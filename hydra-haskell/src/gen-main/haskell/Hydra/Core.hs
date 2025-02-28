@@ -2,16 +2,16 @@
 
 module Hydra.Core where
 
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | A term together with an annotation
 data AnnotatedTerm = 
   AnnotatedTerm {
     annotatedTermSubject :: Term,
-    annotatedTermAnnotation :: (Map Name Term)}
+    annotatedTermAnnotation :: (M.Map Name Term)}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotatedTerm = (Name "hydra.core.AnnotatedTerm")
@@ -24,7 +24,7 @@ _AnnotatedTerm_annotation = (Name "annotation")
 data AnnotatedType = 
   AnnotatedType {
     annotatedTypeSubject :: Type,
-    annotatedTypeAnnotation :: (Map Name Term)}
+    annotatedTypeAnnotation :: (M.Map Name Term)}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotatedType = (Name "hydra.core.AnnotatedType")
@@ -250,19 +250,19 @@ data IntegerValue =
   -- | An arbitrary-precision integer value
   IntegerValueBigint Integer |
   -- | An 8-bit signed integer value
-  IntegerValueInt8 Int8 |
+  IntegerValueInt8 I.Int8 |
   -- | A 16-bit signed integer value (short value)
-  IntegerValueInt16 Int16 |
+  IntegerValueInt16 I.Int16 |
   -- | A 32-bit signed integer value (int value)
   IntegerValueInt32 Int |
   -- | A 64-bit signed integer value (long value)
-  IntegerValueInt64 Int64 |
+  IntegerValueInt64 I.Int64 |
   -- | An 8-bit unsigned integer value (byte)
-  IntegerValueUint8 Int16 |
+  IntegerValueUint8 I.Int16 |
   -- | A 16-bit unsigned integer value
   IntegerValueUint16 Int |
   -- | A 32-bit unsigned integer value (unsigned int)
-  IntegerValueUint32 Int64 |
+  IntegerValueUint32 I.Int64 |
   -- | A 64-bit unsigned integer value (unsigned long)
   IntegerValueUint64 Integer
   deriving (Eq, Ord, Read, Show)
@@ -511,7 +511,7 @@ data Term =
   -- | A literal value
   TermLiteral Literal |
   -- | A map of keys to values
-  TermMap (Map Term Term) |
+  TermMap (M.Map Term Term) |
   -- | An optional value
   TermOptional (Maybe Term) |
   -- | A tuple
@@ -519,7 +519,7 @@ data Term =
   -- | A record term
   TermRecord Record |
   -- | A set of values
-  TermSet (Set Term) |
+  TermSet (S.Set Term) |
   -- | A variant tuple
   TermSum Sum |
   -- | A System F type abstraction term

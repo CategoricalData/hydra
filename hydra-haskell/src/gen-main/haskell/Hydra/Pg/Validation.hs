@@ -9,10 +9,10 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Pg.Model as Model
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 validateEdge :: ((t -> v -> Maybe String) -> (v -> String) -> Maybe (v -> Maybe Model.VertexLabel) -> Model.EdgeType t -> Model.Edge v -> Maybe String)
 validateEdge checkValue showValue labelForVertexId typ el =  
@@ -66,7 +66,7 @@ validateGraph checkValue showValue schema graph =
     checkVertices,
     checkEdges])
 
-validateProperties :: ((t -> v -> Maybe String) -> [Model.PropertyType t] -> Map Model.PropertyKey v -> Maybe String)
+validateProperties :: ((t -> v -> Maybe String) -> [Model.PropertyType t] -> M.Map Model.PropertyKey v -> Maybe String)
 validateProperties checkValue types props =  
   let checkTypes = (checkAll (Lists.map checkType types)) 
       checkType = (\t -> Logic.ifElse (Model.propertyTypeRequired t) ((\x -> case x of

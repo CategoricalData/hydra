@@ -3,10 +3,10 @@
 module Hydra.Ext.RelationalModel where
 
 import qualified Hydra.Core as Core
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd
 newtype ColumnName = 
@@ -37,7 +37,7 @@ data ForeignKey =
     -- | The name of the target relation
     foreignKeyForeignRelation :: RelationName,
     -- | The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation.
-    foreignKeyKeys :: (Map ColumnName ColumnName)}
+    foreignKeyKeys :: (M.Map ColumnName ColumnName)}
   deriving (Eq, Ord, Read, Show)
 
 _ForeignKey = (Core.Name "hydra.ext.relationalModel.ForeignKey")
@@ -96,7 +96,7 @@ _RelationSchema_foreignKeys = (Core.Name "foreignKeys")
 -- | A domain-unordered (string-indexed, rather than position-indexed) relation
 newtype Relationship v = 
   Relationship {
-    unRelationship :: (Set (Map ColumnName v))}
+    unRelationship :: (S.Set (M.Map ColumnName v))}
   deriving (Eq, Ord, Read, Show)
 
 _Relationship = (Core.Name "hydra.ext.relationalModel.Relationship")

@@ -6,10 +6,10 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Mantle as Mantle
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | Find the elimination variant (constructor) for a given elimination term
 eliminationVariant :: (Core.Elimination -> Mantle.EliminationVariant)
@@ -230,12 +230,12 @@ typeVariants = [
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantVariable]
 
-fieldMap :: ([Core.Field] -> Map Core.Name Core.Term)
+fieldMap :: ([Core.Field] -> M.Map Core.Name Core.Term)
 fieldMap fields = (Maps.fromList (Lists.map toPair fields)) 
   where 
     toPair = (\f -> (Core.fieldName f, (Core.fieldTerm f)))
 
-fieldTypeMap :: ([Core.FieldType] -> Map Core.Name Core.Type)
+fieldTypeMap :: ([Core.FieldType] -> M.Map Core.Name Core.Type)
 fieldTypeMap fields = (Maps.fromList (Lists.map toPair fields)) 
   where 
     toPair = (\f -> (Core.fieldTypeName f, (Core.fieldTypeType f)))

@@ -6,10 +6,10 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Mantle as Mantle
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | Language constraints for Python 3
 pythonLanguage :: Coders.Language
@@ -69,7 +69,7 @@ pythonLanguage = Coders.Language {
     Coders.languageConstraintsTypes = (\_ -> True)}}
 
 -- | A set of reserved words in Python
-pythonReservedWords :: (Set String)
+pythonReservedWords :: (S.Set String)
 pythonReservedWords = (Sets.fromList keywords) 
   where 
     keywords = [

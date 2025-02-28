@@ -8,10 +8,10 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Mantle as Mantle
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | The maximum supported length of a tuple in Hydra-Java. Note: if this constant is changed, also change Tuples.java correspondingly
 javaMaxTupleLength :: Int
@@ -82,7 +82,7 @@ javaLanguage = Coders.Language {
       _ -> True)}}
 
 -- | A set of reserved words in Java
-reservedWords :: (Set String)
+reservedWords :: (S.Set String)
 reservedWords = (Sets.fromList (Lists.concat [
   specialNames,
   classNames,

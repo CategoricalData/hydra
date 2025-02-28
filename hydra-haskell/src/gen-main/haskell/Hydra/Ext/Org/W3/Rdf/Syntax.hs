@@ -3,10 +3,10 @@
 module Hydra.Ext.Org.W3.Rdf.Syntax where
 
 import qualified Hydra.Core as Core
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 newtype BlankNode = 
   BlankNode {
@@ -24,7 +24,7 @@ _RdfsClass = (Core.Name "hydra.ext.org.w3.rdf.syntax.RdfsClass")
 
 newtype Dataset = 
   Dataset {
-    unDataset :: (Set Quad)}
+    unDataset :: (S.Set Quad)}
   deriving (Eq, Ord, Read, Show)
 
 _Dataset = (Core.Name "hydra.ext.org.w3.rdf.syntax.Dataset")
@@ -44,7 +44,7 @@ _Description_graph = (Core.Name "graph")
 
 newtype Graph = 
   Graph {
-    unGraph :: (Set Triple)}
+    unGraph :: (S.Set Triple)}
   deriving (Eq, Ord, Read, Show)
 
 _Graph = (Core.Name "hydra.ext.org.w3.rdf.syntax.Graph")
@@ -72,7 +72,7 @@ _IriOrLiteral_literal = (Core.Name "literal")
 -- | A convenience type which provides at most one string value per language, and optionally a value without a language
 newtype LangStrings = 
   LangStrings {
-    unLangStrings :: (Map (Maybe LanguageTag) String)}
+    unLangStrings :: (M.Map (Maybe LanguageTag) String)}
   deriving (Eq, Ord, Read, Show)
 
 _LangStrings = (Core.Name "hydra.ext.org.w3.rdf.syntax.LangStrings")
@@ -122,10 +122,10 @@ _Node_literal = (Core.Name "literal")
 data Property = 
   Property {
     -- | State that any resource that has a given property is an instance of one or more classes
-    propertyDomain :: (Set RdfsClass),
+    propertyDomain :: (S.Set RdfsClass),
     -- | States that the values of a property are instances of one or more classes
-    propertyRange :: (Set RdfsClass),
-    propertySubPropertyOf :: (Set Property)}
+    propertyRange :: (S.Set RdfsClass),
+    propertySubPropertyOf :: (S.Set Property)}
   deriving (Eq, Ord, Read, Show)
 
 _Property = (Core.Name "hydra.ext.org.w3.rdf.syntax.Property")

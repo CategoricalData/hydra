@@ -4,10 +4,10 @@ module Hydra.Graph where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | An equality judgement: less than, equal to, or greater than
 data Comparison = 
@@ -44,15 +44,15 @@ _Element_type = (Core.Name "type")
 data Graph = 
   Graph {
     -- | All of the elements in the graph
-    graphElements :: (Map Core.Name Element),
+    graphElements :: (M.Map Core.Name Element),
     -- | The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)
-    graphEnvironment :: (Map Core.Name (Maybe Core.Term)),
+    graphEnvironment :: (M.Map Core.Name (Maybe Core.Term)),
     -- | The typing environment of the graph
-    graphTypes :: (Map Core.Name Core.TypeScheme),
+    graphTypes :: (M.Map Core.Name Core.TypeScheme),
     -- | The body of the term which generated this context
     graphBody :: Core.Term,
     -- | All supported primitive constants and functions, by name
-    graphPrimitives :: (Map Core.Name Primitive),
+    graphPrimitives :: (M.Map Core.Name Primitive),
     -- | The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph.
     graphSchema :: (Maybe Graph)}
 

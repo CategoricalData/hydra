@@ -5,10 +5,10 @@ module Hydra.CoreLanguage where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Variants as Variants
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | Language constraints for Java
 hydraCoreLanguage :: Coders.Language

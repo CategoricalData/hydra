@@ -3,10 +3,10 @@
 module Hydra.Pg.Graphson.Syntax where
 
 import qualified Hydra.Core as Core
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 newtype BigDecimalValue = 
   BigDecimalValue {
@@ -18,7 +18,7 @@ _BigDecimalValue = (Core.Name "hydra.pg.graphson.syntax.BigDecimalValue")
 data CompositeTypedValue = 
   CompositeTypedValue {
     compositeTypedValueType :: TypeName,
-    compositeTypedValueFields :: Map_}
+    compositeTypedValueFields :: Map}
   deriving (Eq, Ord, Read, Show)
 
 _CompositeTypedValue = (Core.Name "hydra.pg.graphson.syntax.CompositeTypedValue")
@@ -82,8 +82,8 @@ _FloatValue_negativeInfinity = (Core.Name "negativeInfinity")
 
 _FloatValue_notANumber = (Core.Name "notANumber")
 
-newtype Map_ = 
-  Map_ {
+newtype Map = 
+  Map {
     unMap :: [ValuePair]}
   deriving (Eq, Ord, Read, Show)
 
@@ -93,7 +93,7 @@ data AdjacentEdge =
   AdjacentEdge {
     adjacentEdgeId :: Value,
     adjacentEdgeVertexId :: Value,
-    adjacentEdgeProperties :: (Map PropertyKey Value)}
+    adjacentEdgeProperties :: (M.Map PropertyKey Value)}
   deriving (Eq, Ord, Read, Show)
 
 _AdjacentEdge = (Core.Name "hydra.pg.graphson.syntax.AdjacentEdge")
@@ -142,8 +142,8 @@ data Value =
   ValueBigInteger Integer |
   ValueBinary String |
   ValueBoolean Bool |
-  ValueByte Int16 |
-  ValueChar Int64 |
+  ValueByte I.Int16 |
+  ValueChar I.Int64 |
   ValueComposite CompositeTypedValue |
   ValueDateTime DateTime |
   ValueDouble DoubleValue |
@@ -151,12 +151,12 @@ data Value =
   ValueFloat FloatValue |
   ValueInteger Int |
   ValueList [Value] |
-  ValueLong Int64 |
-  ValueMap Map_ |
+  ValueLong I.Int64 |
+  ValueMap Map |
   ValueNull  |
   ValuePrimitive PrimitiveTypedValue |
   ValueSet [Value] |
-  ValueShort Int16 |
+  ValueShort I.Int16 |
   ValueString String |
   ValueUuid Uuid
   deriving (Eq, Ord, Read, Show)
@@ -221,9 +221,9 @@ data Vertex =
   Vertex {
     vertexId :: Value,
     vertexLabel :: (Maybe VertexLabel),
-    vertexInEdges :: (Map EdgeLabel [AdjacentEdge]),
-    vertexOutEdges :: (Map EdgeLabel [AdjacentEdge]),
-    vertexProperties :: (Map PropertyKey [VertexPropertyValue])}
+    vertexInEdges :: (M.Map EdgeLabel [AdjacentEdge]),
+    vertexOutEdges :: (M.Map EdgeLabel [AdjacentEdge]),
+    vertexProperties :: (M.Map PropertyKey [VertexPropertyValue])}
   deriving (Eq, Ord, Read, Show)
 
 _Vertex = (Core.Name "hydra.pg.graphson.syntax.Vertex")

@@ -4,15 +4,15 @@ module Hydra.Ext.Org.Json.Schema where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Json as Json
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 data Document = 
   Document {
     documentId :: (Maybe String),
-    documentDefinitions :: (Maybe (Map Keyword Schema)),
+    documentDefinitions :: (Maybe (M.Map Keyword Schema)),
     documentRoot :: Schema}
   deriving (Eq, Ord, Read, Show)
 
@@ -197,13 +197,13 @@ _AdditionalItems_any = (Core.Name "any")
 _AdditionalItems_schema = (Core.Name "schema")
 
 data ObjectRestriction = 
-  ObjectRestrictionProperties (Map Keyword Schema) |
+  ObjectRestrictionProperties (M.Map Keyword Schema) |
   ObjectRestrictionAdditionalProperties AdditionalItems |
   ObjectRestrictionRequired [Keyword] |
   ObjectRestrictionMinProperties Int |
   ObjectRestrictionMaxProperties Int |
-  ObjectRestrictionDependencies (Map Keyword SchemaOrArray) |
-  ObjectRestrictionPatternProperties (Map RegularExpression Schema)
+  ObjectRestrictionDependencies (M.Map Keyword SchemaOrArray) |
+  ObjectRestrictionPatternProperties (M.Map RegularExpression Schema)
   deriving (Eq, Ord, Read, Show)
 
 _ObjectRestriction = (Core.Name "hydra.ext.org.json.schema.ObjectRestriction")

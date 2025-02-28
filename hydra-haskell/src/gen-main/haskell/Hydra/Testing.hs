@@ -4,10 +4,10 @@ module Hydra.Testing where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Mantle as Mantle
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | One of two evaluation styles: eager or lazy
 data EvaluationStyle = 

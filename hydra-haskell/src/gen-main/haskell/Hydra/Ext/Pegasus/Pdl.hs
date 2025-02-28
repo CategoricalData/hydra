@@ -5,10 +5,10 @@ module Hydra.Ext.Pegasus.Pdl where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Json as Json
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas
 data Annotations = 
