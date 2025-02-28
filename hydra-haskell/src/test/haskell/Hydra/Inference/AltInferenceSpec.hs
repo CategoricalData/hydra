@@ -32,7 +32,7 @@ initialContext = AltInferenceContext lexicon 0 M.empty
     lexicon = M.fromList $ fmap (\p -> (primitiveName p, primitiveType p)) (L.concat (libraryPrimitives <$> standardLibraries))
 
 expectType :: Term -> TypeScheme -> H.Expectation
-expectType term expected = shouldSucceedWith (sInferType term) expected
+expectType term expected = shouldSucceedWith (inferTypeOf term) expected
 
 shouldSucceedWith :: (Eq a, Show a) => Flow AltInferenceContext a -> a -> H.Expectation
 shouldSucceedWith f x = case my of
