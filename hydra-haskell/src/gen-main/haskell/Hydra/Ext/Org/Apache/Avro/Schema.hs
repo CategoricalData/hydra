@@ -5,10 +5,10 @@ module Hydra.Ext.Org.Apache.Avro.Schema where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Json as Json
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 data Array = 
   Array {
@@ -48,7 +48,7 @@ data Field =
     -- | a JSON array of strings, providing alternate names for this field
     fieldAliases :: (Maybe [String]),
     -- | Any additional key/value pairs attached to the field
-    fieldAnnotations :: (Map String Json.Value)}
+    fieldAnnotations :: (M.Map String Json.Value)}
   deriving (Eq, Ord, Read, Show)
 
 _Field = (Core.Name "hydra.ext.org.apache.avro.schema.Field")
@@ -77,8 +77,8 @@ _Fixed = (Core.Name "hydra.ext.org.apache.avro.schema.Fixed")
 
 _Fixed_size = (Core.Name "size")
 
-data Map_ = 
-  Map_ {
+data Map = 
+  Map {
     mapValues :: Schema}
   deriving (Eq, Ord, Read, Show)
 
@@ -98,7 +98,7 @@ data Named =
     namedDoc :: (Maybe String),
     namedType :: NamedType,
     -- | Any additional key/value pairs attached to the type
-    namedAnnotations :: (Map String Json.Value)}
+    namedAnnotations :: (M.Map String Json.Value)}
   deriving (Eq, Ord, Read, Show)
 
 _Named = (Core.Name "hydra.ext.org.apache.avro.schema.Named")
@@ -192,7 +192,7 @@ _Record_fields = (Core.Name "fields")
 
 data Schema = 
   SchemaArray Array |
-  SchemaMap Map_ |
+  SchemaMap Map |
   SchemaNamed Named |
   SchemaPrimitive Primitive |
   -- | A reference by name to a previously defined type

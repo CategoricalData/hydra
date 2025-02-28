@@ -3,10 +3,10 @@
 module Hydra.Json where
 
 import qualified Hydra.Core as Core
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | A JSON value
 data Value = 
@@ -19,7 +19,7 @@ data Value =
   -- | A numeric value
   ValueNumber Double |
   -- | A JSON object as a set of key/value pairs
-  ValueObject (Map String Value) |
+  ValueObject (M.Map String Value) |
   -- | A string value
   ValueString String
   deriving (Eq, Ord, Read, Show)

@@ -3,10 +3,10 @@
 module Hydra.Compute where
 
 import qualified Hydra.Core as Core
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | A two-level bidirectional encoder which adapts types to types and terms to terms
 data Adapter s1 s2 t1 t2 v1 v2 = 
@@ -79,7 +79,7 @@ data Trace =
     traceStack :: [String],
     traceMessages :: [String],
     -- | A map of string keys to arbitrary terms as values, for application-specific use
-    traceOther :: (Map Core.Name Core.Term)}
+    traceOther :: (M.Map Core.Name Core.Term)}
   deriving (Eq, Ord, Read, Show)
 
 _Trace = (Core.Name "hydra.compute.Trace")

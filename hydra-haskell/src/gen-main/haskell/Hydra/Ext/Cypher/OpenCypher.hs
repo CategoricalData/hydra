@@ -4,10 +4,10 @@
 module Hydra.Ext.Cypher.OpenCypher where
 
 import qualified Hydra.Core as Core
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 data Query = 
   QueryRegular RegularQuery |
@@ -101,7 +101,7 @@ data UpdatingClause =
   UpdatingClauseCreate Create |
   UpdatingClauseMerge Merge |
   UpdatingClauseDelete Delete |
-  UpdatingClauseSet Set_ |
+  UpdatingClauseSet Set |
   UpdatingClauseRemove Remove
   deriving (Eq, Ord, Read, Show)
 
@@ -184,7 +184,7 @@ _MatchOrCreate_create = (Core.Name "create")
 data MergeAction = 
   MergeAction {
     mergeActionAction :: MatchOrCreate,
-    mergeActionSet :: Set_}
+    mergeActionSet :: Set}
   deriving (Eq, Ord, Read, Show)
 
 _MergeAction = (Core.Name "hydra.ext.cypher.openCypher.MergeAction")
@@ -200,8 +200,8 @@ newtype Create =
 
 _Create = (Core.Name "hydra.ext.cypher.openCypher.Create")
 
-newtype Set_ = 
-  Set_ {
+newtype Set = 
+  Set {
     unSet :: [SetItem]}
   deriving (Eq, Ord, Read, Show)
 

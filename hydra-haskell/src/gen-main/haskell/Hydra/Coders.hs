@@ -6,17 +6,17 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Mantle as Mantle
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | An evaluation context together with a source language and a target language
 data AdapterContext = 
   AdapterContext {
     adapterContextGraph :: Graph.Graph,
     adapterContextLanguage :: Language,
-    adapterContextAdapters :: (Map Core.Name (Compute.Adapter AdapterContext AdapterContext Core.Type Core.Type Core.Term Core.Term))}
+    adapterContextAdapters :: (M.Map Core.Name (Compute.Adapter AdapterContext AdapterContext Core.Type Core.Type Core.Term Core.Term))}
 
 _AdapterContext = (Core.Name "hydra.coders.AdapterContext")
 
@@ -54,19 +54,19 @@ _Language_constraints = (Core.Name "constraints")
 data LanguageConstraints = 
   LanguageConstraints {
     -- | All supported elimination variants
-    languageConstraintsEliminationVariants :: (Set Mantle.EliminationVariant),
+    languageConstraintsEliminationVariants :: (S.Set Mantle.EliminationVariant),
     -- | All supported literal variants
-    languageConstraintsLiteralVariants :: (Set Mantle.LiteralVariant),
+    languageConstraintsLiteralVariants :: (S.Set Mantle.LiteralVariant),
     -- | All supported float types
-    languageConstraintsFloatTypes :: (Set Core.FloatType),
+    languageConstraintsFloatTypes :: (S.Set Core.FloatType),
     -- | All supported function variants
-    languageConstraintsFunctionVariants :: (Set Mantle.FunctionVariant),
+    languageConstraintsFunctionVariants :: (S.Set Mantle.FunctionVariant),
     -- | All supported integer types
-    languageConstraintsIntegerTypes :: (Set Core.IntegerType),
+    languageConstraintsIntegerTypes :: (S.Set Core.IntegerType),
     -- | All supported term variants
-    languageConstraintsTermVariants :: (Set Mantle.TermVariant),
+    languageConstraintsTermVariants :: (S.Set Mantle.TermVariant),
     -- | All supported type variants
-    languageConstraintsTypeVariants :: (Set Mantle.TypeVariant),
+    languageConstraintsTypeVariants :: (S.Set Mantle.TypeVariant),
     -- | A logical set of types, as a predicate which tests a type for inclusion
     languageConstraintsTypes :: (Core.Type -> Bool)}
 
