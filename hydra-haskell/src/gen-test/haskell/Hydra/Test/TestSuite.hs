@@ -7,10 +7,10 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 allTests :: Testing.TestGroup
 allTests = Testing.TestGroup {
