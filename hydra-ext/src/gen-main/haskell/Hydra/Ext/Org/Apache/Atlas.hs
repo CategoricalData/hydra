@@ -6,10 +6,10 @@ module Hydra.Ext.Org.Apache.Atlas where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Org.W3.Xml.Schema as Schema
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | class that captures details of a struct-attribute.
 data AtlasAttributeDef = 
@@ -28,7 +28,7 @@ data AtlasAttributeDef =
     atlasAttributeDefSearchWeight :: Int,
     atlasAttributeDefIndexType :: (Maybe AtlasAttributeDef_IndexType),
     atlasAttributeDefConstraints :: [AtlasConstraintDef],
-    atlasAttributeDefOptions :: (Map String String),
+    atlasAttributeDefOptions :: (M.Map String String),
     atlasAttributeDefDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -100,12 +100,12 @@ data AtlasBaseTypeDef =
     atlasBaseTypeDefUpdatedBy :: (Maybe String),
     atlasBaseTypeDefCreateTime :: (Maybe Schema.DateTime),
     atlasBaseTypeDefUpdateTime :: (Maybe Schema.DateTime),
-    atlasBaseTypeDefVersion :: (Maybe Int64),
+    atlasBaseTypeDefVersion :: (Maybe I.Int64),
     atlasBaseTypeDefName :: (Maybe String),
     atlasBaseTypeDefDescription :: (Maybe String),
     atlasBaseTypeDefTypeVersion :: (Maybe String),
     atlasBaseTypeDefServiceType :: (Maybe String),
-    atlasBaseTypeDefOptions :: (Map String String)}
+    atlasBaseTypeDefOptions :: (M.Map String String)}
   deriving (Eq, Ord, Read, Show)
 
 _AtlasBaseTypeDef = (Core.Name "hydra.ext.org.apache.atlas.AtlasBaseTypeDef")
@@ -138,7 +138,7 @@ _AtlasBaseTypeDef_options = (Core.Name "options")
 data AtlasConstraintDef = 
   AtlasConstraintDef {
     atlasConstraintDefType :: (Maybe String),
-    atlasConstraintDefParams :: (Map String String)}
+    atlasConstraintDefParams :: (M.Map String String)}
   deriving (Eq, Ord, Read, Show)
 
 _AtlasConstraintDef = (Core.Name "hydra.ext.org.apache.atlas.AtlasConstraintDef")
@@ -151,13 +151,13 @@ _AtlasConstraintDef_params = (Core.Name "params")
 data AtlasEntityDef = 
   AtlasEntityDef {
     atlasEntityDefAsAtlasStructDef :: AtlasStructDef,
-    atlasEntityDefSuperTypes :: (Set String),
+    atlasEntityDefSuperTypes :: (S.Set String),
     -- | the value of this field is derived from 'superTypes' specified in all AtlasEntityDef
-    atlasEntityDefSubTypes :: (Set String),
+    atlasEntityDefSubTypes :: (S.Set String),
     -- | the value of this field is derived from all the relationshipDefs this entityType is referenced in
     atlasEntityDefRelationshipAttributeDefs :: [AtlasRelationshipAttributeDef],
     -- | the value of this field is derived from all the businessMetadataDefs this entityType is referenced in
-    atlasEntityDefBusinessAttributeDefs :: (Map String [AtlasAttributeDef])}
+    atlasEntityDefBusinessAttributeDefs :: (M.Map String [AtlasAttributeDef])}
   deriving (Eq, Ord, Read, Show)
 
 _AtlasEntityDef = (Core.Name "hydra.ext.org.apache.atlas.AtlasEntityDef")

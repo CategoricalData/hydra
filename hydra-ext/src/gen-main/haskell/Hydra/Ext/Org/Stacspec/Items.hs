@@ -5,10 +5,10 @@ module Hydra.Ext.Org.Stacspec.Items where
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Org.Geojson.Model as Model
 import qualified Hydra.Ext.Org.Iana.Linkrelations as Linkrelations
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | An Asset is an object that contains a URI to data associated with the Item that can be downloaded or streamed. It is allowed to add additional fields.
 data Asset = 
@@ -48,7 +48,7 @@ data Item =
     -- | List of link objects to resources and related URLs. A link with the rel set to self is strongly recommended.
     itemLinks :: [Link],
     -- | Dictionary of asset objects that can be downloaded, each with a unique key.
-    itemAssets :: (Map String Asset),
+    itemAssets :: (M.Map String Asset),
     -- | The id of the STAC Collection this Item references to (see collection relation type). This field is required if such a relation type is present and is not allowed otherwise. This field provides an easy way for a user to search for any Items that belong in a specified Collection. Must be a non-empty string.
     itemCollection :: (Maybe Model.Id)}
   deriving (Eq, Ord, Read, Show)

@@ -8,10 +8,10 @@
 module Hydra.Ext.Com.Microsoft.Azure.Dtld where
 
 import qualified Hydra.Core as Core
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | A Command describes a function or operation that can be performed on any digital twin.
 data Command = 
@@ -226,15 +226,15 @@ data Interface =
     -- | A comment for model authors
     interfaceComment :: (Maybe String),
     -- | A set of objects that define the contents (Telemetry, Properties, Commands, Relationships, and/or Components) of this interface
-    interfaceContents :: (Maybe (Set Interface_Contents)),
+    interfaceContents :: (Maybe (S.Set Interface_Contents)),
     -- | A localizable description for display
     interfaceDescription :: (Maybe String),
     -- | A localizable name for display
     interfaceDisplayName :: (Maybe String),
     -- | A set of DTMIs that refer to interfaces this interface inherits from. Interfaces can inherit from multiple interfaces.
-    interfaceExtends :: (Maybe (Set Interface)),
+    interfaceExtends :: (Maybe (S.Set Interface)),
     -- | A set of IRIs or objects that refer to the reusable schemas within this interface.
-    interfaceSchemas :: (Maybe (Set Schema_Interface))}
+    interfaceSchemas :: (Maybe (S.Set Schema_Interface))}
   deriving (Eq, Ord, Read, Show)
 
 _Interface = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface")
@@ -409,7 +409,7 @@ data Relationship =
     -- | The minimum multiplicity for the target of the relationship. The default value is 0 (this relationship is permitted to have no instances). In DTDL v2, minMultiplicity must always be 0.
     relationshipMinMultiplicity :: (Maybe Int),
     -- | A set of Properties that define relationship-specific state
-    relationshipProperties :: (Maybe (Set Property)),
+    relationshipProperties :: (Maybe (S.Set Property)),
     -- | An interface ID. The default value (when target is not specified) is that the target may be any interface.
     relationshipTarget :: (Maybe Interface),
     -- | A boolean value that indicates whether the relationship is writable by an external source, such as an application, or not. The default value is false (read-only).
@@ -621,7 +621,7 @@ data Schema_Object =
     -- | Object
     schema_ObjectType :: Iri,
     -- | A set of field descriptions, one for each field in the Object
-    schema_ObjectFields :: (Set Field),
+    schema_ObjectFields :: (S.Set Field),
     -- | The ID of the object. If no @id is provided, the digital twin interface processor will assign one.
     schema_ObjectId :: (Maybe Dtmi),
     -- | A comment for model authors

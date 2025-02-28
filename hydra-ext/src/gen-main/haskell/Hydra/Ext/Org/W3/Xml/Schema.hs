@@ -7,10 +7,10 @@
 module Hydra.Ext.Org.W3.Xml.Schema where
 
 import qualified Hydra.Core as Core
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 newtype AnySimpleType = 
   AnySimpleType {
@@ -49,7 +49,7 @@ _Boolean = (Core.Name "hydra.ext.org.w3.xml.schema.Boolean")
 
 newtype Byte = 
   Byte {
-    unByte :: Int8}
+    unByte :: I.Int8}
   deriving (Eq, Ord, Read, Show)
 
 _Byte = (Core.Name "hydra.ext.org.w3.xml.schema.Byte")
@@ -196,7 +196,7 @@ _Language = (Core.Name "hydra.ext.org.w3.xml.schema.Language")
 
 newtype Long = 
   Long {
-    unLong :: Int64}
+    unLong :: I.Int64}
   deriving (Eq, Ord, Read, Show)
 
 _Long = (Core.Name "hydra.ext.org.w3.xml.schema.Long")
@@ -266,7 +266,7 @@ _QName = (Core.Name "hydra.ext.org.w3.xml.schema.QName")
 
 newtype Short = 
   Short {
-    unShort :: Int16}
+    unShort :: I.Int16}
   deriving (Eq, Ord, Read, Show)
 
 _Short = (Core.Name "hydra.ext.org.w3.xml.schema.Short")
@@ -294,14 +294,14 @@ _Token = (Core.Name "hydra.ext.org.w3.xml.schema.Token")
 
 newtype UnsignedByte = 
   UnsignedByte {
-    unUnsignedByte :: Int16}
+    unUnsignedByte :: I.Int16}
   deriving (Eq, Ord, Read, Show)
 
 _UnsignedByte = (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedByte")
 
 newtype UnsignedInt = 
   UnsignedInt {
-    unUnsignedInt :: Int64}
+    unUnsignedInt :: I.Int64}
   deriving (Eq, Ord, Read, Show)
 
 _UnsignedInt = (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedInt")
