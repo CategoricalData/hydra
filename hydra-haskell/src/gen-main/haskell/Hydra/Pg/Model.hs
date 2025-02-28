@@ -3,10 +3,10 @@
 module Hydra.Pg.Model where
 
 import qualified Hydra.Core as Core
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | An edge which is adjacent to a given vertex. Only the other endpoint of the edge is provided.
 data AdjacentEdge v = 
@@ -18,7 +18,7 @@ data AdjacentEdge v =
     -- | The id of the other vertex adjacent to the edge
     adjacentEdgeVertex :: v,
     -- | A key/value map of edge properties
-    adjacentEdgeProperties :: (Map PropertyKey v)}
+    adjacentEdgeProperties :: (M.Map PropertyKey v)}
   deriving (Eq, Ord, Read, Show)
 
 _AdjacentEdge = (Core.Name "hydra.pg.model.AdjacentEdge")
@@ -61,7 +61,7 @@ data Edge v =
     -- | The id of the in-vertex (head) of the edge
     edgeIn :: v,
     -- | A key/value map of edge properties
-    edgeProperties :: (Map PropertyKey v)}
+    edgeProperties :: (M.Map PropertyKey v)}
   deriving (Eq, Ord, Read, Show)
 
 _Edge = (Core.Name "hydra.pg.model.Edge")
@@ -176,8 +176,8 @@ _ElementTypeTree_dependencies = (Core.Name "dependencies")
 -- | A graph; a self-contained collection of vertices and edges
 data Graph v = 
   Graph {
-    graphVertices :: (Map v (Vertex v)),
-    graphEdges :: (Map v (Edge v))}
+    graphVertices :: (M.Map v (Vertex v)),
+    graphEdges :: (M.Map v (Edge v))}
   deriving (Eq, Ord, Read, Show)
 
 _Graph = (Core.Name "hydra.pg.model.Graph")
@@ -190,9 +190,9 @@ _Graph_edges = (Core.Name "edges")
 data GraphSchema t = 
   GraphSchema {
     -- | A unique vertex type for each vertex label which may occur in a graph
-    graphSchemaVertices :: (Map VertexLabel (VertexType t)),
+    graphSchemaVertices :: (M.Map VertexLabel (VertexType t)),
     -- | A unique edge type for each edge label which may occur in a graph
-    graphSchemaEdges :: (Map EdgeLabel (EdgeType t))}
+    graphSchemaEdges :: (M.Map EdgeLabel (EdgeType t))}
   deriving (Eq, Ord, Read, Show)
 
 _GraphSchema = (Core.Name "hydra.pg.model.GraphSchema")
@@ -263,7 +263,7 @@ data Vertex v =
     -- | The unique identifier of the vertex
     vertexId :: v,
     -- | A key/value map of vertex properties
-    vertexProperties :: (Map PropertyKey v)}
+    vertexProperties :: (M.Map PropertyKey v)}
   deriving (Eq, Ord, Read, Show)
 
 _Vertex = (Core.Name "hydra.pg.model.Vertex")

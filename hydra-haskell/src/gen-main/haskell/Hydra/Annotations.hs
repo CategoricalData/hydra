@@ -8,12 +8,12 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Strings as Strings
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
-getAnnotation :: (Core.Name -> Map Core.Name Core.Term -> Maybe Core.Term)
+getAnnotation :: (Core.Name -> M.Map Core.Name Core.Term -> Maybe Core.Term)
 getAnnotation key ann = (Maps.lookup key ann)
 
 -- | Get the annotated type of a given term, if any
