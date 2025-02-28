@@ -63,12 +63,12 @@ constructModule namespaces mod coders pairs = do
           where
             toImport (Namespace name, alias) = H.Import True (importName name) (Just alias) Nothing
         standardImports = toImport <$> [
-            ("Data.Int", Nothing),
-            ("Data.List", Just "L"),
-            ("Data.Map", Just "M"),
-            ("Data.Set", Just "S")]
+            ("Data.Int", "I"),
+            ("Data.List", "L"),
+            ("Data.Map", "M"),
+            ("Data.Set", "S")]
           where
-            toImport (name, alias) = H.Import False (H.ModuleName name) (H.ModuleName <$> alias) Nothing
+            toImport (name, alias) = H.Import True (H.ModuleName name) (Just $ H.ModuleName alias) Nothing
 
 encodeFunction :: HaskellNamespaces -> Function -> Flow Graph H.Expression
 encodeFunction namespaces fun = case fun of
@@ -213,15 +213,15 @@ encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
 --        _ -> fail $ "unexpected floating-point type: " ++ show ft
       LiteralTypeInteger it -> case it of
         IntegerTypeBigint -> pure "Integer"
-        IntegerTypeInt8 -> pure "Int8"
-        IntegerTypeInt16 -> pure "Int16"
+        IntegerTypeInt8 -> pure "I.Int8"
+        IntegerTypeInt16 -> pure "I.Int16"
         IntegerTypeInt32 -> pure "Int"
-        IntegerTypeInt64 -> pure "Int64"
+        IntegerTypeInt64 -> pure "I.Int64"
         _ -> fail $ "unexpected integer type: " ++ show it
       LiteralTypeString -> pure "String"
       _ -> fail $ "unexpected literal type: " ++ show lt
     TypeMap (MapType kt vt) -> toTypeApplication <$> CM.sequence [
-      pure $ H.TypeVariable $ rawName "Map",
+      pure $ H.TypeVariable $ rawName "M.Map",
       encode kt,
       encode vt]
     TypeOptional ot -> toTypeApplication <$> CM.sequence [
@@ -232,7 +232,7 @@ encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
       [] -> pure $ H.TypeTuple []  -- TODO: too permissive; not all empty record types are the unit type
       _ -> ref $ rowTypeTypeName rt
     TypeSet st -> toTypeApplication <$> CM.sequence [
-      pure $ H.TypeVariable $ rawName "Set",
+      pure $ H.TypeVariable $ rawName "S.Set",
       encode st]
     TypeUnion rt -> ref $ rowTypeTypeName rt
     TypeVariable v -> ref v
