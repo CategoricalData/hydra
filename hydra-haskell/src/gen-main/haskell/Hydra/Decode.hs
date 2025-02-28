@@ -8,10 +8,10 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Strip as Strip
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 bigfloat :: (Core.Term -> Maybe Double)
 bigfloat = (Optionals.compose (Optionals.compose literal floatLiteral) bigfloatValue)
@@ -87,10 +87,10 @@ floatLiteral x = case x of
   Core.LiteralFloat v1 -> (Optionals.pure v1)
   _ -> Nothing
 
-int16 :: (Core.Term -> Maybe Int16)
+int16 :: (Core.Term -> Maybe I.Int16)
 int16 = (Optionals.compose (Optionals.compose literal integerLiteral) int16Value)
 
-int16Value :: (Core.IntegerValue -> Maybe Int16)
+int16Value :: (Core.IntegerValue -> Maybe I.Int16)
 int16Value x = case x of
   Core.IntegerValueInt16 v1 -> (Optionals.pure v1)
   _ -> Nothing
@@ -103,18 +103,18 @@ int32Value x = case x of
   Core.IntegerValueInt32 v1 -> (Optionals.pure v1)
   _ -> Nothing
 
-int64 :: (Core.Term -> Maybe Int64)
+int64 :: (Core.Term -> Maybe I.Int64)
 int64 = (Optionals.compose (Optionals.compose literal integerLiteral) int64Value)
 
-int64Value :: (Core.IntegerValue -> Maybe Int64)
+int64Value :: (Core.IntegerValue -> Maybe I.Int64)
 int64Value x = case x of
   Core.IntegerValueInt64 v1 -> (Optionals.pure v1)
   _ -> Nothing
 
-int8 :: (Core.Term -> Maybe Int8)
+int8 :: (Core.Term -> Maybe I.Int8)
 int8 = (Optionals.compose (Optionals.compose literal integerLiteral) int8Value)
 
-int8Value :: (Core.IntegerValue -> Maybe Int8)
+int8Value :: (Core.IntegerValue -> Maybe I.Int8)
 int8Value x = case x of
   Core.IntegerValueInt8 v1 -> (Optionals.pure v1)
   _ -> Nothing
@@ -157,8 +157,8 @@ literal x = ((\x -> case x of
   Core.TermLiteral v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x))
 
-map :: (Core.Term -> Maybe (Map Core.Term Core.Term))
-map x = ((\x -> case x of
+map_ :: (Core.Term -> Maybe (M.Map Core.Term Core.Term))
+map_ x = ((\x -> case x of
   Core.TermMap v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x))
 
@@ -204,7 +204,7 @@ record = (nominal Core.recordTypeName Core.recordFields (\x -> (\x -> case x of
   Core.TermRecord v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x)))
 
-set :: (Core.Term -> Maybe (Set Core.Term))
+set :: (Core.Term -> Maybe (S.Set Core.Term))
 set x = ((\x -> case x of
   Core.TermSet v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm x))
@@ -225,10 +225,10 @@ uint16Value x = case x of
   Core.IntegerValueUint16 v1 -> (Optionals.pure v1)
   _ -> Nothing
 
-uint32 :: (Core.Term -> Maybe Int64)
+uint32 :: (Core.Term -> Maybe I.Int64)
 uint32 = (Optionals.compose (Optionals.compose literal integerLiteral) uint32Value)
 
-uint32Value :: (Core.IntegerValue -> Maybe Int64)
+uint32Value :: (Core.IntegerValue -> Maybe I.Int64)
 uint32Value x = case x of
   Core.IntegerValueUint32 v1 -> (Optionals.pure v1)
   _ -> Nothing
@@ -241,10 +241,10 @@ uint64Value x = case x of
   Core.IntegerValueUint64 v1 -> (Optionals.pure v1)
   _ -> Nothing
 
-uint8 :: (Core.Term -> Maybe Int16)
+uint8 :: (Core.Term -> Maybe I.Int16)
 uint8 = (Optionals.compose (Optionals.compose literal integerLiteral) uint8Value)
 
-uint8Value :: (Core.IntegerValue -> Maybe Int16)
+uint8Value :: (Core.IntegerValue -> Maybe I.Int16)
 uint8Value x = case x of
   Core.IntegerValueUint8 v1 -> (Optionals.pure v1)
   _ -> Nothing

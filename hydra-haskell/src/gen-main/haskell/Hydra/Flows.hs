@@ -12,10 +12,10 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 bind :: (Compute.Flow s a -> (a -> Compute.Flow s b) -> Compute.Flow s b)
 bind l r =  

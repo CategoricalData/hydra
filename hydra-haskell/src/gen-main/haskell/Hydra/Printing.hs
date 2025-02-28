@@ -7,10 +7,10 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Variants as Variants
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | Display a floating-point type as a string
 describeFloatType :: (Core.FloatType -> String)

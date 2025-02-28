@@ -4,16 +4,16 @@ module Hydra.Ext.Org.W3.Shacl.Model where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Syntax
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | See https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent
 data Closed = 
   Closed {
     closedIsClosed :: Bool,
-    closedIgnoredProperties :: (Maybe (Set Syntax.Property))}
+    closedIgnoredProperties :: (Maybe (S.Set Syntax.Property))}
   deriving (Eq, Ord, Read, Show)
 
 _Closed = (Core.Name "hydra.ext.org.w3.shacl.model.Closed")
@@ -25,29 +25,29 @@ _Closed_ignoredProperties = (Core.Name "ignoredProperties")
 -- | Any of a number of constraint parameters which can be applied either to node or property shapes
 data CommonConstraint = 
   -- | See https://www.w3.org/TR/shacl/#AndConstraintComponent
-  CommonConstraintAnd (Set (Reference Shape)) |
+  CommonConstraintAnd (S.Set (Reference Shape)) |
   -- | See https://www.w3.org/TR/shacl/#ClosedConstraintComponent
   CommonConstraintClosed Closed |
   -- | See https://www.w3.org/TR/shacl/#ClassConstraintComponent
-  CommonConstraintClass (Set Syntax.RdfsClass) |
+  CommonConstraintClass (S.Set Syntax.RdfsClass) |
   -- | See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent
   CommonConstraintDatatype Syntax.Iri |
   -- | See https://www.w3.org/TR/shacl/#DisjointConstraintComponent
-  CommonConstraintDisjoint (Set Syntax.Property) |
+  CommonConstraintDisjoint (S.Set Syntax.Property) |
   -- | See https://www.w3.org/TR/shacl/#EqualsConstraintComponent
-  CommonConstraintEquals (Set Syntax.Property) |
+  CommonConstraintEquals (S.Set Syntax.Property) |
   -- | Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent
-  CommonConstraintHasValue (Set Syntax.Node) |
+  CommonConstraintHasValue (S.Set Syntax.Node) |
   -- | Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent
   CommonConstraintIn [Syntax.Node] |
   -- | See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent
-  CommonConstraintLanguageIn (Set Syntax.LanguageTag) |
+  CommonConstraintLanguageIn (S.Set Syntax.LanguageTag) |
   -- | See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent
   CommonConstraintNodeKind NodeKind |
   -- | See https://www.w3.org/TR/shacl/#NodeConstraintComponent
-  CommonConstraintNode (Set (Reference NodeShape)) |
+  CommonConstraintNode (S.Set (Reference NodeShape)) |
   -- | See https://www.w3.org/TR/shacl/#NotConstraintComponent
-  CommonConstraintNot (Set (Reference Shape)) |
+  CommonConstraintNot (S.Set (Reference Shape)) |
   -- | See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent
   CommonConstraintMaxExclusive Syntax.Literal |
   -- | See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent
@@ -63,11 +63,11 @@ data CommonConstraint =
   -- | See https://www.w3.org/TR/shacl/#PatternConstraintComponent
   CommonConstraintPattern Pattern |
   -- | See https://www.w3.org/TR/shacl/#PropertyConstraintComponent
-  CommonConstraintProperty (Set (Reference PropertyShape)) |
+  CommonConstraintProperty (S.Set (Reference PropertyShape)) |
   -- | See https://www.w3.org/TR/shacl/#OrConstraintComponent
-  CommonConstraintOr (Set (Reference Shape)) |
+  CommonConstraintOr (S.Set (Reference Shape)) |
   -- | See https://www.w3.org/TR/shacl/#XoneConstraintComponent
-  CommonConstraintXone (Set (Reference Shape))
+  CommonConstraintXone (S.Set (Reference Shape))
   deriving (Eq, Ord, Read, Show)
 
 _CommonConstraint = (Core.Name "hydra.ext.org.w3.shacl.model.CommonConstraint")
@@ -120,7 +120,7 @@ _CommonConstraint_xone = (Core.Name "xone")
 data CommonProperties = 
   CommonProperties {
     -- | Common constraint parameters attached to this shape
-    commonPropertiesConstraints :: (Set CommonConstraint),
+    commonPropertiesConstraints :: (S.Set CommonConstraint),
     -- | See https://www.w3.org/TR/shacl/#deactivated
     commonPropertiesDeactivated :: (Maybe Bool),
     -- | See https://www.w3.org/TR/shacl/#message
@@ -128,13 +128,13 @@ data CommonProperties =
     -- | See https://www.w3.org/TR/shacl/#severity
     commonPropertiesSeverity :: Severity,
     -- | See https://www.w3.org/TR/shacl/#targetClass
-    commonPropertiesTargetClass :: (Set Syntax.RdfsClass),
+    commonPropertiesTargetClass :: (S.Set Syntax.RdfsClass),
     -- | See https://www.w3.org/TR/shacl/#targetNode
-    commonPropertiesTargetNode :: (Set Syntax.IriOrLiteral),
+    commonPropertiesTargetNode :: (S.Set Syntax.IriOrLiteral),
     -- | See https://www.w3.org/TR/shacl/#targetObjectsOf
-    commonPropertiesTargetObjectsOf :: (Set Syntax.Property),
+    commonPropertiesTargetObjectsOf :: (S.Set Syntax.Property),
     -- | See https://www.w3.org/TR/shacl/#targetSubjectsOf
-    commonPropertiesTargetSubjectsOf :: (Set Syntax.Property)}
+    commonPropertiesTargetSubjectsOf :: (S.Set Syntax.Property)}
   deriving (Eq, Ord, Read, Show)
 
 _CommonProperties = (Core.Name "hydra.ext.org.w3.shacl.model.CommonProperties")
@@ -225,7 +225,7 @@ data PropertyShape =
   PropertyShape {
     propertyShapeCommon :: CommonProperties,
     -- | Any property shape -specific constraint parameters
-    propertyShapeConstraints :: (Set PropertyShapeConstraint),
+    propertyShapeConstraints :: (S.Set PropertyShapeConstraint),
     -- | See https://www.w3.org/TR/shacl/#defaultValue
     propertyShapeDefaultValue :: (Maybe Syntax.Node),
     -- | See https://www.w3.org/TR/shacl/#name
@@ -256,9 +256,9 @@ _PropertyShape_path = (Core.Name "path")
 -- | A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes
 data PropertyShapeConstraint = 
   -- | See https://www.w3.org/TR/shacl/#LessThanConstraintComponent
-  PropertyShapeConstraintLessThan (Set Syntax.Property) |
+  PropertyShapeConstraintLessThan (S.Set Syntax.Property) |
   -- | See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent
-  PropertyShapeConstraintLessThanOrEquals (Set Syntax.Property) |
+  PropertyShapeConstraintLessThanOrEquals (S.Set Syntax.Property) |
   -- | The maximum cardinality. Node shapes cannot have any value for sh:maxCount. See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent
   PropertyShapeConstraintMaxCount Integer |
   -- | The minimum cardinality. Node shapes cannot have any value for sh:minCount. See https://www.w3.org/TR/shacl/#MinCountConstraintComponent
@@ -351,7 +351,7 @@ _Shape_property = (Core.Name "property")
 -- | An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes
 newtype ShapesGraph = 
   ShapesGraph {
-    unShapesGraph :: (Set (Definition Shape))}
+    unShapesGraph :: (S.Set (Definition Shape))}
   deriving (Eq, Ord, Read, Show)
 
 _ShapesGraph = (Core.Name "hydra.ext.org.w3.shacl.model.ShapesGraph")

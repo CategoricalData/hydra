@@ -9,10 +9,10 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Strip as Strip
-import Data.Int
-import Data.List as L
-import Data.Map as M
-import Data.Set as S
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- | Fold over a term, traversing its subterms in the specified order
 foldOverTerm :: (Coders.TraversalOrder -> (x -> Core.Term -> x) -> x -> Core.Term -> x)
@@ -27,7 +27,7 @@ foldOverType order fld b0 typ = ((\x -> case x of
   Coders.TraversalOrderPost -> (fld (Lists.foldl (foldOverType order fld) b0 (subtypes typ)) typ)) order)
 
 -- | Find the free variables (i.e. variables not bound by a lambda or let) in a term
-freeVariablesInTerm :: (Core.Term -> Set Core.Name)
+freeVariablesInTerm :: (Core.Term -> S.Set Core.Name)
 freeVariablesInTerm term =  
   let dfltVars = (Lists.foldl (\s -> \t -> Sets.union s (freeVariablesInTerm t)) Sets.empty (subterms term))
   in ((\x -> case x of
@@ -38,7 +38,7 @@ freeVariablesInTerm term =
     _ -> dfltVars) term)
 
 -- | Find the free variables (i.e. variables not bound by a lambda or let) in a type
-freeVariablesInType :: (Core.Type -> Set Core.Name)
+freeVariablesInType :: (Core.Type -> S.Set Core.Name)
 freeVariablesInType typ =  
   let dfltVars = (Lists.foldl (\s -> \t -> Sets.union s (freeVariablesInType t)) Sets.empty (subtypes typ))
   in ((\x -> case x of
