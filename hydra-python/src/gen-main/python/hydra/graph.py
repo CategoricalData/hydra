@@ -20,6 +20,14 @@ class Comparison(Enum):
     GREATER_THAN = "greaterThan"
 
 @dataclass
+class Element:
+    """A graph element, having a name, data term (value), and schema term (type)."""
+    
+    name: hydra.core.Name
+    term: hydra.core.Term
+    type: hydra.core.TypeScheme | None
+
+@dataclass
 class Graph:
     """A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph."""
     
@@ -29,13 +37,6 @@ class Graph:
     body: Annotated[hydra.core.Term, "The body of the term which generated this context"]
     primitives: Annotated[dict[hydra.core.Name, Primitive], "All supported primitive constants and functions, by name"]
     schema: Annotated[Graph | None, "The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph."]
-
-@dataclass
-class Element:
-    """A graph element, having a name, data term (value), and schema term (type)."""
-    
-    name: hydra.core.Name
-    data: hydra.core.Term
 
 @dataclass
 class Primitive:
