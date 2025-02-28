@@ -140,7 +140,7 @@ decodeSchema v = case v of
         (avro_fixed, \m -> decodeNamedSchema $ Json.ValueObject m),
         (avro_map, \m -> do
           values <- require avro_values m >>= decodeSchema
-          return $ Avro.SchemaMap $ Avro.Map_ values),
+          return $ Avro.SchemaMap $ Avro.Map values),
         (avro_record, \m -> decodeNamedSchema $ Json.ValueObject m)]
   Json.ValueString s -> pure $ case M.lookup s schemas of
       Just prim -> Avro.SchemaPrimitive prim
