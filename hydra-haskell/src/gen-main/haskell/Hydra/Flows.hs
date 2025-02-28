@@ -63,6 +63,19 @@ fromFlow def cx f = ((\x -> case x of
   Nothing -> def
   Just v1 -> v1) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
 
+-- | Map a function over a flow
+map_ :: ((a -> b) -> Compute.Flow s a -> Compute.Flow s b)
+map_ f f1 = (Compute.Flow (\s0 -> \t0 ->  
+  let f2 = (Compute.unFlow f1 s0 t0)
+  in Compute.FlowState {
+    Compute.flowStateValue = (Optionals.map f (Compute.flowStateValue f2)),
+    Compute.flowStateState = (Compute.flowStateState f2),
+    Compute.flowStateTrace = (Compute.flowStateTrace f2)}))
+
+-- | Map a function over two flows
+map2 :: (Compute.Flow s a -> Compute.Flow s b -> (a -> b -> c) -> Compute.Flow s c)
+map2 f1 f2 f = (bind f1 (\r1 -> map_ (\r2 -> f r1 r2) f2))
+
 mutateTrace :: ((Compute.Trace -> Mantle.Either_ String Compute.Trace) -> (Compute.Trace -> Compute.Trace -> Compute.Trace) -> Compute.Flow s a -> Compute.Flow s a)
 mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->  
   let forLeft = (\msg -> Compute.FlowState {
