@@ -306,7 +306,7 @@ encodeTerm env term = case fullyStripTerm term of
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) pargs
     TermSet s -> do
       pyEls <- CM.mapM encode $ S.toList s
-      return $ pyAtomToPyExpression $ Py.AtomSet $ Py.Set_ (pyExpressionToPyStarNamedExpression <$> pyEls)
+      return $ pyAtomToPyExpression $ Py.AtomSet $ Py.Set (pyExpressionToPyStarNamedExpression <$> pyEls)
     TermUnion (Injection tname field) -> do
       rt <- requireUnionType tname
       if isEnumType rt
