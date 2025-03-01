@@ -2845,6 +2845,97 @@ inferenceTests = Testing.TestGroup {
                     Testing.Tag "disabledForAlgorithmWInference",
                     (Testing.Tag "disabledForAltInference")]}]},
             Testing.TestGroup {
+              Testing.testGroupName = "Optional eliminations",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationOptional (Core.OptionalCases {
+                      Core.optionalCasesNothing = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                      Core.optionalCasesJust = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.neg")))})))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
+                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForAlgorithmWInference",
+                    (Testing.Tag "disabledForAltInference")]},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationOptional (Core.OptionalCases {
+                        Core.optionalCasesNothing = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                        Core.optionalCasesJust = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.neg")))})))),
+                      Core.applicationArgument = (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForAlgorithmWInference",
+                    (Testing.Tag "disabledForAltInference")]},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationOptional (Core.OptionalCases {
+                        Core.optionalCasesNothing = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                        Core.optionalCasesJust = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.neg")))})))),
+                      Core.applicationArgument = (Core.TermOptional Nothing)})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForAlgorithmWInference",
+                    (Testing.Tag "disabledForAltInference")]},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationOptional (Core.OptionalCases {
+                          Core.optionalCasesNothing = (Core.TermVariable (Core.Name "x")),
+                          Core.optionalCasesJust = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.optionals.pure")))})))),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "t0"))),
+                        Core.functionTypeCodomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "t0")))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForAlgorithmWInference",
+                    (Testing.Tag "disabledForAltInference")]},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#5",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationOptional (Core.OptionalCases {
+                      Core.optionalCasesNothing = (Core.TermList []),
+                      Core.optionalCasesJust = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermList [
+                          Core.TermVariable (Core.Name "x")])})))})))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "t0"))),
+                        Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForAlgorithmWInference",
+                    (Testing.Tag "disabledForAltInference")]}]},
+            Testing.TestGroup {
               Testing.testGroupName = "Projections",
               Testing.testGroupDescription = Nothing,
               Testing.testGroupSubgroups = [],

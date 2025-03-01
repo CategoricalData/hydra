@@ -13,7 +13,7 @@ import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Tier3.Test.TestGraph
 
-import Hydra.Dsl.TTerms as TTerms
+import           Hydra.Dsl.TTerms as TTerms
 import qualified Hydra.Dsl.TTypes as T
 
 import qualified Data.Map as M
