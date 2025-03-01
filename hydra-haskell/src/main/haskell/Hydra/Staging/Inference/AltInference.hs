@@ -266,7 +266,20 @@ inferTypeOfCollection cons desc els = bindVar withVar
 
 inferTypeOfElimination :: Elimination -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfElimination elm = case elm of
---  EliminationList fun -> do
+  EliminationList fun -> bindVar2 withVars
+    where
+      withVars a b = Flows.map withResult (inferTypeOfTerm fun)
+        where
+          withResult (AltInferenceResult (TypeScheme funVars funType) constraints) = AltInferenceResult
+              (TypeScheme (a:b:funVars) elimType)
+              ((TypeConstraint expectedType funType $ Just "fold function"):constraints)
+            where
+              aT = TypeVariable a
+              bT = TypeVariable b
+              expectedType = Types.functionN [bT, aT, bT]
+              elimType = Types.functionN [bT, Types.list aT, bT]
+
+
 --  EliminationOptional (OptionalCases n j) -> do
 --  EliminationProduct (TupleProjection arity idx) -> do
 --  EliminationRecord (Projection name fname) -> do
