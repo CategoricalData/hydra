@@ -123,14 +123,14 @@ testElementArthurDef = testGraphDefinition "testElementArthur" $
   Graph.element
     (name "firstName")
     (ref testDataArthurDef)
-    (just $ Core.typeScheme (Base.list []) (Core.typeVariable $ ref testTypePersonNameDef))
+    (Base.just $ Core.typeScheme (Base.list []) (Core.typeVariable $ ref testTypePersonNameDef))
 
 testElementFirstNameDef :: TElement Element
 testElementFirstNameDef = testGraphDefinition "testElementFirstName" $
   Graph.element
     (name "firstName")
     (project (ref testTypePersonNameDef) (name "firstName"))
-    (just $ Core.typeScheme (Base.list [])
+    (Base.just $ Core.typeScheme (Base.list [])
       (Core.typeFunction $ Core.functionType (Core.typeVariable $ ref testTypePersonNameDef) T.string))
 
 --testGraph :: Graph
