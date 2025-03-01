@@ -297,7 +297,13 @@ inferTypeOfElimination elm = case elm of
                 TypeConstraint (Types.function dom cod) jtyp $ Just "optional elimination; just case"]
                 ++ altInferenceResultConstraints nresult ++ altInferenceResultConstraints jresult
 
---  EliminationProduct (TupleProjection arity idx) -> do
+  EliminationProduct (TupleProjection arity idx) -> forVars arity withVars
+    where
+      withVars vars = AltInferenceResult (TypeScheme vars $ Types.function (Types.product types) cod) []
+        where
+          types = TypeVariable <$> vars
+          cod = types !! idx
+
 --  EliminationRecord (Projection name fname) -> do
 --  EliminationUnion (CaseStatement tname def cases) -> do
 --  EliminationWrap name -> do
@@ -449,6 +455,9 @@ forInferredTerm2 t1 t2 f = map2 (inferTypeOfTerm t1) (inferTypeOfTerm t2) f
 
 forInferredTerms :: [Term] -> ([AltInferenceResult] -> a) -> Flow AltInferenceContext a
 forInferredTerms terms f = Flows.map f $ Flows.sequence $ inferTypeOfTerm <$> terms
+
+forVars :: Int -> ([Name] -> a) -> Flow AltInferenceContext a
+forVars n f = Flows.map f $ createNewVariables n
 
 instantiateTypeScheme :: TypeScheme -> Flow AltInferenceContext TypeScheme
 instantiateTypeScheme scheme = Flows.map doSubst (createNewVariables $ L.length oldVars)

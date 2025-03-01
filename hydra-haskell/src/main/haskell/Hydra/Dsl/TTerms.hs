@@ -137,11 +137,18 @@ sum i s = Core.termSum . Core.sum (Base.int32 i) (Base.int32 s)
 true :: TTerm Term
 true = boolean True
 
+tuple :: [TTerm Term] -> TTerm Term
+tuple = Core.termProduct . Base.list
+
 uint64 :: Integer -> TTerm Term
 uint64 = uint64Term . TTerm . Terms.uint64
 
 uint64Term :: TTerm Integer -> TTerm Term
 uint64Term = Core.termLiteral . Core.literalInteger . Core.integerValueUint64
+
+untuple :: Int -> Int -> TTerm Term
+untuple arity idx = Core.termFunction $ Core.functionElimination $ Core.eliminationProduct
+  $ Core.tupleProjection (Base.int32 arity) (Base.int32 idx)
 
 unwrap :: TTerm Name -> TTerm Term
 unwrap = Core.termFunction . Core.functionElimination . Core.eliminationWrap
