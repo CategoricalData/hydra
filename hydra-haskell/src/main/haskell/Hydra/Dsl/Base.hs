@@ -224,6 +224,9 @@ unit = TTerm Terms.unit
 unitVariant :: Name -> Name -> TTerm a
 unitVariant name fname = TTerm $ Terms.inject name $ Field fname Terms.unit
 
+untuple :: Int -> Int -> TTerm (a -> b)
+untuple arity idx = TTerm $ Terms.untuple arity idx
+
 unwrap :: Name -> TTerm (a -> b)
 unwrap = TTerm . Terms.unwrap
 
