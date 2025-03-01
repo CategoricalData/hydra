@@ -76,6 +76,9 @@ eliminationList = variant _Elimination _Elimination_list
 eliminationOptional :: TTerm OptionalCases -> TTerm Elimination
 eliminationOptional = variant _Elimination _Elimination_optional
 
+eliminationProduct :: TTerm TupleProjection -> TTerm Elimination
+eliminationProduct = variant _Elimination _Elimination_product
+
 eliminationRecord :: TTerm Projection -> TTerm Elimination
 eliminationRecord = variant _Elimination _Elimination_record
 
@@ -365,6 +368,11 @@ termVariable = variant _Term _Term_variable
 
 termWrap :: TTerm WrappedTerm -> TTerm Term
 termWrap = variant _Term _Term_wrap
+
+tupleProjection :: TTerm Int -> TTerm Int -> TTerm TupleProjection
+tupleProjection arity idx = Base.record _TupleProjection [
+  _TupleProjection_arity>>: arity,
+  _TupleProjection_index>>: idx]
 
 tupleProjectionArity :: TTerm (TupleProjection -> Int)
 tupleProjectionArity = Base.project _TupleProjection _TupleProjection_arity
