@@ -33,7 +33,7 @@ import Hydra.Sources.Tier2.Variants
 hydraAnnotationsModule :: Module
 hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
     [hydraVariantsModule]
-    [hydraGraphModule] $
+    [hydraGraphModule, hydraMantleModule] $
     Just "Utilities for reading and writing type and term annotations"
   where
    elements = [
@@ -51,7 +51,7 @@ getAnnotationDef = annotationsDefinition "getAnnotation" $
   lambda "key" $ lambda "ann" $
     Maps.lookup (var "key") (var "ann")
 
-getTermTypeDef :: TElement (Term -> Flow Graph (Maybe Type))
+getTermTypeDef :: TElement (Term -> Maybe Type)
 getTermTypeDef = annotationsDefinition "getTermType" $
   doc "Get the annotated type of a given term, if any" $
   function termT (tOpt typeT) $

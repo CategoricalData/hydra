@@ -63,6 +63,23 @@ testGroupForFunctionTerms = supergroup "Function terms" [
         (apply (apply foldAdd $ int32 0) (list (int32 <$> [1, 2, 3, 4, 5])))
         T.int32],
 
+    subgroup "Optional eliminations" [
+      expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+        (matchOpt (int32 42) (primitive _math_neg))
+        (T.function (T.optional T.int32) T.int32),
+      expectMono 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+        (matchOpt (int32 42) (primitive _math_neg) @@ optional (just $ int32 137))
+        T.int32,
+      expectMono 3 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+        (matchOpt (int32 42) (primitive _math_neg) @@ optional nothing)
+        T.int32,
+      expectPoly 4 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+        (lambda "x" $ matchOpt (var "x") (primitive _optionals_pure) @@ var "x")
+        ["t0"] (T.function (T.optional $ T.var "t0") (T.optional $ T.var "t0")),
+      expectPoly 5 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+        (matchOpt (list []) (lambda "x" $ list [var "x"]))
+        ["t0"] (T.function (T.optional $ T.var "t0") (T.list $ T.var "t0"))],
+
     subgroup "Projections" [
       expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
         (project (ref testTypePersonNameDef) (name "firstName"))
