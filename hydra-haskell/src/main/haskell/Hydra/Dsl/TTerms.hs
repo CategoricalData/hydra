@@ -67,21 +67,24 @@ int32 = int32Term . TTerm . Terms.int32
 int32Term :: TTerm Int -> TTerm Term
 int32Term = Core.termLiteral . Core.literalInteger . Core.integerValueInt32
 
+just :: TTerm Term -> TTerm (Maybe Term)
+just = Base.just
+
 lambda :: String -> TTerm Term -> TTerm Term
-lambda var body = Core.termFunction $ Core.functionLambda $ Core.lambda (name var) nothing body
+lambda var body = Core.termFunction $ Core.functionLambda $ Core.lambda (name var) Base.nothing body
 
 lambdas :: [String] -> TTerm Term -> TTerm Term
 lambdas params body = case params of
   [] -> body
-  (h:rest) -> Core.termFunction $ Core.functionLambda $ Core.lambda (name h) nothing $ lambdas rest body
+  (h:rest) -> Core.termFunction $ Core.functionLambda $ Core.lambda (name h) Base.nothing $ lambdas rest body
 
 let1 :: String -> TTerm Term -> TTerm Term -> TTerm Term
-let1 v t1 t2 = Core.termLet $ Core.letExpression (Base.list [Core.letBinding (name v) t1 nothing]) t2
+let1 v t1 t2 = Core.termLet $ Core.letExpression (Base.list [Core.letBinding (name v) t1 Base.nothing]) t2
 
 lets :: [(TTerm Name, TTerm Term)] -> TTerm Term -> TTerm Term
 lets pairs body = Core.termLet $ Core.letExpression (Base.list $ toBinding pairs) body
   where
-    toBinding = fmap (\(n, t) -> Core.letBinding n t nothing)
+    toBinding = fmap (\(n, t) -> Core.letBinding n t Base.nothing)
 
 list :: [TTerm Term] -> TTerm Term
 list = Core.termList . Base.list
@@ -94,6 +97,12 @@ match tname def pairs = Core.termFunction $ Core.functionElimination $ Core.elim
     $ Core.caseStatement tname def $ Base.list $ toField pairs
   where
     toField = fmap (\(n, t) -> Core.field n t)
+
+matchOpt :: TTerm Term -> TTerm Term -> TTerm Term
+matchOpt n j = Core.termFunction $ Core.functionElimination $ Core.eliminationOptional $ Core.optionalCases n j
+
+nothing :: TTerm (Maybe Term)
+nothing = Base.nothing
 
 optional :: TTerm (Maybe Term) -> TTerm Term
 optional = Core.termOptional

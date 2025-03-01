@@ -9,7 +9,7 @@ module Hydra.Dsl.TBase (
 
 import Hydra.Kernel
 import Hydra.Dsl.ShorthandTypes
-import Hydra.Dsl.Base(definitionInModule, el, firstClassType, just, nothing, opt, ref, variant)
+import Hydra.Dsl.Base(definitionInModule, el, firstClassType, opt, ref, variant)
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Core as Core
 import Hydra.Sources.Libraries

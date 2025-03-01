@@ -73,6 +73,9 @@ caseStatementCases = Base.project _CaseStatement _CaseStatement_cases
 eliminationList :: TTerm Term -> TTerm Elimination
 eliminationList = variant _Elimination _Elimination_list
 
+eliminationOptional :: TTerm OptionalCases -> TTerm Elimination
+eliminationOptional = variant _Elimination _Elimination_optional
+
 eliminationRecord :: TTerm Projection -> TTerm Elimination
 eliminationRecord = variant _Elimination _Elimination_record
 

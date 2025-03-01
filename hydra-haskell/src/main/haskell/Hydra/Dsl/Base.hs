@@ -129,7 +129,7 @@ inject name fname (TTerm term) = TTerm $ Terms.inject name (Field fname term)
 inject2 :: Name -> Name -> TTerm (a -> b)
 inject2 name fname = lambda "x2" $ inject name fname $ var "x2"
 
-just :: TTerm x -> TTerm (Maybe x)
+just :: TTerm a -> TTerm (Maybe a)
 just (TTerm term) = TTerm $ Terms.just term
 
 lambda :: String -> TTerm x -> TTerm (a -> b)
@@ -179,7 +179,7 @@ matchToUnion domName codName dflt pairs = matchData domName dflt (toCase <$> pai
 nom :: Name -> TTerm a -> TTerm b
 nom name (TTerm term) = TTerm $ Terms.wrap name term
 
-nothing :: TTerm a
+nothing :: TTerm (Maybe a)
 nothing = TTerm Terms.nothing
 
 opt :: Maybe (TTerm a) -> TTerm (Maybe a)
