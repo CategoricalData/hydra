@@ -2936,7 +2936,7 @@ inferenceTests = Testing.TestGroup {
                     Testing.Tag "disabledForAlgorithmWInference",
                     (Testing.Tag "disabledForAltInference")]}]},
             Testing.TestGroup {
-              Testing.testGroupName = "Projections",
+              Testing.testGroupName = "Record projections",
               Testing.testGroupDescription = Nothing,
               Testing.testGroupSubgroups = [],
               Testing.testGroupCases = [
@@ -2990,6 +2990,93 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                         Core.functionTypeDomain = TestGraph.testTypeFoobarValue,
                         Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeBoolean)}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForAlgorithmWInference",
+                    (Testing.Tag "disabledForAltInference")]}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Tuple projections",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+                      Core.tupleProjectionArity = 2,
+                      Core.tupleProjectionIndex = 0})))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0",
+                        (Core.Name "t1")],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeProduct [
+                          Core.TypeVariable (Core.Name "t0"),
+                          (Core.TypeVariable (Core.Name "t1"))]),
+                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForAlgorithmWInference",
+                    (Testing.Tag "disabledForAltInference")]},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+                        Core.tupleProjectionArity = 2,
+                        Core.tupleProjectionIndex = 1})))),
+                      Core.applicationArgument = (Core.TermProduct [
+                        Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
+                        (Core.TermLiteral (Core.LiteralString "foo"))])})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString)}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForAlgorithmWInference",
+                    (Testing.Tag "disabledForAltInference")]},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+                          Core.tupleProjectionArity = 1,
+                          Core.tupleProjectionIndex = 0})))),
+                        Core.applicationArgument = (Core.TermProduct [
+                          Core.TermVariable (Core.Name "x")])}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForAlgorithmWInference",
+                    (Testing.Tag "disabledForAltInference")]},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+                          Core.tupleProjectionArity = 3,
+                          Core.tupleProjectionIndex = 2})))),
+                        Core.applicationArgument = (Core.TermProduct [
+                          Core.TermVariable (Core.Name "x"),
+                          Core.TermVariable (Core.Name "x"),
+                          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))])}))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForAlgorithmWInference",

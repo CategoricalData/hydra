@@ -80,7 +80,7 @@ testGroupForFunctionTerms = supergroup "Function terms" [
         (matchOpt (list []) (lambda "x" $ list [var "x"]))
         ["t0"] (T.function (T.optional $ T.var "t0") (T.list $ T.var "t0"))],
 
-    subgroup "Projections" [
+    subgroup "Record projections" [
       expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
         (project (ref testTypePersonNameDef) (name "firstName"))
         (T.function (ref testTypePersonDef) T.string)],
@@ -91,7 +91,22 @@ testGroupForFunctionTerms = supergroup "Function terms" [
           "bool">: constant true,
           "string">: constant false,
           "unit">: constant false])
-        (T.function (ref testTypeFoobarValueDef) T.boolean)]]
+        (T.function (ref testTypeFoobarValueDef) T.boolean)],
+
+   subgroup "Tuple projections" [
+     expectPoly 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+       (untuple 2 0)
+       ["t0", "t1"] (T.function (T.product [T.var "t0", T.var "t1"]) (T.var "t0")),
+     expectMono 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+       (untuple 2 1 @@ pair (int32 42) (string "foo"))
+       T.string,
+     expectPoly 3 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+       (lambda "x" $ untuple 1 0 @@ tuple [var "x"])
+       ["t0"] (T.function (T.var "t0") (T.var "t0")),
+     expectPoly 4 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+       (lambda "x" $ untuple 3 2 @@ tuple [var "x", var "x", int32 42])
+       ["t0"] (T.function (T.var "t0") T.int32)]]
+
   where
     foldAdd = fold $ primitive _math_add
 
