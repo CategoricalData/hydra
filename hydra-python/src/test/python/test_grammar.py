@@ -1,17 +1,17 @@
-from hydra.grammar import (
-    Pattern,
-    PatternNonterminal,
-    PatternSequence,
-    PatternAlternatives,
-    PatternOption,
-    PatternStar,
-    PatternPlus,
-    PatternLabeled,
-    PatternConstant,
-    PatternRegex,
-    Grammar,
-)
 import hydra.dsl.grammar as dsl
+from hydra.grammar import (
+    Grammar,
+    Pattern,
+    PatternAlternatives,
+    PatternConstant,
+    PatternLabeled,
+    PatternNonterminal,
+    PatternOption,
+    PatternPlus,
+    PatternRegex,
+    PatternSequence,
+    PatternStar,
+)
 
 
 def gather_nonterminals(pattern: Pattern) -> set[str]:
