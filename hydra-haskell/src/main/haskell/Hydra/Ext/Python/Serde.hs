@@ -174,12 +174,13 @@ encodeFunctionDefRaw (Py.FunctionDefRaw async name tparams params retType ftc bl
   spaceSep $ Y.catMaybes [
     if async then Just $ cst "async" else Nothing,
     Just $ cst "def",
-    Just $ noSep (Y.catMaybes [
+    Just $ noSep $ Y.catMaybes [
       Just $ encodeName name,
       Nothing, -- TODO: tparams
-      Just $ noSep $ Y.catMaybes [Just $ cst "(", encodeParameters <$> params, Just $ cst ")"]]),
-    Nothing, -- TODO: retType
-    Just $ cst ":",
+      Just $ cst "(",
+      encodeParameters <$> params,
+      Just $ cst ")",
+      Just $ cst ":"],
     Nothing], -- TODO: ftc
   encodeBlock block]
 
