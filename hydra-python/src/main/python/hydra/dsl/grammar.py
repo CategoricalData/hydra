@@ -1,24 +1,24 @@
 """A DSL for building BNF grammars."""
 
 from hydra.grammar import (
-    Symbol,
+    Constant,
+    Label,
+    LabeledPattern,
     Pattern,
-    PatternLabeled,
     PatternAlternatives,
-    Production,
+    PatternConstant,
     PatternIgnored,
-    PatternSequence,
+    PatternLabeled,
     PatternNil,
+    PatternNonterminal,
     PatternOption,
     PatternPlus,
     PatternRegex,
-    LabeledPattern,
-    Label,
-    Regex,
+    PatternSequence,
     PatternStar,
-    PatternConstant,
-    Constant,
-    PatternNonterminal,
+    Production,
+    Regex,
+    Symbol,
 )
 
 
