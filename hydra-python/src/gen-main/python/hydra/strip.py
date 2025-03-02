@@ -3,45 +3,45 @@
 from __future__ import annotations
 import hydra.core
 
-def fullyStripTerm(t):
+def fully_strip_term(t):
     """Strip all annotations from a term, including first-class type annotations."""
     
     match t:
         case hydra.core.TermAnnotated(x):
-            return fullyStripTerm(x.subject)
+            return fully_strip_term(x.subject)
         
         case hydra.core.TermTyped(x):
-            return fullyStripTerm(x.term)
+            return fully_strip_term(x.term)
         
         case _:
             return t
 
-def stripTerm(t):
+def strip_term(t):
     """Strip all annotations from a term."""
     
     match t:
         case hydra.core.TermAnnotated(x):
-            return stripTerm(x.subject)
+            return strip_term(x.subject)
         
         case _:
             return t
 
-def stripType(t):
+def strip_type(t):
     """Strip all annotations from a term."""
     
     match t:
         case hydra.core.TypeAnnotated(x):
-            return stripType(x.subject)
+            return strip_type(x.subject)
         
         case _:
             return t
 
-def stripTypeParameters(t):
+def strip_type_parameters(t):
     """Strip any top-level type lambdas from a type, extracting the (possibly nested) type body."""
     
-    match stripType(t):
+    match strip_type(t):
         case hydra.core.TypeLambda(lt):
-            return stripTypeParameters(lt.body)
+            return strip_type_parameters(lt.body)
         
         case _:
             return t

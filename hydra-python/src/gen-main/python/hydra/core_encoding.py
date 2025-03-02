@@ -9,62 +9,62 @@ import hydra.lib.optionals
 import hydra.lib.sets
 import hydra.strip
 
-def coreEncodeAnnotatedTerm(a):
-    return hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(coreEncodeTerm(a.subject), a.annotation))
+def core_encode_annotated_term(a):
+    return hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(core_encode_term(a.subject), a.annotation))
 
-def coreEncodeAnnotatedType(at):
-    return hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(coreEncodeType(at.subject), at.annotation))
+def core_encode_annotated_type(at):
+    return hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(core_encode_type(at.subject), at.annotation))
 
-def coreEncodeApplication(app):
+def core_encode_application(app):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Application"), [
-      hydra.core.Field(hydra.core.Name("function"), coreEncodeTerm(app.function)),
-      hydra.core.Field(hydra.core.Name("argument"), coreEncodeTerm(app.argument))]))
+      hydra.core.Field(hydra.core.Name("function"), core_encode_term(app.function)),
+      hydra.core.Field(hydra.core.Name("argument"), core_encode_term(app.argument))]))
 
-def coreEncodeApplicationType(at):
+def core_encode_application_type(at):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.ApplicationType"), [
-      hydra.core.Field(hydra.core.Name("function"), coreEncodeType(at.function)),
-      hydra.core.Field(hydra.core.Name("argument"), coreEncodeType(at.argument))]))
+      hydra.core.Field(hydra.core.Name("function"), core_encode_type(at.function)),
+      hydra.core.Field(hydra.core.Name("argument"), core_encode_type(at.argument))]))
 
-def coreEncodeCaseStatement(cs):
+def core_encode_case_statement(cs):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.CaseStatement"), [
-      hydra.core.Field(hydra.core.Name("typeName"), coreEncodeName(cs.type_name)),
-      hydra.core.Field(hydra.core.Name("default"), hydra.core.TermOptional(hydra.lib.optionals.map(lambda v1: coreEncodeTerm(v1))(cs.default))),
-      hydra.core.Field(hydra.core.Name("cases"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: coreEncodeField(v1))(cs.cases)))]))
+      hydra.core.Field(hydra.core.Name("typeName"), core_encode_name(cs.type_name)),
+      hydra.core.Field(hydra.core.Name("default"), hydra.core.TermOptional(hydra.lib.optionals.map(lambda v1: core_encode_term(v1))(cs.default))),
+      hydra.core.Field(hydra.core.Name("cases"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_field(v1))(cs.cases)))]))
 
-def coreEncodeElimination(v1):
+def core_encode_elimination(v1):
     match v1:
         case hydra.core.EliminationList(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("list"), coreEncodeTerm(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("list"), core_encode_term(v))))
         
         case hydra.core.EliminationOptional(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("optional"), coreEncodeOptionalCases(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("optional"), core_encode_optional_cases(v))))
         
         case hydra.core.EliminationProduct(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("product"), coreEncodeTupleProjection(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("product"), core_encode_tuple_projection(v))))
         
         case hydra.core.EliminationRecord(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("record"), coreEncodeProjection(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("record"), core_encode_projection(v))))
         
         case hydra.core.EliminationUnion(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("union"), coreEncodeCaseStatement(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("union"), core_encode_case_statement(v))))
         
         case hydra.core.EliminationWrap(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("wrap"), coreEncodeName(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("wrap"), core_encode_name(v))))
         
         case _:
             raise TypeError("Unsupported Elimination")
 
-def coreEncodeField(f):
+def core_encode_field(f):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Field"), [
       hydra.core.Field(hydra.core.Name("name"), hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.core.Name"), hydra.core.TermLiteral(hydra.core.LiteralString(f.name.value))))),
-      hydra.core.Field(hydra.core.Name("term"), coreEncodeTerm(f.term))]))
+      hydra.core.Field(hydra.core.Name("term"), core_encode_term(f.term))]))
 
-def coreEncodeFieldType(ft):
+def core_encode_field_type(ft):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.FieldType"), [
-      hydra.core.Field(hydra.core.Name("name"), coreEncodeName(ft.name)),
-      hydra.core.Field(hydra.core.Name("type"), coreEncodeType(ft.type))]))
+      hydra.core.Field(hydra.core.Name("name"), core_encode_name(ft.name)),
+      hydra.core.Field(hydra.core.Name("type"), core_encode_type(ft.type))]))
 
-def coreEncodeFloatType(v1):
+def core_encode_float_type(v1):
     match v1:
         case hydra.core.FloatTypeBigfloat(_):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("bigfloat"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), [])))))
@@ -78,7 +78,7 @@ def coreEncodeFloatType(v1):
         case _:
             raise TypeError("Unsupported FloatType")
 
-def coreEncodeFloatValue(v1):
+def core_encode_float_value(v1):
     match v1:
         case hydra.core.FloatValueBigfloat(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatValue"), hydra.core.Field(hydra.core.Name("bigfloat"), hydra.core.TermLiteral(hydra.core.LiteralFloat(hydra.core.FloatValueBigfloat(v))))))
@@ -92,31 +92,31 @@ def coreEncodeFloatValue(v1):
         case _:
             raise TypeError("Unsupported FloatValue")
 
-def coreEncodeFunction(v1):
+def core_encode_function(v1):
     match v1:
         case hydra.core.FunctionElimination(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Function"), hydra.core.Field(hydra.core.Name("elimination"), coreEncodeElimination(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Function"), hydra.core.Field(hydra.core.Name("elimination"), core_encode_elimination(v))))
         
         case hydra.core.FunctionLambda(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Function"), hydra.core.Field(hydra.core.Name("lambda"), coreEncodeLambda(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Function"), hydra.core.Field(hydra.core.Name("lambda"), core_encode_lambda(v))))
         
         case hydra.core.FunctionPrimitive(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Function"), hydra.core.Field(hydra.core.Name("primitive"), coreEncodeName(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Function"), hydra.core.Field(hydra.core.Name("primitive"), core_encode_name(v))))
         
         case _:
             raise TypeError("Unsupported Function")
 
-def coreEncodeFunctionType(ft):
+def core_encode_function_type(ft):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.FunctionType"), [
-      hydra.core.Field(hydra.core.Name("domain"), coreEncodeType(ft.domain)),
-      hydra.core.Field(hydra.core.Name("codomain"), coreEncodeType(ft.codomain))]))
+      hydra.core.Field(hydra.core.Name("domain"), core_encode_type(ft.domain)),
+      hydra.core.Field(hydra.core.Name("codomain"), core_encode_type(ft.codomain))]))
 
-def coreEncodeInjection(i):
+def core_encode_injection(i):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Injection"), [
-      hydra.core.Field(hydra.core.Name("typeName"), coreEncodeName(i.type_name)),
-      hydra.core.Field(hydra.core.Name("field"), coreEncodeField(i.field))]))
+      hydra.core.Field(hydra.core.Name("typeName"), core_encode_name(i.type_name)),
+      hydra.core.Field(hydra.core.Name("field"), core_encode_field(i.field))]))
 
-def coreEncodeIntegerType(v1):
+def core_encode_integer_type(v1):
     match v1:
         case hydra.core.IntegerTypeBigint(_):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("bigint"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), [])))))
@@ -148,7 +148,7 @@ def coreEncodeIntegerType(v1):
         case _:
             raise TypeError("Unsupported IntegerType")
 
-def coreEncodeIntegerValue(v1):
+def core_encode_integer_value(v1):
     match v1:
         case hydra.core.IntegerValueBigint(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("bigint"), hydra.core.TermLiteral(hydra.core.LiteralInteger(hydra.core.IntegerValueBigint(v))))))
@@ -180,29 +180,29 @@ def coreEncodeIntegerValue(v1):
         case _:
             raise TypeError("Unsupported IntegerValue")
 
-def coreEncodeLambda(l):
+def core_encode_lambda(l):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Lambda"), [
-      hydra.core.Field(hydra.core.Name("parameter"), coreEncodeName(l.parameter)),
-      hydra.core.Field(hydra.core.Name("domain"), hydra.core.TermOptional(hydra.lib.optionals.map(lambda v1: coreEncodeType(v1))(l.domain))),
-      hydra.core.Field(hydra.core.Name("body"), coreEncodeTerm(l.body))]))
+      hydra.core.Field(hydra.core.Name("parameter"), core_encode_name(l.parameter)),
+      hydra.core.Field(hydra.core.Name("domain"), hydra.core.TermOptional(hydra.lib.optionals.map(lambda v1: core_encode_type(v1))(l.domain))),
+      hydra.core.Field(hydra.core.Name("body"), core_encode_term(l.body))]))
 
-def coreEncodeLambdaType(lt):
+def core_encode_lambda_type(lt):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.LambdaType"), [
-      hydra.core.Field(hydra.core.Name("parameter"), coreEncodeName(lt.parameter)),
-      hydra.core.Field(hydra.core.Name("body"), coreEncodeType(lt.body))]))
+      hydra.core.Field(hydra.core.Name("parameter"), core_encode_name(lt.parameter)),
+      hydra.core.Field(hydra.core.Name("body"), core_encode_type(lt.body))]))
 
-def coreEncodeLet(l):
+def core_encode_let(l):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Let"), [
-      hydra.core.Field(hydra.core.Name("bindings"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: coreEncodeLetBinding(v1))(l.bindings))),
-      hydra.core.Field(hydra.core.Name("environment"), coreEncodeTerm(l.environment))]))
+      hydra.core.Field(hydra.core.Name("bindings"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_let_binding(v1))(l.bindings))),
+      hydra.core.Field(hydra.core.Name("environment"), core_encode_term(l.environment))]))
 
-def coreEncodeLetBinding(b):
+def core_encode_let_binding(b):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.LetBinding"), [
-      hydra.core.Field(hydra.core.Name("name"), coreEncodeName(b.name)),
-      hydra.core.Field(hydra.core.Name("term"), coreEncodeTerm(b.term)),
-      hydra.core.Field(hydra.core.Name("type"), hydra.core.TermOptional(hydra.lib.optionals.map(lambda v1: coreEncodeTypeScheme(v1))(b.type)))]))
+      hydra.core.Field(hydra.core.Name("name"), core_encode_name(b.name)),
+      hydra.core.Field(hydra.core.Name("term"), core_encode_term(b.term)),
+      hydra.core.Field(hydra.core.Name("type"), hydra.core.TermOptional(hydra.lib.optionals.map(lambda v1: core_encode_type_scheme(v1))(b.type)))]))
 
-def coreEncodeLiteral(v1):
+def core_encode_literal(v1):
     match v1:
         case hydra.core.LiteralBinary(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("binary"), hydra.core.TermLiteral(hydra.core.LiteralBinary(v)))))
@@ -211,10 +211,10 @@ def coreEncodeLiteral(v1):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("boolean"), hydra.core.TermLiteral(hydra.core.LiteralBoolean(v)))))
         
         case hydra.core.LiteralFloat(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("float"), coreEncodeFloatValue(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("float"), core_encode_float_value(v))))
         
         case hydra.core.LiteralInteger(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("integer"), coreEncodeIntegerValue(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("integer"), core_encode_integer_value(v))))
         
         case hydra.core.LiteralString(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("string"), hydra.core.TermLiteral(hydra.core.LiteralString(v)))))
@@ -222,7 +222,7 @@ def coreEncodeLiteral(v1):
         case _:
             raise TypeError("Unsupported Literal")
 
-def coreEncodeLiteralType(v1):
+def core_encode_literal_type(v1):
     match v1:
         case hydra.core.LiteralTypeBinary(_):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("binary"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), [])))))
@@ -231,10 +231,10 @@ def coreEncodeLiteralType(v1):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("boolean"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), [])))))
         
         case hydra.core.LiteralTypeFloat(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("float"), coreEncodeFloatType(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("float"), core_encode_float_type(v))))
         
         case hydra.core.LiteralTypeInteger(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("integer"), coreEncodeIntegerType(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("integer"), core_encode_integer_type(v))))
         
         case hydra.core.LiteralTypeString(_):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("string"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), [])))))
@@ -242,206 +242,206 @@ def coreEncodeLiteralType(v1):
         case _:
             raise TypeError("Unsupported LiteralType")
 
-def coreEncodeMapType(mt):
+def core_encode_map_type(mt):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.MapType"), [
-      hydra.core.Field(hydra.core.Name("keys"), coreEncodeType(mt.keys)),
-      hydra.core.Field(hydra.core.Name("values"), coreEncodeType(mt.values))]))
+      hydra.core.Field(hydra.core.Name("keys"), core_encode_type(mt.keys)),
+      hydra.core.Field(hydra.core.Name("values"), core_encode_type(mt.values))]))
 
-def coreEncodeName(fn):
+def core_encode_name(fn):
     return hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.core.Name"), hydra.core.TermLiteral(hydra.core.LiteralString(fn.value))))
 
-def coreEncodeOptionalCases(oc):
+def core_encode_optional_cases(oc):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.OptionalCases"), [
-      hydra.core.Field(hydra.core.Name("nothing"), coreEncodeTerm(oc.nothing)),
-      hydra.core.Field(hydra.core.Name("just"), coreEncodeTerm(oc.just))]))
+      hydra.core.Field(hydra.core.Name("nothing"), core_encode_term(oc.nothing)),
+      hydra.core.Field(hydra.core.Name("just"), core_encode_term(oc.just))]))
 
-def coreEncodeProjection(p):
+def core_encode_projection(p):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Projection"), [
-      hydra.core.Field(hydra.core.Name("typeName"), coreEncodeName(p.type_name)),
-      hydra.core.Field(hydra.core.Name("field"), coreEncodeName(p.field))]))
+      hydra.core.Field(hydra.core.Name("typeName"), core_encode_name(p.type_name)),
+      hydra.core.Field(hydra.core.Name("field"), core_encode_name(p.field))]))
 
-def coreEncodeRecord(r):
+def core_encode_record(r):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Record"), [
-      hydra.core.Field(hydra.core.Name("typeName"), coreEncodeName(r.type_name)),
-      hydra.core.Field(hydra.core.Name("fields"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: coreEncodeField(v1))(r.fields)))]))
+      hydra.core.Field(hydra.core.Name("typeName"), core_encode_name(r.type_name)),
+      hydra.core.Field(hydra.core.Name("fields"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_field(v1))(r.fields)))]))
 
-def coreEncodeRowType(rt):
+def core_encode_row_type(rt):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.RowType"), [
-      hydra.core.Field(hydra.core.Name("typeName"), coreEncodeName(rt.type_name)),
-      hydra.core.Field(hydra.core.Name("fields"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: coreEncodeFieldType(v1))(rt.fields)))]))
+      hydra.core.Field(hydra.core.Name("typeName"), core_encode_name(rt.type_name)),
+      hydra.core.Field(hydra.core.Name("fields"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_field_type(v1))(rt.fields)))]))
 
-def coreEncodeSum(s):
+def core_encode_sum(s):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Sum"), [
       hydra.core.Field(hydra.core.Name("index"), hydra.core.TermLiteral(hydra.core.LiteralInteger(hydra.core.IntegerValueInt32(s.index)))),
       hydra.core.Field(hydra.core.Name("size"), hydra.core.TermLiteral(hydra.core.LiteralInteger(hydra.core.IntegerValueInt32(s.size)))),
-      hydra.core.Field(hydra.core.Name("term"), coreEncodeTerm(s.term))]))
+      hydra.core.Field(hydra.core.Name("term"), core_encode_term(s.term))]))
 
-def coreEncodeTerm(v1):
+def core_encode_term(v1):
     match v1:
         case hydra.core.TermAnnotated(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("annotated"), coreEncodeAnnotatedTerm(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("annotated"), core_encode_annotated_term(v))))
         
         case hydra.core.TermApplication(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("application"), coreEncodeApplication(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("application"), core_encode_application(v))))
         
         case hydra.core.TermFunction(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("function"), coreEncodeFunction(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("function"), core_encode_function(v))))
         
         case hydra.core.TermLet(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("let"), coreEncodeLet(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("let"), core_encode_let(v))))
         
         case hydra.core.TermLiteral(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), coreEncodeLiteral(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), core_encode_literal(v))))
         
         case hydra.core.TermList(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("list"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: coreEncodeTerm(v1))(v)))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("list"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_term(v1))(v)))))
         
         case hydra.core.TermMap(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), hydra.core.TermMap(hydra.lib.maps.bimap(lambda v1: coreEncodeTerm(v1))(lambda v1: coreEncodeTerm(v1))(v)))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), hydra.core.TermMap(hydra.lib.maps.bimap(lambda v1: core_encode_term(v1))(lambda v1: core_encode_term(v1))(v)))))
         
         case hydra.core.TermOptional(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("optional"), hydra.core.TermOptional(hydra.lib.optionals.map(lambda v1: coreEncodeTerm(v1))(v)))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("optional"), hydra.core.TermOptional(hydra.lib.optionals.map(lambda v1: core_encode_term(v1))(v)))))
         
         case hydra.core.TermProduct(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("product"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: coreEncodeTerm(v1))(v)))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("product"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_term(v1))(v)))))
         
         case hydra.core.TermRecord(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("record"), coreEncodeRecord(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("record"), core_encode_record(v))))
         
         case hydra.core.TermSet(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("set"), hydra.core.TermSet(hydra.lib.sets.map(lambda v1: coreEncodeTerm(v1))(v)))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("set"), hydra.core.TermSet(hydra.lib.sets.map(lambda v1: core_encode_term(v1))(v)))))
         
         case hydra.core.TermSum(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("sum"), coreEncodeSum(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("sum"), core_encode_sum(v))))
         
         case hydra.core.TermTypeAbstraction(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeAbstraction"), coreEncodeTypeAbstraction(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeAbstraction"), core_encode_type_abstraction(v))))
         
         case hydra.core.TermTypeApplication(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeApplication"), coreEncodeTypedTerm(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeApplication"), core_encode_typed_term(v))))
         
         case hydra.core.TermTyped(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typed"), coreEncodeTypedTerm(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typed"), core_encode_typed_term(v))))
         
         case hydra.core.TermUnion(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("union"), coreEncodeInjection(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("union"), core_encode_injection(v))))
         
         case hydra.core.TermVariable(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("variable"), coreEncodeName(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("variable"), core_encode_name(v))))
         
         case hydra.core.TermWrap(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), coreEncodeWrappedTerm(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), core_encode_wrapped_term(v))))
         
         case _:
             raise TypeError("Unsupported Term")
 
-def coreEncodeTupleProjection(tp):
+def core_encode_tuple_projection(tp):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TupleProjection"), [
       hydra.core.Field(hydra.core.Name("arity"), hydra.core.TermLiteral(hydra.core.LiteralInteger(hydra.core.IntegerValueInt32(tp.arity)))),
       hydra.core.Field(hydra.core.Name("index"), hydra.core.TermLiteral(hydra.core.LiteralInteger(hydra.core.IntegerValueInt32(tp.index))))]))
 
-def coreEncodeType(v1):
+def core_encode_type(v1):
     match v1:
         case hydra.core.TypeAnnotated(v):
-            return hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(coreEncodeType(v.subject), v.annotation))
+            return hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(core_encode_type(v.subject), v.annotation))
         
         case hydra.core.TypeApplication(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("application"), coreEncodeApplicationType(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("application"), core_encode_application_type(v))))
         
         case hydra.core.TypeFunction(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("function"), coreEncodeFunctionType(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("function"), core_encode_function_type(v))))
         
         case hydra.core.TypeLambda(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("lambda"), coreEncodeLambdaType(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("lambda"), core_encode_lambda_type(v))))
         
         case hydra.core.TypeList(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("list"), coreEncodeType(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("list"), core_encode_type(v))))
         
         case hydra.core.TypeLiteral(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("literal"), coreEncodeLiteralType(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("literal"), core_encode_literal_type(v))))
         
         case hydra.core.TypeMap(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("map"), coreEncodeMapType(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("map"), core_encode_map_type(v))))
         
         case hydra.core.TypeOptional(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("optional"), coreEncodeType(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("optional"), core_encode_type(v))))
         
         case hydra.core.TypeProduct(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("product"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: coreEncodeType(v1))(v)))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("product"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_type(v1))(v)))))
         
         case hydra.core.TypeRecord(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("record"), coreEncodeRowType(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("record"), core_encode_row_type(v))))
         
         case hydra.core.TypeSet(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("set"), coreEncodeType(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("set"), core_encode_type(v))))
         
         case hydra.core.TypeSum(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("sum"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: coreEncodeType(v1))(v)))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("sum"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_type(v1))(v)))))
         
         case hydra.core.TypeUnion(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("union"), coreEncodeRowType(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("union"), core_encode_row_type(v))))
         
         case hydra.core.TypeVariable(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("variable"), coreEncodeName(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("variable"), core_encode_name(v))))
         
         case hydra.core.TypeWrap(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("wrap"), coreEncodeWrappedType(v))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("wrap"), core_encode_wrapped_type(v))))
         
         case _:
             raise TypeError("Unsupported Type")
 
-def coreEncodeTypeAbstraction(l):
+def core_encode_type_abstraction(l):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeAbstraction"), [
-      hydra.core.Field(hydra.core.Name("parameter"), coreEncodeName(l.parameter)),
-      hydra.core.Field(hydra.core.Name("body"), coreEncodeTerm(l.body))]))
+      hydra.core.Field(hydra.core.Name("parameter"), core_encode_name(l.parameter)),
+      hydra.core.Field(hydra.core.Name("body"), core_encode_term(l.body))]))
 
-def coreEncodeTypeScheme(ts):
+def core_encode_type_scheme(ts):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeScheme"), [
-      hydra.core.Field(hydra.core.Name("variables"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: coreEncodeName(v1))(ts.variables))),
-      hydra.core.Field(hydra.core.Name("type"), coreEncodeType(ts.type))]))
+      hydra.core.Field(hydra.core.Name("variables"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_name(v1))(ts.variables))),
+      hydra.core.Field(hydra.core.Name("type"), core_encode_type(ts.type))]))
 
-def coreEncodeTypedTerm(tt):
+def core_encode_typed_term(tt):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypedTerm"), [
-      hydra.core.Field(hydra.core.Name("term"), coreEncodeTerm(tt.term)),
-      hydra.core.Field(hydra.core.Name("type"), coreEncodeType(tt.type))]))
+      hydra.core.Field(hydra.core.Name("term"), core_encode_term(tt.term)),
+      hydra.core.Field(hydra.core.Name("type"), core_encode_type(tt.type))]))
 
-def coreEncodeWrappedTerm(n):
+def core_encode_wrapped_term(n):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.WrappedTerm"), [
-      hydra.core.Field(hydra.core.Name("typeName"), coreEncodeName(n.type_name)),
-      hydra.core.Field(hydra.core.Name("object"), coreEncodeTerm(n.object))]))
+      hydra.core.Field(hydra.core.Name("typeName"), core_encode_name(n.type_name)),
+      hydra.core.Field(hydra.core.Name("object"), core_encode_term(n.object))]))
 
-def coreEncodeWrappedType(nt):
+def core_encode_wrapped_type(nt):
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.WrappedType"), [
-      hydra.core.Field(hydra.core.Name("typeName"), coreEncodeName(nt.type_name)),
-      hydra.core.Field(hydra.core.Name("object"), coreEncodeType(nt.object))]))
+      hydra.core.Field(hydra.core.Name("typeName"), core_encode_name(nt.type_name)),
+      hydra.core.Field(hydra.core.Name("object"), core_encode_type(nt.object))]))
 
-def isEncodedType(t):
-    match hydra.strip.stripTerm(t):
+def is_encoded_type(t):
+    match hydra.strip.strip_term(t):
         case hydra.core.TermApplication(a):
-            return isEncodedType(a.function)
+            return is_encoded_type(a.function)
         
         case hydra.core.TermUnion(i):
-            return hydra.lib.equality.equalString("hydra.core.Type")(i.type_name.value)
+            return hydra.lib.equality.equal_string("hydra.core.Type")(i.type_name.value)
         
         case _:
             return False
 
-def isType(t):
-    match hydra.strip.stripType(t):
+def is_type(t):
+    match hydra.strip.strip_type(t):
         case hydra.core.TypeApplication(a):
-            return isType(a.function)
+            return is_type(a.function)
         
         case hydra.core.TypeLambda(l):
-            return isType(l.body)
+            return is_type(l.body)
         
         case hydra.core.TypeUnion(rt):
-            return hydra.lib.equality.equalString("hydra.core.Type")(rt.type_name.value)
+            return hydra.lib.equality.equal_string("hydra.core.Type")(rt.type_name.value)
         
         case _:
             return False
 
-def isUnitTerm(t):
-    return hydra.lib.equality.equalTerm(hydra.strip.fullyStripTerm(t))(hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), [])))
+def is_unit_term(t):
+    return hydra.lib.equality.equal_term(hydra.strip.fully_strip_term(t))(hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), [])))
 
-def isUnitType(t):
-    return hydra.lib.equality.equalType(hydra.strip.stripType(t))(hydra.core.TypeRecord(hydra.core.RowType(hydra.core.Name("hydra.core.Unit"), [])))
+def is_unit_type(t):
+    return hydra.lib.equality.equal_type(hydra.strip.strip_type(t))(hydra.core.TypeRecord(hydra.core.RowType(hydra.core.Name("hydra.core.Unit"), [])))
