@@ -11,7 +11,7 @@ import hydra.mantle
 def capitalize(v2):
     """Capitalize the first letter of a string."""
     
-    mapFirstLetter(lambda v1: hydra.lib.strings.toUpper(v1))(v2)
+    return mapFirstLetter(lambda v1: hydra.lib.strings.toUpper(v1))(v2)
 
 def convertCase(from_, to, original):
     """Convert a string from one case convention to another."""
@@ -20,8 +20,8 @@ def convertCase(from_, to, original):
         byUnderscores = hydra.lib.strings.splitOn("_")(original)
         def byCaps():
             def splitOnUppercase(acc, c):
-                hydra.lib.lists.concat2(hydra.lib.logic.ifElse(hydra.lib.chars.isUpper(c))([[]])([]))(hydra.lib.lists.cons(hydra.lib.lists.cons(c)(hydra.lib.lists.head(acc)))(hydra.lib.lists.tail(acc)))
-            hydra.lib.lists.map(lambda v1: hydra.lib.strings.fromList(v1))(hydra.lib.lists.foldl(splitOnUppercase)([[]])(hydra.lib.lists.reverse(hydra.lib.strings.toList(decapitalize(original)))))
+                return hydra.lib.lists.concat2(hydra.lib.logic.ifElse(hydra.lib.chars.isUpper(c))([[]])([]))(hydra.lib.lists.cons(hydra.lib.lists.cons(c)(hydra.lib.lists.head(acc)))(hydra.lib.lists.tail(acc)))
+            return hydra.lib.lists.map(lambda v1: hydra.lib.strings.fromList(v1))(hydra.lib.lists.foldl(splitOnUppercase)([[]])(hydra.lib.lists.reverse(hydra.lib.strings.toList(decapitalize(original)))))
         match from_:
             case hydra.mantle.CaseConventionCamel(_):
                 return byCaps
@@ -56,26 +56,26 @@ def convertCase(from_, to, original):
 def convertCaseCamelToLowerSnake(v3):
     """Convert a string from camel case to lower snake case."""
     
-    convertCase(hydra.mantle.CaseConvention.CAMEL)(hydra.mantle.CaseConvention.LOWER_SNAKE)(v3)
+    return convertCase(hydra.mantle.CaseConvention.CAMEL)(hydra.mantle.CaseConvention.LOWER_SNAKE)(v3)
 
 def convertCaseCamelToUpperSnake(v3):
     """Convert a string from camel case to upper snake case."""
     
-    convertCase(hydra.mantle.CaseConvention.CAMEL)(hydra.mantle.CaseConvention.UPPER_SNAKE)(v3)
+    return convertCase(hydra.mantle.CaseConvention.CAMEL)(hydra.mantle.CaseConvention.UPPER_SNAKE)(v3)
 
 def convertCasePascalToUpperSnake(v3):
     """Convert a string from pascal case to upper snake case."""
     
-    convertCase(hydra.mantle.CaseConvention.PASCAL)(hydra.mantle.CaseConvention.UPPER_SNAKE)(v3)
+    return convertCase(hydra.mantle.CaseConvention.PASCAL)(hydra.mantle.CaseConvention.UPPER_SNAKE)(v3)
 
 def decapitalize(v2):
     """Decapitalize the first letter of a string."""
     
-    mapFirstLetter(lambda v1: hydra.lib.strings.toLower(v1))(v2)
+    return mapFirstLetter(lambda v1: hydra.lib.strings.toLower(v1))(v2)
 
 def mapFirstLetter(mapping, s):
     """A helper which maps the first letter of a string to another string."""
     
     list = hydra.lib.strings.toList(s)
     firstLetter = mapping(hydra.lib.strings.fromList(hydra.lib.lists.pure(hydra.lib.lists.head(list))))
-    hydra.lib.logic.ifElse(hydra.lib.strings.isEmpty(s))(s)(hydra.lib.strings.cat2(firstLetter)(hydra.lib.strings.fromList(hydra.lib.lists.tail(list))))
+    return hydra.lib.logic.ifElse(hydra.lib.strings.isEmpty(s))(s)(hydra.lib.strings.cat2(firstLetter)(hydra.lib.strings.fromList(hydra.lib.lists.tail(list))))
