@@ -5,7 +5,7 @@ import hydra.core
 import hydra.lib.equality
 import hydra.lib.literals
 
-def floatValueToBigfloat(v1) :
+def floatValueToBigfloat(v1):
     match v1:
         case hydra.core.FloatValueBigfloat(f):
             return hydra.lib.equality.identity(f)
@@ -19,7 +19,7 @@ def floatValueToBigfloat(v1) :
         case _:
             raise TypeError("Unsupported FloatValue")
 
-def integerValueToBigint(v1) :
+def integerValueToBigint(v1):
     """Convert an integer value of any precision to a bigint."""
     
     match v1:
