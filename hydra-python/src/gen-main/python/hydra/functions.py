@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-def id(x) :
+def id(x):
     """The identity function."""
     
     x
