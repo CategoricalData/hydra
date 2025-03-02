@@ -6,9 +6,9 @@ import Hydra.Ext.Python.Language
 import Hydra.Dsl.Terms
 import Hydra.Staging.Serialization
 import qualified Hydra.Ext.Python.Syntax as Py
+import Hydra.Ext.Python.Names
 import Hydra.Ext.Python.Utils
 import qualified Hydra.Ext.Python.Serde as PySer
-import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
 import Hydra.Lib.Io
@@ -16,17 +16,11 @@ import Hydra.Staging.Formatting
 import qualified Hydra.Decode as Decode
 
 import qualified Control.Monad as CM
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
+import qualified Data.List  as L
+import qualified Data.Map   as M
+import qualified Data.Set   as S
 import qualified Data.Maybe as Y
 
--- Temporary macros for Python code generation
-_useFutureAnnotations_ = True
-
-data PythonEnvironment = PythonEnvironment {
-  pythonEnvironmentNamespaces :: Namespaces Py.DottedName,
-  pythonEnvironmentBoundTypeVariables :: ([Name], M.Map Name Py.Name)}
 
 -- | Temporary metadata which is used to create the header section of a Python file
 data PythonModuleMetadata = PythonModuleMetadata {
@@ -49,7 +43,7 @@ encodeApplication env (Application fun arg) = case fullyStripTerm fun of
 --        EliminationProduct ...
         EliminationRecord (Projection _ fname) -> do
           parg <- encodeTerm env arg
-          return $ projectFromExpression parg $ encodeFieldName False fname
+          return $ projectFromExpression parg $ encodeFieldName env fname
         EliminationUnion (CaseStatement tname mdef cases) -> do
           return $ stringToPyExpression Py.QuoteStyleDouble "inline match expressions are unsupported"
         EliminationWrap _ -> do
@@ -58,11 +52,11 @@ encodeApplication env (Application fun arg) = case fullyStripTerm fun of
         _ -> fail $ "elimination variant is not yet supported in applications: " ++ show (eliminationVariant elm)
       FunctionPrimitive name -> do
         parg <- encodeTerm env arg
-        return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env name) [parg]
+        return $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) [parg]
       _ -> def
     TermVariable name -> do -- Special-casing variables prevents quoting; forward references are allowed for function calls
       parg <- encodeTerm env arg
-      return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env name) [parg]
+      return $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) [parg]
     _ -> def
   where
     def = do
@@ -94,17 +88,12 @@ encodeDefinition env def = case def of
 encodeField :: PythonEnvironment -> Field -> Flow Graph (Py.Name, Py.Expression)
 encodeField env (Field fname fterm) = do
   pterm <- encodeTerm env fterm
-  return (encodeFieldName False fname, pterm)
-
-encodeFieldName :: Bool -> Name -> Py.Name
-encodeFieldName isEnum fname = Py.Name $ sanitizePythonName $ convertCase CaseConventionCamel caseConv $ unName fname
-  where
-    caseConv = if isEnum then CaseConventionUpperSnake else CaseConventionLowerSnake
+  return (encodeFieldName env fname, pterm)
 
 encodeFieldType :: PythonEnvironment -> FieldType -> Flow Graph Py.Statement
 encodeFieldType env (FieldType fname ftype) = do
   comment <- getTypeDescription ftype
-  let pyName = Py.SingleTargetName $ encodeFieldName False fname
+  let pyName = Py.SingleTargetName $ encodeFieldName env fname
   pyType <- annotatedExpression comment <$> encodeType env ftype
   return $ pyAssignmentToPyStatement $ Py.AssignmentTyped $ Py.TypedAssignment pyName pyType Nothing
 
@@ -136,7 +125,7 @@ encodeFunction env f = case f of
     pbody <- encodeTerm env body
     return $ Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] $
       Just $ Py.LambdaStarEtcParamNoDefault $ Py.LambdaParamNoDefault $ encodeNameQualified env var) pbody
-  FunctionPrimitive name -> pure $ variableReference False env name -- Only nullary primitives should appear here.
+  FunctionPrimitive name -> pure $ pyNameToPyExpression $ encodeName True CaseConventionLowerSnake env name -- Only nullary primitives should appear here.
   _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
 encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> Term -> Maybe String -> [Py.Statement] -> Flow Graph Py.Statement
@@ -145,9 +134,9 @@ encodeFunctionDefinition env name args body comment prefixes = do
     stmts <- encodeTopLevelTerm env body
     let block = indentedBlock comment [prefixes ++ stmts]
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing
-      $ Py.FunctionDefRaw False (encodeNameUnqualified name) [] (Just params) Nothing Nothing block
+      $ Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) [] (Just params) Nothing Nothing block
   where
-    toParam name = Py.ParamNoDefault (Py.Param (encodeNameUnqualified name) Nothing) Nothing
+    toParam name = Py.ParamNoDefault (Py.Param (encodeName False CaseConventionLowerSnake env name) Nothing) Nothing
 
 encodeIntegerValue :: IntegerValue -> Flow s Py.Expression
 encodeIntegerValue iv = case iv of
@@ -253,28 +242,12 @@ encodeModule mod = do
               where
                 forSymbol s = Py.ImportFromAsName (Py.Name s) Nothing
 
-encodeNameQualified :: PythonEnvironment -> Name -> Py.Name
-encodeNameQualified env name = case M.lookup name (snd $ pythonEnvironmentBoundTypeVariables env) of
-    Just n -> n
-    Nothing -> if ns == Just focusNs
-      then Py.Name $ if _useFutureAnnotations_ then local else PySer.escapePythonString True local
-      else Py.Name $ L.intercalate "." (sanitizePythonName <$> (Strings.splitOn "." $ unName name))
-  where
-    focusNs = fst $ namespacesFocus $ pythonEnvironmentNamespaces env
-    QualifiedName ns local = qualifyName name
-
-encodeNameUnqualified :: Name -> Py.Name
-encodeNameUnqualified name = (Py.Name $ sanitizePythonName $ localNameOf name)
-
-encodeNamespace :: Namespace -> Py.DottedName
-encodeNamespace ns = Py.DottedName (Py.Name <$> (Strings.splitOn "." $ unNamespace ns))
-
 encodeRecordType :: PythonEnvironment -> Name -> RowType -> Maybe String -> Flow Graph Py.Statement
 encodeRecordType env name (RowType _ tfields) comment = do
     pyFields <- CM.mapM (encodeFieldType env) tfields
     let body = indentedBlock comment [pyFields]
     return $ pyClassDefinitionToPyStatement $
-      Py.ClassDefinition (Just decs) (encodeNameUnqualified name) [] args body
+      Py.ClassDefinition (Just decs) (encodeName False CaseConventionPascal env name) [] args body
   where
     (tparamList, tparamMap) = pythonEnvironmentBoundTypeVariables env
     args = fmap (\a -> pyExpressionsToPyArgs [a]) $ genericArg tparamList
@@ -311,11 +284,11 @@ encodeTerm env term = case fullyStripTerm term of
       rt <- requireUnionType tname
       if isEnumType rt
         then return $ projectFromExpression (pyNameToPyExpression $ encodeNameQualified env tname)
-          $ encodeFieldName True $ fieldName field
+          $ encodeEnumValue env $ fieldName field
         else do
           parg <- encode $ fieldTerm field
           return $ functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) [parg]
-    TermVariable name -> pure $ variableReference True env name
+    TermVariable name -> pure $ pyNameToPyExpression $ encodeName True CaseConventionLowerSnake env name
     TermWrap (WrappedTerm tname term1) -> do
       parg <- encode term1
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) [parg]
@@ -328,7 +301,7 @@ encodeTermAssignment env name term comment = if L.null args && L.null bindings
     -- If there are no arguments or let bindings, use a simple a = b assignment.
     then do
       bodyExpr <- encodeTerm env body
-      return [annotatedStatement comment $ assignmentToExpression (encodeNameUnqualified name) bodyExpr]
+      return [annotatedStatement comment $ assignmentToExpression (encodeName False CaseConventionLowerSnake env name) bodyExpr]
     -- If there are either arguments or let bindings, then only a function definition will work.
     else do
         -- TODO: topological sort of bindings
@@ -377,7 +350,7 @@ encodeTopLevelTerm env term = if L.length args == 1
               pyReturn <- encodeTerm env body
               let pyVarName = Py.NameOrAttribute [variantName True env tname fname]
               let argPattern = Py.PatternOr $ Py.OrPattern [
-                                 Py.ClosedPatternCapture $ Py.CapturePattern $ Py.PatternCaptureTarget (encodeNameUnqualified v)]
+                                 Py.ClosedPatternCapture $ Py.CapturePattern $ Py.PatternCaptureTarget (encodeName False CaseConventionLowerSnake env v)]
               let patterns = pyClosedPatternToPyPatterns $ Py.ClosedPatternClass $ Py.ClassPattern pyVarName (Just $ Py.PositionalPatterns [argPattern]) Nothing
               let body = indentedBlock Nothing [[returnSingle pyReturn]]
               return $ Py.CaseBlock patterns Nothing body
@@ -398,11 +371,11 @@ encodeType env typ = case stripType typ of
     TypeOptional et -> orNull . pyExpressionToPyPrimary <$> encode et
     TypeRecord rt -> pure $ if isUnitType (TypeRecord rt)
       then pyNameToPyExpression pyNone
-      else variableReference False env $ rowTypeTypeName rt
+      else typeVariableReference False env $ rowTypeTypeName rt
     TypeSet et -> nameAndParams (Py.Name "set") . L.singleton <$> encode et
-    TypeUnion rt -> pure $ variableReference False env $ rowTypeTypeName rt
-    TypeVariable name -> pure $ variableReference False env name
-    TypeWrap (WrappedType name _) -> pure $ variableReference False env name
+    TypeUnion rt -> pure $ typeVariableReference False env $ rowTypeTypeName rt
+    TypeVariable name -> pure $ typeVariableReference False env name
+    TypeWrap (WrappedType name _) -> pure $ typeVariableReference False env name
     _ -> dflt
   where
     encode = encodeType env
@@ -421,7 +394,7 @@ encodeTypeAssignment env name typ comment = encode env typ
       TypeWrap (WrappedType _ t) -> single <$> encodeWrappedType env name t comment
       t -> singleTypedef env <$> encodeType env t
     single st = [st]
-    singleTypedef env e = single $ typeAliasStatement (encodeNameUnqualified name) tparams comment e
+    singleTypedef env e = single $ typeAliasStatement (encodeName False CaseConventionPascal env name) tparams comment e
       where
         tparams = environmentTypeParameters env
 
@@ -432,22 +405,19 @@ encodeTypeQuoted env typ = do
     then pytype
     else doubleQuotedString $ printExpr $ PySer.encodeExpression pytype
 
-encodeTypeVariable :: Name -> Py.Name
-encodeTypeVariable = Py.Name . capitalize . unName
-
 encodeUnionType :: PythonEnvironment -> Name -> RowType -> Maybe String -> Flow Graph [Py.Statement]
 encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumType rt then asEnum else asUnion
   where
     asEnum = do
         vals <- CM.mapM toVal tfields
         let body = indentedBlock comment vals
-        return [pyClassDefinitionToPyStatement $ Py.ClassDefinition Nothing (encodeNameUnqualified name) [] args body]
+        return [pyClassDefinitionToPyStatement $ Py.ClassDefinition Nothing (encodeName False CaseConventionPascal env name) [] args body]
       where
         args = Just $ pyExpressionsToPyArgs [pyNameToPyExpression $ Py.Name "Enum"]
         toVal (FieldType fname ftype) = do
           fcomment <- fmap normalizeComment <$> getTypeDescription ftype
           return $ Y.catMaybes [
-            Just $ assignmentToExpression (encodeFieldName True fname) (doubleQuotedString $ unName fname),
+            Just $ assignmentToExpression (encodeEnumValue env fname) (doubleQuotedString $ unName fname),
             pyExpressionToPyStatement . tripleQuotedString <$> fcomment]
     asUnion = do
       fieldStmts <- CM.mapM toFieldStmt tfields
@@ -465,7 +435,7 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumType rt then 
                 (Just $ variantArgs ptypeQuoted [])
                 body
         unionStmt = typeAliasStatement
-            (encodeNameUnqualified name)
+            (encodeName False CaseConventionPascal env name)
             tparams
             comment
             (orExpression (alt <$> tfields))
@@ -486,7 +456,7 @@ encodeWrappedType env name typ comment = do
     return $ pyClassDefinitionToPyStatement $
       Py.ClassDefinition
         Nothing
-        (encodeNameUnqualified name)
+        (encodeName False CaseConventionPascal env name)
         (pyNameToPyTypeParameter . encodeTypeVariable <$> findTypeParams env typ)
         (Just $ variantArgs ptypeQuoted tparamList)
         body
@@ -566,27 +536,8 @@ moduleToPython mod = do
   let path = namespaceToFilePath CaseConventionLowerSnake (FileExtension "py") $ moduleNamespace mod
   return $ M.fromList [(path, s)]
 
-sanitizePythonName :: String -> String
-sanitizePythonName = sanitizeWithUnderscores pythonReservedWords
-
-variableReference :: Bool -> PythonEnvironment -> Name -> Py.Expression
-variableReference quoted env name = if quoted && Y.isJust (namespaceOf name)
-    then doubleQuotedString $ Py.unName pyName
-    else unquoted
-  where
-    pyName = encodeNameQualified env name
-    unquoted = pyNameToPyExpression pyName
-
 variantArgs :: Py.Expression -> [Name] -> Py.Args
 variantArgs ptype tparams = pyExpressionsToPyArgs $ Y.catMaybes [
     Just $ pyPrimaryToPyExpression $
       primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Node") [ptype],
     genericArg tparams]
-
-variantName :: Bool -> PythonEnvironment -> Name -> Name -> Py.Name
-variantName qual env tname fname = if qual
-    then encodeNameQualified env $ unqualifyName $ QualifiedName mns vname
-    else Py.Name vname
-  where
-    (QualifiedName mns local) = qualifyName tname
-    vname = sanitizePythonName $ local ++ (capitalize $ unName fname)
