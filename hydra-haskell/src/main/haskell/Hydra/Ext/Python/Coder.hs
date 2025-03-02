@@ -356,7 +356,7 @@ encodeTopLevelTerm env term = if L.length args == 1
       t -> (rest, t)
     dflt = do
       expr <- encodeTerm env term
-      return [pyExpressionToPyStatement expr]
+      return [returnSingle expr]
     withArg body arg = case fullyStripTerm body of
       TermFunction (FunctionElimination (EliminationUnion (CaseStatement tname dflt cases))) -> do
           pyArg <- encodeTerm env arg
