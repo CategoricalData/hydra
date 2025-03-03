@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 from dataclasses import dataclass
-from hydra.dsl.python import Node
+from hydra.dsl.python import frozenlist, Node
 
 class Constant(Node[str]):
     """A constant pattern."""
 
 # An enhanced Backus-Naur form (BNF) grammar.
-type Grammar = list[Production]
+type Grammar = frozenlist[Production]
 
 class Label(Node[str]):
     """A name for a pattern."""
@@ -32,9 +32,9 @@ class PatternRegex(Node["Regex"]): ...
 
 class PatternNonterminal(Node["Symbol"]): ...
 
-class PatternSequence(Node["list[Pattern]"]): ...
+class PatternSequence(Node["frozenlist[Pattern]"]): ...
 
-class PatternAlternatives(Node["list[Pattern]"]): ...
+class PatternAlternatives(Node["frozenlist[Pattern]"]): ...
 
 class PatternOption(Node["Pattern"]): ...
 

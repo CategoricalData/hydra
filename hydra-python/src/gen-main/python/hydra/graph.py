@@ -4,6 +4,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
+from hydra.dsl.python import FrozenDict, frozenlist
 from typing import Annotated, Generic, TypeVar
 import hydra.compute
 import hydra.core
@@ -31,11 +32,11 @@ class Element:
 class Graph:
     """A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph."""
     
-    elements: Annotated[dict[hydra.core.Name, Element], "All of the elements in the graph"]
-    environment: Annotated[dict[hydra.core.Name, hydra.core.Term | None], "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)"]
-    types: Annotated[dict[hydra.core.Name, hydra.core.TypeScheme], "The typing environment of the graph"]
+    elements: Annotated[FrozenDict[hydra.core.Name, Element], "All of the elements in the graph"]
+    environment: Annotated[FrozenDict[hydra.core.Name, hydra.core.Term | None], "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)"]
+    types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "The typing environment of the graph"]
     body: Annotated[hydra.core.Term, "The body of the term which generated this context"]
-    primitives: Annotated[dict[hydra.core.Name, Primitive], "All supported primitive constants and functions, by name"]
+    primitives: Annotated[FrozenDict[hydra.core.Name, Primitive], "All supported primitive constants and functions, by name"]
     schema: Annotated[Graph | None, "The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph."]
 
 @dataclass
@@ -44,7 +45,7 @@ class Primitive:
     
     name: Annotated[hydra.core.Name, "The unique name of the primitive function"]
     type: Annotated[hydra.core.TypeScheme, "The type signature of the primitive function"]
-    implementation: Annotated[Callable[[list[hydra.core.Term]], hydra.compute.Flow[Graph, hydra.core.Term]], "A concrete implementation of the primitive function"]
+    implementation: Annotated[Callable[[frozenlist[hydra.core.Term]], hydra.compute.Flow[Graph, hydra.core.Term]], "A concrete implementation of the primitive function"]
 
 @dataclass
 class TermCoder(Generic[X]):
