@@ -66,13 +66,13 @@ def core_encode_field_type(ft: hydra.core.FieldType) -> hydra.core.Term:
 
 def core_encode_float_type(v1: hydra.core.FloatType) -> hydra.core.Term:
     match v1:
-        case hydra.core.FloatTypeBigfloat(_):
+        case hydra.core.FloatType.BIGFLOAT:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("bigfloat"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
         
-        case hydra.core.FloatTypeFloat32(_):
+        case hydra.core.FloatType.FLOAT32:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("float32"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
         
-        case hydra.core.FloatTypeFloat64(_):
+        case hydra.core.FloatType.FLOAT64:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("float64"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
         
         case _:
@@ -118,31 +118,31 @@ def core_encode_injection(i: hydra.core.Injection) -> hydra.core.Term:
 
 def core_encode_integer_type(v1: hydra.core.IntegerType) -> hydra.core.Term:
     match v1:
-        case hydra.core.IntegerTypeBigint(_):
+        case hydra.core.IntegerType.BIGINT:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("bigint"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
         
-        case hydra.core.IntegerTypeInt8(_):
+        case hydra.core.IntegerType.INT8:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int8"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
         
-        case hydra.core.IntegerTypeInt16(_):
+        case hydra.core.IntegerType.INT16:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int16"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
         
-        case hydra.core.IntegerTypeInt32(_):
+        case hydra.core.IntegerType.INT32:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int32"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
         
-        case hydra.core.IntegerTypeInt64(_):
+        case hydra.core.IntegerType.INT64:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int64"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
         
-        case hydra.core.IntegerTypeUint8(_):
+        case hydra.core.IntegerType.UINT8:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint8"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
         
-        case hydra.core.IntegerTypeUint16(_):
+        case hydra.core.IntegerType.UINT16:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint16"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
         
-        case hydra.core.IntegerTypeUint32(_):
+        case hydra.core.IntegerType.UINT32:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint32"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
         
-        case hydra.core.IntegerTypeUint64(_):
+        case hydra.core.IntegerType.UINT64:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint64"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
         
         case _:
