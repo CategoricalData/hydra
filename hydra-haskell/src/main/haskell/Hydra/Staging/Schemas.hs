@@ -30,6 +30,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
+-- TODO: use TypeScheme here instead of Type
 data Definition = DefinitionType Name Type | DefinitionTerm Name Term Type
 
 data Namespaces n = Namespaces {

@@ -32,7 +32,7 @@ data Inferred a = Inferred {
   -- The original term, possibly annotated with the inferred type
   inferredObject :: a,
   -- The inferred type
-  inferredType :: Type,
+  inferredType :: Type, -- TODO: this should really be TypeScheme
   -- Any constraints introduced by the inference process
   inferredConstraints :: [TypeConstraint]
 } deriving Show
@@ -269,7 +269,8 @@ inferLet (Let bindings env) = withTrace ("let(" ++ L.intercalate "," (unName . l
       -- Infer types of bindings in the pre-extended environment
       ivalues' <- CM.mapM infer (letBindingTerm <$> bindings)
       let ivalues = inferredObject <$> ivalues'
-      let ibindings = L.zipWith (\(LetBinding k v t) i -> LetBinding k i t) bindings ivalues
+      let itypes = inferredType <$> ivalues'
+      let ibindings = L.zipWith (\(LetBinding k v _) (i, t) -> LetBinding k i $ Just $ TypeScheme [] t) bindings $ L.zip ivalues itypes
       let bc = L.concat (inferredConstraints <$> ivalues')
 
       let tbindings = M.fromList $ fmap (\(LetBinding k i t) -> (k, termTypeScheme i)) ibindings
