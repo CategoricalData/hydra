@@ -34,9 +34,6 @@ def convert_case(from_: hydra.mantle.CaseConvention, to: hydra.mantle.CaseConven
             
             case hydra.mantle.CaseConvention.UPPER_SNAKE:
                 return by_underscores
-            
-            case _:
-                raise TypeError("Unsupported CaseConvention")
     match to:
         case hydra.mantle.CaseConvention.CAMEL:
             return decapitalize(hydra.lib.strings.cat(hydra.lib.lists.map(lambda x: capitalize(hydra.lib.strings.to_lower(x)))(parts)))
@@ -49,9 +46,6 @@ def convert_case(from_: hydra.mantle.CaseConvention, to: hydra.mantle.CaseConven
         
         case hydra.mantle.CaseConvention.UPPER_SNAKE:
             return hydra.lib.strings.intercalate("_")(hydra.lib.lists.map(lambda v1: hydra.lib.strings.to_upper(v1))(parts))
-        
-        case _:
-            raise TypeError("Unsupported CaseConvention")
 
 def convert_case_camel_to_lower_snake(v3: str) -> str:
     """Convert a string from camel case to lower snake case."""

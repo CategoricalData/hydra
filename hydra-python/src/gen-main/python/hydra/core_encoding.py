@@ -50,9 +50,6 @@ def core_encode_elimination(v1: hydra.core.Elimination) -> hydra.core.Term:
         
         case hydra.core.EliminationWrap(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("wrap"), core_encode_name(v))))
-        
-        case _:
-            raise TypeError("Unsupported Elimination")
 
 def core_encode_field(f: hydra.core.Field) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Field"), tuple([
@@ -74,9 +71,6 @@ def core_encode_float_type(v1: hydra.core.FloatType) -> hydra.core.Term:
         
         case hydra.core.FloatType.FLOAT64:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("float64"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
-        
-        case _:
-            raise TypeError("Unsupported FloatType")
 
 def core_encode_float_value(v1: hydra.core.FloatValue) -> hydra.core.Term:
     match v1:
@@ -88,9 +82,6 @@ def core_encode_float_value(v1: hydra.core.FloatValue) -> hydra.core.Term:
         
         case hydra.core.FloatValueFloat64(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatValue"), hydra.core.Field(hydra.core.Name("float64"), hydra.core.TermLiteral(hydra.core.LiteralFloat(hydra.core.FloatValueFloat64(v))))))
-        
-        case _:
-            raise TypeError("Unsupported FloatValue")
 
 def core_encode_function(v1: hydra.core.Function) -> hydra.core.Term:
     match v1:
@@ -102,9 +93,6 @@ def core_encode_function(v1: hydra.core.Function) -> hydra.core.Term:
         
         case hydra.core.FunctionPrimitive(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Function"), hydra.core.Field(hydra.core.Name("primitive"), core_encode_name(v))))
-        
-        case _:
-            raise TypeError("Unsupported Function")
 
 def core_encode_function_type(ft: hydra.core.FunctionType) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.FunctionType"), tuple([
@@ -144,9 +132,6 @@ def core_encode_integer_type(v1: hydra.core.IntegerType) -> hydra.core.Term:
         
         case hydra.core.IntegerType.UINT64:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint64"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
-        
-        case _:
-            raise TypeError("Unsupported IntegerType")
 
 def core_encode_integer_value(v1: hydra.core.IntegerValue) -> hydra.core.Term:
     match v1:
@@ -176,9 +161,6 @@ def core_encode_integer_value(v1: hydra.core.IntegerValue) -> hydra.core.Term:
         
         case hydra.core.IntegerValueUint64(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("uint64"), hydra.core.TermLiteral(hydra.core.LiteralInteger(hydra.core.IntegerValueUint64(v))))))
-        
-        case _:
-            raise TypeError("Unsupported IntegerValue")
 
 def core_encode_lambda(l: hydra.core.Lambda) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Lambda"), tuple([
@@ -218,9 +200,6 @@ def core_encode_literal(v1: hydra.core.Literal) -> hydra.core.Term:
         
         case hydra.core.LiteralString(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("string"), hydra.core.TermLiteral(hydra.core.LiteralString(v)))))
-        
-        case _:
-            raise TypeError("Unsupported Literal")
 
 def core_encode_literal_type(v1: hydra.core.LiteralType) -> hydra.core.Term:
     match v1:
@@ -238,9 +217,6 @@ def core_encode_literal_type(v1: hydra.core.LiteralType) -> hydra.core.Term:
         
         case hydra.core.LiteralTypeString(_):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("string"), hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Unit"), tuple([]))))))
-        
-        case _:
-            raise TypeError("Unsupported LiteralType")
 
 def core_encode_map_type(mt: hydra.core.MapType) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.MapType"), tuple([
@@ -331,9 +307,6 @@ def core_encode_term(v1: hydra.core.Term) -> hydra.core.Term:
         
         case hydra.core.TermWrap(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), core_encode_wrapped_term(v))))
-        
-        case _:
-            raise TypeError("Unsupported Term")
 
 def core_encode_tuple_projection(tp: hydra.core.TupleProjection) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TupleProjection"), tuple([
@@ -386,9 +359,6 @@ def core_encode_type(v1: hydra.core.Type) -> hydra.core.Term:
         
         case hydra.core.TypeWrap(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("wrap"), core_encode_wrapped_type(v))))
-        
-        case _:
-            raise TypeError("Unsupported Type")
 
 def core_encode_type_abstraction(l: hydra.core.TypeAbstraction) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeAbstraction"), tuple([

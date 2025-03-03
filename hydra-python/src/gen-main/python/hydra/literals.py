@@ -15,9 +15,6 @@ def float_value_to_bigfloat(v1: hydra.core.FloatValue) -> float:
         
         case hydra.core.FloatValueFloat64(v1):
             return hydra.lib.literals.float64_to_bigfloat(v1)
-        
-        case _:
-            raise TypeError("Unsupported FloatValue")
 
 def integer_value_to_bigint(v1: hydra.core.IntegerValue) -> int:
     """Convert an integer value of any precision to a bigint."""
@@ -49,6 +46,3 @@ def integer_value_to_bigint(v1: hydra.core.IntegerValue) -> int:
         
         case hydra.core.IntegerValueUint64(v1):
             return hydra.lib.literals.uint64_to_bigint(v1)
-        
-        case _:
-            raise TypeError("Unsupported IntegerValue")
