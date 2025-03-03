@@ -5,50 +5,50 @@ import hydra.core
 import hydra.lib.equality
 import hydra.lib.literals
 
-def float_value_to_bigfloat(v1):
-    match V1:
+def float_value_to_bigfloat(v1: hydra.core.FloatValue) -> float:
+    match v1:
         case hydra.core.FloatValueBigfloat(f):
-            return hydra.lib.equality.identity(F)
+            return hydra.lib.equality.identity(f)
         
         case hydra.core.FloatValueFloat32(v1):
-            return hydra.lib.literals.float32_to_bigfloat(V1)
+            return hydra.lib.literals.float32_to_bigfloat(v1)
         
         case hydra.core.FloatValueFloat64(v1):
-            return hydra.lib.literals.float64_to_bigfloat(V1)
+            return hydra.lib.literals.float64_to_bigfloat(v1)
         
         case _:
             raise TypeError("Unsupported FloatValue")
 
-def integer_value_to_bigint(v1):
+def integer_value_to_bigint(v1: hydra.core.IntegerValue) -> int:
     """Convert an integer value of any precision to a bigint."""
     
-    match V1:
+    match v1:
         case hydra.core.IntegerValueBigint(i):
-            return hydra.lib.equality.identity(I)
+            return hydra.lib.equality.identity(i)
         
         case hydra.core.IntegerValueInt8(v1):
-            return hydra.lib.literals.int8_to_bigint(V1)
+            return hydra.lib.literals.int8_to_bigint(v1)
         
         case hydra.core.IntegerValueInt16(v1):
-            return hydra.lib.literals.int16_to_bigint(V1)
+            return hydra.lib.literals.int16_to_bigint(v1)
         
         case hydra.core.IntegerValueInt32(v1):
-            return hydra.lib.literals.int32_to_bigint(V1)
+            return hydra.lib.literals.int32_to_bigint(v1)
         
         case hydra.core.IntegerValueInt64(v1):
-            return hydra.lib.literals.int64_to_bigint(V1)
+            return hydra.lib.literals.int64_to_bigint(v1)
         
         case hydra.core.IntegerValueUint8(v1):
-            return hydra.lib.literals.uint8_to_bigint(V1)
+            return hydra.lib.literals.uint8_to_bigint(v1)
         
         case hydra.core.IntegerValueUint16(v1):
-            return hydra.lib.literals.uint16_to_bigint(V1)
+            return hydra.lib.literals.uint16_to_bigint(v1)
         
         case hydra.core.IntegerValueUint32(v1):
-            return hydra.lib.literals.uint32_to_bigint(V1)
+            return hydra.lib.literals.uint32_to_bigint(v1)
         
         case hydra.core.IntegerValueUint64(v1):
-            return hydra.lib.literals.uint64_to_bigint(V1)
+            return hydra.lib.literals.uint64_to_bigint(v1)
         
         case _:
             raise TypeError("Unsupported IntegerValue")
