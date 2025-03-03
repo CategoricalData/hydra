@@ -348,8 +348,10 @@ encodeTopLevelTerm env term = if L.length args == 1
       return [returnSingle expr]
     withArg body arg = case fullyStripTerm body of
       TermFunction (FunctionElimination (EliminationUnion (CaseStatement tname dflt cases))) -> do
+          rt <- requireUnionType tname
+          let isEnum = isEnumType rt
           pyArg <- encodeTerm env arg
-          pyCases <- CM.mapM toCaseBlock cases
+          pyCases <- CM.mapM (toCaseBlock isEnum) cases
           pyDflt <- toDefault dflt
           let subj = Py.SubjectExpressionSimple $ Py.NamedExpressionSimple pyArg
           return [Py.StatementCompound $ Py.CompoundStatementMatch $ Py.MatchStatement subj $ pyCases ++ [pyDflt]]
@@ -361,15 +363,23 @@ encodeTopLevelTerm env term = if L.length args == 1
             let patterns = pyClosedPatternToPyPatterns Py.ClosedPatternWildcard
             let body = indentedBlock Nothing [[stmt]]
             return $ Py.CaseBlock patterns Nothing body
-          toCaseBlock (Field fname fterm) = case fullyStripTerm fterm of
+          toCaseBlock isEnum (Field fname fterm) = case fullyStripTerm fterm of
             TermFunction (FunctionLambda (Lambda v _ body)) -> do
-              pyReturn <- encodeTerm env body
-              let pyVarName = Py.NameOrAttribute [variantName True env tname fname]
-              let argPattern = Py.PatternOr $ Py.OrPattern [
-                                 Py.ClosedPatternCapture $ Py.CapturePattern $ Py.PatternCaptureTarget (encodeName False CaseConventionLowerSnake env v)]
-              let patterns = pyClosedPatternToPyPatterns $ Py.ClosedPatternClass $ Py.ClassPattern pyVarName (Just $ Py.PositionalPatterns [argPattern]) Nothing
-              let body = indentedBlock Nothing [[returnSingle pyReturn]]
-              return $ Py.CaseBlock patterns Nothing body
+                pyReturn <- encodeTerm env body
+                let body = indentedBlock Nothing [[returnSingle pyReturn]]
+                return $ Py.CaseBlock (pyClosedPatternToPyPatterns pattern) Nothing body
+              where
+                pattern = if isEnum
+                    then Py.ClosedPatternValue $ Py.ValuePattern $ Py.Attribute [
+                      encodeName True CaseConventionPascal env tname,
+                      encodeEnumValue env fname]
+                    else Py.ClosedPatternClass
+                      $ Py.ClassPattern pyVarName (Just $ Py.PositionalPatterns [argPattern]) Nothing
+                  where
+                    pyVarName = Py.NameOrAttribute [variantName True env tname fname]
+                    argPattern = Py.PatternOr $ Py.OrPattern [
+                      Py.ClosedPatternCapture $ Py.CapturePattern
+                        $ Py.PatternCaptureTarget (encodeName False CaseConventionLowerSnake env v)]
             _ -> fail "unsupported case"
       _ -> dflt
 
