@@ -30,34 +30,36 @@ data HydraContext = HydraContext (M.Map Core.Name Graph.Primitive)
 
 ----------------------------------------
 
--- Note: no support for @wisnesky's Prim constructors other than PrimStr, PrimNat, Cons, and Nil
+-- Note: no support for @wisnesky's Prim constructors other than PrimStr, PrimNat, PrimCons, and PrimNil
 hydraTermToStlc :: HydraContext -> Core.Term -> Either String Expr
 hydraTermToStlc context term = case term of
-    Core.TermApplication (Core.Application t1 t2) -> App <$> toStlc t1 <*> toStlc t2
+    Core.TermApplication (Core.Application t1 t2) -> ExprApp <$> toStlc t1 <*> toStlc t2
     Core.TermFunction f -> case f of
-      Core.FunctionLambda (Core.Lambda (Core.Name v) _ body) -> Abs <$> pure v <*> toStlc body
+--      Core.FunctionElimination elm -> case elm of
+--        EliminationRecord (Projection tname fname) -> Right $ ExprProj
+      Core.FunctionLambda (Core.Lambda (Core.Name v) _ body) -> ExprAbs <$> pure v <*> toStlc body
       Core.FunctionPrimitive name -> do
         prim <- case M.lookup name prims of
           Nothing -> Left $ "no such primitive: " ++ Core.unName name
           Just p -> Right p
         ts <- hydraTypeSchemeToStlc $ Graph.primitiveType prim
         return $ ExprConst $ PrimTyped $ TypedPrimitive name ts
-    Core.TermLet (Core.Let bindings env) -> Letrec <$> CM.mapM bindingToStlc bindings <*> toStlc env
+    Core.TermLet (Core.Let bindings env) -> ExprLetrec <$> CM.mapM bindingToStlc bindings <*> toStlc env
       where
         bindingToStlc (Core.LetBinding (Core.Name v) term _) = do
           s <- toStlc term
           return (v, s)
     Core.TermList els -> do
       sels <- CM.mapM toStlc els
-      return $ foldr (\el acc -> App (App (ExprConst Cons) el) acc) (ExprConst Nil) sels
+      return $ foldr (\el acc -> ExprApp (ExprApp (ExprConst PrimCons) el) acc) (ExprConst PrimNil) sels
     Core.TermLiteral lit -> pure $ ExprConst $ PrimLiteral lit
-    Core.TermProduct els -> Tuple <$> (CM.mapM toStlc els)
-    Core.TermVariable (Core.Name v) -> pure $ Var v
+    Core.TermProduct els -> ExprTuple <$> (CM.mapM toStlc els)
+    Core.TermVariable (Core.Name v) -> pure $ ExprVar v
     _ -> Left $ "Unsupported term: " ++ show term
   where
     HydraContext prims = context
     toStlc = hydraTermToStlc context
-    pair a b = App (App (ExprConst Pair) a) b
+    pair a b = ExprApp (ExprApp (ExprConst PrimPair) a) b
 
 hydraTypeSchemeToStlc :: Core.TypeScheme -> Either String TypSch
 hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
@@ -92,7 +94,7 @@ toTerm expr = case expr of
   FConst prim -> case prim of
     PrimLiteral lit -> Core.TermLiteral lit
     PrimTyped (TypedPrimitive name _) -> Core.TermFunction $ Core.FunctionPrimitive name
-    Nil -> Core.TermList []
+    PrimNil -> Core.TermList []
     -- Note: other prims are unsupported; they can be added here as needed
   FVar v -> Core.TermVariable $ Core.Name v
   FTuple els -> Core.TermProduct $ (fmap toTerm els)
@@ -100,18 +102,18 @@ toTerm expr = case expr of
   FInj i types e -> Core.TermSum $ Core.Sum i (L.length types) $ toTerm e
   -- FCase... -> ... TODO
   FApp e1 e2 -> case e1 of
-    FApp (FTyApp (FConst Cons) _) hd -> Core.TermList $
+    FApp (FTyApp (FConst PrimCons) _) hd -> Core.TermList $
         fmap toTerm (hd:(gather e2)) -- TODO: include inferred type
       where
         gather e = case e of
-          FTyApp (FConst Nil) _ -> []
-          FApp (FApp (FTyApp (FConst Cons) _) hd) tl -> hd:(gather tl)
-    FTyApp (FConst Pair) _ -> Core.TermProduct els -- TODO: include inferred type
+          FTyApp (FConst PrimNil) _ -> []
+          FApp (FApp (FTyApp (FConst PrimCons) _) hd) tl -> hd:(gather tl)
+    FTyApp (FConst PrimPair) _ -> Core.TermProduct els -- TODO: include inferred type
       where
 --        els = fmap toTerm (gather expr)
         els = []
         gather e = case e of
-          FApp (FApp (FTyApp (FConst Pair) _) el) arg -> el:(gather arg)
+          FApp (FApp (FTyApp (FConst PrimPair) _) el) arg -> el:(gather arg)
           _ -> [e]
     _ -> Core.TermApplication $ Core.Application (toTerm e1) (toTerm e2)
   FAbs v dom e -> Core.TermFunction $ Core.FunctionLambda (Core.Lambda (Core.Name v) (Just hdom) (toTerm e))
