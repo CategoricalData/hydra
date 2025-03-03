@@ -82,7 +82,7 @@ encodeDefinition env def = case def of
   DefinitionTerm name term typ -> withTrace ("data element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTermDescription term
     g <- getState
-    encodeTermAssignment env name (fullyStripTerm $ expandLambdas g term) comment
+    encodeTermAssignment env name (fullyStripTerm $ expandLambdas g term) typ comment
   DefinitionType name typ -> withTrace ("type element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTypeDescription typ
     encodeTypeAssignment env name typ comment
@@ -130,15 +130,19 @@ encodeFunction env f = case f of
   FunctionPrimitive name -> pure $ pyNameToPyExpression $ encodeName True CaseConventionLowerSnake env name -- Only nullary primitives should appear here.
   _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
-encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> Term -> Maybe String -> [Py.Statement] -> Flow Graph Py.Statement
-encodeFunctionDefinition env name args body comment prefixes = do
-    let params = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters (toParam <$> args) [] Nothing
+encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> Term -> [Type] -> Type -> Maybe String -> [Py.Statement] -> Flow Graph Py.Statement
+encodeFunctionDefinition env name args body doms cod comment prefixes = do
+    pyArgs <- CM.zipWithM toParam args doms
+    let params = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters pyArgs [] Nothing
     stmts <- encodeTopLevelTerm env body
     let block = indentedBlock comment [prefixes ++ stmts]
+    returnType <- encodeType env cod
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing
-      $ Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) [] (Just params) Nothing Nothing block
+      $ Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) [] (Just params) (Just returnType) Nothing block
   where
-    toParam name = Py.ParamNoDefault (Py.Param (encodeName False CaseConventionLowerSnake env name) Nothing) Nothing
+    toParam name typ = do
+      pyTyp <- encodeType env typ
+      return $ Py.ParamNoDefault (Py.Param (encodeName False CaseConventionLowerSnake env name) $ Just $ Py.Annotation pyTyp) Nothing
 
 encodeIntegerValue :: IntegerValue -> Flow s Py.Expression
 encodeIntegerValue iv = case iv of
@@ -304,8 +308,8 @@ encodeTerm env term = case fullyStripTerm term of
   where
     encode = encodeTerm env
 
-encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> Flow Graph [Py.Statement]
-encodeTermAssignment env name term comment = if L.null args && L.null bindings
+encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Type -> Maybe String -> Flow Graph [Py.Statement]
+encodeTermAssignment env name term typ comment = if L.null args && L.null bindings
     -- If there are no arguments or let bindings, use a simple a = b assignment.
     then do
       bodyExpr <- encodeTerm env body
@@ -314,17 +318,21 @@ encodeTermAssignment env name term comment = if L.null args && L.null bindings
     else do
         -- TODO: topological sort of bindings
         bindingStmts <- L.concat <$> CM.mapM encodeBinding bindings
-        bodyStmt <- encodeFunctionDefinition env name args body comment bindingStmts
+        bodyStmt <- encodeFunctionDefinition env name args body doms cod comment bindingStmts
         return [bodyStmt]
   where
-    encodeBinding (LetBinding name1 term1 ts) = do
+    encodeBinding (LetBinding name1 term1 mts) = do
       comment <- fmap normalizeComment <$> getTermDescription term1
-      encodeTermAssignment env name1 term1 comment
-    (args, bindings, body) = gatherArgsAndBindings [] [] term
-    gatherArgsAndBindings prevArgs prevBindings term = case fullyStripTerm term of
-      TermFunction (FunctionLambda (Lambda var _ body)) -> gatherArgsAndBindings (var:prevArgs) prevBindings body
-      TermLet (Let bindings body) -> gatherArgsAndBindings prevArgs (bindings ++ prevBindings) body
-      t -> (L.reverse prevArgs, L.reverse prevBindings, t)
+      typ1 <- case mts of
+        Nothing -> fail $ "missing type for let binding " ++ unName name1 ++ " in " ++ unName name
+        Just ts -> return $ typeSchemeType ts
+      encodeTermAssignment env name1 term1 typ1 comment
+    (args, bindings, body, doms, cod) = gatherArgsAndBindings [] [] [] term typ
+    gatherArgsAndBindings prevArgs prevBindings prevDoms term typ = case fullyStripTerm term of
+      TermFunction (FunctionLambda (Lambda var _ body)) -> case stripType typ of
+        TypeFunction (FunctionType dom cod) -> gatherArgsAndBindings (var:prevArgs) prevBindings (dom:prevDoms) body cod
+      TermLet (Let bindings body) -> gatherArgsAndBindings prevArgs (bindings ++ prevBindings) prevDoms body typ
+      t -> (L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ)
 
 encodeTopLevelTerm :: PythonEnvironment -> Term -> Flow Graph [Py.Statement]
 encodeTopLevelTerm env term = if L.length args == 1
