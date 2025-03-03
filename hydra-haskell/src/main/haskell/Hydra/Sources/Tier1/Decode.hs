@@ -135,8 +135,8 @@ casesDef = decodeNominalFunctionDefinition "cases" (tList fieldT) $
   lets [
     "matchFunction">: matchTermVariant _Term_function,
     "matchElimination">: matchVariant _Function _Function_elimination,
-    "matchUnion">: matchVariant _Elimination _Elimination_union
-    ] $ ref nominalDef
+    "matchUnion">: matchVariant _Elimination _Elimination_union]
+    $ ref nominalDef
       @@ Core.caseStatementTypeName
       @@ Core.caseStatementCases
       @@ compose3 (var "matchFunction") (var "matchElimination") (var "matchUnion")
@@ -237,8 +237,8 @@ lambdaDef :: TElement (Term -> Maybe Lambda)
 lambdaDef = decodeFunctionDefinition "lambda" termT lambdaT $
   lets [
     "matchFunction">: matchTermVariant _Term_function,
-    "matchLambda">: matchVariant _Function _Function_lambda
-    ] $ compose2 (var "matchFunction") (var "matchLambda")
+    "matchLambda">: matchVariant _Function _Function_lambda]
+    $ compose2 (var "matchFunction") (var "matchLambda")
 
 letBindingDef :: TElement (Name -> Term -> Maybe LetBinding)
 letBindingDef = decodeDefinition "letBinding" $
@@ -301,8 +301,8 @@ optCasesDef = decodeFunctionDefinition "optCases" termT optionalCasesT $
   lets [
     "matchFunction">: matchTermVariant _Term_function,
     "matchElimination">: matchVariant _Function _Function_elimination,
-    "matchOptional">: matchVariant _Elimination _Elimination_optional
-    ] $ compose3 (var "matchFunction") (var "matchElimination") (var "matchOptional")
+    "matchOptional">: matchVariant _Elimination _Elimination_optional]
+    $ compose3 (var "matchFunction") (var "matchElimination") (var "matchOptional")
 
 optCasesJustDef :: TElement (Term -> Maybe Term)
 optCasesJustDef = decodeFunctionDefinition "optCasesJust" termT termT $
@@ -319,8 +319,8 @@ optionalDef = decodeFunctionDefinition "optional" termT (tOpt termT) $
 pairDef :: TElement (Term -> Maybe (Term, Term))
 pairDef = decodeFunctionDefinition "pair" termT (tPair termT termT) $
   lets [
-    "matchProduct">: matchTermVariant _Term_product
-    ] $ compose2
+    "matchProduct">: matchTermVariant _Term_product]
+    $ compose2
       (var "matchProduct")
       (lambda "l" $ Logic.ifElse (Equality.equal (int32 2) (Lists.length $ var "l"))
         (just $ pair (Lists.at (int32 0) $ var "l") (Lists.at (int32 1) $ var "l"))

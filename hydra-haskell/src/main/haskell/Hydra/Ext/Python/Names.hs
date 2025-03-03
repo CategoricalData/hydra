@@ -76,5 +76,5 @@ variableReference conv quoted env name = if quoted && Y.isJust (namespaceOf name
     then doubleQuotedString $ Py.unName pyName
     else unquoted
   where
-    pyName = encodeName True CaseConventionPascal env name
+    pyName = encodeName True conv env name
     unquoted = pyNameToPyExpression pyName
