@@ -37,10 +37,10 @@ type Var = String
 data Prim
  = PrimLiteral Literal
  | PrimTyped TypedPrimitive
- | If0
- | Fst | Snd | Pair | TT
- | Nil | Cons | FoldList
- | FF | Inl | Inr | Case | Con Var | Fold Var
+ | PrimIf
+ | PrimFst | PrimSnd | PrimPair | PrimTT
+ | PrimNil | PrimCons | FoldList
+ | PrimFF | PrimInl | PrimInr | PrimCase | PrimCon Var | PrimFold Var
  deriving Eq
 
 instance Show Prim where
@@ -57,45 +57,45 @@ instance Show Prim where
     _ -> show l
   show (PrimTyped (TypedPrimitive name _)) = unName name ++ "()"
   show FoldList = "fold"
-  show Fst = "fst"
-  show Snd = "snd"
-  show Nil = "nil"
-  show Cons = "cons"
-  show TT = "tt"
-  show FF = "ff"
-  show Inl = "inl"
-  show Inr = "inr"
-  show Case = "case"
-  show If0 = "if0"
-  show Pair = "pair"
-  show (Con  n) = n
-  show (Fold n) = "fold_" ++ n
+  show PrimFst = "fst"
+  show PrimSnd = "snd"
+  show PrimNil = "nil"
+  show PrimCons = "cons"
+  show PrimTT = "tt"
+  show PrimFF = "ff"
+  show PrimInl = "inl"
+  show PrimInr = "inr"
+  show PrimCase = "case"
+  show PrimIf = "if0"
+  show PrimPair = "pair"
+  show (PrimCon  n) = n
+  show (PrimFold n) = "fold_" ++ n
 
 data Expr
  = ExprConst Prim
- | Var Var
- | Tuple [Expr]
- | Proj Int Int Expr
- | Inj Int Int Expr
- | Case' Expr [Expr]
- | App Expr Expr
- | Abs Var Expr
- | Letrec [(Var, Expr)] Expr
+ | ExprVar Var
+ | ExprTuple [Expr]
+ | ExprProj Int Int Expr
+ | ExprInj Int Int Expr
+ | ExprCase Expr [Expr]
+ | ExprApp Expr Expr
+ | ExprAbs Var Expr
+ | ExprLetrec [(Var, Expr)] Expr
  deriving Eq
 
 instance Show Expr where
-  show (Case' t ts) = "case " ++ show t ++ " of " ++ x ++ " end"
+  show (ExprCase t ts) = "case " ++ show t ++ " of " ++ x ++ " end"
    where x = foldl (\p q -> p ++ "\n\t\t" ++ q) "" $ map show ts
-  show (Proj i j e) = show e ++ "." ++ show i ++ " (arity " ++ show j ++ ")"
-  show (Inj i j e) = "inj " ++ show i ++ " (arity " ++ show j ++ ") " ++ show e
-  show (Tuple ts) = "<" ++ show (map show ts) ++ ">"
+  show (ExprProj i j e) = show e ++ "." ++ show i ++ " (arity " ++ show j ++ ")"
+  show (ExprInj i j e) = "inj " ++ show i ++ " (arity " ++ show j ++ ") " ++ show e
+  show (ExprTuple ts) = "<" ++ show (map show ts) ++ ">"
   show (ExprConst p) = show p
-  show (Var v) = v
-  show (App (App (App a' a) b) b') = "(" ++ show a' ++ " " ++ show a ++ " " ++ show b ++ " " ++ show b' ++ ")"
-  show (App (App a b) b') = "(" ++ show a ++ " " ++ show b ++ " " ++ show b' ++ ")"
-  show (App a b) = "(" ++ show a ++ " " ++ show b ++ ")"
-  show (Abs a b) = "(\\" ++ a ++ ". " ++ show b ++ ")"
-  show (Letrec ab c) = "letrec " ++ d ++ show c
+  show (ExprVar v) = v
+  show (ExprApp (ExprApp (ExprApp a' a) b) b') = "(" ++ show a' ++ " " ++ show a ++ " " ++ show b ++ " " ++ show b' ++ ")"
+  show (ExprApp (ExprApp a b) b') = "(" ++ show a ++ " " ++ show b ++ " " ++ show b' ++ ")"
+  show (ExprApp a b) = "(" ++ show a ++ " " ++ show b ++ ")"
+  show (ExprAbs a b) = "(\\" ++ a ++ ". " ++ show b ++ ")"
+  show (ExprLetrec ab c) = "letrec " ++ d ++ show c
     where d = foldr (\(p, q) r -> p ++ " = " ++ show q ++ " \n\t\t" ++ r) "in " ab
 
 data MTy = TyVar Var
@@ -271,33 +271,33 @@ replaceTCon u s (TyCon t' ts)  | TyCon t' ts == u = s
 primTy :: ADTs -> Prim -> Either String TypSch
 primTy _ (PrimLiteral l) = Right $ Forall [] $ TyLit $ literalType l
 primTy _ (PrimTyped (TypedPrimitive _ forAll)) = Right forAll
-primTy [] (Con n) = throwError $ n ++ " not found "
-primTy ((a,t,[]):tl) (Con n) = primTy tl $ Con n
-primTy ((a,t,(c,ts):cs):tl) (Con n) | c == n = return $ Forall t (ts' ts $ TyCon a $ map TyVar t)
-                                    | otherwise = primTy ((a,t,cs):tl) $ Con n
+primTy [] (PrimCon n) = throwError $ n ++ " not found "
+primTy ((a,t,[]):tl) (PrimCon n) = primTy tl $ PrimCon n
+primTy ((a,t,(c,ts):cs):tl) (PrimCon n) | c == n = return $ Forall t (ts' ts $ TyCon a $ map TyVar t)
+                                    | otherwise = primTy ((a,t,cs):tl) $ PrimCon n
  where ts' [] x = x
        ts' (p:q) x = TyFn p $ ts' q x
-primTy [] (Fold n) = throwError $ n ++ " not found "
-primTy ((a,t,cs):tl) (Fold n) | a == n = return $ Forall ("r":t) $ elimTy
-                              | otherwise = primTy tl $ Fold n
+primTy [] (PrimFold n) = throwError $ n ++ " not found "
+primTy ((a,t,cs):tl) (PrimFold n) | a == n = return $ Forall ("r":t) $ elimTy
+                              | otherwise = primTy tl $ PrimFold n
  where elimTy = TyFn (TyCon a $ map TyVar t) $ replaceTCon (TyCon a $ map TyVar t) (TyVar "r") (ts' cs)
        ts' [] = TyVar "r"
        ts' ((_,ts):q)  = TyFn (ts'' ts) $ ts' q
        ts'' [] = TyCon a $ map TyVar t
        ts'' (a:b) = TyFn a $ ts'' b
-primTy _ Fst = return $  Forall ["x", "y"] $ (TyProd (TyVar "x") (TyVar "y")) `TyFn` (TyVar "x")
-primTy _ Snd = return $  Forall ["x", "y"] $ (TyProd (TyVar "x") (TyVar "y")) `TyFn` (TyVar "y")
-primTy _ Nil = return $  Forall ["t"] $ TyList (TyVar "t")
-primTy _ Cons = return $ Forall ["t"] $ TyFn (TyVar "t") (TyFn (TyList (TyVar "t")) (TyList (TyVar "t")))
-primTy _ TT = return $ Forall [] TyUnit
-primTy _ FF = return $ Forall ["t"] $ TyFn TyVoid (TyVar "t")
-primTy _ Inl = return $ Forall ["x", "y"] $ (TyVar "x") `TyFn` (TyProd (TyVar "x") (TyVar "y"))
-primTy _ Inr = return $ Forall ["x", "y"] $ (TyVar "y") `TyFn` (TyProd (TyVar "x") (TyVar "y"))
-primTy _ Pair = return $ Forall ["xx", "yy"] $ (TyFn (TyVar "xx") (TyFn (TyVar "yy") (TyProd (TyVar "xx") (TyVar "yy"))))
-primTy _ If0 = return $ Forall [] $ natType `TyFn` (natType `TyFn` (natType `TyFn` natType))
+primTy _ PrimFst = return $  Forall ["x", "y"] $ (TyProd (TyVar "x") (TyVar "y")) `TyFn` (TyVar "x")
+primTy _ PrimSnd = return $  Forall ["x", "y"] $ (TyProd (TyVar "x") (TyVar "y")) `TyFn` (TyVar "y")
+primTy _ PrimNil = return $  Forall ["t"] $ TyList (TyVar "t")
+primTy _ PrimCons = return $ Forall ["t"] $ TyFn (TyVar "t") (TyFn (TyList (TyVar "t")) (TyList (TyVar "t")))
+primTy _ PrimTT = return $ Forall [] TyUnit
+primTy _ PrimFF = return $ Forall ["t"] $ TyFn TyVoid (TyVar "t")
+primTy _ PrimInl = return $ Forall ["x", "y"] $ (TyVar "x") `TyFn` (TyProd (TyVar "x") (TyVar "y"))
+primTy _ PrimInr = return $ Forall ["x", "y"] $ (TyVar "y") `TyFn` (TyProd (TyVar "x") (TyVar "y"))
+primTy _ PrimPair = return $ Forall ["xx", "yy"] $ (TyFn (TyVar "xx") (TyFn (TyVar "yy") (TyProd (TyVar "xx") (TyVar "yy"))))
+primTy _ PrimIf = return $ Forall [] $ natType `TyFn` (natType `TyFn` (natType `TyFn` natType))
 primTy _ FoldList = return $ Forall ["a", "b"] $ p `TyFn` ((TyVar "b") `TyFn` ((TyList $ TyVar "a") `TyFn` (TyVar "b")))
  where p = TyVar "b" `TyFn` (TyVar "a" `TyFn` TyVar "b")
-primTy _ Case = return $ Forall ["x", "y", "z"] $ (TySum (TyVar "x") (TyVar "y")) `TyFn` (l `TyFn` (r `TyFn` (TyVar "z")))
+primTy _ PrimCase = return $ Forall ["x", "y", "z"] $ (TySum (TyVar "x") (TyVar "y")) `TyFn` (l `TyFn` (r `TyFn` (TyVar "z")))
  where l = (TyVar "x") `TyFn` (TyVar "z")
        r = (TyVar "y") `TyFn` (TyVar "z")
 
@@ -535,7 +535,7 @@ checkAgainstF adts g t e = case (typeOf adts [] g' e) of
  where g' = map (\(k,v)->(k, tyToFTy v)) g
 
 w :: Int -> ADTs -> Ctx -> Expr -> M (MTy, FExpr)
-w l adts g (Case' e es') = do { t <- fresh
+w l adts g (ExprCase e es') = do { t <- fresh
                             ; bs' <- mapM (\_->fresh) es'
                             ; let bs = map (\k-> TyFn k t) bs'
                             ; (phi , (ts, es)) <- w' (l+1) g es'
@@ -551,7 +551,7 @@ w l adts g (Case' e es') = do { t <- fresh
        w' l g (e:tl) = do { (u,(u', j)) <- w l adts g e
                         ; (r,(r', h)) <- w' l (subst u g ) tl
                         ; return (r `o` u, ((subst r u'):r', (subst r j):h)) }
-w l adts g (Inj i j e) = do {
+w l adts g (ExprInj i j e) = do {
                      ; (s0, (t0, a)) <- w (l+1) adts g e
                      ; t'' <- mapM (\_->fresh) [1..j]
                      ; let t' = replace t'' (i, t0)
@@ -561,7 +561,7 @@ w l adts g (Inj i j e) = do {
                      ; log0 l $ "INJ " ++ show (subst ret_subst g) ++ "|- " ++ (show $ ret) ++ " : " ++  show ret_t
                      ; checkAgainstF adts (subst ret_subst g) ret_t ret
                      ; return (ret_subst, (ret_t, ret)) }
-w l adts g (Proj i j e) = do {
+w l adts g (ExprProj i j e) = do {
                      ; (s0, (t0, a)) <- w (l+1) adts g e
                      ; t' <- mapM (\_->fresh) [1..j]
                      ; s2 <-  t0 `mgu` (TyTuple t')
@@ -571,7 +571,7 @@ w l adts g (Proj i j e) = do {
                      ; log0 l $ "PROJ " ++ show (subst ret_subst g) ++ "|- " ++ (show $ ret) ++ " : " ++  show ret_t
                      ; checkAgainstF adts (subst ret_subst g) ret_t ret
                      ; return (ret_subst, (ret_t, ret)) }
-w l adts g (Tuple es') = do { (phi, (ts, es)) <- w' (l+1) g es'
+w l adts g (ExprTuple es') = do { (phi, (ts, es)) <- w' (l+1) g es'
                             ; let ret = FTuple es
                                   ret_t = TyTuple ts
                                   ret_subst = phi
@@ -589,14 +589,14 @@ w l adts g (ExprConst p) = do { case primTy adts p of
                           ; log0 l $ "CONST " ++ show g ++ "|- " ++  show ret ++ " : " ++ show ret_t
                         ; checkAgainstF adts g ret_t ret
                         ; return (idSubst, (ret_t, ret)) } }
-w l adts g (Var x) = case lookup x g of
+w l adts g (ExprVar x) = case lookup x g of
                 Nothing -> throwError $ "Unknown var: " ++ (show x)
                 Just s -> do { (ret_t, vs) <- inst s
                              ; let ret = fTyApp (FVar x) $ map mTyToFTy vs
                              ; log0 l $ "VAR " ++ show g ++ "|- " ++ show ret ++ " : " ++ show ret_t
                              ; checkAgainstF adts g ret_t ret
                              ; return (idSubst, (ret_t, ret)) }
-w l adts g (App e0 e1) = do {
+w l adts g (ExprApp e0 e1) = do {
                      ; (s0, (t0, a)) <- w (l+1) adts g e0
                      ; (s1, (t1, b)) <- w (l+1) adts (subst s0 g) e1
                      ; t' <- fresh
@@ -607,7 +607,7 @@ w l adts g (App e0 e1) = do {
                      ; log0 l $ "APP " ++ show (subst ret_subst g) ++ "|- " ++ show ret ++ " : " ++  show ret_t
                      ; checkAgainstF adts (subst ret_subst g) ret_t ret
                      ; return (ret_subst, (ret_t, ret)) }
-w l adts g (Abs x e) = do {
+w l adts g (ExprAbs x e) = do {
                         ; t  <- fresh
                         ; (ret_subst, (t', a)) <- w (l+1) adts ((x, (Forall [] t)):g) e
                         ; let ret = FAbs x (mTyToFTy $ subst ret_subst t) a
@@ -615,7 +615,7 @@ w l adts g (Abs x e) = do {
                         ; log0 l $ "ABS " ++ show (subst ret_subst g) ++ "|- \\" ++ x ++ ". " ++ show ret ++ " : " ++ show ret_t
                         ; checkAgainstF adts (subst ret_subst g) ret_t ret
                         ; return (ret_subst, (ret_t, ret)) }
-w l adts g (Letrec xe0 e1) = do {
+w l adts g (ExprLetrec xe0 e1) = do {
                          ; t0s <- mapM (\(k,v) -> do { f <- fresh; return (k, f) }) xe0
                          ; let g' = map (\(k,v) -> (k, Forall [] v)) t0s ++ g
                          ; (s0, (ts,e0XS)) <- w' (l+1) g' xe0
@@ -686,9 +686,9 @@ testOne (TestCase name t) = do { putStrLn $ "[" ++ name ++ "]"
                ; putStrLn "------------------------"
                ; putStrLn ""  }
 
-letrec' x e f = Letrec [(x,e)] f
+letrec' x e f = ExprLetrec [(x,e)] f
 
-x @@ y = App x y
+x @@ y = ExprApp x y
 zero = nat 0
 
 
@@ -702,122 +702,122 @@ tests = adtTests ++ tupleTests ++ variantTests ++ letTests
 
 adtTests = [testAdt1, testAdt2, testAdt3]
 
-testAdt1 = TestCase "testAdt1" $ Letrec [("lat1", lat1)] body
- where body = App (App (ExprConst $ Con "MkLatLon1") (nat 0)) (nat 1)
-       lat1 = Abs "z" $ App (App (ExprConst $ Fold "LatLon1") (Var "z")) $ Abs "p" $ Abs "q" $ (Var "p")
+testAdt1 = TestCase "testAdt1" $ ExprLetrec [("lat1", lat1)] body
+ where body = ExprApp (ExprApp (ExprConst $ PrimCon "MkLatLon1") (nat 0)) (nat 1)
+       lat1 = ExprAbs "z" $ ExprApp (ExprApp (ExprConst $ PrimFold "LatLon1") (ExprVar "z")) $ ExprAbs "p" $ ExprAbs "q" $ (ExprVar "p")
 
-testAdt2 = TestCase "testAdt2" $ Letrec [("lat1", lat1)] $ App (Var "lat1") body
- where body = App (App (ExprConst $ Con "MkLatLon1") (nat 0)) (nat 1)
-       lat1 = Abs "z" $ App (App (ExprConst $ Fold "LatLon1") (Var "z")) $ Abs "p" $ Abs "q" $ (Var "p")
+testAdt2 = TestCase "testAdt2" $ ExprLetrec [("lat1", lat1)] $ ExprApp (ExprVar "lat1") body
+ where body = ExprApp (ExprApp (ExprConst $ PrimCon "MkLatLon1") (nat 0)) (nat 1)
+       lat1 = ExprAbs "z" $ ExprApp (ExprApp (ExprConst $ PrimFold "LatLon1") (ExprVar "z")) $ ExprAbs "p" $ ExprAbs "q" $ (ExprVar "p")
 
-testAdt3 = TestCase "testAdt3" $ Abs "z" $ ExprConst (Fold "List")
-  @@ Var "z"
-  @@ ExprConst (Con "Nil")
-  @@ ExprConst (Con "Cons")
+testAdt3 = TestCase "testAdt3" $ ExprAbs "z" $ ExprConst (PrimFold "List")
+  @@ ExprVar "z"
+  @@ ExprConst (PrimCon "Nil")
+  @@ ExprConst (PrimCon "Cons")
 
 ---
 
 tupleTests = [testTuple1, testTuple2]
 
-testTuple1 = TestCase "testTuple1" $ Letrec [("t", t)] $ Tuple [Proj 1 2 $ Var "t", Proj 0 2 $ Var "t"]
+testTuple1 = TestCase "testTuple1" $ ExprLetrec [("t", t)] $ ExprTuple [ExprProj 1 2 $ ExprVar "t", ExprProj 0 2 $ ExprVar "t"]
  where f = str "alice"
        g = nat 0
-       t = Tuple [f, g]
+       t = ExprTuple [f, g]
 
-testTuple2 = TestCase "testTuple2" $ Abs "z" $ Tuple [(Proj 0 2 $ Var "z"), (Proj 1 2 $ Var "z")]
+testTuple2 = TestCase "testTuple2" $ ExprAbs "z" $ ExprTuple [(ExprProj 0 2 $ ExprVar "z"), (ExprProj 1 2 $ ExprVar "z")]
 
 ---
 
 variantTests = [testVariant1, testVariant2]
 
-testVariant1 = TestCase "testVariant1" $ Abs "z" $ Case' (Var "z") [f,g]
- where f = Abs "x" {-- $ Inj 0 2 --} $ Var "x"
-       g = Abs "y" {-- $ Inj 1 2 --} $ Var "y"
+testVariant1 = TestCase "testVariant1" $ ExprAbs "z" $ ExprCase (ExprVar "z") [f,g]
+ where f = ExprAbs "x" {-- $ ExprInj 0 2 --} $ ExprVar "x"
+       g = ExprAbs "y" {-- $ ExprInj 1 2 --} $ ExprVar "y"
 
-testVariant2 = TestCase "testVariant2" $ Abs "z" $ Case' (Var "z") [f,g]
- where f = Abs "x" $ Inj 0 2 $ Var "x"
-       g = Abs "y" $ Inj 1 2 $ Var "y"
+testVariant2 = TestCase "testVariant2" $ ExprAbs "z" $ ExprCase (ExprVar "z") [f,g]
+ where f = ExprAbs "x" $ ExprInj 0 2 $ ExprVar "x"
+       g = ExprAbs "y" $ ExprInj 1 2 $ ExprVar "y"
 
 ---
 
 letTests = [testLet1, testLet2, testLet3, testLet4, testLet5, testLet6, testLet7, testLet8, testLet9, testLet10, testLet11, testLet12, testLet13]
 
-testLet1 = TestCase "testLet1" $ Letrec [("f", f), ("g", g)] b
- where b = Tuple [(Var "f"), (Var "g")]
-       f = Abs "x" $ Abs "y" $ App (App (Var "g") (nat 0)) (Var "x")
-       g = Abs "u" $ Abs "v" $ App (App (Var "f") (Var "v")) (nat 0)
+testLet1 = TestCase "testLet1" $ ExprLetrec [("f", f), ("g", g)] b
+ where b = ExprTuple [(ExprVar "f"), (ExprVar "g")]
+       f = ExprAbs "x" $ ExprAbs "y" $ ExprApp (ExprApp (ExprVar "g") (nat 0)) (ExprVar "x")
+       g = ExprAbs "u" $ ExprAbs "v" $ ExprApp (ExprApp (ExprVar "f") (ExprVar "v")) (nat 0)
 
 testLet2 = TestCase "testLet2" $ letrec' "f" i b
- where i = Abs "x" (Var "x")
-       b = Var "f"
+ where i = ExprAbs "x" (ExprVar "x")
+       b = ExprVar "f"
 
-testLet3 = TestCase "testLet3" $ letrec' "f" ( (Abs "x" (Var "x"))) $ App (Var "f")  (nat 0)
- where sng0 = App (Var "sng") (nat 0)
-       sngAlice = App (Var "sng") (str "alice")
-       body = (Var "sng")
+testLet3 = TestCase "testLet3" $ letrec' "f" ( (ExprAbs "x" (ExprVar "x"))) $ ExprApp (ExprVar "f")  (nat 0)
+ where sng0 = ExprApp (ExprVar "sng") (nat 0)
+       sngAlice = ExprApp (ExprVar "sng") (str "alice")
+       body = (ExprVar "sng")
 
-testLet4 =  TestCase "testLet4" $ letrec' "f" (App (Abs "x" (Var "x")) (nat 0)) (Var "f")
- where sng0 = App (Var "sng") (nat 0)
-       sngAlice = App (Var "sng") (str "alice")
+testLet4 =  TestCase "testLet4" $ letrec' "f" (ExprApp (ExprAbs "x" (ExprVar "x")) (nat 0)) (ExprVar "f")
+ where sng0 = ExprApp (ExprVar "sng") (nat 0)
+       sngAlice = ExprApp (ExprVar "sng") (str "alice")
 
-testLet5 = TestCase "testLet5" $ letrec' "sng" (Abs "x" (App (App (ExprConst Cons) (Var "x")) (ExprConst Nil))) body
+testLet5 = TestCase "testLet5" $ letrec' "sng" (ExprAbs "x" (ExprApp (ExprApp (ExprConst PrimCons) (ExprVar "x")) (ExprConst PrimNil))) body
   where
-    body = (Var "sng")
+    body = (ExprVar "sng")
 
-testLet6 = TestCase "testLet6" $ letrec' "sng" (Abs "x" (App (App (ExprConst Cons) (Var "x")) (ExprConst Nil))) body
- where sng0 = App (Var "sng") (nat 0)
-       sngAlice = App (Var "sng") (str "alice")
-       body = App (App (ExprConst Pair) sng0) sngAlice
+testLet6 = TestCase "testLet6" $ letrec' "sng" (ExprAbs "x" (ExprApp (ExprApp (ExprConst PrimCons) (ExprVar "x")) (ExprConst PrimNil))) body
+ where sng0 = ExprApp (ExprVar "sng") (nat 0)
+       sngAlice = ExprApp (ExprVar "sng") (str "alice")
+       body = ExprApp (ExprApp (ExprConst PrimPair) sng0) sngAlice
 
-testLet7 = TestCase "testLet7" $ letrec' "+" (Abs "x" $ Abs "y" $ recCall) twoPlusOne
+testLet7 = TestCase "testLet7" $ letrec' "+" (ExprAbs "x" $ ExprAbs "y" $ recCall) twoPlusOne
  where
-   recCall = App constSucc $ App (App (Var "+") (App constPred (Var "x"))) (Var "y")
-   ifz x y z = App (App (App (ExprConst If0) x) y) z
-   twoPlusOne = App (App (Var "+") two) one
-   two = App constSucc one
-   one = App constSucc (nat 0)
+   recCall = ExprApp constSucc $ ExprApp (ExprApp (ExprVar "+") (ExprApp constPred (ExprVar "x"))) (ExprVar "y")
+   ifz x y z = ExprApp (ExprApp (ExprApp (ExprConst PrimIf) x) y) z
+   twoPlusOne = ExprApp (ExprApp (ExprVar "+") two) one
+   two = ExprApp constSucc one
+   one = ExprApp constSucc (nat 0)
 
-testLet8 = TestCase "testLet8" $ letrec' "+" (Abs "x" $ Abs "y" $ recCall) $ twoPlusOne
+testLet8 = TestCase "testLet8" $ letrec' "+" (ExprAbs "x" $ ExprAbs "y" $ recCall) $ twoPlusOne
  where
-   recCall = App constSucc $ App (App (Var "+") (App constPred (Var "x"))) ( (Var "y"))
-   ifz x y z = App (App (App (ExprConst If0) x) y) z
-   twoPlusOne = App (App (Var "+") two) one
-   two = App constSucc one
-   one = App constSucc (nat 0)
+   recCall = ExprApp constSucc $ ExprApp (ExprApp (ExprVar "+") (ExprApp constPred (ExprVar "x"))) ( (ExprVar "y"))
+   ifz x y z = ExprApp (ExprApp (ExprApp (ExprConst PrimIf) x) y) z
+   twoPlusOne = ExprApp (ExprApp (ExprVar "+") two) one
+   two = ExprApp constSucc one
+   one = ExprApp constSucc (nat 0)
 
 testLet9 = TestCase "testLet9" $ letrec' "f" f x
- where x =  (Var "f")
-       f = Abs "x" $ Abs "y" $ App (App (Var "f") (nat 0)) (Var "x")
+ where x =  (ExprVar "f")
+       f = ExprAbs "x" $ ExprAbs "y" $ ExprApp (ExprApp (ExprVar "f") (nat 0)) (ExprVar "x")
 
-testLet10 = TestCase "testLet10" $ Letrec [("f", f), ("g", g)] x
- where x =  App (App (ExprConst $ Pair) (Var "f")) (Var "g")
-       f = Abs "x" $ Abs "y" $ App (App (Var "f") (nat 0)) (Var "x")
-       g = Abs "xx" $ Abs "yy" $ App (App (Var "g") (nat 0)) (Var "xx")
+testLet10 = TestCase "testLet10" $ ExprLetrec [("f", f), ("g", g)] x
+ where x =  ExprApp (ExprApp (ExprConst PrimPair) (ExprVar "f")) (ExprVar "g")
+       f = ExprAbs "x" $ ExprAbs "y" $ ExprApp (ExprApp (ExprVar "f") (nat 0)) (ExprVar "x")
+       g = ExprAbs "xx" $ ExprAbs "yy" $ ExprApp (ExprApp (ExprVar "g") (nat 0)) (ExprVar "xx")
 
-testLet11 = TestCase "testLet11" $ Letrec [("f", f), ("g", g)] b
- where b = App (App (ExprConst Pair) (Var "f")) (Var "g")
-       f = Abs "x" $ Abs "y" $ App (App (Var "g") (nat 0)) (Var "x")
-       g = Abs "u" $ Abs "v" $ App (App (Var "f") (Var "v")) (nat 0)
+testLet11 = TestCase "testLet11" $ ExprLetrec [("f", f), ("g", g)] b
+ where b = ExprApp (ExprApp (ExprConst PrimPair) (ExprVar "f")) (ExprVar "g")
+       f = ExprAbs "x" $ ExprAbs "y" $ ExprApp (ExprApp (ExprVar "g") (nat 0)) (ExprVar "x")
+       g = ExprAbs "u" $ ExprAbs "v" $ ExprApp (ExprApp (ExprVar "f") (ExprVar "v")) (nat 0)
 
-testLet12 = TestCase "testLet12" $ Letrec [("f", f), ("g", g)] b
- where b = App (App (ExprConst Pair) (Var "f")) (Var "g")
-       f = Abs "x" $ Abs "y" $ App (App (Var "g") (nat 0)) (nat 0)
-       g = Abs "u" $ Abs "v" $ App (App (Var "f") (Var "v")) (nat 0)
+testLet12 = TestCase "testLet12" $ ExprLetrec [("f", f), ("g", g)] b
+ where b = ExprApp (ExprApp (ExprConst PrimPair) (ExprVar "f")) (ExprVar "g")
+       f = ExprAbs "x" $ ExprAbs "y" $ ExprApp (ExprApp (ExprVar "g") (nat 0)) (nat 0)
+       g = ExprAbs "u" $ ExprAbs "v" $ ExprApp (ExprApp (ExprVar "f") (ExprVar "v")) (nat 0)
 
-testLet13 = TestCase "testLet13" $ Letrec [("f", f), ("g", g)] b
- where b = App (App (ExprConst Pair) (Var "f")) (Var "g")
-       f = Abs "x" $ Abs "y" $ App (App (Var "g") (nat 0)) (Var "x")
-       g = Abs "u" $ Abs "v" $ App (App (Var "f") (nat 0)) (nat 0)
+testLet13 = TestCase "testLet13" $ ExprLetrec [("f", f), ("g", g)] b
+ where b = ExprApp (ExprApp (ExprConst PrimPair) (ExprVar "f")) (ExprVar "g")
+       f = ExprAbs "x" $ ExprAbs "y" $ ExprApp (ExprApp (ExprVar "g") (nat 0)) (ExprVar "x")
+       g = ExprAbs "u" $ ExprAbs "v" $ ExprApp (ExprApp (ExprVar "f") (nat 0)) (nat 0)
 
-testLet14 = TestCase "testLet14" $ Letrec [("singleton", singleton), ("f", f), ("g", g)] $ Var "f"
+testLet14 = TestCase "testLet14" $ ExprLetrec [("singleton", singleton), ("f", f), ("g", g)] $ ExprVar "f"
   where
-    singleton = Abs "x" $ ExprConst Cons @@ Var "x" @@ ExprConst Nil
-    f = Abs "x" $ Abs "y" $ ExprConst Cons
-      @@ (ExprConst Pair
-        @@ (Var "singleton" @@ Var "x")
-        @@ (Var "singleton" @@ Var "y"))
-      @@ (Var "g" @@ Var "x" @@ Var "y")
-    g = Abs "x" $ Abs "y" $ Var "f" @@ zero @@ Var "y"
+    singleton = ExprAbs "x" $ ExprConst PrimCons @@ ExprVar "x" @@ ExprConst PrimNil
+    f = ExprAbs "x" $ ExprAbs "y" $ ExprConst PrimCons
+      @@ (ExprConst PrimPair
+        @@ (ExprVar "singleton" @@ ExprVar "x")
+        @@ (ExprVar "singleton" @@ ExprVar "y"))
+      @@ (ExprVar "g" @@ ExprVar "x" @@ ExprVar "y")
+    g = ExprAbs "x" $ ExprAbs "y" $ ExprVar "f" @@ zero @@ ExprVar "y"
 
 testLet14_haskell = f
   where
@@ -825,13 +825,13 @@ testLet14_haskell = f
     f = \x y -> (sng x, sng y): []
     g = \x y -> f 0 y
 
-testLet15 = TestCase "testLet15" $ Letrec [("singleton", singleton)] $
- Letrec [("f", f), ("g", g)] $ Var "f"
+testLet15 = TestCase "testLet15" $ ExprLetrec [("singleton", singleton)] $
+ ExprLetrec [("f", f), ("g", g)] $ ExprVar "f"
   where
-    singleton = Abs "x" $ ExprConst Cons @@ Var "x" @@ ExprConst Nil
-    f = Abs "x" $ Abs "y" $ ExprConst Cons
-      @@ (ExprConst Pair
-        @@ (Var "singleton" @@ Var "x")
-        @@ (Var "singleton" @@ Var "y"))
-      @@ (Var "g" @@ Var "x" @@ Var "y")
-    g = Abs "x" $ Abs "y" $ Var "f" @@ zero @@ Var "y"
+    singleton = ExprAbs "x" $ ExprConst PrimCons @@ ExprVar "x" @@ ExprConst PrimNil
+    f = ExprAbs "x" $ ExprAbs "y" $ ExprConst PrimCons
+      @@ (ExprConst PrimPair
+        @@ (ExprVar "singleton" @@ ExprVar "x")
+        @@ (ExprVar "singleton" @@ ExprVar "y"))
+      @@ (ExprVar "g" @@ ExprVar "x" @@ ExprVar "y")
+    g = ExprAbs "x" $ ExprAbs "y" $ ExprVar "f" @@ zero @@ ExprVar "y"
