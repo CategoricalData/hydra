@@ -20,6 +20,7 @@ import qualified Data.List  as L
 import qualified Data.Map   as M
 import qualified Data.Set   as S
 import qualified Data.Maybe as Y
+import qualified Text.Read  as TR
 
 
 -- | Temporary metadata which is used to create the header section of a Python file
@@ -99,20 +100,6 @@ encodeFieldType env (FieldType fname ftype) = do
   pyType <- annotatedExpression comment <$> encodeType env ftype
   return $ pyAssignmentToPyStatement $ Py.AssignmentTyped $ Py.TypedAssignment pyName pyType Nothing
 
-encodeFunctionType :: PythonEnvironment -> FunctionType -> Flow Graph Py.Expression
-encodeFunctionType env ft = do
-    pydoms <- CM.mapM encode doms
-    pycod <- encode cod
-    return $ pyPrimaryToPyExpression $ primaryWithSlices (pyNameToPyPrimary $ Py.Name "Callable")
-      (pyPrimaryToPySlice $ Py.PrimarySimple $ Py.AtomList $ pyList pydoms)
-      [Py.SliceOrStarredExpressionSlice $ pyExpressionToPySlice pycod]
-  where
-    encode = encodeType env
-    (doms, cod) = gatherParams [] ft
-    gatherParams rdoms (FunctionType dom cod) = case stripType cod of
-      TypeFunction ft2 -> gatherParams (dom:rdoms) ft2
-      _ -> (L.reverse (dom:rdoms), cod)
-
 encodeFloatValue :: FloatValue -> Flow s Py.Expression
 encodeFloatValue fv = case fv of
   FloatValueBigfloat f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat f
@@ -136,13 +123,35 @@ encodeFunctionDefinition env name args body doms cod comment prefixes = do
     let params = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters pyArgs [] Nothing
     stmts <- encodeTopLevelTerm env body
     let block = indentedBlock comment [prefixes ++ stmts]
-    returnType <- encodeType env cod
+    returnType <- tryType cod
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing
-      $ Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) [] (Just params) (Just returnType) Nothing block
+      $ Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) [] (Just params) returnType Nothing block
   where
     toParam name typ = do
-      pyTyp <- encodeType env typ
-      return $ Py.ParamNoDefault (Py.Param (encodeName False CaseConventionLowerSnake env name) $ Just $ Py.Annotation pyTyp) Nothing
+      pyTyp <- tryType typ
+      return $ Py.ParamNoDefault (Py.Param (encodeName False CaseConventionLowerSnake env name) $ fmap Py.Annotation pyTyp) Nothing
+    -- TODO: this is a workaround for unresolved type variables from type inference. This function should reduce to "encodeType env" once that issue is fixed.
+    tryType typ = if isTemporaryTypeVariable typ
+      then pure Nothing
+      else Just <$> encodeType env typ
+    isTemporaryTypeVariable typ = case stripType typ of
+      TypeVariable (Name v) -> L.head v == 't' && Y.isJust (TR.readMaybe (L.tail v) :: Maybe Int)
+      _ -> False
+
+
+encodeFunctionType :: PythonEnvironment -> FunctionType -> Flow Graph Py.Expression
+encodeFunctionType env ft = do
+    pydoms <- CM.mapM encode doms
+    pycod <- encode cod
+    return $ pyPrimaryToPyExpression $ primaryWithSlices (pyNameToPyPrimary $ Py.Name "Callable")
+      (pyPrimaryToPySlice $ Py.PrimarySimple $ Py.AtomList $ pyList pydoms)
+      [Py.SliceOrStarredExpressionSlice $ pyExpressionToPySlice pycod]
+  where
+    encode = encodeType env
+    (doms, cod) = gatherParams [] ft
+    gatherParams rdoms (FunctionType dom cod) = case stripType cod of
+      TypeFunction ft2 -> gatherParams (dom:rdoms) ft2
+      _ -> (L.reverse (dom:rdoms), cod)
 
 encodeIntegerValue :: IntegerValue -> Flow s Py.Expression
 encodeIntegerValue iv = case iv of
