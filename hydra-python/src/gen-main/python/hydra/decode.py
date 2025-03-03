@@ -56,21 +56,21 @@ def cases_case(tname: hydra.core.Name, fname: hydra.core.Name, v3: hydra.core.Te
     return hydra.lib.optionals.compose(lambda v2: cases(tname)(v2))(lambda v2: field(fname)(v2))(v3)
 
 def cases(v4: hydra.core.Name, v5: hydra.core.Term) -> frozenlist[hydra.core.Field] | None:
-    def match_union(v1: hydra.core.Elimination) -> T760:
+    def match_union(v1: hydra.core.Elimination):
         match v1:
             case hydra.core.EliminationUnion(x):
                 return hydra.lib.optionals.pure(x)
             
             case _:
                 return None
-    def match_elimination(v1: hydra.core.Function) -> T755:
+    def match_elimination(v1: hydra.core.Function):
         match v1:
             case hydra.core.FunctionElimination(x):
                 return hydra.lib.optionals.pure(x)
             
             case _:
                 return None
-    def match_function(x: T743) -> T750:
+    def match_function(x):
         match hydra.strip.fully_strip_term(x):
             case hydra.core.TermFunction(x):
                 return hydra.lib.optionals.pure(x)
@@ -166,14 +166,14 @@ def integer_literal(v1: hydra.core.Literal) -> hydra.core.IntegerValue | None:
             return None
 
 def lambda_(v3: hydra.core.Term) -> hydra.core.Lambda | None:
-    def match_lambda(v1: hydra.core.Function) -> T606:
+    def match_lambda(v1: hydra.core.Function):
         match v1:
             case hydra.core.FunctionLambda(x):
                 return hydra.lib.optionals.pure(x)
             
             case _:
                 return None
-    def match_function(x: T594) -> T601:
+    def match_function(x):
         match hydra.strip.fully_strip_term(x):
             case hydra.core.TermFunction(x):
                 return hydra.lib.optionals.pure(x)
@@ -228,21 +228,21 @@ def nominal(get_name: Callable[[A], hydra.core.Name], get_b: Callable[[A], B], g
     return hydra.lib.optionals.compose(get_a)(lambda a: hydra.lib.logic.if_else(hydra.lib.equality.equal(get_name(a))(expected))(get_b(a))(None))(v3)
 
 def opt_cases(v3: hydra.core.Term) -> hydra.core.OptionalCases | None:
-    def match_optional(v1: hydra.core.Elimination) -> T486:
+    def match_optional(v1: hydra.core.Elimination):
         match v1:
             case hydra.core.EliminationOptional(x):
                 return hydra.lib.optionals.pure(x)
             
             case _:
                 return None
-    def match_elimination(v1: hydra.core.Function) -> T481:
+    def match_elimination(v1: hydra.core.Function):
         match v1:
             case hydra.core.FunctionElimination(x):
                 return hydra.lib.optionals.pure(x)
             
             case _:
                 return None
-    def match_function(x: T469) -> T476:
+    def match_function(x):
         match hydra.strip.fully_strip_term(x):
             case hydra.core.TermFunction(x):
                 return hydra.lib.optionals.pure(x)
@@ -266,7 +266,7 @@ def optional(x: hydra.core.Term) -> None | None:
             return None
 
 def pair(v3: hydra.core.Term) -> "type = TypeProduct [TypeVariable (Name {unName = \"hydra.core.Term\"}),TypeVariable (Name {unName = \"hydra.core.Term\"})]" | None:
-    def match_product(x: T419) -> T426:
+    def match_product(x):
         match hydra.strip.fully_strip_term(x):
             case hydra.core.TermProduct(x):
                 return hydra.lib.optionals.pure(x)
