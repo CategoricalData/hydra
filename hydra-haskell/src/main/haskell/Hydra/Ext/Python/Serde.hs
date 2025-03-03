@@ -50,6 +50,9 @@ encodeAtom a = case a of
   Py.AtomTuple t -> encodeTuple t
   _ -> unsupportedVariant "atom" a
 
+encodeAttribute :: Py.Attribute -> A.Expr
+encodeAttribute (Py.Attribute names) = dotSep $ encodeName <$> names
+
 encodeAwaitPrimary :: Py.AwaitPrimary -> A.Expr
 encodeAwaitPrimary (Py.AwaitPrimary await primary) = if await
   then spaceSep [cst "await", encodePrimary primary]
@@ -116,6 +119,7 @@ encodeClosedPattern :: Py.ClosedPattern -> A.Expr
 encodeClosedPattern cp = case cp of
   Py.ClosedPatternCapture c -> encodeCapturePattern c
   Py.ClosedPatternClass p -> encodeClassPattern p
+  Py.ClosedPatternValue v -> encodeValuePattern v
   Py.ClosedPatternWildcard -> cst "_"
   _ -> unsupportedVariant "closed pattern" cp
 
@@ -502,6 +506,9 @@ encodeUntypedAssignment (Py.UntypedAssignment targets rhs _) = spaceSep $ lefts 
   where
     lefts = encodeStarTarget <$> targets
     right = encodeAnnotatedRhs rhs
+
+encodeValuePattern :: Py.ValuePattern -> A.Expr
+encodeValuePattern (Py.ValuePattern attr) = encodeAttribute attr
 
 -- TODO: this is a partially ChatGPT-generated function which has not been thoroughly tested.
 escapePythonString :: Bool -> String -> String
