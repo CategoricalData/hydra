@@ -61,14 +61,20 @@ encodeTypeVariable = Py.Name . capitalize . unName
 sanitizePythonName :: String -> String
 sanitizePythonName = sanitizeWithUnderscores pythonReservedWords
 
-typeVariableReference :: Bool -> PythonEnvironment -> Name -> Py.Expression
-typeVariableReference quoted env name = if quoted && Y.isJust (namespaceOf name)
+termVariableReference :: PythonEnvironment -> Name -> Py.Expression
+termVariableReference = variableReference CaseConventionLowerSnake True
+
+typeVariableReference :: PythonEnvironment -> Name -> Py.Expression
+typeVariableReference = variableReference CaseConventionPascal False
+
+variantName :: Bool -> PythonEnvironment -> Name -> Name -> Py.Name
+variantName isQualified env tname fname = encodeName isQualified CaseConventionPascal env
+  $ Name $ unName tname ++ capitalize (unName fname)
+
+variableReference :: CaseConvention -> Bool -> PythonEnvironment -> Name -> Py.Expression
+variableReference conv quoted env name = if quoted && Y.isJust (namespaceOf name)
     then doubleQuotedString $ Py.unName pyName
     else unquoted
   where
     pyName = encodeName True CaseConventionPascal env name
     unquoted = pyNameToPyExpression pyName
-
-variantName :: Bool -> PythonEnvironment -> Name -> Name -> Py.Name
-variantName isQualified env tname fname = encodeName isQualified CaseConventionPascal env
-  $ Name $ unName tname ++ capitalize (unName fname)
