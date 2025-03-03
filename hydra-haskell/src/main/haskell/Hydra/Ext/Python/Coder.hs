@@ -350,19 +350,22 @@ encodeTopLevelTerm env term = if L.length args == 1
       TermFunction (FunctionElimination (EliminationUnion (CaseStatement tname dflt cases))) -> do
           rt <- requireUnionType tname
           let isEnum = isEnumType rt
+          let isFull = L.length cases >= L.length (rowTypeFields rt)
           pyArg <- encodeTerm env arg
           pyCases <- CM.mapM (toCaseBlock isEnum) cases
-          pyDflt <- toDefault dflt
+          pyDflt <- toDefault isFull dflt
           let subj = Py.SubjectExpressionSimple $ Py.NamedExpressionSimple pyArg
-          return [Py.StatementCompound $ Py.CompoundStatementMatch $ Py.MatchStatement subj $ pyCases ++ [pyDflt]]
+          return [Py.StatementCompound $ Py.CompoundStatementMatch $ Py.MatchStatement subj $ pyCases ++ pyDflt]
         where
-          toDefault dflt = do
-            stmt <- case dflt of
-              Nothing -> pure $ raiseTypeError $ "Unsupported " ++ localNameOf tname
-              Just d -> returnSingle <$> encodeTerm env d
-            let patterns = pyClosedPatternToPyPatterns Py.ClosedPatternWildcard
-            let body = indentedBlock Nothing [[stmt]]
-            return $ Py.CaseBlock patterns Nothing body
+          toDefault isFull dflt = if isFull
+            then pure []
+            else do
+              stmt <- case dflt of
+                Nothing -> pure $ raiseTypeError $ "Unsupported " ++ localNameOf tname
+                Just d -> returnSingle <$> encodeTerm env d
+              let patterns = pyClosedPatternToPyPatterns Py.ClosedPatternWildcard
+              let body = indentedBlock Nothing [[stmt]]
+              return [Py.CaseBlock patterns Nothing body]
           toCaseBlock isEnum (Field fname fterm) = case fullyStripTerm fterm of
             TermFunction (FunctionLambda (Lambda v _ body)) -> do
                 pyReturn <- encodeTerm env body
