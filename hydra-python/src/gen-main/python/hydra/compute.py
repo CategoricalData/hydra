@@ -3,7 +3,7 @@
 from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
-from hydra.dsl.python import Node
+from hydra.dsl.python import FrozenDict, frozenlist, Node
 from typing import Annotated, Generic, TypeVar
 import hydra.core
 
@@ -54,6 +54,6 @@ class FlowState(Generic[S, X]):
 class Trace:
     """A container for logging and error information."""
     
-    stack: list[str]
-    messages: list[str]
-    other: Annotated[dict[hydra.core.Name, hydra.core.Term], "A map of string keys to arbitrary terms as values, for application-specific use"]
+    stack: frozenlist[str]
+    messages: frozenlist[str]
+    other: Annotated[FrozenDict[hydra.core.Name, hydra.core.Term], "A map of string keys to arbitrary terms as values, for application-specific use"]

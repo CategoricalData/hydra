@@ -4,7 +4,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
-from hydra.dsl.python import Node
+from hydra.dsl.python import FrozenDict, Node
 from typing import Annotated
 import hydra.compute
 import hydra.core
@@ -17,7 +17,7 @@ class AdapterContext:
     
     graph: hydra.graph.Graph
     language: Language
-    adapters: dict[hydra.core.Name, hydra.compute.Adapter[AdapterContext, AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]
+    adapters: FrozenDict[hydra.core.Name, hydra.compute.Adapter[AdapterContext, AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]
 
 class CoderDirection(Enum):
     """Indicates either the 'out' or the 'in' direction of a coder."""
@@ -37,13 +37,13 @@ class Language:
 class LanguageConstraints:
     """A set of constraints on valid type and term expressions, characterizing a language."""
     
-    elimination_variants: Annotated[set[hydra.mantle.EliminationVariant], "All supported elimination variants"]
-    literal_variants: Annotated[set[hydra.mantle.LiteralVariant], "All supported literal variants"]
-    float_types: Annotated[set[hydra.core.FloatType], "All supported float types"]
-    function_variants: Annotated[set[hydra.mantle.FunctionVariant], "All supported function variants"]
-    integer_types: Annotated[set[hydra.core.IntegerType], "All supported integer types"]
-    term_variants: Annotated[set[hydra.mantle.TermVariant], "All supported term variants"]
-    type_variants: Annotated[set[hydra.mantle.TypeVariant], "All supported type variants"]
+    elimination_variants: Annotated[frozenset[hydra.mantle.EliminationVariant], "All supported elimination variants"]
+    literal_variants: Annotated[frozenset[hydra.mantle.LiteralVariant], "All supported literal variants"]
+    float_types: Annotated[frozenset[hydra.core.FloatType], "All supported float types"]
+    function_variants: Annotated[frozenset[hydra.mantle.FunctionVariant], "All supported function variants"]
+    integer_types: Annotated[frozenset[hydra.core.IntegerType], "All supported integer types"]
+    term_variants: Annotated[frozenset[hydra.mantle.TermVariant], "All supported term variants"]
+    type_variants: Annotated[frozenset[hydra.mantle.TypeVariant], "All supported type variants"]
     types: Annotated[Callable[[hydra.core.Type], bool], "A logical set of types, as a predicate which tests a type for inclusion"]
 
 class LanguageName(Node[str]):

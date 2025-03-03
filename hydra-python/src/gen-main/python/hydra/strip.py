@@ -6,42 +6,42 @@ import hydra.core
 def fully_strip_term(t):
     """Strip all annotations from a term, including first-class type annotations."""
     
-    match t:
+    match T:
         case hydra.core.TermAnnotated(x):
-            return fully_strip_term(x.subject)
+            return fully_strip_term(X.subject)
         
         case hydra.core.TermTyped(x):
-            return fully_strip_term(x.term)
+            return fully_strip_term(X.term)
         
         case _:
-            return t
+            return T
 
 def strip_term(t):
     """Strip all annotations from a term."""
     
-    match t:
+    match T:
         case hydra.core.TermAnnotated(x):
-            return strip_term(x.subject)
+            return strip_term(X.subject)
         
         case _:
-            return t
+            return T
 
 def strip_type(t):
     """Strip all annotations from a term."""
     
-    match t:
+    match T:
         case hydra.core.TypeAnnotated(x):
-            return strip_type(x.subject)
+            return strip_type(X.subject)
         
         case _:
-            return t
+            return T
 
 def strip_type_parameters(t):
     """Strip any top-level type lambdas from a type, extracting the (possibly nested) type body."""
     
-    match strip_type(t):
+    match strip_type(T):
         case hydra.core.TypeLambda(lt):
-            return strip_type_parameters(lt.body)
+            return strip_type_parameters(Lt.body)
         
         case _:
-            return t
+            return T

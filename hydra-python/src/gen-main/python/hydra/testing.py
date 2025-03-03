@@ -3,7 +3,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
-from hydra.dsl.python import Node
+from hydra.dsl.python import frozenlist, Node
 import hydra.core
 import hydra.mantle
 
@@ -56,7 +56,7 @@ class TestCaseWithMetadata:
     name: str
     case: TestCase
     description: str | None
-    tags: list[Tag]
+    tags: frozenlist[Tag]
 
 @dataclass
 class TestGroup:
@@ -64,5 +64,5 @@ class TestGroup:
     
     name: str
     description: str | None
-    subgroups: list[TestGroup]
-    cases: list[TestCaseWithMetadata]
+    subgroups: frozenlist[TestGroup]
+    cases: frozenlist[TestCaseWithMetadata]

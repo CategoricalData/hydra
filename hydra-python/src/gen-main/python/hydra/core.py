@@ -3,7 +3,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
-from hydra.dsl.python import Node
+from hydra.dsl.python import FrozenDict, frozenlist, Node
 from typing import Annotated
 
 @dataclass
@@ -11,14 +11,14 @@ class AnnotatedTerm:
     """A term together with an annotation."""
     
     subject: Term
-    annotation: dict[Name, Term]
+    annotation: FrozenDict[Name, Term]
 
 @dataclass
 class AnnotatedType:
     """A type together with an annotation."""
     
     subject: Type
-    annotation: dict[Name, Term]
+    annotation: FrozenDict[Name, Term]
 
 @dataclass
 class Application:
@@ -40,7 +40,7 @@ class CaseStatement:
     
     type_name: Name
     default: Term | None
-    cases: list[Field]
+    cases: frozenlist[Field]
 
 class EliminationList(Node["Term"]):
     """Eliminates a list using a fold function; this function has the signature b -> [a] -> b."""
@@ -194,7 +194,7 @@ class LambdaType:
 class Let:
     """A set of (possibly recursive) 'let' bindings together with an environment in which they are bound."""
     
-    bindings: list[LetBinding]
+    bindings: frozenlist[LetBinding]
     environment: Term
 
 @dataclass
@@ -270,14 +270,14 @@ class Record:
     """A record, or labeled tuple; a map of field names to terms."""
     
     type_name: Name
-    fields: list[Field]
+    fields: frozenlist[Field]
 
 @dataclass
 class RowType:
     """A labeled record or union type."""
     
     type_name: Annotated[Name, "The name of the row type, which must correspond to the name of a Type element"]
-    fields: Annotated[list[FieldType], "The fields of this row type, excluding any inherited fields"]
+    fields: Annotated[frozenlist[FieldType], "The fields of this row type, excluding any inherited fields"]
 
 @dataclass
 class Sum:
@@ -298,25 +298,25 @@ class TermFunction(Node["Function"]):
 
 class TermLet(Node["Let"]): ...
 
-class TermList(Node["list[Term]"]):
+class TermList(Node["frozenlist[Term]"]):
     """A list."""
 
 class TermLiteral(Node["Literal"]):
     """A literal value."""
 
-class TermMap(Node["dict[Term, Term]"]):
+class TermMap(Node["FrozenDict[Term, Term]"]):
     """A map of keys to values."""
 
 class TermOptional(Node["Term | None"]):
     """An optional value."""
 
-class TermProduct(Node["list[Term]"]):
+class TermProduct(Node["frozenlist[Term]"]):
     """A tuple."""
 
 class TermRecord(Node["Record"]):
     """A record term."""
 
-class TermSet(Node["set[Term]"]):
+class TermSet(Node["frozenset[Term]"]):
     """A set of values."""
 
 class TermSum(Node["Sum"]):
@@ -365,13 +365,13 @@ class TypeMap(Node["MapType"]): ...
 
 class TypeOptional(Node["Type"]): ...
 
-class TypeProduct(Node["list[Type]"]): ...
+class TypeProduct(Node["frozenlist[Type]"]): ...
 
 class TypeRecord(Node["RowType"]): ...
 
 class TypeSet(Node["Type"]): ...
 
-class TypeSum(Node["list[Type]"]): ...
+class TypeSum(Node["frozenlist[Type]"]): ...
 
 class TypeUnion(Node["RowType"]): ...
 
@@ -393,7 +393,7 @@ class TypeAbstraction:
 class TypeScheme:
     """A type expression together with free type variables occurring in the expression."""
     
-    variables: list[Name]
+    variables: frozenlist[Name]
     type: Type
 
 @dataclass

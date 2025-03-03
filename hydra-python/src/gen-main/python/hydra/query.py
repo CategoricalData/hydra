@@ -3,7 +3,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
-from hydra.dsl.python import Node
+from hydra.dsl.python import frozenlist, Node
 from typing import Annotated
 import hydra.core
 
@@ -35,7 +35,7 @@ class GraphPattern:
     """A query pattern which matches within a designated component subgraph."""
     
     graph: Annotated[hydra.core.Name, "The name of the component graph"]
-    patterns: Annotated[list[Pattern], "The patterns to match within the subgraph"]
+    patterns: Annotated[frozenlist[Pattern], "The patterns to match within the subgraph"]
 
 class NodeTerm(Node["hydra.core.Term"]):
     """A graph term; an expression which is valid in the graph being matched."""
@@ -67,10 +67,10 @@ class PatternTriple(Node["TriplePattern"]):
 class PatternNegation(Node["Pattern"]):
     """The negation of another pattern."""
 
-class PatternConjunction(Node["list[Pattern]"]):
+class PatternConjunction(Node["frozenlist[Pattern]"]):
     """The conjunction ('and') of several other patterns."""
 
-class PatternDisjunction(Node["list[Pattern]"]):
+class PatternDisjunction(Node["frozenlist[Pattern]"]):
     """The disjunction (inclusive 'or') of several other patterns."""
 
 class PatternGraph(Node["GraphPattern"]):
@@ -83,8 +83,8 @@ type Pattern = PatternTriple | PatternNegation | PatternConjunction | PatternDis
 class Query:
     """A SELECT-style graph pattern matching query."""
     
-    variables: Annotated[list[Variable], "The variables selected by the query"]
-    patterns: Annotated[list[Pattern], "The patterns to be matched"]
+    variables: Annotated[frozenlist[Variable], "The variables selected by the query"]
+    patterns: Annotated[frozenlist[Pattern], "The patterns to be matched"]
 
 @dataclass
 class Range:

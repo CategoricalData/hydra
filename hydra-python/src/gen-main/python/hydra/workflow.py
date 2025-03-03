@@ -3,7 +3,7 @@
 from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
-from hydra.dsl.python import Node
+from hydra.dsl.python import frozenlist, Node
 from typing import Annotated, Generic, TypeVar
 import hydra.compute
 import hydra.core
@@ -17,15 +17,15 @@ S = TypeVar("S")
 class HydraSchemaSpec:
     """The specification of a Hydra schema, provided as a set of modules and a distinguished type."""
     
-    modules: Annotated[list[hydra.module.Module], "The modules to include in the schema graph"]
+    modules: Annotated[frozenlist[hydra.module.Module], "The modules to include in the schema graph"]
     type_name: Annotated[hydra.core.Name, "The name of the top-level type; all data which passes through the workflow will be instances of this type"]
 
 @dataclass
 class LastMile(Generic[S, A]):
     """The last mile of a transformation, which encodes and serializes terms to a file."""
     
-    encoder: Annotated[Callable[[hydra.core.Type], hydra.compute.Flow[S, Callable[[hydra.core.Term, hydra.graph.Graph], hydra.compute.Flow[S, list[A]]]]], "An encoder for terms to a list of output objects"]
-    serializer: Annotated[Callable[[list[A]], hydra.compute.Flow[S, str]], "A function which serializes a list of output objects to a string representation"]
+    encoder: Annotated[Callable[[hydra.core.Type], hydra.compute.Flow[S, Callable[[hydra.core.Term, hydra.graph.Graph], hydra.compute.Flow[S, frozenlist[A]]]]], "An encoder for terms to a list of output objects"]
+    serializer: Annotated[Callable[[frozenlist[A]], hydra.compute.Flow[S, str]], "A function which serializes a list of output objects to a string representation"]
     file_extension: Annotated[str, "A file extension for the generated file(s)"]
 
 class SchemaSpecHydra(Node["HydraSchemaSpec"]):
