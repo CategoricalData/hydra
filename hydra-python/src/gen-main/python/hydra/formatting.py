@@ -23,31 +23,31 @@ def convert_case(from_: hydra.mantle.CaseConvention, to: hydra.mantle.CaseConven
                 return hydra.lib.lists.concat2(hydra.lib.logic.if_else(hydra.lib.chars.is_upper(c))(tuple([tuple([])]))(tuple([])))(hydra.lib.lists.cons(hydra.lib.lists.cons(c)(hydra.lib.lists.head(acc)))(hydra.lib.lists.tail(acc)))
             return hydra.lib.lists.map(lambda v1: hydra.lib.strings.from_list(v1))(hydra.lib.lists.foldl(split_on_uppercase)(tuple([tuple([])]))(hydra.lib.lists.reverse(hydra.lib.strings.to_list(decapitalize(original)))))
         match from_:
-            case hydra.mantle.CaseConventionCamel(_):
+            case hydra.mantle.CaseConvention.CAMEL:
                 return by_caps
             
-            case hydra.mantle.CaseConventionPascal(_):
+            case hydra.mantle.CaseConvention.PASCAL:
                 return by_caps
             
-            case hydra.mantle.CaseConventionLowerSnake(_):
+            case hydra.mantle.CaseConvention.LOWER_SNAKE:
                 return by_underscores
             
-            case hydra.mantle.CaseConventionUpperSnake(_):
+            case hydra.mantle.CaseConvention.UPPER_SNAKE:
                 return by_underscores
             
             case _:
                 raise TypeError("Unsupported CaseConvention")
     match to:
-        case hydra.mantle.CaseConventionCamel(_):
+        case hydra.mantle.CaseConvention.CAMEL:
             return decapitalize(hydra.lib.strings.cat(hydra.lib.lists.map(lambda x: capitalize(hydra.lib.strings.to_lower(x)))(parts)))
         
-        case hydra.mantle.CaseConventionPascal(_):
+        case hydra.mantle.CaseConvention.PASCAL:
             return hydra.lib.strings.cat(hydra.lib.lists.map(lambda x: capitalize(hydra.lib.strings.to_lower(x)))(parts))
         
-        case hydra.mantle.CaseConventionLowerSnake(_):
+        case hydra.mantle.CaseConvention.LOWER_SNAKE:
             return hydra.lib.strings.intercalate("_")(hydra.lib.lists.map(lambda v1: hydra.lib.strings.to_lower(v1))(parts))
         
-        case hydra.mantle.CaseConventionUpperSnake(_):
+        case hydra.mantle.CaseConvention.UPPER_SNAKE:
             return hydra.lib.strings.intercalate("_")(hydra.lib.lists.map(lambda v1: hydra.lib.strings.to_upper(v1))(parts))
         
         case _:
