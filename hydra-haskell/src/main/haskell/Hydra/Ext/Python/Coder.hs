@@ -29,6 +29,8 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesCallable :: Bool,
   pythonModuleMetadataUsesDataclass :: Bool,
   pythonModuleMetadataUsesEnum :: Bool,
+  pythonModuleMetadataUsesFrozenDict :: Bool,
+  pythonModuleMetadataUsesFrozenList :: Bool,
   pythonModuleMetadataUsesGeneric :: Bool,
   pythonModuleMetadataUsesTypeVar :: Bool,
   pythonModuleMetadataUsesNode :: Bool}
@@ -229,6 +231,8 @@ encodeModule mod = do
                 ("enum", [
                   cond "Enum" $ pythonModuleMetadataUsesEnum meta]),
                 ("hydra.dsl.python", [
+                  cond "FrozenDict" $ pythonModuleMetadataUsesFrozenDict meta,
+                  cond "frozenlist" $ pythonModuleMetadataUsesFrozenList meta,
                   cond "Node" $ pythonModuleMetadataUsesNode meta]),
                 ("typing", [
                   cond "Annotated" $ pythonModuleMetadataUsesAnnotated meta,
@@ -258,11 +262,14 @@ encodeTerm env term = case fullyStripTerm term of
     TermApplication a -> encodeApplication env a
     TermFunction f -> encodeFunction env f
     TermLet _ -> pure $ stringToPyExpression Py.QuoteStyleDouble "let terms are not supported here"
-    TermList els -> pyAtomToPyExpression . Py.AtomList . pyList <$> CM.mapM encode els
+    TermList els -> do
+      pl <- pyAtomToPyExpression . Py.AtomList . pyList <$> CM.mapM encode els
+      return $ functionCall (pyNameToPyPrimary $ Py.Name "tuple") [pl]
     TermLiteral lit -> encodeLiteral lit
     TermMap m -> do
         pairs <- CM.mapM encodePair $ M.toList m
-        return $ pyAtomToPyExpression $ Py.AtomDict $ Py.Dict pairs
+        return $ functionCall (pyNameToPyPrimary $ Py.Name "FrozenDict")
+          [pyAtomToPyExpression $ Py.AtomDict $ Py.Dict pairs]
       where
         encodePair (k, v) = do
           pyK <- encode k
@@ -279,7 +286,8 @@ encodeTerm env term = case fullyStripTerm term of
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) pargs
     TermSet s -> do
       pyEls <- CM.mapM encode $ S.toList s
-      return $ pyAtomToPyExpression $ Py.AtomSet $ Py.Set (pyExpressionToPyStarNamedExpression <$> pyEls)
+      return $ functionCall (pyNameToPyPrimary $ Py.Name "frozenset")
+        [pyAtomToPyExpression $ Py.AtomSet $ Py.Set (pyExpressionToPyStarNamedExpression <$> pyEls)]
     TermUnion (Injection tname field) -> do
       rt <- requireUnionType tname
       if isEnumType rt
@@ -288,7 +296,7 @@ encodeTerm env term = case fullyStripTerm term of
         else do
           parg <- encode $ fieldTerm field
           return $ functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) [parg]
-    TermVariable name -> pure $ pyNameToPyExpression $ encodeName True CaseConventionLowerSnake env name
+    TermVariable name -> pure $ termVariableReference env name
     TermWrap (WrappedTerm tname term1) -> do
       parg <- encode term1
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) [parg]
@@ -362,20 +370,20 @@ encodeType env typ = case stripType typ of
     TypeApplication at -> encodeApplicationType env at
     TypeFunction ft -> encodeFunctionType env ft
     TypeLambda lt -> encodeLambdaType env lt
-    TypeList et -> nameAndParams (Py.Name "list") . L.singleton <$> encode et
+    TypeList et -> nameAndParams (Py.Name "frozenlist") . L.singleton <$> encode et
     TypeMap (MapType kt vt) -> do
       pykt <- encode kt
       pyvt <- encode vt
-      return $ nameAndParams (Py.Name "dict") [pykt, pyvt]
+      return $ nameAndParams (Py.Name "FrozenDict") [pykt, pyvt]
     TypeLiteral lt -> encodeLiteralType lt
     TypeOptional et -> orNull . pyExpressionToPyPrimary <$> encode et
     TypeRecord rt -> pure $ if isUnitType (TypeRecord rt)
       then pyNameToPyExpression pyNone
-      else typeVariableReference False env $ rowTypeTypeName rt
-    TypeSet et -> nameAndParams (Py.Name "set") . L.singleton <$> encode et
-    TypeUnion rt -> pure $ typeVariableReference False env $ rowTypeTypeName rt
-    TypeVariable name -> pure $ typeVariableReference False env name
-    TypeWrap (WrappedType name _) -> pure $ typeVariableReference False env name
+      else typeVariableReference env $ rowTypeTypeName rt
+    TypeSet et -> nameAndParams (Py.Name "frozenset") . L.singleton <$> encode et
+    TypeUnion rt -> pure $ typeVariableReference env $ rowTypeTypeName rt
+    TypeVariable name -> pure $ typeVariableReference env name
+    TypeWrap (WrappedType name _) -> pure $ typeVariableReference env name
     _ -> dflt
   where
     encode = encodeType env
@@ -481,11 +489,17 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataUsesCallable = False,
       pythonModuleMetadataUsesDataclass = False,
       pythonModuleMetadataUsesEnum = False,
+      pythonModuleMetadataUsesFrozenDict = False,
+      pythonModuleMetadataUsesFrozenList = False,
       pythonModuleMetadataUsesGeneric = False,
       pythonModuleMetadataUsesTypeVar = False,
       pythonModuleMetadataUsesNode = False}
     addDef meta def = case def of
-      DefinitionTerm _ _ _ -> meta
+      DefinitionTerm _ term _ -> foldOverTerm TraversalOrderPre extendMeta meta term
+        where
+          extendMeta meta t = case t of
+            TermMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
+            _ -> meta
       DefinitionType _ typ -> foldOverType TraversalOrderPre extendMeta meta3 typ
         where
           tvars = pythonModuleMetadataTypeVariables meta
@@ -509,6 +523,8 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
                 baseType t = case stripType t of
                   TypeLambda (LambdaType _ body2) -> baseType body2
                   t2 -> t2
+            TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True}
+            TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
             TypeRecord (RowType _ fields) -> meta {
                 pythonModuleMetadataUsesAnnotated = L.foldl checkForAnnotated (pythonModuleMetadataUsesAnnotated meta) fields,
                 pythonModuleMetadataUsesDataclass = pythonModuleMetadataUsesDataclass meta || not (L.null fields)}
