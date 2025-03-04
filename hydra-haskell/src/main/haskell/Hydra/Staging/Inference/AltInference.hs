@@ -418,13 +418,13 @@ inferTypeOfRecord (Record tname fields) = map2
     (Flows.sequence $ fmap inferTypeOfTerm $ fmap fieldTerm fields)
     withResults
   where
-    withResults (TypeScheme svars styp) results = AltInferenceResult ts cons
+    withResults (TypeScheme svars styp) results = AltInferenceResult (TypeScheme vars styp) cons
       where
-        ts = TypeScheme vars typ
-        typ = TypeRecord $ RowType tname
+        ityp = TypeRecord $ RowType tname
           $ L.zipWith (\n r -> FieldType n $ typeSchemeType $ altInferenceResultTypeScheme r) (fmap fieldName fields) results
         vars = svars ++ (L.concat $ fmap (typeSchemeVariables . altInferenceResultTypeScheme) results)
-        cons = (L.concat $ fmap altInferenceResultConstraints results) ++ [TypeConstraint styp typ $ Just "schema type of record"]
+        cons = [TypeConstraint styp ityp $ Just "schema type of record"]
+          ++ (L.concat $ fmap altInferenceResultConstraints results)
 
 inferTypeOfSet :: S.Set Term -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfSet = inferTypeOfCollection Types.set "set element" . S.toList
@@ -456,11 +456,8 @@ inferTypeOfWrappedTerm :: WrappedTerm -> Flow AltInferenceContext AltInferenceRe
 inferTypeOfWrappedTerm (WrappedTerm tname term) = map2 (requireSchemaType tname) (inferTypeOfTerm term) withResult
   where
     withResult (TypeScheme svars styp) (AltInferenceResult (TypeScheme ivars ityp) icons)
-        = AltInferenceResult (TypeScheme vars typ) cons
-      where
-        typ = TypeWrap $ WrappedType tname ityp
-        vars = svars ++ ivars
-        cons = icons ++ [TypeConstraint styp typ $ Just "schema type of wrapper"]
+      = AltInferenceResult (TypeScheme (svars ++ ivars) styp) $
+        [TypeConstraint styp (TypeWrap $ WrappedType tname ityp) $ Just "schema type of wrapper"] ++ icons
 
 --------------------------------------------------------------------------------
 
