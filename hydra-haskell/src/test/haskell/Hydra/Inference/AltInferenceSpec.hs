@@ -31,11 +31,8 @@ _unify t1 t2 = unifyTypeConstraints [TypeConstraint t1 t2 $ Just "ctx"]
 initialContext = AltInferenceContext 0 primTypes schemaTypes varTypes
   where
     primTypes = M.fromList $ fmap (\p -> (primitiveName p, primitiveType p)) (L.concat (libraryPrimitives <$> standardLibraries))
-    schemaTypes = schemaGraphToTypingEnvironment testSchemaGraph
+    schemaTypes = fromFlow M.empty testGraph $ schemaGraphToTypingEnvironment testSchemaGraph
     varTypes = M.empty
-
-schemaGraphToTypingEnvironment :: Graph -> M.Map Name TypeScheme
-schemaGraphToTypingEnvironment g = M.empty -- TODO
 
 expectType :: Term -> TypeScheme -> H.Expectation
 expectType term expected = shouldSucceedWith (inferTypeOf term) expected
@@ -46,6 +43,20 @@ shouldSucceedWith f x = case my of
     Just y -> y `H.shouldBe` x
   where
     FlowState my _ trace = unFlow f initialContext emptyTrace
+
+--expectType :: Term -> TypeScheme -> H.Expectation
+--expectType term expected = shouldSucceedWith (debug term) expected
+--  where
+--    debug term = do
+--      schemaTypes <- schemaGraphToTypingEnvironment testSchemaGraph
+--      fail $ "schema types: " ++ show schemaTypes
+--
+--shouldSucceedWith :: (Eq a, Show a) => Flow Graph a -> a -> H.Expectation
+--shouldSucceedWith f x = case my of
+--    Nothing -> HL.assertFailure $ "Error: " ++ traceSummary trace
+--    Just y -> y `H.shouldBe` x
+--  where
+--    FlowState my _ trace = unFlow f testGraph emptyTrace
 
 altInferenceTestRunner :: TestRunner
 --altInferenceTestRunner tcase = if Testing.isDisabled tcase || Testing.isDisabledForAltInference tcase
