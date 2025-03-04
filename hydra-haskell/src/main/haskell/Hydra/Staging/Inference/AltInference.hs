@@ -189,9 +189,10 @@ substituteInConstraints subst = fmap (substituteInConstraint subst)
 
 data AltInferenceContext
   = AltInferenceContext {
-    altInferenceContextLexicon :: M.Map Name TypeScheme,
     altInferenceContextVariableCount :: Int,
-    altInferenceContextTypingEnvironment :: M.Map Name TypeScheme}
+    altInferenceContextPrimitiveTypes :: M.Map Name TypeScheme,
+    altInferenceContextSchemaTypes :: M.Map Name TypeScheme,
+    altInferenceContextVariableTypes :: M.Map Name TypeScheme}
   deriving (Eq, Ord, Show)
 
 data AltInferenceResult
@@ -383,7 +384,7 @@ inferTypeOfOptional :: Maybe Term -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfOptional m = inferTypeOfCollection Types.optional "optional element" $ Y.maybe [] (\e -> [e]) m
 
 inferTypeOfPrimitive :: Name -> Flow AltInferenceContext AltInferenceResult
-inferTypeOfPrimitive name = Flow $ \ctx t -> case M.lookup name (altInferenceContextLexicon ctx) of
+inferTypeOfPrimitive name = Flow $ \ctx t -> case M.lookup name (altInferenceContextPrimitiveTypes ctx) of
   Just scheme -> unFlow (Flows.map withoutConstraints $ instantiateTypeScheme scheme) ctx t
   Nothing -> unFlow (Flows.fail $ "No such primitive: " ++ unName name) ctx t
 
@@ -420,7 +421,7 @@ inferTypeOfTypedTerm :: TypedTerm -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfTypedTerm (TypedTerm term _) = inferTypeOfTerm term
 
 inferTypeOfVariable :: Name -> Flow AltInferenceContext AltInferenceResult
-inferTypeOfVariable var = Flow $ \ctx t -> case M.lookup var (altInferenceContextTypingEnvironment ctx) of
+inferTypeOfVariable var = Flow $ \ctx t -> case M.lookup var (altInferenceContextVariableTypes ctx) of
   Just scheme -> unFlow (Flows.map withoutConstraints $ instantiateTypeScheme scheme) ctx t
   Nothing -> unFlow (Flows.fail $ "Variable not bound to type: " ++ unName var) ctx t
 
@@ -503,10 +504,10 @@ withTypeBinding name scheme f = Flow helper
   where
     helper ctx0 t0 = FlowState e ctx3 t1
       where
-        env = altInferenceContextTypingEnvironment ctx0
-        ctx1 = ctx0 {altInferenceContextTypingEnvironment = M.insert name scheme env}
+        env = altInferenceContextVariableTypes ctx0
+        ctx1 = ctx0 {altInferenceContextVariableTypes = M.insert name scheme env}
         FlowState e ctx2 t1 = unFlow f ctx1 t0
-        ctx3 = ctx2 {altInferenceContextTypingEnvironment = env}
+        ctx3 = ctx2 {altInferenceContextVariableTypes = env}
 
 unsupported = Flows.fail "Not yet supported"
 withoutConstraints scheme = AltInferenceResult scheme []
