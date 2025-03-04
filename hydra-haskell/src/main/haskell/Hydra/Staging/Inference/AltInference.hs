@@ -427,10 +427,14 @@ inferTypeOfVariable var = Flow $ \ctx t -> case M.lookup var (altInferenceContex
   Nothing -> unFlow (Flows.fail $ "Variable not bound to type: " ++ unName var) ctx t
 
 inferTypeOfWrappedTerm :: WrappedTerm -> Flow AltInferenceContext AltInferenceResult
-inferTypeOfWrappedTerm (WrappedTerm tname term) = Flows.map withResult $ inferTypeOfTerm term
+inferTypeOfWrappedTerm (WrappedTerm tname term) = map2 (requireSchemaType tname) (inferTypeOfTerm term) withResult
   where
-    withResult (AltInferenceResult (TypeScheme vars typ) constraints)
-      = AltInferenceResult (TypeScheme vars $ TypeWrap $ WrappedType tname typ) constraints
+    withResult (TypeScheme svars styp) (AltInferenceResult (TypeScheme ivars ityp) icons)
+        = AltInferenceResult (TypeScheme vars typ) cons
+      where
+        typ = TypeWrap $ WrappedType tname ityp
+        vars = svars ++ ivars
+        cons = icons ++ [TypeConstraint styp typ $ Just "schema type of wrapper"]
 
 --------------------------------------------------------------------------------
 
@@ -498,6 +502,13 @@ createNewVariables n = Flow helper
       where
         value = Just ((\n -> Name $ "t" ++ show n) <$> (L.take n [(altInferenceContextVariableCount ctx)..]))
         ctx' = ctx {altInferenceContextVariableCount = n + altInferenceContextVariableCount ctx}
+
+requireSchemaType :: Name -> Flow AltInferenceContext TypeScheme
+requireSchemaType tname = do
+  cx <- getState
+  case M.lookup tname (altInferenceContextSchemaTypes cx) of
+    Nothing -> Flows.fail $ "No such schema type: " ++ unName tname
+    Just ts -> instantiateTypeScheme ts
 
 -- | Temporarily add a (term variable, type scheme) to the typing environment
 withTypeBinding :: Name -> TypeScheme -> Flow AltInferenceContext a -> Flow AltInferenceContext a
