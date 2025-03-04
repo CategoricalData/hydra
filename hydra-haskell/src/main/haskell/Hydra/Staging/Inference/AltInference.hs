@@ -228,7 +228,7 @@ inferTypeOfTerm term = case term of
   TermSet s -> inferTypeOfSet s
   TermSum s -> inferTypeOfSum s
   TermTyped t -> inferTypeOfTypedTerm t
---  TermUnion ...
+  TermUnion i -> inferTypeOfInjection i
   TermVariable name -> inferTypeOfVariable name
   TermWrap w -> inferTypeOfWrappedTerm w
 
@@ -316,6 +316,18 @@ inferTypeOfFunction f = case f of
   FunctionElimination elm -> inferTypeOfElimination elm
   FunctionLambda l -> inferTypeOfLambda l
   FunctionPrimitive name -> inferTypeOfPrimitive name
+
+inferTypeOfInjection :: Injection -> Flow AltInferenceContext AltInferenceResult
+inferTypeOfInjection (Injection tname (Field fname term)) = bind2 (requireSchemaType tname) (inferTypeOfTerm term) withResults
+  where
+    withResults (TypeScheme svars styp) (AltInferenceResult (TypeScheme ivars ityp) icons) = Flows.map withField findField
+      where
+        findField = case styp of
+          TypeUnion (RowType _ sfields) -> case L.filter (\(FieldType fn _) -> fn == fname) sfields of
+            [] -> Flows.fail $ "No such field: " ++ unName fname
+            (f:_) -> Flows.pure $ fieldTypeType f
+        withField ftyp = AltInferenceResult (TypeScheme (svars ++ ivars) styp)
+          $ [TypeConstraint ftyp ityp $ Just "schema type of injected field"] ++ icons
 
 inferTypeOfLambda :: Lambda -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfLambda (Lambda var _ body) = bindVar withVdom
@@ -476,6 +488,9 @@ forInferredTerm2 t1 t2 f = map2 (inferTypeOfTerm t1) (inferTypeOfTerm t2) f
 forInferredTerms :: [Term] -> ([AltInferenceResult] -> a) -> Flow AltInferenceContext a
 forInferredTerms terms f = Flows.map f $ Flows.sequence $ inferTypeOfTerm <$> terms
 
+forVar :: (Name -> a) -> Flow AltInferenceContext a
+forVar f = Flows.map f createNewVariable
+
 forVars :: Int -> ([Name] -> a) -> Flow AltInferenceContext a
 forVars n f = Flows.map f $ createNewVariables n
 
@@ -522,7 +537,7 @@ requireSchemaType tname = do
   cx <- getState
   case M.lookup tname (altInferenceContextSchemaTypes cx) of
     Nothing -> Flows.fail $ "No such schema type: " ++ unName tname
-    Just ts -> instantiateTypeScheme ts
+    Just ts -> instantiateTypeScheme $ stripTypeSchemeRecursive ts
 
 -- | Temporarily add a (term variable, type scheme) to the typing environment
 withTypeBinding :: Name -> TypeScheme -> Flow AltInferenceContext a -> Flow AltInferenceContext a

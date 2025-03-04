@@ -395,6 +395,16 @@ stripTermRecursive = rewriteTerm strip
       TermTyped (TypedTerm t _) -> t
       t -> t
 
+stripTypeRecursive :: Type -> Type
+stripTypeRecursive = rewriteType strip
+  where
+    strip recurse typ = case recurse typ of
+      TypeAnnotated (AnnotatedType t _) -> t
+      t -> t
+
+stripTypeSchemeRecursive :: TypeScheme -> TypeScheme
+stripTypeSchemeRecursive (TypeScheme vars typ) = TypeScheme vars $ stripTypeRecursive typ
+
 substituteTypeVariables :: M.Map Name Name -> Type -> Type
 substituteTypeVariables subst = rewriteType replace
   where
