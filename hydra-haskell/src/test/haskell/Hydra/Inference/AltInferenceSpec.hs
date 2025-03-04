@@ -44,20 +44,6 @@ shouldSucceedWith f x = case my of
   where
     FlowState my _ trace = unFlow f initialContext emptyTrace
 
---expectType :: Term -> TypeScheme -> H.Expectation
---expectType term expected = shouldSucceedWith (debug term) expected
---  where
---    debug term = do
---      schemaTypes <- schemaGraphToTypingEnvironment testSchemaGraph
---      fail $ "schema types: " ++ show schemaTypes
---
---shouldSucceedWith :: (Eq a, Show a) => Flow Graph a -> a -> H.Expectation
---shouldSucceedWith f x = case my of
---    Nothing -> HL.assertFailure $ "Error: " ++ traceSummary trace
---    Just y -> y `H.shouldBe` x
---  where
---    FlowState my _ trace = unFlow f testGraph emptyTrace
-
 altInferenceTestRunner :: TestRunner
 --altInferenceTestRunner tcase = if Testing.isDisabled tcase || Testing.isDisabledForAltInference tcase
 altInferenceTestRunner tcase = if Testing.isDisabled tcase
