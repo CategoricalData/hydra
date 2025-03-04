@@ -224,7 +224,7 @@ inferTypeOfTerm term = case term of
   TermMap m -> inferTypeOfMap m
   TermOptional m -> inferTypeOfOptional m
   TermProduct els -> inferTypeOfProduct els
---  TermRecord ...
+  TermRecord r -> inferTypeOfRecord r
   TermSet s -> inferTypeOfSet s
   TermSum s -> inferTypeOfSum s
   TermTyped t -> inferTypeOfTypedTerm t
@@ -399,6 +399,20 @@ inferTypeOfProduct els = if L.null els
         tvars = L.concat $ typeSchemeVariables . altInferenceResultTypeScheme <$> results
         tbodies = typeSchemeType . altInferenceResultTypeScheme <$> results
         constraints = L.concat $ altInferenceResultConstraints <$> results
+
+inferTypeOfRecord :: Record -> Flow AltInferenceContext AltInferenceResult
+inferTypeOfRecord (Record tname fields) = map2
+    (requireSchemaType tname)
+    (Flows.sequence $ fmap inferTypeOfTerm $ fmap fieldTerm fields)
+    withResults
+  where
+    withResults (TypeScheme svars styp) results = AltInferenceResult ts cons
+      where
+        ts = TypeScheme vars typ
+        typ = TypeRecord $ RowType tname
+          $ L.zipWith (\n r -> FieldType n $ typeSchemeType $ altInferenceResultTypeScheme r) (fmap fieldName fields) results
+        vars = svars ++ (L.concat $ fmap (typeSchemeVariables . altInferenceResultTypeScheme) results)
+        cons = (L.concat $ fmap altInferenceResultConstraints results) ++ [TypeConstraint styp typ $ Just "schema type of record"]
 
 inferTypeOfSet :: S.Set Term -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfSet = inferTypeOfCollection Types.set "set element" . S.toList
