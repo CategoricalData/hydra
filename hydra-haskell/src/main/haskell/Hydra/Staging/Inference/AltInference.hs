@@ -4,6 +4,7 @@ import Hydra.Variants
 import Hydra.Coders
 import Hydra.Core
 import Hydra.Compute
+import Hydra.Errors
 import Hydra.Mantle
 import Hydra.Flows
 import Hydra.Strip
