@@ -22,14 +22,20 @@ import qualified Hydra.TestUtils as TU
 import Hydra.Testing
 import Hydra.TestSuiteSpec
 import Hydra.Test.TestSuite
+import Hydra.Staging.TestGraph
 import qualified Hydra.Dsl.Testing as Testing
 
 
 _unify t1 t2 = unifyTypeConstraints [TypeConstraint t1 t2 $ Just "ctx"]
 
-initialContext = AltInferenceContext lexicon 0 M.empty
+initialContext = AltInferenceContext 0 primTypes schemaTypes varTypes
   where
-    lexicon = M.fromList $ fmap (\p -> (primitiveName p, primitiveType p)) (L.concat (libraryPrimitives <$> standardLibraries))
+    primTypes = M.fromList $ fmap (\p -> (primitiveName p, primitiveType p)) (L.concat (libraryPrimitives <$> standardLibraries))
+    schemaTypes = schemaGraphToTypingEnvironment testSchemaGraph
+    varTypes = M.empty
+
+schemaGraphToTypingEnvironment :: Graph -> M.Map Name TypeScheme
+schemaGraphToTypingEnvironment g = M.empty -- TODO
 
 expectType :: Term -> TypeScheme -> H.Expectation
 expectType term expected = shouldSucceedWith (inferTypeOf term) expected
