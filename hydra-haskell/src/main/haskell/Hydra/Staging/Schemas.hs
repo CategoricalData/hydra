@@ -165,6 +165,34 @@ resolveType typ = case stripType typ of
         Just t -> Just <$> coreDecodeType t
     _ -> pure $ Just typ
 
+schemaGraphToTypingEnvironment :: Graph -> Flow Graph (M.Map Name TypeScheme)
+schemaGraphToTypingEnvironment g = do
+    mpairs <- CM.mapM toPair $ M.elems $ graphElements g
+    return $ M.fromList $ Y.catMaybes mpairs
+  where
+    toPair :: Element -> Flow Graph (Maybe (Name, TypeScheme))
+    toPair el = do
+      mts <- case elementType el of
+        Just ts ->
+          if ts == (TypeScheme [] $ TypeVariable _TypeScheme)
+          then fmap Just $ coreDecodeTypeScheme $ elementTerm el
+          -- TODO: temporary; all schema elements should be encoded as type schemes, not "lambda types"
+          else if ts == (TypeScheme [] $ TypeVariable _Type)
+          then fmap Just (toTypeScheme [] <$> coreDecodeType (elementTerm el))
+          -- TODO: temporary; the following handles the "bootstrapping" case where we have not yet applied type inference to the schema graph
+          else case fullyStripTerm (elementTerm el) of
+            TermRecord (Record tname _) -> if tname == _TypeScheme
+              then fmap Just $ coreDecodeTypeScheme $ elementTerm el
+              else pure Nothing
+            TermUnion (Injection tname _) -> if tname == _Type
+              then fmap Just (toTypeScheme [] <$> coreDecodeType (elementTerm el))
+              else pure Nothing
+        Nothing -> pure Nothing
+      return $ fmap (\ts -> (elementName el, ts)) mts
+    toTypeScheme vars typ = case stripType typ of
+      TypeLambda (LambdaType v body) -> toTypeScheme (v:vars) body
+      _ -> TypeScheme (L.reverse vars) typ
+
 typeDependencies :: (Type -> Type) -> Name -> Flow Graph (M.Map Name Type)
 typeDependencies transform name = deps (S.fromList [name]) M.empty
   where
