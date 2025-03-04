@@ -13,6 +13,7 @@ module Hydra.Staging.CoreDecoding (
   coreDecodeRowType,
   coreDecodeString,
   coreDecodeType,
+  coreDecodeTypeScheme,
   ) where
 
 import Hydra.Strip
@@ -132,6 +133,13 @@ coreDecodeType dat = case dat of
     (_Type_union, fmap TypeUnion . coreDecodeRowType),
     (_Type_variable, fmap TypeVariable . coreDecodeName),
     (_Type_wrap, fmap TypeWrap . (coreDecodeWrappedType))] dat
+
+coreDecodeTypeScheme :: Term -> Flow Graph TypeScheme
+coreDecodeTypeScheme = matchRecord $ \m -> TypeScheme
+  <$> getField m _TypeScheme_variables (Expect.list coreDecodeName)
+  <*> getField m _TypeScheme_type coreDecodeType
+
+-- helpers ---------------------------------------------------------------------
 
 getField :: M.Map Name (Term) -> Name -> (Term -> Flow Graph b) -> Flow Graph b
 getField m fname decode = case M.lookup fname m of
