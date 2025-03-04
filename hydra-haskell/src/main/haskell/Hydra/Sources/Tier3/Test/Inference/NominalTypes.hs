@@ -161,7 +161,7 @@ testGroupForVariants = supergroup "Variant terms" [
 testGroupForWrappers :: TTerm TestGroup
 testGroupForWrappers = supergroup "Wrapper introductions and eliminations" [
 
-    subgroup "Wrapper eliminations" [
+    subgroup "Wrapper introductions" [
       expectMono 1 [tag_disabled]
         (wrap (ref testTypeStringAliasNameDef) $ string "foo")
         (Core.typeVariable $ ref testTypeStringAliasNameDef),
@@ -169,7 +169,7 @@ testGroupForWrappers = supergroup "Wrapper introductions and eliminations" [
         (lambda "v" $ wrap (ref testTypeStringAliasNameDef) $ var "v")
         (T.function T.string (Core.typeVariable $ ref testTypeStringAliasNameDef))],
 
-    subgroup "Wrapper introductions" [
+    subgroup "Wrapper eliminations" [
       expectMono 1 [tag_disabled]
         (unwrap (ref testTypeStringAliasNameDef))
         (T.function (Core.typeVariable $ ref testTypeStringAliasNameDef) T.string),
