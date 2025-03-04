@@ -36,6 +36,7 @@ hydraConstantsModule = Module (Namespace "hydra.constants") elements [] [hydraCo
      el key_deprecatedDef,
      el key_descriptionDef,
      el key_excludeDef,
+     el key_firstClassTypeDef,
      el key_maxLengthDef,
      el key_minLengthDef,
      el key_preserveFieldNameDef,
@@ -58,10 +59,15 @@ key_classesDef = annotationKeyDef "classes" Nothing
 key_deprecatedDef = annotationKeyDef "_deprecated" Nothing
 key_descriptionDef = annotationKeyDef "description" Nothing
 key_excludeDef = annotationKeyDef "exclude" Nothing
+key_firstClassTypeDef = annotationKeyDef "firstClassType"
+  $ Just "A flag which tells the language coders to encode a given encoded type as a term rather than a native type"
 key_maxLengthDef = annotationKeyDef "_maxLength" Nothing
 key_minLengthDef = annotationKeyDef "_minLength" Nothing
 key_preserveFieldNameDef = annotationKeyDef "_preserveFieldName" Nothing
 key_typeDef = annotationKeyDef "type" Nothing
+
+
+
 
 placeholderNameDef :: TElement Name
 placeholderNameDef = constantsDefinition "placeholderName" $
