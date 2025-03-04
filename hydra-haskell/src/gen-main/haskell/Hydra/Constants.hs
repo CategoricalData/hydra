@@ -23,6 +23,10 @@ key_description = (Core.Name "description")
 key_exclude :: Core.Name
 key_exclude = (Core.Name "exclude")
 
+-- | A flag which tells the language coders to encode a given encoded type as a term rather than a native type
+key_firstClassType :: Core.Name
+key_firstClassType = (Core.Name "firstClassType")
+
 key_maxLength :: Core.Name
 key_maxLength = (Core.Name "_maxLength")
 

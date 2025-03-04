@@ -25,9 +25,6 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
--- | A flag which tells the language coders to encode a given encoded type as a term rather than a native type
-key_firstClassType = Name "firstClassType"
-
 aggregateAnnotations :: (x -> Maybe y) -> (y -> x) -> (y -> M.Map Name Term) -> x -> M.Map Name Term
 aggregateAnnotations getValue getX getAnns t = M.fromList $ L.concat $ toPairs [] t
   where
