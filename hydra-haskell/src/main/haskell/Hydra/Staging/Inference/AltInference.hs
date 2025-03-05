@@ -372,10 +372,13 @@ inferTypeOfLambda (Lambda var _ body) = bindVar withVdom
 -- TODO: propagate rawValueVars and envVars into the final result, possibly after substitution
 -- TODO: recursive and mutually recursive let
 inferTypeOfLet :: Let -> Flow AltInferenceContext AltInferenceResult
-inferTypeOfLet (Let bindings env) = if L.length bindings > 2
+inferTypeOfLet (Let bindings env) = if L.null bindings
+    then Flows.map forEmptyBindings (inferTypeOfTerm env)
+    else if L.length bindings > 2
     then inferTypeOfTerm $ TermLet (Let [L.head bindings] $ TermLet $ Let (L.tail bindings) env)
     else forSingleBinding $ L.head bindings
   where
+    forEmptyBindings r = r
     forSingleBinding (LetBinding key value _) = bindVar withVar
       where
         -- Create a temporary type variable for the binding
