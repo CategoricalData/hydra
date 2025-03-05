@@ -76,19 +76,19 @@ elementAsTypedTerm el = do
   typ <- requireTermType $ elementTerm el
   return $ TypedTerm (elementTerm el) typ
 
---expectRecordType :: Name -> Type -> Flow s [FieldType]
---expectRecordType ename typ = case stripType typ of
---  TypeRecord (RowType tname fields) -> if tname == ename
---    then pure fields
---    else unexpected ("record of type " ++ unName ename) $ "record of type " ++ unName tname
---  _ -> unexpected "record type" $ show typ
+expectRecordType :: Name -> Type -> Flow s [FieldType]
+expectRecordType ename typ = case stripType typ of
+  TypeRecord (RowType tname fields) -> if tname == ename
+    then pure fields
+    else unexpected ("record of type " ++ unName ename) $ "record of type " ++ unName tname
+  _ -> unexpected "record type" $ show typ
 
---expectUnionType :: Name -> Type -> Flow s [FieldType]
---expectUnionType ename typ = case stripType typ of
---  TypeUnion (RowType tname fields) -> if tname == ename
---    then pure fields
---    else unexpected ("union of type " ++ unName ename) $ "union of type " ++ unName tname
---  _ -> unexpected "union type" $ show typ
+expectUnionType :: Name -> Type -> Flow s [FieldType]
+expectUnionType ename typ = case stripType typ of
+  TypeUnion (RowType tname fields) -> if tname == ename
+    then pure fields
+    else unexpected ("union of type " ++ unName ename) $ "union of type " ++ unName tname
+  _ -> unexpected "union type" $ show typ
 
 expectWrappedType :: Name -> Type -> Flow s Type
 expectWrappedType ename typ = case stripType typ of
@@ -96,6 +96,12 @@ expectWrappedType ename typ = case stripType typ of
       then pure t
       else unexpected ("wrapped type " ++ unName ename) $ "wrapped type " ++ unName tname
     _ -> unexpected "wrapped type" $ show typ
+
+findFieldType :: Name -> [FieldType] -> Flow s Type
+findFieldType fname fields = case L.filter (\(FieldType fn _) -> fn == fname) fields of
+  [] -> fail $ "No such field: " ++ unName fname
+  [f] -> pure $ fieldTypeType f
+  _ -> fail $ "Multiple fields named " ++ unName fname
 
 -- TODO: a graph is a let-expression, so it should be trivial to get the type scheme of an element upon lookup. See issue #159.
 lookupTypedTerm :: Graph -> Name -> Maybe TypedTerm
