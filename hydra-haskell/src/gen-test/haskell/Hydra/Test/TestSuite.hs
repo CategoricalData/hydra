@@ -1260,7 +1260,33 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
-                    Testing.Tag "disabledForAltInference"]}]},
+                    Testing.Tag "disabledForAltInference"]},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1.5",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "bar"),
+                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
+                          Core.letBindingType = Nothing},
+
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "foo"),
+                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                          Core.letBindingType = Nothing}
+                          ],
+                      Core.letEnvironment = (Core.TermList [
+                        Core.TermVariable (Core.Name "bar"),
+                        Core.TermVariable (Core.Name "foo")])})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForAltInference"]}
+                    ]},
             Testing.TestGroup {
               Testing.testGroupName = "Let-polymorphism",
               Testing.testGroupDescription = Nothing,
