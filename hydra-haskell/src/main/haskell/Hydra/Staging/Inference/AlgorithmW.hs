@@ -18,7 +18,7 @@ import Debug.Trace
 
 
 natType = TyLit $ LiteralTypeInteger IntegerTypeInt32
-constNeg = ExprConst $ PrimTyped $ TypedPrimitive (Name "hydra.lib.math.neg") $ Forall [] $ TyFn natType natType
+constNeg = ExprConst $ PrimTyped $ TypedPrimitive (Name "hydra.lib.math.neg") $ TypSch [] $ TyFn natType natType
 -- Note: Hydra has no built-in pred or succ functions, but neg has the expected type
 constPred = constNeg
 constSucc = constNeg
@@ -98,7 +98,8 @@ instance Show Expr where
   show (ExprLetrec ab c) = "letrec " ++ d ++ show c
     where d = foldr (\(p, q) r -> p ++ " = " ++ show q ++ " \n\t\t" ++ r) "in " ab
 
-data MTy = TyVar Var
+data MTy
+  = TyVar Var
   | TyLit LiteralType
   | TyList MTy
   | TyFn MTy MTy
@@ -128,12 +129,12 @@ instance Show MTy where
   show (TyCon c ts) = c ++ " " ++ ts'
    where ts' = foldr (\p r -> show p ++ "" ++ r) "" ts
 
-data TypSch = Forall [Var] MTy
+data TypSch = TypSch [Var] MTy
  deriving Eq
 
 instance Show TypSch where
-  show (Forall [] t) = show t
-  show (Forall x t) = "forall " ++ d ++ show t
+  show (TypSch [] t) = show t
+  show (TypSch x t) = "forall " ++ d ++ show t
    where d = foldr (\p q ->  p ++ " " ++ q) ", " x
 
 
@@ -219,8 +220,8 @@ mTyToFTy (TyVariant ts) = FTyVariant (map mTyToFTy ts)
 mTyToFTy (TyCon c ts) = FTyCon c $ map mTyToFTy ts
 
 tyToFTy :: TypSch -> FTy
-tyToFTy (Forall [] t) = mTyToFTy t
-tyToFTy (Forall vs t) = FTyForall vs (mTyToFTy t)
+tyToFTy (TypSch [] t) = mTyToFTy t
+tyToFTy (TypSch vs t) = FTyForall vs (mTyToFTy t)
 
 --------------------
 -- Contexts
@@ -235,7 +236,7 @@ instance Vars Ctx where
  vars ((v,t):l) = vars t ++ vars l
 
 instance Vars TypSch where
- vars (Forall vs t) = filter (\v -> not $ elem v vs) (vars t)
+ vars (TypSch vs t) = filter (\v -> not $ elem v vs) (vars t)
 
 instance Vars MTy where
  vars (TyVar v) = [v]
@@ -269,35 +270,35 @@ replaceTCon u s (TyCon t' ts)  | TyCon t' ts == u = s
                                | otherwise = TyCon t' $ map (replaceTCon u s) ts
 
 primTy :: ADTs -> Prim -> Either String TypSch
-primTy _ (PrimLiteral l) = Right $ Forall [] $ TyLit $ literalType l
+primTy _ (PrimLiteral l) = Right $ TypSch [] $ TyLit $ literalType l
 primTy _ (PrimTyped (TypedPrimitive _ forAll)) = Right forAll
 primTy [] (PrimCon n) = throwError $ n ++ " not found "
 primTy ((a,t,[]):tl) (PrimCon n) = primTy tl $ PrimCon n
-primTy ((a,t,(c,ts):cs):tl) (PrimCon n) | c == n = return $ Forall t (ts' ts $ TyCon a $ map TyVar t)
+primTy ((a,t,(c,ts):cs):tl) (PrimCon n) | c == n = return $ TypSch t (ts' ts $ TyCon a $ map TyVar t)
                                     | otherwise = primTy ((a,t,cs):tl) $ PrimCon n
  where ts' [] x = x
        ts' (p:q) x = TyFn p $ ts' q x
 primTy [] (PrimFold n) = throwError $ n ++ " not found "
-primTy ((a,t,cs):tl) (PrimFold n) | a == n = return $ Forall ("r":t) $ elimTy
+primTy ((a,t,cs):tl) (PrimFold n) | a == n = return $ TypSch ("r":t) $ elimTy
                               | otherwise = primTy tl $ PrimFold n
  where elimTy = TyFn (TyCon a $ map TyVar t) $ replaceTCon (TyCon a $ map TyVar t) (TyVar "r") (ts' cs)
        ts' [] = TyVar "r"
        ts' ((_,ts):q)  = TyFn (ts'' ts) $ ts' q
        ts'' [] = TyCon a $ map TyVar t
        ts'' (a:b) = TyFn a $ ts'' b
-primTy _ PrimFst = return $  Forall ["x", "y"] $ (TyProd (TyVar "x") (TyVar "y")) `TyFn` (TyVar "x")
-primTy _ PrimSnd = return $  Forall ["x", "y"] $ (TyProd (TyVar "x") (TyVar "y")) `TyFn` (TyVar "y")
-primTy _ PrimNil = return $  Forall ["t"] $ TyList (TyVar "t")
-primTy _ PrimCons = return $ Forall ["t"] $ TyFn (TyVar "t") (TyFn (TyList (TyVar "t")) (TyList (TyVar "t")))
-primTy _ PrimTT = return $ Forall [] TyUnit
-primTy _ PrimFF = return $ Forall ["t"] $ TyFn TyVoid (TyVar "t")
-primTy _ PrimInl = return $ Forall ["x", "y"] $ (TyVar "x") `TyFn` (TyProd (TyVar "x") (TyVar "y"))
-primTy _ PrimInr = return $ Forall ["x", "y"] $ (TyVar "y") `TyFn` (TyProd (TyVar "x") (TyVar "y"))
-primTy _ PrimPair = return $ Forall ["xx", "yy"] $ (TyFn (TyVar "xx") (TyFn (TyVar "yy") (TyProd (TyVar "xx") (TyVar "yy"))))
-primTy _ PrimIf = return $ Forall [] $ natType `TyFn` (natType `TyFn` (natType `TyFn` natType))
-primTy _ FoldList = return $ Forall ["a", "b"] $ p `TyFn` ((TyVar "b") `TyFn` ((TyList $ TyVar "a") `TyFn` (TyVar "b")))
+primTy _ PrimFst = return $  TypSch ["x", "y"] $ (TyProd (TyVar "x") (TyVar "y")) `TyFn` (TyVar "x")
+primTy _ PrimSnd = return $  TypSch ["x", "y"] $ (TyProd (TyVar "x") (TyVar "y")) `TyFn` (TyVar "y")
+primTy _ PrimNil = return $  TypSch ["t"] $ TyList (TyVar "t")
+primTy _ PrimCons = return $ TypSch ["t"] $ TyFn (TyVar "t") (TyFn (TyList (TyVar "t")) (TyList (TyVar "t")))
+primTy _ PrimTT = return $ TypSch [] TyUnit
+primTy _ PrimFF = return $ TypSch ["t"] $ TyFn TyVoid (TyVar "t")
+primTy _ PrimInl = return $ TypSch ["x", "y"] $ (TyVar "x") `TyFn` (TyProd (TyVar "x") (TyVar "y"))
+primTy _ PrimInr = return $ TypSch ["x", "y"] $ (TyVar "y") `TyFn` (TyProd (TyVar "x") (TyVar "y"))
+primTy _ PrimPair = return $ TypSch ["xx", "yy"] $ (TyFn (TyVar "xx") (TyFn (TyVar "yy") (TyProd (TyVar "xx") (TyVar "yy"))))
+primTy _ PrimIf = return $ TypSch [] $ natType `TyFn` (natType `TyFn` (natType `TyFn` natType))
+primTy _ FoldList = return $ TypSch ["a", "b"] $ p `TyFn` ((TyVar "b") `TyFn` ((TyList $ TyVar "a") `TyFn` (TyVar "b")))
  where p = TyVar "b" `TyFn` (TyVar "a" `TyFn` TyVar "b")
-primTy _ PrimCase = return $ Forall ["x", "y", "z"] $ (TySum (TyVar "x") (TyVar "y")) `TyFn` (l `TyFn` (r `TyFn` (TyVar "z")))
+primTy _ PrimCase = return $ TypSch ["x", "y", "z"] $ (TySum (TyVar "x") (TyVar "y")) `TyFn` (l `TyFn` (r `TyFn` (TyVar "z")))
  where l = (TyVar "x") `TyFn` (TyVar "z")
        r = (TyVar "y") `TyFn` (TyVar "z")
 
@@ -310,8 +311,8 @@ type Subst = [(Var, MTy)]
 idSubst :: Subst
 idSubst = []
 
-o :: Subst -> Subst -> Subst
-o f g = addExtra ++ map h g
+composeSubst :: Subst -> Subst -> Subst
+composeSubst f g = addExtra ++ map h g
  where h (v, g') = (v, subst f g')
        addExtra = filter (\(v,f')-> case lookup v g of
                                       Just y  -> False
@@ -353,7 +354,7 @@ instance Substable FTy where
  subst f (FTyCon v ts) = FTyCon v $ map (subst f) ts
 
 instance Substable TypSch where
- subst f (Forall vs t) = Forall vs $ subst f' t
+ subst f (TypSch vs t) = TypSch vs $ subst f' t
    where f' = filter (\(v,t')-> not $ elem v vs) f
 
 instance Substable Ctx where
@@ -454,30 +455,31 @@ typeOf adts tvs g (FLetrec es e) = do { let g' = map (\(k,t,e)->(k,t)) es
 -----------------------------
 -- Unification
 
-mgu :: MTy -> MTy -> E Subst
-mgu (TyLit lt1) (TyLit lt2) = if lt1 == lt2
+-- Find the MGU of two types
+unify :: MTy -> MTy -> E Subst
+unify (TyLit lt1) (TyLit lt2) = if lt1 == lt2
   then return []
   else throwError $ "Cannot unify literal types " ++ show lt1 ++ " and " ++ show lt2
-mgu (TyVariant ts1) (TyVariant ts2) | length ts1 == length ts2 = mgu' ts1 ts2
+unify (TyVariant ts1) (TyVariant ts2) | length ts1 == length ts2 = unifyMany ts1 ts2
                                     | otherwise = throwError $ "cannot unify " ++ show ts1 ++ " with " ++ show ts2
-mgu (TyTuple ts1) (TyTuple ts2) | length ts1 == length ts2 = mgu' ts1 ts2
+unify (TyTuple ts1) (TyTuple ts2) | length ts1 == length ts2 = unifyMany ts1 ts2
                                 | otherwise = throwError $ "cannot unify " ++ show ts1 ++ " with " ++ show ts2
-mgu (TyList a) (TyList b) = mgu a b
-mgu TyUnit TyUnit = return []
-mgu TyVoid TyVoid = return []
-mgu (TyCon a as) (TyCon b bs) | a == b && length as == length bs = mgu' as bs
+unify (TyList a) (TyList b) = unify a b
+unify TyUnit TyUnit = return []
+unify TyVoid TyVoid = return []
+unify (TyCon a as) (TyCon b bs) | a == b && length as == length bs = unifyMany as bs
                               | otherwise = throwError $ "cannot unify " ++ show a ++ " with " ++ show b
-mgu (TyProd a b) (TyProd a' b') = do { s <- mgu a a' ; s' <- mgu (subst s b) (subst s b'); return $ s' `o` s }
-mgu (TySum  a b) (TySum  a' b') = do { s <- mgu a a' ; s' <- mgu (subst s b) (subst s b'); return $ s' `o` s }
-mgu (TyFn   a b) (TyFn   a' b') = do { s <- mgu a a' ; s' <- mgu (subst s b) (subst s b'); return $ s' `o` s }
-mgu (TyVar a) (TyVar b) | a == b = return []
-mgu (TyVar a) b = do { occurs a b; return [(a, b)] }
-mgu a (TyVar b) = mgu (TyVar b) a
-mgu a b = throwError $ "cannot unify " ++ show a ++ " with " ++ show b
+unify (TyProd a b) (TyProd a' b') = do { s <- unify a a' ; s' <- unify (subst s b) (subst s b'); return $ composeSubst s' s }
+unify (TySum  a b) (TySum  a' b') = do { s <- unify a a' ; s' <- unify (subst s b) (subst s b'); return $ composeSubst s' s }
+unify (TyFn   a b) (TyFn   a' b') = do { s <- unify a a' ; s' <- unify (subst s b) (subst s b'); return $ composeSubst s' s }
+unify (TyVar a) (TyVar b) | a == b = return []
+unify (TyVar a) b = do { occurs a b; return [(a, b)] }
+unify a (TyVar b) = unify (TyVar b) a
+unify a b = throwError $ "cannot unify " ++ show a ++ " with " ++ show b
 
-mgu' :: [MTy] -> [MTy] -> E Subst
-mgu' [] [] = return idSubst
-mgu' (a:as) (b:bs) = do { f <- mgu a b; s <- mgu' (map (subst f) as) (map (subst f) bs); return $ s `o` f }
+unifyMany :: [MTy] -> [MTy] -> E Subst
+unifyMany [] [] = return idSubst
+unifyMany (a:as) (b:bs) = do { f <- unify a b; s <- unifyMany (map (subst f) as) (map (subst f) bs); return $ composeSubst s f }
 
 occurs :: Var -> MTy -> E ()
 occurs v (TyLit _) = return ()
@@ -507,10 +509,10 @@ fresh :: E MTy
 fresh = do { (l,s) <- get; put (l, s + 1); return $ TyVar $ "v" ++ show s }
 
 inst :: TypSch -> E (MTy,[MTy])
-inst (Forall vs ty) = do { vs' <- mapM (\_->fresh) vs; return $ (subst (zip vs vs') ty,  vs') }
+inst (TypSch vs ty) = do { vs' <- mapM (\_->fresh) vs; return $ (subst (zip vs vs') ty,  vs') }
 
 gen :: Ctx -> MTy -> (TypSch, [Var])
-gen g t = (Forall vs t , vs)
+gen g t = (TypSch vs t , vs)
  where vs = nub $ filter (\v -> not $ elem v (vars g)) (vars t)
 
 fTyApp x [] = x
@@ -535,111 +537,124 @@ checkAgainstF adts g t e = case (typeOf adts [] g' e) of
  where g' = map (\(k,v)->(k, tyToFTy v)) g
 
 w :: Int -> ADTs -> Ctx -> Expr -> M (MTy, FExpr)
-w l adts g (ExprCase e es') = do { t <- fresh
-                            ; bs' <- mapM (\_->fresh) es'
-                            ; let bs = map (\k-> TyFn k t) bs'
-                            ; (phi , (ts, es)) <- w' (l+1) g es'
-                            ; m1 <- mgu' bs ts
-                            ; (phi', (t', e')) <- w  (l+1) adts (subst (m1 `o` phi) g) e
-                            ; m2 <- mgu (subst (m1 `o` phi) t') (subst (m1 `o` phi' `o` phi) $ TyVariant bs')
-                            ; let ret = FCase (subst (m2 ) e') (mTyToFTy ret_t) (map (subst $ m2 `o` phi' `o` m1) es)
-                                  ret_t = subst ret_subst t
-                                  ret_subst = m2 `o` phi' `o` m1 `o` phi
-                            ; checkAgainstF adts (subst ret_subst g) ret_t ret
-                            ; return (ret_subst, (ret_t, ret)) }
- where w' l g [] = return (idSubst, ([], []))
-       w' l g (e:tl) = do { (u,(u', j)) <- w l adts g e
-                        ; (r,(r', h)) <- w' l (subst u g ) tl
-                        ; return (r `o` u, ((subst r u'):r', (subst r j):h)) }
-w l adts g (ExprInj i j e) = do {
-                     ; (s0, (t0, a)) <- w (l+1) adts g e
-                     ; t'' <- mapM (\_->fresh) [1..j]
-                     ; let t' = replace t'' (i, t0)
-                     ; let ret = FInj i (map (mTyToFTy) t') a
-                           ret_t = TyVariant t'
-                           ret_subst = s0
-                     ; log0 l $ "INJ " ++ show (subst ret_subst g) ++ "|- " ++ (show $ ret) ++ " : " ++  show ret_t
-                     ; checkAgainstF adts (subst ret_subst g) ret_t ret
-                     ; return (ret_subst, (ret_t, ret)) }
-w l adts g (ExprProj i j e) = do {
-                     ; (s0, (t0, a)) <- w (l+1) adts g e
-                     ; t' <- mapM (\_->fresh) [1..j]
-                     ; s2 <-  t0 `mgu` (TyTuple t')
-                     ; let ret = FProj i (subst s2 a)
-                           ret_t = subst s2 (t' !! i)
-                           ret_subst = s2 `o` s0
-                     ; log0 l $ "PROJ " ++ show (subst ret_subst g) ++ "|- " ++ (show $ ret) ++ " : " ++  show ret_t
-                     ; checkAgainstF adts (subst ret_subst g) ret_t ret
-                     ; return (ret_subst, (ret_t, ret)) }
-w l adts g (ExprTuple es') = do { (phi, (ts, es)) <- w' (l+1) g es'
-                            ; let ret = FTuple es
-                                  ret_t = TyTuple ts
-                                  ret_subst = phi
-                            ; log0 l $ "TUPLE " ++ show (subst ret_subst g) ++ "|- " ++ (show $ ret) ++ " : " ++  show ret_t
-                            ; checkAgainstF adts (subst ret_subst g) ret_t ret
-                            ; return (ret_subst, (ret_t, ret)) }
- where w' l g [] = return (idSubst, ([], []))
-       w' l g (e:tl) = do { (u,(u', j)) <- w l adts g e
-                        ; (r,(r', h)) <- w' l (subst u g ) tl
-                        ; return (r `o` u, ((subst r u'):r', (subst r j):h)) }
-w l adts g (ExprConst p) = do { case primTy adts p of
-                              Left er -> throwError er
-                              Right t -> do { (ret_t, vs) <- inst t
-                        ; let ret = fTyApp (FConst p) $ map mTyToFTy vs
-                          ; log0 l $ "CONST " ++ show g ++ "|- " ++  show ret ++ " : " ++ show ret_t
-                        ; checkAgainstF adts g ret_t ret
-                        ; return (idSubst, (ret_t, ret)) } }
-w l adts g (ExprVar x) = case lookup x g of
-                Nothing -> throwError $ "Unknown var: " ++ (show x)
-                Just s -> do { (ret_t, vs) <- inst s
-                             ; let ret = fTyApp (FVar x) $ map mTyToFTy vs
-                             ; log0 l $ "VAR " ++ show g ++ "|- " ++ show ret ++ " : " ++ show ret_t
-                             ; checkAgainstF adts g ret_t ret
-                             ; return (idSubst, (ret_t, ret)) }
-w l adts g (ExprApp e0 e1) = do {
-                     ; (s0, (t0, a)) <- w (l+1) adts g e0
-                     ; (s1, (t1, b)) <- w (l+1) adts (subst s0 g) e1
-                     ; t' <- fresh
-                     ; s2 <-  (subst s1 t0) `mgu` (t1 `TyFn` t')
-                     ; let ret = FApp (subst (s2 `o` s1) a) (subst s2 b)
-                           ret_t = subst s2 t'
-                           ret_subst = s2 `o` (s1 `o` s0);
-                     ; log0 l $ "APP " ++ show (subst ret_subst g) ++ "|- " ++ show ret ++ " : " ++  show ret_t
-                     ; checkAgainstF adts (subst ret_subst g) ret_t ret
-                     ; return (ret_subst, (ret_t, ret)) }
-w l adts g (ExprAbs x e) = do {
-                        ; t  <- fresh
-                        ; (ret_subst, (t', a)) <- w (l+1) adts ((x, (Forall [] t)):g) e
-                        ; let ret = FAbs x (mTyToFTy $ subst ret_subst t) a
-                              ret_t = TyFn (subst ret_subst t) t'
-                        ; log0 l $ "ABS " ++ show (subst ret_subst g) ++ "|- \\" ++ x ++ ". " ++ show ret ++ " : " ++ show ret_t
-                        ; checkAgainstF adts (subst ret_subst g) ret_t ret
-                        ; return (ret_subst, (ret_t, ret)) }
-w l adts g (ExprLetrec xe0 e1) = do {
-                         ; t0s <- mapM (\(k,v) -> do { f <- fresh; return (k, f) }) xe0
-                         ; let g' = map (\(k,v) -> (k, Forall [] v)) t0s ++ g
-                         ; (s0, (ts,e0XS)) <- w' (l+1) g' xe0
-                         ; s' <- mgu' (map (\(_,v) -> subst s0 v) t0s) ts
-                         ; let g'' = subst (s' `o` s0) g'
-                               g'''  = map (\(k,t) -> (k, fst $ gen g (subst s' t))) $ zip (fst $ unzip xe0) ts
-                         ; (s1, (t',e1X)) <- w (l+1) adts (g''') e1
-                         ; let g''X = map (\(k,t) -> (k, gen g (subst (s') t))) $ zip (fst $ unzip xe0) ts
-                               e0Xs = map (subst (s1 `o` s')) e0XS
-                               mmm = map (\((x,(ww,ww2)),e0X)->(x, (fTyApp (FVar x) $ map FTyVar ww2))) $  zip g''X e0Xs
-                               e0X's =  map (\((x,(ww,ww2)),e0X)->(x,ww,ww2, subst'' mmm e0X)) $ zip g''X e0Xs
-                               e0X''s = map (\(x,ww,ww2,e) -> (x,ww,ww2,fTyAbs ww2 e)) e0X's
-                               bs = map (\(x,ww,ww2,e0X'') -> (x, subst s1 $ tyToFTy ww, subst (s' `o` s1) e0X'')) e0X''s
-                               ret = FLetrec bs e1X
-                               ret_t = t'
-                               ret_subst = s1 `o` s' `o` s0
-                        ; log0 l $ "LETREC " ++ show (subst ret_subst g) ++ "|- " ++ show ret ++ " : " ++ show ret_t
-                        ; checkAgainstF adts (subst ret_subst g) ret_t ret
-                        ; return (ret_subst, (ret_t, ret)) }
- where w' l g [] = return (idSubst, ([], []))
-       w' l g  ((k,v):tl) = do { (u,(u', j)) <- w l adts g v
-                             ; (r,(r', h)) <- w' l (subst u g ) tl
-                             ; return (r `o` u, ((subst r u'):r', (subst r j):h)) }
+w level adts g (ExprCase e es') = do
+    t <- fresh
+    bs' <- mapM (\_->fresh) es'
+    let bs = map (\k-> TyFn k t) bs'
+    (phi , (ts, es)) <- w' (level+1) g es'
+    m1 <- unifyMany bs ts
+    (phi', (t', e')) <- w  (level+1) adts (subst (composeSubst m1 phi) g) e
+    m2 <- unify (subst (composeSubst m1 phi) t') (subst (composeSubst m1 $ composeSubst phi' phi) $ TyVariant bs')
+    let rExpr = FCase (subst (m2 ) e') (mTyToFTy rType) (map (subst $ composeSubst m2 $ composeSubst phi' m1) es)
+        rType = subst rSubst t
+        rSubst = composeSubst m2 $ composeSubst phi' $ composeSubst m1 phi
+    checkAgainstF adts (subst rSubst g) rType rExpr
+    return (rSubst, (rType, rExpr))
+  where
+    w' level g [] = return (idSubst, ([], []))
+    w' level g (e:tl) = do
+      (u,(u', j)) <- w level adts g e
+      (r,(r', h)) <- w' level (subst u g ) tl
+      return (composeSubst r u, ((subst r u'):r', (subst r j):h))
+w level adts g (ExprInj i j e) = do
+    (s0, (t0, a)) <- w (level+1) adts g e
+    t'' <- mapM (\_->fresh) [1..j]
+    let t' = replace t'' (i, t0)
+    let rExpr = FInj i (map (mTyToFTy) t') a
+        rType = TyVariant t'
+        rSubst = s0
+    log0 level $ "INJ " ++ show (subst rSubst g) ++ "|- " ++ (show rExpr) ++ " : " ++  show rType
+    checkAgainstF adts (subst rSubst g) rType rExpr
+    return (rSubst, (rType, rExpr))
+w level adts g (ExprProj i j e) = do
+    (s0, (t0, a)) <- w (level+1) adts g e
+    t' <- mapM (\_->fresh) [1..j]
+    s2 <-  t0 `unify` (TyTuple t')
+    let rExpr = FProj i (subst s2 a)
+        rType = subst s2 (t' !! i)
+        rSubst = composeSubst s2 s0
+    log0 level $ "PROJ " ++ show (subst rSubst g) ++ "|- " ++ (show rExpr) ++ " : " ++  show rType
+    checkAgainstF adts (subst rSubst g) rType rExpr
+    return (rSubst, (rType, rExpr))
+w level adts g (ExprTuple es') = do
+    (phi, (ts, es)) <- w' (level+1) g es'
+    let rExpr = FTuple es
+        rType = TyTuple ts
+        rSubst = phi
+    log0 level $ "TUPLE " ++ show (subst rSubst g) ++ "|- " ++ (show rExpr) ++ " : " ++  show rType
+    checkAgainstF adts (subst rSubst g) rType rExpr
+    return (rSubst, (rType, rExpr))
+  where
+    w' level g [] = return (idSubst, ([], []))
+    w' level g (e:tl) = do
+      (u,(u', j)) <- w level adts g e
+      (r,(r', h)) <- w' level (subst u g ) tl
+      return (composeSubst r u, ((subst r u'):r', (subst r j):h))
+w level adts g (ExprConst p) = do
+    case primTy adts p of
+      Left er -> throwError er
+      Right t -> do
+        (rType, vs) <- inst t
+        let rExpr = fTyApp (FConst p) $ map mTyToFTy vs
+        log0 level $ "CONST " ++ show g ++ "|- " ++  show rExpr ++ " : " ++ show rType
+        checkAgainstF adts g rType rExpr
+        return (idSubst, (rType, rExpr))
+w level adts g (ExprVar x) = case lookup x g of
+    Nothing -> throwError $ "Unknown var: " ++ (show x)
+    Just s -> do
+      (rType, vs) <- inst s
+      let rExpr = fTyApp (FVar x) $ map mTyToFTy vs
+      log0 level $ "VAR " ++ show g ++ "|- " ++ show rExpr ++ " : " ++ show rType
+      checkAgainstF adts g rType rExpr
+      return (idSubst, (rType, rExpr))
+w l adts g (ExprApp e0 e1) = do
+    (s0, (t0, a)) <- w (l+1) adts g e0
+    (s1, (t1, b)) <- w (l+1) adts (subst s0 g) e1
+    t' <- fresh
+    s2 <-  (subst s1 t0) `unify` (t1 `TyFn` t')
+    let rExpr = FApp (subst (composeSubst s2 s1) a) (subst s2 b)
+        rType = subst s2 t'
+        rSubst = composeSubst s2 $ composeSubst s1 s0;
+    log0 l $ "APP " ++ show (subst rSubst g) ++ "|- " ++ show rExpr ++ " : " ++  show rType
+    checkAgainstF adts (subst rSubst g) rType rExpr
+    return (rSubst, (rType, rExpr))
+w level adts g (ExprAbs x e) = do
+    t  <- fresh
+    (rSubst, (t', a)) <- w (level+1) adts ((x, (TypSch [] t)):g) e
+    let rExpr = FAbs x (mTyToFTy $ subst rSubst t) a
+        rType = TyFn (subst rSubst t) t'
+    log0 level $ "ABS " ++ show (subst rSubst g) ++ "|- \\" ++ x ++ ". " ++ show rExpr ++ " : " ++ show rType
+    checkAgainstF adts (subst rSubst g) rType rExpr
+    return (rSubst, (rType, rExpr))
+w level adts g (ExprLetrec bindings env) = do
 
+    -- Extend g with a fresh type variable for each binding
+    tBindings <- mapM (\(k,v) -> do { f <- fresh; return (k, f) }) bindings
+    let g1 = map (\(k,v) -> (k, TypSch [] v)) tBindings ++ g
+
+    (s0, (bTypes, bExprs)) <- wBinding (level+1) g1 bindings
+    s' <- unifyMany (map (\(_,v) -> subst s0 v) tBindings) bTypes
+    let g2  = map (\(k,t) -> (k, fst $ gen g (subst s' t))) $ zip (fst $ unzip bindings) bTypes
+    (s1, (rType, rEnv)) <- w (level+1) adts g2 env
+    let g3 = map (\(k,t) -> (k, gen g (subst (s') t))) $ zip (fst $ unzip bindings) bTypes
+        e0Xs = map (subst (composeSubst s1 s')) bExprs
+        mmm = map (\((x,(ww,ww2)),e0X)->(x, (fTyApp (FVar x) $ map FTyVar ww2))) $ zip g3 e0Xs
+        e0X's =  map (\((x,(ww,ww2)),e0X)->(x,ww,ww2, subst'' mmm e0X)) $ zip g3 e0Xs
+        e0X''s = map (\(x,ww,ww2,e) -> (x,ww,ww2,fTyAbs ww2 e)) e0X's
+        rBindings = map (\(x,ww,ww2,e0X'') -> (x, subst s1 $ tyToFTy ww, subst (composeSubst s' s1) e0X'')) e0X''s
+        rExpr = FLetrec rBindings rEnv
+        rSubst = composeSubst s1 $ composeSubst s' s0
+    log0 level $ "LETREC " ++ show (subst rSubst g) ++ "|- " ++ show rExpr ++ " : " ++ show rType
+    checkAgainstF adts (subst rSubst g) rType rExpr
+    return (rSubst, (rType, rExpr))
+  where
+    wBinding :: Int -> [(Var, TypSch)] -> [(Var, Expr)] -> M ([MTy], [FExpr])
+    wBinding level g bindings = case bindings of
+      [] -> return (idSubst, ([], []))
+      ((k,v):tl) -> do
+        (u,(u', j)) <- w level adts g v
+        (r,(r', h)) <- wBinding level (subst u g ) tl
+        return (composeSubst r u, ((subst r u'):r', (subst r j):h))
 
 subst'' :: [(Var, FExpr)] -> FExpr -> FExpr
 subst'' phi (FTuple es) = FTuple $ map (subst'' phi) es
