@@ -251,6 +251,33 @@ inferTypeOfApplication (Application lterm rterm) = bindVar2 withVars
             rtyp = typeSchemeType $ altInferenceResultTypeScheme rresult
             tvars = typeSchemeVariables (altInferenceResultTypeScheme lresult) ++ typeSchemeVariables (altInferenceResultTypeScheme rresult)
 
+inferTypeOfCaseStatement :: CaseStatement -> Flow AltInferenceContext AltInferenceResult
+inferTypeOfCaseStatement (CaseStatement tname dflt cases) = Flows.bind (requireSchemaType tname) withSchemaType
+  where
+    withSchemaType (TypeScheme svars styp) = Flows.bind (expectUnionType tname styp) withFields
+      where
+        withFields sfields = bind2 (traverse inferTypeOfTerm dflt) (Flows.sequence $ fmap inferTypeOfTerm $ fmap fieldTerm cases) withNext
+          where
+            withNext mr rcases = forVar withCod
+              where
+                withCod codv = AltInferenceResult (TypeScheme vars $ TypeFunction $ FunctionType styp cod) cons
+                  where
+                    cod = TypeVariable codv
+                    vars =
+                      svars
+                      ++ (L.concat $ fmap (typeSchemeVariables . altInferenceResultTypeScheme) rcases)
+                      ++ Y.fromMaybe [] (fmap (typeSchemeVariables . altInferenceResultTypeScheme) mr)
+                    cons =
+                      (L.concat $ fmap altInferenceResultConstraints rcases)
+                      ++ (Y.fromMaybe [] $ fmap (\r ->
+                        altInferenceResultConstraints r ++
+                        [TypeConstraint cod (typeSchemeType $ altInferenceResultTypeScheme r) $ Just "match default"]) mr)
+                      ++ caseCons
+                    caseCons = Y.catMaybes $ fmap (\(FieldType fname ftyp) -> fmap (\r -> toConstraint ftyp r) $ M.lookup fname caseMap) sfields
+                      where
+                        caseMap = M.fromList $ L.zipWith (\f r -> (fieldName f, r)) cases rcases
+                        toConstraint ftyp r = TypeConstraint (Types.function ftyp cod) (typeSchemeType $ altInferenceResultTypeScheme r) $ Just "case type"
+
 inferTypeOfCollection :: (Type -> Type) -> String -> [Term] -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfCollection cons desc els = bindVar withVar
   where
@@ -309,10 +336,11 @@ inferTypeOfElimination elm = case elm of
 
   EliminationRecord p -> inferTypeOfProjection p
 
---  EliminationUnion (CaseStatement tname def cases) -> do
+  EliminationUnion c -> inferTypeOfCaseStatement c
+
   EliminationWrap tname -> inferTypeOfUnwrap tname
 
-  _ -> Flows.fail $ "Unsupported elimination: " ++ show elm
+--  _ -> Flows.fail $ "Unsupported elimination: " ++ show elm
 
 inferTypeOfFunction :: Function -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfFunction f = case f of
@@ -413,9 +441,6 @@ inferTypeOfProduct els = if L.null els
         tvars = L.concat $ typeSchemeVariables . altInferenceResultTypeScheme <$> results
         tbodies = typeSchemeType . altInferenceResultTypeScheme <$> results
         constraints = L.concat $ altInferenceResultConstraints <$> results
-
---inferTypeOfCaseStatement :: CaseStatement -> Flow AltInferenceContext AltInferenceResult
---inferTypeOfCaseStatement ...
 
 inferTypeOfProjection :: Projection -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfProjection (Projection tname fname) = Flows.bind (requireSchemaType tname) withSchemaType
