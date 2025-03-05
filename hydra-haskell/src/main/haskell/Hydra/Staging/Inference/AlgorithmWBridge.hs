@@ -64,7 +64,7 @@ hydraTermToStlc context term = case term of
 hydraTypeSchemeToStlc :: Core.TypeScheme -> Either String TypSch
 hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
     sbody <- toStlc body
-    return $ Forall (Core.unName <$> vars) sbody
+    return $ TypSch (Core.unName <$> vars) sbody
   where
     toStlc typ = case stripType typ of
       Core.TypeFunction (Core.FunctionType dom cod) -> TyFn <$> toStlc dom <*> toStlc cod
