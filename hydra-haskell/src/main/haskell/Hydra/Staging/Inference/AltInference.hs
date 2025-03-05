@@ -307,7 +307,8 @@ inferTypeOfElimination elm = case elm of
           types = TypeVariable <$> vars
           cod = types !! idx
 
---  EliminationRecord (Projection name fname) -> do
+  EliminationRecord p -> inferTypeOfProjection p
+
 --  EliminationUnion (CaseStatement tname def cases) -> do
   EliminationWrap tname -> inferTypeOfUnwrap tname
 
@@ -322,14 +323,13 @@ inferTypeOfFunction f = case f of
 inferTypeOfInjection :: Injection -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfInjection (Injection tname (Field fname term)) = bind2 (requireSchemaType tname) (inferTypeOfTerm term) withResults
   where
-    withResults (TypeScheme svars styp) (AltInferenceResult (TypeScheme ivars ityp) icons) = Flows.map withField findField
+    withResults (TypeScheme svars styp) (AltInferenceResult (TypeScheme ivars ityp) icons) =
+        Flows.bind (expectUnionType tname styp) withFields
       where
-        findField = case styp of
-          TypeUnion (RowType _ sfields) -> case L.filter (\(FieldType fn _) -> fn == fname) sfields of
-            [] -> Flows.fail $ "No such field: " ++ unName fname
-            (f:_) -> Flows.pure $ fieldTypeType f
-        withField ftyp = AltInferenceResult (TypeScheme (svars ++ ivars) styp)
-          $ [TypeConstraint ftyp ityp $ Just "schema type of injected field"] ++ icons
+        withFields sfields = Flows.map withField $ findFieldType fname sfields
+          where
+            withField ftyp = AltInferenceResult (TypeScheme (svars ++ ivars) styp)
+              $ [TypeConstraint ftyp ityp $ Just "schema type of injected field"] ++ icons
 
 inferTypeOfLambda :: Lambda -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfLambda (Lambda var _ body) = bindVar withVdom
@@ -413,6 +413,18 @@ inferTypeOfProduct els = if L.null els
         tvars = L.concat $ typeSchemeVariables . altInferenceResultTypeScheme <$> results
         tbodies = typeSchemeType . altInferenceResultTypeScheme <$> results
         constraints = L.concat $ altInferenceResultConstraints <$> results
+
+--inferTypeOfCaseStatement :: CaseStatement -> Flow AltInferenceContext AltInferenceResult
+--inferTypeOfCaseStatement ...
+
+inferTypeOfProjection :: Projection -> Flow AltInferenceContext AltInferenceResult
+inferTypeOfProjection (Projection tname fname) = Flows.bind (requireSchemaType tname) withSchemaType
+  where
+    withSchemaType (TypeScheme svars styp) = Flows.bind (expectRecordType tname styp) withRecordType
+      where
+        withRecordType sfields = Flows.map withField $ findFieldType fname sfields
+          where
+            withField ftyp = AltInferenceResult (TypeScheme svars $ Types.function styp ftyp) []
 
 inferTypeOfRecord :: Record -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfRecord (Record tname fields) = map2
