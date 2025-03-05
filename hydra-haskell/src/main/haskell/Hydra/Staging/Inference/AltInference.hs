@@ -10,6 +10,7 @@ import Hydra.Flows
 import Hydra.Strip
 import Hydra.Rewriting
 import Hydra.Staging.Rewriting
+import Hydra.Staging.Schemas
 import Hydra.Lib.Flows as Flows
 import qualified Hydra.Tools.Monads as TM
 import qualified Hydra.Dsl.Types as Types
@@ -308,7 +309,8 @@ inferTypeOfElimination elm = case elm of
 
 --  EliminationRecord (Projection name fname) -> do
 --  EliminationUnion (CaseStatement tname def cases) -> do
---  EliminationWrap name -> do
+  EliminationWrap tname -> inferTypeOfUnwrap tname
+
   _ -> Flows.fail $ "Unsupported elimination: " ++ show elm
 
 inferTypeOfFunction :: Function -> Flow AltInferenceContext AltInferenceResult
@@ -446,6 +448,13 @@ inferTypeOfSum (Sum i s term) = bindInferredTerm term withResult
 -- For now, type annotations are simply ignored during inference.
 inferTypeOfTypedTerm :: TypedTerm -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfTypedTerm (TypedTerm term _) = inferTypeOfTerm term
+
+inferTypeOfUnwrap :: Name -> Flow AltInferenceContext AltInferenceResult
+inferTypeOfUnwrap tname = Flows.bind (requireSchemaType tname) withSchemaType
+  where
+    withSchemaType (TypeScheme svars styp) = Flows.map withWrappedType (expectWrappedType tname styp)
+      where
+        withWrappedType wtyp = AltInferenceResult (TypeScheme svars $ Types.function styp wtyp) []
 
 inferTypeOfVariable :: Name -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfVariable var = Flow $ \ctx t -> case M.lookup var (altInferenceContextVariableTypes ctx) of
