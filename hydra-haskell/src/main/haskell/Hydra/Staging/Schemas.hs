@@ -76,26 +76,26 @@ elementAsTypedTerm el = do
   typ <- requireTermType $ elementTerm el
   return $ TypedTerm (elementTerm el) typ
 
---expectRecordType :: Name -> Type -> Flow Graph [FieldType]
+--expectRecordType :: Name -> Type -> Flow s [FieldType]
 --expectRecordType ename typ = case stripType typ of
 --  TypeRecord (RowType tname fields) -> if tname == ename
 --    then pure fields
 --    else unexpected ("record of type " ++ unName ename) $ "record of type " ++ unName tname
 --  _ -> unexpected "record type" $ show typ
 
---expectUnionType :: Name -> Type -> Flow Graph [FieldType]
+--expectUnionType :: Name -> Type -> Flow s [FieldType]
 --expectUnionType ename typ = case stripType typ of
 --  TypeUnion (RowType tname fields) -> if tname == ename
 --    then pure fields
 --    else unexpected ("union of type " ++ unName ename) $ "union of type " ++ unName tname
 --  _ -> unexpected "union type" $ show typ
 
---expectWrappedType :: Name -> Type -> Flow Graph Type
---expectWrappedType ename typ = case stripType typ of
---    TypeWrap (WrappedType tname t) -> if tname == ename
---      then pure t
---      else unexpected ("wrapped type " ++ unName ename) $ "wrapped type " ++ unName tname
---    _ -> unexpected "wrapped type" $ show typ
+expectWrappedType :: Name -> Type -> Flow s Type
+expectWrappedType ename typ = case stripType typ of
+    TypeWrap (WrappedType tname t) -> if tname == ename
+      then pure t
+      else unexpected ("wrapped type " ++ unName ename) $ "wrapped type " ++ unName tname
+    _ -> unexpected "wrapped type" $ show typ
 
 -- TODO: a graph is a let-expression, so it should be trivial to get the type scheme of an element upon lookup. See issue #159.
 lookupTypedTerm :: Graph -> Name -> Maybe TypedTerm
