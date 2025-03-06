@@ -184,9 +184,9 @@ unwrapTerm term = case term of
     _ -> fail "expected let bindings"
 
 inferExpr :: Expr -> IO (FExpr, FTy)
-inferExpr t = case (fst $ runState (runExceptT (w 0 [] [] t)) ([],0)) of
+inferExpr t = case (fst $ runState (runExceptT (infer 0 [] M.empty t)) ([],0)) of
   Left e -> fail $ "inference error: " ++ e
-  Right (_, (ty, f)) -> case (typeOf [] [] [] f) of
+  Right (_, (ty, f)) -> case (typeOf [] [] M.empty f) of
     Left err -> fail $ "type error: " ++ err
     Right tt -> if tt == mTyToFTy ty
       then return (f, tt)
