@@ -44,7 +44,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
     expectMono 2 []
       (lets [
         "foo" >: lambda "x" $ var "x"]
-        $ int32 32)
+        $ int32 42)
       T.int32,
 
 --  --Untyped input:

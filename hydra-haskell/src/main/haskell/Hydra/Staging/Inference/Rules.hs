@@ -50,8 +50,8 @@ findMatchingField fname sfields = case L.filter (\f -> fieldTypeName f == fname)
   []    -> fail $ "no such field: " ++ unName fname
   (h:_) -> return h
 
-freshName :: Flow Graph Name
-freshName = normalVariable <$> nextCount key_vcount
+freshName :: Flow s Name
+freshName = normalTypeVariable <$> nextCount key_vcount
 
 freshVariableType :: Flow Graph Type
 freshVariableType = TypeVariable <$> freshName

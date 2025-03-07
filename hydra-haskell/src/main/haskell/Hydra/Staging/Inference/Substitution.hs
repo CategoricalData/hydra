@@ -18,17 +18,17 @@ type Subst = M.Map Name Type
 composeSubst :: Subst -> Subst -> Subst
 composeSubst s1 s2 = M.union s1 $ M.map (substituteInType s1) s2
 
-normalVariables :: [Name]
-normalVariables = normalVariable <$> [0..]
+normalTypeVariables :: [Name]
+normalTypeVariables = normalTypeVariable <$> [0..]
 
 -- | Type variable naming convention follows Haskell: t0, t1, etc.
-normalVariable :: Int -> Name
-normalVariable i = Name $ "t" ++ show i
+normalTypeVariable :: Int -> Name
+normalTypeVariable i = Name $ "t" ++ show i
 
 normalizeScheme :: TypeScheme -> TypeScheme
 normalizeScheme ts@(TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeType body)
   where
-    ord = L.zip (S.toList $ freeVariablesInType body) normalVariables
+    ord = L.zip (S.toList $ freeVariablesInType body) normalTypeVariables
 
     normalizeFieldType (FieldType fname typ) = FieldType fname $ normalizeType typ
 
