@@ -644,29 +644,30 @@ infer level adts g (ExprLetrec b0 env0) = do
     -- Extend the environment with temporary types for each binding
     let g1 = M.union (M.fromList $ zip bnames $ fmap (TypSch []) bvars) g
     -- Infer the types of the bindings
-    (s1, (tb, eb1)) <- inferMany (level+1) adts g1 bexprs0
+    (s1, (tb, eb1)) <- inferMany (level+1) adts g1 eb0
     sb <- unifyMany (fmap (substMTy s1) bvars) tb
 
-    -- Extend the environment again with the inferred types. TODO: this actually restricts the environment to the bindings
+    -- Extend the environment again with the inferred types. TODO: this actually restricts the environment to the bindings. Add test cases for nested let, e.g. let x = 42 in let y = 37 in x+y
     let g2 = M.fromList $ zip bnames $ fmap (generalize g . substMTy sb) tb
     -- Infer the type of the let environment
     (senv, (tenv, env1)) <- infer (level+1) adts g2 env0
     let s2 = composeMTySubst senv $ composeMTySubst sb s1
-        eb2 = map (mTySubstFExpr (composeMTySubst senv sb)) eb1
+        eb2 = fmap (mTySubstFExpr (composeMTySubst senv sb)) eb1
 
-    let tsb = zip (zip bnames $ fmap (\ts -> (ts, typSchVariables ts)) $ map (generalize g . substMTy sb) tb) eb2 :: [((Var, (TypSch, [Var])), FExpr)]
-        mmm = M.fromList $ map (\((x, (_, vars)), _)->(x, (fTyApp (FVar x) $ map FTyVar vars))) tsb :: FExprSubst
-        e0X's =  map (\((x,(ww,ww2)),e0X)->(x,ww,ww2, substFExpr mmm e0X)) tsb
-        e0X''s = map (\(x,ww,ww2,e) -> (x,ww,ww2,fTyAbs ww2 e)) e0X's
-        b1 = map (\(x,ww,ww2,e0X'') -> (x, mTySubstFTy senv $ tyToFTy ww, mTySubstFExpr (composeMTySubst sb senv) e0X'')) e0X''s
-        let1 = FLetrec b1 env1
+    let b3t = zip bnames $ fmap (generalize g . substMTy sb) tb
+    let s3 = M.fromList $ fmap (\(x, ts) -> (x, (fTyApp (FVar x) $ fmap FTyVar $ typSchVariables ts))) b3t :: FExprSubst
+        b3 = L.zipWith (\(x, ts) e ->
+               (x,
+                mTySubstFTy senv $ tyToFTy ts,
+                mTySubstFExpr (composeMTySubst sb senv) $ fTyAbs (typSchVariables ts) $ substFExpr s3 e)) b3t eb2 :: [(Var, FTy, FExpr)]
+    let let1 = FLetrec b3 env1
 
     log0 level $ "LETREC " ++ show (substContext s2 g) ++ "|- " ++ show let1 ++ " : " ++ show tenv
     checkAgainstF adts (substContext s2 g) tenv let1
     return (s2, (tenv, let1))
   where
     bnames = fmap fst b0
-    bexprs0 = fmap snd b0
+    eb0 = fmap snd b0
 
 inferMany :: Int -> ADTs -> Ctx -> [Expr] -> M ([MTy], [FExpr])
 inferMany level adts g es = case es of

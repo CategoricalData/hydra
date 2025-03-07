@@ -124,8 +124,8 @@ flattenLetTerms = rewriteTerm flatten
             v1 -> ((LetBinding k0 v1 t), [])
       term0 -> term0
 
-freeVariablesInScheme :: TypeScheme -> S.Set Name
-freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t) (S.fromList vars)
+freeVariablesInTypeScheme :: TypeScheme -> S.Set Name
+freeVariablesInTypeScheme (TypeScheme vars t) = S.difference (freeVariablesInType t) (S.fromList vars)
 
 -- | Inline all type variables in a type using the provided schema.
 --   Note: this function is only appropriate for nonrecursive type definitions.
