@@ -28,21 +28,21 @@ import qualified Hydra.Dsl.Testing as Testing
 
 _unify t1 t2 = unifyTypeConstraints [TypeConstraint t1 t2 $ Just "ctx"]
 
-initialContext = AltInferenceContext 0 $ L.foldl M.union M.empty [primTypes, schemaTypes, varTypes]
+initialContext = AltInferenceContext $ L.foldl M.union M.empty [primTypes, schemaTypes, varTypes]
   where
     primTypes = M.fromList $ fmap (\p -> (primitiveName p, primitiveType p)) (L.concat (libraryPrimitives <$> standardLibraries))
     schemaTypes = fromFlow M.empty testGraph $ schemaGraphToTypingEnvironment testSchemaGraph
     varTypes = M.empty
 
 expectType :: Term -> TypeScheme -> H.Expectation
-expectType term expected = shouldSucceedWith (inferTypeOf term) expected
+expectType term expected = shouldSucceedWith (inferTypeOf initialContext term) expected
 
-shouldSucceedWith :: (Eq a, Show a) => Flow AltInferenceContext a -> a -> H.Expectation
+shouldSucceedWith :: (Eq a, Show a) => Flow () a -> a -> H.Expectation
 shouldSucceedWith f x = case my of
     Nothing -> HL.assertFailure $ "Error: " ++ traceSummary trace
     Just y -> y `H.shouldBe` x
   where
-    FlowState my _ trace = unFlow f initialContext emptyTrace
+    FlowState my _ trace = unFlow f () emptyTrace
 
 altInferenceTestRunner :: TestRunner
 --altInferenceTestRunner tcase = if Testing.isDisabled tcase || Testing.isDisabledForAltInference tcase
