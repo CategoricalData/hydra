@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Testing as Testing
 
 _unify t1 t2 = unifyTypeConstraints [TypeConstraint t1 t2 $ Just "ctx"]
 
-initialContext = AltInferenceContext 0 primTypes schemaTypes varTypes
+initialContext = AltInferenceContext 0 $ L.foldl M.union M.empty [primTypes, schemaTypes, varTypes]
   where
     primTypes = M.fromList $ fmap (\p -> (primitiveName p, primitiveType p)) (L.concat (libraryPrimitives <$> standardLibraries))
     schemaTypes = fromFlow M.empty testGraph $ schemaGraphToTypingEnvironment testSchemaGraph
