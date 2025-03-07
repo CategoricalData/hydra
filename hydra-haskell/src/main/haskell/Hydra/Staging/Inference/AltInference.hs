@@ -15,11 +15,12 @@ import Hydra.Lib.Flows as Flows
 import qualified Hydra.Tools.Monads as TM
 import qualified Hydra.Dsl.Types as Types
 
-import qualified Data.Either as E
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
-import qualified Data.Maybe as Y
+import qualified Control.Monad as CM
+import qualified Data.Either   as E
+import qualified Data.List     as L
+import qualified Data.Map      as M
+import qualified Data.Set      as S
+import qualified Data.Maybe    as Y
 
 
 --------------------------------------------------------------------------------
@@ -91,6 +92,12 @@ unifyTypeConstraints ((TypeConstraint left right comment):rest) = case sleft of
       where
         subst = singletonTypeSubst v t
 
+unifyTypeLists :: [Type] -> [Type] -> Maybe String -> Either UnificationError TypeSubst
+unifyTypeLists l r comment = joinTypeLists l r comment >>= unifyTypeConstraints
+
+joinTypeLists :: [Type] -> [Type] -> Maybe String -> Either UnificationError [TypeConstraint]
+joinTypeLists l r comment = L.concat <$> CM.zipWithM (\t1 t2 -> joinTypes t1 t2 comment) l r
+
 joinTypes :: Type -> Type -> Maybe String -> Either UnificationError [TypeConstraint]
 joinTypes left right comment = case sleft of
     TypeFunction (FunctionType domleft codleft) -> case sright of
@@ -154,6 +161,7 @@ joinTypes left right comment = case sleft of
 -- Substitution
 
 data TypeSubst = TypeSubst { unTypeSubst :: M.Map Name Type } deriving (Eq, Ord)
+data TermSubst = TermSubst { unTermSubst :: M.Map Name Term } deriving (Eq, Ord)
 
 instance Show TypeSubst where
   show (TypeSubst subst) = "{" ++ L.intercalate ", " (fmap (\((Name k), v) -> k ++ ": " ++ showType v) $ M.toList subst) ++ "}"
@@ -171,6 +179,24 @@ tmpTypeSubst = TypeSubst M.empty
 singletonTypeSubst :: Name -> Type -> TypeSubst
 singletonTypeSubst v t = TypeSubst $ M.singleton v t
 
+substituteInTerm :: TermSubst -> Term -> Term
+substituteInTerm (TermSubst s) = rewriteTerm rewrite
+  where
+    rewrite recurse term = case term of
+      TermFunction (FunctionLambda (Lambda v mt body)) ->
+          TermFunction $ FunctionLambda $ Lambda v mt $ substituteInTerm subst2 body
+        where
+          subst2 = TermSubst $ M.delete v s
+      TermLet (Let bindings env) -> TermLet $ Let (fmap rewriteBinding bindings) $ substituteInTerm subst2 env
+        where
+          names = fmap letBindingName bindings
+          subst2 = TermSubst $ M.filterWithKey (\k _ -> not $ L.elem k names) s
+          rewriteBinding (LetBinding name term mt) = LetBinding name (substituteInTerm subst2 term) mt
+      TermVariable name -> case M.lookup name s of
+        Just sterm -> sterm
+        Nothing -> recurse term
+      _ -> recurse term
+
 substituteInType :: TypeSubst -> Type -> Type
 substituteInType subst = rewriteType rewrite
   where
@@ -180,9 +206,10 @@ substituteInType subst = rewriteType rewrite
         Nothing -> typ
       t -> t
 
--- TODO: remove unused bound type variables
 substituteInTypeScheme :: TypeSubst -> TypeScheme -> TypeScheme
-substituteInTypeScheme subst (TypeScheme vars typ) = TypeScheme vars $ substituteInType subst typ
+substituteInTypeScheme subst (TypeScheme vars typ) = TypeScheme vars $ substituteInType subst2 typ
+  where
+    subst2 = TypeSubst $ M.filterWithKey (\k _ -> not $ k `elem` vars) $ unTypeSubst subst
 
 substituteInConstraint :: TypeSubst -> TypeConstraint -> TypeConstraint
 substituteInConstraint subst (TypeConstraint t1 t2 ctx) = TypeConstraint (substituteInType subst t1) (substituteInType subst t2) ctx
@@ -190,25 +217,53 @@ substituteInConstraint subst (TypeConstraint t1 t2 ctx) = TypeConstraint (substi
 substituteInConstraints :: TypeSubst -> [TypeConstraint] -> [TypeConstraint]
 substituteInConstraints subst = fmap (substituteInConstraint subst)
 
+substituteTypesInTerm :: TypeSubst -> Term -> Term
+substituteTypesInTerm subst = rewriteTerm rewrite
+  where
+    rewrite recurse term = case term of
+      -- TODO: injections and case statements need a domain field as well, similar to lambdas
+      TermFunction (FunctionLambda (Lambda v mt body)) -> recurse $ TermFunction $ FunctionLambda $ Lambda v (fmap (substituteInType subst) mt) body
+      TermLet (Let bindings env) -> recurse $ TermLet $ Let (fmap rewriteBinding bindings) env
+        where
+          rewriteBinding (LetBinding v e mt) = LetBinding v e $ fmap (substituteInTypeScheme subst) mt
+      TermTypeAbstraction (TypeAbstraction param body) -> TermTypeAbstraction $ TypeAbstraction param $ substituteTypesInTerm subst2 body
+        where
+          subst2 = TypeSubst $ M.delete param $ unTypeSubst subst
+      TermTypeApplication (TypedTerm trm typ) -> recurse $ TermTypeApplication $ TypedTerm trm $ substituteInType subst typ
+      _ -> recurse term
+
 --------------------------------------------------------------------------------
 -- Inference
 
 data AltInferenceContext
   = AltInferenceContext {
     altInferenceContextVariableCount :: Int,
-    altInferenceContextPrimitiveTypes :: M.Map Name TypeScheme,
-    altInferenceContextSchemaTypes :: M.Map Name TypeScheme,
-    altInferenceContextVariableTypes :: M.Map Name TypeScheme}
+    altInferenceContextTypes :: M.Map Name TypeScheme}
+--    altInferenceContextPrimitiveTypes :: M.Map Name TypeScheme,
+--    altInferenceContextSchemaTypes :: M.Map Name TypeScheme,
+--    altInferenceContextVariableTypes :: M.Map Name TypeScheme}
   deriving (Eq, Ord, Show)
 
 data AltInferenceResult
   = AltInferenceResult {
-    altInferenceResultTypeScheme :: TypeScheme,
-    altInferenceResultConstraints :: [TypeConstraint],
+    altInferenceResultTerm :: Term,
+    altInferenceResultTypeScheme :: TypeScheme, -- TODO: no need for type schemes here; we can just pass (STLC) types up
+    altInferenceResultConstraints :: [TypeConstraint], -- TODO: no need to pass constraints up; we pass substitutions
     altInferenceResultSubst :: TypeSubst}
   deriving (Eq, Ord)
 instance Show AltInferenceResult where
-  show (AltInferenceResult scheme constraints subst) = "{type= " ++ showTypeScheme scheme ++ ", constraints= " ++ show constraints ++ ", subst= " ++ show subst ++ "}"
+  show (AltInferenceResult term scheme constraints subst) = "{term=" ++ show term ++ ", type= " ++ showTypeScheme scheme ++ ", constraints= " ++ show constraints ++ ", subst= " ++ show subst ++ "}"
+
+dummyTerm :: Term
+dummyTerm = TermLiteral $ LiteralString "dummy"
+
+-- | Warning: this is an expensive operation (linear with respect to the size of the graph and schema graph)
+generalize :: AltInferenceContext -> Type -> TypeScheme
+generalize cx typ = TypeScheme vars typ
+  where
+    vars = L.nub $ L.filter isUnbound $ S.toList $ freeVariablesInType typ
+    isUnbound v = not $ S.member v freeVars
+    freeVars = L.foldl S.union S.empty $ fmap freeVariablesInTypeScheme $ M.elems $ altInferenceContextTypes cx
 
 inferTypeOf :: Term -> Flow AltInferenceContext TypeScheme
 inferTypeOf term = bindInferredTerm term unifyAndSubst
@@ -232,6 +287,7 @@ inferTypeOfApplication (Application lterm rterm) = bindVar2 withVars
             TypeConstraint (TypeVariable dom) rtyp $ Just "application; rhs"]
           where
             withConstraints subst = AltInferenceResult
+                dummyTerm
                 (TypeScheme tvars $ TypeVariable cod)
                 ([TypeConstraint (Types.function (TypeVariable dom) (TypeVariable cod)) ltyp $ Just "application; lhs",
                   TypeConstraint (TypeVariable dom) rtyp $ Just "application; rhs"]
@@ -268,6 +324,7 @@ inferTypeOfCaseStatement (CaseStatement tname dflt cases) = Flows.bind (requireS
                       ++ (L.concat $ fmap altInferenceResultConstraints rcases)
                       ++ (Y.maybe [] altInferenceResultConstraints mr)
                     withConstraints subst = AltInferenceResult
+                        dummyTerm
                         (TypeScheme vars $ TypeFunction $ FunctionType styp cod)
                         cons
                         (composeTypeSubstList $ [subst] ++ (maybeToList $ fmap altInferenceResultSubst mr) ++ (fmap altInferenceResultSubst rcases))
@@ -278,6 +335,7 @@ inferTypeOfCollection cons desc els = bindVar withVar
     withVar var = forInferredTerms els fromResults
       where
         fromResults results = AltInferenceResult
+            dummyTerm
             (TypeScheme vars $ cons $ TypeVariable var)
             constraints
             (composeTypeSubstList $ fmap altInferenceResultSubst results)
@@ -303,12 +361,13 @@ inferTypeOfFold fun = bindVar2 withVars
   where
     withVars a b = Flows.bind (inferTypeOfTerm fun) withResult
       where
-        withResult (AltInferenceResult (TypeScheme funVars funType) constraints subst1) = mapConstraints withSubst [funCons]
+        withResult (AltInferenceResult _ (TypeScheme funVars funType) constraints subst1) = mapConstraints withSubst [funCons]
           where
             withSubst subst2 = AltInferenceResult
-                (TypeScheme (a:b:funVars) elimType)
-                (funCons:constraints)
-                (composeTypeSubst subst1 subst2)
+              dummyTerm
+              (TypeScheme (a:b:funVars) elimType)
+              (funCons:constraints)
+              (composeTypeSubst subst1 subst2)
             funCons = TypeConstraint expectedType funType $ Just "fold function"
             aT = TypeVariable a
             bT = TypeVariable b
@@ -324,7 +383,7 @@ inferTypeOfFunction f = case f of
 inferTypeOfInjection :: Injection -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfInjection (Injection tname (Field fname term)) = bind2 (requireSchemaType tname) (inferTypeOfTerm term) withResults
   where
-    withResults (TypeScheme svars styp) (AltInferenceResult (TypeScheme ivars ityp) icons isubst) =
+    withResults (TypeScheme svars styp) (AltInferenceResult _ (TypeScheme ivars ityp) icons isubst) =
         Flows.bind (expectUnionType tname styp) withFields
       where
         withFields sfields = Flows.bind (findFieldType fname sfields) withField
@@ -333,6 +392,7 @@ inferTypeOfInjection (Injection tname (Field fname term)) = bind2 (requireSchema
               where
                 scons = TypeConstraint ftyp ityp $ Just "schema type of injected field"
                 withSubst subst = AltInferenceResult
+                  dummyTerm
                   (TypeScheme (svars ++ ivars) styp)
                   ([scons] ++ icons)
                   (composeTypeSubst subst isubst)
@@ -343,11 +403,52 @@ inferTypeOfLambda (Lambda var _ body) = bindVar withVdom
     withVdom vdom = withTypeBindings [(var, TypeScheme [] $ TypeVariable vdom)]
         $ Flows.map withResult (inferTypeOfTerm body)
       where
-        withResult (AltInferenceResult (TypeScheme vars t) constraints subst)
-          = AltInferenceResult (TypeScheme (vdom:vars) $ Types.function (TypeVariable vdom) t) constraints subst
+        withResult (AltInferenceResult _ (TypeScheme vars t) constraints subst)
+          = AltInferenceResult dummyTerm (TypeScheme (vdom:vars) $ Types.function (TypeVariable vdom) t) constraints subst
+
+
+
+
+
 
 inferTypeOfLet :: Let -> Flow AltInferenceContext AltInferenceResult
-inferTypeOfLet (Let bindings env) = bindVars (L.length bindings) withVars
+inferTypeOfLet = inferTypeOfLetOld
+
+inferTypeOfLetNew :: Let -> Flow AltInferenceContext AltInferenceResult
+inferTypeOfLetNew (Let b0 env0) = do
+    g <- getState
+    bindVars (L.length b0) (withVars g)
+  where
+    bnames = fmap letBindingName b0
+    eb0 = fmap letBindingTerm b0
+    withVars g bvars = withTypeBindings (L.zip bnames $ fmap (TypeScheme []) btypes) withTmpBindings1
+      where
+        btypes = fmap TypeVariable bvars
+        withTmpBindings1 = Flows.bind (Flows.sequence $ fmap inferTypeOfTerm eb0) withInferredBindings
+          where
+            withInferredBindings results = Flows.bind
+                (TM.fromEither $ unifyTypeLists (fmap (substituteInType s1) btypes) tb $ Just "let temporary type bindings") withSubst
+              where
+                eb1 = fmap altInferenceResultTerm results
+                tb = fmap (typeSchemeType . altInferenceResultTypeScheme) results
+                s1 = composeTypeSubstList $ fmap altInferenceResultSubst results
+                withSubst sb = withTypeBindings (L.zip bnames $ fmap (generalize g . substituteInType sb) tb) withTmpBindings2
+                  where
+                    withTmpBindings2 = Flows.map withEnv $ inferTypeOfTerm env0
+                      where
+                        withEnv (AltInferenceResult env1 tenv _ senv) = AltInferenceResult let1 tenv [] s2
+                          where
+                            s2 = composeTypeSubstList [senv, sb, s1]
+                            eb2 = fmap (substituteTypesInTerm $ composeTypeSubst senv sb) eb1
+                            b3t = L.zip bnames $ fmap (generalize g . substituteInType s2) tb
+                            s3 = TermSubst $ M.fromList $ fmap (\(x, ts) -> (x, (typeApplication (TermVariable x) $ fmap TypeVariable $ typeSchemeVariables ts))) b3t
+                            b3 = L.zipWith (\(x, ts) e -> LetBinding x
+                              (substituteTypesInTerm (composeTypeSubst sb senv) $ typeAbstraction (typeSchemeVariables ts) $ substituteInTerm s3 e)
+                              (Just $ substituteInTypeScheme senv ts)) b3t eb2
+                            let1 = TermLet $ Let b3 env1
+
+inferTypeOfLetOld :: Let -> Flow AltInferenceContext AltInferenceResult
+inferTypeOfLetOld (Let bindings env) = bindVars (L.length bindings) withVars
   where
     bindingNames = letBindingName <$> bindings
     bindingTerms = letBindingTerm <$> bindings
@@ -360,7 +461,7 @@ inferTypeOfLet (Let bindings env) = bindVars (L.length bindings) withVars
               where
                 inferEnv = Flows.map withInferredEnv (inferTypeOfTerm env)
                   where
-                    withInferredEnv renv = AltInferenceResult (TypeScheme vars typ) constraints tmpTypeSubst
+                    withInferredEnv renv = AltInferenceResult dummyTerm (TypeScheme vars typ) constraints tmpTypeSubst
                       where
                         typ = typeSchemeType $ altInferenceResultTypeScheme renv
                         vars =
@@ -375,67 +476,73 @@ inferTypeOfLet (Let bindings env) = bindVars (L.length bindings) withVars
                             btypes
                             (typeSchemeType . altInferenceResultTypeScheme <$> rbindings))
 
----- TODO: propagate rawValueVars and envVars into the final result, possibly after substitution
----- TODO: recursive and mutually recursive let
---inferTypeOfLet :: Let -> Flow AltInferenceContext AltInferenceResult
---inferTypeOfLet (Let bindings env) = if L.null bindings
---    then Flows.map forEmptyBindings (inferTypeOfTerm env)
---    else if L.length bindings > 2
---    then inferTypeOfTerm $ TermLet (Let [L.head bindings] $ TermLet $ Let (L.tail bindings) env)
---    else forSingleBinding $ L.head bindings
---  where
---    forEmptyBindings r = r
---    forSingleBinding (LetBinding key value _) = bindVar withVar
---      where
---        -- Create a temporary type variable for the binding
---        withVar var = withTypeBindings [(key, Types.mono $ TypeVariable var)] $
---            bindInferredTerm value withValueType
---          where
---            -- Unify and substitute over the value constraints
---            -- TODO: save the substitution and pass it along, instead of the original set of constraints
---            withValueType (AltInferenceResult rawValueScheme valueConstraints) = Flows.bind (TM.fromEither $ unifyTypeConstraints kvConstraints) afterUnification
---              where
---                rawValueVars = typeSchemeVariables rawValueScheme
---                kvConstraints = keyConstraint:valueConstraints
---                keyConstraint = TypeConstraint (TypeVariable var) (typeSchemeType rawValueScheme) $ Just "let binding"
---                -- Now update the type binding to use the inferred type
---                afterUnification subst = withTypeBindings [(key, valueScheme)]
---                    $ Flows.map withEnvType (inferTypeOfTerm env)
---                  where
---                    valueScheme = substituteInTypeScheme subst rawValueScheme
---                    withEnvType (AltInferenceResult envScheme envConstraints) = AltInferenceResult envScheme constraints
---                      where
---                        constraints = kvConstraints ++ envConstraints
---                        envVars = typeSchemeVariables envScheme
---
---
+-- TODO: propagate rawValueVars and envVars into the final result, possibly after substitution
+-- TODO: recursive and mutually recursive let
+inferTypeOfLetOlder :: Let -> Flow AltInferenceContext AltInferenceResult
+inferTypeOfLetOlder (Let bindings env) = if L.null bindings
+    then Flows.map forEmptyBindings (inferTypeOfTerm env)
+    else if L.length bindings > 2
+    then inferTypeOfTerm $ TermLet (Let [L.head bindings] $ TermLet $ Let (L.tail bindings) env)
+    else forSingleBinding $ L.head bindings
+  where
+    forEmptyBindings r = r
+    forSingleBinding (LetBinding key value _) = bindVar withVar
+      where
+        -- Create a temporary type variable for the binding
+        withVar var = withTypeBindings [(key, Types.mono $ TypeVariable var)] $
+            bindInferredTerm value withValueType
+          where
+            -- Unify and substitute over the value constraints
+            -- TODO: save the substitution and pass it along, instead of the original set of constraints
+            withValueType (AltInferenceResult _ rawValueScheme valueConstraints _) = Flows.bind (TM.fromEither $ unifyTypeConstraints kvConstraints) afterUnification
+              where
+                rawValueVars = typeSchemeVariables rawValueScheme
+                kvConstraints = keyConstraint:valueConstraints
+                keyConstraint = TypeConstraint (TypeVariable var) (typeSchemeType rawValueScheme) $ Just "let binding"
+                -- Now update the type binding to use the inferred type
+                afterUnification subst = withTypeBindings [(key, valueScheme)]
+                    $ Flows.map withEnvType (inferTypeOfTerm env)
+                  where
+                    valueScheme = substituteInTypeScheme subst rawValueScheme
+                    withEnvType (AltInferenceResult _ envScheme envConstraints _) = AltInferenceResult dummyTerm envScheme constraints emptyTypeSubst
+                      where
+                        constraints = kvConstraints ++ envConstraints
+                        envVars = typeSchemeVariables envScheme
+
+
+
+
+
+
+
 
 inferTypeOfList :: [Term] -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfList = inferTypeOfCollection Types.list "list element"
 
 inferTypeOfLiteral :: Literal -> Flow AltInferenceContext AltInferenceResult
-inferTypeOfLiteral lit = Flows.pure $ AltInferenceResult (Types.mono $ TypeLiteral $ literalType lit) [] emptyTypeSubst
+inferTypeOfLiteral lit = Flows.pure $ AltInferenceResult dummyTerm (Types.mono $ TypeLiteral $ literalType lit) [] emptyTypeSubst
 
 inferTypeOfMap :: M.Map Term Term -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfMap m = bindVar2 withVars
   where
     withVars kvar vvar = if M.null m
         -- TODO: get rid of this special case; it should follow from the generate case
-        then Flows.pure $ AltInferenceResult (TypeScheme [kvar, vvar] $ Types.map (TypeVariable kvar) (TypeVariable vvar)) [] emptyTypeSubst
+        then Flows.pure $ AltInferenceResult dummyTerm (TypeScheme [kvar, vvar] $ Types.map (TypeVariable kvar) (TypeVariable vvar)) [] emptyTypeSubst
         else Flows.map withResults (Flows.sequence $ fmap fromPair $ M.toList m)
       where
         fromPair :: (Term, Term) -> Flow AltInferenceContext (([Name], [TypeConstraint]), TypeSubst)
         fromPair (k, v) = bindInferredTerm2 k v withPairResults
           where
             withPairResults
-                (AltInferenceResult (TypeScheme kvars kt) kconstraints ksubst)
-                (AltInferenceResult (TypeScheme vvars vt) vconstraints vsubst) = mapConstraints withSubst cons
+                (AltInferenceResult _ (TypeScheme kvars kt) kconstraints ksubst)
+                (AltInferenceResult _ (TypeScheme vvars vt) vconstraints vsubst) = mapConstraints withSubst cons
               where
                 cons = [
                   TypeConstraint (TypeVariable kvar) kt $ Just "map key",
                   TypeConstraint (TypeVariable vvar) vt $ Just "map value"]
                 withSubst subst = ((kvars ++ vvars, cons ++ kconstraints ++ vconstraints), subst)
         withResults pairs = AltInferenceResult
+          dummyTerm
           (TypeScheme (L.concat $ fmap (fst . fst)pairs) $ Types.map (TypeVariable kvar) (TypeVariable vvar))
           (L.concat $ fmap (snd . fst) pairs)
           (composeTypeSubstList $ fmap snd pairs)
@@ -458,6 +565,7 @@ inferTypeOfOptionalCases (OptionalCases n j) = bindVar2 withVars
               TypeConstraint cod ntyp $ Just "optional elimination; nothing case",
               TypeConstraint (Types.function dom cod) jtyp $ Just "optional elimination; just case"]
             withSubst subst = AltInferenceResult
+                dummyTerm
                 (TypeScheme tvars $ Types.function (Types.optional dom) cod)
                 constraints
                 (composeTypeSubstList [subst, altInferenceResultSubst nresult, altInferenceResultSubst jresult])
@@ -468,17 +576,17 @@ inferTypeOfOptionalCases (OptionalCases n j) = bindVar2 withVars
                 constraints = cons ++ altInferenceResultConstraints nresult ++ altInferenceResultConstraints jresult
 
 inferTypeOfPrimitive :: Name -> Flow AltInferenceContext AltInferenceResult
-inferTypeOfPrimitive name = Flow $ \ctx t -> case M.lookup name (altInferenceContextPrimitiveTypes ctx) of
+inferTypeOfPrimitive name = Flow $ \ctx t -> case M.lookup name (altInferenceContextTypes ctx) of
   Just scheme -> unFlow (Flows.map withoutConstraints $ instantiateTypeScheme scheme) ctx t
   Nothing -> unFlow (Flows.fail $ "No such primitive: " ++ unName name) ctx t
 
 inferTypeOfProduct :: [Term] -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfProduct els = if L.null els
     -- TODO: get rid of this special case; it should follow from the generate case
-    then Flows.pure $ AltInferenceResult (Types.mono $ Types.product []) [] emptyTypeSubst
+    then Flows.pure $ AltInferenceResult dummyTerm (Types.mono $ Types.product []) [] emptyTypeSubst
     else forInferredTerms els fromResults
   where
-    fromResults results = AltInferenceResult (TypeScheme tvars $ TypeProduct tbodies) constraints subst
+    fromResults results = AltInferenceResult dummyTerm (TypeScheme tvars $ TypeProduct tbodies) constraints subst
       where
         tvars = L.concat $ typeSchemeVariables . altInferenceResultTypeScheme <$> results
         tbodies = fmap (typeSchemeType . altInferenceResultTypeScheme) results
@@ -492,7 +600,7 @@ inferTypeOfProjection (Projection tname fname) = Flows.bind (requireSchemaType t
       where
         withRecordType sfields = Flows.map withField $ findFieldType fname sfields
           where
-            withField ftyp = AltInferenceResult (TypeScheme svars $ Types.function styp ftyp) [] emptyTypeSubst
+            withField ftyp = AltInferenceResult dummyTerm (TypeScheme svars $ Types.function styp ftyp) [] emptyTypeSubst
 
 inferTypeOfRecord :: Record -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfRecord (Record tname fields) = bind2
@@ -506,6 +614,7 @@ inferTypeOfRecord (Record tname fields) = bind2
         ityp = TypeRecord $ RowType tname
           $ L.zipWith (\n r -> FieldType n $ typeSchemeType $ altInferenceResultTypeScheme r) (fmap fieldName fields) results
         withSubst subst = AltInferenceResult
+            dummyTerm
             (TypeScheme vars styp)
             (scons:(L.concat $ fmap altInferenceResultConstraints results))
             (composeTypeSubstList (subst:(fmap altInferenceResultSubst results)))
@@ -518,12 +627,12 @@ inferTypeOfSet = inferTypeOfCollection Types.set "set element" . S.toList
 inferTypeOfSum :: Sum -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfSum (Sum i s term) = bindInferredTerm term withResult
   where
-    withResult (AltInferenceResult (TypeScheme bvars typ) icons isubst) = Flows.map withVars (Flows.sequence $ fmap (varOrTerm typ) [0..(s-1)])
+    withResult (AltInferenceResult _ (TypeScheme bvars typ) icons isubst) = Flows.map withVars (Flows.sequence $ fmap (varOrTerm typ) [0..(s-1)])
       where
         varOrTerm t j = if i == j
           then Flows.pure $ Left t
           else Right <$> createNewVariable
-        withVars vars = AltInferenceResult (TypeScheme (bvars ++ E.rights vars) $ TypeSum (toType <$> vars)) icons isubst
+        withVars vars = AltInferenceResult dummyTerm (TypeScheme (bvars ++ E.rights vars) $ TypeSum (toType <$> vars)) icons isubst
           where
             toType e = case e of
               Left t -> t
@@ -551,7 +660,7 @@ inferTypeOfTerm term = case term of
 inferTypeOfTupleProjection :: TupleProjection -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfTupleProjection (TupleProjection arity idx) = forVars arity withVars
   where
-    withVars vars = AltInferenceResult (TypeScheme vars $ Types.function (Types.product types) cod) [] emptyTypeSubst
+    withVars vars = AltInferenceResult dummyTerm (TypeScheme vars $ Types.function (Types.product types) cod) [] emptyTypeSubst
       where
         types = TypeVariable <$> vars
         cod = types !! idx
@@ -565,20 +674,21 @@ inferTypeOfUnwrap tname = Flows.bind (requireSchemaType tname) withSchemaType
   where
     withSchemaType (TypeScheme svars styp) = Flows.map withWrappedType (expectWrappedType tname styp)
       where
-        withWrappedType wtyp = AltInferenceResult (TypeScheme svars $ Types.function styp wtyp) [] emptyTypeSubst
+        withWrappedType wtyp = AltInferenceResult dummyTerm (TypeScheme svars $ Types.function styp wtyp) [] emptyTypeSubst
 
 inferTypeOfVariable :: Name -> Flow AltInferenceContext AltInferenceResult
-inferTypeOfVariable var = Flow $ \ctx t -> case M.lookup var (altInferenceContextVariableTypes ctx) of
+inferTypeOfVariable var = Flow $ \ctx t -> case M.lookup var (altInferenceContextTypes ctx) of
   Just scheme -> unFlow (Flows.map withoutConstraints $ instantiateTypeScheme scheme) ctx t
   Nothing -> unFlow (Flows.fail $ "Variable not bound to type: " ++ unName var) ctx t
 
 inferTypeOfWrappedTerm :: WrappedTerm -> Flow AltInferenceContext AltInferenceResult
 inferTypeOfWrappedTerm (WrappedTerm tname term) = bind2 (requireSchemaType tname) (inferTypeOfTerm term) withResult
   where
-    withResult (TypeScheme svars styp) (AltInferenceResult (TypeScheme ivars ityp) icons isubst) = mapConstraints withSubst [scons]
+    withResult (TypeScheme svars styp) (AltInferenceResult _ (TypeScheme ivars ityp) icons isubst) = mapConstraints withSubst [scons]
       where
         scons = TypeConstraint styp (TypeWrap $ WrappedType tname ityp) $ Just "schema type of wrapper"
         withSubst subst = AltInferenceResult
+          dummyTerm
           (TypeScheme (svars ++ ivars) styp)
           ([scons] ++ icons)
           (composeTypeSubst subst isubst)
@@ -664,9 +774,15 @@ createNewVariables n = Flow helper
 requireSchemaType :: Name -> Flow AltInferenceContext TypeScheme
 requireSchemaType tname = do
   cx <- getState
-  case M.lookup tname (altInferenceContextSchemaTypes cx) of
+  case M.lookup tname (altInferenceContextTypes cx) of
     Nothing -> Flows.fail $ "No such schema type: " ++ unName tname
     Just ts -> instantiateTypeScheme $ stripTypeSchemeRecursive ts
+
+typeAbstraction :: [Name] -> Term -> Term
+typeAbstraction vars body = L.foldl (\b v -> TermTypeAbstraction $ TypeAbstraction v b) body vars
+
+typeApplication :: Term -> [Type] -> Term
+typeApplication term types = L.foldl (\t ty -> TermTypeApplication $ TypedTerm t ty) term types
 
 -- | Temporarily add (term variable, type scheme) pairs to the typing environment
 withTypeBindings :: [(Name, TypeScheme)] -> Flow AltInferenceContext a -> Flow AltInferenceContext a
@@ -674,10 +790,10 @@ withTypeBindings pairs f = Flow helper
   where
     helper ctx0 t0 = FlowState e ctx3 t1
       where
-        env = altInferenceContextVariableTypes ctx0
-        ctx1 = ctx0 {altInferenceContextVariableTypes = M.union (M.fromList pairs) env}
+        env = altInferenceContextTypes ctx0
+        ctx1 = ctx0 {altInferenceContextTypes = M.union (M.fromList pairs) env}
         FlowState e ctx2 t1 = unFlow f ctx1 t0
-        ctx3 = ctx2 {altInferenceContextVariableTypes = env}
+        ctx3 = ctx2 {altInferenceContextTypes = env}
 
 unsupported = Flows.fail "Not yet supported"
-withoutConstraints scheme = AltInferenceResult scheme [] emptyTypeSubst
+withoutConstraints scheme = AltInferenceResult dummyTerm scheme [] emptyTypeSubst

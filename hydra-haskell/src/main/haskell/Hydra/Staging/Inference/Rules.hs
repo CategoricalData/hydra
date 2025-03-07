@@ -61,7 +61,7 @@ generalize env t  = TypeScheme vars t
   where
     vars = S.toList $ S.difference
       (freeVariablesInType t)
-      (L.foldr (S.union . freeVariablesInScheme) S.empty $ M.elems env)
+      (L.foldr (S.union . freeVariablesInTypeScheme) S.empty $ M.elems env)
 
 infer :: Term -> Flow Graph (Inferred Term)
 infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
