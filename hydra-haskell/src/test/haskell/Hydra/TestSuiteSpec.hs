@@ -22,10 +22,10 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-type TestRunner = TestCaseWithMetadata -> Y.Maybe H.Expectation
+type TestRunner = String -> TestCaseWithMetadata -> Y.Maybe H.Expectation
 
 defaultTestRunner :: TestRunner
-defaultTestRunner tcase = if Testing.isDisabled tcase || Testing.isDisabledForDefaultInference tcase
+defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabledForDefaultInference tcase
   then Nothing
   else Just $ case testCaseWithMetadataCase tcase of
     TestCaseCaseConversion (CaseConversionTestCase fromConvention toConvention fromString toString) -> H.shouldBe
@@ -38,24 +38,26 @@ defaultTestRunner tcase = if Testing.isDisabled tcase || Testing.isDisabledForDe
       (snd <$> inferTypeAndConstraints input)
       output
 
-runTestCase :: TestRunner -> TestCaseWithMetadata -> H.SpecWith ()
-runTestCase runner tcase@(TestCaseWithMetadata name _ mdesc _) = case runner tcase of
+runTestCase :: String -> TestRunner -> TestCaseWithMetadata -> H.SpecWith ()
+runTestCase pdesc runner tcase@(TestCaseWithMetadata name _ mdesc _) = case runner cdesc tcase of
     Nothing -> return ()
     Just e -> H.it desc e
   where
     desc = name ++ Y.maybe ("") (\d -> ": " ++ d) mdesc
+    cdesc = if L.null pdesc then desc else pdesc ++ ", " ++ desc
 
-runTestGroup :: TestRunner -> TestGroup -> H.SpecWith ()
-runTestGroup runner tg = do
+runTestGroup :: String -> TestRunner -> TestGroup -> H.SpecWith ()
+runTestGroup pdesc runner tg = do
     H.describe desc $ do
-      CM.mapM (runTestCase runner) $ testGroupCases tg
-      CM.sequence (runTestGroup runner <$> (testGroupSubgroups tg))
+      CM.mapM (runTestCase cdesc runner) $ testGroupCases tg
+      CM.sequence (runTestGroup cdesc runner <$> (testGroupSubgroups tg))
       return ()
   where
     desc = testGroupName tg ++ descSuffix
+    cdesc = if L.null pdesc then desc else pdesc ++ ", " ++ desc
     descSuffix = case testGroupDescription tg of
       Nothing -> ""
       Just d -> " (" ++ d ++ ")"
 
 spec :: H.Spec
-spec = runTestGroup defaultTestRunner allTests
+spec = runTestGroup "" defaultTestRunner allTests

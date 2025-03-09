@@ -14,6 +14,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Test.Hspec as H
 import qualified Test.HUnit.Lang as HL
+import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
@@ -26,31 +27,32 @@ import Hydra.Staging.TestGraph
 import qualified Hydra.Dsl.Testing as Testing
 
 
-_unify t1 t2 = unifyTypeConstraints [TypeConstraint t1 t2 $ Just "ctx"]
-
 initialContext = AltInferenceContext $ L.foldl M.union M.empty [primTypes, schemaTypes, varTypes]
   where
     primTypes = M.fromList $ fmap (\p -> (primitiveName p, primitiveType p)) (L.concat (libraryPrimitives <$> standardLibraries))
     schemaTypes = fromFlow M.empty testGraph $ schemaGraphToTypingEnvironment testSchemaGraph
     varTypes = M.empty
 
-expectType :: Term -> TypeScheme -> H.Expectation
-expectType term expected = shouldSucceedWith (inferTypeOf initialContext term) expected
+expectType :: String -> Term -> TypeScheme -> H.Expectation
+expectType desc term expected = shouldSucceedWith desc (inferTypeOf initialContext term) expected
 
-shouldSucceedWith :: (Eq a, Show a) => Flow () a -> a -> H.Expectation
-shouldSucceedWith f x = case my of
+shouldSucceedWith :: (Eq a, Show a) => String -> Flow () a -> a -> H.Expectation
+shouldSucceedWith desc f x = case my of
     Nothing -> HL.assertFailure $ "Error: " ++ traceSummary trace
     Just y -> y `H.shouldBe` x
   where
-    FlowState my _ trace = unFlow f () emptyTrace
+    FlowState my _ trace = unFlow f2 () emptyTrace
+    f2 = do
+      putAttr key_debugId $ Terms.string desc
+      f
 
 altInferenceTestRunner :: TestRunner
 --altInferenceTestRunner tcase = if Testing.isDisabled tcase || Testing.isDisabledForAltInference tcase
-altInferenceTestRunner tcase = if Testing.isDisabled tcase
+altInferenceTestRunner desc tcase = if Testing.isDisabled tcase
   then Nothing
   else case testCaseWithMetadataCase tcase of
-    TestCaseInference (InferenceTestCase input output) -> Just $ expectType input output
+    TestCaseInference (InferenceTestCase input output) -> Just $ expectType desc input output
     _ -> Nothing
 
 spec :: H.Spec
-spec = runTestGroup altInferenceTestRunner allTests
+spec = runTestGroup "" altInferenceTestRunner allTests

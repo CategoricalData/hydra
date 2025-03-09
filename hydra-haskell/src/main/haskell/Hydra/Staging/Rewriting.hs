@@ -124,8 +124,19 @@ flattenLetTerms = rewriteTerm flatten
             v1 -> ((LetBinding k0 v1 t), [])
       term0 -> term0
 
+-- | Same as freeVariablesInType, but ignores the binding action of "lambda types".
+freeVariablesInTypeSimple :: Type -> S.Set Name
+freeVariablesInTypeSimple = foldOverType TraversalOrderPre helper S.empty
+  where
+    helper types typ = case typ of
+      TypeVariable v -> S.insert v types
+      _ -> types
+
 freeVariablesInTypeScheme :: TypeScheme -> S.Set Name
 freeVariablesInTypeScheme (TypeScheme vars t) = S.difference (freeVariablesInType t) (S.fromList vars)
+
+freeVariablesInTypeSchemeSimple :: TypeScheme -> S.Set Name
+freeVariablesInTypeSchemeSimple (TypeScheme vars t) = S.difference (freeVariablesInTypeSimple t) (S.fromList vars)
 
 -- | Inline all type variables in a type using the provided schema.
 --   Note: this function is only appropriate for nonrecursive type definitions.
