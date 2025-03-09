@@ -294,7 +294,7 @@ testGroupForProductTerms = supergroup "Product terms" [
       expectMono 1 []
         (product [])
         (T.product [])],
-    subgroup "Non-empty, monotyped products" [
+    subgroup "Non-empty monotyped products" [
       expectMono 1 []
         (product [string "foo", int32 42])
         (T.product [T.string, T.int32]),
