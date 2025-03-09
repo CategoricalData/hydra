@@ -42,11 +42,11 @@ expectType :: Term -> TypeScheme -> H.Expectation
 expectType term ts = H.shouldReturn (snd <$> inferType term) ts
 
 algorithmWRunner :: TestRunner
-algorithmWRunner tcase = if Testing.isDisabled tcase || Testing.isDisabledForAlgorithmWInference tcase
+algorithmWRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabledForAlgorithmWInference tcase
   then Nothing
   else case testCaseWithMetadataCase tcase of
     TestCaseInference (InferenceTestCase input output) -> Just $ expectType input output
     _ -> Nothing
 
 spec :: H.Spec
-spec = runTestGroup algorithmWRunner allTests
+spec = runTestGroup "" algorithmWRunner allTests

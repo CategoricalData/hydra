@@ -166,7 +166,7 @@ letBinding n term = do
 lambdaBody :: Term -> Flow s Term
 lambdaBody term = Hydra.Core.lambdaBody <$> lambda term
 
-letTerm :: Term -> Flow s (Let)
+letTerm :: Term -> Flow s Let
 letTerm term = case fullyStripTerm term of
   TermLet lt -> pure lt
   _ -> unexpected "let term" $ show term
