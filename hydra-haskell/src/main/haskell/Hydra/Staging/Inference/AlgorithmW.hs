@@ -529,8 +529,8 @@ log0 i x = do { (l, s) <- get; put ((x'++x):l, s); }
 fresh :: E MTy
 fresh = do { (l,s) <- get; put (l, s + 1); return $ TyVar $ "v" ++ show s }
 
-inst :: TypSch -> E (MTy,[MTy])
-inst (TypSch vs ty) = do { vs' <- mapM (\_->fresh) vs; return $ (substMTy (M.fromList $ zip vs vs') ty,  vs') }
+instantiate :: TypSch -> E (MTy,[MTy])
+instantiate (TypSch vs ty) = do { vs' <- mapM (\_->fresh) vs; return $ (substMTy (M.fromList $ zip vs vs') ty,  vs') }
 
 generalize :: Ctx -> MTy -> TypSch
 generalize g t = TypSch vars t
@@ -561,6 +561,25 @@ checkAgainstF adts g t e = case (typeOf adts [] g' e) of
 
 -- | Infer the type of an expression using Algorithm W
 infer :: Int -> ADTs -> Ctx -> Expr -> M (MTy, FExpr)
+infer level adts g (ExprAbs x e) = do
+    vdom <- fresh
+    (sbody, (tbody, ebody)) <- infer (level+1) adts (M.insert x (TypSch [] vdom) g) e
+    let rExpr = FAbs x (mTyToFTy $ substMTy sbody vdom) ebody
+        rType = TyFn (substMTy sbody vdom) tbody
+    log0 level $ "ABS " ++ show (substContext sbody g) ++ "|- \\" ++ x ++ ". " ++ show rExpr ++ " : " ++ show rType
+    checkAgainstF adts (substContext sbody g) rType rExpr
+    return (sbody, (rType, rExpr))
+infer l adts g (ExprApp e0 e1) = do
+    (s0, (t0, a)) <- infer (l+1) adts g e0
+    (s1, (t1, b)) <- infer (l+1) adts (substContext s0 g) e1
+    t' <- fresh
+    s2 <-  (substMTy s1 t0) `unify` (t1 `TyFn` t')
+    let rExpr = FApp (mTySubstFExpr (composeMTySubst s2 s1) a) (mTySubstFExpr s2 b)
+        rType = substMTy s2 t'
+        rSubst = composeMTySubst s2 $ composeMTySubst s1 s0;
+    log0 l $ "APP " ++ show (substContext rSubst g) ++ "|- " ++ show rExpr ++ " : " ++  show rType
+    checkAgainstF adts (substContext rSubst g) rType rExpr
+    return (rSubst, (rType, rExpr))
 infer level adts g (ExprCase e es') = do
     t <- fresh
     bs' <- mapM (\_->fresh) es'
@@ -574,6 +593,14 @@ infer level adts g (ExprCase e es') = do
         rSubst = composeMTySubst m2 $ composeMTySubst phi' $ composeMTySubst m1 phi
     checkAgainstF adts (substContext rSubst g) rType rExpr
     return (rSubst, (rType, rExpr))
+infer level adts g (ExprConst p) = case primTy adts p of
+    Left er -> throwError er
+    Right t -> do
+      (rType, vs) <- instantiate t
+      let rExpr = fTyApp (FConst p) $ map mTyToFTy vs
+      log0 level $ "CONST " ++ show g ++ "|- " ++  show rExpr ++ " : " ++ show rType
+      checkAgainstF adts g rType rExpr
+      return (idMTySubst, (rType, rExpr))
 infer level adts g (ExprInj i j e) = do
     (s0, (t0, a)) <- infer (level+1) adts g e
     t'' <- mapM (\_->fresh) [1..j]
@@ -584,6 +611,37 @@ infer level adts g (ExprInj i j e) = do
     log0 level $ "INJ " ++ show (substContext rSubst g) ++ "|- " ++ (show rExpr) ++ " : " ++  show rType
     checkAgainstF adts (substContext rSubst g) rType rExpr
     return (rSubst, (rType, rExpr))
+infer level adts g (ExprLetrec b0 env0) = do
+    -- Fresh type variables; one per binding
+    bvars <- CM.replicateM (length b0) fresh
+
+    -- Extend the environment with temporary types for each binding
+    let g2 = M.union (M.fromList $ zip bnames $ fmap (TypSch []) bvars) g
+    -- Infer the types of the bindings
+    (s1, (tb, eb1)) <- inferMany (level+1) adts g2 eb0
+    sb <- unifyMany (fmap (substMTy s1) bvars) tb
+
+    -- Extend the environment again with the inferred types. TODO: this actually restricts the environment to the bindings. Add test cases for nested let, e.g. let x = 42 in let y = 37 in x+y
+    let g3 = M.fromList $ zip bnames $ fmap (generalize g . substMTy sb) tb
+    -- Infer the type of the let environment
+    (senv, (tenv, env1)) <- infer (level+1) adts g3 env0
+    let s2 = composeMTySubst senv $ composeMTySubst sb s1
+        eb2 = fmap (mTySubstFExpr (composeMTySubst senv sb)) eb1
+
+    let b3t = zip bnames $ fmap (generalize g . substMTy sb) tb
+    let s3 = M.fromList $ fmap (\(x, ts) -> (x, (fTyApp (FVar x) $ fmap FTyVar $ typSchVariables ts))) b3t :: FExprSubst
+        b3 = L.zipWith (\(x, ts) e ->
+               (x,
+                mTySubstFTy senv $ tyToFTy ts,
+                mTySubstFExpr (composeMTySubst sb senv) $ fTyAbs (typSchVariables ts) $ substFExpr s3 e)) b3t eb2 :: [(Var, FTy, FExpr)]
+    let let1 = FLetrec b3 env1
+
+    log0 level $ "LETREC " ++ show (substContext s2 g) ++ "|- " ++ show let1 ++ " : " ++ show tenv
+    checkAgainstF adts (substContext s2 g) tenv let1
+    return (s2, (tenv, let1))
+  where
+    bnames = fmap fst b0
+    eb0 = fmap snd b0
 infer level adts g (ExprProj i j e) = do
     (s0, (t0, a)) <- infer (level+1) adts g e
     t' <- mapM (\_->fresh) [1..j]
@@ -602,80 +660,22 @@ infer level adts g (ExprTuple es') = do
     log0 level $ "TUPLE " ++ show (substContext rSubst g) ++ "|- " ++ (show rExpr) ++ " : " ++  show rType
     checkAgainstF adts (substContext rSubst g) rType rExpr
     return (rSubst, (rType, rExpr))
-infer level adts g (ExprConst p) = case primTy adts p of
-    Left er -> throwError er
-    Right t -> do
-      (rType, vs) <- inst t
-      let rExpr = fTyApp (FConst p) $ map mTyToFTy vs
-      log0 level $ "CONST " ++ show g ++ "|- " ++  show rExpr ++ " : " ++ show rType
-      checkAgainstF adts g rType rExpr
-      return (idMTySubst, (rType, rExpr))
 infer level adts g (ExprVar x) = case M.lookup x g of
     Nothing -> throwError $ "Unknown var: " ++ (show x)
     Just s -> do
-      (rType, vs) <- inst s
+      (rType, vs) <- instantiate s
       let rExpr = fTyApp (FVar x) $ map mTyToFTy vs
       log0 level $ "VAR " ++ show g ++ "|- " ++ show rExpr ++ " : " ++ show rType
       checkAgainstF adts g rType rExpr
       return (idMTySubst, (rType, rExpr))
-infer l adts g (ExprApp e0 e1) = do
-    (s0, (t0, a)) <- infer (l+1) adts g e0
-    (s1, (t1, b)) <- infer (l+1) adts (substContext s0 g) e1
-    t' <- fresh
-    s2 <-  (substMTy s1 t0) `unify` (t1 `TyFn` t')
-    let rExpr = FApp (mTySubstFExpr (composeMTySubst s2 s1) a) (mTySubstFExpr s2 b)
-        rType = substMTy s2 t'
-        rSubst = composeMTySubst s2 $ composeMTySubst s1 s0;
-    log0 l $ "APP " ++ show (substContext rSubst g) ++ "|- " ++ show rExpr ++ " : " ++  show rType
-    checkAgainstF adts (substContext rSubst g) rType rExpr
-    return (rSubst, (rType, rExpr))
-infer level adts g (ExprAbs x e) = do
-    t  <- fresh
-    (rSubst, (t', a)) <- infer (level+1) adts (M.insert x (TypSch [] t) g) e
-    let rExpr = FAbs x (mTyToFTy $ substMTy rSubst t) a
-        rType = TyFn (substMTy rSubst t) t'
-    log0 level $ "ABS " ++ show (substContext rSubst g) ++ "|- \\" ++ x ++ ". " ++ show rExpr ++ " : " ++ show rType
-    checkAgainstF adts (substContext rSubst g) rType rExpr
-    return (rSubst, (rType, rExpr))
-infer level adts g (ExprLetrec b0 env0) = do
-    -- Fresh type variables; one per binding
-    bvars <- CM.replicateM (length b0) fresh
-
-    -- Extend the environment with temporary types for each binding
-    let g1 = M.union (M.fromList $ zip bnames $ fmap (TypSch []) bvars) g
-    -- Infer the types of the bindings
-    (s1, (tb, eb1)) <- inferMany (level+1) adts g1 eb0
-    sb <- unifyMany (fmap (substMTy s1) bvars) tb
-
-    -- Extend the environment again with the inferred types. TODO: this actually restricts the environment to the bindings. Add test cases for nested let, e.g. let x = 42 in let y = 37 in x+y
-    let g2 = M.fromList $ zip bnames $ fmap (generalize g . substMTy sb) tb
-    -- Infer the type of the let environment
-    (senv, (tenv, env1)) <- infer (level+1) adts g2 env0
-    let s2 = composeMTySubst senv $ composeMTySubst sb s1
-        eb2 = fmap (mTySubstFExpr (composeMTySubst senv sb)) eb1
-
-    let b3t = zip bnames $ fmap (generalize g . substMTy sb) tb
-    let s3 = M.fromList $ fmap (\(x, ts) -> (x, (fTyApp (FVar x) $ fmap FTyVar $ typSchVariables ts))) b3t :: FExprSubst
-        b3 = L.zipWith (\(x, ts) e ->
-               (x,
-                mTySubstFTy senv $ tyToFTy ts,
-                mTySubstFExpr (composeMTySubst sb senv) $ fTyAbs (typSchVariables ts) $ substFExpr s3 e)) b3t eb2 :: [(Var, FTy, FExpr)]
-    let let1 = FLetrec b3 env1
-
-    log0 level $ "LETREC " ++ show (substContext s2 g) ++ "|- " ++ show let1 ++ " : " ++ show tenv
-    checkAgainstF adts (substContext s2 g) tenv let1
-    return (s2, (tenv, let1))
-  where
-    bnames = fmap fst b0
-    eb0 = fmap snd b0
 
 inferMany :: Int -> ADTs -> Ctx -> [Expr] -> M ([MTy], [FExpr])
 inferMany level adts g es = case es of
   [] -> return (idMTySubst, ([], []))
   (e:tl) -> do
-    (u,(u', j)) <- infer level adts g e
-    (r,(r', h)) <- inferMany level adts (substContext u g) tl
-    return (composeMTySubst r u, ((substMTy r u'):r', (mTySubstFExpr r j):h))
+    (s1, (t1, e1)) <- infer level adts g e
+    (s2, (t2, e2)) <- inferMany level adts (substContext s1 g) tl
+    return (composeMTySubst s2 s1, ((substMTy s2 t1):t2, (mTySubstFExpr s2 e1):e2))
 
 ----------------------------------------
 -- Main
