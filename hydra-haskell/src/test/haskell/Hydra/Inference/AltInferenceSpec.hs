@@ -27,7 +27,8 @@ import Hydra.Staging.TestGraph
 import qualified Hydra.Dsl.Testing as Testing
 
 
-initialContext = AltInferenceContext $ L.foldl M.union M.empty [primTypes, schemaTypes, varTypes]
+initialContext :: AltInferenceContext
+initialContext = AltInferenceContext schemaTypes primTypes varTypes
   where
     primTypes = M.fromList $ fmap (\p -> (primitiveName p, primitiveType p)) (L.concat (libraryPrimitives <$> standardLibraries))
     schemaTypes = fromFlow M.empty testGraph $ schemaGraphToTypingEnvironment testSchemaGraph
