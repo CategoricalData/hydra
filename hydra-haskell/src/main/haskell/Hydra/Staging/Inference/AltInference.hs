@@ -437,7 +437,7 @@ inferMany cx terms = case terms of
     return (
       (substTypesInTerm s2 e1):e2,
       (substInType s2 $ typeSchemeType t1):t2,
-      composeTypeSubst s2 s1)
+      composeTypeSubst s1 s2)
 -- TODO: restore the simpler and more efficient parallel implementation (no substInContext) if it does not impact correctness
 --inferMany cx terms = Flows.map withResults $ Flows.sequence $ fmap (inferTypeOfTerm cx) terms
 --  where
@@ -453,14 +453,10 @@ inferTypeOf cx term = bindInferredTerm cx letTerm unifyAndSubst
     unifyAndSubst result = do
         (Let bindings _) <- Expect.letTerm $ altInferenceResultTerm result
         case bindings of
-          [LetBinding _ _ (Just ts)] -> Flows.map (doSubst ts) (unifyTypeConstraints $ altInferenceResultConstraints result)
+          [LetBinding _ _ (Just ts)] -> return $ normalizeVariablesInTypeScheme $ substInTypeScheme subst ts
           _ -> Flows.fail $ "Expected a single binding with a type scheme, but got: " ++ show bindings
       where
-        subst1 = altInferenceResultSubst result
-        -- TODO: get rid of subst2 along with passed constraints
-        doSubst ts subst2 = normalizeVariablesInTypeScheme $ substInTypeScheme subst ts
-          where
-            subst = composeTypeSubst subst1 subst2
+        subst = altInferenceResultSubst result
 
 inferTypeOfAnnotatedTerm :: AltInferenceContext -> AnnotatedTerm -> Flow s AltInferenceResult
 inferTypeOfAnnotatedTerm cx (AnnotatedTerm term _) = inferTypeOfTerm cx term
@@ -477,9 +473,9 @@ inferTypeOfApplication cx (Application e0 e1) = bindInferredTerm cx e0 withLhs
               where
                 withSubst s2 = AltInferenceResult rExpr (Types.mono rType) [] rSubst
                   where
-                    rExpr = Terms.apply (substTypesInTerm (composeTypeSubst s2 s1) a) (substTypesInTerm s2 b)
+                    rExpr = Terms.apply (substTypesInTerm (composeTypeSubst s1 s2) a) (substTypesInTerm s2 b)
                     rType = substInType s2 $ TypeVariable v
-                    rSubst = composeTypeSubstList [s2, s1, s0]
+                    rSubst = composeTypeSubstList [s0, s1, s2]
 
 inferTypeOfCaseStatement :: AltInferenceContext -> CaseStatement -> Flow s AltInferenceResult
 inferTypeOfCaseStatement cx (CaseStatement tname dflt cases) = Flows.bind (requireSchemaType cx tname) withSchemaType
@@ -522,7 +518,7 @@ inferTypeOfCollection cx typCons trmCons desc els = bindVar withVar
 --                    ++ "\n\tsubst2: " ++ show subst2
 --                    ++ "\n\tsubst: " ++ show subst
 
-                return $ yield (trmCons terms) (typCons $ TypeVariable var) $ composeTypeSubst subst2 subst1
+                return $ yield (trmCons terms) (typCons $ TypeVariable var) $ composeTypeSubst subst1 subst2
 
 inferTypeOfElimination :: AltInferenceContext -> Elimination -> Flow s AltInferenceResult
 inferTypeOfElimination cx elm = case elm of
@@ -590,8 +586,7 @@ inferTypeOfLet cx (Let b0 env0) = bindVars (L.length b0) withVars
           where
             withSubst sb = Flows.bind (inferTypeOfTerm cx3 env0) withEnv
               where
---                cx3 = extendContext (L.zip bnames $ fmap (generalize cx . substInType sb) tb) cx2 -- TODO: restore me; this is probably more correct. Add test cases for nested let, e.g. let x = 42 in let y = 37 in x+y
-                cx3 = AltInferenceContext $ M.fromList $ L.zip bnames $ fmap (generalize cx . substInType sb) tb
+                cx3 = extendContext (L.zip bnames $ fmap (generalize cx . substInType sb) tb) cx2
                 withEnv tmp@(AltInferenceResult env1 tenv _ senv) = do
 
 --                    if (TermFunction $ FunctionLambda tmp) == (Terms.lambda "v" $ Terms.wrap (Name "StringTypeAlias") $ Terms.var "v")
@@ -606,13 +601,12 @@ inferTypeOfLet cx (Let b0 env0) = bindVars (L.length b0) withVars
 
                     return $ AltInferenceResult let1 tenv [] s2
                   where
-                    s2 = composeTypeSubstList [senv, sb, s1]
-                    eb2 = fmap (substTypesInTerm $ composeTypeSubst senv sb) eb1
+                    s2 = composeTypeSubstList [s1, sb, senv]
+                    eb2 = fmap (substTypesInTerm $ composeTypeSubst sb senv) eb1
                     b3t = L.zip bnames $ fmap (generalize cx . substInType sb) tb
---                    b3t = L.zip bnames $ fmap (generalize cx . substInType s2) tb
                     s3 = TermSubst $ M.fromList $ fmap (\(x, ts) -> (x, (typeApplication (TermVariable x) $ fmap TypeVariable $ typeSchemeVariables ts))) b3t
                     b3 = L.zipWith (\(x, ts) e -> LetBinding x
-                      (substTypesInTerm (composeTypeSubst sb senv) $ typeAbstraction (typeSchemeVariables ts) $ substituteInTerm s3 e)
+                      (substTypesInTerm (composeTypeSubst senv sb) $ typeAbstraction (typeSchemeVariables ts) $ substituteInTerm s3 e)
                       (Just $ substInTypeScheme senv ts)) b3t eb2
                     let1 = TermLet $ Let b3 env1
 
