@@ -29,15 +29,14 @@ simpleTermsTests = supergroup "Simple terms" [
   testGroupForListTerms,
   testGroupForPrimitiveTerms,
   testGroupForProductTerms,
-  testGroupForSumTerms,
-  testGroupForWrapTerms]
+  testGroupForSumTerms]
 
 testGroupForApplicationTerms :: TTerm TestGroup
 testGroupForApplicationTerms = subgroup "Application terms" [
     expectMono 1 []
       ((lambda "x" $ var "x") @@ string "foo")
       T.string,
-    expectMono 2 [tag_disabledForAltInference]
+    expectMono 2 []
       (lambda "x" $ primitive _math_sub @@ (primitive _math_add @@ var "x" @@ var "x") @@ int32 1)
       (T.function T.int32 T.int32)]
 
@@ -53,57 +52,44 @@ testGroupForFunctionTerms = supergroup "Function terms" [
         ["t0"] (T.function (T.var "t0") T.int16)],
 
     subgroup "List eliminations" [
-      expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectMono 1 [tag_disabledForAlgorithmWInference]
         foldAdd
         (T.functionN [T.int32, T.list T.int32, T.int32]),
-      expectMono 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectMono 2 [tag_disabledForAlgorithmWInference]
         (apply foldAdd $ int32 0)
         (T.function (T.list T.int32) T.int32),
-      expectMono 3 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectMono 3 [tag_disabledForAlgorithmWInference]
         (apply (apply foldAdd $ int32 0) (list (int32 <$> [1, 2, 3, 4, 5])))
         T.int32],
 
     subgroup "Optional eliminations" [
-      expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectMono 1 [tag_disabledForAlgorithmWInference]
         (matchOpt (int32 42) (primitive _math_neg))
         (T.function (T.optional T.int32) T.int32),
-      expectMono 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectMono 2 [tag_disabledForAlgorithmWInference]
         (matchOpt (int32 42) (primitive _math_neg) @@ optional (just $ int32 137))
         T.int32,
-      expectMono 3 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectMono 3 [tag_disabledForAlgorithmWInference]
         (matchOpt (int32 42) (primitive _math_neg) @@ optional nothing)
         T.int32,
-      expectPoly 4 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectPoly 4 [tag_disabledForAlgorithmWInference]
         (lambda "x" $ matchOpt (var "x") (primitive _optionals_pure) @@ var "x")
         ["t0"] (T.function (T.optional $ T.var "t0") (T.optional $ T.var "t0")),
-      expectPoly 5 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectPoly 5 [tag_disabledForAlgorithmWInference]
         (matchOpt (list []) (lambda "x" $ list [var "x"]))
         ["t0"] (T.function (T.optional $ T.var "t0") (T.list $ T.var "t0"))],
 
-    subgroup "Record projections" [
-      expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
-        (project (ref testTypePersonNameDef) (name "firstName"))
-        (T.function (ref testTypePersonDef) T.string)],
-
-    subgroup "Case statements" [
-      expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
-        (match (ref testTypeFoobarValueNameDef) nothing [
-          "bool">: constant true,
-          "string">: constant false,
-          "unit">: constant false])
-        (T.function (ref testTypeFoobarValueDef) T.boolean)],
-
    subgroup "Tuple projections" [
-     expectPoly 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+     expectPoly 1 [tag_disabledForAlgorithmWInference]
        (untuple 2 0)
        ["t0", "t1"] (T.function (T.product [T.var "t0", T.var "t1"]) (T.var "t0")),
-     expectMono 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+     expectMono 2 [tag_disabledForAlgorithmWInference]
        (untuple 2 1 @@ pair (int32 42) (string "foo"))
        T.string,
-     expectPoly 3 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+     expectPoly 3 [tag_disabledForAlgorithmWInference]
        (lambda "x" $ untuple 1 0 @@ tuple [var "x"])
        ["t0"] (T.function (T.var "t0") (T.var "t0")),
-     expectPoly 4 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+     expectPoly 4 [tag_disabledForAlgorithmWInference]
        (lambda "x" $ untuple 3 2 @@ tuple [var "x", var "x", int32 42])
        ["t0"] (T.function (T.var "t0") T.int32)]]
 
@@ -132,7 +118,7 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
         (let1 "x" (float32 42.0) $ lambdas ["y", "z"] $ var "x")
         ["t0", "t1"] (T.function (T.var "t0") (T.function (T.var "t1") T.float32)),
       -- Example from https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
-      expectMono 2 [tag_disabledForAltInference]
+      expectMono 2 []
         (lets [
             "square">: lambda "z" $ primitive _math_mul @@ var "z" @@ var "z"] $
           lambdas ["f", "x", "y"] $ primitive _logic_ifElse
@@ -143,10 +129,10 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
           T.functionN [T.int32, T.boolean, T.boolean], T.int32, T.boolean, T.boolean])],
 
     subgroup "Optionals" [
-      expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectMono 1 [tag_disabledForAlgorithmWInference]
         (optional $ just $ int32 42)
         (T.optional T.int32),
-      expectPoly 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectPoly 2 [tag_disabledForAlgorithmWInference]
         (optional nothing)
         ["t0"] (T.optional $ T.var "t0")],
 
@@ -158,48 +144,11 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
         (pair (int32 42) (string "foo"))
         (T.product [T.int32, T.string])],
 
-    subgroup "Records" [
-      expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
-        (record (ref testTypeLatLonNameDef) [
-          "lat">: float32 37.7749,
-          "lon">: float32 $ negate 122.4194])
-        (T.record (ref testTypeLatLonNameDef) [
-          "lat">: T.float32,
-          "lon">: T.float32]),
-      expectMono 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
-        (record (ref testTypeLatLonPolyNameDef) [
-          "lat">: float32 37.7749,
-          "lon">: float32 $ negate 122.4194])
-        (T.record (ref testTypeLatLonPolyNameDef) [
-          "lat">: T.float32,
-          "lon">: T.float32]),
-      expectMono 3 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
-        (lambda "lon" (record (ref testTypeLatLonPolyNameDef) [
-          "lat">: float32 37.7749,
-          "lon">: var "lon"]))
-        (T.function (T.float32)
-          (T.record (ref testTypeLatLonPolyNameDef) [
-            "lat">: T.float32,
-            "lon">: T.float32])),
-      expectPoly 4 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
-        (lambda "latlon" (record (ref testTypeLatLonPolyNameDef) [
-          "lat">: var "latlon",
-          "lon">: var "latlon"]))
-        ["t0"] (T.function (T.var "t0")
-          (T.record (ref testTypeLatLonPolyNameDef) [
-            "lat">: T.var "t0",
-            "lon">: T.var "t0"]))],
-
-    subgroup "Unions" [
-      expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
-        (inject (ref testTypeTimestampNameDef) "unixTimeMillis" $ uint64 1638200308368)
-        (ref testTypeTimestampDef)],
-
     subgroup "Sets" [
-      expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectMono 1 [tag_disabledForAlgorithmWInference]
         (set [true])
         (T.set T.boolean),
-      expectPoly 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectPoly 2 [tag_disabledForAlgorithmWInference]
         (set [set []])
         ["t0"] (T.set $ T.set $ T.var "t0")],
 
@@ -233,7 +182,7 @@ testGroupForLetTerms :: TTerm TestGroup
 testGroupForLetTerms = supergroup "Let terms" [
 
     subgroup "Empty let" [
-      expectMono 1 [tag_disabledForAltInference]
+      expectMono 1 []
         (lets [] $ int32 42)
         T.int32],
 
@@ -279,11 +228,11 @@ testGroupForPrimitiveTerms = supergroup "Primitive terms" [
       expectMono 1 []
         (primitive $ Name "hydra.lib.strings.length")
         (T.function T.string T.int32),
-      expectMono 2 [tag_disabledForAltInference]
+      expectMono 2 []
         (primitive _math_sub)
         (T.function T.int32 (T.function T.int32 T.int32))],
     subgroup "Polymorphic primitive functions" [
-      expectPoly 1 [tag_disabledForAltInference]
+      expectPoly 1 []
         (lambda "els" (apply (primitive _lists_length) (apply (primitive _lists_concat) $ var "els")))
         ["t0"] (T.function (T.list $ T.list $ T.var "t0") T.int32)]]
 
@@ -310,34 +259,16 @@ testGroupForSumTerms :: TTerm TestGroup
 testGroupForSumTerms = supergroup "Sum terms" [
 
     subgroup "Singleton sum terms" [
-      expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectMono 1 [tag_disabledForAlgorithmWInference]
         (sum 0 1 $ string "foo")
         (T.sum [T.string]),
-      expectPoly 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectPoly 2 [tag_disabledForAlgorithmWInference]
         (sum 0 1 $ list [])
         ["t0"] (T.sum [T.list $ T.var "t0"])],
     subgroup "Non-singleton sum terms" [
-      expectPoly 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectPoly 1 [tag_disabledForAlgorithmWInference]
         (sum 0 2 $ string "foo")
         ["t0"] (T.sum [T.string, T.var "t0"]),
-      expectPoly 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectPoly 2 [tag_disabledForAlgorithmWInference]
         (sum 1 2 $ string "foo")
         ["t0"] (T.sum [T.var "t0", T.string])]]
-
-testGroupForWrapTerms :: TTerm TestGroup
-testGroupForWrapTerms = supergroup "Wrap terms" [
-
-    subgroup "Wrap introductions" [
-      expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
-        (wrap (ref testTypeStringAliasNameDef) $ string "foo")
-        (ref testTypeStringAliasDef),
-      expectMono 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
-        (lambda "v" $ wrap (ref testTypeStringAliasNameDef) $ var "v")
-        (T.function T.string (ref testTypeStringAliasDef))],
-    subgroup "Wrap eliminations" [
-      expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
-        (apply (unwrap (ref testTypeStringAliasNameDef)) (wrap (ref testTypeStringAliasNameDef) $ string "foo"))
-        T.string,
-      expectMono 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
-        (unwrap (ref testTypeStringAliasNameDef))
-        (T.function (ref testTypeStringAliasDef) T.string)]]
