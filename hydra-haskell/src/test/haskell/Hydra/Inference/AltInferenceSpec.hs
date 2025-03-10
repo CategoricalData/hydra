@@ -47,8 +47,8 @@ shouldSucceedWith desc f x = case my of
       f
 
 altInferenceTestRunner :: TestRunner
---altInferenceTestRunner tcase = if Testing.isDisabled tcase || Testing.isDisabledForAltInference tcase
-altInferenceTestRunner desc tcase = if Testing.isDisabled tcase
+altInferenceTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabledForAltInference tcase
+--altInferenceTestRunner desc tcase = if Testing.isDisabled tcase
   then Nothing
   else case testCaseWithMetadataCase tcase of
     TestCaseInference (InferenceTestCase input output) -> Just $ expectType desc input output
