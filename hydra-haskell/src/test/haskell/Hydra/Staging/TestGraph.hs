@@ -26,7 +26,6 @@ testSchemaGraph = elementsToGraph hydraCoreGraph (Just hydraCoreGraph) [
     def testTypeBuddyListAName testTypeBuddyListA,
     def testTypeBuddyListBName testTypeBuddyListB,
     def testTypeComparisonName testTypeComparison,
-    def testTypeFoobarValueName testTypeFoobarValue,
     def testTypeIntListName testTypeIntList,
     def testTypeHydraLiteralTypeName testTypeHydraLiteralType,
     def testTypeHydraTypeName testTypeHydraType,

@@ -34,7 +34,7 @@ testGroupForCaseStatements = subgroup "Case statements" [
       (match (ref testTypeSimpleNumberNameDef) nothing [
         "int">: lambda "x" $ var "x",
         "float">: lambda "x" $ int32 42])
-      (T.function (T.var "t0") T.int32),
+      (T.function (Core.typeVariable $ ref testTypeSimpleNumberNameDef) T.int32),
     expectMono 2 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
       (match (ref testTypeUnionMonomorphicNameDef) nothing [
         "bool">: constant true,
@@ -63,11 +63,11 @@ testGroupForRecords = supergroup "Records" [
           "lat">: float32 37.7749,
           "lon">: float32 $ negate 122.4194])
         (T.apply (Core.typeVariable (ref testTypeLatLonPolyNameDef)) T.float32),
-      expectPoly 3 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectMono 3 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
         (lambda "lon" (record (ref testTypeLatLonPolyNameDef) [
           "lat">: float32 37.7749,
           "lon">: var "lon"]))
-        ["t0"] (T.function T.float32 (T.apply (Core.typeVariable (ref testTypeLatLonPolyNameDef)) T.float32)),
+        (T.function T.float32 (T.apply (Core.typeVariable (ref testTypeLatLonPolyNameDef)) T.float32)),
       expectPoly 4 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
         (lambda "latlon" (record (ref testTypeLatLonPolyNameDef) [
           "lat">: var "latlon",
