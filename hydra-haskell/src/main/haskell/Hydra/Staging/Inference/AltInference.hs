@@ -319,7 +319,8 @@ substituteInTerm (TermSubst s) = rewriteTerm rewrite
       _ -> recurse term
 
 substInContext :: TypeSubst -> AltInferenceContext -> AltInferenceContext
-substInContext subst (AltInferenceContext types) = AltInferenceContext $ fmap (substInTypeScheme subst) types
+substInContext subst cx = cx {
+  altInferenceContextDataTypes = fmap (substInTypeScheme subst) $ altInferenceContextDataTypes cx}
 
 substInType :: TypeSubst -> Type -> Type
 substInType subst = rewriteType rewrite
@@ -398,7 +399,14 @@ substTypesInTerm subst = rewriteTerm rewrite
 
 data AltInferenceContext
   = AltInferenceContext {
-    altInferenceContextTypes :: M.Map Name TypeScheme}
+    -- | A fixed typing environment which is derived from the schema of the graph.
+    altInferenceContextSchemaTypes :: M.Map Name TypeScheme,
+    -- | A fixed typing environment which is derived from the set of primitives in the graph.
+    altInferenceContextPrimitiveTypes :: M.Map Name TypeScheme,
+    -- | A mutable typing environment which is specific to the current graph being processed.
+    --   This environment is (usually) smaller than the schema and primitive typing environments,
+    --   and is subject to global substitutions.
+    altInferenceContextDataTypes :: M.Map Name TypeScheme}
   deriving (Eq, Ord, Show)
 
 data AltInferenceResult
@@ -419,14 +427,15 @@ dummyTerm :: Term
 dummyTerm = TermLiteral $ LiteralString "dummy"
 
 freeVariablesInContext :: AltInferenceContext -> S.Set Name
-freeVariablesInContext cx = L.foldl S.union S.empty $ fmap freeVariablesInTypeSchemeSimple $ M.elems $ altInferenceContextTypes cx
+freeVariablesInContext cx = L.foldl S.union S.empty $ fmap freeVariablesInTypeSchemeSimple $ M.elems $ altInferenceContextDataTypes cx
 
 -- | Warning: this is an expensive operation (linear with respect to the size of the graph and schema graph)
 generalize :: AltInferenceContext -> Type -> TypeScheme
 generalize cx typ = TypeScheme vars typ
   where
     vars = L.nub $ L.filter isUnbound $ S.toList $ freeVariablesInType typ
-    isUnbound v = not $ S.member v $ freeVariablesInContext cx
+    isUnbound v = not (S.member v $ freeVariablesInContext cx)
+      && not (M.member v $ altInferenceContextSchemaTypes cx)
 
 inferMany :: AltInferenceContext -> [Term] -> Flow s ([Term], [Type], TypeSubst)
 inferMany cx terms = case terms of
@@ -661,7 +670,7 @@ inferTypeOfOptionalCases cx (OptionalCases n j) = bindVar2 withVars
                 (composeTypeSubstList [altInferenceResultSubst nresult, altInferenceResultSubst jresult, subst])
 
 inferTypeOfPrimitive :: AltInferenceContext -> Name -> Flow s AltInferenceResult
-inferTypeOfPrimitive cx name = case M.lookup name (altInferenceContextTypes cx) of
+inferTypeOfPrimitive cx name = case M.lookup name (altInferenceContextPrimitiveTypes cx) of
     Nothing -> Flows.fail $ "No such primitive: " ++ unName name
     -- TODO: check against algo W implementation
     Just scheme -> Flows.map withScheme $ instantiateTypeScheme scheme
@@ -758,7 +767,7 @@ inferTypeOfUnwrap cx tname = Flows.bind (requireSchemaType cx tname) withSchemaT
           emptyTypeSubst
 
 inferTypeOfVariable :: AltInferenceContext -> Name -> Flow s AltInferenceResult
-inferTypeOfVariable cx name = case M.lookup name (altInferenceContextTypes cx) of
+inferTypeOfVariable cx name = case M.lookup name (altInferenceContextDataTypes cx) of
     Nothing -> Flows.fail $ "Variable not bound to type: " ++ unName name
     Just scheme -> Flows.map withTypeScheme $ instantiateTypeScheme scheme
   where
@@ -770,8 +779,9 @@ inferTypeOfVariable cx name = case M.lookup name (altInferenceContextTypes cx) o
 inferTypeOfWrappedTerm :: AltInferenceContext -> WrappedTerm -> Flow s AltInferenceResult
 inferTypeOfWrappedTerm cx (WrappedTerm tname term) = bind2 (requireSchemaType cx tname) (inferTypeOfTerm cx term) withResult
   where
-    withResult (TypeScheme _ styp) (AltInferenceResult iterm (TypeScheme _ ityp) icons isubst) = mapConstraints withSubst [
-        TypeConstraint styp (TypeWrap $ WrappedType tname ityp) $ Just "schema type of wrapper"]
+    withResult (TypeScheme svars styp) (AltInferenceResult iterm (TypeScheme _ ityp) icons isubst)
+        = mapConstraints withSubst [
+          TypeConstraint styp (TypeWrap $ WrappedType tname ityp) $ Just "schema type of wrapper"]
       where
         withSubst subst = yield (Terms.wrap tname iterm) styp (composeTypeSubst isubst subst)
 
@@ -843,7 +853,7 @@ maybeToList mx = case mx of
   Nothing -> []
 
 requireSchemaType :: AltInferenceContext -> Name -> Flow s TypeScheme
-requireSchemaType cx tname = case M.lookup tname (altInferenceContextTypes cx) of
+requireSchemaType cx tname = case M.lookup tname (altInferenceContextSchemaTypes cx) of
     Nothing -> Flows.fail $ "No such schema type: " ++ unName tname
     Just ts -> instantiateTypeScheme $ stripTypeSchemeRecursive ts
 
@@ -855,7 +865,28 @@ typeApplication term types = L.foldl (\t ty -> TermTypeApplication $ TypedTerm t
 
 -- | Add (term variable, type scheme) pairs to the typing environment
 extendContext :: [(Name, TypeScheme)] -> AltInferenceContext -> AltInferenceContext
-extendContext pairs cx = cx {altInferenceContextTypes = M.union (M.fromList pairs) $ altInferenceContextTypes cx}
+extendContext pairs cx = cx {altInferenceContextDataTypes = M.union (M.fromList pairs) $ altInferenceContextDataTypes cx}
 
 yield :: Term -> Type -> TypeSubst -> AltInferenceResult
 yield term typ subst = AltInferenceResult (substTypesInTerm subst term) (Types.mono $ substInType subst typ) [] subst
+
+yieldDebug :: AltInferenceContext -> Term -> Type -> TypeSubst -> String -> Flow s AltInferenceResult
+yieldDebug cx term typ subst debugId = do
+
+--    Flows.fail $ "env: " ++ show (fmap unName $ M.keys $ altInferenceContextTypes cx)
+
+    debug debugId $ ""
+        ++ "\n\tterm: " ++ showTerm term
+        ++ "\n\ttyp: " ++ showType typ
+        ++ "\n\tsubst: " ++ show subst
+        ++ "\n\trterm: " ++ showTerm rterm
+        ++ "\n\trtyp: " ++ showType rtyp
+
+    return $ AltInferenceResult
+      rterm
+      (Types.mono rtyp)
+      []
+      subst
+  where
+    rterm = substTypesInTerm subst term
+    rtyp = substInType subst typ
