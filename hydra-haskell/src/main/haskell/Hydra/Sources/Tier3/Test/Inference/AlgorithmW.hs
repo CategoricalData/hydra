@@ -113,7 +113,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --		in (+ (S (S 0)) (S 0))
 --  --System F type:
 --  -- 	Nat
-    expectMono 7 [tag_disabledForDefaultInference, tag_disabledForAltInference]
+    expectMono 7 [tag_disabledForDefaultInference]
       (lets [
         "+" >: lambdas ["x", "y"] (primSucc @@ (var "+" @@ (primPred @@ var "x") @@ var "y"))]
         $ var "+" @@ (primSucc @@ (primSucc @@ int32 0)) @@ (primSucc @@ int32 0))
@@ -124,7 +124,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --		in f
 --  --System F type:
 --  -- 	(Nat -> (Nat -> v5))
-    expectPoly 9 [tag_disabledForDefaultInference, tag_disabledForAltInference]
+    expectPoly 9 [tag_disabledForDefaultInference]
       (lets [
         "f" >: lambdas ["x", "y"] (var "f" @@ int32 0 @@ var "x")]
         $ var "f")
@@ -136,7 +136,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 ----		in (pair f g)
 ----Type inferred by Hindley-Milner:
 ----	((Int32 -> (Int32 -> v12)) * (Int32 -> (Int32 -> v14)))
-    expectPoly 10 [tag_disabledForDefaultInference, tag_disabledForAltInference]
+    expectPoly 10 [tag_disabledForDefaultInference]
       (lets [
         "f">: lambdas ["x", "y"] (var "f" @@ int32 0 @@ var "x"),
         "g">: lambda "xx" $ lambda "yy" (var "g" @@ int32 0 @@ var "xx")]
@@ -151,7 +151,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --		in (pair f g)
 --  --System F type:
 --  -- 	((v12 -> (Nat -> v13)) * (Nat -> (v15 -> v16)))
-    expectPoly 11 [tag_disabledForDefaultInference, tag_disabledForAltInference]
+    expectPoly 11 [tag_disabledForDefaultInference]
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
         "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
@@ -166,7 +166,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --		in (pair f g)
 --  --System F type:
 --  -- 	((Nat -> (Nat -> v12)) * (Nat -> (Nat -> v14)))
-    expectPoly 12 [tag_disabledForDefaultInference, tag_disabledForAltInference]
+    expectPoly 12 [tag_disabledForDefaultInference]
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ int32 0),
         "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
@@ -181,7 +181,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --		in (pair f g)
 --  --System F type:
 --  -- 	((Nat -> (Nat -> v12)) * (Nat -> (Nat -> v14)))
-    expectPoly 13 [tag_disabledForDefaultInference, tag_disabledForAltInference]
+    expectPoly 13 [tag_disabledForDefaultInference]
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
         "g">: lambda "u" $ lambda "v" (var "f" @@ int32 0 @@ int32 0)]

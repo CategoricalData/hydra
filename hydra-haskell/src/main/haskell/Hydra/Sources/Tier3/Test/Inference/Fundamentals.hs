@@ -46,7 +46,7 @@ testGroupForLet = supergroup "Let" [
         (let1 "x" (float32 42.0) (lambda "y" (lambda "z" (var "x"))))
         ["t0", "t1"] (T.function (T.var "t0") (T.function (T.var "t1") T.float32))],
     subgroup "Empty let" [
-      expectMono 1 [tag_disabledForAltInference]
+      expectMono 1 []
         (lets [] $ int32 42)
         T.int32],
     subgroup "Trivial let" [
@@ -56,7 +56,7 @@ testGroupForLet = supergroup "Let" [
           $ var "foo")
         T.int32],
     subgroup "Multiple references to a let-bound term" [
-      expectMono 1 [tag_disabledForAltInference]
+      expectMono 1 []
         (lets [
           "foo">: int32 42,
           "bar">: int32 137]
@@ -193,10 +193,10 @@ testGroupForPolymorphism = supergroup "Polymorphism" [
       expectPoly 1 []
         (list [])
         ["t0"] (T.list (T.var "t0")),
-      expectPoly 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectPoly 2 [tag_disabledForAlgorithmWInference]
         (optional nothing)
         ["t0"] (T.optional (T.var "t0")),
-      expectMono 3 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectMono 3 [tag_disabledForAlgorithmWInference]
         (optional $ just $ int32 42)
         (T.optional T.int32)],
 
@@ -223,23 +223,23 @@ testGroupForPolymorphism = supergroup "Polymorphism" [
         T.string],
 
     subgroup "Primitives and application" [
-      expectMono 1 [tag_disabledForAltInference]
+      expectMono 1 []
         (primitive _lists_concat @@ list [list [int32 42], list []])
         (T.list T.int32)],
 
     subgroup "Lambdas and primitives" [
-      expectMono 1 [tag_disabledForAltInference]
+      expectMono 1 []
         (primitive _math_add)
         (T.functionN [T.int32, T.int32, T.int32]),
-      expectMono 2 [tag_disabledForAltInference]
+      expectMono 2 []
         (lambda "x" (primitive _math_add @@ var "x"))
         (T.functionN [T.int32, T.int32, T.int32]),
-      expectMono 3 [tag_disabledForAltInference]
+      expectMono 3 []
         (lambda "x" (primitive _math_add @@ var "x" @@ var "x"))
         (T.function T.int32 T.int32)],
 
     subgroup "Mixed expressions with lambdas, constants, and primitive functions" [
-      expectMono 1 [tag_disabledForAltInference]
+      expectMono 1 []
         (lambda "x" $ (primitive _math_sub @@ (primitive _math_add @@ var "x" @@ var "x") @@ int32 1))
         (T.function T.int32 T.int32)]]
 
@@ -247,37 +247,37 @@ testGroupForPrimitives :: TTerm TestGroup
 testGroupForPrimitives = supergroup "Primitives" [
 
     subgroup "Monomorphic primitive functions" [
-      expectMono 1 [tag_disabledForAltInference]
+      expectMono 1 []
         (primitive $ _strings_length)
         (T.function T.string T.int32),
-      expectMono 2 [tag_disabledForAltInference]
+      expectMono 2 []
         (primitive _math_sub)
         (T.functionN [T.int32, T.int32, T.int32])],
 
     subgroup "Polymorphic primitive functions" [
-      expectPoly 1 [tag_disabledForAltInference]
+      expectPoly 1 []
         (lambda "el" (primitive _lists_length @@ (list [var "el"])))
         ["t0"] (T.function (T.var "t0") T.int32),
-      expectMono 2 [tag_disabledForAltInference]
+      expectMono 2 []
         (lambda "el" (primitive _lists_length @@ (list [int32 42, var "el"])))
         (T.function T.int32 T.int32),
-      expectPoly 3 [tag_disabledForAltInference]
+      expectPoly 3 []
         (primitive _lists_concat)
         ["t0"] (T.function (T.list $ T.list $ T.var "t0") (T.list $ T.var "t0")),
-      expectPoly 4 [tag_disabledForAltInference]
+      expectPoly 4 []
         (lambda "lists" (primitive _lists_concat @@ var "lists"))
         ["t0"] (T.function (T.list $ T.list $ T.var "t0") (T.list $ T.var "t0")),
-      expectPoly 5 [tag_disabledForAltInference]
+      expectPoly 5 []
         (lambda "lists" (primitive _lists_length @@ (primitive _lists_concat @@ var "lists")))
         ["t0"] (T.function (T.list $ T.list $ T.var "t0") T.int32),
-      expectPoly 6 [tag_disabledForAltInference]
+      expectPoly 6 []
         (lambda "list" (primitive _lists_length @@ (primitive _lists_concat @@ list [var "list", list []])))
         ["t0"] (T.function (T.list $ T.var "t0") T.int32),
-      expectPoly 7 [tag_disabledForAltInference]
+      expectPoly 7 []
         (lambda "list" (primitive _math_add
           @@ int32 1
           @@ (primitive _lists_length @@ (primitive _lists_concat @@ list [var "list", list []]))))
         ["t0"] (T.function (T.list $ T.var "t0") T.int32),
-      expectPoly 8 [tag_disabledForAltInference]
+      expectPoly 8 []
         (lambda "lists" (primitive _lists_length @@ (primitive _lists_concat @@ var "lists")))
         ["t0"] (T.function (T.list $ T.list $ T.var "t0") T.int32)]]
