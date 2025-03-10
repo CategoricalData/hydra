@@ -55,8 +55,6 @@ testGraphModule = Module (Namespace "hydra.test.testGraph") elements [] [hydraGr
       el testTypeBuddyListBNameDef,
       el testTypeComparisonDef,
       el testTypeComparisonNameDef,
-      el testTypeFoobarValueDef,
-      el testTypeFoobarValueNameDef,
       el testTypeIntListDef,
       el testTypeIntListNameDef,
       el testTypeHydraLiteralTypeDef,
@@ -144,7 +142,6 @@ testNamespaceDef = testGraphDefinition "testNamespace" $ Module.namespace $ Base
 --    def testTypeBuddyListAName testTypeBuddyListA,
 --    def testTypeBuddyListBName testTypeBuddyListB,
 --    def testTypeComparisonName testTypeComparison,
---    def testTypeFoobarValueName testTypeFoobarValue,
 --    def testTypeIntListName testTypeIntList,
 --    def testTypeHydraLiteralTypeName testTypeHydraLiteralType,
 --    def testTypeHydraTypeName testTypeHydraType,
@@ -204,17 +201,6 @@ testTypeComparisonDef = testGraphType "testTypeComparison" $
 testTypeComparisonNameDef :: TElement Name
 testTypeComparisonNameDef = testGraphDefinition "testTypeComparisonName" $
   name "Comparison"
-
----- TODO: remove
-testTypeFoobarValueDef :: TElement Type
-testTypeFoobarValueDef = testGraphType "testTypeFoobarValue" $
-  T.union (ref testTypeFoobarValueNameDef) [
-    "bool">: T.boolean,
-    "string">: T.string,
-    "unit">: T.unit]
-testTypeFoobarValueNameDef :: TElement Name
-testTypeFoobarValueNameDef = testGraphDefinition "testTypeFoobarValueName" $
-  name "FoobarValue"
 
 testTypeIntListDef :: TElement Type
 testTypeIntListDef = testGraphType "testTypeIntList" $

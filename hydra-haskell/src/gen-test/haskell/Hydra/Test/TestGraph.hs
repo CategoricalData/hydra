@@ -158,25 +158,6 @@ testTypeComparison = (Core.TypeUnion (Core.RowType {
 testTypeComparisonName :: Core.Name
 testTypeComparisonName = (Core.Name "Comparison")
 
-testTypeFoobarValue :: Core.Type
-testTypeFoobarValue = (Core.TypeUnion (Core.RowType {
-  Core.rowTypeTypeName = testTypeFoobarValueName,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "bool"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "string"),
-      Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "unit"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra.core.Unit"),
-        Core.rowTypeFields = []}))}]}))
-
-testTypeFoobarValueName :: Core.Name
-testTypeFoobarValueName = (Core.Name "FoobarValue")
-
 testTypeIntList :: Core.Type
 testTypeIntList = (Core.TypeRecord (Core.RowType {
   Core.rowTypeTypeName = testTypeIntListName,
