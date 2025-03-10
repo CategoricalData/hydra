@@ -32,13 +32,13 @@ algebraicTypesTests = supergroup "Algebraic terms" [
 
 testGroupForFolds :: TTerm TestGroup
 testGroupForFolds = subgroup "List eliminations (folds)" [
-    expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+    expectMono 1 [tag_disabledForAlgorithmWInference]
       foldAdd
       (T.functionN [T.int32, T.list T.int32, T.int32]),
-    expectMono 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+    expectMono 2 [tag_disabledForAlgorithmWInference]
       (foldAdd @@ int32 0)
       (T.function (T.list T.int32) T.int32),
-    expectMono 3 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+    expectMono 3 [tag_disabledForAlgorithmWInference]
       (foldAdd @@ int32 0 @@ (list (int32 <$> [1, 2, 3, 4, 5])))
       T.int32]
   where
@@ -88,10 +88,10 @@ testGroupForMaps = subgroup "Map terms" [
 
 testGroupForOptionals :: TTerm TestGroup
 testGroupForOptionals = subgroup "Optional terms" [
-    expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+    expectMono 1 [tag_disabledForAlgorithmWInference]
       (optional $ just $ int32 42)
       (T.optional T.int32),
-    expectPoly 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+    expectPoly 2 [tag_disabledForAlgorithmWInference]
       (optional nothing)
       ["t0"] (T.optional $ T.var "t0")]
 
@@ -134,27 +134,27 @@ testGroupForProducts = supergroup "Product terms" [
 
 testGroupForSets :: TTerm TestGroup
 testGroupForSets = subgroup "Set terms" [
-    expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+    expectMono 1 [tag_disabledForAlgorithmWInference]
       (set [true])
       (T.set T.boolean),
-    expectPoly 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+    expectPoly 2 [tag_disabledForAlgorithmWInference]
       (set [set []])
       ["t0"] (T.set $ T.set $ T.var "t0")]
 
 testGroupForSums :: TTerm TestGroup
 testGroupForSums = supergroup "Sum terms" [
     subgroup "Singleton sum terms" [
-      expectMono 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectMono 1 [tag_disabledForAlgorithmWInference]
         (sum 0 1 (string "foo"))
         (T.sum [T.string]),
-      expectPoly 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectPoly 2 [tag_disabledForAlgorithmWInference]
         (sum 0 1 (list []))
         ["t0"] (T.sum [T.list $ T.var "t0"])],
 
     subgroup "Non-singleton sum terms" [
-      expectPoly 1 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectPoly 1 [tag_disabledForAlgorithmWInference]
         (sum 0 2 (string "foo"))
         ["t0"] (T.sum [T.string, T.var "t0"]),
-      expectPoly 2 [tag_disabledForAlgorithmWInference, tag_disabledForAltInference]
+      expectPoly 2 [tag_disabledForAlgorithmWInference]
         (sum 1 2 (string "foo"))
         ["t0"] (T.sum [T.var "t0", T.string])]]

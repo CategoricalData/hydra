@@ -276,7 +276,7 @@ testGroupForPrimitiveTerms :: TTerm TestGroup
 testGroupForPrimitiveTerms = supergroup "Primitive terms" [
 
     subgroup "Monomorphic primitive functions" [
-      expectMono 1 [tag_disabledForAltInference]
+      expectMono 1 []
         (primitive $ Name "hydra.lib.strings.length")
         (T.function T.string T.int32),
       expectMono 2 [tag_disabledForAltInference]
