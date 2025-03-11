@@ -192,12 +192,11 @@ resolveType typ = case stripType typ of
         Just t -> Just <$> coreDecodeType t
     _ -> pure $ Just typ
 
-schemaGraphToTypingEnvironment :: Graph -> Flow Graph (M.Map Name TypeScheme)
-schemaGraphToTypingEnvironment g = do
+schemaGraphToTypingEnvironment :: Graph -> Flow s (M.Map Name TypeScheme)
+schemaGraphToTypingEnvironment g = withState g $ do
     mpairs <- CM.mapM toPair $ M.elems $ graphElements g
     return $ M.fromList $ Y.catMaybes mpairs
   where
-    toPair :: Element -> Flow Graph (Maybe (Name, TypeScheme))
     toPair el = do
       mts <- case elementType el of
         Just ts ->
