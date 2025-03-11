@@ -3,6 +3,7 @@
 module Hydra.Lib.Io (
   showTerm,
   showType,
+  showTypeScheme,
 ) where
 
 import Hydra.Core
@@ -15,10 +16,12 @@ import Hydra.CoreEncoding
 --import Hydra.Staging.Rewriting
 --import Hydra.Annotations
 import Hydra.Flows
+import Hydra.Strip
 import qualified Hydra.Json as Json
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
+import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
@@ -33,9 +36,49 @@ noGraph = Graph {
   graphSchema = Nothing}
 
 
+--showTerm :: Term -> String
+----showTerm term = fromFlow "fail" noGraph (jsonValueToString <$> untypedTermToJson term)
+--showTerm = show
+
 showTerm :: Term -> String
---showTerm term = fromFlow "fail" noGraph (jsonValueToString <$> untypedTermToJson term)
-showTerm = show
+showTerm term = case stripTerm term of
+  TermApplication app -> "(" ++ (L.intercalate " @ " $ fmap showTerm $ gatherTerms [] app) ++ ")"
+    where
+      gatherTerms prev (Application lhs rhs) = case stripTerm lhs of
+        TermApplication app2 -> gatherTerms (rhs:prev) app2
+        t -> t:(L.reverse (rhs:prev))
+  TermFunction f -> case f of
+    FunctionElimination _ -> show $ stripTerm term
+    FunctionLambda (Lambda (Name v) mt body) -> "λ" ++ v ++ (Y.maybe "" (\t -> ":" ++ showType t) mt) ++ "." ++ showTerm body
+    FunctionPrimitive (Name name) -> name ++ "!"
+  TermLet (Let bindings env) -> "let " ++ (L.intercalate ", " $ fmap showBinding bindings) ++ " in " ++ showTerm env
+    where
+      showBinding (LetBinding (Name v) term mt) = v ++ "=" ++ showTerm term ++ (Y.maybe "" (\t -> ":" ++ showTypeScheme t) mt)
+  TermList els -> "[" ++ (L.intercalate ", " $ fmap showTerm els) ++ "]"
+  TermLiteral lit -> case lit of
+    LiteralBinary _ -> "[binary]"
+    LiteralBoolean b -> if b then "true" else "false"
+    LiteralFloat fv -> case fv of
+      FloatValueBigfloat v -> show v
+      FloatValueFloat32 v -> show v
+      FloatValueFloat64 v -> show v
+    LiteralInteger iv -> case iv of
+      IntegerValueBigint v -> show v
+      IntegerValueInt8 v -> show v
+      IntegerValueInt16 v -> show v
+      IntegerValueInt32 v -> show v
+      IntegerValueInt64 v -> show v
+      IntegerValueUint8 v -> show v
+      IntegerValueUint16 v -> show v
+      IntegerValueUint32 v -> show v
+      IntegerValueUint64 v -> show v
+    LiteralString s -> show s
+  TermProduct els -> "(" ++ (L.intercalate ", " $ fmap showTerm els) ++ ")"
+  TermTypeAbstraction (TypeAbstraction (Name param) body) -> "Λ" ++ param ++ "." ++ showTerm body
+  TermTypeApplication (TypedTerm term typ) -> showTerm term ++ "⟨" ++ showType typ ++ "⟩"
+  TermVariable (Name name) -> name
+  TermWrap (WrappedTerm tname term1) -> "wrap[" ++ unName tname ++ "](" ++ showTerm term1 ++ ")"
+  t -> show t
 
 --     coder <- termStringCoder
 --     coderEncode coder encoded
@@ -61,9 +104,10 @@ showTerm = show
 --    encoded = coreEncodeType $ rewriteTypeMeta (const $ Kv M.empty) typ
 
 -- TODO: for now, we are bypassing the complexity of TermAdapters because of issues yet to be resolved
-showType :: Type -> String
---showType = showTerm . coreEncodeType
-showType = show
+--showType :: Type -> String
+----showType = showTerm . coreEncodeType
+--showType = show
+
 --showType typ = case flowStateValue result of
 --    Nothing -> "failed to encode type:\n" ++ show (traceMessages $ flowStateTrace result)
 --    Just s -> s
@@ -80,3 +124,37 @@ showType = show
 --    min typeJsonCoder s = case stringToJsonValue s of
 --      Left msg -> fail $ "failed to parse as JSON value: " ++ msg
 --      Right v -> coderDecode typeJsonCoder v
+
+
+showType :: Type -> String
+showType typ = case stripType typ of
+  TypeFunction (FunctionType dom cod) -> "(" ++ showType dom ++ "→" ++ showType cod ++ ")"
+  TypeList etyp -> "[" ++ showType etyp ++ "]"
+  TypeLiteral lt -> case lt of
+    LiteralTypeBinary -> "binary"
+    LiteralTypeBoolean -> "boolean"
+    LiteralTypeFloat ft -> case ft of
+      FloatTypeBigfloat -> "bigfloat"
+      FloatTypeFloat32 -> "float32"
+      FloatTypeFloat64 -> "float64"
+    LiteralTypeInteger it -> case it of
+      IntegerTypeBigint -> "bigint"
+      IntegerTypeInt8 -> "int8"
+      IntegerTypeInt16 -> "int16"
+      IntegerTypeInt32 -> "int32"
+      IntegerTypeInt64 -> "int64"
+      IntegerTypeUint8 -> "uint8"
+      IntegerTypeUint16 -> "uint16"
+      IntegerTypeUint32 -> "uint32"
+      IntegerTypeUint64 -> "uint64"
+    LiteralTypeString -> "string"
+  TypeMap (MapType keyTyp valTyp) -> "map<" ++ showType keyTyp ++ "," ++ showType valTyp ++ ">"
+  TypeProduct types -> L.intercalate "×" (fmap showType types)
+  TypeVariable (Name name) -> name
+  TypeWrap (WrappedType tname typ1) -> "wrap[" ++ unName tname ++ "](" ++ showType typ1 ++ ")"
+  t -> show t
+
+showTypeScheme :: TypeScheme -> String
+showTypeScheme (TypeScheme vars body) = fa ++ showType body
+  where
+    fa = if L.null vars then "" else "∀[" ++ (L.intercalate "," (fmap (\(Name name) -> name) vars)) ++ "]."
