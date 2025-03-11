@@ -48,7 +48,6 @@ shouldSucceedWith desc f x = case my of
       f
 
 altInferenceTestRunner :: TestRunner
---altInferenceTestRunner desc tcase = if False
 altInferenceTestRunner desc tcase = if Testing.isDisabled tcase
   then Nothing
   else case testCaseWithMetadataCase tcase of
