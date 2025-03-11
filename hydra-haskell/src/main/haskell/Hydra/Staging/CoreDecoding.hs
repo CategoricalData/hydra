@@ -103,7 +103,7 @@ coreDecodeWrappedType term = do
   obj <- Expect.field _WrappedType_object coreDecodeType fields
   pure $ WrappedType name obj
 
-coreDecodeRowType :: Term -> Flow Graph (RowType)
+coreDecodeRowType :: Term -> Flow Graph RowType
 coreDecodeRowType = matchRecord $ \m -> RowType
   <$> getField m _RowType_typeName coreDecodeName
   <*> getField m _RowType_fields coreDecodeFieldTypes

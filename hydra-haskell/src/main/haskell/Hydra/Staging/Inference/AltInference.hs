@@ -435,8 +435,15 @@ generalize cx typ = TypeScheme vars typ
     isUnbound v = not (S.member v $ freeVariablesInContext cx)
       && not (M.member v $ altInferenceContextSchemaTypes cx)
 
-inferGraphTypes :: AltInferenceContext -> Graph -> Flow s Graph
-inferGraphTypes cx g0 = Flows.bind (inferTypeOfTerm cx $ toLetTerm g0) withResult
+inferGraphTypes :: Graph -> Flow s Graph
+inferGraphTypes g0 = do
+    schemaTypes <- case graphSchema g0 of
+      Nothing -> Flows.fail "no schema provided"
+      Just s -> schemaGraphToTypingEnvironment s
+    let primTypes = M.fromList $ fmap (\p -> (primitiveName p, primitiveType p)) (M.elems $ graphPrimitives g0)
+    let varTypes = M.empty
+    let cx = AltInferenceContext schemaTypes primTypes varTypes
+    Flows.bind (inferTypeOfTerm cx $ toLetTerm g0) withResult
   where
     toLetTerm g = TermLet $ Let (fmap toBinding $ M.elems $ graphElements g) $ graphBody g
       where
