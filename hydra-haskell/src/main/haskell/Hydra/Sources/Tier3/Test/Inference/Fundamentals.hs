@@ -69,22 +69,22 @@ testGroupForLet = supergroup "Let" [
           "id">: lambda "x" $ var "x"]
           $ lambda "x" $ var "id" @@ (var "id" @@ var "x"))
         ["t0"] (T.function (T.var "t0") (T.var "t0")),
-      expectMono 2 [tag_disabled]
+      expectMono 2 [tag_disabledForDefaultInference]
         (lets [
           "id">: lambda "x" $ var "x"]
           $ var "id" @@ (list [var "id" @@ int32 42]))
         (T.list T.int32),
-      expectPoly 3 [tag_disabled]
+      expectPoly 3 [tag_disabledForDefaultInference]
         (lets [
           "id">: lambda "x" $ var "x"]
           $ lambda "x" (var "id" @@ (list [var "id" @@ var "x"])))
         ["t0"] (T.function (T.var "t0") (T.list $ T.var "t0")),
-      expectMono 4 [tag_disabled]
+      expectMono 4 [tag_disabledForDefaultInference]
         (lets [
           "id">: lambda "x" $ var "x"]
           $ pair (var "id" @@ int32 42) (var "id" @@ string "foo"))
         (T.pair T.int32 T.string),
-      expectMono 5 [tag_disabled]
+      expectMono 5 [tag_disabledForDefaultInference]
         (lets [
           "list">: lambda "x" $ list [var "x"]]
           $ pair (var "list" @@ int32 42) (var "list" @@ string "foo"))
@@ -99,44 +99,43 @@ testGroupForLet = supergroup "Let" [
           $ var "f")
         ["t0"] (T.list $ T.pair T.int32 (T.var "t0"))],
 
---  H.describe "Recursive and mutually recursive let (@wisnesky's test cases)" $ do
-    subgroup "Recursive and mutually recursive let (@wisnesky's test cases)" []]
---      expectPoly 1
---        (lets [
---          "f">: lambda "x" $ lambda "y" (var "f" @@ int32 0 @@ var "x")]
---          $ var "f")
---        ["t0"] (T.function T.int32 (T.function T.int32 (T.var "t0"))),
---      expectPoly 2
---        (lets [
---          "f">: var "g",
---          "g">: var "f"]
---          $ pair (var "f") (var "g"))
---        -- Note: GHC finds (a, b) rather than (a, a)
---        -- Try: :t (let (f, g) = (g, f) in (f, g))
---        ["t0"] (T.pair (T.var "t0") (T.var "t0")),
---      expectPoly 3
---        (lets [
---          "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
---          "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
---          $ pair (var "f") (var "g"))
---        ["t0", "t1"] (T.pair
---          (T.function (T.var "v0") (T.function T.int32 (T.var "t1")))
---          (T.function T.int32 (T.function (T.var "v0") (T.var "t1")))),
---      expectPoly 4
---        -- letrec + = (\x . (\y . (S (+ (P x) y)))) in (+ (S (S 0)) (S 0))
---        (lets [
---          "plus">: lambda "x" $ lambda "y" (s @@ (var "plus" @@ (p @@ var "x") @@ var "y"))]
---          $ var "plus" @@ (s @@ (s @@ int32 0)) @@ (s @@ int32 0))
---        ["t0"] (T.function T.int32 $ T.function (T.var "t0") T.int32),
---      expectMono 5
---        -- letrecs id = (\z. z)
---        --     f = (\p0. (pair (id p0) (id p0)))
---        --     in 0
---        (lets [
---          "id">: lambda "z" $ var "z",
---          "f">: lambda "p0" $ pair (var "id" @@ var "p0") (var "id" @@ var "p0")]
---          $ int32 0)
---        T.int32]]
+    subgroup "Recursive and mutually recursive let (@wisnesky's test cases)" [
+      expectPoly 1 [tag_disabledForDefaultInference]
+        (lets [
+          "f">: lambda "x" $ lambda "y" (var "f" @@ int32 0 @@ var "x")]
+          $ var "f")
+        ["t0"] (T.function T.int32 (T.function T.int32 (T.var "t0"))),
+      expectPoly 2 [tag_disabledForDefaultInference]
+        (lets [
+          "f">: var "g",
+          "g">: var "f"]
+          $ pair (var "f") (var "g"))
+        -- Note: GHC finds (a, b) rather than (a, a)
+        -- Try: :t (let (f, g) = (g, f) in (f, g))
+        ["t0", "t1"] (T.pair (T.var "t0") (T.var "t1")),
+      expectPoly 3 [tag_disabled]
+        (lets [
+          "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
+          "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
+          $ pair (var "f") (var "g"))
+        ["t0", "t1"] (T.pair
+          (T.functionN [T.var "t0", T.int32, T.var "t1"])
+          (T.functionN [T.int32, T.var "v0", T.var "t1"])),
+      expectMono 4 [tag_disabledForDefaultInference]
+        -- letrec + = (\x . (\y . (S (+ (P x) y)))) in (+ (S (S 0)) (S 0))
+        (lets [
+          "plus">: lambda "x" $ lambda "y" $ s @@ (var "plus" @@ (p @@ var "x") @@ var "y")]
+          $ var "plus" @@ (s @@ (s @@ int32 0)) @@ (s @@ int32 0))
+        T.int32,
+      expectMono 5 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
+        -- letrecs id = (\z. z)
+        --     f = (\p0. (pair (id p0) (id p0)))
+        --     in 0
+        (lets [
+          "id">: lambda "z" $ var "z",
+          "f">: lambda "p0" $ pair (var "id" @@ var "p0") (var "id" @@ var "p0")]
+          $ int32 0)
+        T.int32]]
   where
     s = primitive _math_neg
     p = primitive _math_neg
@@ -160,12 +159,12 @@ testGroupForPathologicalTerms :: TTerm TestGroup
 testGroupForPathologicalTerms = supergroup "Pathological terms" [
 
     subgroup "Infinite lists" [
-      expectMono 1 [tag_disabled]
+      expectMono 1 [tag_disabledForDefaultInference]
         (lets [
           "self">: primitive _lists_cons @@ int32 42 @@ var "self"]
           $ var "self")
         (T.list T.int32),
-      expectPoly 2  [tag_disabled]
+      expectPoly 2  [tag_disabledForDefaultInference]
         (lambda "x" $ lets [
           "self">: primitive _lists_cons @@ var "x" @@ var "self"]
           $ var "self")
@@ -174,8 +173,8 @@ testGroupForPathologicalTerms = supergroup "Pathological terms" [
         (lets [
           "self">: lambda "e" $ primitive _lists_cons @@ var "e" @@ (var "self" @@ var "e")]
           $ lambda "x" $ var "self" @@ var "x")
-        ["t0"] (T.function T.int32 (T.list T.int32)),
-      expectMono 4  [tag_disabled]
+        ["t0"] (T.function (T.var "t0") (T.var "t0")),
+      expectMono 4  [tag_disabledForDefaultInference]
         (lets [
           "build">: lambda "x" $ primitive _lists_cons @@ var "x" @@ (var "build" @@
             (primitive _math_add @@ var "x" @@ int32 1))]
