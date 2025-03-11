@@ -14,7 +14,7 @@ import Hydra.Staging.Annotations
 import Hydra.Staging.Rewriting
 import Hydra.Staging.Schemas
 import Hydra.Lib.Flows as Flows
-import qualified Hydra.Tools.Monads as TM
+import Hydra.Lib.Io
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Expect as Expect
@@ -33,8 +33,8 @@ import qualified Data.Maybe    as Y
 key_vcount = Name "vcount"
 key_debugId = Name "debugId"
 
-debug :: String -> String -> Flow s ()
-debug debugId message = do
+debugIf :: String -> String -> Flow s ()
+debugIf debugId message = do
   desc <- getDebugId
   if desc == Just debugId
     then Flows.fail message
@@ -72,81 +72,11 @@ normalizeVariablesInTypeScheme scheme = TypeScheme newVars $ substInType subst $
 --------------------------------------------------------------------------------
 -- Printing
 
-showTerm :: Term -> String
-showTerm term = case stripTerm term of
-  TermApplication app -> "(" ++ (L.intercalate " @ " $ fmap showTerm $ gatherTerms [] app) ++ ")"
-    where
-      gatherTerms prev (Application lhs rhs) = case stripTerm lhs of
-        TermApplication app2 -> gatherTerms (rhs:prev) app2
-        t -> t:(L.reverse (rhs:prev))
-  TermFunction f -> case f of
-    FunctionElimination _ -> show $ stripTerm term
-    FunctionLambda (Lambda (Name v) mt body) -> "λ" ++ v ++ (Y.maybe "" (\t -> ":" ++ showType t) mt) ++ "." ++ showTerm body
-    FunctionPrimitive (Name name) -> name ++ "!"
-  TermLet (Let bindings env) -> "let " ++ (L.intercalate ", " $ fmap showBinding bindings) ++ " in " ++ showTerm env
-    where
-      showBinding (LetBinding (Name v) term mt) = v ++ "=" ++ showTerm term ++ (Y.maybe "" (\t -> ":" ++ showTypeScheme t) mt)
-  TermList els -> "[" ++ (L.intercalate ", " $ fmap showTerm els) ++ "]"
-  TermLiteral lit -> case lit of
-    LiteralBinary _ -> "[binary]"
-    LiteralBoolean b -> if b then "true" else "false"
-    LiteralFloat fv -> case fv of
-      FloatValueBigfloat v -> show v
-      FloatValueFloat32 v -> show v
-      FloatValueFloat64 v -> show v
-    LiteralInteger iv -> case iv of
-      IntegerValueBigint v -> show v
-      IntegerValueInt8 v -> show v
-      IntegerValueInt16 v -> show v
-      IntegerValueInt32 v -> show v
-      IntegerValueInt64 v -> show v
-      IntegerValueUint8 v -> show v
-      IntegerValueUint16 v -> show v
-      IntegerValueUint32 v -> show v
-      IntegerValueUint64 v -> show v
-    LiteralString s -> show s
-  TermProduct els -> "(" ++ (L.intercalate ", " $ fmap showTerm els) ++ ")"
-  TermTypeAbstraction (TypeAbstraction (Name param) body) -> "Λ" ++ param ++ "." ++ showTerm body
-  TermTypeApplication (TypedTerm term typ) -> showTerm term ++ "⟨" ++ showType typ ++ "⟩"
-  TermVariable (Name name) -> name
-  TermWrap (WrappedTerm tname term1) -> "wrap[" ++ unName tname ++ "](" ++ showTerm term1 ++ ")"
-  t -> show t
-
-showType :: Type -> String
-showType typ = case stripType typ of
-  TypeFunction (FunctionType dom cod) -> "(" ++ showType dom ++ "→" ++ showType cod ++ ")"
-  TypeList etyp -> "[" ++ showType etyp ++ "]"
-  TypeLiteral lt -> case lt of
-    LiteralTypeBinary -> "binary"
-    LiteralTypeBoolean -> "boolean"
-    LiteralTypeFloat ft -> case ft of
-      FloatTypeBigfloat -> "bigfloat"
-      FloatTypeFloat32 -> "float32"
-      FloatTypeFloat64 -> "float64"
-    LiteralTypeInteger it -> case it of
-      IntegerTypeBigint -> "bigint"
-      IntegerTypeInt8 -> "int8"
-      IntegerTypeInt16 -> "int16"
-      IntegerTypeInt32 -> "int32"
-      IntegerTypeInt64 -> "int64"
-      IntegerTypeUint8 -> "uint8"
-      IntegerTypeUint16 -> "uint16"
-      IntegerTypeUint32 -> "uint32"
-      IntegerTypeUint64 -> "uint64"
-    LiteralTypeString -> "string"
-  TypeMap (MapType keyTyp valTyp) -> "map<" ++ showType keyTyp ++ "," ++ showType valTyp ++ ">"
-  TypeProduct types -> L.intercalate "×" (fmap showType types)
-  TypeVariable (Name name) -> name
-  TypeWrap (WrappedType tname typ1) -> "wrap[" ++ unName tname ++ "](" ++ showType typ1 ++ ")"
-  t -> show t
-
-showTypeScheme :: TypeScheme -> String
-showTypeScheme (TypeScheme vars body) = fa ++ showType body
-  where
-    fa = if L.null vars then "" else "∀[" ++ (L.intercalate "," (fmap (\(Name name) -> name) vars)) ++ "]."
-
 showTypeConstraint :: TypeConstraint -> String
 showTypeConstraint (TypeConstraint ltyp rtyp _) = showType ltyp ++ "≡" ++ showType rtyp
+
+data TypeSubst = TypeSubst { unTypeSubst :: M.Map Name Type } deriving (Eq, Ord)
+data TermSubst = TermSubst { unTermSubst :: M.Map Name Term } deriving (Eq, Ord)
 
 showTypeSubst :: TypeSubst -> String
 showTypeSubst (TypeSubst subst) = "{" ++ (L.intercalate "," (fmap (\(Name name, typ) -> name ++ "↦" ++ showType typ) (M.toList subst))) ++ "}"
@@ -279,12 +209,6 @@ joinTypes left right comment = case sleft of
 
 --------------------------------------------------------------------------------
 -- Substitution
-
-data TypeSubst = TypeSubst { unTypeSubst :: M.Map Name Type } deriving (Eq, Ord)
-data TermSubst = TermSubst { unTermSubst :: M.Map Name Term } deriving (Eq, Ord)
-
-instance Show TypeSubst where
-  show (TypeSubst subst) = "{" ++ L.intercalate ", " (fmap (\((Name k), v) -> k ++ ": " ++ showType v) $ M.toList subst) ++ "}"
 
 -- | The composition S T of two substitution is the result of first applying S, then T.
 composeTypeSubst :: TypeSubst -> TypeSubst -> TypeSubst
@@ -435,14 +359,19 @@ generalize cx typ = TypeScheme vars typ
     isUnbound v = not (S.member v $ freeVariablesInContext cx)
       && not (M.member v $ altInferenceContextSchemaTypes cx)
 
-inferGraphTypes :: Graph -> Flow s Graph
-inferGraphTypes g0 = do
+graphToInferenceContext :: Graph -> Flow s AltInferenceContext
+graphToInferenceContext g0 = do
     schemaTypes <- case graphSchema g0 of
       Nothing -> Flows.fail "no schema provided"
       Just s -> schemaGraphToTypingEnvironment s
-    let primTypes = M.fromList $ fmap (\p -> (primitiveName p, primitiveType p)) (M.elems $ graphPrimitives g0)
-    let varTypes = M.empty
-    let cx = AltInferenceContext schemaTypes primTypes varTypes
+    return $ AltInferenceContext schemaTypes primTypes varTypes
+  where
+    primTypes = M.fromList $ fmap (\p -> (primitiveName p, primitiveType p)) (M.elems $ graphPrimitives g0)
+    varTypes = M.empty
+
+inferGraphTypes :: Graph -> Flow s Graph
+inferGraphTypes g0 = do
+    cx <- graphToInferenceContext g0
     Flows.bind (inferTypeOfTerm cx $ toLetTerm g0) withResult
   where
     toLetTerm g = TermLet $ Let (fmap toBinding $ M.elems $ graphElements g) $ graphBody g
@@ -477,17 +406,34 @@ inferMany cx terms = case terms of
 --      fmap (typeSchemeType . altInferenceResultTypeScheme) results,
 --      composeTypeSubstList $ fmap altInferenceResultSubst results)
 
-inferTypeOf :: AltInferenceContext -> Term -> Flow s TypeScheme
+-- TODO: deprecated (and expensive)
+inferTermType :: Term -> Flow Graph Term
+inferTermType term0 = do
+  g <- getState
+  cx <- graphToInferenceContext g
+  fst <$> inferTypeOf cx term0
+
+inferTypeOf :: AltInferenceContext -> Term -> Flow s (Term, TypeScheme)
 inferTypeOf cx term = bindInferredTerm cx letTerm unifyAndSubst
   where
     letTerm = TermLet $ Let [LetBinding (Name "x") term Nothing] $ Terms.string "ignored"
     unifyAndSubst result = do
         (Let bindings _) <- Expect.letTerm $ altInferenceResultTerm result
         case bindings of
-          [LetBinding _ _ (Just ts)] -> return $ normalizeVariablesInTypeScheme $ substInTypeScheme subst ts
+          -- TODO: first normalize *all* type schemes in the inferred term, then grab the resulting let binding, with term and type scheme
+          [LetBinding _ term1 (Just ts)] -> return (
+            term1,
+            normalizeVariablesInTypeScheme $ substInTypeScheme subst ts)
           _ -> Flows.fail $ "Expected a single binding with a type scheme, but got: " ++ show bindings
       where
         subst = altInferenceResultSubst result
+
+-- TODO: deprecated (and expensive)
+inferredTypeOf :: Term -> Flow Graph Type
+inferredTypeOf term = do
+  g <- getState
+  cx <- graphToInferenceContext g
+  typeSchemeType . snd <$> inferTypeOf cx term
 
 inferTypeOfAnnotatedTerm :: AltInferenceContext -> AnnotatedTerm -> Flow s AltInferenceResult
 inferTypeOfAnnotatedTerm cx (AnnotatedTerm term _) = inferTypeOfTerm cx term
@@ -541,7 +487,7 @@ inferTypeOfCollection cx typCons trmCons desc els = bindVar withVar
             constraints = fmap (\t -> TypeConstraint (TypeVariable var) t $ Just desc) types
             withConstraints subst2 = do
 
---                debug "All tests, Inference tests, Simple terms, List terms, List with bound variables, #1" $ ""
+--                debugIf "All tests, Inference tests, Simple terms, List terms, List with bound variables, #1" $ ""
 --                    ++ "\n\tels: " ++ (L.intercalate ", " $ fmap showTerm els)
 --                    ++ "\n\trExpr: " ++ showTerm rExpr
 --                    ++ "\n\trType: " ++ showType rType
@@ -638,9 +584,9 @@ inferTypeOfLet cx (Let b0 env0) = bindVars (L.length b0) withVars
                     s2 = composeTypeSubstList [s1, sb, senv]
                     eb2 = fmap (substTypesInTerm $ composeTypeSubst sb senv) eb1
                     b3t = L.zip bnames $ fmap (generalize cx . substInType sb) tb
-                    s3 = TermSubst $ M.fromList $ fmap (\(x, ts) -> (x, (typeApplication (TermVariable x) $ fmap TypeVariable $ typeSchemeVariables ts))) b3t
+                    s3 = TermSubst $ M.fromList $ fmap (\(x, ts) -> (x, (Terms.typeApplication (TermVariable x) $ fmap TypeVariable $ typeSchemeVariables ts))) b3t
                     b3 = L.zipWith (\(x, ts) e -> LetBinding x
-                      (substTypesInTerm (composeTypeSubst senv sb) $ typeAbstraction (typeSchemeVariables ts) $ substituteInTerm s3 e)
+                      (substTypesInTerm (composeTypeSubst senv sb) $ Terms.typeAbstraction (typeSchemeVariables ts) $ substituteInTerm s3 e)
                       (Just $ substInTypeScheme senv ts)) b3t eb2
                     let1 = TermLet $ Let b3 env1
 
@@ -729,7 +675,7 @@ inferTypeOfRecord cx (Record tname fields) =
       where
         ityp = TypeRecord $ RowType tname $ L.zipWith FieldType fnames itypes
         withSubst subst = do
---          debug "All tests, Inference tests, Nominal terms, Records, Record instances of simply recursive record types, #1" $ ""
+--          debugIf "All tests, Inference tests, Nominal terms, Records, Record instances of simply recursive record types, #1" $ ""
 --            ++ "\n\tstyp: " ++ showType styp
 --            ++ "\n\tityp: " ++ showType ityp
 
@@ -806,7 +752,7 @@ inferTypeOfVariable cx name = case M.lookup name (altInferenceContextDataTypes c
     Just scheme -> Flows.map withTypeScheme $ instantiateTypeScheme scheme
   where
     withTypeScheme (TypeScheme vars typ) = AltInferenceResult
-      (typeApplication (TermVariable name) $ fmap TypeVariable vars)
+      (Terms.typeApplication (TermVariable name) $ fmap TypeVariable vars)
       (Types.mono typ)
       [] emptyTypeSubst
 
@@ -877,12 +823,6 @@ requireSchemaType cx tname = case M.lookup tname (altInferenceContextSchemaTypes
     Nothing -> Flows.fail $ "No such schema type: " ++ unName tname
     Just ts -> instantiateTypeScheme $ stripTypeSchemeRecursive ts
 
-typeAbstraction :: [Name] -> Term -> Term
-typeAbstraction vars body = L.foldl (\b v -> TermTypeAbstraction $ TypeAbstraction v b) body vars
-
-typeApplication :: Term -> [Type] -> Term
-typeApplication term types = L.foldl (\t ty -> TermTypeApplication $ TypedTerm t ty) term types
-
 -- | Add (term variable, type scheme) pairs to the typing environment
 extendContext :: [(Name, TypeScheme)] -> AltInferenceContext -> AltInferenceContext
 extendContext pairs cx = cx {altInferenceContextDataTypes = M.union (M.fromList pairs) $ altInferenceContextDataTypes cx}
@@ -893,10 +833,10 @@ yield term typ subst = AltInferenceResult (substTypesInTerm subst term) (Types.m
 yieldDebug :: AltInferenceContext -> String -> Term -> Type -> TypeSubst -> Flow s AltInferenceResult
 yieldDebug cx debugId term typ subst = do
 
-    debug debugId $ ""
+    debugIf debugId $ ""
         ++ "\n\tterm: " ++ showTerm term
         ++ "\n\ttyp: " ++ showType typ
-        ++ "\n\tsubst: " ++ show subst
+        ++ "\n\tsubst: " ++ showTypeSubst subst
         ++ "\n\trterm: " ++ showTerm rterm
         ++ "\n\trtyp: " ++ showType rtyp
 
