@@ -2098,8 +2098,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForDefaultInference",
-                Testing.Tag "disabledForAlgorithmWInference",
-                (Testing.Tag "disabledForAltInference")]},
+                (Testing.Tag "disabledForAlgorithmWInference")]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2133,8 +2132,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForDefaultInference",
-                Testing.Tag "disabledForAlgorithmWInference",
-                (Testing.Tag "disabledForAltInference")]}]},
+                (Testing.Tag "disabledForAlgorithmWInference")]}]},
         Testing.TestGroup {
           Testing.testGroupName = "Projections",
           Testing.testGroupDescription = Nothing,
@@ -2158,8 +2156,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]}]}],
+                    (Testing.Tag "disabledForAlgorithmWInference")]}]}],
           Testing.testGroupCases = []},
         Testing.TestGroup {
           Testing.testGroupName = "Records",
@@ -2188,8 +2185,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2210,8 +2206,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#3",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2237,8 +2232,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#4",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2265,8 +2259,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#5",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2277,8 +2270,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]}]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]}]},
             Testing.TestGroup {
               Testing.testGroupName = "Record instances of simply recursive record types",
               Testing.testGroupDescription = Nothing,
@@ -2310,8 +2302,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2343,8 +2334,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#3",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2373,8 +2363,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#4",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2408,8 +2397,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#5",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2444,8 +2432,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]}]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]}]},
             Testing.TestGroup {
               Testing.testGroupName = "Record instances of mutually recursive record types",
               Testing.testGroupDescription = Nothing,
@@ -2484,8 +2471,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2520,8 +2506,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]}]}],
+                    (Testing.Tag "disabledForAlgorithmWInference")]}]}],
           Testing.testGroupCases = []},
         Testing.TestGroup {
           Testing.testGroupName = "Variant terms",
@@ -2546,8 +2531,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2562,8 +2546,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]}]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]}]},
             Testing.TestGroup {
               Testing.testGroupName = "Polymorphic and recursive variants",
               Testing.testGroupDescription = Nothing,
@@ -2586,8 +2569,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2604,8 +2586,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#3",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2632,8 +2613,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]}]}],
+                    (Testing.Tag "disabledForAlgorithmWInference")]}]}],
           Testing.testGroupCases = []},
         Testing.TestGroup {
           Testing.testGroupName = "Wrapper introductions and eliminations",
@@ -2656,8 +2636,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2675,8 +2654,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]}]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]}]},
             Testing.TestGroup {
               Testing.testGroupName = "Wrapper eliminations",
               Testing.testGroupDescription = Nothing,
@@ -2694,8 +2672,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]},
+                    (Testing.Tag "disabledForAlgorithmWInference")]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -2709,8 +2686,7 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString)}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
-                    Testing.Tag "disabledForAlgorithmWInference",
-                    (Testing.Tag "disabledForAltInference")]}]}],
+                    Testing.Tag "disabledForAlgorithmWInference"]}]}],
           Testing.testGroupCases = []}],
       Testing.testGroupCases = []},
     Testing.TestGroup {
