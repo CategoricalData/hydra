@@ -16,6 +16,9 @@ encodeAnnotatedRhs a = spaceSep [cst "=", case a of
 encodeAnnotatedStatement :: Py.AnnotatedStatement -> A.Expr
 encodeAnnotatedStatement (Py.AnnotatedStatement doc stmt) = newlineSep [cst $ toPythonComments doc, encodeStatement stmt]
 
+encodeAnnotation :: Py.Annotation -> A.Expr
+encodeAnnotation (Py.Annotation expr) = spaceSep [cst ":", encodeExpression expr]
+
 encodeArgs :: Py.Args -> A.Expr
 encodeArgs (Py.Args positional kwargStarred kwargDoubleStarred) = commaSep inlineStyle $ ps ++ ks ++ kss
   where
@@ -46,6 +49,9 @@ encodeAtom a = case a of
   Py.AtomTrue -> cst "True"
   Py.AtomTuple t -> encodeTuple t
   _ -> unsupportedVariant "atom" a
+
+encodeAttribute :: Py.Attribute -> A.Expr
+encodeAttribute (Py.Attribute names) = dotSep $ encodeName <$> names
 
 encodeAwaitPrimary :: Py.AwaitPrimary -> A.Expr
 encodeAwaitPrimary (Py.AwaitPrimary await primary) = if await
@@ -113,6 +119,7 @@ encodeClosedPattern :: Py.ClosedPattern -> A.Expr
 encodeClosedPattern cp = case cp of
   Py.ClosedPatternCapture c -> encodeCapturePattern c
   Py.ClosedPatternClass p -> encodeClassPattern p
+  Py.ClosedPatternValue v -> encodeValuePattern v
   Py.ClosedPatternWildcard -> cst "_"
   _ -> unsupportedVariant "closed pattern" cp
 
@@ -171,18 +178,23 @@ encodeFactor f = case f of
 
 encodeFunctionDefRaw :: Py.FunctionDefRaw -> A.Expr
 encodeFunctionDefRaw (Py.FunctionDefRaw async name tparams params retType ftc block) = newlineSep [
-  spaceSep $ Y.catMaybes [
-    if async then Just $ cst "async" else Nothing,
-    Just $ cst "def",
-    Just $ noSep $ Y.catMaybes [
-      Just $ encodeName name,
-      Nothing, -- TODO: tparams
-      Just $ cst "(",
-      encodeParameters <$> params,
-      Just $ cst ")",
-      Just $ cst ":"],
-    Nothing], -- TODO: ftc
-  encodeBlock block]
+    spaceSep $ Y.catMaybes [
+      if async then Just $ cst "async" else Nothing,
+      Just $ cst "def",
+      Just $ noSep $ Y.catMaybes [
+        Just $ spaceSep $ Y.catMaybes [
+        Just $ noSep $ Y.catMaybes[
+          Just $ encodeName name,
+          Nothing, -- TODO: tparams
+          Just $ cst "(",
+          encodeParameters <$> params,
+          Just $ cst ")"],
+          retExpr],
+        Just $ cst ":"],
+      Nothing], -- TODO: ftc
+    encodeBlock block]
+  where
+    retExpr = fmap (\t -> spaceSep[cst "->", encodeExpression t]) retType
 
 encodeFunctionDefinition :: Py.FunctionDefinition -> A.Expr
 encodeFunctionDefinition (Py.FunctionDefinition mdecs raw) = encodeFunctionDefRaw raw
@@ -293,7 +305,9 @@ encodeOrPattern :: Py.OrPattern -> A.Expr
 encodeOrPattern (Py.OrPattern p) = symbolSep "|" inlineStyle (encodeClosedPattern <$> p)
 
 encodeParam :: Py.Param -> A.Expr
-encodeParam (Py.Param name annot) = encodeName name
+encodeParam (Py.Param name mann) = noSep $ Y.catMaybes [
+  Just $ encodeName name,
+  fmap encodeAnnotation mann]
 
 encodeParamNoDefault :: Py.ParamNoDefault -> A.Expr
 encodeParamNoDefault (Py.ParamNoDefault param tcomment) = encodeParam param
@@ -492,6 +506,9 @@ encodeUntypedAssignment (Py.UntypedAssignment targets rhs _) = spaceSep $ lefts 
   where
     lefts = encodeStarTarget <$> targets
     right = encodeAnnotatedRhs rhs
+
+encodeValuePattern :: Py.ValuePattern -> A.Expr
+encodeValuePattern (Py.ValuePattern attr) = encodeAttribute attr
 
 -- TODO: this is a partially ChatGPT-generated function which has not been thoroughly tested.
 escapePythonString :: Bool -> String -> String

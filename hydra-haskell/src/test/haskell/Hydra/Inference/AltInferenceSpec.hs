@@ -42,8 +42,8 @@ shouldSucceedWith f x = case my of
     FlowState my _ trace = unFlow f initialContext emptyTrace
 
 altInferenceTestRunner :: TestRunner
---altInferenceTestRunner tcase = if Testing.isDisabled tcase || Testing.isDisabledForAltInference tcase
-altInferenceTestRunner tcase = if Testing.isDisabled tcase
+altInferenceTestRunner tcase = if Testing.isDisabled tcase || Testing.isDisabledForAltInference tcase
+--altInferenceTestRunner tcase = if Testing.isDisabled tcase
   then Nothing
   else case testCaseWithMetadataCase tcase of
     TestCaseInference (InferenceTestCase input output) -> Just $ expectType input output

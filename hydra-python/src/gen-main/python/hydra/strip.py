@@ -3,7 +3,7 @@
 from __future__ import annotations
 import hydra.core
 
-def fully_strip_term(t):
+def fully_strip_term(t: hydra.core.Term) -> hydra.core.Term:
     """Strip all annotations from a term, including first-class type annotations."""
     
     match t:
@@ -16,7 +16,7 @@ def fully_strip_term(t):
         case _:
             return t
 
-def strip_term(t):
+def strip_term(t: hydra.core.Term) -> hydra.core.Term:
     """Strip all annotations from a term."""
     
     match t:
@@ -26,7 +26,7 @@ def strip_term(t):
         case _:
             return t
 
-def strip_type(t):
+def strip_type(t: hydra.core.Type) -> hydra.core.Type:
     """Strip all annotations from a term."""
     
     match t:
@@ -36,7 +36,7 @@ def strip_type(t):
         case _:
             return t
 
-def strip_type_parameters(t):
+def strip_type_parameters(t: hydra.core.Type) -> hydra.core.Type:
     """Strip any top-level type lambdas from a type, extracting the (possibly nested) type body."""
     
     match strip_type(t):
