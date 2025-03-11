@@ -1,0 +1,72 @@
+{
+	"name": "hydra-dev",
+	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+	"features": {
+		"ghcr.io/devcontainers-extra/features/haskell:2": {
+		  "version": "22.31"
+		},
+		"ghcr.io/devcontainers-extra/features/scala-sdkman:2": {
+		  "version": "3.6.3"
+		},
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "none",
+      "installMaven": "false",
+      "installGradle": "true"
+    },
+		"ghcr.io/devcontainers/features/python:1": {
+		  "version": "3.12"
+		},
+		"ghcr.io/va-h/devcontainers-features/uv:1": {}
+	},
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    "forwardPorts": [],
+    // Configure tool-specific properties.
+    "customizations": {
+      "vscode": {
+        "settings": {
+          "[python]": {
+            "editor.defaultFormatter": "charliermarsh.ruff",
+            "editor.formatOnSave": true,
+            "editor.codeActionsOnSave": {
+              "source.organizeImports": "explicit",
+              "source.unusedImports": "explicit"
+            }
+          },
+          "python.defaultInterpreterPath": "./hydra-python/.venv/bin/python",
+          "python.analysis.typeCheckingMode": "strict",
+          // Forward SSH agent   
+          "remote.containers.forwardAgent": true,
+          "java.project.sourcePaths": [
+            "./hydra-java/src"
+          ]
+        },
+        "extensions": [
+            // General
+            "vscode-icons-team.vscode-icons",
+            "wayou.vscode-todo-highlight",
+            "esbenp.prettier-vscode",
+            "tamasfe.even-better-toml",
+            "donjayamanne.githistory",
+            "mechatroner.rainbow-csv",
+            "GrapeCity.gc-excelviewer",
+            "Gruntfuggly.todo-tree",
+            "yzhang.markdown-all-in-one",
+            "bierner.markdown-mermaid",
+            "akamud.vscode-theme-onedark",
+            // Bash
+            "timonwong.shellcheck",
+            // Haskell
+            "haskell.haskell",
+            // Scala
+            "scala-lang.scala",
+            // Java 
+            "vscjava.vscode-java-pack",
+            // Python
+            "charliermarsh.ruff"
+ 
+        ]
+      }
+    },
+    "remoteUser": "vscode"
+}
