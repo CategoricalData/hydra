@@ -5,6 +5,7 @@ import Hydra.Coders
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Errors
+import Hydra.Graph
 import Hydra.Mantle
 import Hydra.Flows
 import Hydra.Strip
@@ -433,6 +434,23 @@ generalize cx typ = TypeScheme vars typ
     vars = L.nub $ L.filter isUnbound $ S.toList $ freeVariablesInType typ
     isUnbound v = not (S.member v $ freeVariablesInContext cx)
       && not (M.member v $ altInferenceContextSchemaTypes cx)
+
+inferGraphTypes :: AltInferenceContext -> Graph -> Flow s Graph
+inferGraphTypes cx g0 = Flows.bind (inferTypeOfTerm cx $ toLetTerm g0) withResult
+  where
+    toLetTerm g = TermLet $ Let (fmap toBinding $ M.elems $ graphElements g) $ graphBody g
+      where
+        toBinding (Element name term _) = LetBinding name term Nothing
+    withResult (AltInferenceResult term ts _ _) = case term of
+      TermLet l -> Flows.pure $ fromLetTerm l
+      _ -> Flows.fail $ "Expected inferred graph as let term"
+    fromLetTerm (Let bindings env) = g0 {
+        graphElements = M.fromList $ fmap fromBinding bindings,
+        graphBody = env,
+        graphEnvironment = M.empty,
+        graphTypes = M.empty}
+      where
+        fromBinding (LetBinding name term mt) = (name, Element name term mt)
 
 inferMany :: AltInferenceContext -> [Term] -> Flow s ([Term], [Type], TypeSubst)
 inferMany cx terms = case terms of
