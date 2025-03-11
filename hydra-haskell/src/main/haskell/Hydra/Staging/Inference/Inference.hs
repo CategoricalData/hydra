@@ -62,11 +62,6 @@ annotateElements g sortedEls = withInferenceContext $ do
         (Inferred iel t c1) <- inferElementType el
         withBinding (elementName el) (monotype t) $ annotate r ((iel, c1):annotated)
 
-inferTermType :: Term -> Flow Graph Term
-inferTermType term0 = do
-  (term1, _) <- inferTypeAndConstraints term0
-  return term1
-
 inferElementType :: Element -> Flow Graph (Inferred Element)
 inferElementType el = withTrace ("infer type of " ++ unName (elementName el)) $ do
   (Inferred iterm t c) <- infer $ elementTerm el
@@ -81,6 +76,11 @@ inferGraphTypes = getState >>= annotateGraph
         return g {graphElements = M.fromList (toPair <$> els)}
       where
         toPair el = (elementName el, el)
+
+inferTermType :: Term -> Flow Graph Term
+inferTermType term0 = do
+  (term1, _) <- inferTypeAndConstraints term0
+  return term1
 
 -- TODO: deprecated
 inferredTypeOf :: Term -> Flow Graph Type

@@ -190,6 +190,12 @@ sum i s term = TermSum $ Sum i s term
 true :: Term
 true = boolean True
 
+typeAbstraction :: [Name] -> Term -> Term
+typeAbstraction vars body = L.foldl (\b v -> TermTypeAbstraction $ TypeAbstraction v b) body vars
+
+typeApplication :: Term -> [Type] -> Term
+typeApplication term types = L.foldl (\t ty -> TermTypeApplication $ TypedTerm t ty) term types
+
 typed :: Type -> Term -> Term
 typed typ term = TermTyped $ TypedTerm term typ
 

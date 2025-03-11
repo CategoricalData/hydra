@@ -49,9 +49,10 @@ generateSources printModule basePath mods = do
     generateFiles = do
       withTrace "generate files" $ do
         withState (modulesToGraph mods) $ do
-          g' <- inferGraphTypes
-          withState g' $ do
-              maps <- CM.mapM forModule $ refreshModule (graphElements g') <$> mods
+          g <- getState
+          g1 <- inferGraphTypes g
+          withState g1 $ do
+              maps <- CM.mapM forModule $ refreshModule (graphElements g1) <$> mods
               return $ L.concat (M.toList <$> maps)
             where
               refreshModule els mod = mod {
