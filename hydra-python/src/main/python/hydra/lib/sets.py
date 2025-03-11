@@ -1,7 +1,9 @@
 """Python implementations of hydra.lib.sets primitives."""
 
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from typing import Any
+
+from hydra.lib.lists import frozenlist
 
 
 def empty[A]():
@@ -19,7 +21,7 @@ def difference[A](s1: frozenset[A], s2: frozenset[A]) -> frozenset[A]:
     return s1 - s2
 
 
-def from_list[A](xs: list[A]) -> frozenset[A]:
+def from_list[A](xs: Sequence[A]) -> frozenset[A]:
     """Create a set from a list."""
     return frozenset(xs)
 
@@ -59,9 +61,9 @@ def size(s: frozenset[Any]) -> int:
     return len(s)
 
 
-def to_list[A](s: frozenset[A]) -> list[A]:
+def to_list[A](s: frozenset[A]) -> frozenlist[A]:
     """Convert a set to a list."""
-    return list(s)
+    return tuple(s)
 
 
 def union[A](s1: frozenset[A], s2: frozenset[A]) -> frozenset[A]:
