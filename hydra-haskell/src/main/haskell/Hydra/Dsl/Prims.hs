@@ -194,13 +194,13 @@ string = TermCoder Types.string $ Coder encode decode
     decode = pure . Terms.string
 
 term :: TermCoder (Term)
-term = TermCoder (Types.apply (TypeVariable _Term) (Types.var "a")) $ Coder encode decode
+term = TermCoder (TypeVariable _Term) $ Coder encode decode
   where
     encode = pure
     decode = pure
 
 type_ :: TermCoder (Type)
-type_ = TermCoder (Types.apply (TypeVariable _Type) (Types.var "a")) $ Coder encode decode
+type_ = TermCoder (TypeVariable _Type) $ Coder encode decode
   where
     encode = coreDecodeType
     decode = pure . coreEncodeType
