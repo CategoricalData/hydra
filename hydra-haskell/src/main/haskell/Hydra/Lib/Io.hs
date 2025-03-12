@@ -1,10 +1,12 @@
 -- | Haskell implementations of hydra.lib.io primitives.
 
 module Hydra.Lib.Io (
+  showElement,
   showTerm,
   showType,
   showTypeConstraint,
   showTypeScheme,
+  showTypeSubst,
 ) where
 
 import Hydra.Core
@@ -37,6 +39,11 @@ noGraph = Graph {
   graphPrimitives = M.empty,
   graphSchema = Nothing}
 
+
+showElement :: Element -> String
+showElement el = unName (elementName el) ++ " = " ++ showTerm (elementTerm el) ++ (case elementType el of
+  Nothing -> ""
+  Just ts -> " : " ++ showTypeScheme ts)
 
 --showTerm :: Term -> String
 ----showTerm term = fromFlow "fail" noGraph (jsonValueToString <$> untypedTermToJson term)
@@ -127,7 +134,6 @@ showTerm term = case stripTerm term of
 --      Left msg -> fail $ "failed to parse as JSON value: " ++ msg
 --      Right v -> coderDecode typeJsonCoder v
 
-
 showType :: Type -> String
 showType typ = case stripType typ of
   TypeFunction (FunctionType dom cod) -> "(" ++ showType dom ++ "→" ++ showType cod ++ ")"
@@ -163,3 +169,6 @@ showTypeScheme :: TypeScheme -> String
 showTypeScheme (TypeScheme vars body) = fa ++ showType body
   where
     fa = if L.null vars then "" else "∀[" ++ (L.intercalate "," (fmap (\(Name name) -> name) vars)) ++ "]."
+
+showTypeSubst :: TypeSubst -> String
+showTypeSubst (TypeSubst subst) = "{" ++ (L.intercalate "," (fmap (\(Name name, typ) -> name ++ "↦" ++ showType typ) (M.toList subst))) ++ "}"

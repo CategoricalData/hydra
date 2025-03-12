@@ -88,7 +88,7 @@ getTypeDescription = getDescription . typeAnnotationInternal
 isNativeType :: Element -> Bool
 isNativeType el = case elementType el of
     Nothing -> False
-    Just ts -> isType (typeSchemeType ts) && not isFlaggedAsFirstClassType
+    Just ts -> ts == TypeScheme [] (TypeVariable _Type) && not isFlaggedAsFirstClassType
   where
     isFlaggedAsFirstClassType = Y.fromMaybe False (getTermAnnotation key_firstClassType (elementTerm el) >>= Decode.boolean)
 

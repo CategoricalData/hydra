@@ -70,15 +70,6 @@ normalizeVariablesInTypeScheme scheme = TypeScheme newVars $ substInType subst $
     subst =TypeSubst $ M.fromList $ L.zip oldVars (TypeVariable <$> newVars)
 
 --------------------------------------------------------------------------------
--- Printing
-
-data TypeSubst = TypeSubst { unTypeSubst :: M.Map Name Type } deriving (Eq, Ord)
-data TermSubst = TermSubst { unTermSubst :: M.Map Name Term } deriving (Eq, Ord)
-
-showTypeSubst :: TypeSubst -> String
-showTypeSubst (TypeSubst subst) = "{" ++ (L.intercalate "," (fmap (\(Name name, typ) -> name ++ "↦" ++ showType typ) (M.toList subst))) ++ "}"
-
---------------------------------------------------------------------------------
 -- Unification
 
 -- TODO: eliminate lambda types before unification
@@ -433,7 +424,10 @@ inferredTypeOf term = do
   typeSchemeType . snd <$> inferTypeOf cx term
 
 inferTypeOfAnnotatedTerm :: AltInferenceContext -> AnnotatedTerm -> Flow s AltInferenceResult
-inferTypeOfAnnotatedTerm cx (AnnotatedTerm term _) = inferTypeOfTerm cx term
+inferTypeOfAnnotatedTerm cx (AnnotatedTerm term ann) = Flows.map withResult $ inferTypeOfTerm cx term
+  where
+    withResult (AltInferenceResult iterm itype icons isubst)
+      = AltInferenceResult (TermAnnotated $ AnnotatedTerm iterm ann) itype icons isubst
 
 inferTypeOfApplication :: AltInferenceContext -> Application -> Flow s AltInferenceResult
 inferTypeOfApplication cx (Application e0 e1) = bindInferredTerm cx e0 withLhs
