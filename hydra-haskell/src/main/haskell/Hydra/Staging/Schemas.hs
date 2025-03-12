@@ -46,23 +46,25 @@ definitionDependencyNamespaces defs = S.fromList $ Y.catMaybes (namespaceOf <$> 
         DefinitionTerm _ term _ -> termDependencyNames True True True term
 
 -- | Find dependency namespaces in all of a set of terms.
-dependencyNamespaces :: Bool -> Bool -> Bool -> Bool -> [Term] -> Flow Graph (S.Set Namespace)
-dependencyNamespaces withVars withPrims withNoms withSchema terms = do
-    allNames <- S.unions <$> (CM.mapM depNames terms)
+dependencyNamespaces :: Bool -> Bool -> Bool -> Bool -> [Element] -> Flow Graph (S.Set Namespace)
+dependencyNamespaces withVars withPrims withNoms withSchema els = do
+    allNames <- S.unions <$> (CM.mapM depNames els)
     return $ S.fromList $ Y.catMaybes (namespaceOf <$> S.toList allNames)
   where
-    depNames term = do
-      let dataNames = termDependencyNames withVars withPrims withNoms term
+    depNames el = do
+        typeNames <- if isEncodedType (fullyStripTerm term)
+          then typeDependencyNames <$> coreDecodeType term
+          else pure S.empty
 
-      schemaNames <- if withSchema
-        then typeDependencyNames <$> requireTermType term
-        else pure S.empty
-
-      typeNames <- if isEncodedType (fullyStripTerm term)
-        then typeDependencyNames <$> coreDecodeType term
-        else pure S.empty
-
-      return $ S.unions [dataNames, schemaNames, typeNames]
+        return $ S.unions [dataNames, schemaNames, typeNames]
+      where
+        term = elementTerm el
+        dataNames = termDependencyNames withVars withPrims withNoms term
+        schemaNames = if withSchema
+          then case elementType el of
+            Nothing -> S.empty
+            Just ts -> typeDependencyNames (typeSchemeType ts)
+          else S.empty
 
 dereferenceType :: Name -> Flow Graph (Maybe Type)
 dereferenceType name = do
@@ -72,9 +74,9 @@ dereferenceType name = do
     Just el -> Just <$> coreDecodeType (elementTerm el)
 
 elementAsTypedTerm :: Element -> Flow Graph TypedTerm
-elementAsTypedTerm el = do
-  typ <- requireTermType $ elementTerm el
-  return $ TypedTerm (elementTerm el) typ
+elementAsTypedTerm el = case elementType el of
+  Nothing -> fail "missing element type"
+  Just ts -> return $ TypedTerm (elementTerm el) (typeSchemeType ts)
 
 expectRecordType :: Name -> Type -> Flow s [FieldType]
 expectRecordType ename typ = case stripType typ of
@@ -102,13 +104,6 @@ findFieldType fname fields = case L.filter (\(FieldType fn _) -> fn == fname) fi
   [] -> fail $ "No such field: " ++ unName fname
   [f] -> pure $ fieldTypeType f
   _ -> fail $ "Multiple fields named " ++ unName fname
-
--- TODO: a graph is a let-expression, so it should be trivial to get the type scheme of an element upon lookup. See issue #159.
-lookupTypedTerm :: Graph -> Name -> Maybe TypedTerm
-lookupTypedTerm g name = do
-  el <- lookupElement g name
-  typ <- getTermType $ elementTerm el
-  return $ TypedTerm (elementTerm el) typ
 
 fieldTypes :: Type -> Flow Graph (M.Map Name Type)
 fieldTypes t = case stripType t of
@@ -141,7 +136,7 @@ isSerializable el = do
 moduleDependencyNamespaces :: Bool -> Bool -> Bool -> Bool -> Module -> Flow Graph (S.Set Namespace)
 moduleDependencyNamespaces withVars withPrims withNoms withSchema mod =
   S.delete (moduleNamespace mod) <$> (dependencyNamespaces withVars withPrims withNoms withSchema $
-    (elementTerm <$> moduleElements mod))
+    (moduleElements mod))
 
 namespacesForDefinitions :: (Namespace -> a) -> Namespace -> [Definition] -> Namespaces a
 namespacesForDefinitions encodeNamespace focusNs defs = Namespaces (toPair focusNs) $ M.fromList (toPair <$> S.toList nss)

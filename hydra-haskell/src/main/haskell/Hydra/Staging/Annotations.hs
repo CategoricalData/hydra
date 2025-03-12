@@ -85,10 +85,12 @@ getTypeDescription = getDescription . typeAnnotationInternal
 
 -- | For a typed term, decide whether a coder should encode it as a native type expression,
 --   or as a Hydra type expression.
-isNativeType :: TypedTerm -> Bool
-isNativeType (TypedTerm term typ) = isType typ && not isFlaggedAsFirstClassType
+isNativeType :: Element -> Bool
+isNativeType el = case elementType el of
+    Nothing -> False
+    Just ts -> isType (typeSchemeType ts) && not isFlaggedAsFirstClassType
   where
-    isFlaggedAsFirstClassType = Y.fromMaybe False (getTermAnnotation key_firstClassType term >>= Decode.boolean)
+    isFlaggedAsFirstClassType = Y.fromMaybe False (getTermAnnotation key_firstClassType (elementTerm el) >>= Decode.boolean)
 
 hasDescription :: M.Map Name Term -> Bool
 hasDescription anns = case getAnnotation key_description anns of

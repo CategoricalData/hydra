@@ -192,7 +192,7 @@ expandLambdas g = contractTerm . expand
           then TermVariable name
           else pad [1..arity] $ TermVariable name
         where
-          arity = case typedTermType <$> lookupTypedTerm g name of
+          arity = case typeSchemeType <$> (lookupElement g name >>= elementType) of
             Nothing -> 0
             Just typ -> typeArity typ
       t -> t

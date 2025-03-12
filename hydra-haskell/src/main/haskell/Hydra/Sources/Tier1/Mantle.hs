@@ -95,6 +95,10 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "injectionTerm">: unit,
           "wrappedTerm">: unit],
 
+      def "TermSubst" $
+        doc "A substitution of term variables for terms" $
+        wrap $ Types.map (core "Name") (core "Term"),
+
       def "TermVariant" $
         doc "The identifier of a term expression constructor" $
         enum [
@@ -125,6 +129,10 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "comment">:
             doc "An optional description of the type constraint. This may be used for tracing or debugging." $
             optional string],
+
+      def "TypeSubst" $
+        doc "A substitution of type variables for types" $
+        wrap $ Types.map (core "Name") (core "Type"),
 
       def "TypeVariant" $
         doc "The identifier of a type constructor" $

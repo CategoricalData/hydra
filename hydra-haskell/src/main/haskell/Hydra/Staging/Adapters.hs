@@ -100,18 +100,20 @@ adaptedModuleDefinitions lang mod = do
     tterms <- withSchemaContext $ CM.mapM elementAsTypedTerm $ moduleElements mod
     let types = S.toList $ S.fromList $ (stripType . typedTermType <$> tterms)
     adapters <- adaptersFor types
-    CM.mapM (classify adapters) $ L.zip (elementName <$> moduleElements mod) tterms
+    CM.mapM (classify adapters) $ L.zip (moduleElements mod) tterms
   where
-    classify adapters (name, tt@(TypedTerm term typ)) = if isNativeType tt
-      then do
-        typ <- coreDecodeType term >>= adaptType lang
-        return $ DefinitionType name typ
-      else do
-        case M.lookup typ adapters of
-          Nothing -> fail $ "no adapter for element " ++ unName name
-          Just adapter -> do
-            adapted <- coderEncode (adapterCoder adapter) term
-            return $ DefinitionTerm name adapted $ adapterTarget adapter
+    classify adapters (el, tt@(TypedTerm term typ)) = if isNativeType el
+        then do
+          typ <- coreDecodeType term >>= adaptType lang
+          return $ DefinitionType name typ
+        else do
+          case M.lookup typ adapters of
+            Nothing -> fail $ "no adapter for element " ++ unName name
+            Just adapter -> do
+              adapted <- coderEncode (adapterCoder adapter) term
+              return $ DefinitionTerm name adapted $ adapterTarget adapter
+      where
+        name = elementName el
     adaptersFor types = do
       adapters <- CM.mapM (languageAdapter lang) types
       return $ M.fromList $ L.zip types adapters
