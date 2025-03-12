@@ -187,6 +187,14 @@ _TermAccessor_injectionTerm = (Core.Name "injectionTerm")
 
 _TermAccessor_wrappedTerm = (Core.Name "wrappedTerm")
 
+-- | A substitution of term variables for terms
+newtype TermSubst = 
+  TermSubst {
+    unTermSubst :: (M.Map Core.Name Core.Term)}
+  deriving (Eq, Ord, Read, Show)
+
+_TermSubst = (Core.Name "hydra.mantle.TermSubst")
+
 -- | The identifier of a term expression constructor
 data TermVariant = 
   TermVariantAnnotated  |
@@ -263,6 +271,14 @@ _TypeConstraint_left = (Core.Name "left")
 _TypeConstraint_right = (Core.Name "right")
 
 _TypeConstraint_comment = (Core.Name "comment")
+
+-- | A substitution of type variables for types
+newtype TypeSubst = 
+  TypeSubst {
+    unTypeSubst :: (M.Map Core.Name Core.Type)}
+  deriving (Eq, Ord, Read, Show)
+
+_TypeSubst = (Core.Name "hydra.mantle.TypeSubst")
 
 -- | The identifier of a type constructor
 data TypeVariant = 
