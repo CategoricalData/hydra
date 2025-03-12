@@ -136,6 +136,7 @@ showTerm term = case stripTerm term of
 
 showType :: Type -> String
 showType typ = case stripType typ of
+  TypeApplication (ApplicationType lhs rhs) -> "(" ++ showType lhs ++ " " ++ showType rhs ++ ")"
   TypeFunction (FunctionType dom cod) -> "(" ++ showType dom ++ "→" ++ showType cod ++ ")"
   TypeList etyp -> "[" ++ showType etyp ++ "]"
   TypeLiteral lt -> case lt of
