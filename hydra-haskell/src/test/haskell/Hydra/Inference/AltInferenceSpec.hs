@@ -27,15 +27,13 @@ import Hydra.Staging.TestGraph
 import qualified Hydra.Dsl.Testing as Testing
 
 
-initialContext :: AltInferenceContext
-initialContext = AltInferenceContext schemaTypes primTypes varTypes
-  where
-    primTypes = M.fromList $ fmap (\p -> (primitiveName p, primitiveType p)) (L.concat (libraryPrimitives <$> standardLibraries))
-    schemaTypes = fromFlow M.empty testGraph $ schemaGraphToTypingEnvironment testSchemaGraph
-    varTypes = M.empty
-
 expectType :: String -> Term -> TypeScheme -> H.Expectation
-expectType desc term expected = shouldSucceedWith desc (inferTypeOf initialContext term) expected
+expectType desc term expected = shouldSucceedWith desc result expected
+  where
+    result = do
+      cx <- graphToInferenceContext testGraph
+      (term1, ts) <- inferTypeOf cx term
+      return ts
 
 shouldSucceedWith :: (Eq a, Show a) => String -> Flow () a -> a -> H.Expectation
 shouldSucceedWith desc f x = case my of
