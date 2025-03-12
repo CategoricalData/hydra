@@ -7,6 +7,5 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | The identity function
-id_ :: (a -> a)
+id_ :: (t0 -> t0)
 id_ x = x

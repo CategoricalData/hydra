@@ -39,32 +39,28 @@ hydraStripModule = Module (Namespace "hydra.strip") elements [] [hydraCoreModule
 fullyStripTermDef :: TElement (Term -> Term)
 fullyStripTermDef = stripDefinition "fullyStripTerm" $
   doc "Strip all annotations from a term, including first-class type annotations" $
-  function termT termT $
-    lambda "t" (match _Term (Just $ var "t") [
-      TCase _Term_annotated --> ref fullyStripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject),
-      TCase _Term_typed --> ref fullyStripTermDef <.> (project _TypedTerm _TypedTerm_term)
-      ] @@ (var "t"))
+  lambda "t" $ match _Term (Just $ var "t") [
+    TCase _Term_annotated --> ref fullyStripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject),
+    TCase _Term_typed --> ref fullyStripTermDef <.> (project _TypedTerm _TypedTerm_term)]
+    @@ (var "t")
 
 stripTermDef :: TElement (Term -> Term)
 stripTermDef = stripDefinition "stripTerm" $
   doc "Strip all annotations from a term" $
-  function termT termT $
-    lambda "t" (match _Term (Just $ var "t") [
-      TCase _Term_annotated --> ref stripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject)
-      ] @@ (var "t"))
+  lambda "t" $ match _Term (Just $ var "t") [
+    TCase _Term_annotated --> ref stripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject)]
+    @@ (var "t")
 
 stripTypeDef :: TElement (Type -> Type)
 stripTypeDef = stripDefinition "stripType" $
   doc "Strip all annotations from a term" $
-  function typeT typeT $
-    lambda "t" (match _Type (Just $ var "t") [
-      TCase _Type_annotated --> ref stripTypeDef <.> (project _AnnotatedType _AnnotatedType_subject)
-      ] @@ (var "t"))
+  lambda "t" $ match _Type (Just $ var "t") [
+    TCase _Type_annotated --> ref stripTypeDef <.> (project _AnnotatedType _AnnotatedType_subject)]
+    @@ (var "t")
 
 stripTypeParametersDef :: TElement (Type -> Type)
 stripTypeParametersDef = stripDefinition "stripTypeParameters" $
   doc "Strip any top-level type lambdas from a type, extracting the (possibly nested) type body" $
-  function typeT typeT $
-    lambda "t" $ match _Type (Just $ var "t") [
-      TCase _Type_lambda --> lambda "lt" (ref stripTypeParametersDef @@ (project _LambdaType _LambdaType_body @@ var "lt"))
-      ] @@ (ref stripTypeDef @@ var "t")
+  lambda "t" $ match _Type (Just $ var "t") [
+    TCase _Type_lambda --> lambda "lt" (ref stripTypeParametersDef @@ (project _LambdaType _LambdaType_body @@ var "lt"))
+    ] @@ (ref stripTypeDef @@ var "t")

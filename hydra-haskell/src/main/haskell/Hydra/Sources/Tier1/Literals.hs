@@ -37,7 +37,6 @@ hydraLiteralsModule = Module (Namespace "hydra.literals") elements [] [hydraCore
 floatValueToBigfloatDef :: TElement (Double -> Double)
 floatValueToBigfloatDef = literalsDefinition "floatValueToBigfloat" $
   doc "Convert a floating-point value of any precision to a bigfloat" $
-  function floatValueT Types.bigfloat $
   match _FloatValue Nothing [
     _FloatValue_bigfloat>>: lambda "f" $ Equality.identity $ var "f",
     _FloatValue_float32>>: Literals.float32ToBigfloat,
@@ -46,7 +45,6 @@ floatValueToBigfloatDef = literalsDefinition "floatValueToBigfloat" $
 integerValueToBigintDef :: TElement (IntegerValue -> Integer)
 integerValueToBigintDef = literalsDefinition "integerValueToBigint" $
   doc "Convert an integer value of any precision to a bigint" $
-  function integerValueT Types.bigint $
   match _IntegerValue Nothing [
     _IntegerValue_bigint>>: lambda "i" $ Equality.identity $ var "i",
     _IntegerValue_int8>>: Literals.int8ToBigint,
