@@ -127,8 +127,8 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "left">: core "Type",
           "right">: core "Type",
           "comment">:
-            doc "An optional description of the type constraint. This may be used for tracing or debugging." $
-            optional string],
+            doc "A description of the type constraint which may be used for tracing or debugging"
+            string],
 
       def "TypeSubst" $
         doc "A substitution of type variables for types" $

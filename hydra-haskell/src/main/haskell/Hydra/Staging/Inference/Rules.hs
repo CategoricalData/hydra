@@ -40,7 +40,7 @@ data Inferred a = Inferred {
 key_vcount = Name "vcount"
 
 constraint :: Type -> Type -> TypeConstraint
-constraint t1 t2 = TypeConstraint t1 t2 Nothing
+constraint t1 t2 = TypeConstraint t1 t2 "no comment"
 
 fieldType :: Field -> FieldType
 fieldType (Field fname term) = FieldType fname $ termType term

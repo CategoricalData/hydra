@@ -117,21 +117,21 @@ unifyTypeConstraints cx constraints = case constraints of
         -- TODO: this occurrence check is expensive; consider delaying it until the time of substitution
         tryBinding v t = if variableOccursInType v t
           then Flows.fail $ "Variable " ++ unName v ++ " appears free in " ++ showType t
-            ++ (Y.maybe "" (\c -> " (" ++ c ++ ")") comment)
+            ++ " (" ++ comment ++ ")"
           else bind v t
         bind v t = composeTypeSubst subst <$> unifyTypeConstraints cx (substituteInConstraints subst rest)
           where
             subst = singletonTypeSubst v t
 
-unifyTypeLists :: AltInferenceContext -> [Type] -> [Type] -> Maybe String -> Flow s TypeSubst
+unifyTypeLists :: AltInferenceContext -> [Type] -> [Type] -> String -> Flow s TypeSubst
 unifyTypeLists cx l r comment = unifyTypeConstraints cx $ L.zipWith toConstraint l r
   where
     toConstraint l r = TypeConstraint l r comment
 
-unifyTypes :: AltInferenceContext -> Type -> Type -> Maybe String -> Flow s TypeSubst
+unifyTypes :: AltInferenceContext -> Type -> Type -> String -> Flow s TypeSubst
 unifyTypes cx l r comment = unifyTypeConstraints cx [TypeConstraint l r comment]
 
-joinTypes :: Type -> Type -> Maybe String -> Flow s [TypeConstraint]
+joinTypes :: Type -> Type -> String -> Flow s [TypeConstraint]
 joinTypes left right comment = case sleft of
     TypeApplication (ApplicationType lhs1 rhs1) -> case sright of
       TypeApplication (ApplicationType lhs2 rhs2) -> Flows.pure [
@@ -179,7 +179,7 @@ joinTypes left right comment = case sleft of
   where
     sleft = stripType left
     sright = stripType right
-    joinOne l r = TypeConstraint l r $ fmap (\c -> "join types; " ++ c) comment
+    joinOne l r = TypeConstraint l r $ "join types; " ++ comment
     cannotUnify = Flows.fail $ "Cannot unify " ++ showType sleft ++ " with " ++ showType sright
     assertEqual = if sleft == sright
       then Flows.pure []
@@ -450,7 +450,7 @@ inferTypeOfApplication cx (Application e0 e1) = bindInferredTerm cx e0 "lhs" wit
             withVar v = Flows.map withSubst $ unifyTypes cx
                 (substInType s1 $ typeSchemeType t0)
                 (Types.function (typeSchemeType t1) $ TypeVariable v)
-                (Just "application lhs")
+                "application lhs"
               where
                 withSubst s2 = AltInferenceResult rExpr (Types.mono rType) [] rSubst
                   where
@@ -471,11 +471,11 @@ inferTypeOfCaseStatement cx (CaseStatement tname dflt cases) = Flows.bind (requi
                 withCod codv = mapConstraints cx withConstraints (dfltConstraints ++ caseConstraints)
                   where
                     cod = TypeVariable codv
-                    dfltConstraints = maybeToList $ fmap (\r -> TypeConstraint cod (typeSchemeType $ altInferenceResultTypeScheme r) $ Just "match default") mr
+                    dfltConstraints = maybeToList $ fmap (\r -> TypeConstraint cod (typeSchemeType $ altInferenceResultTypeScheme r) "match default") mr
                     caseConstraints = Y.catMaybes $ L.zipWith (\fname itype -> fmap (\r -> toConstraint r itype) $ M.lookup fname caseMap) fnames itypes
                       where
                         caseMap = M.fromList $ fmap (\(FieldType fname ftype) -> (fname, ftype)) sfields
-                        toConstraint ftyp r = TypeConstraint r (Types.function ftyp cod) $ Just "case type"
+                        toConstraint ftyp r = TypeConstraint r (Types.function ftyp cod) "case type"
                     withConstraints subst = yield
                         (TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement tname (fmap altInferenceResultTerm mr) $ L.zipWith Field fnames iterms)
                         (TypeFunction $ FunctionType (nominalApplication tname svars) cod)
@@ -488,7 +488,7 @@ inferTypeOfCollection cx typCons trmCons desc els = bindVar withVar
       where
         fromResults (terms, types, subst1) = bindConstraints cx constraints withConstraints
           where
-            constraints = fmap (\t -> TypeConstraint (TypeVariable var) t $ Just desc) types
+            constraints = fmap (\t -> TypeConstraint (TypeVariable var) t desc) types
             withConstraints subst2 = do
 
 --                debugIf "All tests, Inference tests, Simple terms, List terms, List with bound variables, #1" $ ""
@@ -518,7 +518,7 @@ inferTypeOfFold cx fun = bindVar2 withVars
         aT = TypeVariable a
         bT = TypeVariable b
         withResult (AltInferenceResult iterm (TypeScheme _ ityp) _ isubst) = mapConstraints cx withSubst [
-            TypeConstraint expectedType ityp $ Just "fold function"]
+            TypeConstraint expectedType ityp "fold function"]
           where
             expectedType = Types.functionN [bT, aT, bT]
             withSubst subst = yield iterm (Types.functionN [bT, Types.list aT, bT]) $ composeTypeSubst isubst subst
@@ -538,7 +538,7 @@ inferTypeOfInjection cx (Injection tname (Field fname term)) = bind2 (requireSch
         withFields sfields = Flows.bind (findFieldType fname sfields) withField
           where
             withField ftyp = mapConstraints cx withSubst [
-                TypeConstraint ftyp ityp $ Just "schema type of injected field"]
+                TypeConstraint ftyp ityp "schema type of injected field"]
               where
                 withSubst subst = yield
                   (Terms.inject tname $ Field fname iterm)
@@ -548,7 +548,8 @@ inferTypeOfInjection cx (Injection tname (Field fname term)) = bind2 (requireSch
 inferTypeOfLambda :: AltInferenceContext -> Lambda -> Flow s AltInferenceResult
 inferTypeOfLambda cx tmp@(Lambda var _ body) = bindVar withVdom
   where
-    withVdom vdom = Flows.map withResult (inferTypeOfTerm cx2 body "lambda body")
+--    withVdom vdom = Flows.map withResult (inferTypeOfTerm cx2 body "lambda body")
+    withVdom vdom = Flows.map withResult (inferTypeOfTerm cx2 body $ "lambda body: " ++ showTerm body)
       where
         dom = TypeVariable vdom
         cx2 = extendContext [(var, Types.mono $ TypeVariable vdom)] cx
@@ -566,7 +567,7 @@ inferTypeOfLet cx (Let b0 env0) = bindVars (L.length b0) withVars
         cx2 = extendContext (L.zip bnames $ fmap Types.mono btypes) cx
         btypes = fmap TypeVariable bvars
         withInferredBindings (eb1, tb, s1) = Flows.bind
-            (unifyTypeLists cx (fmap (substInType s1) btypes) tb $ Just "let temporary type bindings") withSubst
+            (unifyTypeLists cx (fmap (substInType s1) btypes) tb "let temporary type bindings") withSubst
           where
             withSubst sb = Flows.bind (inferTypeOfTerm cx3 env0 "let environment") withEnv
               where
@@ -612,8 +613,8 @@ inferTypeOfMap cx m = bindVar2 withVars
           where
             withValues (vterms, vtypes, vsubst) = mapConstraints cx withSubst $ kcons ++ vcons
               where
-                kcons = fmap (\t -> TypeConstraint (TypeVariable kvar) t $ Just "map key") ktypes
-                vcons = fmap (\t -> TypeConstraint (TypeVariable vvar) t $ Just "map value") vtypes
+                kcons = fmap (\t -> TypeConstraint (TypeVariable kvar) t "map key") ktypes
+                vcons = fmap (\t -> TypeConstraint (TypeVariable vvar) t "map value") vtypes
                 withSubst subst = yield
                     (TermMap $ M.fromList $ L.zip kterms vterms)
                     (Types.map (TypeVariable kvar) (TypeVariable vvar))
@@ -634,8 +635,8 @@ inferTypeOfOptionalCases cx (OptionalCases n j) = bindVar2 withVars
         dom = TypeVariable domv
         cod = TypeVariable codv
         withResults (nterm, nts, jterm, jts, subst) = mapConstraints cx withSubst [
-            TypeConstraint cod nts $ Just "optional elimination; nothing case",
-            TypeConstraint (Types.function dom cod) jts $ Just "optional elimination; just case"]
+            TypeConstraint cod nts "optional elimination; nothing case",
+            TypeConstraint (Types.function dom cod) jts "optional elimination; just case"]
           where
             withSubst csubst = yield
                 (Terms.matchOpt nterm jterm)
@@ -673,7 +674,7 @@ inferTypeOfRecord cx (Record tname fields) =
   where
     fnames = fmap fieldName fields
     withResults (TypeScheme svars styp) (iterms, itypes, isubst) = bindConstraints cx [
-        TypeConstraint styp ityp $ Just "schema type of record"] withSubst
+        TypeConstraint styp ityp "schema type of record"] withSubst
       where
         ityp = TypeRecord $ RowType tname $ L.zipWith FieldType fnames itypes
         withSubst subst = do
@@ -763,7 +764,7 @@ inferTypeOfWrappedTerm cx (WrappedTerm tname term) = bind2 (requireSchemaType cx
   where
     withResult (TypeScheme svars styp) (AltInferenceResult iterm (TypeScheme _ ityp) icons isubst)
         = mapConstraints cx withSubst [
-          TypeConstraint styp (TypeWrap $ WrappedType tname ityp) $ Just "schema type of wrapper"]
+          TypeConstraint styp (TypeWrap $ WrappedType tname ityp) "schema type of wrapper"]
       where
         withSubst subst = yield (Terms.wrap tname iterm) (nominalApplication tname svars) (composeTypeSubst isubst subst)
 
