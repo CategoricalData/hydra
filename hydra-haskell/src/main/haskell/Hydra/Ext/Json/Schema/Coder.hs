@@ -33,7 +33,7 @@ constructModule
   -> Flow Graph (M.Map FilePath JS.Document)
 constructModule opts mod coders pairs = M.fromList <$> CM.mapM toDocument pairs
   where
-    toDocument (el, tt@(TypedTerm term typ)) = if isNativeType tt
+    toDocument (el, tt@(TypedTerm term typ)) = if isNativeType el
       then typeTermToDocument (elementName el)
       else fail $ "mapping of non-type elements to JSON Schema is not yet supported: " ++ unName (elementName el)
 

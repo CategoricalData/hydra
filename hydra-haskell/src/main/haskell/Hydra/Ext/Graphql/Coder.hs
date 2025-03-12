@@ -47,7 +47,7 @@ constructModule mod coders pairs = do
         toPair ns = (ns, if ns == moduleNamespace mod then "" else (sanitizeWithUnderscores S.empty (unNamespace ns)) ++ "_")
     toTypeDef prefixes el = do
       typ <- requireTermType term
-      if isNativeType (TypedTerm term typ)
+      if isNativeType el
         then coreDecodeType (elementTerm el) >>= encodeNamedType prefixes el
         else fail $ "mapping of non-type elements to GraphQL is not yet supported: " ++ unName (elementName el)
      where

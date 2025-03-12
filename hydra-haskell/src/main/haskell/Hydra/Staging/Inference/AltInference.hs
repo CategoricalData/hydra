@@ -72,9 +72,6 @@ normalizeVariablesInTypeScheme scheme = TypeScheme newVars $ substInType subst $
 --------------------------------------------------------------------------------
 -- Printing
 
-showTypeConstraint :: TypeConstraint -> String
-showTypeConstraint (TypeConstraint ltyp rtyp _) = showType ltyp ++ "≡" ++ showType rtyp
-
 data TypeSubst = TypeSubst { unTypeSubst :: M.Map Name Type } deriving (Eq, Ord)
 data TermSubst = TermSubst { unTermSubst :: M.Map Name Term } deriving (Eq, Ord)
 
