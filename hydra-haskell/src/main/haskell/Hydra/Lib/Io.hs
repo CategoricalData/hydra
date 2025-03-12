@@ -83,10 +83,14 @@ showTerm term = case stripTerm term of
       IntegerValueUint64 v -> show v
     LiteralString s -> show s
   TermProduct els -> "(" ++ (L.intercalate ", " $ fmap showTerm els) ++ ")"
+  TermRecord (Record tname fields) -> "record(" ++ unName tname ++ "){" ++ (L.intercalate ", " $ fmap showField fields) ++ "}"
+    where
+      showField (Field fname term) = unName fname ++ "=" ++ showTerm term
   TermTypeAbstraction (TypeAbstraction (Name param) body) -> "Λ" ++ param ++ "." ++ showTerm body
   TermTypeApplication (TypedTerm term typ) -> showTerm term ++ "⟨" ++ showType typ ++ "⟩"
+  TermUnion (Injection tname (Field fname term1)) -> "inject(" ++ unName tname ++ "){" ++ unName fname ++ "=" ++ showTerm term1 ++ "}"
   TermVariable (Name name) -> name
-  TermWrap (WrappedTerm tname term1) -> "wrap[" ++ unName tname ++ "](" ++ showTerm term1 ++ ")"
+  TermWrap (WrappedTerm tname term1) -> "wrap(" ++ unName tname ++ "){" ++ showTerm term1 ++ "}"
   t -> show t
 
 --     coder <- termStringCoder
