@@ -116,7 +116,7 @@ unifyTypeConstraints cx constraints = case constraints of
         sright = stripType right
         -- TODO: this occurrence check is expensive; consider delaying it until the time of substitution
         tryBinding v t = if variableOccursInType v t
-          then Flows.fail $ "Variable " ++ unName v ++ " apears free in " ++ showType t
+          then Flows.fail $ "Variable " ++ unName v ++ " appears free in " ++ showType t
             ++ (Y.maybe "" (\c -> " (" ++ c ++ ")") comment)
           else bind v t
         bind v t = composeTypeSubst subst <$> unifyTypeConstraints cx (substituteInConstraints subst rest)
@@ -179,7 +179,7 @@ joinTypes left right comment = case sleft of
   where
     sleft = stripType left
     sright = stripType right
-    joinOne l r = TypeConstraint l r Nothing
+    joinOne l r = TypeConstraint l r $ fmap (\c -> "join types; " ++ c) comment
     cannotUnify = Flows.fail $ "Cannot unify " ++ showType sleft ++ " with " ++ showType sright
     assertEqual = if sleft == sright
       then Flows.pure []
@@ -358,9 +358,9 @@ graphToInferenceContext g0 = do
     varTypes = M.empty
 
 inferGraphTypes :: Graph -> Flow s Graph
-inferGraphTypes g0 = do
+inferGraphTypes g0 = withTrace "graph inference" $ do
     cx <- graphToInferenceContext g0
-    Flows.bind (inferTypeOfTerm cx $ toLetTerm g0) withResult
+    Flows.bind (inferTypeOfTerm cx (toLetTerm g0) "graph term") withResult
   where
     toLetTerm g = TermLet $ Let (fmap toBinding $ M.elems $ graphElements g) $ graphBody g
       where
@@ -376,11 +376,11 @@ inferGraphTypes g0 = do
       where
         fromBinding (LetBinding name term mt) = (name, Element name term mt)
 
-inferMany :: AltInferenceContext -> [Term] -> Flow s ([Term], [Type], TypeSubst)
+inferMany :: AltInferenceContext -> [(Term, String)] -> Flow s ([Term], [Type], TypeSubst)
 inferMany cx terms = case terms of
   [] -> return ([], [], emptyTypeSubst)
-  (e:tl) -> do
-    (AltInferenceResult e1 t1 _ s1) <- inferTypeOfTerm cx e
+  ((e, desc):tl) -> do
+    (AltInferenceResult e1 t1 _ s1) <- inferTypeOfTerm cx e desc
     (e2, t2, s2) <- inferMany (substInContext s1 cx) tl
     return (
       (substTypesInTerm s2 e1):e2,
@@ -401,8 +401,14 @@ inferTermType term0 = do
   cx <- graphToInferenceContext g
   fst <$> inferTypeOf cx term0
 
+inferTwo :: AltInferenceContext -> Term -> String -> Term -> String -> Flow s (Term, Type, Term, Type, TypeSubst)
+inferTwo cx term1 desc1 term2 desc2 = Flows.map withResult $ inferMany cx [(term1, desc1), (term2, desc2)]
+  where
+    withResult ([e1, e2], [t1, t2], s) = (e1, t1, e2, t2, s)
+    withResult _ = error "unexpected result from inferMany"
+
 inferTypeOf :: AltInferenceContext -> Term -> Flow s (Term, TypeScheme)
-inferTypeOf cx term = bindInferredTerm cx letTerm unifyAndSubst
+inferTypeOf cx term = bindInferredTerm cx letTerm "infer type of term" unifyAndSubst
   where
     letTerm = TermLet $ Let [LetBinding (Name "x") term Nothing] $ Terms.string "ignored"
     unifyAndSubst result = do
@@ -416,6 +422,11 @@ inferTypeOf cx term = bindInferredTerm cx letTerm unifyAndSubst
       where
         subst = altInferenceResultSubst result
 
+inferTypeOfElement :: AltInferenceContext -> Element -> Flow s Element
+inferTypeOfElement cx (Element name term _) = withTrace ("inference on element " ++ unName name) $ do
+  (term1, ts) <- inferTypeOf cx term
+  return $ Element name term1 (Just ts)
+
 -- TODO: deprecated (and expensive)
 inferredTypeOf :: Term -> Flow Graph Type
 inferredTypeOf term = do
@@ -424,20 +435,22 @@ inferredTypeOf term = do
   typeSchemeType . snd <$> inferTypeOf cx term
 
 inferTypeOfAnnotatedTerm :: AltInferenceContext -> AnnotatedTerm -> Flow s AltInferenceResult
-inferTypeOfAnnotatedTerm cx (AnnotatedTerm term ann) = Flows.map withResult $ inferTypeOfTerm cx term
+inferTypeOfAnnotatedTerm cx (AnnotatedTerm term ann) = Flows.map withResult $ inferTypeOfTerm cx term "annotated term"
   where
     withResult (AltInferenceResult iterm itype icons isubst)
       = AltInferenceResult (TermAnnotated $ AnnotatedTerm iterm ann) itype icons isubst
 
 inferTypeOfApplication :: AltInferenceContext -> Application -> Flow s AltInferenceResult
-inferTypeOfApplication cx (Application e0 e1) = bindInferredTerm cx e0 withLhs
+inferTypeOfApplication cx (Application e0 e1) = bindInferredTerm cx e0 "lhs" withLhs
   where
-    withLhs (AltInferenceResult a t0 _ s0) = bindInferredTerm (substInContext s0 cx) e1 withRhs
+    withLhs (AltInferenceResult a t0 _ s0) = bindInferredTerm (substInContext s0 cx) e1 "rhs" withRhs
       where
         withRhs (AltInferenceResult b t1 _ s1) = bindVar withVar
           where
-            withVar v = Flows.map withSubst
-                $ unifyTypes cx (substInType s1 $ typeSchemeType t0) (Types.function (typeSchemeType t1) $ TypeVariable v) $ Just "application lhs"
+            withVar v = Flows.map withSubst $ unifyTypes cx
+                (substInType s1 $ typeSchemeType t0)
+                (Types.function (typeSchemeType t1) $ TypeVariable v)
+                (Just "application lhs")
               where
                 withSubst s2 = AltInferenceResult rExpr (Types.mono rType) [] rSubst
                   where
@@ -451,7 +464,7 @@ inferTypeOfCaseStatement cx (CaseStatement tname dflt cases) = Flows.bind (requi
     fnames = fmap fieldName cases
     withSchemaType (TypeScheme svars styp) = Flows.bind (expectUnionType tname styp) withFields
       where
-        withFields sfields = bind2 (traverse (inferTypeOfTerm cx) dflt) (inferMany cx $ fmap fieldTerm cases) withResults
+        withFields sfields = bind2 (traverse (\t -> inferTypeOfTerm cx t "default") dflt) (inferMany cx $ fmap (\f -> (fieldTerm f, "case " ++ unName (fieldName f))) cases) withResults
           where
             withResults mr (iterms, itypes, isubst) = bindVar withCod
               where
@@ -471,7 +484,7 @@ inferTypeOfCaseStatement cx (CaseStatement tname dflt cases) = Flows.bind (requi
 inferTypeOfCollection :: AltInferenceContext -> (Type -> Type) -> ([Term] -> Term) -> String -> [Term] -> Flow s AltInferenceResult
 inferTypeOfCollection cx typCons trmCons desc els = bindVar withVar
   where
-    withVar var = Flows.bind (inferMany cx els) fromResults
+    withVar var = Flows.bind (inferMany cx $ L.zip els $ fmap (\i -> "#" ++ show i) [1..(L.length els)]) fromResults
       where
         fromResults (terms, types, subst1) = bindConstraints cx constraints withConstraints
           where
@@ -500,7 +513,7 @@ inferTypeOfElimination cx elm = case elm of
 inferTypeOfFold :: AltInferenceContext -> Term -> Flow s AltInferenceResult
 inferTypeOfFold cx fun = bindVar2 withVars
   where
-    withVars a b = Flows.bind (inferTypeOfTerm cx fun) withResult
+    withVars a b = Flows.bind (inferTypeOfTerm cx fun "fold function") withResult
       where
         aT = TypeVariable a
         bT = TypeVariable b
@@ -517,7 +530,7 @@ inferTypeOfFunction cx f = case f of
   FunctionPrimitive name -> inferTypeOfPrimitive cx name
 
 inferTypeOfInjection :: AltInferenceContext -> Injection -> Flow s AltInferenceResult
-inferTypeOfInjection cx (Injection tname (Field fname term)) = bind2 (requireSchemaType cx tname) (inferTypeOfTerm cx term) withResults
+inferTypeOfInjection cx (Injection tname (Field fname term)) = bind2 (requireSchemaType cx tname) (inferTypeOfTerm cx term "injected term") withResults
   where
     withResults (TypeScheme svars styp) (AltInferenceResult iterm (TypeScheme _ ityp) _ isubst) =
         Flows.bind (expectUnionType tname styp) withFields
@@ -535,7 +548,7 @@ inferTypeOfInjection cx (Injection tname (Field fname term)) = bind2 (requireSch
 inferTypeOfLambda :: AltInferenceContext -> Lambda -> Flow s AltInferenceResult
 inferTypeOfLambda cx tmp@(Lambda var _ body) = bindVar withVdom
   where
-    withVdom vdom = Flows.map withResult (inferTypeOfTerm cx2 body)
+    withVdom vdom = Flows.map withResult (inferTypeOfTerm cx2 body "lambda body")
       where
         dom = TypeVariable vdom
         cx2 = extendContext [(var, Types.mono $ TypeVariable vdom)] cx
@@ -548,14 +561,14 @@ inferTypeOfLet cx (Let b0 env0) = bindVars (L.length b0) withVars
   where
     bnames = fmap letBindingName b0
     eb0 = fmap letBindingTerm b0
-    withVars bvars = Flows.bind (inferMany cx2 eb0) withInferredBindings
+    withVars bvars = Flows.bind (inferMany cx2 $ L.zip eb0 $ fmap (\n -> "binding " ++ unName n) bnames) withInferredBindings
       where
         cx2 = extendContext (L.zip bnames $ fmap Types.mono btypes) cx
         btypes = fmap TypeVariable bvars
         withInferredBindings (eb1, tb, s1) = Flows.bind
             (unifyTypeLists cx (fmap (substInType s1) btypes) tb $ Just "let temporary type bindings") withSubst
           where
-            withSubst sb = Flows.bind (inferTypeOfTerm cx3 env0) withEnv
+            withSubst sb = Flows.bind (inferTypeOfTerm cx3 env0 "let environment") withEnv
               where
                 cx3 = extendContext (L.zip bnames $ fmap (generalize cx . substInType sb) tb) cx2
                 withEnv tmp@(AltInferenceResult env1 tenv _ senv) = do
@@ -593,9 +606,9 @@ inferTypeOfMap cx m = bindVar2 withVars
     withVars kvar vvar = if M.null m
         -- TODO: get rid of this special case; it should follow from the generate case
         then Flows.pure $ yield (TermMap M.empty) (Types.map (TypeVariable kvar) (TypeVariable vvar)) emptyTypeSubst
-        else Flows.bind (inferMany cx $ M.keys m) withKeys
+        else Flows.bind (inferMany cx $ fmap (\k -> (k, "map key")) $ M.keys m) withKeys
       where
-        withKeys (kterms, ktypes, ksubst) = Flows.bind (inferMany cx $ M.elems m) withValues
+        withKeys (kterms, ktypes, ksubst) = Flows.bind (inferMany cx $ fmap (\v -> (v, "map value")) $ M.elems m) withValues
           where
             withValues (vterms, vtypes, vsubst) = mapConstraints cx withSubst $ kcons ++ vcons
               where
@@ -616,20 +629,18 @@ inferTypeOfOptional cx m = inferTypeOfCollection cx Types.optional trmCons "opti
 inferTypeOfOptionalCases :: AltInferenceContext -> OptionalCases -> Flow s AltInferenceResult
 inferTypeOfOptionalCases cx (OptionalCases n j) = bindVar2 withVars
   where
-    withVars domv codv = bindInferredTerm2 cx n j withResults
+    withVars domv codv = Flows.bind (inferTwo cx n "nothing case" j "just case") withResults
       where
         dom = TypeVariable domv
         cod = TypeVariable codv
-        withResults nresult jresult = mapConstraints cx withSubst [
-            TypeConstraint cod ntyp $ Just "optional elimination; nothing case",
-            TypeConstraint (Types.function dom cod) jtyp $ Just "optional elimination; just case"]
+        withResults (nterm, nts, jterm, jts, subst) = mapConstraints cx withSubst [
+            TypeConstraint cod nts $ Just "optional elimination; nothing case",
+            TypeConstraint (Types.function dom cod) jts $ Just "optional elimination; just case"]
           where
-            ntyp = typeSchemeType $ altInferenceResultTypeScheme nresult
-            jtyp = typeSchemeType $ altInferenceResultTypeScheme jresult
-            withSubst subst = yield
-                (Terms.matchOpt (altInferenceResultTerm nresult) (altInferenceResultTerm jresult))
+            withSubst csubst = yield
+                (Terms.matchOpt nterm jterm)
                 (Types.function (Types.optional dom) cod)
-                (composeTypeSubstList [altInferenceResultSubst nresult, altInferenceResultSubst jresult, subst])
+                (composeTypeSubst subst csubst)
 
 inferTypeOfPrimitive :: AltInferenceContext -> Name -> Flow s AltInferenceResult
 inferTypeOfPrimitive cx name = case M.lookup name (altInferenceContextPrimitiveTypes cx) of
@@ -640,7 +651,7 @@ inferTypeOfPrimitive cx name = case M.lookup name (altInferenceContextPrimitiveT
     withScheme ts = yield (Terms.primitive name) (typeSchemeType ts) emptyTypeSubst
 
 inferTypeOfProduct :: AltInferenceContext -> [Term] -> Flow s AltInferenceResult
-inferTypeOfProduct cx els = Flows.map withResults (inferMany cx els)
+inferTypeOfProduct cx els = Flows.map withResults (inferMany cx $ fmap (\e -> (e, "tuple element")) els)
   where
     withResults (iterms, itypes, isubst) = yield (Terms.product iterms) (Types.product itypes) isubst
 
@@ -658,7 +669,7 @@ inferTypeOfProjection cx (Projection tname fname) = Flows.bind (requireSchemaTyp
 
 inferTypeOfRecord :: AltInferenceContext -> Record -> Flow s AltInferenceResult
 inferTypeOfRecord cx (Record tname fields) =
-    bind2 (requireSchemaType cx tname) (inferMany cx $ fmap fieldTerm fields) withResults
+    bind2 (requireSchemaType cx tname) (inferMany cx $ fmap (\f -> (fieldTerm f, "field " ++ unName (fieldName f))) fields) withResults
   where
     fnames = fmap fieldName fields
     withResults (TypeScheme svars styp) (iterms, itypes, isubst) = bindConstraints cx [
@@ -680,7 +691,7 @@ inferTypeOfSet :: AltInferenceContext -> S.Set Term -> Flow s AltInferenceResult
 inferTypeOfSet cx = inferTypeOfCollection cx Types.set (Terms.set . S.fromList) "set element" . S.toList
 
 inferTypeOfSum :: AltInferenceContext -> Sum -> Flow s AltInferenceResult
-inferTypeOfSum cx (Sum i s term) = bindInferredTerm cx term withResult
+inferTypeOfSum cx (Sum i s term) = bindInferredTerm cx term "sum term" withResult
   where
     withResult (AltInferenceResult iterm (TypeScheme _ typ) icons isubst) = Flows.map withVars (Flows.sequence $ fmap (varOrTerm typ) [0..(s-1)])
       where
@@ -693,8 +704,8 @@ inferTypeOfSum cx (Sum i s term) = bindInferredTerm cx term withResult
               Left t -> t
               Right v -> TypeVariable v
 
-inferTypeOfTerm :: AltInferenceContext -> Term -> Flow s AltInferenceResult
-inferTypeOfTerm cx term = case term of
+inferTypeOfTerm :: AltInferenceContext -> Term -> String -> Flow s AltInferenceResult
+inferTypeOfTerm cx term desc = withTrace desc $ case term of
   TermAnnotated a -> inferTypeOfAnnotatedTerm cx a
   TermApplication a -> inferTypeOfApplication cx a
   TermFunction f -> inferTypeOfFunction cx f
@@ -725,7 +736,7 @@ inferTypeOfTupleProjection _ (TupleProjection arity idx) = forVars arity withVar
 
 -- For now, type annotations are simply ignored during inference.
 inferTypeOfTypedTerm :: AltInferenceContext -> TypedTerm -> Flow s AltInferenceResult
-inferTypeOfTypedTerm cx (TypedTerm term _) = inferTypeOfTerm cx term
+inferTypeOfTypedTerm cx (TypedTerm term _) = inferTypeOfTerm cx term "typed term"
 
 inferTypeOfUnwrap :: AltInferenceContext -> Name -> Flow s AltInferenceResult
 inferTypeOfUnwrap cx tname = Flows.bind (requireSchemaType cx tname) withSchemaType
@@ -748,7 +759,7 @@ inferTypeOfVariable cx name = case M.lookup name (altInferenceContextDataTypes c
       [] emptyTypeSubst
 
 inferTypeOfWrappedTerm :: AltInferenceContext -> WrappedTerm -> Flow s AltInferenceResult
-inferTypeOfWrappedTerm cx (WrappedTerm tname term) = bind2 (requireSchemaType cx tname) (inferTypeOfTerm cx term) withResult
+inferTypeOfWrappedTerm cx (WrappedTerm tname term) = bind2 (requireSchemaType cx tname) (inferTypeOfTerm cx term "wrapped term") withResult
   where
     withResult (TypeScheme svars styp) (AltInferenceResult iterm (TypeScheme _ ityp) icons isubst)
         = mapConstraints cx withSubst [
@@ -770,17 +781,11 @@ bindVar2 f = bindVar $ \v1 -> bindVar $ \v2 -> f v1 v2
 bindVars :: Int -> ([Name] -> Flow s a) -> Flow s a
 bindVars n = Flows.bind $ freshNames n
 
-bindInferredTerm :: AltInferenceContext -> Term -> (AltInferenceResult -> Flow s a) -> Flow s a
-bindInferredTerm cx term = Flows.bind $ inferTypeOfTerm cx term
+bindInferredTerm :: AltInferenceContext -> Term -> String -> (AltInferenceResult -> Flow s a) -> Flow s a
+bindInferredTerm cx term desc = Flows.bind $ inferTypeOfTerm cx term desc
 
-bindInferredTerm2 :: AltInferenceContext -> Term -> Term -> (AltInferenceResult -> AltInferenceResult -> Flow s a) -> Flow s a
-bindInferredTerm2 cx t1 t2 f = bindInferredTerm cx t1 $ \r1 -> bindInferredTerm cx t2 $ f r1
-
-forInferredTerm :: AltInferenceContext -> Term -> (AltInferenceResult -> a) -> Flow s a
-forInferredTerm cx term f = Flows.map f $ inferTypeOfTerm cx term
-
-forInferredTerm2 :: AltInferenceContext -> Term -> Term -> (AltInferenceResult -> AltInferenceResult -> a) -> Flow s a
-forInferredTerm2 cx t1 t2 f = map2 (inferTypeOfTerm cx t1) (inferTypeOfTerm cx t2) f
+forInferredTerm :: AltInferenceContext -> Term -> String -> (AltInferenceResult -> a) -> Flow s a
+forInferredTerm cx term desc f = Flows.map f $ inferTypeOfTerm cx term desc
 
 forVar :: (Name -> a) -> Flow s a
 forVar f = Flows.map f freshName
