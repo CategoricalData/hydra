@@ -186,6 +186,8 @@ encodeTerm namespaces term = do
       let lhs = hsvar "S.fromList"
       rhs <- encodeTerm namespaces $ TermList $ S.toList s
       return $ hsapp lhs rhs
+    TermTypeAbstraction (TypeAbstraction _ term1) -> encode term1
+    TermTypeApplication (TypedTerm term1 _) -> encode term1
     TermUnion (Injection sname (Field fn ft)) -> do
       let lhs = H.ExpressionVariable $ unionFieldReference namespaces sname fn
       case fullyStripTerm ft of
