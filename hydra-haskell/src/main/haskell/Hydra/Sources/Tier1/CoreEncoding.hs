@@ -78,9 +78,8 @@ coreEncodingModule = Module (Namespace "hydra.coreEncoding") elements [] [hydraC
       el isUnitTermDef,
       el isUnitTypeDef]
 
-coreEncodingDefinition :: String -> Type -> TTerm x -> TElement x
-coreEncodingDefinition label dom datum = definitionInModule coreEncodingModule ("coreEncode" <> label) $
-  function dom termT datum
+coreEncodingDefinition :: String -> TTerm x -> TElement x
+coreEncodingDefinition label = definitionInModule coreEncodingModule ("coreEncode" <> label)
 
 coreEncodingExtrasDefinition :: String -> TTerm a -> TElement a
 coreEncodingExtrasDefinition = definitionInModule coreEncodingModule
@@ -159,31 +158,31 @@ encodedVariant :: Name -> Name -> TTerm Term -> TTerm Term
 encodedVariant tname fname term = encodedUnion $ encodedInjection tname fname term
 
 coreEncodeAnnotatedTermDef :: TElement (AnnotatedTerm -> Term)
-coreEncodeAnnotatedTermDef = coreEncodingDefinition "AnnotatedTerm" annotatedTermT $
+coreEncodeAnnotatedTermDef = coreEncodingDefinition "AnnotatedTerm" $
   lambda "a" $ variant _Term _Term_annotated $ record _AnnotatedTerm [
     field _AnnotatedTerm_subject $ ref coreEncodeTermDef @@ (Core.annotatedTermSubject @@ var "a"),
     field _AnnotatedTerm_annotation $ Core.annotatedTermAnnotation @@ var "a"]
 
 coreEncodeAnnotatedTypeDef :: TElement (AnnotatedType -> Term)
-coreEncodeAnnotatedTypeDef = coreEncodingDefinition "AnnotatedType" annotatedTypeT $
+coreEncodeAnnotatedTypeDef = coreEncodingDefinition "AnnotatedType" $
   lambda "at" $ variant _Term _Term_annotated $ record _AnnotatedTerm [
     field _AnnotatedTerm_subject $ ref coreEncodeTypeDef @@ (Core.annotatedTypeSubject @@ var "at"),
     field _AnnotatedTerm_annotation $ Core.annotatedTypeAnnotation @@ var "at"]
 
 coreEncodeApplicationDef :: TElement (Application -> Term)
-coreEncodeApplicationDef = coreEncodingDefinition "Application" applicationT $
+coreEncodeApplicationDef = coreEncodingDefinition "Application" $
   lambda "app" $ encodedRecord _Application [
     field _Application_function $ ref coreEncodeTermDef @@ (Core.applicationFunction @@ var "app"),
     field _Application_argument $ ref coreEncodeTermDef @@ (Core.applicationArgument @@ var "app")]
 
 coreEncodeApplicationTypeDef :: TElement (ApplicationType -> Term)
-coreEncodeApplicationTypeDef = coreEncodingDefinition "ApplicationType" applicationTypeT $
+coreEncodeApplicationTypeDef = coreEncodingDefinition "ApplicationType" $
   lambda "at" $ encodedRecord _ApplicationType [
     field _ApplicationType_function $ ref coreEncodeTypeDef @@ (Core.applicationTypeFunction @@ var "at"),
     field _ApplicationType_argument $ ref coreEncodeTypeDef @@ (Core.applicationTypeArgument @@ var "at")]
 
 coreEncodeCaseStatementDef :: TElement (CaseStatement -> Term)
-coreEncodeCaseStatementDef = coreEncodingDefinition "CaseStatement" caseStatementT $
+coreEncodeCaseStatementDef = coreEncodingDefinition "CaseStatement" $
   lambda "cs" $ encodedRecord _CaseStatement [
     field _CaseStatement_typeName $ ref coreEncodeNameDef @@ (Core.caseStatementTypeName @@ var "cs"),
     field _CaseStatement_default $ encodedOptional
@@ -192,7 +191,7 @@ coreEncodeCaseStatementDef = coreEncodingDefinition "CaseStatement" caseStatemen
       (primitive _lists_map @@ ref coreEncodeFieldDef @@ (Core.caseStatementCases @@ var "cs"))]
 
 coreEncodeEliminationDef :: TElement (Elimination -> Term)
-coreEncodeEliminationDef = coreEncodingDefinition "Elimination" eliminationT $
+coreEncodeEliminationDef = coreEncodingDefinition "Elimination" $
     match _Elimination Nothing [
       ecase _Elimination_list coreEncodeTermDef,
       ecase _Elimination_optional coreEncodeOptionalCasesDef,
@@ -204,19 +203,19 @@ coreEncodeEliminationDef = coreEncodingDefinition "Elimination" eliminationT $
     ecase fname funname = encodedCase _Elimination fname (ref funname)
 
 coreEncodeFieldDef :: TElement (Field -> Term)
-coreEncodeFieldDef = coreEncodingDefinition "Field" fieldT $
+coreEncodeFieldDef = coreEncodingDefinition "Field" $
   lambda "f" $ encodedRecord _Field [
     field _Field_name $ encodedWrappedTerm _Name $ encodedString $ (unwrap _Name @@ (Core.fieldName @@ var "f")),
     field _Field_term $ ref coreEncodeTermDef @@ (Core.fieldTerm @@ var "f")]
 
 coreEncodeFieldTypeDef :: TElement (FieldType -> Term)
-coreEncodeFieldTypeDef = coreEncodingDefinition "FieldType" fieldTypeT $
+coreEncodeFieldTypeDef = coreEncodingDefinition "FieldType" $
   lambda "ft" $ encodedRecord _FieldType [
     field _FieldType_name $ ref coreEncodeNameDef @@ (Core.fieldTypeName @@ var "ft"),
     field _FieldType_type $ ref coreEncodeTypeDef @@ (Core.fieldTypeType @@ var "ft")]
 
 coreEncodeFloatTypeDef :: TElement (FloatType -> Term)
-coreEncodeFloatTypeDef = coreEncodingDefinition "FloatType" floatTypeT $
+coreEncodeFloatTypeDef = coreEncodingDefinition "FloatType" $
     match _FloatType Nothing (cs <$> [
       _FloatType_bigfloat,
       _FloatType_float32,
@@ -225,7 +224,7 @@ coreEncodeFloatTypeDef = coreEncodingDefinition "FloatType" floatTypeT $
     cs fname = field fname $ constant $ TTerm $ coreEncodeTerm $ unTTerm $ unitVariant _FloatType fname
 
 coreEncodeFloatValueDef :: TElement (FloatValue -> Term)
-coreEncodeFloatValueDef = coreEncodingDefinition "FloatValue" floatValueT $
+coreEncodeFloatValueDef = coreEncodingDefinition "FloatValue" $
   match _FloatValue Nothing (varField <$> [
     _FloatValue_bigfloat,
     _FloatValue_float32,
@@ -235,7 +234,7 @@ coreEncodeFloatValueDef = coreEncodingDefinition "FloatValue" floatValueT $
       variant _FloatValue fname $ var "v"
 
 coreEncodeFunctionDef :: TElement (Function -> Term)
-coreEncodeFunctionDef = coreEncodingDefinition "Function" functionT $
+coreEncodeFunctionDef = coreEncodingDefinition "Function" $
     match _Function Nothing [
       ecase _Function_elimination coreEncodeEliminationDef,
       ecase _Function_lambda coreEncodeLambdaDef,
@@ -244,19 +243,19 @@ coreEncodeFunctionDef = coreEncodingDefinition "Function" functionT $
     ecase fname funname = encodedCase _Function fname (ref funname)
 
 coreEncodeFunctionTypeDef :: TElement (FunctionType -> Term)
-coreEncodeFunctionTypeDef = coreEncodingDefinition "FunctionType" functionTypeT $
+coreEncodeFunctionTypeDef = coreEncodingDefinition "FunctionType" $
   lambda "ft" $ encodedRecord _FunctionType [
     field _FunctionType_domain $ ref coreEncodeTypeDef @@ (Core.functionTypeDomain @@ var "ft"),
     field _FunctionType_codomain $ ref coreEncodeTypeDef @@ (Core.functionTypeCodomain @@ var "ft")]
 
 coreEncodeInjectionDef :: TElement (Injection -> Term)
-coreEncodeInjectionDef = coreEncodingDefinition "Injection" injectionT $
+coreEncodeInjectionDef = coreEncodingDefinition "Injection" $
   lambda "i" $ encodedRecord _Injection [
     field _Injection_typeName $ ref coreEncodeNameDef @@ (Core.injectionTypeName @@ var "i"),
     field _Injection_field $ ref coreEncodeFieldDef @@ (Core.injectionField @@ var "i")]
 
 coreEncodeIntegerTypeDef :: TElement (IntegerType -> Term)
-coreEncodeIntegerTypeDef = coreEncodingDefinition "IntegerType" integerTypeT $
+coreEncodeIntegerTypeDef = coreEncodingDefinition "IntegerType" $
     match _IntegerType Nothing (cs <$> [
       _IntegerType_bigint,
       _IntegerType_int8,
@@ -271,7 +270,7 @@ coreEncodeIntegerTypeDef = coreEncodingDefinition "IntegerType" integerTypeT $
     cs fname = field fname $ constant $ TTerm $ coreEncodeTerm $ unTTerm $ unitVariant _IntegerType fname
 
 coreEncodeIntegerValueDef :: TElement (IntegerValue -> Term)
-coreEncodeIntegerValueDef = coreEncodingDefinition "IntegerValue" integerValueT $
+coreEncodeIntegerValueDef = coreEncodingDefinition "IntegerValue" $
   match _IntegerValue Nothing (varField <$> [
     _IntegerValue_bigint,
     _IntegerValue_int8,
@@ -287,33 +286,33 @@ coreEncodeIntegerValueDef = coreEncodingDefinition "IntegerValue" integerValueT 
       variant _IntegerValue fname $ var "v"
 
 coreEncodeLambdaDef :: TElement (Lambda -> Term)
-coreEncodeLambdaDef = coreEncodingDefinition "Lambda" lambdaT $
+coreEncodeLambdaDef = coreEncodingDefinition "Lambda" $
   lambda "l" $ encodedRecord _Lambda [
     field _Lambda_parameter $ ref coreEncodeNameDef @@ (Core.lambdaParameter @@ var "l"),
     field _Lambda_domain $ encodedOptional $ primitive _optionals_map @@ ref coreEncodeTypeDef @@ (Core.lambdaDomain @@ var "l"),
     field _Lambda_body $ ref coreEncodeTermDef @@ (Core.lambdaBody @@ var "l")]
 
 coreEncodeLambdaTypeDef :: TElement (LambdaType -> Term)
-coreEncodeLambdaTypeDef = coreEncodingDefinition "LambdaType" lambdaTypeT $
+coreEncodeLambdaTypeDef = coreEncodingDefinition "LambdaType" $
   lambda "lt" $ encodedRecord _LambdaType [
     field _LambdaType_parameter $ ref coreEncodeNameDef @@ (Core.lambdaTypeParameter @@ var "lt"),
     field _LambdaType_body $ ref coreEncodeTypeDef @@ (Core.lambdaTypeBody @@ var "lt")]
 
 coreEncodeLetDef :: TElement (Let -> Term)
-coreEncodeLetDef = coreEncodingDefinition "Let" letT $
+coreEncodeLetDef = coreEncodingDefinition "Let" $
   lambda "l" $ encodedRecord _Let [
     field _Let_bindings $ encodedList (primitive _lists_map @@ ref coreEncodeLetBindingDef @@ (Core.letBindings @@ var "l")),
     field _Let_environment $ ref coreEncodeTermDef @@ (Core.letEnvironment @@ var "l")]
 
 coreEncodeLetBindingDef :: TElement (LetBinding -> Term)
-coreEncodeLetBindingDef = coreEncodingDefinition "LetBinding" letBindingT $
+coreEncodeLetBindingDef = coreEncodingDefinition "LetBinding" $
   lambda "b" $ encodedRecord _LetBinding [
     field _LetBinding_name $ ref coreEncodeNameDef @@ (Core.letBindingName @@ var "b"),
     field _LetBinding_term $ ref coreEncodeTermDef @@ (Core.letBindingTerm @@ var "b"),
     field _LetBinding_type $ encodedOptional $ primitive _optionals_map @@ ref coreEncodeTypeSchemeDef @@ (Core.letBindingType @@ var "b")]
 
 coreEncodeLiteralDef :: TElement (Literal -> Term)
-coreEncodeLiteralDef = coreEncodingDefinition "Literal" literalT $
+coreEncodeLiteralDef = coreEncodingDefinition "Literal" $
   match _Literal Nothing [
     varField _Literal_binary $ encodedBinary $ var "v",
     varField _Literal_boolean $ encodedBoolean $ var "v",
@@ -324,7 +323,7 @@ coreEncodeLiteralDef = coreEncodingDefinition "Literal" literalT $
     varField fname = field fname . lambda "v" . encodedVariant _Literal fname
 
 coreEncodeLiteralTypeDef :: TElement (LiteralType -> Term)
-coreEncodeLiteralTypeDef = coreEncodingDefinition "LiteralType" literalTypeT $
+coreEncodeLiteralTypeDef = coreEncodingDefinition "LiteralType" $
   match _LiteralType Nothing [
     csunit _LiteralType_binary,
     csunit _LiteralType_boolean,
@@ -336,48 +335,48 @@ coreEncodeLiteralTypeDef = coreEncodingDefinition "LiteralType" literalTypeT $
     csunit fname = field fname $ constant $ TTerm $ coreEncodeTerm $ unTTerm $ variant _LiteralType fname unit
 
 coreEncodeMapTypeDef :: TElement (MapType -> Term)
-coreEncodeMapTypeDef = coreEncodingDefinition "MapType" mapTypeT $
+coreEncodeMapTypeDef = coreEncodingDefinition "MapType" $
     lambda "mt" $ encodedRecord _MapType [
       field _MapType_keys $ ref coreEncodeTypeDef @@ (Core.mapTypeKeys @@ var "mt"),
       field _MapType_values $ ref coreEncodeTypeDef @@ (Core.mapTypeValues @@ var "mt")]
 
 coreEncodeNameDef :: TElement (Name -> Term)
-coreEncodeNameDef = coreEncodingDefinition "Name" nameT $
+coreEncodeNameDef = coreEncodingDefinition "Name" $
   lambda "fn" $ encodedWrappedTerm _Name $ encodedString $ unwrap _Name @@ var "fn"
 
 coreEncodeOptionalCasesDef :: TElement (OptionalCases -> Term)
-coreEncodeOptionalCasesDef = coreEncodingDefinition "OptionalCases" optionalCasesT $
+coreEncodeOptionalCasesDef = coreEncodingDefinition "OptionalCases" $
   lambda "oc" $ encodedRecord _OptionalCases [
     field _OptionalCases_nothing $ ref coreEncodeTermDef @@ (Core.optionalCasesNothing @@ var "oc"),
     field _OptionalCases_just $ ref coreEncodeTermDef @@ (Core.optionalCasesJust @@ var "oc")]
 
 coreEncodeProjectionDef :: TElement (Projection -> Term)
-coreEncodeProjectionDef = coreEncodingDefinition "Projection" projectionT $
+coreEncodeProjectionDef = coreEncodingDefinition "Projection" $
   lambda "p" $ encodedRecord _Projection [
     field _Projection_typeName $ ref coreEncodeNameDef @@ (Core.projectionTypeName @@ var "p"),
     field _Projection_field $ ref coreEncodeNameDef @@ (Core.projectionField @@ var "p")]
 
 coreEncodeRecordDef :: TElement (Record -> Term)
-coreEncodeRecordDef = coreEncodingDefinition "Record" recordT $
+coreEncodeRecordDef = coreEncodingDefinition "Record" $
   lambda "r" $ encodedRecord _Record [
     field _Record_typeName $ ref coreEncodeNameDef @@ (Core.recordTypeName @@ var "r"),
     field _Record_fields $ encodedList (primitive _lists_map @@ (ref coreEncodeFieldDef) @@ (Core.recordFields @@ var "r"))]
 
 coreEncodeRowTypeDef :: TElement (RowType -> Term)
-coreEncodeRowTypeDef = coreEncodingDefinition "RowType" rowTypeT $
+coreEncodeRowTypeDef = coreEncodingDefinition "RowType" $
   lambda "rt" $ encodedRecord _RowType [
     field _RowType_typeName $ ref coreEncodeNameDef @@ (Core.rowTypeTypeName @@ var "rt"),
     field _RowType_fields $ encodedList (primitive _lists_map @@ ref coreEncodeFieldTypeDef @@ (Core.rowTypeFields @@ var "rt"))]
 
 coreEncodeSumDef :: TElement (Sum -> Term)
-coreEncodeSumDef = coreEncodingDefinition "Sum" sumT $
+coreEncodeSumDef = coreEncodingDefinition "Sum" $
   lambda "s" $ encodedRecord _Sum [
     field _Sum_index $ encodedInt32 $ Core.sumIndex @@ var "s",
     field _Sum_size $ encodedInt32 $ Core.sumSize @@ var "s",
     field _Sum_term $ ref coreEncodeTermDef @@ (Core.sumTerm @@ var "s")]
 
 coreEncodeTermDef :: TElement (Term -> Term)
-coreEncodeTermDef = coreEncodingDefinition "Term" termT $
+coreEncodeTermDef = coreEncodingDefinition "Term" $
   match _Term Nothing [
     ecase _Term_annotated (ref coreEncodeAnnotatedTermDef),
     ecase _Term_application (ref coreEncodeApplicationDef),
@@ -403,13 +402,13 @@ coreEncodeTermDef = coreEncodingDefinition "Term" termT $
     ecase2 fname = field fname . lambda "v" . encodedVariant _Term fname
 
 coreEncodeTupleProjectionDef :: TElement (TupleProjection -> Term)
-coreEncodeTupleProjectionDef = coreEncodingDefinition "TupleProjection" tupleProjectionT $
+coreEncodeTupleProjectionDef = coreEncodingDefinition "TupleProjection" $
   lambda "tp" $ encodedRecord _TupleProjection [
     field _TupleProjection_arity $ encodedInt32 $ Core.tupleProjectionArity @@ var "tp",
     field _TupleProjection_index $ encodedInt32 $ Core.tupleProjectionIndex @@ var "tp"]
 
 coreEncodeTypeDef :: TElement (Type -> Term)
-coreEncodeTypeDef = coreEncodingDefinition "Type" typeT $
+coreEncodeTypeDef = coreEncodingDefinition "Type" $
   match _Type Nothing [
     field _Type_annotated $ lambda "v" $ variant _Term _Term_annotated $ record _AnnotatedTerm [
       field _AnnotatedTerm_subject $ ref coreEncodeTypeDef @@ (Core.annotatedTypeSubject @@ var "v"),
@@ -433,31 +432,31 @@ coreEncodeTypeDef = coreEncodingDefinition "Type" typeT $
     csref fname fun = cs fname (ref fun @@ var "v")
 
 coreEncodeTypeAbstractionDef :: TElement (TypeAbstraction -> Term)
-coreEncodeTypeAbstractionDef = coreEncodingDefinition "TypeAbstraction" typeAbstractionT $
+coreEncodeTypeAbstractionDef = coreEncodingDefinition "TypeAbstraction" $
   lambda "l" $ encodedRecord _TypeAbstraction [
     field _TypeAbstraction_parameter $ ref coreEncodeNameDef @@ (project _TypeAbstraction _TypeAbstraction_parameter @@ var "l"),
     field _TypeAbstraction_body $ ref coreEncodeTermDef @@ (project _TypeAbstraction _TypeAbstraction_body @@ var "l")]
 
 coreEncodeTypeSchemeDef :: TElement (TypeScheme -> Term)
-coreEncodeTypeSchemeDef = coreEncodingDefinition "TypeScheme" typeSchemeT $
+coreEncodeTypeSchemeDef = coreEncodingDefinition "TypeScheme" $
   lambda "ts" $ encodedRecord _TypeScheme [
     field _TypeScheme_variables $ encodedList (primitive _lists_map @@ ref coreEncodeNameDef @@ (Core.typeSchemeVariables @@ var "ts")),
     field _TypeScheme_type $ ref coreEncodeTypeDef @@ (Core.typeSchemeType @@ var "ts")]
 
 coreEncodeTypedTermDef :: TElement (TypedTerm -> Term)
-coreEncodeTypedTermDef = coreEncodingDefinition "TypedTerm" typedTermT $
+coreEncodeTypedTermDef = coreEncodingDefinition "TypedTerm" $
   lambda "tt" $ encodedRecord _TypedTerm [
     field _TypedTerm_term $ ref coreEncodeTermDef @@ (project _TypedTerm _TypedTerm_term @@ var "tt"),
     field _TypedTerm_type $ ref coreEncodeTypeDef @@ (project _TypedTerm _TypedTerm_type @@ var "tt")]
 
 coreEncodeWrappedTermDef :: TElement (WrappedTerm -> Term)
-coreEncodeWrappedTermDef = coreEncodingDefinition "WrappedTerm" wrappedTermT $
+coreEncodeWrappedTermDef = coreEncodingDefinition "WrappedTerm" $
   lambda "n" $ encodedRecord _WrappedTerm [
     field _WrappedTerm_typeName $ ref coreEncodeNameDef @@ (Core.wrappedTermTypeName @@ var "n"),
     field _WrappedTerm_object $ ref coreEncodeTermDef @@ (Core.wrappedTermObject @@ var "n")]
 
 coreEncodeWrappedTypeDef :: TElement (WrappedType -> Term)
-coreEncodeWrappedTypeDef = coreEncodingDefinition "WrappedType" wrappedTypeT $
+coreEncodeWrappedTypeDef = coreEncodingDefinition "WrappedType" $
   lambda "nt" $ encodedRecord _WrappedType [
     field _WrappedType_typeName $ ref coreEncodeNameDef @@ (Core.wrappedTypeTypeName @@ var "nt"),
     field _WrappedType_object $ ref coreEncodeTypeDef @@ (Core.wrappedTypeObject @@ var "nt")]
@@ -466,7 +465,6 @@ coreEncodeWrappedTypeDef = coreEncodingDefinition "WrappedType" wrappedTypeT $
 
 isEncodedTypeDef :: TElement (Term -> Bool)
 isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
-  function termT tBoolean $
   lambda "t" $ (match _Term (Just false) [
       TCase _Term_application --> lambda "a" $
         ref isEncodedTypeDef @@ (Core.applicationFunction @@ var "a"),
@@ -476,7 +474,6 @@ isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
 
 isTypeDef :: TElement (Type -> Bool)
 isTypeDef = coreEncodingExtrasDefinition "isType" $
-  function typeT tBoolean $
   lambda "t" $ (match _Type (Just false) [
       TCase _Type_application --> lambda "a" $
         ref isTypeDef @@ (Core.applicationTypeFunction @@ var "a"),
@@ -489,10 +486,8 @@ isTypeDef = coreEncodingExtrasDefinition "isType" $
 
 isUnitTermDef :: TElement (Term -> Bool)
 isUnitTermDef = coreEncodingExtrasDefinition "isUnitTerm" $
-  function termT tBoolean $
   lambda "t" $ Equality.equalTerm (ref fullyStripTermDef @@ var "t") $ TTerm (coreEncodeTerm Terms.unit)
 
 isUnitTypeDef :: TElement (Term -> Bool)
 isUnitTypeDef = coreEncodingExtrasDefinition "isUnitType" $
-  function typeT tBoolean $
   lambda "t" $ Equality.equalType (ref stripTypeDef @@ var "t") $ TTerm (coreEncodeType tUnit)

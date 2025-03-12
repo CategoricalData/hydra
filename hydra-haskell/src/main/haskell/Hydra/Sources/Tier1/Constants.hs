@@ -66,9 +66,6 @@ key_minLengthDef = annotationKeyDef "_minLength" Nothing
 key_preserveFieldNameDef = annotationKeyDef "_preserveFieldName" Nothing
 key_typeDef = annotationKeyDef "type" Nothing
 
-
-
-
 placeholderNameDef :: TElement Name
 placeholderNameDef = constantsDefinition "placeholderName" $
   doc "A placeholder name for row types as they are being constructed" $
