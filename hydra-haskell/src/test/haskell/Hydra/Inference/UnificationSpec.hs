@@ -23,12 +23,12 @@ checkIndividualConstraints = do
 
     H.it "Unify variable with variable" $
       expectUnified
-        [TypeConstraint (Types.var "a") (Types.var "b") Nothing]
+        [TypeConstraint (Types.var "a") (Types.var "b") "test"]
         [(Name "b", Types.var "a")]
 
     H.it "Unify variable with literal type" $
       expectUnified
-        [TypeConstraint (Types.var "a") Types.string Nothing]
+        [TypeConstraint (Types.var "a") Types.string "test"]
         [(Name "a", Types.string)]
 
 spec :: H.Spec

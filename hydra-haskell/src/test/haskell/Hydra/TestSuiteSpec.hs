@@ -10,7 +10,7 @@ import Hydra.Kernel
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.TestUtils
 import Hydra.Testing
-import Hydra.Staging.Inference.Inference
+import Hydra.Staging.Inference.AltInference
 import Hydra.Test.TestSuite
 import qualified Hydra.Dsl.Testing as Testing
 
@@ -35,8 +35,10 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabled
       (eval input)
       output
     TestCaseInference (InferenceTestCase input output) -> shouldSucceedWith
-      (snd <$> inferTypeAndConstraints input)
+      (snd <$> inferTypeOf cx input)
       output
+  where
+    cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
 
 runTestCase :: String -> TestRunner -> TestCaseWithMetadata -> H.SpecWith ()
 runTestCase pdesc runner tcase@(TestCaseWithMetadata name _ mdesc _) = case runner cdesc tcase of
