@@ -47,13 +47,11 @@ hydraFormattingModule = Module (Namespace "hydra.formatting") elements [] [hydra
 capitalizeDef :: TElement (String -> String)
 capitalizeDef = formattingDefinition "capitalize" $
   doc "Capitalize the first letter of a string" $
-  function tString tString $
   ref mapFirstLetterDef @@ primitive _strings_toUpper
 
 convertCaseDef :: TElement (CaseConvention -> CaseConvention -> String -> String)
 convertCaseDef = formattingDefinition "convertCase" $
   doc "Convert a string from one case convention to another" $
-  functionN [caseConventionT, caseConventionT, tString, tString] $
   lambdas ["from", "to", "original"] $ lets [
     "parts">: lets [
       "byCaps">: lets [
@@ -80,32 +78,27 @@ convertCaseDef = formattingDefinition "convertCase" $
 convertCaseCamelToLowerSnakeDef :: TElement (String -> String)
 convertCaseCamelToLowerSnakeDef = formattingDefinition "convertCaseCamelToLowerSnake" $
   doc "Convert a string from camel case to lower snake case" $
-  function tString tString $
   ref convertCaseDef @@ Mantle.caseConventionCamel @@ Mantle.caseConventionLowerSnake
 
 convertCaseCamelToUpperSnakeDef :: TElement (String -> String)
 convertCaseCamelToUpperSnakeDef = formattingDefinition "convertCaseCamelToUpperSnake" $
   doc "Convert a string from camel case to upper snake case" $
-  function tString tString $
   ref convertCaseDef @@ Mantle.caseConventionCamel @@ Mantle.caseConventionUpperSnake
 
 convertCasePascalToUpperSnakeDef :: TElement (String -> String)
 convertCasePascalToUpperSnakeDef = formattingDefinition "convertCasePascalToUpperSnake" $
   doc "Convert a string from pascal case to upper snake case" $
-  function tString tString $
   ref convertCaseDef @@ Mantle.caseConventionPascal @@ Mantle.caseConventionUpperSnake
 
 decapitalizeDef :: TElement (String -> String)
 decapitalizeDef = formattingDefinition "decapitalize" $
   doc "Decapitalize the first letter of a string" $
-  function tString tString $
   ref mapFirstLetterDef @@ primitive _strings_toLower
 
 -- TODO: simplify this helper
 mapFirstLetterDef :: TElement ((String -> String) -> String -> String)
 mapFirstLetterDef = formattingDefinition "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
-  function (tFun tString tString) (tFun tString tString) $
   lambda "mapping" $ lambda "s" $ lets [
     "firstLetter">: var "mapping" @@ (Strings.fromList (Lists.pure (Lists.head $ var "list"))),
     "list">: typed (tList tInt32) $ Strings.toList $ var "s"]
