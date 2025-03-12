@@ -260,8 +260,8 @@ data TypeConstraint =
   TypeConstraint {
     typeConstraintLeft :: Core.Type,
     typeConstraintRight :: Core.Type,
-    -- | An optional description of the type constraint. This may be used for tracing or debugging.
-    typeConstraintComment :: (Maybe String)}
+    -- | A description of the type constraint which may be used for tracing or debugging
+    typeConstraintComment :: String}
   deriving (Eq, Ord, Read, Show)
 
 _TypeConstraint = (Core.Name "hydra.mantle.TypeConstraint")
