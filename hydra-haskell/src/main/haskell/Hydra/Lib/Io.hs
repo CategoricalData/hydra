@@ -3,6 +3,7 @@
 module Hydra.Lib.Io (
   showTerm,
   showType,
+  showTypeConstraint,
   showTypeScheme,
 ) where
 
@@ -16,6 +17,7 @@ import Hydra.CoreEncoding
 --import Hydra.Staging.Rewriting
 --import Hydra.Annotations
 import Hydra.Flows
+import Hydra.Mantle
 import Hydra.Strip
 import qualified Hydra.Json as Json
 import qualified Hydra.Dsl.Terms as Terms
@@ -153,6 +155,9 @@ showType typ = case stripType typ of
   TypeVariable (Name name) -> name
   TypeWrap (WrappedType tname typ1) -> "wrap[" ++ unName tname ++ "](" ++ showType typ1 ++ ")"
   t -> show t
+
+showTypeConstraint :: TypeConstraint -> String
+showTypeConstraint (TypeConstraint ltyp rtyp _) = showType ltyp ++ "≡" ++ showType rtyp
 
 showTypeScheme :: TypeScheme -> String
 showTypeScheme (TypeScheme vars body) = fa ++ showType body
