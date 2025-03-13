@@ -28,110 +28,102 @@ import Hydra.Sources.Tier1.Strip
 decodeDefinition :: String -> TTerm a -> TElement a
 decodeDefinition = definitionInModule hydraDecodeModule
 
-decodeFunctionDefinition :: String -> Type -> Type -> TTerm a -> TElement a
-decodeFunctionDefinition name dom cod term = decodeDefinition name $
-  function dom (tOpt cod) term
-
-decodeNominalFunctionDefinition :: String -> Type -> TTerm a -> TElement a
-decodeNominalFunctionDefinition name cod term = decodeDefinition name $
-  function nameT (tFun termT $ tOpt cod) term
-
 hydraDecodeModule :: Module
-hydraDecodeModule = Module (Namespace "hydra.decode") elements [hydraStripModule] [hydraCoreModule] $
+hydraDecodeModule = Module (Namespace "hydra.decodeTmp") elements [hydraStripModule] [hydraCoreModule] $
     Just "A module for decoding terms to native objects"
   where
-   elements = [
-    el bigfloatDef,
-    el bigfloatValueDef,
-    el bigintDef,
-    el bigintValueDef,
-    el binaryDef,
-    el binaryLiteralDef,
-    el booleanDef,
-    el booleanLiteralDef,
-    el casesCaseDef,
-    el casesDef,
-    el fieldDef,
-    el float32Def,
-    el float32ValueDef,
-    el float64Def,
-    el float64ValueDef,
-    el floatLiteralDef,
-    el int16Def,
-    el int16ValueDef,
-    el int32Def,
-    el int32ValueDef,
-    el int64Def,
-    el int64ValueDef,
-    el int8Def,
-    el int8ValueDef,
-    el integerLiteralDef,
-    el lambdaDef,
-    el letBindingDef,
-    el letBindingWithKeyDef,
-    el letTermDef,
-    el listDef,
-    el literalDef,
-    el mapDef,
-    el nameDef,
-    el nominalDef,
-    el optCasesDef,
-    el optCasesJustDef,
-    el optCasesNothingDef,
-    el optionalDef,
-    el pairDef,
-    el recordDef,
-    el setDef,
-    el stringDef,
-    el stringLiteralDef,
-    el uint16Def,
-    el uint16ValueDef,
-    el uint32Def,
-    el uint32ValueDef,
-    el uint64Def,
-    el uint64ValueDef,
-    el uint8Def,
-    el uint8ValueDef,
-    el unitDef,
-    el unitVariantDef,
-    el variableDef,
-    el variantDef,
-    el wrapDef]
+    elements = [
+      el bigfloatDef,
+      el bigfloatValueDef,
+      el bigintDef,
+      el bigintValueDef,
+      el binaryDef,
+      el binaryLiteralDef,
+      el booleanDef,
+      el booleanLiteralDef,
+      el casesCaseDef,
+      el casesDef,
+      el fieldDef,
+      el float32Def,
+      el float32ValueDef,
+      el float64Def,
+      el float64ValueDef,
+      el floatLiteralDef,
+      el int16Def,
+      el int16ValueDef,
+      el int32Def,
+      el int32ValueDef,
+      el int64Def,
+      el int64ValueDef,
+      el int8Def,
+      el int8ValueDef,
+      el integerLiteralDef,
+      el lambdaDef,
+      el letBindingDef,
+      el letBindingWithKeyDef,
+      el letTermDef,
+      el listDef,
+      el literalDef,
+      el mapDef,
+      el nameDef,
+      el nominalDef,
+      el optCasesDef,
+      el optCasesJustDef,
+      el optCasesNothingDef,
+      el optionalDef,
+      el pairDef,
+      el recordDef,
+      el setDef,
+      el stringDef,
+      el stringLiteralDef,
+      el uint16Def,
+      el uint16ValueDef,
+      el uint32Def,
+      el uint32ValueDef,
+      el uint64Def,
+      el uint64ValueDef,
+      el uint8Def,
+      el uint8ValueDef,
+      el unitDef,
+      el unitVariantDef,
+      el variableDef,
+      el variantDef,
+      el wrapDef]
 
 bigfloatDef :: TElement (Term -> Maybe Float)
-bigfloatDef = decodeFunctionDefinition "bigfloat" termT tBigfloat $
+bigfloatDef = decodeDefinition "bigfloat" $
   compose3 (ref literalDef) (ref floatLiteralDef) (ref bigfloatValueDef)
 
 bigfloatValueDef :: TElement (FloatValue -> Maybe Float)
-bigfloatValueDef = decodeFunctionDefinition "bigfloatValue" floatValueT tBigfloat $
+bigfloatValueDef = decodeDefinition "bigfloatValue" $
   matchVariant _FloatValue _FloatValue_bigfloat
 
 bigintDef :: TElement (Term -> Maybe Int)
-bigintDef = decodeFunctionDefinition "bigint" termT tBigint $
+bigintDef = decodeDefinition "bigint" $
   compose3 (ref literalDef) (ref integerLiteralDef) (ref bigintValueDef)
 
 bigintValueDef :: TElement (IntegerValue -> Maybe Int)
-bigintValueDef = decodeFunctionDefinition "bigintValue" integerValueT tBigint $
+bigintValueDef = decodeDefinition "bigintValue" $
   matchVariant _IntegerValue _IntegerValue_bigint
 
 binaryDef :: TElement (Term -> Maybe String)
-binaryDef = decodeFunctionDefinition "binary" termT tBinary $
+binaryDef = decodeDefinition "binary" $
   compose2 (ref literalDef) (ref binaryLiteralDef)
 
 binaryLiteralDef :: TElement (Literal -> Maybe String)
-binaryLiteralDef = decodeFunctionDefinition "binaryLiteral" literalT tBinary $
+binaryLiteralDef = decodeDefinition "binaryLiteral" $
   matchVariant _Literal _Literal_binary
 
 booleanDef :: TElement (Term -> Maybe Bool)
-booleanDef = decodeFunctionDefinition "boolean" termT tBoolean $
+booleanDef = decodeDefinition "boolean" $
   compose2 (ref literalDef) (ref booleanLiteralDef)
 
 booleanLiteralDef :: TElement (Literal -> Maybe Bool)
-booleanLiteralDef = decodeFunctionDefinition "booleanLiteral" literalT tBoolean $
+booleanLiteralDef = decodeDefinition "booleanLiteral" $
   matchVariant _Literal _Literal_boolean
 
 casesDef :: TElement (Name -> Term -> Maybe [Field])
-casesDef = decodeNominalFunctionDefinition "cases" (tList fieldT) $
+casesDef = decodeDefinition "cases" $
   lets [
     "matchFunction">: matchTermVariant _Term_function,
     "matchElimination">: matchVariant _Function _Function_elimination,
@@ -143,7 +135,6 @@ casesDef = decodeNominalFunctionDefinition "cases" (tList fieldT) $
 
 casesCaseDef :: TElement (Name -> Name -> Term -> Y.Maybe Term)
 casesCaseDef = decodeDefinition "casesCase" $
- functionN [nameT, nameT, termT, tOpt termT] $
  lambda "tname" $ lambda "fname" $
    compose2
      (ref casesDef @@ var "tname" )
@@ -151,7 +142,6 @@ casesCaseDef = decodeDefinition "casesCase" $
 
 fieldDef :: TElement (Name -> [Field] -> Maybe Term)
 fieldDef = decodeDefinition "field" $
-  functionN [nameT, tList fieldT, tOpt termT] $
   lambdas ["fname", "fields"] $ lets [
     "matches">: Lists.filter
       (lambda "f" $ Equality.equal (Core.fieldName @@ var "f") $ var "fname")
@@ -161,80 +151,80 @@ fieldDef = decodeDefinition "field" $
       nothing
 
 float32Def :: TElement (Term -> Maybe Float)
-float32Def = decodeFunctionDefinition "float32" termT tFloat32 $
+float32Def = decodeDefinition "float32" $
   compose3
     (ref literalDef)
     (ref floatLiteralDef)
     (ref float32ValueDef)
 
 float32ValueDef :: TElement (FloatValue -> Maybe Float)
-float32ValueDef = decodeFunctionDefinition "float32Value" floatValueT tFloat32 $
+float32ValueDef = decodeDefinition "float32Value" $
   matchVariant _FloatValue _FloatValue_float32
 
 float64Def :: TElement (Term -> Maybe Float)
-float64Def = decodeFunctionDefinition "float64" termT tFloat64 $
+float64Def = decodeDefinition "float64" $
   compose3
     (ref literalDef)
     (ref floatLiteralDef)
     (ref float64ValueDef)
 
 float64ValueDef :: TElement (FloatValue -> Maybe Float)
-float64ValueDef = decodeFunctionDefinition "float64Value" floatValueT tFloat64 $
+float64ValueDef = decodeDefinition "float64Value" $
   matchVariant _FloatValue _FloatValue_float64
 
-floatLiteralDef = decodeFunctionDefinition "floatLiteral" literalT floatValueT $
+floatLiteralDef = decodeDefinition "floatLiteral" $
   matchVariant _Literal _Literal_float
 
 int8Def :: TElement (Term -> Maybe Int)
-int8Def = decodeFunctionDefinition "int8" termT tInt8 $
+int8Def = decodeDefinition "int8" $
   compose3
     (ref literalDef)
     (ref integerLiteralDef)
     (ref int8ValueDef)
 
 int8ValueDef :: TElement (IntegerValue -> Maybe Int)
-int8ValueDef = decodeFunctionDefinition "int8Value" integerValueT tInt8 $
+int8ValueDef = decodeDefinition "int8Value" $
   matchVariant _IntegerValue _IntegerValue_int8
 
 int16Def :: TElement (Term -> Maybe Int)
-int16Def = decodeFunctionDefinition "int16" termT tInt16 $
+int16Def = decodeDefinition "int16" $
   compose3
     (ref literalDef)
     (ref integerLiteralDef)
     (ref int16ValueDef)
 
 int16ValueDef :: TElement (IntegerValue -> Maybe Int)
-int16ValueDef = decodeFunctionDefinition "int16Value" integerValueT tInt16 $
+int16ValueDef = decodeDefinition "int16Value" $
   matchVariant _IntegerValue _IntegerValue_int16
 
 int32Def :: TElement (Term -> Maybe Int)
-int32Def = decodeFunctionDefinition "int32" termT tInt32 $
+int32Def = decodeDefinition "int32" $
   compose3
     (ref literalDef)
     (ref integerLiteralDef)
     (ref int32ValueDef)
 
 int32ValueDef :: TElement (IntegerValue -> Maybe Int)
-int32ValueDef = decodeFunctionDefinition "int32Value" integerValueT tInt32 $
+int32ValueDef = decodeDefinition "int32Value" $
   matchVariant _IntegerValue _IntegerValue_int32
 
 int64Def :: TElement (Term -> Maybe Int)
-int64Def = decodeFunctionDefinition "int64" termT tInt64 $
+int64Def = decodeDefinition "int64" $
   compose3
     (ref literalDef)
     (ref integerLiteralDef)
     (ref int64ValueDef)
 
 int64ValueDef :: TElement (IntegerValue -> Maybe Int)
-int64ValueDef = decodeFunctionDefinition "int64Value" integerValueT tInt64 $
+int64ValueDef = decodeDefinition "int64Value" $
   matchVariant _IntegerValue _IntegerValue_int64
 
 integerLiteralDef :: TElement (Literal -> Maybe IntegerValue)
-integerLiteralDef = decodeFunctionDefinition "integerLiteral" literalT integerValueT $
+integerLiteralDef = decodeDefinition "integerLiteral" $
   matchVariant _Literal _Literal_integer
 
 lambdaDef :: TElement (Term -> Maybe Lambda)
-lambdaDef = decodeFunctionDefinition "lambda" termT lambdaT $
+lambdaDef = decodeDefinition "lambda" $
   lets [
     "matchFunction">: matchTermVariant _Term_function,
     "matchLambda">: matchVariant _Function _Function_lambda]
@@ -242,7 +232,6 @@ lambdaDef = decodeFunctionDefinition "lambda" termT lambdaT $
 
 letBindingDef :: TElement (Name -> Term -> Maybe LetBinding)
 letBindingDef = decodeDefinition "letBinding" $
-  functionN [nameT, termT, tOpt letBindingT] $
   lambda "fname" $ lambda "term" $ Optionals.bind
     (Optionals.map
       Core.letBindings
@@ -251,7 +240,6 @@ letBindingDef = decodeDefinition "letBinding" $
 
 letBindingWithKeyDef :: TElement (Name -> [LetBinding] -> Maybe LetBinding)
 letBindingWithKeyDef = decodeDefinition "letBindingWithKey" $
-  functionN [nameT, tList letBindingT, tOpt letBindingT] $
   lambda "fname" $ lambda "bindings" $ lets [
     "matches">: Lists.filter
       (lambda "b" $ Equality.equal (Core.letBindingName @@ var "b") $ var "fname")
@@ -261,23 +249,23 @@ letBindingWithKeyDef = decodeDefinition "letBindingWithKey" $
       nothing
 
 letTermDef :: TElement (Term -> Maybe Let)
-letTermDef = decodeFunctionDefinition "letTerm" termT letT $
+letTermDef = decodeDefinition "letTerm" $
   matchTermVariant _Term_let
 
 listDef :: TElement (Term -> Maybe [Term])
-listDef = decodeFunctionDefinition "list" termT (tList termT) $
+listDef = decodeDefinition "list" $
   matchTermVariant _Term_list
 
 literalDef :: TElement (Term -> Maybe Literal)
-literalDef = decodeFunctionDefinition "literal" termT literalT $
+literalDef = decodeDefinition "literal" $
   matchTermVariant _Term_literal
 
 mapDef :: TElement (Term -> Maybe (M.Map Term Term))
-mapDef = decodeFunctionDefinition "map" termT (tMap termT termT) $
+mapDef = decodeDefinition "map" $
   matchTermVariant _Term_map
 
 nameDef :: TElement (Term -> Name)
-nameDef = decodeFunctionDefinition "name" termT nameT $
+nameDef = decodeDefinition "name" $
   lambda "term" $ Optionals.map nm
     (Optionals.bind
       (ref wrapDef @@ Core.name _Name @@ var "term")
@@ -286,9 +274,8 @@ nameDef = decodeFunctionDefinition "name" termT nameT $
     nm :: TTerm (String -> Name)
     nm = TTerm $ Terms.lambda "s" $ TermWrap $ WrappedTerm _Name $ Terms.var "s"
 
-nominalDef :: TElement ((a -> Name) -> (a -> b) -> (c -> Maybe a) -> Name -> c -> Maybe b)
+nominalDef :: TElement ((a -> n) -> (a -> b) -> (c -> Maybe a) -> n -> c -> Maybe b)
 nominalDef = decodeDefinition "nominal" $
-    functionN [tFun tA nameT, tFun tA tB, tFun tC (tOpt tA), nameT, tC, tOpt tB] $
     lambda "getName" $ lambda "getB" $ lambda "getA" $ lambda "expected" $
     compose2
       (var "getA")
@@ -297,7 +284,7 @@ nominalDef = decodeDefinition "nominal" $
         nothing)
 
 optCasesDef :: TElement (Term -> Maybe OptionalCases)
-optCasesDef = decodeFunctionDefinition "optCases" termT optionalCasesT $
+optCasesDef = decodeDefinition "optCases" $
   lets [
     "matchFunction">: matchTermVariant _Term_function,
     "matchElimination">: matchVariant _Function _Function_elimination,
@@ -305,19 +292,19 @@ optCasesDef = decodeFunctionDefinition "optCases" termT optionalCasesT $
     $ compose3 (var "matchFunction") (var "matchElimination") (var "matchOptional")
 
 optCasesJustDef :: TElement (Term -> Maybe Term)
-optCasesJustDef = decodeFunctionDefinition "optCasesJust" termT termT $
+optCasesJustDef = decodeDefinition "optCasesJust" $
   lambda "term" $ Optionals.map Core.optionalCasesJust (ref optCasesDef @@ var "term")
 
 optCasesNothingDef :: TElement (Term -> Maybe Term)
-optCasesNothingDef = decodeFunctionDefinition "optCasesNothing" termT termT $
+optCasesNothingDef = decodeDefinition "optCasesNothing" $
   lambda "term" $ Optionals.map Core.optionalCasesNothing (ref optCasesDef @@ var "term")
 
 optionalDef :: TElement (Term -> Maybe (Maybe Term))
-optionalDef = decodeFunctionDefinition "optional" termT (tOpt termT) $
+optionalDef = decodeDefinition "optional" $
   matchTermVariant _Term_optional
 
 pairDef :: TElement (Term -> Maybe (Term, Term))
-pairDef = decodeFunctionDefinition "pair" termT (tPair termT termT) $
+pairDef = decodeDefinition "pair" $
   lets [
     "matchProduct">: matchTermVariant _Term_product]
     $ compose2
@@ -327,76 +314,75 @@ pairDef = decodeFunctionDefinition "pair" termT (tPair termT termT) $
         nothing)
 
 recordDef :: TElement (Name -> Term -> Maybe [Field])
-recordDef = decodeNominalFunctionDefinition "record" (tList fieldT) $
+recordDef = decodeDefinition "record" $
   matchNominal _Term_record Core.recordTypeName Core.recordFields
 
 setDef :: TElement (Term -> Maybe (S.Set Term))
-setDef = decodeFunctionDefinition "set" termT (tSet termT) $
+setDef = decodeDefinition "set" $
   matchTermVariant _Term_set
 
 stringDef :: TElement (Term -> Maybe String)
-stringDef = decodeFunctionDefinition "string" termT tString $
+stringDef = decodeDefinition "string" $
   compose2 (ref literalDef) (ref stringLiteralDef)
 
 stringLiteralDef :: TElement (Literal -> Maybe String)
-stringLiteralDef = decodeFunctionDefinition "stringLiteral" literalT tString $
+stringLiteralDef = decodeDefinition "stringLiteral" $
   matchVariant _Literal _Literal_string
 
 uint8Def :: TElement (Term -> Maybe Int)
-uint8Def = decodeFunctionDefinition "uint8" termT tUint8 $
+uint8Def = decodeDefinition "uint8" $
   compose3 (ref literalDef) (ref integerLiteralDef) (ref uint8ValueDef)
 
 uint8ValueDef :: TElement (IntegerValue -> Maybe Int)
-uint8ValueDef = decodeFunctionDefinition "uint8Value" integerValueT tUint8 $
+uint8ValueDef = decodeDefinition "uint8Value" $
   matchVariant _IntegerValue _IntegerValue_uint8
 
 uint16Def :: TElement (Term -> Maybe Int)
-uint16Def = decodeFunctionDefinition "uint16" termT tUint16 $
+uint16Def = decodeDefinition "uint16" $
   compose3 (ref literalDef) (ref integerLiteralDef) (ref uint16ValueDef)
 
 uint16ValueDef :: TElement (IntegerValue -> Maybe Int)
-uint16ValueDef = decodeFunctionDefinition "uint16Value" integerValueT tUint16 $
+uint16ValueDef = decodeDefinition "uint16Value" $
   matchVariant _IntegerValue _IntegerValue_uint16
 
 uint32Def :: TElement (Term -> Maybe Int)
-uint32Def = decodeFunctionDefinition "uint32" termT tUint32 $
+uint32Def = decodeDefinition "uint32" $
   compose3 (ref literalDef) (ref integerLiteralDef) (ref uint32ValueDef)
 
 uint32ValueDef :: TElement (IntegerValue -> Maybe Int)
-uint32ValueDef = decodeFunctionDefinition "uint32Value" integerValueT tUint32 $
+uint32ValueDef = decodeDefinition "uint32Value" $
   matchVariant _IntegerValue _IntegerValue_uint32
 
 uint64Def :: TElement (Term -> Maybe Int)
-uint64Def = decodeFunctionDefinition "uint64" termT tUint64 $
+uint64Def = decodeDefinition "uint64" $
   compose3 (ref literalDef) (ref integerLiteralDef) (ref uint64ValueDef)
 
 uint64ValueDef :: TElement (IntegerValue -> Maybe Int)
-uint64ValueDef = decodeFunctionDefinition "uint64Value" integerValueT tUint64 $
+uint64ValueDef = decodeDefinition "uint64Value" $
   matchVariant _IntegerValue _IntegerValue_uint64
 
 unitDef :: TElement (Term -> Maybe ())
-unitDef = decodeFunctionDefinition "unit" termT tUnit $
+unitDef = decodeDefinition "unit" $
   lambda "term" $ Optionals.map
     (constant unit)
     (ref recordDef @@ Core.name _Unit @@ var "term")
 
 unitVariantDef :: TElement (Name -> Term -> Maybe Name)
 unitVariantDef = decodeDefinition "unitVariant" $
-  functionN [nameT, termT, tOpt nameT] $
   lambda "tname" $ lambda "term" $ Optionals.map
     Core.fieldName
     (ref variantDef @@ var "tname" @@ var "term")
 
 variableDef :: TElement (Term -> Y.Maybe Name)
-variableDef = decodeFunctionDefinition "variable" termT nameT $
+variableDef = decodeDefinition "variable" $
   matchTermVariant _Term_variable
 
 variantDef :: TElement (Name -> Term -> Maybe Field)
-variantDef = decodeNominalFunctionDefinition "variant" fieldT $
+variantDef = decodeDefinition "variant" $
   matchNominal _Term_union Core.injectionTypeName Core.injectionField
 
 wrapDef :: TElement (Name -> Term -> Maybe Term)
-wrapDef = decodeNominalFunctionDefinition "wrap" termT $
+wrapDef = decodeDefinition "wrap" $
   matchNominal _Term_wrap Core.wrappedTermTypeName Core.wrappedTermObject
 
 --
