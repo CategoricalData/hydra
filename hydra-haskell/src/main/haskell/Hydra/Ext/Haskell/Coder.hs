@@ -312,9 +312,9 @@ toDataDeclaration coders namespaces (el, TypedTerm term typ) = do
 
     toDecl comments hname term coder bindings = case fullyStripTerm term of
       TermLet (Let lbindings env) -> do
-          -- A "let" constant cannot be predicted in advance, so we infer its type and construct a coder on the fly
+          -- A "let" constant cannot be predicted in advance, so we construct a coder on the fly.
           -- This makes program code with "let" terms more expensive to transform than simple data.
-          ts <- (CM.mapM inferredTypeOf (letBindingTerm <$> lbindings))
+          let ts = typeSchemeType . Y.fromJust . letBindingType <$> lbindings
           coders <- CM.mapM (constructCoder haskellLanguage (encodeTerm namespaces)) ts
           let hnames = simpleName <$> (unName . letBindingName <$> lbindings)
           hterms <- CM.zipWithM coderEncode coders (letBindingTerm <$> lbindings)
