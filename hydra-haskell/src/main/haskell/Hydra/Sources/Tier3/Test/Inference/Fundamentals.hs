@@ -48,7 +48,10 @@ testGroupForLet = supergroup "Let" [
     subgroup "Empty let" [
       expectMono 1 []
         (lets [] $ int32 42)
-        T.int32],
+        T.int32,
+      expectPoly 2 []
+        (lets [] $ lambda "x" $ var "x")
+        ["t0"] (T.function (T.var "t0") (T.var "t0"))],
     subgroup "Trivial let" [
       expectMono 1  []
         (lets [
@@ -62,6 +65,31 @@ testGroupForLet = supergroup "Let" [
           "bar">: int32 137]
           $ list [var "foo", var "bar", var "foo"])
         (T.list T.int32)],
+
+    subgroup "Nested let" [
+      expectMono 1 [tag_disabledForAlgorithmWInference]
+        (lets [
+          "foo">: int32 42]
+          $ lets [
+            "bar">: int32 137]
+            $ list [var "foo", var "bar"])
+        (T.list T.int32),
+      expectMono 2 []
+        (lets [
+          "foo">: int32 42]
+          $ lets [
+            "bar">: pair (var "foo") (int32 137)]
+            $ var "bar")
+        (T.pair T.int32 T.int32),
+      expectPoly 3 [tag_disabledForAlgorithmWInference]
+        (lets [
+          "sng">: lambda "x" $ list [var "x"]]
+          $ lets [
+            "foo">: var "sng" @@ int32 42,
+            "bar">: var "sng" @@ string "bar",
+            "quux">: lambda "x" $ var "sng" @@ var "x"]
+            $ pair (var "foo") (pair (var "bar") (var "quux" @@ list [])))
+        ["t0"] (T.pair (T.list T.int32) (T.pair (T.list T.string) (T.list $ T.list $ T.var "t0")))],
 
     subgroup "Let-polymorphism" [
       expectPoly 1 []
