@@ -1194,6 +1194,23 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [],
+                      Core.letEnvironment = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]},
             Testing.TestGroup {
               Testing.testGroupName = "Trivial let",
@@ -1242,6 +1259,114 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Nested let",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "foo"),
+                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermLet (Core.Let {
+                        Core.letBindings = [
+                          Core.LetBinding {
+                            Core.letBindingName = (Core.Name "bar"),
+                            Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
+                            Core.letBindingType = Nothing}],
+                        Core.letEnvironment = (Core.TermList [
+                          Core.TermVariable (Core.Name "foo"),
+                          (Core.TermVariable (Core.Name "bar"))])}))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForAlgorithmWInference"]},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "foo"),
+                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermLet (Core.Let {
+                        Core.letBindings = [
+                          Core.LetBinding {
+                            Core.letBindingName = (Core.Name "bar"),
+                            Core.letBindingTerm = (Core.TermProduct [
+                              Core.TermVariable (Core.Name "foo"),
+                              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))]),
+                            Core.letBindingType = Nothing}],
+                        Core.letEnvironment = (Core.TermVariable (Core.Name "bar"))}))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeProduct [
+                        Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
+                        (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))])}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "sng"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermList [
+                              Core.TermVariable (Core.Name "x")])}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermLet (Core.Let {
+                        Core.letBindings = [
+                          Core.LetBinding {
+                            Core.letBindingName = (Core.Name "foo"),
+                            Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
+                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                            Core.letBindingType = Nothing},
+                          Core.LetBinding {
+                            Core.letBindingName = (Core.Name "bar"),
+                            Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
+                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))})),
+                            Core.letBindingType = Nothing},
+                          Core.LetBinding {
+                            Core.letBindingName = (Core.Name "quux"),
+                            Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "x"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
+                            Core.letBindingType = Nothing}],
+                        Core.letEnvironment = (Core.TermProduct [
+                          Core.TermVariable (Core.Name "foo"),
+                          (Core.TermProduct [
+                            Core.TermVariable (Core.Name "bar"),
+                            (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "quux")),
+                              Core.applicationArgument = (Core.TermList [])}))])])}))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeProduct [
+                        Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                        (Core.TypeProduct [
+                          Core.TypeList (Core.TypeLiteral Core.LiteralTypeString),
+                          (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0"))))])])}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForAlgorithmWInference"]}]},
             Testing.TestGroup {
               Testing.testGroupName = "Let-polymorphism",
               Testing.testGroupDescription = Nothing,
