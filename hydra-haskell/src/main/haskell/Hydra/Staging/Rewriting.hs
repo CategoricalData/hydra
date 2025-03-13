@@ -172,8 +172,8 @@ normalizeTypeVariablesInTerm = rewriteWithSubst (M.empty, S.empty)
               Lambda v (fmap (substType subst) mdom) $ rewrite recurse body
             TermLet (Let bindings env) -> TermLet $ Let (rewriteBinding <$> bindings) $ rewrite recurse env
             --TermTyped...
-            --TermTypeAbstraction...
-            --TermTypeApplication...
+            TermTypeAbstraction (TypeAbstraction name term1) -> TermTypeAbstraction $ TypeAbstraction (replaceName subst name) $ rewrite recurse term1
+            TermTypeApplication (TypedTerm term1 typ) -> TermTypeApplication $ TypedTerm (rewrite recurse term1) $ substType subst typ
             _ -> recurse term
           where
             rewriteBinding b@(LetBinding key value mts) = case mts of
@@ -187,10 +187,11 @@ normalizeTypeVariablesInTerm = rewriteWithSubst (M.empty, S.empty)
     substType subst = rewriteType rewrite
       where
         rewrite recurse typ = case recurse typ of
-          TypeVariable v -> TypeVariable $ Y.fromMaybe v $ M.lookup v subst
+          TypeVariable v -> TypeVariable $ replaceName subst v
           --TypeApplication...
           --TypeLambda...
           t -> t
+    replaceName subst v = Y.fromMaybe v $ M.lookup v subst
 
 -- | Recursively remove term annotations, including within subterms
 removeTermAnnotations :: Term -> Term
