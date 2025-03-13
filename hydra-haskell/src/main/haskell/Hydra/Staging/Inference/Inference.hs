@@ -126,11 +126,11 @@ rewriteDataType f = rewriteTerm ff
 --        -- No need for an inference dependency on an element which is already annotated with a type
 --        isNotAnnotated name = not $ S.member name annotated
 
---withInferenceContext flow = do
---    g <- getState
---    let env = initialEnv g
---    withState (g {graphTypes = env}) flow
---  where
---    initialEnv g = M.fromList $ Y.catMaybes (toPair <$> (M.elems $ graphElements g))
---      where
---        toPair el = (\t -> (elementName el, monotype t)) <$> (getTermType $ elementTerm el)
+withInferenceContext flow = do
+    g <- getState
+    let env = initialEnv g
+    withState (g {graphTypes = env}) flow
+  where
+    initialEnv g = M.fromList $ Y.catMaybes (toPair <$> (M.elems $ graphElements g))
+      where
+        toPair el = (\t -> (elementName el, monotype t)) <$> (getTermType $ elementTerm el)
