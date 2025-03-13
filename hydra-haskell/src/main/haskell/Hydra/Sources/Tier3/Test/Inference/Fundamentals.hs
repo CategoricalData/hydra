@@ -97,7 +97,14 @@ testGroupForLet = supergroup "Let" [
             @@ (var "g" @@ var "x" @@ var "y"),
           "g">: lambda "x" $ lambda "y" $ var "f" @@ int32 42 @@ var "y"]
           $ var "f")
-        ["t0"] (T.list $ T.pair T.int32 (T.var "t0"))],
+        ["t0"] (T.list $ T.pair T.int32 (T.var "t0")),
+      expectMono 7 [tag_disabledForAlgorithmWInference]
+        (lets [
+          "id">: lambda "x" $ var "x",
+          "fortytwo">: var "id" @@ int32 42,
+          "foo">: var "id" @@ string "foo"]
+          $ pair (var "fortytwo") (var "foo"))
+        (T.pair T.int32 T.string)],
 
     subgroup "Recursive and mutually recursive let (@wisnesky's test cases)" [
       expectPoly 1 [tag_disabledForDefaultInference]
