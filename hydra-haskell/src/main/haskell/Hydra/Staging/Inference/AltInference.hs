@@ -135,6 +135,7 @@ joinTypes left right comment = case sleft of
       TypeFunction (FunctionType domright codright) -> Flows.pure [
         joinOne domleft domright,
         joinOne codleft codright]
+      _ -> cannotUnify
     TypeList eleft -> case sright of
       TypeList eright -> Flows.pure [joinOne eleft eright]
       _ -> cannotUnify
