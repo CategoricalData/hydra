@@ -6,6 +6,7 @@ import Hydra.Dsl.Testing as Testing
 import Hydra.Sources.Tier3.Test.Inference.AlgebraicTypes
 import Hydra.Sources.Tier3.Test.Inference.AlgorithmW
 import Hydra.Sources.Tier3.Test.Inference.Fundamentals
+import Hydra.Sources.Tier3.Test.Inference.KernelExamples
 import Hydra.Sources.Tier3.Test.Inference.NominalTypes
 import Hydra.Sources.Tier3.Test.Inference.Simple
 
@@ -15,5 +16,6 @@ inferenceTests = supergroup "Inference tests" [
   algebraicTypesTests,
   algorithmWTests,
   fundamentalsTests,
+  kernelExamplesTests,
   nominalTypesTests,
   simpleTermsTests]

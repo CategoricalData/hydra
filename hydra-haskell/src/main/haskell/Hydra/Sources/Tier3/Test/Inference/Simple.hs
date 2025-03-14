@@ -7,9 +7,7 @@ import qualified Hydra.Dsl.Core as Core
 import Hydra.Dsl.Testing as Testing
 import Hydra.Dsl.ShorthandTypes
 import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Lib.Lists as Lists
 import qualified Hydra.Dsl.Lib.Maps as Maps
-import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Tier3.Test.TestGraph
 import Hydra.Dsl.TTerms as TTerms
