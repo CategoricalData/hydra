@@ -39,7 +39,10 @@ inferType :: Term -> IO (Term, TypeScheme)
 inferType = W.termToInferredTerm testHydraContext
 
 expectType :: Term -> TypeScheme -> H.Expectation
-expectType term ts = H.shouldReturn (snd <$> inferType term) ts
+expectType term ts = do
+  result <- inferType term
+  H.shouldBe (snd result) ts
+  H.shouldBe (stripTypesFromTerm term) (stripTypesFromTerm $ fst result)
 
 algorithmWRunner :: TestRunner
 algorithmWRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabledForAlgorithmWInference tcase
