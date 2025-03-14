@@ -14,6 +14,7 @@ module Hydra.Sources.Tier1.All(
   module Hydra.Sources.Tier1.Functions,
   module Hydra.Sources.Tier1.Grammar,
   module Hydra.Sources.Tier1.Graph,
+  module Hydra.Sources.Tier1.Inference,
   module Hydra.Sources.Tier1.Json,
   module Hydra.Sources.Tier1.Literals,
   module Hydra.Sources.Tier1.Mantle,
@@ -38,6 +39,7 @@ import Hydra.Sources.Tier1.Formatting
 import Hydra.Sources.Tier1.Functions
 import Hydra.Sources.Tier1.Grammar
 import Hydra.Sources.Tier1.Graph
+import Hydra.Sources.Tier1.Inference
 import Hydra.Sources.Tier1.Json
 import Hydra.Sources.Tier1.Literals
 import Hydra.Sources.Tier1.Mantle
@@ -71,6 +73,7 @@ tier1TypeModules = [
   hydraConstraintsModule,
   hydraGrammarModule,
   hydraGraphModule,
+  hydraInferenceModule,
   hydraMantleModule,
   hydraModuleModule,
   hydraPhantomsModule,
