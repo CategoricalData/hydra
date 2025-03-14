@@ -2604,6 +2604,79 @@ inferenceTests = Testing.TestGroup {
           Testing.testGroupCases = []}],
       Testing.testGroupCases = []},
     Testing.TestGroup {
+      Testing.testGroupName = "Examples from the Hydra kernel",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Nested let",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "hydra.formatting.mapFirstLetter",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "mapping"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "s"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermLet (Core.Let {
+                          Core.letBindings = [
+                            Core.LetBinding {
+                              Core.letBindingName = (Core.Name "firstLetter"),
+                              Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "mapping")),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.fromList"))),
+                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.pure"))),
+                                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.head"))),
+                                      Core.applicationArgument = (Core.TermVariable (Core.Name "list"))}))}))}))})),
+                              Core.letBindingType = Nothing},
+                            Core.LetBinding {
+                              Core.letBindingName = (Core.Name "list"),
+                              Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.toList"))),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "s"))})),
+                              Core.letBindingType = Nothing}],
+                          Core.letEnvironment = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.isEmpty"))),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))})),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "s"))})),
+                            Core.applicationArgument = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat2"))),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "firstLetter"))})),
+                              Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.fromList"))),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.tail"))),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "list"))}))}))}))}))}))})))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
+                          Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
+                          Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})),
+                        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                          Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
+                          Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForAlgorithmWInference"]}]}],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
       Testing.testGroupName = "Nominal terms",
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [
