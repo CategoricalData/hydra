@@ -1879,16 +1879,16 @@ inferenceTests = Testing.TestGroup {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
                         Core.LetBinding {
-                          Core.letBindingName = (Core.Name "f"),
-                          Core.letBindingTerm = (Core.TermVariable (Core.Name "g")),
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermVariable (Core.Name "y")),
                           Core.letBindingType = Nothing},
                         Core.LetBinding {
-                          Core.letBindingName = (Core.Name "g"),
-                          Core.letBindingTerm = (Core.TermVariable (Core.Name "f")),
+                          Core.letBindingName = (Core.Name "y"),
+                          Core.letBindingTerm = (Core.TermVariable (Core.Name "x")),
                           Core.letBindingType = Nothing}],
                       Core.letEnvironment = (Core.TermProduct [
-                        Core.TermVariable (Core.Name "f"),
-                        (Core.TermVariable (Core.Name "g"))])})),
+                        Core.TermVariable (Core.Name "x"),
+                        (Core.TermVariable (Core.Name "y"))])})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
@@ -2037,17 +2037,17 @@ inferenceTests = Testing.TestGroup {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
                         Core.LetBinding {
-                          Core.letBindingName = (Core.Name "f"),
-                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "g"))})),
-                          Core.letBindingType = Nothing},
-                        Core.LetBinding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "g"))})),
                           Core.letBindingType = Nothing},
                         Core.LetBinding {
                           Core.letBindingName = (Core.Name "g"),
@@ -2149,7 +2149,72 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForDefaultInference",
-                    (Testing.Tag "disabledForAlgorithmWInference")]}]}],
+                    (Testing.Tag "disabledForAlgorithmWInference")]}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Polymorphic recursion",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "b"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "x"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})),
+                                  Core.applicationArgument = (Core.TermList [
+                                    Core.TermList [
+                                      Core.TermVariable (Core.Name "x")]])})),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "g"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "b"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "x"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})),
+                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                      Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                      Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
+                                Core.applicationArgument = (Core.TermList [
+                                  Core.TermList [
+                                    Core.TermVariable (Core.Name "x")]])}))})))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeBoolean),
+                        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                          Core.functionTypeCodomain = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0"))))}))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
           Testing.testGroupCases = []},
         Testing.TestGroup {
           Testing.testGroupName = "Literals",
@@ -2196,6 +2261,27 @@ inferenceTests = Testing.TestGroup {
           Testing.testGroupName = "Pathological terms",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Pathological recursion",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermVariable (Core.Name "x")),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeVariable (Core.Name "t0"))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
             Testing.TestGroup {
               Testing.testGroupName = "Infinite lists",
               Testing.testGroupDescription = Nothing,
