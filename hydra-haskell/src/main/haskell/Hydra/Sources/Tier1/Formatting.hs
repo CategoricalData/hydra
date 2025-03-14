@@ -101,7 +101,7 @@ mapFirstLetterDef = formattingDefinition "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
   lambda "mapping" $ lambda "s" $ lets [
     "firstLetter">: var "mapping" @@ (Strings.fromList (Lists.pure (Lists.head $ var "list"))),
-    "list">: typed (tList tInt32) $ Strings.toList $ var "s"]
+    "list">: Strings.toList $ var "s"]
     $ Logic.ifElse
         (Strings.isEmpty $ var "s")
         (var "s")
