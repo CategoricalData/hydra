@@ -577,7 +577,7 @@ inferTypeOfLambda cx tmp@(Lambda var _ body) = bindVar withVdom
 
 -- | Normalize a let term before inferring its type.
 inferTypeOfLet :: AltInferenceContext -> Let -> Flow s AltInferenceResult
-inferTypeOfLet cx lt@(Let bindings0 env0) = Flows.map rewriteResult $ case rewrittenLet of
+inferTypeOfLet cx (Let bindings0 env0) = Flows.map rewriteResult $ case rewrittenLet of
      TermLet l -> inferTypeOfNormalizedLet cx l
      t -> inferTypeOfTerm cx t "empty let term"
   where

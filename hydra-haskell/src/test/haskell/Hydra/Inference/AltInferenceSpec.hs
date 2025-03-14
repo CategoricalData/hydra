@@ -29,12 +29,13 @@ import qualified Hydra.Dsl.Testing as Testing
 
 
 expectType :: String -> Term -> TypeScheme -> H.Expectation
-expectType desc term expected = shouldSucceedWith desc (showTypeScheme <$> result) (showTypeScheme expected)
+expectType desc term expected = do
+    shouldSucceedWith desc (showTypeScheme . snd <$> result) (showTypeScheme expected)
+    shouldSucceedWith desc (showTerm . stripTypesFromTerm . fst <$> result) (showTerm $ stripTypesFromTerm term)
   where
     result = do
       cx <- graphToInferenceContext testGraph
-      (term1, ts) <- inferTypeOf cx term
-      return ts
+      inferTypeOf cx term
 
 shouldSucceedWith :: (Eq a, Show a) => String -> Flow () a -> a -> H.Expectation
 shouldSucceedWith desc f x = case my of
