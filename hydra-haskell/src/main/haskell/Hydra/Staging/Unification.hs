@@ -1,6 +1,6 @@
 -- | Type unification using an adaptation Robinson's algorithm
 
-module Hydra.Staging.Inference.Unification where
+module Hydra.Staging.Unification where
 
 import Hydra.Coders
 import Hydra.Compute
@@ -10,7 +10,7 @@ import Hydra.Lib.Io
 import Hydra.Inference
 import Hydra.Rewriting
 import Hydra.Strip
-import Hydra.Staging.Inference.Substitution
+import Hydra.Staging.Substitution
 
 import qualified Data.List     as L
 import qualified Data.Map      as M
