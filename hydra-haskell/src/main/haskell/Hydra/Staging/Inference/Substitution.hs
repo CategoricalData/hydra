@@ -1,80 +1,93 @@
--- | Variable substitution and normalization of type expressions
+-- | Variable substitution in type expressions
 module Hydra.Staging.Inference.Substitution where
 
 import Hydra.Core
 import Hydra.Mantle
 import Hydra.Staging.Rewriting
-import Hydra.Rewriting
-import Hydra.Dsl.Types as Types
+import Hydra.Inference
 
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
-import qualified Data.Maybe as Y
+import qualified Data.List     as L
+import qualified Data.Map      as M
+import qualified Data.Maybe    as Y
 
 
-type Subst = M.Map Name Type
-
-composeSubst :: Subst -> Subst -> Subst
-composeSubst s1 s2 = M.union s1 $ M.map (substituteInType s1) s2
-
-normalTypeVariables :: [Name]
-normalTypeVariables = normalTypeVariable <$> [0..]
-
--- | Type variable naming convention follows Haskell: t0, t1, etc.
-normalTypeVariable :: Int -> Name
-normalTypeVariable i = Name $ "t" ++ show i
-
-normalizeScheme :: TypeScheme -> TypeScheme
-normalizeScheme ts@(TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeType body)
+-- | The composition S T of two substitution is the result of first applying S, then T.
+composeTypeSubst :: TypeSubst -> TypeSubst -> TypeSubst
+composeTypeSubst s1 s2 =
+    TypeSubst $ M.union addExtra $ fmap (substInType s2) $ unTypeSubst s1
   where
-    ord = L.zip (S.toList $ freeVariablesInType body) normalTypeVariables
+    addExtra = M.filterWithKey (\v _ -> Y.isNothing $ M.lookup v $ unTypeSubst s1) $ unTypeSubst s2
 
-    normalizeFieldType (FieldType fname typ) = FieldType fname $ normalizeType typ
+composeTypeSubstList :: [TypeSubst] -> TypeSubst
+composeTypeSubstList = L.foldl composeTypeSubst emptyTypeSubst
 
-    normalizeType typ = case typ of
-      TypeApplication (ApplicationType lhs rhs) -> TypeApplication (ApplicationType (normalizeType lhs) (normalizeType rhs))
-      TypeAnnotated (AnnotatedType t ann) -> TypeAnnotated (AnnotatedType (normalizeType t) ann)
-      TypeFunction (FunctionType dom cod) -> function (normalizeType dom) (normalizeType cod)
-      TypeList t -> list $ normalizeType t
-      TypeLiteral _ -> typ
-      TypeMap (MapType kt vt) -> Types.map (normalizeType kt) (normalizeType vt)
-      TypeOptional t -> optional $ normalizeType t
-      TypeProduct types -> TypeProduct (normalizeType <$> types)
-      TypeRecord (RowType n fields) -> TypeRecord $ RowType n (normalizeFieldType <$> fields)
-      TypeSet t -> set $ normalizeType t
-      TypeSum types -> TypeSum (normalizeType <$> types)
-      TypeUnion (RowType n fields) -> TypeUnion $ RowType n (normalizeFieldType <$> fields)
-      TypeLambda (LambdaType (Name v) t) -> TypeLambda (LambdaType (Name v) $ normalizeType t)
-      TypeVariable v -> case Prelude.lookup v ord of
-        Just (Name v1) -> var v1
-        Nothing -> error $ "type variable " ++ show v ++ " not in signature of type scheme: " ++ show ts
-      TypeWrap _ -> typ
+emptyTypeSubst = TypeSubst M.empty
+tmpTypeSubst = TypeSubst M.empty
 
-substituteInScheme :: M.Map Name Type -> TypeScheme -> TypeScheme
-substituteInScheme s (TypeScheme as t) = TypeScheme as $ substituteInType s' t
+singletonTypeSubst :: Name -> Type -> TypeSubst
+singletonTypeSubst v t = TypeSubst $ M.singleton v t
+
+substituteInTerm :: TermSubst -> Term -> Term
+substituteInTerm (TermSubst s) = rewriteTerm rewrite
   where
-    s' = L.foldr M.delete s as
+    rewrite recurse term = case term of
+      TermFunction (FunctionLambda (Lambda v mt body)) ->
+          TermFunction $ FunctionLambda $ Lambda v mt $ substituteInTerm subst2 body
+        where
+          subst2 = TermSubst $ M.delete v s
+      TermLet (Let bindings env) -> TermLet $ Let (fmap rewriteBinding bindings) $ substituteInTerm subst2 env
+        where
+          names = fmap letBindingName bindings
+          subst2 = TermSubst $ M.filterWithKey (\k _ -> not $ L.elem k names) s
+          rewriteBinding (LetBinding name term mt) = LetBinding name (substituteInTerm subst2 term) mt
+      TermVariable name -> case M.lookup name s of
+        Just sterm -> sterm
+        Nothing -> recurse term
+      _ -> recurse term
 
-substituteInType :: M.Map Name Type -> Type -> Type
-substituteInType s typ = case typ of
-    TypeApplication (ApplicationType lhs rhs) -> TypeApplication (ApplicationType (subst lhs) (subst rhs))
-    TypeAnnotated (AnnotatedType t ann) -> TypeAnnotated (AnnotatedType (subst t) ann)
-    TypeFunction (FunctionType dom cod) -> function (subst dom) (subst cod)
-    TypeList t -> list $ subst t
-    TypeLiteral _ -> typ
-    TypeMap (MapType kt vt) -> Types.map (subst kt) (subst vt)
-    TypeOptional t -> optional $ subst t
-    TypeProduct types -> TypeProduct (subst <$> types)
-    TypeRecord (RowType n fields) -> TypeRecord $ RowType n (substField <$> fields)
-    TypeSet t -> set $ subst t
-    TypeSum types -> TypeSum (subst <$> types)
-    TypeUnion (RowType n fields) -> TypeUnion $ RowType n (substField <$> fields)
-    TypeLambda (LambdaType var@(Name v) body) -> if Y.isNothing (M.lookup var s)
-      then TypeLambda (LambdaType (Name v) (subst body))
-      else typ
-    TypeVariable a -> M.findWithDefault typ a s
-    TypeWrap _ -> typ -- because we do not allow names to be bound to types with free variables
+substInContext :: TypeSubst -> InferenceContext -> InferenceContext
+substInContext subst cx = cx {
+  inferenceContextDataTypes = fmap (substInTypeScheme subst) $ inferenceContextDataTypes cx}
+
+substInType :: TypeSubst -> Type -> Type
+substInType subst = rewriteType rewrite
   where
-    subst = substituteInType s
-    substField (FieldType fname t) = FieldType fname $ subst t
+    rewrite recurse typ = case typ of
+      TypeLambda (LambdaType v body) -> case M.lookup v (unTypeSubst subst) of
+        Nothing -> recurse typ
+        Just styp -> TypeLambda $ LambdaType v $ substInType subst2 body
+          where
+            subst2 = TypeSubst $ M.delete v $ unTypeSubst subst
+      TypeVariable v -> case M.lookup v (unTypeSubst subst) of
+        Nothing -> typ
+        Just styp -> styp
+      _ -> recurse typ
+
+substInTypeScheme :: TypeSubst -> TypeScheme -> TypeScheme
+substInTypeScheme subst (TypeScheme vars typ) = TypeScheme vars $ substInType subst2 typ
+  where
+    subst2 = TypeSubst $ M.filterWithKey (\k _ -> not $ k `elem` vars) $ unTypeSubst subst
+
+substInTypeSchemeLegacy :: TypeSubst -> TypeScheme -> TypeScheme
+substInTypeSchemeLegacy subst (TypeScheme vars typ) = TypeScheme vars $ substInType subst typ
+
+substituteInConstraint :: TypeSubst -> TypeConstraint -> TypeConstraint
+substituteInConstraint subst (TypeConstraint t1 t2 ctx) = TypeConstraint (substInType subst t1) (substInType subst t2) ctx
+
+substituteInConstraints :: TypeSubst -> [TypeConstraint] -> [TypeConstraint]
+substituteInConstraints subst = fmap (substituteInConstraint subst)
+
+substTypesInTerm :: TypeSubst -> Term -> Term
+substTypesInTerm subst = rewriteTerm rewrite
+  where
+    rewrite recurse term = case term of
+      -- TODO: injections and case statements need a domain field as well, similar to lambdas
+      TermFunction (FunctionLambda (Lambda v mt body)) -> recurse $ TermFunction $ FunctionLambda $ Lambda v (fmap (substInType subst) mt) body
+      TermLet (Let bindings env) -> recurse $ TermLet $ Let (fmap rewriteBinding bindings) env
+        where
+          rewriteBinding (LetBinding v e mt) = LetBinding v e $ fmap (substInTypeScheme subst) mt
+      TermTypeAbstraction (TypeAbstraction param body) -> TermTypeAbstraction $ TypeAbstraction param $ substTypesInTerm subst2 body
+        where
+          subst2 = TypeSubst $ M.delete param $ unTypeSubst subst
+      TermTypeApplication (TypedTerm trm typ) -> recurse $ TermTypeApplication $ TypedTerm trm $ substInType subst typ
+      _ -> recurse term

@@ -16,6 +16,7 @@ module Hydra.Kernel (
   module Hydra.Flows,
   module Hydra.Formatting,
   module Hydra.Graph,
+  module Hydra.Inference,
   module Hydra.Lexical,
   module Hydra.Literals,
   module Hydra.Mantle,
@@ -32,8 +33,9 @@ module Hydra.Kernel (
   module Hydra.Staging.CoreDecoding,
   module Hydra.Staging.Formatting,
 --  module Hydra.Staging.GrammarToModule,
---  module Hydra.Staging.Inference.Inference,
   module Hydra.Staging.Inference.AltInference,
+  module Hydra.Staging.Inference.Substitution,
+  module Hydra.Staging.Inference.Unification,
   module Hydra.Staging.Lexical,
   module Hydra.Staging.LiteralAdapters,
   module Hydra.Staging.Reduction,
@@ -61,6 +63,7 @@ import Hydra.Errors
 import Hydra.Flows
 import Hydra.Formatting
 import Hydra.Graph
+import Hydra.Inference
 import Hydra.Lexical
 import Hydra.Literals
 import Hydra.Mantle
@@ -77,8 +80,9 @@ import Hydra.Staging.Annotations
 import Hydra.Staging.CoreDecoding
 import Hydra.Staging.Formatting
 --import Hydra.Staging.GrammarToModule
---import Hydra.Staging.Inference.Inference
 import Hydra.Staging.Inference.AltInference
+import Hydra.Staging.Inference.Substitution
+import Hydra.Staging.Inference.Unification
 import Hydra.Staging.Lexical
 import Hydra.Staging.LiteralAdapters
 import Hydra.Staging.Reduction
