@@ -129,6 +129,13 @@ testGroupForLet = supergroup "Let" [
           "fortytwo">: var "id" @@ int32 42,
           "foo">: var "id" @@ string "foo"]
           $ pair (var "fortytwo") (var "foo"))
+        (T.pair T.int32 T.string),
+      expectMono 8 [tag_disabledForAlgorithmWInference]
+        (lets [
+          "fortytwo">: var "id" @@ int32 42,
+          "id">: lambda "x" $ var "x",
+          "foo">: var "id" @@ string "foo"]
+          $ pair (var "fortytwo") (var "foo"))
         (T.pair T.int32 T.string)],
 
     subgroup "Recursive and mutually recursive let (@wisnesky's test cases)" [
@@ -177,7 +184,31 @@ testGroupForLet = supergroup "Let" [
           "id">: lambda "z" $ var "z",
           "f">: lambda "p0" $ pair (var "id" @@ var "p0") (var "id" @@ var "p0")]
           $ int32 0)
-        T.int32]]
+        T.int32],
+
+    subgroup "Recursive and mutually recursive let with polymorphism" [
+      expectMono 1 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
+        (lets [
+          "f">: primitive _strings_length @@ var "g",
+          "id">: lambda "x" $ var "x",
+          "g">: primitive _strings_fromList @@ list [var "f"]]
+          $ pair (var "f") (var "g"))
+        (T.pair T.int32 T.string),
+      expectMono 2 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
+        (lets [
+          "id">: lambda "x" $ var "x",
+          "f">: var "id" @@ (primitive _strings_length @@ var "g"),
+          "g">: var "id" @@ (primitive _strings_fromList @@ list [var "f"])]
+          $ pair (var "f") (var "g"))
+        (T.pair T.int32 T.string),
+      expectMono 3 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
+        (lets [
+          "f">: var "id" @@ (primitive _strings_length @@ var "g"),
+          "id">: lambda "x" $ var "x",
+          "g">: var "id" @@ (primitive _strings_fromList @@ list [var "f"])]
+          $ pair (var "f") (var "g"))
+        (T.pair T.int32 T.string)]]
+
   where
     s = primitive _math_neg
     p = primitive _math_neg
