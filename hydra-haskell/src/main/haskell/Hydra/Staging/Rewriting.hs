@@ -417,6 +417,20 @@ stripTypeRecursive = rewriteType strip
 stripTypeSchemeRecursive :: TypeScheme -> TypeScheme
 stripTypeSchemeRecursive (TypeScheme vars typ) = TypeScheme vars $ stripTypeRecursive typ
 
+stripTypesFromTerm :: Term -> Term
+stripTypesFromTerm = rewriteTerm strip
+  where
+    strip recurse term = case recurse term of
+      -- Note: other annotations are not stripped; only types are.
+      TermFunction (FunctionLambda (Lambda v _ b)) -> TermFunction $ FunctionLambda $ Lambda v Nothing b
+      TermLet (Let bindings env) -> TermLet $ Let (fmap stripBinding bindings) env
+        where
+          stripBinding (LetBinding v t _) = LetBinding v t Nothing
+      TermTypeAbstraction (TypeAbstraction _ b) -> b
+      TermTypeApplication (TypedTerm t _) -> t
+      TermTyped (TypedTerm t _) -> t
+      t -> t
+
 substituteTypeVariables :: M.Map Name Name -> Type -> Type
 substituteTypeVariables subst = rewriteType replace
   where
