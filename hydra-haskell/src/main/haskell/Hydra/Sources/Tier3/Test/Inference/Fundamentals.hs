@@ -140,14 +140,24 @@ testGroupForLet = supergroup "Let" [
           "f">: lambda "x" $ lambda "y" (var "f" @@ int32 0 @@ var "x")]
           $ var "f")
         ["t0"] (T.function T.int32 (T.function T.int32 (T.var "t0"))),
-      expectPoly 2 [tag_disabledForDefaultInference]
+
+      -- Note two version of this test. @wisnesky's Algorithm W implementation finds the same type as GHC,
+      -- while Hydra's new inference implementation finds what is arguably a more specific (and equally correct) type.
+      -- Specifically, GHC finds (a, b), whereas we find (a, a)
+      -- Try: :t (let (f, g) = (g, f) in (f, g))
+      expectPoly 2 [tag_disabledForDefaultInference, tag_disabledForAltInference]
         (lets [
           "f">: var "g",
           "g">: var "f"]
           $ pair (var "f") (var "g"))
-        -- Note: GHC finds (a, b) rather than (a, a)
-        -- Try: :t (let (f, g) = (g, f) in (f, g))
         ["t0", "t1"] (T.pair (T.var "t0") (T.var "t1")),
+      expectPoly 2 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
+        (lets [
+          "f">: var "g",
+          "g">: var "f"]
+          $ pair (var "f") (var "g"))
+        ["t0"] (T.pair (T.var "t0") (T.var "t0")),
+
       expectPoly 3 [tag_disabled]
         (lets [
           "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
