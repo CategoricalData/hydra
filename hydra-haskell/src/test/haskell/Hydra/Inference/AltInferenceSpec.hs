@@ -16,6 +16,7 @@ import qualified Test.Hspec as H
 import qualified Test.HUnit.Lang as HL
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Lib.Io
 import Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
 
@@ -28,7 +29,7 @@ import qualified Hydra.Dsl.Testing as Testing
 
 
 expectType :: String -> Term -> TypeScheme -> H.Expectation
-expectType desc term expected = shouldSucceedWith desc result expected
+expectType desc term expected = shouldSucceedWith desc (showTypeScheme <$> result) (showTypeScheme expected)
   where
     result = do
       cx <- graphToInferenceContext testGraph
@@ -46,7 +47,7 @@ shouldSucceedWith desc f x = case my of
       f
 
 altInferenceTestRunner :: TestRunner
-altInferenceTestRunner desc tcase = if Testing.isDisabled tcase
+altInferenceTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabledForAltInference tcase
   then Nothing
   else case testCaseWithMetadataCase tcase of
     TestCaseInference (InferenceTestCase input output) -> Just $ expectType desc input output

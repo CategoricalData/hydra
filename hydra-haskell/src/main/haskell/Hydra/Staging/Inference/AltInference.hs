@@ -1,21 +1,22 @@
 module Hydra.Staging.Inference.AltInference where
 
-import Hydra.Variants
 import Hydra.Coders
-import Hydra.Core
 import Hydra.Compute
+import Hydra.Core
 import Hydra.Errors
-import Hydra.Graph
-import Hydra.Mantle
 import Hydra.Flows
-import Hydra.Strip
-import Hydra.Rewriting
-import Hydra.Staging.Annotations
-import Hydra.Staging.Rewriting
-import Hydra.Staging.Schemas
-import Hydra.Staging.CoreDecoding
+import Hydra.Graph
 import Hydra.Lib.Flows as Flows
 import Hydra.Lib.Io
+import Hydra.Mantle
+import Hydra.Rewriting
+import Hydra.Staging.Annotations
+import Hydra.Staging.CoreDecoding
+import Hydra.Staging.Rewriting
+import Hydra.Staging.Schemas
+import Hydra.Staging.Sorting
+import Hydra.Strip
+import Hydra.Variants
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Expect as Expect
@@ -323,11 +324,12 @@ data AltInferenceResult
     altInferenceResultType :: Type,
     altInferenceResultSubst :: TypeSubst}
   deriving (Eq, Ord)
---instance Show AltInferenceResult where
---  show (AltInferenceResult term typ subst) = "{"
---    ++ "term=" ++ showTerm term ++ ", "
---    ++ "type= " ++ showType typ ++ ", "
---    ++ "subst= " ++ showTypeSubst subst ++ "}"
+
+showAltInferenceResult :: AltInferenceResult -> String
+showAltInferenceResult (AltInferenceResult term typ subst) = "{"
+    ++ "term=" ++ showTerm term ++ ", "
+    ++ "type= " ++ showType typ ++ ", "
+    ++ "subst= " ++ showTypeSubst subst ++ "}"
 
 emptyInferenceContext :: AltInferenceContext
 emptyInferenceContext = AltInferenceContext M.empty M.empty M.empty False
@@ -389,7 +391,7 @@ inferGraphTypes g0 = withTrace "graph inference" $ do
 --          return $ unName (elementName el) ++ ": " ++ showType typ
 
 inferMany :: AltInferenceContext -> [(Term, String)] -> Flow s ([Term], [Type], TypeSubst)
-inferMany cx terms = case terms of
+inferMany cx pairs = case pairs of
   [] -> return ([], [], emptyTypeSubst)
   ((e, desc):tl) -> do
     (AltInferenceResult e1 t1 s1) <- inferTypeOfTerm cx e desc
@@ -398,6 +400,20 @@ inferMany cx terms = case terms of
       (substTypesInTerm s2 e1):e2,
       (substInType s2 t1):t2,
       composeTypeSubst s1 s2)
+
+inferAndBindMany :: AltInferenceContext -> [(Name, Term)] -> Flow s ([Term], [Type], TypeSubst, AltInferenceContext)
+inferAndBindMany cx pairs = case pairs of
+  [] -> return ([], [], emptyTypeSubst, cx)
+  ((name, e):tl) -> do
+    (AltInferenceResult e1 t1 s1) <- inferTypeOfTerm cx e $ "infer and bind " ++ unName name
+    let cx1 = substInContext s1 cx
+    let cx2 = extendContext [(name, generalize cx1 t1)] cx1
+    (e2, t2, s2, cx3) <- inferAndBindMany cx2 tl
+    return (
+      (substTypesInTerm s2 e1):e2,
+      (substInType s2 t1):t2,
+      composeTypeSubst s1 s2,
+      cx3)
 
 -- TODO: deprecated (and expensive)
 inferTermType :: Term -> Flow Graph Term
@@ -559,45 +575,63 @@ inferTypeOfLambda cx tmp@(Lambda var _ body) = bindVar withVdom
         withResult (AltInferenceResult iterm itype isubst) =
           yield (TermFunction $ FunctionLambda $ Lambda var (Just dom) iterm) (Types.function dom itype) isubst
 
--- TODO: this rule contains some expensive operations. Various optimizations may be possible, such as saving substitutions until the end (outside of the rule itself).
+-- | Normalize a let term before inferring its type.
 inferTypeOfLet :: AltInferenceContext -> Let -> Flow s AltInferenceResult
-inferTypeOfLet cx (Let b0 env0) = bindVars (L.length b0) withVars
+inferTypeOfLet cx lt@(Let bindings0 env0) = Flows.map rewriteResult $ case rewrittenLet of
+     TermLet l -> inferTypeOfNormalizedLet cx l
+     t -> inferTypeOfTerm cx t "empty let term"
+  where
+    names = fmap letBindingName bindings0
+    groups = case topologicalSort adjList of
+        Left g -> g
+        Right l -> if L.null l then [] else [l]
+      where
+        adjList = fmap toPair bindings0
+        nameSet = S.fromList names
+        toPair (LetBinding name term _) = (name, L.filter (\n -> S.member n nameSet) $ S.toList $ freeVariablesInTerm term)
+    -- Note: this rewritten let term will yield success in all cases of dependencies among letrec bindings *except*
+    --       in cases of polymorphic recursion. In those cases, type hints will be needed (#162).
+    rewrittenLet = L.foldl createLet env0 $ L.reverse groups
+      where
+        bindingMap = M.fromList $ L.zip names bindings0
+        createLet e group = TermLet $ Let (Y.catMaybes $ fmap (\n -> M.lookup n bindingMap) group) e
+    restoreLet iterm = TermLet $ Let (Y.catMaybes $ fmap (\n -> M.lookup n bindingMap) names) iterm
+      where
+        (bindingList, e) = helper (L.length groups) [] iterm
+        bindingMap = M.fromList $ fmap (\b -> (letBindingName b, b)) bindingList
+        helper level bins term = if level == 0
+          then (bins, term)
+          else case term of
+            TermLet (Let bs e) -> helper (level - 1) (bs ++ bins) e
+    rewriteResult result@(AltInferenceResult iterm itype isubst) = AltInferenceResult (restoreLet iterm) itype isubst
+
+-- | Infer the type of a let (letrec) term which is already in a normal form.
+inferTypeOfNormalizedLet :: AltInferenceContext -> Let -> Flow s AltInferenceResult
+inferTypeOfNormalizedLet cx (Let b0 env0) = bindVars (L.length b0) withVars
   where
     bnames = fmap letBindingName b0
     eb0 = fmap letBindingTerm b0
---    withVars bvars = Flows.bind (inferMany cx2 $ L.zip eb0 $ fmap (\n -> "binding " ++ unName n) bnames) withInferredBindings
-    withVars bvars = Flows.bind (inferMany cx2 $ L.zipWith ((\t n -> (t, "binding " ++ unName n ++ ": " ++ showTerm t))) eb0 bnames) withInferredBindings
+    withVars bvars = Flows.bind (inferAndBindMany cx1 $ L.zip bnames eb0) withInferredBindings
       where
-        cx2 = extendContext (L.zip bnames $ fmap Types.mono btypes) cx
+        cx1 = extendContext (L.zip bnames $ fmap Types.mono btypes) cx
         btypes = fmap TypeVariable bvars
-        withInferredBindings (eb1, tb, s1) = Flows.bind
-            (unifyTypeLists cx (fmap (substInType s1) btypes) tb "let temporary type bindings") withSubst
+        withInferredBindings (eb1, tb, s1, cx2) = Flows.bind
+            (unifyTypeLists cx2 (fmap (substInType s1) btypes) tb "let temporary type bindings") withSubst
           where
-            withSubst sb = Flows.bind (inferTypeOfTerm cx3 env0 "let environment") withEnv
+            withSubst sb = Flows.map withEnv (inferTypeOfTerm cx3 env0 "let environment")
               where
-                cx3 = extendContext (L.zip bnames $ fmap (generalize cx . substInType sb) tb) cx2
-                withEnv tmp@(AltInferenceResult env1 tenv senv) = do
-
---                    if (TermFunction $ FunctionLambda tmp) == (Terms.lambda "v" $ Terms.wrap (Name "StringTypeAlias") $ Terms.var "v")
---                      then Flows.fail $ "bnames: " ++ L.intercalate ", " (fmap unName bnames)
---                        ++ "\nbvars: " ++ L.intercalate ", " (fmap unName bvars)
---                        ++ "\nenv result: " ++ show tmp
---                        ++ "\nbinding result terms:" ++ (L.concat $ L.zipWith (\n r -> "\n\t" ++ unName n ++ ": " ++ showTerm r) bnames eb1)
---                        ++ "\nbinding result types:" ++ (L.concat $ L.zipWith (\n r -> "\n\t" ++ unName n ++ ": " ++ showType r) bnames tb)
---                        ++ "\nbinding result subst: " ++ show s1
---                        ++ "\noverall result: " ++ show (AltInferenceResult let1 tenv [] s2)
---                      else Flows.pure ()
-
-                    return $ AltInferenceResult let1 tenv s2
+                cx3 = extendContext (L.zip bnames $ fmap (generalize cx2 . substInType sb) tb) cx2
+                withEnv tmp@(AltInferenceResult env1 tenv senv) = AltInferenceResult
+                    (TermLet $ Let b3 env1)
+                    tenv
+                    (composeTypeSubstList [s1, sb, senv])
                   where
-                    s2 = composeTypeSubstList [s1, sb, senv]
                     eb2 = fmap (substTypesInTerm $ composeTypeSubst sb senv) eb1
                     b3t = L.zip bnames $ fmap (generalize cx . substInType sb) tb
                     s3 = TermSubst $ M.fromList $ fmap (\(x, ts) -> (x, (Terms.typeApplication (TermVariable x) $ fmap TypeVariable $ typeSchemeVariables ts))) b3t
                     b3 = L.zipWith (\(x, ts) e -> LetBinding x
                       (substTypesInTerm (composeTypeSubst senv sb) $ Terms.typeAbstraction (typeSchemeVariables ts) $ substituteInTerm s3 e)
                       (Just $ substInTypeScheme senv ts)) b3t eb2
-                    let1 = TermLet $ Let b3 env1
 
 inferTypeOfList :: AltInferenceContext -> [Term] -> Flow s AltInferenceResult
 inferTypeOfList cx = inferTypeOfCollection cx Types.list Terms.list "list element"
