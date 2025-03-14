@@ -187,14 +187,6 @@ _TermAccessor_injectionTerm = (Core.Name "injectionTerm")
 
 _TermAccessor_wrappedTerm = (Core.Name "wrappedTerm")
 
--- | A substitution of term variables for terms
-newtype TermSubst = 
-  TermSubst {
-    unTermSubst :: (M.Map Core.Name Core.Term)}
-  deriving (Eq, Ord, Read, Show)
-
-_TermSubst = (Core.Name "hydra.mantle.TermSubst")
-
 -- | The identifier of a term expression constructor
 data TermVariant = 
   TermVariantAnnotated  |
@@ -254,31 +246,6 @@ _TermVariant_union = (Core.Name "union")
 _TermVariant_variable = (Core.Name "variable")
 
 _TermVariant_wrap = (Core.Name "wrap")
-
--- | An assertion that two types can be unified into a single type
-data TypeConstraint = 
-  TypeConstraint {
-    typeConstraintLeft :: Core.Type,
-    typeConstraintRight :: Core.Type,
-    -- | A description of the type constraint which may be used for tracing or debugging
-    typeConstraintComment :: String}
-  deriving (Eq, Ord, Read, Show)
-
-_TypeConstraint = (Core.Name "hydra.mantle.TypeConstraint")
-
-_TypeConstraint_left = (Core.Name "left")
-
-_TypeConstraint_right = (Core.Name "right")
-
-_TypeConstraint_comment = (Core.Name "comment")
-
--- | A substitution of type variables for types
-newtype TypeSubst = 
-  TypeSubst {
-    unTypeSubst :: (M.Map Core.Name Core.Type)}
-  deriving (Eq, Ord, Read, Show)
-
-_TypeSubst = (Core.Name "hydra.mantle.TypeSubst")
 
 -- | The identifier of a type constructor
 data TypeVariant = 
