@@ -146,7 +146,8 @@ testGroupForLet = supergroup "Let" [
         ["t0"] (T.function T.int32 (T.function T.int32 (T.var "t0"))),
 
       -- Note two version of this test. @wisnesky's Algorithm W implementation finds the same type as GHC,
-      -- while Hydra's new inference implementation finds what is arguably a more specific (and equally correct) type.
+      -- while Hydra's new inference implementation finds a less general type.
+      -- The difference is unimportant in this case, if we are uninterested in the types of divergent terms.
       -- Specifically, GHC finds (a, b), whereas we find (a, a)
       -- Try: :t (let (f, g) = (g, f) in (f, g))
       expectPoly 2 [tag_disabledForDefaultInference, tag_disabledForAltInference]
@@ -157,9 +158,9 @@ testGroupForLet = supergroup "Let" [
         ["t0", "t1"] (T.pair (T.var "t0") (T.var "t1")),
       expectPoly 2 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
         (lets [
-          "f">: var "g",
-          "g">: var "f"]
-          $ pair (var "f") (var "g"))
+          "x">: var "y",
+          "y">: var "x"]
+          $ pair (var "x") (var "y"))
         ["t0"] (T.pair (T.var "t0") (T.var "t0")),
 
       expectPoly 3 [tag_disabled]
@@ -189,8 +190,8 @@ testGroupForLet = supergroup "Let" [
     subgroup "Recursive and mutually recursive let with polymorphism" [
       expectMono 1 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
         (lets [
-          "f">: primitive _strings_length @@ var "g",
           "id">: lambda "x" $ var "x",
+          "f">: primitive _strings_length @@ var "g",
           "g">: primitive _strings_fromList @@ list [var "f"]]
           $ pair (var "f") (var "g"))
         (T.pair T.int32 T.string),
@@ -207,7 +208,15 @@ testGroupForLet = supergroup "Let" [
           "id">: lambda "x" $ var "x",
           "g">: var "id" @@ (primitive _strings_fromList @@ list [var "f"])]
           $ pair (var "f") (var "g"))
-        (T.pair T.int32 T.string)]]
+        (T.pair T.int32 T.string)],
+
+    subgroup "Polymorphic recursion" [
+      expectPoly 1 []
+        (lets [
+          "f">: lambda "b" $ lambda "x" $ primitive _logic_ifElse @@ var "b" @@ list [list [var "x"]] @@ (var "g" @@ var "b" @@ var "x"),
+          "g">: lambda "b" $ lambda "x" $ primitive _logic_ifElse @@ var "b" @@ (var "f" @@ var "b" @@ var "x") @@ list [list [var "x"]]]
+          $ var "f")
+        ["t0"] (T.functionN [T.boolean, T.var "t0", T.list $ T.list $ T.var "t0"])]]
 
   where
     s = primitive _math_neg
@@ -230,6 +239,13 @@ testGroupForLiterals = subgroup "Literals" [
 
 testGroupForPathologicalTerms :: TTerm TestGroup
 testGroupForPathologicalTerms = supergroup "Pathological terms" [
+
+    subgroup "Pathological recursion" [
+      expectPoly 1 []
+        (lets [
+          "x">: var "x"]
+          $ var "x")
+        ["t0"] (T.var "t0")],
 
     subgroup "Infinite lists" [
       expectMono 1 [tag_disabledForDefaultInference]
