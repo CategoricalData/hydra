@@ -356,11 +356,6 @@ graphToInferenceContext g0 = do
 
 inferGraphTypes :: Graph -> Flow s Graph
 inferGraphTypes g0 = withTrace "graph inference" $ do
---    case graphSchema g0 of
---      Nothing -> Flows.fail "no schema"
---      Just s -> do
---        str <- showSchemaGraph s
---        Flows.fail $ "schema graph: " ++ str
     cx <- graphToInferenceContext g0
     Flows.bind (inferTypeOfTerm cx (toLetTerm g0) "graph term") withResult
   where
@@ -369,7 +364,6 @@ inferGraphTypes g0 = withTrace "graph inference" $ do
         toBinding (Element name term _) = LetBinding name term Nothing
     withResult (AltInferenceResult term ts _) = case normalizeTypeVariablesInTerm term of
       TermLet l -> Flows.pure $ fromLetTerm l
---      TermLet l -> Flows.fail $ "resulting graph: " ++ showTerm (TermLet l)
       _ -> Flows.fail $ "Expected inferred graph as let term"
     fromLetTerm (Let bindings env) = g0 {
         graphElements = M.fromList $ fmap fromBinding bindings,
@@ -378,17 +372,6 @@ inferGraphTypes g0 = withTrace "graph inference" $ do
         graphTypes = M.empty}
       where
         fromBinding (LetBinding name term mt) = (name, Element name term mt)
---    showSchemaGraph g = withState g $ do
---        s <- CM.mapM forEl typeEls
---        return $ "{" ++ (L.intercalate ", " s) ++ "}"
---      where
---        typeEls = L.filter isEncodedType $ M.elems $ graphElements g
---        isEncodedType el = case (fullyStripTerm $ elementTerm el) of
---          TermUnion (Injection tname _) -> tname == _Type
---          _ -> False
---        forEl el = do
---          typ <- coreDecodeType $ elementTerm el
---          return $ unName (elementName el) ++ ": " ++ showType typ
 
 inferMany :: AltInferenceContext -> [(Term, String)] -> Flow s ([Term], [Type], TypeSubst)
 inferMany cx pairs = case pairs of
@@ -430,7 +413,6 @@ inferTwo cx term1 desc1 term2 desc2 = Flows.map withResult $ inferMany cx [(term
 
 inferTypeOf :: AltInferenceContext -> Term -> Flow s (Term, TypeScheme)
 inferTypeOf cx term = bindInferredTerm cx letTerm "infer type of term" unifyAndSubst
---inferTypeOf cx term = bindInferredTerm cx letTerm ("infer type of term: " ++ showTerm term) unifyAndSubst
   where
     letTerm = TermLet $ Let [LetBinding (Name "x") term Nothing] $ Terms.string "ignored"
     unifyAndSubst result = do
@@ -466,8 +448,7 @@ inferTypeOfApplication cx (Application e0 e1) = bindInferredTerm cx e0 "lhs" wit
       where
         withRhs (AltInferenceResult b t1 s1) = bindVar withVar
           where
---            withVar v = Flows.map withSubst $ unifyTypes cx
-            withVar v = withTrace ("applying " ++ showTerm e0 ++ " to " ++ showTerm e1 ++ "; types are " ++ showType t0 ++ " and " ++ showType t1 ) $ Flows.map withSubst $ unifyTypes cx
+            withVar v = Flows.map withSubst $ unifyTypes cx
                 (substInType s1 t0)
                 (Types.function t1 $ TypeVariable v)
                 "application lhs"
@@ -506,20 +487,10 @@ inferTypeOfCollection cx typCons trmCons desc els = bindVar withVar
   where
     withVar var = Flows.bind (inferMany cx $ L.zip els $ fmap (\i -> "#" ++ show i) [1..(L.length els)]) fromResults
       where
-        fromResults (terms, types, subst1) = bindConstraints cx constraints withConstraints
+        fromResults (terms, types, subst1) = mapConstraints cx withConstraints $
+            fmap (\t -> TypeConstraint (TypeVariable var) t desc) types
           where
-            constraints = fmap (\t -> TypeConstraint (TypeVariable var) t desc) types
-            withConstraints subst2 = do
-
---                debugIf "All tests, Inference tests, Simple terms, List terms, List with bound variables, #1" $ ""
---                    ++ "\n\tels: " ++ (L.intercalate ", " $ fmap showTerm els)
---                    ++ "\n\trExpr: " ++ showTerm rExpr
---                    ++ "\n\trType: " ++ showType rType
---                    ++ "\n\tsubst1: " ++ show subst1
---                    ++ "\n\tsubst2: " ++ show subst2
---                    ++ "\n\tsubst: " ++ show subst
-
-                return $ yield (trmCons terms) (typCons $ TypeVariable var) $ composeTypeSubst subst1 subst2
+            withConstraints subst2 = yield (trmCons terms) (typCons $ TypeVariable var) $ composeTypeSubst subst1 subst2
 
 inferTypeOfElimination :: AltInferenceContext -> Elimination -> Flow s AltInferenceResult
 inferTypeOfElimination cx elm = case elm of
@@ -541,7 +512,10 @@ inferTypeOfFold cx fun = bindVar2 withVars
             TypeConstraint expectedType ityp "fold function"]
           where
             expectedType = Types.functionN [bT, aT, bT]
-            withSubst subst = yield iterm (Types.functionN [bT, Types.list aT, bT]) $ composeTypeSubst isubst subst
+            withSubst subst = yield
+              (TermFunction $ FunctionElimination $ EliminationList iterm)
+              (Types.functionN [bT, Types.list aT, bT])
+              (composeTypeSubst isubst subst)
 
 inferTypeOfFunction :: AltInferenceContext -> Function -> Flow s AltInferenceResult
 inferTypeOfFunction cx f = case f of
@@ -595,7 +569,7 @@ inferTypeOfLet cx (Let bindings0 env0) = Flows.map rewriteResult $ case rewritte
       where
         bindingMap = M.fromList $ L.zip names bindings0
         createLet e group = TermLet $ Let (Y.catMaybes $ fmap (\n -> M.lookup n bindingMap) group) e
-    restoreLet iterm = TermLet $ Let (Y.catMaybes $ fmap (\n -> M.lookup n bindingMap) names) iterm
+    restoreLet iterm = TermLet $ Let (Y.catMaybes $ fmap (\n -> M.lookup n bindingMap) names) e
       where
         (bindingList, e) = helper (L.length groups) [] iterm
         bindingMap = M.fromList $ fmap (\b -> (letBindingName b, b)) bindingList
@@ -711,17 +685,11 @@ inferTypeOfRecord cx (Record tname fields) =
     bind2 (requireSchemaType cx tname) (inferMany cx $ fmap (\f -> (fieldTerm f, "field " ++ unName (fieldName f))) fields) withResults
   where
     fnames = fmap fieldName fields
-    withResults (TypeScheme svars styp) (iterms, itypes, isubst) = bindConstraints cx [
-        TypeConstraint styp ityp "schema type of record"] withSubst
+    withResults (TypeScheme svars styp) (iterms, itypes, isubst) = mapConstraints cx withSubst [
+        TypeConstraint styp ityp "schema type of record"]
       where
         ityp = TypeRecord $ RowType tname $ L.zipWith FieldType fnames itypes
-        withSubst subst = do
---          debugIf "All tests, Inference tests, Nominal terms, Records, Record instances of simply recursive record types, #1" $ ""
---            ++ "\n\tstyp: " ++ showType styp
---            ++ "\n\tityp: " ++ showType ityp
-
---          yieldDebug cx "All tests, Inference tests, Nominal terms, Records, Record instances of simply recursive record types, #1"
-          return $ yield
+        withSubst subst = yield
             (TermRecord $ Record tname $ L.zipWith Field fnames iterms)
             (nominalApplication tname svars)
             (composeTypeSubst isubst subst)
@@ -816,8 +784,8 @@ inferTypeOfWrappedTerm cx (WrappedTerm tname term) = bind2 (requireSchemaType cx
 
 --------------------------------------------------------------------------------
 
-bindConstraints :: AltInferenceContext -> [TypeConstraint] -> (TypeSubst -> Flow s a) -> Flow s a
-bindConstraints cx constraints = Flows.bind (unifyTypeConstraints cx constraints)
+bindConstraints :: AltInferenceContext -> (TypeSubst -> Flow s a) -> [TypeConstraint] -> Flow s a
+bindConstraints cx f constraints = Flows.bind (unifyTypeConstraints cx constraints) f
 
 bindVar :: (Name -> Flow s a) -> Flow s a
 bindVar = Flows.bind freshName
