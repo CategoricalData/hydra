@@ -14,7 +14,7 @@ import Hydra.Sources.Libraries
 import Hydra.Strip
 import Hydra.Rewriting
 import Hydra.Coders
-import Hydra.Staging.Inference.Substitution
+import Hydra.Staging.Substitution
 import Hydra.Staging.Rewriting
 
 import qualified Data.List as L
