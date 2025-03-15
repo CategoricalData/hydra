@@ -39,18 +39,6 @@ import qualified Data.Maybe    as Y
 
 key_vcount = Name "inferenceTypeVariableCount"
 
-debugIf :: String -> String -> Flow s ()
-debugIf debugId message = do
-  desc <- getDebugId
-  if desc == Just debugId
-    then Flows.fail message
-    else return ()
-
-getDebugId :: Flow s (Maybe String)
-getDebugId = do
-  desc <- getAttr key_debugId
-  traverse Expect.string desc
-
 freshName :: Flow s Name
 freshName = normalTypeVariable <$> nextCount key_vcount
 
@@ -59,10 +47,6 @@ freshNames n = Flows.sequence $ L.replicate n freshName
 
 freshVariableType :: Flow s Type
 freshVariableType = TypeVariable <$> freshName
-
--- | Type variable naming convention follows Haskell: t0, t1, etc.
-normalTypeVariable :: Int -> Name
-normalTypeVariable i = Name $ "t" ++ show i
 
 --------------------------------------------------------------------------------
 -- Type checking
@@ -321,13 +305,11 @@ inferTypeOfLambda cx tmp@(Lambda var _ body) = bindVar withVdom
 -- | Normalize a let term before inferring its type.
 inferTypeOfLet :: InferenceContext -> Let -> Flow s InferenceResult
 inferTypeOfLet cx (Let bindings0 env0) = Flows.map rewriteResult $ case rewrittenLet of
-     TermLet l -> inferTypeOfNormalizedLet cx l
+     TermLet l -> inferTypeOfLetAfterNormalization cx l
      t -> inferTypeOfTerm cx t "empty let term"
   where
     names = fmap letBindingName bindings0
-    groups = case topologicalSort adjList of
-        Left g -> g
-        Right l -> if L.null l then [] else [l]
+    groups = topologicalSortComponents adjList
       where
         adjList = fmap toPair bindings0
         nameSet = S.fromList names
@@ -349,8 +331,8 @@ inferTypeOfLet cx (Let bindings0 env0) = Flows.map rewriteResult $ case rewritte
     rewriteResult result@(InferenceResult iterm itype isubst) = InferenceResult (restoreLet iterm) itype isubst
 
 -- | Infer the type of a let (letrec) term which is already in a normal form.
-inferTypeOfNormalizedLet :: InferenceContext -> Let -> Flow s InferenceResult
-inferTypeOfNormalizedLet cx (Let b0 env0) = bindVars (L.length b0) withVars
+inferTypeOfLetAfterNormalization :: InferenceContext -> Let -> Flow s InferenceResult
+inferTypeOfLetAfterNormalization cx (Let b0 env0) = bindVars (L.length b0) withVars
   where
     bnames = fmap letBindingName b0
     eb0 = fmap letBindingTerm b0
