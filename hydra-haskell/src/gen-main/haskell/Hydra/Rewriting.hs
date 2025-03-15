@@ -14,14 +14,12 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Fold over a term, traversing its subterms in the specified order
-foldOverTerm :: (Coders.TraversalOrder -> (x -> Core.Term -> x) -> x -> Core.Term -> x)
+foldOverTerm :: (Coders.TraversalOrder -> (t0 -> Core.Term -> t0) -> t0 -> Core.Term -> t0)
 foldOverTerm order fld b0 term = ((\x -> case x of
   Coders.TraversalOrderPre -> (Lists.foldl (foldOverTerm order fld) (fld b0 term) (subterms term))
   Coders.TraversalOrderPost -> (fld (Lists.foldl (foldOverTerm order fld) b0 (subterms term)) term)) order)
 
--- | Fold over a type, traversing its subtypes in the specified order
-foldOverType :: (Coders.TraversalOrder -> (x -> Core.Type -> x) -> x -> Core.Type -> x)
+foldOverType :: (Coders.TraversalOrder -> (t0 -> Core.Type -> t0) -> t0 -> Core.Type -> t0)
 foldOverType order fld b0 typ = ((\x -> case x of
   Coders.TraversalOrderPre -> (Lists.foldl (foldOverType order fld) (fld b0 typ) (subtypes typ))
   Coders.TraversalOrderPost -> (fld (Lists.foldl (foldOverType order fld) b0 (subtypes typ)) typ)) order)
