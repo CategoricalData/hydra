@@ -63,7 +63,6 @@ hydraVariantsModule = Module (Namespace "hydra.variants") elements [] tier1Modul
 eliminationVariantDef :: TElement (Elimination -> EliminationVariant)
 eliminationVariantDef = variantsDefinition "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
-  function eliminationT eliminationVariantT $
   matchToEnum _Elimination _EliminationVariant Nothing [
     _Elimination_list     @-> _EliminationVariant_list,
     _Elimination_optional @-> _EliminationVariant_optional,
@@ -75,7 +74,6 @@ eliminationVariantDef = variantsDefinition "eliminationVariant" $
 eliminationVariantsDef :: TElement [EliminationVariant]
 eliminationVariantsDef = variantsDefinition "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
-  typed (tList eliminationVariantT) $
   list $ unitVariant _EliminationVariant <$> [
     _EliminationVariant_list,
     _EliminationVariant_wrap,
@@ -87,7 +85,6 @@ eliminationVariantsDef = variantsDefinition "eliminationVariants" $
 floatTypePrecisionDef :: TElement (FloatType -> Precision)
 floatTypePrecisionDef = variantsDefinition "floatTypePrecision" $
   doc "Find the precision of a given floating-point type" $
-  function floatTypeT precisionT $
   matchToUnion _FloatType _Precision Nothing [
     _FloatType_bigfloat @-> field _Precision_arbitrary unit,
     _FloatType_float32  @-> field _Precision_bits $ int 32,
@@ -96,7 +93,6 @@ floatTypePrecisionDef = variantsDefinition "floatTypePrecision" $
 floatTypesDef :: TElement [FloatType]
 floatTypesDef = variantsDefinition "floatTypes" $
   doc "All floating-point types in a canonical order" $
-  typed (tList floatTypeT) $
   list $ unitVariant _FloatType <$> [
     _FloatType_bigfloat,
     _FloatType_float32,
@@ -105,7 +101,6 @@ floatTypesDef = variantsDefinition "floatTypes" $
 floatValueTypeDef :: TElement (FloatValue -> FloatType)
 floatValueTypeDef = variantsDefinition "floatValueType" $
   doc "Find the float type for a given floating-point value" $
-  function floatValueT floatTypeT $
   matchToEnum _FloatValue _FloatType Nothing [
     _FloatValue_bigfloat @-> _FloatType_bigfloat,
     _FloatValue_float32  @-> _FloatType_float32,
@@ -114,7 +109,6 @@ floatValueTypeDef = variantsDefinition "floatValueType" $
 functionVariantDef :: TElement (Function -> FunctionVariant)
 functionVariantDef = variantsDefinition "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
-  function functionT functionVariantT $
   matchToEnum _Function _FunctionVariant Nothing [
     _Function_elimination @-> _FunctionVariant_elimination,
     _Function_lambda      @-> _FunctionVariant_lambda,
@@ -123,7 +117,6 @@ functionVariantDef = variantsDefinition "functionVariant" $
 functionVariantsDef :: TElement [FunctionVariant]
 functionVariantsDef = variantsDefinition "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
-  typed (tList functionVariantT) $
   list $ unitVariant _FunctionVariant <$> [
     _FunctionVariant_elimination,
     _FunctionVariant_lambda,
@@ -132,7 +125,6 @@ functionVariantsDef = variantsDefinition "functionVariants" $
 integerTypeIsSignedDef :: TElement (IntegerType -> Bool)
 integerTypeIsSignedDef = variantsDefinition "integerTypeIsSigned" $
   doc "Find whether a given integer type is signed (true) or unsigned (false)" $
-  function integerTypeT tBoolean $
   matchData _IntegerType Nothing [
     _IntegerType_bigint @-> constant true,
     _IntegerType_int8   @-> constant true,
@@ -147,7 +139,6 @@ integerTypeIsSignedDef = variantsDefinition "integerTypeIsSigned" $
 integerTypePrecisionDef :: TElement (IntegerType -> Precision)
 integerTypePrecisionDef = variantsDefinition "integerTypePrecision" $
   doc "Find the precision of a given integer type" $
-  function integerTypeT precisionT $
   matchToUnion _IntegerType _Precision Nothing [
     _IntegerType_bigint @-> field _Precision_arbitrary unit,
     _IntegerType_int8   @-> field _Precision_bits $ int 8,
@@ -162,7 +153,6 @@ integerTypePrecisionDef = variantsDefinition "integerTypePrecision" $
 integerTypesDef :: TElement [IntegerType]
 integerTypesDef = variantsDefinition "integerTypes" $
   doc "All integer types, in a canonical order" $
-  typed (tList integerTypeT) $
   list $ unitVariant _IntegerType <$> [
     _IntegerType_bigint,
     _IntegerType_int8,
@@ -177,7 +167,6 @@ integerTypesDef = variantsDefinition "integerTypes" $
 integerValueTypeDef :: TElement (IntegerValue -> IntegerType)
 integerValueTypeDef = variantsDefinition "integerValueType" $
   doc "Find the integer type for a given integer value" $
-  function integerValueT integerTypeT $
   matchToEnum _IntegerValue _IntegerType Nothing [
     _IntegerValue_bigint @-> _IntegerType_bigint,
     _IntegerValue_int8   @-> _IntegerType_int8,
@@ -192,7 +181,6 @@ integerValueTypeDef = variantsDefinition "integerValueType" $
 literalTypeDef :: TElement (Literal -> LiteralType)
 literalTypeDef = variantsDefinition "literalType" $
   doc "Find the literal type for a given literal value" $
-  function literalT literalTypeT $
   match _Literal Nothing [
     TCase _Literal_binary  --> constant $ variant _LiteralType _LiteralType_binary unit,
     TCase _Literal_boolean --> constant $ variant _LiteralType _LiteralType_boolean unit,
@@ -203,7 +191,6 @@ literalTypeDef = variantsDefinition "literalType" $
 literalTypeVariantDef :: TElement (LiteralType -> LiteralVariant)
 literalTypeVariantDef = variantsDefinition "literalTypeVariant" $
   doc "Find the literal type variant (constructor) for a given literal value" $
-  function literalTypeT literalVariantT $
   matchToEnum _LiteralType _LiteralVariant Nothing [
     _LiteralType_binary  @-> _LiteralVariant_binary,
     _LiteralType_boolean @-> _LiteralVariant_boolean,
@@ -214,13 +201,11 @@ literalTypeVariantDef = variantsDefinition "literalTypeVariant" $
 literalVariantDef :: TElement (Literal -> LiteralVariant)
 literalVariantDef = variantsDefinition "literalVariant" $
   doc "Find the literal variant (constructor) for a given literal value" $
-  function literalT literalVariantT $
   ref literalTypeVariantDef <.> ref literalTypeDef
 
 literalVariantsDef :: TElement [LiteralVariant]
 literalVariantsDef = variantsDefinition "literalVariants" $
   doc "All literal variants, in a canonical order" $
-  typed (tList literalVariantT) $
   list $ unitVariant _LiteralVariant <$> [
     _LiteralVariant_binary,
     _LiteralVariant_boolean,
@@ -231,7 +216,6 @@ literalVariantsDef = variantsDefinition "literalVariants" $
 termVariantDef :: TElement (Term -> TermVariant)
 termVariantDef = variantsDefinition "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
-  function termT termVariantT $
   matchToEnum _Term _TermVariant Nothing [
     _Term_annotated   @-> _TermVariant_annotated,
     _Term_application @-> _TermVariant_application,
@@ -255,7 +239,6 @@ termVariantDef = variantsDefinition "termVariant" $
 termVariantsDef :: TElement [TermVariant]
 termVariantsDef = variantsDefinition "termVariants" $
   doc "All term (expression) variants, in a canonical order" $
-  typed (tList termVariantT) $
   list $ unitVariant _TermVariant <$> [
     _TermVariant_annotated,
     _TermVariant_application,
@@ -278,7 +261,6 @@ termVariantsDef = variantsDefinition "termVariants" $
 typeVariantDef :: TElement (Type -> TypeVariant)
 typeVariantDef = variantsDefinition "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
-  function typeT typeVariantT $
   matchToEnum _Type _TypeVariant Nothing [
     _Type_annotated   @-> _TypeVariant_annotated,
     _Type_application @-> _TypeVariant_application,
@@ -299,7 +281,6 @@ typeVariantDef = variantsDefinition "typeVariant" $
 typeVariantsDef :: TElement [TypeVariant]
 typeVariantsDef = variantsDefinition "typeVariants" $
   doc "All type variants, in a canonical order" $
-  typed (tList typeVariantT) $
   list $ unitVariant _TypeVariant <$> [
     _TypeVariant_annotated,
     _TypeVariant_application,
@@ -321,14 +302,12 @@ typeVariantsDef = variantsDefinition "typeVariants" $
 
 fieldMapDef :: TElement ([Field] -> M.Map Name Term)
 fieldMapDef = variantsDefinition "fieldMap" $
-  function (TypeList fieldT) (tMap fieldNameT termT) $
   lets [
     "toPair">: lambda "f" $ pair (Core.fieldName @@ var "f") (Core.fieldTerm @@ var "f")]
     $ lambda "fields" $ Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
 fieldTypeMapDef :: TElement ([FieldType] -> M.Map Name Type)
 fieldTypeMapDef = variantsDefinition "fieldTypeMap" $
-  function (TypeList fieldTypeT) (tMap fieldNameT typeT) $
   lets [
     "toPair">: lambda "f" $ pair (Core.fieldTypeName @@ var "f") (Core.fieldTypeType @@ var "f")]
     $ lambda "fields" $ Maps.fromList $ Lists.map (var "toPair") (var "fields")
