@@ -165,8 +165,10 @@ map_ x = ((\x -> case x of
 name :: (Core.Term -> Maybe Core.Name)
 name term = (Optionals.map (\s -> Core.Name s) (Optionals.bind (wrap (Core.Name "hydra.core.Name") term) string))
 
-nominal :: ((a -> Core.Name) -> (a -> b) -> (c -> Maybe a) -> Core.Name -> c -> Maybe b)
-nominal getName getB getA expected = (Optionals.compose getA (\a -> Logic.ifElse (Equality.equal (getName a) expected) (Just (getB a)) Nothing))
+nominal :: ((t1 -> Core.Name) -> (t1 -> t2) -> (t0 -> Maybe t1) -> Core.Name -> t0 -> Maybe t2)
+nominal getName getB getA expected =  
+  let namesEqual = (\n1 -> \n2 -> Equality.equalString (Core.unName n1) (Core.unName n2))
+  in (Optionals.compose getA (\a -> Logic.ifElse (namesEqual (getName a) expected) (Just (getB a)) Nothing))
 
 optCases :: (Core.Term -> Maybe Core.OptionalCases)
 optCases = (Optionals.compose (Optionals.compose matchFunction matchElimination) matchOptional) 
