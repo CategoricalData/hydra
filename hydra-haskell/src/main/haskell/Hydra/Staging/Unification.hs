@@ -7,7 +7,7 @@ import Hydra.Compute
 import Hydra.Core
 import Hydra.Lib.Flows as Flows
 import Hydra.Lib.Io
-import Hydra.Inference
+import Hydra.Typing
 import Hydra.Rewriting
 import Hydra.Strip
 import Hydra.Staging.Substitution

@@ -1,8 +1,8 @@
 -- | Wrapper for @wisnesky's Algorithm W implementation which makes it into an alternative inferencer for Hydra
 
-module Hydra.Staging.Inference.AlgorithmWBridge where
+module Hydra.Reference.AlgorithmWBridge where
 
-import Hydra.Staging.Inference.AlgorithmW
+import Hydra.Reference.AlgorithmW
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph

@@ -2,11 +2,12 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE OverlappingInstances #-}
 
--- Implementation of Hindley Milner algorithm W
--- to system F translation by Ryan Wisnesky, with extensions for Hydra by Joshua Shinavier
+-- A reference implementation of the Hindley Milner algorithm W to system F translation, by Ryan Wisnesky.
+-- slightly refactored for compatibility with Hydra.
+-- See also: https://www.cse.chalmers.se/edu/year/2011/course/CompFun/lecture4.pdf
 -- License: Apache 2.0 https://www.apache.org/licenses/LICENSE-2.0
 
-module Hydra.Staging.Inference.AlgorithmW where
+module Hydra.Reference.AlgorithmW where
 
 import Hydra.Minimal
 

@@ -1,16 +1,18 @@
-module Hydra.Staging.Inference.AltInference where
+module Hydra.Staging.Inference where
 
 import Hydra.Coders
 import Hydra.Compute
+import Hydra.Constants
 import Hydra.Core
 import Hydra.Errors
 import Hydra.Flows
 import Hydra.Graph
-import Hydra.Inference
+import Hydra.Typing
 import Hydra.Lib.Flows as Flows
 import Hydra.Lib.Io
 import Hydra.Mantle
 import Hydra.Rewriting
+import Hydra.Inference
 import Hydra.Staging.Annotations
 import Hydra.Staging.CoreDecoding
 import Hydra.Staging.Substitution
@@ -36,7 +38,6 @@ import qualified Data.Maybe    as Y
 -- Variables
 
 key_vcount = Name "inferenceTypeVariableCount"
-key_debugId = Name "debugId"
 
 debugIf :: String -> String -> Flow s ()
 debugIf debugId message = do
@@ -58,9 +59,6 @@ freshNames n = Flows.sequence $ L.replicate n freshName
 
 freshVariableType :: Flow s Type
 freshVariableType = TypeVariable <$> freshName
-
-normalTypeVariables :: [Name]
-normalTypeVariables = normalTypeVariable <$> [0..]
 
 -- | Type variable naming convention follows Haskell: t0, t1, etc.
 normalTypeVariable :: Int -> Name
@@ -103,9 +101,6 @@ showInferenceResult (InferenceResult term typ subst) = "{"
     ++ "term=" ++ showTerm term ++ ", "
     ++ "type= " ++ showType typ ++ ", "
     ++ "subst= " ++ showTypeSubst subst ++ "}"
-
-emptyInferenceContext :: InferenceContext
-emptyInferenceContext = InferenceContext M.empty M.empty M.empty False
 
 freeVariablesInContext :: InferenceContext -> S.Set Name
 freeVariablesInContext cx = L.foldl S.union S.empty $ fmap freeVariablesInTypeSchemeSimple $ M.elems $ inferenceContextDataTypes cx

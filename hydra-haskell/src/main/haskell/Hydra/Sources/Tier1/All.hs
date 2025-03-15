@@ -14,7 +14,7 @@ module Hydra.Sources.Tier1.All(
   module Hydra.Sources.Tier1.Functions,
   module Hydra.Sources.Tier1.Grammar,
   module Hydra.Sources.Tier1.Graph,
-  module Hydra.Sources.Tier1.Inference,
+--  module Hydra.Sources.Tier1.Inference,
   module Hydra.Sources.Tier1.Json,
   module Hydra.Sources.Tier1.Literals,
   module Hydra.Sources.Tier1.Mantle,
@@ -24,6 +24,7 @@ module Hydra.Sources.Tier1.All(
   module Hydra.Sources.Tier1.Query,
   module Hydra.Sources.Tier1.Strip,
   module Hydra.Sources.Tier1.Testing,
+  module Hydra.Sources.Tier1.Typing,
   module Hydra.Sources.Tier1.Workflow,
 ) where
 
@@ -39,7 +40,7 @@ import Hydra.Sources.Tier1.Formatting
 import Hydra.Sources.Tier1.Functions
 import Hydra.Sources.Tier1.Grammar
 import Hydra.Sources.Tier1.Graph
-import Hydra.Sources.Tier1.Inference
+--import Hydra.Sources.Tier1.Inference
 import Hydra.Sources.Tier1.Json
 import Hydra.Sources.Tier1.Literals
 import Hydra.Sources.Tier1.Mantle
@@ -49,6 +50,7 @@ import Hydra.Sources.Tier1.Phantoms
 import Hydra.Sources.Tier1.Query
 import Hydra.Sources.Tier1.Strip
 import Hydra.Sources.Tier1.Testing
+import Hydra.Sources.Tier1.Typing
 import Hydra.Sources.Tier1.Workflow
 
 tier1Modules :: [Module]
@@ -73,11 +75,12 @@ tier1TypeModules = [
   hydraConstraintsModule,
   hydraGrammarModule,
   hydraGraphModule,
-  hydraInferenceModule,
+--  hydraInferenceModule,
   hydraMantleModule,
   hydraModuleModule,
   hydraPhantomsModule,
   hydraQueryModule,
   hydraTestingModule,
+  hydraTypingModule,
   hydraWorkflowModule,
   jsonModelModule]

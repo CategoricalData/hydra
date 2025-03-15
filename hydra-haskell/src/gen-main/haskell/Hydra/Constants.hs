@@ -14,6 +14,9 @@ ignoredVariable = "_"
 key_classes :: Core.Name
 key_classes = (Core.Name "classes")
 
+key_debugId :: Core.Name
+key_debugId = (Core.Name "debugId")
+
 key_deprecated :: Core.Name
 key_deprecated = (Core.Name "_deprecated")
 
