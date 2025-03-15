@@ -35,7 +35,7 @@ rewritingDefinition = definitionInModule hydraRewritingModule
 
 hydraRewritingModule :: Module
 hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
-    [hydraComputeModule, hydraConstantsModule, hydraStripModule] [hydraCoreModule] $
+    [hydraComputeModule, hydraConstantsModule, hydraStripModule] [hydraCodersModule] $
     Just ("Utilities for type and term rewriting and analysis.")
   where
    elements = [
@@ -51,7 +51,6 @@ hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
 foldOverTermDef :: TElement (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
 foldOverTermDef = rewritingDefinition "foldOverTerm" $
   doc "Fold over a term, traversing its subterms in the specified order" $
-  functionN [TypeVariable _TraversalOrder, tFun tX (tFun termT tX), tX, termT, tX] $
   lambda "order" $ lambda "fld" $ lambda "b0" $ lambda "term" $ (match _TraversalOrder Nothing [
     _TraversalOrder_pre>>: constant (Base.fold (ref foldOverTermDef @@ var "order" @@ var "fld")
       @@ (var "fld" @@ var "b0" @@ var "term")
@@ -65,7 +64,6 @@ foldOverTermDef = rewritingDefinition "foldOverTerm" $
 foldOverTypeDef :: TElement (TraversalOrder -> (x -> Type -> x) -> x -> Type -> x)
 foldOverTypeDef = rewritingDefinition "foldOverType" $
   doc "Fold over a type, traversing its subtypes in the specified order" $
-  functionN [TypeVariable _TraversalOrder, tFun tX (tFun typeT tX), tX, typeT, tX] $
   lambda "order" $ lambda "fld" $ lambda "b0" $ lambda "typ" $ (match _TraversalOrder Nothing [
     _TraversalOrder_pre>>: constant (Base.fold (ref foldOverTypeDef @@ var "order" @@ var "fld")
       @@ (var "fld" @@ var "b0" @@ var "typ")
@@ -79,7 +77,6 @@ foldOverTypeDef = rewritingDefinition "foldOverType" $
 freeVariablesInTermDef :: TElement (Term -> S.Set Name)
 freeVariablesInTermDef = rewritingDefinition "freeVariablesInTerm" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a term" $
-  function termT (tSet nameT) $
   lambda "term" $ lets [
     "dfltVars">: typed (tSet nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (ref freeVariablesInTermDef @@ var "t"))
       @@ Sets.empty
@@ -98,7 +95,6 @@ freeVariablesInTermDef = rewritingDefinition "freeVariablesInTerm" $
 freeVariablesInTypeDef :: TElement (Type -> S.Set Name)
 freeVariablesInTypeDef = rewritingDefinition "freeVariablesInType" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a type" $
-  function typeT (tSet nameT) $
   lambda "typ" $ lets [
     "dfltVars">: typed (tSet nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (recurse @@ var "t"))
       @@ Sets.empty
@@ -115,7 +111,6 @@ freeVariablesInTypeDef = rewritingDefinition "freeVariablesInType" $
 isLambdaDef :: TElement (Term -> Bool)
 isLambdaDef = rewritingDefinition "isLambda" $
   doc "Check whether a term is a lambda, possibly nested within let and/or annotation terms" $
-  function termT Types.boolean $
   lambda "term" $ (match _Term (Just false) [
       _Term_function>>: match _Function (Just false) [
         _Function_lambda>>: constant true],
@@ -125,7 +120,6 @@ isLambdaDef = rewritingDefinition "isLambda" $
 subtermsDef :: TElement (Term -> [Term])
 subtermsDef = rewritingDefinition "subterms" $
   doc "Find the children of a given term" $
-  function termT (tList termT) $
   match _Term Nothing [
     _Term_annotated>>: lambda "at" $ list [Core.annotatedTermSubject @@ var "at"],
     _Term_application>>: lambda "p" $ list [
@@ -163,7 +157,6 @@ subtermsDef = rewritingDefinition "subterms" $
 subtermsWithAccessorsDef :: TElement (Term -> [(TermAccessor, Term)])
 subtermsWithAccessorsDef = rewritingDefinition "subtermsWithAccessors" $
   doc "Find the children of a given term" $
-  function termT (tList $ tPair termAccessorT termT) $
   match _Term Nothing [
     _Term_annotated>>: lambda "at" $ single termAccessorAnnotatedSubject $ Core.annotatedTermSubject @@ var "at",
     _Term_application>>: lambda "p" $ list [
@@ -236,7 +229,6 @@ subtermsWithAccessorsDef = rewritingDefinition "subtermsWithAccessors" $
 subtypesDef :: TElement (Type -> [Type])
 subtypesDef = rewritingDefinition "subtypes" $
   doc "Find the children of a given type expression" $
-  function typeT (tList typeT) $
   match _Type Nothing [
     _Type_annotated>>: lambda "at" $ list [Core.annotatedTypeSubject @@ var "at"],
     _Type_application>>: lambda "at" $ list [
