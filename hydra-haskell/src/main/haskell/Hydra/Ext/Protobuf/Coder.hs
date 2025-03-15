@@ -10,6 +10,7 @@ import Hydra.Staging.Serialization
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations
 import Hydra.Lib.Io
+import qualified Hydra.Dsl.Expect as Expect
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -290,13 +291,9 @@ nextIndex :: Flow s Int
 nextIndex = nextCount key_proto_field_index
 
 readBooleanAnnotation :: Name -> Type -> Flow Graph Bool
-readBooleanAnnotation key typ = do
-  let ann = typeAnnotationInternal typ
-  case TR.readMaybe $ show ann of
-    Just kv -> case getAnnotation key kv of
-      Just _ -> return True
-      Nothing -> return False
-    Nothing -> return False
+readBooleanAnnotation key typ = case M.lookup key (typeAnnotationInternal typ) of
+  Nothing -> return False
+  Just term -> Expect.boolean term
 
 -- Note: this should probably be done in the term adapters
 simplifyType :: Type -> Type
