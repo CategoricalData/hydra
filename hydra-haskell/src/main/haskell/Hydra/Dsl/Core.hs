@@ -265,6 +265,9 @@ mapTypeValues = Base.project _MapType _MapType_values
 name :: Name -> TTerm Name
 name (Name n) = wrap _Name $ string n
 
+name' :: TTerm String -> TTerm Name
+name' = wrap _Name
+
 optionalCases :: TTerm Term -> TTerm Term -> TTerm OptionalCases
 optionalCases nothing just = Base.record _OptionalCases [
   _OptionalCases_nothing>>: nothing,

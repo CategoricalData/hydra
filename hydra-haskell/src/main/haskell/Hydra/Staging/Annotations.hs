@@ -32,6 +32,18 @@ aggregateAnnotations getValue getX getAnns t = M.fromList $ L.concat $ toPairs [
       Nothing -> rest
       Just yy -> toPairs ((M.toList (getAnns yy)):rest) (getX yy)
 
+debugIf :: String -> String -> Flow s ()
+debugIf debugId message = do
+  desc <- getDebugId
+  if desc == Just debugId
+    then fail message
+    else return ()
+
+getDebugId :: Flow s (Maybe String)
+getDebugId = do
+  desc <- getAttr key_debugId
+  traverse Expect.string desc
+
 failOnFlag :: Name -> String -> Flow s ()
 failOnFlag flag msg = do
   val <- hasFlag flag
