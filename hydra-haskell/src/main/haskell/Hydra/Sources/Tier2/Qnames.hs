@@ -48,7 +48,6 @@ hydraQnamesModule = Module (Namespace "hydra.qnames") elements
 
 localNameOfDef :: TElement (Name -> String)
 localNameOfDef = qnamesDefinition "localNameOf" $
-  function nameT tString $
   Module.qualifiedNameLocal <.> ref qualifyNameDef
 
 namespaceOfDef :: TElement (Name -> Maybe Namespace)
@@ -58,7 +57,6 @@ namespaceOfDef = qnamesDefinition "namespaceOf" $
 
 namespaceToFilePathDef :: TElement (CaseConvention -> FileExtension -> Namespace -> String)
 namespaceToFilePathDef = qnamesDefinition "namespaceToFilePath" $
-  function caseConventionT (tFun fileExtensionT (tFun namespaceT tString)) $
   lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
     "parts">: Lists.map
       (ref convertCaseDef @@ Mantle.caseConventionCamel @@ var "caseConv")
@@ -68,7 +66,6 @@ namespaceToFilePathDef = qnamesDefinition "namespaceToFilePath" $
 qnameDef :: TElement (Namespace -> String -> Name)
 qnameDef = qnamesDefinition "qname" $
   doc "Construct a qualified (dot-separated) name" $
-  functionN [namespaceT, tString, nameT] $
   lambda "ns" $ lambda "name" $
     nom _Name $
       Strings.cat $
@@ -76,7 +73,6 @@ qnameDef = qnamesDefinition "qname" $
 
 qualifyNameDef :: TElement (Name -> QualifiedName)
 qualifyNameDef = qnamesDefinition "qualifyName" $
-  function nameT qualifiedNameT $
   lambda "name" $ lets [
     "parts">: Lists.reverse (Strings.splitOn "." (Core.unName @@ var "name"))]
     $ Logic.ifElse
@@ -89,7 +85,6 @@ qualifyNameDef = qnamesDefinition "qualifyName" $
 unqualifyNameDef :: TElement (QualifiedName -> Name)
 unqualifyNameDef = qnamesDefinition "unqualifyName" $
   doc "Convert a qualified name to a dot-separated name" $
-  function qualifiedNameT nameT $
   lambda "qname" $ lets [
     "prefix">: matchOpt (string "") (lambda "n" $ (unwrap _Namespace @@ var "n") ++ string ".")
       @@ (project _QualifiedName _QualifiedName_namespace @@ var "qname")]
