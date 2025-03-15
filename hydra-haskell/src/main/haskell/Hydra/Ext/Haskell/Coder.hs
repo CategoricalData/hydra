@@ -231,18 +231,23 @@ encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
       encode ot]
     TypeProduct types -> H.TypeTuple <$> (CM.mapM encode types)
     TypeRecord rt -> case rowTypeFields rt of
-      [] -> pure $ H.TypeTuple []  -- TODO: too permissive; not all empty record types are the unit type
+      [] -> if rowTypeTypeName rt == _Unit
+        then pure $ unitTuple
+        else ref $ rowTypeTypeName rt
       _ -> ref $ rowTypeTypeName rt
     TypeSet st -> toTypeApplication <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "S.Set",
       encode st]
     TypeUnion rt -> ref $ rowTypeTypeName rt
-    TypeVariable v -> ref v
+    TypeVariable v -> if v == _Unit
+      then pure unitTuple
+      else ref v
     TypeWrap (WrappedType name _) -> ref name
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode = encodeType namespaces
     ref name = pure $ H.TypeVariable $ elementReference namespaces name
+    unitTuple = H.TypeTuple []
 
 encodeTypeWithClassAssertions :: HaskellNamespaces -> M.Map Name (S.Set TypeClass) -> Type -> Flow Graph H.Type
 encodeTypeWithClassAssertions namespaces classes typ = withTrace "encode with assertions" $ do
