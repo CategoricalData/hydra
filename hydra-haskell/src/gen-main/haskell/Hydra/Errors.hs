@@ -16,7 +16,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Get the state of the current flow
-getState :: (Compute.Flow s s)
+getState :: (Compute.Flow t0 t0)
 getState = (Compute.Flow (\s0 -> \t0 ->  
   let fs1 = (Compute.unFlow (Flows.pure ()) s0 t0)
   in ((\v -> \s -> \t -> (\x -> case x of
@@ -29,8 +29,7 @@ getState = (Compute.Flow (\s0 -> \t0 ->
       Compute.flowStateState = s,
       Compute.flowStateTrace = t}) v) (Compute.flowStateValue fs1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))))
 
--- | Set the state of a flow
-putState :: (s -> Compute.Flow s ())
+putState :: (t0 -> Compute.Flow t0 ())
 putState cx = (Compute.Flow (\s0 -> \t0 ->  
   let f1 = (Compute.unFlow (Flows.pure ()) s0 t0)
   in Compute.FlowState {
@@ -52,8 +51,7 @@ traceSummary t =
               (Io.showTerm (snd pair))])
   in (Strings.intercalate "\n" (Lists.concat2 messageLines keyvalLines))
 
--- | Fail if an actual value does not match an expected value
-unexpected :: (String -> String -> Compute.Flow s x)
+unexpected :: (String -> String -> Compute.Flow t0 t1)
 unexpected expected actual = (Flows.fail (Strings.cat [
   Strings.cat [
     Strings.cat [
