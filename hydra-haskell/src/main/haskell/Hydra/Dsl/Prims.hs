@@ -129,15 +129,15 @@ pair kCoder vCoder = TermCoder (Types.product [termCoderType kCoder, termCoderTy
       vTerm <- coderDecode (termCoderCoder vCoder) v
       return $ Terms.product [kTerm, vTerm]
 
-prim0 :: [String] -> Name -> TermCoder x -> x -> Primitive
-prim0 vars name output value = Primitive name typ impl
+prim0 :: Name -> x -> [String]  -> TermCoder x -> Primitive
+prim0 name value vars output = Primitive name typ impl
   where
     typ = TypeScheme (Name <$> vars) $
       termCoderType output
     impl _ = coderDecode (termCoderCoder output) value
 
-prim1 :: [String] -> Name -> TermCoder x -> TermCoder y -> (x -> y) -> Primitive
-prim1 vars name input1 output compute = Primitive name typ impl
+prim1 :: Name -> (x -> y) -> [String] -> TermCoder x -> TermCoder y -> Primitive
+prim1 name compute vars input1 output = Primitive name typ impl
   where
     typ = TypeScheme (Name <$> vars) $
       TypeFunction $ FunctionType (termCoderType input1) $ termCoderType output
@@ -146,8 +146,8 @@ prim1 vars name input1 output compute = Primitive name typ impl
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
       coderDecode (termCoderCoder output) $ compute arg1
 
-prim2 :: [String] -> Name -> TermCoder x -> TermCoder y -> TermCoder z -> (x -> y -> z) -> Primitive
-prim2 vars name input1 input2 output compute = Primitive name typ impl
+prim2 :: Name -> (x -> y -> z) -> [String] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
+prim2 name compute vars input1 input2 output = Primitive name typ impl
   where
     typ = TypeScheme (Name <$> vars) $
       TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
@@ -157,8 +157,8 @@ prim2 vars name input1 input2 output compute = Primitive name typ impl
       arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
       coderDecode (termCoderCoder output) $ compute arg1 arg2
 
-prim2Interp :: [String] -> Name -> TermCoder x -> TermCoder y -> TermCoder z -> (Term -> Term -> Flow (Graph) (Term)) -> Primitive
-prim2Interp vars name input1 input2 output compute = Primitive name typ impl
+prim2Interp :: Name -> (Term -> Term -> Flow (Graph) (Term)) -> [String] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
+prim2Interp name compute vars input1 input2 output = Primitive name typ impl
   where
     typ = TypeScheme (Name <$> vars) $
       TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
@@ -166,8 +166,8 @@ prim2Interp vars name input1 input2 output compute = Primitive name typ impl
       Expect.nArgs 2 args
       compute (args !! 0) (args !! 1)
 
-prim3 :: [String] -> Name -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> (w -> x -> y -> z) -> Primitive
-prim3 vars name input1 input2 input3 output compute = Primitive name typ impl
+prim3 :: Name -> (w -> x -> y -> z) -> [String] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
+prim3 name compute vars input1 input2 input3 output = Primitive name typ impl
   where
     typ = TypeScheme (Name <$> vars) $
       TypeFunction $ FunctionType
