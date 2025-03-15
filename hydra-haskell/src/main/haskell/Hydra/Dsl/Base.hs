@@ -76,7 +76,10 @@ constant :: TTerm a -> TTerm (b -> a)
 constant (TTerm term) = TTerm $ Terms.constant term
 
 definitionInModule :: Module -> String -> TTerm a -> TElement a
-definitionInModule mod lname = TElement $ unqualifyName $ QualifiedName (Just $ moduleNamespace mod) lname
+definitionInModule mod = definitionInNamespace $ moduleNamespace mod
+
+definitionInNamespace :: Namespace -> String -> TTerm a -> TElement a
+definitionInNamespace ns lname = TElement $ unqualifyName $ QualifiedName (Just ns) lname
 
 doc :: String -> TTerm a -> TTerm a
 doc s (TTerm term) = TTerm $ setTermDescription (Just s) term

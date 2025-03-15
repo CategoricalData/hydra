@@ -10,7 +10,7 @@ import Hydra.Kernel
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.TestUtils
 import Hydra.Testing
-import Hydra.Staging.Inference.AltInference
+import Hydra.Staging.Inference
 import Hydra.Test.TestSuite
 import qualified Hydra.Dsl.Testing as Testing
 
