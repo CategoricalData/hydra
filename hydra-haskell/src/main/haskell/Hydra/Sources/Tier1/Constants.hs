@@ -74,4 +74,7 @@ placeholderNameDef = constantsDefinition "placeholderName" $
   wrap _Name $ string "Placeholder"
 
 maxTraceDepthDef :: TElement Int
-maxTraceDepthDef = constantsDefinition "maxTraceDepth" $ int32 50
+maxTraceDepthDef = constantsDefinition "maxTraceDepth" $
+  doc ("A maximum depth for nested flows."
+    <> " Currently, this is set very high because deep flows are common in type inference over the Hydra kernel.") $
+  int32 500

@@ -36,7 +36,8 @@ hydraInferenceModule = Module (Namespace "hydra.inference") elements [] [hydraTy
     Just "Type inference following Algorithm W."
   where
    elements = [
-     el emptyInferenceContextDef]
+     el emptyInferenceContextDef,
+     el normalTypeVariableDef]
 
 emptyInferenceContextDef :: TElement InferenceContext
 emptyInferenceContextDef = inferenceDefinition "emptyInferenceContext" $
@@ -46,3 +47,8 @@ emptyInferenceContextDef = inferenceDefinition "emptyInferenceContext" $
     (Base.map M.empty)
     (Base.map M.empty)
     false
+
+normalTypeVariableDef :: TElement (Int -> Name)
+normalTypeVariableDef = inferenceDefinition "normalTypeVariable" $
+  doc "Type variable naming convention follows Haskell: t0, t1, etc." $
+  lambda "i" $ Core.name' (Strings.cat2 (string "t") (Literals.showInt32 @@ var "i"))
