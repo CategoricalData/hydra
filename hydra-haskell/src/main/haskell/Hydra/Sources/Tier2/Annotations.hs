@@ -37,7 +37,6 @@ hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
     Just "Utilities for reading and writing type and term annotations"
   where
    elements = [
-      el getAnnotationDef,
       el getTermTypeDef,
       el requireElementTypeDef,
       el requireTermTypeDef]
@@ -45,16 +44,9 @@ hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
 annotationsDefinition :: String -> TTerm a -> TElement a
 annotationsDefinition = definitionInModule hydraAnnotationsModule
 
-getAnnotationDef :: TElement (Name -> M.Map Name Term -> Maybe Term)
-getAnnotationDef = annotationsDefinition "getAnnotation" $
-  functionN [nameT, tMap nameT termT, tOpt termT] $
-  lambda "key" $ lambda "ann" $
-    Maps.lookup (var "key") (var "ann")
-
 getTermTypeDef :: TElement (Term -> Maybe Type)
 getTermTypeDef = annotationsDefinition "getTermType" $
   doc "Get the annotated type of a given term, if any" $
-  function termT (tOpt typeT) $
   match _Term (Just nothing) [
     "annotated">: ref getTermTypeDef <.> project _AnnotatedTerm _AnnotatedTerm_subject,
     "typed">: lambda "tt" $ just (project _TypedTerm _TypedTerm_type @@ var "tt")]
@@ -62,18 +54,17 @@ getTermTypeDef = annotationsDefinition "getTermType" $
 requireElementTypeDef :: TElement (Element -> Flow Graph Type)
 requireElementTypeDef = annotationsDefinition "requireElementType" $
   doc "Get the annotated type of a given element, or fail if it is missing" $
-  function elementT (tFlow graphT typeT) $
   lambda "el" $ lets [
     "withType">: matchOpt
       (Flows.fail ("missing type annotation for element " ++ (unwrap _Name @@ (project _Element _Element_name @@ var "el"))))
-        $ lambda "t" $ Flows.pure $ var "t"]
-    $ var "withType" @@ (ref getTermTypeDef @@ (project _Element _Element_term @@ var "el"))
+        $ lambda "t" $ Flows.pure $ var "t"] $
+    var "withType" @@ (ref getTermTypeDef @@ (project _Element _Element_term @@ var "el"))
 
 requireTermTypeDef :: TElement (Term -> Flow Graph Type)
 requireTermTypeDef = annotationsDefinition "requireTermType" $
   doc "Get the annotated type of a given term, or fail if it is missing" $
-  function termT (tFlow graphT typeT) $ lets [
+  lets [
     "withType">: matchOpt
-     (Flows.fail "missing type annotation")
-     $ lambda "t" $ Flows.pure $ var "t"]
-    $ var "withType" <.> ref getTermTypeDef
+      (Flows.fail "missing type annotation")
+      (lambda "t" $ Flows.pure $ var "t")] $
+    var "withType" <.> ref getTermTypeDef
