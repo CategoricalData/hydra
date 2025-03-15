@@ -29,7 +29,7 @@ decodeDefinition :: String -> TTerm a -> TElement a
 decodeDefinition = definitionInModule hydraDecodeModule
 
 hydraDecodeModule :: Module
-hydraDecodeModule = Module (Namespace "hydra.decodeTmp") elements [hydraStripModule] [hydraCoreModule] $
+hydraDecodeModule = Module (Namespace "hydra.decode") elements [hydraStripModule] [hydraCoreModule] $
     Just "A module for decoding terms to native objects"
   where
     elements = [
@@ -274,14 +274,16 @@ nameDef = decodeDefinition "name" $
     nm :: TTerm (String -> Name)
     nm = TTerm $ Terms.lambda "s" $ TermWrap $ WrappedTerm _Name $ Terms.var "s"
 
-nominalDef :: TElement ((a -> n) -> (a -> b) -> (c -> Maybe a) -> n -> c -> Maybe b)
+nominalDef :: TElement ((a -> Name) -> (a -> b) -> (c -> Maybe a) -> Name -> c -> Maybe b)
 nominalDef = decodeDefinition "nominal" $
-    lambda "getName" $ lambda "getB" $ lambda "getA" $ lambda "expected" $
-    compose2
-      (var "getA")
-      (lambda "a" $ (Logic.ifElse (Equality.equal (var "getName" @@ var "a") $ var "expected"))
-        (just (var "getB" @@ var "a"))
-        nothing)
+  lambda "getName" $ lambda "getB" $ lambda "getA" $ lambda "expected" $
+    lets [
+      "namesEqual">: lambda "n1" $ lambda "n2" $ Equality.equalString (Core.unName @@ var "n1") (Core.unName @@ var "n2")] $
+      compose2
+        (var "getA")
+        (lambda "a" $ (Logic.ifElse (var "namesEqual" @@ (var "getName" @@ var "a") @@ (var "expected")))
+          (just (var "getB" @@ var "a"))
+          nothing)
 
 optCasesDef :: TElement (Term -> Maybe OptionalCases)
 optCasesDef = decodeDefinition "optCases" $
