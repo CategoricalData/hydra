@@ -1,12 +1,12 @@
 {-
 stack ghci hydra:lib hydra:hydra-test
 
-Test.Hspec.hspec Hydra.Inference.AltInferenceSpec.spec
+Test.Hspec.hspec Hydra.Inference.InferenceSpec.spec
 -}
-module Hydra.Inference.AltInferenceSpec where
+module Hydra.Inference.InferenceSpec where
 
 import Hydra.Kernel
-import Hydra.Staging.Inference.AltInference
+import Hydra.Staging.Inference
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC

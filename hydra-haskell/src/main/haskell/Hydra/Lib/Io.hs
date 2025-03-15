@@ -20,7 +20,7 @@ import Hydra.CoreEncoding
 --import Hydra.Staging.Rewriting
 --import Hydra.Annotations
 import Hydra.Flows
-import Hydra.Inference
+import Hydra.Typing
 import Hydra.Strip
 import qualified Hydra.Json as Json
 import qualified Hydra.Dsl.Terms as Terms

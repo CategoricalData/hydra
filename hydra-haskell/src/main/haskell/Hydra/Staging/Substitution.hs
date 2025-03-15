@@ -4,7 +4,7 @@ module Hydra.Staging.Substitution where
 import Hydra.Core
 import Hydra.Mantle
 import Hydra.Staging.Rewriting
-import Hydra.Inference
+import Hydra.Typing
 
 import qualified Data.List     as L
 import qualified Data.Map      as M
@@ -21,8 +21,8 @@ composeTypeSubst s1 s2 =
 composeTypeSubstList :: [TypeSubst] -> TypeSubst
 composeTypeSubstList = L.foldl composeTypeSubst emptyTypeSubst
 
+emptyTypeSubst :: TypeSubst
 emptyTypeSubst = TypeSubst M.empty
-tmpTypeSubst = TypeSubst M.empty
 
 singletonTypeSubst :: Name -> Type -> TypeSubst
 singletonTypeSubst v t = TypeSubst $ M.singleton v t

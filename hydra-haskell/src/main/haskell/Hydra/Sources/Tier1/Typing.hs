@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier1.Inference where
+module Hydra.Sources.Tier1.Typing where
 
 -- Standard type-level Tier-1 imports
 import           Hydra.Dsl.Annotations
@@ -14,13 +14,13 @@ import qualified Data.Set              as S
 import qualified Data.Maybe            as Y
 
 
-hydraInferenceModule :: Module
-hydraInferenceModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
+hydraTypingModule :: Module
+hydraTypingModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
     Just ("Types supporting type inference.")
   where
-    ns = Namespace "hydra.inference"
+    ns = Namespace "hydra.typing"
     core = typeref $ moduleNamespace hydraCoreModule
-    inference = typeref ns
+    typing = typeref ns
     def = datatype ns
 
     elements = [
@@ -46,7 +46,7 @@ hydraInferenceModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         record [
           "term">: core "Term",
           "type">: core "Type",
-          "subst">: inference "TypeSubst"],
+          "subst">: typing "TypeSubst"],
 
       def "TermSubst" $
         doc "A substitution of term variables for terms" $
