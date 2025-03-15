@@ -63,25 +63,25 @@ getCount :: Name -> Flow s Int
 getCount key = getAttrWithDefault key (Terms.int32 0) >>= Expect.int32
 
 getDescription :: M.Map Name Term -> Flow Graph (Y.Maybe String)
-getDescription anns = case getAnnotation key_description anns of
+getDescription anns = case M.lookup key_description anns of
   Nothing -> pure Nothing
   Just term -> case term of
     TermLiteral (LiteralString s) -> pure $ Just s
     _ -> fail $ "unexpected value for " ++ show key_description ++ ": " ++ show term
 
 getTermAnnotation :: Name -> Term -> Y.Maybe Term
-getTermAnnotation key = getAnnotation key . termAnnotationInternal
+getTermAnnotation key = M.lookup key . termAnnotationInternal
 
 getTermDescription :: Term -> Flow Graph (Y.Maybe String)
 getTermDescription = getDescription . termAnnotationInternal
 
 getType :: M.Map Name Term -> Flow Graph (Y.Maybe Type)
-getType anns = case getAnnotation key_type anns of
+getType anns = case M.lookup key_type anns of
   Nothing -> pure Nothing
   Just dat -> Just <$> coreDecodeType dat
 
 getTypeAnnotation :: Name -> Type -> Y.Maybe Term
-getTypeAnnotation key = getAnnotation key . typeAnnotationInternal
+getTypeAnnotation key = M.lookup key . typeAnnotationInternal
 
 getTypeClasses :: Type -> Flow Graph (M.Map Name (S.Set TypeClass))
 getTypeClasses typ = case getTypeAnnotation key_classes typ of
@@ -105,7 +105,7 @@ isNativeType el = case elementType el of
     isFlaggedAsFirstClassType = Y.fromMaybe False (getTermAnnotation key_firstClassType (elementTerm el) >>= Decode.boolean)
 
 hasDescription :: M.Map Name Term -> Bool
-hasDescription anns = case getAnnotation key_description anns of
+hasDescription anns = case M.lookup key_description anns of
   Nothing -> False
   Just _ -> True
 
