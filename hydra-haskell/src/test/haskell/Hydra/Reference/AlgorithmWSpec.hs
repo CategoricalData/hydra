@@ -3,9 +3,9 @@
 {-
 stack ghci hydra:lib hydra:hydra-test
 
-Test.Hspec.hspec Hydra.Inference.AlgorithmWSpec.spec
+Test.Hspec.hspec Hydra.Reference.AlgorithmWSpec.spec
 -}
-module Hydra.Inference.AlgorithmWSpec where
+module Hydra.Reference.AlgorithmWSpec where
 
 import Hydra.Kernel
 import Hydra.Sources.Libraries
@@ -41,8 +41,8 @@ inferType = W.termToInferredTerm testHydraContext
 expectType :: Term -> TypeScheme -> H.Expectation
 expectType term ts = do
   result <- inferType term
-  H.shouldBe (snd result) ts
-  H.shouldBe (stripTypesFromTerm term) (stripTypesFromTerm $ fst result)
+  H.shouldBe (showTypeScheme $ snd result) (showTypeScheme ts)
+  H.shouldBe (showTerm $ stripTypesFromTerm term) (showTerm $ stripTypesFromTerm $ fst result)
 
 algorithmWRunner :: TestRunner
 algorithmWRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabledForAlgorithmWInference tcase

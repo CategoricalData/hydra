@@ -15,7 +15,6 @@ import qualified Data.Map as M
 
 tag_disabled = Tag "disabled"
 tag_disabledForAlgorithmWInference = Tag "disabledForAlgorithmWInference"
-tag_disabledForAltInference = Tag "disabledForAltInference"
 tag_disabledForDefaultInference = Tag "disabledForDefaultInference"
 
 expectMono i tags term typ = infTest ("#" ++ show i) tags term $ T.mono typ
@@ -30,8 +29,7 @@ infTest name tags term ts = testCaseWithMetadata (Base.string name)
 
 isDisabled tcase = tag_disabled `L.elem` Testing.testCaseWithMetadataTags tcase
 isDisabledForAlgorithmWInference tcase = tag_disabledForAlgorithmWInference `L.elem` Testing.testCaseWithMetadataTags tcase
-isDisabledForAltInference tcase = tag_disabledForAltInference `L.elem` Testing.testCaseWithMetadataTags tcase
-isDisabledForDefaultInference tcase = tag_disabledForDefaultInference `L.elem` Testing.testCaseWithMetadataTags tcase
+isDisabledForAltInference tcase = tag_disabledForDefaultInference `L.elem` Testing.testCaseWithMetadataTags tcase
 
 -- Note: this is a cheat for an encoded map term; consider using the TTerms DSL
 mapTermCheat :: [(Term, Term)] -> TTerm Term
