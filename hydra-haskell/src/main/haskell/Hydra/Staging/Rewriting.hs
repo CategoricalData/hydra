@@ -453,4 +453,13 @@ topologicalSortElements els = topologicalSort $ adjlist <$> els
     adjlist e = (elementName e, S.toList $ termDependencyNames False True True $ elementTerm e)
 
 typeDependencyNames :: Type -> S.Set Name
-typeDependencyNames = freeVariablesInType
+typeDependencyNames typ = S.union (freeVariablesInType typ) (typeNamesInType typ)
+
+typeNamesInType :: Type -> S.Set Name
+typeNamesInType = foldOverType TraversalOrderPre addNames S.empty
+  where
+    addNames names typ = case typ of
+      TypeRecord (RowType tname _) -> S.insert tname names
+      TypeUnion (RowType tname _) -> S.insert tname names
+      TypeWrap (WrappedType tname _) -> S.insert tname names
+      _ -> names

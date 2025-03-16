@@ -138,7 +138,6 @@ encodeFunctionDefinition env name args body doms cod comment prefixes = do
       TypeVariable (Name v) -> L.head v == 't' && Y.isJust (TR.readMaybe (L.tail v) :: Maybe Int)
       _ -> False
 
-
 encodeFunctionType :: PythonEnvironment -> FunctionType -> Flow Graph Py.Expression
 encodeFunctionType env ft = do
     pydoms <- CM.mapM encode doms
@@ -206,6 +205,19 @@ encodeModule :: Module -> Flow Graph Py.Module
 encodeModule mod = do
     defs <- adaptedModuleDefinitions pythonLanguage mod
     let namespaces = namespacesForDefinitions encodeNamespace (moduleNamespace mod) defs
+
+
+--    let def = defs !! 6
+--    fail $ ""
+--      ++ "\n\t defs: " ++ show (L.length defs)
+--      ++ "\n\t namespaces: " ++ show namespaces
+--      ++ "\n\t def dep namespaces: " ++ show (definitionDependencyNamespaces defs)
+--      ++ case def of
+--        DefinitionType _ typ -> ""
+--          ++ "\n\t type: " ++ showType typ
+--          ++ "\n\t deps: " ++ show (typeDependencyNames typ)
+
+
     let env = PythonEnvironment {
               pythonEnvironmentNamespaces = namespaces,
               pythonEnvironmentBoundTypeVariables = ([], M.empty)}
