@@ -55,29 +55,29 @@ def boolean_literal(v1: hydra.core.Literal) -> bool | None:
 def cases_case(tname: hydra.core.Name, fname: hydra.core.Name, v3: hydra.core.Term) -> hydra.core.Term | None:
     return hydra.lib.optionals.compose(lambda v2: cases(tname)(v2))(lambda v2: field(fname)(v2))(v3)
 
-def cases(v4: hydra.core.Name, v5: hydra.core.Term) -> frozenlist[hydra.core.Field] | None:
-    def match_union(v1: hydra.core.Elimination):
+def cases() -> Callable[[hydra.core.Name, hydra.core.Term], frozenlist[hydra.core.Field] | None]:
+    def match_union(v1: hydra.core.Elimination) -> hydra.core.CaseStatement | None:
         match v1:
             case hydra.core.EliminationUnion(x):
                 return hydra.lib.optionals.pure(x)
             
             case _:
                 return None
-    def match_elimination(v1: hydra.core.Function):
+    def match_elimination(v1: hydra.core.Function) -> hydra.core.Elimination | None:
         match v1:
             case hydra.core.FunctionElimination(x):
                 return hydra.lib.optionals.pure(x)
             
             case _:
                 return None
-    def match_function(x):
+    def match_function(x: hydra.core.Term) -> hydra.core.Function | None:
         match hydra.strip.fully_strip_term(x):
             case hydra.core.TermFunction(x):
                 return hydra.lib.optionals.pure(x)
             
             case _:
                 return None
-    return nominal(lambda v1: v1.type_name)(lambda v1: v1.cases)(lambda v3: hydra.lib.optionals.compose(lambda v3: hydra.lib.optionals.compose(match_function)(match_elimination)(v3))(match_union)(v3))(v4)(v5)
+    return lambda v1: lambda v2: lambda v3: lambda v4: lambda v5: nominal(v1)(v2)(v3)(v4)(v5)(lambda v1: v1.type_name)(lambda v1: v1.cases)(lambda v3: hydra.lib.optionals.compose(lambda v3: hydra.lib.optionals.compose(match_function)(match_elimination)(v3))(match_union)(v3))
 
 def field(fname: hydra.core.Name, fields: frozenlist[hydra.core.Field]) -> hydra.core.Term | None:
     matches = hydra.lib.lists.filter(lambda f: hydra.lib.equality.equal(f.name)(fname))(fields)
@@ -166,14 +166,14 @@ def integer_literal(v1: hydra.core.Literal) -> hydra.core.IntegerValue | None:
             return None
 
 def lambda_(v3: hydra.core.Term) -> hydra.core.Lambda | None:
-    def match_lambda(v1: hydra.core.Function):
+    def match_lambda(v1: hydra.core.Function) -> hydra.core.Lambda | None:
         match v1:
             case hydra.core.FunctionLambda(x):
                 return hydra.lib.optionals.pure(x)
             
             case _:
                 return None
-    def match_function(x):
+    def match_function(x: hydra.core.Term) -> hydra.core.Function | None:
         match hydra.strip.fully_strip_term(x):
             case hydra.core.TermFunction(x):
                 return hydra.lib.optionals.pure(x)
@@ -224,25 +224,24 @@ def map(x: hydra.core.Term) -> FrozenDict[hydra.core.Term, hydra.core.Term] | No
 def name(term: hydra.core.Term) -> hydra.core.Name | None:
     return hydra.lib.optionals.map(lambda s: hydra.core.Name(s))(hydra.lib.optionals.bind(wrap(hydra.core.Name("hydra.core.Name"))(term))(lambda v1: string(v1)))
 
-def nominal(get_name: Callable[[A], hydra.core.Name], get_b: Callable[[A], B], get_a: Callable[[C], A | None], expected: hydra.core.Name, v3: C) -> B | None:
-    return hydra.lib.optionals.compose(get_a)(lambda a: hydra.lib.logic.if_else(hydra.lib.equality.equal(get_name(a))(expected))(get_b(a))(None))(v3)
+nominal = lambda getName: lambda getB: lambda getA: lambda expected: "let terms are not supported here"
 
 def opt_cases(v3: hydra.core.Term) -> hydra.core.OptionalCases | None:
-    def match_optional(v1: hydra.core.Elimination):
+    def match_optional(v1: hydra.core.Elimination) -> hydra.core.OptionalCases | None:
         match v1:
             case hydra.core.EliminationOptional(x):
                 return hydra.lib.optionals.pure(x)
             
             case _:
                 return None
-    def match_elimination(v1: hydra.core.Function):
+    def match_elimination(v1: hydra.core.Function) -> hydra.core.Elimination | None:
         match v1:
             case hydra.core.FunctionElimination(x):
                 return hydra.lib.optionals.pure(x)
             
             case _:
                 return None
-    def match_function(x):
+    def match_function(x: hydra.core.Term) -> hydra.core.Function | None:
         match hydra.strip.fully_strip_term(x):
             case hydra.core.TermFunction(x):
                 return hydra.lib.optionals.pure(x)
@@ -266,7 +265,7 @@ def optional(x: hydra.core.Term) -> None | None:
             return None
 
 def pair(v3: hydra.core.Term) -> "type = TypeProduct [TypeVariable (Name {unName = \"hydra.core.Term\"}),TypeVariable (Name {unName = \"hydra.core.Term\"})]" | None:
-    def match_product(x):
+    def match_product(x: hydra.core.Term) -> frozenlist[hydra.core.Term] | None:
         match hydra.strip.fully_strip_term(x):
             case hydra.core.TermProduct(x):
                 return hydra.lib.optionals.pure(x)
@@ -275,8 +274,7 @@ def pair(v3: hydra.core.Term) -> "type = TypeProduct [TypeVariable (Name {unName
                 return None
     return hydra.lib.optionals.compose(match_product)(lambda l: hydra.lib.logic.if_else(hydra.lib.equality.equal(2)(hydra.lib.lists.length(l)))((hydra.lib.lists.at(0)(l), hydra.lib.lists.at(1)(l)))(None))(v3)
 
-def record(v4: hydra.core.Name, v5: hydra.core.Term) -> frozenlist[hydra.core.Field] | None:
-    return nominal(lambda v1: v1.type_name)(lambda v1: v1.fields)(lambda x: "inline match expressions are unsupported")(v4)(v5)
+record = lambda v1: lambda v2: lambda v3: lambda v4: lambda v5: nominal(v1)(v2)(v3)(v4)(v5)(lambda v1: v1.type_name)(lambda v1: v1.fields)(lambda x: "inline match expressions are unsupported")
 
 def set(x: hydra.core.Term) -> frozenset[hydra.core.Term] | None:
     match hydra.strip.fully_strip_term(x):
@@ -355,8 +353,6 @@ def variable(x: hydra.core.Term) -> hydra.core.Name | None:
         case _:
             return None
 
-def variant(v4: hydra.core.Name, v5: hydra.core.Term) -> hydra.core.Field | None:
-    return nominal(lambda v1: v1.type_name)(lambda v1: v1.field)(lambda x: "inline match expressions are unsupported")(v4)(v5)
+variant = lambda v1: lambda v2: lambda v3: lambda v4: lambda v5: nominal(v1)(v2)(v3)(v4)(v5)(lambda v1: v1.type_name)(lambda v1: v1.field)(lambda x: "inline match expressions are unsupported")
 
-def wrap(v4: hydra.core.Name, v5: hydra.core.Term) -> hydra.core.Term | None:
-    return nominal(lambda v1: v1.type_name)(lambda v1: v1.object)(lambda x: "inline match expressions are unsupported")(v4)(v5)
+wrap = lambda v1: lambda v2: lambda v3: lambda v4: lambda v5: nominal(v1)(v2)(v3)(v4)(v5)(lambda v1: v1.type_name)(lambda v1: v1.object)(lambda x: "inline match expressions are unsupported")

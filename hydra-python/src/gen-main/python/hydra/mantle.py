@@ -1,10 +1,9 @@
 """A set of types which supplement hydra.core with variants and accessors. Currently contains miscellaneous additional types including CaseConvention and Either."""
 
 from __future__ import annotations
-from dataclasses import dataclass
 from enum import Enum
 from hydra.dsl.python import Node
-from typing import Annotated, TypeVar
+from typing import TypeVar
 import hydra.core
 
 A = TypeVar("A")
@@ -162,14 +161,6 @@ class TermVariant(Enum):
     VARIABLE = "variable"
     
     WRAP = "wrap"
-
-@dataclass
-class TypeConstraint:
-    """An assertion that two types can be unified into a single type."""
-    
-    left: hydra.core.Type
-    right: hydra.core.Type
-    comment: Annotated[str | None, "An optional description of the type constraint. This may be used for tracing or debugging."]
 
 class TypeVariant(Enum):
     """The identifier of a type constructor."""
