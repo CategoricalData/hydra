@@ -79,6 +79,7 @@ joinTypes :: Type -> Type -> String -> Flow s [TypeConstraint]
 joinTypes left right comment = case sleft of
     TypeApplication (ApplicationType lhs1 rhs1) -> case sright of
       TypeApplication (ApplicationType lhs2 rhs2) -> Flows.pure [
+--        joinOne lhs1 lhs2]
         joinOne lhs1 lhs2,
         joinOne rhs1 rhs2]
       _ -> cannotUnify

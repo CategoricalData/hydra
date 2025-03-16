@@ -576,9 +576,7 @@ maybeToList mx = case mx of
   Nothing -> []
 
 nominalApplication :: Name -> [Name] -> Type
-nominalApplication tname vars = case vars of
-  [] -> TypeVariable tname
-  (h:r) -> Types.apply (nominalApplication tname r) (TypeVariable h)
+nominalApplication tname vars = L.foldl (\t v -> Types.apply t $ TypeVariable v) (TypeVariable tname) vars
 
 requireSchemaType :: InferenceContext -> Name -> Flow s TypeScheme
 requireSchemaType cx tname = case M.lookup tname (inferenceContextSchemaTypes cx) of
