@@ -301,6 +301,8 @@ encodeTerm env term = case fullyStripTerm term of
       pyEls <- CM.mapM encode $ S.toList s
       return $ functionCall (pyNameToPyPrimary $ Py.Name "frozenset")
         [pyAtomToPyExpression $ Py.AtomSet $ Py.Set (pyExpressionToPyStarNamedExpression <$> pyEls)]
+    TermTypeAbstraction (TypeAbstraction _ term1) -> encode term1
+    TermTypeApplication (TypedTerm term1 _) -> encode term1
     TermUnion (Injection tname field) -> do
       rt <- requireUnionType tname
       if isEnumType rt
