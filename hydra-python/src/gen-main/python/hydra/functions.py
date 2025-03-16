@@ -2,7 +2,4 @@
 
 from __future__ import annotations
 
-def id(x: A) -> A:
-    """The identity function."""
-    
-    return x
+id = lambda x: x
