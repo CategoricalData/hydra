@@ -8,6 +8,7 @@ module Hydra.TestUtils (
   checkSerdeRoundTrip,
   checkSerialization,
   eval,
+  expectSuccess,
   shouldFail,
   shouldSucceedWith,
   strip,
@@ -19,9 +20,9 @@ import Hydra.Kernel
 import Hydra.Staging.LiteralAdapters
 import Hydra.Staging.TermAdapters
 import Hydra.Staging.AdapterUtils
-
 import Hydra.Staging.TestGraph
 import Hydra.ArbitraryCore()
+import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Test.Hspec as H
 import qualified Test.HUnit.Lang as HL
@@ -118,6 +119,16 @@ checkSerialization mkSerdeStr (TypedTerm term typ) expected = do
 
 eval :: Term -> Flow Graph Term
 eval = reduceTerm True M.empty
+
+expectSuccess :: (Eq a, Show a) => String -> Flow () a -> a -> H.Expectation
+expectSuccess desc f x = case my of
+    Nothing -> HL.assertFailure $ "Error: " ++ traceSummary trace
+    Just y -> y `H.shouldBe` x
+  where
+    FlowState my _ trace = unFlow f2 () emptyTrace
+    f2 = do
+      putAttr key_debugId $ Terms.string desc
+      f
 
 shouldFail :: Flow Graph a -> H.Expectation
 shouldFail f = H.shouldBe True (Y.isNothing $ flowStateValue $ unFlow f testGraph emptyTrace)

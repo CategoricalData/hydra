@@ -94,22 +94,22 @@ testGroupForLet = supergroup "Let" [
           "id">: lambda "x" $ var "x"]
           $ lambda "x" $ var "id" @@ (var "id" @@ var "x"))
         ["t0"] (T.function (T.var "t0") (T.var "t0")),
-      expectMono 2 [tag_disabledForDefaultInference]
+      expectMono 2 []
         (lets [
           "id">: lambda "x" $ var "x"]
           $ var "id" @@ (list [var "id" @@ int32 42]))
         (T.list T.int32),
-      expectPoly 3 [tag_disabledForDefaultInference]
+      expectPoly 3 []
         (lets [
           "id">: lambda "x" $ var "x"]
           $ lambda "x" (var "id" @@ (list [var "id" @@ var "x"])))
         ["t0"] (T.function (T.var "t0") (T.list $ T.var "t0")),
-      expectMono 4 [tag_disabledForDefaultInference]
+      expectMono 4 []
         (lets [
           "id">: lambda "x" $ var "x"]
           $ pair (var "id" @@ int32 42) (var "id" @@ string "foo"))
         (T.pair T.int32 T.string),
-      expectMono 5 [tag_disabledForDefaultInference]
+      expectMono 5 []
         (lets [
           "list">: lambda "x" $ list [var "x"]]
           $ pair (var "list" @@ int32 42) (var "list" @@ string "foo"))
@@ -139,7 +139,7 @@ testGroupForLet = supergroup "Let" [
         (T.pair T.int32 T.string)],
 
     subgroup "Recursive and mutually recursive let (@wisnesky's test cases)" [
-      expectPoly 1 [tag_disabledForDefaultInference]
+      expectPoly 1 []
         (lets [
           "f">: lambda "x" $ lambda "y" (var "f" @@ int32 0 @@ var "x")]
           $ var "f")
@@ -150,17 +150,17 @@ testGroupForLet = supergroup "Let" [
       -- The difference is unimportant in this case, if we are uninterested in the types of divergent terms.
       -- Specifically, GHC finds (a, b), whereas we find (a, a)
       -- Try: :t (let (f, g) = (g, f) in (f, g))
-      expectPoly 2 [tag_disabledForDefaultInference, tag_disabledForAltInference]
-        (lets [
-          "f">: var "g",
-          "g">: var "f"]
-          $ pair (var "f") (var "g"))
-        ["t0", "t1"] (T.pair (T.var "t0") (T.var "t1")),
-      expectPoly 2 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
+      expectPoly 2 [tag_disabledForDefaultInference]
         (lets [
           "x">: var "y",
-          "y">: var "x"]
-          $ pair (var "x") (var "y"))
+          "y">: var "x"] $
+          pair (var "x") (var "y"))
+        ["t0", "t1"] (T.pair (T.var "t0") (T.var "t1")),
+      expectPoly 2 [tag_disabledForAlgorithmWInference]
+        (lets [
+          "x">: var "y",
+          "y">: var "x"] $
+          pair (var "x") (var "y"))
         ["t0"] (T.pair (T.var "t0") (T.var "t0")),
 
       expectPoly 3 [tag_disabled]
@@ -171,13 +171,13 @@ testGroupForLet = supergroup "Let" [
         ["t0", "t1"] (T.pair
           (T.functionN [T.var "t0", T.int32, T.var "t1"])
           (T.functionN [T.int32, T.var "v0", T.var "t1"])),
-      expectMono 4 [tag_disabledForDefaultInference]
+      expectMono 4 []
         -- letrec + = (\x . (\y . (S (+ (P x) y)))) in (+ (S (S 0)) (S 0))
         (lets [
           "plus">: lambda "x" $ lambda "y" $ s @@ (var "plus" @@ (p @@ var "x") @@ var "y")]
           $ var "plus" @@ (s @@ (s @@ int32 0)) @@ (s @@ int32 0))
         T.int32,
-      expectMono 5 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
+      expectMono 5 [tag_disabledForAlgorithmWInference]
         -- letrecs id = (\z. z)
         --     f = (\p0. (pair (id p0) (id p0)))
         --     in 0
@@ -185,24 +185,40 @@ testGroupForLet = supergroup "Let" [
           "id">: lambda "z" $ var "z",
           "f">: lambda "p0" $ pair (var "id" @@ var "p0") (var "id" @@ var "p0")]
           $ int32 0)
-        T.int32],
+        T.int32,
+      expectPoly 6 []
+        (lets [
+           "x">: lambda "y" $ var "y",
+           "z">: var "x"] $
+           pair (var "x") (var "z"))
+        ["t0", "t1"] (T.pair (T.function (T.var "t0") (T.var "t0")) (T.function (T.var "t1") (T.var "t1"))),
+      expectPoly 7 []
+        (lets [
+           "x">: lambda "y" $ var "y",
+           "z">: var "x",
+           "w">: var "z"] $
+           tuple [var "x", var "w", var "z"])
+        ["t0", "t1", "t2"] (T.product [
+          T.function (T.var "t0") (T.var "t0"),
+          T.function (T.var "t1") (T.var "t1"),
+          T.function (T.var "t2") (T.var "t2")])],
 
     subgroup "Recursive and mutually recursive let with polymorphism" [
-      expectMono 1 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
+      expectMono 1 [tag_disabledForAlgorithmWInference]
         (lets [
           "id">: lambda "x" $ var "x",
           "f">: primitive _strings_length @@ var "g",
           "g">: primitive _strings_fromList @@ list [var "f"]]
           $ pair (var "f") (var "g"))
         (T.pair T.int32 T.string),
-      expectMono 2 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
+      expectMono 2 [tag_disabledForAlgorithmWInference]
         (lets [
           "id">: lambda "x" $ var "x",
           "f">: var "id" @@ (primitive _strings_length @@ var "g"),
           "g">: var "id" @@ (primitive _strings_fromList @@ list [var "f"])]
           $ pair (var "f") (var "g"))
         (T.pair T.int32 T.string),
-      expectMono 3 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
+      expectMono 3 [tag_disabledForAlgorithmWInference]
         (lets [
           "f">: var "id" @@ (primitive _strings_length @@ var "g"),
           "id">: lambda "x" $ var "x",
@@ -248,12 +264,12 @@ testGroupForPathologicalTerms = supergroup "Pathological terms" [
         ["t0"] (T.var "t0")],
 
     subgroup "Infinite lists" [
-      expectMono 1 [tag_disabledForDefaultInference]
+      expectMono 1 []
         (lets [
           "self">: primitive _lists_cons @@ int32 42 @@ var "self"]
           $ var "self")
         (T.list T.int32),
-      expectPoly 2  [tag_disabledForDefaultInference]
+      expectPoly 2  []
         (lambda "x" $ lets [
           "self">: primitive _lists_cons @@ var "x" @@ var "self"]
           $ var "self")
@@ -263,7 +279,7 @@ testGroupForPathologicalTerms = supergroup "Pathological terms" [
           "self">: lambda "e" $ primitive _lists_cons @@ var "e" @@ (var "self" @@ var "e")]
           $ lambda "x" $ var "self" @@ var "x")
         ["t0"] (T.function (T.var "t0") (T.var "t0")),
-      expectMono 4  [tag_disabledForDefaultInference]
+      expectMono 4  []
         (lets [
           "build">: lambda "x" $ primitive _lists_cons @@ var "x" @@ (var "build" @@
             (primitive _math_add @@ var "x" @@ int32 1))]

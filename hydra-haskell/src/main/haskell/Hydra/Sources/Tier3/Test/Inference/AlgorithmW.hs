@@ -99,7 +99,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --	let sng = (\x. (cons x nil)) in (pair (sng 0) (sng alice))
 --  --System F type:
 --  -- 	((List Nat) * (List String))
-    expectMono 6 [tag_disabledForDefaultInference]
+    expectMono 6 []
       (lets [
         "sng" >: lambda "x" $ list [var "x"]]
         $ pair (var "sng" @@ int32 0) (var "sng" @@ string "alice"))
@@ -110,7 +110,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --		in (+ (S (S 0)) (S 0))
 --  --System F type:
 --  -- 	Nat
-    expectMono 7 [tag_disabledForDefaultInference]
+    expectMono 7 []
       (lets [
         "+" >: lambdas ["x", "y"] (primSucc @@ (var "+" @@ (primPred @@ var "x") @@ var "y"))]
         $ var "+" @@ (primSucc @@ (primSucc @@ int32 0)) @@ (primSucc @@ int32 0))
@@ -121,7 +121,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --		in f
 --  --System F type:
 --  -- 	(Nat -> (Nat -> v5))
-    expectPoly 9 [tag_disabledForDefaultInference]
+    expectPoly 9 []
       (lets [
         "f" >: lambdas ["x", "y"] (var "f" @@ int32 0 @@ var "x")]
         $ var "f")
@@ -133,7 +133,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 ----		in (pair f g)
 ----Type inferred by Hindley-Milner:
 ----	((Int32 -> (Int32 -> v12)) * (Int32 -> (Int32 -> v14)))
-    expectPoly 10 [tag_disabledForDefaultInference]
+    expectPoly 10 []
       (lets [
         "f">: lambdas ["x", "y"] (var "f" @@ int32 0 @@ var "x"),
         "g">: lambda "xx" $ lambda "yy" (var "g" @@ int32 0 @@ var "xx")]
@@ -151,7 +151,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --		in (pair f g)
 --  --System F type:
 --  -- 	((v12 -> (Nat -> v13)) * (Nat -> (v15 -> v16)))
-    expectPoly 11 [tag_disabledForDefaultInference, tag_disabledForAltInference]
+    expectPoly 11 [tag_disabledForDefaultInference]
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
         "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
@@ -159,7 +159,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
       ["t0", "t1", "t2", "t3"] (T.pair
         (T.functionN [T.var "t0", T.int32, T.var "t1"])
         (T.functionN [T.int32, T.var "t2", T.var "t3"])),
-    expectPoly 11 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
+    expectPoly 11 [tag_disabledForAlgorithmWInference]
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
         "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
@@ -174,7 +174,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --		in (pair f g)
 --  --System F type:
 --  -- 	((Nat -> (Nat -> v12)) * (Nat -> (Nat -> v14)))
-    expectPoly 12 [tag_disabledForDefaultInference, tag_disabledForAltInference]
+    expectPoly 12 [tag_disabledForDefaultInference]
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ int32 0),
         "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
@@ -182,7 +182,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
       ["t0", "t1"] (T.pair
         (T.functionN [T.int32, T.int32, T.var "t0"])
         (T.functionN [T.int32, T.int32, T.var "t1"])),
-    expectPoly 12 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
+    expectPoly 12 [tag_disabledForAlgorithmWInference]
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ int32 0),
         "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
@@ -197,7 +197,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --		in (pair f g)
 --  --System F type:
 --  -- 	((Nat -> (Nat -> v12)) * (Nat -> (Nat -> v14)))
-    expectPoly 13 [tag_disabledForDefaultInference, tag_disabledForAltInference]
+    expectPoly 13 [tag_disabledForDefaultInference]
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
         "g">: lambda "u" $ lambda "v" (var "f" @@ int32 0 @@ int32 0)]
@@ -205,7 +205,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
       ["t0", "t1"] (T.pair
         (T.functionN [T.int32, T.int32, T.var "t0"])
         (T.functionN [T.int32, T.int32, T.var "t1"])),
-    expectPoly 13 [tag_disabledForDefaultInference, tag_disabledForAlgorithmWInference]
+    expectPoly 13 [tag_disabledForAlgorithmWInference]
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
         "g">: lambda "u" $ lambda "v" (var "f" @@ int32 0 @@ int32 0)]
