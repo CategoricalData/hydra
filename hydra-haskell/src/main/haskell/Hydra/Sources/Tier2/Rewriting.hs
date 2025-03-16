@@ -78,7 +78,7 @@ freeVariablesInTermDef :: TElement (Term -> S.Set Name)
 freeVariablesInTermDef = rewritingDefinition "freeVariablesInTerm" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a term" $
   lambda "term" $ lets [
-    "dfltVars">: typed (tSet nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (ref freeVariablesInTermDef @@ var "t"))
+    "dfltVars">: Base.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (ref freeVariablesInTermDef @@ var "t"))
       @@ Sets.empty
       @@ (ref subtermsDef @@ var "term")]
     $ match _Term (Just $ var "dfltVars") [
@@ -96,7 +96,7 @@ freeVariablesInTypeDef :: TElement (Type -> S.Set Name)
 freeVariablesInTypeDef = rewritingDefinition "freeVariablesInType" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a type" $
   lambda "typ" $ lets [
-    "dfltVars">: typed (tSet nameT) $ Base.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (recurse @@ var "t"))
+    "dfltVars">: Base.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (recurse @@ var "t"))
       @@ Sets.empty
       @@ (ref subtypesDef @@ var "typ")]
     $ match _Type (Just $ var "dfltVars") [
