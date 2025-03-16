@@ -17,7 +17,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-bind :: (Compute.Flow s a -> (a -> Compute.Flow s b) -> Compute.Flow s b)
+bind :: (Compute.Flow t2 t0 -> (t0 -> Compute.Flow t2 t1) -> Compute.Flow t2 t1)
 bind l r =  
   let q = (\s0 -> \t0 ->  
           let fs1 = (Compute.unFlow l s0 t0)
@@ -29,16 +29,13 @@ bind l r =
             Just v1 -> (Compute.unFlow (r v1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))) (Compute.flowStateValue fs1)))
   in (Compute.Flow q)
 
--- | Bind the results of two flows into another flow
-bind2 :: (Compute.Flow s a -> Compute.Flow s b -> (a -> b -> Compute.Flow s c) -> Compute.Flow s c)
+bind2 :: (Compute.Flow t2 t0 -> Compute.Flow t2 t3 -> (t0 -> t3 -> Compute.Flow t2 t1) -> Compute.Flow t2 t1)
 bind2 f1 f2 f = (bind f1 (\r1 -> bind f2 (\r2 -> f r1 r2)))
 
--- | Bind the results of three flows into another flow
-bind3 :: (Compute.Flow s a -> Compute.Flow s b -> Compute.Flow s c -> (a -> b -> c -> Compute.Flow s d) -> Compute.Flow s d)
+bind3 :: (Compute.Flow t3 t0 -> Compute.Flow t3 t1 -> Compute.Flow t3 t4 -> (t0 -> t1 -> t4 -> Compute.Flow t3 t2) -> Compute.Flow t3 t2)
 bind3 f1 f2 f3 f = (bind f1 (\r1 -> bind f2 (\r2 -> bind f3 (\r3 -> f r1 r2 r3))))
 
--- | Bind the results of four flows into another flow
-bind4 :: (Compute.Flow s a -> Compute.Flow s b -> Compute.Flow s c -> Compute.Flow s d -> (a -> b -> c -> d -> Compute.Flow s e) -> Compute.Flow s e)
+bind4 :: (Compute.Flow t4 t0 -> Compute.Flow t4 t1 -> Compute.Flow t4 t2 -> Compute.Flow t4 t5 -> (t0 -> t1 -> t2 -> t5 -> Compute.Flow t4 t3) -> Compute.Flow t4 t3)
 bind4 f1 f2 f3 f4 f = (bind f1 (\r1 -> bind f2 (\r2 -> bind f3 (\r3 -> bind f4 (\r4 -> f r1 r2 r3 r4)))))
 
 emptyTrace :: Compute.Trace
@@ -47,24 +44,21 @@ emptyTrace = Compute.Trace {
   Compute.traceMessages = [],
   Compute.traceOther = Maps.empty}
 
-failInternal :: (String -> Compute.Flow s a)
+failInternal :: (String -> Compute.Flow t0 t1)
 failInternal msg = (Compute.Flow (\s -> \t -> Compute.FlowState {
   Compute.flowStateValue = Nothing,
   Compute.flowStateState = s,
   Compute.flowStateTrace = (pushError msg t)}))
 
--- | Check whether a flow succeeds
-flowSucceeds :: (s -> Compute.Flow s a -> Bool)
+flowSucceeds :: (t0 -> Compute.Flow t0 t1 -> Bool)
 flowSucceeds cx f = (Optionals.isJust (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
 
--- | Get the value of a flow, or a default value if the flow fails
-fromFlow :: (a -> s -> Compute.Flow s a -> a)
+fromFlow :: (t1 -> t0 -> Compute.Flow t0 t1 -> t1)
 fromFlow def cx f = ((\x -> case x of
   Nothing -> def
   Just v1 -> v1) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
 
--- | Map a function over a flow
-map_ :: ((a -> b) -> Compute.Flow s a -> Compute.Flow s b)
+map_ :: ((t0 -> t1) -> Compute.Flow t2 t0 -> Compute.Flow t2 t1)
 map_ f f1 = (Compute.Flow (\s0 -> \t0 ->  
   let f2 = (Compute.unFlow f1 s0 t0)
   in Compute.FlowState {
@@ -72,11 +66,10 @@ map_ f f1 = (Compute.Flow (\s0 -> \t0 ->
     Compute.flowStateState = (Compute.flowStateState f2),
     Compute.flowStateTrace = (Compute.flowStateTrace f2)}))
 
--- | Map a function over two flows
-map2 :: (Compute.Flow s a -> Compute.Flow s b -> (a -> b -> c) -> Compute.Flow s c)
+map2 :: (Compute.Flow t1 t0 -> Compute.Flow t1 t2 -> (t0 -> t2 -> t3) -> Compute.Flow t1 t3)
 map2 f1 f2 f = (bind f1 (\r1 -> map_ (\r2 -> f r1 r2) f2))
 
-mutateTrace :: ((Compute.Trace -> Mantle.Either_ String Compute.Trace) -> (Compute.Trace -> Compute.Trace -> Compute.Trace) -> Compute.Flow s a -> Compute.Flow s a)
+mutateTrace :: ((Compute.Trace -> Mantle.Either_ String Compute.Trace) -> (Compute.Trace -> Compute.Trace -> Compute.Trace) -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->  
   let forLeft = (\msg -> Compute.FlowState {
           Compute.flowStateValue = Nothing,
@@ -92,7 +85,7 @@ mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->
     Mantle.EitherLeft v1 -> (forLeft v1)
     Mantle.EitherRight v1 -> (forRight v1)) (mutate t0))))
 
-pureInternal :: (a -> Compute.Flow s a)
+pureInternal :: (t0 -> Compute.Flow t1 t0)
 pureInternal x = (Compute.Flow (\s -> \t -> Compute.FlowState {
   Compute.flowStateValue = (Just x),
   Compute.flowStateState = s,
@@ -112,8 +105,7 @@ pushError msg t =
     Compute.traceMessages = (Lists.cons errorMsg (Compute.traceMessages t)),
     Compute.traceOther = (Compute.traceOther t)}
 
--- | Continue the current flow after adding a warning message
-warn :: (String -> Compute.Flow s a -> Compute.Flow s a)
+warn :: (String -> Compute.Flow t1 t0 -> Compute.Flow t1 t0)
 warn msg b = (Compute.Flow (\s0 -> \t0 ->  
   let f1 = (Compute.unFlow b s0 t0) 
       addMessage = (\t -> Compute.Trace {
@@ -127,8 +119,7 @@ warn msg b = (Compute.Flow (\s0 -> \t0 ->
     Compute.flowStateState = (Compute.flowStateState f1),
     Compute.flowStateTrace = (addMessage (Compute.flowStateTrace f1))}))
 
--- | Continue the current flow after setting a flag
-withFlag :: (Core.Name -> Compute.Flow s a -> Compute.Flow s a)
+withFlag :: (Core.Name -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 withFlag flag =  
   let mutate = (\t -> Mantle.EitherRight (Compute.Trace {
           Compute.traceStack = (Compute.traceStack t),
@@ -140,8 +131,7 @@ withFlag flag =
               Compute.traceOther = (Maps.remove flag (Compute.traceOther t1))})
   in (mutateTrace mutate restore)
 
--- | Continue a flow using a given state
-withState :: (s1 -> Compute.Flow s1 a -> Compute.Flow s2 a)
+withState :: (t0 -> Compute.Flow t0 t2 -> Compute.Flow t1 t2)
 withState cx0 f = (Compute.Flow (\cx1 -> \t1 ->  
   let f1 = (Compute.unFlow f cx0 t1)
   in Compute.FlowState {
@@ -149,8 +139,7 @@ withState cx0 f = (Compute.Flow (\cx1 -> \t1 ->
     Compute.flowStateState = cx1,
     Compute.flowStateTrace = (Compute.flowStateTrace f1)}))
 
--- | Continue the current flow after augmenting the trace
-withTrace :: (String -> Compute.Flow s a -> Compute.Flow s a)
+withTrace :: (String -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 withTrace msg =  
   let mutate = (\t -> Logic.ifElse (Equality.gteInt32 (Lists.length (Compute.traceStack t)) Constants.maxTraceDepth) (Mantle.EitherLeft "maximum trace depth exceeded. This may indicate an infinite loop") (Mantle.EitherRight (Compute.Trace {
           Compute.traceStack = (Lists.cons msg (Compute.traceStack t)),

@@ -15,7 +15,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Get the state of the current flow
 getState :: (Compute.Flow t0 t0)
 getState = (Compute.Flow (\s0 -> \t0 ->  
   let fs1 = (Compute.unFlow (Flows.pure ()) s0 t0)
