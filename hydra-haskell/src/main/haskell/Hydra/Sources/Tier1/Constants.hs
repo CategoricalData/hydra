@@ -77,4 +77,4 @@ maxTraceDepthDef :: TElement Int
 maxTraceDepthDef = constantsDefinition "maxTraceDepth" $
   doc ("A maximum depth for nested flows."
     <> " Currently, this is set very high because deep flows are common in type inference over the Hydra kernel.") $
-  int32 500
+  int32 4000

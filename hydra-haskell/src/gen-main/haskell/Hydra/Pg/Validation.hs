@@ -14,7 +14,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-validateEdge :: ((t -> v -> Maybe String) -> (v -> String) -> Maybe (v -> Maybe Model.VertexLabel) -> Model.EdgeType t -> Model.Edge v -> Maybe String)
+validateEdge :: ((t0 -> t1 -> Maybe String) -> (t1 -> String) -> Maybe (t1 -> Maybe Model.VertexLabel) -> Model.EdgeType t0 -> Model.Edge t1 -> Maybe String)
 validateEdge checkValue showValue labelForVertexId typ el =  
   let failWith = (edgeError showValue el) 
       checkLabel =  
@@ -40,7 +40,7 @@ validateEdge checkValue showValue labelForVertexId typ el =
     checkOut,
     checkIn])
 
-validateElement :: ((t -> v -> Maybe String) -> (v -> String) -> Maybe (v -> Maybe Model.VertexLabel) -> Model.ElementType t -> Model.Element v -> Maybe String)
+validateElement :: ((t0 -> t1 -> Maybe String) -> (t1 -> String) -> Maybe (t1 -> Maybe Model.VertexLabel) -> Model.ElementType t0 -> Model.Element t1 -> Maybe String)
 validateElement checkValue showValue labelForVertexId typ el = ((\x -> case x of
   Model.ElementTypeVertex v1 -> ((\x -> case x of
     Model.ElementEdge v2 -> (Just (prepend "Edge instead of vertex" (showValue (Model.edgeId v2))))
@@ -49,7 +49,7 @@ validateElement checkValue showValue labelForVertexId typ el = ((\x -> case x of
     Model.ElementVertex v2 -> (Just (prepend "Vertex instead of edge" (showValue (Model.vertexId v2))))
     Model.ElementEdge v2 -> (validateEdge checkValue showValue labelForVertexId v1 v2)) el)) typ)
 
-validateGraph :: (Ord v) => ((t -> v -> Maybe String) -> (v -> String) -> Model.GraphSchema t -> Model.Graph v -> Maybe String)
+validateGraph :: (Ord t1) => ((t0 -> t1 -> Maybe String) -> (t1 -> String) -> Model.GraphSchema t0 -> Model.Graph t1 -> Maybe String)
 validateGraph checkValue showValue schema graph =  
   let checkVertices =  
           let checkVertex = (\el -> (\x -> case x of
@@ -66,7 +66,7 @@ validateGraph checkValue showValue schema graph =
     checkVertices,
     checkEdges])
 
-validateProperties :: ((t -> v -> Maybe String) -> [Model.PropertyType t] -> M.Map Model.PropertyKey v -> Maybe String)
+validateProperties :: ((t1 -> t0 -> Maybe String) -> [Model.PropertyType t1] -> M.Map Model.PropertyKey t0 -> Maybe String)
 validateProperties checkValue types props =  
   let checkTypes = (checkAll (Lists.map checkType types)) 
       checkType = (\t -> Logic.ifElse (Model.propertyTypeRequired t) ((\x -> case x of
@@ -85,7 +85,7 @@ validateProperties checkValue types props =
     checkTypes,
     checkValues])
 
-validateVertex :: ((t -> v -> Maybe String) -> (v -> String) -> Model.VertexType t -> Model.Vertex v -> Maybe String)
+validateVertex :: ((t0 -> t1 -> Maybe String) -> (t1 -> String) -> Model.VertexType t0 -> Model.Vertex t1 -> Maybe String)
 validateVertex checkValue showValue typ el =  
   let failWith = (vertexError showValue el) 
       checkLabel =  
@@ -99,12 +99,12 @@ validateVertex checkValue showValue typ el =
     checkId,
     checkProperties])
 
-checkAll :: ([Maybe a] -> Maybe a)
+checkAll :: ([Maybe t0] -> Maybe t0)
 checkAll checks =  
   let errors = (Optionals.cat checks)
   in (Lists.safeHead errors)
 
-edgeError :: ((v -> String) -> Model.Edge v -> String -> String)
+edgeError :: ((t0 -> String) -> Model.Edge t0 -> String -> String)
 edgeError showValue e = (prepend (Strings.cat [
   "Invalid edge with id ",
   (showValue (Model.edgeId e))]))
@@ -125,10 +125,10 @@ prepend prefix msg = (Strings.cat [
     ": "],
   msg])
 
-verify :: (Bool -> String -> Maybe String)
+verify :: (Bool -> t0 -> Maybe t0)
 verify b err = (Logic.ifElse b Nothing (Just err))
 
-vertexError :: ((v -> String) -> Model.Vertex v -> String -> String)
+vertexError :: ((t0 -> String) -> Model.Vertex t0 -> String -> String)
 vertexError showValue v = (prepend (Strings.cat [
   "Invalid vertex with id ",
   (showValue (Model.vertexId v))]))

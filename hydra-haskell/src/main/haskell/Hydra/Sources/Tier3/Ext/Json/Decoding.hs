@@ -52,19 +52,17 @@ valueT = TypeVariable Json._Value
 
 decodeArrayDef :: TElement ((Json.Value -> Flow s a) -> Json.Value -> Flow s [a])
 decodeArrayDef  = jsonDecodingDefinition "Array" $
-  function (tFun valueT (tFlow tS tA)) (tFun valueT (tFlow tS (tList tA))) $
   lambda "decodeElem" $ match Json._Value (Just $ Flows.fail "expected an array") [
     Json._Value_array>>: lambda "a" $ Flows.mapList (var "decodeElem") $ var "a"]
 
 decodeBooleanDef :: TElement (Json.Value -> Flow s Bool)
 decodeBooleanDef  = jsonDecodingDefinition "Boolean" $
-  function valueT (tFlow tS tBoolean) $
   match Json._Value (Just $ Flows.fail $ "expected a boolean") [
     Json._Value_boolean>>: lambda "b" $ Flows.pure $ var "b"]
 
 decodeFieldDef :: TElement ((Json.Value -> Flow s a) -> String -> (M.Map String Json.Value) -> Flow s a)
 decodeFieldDef  = jsonDecodingDefinition "Field" $
-  function (tFun valueT (tFlow tS tA)) (tFun tString (tFun (tMap tString valueT) (tFlow tS tA))) $
+  withTypeClasses ordT0 $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     Flows.bind
       (ref decodeOptionalFieldDef @@ var "decodeValue" @@ var "name" @@ var "m")
@@ -72,25 +70,25 @@ decodeFieldDef  = jsonDecodingDefinition "Field" $
 
 decodeNumberDef :: TElement (Json.Value -> Flow s Double)
 decodeNumberDef  = jsonDecodingDefinition "Number" $
-  function valueT (tFlow tS tBigfloat) $
   match Json._Value (Just $ Flows.fail "expected a number") [
     Json._Value_number>>: lambda "n" $ Flows.pure $ var "n"]
 
 decodeObjectDef :: TElement (Json.Value -> Flow s (M.Map String Json.Value))
 decodeObjectDef  = jsonDecodingDefinition "Object" $
-  function valueT (tFlow tS (tMap tString valueT)) $
   match Json._Value (Just $ Flows.fail "expected an object") [
     Json._Value_object>>: lambda "o" $ Flows.pure $ var "o"]
 
 decodeOptionalFieldDef :: TElement ((Json.Value -> Flow s a) -> String -> (M.Map String Json.Value) -> Flow s (Maybe a))
 decodeOptionalFieldDef  = jsonDecodingDefinition "OptionalField" $
-  function (tFun valueT (tFlow tS tA)) (tFun tString (tFun (tMap tString valueT) (tFlow tS (Types.optional tA)))) $
+  withTypeClasses ordT0 $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     (matchOpt (Flows.pure nothing) (lambda "v" (Flows.map (lambda "x" (just $ var "x")) (var "decodeValue" @@ var "v"))))
       @@ (Maps.lookup (var "name") (var "m"))
 
 decodeStringDef :: TElement (Json.Value -> Flow s String)
 decodeStringDef  = jsonDecodingDefinition "String" $
-  function valueT (tFlow tS tString) $
   match Json._Value (Just $ Flows.fail "expected a string") [
     Json._Value_string>>: lambda "s" $ Flows.pure $ var "s"]
+
+-- TODO: this is a hack
+ordT0 = (M.fromList [(Name "t0", S.fromList [TypeClassOrdering])])
