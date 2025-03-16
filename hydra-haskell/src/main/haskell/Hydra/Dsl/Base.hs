@@ -114,12 +114,6 @@ function dom cod = typed (Types.function dom cod)
 functionN :: [Type] -> TTerm a -> TTerm a
 functionN ts = typed $ Types.functionN ts
 
-functionNWithClasses :: [Type] -> M.Map Name (S.Set TypeClass) -> TTerm a -> TTerm a
-functionNWithClasses ts classes = typed $ setTypeClasses classes (Types.functionN ts)
-
-functionWithClasses :: Type -> Type -> M.Map Name (S.Set TypeClass) -> TTerm a -> TTerm a
-functionWithClasses dom cod classes = typed $ setTypeClasses classes (Types.function dom cod)
-
 ifOpt :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
 ifOpt m n j = matchOpt n j @@ m
 
@@ -238,6 +232,9 @@ var v = TTerm $ Terms.var v
 
 variant :: Name -> Name -> TTerm a -> TTerm b
 variant name fname (TTerm term) = TTerm $ Terms.inject name $ Field fname term
+
+withTypeClasses :: M.Map Name (S.Set TypeClass) -> TTerm a -> TTerm a
+withTypeClasses classes (TTerm term) = TTerm $ setTypeClasses classes term
 
 wrap :: Name -> TTerm a -> TTerm b
 wrap name (TTerm term) = TTerm $ Terms.wrap name term
