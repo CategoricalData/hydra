@@ -41,6 +41,7 @@ encodeAtom a = case a of
   Py.AtomDict d -> encodeDict d
   Py.AtomEllipsis -> cst "..."
   Py.AtomFalse -> cst "False"
+  Py.AtomGroup g -> encodeGroup g
   Py.AtomList l -> encodeList l
   Py.AtomName n -> encodeName n
   Py.AtomNumber n -> encodeNumber n
@@ -198,6 +199,11 @@ encodeFunctionDefRaw (Py.FunctionDefRaw async name tparams params retType ftc bl
 
 encodeFunctionDefinition :: Py.FunctionDefinition -> A.Expr
 encodeFunctionDefinition (Py.FunctionDefinition mdecs raw) = encodeFunctionDefRaw raw
+
+encodeGroup :: Py.Group -> A.Expr
+encodeGroup g = case g of
+  Py.GroupExpression ne -> encodeNamedExpression ne
+  _ -> unsupportedVariant "group" g
 
 encodeGuard :: Py.Guard -> A.Expr
 encodeGuard (Py.Guard ne) = spaceSep [cst "if", encodeNamedExpression ne]
