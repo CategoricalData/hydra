@@ -48,4 +48,4 @@ placeholderName = (Core.Name "Placeholder")
 
 -- | A maximum depth for nested flows. Currently, this is set very high because deep flows are common in type inference over the Hydra kernel.
 maxTraceDepth :: Int
-maxTraceDepth = 500
+maxTraceDepth = 4000
