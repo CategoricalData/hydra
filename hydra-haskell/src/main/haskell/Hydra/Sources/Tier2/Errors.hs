@@ -33,7 +33,7 @@ import Hydra.Sources.Tier2.Variants
 hydraErrorsModule :: Module
 hydraErrorsModule = Module (Namespace "hydra.errors") elements
     [hydraVariantsModule]
-    [hydraCoreModule] $
+    [hydraComputeModule, hydraMantleModule] $
     Just "Utilities for working with errors and flow state"
   where
    elements = [
@@ -46,14 +46,11 @@ errorsDefinition :: String -> TTerm a -> TElement a
 errorsDefinition = definitionInModule hydraErrorsModule
 
 getStateDef :: TElement (Flow s s)
-getStateDef = errorsDefinition "getState" $
+getStateDef = errorsDefinition "getState" $ -- Flow s s
   doc "Get the state of the current flow" $
-  typed tFlowSS $
   wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
-    "fs1">:
-      typed (Types.apply (Types.apply (TypeVariable _FlowState) tS) tUnit) $
-      Flows.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"]
-    $ (lambda "v" $ lambda "s" $ lambda "t" $ (
+    "fs1">: Flows.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"] $ -- FlowState s ()
+    (lambda "v" $ lambda "s" $ lambda "t" $ (
         (matchOpt
           (Flows.flowState nothing (var "s") (var "t"))
           (constant (Flows.flowState (just $ var "s") (var "s") (var "t"))))
@@ -63,10 +60,9 @@ getStateDef = errorsDefinition "getState" $
 putStateDef :: TElement (s -> Flow s ())
 putStateDef = errorsDefinition "putState" $
   doc "Set the state of a flow" $
-  function tS (tFlow tS tUnit) $
   lambda "cx" $ wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
-    "f1">: Flows.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"]
-    $ Flows.flowState
+    "f1">: Flows.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"] $
+    Flows.flowState
       (Flows.flowStateValue @@ var "f1")
       (var "cx")
       (Flows.flowStateTrace @@ var "f1")
@@ -74,7 +70,6 @@ putStateDef = errorsDefinition "putState" $
 traceSummaryDef :: TElement (Trace -> String)
 traceSummaryDef = errorsDefinition "traceSummary" $
   doc "Summarize a trace as a string" $
-  function traceT tString $
   lambda "t" $ lets [
     "messageLines">: (Lists.nub (Flows.traceMessages @@ var "t")),
     "keyvalLines">: Logic.ifElse (Maps.isEmpty (Flows.traceOther @@ var "t"))
@@ -83,11 +78,10 @@ traceSummaryDef = errorsDefinition "traceSummary" $
         (Lists.map (var "toLine") (Maps.toList (Flows.traceOther @@ var "t")))),
     "toLine">:
       function (tPair tString termT) tString $
-      lambda "pair" $ "\t" ++ (Core.unName @@ (first @@ var "pair")) ++ ": " ++ (Io.showTerm (second @@ var "pair"))]
-    $ Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines"))
+      lambda "pair" $ "\t" ++ (Core.unName @@ (first @@ var "pair")) ++ ": " ++ (Io.showTerm (second @@ var "pair"))] $
+    Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines"))
 
 unexpectedDef :: TElement (String -> String -> Flow s x)
 unexpectedDef = errorsDefinition "unexpected" $
   doc "Fail if an actual value does not match an expected value" $
-  function tString (tFun tString (tFlow tS tX)) $
   lambda "expected" $ lambda "actual" $ Flows.fail ("expected " ++ var "expected" ++ " but found: " ++ var "actual")
