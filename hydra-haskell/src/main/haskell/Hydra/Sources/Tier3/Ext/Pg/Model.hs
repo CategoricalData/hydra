@@ -63,7 +63,7 @@ pgModelModule = Module ns elements [] [hydraCoreModule] $
 
       def "EdgeLabel" $
         doc "The label of an edge" $
-        string,
+        wrap string,
 
       def "EdgeType" $
         doc "The type of an edge" $
@@ -145,8 +145,8 @@ pgModelModule = Module ns elements [] [hydraCoreModule] $
             "v"],
 
       def "PropertyKey" $
-        doc "A property key"
-        string,
+        doc "A property key" $
+        wrap string,
 
       def "PropertyType" $
         doc "The type of a property" $
@@ -176,7 +176,7 @@ pgModelModule = Module ns elements [] [hydraCoreModule] $
 
       def "VertexLabel" $
         doc "The label of a vertex. The default (null) vertex is represented by the empty string" $
-        string,
+        wrap $ string,
 
       def "VertexType" $
         doc "The type of a vertex" $
