@@ -331,7 +331,7 @@ toDataDeclaration coders namespaces (el, TypedTerm term typ) = do
       _ -> do
         hterm <- coderEncode coder term
         let vb = simpleValueBinding hname hterm bindings
-        classes <- getTypeClasses typ
+        classes <- getTypeClasses $ stripTypesFromTerm $ elementTerm el
         htype <- encodeTypeWithClassAssertions namespaces classes typ
         let decl = H.DeclarationTypedBinding $ H.TypedBinding (H.TypeSignature hname htype) (rewriteValueBinding vb)
         return $ H.DeclarationWithComments decl comments

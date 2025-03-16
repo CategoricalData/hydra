@@ -83,8 +83,8 @@ getType anns = case M.lookup key_type anns of
 getTypeAnnotation :: Name -> Type -> Y.Maybe Term
 getTypeAnnotation key = M.lookup key . typeAnnotationInternal
 
-getTypeClasses :: Type -> Flow Graph (M.Map Name (S.Set TypeClass))
-getTypeClasses typ = case getTypeAnnotation key_classes typ of
+getTypeClasses :: Term -> Flow Graph (M.Map Name (S.Set TypeClass))
+getTypeClasses term = case getTermAnnotation key_classes term of
     Nothing -> pure M.empty
     Just term -> Expect.map coreDecodeName (Expect.set decodeClass) term
   where
@@ -189,8 +189,8 @@ setTypeAnnotation key val typ = if anns == M.empty
     typ' = stripType typ
     anns = setAnnotation key val $ typeAnnotationInternal typ
 
-setTypeClasses :: M.Map Name (S.Set TypeClass) -> Type -> Type
-setTypeClasses m = setTypeAnnotation key_classes encoded
+setTypeClasses :: M.Map Name (S.Set TypeClass) -> Term -> Term
+setTypeClasses m = setTermAnnotation key_classes encoded
   where
     encoded = if M.null m
       then Nothing
