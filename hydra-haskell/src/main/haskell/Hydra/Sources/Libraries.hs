@@ -159,6 +159,7 @@ _lists_bind        = qname _hydra_lib_lists "bind" :: Name
 _lists_concat      = qname _hydra_lib_lists "concat" :: Name
 _lists_concat2     = qname _hydra_lib_lists "concat2" :: Name
 _lists_cons        = qname _hydra_lib_lists "cons" :: Name
+_lists_elem        = qname _hydra_lib_lists "elem" :: Name
 _lists_filter      = qname _hydra_lib_lists "filter" :: Name
 _lists_foldl       = qname _hydra_lib_lists "foldl" :: Name
 _lists_head        = qname _hydra_lib_lists "head" :: Name
@@ -173,6 +174,8 @@ _lists_pure        = qname _hydra_lib_lists "pure" :: Name
 _lists_reverse     = qname _hydra_lib_lists "reverse" :: Name
 _lists_safeHead    = qname _hydra_lib_lists "safeHead" :: Name
 _lists_tail        = qname _hydra_lib_lists "tail" :: Name
+_lists_zip         = qname _hydra_lib_lists "zip" :: Name
+_lists_zipWith     = qname _hydra_lib_lists "zipWith" :: Name
 
 hydraLibLists :: Library
 hydraLibLists = standardLibrary _hydra_lib_lists [
@@ -182,6 +185,7 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim1       _lists_concat      Lists.concat      ["x"] (list (list x)) (list x),
     prim2       _lists_concat2     Lists.concat2     ["x"] (list x) (list x) (list x),
     prim2       _lists_cons        Lists.cons        ["x"] x (list x) (list x),
+    prim2       _lists_elem        Lists.elem        ["x"] x (list x) boolean,
     prim2       _lists_filter      Lists.filter      ["x"] (function x boolean) (list x) (list x),
     prim3       _lists_foldl       Lists.foldl       ["x", "y"] (function y (function x y)) y (list x) y,
     prim1       _lists_head        Lists.head        ["x"] (list x) x,
@@ -195,10 +199,13 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim1       _lists_pure        Lists.pure        ["x"] x (list x),
     prim1       _lists_reverse     Lists.reverse     ["x"] (list x) (list x),
     prim1       _lists_safeHead    Lists.safeHead    ["x"] (list x) (optional x),
-    prim1       _lists_tail        Lists.tail        ["x"] (list x) (list x)]
+    prim1       _lists_tail        Lists.tail        ["x"] (list x) (list x),
+    prim2       _lists_zip         Lists.zip         ["x", "y"] (list x) (list y) (list (pair x y)),
+    prim3       _lists_zipWith     Lists.zipWith     ["x", "y", "z"] (function x $ function y z) (list x) (list y) (list z)]
   where
     x = variable "x"
     y = variable "y"
+    z = variable "z"
 
 _hydra_lib_literals :: Namespace
 _hydra_lib_literals = Namespace "hydra.lib.literals"
@@ -275,38 +282,44 @@ hydraLibLogic = standardLibrary _hydra_lib_logic [
 _hydra_lib_maps :: Namespace
 _hydra_lib_maps = Namespace "hydra.lib.maps"
 
-_maps_bimap     = qname _hydra_lib_maps "bimap" :: Name
-_maps_empty     = qname _hydra_lib_maps "empty" :: Name
-_maps_fromList  = qname _hydra_lib_maps "fromList" :: Name
-_maps_insert    = qname _hydra_lib_maps "insert" :: Name
-_maps_isEmpty   = qname _hydra_lib_maps "isEmpty" :: Name
-_maps_keys      = qname _hydra_lib_maps "keys" :: Name
-_maps_lookup    = qname _hydra_lib_maps "lookup" :: Name
-_maps_map       = qname _hydra_lib_maps "map" :: Name
-_maps_mapKeys   = qname _hydra_lib_maps "mapKeys" :: Name
-_maps_remove    = qname _hydra_lib_maps "remove" :: Name
-_maps_singleton = qname _hydra_lib_maps "singleton" :: Name
-_maps_size      = qname _hydra_lib_maps "size" :: Name
-_maps_toList    = qname _hydra_lib_maps "toList" :: Name
-_maps_values    = qname _hydra_lib_maps "values" :: Name
+_maps_bimap         = qname _hydra_lib_maps "bimap" :: Name
+_maps_empty         = qname _hydra_lib_maps "empty" :: Name
+_maps_filter        = qname _hydra_lib_maps "filter" :: Name
+_maps_filterWithKey = qname _hydra_lib_maps "filterWithKey" :: Name
+_maps_fromList      = qname _hydra_lib_maps "fromList" :: Name
+_maps_insert        = qname _hydra_lib_maps "insert" :: Name
+_maps_isEmpty       = qname _hydra_lib_maps "isEmpty" :: Name
+_maps_keys          = qname _hydra_lib_maps "keys" :: Name
+_maps_lookup        = qname _hydra_lib_maps "lookup" :: Name
+_maps_map           = qname _hydra_lib_maps "map" :: Name
+_maps_mapKeys       = qname _hydra_lib_maps "mapKeys" :: Name
+_maps_remove        = qname _hydra_lib_maps "remove" :: Name
+_maps_singleton     = qname _hydra_lib_maps "singleton" :: Name
+_maps_size          = qname _hydra_lib_maps "size" :: Name
+_maps_toList        = qname _hydra_lib_maps "toList" :: Name
+_maps_union         = qname _hydra_lib_maps "union" :: Name
+_maps_values        = qname _hydra_lib_maps "values" :: Name
 
 hydraLibMaps :: Library
 hydraLibMaps = standardLibrary _hydra_lib_maps [
-    prim3 _maps_bimap     Maps.bimap     ["k1", "k2", "v1", "v2"] (function k1 k2) (function v1 v2) (Prims.map k1 v1) (Prims.map k2 v2),
-    prim0 _maps_empty     Maps.empty     ["k", "v"]               mapKv,
-    prim1 _maps_fromList  Maps.fromList  ["k", "v"]               (list $ pair k v) mapKv,
-    prim3 _maps_insert    Maps.insert    ["k", "v"]               k v mapKv mapKv,
-    prim1 _maps_isEmpty   Maps.isEmpty   ["k", "v"]               mapKv boolean,
-    prim1 _maps_keys      Maps.keys      ["k", "v"]               mapKv (list k),
-    prim2 _maps_lookup    Maps.lookup    ["k", "v"]               k mapKv (optional v),
-    prim2 _maps_map       Maps.map       ["k", "v1", "v2"]        (function v1 v2) (Prims.map k v1) (Prims.map k v2),
-    prim2 _maps_mapKeys   Maps.mapKeys   ["k1", "k2", "v"]        (function k1 k2) (Prims.map k1 v) (Prims.map k2 v),
-    prim1 _maps_size      Maps.size      ["k", "v"]               mapKv int32,
-    prim2 _maps_remove    Maps.remove    ["k", "v"]               k mapKv mapKv,
-    prim2 _maps_singleton Maps.singleton ["k", "v"]               k v mapKv,
-    prim1 _maps_size      Maps.size      ["k", "v"]               mapKv int32,
-    prim1 _maps_toList    Maps.toList    ["k", "v"]               mapKv (list $ pair k v),
-    prim1 _maps_values    Maps.values    ["k", "v"]               mapKv (list v)]
+    prim3 _maps_bimap         Maps.bimap     ["k1", "k2", "v1", "v2"] (function k1 k2) (function v1 v2) (Prims.map k1 v1) (Prims.map k2 v2),
+    prim0 _maps_empty         Maps.empty     ["k", "v"]               mapKv,
+    prim2 _maps_filter        Maps.filter    ["k", "v"]               (function v boolean) mapKv mapKv,
+    prim2 _maps_filterWithKey Maps.filterWithKey ["k", "v"]       (function k (function v boolean)) mapKv mapKv,
+    prim1 _maps_fromList      Maps.fromList  ["k", "v"]               (list $ pair k v) mapKv,
+    prim3 _maps_insert        Maps.insert    ["k", "v"]               k v mapKv mapKv,
+    prim1 _maps_isEmpty       Maps.isEmpty   ["k", "v"]               mapKv boolean,
+    prim1 _maps_keys          Maps.keys      ["k", "v"]               mapKv (list k),
+    prim2 _maps_lookup        Maps.lookup    ["k", "v"]               k mapKv (optional v),
+    prim2 _maps_map           Maps.map       ["k", "v1", "v2"]        (function v1 v2) (Prims.map k v1) (Prims.map k v2),
+    prim2 _maps_mapKeys       Maps.mapKeys   ["k1", "k2", "v"]        (function k1 k2) (Prims.map k1 v) (Prims.map k2 v),
+    prim1 _maps_size          Maps.size      ["k", "v"]               mapKv int32,
+    prim2 _maps_remove        Maps.remove    ["k", "v"]               k mapKv mapKv,
+    prim2 _maps_singleton     Maps.singleton ["k", "v"]               k v mapKv,
+    prim1 _maps_size          Maps.size      ["k", "v"]               mapKv int32,
+    prim1 _maps_toList        Maps.toList    ["k", "v"]               mapKv (list $ pair k v),
+    prim2 _maps_union         Maps.union     ["k", "v"]               mapKv mapKv mapKv,
+    prim1 _maps_values        Maps.values    ["k", "v"]               mapKv (list v)]
   where
     k = variable "k"
     k1 = variable "k1"

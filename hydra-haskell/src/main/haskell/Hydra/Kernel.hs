@@ -34,8 +34,6 @@ module Hydra.Kernel (
   module Hydra.Staging.Formatting,
 --  module Hydra.Staging.GrammarToModule,
   module Hydra.Staging.Inference,
-  module Hydra.Staging.Substitution,
-  module Hydra.Staging.Unification,
   module Hydra.Staging.Lexical,
   module Hydra.Staging.LiteralAdapters,
   module Hydra.Staging.Reduction,
@@ -44,8 +42,10 @@ module Hydra.Kernel (
   module Hydra.Staging.Sorting,
   module Hydra.Staging.TermAdapters,
   module Hydra.Strip,
+  module Hydra.Substitution,
   module Hydra.Tools.Debug,
   module Hydra.Typing,
+  module Hydra.Unification,
   module Hydra.Variants,
   module Hydra.Workflow,
 ) where
@@ -82,8 +82,6 @@ import Hydra.Staging.CoreDecoding
 import Hydra.Staging.Formatting
 --import Hydra.Staging.GrammarToModule
 import Hydra.Staging.Inference
-import Hydra.Staging.Substitution
-import Hydra.Staging.Unification
 import Hydra.Staging.Lexical
 import Hydra.Staging.LiteralAdapters
 import Hydra.Staging.Reduction
@@ -92,7 +90,9 @@ import Hydra.Staging.Schemas
 import Hydra.Staging.Sorting
 import Hydra.Staging.TermAdapters
 import Hydra.Strip
+import Hydra.Substitution
 import Hydra.Tools.Debug
 import Hydra.Typing
+import Hydra.Unification
 import Hydra.Variants
 import Hydra.Workflow
