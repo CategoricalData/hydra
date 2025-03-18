@@ -39,7 +39,7 @@ unificationDefinition = definitionInModule hydraUnificationModule
 
 hydraUnificationModule :: Module
 hydraUnificationModule = Module (Namespace "hydra.unification") elements
-    [hydraRewritingModule] [hydraTypingModule] $
+    [hydraSubstitutionModule] [hydraTypingModule] $
     Just ("Utilities for type unification.")
   where
    elements = [
@@ -170,15 +170,6 @@ unifyTypesDef :: TElement (M.Map Name TypeScheme -> Type -> Type -> String -> Fl
 unifyTypesDef = unificationDefinition "unifyTypes" $
   lambdas ["schemaTypes", "l", "r", "comment"] $
     ref unifyTypeConstraintsDef @@ var "schemaTypes" @@ list [Typing.typeConstraint (var "l") (var "r") (var "comment")]
-
-{-
-
-unifyTypes :: M.Map Name TypeScheme -> Type -> Type -> String -> Flow s TypeSubst
-unifyTypes schemaTypes l r comment = unifyTypeConstraints schemaTypes [TypeConstraint l r comment]
-
--}
-
-
 
 variableOccursInTypeDef :: TElement (Name -> Type -> Bool)
 variableOccursInTypeDef = unificationDefinition "variableOccursInType" $

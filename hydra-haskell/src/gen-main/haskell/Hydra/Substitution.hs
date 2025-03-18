@@ -1,4 +1,4 @@
--- | Utilities for type and term substitution.
+-- | Variable substitution in type and term expressions.
 
 module Hydra.Substitution where
 
