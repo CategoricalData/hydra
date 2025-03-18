@@ -11,6 +11,12 @@ bimap f g = M.fromList . fmap (\(k, v) -> (f k, g v)) . M.toList
 empty :: M.Map k v
 empty = M.empty
 
+filter :: Ord k => (v -> Bool) -> M.Map k v -> M.Map k v
+filter = M.filter
+
+filterWithKey :: Ord k => (k -> v -> Bool) -> M.Map k v -> M.Map k v
+filterWithKey = M.filterWithKey
+
 fromList :: Ord k => [(k, v)] -> M.Map k v
 fromList = M.fromList
 
@@ -43,6 +49,9 @@ size = M.size
 
 toList :: M.Map k v -> [(k, v)]
 toList = M.toList
+
+union :: Ord k => M.Map k v -> M.Map k v -> M.Map k v
+union = M.union
 
 values :: M.Map k v -> [v]
 values = M.elems

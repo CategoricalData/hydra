@@ -28,6 +28,9 @@ concat2 l1 l2 = l1 ++ l2
 cons :: a -> [a] -> [a]
 cons = (:)
 
+elem :: Eq a => a -> [a] -> Bool
+elem = L.elem
+
 filter :: (a -> Bool) -> [a] -> [a]
 filter = L.filter
 
@@ -70,3 +73,9 @@ safeHead (x:_) = Just x
 
 tail :: [a] -> [a]
 tail = L.tail
+
+zip :: [a] -> [b] -> [(a, b)]
+zip = L.zip
+
+zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith = L.zipWith

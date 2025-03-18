@@ -24,6 +24,9 @@ concat2 = primitive2 _lists_concat2
 cons :: TTerm a -> TTerm [a] -> TTerm [a]
 cons = primitive2 _lists_cons
 
+elem :: Eq a => TTerm a -> TTerm [a] -> TTerm Bool
+elem = primitive2 _lists_elem
+
 filter :: TTerm (a -> Bool) -> TTerm [a] -> TTerm [a]
 filter = primitive2 _lists_filter
 
@@ -65,3 +68,9 @@ safeHead = primitive1 _lists_safeHead
 
 tail :: TTerm [a] -> TTerm [a]
 tail = primitive1 _lists_tail
+
+zip :: TTerm [a] -> TTerm [b] -> TTerm [(a, b)]
+zip = primitive2 _lists_zip
+
+zipWith :: TTerm (a -> b -> c) -> TTerm [a] -> TTerm [b] -> TTerm [c]
+zipWith = primitive3 _lists_zipWith
