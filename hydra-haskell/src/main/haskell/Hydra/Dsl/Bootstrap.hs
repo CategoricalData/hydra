@@ -9,6 +9,7 @@ import Hydra.CoreEncoding
 import Hydra.Graph
 import Hydra.Staging.Annotations
 import Hydra.Module
+import Hydra.Rewriting
 import Hydra.Staging.Rewriting
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
