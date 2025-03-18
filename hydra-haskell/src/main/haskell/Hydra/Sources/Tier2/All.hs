@@ -12,6 +12,8 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.Printing,
   module Hydra.Sources.Tier2.Qnames,
   module Hydra.Sources.Tier2.Rewriting,
+  module Hydra.Sources.Tier2.Substitution,
+  module Hydra.Sources.Tier2.Unification,
   module Hydra.Sources.Tier2.Variants,
 ) where
 
@@ -25,6 +27,8 @@ import Hydra.Sources.Tier2.Lexical
 import Hydra.Sources.Tier2.Printing
 import Hydra.Sources.Tier2.Qnames
 import Hydra.Sources.Tier2.Rewriting
+import Hydra.Sources.Tier2.Substitution
+import Hydra.Sources.Tier2.Unification
 import Hydra.Sources.Tier2.Variants
 
 kernelModules :: [Module]
@@ -34,9 +38,20 @@ kernelModules = [hydraCoreModule] ++ tier1Modules ++ tier2Modules
 --   Not guaranteed to be up to date.
 kernelTypeModules :: [Module]
 kernelTypeModules = [
-  hydraCoreModule, hydraAstModule, hydraCodersModule, hydraComputeModule, hydraConstraintsModule,
-  hydraGrammarModule, hydraGraphModule, jsonModelModule, hydraMantleModule, hydraModuleModule,
-  hydraPhantomsModule, hydraQueryModule, hydraTestingModule, hydraWorkflowModule]
+  hydraCoreModule,
+  hydraAstModule,
+  hydraCodersModule,
+  hydraComputeModule,
+  hydraConstraintsModule,
+  hydraGrammarModule,
+  hydraGraphModule,
+  jsonModelModule,
+  hydraMantleModule,
+  hydraModuleModule,
+  hydraPhantomsModule,
+  hydraQueryModule,
+  hydraTestingModule,
+  hydraWorkflowModule]
 
 tier2Modules :: [Module]
 tier2Modules = [
@@ -50,4 +65,5 @@ tier2Modules = [
   hydraQnamesModule,
   hydraRewritingModule,
   hydraStripModule,
+  hydraUnificationModule,
   hydraVariantsModule]

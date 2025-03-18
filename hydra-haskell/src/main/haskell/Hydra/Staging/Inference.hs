@@ -15,12 +15,12 @@ import Hydra.Rewriting
 import Hydra.Inference
 import Hydra.Staging.Annotations
 import Hydra.Staging.CoreDecoding
-import Hydra.Staging.Substitution
-import Hydra.Staging.Unification
 import Hydra.Staging.Rewriting
 import Hydra.Staging.Schemas
 import Hydra.Staging.Sorting
 import Hydra.Strip
+import Hydra.Substitution
+import Hydra.Unification
 import Hydra.Variants
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
