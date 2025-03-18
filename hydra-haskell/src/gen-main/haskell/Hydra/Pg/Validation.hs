@@ -66,7 +66,7 @@ validateGraph checkValue showValue schema graph =
     checkVertices,
     checkEdges])
 
-validateProperties :: ((t1 -> t0 -> Maybe String) -> [Model.PropertyType t1] -> M.Map Model.PropertyKey t0 -> Maybe String)
+validateProperties :: ((t0 -> t1 -> Maybe String) -> [Model.PropertyType t0] -> M.Map Model.PropertyKey t1 -> Maybe String)
 validateProperties checkValue types props =  
   let checkTypes = (checkAll (Lists.map checkType types)) 
       checkType = (\t -> Logic.ifElse (Model.propertyTypeRequired t) ((\x -> case x of

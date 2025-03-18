@@ -175,18 +175,6 @@ inferTypeOf cx term = bindInferredTerm cx letTerm "infer type of term" unifyAndS
       where
         subst = inferenceResultSubst result
 
-inferTypeOfElement :: InferenceContext -> Element -> Flow s Element
-inferTypeOfElement cx (Element name term _) = withTrace ("inference on element " ++ unName name) $ do
-  (term1, ts) <- inferTypeOf cx term
-  return $ Element name term1 (Just ts)
-
--- TODO: deprecated (and expensive)
-inferredTypeOf :: Term -> Flow Graph Type
-inferredTypeOf term = do
-  g <- getState
-  cx <- graphToInferenceContext g
-  typeSchemeType . snd <$> inferTypeOf cx term
-
 inferTypeOfAnnotatedTerm :: InferenceContext -> AnnotatedTerm -> Flow s InferenceResult
 inferTypeOfAnnotatedTerm cx (AnnotatedTerm term ann) = Flows.map withResult $ inferTypeOfTerm cx term "annotated term"
   where
