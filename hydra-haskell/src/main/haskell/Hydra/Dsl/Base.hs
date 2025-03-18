@@ -69,6 +69,9 @@ apply2 (TTerm f) (TTerm a1) (TTerm a2) = TTerm $ Terms.apply (Terms.apply f a1) 
 caseField :: TCase a -> TTerm (a -> b) -> Field
 caseField (TCase fname) (TTerm f) = Field fname f
 
+--cases :: Name -> TTerm a -> Maybe (TTerm b) -> [Field] -> TTerm b
+cases name arg dflt fields = (match name dflt fields) @@ arg
+
 compose :: TTerm (b -> c) -> TTerm (a -> b) -> TTerm (a -> c)
 compose (TTerm f) (TTerm g) = TTerm $ Terms.compose f g
 
@@ -129,6 +132,9 @@ inject2 name fname = lambda "x2" $ inject name fname $ var "x2"
 just :: TTerm a -> TTerm (Maybe a)
 just (TTerm term) = TTerm $ Terms.just term
 
+just_ :: TTerm (a -> Maybe a)
+just_ = TTerm $ TermFunction $ FunctionLambda $ Lambda (Name "x") Nothing $ TermOptional $ Just $ TermVariable $ Name "x"
+
 lambda :: String -> TTerm x -> TTerm (a -> b)
 lambda v (TTerm body) = TTerm $ Terms.lambda v body
 
@@ -151,7 +157,7 @@ map = TTerm . Terms.map . M.fromList . fmap fromTTerm . M.toList
   where
     fromTTerm (TTerm k, TTerm v) = (k, v)
 
-match :: Name -> Maybe (TTerm b) -> [Field] -> TTerm (u -> b)
+match :: Name -> Maybe (TTerm b) -> [Field] -> TTerm (a -> b)
 match name dflt fields = TTerm $ Terms.match name (unTTerm <$> dflt) fields
 
 matchData :: Name -> Maybe (TTerm b) -> [(Name, TTerm (x -> b))] -> TTerm (a -> b)
@@ -181,6 +187,9 @@ nothing = TTerm Terms.nothing
 
 opt :: Maybe (TTerm a) -> TTerm (Maybe a)
 opt mc = TTerm $ Terms.optional (unTTerm <$> mc)
+
+optCases :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
+optCases m n j = matchOpt n j @@ m
 
 pair :: (TTerm a) -> (TTerm b) -> TTerm (a, b)
 pair (TTerm l) (TTerm r) = TTerm $ Terms.pair l r
