@@ -4,6 +4,12 @@ import Hydra.Kernel
 import Hydra.Dsl.Base as Base
 import qualified Hydra.Dsl.Terms as Terms
 
+-- For helpers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists as Lists
+import qualified Hydra.Dsl.Lib.Logic as Logic
+import Hydra.Sources.Libraries
+
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
@@ -363,6 +369,12 @@ termSet = variant _Term _Term_set
 termSum :: TTerm Sum -> TTerm Term
 termSum = variant _Term _Term_sum
 
+termTypeAbstraction :: TTerm TypeAbstraction -> TTerm Term
+termTypeAbstraction = variant _Term _Term_typeAbstraction
+
+termTypeApplication :: TTerm TypedTerm -> TTerm Term
+termTypeApplication = variant _Term _Term_typeApplication
+
 termUnion :: TTerm Injection -> TTerm Term
 termUnion = variant _Term _Term_union
 
@@ -383,11 +395,19 @@ tupleProjectionArity = Base.project _TupleProjection _TupleProjection_arity
 tupleProjectionIndex :: TTerm (TupleProjection -> Int)
 tupleProjectionIndex = Base.project _TupleProjection _TupleProjection_index
 
+typeAbstraction :: TTerm Name -> TTerm Term -> TTerm TypeAbstraction
+typeAbstraction parameter body = Base.record _TypeAbstraction [
+  _TypeAbstraction_parameter>>: parameter,
+  _TypeAbstraction_body>>: body]
+
 typeAbstractionParameter :: TTerm (TypeAbstraction -> Name)
 typeAbstractionParameter = Base.project _TypeAbstraction _TypeAbstraction_parameter
 
-typeAbstractionBody :: TTerm (TypeAbstraction -> Type)
+typeAbstractionBody :: TTerm (TypeAbstraction -> Term)
 typeAbstractionBody = Base.project _TypeAbstraction _TypeAbstraction_body
+
+typeAnnotated :: TTerm AnnotatedType -> TTerm Type
+typeAnnotated = variant _Type _Type_annotated
 
 typeApplication :: TTerm ApplicationType -> TTerm Type
 typeApplication = variant _Type _Type_application
@@ -442,8 +462,16 @@ typeVariable = variant _Type _Type_variable
 typeWrap :: TTerm WrappedType -> TTerm Type
 typeWrap = variant _Type _Type_wrap
 
+typedTerm :: TTerm Term -> TTerm Type -> TTerm TypedTerm
+typedTerm term type_ = Base.record _TypedTerm [
+  _TypedTerm_term>>: term,
+  _TypedTerm_type>>: type_]
+
 typedTermTerm :: TTerm (TypedTerm -> Term)
 typedTermTerm = Base.project _TypedTerm _TypedTerm_term
+
+typedTermType :: TTerm (TypedTerm -> Type)
+typedTermType = Base.project _TypedTerm _TypedTerm_type
 
 unName :: TTerm (Name -> String)
 unName = unwrap _Name
@@ -472,3 +500,30 @@ wrappedTypeTypeName = Base.project _WrappedType _WrappedType_typeName
 
 wrappedTypeObject :: TTerm (WrappedType -> Type)
 wrappedTypeObject = Base.project _WrappedType _WrappedType_object
+
+----------------------------------------
+-- Non-schema helpers
+
+equalName :: TTerm (Name -> Name -> Bool)
+equalName = lambdas ["left", "right"] $ primitive _equality_equalString
+  @@ (Hydra.Dsl.Core.unName @@ var "left")
+  @@ (Hydra.Dsl.Core.unName @@ var "right")
+
+equalName_ :: TTerm Name -> TTerm Name -> TTerm Bool
+equalName_ left right = Equality.equalString (Hydra.Dsl.Core.unName @@ left) (Hydra.Dsl.Core.unName @@ right)
+
+equalNameList :: TTerm ([Name] -> [Name] -> Bool)
+equalNameList = lambdas ["lefts", "rights"] $ Logic.and
+  (Equality.equalInt32 (Lists.length (var "lefts")) (Lists.length (var "rights")))
+  (Logic.ands $ Lists.zipWith equalName (var "lefts") (var "rights"))
+
+equalNameList_ :: TTerm [Name] -> TTerm [Name] -> TTerm Bool
+equalNameList_ lefts rights = Logic.and
+  (Equality.equalInt32 (Lists.length lefts) (Lists.length rights))
+  (Logic.ands $ Lists.zipWith equalName lefts rights)
+
+fieldWithTerm :: TTerm Term -> TTerm Field -> TTerm Field
+fieldWithTerm t ft = Hydra.Dsl.Core.field (Hydra.Dsl.Core.fieldName @@ ft) t
+
+fieldTypeWithType :: TTerm FieldType -> TTerm Type -> TTerm FieldType
+fieldTypeWithType ft t = Hydra.Dsl.Core.fieldType (Hydra.Dsl.Core.fieldTypeName @@ ft) t
