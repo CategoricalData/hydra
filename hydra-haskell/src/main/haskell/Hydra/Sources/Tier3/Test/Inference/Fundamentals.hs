@@ -232,7 +232,15 @@ testGroupForLet = supergroup "Let" [
           "f">: lambda "b" $ lambda "x" $ primitive _logic_ifElse @@ var "b" @@ list [list [var "x"]] @@ (var "g" @@ var "b" @@ var "x"),
           "g">: lambda "b" $ lambda "x" $ primitive _logic_ifElse @@ var "b" @@ (var "f" @@ var "b" @@ var "x") @@ list [list [var "x"]]]
           $ var "f")
-        ["t0"] (T.functionN [T.boolean, T.var "t0", T.list $ T.list $ T.var "t0"])]]
+        ["t0"] (T.functionN [T.boolean, T.var "t0", T.list $ T.list $ T.var "t0"]),
+
+      -- The recursive patterns of hydra.rewriting.foldOverType is similar to this example.
+      expectPoly 2 []
+        (lets [
+          "foo">: var "bar" @@ (lambda "x" false) @@ false,
+          "bar">: lambda "f" $ lambda "b0" $ var "f" @@ (var "bar" @@ var "f" @@ var "b0")] $
+          pair (var "foo") (var "bar"))
+        ["t0"] (T.pair T.boolean (T.functionN [T.function (T.var "t0") (T.var "t0"), T.var "t0", T.var "t0"]))]]
 
   where
     s = primitive _math_neg
