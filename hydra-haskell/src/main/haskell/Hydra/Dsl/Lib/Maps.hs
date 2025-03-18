@@ -14,6 +14,12 @@ bimap = primitive3 _maps_bimap
 empty :: TTerm (Map k v)
 empty = primitive _maps_empty
 
+filter :: TTerm (v -> Bool) -> TTerm (Map k v) -> TTerm (Map k v)
+filter = primitive2 _maps_filter
+
+filterWithKey :: TTerm (k -> v -> Bool) -> TTerm (Map k v) -> TTerm (Map k v)
+filterWithKey = primitive2 _maps_filterWithKey
+
 fromList :: TTerm [(k, v)] -> TTerm (Map k v)
 fromList = primitive1 _maps_fromList
 
@@ -46,6 +52,9 @@ size = primitive1 _maps_size
 
 toList :: TTerm (Map k v) -> TTerm [(k, v)]
 toList = primitive1 _maps_toList
+
+union :: TTerm (Map k v) -> TTerm (Map k v) -> TTerm (Map k v)
+union = primitive2 _maps_union
 
 values :: TTerm (Map k v) -> TTerm [v]
 values = primitive1 _maps_values
