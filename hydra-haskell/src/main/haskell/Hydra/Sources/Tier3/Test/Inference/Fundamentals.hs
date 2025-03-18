@@ -226,7 +226,7 @@ testGroupForLet = supergroup "Let" [
           $ pair (var "f") (var "g"))
         (T.pair T.int32 T.string)],
 
-    subgroup "Polymorphic recursion" [
+    subgroup "Recursion involving polymorphic functions (note: not 'polymorphic recursion' per se)" [
       expectPoly 1 []
         (lets [
           "f">: lambda "b" $ lambda "x" $ primitive _logic_ifElse @@ var "b" @@ list [list [var "x"]] @@ (var "g" @@ var "b" @@ var "x"),
@@ -237,11 +237,32 @@ testGroupForLet = supergroup "Let" [
       -- The recursive patterns of hydra.rewriting.foldOverType is similar to this example.
       expectPoly 2 []
         (lets [
-          "foo">: var "bar" @@ (lambda "x" false) @@ false,
-          "bar">: lambda "f" $ lambda "b0" $ var "f" @@ (var "bar" @@ var "f" @@ var "b0")] $
-          pair (var "foo") (var "bar"))
-        ["t0"] (T.pair T.boolean (T.functionN [T.function (T.var "t0") (T.var "t0"), T.var "t0", T.var "t0"]))]]
+          "inst">: var "rec" @@ (lambda "x" false) @@ false,
+          "rec">: lambda "f" $ lambda "b0" $ var "f" @@ (var "rec" @@ var "f" @@ var "b0")] $
+          pair (var "inst") (var "rec"))
+        ["t0"] (T.pair T.boolean (T.functionN [T.function (T.var "t0") (T.var "t0"), T.var "t0", T.var "t0"])),
+      expectPoly 3 []
+        (lets [
+          "inst">: var "rec" @@ (lambda "x" false),
+          "rec">: lambda "f" $ var "f" @@ (var "rec" @@ var "f")] $
+          pair (var "inst") (var "rec"))
+        ["t0"] (T.pair T.boolean (T.functionN [T.function (T.var "t0") (T.var "t0"), T.var "t0"])),
+      expectPoly 4 []
+        (lets [
+          "inst1">: var "rec" @@ (lambda "x" false),
+          "inst2">: var "rec" @@ (lambda "x" $ int32 42),
+          "rec">: lambda "f" $ var "f" @@ (var "rec" @@ var "f")] $
+          tuple [var "inst1", var "inst2", var "rec"])
+        ["t0"] (T.product [T.boolean, T.int32, T.functionN [T.function (T.var "t0") (T.var "t0"), T.var "t0"]]),
 
+      -- This is another example where Hydra's expected behavior diverges from GHC.
+      -- Try: :t let foo = bar; bar = foo in (foo, bar)
+      expectPoly 5 []
+        (lets [
+          "foo">: var "bar",
+          "bar">: var "foo"] $
+          pair (var "foo") (var "bar"))
+        ["t0"] (T.pair (T.var "t0") (T.var "t0"))]]
   where
     s = primitive _math_neg
     p = primitive _math_neg
