@@ -6,6 +6,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Strip as Strip
@@ -52,6 +53,127 @@ isLambda term = ((\x -> case x of
     _ -> False) v1)
   Core.TermLet v1 -> (isLambda (Core.letEnvironment v1))
   _ -> False) (Strip.fullyStripTerm term))
+
+rewrite :: ((t1 -> t0) -> (t0 -> t1) -> t1)
+rewrite fsub f =  
+  let recurse = (f (fsub recurse))
+  in recurse
+
+rewriteTerm :: (((Core.Term -> Core.Term) -> Core.Term -> Core.Term) -> Core.Term -> Core.Term)
+rewriteTerm f =  
+  let fsub = (\recurse -> \term ->  
+          let forElimination = (\elm -> (\x -> case x of
+                  Core.EliminationList v1 -> (Core.EliminationList (recurse v1))
+                  Core.EliminationOptional v1 -> (Core.EliminationOptional (Core.OptionalCases {
+                    Core.optionalCasesNothing = (recurse (Core.optionalCasesNothing v1)),
+                    Core.optionalCasesJust = (recurse (Core.optionalCasesJust v1))}))
+                  Core.EliminationProduct v1 -> (Core.EliminationProduct v1)
+                  Core.EliminationRecord v1 -> (Core.EliminationRecord v1)
+                  Core.EliminationUnion v1 -> (Core.EliminationUnion (Core.CaseStatement {
+                    Core.caseStatementTypeName = (Core.caseStatementTypeName v1),
+                    Core.caseStatementDefault = (Optionals.map recurse (Core.caseStatementDefault v1)),
+                    Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v1))}))
+                  Core.EliminationWrap v1 -> (Core.EliminationWrap v1)) elm) 
+              forField = (\f -> Core.Field {
+                      Core.fieldName = (Core.fieldName f),
+                      Core.fieldTerm = (recurse (Core.fieldTerm f))})
+              forFunction = (\fun -> (\x -> case x of
+                      Core.FunctionElimination v1 -> (Core.FunctionElimination (forElimination v1))
+                      Core.FunctionLambda v1 -> (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.lambdaParameter v1),
+                        Core.lambdaDomain = (Core.lambdaDomain v1),
+                        Core.lambdaBody = (recurse (Core.lambdaBody v1))}))
+                      Core.FunctionPrimitive v1 -> (Core.FunctionPrimitive v1)) fun)
+              forLet = (\lt ->  
+                      let mapBinding = (\b -> Core.LetBinding {
+                              Core.letBindingName = (Core.letBindingName b),
+                              Core.letBindingTerm = (recurse (Core.letBindingTerm b)),
+                              Core.letBindingType = (Core.letBindingType b)})
+                      in Core.Let {
+                        Core.letBindings = (Lists.map mapBinding (Core.letBindings lt)),
+                        Core.letEnvironment = (recurse (Core.letEnvironment lt))})
+              forMap = (\m ->  
+                      let forPair = (\p -> (recurse (fst p), (recurse (snd p))))
+                      in (Maps.fromList (Lists.map forPair (Maps.toList m))))
+          in ((\x -> case x of
+            Core.TermAnnotated v1 -> (Core.TermAnnotated (Core.AnnotatedTerm {
+              Core.annotatedTermSubject = (recurse (Core.annotatedTermSubject v1)),
+              Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))
+            Core.TermApplication v1 -> (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (recurse (Core.applicationFunction v1)),
+              Core.applicationArgument = (recurse (Core.applicationArgument v1))}))
+            Core.TermFunction v1 -> (Core.TermFunction (forFunction v1))
+            Core.TermLet v1 -> (Core.TermLet (forLet v1))
+            Core.TermList v1 -> (Core.TermList (Lists.map recurse v1))
+            Core.TermLiteral v1 -> (Core.TermLiteral v1)
+            Core.TermMap v1 -> (Core.TermMap (forMap v1))
+            Core.TermWrap v1 -> (Core.TermWrap (Core.WrappedTerm {
+              Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
+              Core.wrappedTermObject = (recurse (Core.wrappedTermObject v1))}))
+            Core.TermOptional v1 -> (Core.TermOptional (Optionals.map recurse v1))
+            Core.TermProduct v1 -> (Core.TermProduct (Lists.map recurse v1))
+            Core.TermRecord v1 -> (Core.TermRecord (Core.Record {
+              Core.recordTypeName = (Core.recordTypeName v1),
+              Core.recordFields = (Lists.map forField (Core.recordFields v1))}))
+            Core.TermSet v1 -> (Core.TermSet (Sets.fromList (Lists.map recurse (Sets.toList v1))))
+            Core.TermSum v1 -> (Core.TermSum (Core.Sum {
+              Core.sumIndex = (Core.sumIndex v1),
+              Core.sumSize = (Core.sumSize v1),
+              Core.sumTerm = (recurse (Core.sumTerm v1))}))
+            Core.TermTypeAbstraction v1 -> (Core.TermTypeAbstraction (Core.TypeAbstraction {
+              Core.typeAbstractionParameter = (Core.typeAbstractionParameter v1),
+              Core.typeAbstractionBody = (recurse (Core.typeAbstractionBody v1))}))
+            Core.TermTypeApplication v1 -> (Core.TermTypeApplication (Core.TypedTerm {
+              Core.typedTermTerm = (recurse (Core.typedTermTerm v1)),
+              Core.typedTermType = (Core.typedTermType v1)}))
+            Core.TermTyped v1 -> (Core.TermTypeApplication (Core.TypedTerm {
+              Core.typedTermTerm = (recurse (Core.typedTermTerm v1)),
+              Core.typedTermType = (Core.typedTermType v1)}))
+            Core.TermUnion v1 -> (Core.TermUnion (Core.Injection {
+              Core.injectionTypeName = (Core.injectionTypeName v1),
+              Core.injectionField = (forField (Core.injectionField v1))}))
+            Core.TermVariable v1 -> (Core.TermVariable v1)) term))
+  in (rewrite fsub f)
+
+rewriteType :: (((Core.Type -> Core.Type) -> Core.Type -> Core.Type) -> Core.Type -> Core.Type)
+rewriteType f =  
+  let fsub = (\recurse -> \typ ->  
+          let forField = (\f -> Core.FieldType {
+                  Core.fieldTypeName = (Core.fieldTypeName f),
+                  Core.fieldTypeType = (recurse (Core.fieldTypeType f))})
+          in ((\x -> case x of
+            Core.TypeAnnotated v1 -> (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeSubject = (recurse (Core.annotatedTypeSubject v1)),
+              Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))
+            Core.TypeApplication v1 -> (Core.TypeApplication (Core.ApplicationType {
+              Core.applicationTypeFunction = (recurse (Core.applicationTypeFunction v1)),
+              Core.applicationTypeArgument = (recurse (Core.applicationTypeArgument v1))}))
+            Core.TypeFunction v1 -> (Core.TypeFunction (Core.FunctionType {
+              Core.functionTypeDomain = (recurse (Core.functionTypeDomain v1)),
+              Core.functionTypeCodomain = (recurse (Core.functionTypeCodomain v1))}))
+            Core.TypeLambda v1 -> (Core.TypeLambda (Core.LambdaType {
+              Core.lambdaTypeParameter = (Core.lambdaTypeParameter v1),
+              Core.lambdaTypeBody = (recurse (Core.lambdaTypeBody v1))}))
+            Core.TypeList v1 -> (Core.TypeList (recurse v1))
+            Core.TypeLiteral v1 -> (Core.TypeLiteral v1)
+            Core.TypeMap v1 -> (Core.TypeMap (Core.MapType {
+              Core.mapTypeKeys = (recurse (Core.mapTypeKeys v1)),
+              Core.mapTypeValues = (recurse (Core.mapTypeValues v1))}))
+            Core.TypeOptional v1 -> (Core.TypeOptional (recurse v1))
+            Core.TypeProduct v1 -> (Core.TypeProduct (Lists.map recurse v1))
+            Core.TypeRecord v1 -> (Core.TypeRecord (Core.RowType {
+              Core.rowTypeTypeName = (Core.rowTypeTypeName v1),
+              Core.rowTypeFields = (Lists.map forField (Core.rowTypeFields v1))}))
+            Core.TypeSet v1 -> (Core.TypeSet (recurse v1))
+            Core.TypeSum v1 -> (Core.TypeSum (Lists.map recurse v1))
+            Core.TypeUnion v1 -> (Core.TypeUnion (Core.RowType {
+              Core.rowTypeTypeName = (Core.rowTypeTypeName v1),
+              Core.rowTypeFields = (Lists.map forField (Core.rowTypeFields v1))}))
+            Core.TypeVariable v1 -> (Core.TypeVariable v1)
+            Core.TypeWrap v1 -> (Core.TypeWrap (Core.WrappedType {
+              Core.wrappedTypeTypeName = (Core.wrappedTypeTypeName v1),
+              Core.wrappedTypeObject = (recurse (Core.wrappedTypeObject v1))}))) typ))
+  in (rewrite fsub f)
 
 -- | Find the children of a given term
 subterms :: (Core.Term -> [Core.Term])

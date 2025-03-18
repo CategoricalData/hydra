@@ -220,47 +220,6 @@ replaceFreeName v rep = rewriteType mapExpr
       TypeVariable v' -> if v == v' then rep else t
       _ -> recurse t
 
-rewrite :: ((x -> y) -> x -> y) -> ((x -> y) -> x -> y) -> x -> y
-rewrite fsub f = recurse
-  where
-    recurse = f (fsub recurse)
-
-rewriteTerm :: ((Term -> Term) -> Term -> Term) -> Term -> Term
-rewriteTerm f = rewrite fsub f
-  where
-    fsub recurse term = case term of
-        TermAnnotated (AnnotatedTerm ex ann) -> TermAnnotated $ AnnotatedTerm (recurse ex) ann
-        TermApplication (Application lhs rhs) -> TermApplication $ Application (recurse lhs) (recurse rhs)
-        TermFunction fun -> TermFunction $ case fun of
-          FunctionElimination e -> FunctionElimination $ case e of
-            EliminationList fld -> EliminationList $ recurse fld
-            EliminationOptional (OptionalCases nothing just) -> EliminationOptional
-              (OptionalCases (recurse nothing) (recurse just))
-            EliminationProduct tp -> EliminationProduct tp
-            EliminationRecord p -> EliminationRecord p
-            EliminationUnion (CaseStatement n def cases) -> EliminationUnion $ CaseStatement n (recurse <$> def) (forField <$> cases)
-            EliminationWrap name -> EliminationWrap name
-          FunctionLambda (Lambda v d body) -> FunctionLambda $ Lambda v d $ recurse body
-          FunctionPrimitive name -> FunctionPrimitive name
-        TermLet (Let bindings env) -> TermLet $ Let (mapBinding <$> bindings) (recurse env)
-          where
-            mapBinding (LetBinding k v t) = LetBinding k (recurse v) t
-        TermList els -> TermList $ recurse <$> els
-        TermLiteral v -> TermLiteral v
-        TermMap m -> TermMap $ M.fromList $ (\(k, v) -> (recurse k, recurse v)) <$> M.toList m
-        TermWrap (WrappedTerm name t) -> TermWrap (WrappedTerm name $ recurse t)
-        TermOptional m -> TermOptional $ recurse <$> m
-        TermProduct tuple -> TermProduct (recurse <$> tuple)
-        TermRecord (Record n fields) -> TermRecord $ Record n $ forField <$> fields
-        TermSet s -> TermSet $ S.fromList $ recurse <$> S.toList s
-        TermSum (Sum i s trm) -> TermSum $ Sum i s $ recurse trm
-        TermTypeAbstraction (TypeAbstraction v t) -> TermTypeAbstraction $ TypeAbstraction v $ recurse t
-        TermTypeApplication (TypedTerm term1 type2) -> TermTypeApplication $ TypedTerm (recurse term1) type2
-        TermTyped (TypedTerm term1 type2) -> TermTyped $ TypedTerm (recurse term1) type2
-        TermUnion (Injection n field) -> TermUnion $ Injection n $ forField field
-        TermVariable v -> TermVariable v
-      where
-        forField f = f {fieldTerm = recurse (fieldTerm f)}
 
 rewriteTermM ::
   ((Term -> Flow s Term) -> Term -> (Flow s Term)) -> Term -> Flow s Term
@@ -326,28 +285,6 @@ rewriteTermMetaM mapping = rewriteTermM rewrite
       case r of
         TermAnnotated (AnnotatedTerm term1 ann) -> TermAnnotated <$> (AnnotatedTerm <$> pure term1 <*> mapping ann)
         t -> pure t
-
-rewriteType :: ((Type -> Type) -> Type -> Type) -> Type -> Type
-rewriteType f = rewrite fsub f
-  where
-    fsub recurse typ = case typ of
-        TypeAnnotated (AnnotatedType t ann) -> TypeAnnotated $ AnnotatedType (recurse t) ann
-        TypeApplication (ApplicationType lhs rhs) -> TypeApplication $ ApplicationType (recurse lhs) (recurse rhs)
-        TypeFunction (FunctionType dom cod) -> TypeFunction (FunctionType (recurse dom) (recurse cod))
-        TypeLambda (LambdaType v b) -> TypeLambda (LambdaType v $ recurse b)
-        TypeList t -> TypeList $ recurse t
-        TypeLiteral lt -> TypeLiteral lt
-        TypeMap (MapType kt vt) -> TypeMap (MapType (recurse kt) (recurse vt))
-        TypeOptional t -> TypeOptional $ recurse t
-        TypeProduct types -> TypeProduct (recurse <$> types)
-        TypeRecord (RowType name fields) -> TypeRecord $ RowType name (forField <$> fields)
-        TypeSet t -> TypeSet $ recurse t
-        TypeSum types -> TypeSum (recurse <$> types)
-        TypeUnion (RowType name fields) -> TypeUnion $ RowType name (forField <$> fields)
-        TypeVariable v -> TypeVariable v
-        TypeWrap (WrappedType name t) -> TypeWrap $ WrappedType name $ recurse t
-      where
-        forField f = f {fieldTypeType = recurse (fieldTypeType f)}
 
 rewriteTypeM ::
   ((Type -> Flow s Type) -> Type -> (Flow s Type)) ->
