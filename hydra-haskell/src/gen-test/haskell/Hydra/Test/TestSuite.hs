@@ -2202,7 +2202,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForAlgorithmWInference"]}]},
             Testing.TestGroup {
-              Testing.testGroupName = "Polymorphic recursion",
+              Testing.testGroupName = "Recursion involving polymorphic functions (note: not 'polymorphic recursion' per se)",
               Testing.testGroupDescription = Nothing,
               Testing.testGroupSubgroups = [],
               Testing.testGroupCases = [
@@ -2272,10 +2272,10 @@ inferenceTests = Testing.TestGroup {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
                         Core.LetBinding {
-                          Core.letBindingName = (Core.Name "foo"),
+                          Core.letBindingName = (Core.Name "inst"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermVariable (Core.Name "bar")),
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
                               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "x"),
                                 Core.lambdaDomain = Nothing,
@@ -2283,7 +2283,7 @@ inferenceTests = Testing.TestGroup {
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))})),
                           Core.letBindingType = Nothing},
                         Core.LetBinding {
-                          Core.letBindingName = (Core.Name "bar"),
+                          Core.letBindingName = (Core.Name "rec"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "f"),
                             Core.lambdaDomain = Nothing,
@@ -2294,13 +2294,13 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                    Core.applicationFunction = (Core.TermVariable (Core.Name "bar")),
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "f"))})),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "b0"))}))}))})))}))),
                           Core.letBindingType = Nothing}],
                       Core.letEnvironment = (Core.TermProduct [
-                        Core.TermVariable (Core.Name "foo"),
-                        (Core.TermVariable (Core.Name "bar"))])})),
+                        Core.TermVariable (Core.Name "inst"),
+                        (Core.TermVariable (Core.Name "rec"))])})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
@@ -2313,6 +2313,121 @@ inferenceTests = Testing.TestGroup {
                           Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}))])}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "inst"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
+                            Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "x"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))})))})),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "rec"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "f"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                              Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermProduct [
+                        Core.TermVariable (Core.Name "inst"),
+                        (Core.TermVariable (Core.Name "rec"))])})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeProduct [
+                        Core.TypeLiteral Core.LiteralTypeBoolean,
+                        (Core.TypeFunction (Core.FunctionType {
+                          Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
+                            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
+                          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))])}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "inst1"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
+                            Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "x"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))})))})),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "inst2"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
+                            Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "x"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "rec"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "f"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                              Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermProduct [
+                        Core.TermVariable (Core.Name "inst1"),
+                        Core.TermVariable (Core.Name "inst2"),
+                        (Core.TermVariable (Core.Name "rec"))])})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeProduct [
+                        Core.TypeLiteral Core.LiteralTypeBoolean,
+                        Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
+                        (Core.TypeFunction (Core.FunctionType {
+                          Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
+                            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
+                          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))])}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#5",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "foo"),
+                          Core.letBindingTerm = (Core.TermVariable (Core.Name "bar")),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "bar"),
+                          Core.letBindingTerm = (Core.TermVariable (Core.Name "foo")),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermProduct [
+                        Core.TermVariable (Core.Name "foo"),
+                        (Core.TermVariable (Core.Name "bar"))])})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeProduct [
+                        Core.TypeVariable (Core.Name "t0"),
+                        (Core.TypeVariable (Core.Name "t0"))])}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]}],
           Testing.testGroupCases = []},
