@@ -27,16 +27,30 @@ fundamentalsTests = supergroup "Fundamentals" [
   testGroupForPrimitives]
 
 testGroupForLambdas :: TTerm TestGroup
-testGroupForLambdas = subgroup "Lambdas" [
-    expectPoly 1 []
-      (lambda "x" $ var "x")
-      ["t0"] (T.function (T.var "t0") (T.var "t0")),
-    expectPoly 2 []
-      (lambda "x" $ int16 137)
-      ["t0"] (T.function (T.var "t0") T.int16)]
+testGroupForLambdas = supergroup "Lambdas" [
+    subgroup "Simple lambdas" [
+      expectPoly 1 []
+        (lambda "x" $ var "x")
+        ["t0"] (T.function (T.var "t0") (T.var "t0")),
+      expectPoly 2 []
+        (lambda "x" $ int16 137)
+        ["t0"] (T.function (T.var "t0") T.int16)],
+
+    subgroup "Nested lambdas" [
+      expectMono 1 []
+        (lambda "x" $ lambda "y" $ primitive _math_add @@ var "x" @@ var "y")
+        (T.functionN [T.int32, T.int32, T.int32]),
+      expectMono 2 []
+        (lambda "x" $ list [lambda "y" $ primitive _math_add @@ var "x" @@ var "y"])
+        (T.function T.int32 $ T.list $ T.function T.int32 T.int32)],
+
+    subgroup "Nested lambdas with shadowing" [
+      expectPoly 1 []
+        (lambda "x" $ lambda "x" $ primitive _math_add @@ var "x" @@ int32 42)
+        ["t0"] (T.function (T.var "t0") (T.function T.int32 T.int32))]]
 
 testGroupForLet :: TTerm TestGroup
-testGroupForLet = supergroup "Let" [
+testGroupForLet = supergroup "Let terms" [
 
     subgroup "Simple" [
       expectPoly 1  []
@@ -64,7 +78,7 @@ testGroupForLet = supergroup "Let" [
         (T.list T.int32)],
 
     subgroup "Nested let" [
-      expectMono 1 [tag_disabledForAlgorithmWInference]
+      expectMono 1 []
         (lets [
           "foo">: int32 42]
           $ lets [
@@ -78,7 +92,7 @@ testGroupForLet = supergroup "Let" [
             "bar">: pair (var "foo") (int32 137)]
             $ var "bar")
         (T.pair T.int32 T.int32),
-      expectPoly 3 [tag_disabledForAlgorithmWInference]
+      expectPoly 3 []
         (lets [
           "sng">: lambda "x" $ list [var "x"]]
           $ lets [
@@ -87,6 +101,23 @@ testGroupForLet = supergroup "Let" [
             "quux">: lambda "x" $ var "sng" @@ var "x"]
             $ pair (var "foo") (pair (var "bar") (var "quux" @@ list [])))
         ["t0"] (T.pair (T.list T.int32) (T.pair (T.list T.string) (T.list $ T.list $ T.var "t0")))],
+
+    subgroup "Nested let with shadowing" [
+      expectMono 1 []
+        (lets [
+          "foo">: string "foo"]
+          $ lets [
+            "foo">: int32 137]
+            $ var "foo")
+        T.int32,
+      expectMono 2 []
+        (lets [
+          "foo">: string "foo",
+          "bar">: var "foo"]
+          $ lets [
+            "foo">: int32 137]
+            $ pair (var "bar") (var "foo"))
+        (T.pair T.string T.int32)],
 
     subgroup "Let-polymorphism" [
       expectPoly 1 []
@@ -123,14 +154,14 @@ testGroupForLet = supergroup "Let" [
           "g">: lambda "x" $ lambda "y" $ var "f" @@ int32 42 @@ var "y"]
           $ var "f")
         ["t0"] (T.list $ T.pair T.int32 (T.var "t0")),
-      expectMono 7 [tag_disabledForAlgorithmWInference]
+      expectMono 7 [tag_disabledForMinimalInference]
         (lets [
           "id">: lambda "x" $ var "x",
           "fortytwo">: var "id" @@ int32 42,
           "foo">: var "id" @@ string "foo"]
           $ pair (var "fortytwo") (var "foo"))
         (T.pair T.int32 T.string),
-      expectMono 8 [tag_disabledForAlgorithmWInference]
+      expectMono 8 [tag_disabledForMinimalInference]
         (lets [
           "fortytwo">: var "id" @@ int32 42,
           "id">: lambda "x" $ var "x",
@@ -144,25 +175,13 @@ testGroupForLet = supergroup "Let" [
           "f">: lambda "x" $ lambda "y" (var "f" @@ int32 0 @@ var "x")]
           $ var "f")
         ["t0"] (T.function T.int32 (T.function T.int32 (T.var "t0"))),
-
-      -- Note two version of this test. @wisnesky's Algorithm W implementation finds the same type as GHC,
-      -- while Hydra's new inference implementation finds a less general type.
-      -- The difference is unimportant in this case, if we are uninterested in the types of divergent terms.
-      -- Specifically, GHC finds (a, b), whereas we find (a, a)
       -- Try: :t (let (f, g) = (g, f) in (f, g))
-      expectPoly 2 [tag_disabledForDefaultInference]
+      expectPoly 2 []
         (lets [
           "x">: var "y",
           "y">: var "x"] $
           pair (var "x") (var "y"))
         ["t0", "t1"] (T.pair (T.var "t0") (T.var "t1")),
-      expectPoly 2 [tag_disabledForAlgorithmWInference]
-        (lets [
-          "x">: var "y",
-          "y">: var "x"] $
-          pair (var "x") (var "y"))
-        ["t0"] (T.pair (T.var "t0") (T.var "t0")),
-
       expectPoly 3 [tag_disabled]
         (lets [
           "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
@@ -177,7 +196,7 @@ testGroupForLet = supergroup "Let" [
           "plus">: lambda "x" $ lambda "y" $ s @@ (var "plus" @@ (p @@ var "x") @@ var "y")]
           $ var "plus" @@ (s @@ (s @@ int32 0)) @@ (s @@ int32 0))
         T.int32,
-      expectMono 5 [tag_disabledForAlgorithmWInference]
+      expectMono 5 []
         -- letrecs id = (\z. z)
         --     f = (\p0. (pair (id p0) (id p0)))
         --     in 0
@@ -197,28 +216,29 @@ testGroupForLet = supergroup "Let" [
            "x">: lambda "y" $ var "y",
            "z">: var "x",
            "w">: var "z"] $
-           tuple [var "x", var "w", var "z"])
+           pair (var "x") (pair (var "w") (var "z")))
         ["t0", "t1", "t2"] (T.product [
           T.function (T.var "t0") (T.var "t0"),
+          T.product [
           T.function (T.var "t1") (T.var "t1"),
-          T.function (T.var "t2") (T.var "t2")])],
+          T.function (T.var "t2") (T.var "t2")]])],
 
     subgroup "Recursive and mutually recursive let with polymorphism" [
-      expectMono 1 [tag_disabledForAlgorithmWInference]
+      expectMono 1 []
         (lets [
           "id">: lambda "x" $ var "x",
           "f">: primitive _strings_length @@ var "g",
           "g">: primitive _strings_fromList @@ list [var "f"]]
           $ pair (var "f") (var "g"))
         (T.pair T.int32 T.string),
-      expectMono 2 [tag_disabledForAlgorithmWInference]
+      expectMono 2 [tag_disabledForMinimalInference]
         (lets [
           "id">: lambda "x" $ var "x",
           "f">: var "id" @@ (primitive _strings_length @@ var "g"),
           "g">: var "id" @@ (primitive _strings_fromList @@ list [var "f"])]
           $ pair (var "f") (var "g"))
         (T.pair T.int32 T.string),
-      expectMono 3 [tag_disabledForAlgorithmWInference]
+      expectMono 3 [tag_disabledForMinimalInference]
         (lets [
           "f">: var "id" @@ (primitive _strings_length @@ var "g"),
           "id">: lambda "x" $ var "x",
@@ -226,7 +246,7 @@ testGroupForLet = supergroup "Let" [
           $ pair (var "f") (var "g"))
         (T.pair T.int32 T.string)],
 
-    subgroup "Recursion involving polymorphic functions (note: not 'polymorphic recursion' per se)" [
+    subgroup "Recursion involving polymorphic functions" [ -- Note: not 'polymorphic recursion' per se
       expectPoly 1 []
         (lets [
           "f">: lambda "b" $ lambda "x" $ primitive _logic_ifElse @@ var "b" @@ list [list [var "x"]] @@ (var "g" @@ var "b" @@ var "x"),
@@ -234,20 +254,20 @@ testGroupForLet = supergroup "Let" [
           $ var "f")
         ["t0"] (T.functionN [T.boolean, T.var "t0", T.list $ T.list $ T.var "t0"]),
 
-      -- The recursive patterns of hydra.rewriting.foldOverType is similar to this example.
-      expectPoly 2 []
+      -- The recursive pattern of hydra.rewriting.foldOverType is similar to this example.
+      expectPoly 2 [tag_disabledForMinimalInference]
         (lets [
           "inst">: var "rec" @@ (lambda "x" false) @@ false,
           "rec">: lambda "f" $ lambda "b0" $ var "f" @@ (var "rec" @@ var "f" @@ var "b0")] $
           pair (var "inst") (var "rec"))
-        ["t0"] (T.pair T.boolean (T.functionN [T.function (T.var "t0") (T.var "t0"), T.var "t0", T.var "t0"])),
-      expectPoly 3 []
+        ["t0", "t1"] (T.pair T.boolean (T.functionN [T.function (T.var "t1") (T.var "t1"), T.var "t0", T.var "t1"])),
+      expectPoly 3 [tag_disabledForMinimalInference] -- Try with GHC:    :t let inst = rec (\x -> False); rec = \f -> f (rec f) in (inst, rec)
         (lets [
           "inst">: var "rec" @@ (lambda "x" false),
           "rec">: lambda "f" $ var "f" @@ (var "rec" @@ var "f")] $
           pair (var "inst") (var "rec"))
         ["t0"] (T.pair T.boolean (T.functionN [T.function (T.var "t0") (T.var "t0"), T.var "t0"])),
-      expectPoly 4 []
+      expectPoly 4 [tag_disabledForMinimalInference]
         (lets [
           "inst1">: var "rec" @@ (lambda "x" false),
           "inst2">: var "rec" @@ (lambda "x" $ int32 42),
@@ -255,14 +275,13 @@ testGroupForLet = supergroup "Let" [
           tuple [var "inst1", var "inst2", var "rec"])
         ["t0"] (T.product [T.boolean, T.int32, T.functionN [T.function (T.var "t0") (T.var "t0"), T.var "t0"]]),
 
-      -- This is another example where Hydra's expected behavior diverges from GHC.
       -- Try: :t let foo = bar; bar = foo in (foo, bar)
-      expectPoly 5 []
+      expectPoly 5 [tag_disabledForMinimalInference]
         (lets [
           "foo">: var "bar",
           "bar">: var "foo"] $
           pair (var "foo") (var "bar"))
-        ["t0"] (T.pair (T.var "t0") (T.var "t0"))]]
+        ["t0", "t1"] (T.pair (T.var "t0") (T.var "t1"))]]
   where
     s = primitive _math_neg
     p = primitive _math_neg
@@ -326,10 +345,10 @@ testGroupForPolymorphism = supergroup "Polymorphism" [
       expectPoly 1 []
         (list [])
         ["t0"] (T.list (T.var "t0")),
-      expectPoly 2 [tag_disabledForAlgorithmWInference]
+      expectPoly 2 [tag_disabledForMinimalInference]
         (optional nothing)
         ["t0"] (T.optional (T.var "t0")),
-      expectMono 3 [tag_disabledForAlgorithmWInference]
+      expectMono 3 [tag_disabledForMinimalInference]
         (optional $ just $ int32 42)
         (T.optional T.int32)],
 

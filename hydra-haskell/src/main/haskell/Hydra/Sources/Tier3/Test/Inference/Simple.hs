@@ -50,44 +50,44 @@ testGroupForFunctionTerms = supergroup "Function terms" [
         ["t0"] (T.function (T.var "t0") T.int16)],
 
     subgroup "List eliminations" [
-      expectMono 1 [tag_disabledForAlgorithmWInference]
+      expectMono 1 [tag_disabledForMinimalInference]
         foldAdd
         (T.functionN [T.int32, T.list T.int32, T.int32]),
-      expectMono 2 [tag_disabledForAlgorithmWInference]
+      expectMono 2 [tag_disabledForMinimalInference]
         (apply foldAdd $ int32 0)
         (T.function (T.list T.int32) T.int32),
-      expectMono 3 [tag_disabledForAlgorithmWInference]
+      expectMono 3 [tag_disabledForMinimalInference]
         (apply (apply foldAdd $ int32 0) (list (int32 <$> [1, 2, 3, 4, 5])))
         T.int32],
 
     subgroup "Optional eliminations" [
-      expectMono 1 [tag_disabledForAlgorithmWInference]
+      expectMono 1 [tag_disabledForMinimalInference]
         (matchOpt (int32 42) (primitive _math_neg))
         (T.function (T.optional T.int32) T.int32),
-      expectMono 2 [tag_disabledForAlgorithmWInference]
+      expectMono 2 [tag_disabledForMinimalInference]
         (matchOpt (int32 42) (primitive _math_neg) @@ optional (just $ int32 137))
         T.int32,
-      expectMono 3 [tag_disabledForAlgorithmWInference]
+      expectMono 3 [tag_disabledForMinimalInference]
         (matchOpt (int32 42) (primitive _math_neg) @@ optional nothing)
         T.int32,
-      expectPoly 4 [tag_disabledForAlgorithmWInference]
+      expectPoly 4 [tag_disabledForMinimalInference]
         (lambda "x" $ matchOpt (var "x") (primitive _optionals_pure) @@ var "x")
         ["t0"] (T.function (T.optional $ T.var "t0") (T.optional $ T.var "t0")),
-      expectPoly 5 [tag_disabledForAlgorithmWInference]
+      expectPoly 5 [tag_disabledForMinimalInference]
         (matchOpt (list []) (lambda "x" $ list [var "x"]))
         ["t0"] (T.function (T.optional $ T.var "t0") (T.list $ T.var "t0"))],
 
    subgroup "Tuple projections" [
-     expectPoly 1 [tag_disabledForAlgorithmWInference]
+     expectPoly 1 [tag_disabledForMinimalInference]
        (untuple 2 0)
        ["t0", "t1"] (T.function (T.product [T.var "t0", T.var "t1"]) (T.var "t0")),
-     expectMono 2 [tag_disabledForAlgorithmWInference]
+     expectMono 2 [tag_disabledForMinimalInference]
        (untuple 2 1 @@ pair (int32 42) (string "foo"))
        T.string,
-     expectPoly 3 [tag_disabledForAlgorithmWInference]
+     expectPoly 3 [tag_disabledForMinimalInference]
        (lambda "x" $ untuple 1 0 @@ tuple [var "x"])
        ["t0"] (T.function (T.var "t0") (T.var "t0")),
-     expectPoly 4 [tag_disabledForAlgorithmWInference]
+     expectPoly 4 [tag_disabledForMinimalInference]
        (lambda "x" $ untuple 3 2 @@ tuple [var "x", var "x", int32 42])
        ["t0"] (T.function (T.var "t0") T.int32)]]
 
@@ -127,10 +127,10 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
           T.functionN [T.int32, T.boolean, T.boolean], T.int32, T.boolean, T.boolean])],
 
     subgroup "Optionals" [
-      expectMono 1 [tag_disabledForAlgorithmWInference]
+      expectMono 1 [tag_disabledForMinimalInference]
         (optional $ just $ int32 42)
         (T.optional T.int32),
-      expectPoly 2 [tag_disabledForAlgorithmWInference]
+      expectPoly 2 [tag_disabledForMinimalInference]
         (optional nothing)
         ["t0"] (T.optional $ T.var "t0")],
 
@@ -143,23 +143,23 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
         (T.product [T.int32, T.string])],
 
     subgroup "Sets" [
-      expectMono 1 [tag_disabledForAlgorithmWInference]
+      expectMono 1 [tag_disabledForMinimalInference]
         (set [true])
         (T.set T.boolean),
-      expectPoly 2 [tag_disabledForAlgorithmWInference]
+      expectPoly 2 [tag_disabledForMinimalInference]
         (set [set []])
         ["t0"] (T.set $ T.set $ T.var "t0")],
 
     subgroup "Maps" [
-      expectMono 1 [tag_disabledForAlgorithmWInference]
+      expectMono 1 [tag_disabledForMinimalInference]
         (mapTermCheat [
           (Terms.string "firstName", Terms.string "Arthur"),
           (Terms.string "lastName", Terms.string "Dent")])
         (T.map T.string T.string),
-      expectPoly 2 [tag_disabledForAlgorithmWInference]
+      expectPoly 2 [tag_disabledForMinimalInference]
         (mapTerm Maps.empty)
         ["t0", "t1"] (T.map (T.var "t0") (T.var "t1")),
-      expectPoly 3 [tag_disabledForAlgorithmWInference]
+      expectPoly 3 [tag_disabledForMinimalInference]
         (lambdas ["x", "y"] $ mapTermCheat
           [(Terms.var "x", Terms.float64 0.1), (Terms.var "y", Terms.float64 0.2)])
         ["t0"] (T.function (T.var "t0") (T.function (T.var "t0") (T.map (T.var "t0") T.float64)))]]
@@ -257,16 +257,16 @@ testGroupForSumTerms :: TTerm TestGroup
 testGroupForSumTerms = supergroup "Sum terms" [
 
     subgroup "Singleton sum terms" [
-      expectMono 1 [tag_disabledForAlgorithmWInference]
+      expectMono 1 [tag_disabledForMinimalInference]
         (sum 0 1 $ string "foo")
         (T.sum [T.string]),
-      expectPoly 2 [tag_disabledForAlgorithmWInference]
+      expectPoly 2 [tag_disabledForMinimalInference]
         (sum 0 1 $ list [])
         ["t0"] (T.sum [T.list $ T.var "t0"])],
     subgroup "Non-singleton sum terms" [
-      expectPoly 1 [tag_disabledForAlgorithmWInference]
+      expectPoly 1 [tag_disabledForMinimalInference]
         (sum 0 2 $ string "foo")
         ["t0"] (T.sum [T.string, T.var "t0"]),
-      expectPoly 2 [tag_disabledForAlgorithmWInference]
+      expectPoly 2 [tag_disabledForMinimalInference]
         (sum 1 2 $ string "foo")
         ["t0"] (T.sum [T.var "t0", T.string])]]
