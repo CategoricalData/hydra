@@ -47,7 +47,7 @@ class NodeWildcard(Node[None]):
     """An anonymous variable which we do not care to join across patterns."""
 
 # A node in a query expression; it may be a term, a variable, or a wildcard.
-type Node = NodeTerm | NodeVariable | NodeWildcard
+type Node_ = NodeTerm | NodeVariable | NodeWildcard
 
 class PathStep(Node["Step"]):
     """A path given by a single step."""
@@ -140,9 +140,9 @@ type Step = StepEdge | StepProject | StepCompare
 class TriplePattern:
     """A subject/predicate/object pattern."""
     
-    subject: Node
+    subject: Node_
     predicate: Path
-    object: Node
+    object: Node_
 
 class Variable(Node[str]):
     """A query variable."""
