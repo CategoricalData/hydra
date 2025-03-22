@@ -89,7 +89,7 @@ joinTypes left right comment =
       _ -> cannotUnify) sright)
     _ -> cannotUnify) sleft)
 
-unifyTypeConstraints :: (M.Map Core.Name t0 -> [Typing.TypeConstraint] -> Compute.Flow t1 Typing.TypeSubst)
+unifyTypeConstraints :: (M.Map Core.Name t1 -> [Typing.TypeConstraint] -> Compute.Flow t0 Typing.TypeSubst)
 unifyTypeConstraints schemaTypes constraints =  
   let withConstraint = (\c -> \rest ->  
           let sleft = (Strip.stripType (Typing.typeConstraintLeft c)) 
@@ -136,7 +136,7 @@ unifyTypeConstraints schemaTypes constraints =
               _ -> noVars) sright)) sleft))
   in (Logic.ifElse (Lists.null constraints) (Flows.pure Substitution.idTypeSubst) (withConstraint (Lists.head constraints) (Lists.tail constraints)))
 
-unifyTypeLists :: (M.Map Core.Name t1005 -> [Core.Type] -> [Core.Type] -> String -> Compute.Flow t931 Typing.TypeSubst)
+unifyTypeLists :: (M.Map Core.Name t1 -> [Core.Type] -> [Core.Type] -> String -> Compute.Flow t0 Typing.TypeSubst)
 unifyTypeLists schemaTypes l r comment =  
   let toConstraint = (\l -> \r -> Typing.TypeConstraint {
           Typing.typeConstraintLeft = l,
@@ -144,7 +144,7 @@ unifyTypeLists schemaTypes l r comment =
           Typing.typeConstraintComment = comment})
   in (unifyTypeConstraints schemaTypes (Lists.zipWith toConstraint l r))
 
-unifyTypes :: (M.Map Core.Name t1005 -> Core.Type -> Core.Type -> String -> Compute.Flow t931 Typing.TypeSubst)
+unifyTypes :: (M.Map Core.Name t1 -> Core.Type -> Core.Type -> String -> Compute.Flow t0 Typing.TypeSubst)
 unifyTypes schemaTypes l r comment = (unifyTypeConstraints schemaTypes [
   Typing.TypeConstraint {
     Typing.typeConstraintLeft = l,
