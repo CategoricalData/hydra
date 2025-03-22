@@ -22,10 +22,10 @@ composeTypeSubst s1 s2 =
   in (Typing.TypeSubst (Maps.union withExtra (Maps.map (substInType s2) (Typing.unTypeSubst s1))))
 
 composeTypeSubstList :: ([Typing.TypeSubst] -> Typing.TypeSubst)
-composeTypeSubstList = (Lists.foldl composeTypeSubst emptyTypeSubst)
+composeTypeSubstList = (Lists.foldl composeTypeSubst idTypeSubst)
 
-emptyTypeSubst :: Typing.TypeSubst
-emptyTypeSubst = (Typing.TypeSubst Maps.empty)
+idTypeSubst :: Typing.TypeSubst
+idTypeSubst = (Typing.TypeSubst Maps.empty)
 
 singletonTypeSubst :: (Core.Name -> Core.Type -> Typing.TypeSubst)
 singletonTypeSubst v t = (Typing.TypeSubst (Maps.singleton v t))
