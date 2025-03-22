@@ -111,12 +111,6 @@ fld fname (TTerm val) = TField $ Field fname val
 fold :: TTerm (b -> a -> b) -> TTerm (b -> [a] -> b)
 fold f = (primitive _lists_foldl) @@ f
 
-function :: Type -> Type -> TTerm a -> TTerm a
-function dom cod = typed (Types.function dom cod)
-
-functionN :: [Type] -> TTerm a -> TTerm a
-functionN ts = typed $ Types.functionN ts
-
 ifOpt :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
 ifOpt m n j = matchOpt n j @@ m
 
@@ -220,9 +214,6 @@ second = TTerm $ Terms.untuple 2 1
 
 set :: [TTerm a] -> TTerm (S.Set a)
 set = TTerm . Terms.set . S.fromList . fmap unTTerm
-
-typed :: Type -> TTerm a -> TTerm a
-typed typ (TTerm term) = TTerm $ setTermType (Just typ) term
 
 unit :: TTerm a
 unit = TTerm Terms.unit

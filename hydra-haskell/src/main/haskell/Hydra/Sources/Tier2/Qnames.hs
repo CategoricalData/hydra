@@ -52,7 +52,6 @@ localNameOfDef = qnamesDefinition "localNameOf" $
 
 namespaceOfDef :: TElement (Name -> Maybe Namespace)
 namespaceOfDef = qnamesDefinition "namespaceOf" $
-  function nameT (tOpt namespaceT) $
   Module.qualifiedNameNamespace <.> ref qualifyNameDef
 
 namespaceToFilePathDef :: TElement (CaseConvention -> FileExtension -> Namespace -> String)

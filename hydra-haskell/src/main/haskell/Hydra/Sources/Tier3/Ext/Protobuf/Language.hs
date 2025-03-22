@@ -43,7 +43,6 @@ protobufLanguageModule = Module ns elements [hydraCodersModule, hydraLexicalModu
 protobufLanguageDef :: TElement (Language)
 protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
   doc "Language constraints for Protocol Buffers v3" $
-  typed languageT $
   record _Language [
     _Language_name>>: wrap _LanguageName "hydra.ext.protobuf",
     _Language_constraints>>: record _LanguageConstraints [
@@ -86,7 +85,6 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
 protobufReservedWordsDef :: TElement (S.Set String)
 protobufReservedWordsDef = protobufLanguageDefinition "protobufReservedWords" $
   doc "A set of reserved words in Protobuf" $
-  typed (tSet tString) $
   lets [
     "fieldNames">:
       doc "See: http://google.github.io/proto-lens/reserved-names.html" $

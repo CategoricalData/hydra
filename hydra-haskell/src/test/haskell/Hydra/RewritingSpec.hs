@@ -82,8 +82,6 @@ testExpandLambdas g = do
         noChange (lambda "x" $ lambda "y" $ splitOn @@ var "x" @@ var "y")
       H.it "test #5" $
         noChange (lambda "x" $ int32 42)
-      H.it "test #6" $
-        noChange (typed Types.int32 $ int32 42)
 
     H.describe "Try bare function terms" $ do
       H.it "test #1" $
@@ -162,8 +160,6 @@ testExpandTypedLambdas = do
         noChange (splitOn @@ "foo" @@ "bar")
       H.it "test #4" $
         noChange (lambda "x" $ int32 42)
-      H.it "test #5" $
-        noChange (typed Types.int32 $ int32 42)
 
     H.describe "Expand bare function terms" $ do
       H.it "test #1" $
