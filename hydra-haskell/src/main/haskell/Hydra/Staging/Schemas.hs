@@ -8,6 +8,7 @@ import Hydra.Qnames
 import Hydra.Strip
 import Hydra.Coders
 import Hydra.Compute
+import Hydra.Constants
 import Hydra.Core
 import Hydra.Staging.CoreDecoding
 import Hydra.CoreEncoding
@@ -42,18 +43,18 @@ definitionDependencyNamespaces defs = S.fromList $ Y.catMaybes (namespaceOf <$> 
   where
     allNames = S.unions (defNames <$> defs)
     defNames def = case def of
-        DefinitionType _ typ -> typeDependencyNames typ
+        DefinitionType _ typ -> typeDependencyNames True typ
         DefinitionTerm _ term _ -> termDependencyNames True True True term
 
 -- | Find dependency namespaces in all of a set of terms.
 dependencyNamespaces :: Bool -> Bool -> Bool -> Bool -> [Element] -> Flow Graph (S.Set Namespace)
 dependencyNamespaces withVars withPrims withNoms withSchema els = do
-    allNames <- S.unions <$> (CM.mapM depNames els)
+    allNames <- S.delete placeholderName . S.unions <$> (CM.mapM depNames els)
     return $ S.fromList $ Y.catMaybes (namespaceOf <$> S.toList allNames)
   where
     depNames el = do
         typeNames <- if isEncodedType (fullyStripTerm term)
-          then typeDependencyNames <$> coreDecodeType term
+          then typeDependencyNames True <$> coreDecodeType term
           else pure S.empty
 
         return $ S.unions [dataNames, schemaNames, typeNames]
@@ -63,7 +64,7 @@ dependencyNamespaces withVars withPrims withNoms withSchema els = do
         schemaNames = if withSchema
           then case elementType el of
             Nothing -> S.empty
-            Just ts -> typeDependencyNames (typeSchemeType ts)
+            Just ts -> typeDependencyNames True (typeSchemeType ts)
           else S.empty
 
 dereferenceType :: Name -> Flow Graph (Maybe Type)
@@ -126,7 +127,7 @@ isEnumType (RowType _ tfields) = L.foldl (\b f -> b && isUnitType (fieldTypeType
 
 isSerializable :: Element -> Flow Graph Bool
 isSerializable el = do
-    deps <- typeDependencies id (elementName el)
+    deps <- typeDependencies False id (elementName el)
     let allVariants = S.fromList $ L.concat (variants <$> M.elems deps)
     return $ not $ S.member TypeVariantFunction allVariants
   where
@@ -214,15 +215,15 @@ schemaGraphToTypingEnvironment g = withState g $ do
       TypeLambda (LambdaType v body) -> toTypeScheme (v:vars) body
       _ -> TypeScheme (L.reverse vars) typ
 
-typeDependencies :: (Type -> Type) -> Name -> Flow Graph (M.Map Name Type)
-typeDependencies transform name = deps (S.fromList [name]) M.empty
+typeDependencies :: Bool -> (Type -> Type) -> Name -> Flow Graph (M.Map Name Type)
+typeDependencies withSchema transform name = deps (S.fromList [name]) M.empty
   where
     deps seeds names = if S.null seeds
         then return names
         else do
           pairs <- CM.mapM toPair $ S.toList seeds
           let newNames = M.union names (M.fromList pairs)
-          let refs = L.foldl S.union S.empty (typeDependencyNames <$> (snd <$> pairs))
+          let refs = L.foldl S.union S.empty (typeDependencyNames withSchema <$> (snd <$> pairs))
           let visited = S.fromList $ M.keys names
           let newSeeds = S.difference refs visited
           deps newSeeds newNames

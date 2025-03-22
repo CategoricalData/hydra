@@ -38,7 +38,7 @@ constructModule opts mod coders pairs = M.fromList <$> CM.mapM toDocument pairs
       else fail $ "mapping of non-type elements to JSON Schema is not yet supported: " ++ unName (elementName el)
 
     typeTermToDocument rootName = do
-      nt <- typeDependencies excludeAnnotatedFields rootName
+      nt <- typeDependencies False excludeAnnotatedFields rootName
       let names = M.keys nt
       let nameSubst = toShortNames names
       let types = substituteTypeVariables nameSubst <$> M.elems nt
