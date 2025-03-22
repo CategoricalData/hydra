@@ -98,10 +98,13 @@ pythonReservedWordsDef :: TElement (S.Set String)
 pythonReservedWordsDef = pythonLanguageDefinition "pythonReservedWords" $
   doc "A set of reserved words in Python" $
   lets [
-    "keywords">:
+    "pythonKeywords">:
       doc "Python keywords, as enumerated at https://docs.python.org/3.13/reference/lexical_analysis.html#keywords" $
       list [
         "False", "None", "True", "and", "as", "assert", "async", "await", "break", "class", "continue", "def", "del",
         "elif", "else", "except", "finally", "for", "from", "global", "if", "import", "in", "is", "lambda", "nonlocal",
-        "not", "or", "pass", "raise", "return", "try", "while", "with", "yield"]]
-    $ Sets.fromList $ var "keywords"
+        "not", "or", "pass", "raise", "return", "try", "while", "with", "yield"],
+    "hydraPythonKeywords">:
+      doc "Reserved words which are specific to Hydra-Python" $
+      list ["Node", "FrozenDict"]]
+    $ Sets.fromList $ Lists.concat2 (var "pythonKeywords") (var "hydraPythonKeywords")

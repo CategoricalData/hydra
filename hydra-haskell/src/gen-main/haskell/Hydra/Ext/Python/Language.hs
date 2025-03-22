@@ -4,6 +4,7 @@ module Hydra.Ext.Python.Language where
 
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Mantle as Mantle
 import qualified Data.Int as I
@@ -70,9 +71,9 @@ pythonLanguage = Coders.Language {
 
 -- | A set of reserved words in Python
 pythonReservedWords :: (S.Set String)
-pythonReservedWords = (Sets.fromList keywords) 
+pythonReservedWords = (Sets.fromList (Lists.concat2 pythonKeywords hydraPythonKeywords)) 
   where 
-    keywords = [
+    pythonKeywords = [
       "False",
       "None",
       "True",
@@ -108,3 +109,6 @@ pythonReservedWords = (Sets.fromList keywords)
       "while",
       "with",
       "yield"]
+    hydraPythonKeywords = [
+      "Node",
+      "FrozenDict"]
