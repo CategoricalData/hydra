@@ -29,41 +29,46 @@ data HydraContext = HydraContext (M.Map Core.Name Graph.Primitive)
 
 ----------------------------------------
 
--- Note: no support for @wisnesky's Prim constructors other than PrimStr, PrimNat, PrimCons, and PrimNil
+-- Note: no support for @wisnesky's Prim constructors other than Str, Nat, Cons, and Nil
 hydraTermToStlc :: HydraContext -> Core.Term -> Either String Expr
 hydraTermToStlc context term = case term of
-    Core.TermApplication (Core.Application t1 t2) -> ExprApp <$> toStlc t1 <*> toStlc t2
+    Core.TermApplication (Core.Application t1 t2) -> App <$> toStlc t1 <*> toStlc t2
     Core.TermFunction f -> case f of
 --      Core.FunctionElimination elm -> case elm of
 --        EliminationRecord (Projection tname fname) -> Right $ ExprProj
-      Core.FunctionLambda (Core.Lambda (Core.Name v) _ body) -> ExprAbs <$> pure v <*> toStlc body
+      Core.FunctionLambda (Core.Lambda (Core.Name v) _ body) -> Abs <$> pure v <*> toStlc body
       Core.FunctionPrimitive name -> do
         prim <- case M.lookup name prims of
           Nothing -> Left $ "no such primitive: " ++ Core.unName name
           Just p -> Right p
         ts <- hydraTypeSchemeToStlc $ Graph.primitiveType prim
-        return $ ExprConst $ PrimTyped $ TypedPrimitive name ts
-    Core.TermLet (Core.Let bindings env) -> ExprLetrec <$> CM.mapM bindingToStlc bindings <*> toStlc env
+        return $ Const $ PrimTyped $ TypedPrimitive name ts
+    Core.TermLet (Core.Let bindings env) -> Letrec <$> CM.mapM bindingToStlc bindings <*> toStlc env
       where
         bindingToStlc (Core.LetBinding (Core.Name v) term _) = do
           s <- toStlc term
           return (v, s)
     Core.TermList els -> do
       sels <- CM.mapM toStlc els
-      return $ foldr (\el acc -> ExprApp (ExprApp (ExprConst PrimCons) el) acc) (ExprConst PrimNil) sels
-    Core.TermLiteral lit -> pure $ ExprConst $ PrimLiteral lit
-    Core.TermProduct els -> ExprTuple <$> (CM.mapM toStlc els)
-    Core.TermVariable (Core.Name v) -> pure $ ExprVar v
+      return $ foldr (\el acc -> App (App (Const Cons) el) acc) (Const Nil) sels
+    Core.TermLiteral lit -> pure $ Const $ PrimLiteral lit
+    Core.TermProduct els -> toPairs <$> CM.mapM toStlc els
+      where
+        toPairs sels = case sels of
+          [] -> Const TT
+          [h] -> h
+          (h:r) -> pair h (toPairs r)
+    Core.TermVariable (Core.Name v) -> pure $ Var v
     _ -> Left $ "Unsupported term: " ++ show term
   where
     HydraContext prims = context
     toStlc = hydraTermToStlc context
-    pair a b = ExprApp (ExprApp (ExprConst PrimPair) a) b
+    pair a b = App (App (Const Pair) a) b
 
 hydraTypeSchemeToStlc :: Core.TypeScheme -> Either String TypSch
 hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
     sbody <- toStlc body
-    return $ TypSch (Core.unName <$> vars) sbody
+    return $ Forall (Core.unName <$> vars) sbody
   where
     toStlc typ = case stripType typ of
       Core.TypeFunction (Core.FunctionType dom cod) -> TyFn <$> toStlc dom <*> toStlc cod
@@ -71,7 +76,11 @@ hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
       Core.TypeLiteral lt -> pure $ TyLit lt
 --      TypeMap MapType |
 --      TypeOptional Type |
-      Core.TypeProduct types -> TyTuple <$> (CM.mapM toStlc types)
+      Core.TypeProduct types -> toProd <$> (CM.mapM toStlc types)
+        where
+          toProd ts = case ts of
+            [h] -> h
+            (h:r) -> TyProd h (toProd r)
 --      TypeRecord RowType |
 --      TypeSet Type |
       Core.TypeSum types -> if L.length types == 0
@@ -90,41 +99,41 @@ hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
 -- | Convert a System F term expression to a Hydra term
 toTerm :: FExpr -> Core.Term
 toTerm expr = case expr of
-  FConst prim -> case prim of
-    PrimLiteral lit -> Core.TermLiteral lit
-    PrimTyped (TypedPrimitive name _) -> Core.TermFunction $ Core.FunctionPrimitive name
-    PrimNil -> Core.TermList []
-    -- Note: other prims are unsupported; they can be added here as needed
-  FVar v -> Core.TermVariable $ Core.Name v
-  FTuple els -> Core.TermProduct $ (fmap toTerm els)
-  -- FProj i e -> ... TODO
-  FInj i types e -> Core.TermSum $ Core.Sum i (L.length types) $ toTerm e
-  -- FCase... -> ... TODO
-  FApp e1 e2 -> case e1 of
-    FApp (FTyApp (FConst PrimCons) _) hd -> Core.TermList $
-        fmap toTerm (hd:(gather e2)) -- TODO: include inferred type
-      where
-        gather e = case e of
-          FTyApp (FConst PrimNil) _ -> []
-          FApp (FApp (FTyApp (FConst PrimCons) _) hd) tl -> hd:(gather tl)
-    FTyApp (FConst PrimPair) _ -> Core.TermProduct els -- TODO: include inferred type
-      where
---        els = fmap toTerm (gather expr)
-        els = []
-        gather e = case e of
-          FApp (FApp (FTyApp (FConst PrimPair) _) el) arg -> el:(gather arg)
-          _ -> [e]
-    _ -> Core.TermApplication $ Core.Application (toTerm e1) (toTerm e2)
   FAbs v dom e -> Core.TermFunction $ Core.FunctionLambda (Core.Lambda (Core.Name v) (Just hdom) (toTerm e))
     where
       hdom = Core.typeSchemeType $ toTypeScheme dom
-  FTyApp fun args -> L.foldl (\t a -> Core.TermTypeApplication $ Core.TypedTerm t a) (toTerm fun) $ L.reverse hargs
-    where
-      hargs = fmap (\t -> Core.typeSchemeType $ toTypeScheme t) args
-  FTyAbs params body -> L.foldl (\t v -> Core.TermTypeAbstraction $ Core.TypeAbstraction (Core.Name v) t) (toTerm body) $ L.reverse params
+  -- App (App (Const Pair) (nat 0)) (nat 1)
+  --   e1 = App (Const Pair) (nat 0)
+  --   e2 = nat 1
+
+  -- FApp (FApp (FTyApp (FConst pair) [Int32,Int32]) (FConst 0)) (FConst 1)
+  --   e1 = FApp (FTyApp (FConst pair) [Int32,Int32]) (FConst 0)
+  --   e2 = FConst 1
+  FApp e1 e2 -> case e1 of
+    FApp (FTyApp (FConst Cons) _) hd -> Core.TermList $
+        fmap toTerm (hd:(gather e2)) -- TODO: include inferred type
+      where
+        gather e = case e of
+          FTyApp (FConst Nil) _ -> []
+          FApp (FApp (FTyApp (FConst Cons) _) hd) tl -> hd:(gather tl)
+    FApp (FTyApp (FConst Pair) _) lhs -> Core.TermProduct [toTerm lhs, toTerm e2]
+    _ -> Core.TermApplication $ Core.Application (toTerm e1) (toTerm e2)
+  FConst prim -> case prim of
+    PrimLiteral lit -> Core.TermLiteral lit
+    PrimTyped (TypedPrimitive name _) -> Core.TermFunction $ Core.FunctionPrimitive name
+    Nil -> Core.TermList []
+    Pair -> Terms.lambdas ["a", "b"] $ Terms.pair (Terms.var "a") (Terms.var "b")
+    TT -> Terms.product []
+    _ -> Terms.string $ "unexpected primitive: " ++ show prim
+    -- Note: other prims are unsupported; they can be added here as needed
   FLetrec bindings env -> Core.TermLet $ Core.Let (fmap bindingToHydra bindings) (toTerm env)
     where
       bindingToHydra (v, ty, term) = Core.LetBinding (Core.Name v) (toTerm term) $ Just $ toTypeScheme ty
+  FTyAbs params body -> L.foldl (\t v -> Core.TermTypeAbstraction $ Core.TypeAbstraction (Core.Name v) t) (toTerm body) $ L.reverse params
+  FTyApp fun args -> L.foldl (\t a -> Core.TermTypeApplication $ Core.TypedTerm t a) (toTerm fun) $ L.reverse hargs
+    where
+      hargs = fmap (\t -> Core.typeSchemeType $ toTypeScheme t) args
+  FVar v -> Core.TermVariable $ Core.Name v
 
 toType :: FTy -> Core.Type
 toType ty = case ty of
@@ -144,13 +153,11 @@ toType ty = case ty of
         _ -> [t]
   FTyUnit -> Core.TypeProduct []
   FTyVoid -> Core.TypeSum []
-  FTyTuple tys -> Core.TypeProduct (toType <$> tys)
-  FTyVariant tys -> Core.TypeSum (toType <$> tys)
 
 -- | Convert a System F type expression to a Hydra type scheme
 toTypeScheme :: FTy -> Core.TypeScheme
 toTypeScheme ty = case ty of
-  FTyForall vars body -> Core.TypeScheme (Core.Name <$> vars) $ toType body
+  FForall vars body -> Core.TypeScheme (Core.Name <$> vars) $ toType body
   _ -> Core.TypeScheme [] $ toType ty
 
 termToInferredFExpr :: HydraContext -> Core.Term -> IO (FExpr, FTy)
@@ -183,9 +190,9 @@ unwrapTerm term = case term of
     _ -> fail "expected let bindings"
 
 inferExpr :: Expr -> IO (FExpr, FTy)
-inferExpr t = case (fst $ runState (runExceptT (infer 0 [] M.empty t)) ([],0)) of
+inferExpr t = case (fst $ runState (runExceptT (w [] t)) 0) of
   Left e -> fail $ "inference error: " ++ e
-  Right (_, (ty, f)) -> case (typeOf [] [] M.empty f) of
+  Right (_, (ty, f)) -> case (typeOf [] [] f) of
     Left err -> fail $ "type error: " ++ err
     Right tt -> if tt == mTyToFTy ty
       then return (f, tt)
