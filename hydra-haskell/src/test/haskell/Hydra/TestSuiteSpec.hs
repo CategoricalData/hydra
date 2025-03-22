@@ -26,7 +26,7 @@ import qualified Data.Maybe as Y
 type TestRunner = String -> TestCaseWithMetadata -> Y.Maybe H.Expectation
 
 defaultTestRunner :: TestRunner
-defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabledForAltInference tcase
+defaultTestRunner desc tcase = if Testing.isDisabled tcase
   then Nothing
   else Just $ case testCaseWithMetadataCase tcase of
     TestCaseCaseConversion (CaseConversionTestCase fromConvention toConvention fromString toString) -> H.shouldBe
