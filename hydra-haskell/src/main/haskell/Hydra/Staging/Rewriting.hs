@@ -452,8 +452,10 @@ topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames False True True $ elementTerm e)
 
-typeDependencyNames :: Type -> S.Set Name
-typeDependencyNames typ = S.union (freeVariablesInType typ) (typeNamesInType typ)
+typeDependencyNames :: Bool -> Type -> S.Set Name
+typeDependencyNames withSchema typ = if withSchema
+  then S.union (freeVariablesInType typ) (typeNamesInType typ)
+  else freeVariablesInType typ
 
 typeNamesInType :: Type -> S.Set Name
 typeNamesInType = foldOverType TraversalOrderPre addNames S.empty
