@@ -42,10 +42,10 @@ expectType :: Term -> TypeScheme -> H.Expectation
 expectType term ts = do
   result <- inferType term
   H.shouldBe (showTypeScheme $ snd result) (showTypeScheme ts)
-  H.shouldBe (showTerm $ stripTypesFromTerm term) (showTerm $ stripTypesFromTerm $ fst result)
+  H.shouldBe (showTerm $ stripTypesFromTerm $ fst result) (showTerm $ stripTypesFromTerm term)
 
 algorithmWRunner :: TestRunner
-algorithmWRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabledForAlgorithmWInference tcase
+algorithmWRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabledForMinimalInference tcase
   then Nothing
   else case testCaseWithMetadataCase tcase of
     TestCaseInference (InferenceTestCase input output) -> Just $ expectType input output
