@@ -14,8 +14,7 @@ import qualified Data.Map as M
 
 
 tag_disabled = Tag "disabled"
-tag_disabledForAlgorithmWInference = Tag "disabledForAlgorithmWInference"
-tag_disabledForDefaultInference = Tag "disabledForDefaultInference"
+tag_disabledForMinimalInference = Tag "disabledForMinimalInference"
 
 expectMono i tags term typ = infTest ("#" ++ show i) tags term $ T.mono typ
 
@@ -28,8 +27,7 @@ infTest name tags term ts = testCaseWithMetadata (Base.string name)
   (testCaseInference $ inferenceTestCase term ts) nothing (Base.list $ tag . unTag <$> tags)
 
 isDisabled tcase = tag_disabled `L.elem` Testing.testCaseWithMetadataTags tcase
-isDisabledForAlgorithmWInference tcase = tag_disabledForAlgorithmWInference `L.elem` Testing.testCaseWithMetadataTags tcase
-isDisabledForAltInference tcase = tag_disabledForDefaultInference `L.elem` Testing.testCaseWithMetadataTags tcase
+isDisabledForMinimalInference tcase = tag_disabledForMinimalInference `L.elem` Testing.testCaseWithMetadataTags tcase
 
 -- Note: this is a cheat for an encoded map term; consider using the TTerms DSL
 mapTermCheat :: [(Term, Term)] -> TTerm Term
@@ -118,13 +116,6 @@ testCaseWithMetadataDescription = Base.project _TestCaseWithMetadata _TestCaseWi
 
 testCaseWithMetadataTags :: TTerm (TestCaseWithMetadata -> [Tag])
 testCaseWithMetadataTags = Base.project _TestCaseWithMetadata _TestCaseWithMetadata_tags
-
---testCaseWithMetadataSetTags :: [Tag] -> TTerm (TestCaseWithMetadata -> TestCaseWithMetadata)
---testCaseWithMetadataSetTags tags = Base.lambda "t" $ testCaseWithMetadata
---    (Hydra.Dsl.Testing.testCaseWithMetadataName @@ Base.var "t")
---    (Hydra.Dsl.Testing.testCaseWithMetadataCase @@ Base.var "t")
---    (Hydra.Dsl.Testing.testCaseWithMetadataDescription @@ Base.var "t")
---    (Base.list $ fmap (tag . unTag) tags)
 
 testGroup :: TTerm String -> TTerm (Maybe String) -> TTerm [TestGroup] -> TTerm [TestCaseWithMetadata] -> TTerm TestGroup
 testGroup name description subgroups cases = Base.record _TestGroup [

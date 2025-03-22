@@ -151,7 +151,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --		in (pair f g)
 --  --System F type:
 --  -- 	((v12 -> (Nat -> v13)) * (Nat -> (v15 -> v16)))
-    expectPoly 11 [tag_disabledForDefaultInference]
+    expectPoly 11 []
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
         "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
@@ -159,14 +159,6 @@ testGroupForSystemF = subgroup "STLC to System F" [
       ["t0", "t1", "t2", "t3"] (T.pair
         (T.functionN [T.var "t0", T.int32, T.var "t1"])
         (T.functionN [T.int32, T.var "t2", T.var "t3"])),
-    expectPoly 11 [tag_disabledForAlgorithmWInference]
-      (lets [
-        "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
-        "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
-        $ pair (var "f") (var "g"))
-      ["t0", "t1", "t2"] (T.pair
-        (T.functionN [T.var "t2", T.var "t1", T.var "t0"])
-        (T.functionN [T.int32, T.var "t2", T.var "t0"])),
 
 --  --Untyped input:
 --  --	letrecs f = (\x. (\y. (g 0 0)))
@@ -174,7 +166,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --		in (pair f g)
 --  --System F type:
 --  -- 	((Nat -> (Nat -> v12)) * (Nat -> (Nat -> v14)))
-    expectPoly 12 [tag_disabledForDefaultInference]
+    expectPoly 12 []
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ int32 0),
         "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
@@ -182,14 +174,6 @@ testGroupForSystemF = subgroup "STLC to System F" [
       ["t0", "t1"] (T.pair
         (T.functionN [T.int32, T.int32, T.var "t0"])
         (T.functionN [T.int32, T.int32, T.var "t1"])),
-    expectPoly 12 [tag_disabledForAlgorithmWInference]
-      (lets [
-        "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ int32 0),
-        "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
-        $ pair (var "f") (var "g"))
-      ["t0", "t1", "t2"] (T.pair
-        (T.functionN [T.var "t1", T.var "t2", T.var "t0"])
-        (T.functionN [T.int32, T.int32, T.var "t0"])),
 
 --  --Untyped input:
 --  --	letrecs f = (\x. (\y. (g 0 x)))
@@ -197,22 +181,14 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --		in (pair f g)
 --  --System F type:
 --  -- 	((Nat -> (Nat -> v12)) * (Nat -> (Nat -> v14)))
-    expectPoly 13 [tag_disabledForDefaultInference]
+    expectPoly 13 []
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
         "g">: lambda "u" $ lambda "v" (var "f" @@ int32 0 @@ int32 0)]
         $ pair (var "f") (var "g"))
       ["t0", "t1"] (T.pair
         (T.functionN [T.int32, T.int32, T.var "t0"])
-        (T.functionN [T.int32, T.int32, T.var "t1"])),
-    expectPoly 13 [tag_disabledForAlgorithmWInference]
-      (lets [
-        "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
-        "g">: lambda "u" $ lambda "v" (var "f" @@ int32 0 @@ int32 0)]
-        $ pair (var "f") (var "g"))
-      ["t0", "t1"] (T.pair
-        (T.functionN [T.int32, T.var "t1", T.var "t0"])
-        (T.functionN [T.int32, T.int32, T.var "t0"]))]
+        (T.functionN [T.int32, T.int32, T.var "t1"]))]
   where
     -- Placeholders for the primitives in @wisnesky's test cases; they are not necessarily the same functions,
     -- but they have the same types.

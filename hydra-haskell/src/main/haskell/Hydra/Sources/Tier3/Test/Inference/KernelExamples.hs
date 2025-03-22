@@ -24,7 +24,7 @@ kernelExamplesTests = supergroup "Examples from the Hydra kernel" [
 testGroupForNestedLet :: TTerm TestGroup
 testGroupForNestedLet = supergroup "Nested let" [
     subgroup "hydra.formatting.mapFirstLetter" [
-      expectMono 1 [tag_disabledForAlgorithmWInference]
+      expectMono 1 [tag_disabledForMinimalInference]
         (lambda "mapping" $ lambda "s" $ lets [
           "firstLetter">: var "mapping" @@ (primitive _strings_fromList @@ (primitive _lists_pure @@ (primitive _lists_head @@ var "list"))),
           "list">: primitive _strings_toList @@ var "s"] $
