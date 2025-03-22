@@ -134,7 +134,7 @@ unifyTypeConstraints schemaTypes constraints =
             _ -> ((\x -> case x of
               Core.TypeVariable v1 -> (tryBinding v1 sleft)
               _ -> noVars) sright)) sleft))
-  in (Logic.ifElse (Lists.null constraints) (Flows.pure Substitution.emptyTypeSubst) (withConstraint (Lists.head constraints) (Lists.tail constraints)))
+  in (Logic.ifElse (Lists.null constraints) (Flows.pure Substitution.idTypeSubst) (withConstraint (Lists.head constraints) (Lists.tail constraints)))
 
 unifyTypeLists :: (M.Map Core.Name t1005 -> [Core.Type] -> [Core.Type] -> String -> Compute.Flow t931 Typing.TypeSubst)
 unifyTypeLists schemaTypes l r comment =  
