@@ -44,7 +44,7 @@ hydraSubstitutionModule = Module (Namespace "hydra.substitution") elements
    elements = [
      el composeTypeSubstDef,
      el composeTypeSubstListDef,
-     el idTypeSubstDef,
+     el emptyTypeSubstDef,
      el singletonTypeSubstDef,
      el substituteInConstraintDef,
      el substituteInConstraintsDef,
@@ -63,10 +63,10 @@ composeTypeSubstDef = substitutionDefinition "composeTypeSubst" $
 
 composeTypeSubstListDef :: TElement ([TypeSubst] -> TypeSubst)
 composeTypeSubstListDef = substitutionDefinition "composeTypeSubstList" $
-  Base.fold (ref composeTypeSubstDef) @@ ref idTypeSubstDef
+  Base.fold (ref composeTypeSubstDef) @@ ref emptyTypeSubstDef
 
-idTypeSubstDef :: TElement TypeSubst
-idTypeSubstDef = substitutionDefinition "idTypeSubst" $
+emptyTypeSubstDef :: TElement TypeSubst
+emptyTypeSubstDef = substitutionDefinition "emptyTypeSubst" $
   Typing.typeSubst Maps.empty
 
 singletonTypeSubstDef :: TElement (Name -> Type -> TypeSubst)

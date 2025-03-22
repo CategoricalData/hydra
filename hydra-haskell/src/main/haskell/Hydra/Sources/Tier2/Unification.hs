@@ -157,7 +157,7 @@ unifyTypeConstraintsDef = unificationDefinition "unifyTypeConstraints" $
               (var "bind" @@ var "name" @@ var "sright"))]]] $
     Logic.ifElse
       (Lists.null $ var "constraints")
-      (Flows.pure $ ref idTypeSubstDef)
+      (Flows.pure $ ref emptyTypeSubstDef)
       (var "withConstraint" @@ (Lists.head $ var "constraints") @@ (Lists.tail $ var "constraints"))
 
 unifyTypeListsDef :: TElement (M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Flow s TypeSubst)
