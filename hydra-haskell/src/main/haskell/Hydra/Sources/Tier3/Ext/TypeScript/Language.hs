@@ -36,7 +36,6 @@ typeScriptLanguageModule = Module ns elements
 typeScriptLanguageDef :: TElement Language
 typeScriptLanguageDef = typeScriptLanguageDefinition "typeScriptLanguage" $
   doc "Language constraints for TypeScript" $
-  typed languageT $
   record _Language [
     _Language_name>>: wrap _LanguageName "hydra.langs.typeScript",
     _Language_constraints>>: record _LanguageConstraints [
@@ -74,7 +73,6 @@ typeScriptLanguageDef = typeScriptLanguageDefinition "typeScriptLanguage" $
 typeScriptReservedWordsDef :: TElement (S.Set String)
 typeScriptReservedWordsDef = typeScriptLanguageDefinition "typeScriptReservedWords" $
     doc "A set of reserved words in TypeScript. Taken directly from https://github.com/microsoft/TypeScript/issues/2536" $
-    typed (tSet tString) $
     lets [
       "reservedWords">: list [
         "delete", "do", "else", "enum", "export", "extends", "false", "finally", "for", "function", "if", "import",

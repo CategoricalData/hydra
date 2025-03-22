@@ -77,7 +77,6 @@ traceSummaryDef = errorsDefinition "traceSummary" $
       (Lists.cons ("key/value pairs: ")
         (Lists.map (var "toLine") (Maps.toList (Flows.traceOther @@ var "t")))),
     "toLine">:
-      function (tPair tString termT) tString $
       lambda "pair" $ "\t" ++ (Core.unName @@ (first @@ var "pair")) ++ ": " ++ (Io.showTerm (second @@ var "pair"))] $
     Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines"))
 

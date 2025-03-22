@@ -139,7 +139,6 @@ mutateTraceDef = flowsDefinition "mutateTrace" $
           lambda "msg" $ Flows.flowState nothing (var "s0") (ref pushErrorDef @@ var "msg" @@ var "t0"),
         -- retain the updated state, but reset the trace after execution
         "forRight">:
-          function traceT (tFlowState (Types.var "s") (Types.var "s")) $
           lambda "t1" $ lets [
             -- execute the internal flow after augmenting the trace
             "f2">: Flows.unFlow @@ var "f" @@ var "s0" @@ var "t1"]
