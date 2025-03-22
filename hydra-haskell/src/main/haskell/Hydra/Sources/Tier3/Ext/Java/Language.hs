@@ -41,7 +41,6 @@ javaMaxTupleLengthDef = javaLanguageDefinition "javaMaxTupleLength" $
 javaLanguageDef :: TElement (Language)
 javaLanguageDef = javaLanguageDefinition "javaLanguage" $
     doc "Language constraints for Java" $
-    typed languageT $
     Coders.language "hydra.ext.java"
       eliminationVariants
       literalVariants
@@ -114,7 +113,6 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
 reservedWordsDef :: TElement (S.Set String)
 reservedWordsDef = javaLanguageDefinition "reservedWords" $
   doc "A set of reserved words in Java" $
-  typed (tSet tString) $
   lets [
     "specialNames">:
       doc "Special names reserved for use by Hydra" $

@@ -34,7 +34,6 @@ pythonLanguageModule = Module ns elements
 pythonLanguageDef :: TElement Language
 pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
     doc "Language constraints for Python 3" $
-    typed languageT $
     Coders.language "hydra.ext.python"
       eliminationVariants
       literalVariants
@@ -98,7 +97,6 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
 pythonReservedWordsDef :: TElement (S.Set String)
 pythonReservedWordsDef = pythonLanguageDefinition "pythonReservedWords" $
   doc "A set of reserved words in Python" $
-  typed (tSet tString) $
   lets [
     "keywords">:
       doc "Python keywords, as enumerated at https://docs.python.org/3.13/reference/lexical_analysis.html#keywords" $

@@ -35,7 +35,6 @@ csharpLanguageModule = Module ns elements
 csharpLanguageDef :: TElement Language
 csharpLanguageDef = csharpLanguageDefinition "csharpLanguage" $
     doc "Language constraints for C Sharp (C#)" $
-    typed languageT $
     Coders.language "hydra.ext.csharp"
       eliminationVariants
       literalVariants
@@ -115,7 +114,6 @@ csharpReservedWordsDef = csharpLanguageDefinition "csharpReservedWords" $
   doc ("A set of reserved words in C#. Both the \"keywords\" and \"contextual keywords\" are drawn from"
     <> " section 6.4.4 of the C# documentation:\n"
     <> "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure#64-tokens") $
-  typed (tSet tString) $
   lets [
     "keywords">: list [
         "DEFAULT", "FALSE", "NULL", "TRUE",

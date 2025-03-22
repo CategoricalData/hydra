@@ -91,7 +91,6 @@ testTypeLatLonPolyNameDef = testGraphDefinition "testTypeLatLonPolyName" $
 
 latlonRecordDef :: TElement (Float -> Float -> Term)
 latlonRecordDef = testGraphDefinition "latlonRecord" $
-  Base.functionN [tFloat32, tFloat32, termT] $
   Base.lambdas ["lat", "lon"] $ record (ref testTypeLatLonNameDef) [
     "lat">: float32Term $ variable "lat",
     "lon">: float32Term $ variable "lon"]
