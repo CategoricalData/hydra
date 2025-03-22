@@ -459,10 +459,7 @@ typeNamesInType :: Type -> S.Set Name
 typeNamesInType = foldOverType TraversalOrderPre addNames S.empty
   where
     addNames names typ = case typ of
-      -- TODO: it is *usually* helpful to exclude the unit type, although this may not *always* be appropriate.
-      TypeRecord (RowType tname _) -> if tname /= _Unit
-        then S.insert tname names
-        else names
+      TypeRecord (RowType tname _) -> S.insert tname names
       TypeUnion (RowType tname _) -> S.insert tname names
       TypeWrap (WrappedType tname _) -> S.insert tname names
       _ -> names
