@@ -25,28 +25,6 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
--- beneathTermAnnotations :: (Term -> Term) -> Term -> Term
--- beneathTermAnnotations f term = case term of
---   TermAnnotated (AnnotatedTerm term1 ann) ->
---     TermAnnotated (AnnotatedTerm (beneathTermAnnotations f term1) ann)
---   TermTyped (TypedTerm term1 typ) ->
---     TermTyped $ TypedTerm (beneathTermAnnotations f term1) typ
---   _ -> f term
---
--- beneathTermAnnotationsM :: (Term -> Flow s Term) -> Term -> Flow s Term
--- beneathTermAnnotationsM f term = case term of
---   TermAnnotated (AnnotatedTerm term1 ann) ->
---     TermAnnotated <$> (AnnotatedTerm <$> beneathTermAnnotationsM f term1 <*> pure ann)
---   TermTyped (TypedTerm term1 typ) ->
---     TermTyped <$> (TypedTerm <$> beneathTermAnnotationsM f term1 <*> pure typ)
---   _ -> f term
-
--- | Apply a transformation to the first type beneath a chain of annotations
-beneathTypeAnnotations :: (Type -> Type) -> Type -> Type
-beneathTypeAnnotations f t = case t of
-  TypeAnnotated (AnnotatedType t1 ann) -> TypeAnnotated (AnnotatedType (beneathTypeAnnotations f t1) ann)
-  _ -> f t
-
 elementsWithDependencies :: [Element] -> Flow Graph [Element]
 elementsWithDependencies original = CM.mapM requireElement allDepNames
   where
@@ -151,8 +129,14 @@ inlineType schema = rewriteTypeM f
           Nothing -> fail $ "No such type in schema: " ++ unName v
         t -> return t
 
-isFreeIn :: Name -> Term -> Bool
-isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
+isFreeVariableInTerm :: Name -> Term -> Bool
+isFreeVariableInTerm v term = not $ S.member v $ freeVariablesInTerm term
+
+-- | Apply a transformation to the first type beneath a chain of annotations
+mapBeneathTypeAnnotations :: (Type -> Type) -> Type -> Type
+mapBeneathTypeAnnotations f t = case t of
+  TypeAnnotated (AnnotatedType t1 ann) -> TypeAnnotated (AnnotatedType (mapBeneathTypeAnnotations f t1) ann)
+  _ -> f t
 
 -- | Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ...,
 --   e.g. (key = value : forall v, a, v_12. type) becomes (key = norm(S,value) : forall t0, t1, t2. S(type)),
