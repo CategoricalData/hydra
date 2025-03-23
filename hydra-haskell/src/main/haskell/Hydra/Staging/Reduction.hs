@@ -146,7 +146,7 @@ contractTerm = rewriteTerm rewrite
   where
     rewrite recurse term = case rec of
         TermApplication (Application lhs rhs) -> case fullyStripTerm lhs of
-          TermFunction (FunctionLambda (Lambda v _ body)) -> if isFreeIn v body
+          TermFunction (FunctionLambda (Lambda v _ body)) -> if isFreeVariableInTerm v body
             then body
             else alphaConvert v rhs body
           _ -> rec
@@ -167,7 +167,7 @@ etaReduceTerm term = case term of
         where
           reduceApplication (Application lhs rhs) = case etaReduceTerm rhs of
             TermAnnotated (AnnotatedTerm rhs1 ann) -> reduceApplication (Application lhs rhs1)
-            TermVariable v1 -> if v == v1 && isFreeIn v lhs
+            TermVariable v1 -> if v == v1 && isFreeVariableInTerm v lhs
               then etaReduceTerm lhs
               else noChange
             _ -> noChange
@@ -181,21 +181,32 @@ etaReduceTerm term = case term of
 --   Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
 expandLambdas :: Graph -> Term -> Term
 --expandLambdas g = contractTerm . unshadowVariables . expand
-expandLambdas g = contractTerm . expand
+expandLambdas graph term = contractTerm $ rewriteTerm (rewrite []) term
   where
-    expand = rewriteTerm $ \recurse term -> case recurse term of
-      TermFunction f -> case f of
-          FunctionElimination _ -> pad [1] $ TermFunction f
-          FunctionPrimitive name -> pad [1..(primitiveArity $ Y.fromJust $ lookupPrimitive g name)] $ TermFunction f
-          _ -> TermFunction f
-      TermVariable name -> if 0 == arity
-          then TermVariable name
-          else pad [1..arity] $ TermVariable name
-        where
-          arity = case typeSchemeType <$> (lookupElement g name >>= elementType) of
-            Nothing -> 0
-            Just typ -> typeArity typ
-      t -> t
+    rewrite args recurse term = case term of
+        TermApplication (Application lhs rhs) -> rewrite (erhs:args) recurse lhs
+          where
+            erhs = rewrite [] recurse rhs
+        _ -> afterRecursion $ recurse term
+      where
+        afterRecursion term = case term of
+          TermFunction f -> case f of
+            FunctionElimination _ -> expand args 1 $ TermFunction f
+--            FunctionLambda (Lambda v mt body) -> TermFunction $ FunctionLambda $ Lambda v mt $ expand args 0 $ rewrite [] recurse body
+            FunctionPrimitive name -> expand args (primitiveArity $ Y.fromJust $ lookupPrimitive graph name) $ TermFunction f
+            _ -> expand args 0 term
+          TermVariable name -> if 0 == arity
+              then TermVariable name
+              else expand args arity $ TermVariable name
+            where
+              arity = case typeSchemeType <$> (lookupElement graph name >>= elementType) of
+                Nothing -> 0
+                Just typ -> typeArity typ
+          _ -> expand args 0 term
+    expand args arity term = pad is apps
+      where
+        apps = L.foldl (\lhs arg -> TermApplication $ Application lhs arg) term args
+        is = if arity <= L.length args then [] else [1..(arity - L.length args)]
     pad is term = if L.null is
         then term
         else TermFunction $ FunctionLambda $
