@@ -112,7 +112,7 @@ encodeFunction namespaces fun = case fun of
             let v0 = "v" ++ show depth
             let raw = apply fun' (var v0)
             let rhsTerm = simplifyTerm raw
-            let v1 = if isFreeIn (Name v0) rhsTerm then ignoredVariable else v0
+            let v1 = if isFreeVariableInTerm (Name v0) rhsTerm then ignoredVariable else v0
             let hname = unionFieldReference namespaces dn fn
             args <- case M.lookup fn fieldMap of
               Just (FieldType _ ft) -> case stripType ft of

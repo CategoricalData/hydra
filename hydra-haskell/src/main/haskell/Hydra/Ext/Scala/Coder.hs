@@ -106,7 +106,7 @@ encodeFunction meta fun arg = case fun of
             where
               v = Name "y"
           applyVar fterm avar@(Name v) = case stripTerm fterm of
-            TermFunction (FunctionLambda (Lambda v1 _ body)) -> if isFreeIn v1 body
+            TermFunction (FunctionLambda (Lambda v1 _ body)) -> if isFreeVariableInTerm v1 body
               then body
               else substituteVariable v1 avar body
             _ -> apply fterm (var v)

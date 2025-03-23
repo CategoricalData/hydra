@@ -375,7 +375,7 @@ unionToRecord t@(TypeUnion rt) = do
 unionTypeToRecordType :: RowType -> RowType
 unionTypeToRecordType rt = rt {rowTypeFields = makeOptional <$> rowTypeFields rt}
   where
-    makeOptional (FieldType fn ft) = FieldType fn $ beneathTypeAnnotations Types.optional ft
+    makeOptional (FieldType fn ft) = FieldType fn $ mapBeneathTypeAnnotations Types.optional ft
 
 unsupportedToString :: TypeAdapter
 unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decode
