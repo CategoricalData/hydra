@@ -1,5 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+{-
+Test.Hspec.hspec Hydra.RewritingSpec.spec
+-}
 module Hydra.RewritingSpec where
 
 import Hydra.Kernel
@@ -94,10 +97,22 @@ testExpandLambdas g = do
           (lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2")
       H.it "test #3" $
         expandsTo
+          (splitOn @@ var "foo")
+          (lambda "v1" $ splitOn @@ var "foo" @@ var "v1")
+      H.it "test #4" $
+        expandsTo
+          (splitOn @@ var "foo" @@ var "bar")
+          (splitOn @@ var "foo" @@ var "bar")
+      H.it "test #5" $
+        expandsTo
+          (splitOn @@ var "foo" @@ var "bar" @@ var "baz")
+          (splitOn @@ var "foo" @@ var "bar" @@ var "baz")
+      H.it "test #6" $
+        expandsTo
           (matchOpt (int32 42) length)
           -- Note two levels of lambda expansion
           (lambda "v1" $ (matchOpt (int32 42) $ lambda "v1" $ length @@ var "v1") @@ var "v1")
-      H.it "test #4" $
+      H.it "test #7" $
         expandsTo
           (project (Name "Person") (Name "firstName"))
           (lambda "v1" $ ((project (Name "Person") (Name "firstName") @@ var "v1")))
@@ -107,11 +122,11 @@ testExpandLambdas g = do
       H.it "test #1" $
         expandsTo
           (splitOn @@ "bar")
-          (lambda "v2" $ splitOn @@ "bar" @@ var "v2")
+          (lambda "v1" $ splitOn @@ "bar" @@ var "v1")
       H.it "test #2" $
         expandsTo
           (lambda "x" $ splitOn @@ var "x")
-          (lambda "x" $ lambda "v2" $ splitOn @@ var "x" @@ var "v2")
+          (lambda "x" $ lambda "v1" $ splitOn @@ var "x" @@ var "v1")
       H.it "test #3" $
         expandsTo
           ((lambda "x" $ var "x") @@ length)
@@ -130,7 +145,7 @@ testExpandLambdas g = do
       H.it "test #1" $
         expandsTo
           (list [lambda "x" $ list ["foo"], splitOn @@ "bar"])
-          (list [lambda "x" $ list ["foo"], lambda "v2" $ splitOn @@ "bar" @@ var "v2"])
+          (list [lambda "x" $ list ["foo"], lambda "v1" $ splitOn @@ "bar" @@ var "v1"])
 
     H.it "Check that lambda expansion is idempotent" $ do
       QC.property $ \term -> do
