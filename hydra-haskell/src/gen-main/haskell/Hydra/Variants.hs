@@ -123,8 +123,8 @@ literalType :: (Core.Literal -> Core.LiteralType)
 literalType x = case x of
   Core.LiteralBinary _ -> Core.LiteralTypeBinary
   Core.LiteralBoolean _ -> Core.LiteralTypeBoolean
-  Core.LiteralFloat v1 -> ((\x2 -> Core.LiteralTypeFloat x2) (floatValueType v1))
-  Core.LiteralInteger v1 -> ((\x2 -> Core.LiteralTypeInteger x2) (integerValueType v1))
+  Core.LiteralFloat v1 -> ((\injected_ -> Core.LiteralTypeFloat injected_) (floatValueType v1))
+  Core.LiteralInteger v1 -> ((\injected_ -> Core.LiteralTypeInteger injected_) (integerValueType v1))
   Core.LiteralString _ -> Core.LiteralTypeString
 
 -- | Find the literal type variant (constructor) for a given literal value
@@ -138,7 +138,7 @@ literalTypeVariant x = case x of
 
 -- | Find the literal variant (constructor) for a given literal value
 literalVariant :: (Core.Literal -> Mantle.LiteralVariant)
-literalVariant x = (literalTypeVariant (literalType x))
+literalVariant arg_ = (literalTypeVariant (literalType arg_))
 
 -- | All literal variants, in a canonical order
 literalVariants :: [Mantle.LiteralVariant]

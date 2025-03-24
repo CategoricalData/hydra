@@ -402,4 +402,4 @@ matchTermVariant :: Name -> TTerm (Term -> Maybe a)
 matchTermVariant fname = matchVariant _Term fname <.> ref fullyStripTermDef
 
 matchVariant :: Name -> Name -> TTerm (a -> Maybe b)
-matchVariant tname fname = match tname (Just nothing) [TCase fname --> lambda "x" $ Optionals.pure $ var "x"]
+matchVariant tname fname = match tname (Just nothing) [TCase fname --> lambda "matched_" $ Optionals.pure $ var "matched_"]

@@ -15,13 +15,13 @@ import qualified Data.Set as S
 -- | Display a floating-point type as a string
 describeFloatType :: (Core.FloatType -> String)
 describeFloatType t = (Strings.cat [
-  (\x -> describePrecision (Variants.floatTypePrecision x)) t,
+  (\arg_ -> describePrecision (Variants.floatTypePrecision arg_)) t,
   " floating-point numbers"])
 
 -- | Display an integer type as a string
 describeIntegerType :: (Core.IntegerType -> String)
 describeIntegerType t = (Strings.cat [
-  (\x -> describePrecision (Variants.integerTypePrecision x)) t,
+  (\arg_ -> describePrecision (Variants.integerTypePrecision arg_)) t,
   " integers"])
 
 -- | Display a literal type as a string

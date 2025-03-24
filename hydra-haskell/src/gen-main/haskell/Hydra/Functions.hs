@@ -8,4 +8,4 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 id_ :: (t0 -> t0)
-id_ x = x
+id_ any_ = any_

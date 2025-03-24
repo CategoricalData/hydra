@@ -58,7 +58,7 @@ primitiveArityDef = arityDefinition "primitiveArity" $
 termArityDef :: TElement (Term -> Int)
 termArityDef = arityDefinition "termArity" $
   match _Term (Just $ int32 0) [
-    TCase _Term_application --> (lambda "x" $ Math.sub (var "x") (int32 1)) <.> ref termArityDef <.> Core.applicationFunction,
+    TCase _Term_application --> (lambda "xapp" $ Math.sub (var "xapp") (int32 1)) <.> ref termArityDef <.> Core.applicationFunction,
     TCase _Term_function --> ref functionArityDef]
     -- Note: ignoring variables which might resolve to functions
 

@@ -16,10 +16,10 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 localNameOf :: (Core.Name -> String)
-localNameOf x = (Module.qualifiedNameLocal (qualifyName x))
+localNameOf arg_ = (Module.qualifiedNameLocal (qualifyName arg_))
 
 namespaceOf :: (Core.Name -> Maybe Module.Namespace)
-namespaceOf x = (Module.qualifiedNameNamespace (qualifyName x))
+namespaceOf arg_ = (Module.qualifiedNameNamespace (qualifyName arg_))
 
 namespaceToFilePath :: (Mantle.CaseConvention -> Module.FileExtension -> Module.Namespace -> String)
 namespaceToFilePath caseConv ext ns =  
