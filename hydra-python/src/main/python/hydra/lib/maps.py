@@ -6,17 +6,12 @@ from typing import Any
 from hydra.dsl.python import FrozenDict, frozenlist
 
 
-
-
-bimap :: (Ord k1, Ord k2) => (k1 -> k2) -> (v1 -> v2) -> M.Map k1 v1 -> M.Map k2 v2
-bimap f g = M.fromList . fmap (\(k, v) -> (f k, g v)) . M.toList
-
-
 def bimap[K1, K2, V1, V2](
     f: Callable[[K1], K2], g: Callable[[V1], V2], mapping: Mapping[K1, V1]
 ) -> FrozenDict[K2, V2]:
     """Map a function over the keys and values of a map."""
     return FrozenDict({f(k): g(v) for k, v in mapping.items()})
+
 
 def empty[K, V]():
     """Create an empty map."""

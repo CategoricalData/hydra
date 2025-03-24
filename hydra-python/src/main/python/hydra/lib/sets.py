@@ -3,7 +3,7 @@
 from collections.abc import Callable, Sequence
 from typing import Any
 
-from hydra.lib.lists import frozenlist
+from hydra.dsl.python import frozenlist
 
 
 def empty[A]():

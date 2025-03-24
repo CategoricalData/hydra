@@ -32,7 +32,7 @@ def compose[A, B, C](
 
 def from_maybe[A](x: A, y: A | None) -> A:
     """Get a value from an optional value, or return a default value."""
-    return x if y is not None else y
+    return y if y is not None else x
 
 
 def is_just(x: Any | None) -> bool:

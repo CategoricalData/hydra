@@ -1,7 +1,11 @@
 """Python implementations of hydra.lib.strings primitives."""
 
+from collections.abc import Sequence
 
-def cat(xs: list[str]) -> str:
+from hydra.dsl.python import frozenlist
+
+
+def cat(xs: Sequence[str]) -> str:
     """Concatenate a list of strings."""
     return "".join(xs)
 
@@ -11,12 +15,12 @@ def cat2(s1: str, s2: str) -> str:
     return s1 + s2
 
 
-def from_list(values: list[int]) -> str:
+def from_list(values: Sequence[int]) -> str:
     """Convert a list of integers to a string."""
     return "".join(chr(v) for v in values)
 
 
-def intercalate(separator: str, values: list[str]) -> str:
+def intercalate(separator: str, values: Sequence[str]) -> str:
     """Intercalate a string between a list of strings."""
     return separator.join(values)
 
@@ -31,14 +35,14 @@ def length(x: str) -> int:
     return len(x)
 
 
-def split_on(delimiter: str, x: str) -> list[str]:
+def split_on(delimiter: str, x: str) -> frozenlist[str]:
     """Split a string on a delimiter."""
-    return x.split(delimiter)
+    return tuple(x.split(delimiter))
 
 
-def to_list(x: str) -> list[int]:
+def to_list(x: str) -> frozenlist[int]:
     """Convert a string to a list of integers."""
-    return [ord(c) for c in x]
+    return tuple(ord(c) for c in x)
 
 
 def to_lower(x: str) -> str:
