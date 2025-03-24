@@ -2,4 +2,4 @@
 
 from __future__ import annotations
 
-id = lambda x: x
+id = lambda any_: any_
