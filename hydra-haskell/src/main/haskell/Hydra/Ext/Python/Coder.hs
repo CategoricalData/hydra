@@ -37,35 +37,44 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesNode :: Bool}
 
 encodeApplication :: PythonEnvironment -> Application -> Flow Graph Py.Expression
-encodeApplication env (Application fun arg) = case fullyStripTerm fun of
-    TermFunction f -> case f of
-      FunctionElimination elm -> case elm of
---        EliminationList ...
-        EliminationOptional (OptionalCases nothing just) -> do
-          return $ stringToPyExpression Py.QuoteStyleDouble "optional match expressions not yet supported"
---        EliminationProduct ...
-        EliminationRecord (Projection _ fname) -> do
-          parg <- encodeTerm env arg
-          return $ projectFromExpression parg $ encodeFieldName env fname
-        EliminationUnion (CaseStatement tname mdef cases) -> do
-          return $ stringToPyExpression Py.QuoteStyleDouble "inline match expressions are unsupported"
-        EliminationWrap _ -> do
-          parg <- encodeTerm env arg
-          return $ projectFromExpression parg $ Py.Name "value"
-        _ -> fail $ "elimination variant is not yet supported in applications: " ++ show (eliminationVariant elm)
-      FunctionPrimitive name -> do
-        parg <- encodeTerm env arg
-        return $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) [parg]
-      _ -> def
-    TermVariable name -> do -- Special-casing variables prevents quoting; forward references are allowed for function calls
-      parg <- encodeTerm env arg
-      return $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) [parg]
-    _ -> def
+encodeApplication env app = do
+    g <- getState
+    let arity = expansionArity g fun
+    pargs <- CM.mapM (encodeTerm env) args
+    let hargs = L.take arity pargs
+    let rargs = L.drop arity pargs
+    lhs <- applyArgs hargs
+    return $ L.foldl (\t a -> functionCall (pyExpressionToPyPrimary t) [a]) lhs rargs
   where
-    def = do
-      pfun <- encodeTerm env fun
-      parg <- encodeTerm env arg
-      return $ functionCall (pyExpressionToPyPrimary pfun) [parg]
+    (fun, args) = gatherArgs (TermApplication app) []
+    gatherArgs term args = case fullyStripTerm term of
+      TermApplication (Application lhs rhs) -> gatherArgs lhs (rhs:args)
+      _ -> (term, args)
+    applyArgs hargs = case fun of
+        TermFunction f -> case f of
+          FunctionElimination elm -> case elm of
+    --        EliminationList ...
+            EliminationOptional (OptionalCases nothing just) -> do
+              return $ stringToPyExpression Py.QuoteStyleDouble "optional match expressions not yet supported"
+    --        EliminationProduct ...
+            EliminationRecord (Projection _ fname) -> do
+              return $ projectFromExpression parg $ encodeFieldName env fname
+            EliminationUnion (CaseStatement tname mdef cases) -> do
+              return $ stringToPyExpression Py.QuoteStyleDouble "inline match expressions are unsupported"
+            EliminationWrap _ -> do
+              return $ projectFromExpression parg $ Py.Name "value"
+            _ -> fail $ "elimination variant is not yet supported in applications: " ++ show (eliminationVariant elm)
+          FunctionPrimitive name -> do
+            return $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) hargs
+          _ -> def
+        TermVariable name -> do -- Special-casing variables prevents quoting; forward references are allowed for function calls
+          return $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) hargs
+        _ -> def
+      where
+        parg = L.head hargs
+        def = do
+          pfun <- encodeTerm env fun
+          return $ functionCall (pyExpressionToPyPrimary pfun) hargs
 
 encodeApplicationType :: PythonEnvironment -> ApplicationType -> Flow Graph Py.Expression
 encodeApplicationType env at = do
@@ -206,7 +215,6 @@ encodeModule mod = do
     defs <- adaptedModuleDefinitions pythonLanguage mod
     let namespaces = namespacesForDefinitions encodeNamespace (moduleNamespace mod) defs
 
-
 --    let def = defs !! 6
 --    fail $ ""
 --      ++ "\n\t defs: " ++ show (L.length defs)
@@ -216,7 +224,6 @@ encodeModule mod = do
 --        DefinitionType _ typ -> ""
 --          ++ "\n\t type: " ++ showType typ
 --          ++ "\n\t deps: " ++ show (typeDependencyNames typ)
-
 
     let env = PythonEnvironment {
               pythonEnvironmentNamespaces = namespaces,
