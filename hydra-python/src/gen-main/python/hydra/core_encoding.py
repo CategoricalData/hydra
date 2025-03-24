@@ -28,8 +28,8 @@ def core_encode_application_type(at: hydra.core.ApplicationType) -> hydra.core.T
 def core_encode_case_statement(cs: hydra.core.CaseStatement) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.CaseStatement"), tuple([
       hydra.core.Field(hydra.core.Name("typeName"), core_encode_name(cs.type_name)),
-      hydra.core.Field(hydra.core.Name("default"), hydra.core.TermOptional(hydra.lib.optionals.map(core_encode_term, cs.default))),
-      hydra.core.Field(hydra.core.Name("cases"), hydra.core.TermList(hydra.lib.lists.map(core_encode_field, cs.cases)))])))
+      hydra.core.Field(hydra.core.Name("default"), hydra.core.TermOptional(hydra.lib.optionals.map(lambda v1: core_encode_term(v1), cs.default))),
+      hydra.core.Field(hydra.core.Name("cases"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_field(v1), cs.cases)))])))
 
 def core_encode_elimination(v1: hydra.core.Elimination) -> hydra.core.Term:
     match v1:
@@ -165,7 +165,7 @@ def core_encode_integer_value(v1: hydra.core.IntegerValue) -> hydra.core.Term:
 def core_encode_lambda(l: hydra.core.Lambda) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Lambda"), tuple([
       hydra.core.Field(hydra.core.Name("parameter"), core_encode_name(l.parameter)),
-      hydra.core.Field(hydra.core.Name("domain"), hydra.core.TermOptional(hydra.lib.optionals.map(core_encode_type, l.domain))),
+      hydra.core.Field(hydra.core.Name("domain"), hydra.core.TermOptional(hydra.lib.optionals.map(lambda v1: core_encode_type(v1), l.domain))),
       hydra.core.Field(hydra.core.Name("body"), core_encode_term(l.body))])))
 
 def core_encode_lambda_type(lt: hydra.core.LambdaType) -> hydra.core.Term:
@@ -175,14 +175,14 @@ def core_encode_lambda_type(lt: hydra.core.LambdaType) -> hydra.core.Term:
 
 def core_encode_let(l: hydra.core.Let) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Let"), tuple([
-      hydra.core.Field(hydra.core.Name("bindings"), hydra.core.TermList(hydra.lib.lists.map(core_encode_let_binding, l.bindings))),
+      hydra.core.Field(hydra.core.Name("bindings"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_let_binding(v1), l.bindings))),
       hydra.core.Field(hydra.core.Name("environment"), core_encode_term(l.environment))])))
 
 def core_encode_let_binding(b: hydra.core.LetBinding) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.LetBinding"), tuple([
       hydra.core.Field(hydra.core.Name("name"), core_encode_name(b.name)),
       hydra.core.Field(hydra.core.Name("term"), core_encode_term(b.term)),
-      hydra.core.Field(hydra.core.Name("type"), hydra.core.TermOptional(hydra.lib.optionals.map(core_encode_type_scheme, b.type)))])))
+      hydra.core.Field(hydra.core.Name("type"), hydra.core.TermOptional(hydra.lib.optionals.map(lambda v1: core_encode_type_scheme(v1), b.type)))])))
 
 def core_encode_literal(v1: hydra.core.Literal) -> hydra.core.Term:
     match v1:
@@ -239,12 +239,12 @@ def core_encode_projection(p: hydra.core.Projection) -> hydra.core.Term:
 def core_encode_record(r: hydra.core.Record) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Record"), tuple([
       hydra.core.Field(hydra.core.Name("typeName"), core_encode_name(r.type_name)),
-      hydra.core.Field(hydra.core.Name("fields"), hydra.core.TermList(hydra.lib.lists.map(core_encode_field, r.fields)))])))
+      hydra.core.Field(hydra.core.Name("fields"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_field(v1), r.fields)))])))
 
 def core_encode_row_type(rt: hydra.core.RowType) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.RowType"), tuple([
       hydra.core.Field(hydra.core.Name("typeName"), core_encode_name(rt.type_name)),
-      hydra.core.Field(hydra.core.Name("fields"), hydra.core.TermList(hydra.lib.lists.map(core_encode_field_type, rt.fields)))])))
+      hydra.core.Field(hydra.core.Name("fields"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_field_type(v1), rt.fields)))])))
 
 def core_encode_sum(s: hydra.core.Sum) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Sum"), tuple([
@@ -270,22 +270,22 @@ def core_encode_term(v1: hydra.core.Term) -> hydra.core.Term:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), core_encode_literal(v))))
         
         case hydra.core.TermList(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("list"), hydra.core.TermList(hydra.lib.lists.map(core_encode_term, v)))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("list"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_term(v1), v)))))
         
         case hydra.core.TermMap(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), hydra.core.TermMap(hydra.lib.maps.bimap(core_encode_term, core_encode_term, v)))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), hydra.core.TermMap(hydra.lib.maps.bimap(lambda v1: core_encode_term(v1), lambda v1: core_encode_term(v1), v)))))
         
         case hydra.core.TermOptional(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("optional"), hydra.core.TermOptional(hydra.lib.optionals.map(core_encode_term, v)))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("optional"), hydra.core.TermOptional(hydra.lib.optionals.map(lambda v1: core_encode_term(v1), v)))))
         
         case hydra.core.TermProduct(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("product"), hydra.core.TermList(hydra.lib.lists.map(core_encode_term, v)))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("product"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_term(v1), v)))))
         
         case hydra.core.TermRecord(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("record"), core_encode_record(v))))
         
         case hydra.core.TermSet(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("set"), hydra.core.TermSet(hydra.lib.sets.map(core_encode_term, v)))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("set"), hydra.core.TermSet(hydra.lib.sets.map(lambda v1: core_encode_term(v1), v)))))
         
         case hydra.core.TermSum(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("sum"), core_encode_sum(v))))
@@ -340,7 +340,7 @@ def core_encode_type(v1: hydra.core.Type) -> hydra.core.Term:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("optional"), core_encode_type(v))))
         
         case hydra.core.TypeProduct(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("product"), hydra.core.TermList(hydra.lib.lists.map(core_encode_type, v)))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("product"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_type(v1), v)))))
         
         case hydra.core.TypeRecord(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("record"), core_encode_row_type(v))))
@@ -349,7 +349,7 @@ def core_encode_type(v1: hydra.core.Type) -> hydra.core.Term:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("set"), core_encode_type(v))))
         
         case hydra.core.TypeSum(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("sum"), hydra.core.TermList(hydra.lib.lists.map(core_encode_type, v)))))
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("sum"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_type(v1), v)))))
         
         case hydra.core.TypeUnion(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("union"), core_encode_row_type(v))))
@@ -367,7 +367,7 @@ def core_encode_type_abstraction(l: hydra.core.TypeAbstraction) -> hydra.core.Te
 
 def core_encode_type_scheme(ts: hydra.core.TypeScheme) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeScheme"), tuple([
-      hydra.core.Field(hydra.core.Name("variables"), hydra.core.TermList(hydra.lib.lists.map(core_encode_name, ts.variables))),
+      hydra.core.Field(hydra.core.Name("variables"), hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_name(v1), ts.variables))),
       hydra.core.Field(hydra.core.Name("type"), core_encode_type(ts.type))])))
 
 def core_encode_typed_term(tt: hydra.core.TypedTerm) -> hydra.core.Term:
