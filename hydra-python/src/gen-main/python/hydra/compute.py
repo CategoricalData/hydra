@@ -12,9 +12,9 @@ S1 = TypeVar("S1")
 S2 = TypeVar("S2")
 T1 = TypeVar("T1")
 T2 = TypeVar("T2")
+V = TypeVar("V")
 V1 = TypeVar("V1")
 V2 = TypeVar("V2")
-X = TypeVar("X")
 
 @dataclass
 class Adapter(Generic[S1, S2, T1, T2, V1, V2]):
@@ -39,14 +39,14 @@ class Coder(Generic[S1, S2, V1, V2]):
     encode: Callable[[V1], Flow[S1, V2]]
     decode: Callable[[V2], Flow[S2, V1]]
 
-class Flow(Node["Callable[[S, Trace], FlowState[S, X]]"], Generic[S, X]):
+class Flow(Node["Callable[[S, Trace], FlowState[S, V]]"], Generic[S, V]):
     """A variant of the State monad with built-in logging and error handling."""
 
 @dataclass
-class FlowState(Generic[S, X]):
+class FlowState(Generic[S, V]):
     """The result of evaluating a Flow."""
     
-    value: X | None
+    value: V | None
     state: S
     trace: Trace
 

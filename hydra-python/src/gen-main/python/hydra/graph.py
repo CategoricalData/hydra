@@ -9,7 +9,7 @@ from typing import Annotated, Generic, TypeVar
 import hydra.compute
 import hydra.core
 
-X = TypeVar("X")
+A = TypeVar("A")
 
 class Comparison(Enum):
     """An equality judgement: less than, equal to, or greater than."""
@@ -48,11 +48,11 @@ class Primitive:
     implementation: Annotated[Callable[[frozenlist[hydra.core.Term]], hydra.compute.Flow[Graph, hydra.core.Term]], "A concrete implementation of the primitive function"]
 
 @dataclass
-class TermCoder(Generic[X]):
+class TermCoder(Generic[A]):
     """A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms."""
     
     type: hydra.core.Type
-    coder: hydra.compute.Coder[Graph, Graph, hydra.core.Term, X]
+    coder: hydra.compute.Coder[Graph, Graph, hydra.core.Term, A]
 
 class TypeClass(Enum):
     """Any of a small number of built-in type classes."""

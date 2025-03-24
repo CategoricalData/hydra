@@ -7,11 +7,11 @@ def fully_strip_term(t: hydra.core.Term) -> hydra.core.Term:
     """Strip all annotations from a term, including first-class type annotations."""
     
     match t:
-        case hydra.core.TermAnnotated(x):
-            return fully_strip_term(x.subject)
+        case hydra.core.TermAnnotated(arg_):
+            return fully_strip_term(arg_.subject)
         
-        case hydra.core.TermTyped(x):
-            return fully_strip_term(x.term)
+        case hydra.core.TermTyped(arg_):
+            return fully_strip_term(arg_.term)
         
         case _:
             return t
@@ -20,8 +20,8 @@ def strip_term(t: hydra.core.Term) -> hydra.core.Term:
     """Strip all annotations from a term."""
     
     match t:
-        case hydra.core.TermAnnotated(x):
-            return strip_term(x.subject)
+        case hydra.core.TermAnnotated(arg_):
+            return strip_term(arg_.subject)
         
         case _:
             return t
@@ -30,8 +30,8 @@ def strip_type(t: hydra.core.Type) -> hydra.core.Type:
     """Strip all annotations from a term."""
     
     match t:
-        case hydra.core.TypeAnnotated(x):
-            return strip_type(x.subject)
+        case hydra.core.TypeAnnotated(arg_):
+            return strip_type(arg_.subject)
         
         case _:
             return t
