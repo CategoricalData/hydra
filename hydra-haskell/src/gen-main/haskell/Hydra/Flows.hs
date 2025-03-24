@@ -86,8 +86,8 @@ mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->
     Mantle.EitherRight v1 -> (forRight v1)) (mutate t0))))
 
 pureInternal :: (t0 -> Compute.Flow t1 t0)
-pureInternal x = (Compute.Flow (\s -> \t -> Compute.FlowState {
-  Compute.flowStateValue = (Just x),
+pureInternal xp = (Compute.Flow (\s -> \t -> Compute.FlowState {
+  Compute.flowStateValue = (Just xp),
   Compute.flowStateState = s,
   Compute.flowStateTrace = t}))
 

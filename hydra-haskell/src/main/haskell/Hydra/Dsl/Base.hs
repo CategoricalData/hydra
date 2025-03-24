@@ -121,13 +121,13 @@ inject :: Name -> Name -> TTerm a -> TTerm b
 inject name fname (TTerm term) = TTerm $ Terms.inject name (Field fname term)
 
 inject2 :: Name -> Name -> TTerm (a -> b)
-inject2 name fname = lambda "x2" $ inject name fname $ var "x2"
+inject2 name fname = lambda "injected_" $ inject name fname $ var "injected_"
 
 just :: TTerm a -> TTerm (Maybe a)
 just (TTerm term) = TTerm $ Terms.just term
 
 just_ :: TTerm (a -> Maybe a)
-just_ = TTerm $ TermFunction $ FunctionLambda $ Lambda (Name "x") Nothing $ TermOptional $ Just $ TermVariable $ Name "x"
+just_ = TTerm $ Terms.lambda "just_" $ Terms.just $ Terms.var "just_"
 
 lambda :: String -> TTerm x -> TTerm (a -> b)
 lambda v (TTerm body) = TTerm $ Terms.lambda v body

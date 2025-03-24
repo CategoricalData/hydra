@@ -33,4 +33,4 @@ requireTermType =
   let withType = (\x -> case x of
           Nothing -> (Flows.fail "missing type annotation")
           Just v1 -> (Flows.pure v1))
-  in (\x -> withType (getTermType x))
+  in (\arg_ -> withType (getTermType arg_))

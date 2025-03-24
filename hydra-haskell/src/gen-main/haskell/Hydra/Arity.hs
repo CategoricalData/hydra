@@ -19,11 +19,11 @@ functionArity x = case x of
 
 -- | Find the arity (expected number of arguments) of a primitive constant or function
 primitiveArity :: (Graph.Primitive -> Int)
-primitiveArity x = ((\x -> typeArity (Core.typeSchemeType x)) (Graph.primitiveType x))
+primitiveArity arg_ = ((\arg_ -> typeArity (Core.typeSchemeType arg_)) (Graph.primitiveType arg_))
 
 termArity :: (Core.Term -> Int)
 termArity x = case x of
-  Core.TermApplication v1 -> ((\x -> (\x -> Math.sub x 1) (termArity x)) (Core.applicationFunction v1))
+  Core.TermApplication v1 -> ((\arg_ -> (\xapp -> Math.sub xapp 1) (termArity arg_)) (Core.applicationFunction v1))
   Core.TermFunction v1 -> (functionArity v1)
   _ -> 0
 

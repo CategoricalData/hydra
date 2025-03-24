@@ -56,7 +56,7 @@ boolean :: Bool -> Term
 boolean = literal . Literals.boolean
 
 compose :: Term -> Term -> Term
-compose f g = lambda "x" $ apply f (apply g $ var "x")
+compose f g = lambda "arg_" $ apply f (apply g $ var "arg_")
 
 constant :: Term -> Term
 constant = lambda ignoredVariable
@@ -89,7 +89,7 @@ fold :: Term -> Term
 fold = TermFunction . FunctionElimination . EliminationList
 
 identity :: Term
-identity = lambda "x" $ var "x"
+identity = lambda "any_" $ var "any_"
 
 inject :: Name -> Field -> Term
 inject tname = TermUnion . Injection tname

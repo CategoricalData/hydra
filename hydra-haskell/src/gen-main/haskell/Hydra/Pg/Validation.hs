@@ -21,8 +21,8 @@ validateEdge checkValue showValue labelForVertexId typ el =
               let expected = (Model.edgeTypeLabel typ) 
                   actual = (Model.edgeLabel el)
               in (verify (Equality.equalString (Model.unEdgeLabel actual) (Model.unEdgeLabel expected)) (failWith (prepend "Wrong label" (edgeLabelMismatch expected actual))))
-      checkId = (Optionals.map (\x -> failWith (prepend "Invalid id" x)) (checkValue (Model.edgeTypeId typ) (Model.edgeId el)))
-      checkProperties = (Optionals.map (\x -> failWith (prepend "Invalid property" x)) (validateProperties checkValue (Model.edgeTypeProperties typ) (Model.edgeProperties el)))
+      checkId = (Optionals.map (\arg_ -> failWith (prepend "Invalid id" arg_)) (checkValue (Model.edgeTypeId typ) (Model.edgeId el)))
+      checkProperties = (Optionals.map (\arg_ -> failWith (prepend "Invalid property" arg_)) (validateProperties checkValue (Model.edgeTypeProperties typ) (Model.edgeProperties el)))
       checkOut = ((\x -> case x of
               Nothing -> Nothing
               Just v1 -> ((\x -> case x of
@@ -92,8 +92,8 @@ validateVertex checkValue showValue typ el =
               let expected = (Model.vertexTypeLabel typ) 
                   actual = (Model.vertexLabel el)
               in (verify (Equality.equalString (Model.unVertexLabel actual) (Model.unVertexLabel expected)) (failWith (prepend "Wrong label" (vertexLabelMismatch expected actual))))
-      checkId = (Optionals.map (\x -> failWith (prepend "Invalid id" x)) (checkValue (Model.vertexTypeId typ) (Model.vertexId el)))
-      checkProperties = (Optionals.map (\x -> failWith (prepend "Invalid property" x)) (validateProperties checkValue (Model.vertexTypeProperties typ) (Model.vertexProperties el)))
+      checkId = (Optionals.map (\arg_ -> failWith (prepend "Invalid id" arg_)) (checkValue (Model.vertexTypeId typ) (Model.vertexId el)))
+      checkProperties = (Optionals.map (\arg_ -> failWith (prepend "Invalid property" arg_)) (validateProperties checkValue (Model.vertexTypeProperties typ) (Model.vertexProperties el)))
   in (checkAll [
     checkLabel,
     checkId,

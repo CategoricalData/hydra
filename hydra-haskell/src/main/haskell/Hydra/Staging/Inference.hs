@@ -152,7 +152,7 @@ inferTwo cx term1 desc1 term2 desc2 = Flows.map withResult $ inferMany cx [(term
 inferTypeOf :: InferenceContext -> Term -> Flow s (Term, TypeScheme)
 inferTypeOf cx term = bindInferredTerm cx letTerm "infer type of term" unifyAndSubst
   where
-    letTerm = TermLet $ Let [LetBinding (Name "x") term Nothing] $ Terms.string "ignored"
+    letTerm = TermLet $ Let [LetBinding (Name "ignoredVariableName") term Nothing] $ Terms.string "ignoredEnvironment"
     unifyAndSubst result = do
         (Let bindings _) <- Expect.letTerm $ normalizeTypeVariablesInTerm $ inferenceResultTerm result
         case bindings of

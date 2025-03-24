@@ -109,7 +109,7 @@ fromFlowDef :: TElement (a -> s -> Flow s a -> a)
 fromFlowDef = flowsDefinition "fromFlow" $
   doc "Get the value of a flow, or a default value if the flow fails" $
   lambda "def" $ lambda "cx" $ lambda "f" $
-      matchOpt (var "def") (lambda "x" $ var "x")
+      matchOpt (var "def") (lambda "xmo" $ var "xmo")
         @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
 
 mapDef :: TElement ((a -> b) -> Flow s a -> Flow s b)
@@ -155,7 +155,7 @@ mutateTraceDef = flowsDefinition "mutateTrace" $
 
 pureDef :: TElement (a -> Flow s a)
 pureDef = flowsDefinition "pureInternal" $
-  lambda "x" $ wrap _Flow $ lambdas ["s", "t"] $ Flows.flowState (just $ var "x") (var "s") (var "t")
+  lambda "xp" $ wrap _Flow $ lambdas ["s", "t"] $ Flows.flowState (just $ var "xp") (var "s") (var "t")
 
 pushErrorDef :: TElement (String -> Trace -> Trace)
 pushErrorDef = flowsDefinition "pushError" $

@@ -33,8 +33,8 @@ convertCase from to original =
             Mantle.CaseConventionLowerSnake -> byUnderscores
             Mantle.CaseConventionUpperSnake -> byUnderscores) from)
   in ((\x -> case x of
-    Mantle.CaseConventionCamel -> (decapitalize (Strings.cat (Lists.map (\x -> capitalize (Strings.toLower x)) parts)))
-    Mantle.CaseConventionPascal -> (Strings.cat (Lists.map (\x -> capitalize (Strings.toLower x)) parts))
+    Mantle.CaseConventionCamel -> (decapitalize (Strings.cat (Lists.map (\arg_ -> capitalize (Strings.toLower arg_)) parts)))
+    Mantle.CaseConventionPascal -> (Strings.cat (Lists.map (\arg_ -> capitalize (Strings.toLower arg_)) parts))
     Mantle.CaseConventionLowerSnake -> (Strings.intercalate "_" (Lists.map Strings.toLower parts))
     Mantle.CaseConventionUpperSnake -> (Strings.intercalate "_" (Lists.map Strings.toUpper parts))) to)
 
