@@ -189,20 +189,7 @@ expandLambdas graph term = contractTerm $ rewriteTerm (rewrite []) term
             erhs = rewrite [] recurse rhs
         _ -> afterRecursion $ recurse term
       where
-        afterRecursion term = case term of
-          TermFunction f -> case f of
-            FunctionElimination _ -> expand args 1 $ TermFunction f
---            FunctionLambda (Lambda v mt body) -> TermFunction $ FunctionLambda $ Lambda v mt $ expand args 0 $ rewrite [] recurse body
-            FunctionPrimitive name -> expand args (primitiveArity $ Y.fromJust $ lookupPrimitive graph name) $ TermFunction f
-            _ -> expand args 0 term
-          TermVariable name -> if 0 == arity
-              then TermVariable name
-              else expand args arity $ TermVariable name
-            where
-              arity = case typeSchemeType <$> (lookupElement graph name >>= elementType) of
-                Nothing -> 0
-                Just typ -> typeArity typ
-          _ -> expand args 0 term
+        afterRecursion term = expand args (expansionArity graph term) term
     expand args arity term = pad is apps
       where
         apps = L.foldl (\lhs arg -> TermApplication $ Application lhs arg) term args
@@ -213,6 +200,18 @@ expandLambdas graph term = contractTerm $ rewriteTerm (rewrite []) term
           Lambda var Nothing $ pad (tail is) (TermApplication $ Application term $ TermVariable var)
       where
         var = (Name $ "v" ++ show (head is))
+
+expansionArity :: Graph -> Term -> Int
+expansionArity graph term = case fullyStripTerm term of
+  TermApplication (Application lhs rhs) -> expansionArity graph lhs - 1
+  TermFunction f -> case f of
+    FunctionElimination _ -> 1
+    FunctionLambda _ -> 0 -- lambdas increase logical arity, but they do not need to be expanded
+    FunctionPrimitive name -> primitiveArity $ Y.fromJust $ lookupPrimitive graph name
+  TermVariable name -> case typeSchemeType <$> (lookupElement graph name >>= elementType) of
+    Nothing -> 0
+    Just typ -> typeArity typ
+  _ -> 0
 
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: Term -> Bool
