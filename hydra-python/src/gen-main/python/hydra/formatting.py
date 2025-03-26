@@ -1,6 +1,8 @@
 """String formatting types and functions."""
 
 from __future__ import annotations
+from collections.abc import Callable
+from hydra.dsl.python import frozenlist
 import hydra.core
 import hydra.lib.chars
 import hydra.lib.lists

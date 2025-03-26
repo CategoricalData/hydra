@@ -546,49 +546,62 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataUsesTypeVar = False,
       pythonModuleMetadataUsesNode = False}
     addDef meta def = case def of
-      DefinitionTerm _ term _ -> foldOverTerm TraversalOrderPre extendMeta meta term
+      DefinitionTerm _ term typ -> foldOverTerm TraversalOrderPre extendMetaForTerm (extendMetaForType True meta typ) term
+      DefinitionType _ typ -> foldOverType TraversalOrderPre (extendMetaForType False) meta typ
+    extendMetaForTerm meta t = case t of
+      TermLet (Let bindings _) -> L.foldl forBinding meta bindings
         where
-          extendMeta meta t = case t of
-            TermMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
-            _ -> meta
-      DefinitionType _ typ -> foldOverType TraversalOrderPre extendMeta meta3 typ
-        where
-          tvars = pythonModuleMetadataTypeVariables meta
-          meta3 = digForWrap typ
+          forBinding meta (LetBinding _ _ mts) = case mts of
+            Nothing -> meta
+            Just ts -> extendMetaForType False meta $ typeSchemeType ts
+      TermMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
+      _ -> meta
+    extendMetaForType isTermAnnot meta typ = extendFor meta3 typ
+      where
+        tvars = pythonModuleMetadataTypeVariables meta
+        meta3 = digForWrap typ
+          where
+            digForWrap typ = case stripType typ of
+              TypeLambda (LambdaType _ body) -> digForWrap body
+              TypeWrap _ -> if isTermAnnot
+                -- No need to import Node for instantiations of a Node type, e.g.
+                --   placeholder_name = hydra.core.Name("Placeholder")
+                then meta2
+                else meta2 {pythonModuleMetadataUsesNode = True}
+              _ -> meta2
+        meta2 = meta {pythonModuleMetadataTypeVariables = newTvars tvars typ}
+          where
+            newTvars s t = case stripType t of
+              TypeLambda (LambdaType v body) -> newTvars (S.insert v s) body
+              _ -> s
+        extendFor meta t = case t of
+          TypeFunction _ -> if isTermAnnot
+            -- If a particular term has a function type, don't import Callable; Python has special "def" syntax for functions.
+            then meta
+            -- If this is a type-level definition, or an *argument* to a function is a function, then we need Callable.
+            else meta {pythonModuleMetadataUsesCallable = True}
+          TypeLambda (LambdaType _ body) -> case baseType body of
+              TypeRecord _ -> meta {pythonModuleMetadataUsesGeneric = True}
+              _ -> meta
             where
-              digForWrap typ = case stripType typ of
-                TypeLambda (LambdaType _ body) -> digForWrap body
-                TypeWrap _ -> meta2 {pythonModuleMetadataUsesNode = True}
-                _ -> meta2
-          meta2 = meta {pythonModuleMetadataTypeVariables = newTvars tvars typ}
+              baseType t = case stripType t of
+                TypeLambda (LambdaType _ body2) -> baseType body2
+                t2 -> t2
+          TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True}
+          TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
+          TypeRecord (RowType _ fields) -> meta {
+              pythonModuleMetadataUsesAnnotated = L.foldl checkForAnnotated (pythonModuleMetadataUsesAnnotated meta) fields,
+              pythonModuleMetadataUsesDataclass = pythonModuleMetadataUsesDataclass meta || not (L.null fields)}
             where
-              newTvars s t = case stripType t of
-                TypeLambda (LambdaType v body) -> newTvars (S.insert v s) body
-                _ -> s
-          extendMeta meta t = case t of
-            TypeFunction _ -> meta {pythonModuleMetadataUsesCallable = True}
-            TypeLambda (LambdaType _ body) -> case baseType body of
-                TypeRecord _ -> meta {pythonModuleMetadataUsesGeneric = True}
-                _ -> meta
-              where
-                baseType t = case stripType t of
-                  TypeLambda (LambdaType _ body2) -> baseType body2
-                  t2 -> t2
-            TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True}
-            TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
-            TypeRecord (RowType _ fields) -> meta {
-                pythonModuleMetadataUsesAnnotated = L.foldl checkForAnnotated (pythonModuleMetadataUsesAnnotated meta) fields,
-                pythonModuleMetadataUsesDataclass = pythonModuleMetadataUsesDataclass meta || not (L.null fields)}
-              where
-                checkForAnnotated b (FieldType _ ft) = b || hasTypeDescription ft
-            TypeUnion rt@(RowType _ fields) -> if isEnumType rt
-                then meta {pythonModuleMetadataUsesEnum = True}
-                else meta {
-                  pythonModuleMetadataUsesNode = pythonModuleMetadataUsesNode meta || (not $ L.null fields)}
-              where
-                checkForLiteral b (FieldType _ ft) = b || isUnitType (stripType ft)
-                checkForNewType b (FieldType _ ft) = b || not (isUnitType (stripType ft))
-            _ -> meta
+              checkForAnnotated b (FieldType _ ft) = b || hasTypeDescription ft
+          TypeUnion rt@(RowType _ fields) -> if isEnumType rt
+              then meta {pythonModuleMetadataUsesEnum = True}
+              else meta {
+                pythonModuleMetadataUsesNode = pythonModuleMetadataUsesNode meta || (not $ L.null fields)}
+            where
+              checkForLiteral b (FieldType _ ft) = b || isUnitType (stripType ft)
+              checkForNewType b (FieldType _ ft) = b || not (isUnitType (stripType ft))
+          _ -> meta
 
 genericArg :: [Name] -> Y.Maybe Py.Expression
 genericArg tparamList = if L.null tparamList
