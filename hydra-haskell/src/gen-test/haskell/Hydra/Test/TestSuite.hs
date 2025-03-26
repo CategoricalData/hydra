@@ -4691,13 +4691,13 @@ listPrimitiveTests = Testing.TestGroup {
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))])})),
               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "x"),
+                Core.lambdaParameter = (Core.Name "arg_"),
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.pure"))),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.neg"))),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "arg_"))}))}))})))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-1))),
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-2))),
