@@ -59,9 +59,11 @@ generateSources printModule basePath mods = do
                 moduleElements = Y.catMaybes ((\e -> M.lookup (elementName e) els) <$> moduleElements mod)}
 
     writePair (path, s) = do
-      let fullPath = FP.combine basePath path
-      SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
-      writeFile fullPath s
+        let fullPath = FP.combine basePath path
+        SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
+        writeFile fullPath withNewline
+      where
+        withNewline = if L.isSuffixOf "\n" s then s else s ++ "\n"
 
     forModule mod = withTrace ("module " ++ unNamespace (moduleNamespace mod)) $ printModule mod
 
