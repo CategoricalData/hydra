@@ -1,6 +1,8 @@
 """A module for decoding terms to native objects."""
 
 from __future__ import annotations
+from collections.abc import Callable
+from hydra.dsl.python import frozenlist
 import hydra.core
 import hydra.lib.equality
 import hydra.lib.lists
