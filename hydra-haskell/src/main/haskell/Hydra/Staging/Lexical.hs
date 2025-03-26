@@ -21,6 +21,12 @@ import Control.Monad
 dereferenceElement :: Name -> Flow Graph (Maybe Element)
 dereferenceElement name = lookupElement <$> getState <*> pure name
 
+extendGraphWithBindings :: [LetBinding] -> Graph -> Graph
+extendGraphWithBindings bindings g = g {graphElements = M.union newEls $ graphElements g}
+  where
+    newEls = M.fromList $ fmap toEl bindings
+    toEl (LetBinding name term mts) = (name, Element name term mts)
+
 fieldsOf :: Type -> [FieldType]
 fieldsOf t = case stripType t of
   TypeLambda (LambdaType _ body) -> fieldsOf body

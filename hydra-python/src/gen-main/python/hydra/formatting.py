@@ -26,10 +26,10 @@ def convert_case(from_: hydra.mantle.CaseConvention, to: hydra.mantle.CaseConven
             return hydra.lib.lists.map(lambda v1: hydra.lib.strings.from_list(v1), hydra.lib.lists.foldl(split_on_uppercase, tuple([tuple([])]), hydra.lib.lists.reverse(hydra.lib.strings.to_list(decapitalize(original)))))
         match from_:
             case hydra.mantle.CaseConvention.CAMEL:
-                return by_caps
+                return by_caps()
             
             case hydra.mantle.CaseConvention.PASCAL:
-                return by_caps
+                return by_caps()
             
             case hydra.mantle.CaseConvention.LOWER_SNAKE:
                 return by_underscores
@@ -38,16 +38,16 @@ def convert_case(from_: hydra.mantle.CaseConvention, to: hydra.mantle.CaseConven
                 return by_underscores
     match to:
         case hydra.mantle.CaseConvention.CAMEL:
-            return decapitalize(hydra.lib.strings.cat(hydra.lib.lists.map(lambda arg_: capitalize(hydra.lib.strings.to_lower(arg_)), parts)))
+            return decapitalize(hydra.lib.strings.cat(hydra.lib.lists.map(lambda arg_: capitalize(hydra.lib.strings.to_lower(arg_)), parts())))
         
         case hydra.mantle.CaseConvention.PASCAL:
-            return hydra.lib.strings.cat(hydra.lib.lists.map(lambda arg_: capitalize(hydra.lib.strings.to_lower(arg_)), parts))
+            return hydra.lib.strings.cat(hydra.lib.lists.map(lambda arg_: capitalize(hydra.lib.strings.to_lower(arg_)), parts()))
         
         case hydra.mantle.CaseConvention.LOWER_SNAKE:
-            return hydra.lib.strings.intercalate("_", hydra.lib.lists.map(lambda v1: hydra.lib.strings.to_lower(v1), parts))
+            return hydra.lib.strings.intercalate("_", hydra.lib.lists.map(lambda v1: hydra.lib.strings.to_lower(v1), parts()))
         
         case hydra.mantle.CaseConvention.UPPER_SNAKE:
-            return hydra.lib.strings.intercalate("_", hydra.lib.lists.map(lambda v1: hydra.lib.strings.to_upper(v1), parts))
+            return hydra.lib.strings.intercalate("_", hydra.lib.lists.map(lambda v1: hydra.lib.strings.to_upper(v1), parts()))
 
 def convert_case_camel_to_lower_snake(v1: str) -> str:
     """Convert a string from camel case to lower snake case."""

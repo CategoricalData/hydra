@@ -36,6 +36,15 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesTypeVar :: Bool,
   pythonModuleMetadataUsesNode :: Bool}
 
+argsAndBindings :: Term -> Type -> ([Name], [LetBinding], Term, [Type], Type)
+argsAndBindings = gather [] [] []
+  where
+    gather prevArgs prevBindings prevDoms term typ = case fullyStripTerm term of
+      TermFunction (FunctionLambda (Lambda var _ body)) -> case stripType typ of
+        TypeFunction (FunctionType dom cod) -> gather (var:prevArgs) prevBindings (dom:prevDoms) body cod
+      TermLet (Let bindings body) -> gather prevArgs (bindings ++ prevBindings) prevDoms body typ
+      t -> (L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ)
+
 encodeApplication :: PythonEnvironment -> Application -> Flow Graph Py.Expression
 encodeApplication env app = do
     g <- getState
@@ -330,7 +339,15 @@ encodeTerm env term = case fullyStripTerm term of
         else do
           parg <- encode $ fieldTerm field
           return $ functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) [parg]
-    TermVariable name -> pure $ termVariableReference env name
+    TermVariable name -> do
+      g <- getState
+      return $ case lookupElement g name of
+        -- Lambda-bound variables
+        Nothing -> termVariableReference env name
+        -- Let-bound variables
+        Just el -> if isUnaryFunction el
+          then functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) []
+          else termVariableReference env name
     TermWrap (WrappedTerm tname term1) -> do
       parg <- encode term1
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) [parg]
@@ -348,21 +365,18 @@ encodeTermAssignment env name term typ comment = if L.null args && L.null bindin
     else do
         -- TODO: topological sort of bindings
         bindingStmts <- L.concat <$> CM.mapM encodeBinding bindings
-        bodyStmt <- encodeFunctionDefinition env name args body doms cod comment bindingStmts
-        return [bodyStmt]
+        g <- getState
+        withState (extendGraphWithBindings bindings g) $ do
+          bodyStmt <- encodeFunctionDefinition env name args body doms cod comment bindingStmts
+          return [bodyStmt]
   where
     encodeBinding (LetBinding name1 term1 mts) = do
-      comment <- fmap normalizeComment <$> getTermDescription term1
-      typ1 <- case mts of
-        Nothing -> fail $ "missing type for let binding " ++ unName name1 ++ " in " ++ unName name
-        Just ts -> return $ typeSchemeType ts
-      encodeTermAssignment env name1 term1 typ1 comment
-    (args, bindings, body, doms, cod) = gatherArgsAndBindings [] [] [] term typ
-    gatherArgsAndBindings prevArgs prevBindings prevDoms term typ = case fullyStripTerm term of
-      TermFunction (FunctionLambda (Lambda var _ body)) -> case stripType typ of
-        TypeFunction (FunctionType dom cod) -> gatherArgsAndBindings (var:prevArgs) prevBindings (dom:prevDoms) body cod
-      TermLet (Let bindings body) -> gatherArgsAndBindings prevArgs (bindings ++ prevBindings) prevDoms body typ
-      t -> (L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ)
+        comment <- fmap normalizeComment <$> getTermDescription term1
+        typ1 <- case mts of
+          Nothing -> fail $ "missing type for let binding " ++ unName name1 ++ " in " ++ unName name
+          Just ts -> return $ typeSchemeType ts
+        encodeTermAssignment env name1 term1 typ1 comment
+    (args, bindings, body, doms, cod) = argsAndBindings term typ
 
 encodeTopLevelTerm :: PythonEnvironment -> Term -> Flow Graph [Py.Statement]
 encodeTopLevelTerm env term = if L.length args == 1
@@ -608,6 +622,13 @@ genericArg tparamList = if L.null tparamList
   then Nothing
   else Just $ pyPrimaryToPyExpression $ primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Generic")
     (pyNameToPyExpression . encodeTypeVariable <$> tparamList)
+
+isUnaryFunction :: Element -> Bool
+isUnaryFunction el = case elementType el of
+  Nothing -> False
+  Just ts -> L.null args && not (L.null bindings)
+    where
+      (args, bindings, _, _, _) = argsAndBindings (elementTerm el) (typeSchemeType ts)
 
 moduleToPython :: Module -> Flow Graph (M.Map FilePath String)
 moduleToPython mod = do
