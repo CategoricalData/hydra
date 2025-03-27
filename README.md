@@ -1,46 +1,52 @@
 # Hydra
 
-Hydra is a domain-specific language for type-safe transformations between data, schema, and program representations.
-As a data transformation toolkit, Hydra is similar to [Dragon](https://eng.uber.com/dragon-schema-integration-at-uber-scale),
-but open source, and with a more completely and formally specified data model based on typed lambda calculus.
-Hydra maps data and schemas between languages in a way which maintains type conformance.
-It will even map functional programs between selected languages, including parts of its own source code.
+Welcome to the Hydra project!
+Hydra is a unique functional programming language based on the [LambdaGraph](https://bit.ly/lg-kgc2024) data model.
+It explores an isomorphism between labeled [hypergraphs](https://en.wikipedia.org/wiki/Hypergraph) and [typed lambda calculus](https://en.wikipedia.org/wiki/Typed_lambda_calculus):
+in Hydra, programs are graphs, and graphs are programs.
+Hydra has the ability to translate its own kernel into several other languages, including
+Haskell ([Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)),
+Java ([Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java)),
+and Python ([Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python); in progress).
+Hydra is used for data modeling, validation, and transforms at Microsoft,
+while its closed-source predecessor [Dragon](https://www.uber.com/blog/dragon-schema-integration-at-uber-scale/) was used
+for data integration and graph construction at Uber.
+The language is now being developed for its own sake, with the intention of becoming an [Apache Incubator](https://incubator.apache.org) project,
+integrating more directly with [Apache TinkerPop](https://tinkerpop.apache.org),
+and branching out into additional concrete programming languages.
+Typical use cases include:
+* **Graph construction**. Hydra supports TinkerPop-style property graphs 
+  as well as [RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework) and [SHACL](https://en.wikipedia.org/wiki/SHACL),
+  and has been used in combination with the ISO/IEC [GQL](https://en.wikipedia.org/wiki/Graph_Query_Language) standard.
+  Hydra provides [DSLs](https://en.wikipedia.org/wiki/Domain-specific_language) for defining schemas and mappings,
+  as well as tools for validating schemas and data, and moving them seamlessly into and out of the graph formats.
+* **Data integration**. Hydra includes "coders" (encoders+decoders) for many data and schema languages which you can easily compose together
+  to build data transform pipelines. Some of the currently supported languages and formats include 
+  [Protobuf](https://en.wikipedia.org/wiki/Protocol_Buffers),
+  [Avro](https://avro.apache.org),
+  [JSON](https://json.org) and [YAML](https://en.wikipedia.org/wiki/YAML),
+  [RDF](https://www.w3.org/RDF) formats including N-Triples,
+  [GraphQL](https://graphql.org/),
+  LinkedIn's [PDL Schema](https://linkedin.github.io/rest.li/pdl_schema) language, as well as simple tabular data (CSV/TSV).
+  Hydra has been used extensively with (Delta) [Parquet](https://en.wikipedia.org/wiki/Apache_Parquet), although this support is not currently open source. 
+ There is also limited support for [C Sharp](https://en.wikipedia.org/wiki/C_Sharp_(programming_language)) and [Scala](https://en.wikipedia.org/wiki/Scala_(programming_language)) ([Hydra-Scala](https://github.com/CategoricalData/hydra/tree/main/hydra-scala)).
 
-For more information, see [hydra-haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)
-as well as the Data Day Texas presentation, "[Transpilers Gone Wild](https://www.slideshare.net/joshsh/transpilers-gone-wild-introducing-hydra)"
-and its sequel, "[Graphs Gone Wild](https://docs.google.com/presentation/d/1PF0K3KtopV0tMVa0sGBW2hDA7nw-cSwQm6h1AED1VSA)".
-To get involved, join the Hydra [Discord server](https://discord.gg/3uq8WpFqbG).
-An early design document is available [here](https://bit.ly/hydra-design-doc).
-The full specification of Hydra's data model, nicknamed LambdaGraph, should appear as a preprint before long;
-you can see major excerpts from the specification [here](https://docs.google.com/presentation/d/1PF0K3KtopV0tMVa0sGBW2hDA7nw-cSwQm6h1AED1VSA).
+* **Computational graphs**. Unusually among graph data models and query languages, Hydra has deep support for [polymorphism](https://en.wikipedia.org/wiki/Parametric_polymorphism),
+  as well as embedding computational elements with a graph (sometimes called *computational knowledge graphs*).
+  As we mentioned, programs are graphs and vice versa. See the KGC 2024 presentation [Graphs, logics, and lambda calculus](https://bit.ly/lg-kgc2024) for examples.
 
-The project encompasses:
-* **[Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)**: is currently the most complete and mature implementation of the language, and the source-of-truth for all of Hydra's generated code.
-Here you will find Hydra coders (type-aware encoders/decoders) for Haskell itself, Java, Scala,
-[Avro](https://avro.apache.org), [JSON](https://json.org), [YAML](https://en.wikipedia.org/wiki/YAML),
-[RDF](https://www.w3.org/RDF) + [SHACL](https://www.w3.org/TR/shacl), [GraphQL](https://graphql.org/),
-and LinkedIn's [PDL Schema](https://linkedin.github.io/rest.li/pdl_schema) language, as well as [TinkerPop](https://tinkerpop.apache.org)-style property graphs. See [Property graphs](https://github.com/CategoricalData/hydra/wiki/Property-graphs) for more information. Most of the Hydra documentation is also here.
-* **[Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java)** is a Java implementation of Hydra which is under active development.
-It includes a substantial portion of the Hydra kernel, though none of the coders mentioned above are fully ported to Java yet.
-JavaDocs are available [here](https://categoricaldata.github.io/hydra/hydra-java/javadoc).
-* [Hydra-Scala](https://github.com/CategoricalData/hydra/tree/main/hydra-scala) is an experimental Scala implementation which has been on the back burner for a little while;
-Java has been getting most of the attention lately.
-* [hydra-ext](https://github.com/CategoricalData/hydra/tree/main/hydra-ext) is Haskell project which includes a large collection of Hydra models, coders, and utilities which can be useful for building applications.
-For example, there is a GeoJson model, a Coq model, and an AvroWorkflows tool which has been used at LinkedIn for ingestion of Avro-formatted data into RDF triple stores.
+One of the less exciting, but very important aspects of Hydra is its test suite, which guarantees parity across the supported programming languages.
+This ensures that each Hydra implementation behaves the same,
+and we think it will be very useful in heterogeneous environments like TinkerPop where we need exactly the same logic
+-- validation, query steps, user-defined functions, etc. -- to be manifested identically in more than one programming language.
 
-Both of the active language variants (Haskell and Java) contain a complete copy of Hydra's built-in generated APIs, including:
-* Core data model (types and terms)
-* Graphs and modules
-* Standard library of primitive functions
-* Computation
-* Bidirectional transformations
-* BNF grammars
-* Various utilities for transform workflows, formatting, etc.
-* Models for Avro, GraphQL, Haskell, Java, JSON, OWL, Parquet, PDL, Protobuf, Python v3, RDF, Scala, SHACL, ShEx, SQL, property graphs, and YAML
+If any of the above sounds interesting, feel free to ask questions or get involved via the [LambdaGraph Discord](https://lg-discord) server.
+Near-term goals of the project include what we call "closing the loop" (completely folding Hydra's kernel into the Hydra DSL),
+[finishing](https://github.com/CategoricalData/hydra/wiki/New-Hydra-implementations) Hydra-Python and updating Hydra-Java,
+and getting Hydra out into the community.
+There is a recent [demo video](https://drive.google.com/file/d/1p2R6WWc1cW02eb7O8l-4cV1htDb84Y43/view) you can check out,
+as well as a couple of earlier presentations [here](https://www.slideshare.net/joshsh/transpilers-gone-wild-introducing-hydra)
+and [here](https://docs.google.com/presentation/d/1PF0K3KtopV0tMVa0sGBW2hDA7nw-cSwQm6h1AED1VSA),
+and the original design document [here](https://bit.ly/hydra-design-doc).
 
-Hydra also features a language-agnostic test suite which guarantees parity of program evaluation and primitive functions across the language variants.
-Along with the rest of Hydra's generated code, the test suite will be used as a seed for future implementations in additional languages, such as
-[Python](https://github.com/CategoricalData/hydra/issues/66)
-and [Go](https://github.com/CategoricalData/hydra/issues/65).
-
-If you would like to contribute to Hydra, please see the [Hydra developer documentation](https://github.com/CategoricalData/hydra/wiki/Hydra-developers).
+Share and enjoy.
