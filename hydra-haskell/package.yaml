@@ -30,7 +30,7 @@ dependencies:
   - split                         >= 0.2.3 && < 0.3
   - text                          >= 2.0.2 && < 2.1
   - vector                        >= 0.12.0 && < 0.14
-  - mtl # Temporary, for the Algorithm W implementation
+  - array # Temporary, for Tarjan's algorithm
 
 library:
   source-dirs:
@@ -49,3 +49,4 @@ tests:
       - hspec-discover
       - HUnit
       - QuickCheck
+      - mtl # For the Algorithm W reference implementation

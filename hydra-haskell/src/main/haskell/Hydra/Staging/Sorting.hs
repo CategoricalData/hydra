@@ -4,11 +4,11 @@ module Hydra.Staging.Sorting (
   OrderingIsomorphism(..),
   createOrderingIsomorphism,
   topologicalSort,
-  topologicalSortComponents,
-  initGraph
+  topologicalSortComponents
 ) where
 
-import qualified Data.Graph as G
+import Hydra.Staging.SCC
+
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -42,22 +42,11 @@ topologicalSort pairs = if L.null withCycles
     withCycles = L.filter isCycle sccs
     isCycle = not . L.null . L.tail
 
--- | Find the strongly connected components (including cycles and isolated vertices) of a graph, in (reverse) topological order
+-- | Find the strongly connected components (including cycles and isolated vertices) of a graph,
+--   in (reverse) topological order, i.e. dependencies before dependents
 topologicalSortComponents :: Ord a => [(a, [a])] -> [[a]]
-topologicalSortComponents pairs = L.sort <$> (fmap (getKey nodeFromVertex) . treeToList) <$> G.scc g
+topologicalSortComponents pairs = fmap (fmap getKey) $ stronglyConnectedComponents g
   where
-    (g, nodeFromVertex) = initGraph pairs
-
-treeToList :: G.Tree a -> [a]
-treeToList (G.Node root subforest) = root:(L.concat (treeToList <$> subforest))
-
-getKey :: (G.Vertex -> ((), a, [a])) -> G.Vertex -> a
-getKey nodeFromVertex v = n
-  where
-    (_, n, _) = nodeFromVertex v
-
-initGraph :: Ord a => [(a, [a])] -> (G.Graph, G.Vertex -> ((), a, [a]))
-initGraph pairs = (g, nodeFromVertex)
-  where
-    (g, nodeFromVertex, _) = G.graphFromEdges (toEdge <$> pairs)
-    toEdge (key, keys) = ((), key, keys)
+    (g, getKey) = adjacencyListsToGraph (toEdge <$> pairs)
+      where
+        toEdge (key, keys) = (key, keys)
