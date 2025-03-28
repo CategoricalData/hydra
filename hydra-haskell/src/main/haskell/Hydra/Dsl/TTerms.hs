@@ -95,9 +95,6 @@ match tname def pairs = Core.termFunction $ Core.functionElimination $ Core.elim
   where
     toField = fmap (\(n, t) -> Core.field n t)
 
-matchOpt :: TTerm Term -> TTerm Term -> TTerm Term
-matchOpt n j = Core.termFunction $ Core.functionElimination $ Core.eliminationOptional $ Core.optionalCases n j
-
 nothing :: TTerm (Maybe Term)
 nothing = Base.nothing
 

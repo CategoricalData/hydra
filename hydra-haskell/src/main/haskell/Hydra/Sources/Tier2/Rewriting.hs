@@ -28,6 +28,7 @@ import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier1.All
 
 import Hydra.Dsl.Mantle
+import Hydra.Sources.Libraries
 
 
 rewritingDefinition :: String -> TTerm a -> TElement a
@@ -129,9 +130,6 @@ rewriteTermDef :: TElement (((Term -> Term) -> Term -> Term) -> Term -> Term)
 rewriteTermDef = rewritingDefinition "rewriteTerm" $ lambda "f" $ lets [
   "fsub">: lambdas ["recurse", "term"] $ lets [
     "forElimination">: lambda "elm" $ cases _Elimination (var "elm") Nothing [
-      _Elimination_optional>>: lambda "oc" $ Core.eliminationOptional $ Core.optionalCases
-        (var "recurse" @@ (Core.optionalCasesNothing @@ var "oc"))
-        (var "recurse" @@ (Core.optionalCasesJust @@ var "oc")),
       _Elimination_product>>: lambda "tp" $ Core.eliminationProduct $ var "tp",
       _Elimination_record>>: lambda "p" $ Core.eliminationRecord $ var "p",
       _Elimination_union>>: lambda "cs" $ Core.eliminationUnion $ Core.caseStatement
@@ -246,11 +244,8 @@ subtermsDef = rewritingDefinition "subterms" $
       Core.applicationArgument @@ var "p"],
     _Term_function>>: match _Function (Just $ list []) [
         _Function_elimination>>: match _Elimination (Just $ list []) [
-            _Elimination_optional>>: lambda "oc" $ list [
-              Core.optionalCasesNothing @@ var "oc",
-              Core.optionalCasesJust @@ var "oc"],
             _Elimination_union>>: lambda "cs" $ Lists.concat2
-              ((matchOpt (list []) (lambda "t" $ list [var "t"])) @@ (Core.caseStatementDefault @@ var "cs"))
+              ((primitive _optionals_maybe @@ (list []) @@ (lambda "t" $ list [var "t"])) @@ (Core.caseStatementDefault @@ var "cs"))
               (Lists.map Core.fieldTerm (Core.caseStatementCases @@ var "cs"))],
         _Function_lambda>>: lambda "l" $ list [Core.lambdaBody @@ var "l"]],
     _Term_let>>: lambda "lt" $ Lists.cons
@@ -260,7 +255,7 @@ subtermsDef = rewritingDefinition "subterms" $
     _Term_literal>>: constant $ list [],
     _Term_map>>: lambda "m" (Lists.concat
       (Lists.map (lambda "p" $ list [first @@ var "p", second @@ var "p"]) (Maps.toList $ var "m"))),
-    _Term_optional>>: matchOpt (list []) (lambda "t" $ list [var "t"]),
+    _Term_optional>>: primitive _optionals_maybe @@  (list []) @@ (lambda "t" $ list [var "t"]),
     _Term_product>>: lambda "tuple" $ var "tuple",
     _Term_record>>: lambda "rt" (Lists.map Core.fieldTerm (Core.recordFields @@ var "rt")),
     _Term_set>>: lambda "l" $ Sets.toList $ var "l",
@@ -282,11 +277,8 @@ subtermsWithAccessorsDef = rewritingDefinition "subtermsWithAccessors" $
       result termAccessorApplicationArgument $ Core.applicationArgument @@ var "p"],
     _Term_function>>: match _Function (Just none) [
         _Function_elimination>>: match _Elimination (Just none) [
-            _Elimination_optional>>: lambda "oc" $ list [
-              result termAccessorOptionalCasesNothing $ Core.optionalCasesNothing @@ var "oc",
-              result termAccessorOptionalCasesJust $ Core.optionalCasesJust @@ var "oc"],
             _Elimination_union>>: lambda "cs" $ Lists.concat2
-              ((matchOpt none (lambda "t" $ single termAccessorUnionCasesDefault $ var "t")) @@ (Core.caseStatementDefault @@ var "cs"))
+              ((primitive _optionals_maybe @@  none @@ (lambda "t" $ single termAccessorUnionCasesDefault $ var "t")) @@ (Core.caseStatementDefault @@ var "cs"))
               (Lists.map
                 (lambda "f" $ result (termAccessorUnionCasesBranch $ Core.fieldName @@ var "f") $ Core.fieldTerm @@ var "f")
                 (Core.caseStatementCases @@ var "cs"))],
@@ -308,7 +300,7 @@ subtermsWithAccessorsDef = rewritingDefinition "subtermsWithAccessors" $
           result (termAccessorMapKey $ int32 0) $ first @@ var "p",
           result (termAccessorMapValue $ int32 0) $ second @@ var "p"])
         (Maps.toList $ var "m"))),
-    _Term_optional>>: matchOpt none (lambda "t" $ single termAccessorOptionalTerm $ var "t"),
+    _Term_optional>>: primitive _optionals_maybe @@  none @@ (lambda "t" $ single termAccessorOptionalTerm $ var "t"),
     _Term_product>>: lambda "p" $ Lists.map
       -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
       (lambda "e" $ result (termAccessorProductTerm $ int32 0) $ var "e")

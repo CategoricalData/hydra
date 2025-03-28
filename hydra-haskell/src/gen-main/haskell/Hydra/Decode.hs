@@ -170,25 +170,6 @@ nominal getName getB getA expected =
   let namesEqual = (\n1 -> \n2 -> Equality.equalString (Core.unName n1) (Core.unName n2))
   in (Optionals.compose getA (\a -> Logic.ifElse (namesEqual (getName a) expected) (Just (getB a)) Nothing))
 
-optCases :: (Core.Term -> Maybe Core.OptionalCases)
-optCases = (Optionals.compose (Optionals.compose matchFunction matchElimination) matchOptional) 
-  where 
-    matchFunction = (\arg_ -> (\x -> case x of
-      Core.TermFunction v1 -> (Optionals.pure v1)
-      _ -> Nothing) (Strip.fullyStripTerm arg_))
-    matchElimination = (\x -> case x of
-      Core.FunctionElimination v1 -> (Optionals.pure v1)
-      _ -> Nothing)
-    matchOptional = (\x -> case x of
-      Core.EliminationOptional v1 -> (Optionals.pure v1)
-      _ -> Nothing)
-
-optCasesJust :: (Core.Term -> Maybe Core.Term)
-optCasesJust term = (Optionals.map Core.optionalCasesJust (optCases term))
-
-optCasesNothing :: (Core.Term -> Maybe Core.Term)
-optCasesNothing term = (Optionals.map Core.optionalCasesNothing (optCases term))
-
 optional :: (Core.Term -> Maybe (Maybe Core.Term))
 optional arg_ = ((\x -> case x of
   Core.TermOptional v1 -> (Optionals.pure v1)

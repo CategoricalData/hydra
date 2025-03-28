@@ -9,6 +9,7 @@ import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -18,15 +19,13 @@ import qualified Data.Set as S
 getState :: (Compute.Flow t0 t0)
 getState = (Compute.Flow (\s0 -> \t0 ->  
   let fs1 = (Compute.unFlow (Flows.pure ()) s0 t0)
-  in ((\v -> \s -> \t -> (\x -> case x of
-    Nothing -> Compute.FlowState {
-      Compute.flowStateValue = Nothing,
-      Compute.flowStateState = s,
-      Compute.flowStateTrace = t}
-    Just _ -> Compute.FlowState {
-      Compute.flowStateValue = (Just s),
-      Compute.flowStateState = s,
-      Compute.flowStateTrace = t}) v) (Compute.flowStateValue fs1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))))
+  in ((\v -> \s -> \t -> Optionals.maybe (Compute.FlowState {
+    Compute.flowStateValue = Nothing,
+    Compute.flowStateState = s,
+    Compute.flowStateTrace = t}) (\_ -> Compute.FlowState {
+    Compute.flowStateValue = (Just s),
+    Compute.flowStateState = s,
+    Compute.flowStateTrace = t}) v) (Compute.flowStateValue fs1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))))
 
 putState :: (t0 -> Compute.Flow t0 ())
 putState cx = (Compute.Flow (\s0 -> \t0 ->  

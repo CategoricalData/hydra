@@ -95,7 +95,6 @@ literalVariantT = TypeVariable _LiteralVariant :: Type
 mapTypeT = TypeVariable _MapType :: Type
 nameT = TypeVariable _Name
 namespaceT = TypeVariable _Namespace
-optionalCasesT = TypeVariable _OptionalCases :: Type
 precisionT = TypeVariable _Precision :: Type
 primitiveT = TypeVariable _Primitive :: Type
 projectionT = TypeVariable _Projection :: Type

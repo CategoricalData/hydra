@@ -7,6 +7,7 @@ import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
+import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
@@ -49,11 +50,9 @@ qualifyName name =
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: (Module.QualifiedName -> Core.Name)
 unqualifyName qname =  
-  let prefix = ((\x -> case x of
-          Nothing -> ""
-          Just v1 -> (Strings.cat [
-            Module.unNamespace v1,
-            "."])) (Module.qualifiedNameNamespace qname))
+  let prefix = (Optionals.maybe "" (\n -> Strings.cat [
+          Module.unNamespace n,
+          "."]) (Module.qualifiedNameNamespace qname))
   in (Core.Name (Strings.cat [
     prefix,
     (Module.qualifiedNameLocal qname)]))

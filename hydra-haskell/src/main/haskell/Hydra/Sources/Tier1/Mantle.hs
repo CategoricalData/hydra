@@ -38,7 +38,6 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "EliminationVariant" $
         doc "The identifier of an elimination constructor" $
         enum [
-          "optional",
           "product",
           "record",
           "union",
@@ -73,8 +72,6 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "applicationFunction">: unit,
           "applicationArgument">: unit,
           "lambdaBody">: unit,
-          "optionalCasesNothing">: unit,
-          "optionalCasesJust">: unit,
           "unionCasesDefault">: unit,
           "unionCasesBranch">: core "Name",
           "letEnvironment">: unit,

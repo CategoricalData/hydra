@@ -67,9 +67,6 @@ hydraDecodeModule = Module (Namespace "hydra.decode") elements [hydraStripModule
       el mapDef,
       el nameDef,
       el nominalDef,
-      el optCasesDef,
-      el optCasesJustDef,
-      el optCasesNothingDef,
       el optionalDef,
       el pairDef,
       el recordDef,
@@ -284,22 +281,6 @@ nominalDef = decodeDefinition "nominal" $
         (lambda "a" $ (Logic.ifElse (var "namesEqual" @@ (var "getName" @@ var "a") @@ (var "expected")))
           (just (var "getB" @@ var "a"))
           nothing)
-
-optCasesDef :: TElement (Term -> Maybe OptionalCases)
-optCasesDef = decodeDefinition "optCases" $
-  lets [
-    "matchFunction">: matchTermVariant _Term_function,
-    "matchElimination">: matchVariant _Function _Function_elimination,
-    "matchOptional">: matchVariant _Elimination _Elimination_optional]
-    $ compose3 (var "matchFunction") (var "matchElimination") (var "matchOptional")
-
-optCasesJustDef :: TElement (Term -> Maybe Term)
-optCasesJustDef = decodeDefinition "optCasesJust" $
-  lambda "term" $ Optionals.map Core.optionalCasesJust (ref optCasesDef @@ var "term")
-
-optCasesNothingDef :: TElement (Term -> Maybe Term)
-optCasesNothingDef = decodeDefinition "optCasesNothing" $
-  lambda "term" $ Optionals.map Core.optionalCasesNothing (ref optCasesDef @@ var "term")
 
 optionalDef :: TElement (Term -> Maybe (Maybe Term))
 optionalDef = decodeDefinition "optional" $

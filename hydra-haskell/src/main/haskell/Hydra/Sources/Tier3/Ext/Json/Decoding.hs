@@ -29,6 +29,7 @@ import           Hydra.Sources.Tier2.All
 
 import qualified Hydra.Json as Json
 import Hydra.Sources.Tier1.Json
+import Hydra.Sources.Libraries
 
 
 jsonDecodingModule :: Module
@@ -66,7 +67,9 @@ decodeFieldDef  = jsonDecodingDefinition "Field" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     Flows.bind
       (ref decodeOptionalFieldDef @@ var "decodeValue" @@ var "name" @@ var "m")
-      (matchOpt (Flows.fail ("missing field: " ++ var "name")) $ lambda "f" $ Flows.pure $ var "f")
+      (primitive _optionals_maybe
+        @@ (Flows.fail ("missing field: " ++ var "name"))
+        @@ (lambda "f" $ Flows.pure $ var "f"))
 
 decodeNumberDef :: TElement (Json.Value -> Flow s Double)
 decodeNumberDef  = jsonDecodingDefinition "Number" $
@@ -82,7 +85,9 @@ decodeOptionalFieldDef :: TElement ((Json.Value -> Flow s a) -> String -> (M.Map
 decodeOptionalFieldDef  = jsonDecodingDefinition "OptionalField" $
   withTypeClasses ordT0 $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
-    (matchOpt (Flows.pure nothing) (lambda "v" (Flows.map (lambda "x" (just $ var "x")) (var "decodeValue" @@ var "v"))))
+    (primitive _optionals_maybe
+        @@ (Flows.pure nothing)
+        @@ (lambda "v" (Flows.map (lambda "x" (just $ var "x")) (var "decodeValue" @@ var "v"))))
       @@ (Maps.lookup (var "name") (var "m"))
 
 decodeStringDef :: TElement (Json.Value -> Flow s String)

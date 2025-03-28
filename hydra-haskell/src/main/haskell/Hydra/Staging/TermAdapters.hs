@@ -81,7 +81,6 @@ functionProxyName = Name "hydra.core.FunctionProxy"
 functionProxyType :: Type -> Type
 functionProxyType dom = TypeUnion $ RowType functionProxyName [
   FieldType _Elimination_wrap Types.string,
-  FieldType _Elimination_optional Types.string,
   FieldType _Elimination_record Types.string,
   FieldType _Elimination_union Types.string, -- TODO (TypeRecord cases)
   FieldType _Function_lambda Types.string, -- TODO (TypeRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
@@ -98,7 +97,6 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
       TermFunction f -> case f of
         FunctionElimination e -> case e of
           EliminationWrap (Name name) -> variant functionProxyName _Elimination_wrap $ string name
-          EliminationOptional _ -> variant functionProxyName _Elimination_optional $ string $ show term -- TODO
           EliminationRecord _ -> variant functionProxyName _Elimination_record $ string $ show term -- TODO
           EliminationUnion _ -> variant functionProxyName _Elimination_union $ string $ show term -- TODO
         FunctionLambda _ -> variant functionProxyName _Function_lambda $ string $ show term -- TODO
@@ -109,7 +107,6 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
         (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= Expect.injection
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
           (_Elimination_wrap, forWrapped fterm),
-          (_Elimination_optional, forOptionalCases fterm),
           (_Elimination_record, forProjection fterm),
           (_Elimination_union, forCases fterm),
           (_Function_lambda, forLambda fterm),
@@ -120,7 +117,6 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
         forCases fterm = read <$> Expect.string fterm -- TODO
         forLambda fterm = read <$> Expect.string fterm -- TODO
         forWrapped fterm = unwrap . Name <$> Expect.string fterm
-        forOptionalCases fterm = read <$> Expect.string fterm -- TODO
         forPrimitive fterm = primitive . Name <$> Expect.string fterm
         forProjection fterm = read <$> Expect.string fterm -- TODO
         forVariable fterm = var <$> Expect.string fterm
@@ -129,7 +125,6 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
       domAd <- termAdapter dom
       return $ TypeUnion $ RowType functionProxyName [
         FieldType _Elimination_wrap Types.string,
-        FieldType _Elimination_optional Types.string,
         FieldType _Elimination_record Types.string,
         FieldType _Elimination_union Types.string, -- TODO (TypeRecord cases)
         FieldType _Function_lambda Types.string, -- TODO (TypeRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
@@ -185,10 +180,6 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
       $ bidirectional $ \dir term -> case fullyStripTerm term of
         TermFunction f -> TermFunction <$> case f of
           FunctionElimination e -> FunctionElimination <$> case e of
-            EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$> (
-              OptionalCases
-                <$> encodeDecode dir (adapterCoder codAd) nothing
-                <*> (encodeDecode dir (adapterCoder $ Y.fromJust optionAd) just))
             EliminationUnion (CaseStatement n def cases) -> do
                 rcases <- CM.mapM (\f -> encodeDecode dir (getCoder $ fieldName f) f) cases
                 rdef <- case def of

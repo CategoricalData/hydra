@@ -52,7 +52,6 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
       typePredicate
   where
       eliminationVariants = [
-        EliminationVariantOptional,
         EliminationVariantProduct,
         EliminationVariantRecord,
         EliminationVariantUnion,

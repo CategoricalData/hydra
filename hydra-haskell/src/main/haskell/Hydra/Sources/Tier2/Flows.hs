@@ -27,6 +27,8 @@ import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier1.All hiding (mapDef)
 
+import Hydra.Sources.Libraries
+
 
 flowsDefinition :: String -> TTerm a -> TElement a
 flowsDefinition = definitionInModule hydraFlowsModule
@@ -60,9 +62,9 @@ bindDef = flowsDefinition "bind" $
   lambdas ["l", "r"] $ lets [
     "q">: lambdas ["s0", "t0"] $ lets [
       "fs1">: Flows.unFlow @@ var "l" @@ var "s0" @@ var "t0"]
-      $ (matchOpt
-          (Flows.flowState nothing (Flows.flowStateState @@ var "fs1") (Flows.flowStateTrace @@ var "fs1"))
-          (lambda "v" $ Flows.unFlow @@ (var "r" @@ var "v") @@ (Flows.flowStateState @@ var "fs1") @@ (Flows.flowStateTrace @@ var "fs1")))
+      $ (primitive _optionals_maybe
+          @@ (Flows.flowState nothing (Flows.flowStateState @@ var "fs1") (Flows.flowStateTrace @@ var "fs1"))
+          @@ (lambda "v" $ Flows.unFlow @@ (var "r" @@ var "v") @@ (Flows.flowStateState @@ var "fs1") @@ (Flows.flowStateTrace @@ var "fs1")))
         @@ (Flows.flowStateValue @@ var "fs1")]
     $ wrap _Flow $ var "q"
 
@@ -108,9 +110,10 @@ flowSucceedsDef = flowsDefinition "flowSucceeds" $
 fromFlowDef :: TElement (a -> s -> Flow s a -> a)
 fromFlowDef = flowsDefinition "fromFlow" $
   doc "Get the value of a flow, or a default value if the flow fails" $
-  lambda "def" $ lambda "cx" $ lambda "f" $
-      matchOpt (var "def") (lambda "xmo" $ var "xmo")
-        @@ (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
+  lambda "def" $ lambda "cx" $ lambda "f" $ Optionals.maybe
+    (var "def")
+    (lambda "xmo" $ var "xmo")
+    (Flows.flowStateValue @@ (Flows.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
 
 mapDef :: TElement ((a -> b) -> Flow s a -> Flow s b)
 mapDef = flowsDefinition "map" $

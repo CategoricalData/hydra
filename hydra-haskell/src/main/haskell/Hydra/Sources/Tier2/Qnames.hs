@@ -85,6 +85,8 @@ unqualifyNameDef :: TElement (QualifiedName -> Name)
 unqualifyNameDef = qnamesDefinition "unqualifyName" $
   doc "Convert a qualified name to a dot-separated name" $
   lambda "qname" $ lets [
-    "prefix">: matchOpt (string "") (lambda "n" $ (unwrap _Namespace @@ var "n") ++ string ".")
-      @@ (project _QualifiedName _QualifiedName_namespace @@ var "qname")]
+    "prefix">: Optionals.maybe
+      (string "")
+      (lambda "n" $ (unwrap _Namespace @@ var "n") ++ string ".")
+      (project _QualifiedName _QualifiedName_namespace @@ var "qname")]
     $ wrap _Name $ var "prefix" ++ (project _QualifiedName _QualifiedName_local @@ var "qname")

@@ -21,12 +21,10 @@ bind :: (Compute.Flow t2 t0 -> (t0 -> Compute.Flow t2 t1) -> Compute.Flow t2 t1)
 bind l r =  
   let q = (\s0 -> \t0 ->  
           let fs1 = (Compute.unFlow l s0 t0)
-          in ((\x -> case x of
-            Nothing -> Compute.FlowState {
-              Compute.flowStateValue = Nothing,
-              Compute.flowStateState = (Compute.flowStateState fs1),
-              Compute.flowStateTrace = (Compute.flowStateTrace fs1)}
-            Just v1 -> (Compute.unFlow (r v1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))) (Compute.flowStateValue fs1)))
+          in (Optionals.maybe (Compute.FlowState {
+            Compute.flowStateValue = Nothing,
+            Compute.flowStateState = (Compute.flowStateState fs1),
+            Compute.flowStateTrace = (Compute.flowStateTrace fs1)}) (\v -> Compute.unFlow (r v) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1)) (Compute.flowStateValue fs1)))
   in (Compute.Flow q)
 
 bind2 :: (Compute.Flow t2 t0 -> Compute.Flow t2 t3 -> (t0 -> t3 -> Compute.Flow t2 t1) -> Compute.Flow t2 t1)
@@ -54,9 +52,7 @@ flowSucceeds :: (t0 -> Compute.Flow t0 t1 -> Bool)
 flowSucceeds cx f = (Optionals.isJust (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
 
 fromFlow :: (t1 -> t0 -> Compute.Flow t0 t1 -> t1)
-fromFlow def cx f = ((\x -> case x of
-  Nothing -> def
-  Just v1 -> v1) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
+fromFlow def cx f = (Optionals.maybe def (\xmo -> xmo) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
 
 map_ :: ((t0 -> t1) -> Compute.Flow t2 t0 -> Compute.Flow t2 t1)
 map_ f f1 = (Compute.Flow (\s0 -> \t0 ->  

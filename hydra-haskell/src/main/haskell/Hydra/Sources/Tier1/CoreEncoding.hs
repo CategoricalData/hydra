@@ -59,7 +59,6 @@ coreEncodingModule = Module (Namespace "hydra.coreEncoding") elements [] [hydraC
       el coreEncodeLiteralTypeDef,
       el coreEncodeMapTypeDef,
       el coreEncodeNameDef,
-      el coreEncodeOptionalCasesDef,
       el coreEncodeProjectionDef,
       el coreEncodeRecordDef,
       el coreEncodeRowTypeDef,
@@ -193,7 +192,6 @@ coreEncodeCaseStatementDef = coreEncodingDefinition "CaseStatement" $
 coreEncodeEliminationDef :: TElement (Elimination -> Term)
 coreEncodeEliminationDef = coreEncodingDefinition "Elimination" $
     match _Elimination Nothing [
-      ecase _Elimination_optional coreEncodeOptionalCasesDef,
       ecase _Elimination_product coreEncodeTupleProjectionDef,
       ecase _Elimination_record coreEncodeProjectionDef,
       ecase _Elimination_union coreEncodeCaseStatementDef,
@@ -342,12 +340,6 @@ coreEncodeMapTypeDef = coreEncodingDefinition "MapType" $
 coreEncodeNameDef :: TElement (Name -> Term)
 coreEncodeNameDef = coreEncodingDefinition "Name" $
   lambda "fn" $ encodedWrappedTerm _Name $ encodedString $ unwrap _Name @@ var "fn"
-
-coreEncodeOptionalCasesDef :: TElement (OptionalCases -> Term)
-coreEncodeOptionalCasesDef = coreEncodingDefinition "OptionalCases" $
-  lambda "oc" $ encodedRecord _OptionalCases [
-    field _OptionalCases_nothing $ ref coreEncodeTermDef @@ (Core.optionalCasesNothing @@ var "oc"),
-    field _OptionalCases_just $ ref coreEncodeTermDef @@ (Core.optionalCasesJust @@ var "oc")]
 
 coreEncodeProjectionDef :: TElement (Projection -> Term)
 coreEncodeProjectionDef = coreEncodingDefinition "Projection" $

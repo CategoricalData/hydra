@@ -15,7 +15,6 @@ caseConventionUpperSnake = unitVariant _CaseConvention _CaseConvention_upperSnak
 
 eliminationVariant :: EliminationVariant -> TTerm EliminationVariant
 eliminationVariant v = unitVariant _EliminationVariant $ case v of
-  EliminationVariantOptional -> _EliminationVariant_optional
   EliminationVariantProduct -> _EliminationVariant_product
   EliminationVariantRecord -> _EliminationVariant_record
   EliminationVariantUnion -> _EliminationVariant_union
@@ -46,12 +45,6 @@ termAccessorApplicationArgument = unitVariant _TermAccessor _TermAccessor_applic
 
 termAccessorLambdaBody :: TTerm TermAccessor
 termAccessorLambdaBody = unitVariant _TermAccessor _TermAccessor_lambdaBody
-
-termAccessorOptionalCasesNothing :: TTerm TermAccessor
-termAccessorOptionalCasesNothing = unitVariant _TermAccessor _TermAccessor_optionalCasesNothing
-
-termAccessorOptionalCasesJust :: TTerm TermAccessor
-termAccessorOptionalCasesJust = unitVariant _TermAccessor _TermAccessor_optionalCasesJust
 
 termAccessorUnionCasesDefault :: TTerm TermAccessor
 termAccessorUnionCasesDefault = unitVariant _TermAccessor _TermAccessor_unionCasesDefault

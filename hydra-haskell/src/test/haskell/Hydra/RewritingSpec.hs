@@ -109,9 +109,9 @@ testExpandLambdas g = do
           (splitOn @@ var "foo" @@ var "bar" @@ var "baz")
       H.it "test #6" $
         expandsTo
-          (matchOpt (int32 42) length)
+          (primitive _optionals_maybe @@ (int32 42) @@ length)
           -- Note two levels of lambda expansion
-          (lambda "v1" $ (matchOpt (int32 42) $ lambda "v1" $ length @@ var "v1") @@ var "v1")
+          (lambda "v1" $ (primitive _optionals_maybe @@ (int32 42) @@ (lambda "v1" $ length @@ var "v1")) @@ var "v1")
       H.it "test #7" $
         expandsTo
           (project (Name "Person") (Name "firstName"))
@@ -187,9 +187,9 @@ testExpandTypedLambdas = do
           (lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2")
       H.it "test #3" $
         expandsTo
-          (matchOpt (int32 42) length)
+          (primitive _optionals_maybe @@ (int32 42) @@ length)
           -- Note two levels of lambda expansion
-          (lambda "v1" $ (matchOpt (int32 42) $ lambda "v1" $ length @@ var "v1") @@ var "v1")
+          (lambda "v1" $ (primitive _optionals_maybe @@ (int32 42) @@ (lambda "v1" $ length @@ var "v1")) @@ var "v1")
       H.it "test #4" $
         expandsTo
           (project (Name "Person") (Name "firstName"))

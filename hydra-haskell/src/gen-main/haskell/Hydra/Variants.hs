@@ -14,7 +14,6 @@ import qualified Data.Set as S
 -- | Find the elimination variant (constructor) for a given elimination term
 eliminationVariant :: (Core.Elimination -> Mantle.EliminationVariant)
 eliminationVariant x = case x of
-  Core.EliminationOptional _ -> Mantle.EliminationVariantOptional
   Core.EliminationProduct _ -> Mantle.EliminationVariantProduct
   Core.EliminationRecord _ -> Mantle.EliminationVariantRecord
   Core.EliminationUnion _ -> Mantle.EliminationVariantUnion
@@ -23,11 +22,10 @@ eliminationVariant x = case x of
 -- | All elimination variants (constructors), in a canonical order
 eliminationVariants :: [Mantle.EliminationVariant]
 eliminationVariants = [
-  Mantle.EliminationVariantWrap,
-  Mantle.EliminationVariantOptional,
   Mantle.EliminationVariantProduct,
   Mantle.EliminationVariantRecord,
-  Mantle.EliminationVariantUnion]
+  Mantle.EliminationVariantUnion,
+  Mantle.EliminationVariantWrap]
 
 -- | Find the precision of a given floating-point type
 floatTypePrecision :: (Core.FloatType -> Mantle.Precision)

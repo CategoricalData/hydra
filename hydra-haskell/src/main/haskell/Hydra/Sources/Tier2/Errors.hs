@@ -28,6 +28,7 @@ import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier1.All
 
 import Hydra.Sources.Tier2.Variants
+import Hydra.Sources.Libraries
 
 
 hydraErrorsModule :: Module
@@ -51,9 +52,9 @@ getStateDef = errorsDefinition "getState" $ -- Flow s s
   wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
     "fs1">: Flows.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"] $ -- FlowState s ()
     (lambda "v" $ lambda "s" $ lambda "t" $ (
-        (matchOpt
-          (Flows.flowState nothing (var "s") (var "t"))
-          (constant (Flows.flowState (just $ var "s") (var "s") (var "t"))))
+        (primitive _optionals_maybe
+          @@ (Flows.flowState nothing (var "s") (var "t"))
+          @@ (constant (Flows.flowState (just $ var "s") (var "s") (var "t"))))
          @@ var "v"))
       @@ (Flows.flowStateValue @@ var "fs1") @@ (Flows.flowStateState @@ var "fs1") @@ (Flows.flowStateTrace @@ var "fs1")
 

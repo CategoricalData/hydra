@@ -46,7 +46,6 @@ csharpLanguageDef = csharpLanguageDefinition "csharpLanguage" $
       typePredicate
   where
       eliminationVariants = [ -- TODO: verify whether all are supported
-        EliminationVariantOptional,
         EliminationVariantProduct,
         EliminationVariantRecord,
         EliminationVariantUnion,

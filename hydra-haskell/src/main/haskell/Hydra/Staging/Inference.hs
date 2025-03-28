@@ -221,7 +221,6 @@ inferTypeOfCollection cx typCons trmCons desc els = bindVar withVar
 
 inferTypeOfElimination :: InferenceContext -> Elimination -> Flow s InferenceResult
 inferTypeOfElimination cx elm = case elm of
-  EliminationOptional oc -> inferTypeOfOptionalCases cx oc
   EliminationProduct tp -> inferTypeOfTupleProjection cx tp
   EliminationRecord p -> inferTypeOfProjection cx p
   EliminationUnion c -> inferTypeOfCaseStatement cx c
@@ -348,22 +347,6 @@ inferTypeOfOptional cx m = inferTypeOfCollection cx Types.optional trmCons "opti
     trmCons terms = case terms of
       [] -> Terms.optional Nothing
       [term] -> Terms.optional $ Just term
-
-inferTypeOfOptionalCases :: InferenceContext -> OptionalCases -> Flow s InferenceResult
-inferTypeOfOptionalCases cx (OptionalCases n j) = bindVar2 withVars
-  where
-    withVars domv codv = Flows.bind (inferTwo cx n "nothing case" j "just case") withResults
-      where
-        dom = TypeVariable domv
-        cod = TypeVariable codv
-        withResults (nterm, nts, jterm, jts, subst) = mapConstraints cx withSubst [
-            TypeConstraint cod nts "optional elimination; nothing case",
-            TypeConstraint (Types.function dom cod) jts "optional elimination; just case"]
-          where
-            withSubst csubst = yield
-                (Terms.matchOpt nterm jterm)
-                (Types.function (Types.optional dom) cod)
-                (composeTypeSubst subst csubst)
 
 inferTypeOfPrimitive :: InferenceContext -> Name -> Flow s InferenceResult
 inferTypeOfPrimitive cx name = case M.lookup name (inferenceContextPrimitiveTypes cx) of

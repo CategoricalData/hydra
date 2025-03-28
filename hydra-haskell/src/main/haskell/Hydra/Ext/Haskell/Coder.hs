@@ -75,18 +75,6 @@ encodeFunction namespaces fun = case fun of
     FunctionElimination e -> case e of
       EliminationWrap name -> pure $ H.ExpressionVariable $ elementReference namespaces $
         qname (Y.fromJust $ namespaceOf name) $ newtypeAccessorName name
-      EliminationOptional (OptionalCases nothing just) -> do
-        nothingRhs <- H.CaseRhs <$> encodeTerm namespaces nothing
-        let nothingAlt = H.Alternative (H.PatternName $ rawName "Nothing") nothingRhs Nothing
-        justAlt <- withDepth key_haskellVar $ \depth -> do
-          -- Note: some of the following could be brought together with FunctionCases
-          let v0 = "v" ++ show depth
-          let rhsTerm = simplifyTerm $ apply just (var v0)
-          let v1 = if S.member (Name v0) $ freeVariablesInTerm rhsTerm then v0 else ignoredVariable
-          let lhs = applicationPattern (rawName "Just") [H.PatternName $ rawName v1]
-          rhs <- H.CaseRhs <$> encodeTerm namespaces rhsTerm
-          return $ H.Alternative lhs rhs Nothing
-        return $ hslambda "x" $ H.ExpressionCase $ H.CaseExpression (hsvar "x") [nothingAlt, justAlt]
       EliminationProduct (TupleProjection arity idx) -> if arity == 2
         then return $ hsvar $ if idx == 0 then "fst" else "snd"
         else fail "Eliminations for tuples of arity > 2 are not supported yet in the Haskell coder"
