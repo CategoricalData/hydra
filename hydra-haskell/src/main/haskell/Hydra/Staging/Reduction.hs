@@ -97,7 +97,6 @@ reduceTerm eager env = rewriteTermM mapping
       _ -> pure $ applyToArguments original args
 
     applyElimination elm reducedArg = case elm of
-      EliminationOptional _ -> fail "optional eliminations are unsupported"
       EliminationRecord proj -> do
         fields <- Expect.recordWithName (projectionTypeName proj) $ stripTerm reducedArg
         let matchingFields = L.filter (\f -> fieldName f == projectionField proj) fields
@@ -241,8 +240,6 @@ termIsValue g term = case stripTerm term of
     functionIsValue f = case f of
       FunctionElimination e -> case e of
         EliminationWrap _ -> True
-        EliminationOptional (OptionalCases nothing just) -> termIsValue g nothing
-          && termIsValue g just
         EliminationRecord _ -> True
         EliminationUnion (CaseStatement _ def cases) -> checkFields cases && (Y.maybe True (termIsValue g) def)
       FunctionLambda (Lambda _ _ body) -> termIsValue g body

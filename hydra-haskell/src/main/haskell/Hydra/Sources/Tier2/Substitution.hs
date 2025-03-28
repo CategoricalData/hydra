@@ -117,25 +117,28 @@ substituteInTermDef = substitutionDefinition "substituteInTerm" $
           (Just $ var "recurse" @@ var "term") [
           _Function_lambda>>: var "withLambda"],
         _Term_let>>: var "withLet",
-        _Term_variable>>: lambda "name" $ optCases (Maps.lookup (var "name") (var "s"))
+        _Term_variable>>: lambda "name" $ Optionals.maybe
           (var "recurse" @@ var "term")
-          (lambda "sterm" $ var "sterm")]] $
+          (lambda "sterm" $ var "sterm")
+          (Maps.lookup (var "name") (var "s"))]] $
     ref rewriteTermDef @@ var "rewrite"
 
 substInTypeDef :: TElement (TypeSubst -> Type -> Type)
 substInTypeDef = substitutionDefinition "substInType" $
   lambda "subst" $ lets [
     "rewrite">: lambdas ["recurse", "typ"] $ cases _Type (var "typ") (Just $ var "recurse" @@ var "typ") [
-      _Type_lambda>>: lambda "lt" $ optCases (Maps.lookup (Core.lambdaTypeParameter @@ var "lt") (Typing.unTypeSubst @@ var "subst"))
+      _Type_lambda>>: lambda "lt" $ Optionals.maybe
         (var "recurse" @@ var "typ")
         (lambda "styp" $ Core.typeLambda $ Core.lambdaType
           (Core.lambdaTypeParameter @@ var "lt")
           (ref substInTypeDef
             @@ (var "removeVar" @@ (Core.lambdaTypeParameter @@ var "lt"))
-            @@ (Core.lambdaTypeBody @@ var "lt"))),
-      _Type_variable>>: lambda "v" $ optCases (Maps.lookup (var "v") (Typing.unTypeSubst @@ var "subst"))
+            @@ (Core.lambdaTypeBody @@ var "lt")))
+        (Maps.lookup (Core.lambdaTypeParameter @@ var "lt") (Typing.unTypeSubst @@ var "subst")),
+      _Type_variable>>: lambda "v" $ Optionals.maybe
         (var "typ")
-        (lambda "styp" $ var "styp")],
+        (lambda "styp" $ var "styp")
+        (Maps.lookup (var "v") (Typing.unTypeSubst @@ var "subst"))],
     "removeVar">: lambdas ["v"] $ Typing.typeSubst $ Maps.remove (var "v") (Typing.unTypeSubst @@ var "subst")] $
     (ref rewriteTypeDef) @@ var "rewrite"
 

@@ -143,9 +143,6 @@ mapTerm = TermMap
 match :: Name -> Maybe Term -> [Field] -> Term
 match tname def fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement tname def fields
 
-matchOpt :: Term -> Term -> Term
-matchOpt n j = TermFunction $ FunctionElimination $ EliminationOptional $ OptionalCases n j
-
 matchWithVariants :: Name -> Maybe Term -> [(Name, Name)] -> Term
 matchWithVariants tname def pairs = match tname def (toField <$> pairs)
   where

@@ -62,11 +62,6 @@ coreEncodeCaseStatement cs = (Core.TermRecord (Core.Record {
 
 coreEncodeElimination :: (Core.Elimination -> Core.Term)
 coreEncodeElimination x = case x of
-  Core.EliminationOptional v1 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.core.Elimination"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "optional"),
-      Core.fieldTerm = (coreEncodeOptionalCases v1)}}))
   Core.EliminationProduct v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Elimination"),
     Core.injectionField = Core.Field {
@@ -435,17 +430,6 @@ coreEncodeName :: (Core.Name -> Core.Term)
 coreEncodeName fn = (Core.TermWrap (Core.WrappedTerm {
   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
   Core.wrappedTermObject = (Core.TermLiteral (Core.LiteralString (Core.unName fn)))}))
-
-coreEncodeOptionalCases :: (Core.OptionalCases -> Core.Term)
-coreEncodeOptionalCases oc = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.core.OptionalCases"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "nothing"),
-      Core.fieldTerm = (coreEncodeTerm (Core.optionalCasesNothing oc))},
-    Core.Field {
-      Core.fieldName = (Core.Name "just"),
-      Core.fieldTerm = (coreEncodeTerm (Core.optionalCasesJust oc))}]}))
 
 coreEncodeProjection :: (Core.Projection -> Core.Term)
 coreEncodeProjection p = (Core.TermRecord (Core.Record {

@@ -67,9 +67,6 @@ hydraCoreModule = Module ns elements [] [] $
       def "Elimination" $
         doc "A corresponding elimination for an introduction term" $
         union [
-          "optional">:
-            doc "Eliminates an optional term by matching over the two possible cases" $
-            core "OptionalCases",
           "product">:
             doc "Eliminates a tuple by projecting the component at a given 0-indexed offset" $
             core "TupleProjection",
@@ -248,16 +245,6 @@ hydraCoreModule = Module ns elements [] [] $
       def "Name" $
         doc "A unique identifier in some context; a string-valued key"
         $ wrap string,
-
-      def "OptionalCases" $
-        doc "A case statement for matching optional terms" $
-        record [
-          "nothing">:
-            doc "A term provided if the optional value is nothing" $
-            core "Term",
-          "just">:
-            doc "A function which is applied if the optional value is non-nothing" $
-            core "Term"],
 
       def "Projection" $
         doc "A record elimination; a projection" $

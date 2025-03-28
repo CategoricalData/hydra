@@ -76,9 +76,6 @@ caseStatementDefault = Base.project _CaseStatement _CaseStatement_default
 caseStatementCases :: TTerm (CaseStatement -> [Field])
 caseStatementCases = Base.project _CaseStatement _CaseStatement_cases
 
-eliminationOptional :: TTerm OptionalCases -> TTerm Elimination
-eliminationOptional = variant _Elimination _Elimination_optional
-
 eliminationProduct :: TTerm TupleProjection -> TTerm Elimination
 eliminationProduct = variant _Elimination _Elimination_product
 
@@ -270,17 +267,6 @@ name (Name n) = wrap _Name $ string n
 
 name' :: TTerm String -> TTerm Name
 name' = wrap _Name
-
-optionalCases :: TTerm Term -> TTerm Term -> TTerm OptionalCases
-optionalCases nothing just = Base.record _OptionalCases [
-  _OptionalCases_nothing>>: nothing,
-  _OptionalCases_just>>: just]
-
-optionalCasesNothing :: TTerm (OptionalCases -> Term)
-optionalCasesNothing = Base.project _OptionalCases _OptionalCases_nothing
-
-optionalCasesJust :: TTerm (OptionalCases -> Term)
-optionalCasesJust = Base.project _OptionalCases _OptionalCases_just
 
 projection :: TTerm Name -> TTerm Name -> TTerm Projection
 projection tname fname = Base.record _Projection [

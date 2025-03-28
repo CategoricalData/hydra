@@ -203,17 +203,6 @@ nArgs n args = if L.length args /= n
   then unexpected (show n ++ " arguments") $ show (L.length args)
   else pure ()
 
-optCases :: Term -> Flow s (OptionalCases)
-optCases term = case fullyStripTerm term of
-  TermFunction (FunctionElimination (EliminationOptional cs)) -> pure cs
-  _ -> unexpected "optional cases" $ show term
-
-optCasesJust :: Term -> Flow s Term
-optCasesJust term = optionalCasesJust <$> optCases term
-
-optCasesNothing :: Term -> Flow s Term
-optCasesNothing term = optionalCasesNothing <$> optCases term
-
 optional :: (Term -> Flow s x) -> Term -> Flow s (Y.Maybe x)
 optional f term = case fullyStripTerm term of
   TermOptional mt -> case mt of

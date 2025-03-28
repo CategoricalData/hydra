@@ -23,16 +23,8 @@ validateEdge checkValue showValue labelForVertexId typ el =
               in (verify (Equality.equalString (Model.unEdgeLabel actual) (Model.unEdgeLabel expected)) (failWith (prepend "Wrong label" (edgeLabelMismatch expected actual))))
       checkId = (Optionals.map (\arg_ -> failWith (prepend "Invalid id" arg_)) (checkValue (Model.edgeTypeId typ) (Model.edgeId el)))
       checkProperties = (Optionals.map (\arg_ -> failWith (prepend "Invalid property" arg_)) (validateProperties checkValue (Model.edgeTypeProperties typ) (Model.edgeProperties el)))
-      checkOut = ((\x -> case x of
-              Nothing -> Nothing
-              Just v1 -> ((\x -> case x of
-                Nothing -> (Just (failWith (prepend "Out-vertex does not exist" (showValue (Model.edgeOut el)))))
-                Just v2 -> (verify (Equality.equalString (Model.unVertexLabel v2) (Model.unVertexLabel (Model.edgeTypeOut typ))) (failWith (prepend "Wrong out-vertex label" (vertexLabelMismatch (Model.edgeTypeOut typ) v2))))) (v1 (Model.edgeOut el)))) labelForVertexId)
-      checkIn = ((\x -> case x of
-              Nothing -> Nothing
-              Just v1 -> ((\x -> case x of
-                Nothing -> (Just (failWith (prepend "In-vertex does not exist" (showValue (Model.edgeIn el)))))
-                Just v2 -> (verify (Equality.equalString (Model.unVertexLabel v2) (Model.unVertexLabel (Model.edgeTypeIn typ))) (failWith (prepend "Wrong in-vertex label" (vertexLabelMismatch (Model.edgeTypeIn typ) v2))))) (v1 (Model.edgeIn el)))) labelForVertexId)
+      checkOut = (Optionals.maybe Nothing (\f -> Optionals.maybe (Just (failWith (prepend "Out-vertex does not exist" (showValue (Model.edgeOut el))))) (\label -> verify (Equality.equalString (Model.unVertexLabel label) (Model.unVertexLabel (Model.edgeTypeOut typ))) (failWith (prepend "Wrong out-vertex label" (vertexLabelMismatch (Model.edgeTypeOut typ) label)))) (f (Model.edgeOut el))) labelForVertexId)
+      checkIn = (Optionals.maybe Nothing (\f -> Optionals.maybe (Just (failWith (prepend "In-vertex does not exist" (showValue (Model.edgeIn el))))) (\label -> verify (Equality.equalString (Model.unVertexLabel label) (Model.unVertexLabel (Model.edgeTypeIn typ))) (failWith (prepend "Wrong in-vertex label" (vertexLabelMismatch (Model.edgeTypeIn typ) label)))) (f (Model.edgeIn el))) labelForVertexId)
   in (checkAll [
     checkLabel,
     checkId,
@@ -49,37 +41,29 @@ validateElement checkValue showValue labelForVertexId typ el = ((\x -> case x of
     Model.ElementVertex v2 -> (Just (prepend "Vertex instead of edge" (showValue (Model.vertexId v2))))
     Model.ElementEdge v2 -> (validateEdge checkValue showValue labelForVertexId v1 v2)) el)) typ)
 
-validateGraph :: (Ord t1) => ((t0 -> t1 -> Maybe String) -> (t1 -> String) -> Model.GraphSchema t0 -> Model.Graph t1 -> Maybe String)
+validateGraph :: (Ord t0) => ((t1 -> t0 -> Maybe String) -> (t0 -> String) -> Model.GraphSchema t1 -> Model.Graph t0 -> Maybe String)
 validateGraph checkValue showValue schema graph =  
   let checkVertices =  
-          let checkVertex = (\el -> (\x -> case x of
-                  Nothing -> (Just (vertexError showValue el (prepend "Unexpected label" (Model.unVertexLabel (Model.vertexLabel el)))))
-                  Just v1 -> (validateVertex checkValue showValue v1 el)) (Maps.lookup (Model.vertexLabel el) (Model.graphSchemaVertices schema)))
+          let checkVertex = (\el -> Optionals.maybe (Just (vertexError showValue el (prepend "Unexpected label" (Model.unVertexLabel (Model.vertexLabel el))))) (\t -> validateVertex checkValue showValue t el) (Maps.lookup (Model.vertexLabel el) (Model.graphSchemaVertices schema)))
           in (checkAll (Lists.map checkVertex (Maps.values (Model.graphVertices graph)))) 
       checkEdges =  
-              let checkEdge = (\el -> (\x -> case x of
-                      Nothing -> (Just (edgeError showValue el (prepend "Unexpected label" (Model.unEdgeLabel (Model.edgeLabel el)))))
-                      Just v1 -> (validateEdge checkValue showValue labelForVertexId v1 el)) (Maps.lookup (Model.edgeLabel el) (Model.graphSchemaEdges schema))) 
+              let checkEdge = (\el -> Optionals.maybe (Just (edgeError showValue el (prepend "Unexpected label" (Model.unEdgeLabel (Model.edgeLabel el))))) (\t -> validateEdge checkValue showValue labelForVertexId t el) (Maps.lookup (Model.edgeLabel el) (Model.graphSchemaEdges schema))) 
                   labelForVertexId = (Just (\i -> Optionals.map Model.vertexLabel (Maps.lookup i (Model.graphVertices graph))))
               in (checkAll (Lists.map checkEdge (Maps.values (Model.graphEdges graph))))
   in (checkAll [
     checkVertices,
     checkEdges])
 
-validateProperties :: ((t0 -> t1 -> Maybe String) -> [Model.PropertyType t0] -> M.Map Model.PropertyKey t1 -> Maybe String)
+validateProperties :: ((t1 -> t0 -> Maybe String) -> [Model.PropertyType t1] -> M.Map Model.PropertyKey t0 -> Maybe String)
 validateProperties checkValue types props =  
   let checkTypes = (checkAll (Lists.map checkType types)) 
-      checkType = (\t -> Logic.ifElse (Model.propertyTypeRequired t) ((\x -> case x of
-              Nothing -> (Just (prepend "Missing value for " (Model.unPropertyKey (Model.propertyTypeKey t))))
-              Just _ -> Nothing) (Maps.lookup (Model.propertyTypeKey t) props)) Nothing)
+      checkType = (\t -> Logic.ifElse (Model.propertyTypeRequired t) (Optionals.maybe (Just (prepend "Missing value for " (Model.unPropertyKey (Model.propertyTypeKey t)))) (\_ -> Nothing) (Maps.lookup (Model.propertyTypeKey t) props)) Nothing)
       checkValues =  
               let m = (Maps.fromList (Lists.map (\p -> (Model.propertyTypeKey p, (Model.propertyTypeValue p))) types)) 
                   checkPair = (\pair ->  
                           let key = (fst pair) 
                               val = (snd pair)
-                          in ((\x -> case x of
-                            Nothing -> (Just (prepend "Unexpected key" (Model.unPropertyKey key)))
-                            Just v1 -> (Optionals.map (prepend "Invalid value") (checkValue v1 val))) (Maps.lookup key m)))
+                          in (Optionals.maybe (Just (prepend "Unexpected key" (Model.unPropertyKey key))) (\typ -> Optionals.map (prepend "Invalid value") (checkValue typ val)) (Maps.lookup key m)))
               in (checkAll (Lists.map checkPair (Maps.toList props)))
   in (checkAll [
     checkTypes,

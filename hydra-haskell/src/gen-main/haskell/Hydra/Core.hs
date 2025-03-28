@@ -81,8 +81,6 @@ _CaseStatement_cases = (Name "cases")
 
 -- | A corresponding elimination for an introduction term
 data Elimination = 
-  -- | Eliminates an optional term by matching over the two possible cases
-  EliminationOptional OptionalCases |
   -- | Eliminates a tuple by projecting the component at a given 0-indexed offset
   EliminationProduct TupleProjection |
   -- | Eliminates a record by projecting a given field
@@ -94,8 +92,6 @@ data Elimination =
   deriving (Eq, Ord, Read, Show)
 
 _Elimination = (Name "hydra.core.Elimination")
-
-_Elimination_optional = (Name "optional")
 
 _Elimination_product = (Name "product")
 
@@ -418,21 +414,6 @@ newtype Name =
   deriving (Eq, Ord, Read, Show)
 
 _Name = (Name "hydra.core.Name")
-
--- | A case statement for matching optional terms
-data OptionalCases = 
-  OptionalCases {
-    -- | A term provided if the optional value is nothing
-    optionalCasesNothing :: Term,
-    -- | A function which is applied if the optional value is non-nothing
-    optionalCasesJust :: Term}
-  deriving (Eq, Ord, Read, Show)
-
-_OptionalCases = (Name "hydra.core.OptionalCases")
-
-_OptionalCases_nothing = (Name "nothing")
-
-_OptionalCases_just = (Name "just")
 
 -- | A record elimination; a projection
 data Projection = 

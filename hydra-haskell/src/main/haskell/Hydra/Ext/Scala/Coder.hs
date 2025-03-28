@@ -79,7 +79,6 @@ encodeFunction meta fun arg = case fun of
     FunctionPrimitive name -> pure $ sprim name
     FunctionElimination e -> case e of
       EliminationWrap name -> pure $ sname $ "ELIM-NOMINAL(" ++ show name ++ ")" -- TODO
-      EliminationOptional c -> pure $ sname "ELIM-OPTIONAL" -- TODO
       EliminationRecord p -> fail "unapplied projection not yet supported"
       EliminationUnion (CaseStatement _ def cases) -> do
           let v = "v"
@@ -145,7 +144,6 @@ encodeTerm term = case stripTerm term of
         TermFunction f -> case f of
           FunctionElimination e -> case e of
             EliminationWrap name -> fallback
-            EliminationOptional c -> fallback
             EliminationRecord (Projection _ (Name fname)) -> do
               sarg <- encodeTerm arg
               return $ Scala.DataRef $ Scala.Data_RefSelect $ Scala.Data_Select sarg

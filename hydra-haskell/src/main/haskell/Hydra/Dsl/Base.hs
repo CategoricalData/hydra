@@ -111,9 +111,6 @@ fld fname (TTerm val) = TField $ Field fname val
 fold :: TTerm (b -> a -> b) -> TTerm (b -> [a] -> b)
 fold f = (primitive _lists_foldl) @@ f
 
-ifOpt :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
-ifOpt m n j = matchOpt n j @@ m
-
 identity :: TTerm (a -> a)
 identity = TTerm Terms.identity
 
@@ -159,9 +156,6 @@ matchData name dflt pairs = TTerm $ Terms.match name (unTTerm <$> dflt) (toField
   where
     toField (fname, TTerm term) = Field fname term
 
-matchOpt :: TTerm b -> TTerm (a -> b) -> TTerm (Maybe a -> b)
-matchOpt (TTerm n) (TTerm j) = TTerm $ Terms.matchOpt n j
-
 matchToEnum :: Name -> Name -> Maybe (TTerm b) -> [(Name, Name)] -> TTerm (a -> b)
 matchToEnum domName codName dflt pairs = matchData domName dflt (toCase <$> pairs)
   where
@@ -181,9 +175,6 @@ nothing = TTerm Terms.nothing
 
 opt :: Maybe (TTerm a) -> TTerm (Maybe a)
 opt mc = TTerm $ Terms.optional (unTTerm <$> mc)
-
-optCases :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
-optCases m n j = matchOpt n j @@ m
 
 pair :: (TTerm a) -> (TTerm b) -> TTerm (a, b)
 pair (TTerm l) (TTerm r) = TTerm $ Terms.pair l r

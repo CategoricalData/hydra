@@ -63,9 +63,6 @@ rewriteTerm :: (((Core.Term -> Core.Term) -> Core.Term -> Core.Term) -> Core.Ter
 rewriteTerm f =  
   let fsub = (\recurse -> \term ->  
           let forElimination = (\elm -> (\x -> case x of
-                  Core.EliminationOptional v1 -> (Core.EliminationOptional (Core.OptionalCases {
-                    Core.optionalCasesNothing = (recurse (Core.optionalCasesNothing v1)),
-                    Core.optionalCasesJust = (recurse (Core.optionalCasesJust v1))}))
                   Core.EliminationProduct v1 -> (Core.EliminationProduct v1)
                   Core.EliminationRecord v1 -> (Core.EliminationRecord v1)
                   Core.EliminationUnion v1 -> (Core.EliminationUnion (Core.CaseStatement {
@@ -184,13 +181,8 @@ subterms x = case x of
     (Core.applicationArgument v1)]
   Core.TermFunction v1 -> ((\x -> case x of
     Core.FunctionElimination v2 -> ((\x -> case x of
-      Core.EliminationOptional v3 -> [
-        Core.optionalCasesNothing v3,
-        (Core.optionalCasesJust v3)]
-      Core.EliminationUnion v3 -> (Lists.concat2 ((\x -> case x of
-        Nothing -> []
-        Just v4 -> [
-          v4]) (Core.caseStatementDefault v3)) (Lists.map Core.fieldTerm (Core.caseStatementCases v3)))
+      Core.EliminationUnion v3 -> (Lists.concat2 (Optionals.maybe [] (\t -> [
+        t]) (Core.caseStatementDefault v3)) (Lists.map Core.fieldTerm (Core.caseStatementCases v3)))
       _ -> []) v2)
     Core.FunctionLambda v2 -> [
       Core.lambdaBody v2]
@@ -201,10 +193,8 @@ subterms x = case x of
   Core.TermMap v1 -> (Lists.concat (Lists.map (\p -> [
     fst p,
     (snd p)]) (Maps.toList v1)))
-  Core.TermOptional v1 -> ((\x -> case x of
-    Nothing -> []
-    Just v2 -> [
-      v2]) v1)
+  Core.TermOptional v1 -> (Optionals.maybe [] (\t -> [
+    t]) v1)
   Core.TermProduct v1 -> v1
   Core.TermRecord v1 -> (Lists.map Core.fieldTerm (Core.recordFields v1))
   Core.TermSet v1 -> (Sets.toList v1)
@@ -232,13 +222,8 @@ subtermsWithAccessors x = case x of
     (Mantle.TermAccessorApplicationArgument, (Core.applicationArgument v1))]
   Core.TermFunction v1 -> ((\x -> case x of
     Core.FunctionElimination v2 -> ((\x -> case x of
-      Core.EliminationOptional v3 -> [
-        (Mantle.TermAccessorOptionalCasesNothing, (Core.optionalCasesNothing v3)),
-        (Mantle.TermAccessorOptionalCasesJust, (Core.optionalCasesJust v3))]
-      Core.EliminationUnion v3 -> (Lists.concat2 ((\x -> case x of
-        Nothing -> []
-        Just v4 -> [
-          (Mantle.TermAccessorUnionCasesDefault, v4)]) (Core.caseStatementDefault v3)) (Lists.map (\f -> (Mantle.TermAccessorUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v3)))
+      Core.EliminationUnion v3 -> (Lists.concat2 (Optionals.maybe [] (\t -> [
+        (Mantle.TermAccessorUnionCasesDefault, t)]) (Core.caseStatementDefault v3)) (Lists.map (\f -> (Mantle.TermAccessorUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v3)))
       _ -> []) v2)
     Core.FunctionLambda v2 -> [
       (Mantle.TermAccessorLambdaBody, (Core.lambdaBody v2))]
@@ -249,10 +234,8 @@ subtermsWithAccessors x = case x of
   Core.TermMap v1 -> (Lists.concat (Lists.map (\p -> [
     (Mantle.TermAccessorMapKey 0, (fst p)),
     (Mantle.TermAccessorMapValue 0, (snd p))]) (Maps.toList v1)))
-  Core.TermOptional v1 -> ((\x -> case x of
-    Nothing -> []
-    Just v2 -> [
-      (Mantle.TermAccessorOptionalTerm, v2)]) v1)
+  Core.TermOptional v1 -> (Optionals.maybe [] (\t -> [
+    (Mantle.TermAccessorOptionalTerm, t)]) v1)
   Core.TermProduct v1 -> (Lists.map (\e -> (Mantle.TermAccessorProductTerm 0, e)) v1)
   Core.TermRecord v1 -> (Lists.map (\f -> (Mantle.TermAccessorRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v1))
   Core.TermSet v1 -> (Lists.map (\e -> (Mantle.TermAccessorListElement 0, e)) (Sets.toList v1))

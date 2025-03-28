@@ -485,25 +485,6 @@ encodeApplication aliases app@(Application lhs rhs) = case fullyStripTerm fun of
 
 encodeElimination :: Aliases -> Maybe Java.Expression -> Type -> Type -> Elimination -> Flow Graph Java.Expression
 encodeElimination aliases marg dom cod elm = case elm of
-  EliminationOptional (OptionalCases nothing just) -> do
-    jnothing <- encodeTerm aliases nothing
-    jjust <- encodeTerm aliases just
-    let var = Name "m"
-
-    let jobj = case marg of
-                  Nothing -> Left $ javaIdentifierToJavaExpressionName $ variableToJavaIdentifier var
-                  Just jarg -> Right $ javaExpressionToJavaPrimary jarg
-    let jhead = javaMethodInvocationToJavaExpression $ methodInvocation
-          (Just jobj)
-          (Java.Identifier "map") [jjust]
-    let jbody = javaMethodInvocationToJavaExpression $ methodInvocation
-          (Just $ Right $ javaExpressionToJavaPrimary jhead)
-          (Java.Identifier "orElse") [jnothing]
-    castType <- adaptTypeToJavaAndEncode aliases (TypeFunction $ FunctionType dom cod) >>= javaTypeToJavaReferenceType
-    return $ case marg of
-      Nothing -> javaCastExpressionToJavaExpression $ javaCastExpression castType $
-                       javaExpressionToJavaUnaryExpression $ javaLambda var jbody
-      Just _ -> jbody
   EliminationRecord (Projection _ fname) -> do
     jdomr <- adaptTypeToJavaAndEncode aliases dom >>= javaTypeToJavaReferenceType
     jexp <- case marg of

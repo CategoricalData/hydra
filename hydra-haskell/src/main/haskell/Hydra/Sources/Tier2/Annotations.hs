@@ -28,6 +28,7 @@ import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier1.All
 
 import Hydra.Sources.Tier2.Variants
+import Hydra.Sources.Libraries
 
 
 hydraAnnotationsModule :: Module
@@ -55,16 +56,16 @@ requireElementTypeDef :: TElement (Element -> Flow Graph Type)
 requireElementTypeDef = annotationsDefinition "requireElementType" $
   doc "Get the annotated type of a given element, or fail if it is missing" $
   lambda "el" $ lets [
-    "withType">: matchOpt
-      (Flows.fail ("missing type annotation for element " ++ (unwrap _Name @@ (project _Element _Element_name @@ var "el"))))
-        $ lambda "t" $ Flows.pure $ var "t"] $
+    "withType">: primitive _optionals_maybe
+      @@ (Flows.fail ("missing type annotation for element " ++ (unwrap _Name @@ (project _Element _Element_name @@ var "el"))))
+      @@ (lambda "t" $ Flows.pure $ var "t")] $
     var "withType" @@ (ref getTermTypeDef @@ (project _Element _Element_term @@ var "el"))
 
 requireTermTypeDef :: TElement (Term -> Flow Graph Type)
 requireTermTypeDef = annotationsDefinition "requireTermType" $
   doc "Get the annotated type of a given term, or fail if it is missing" $
   lets [
-    "withType">: matchOpt
-      (Flows.fail "missing type annotation")
-      (lambda "t" $ Flows.pure $ var "t")] $
+    "withType">: primitive _optionals_maybe
+      @@ (Flows.fail "missing type annotation")
+      @@ (lambda "t" $ Flows.pure $ var "t")] $
     var "withType" <.> ref getTermTypeDef

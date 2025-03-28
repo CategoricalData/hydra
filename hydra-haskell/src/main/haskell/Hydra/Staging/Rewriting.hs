@@ -214,8 +214,6 @@ rewriteTermM f = rewrite fsub f
         TermApplication (Application lhs rhs) -> TermApplication <$> (Application <$> recurse lhs <*> recurse rhs)
         TermFunction fun -> TermFunction <$> case fun of
           FunctionElimination e -> FunctionElimination <$> case e of
-            EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$>
-              (OptionalCases <$> recurse nothing <*> recurse just)
             EliminationProduct tp -> pure $ EliminationProduct tp
             EliminationRecord p -> pure $ EliminationRecord p
             EliminationUnion (CaseStatement n def cases) -> do
