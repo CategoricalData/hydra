@@ -42,12 +42,6 @@ class CaseStatement:
     default: Term | None
     cases: frozenlist[Field]
 
-class EliminationList(Node["Term"]):
-    """Eliminates a list using a fold function; this function has the signature b -> [a] -> b."""
-
-class EliminationOptional(Node["OptionalCases"]):
-    """Eliminates an optional term by matching over the two possible cases."""
-
 class EliminationProduct(Node["TupleProjection"]):
     """Eliminates a tuple by projecting the component at a given 0-indexed offset."""
 
@@ -61,7 +55,7 @@ class EliminationWrap(Node["Name"]):
     """Unwrap a wrapped term."""
 
 # A corresponding elimination for an introduction term.
-type Elimination = EliminationList | EliminationOptional | EliminationProduct | EliminationRecord | EliminationUnion | EliminationWrap
+type Elimination = EliminationProduct | EliminationRecord | EliminationUnion | EliminationWrap
 
 @dataclass
 class Field:
@@ -250,13 +244,6 @@ class MapType:
 
 class Name(Node[str]):
     """A unique identifier in some context; a string-valued key."""
-
-@dataclass
-class OptionalCases:
-    """A case statement for matching optional terms."""
-    
-    nothing: Annotated[Term, "A term provided if the optional value is nothing"]
-    just: Annotated[Term, "A function which is applied if the optional value is non-nothing"]
 
 @dataclass
 class Projection:

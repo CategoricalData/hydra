@@ -228,36 +228,6 @@ def name(term: hydra.core.Term) -> hydra.core.Name | None:
 
 nominal = lambda getName: lambda getB: lambda getA: lambda expected: "let terms are not supported here"
 
-def opt_cases(v1: hydra.core.Term) -> hydra.core.OptionalCases | None:
-    def match_optional(v1: hydra.core.Elimination) -> hydra.core.OptionalCases | None:
-        match v1:
-            case hydra.core.EliminationOptional(matched_):
-                return hydra.lib.optionals.pure(matched_)
-            
-            case _:
-                return None
-    def match_elimination(v1: hydra.core.Function) -> hydra.core.Elimination | None:
-        match v1:
-            case hydra.core.FunctionElimination(matched_):
-                return hydra.lib.optionals.pure(matched_)
-            
-            case _:
-                return None
-    def match_function(arg_: hydra.core.Term) -> hydra.core.Function | None:
-        match hydra.strip.fully_strip_term(arg_):
-            case hydra.core.TermFunction(matched_):
-                return hydra.lib.optionals.pure(matched_)
-            
-            case _:
-                return None
-    return hydra.lib.optionals.compose(lambda v1: hydra.lib.optionals.compose(match_function, match_elimination, v1), match_optional, v1)
-
-def opt_cases_just(term: hydra.core.Term) -> hydra.core.Term | None:
-    return hydra.lib.optionals.map(lambda v1: v1.just, opt_cases(term))
-
-def opt_cases_nothing(term: hydra.core.Term) -> hydra.core.Term | None:
-    return hydra.lib.optionals.map(lambda v1: v1.nothing, opt_cases(term))
-
 def optional(arg_: hydra.core.Term) -> None | None:
     match hydra.strip.fully_strip_term(arg_):
         case hydra.core.TermOptional(matched_):

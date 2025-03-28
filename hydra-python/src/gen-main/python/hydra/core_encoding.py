@@ -33,12 +33,6 @@ def core_encode_case_statement(cs: hydra.core.CaseStatement) -> hydra.core.Term:
 
 def core_encode_elimination(v1: hydra.core.Elimination) -> hydra.core.Term:
     match v1:
-        case hydra.core.EliminationList(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("list"), core_encode_term(v))))
-        
-        case hydra.core.EliminationOptional(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("optional"), core_encode_optional_cases(v))))
-        
         case hydra.core.EliminationProduct(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("product"), core_encode_tuple_projection(v))))
         
@@ -225,11 +219,6 @@ def core_encode_map_type(mt: hydra.core.MapType) -> hydra.core.Term:
 
 def core_encode_name(fn: hydra.core.Name) -> hydra.core.Term:
     return hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.core.Name"), hydra.core.TermLiteral(hydra.core.LiteralString(fn.value))))
-
-def core_encode_optional_cases(oc: hydra.core.OptionalCases) -> hydra.core.Term:
-    return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.OptionalCases"), tuple([
-      hydra.core.Field(hydra.core.Name("nothing"), core_encode_term(oc.nothing)),
-      hydra.core.Field(hydra.core.Name("just"), core_encode_term(oc.just))])))
 
 def core_encode_projection(p: hydra.core.Projection) -> hydra.core.Term:
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Projection"), tuple([
