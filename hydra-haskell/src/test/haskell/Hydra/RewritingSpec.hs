@@ -527,7 +527,7 @@ testTopologicalSortBindings = do
       H.it "Isolated bindings" $ do
         checkBindings
           [("a", string "foo"), ("b", string "bar")]
-          [["b"], ["a"]]
+          [["a"], ["b"]]
 
       H.it "Single recursive binding" $ do
         checkBindings
@@ -542,7 +542,7 @@ testTopologicalSortBindings = do
       H.it "Mixed bindings" $ do
         checkBindings
           [("a", var "b"), ("b", list [var "a", var "c"]), ("c", string "foo"), ("d", string "bar")]
-          [["d"], ["c"], ["a", "b"]]
+          [["c"], ["a", "b"], ["d"]]
   where
     checkBindings bindings expectedVars = H.shouldBe
         (topologicalSortBindings bindingMap)
