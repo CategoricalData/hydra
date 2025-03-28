@@ -85,9 +85,6 @@ float64 = literal . Literals.float64
 float :: FloatValue -> Term
 float = literal . Literals.float
 
-fold :: Term -> Term
-fold = TermFunction . FunctionElimination . EliminationList
-
 identity :: Term
 identity = lambda "any_" $ var "any_"
 

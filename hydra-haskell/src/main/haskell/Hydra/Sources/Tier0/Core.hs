@@ -67,9 +67,6 @@ hydraCoreModule = Module ns elements [] [] $
       def "Elimination" $
         doc "A corresponding elimination for an introduction term" $
         union [
-          "list">:
-            doc "Eliminates a list using a fold function; this function has the signature b -> [a] -> b" $
-            core "Term",
           "optional">:
             doc "Eliminates an optional term by matching over the two possible cases" $
             core "OptionalCases",

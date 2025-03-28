@@ -81,8 +81,6 @@ _CaseStatement_cases = (Name "cases")
 
 -- | A corresponding elimination for an introduction term
 data Elimination = 
-  -- | Eliminates a list using a fold function; this function has the signature b -> [a] -> b
-  EliminationList Term |
   -- | Eliminates an optional term by matching over the two possible cases
   EliminationOptional OptionalCases |
   -- | Eliminates a tuple by projecting the component at a given 0-indexed offset
@@ -96,8 +94,6 @@ data Elimination =
   deriving (Eq, Ord, Read, Show)
 
 _Elimination = (Name "hydra.core.Elimination")
-
-_Elimination_list = (Name "list")
 
 _Elimination_optional = (Name "optional")
 

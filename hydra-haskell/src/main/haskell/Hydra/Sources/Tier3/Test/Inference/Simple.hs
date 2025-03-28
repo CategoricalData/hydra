@@ -92,7 +92,7 @@ testGroupForFunctionTerms = supergroup "Function terms" [
        ["t0"] (T.function (T.var "t0") T.int32)]]
 
   where
-    foldAdd = fold $ primitive _math_add
+    foldAdd = primitive _lists_foldl @@ primitive _math_add
 
 testGroupForIndividualTerms :: TTerm TestGroup
 testGroupForIndividualTerms = supergroup "Individual terms" [

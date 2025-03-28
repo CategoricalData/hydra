@@ -64,7 +64,6 @@ eliminationVariantDef :: TElement (Elimination -> EliminationVariant)
 eliminationVariantDef = variantsDefinition "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
   matchToEnum _Elimination _EliminationVariant Nothing [
-    _Elimination_list     @-> _EliminationVariant_list,
     _Elimination_optional @-> _EliminationVariant_optional,
     _Elimination_product  @-> _EliminationVariant_product,
     _Elimination_record   @-> _EliminationVariant_record,
@@ -75,7 +74,6 @@ eliminationVariantsDef :: TElement [EliminationVariant]
 eliminationVariantsDef = variantsDefinition "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
   list $ unitVariant _EliminationVariant <$> [
-    _EliminationVariant_list,
     _EliminationVariant_wrap,
     _EliminationVariant_optional,
     _EliminationVariant_product,

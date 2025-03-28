@@ -143,7 +143,6 @@ untypedTermToJson term = case term of
       Field _Application_argument rhs]
     TermFunction f -> case f of
       FunctionElimination elm -> case elm of
-        EliminationList term1 -> asVariant "fold" term1
         EliminationRecord (Projection _ fname) -> asVariant "project" $ TermVariable fname
         _ -> unexp $ "unexpected elimination variant: " ++ show (eliminationVariant elm)
       FunctionLambda (Lambda v d body) -> asRecord [

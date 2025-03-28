@@ -49,9 +49,6 @@ float64 = float64Term . TTerm . Terms.float64
 float64Term :: TTerm Float -> TTerm Term
 float64Term = Core.termLiteral . Core.literalFloat . Core.floatValueFloat64
 
-fold :: TTerm Term -> TTerm Term
-fold = Core.termFunction . Core.functionElimination . Core.eliminationList
-
 inject :: TTerm Name -> String -> TTerm Term -> TTerm Term
 inject tname fname = Core.termUnion . Core.injection tname . Core.field (name fname)
 

@@ -129,7 +129,6 @@ rewriteTermDef :: TElement (((Term -> Term) -> Term -> Term) -> Term -> Term)
 rewriteTermDef = rewritingDefinition "rewriteTerm" $ lambda "f" $ lets [
   "fsub">: lambdas ["recurse", "term"] $ lets [
     "forElimination">: lambda "elm" $ cases _Elimination (var "elm") Nothing [
-      _Elimination_list>>: lambda "fld" $ Core.eliminationList $ var "recurse" @@ var "fld",
       _Elimination_optional>>: lambda "oc" $ Core.eliminationOptional $ Core.optionalCases
         (var "recurse" @@ (Core.optionalCasesNothing @@ var "oc"))
         (var "recurse" @@ (Core.optionalCasesJust @@ var "oc")),
@@ -247,7 +246,6 @@ subtermsDef = rewritingDefinition "subterms" $
       Core.applicationArgument @@ var "p"],
     _Term_function>>: match _Function (Just $ list []) [
         _Function_elimination>>: match _Elimination (Just $ list []) [
-            _Elimination_list>>: lambda "fld" $ list [var "fld"],
             _Elimination_optional>>: lambda "oc" $ list [
               Core.optionalCasesNothing @@ var "oc",
               Core.optionalCasesJust @@ var "oc"],
@@ -284,7 +282,6 @@ subtermsWithAccessorsDef = rewritingDefinition "subtermsWithAccessors" $
       result termAccessorApplicationArgument $ Core.applicationArgument @@ var "p"],
     _Term_function>>: match _Function (Just none) [
         _Function_elimination>>: match _Elimination (Just none) [
-            _Elimination_list>>: lambda "fld" $ single termAccessorListFold $ var "fld",
             _Elimination_optional>>: lambda "oc" $ list [
               result termAccessorOptionalCasesNothing $ Core.optionalCasesNothing @@ var "oc",
               result termAccessorOptionalCasesJust $ Core.optionalCasesJust @@ var "oc"],

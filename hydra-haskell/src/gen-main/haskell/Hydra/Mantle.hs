@@ -39,7 +39,6 @@ _Either_right = (Core.Name "right")
 
 -- | The identifier of an elimination constructor
 data EliminationVariant = 
-  EliminationVariantList  |
   EliminationVariantOptional  |
   EliminationVariantProduct  |
   EliminationVariantRecord  |
@@ -48,8 +47,6 @@ data EliminationVariant =
   deriving (Eq, Ord, Read, Show)
 
 _EliminationVariant = (Core.Name "hydra.mantle.EliminationVariant")
-
-_EliminationVariant_list = (Core.Name "list")
 
 _EliminationVariant_optional = (Core.Name "optional")
 
@@ -115,7 +112,6 @@ data TermAccessor =
   TermAccessorApplicationFunction  |
   TermAccessorApplicationArgument  |
   TermAccessorLambdaBody  |
-  TermAccessorListFold  |
   TermAccessorOptionalCasesNothing  |
   TermAccessorOptionalCasesJust  |
   TermAccessorUnionCasesDefault  |
@@ -146,8 +142,6 @@ _TermAccessor_applicationFunction = (Core.Name "applicationFunction")
 _TermAccessor_applicationArgument = (Core.Name "applicationArgument")
 
 _TermAccessor_lambdaBody = (Core.Name "lambdaBody")
-
-_TermAccessor_listFold = (Core.Name "listFold")
 
 _TermAccessor_optionalCasesNothing = (Core.Name "optionalCasesNothing")
 

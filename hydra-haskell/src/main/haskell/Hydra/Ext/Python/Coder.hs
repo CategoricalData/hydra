@@ -62,7 +62,6 @@ encodeApplication env app = do
     applyArgs hargs = case fun of
         TermFunction f -> case f of
           FunctionElimination elm -> case elm of
-    --        EliminationList ...
             EliminationOptional (OptionalCases nothing just) -> do
               return $ stringToPyExpression Py.QuoteStyleDouble "optional match expressions not yet supported"
     --        EliminationProduct ...

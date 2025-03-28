@@ -14,7 +14,6 @@ import qualified Data.Set as S
 -- | Find the elimination variant (constructor) for a given elimination term
 eliminationVariant :: (Core.Elimination -> Mantle.EliminationVariant)
 eliminationVariant x = case x of
-  Core.EliminationList _ -> Mantle.EliminationVariantList
   Core.EliminationOptional _ -> Mantle.EliminationVariantOptional
   Core.EliminationProduct _ -> Mantle.EliminationVariantProduct
   Core.EliminationRecord _ -> Mantle.EliminationVariantRecord
@@ -24,7 +23,6 @@ eliminationVariant x = case x of
 -- | All elimination variants (constructors), in a canonical order
 eliminationVariants :: [Mantle.EliminationVariant]
 eliminationVariants = [
-  Mantle.EliminationVariantList,
   Mantle.EliminationVariantWrap,
   Mantle.EliminationVariantOptional,
   Mantle.EliminationVariantProduct,

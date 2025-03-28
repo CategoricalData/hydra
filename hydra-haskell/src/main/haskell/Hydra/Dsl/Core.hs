@@ -76,9 +76,6 @@ caseStatementDefault = Base.project _CaseStatement _CaseStatement_default
 caseStatementCases :: TTerm (CaseStatement -> [Field])
 caseStatementCases = Base.project _CaseStatement _CaseStatement_cases
 
-eliminationList :: TTerm Term -> TTerm Elimination
-eliminationList = variant _Elimination _Elimination_list
-
 eliminationOptional :: TTerm OptionalCases -> TTerm Elimination
 eliminationOptional = variant _Elimination _Elimination_optional
 

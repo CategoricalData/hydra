@@ -45,7 +45,6 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
       typePredicate
   where
       eliminationVariants = [ -- TODO: verify whether all are supported
-        EliminationVariantList,
         EliminationVariantOptional,
         EliminationVariantProduct,
         EliminationVariantRecord,

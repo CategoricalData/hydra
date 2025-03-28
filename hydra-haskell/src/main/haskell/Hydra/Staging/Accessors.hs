@@ -21,7 +21,6 @@ showTermAccessor accessor = case accessor of
     TermAccessorApplicationFunction -> Just "fun"
     TermAccessorApplicationArgument -> Just "arg"
     TermAccessorLambdaBody -> Just "body"
-    TermAccessorListFold -> Nothing
     TermAccessorOptionalCasesNothing -> Just "nothing"
     TermAccessorOptionalCasesJust -> Just "just"
     TermAccessorUnionCasesDefault -> Just "default"
