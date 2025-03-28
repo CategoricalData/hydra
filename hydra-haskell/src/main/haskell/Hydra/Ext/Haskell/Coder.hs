@@ -73,10 +73,6 @@ constructModule namespaces mod coders pairs = do
 encodeFunction :: HaskellNamespaces -> Function -> Flow Graph H.Expression
 encodeFunction namespaces fun = case fun of
     FunctionElimination e -> case e of
-      EliminationList fun -> do
-        let lhs = hsvar "L.foldl"
-        rhs <- encodeTerm namespaces fun
-        return $ hsapp lhs rhs
       EliminationWrap name -> pure $ H.ExpressionVariable $ elementReference namespaces $
         qname (Y.fromJust $ namespaceOf name) $ newtypeAccessorName name
       EliminationOptional (OptionalCases nothing just) -> do

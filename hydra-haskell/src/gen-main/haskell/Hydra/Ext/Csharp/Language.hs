@@ -18,7 +18,6 @@ csharpLanguage = Coders.Language {
   Coders.languageName = (Coders.LanguageName "hydra.ext.csharp"),
   Coders.languageConstraints = Coders.LanguageConstraints {
     Coders.languageConstraintsEliminationVariants = (Sets.fromList [
-      Mantle.EliminationVariantList,
       Mantle.EliminationVariantOptional,
       Mantle.EliminationVariantProduct,
       Mantle.EliminationVariantRecord,

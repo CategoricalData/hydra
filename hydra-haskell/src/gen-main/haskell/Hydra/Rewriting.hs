@@ -63,7 +63,6 @@ rewriteTerm :: (((Core.Term -> Core.Term) -> Core.Term -> Core.Term) -> Core.Ter
 rewriteTerm f =  
   let fsub = (\recurse -> \term ->  
           let forElimination = (\elm -> (\x -> case x of
-                  Core.EliminationList v1 -> (Core.EliminationList (recurse v1))
                   Core.EliminationOptional v1 -> (Core.EliminationOptional (Core.OptionalCases {
                     Core.optionalCasesNothing = (recurse (Core.optionalCasesNothing v1)),
                     Core.optionalCasesJust = (recurse (Core.optionalCasesJust v1))}))
@@ -185,8 +184,6 @@ subterms x = case x of
     (Core.applicationArgument v1)]
   Core.TermFunction v1 -> ((\x -> case x of
     Core.FunctionElimination v2 -> ((\x -> case x of
-      Core.EliminationList v3 -> [
-        v3]
       Core.EliminationOptional v3 -> [
         Core.optionalCasesNothing v3,
         (Core.optionalCasesJust v3)]
@@ -235,8 +232,6 @@ subtermsWithAccessors x = case x of
     (Mantle.TermAccessorApplicationArgument, (Core.applicationArgument v1))]
   Core.TermFunction v1 -> ((\x -> case x of
     Core.FunctionElimination v2 -> ((\x -> case x of
-      Core.EliminationList v3 -> [
-        (Mantle.TermAccessorListFold, v3)]
       Core.EliminationOptional v3 -> [
         (Mantle.TermAccessorOptionalCasesNothing, (Core.optionalCasesNothing v3)),
         (Mantle.TermAccessorOptionalCasesJust, (Core.optionalCasesJust v3))]

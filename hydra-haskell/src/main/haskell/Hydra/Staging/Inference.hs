@@ -221,28 +221,11 @@ inferTypeOfCollection cx typCons trmCons desc els = bindVar withVar
 
 inferTypeOfElimination :: InferenceContext -> Elimination -> Flow s InferenceResult
 inferTypeOfElimination cx elm = case elm of
-  EliminationList fun -> inferTypeOfFold cx fun
   EliminationOptional oc -> inferTypeOfOptionalCases cx oc
   EliminationProduct tp -> inferTypeOfTupleProjection cx tp
   EliminationRecord p -> inferTypeOfProjection cx p
   EliminationUnion c -> inferTypeOfCaseStatement cx c
   EliminationWrap tname -> inferTypeOfUnwrap cx tname
-
-inferTypeOfFold :: InferenceContext -> Term -> Flow s InferenceResult
-inferTypeOfFold cx fun = bindVar2 withVars
-  where
-    withVars a b = Flows.bind (inferTypeOfTerm cx fun "fold function") withResult
-      where
-        aT = TypeVariable a
-        bT = TypeVariable b
-        withResult (InferenceResult iterm ityp isubst) = mapConstraints cx withSubst [
-            TypeConstraint expectedType ityp "fold function"]
-          where
-            expectedType = Types.functionN [bT, aT, bT]
-            withSubst subst = yield
-              (TermFunction $ FunctionElimination $ EliminationList iterm)
-              (Types.functionN [bT, Types.list aT, bT])
-              (composeTypeSubst isubst subst)
 
 inferTypeOfFunction :: InferenceContext -> Function -> Flow s InferenceResult
 inferTypeOfFunction cx f = case f of

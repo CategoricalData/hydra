@@ -97,7 +97,6 @@ reduceTerm eager env = rewriteTermM mapping
       _ -> pure $ applyToArguments original args
 
     applyElimination elm reducedArg = case elm of
-      EliminationList _ -> fail "list eliminations are unsupported"
       EliminationOptional _ -> fail "optional eliminations are unsupported"
       EliminationRecord proj -> do
         fields <- Expect.recordWithName (projectionTypeName proj) $ stripTerm reducedArg

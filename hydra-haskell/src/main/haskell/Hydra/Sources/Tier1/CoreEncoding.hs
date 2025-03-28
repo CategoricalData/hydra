@@ -193,7 +193,6 @@ coreEncodeCaseStatementDef = coreEncodingDefinition "CaseStatement" $
 coreEncodeEliminationDef :: TElement (Elimination -> Term)
 coreEncodeEliminationDef = coreEncodingDefinition "Elimination" $
     match _Elimination Nothing [
-      ecase _Elimination_list coreEncodeTermDef,
       ecase _Elimination_optional coreEncodeOptionalCasesDef,
       ecase _Elimination_product coreEncodeTupleProjectionDef,
       ecase _Elimination_record coreEncodeProjectionDef,

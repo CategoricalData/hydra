@@ -18,7 +18,6 @@ pythonLanguage = Coders.Language {
   Coders.languageName = (Coders.LanguageName "hydra.ext.python"),
   Coders.languageConstraints = Coders.LanguageConstraints {
     Coders.languageConstraintsEliminationVariants = (Sets.fromList [
-      Mantle.EliminationVariantList,
       Mantle.EliminationVariantOptional,
       Mantle.EliminationVariantProduct,
       Mantle.EliminationVariantRecord,

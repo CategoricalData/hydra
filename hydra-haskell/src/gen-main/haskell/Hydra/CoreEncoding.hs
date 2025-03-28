@@ -62,11 +62,6 @@ coreEncodeCaseStatement cs = (Core.TermRecord (Core.Record {
 
 coreEncodeElimination :: (Core.Elimination -> Core.Term)
 coreEncodeElimination x = case x of
-  Core.EliminationList v1 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.core.Elimination"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "list"),
-      Core.fieldTerm = (coreEncodeTerm v1)}}))
   Core.EliminationOptional v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Elimination"),
     Core.injectionField = Core.Field {

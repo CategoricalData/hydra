@@ -39,7 +39,7 @@ testGroupForFolds = subgroup "List eliminations (folds)" [
       (foldAdd @@ int32 0 @@ (list (int32 <$> [1, 2, 3, 4, 5])))
       T.int32]
   where
-    foldAdd = fold $ primitive _math_add
+    foldAdd = primitive _lists_foldl @@ primitive _math_add
 
 testGroupForLists :: TTerm TestGroup
 testGroupForLists = supergroup "List terms" [
