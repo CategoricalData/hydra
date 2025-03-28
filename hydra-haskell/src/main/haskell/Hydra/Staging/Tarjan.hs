@@ -1,6 +1,7 @@
 -- This implementation of Tarjan's algorithm was originally based on GraphSCC by Iavor S. Diatchki:
 --   https://hackage.haskell.org/package/GraphSCC
 
+{-# LANGUAGE BangPatterns #-}
 module Hydra.Staging.Tarjan (
   Graph,
   Vertex,
