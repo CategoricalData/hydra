@@ -7,7 +7,7 @@ module Hydra.Staging.Sorting (
   topologicalSortComponents
 ) where
 
-import Hydra.Staging.SCC
+import Hydra.Staging.Tarjan
 
 import qualified Data.List as L
 import qualified Data.Map as M
