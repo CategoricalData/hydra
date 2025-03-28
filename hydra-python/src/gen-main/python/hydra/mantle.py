@@ -28,10 +28,6 @@ type Either[A, B] = EitherLeft[A] | EitherRight[B]
 class EliminationVariant(Enum):
     """The identifier of an elimination constructor."""
     
-    LIST = "list"
-    
-    OPTIONAL = "optional"
-    
     PRODUCT = "product"
     
     RECORD = "record"
@@ -77,12 +73,6 @@ class TermAccessorApplicationArgument(Node[None]): ...
 
 class TermAccessorLambdaBody(Node[None]): ...
 
-class TermAccessorListFold(Node[None]): ...
-
-class TermAccessorOptionalCasesNothing(Node[None]): ...
-
-class TermAccessorOptionalCasesJust(Node[None]): ...
-
 class TermAccessorUnionCasesDefault(Node[None]): ...
 
 class TermAccessorUnionCasesBranch(Node[hydra.core.Name]):
@@ -121,7 +111,7 @@ class TermAccessorInjectionTerm(Node[None]): ...
 class TermAccessorWrappedTerm(Node[None]): ...
 
 # A function which maps from a term to a particular immediate subterm.
-type TermAccessor = TermAccessorAnnotatedSubject | TermAccessorApplicationFunction | TermAccessorApplicationArgument | TermAccessorLambdaBody | TermAccessorListFold | TermAccessorOptionalCasesNothing | TermAccessorOptionalCasesJust | TermAccessorUnionCasesDefault | TermAccessorUnionCasesBranch | TermAccessorLetEnvironment | TermAccessorLetBinding | TermAccessorListElement | TermAccessorMapKey | TermAccessorMapValue | TermAccessorOptionalTerm | TermAccessorProductTerm | TermAccessorRecordField | TermAccessorSetElement | TermAccessorSumTerm | TermAccessorTypeAbstractionBody | TermAccessorTypeApplicationTerm | TermAccessorTypedTerm | TermAccessorInjectionTerm | TermAccessorWrappedTerm
+type TermAccessor = TermAccessorAnnotatedSubject | TermAccessorApplicationFunction | TermAccessorApplicationArgument | TermAccessorLambdaBody | TermAccessorUnionCasesDefault | TermAccessorUnionCasesBranch | TermAccessorLetEnvironment | TermAccessorLetBinding | TermAccessorListElement | TermAccessorMapKey | TermAccessorMapValue | TermAccessorOptionalTerm | TermAccessorProductTerm | TermAccessorRecordField | TermAccessorSetElement | TermAccessorSumTerm | TermAccessorTypeAbstractionBody | TermAccessorTypeApplicationTerm | TermAccessorTypedTerm | TermAccessorInjectionTerm | TermAccessorWrappedTerm
 
 class TermVariant(Enum):
     """The identifier of a term expression constructor."""
