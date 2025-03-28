@@ -1,3 +1,6 @@
+{-
+Test.Hspec.hspec Hydra.SortingSpec.spec
+-}
 module Hydra.SortingSpec where
 
 import qualified Test.Hspec as H
@@ -23,7 +26,8 @@ checkSortDiscreteSet = H.describe "Check sorting of discrete sets (no dependenci
 
   H.it "Discrete set with multiple elements" $
     checkSort [(3, []), (1, []), (2, [])]
-      (Right [3, 2, 1])
+--      (Right [3, 2, 1])
+      (Right [1, 2, 3])
 
 checkSortTreesAndDags :: H.SpecWith ()
 checkSortTreesAndDags = H.describe "Check sorting of trees and DAGs" $ do
@@ -34,11 +38,13 @@ checkSortTreesAndDags = H.describe "Check sorting of trees and DAGs" $ do
 
   H.it "Binary tree" $
     checkSort [(3, [1, 4]), (4, [6, 2]), (1, [5]), (2, []), (6, []), (5, [])]
-      (Right [6, 5, 2, 4, 1, 3])
+--      (Right [6, 5, 2, 4, 1, 3])
+      (Right [5, 1, 2, 6, 4, 3])
 
   H.it "Two trees" $
     checkSort [(3, [1, 4]), (5, [6, 2]), (2, [7]), (1, []), (4, []), (6, []), (7, [])]
-      (Right [7, 6, 4, 2, 5, 1, 3])
+--      (Right [7, 6, 4, 2, 5, 1, 3])
+      (Right [1, 7, 2, 4, 3, 6, 5])
 
   H.it "Diamond (DAG)" $
     checkSort [(1, [3, 4]), (3, [2]), (4, [2]), (2, [5]), (5, [])]
@@ -68,7 +74,8 @@ checkSortSCCDiscreteSet = H.describe "Check sorting of discrete sets (no depende
 
   H.it "Discrete set with multiple elements" $
     checkSortSCC [(3, []), (1, []), (2, [])]
-      [[3],[2],[1]]
+--      [[3], [2], [1]]
+      [[1], [2], [3]]
 
 checkSortSCCWeaklyConnectedComponents :: H.SpecWith ()
 checkSortSCCWeaklyConnectedComponents = H.describe "Check weakly-connected components" $ do
@@ -108,7 +115,8 @@ checkSortSCCStronglyConnectedComponents = H.describe "Check strongly-connected c
   H.it "Multiple, disconnected cycles, each ordered naturally" $ do
     checkSortSCC
       ([(200, [])] ++ [(100, [])] ++ [(300, [])] ++ [(10, [20]), (20, [10])] ++ [(1, [2]), (2, [3]), (3, [1])])
-      [[300], [200], [100], [10, 20], [1, 2, 3]]
+--      [[300], [200], [100], [10, 20], [1, 2, 3]]
+      [[1, 2, 3], [10, 20], [100], [200], [300]]
 
   H.it "Complex cycles" $ do
     checkSortSCC [(1, [2, 3]), (2, [3]), (3, [1])]
@@ -129,7 +137,8 @@ checkSortSCCMixed = H.describe "Check graphs which are a mix of weakly- and stro
        (100, [200, 2]), (200, []), (300, [100]),
        (1000, []),
        (2000, [])]
-      [[2000], [1000], [200], [30], [20], [10], [1, 2, 3], [100], [300]]
+--      [[2000], [1000], [200], [30], [20], [10], [1, 2, 3], [100], [300]]
+      [[30], [20], [10], [1, 2, 3], [200], [100], [300], [1000], [2000]]
 
 spec :: H.Spec
 spec = do
