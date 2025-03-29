@@ -5,7 +5,7 @@ from hydra.dsl.python import FrozenDict
 import hydra.core
 import hydra.lib.maps
 import hydra.mantle
-import hydra.test.testGraph
+import hydra.test.test_graph
 import hydra.testing
 
 all_tests = hydra.testing.TestGroup("All tests", None, tuple(["formatting_tests", "inference_tests", "primitive_tests"]), tuple([]))
