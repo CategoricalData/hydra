@@ -212,7 +212,7 @@ findAdjacenEdgeAdapters schema vidType eidType parentLabel dir fields = Y.catMay
     toSpec field = case getTypeAnnotation key (fieldTypeType field) of
       Nothing -> pure Nothing
       Just a -> do
-        label <- PG.EdgeLabel <$> Expect.string a
+        label <- PG.EdgeLabel <$> withEmptyGraph (Expect.string a)
         elad <- elementCoder (Just (dir, parentLabel)) schema (fieldTypeType field) vidType eidType
         return $ Just $ AdjacentEdgeAdapter dir field label elad
     key = case dir of
@@ -242,7 +242,7 @@ findIncidentVertexAdapter schema vidType eidType spec = do
 findLabelString :: Type -> Name -> Name -> Flow s String
 findLabelString source tname labelKey = case getTypeAnnotation labelKey source of
   Nothing -> pure $ unName tname
-  Just labelTerm -> Expect.string labelTerm
+  Just labelTerm -> withEmptyGraph $ Expect.string labelTerm
 
 findProjectionSpec :: Name -> Name -> Name -> [FieldType] -> Flow s (Y.Maybe (ProjectionSpec a))
 findProjectionSpec tname key aliasKey fields = withTrace ("find " ++ show key ++ " projection") $ do
@@ -253,7 +253,7 @@ findProjectionSpec tname key aliasKey fields = withTrace ("find " ++ show key ++
       spec <- decodeValueSpec $ Y.fromJust $ getTypeAnnotation key $ fieldTypeType field
       alias <- case getTypeAnnotation aliasKey $ fieldTypeType field of
         Nothing -> pure Nothing
-        Just t -> Just <$> Expect.string t
+        Just t -> Just <$> withEmptyGraph (Expect.string t)
       return $ Just $ ProjectionSpec field spec alias
 
 findPropertySpecs :: Schema s t v -> PG.ElementKind -> [FieldType] -> Flow s [ProjectionSpec a]
@@ -271,7 +271,7 @@ findPropertySpecs schema kind fields = CM.mapM toSpec $ L.filter isPropField fie
     toSpec field = do
       alias <- case (getTypeAnnotation (propertyKeyKey schema) $ fieldTypeType field) of
         Nothing -> pure Nothing
-        Just a -> Just <$> Expect.string a
+        Just a -> Just <$> withEmptyGraph (Expect.string a)
       values <- case (getTypeAnnotation (propertyValueKey schema) $ fieldTypeType field) of
         Nothing -> pure ValueSpecValue
         Just sp -> decodeValueSpec sp

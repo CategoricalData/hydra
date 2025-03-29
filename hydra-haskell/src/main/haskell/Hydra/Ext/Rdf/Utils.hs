@@ -14,10 +14,10 @@ descriptionsToGraph :: [Rdf.Description] -> Rdf.Graph
 descriptionsToGraph ds = Rdf.Graph $ S.fromList $ triplesOf ds
 
 emptyDescription :: Rdf.Node -> Rdf.Description
-emptyDescription node = Rdf.Description node emptyGraph
+emptyDescription node = Rdf.Description node emptyRdfGraph
 
-emptyGraph :: Rdf.Graph
-emptyGraph = Rdf.Graph S.empty
+emptyRdfGraph :: Rdf.Graph
+emptyRdfGraph = Rdf.Graph S.empty
 
 emptyLangStrings :: Rdf.LangStrings
 emptyLangStrings = Rdf.LangStrings M.empty
