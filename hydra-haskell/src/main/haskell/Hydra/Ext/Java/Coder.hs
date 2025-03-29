@@ -570,8 +570,6 @@ encodeElimination aliases marg dom cod elm = case elm of
     Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier valueFieldName)
       where
         qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
-  _ -> pure $ encodeLiteral $ LiteralString $
-    "Unimplemented elimination variant: " ++ show (eliminationVariant elm) -- TODO: temporary
 
 encodeFunction :: Aliases -> Type -> Type -> Function -> Flow Graph Java.Expression
 encodeFunction aliases dom cod fun = case fun of

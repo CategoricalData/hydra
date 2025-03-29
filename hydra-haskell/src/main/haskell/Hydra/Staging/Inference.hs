@@ -190,7 +190,7 @@ inferTypeOfCaseStatement :: InferenceContext -> CaseStatement -> Flow s Inferenc
 inferTypeOfCaseStatement cx (CaseStatement tname dflt cases) = Flows.bind (requireSchemaType cx tname) withSchemaType
   where
     fnames = fmap fieldName cases
-    withSchemaType (TypeScheme svars styp) = Flows.bind (expectUnionType tname styp) withFields
+    withSchemaType (TypeScheme svars styp) = Flows.bind (Expect.unionType tname styp) withFields
       where
         withFields sfields = bind2 (traverse (\t -> inferTypeOfTerm cx t "default") dflt) (inferMany cx $ fmap (\f -> (fieldTerm f, "case " ++ unName (fieldName f))) cases) withResults
           where
@@ -236,7 +236,7 @@ inferTypeOfInjection :: InferenceContext -> Injection -> Flow s InferenceResult
 inferTypeOfInjection cx (Injection tname (Field fname term)) = bind2 (requireSchemaType cx tname) (inferTypeOfTerm cx term "injected term") withResults
   where
     withResults (TypeScheme svars styp) (InferenceResult iterm ityp isubst) =
-        Flows.bind (expectUnionType tname styp) withFields
+        Flows.bind (Expect.unionType tname styp) withFields
       where
         withFields sfields = Flows.bind (findFieldType fname sfields) withField
           where
@@ -364,7 +364,7 @@ inferTypeOfProduct cx els = Flows.map withResults (inferMany cx $ fmap (\e -> (e
 inferTypeOfProjection :: InferenceContext -> Projection -> Flow s InferenceResult
 inferTypeOfProjection cx (Projection tname fname) = Flows.bind (requireSchemaType cx tname) withSchemaType
   where
-    withSchemaType (TypeScheme svars styp) = Flows.bind (expectRecordType tname styp) withRecordType
+    withSchemaType (TypeScheme svars styp) = Flows.bind (Expect.recordType tname styp) withRecordType
       where
         withRecordType sfields = Flows.map withField $ findFieldType fname sfields
           where
@@ -449,7 +449,7 @@ inferTypeOfTypedTerm cx (TypedTerm term _) = inferTypeOfTerm cx term "typed term
 inferTypeOfUnwrap :: InferenceContext -> Name -> Flow s InferenceResult
 inferTypeOfUnwrap cx tname = Flows.bind (requireSchemaType cx tname) withSchemaType
   where
-    withSchemaType (TypeScheme svars styp) = Flows.map withWrappedType (expectWrappedType tname styp)
+    withSchemaType (TypeScheme svars styp) = Flows.map withWrappedType (Expect.wrappedType tname styp)
       where
         withWrappedType wtyp = yield
           (Terms.unwrap tname)
