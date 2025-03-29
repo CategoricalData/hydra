@@ -3,21 +3,10 @@
 module Hydra.Constants where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Graph as Graph
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
-
--- | An empty graph; no elements, no primitives, no schema, and an arbitrary body.
-emptyGraph :: Graph.Graph
-emptyGraph = Graph.Graph {
-  Graph.graphElements = M.empty,
-  Graph.graphEnvironment = M.empty,
-  Graph.graphTypes = M.empty,
-  Graph.graphBody = Core.TermLiteral $ Core.LiteralString "empty graph",
-  Graph.graphPrimitives = M.empty,
-  Graph.graphSchema = Nothing}
 
 ignoredVariable :: String
 ignoredVariable = "_"

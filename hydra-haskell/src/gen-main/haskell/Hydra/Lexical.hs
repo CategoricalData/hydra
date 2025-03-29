@@ -22,5 +22,15 @@ elementsToGraph parent schema elements =
     Graph.graphPrimitives = (Graph.graphPrimitives parent),
     Graph.graphSchema = schema}
 
+-- | An empty graph; no elements, no primitives, no schema, and an arbitrary body.
+emptyGraph :: Graph.Graph
+emptyGraph = Graph.Graph {
+  Graph.graphElements = Maps.empty,
+  Graph.graphEnvironment = Maps.empty,
+  Graph.graphTypes = Maps.empty,
+  Graph.graphBody = (Core.TermLiteral (Core.LiteralString "empty graph")),
+  Graph.graphPrimitives = Maps.empty,
+  Graph.graphSchema = Nothing}
+
 lookupPrimitive :: (Graph.Graph -> Core.Name -> Maybe Graph.Primitive)
 lookupPrimitive g name = (Maps.lookup name (Graph.graphPrimitives g))
