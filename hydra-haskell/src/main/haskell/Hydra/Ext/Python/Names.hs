@@ -53,7 +53,7 @@ encodeName isQualified conv env name = if isQualified
     pyNs ns = L.intercalate "." $ fmap (convertCase CaseConventionCamel CaseConventionLowerSnake) $ Strings.splitOn "." $ unNamespace ns
 
 encodeNamespace :: Namespace -> Py.DottedName
-encodeNamespace ns = Py.DottedName (Py.Name <$> (Strings.splitOn "." $ unNamespace ns))
+encodeNamespace ns = Py.DottedName (Py.Name . (convertCase CaseConventionCamel CaseConventionLowerSnake) <$> (Strings.splitOn "." $ unNamespace ns))
 
 encodeTypeVariable :: Name -> Py.Name
 encodeTypeVariable = Py.Name . capitalize . unName
