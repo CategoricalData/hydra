@@ -98,7 +98,7 @@ coreDecodeName term = Name <$> (Expect.wrap _Name term >>= Expect.string)
 
 coreDecodeWrappedType :: Term -> Flow Graph WrappedType
 coreDecodeWrappedType term = do
-  fields <- Expect.recordWithName _WrappedType term
+  fields <- Expect.record _WrappedType term
   name <- Expect.field _WrappedType_typeName coreDecodeName fields
   obj <- Expect.field _WrappedType_object coreDecodeType fields
   pure $ WrappedType name obj

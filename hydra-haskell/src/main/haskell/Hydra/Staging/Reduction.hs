@@ -98,13 +98,13 @@ reduceTerm eager env = rewriteTermM mapping
 
     applyElimination elm reducedArg = case elm of
       EliminationRecord proj -> do
-        fields <- Expect.recordWithName (projectionTypeName proj) $ stripTerm reducedArg
+        fields <- Expect.record (projectionTypeName proj) $ stripTerm reducedArg
         let matchingFields = L.filter (\f -> fieldName f == projectionField proj) fields
         if L.null matchingFields
           then fail $ "no such field: " ++ unName (projectionField proj) ++ " in " ++ unName (projectionTypeName proj) ++ " record"
           else pure $ fieldTerm $ L.head matchingFields
       EliminationUnion (CaseStatement name def fields) -> do
-        field <- Expect.injectionWithName name reducedArg
+        field <- Expect.injection name reducedArg
         let matchingFields = L.filter (\f -> fieldName f == fieldName field) fields
         if L.null matchingFields
           then case def of

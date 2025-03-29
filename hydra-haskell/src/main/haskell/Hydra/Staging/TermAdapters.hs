@@ -104,7 +104,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
       TermVariable (Name var) -> variant functionProxyName _Term_variable $ string var
 
     decode ad term = do
-        (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= Expect.injection
+        (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= Expect.injection functionProxyName
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
           (_Elimination_wrap, forWrapped fterm),
           (_Elimination_record, forProjection fterm),
@@ -270,14 +270,14 @@ passUnion t@(TypeUnion rt) = do
     let sfields' = adapterTarget . snd <$> adapters
     return $ Adapter lossy t (TypeUnion $ rt {rowTypeFields = sfields'})
       $ bidirectional $ \dir term -> do
-        dfield <- Expect.injection term
+        dfield <- Expect.injection tname term
         ad <- getAdapter adaptersMap dfield
-        TermUnion . Injection nm <$> encodeDecode dir (adapterCoder ad) dfield
+        TermUnion . Injection tname <$> encodeDecode dir (adapterCoder ad) dfield
   where
     getAdapter adaptersMap f = Y.maybe (fail $ "no such field: " ++ unName (fieldName f)) pure
       $ M.lookup (fieldName f) adaptersMap
     sfields = rowTypeFields rt
-    nm = rowTypeTypeName rt
+    tname = rowTypeTypeName rt
 
 passWrapped :: TypeAdapter
 passWrapped t@(TypeWrap (WrappedType tname ot)) = do
@@ -344,7 +344,7 @@ unionToRecord t@(TypeUnion rt) = do
     ad <- termAdapter target
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Coder {
       coderEncode = \term' -> do
-        (Field fn term) <- Expect.injectionWithName (rowTypeTypeName rt) term'
+        (Field fn term) <- Expect.injection (rowTypeTypeName rt) term'
         coderEncode (adapterCoder ad) $ record nm (toRecordField term fn <$> sfields),
       coderDecode = \term -> do
         TermRecord (Record _ fields) <- coderDecode (adapterCoder ad) term
