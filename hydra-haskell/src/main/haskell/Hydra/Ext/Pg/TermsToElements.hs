@@ -21,12 +21,17 @@ type PgAdapter s v = Adapter s s Type [PG.Label] Term [PG.Element v]
 
 key_elements = Name "elements"
 
+expectList :: (Term -> Flow s x) -> Term -> Flow s [x]
+expectList f term = do
+  s <- getState
+  withEmptyGraph $ Expect.list (\t -> withState s $ f t) term
+
 termToElementsAdapter :: Schema s t v -> Type -> Flow s (PgAdapter s v)
 termToElementsAdapter schema typ = do
     case getTypeAnnotation key_elements typ of
       Nothing -> pure trivialAdapter
       Just term -> do
-        specs <- Expect.list decodeElementSpec term >>= CM.mapM (parseElementSpec schema)
+        specs <- expectList decodeElementSpec term >>= CM.mapM (parseElementSpec schema)
         let labels = L.nub (fst <$> specs)
         let encoders = snd <$> specs
         let encode term = L.concat <$> CM.mapM (\e -> e term) encoders
@@ -190,7 +195,7 @@ requireUnique context fun term = do
 -- Element spec decoding. TODO: this should code should really be generated rather than hand-written.
 
 decodeEdgeLabel :: Term -> Flow s PG.EdgeLabel
-decodeEdgeLabel t = PG.EdgeLabel <$> Expect.string t
+decodeEdgeLabel t = PG.EdgeLabel <$> withEmptyGraph (Expect.string t)
 
 decodeEdgeSpec :: Term -> Flow s EdgeSpec
 decodeEdgeSpec term = withTrace "decode edge spec" $ matchRecord (\fields -> EdgeSpec
@@ -198,7 +203,7 @@ decodeEdgeSpec term = withTrace "decode edge spec" $ matchRecord (\fields -> Edg
   <*> readField fields _EdgeSpec_id decodeValueSpec
   <*> readField fields _EdgeSpec_out decodeValueSpec
   <*> readField fields _EdgeSpec_in decodeValueSpec
-  <*> readField fields _EdgeSpec_properties (Expect.list decodePropertySpec)) term
+  <*> readField fields _EdgeSpec_properties (expectList decodePropertySpec)) term
 
 decodeElementSpec :: Term -> Flow s ElementSpec
 decodeElementSpec term = withTrace "decode element spec" $ matchInjection [
@@ -206,7 +211,7 @@ decodeElementSpec term = withTrace "decode element spec" $ matchInjection [
   (_ElementSpec_edge, \t -> ElementSpecEdge <$> decodeEdgeSpec t)] term
 
 decodePropertyKey :: Term -> Flow s PG.PropertyKey
-decodePropertyKey t = PG.PropertyKey <$> Expect.string t
+decodePropertyKey t = PG.PropertyKey <$> withEmptyGraph (Expect.string t)
 
 decodePropertySpec :: Term -> Flow s PropertySpec
 decodePropertySpec term = withTrace "decode property spec" $ matchRecord (\fields -> PropertySpec
@@ -219,23 +224,23 @@ decodeValueSpec term = withTrace "decode value spec" $ case stripTerm term of
   TermLiteral (LiteralString s) -> pure $ ValueSpecPattern s
   _ -> matchInjection [
     (_ValueSpec_value, \t -> pure ValueSpecValue),
-    (_ValueSpec_pattern, \t -> ValueSpecPattern <$> Expect.string t)] term
+    (_ValueSpec_pattern, \t -> ValueSpecPattern <$> withEmptyGraph (Expect.string t))] term
 
 decodeVertexLabel :: Term -> Flow s PG.VertexLabel
-decodeVertexLabel t = PG.VertexLabel <$> Expect.string t
+decodeVertexLabel t = PG.VertexLabel <$> withEmptyGraph (Expect.string t)
 
 decodeVertexSpec :: Term -> Flow s VertexSpec
 decodeVertexSpec term = withTrace "decode vertex spec" $ matchRecord (\fields -> VertexSpec
   <$> readField fields _VertexSpec_label decodeVertexLabel
   <*> readField fields _VertexSpec_id decodeValueSpec
-  <*> readField fields _VertexSpec_properties (Expect.list decodePropertySpec)) term
+  <*> readField fields _VertexSpec_properties (expectList decodePropertySpec)) term
 
 
 -- General-purpose code for decoding
 
 matchInjection :: [(Name, Term -> Flow s x)] -> Term -> Flow s x
 matchInjection cases encoded = do
-  mp <- Expect.map (\k -> Name <$> Expect.string k) pure encoded
+  mp <- withEmptyGraph (Expect.map (\k -> Name <$> Expect.string k) pure encoded)
   f <- case M.toList mp of
     [] -> fail "empty injection"
     [(k, v)] -> pure $ Field k v
@@ -246,7 +251,7 @@ matchInjection cases encoded = do
     _ -> fail "duplicate field name in cases"
 
 matchRecord :: (M.Map Name Term -> Flow s x) -> Term -> Flow s x
-matchRecord cons term = Expect.map (\k -> Name <$> Expect.string k) pure term >>= cons
+matchRecord cons term = withEmptyGraph (Expect.map (\k -> Name <$> Expect.string k) pure term) >>= cons
 
 readField fields fname fun = case M.lookup fname fields of
   Nothing -> fail $ "no such field: " ++ unName fname

@@ -154,7 +154,7 @@ inferTypeOf cx term = bindInferredTerm cx letTerm "infer type of term" unifyAndS
   where
     letTerm = TermLet $ Let [LetBinding (Name "ignoredVariableName") term Nothing] $ Terms.string "ignoredEnvironment"
     unifyAndSubst result = do
-        (Let bindings _) <- Expect.letTerm $ normalizeTypeVariablesInTerm $ inferenceResultTerm result
+        (Let bindings _) <- withEmptyGraph $ Expect.letTerm $ normalizeTypeVariablesInTerm $ inferenceResultTerm result
         case bindings of
           [LetBinding _ term1 (Just ts)] -> return (term1, ts)
           _ -> Flows.fail $ "Expected a single binding with a type scheme, but got: " ++ show bindings

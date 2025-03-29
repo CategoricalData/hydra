@@ -21,15 +21,9 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
--- | An empty graph (no elements, no primitives, but an annotation class) which is used for bootstrapping Hydra Core
+-- | An empty graph (no elements, no schema, but with primitive functions) which is used for bootstrapping Hydra Core
 bootstrapGraph :: Graph
-bootstrapGraph = Graph {
-  graphElements = M.empty,
-  graphEnvironment = M.empty,
-  graphTypes = M.empty,
-  graphBody = Terms.list [], -- Note: the bootstrap body is arbitrary
-  graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) (L.concat (libraryPrimitives <$> standardLibraries)),
-  graphSchema = Nothing}
+bootstrapGraph = emptyGraph {graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) (L.concat (libraryPrimitives <$> standardLibraries))}
 
 datatype :: Namespace -> String -> Type -> Element
 datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders typ
@@ -51,9 +45,6 @@ datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders 
       where
         rect = rec t
 
-typeref :: Namespace -> String -> Type
-typeref ns = TypeVariable . qualify ns . Name
-
 qualify :: Namespace -> Name -> Name
 qualify (Namespace gname) (Name lname) = Name $ gname ++ "." ++ lname
 
@@ -67,3 +58,6 @@ typeElement name typ = Element {
     -- These type annotations allow type inference to proceed despite cyclic type definitions, e.g. in Hydra Core
     dataTerm = normalizeTermAnnotations $ TermAnnotated $ AnnotatedTerm (coreEncodeType typ) $ M.fromList [(key_type, schemaTerm)]
     schemaTerm = TermVariable _Type
+
+typeref :: Namespace -> String -> Type
+typeref ns = TypeVariable . qualify ns . Name

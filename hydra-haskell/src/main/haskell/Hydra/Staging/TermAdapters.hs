@@ -104,7 +104,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
       TermVariable (Name var) -> variant functionProxyName _Term_variable $ string var
 
     decode ad term = do
-        (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= Expect.injection functionProxyName
+        (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= (\x -> withGraphContext $ Expect.injection functionProxyName x)
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
           (_Elimination_wrap, forWrapped fterm),
           (_Elimination_record, forProjection fterm),
@@ -114,12 +114,12 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
           (_Term_variable, forVariable fterm)]
       where
         notFound fname = fail $ "unexpected field: " ++ unName fname
-        forCases fterm = read <$> Expect.string fterm -- TODO
-        forLambda fterm = read <$> Expect.string fterm -- TODO
-        forWrapped fterm = unwrap . Name <$> Expect.string fterm
-        forPrimitive fterm = primitive . Name <$> Expect.string fterm
-        forProjection fterm = read <$> Expect.string fterm -- TODO
-        forVariable fterm = var <$> Expect.string fterm
+        forCases fterm = withGraphContext $ read <$> Expect.string fterm -- TODO
+        forLambda fterm = withGraphContext $ read <$> Expect.string fterm -- TODO
+        forWrapped fterm = withGraphContext $ unwrap . Name <$> Expect.string fterm
+        forPrimitive fterm = withGraphContext $ primitive . Name <$> Expect.string fterm
+        forProjection fterm = withGraphContext $ read <$> Expect.string fterm -- TODO
+        forVariable fterm = withGraphContext $ var <$> Expect.string fterm
 
     unionType = do
       domAd <- termAdapter dom
@@ -205,7 +205,7 @@ passLiteral :: TypeAdapter
 passLiteral (TypeLiteral at) = do
   ad <- literalAdapter at
   let step = bidirectional $ \dir term -> do
-        l <- Expect.literal term
+        l <- withGraphContext $ Expect.literal term
         literal <$> encodeDecode dir (adapterCoder ad) l
   return $ Adapter (adapterIsLossy ad) (Types.literal $ adapterSource ad) (Types.literal $ adapterTarget ad) step
 
@@ -231,7 +231,7 @@ passOptional t@(TypeOptional ot) = do
     return $ Adapter (adapterIsLossy adapter) t (Types.optional $ adapterTarget adapter) $
       bidirectional (mapTerm $ adapterCoder adapter)
   where
-    mapTerm coder dir term = Terms.optional <$> (Expect.optional pure term >>= traverse (encodeDecode dir coder))
+    mapTerm coder dir term = Terms.optional <$> (withGraphContext (Expect.optional pure term) >>= traverse (encodeDecode dir coder))
 
 passProduct :: TypeAdapter
 passProduct t@(TypeProduct types) = do
@@ -270,7 +270,7 @@ passUnion t@(TypeUnion rt) = do
     let sfields' = adapterTarget . snd <$> adapters
     return $ Adapter lossy t (TypeUnion $ rt {rowTypeFields = sfields'})
       $ bidirectional $ \dir term -> do
-        dfield <- Expect.injection tname term
+        dfield <- withGraphContext $ Expect.injection tname term
         ad <- getAdapter adaptersMap dfield
         TermUnion . Injection tname <$> encodeDecode dir (adapterCoder ad) dfield
   where
@@ -344,7 +344,7 @@ unionToRecord t@(TypeUnion rt) = do
     ad <- termAdapter target
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Coder {
       coderEncode = \term' -> do
-        (Field fn term) <- Expect.injection (rowTypeTypeName rt) term'
+        (Field fn term) <- withGraphContext $ Expect.injection (rowTypeTypeName rt) term'
         coderEncode (adapterCoder ad) $ record nm (toRecordField term fn <$> sfields),
       coderDecode = \term -> do
         TermRecord (Record _ fields) <- coderDecode (adapterCoder ad) term
@@ -374,7 +374,7 @@ unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decod
     -- TODO: use JSON for encoding and decoding unsupported terms, rather than Haskell's read/show
     encode term = pure $ string $ "unsupported: " ++ show term
     decode term = do
-      s <- Expect.string term
+      s <- withGraphContext $ Expect.string term
       case TR.readEither s of
         Left msg -> fail $ "could not decode unsupported term: " ++ s
         Right t -> pure t
@@ -389,7 +389,7 @@ wrapToUnwrapped t@(TypeWrap (WrappedType tname typ)) = do
       decoded <- coderDecode (adapterCoder ad) term
       return $ TermWrap $ WrappedTerm tname decoded
 
-withGraphContext :: Flow (Graph) x -> Flow (AdapterContext) x
+withGraphContext :: Flow Graph a -> Flow AdapterContext a
 withGraphContext f = do
   cx <- getState
   withState (adapterContextGraph cx) f

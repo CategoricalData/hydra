@@ -40,7 +40,7 @@ debugIf debugId message = do
     else return ()
 
 getDebugId :: Flow s (Maybe String)
-getDebugId = do
+getDebugId = withEmptyGraph $ do
   desc <- getAttr key_debugId
   traverse Expect.string desc
 
@@ -60,7 +60,7 @@ getAttrWithDefault :: Name -> Term -> Flow s Term
 getAttrWithDefault key def = Y.fromMaybe def <$> getAttr key
 
 getCount :: Name -> Flow s Int
-getCount key = getAttrWithDefault key (Terms.int32 0) >>= Expect.int32
+getCount key = withEmptyGraph $ getAttrWithDefault key (Terms.int32 0) >>= Expect.int32
 
 getDescription :: M.Map Name Term -> Flow Graph (Y.Maybe String)
 getDescription anns = case M.lookup key_description anns of
@@ -110,7 +110,7 @@ hasDescription anns = case M.lookup key_description anns of
   Just _ -> True
 
 hasFlag :: Name -> Flow s Bool
-hasFlag flag = getAttrWithDefault flag (Terms.boolean False) >>= Expect.boolean
+hasFlag flag = withEmptyGraph $ getAttrWithDefault flag (Terms.boolean False) >>= Expect.boolean
 
 hasTypeDescription :: Type -> Bool
 hasTypeDescription = hasDescription . typeAnnotationInternal
@@ -259,3 +259,6 @@ withDepth key f = do
   r <- f inc
   putCount key count
   return r
+
+withEmptyGraph :: Flow Graph a -> Flow s a
+withEmptyGraph = withState emptyGraph
