@@ -88,15 +88,6 @@ stripAndDereferenceTerm term = case fullyStripTerm term of
     stripAndDereferenceTerm t
   t -> pure t
 
-toCompactName :: M.Map Namespace String -> Name -> String
-toCompactName namespaces name = case mns of
-    Nothing -> unName name
-    Just ns -> case M.lookup ns namespaces of
-      Just pre -> pre ++ ":" ++ local
-      Nothing -> local
-  where
-    (QualifiedName mns local) = qualifyName name
-
 typeOfPrimitive :: Name -> Flow Graph TypeScheme
 typeOfPrimitive name = primitiveType <$> requirePrimitive name
 

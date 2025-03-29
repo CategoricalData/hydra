@@ -99,20 +99,8 @@ functionType typ = case stripType typ of
   TypeFunction ft -> pure ft
   _ -> unexpected "function type" $ show typ
 
-inject :: Name -> Term -> Flow s Field
-inject name term = case fullyStripTerm term of
-  TermUnion (Injection name' field) -> if name' == name
-    then pure field
-    else unexpected ("injection of type " ++ unName name) (unName name')
-  _ -> unexpected "injection" $ show term
-
-injection :: Term -> Flow s Field
-injection term = case fullyStripTerm term of
-  TermUnion (Injection _ field) -> pure field
-  _ -> unexpected "injection" $ show term
-
-injectionWithName :: Name -> Term -> Flow s Field
-injectionWithName expected term = case fullyStripTerm term of
+injection :: Name -> Term -> Flow s Field
+injection expected term = case fullyStripTerm term of
   TermUnion (Injection actual field) -> if actual == expected
     then pure field
     else unexpected ("injection of type " ++ unName expected) (unName actual)
@@ -245,9 +233,11 @@ productType typ = case stripType typ of
   TypeProduct types -> pure types
   _ -> unexpected "product type" $ show typ
 
-record :: Term -> Flow s [Field]
-record term = case fullyStripTerm term of
-  TermRecord (Record _ fields) -> pure fields
+record :: Name -> Term -> Flow s [Field]
+record expected term = case fullyStripTerm term of
+  TermRecord (Record actual fields) -> if actual == expected
+    then pure fields
+    else unexpected ("record of type " ++ unName expected) (unName actual)
   _ -> unexpected "record" $ show term
 
 recordType :: Name -> Type -> Flow s [FieldType]
@@ -256,13 +246,6 @@ recordType ename typ = case stripType typ of
     then pure fields
     else unexpected ("record of type " ++ unName ename) $ "record of type " ++ unName tname
   _ -> unexpected "record type" $ show typ
-
-recordWithName :: Name -> Term -> Flow s [Field]
-recordWithName expected term = case fullyStripTerm term of
-  TermRecord (Record actual fields) -> if actual == expected
-    then pure fields
-    else unexpected ("record of type " ++ unName expected) (unName actual)
-  _ -> unexpected "record" $ show term
 
 set :: Ord x => (Term -> Flow s x) -> Term -> Flow s (S.Set x)
 set f term = case fullyStripTerm term of
@@ -281,6 +264,11 @@ stringLiteral :: Literal -> Flow s String
 stringLiteral v = case v of
   LiteralString s -> pure s
   _ -> unexpected "string" $ show v
+
+sumType :: Type -> Flow s [Type]
+sumType typ = case stripType typ of
+  TypeSum types -> pure types
+  _ -> unexpected "sum type" $ show typ
 
 uint8 :: Term -> Flow s Int16
 uint8 t = literal t >>= integerLiteral >>= uint8Value
@@ -323,7 +311,7 @@ unionType ename typ = case stripType typ of
 
 unit :: Term -> Flow s ()
 unit term = do
-  fields <- recordWithName _Unit term
+  fields <- record _Unit term
   if L.null fields
     then pure ()
     else unexpected "unit" $ show term
@@ -340,7 +328,7 @@ variable term = case fullyStripTerm term of
   _ -> unexpected "variable" $ show term
 
 variant :: Name -> Term -> Flow s Field
-variant = injectionWithName
+variant = injection
 
 -- TODO: also strip and dereference terms in the other decoders
 wrap :: Name -> Term -> Flow Graph Term

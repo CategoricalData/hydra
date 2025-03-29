@@ -74,5 +74,14 @@ termToAccessorGraph namespaces term = AccessorGraph nodesX edgesX
       where
         nextPath = accessor:path
 
+toCompactName :: M.Map Namespace String -> Name -> String
+toCompactName namespaces name = case mns of
+    Nothing -> unName name
+    Just ns -> case M.lookup ns namespaces of
+      Just pre -> pre ++ ":" ++ local
+      Nothing -> local
+  where
+    (QualifiedName mns local) = qualifyName name
+
 toUniqueLabel :: S.Set String -> String -> String
 toUniqueLabel visited l = if S.member l visited then toUniqueLabel visited (l ++ "'") else l
