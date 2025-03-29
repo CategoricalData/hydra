@@ -79,27 +79,6 @@ elementAsTypedTerm el = case elementType el of
   Nothing -> fail "missing element type"
   Just ts -> return $ TypedTerm (elementTerm el) (typeSchemeType ts)
 
-expectRecordType :: Name -> Type -> Flow s [FieldType]
-expectRecordType ename typ = case stripType typ of
-  TypeRecord (RowType tname fields) -> if tname == ename
-    then pure fields
-    else unexpected ("record of type " ++ unName ename) $ "record of type " ++ unName tname
-  _ -> unexpected "record type" $ show typ
-
-expectUnionType :: Name -> Type -> Flow s [FieldType]
-expectUnionType ename typ = case stripType typ of
-  TypeUnion (RowType tname fields) -> if tname == ename
-    then pure fields
-    else unexpected ("union of type " ++ unName ename) $ "union of type " ++ unName tname
-  _ -> unexpected "union type" $ show typ
-
-expectWrappedType :: Name -> Type -> Flow s Type
-expectWrappedType ename typ = case stripType typ of
-    TypeWrap (WrappedType tname t) -> if tname == ename
-      then pure t
-      else unexpected ("wrapped type " ++ unName ename) $ "wrapped type " ++ unName tname
-    _ -> unexpected "wrapped type" $ show typ
-
 findFieldType :: Name -> [FieldType] -> Flow s Type
 findFieldType fname fields = case L.filter (\(FieldType fn _) -> fn == fname) fields of
   [] -> fail $ "No such field: " ++ unName fname
@@ -170,14 +149,6 @@ requireUnionType :: Name -> Flow Graph RowType
 requireUnionType = requireRowType "union" $ \t -> case t of
   TypeUnion rt -> Just rt
   _ -> Nothing
-
-requireWrappedType :: Name -> Flow Graph Type
-requireWrappedType name = do
-  typ <- requireType name
-  case stripType typ of
-    TypeWrap (WrappedType name t) -> return t
-    _ -> return typ -- TODO: stop allowing this "slop" once typedefs are clearly separated from newtypes
---     _ -> fail $ "expected wrapped type for " ++ unName name ++ " but got " ++ show typ
 
 resolveType :: Type -> Flow Graph (Maybe Type)
 resolveType typ = case stripType typ of

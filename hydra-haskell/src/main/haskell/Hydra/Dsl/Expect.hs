@@ -94,6 +94,11 @@ floatLiteral lit = case lit of
   LiteralFloat v -> pure v
   _ -> unexpected "floating-point value" $ show lit
 
+functionType :: Type -> Flow s FunctionType
+functionType typ = case stripType typ of
+  TypeFunction ft -> pure ft
+  _ -> unexpected "function type" $ show typ
+
 inject :: Name -> Term -> Flow s Field
 inject name term = case fullyStripTerm term of
   TermUnion (Injection name' field) -> if name' == name
@@ -150,7 +155,7 @@ integerLiteral lit = case lit of
   LiteralInteger v -> pure v
   _ -> unexpected "integer value" $ show lit
 
-lambda :: Term -> Flow s (Lambda)
+lambda :: Term -> Flow s Lambda
 lambda term = case fullyStripTerm term of
   TermFunction (FunctionLambda l) -> pure l
   _ -> unexpected "lambda" $ show term
@@ -183,6 +188,11 @@ listHead term = do
     then fail "empty list"
     else pure $ L.head l
 
+listType :: Type -> Flow s Type
+listType typ = case stripType typ of
+  TypeList t -> pure t
+  _ -> unexpected "list type" $ show typ
+
 literal :: Term -> Flow s Literal
 literal term = case fullyStripTerm term of
   TermLiteral lit -> pure lit
@@ -198,6 +208,11 @@ map fk fv term = case fullyStripTerm term of
         return (kval, vval)
   _ -> unexpected "map" $ show term
 
+mapType :: Type -> Flow s MapType
+mapType typ = case stripType typ of
+  TypeMap mt -> pure mt
+  _ -> unexpected "map type" $ show typ
+
 nArgs :: Int -> [Term] -> Flow s ()
 nArgs n args = if L.length args /= n
   then unexpected (show n ++ " arguments") $ show (L.length args)
@@ -210,6 +225,11 @@ optional f term = case fullyStripTerm term of
     Just t -> Just <$> f t
   _ -> unexpected "optional value" $ show term
 
+optionalType :: Type -> Flow s Type
+optionalType typ = case stripType typ of
+  TypeOptional t -> pure t
+  _ -> unexpected "optional type" $ show typ
+
 pair :: (Term -> Flow s k) -> (Term -> Flow s v) -> Term -> Flow s (k, v)
 pair kf vf term = case fullyStripTerm term of
   TermProduct terms -> case terms of
@@ -220,10 +240,22 @@ pair kf vf term = case fullyStripTerm term of
     _ -> unexpected "pair" $ show term
   _ -> unexpected "product" $ show term
 
+productType :: Type -> Flow s [Type]
+productType typ = case stripType typ of
+  TypeProduct types -> pure types
+  _ -> unexpected "product type" $ show typ
+
 record :: Term -> Flow s [Field]
 record term = case fullyStripTerm term of
   TermRecord (Record _ fields) -> pure fields
   _ -> unexpected "record" $ show term
+
+recordType :: Name -> Type -> Flow s [FieldType]
+recordType ename typ = case stripType typ of
+  TypeRecord (RowType tname fields) -> if tname == ename
+    then pure fields
+    else unexpected ("record of type " ++ unName ename) $ "record of type " ++ unName tname
+  _ -> unexpected "record type" $ show typ
 
 recordWithName :: Name -> Term -> Flow s [Field]
 recordWithName expected term = case fullyStripTerm term of
@@ -236,6 +268,11 @@ set :: Ord x => (Term -> Flow s x) -> Term -> Flow s (S.Set x)
 set f term = case fullyStripTerm term of
   TermSet s -> S.fromList <$> CM.mapM f (S.toList s)
   _ -> unexpected "set" $ show term
+
+setType :: Type -> Flow s Type
+setType typ = case stripType typ of
+  TypeSet t -> pure t
+  _ -> unexpected "set type" $ show typ
 
 string :: Term -> Flow s String
 string t = literal t >>= stringLiteral
@@ -277,6 +314,13 @@ uint64Value v = case v of
   IntegerValueUint64 i -> pure i
   _ -> unexpected "uint64" $ show v
 
+unionType :: Name -> Type -> Flow s [FieldType]
+unionType ename typ = case stripType typ of
+  TypeUnion (RowType tname fields) -> if tname == ename
+    then pure fields
+    else unexpected ("union of type " ++ unName ename) $ "union of type " ++ unName tname
+  _ -> unexpected "union type" $ show typ
+
 unit :: Term -> Flow s ()
 unit term = do
   fields <- recordWithName _Unit term
@@ -307,3 +351,10 @@ wrap expected term = do
       then pure term
       else unexpected ("wrapper of type " ++ unName expected) (unName actual)
     _ -> unexpected ("wrap(" ++ unName expected ++ ")") $ show term
+
+wrappedType :: Name -> Type -> Flow s Type
+wrappedType ename typ = case stripType typ of
+  TypeWrap (WrappedType tname t) -> if tname == ename
+    then pure t
+    else unexpected ("wrapped type " ++ unName ename) $ "wrapped type " ++ unName tname
+  _ -> unexpected "wrapped type" $ show typ
