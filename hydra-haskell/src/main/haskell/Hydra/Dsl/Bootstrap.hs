@@ -7,6 +7,7 @@ import Hydra.Constants
 import Hydra.Core
 import Hydra.CoreEncoding
 import Hydra.Graph
+import Hydra.Lexical
 import Hydra.Staging.Annotations
 import Hydra.Module
 import Hydra.Rewriting

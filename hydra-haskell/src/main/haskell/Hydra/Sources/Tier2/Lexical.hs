@@ -33,11 +33,12 @@ lexicalDefinition = definitionInModule hydraLexicalModule
 
 hydraLexicalModule :: Module
 hydraLexicalModule = Module (Namespace "hydra.lexical") elements
-   [hydraGraphModule, hydraMantleModule, hydraComputeModule, hydraStripModule] [hydraCoreModule] $
+   [hydraGraphModule, hydraMantleModule, hydraComputeModule, hydraStripModule] [hydraGraphModule] $
     Just ("A module for lexical operations over graphs.")
   where
     elements = [
       el elementsToGraphDef,
+      el emptyGraphDef,
       el lookupPrimitiveDef]
 
 elementsToGraphDef :: TElement (Graph -> Maybe Graph -> [Element] -> Graph)
@@ -51,6 +52,17 @@ elementsToGraphDef = lexicalDefinition "elementsToGraph" $
       (Graph.graphBody @@ var "parent")
       (Graph.graphPrimitives @@ var "parent")
       (var "schema")
+
+emptyGraphDef :: TElement Graph
+emptyGraphDef = lexicalDefinition "emptyGraph" $
+  doc "An empty graph; no elements, no primitives, no schema, and an arbitrary body." $
+  Graph.graph
+    Maps.empty
+    Maps.empty
+    Maps.empty
+    (Core.termLiteral $ Core.literalString "empty graph")
+    Maps.empty
+    nothing
 
 lookupPrimitiveDef :: TElement (Graph -> Name -> Maybe Primitive)
 lookupPrimitiveDef = lexicalDefinition "lookupPrimitive" $
