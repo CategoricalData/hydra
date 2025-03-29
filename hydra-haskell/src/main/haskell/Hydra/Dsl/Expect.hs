@@ -322,11 +322,6 @@ unitVariant tname term = do
   unit $ fieldTerm field
   pure $ fieldName field
 
-variable :: Term -> Flow s Name
-variable term = case fullyStripTerm term of
-  TermVariable name -> pure name
-  _ -> unexpected "variable" $ show term
-
 variant :: Name -> Term -> Flow s Field
 variant = injection
 
