@@ -22,7 +22,7 @@ def convert_case(from_: hydra.mantle.CaseConvention, to: hydra.mantle.CaseConven
         by_underscores = hydra.lib.strings.split_on("_", original)
         def by_caps() -> frozenlist[str]:
             def split_on_uppercase(acc: frozenlist[frozenlist[int]], c: int) -> frozenlist[frozenlist[int]]:
-                return hydra.lib.lists.concat2(hydra.lib.logic.if_else(hydra.lib.chars.is_upper(c), tuple([tuple([])]), tuple([])), hydra.lib.lists.cons(hydra.lib.lists.cons(c, hydra.lib.lists.head(acc)), hydra.lib.lists.tail(acc)))
+                return hydra.lib.lists.concat2(hydra.lib.logic.if_else(hydra.lib.chars.is_upper(c), tuple([tuple[int]([])]), tuple([])), hydra.lib.lists.cons(hydra.lib.lists.cons(c, hydra.lib.lists.head(acc)), hydra.lib.lists.tail(acc)))
             return hydra.lib.lists.map(lambda v1: hydra.lib.strings.from_list(v1), hydra.lib.lists.foldl(split_on_uppercase, tuple([tuple([])]), hydra.lib.lists.reverse(hydra.lib.strings.to_list(decapitalize(original)))))
         match from_:
             case hydra.mantle.CaseConvention.CAMEL:
@@ -73,5 +73,5 @@ def map_first_letter(mapping: Callable[[str], str], s: str) -> str:
     """A helper which maps the first letter of a string to another string."""
     
     list = hydra.lib.strings.to_list(s)
-    first_letter = mapping()(hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.lists.head(list))))
+    first_letter = mapping(hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.lists.head(list))))
     return hydra.lib.logic.if_else(hydra.lib.strings.is_empty(s), s, hydra.lib.strings.cat2(first_letter, hydra.lib.strings.from_list(hydra.lib.lists.tail(list))))
