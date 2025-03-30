@@ -64,7 +64,7 @@ javaLanguage = Coders.Language {
       Mantle.TypeVariantAnnotated,
       Mantle.TypeVariantApplication,
       Mantle.TypeVariantFunction,
-      Mantle.TypeVariantLambda,
+      Mantle.TypeVariantForall,
       Mantle.TypeVariantList,
       Mantle.TypeVariantLiteral,
       Mantle.TypeVariantMap,

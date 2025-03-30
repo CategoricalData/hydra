@@ -236,8 +236,8 @@ _TermVariant_wrap = (Core.Name "wrap")
 data TypeVariant = 
   TypeVariantAnnotated  |
   TypeVariantApplication  |
+  TypeVariantForall  |
   TypeVariantFunction  |
-  TypeVariantLambda  |
   TypeVariantList  |
   TypeVariantLiteral  |
   TypeVariantMap  |
@@ -257,9 +257,9 @@ _TypeVariant_annotated = (Core.Name "annotated")
 
 _TypeVariant_application = (Core.Name "application")
 
-_TypeVariant_function = (Core.Name "function")
+_TypeVariant_forall = (Core.Name "forall")
 
-_TypeVariant_lambda = (Core.Name "lambda")
+_TypeVariant_function = (Core.Name "function")
 
 _TypeVariant_list = (Core.Name "list")
 

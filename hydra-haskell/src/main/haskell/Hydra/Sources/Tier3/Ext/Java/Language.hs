@@ -94,7 +94,7 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
         TypeVariantAnnotated,
         TypeVariantApplication,
         TypeVariantFunction,
-        TypeVariantLambda,
+        TypeVariantForall,
         TypeVariantList,
         TypeVariantLiteral,
         TypeVariantMap,

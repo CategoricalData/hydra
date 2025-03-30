@@ -83,7 +83,7 @@ hydraGraphModule = Module ns elements [hydraComputeModule] [hydraCoreModule] $
 
       def "TermCoder" $
         doc "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms" $
-        lambda "a" $ record [
+        forAll "a" $ record [
           "type">: core "Type",
           "coder">: compute "Coder" @@ graph "Graph" @@ graph "Graph" @@ core "Term" @@ "a"],
 

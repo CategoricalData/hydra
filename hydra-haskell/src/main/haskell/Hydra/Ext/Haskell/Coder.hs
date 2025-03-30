@@ -186,7 +186,7 @@ encodeType :: HaskellNamespaces -> Type -> Flow Graph H.Type
 encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
     TypeApplication (ApplicationType lhs rhs) -> toTypeApplication <$> CM.sequence [encode lhs, encode rhs]
     TypeFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.FunctionType <$> encode dom <*> encode cod)
-    TypeLambda (LambdaType (Name v) body) -> toTypeApplication <$> CM.sequence [
+    TypeForall (ForallType (Name v) body) -> toTypeApplication <$> CM.sequence [
       encode body,
       pure $ H.TypeVariable $ simpleName v]
     TypeList lt -> H.TypeList <$> encode lt
@@ -331,7 +331,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
     let deriv = H.Deriving $ if isSer
                   then rawName <$> ["Eq", "Ord", "Read", "Show"]
                   else []
-    let (vars, t') = unpackLambdaType g t
+    let (vars, t') = unpackForallType g t
     let hd = declHead hname $ L.reverse vars
     decl <- case stripType t' of
       TypeRecord rt -> do

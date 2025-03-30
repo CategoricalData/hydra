@@ -36,6 +36,9 @@ float32 = typeLiteral $ literalTypeFloat $ floatType FloatTypeFloat32
 float64 :: TTerm Type
 float64 = typeLiteral $ literalTypeFloat $ floatType FloatTypeFloat64
 
+forAll :: String -> TTerm Type -> TTerm Type
+forAll var body = typeLambda $ forallType (name var) body
+
 function :: TTerm Type -> TTerm Type -> TTerm Type
 function dom cod = typeFunction $ functionType dom cod
 
@@ -64,9 +67,6 @@ integerType t = Base.unitVariant _IntegerType $ case t of
   IntegerTypeUint16 -> _IntegerType_uint16
   IntegerTypeUint32 -> _IntegerType_uint32
   IntegerTypeUint64 -> _IntegerType_uint64
-
-lambda :: String -> TTerm Type -> TTerm Type
-lambda var body = typeLambda $ lambdaType (name var) body
 
 list :: TTerm Type -> TTerm Type
 list = typeList

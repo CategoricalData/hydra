@@ -42,7 +42,7 @@ haskellLanguage = Language (LanguageName "hydra.ext.haskell") $ LanguageConstrai
     TypeVariantAnnotated,
     TypeVariantApplication,
     TypeVariantFunction,
-    TypeVariantLambda,
+    TypeVariantForall,
     TypeVariantList,
     TypeVariantLiteral,
     TypeVariantMap,

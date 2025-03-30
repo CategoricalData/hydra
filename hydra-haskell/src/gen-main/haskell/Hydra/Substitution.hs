@@ -82,11 +82,11 @@ substituteInTerm subst =
 substInType :: (Typing.TypeSubst -> Core.Type -> Core.Type)
 substInType subst =  
   let rewrite = (\recurse -> \typ -> (\x -> case x of
-          Core.TypeLambda v1 -> ((\x -> case x of
+          Core.TypeForall v1 -> ((\x -> case x of
             Nothing -> (recurse typ)
-            Just _ -> (Core.TypeLambda (Core.LambdaType {
-              Core.lambdaTypeParameter = (Core.lambdaTypeParameter v1),
-              Core.lambdaTypeBody = (substInType (removeVar (Core.lambdaTypeParameter v1)) (Core.lambdaTypeBody v1))}))) (Maps.lookup (Core.lambdaTypeParameter v1) (Typing.unTypeSubst subst)))
+            Just _ -> (Core.TypeForall (Core.ForallType {
+              Core.forallTypeParameter = (Core.forallTypeParameter v1),
+              Core.forallTypeBody = (substInType (removeVar (Core.forallTypeParameter v1)) (Core.forallTypeBody v1))}))) (Maps.lookup (Core.forallTypeParameter v1) (Typing.unTypeSubst subst)))
           Core.TypeVariable v1 -> ((\x -> case x of
             Nothing -> typ
             Just v2 -> v2) (Maps.lookup v1 (Typing.unTypeSubst subst)))
