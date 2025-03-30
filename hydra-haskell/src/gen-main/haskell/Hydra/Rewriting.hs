@@ -41,7 +41,7 @@ freeVariablesInType :: (Core.Type -> S.Set Core.Name)
 freeVariablesInType typ =  
   let dfltVars = (Lists.foldl (\s -> \t -> Sets.union s (freeVariablesInType t)) Sets.empty (subtypes typ))
   in ((\x -> case x of
-    Core.TypeLambda v1 -> (Sets.remove (Core.lambdaTypeParameter v1) (freeVariablesInType (Core.lambdaTypeBody v1)))
+    Core.TypeForall v1 -> (Sets.remove (Core.forallTypeParameter v1) (freeVariablesInType (Core.forallTypeBody v1)))
     Core.TypeVariable v1 -> (Sets.singleton v1)
     _ -> dfltVars) typ)
 
@@ -147,9 +147,9 @@ rewriteType f =
             Core.TypeFunction v1 -> (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (recurse (Core.functionTypeDomain v1)),
               Core.functionTypeCodomain = (recurse (Core.functionTypeCodomain v1))}))
-            Core.TypeLambda v1 -> (Core.TypeLambda (Core.LambdaType {
-              Core.lambdaTypeParameter = (Core.lambdaTypeParameter v1),
-              Core.lambdaTypeBody = (recurse (Core.lambdaTypeBody v1))}))
+            Core.TypeForall v1 -> (Core.TypeForall (Core.ForallType {
+              Core.forallTypeParameter = (Core.forallTypeParameter v1),
+              Core.forallTypeBody = (recurse (Core.forallTypeBody v1))}))
             Core.TypeList v1 -> (Core.TypeList (recurse v1))
             Core.TypeLiteral v1 -> (Core.TypeLiteral v1)
             Core.TypeMap v1 -> (Core.TypeMap (Core.MapType {
@@ -264,8 +264,8 @@ subtypes x = case x of
   Core.TypeFunction v1 -> [
     Core.functionTypeDomain v1,
     (Core.functionTypeCodomain v1)]
-  Core.TypeLambda v1 -> [
-    Core.lambdaTypeBody v1]
+  Core.TypeForall v1 -> [
+    Core.forallTypeBody v1]
   Core.TypeList v1 -> [
     v1]
   Core.TypeLiteral _ -> []

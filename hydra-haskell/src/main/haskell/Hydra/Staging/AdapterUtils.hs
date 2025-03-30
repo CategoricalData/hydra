@@ -118,7 +118,7 @@ typeIsSupported constraints t = languageConstraintsTypes constraints base -- the
   && case base of
     TypeAnnotated (AnnotatedType t _) -> typeIsSupported constraints t
     TypeApplication (ApplicationType lhs rhs) -> typeIsSupported constraints lhs && typeIsSupported constraints rhs
-    TypeLambda (LambdaType _ body) -> typeIsSupported constraints body
+    TypeForall (ForallType _ body) -> typeIsSupported constraints body
     TypeFunction (FunctionType dom cod) -> typeIsSupported constraints dom && typeIsSupported constraints cod
     TypeList lt -> typeIsSupported constraints lt
     TypeLiteral at -> literalTypeIsSupported constraints at

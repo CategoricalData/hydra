@@ -18,6 +18,7 @@ import Hydra.Core
 import Hydra.Staging.Schemas
 import Hydra.Graph
 import Hydra.Staging.Lexical
+import Hydra.Lib.Io
 import Hydra.Mantle
 import Hydra.Staging.Reduction
 import Hydra.Staging.Rewriting
@@ -132,7 +133,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
         FieldType _Term_variable Types.string]
 
 lambdaToMonotype :: TypeAdapter
-lambdaToMonotype t@(TypeLambda (LambdaType _ body)) = do
+lambdaToMonotype t@(TypeForall (ForallType _ body)) = do
   ad <- termAdapter body
   return ad {adapterSource = t}
 
@@ -195,10 +196,10 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
 --        _ -> unexpected "function term" $ show term
         t -> pure t
 
-passLambda :: TypeAdapter
-passLambda t@(TypeLambda (LambdaType (Name v) body)) = do
+passForall :: TypeAdapter
+passForall t@(TypeForall (ForallType (Name v) body)) = do
   ad <- termAdapter body
-  return $ Adapter (adapterIsLossy ad) t (Types.lambda v $ adapterTarget ad)
+  return $ Adapter (adapterIsLossy ad) t (Types.forAll v $ adapterTarget ad)
     $ bidirectional $ \dir term -> encodeDecode dir (adapterCoder ad) term
 
 passLiteral :: TypeAdapter
@@ -314,8 +315,8 @@ termAdapter typ = case typ of
       if supportedAtTopLevel cx t then pass t else trySubstitution t
     pass t = case typeVariant (stripType t) of
       TypeVariantApplication -> [passApplication]
+      TypeVariantForall -> [passForall]
       TypeVariantFunction ->  [passFunction]
-      TypeVariantLambda -> [passLambda]
       TypeVariantList -> [passList]
       TypeVariantLiteral -> [passLiteral]
       TypeVariantMap -> [passMap]
@@ -330,7 +331,7 @@ termAdapter typ = case typ of
     trySubstitution t = case typeVariant t of
       TypeVariantApplication -> [simplifyApplication]
       TypeVariantFunction -> [functionToUnion]
-      TypeVariantLambda -> [lambdaToMonotype]
+      TypeVariantForall -> [lambdaToMonotype]
       TypeVariantOptional -> [optionalToList]
       TypeVariantSet ->  [listToSet]
       TypeVariantUnion -> [unionToRecord]
@@ -371,8 +372,7 @@ unionTypeToRecordType rt = rt {rowTypeFields = makeOptional <$> rowTypeFields rt
 unsupportedToString :: TypeAdapter
 unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decode
   where
-    -- TODO: use JSON for encoding and decoding unsupported terms, rather than Haskell's read/show
-    encode term = pure $ string $ "unsupported: " ++ show term
+    encode term = pure $ string $ "unsupported: " ++ showTerm term
     decode term = do
       s <- withGraphContext $ Expect.string term
       case TR.readEither s of

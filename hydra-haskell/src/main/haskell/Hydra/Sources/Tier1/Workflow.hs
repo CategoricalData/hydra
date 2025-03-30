@@ -44,7 +44,7 @@ hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule,
 
       def "LastMile" $
         doc "The last mile of a transformation, which encodes and serializes terms to a file" $
-        lambda "s" $ lambda "a" $ record [
+        forAlls ["s", "a"] $ record [
           "encoder">:
             doc "An encoder for terms to a list of output objects" $
             core "Type" --> compute "Flow" @@ "s"

@@ -46,7 +46,7 @@ scalaLanguage = Language (LanguageName "hydra.ext.scala") $ LanguageConstraints 
     TypeVariantRecord,
     TypeVariantSet,
     TypeVariantUnion,
-    TypeVariantLambda,
+    TypeVariantForall,
     TypeVariantVariable,
     TypeVariantWrap],
   languageConstraintsTypes = const True }

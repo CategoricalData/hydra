@@ -62,5 +62,5 @@ stripTypeParametersDef :: TElement (Type -> Type)
 stripTypeParametersDef = stripDefinition "stripTypeParameters" $
   doc "Strip any top-level type lambdas from a type, extracting the (possibly nested) type body" $
   lambda "t" $ match _Type (Just $ var "t") [
-    TCase _Type_lambda --> lambda "lt" (ref stripTypeParametersDef @@ (project _LambdaType _LambdaType_body @@ var "lt"))
+    TCase _Type_forall --> lambda "lt" (ref stripTypeParametersDef @@ (project _ForallType _ForallType_body @@ var "lt"))
     ] @@ (ref stripTypeDef @@ var "t")

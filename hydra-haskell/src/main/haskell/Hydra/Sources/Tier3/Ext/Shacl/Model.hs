@@ -156,7 +156,7 @@ shaclModelModule = Module ns elements [rdfSyntaxModule] [hydraCoreModule] $
 
       def "Definition" $
         doc "An instance of a type like sh:Shape or sh:NodeShape, together with a unique IRI for that instance" $
-        lambda "a" $ record [
+        forAll "a" $ record [
           "iri">: rdf "Iri",
           "target">: "a"],
 
@@ -247,7 +247,7 @@ shaclModelModule = Module ns elements [rdfSyntaxModule] [hydraCoreModule] $
 
       def "Reference" $
         doc "Either an instance of a type like sh:Shape or sh:NodeShape, or an IRI which refers to an instance of that type" $
-        lambda "a" $ union [
+        forAll "a" $ union [
           "named">: rdf "Iri",
           "anonymous">:
             doc "An anonymous instance"

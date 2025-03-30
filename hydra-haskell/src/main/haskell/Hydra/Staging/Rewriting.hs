@@ -173,7 +173,7 @@ normalizeTypeVariablesInTerm = rewriteWithSubst (M.empty, S.empty)
         rewrite recurse typ = case recurse typ of
           TypeVariable v -> TypeVariable $ replaceName subst v
           --TypeApplication...
-          --TypeLambda...
+          --TypeForall...
           t -> t
     replaceName subst v = Y.fromMaybe v $ M.lookup v subst
 
@@ -198,9 +198,9 @@ replaceFreeName :: Name -> Type -> Type -> Type
 replaceFreeName v rep = rewriteType mapExpr
   where
     mapExpr recurse t = case t of
-      TypeLambda (LambdaType v' body) -> if v == v'
+      TypeForall (ForallType v' body) -> if v == v'
         then t
-        else TypeLambda $ LambdaType v' $ recurse body
+        else TypeForall $ ForallType v' $ recurse body
       TypeVariable v' -> if v == v' then rep else t
       _ -> recurse t
 
@@ -277,7 +277,7 @@ rewriteTypeM f = rewrite fsub f
         TypeAnnotated (AnnotatedType t ann) -> TypeAnnotated <$> (AnnotatedType <$> recurse t <*> pure ann)
         TypeApplication (ApplicationType lhs rhs) -> TypeApplication <$> (ApplicationType <$> recurse lhs <*> recurse rhs)
         TypeFunction (FunctionType dom cod) -> TypeFunction <$> (FunctionType <$> recurse dom <*> recurse cod)
-        TypeLambda (LambdaType v b) -> TypeLambda <$> (LambdaType <$> pure v <*> recurse b)
+        TypeForall (ForallType v b) -> TypeForall <$> (ForallType <$> pure v <*> recurse b)
         TypeList t -> TypeList <$> recurse t
         TypeLiteral lt -> pure $ TypeLiteral lt
         TypeMap (MapType kt vt) -> TypeMap <$> (MapType <$> recurse kt <*> recurse vt)

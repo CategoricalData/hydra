@@ -78,11 +78,11 @@ defaultTinkerpopAnnotations = PGM.AnnotationSchema {
 examplePgSchema :: PGM.Schema s () String
 examplePgSchema = PGM.Schema {
     PGM.schemaVertexIdTypes = mkCoder "encode vertex id type" encodeType decodeType,
-    PGM.schemaVertexIds = mkCoder "encode vertex id" Expect.string (pure . Terms.string),
+    PGM.schemaVertexIds = mkCoder "encode vertex id" expString (pure . Terms.string),
     PGM.schemaEdgeIdTypes = mkCoder "encode edge id type" encodeType decodeType,
-    PGM.schemaEdgeIds = mkCoder "encode edge id" Expect.string (pure . Terms.string),
+    PGM.schemaEdgeIds = mkCoder "encode edge id" expString (pure . Terms.string),
     PGM.schemaPropertyTypes = mkCoder "encode property type" encodeType decodeType,
-    PGM.schemaPropertyValues = mkCoder "encode property value" Expect.string (pure . Terms.string),
+    PGM.schemaPropertyValues = mkCoder "encode property value" expString (pure . Terms.string),
     PGM.schemaAnnotations = defaultTinkerpopAnnotations,
     PGM.schemaDefaultVertexId = "defaultVertexId",
     PGM.schemaDefaultEdgeId = "defaultEdgeId"}
@@ -99,6 +99,9 @@ executeAvroTransformWorkflow lastMile (TransformWorkflow name schemaSpec srcDir 
       _ -> fail "unsupported schema spec"
     putStrLn $ "Executing workflow " ++ show name ++ ":"
     transformAvroJsonDirectory lastMile schemaPath srcDir destDir
+
+expString :: Term -> Flow s String
+expString term = withEmptyGraph $ Expect.string term
 
 -- Replace all lists with sets, for better query performance.
 -- This is a last-mile step which breaks type/term conformance

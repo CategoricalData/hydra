@@ -30,5 +30,5 @@ stripType t = ((\x -> case x of
 -- | Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
 stripTypeParameters :: (Core.Type -> Core.Type)
 stripTypeParameters t = ((\x -> case x of
-  Core.TypeLambda v1 -> (stripTypeParameters (Core.lambdaTypeBody v1))
+  Core.TypeForall v1 -> (stripTypeParameters (Core.forallTypeBody v1))
   _ -> t) (stripType t))

@@ -67,7 +67,7 @@ typeArityDef = arityDefinition "typeArity" $
   match _Type (Just $ int32 0) [
     TCase _Type_annotated --> ref typeArityDef <.> Core.annotatedTypeSubject,
     TCase _Type_application --> ref typeArityDef <.> Core.applicationTypeFunction,
-    TCase _Type_lambda --> ref typeArityDef <.> Core.lambdaTypeBody,
+    TCase _Type_forall --> ref typeArityDef <.> Core.forallTypeBody,
     TCase _Type_function --> lambda "f" $
       Math.add (int32 1) (ref typeArityDef @@ (Core.functionTypeCodomain @@ var "f"))]
 
@@ -77,7 +77,7 @@ uncurryTypeDef = arityDefinition "uncurryType" $
   lambda "t" ((match _Type (Just $ list [var "t"]) [
     _Type_annotated>>: ref uncurryTypeDef <.> Core.annotatedTypeSubject,
     _Type_application>>: ref uncurryTypeDef <.> Core.applicationTypeFunction,
-    _Type_lambda>>: ref uncurryTypeDef <.> Core.lambdaTypeBody,
+    _Type_forall>>: ref uncurryTypeDef <.> Core.forallTypeBody,
     _Type_function>>: lambda "ft" $ Lists.cons
       (Core.functionTypeDomain @@ var "ft")
       (ref uncurryTypeDef @@ (Core.functionTypeCodomain @@ var "ft"))]) @@ var "t")

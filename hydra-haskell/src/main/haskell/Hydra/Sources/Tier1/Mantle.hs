@@ -31,7 +31,7 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "Either" $
         doc "A disjoint union between a 'left' type and a 'right' type" $
-        lambda "a" $ lambda "b" $ union [
+        forAlls ["a", "b"] $ union [
           "left">: "a",
           "right">: "b"],
 
@@ -117,8 +117,8 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         enum [
           "annotated",
           "application",
+          "forall",
           "function",
-          "lambda",
           "list",
           "literal",
           "map",

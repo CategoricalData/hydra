@@ -317,16 +317,16 @@ coreEncodeLambda l = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "body"),
       Core.fieldTerm = (coreEncodeTerm (Core.lambdaBody l))}]}))
 
-coreEncodeLambdaType :: (Core.LambdaType -> Core.Term)
-coreEncodeLambdaType lt = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.core.LambdaType"),
+coreEncodeForallType :: (Core.ForallType -> Core.Term)
+coreEncodeForallType lt = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.core.ForallType"),
   Core.recordFields = [
     Core.Field {
       Core.fieldName = (Core.Name "parameter"),
-      Core.fieldTerm = (coreEncodeName (Core.lambdaTypeParameter lt))},
+      Core.fieldTerm = (coreEncodeName (Core.forallTypeParameter lt))},
     Core.Field {
       Core.fieldName = (Core.Name "body"),
-      Core.fieldTerm = (coreEncodeType (Core.lambdaTypeBody lt))}]}))
+      Core.fieldTerm = (coreEncodeType (Core.forallTypeBody lt))}]}))
 
 coreEncodeLet :: (Core.Let -> Core.Term)
 coreEncodeLet l = (Core.TermRecord (Core.Record {
@@ -597,11 +597,11 @@ coreEncodeType x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "function"),
       Core.fieldTerm = (coreEncodeFunctionType v1)}}))
-  Core.TypeLambda v1 -> (Core.TermUnion (Core.Injection {
+  Core.TypeForall v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Type"),
     Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "lambda"),
-      Core.fieldTerm = (coreEncodeLambdaType v1)}}))
+      Core.fieldName = (Core.Name "forall"),
+      Core.fieldTerm = (coreEncodeForallType v1)}}))
   Core.TypeList v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Type"),
     Core.injectionField = Core.Field {
@@ -722,7 +722,7 @@ isEncodedType t = ((\x -> case x of
 isType :: (Core.Type -> Bool)
 isType t = ((\x -> case x of
   Core.TypeApplication v1 -> (isType (Core.applicationTypeFunction v1))
-  Core.TypeLambda v1 -> (isType (Core.lambdaTypeBody v1))
+  Core.TypeForall v1 -> (isType (Core.forallTypeBody v1))
   Core.TypeUnion v1 -> (Equality.equalString "hydra.core.Type" (Core.unName (Core.rowTypeTypeName v1)))
   _ -> False) (Strip.stripType t))
 

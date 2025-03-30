@@ -24,7 +24,7 @@ insantiateTemplate minimal schema t = case t of
     TypeAnnotated (AnnotatedType t _) -> inst t
     TypeApplication _ -> noPoly
     TypeFunction _ -> noPoly
-    TypeLambda _ -> noPoly
+    TypeForall _ -> noPoly
     TypeList et -> if minimal
       then pure $ TermList []
       else do

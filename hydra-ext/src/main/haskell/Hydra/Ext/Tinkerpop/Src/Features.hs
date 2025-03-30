@@ -82,7 +82,7 @@ tinkerpopFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
       def "ExtraFeatures" $
         doc ("Additional features which are needed for the complete specification of language constraints in Hydra, "
           ++ "above and beyond TinkerPop Graph.Features") $
-        lambda "a" $ record [
+        forAll "a" $ record [
           "supportsMapKey">: function (core "Type") boolean],
 
       def "Features" $
