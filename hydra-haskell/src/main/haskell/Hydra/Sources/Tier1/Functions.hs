@@ -22,18 +22,26 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
+import Hydra.Sources.Libraries
+
 
 functionsDefinition :: String -> TTerm a -> TElement a
 functionsDefinition = definitionInModule hydraFunctionsModule
 
 hydraFunctionsModule :: Module
 hydraFunctionsModule = Module (Namespace "hydra.functions") elements [] [hydraCoreModule] $
-    Just "Placeholder for utilities dealing with Hydra functions."
+    Just "Various general-purpose helper functions."
   where
     elements = [
-      el idDef]
+      el idDef,
+      el optionalToListDef]
 
 idDef :: TElement (a -> a)
 idDef = functionsDefinition "id" $
   doc "The identity function" $
   lambda "any_" $ var "any_"
+
+optionalToListDef :: TElement (Maybe a -> [a])
+optionalToListDef = functionsDefinition "optionalToList" $
+  doc "Converts an optional value either to an empty list (if nothing) or a singleton list (if just)." $
+  lambda "mx" $ Optionals.maybe (list []) (primitive _lists_pure) (var "mx")
