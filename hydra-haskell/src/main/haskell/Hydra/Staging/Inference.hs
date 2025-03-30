@@ -6,6 +6,7 @@ import Hydra.Constants
 import Hydra.Core
 import Hydra.Errors
 import Hydra.Flows
+import Hydra.Functions
 import Hydra.Graph
 import Hydra.Typing
 import Hydra.Lib.Flows as Flows
@@ -199,7 +200,7 @@ inferTypeOfCaseStatement cx (CaseStatement tname dflt cases) = Flows.bind (requi
                 withCod codv = mapConstraints cx withConstraints (dfltConstraints ++ caseConstraints)
                   where
                     cod = TypeVariable codv
-                    dfltConstraints = maybeToList $ fmap (\r -> TypeConstraint cod (inferenceResultType r) "match default") mr
+                    dfltConstraints = optionalToList $ fmap (\r -> TypeConstraint cod (inferenceResultType r) "match default") mr
                     caseConstraints = Y.catMaybes $ L.zipWith (\fname itype -> fmap (\r -> toConstraint r itype) $ M.lookup fname caseMap) fnames itypes
                       where
                         caseMap = M.fromList $ fmap (\(FieldType fname ftype) -> (fname, ftype)) sfields
@@ -207,7 +208,7 @@ inferTypeOfCaseStatement cx (CaseStatement tname dflt cases) = Flows.bind (requi
                     withConstraints subst = yield
                         (TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement tname (fmap inferenceResultTerm mr) $ L.zipWith Field fnames iterms)
                         (TypeFunction $ FunctionType (nominalApplication tname svars) cod)
-                        (composeTypeSubstList $ (maybeToList $ fmap inferenceResultSubst mr) ++ [isubst, subst])
+                        (composeTypeSubstList $ (optionalToList $ fmap inferenceResultSubst mr) ++ [isubst, subst])
 
 inferTypeOfCollection :: InferenceContext -> (Type -> Type) -> ([Term] -> Term) -> String -> [Term] -> Flow s InferenceResult
 inferTypeOfCollection cx typCons trmCons desc els = bindVar withVar
@@ -521,11 +522,6 @@ instantiateTypeScheme scheme = Flows.map doSubst (freshNames $ L.length oldVars)
 
 mapConstraints :: InferenceContext -> (TypeSubst -> a) -> [TypeConstraint] -> Flow s a
 mapConstraints cx f constraints = Flows.map f $ unifyTypeConstraints (inferenceContextSchemaTypes cx) constraints
-
-maybeToList :: Maybe a -> [a]
-maybeToList mx = case mx of
-  Just x -> [x]
-  Nothing -> []
 
 nominalApplication :: Name -> [Name] -> Type
 nominalApplication tname vars = L.foldl (\t v -> Types.apply t $ TypeVariable v) (TypeVariable tname) vars
