@@ -214,7 +214,7 @@ encodeType t = case stripType t of
 --  TypeRecord sfields ->
   TypeSet st -> stapply1 <$> pure (stref "Set") <*> encodeType st
 --  TypeUnion sfields ->
-  TypeLambda (LambdaType v body) -> do
+  TypeForall (ForallType v body) -> do
     sbody <- encodeType body
     return $ Scala.TypeLambda $ Scala.Type_Lambda [stparam v] sbody
 --   TypeVariable name -> pure $ stref $ scalaTypeName True name

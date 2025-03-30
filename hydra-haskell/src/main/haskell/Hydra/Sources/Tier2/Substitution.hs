@@ -127,14 +127,14 @@ substInTypeDef :: TElement (TypeSubst -> Type -> Type)
 substInTypeDef = substitutionDefinition "substInType" $
   lambda "subst" $ lets [
     "rewrite">: lambdas ["recurse", "typ"] $ cases _Type (var "typ") (Just $ var "recurse" @@ var "typ") [
-      _Type_lambda>>: lambda "lt" $ Optionals.maybe
+      _Type_forall>>: lambda "lt" $ Optionals.maybe
         (var "recurse" @@ var "typ")
-        (lambda "styp" $ Core.typeLambda $ Core.lambdaType
-          (Core.lambdaTypeParameter @@ var "lt")
+        (lambda "styp" $ Core.typeLambda $ Core.forallType
+          (Core.forallTypeParameter @@ var "lt")
           (ref substInTypeDef
-            @@ (var "removeVar" @@ (Core.lambdaTypeParameter @@ var "lt"))
-            @@ (Core.lambdaTypeBody @@ var "lt")))
-        (Maps.lookup (Core.lambdaTypeParameter @@ var "lt") (Typing.unTypeSubst @@ var "subst")),
+            @@ (var "removeVar" @@ (Core.forallTypeParameter @@ var "lt"))
+            @@ (Core.forallTypeBody @@ var "lt")))
+        (Maps.lookup (Core.forallTypeParameter @@ var "lt") (Typing.unTypeSubst @@ var "subst")),
       _Type_variable>>: lambda "v" $ Optionals.maybe
         (var "typ")
         (lambda "styp" $ var "styp")

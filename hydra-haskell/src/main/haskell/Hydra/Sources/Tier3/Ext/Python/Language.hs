@@ -79,7 +79,7 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
         TypeVariantAnnotated,
         TypeVariantApplication,
         TypeVariantFunction,
-        TypeVariantLambda,
+        TypeVariantForall,
         TypeVariantList,
         TypeVariantLiteral,
         TypeVariantMap,

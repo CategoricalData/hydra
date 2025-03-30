@@ -61,7 +61,7 @@ addComment decl field = Java.ClassBodyDeclarationWithComments decl <$> commentsF
 boundTypeVariables :: Type -> [Name]
 boundTypeVariables typ = case typ of
   TypeAnnotated (AnnotatedType typ1 _) -> boundTypeVariables typ1
-  TypeLambda (LambdaType v body) -> v:(boundTypeVariables body)
+  TypeForall (ForallType v body) -> v:(boundTypeVariables body)
   _ -> []
 
 classModsPublic :: [Java.ClassModifier]
@@ -201,9 +201,9 @@ constructModule mod coders pairs = do
             _ -> unexpected "function term" $ show term
           _ -> unexpected "function type" $ show typ
 
-declarationForLambdaType :: Bool -> Aliases
-  -> [Java.TypeParameter] -> Name -> LambdaType -> Flow Graph Java.ClassDeclaration
-declarationForLambdaType isSer aliases tparams elName (LambdaType (Name v) body) =
+declarationForForallType :: Bool -> Aliases
+  -> [Java.TypeParameter] -> Name -> ForallType -> Flow Graph Java.ClassDeclaration
+declarationForForallType isSer aliases tparams elName (ForallType (Name v) body) =
     toClassDecl False isSer aliases (tparams ++ [param]) elName body
   where
     param = javaTypeParameter $ capitalize v
@@ -728,7 +728,7 @@ encodeType aliases t = case stripType t of
       jdom <- encode dom >>= javaTypeToJavaReferenceType
       jcod <- encode cod >>= javaTypeToJavaReferenceType
       return $ javaRefType [jdom, jcod] javaUtilFunctionPackageName "Function"
-    TypeLambda (LambdaType (Name v) body) -> do
+    TypeForall (ForallType (Name v) body) -> do
       jbody <- encode body
       addJavaTypeParameter (javaTypeVariable v) jbody
     TypeList et -> do
@@ -856,7 +856,7 @@ javaTypeParametersForType typ = toParam <$> vars
     toParam (Name v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) Nothing
     vars = L.nub $ boundVars typ ++ freeVars
     boundVars t = case stripType t of
-      TypeLambda (LambdaType v body) -> v:(boundVars body)
+      TypeForall (ForallType v body) -> v:(boundVars body)
       _ -> []
     freeVars = L.filter isLambdaBoundVariable $ S.toList $ freeVariablesInType typ
 
@@ -948,7 +948,7 @@ toClassDecl :: Bool -> Bool -> Aliases -> [Java.TypeParameter]
 toClassDecl isInner isSer aliases tparams elName t = case stripType t of
     TypeRecord rt -> declarationForRecordType isInner isSer aliases tparams elName $ rowTypeFields rt
     TypeUnion rt -> declarationForUnionType isSer aliases tparams elName $ rowTypeFields rt
-    TypeLambda ut -> declarationForLambdaType isSer aliases tparams elName ut
+    TypeForall ut -> declarationForForallType isSer aliases tparams elName ut
     TypeWrap (WrappedType tname wt) -> declarationForRecordType isInner isSer aliases tparams elName
       [FieldType (Name "value") wt]
     -- Other types are not supported as class declarations, so we wrap them as record types.

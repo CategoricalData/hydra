@@ -87,7 +87,7 @@ describeTypeDef = printingDefinition "describeType" $
       ++ (ref describeTypeDef @@ (project _FunctionType _FunctionType_domain @@ var "ft"))
       ++ string " to "
       ++ (ref describeTypeDef @@ (project _FunctionType _FunctionType_codomain @@ var "ft")),
-    TCase _Type_lambda      --> constant $ string "polymorphic terms",
+    TCase _Type_forall      --> constant $ string "polymorphic terms",
     TCase _Type_list        --> lambda "t" $ string "lists of " ++ (ref describeTypeDef @@ var "t"),
     TCase _Type_map         --> lambda "mt" $ string "maps from "
       ++ (ref describeTypeDef @@ (project _MapType _MapType_keys @@ var "mt"))

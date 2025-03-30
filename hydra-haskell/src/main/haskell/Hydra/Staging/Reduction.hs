@@ -128,7 +128,7 @@ betaReduceType typ = rewriteTypeM mapExpr typ
           TypeAnnotated (AnnotatedType t' ann) -> do
             a <- reduceApp $ ApplicationType t' rhs
             return $ TypeAnnotated $ AnnotatedType a ann
-          TypeLambda (LambdaType v body) -> betaReduceType $ replaceFreeName v rhs body
+          TypeForall (ForallType v body) -> betaReduceType $ replaceFreeName v rhs body
           -- nominal types are transparent
           TypeVariable name -> do
             t' <- requireType name

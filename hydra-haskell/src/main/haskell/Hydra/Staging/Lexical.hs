@@ -29,7 +29,7 @@ extendGraphWithBindings bindings g = g {graphElements = M.union newEls $ graphEl
 
 fieldsOf :: Type -> [FieldType]
 fieldsOf t = case stripType t of
-  TypeLambda (LambdaType _ body) -> fieldsOf body
+  TypeForall (ForallType _ body) -> fieldsOf body
   TypeRecord rt -> rowTypeFields rt
   TypeUnion rt -> rowTypeFields rt
   _ -> []

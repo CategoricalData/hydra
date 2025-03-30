@@ -56,7 +56,7 @@ describeType x = case x of
         (describeType (Core.functionTypeDomain v1))],
       " to "],
     (describeType (Core.functionTypeCodomain v1))])
-  Core.TypeLambda _ -> "polymorphic terms"
+  Core.TypeForall _ -> "polymorphic terms"
   Core.TypeList v1 -> (Strings.cat [
     "lists of ",
     (describeType v1)])

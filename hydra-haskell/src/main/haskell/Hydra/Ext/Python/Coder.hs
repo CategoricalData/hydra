@@ -181,14 +181,14 @@ encodeIntegerValue iv = case iv of
   IntegerValueUint64 i -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $ fromIntegral i
 --  _ -> fail $ "unsupported integer type: " ++ show (integerValueType iv)
 
-encodeLambdaType :: PythonEnvironment -> LambdaType -> Flow Graph Py.Expression
-encodeLambdaType env lt = do
+encodeForallType :: PythonEnvironment -> ForallType -> Flow Graph Py.Expression
+encodeForallType env lt = do
     pyBody <- encodeType env body
     return $ primaryAndParams (pyExpressionToPyPrimary pyBody) (pyNameToPyExpression . Py.Name . unName <$> params)
   where
-    (body, params) = gatherParams (TypeLambda lt) []
+    (body, params) = gatherParams (TypeForall lt) []
     gatherParams t ps = case stripType t of
-      TypeLambda (LambdaType name body) -> gatherParams body (name:ps)
+      TypeForall (ForallType name body) -> gatherParams body (name:ps)
       _ -> (t, L.reverse ps)
 
 encodeLiteral :: Literal -> Flow s Py.Expression
@@ -431,7 +431,7 @@ encodeType :: PythonEnvironment -> Type -> Flow Graph Py.Expression
 encodeType env typ = case stripType typ of
     TypeApplication at -> encodeApplicationType env at
     TypeFunction ft -> encodeFunctionType env ft
-    TypeLambda lt -> encodeLambdaType env lt
+    TypeForall lt -> encodeForallType env lt
     TypeList et -> nameAndParams (Py.Name "frozenlist") . L.singleton <$> encode et
     TypeMap (MapType kt vt) -> do
       pykt <- encode kt
@@ -455,7 +455,7 @@ encodeTypeAssignment :: PythonEnvironment -> Name -> Type -> Maybe String -> Flo
 encodeTypeAssignment env name typ comment = encode env typ
   where
     encode env typ = case stripType typ of
-      TypeLambda (LambdaType var body) -> encode newEnv body
+      TypeForall (ForallType var body) -> encode newEnv body
         where
           (tparamList, tparamMap) = pythonEnvironmentBoundTypeVariables env
           newEnv = env {pythonEnvironmentBoundTypeVariables = (tparamList ++ [var], M.insert var (encodeTypeVariable var) tparamMap)}
@@ -573,7 +573,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
         meta3 = digForWrap typ
           where
             digForWrap typ = case stripType typ of
-              TypeLambda (LambdaType _ body) -> digForWrap body
+              TypeForall (ForallType _ body) -> digForWrap body
               TypeWrap _ -> if isTermAnnot
                 -- No need to import Node for instantiations of a Node type, e.g.
                 --   placeholder_name = hydra.core.Name("Placeholder")
@@ -583,7 +583,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
         meta2 = meta {pythonModuleMetadataTypeVariables = newTvars tvars typ}
           where
             newTvars s t = case stripType t of
-              TypeLambda (LambdaType v body) -> newTvars (S.insert v s) body
+              TypeForall (ForallType v body) -> newTvars (S.insert v s) body
               _ -> s
         extendFor meta t = case t of
           TypeFunction _ -> if isTermAnnot
@@ -591,12 +591,12 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
             then meta
             -- If this is a type-level definition, or an *argument* to a function is a function, then we need Callable.
             else meta {pythonModuleMetadataUsesCallable = True}
-          TypeLambda (LambdaType _ body) -> case baseType body of
+          TypeForall (ForallType _ body) -> case baseType body of
               TypeRecord _ -> meta {pythonModuleMetadataUsesGeneric = True}
               _ -> meta
             where
               baseType t = case stripType t of
-                TypeLambda (LambdaType _ body2) -> baseType body2
+                TypeForall (ForallType _ body2) -> baseType body2
                 t2 -> t2
           TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True}
           TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}

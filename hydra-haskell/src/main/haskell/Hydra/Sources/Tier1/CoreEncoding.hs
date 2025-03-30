@@ -52,7 +52,7 @@ coreEncodingModule = Module (Namespace "hydra.coreEncoding") elements [] [hydraC
       el coreEncodeIntegerTypeDef,
       el coreEncodeIntegerValueDef,
       el coreEncodeLambdaDef,
-      el coreEncodeLambdaTypeDef,
+      el coreEncodeForallTypeDef,
       el coreEncodeLetDef,
       el coreEncodeLetBindingDef,
       el coreEncodeLiteralDef,
@@ -289,11 +289,11 @@ coreEncodeLambdaDef = coreEncodingDefinition "Lambda" $
     field _Lambda_domain $ encodedOptional $ primitive _optionals_map @@ ref coreEncodeTypeDef @@ (Core.lambdaDomain @@ var "l"),
     field _Lambda_body $ ref coreEncodeTermDef @@ (Core.lambdaBody @@ var "l")]
 
-coreEncodeLambdaTypeDef :: TElement (LambdaType -> Term)
-coreEncodeLambdaTypeDef = coreEncodingDefinition "LambdaType" $
-  lambda "lt" $ encodedRecord _LambdaType [
-    field _LambdaType_parameter $ ref coreEncodeNameDef @@ (Core.lambdaTypeParameter @@ var "lt"),
-    field _LambdaType_body $ ref coreEncodeTypeDef @@ (Core.lambdaTypeBody @@ var "lt")]
+coreEncodeForallTypeDef :: TElement (ForallType -> Term)
+coreEncodeForallTypeDef = coreEncodingDefinition "ForallType" $
+  lambda "lt" $ encodedRecord _ForallType [
+    field _ForallType_parameter $ ref coreEncodeNameDef @@ (Core.forallTypeParameter @@ var "lt"),
+    field _ForallType_body $ ref coreEncodeTypeDef @@ (Core.forallTypeBody @@ var "lt")]
 
 coreEncodeLetDef :: TElement (Let -> Term)
 coreEncodeLetDef = coreEncodingDefinition "Let" $
@@ -406,7 +406,7 @@ coreEncodeTypeDef = coreEncodingDefinition "Type" $
       field _AnnotatedTerm_annotation $ Core.annotatedTypeAnnotation @@ var "v"],
     csref _Type_application coreEncodeApplicationTypeDef,
     csref _Type_function coreEncodeFunctionTypeDef,
-    csref _Type_lambda coreEncodeLambdaTypeDef,
+    csref _Type_forall coreEncodeForallTypeDef,
     csref _Type_list coreEncodeTypeDef,
     csref _Type_literal coreEncodeLiteralTypeDef,
     csref _Type_map coreEncodeMapTypeDef,
@@ -468,8 +468,8 @@ isTypeDef = coreEncodingExtrasDefinition "isType" $
   lambda "t" $ (match _Type (Just false) [
       TCase _Type_application --> lambda "a" $
         ref isTypeDef @@ (Core.applicationTypeFunction @@ var "a"),
-      TCase _Type_lambda --> lambda "l" $
-        ref isTypeDef @@ (Core.lambdaTypeBody @@ var "l"),
+      TCase _Type_forall --> lambda "l" $
+        ref isTypeDef @@ (Core.forallTypeBody @@ var "l"),
       TCase _Type_union --> lambda "rt" $
         Equality.equalString (string $ unName _Type) (Core.unName @@ (Core.rowTypeTypeName @@ var "rt"))
 --      TCase _Type_variable --> constant true

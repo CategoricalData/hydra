@@ -194,7 +194,7 @@ typeVariant x = case x of
   Core.TypeAnnotated _ -> Mantle.TypeVariantAnnotated
   Core.TypeApplication _ -> Mantle.TypeVariantApplication
   Core.TypeFunction _ -> Mantle.TypeVariantFunction
-  Core.TypeLambda _ -> Mantle.TypeVariantLambda
+  Core.TypeForall _ -> Mantle.TypeVariantForall
   Core.TypeList _ -> Mantle.TypeVariantList
   Core.TypeLiteral _ -> Mantle.TypeVariantLiteral
   Core.TypeMap _ -> Mantle.TypeVariantMap
@@ -213,7 +213,7 @@ typeVariants = [
   Mantle.TypeVariantAnnotated,
   Mantle.TypeVariantApplication,
   Mantle.TypeVariantFunction,
-  Mantle.TypeVariantLambda,
+  Mantle.TypeVariantForall,
   Mantle.TypeVariantList,
   Mantle.TypeVariantLiteral,
   Mantle.TypeVariantMap,

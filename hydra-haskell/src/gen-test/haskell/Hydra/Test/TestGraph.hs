@@ -39,9 +39,9 @@ testTypeLatLon = (Core.TypeRecord (Core.RowType {
       Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}]}))
 
 testTypeLatLonPoly :: Core.Type
-testTypeLatLonPoly = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "a"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
+testTypeLatLonPoly = (Core.TypeForall (Core.ForallType {
+  Core.forallTypeParameter = (Core.Name "a"),
+  Core.forallTypeBody = (Core.TypeRecord (Core.RowType {
     Core.rowTypeTypeName = testTypeLatLonPolyName,
     Core.rowTypeFields = [
       Core.FieldType {
@@ -100,9 +100,9 @@ testDataArthur = (Core.TermRecord (Core.Record {
       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}]}))
 
 testTypeBuddyListA :: Core.Type
-testTypeBuddyListA = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "a"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
+testTypeBuddyListA = (Core.TypeForall (Core.ForallType {
+  Core.forallTypeParameter = (Core.Name "a"),
+  Core.forallTypeBody = (Core.TypeRecord (Core.RowType {
     Core.rowTypeTypeName = testTypeBuddyListAName,
     Core.rowTypeFields = [
       Core.FieldType {
@@ -118,9 +118,9 @@ testTypeBuddyListAName :: Core.Name
 testTypeBuddyListAName = (Core.Name "BuddyListA")
 
 testTypeBuddyListB :: Core.Type
-testTypeBuddyListB = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "a"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
+testTypeBuddyListB = (Core.TypeForall (Core.ForallType {
+  Core.forallTypeParameter = (Core.Name "a"),
+  Core.forallTypeBody = (Core.TypeRecord (Core.RowType {
     Core.rowTypeTypeName = testTypeBuddyListBName,
     Core.rowTypeFields = [
       Core.FieldType {
@@ -201,9 +201,9 @@ testTypeHydraTypeName :: Core.Name
 testTypeHydraTypeName = (Core.Name "HydraType")
 
 testTypeList :: Core.Type
-testTypeList = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "a"),
-  Core.lambdaTypeBody = (Core.TypeRecord (Core.RowType {
+testTypeList = (Core.TypeForall (Core.ForallType {
+  Core.forallTypeParameter = (Core.Name "a"),
+  Core.forallTypeBody = (Core.TypeRecord (Core.RowType {
     Core.rowTypeTypeName = testTypeListName,
     Core.rowTypeFields = [
       Core.FieldType {
@@ -250,9 +250,9 @@ testTypePersonName :: Core.Name
 testTypePersonName = (Core.Name "Person")
 
 testTypePersonOrSomething :: Core.Type
-testTypePersonOrSomething = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "a"),
-  Core.lambdaTypeBody = (Core.TypeUnion (Core.RowType {
+testTypePersonOrSomething = (Core.TypeForall (Core.ForallType {
+  Core.forallTypeParameter = (Core.Name "a"),
+  Core.forallTypeBody = (Core.TypeUnion (Core.RowType {
     Core.rowTypeTypeName = testTypePersonOrSomethingName,
     Core.rowTypeFields = [
       Core.FieldType {
@@ -313,9 +313,9 @@ testTypeUnionMonomorphicName :: Core.Name
 testTypeUnionMonomorphicName = (Core.Name "UnionMonomorphic")
 
 testTypeUnionPolymorphicRecursive :: Core.Type
-testTypeUnionPolymorphicRecursive = (Core.TypeLambda (Core.LambdaType {
-  Core.lambdaTypeParameter = (Core.Name "a"),
-  Core.lambdaTypeBody = (Core.TypeUnion (Core.RowType {
+testTypeUnionPolymorphicRecursive = (Core.TypeForall (Core.ForallType {
+  Core.forallTypeParameter = (Core.Name "a"),
+  Core.forallTypeBody = (Core.TypeUnion (Core.RowType {
     Core.rowTypeTypeName = testTypeUnionPolymorphicRecursiveName,
     Core.rowTypeFields = [
       Core.FieldType {

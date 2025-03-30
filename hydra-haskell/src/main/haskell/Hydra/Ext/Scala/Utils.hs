@@ -13,7 +13,7 @@ import qualified Data.Maybe as Y
 nameOfType :: Graph -> Type -> Y.Maybe Name
 nameOfType cx t = case stripType t of
   TypeVariable name -> Just name
-  TypeLambda (LambdaType _ body) -> nameOfType cx body
+  TypeForall (ForallType _ body) -> nameOfType cx body
   _ -> Nothing
 
 qualifyUnionFieldName :: String -> Y.Maybe Name -> Name -> String

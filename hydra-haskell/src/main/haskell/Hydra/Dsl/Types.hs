@@ -70,6 +70,12 @@ float64 = float FloatTypeFloat64
 float :: FloatType -> Type
 float = literal . LiteralTypeFloat
 
+forAll :: String -> Type -> Type
+forAll v body = TypeForall $ ForallType (Name v) body
+
+forAlls :: [String] -> Type -> Type
+forAlls vs body = L.foldr forAll body vs
+
 function :: Type -> Type -> Type
 function dom cod = TypeFunction $ FunctionType dom cod
 
@@ -92,12 +98,6 @@ int8 = integer IntegerTypeInt8
 
 integer :: IntegerType -> Type
 integer = literal . LiteralTypeInteger
-
-lambda :: String -> Type -> Type
-lambda v body = TypeLambda $ LambdaType (Name v) body
-
-lambdas :: [String] -> Type -> Type
-lambdas vs body = L.foldr lambda body vs
 
 list :: Type -> Type
 list = TypeList

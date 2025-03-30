@@ -103,7 +103,7 @@ testTypeLatLonDef = testGraphType "testTypeLatLon" $
 
 testTypeLatLonPolyDef :: TElement Type
 testTypeLatLonPolyDef = testGraphType "testTypeLatLonPoly" $
-  T.lambda "a" $ T.record (ref testTypeLatLonPolyNameDef) [
+  T.forAll "a" $ T.record (ref testTypeLatLonPolyNameDef) [
     "lat">: T.var "a",
     "lon">: T.var "a"]
 
@@ -170,7 +170,7 @@ testDataArthurDef = testGraphDefinition "testDataArthur" $
 
 testTypeBuddyListADef :: TElement Type
 testTypeBuddyListADef = testGraphType "testTypeBuddyListA" $
-  T.lambda "a" $ T.record (ref testTypeBuddyListANameDef) [
+  T.forAll "a" $ T.record (ref testTypeBuddyListANameDef) [
     "head">: T.var "a",
     "tail">: T.optional $
       T.apply (Core.typeVariable $ ref testTypeBuddyListBNameDef) (T.var "a")]
@@ -181,7 +181,7 @@ testTypeBuddyListANameDef = testGraphDefinition "testTypeBuddyListAName" $
 
 testTypeBuddyListBDef :: TElement Type
 testTypeBuddyListBDef = testGraphType "testTypeBuddyListB" $
-  T.lambda "a" $ T.record (ref testTypeBuddyListBNameDef) [
+  T.forAll "a" $ T.record (ref testTypeBuddyListBNameDef) [
     "head">: T.var "a",
     "tail">: T.optional $
       T.apply (Core.typeVariable $ ref testTypeBuddyListANameDef) (T.var "a")]
@@ -233,7 +233,7 @@ testTypeHydraTypeNameDef = testGraphDefinition "testTypeHydraTypeName" $
 
 testTypeListDef :: TElement Type
 testTypeListDef = testGraphType "testTypeList" $
-  T.lambda "a" $ T.record (ref testTypeListNameDef) [
+  T.forAll "a" $ T.record (ref testTypeListNameDef) [
     "head">: T.var "a",
     "tail">: T.optional $
       T.apply (Core.typeVariable $ ref testTypeListNameDef) (T.var "a")]
@@ -265,7 +265,7 @@ testTypePersonNameDef = testGraphDefinition "testTypePersonName" $
 
 testTypePersonOrSomethingDef :: TElement Type
 testTypePersonOrSomethingDef = testGraphType "testTypePersonOrSomething" $
-  T.lambda "a" $ T.union (ref testTypePersonOrSomethingNameDef) [
+  T.forAll "a" $ T.union (ref testTypePersonOrSomethingNameDef) [
     "person">: Core.typeVariable $ ref testTypePersonNameDef,
     "other">: T.var "a"]
 
@@ -306,7 +306,7 @@ testTypeUnionMonomorphicNameDef = testGraphDefinition "testTypeUnionMonomorphicN
 
 testTypeUnionPolymorphicRecursiveDef :: TElement Type
 testTypeUnionPolymorphicRecursiveDef = testGraphType "testTypeUnionPolymorphicRecursive" $
-  T.lambda "a" $ T.union (ref testTypeUnionPolymorphicRecursiveNameDef) [
+  T.forAll "a" $ T.union (ref testTypeUnionPolymorphicRecursiveNameDef) [
     "bool">: T.boolean,
     "value">: T.var "a",
     "other">: T.apply (Core.typeVariable $ ref testTypeUnionPolymorphicRecursiveNameDef) (T.var "a")]

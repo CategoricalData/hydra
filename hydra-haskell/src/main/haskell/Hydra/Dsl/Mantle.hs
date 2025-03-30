@@ -123,7 +123,7 @@ typeVariant v = unitVariant _TypeVariant $ case v of
   TypeVariantAnnotated -> _TypeVariant_annotated
   TypeVariantApplication -> _TypeVariant_application
   TypeVariantFunction -> _TypeVariant_function
-  TypeVariantLambda -> _TypeVariant_lambda
+  TypeVariantForall -> _TypeVariant_forall
   TypeVariantList -> _TypeVariant_list
   TypeVariantLiteral -> _TypeVariant_literal
   TypeVariantMap -> _TypeVariant_map

@@ -82,7 +82,7 @@ pgMappingModule = Module ns elements
 
       def "Schema" $
         doc "A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types" $
-        lambdas ["s", "t", "v"] $
+        forAlls ["s", "t", "v"] $
           record [
             "vertexIdTypes">: compute "Coder" @@ "s" @@ "s" @@ core "Type" @@ "t",
             "vertexIds">: compute "Coder" @@ "s" @@ "s" @@ core "Term" @@ "v",

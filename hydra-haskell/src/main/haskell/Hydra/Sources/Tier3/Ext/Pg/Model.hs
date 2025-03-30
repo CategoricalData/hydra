@@ -24,7 +24,7 @@ pgModelModule = Module ns elements [] [hydraCoreModule] $
 
       def "AdjacentEdge" $
         doc "An edge which is adjacent to a given vertex. Only the other endpoint of the edge is provided." $
-        lambda "v" $ record [
+        forAll "v" $ record [
           "label">:
             doc "The label of the edge" $
             pg "EdgeLabel",
@@ -44,7 +44,7 @@ pgModelModule = Module ns elements [] [hydraCoreModule] $
 
       def "Edge" $
         doc "An edge" $
-        lambda "v" $ record [
+        forAll "v" $ record [
           "label">:
             doc "The label of the edge" $
             pg "EdgeLabel",
@@ -67,26 +67,26 @@ pgModelModule = Module ns elements [] [hydraCoreModule] $
 
       def "EdgeType" $
         doc "The type of an edge" $
-        lambda "t" $ record [
-            "label">:
-              doc "The label of any edge of this edge type" $
-              pg "EdgeLabel",
-            "id">:
-              doc "The type of the id of any edge of this edge type"
-              "t",
-            "out">:
-              doc "The label of the out-vertex (tail) of any edge of this edge type" $
-              pg "VertexLabel",
-            "in">:
-              doc "The label of the in-vertex (head) of any edge of this edge type" $
-              pg "VertexLabel",
-            "properties">:
-              doc "A list of property types. The types are ordered for the sake of applications in which property order is significant." $
-              list (pg "PropertyType" @@ "t")],
+        forAll "t" $ record [
+          "label">:
+            doc "The label of any edge of this edge type" $
+            pg "EdgeLabel",
+          "id">:
+            doc "The type of the id of any edge of this edge type"
+            "t",
+          "out">:
+            doc "The label of the out-vertex (tail) of any edge of this edge type" $
+            pg "VertexLabel",
+          "in">:
+            doc "The label of the in-vertex (head) of any edge of this edge type" $
+            pg "VertexLabel",
+          "properties">:
+            doc "A list of property types. The types are ordered for the sake of applications in which property order is significant." $
+            list (pg "PropertyType" @@ "t")],
 
       def "Element" $
         doc "Either a vertex or an edge" $
-        lambda "v" $ union [
+        forAll "v" $ union [
           "vertex">: pg "Vertex" @@ "v",
           "edge">: pg "Edge" @@ "v"],
 
@@ -96,31 +96,31 @@ pgModelModule = Module ns elements [] [hydraCoreModule] $
 
       def "ElementTree" $
         doc "An element together with its dependencies in some context" $
-        lambda "v" $ record [
+        forAll "v" $ record [
           "self">: pg "Element" @@ "v",
           "dependencies">: Types.list $ pg "ElementTree" @@ "v"],
 
       def "ElementType" $
         doc "The type of a vertex or edge" $
-        lambda "t" $ union [
+        forAll "t" $ union [
           "vertex">: pg "VertexType" @@ "t",
           "edge">: pg "EdgeType" @@ "t"],
 
       def "ElementTypeTree" $
         doc "An element type together with its dependencies in some context" $
-        lambda "t" $ record [
+        forAll "t" $ record [
           "self">: pg "ElementType" @@ "t",
           "dependencies">: Types.list $ pg "ElementTypeTree" @@ "t"],
 
       def "Graph" $
         doc "A graph; a self-contained collection of vertices and edges" $
-        lambda "v" $ record [
+        forAll "v" $ record [
           "vertices">: Types.map "v" $ pg "Vertex" @@ "v",
           "edges">: Types.map "v" $ pg "Edge" @@ "v"],
 
       def "GraphSchema" $
         doc "A graph schema; a vertex and edge types for the vertices and edges of a graph conforming to the schema" $
-        lambda "t" $ record [
+        forAll "t" $ record [
           "vertices">:
             doc "A unique vertex type for each vertex label which may occur in a graph" $
             Types.map (pg "VertexLabel") (pg "VertexType" @@ "t"),
@@ -136,7 +136,7 @@ pgModelModule = Module ns elements [] [hydraCoreModule] $
 
       def "Property" $
         doc "A key/value property" $
-        lambda "v" $ record [
+        forAll "v" $ record [
           "key">:
             doc "They key of the property" $
             pg "PropertyKey",
@@ -150,7 +150,7 @@ pgModelModule = Module ns elements [] [hydraCoreModule] $
 
       def "PropertyType" $
         doc "The type of a property" $
-        lambda "t" $ record [
+        forAll "t" $ record [
           "key">:
             doc "A property's key" $
             pg "PropertyKey",
@@ -163,7 +163,7 @@ pgModelModule = Module ns elements [] [hydraCoreModule] $
 
       def "Vertex" $
         doc "A vertex" $
-        lambda "v" $ record [
+        forAll "v" $ record [
           "label">:
             doc "The label of the vertex" $
             pg "VertexLabel",
@@ -180,7 +180,7 @@ pgModelModule = Module ns elements [] [hydraCoreModule] $
 
       def "VertexType" $
         doc "The type of a vertex" $
-        lambda "t" $ record [
+        forAll "t" $ record [
           "label">:
             doc "The label of any vertex of this vertex type" $
             pg "VertexLabel",
@@ -193,7 +193,7 @@ pgModelModule = Module ns elements [] [hydraCoreModule] $
 
       def "VertexWithAdjacentEdges" $
         doc "A vertex together with any outgoing and/or incoming edges; a vertex object" $
-        lambda "v" $ record [
+        forAll "v" $ record [
           "vertex">:
             doc "The focus vertex" $
             pg "Vertex" @@ "v",

@@ -94,7 +94,7 @@ csharpLanguageDef = csharpLanguageDefinition "csharpLanguage" $
         TypeVariantAnnotated,
         TypeVariantApplication,
         TypeVariantFunction,
-        TypeVariantLambda,
+        TypeVariantForall,
         TypeVariantList,
         TypeVariantLiteral,
         TypeVariantMap,

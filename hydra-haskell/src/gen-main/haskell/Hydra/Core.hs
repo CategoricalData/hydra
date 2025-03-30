@@ -160,6 +160,21 @@ _FloatValue_float32 = (Name "float32")
 
 _FloatValue_float64 = (Name "float64")
 
+-- | A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term.
+data ForallType = 
+  ForallType {
+    -- | The variable which is bound by the lambda
+    forallTypeParameter :: Name,
+    -- | The body of the lambda
+    forallTypeBody :: Type}
+  deriving (Eq, Ord, Read, Show)
+
+_ForallType = (Name "hydra.core.ForallType")
+
+_ForallType_parameter = (Name "parameter")
+
+_ForallType_body = (Name "body")
+
 -- | A function
 data Function = 
   -- | An elimination for any of a few term variants
@@ -297,21 +312,6 @@ _Lambda_parameter = (Name "parameter")
 _Lambda_domain = (Name "domain")
 
 _Lambda_body = (Name "body")
-
--- | A type abstraction; the type-level analog of a lambda term
-data LambdaType = 
-  LambdaType {
-    -- | The variable which is bound by the lambda
-    lambdaTypeParameter :: Name,
-    -- | The body of the lambda
-    lambdaTypeBody :: Type}
-  deriving (Eq, Ord, Read, Show)
-
-_LambdaType = (Name "hydra.core.LambdaType")
-
-_LambdaType_parameter = (Name "parameter")
-
-_LambdaType_body = (Name "body")
 
 -- | A set of (possibly recursive) 'let' bindings together with an environment in which they are bound
 data Let = 
@@ -569,8 +569,8 @@ _TupleProjection_index = (Name "index")
 data Type = 
   TypeAnnotated AnnotatedType |
   TypeApplication ApplicationType |
+  TypeForall ForallType |
   TypeFunction FunctionType |
-  TypeLambda LambdaType |
   TypeList Type |
   TypeLiteral LiteralType |
   TypeMap MapType |
@@ -590,9 +590,9 @@ _Type_annotated = (Name "annotated")
 
 _Type_application = (Name "application")
 
-_Type_function = (Name "function")
+_Type_forall = (Name "forall")
 
-_Type_lambda = (Name "lambda")
+_Type_function = (Name "function")
 
 _Type_list = (Name "list")
 

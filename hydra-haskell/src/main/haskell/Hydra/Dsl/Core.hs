@@ -116,6 +116,17 @@ floatValueFloat32 = inject _FloatValue _FloatValue_float32
 floatValueFloat64 :: TTerm Float -> TTerm FloatValue
 floatValueFloat64 = inject _FloatValue _FloatValue_float64
 
+forallType :: TTerm Name -> TTerm Type -> TTerm ForallType
+forallType parameter body = Base.record _ForallType [
+  _ForallType_parameter>>: parameter,
+  _ForallType_body>>: body]
+
+forallTypeParameter :: TTerm (ForallType -> Name)
+forallTypeParameter = Base.project _ForallType _ForallType_parameter
+
+forallTypeBody :: TTerm (ForallType -> Type)
+forallTypeBody = Base.project _ForallType _ForallType_body
+
 functionElimination :: TTerm Elimination -> TTerm Function
 functionElimination = variant _Function _Function_elimination
 
@@ -185,17 +196,6 @@ lambdaBody = Base.project _Lambda _Lambda_body
 
 lambdaDomain :: TTerm (Lambda -> Maybe Type)
 lambdaDomain = Base.project _Lambda _Lambda_domain
-
-lambdaType :: TTerm Name -> TTerm Type -> TTerm LambdaType
-lambdaType parameter body = Base.record _LambdaType [
-  _LambdaType_parameter>>: parameter,
-  _LambdaType_body>>: body]
-
-lambdaTypeParameter :: TTerm (LambdaType -> Name)
-lambdaTypeParameter = Base.project _LambdaType _LambdaType_parameter
-
-lambdaTypeBody :: TTerm (LambdaType -> Type)
-lambdaTypeBody = Base.project _LambdaType _LambdaType_body
 
 letBinding :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm LetBinding
 letBinding name term mtype = Base.record _LetBinding [
@@ -398,8 +398,8 @@ typeApplication = variant _Type _Type_application
 typeFunction :: TTerm FunctionType -> TTerm Type
 typeFunction = variant _Type _Type_function
 
-typeLambda :: TTerm LambdaType -> TTerm Type
-typeLambda = variant _Type _Type_lambda
+typeLambda :: TTerm ForallType -> TTerm Type
+typeLambda = variant _Type _Type_forall
 
 typeList :: TTerm Type -> TTerm Type
 typeList = variant _Type _Type_list

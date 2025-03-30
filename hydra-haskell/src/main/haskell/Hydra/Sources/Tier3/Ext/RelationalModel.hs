@@ -27,7 +27,7 @@ relationalModelModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "ColumnSchema" $
         doc "An abstract specification of the domain represented by a column in a relation; a role" $
-        lambda "t" $ record [
+        forAll "t" $ record [
           "name">:
             doc "A unique name for the column" $
             rm "ColumnName",
@@ -52,7 +52,7 @@ relationalModelModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "Relation" $
         doc "A set of distinct n-tuples; a table" $
-        lambda "v" $ list (rm "Row" @@ "v"),
+        forAll "v" $ list (rm "Row" @@ "v"),
 
       def "RelationName" $
         doc "A unique relation (table) name" $
@@ -60,7 +60,7 @@ relationalModelModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "RelationSchema" $ -- Note: this term is not in Codd
         doc "An abstract relation; the name and columns of a relation without its actual data" $
-        lambda "t" $ record [
+        forAll "t" $ record [
           "name">:
             doc "A unique name for the relation" $
             rm "RelationName",
@@ -76,8 +76,8 @@ relationalModelModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "Relationship" $
         doc "A domain-unordered (string-indexed, rather than position-indexed) relation" $
-        lambda "v" $ set $ Types.map (rm "ColumnName") "v",
+        forAll "v" $ set $ Types.map (rm "ColumnName") "v",
 
       def "Row" $
         doc "An n-tuple which is an element of a given relation" $
-        lambda "v" $ nonemptyList "v"]
+        forAll "v" $ nonemptyList "v"]

@@ -6,7 +6,7 @@ module Hydra.Staging.CoreDecoding (
   coreDecodeFloatType,
   coreDecodeFunctionType,
   coreDecodeIntegerType,
-  coreDecodeLambdaType,
+  coreDecodeForallType,
   coreDecodeLiteralType,
   coreDecodeMapType,
   coreDecodeName,
@@ -58,6 +58,11 @@ coreDecodeFloatType = matchEnum _FloatType [
   (_FloatType_float32, FloatTypeFloat32),
   (_FloatType_float64, FloatTypeFloat64)]
 
+coreDecodeForallType :: Term -> Flow Graph (ForallType)
+coreDecodeForallType = matchRecord $ \m -> ForallType
+  <$> (getField m _ForallType_parameter coreDecodeName)
+  <*> getField m _ForallType_body coreDecodeType
+
 coreDecodeFunctionType :: Term -> Flow Graph (FunctionType)
 coreDecodeFunctionType = matchRecord $ \m -> FunctionType
   <$> getField m _FunctionType_domain coreDecodeType
@@ -74,11 +79,6 @@ coreDecodeIntegerType = matchEnum _IntegerType [
   (_IntegerType_uint16, IntegerTypeUint16),
   (_IntegerType_uint32, IntegerTypeUint32),
   (_IntegerType_uint64, IntegerTypeUint64)]
-
-coreDecodeLambdaType :: Term -> Flow Graph (LambdaType)
-coreDecodeLambdaType = matchRecord $ \m -> LambdaType
-  <$> (getField m _LambdaType_parameter coreDecodeName)
-  <*> getField m _LambdaType_body coreDecodeType
 
 coreDecodeLiteralType :: Term -> Flow Graph LiteralType
 coreDecodeLiteralType = matchUnion _LiteralType [
@@ -118,8 +118,8 @@ coreDecodeType dat = case dat of
   _ -> matchUnion _Type [
 --    (_Type_annotated, fmap TypeAnnotated . coreDecodeAnnotated),
     (_Type_application, fmap TypeApplication . coreDecodeApplicationType),
+    (_Type_forall, fmap TypeForall . coreDecodeForallType),
     (_Type_function, fmap TypeFunction . coreDecodeFunctionType),
-    (_Type_lambda, fmap TypeLambda . coreDecodeLambdaType),
     (_Type_list, fmap TypeList . coreDecodeType),
     (_Type_literal, fmap TypeLiteral . coreDecodeLiteralType),
     (_Type_map, fmap TypeMap . coreDecodeMapType),

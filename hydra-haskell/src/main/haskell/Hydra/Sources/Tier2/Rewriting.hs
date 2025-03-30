@@ -104,9 +104,9 @@ freeVariablesInTypeDef = rewritingDefinition "freeVariablesInType" $
       @@ Sets.empty
       @@ (ref subtypesDef @@ var "typ")]
     $ match _Type (Just $ var "dfltVars") [
-      _Type_lambda>>: lambda "lt" (Sets.remove
-          (Core.lambdaTypeParameter @@ var "lt")
-          (recurse @@ (Core.lambdaTypeBody @@ var "lt"))),
+      _Type_forall>>: lambda "lt" (Sets.remove
+          (Core.forallTypeParameter @@ var "lt")
+          (recurse @@ (Core.forallTypeBody @@ var "lt"))),
       -- TODO: let-types
       _Type_variable>>: lambda "v" (Sets.singleton $ var "v")] @@ var "typ"
   where
@@ -210,9 +210,9 @@ rewriteTypeDef = rewritingDefinition "rewriteType" $ lambda "f" $ lets [
       _Type_function>>: lambda "fun" $ Core.typeFunction $ Core.functionType
         (var "recurse" @@ (Core.functionTypeDomain @@ var "fun"))
         (var "recurse" @@ (Core.functionTypeCodomain @@ var "fun")),
-      _Type_lambda>>: lambda "lt" $ Core.typeLambda $ Core.lambdaType
-        (Core.lambdaTypeParameter @@ var "lt")
-        (var "recurse" @@ (Core.lambdaTypeBody @@ var "lt")),
+      _Type_forall>>: lambda "lt" $ Core.typeLambda $ Core.forallType
+        (Core.forallTypeParameter @@ var "lt")
+        (var "recurse" @@ (Core.forallTypeBody @@ var "lt")),
       _Type_list>>: lambda "t" $ Core.typeList $ var "recurse" @@ var "t",
       _Type_literal>>: lambda "lt" $ Core.typeLiteral $ var "lt",
       _Type_map>>: lambda "mt" $ Core.typeMap $ Core.mapType
@@ -346,7 +346,7 @@ subtypesDef = rewritingDefinition "subtypes" $
     _Type_function>>: lambda "ft" $ list [
       Core.functionTypeDomain @@ var "ft",
       Core.functionTypeCodomain @@ var "ft"],
-    _Type_lambda>>: lambda "lt" $ list [Core.lambdaTypeBody @@ var "lt"],
+    _Type_forall>>: lambda "lt" $ list [Core.forallTypeBody @@ var "lt"],
     _Type_list>>: lambda "lt" $ list [var "lt"],
     _Type_literal>>: constant $ list [],
     _Type_map>>: lambda "mt" $ list [

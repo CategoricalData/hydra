@@ -109,6 +109,16 @@ hydraCoreModule = Module ns elements [] [] $
           "float64">:
             doc "A 64-bit floating-point value" float64],
 
+      def "ForallType" $
+        doc "A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term." $
+        record [
+          "parameter">:
+            doc "The variable which is bound by the lambda" $
+            core "Name",
+          "body">:
+            doc "The body of the lambda" $
+            core "Type"],
+
       def "Function" $
         doc "A function" $
         union [
@@ -181,16 +191,6 @@ hydraCoreModule = Module ns elements [] [] $
           "body">:
             doc "The body of the lambda" $
             core "Term"],
-
-      def "LambdaType" $
-        doc "A type abstraction; the type-level analog of a lambda term" $
-        record [
-          "parameter">:
-            doc "The variable which is bound by the lambda" $
-            core "Name",
-          "body">:
-            doc "The body of the lambda" $
-            core "Type"],
 
       def "Let" $
         doc "A set of (possibly recursive) 'let' bindings together with an environment in which they are bound" $
@@ -350,8 +350,8 @@ hydraCoreModule = Module ns elements [] [] $
         union [
           "annotated">: core "AnnotatedType",
           "application">: core "ApplicationType",
+          "forall">: core "ForallType",
           "function">: core "FunctionType",
-          "lambda">: core "LambdaType",
           "list">: core "Type",
           "literal">: core "LiteralType",
           "map">: core "MapType",

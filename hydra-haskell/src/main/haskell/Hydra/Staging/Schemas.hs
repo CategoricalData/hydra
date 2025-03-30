@@ -87,7 +87,7 @@ findFieldType fname fields = case L.filter (\(FieldType fn _) -> fn == fname) fi
 
 fieldTypes :: Type -> Flow Graph (M.Map Name Type)
 fieldTypes t = case stripType t of
-    TypeLambda (LambdaType _ body) -> fieldTypes body
+    TypeForall (ForallType _ body) -> fieldTypes body
     TypeRecord rt -> pure $ toMap $ rowTypeFields rt
     TypeUnion rt -> pure $ toMap $ rowTypeFields rt
     TypeVariable name -> do
@@ -138,7 +138,7 @@ requireRowType label getter name = do
   where
     rawType t = case t of
       TypeAnnotated (AnnotatedType t' _) -> rawType t'
-      TypeLambda (LambdaType _ body) -> rawType body -- Note: throwing away quantification here
+      TypeForall (ForallType _ body) -> rawType body -- Note: throwing away quantification here
       _ -> t
 
 requireType :: Name -> Flow Graph Type
@@ -183,7 +183,7 @@ schemaGraphToTypingEnvironment g = withState g $ do
         Nothing -> pure Nothing
       return $ fmap (\ts -> (elementName el, ts)) mts
     toTypeScheme vars typ = case stripType typ of
-      TypeLambda (LambdaType v body) -> toTypeScheme (v:vars) body
+      TypeForall (ForallType v body) -> toTypeScheme (v:vars) body
       _ -> TypeScheme (L.reverse vars) typ
 
 typeDependencies :: Bool -> (Type -> Type) -> Name -> Flow Graph (M.Map Name Type)
