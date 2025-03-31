@@ -16,6 +16,7 @@ import Hydra.Rewriting
 import Hydra.Inference
 import Hydra.Staging.Annotations
 import Hydra.Staging.CoreDecoding
+import Hydra.Staging.Lexical
 import Hydra.Staging.Rewriting
 import Hydra.Staging.Schemas
 import Hydra.Staging.Sorting
@@ -52,31 +53,85 @@ freshVariableType = TypeVariable <$> freshName
 --------------------------------------------------------------------------------
 -- Type checking
 
---typeOf :: InferenceContext -> Term -> Flow s Type
---typeOf cx term = case term of
-----    TermAnnotated (AnnotatedTerm term1 _) -> ...
-----    TermApplication (Application lhs rhs) -> ...
-----    TermFunction f -> case f of
-----      FunctionElimination elm -> ...
-----      FunctionLambda (Lambda v mt body) -> ...
-----      FunctionPrimitive name -> ...
-----    TermLet (Let bindings env) -> ...
+type Types = M.Map Name Type
+
+typeOf :: S.Set Name -> Types -> Term -> Flow Graph Type
+typeOf vars types term = case term of
+    TermAnnotated (AnnotatedTerm term1 _) -> typeOf vars types term1
+    TermApplication (Application a b) -> do
+      t1 <- typeOf vars types a
+      t2 <- typeOf vars types b
+      checkTypeVariables vars t1
+      checkTypeVariables vars t2
+      case t1 of
+        TypeFunction (FunctionType p q) -> if p == t2
+          then return q
+          else Flows.fail $ "expected " ++ showType p ++ " in " ++ showTerm term ++ " but found " ++ showType t2
+        _ -> Flows.fail $ "left hand side of application " ++ showTerm term ++ " is not a function type: " ++ showType t1
+    TermFunction f -> case f of
+--      FunctionElimination elm -> ...
+      FunctionLambda (Lambda x mt e) -> case mt of
+        Nothing -> Flows.fail $ "untyped lambda: " ++ showTerm term
+        Just t -> do
+          checkTypeVariables vars t
+          t1 <- typeOf vars (M.insert x t types) e
+          checkTypeVariables vars t1
+          return $ Types.function t t1
+      FunctionPrimitive name -> typeSchemeToFType . primitiveType <$> requirePrimitive name -- Note: no instantiation
+    TermLet (Let es e) -> do
+        btypes <- CM.mapM binType es
+        let types2 = M.union (M.fromList $ L.zip bnames btypes) types
+        est <- CM.mapM (\v -> typeOf vars types2 v) bterms
+        CM.mapM (checkTypeVariables vars) est
+        CM.mapM (checkTypeVariables vars) btypes
+        if est == btypes
+          then typeOf vars types2 e
+          else Flows.fail $ "binding types disagree: " ++ show (fmap showType est) ++ " and " ++ show (fmap showType btypes)
+      where
+        bnames = fmap letBindingName es
+        bterms = fmap letBindingTerm es
+        binType b = case letBindingType b of
+          Nothing -> Flows.fail $ "untyped let binding in " ++ showTerm term
+          Just ts -> return $ typeSchemeToFType ts
 --    TermList els -> do
 --      types <- CM.mapM (typeOf cx) els
 --      TypeList <$> typeOf cx
---    TermLiteral lit -> Flows.pure $ TypeLiteral $ literalType lit
-----    TermMap m -> ...
-----    TermOptional mt -> ...
-----    TermProduct tuple -> ...
-----    TermRecord (Record tname fields) -> ...
-----    TermSet s -> ...
-----    TermSum (Sum idx size term1) -> ...
-----    TermTypeAbstraction (TypeAbstraction param body) -> ...
-----    TermTypeApplication (TypedTerm trm typ) -> ...
-----    TermUnion (Injection tname (Field fname term1)) -> ...
-----    TermVariable name -> ...
-----    TermWrap (WrappedTerm tname term1) -> ...
---    _ -> Flows.fail $ "unexpected term variant: " ++ show (termVariant term)
+    TermLiteral lit -> return $ TypeLiteral $ literalType lit
+--    TermMap m -> ...
+--    TermOptional mt -> ...
+--    TermProduct tuple -> ...
+--    TermRecord (Record tname fields) -> ...
+--    TermSet s -> ...
+--    TermSum (Sum idx size term1) -> ...
+    TermTypeAbstraction (TypeAbstraction v e) -> do
+      t1 <- typeOf (S.insert v vars) types e
+      checkTypeVariables (S.insert v vars) t1
+      return $ TypeForall $ ForallType v t1
+    TermTypeApplication (TypedTerm e t) -> do
+      t1 <- typeOf vars types e
+      checkTypeVariables vars t1
+      case t1 of
+        TypeForall (ForallType v t2) -> return $ substInType (TypeSubst $ M.fromList [(v, t)]) t2
+        t2 -> Flows.fail $ "not a forall type: " ++ showType t2
+--    TermUnion (Injection tname (Field fname term1)) -> ...
+    TermVariable name -> case M.lookup name types of
+      Nothing -> Flows.fail $ "unbound variable: " ++ unName name
+      Just t -> return t
+--    TermWrap (WrappedTerm tname term1) -> ...
+    _ -> Flows.fail $ "unexpected term variant: " ++ show (termVariant term)
+
+checkTypeVariables :: S.Set Name -> Type -> Flow s ()
+checkTypeVariables vars typ = case typ of
+  TypeForall (ForallType v body) -> checkTypeVariables (S.insert v vars) body
+  TypeVariable v -> if S.member v vars
+    then return ()
+    else Flows.fail $ "unbound type variable \"" ++ unName v ++ "\" in " ++ showType typ
+  _ -> do
+    CM.sequence $ fmap (checkTypeVariables vars) $ subtypes typ
+    return ()
+
+typeSchemeToFType :: TypeScheme -> Type
+typeSchemeToFType (TypeScheme vars body) = L.foldl (\t v -> TypeForall $ ForallType v t) body $ L.reverse vars
 
 --------------------------------------------------------------------------------
 -- Inference
