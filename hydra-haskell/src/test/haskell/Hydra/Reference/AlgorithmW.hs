@@ -534,11 +534,7 @@ testOne t = do { putStrLn $ "Untyped input: "
                ; putStrLn ""  }
 
 stlc = Letrec [("x",Var "y"),("y",Var "x")] (App (App (Const Pair) (Var "x")) (Var "y"))
-main = testOne stlc
-
-
---main = testOne testJ
--- mapM testOne tests
+--main = testOne stlc
 
 yyy = let x = y
           y = x in (x,y)
