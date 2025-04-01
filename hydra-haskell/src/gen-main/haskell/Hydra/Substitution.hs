@@ -73,23 +73,17 @@ substituteInTerm subst =
                   Core.FunctionLambda v2 -> (withLambda v2)
                   _ -> (recurse term)) v1)
                 Core.TermLet v1 -> (withLet v1)
-                Core.TermVariable v1 -> ((\x -> case x of
-                  Nothing -> (recurse term)
-                  Just v2 -> v2) (Maps.lookup v1 s))
+                Core.TermVariable v1 -> (Optionals.maybe (recurse term) (\sterm -> sterm) (Maps.lookup v1 s))
                 _ -> (recurse term)) term))
   in (Rewriting.rewriteTerm rewrite)
 
 substInType :: (Typing.TypeSubst -> Core.Type -> Core.Type)
 substInType subst =  
   let rewrite = (\recurse -> \typ -> (\x -> case x of
-          Core.TypeForall v1 -> ((\x -> case x of
-            Nothing -> (recurse typ)
-            Just _ -> (Core.TypeForall (Core.ForallType {
-              Core.forallTypeParameter = (Core.forallTypeParameter v1),
-              Core.forallTypeBody = (substInType (removeVar (Core.forallTypeParameter v1)) (Core.forallTypeBody v1))}))) (Maps.lookup (Core.forallTypeParameter v1) (Typing.unTypeSubst subst)))
-          Core.TypeVariable v1 -> ((\x -> case x of
-            Nothing -> typ
-            Just v2 -> v2) (Maps.lookup v1 (Typing.unTypeSubst subst)))
+          Core.TypeForall v1 -> (Optionals.maybe (recurse typ) (\styp -> Core.TypeForall (Core.ForallType {
+            Core.forallTypeParameter = (Core.forallTypeParameter v1),
+            Core.forallTypeBody = (substInType (removeVar (Core.forallTypeParameter v1)) (Core.forallTypeBody v1))})) (Maps.lookup (Core.forallTypeParameter v1) (Typing.unTypeSubst subst)))
+          Core.TypeVariable v1 -> (Optionals.maybe typ (\styp -> styp) (Maps.lookup v1 (Typing.unTypeSubst subst)))
           _ -> (recurse typ)) typ) 
       removeVar = (\v -> Typing.TypeSubst (Maps.remove v (Typing.unTypeSubst subst)))
   in (Rewriting.rewriteType rewrite)
@@ -102,9 +96,13 @@ substInTypeScheme subst ts = Core.TypeScheme {
 substTypesInTerm :: (Typing.TypeSubst -> Core.Term -> Core.Term)
 substTypesInTerm subst =  
   let rewrite = (\recurse -> \term ->  
-          let forFunction = (\f -> (\x -> case x of
-                  Core.FunctionLambda v1 -> (forLambda v1)
-                  _ -> (recurse term)) f) 
+          let forElimination = (\elm -> (\x -> case x of
+                  Core.EliminationProduct v1 -> (forTupleProjection v1)
+                  _ -> (recurse term)) elm) 
+              forFunction = (\f -> (\x -> case x of
+                      Core.FunctionElimination v1 -> (forElimination v1)
+                      Core.FunctionLambda v1 -> (forLambda v1)
+                      _ -> (recurse term)) f)
               forLambda = (\l -> recurse (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.lambdaParameter l),
                       Core.lambdaDomain = (Optionals.map (substInType subst) (Core.lambdaDomain l)),
@@ -117,6 +115,10 @@ substTypesInTerm subst =
                       in (recurse (Core.TermLet (Core.Let {
                         Core.letBindings = (Lists.map rewriteBinding (Core.letBindings l)),
                         Core.letEnvironment = (Core.letEnvironment l)}))))
+              forTupleProjection = (\tp -> recurse (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+                      Core.tupleProjectionArity = (Core.tupleProjectionArity tp),
+                      Core.tupleProjectionIndex = (Core.tupleProjectionIndex tp),
+                      Core.tupleProjectionDomain = (Optionals.map (\types -> Lists.map (substInType subst) types) (Core.tupleProjectionDomain tp))})))))
               forTypeAbstraction = (\ta ->  
                       let param = (Core.typeAbstractionParameter ta) 
                           subst2 = (Typing.TypeSubst (Maps.remove param (Typing.unTypeSubst subst)))

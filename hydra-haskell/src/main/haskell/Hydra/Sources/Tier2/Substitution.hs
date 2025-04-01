@@ -152,9 +152,13 @@ substTypesInTermDef :: TElement (TypeSubst -> Term -> Term)
 substTypesInTermDef = substitutionDefinition "substTypesInTerm" $
   lambda "subst" $ lets [
     "rewrite">: lambdas ["recurse", "term"] $ lets [
+      "forElimination">: lambda "elm" $ cases _Elimination (var "elm")
+        (Just $ var "recurse" @@ var "term") [
+        _Elimination_product>>: var "forTupleProjection"],
       "forFunction">: lambda "f" $ cases _Function (var "f")
         -- TODO: injections and case statements need a domain field as well, similar to lambdas
         (Just $ var "recurse" @@ var "term") [
+        _Function_elimination>>: var "forElimination",
         _Function_lambda>>: var "forLambda"],
       "forLambda">: lambda "l" $ var "recurse" @@ (Core.termFunction $ Core.functionLambda $ Core.lambda
         (Core.lambdaParameter @@ var "l")
@@ -168,6 +172,10 @@ substTypesInTermDef = substitutionDefinition "substTypesInTerm" $
         var "recurse" @@ (Core.termLet $ Core.letExpression
           (Lists.map (var "rewriteBinding") (Core.letBindings @@ var "l"))
           (Core.letEnvironment @@ var "l")),
+      "forTupleProjection">: lambda "tp" $ var "recurse" @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $ Core.tupleProjection
+        (Core.tupleProjectionArity @@ var "tp")
+        (Core.tupleProjectionIndex @@ var "tp")
+        (Optionals.map (lambda "types" $ Lists.map (ref substInTypeDef @@ var "subst") (var "types")) (Core.tupleProjectionDomain @@ var "tp"))),
       "forTypeAbstraction">: lambda "ta" $ lets [
         "param">: Core.typeAbstractionParameter @@ var "ta",
         "subst2">: Typing.typeSubst $ Maps.remove (var "param") (Typing.unTypeSubst @@ var "subst")] $

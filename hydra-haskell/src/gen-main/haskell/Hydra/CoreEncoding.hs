@@ -580,7 +580,12 @@ coreEncodeTupleProjection tp = (Core.TermRecord (Core.Record {
       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.tupleProjectionArity tp))))},
     Core.Field {
       Core.fieldName = (Core.Name "index"),
-      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.tupleProjectionIndex tp))))}]}))
+      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.tupleProjectionIndex tp))))},
+    Core.Field {
+      Core.fieldName = (Core.Name "domain"),
+      Core.fieldTerm = (Core.TermOptional (Optionals.map encodeTypes (Core.tupleProjectionDomain tp)))}]})) 
+  where 
+    encodeTypes = (\types -> Core.TermList (Lists.map coreEncodeType types))
 
 coreEncodeType :: (Core.Type -> Core.Term)
 coreEncodeType x = case x of

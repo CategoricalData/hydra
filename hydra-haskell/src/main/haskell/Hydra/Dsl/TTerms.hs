@@ -142,7 +142,7 @@ uint64Term = Core.termLiteral . Core.literalInteger . Core.integerValueUint64
 
 untuple :: Int -> Int -> TTerm Term
 untuple arity idx = Core.termFunction $ Core.functionElimination $ Core.eliminationProduct
-  $ Core.tupleProjection (Base.int32 arity) (Base.int32 idx)
+  $ Core.tupleProjection (Base.int32 arity) (Base.int32 idx) Base.nothing
 
 unwrap :: TTerm Name -> TTerm Term
 unwrap = Core.termFunction . Core.functionElimination . Core.eliminationWrap

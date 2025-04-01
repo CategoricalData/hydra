@@ -367,16 +367,20 @@ termVariable = variant _Term _Term_variable
 termWrap :: TTerm WrappedTerm -> TTerm Term
 termWrap = variant _Term _Term_wrap
 
-tupleProjection :: TTerm Int -> TTerm Int -> TTerm TupleProjection
-tupleProjection arity idx = Base.record _TupleProjection [
+tupleProjection :: TTerm Int -> TTerm Int -> TTerm (Maybe [Type]) -> TTerm TupleProjection
+tupleProjection arity idx mdom = Base.record _TupleProjection [
   _TupleProjection_arity>>: arity,
-  _TupleProjection_index>>: idx]
+  _TupleProjection_index>>: idx,
+  _TupleProjection_domain>>: mdom]
 
 tupleProjectionArity :: TTerm (TupleProjection -> Int)
 tupleProjectionArity = Base.project _TupleProjection _TupleProjection_arity
 
 tupleProjectionIndex :: TTerm (TupleProjection -> Int)
 tupleProjectionIndex = Base.project _TupleProjection _TupleProjection_index
+
+tupleProjectionDomain :: TTerm (TupleProjection -> Maybe [Type])
+tupleProjectionDomain = Base.project _TupleProjection _TupleProjection_domain
 
 typeAbstraction :: TTerm Name -> TTerm Term -> TTerm TypeAbstraction
 typeAbstraction parameter body = Base.record _TypeAbstraction [

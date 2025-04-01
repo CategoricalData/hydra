@@ -375,7 +375,6 @@ coreEncodeTermDef = coreEncodingDefinition "Term" $
     ecase _Term_let (ref coreEncodeLetDef),
     ecase _Term_literal (ref coreEncodeLiteralDef),
     ecase2 _Term_list $ encodedList $ primitive _lists_map @@ (ref coreEncodeTermDef) @@ var "v",
---     -- TODO: map encoding
     ecase2 _Term_map $ encodedMap (primitive _maps_bimap @@ ref coreEncodeTermDef @@ ref coreEncodeTermDef @@ var "v"),
     ecase2 _Term_optional $ encodedOptional (primitive _optionals_map @@ ref coreEncodeTermDef @@ var "v"),
     ecase2 _Term_product $ encodedList (primitive _lists_map @@ ref coreEncodeTermDef @@ var "v"),
@@ -394,9 +393,12 @@ coreEncodeTermDef = coreEncodingDefinition "Term" $
 
 coreEncodeTupleProjectionDef :: TElement (TupleProjection -> Term)
 coreEncodeTupleProjectionDef = coreEncodingDefinition "TupleProjection" $
-  lambda "tp" $ encodedRecord _TupleProjection [
-    field _TupleProjection_arity $ encodedInt32 $ Core.tupleProjectionArity @@ var "tp",
-    field _TupleProjection_index $ encodedInt32 $ Core.tupleProjectionIndex @@ var "tp"]
+  lets [
+    "encodeTypes">: lambda "types" $ encodedList $ primitive _lists_map @@ ref coreEncodeTypeDef @@ var "types"] $
+    lambda "tp" $ encodedRecord _TupleProjection [
+      field _TupleProjection_arity $ encodedInt32 $ Core.tupleProjectionArity @@ var "tp",
+      field _TupleProjection_index $ encodedInt32 $ Core.tupleProjectionIndex @@ var "tp",
+      field _TupleProjection_domain $ encodedOptional $ primitive _optionals_map @@ var "encodeTypes" @@ (Core.tupleProjectionDomain @@ var "tp")]
 
 coreEncodeTypeDef :: TElement (Type -> Term)
 coreEncodeTypeDef = coreEncodingDefinition "Type" $
