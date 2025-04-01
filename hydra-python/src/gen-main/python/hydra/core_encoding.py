@@ -1,6 +1,7 @@
 """Mapping of hydra.core constructs in a host language like Haskell or Java  to their native Hydra counterparts as terms.  This includes an implementation of LambdaGraph's epsilon encoding (types to terms)."""
 
 from __future__ import annotations
+from collections.abc import Callable
 import hydra.core
 import hydra.lib.equality
 import hydra.lib.lists
@@ -162,8 +163,8 @@ def core_encode_lambda(l: hydra.core.Lambda) -> hydra.core.Term:
       hydra.core.Field(hydra.core.Name("domain"), hydra.core.TermOptional(hydra.lib.optionals.map(lambda v1: core_encode_type(v1), l.domain))),
       hydra.core.Field(hydra.core.Name("body"), core_encode_term(l.body))])))
 
-def core_encode_lambda_type(lt: hydra.core.LambdaType) -> hydra.core.Term:
-    return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.LambdaType"), tuple([
+def core_encode_forall_type(lt: hydra.core.ForallType) -> hydra.core.Term:
+    return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.ForallType"), tuple([
       hydra.core.Field(hydra.core.Name("parameter"), core_encode_name(lt.parameter)),
       hydra.core.Field(hydra.core.Name("body"), core_encode_type(lt.body))])))
 
@@ -298,9 +299,12 @@ def core_encode_term(v1: hydra.core.Term) -> hydra.core.Term:
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), core_encode_wrapped_term(v))))
 
 def core_encode_tuple_projection(tp: hydra.core.TupleProjection) -> hydra.core.Term:
+    def encode_types(types: frozenlist[hydra.core.Type]) -> hydra.core.Term:
+        return hydra.core.TermList(hydra.lib.lists.map(lambda v1: core_encode_type(v1), types))
     return hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TupleProjection"), tuple([
       hydra.core.Field(hydra.core.Name("arity"), hydra.core.TermLiteral(hydra.core.LiteralInteger(hydra.core.IntegerValueInt32(tp.arity)))),
-      hydra.core.Field(hydra.core.Name("index"), hydra.core.TermLiteral(hydra.core.LiteralInteger(hydra.core.IntegerValueInt32(tp.index))))])))
+      hydra.core.Field(hydra.core.Name("index"), hydra.core.TermLiteral(hydra.core.LiteralInteger(hydra.core.IntegerValueInt32(tp.index)))),
+      hydra.core.Field(hydra.core.Name("domain"), hydra.core.TermOptional(hydra.lib.optionals.map(encode_types, tp.domain)))])))
 
 def core_encode_type(v1: hydra.core.Type) -> hydra.core.Term:
     match v1:
@@ -313,8 +317,8 @@ def core_encode_type(v1: hydra.core.Type) -> hydra.core.Term:
         case hydra.core.TypeFunction(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("function"), core_encode_function_type(v))))
         
-        case hydra.core.TypeLambda(v):
-            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("lambda"), core_encode_lambda_type(v))))
+        case hydra.core.TypeForall(v):
+            return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("forall"), core_encode_forall_type(v))))
         
         case hydra.core.TypeList(v):
             return hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("list"), core_encode_type(v))))
@@ -390,7 +394,7 @@ def is_type(t: hydra.core.Type) -> bool:
         case hydra.core.TypeApplication(a):
             return is_type(a.function)
         
-        case hydra.core.TypeLambda(l):
+        case hydra.core.TypeForall(l):
             return is_type(l.body)
         
         case hydra.core.TypeUnion(rt):

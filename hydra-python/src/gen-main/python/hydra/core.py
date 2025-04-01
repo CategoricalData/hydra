@@ -92,6 +92,13 @@ class FloatValueFloat64(Node[float]):
 # A floating-point literal value.
 type FloatValue = FloatValueBigfloat | FloatValueFloat32 | FloatValueFloat64
 
+@dataclass
+class ForallType:
+    """A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term."""
+    
+    parameter: Annotated[Name, "The variable which is bound by the lambda"]
+    body: Annotated[Type, "The body of the lambda"]
+
 class FunctionElimination(Node["Elimination"]):
     """An elimination for any of a few term variants."""
 
@@ -176,13 +183,6 @@ class Lambda:
     parameter: Annotated[Name, "The parameter of the lambda"]
     domain: Annotated[Type | None, "An optional domain type for the lambda"]
     body: Annotated[Term, "The body of the lambda"]
-
-@dataclass
-class LambdaType:
-    """A type abstraction; the type-level analog of a lambda term."""
-    
-    parameter: Annotated[Name, "The variable which is bound by the lambda"]
-    body: Annotated[Type, "The body of the lambda"]
 
 @dataclass
 class Let:
@@ -335,14 +335,15 @@ class TupleProjection:
     
     arity: Annotated[int, "The arity of the tuple"]
     index: Annotated[int, "The 0-indexed offset from the beginning of the tuple"]
+    domain: Annotated[frozenlist[Type] | None, "An optional domain for the projection; this is a list of component types"]
 
 class TypeAnnotated(Node["AnnotatedType"]): ...
 
 class TypeApplication(Node["ApplicationType"]): ...
 
-class TypeFunction(Node["FunctionType"]): ...
+class TypeForall(Node["ForallType"]): ...
 
-class TypeLambda(Node["LambdaType"]): ...
+class TypeFunction(Node["FunctionType"]): ...
 
 class TypeList(Node["Type"]): ...
 
@@ -367,7 +368,7 @@ class TypeVariable(Node["Name"]): ...
 class TypeWrap(Node["WrappedType"]): ...
 
 # A data type.
-type Type = TypeAnnotated | TypeApplication | TypeFunction | TypeLambda | TypeList | TypeLiteral | TypeMap | TypeOptional | TypeProduct | TypeRecord | TypeSet | TypeSum | TypeUnion | TypeVariable | TypeWrap
+type Type = TypeAnnotated | TypeApplication | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeOptional | TypeProduct | TypeRecord | TypeSet | TypeSum | TypeUnion | TypeVariable | TypeWrap
 
 @dataclass
 class TypeAbstraction:
