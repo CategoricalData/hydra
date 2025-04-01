@@ -556,7 +556,9 @@ data TupleProjection =
     -- | The arity of the tuple
     tupleProjectionArity :: Int,
     -- | The 0-indexed offset from the beginning of the tuple
-    tupleProjectionIndex :: Int}
+    tupleProjectionIndex :: Int,
+    -- | An optional domain for the projection; this is a list of component types
+    tupleProjectionDomain :: (Maybe [Type])}
   deriving (Eq, Ord, Read, Show)
 
 _TupleProjection = (Name "hydra.core.TupleProjection")
@@ -564,6 +566,8 @@ _TupleProjection = (Name "hydra.core.TupleProjection")
 _TupleProjection_arity = (Name "arity")
 
 _TupleProjection_index = (Name "index")
+
+_TupleProjection_domain = (Name "domain")
 
 -- | A data type
 data Type = 

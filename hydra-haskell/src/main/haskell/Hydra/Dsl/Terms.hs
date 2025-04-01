@@ -74,7 +74,7 @@ fieldsToMap :: [Field] -> M.Map Name Term
 fieldsToMap fields = M.fromList $ (\(Field name term) -> (name, term)) <$> fields
 
 first :: Term
-first = untuple 2 0
+first = untuple 2 0 Nothing
 
 float32 :: Float -> Term
 float32 = literal . Literals.float32
@@ -170,7 +170,7 @@ record :: Name -> [Field] -> Term
 record tname fields = TermRecord $ Record tname fields
 
 second :: Term
-second = untuple 2 1
+second = untuple 2 1 Nothing
 
 set :: S.Set Term -> Term
 set = TermSet
@@ -211,8 +211,8 @@ unit = TermRecord $ Record _Unit []
 unitVariant :: Name -> Name -> Term
 unitVariant tname fname = variant tname fname unit
 
-untuple :: Int -> Int -> Term
-untuple arity idx = TermFunction $ FunctionElimination $ EliminationProduct $ TupleProjection arity idx
+untuple :: Int -> Int -> Maybe [Type] -> Term
+untuple arity idx mtypes = TermFunction $ FunctionElimination $ EliminationProduct $ TupleProjection arity idx mtypes
 
 unwrap :: Name -> Term
 unwrap = TermFunction . FunctionElimination . EliminationWrap

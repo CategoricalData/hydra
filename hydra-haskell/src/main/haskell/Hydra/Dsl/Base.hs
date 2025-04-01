@@ -100,7 +100,7 @@ field :: Name -> TTerm a -> Field
 field fname (TTerm val) = Field fname val
 
 first :: TTerm ((a, b) -> a)
-first = TTerm $ Terms.untuple 2 0
+first = TTerm $ Terms.untuple 2 0 Nothing
 
 firstClassType :: TTerm Type -> TTerm Type
 firstClassType typ = annot key_firstClassType (Just $ Terms.boolean True) typ
@@ -201,7 +201,7 @@ ref :: TElement a -> TTerm a
 ref (TElement name _) = TTerm (TermVariable name)
 
 second :: TTerm ((a, b) -> b)
-second = TTerm $ Terms.untuple 2 1
+second = TTerm $ Terms.untuple 2 1 Nothing
 
 set :: [TTerm a] -> TTerm (S.Set a)
 set = TTerm . Terms.set . S.fromList . fmap unTTerm
@@ -213,7 +213,7 @@ unitVariant :: Name -> Name -> TTerm a
 unitVariant name fname = TTerm $ Terms.inject name $ Field fname Terms.unit
 
 untuple :: Int -> Int -> TTerm (a -> b)
-untuple arity idx = TTerm $ Terms.untuple arity idx
+untuple arity idx = TTerm $ Terms.untuple arity idx Nothing
 
 unwrap :: Name -> TTerm (a -> b)
 unwrap = TTerm . Terms.unwrap

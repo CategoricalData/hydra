@@ -343,7 +343,10 @@ hydraCoreModule = Module ns elements [] [] $
             int32,
           "index">:
             doc "The 0-indexed offset from the beginning of the tuple"
-            int32],
+            int32,
+          "domain">:
+            doc "An optional domain for the projection; this is a list of component types" $
+            optional $ list $ core "Type"],
 
       def "Type" $
         doc "A data type" $

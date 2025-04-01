@@ -3945,7 +3945,8 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
                       Core.tupleProjectionArity = 2,
-                      Core.tupleProjectionIndex = 0})))),
+                      Core.tupleProjectionIndex = 0,
+                      Core.tupleProjectionDomain = Nothing})))),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0",
@@ -3964,7 +3965,8 @@ inferenceTests = Testing.TestGroup {
                     Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
                         Core.tupleProjectionArity = 2,
-                        Core.tupleProjectionIndex = 1})))),
+                        Core.tupleProjectionIndex = 1,
+                        Core.tupleProjectionDomain = Nothing})))),
                       Core.applicationArgument = (Core.TermProduct [
                         Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
                         (Core.TermLiteral (Core.LiteralString "foo"))])})),
@@ -3983,7 +3985,8 @@ inferenceTests = Testing.TestGroup {
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
                           Core.tupleProjectionArity = 1,
-                          Core.tupleProjectionIndex = 0})))),
+                          Core.tupleProjectionIndex = 0,
+                          Core.tupleProjectionDomain = Nothing})))),
                         Core.applicationArgument = (Core.TermProduct [
                           Core.TermVariable (Core.Name "x")])}))}))),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -4004,7 +4007,8 @@ inferenceTests = Testing.TestGroup {
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
                           Core.tupleProjectionArity = 3,
-                          Core.tupleProjectionIndex = 2})))),
+                          Core.tupleProjectionIndex = 2,
+                          Core.tupleProjectionDomain = Nothing})))),
                         Core.applicationArgument = (Core.TermProduct [
                           Core.TermVariable (Core.Name "x"),
                           Core.TermVariable (Core.Name "x"),

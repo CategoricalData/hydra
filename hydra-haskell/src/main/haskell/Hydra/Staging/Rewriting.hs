@@ -340,7 +340,11 @@ stripTypesFromTerm = rewriteTerm strip
   where
     strip recurse term = case recurse term of
       -- Note: other annotations are not stripped; only types are.
-      TermFunction (FunctionLambda (Lambda v _ b)) -> TermFunction $ FunctionLambda $ Lambda v Nothing b
+      TermFunction f -> case f of
+         FunctionElimination (EliminationProduct (TupleProjection index arity _)) -> TermFunction $ FunctionElimination
+           $ EliminationProduct $ TupleProjection index arity Nothing
+         FunctionLambda (Lambda v _ b) -> TermFunction $ FunctionLambda $ Lambda v Nothing b
+         _ -> TermFunction f
       TermLet (Let bindings env) -> TermLet $ Let (fmap stripBinding bindings) env
         where
           stripBinding (LetBinding v t _) = LetBinding v t Nothing

@@ -75,7 +75,7 @@ encodeFunction namespaces fun = case fun of
     FunctionElimination e -> case e of
       EliminationWrap name -> pure $ H.ExpressionVariable $ elementReference namespaces $
         qname (Y.fromJust $ namespaceOf name) $ newtypeAccessorName name
-      EliminationProduct (TupleProjection arity idx) -> if arity == 2
+      EliminationProduct (TupleProjection arity idx _) -> if arity == 2
         then return $ hsvar $ if idx == 0 then "fst" else "snd"
         else fail "Eliminations for tuples of arity > 2 are not supported yet in the Haskell coder"
       EliminationRecord (Projection dn fname) -> return $ H.ExpressionVariable $ recordFieldReference namespaces dn fname
