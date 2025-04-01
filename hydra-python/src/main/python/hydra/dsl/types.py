@@ -177,6 +177,16 @@ def fields_to_map(fields: list[FieldType]) -> dict[Name, Type]:
     return {f.name: f.type for f in fields}
 
 
+def forall(v: Name, b: Type) -> Type:
+    """Construct a unary forall type."""
+    return TypeForall(ForallType(v, b))
+
+
+def foralls(vs: list[str], body: Type) -> Type:
+    """Construct a multi-ary forall type."""
+    return reduce(lambda acc, v: forall(Name(v), acc), reversed(vs), body)
+
+
 def function(a: Type, b: Type) -> Type:
     """Construct a function type."""
     return TypeFunction(FunctionType(a, b))
@@ -185,16 +195,6 @@ def function(a: Type, b: Type) -> Type:
 def function_n(ts: list[Type]) -> Type:
     """Construct a function type."""
     return reduce(lambda acc, t: function(t, acc), reversed(ts), ts[0])
-
-
-def lam(v: Name, b: Type) -> Type:
-    """Construct a lambda type."""
-    return TypeLambda(LambdaType(v, b))
-
-
-def lams(vs: list[str], body: Type) -> Type:
-    """Construct a lambda type."""
-    return reduce(lambda acc, v: lam(Name(v), acc), reversed(vs), body)
 
 
 def list_(t: Type) -> Type:
