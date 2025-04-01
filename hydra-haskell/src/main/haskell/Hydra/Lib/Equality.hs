@@ -40,6 +40,15 @@ equalInt32 = (==)
 equalInt64 :: Int64 -> Int64 -> Bool
 equalInt64 = (==)
 
+equalString :: String -> String -> Bool
+equalString = (==)
+
+equalTerm :: Term -> Term -> Bool
+equalTerm = (==)
+
+equalType :: Type -> Type -> Bool
+equalType = (==)
+
 equalUint8 :: Int16 -> Int16 -> Bool
 equalUint8 = (==)
 
@@ -51,15 +60,6 @@ equalUint32 = (==)
 
 equalUint64 :: Integer -> Integer -> Bool
 equalUint64 = (==)
-
-equalString :: String -> String -> Bool
-equalString = (==)
-
-equalTerm :: Term -> Term -> Bool
-equalTerm = (==)
-
-equalType :: Type -> Type -> Bool
-equalType = (==)
 
 gtInt32 :: Int -> Int -> Bool
 gtInt32 = (>)
