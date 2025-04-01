@@ -93,15 +93,25 @@ typeOf vars types term = case term of
         binType b = case letBindingType b of
           Nothing -> Flows.fail $ "untyped let binding in " ++ showTerm term
           Just ts -> return $ typeSchemeToFType ts
---    TermList els -> do
---      types <- CM.mapM (typeOf cx) els
---      TypeList <$> typeOf cx
+    TermList els -> typeOfCollection "list" TypeList vars types els
     TermLiteral lit -> return $ TypeLiteral $ literalType lit
---    TermMap m -> ...
---    TermOptional mt -> ...
---    TermProduct tuple -> ...
+    TermMap m -> if M.null m
+        then return $ typeSchemeToFType $ Types.scheme ["k", "v"] $ Types.map (Types.var "k") (Types.var "v")
+        else do
+          kt <- (CM.mapM (typeOf vars types) $ fmap fst pairs) >>= singleType "map keys"
+          vt <- (CM.mapM (typeOf vars types) $ fmap snd pairs) >>= singleType "map values"
+          checkTypeVariables vars kt
+          checkTypeVariables vars vt
+          return $ TypeMap $ MapType kt vt
+      where
+        pairs = M.toList m
+    TermOptional mt -> typeOfCollection "optional" TypeOptional vars types $ Y.maybe [] (\x -> [x]) mt
+    TermProduct tuple -> do
+      etypes <- CM.mapM (typeOf vars types) tuple
+      CM.mapM (checkTypeVariables vars) etypes
+      return $ TypeProduct etypes
 --    TermRecord (Record tname fields) -> ...
---    TermSet s -> ...
+    TermSet els -> typeOfCollection "set" TypeSet vars types $ S.toList els
 --    TermSum (Sum idx size term1) -> ...
     TermTypeAbstraction (TypeAbstraction v e) -> do
       t1 <- typeOf (S.insert v vars) types e
@@ -119,6 +129,21 @@ typeOf vars types term = case term of
       Just t -> return t
 --    TermWrap (WrappedTerm tname term1) -> ...
     _ -> Flows.fail $ "unexpected term variant: " ++ show (termVariant term)
+
+typeOfCollection :: String -> (Type -> Type) -> S.Set Name -> Types -> [Term] -> Flow Graph Type
+typeOfCollection desc cons vars types els = if L.null els
+  then return $ typeSchemeToFType $ Types.scheme ["t"] $ cons $ Types.var "t"
+  else do
+    et <- CM.mapM (typeOf vars types) els >>= singleType desc
+    checkTypeVariables vars et
+    return $ cons et
+
+singleType :: String -> [Type] -> Flow s Type
+singleType desc types = if (L.foldl (\b t -> b && t == h) True types)
+    then return h
+    else Flows.fail $ "unequal types " ++ show (fmap showType types) ++ " in " ++ desc
+  where
+    h = L.head types
 
 checkTypeVariables :: S.Set Name -> Type -> Flow s ()
 checkTypeVariables vars typ = case typ of
