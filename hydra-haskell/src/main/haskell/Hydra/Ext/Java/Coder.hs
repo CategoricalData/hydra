@@ -497,7 +497,7 @@ encodeElimination aliases marg dom cod elm = case elm of
         where
           qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
     return jexp
-  EliminationProduct (TupleProjection arity idx) -> if arity > javaMaxTupleLength
+  EliminationProduct (TupleProjection arity idx _) -> if arity > javaMaxTupleLength
       then fail $ "Tuple eliminations of arity greater than " ++ show javaMaxTupleLength ++ " are unsupported"
       else pure $ case marg of
         Nothing -> javaLambda var $ accessExpr $ javaIdentifierToJavaExpression $ variableToJavaIdentifier var

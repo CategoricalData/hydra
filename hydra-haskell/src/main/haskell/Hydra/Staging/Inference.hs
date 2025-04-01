@@ -69,7 +69,15 @@ typeOf vars types term = case term of
           else Flows.fail $ "expected " ++ showType p ++ " in " ++ showTerm term ++ " but found " ++ showType t2
         _ -> Flows.fail $ "left hand side of application " ++ showTerm term ++ " is not a function type: " ++ showType t1
     TermFunction f -> case f of
---      FunctionElimination elm -> ...
+      FunctionElimination elm -> case elm of
+        EliminationProduct (TupleProjection index arity mtypes) -> case mtypes of
+          Nothing -> Flows.fail $ "untyped tuple projection: " ++ showTerm term
+          Just types -> do
+            CM.mapM (checkTypeVariables vars) types
+            return $ Types.function (Types.product types) (types !! index)
+--        EliminationRecord (Projection tname (Field fname fterm)) -> ...
+--        EliminationUnion (CaseStatement tname def cases) -> ...
+--        EliminationWrap tname -> ...
       FunctionLambda (Lambda x mt e) -> case mt of
         Nothing -> Flows.fail $ "untyped lambda: " ++ showTerm term
         Just t -> do
@@ -507,10 +515,10 @@ inferTypeOfTerm cx term desc = withTrace desc $ case term of
   TermWrap w -> inferTypeOfWrappedTerm cx w
 
 inferTypeOfTupleProjection :: InferenceContext -> TupleProjection -> Flow s InferenceResult
-inferTypeOfTupleProjection _ (TupleProjection arity idx) = forVars arity withVars
+inferTypeOfTupleProjection _ (TupleProjection arity idx _) = forVars arity withVars
   where
     withVars vars = yield
-        (Terms.untuple arity idx)
+        (Terms.untuple arity idx $ Just types)
         (Types.function (Types.product types) cod)
         idTypeSubst
       where
