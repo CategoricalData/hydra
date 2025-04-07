@@ -22,6 +22,14 @@ class ComparisonConstraint(Enum):
     
     GREATER_THAN_OR_EQUAL = "greaterThanOrEqual"
 
+COMPARISON_CONSTRAINT__NAME = hydra.core.Name("hydra.query.ComparisonConstraint")
+COMPARISON_CONSTRAINT__EQUAL__NAME = hydra.core.Name("equal")
+COMPARISON_CONSTRAINT__NOT_EQUAL__NAME = hydra.core.Name("notEqual")
+COMPARISON_CONSTRAINT__LESS_THAN__NAME = hydra.core.Name("lessThan")
+COMPARISON_CONSTRAINT__GREATER_THAN__NAME = hydra.core.Name("greaterThan")
+COMPARISON_CONSTRAINT__LESS_THAN_OR_EQUAL__NAME = hydra.core.Name("lessThanOrEqual")
+COMPARISON_CONSTRAINT__GREATER_THAN_OR_EQUAL__NAME = hydra.core.Name("greaterThanOrEqual")
+
 @dataclass
 class Edge:
     """An abstract edge based on a record type."""
@@ -30,12 +38,21 @@ class Edge:
     out: Annotated[hydra.core.Name | None, "The field representing the out-projection of the edge. Defaults to 'out'."]
     in_: Annotated[hydra.core.Name | None, "The field representing the in-projection of the edge. Defaults to 'in'."]
 
+EDGE__NAME = hydra.core.Name("hydra.query.Edge")
+EDGE__TYPE__NAME = hydra.core.Name("type")
+EDGE__OUT__NAME = hydra.core.Name("out")
+EDGE__IN__NAME = hydra.core.Name("in")
+
 @dataclass
 class GraphPattern:
     """A query pattern which matches within a designated component subgraph."""
     
     graph: Annotated[hydra.core.Name, "The name of the component graph"]
     patterns: Annotated[frozenlist[Pattern], "The patterns to match within the subgraph"]
+
+GRAPH_PATTERN__NAME = hydra.core.Name("hydra.query.GraphPattern")
+GRAPH_PATTERN__GRAPH__NAME = hydra.core.Name("graph")
+GRAPH_PATTERN__PATTERNS__NAME = hydra.core.Name("patterns")
 
 class NodeTerm(Node["hydra.core.Term"]):
     """A graph term; an expression which is valid in the graph being matched."""
@@ -49,6 +66,11 @@ class NodeWildcard(Node[None]):
 # A node in a query expression; it may be a term, a variable, or a wildcard.
 type Node_ = NodeTerm | NodeVariable | NodeWildcard
 
+NODE__NAME = hydra.core.Name("hydra.query.Node")
+NODE__TERM__NAME = hydra.core.Name("term")
+NODE__VARIABLE__NAME = hydra.core.Name("variable")
+NODE__WILDCARD__NAME = hydra.core.Name("wildcard")
+
 class PathStep(Node["Step"]):
     """A path given by a single step."""
 
@@ -60,6 +82,11 @@ class PathInverse(Node["Path"]):
 
 # A query path.
 type Path = PathStep | PathRegex | PathInverse
+
+PATH__NAME = hydra.core.Name("hydra.query.Path")
+PATH__STEP__NAME = hydra.core.Name("step")
+PATH__REGEX__NAME = hydra.core.Name("regex")
+PATH__INVERSE__NAME = hydra.core.Name("inverse")
 
 class PatternTriple(Node["TriplePattern"]):
     """A subject/predicate/object pattern."""
@@ -79,6 +106,13 @@ class PatternGraph(Node["GraphPattern"]):
 # A query pattern.
 type Pattern = PatternTriple | PatternNegation | PatternConjunction | PatternDisjunction | PatternGraph
 
+PATTERN__NAME = hydra.core.Name("hydra.query.Pattern")
+PATTERN__TRIPLE__NAME = hydra.core.Name("triple")
+PATTERN__NEGATION__NAME = hydra.core.Name("negation")
+PATTERN__CONJUNCTION__NAME = hydra.core.Name("conjunction")
+PATTERN__DISJUNCTION__NAME = hydra.core.Name("disjunction")
+PATTERN__GRAPH__NAME = hydra.core.Name("graph")
+
 @dataclass
 class Query:
     """A SELECT-style graph pattern matching query."""
@@ -86,12 +120,20 @@ class Query:
     variables: Annotated[frozenlist[Variable], "The variables selected by the query"]
     patterns: Annotated[frozenlist[Pattern], "The patterns to be matched"]
 
+QUERY__NAME = hydra.core.Name("hydra.query.Query")
+QUERY__VARIABLES__NAME = hydra.core.Name("variables")
+QUERY__PATTERNS__NAME = hydra.core.Name("patterns")
+
 @dataclass
 class Range:
     """A range from min to max, inclusive."""
     
     min: int
     max: int
+
+RANGE__NAME = hydra.core.Name("hydra.query.Range")
+RANGE__MIN__NAME = hydra.core.Name("min")
+RANGE__MAX__NAME = hydra.core.Name("max")
 
 class RegexQuantifierOne(Node[None]):
     """No quantifier; matches a single occurrence."""
@@ -117,12 +159,25 @@ class RegexQuantifierRange(Node["Range"]):
 # A regular expression quantifier.
 type RegexQuantifier = RegexQuantifierOne | RegexQuantifierZeroOrOne | RegexQuantifierZeroOrMore | RegexQuantifierOneOrMore | RegexQuantifierExactly | RegexQuantifierAtLeast | RegexQuantifierRange
 
+REGEX_QUANTIFIER__NAME = hydra.core.Name("hydra.query.RegexQuantifier")
+REGEX_QUANTIFIER__ONE__NAME = hydra.core.Name("one")
+REGEX_QUANTIFIER__ZERO_OR_ONE__NAME = hydra.core.Name("zeroOrOne")
+REGEX_QUANTIFIER__ZERO_OR_MORE__NAME = hydra.core.Name("zeroOrMore")
+REGEX_QUANTIFIER__ONE_OR_MORE__NAME = hydra.core.Name("oneOrMore")
+REGEX_QUANTIFIER__EXACTLY__NAME = hydra.core.Name("exactly")
+REGEX_QUANTIFIER__AT_LEAST__NAME = hydra.core.Name("atLeast")
+REGEX_QUANTIFIER__RANGE__NAME = hydra.core.Name("range")
+
 @dataclass
 class RegexSequence:
     """A path with a regex quantifier."""
     
     path: Path
     quantifier: RegexQuantifier
+
+REGEX_SEQUENCE__NAME = hydra.core.Name("hydra.query.RegexSequence")
+REGEX_SEQUENCE__PATH__NAME = hydra.core.Name("path")
+REGEX_SEQUENCE__QUANTIFIER__NAME = hydra.core.Name("quantifier")
 
 class StepEdge(Node["Edge"]):
     """An out-to-in traversal of an abstract edge."""
@@ -136,6 +191,11 @@ class StepCompare(Node["ComparisonConstraint"]):
 # An atomic function as part of a query. When applied to a graph, steps are typed by function types.
 type Step = StepEdge | StepProject | StepCompare
 
+STEP__NAME = hydra.core.Name("hydra.query.Step")
+STEP__EDGE__NAME = hydra.core.Name("edge")
+STEP__PROJECT__NAME = hydra.core.Name("project")
+STEP__COMPARE__NAME = hydra.core.Name("compare")
+
 @dataclass
 class TriplePattern:
     """A subject/predicate/object pattern."""
@@ -144,5 +204,12 @@ class TriplePattern:
     predicate: Path
     object: Node_
 
+TRIPLE_PATTERN__NAME = hydra.core.Name("hydra.query.TriplePattern")
+TRIPLE_PATTERN__SUBJECT__NAME = hydra.core.Name("subject")
+TRIPLE_PATTERN__PREDICATE__NAME = hydra.core.Name("predicate")
+TRIPLE_PATTERN__OBJECT__NAME = hydra.core.Name("object")
+
 class Variable(Node[str]):
     """A query variable."""
+
+VARIABLE__NAME = hydra.core.Name("hydra.query.Variable")
