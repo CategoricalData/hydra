@@ -22,8 +22,8 @@ assignment :: Py.Name -> Py.AnnotatedRhs -> Py.Statement
 assignment name rhs = pyAssignmentToPyStatement $ Py.AssignmentUntyped
   $ Py.UntypedAssignment [pyNameToPyStarTarget name] rhs Nothing
 
-assignmentToExpression :: Py.Name -> Py.Expression -> Py.Statement
-assignmentToExpression name expr = assignment name $ pyExpressionToPyAnnotatedRhs expr
+assignmentStatement :: Py.Name -> Py.Expression -> Py.Statement
+assignmentStatement name expr = assignment name $ pyExpressionToPyAnnotatedRhs expr
 
 commentStatement :: String -> Py.Statement
 commentStatement = pyExpressionToPyStatement . tripleQuotedString
@@ -75,7 +75,7 @@ nameAndParams :: Py.Name -> [Py.Expression] -> Py.Expression
 nameAndParams pyName params = primaryAndParams (pyNameToPyPrimary pyName) params
 
 newtypeStatement :: Py.Name -> Maybe String -> Py.Expression -> Py.Statement
-newtypeStatement name mcomment expr = annotatedStatement mcomment $ assignmentToExpression name
+newtypeStatement name mcomment expr = annotatedStatement mcomment $ assignmentStatement name
   $ functionCall (pyNameToPyPrimary $ Py.Name "NewType") [doubleQuotedString $ Py.unName name, expr]
 
 normalizeComment :: String -> String
