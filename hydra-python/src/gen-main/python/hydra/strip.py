@@ -40,7 +40,7 @@ def strip_type_parameters(t: hydra.core.Type) -> hydra.core.Type:
     """Strip any top-level type lambdas from a type, extracting the (possibly nested) type body."""
     
     match strip_type(t):
-        case hydra.core.TypeLambda(lt):
+        case hydra.core.TypeForall(lt):
             return strip_type_parameters(lt.body)
         
         case _:
