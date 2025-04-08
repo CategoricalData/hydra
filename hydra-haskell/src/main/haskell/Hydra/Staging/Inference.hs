@@ -36,6 +36,9 @@ import qualified Data.Set      as S
 import qualified Data.Maybe    as Y
 
 
+-- Disable type checking by default, for better performance.
+debugInference = True
+
 --------------------------------------------------------------------------------
 -- Variables
 
@@ -55,12 +58,12 @@ freshVariableType = TypeVariable <$> freshName
 
 type Types = M.Map Name Type
 
-typeOf :: S.Set Name -> Types -> Term -> Flow Graph Type
-typeOf vars types term = case term of
-    TermAnnotated (AnnotatedTerm term1 _) -> typeOf vars types term1
+typeOf :: InferenceContext -> S.Set Name -> Types -> Term -> Flow s Type
+typeOf cx vars types term = case term of
+    TermAnnotated (AnnotatedTerm term1 _) -> typeOf cx vars types term1
     TermApplication (Application a b) -> do
-      t1 <- typeOf vars types a
-      t2 <- typeOf vars types b
+      t1 <- typeOf cx vars types a
+      t2 <- typeOf cx vars types b
       checkTypeVariables vars t1
       checkTypeVariables vars t2
       case t1 of
@@ -82,18 +85,23 @@ typeOf vars types term = case term of
         Nothing -> Flows.fail $ "untyped lambda: " ++ showTerm term
         Just t -> do
           checkTypeVariables vars t
-          t1 <- typeOf vars (M.insert x t types) e
+          t1 <- typeOf cx vars (M.insert x t types) e
           checkTypeVariables vars t1
           return $ Types.function t t1
-      FunctionPrimitive name -> typeSchemeToFType . primitiveType <$> requirePrimitive name -- Note: no instantiation
+      FunctionPrimitive name -> typeSchemeToFType <$> ts
+        where
+          -- Note: no instantiation
+          ts = case M.lookup name (inferenceContextPrimitiveTypes cx) of
+            Nothing -> Flows.fail $ "no such primitive: " ++ unName name
+            Just ts0 -> return ts0
     TermLet (Let es e) -> do
         btypes <- CM.mapM binType es
         let types2 = M.union (M.fromList $ L.zip bnames btypes) types
-        est <- CM.mapM (\v -> typeOf vars types2 v) bterms
+        est <- CM.mapM (\v -> typeOf cx vars types2 v) bterms
         CM.mapM (checkTypeVariables vars) est
         CM.mapM (checkTypeVariables vars) btypes
         if est == btypes
-          then typeOf vars types2 e
+          then typeOf cx vars types2 e
           else Flows.fail $ "binding types disagree: " ++ show (fmap showType est) ++ " and " ++ show (fmap showType btypes)
       where
         bnames = fmap letBindingName es
@@ -101,32 +109,32 @@ typeOf vars types term = case term of
         binType b = case letBindingType b of
           Nothing -> Flows.fail $ "untyped let binding in " ++ showTerm term
           Just ts -> return $ typeSchemeToFType ts
-    TermList els -> typeOfCollection "list" TypeList vars types els
+    TermList els -> typeOfCollection cx "list" TypeList vars types els
     TermLiteral lit -> return $ TypeLiteral $ literalType lit
     TermMap m -> if M.null m
         then return $ typeSchemeToFType $ Types.scheme ["k", "v"] $ Types.map (Types.var "k") (Types.var "v")
         else do
-          kt <- (CM.mapM (typeOf vars types) $ fmap fst pairs) >>= singleType "map keys"
-          vt <- (CM.mapM (typeOf vars types) $ fmap snd pairs) >>= singleType "map values"
+          kt <- (CM.mapM (typeOf cx vars types) $ fmap fst pairs) >>= singleType "map keys"
+          vt <- (CM.mapM (typeOf cx vars types) $ fmap snd pairs) >>= singleType "map values"
           checkTypeVariables vars kt
           checkTypeVariables vars vt
           return $ TypeMap $ MapType kt vt
       where
         pairs = M.toList m
-    TermOptional mt -> typeOfCollection "optional" TypeOptional vars types $ Y.maybe [] (\x -> [x]) mt
+    TermOptional mt -> typeOfCollection cx "optional" TypeOptional vars types $ Y.maybe [] (\x -> [x]) mt
     TermProduct tuple -> do
-      etypes <- CM.mapM (typeOf vars types) tuple
+      etypes <- CM.mapM (typeOf cx vars types) tuple
       CM.mapM (checkTypeVariables vars) etypes
       return $ TypeProduct etypes
 --    TermRecord (Record tname fields) -> ...
-    TermSet els -> typeOfCollection "set" TypeSet vars types $ S.toList els
+    TermSet els -> typeOfCollection cx "set" TypeSet vars types $ S.toList els
 --    TermSum (Sum idx size term1) -> ...
     TermTypeAbstraction (TypeAbstraction v e) -> do
-      t1 <- typeOf (S.insert v vars) types e
+      t1 <- typeOf cx (S.insert v vars) types e
       checkTypeVariables (S.insert v vars) t1
       return $ TypeForall $ ForallType v t1
     TermTypeApplication (TypedTerm e t) -> do
-      t1 <- typeOf vars types e
+      t1 <- typeOf cx vars types e
       checkTypeVariables vars t1
       case t1 of
         TypeForall (ForallType v t2) -> return $ substInType (TypeSubst $ M.fromList [(v, t)]) t2
@@ -135,14 +143,17 @@ typeOf vars types term = case term of
     TermVariable name -> case M.lookup name types of
       Nothing -> Flows.fail $ "unbound variable: " ++ unName name
       Just t -> return t
---    TermWrap (WrappedTerm tname term1) -> ...
+--    TermWrap (WrappedTerm tname term1) -> do
+--      t1 <- typeOf cx vars types term1
+--      checkTypeVariables vars t1
+--      ...
     _ -> Flows.fail $ "unexpected term variant: " ++ show (termVariant term)
 
-typeOfCollection :: String -> (Type -> Type) -> S.Set Name -> Types -> [Term] -> Flow Graph Type
-typeOfCollection desc cons vars types els = if L.null els
+typeOfCollection :: InferenceContext -> String -> (Type -> Type) -> S.Set Name -> Types -> [Term] -> Flow s Type
+typeOfCollection cx desc cons vars types els = if L.null els
   then return $ typeSchemeToFType $ Types.scheme ["t"] $ cons $ Types.var "t"
   else do
-    et <- CM.mapM (typeOf vars types) els >>= singleType desc
+    et <- CM.mapM (typeOf cx vars types) els >>= singleType desc
     checkTypeVariables vars et
     return $ cons et
 
@@ -152,6 +163,15 @@ singleType desc types = if (L.foldl (\b t -> b && t == h) True types)
     else Flows.fail $ "unequal types " ++ show (fmap showType types) ++ " in " ++ desc
   where
     h = L.head types
+
+checkType :: S.Set Name -> InferenceContext -> Type -> Term -> Flow s ()
+checkType k g t e = if debugInference
+  then do
+    t0 <- typeOf g k (toFContext g) e
+    if t0 == t
+      then return ()
+      else Flows.fail $ "type checking failed: expected " ++ showType t ++ " but found " ++ show t0
+  else return ()
 
 checkTypeVariables :: S.Set Name -> Type -> Flow s ()
 checkTypeVariables vars typ = case typ of
@@ -165,6 +185,9 @@ checkTypeVariables vars typ = case typ of
 
 typeSchemeToFType :: TypeScheme -> Type
 typeSchemeToFType (TypeScheme vars body) = L.foldl (\t v -> TypeForall $ ForallType v t) body $ L.reverse vars
+
+toFContext :: InferenceContext -> Types
+toFContext = fmap typeSchemeToFType . inferenceContextDataTypes
 
 --------------------------------------------------------------------------------
 -- Inference
@@ -340,12 +363,19 @@ inferTypeOfInjection cx (Injection tname (Field fname term)) = bind2 (requireSch
 inferTypeOfLambda :: InferenceContext -> Lambda -> Flow s InferenceResult
 inferTypeOfLambda cx tmp@(Lambda var _ body) = bindVar withVdom
   where
-    withVdom vdom = Flows.map withResult (inferTypeOfTerm cx2 body "lambda body")
+    withVdom vdom = Flows.bind (inferTypeOfTerm cx2 body "lambda body") withResult
       where
         dom = TypeVariable vdom
-        cx2 = extendContext [(var, Types.mono $ TypeVariable vdom)] cx
-        withResult (InferenceResult iterm itype isubst) =
-          yield (TermFunction $ FunctionLambda $ Lambda var (Just dom) iterm) (Types.function dom itype) isubst
+        cx2 = extendContext [(var, Types.mono dom)] cx
+        withResult (InferenceResult iterm icod isubst) = do
+--            checkType vars cx3 rtype rterm
+            return $ InferenceResult rterm rtype isubst
+          where
+            rterm = TermFunction $ FunctionLambda $ Lambda var (Just rdom) iterm
+            rtype = Types.function rdom icod
+            rdom = substInType isubst dom
+            vars = S.union (freeVariablesInType rdom) $ S.union (freeVariablesInType icod) (freeVariablesInContext $ substInContext isubst cx2)
+            cx3 = substInContext isubst cx
 
 -- | Normalize a let term before inferring its type.
 inferTypeOfLet :: InferenceContext -> Let -> Flow s InferenceResult
@@ -443,6 +473,7 @@ inferTypeOfPrimitive cx name = case M.lookup name (inferenceContextPrimitiveType
     -- TODO: check against algo W implementation
     Just scheme -> Flows.map withScheme $ instantiateTypeScheme scheme
   where
+    -- Note: currently no type checking for primitives
     withScheme ts = yield (Terms.primitive name) (typeSchemeType ts) idTypeSubst
 
 inferTypeOfProduct :: InferenceContext -> [Term] -> Flow s InferenceResult
@@ -548,12 +579,16 @@ inferTypeOfUnwrap cx tname = Flows.bind (requireSchemaType cx tname) withSchemaT
 inferTypeOfVariable :: InferenceContext -> Name -> Flow s InferenceResult
 inferTypeOfVariable cx name = case M.lookup name (inferenceContextDataTypes cx) of
     Nothing -> Flows.fail $ "Variable not bound to type: " ++ unName name
-    Just scheme -> Flows.map withTypeScheme $ instantiateTypeScheme scheme
+    Just scheme -> Flows.bind (instantiateTypeScheme scheme) withTypeScheme
   where
-    withTypeScheme (TypeScheme vars typ) = InferenceResult
-      (Terms.typeApplication (TermVariable name) $ fmap TypeVariable vars)
-      typ
-      idTypeSubst
+    withTypeScheme (TypeScheme vars itype) = do
+        checkType (S.fromList vars) cx itype iterm
+        return $ InferenceResult
+          iterm
+          itype
+          idTypeSubst
+      where
+        iterm = Terms.typeApplication (TermVariable name) $ fmap TypeVariable vars
 
 inferTypeOfWrappedTerm :: InferenceContext -> WrappedTerm -> Flow s InferenceResult
 inferTypeOfWrappedTerm cx (WrappedTerm tname term) = bind2 (requireSchemaType cx tname) (inferTypeOfTerm cx term "wrapped term") withResult
@@ -625,6 +660,14 @@ extendContext pairs cx = cx {inferenceContextDataTypes = M.union (M.fromList pai
 
 yield :: Term -> Type -> TypeSubst -> InferenceResult
 yield term typ subst = InferenceResult (substTypesInTerm subst term) (substInType subst typ) subst
+
+yieldChecked :: InferenceContext -> [Name] -> Term -> Type -> TypeSubst -> Flow s InferenceResult
+yieldChecked cx vars term typ subst = do
+    checkType (S.fromList vars) cx itype iterm
+    return $ InferenceResult iterm itype subst
+  where
+    iterm = substTypesInTerm subst term
+    itype = substInType subst typ
 
 yieldDebug :: InferenceContext -> String -> Term -> Type -> TypeSubst -> Flow s InferenceResult
 yieldDebug cx debugId term typ subst = do
