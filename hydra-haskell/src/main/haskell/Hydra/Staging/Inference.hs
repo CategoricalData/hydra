@@ -170,7 +170,7 @@ checkType k g t e = if debugInference
     t0 <- typeOf g k (toFContext g) e
     if t0 == t
       then return ()
-      else Flows.fail $ "type checking failed: expected " ++ showType t ++ " but found " ++ show t0
+      else Flows.fail $ "type checking failed: expected " ++ showType t ++ " but found " ++ showType t0
   else return ()
 
 checkTypeVariables :: S.Set Name -> Type -> Flow s ()
@@ -470,11 +470,12 @@ inferTypeOfOptional cx m = inferTypeOfCollection cx Types.optional trmCons "opti
 inferTypeOfPrimitive :: InferenceContext -> Name -> Flow s InferenceResult
 inferTypeOfPrimitive cx name = case M.lookup name (inferenceContextPrimitiveTypes cx) of
     Nothing -> Flows.fail $ "No such primitive: " ++ unName name
-    -- TODO: check against algo W implementation
-    Just scheme -> Flows.map withScheme $ instantiateTypeScheme scheme
+    Just scheme -> Flows.bind (instantiateTypeScheme scheme) withScheme
   where
-    -- Note: currently no type checking for primitives
-    withScheme ts = yield (Terms.primitive name) (typeSchemeType ts) idTypeSubst
+    withScheme ts = yieldChecked cx (typeSchemeVariables ts) iterm itype idTypeSubst
+      where
+        iterm = L.foldl (\t v -> TermTypeApplication $ TypedTerm t $ TypeVariable v) (Terms.primitive name) $ typeSchemeVariables ts
+        itype = typeSchemeType ts
 
 inferTypeOfProduct :: InferenceContext -> [Term] -> Flow s InferenceResult
 inferTypeOfProduct cx els = Flows.map withResults (inferMany cx $ fmap (\e -> (e, "tuple element")) els)
@@ -583,10 +584,7 @@ inferTypeOfVariable cx name = case M.lookup name (inferenceContextDataTypes cx) 
   where
     withTypeScheme (TypeScheme vars itype) = do
         checkType (S.fromList vars) cx itype iterm
-        return $ InferenceResult
-          iterm
-          itype
-          idTypeSubst
+        return $ InferenceResult iterm itype idTypeSubst
       where
         iterm = Terms.typeApplication (TermVariable name) $ fmap TypeVariable vars
 
