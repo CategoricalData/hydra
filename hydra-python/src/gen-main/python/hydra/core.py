@@ -6,6 +6,11 @@ from enum import Enum
 from hydra.dsl.python import FrozenDict, frozenlist, Node
 from typing import Annotated
 
+class Name(Node[str]):
+    """A unique identifier in some context; a string-valued key."""
+
+NAME__NAME = Name("hydra.core.Name")
+
 @dataclass
 class AnnotatedTerm:
     """A term together with an annotation."""
@@ -357,11 +362,6 @@ class MapType:
 MAP_TYPE__NAME = Name("hydra.core.MapType")
 MAP_TYPE__KEYS__NAME = Name("keys")
 MAP_TYPE__VALUES__NAME = Name("values")
-
-class Name(Node[str]):
-    """A unique identifier in some context; a string-valued key."""
-
-NAME__NAME = Name("hydra.core.Name")
 
 @dataclass
 class Projection:
