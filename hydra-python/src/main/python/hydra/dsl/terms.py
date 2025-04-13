@@ -1,60 +1,62 @@
 """A DSL for constructing Hydra terms in Python."""
 
+from collections.abc import Mapping, Sequence
+
 import hydra.dsl.literals as lt
 from hydra.core import (
-    Term,
-    TermAnnotated,
     AnnotatedTerm,
-    TermApplication,
     Application,
-    TermLiteral,
-    Literal,
-    Name,
+    CaseStatement,
+    Elimination,
+    EliminationProduct,
+    EliminationRecord,
+    EliminationUnion,
+    EliminationWrap,
     Field,
     FloatValue,
-    TermVariable,
-    TermFunction,
-    FunctionLambda,
-    Lambda,
-    TermUnion,
-    Injection,
-    TermSum,
-    Sum,
-    TermSet,
-    TermWrap,
-    WrappedTerm,
-    TermRecord,
-    Record,
-    Elimination,
     FunctionElimination,
+    FunctionLambda,
+    FunctionPrimitive,
+    Injection,
     IntegerValue,
-    TermList,
-    TermProduct,
-    Type,
-    TermTyped,
-    TypedTerm,
-    EliminationList,
-    TermLet,
+    Lambda,
     Let,
     LetBinding,
-    FunctionPrimitive,
-    TermMap,
-    CaseStatement,
-    EliminationUnion,
-    EliminationOptional,
-    OptionalCases,
-    TermOptional,
-    EliminationRecord,
+    Literal,
+    Name,
     Projection,
-    EliminationProduct,
+    Record,
+    Sum,
+    Term,
+    TermAnnotated,
+    TermApplication,
+    TermFunction,
+    TermLet,
+    TermList,
+    TermLiteral,
+    TermMap,
+    TermOptional,
+    TermProduct,
+    TermRecord,
+    TermSet,
+    TermSum,
+    TermTyped,
+    TermUnion,
+    TermVariable,
+    TermWrap,
     TupleProjection,
-    EliminationWrap,
+    Type,
+    TypedTerm,
+    WrappedTerm,
 )
+from hydra.dsl.python import FrozenDict
 
 
-def annot(ann: dict[str, Term], t: Term) -> Term:
+def annot(ann: Mapping[str, Term], t: Term) -> Term:
     """Annotate a term with a map of names to terms."""
-    return TermAnnotated(AnnotatedTerm(t, {Name(k): v for k, v in ann.items()}))
+    return TermAnnotated(
+        AnnotatedTerm(t, FrozenDict({Name(k): v for k, v in ann.items()}))
+    )
 
 
 def apply(func: Term, arg: Term) -> Term:
@@ -109,14 +111,14 @@ def field(n: str, t: Term) -> Field:
     return Field(Name(n), t)
 
 
-def fields_to_map(fields: list[Field]) -> dict[Name, Term]:
+def fields_to_map(fields: Sequence[Field]) -> FrozenDict[Name, Term]:
     """Construct a map from fields to terms."""
-    return {field.name: field.term for field in fields}
+    return FrozenDict({field.name: field.term for field in fields})
 
 
 def first() -> Term:
     """Construct a first term."""
-    return untuple(2, 0)
+    return untuple(2, 0, None)
 
 
 def float32(value: float) -> Term:
@@ -132,11 +134,6 @@ def float64(value: float) -> Term:
 def float_(value: FloatValue) -> Term:
     """Construct a float term."""
     return literal(lt.float_(value))
-
-
-def fold(term: Term) -> Term:
-    """Construct a fold term."""
-    return TermFunction(FunctionElimination(EliminationList(term)))
 
 
 def identity() -> Term:
@@ -184,21 +181,24 @@ def lam(param: str, body: Term) -> Term:
     return TermFunction(FunctionLambda(Lambda(Name(param), None, body)))
 
 
-def let_multi(bindings: list[tuple[str, Term]], body: Term) -> Term:
+def let_multi(bindings: Sequence[tuple[str, Term]], body: Term) -> Term:
     """Construct a 'let' term with multiple bindings."""
     return TermLet(
-        Let([LetBinding(Name(name), term, None) for name, term in bindings], body)
+        Let(
+            tuple([LetBinding(Name(name), term, None) for name, term in bindings]),
+            body,
+        )
     )
 
 
 def let_term(v: Name, t1: Term, t2: Term) -> Term:
     """Construct a 'let' term with a single binding."""
-    return TermLet(Let([LetBinding(v, t1, None)], t2))
+    return TermLet(Let(tuple([LetBinding(v, t1, None)]), t2))
 
 
-def list_(terms: list[Term]) -> Term:
+def list_(terms: Sequence[Term]) -> Term:
     """Construct a list term."""
-    return TermList(terms)
+    return TermList(tuple(terms))
 
 
 def literal(value: Literal) -> Term:
@@ -206,30 +206,25 @@ def literal(value: Literal) -> Term:
     return TermLiteral(value)
 
 
-def map_(terms: dict[Term, Term]) -> Term:
+def map_(terms: Mapping[Term, Term]) -> Term:
     """Construct a map term."""
-    return TermMap(terms)
+    return TermMap(FrozenDict(terms))
 
 
-def map_term(terms: dict[Term, Term]) -> Term:
+def map_term(terms: Mapping[Term, Term]) -> Term:
     """Construct a map term."""
-    return TermMap(terms)
+    return TermMap(FrozenDict(terms))
 
 
-def match(tname: Name, def_: Term | None, fields: list[Field]) -> Term:
+def match(tname: Name, def_: Term | None, fields: Sequence[Field]) -> Term:
     """Construct a match term."""
     return TermFunction(
-        FunctionElimination(EliminationUnion(CaseStatement(tname, def_, fields)))
+        FunctionElimination(EliminationUnion(CaseStatement(tname, def_, tuple(fields))))
     )
 
 
-def match_opt(n: Term, j: Term) -> Term:
-    """Construct a match term."""
-    return TermFunction(FunctionElimination(EliminationOptional(OptionalCases(n, j))))
-
-
 def match_with_variants(
-    tname: Name, def_: Term | None, pairs: list[tuple[Name, Name]]
+    tname: Name, def_: Term | None, pairs: Sequence[tuple[Name, Name]]
 ) -> Term:
     """Construct a match term with variants."""
     return match(
@@ -251,7 +246,7 @@ def optional(term: Term | None) -> Term:
 
 def pair(a: Term, b: Term) -> Term:
     """Construct a pair term."""
-    return TermProduct([a, b])
+    return TermProduct((a, b))
 
 
 def primitive(name: Name) -> Term:
@@ -259,9 +254,9 @@ def primitive(name: Name) -> Term:
     return TermFunction(FunctionPrimitive(name))
 
 
-def product(terms: list[Term]) -> Term:
+def product(terms: Sequence[Term]) -> Term:
     """Construct a product term."""
-    return TermProduct(terms)
+    return TermProduct(tuple(terms))
 
 
 def project(tname: Name, fname: Name) -> Term:
@@ -271,19 +266,19 @@ def project(tname: Name, fname: Name) -> Term:
     )
 
 
-def record(tname: Name, fields: list[Field]) -> Term:
+def record(tname: Name, fields: Sequence[Field]) -> Term:
     """Construct a record term."""
-    return TermRecord(Record(tname, fields))
+    return TermRecord(Record(tname, tuple(fields)))
 
 
 def second() -> Term:
     """Construct a second term."""
-    return untuple(2, 1)
+    return untuple(2, 1, None)
 
 
 def set(s: set[Term]) -> Term:
     """Construct a set term."""
-    return TermSet(s)
+    return TermSet(frozenset(s))
 
 
 def string(value: str) -> Term:
@@ -331,10 +326,14 @@ def unit_variant(tname: Name, fname: Name) -> Term:
     return variant(tname, fname, unit())
 
 
-def untuple(arity: int, idx: int) -> Term:
+def untuple(arity: int, idx: int, mtypes: Sequence[Type] | None) -> Term:
     """Construct a tuple projection term."""
     return TermFunction(
-        FunctionElimination(EliminationProduct(TupleProjection(arity, idx)))
+        FunctionElimination(
+            EliminationProduct(
+                TupleProjection(arity, idx, tuple(mtypes) if mtypes else None)
+            )
+        )
     )
 
 
@@ -353,13 +352,13 @@ def variant(tname: Name, fname: Name, term: Term) -> Term:
     return TermUnion(Injection(tname, Field(fname, term)))
 
 
-def with_(env: Term, bindings: list[Field]) -> Term:
+def with_(env: Term, bindings: Sequence[Field]) -> Term:
     """Construct a with variant term."""
 
     def to_binding(field: Field) -> LetBinding:
         return LetBinding(field.name, field.term, None)
 
-    return TermLet(Let([to_binding(field) for field in bindings], env))
+    return TermLet(Let(tuple([to_binding(field) for field in bindings]), env))
 
 
 def wrap(name: Name, term: Term) -> Term:
