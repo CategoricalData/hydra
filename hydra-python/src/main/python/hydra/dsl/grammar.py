@@ -29,7 +29,7 @@ def labeled(label: str, pattern: Pattern) -> Pattern:
 
 def alts(patterns: list[Pattern]) -> Pattern:
     """Construct an alternatives pattern."""
-    return PatternAlternatives(patterns)
+    return PatternAlternatives(tuple(patterns))
 
 
 def define(s: str, patterns: list[Pattern]) -> Production:
@@ -45,7 +45,7 @@ def ignored(pattern: Pattern) -> Pattern:
 
 def sequence(patterns: list[Pattern]) -> Pattern:
     """Construct a sequence pattern."""
-    return PatternSequence(patterns)
+    return PatternSequence(tuple(patterns))
 
 
 def nil() -> Pattern:

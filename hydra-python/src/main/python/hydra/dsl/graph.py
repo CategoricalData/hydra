@@ -1,36 +1,11 @@
 """Python implementations of hydra.dsl.graph primitives."""
 
 import hydra.dsl.terms as terms
+import hydra.graph
 from hydra.core import Field, Name, Term, TypeScheme
 from hydra.dsl.python import FrozenDict
 from hydra.graph import Element, Graph, Primitive
 from hydra.phantoms import TTerm
-
-ELEMENT = Name("Element")
-ELEMENT_NAME = Name("name")
-ELEMENT_TERM = Name("term")
-ELEMENT_TYPE = Name("type")
-
-GRAPH = Name("Graph")
-GRAPH_ELEMENTS = Name("elements")
-GRAPH_ENVIRONMENT = Name("environment")
-GRAPH_TYPES = Name("types")
-GRAPH_BODY = Name("body")
-GRAPH_PRIMITIVES = Name("primitives")
-GRAPH_SCHEMA = Name("schema")
-
-PRIMITIVE = Name("Primitive")
-PRIMITIVE_NAME = Name("name")
-PRIMITIVE_TYPE = Name("type")
-PRIMITIVE_IMPLEMENTATION = Name("implementation")
-
-TERM_CODER = Name("TermCoder")
-TERM_CODER_TYPE = Name("type")
-TERM_CODER_CODER = Name("coder")
-
-TYPE_CLASS = Name("TypeClass")
-TYPE_CLASS_EQUALITY = Name("equality")
-TYPE_CLASS_ORDERING = Name("ordering")
 
 
 def element(
@@ -39,11 +14,11 @@ def element(
     """Create an element from a name, term, and optional type scheme."""
     return TTerm[Element](
         terms.record(
-            ELEMENT,
+            hydra.graph.ELEMENT__NAME,
             [
-                Field(ELEMENT_NAME, name.value),
-                Field(ELEMENT_TERM, term.value),
-                Field(ELEMENT_TYPE, mtyp.value),
+                Field(hydra.graph.ELEMENT__NAME__NAME, name.value),
+                Field(hydra.graph.ELEMENT__TERM__NAME, term.value),
+                Field(hydra.graph.ELEMENT__TYPE__NAME, mtyp.value),
             ],
         )
     )
@@ -51,7 +26,9 @@ def element(
 
 def element_name() -> TTerm[Name]:
     """Get the name of an element."""
-    return TTerm[Name](terms.project(ELEMENT, ELEMENT_NAME))
+    return TTerm[Name](
+        terms.project(hydra.graph.ELEMENT__NAME, hydra.graph.ELEMENT__NAME__NAME)
+    )
 
 
 def graph(
@@ -86,14 +63,14 @@ def graph(
     """
     return TTerm[Graph](
         terms.record(
-            GRAPH,
+            hydra.graph.GRAPH__NAME,
             [
-                Field(GRAPH_ELEMENTS, elements.value),
-                Field(GRAPH_ENVIRONMENT, environment.value),
-                Field(GRAPH_TYPES, types.value),
-                Field(GRAPH_BODY, body.value),
-                Field(GRAPH_PRIMITIVES, primitives.value),
-                Field(GRAPH_SCHEMA, schema.value),
+                Field(hydra.graph.GRAPH__ELEMENTS__NAME, elements.value),
+                Field(hydra.graph.GRAPH__ENVIRONMENT__NAME, environment.value),
+                Field(hydra.graph.GRAPH__TYPES__NAME, types.value),
+                Field(hydra.graph.GRAPH__BODY__NAME, body.value),
+                Field(hydra.graph.GRAPH__PRIMITIVES__NAME, primitives.value),
+                Field(hydra.graph.GRAPH__SCHEMA__NAME, schema.value),
             ],
         )
     )
@@ -101,42 +78,58 @@ def graph(
 
 def graph_elements() -> TTerm[FrozenDict[Name, Element]]:
     """Get the elements of a graph."""
-    return TTerm[FrozenDict[Name, Element]](terms.project(GRAPH, GRAPH_ELEMENTS))
+    return TTerm[FrozenDict[Name, Element]](
+        terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__ELEMENTS__NAME)
+    )
 
 
 def graph_environment() -> TTerm[FrozenDict[Name, Term | None]]:
     """Get the environment of a graph."""
-    return TTerm[FrozenDict[Name, Term | None]](terms.project(GRAPH, GRAPH_ENVIRONMENT))
+    return TTerm[FrozenDict[Name, Term | None]](
+        terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__ENVIRONMENT__NAME)
+    )
 
 
 def graph_types() -> TTerm[FrozenDict[Name, TypeScheme]]:
     """Get the types of a graph."""
-    return TTerm[FrozenDict[Name, TypeScheme]](terms.project(GRAPH, GRAPH_TYPES))
+    return TTerm[FrozenDict[Name, TypeScheme]](
+        terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__TYPES__NAME)
+    )
 
 
 def graph_body() -> TTerm[Term]:
     """Get the body of a graph."""
-    return TTerm[Term](terms.project(GRAPH, GRAPH_BODY))
+    return TTerm[Term](
+        terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__BODY__NAME)
+    )
 
 
 def graph_primitives() -> TTerm[FrozenDict[Name, Primitive]]:
     """Get the primitives of a graph."""
-    return TTerm[FrozenDict[Name, Primitive]](terms.project(GRAPH, GRAPH_PRIMITIVES))
+    return TTerm[FrozenDict[Name, Primitive]](
+        terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__PRIMITIVES__NAME)
+    )
 
 
 def graph_schema() -> TTerm[Graph | None]:
     """Get the schema of a graph."""
-    return TTerm[Graph | None](terms.project(GRAPH, GRAPH_SCHEMA))
+    return TTerm[Graph | None](
+        terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__SCHEMA__NAME)
+    )
 
 
 def primitive_name() -> TTerm[Name]:
     """Get the name of a primitive."""
-    return TTerm[Name](terms.project(PRIMITIVE, PRIMITIVE_NAME))
+    return TTerm[Name](
+        terms.project(hydra.graph.PRIMITIVE__NAME, hydra.graph.PRIMITIVE__NAME__NAME)
+    )
 
 
 def primitive_type() -> TTerm[TypeScheme]:
     """Get the type of a primitive."""
-    return TTerm[TypeScheme](terms.project(PRIMITIVE, PRIMITIVE_TYPE))
+    return TTerm[TypeScheme](
+        terms.project(hydra.graph.PRIMITIVE__NAME, hydra.graph.PRIMITIVE__TYPE__NAME)
+    )
 
 
 # primitiveImplementation :: TTerm (Primitive -> ([Term] -> Flow Graph Term))
