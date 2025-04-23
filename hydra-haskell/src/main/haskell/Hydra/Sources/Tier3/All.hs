@@ -6,6 +6,8 @@ module Hydra.Sources.Tier3.All(
 
 import Hydra.Sources.Tier2.All
 import Hydra.Sources.Tier3.Ext.Avro.Schema
+import Hydra.Sources.Tier3.Ext.Cpp.Language
+import Hydra.Sources.Tier3.Ext.Cpp.Syntax
 import Hydra.Sources.Tier3.Ext.Csharp.Language
 import Hydra.Sources.Tier3.Ext.Csharp.Syntax
 import Hydra.Sources.Tier3.Ext.Cypher.Features
@@ -54,6 +56,8 @@ testModules = [
 tier3ExtModules :: [Module]
 tier3ExtModules = [
   avroSchemaModule,
+  cppLanguageModule,
+  cppSyntaxModule,
   csharpLanguageModule,
   csharpSyntaxModule,
   graphqlSyntaxModule,
