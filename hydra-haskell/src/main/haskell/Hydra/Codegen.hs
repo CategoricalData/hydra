@@ -2,6 +2,7 @@
 
 module Hydra.Codegen (
   modulesToGraph,
+  writeCpp,
   writeGraphql,
   writeHaskell,
   writeJava,
@@ -17,6 +18,7 @@ module Hydra.Codegen (
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
+import Hydra.Ext.Cpp.Coder
 import Hydra.Ext.Graphql.Coder
 import Hydra.Ext.Haskell.Coder
 import Hydra.Ext.Java.Coder
@@ -88,6 +90,9 @@ runFlow s f = do
     return v
   where
     FlowState v _ t = unFlow f s emptyTrace
+
+writeCpp :: FP.FilePath -> [Module] -> IO ()
+writeCpp = generateSources moduleToCpp
 
 writeGraphql :: FP.FilePath -> [Module] -> IO ()
 writeGraphql = generateSources moduleToGraphql
