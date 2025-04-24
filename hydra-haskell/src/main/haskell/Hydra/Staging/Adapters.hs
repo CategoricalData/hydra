@@ -105,13 +105,13 @@ adaptedModuleDefinitions lang mod = do
     classify adapters (el, tt@(TypedTerm term typ)) = if isNativeType el
         then do
           typ <- coreDecodeType term >>= adaptType lang
-          return $ DefinitionType name typ
+          return $ DefinitionType $ TypeDefinition name typ
         else do
           case M.lookup typ adapters of
             Nothing -> fail $ "no adapter for element " ++ unName name
             Just adapter -> do
               adapted <- coderEncode (adapterCoder adapter) term
-              return $ DefinitionTerm name adapted $ adapterTarget adapter
+              return $ DefinitionTerm $ TermDefinition name adapted $ adapterTarget adapter
       where
         name = elementName el
     adaptersFor types = do

@@ -87,9 +87,8 @@ encodeApplicationType env at = do
 
 encodeDefinition :: CppEnvironment -> Definition -> Flow Graph [Cpp.Declaration]
 encodeDefinition env def = case def of
-  DefinitionTerm name term typ -> withTrace ("data element " ++ unName name) $ do
-    fail "term-level encoding is not yet supported"
-  DefinitionType name typ -> withTrace ("type element " ++ unName name) $ do
+  DefinitionTerm _ -> fail "term-level encoding is not yet supported"
+  DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTypeDescription typ
     encodeTypeDefinition env name typ comment
 
@@ -235,7 +234,7 @@ encodeModule mod = do
     forwardDeclarationsForDefs env defs = Y.catMaybes (toDecl <$> defs)
       where
         toDecl def = case def of
-          DefinitionType name typ -> case stripType typ of
+          DefinitionType (TypeDefinition name typ) -> case stripType typ of
             TypeRecord _ -> Just $ Cpp.DeclarationClass $
                   Cpp.ClassDeclaration
                     (Cpp.ClassSpecifier Cpp.ClassKeyStruct (encodeName False CaseConventionPascal env name) [])
@@ -428,8 +427,8 @@ gatherMetadata defs = L.foldl addDef start defs
       cppModuleMetadataUsesAlgorithm = False}
 
     addDef meta def = case def of
-      DefinitionTerm _ term typ -> foldOverTerm TraversalOrderPre extendMetaForTerm (extendMetaForType meta typ) term
-      DefinitionType _ typ -> foldOverType TraversalOrderPre extendMetaForType meta typ
+      DefinitionTerm (TermDefinition _ term typ) -> foldOverTerm TraversalOrderPre extendMetaForTerm (extendMetaForType meta typ) term
+      DefinitionType (TypeDefinition _ typ) -> foldOverType TraversalOrderPre extendMetaForType meta typ
 
     extendMetaForTerm meta t = case t of
       TermLet (Let bindings _) -> L.foldl forBinding meta bindings

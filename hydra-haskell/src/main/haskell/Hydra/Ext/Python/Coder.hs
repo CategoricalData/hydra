@@ -95,11 +95,11 @@ encodeApplicationType env at = do
 
 encodeDefinition :: PythonEnvironment -> Definition -> Flow Graph [Py.Statement]
 encodeDefinition env def = case def of
-  DefinitionTerm name term typ -> withTrace ("data element " ++ unName name) $ do
+  DefinitionTerm (TermDefinition name term typ) -> withTrace ("data element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTermDescription term
     g <- getState
     encodeTermAssignment env name (fullyStripTerm $ expandLambdas g term) typ comment
-  DefinitionType name typ -> withTrace ("type element " ++ unName name) $ do
+  DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTypeDescription typ
     encodeTypeAssignment env name typ comment
 
@@ -557,8 +557,8 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataUsesTypeVar = False,
       pythonModuleMetadataUsesNode = False}
     addDef meta def = case def of
-      DefinitionTerm _ term typ -> foldOverTerm TraversalOrderPre extendMetaForTerm (extendMetaForType True meta typ) term
-      DefinitionType _ typ -> foldOverType TraversalOrderPre (extendMetaForType False) meta typ
+      DefinitionTerm (TermDefinition _ term typ) -> foldOverTerm TraversalOrderPre extendMetaForTerm (extendMetaForType True meta typ) term
+      DefinitionType (TypeDefinition _ typ) -> foldOverType TraversalOrderPre (extendMetaForType False) meta typ
     extendMetaForTerm meta t = case t of
       TermLet (Let bindings _) -> L.foldl forBinding meta bindings
         where

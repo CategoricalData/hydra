@@ -26,9 +26,9 @@ data CsharpEnvironment = CsharpEnvironment {} deriving Show
 
 encodeDefinition :: CsharpEnvironment -> Definition -> Flow Graph [Cs.NamespaceMemberDeclaration]
 encodeDefinition env def = case def of
-  DefinitionTerm name term typ -> withTrace ("data element " ++ unName name) $
+  DefinitionTerm (TermDefinition name term typ) -> withTrace ("data element " ++ unName name) $
     return [] -- TODO
-  DefinitionType name typ -> withTrace ("type element " ++ unName name) $ do
+  DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTypeDescription typ
     encodeTypeAssignment env name typ comment
 
