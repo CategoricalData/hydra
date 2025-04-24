@@ -131,6 +131,6 @@ cppReservedWordsDef = cppLanguageDefinition "cppReservedWords" $
         "unordered_map", "unordered_set", "unordered_multimap", "unordered_multiset",
         "stack", "queue", "priority_queue", "shared_ptr", "unique_ptr", "weak_ptr"],
     "hydraCppKeywords">:
-      doc "Reserved words which are specific to Hydra-Cpp" $
-      list ["Node", "FrozenDict", "CppObject"]]
+      doc "Reserved words which are specific to Hydra" $
+      list []]
     $ Sets.fromList $ Lists.concat2 (Lists.concat2 (Lists.concat2 (var "cppKeywords") (var "cppPreprocessor")) (var "cppStlTypes")) (var "hydraCppKeywords")

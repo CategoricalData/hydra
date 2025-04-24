@@ -15,10 +15,8 @@ import qualified Data.Set   as S
 import qualified Data.Maybe as Y
 
 
--- | Environment for C++ code generation
-data CppEnvironment = CppEnvironment {
-  cppEnvironmentNamespaces :: Namespaces String,
-  cppEnvironmentBoundTypeVariables :: ([Name], M.Map Name String)}
+createTypeReference :: CppEnvironment -> Name -> Cpp.TypeExpression
+createTypeReference env name = Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $ encodeName True CaseConventionPascal env name
 
 -- | Encode an enum value with appropriate naming convention
 encodeEnumValue :: CppEnvironment -> Name -> String
@@ -44,9 +42,12 @@ encodeName :: Bool -> CaseConvention -> CppEnvironment -> Name -> String
 encodeName isQualified conv env name = if isQualified
     then case M.lookup name (snd $ cppEnvironmentBoundTypeVariables env) of
       Just n -> n
-      Nothing -> if mns == Just focusNs
-        then cppLocal
-        else case mns of
+--      Nothing -> if mns == Just focusNs
+--        then cppLocal
+--        else case mns of
+--          Nothing -> cppLocal
+--          Just ns -> cppNs ns ++ "::" ++ cppLocal
+      Nothing -> case mns of
           Nothing -> cppLocal
           Just ns -> cppNs ns ++ "::" ++ cppLocal
     else cppLocal

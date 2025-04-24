@@ -28,7 +28,7 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
 --     | sessionCloseCommand EOF
 --     ;
       def "GqlProgram" $
-        union [
+        record [
           "activity">: optional $ gql "ProgramActivity",
           "close">: optional $ gql "SessionCloseCommand"],
 

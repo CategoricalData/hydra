@@ -2,11 +2,18 @@
 
 module Hydra.Ext.Cpp.Utils where
 
+import Hydra.Kernel
 import Hydra.Staging.Formatting
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
 
 import qualified Data.List as L
+import qualified Data.Map as M
 
+
+-- | Environment for C++ code generation
+data CppEnvironment = CppEnvironment {
+  cppEnvironmentNamespaces :: Namespaces String,
+  cppEnvironmentBoundTypeVariables :: ([Name], M.Map Name String)}
 
 cppPostfixExpressionToCppExpression :: Cpp.PostfixExpression -> Cpp.Expression
 cppPostfixExpressionToCppExpression pfe =
@@ -27,9 +34,6 @@ cppPostfixExpressionToCppExpression pfe =
 
 cppPrimaryExpressionToCppExpression :: Cpp.PrimaryExpression -> Cpp.Expression
 cppPrimaryExpressionToCppExpression prim = cppPostfixExpressionToCppExpression $ Cpp.PostfixExpressionPrimary prim
-
-createBasicType :: String -> Cpp.TypeExpression
-createBasicType name = Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed name
 
 createCompoundStmt :: [Cpp.Statement] -> Cpp.CompoundStatement
 createCompoundStmt = Cpp.CompoundStatement

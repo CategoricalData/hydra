@@ -293,5 +293,8 @@ unsupportedType label = cst $ "[" ++ label ++ "]"
 unsupportedVariant :: Show a => String -> a -> Expr
 unsupportedVariant label obj = cst $ "[unsupported " ++ label ++ ": " ++ show obj ++ "]"
 
+withComma :: Expr -> Expr
+withComma e = noSep [e, cst ","]
+
 withSemi :: Expr -> Expr
 withSemi e = noSep [e, cst ";"]

@@ -208,7 +208,4 @@ cppReservedWords = (Sets.fromList (Lists.concat2 (Lists.concat2 (Lists.concat2 c
       "shared_ptr",
       "unique_ptr",
       "weak_ptr"]
-    hydraCppKeywords = [
-      "Node",
-      "FrozenDict",
-      "CppObject"]
+    hydraCppKeywords = []
