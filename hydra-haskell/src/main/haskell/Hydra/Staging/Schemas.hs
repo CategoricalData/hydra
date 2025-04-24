@@ -31,8 +31,18 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
--- TODO: use TypeScheme here instead of Type
-data Definition = DefinitionType Name Type | DefinitionTerm Name Term Type
+
+data TermDefinition = TermDefinition {
+  termDefinitionName :: Name,
+  termDefinitionTerm :: Term,
+  termDefinitionType :: Type} deriving Show
+
+data TypeDefinition = TypeDefinition {
+  typeDefinitionName :: Name,
+  -- TODO: use TypeScheme here instead of Type
+  typeDefinitionType :: Type} deriving Show
+
+data Definition = DefinitionTerm TermDefinition | DefinitionType TypeDefinition
 
 data Namespaces n = Namespaces {
   namespacesFocus :: (Namespace, n),
@@ -43,8 +53,8 @@ definitionDependencyNamespaces defs = S.fromList $ Y.catMaybes (namespaceOf <$> 
   where
     allNames = S.unions (defNames <$> defs)
     defNames def = case def of
-        DefinitionType _ typ -> typeDependencyNames True typ
-        DefinitionTerm _ term _ -> termDependencyNames True True True term
+        DefinitionType (TypeDefinition _ typ) -> typeDependencyNames True typ
+        DefinitionTerm (TermDefinition _ term _) -> termDependencyNames True True True term
 
 -- | Find dependency namespaces in all of a set of terms.
 dependencyNamespaces :: Bool -> Bool -> Bool -> Bool -> [Element] -> Flow Graph (S.Set Namespace)
