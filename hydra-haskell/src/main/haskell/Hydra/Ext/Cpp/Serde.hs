@@ -13,7 +13,7 @@ import qualified Data.Maybe as Y
 -- Program structure
 encodeProgram :: Cpp.Program -> A.Expr
 encodeProgram (Cpp.Program includes decls) = doubleNewlineSep [
-  doubleNewlineSep (encodeIncludeDirective <$> includes),
+  newlineSep (encodeIncludeDirective <$> includes),
   doubleNewlineSep (encodeDeclaration <$> decls)]
 
 encodeIncludeDirective :: Cpp.IncludeDirective -> A.Expr
@@ -26,13 +26,13 @@ encodeDeclaration :: Cpp.Declaration -> A.Expr
 encodeDeclaration d = case d of
   Cpp.DeclarationClass c -> encodeClassDeclaration c
   Cpp.DeclarationFunction f -> encodeFunctionDeclaration f
-  Cpp.DeclarationVariable v -> encodeVariableDeclaration v
+  Cpp.DeclarationVariable v -> encodeVariableDeclaration False v
   Cpp.DeclarationTypedef t -> encodeTypedefDeclaration t
   Cpp.DeclarationNamespace n -> encodeNamespaceDeclaration n
 
 encodeNamespaceDeclaration :: Cpp.NamespaceDeclaration -> A.Expr
 encodeNamespaceDeclaration (Cpp.NamespaceDeclaration name decls) =
-  newlineSep [
+  spaceSep [
     cst $ "namespace " ++ name,
     curlyBlock fullBlockStyle (doubleNewlineSep $ encodeDeclaration <$> decls),
     cst ";"]
@@ -44,15 +44,14 @@ encodeTypedefDeclaration (Cpp.TypedefDeclaration name typ isUsing) =
     else withSemi $ spaceSep [cst "typedef", encodeTypeExpression typ, cst name]
 
 -- Class-related encoders
-encodeClassBody :: Cpp.ClassBody -> A.Expr
-encodeClassBody (Cpp.ClassBody members) = curlyBlock fullBlockStyle (doubleNewlineSep $ map encodeMemberSpecification members)
+encodeClassBody :: Bool -> Cpp.ClassBody -> A.Expr
+encodeClassBody commas (Cpp.ClassBody members) = curlyBlock fullBlockStyle (doubleNewlineSep $ map (encodeMemberSpecification commas) members)
 
 encodeClassDeclaration :: Cpp.ClassDeclaration -> A.Expr
-encodeClassDeclaration (Cpp.ClassDeclaration spec body) =
-  newlineSep [
-    encodeClassSpecifier spec,
-    encodeClassBody body,
-    cst ";"]
+encodeClassDeclaration (Cpp.ClassDeclaration spec mbody) = withSemi $
+  spaceSep $ Y.catMaybes [
+    Just $ encodeClassSpecifier spec,
+    encodeClassBody (Cpp.classSpecifierKey spec == Cpp.ClassKeyEnumClass) <$> mbody]
 
 encodeClassSpecifier :: Cpp.ClassSpecifier -> A.Expr
 encodeClassSpecifier (Cpp.ClassSpecifier key name inheritance) =
@@ -64,6 +63,7 @@ encodeClassSpecifier (Cpp.ClassSpecifier key name inheritance) =
 encodeClassKey :: Cpp.ClassKey -> A.Expr
 encodeClassKey k = case k of
   Cpp.ClassKeyClass -> cst "class"
+  Cpp.ClassKeyEnumClass -> cst "enum class"
   Cpp.ClassKeyStruct -> cst "struct"
 
 encodeBaseSpecifier :: Cpp.BaseSpecifier -> A.Expr
@@ -77,31 +77,30 @@ encodeAccessSpecifier a = case a of
   Cpp.AccessSpecifierPrivate -> cst "private"
   Cpp.AccessSpecifierNone -> cst ""
 
-encodeMemberSpecification :: Cpp.MemberSpecification -> A.Expr
-encodeMemberSpecification m = case m of
-  Cpp.MemberSpecificationAccessLabel a -> spaceSep [encodeAccessSpecifier a, cst ":"]
-  Cpp.MemberSpecificationMember d -> encodeMemberDeclaration d
+encodeMemberSpecification :: Bool -> Cpp.MemberSpecification -> A.Expr
+encodeMemberSpecification commas m = case m of
+  Cpp.MemberSpecificationAccessLabel a -> noSep [encodeAccessSpecifier a, cst ":"]
+  Cpp.MemberSpecificationMember d -> encodeMemberDeclaration commas d
 
-encodeMemberDeclaration :: Cpp.MemberDeclaration -> A.Expr
-encodeMemberDeclaration m = case m of
+encodeMemberDeclaration :: Bool -> Cpp.MemberDeclaration -> A.Expr
+encodeMemberDeclaration commas m = case m of
   Cpp.MemberDeclarationFunction f -> encodeFunctionDeclaration f
-  Cpp.MemberDeclarationVariable v -> encodeVariableDeclaration v
+  Cpp.MemberDeclarationVariable v -> encodeVariableDeclaration commas v
   Cpp.MemberDeclarationConstructor c -> encodeConstructorDeclaration c
   Cpp.MemberDeclarationDestructor d -> encodeDestructorDeclaration d
   Cpp.MemberDeclarationNestedClass c -> encodeClassDeclaration c
 
 encodeConstructorDeclaration :: Cpp.ConstructorDeclaration -> A.Expr
 encodeConstructorDeclaration (Cpp.ConstructorDeclaration name params inits body) =
-  newlineSep [
-    spaceSep [
-      cst name,
-      parens $ commaSep inlineStyle $ encodeParameter <$> params,
-      if null inits
-        then cst ""
-        else spaceSep [
-          cst ":",
-          commaSep inlineStyle $ encodeMemInitializer <$> inits]],
-    encodeCompoundStatement body]
+  spaceSep $ Y.catMaybes [
+    Just $ cst name,
+    Just $ parens $ commaSep inlineStyle $ encodeParameter <$> params,
+    if null inits
+      then Nothing
+      else Just $ spaceSep [
+        cst ":",
+        commaSep inlineStyle $ encodeMemInitializer <$> inits],
+    Just $ encodeCompoundStatement body]
 
 encodeMemInitializer :: Cpp.MemInitializer -> A.Expr
 encodeMemInitializer (Cpp.MemInitializer name args) =
@@ -118,13 +117,12 @@ encodeDestructorDeclaration (Cpp.DestructorDeclaration name body) =
 -- Function-related encoders
 encodeFunctionDeclaration :: Cpp.FunctionDeclaration -> A.Expr
 encodeFunctionDeclaration (Cpp.FunctionDeclaration retType name params specs body) =
-  newlineSep [
-    spaceSep $ [
+  spaceSep $
+    (encodeFunctionSpecifier <$> specs) ++ [
       encodeTypeExpression retType,
       cst name,
-      parens $ commaSep inlineStyle $ encodeParameter <$> params] ++
-      (encodeFunctionSpecifier <$> specs),
-    encodeFunctionBody body]
+      parens $ commaSep inlineStyle $ encodeParameter <$> params,
+      encodeFunctionBody body]
 
 encodeFunctionSpecifier :: Cpp.FunctionSpecifier -> A.Expr
 encodeFunctionSpecifier s = case s of
@@ -149,12 +147,12 @@ encodeFunctionBody b = case b of
   Cpp.FunctionBodyDeclaration -> cst ";"
 
 -- Variable and type declarations
-encodeVariableDeclaration :: Cpp.VariableDeclaration -> A.Expr
-encodeVariableDeclaration (Cpp.VariableDeclaration typ name init isAuto) =
-  withSemi $ spaceSep $
+encodeVariableDeclaration :: Bool -> Cpp.VariableDeclaration -> A.Expr
+encodeVariableDeclaration commas (Cpp.VariableDeclaration typ name init isAuto) =
+  (if commas then withComma else withSemi) $ spaceSep $
     (if isAuto
       then [cst "auto"]
-      else [encodeTypeExpression typ]) ++
+      else (Y.maybe [] (\t -> [encodeTypeExpression t]) typ)) ++
     [cst name] ++
     (case init of
       Just expr -> [cst "=", encodeExpression expr]
@@ -178,18 +176,16 @@ encodeBasicType t = case t of
   Cpp.BasicTypeFloat -> cst "float"
   Cpp.BasicTypeDouble -> cst "double"
   Cpp.BasicTypeString -> cst "std::string"
+  Cpp.BasicTypeAuto -> cst "auto"
   Cpp.BasicTypeNamed name -> cst name
 
 encodeQualifiedType :: Cpp.QualifiedType -> A.Expr
 encodeQualifiedType (Cpp.QualifiedType baseType qualifier) =
-  spaceSep [encodeTypeExpression baseType, encodeTypeQualifier qualifier]
-
-encodeTypeQualifier :: Cpp.TypeQualifier -> A.Expr
-encodeTypeQualifier q = case q of
-  Cpp.TypeQualifierConst -> cst "const"
-  Cpp.TypeQualifierLvalueRef -> cst "&"
-  Cpp.TypeQualifierRvalueRef -> cst "&&"
-  Cpp.TypeQualifierPointer -> cst "*"
+  case qualifier of
+    Cpp.TypeQualifierConst -> spaceSep [cst "const", encodeTypeExpression baseType]
+    Cpp.TypeQualifierLvalueRef -> noSep [encodeTypeExpression baseType, cst "&"]
+    Cpp.TypeQualifierRvalueRef -> noSep [encodeTypeExpression baseType, cst "&&"]
+    Cpp.TypeQualifierPointer -> noSep [encodeTypeExpression baseType, cst "*"]
 
 encodeTemplateType :: Cpp.TemplateType -> A.Expr
 encodeTemplateType (Cpp.TemplateType name args) =
@@ -214,9 +210,10 @@ encodeStatement s = case s of
   Cpp.StatementLabeled l -> encodeLabeledStatement l
   Cpp.StatementCompound c -> encodeCompoundStatement c
   Cpp.StatementSelection s -> encodeSelectionStatement s
+  Cpp.StatementSwitch s -> encodeSwitchStatement s
   Cpp.StatementIteration i -> encodeIterationStatement i
   Cpp.StatementJump j -> encodeJumpStatement j
-  Cpp.StatementDeclaration v -> withSemi $ encodeVariableDeclaration v
+  Cpp.StatementDeclaration v -> withSemi $ encodeVariableDeclaration False v
   Cpp.StatementExpression e -> withSemi $ encodeExpression e
 
 encodeLabeledStatement :: Cpp.LabeledStatement -> A.Expr
@@ -239,6 +236,29 @@ encodeSelectionStatement (Cpp.SelectionStatement cond thenBranch elseBranch) =
     case elseBranch of
       Just stmt -> newlineSep [cst "else", encodeStatement stmt]
       Nothing -> cst ""]
+
+encodeSwitchStatement :: Cpp.SwitchStatement -> A.Expr
+encodeSwitchStatement (Cpp.SwitchStatement value cases) =
+  spaceSep [
+    cst "switch",
+    parens $ encodeExpression value,
+    curlyBlock fullBlockStyle $ newlineSep $ map encodeCaseStatement cases]
+
+encodeCaseStatement :: Cpp.CaseStatement -> A.Expr
+encodeCaseStatement stmt = case stmt of
+  Cpp.CaseStatementCase caseValue ->
+    encodeCaseValue caseValue
+  Cpp.CaseStatementDefault statement ->
+    spaceSep [
+      cst "default:",
+      encodeStatement statement]
+
+encodeCaseValue :: Cpp.CaseValue -> A.Expr
+encodeCaseValue (Cpp.CaseValue value statement) =
+  spaceSep [
+    cst "case",
+    noSep [encodeExpression value, cst ":"],
+    encodeStatement statement]
 
 encodeIterationStatement :: Cpp.IterationStatement -> A.Expr
 encodeIterationStatement i = case i of
@@ -280,7 +300,7 @@ encodeForStatement (Cpp.ForStatement init cond inc body) =
 encodeForInit :: Cpp.ForInit -> A.Expr
 encodeForInit i = case i of
   Cpp.ForInitExpression e -> encodeExpression e
-  Cpp.ForInitDeclaration d -> encodeVariableDeclaration d
+  Cpp.ForInitDeclaration d -> encodeVariableDeclaration False d
   Cpp.ForInitEmpty -> cst ""
 
 encodeRangeForStatement :: Cpp.RangeForStatement -> A.Expr
@@ -716,15 +736,12 @@ encodeOptional (Cpp.Optional valType val) =
       Nothing -> cst "{}"]
 
 -- Utility functions
-toPythonComments :: String -> String
-toPythonComments s = "# " ++ L.intercalate "\n# " (lines s)
 
-toCppComments :: String -> String -> String
-toCppComments s isMultiline =
-  if isMultiline == "true"
-    then "/* " ++ s ++ " */"
-    else "// " ++ s
+toCppComments :: String -> Bool -> String
+toCppComments s isMultiline = if isMultiline
+  then "/* " ++ s ++ " */"
+  else "// " ++ s
 
 encodeComment :: Cpp.Comment -> A.Expr
 encodeComment (Cpp.Comment text isMultiline) =
-  cst $ toCppComments text (if isMultiline then "true" else "false")
+  cst $ toCppComments text isMultiline

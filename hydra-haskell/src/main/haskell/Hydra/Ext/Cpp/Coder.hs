@@ -97,58 +97,60 @@ encodeEnumType :: CppEnvironment -> Name -> [FieldType] -> Maybe String -> Flow 
 encodeEnumType env name tfields comment = do
   return [Cpp.DeclarationClass $
     Cpp.ClassDeclaration
-      (Cpp.ClassSpecifier Cpp.ClassKeyClass (encodeName False CaseConventionPascal env name) [])
-      (Cpp.ClassBody $ [Cpp.MemberSpecificationAccessLabel Cpp.AccessSpecifierPublic] ++ enumFields ++ enumMethods)]
+      (Cpp.ClassSpecifier Cpp.ClassKeyEnumClass (encodeName False CaseConventionPascal env name) [])
+      (Just $ Cpp.ClassBody enumFields)]
   where
     enumFields = [Cpp.MemberSpecificationMember $
                     Cpp.MemberDeclarationVariable $
                       Cpp.VariableDeclaration
-                        (Cpp.TypeExpressionBasic $ Cpp.BasicTypeInt)
+                        Nothing
                         (encodeEnumValue env fname)
                         (Just $ createLiteralIntExpr idx)
                         False
                 | (FieldType fname _, idx) <- zip tfields [0..]]
 
-    enumMethods = [
-      -- Create a toString method for enums
-      Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationFunction $
-        Cpp.FunctionDeclaration
-          (Cpp.TypeExpressionBasic Cpp.BasicTypeString)
-          "toString"
-          [createParameter (Cpp.TypeExpressionBasic $ Cpp.BasicTypeInt) "value" Nothing]
-          [Cpp.FunctionSpecifierStatic]
-          (Cpp.FunctionBodyCompound $ createCompoundStmt [
-            createSwitchStatement
-          ])]
+encodeFieldType :: CppEnvironment -> Bool -> FieldType -> Flow Graph Cpp.VariableDeclaration
+encodeFieldType env isParameter (FieldType fname ftype) = do
+    comment <- getTypeDescription ftype
+    cppType <- encodeType env ftype
 
-    createSwitchStatement = Cpp.StatementSelection $ Cpp.SelectionStatement
-      (createIdentifierExpr "value")
-      (Cpp.StatementCompound $ createCompoundStmt switchCases)
+    -- Apply different type modifiers based on whether this is a parameter or field
+    let finalType = if isParameter
+                    then parameterType cppType
+                    else fieldType cppType
+
+    return $ Cpp.VariableDeclaration
+      (Just finalType)
+      (encodeFieldName env fname)
       Nothing
+      False
+  where
+    isBasicType = typeVariant (stripType ftype) == TypeVariantLiteral
+    isTemplateType = isStdContainer ftype
 
-    switchCases = enumCases ++ [defaultCase]
-      where
-        enumCases = [
-          Cpp.StatementLabeled (Cpp.LabeledStatement
-            ("case " ++ show idx)
-            (Cpp.StatementJump $ Cpp.JumpStatementReturnValue $
-              createLiteralStringExpr (unName fname)))
-          | (FieldType fname _, idx) <- zip tfields [0..]]
+    -- For fields: Apply const to non-basic types
+    fieldType typ = if isBasicType
+                    then typ
+                    else Cpp.TypeExpressionQualified $ Cpp.QualifiedType typ Cpp.TypeQualifierConst
 
-        defaultCase = Cpp.StatementLabeled (Cpp.LabeledStatement
-          "default"
-          (Cpp.StatementJump $ Cpp.JumpStatementReturnValue $
-            createLiteralStringExpr "Unknown"))
+    -- For parameters: Apply different rules based on type
+    parameterType typ
+      | isBasicType = typ                               -- Basic types by value
+      | isTemplateType = typ                           -- Template types by value (for std::move)
+      | otherwise = Cpp.TypeExpressionQualified $     -- Other complex types by const reference
+                     Cpp.QualifiedType
+                       (Cpp.TypeExpressionQualified $
+                         Cpp.QualifiedType typ Cpp.TypeQualifierConst)
+                       Cpp.TypeQualifierLvalueRef
 
-encodeFieldType :: CppEnvironment -> FieldType -> Flow Graph Cpp.VariableDeclaration
-encodeFieldType env (FieldType fname ftype) = do
-  comment <- getTypeDescription ftype
-  cppType <- encodeType env ftype
-  return $ Cpp.VariableDeclaration
-    cppType
-    (encodeFieldName env fname)
-    Nothing
-    False
+    -- Check if type is a std container like optional, vector, etc.
+    isStdContainer typ = case stripType typ of
+      TypeApplication (ApplicationType lhs _) -> isStdContainer lhs
+      TypeList _ -> True
+      TypeMap _ -> True
+      TypeOptional _ -> True
+      TypeSet _ -> True
+      _ -> False
 
 encodeFunctionType :: CppEnvironment -> FunctionType -> Flow Graph Cpp.TypeExpression
 encodeFunctionType env ft = do
@@ -201,13 +203,14 @@ encodeModule mod = do
     let env = CppEnvironment {
               cppEnvironmentNamespaces = namespaces,
               cppEnvironmentBoundTypeVariables = ([], M.empty)}
+    let forwardDecls = forwardDeclarationsForDefs env defs
     defDecls <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
     let meta = gatherMetadata defs
     let includeDirectives = includes meta
-    return $ Cpp.Program includeDirectives (wrapWithNamespace (moduleNamespace mod) defDecls)
+    return $ Cpp.Program includeDirectives (wrapWithNamespace (moduleNamespace mod) (forwardDecls ++ defDecls))
   where
     wrapWithNamespace ns decls = [Cpp.DeclarationNamespace $
-      Cpp.NamespaceDeclaration (unNamespace ns) decls]
+      Cpp.NamespaceDeclaration (encodeNamespace ns) decls]
 
     includes meta = addVersionInclude $ standardIncludes ++ containerIncludes
       where
@@ -229,36 +232,76 @@ encodeModule mod = do
           if cppModuleMetadataUsesFunctional meta then Just (Cpp.IncludeDirective "functional" True) else Nothing,
           if cppModuleMetadataUsesTypeTraits meta then Just (Cpp.IncludeDirective "type_traits" True) else Nothing]
 
+    forwardDeclarationsForDefs env defs = Y.catMaybes (toDecl <$> defs)
+      where
+        toDecl def = case def of
+          DefinitionType name typ -> case stripType typ of
+            TypeRecord _ -> Just $ Cpp.DeclarationClass $
+                  Cpp.ClassDeclaration
+                    (Cpp.ClassSpecifier Cpp.ClassKeyStruct (encodeName False CaseConventionPascal env name) [])
+                    Nothing
+            _ -> Nothing
+          _ -> Nothing
+
 encodeRecordType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph Cpp.Declaration
 encodeRecordType env name (RowType _ tfields) comment = do
-    cppFields <- CM.mapM (encodeFieldType env) tfields
+    -- Get field declarations for member variables
+    cppFields <- CM.mapM (encodeFieldType env False) tfields
+
+    -- Generate constructor parameters in the monadic context
+    constructorParams <- createParameters tfields
+
     return $ Cpp.DeclarationClass $
       Cpp.ClassDeclaration
         (Cpp.ClassSpecifier Cpp.ClassKeyStruct (encodeName False CaseConventionPascal env name) [])
-        (Cpp.ClassBody $ publicSection cppFields ++ createStructMethods cppFields)
+        (Just $ Cpp.ClassBody $ publicSection cppFields ++ createStructMethods cppFields constructorParams)
   where
-    publicSection cppFields = [
-      Cpp.MemberSpecificationAccessLabel Cpp.AccessSpecifierPublic] ++
+    publicSection cppFields =
       [Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable field | field <- cppFields]
 
-    -- Add default constructor, destructor, copy/move operations if needed
-    createStructMethods fields = [
+    createStructMethods fields params = [
       Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationConstructor $
         Cpp.ConstructorDeclaration
           (encodeName False CaseConventionPascal env name)
-          []  -- No parameters for default constructor
-          []  -- No initializers
-          (createCompoundStmt []),
-
-      Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationConstructor $
-        Cpp.ConstructorDeclaration
-          (encodeName False CaseConventionPascal env name)
-          [createParameter (createConstRefType $ createBasicType $ encodeName False CaseConventionPascal env name) "other" Nothing]
-          [Cpp.MemInitializer (fieldVarName field) [createMemberAccessExpr (createIdentifierExpr "other") (fieldVarName field)]
-            | field <- fields]
-          (createCompoundStmt [])]
+          params  -- Use pre-computed parameters
+          [Cpp.MemInitializer
+             (Cpp.variableDeclarationName field)
+             [createInitializerExpr field (Cpp.variableDeclarationName field)]
+           | field <- fields]
+          (Cpp.CompoundStatement [])]
       where
-        fieldVarName (Cpp.VariableDeclaration _ name _ _) = name
+        -- Create initializer expression with std::move for template types
+        createInitializerExpr field paramName =
+          if isTemplateType field
+            then createFunctionCallExpr "std::move" [createIdentifierExpr paramName]  -- Use std::move
+            else createIdentifierExpr paramName  -- Use direct reference
+
+        -- Check if a field has a template type
+        isTemplateType (Cpp.VariableDeclaration (Just typ) _ _ _) =
+          case typ of
+            Cpp.TypeExpressionQualified (Cpp.QualifiedType innerType _) -> isTemplateTypeExpr innerType
+            _ -> isTemplateTypeExpr typ
+
+        isTemplateTypeExpr typ = case typ of
+          Cpp.TypeExpressionTemplate _ -> True  -- Template types like std::optional<T>
+          _ -> False
+
+    createParameters origFields = do
+      let fieldNames = [fname | FieldType fname _ <- origFields]
+      CM.zipWithM createParam fieldNames origFields
+
+    createParam fieldName (FieldType _ ftype) = do
+      paramDecl <- encodeFieldType env True (FieldType fieldName ftype)
+      return $ Cpp.Parameter
+        (variableDeclarationType paramDecl)
+        (variableDeclarationName paramDecl)
+        Nothing
+
+    fieldVarName (Cpp.VariableDeclaration _ name _ _) = name
+
+    variableDeclarationType (Cpp.VariableDeclaration (Just typ) _ _ _) = typ
+
+    variableDeclarationName (Cpp.VariableDeclaration _ name _ _) = name
 
 encodeType :: CppEnvironment -> Type -> Flow Graph Cpp.TypeExpression
 encodeType env typ = case stripType typ of
@@ -276,13 +319,13 @@ encodeType env typ = case stripType typ of
     TypeOptional et -> do
       elemType <- encode et
       return $ createTemplateType "std::optional" [elemType]
-    TypeRecord rt -> pure $ createBasicType $ unName $ rowTypeTypeName rt
+    TypeRecord rt -> pure $ createTypeReference env $ rowTypeTypeName rt
     TypeSet et -> do
       elemType <- encode et
       return $ createTemplateType "std::set" [elemType]
-    TypeUnion rt -> pure $ createBasicType $ unName $ rowTypeTypeName rt
-    TypeVariable name -> pure $ createBasicType $ unName name
-    TypeWrap (WrappedType name _) -> pure $ createBasicType $ unName name
+    TypeUnion rt -> pure $ createTypeReference env $ rowTypeTypeName rt
+    TypeVariable name -> pure $ createTypeReference env name
+    TypeWrap (WrappedType name _) -> pure $ createTypeReference env name
     _ -> dflt
   where
     encode = encodeType env
@@ -321,7 +364,7 @@ encodeUnionType env name rt@(RowType _ tfields) comment =
 encodeVariantType :: CppEnvironment -> Name -> [FieldType] -> Maybe String -> Flow Graph [Cpp.Declaration]
 encodeVariantType env name tfields comment = do
   -- Encode each field type
-  variantTypes <- CM.mapM (encodeType env . fieldType) tfields
+  variantTypes <- CM.mapM (encodeType env . fieldTypeType) tfields
 
   -- Create a typedef declaration for the variant
   let typedefDecl = Cpp.DeclarationTypedef $
@@ -330,28 +373,8 @@ encodeVariantType env name tfields comment = do
           (createTemplateType "std::variant" variantTypes)
           True  -- Use "using" syntax instead of "typedef"
 
-  -- Create helper function to identify the active type in a variant
-  let helperFunc = Cpp.DeclarationFunction $
-        Cpp.FunctionDeclaration
-          (Cpp.TypeExpressionBasic Cpp.BasicTypeString)
-          ("get" ++ encodeName False CaseConventionPascal env name ++ "Type")
-          [Cpp.Parameter
-            (createConstRefType $ createBasicType $ encodeName False CaseConventionPascal env name)
-            "value"
-            Nothing]
-          []
-          (Cpp.FunctionBodyCompound $ Cpp.CompoundStatement [
-            Cpp.StatementJump $ Cpp.JumpStatementReturnValue $
-              createFunctionCallExpr "std::visit" [
-                createLambdaExpr,
-                createIdentifierExpr "value"
-              ]
-          ])
-
-  return [typedefDecl, helperFunc]
+  return [typedefDecl]
   where
-    fieldType (FieldType _ ft) = ft
-
     -- Helper to create a template type like std::variant<T1, T2, ...>
     createTemplateType name args =
       Cpp.TypeExpressionTemplate $
@@ -364,8 +387,8 @@ encodeWrappedType env name typ comment = do
   return $ Cpp.DeclarationClass $
     Cpp.ClassDeclaration
       (Cpp.ClassSpecifier Cpp.ClassKeyStruct className [])
-      (Cpp.ClassBody $ [Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable $
-        Cpp.VariableDeclaration cppType "value" Nothing False,
+      (Just $ Cpp.ClassBody $ [Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable $
+        Cpp.VariableDeclaration (Just cppType) "value" Nothing False,
 
        -- Simple constructor
        Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationConstructor $

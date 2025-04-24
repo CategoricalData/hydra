@@ -99,7 +99,7 @@ _TypedefDeclaration_isUsing = (Core.Name "isUsing")
 data ClassDeclaration = 
   ClassDeclaration {
     classDeclarationSpecifier :: ClassSpecifier,
-    classDeclarationBody :: ClassBody}
+    classDeclarationBody :: (Maybe ClassBody)}
   deriving (Eq, Ord, Read, Show)
 
 _ClassDeclaration = (Core.Name "hydra.ext.cpp.syntax.ClassDeclaration")
@@ -125,12 +125,15 @@ _ClassSpecifier_inheritance = (Core.Name "inheritance")
 
 data ClassKey = 
   ClassKeyClass  |
+  ClassKeyEnumClass  |
   ClassKeyStruct 
   deriving (Eq, Ord, Read, Show)
 
 _ClassKey = (Core.Name "hydra.ext.cpp.syntax.ClassKey")
 
 _ClassKey_class = (Core.Name "class")
+
+_ClassKey_enumClass = (Core.Name "enumClass")
 
 _ClassKey_struct = (Core.Name "struct")
 
@@ -251,8 +254,8 @@ data FunctionSpecifier =
   FunctionSpecifierConst  |
   FunctionSpecifierNoexcept  |
   FunctionSpecifierOverride  |
-  FunctionSpecifierFinal |
-  FunctionSpecifierStatic
+  FunctionSpecifierFinal  |
+  FunctionSpecifierStatic 
   deriving (Eq, Ord, Read, Show)
 
 _FunctionSpecifier = (Core.Name "hydra.ext.cpp.syntax.FunctionSpecifier")
@@ -264,6 +267,8 @@ _FunctionSpecifier_noexcept = (Core.Name "noexcept")
 _FunctionSpecifier_override = (Core.Name "override")
 
 _FunctionSpecifier_final = (Core.Name "final")
+
+_FunctionSpecifier_static = (Core.Name "static")
 
 data Parameter = 
   Parameter {
@@ -293,7 +298,7 @@ _FunctionBody_declaration = (Core.Name "declaration")
 
 data VariableDeclaration = 
   VariableDeclaration {
-    variableDeclarationType :: TypeExpression,
+    variableDeclarationType :: (Maybe TypeExpression),
     variableDeclarationName :: String,
     variableDeclarationInitializer :: (Maybe Expression),
     variableDeclarationIsAuto :: Bool}
@@ -1127,6 +1132,7 @@ data Statement =
   StatementLabeled LabeledStatement |
   StatementCompound CompoundStatement |
   StatementSelection SelectionStatement |
+  StatementSwitch SwitchStatement |
   StatementIteration IterationStatement |
   StatementJump JumpStatement |
   StatementDeclaration VariableDeclaration |
@@ -1140,6 +1146,8 @@ _Statement_labeled = (Core.Name "labeled")
 _Statement_compound = (Core.Name "compound")
 
 _Statement_selection = (Core.Name "selection")
+
+_Statement_switch = (Core.Name "switch")
 
 _Statement_iteration = (Core.Name "iteration")
 
@@ -1182,6 +1190,41 @@ _SelectionStatement_condition = (Core.Name "condition")
 _SelectionStatement_thenBranch = (Core.Name "thenBranch")
 
 _SelectionStatement_elseBranch = (Core.Name "elseBranch")
+
+data SwitchStatement = 
+  SwitchStatement {
+    switchStatementValue :: Expression,
+    switchStatementCases :: [CaseStatement]}
+  deriving (Eq, Ord, Read, Show)
+
+_SwitchStatement = (Core.Name "hydra.ext.cpp.syntax.SwitchStatement")
+
+_SwitchStatement_value = (Core.Name "value")
+
+_SwitchStatement_cases = (Core.Name "cases")
+
+data CaseStatement = 
+  CaseStatementCase CaseValue |
+  CaseStatementDefault Statement
+  deriving (Eq, Ord, Read, Show)
+
+_CaseStatement = (Core.Name "hydra.ext.cpp.syntax.CaseStatement")
+
+_CaseStatement_case = (Core.Name "case")
+
+_CaseStatement_default = (Core.Name "default")
+
+data CaseValue = 
+  CaseValue {
+    caseValueValue :: Expression,
+    caseValueStatement :: Statement}
+  deriving (Eq, Ord, Read, Show)
+
+_CaseValue = (Core.Name "hydra.ext.cpp.syntax.CaseValue")
+
+_CaseValue_value = (Core.Name "value")
+
+_CaseValue_statement = (Core.Name "statement")
 
 data IterationStatement = 
   IterationStatementWhile WhileStatement |
@@ -1326,7 +1369,7 @@ data BasicType =
   BasicTypeFloat  |
   BasicTypeDouble  |
   BasicTypeString  |
-  BasicTypeAuto |
+  BasicTypeAuto  |
   BasicTypeNamed String
   deriving (Eq, Ord, Read, Show)
 
@@ -1345,6 +1388,8 @@ _BasicType_float = (Core.Name "float")
 _BasicType_double = (Core.Name "double")
 
 _BasicType_string = (Core.Name "string")
+
+_BasicType_auto = (Core.Name "auto")
 
 _BasicType_named = (Core.Name "named")
 

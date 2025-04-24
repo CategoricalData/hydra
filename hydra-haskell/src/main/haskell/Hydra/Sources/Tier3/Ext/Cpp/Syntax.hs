@@ -59,7 +59,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
 -- <class-declaration> ::= <class-specifier> <class-body>
       def "ClassDeclaration" $ record [
         "specifier">: cpp "ClassSpecifier",
-        "body">: cpp "ClassBody"],
+        "body">: optional $ cpp "ClassBody"],
 
 -- <class-specifier> ::= <class-key> <identifier> <inheritance-list>
       def "ClassSpecifier" $ record [
@@ -68,7 +68,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "inheritance">: list $ cpp "BaseSpecifier"],
 
 -- <class-key> ::= "class" | "struct"
-      def "ClassKey" $ enum ["class", "struct"],
+      def "ClassKey" $ enum ["class", "enumClass", "struct"],
 
 -- <base-specifier> ::= <access-specifier> <identifier>
       def "BaseSpecifier" $ record [
@@ -132,7 +132,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
 
 -- <variable-declaration> ::= <type-expression> <identifier> <initializer> ";" | "auto" <identifier> <initializer> ";"
       def "VariableDeclaration" $ record [
-        "type">: cpp "TypeExpression",
+        "type">: optional $ cpp "TypeExpression",
         "name">: string,
         "initializer">: optional $ cpp "Expression",
         "isAuto">: boolean],
@@ -444,6 +444,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "labeled">: cpp "LabeledStatement",
         "compound">: cpp "CompoundStatement",
         "selection">: cpp "SelectionStatement",
+        "switch">: cpp "SwitchStatement",
         "iteration">: cpp "IterationStatement",
         "jump">: cpp "JumpStatement",
         "declaration">: cpp "VariableDeclaration",
@@ -462,6 +463,21 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "condition">: cpp "Expression",
         "thenBranch">: cpp "Statement",
         "elseBranch">: optional $ cpp "Statement"],
+
+-- <switch-statement> ::= "switch" "(" <expression> ")" "{" <case-statement>* "}"
+      def "SwitchStatement" $ record [
+        "value">: cpp "Expression",
+        "cases">: list $ cpp "CaseStatement"],
+
+-- <case-statement> ::= "case" <expression> ":" <statement>* | "default" ":" <statement>*
+      def "CaseStatement" $ union [
+        "case">: cpp "CaseValue",
+        "default">: cpp "Statement"],
+
+-- <case-value> ::= <expression> <statement>*
+      def "CaseValue" $ record [
+        "value">: cpp "Expression",
+        "statement">: cpp "Statement"],
 
 -- <iteration-statement> ::= <while-statement> | <do-statement> | <for-statement> | <range-for-statement>
       def "IterationStatement" $ union [
