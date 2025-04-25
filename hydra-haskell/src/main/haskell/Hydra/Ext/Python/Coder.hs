@@ -219,17 +219,17 @@ encodeLiteralType lt = do
 encodeModule :: Module -> Flow Graph Py.Module
 encodeModule mod = do
     defs <- adaptedModuleDefinitions pythonLanguage mod
-    let namespaces = namespacesForDefinitions encodeNamespace (moduleNamespace mod) defs
+    let namespaces = namespacesForDefinitions True encodeNamespace (moduleNamespace mod) defs
 
 --    let def = defs !! 6
 --    fail $ ""
 --      ++ "\n\t defs: " ++ show (L.length defs)
 --      ++ "\n\t namespaces: " ++ show namespaces
---      ++ "\n\t def dep namespaces: " ++ show (definitionDependencyNamespaces defs)
+--      ++ "\n\t def dep namespaces: " ++ show (definitionDependencyNamespaces True defs)
 --      ++ case def of
 --        DefinitionType _ typ -> ""
 --          ++ "\n\t type: " ++ showType typ
---          ++ "\n\t deps: " ++ show (typeDependencyNames typ)
+--          ++ "\n\t deps: " ++ show (typeDependencyNames True typ)
 
     let env = PythonEnvironment {
               pythonEnvironmentNamespaces = namespaces,
@@ -330,7 +330,7 @@ encodeTerm env term = case fullyStripTerm term of
     TermTypeApplication (TypedTerm term1 _) -> encode term1
     TermUnion (Injection tname field) -> do
       rt <- requireUnionType tname
-      if isEnumType rt
+      if isEnumRowType rt
         then return $ projectFromExpression (pyNameToPyExpression $ encodeNameQualified env tname)
           $ encodeEnumValue env $ fieldName field
         else do
@@ -390,7 +390,7 @@ encodeTopLevelTerm env term = if L.length args == 1
     withArg body arg = case fullyStripTerm body of
       TermFunction (FunctionElimination (EliminationUnion (CaseStatement tname dflt cases))) -> do
           rt <- requireUnionType tname
-          let isEnum = isEnumType rt
+          let isEnum = isEnumRowType rt
           let isFull = L.length cases >= L.length (rowTypeFields rt)
           pyArg <- encodeTerm env arg
           pyCases <- CM.mapM (toCaseBlock isEnum) cases
@@ -476,7 +476,7 @@ encodeTypeQuoted env typ = do
     else doubleQuotedString $ printExpr $ PySer.encodeExpression pytype
 
 encodeUnionType :: PythonEnvironment -> Name -> RowType -> Maybe String -> Flow Graph [Py.Statement]
-encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumType rt then asEnum else asUnion
+encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumRowType rt then asEnum else asUnion
   where
     asEnum = do
         vals <- CM.mapM toVal tfields
@@ -605,7 +605,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
               pythonModuleMetadataUsesDataclass = pythonModuleMetadataUsesDataclass meta || not (L.null fields)}
             where
               checkForAnnotated b (FieldType _ ft) = b || hasTypeDescription ft
-          TypeUnion rt@(RowType _ fields) -> if isEnumType rt
+          TypeUnion rt@(RowType _ fields) -> if isEnumRowType rt
               then meta {pythonModuleMetadataUsesEnum = True}
               else meta {
                 pythonModuleMetadataUsesNode = pythonModuleMetadataUsesNode meta || (not $ L.null fields)}
