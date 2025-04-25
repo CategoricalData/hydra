@@ -109,6 +109,11 @@ fieldTypes t = case stripType t of
     toMap fields = M.fromList (toPair <$> fields)
     toPair (FieldType fname ftype) = (fname, ftype)
 
+fullyStripType :: Type -> Type
+fullyStripType typ = case stripType typ of
+  TypeForall (ForallType _ body) -> fullyStripType body
+  t -> t
+
 -- | Checks whether the fields of a 'RowType' are all unit-typed.
 --   A union with such a 'RowType' can be treated as an enum in languages that support enums.
 isEnumRowType :: RowType -> Bool

@@ -255,23 +255,20 @@ encodeModule mod = do
             where
               forwardDecls = if L.length comp < 2
                   then []
-                  else toForwardDecl <$> recordDefs
+                  else toForwardDecl <$> structDefs
                 where
                   toForwardDecl (TypeDefinition name _) = Cpp.DeclarationClass $
                       Cpp.ClassDeclaration
                         (Cpp.ClassSpecifier Cpp.ClassKeyStruct (encodeName False CaseConventionPascal env name) [])
                         Nothing
               typeDecls = Y.catMaybes $ fmap (\d -> M.lookup (typeDefinitionName d) declMap) reorderedDefs
-              reorderedDefs = otherDefs ++ unionDefs ++ recordDefs
+              reorderedDefs = otherDefs ++ usingDefs ++ structDefs
               defs = Y.catMaybes $ fmap (\n -> M.lookup n typeDefMap) comp
-              (unionDefs, nonUnionDefs) = L.partition isUnion defs
+              (usingDefs, nonUsingDefs) = L.partition isUnion defs
                 where
                   isUnion (TypeDefinition _ typ) = isEnumType typ
                     || (useStdVariants && typeVariant (stripType typ) == TypeVariantUnion)
-              (recordDefs, otherDefs) = L.partition isRecord nonUnionDefs
-                where
-                  isRecord (TypeDefinition _ typ) = typeVariant (stripType typ) == TypeVariantRecord
-                    || (not useStdVariants && not (isEnumType typ) && typeVariant (stripType typ) == TypeVariantUnion)
+              (structDefs, otherDefs) = L.partition (isStructType. typeDefinitionType) nonUsingDefs
 
 encodeRecordType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph Cpp.Declaration
 encodeRecordType env name (RowType _ tfields) comment = do
@@ -349,17 +346,29 @@ encodeType env typ = case stripType typ of
     TypeOptional et -> do
       elemType <- encode et
       return $ createTemplateType "std::optional" [elemType]
-    TypeRecord rt -> pure $ createTypeReference env $ rowTypeTypeName rt
+    TypeRecord rt -> typeref typ $ rowTypeTypeName rt
     TypeSet et -> do
       elemType <- encode et
       return $ createTemplateType "std::set" [elemType]
-    TypeUnion rt -> pure $ createTypeReference env $ rowTypeTypeName rt
-    TypeVariable name -> pure $ createTypeReference env name
-    TypeWrap (WrappedType name _) -> pure $ createTypeReference env name
+    TypeUnion rt -> typeref typ $ rowTypeTypeName rt
+    TypeVariable name -> do
+      t <- (elementTerm <$> requireElement name) >>= coreDecodeType
+      typeref t name
+    TypeWrap (WrappedType name _) -> typeref typ name
     _ -> dflt
   where
     encode = encodeType env
     dflt = fail $ "Unsupported type: " ++ show (stripType typ)
+    typeref t name = pure $ createTypeReference (isStructType t) env name
+
+encodeTypeAlias :: CppEnvironment -> Name -> Type -> Maybe String -> Flow Graph Cpp.Declaration
+encodeTypeAlias env name typ comment = do
+  cppType <- encodeType env typ
+  return $ Cpp.DeclarationTypedef $
+    Cpp.TypedefDeclaration
+      (encodeName False CaseConventionPascal env name)
+      cppType
+      True -- Use "using" syntax instead of "typedef"
 
 encodeTypeDefinition :: CppEnvironment -> Name -> Type -> Maybe String -> Flow Graph [Cpp.Declaration]
 encodeTypeDefinition env name typ comment = encode env typ
@@ -374,15 +383,6 @@ encodeTypeDefinition env name typ comment = encode env typ
       TypeWrap (WrappedType _ t) -> single <$> encodeWrappedType env name t comment
       t -> single <$> encodeTypeAlias env name t comment
     single decl = [decl]
-
-encodeTypeAlias :: CppEnvironment -> Name -> Type -> Maybe String -> Flow Graph Cpp.Declaration
-encodeTypeAlias env name typ comment = do
-  cppType <- encodeType env typ
-  return $ Cpp.DeclarationTypedef $
-    Cpp.TypedefDeclaration
-      (encodeName False CaseConventionPascal env name)
-      cppType
-      True -- Use "using" syntax instead of "typedef"
 
 encodeUnionType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph [Cpp.Declaration]
 encodeUnionType env name rt@(RowType _ tfields) comment =
@@ -498,7 +498,7 @@ gatherMetadata defs = L.foldl addDef start defs
       TypeOptional _ -> meta {cppModuleMetadataUsesOptional = True}
       TypeRecord (RowType _ fields) -> L.foldl (checkFieldTypes) meta fields
       TypeSet _ -> meta {cppModuleMetadataUsesSet = True}
-      TypeUnion rt -> if isEnumType rt
+      TypeUnion rt -> if isEnumRowType rt
         then meta
         else meta {
           cppModuleMetadataUsesVariant = True,
@@ -514,6 +514,6 @@ gatherMetadata defs = L.foldl addDef start defs
     -- Check each field in a record type for additional metadata
     checkFieldTypes meta (FieldType _ ft) = extendMetaForType meta ft
 
-    -- Check if a row type is an enum (all unit fields)
-    isEnumType (RowType _ fields) = all isUnitField fields
-      where isUnitField (FieldType _ ft) = isUnitType (stripType ft)
+isStructType :: Type -> Bool
+isStructType typ = typeVariant (fullyStripType typ) == TypeVariantRecord
+  || (not useStdVariants && not (isEnumType typ) && typeVariant (fullyStripType typ) == TypeVariantUnion)
