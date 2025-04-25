@@ -206,17 +206,13 @@ encodeModule mod = do
     wrapWithNamespace ns decls = [Cpp.DeclarationNamespace $
       Cpp.NamespaceDeclaration (encodeNamespace ns) decls]
 
-    includes namespaces meta = versionIncludes ++ standardIncludes ++ containerIncludes ++ domainIncludes
+    includes namespaces meta = fixedIncludes ++ conditionalIncludes ++ domainIncludes
       where
-        versionIncludes = [
-          Cpp.IncludeDirective "version" True]
+        fixedIncludes = [
+          Cpp.IncludeDirective "string" True, -- TODO: make conditional
+          Cpp.IncludeDirective "cstdint" True] -- TODO: make conditional
 
-        standardIncludes = [
-          Cpp.IncludeDirective "iostream" True,
-          Cpp.IncludeDirective "string" True,
-          Cpp.IncludeDirective "cstdint" True]
-
-        containerIncludes = Y.catMaybes [
+        conditionalIncludes = Y.catMaybes [
           if cppModuleMetadataUsesVector meta then Just (Cpp.IncludeDirective "vector" True) else Nothing,
           if cppModuleMetadataUsesMap meta then Just (Cpp.IncludeDirective "map" True) else Nothing,
           if cppModuleMetadataUsesSet meta then Just (Cpp.IncludeDirective "set" True) else Nothing,
@@ -496,23 +492,22 @@ gatherMetadata defs = L.foldl addDef start defs
         LiteralTypeFloat _ -> meta {cppModuleMetadataUsesIOStream = True}
         _ -> meta
       TypeOptional _ -> meta {cppModuleMetadataUsesOptional = True}
-      TypeRecord (RowType _ fields) -> L.foldl (checkFieldTypes) meta fields
+      TypeRecord _ -> meta {cppModuleMetadataUsesMemory = True}
       TypeSet _ -> meta {cppModuleMetadataUsesSet = True}
       TypeUnion rt -> if isEnumRowType rt
         then meta
-        else meta {
+        else if useStdVariants
+        then meta {
           cppModuleMetadataUsesVariant = True,
           cppModuleMetadataUsesTypeTraits = True,
           cppModuleMetadataUsesFunctional = True}
+        else meta {cppModuleMetadataUsesMemory = True}
       TypeVariable name -> meta {
         cppModuleMetadataUsesTypeTraits = True,
         cppModuleMetadataTypeVariables = S.insert name (cppModuleMetadataTypeVariables meta)}
       TypeWrap _ -> meta {cppModuleMetadataUsesMemory = True}
       TypeApplication _ -> meta {cppModuleMetadataUsesTypeTraits = True}
       _ -> meta
-
-    -- Check each field in a record type for additional metadata
-    checkFieldTypes meta (FieldType _ ft) = extendMetaForType meta ft
 
 isStructType :: Type -> Bool
 isStructType typ = typeVariant (fullyStripType typ) == TypeVariantRecord
