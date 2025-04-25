@@ -15,8 +15,13 @@ import qualified Data.Set   as S
 import qualified Data.Maybe as Y
 
 
-createTypeReference :: CppEnvironment -> Name -> Cpp.TypeExpression
-createTypeReference env name = Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $ encodeName True CaseConventionPascal env name
+createTypeReference :: Bool -> CppEnvironment -> Name -> Cpp.TypeExpression
+createTypeReference isPointer env name = if isPointer
+       then createTemplateType "std::shared_ptr" [constType]
+       else baseType
+  where
+    baseType = Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $ encodeName True CaseConventionPascal env name
+    constType = Cpp.TypeExpressionQualified $ Cpp.QualifiedType baseType Cpp.TypeQualifierConst
 
 -- | Encode an enum value with appropriate naming convention
 encodeEnumValue :: CppEnvironment -> Name -> String

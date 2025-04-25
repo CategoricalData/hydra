@@ -189,7 +189,7 @@ encodeQualifiedType (Cpp.QualifiedType baseType qualifier) =
 
 encodeTemplateType :: Cpp.TemplateType -> A.Expr
 encodeTemplateType (Cpp.TemplateType name args) =
-  spaceSep [
+  noSep [
     cst name,
     angleBracesList inlineStyle $ encodeTemplateArgument <$> args]
 
