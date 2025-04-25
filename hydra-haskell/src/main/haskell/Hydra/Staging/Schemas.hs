@@ -48,12 +48,12 @@ data Namespaces n = Namespaces {
   namespacesFocus :: (Namespace, n),
   namespacesMapping :: M.Map Namespace n} deriving Show
 
-definitionDependencyNamespaces :: [Definition] -> S.Set Namespace
-definitionDependencyNamespaces defs = S.fromList $ Y.catMaybes (namespaceOf <$> S.toList allNames)
+definitionDependencyNamespaces :: Bool -> [Definition] -> S.Set Namespace
+definitionDependencyNamespaces excludeUnit defs = S.fromList $ Y.catMaybes (namespaceOf <$> S.toList allNames)
   where
     allNames = S.unions (defNames <$> defs)
     defNames def = case def of
-        DefinitionType (TypeDefinition _ typ) -> typeDependencyNames True typ
+        DefinitionType (TypeDefinition _ typ) -> typeDependencyNames True excludeUnit typ
         DefinitionTerm (TermDefinition _ term _) -> termDependencyNames True True True term
 
 -- | Find dependency namespaces in all of a set of terms.
@@ -64,7 +64,7 @@ dependencyNamespaces withVars withPrims withNoms withSchema els = do
   where
     depNames el = do
         typeNames <- if isEncodedType (fullyStripTerm term)
-          then typeDependencyNames True <$> coreDecodeType term
+          then typeDependencyNames True True <$> coreDecodeType term
           else pure S.empty
 
         return $ S.unions [dataNames, schemaNames, typeNames]
@@ -74,7 +74,7 @@ dependencyNamespaces withVars withPrims withNoms withSchema els = do
         schemaNames = if withSchema
           then case elementType el of
             Nothing -> S.empty
-            Just ts -> typeDependencyNames True (typeSchemeType ts)
+            Just ts -> typeDependencyNames True True (typeSchemeType ts)
           else S.empty
 
 dereferenceType :: Name -> Flow Graph (Maybe Type)
@@ -111,8 +111,13 @@ fieldTypes t = case stripType t of
 
 -- | Checks whether the fields of a 'RowType' are all unit-typed.
 --   A union with such a 'RowType' can be treated as an enum in languages that support enums.
-isEnumType :: RowType -> Bool
-isEnumType (RowType _ tfields) = L.foldl (\b f -> b && isUnitType (fieldTypeType f)) True tfields
+isEnumRowType :: RowType -> Bool
+isEnumRowType (RowType _ tfields) = L.foldl (\b f -> b && isUnitType (fieldTypeType f)) True tfields
+
+isEnumType :: Type -> Bool
+isEnumType typ = case stripType typ of
+  TypeUnion rt -> isEnumRowType rt
+  _ -> False
 
 isSerializable :: Element -> Flow Graph Bool
 isSerializable el = do
@@ -128,10 +133,10 @@ moduleDependencyNamespaces withVars withPrims withNoms withSchema mod =
   S.delete (moduleNamespace mod) <$> (dependencyNamespaces withVars withPrims withNoms withSchema $
     (moduleElements mod))
 
-namespacesForDefinitions :: (Namespace -> a) -> Namespace -> [Definition] -> Namespaces a
-namespacesForDefinitions encodeNamespace focusNs defs = Namespaces (toPair focusNs) $ M.fromList (toPair <$> S.toList nss)
+namespacesForDefinitions :: Bool -> (Namespace -> a) -> Namespace -> [Definition] -> Namespaces a
+namespacesForDefinitions excludeUnit encodeNamespace focusNs defs = Namespaces (toPair focusNs) $ M.fromList (toPair <$> S.toList nss)
   where
-    nss = S.delete focusNs $ definitionDependencyNamespaces defs
+    nss = S.delete focusNs $ definitionDependencyNamespaces excludeUnit defs
     toPair ns = (ns, encodeNamespace ns)
 
 requireRecordType :: Name -> Flow Graph RowType
@@ -204,7 +209,7 @@ typeDependencies withSchema transform name = deps (S.fromList [name]) M.empty
         else do
           pairs <- CM.mapM toPair $ S.toList seeds
           let newNames = M.union names (M.fromList pairs)
-          let refs = L.foldl S.union S.empty (typeDependencyNames withSchema <$> (snd <$> pairs))
+          let refs = L.foldl S.union S.empty (typeDependencyNames withSchema True <$> (snd <$> pairs))
           let visited = S.fromList $ M.keys names
           let newSeeds = S.difference refs visited
           deps newSeeds newNames

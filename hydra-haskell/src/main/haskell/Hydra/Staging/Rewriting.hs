@@ -437,17 +437,16 @@ topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames False True True $ elementTerm e)
 
-typeDependencyNames :: Bool -> Type -> S.Set Name
-typeDependencyNames withSchema typ = if withSchema
-  then S.union (freeVariablesInType typ) (typeNamesInType typ)
+typeDependencyNames :: Bool -> Bool -> Type -> S.Set Name
+typeDependencyNames withSchema excludeUnit typ = if withSchema
+  then S.union (freeVariablesInType typ) (typeNamesInType excludeUnit typ)
   else freeVariablesInType typ
 
-typeNamesInType :: Type -> S.Set Name
-typeNamesInType = foldOverType TraversalOrderPre addNames S.empty
+typeNamesInType :: Bool -> Type -> S.Set Name
+typeNamesInType excludeUnit = foldOverType TraversalOrderPre addNames S.empty
   where
     addNames names typ = case typ of
-      -- TODO: it is *usually* helpful to exclude the unit type, although this may not *always* be appropriate.
-      TypeRecord (RowType tname _) -> if tname /= _Unit
+      TypeRecord (RowType tname _) -> if (not excludeUnit) || tname /= _Unit
         then S.insert tname names
         else names
       TypeUnion (RowType tname _) -> S.insert tname names
