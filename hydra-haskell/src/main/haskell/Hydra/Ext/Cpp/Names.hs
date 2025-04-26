@@ -23,6 +23,10 @@ createTypeReference isPointer env name = if isPointer
     baseType = Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $ encodeName True CaseConventionPascal env name
     constType = Cpp.TypeExpressionQualified $ Cpp.QualifiedType baseType Cpp.TypeQualifierConst
 
+--createTypeReference :: Bool -> CppEnvironment -> Name -> Cpp.TypeExpression
+--createTypeReference isClass env name =
+--  Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $ encodeName False CaseConventionPascal env name
+
 -- | Encode an enum value with appropriate naming convention
 encodeEnumValue :: CppEnvironment -> Name -> String
 encodeEnumValue = encodeName False CaseConventionUpperSnake

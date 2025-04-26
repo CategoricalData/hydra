@@ -54,7 +54,8 @@ data Declaration =
   DeclarationFunction FunctionDeclaration |
   DeclarationVariable VariableDeclaration |
   DeclarationTypedef TypedefDeclaration |
-  DeclarationNamespace NamespaceDeclaration
+  DeclarationNamespace NamespaceDeclaration |
+  DeclarationTemplate TemplateDeclaration
   deriving (Eq, Ord, Read, Show)
 
 _Declaration = (Core.Name "hydra.ext.cpp.syntax.Declaration")
@@ -68,6 +69,8 @@ _Declaration_variable = (Core.Name "variable")
 _Declaration_typedef = (Core.Name "typedef")
 
 _Declaration_namespace = (Core.Name "namespace")
+
+_Declaration_template = (Core.Name "template")
 
 data NamespaceDeclaration = 
   NamespaceDeclaration {
@@ -107,6 +110,21 @@ _ClassDeclaration = (Core.Name "hydra.ext.cpp.syntax.ClassDeclaration")
 _ClassDeclaration_specifier = (Core.Name "specifier")
 
 _ClassDeclaration_body = (Core.Name "body")
+
+data TemplateDeclaration = 
+  TemplateDeclaration {
+    templateDeclarationInline :: Bool,
+    templateDeclarationParameters :: [String],
+    templateDeclarationDeclaration :: Declaration}
+  deriving (Eq, Ord, Read, Show)
+
+_TemplateDeclaration = (Core.Name "hydra.ext.cpp.syntax.TemplateDeclaration")
+
+_TemplateDeclaration_inline = (Core.Name "inline")
+
+_TemplateDeclaration_parameters = (Core.Name "parameters")
+
+_TemplateDeclaration_declaration = (Core.Name "declaration")
 
 data ClassSpecifier = 
   ClassSpecifier {
@@ -219,26 +237,35 @@ _MemInitializer_arguments = (Core.Name "arguments")
 
 data DestructorDeclaration = 
   DestructorDeclaration {
+    destructorDeclarationPrefixSpecifiers :: [FunctionSpecifierPrefix],
     destructorDeclarationName :: String,
+    destructorDeclarationSuffixSpecifiers :: [FunctionSpecifierSuffix],
     destructorDeclarationBody :: CompoundStatement}
   deriving (Eq, Ord, Read, Show)
 
 _DestructorDeclaration = (Core.Name "hydra.ext.cpp.syntax.DestructorDeclaration")
 
+_DestructorDeclaration_prefixSpecifiers = (Core.Name "prefixSpecifiers")
+
 _DestructorDeclaration_name = (Core.Name "name")
+
+_DestructorDeclaration_suffixSpecifiers = (Core.Name "suffixSpecifiers")
 
 _DestructorDeclaration_body = (Core.Name "body")
 
 data FunctionDeclaration = 
   FunctionDeclaration {
+    functionDeclarationPrefixSpecifiers :: [FunctionSpecifierPrefix],
     functionDeclarationReturnType :: TypeExpression,
     functionDeclarationName :: String,
     functionDeclarationParameters :: [Parameter],
-    functionDeclarationSpecifiers :: [FunctionSpecifier],
+    functionDeclarationSuffixSpecifiers :: [FunctionSpecifierSuffix],
     functionDeclarationBody :: FunctionBody}
   deriving (Eq, Ord, Read, Show)
 
 _FunctionDeclaration = (Core.Name "hydra.ext.cpp.syntax.FunctionDeclaration")
+
+_FunctionDeclaration_prefixSpecifiers = (Core.Name "prefixSpecifiers")
 
 _FunctionDeclaration_returnType = (Core.Name "returnType")
 
@@ -246,29 +273,40 @@ _FunctionDeclaration_name = (Core.Name "name")
 
 _FunctionDeclaration_parameters = (Core.Name "parameters")
 
-_FunctionDeclaration_specifiers = (Core.Name "specifiers")
+_FunctionDeclaration_suffixSpecifiers = (Core.Name "suffixSpecifiers")
 
 _FunctionDeclaration_body = (Core.Name "body")
 
-data FunctionSpecifier = 
-  FunctionSpecifierConst  |
-  FunctionSpecifierNoexcept  |
-  FunctionSpecifierOverride  |
-  FunctionSpecifierFinal  |
-  FunctionSpecifierStatic 
+data FunctionSpecifierPrefix = 
+  FunctionSpecifierPrefixVirtual  |
+  FunctionSpecifierPrefixStatic 
   deriving (Eq, Ord, Read, Show)
 
-_FunctionSpecifier = (Core.Name "hydra.ext.cpp.syntax.FunctionSpecifier")
+_FunctionSpecifierPrefix = (Core.Name "hydra.ext.cpp.syntax.FunctionSpecifierPrefix")
 
-_FunctionSpecifier_const = (Core.Name "const")
+_FunctionSpecifierPrefix_virtual = (Core.Name "virtual")
 
-_FunctionSpecifier_noexcept = (Core.Name "noexcept")
+_FunctionSpecifierPrefix_static = (Core.Name "static")
 
-_FunctionSpecifier_override = (Core.Name "override")
+data FunctionSpecifierSuffix = 
+  FunctionSpecifierSuffixConst  |
+  FunctionSpecifierSuffixNoexcept  |
+  FunctionSpecifierSuffixOverride  |
+  FunctionSpecifierSuffixFinal  |
+  FunctionSpecifierSuffixPure 
+  deriving (Eq, Ord, Read, Show)
 
-_FunctionSpecifier_final = (Core.Name "final")
+_FunctionSpecifierSuffix = (Core.Name "hydra.ext.cpp.syntax.FunctionSpecifierSuffix")
 
-_FunctionSpecifier_static = (Core.Name "static")
+_FunctionSpecifierSuffix_const = (Core.Name "const")
+
+_FunctionSpecifierSuffix_noexcept = (Core.Name "noexcept")
+
+_FunctionSpecifierSuffix_override = (Core.Name "override")
+
+_FunctionSpecifierSuffix_final = (Core.Name "final")
+
+_FunctionSpecifierSuffix_pure = (Core.Name "pure")
 
 data Parameter = 
   Parameter {

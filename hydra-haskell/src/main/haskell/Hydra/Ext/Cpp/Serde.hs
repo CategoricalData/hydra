@@ -29,6 +29,7 @@ encodeDeclaration d = case d of
   Cpp.DeclarationVariable v -> encodeVariableDeclaration False v
   Cpp.DeclarationTypedef t -> encodeTypedefDeclaration t
   Cpp.DeclarationNamespace n -> encodeNamespaceDeclaration n
+  Cpp.DeclarationTemplate t -> encodeTemplateDeclaration t
 
 encodeNamespaceDeclaration :: Cpp.NamespaceDeclaration -> A.Expr
 encodeNamespaceDeclaration (Cpp.NamespaceDeclaration name decls) =
@@ -109,28 +110,37 @@ encodeMemInitializer (Cpp.MemInitializer name args) =
     parens $ commaSep inlineStyle $ encodeExpression <$> args]
 
 encodeDestructorDeclaration :: Cpp.DestructorDeclaration -> A.Expr
-encodeDestructorDeclaration (Cpp.DestructorDeclaration name body) =
+encodeDestructorDeclaration (Cpp.DestructorDeclaration prefixSpecs name suffixSpecs body) =
   newlineSep [
-    spaceSep [cst $ "~" ++ name, parens $ cst ""],
+    spaceSep $
+      fmap encodeFunctionSpecifierPrefix prefixSpecs ++ [
+        cst $ "~" ++ name,
+        parens $ cst ""] ++
+      fmap encodeFunctionSpecifierSuffix suffixSpecs,
     encodeCompoundStatement body]
 
--- Function-related encoders
 encodeFunctionDeclaration :: Cpp.FunctionDeclaration -> A.Expr
-encodeFunctionDeclaration (Cpp.FunctionDeclaration retType name params specs body) =
+encodeFunctionDeclaration (Cpp.FunctionDeclaration prefixSpecs retType name params suffixSpecs body) =
   spaceSep $
-    (encodeFunctionSpecifier <$> specs) ++ [
+    fmap encodeFunctionSpecifierPrefix prefixSpecs ++ [
       encodeTypeExpression retType,
       cst name,
-      parens $ commaSep inlineStyle $ encodeParameter <$> params,
+      parens $ commaSep inlineStyle $ fmap encodeParameter params] ++
+    fmap encodeFunctionSpecifierSuffix suffixSpecs ++ [
       encodeFunctionBody body]
 
-encodeFunctionSpecifier :: Cpp.FunctionSpecifier -> A.Expr
-encodeFunctionSpecifier s = case s of
-  Cpp.FunctionSpecifierConst -> cst "const"
-  Cpp.FunctionSpecifierNoexcept -> cst "noexcept"
-  Cpp.FunctionSpecifierOverride -> cst "override"
-  Cpp.FunctionSpecifierFinal -> cst "final"
-  Cpp.FunctionSpecifierStatic -> cst "static"
+encodeFunctionSpecifierPrefix :: Cpp.FunctionSpecifierPrefix -> A.Expr
+encodeFunctionSpecifierPrefix s = case s of
+  Cpp.FunctionSpecifierPrefixVirtual -> cst "virtual"
+  Cpp.FunctionSpecifierPrefixStatic  -> cst "static"
+
+encodeFunctionSpecifierSuffix :: Cpp.FunctionSpecifierSuffix -> A.Expr
+encodeFunctionSpecifierSuffix s = case s of
+  Cpp.FunctionSpecifierSuffixConst    -> cst "const"
+  Cpp.FunctionSpecifierSuffixNoexcept -> cst "noexcept"
+  Cpp.FunctionSpecifierSuffixOverride -> cst "override"
+  Cpp.FunctionSpecifierSuffixFinal    -> cst "final"
+  Cpp.FunctionSpecifierSuffixPure     -> cst "= 0"
 
 encodeParameter :: Cpp.Parameter -> A.Expr
 encodeParameter (Cpp.Parameter typ name defaultVal) =
@@ -186,6 +196,14 @@ encodeQualifiedType (Cpp.QualifiedType baseType qualifier) =
     Cpp.TypeQualifierLvalueRef -> noSep [encodeTypeExpression baseType, cst "&"]
     Cpp.TypeQualifierRvalueRef -> noSep [encodeTypeExpression baseType, cst "&&"]
     Cpp.TypeQualifierPointer -> noSep [encodeTypeExpression baseType, cst "*"]
+
+encodeTemplateDeclaration :: Cpp.TemplateDeclaration -> A.Expr
+encodeTemplateDeclaration (Cpp.TemplateDeclaration inline params declaration) =
+  (if inline then spaceSep else newlineSep) [
+    noSep [
+      cst "template",
+      angleBracesList inlineStyle $ cst <$> params],
+    encodeDeclaration declaration]
 
 encodeTemplateType :: Cpp.TemplateType -> A.Expr
 encodeTemplateType (Cpp.TemplateType name args) =

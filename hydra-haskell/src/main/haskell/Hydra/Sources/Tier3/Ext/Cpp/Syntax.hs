@@ -37,13 +37,14 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "name">: string,
         "isSystem">: boolean],
 
--- <declaration> ::= <class-declaration> | <function-declaration> | <variable-declaration> | <typedef-declaration> | <namespace-declaration>
+-- <declaration> ::= <class-declaration> | <function-declaration> | <variable-declaration> | <typedef-declaration> | <namespace-declaration> | <template-declaration>
       def "Declaration" $ union [
         "class">: cpp "ClassDeclaration",
         "function">: cpp "FunctionDeclaration",
         "variable">: cpp "VariableDeclaration",
         "typedef">: cpp "TypedefDeclaration",
-        "namespace">: cpp "NamespaceDeclaration"],
+        "namespace">: cpp "NamespaceDeclaration",
+        "template">: cpp "TemplateDeclaration"],
 
 -- <namespace-declaration> ::= "namespace" <identifier> "{" <declarations> "}" ";"
       def "NamespaceDeclaration" $ record [
@@ -60,6 +61,12 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
       def "ClassDeclaration" $ record [
         "specifier">: cpp "ClassSpecifier",
         "body">: optional $ cpp "ClassBody"],
+
+-- <template-declaration> ::= "template" "<" "typename" <identifier> ("," "typename" <identifier>)* ">" <declaration>
+      def "TemplateDeclaration" $ record [
+        "inline">: boolean,
+        "parameters">: list string,
+        "declaration">: cpp "Declaration"],
 
 -- <class-specifier> ::= <class-key> <identifier> <inheritance-list>
       def "ClassSpecifier" $ record [
@@ -103,21 +110,27 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "name">: string,
         "arguments">: list $ cpp "Expression"],
 
--- <destructor-declaration> ::= "~" <identifier> "(" ")" <function-body>
+-- <destructor-declaration> ::= <prefix-specifiers> "~" <identifier> "(" ")" <suffix-specifiers> <function-body>
       def "DestructorDeclaration" $ record [
-        "name">: string,
-        "body">: cpp "CompoundStatement"],
+        "prefixSpecifiers" >: list (cpp "FunctionSpecifierPrefix"),
+        "name" >: string,
+        "suffixSpecifiers" >: list (cpp "FunctionSpecifierSuffix"),
+        "body" >: cpp "CompoundStatement"],
 
--- <function-declaration> ::= <type-expression> <identifier> "(" <parameter-list> ")" <function-specifiers> <function-body>
+-- <function-declaration> ::= <prefix-specifiers> <type-expression> <identifier> "(" <parameter-list> ")" <suffix-specifiers> <function-body>
       def "FunctionDeclaration" $ record [
-        "returnType">: cpp "TypeExpression",
-        "name">: string,
-        "parameters">: list $ cpp "Parameter",
-        "specifiers">: list $ cpp "FunctionSpecifier",
-        "body">: cpp "FunctionBody"],
+        "prefixSpecifiers" >: list (cpp "FunctionSpecifierPrefix"),
+        "returnType" >: cpp "TypeExpression",
+        "name" >: string,
+        "parameters" >: list (cpp "Parameter"),
+        "suffixSpecifiers" >: list (cpp "FunctionSpecifierSuffix"),
+        "body" >: cpp "FunctionBody"],
 
--- <function-specifier> ::= "const" | "noexcept" | "override" | "final"
-      def "FunctionSpecifier" $ enum ["const", "noexcept", "override", "final", "static"],
+-- <function-prefix-specifier> ::= "virtual" | "static"
+      def "FunctionSpecifierPrefix" $ enum ["virtual", "static"],
+
+-- <function-suffix-specifier> ::= "const" | "noexcept" | "override" | "final" | "pure"
+      def "FunctionSpecifierSuffix" $ enum ["const", "noexcept", "override", "final", "pure"],
 
 -- <parameter> ::= <type-expression> <identifier> <default-arg>
       def "Parameter" $ record [
