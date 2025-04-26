@@ -3,7 +3,6 @@
 module Hydra.Ext.Cpp.Utils where
 
 import Hydra.Kernel
-import Hydra.Staging.Formatting
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
 
 import qualified Data.List as L
@@ -35,6 +34,11 @@ cppPostfixExpressionToCppExpression pfe =
 cppPrimaryExpressionToCppExpression :: Cpp.PrimaryExpression -> Cpp.Expression
 cppPrimaryExpressionToCppExpression prim = cppPostfixExpressionToCppExpression $ Cpp.PostfixExpressionPrimary prim
 
+createCastExpr :: Cpp.TypeExpression -> Cpp.Expression -> Cpp.Expression
+createCastExpr targetType expr = cppPrimaryExpressionToCppExpression $
+  Cpp.PrimaryExpressionParenthesized $
+    cppPrimaryExpressionToCppExpression $ Cpp.PrimaryExpressionParenthesized expr
+
 createCompoundStmt :: [Cpp.Statement] -> Cpp.CompoundStatement
 createCompoundStmt = Cpp.CompoundStatement
 
@@ -43,6 +47,12 @@ createConstRefType baseType = createReferenceType $ createConstType baseType
 
 createConstType :: Cpp.TypeExpression -> Cpp.TypeExpression
 createConstType baseType = createQualifiedType baseType Cpp.TypeQualifierConst
+
+createEnumAccessExpr :: String -> String -> Cpp.Expression
+createEnumAccessExpr enumName valueName = cppPostfixExpressionToCppExpression $
+  Cpp.PostfixExpressionMemberAccess $ Cpp.MemberAccessOperation
+    (Cpp.PostfixExpressionPrimary $ Cpp.PrimaryExpressionIdentifier enumName)
+    valueName
 
 createFunctionCallExpr :: String -> [Cpp.Expression] -> Cpp.Expression
 createFunctionCallExpr funcName args =
@@ -55,21 +65,14 @@ createFunctionCallExpr funcName args =
 createIdentifierExpr :: String -> Cpp.Expression
 createIdentifierExpr name = cppPrimaryExpressionToCppExpression $ Cpp.PrimaryExpressionIdentifier name
 
---createLambdaExpr :: String -> Cpp.Expression
-createLambdaExpr =
-  cppPrimaryExpressionToCppExpression $
-    Cpp.PrimaryExpressionLambda $
-      Cpp.LambdaExpression
-        (Cpp.CaptureListCaptureByValue)  -- Empty capture list
-        [Cpp.Parameter
-          (createConstRefType $ Cpp.TypeExpressionBasic $ Cpp.BasicTypeAuto)
-          "arg"
-          Nothing]
-        Nothing  -- No explicit return type
-        (Cpp.CompoundStatement [
-          Cpp.StatementJump $ Cpp.JumpStatementReturnValue $
-            createFunctionCallExpr "typeid" [createIdentifierExpr "arg"]
-        ])
+createLambdaExpr :: [Cpp.Parameter] -> Cpp.Expression -> Cpp.Expression
+createLambdaExpr params body = cppPostfixExpressionToCppExpression $
+  Cpp.PostfixExpressionPrimary $ Cpp.PrimaryExpressionLambda $
+    Cpp.LambdaExpression
+      (Cpp.CaptureListCaptures [])
+      params
+      Nothing
+      (Cpp.CompoundStatement [Cpp.StatementExpression body])
 
 createLiteralBoolExpr :: Bool -> Cpp.Expression
 createLiteralBoolExpr val = cppPrimaryExpressionToCppExpression $ Cpp.PrimaryExpressionLiteral $
@@ -91,9 +94,9 @@ createMemberAccessExpr objExpr member =
         (extractPostfixExpression objExpr)
         member
 
-createParameter :: Cpp.TypeExpression -> String -> Maybe Cpp.Expression -> Cpp.Parameter
-createParameter typ name defaultVal = Cpp.Parameter typ name defaultVal
-
+--createParameter :: Cpp.TypeExpression -> String -> Maybe Cpp.Expression -> Cpp.Parameter
+--createParameter typ name defaultVal = Cpp.Parameter typ name defaultVal
+--
 createQualifiedType :: Cpp.TypeExpression -> Cpp.TypeQualifier -> Cpp.TypeExpression
 createQualifiedType baseType qualifier =
   Cpp.TypeExpressionQualified $ Cpp.QualifiedType baseType qualifier
@@ -111,6 +114,18 @@ createTemplateType :: String -> [Cpp.TypeExpression] -> Cpp.TypeExpression
 createTemplateType name args =
   Cpp.TypeExpressionTemplate $
     Cpp.TemplateType name [Cpp.TemplateArgumentType a | a <- args]
+
+createThisExpr :: Cpp.Expression
+createThisExpr = cppPostfixExpressionToCppExpression $
+  Cpp.PostfixExpressionPrimary $ Cpp.PrimaryExpressionIdentifier "this"
+
+createTypeNameExpr :: String -> Cpp.Expression
+createTypeNameExpr typeName = cppPostfixExpressionToCppExpression $
+  Cpp.PostfixExpressionPrimary $ Cpp.PrimaryExpressionIdentifier typeName
+
+createVariantExpr :: Cpp.Expression
+createVariantExpr = cppPostfixExpressionToCppExpression $
+  Cpp.PostfixExpressionPrimary $ Cpp.PrimaryExpressionIdentifier "variant"
 
 extractPostfixExpression :: Cpp.Expression -> Cpp.PostfixExpression
 extractPostfixExpression (Cpp.ExpressionAssignment
