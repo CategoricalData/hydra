@@ -2,10 +2,6 @@
 
 module Hydra.Ext.Cpp.Coder (moduleToCpp) where
 
---------------------------------------------------------------------------------
--- Imports
---------------------------------------------------------------------------------
-
 import Hydra.Dsl.ShorthandTypes
 import Hydra.Dsl.Terms
 import Hydra.Ext.Cpp.Language
@@ -22,6 +18,7 @@ import Hydra.Staging.Serialization
 import qualified Hydra.Decode as Decode
 
 import qualified Control.Monad as CM
+import qualified Data.Either as E
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
@@ -30,7 +27,6 @@ import qualified Text.Read as TR
 
 --------------------------------------------------------------------------------
 -- Constants
---------------------------------------------------------------------------------
 
 -- | Switch to control whether to use std::variant or class hierarchy for union types
 -- Set to False to use class hierarchy with visitor pattern (recommended for labeled unions)
@@ -39,8 +35,7 @@ useStdVariants :: Bool
 useStdVariants = False
 
 --------------------------------------------------------------------------------
--- Data Types
---------------------------------------------------------------------------------
+-- Datatypes
 
 -- | Temporary metadata which is used to create the header section of a C++ file
 data CppModuleMetadata = CppModuleMetadata {
@@ -59,36 +54,54 @@ data CppModuleMetadata = CppModuleMetadata {
 }
 
 --------------------------------------------------------------------------------
--- Top-Level Entry Points
---------------------------------------------------------------------------------
+-- Entry point
 
 -- | Convert a module to C++ code files
 moduleToCpp :: Module -> Flow Graph (M.Map FilePath String)
 moduleToCpp mod = do
-  program <- encodeModule mod
+    defs <- adaptedModuleDefinitions cppLanguage mod
+    let namespaces = namespacesForDefinitions False encodeNamespace (moduleNamespace mod) defs
+    let env = CppEnvironment {
+      cppEnvironmentNamespaces = namespaces,
+      cppEnvironmentBoundTypeVariables = ([], M.empty)}
 
-  let header = printExpr $ parenthesize $ CppSer.encodeProgram program
-  let implContent = generateImplementationFile mod
+    let (typeDefs, termDefs) = E.partitionEithers $ fmap toEither defs
 
-  let headerPath = namespaceToFilePath CaseConventionLowerSnake (FileExtension "h") $ moduleNamespace mod
-  let implPath = namespaceToFilePath CaseConventionLowerSnake (FileExtension "cpp") $ moduleNamespace mod
+    typeFiles <- CM.mapM (generateTypeFile env) typeDefs
 
-  return $ M.fromList [
-    (headerPath, header),
-    (implPath, implContent)]
+    return $ M.fromList typeFiles -- TODO: also generate a term-level *.cpp file if nonempty
+  where
+    toEither d = case d of
+      DefinitionType t -> Left t
+      DefinitionTerm t -> Right t
 
--- | Generate implementation file with template specializations and implementation details
-generateImplementationFile :: Module -> String
-generateImplementationFile mod =
-  "// Generated C++ implementation file\n\n"
-  ++ "#include \"" ++ namespaceToFilePath CaseConventionLowerSnake (FileExtension "h") (moduleNamespace mod) ++ "\"\n\n"
-  ++ "namespace " ++ unNamespace (moduleNamespace mod) ++ " {\n\n"
-  ++ "// Add implementation-specific code here\n\n"
-  ++ "} // namespace " ++ unNamespace (moduleNamespace mod) ++ "\n"
+generateTypeFile :: CppEnvironment -> TypeDefinition -> Flow Graph (FilePath, String)
+generateTypeFile env def@(TypeDefinition name typ) = do
+  decls <- encodeTypeDefinition env name typ Nothing
+  let program = Cpp.Program includes [
+                  Cpp.DeclarationNamespace $ Cpp.NamespaceDeclaration (encodeNamespace ns) decls]
+  let headerContent = printExpr $ parenthesize $ CppSer.encodeProgram program
+  return (elementNameToFilePath name, headerContent)
+  where
+    ns = Y.fromJust $ namespaceOf name
+    meta = gatherMetadata [DefinitionType def]
+    includes = fixedIncludes ++ conditionalIncludes
+    fixedIncludes = [
+      Cpp.IncludeDirective "string" True,
+      Cpp.IncludeDirective "cstdint" True,
+      Cpp.IncludeDirective "stdexcept" True]
+    conditionalIncludes = Y.catMaybes [
+      if cppModuleMetadataUsesVector meta then Just (Cpp.IncludeDirective "vector" True) else Nothing,
+      if cppModuleMetadataUsesMap meta then Just (Cpp.IncludeDirective "map" True) else Nothing,
+      if cppModuleMetadataUsesSet meta then Just (Cpp.IncludeDirective "set" True) else Nothing,
+      if cppModuleMetadataUsesVariant meta then Just (Cpp.IncludeDirective "variant" True) else Nothing,
+      if cppModuleMetadataUsesOptional meta then Just (Cpp.IncludeDirective "optional" True) else Nothing,
+      if cppModuleMetadataUsesMemory meta then Just (Cpp.IncludeDirective "memory" True) else Nothing,
+      if cppModuleMetadataUsesFunctional meta then Just (Cpp.IncludeDirective "functional" True) else Nothing,
+      if cppModuleMetadataUsesTypeTraits meta then Just (Cpp.IncludeDirective "type_traits" True) else Nothing]
 
 --------------------------------------------------------------------------------
--- Encoding Functions (Alphabetical Order)
---------------------------------------------------------------------------------
+-- Encoding functions
 
 encodeApplicationType :: CppEnvironment -> ApplicationType -> Flow Graph Cpp.TypeExpression
 encodeApplicationType env at = do
@@ -212,93 +225,6 @@ encodeLiteralType lt = do
         IntegerTypeInt64 -> pure $ Cpp.BasicTypeNamed "int64_t"
         _ -> pure Cpp.BasicTypeInt
       LiteralTypeString -> pure Cpp.BasicTypeString
-
-encodeModule :: Module -> Flow Graph Cpp.Program
-encodeModule mod = do
-  defs <- adaptedModuleDefinitions cppLanguage mod
-  let namespaces = namespacesForDefinitions False encodeNamespace (moduleNamespace mod) defs
-  let env = CppEnvironment {
-    cppEnvironmentNamespaces = namespaces,
-    cppEnvironmentBoundTypeVariables = ([], M.empty)}
-  defDecls <- reorderedTypeDecls env defs
-  let meta = gatherMetadata defs
-  let includeDirectives = includes namespaces meta
-  return $ Cpp.Program includeDirectives (wrapWithNamespace (moduleNamespace mod) defDecls)
-  where
-    wrapWithNamespace ns decls = [
-      Cpp.DeclarationNamespace $
-        Cpp.NamespaceDeclaration (encodeNamespace ns) decls]
-
-    includes namespaces meta = fixedIncludes ++ conditionalIncludes ++ domainIncludes
-      where
-        fixedIncludes = [
-          Cpp.IncludeDirective "string" True,
-          Cpp.IncludeDirective "cstdint" True,
-          Cpp.IncludeDirective "stdexcept" True]
-
-        conditionalIncludes = Y.catMaybes [
-          if cppModuleMetadataUsesVector meta then Just (Cpp.IncludeDirective "vector" True) else Nothing,
-          if cppModuleMetadataUsesMap meta then Just (Cpp.IncludeDirective "map" True) else Nothing,
-          if cppModuleMetadataUsesSet meta then Just (Cpp.IncludeDirective "set" True) else Nothing,
-          if cppModuleMetadataUsesVariant meta then Just (Cpp.IncludeDirective "variant" True) else Nothing,
-          if cppModuleMetadataUsesOptional meta then Just (Cpp.IncludeDirective "optional" True) else Nothing,
-          if cppModuleMetadataUsesMemory meta then Just (Cpp.IncludeDirective "memory" True) else Nothing,
-          if cppModuleMetadataUsesFunctional meta then Just (Cpp.IncludeDirective "functional" True) else Nothing,
-          if cppModuleMetadataUsesTypeTraits meta then Just (Cpp.IncludeDirective "type_traits" True) else Nothing]
-
-        domainIncludes = toCppInclude <$> names
-          where
-            names = L.sort $ M.elems $ namespacesMapping namespaces
-            toCppInclude ns =
-              Cpp.IncludeDirective (namespaceToHeaderPath ns) False
-
-            namespaceToHeaderPath ns =
-              L.intercalate "/" (convertCase CaseConventionCamel CaseConventionLowerSnake <$> Strings.splitOn "::" ns) ++ ".h"
-
-    reorderedTypeDecls env defs = do
-      decls <- CM.mapM encode typeDefs
-      let declMap = M.fromList $ L.zip (typeDefinitionName <$> typeDefs) decls
-      return $ L.concat (componentDecls declMap <$> typeComponents)
-      where
-        typeDefs = Y.catMaybes (toTypeDef <$> defs)
-
-        toTypeDef def = case def of
-          DefinitionType d -> Just d
-          _ -> Nothing
-
-        typeDefMap = M.fromList $ L.zip (typeDefinitionName <$> typeDefs) typeDefs
-
-        encode (TypeDefinition name typ) = withTrace ("type element " ++ unName name) $ do
-          comment <- fmap normalizeComment <$> getTypeDescription typ
-          encodeTypeDefinition env name typ comment
-
-        typeComponents = topologicalSortComponents (toAdjPair <$> typeDefs)
-
-        toAdjPair (TypeDefinition name typ) = (name, S.toList $ typeDependencyNames True False typ)
-
-        componentDecls declMap comp = forwardDecls ++ typeDecls
-          where
-            forwardDecls = if L.length comp < 2 then [] else toForwardDecl <$> structDefs
-              where
-                toForwardDecl (TypeDefinition name _) =
-                  Cpp.DeclarationClass $
-                    Cpp.ClassDeclaration
-                      (Cpp.ClassSpecifier Cpp.ClassKeyStruct (encodeName False CaseConventionPascal env name) [])
-                      Nothing
-
-            typeDecls = L.concat $ Y.catMaybes $ fmap (\d -> M.lookup (typeDefinitionName d) declMap) reorderedDefs
-
-            reorderedDefs = otherDefs ++ usingDefs ++ structDefs
-
-            defs = Y.catMaybes $ fmap (\n -> M.lookup n typeDefMap) comp
-
-            (usingDefs, nonUsingDefs) = L.partition isUnion defs
-
-            isUnion (TypeDefinition _ typ) =
-              isEnumType typ ||
-              (useStdVariants && typeVariant (stripType typ) == TypeVariantUnion)
-
-            (structDefs, otherDefs) = L.partition (isStructType . typeDefinitionType) nonUsingDefs
 
 encodeRecordType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph Cpp.Declaration
 encodeRecordType env name (RowType _ tfields) _comment = do
@@ -506,8 +432,7 @@ encodeWrappedType env name typ _comment = do
               Cpp.StatementJump $ Cpp.JumpStatementReturnValue $ createIdentifierExpr "value"])])
 
 --------------------------------------------------------------------------------
--- Helper Functions (Alphabetical Order)
---------------------------------------------------------------------------------
+-- Helper functions
 
 createFactoryMethods :: CppEnvironment -> Name -> [FieldType] -> [Cpp.MemberSpecification]
 createFactoryMethods env name variants =
@@ -774,6 +699,9 @@ createVisitorInterface env name variants = Cpp.DeclarationTemplate $
         (encodeName False CaseConventionPascal env name ++ "Visitor")
         []
         (Cpp.CompoundStatement [])
+
+elementNameToFilePath :: Name -> FilePath
+elementNameToFilePath = nameToFilePathNew CaseConventionLowerSnake CaseConventionLowerSnake (FileExtension "h")
 
 gatherMetadata :: [Definition] -> CppModuleMetadata
 gatherMetadata defs = L.foldl addDef start defs
