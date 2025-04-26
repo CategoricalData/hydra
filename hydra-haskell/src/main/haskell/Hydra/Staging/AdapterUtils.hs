@@ -9,6 +9,7 @@ import Hydra.Variants
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
+import Hydra.Formatting
 import Hydra.Qnames
 import Hydra.Module
 import Hydra.Printing
@@ -111,6 +112,15 @@ nameToFilePath caseConv ext name = namespaceToFilePath caseConv ext $ Namespace 
   where
     QualifiedName ns local = qualifyName name
     prefix = Y.maybe "" (\(Namespace gname) -> gname ++ "/") ns
+
+-- An updated function which allows different case conventions for the namespace and local name
+nameToFilePathNew :: CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath
+nameToFilePathNew nsConv localConv ext name = prefix ++ suffix ++ "." ++ unFileExtension ext
+  where
+    QualifiedName ns local = qualifyName name
+    prefix = Y.maybe "" (\n -> nsToFilePath n ++ "/") ns
+    suffix = convertCase CaseConventionPascal localConv local
+    nsToFilePath ns = L.intercalate "/" $ fmap (convertCase CaseConventionCamel nsConv) $ Strings.splitOn "." $ unNamespace ns
 
 typeIsSupported :: LanguageConstraints -> Type -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints base -- these are *additional* type constraints
