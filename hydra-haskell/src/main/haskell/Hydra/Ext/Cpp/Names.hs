@@ -15,13 +15,15 @@ import qualified Data.Set   as S
 import qualified Data.Maybe as Y
 
 
+className :: Name -> String
+className = sanitizeCppName . localNameOf
+
 createTypeReference :: Bool -> CppEnvironment -> Name -> Cpp.TypeExpression
 createTypeReference isPointer env name = if isPointer
-       then createTemplateType "std::shared_ptr" [constType]
-       else baseType
+    then createTemplateType "std::shared_ptr" [toConstType baseType]
+    else baseType
   where
     baseType = Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $ encodeName True CaseConventionPascal env name
-    constType = Cpp.TypeExpressionQualified $ Cpp.QualifiedType baseType Cpp.TypeQualifierConst
 
 --createTypeReference :: Bool -> CppEnvironment -> Name -> Cpp.TypeExpression
 --createTypeReference isClass env name =
@@ -74,6 +76,9 @@ encodeNamespace ns = L.intercalate "::" $ (convertCase CaseConventionCamel CaseC
 encodeTypeVariable :: Name -> String
 encodeTypeVariable = capitalize . unName
 
+partialVisitorName :: Name -> String
+partialVisitorName name = sanitizeCppName $ localNameOf name ++ "PartialVisitor"
+
 -- | Sanitize a name to be valid in C++
 sanitizeCppName :: String -> String
 sanitizeCppName = sanitizeWithUnderscores cppReservedWords
@@ -86,11 +91,12 @@ termVariableReference = variableReference CaseConventionLowerSnake
 typeVariableReference :: CppEnvironment -> Name -> Cpp.TypeExpression
 typeVariableReference env name = Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $ encodeName True CaseConventionPascal env name
 
--- | Create a name for a variant type
-variantName :: Bool -> CppEnvironment -> Name -> Name -> String
-variantName isQualified env tname fname = encodeName isQualified CaseConventionPascal env
-  $ Name $ unName tname ++ capitalize (unName fname)
-
 -- | Create a variable reference expression
 variableReference :: CaseConvention -> CppEnvironment -> Name -> Cpp.Expression
 variableReference conv env name = createIdentifierExpr $ encodeName True conv env name
+
+variantName :: Name -> Name -> String
+variantName tname fname = sanitizeCppName $ localNameOf tname ++ capitalize (unName fname)
+
+visitorName :: Name -> String
+visitorName name = sanitizeCppName $ localNameOf name ++ "Visitor"

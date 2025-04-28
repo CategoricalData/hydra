@@ -26,32 +26,17 @@ import qualified Data.Set as S
 import qualified Text.Read as TR
 
 --------------------------------------------------------------------------------
--- Constants
-
--- | Switch to control whether to use std::variant or class hierarchy for union types
--- Set to False to use class hierarchy with visitor pattern (recommended for labeled unions)
--- Set to True to use std::variant approach (more compact but less type-safe for labeled unions)
-useStdVariants :: Bool
-useStdVariants = False
-
---------------------------------------------------------------------------------
 -- Datatypes
 
 -- | Temporary metadata which is used to create the header section of a C++ file
 data CppModuleMetadata = CppModuleMetadata {
   cppModuleMetadataTypeVariables :: S.Set Name,
-  cppModuleMetadataUsesVariant :: Bool,
-  cppModuleMetadataUsesOptional :: Bool,
-  cppModuleMetadataUsesVector :: Bool,
   cppModuleMetadataUsesMap :: Bool,
+  cppModuleMetadataUsesOptional :: Bool,
   cppModuleMetadataUsesSet :: Bool,
   cppModuleMetadataUsesString :: Bool,
-  cppModuleMetadataUsesMemory :: Bool,
-  cppModuleMetadataUsesFunctional :: Bool,
-  cppModuleMetadataUsesTypeTraits :: Bool,
-  cppModuleMetadataUsesIOStream :: Bool,
-  cppModuleMetadataUsesAlgorithm :: Bool
-}
+  cppModuleMetadataUsesTypeinfo :: Bool,
+  cppModuleMetadataUsesVector :: Bool}
 
 --------------------------------------------------------------------------------
 -- Entry point
@@ -78,27 +63,33 @@ moduleToCpp mod = do
 generateTypeFile :: CppEnvironment -> TypeDefinition -> Flow Graph (FilePath, String)
 generateTypeFile env def@(TypeDefinition name typ) = do
   decls <- encodeTypeDefinition env name typ Nothing
-  let program = Cpp.Program includes [
-                  Cpp.DeclarationNamespace $ Cpp.NamespaceDeclaration (encodeNamespace ns) decls]
+  let program = Cpp.Program
+        [Cpp.PreprocessorDirectivePragma $ Cpp.PragmaDirective "once"]
+        includes
+        [Cpp.DeclarationNamespace $ Cpp.NamespaceDeclaration (encodeNamespace ns) decls]
   let headerContent = printExpr $ parenthesize $ CppSer.encodeProgram program
   return (elementNameToFilePath name, headerContent)
   where
     ns = Y.fromJust $ namespaceOf name
     meta = gatherMetadata [DefinitionType def]
-    includes = fixedIncludes ++ conditionalIncludes
-    fixedIncludes = [
-      Cpp.IncludeDirective "string" True,
-      Cpp.IncludeDirective "cstdint" True,
-      Cpp.IncludeDirective "stdexcept" True]
-    conditionalIncludes = Y.catMaybes [
-      if cppModuleMetadataUsesVector meta then Just (Cpp.IncludeDirective "vector" True) else Nothing,
+    includes = systemIncludes ++ domainIncludes
+    systemIncludes = Y.catMaybes [
       if cppModuleMetadataUsesMap meta then Just (Cpp.IncludeDirective "map" True) else Nothing,
-      if cppModuleMetadataUsesSet meta then Just (Cpp.IncludeDirective "set" True) else Nothing,
-      if cppModuleMetadataUsesVariant meta then Just (Cpp.IncludeDirective "variant" True) else Nothing,
       if cppModuleMetadataUsesOptional meta then Just (Cpp.IncludeDirective "optional" True) else Nothing,
-      if cppModuleMetadataUsesMemory meta then Just (Cpp.IncludeDirective "memory" True) else Nothing,
-      if cppModuleMetadataUsesFunctional meta then Just (Cpp.IncludeDirective "functional" True) else Nothing,
-      if cppModuleMetadataUsesTypeTraits meta then Just (Cpp.IncludeDirective "type_traits" True) else Nothing]
+      if cppModuleMetadataUsesSet meta then Just (Cpp.IncludeDirective "set" True) else Nothing,
+      if cppModuleMetadataUsesString meta then Just (Cpp.IncludeDirective "string" True) else Nothing,
+      if cppModuleMetadataUsesTypeinfo meta then Just (Cpp.IncludeDirective "typeinfo" True) else Nothing,
+      if cppModuleMetadataUsesVector meta then Just (Cpp.IncludeDirective "vector" True) else Nothing,
+      -- TODO: consider making these conditional as well
+      Just (Cpp.IncludeDirective "memory" True),
+      Just (Cpp.IncludeDirective "stdexcept" True)]
+    domainIncludes = typeIncludes ++ dslIncludes
+      where
+        typeIncludes = toInclude <$> names
+          where
+            toInclude name = Cpp.IncludeDirective (elementNameToFilePath name) False
+            names = S.toList $ S.difference (typeDependencyNames True True typ) (S.singleton name)
+        dslIncludes = [] -- These will be needed if/when DSL functions are used.for type construction.
 
 --------------------------------------------------------------------------------
 -- Encoding functions
@@ -119,30 +110,29 @@ encodeApplicationType env at = do
       Cpp.TypeExpressionBasic (Cpp.BasicTypeNamed name) -> createTemplateType name args
       _ -> error "Non-named type in template application"
 
-encodeClassHierarchyUnion :: CppEnvironment -> Name -> [FieldType] -> Maybe String -> Flow Graph [Cpp.Declaration]
-encodeClassHierarchyUnion env name variants comment = do
-  baseClass <- createUnionBaseClass env name variants
-  let visitorInterface = createVisitorInterface env name variants
-  let partialVisitorInterface = createPartialVisitorInterface env name variants
-  variantClasses <- CM.mapM (createVariantClass env name name) variants
-  return $ [baseClass, visitorInterface, partialVisitorInterface] ++ variantClasses
+encodeVariantType env name variants comment = do
+    variantClasses <- CM.mapM (createVariantClass env name name) variants
+    return $ forwardDecls ++ [visitorInterface, baseClass] ++ variantClasses ++ [partialVisitorInterface, acceptImpl]
+  where
+    forwardDecls = generateForwardDeclarations env name variants
+    baseClass = createUnionBaseClass env name variants
+    visitorInterface = createVisitorInterface env name variants
+    partialVisitorInterface = createPartialVisitorInterface env name variants
+    acceptImpl = createAcceptImplementation env name variants
 
 encodeEnumType :: CppEnvironment -> Name -> [FieldType] -> Maybe String -> Flow Graph [Cpp.Declaration]
 encodeEnumType env name tfields _comment = return [
-  Cpp.DeclarationClass $
-    Cpp.ClassDeclaration
-      (Cpp.ClassSpecifier Cpp.ClassKeyEnumClass (encodeName False CaseConventionPascal env name) [])
-      (Just $ Cpp.ClassBody enumFields)
-  ]
+    cppClassDeclaration (encodeName False CaseConventionPascal env name) []
+      $ Just $ Cpp.ClassBody enumFields]
   where
     enumFields = [Cpp.MemberSpecificationMember $
-                    Cpp.MemberDeclarationVariable $
-                      Cpp.VariableDeclaration
-                        Nothing
-                        (encodeEnumValue env fname)
-                        (Just $ createLiteralIntExpr idx)
-                        False
-                  | (FieldType fname _, idx) <- zip tfields [0..]]
+        Cpp.MemberDeclarationVariable $
+          Cpp.VariableDeclaration
+            Nothing
+            (encodeEnumValue env fname)
+            (Just $ createLiteralIntExpr idx)
+            False
+      | (FieldType fname _, idx) <- zip tfields [0..]]
 
 encodeFieldType :: CppEnvironment -> Bool -> FieldType -> Flow Graph Cpp.VariableDeclaration
 encodeFieldType env isParameter (FieldType fname ftype) = do
@@ -228,12 +218,10 @@ encodeLiteralType lt = do
 
 encodeRecordType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph Cpp.Declaration
 encodeRecordType env name (RowType _ tfields) _comment = do
-  cppFields <- CM.mapM (encodeFieldType env False) tfields
-  constructorParams <- createParameters tfields
-  return $ Cpp.DeclarationClass $
-    Cpp.ClassDeclaration
-      (Cpp.ClassSpecifier Cpp.ClassKeyStruct (encodeName False CaseConventionPascal env name) [])
-      (Just $ Cpp.ClassBody (publicSection cppFields ++ createStructMethods cppFields constructorParams))
+    cppFields <- CM.mapM (encodeFieldType env False) tfields
+    constructorParams <- createParameters tfields
+    return $ cppClassDeclaration (className name) [] $
+      Just $ Cpp.ClassBody (publicSection cppFields ++ createStructMethods cppFields constructorParams)
   where
     publicSection fields = [Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable field | field <- fields]
 
@@ -246,7 +234,7 @@ encodeRecordType env name (RowType _ tfields) _comment = do
              (Cpp.variableDeclarationName field)
              [createIdentifierExpr $ Cpp.variableDeclarationName field]
            | field <- fields]
-          (Cpp.CompoundStatement [])]
+          Cpp.FunctionBodyDeclaration]
 
     createParameters fields = do
       let fieldNames = [fname | FieldType fname _ <- fields]
@@ -259,113 +247,17 @@ encodeRecordType env name (RowType _ tfields) _comment = do
         (Cpp.variableDeclarationName paramDecl)
         Nothing
 
-encodeStdVariantUnion :: CppEnvironment -> Name -> [FieldType] -> Maybe String -> Flow Graph [Cpp.Declaration]
-encodeStdVariantUnion env name variants _comment = do
-  taggedTypes <- CM.mapM createTaggedType variants
-  variantTypes <- CM.mapM (encodeType env . fieldTypeType) variants
-  let variantTypedef = Cpp.DeclarationTypedef $
-        Cpp.TypedefDeclaration
-          (encodeName False CaseConventionPascal env name)
-          (createTemplateType "std::variant" variantTypes)
-          True
-  let visitorHelpers = createVariantVisitors env name variants
-  return $ [tagEnum, variantTypedef] ++ taggedTypes ++ visitorHelpers
-  where
-    tagName = encodeName False CaseConventionPascal env name ++ "Tag"
-
-    tagEnum = Cpp.DeclarationClass $
-      Cpp.ClassDeclaration
-        (Cpp.ClassSpecifier Cpp.ClassKeyEnumClass tagName [])
-        (Just $ Cpp.ClassBody [
-          Cpp.MemberSpecificationMember $
-            Cpp.MemberDeclarationVariable $
-              Cpp.VariableDeclaration
-                Nothing
-                (encodeEnumValue env variantName)
-                (Just $ createLiteralIntExpr idx)
-                False
-          | (FieldType variantName _, idx) <- zip variants [0..]])
-
-    createTaggedType (FieldType variantName variantType) = do
-      wrappedType <- encodeType env variantType
-      return $ Cpp.DeclarationClass $
-        Cpp.ClassDeclaration
-          (Cpp.ClassSpecifier Cpp.ClassKeyStruct (encodeName False CaseConventionPascal env variantName) [])
-          (Just $ Cpp.ClassBody [
-            Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable $
-              Cpp.VariableDeclaration (Just wrappedType) "value" Nothing False,
-            Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable $
-              Cpp.VariableDeclaration
-                (Just $ Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed tagName)
-                "tag"
-                (Just $ createEnumAccessExpr tagName (encodeEnumValue env variantName))
-                False,
-            Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationConstructor $
-              Cpp.ConstructorDeclaration
-                (encodeName False CaseConventionPascal env variantName)
-                [Cpp.Parameter wrappedType "val" Nothing]
-                [Cpp.MemInitializer "value" [createIdentifierExpr "val"]]
-                (Cpp.CompoundStatement [])
-          ])
-
-    createVariantVisitors env name _variants = [
-      Cpp.DeclarationFunction $
-        Cpp.FunctionDeclaration
-          []
-          (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed "R")
-          ("visit" ++ encodeName False CaseConventionPascal env name)
-          [Cpp.Parameter
-            (Cpp.TypeExpressionQualified $
-              Cpp.QualifiedType
-                (Cpp.TypeExpressionQualified $
-                  Cpp.QualifiedType
-                    (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $
-                      encodeName False CaseConventionPascal env name)
-                    Cpp.TypeQualifierConst)
-                Cpp.TypeQualifierLvalueRef)
-            "variant"
-            Nothing,
-           Cpp.Parameter
-            (Cpp.TypeExpressionTemplate $
-              Cpp.TemplateType "std::function"
-                [Cpp.TemplateArgumentType $
-                  Cpp.TypeExpressionFunction $
-                    Cpp.FunctionType
-                      (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed "R")
-                      [Cpp.Parameter
-                        (Cpp.TypeExpressionQualified $
-                          Cpp.QualifiedType
-                            (Cpp.TypeExpressionQualified $
-                              Cpp.QualifiedType
-                                (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $
-                                  encodeName False CaseConventionPascal env name)
-                                Cpp.TypeQualifierConst)
-                            Cpp.TypeQualifierLvalueRef)
-                        ""
-                        Nothing]])
-            "visitor"
-            Nothing]
-          []
-          (Cpp.FunctionBodyCompound $ Cpp.CompoundStatement [
-            Cpp.StatementJump $ Cpp.JumpStatementReturnValue $
-              createFunctionCallExpr
-                "std::visit"
-                [createLambdaExpr [Cpp.Parameter Cpp.TypeExpressionAuto "v" Nothing]
-                  (createFunctionCallExpr "visitor" [createIdentifierExpr "v"]),
-                 createIdentifierExpr "variant"]
-          ])]
-
 encodeType :: CppEnvironment -> Type -> Flow Graph Cpp.TypeExpression
 encodeType env typ = case stripType typ of
   TypeApplication at -> encodeApplicationType env at
   TypeFunction ft -> encodeFunctionType env ft
   TypeForall lt -> encodeForallType env lt
-  TypeList et -> createTemplateType "std::vector" <$> ((:[]) <$> encode et)
-  TypeMap (MapType kt vt) -> createTemplateType "std::map" <$> sequence [encode kt, encode vt]
+  TypeList et -> toConstType <$> (createTemplateType "std::vector" <$> ((:[]) <$> encode et))
+  TypeMap (MapType kt vt) -> toConstType <$> (createTemplateType "std::map" <$> sequence [encode kt, encode vt])
   TypeLiteral lt -> encodeLiteralType lt
-  TypeOptional et -> createTemplateType "std::optional" <$> ((:[]) <$> encode et)
+  TypeOptional et -> toConstType <$> (createTemplateType "std::optional" <$> ((:[]) <$> encode et))
   TypeRecord rt -> typeref typ (rowTypeTypeName rt)
-  TypeSet et -> createTemplateType "std::set" <$> ((:[]) <$> encode et)
+  TypeSet et -> toConstType <$> (createTemplateType "std::set" <$> ((:[]) <$> encode et))
   TypeUnion rt -> typeref typ (rowTypeTypeName rt)
   TypeVariable name -> (elementTerm <$> requireElement name) >>= coreDecodeType >>= \t -> typeref t name
   TypeWrap (WrappedType name _) -> typeref typ name
@@ -401,18 +293,14 @@ encodeUnionType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Gra
 encodeUnionType env name rt comment =
   if isEnumRowType rt
     then encodeEnumType env name (rowTypeFields rt) comment
-    else if useStdVariants
-      then encodeStdVariantUnion env name (rowTypeFields rt) comment
-      else encodeClassHierarchyUnion env name (rowTypeFields rt) comment
+    else encodeVariantType env name (rowTypeFields rt) comment
 
 encodeWrappedType :: CppEnvironment -> Name -> Type -> Maybe String -> Flow Graph Cpp.Declaration
 encodeWrappedType env name typ _comment = do
   cppType <- encodeType env typ
   let className = encodeName False CaseConventionPascal env name
-  return $ Cpp.DeclarationClass $
-    Cpp.ClassDeclaration
-      (Cpp.ClassSpecifier Cpp.ClassKeyStruct className [])
-      (Just $ Cpp.ClassBody [
+  return $ cppClassDeclaration className [] $
+      Just $ Cpp.ClassBody [
         Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable $
           Cpp.VariableDeclaration (Just cppType) "value" Nothing False,
         Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationConstructor $
@@ -420,7 +308,7 @@ encodeWrappedType env name typ _comment = do
             className
             [Cpp.Parameter cppType "v" Nothing]
             [Cpp.MemInitializer "value" [createIdentifierExpr "v"]]
-            (Cpp.CompoundStatement []),
+            Cpp.FunctionBodyDeclaration,
         Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationFunction $
           Cpp.FunctionDeclaration
             []
@@ -429,66 +317,74 @@ encodeWrappedType env name typ _comment = do
             []
             [Cpp.FunctionSpecifierSuffixConst]
             (Cpp.FunctionBodyCompound $ Cpp.CompoundStatement [
-              Cpp.StatementJump $ Cpp.JumpStatementReturnValue $ createIdentifierExpr "value"])])
+              Cpp.StatementJump $ Cpp.JumpStatementReturnValue $ createIdentifierExpr "value"])]
 
 --------------------------------------------------------------------------------
 -- Helper functions
 
-createFactoryMethods :: CppEnvironment -> Name -> [FieldType] -> [Cpp.MemberSpecification]
-createFactoryMethods env name variants =
-  [Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationFunction $
-    Cpp.FunctionDeclaration
-      [Cpp.FunctionSpecifierPrefixStatic]
-      (Cpp.TypeExpressionTemplate $
-        Cpp.TemplateType "std::unique_ptr"
-          [Cpp.TemplateArgumentType $
-            Cpp.TypeExpressionBasic $
-              Cpp.BasicTypeNamed $ encodeName False CaseConventionPascal env name])
-      ("make" ++ encodeName False CaseConventionPascal env variantName)
-      (if isUnitType variantType
-       then []
-       else [Cpp.Parameter paramType "value" Nothing])
-      []
-      (Cpp.FunctionBodyCompound $ Cpp.CompoundStatement [
-        Cpp.StatementJump $ Cpp.JumpStatementReturnValue $
-          createFunctionCallExpr
-            ("std::make_unique<" ++ encodeName False CaseConventionPascal env variantName ++ ">")
-            (if isUnitType variantType
-             then []
-             else [createIdentifierExpr "value"])])
-  | FieldType variantName variantType <- variants,
-    let paramType = if isUnitType variantType
-                    then Cpp.TypeExpressionBasic Cpp.BasicTypeVoid
-                    else Cpp.TypeExpressionQualified $
-                           Cpp.QualifiedType
-                             (Cpp.TypeExpressionQualified $
-                               Cpp.QualifiedType
-                                 (encodeType' env variantType)
-                                 Cpp.TypeQualifierConst)
-                             Cpp.TypeQualifierLvalueRef]
+createAcceptImplementation :: CppEnvironment -> Name -> [FieldType] -> Cpp.Declaration
+createAcceptImplementation env tname variants = Cpp.DeclarationTemplate $
+    Cpp.TemplateDeclaration False ["typename R"] $
+      Cpp.DeclarationFunction $
+        Cpp.FunctionDeclaration
+          []
+          (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed "R")
+          (encodeName False CaseConventionPascal env tname ++ "::accept")
+          [Cpp.Parameter
+            (Cpp.TypeExpressionQualified $
+              Cpp.QualifiedType
+                (Cpp.TypeExpressionBasic $
+                  Cpp.BasicTypeNamed $ visitorName tname ++ "<R>")
+                Cpp.TypeQualifierLvalueRef)
+            "visitor"
+            Nothing]
+          [Cpp.FunctionSpecifierSuffixConst]
+          (Cpp.FunctionBodyCompound $ Cpp.CompoundStatement $ generateDynamicCasts variants)
   where
-    encodeType' :: CppEnvironment -> Type -> Cpp.TypeExpression
-    encodeType' env typ = case stripType typ of
-      TypeLiteral lt -> case lt of
-        LiteralTypeBoolean -> Cpp.TypeExpressionBasic Cpp.BasicTypeBool
-        LiteralTypeFloat FloatTypeFloat32 -> Cpp.TypeExpressionBasic Cpp.BasicTypeFloat
-        LiteralTypeFloat _ -> Cpp.TypeExpressionBasic Cpp.BasicTypeDouble
-        LiteralTypeInteger IntegerTypeInt32 -> Cpp.TypeExpressionBasic Cpp.BasicTypeInt
-        LiteralTypeInteger _ -> Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed "int64_t"
-        LiteralTypeString -> Cpp.TypeExpressionBasic Cpp.BasicTypeString
-        _ -> Cpp.TypeExpressionBasic Cpp.BasicTypeVoid
-      _ -> Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $ encodeName False CaseConventionPascal env name
+    generateDynamicCasts [] = []
+    generateDynamicCasts (FieldType fname _:rest) =
+      let -- Create a workaround for template function call using existing AST
+          -- We'll represent dynamic_cast<T>(expr) as a regular function call with the template part in the function name
+          templateFunction = "dynamic_cast<const " ++ variantName tname fname ++ "*>"
+
+          dynamicCastExpr = Cpp.ExpressionAssignment $ Cpp.AssignmentExpressionAssignment $
+            Cpp.ExplicitAssignment
+              (cppUnaryExpressionToCppLogicalOrExpression $ Cpp.UnaryExpressionPostfix $
+                Cpp.PostfixExpressionPrimary $ Cpp.PrimaryExpressionIdentifier "auto ptr")
+              Cpp.AssignmentOperatorAssign
+              (Cpp.AssignmentExpressionConditional $ Cpp.ConditionalExpressionLogicalOr $
+                cppUnaryExpressionToCppLogicalOrExpression $ Cpp.UnaryExpressionPostfix $
+                  Cpp.PostfixExpressionFunctionCall $ Cpp.FunctionCallOperation
+                    (Cpp.PostfixExpressionPrimary $ Cpp.PrimaryExpressionIdentifier templateFunction)
+                    [cppPrimaryExpressionToCppExpression $ Cpp.PrimaryExpressionIdentifier "this"])
+
+          returnVisitorCall = Cpp.StatementJump $ Cpp.JumpStatementReturnValue $
+            cppPostfixExpressionToCppExpression $ Cpp.PostfixExpressionFunctionCall $ Cpp.FunctionCallOperation
+              (Cpp.PostfixExpressionMemberAccess $ Cpp.MemberAccessOperation
+                (Cpp.PostfixExpressionPrimary $ Cpp.PrimaryExpressionIdentifier "visitor")
+                "visit")
+              [cppUnaryExpressionToCppExpression $ Cpp.UnaryExpressionUnaryOp $ Cpp.UnaryOperation
+                Cpp.UnaryOperatorDereference
+                (Cpp.UnaryExpressionPostfix $ Cpp.PostfixExpressionPrimary $
+                  Cpp.PrimaryExpressionIdentifier "ptr")]
+
+          elseClause = if null rest
+                       then Just throwStatement
+                       else Just $ head $ generateDynamicCasts rest
+      in
+      [Cpp.StatementSelection $ Cpp.SelectionStatement
+         dynamicCastExpr
+         (Cpp.StatementCompound $ Cpp.CompoundStatement [returnVisitorCall])
+         elseClause]
+
+    throwStatement = createThrowStmt "std::runtime_error" createTypeIdNameCall
 
 createPartialVisitorInterface :: CppEnvironment -> Name -> [FieldType] -> Cpp.Declaration
-createPartialVisitorInterface env name variants = Cpp.DeclarationTemplate $
-  Cpp.TemplateDeclaration False ["typename R"] $
-    Cpp.DeclarationClass $
-      Cpp.ClassDeclaration
-        (Cpp.ClassSpecifier
-          Cpp.ClassKeyClass
-          (encodeName False CaseConventionPascal env name ++ "PartialVisitor")
-          [Cpp.BaseSpecifier Cpp.AccessSpecifierPublic (encodeName False CaseConventionPascal env name ++ "Visitor<R>")])
-        (Just $ Cpp.ClassBody (otherwiseMethod : defaultVisitMethods))
+createPartialVisitorInterface env tname variants = Cpp.DeclarationTemplate $
+    Cpp.TemplateDeclaration False ["typename R"] $
+      cppClassDeclaration (partialVisitorName tname)
+        [Cpp.BaseSpecifier Cpp.AccessSpecifierPublic (visitorName tname ++ "<R>")] $
+        Just $ Cpp.ClassBody ([memberSpecificationPublic, otherwiseMethod] ++ defaultVisitMethods)
   where
     otherwiseMethod = Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationFunction $
       Cpp.FunctionDeclaration
@@ -501,35 +397,30 @@ createPartialVisitorInterface env name variants = Cpp.DeclarationTemplate $
               (Cpp.TypeExpressionQualified $
                 Cpp.QualifiedType
                   (Cpp.TypeExpressionBasic $
-                    Cpp.BasicTypeNamed $
-                      encodeName False CaseConventionPascal env name)
+                    Cpp.BasicTypeNamed $ className tname)
                   Cpp.TypeQualifierConst)
               Cpp.TypeQualifierLvalueRef)
-          "variant"
+          "value"
           Nothing]
-        []
-        (Cpp.FunctionBodyCompound $ Cpp.CompoundStatement [
-          Cpp.StatementExpression $
-            createFunctionCallExpr
-              "throw std::runtime_error"
-              [createLiteralStringExpr "Non-exhaustive patterns when matching: unhandled case"]])
+        [Cpp.FunctionSpecifierSuffixConst]
+        Cpp.FunctionBodyPure
 
     defaultVisitMethods = [
       Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationFunction $
         Cpp.FunctionDeclaration
-          [Cpp.FunctionSpecifierPrefixVirtual]
+          []
           (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed "R")
-          ("visit" ++ encodeName False CaseConventionPascal env variantName)
+          "visit"
           [Cpp.Parameter
             (Cpp.TypeExpressionQualified $
               Cpp.QualifiedType
                 (Cpp.TypeExpressionQualified $
                   Cpp.QualifiedType
                     (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $
-                      encodeName False CaseConventionPascal env variantName)
+                      variantName tname fname)
                     Cpp.TypeQualifierConst)
                 Cpp.TypeQualifierLvalueRef)
-            "variant"
+            "value"
             Nothing]
           [Cpp.FunctionSpecifierSuffixOverride]
           (Cpp.FunctionBodyCompound $ Cpp.CompoundStatement [
@@ -537,168 +428,116 @@ createPartialVisitorInterface env name variants = Cpp.DeclarationTemplate $
               Cpp.JumpStatementReturnValue $
                 createFunctionCallExpr
                   "otherwise"
-                  [createCastExpr
-                    (Cpp.TypeExpressionQualified $
-                      Cpp.QualifiedType
-                        (Cpp.TypeExpressionQualified $
-                          Cpp.QualifiedType
-                            (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $
-                              encodeName False CaseConventionPascal env name)
-                            Cpp.TypeQualifierConst)
-                        Cpp.TypeQualifierLvalueRef)
-                    createVariantExpr]
-          ])
-      | FieldType variantName _ <- variants]
+                  [createIdentifierExpr "value"]])
+      | FieldType fname _ <- variants]
 
-createUnionBaseClass :: CppEnvironment -> Name -> [FieldType] -> Flow Graph Cpp.Declaration
-createUnionBaseClass env name variants = do
-  let className = encodeName False CaseConventionPascal env name
-
-  let privateConstructor = Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationConstructor $
-        Cpp.ConstructorDeclaration
-          className
-          []
-          []
-          (Cpp.CompoundStatement [])
-
-  let virtualDestructor = Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationDestructor $
-        Cpp.DestructorDeclaration
-          [Cpp.FunctionSpecifierPrefixVirtual]
-          className
-          []
-          (Cpp.CompoundStatement [])
-
-  let acceptMethod = Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationFunction $
+createUnionBaseClass :: CppEnvironment -> Name -> [FieldType] -> Cpp.Declaration
+createUnionBaseClass env name variants = cppClassDeclaration className [] $ Just $ Cpp.ClassBody [
+    memberSpecificationProtected,
+    constructor,
+    memberSpecificationPublic,
+    virtualDestructor,
+    acceptMethod]
+  where
+    className = encodeName False CaseConventionPascal env name
+    constructor = Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationConstructor $
+      Cpp.ConstructorDeclaration
+        className
+        []
+        []
+        Cpp.FunctionBodyDefault
+    virtualDestructor = Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationDestructor $
+      Cpp.DestructorDeclaration
+        [Cpp.FunctionSpecifierPrefixVirtual]
+        className
+        []
+        Cpp.FunctionBodyDefault
+    acceptMethod = Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationTemplate $
+      Cpp.TemplateDeclaration False ["typename R"] $ Cpp.DeclarationFunction $
         Cpp.FunctionDeclaration
-          [Cpp.FunctionSpecifierPrefixVirtual]
+          []
           (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed "R")
           "accept"
           [Cpp.Parameter
             (Cpp.TypeExpressionQualified $
               Cpp.QualifiedType
-                (Cpp.TypeExpressionQualified $
-                  Cpp.QualifiedType
-                    (Cpp.TypeExpressionBasic $
-                      Cpp.BasicTypeNamed $ className ++ "Visitor<R>")
-                    Cpp.TypeQualifierConst)
+                (Cpp.TypeExpressionBasic $
+                  Cpp.BasicTypeNamed $ visitorName name ++ "<R>")
                 Cpp.TypeQualifierLvalueRef)
             "visitor"
             Nothing]
-          [Cpp.FunctionSpecifierSuffixPure]
+          [Cpp.FunctionSpecifierSuffixConst]
           Cpp.FunctionBodyDeclaration
-
-  let factoryMethods = createFactoryMethods env name variants
-
-  return $ Cpp.DeclarationTemplate $ Cpp.TemplateDeclaration False ["typename R"] $
-    Cpp.DeclarationClass $ Cpp.ClassDeclaration
-      (Cpp.ClassSpecifier Cpp.ClassKeyClass className [])
-      (Just $ Cpp.ClassBody (
-        [ Cpp.MemberSpecificationAccessLabel Cpp.AccessSpecifierPrivate
-        , privateConstructor
-        , Cpp.MemberSpecificationAccessLabel Cpp.AccessSpecifierPublic
-        , virtualDestructor
-        , acceptMethod
-        ] ++ factoryMethods))
 
 createVariantClass :: CppEnvironment -> Name -> Name -> FieldType -> Flow Graph Cpp.Declaration
-createVariantClass env parentName parentClass (FieldType variantName variantType) = do
-  let hasValue = not (isUnitType variantType)
+createVariantClass env tname parentClass (FieldType fname variantType) = do
+    valueField <- if hasValue
+      then do
+        cppType <- encodeType env (stripType variantType)
+        return [Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable $
+                  Cpp.VariableDeclaration (Just cppType) "value" Nothing False]
+      else return []
 
-  valueField <- if hasValue
-                then do
-                  strippedType <- encodeType env (stripType variantType)
-                  return [Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable $
-                    Cpp.VariableDeclaration (Just strippedType) "value" Nothing False]
-                else return []
+    constructorParams <- if hasValue
+      then do
+        paramType <- encodeType env (stripType variantType)
+        return [Cpp.Parameter paramType "value" Nothing]
+      else return []
 
-  constructorParams <- if hasValue
-                       then do
-                         paramType <- encodeType env (stripType variantType)
-                         return [Cpp.Parameter paramType "value" Nothing]
-                       else return []
+    let constructorInitList = if hasValue && isStdType variantType
+                              then [Cpp.MemInitializer "value" [createFunctionCallExpr "std::move" [createIdentifierExpr "value"]]]
+                              else if hasValue
+                                   then [Cpp.MemInitializer "value" [createIdentifierExpr "value"]]
+                                   else []
+    let constructor = Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationConstructor $
+          Cpp.ConstructorDeclaration
+            (variantName tname fname)
+            constructorParams
+            constructorInitList
+            (if L.null constructorParams then Cpp.FunctionBodyDefault else emptyFunctionBody)
+    let baseClass = Cpp.BaseSpecifier Cpp.AccessSpecifierPublic $ encodeName False CaseConventionPascal env parentClass
 
-  let constructorInitList = if hasValue
-                            then [Cpp.MemInitializer "value" [createIdentifierExpr "value"]]
-                            else []
-
-  let constructor = Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationConstructor $
-        Cpp.ConstructorDeclaration
-          (encodeName False CaseConventionPascal env variantName)
-          constructorParams
-          constructorInitList
-          (Cpp.CompoundStatement [])
-
-  let visitorType = Cpp.TypeExpressionTemplate $
-                      Cpp.TemplateType
-                        (encodeName False CaseConventionPascal env parentName ++ "Visitor")
-                        [Cpp.TemplateArgumentType $
-                          Cpp.TypeExpressionBasic $
-                          Cpp.BasicTypeNamed "R"]
-
-  let constVisitorType = Cpp.TypeExpressionQualified $
-                           Cpp.QualifiedType visitorType Cpp.TypeQualifierConst
-
-  let visitorParam = Cpp.Parameter
-                       (Cpp.TypeExpressionQualified $
-                         Cpp.QualifiedType constVisitorType Cpp.TypeQualifierLvalueRef)
-                       "visitor"
-                       Nothing
-
-  let acceptMethod = Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationFunction $
-        Cpp.FunctionDeclaration
-          [Cpp.FunctionSpecifierPrefixVirtual]
-          (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed "R")
-          "accept"
-          [visitorParam]
-          [Cpp.FunctionSpecifierSuffixConst, Cpp.FunctionSpecifierSuffixPure]
-          Cpp.FunctionBodyDeclaration
-
-  let baseClass = Cpp.BaseSpecifier Cpp.AccessSpecifierPublic $
-                    encodeName False CaseConventionPascal env parentClass
-
-  return $ Cpp.DeclarationClass $
-    Cpp.ClassDeclaration
-      (Cpp.ClassSpecifier Cpp.ClassKeyClass (encodeName False CaseConventionPascal env variantName) [baseClass])
-      (Just $ Cpp.ClassBody (valueField ++ [constructor, acceptMethod]))
+    return $ cppClassDeclaration
+      (variantName tname fname)
+      [baseClass]
+      (Just $ Cpp.ClassBody ([memberSpecificationPublic] ++ valueField ++ [constructor]))
+  where
+    hasValue = not (isUnitType variantType)
 
 createVisitorInterface :: CppEnvironment -> Name -> [FieldType] -> Cpp.Declaration
-createVisitorInterface env name variants = Cpp.DeclarationTemplate $
-  Cpp.TemplateDeclaration False ["typename R"] $
-    Cpp.DeclarationClass $
-      Cpp.ClassDeclaration
-        (Cpp.ClassSpecifier
-          Cpp.ClassKeyClass
-          (encodeName False CaseConventionPascal env name ++ "Visitor")
-          [])
+createVisitorInterface env tname variants = Cpp.DeclarationTemplate $
+    Cpp.TemplateDeclaration False ["typename R"] $
+      cppClassDeclaration
+        (visitorName tname)
+        []
         (Just $ Cpp.ClassBody (visitMethods ++ [virtualDestructor]))
   where
-    visitMethods = [
+    visitMethods = [memberSpecificationPublic] ++ [
       Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationFunction $
         Cpp.FunctionDeclaration
           [Cpp.FunctionSpecifierPrefixVirtual]
           (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed "R")
-          ("visit" ++ encodeName False CaseConventionPascal env variantName)
+          "visit"
           [Cpp.Parameter
             (Cpp.TypeExpressionQualified $
               Cpp.QualifiedType
                 (Cpp.TypeExpressionQualified $
                   Cpp.QualifiedType
-                    (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $
-                      encodeName False CaseConventionPascal env variantName)
+                    (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $ variantName tname fname)
                     Cpp.TypeQualifierConst)
                 Cpp.TypeQualifierLvalueRef)
-            "variant"
+            "value"
             Nothing]
-          [Cpp.FunctionSpecifierSuffixConst, Cpp.FunctionSpecifierSuffixPure]
-          (Cpp.FunctionBodyCompound $ Cpp.CompoundStatement [])
-      | FieldType variantName _ <- variants]
+          []
+          Cpp.FunctionBodyPure
+      | FieldType fname _ <- variants]
 
     virtualDestructor = Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationDestructor $
       Cpp.DestructorDeclaration
+        [Cpp.FunctionSpecifierPrefixVirtual]
+        (visitorName tname)
         []
-        (encodeName False CaseConventionPascal env name ++ "Visitor")
-        []
-        (Cpp.CompoundStatement [])
+        Cpp.FunctionBodyDefault
 
 elementNameToFilePath :: Name -> FilePath
 elementNameToFilePath = nameToFilePathNew CaseConventionLowerSnake CaseConventionLowerSnake (FileExtension "h")
@@ -708,17 +547,12 @@ gatherMetadata defs = L.foldl addDef start defs
   where
     start = CppModuleMetadata {
       cppModuleMetadataTypeVariables = S.empty,
-      cppModuleMetadataUsesVariant = False,
-      cppModuleMetadataUsesOptional = False,
-      cppModuleMetadataUsesVector = False,
       cppModuleMetadataUsesMap = False,
+      cppModuleMetadataUsesOptional = False,
       cppModuleMetadataUsesSet = False,
       cppModuleMetadataUsesString = False,
-      cppModuleMetadataUsesMemory = False,
-      cppModuleMetadataUsesFunctional = False,
-      cppModuleMetadataUsesTypeTraits = True,
-      cppModuleMetadataUsesIOStream = False,
-      cppModuleMetadataUsesAlgorithm = False}
+      cppModuleMetadataUsesTypeinfo = False,
+      cppModuleMetadataUsesVector = False}
 
     addDef meta def = case def of
       DefinitionTerm (TermDefinition _ term typ) ->
@@ -733,39 +567,54 @@ gatherMetadata defs = L.foldl addDef start defs
             Nothing -> m
             Just ts -> extendMetaForType m $ typeSchemeType ts
       TermMap _ -> meta {cppModuleMetadataUsesMap = True}
-      TermList _ -> meta {cppModuleMetadataUsesVector = True, cppModuleMetadataUsesAlgorithm = True}
-      TermSet _ -> meta {cppModuleMetadataUsesSet = True, cppModuleMetadataUsesAlgorithm = True}
+      TermList _ -> meta {cppModuleMetadataUsesVector = True}
+      TermSet _ -> meta {cppModuleMetadataUsesSet = True}
       TermLiteral (LiteralString _) -> meta {cppModuleMetadataUsesString = True}
-      TermFunction _ -> meta {cppModuleMetadataUsesFunctional = True}
-      TermApplication _ -> meta {cppModuleMetadataUsesFunctional = True}
       TermOptional _ -> meta {cppModuleMetadataUsesOptional = True}
       _ -> meta
 
     extendMetaForType meta typ = case stripType typ of
-      TypeFunction _ -> meta {cppModuleMetadataUsesFunctional = True}
       TypeForall (ForallType _ body) ->
         meta {cppModuleMetadataTypeVariables = S.union (cppModuleMetadataTypeVariables meta) (freeVariablesInType body)}
-      TypeList _ -> meta {cppModuleMetadataUsesVector = True, cppModuleMetadataUsesAlgorithm = True}
+      TypeList _ -> meta {cppModuleMetadataUsesVector = True}
       TypeMap _ -> meta {cppModuleMetadataUsesMap = True}
       TypeLiteral lt -> case lt of
         LiteralTypeString -> meta {cppModuleMetadataUsesString = True}
-        LiteralTypeFloat _ -> meta {cppModuleMetadataUsesIOStream = True}
         _ -> meta
       TypeOptional _ -> meta {cppModuleMetadataUsesOptional = True}
-      TypeRecord _ -> meta {cppModuleMetadataUsesMemory = True}
       TypeSet _ -> meta {cppModuleMetadataUsesSet = True}
-      TypeUnion rt ->
-        if isEnumRowType rt
-          then meta
-          else if useStdVariants
-            then meta {cppModuleMetadataUsesVariant = True, cppModuleMetadataUsesFunctional = True}
-            else meta {cppModuleMetadataUsesMemory = True, cppModuleMetadataUsesFunctional = True}
+      TypeUnion _ -> meta {cppModuleMetadataUsesTypeinfo = True}
       TypeVariable name -> meta {cppModuleMetadataTypeVariables = S.insert name (cppModuleMetadataTypeVariables meta)}
-      TypeWrap _ -> meta {cppModuleMetadataUsesMemory = True}
       TypeApplication _ -> meta
       _ -> meta
+
+generateForwardDeclarations :: CppEnvironment -> Name -> [FieldType] -> [Cpp.Declaration]
+generateForwardDeclarations env tname fields = fmap declare (unionName:variantNames)
+  where
+    unionName = sanitizeCppName $ localNameOf tname
+    variantNames = fmap (variantName tname . fieldTypeName) fields
+    declare name = cppClassDeclaration name [] Nothing
+
+isStdType :: Type -> Bool
+isStdType typ = case stripType typ of
+  TypeList _ -> True
+  TypeLiteral LiteralTypeString -> True
+  TypeMap _ -> True
+  TypeOptional _ -> True
+  TypeSet _ -> True
+  _ -> False
 
 isStructType :: Type -> Bool
 isStructType typ =
   typeVariant (fullyStripType typ) == TypeVariantRecord ||
-  (not useStdVariants && not (isEnumType typ) && typeVariant (fullyStripType typ) == TypeVariantUnion)
+  (not (isEnumType typ) && typeVariant (fullyStripType typ) == TypeVariantUnion)
+
+parameterType :: CppEnvironment -> Type -> Flow Graph Cpp.TypeExpression
+parameterType env typ = do
+  encoded <- encodeType env typ
+  return $
+    Cpp.TypeExpressionQualified $
+      Cpp.QualifiedType
+        (Cpp.TypeExpressionQualified $
+          Cpp.QualifiedType encoded Cpp.TypeQualifierConst)
+        Cpp.TypeQualifierLvalueRef

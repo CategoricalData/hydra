@@ -27,11 +27,14 @@ _AccessSpecifier_none = (Core.Name "none")
 
 data Program = 
   Program {
+    programPreprocessorDirectives :: [PreprocessorDirective],
     programIncludes :: [IncludeDirective],
     programDeclarations :: [Declaration]}
   deriving (Eq, Ord, Read, Show)
 
 _Program = (Core.Name "hydra.ext.cpp.syntax.Program")
+
+_Program_preprocessorDirectives = (Core.Name "preprocessorDirectives")
 
 _Program_includes = (Core.Name "includes")
 
@@ -50,6 +53,7 @@ _IncludeDirective_name = (Core.Name "name")
 _IncludeDirective_isSystem = (Core.Name "isSystem")
 
 data Declaration = 
+  DeclarationPreprocessor PreprocessorDirective |
   DeclarationClass ClassDeclaration |
   DeclarationFunction FunctionDeclaration |
   DeclarationVariable VariableDeclaration |
@@ -59,6 +63,8 @@ data Declaration =
   deriving (Eq, Ord, Read, Show)
 
 _Declaration = (Core.Name "hydra.ext.cpp.syntax.Declaration")
+
+_Declaration_preprocessor = (Core.Name "preprocessor")
 
 _Declaration_class = (Core.Name "class")
 
@@ -126,6 +132,161 @@ _TemplateDeclaration_parameters = (Core.Name "parameters")
 
 _TemplateDeclaration_declaration = (Core.Name "declaration")
 
+data PreprocessorDirective = 
+  PreprocessorDirectiveInclude IncludeDirective |
+  PreprocessorDirectivePragma PragmaDirective |
+  PreprocessorDirectiveDefine DefineDirective |
+  PreprocessorDirectiveUndef UndefDirective |
+  PreprocessorDirectiveIfdef IfdefDirective |
+  PreprocessorDirectiveIfndef IfndefDirective |
+  PreprocessorDirectiveIf IfDirective |
+  PreprocessorDirectiveElif ElifDirective |
+  PreprocessorDirectiveElse ElseDirective |
+  PreprocessorDirectiveEndif EndifDirective |
+  PreprocessorDirectiveLine LineDirective |
+  PreprocessorDirectiveError ErrorDirective |
+  PreprocessorDirectiveWarning WarningDirective
+  deriving (Eq, Ord, Read, Show)
+
+_PreprocessorDirective = (Core.Name "hydra.ext.cpp.syntax.PreprocessorDirective")
+
+_PreprocessorDirective_include = (Core.Name "include")
+
+_PreprocessorDirective_pragma = (Core.Name "pragma")
+
+_PreprocessorDirective_define = (Core.Name "define")
+
+_PreprocessorDirective_undef = (Core.Name "undef")
+
+_PreprocessorDirective_ifdef = (Core.Name "ifdef")
+
+_PreprocessorDirective_ifndef = (Core.Name "ifndef")
+
+_PreprocessorDirective_if = (Core.Name "if")
+
+_PreprocessorDirective_elif = (Core.Name "elif")
+
+_PreprocessorDirective_else = (Core.Name "else")
+
+_PreprocessorDirective_endif = (Core.Name "endif")
+
+_PreprocessorDirective_line = (Core.Name "line")
+
+_PreprocessorDirective_error = (Core.Name "error")
+
+_PreprocessorDirective_warning = (Core.Name "warning")
+
+data PragmaDirective = 
+  PragmaDirective {
+    pragmaDirectiveContent :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_PragmaDirective = (Core.Name "hydra.ext.cpp.syntax.PragmaDirective")
+
+_PragmaDirective_content = (Core.Name "content")
+
+data DefineDirective = 
+  DefineDirective {
+    defineDirectiveName :: String,
+    defineDirectiveParameters :: (Maybe [String]),
+    defineDirectiveReplacement :: (Maybe String)}
+  deriving (Eq, Ord, Read, Show)
+
+_DefineDirective = (Core.Name "hydra.ext.cpp.syntax.DefineDirective")
+
+_DefineDirective_name = (Core.Name "name")
+
+_DefineDirective_parameters = (Core.Name "parameters")
+
+_DefineDirective_replacement = (Core.Name "replacement")
+
+data UndefDirective = 
+  UndefDirective {
+    undefDirectiveName :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_UndefDirective = (Core.Name "hydra.ext.cpp.syntax.UndefDirective")
+
+_UndefDirective_name = (Core.Name "name")
+
+data IfdefDirective = 
+  IfdefDirective {
+    ifdefDirectiveIdentifier :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_IfdefDirective = (Core.Name "hydra.ext.cpp.syntax.IfdefDirective")
+
+_IfdefDirective_identifier = (Core.Name "identifier")
+
+data IfndefDirective = 
+  IfndefDirective {
+    ifndefDirectiveIdentifier :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_IfndefDirective = (Core.Name "hydra.ext.cpp.syntax.IfndefDirective")
+
+_IfndefDirective_identifier = (Core.Name "identifier")
+
+data IfDirective = 
+  IfDirective {
+    ifDirectiveCondition :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_IfDirective = (Core.Name "hydra.ext.cpp.syntax.IfDirective")
+
+_IfDirective_condition = (Core.Name "condition")
+
+data ElifDirective = 
+  ElifDirective {
+    elifDirectiveCondition :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_ElifDirective = (Core.Name "hydra.ext.cpp.syntax.ElifDirective")
+
+_ElifDirective_condition = (Core.Name "condition")
+
+data ElseDirective = 
+  ElseDirective {}
+  deriving (Eq, Ord, Read, Show)
+
+_ElseDirective = (Core.Name "hydra.ext.cpp.syntax.ElseDirective")
+
+data EndifDirective = 
+  EndifDirective {}
+  deriving (Eq, Ord, Read, Show)
+
+_EndifDirective = (Core.Name "hydra.ext.cpp.syntax.EndifDirective")
+
+data LineDirective = 
+  LineDirective {
+    lineDirectiveLineNumber :: Int,
+    lineDirectiveFilename :: (Maybe String)}
+  deriving (Eq, Ord, Read, Show)
+
+_LineDirective = (Core.Name "hydra.ext.cpp.syntax.LineDirective")
+
+_LineDirective_lineNumber = (Core.Name "lineNumber")
+
+_LineDirective_filename = (Core.Name "filename")
+
+data ErrorDirective = 
+  ErrorDirective {
+    errorDirectiveMessage :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_ErrorDirective = (Core.Name "hydra.ext.cpp.syntax.ErrorDirective")
+
+_ErrorDirective_message = (Core.Name "message")
+
+data WarningDirective = 
+  WarningDirective {
+    warningDirectiveMessage :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_WarningDirective = (Core.Name "hydra.ext.cpp.syntax.WarningDirective")
+
+_WarningDirective_message = (Core.Name "message")
+
 data ClassSpecifier = 
   ClassSpecifier {
     classSpecifierKey :: ClassKey,
@@ -190,7 +351,8 @@ data MemberDeclaration =
   MemberDeclarationVariable VariableDeclaration |
   MemberDeclarationConstructor ConstructorDeclaration |
   MemberDeclarationDestructor DestructorDeclaration |
-  MemberDeclarationNestedClass ClassDeclaration
+  MemberDeclarationNestedClass ClassDeclaration |
+  MemberDeclarationTemplate TemplateDeclaration
   deriving (Eq, Ord, Read, Show)
 
 _MemberDeclaration = (Core.Name "hydra.ext.cpp.syntax.MemberDeclaration")
@@ -205,12 +367,14 @@ _MemberDeclaration_destructor = (Core.Name "destructor")
 
 _MemberDeclaration_nestedClass = (Core.Name "nestedClass")
 
+_MemberDeclaration_template = (Core.Name "template")
+
 data ConstructorDeclaration = 
   ConstructorDeclaration {
     constructorDeclarationName :: String,
     constructorDeclarationParameters :: [Parameter],
     constructorDeclarationInitializers :: [MemInitializer],
-    constructorDeclarationBody :: CompoundStatement}
+    constructorDeclarationBody :: FunctionBody}
   deriving (Eq, Ord, Read, Show)
 
 _ConstructorDeclaration = (Core.Name "hydra.ext.cpp.syntax.ConstructorDeclaration")
@@ -240,7 +404,7 @@ data DestructorDeclaration =
     destructorDeclarationPrefixSpecifiers :: [FunctionSpecifierPrefix],
     destructorDeclarationName :: String,
     destructorDeclarationSuffixSpecifiers :: [FunctionSpecifierSuffix],
-    destructorDeclarationBody :: CompoundStatement}
+    destructorDeclarationBody :: FunctionBody}
   deriving (Eq, Ord, Read, Show)
 
 _DestructorDeclaration = (Core.Name "hydra.ext.cpp.syntax.DestructorDeclaration")
@@ -279,7 +443,8 @@ _FunctionDeclaration_body = (Core.Name "body")
 
 data FunctionSpecifierPrefix = 
   FunctionSpecifierPrefixVirtual  |
-  FunctionSpecifierPrefixStatic 
+  FunctionSpecifierPrefixStatic  |
+  FunctionSpecifierPrefixExplicit 
   deriving (Eq, Ord, Read, Show)
 
 _FunctionSpecifierPrefix = (Core.Name "hydra.ext.cpp.syntax.FunctionSpecifierPrefix")
@@ -288,12 +453,13 @@ _FunctionSpecifierPrefix_virtual = (Core.Name "virtual")
 
 _FunctionSpecifierPrefix_static = (Core.Name "static")
 
+_FunctionSpecifierPrefix_explicit = (Core.Name "explicit")
+
 data FunctionSpecifierSuffix = 
   FunctionSpecifierSuffixConst  |
   FunctionSpecifierSuffixNoexcept  |
   FunctionSpecifierSuffixOverride  |
-  FunctionSpecifierSuffixFinal  |
-  FunctionSpecifierSuffixPure 
+  FunctionSpecifierSuffixFinal 
   deriving (Eq, Ord, Read, Show)
 
 _FunctionSpecifierSuffix = (Core.Name "hydra.ext.cpp.syntax.FunctionSpecifierSuffix")
@@ -305,8 +471,6 @@ _FunctionSpecifierSuffix_noexcept = (Core.Name "noexcept")
 _FunctionSpecifierSuffix_override = (Core.Name "override")
 
 _FunctionSpecifierSuffix_final = (Core.Name "final")
-
-_FunctionSpecifierSuffix_pure = (Core.Name "pure")
 
 data Parameter = 
   Parameter {
@@ -325,7 +489,9 @@ _Parameter_defaultValue = (Core.Name "defaultValue")
 
 data FunctionBody = 
   FunctionBodyCompound CompoundStatement |
-  FunctionBodyDeclaration 
+  FunctionBodyDeclaration  |
+  FunctionBodyPure  |
+  FunctionBodyDefault 
   deriving (Eq, Ord, Read, Show)
 
 _FunctionBody = (Core.Name "hydra.ext.cpp.syntax.FunctionBody")
@@ -333,6 +499,10 @@ _FunctionBody = (Core.Name "hydra.ext.cpp.syntax.FunctionBody")
 _FunctionBody_compound = (Core.Name "compound")
 
 _FunctionBody_declaration = (Core.Name "declaration")
+
+_FunctionBody_pure = (Core.Name "pure")
+
+_FunctionBody_default = (Core.Name "default")
 
 data VariableDeclaration = 
   VariableDeclaration {
@@ -973,6 +1143,7 @@ data PostfixExpression =
   PostfixExpressionPrimary PrimaryExpression |
   PostfixExpressionSubscript SubscriptOperation |
   PostfixExpressionFunctionCall FunctionCallOperation |
+  PostfixExpressionTemplateFunctionCall TemplateFunctionCallOperation |
   PostfixExpressionMemberAccess MemberAccessOperation |
   PostfixExpressionPointerMemberAccess PointerMemberAccessOperation |
   PostfixExpressionPostIncrement PostfixExpression |
@@ -986,6 +1157,8 @@ _PostfixExpression_primary = (Core.Name "primary")
 _PostfixExpression_subscript = (Core.Name "subscript")
 
 _PostfixExpression_functionCall = (Core.Name "functionCall")
+
+_PostfixExpression_templateFunctionCall = (Core.Name "templateFunctionCall")
 
 _PostfixExpression_memberAccess = (Core.Name "memberAccess")
 
@@ -1042,6 +1215,21 @@ _PointerMemberAccessOperation = (Core.Name "hydra.ext.cpp.syntax.PointerMemberAc
 _PointerMemberAccessOperation_pointer = (Core.Name "pointer")
 
 _PointerMemberAccessOperation_member = (Core.Name "member")
+
+data TemplateFunctionCallOperation = 
+  TemplateFunctionCallOperation {
+    templateFunctionCallOperationFunction :: PostfixExpression,
+    templateFunctionCallOperationTemplateArguments :: [TemplateArgument],
+    templateFunctionCallOperationArguments :: [Expression]}
+  deriving (Eq, Ord, Read, Show)
+
+_TemplateFunctionCallOperation = (Core.Name "hydra.ext.cpp.syntax.TemplateFunctionCallOperation")
+
+_TemplateFunctionCallOperation_function = (Core.Name "function")
+
+_TemplateFunctionCallOperation_templateArguments = (Core.Name "templateArguments")
+
+_TemplateFunctionCallOperation_arguments = (Core.Name "arguments")
 
 data PrimaryExpression = 
   PrimaryExpressionIdentifier String |
@@ -1359,7 +1547,8 @@ data JumpStatement =
   JumpStatementBreak  |
   JumpStatementContinue  |
   JumpStatementReturnValue Expression |
-  JumpStatementReturnVoid 
+  JumpStatementReturnVoid  |
+  JumpStatementThrow Expression
   deriving (Eq, Ord, Read, Show)
 
 _JumpStatement = (Core.Name "hydra.ext.cpp.syntax.JumpStatement")
@@ -1371,6 +1560,8 @@ _JumpStatement_continue = (Core.Name "continue")
 _JumpStatement_returnValue = (Core.Name "returnValue")
 
 _JumpStatement_returnVoid = (Core.Name "returnVoid")
+
+_JumpStatement_throw = (Core.Name "throw")
 
 newtype ExpressionStatement = 
   ExpressionStatement {

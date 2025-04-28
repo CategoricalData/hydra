@@ -128,7 +128,7 @@ constructElementsInterface mod members = (elName, cu)
     decl = Java.TypeDeclarationWithComments itf $ moduleDescription mod
 
 constructModule :: Module
-  -> M.Map Type (Coder Graph Graph (Term) Java.Expression)
+  -> M.Map Type (Coder Graph Graph Term Java.Expression)
   -> [(Element, TypedTerm)]
   -> Flow Graph (M.Map Name Java.CompilationUnit)
 constructModule mod coders pairs = do

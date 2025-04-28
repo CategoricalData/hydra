@@ -14,25 +14,35 @@ data CppEnvironment = CppEnvironment {
   cppEnvironmentNamespaces :: Namespaces String,
   cppEnvironmentBoundTypeVariables :: ([Name], M.Map Name String)}
 
+cppClassDeclaration :: String -> [Cpp.BaseSpecifier] -> Maybe Cpp.ClassBody -> Cpp.Declaration
+cppClassDeclaration name baseSpecs mbody = Cpp.DeclarationClass $ Cpp.ClassDeclaration
+  (Cpp.ClassSpecifier Cpp.ClassKeyClass name baseSpecs)
+  mbody
+
 cppPostfixExpressionToCppExpression :: Cpp.PostfixExpression -> Cpp.Expression
-cppPostfixExpressionToCppExpression pfe =
-  Cpp.ExpressionAssignment $
-    Cpp.AssignmentExpressionConditional $
-      Cpp.ConditionalExpressionLogicalOr $
-        Cpp.LogicalOrExpressionLogicalAnd $
-          Cpp.LogicalAndExpressionInclusiveOr $
-            Cpp.InclusiveOrExpressionExclusiveOr $
-              Cpp.ExclusiveOrExpressionAnd $
-                Cpp.AndExpressionEquality $
-                  Cpp.EqualityExpressionRelational $
-                    Cpp.RelationalExpressionShift $
-                      Cpp.ShiftExpressionAdditive $
-                        Cpp.AdditiveExpressionMultiplicative $
-                          Cpp.MultiplicativeExpressionUnary $
-                            Cpp.UnaryExpressionPostfix pfe
+cppPostfixExpressionToCppExpression = cppUnaryExpressionToCppExpression . Cpp.UnaryExpressionPostfix
 
 cppPrimaryExpressionToCppExpression :: Cpp.PrimaryExpression -> Cpp.Expression
 cppPrimaryExpressionToCppExpression prim = cppPostfixExpressionToCppExpression $ Cpp.PostfixExpressionPrimary prim
+
+cppUnaryExpressionToCppExpression :: Cpp.UnaryExpression -> Cpp.Expression
+cppUnaryExpressionToCppExpression ue =
+  Cpp.ExpressionAssignment $
+    Cpp.AssignmentExpressionConditional $
+      Cpp.ConditionalExpressionLogicalOr $ cppUnaryExpressionToCppLogicalOrExpression ue
+
+cppUnaryExpressionToCppLogicalOrExpression :: Cpp.UnaryExpression -> Cpp.LogicalOrExpression
+cppUnaryExpressionToCppLogicalOrExpression ue =
+  Cpp.LogicalOrExpressionLogicalAnd $
+    Cpp.LogicalAndExpressionInclusiveOr $
+      Cpp.InclusiveOrExpressionExclusiveOr $
+        Cpp.ExclusiveOrExpressionAnd $
+          Cpp.AndExpressionEquality $
+            Cpp.EqualityExpressionRelational $
+              Cpp.RelationalExpressionShift $
+                Cpp.ShiftExpressionAdditive $
+                  Cpp.AdditiveExpressionMultiplicative $
+                    Cpp.MultiplicativeExpressionUnary ue
 
 createCastExpr :: Cpp.TypeExpression -> Cpp.Expression -> Cpp.Expression
 createCastExpr targetType expr = cppPrimaryExpressionToCppExpression $
@@ -117,7 +127,28 @@ createTemplateType name args =
 
 createThisExpr :: Cpp.Expression
 createThisExpr = cppPostfixExpressionToCppExpression $
-  Cpp.PostfixExpressionPrimary $ Cpp.PrimaryExpressionIdentifier "this"
+  Cpp.PostfixExpressionPrimary $ Cpp.PrimaryExpressionIdentifier "*this"
+
+createThrowStmt :: String -> Cpp.Expression -> Cpp.Statement
+createThrowStmt exceptionType arg =
+  Cpp.StatementJump $ Cpp.JumpStatementThrow $
+    createFunctionCallExpr exceptionType [arg]
+
+createTypeIdNameCall :: Cpp.Expression
+createTypeIdNameCall =
+  cppPostfixExpressionToCppExpression $
+    Cpp.PostfixExpressionFunctionCall $
+      Cpp.FunctionCallOperation
+        (Cpp.PostfixExpressionMemberAccess $
+          Cpp.MemberAccessOperation
+            (Cpp.PostfixExpressionFunctionCall $
+              Cpp.FunctionCallOperation
+                (Cpp.PostfixExpressionPrimary $
+                  Cpp.PrimaryExpressionIdentifier "typeid")
+                [cppPrimaryExpressionToCppExpression $
+                  Cpp.PrimaryExpressionParenthesized createThisExpr])
+            "name")
+        []
 
 createTypeNameExpr :: String -> Cpp.Expression
 createTypeNameExpr typeName = cppPostfixExpressionToCppExpression $
@@ -126,6 +157,9 @@ createTypeNameExpr typeName = cppPostfixExpressionToCppExpression $
 createVariantExpr :: Cpp.Expression
 createVariantExpr = cppPostfixExpressionToCppExpression $
   Cpp.PostfixExpressionPrimary $ Cpp.PrimaryExpressionIdentifier "variant"
+
+emptyFunctionBody :: Cpp.FunctionBody
+emptyFunctionBody = Cpp.FunctionBodyCompound $ Cpp.CompoundStatement []
 
 extractPostfixExpression :: Cpp.Expression -> Cpp.PostfixExpression
 extractPostfixExpression (Cpp.ExpressionAssignment
@@ -144,6 +178,12 @@ extractPostfixExpression (Cpp.ExpressionAssignment
                           (Cpp.UnaryExpressionPostfix postfix)))))))))))))) = postfix
 extractPostfixExpression _ = Cpp.PostfixExpressionPrimary $ Cpp.PrimaryExpressionIdentifier "error"
 
+memberSpecificationProtected :: Cpp.MemberSpecification
+memberSpecificationProtected = Cpp.MemberSpecificationAccessLabel Cpp.AccessSpecifierProtected
+
+memberSpecificationPublic :: Cpp.MemberSpecification
+memberSpecificationPublic = Cpp.MemberSpecificationAccessLabel Cpp.AccessSpecifierPublic
+
 normalizeComment :: String -> String
 normalizeComment s = if L.null stripped
     then ""
@@ -152,3 +192,10 @@ normalizeComment s = if L.null stripped
       else stripped
   where
     stripped = stripLeadingAndTrailingWhitespace s
+
+stringExpression :: String -> Cpp.Expression
+stringExpression =
+  cppPrimaryExpressionToCppExpression . Cpp.PrimaryExpressionLiteral . Cpp.LiteralString . Cpp.StringLiteral
+
+toConstType :: Cpp.TypeExpression -> Cpp.TypeExpression
+toConstType baseType = Cpp.TypeExpressionQualified $ Cpp.QualifiedType baseType Cpp.TypeQualifierConst
