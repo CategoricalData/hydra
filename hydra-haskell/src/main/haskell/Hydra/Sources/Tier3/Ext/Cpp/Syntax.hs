@@ -29,6 +29,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
     declarationTypes = [
 -- <program> ::= <include-directives> <declarations>
       def "Program" $ record [
+        "preprocessorDirectives">: list $ cpp "PreprocessorDirective",
         "includes">: list $ cpp "IncludeDirective",
         "declarations">: list $ cpp "Declaration"],
 
@@ -39,6 +40,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
 
 -- <declaration> ::= <class-declaration> | <function-declaration> | <variable-declaration> | <typedef-declaration> | <namespace-declaration> | <template-declaration>
       def "Declaration" $ union [
+        "preprocessor">: cpp "PreprocessorDirective",
         "class">: cpp "ClassDeclaration",
         "function">: cpp "FunctionDeclaration",
         "variable">: cpp "VariableDeclaration",
@@ -68,6 +70,71 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "parameters">: list string,
         "declaration">: cpp "Declaration"],
 
+-- <preprocessor-directive> ::= <include-directive> | <pragma-directive> | <define-directive> | <undef-directive> | <ifdef-directive> | <ifndef-directive> | <if-directive> | <elif-directive> | <else-directive> | <endif-directive> | <line-directive> | <error-directive> | <warning-directive>
+      def "PreprocessorDirective" $ union [
+        "include">: cpp "IncludeDirective",  -- Already defined
+        "pragma">: cpp "PragmaDirective",
+        "define">: cpp "DefineDirective",
+        "undef">: cpp "UndefDirective",
+        "ifdef">: cpp "IfdefDirective",
+        "ifndef">: cpp "IfndefDirective",
+        "if">: cpp "IfDirective",
+        "elif">: cpp "ElifDirective",
+        "else">: cpp "ElseDirective",
+        "endif">: cpp "EndifDirective",
+        "line">: cpp "LineDirective",
+        "error">: cpp "ErrorDirective",
+        "warning">: cpp "WarningDirective"],
+
+-- <pragma-directive> ::= "#pragma" <pragma-content>
+      def "PragmaDirective" $ record [
+        "content">: string],
+
+-- <define-directive> ::= "#define" <identifier> <replacement-list>
+      def "DefineDirective" $ record [
+        "name">: string,
+        "parameters">: optional $ list string,
+        "replacement">: optional string],
+
+-- <undef-directive> ::= "#undef" <identifier>
+      def "UndefDirective" $ record [
+        "name">: string],
+
+-- <ifdef-directive> ::= "#ifdef" <identifier>
+      def "IfdefDirective" $ record [
+        "identifier">: string],
+
+-- <ifndef-directive> ::= "#ifndef" <identifier>
+      def "IfndefDirective" $ record [
+        "identifier">: string],
+
+-- <if-directive> ::= "#if" <constant-expression>
+      def "IfDirective" $ record [
+        "condition">: string],
+
+-- <elif-directive> ::= "#elif" <constant-expression>
+      def "ElifDirective" $ record [
+        "condition">: string],
+
+-- <else-directive> ::= "#else"
+      def "ElseDirective" $ unit,
+
+-- <endif-directive> ::= "#endif"
+      def "EndifDirective" $ unit,
+
+-- <line-directive> ::= "#line" <line-number> <filename>
+      def "LineDirective" $ record [
+        "lineNumber">: int32,
+        "filename">: optional string],
+
+-- <error-directive> ::= "#error" <message>
+      def "ErrorDirective" $ record [
+        "message">: string],
+
+-- <warning-directive> ::= "#warning" <message>
+      def "WarningDirective" $ record [
+        "message">: string],
+
 -- <class-specifier> ::= <class-key> <identifier> <inheritance-list>
       def "ClassSpecifier" $ record [
         "key">: cpp "ClassKey",
@@ -90,20 +157,21 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "accessLabel">: cpp "AccessSpecifier",
         "member">: cpp "MemberDeclaration"],
 
--- <member-declaration> ::= <function-declaration> | <variable-declaration> | <constructor-declaration> | <destructor-declaration> | <nested-class-declaration>
+-- <member-declaration> ::= <function-declaration> | <variable-declaration> | <constructor-declaration> | <destructor-declaration> | <nested-class-declaration> | <template-declaration>
       def "MemberDeclaration" $ union [
         "function">: cpp "FunctionDeclaration",
         "variable">: cpp "VariableDeclaration",
         "constructor">: cpp "ConstructorDeclaration",
         "destructor">: cpp "DestructorDeclaration",
-        "nestedClass">: cpp "ClassDeclaration"],
+        "nestedClass">: cpp "ClassDeclaration",
+        "template">: cpp "TemplateDeclaration"],
 
 -- <constructor-declaration> ::= <identifier> "(" <parameter-list> ")" <constructor-initializers> <function-body>
       def "ConstructorDeclaration" $ record [
         "name">: string,
         "parameters">: list $ cpp "Parameter",
         "initializers">: list $ cpp "MemInitializer",
-        "body">: cpp "CompoundStatement"],
+        "body">: cpp "FunctionBody"],
 
 -- <mem-initializer> ::= <identifier> "(" <expression-list> ")"
       def "MemInitializer" $ record [
@@ -115,7 +183,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "prefixSpecifiers" >: list (cpp "FunctionSpecifierPrefix"),
         "name" >: string,
         "suffixSpecifiers" >: list (cpp "FunctionSpecifierSuffix"),
-        "body" >: cpp "CompoundStatement"],
+        "body" >: cpp "FunctionBody"],
 
 -- <function-declaration> ::= <prefix-specifiers> <type-expression> <identifier> "(" <parameter-list> ")" <suffix-specifiers> <function-body>
       def "FunctionDeclaration" $ record [
@@ -127,10 +195,10 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "body" >: cpp "FunctionBody"],
 
 -- <function-prefix-specifier> ::= "virtual" | "static"
-      def "FunctionSpecifierPrefix" $ enum ["virtual", "static"],
+      def "FunctionSpecifierPrefix" $ enum ["virtual", "static", "explicit"],
 
--- <function-suffix-specifier> ::= "const" | "noexcept" | "override" | "final" | "pure"
-      def "FunctionSpecifierSuffix" $ enum ["const", "noexcept", "override", "final", "pure"],
+-- <function-suffix-specifier> ::= "const" | "noexcept" | "override" | "final"
+      def "FunctionSpecifierSuffix" $ enum ["const", "noexcept", "override", "final"],
 
 -- <parameter> ::= <type-expression> <identifier> <default-arg>
       def "Parameter" $ record [
@@ -138,10 +206,12 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "name">: string,
         "defaultValue">: optional $ cpp "Expression"],
 
--- <function-body> ::= <compound-statement> | ";"
+-- <function-body> ::= <compound-statement> | ";" | "= 0;" | "= default;"
       def "FunctionBody" $ union [
         "compound">: cpp "CompoundStatement",
-        "declaration">: unit],
+        "declaration">: unit,
+        "pure">: unit,
+        "default">: unit],
 
 -- <variable-declaration> ::= <type-expression> <identifier> <initializer> ";" | "auto" <identifier> <initializer> ";"
       def "VariableDeclaration" $ record [
@@ -378,6 +448,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "primary">: cpp "PrimaryExpression",
         "subscript">: cpp "SubscriptOperation",
         "functionCall">: cpp "FunctionCallOperation",
+        "templateFunctionCall">: cpp "TemplateFunctionCallOperation",
         "memberAccess">: cpp "MemberAccessOperation",
         "pointerMemberAccess">: cpp "PointerMemberAccessOperation",
         "postIncrement">: cpp "PostfixExpression",
@@ -398,6 +469,11 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
       def "PointerMemberAccessOperation" $ record [
         "pointer">: cpp "PostfixExpression",
         "member">: string],
+
+      def "TemplateFunctionCallOperation" $ record [
+        "function">: cpp "PostfixExpression",
+        "templateArguments">: list $ cpp "TemplateArgument",
+        "arguments">: list $ cpp "Expression"],
 
 -- <primary-expression> ::= <identifier> | <literal> | "(" <expression> ")" | <lambda-expression>
       def "PrimaryExpression" $ union [
@@ -529,12 +605,13 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "range">: cpp "Expression",
         "body">: cpp "Statement"],
 
--- <jump-statement> ::= "break" ";" | "continue" ";" | "return" <expression> ";" | "return" ";"
+-- <jump-statement> ::= "break" ";" | "continue" ";" | "return" <expression> ";" | "return" ";" | "throw" <expression> ";"
       def "JumpStatement" $ union [
         "break">: unit,
         "continue">: unit,
         "returnValue">: cpp "Expression",
-        "returnVoid">: unit],
+        "returnVoid">: unit,
+        "throw">: cpp "Expression"],
 
 -- <expression-statement> ::= <expression> ";"
       def "ExpressionStatement" $ cpp "Expression"]

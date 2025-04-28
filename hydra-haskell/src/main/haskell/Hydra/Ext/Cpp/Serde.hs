@@ -12,9 +12,85 @@ import qualified Data.Maybe as Y
 
 -- Program structure
 encodeProgram :: Cpp.Program -> A.Expr
-encodeProgram (Cpp.Program includes decls) = doubleNewlineSep [
-  newlineSep (encodeIncludeDirective <$> includes),
-  doubleNewlineSep (encodeDeclaration <$> decls)]
+encodeProgram (Cpp.Program preps includes decls) = doubleNewlineSep $ Y.catMaybes [
+    separate newlineSep (encodePreprocessorDirective <$> preps),
+    separate newlineSep (encodeIncludeDirective <$> includes),
+    separate doubleNewlineSep (encodeDeclaration <$> decls)]
+  where
+    separate sep defs = if L.null defs
+      then Nothing
+      else Just $ sep defs
+
+encodePreprocessorDirective :: Cpp.PreprocessorDirective -> A.Expr
+encodePreprocessorDirective d = case d of
+  Cpp.PreprocessorDirectiveInclude i -> encodeIncludeDirective i
+  Cpp.PreprocessorDirectivePragma p -> encodePragmaDirective p
+  Cpp.PreprocessorDirectiveDefine d -> encodeDefineDirective d
+  Cpp.PreprocessorDirectiveUndef u -> encodeUndefDirective u
+  Cpp.PreprocessorDirectiveIfdef i -> encodeIfdefDirective i
+  Cpp.PreprocessorDirectiveIfndef i -> encodeIfndefDirective i
+  Cpp.PreprocessorDirectiveIf i -> encodeIfDirective i
+  Cpp.PreprocessorDirectiveElif e -> encodeElifDirective e
+  Cpp.PreprocessorDirectiveElse e -> encodeElseDirective e
+  Cpp.PreprocessorDirectiveEndif e -> encodeEndifDirective e
+  Cpp.PreprocessorDirectiveLine l -> encodeLineDirective l
+  Cpp.PreprocessorDirectiveError e -> encodeErrorDirective e
+  Cpp.PreprocessorDirectiveWarning w -> encodeWarningDirective w
+
+encodePragmaDirective :: Cpp.PragmaDirective -> A.Expr
+encodePragmaDirective (Cpp.PragmaDirective content) =
+  cst $ "#pragma " ++ content
+
+encodeDefineDirective :: Cpp.DefineDirective -> A.Expr
+encodeDefineDirective (Cpp.DefineDirective name params replacement) =
+  spaceSep $ [cst "#define", cst name] ++
+    (case params of
+      Just ps -> [parens $ commaSep inlineStyle $ cst <$> ps]
+      Nothing -> []) ++
+    (case replacement of
+      Just r -> [cst r]
+      Nothing -> [])
+
+encodeUndefDirective :: Cpp.UndefDirective -> A.Expr
+encodeUndefDirective (Cpp.UndefDirective name) =
+  spaceSep [cst "#undef", cst name]
+
+encodeIfdefDirective :: Cpp.IfdefDirective -> A.Expr
+encodeIfdefDirective (Cpp.IfdefDirective identifier) =
+  spaceSep [cst "#ifdef", cst identifier]
+
+encodeIfndefDirective :: Cpp.IfndefDirective -> A.Expr
+encodeIfndefDirective (Cpp.IfndefDirective identifier) =
+  spaceSep [cst "#ifndef", cst identifier]
+
+encodeIfDirective :: Cpp.IfDirective -> A.Expr
+encodeIfDirective (Cpp.IfDirective condition) =
+  spaceSep [cst "#if", cst condition]
+
+encodeElifDirective :: Cpp.ElifDirective -> A.Expr
+encodeElifDirective (Cpp.ElifDirective condition) =
+  spaceSep [cst "#elif", cst condition]
+
+encodeElseDirective :: Cpp.ElseDirective -> A.Expr
+encodeElseDirective _ = cst "#else"
+
+encodeEndifDirective :: Cpp.EndifDirective -> A.Expr
+encodeEndifDirective _ = cst "#endif"
+
+encodeLineDirective :: Cpp.LineDirective -> A.Expr
+encodeLineDirective (Cpp.LineDirective lineNumber filename) =
+  spaceSep $ [cst "#line", cst $ show lineNumber] ++
+    (case filename of
+      Just f -> [cst $ "\"" ++ f ++ "\""]
+      Nothing -> [])
+
+encodeErrorDirective :: Cpp.ErrorDirective -> A.Expr
+encodeErrorDirective (Cpp.ErrorDirective message) =
+  spaceSep [cst "#error", cst message]
+
+encodeWarningDirective :: Cpp.WarningDirective -> A.Expr
+encodeWarningDirective (Cpp.WarningDirective message) =
+  spaceSep [cst "#warning", cst message]
 
 encodeIncludeDirective :: Cpp.IncludeDirective -> A.Expr
 encodeIncludeDirective (Cpp.IncludeDirective name isSystem) =
@@ -24,6 +100,7 @@ encodeIncludeDirective (Cpp.IncludeDirective name isSystem) =
 
 encodeDeclaration :: Cpp.Declaration -> A.Expr
 encodeDeclaration d = case d of
+  Cpp.DeclarationPreprocessor p -> encodePreprocessorDirective p
   Cpp.DeclarationClass c -> encodeClassDeclaration c
   Cpp.DeclarationFunction f -> encodeFunctionDeclaration f
   Cpp.DeclarationVariable v -> encodeVariableDeclaration False v
@@ -35,8 +112,7 @@ encodeNamespaceDeclaration :: Cpp.NamespaceDeclaration -> A.Expr
 encodeNamespaceDeclaration (Cpp.NamespaceDeclaration name decls) =
   spaceSep [
     cst $ "namespace " ++ name,
-    curlyBlock fullBlockStyle (doubleNewlineSep $ encodeDeclaration <$> decls),
-    cst ";"]
+    curlyBlock fullBlockStyle (doubleNewlineSep $ encodeDeclaration <$> decls)]
 
 encodeTypedefDeclaration :: Cpp.TypedefDeclaration -> A.Expr
 encodeTypedefDeclaration (Cpp.TypedefDeclaration name typ isUsing) =
@@ -90,42 +166,45 @@ encodeMemberDeclaration commas m = case m of
   Cpp.MemberDeclarationConstructor c -> encodeConstructorDeclaration c
   Cpp.MemberDeclarationDestructor d -> encodeDestructorDeclaration d
   Cpp.MemberDeclarationNestedClass c -> encodeClassDeclaration c
+  Cpp.MemberDeclarationTemplate t -> encodeTemplateDeclaration t
 
 encodeConstructorDeclaration :: Cpp.ConstructorDeclaration -> A.Expr
 encodeConstructorDeclaration (Cpp.ConstructorDeclaration name params inits body) =
   spaceSep $ Y.catMaybes [
-    Just $ cst name,
-    Just $ parens $ commaSep inlineStyle $ encodeParameter <$> params,
+    Just $ noSep [
+      cst name,
+      parens $ commaSep inlineStyle $ encodeParameter <$> params],
     if null inits
       then Nothing
       else Just $ spaceSep [
         cst ":",
         commaSep inlineStyle $ encodeMemInitializer <$> inits],
-    Just $ encodeCompoundStatement body]
+    Just $ encodeFunctionBody body]
 
 encodeMemInitializer :: Cpp.MemInitializer -> A.Expr
 encodeMemInitializer (Cpp.MemInitializer name args) =
-  spaceSep [
+  noSep [
     cst name,
     parens $ commaSep inlineStyle $ encodeExpression <$> args]
 
 encodeDestructorDeclaration :: Cpp.DestructorDeclaration -> A.Expr
 encodeDestructorDeclaration (Cpp.DestructorDeclaration prefixSpecs name suffixSpecs body) =
-  newlineSep [
-    spaceSep $
-      fmap encodeFunctionSpecifierPrefix prefixSpecs ++ [
-        cst $ "~" ++ name,
-        parens $ cst ""] ++
-      fmap encodeFunctionSpecifierSuffix suffixSpecs,
-    encodeCompoundStatement body]
+  spaceSep $
+    fmap encodeFunctionSpecifierPrefix prefixSpecs ++
+    [noSep [
+      cst $ "~" ++ name,
+      parens $ cst ""]] ++
+    fmap encodeFunctionSpecifierSuffix suffixSpecs ++
+    [encodeFunctionBody body]
 
 encodeFunctionDeclaration :: Cpp.FunctionDeclaration -> A.Expr
 encodeFunctionDeclaration (Cpp.FunctionDeclaration prefixSpecs retType name params suffixSpecs body) =
   spaceSep $
     fmap encodeFunctionSpecifierPrefix prefixSpecs ++ [
       encodeTypeExpression retType,
-      cst name,
-      parens $ commaSep inlineStyle $ fmap encodeParameter params] ++
+      noSep [
+        cst name,
+        parens $ commaSep inlineStyle $ fmap encodeParameter params]] ++
     fmap encodeFunctionSpecifierSuffix suffixSpecs ++ [
       encodeFunctionBody body]
 
@@ -133,6 +212,7 @@ encodeFunctionSpecifierPrefix :: Cpp.FunctionSpecifierPrefix -> A.Expr
 encodeFunctionSpecifierPrefix s = case s of
   Cpp.FunctionSpecifierPrefixVirtual -> cst "virtual"
   Cpp.FunctionSpecifierPrefixStatic  -> cst "static"
+  Cpp.FunctionSpecifierPrefixExplicit -> cst "explicit"
 
 encodeFunctionSpecifierSuffix :: Cpp.FunctionSpecifierSuffix -> A.Expr
 encodeFunctionSpecifierSuffix s = case s of
@@ -140,7 +220,6 @@ encodeFunctionSpecifierSuffix s = case s of
   Cpp.FunctionSpecifierSuffixNoexcept -> cst "noexcept"
   Cpp.FunctionSpecifierSuffixOverride -> cst "override"
   Cpp.FunctionSpecifierSuffixFinal    -> cst "final"
-  Cpp.FunctionSpecifierSuffixPure     -> cst "= 0"
 
 encodeParameter :: Cpp.Parameter -> A.Expr
 encodeParameter (Cpp.Parameter typ name defaultVal) =
@@ -155,6 +234,8 @@ encodeFunctionBody :: Cpp.FunctionBody -> A.Expr
 encodeFunctionBody b = case b of
   Cpp.FunctionBodyCompound c -> encodeCompoundStatement c
   Cpp.FunctionBodyDeclaration -> cst ";"
+  Cpp.FunctionBodyPure -> withSemi $ cst "= 0"
+  Cpp.FunctionBodyDefault -> withSemi $ cst "= default"
 
 -- Variable and type declarations
 encodeVariableDeclaration :: Bool -> Cpp.VariableDeclaration -> A.Expr
@@ -242,7 +323,7 @@ encodeLabeledStatement (Cpp.LabeledStatement label stmt) =
 
 encodeCompoundStatement :: Cpp.CompoundStatement -> A.Expr
 encodeCompoundStatement (Cpp.CompoundStatement stmts) =
-  curlyBlock fullBlockStyle $ newlineSep $ encodeStatement <$> stmts
+  curlyBracesList (Just "") fullBlockStyle (encodeStatement <$> stmts)
 
 encodeSelectionStatement :: Cpp.SelectionStatement -> A.Expr
 encodeSelectionStatement (Cpp.SelectionStatement cond thenBranch elseBranch) =
@@ -339,6 +420,7 @@ encodeJumpStatement j = case j of
   Cpp.JumpStatementContinue -> withSemi $ cst "continue"
   Cpp.JumpStatementReturnValue e -> withSemi $ spaceSep [cst "return", encodeExpression e]
   Cpp.JumpStatementReturnVoid -> withSemi $ cst "return"
+  Cpp.JumpStatementThrow e -> withSemi $ spaceSep [cst "throw", encodeExpression e]
 
 -- Expressions
 encodeExpression :: Cpp.Expression -> A.Expr
@@ -604,6 +686,7 @@ encodePostfixExpression e = case e of
   Cpp.PostfixExpressionPrimary p -> encodePrimaryExpression p
   Cpp.PostfixExpressionSubscript s -> encodeSubscriptOperation s
   Cpp.PostfixExpressionFunctionCall f -> encodeFunctionCallOperation f
+  Cpp.PostfixExpressionTemplateFunctionCall t -> encodeTemplateFunctionCallOperation t
   Cpp.PostfixExpressionMemberAccess m -> encodeMemberAccessOperation m
   Cpp.PostfixExpressionPointerMemberAccess p -> encodePointerMemberAccessOperation p
   Cpp.PostfixExpressionPostIncrement p -> noSep [encodePostfixExpression p, cst "++"]
@@ -621,6 +704,13 @@ encodeFunctionCallOperation :: Cpp.FunctionCallOperation -> A.Expr
 encodeFunctionCallOperation (Cpp.FunctionCallOperation func args) =
   noSep [
     encodePostfixExpression func,
+    parens $ commaSep inlineStyle $ encodeExpression <$> args]
+
+encodeTemplateFunctionCallOperation :: Cpp.TemplateFunctionCallOperation -> A.Expr
+encodeTemplateFunctionCallOperation (Cpp.TemplateFunctionCallOperation func templateArgs args) =
+  noSep [
+    encodePostfixExpression func,
+    angleBracesList inlineStyle $ encodeTemplateArgument <$> templateArgs,
     parens $ commaSep inlineStyle $ encodeExpression <$> args]
 
 encodeMemberAccessOperation :: Cpp.MemberAccessOperation -> A.Expr
