@@ -63,6 +63,9 @@ createConstRefType baseType = createReferenceType $ createConstType baseType
 createConstType :: Cpp.TypeExpression -> Cpp.TypeExpression
 createConstType baseType = createQualifiedType baseType Cpp.TypeQualifierConst
 
+createConstructorBody :: [Cpp.Parameter] -> Cpp.FunctionBody
+createConstructorBody params = if L.null params then Cpp.FunctionBodyDefault else emptyFunctionBody
+
 createEnumAccessExpr :: String -> String -> Cpp.Expression
 createEnumAccessExpr enumName valueName = cppPostfixExpressionToCppExpression $
   Cpp.PostfixExpressionMemberAccess $ Cpp.MemberAccessOperation
