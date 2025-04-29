@@ -223,11 +223,11 @@ encodeRecordType env name (RowType _ tfields) _comment = do
     cppFields <- CM.mapM (encodeFieldType env False) tfields
     constructorParams <- createParameters tfields
     return $ cppClassDeclaration (className name) [] $
-      Just $ Cpp.ClassBody (publicSection cppFields ++ createStructMethods cppFields constructorParams)
+      Just $ Cpp.ClassBody ([memberSpecificationPublic] ++ fieldDecls cppFields ++ constructor cppFields constructorParams)
   where
-    publicSection fields = [Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable field | field <- fields]
+    fieldDecls fields = [Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable field | field <- fields]
 
-    createStructMethods fields params = [
+    constructor fields params = [
       Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationConstructor $
         Cpp.ConstructorDeclaration
           (encodeName False CaseConventionPascal env name)
@@ -236,7 +236,7 @@ encodeRecordType env name (RowType _ tfields) _comment = do
              (Cpp.variableDeclarationName field)
              [createIdentifierExpr $ Cpp.variableDeclarationName field]
            | field <- fields]
-          Cpp.FunctionBodyDeclaration]
+          (createConstructorBody params)]
 
     createParameters fields = do
       let fieldNames = [fname | FieldType fname _ <- fields]
@@ -502,7 +502,7 @@ createVariantClass env tname parentClass (FieldType fname variantType) = do
             (variantName tname fname)
             constructorParams
             constructorInitList
-            (if L.null constructorParams then Cpp.FunctionBodyDefault else emptyFunctionBody)
+            (createConstructorBody constructorParams)
     let baseClass = Cpp.BaseSpecifier Cpp.AccessSpecifierPublic $ encodeName False CaseConventionPascal env parentClass
 
     return $ cppClassDeclaration
