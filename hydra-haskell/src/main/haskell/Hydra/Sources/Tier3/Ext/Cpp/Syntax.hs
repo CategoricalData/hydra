@@ -141,8 +141,8 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "name">: string,
         "inheritance">: list $ cpp "BaseSpecifier"],
 
--- <class-key> ::= "class" | "enum" | "struct"
-      def "ClassKey" $ enum ["class", "enum", "struct"],
+-- <class-key> ::= "class" | "enum" | "enum class" | "struct"
+      def "ClassKey" $ enum ["class", "enum", "enumClass", "struct"],
 
 -- <base-specifier> ::= <access-specifier> <identifier>
       def "BaseSpecifier" $ record [

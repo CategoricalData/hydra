@@ -128,7 +128,9 @@ encodeClassDeclaration :: Cpp.ClassDeclaration -> A.Expr
 encodeClassDeclaration (Cpp.ClassDeclaration spec mbody) = withSemi $
   spaceSep $ Y.catMaybes [
     Just $ encodeClassSpecifier spec,
-    encodeClassBody (Cpp.classSpecifierKey spec == Cpp.ClassKeyEnum) <$> mbody]
+    encodeClassBody isEnum <$> mbody]
+  where
+    isEnum = Cpp.classSpecifierKey spec == Cpp.ClassKeyEnum || Cpp.classSpecifierKey spec == Cpp.ClassKeyEnumClass
 
 encodeClassSpecifier :: Cpp.ClassSpecifier -> A.Expr
 encodeClassSpecifier (Cpp.ClassSpecifier key name inheritance) =
@@ -141,6 +143,7 @@ encodeClassKey :: Cpp.ClassKey -> A.Expr
 encodeClassKey k = case k of
   Cpp.ClassKeyClass -> cst "class"
   Cpp.ClassKeyEnum -> cst "enum"
+  Cpp.ClassKeyEnumClass -> cst "enum class"
   Cpp.ClassKeyStruct -> cst "struct"
 
 encodeBaseSpecifier :: Cpp.BaseSpecifier -> A.Expr
