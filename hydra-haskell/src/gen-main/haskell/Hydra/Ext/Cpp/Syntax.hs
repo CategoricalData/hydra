@@ -305,6 +305,7 @@ _ClassSpecifier_inheritance = (Core.Name "inheritance")
 data ClassKey = 
   ClassKeyClass  |
   ClassKeyEnum  |
+  ClassKeyEnumClass  |
   ClassKeyStruct 
   deriving (Eq, Ord, Read, Show)
 
@@ -313,6 +314,8 @@ _ClassKey = (Core.Name "hydra.ext.cpp.syntax.ClassKey")
 _ClassKey_class = (Core.Name "class")
 
 _ClassKey_enum = (Core.Name "enum")
+
+_ClassKey_enumClass = (Core.Name "enumClass")
 
 _ClassKey_struct = (Core.Name "struct")
 

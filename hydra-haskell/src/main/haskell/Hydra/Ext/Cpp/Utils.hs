@@ -21,7 +21,8 @@ cppClassDeclaration name baseSpecs mbody = Cpp.DeclarationClass $ Cpp.ClassDecla
 
 cppEnumDeclaration :: String -> [Cpp.BaseSpecifier] -> Maybe Cpp.ClassBody -> Cpp.Declaration
 cppEnumDeclaration name baseSpecs mbody = Cpp.DeclarationClass $ Cpp.ClassDeclaration
-  (Cpp.ClassSpecifier Cpp.ClassKeyEnum name baseSpecs)
+  -- Note: "enum class" instead of "enum" to avoid collisions on enum values
+  (Cpp.ClassSpecifier Cpp.ClassKeyEnumClass name baseSpecs)
   mbody
 
 cppPostfixExpressionToCppExpression :: Cpp.PostfixExpression -> Cpp.Expression
