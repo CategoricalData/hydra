@@ -35,6 +35,7 @@ data CppModuleMetadata = CppModuleMetadata {
   cppModuleMetadataUsesOptional :: Bool,
   cppModuleMetadataUsesSet :: Bool,
   cppModuleMetadataUsesString :: Bool,
+  cppModuleMetadataUsesTuple :: Bool,
   cppModuleMetadataUsesTypeinfo :: Bool,
   cppModuleMetadataUsesVector :: Bool}
 
@@ -78,6 +79,7 @@ generateTypeFile env def@(TypeDefinition name typ) = do
       if cppModuleMetadataUsesOptional meta then Just (Cpp.IncludeDirective "optional" True) else Nothing,
       if cppModuleMetadataUsesSet meta then Just (Cpp.IncludeDirective "set" True) else Nothing,
       if cppModuleMetadataUsesString meta then Just (Cpp.IncludeDirective "string" True) else Nothing,
+      if cppModuleMetadataUsesTuple meta then Just (Cpp.IncludeDirective "tuple" True) else Nothing,
       if cppModuleMetadataUsesTypeinfo meta then Just (Cpp.IncludeDirective "typeinfo" True) else Nothing,
       if cppModuleMetadataUsesVector meta then Just (Cpp.IncludeDirective "vector" True) else Nothing,
       -- TODO: consider making these conditional as well
@@ -264,7 +266,13 @@ encodeType env typ = case stripType typ of
   _ -> fail $ "Unsupported type: " ++ show (stripType typ)
   where
     encode = encodeType env
-    typeref t name = pure $ createTypeReference (isStructType t) env name
+    typeref t name = pure $ case t of
+        TypeRecord rt -> if rowTypeTypeName rt == _Unit
+          then createTemplateType "std::tuple" []
+          else def
+        _ -> def
+      where
+        def = createTypeReference (isStructType t) env name
 
 encodeTypeAlias :: CppEnvironment -> Name -> Type -> Maybe String -> Flow Graph Cpp.Declaration
 encodeTypeAlias env name typ _comment = do
@@ -551,6 +559,7 @@ gatherMetadata defs = L.foldl addDef start defs
       cppModuleMetadataUsesOptional = False,
       cppModuleMetadataUsesSet = False,
       cppModuleMetadataUsesString = False,
+      cppModuleMetadataUsesTuple = False,
       cppModuleMetadataUsesTypeinfo = False,
       cppModuleMetadataUsesVector = False}
 
@@ -582,6 +591,9 @@ gatherMetadata defs = L.foldl addDef start defs
         LiteralTypeString -> meta {cppModuleMetadataUsesString = True}
         _ -> meta
       TypeOptional _ -> meta {cppModuleMetadataUsesOptional = True}
+      TypeRecord rt -> if rowTypeTypeName rt == _Unit
+        then meta {cppModuleMetadataUsesTuple = True}
+        else meta
       TypeSet _ -> meta {cppModuleMetadataUsesSet = True}
       TypeUnion _ -> meta {cppModuleMetadataUsesTypeinfo = True}
       TypeVariable name -> meta {cppModuleMetadataTypeVariables = S.insert name (cppModuleMetadataTypeVariables meta)}
