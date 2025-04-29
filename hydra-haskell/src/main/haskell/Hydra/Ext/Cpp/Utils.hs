@@ -19,6 +19,11 @@ cppClassDeclaration name baseSpecs mbody = Cpp.DeclarationClass $ Cpp.ClassDecla
   (Cpp.ClassSpecifier Cpp.ClassKeyClass name baseSpecs)
   mbody
 
+cppEnumDeclaration :: String -> [Cpp.BaseSpecifier] -> Maybe Cpp.ClassBody -> Cpp.Declaration
+cppEnumDeclaration name baseSpecs mbody = Cpp.DeclarationClass $ Cpp.ClassDeclaration
+  (Cpp.ClassSpecifier Cpp.ClassKeyEnum name baseSpecs)
+  mbody
+
 cppPostfixExpressionToCppExpression :: Cpp.PostfixExpression -> Cpp.Expression
 cppPostfixExpressionToCppExpression = cppUnaryExpressionToCppExpression . Cpp.UnaryExpressionPostfix
 

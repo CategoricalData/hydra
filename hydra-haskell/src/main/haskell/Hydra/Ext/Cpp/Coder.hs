@@ -122,7 +122,7 @@ encodeVariantType env name variants comment = do
 
 encodeEnumType :: CppEnvironment -> Name -> [FieldType] -> Maybe String -> Flow Graph [Cpp.Declaration]
 encodeEnumType env name tfields _comment = return [
-    cppClassDeclaration (encodeName False CaseConventionPascal env name) []
+    cppEnumDeclaration (encodeName False CaseConventionPascal env name) []
       $ Just $ Cpp.ClassBody enumFields]
   where
     enumFields = [Cpp.MemberSpecificationMember $
