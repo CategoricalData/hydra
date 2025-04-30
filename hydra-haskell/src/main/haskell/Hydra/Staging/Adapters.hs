@@ -87,7 +87,6 @@ transformModule lang encodeTerm createModule mod = withTrace ("transform module 
     createModule mod coders $ L.zip els tterms
   where
     els = moduleElements mod
-
     codersFor types = do
       cdrs <- CM.mapM (constructCoder lang encodeTerm) types
       return $ M.fromList $ L.zip types cdrs
@@ -97,11 +96,12 @@ transformModule lang encodeTerm createModule mod = withTrace ("transform module 
 -- | Map a Hydra module to a list of type and/or term definitions which have been adapted to the target language.
 adaptedModuleDefinitions :: Language -> Module -> Flow Graph [Definition]
 adaptedModuleDefinitions lang mod = do
-    tterms <- withSchemaContext $ CM.mapM elementAsTypedTerm $ moduleElements mod
+    tterms <- withSchemaContext $ CM.mapM elementAsTypedTerm els
     let types = S.toList $ S.fromList $ (stripType . typedTermType <$> tterms)
     adapters <- adaptersFor types
-    CM.mapM (classify adapters) $ L.zip (moduleElements mod) tterms
+    CM.mapM (classify adapters) $ L.zip els tterms
   where
+    els = moduleElements mod
     classify adapters (el, tt@(TypedTerm term typ)) = if isNativeType el
         then do
           typ <- coreDecodeType term >>= adaptType lang

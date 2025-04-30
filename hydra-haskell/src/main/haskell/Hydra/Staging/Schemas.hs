@@ -17,6 +17,7 @@ import Hydra.Mantle
 import Hydra.Module
 import Hydra.Staging.Lexical
 import Hydra.Staging.Rewriting
+import Hydra.Staging.Sorting
 import Hydra.Flows
 import Hydra.Rewriting
 import Hydra.Errors
@@ -205,6 +206,13 @@ schemaGraphToTypingEnvironment g = withState g $ do
     toTypeScheme vars typ = case stripType typ of
       TypeForall (ForallType v body) -> toTypeScheme (v:vars) body
       _ -> TypeScheme (L.reverse vars) typ
+
+topologicalSortTypeDefinitions :: [TypeDefinition] -> [[TypeDefinition]]
+topologicalSortTypeDefinitions defs = fmap (Y.catMaybes . fmap (\n -> M.lookup n nameToDef)) sorted
+  where
+    sorted = topologicalSortComponents (toPair <$> defs)
+    toPair def@(TypeDefinition name typ) = (typeDefinitionName def, S.toList $ typeDependencyNames False True typ)
+    nameToDef = M.fromList $ L.map (\d -> (typeDefinitionName d, d)) defs
 
 typeDependencies :: Bool -> (Type -> Type) -> Name -> Flow Graph (M.Map Name Type)
 typeDependencies withSchema transform name = deps (S.fromList [name]) M.empty

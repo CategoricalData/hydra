@@ -53,23 +53,32 @@ moduleToCpp mod = do
 
     let (typeDefs, termDefs) = E.partitionEithers $ fmap toEither defs
 
-    typeFiles <- CM.mapM (generateTypeFile env) typeDefs
+--    fail $ "components: " ++ show (fmap (fmap (\d -> localNameOf $ typeDefinitionName d)) $ topologicalSortTypeDefinitions typeDefs)
+    typeFiles <- L.concat <$> (CM.mapM (encodeTypeDefComponent env) $ topologicalSortTypeDefinitions typeDefs)
 
     return $ M.fromList typeFiles -- TODO: also generate a term-level *.cpp file if nonempty
   where
     toEither d = case d of
       DefinitionType t -> Left t
       DefinitionTerm t -> Right t
+    encodeTypeDefComponent env defs = CM.mapM (encodeTypeDef env names) defs
+      where
+        names = S.fromList $ fmap typeDefinitionName defs
+    encodeTypeDef env compNames def = generateTypeFile env def importDeps (groupNamesByNamespace declDeps)
+      where
+        groupNamesByNamespace names = M.fromListWith (++) [(ns, [n]) | n <- names, Just ns <- [namespaceOf n]]
+        -- Note: this is also done in topologicalSortTypeDefinitions
+        deps = S.toList $ S.difference (typeDependencyNames True True $ typeDefinitionType def) (S.singleton $ typeDefinitionName def)
+        (declDeps, importDeps) = L.partition (\n -> S.member n compNames) deps
 
-generateTypeFile :: CppEnvironment -> TypeDefinition -> Flow Graph (FilePath, String)
-generateTypeFile env def@(TypeDefinition name typ) = do
+generateTypeFile :: CppEnvironment -> TypeDefinition -> [Name] -> M.Map Namespace [Name] -> Flow Graph (FilePath, String)
+generateTypeFile env def@(TypeDefinition name typ) importDeps declDeps = withTrace ("type definition " ++ show (unName name)) $ do
   decls <- encodeTypeDefinition env name typ Nothing
   let program = Cpp.Program
         [Cpp.PreprocessorDirectivePragma $ Cpp.PragmaDirective "once"]
         includes
-        [Cpp.DeclarationNamespace $ Cpp.NamespaceDeclaration (encodeNamespace ns) decls]
-  let headerContent = printExpr $ parenthesize $ CppSer.encodeProgram program
-  return (elementNameToFilePath name, headerContent)
+        (forwardDecls ++ [Cpp.DeclarationNamespace $ Cpp.NamespaceDeclaration (encodeNamespace ns) decls])
+  return (elementNameToFilePath name, printExpr $ parenthesize $ CppSer.encodeProgram program)
   where
     ns = Y.fromJust $ namespaceOf name
     meta = gatherMetadata [DefinitionType def]
@@ -87,11 +96,15 @@ generateTypeFile env def@(TypeDefinition name typ) = do
       Just (Cpp.IncludeDirective "stdexcept" True)]
     domainIncludes = typeIncludes ++ dslIncludes
       where
-        typeIncludes = toInclude <$> names
+        typeIncludes = toInclude <$> importDeps
           where
             toInclude name = Cpp.IncludeDirective (elementNameToFilePath name) False
-            names = S.toList $ S.difference (typeDependencyNames True True typ) (S.singleton name)
         dslIncludes = [] -- These will be needed if/when DSL functions are used.for type construction.
+    forwardDecls = fmap toDecls $ M.toList declDeps
+      where
+        toDecls (ns, names) = Cpp.DeclarationNamespace $ Cpp.NamespaceDeclaration (encodeNamespace ns) $
+          fmap toDecl names
+        toDecl name = cppClassDeclaration (localNameOf name) [] Nothing
 
 --------------------------------------------------------------------------------
 -- Encoding functions
@@ -148,28 +161,20 @@ encodeFieldType env isParameter (FieldType fname ftype) = do
     False
   where
     isBasicType = typeVariant (stripType ftype) == TypeVariantLiteral
-    isTemplateType = isStdContainer ftype
+    isContainerType = isStdContainerType ftype
 
     fieldType typ =
-      if isBasicType then typ
+      if isBasicType || isContainerType then typ
       else Cpp.TypeExpressionQualified $ Cpp.QualifiedType typ Cpp.TypeQualifierConst
 
     parameterType typ
       | isBasicType = typ
-      | isTemplateType = typ
+      | isContainerType = typ
       | otherwise = Cpp.TypeExpressionQualified $
                       Cpp.QualifiedType
                         (Cpp.TypeExpressionQualified $
                           Cpp.QualifiedType typ Cpp.TypeQualifierConst)
                         Cpp.TypeQualifierLvalueRef
-
-    isStdContainer typ = case stripType typ of
-      TypeApplication (ApplicationType lhs _) -> isStdContainer lhs
-      TypeList _ -> True
-      TypeMap _ -> True
-      TypeOptional _ -> True
-      TypeSet _ -> True
-      _ -> False
 
 encodeForallType :: CppEnvironment -> ForallType -> Flow Graph Cpp.TypeExpression
 encodeForallType env lt = do
@@ -309,6 +314,7 @@ encodeWrappedType env name typ _comment = do
   let className = encodeName False CaseConventionPascal env name
   return $ cppClassDeclaration className [] $
       Just $ Cpp.ClassBody [
+        memberSpecificationPublic,
         Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable $
           Cpp.VariableDeclaration (Just cppType) "value" Nothing False,
         Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationConstructor $
@@ -316,7 +322,7 @@ encodeWrappedType env name typ _comment = do
             className
             [Cpp.Parameter cppType "v" Nothing]
             [Cpp.MemInitializer "value" [createIdentifierExpr "v"]]
-            Cpp.FunctionBodyDeclaration,
+            emptyFunctionBody,
         Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationFunction $
           Cpp.FunctionDeclaration
             []
@@ -492,7 +498,7 @@ createVariantClass env tname parentClass (FieldType fname variantType) = do
         return [Cpp.Parameter paramType "value" Nothing]
       else return []
 
-    let constructorInitList = if hasValue && isStdType variantType
+    let constructorInitList = if hasValue && isTemplateType variantType
                               then [Cpp.MemInitializer "value" [createFunctionCallExpr "std::move" [createIdentifierExpr "value"]]]
                               else if hasValue
                                    then [Cpp.MemInitializer "value" [createIdentifierExpr "value"]]
@@ -607,10 +613,10 @@ generateForwardDeclarations env tname fields = fmap declare (unionName:variantNa
     variantNames = fmap (variantName tname . fieldTypeName) fields
     declare name = cppClassDeclaration name [] Nothing
 
-isStdType :: Type -> Bool
-isStdType typ = case stripType typ of
+isStdContainerType :: Type -> Bool
+isStdContainerType typ = case stripType typ of
+  TypeApplication (ApplicationType lhs _) -> isStdContainerType lhs
   TypeList _ -> True
-  TypeLiteral LiteralTypeString -> True
   TypeMap _ -> True
   TypeOptional _ -> True
   TypeSet _ -> True
@@ -620,6 +626,11 @@ isStructType :: Type -> Bool
 isStructType typ =
   typeVariant (fullyStripType typ) == TypeVariantRecord ||
   (not (isEnumType typ) && typeVariant (fullyStripType typ) == TypeVariantUnion)
+
+isTemplateType :: Type -> Bool
+isTemplateType typ = case stripType typ of
+  TypeLiteral LiteralTypeString -> True
+  _ -> isStdContainerType typ
 
 parameterType :: CppEnvironment -> Type -> Flow Graph Cpp.TypeExpression
 parameterType env typ = do
