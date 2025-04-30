@@ -14,6 +14,17 @@ data CppEnvironment = CppEnvironment {
   cppEnvironmentNamespaces :: Namespaces String,
   cppEnvironmentBoundTypeVariables :: ([Name], M.Map Name String)}
 
+constParameter :: String -> Cpp.TypeExpression -> Cpp.Parameter
+constParameter name typ = Cpp.Parameter
+  (Cpp.TypeExpressionQualified $
+    Cpp.QualifiedType
+      (Cpp.TypeExpressionQualified $
+        Cpp.QualifiedType typ Cpp.TypeQualifierConst)
+      Cpp.TypeQualifierLvalueRef)
+  name
+  False
+  Nothing
+
 cppClassDeclaration :: String -> [Cpp.BaseSpecifier] -> Maybe Cpp.ClassBody -> Cpp.Declaration
 cppClassDeclaration name baseSpecs mbody = Cpp.DeclarationClass $ Cpp.ClassDeclaration
   (Cpp.ClassSpecifier Cpp.ClassKeyClass name baseSpecs)
@@ -113,9 +124,6 @@ createMemberAccessExpr objExpr member =
         (extractPostfixExpression objExpr)
         member
 
---createParameter :: Cpp.TypeExpression -> String -> Maybe Cpp.Expression -> Cpp.Parameter
---createParameter typ name defaultVal = Cpp.Parameter typ name defaultVal
---
 createQualifiedType :: Cpp.TypeExpression -> Cpp.TypeQualifier -> Cpp.TypeExpression
 createQualifiedType baseType qualifier =
   Cpp.TypeExpressionQualified $ Cpp.QualifiedType baseType qualifier
@@ -207,3 +215,6 @@ stringExpression =
 
 toConstType :: Cpp.TypeExpression -> Cpp.TypeExpression
 toConstType baseType = Cpp.TypeExpressionQualified $ Cpp.QualifiedType baseType Cpp.TypeQualifierConst
+
+unnamedParameter :: String -> Cpp.TypeExpression -> Cpp.Parameter
+unnamedParameter name typ = Cpp.Parameter typ name True Nothing

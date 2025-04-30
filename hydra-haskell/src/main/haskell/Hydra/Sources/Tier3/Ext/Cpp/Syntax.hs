@@ -204,6 +204,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
       def "Parameter" $ record [
         "type">: cpp "TypeExpression",
         "name">: string,
+        "unnamed">: boolean,
         "defaultValue">: optional $ cpp "Expression"],
 
 -- <function-body> ::= <compound-statement> | ";" | "= 0;" | "= default;"

@@ -225,13 +225,17 @@ encodeFunctionSpecifierSuffix s = case s of
   Cpp.FunctionSpecifierSuffixFinal    -> cst "final"
 
 encodeParameter :: Cpp.Parameter -> A.Expr
-encodeParameter (Cpp.Parameter typ name defaultVal) =
+encodeParameter (Cpp.Parameter typ name unnamed defaultVal) =
   spaceSep $ [
     encodeTypeExpression typ,
-    cst name] ++
+    nameExpr] ++
     (case defaultVal of
       Just expr -> [cst "=", encodeExpression expr]
       Nothing -> [])
+  where
+    nameExpr = cst $ if unnamed
+      then "/*" ++ name ++ "*/"
+      else name
 
 encodeFunctionBody :: Cpp.FunctionBody -> A.Expr
 encodeFunctionBody b = case b of
