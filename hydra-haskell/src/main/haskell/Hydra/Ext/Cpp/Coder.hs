@@ -309,29 +309,9 @@ encodeUnionType env name rt comment =
     else encodeVariantType env name (rowTypeFields rt) comment
 
 encodeWrappedType :: CppEnvironment -> Name -> Type -> Maybe String -> Flow Graph Cpp.Declaration
-encodeWrappedType env name typ _comment = do
-  cppType <- encodeType env typ
-  let className = encodeName False CaseConventionPascal env name
-  return $ cppClassDeclaration className [] $
-      Just $ Cpp.ClassBody [
-        memberSpecificationPublic,
-        Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable $
-          Cpp.VariableDeclaration (Just cppType) "value" Nothing False,
-        Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationConstructor $
-          Cpp.ConstructorDeclaration
-            className
-            [Cpp.Parameter cppType "v" Nothing]
-            [Cpp.MemInitializer "value" [createIdentifierExpr "v"]]
-            emptyFunctionBody,
-        Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationFunction $
-          Cpp.FunctionDeclaration
-            []
-            cppType
-            "getValue"
-            []
-            [Cpp.FunctionSpecifierSuffixConst]
-            (Cpp.FunctionBodyCompound $ Cpp.CompoundStatement [
-              Cpp.StatementJump $ Cpp.JumpStatementReturnValue $ createIdentifierExpr "value"])]
+encodeWrappedType env name typ comment = encodeRecordType env name rt comment
+  where
+    rt = RowType name [FieldType (Name "value") typ]
 
 --------------------------------------------------------------------------------
 -- Helper functions
