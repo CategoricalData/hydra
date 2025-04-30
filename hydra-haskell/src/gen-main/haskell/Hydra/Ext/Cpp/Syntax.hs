@@ -479,6 +479,7 @@ data Parameter =
   Parameter {
     parameterType :: TypeExpression,
     parameterName :: String,
+    parameterUnnamed :: Bool,
     parameterDefaultValue :: (Maybe Expression)}
   deriving (Eq, Ord, Read, Show)
 

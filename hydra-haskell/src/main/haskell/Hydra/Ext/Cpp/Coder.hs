@@ -200,7 +200,7 @@ encodeFunctionType env ft = do
       TypeFunction ft2 -> gatherParams (dom:rdoms) ft2
       _ -> (L.reverse (dom:rdoms), cod)
 
-    paramFromType t = Cpp.Parameter t "" Nothing
+    paramFromType t = Cpp.Parameter t "" False Nothing
 
 encodeLiteralType :: LiteralType -> Flow Graph Cpp.TypeExpression
 encodeLiteralType lt = do
@@ -223,12 +223,13 @@ encodeLiteralType lt = do
         _ -> pure Cpp.BasicTypeInt
       LiteralTypeString -> pure Cpp.BasicTypeString
 
-encodeRecordType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph Cpp.Declaration
+encodeRecordType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph [Cpp.Declaration]
 encodeRecordType env name (RowType _ tfields) _comment = do
     cppFields <- CM.mapM (encodeFieldType env False) tfields
     constructorParams <- createParameters tfields
-    return $ cppClassDeclaration (className name) [] $
-      Just $ Cpp.ClassBody ([memberSpecificationPublic] ++ fieldDecls cppFields ++ constructor cppFields constructorParams)
+    return [cppClassDeclaration (className name) [] $
+      Just $ Cpp.ClassBody ([memberSpecificationPublic] ++ fieldDecls cppFields ++ constructor cppFields constructorParams),
+      createLessThanOperator env name tfields]
   where
     fieldDecls fields = [Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable field | field <- fields]
 
@@ -252,6 +253,7 @@ encodeRecordType env name (RowType _ tfields) _comment = do
       return $ Cpp.Parameter
         (Y.fromJust $ Cpp.variableDeclarationType paramDecl)
         (Cpp.variableDeclarationName paramDecl)
+        False
         Nothing
 
 encodeType :: CppEnvironment -> Type -> Flow Graph Cpp.TypeExpression
@@ -297,9 +299,9 @@ encodeTypeDefinition env name typ comment = encode env typ
         where
           (tparamList, tparamMap) = cppEnvironmentBoundTypeVariables env
           env' = env { cppEnvironmentBoundTypeVariables = (tparamList ++ [var], M.insert var (unName var) tparamMap)}
-      TypeRecord rt -> pure <$> encodeRecordType env name rt comment
+      TypeRecord rt -> encodeRecordType env name rt comment
       TypeUnion rt -> encodeUnionType env name rt comment
-      TypeWrap (WrappedType _ t) -> pure <$> encodeWrappedType env name t comment
+      TypeWrap (WrappedType _ t) -> encodeWrappedType env name t comment
       _ -> pure <$> encodeTypeAlias env name typ comment
 
 encodeUnionType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph [Cpp.Declaration]
@@ -308,7 +310,7 @@ encodeUnionType env name rt comment =
     then encodeEnumType env name (rowTypeFields rt) comment
     else encodeVariantType env name (rowTypeFields rt) comment
 
-encodeWrappedType :: CppEnvironment -> Name -> Type -> Maybe String -> Flow Graph Cpp.Declaration
+encodeWrappedType :: CppEnvironment -> Name -> Type -> Maybe String -> Flow Graph [Cpp.Declaration]
 encodeWrappedType env name typ comment = encodeRecordType env name rt comment
   where
     rt = RowType name [FieldType (Name "value") typ]
@@ -331,6 +333,7 @@ createAcceptImplementation env tname variants = Cpp.DeclarationTemplate $
                   Cpp.BasicTypeNamed $ visitorName tname ++ "<R>")
                 Cpp.TypeQualifierLvalueRef)
             "visitor"
+            False
             Nothing]
           [Cpp.FunctionSpecifierSuffixConst]
           (Cpp.FunctionBodyCompound $ Cpp.CompoundStatement $ generateDynamicCasts variants)
@@ -373,6 +376,21 @@ createAcceptImplementation env tname variants = Cpp.DeclarationTemplate $
 
     throwStatement = createThrowStmt "std::runtime_error" createTypeIdNameCall
 
+createLessThanOperator :: CppEnvironment -> Name -> [FieldType] -> Cpp.Declaration
+createLessThanOperator env typeName fields = Cpp.DeclarationFunction $
+  Cpp.FunctionDeclaration
+    []
+    (Cpp.TypeExpressionBasic Cpp.BasicTypeBool)
+    ("operator<")
+    [unnamedParameter "lhs" $ Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $ encodeName False CaseConventionPascal env typeName,
+     unnamedParameter "rhs" $ Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $ encodeName False CaseConventionPascal env typeName]
+    []
+    (Cpp.FunctionBodyCompound $ Cpp.CompoundStatement $ generateComparisonLogic fields)
+  where
+    -- TODO: trivial (and incorrect) implementation
+    generateComparisonLogic fields =
+      [Cpp.StatementJump $ Cpp.JumpStatementReturnValue $ createLiteralBoolExpr False]
+
 createPartialVisitorInterface :: CppEnvironment -> Name -> [FieldType] -> Cpp.Declaration
 createPartialVisitorInterface env tname variants = Cpp.DeclarationTemplate $
     Cpp.TemplateDeclaration False ["typename R"] $
@@ -385,17 +403,7 @@ createPartialVisitorInterface env tname variants = Cpp.DeclarationTemplate $
         [Cpp.FunctionSpecifierPrefixVirtual]
         (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed "R")
         "otherwise"
-        [Cpp.Parameter
-          (Cpp.TypeExpressionQualified $
-            Cpp.QualifiedType
-              (Cpp.TypeExpressionQualified $
-                Cpp.QualifiedType
-                  (Cpp.TypeExpressionBasic $
-                    Cpp.BasicTypeNamed $ className tname)
-                  Cpp.TypeQualifierConst)
-              Cpp.TypeQualifierLvalueRef)
-          "value"
-          Nothing]
+        [constParameter "value" $ Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $ className tname]
         [Cpp.FunctionSpecifierSuffixConst]
         Cpp.FunctionBodyPure
 
@@ -405,17 +413,7 @@ createPartialVisitorInterface env tname variants = Cpp.DeclarationTemplate $
           []
           (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed "R")
           "visit"
-          [Cpp.Parameter
-            (Cpp.TypeExpressionQualified $
-              Cpp.QualifiedType
-                (Cpp.TypeExpressionQualified $
-                  Cpp.QualifiedType
-                    (Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $
-                      variantName tname fname)
-                    Cpp.TypeQualifierConst)
-                Cpp.TypeQualifierLvalueRef)
-            "value"
-            Nothing]
+          [constParameter "value" $ Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $ variantName tname fname]
           [Cpp.FunctionSpecifierSuffixOverride]
           (Cpp.FunctionBodyCompound $ Cpp.CompoundStatement [
             Cpp.StatementJump $
@@ -459,6 +457,7 @@ createUnionBaseClass env name variants = cppClassDeclaration className [] $ Just
                   Cpp.BasicTypeNamed $ visitorName name ++ "<R>")
                 Cpp.TypeQualifierLvalueRef)
             "visitor"
+            False
             Nothing]
           [Cpp.FunctionSpecifierSuffixConst]
           Cpp.FunctionBodyDeclaration
@@ -475,7 +474,7 @@ createVariantClass env tname parentClass (FieldType fname variantType) = do
     constructorParams <- if hasValue
       then do
         paramType <- encodeType env (stripType variantType)
-        return [Cpp.Parameter paramType "value" Nothing]
+        return [Cpp.Parameter paramType "value" False Nothing]
       else return []
 
     let constructorInitList = if hasValue && isTemplateType variantType
@@ -521,6 +520,7 @@ createVisitorInterface env tname variants = Cpp.DeclarationTemplate $
                     Cpp.TypeQualifierConst)
                 Cpp.TypeQualifierLvalueRef)
             "value"
+            False
             Nothing]
           []
           Cpp.FunctionBodyPure
