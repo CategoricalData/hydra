@@ -131,8 +131,7 @@ createReturnVoidStmt = Cpp.StatementJump $ Cpp.JumpStatementReturnVoid
 
 createTemplateType :: String -> [Cpp.TypeExpression] -> Cpp.TypeExpression
 createTemplateType name args =
-  Cpp.TypeExpressionTemplate $
-    Cpp.TemplateType name [Cpp.TemplateArgumentType a | a <- args]
+  Cpp.TypeExpressionTemplate $ Cpp.TemplateType name [Cpp.TemplateArgumentType a | a <- args]
 
 createThisExpr :: Cpp.Expression
 createThisExpr = cppPostfixExpressionToCppExpression $
