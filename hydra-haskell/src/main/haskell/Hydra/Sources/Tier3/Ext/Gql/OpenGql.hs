@@ -2971,8 +2971,8 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
 --     ;
       def "EndpointPair" $
         union [
-          "directed">: gql "EndpointPairDirected",
-          "undirected">: gql "EndpointPairUndirected"],
+          "directedPair">: gql "EndpointPairDirected",
+          "undirectedPair">: gql "EndpointPairUndirected"],
 
 -- endpointPairDirected
 --     : endpointPairPointingRight
