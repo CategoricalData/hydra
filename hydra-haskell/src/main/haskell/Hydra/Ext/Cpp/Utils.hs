@@ -30,11 +30,15 @@ cppClassDeclaration name baseSpecs mbody = Cpp.DeclarationClass $ Cpp.ClassDecla
   (Cpp.ClassSpecifier Cpp.ClassKeyClass name baseSpecs)
   mbody
 
-cppEnumDeclaration :: String -> [Cpp.BaseSpecifier] -> Maybe Cpp.ClassBody -> Cpp.Declaration
-cppEnumDeclaration name baseSpecs mbody = Cpp.DeclarationClass $ Cpp.ClassDeclaration
+cppEnumDeclaration :: String -> Maybe Cpp.ClassBody -> Cpp.Declaration
+cppEnumDeclaration name mbody = Cpp.DeclarationClass $ Cpp.ClassDeclaration
   -- Note: "enum class" instead of "enum" to avoid collisions on enum values
-  (Cpp.ClassSpecifier Cpp.ClassKeyEnumClass name baseSpecs)
+  (Cpp.ClassSpecifier Cpp.ClassKeyEnumClass name [])
   mbody
+
+cppEnumForwardDeclaration :: String -> Cpp.Declaration
+cppEnumForwardDeclaration name = Cpp.DeclarationClass $ Cpp.ClassDeclaration
+  (Cpp.ClassSpecifier Cpp.ClassKeyEnumClass name []) Nothing
 
 cppPostfixExpressionToCppExpression :: Cpp.PostfixExpression -> Cpp.Expression
 cppPostfixExpressionToCppExpression = cppUnaryExpressionToCppExpression . Cpp.UnaryExpressionPostfix
@@ -91,6 +95,12 @@ createFunctionCallExpr funcName args =
       Cpp.FunctionCallOperation
         (Cpp.PostfixExpressionPrimary $ Cpp.PrimaryExpressionIdentifier funcName)
         args
+
+createHeaderFile :: [Cpp.IncludeDirective] -> [Cpp.Declaration] -> Cpp.Program
+createHeaderFile includes decls = Cpp.Program
+  [Cpp.PreprocessorDirectivePragma $ Cpp.PragmaDirective "once"]
+  includes
+  decls
 
 createIdentifierExpr :: String -> Cpp.Expression
 createIdentifierExpr name = cppPrimaryExpressionToCppExpression $ Cpp.PrimaryExpressionIdentifier name
