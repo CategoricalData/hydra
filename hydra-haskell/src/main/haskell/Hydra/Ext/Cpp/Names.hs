@@ -76,6 +76,12 @@ encodeNamespace ns = L.intercalate "::" $ (convertCase CaseConventionCamel CaseC
 encodeTypeVariable :: Name -> String
 encodeTypeVariable = capitalize . unName
 
+fwdHeaderName :: Namespace -> Name
+fwdHeaderName ns = unqualifyName $ QualifiedName (Just ns) "Fwd"
+
+namespaceDecl :: Namespace -> [Cpp.Declaration] -> Cpp.Declaration
+namespaceDecl ns decls = Cpp.DeclarationNamespace $ Cpp.NamespaceDeclaration (encodeNamespace ns) decls
+
 partialVisitorName :: Name -> String
 partialVisitorName name = sanitizeCppName $ localNameOf name ++ "PartialVisitor"
 

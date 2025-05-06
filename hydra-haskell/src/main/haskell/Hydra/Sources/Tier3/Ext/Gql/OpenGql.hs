@@ -480,13 +480,13 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
 -- objectExpressionPrimary
 --     : VARIABLE valueExpressionPrimary
 --     | parenthesizedValueExpression
---     | nonParenthesizedValueExpressionPrimarySpecialCase
+--     | nonParenthesizedPrimaryValueExpressionSpecialCase
 --     ;
       def "ObjectExpressionPrimary" $
         union [
-          "variable">: gql "ValueExpressionPrimary",
+          "variable">: gql "PrimaryValueExpression",
           "parenthesized">: gql "ParenthesizedValueExpression",
-          "nonParenthesized">: gql "NonParenthesizedValueExpressionPrimarySpecialCase"],
+          "nonParenthesized">: gql "NonParenthesizedPrimaryValueExpressionSpecialCase"],
 
 -- // 12.1 <linear catalog-modifying statement>
 --
@@ -3952,7 +3952,7 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
 --     ;
       def "NullPredicate" $
         record [
-          "valueExpression">: gql "ValueExpressionPrimary",
+          "valueExpression">: gql "PrimaryValueExpression",
           "nullPart">: gql "NullPredicatePart2"],
 
 -- nullPredicatePart2
@@ -3969,7 +3969,7 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
 --     ;
       def "ValueTypePredicate" $
         record [
-          "valueExpression">: gql "ValueExpressionPrimary",
+          "valueExpression">: gql "PrimaryValueExpression",
           "valueTypePart">: gql "ValueTypePredicatePart2"],
 
 -- valueTypePredicatePart2
@@ -4138,7 +4138,7 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
           "propertyGraph">: gql "GraphExpression",
           "bindingTable">: gql "BindingTableExpression",
           "valueFunction">: gql "ValueFunction",
-          "primary">: gql "ValueExpressionPrimary"],
+          "primary">: gql "PrimaryValueExpression"],
 
       def "SignedExpr" $
         record [
@@ -4295,13 +4295,13 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
 --     : valueExpressionPrimary
 --     ;
       def "NodeReferenceValueExpression" $
-        gql "ValueExpressionPrimary",
+        gql "PrimaryValueExpression",
 
 -- edgeReferenceValueExpression
 --     : valueExpressionPrimary
 --     ;
       def "EdgeReferenceValueExpression" $
-        gql "ValueExpressionPrimary",
+        gql "PrimaryValueExpression",
 
 -- aggregatingValueExpression
 --     : valueExpression
@@ -4327,7 +4327,7 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
 --     | letValueExpression
 --     | bindingVariableReference
 --     ;
-      def "ValueExpressionPrimary" $
+      def "PrimaryValueExpression" $
         union [
           "parenthesized">: gql "ParenthesizedValueExpression",
           "aggregateFunction">: gql "AggregateFunction",
@@ -4347,16 +4347,16 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
       def "ParenthesizedValueExpression" $
         gql "ValueExpression",
 
--- nonParenthesizedValueExpressionPrimary
---     : nonParenthesizedValueExpressionPrimarySpecialCase
+-- nonParenthesizedPrimaryValueExpression
+--     : nonParenthesizedPrimaryValueExpressionSpecialCase
 --     | bindingVariableReference
 --     ;
-      def "NonParenthesizedValueExpressionPrimary" $
+      def "NonParenthesizedPrimaryValueExpression" $
         union [
-          "specialCase">: gql "NonParenthesizedValueExpressionPrimarySpecialCase",
-          "bindingVariableReference">: gql "BindingVariableReference"],
+          "special">: gql "NonParenthesizedPrimaryValueExpressionSpecialCase",
+          "bindingVariable">: gql "BindingVariableReference"],
 
--- nonParenthesizedValueExpressionPrimarySpecialCase
+-- nonParenthesizedPrimaryValueExpressionSpecialCase
 --     : aggregateFunction
 --     | unsignedValueSpecification
 -- // List and Record literals are redundantly/ambiguously part of the literal production
@@ -4370,7 +4370,7 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
 --     | element_idFunction
 --     | letValueExpression
 --     ;
-      def "NonParenthesizedValueExpressionPrimarySpecialCase" $
+      def "NonParenthesizedPrimaryValueExpressionSpecialCase" $
         union [
           "aggregateFunction">: gql "AggregateFunction",
           "unsignedValueSpecification">: gql "UnsignedValueSpecification",
@@ -4511,12 +4511,12 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
         gql "Result",
 
 -- caseOperand
---     : nonParenthesizedValueExpressionPrimary
+--     : nonParenthesizedPrimaryValueExpression
 --     | elementVariableReference
 --     ;
       def "CaseOperand" $
         union [
-          "valueExpression">: gql "NonParenthesizedValueExpressionPrimary",
+          "valueExpression">: gql "NonParenthesizedPrimaryValueExpression",
           "elementReference">: gql "ElementVariableReference"],
 
 -- whenOperandList
@@ -4526,7 +4526,7 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
         nonemptyList $ gql "WhenOperand",
 
 -- whenOperand
---     : nonParenthesizedValueExpressionPrimary
+--     : nonParenthesizedPrimaryValueExpression
 --     | comparisonPredicatePart2
 --     | nullPredicatePart2
 --     | valueTypePredicatePart2
@@ -4538,7 +4538,7 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
 --     ;
       def "WhenOperand" $
         union [
-          "valueExpression">: gql "NonParenthesizedValueExpressionPrimary",
+          "valueExpression">: gql "NonParenthesizedPrimaryValueExpression",
           "comparison">: gql "ComparisonPredicatePart2",
           "nullPredicate">: gql "NullPredicatePart2",
           "valueTypePredicate">: gql "ValueTypePredicatePart2",
@@ -4554,7 +4554,7 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
 --     ;
       def "Result" $
         union [
-          "expression">: gql "ResultExpression",
+          "simple">: gql "ResultExpression",
           "nullLiteral">: unit],
 
 -- resultExpression
@@ -4683,7 +4683,7 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
 --     ;
       def "PropertyReference" $
         record [
-          "valueExpression">: gql "ValueExpressionPrimary",
+          "valueExpression">: gql "PrimaryValueExpression",
           "propertyName">: gql "PropertyName"],
 
 -- // 20.12 <binding variable reference>
@@ -4849,7 +4849,7 @@ openGqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
           "signed">: gql "SignedNumericValueExpression",
           "multiplicationOrDivision">: gql "MulDivNumericValueExpression",
           "additionOrSubtraction">: gql "AddSubNumericValueExpression",
-          "primary">: gql "ValueExpressionPrimary",
+          "primary">: gql "PrimaryValueExpression",
           "function">: gql "NumericValueFunction"],
 
       def "SignedNumericValueExpression" $
