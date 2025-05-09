@@ -20,6 +20,7 @@ import Hydra.Ext.Other.Datalog
 import Hydra.Ext.Other.GeoJson
 import Hydra.Ext.Other.IanaRelations
 import Hydra.Ext.Other.Osv
+import Hydra.Ext.Other.PathAlgebra
 import Hydra.Ext.Other.StacItems
 
 
@@ -38,6 +39,7 @@ hydraExtModules = [
   osvSchemaModule,
   owlSyntaxModule,
   parquetFormatModule,
+  pathAlgebraModule,
   shexSyntaxModule,
   sqlModule,
   stacModule,
