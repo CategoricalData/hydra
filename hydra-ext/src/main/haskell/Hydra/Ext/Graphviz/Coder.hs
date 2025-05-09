@@ -126,7 +126,7 @@ termLabel compact namespaces term = case term of
     TermFunction f -> case f of
       FunctionLambda (Lambda v _ body) -> simpleLabel $ if compact then "\x03BB" else "lambda"
       FunctionElimination e -> case e of
-        EliminationProduct (TupleProjection n i) -> simpleLabel $ "[" ++ show i ++ "/" ++ show n ++ "]"
+        EliminationProduct (TupleProjection n i _) -> simpleLabel $ "[" ++ show i ++ "/" ++ show n ++ "]"
         EliminationRecord (Projection tname fname) -> simpleLabel $ "{" ++ toCompactName namespaces tname ++ "}." ++ unName fname
         EliminationUnion (CaseStatement tname _ _) -> simpleLabel $ "cases_{" ++ toCompactName namespaces tname ++ "}"
         EliminationWrap name -> simpleLabel $ "unwrap_{" ++ toCompactName namespaces name ++ "}"
