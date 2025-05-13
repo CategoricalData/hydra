@@ -229,6 +229,7 @@ _literals_int16ToBigint     = qname _hydra_lib_literals "int16ToBigint" :: Name
 _literals_int32ToBigint     = qname _hydra_lib_literals "int32ToBigint" :: Name
 _literals_int64ToBigint     = qname _hydra_lib_literals "int64ToBigint" :: Name
 _literals_showInt32         = qname _hydra_lib_literals "showInt32" :: Name
+_literals_showInt64         = qname _hydra_lib_literals "showInt64" :: Name
 _literals_showString        = qname _hydra_lib_literals "showString" :: Name
 _literals_uint8ToBigint     = qname _hydra_lib_literals "uint8ToBigint" :: Name
 _literals_uint16ToBigint    = qname _hydra_lib_literals "uint16ToBigint" :: Name

@@ -62,6 +62,9 @@ int64ToBigint = fromIntegral
 showInt32 :: Int -> String
 showInt32 = show
 
+showInt64 :: Int64 -> String
+showInt64 = show
+
 showString :: String -> String
 showString = show
 
