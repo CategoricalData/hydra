@@ -3,6 +3,7 @@
 module Hydra.Lib.Literals where
 
 import Data.Int
+import Text.Read (readMaybe)
 
 
 bigfloatToBigint :: Double -> Integer
@@ -58,6 +59,25 @@ int32ToBigint = fromIntegral
 
 int64ToBigint :: Int64 -> Integer
 int64ToBigint = fromIntegral
+
+readBoolean :: String -> Maybe Bool
+readBoolean s = if s == "true" then Just True
+  else if s == "false" then Just False
+  else Nothing
+
+readInt32 :: String -> Maybe Int
+readInt32 s = readMaybe s :: Maybe Int
+
+readInt64 :: String -> Maybe Int64
+readInt64 s = readMaybe s :: Maybe Int64
+
+readString :: String -> Maybe String
+readString s = readMaybe s :: Maybe String
+
+showBoolean :: Bool -> String
+showBoolean b = case b of
+  True -> "true"
+  False -> "false"
 
 showInt32 :: Int -> String
 showInt32 = show

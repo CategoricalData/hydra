@@ -228,6 +228,11 @@ _literals_int8ToBigint      = qname _hydra_lib_literals "int8ToBigint" :: Name
 _literals_int16ToBigint     = qname _hydra_lib_literals "int16ToBigint" :: Name
 _literals_int32ToBigint     = qname _hydra_lib_literals "int32ToBigint" :: Name
 _literals_int64ToBigint     = qname _hydra_lib_literals "int64ToBigint" :: Name
+_literals_readBoolean       = qname _hydra_lib_literals "readBoolean" :: Name
+_literals_readInt32         = qname _hydra_lib_literals "readInt32" :: Name
+_literals_readInt64         = qname _hydra_lib_literals "readInt64" :: Name
+_literals_readString        = qname _hydra_lib_literals "readString" :: Name
+_literals_showBoolean       = qname _hydra_lib_literals "show" :: Name
 _literals_showInt32         = qname _hydra_lib_literals "showInt32" :: Name
 _literals_showInt64         = qname _hydra_lib_literals "showInt64" :: Name
 _literals_showString        = qname _hydra_lib_literals "showString" :: Name
@@ -256,7 +261,13 @@ hydraLibLiterals = standardLibrary _hydra_lib_literals [
   prim1 _literals_int16ToBigint     Literals.int16ToBigint     [] int16 bigint,
   prim1 _literals_int32ToBigint     Literals.int32ToBigint     [] int32 bigint,
   prim1 _literals_int64ToBigint     Literals.int64ToBigint     [] int64 bigint,
+  prim1 _literals_readBoolean       Literals.readBoolean       [] string (optional boolean),
+  prim1 _literals_readInt32         Literals.readInt32         [] string (optional int32),
+  prim1 _literals_readInt64         Literals.readInt64         [] string (optional int64),
+  prim1 _literals_readString        Literals.readString        [] string (optional string),
+  prim1 _literals_showBoolean       Literals.showBoolean       [] boolean string,
   prim1 _literals_showInt32         Literals.showInt32         [] int32 string,
+  prim1 _literals_showInt64         Literals.showInt64         [] int64 string,
   prim1 _literals_showString        Literals.showString        [] string string,
   prim1 _literals_uint8ToBigint     Literals.uint8ToBigint     [] uint8 bigint,
   prim1 _literals_uint16ToBigint    Literals.uint16ToBigint    [] uint16 bigint,
