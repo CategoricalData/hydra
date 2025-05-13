@@ -1,0 +1,6 @@
+id,customer_id,employee_id,interaction_date,notes,duration_minutes,follow_up_required,customer_initiated
+1,3,6,"2025-04-05","Sent custom planet designs with fjords",30,true,false
+2,1,5,"2025-02-18","Complained about door personality modules",10,true,true
+3,2,3,"2025-03-20","Request for restaurant menu samples",NULL,false,true
+4,4,7,"2025-02-28","Poetry submission for review",NULL,false,true
+

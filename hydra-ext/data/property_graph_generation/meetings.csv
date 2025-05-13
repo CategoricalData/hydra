@@ -1,0 +1,6 @@
+id,customer_id,employee_id,interaction_date,notes,duration_minutes,follow_up_required,customer_initiated
+1,1,2,"2025-02-15","Discussed the improbability of their newest product line",45,true,false
+2,2,4,"2025-04-22","Proposed special menu items for Time Travelers Week",60,true,false
+3,3,1,"2025-03-15","Annual planetary design review",120,true,false
+4,5,6,"2025-03-05","Discussion about towel promotional event",60,true,false
+

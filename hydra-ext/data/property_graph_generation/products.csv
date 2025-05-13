@@ -1,0 +1,10 @@
+product_id,product_name,price,category_name,since_date,is_primary
+1,"Infinite Improbability Drive",999999.99,"Improbability Devices","2024-01-15",true
+2,"Hitchhiker's Guide Mark II",42.00,"Guide Editions","2023-11-30",true
+3,"Super-Absorbent Towel",19.99,"Towels",NULL,true
+4,"Babel Fish Translator",149.50,"Babel Fish Products","2024-02-20",true
+5,"Perfect Cup of Tea Simulator",239.95,"Nutrimatic Machines","2023-09-05",true
+6,"Pan Galactic Gargle Blaster Kit",59.99,"Nutrimatic Machines","2023-08-12",true
+7,"Electronic Thumb",29.95,"Improbability Devices","2022-03-18",false
+8,"Digital Watch (Amazingly Complicated)",24.95,"Improbability Devices",NULL,true
+9,"Nutrimatic Drink Dispenser",NULL,"Nutrimatic Machines","2023-01-08",true
