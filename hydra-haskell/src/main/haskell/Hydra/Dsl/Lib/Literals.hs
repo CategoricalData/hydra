@@ -64,6 +64,9 @@ int64ToBigint = TTerm $ Terms.primitive _literals_int64ToBigint
 showInt32 :: TTerm (Int -> String)
 showInt32 = TTerm $ Terms.primitive _literals_showInt32
 
+showInt64 :: TTerm (Int64 -> String)
+showInt64 = TTerm $ Terms.primitive _literals_showInt64
+
 showString :: TTerm (String -> String)
 showString = TTerm $ Terms.primitive _literals_showString
 
