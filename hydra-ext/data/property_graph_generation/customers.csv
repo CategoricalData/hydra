@@ -1,0 +1,6 @@
+customer_id,company_name,contact_name,email,phone
+1,"Sirius Cybernetics Corporation","Hactar","hactar@sirius.com","+42-5551234"
+2,"Milliways Restaurant","Max Quordlepleen","max@endofuniverse.com","+42-5557890"
+3,"Magrathean Planetary Design","Deep Thought","thought@magrathea.com",NULL
+4,"Vogon Poetry Appreciation","Prostetnic Jeltz","poetry@vogon.gov","+42-5552468"
+5,"Betelgeusian Trading Co.","Hotblack Desiato",NULL,"+42-5551357"

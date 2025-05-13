@@ -1,0 +1,10 @@
+department_id,department_name,parent_department_id,parent_department_since
+1,"Executive Office",NULL,NULL
+2,"Research & Development",1,"1980-01-15"
+3,"Field Research",2,"1981-03-22"
+4,"Robotics",2,"1982-05-10"
+5,"Custom Design",NULL,NULL
+6,"Megadodo Publications",NULL,NULL
+7,"Vogon Constructor Fleet",6,"1990-08-30"
+8,"Restaurant Division",NULL,NULL
+9,"Marketing",1,"1983-11-05"

@@ -1,0 +1,9 @@
+employee_id,first_name,last_name,email,hire_date,manager_id,department_id,management_since_date,department_join_date,department_role
+1,"Zaphod","Beeblebrox","z.beeblebrox@heartofgold.com","1979-10-12",NULL,1,NULL,"1979-10-12","President"
+2,"Arthur","Dent","a.dent@heartofgold.com","2005-06-22",1,2,"2005-06-22","2005-06-22","Researcher"
+3,"Ford","Prefect","f.prefect@heartofgold.com","1980-03-08",1,3,"1980-03-08","1980-03-08","Field Agent"
+4,"Trillian","Astra","t.astra@heartofgold.com","1997-11-30",1,2,"1997-11-30","1997-11-30","Lead Scientist"
+5,"Marvin","Android","m.android@heartofgold.com","1981-02-14",4,4,NULL,"1981-02-14","Prototype Tester"
+6,"Slartibartfast","Magrathea","s.magrathea@heartofgold.com",NULL,3,5,"1980-01-10",NULL,"Fjord Designer"
+7,"Zarniwoop","Vann","z.vann@heartofgold.com","1984-09-27",NULL,6,NULL,"1984-09-27","Editor-in-Chief"
+8,"Prostetnic","Jeltz","p.jeltz@vogon.gov","2010-12-05",7,7,"2010-12-05","2010-12-05",NULL
