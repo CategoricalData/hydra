@@ -27,6 +27,7 @@ import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier1.All
 
+import Hydra.Sources.Tier1.Compute
 import Hydra.Sources.Tier2.Variants
 import Hydra.Sources.Libraries
 
@@ -34,7 +35,7 @@ import Hydra.Sources.Libraries
 hydraAnnotationsModule :: Module
 hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
     [hydraVariantsModule]
-    [hydraGraphModule, hydraMantleModule] $
+    [hydraComputeModule, hydraGraphModule, hydraMantleModule] $
     Just "Utilities for reading and writing type and term annotations"
   where
    elements = [
