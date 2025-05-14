@@ -483,4 +483,4 @@ isUnitTermDef = coreEncodingExtrasDefinition "isUnitTerm" $
 
 isUnitTypeDef :: TElement (Term -> Bool)
 isUnitTypeDef = coreEncodingExtrasDefinition "isUnitType" $
-  lambda "t" $ Equality.equalType (ref stripTypeDef @@ var "t") $ TTerm (coreEncodeType tUnit)
+  lambda "t" $ Equality.equalType (ref stripTypeDef @@ var "t") $ TTerm (coreEncodeType Types.unit)

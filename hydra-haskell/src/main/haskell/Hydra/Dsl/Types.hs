@@ -26,7 +26,7 @@ fun @@ arg = apply fun arg
 -- Example: "name">: string
 infixr 0 >:
 (>:) :: String -> Type -> FieldType
-name >: typ = field name typ
+name>: typ = field name typ
 
 -- * Fundamentals
 
