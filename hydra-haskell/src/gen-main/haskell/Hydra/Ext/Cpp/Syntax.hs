@@ -489,6 +489,8 @@ _Parameter_type = (Core.Name "type")
 
 _Parameter_name = (Core.Name "name")
 
+_Parameter_unnamed = (Core.Name "unnamed")
+
 _Parameter_defaultValue = (Core.Name "defaultValue")
 
 data FunctionBody = 
