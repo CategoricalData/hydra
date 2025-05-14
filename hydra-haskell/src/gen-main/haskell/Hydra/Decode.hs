@@ -45,8 +45,8 @@ booleanLiteral x = case x of
   Core.LiteralBoolean v1 -> (Optionals.pure v1)
   _ -> Nothing
 
-casesCase :: (Core.Name -> Core.Name -> Core.Term -> Maybe Core.Term)
-casesCase tname fname = (Optionals.compose (cases tname) (field fname))
+caseField :: (Core.Name -> Core.Name -> Core.Term -> Maybe Core.Term)
+caseField tname fname = (Optionals.compose (cases tname) (field fname))
 
 cases :: (Core.Name -> Core.Term -> Maybe [Core.Field])
 cases = (nominal Core.caseStatementTypeName Core.caseStatementCases (Optionals.compose (Optionals.compose matchFunction matchElimination) matchUnion)) 
