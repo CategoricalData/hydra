@@ -3,14 +3,9 @@
 module Hydra.Sources.Tier2.Rewriting where
 
 -- Standard Tier-2 imports
-import           Prelude hiding ((++))
-import qualified Data.List                 as L
-import qualified Data.Map                  as M
-import qualified Data.Set                  as S
-import qualified Data.Maybe                as Y
-import           Hydra.Dsl.Base            as Base
 import qualified Hydra.Dsl.Core            as Core
 import qualified Hydra.Dsl.Graph           as Graph
+import qualified Hydra.Dsl.Lib.Chars       as Chars
 import qualified Hydra.Dsl.Lib.Equality    as Equality
 import qualified Hydra.Dsl.Lib.Flows       as Flows
 import qualified Hydra.Dsl.Lib.Io          as Io
@@ -20,12 +15,18 @@ import qualified Hydra.Dsl.Lib.Logic       as Logic
 import qualified Hydra.Dsl.Lib.Maps        as Maps
 import qualified Hydra.Dsl.Lib.Math        as Math
 import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import           Hydra.Dsl.Phantoms        as Phantoms
 import qualified Hydra.Dsl.Lib.Sets        as Sets
 import           Hydra.Dsl.Lib.Strings     as Strings
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier1.All
+import           Prelude hiding ((++))
+import qualified Data.List                 as L
+import qualified Data.Map                  as M
+import qualified Data.Set                  as S
+import qualified Data.Maybe                as Y
 
 import Hydra.Dsl.Mantle
 import Hydra.Sources.Libraries
@@ -56,11 +57,11 @@ foldOverTermDef :: TElement (TraversalOrder -> (x -> Term -> x) -> x -> Term -> 
 foldOverTermDef = rewritingDefinition "foldOverTerm" $
   doc "Fold over a term, traversing its subterms in the specified order" $
   lambda "order" $ lambda "fld" $ lambda "b0" $ lambda "term" $ (match _TraversalOrder Nothing [
-    _TraversalOrder_pre>>: constant (Base.fold (ref foldOverTermDef @@ var "order" @@ var "fld")
+    _TraversalOrder_pre>>: constant (Phantoms.fold (ref foldOverTermDef @@ var "order" @@ var "fld")
       @@ (var "fld" @@ var "b0" @@ var "term")
       @@ (ref subtermsDef @@ var "term")),
     _TraversalOrder_post>>: constant (var "fld"
-      @@ (Base.fold (ref foldOverTermDef @@ var "order" @@ var "fld")
+      @@ (Phantoms.fold (ref foldOverTermDef @@ var "order" @@ var "fld")
         @@ (var "b0")
         @@ (ref subtermsDef @@ var "term"))
       @@ var "term")] @@ var "order")
@@ -69,11 +70,11 @@ foldOverTypeDef :: TElement (TraversalOrder -> (x -> Type -> x) -> x -> Type -> 
 foldOverTypeDef = rewritingDefinition "foldOverType" $
   doc "Fold over a type, traversing its subtypes in the specified order" $
   lambda "order" $ lambda "fld" $ lambda "b0" $ lambda "typ" $ (match _TraversalOrder Nothing [
-    _TraversalOrder_pre>>: constant (Base.fold (ref foldOverTypeDef @@ var "order" @@ var "fld")
+    _TraversalOrder_pre>>: constant (Phantoms.fold (ref foldOverTypeDef @@ var "order" @@ var "fld")
       @@ (var "fld" @@ var "b0" @@ var "typ")
       @@ (ref subtypesDef @@ var "typ")),
     _TraversalOrder_post>>: constant (var "fld"
-      @@ (Base.fold (ref foldOverTypeDef @@ var "order" @@ var "fld")
+      @@ (Phantoms.fold (ref foldOverTypeDef @@ var "order" @@ var "fld")
         @@ (var "b0")
         @@ (ref subtypesDef @@ var "typ"))
       @@ var "typ")] @@ var "order")
@@ -82,7 +83,7 @@ freeVariablesInTermDef :: TElement (Term -> S.Set Name)
 freeVariablesInTermDef = rewritingDefinition "freeVariablesInTerm" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a term" $
   lambda "term" $ lets [
-    "dfltVars">: Base.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (ref freeVariablesInTermDef @@ var "t"))
+    "dfltVars">: Phantoms.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (ref freeVariablesInTermDef @@ var "t"))
       @@ Sets.empty
       @@ (ref subtermsDef @@ var "term")]
     $ match _Term (Just $ var "dfltVars") [
@@ -100,7 +101,7 @@ freeVariablesInTypeDef :: TElement (Type -> S.Set Name)
 freeVariablesInTypeDef = rewritingDefinition "freeVariablesInType" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a type" $
   lambda "typ" $ lets [
-    "dfltVars">: Base.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (recurse @@ var "t"))
+    "dfltVars">: Phantoms.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (recurse @@ var "t"))
       @@ Sets.empty
       @@ (ref subtypesDef @@ var "typ")]
     $ match _Type (Just $ var "dfltVars") [

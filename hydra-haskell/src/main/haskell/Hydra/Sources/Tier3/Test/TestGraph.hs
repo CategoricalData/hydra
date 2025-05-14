@@ -1,9 +1,9 @@
 module Hydra.Sources.Tier3.Test.TestGraph where
 
-import qualified Hydra.Dsl.Base          as Base
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Graph         as Graph
 import qualified Hydra.Dsl.Module        as Module
+import qualified Hydra.Dsl.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Lib.Io        as Io
 import qualified Hydra.Dsl.Lib.Lists     as Lists
@@ -12,6 +12,7 @@ import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Terms         as Terms
@@ -91,7 +92,7 @@ testTypeLatLonPolyNameDef = testGraphDefinition "testTypeLatLonPolyName" $
 
 latlonRecordDef :: TElement (Float -> Float -> Term)
 latlonRecordDef = testGraphDefinition "latlonRecord" $
-  Base.lambdas ["lat", "lon"] $ record (ref testTypeLatLonNameDef) [
+  Phantoms.lambdas ["lat", "lon"] $ record (ref testTypeLatLonNameDef) [
     "lat">: float32Term $ variable "lat",
     "lon">: float32Term $ variable "lon"]
 
@@ -120,21 +121,21 @@ testElementArthurDef = testGraphDefinition "testElementArthur" $
   Graph.element
     (name "firstName")
     (ref testDataArthurDef)
-    (Base.just $ Core.typeScheme (Base.list []) (Core.typeVariable $ ref testTypePersonNameDef))
+    (Phantoms.just $ Core.typeScheme (Phantoms.list []) (Core.typeVariable $ ref testTypePersonNameDef))
 
 testElementFirstNameDef :: TElement Element
 testElementFirstNameDef = testGraphDefinition "testElementFirstName" $
   Graph.element
     (name "firstName")
     (project (ref testTypePersonNameDef) (name "firstName"))
-    (Base.just $ Core.typeScheme (Base.list [])
+    (Phantoms.just $ Core.typeScheme (Phantoms.list [])
       (Core.typeFunction $ Core.functionType (Core.typeVariable $ ref testTypePersonNameDef) T.string))
 
 --testGraph :: Graph
 --testGraph = elementsToGraph hydraCoreGraph (Just testSchemaGraph) [testElementArthur, testElementFirstName]
 
 testNamespaceDef :: TElement Namespace
-testNamespaceDef = testGraphDefinition "testNamespace" $ Module.namespace $ Base.string "testGraph"
+testNamespaceDef = testGraphDefinition "testNamespace" $ Module.namespace $ Phantoms.string "testGraph"
 
 --testSchemaGraph :: Graph
 --testSchemaGraph = elementsToGraph hydraCoreGraph (Just hydraCoreGraph) [
@@ -159,7 +160,7 @@ testNamespaceDef = testGraphDefinition "testNamespace" $ Module.namespace $ Base
 --    def = typeElement
 
 testSchemaNamespaceDef :: TElement Namespace
-testSchemaNamespaceDef = testGraphDefinition "testSchemaNamespace" $ Module.namespace $ Base.string "testSchemaGraph"
+testSchemaNamespaceDef = testGraphDefinition "testSchemaNamespace" $ Module.namespace $ Phantoms.string "testSchemaGraph"
 
 testDataArthurDef :: TElement Term
 testDataArthurDef = testGraphDefinition "testDataArthur" $

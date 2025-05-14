@@ -4,7 +4,7 @@ import Hydra.Testing
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Tier2.All
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Phantoms as Base
 import Hydra.Dsl.Testing
 import qualified Hydra.Dsl.TTerms as TTerms
 

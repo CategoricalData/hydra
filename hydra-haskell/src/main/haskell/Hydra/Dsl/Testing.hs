@@ -3,7 +3,7 @@ module Hydra.Dsl.Testing where
 
 import Hydra.Kernel
 import Hydra.Testing as Testing
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Phantoms as Phantoms
 import qualified Hydra.Dsl.Core as Core
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.TTerms as TTerms
@@ -23,8 +23,8 @@ expectPoly i tags term params typ = infTest ("#" ++ show i) tags term $ T.poly p
 groupRef = TTerms.variableFromName . elementName
 
 infTest :: String -> [Tag] -> TTerm Term -> TTerm TypeScheme -> TTerm TestCaseWithMetadata
-infTest name tags term ts = testCaseWithMetadata (Base.string name)
-  (testCaseInference $ inferenceTestCase term ts) nothing (Base.list $ tag . unTag <$> tags)
+infTest name tags term ts = testCaseWithMetadata (Phantoms.string name)
+  (testCaseInference $ inferenceTestCase term ts) nothing (Phantoms.list $ tag . unTag <$> tags)
 
 isDisabled tcase = tag_disabled `L.elem` Testing.testCaseWithMetadataTags tcase
 isDisabledForMinimalInference tcase = tag_disabledForMinimalInference `L.elem` Testing.testCaseWithMetadataTags tcase
@@ -40,10 +40,10 @@ supergroup :: String -> [TTerm TestGroup] -> TTerm TestGroup
 supergroup name subgroups = tgroup name Nothing subgroups []
 
 tag :: String -> TTerm Tag
-tag = Base.wrap _Tag . Base.string
+tag = Phantoms.wrap _Tag . Phantoms.string
 
 tgroup :: String -> Maybe String -> [TTerm TestGroup] -> [TTerm TestCaseWithMetadata] -> TTerm TestGroup
-tgroup name mdesc subgroups cases = testGroup (Base.string name) (opt (Base.string <$> mdesc)) (Base.list subgroups) (Base.list cases)
+tgroup name mdesc subgroups cases = testGroup (Phantoms.string name) (opt (Phantoms.string <$> mdesc)) (Phantoms.list subgroups) (Phantoms.list cases)
 
 ----------------------------------------
 
@@ -91,7 +91,7 @@ encodedTestGroupToElement ns lname group = Element name (setTermType (Just typ) 
     typ = TypeVariable _TestGroup
 
 inferenceTestCase :: TTerm Term -> TTerm TypeScheme -> TTerm InferenceTestCase
-inferenceTestCase input output = Base.record _InferenceTestCase [
+inferenceTestCase input output = Phantoms.record _InferenceTestCase [
   _InferenceTestCase_input>>: input,
   _InferenceTestCase_output>>: output]
 
@@ -99,26 +99,26 @@ testCaseInference :: TTerm InferenceTestCase -> TTerm TestCase
 testCaseInference = variant _TestCase _TestCase_inference
 
 testCaseWithMetadata :: TTerm String -> TTerm TestCase -> TTerm (Maybe String) -> TTerm [Tag] -> TTerm TestCaseWithMetadata
-testCaseWithMetadata name tcase description tags = Base.record _TestCaseWithMetadata [
+testCaseWithMetadata name tcase description tags = Phantoms.record _TestCaseWithMetadata [
   _TestCaseWithMetadata_name>>: name,
   _TestCaseWithMetadata_case>>: tcase,
   _TestCaseWithMetadata_description>>: description,
   _TestCaseWithMetadata_tags>>: tags]
 
 testCaseWithMetadataName :: TTerm (TestCaseWithMetadata -> String)
-testCaseWithMetadataName = Base.project _TestCaseWithMetadata _TestCaseWithMetadata_name
+testCaseWithMetadataName = Phantoms.project _TestCaseWithMetadata _TestCaseWithMetadata_name
 
 testCaseWithMetadataCase :: TTerm (TestCaseWithMetadata -> TestCase)
-testCaseWithMetadataCase = Base.project _TestCaseWithMetadata _TestCaseWithMetadata_case
+testCaseWithMetadataCase = Phantoms.project _TestCaseWithMetadata _TestCaseWithMetadata_case
 
 testCaseWithMetadataDescription :: TTerm (TestCaseWithMetadata -> Maybe String)
-testCaseWithMetadataDescription = Base.project _TestCaseWithMetadata _TestCaseWithMetadata_description
+testCaseWithMetadataDescription = Phantoms.project _TestCaseWithMetadata _TestCaseWithMetadata_description
 
 testCaseWithMetadataTags :: TTerm (TestCaseWithMetadata -> [Tag])
-testCaseWithMetadataTags = Base.project _TestCaseWithMetadata _TestCaseWithMetadata_tags
+testCaseWithMetadataTags = Phantoms.project _TestCaseWithMetadata _TestCaseWithMetadata_tags
 
 testGroup :: TTerm String -> TTerm (Maybe String) -> TTerm [TestGroup] -> TTerm [TestCaseWithMetadata] -> TTerm TestGroup
-testGroup name description subgroups cases = Base.record _TestGroup [
+testGroup name description subgroups cases = Phantoms.record _TestGroup [
   _TestGroup_name>>: name,
   _TestGroup_description>>: description,
   _TestGroup_subgroups>>: subgroups,

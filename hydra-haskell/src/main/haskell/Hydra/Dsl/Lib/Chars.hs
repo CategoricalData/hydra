@@ -1,6 +1,6 @@
 module Hydra.Dsl.Lib.Chars where
 
-import Hydra.Dsl.Base
+import Hydra.Dsl.Phantoms
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms

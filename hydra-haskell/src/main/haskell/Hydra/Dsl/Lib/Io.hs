@@ -4,7 +4,7 @@ import Hydra.Core
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
-import Hydra.Dsl.Base
+import Hydra.Dsl.Phantoms
 
 
 showTerm :: TTerm Term -> TTerm String

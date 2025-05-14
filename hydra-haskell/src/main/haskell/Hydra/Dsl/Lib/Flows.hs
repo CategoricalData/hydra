@@ -1,6 +1,6 @@
 module Hydra.Dsl.Lib.Flows where
 
-import Hydra.Dsl.Base
+import Hydra.Dsl.Phantoms
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Phantoms

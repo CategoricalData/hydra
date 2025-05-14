@@ -1,7 +1,7 @@
 module Hydra.Dsl.Graph where
 
 import Hydra.Kernel
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Phantoms
 
 import qualified Data.Map as M
 

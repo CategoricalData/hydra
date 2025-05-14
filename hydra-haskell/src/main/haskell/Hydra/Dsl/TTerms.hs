@@ -10,7 +10,7 @@ import Hydra.Kernel
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Core as Core
 import Hydra.Dsl.TBase
-import qualified Hydra.Dsl.Base as Base
+import qualified Hydra.Dsl.Phantoms as Phantoms
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -65,38 +65,38 @@ int32Term :: TTerm Int -> TTerm Term
 int32Term = Core.termLiteral . Core.literalInteger . Core.integerValueInt32
 
 just :: TTerm Term -> TTerm (Maybe Term)
-just = Base.just
+just = Phantoms.just
 
 lambda :: String -> TTerm Term -> TTerm Term
-lambda var body = Core.termFunction $ Core.functionLambda $ Core.lambda (name var) Base.nothing body
+lambda var body = Core.termFunction $ Core.functionLambda $ Core.lambda (name var) Phantoms.nothing body
 
 lambdas :: [String] -> TTerm Term -> TTerm Term
 lambdas params body = case params of
   [] -> body
-  (h:rest) -> Core.termFunction $ Core.functionLambda $ Core.lambda (name h) Base.nothing $ lambdas rest body
+  (h:rest) -> Core.termFunction $ Core.functionLambda $ Core.lambda (name h) Phantoms.nothing $ lambdas rest body
 
 let1 :: String -> TTerm Term -> TTerm Term -> TTerm Term
-let1 v t1 t2 = Core.termLet $ Core.letExpression (Base.list [Core.letBinding (name v) t1 Base.nothing]) t2
+let1 v t1 t2 = Core.termLet $ Core.letExpression (Phantoms.list [Core.letBinding (name v) t1 Phantoms.nothing]) t2
 
 lets :: [(TTerm Name, TTerm Term)] -> TTerm Term -> TTerm Term
-lets pairs body = Core.termLet $ Core.letExpression (Base.list $ toBinding pairs) body
+lets pairs body = Core.termLet $ Core.letExpression (Phantoms.list $ toBinding pairs) body
   where
-    toBinding = fmap (\(n, t) -> Core.letBinding n t Base.nothing)
+    toBinding = fmap (\(n, t) -> Core.letBinding n t Phantoms.nothing)
 
 list :: [TTerm Term] -> TTerm Term
-list = Core.termList . Base.list
+list = Core.termList . Phantoms.list
 
 mapTerm :: TTerm (M.Map Term Term) -> TTerm Term
 mapTerm = Core.termMap
 
 match :: TTerm Name -> TTerm (Maybe Term) -> [(TTerm Name, TTerm Term)] -> TTerm Term
 match tname def pairs = Core.termFunction $ Core.functionElimination $ Core.eliminationUnion
-    $ Core.caseStatement tname def $ Base.list $ toField pairs
+    $ Core.caseStatement tname def $ Phantoms.list $ toField pairs
   where
     toField = fmap (\(n, t) -> Core.field n t)
 
 nothing :: TTerm (Maybe Term)
-nothing = Base.nothing
+nothing = Phantoms.nothing
 
 optional :: TTerm (Maybe Term) -> TTerm Term
 optional = Core.termOptional
@@ -115,7 +115,7 @@ project tname fname = Core.termFunction $ Core.functionElimination $ Core.elimin
   $ Core.projection tname fname
 
 record :: TTerm Name -> [(TTerm Name, TTerm Term)] -> TTerm Term
-record name pairs = Core.termRecord $ Core.record name $ Base.list (toField <$> pairs)
+record name pairs = Core.termRecord $ Core.record name $ Phantoms.list (toField <$> pairs)
   where
     toField (n, t) = Core.field n t
 
@@ -126,13 +126,13 @@ string :: String -> TTerm Term
 string = Core.termLiteral . Core.literalString . TTerm . Terms.string
 
 sum :: Int -> Int -> TTerm Term -> TTerm Term
-sum i s = Core.termSum . Core.sum (Base.int32 i) (Base.int32 s)
+sum i s = Core.termSum . Core.sum (Phantoms.int32 i) (Phantoms.int32 s)
 
 true :: TTerm Term
 true = boolean True
 
 tuple :: [TTerm Term] -> TTerm Term
-tuple = Core.termProduct . Base.list
+tuple = Core.termProduct . Phantoms.list
 
 uint64 :: Integer -> TTerm Term
 uint64 = uint64Term . TTerm . Terms.uint64
@@ -142,7 +142,7 @@ uint64Term = Core.termLiteral . Core.literalInteger . Core.integerValueUint64
 
 untuple :: Int -> Int -> TTerm Term
 untuple arity idx = Core.termFunction $ Core.functionElimination $ Core.eliminationProduct
-  $ Core.tupleProjection (Base.int32 arity) (Base.int32 idx) Base.nothing
+  $ Core.tupleProjection (Phantoms.int32 arity) (Phantoms.int32 idx) Phantoms.nothing
 
 unwrap :: TTerm Name -> TTerm Term
 unwrap = Core.termFunction . Core.functionElimination . Core.eliminationWrap

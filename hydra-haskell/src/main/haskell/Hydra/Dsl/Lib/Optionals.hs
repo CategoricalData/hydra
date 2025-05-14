@@ -3,7 +3,7 @@ module Hydra.Dsl.Lib.Optionals where
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
-import Hydra.Dsl.Base
+import Hydra.Dsl.Phantoms
 
 
 apply :: TTerm (Maybe (a -> b)) -> TTerm (Maybe a) -> TTerm (Maybe b)

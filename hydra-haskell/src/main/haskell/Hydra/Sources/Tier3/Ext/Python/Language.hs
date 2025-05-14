@@ -3,7 +3,7 @@
 module Hydra.Sources.Tier3.Ext.Python.Language where
 
 import Hydra.Sources.Tier2.All
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Phantoms
 import Hydra.Dsl.Coders as Coders
 import Hydra.Dsl.Lib.Equality as Equality
 import Hydra.Dsl.Lib.Flows as Flows

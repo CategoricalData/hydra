@@ -2,7 +2,7 @@ module Hydra.Sources.Tier3.Test.Inference.AlgorithmW (algorithmWTests) where
 
 import Hydra.Kernel
 import Hydra.Testing
-import qualified Hydra.Dsl.Base as Base
+import qualified Hydra.Dsl.Phantoms as Base
 import qualified Hydra.Dsl.Core as Core
 import Hydra.Dsl.Testing as Testing
 import Hydra.Dsl.ShorthandTypes
