@@ -215,9 +215,9 @@ mapType typ = case stripType typ of
   TypeMap mt -> pure mt
   _ -> unexpected "map type" $ show typ
 
-nArgs :: Int -> [Term] -> Flow s ()
-nArgs n args = if L.length args /= n
-  then unexpected (show n ++ " arguments") $ show (L.length args)
+nArgs :: Name -> Int -> [Term] -> Flow s ()
+nArgs name n args = if L.length args /= n
+  then unexpected (show n ++ " arguments to primitive " ++ show (unName name)) $ show (L.length args)
   else pure ()
 
 optional :: (Term -> Flow Graph x) -> Term -> Flow Graph (Y.Maybe x)

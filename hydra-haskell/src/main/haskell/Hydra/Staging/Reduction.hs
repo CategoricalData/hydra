@@ -13,6 +13,8 @@ import Hydra.Staging.Lexical
 import Hydra.Staging.Rewriting
 import Hydra.Rewriting
 import Hydra.Lexical
+import Hydra.Lib.Io
+import Hydra.Flows
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
@@ -40,6 +42,7 @@ countPrimitiveInvocations = True
 -- A term evaluation function which is alternatively lazy or eager
 reduceTerm :: Bool -> M.Map Name Term -> Term -> Flow Graph Term
 reduceTerm eager env = rewriteTermM mapping
+--reduceTerm eager env term = withTrace ("reducing " ++ showTerm term) $ rewriteTermM mapping term
   where
     reduce eager = reduceTerm eager M.empty
 

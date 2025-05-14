@@ -33,11 +33,15 @@ evaluateEdge (Pg.Edge label idSpec outSpec inSpec propSpecs) term = do
   return $ Pg.Edge label id outId inId props
 
 evaluateProperties :: M.Map Pg.PropertyKey Term -> Term -> Flow Graph (M.Map Pg.PropertyKey Term)
-evaluateProperties specs record = M.fromList <$> (CM.mapM forPair $ M.toList specs)
+evaluateProperties specs record = M.fromList . Y.catMaybes <$> (CM.mapM forPair $ M.toList specs)
   where
     forPair (k, spec) = do
-      value <- evaluate $ Terms.apply spec record
-      return (k, value)
+      value <- (evaluate $ Terms.apply spec record)
+      case fullyStripTerm value of
+        TermOptional mv -> case mv of
+          Nothing -> return Nothing
+          Just v -> return $ Just (k, v)
+        _ -> fail $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ showTerm value
 
 evaluateVertex :: Pg.Vertex Term -> Term -> Flow Graph (Pg.Vertex Term)
 evaluateVertex (Pg.Vertex label idSpec propSpecs) record = do

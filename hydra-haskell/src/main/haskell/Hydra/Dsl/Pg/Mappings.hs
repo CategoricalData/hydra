@@ -14,7 +14,7 @@ data LazyGraph v = LazyGraph
   { lazyGraphVertices :: [Vertex v]
   , lazyGraphEdges :: [Edge v]}
 
-columnValue :: String -> String -> TTerm (a -> b)
+columnValue :: String -> String -> TTerm (a -> Maybe b)
 columnValue sourceTable sourceColumn = project (Name sourceTable) (Name sourceColumn)
 
 edge :: String -> TTerm e -> TTerm vo -> TTerm vi -> [Property Term] -> Edge Term
