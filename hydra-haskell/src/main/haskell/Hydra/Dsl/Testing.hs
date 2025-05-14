@@ -31,7 +31,7 @@ isDisabledForMinimalInference tcase = tag_disabledForMinimalInference `L.elem` T
 
 -- Note: this is a cheat for an encoded map term; consider using the TTerms DSL
 mapTermCheat :: [(Term, Term)] -> TTerm Term
-mapTermCheat = TTerm . coreEncodeTerm . Terms.mapTerm . M.fromList
+mapTermCheat = TTerm . coreEncodeTerm . Terms.map . M.fromList
 
 subgroup :: String -> [TTerm TestCaseWithMetadata] -> TTerm TestGroup
 subgroup name = tgroup name Nothing []

@@ -583,7 +583,7 @@ inferTypeOfVariable cx name = case M.lookup name (inferenceContextDataTypes cx) 
     Just scheme -> Flows.bind (instantiateTypeScheme scheme) withTypeScheme
   where
     withTypeScheme (TypeScheme vars itype) = do
-        checkType (S.fromList vars) cx itype iterm
+--        checkType (S.fromList vars) cx itype iterm
         return $ InferenceResult iterm itype idTypeSubst
       where
         iterm = Terms.typeApplication (TermVariable name) $ fmap TypeVariable vars
@@ -661,7 +661,7 @@ yield term typ subst = InferenceResult (substTypesInTerm subst term) (substInTyp
 
 yieldChecked :: InferenceContext -> [Name] -> Term -> Type -> TypeSubst -> Flow s InferenceResult
 yieldChecked cx vars term typ subst = do
-    checkType (S.fromList vars) cx itype iterm
+--    checkType (S.fromList vars) cx itype iterm
     return $ InferenceResult iterm itype subst
   where
     iterm = substTypesInTerm subst term
