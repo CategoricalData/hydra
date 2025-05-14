@@ -4,7 +4,7 @@ import Hydra.Core
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Phantoms as Phantoms
 
 
 and :: TTerm Bool -> TTerm Bool -> TTerm Bool
@@ -23,7 +23,7 @@ or = primitive2 _logic_or
 -- Helpers which are not primitives
 
 ands :: TTerm [Bool] -> TTerm Bool
-ands terms = Base.fold (primitive _logic_and) @@ true @@ terms
+ands terms = Phantoms.fold (primitive _logic_and) @@ true @@ terms
 
 ors :: TTerm [Bool] -> TTerm Bool
-ors terms = Base.fold (primitive _logic_or) @@ false @@ terms
+ors terms = Phantoms.fold (primitive _logic_or) @@ false @@ terms

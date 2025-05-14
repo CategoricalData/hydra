@@ -1,7 +1,6 @@
 module Hydra.Sources.Tier1.Formatting where
 
 -- Standard term-level Tier-1 imports
-import           Hydra.Dsl.Base          as Base
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Lib.Equality  as Equality
@@ -14,6 +13,7 @@ import qualified Hydra.Dsl.Lib.Math      as Math
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
+import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Types         as Types
 import           Hydra.Sources.Tier0.Core

@@ -1,7 +1,7 @@
 module Hydra.Dsl.Compute where
 
 import Hydra.Kernel
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Phantoms
 import Hydra.Dsl.Core
 
 import qualified Data.Map as M

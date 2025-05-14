@@ -1,7 +1,7 @@
 module Hydra.Dsl.Typing where
 
 import Hydra.Kernel
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Phantoms as Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.Map as M
@@ -17,44 +17,44 @@ inferenceContext
   -> TTerm (M.Map Name TypeScheme)
   -> TTerm Bool
   -> TTerm InferenceContext
-inferenceContext schemaTypes primitiveTypes dataTypes debug = Base.record _InferenceContext [
+inferenceContext schemaTypes primitiveTypes dataTypes debug = Phantoms.record _InferenceContext [
   _InferenceContext_schemaTypes>>: schemaTypes,
   _InferenceContext_primitiveTypes>>: primitiveTypes,
   _InferenceContext_dataTypes>>: dataTypes,
   _InferenceContext_debug>>: debug]
 
 inferenceContextSchemaTypes :: TTerm (InferenceContext -> M.Map Name TypeScheme)
-inferenceContextSchemaTypes = Base.project _InferenceContext _InferenceContext_schemaTypes
+inferenceContextSchemaTypes = Phantoms.project _InferenceContext _InferenceContext_schemaTypes
 
 inferenceContextPrimitiveTypes :: TTerm (InferenceContext -> M.Map Name TypeScheme)
-inferenceContextPrimitiveTypes = Base.project _InferenceContext _InferenceContext_primitiveTypes
+inferenceContextPrimitiveTypes = Phantoms.project _InferenceContext _InferenceContext_primitiveTypes
 
 inferenceContextDataTypes :: TTerm (InferenceContext -> M.Map Name TypeScheme)
-inferenceContextDataTypes = Base.project _InferenceContext _InferenceContext_dataTypes
+inferenceContextDataTypes = Phantoms.project _InferenceContext _InferenceContext_dataTypes
 
 inferenceContextDebug :: TTerm (InferenceContext -> Bool)
-inferenceContextDebug = Base.project _InferenceContext _InferenceContext_debug
+inferenceContextDebug = Phantoms.project _InferenceContext _InferenceContext_debug
 
 termSubst :: TTerm (M.Map Name Term) -> TTerm TermSubst
-termSubst = Base.wrap _TermSubst
+termSubst = Phantoms.wrap _TermSubst
 
 typeConstraint :: TTerm Type -> TTerm Type -> TTerm String -> TTerm TypeConstraint
-typeConstraint t1 t2 comment = Base.record _TypeConstraint [
+typeConstraint t1 t2 comment = Phantoms.record _TypeConstraint [
   _TypeConstraint_left>>: t1,
   _TypeConstraint_right>>: t2,
   _TypeConstraint_comment>>: comment]
 
 typeConstraintLeft :: TTerm (TypeConstraint -> Type)
-typeConstraintLeft = Base.project _TypeConstraint _TypeConstraint_left
+typeConstraintLeft = Phantoms.project _TypeConstraint _TypeConstraint_left
 
 typeConstraintRight :: TTerm (TypeConstraint -> Type)
-typeConstraintRight = Base.project _TypeConstraint _TypeConstraint_right
+typeConstraintRight = Phantoms.project _TypeConstraint _TypeConstraint_right
 
 typeConstraintComment :: TTerm (TypeConstraint -> String)
-typeConstraintComment = Base.project _TypeConstraint _TypeConstraint_comment
+typeConstraintComment = Phantoms.project _TypeConstraint _TypeConstraint_comment
 
 typeSubst :: TTerm (M.Map Name Type) -> TTerm TypeSubst
-typeSubst = Base.wrap _TypeSubst
+typeSubst = Phantoms.wrap _TypeSubst
 
 unTermSubst :: TTerm (TermSubst -> M.Map Name Term)
 unTermSubst = unwrap _TermSubst

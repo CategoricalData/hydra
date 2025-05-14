@@ -3,7 +3,7 @@
 module Hydra.Demos.PropertyGraphGeneration.ExampleMapping where
 
 import Hydra.Phantoms
-import Hydra.Dsl.Base
+import Hydra.Dsl.Phantoms
 import Hydra.Dsl.Pg.Mappings
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Optionals as Optionals

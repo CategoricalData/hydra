@@ -3,7 +3,7 @@ module Hydra.Dsl.Pg.Mappings where
 import Hydra.Core
 import Hydra.Phantoms
 import Hydra.Pg.Model
-import Hydra.Dsl.Base
+import Hydra.Dsl.Phantoms
 
 import qualified Data.Map as M
 

@@ -5,7 +5,7 @@
 module Hydra.Demos.MeteredEvaluation (demoMeteredEvaluation) where
 
 import Hydra.Sources.Tier3.All
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Phantoms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Lib.Lists as Lists
 import Hydra.Dsl.Lib.Strings as Strings

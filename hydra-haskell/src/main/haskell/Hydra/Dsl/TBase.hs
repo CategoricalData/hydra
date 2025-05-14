@@ -1,7 +1,7 @@
 -- | A basis for other DSLs which deal with term-encoded expressions.
 
 module Hydra.Dsl.TBase (
-  module Hydra.Dsl.Base,
+  module Hydra.Dsl.Phantoms,
   module Hydra.Dsl.ShorthandTypes,
   module Hydra.Dsl.TBase,
   module Hydra.Sources.Libraries,
@@ -9,7 +9,7 @@ module Hydra.Dsl.TBase (
 
 import Hydra.Kernel
 import Hydra.Dsl.ShorthandTypes
-import Hydra.Dsl.Base(definitionInModule, el, firstClassType, opt, ref, variant)
+import Hydra.Dsl.Phantoms(definitionInModule, el, firstClassType, opt, ref, variant)
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Core as Core
 import Hydra.Sources.Libraries

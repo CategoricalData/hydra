@@ -1,7 +1,7 @@
 module Hydra.Dsl.Module where
 
 import Hydra.Kernel
-import Hydra.Dsl.Base as Base
+import Hydra.Dsl.Phantoms
 
 
 namespace :: TTerm String -> TTerm Namespace

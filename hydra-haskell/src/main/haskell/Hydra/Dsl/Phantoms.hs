@@ -1,7 +1,7 @@
--- | Base DSL which makes use of phantom types. Use this DSL for defining programs as opposed to data type definitions.
--- The phantom types provide static type checking at the Haskell level while working with the dynamically typed Hydra core.
-module Hydra.Dsl.Base (
-  module Hydra.Dsl.Base,
+-- | Term-level DSL which makes use of phantom types. Use this DSL for defining programs as opposed to data type definitions.
+-- The phantom types provide static type checking in Haskell prior to Hydra's runtime type checking.
+module Hydra.Dsl.Phantoms (
+  module Hydra.Dsl.Phantoms,
   module Hydra.Dsl.PhantomLiterals,
   hydraCoreGraph,
 ) where

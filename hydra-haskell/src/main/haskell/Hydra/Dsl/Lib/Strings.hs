@@ -1,10 +1,10 @@
 module Hydra.Dsl.Lib.Strings where
 
-import Hydra.Dsl.Base
+import Hydra.Dsl.Phantoms
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
-import Hydra.Dsl.Base
+import Hydra.Dsl.Phantoms
 
 
 (++) :: TTerm String -> TTerm String -> TTerm String
