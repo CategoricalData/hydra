@@ -42,7 +42,7 @@ hydraDecodeModule = Module (Namespace "hydra.decode") elements [hydraStripModule
       el binaryLiteralDef,
       el booleanDef,
       el booleanLiteralDef,
-      el casesCaseDef,
+      el caseFieldDef,
       el casesDef,
       el fieldDef,
       el float32Def,
@@ -131,8 +131,8 @@ casesDef = decodeDefinition "cases" $
       @@ Core.caseStatementCases
       @@ compose3 (var "matchFunction") (var "matchElimination") (var "matchUnion")
 
-casesCaseDef :: TElement (Name -> Name -> Term -> Y.Maybe Term)
-casesCaseDef = decodeDefinition "casesCase" $
+caseFieldDef :: TElement (Name -> Name -> Term -> Y.Maybe Term)
+caseFieldDef = decodeDefinition "caseField" $
  lambda "tname" $ lambda "fname" $
    compose2
      (ref casesDef @@ var "tname" )
