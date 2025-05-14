@@ -9,7 +9,7 @@ import qualified Hydra.Dsl.Types as Types
 dateType = Types.string
 decimalType = Types.float64
 
-salesSchema = schema vertexTypes edgeTypes
+salesGraphSchema = schema vertexTypes edgeTypes
   where
     vertexTypes = [
       vertexType "Employee" Types.int32 [

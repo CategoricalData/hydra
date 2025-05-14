@@ -127,7 +127,7 @@ emailCustomerEdges = customerEdges emailInteractionType emailsColumn
 meetingEmployeeEdges = employeeEdges meetingInteractionType meetingsColumn
 meetingCustomerEdges = customerEdges meetingInteractionType meetingsColumn
 
-salesGraph = graph
+salesGraphMapping = graph
   [employeeVertices, departmentVertices, customerVertices, productVertices,
    saleVertices, saleItemVertices,
    callInteractionVertices, emailInteractionVertices, meetingInteractionVertices]
