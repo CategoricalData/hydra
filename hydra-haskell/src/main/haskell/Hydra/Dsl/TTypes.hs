@@ -42,10 +42,10 @@ forAll var body = typeLambda $ forallType (name var) body
 function :: TTerm Type -> TTerm Type -> TTerm Type
 function dom cod = typeFunction $ functionType dom cod
 
-functionN :: [TTerm Type] -> TTerm Type
-functionN types = case types of
+functionMany :: [TTerm Type] -> TTerm Type
+functionMany types = case types of
   [t] -> t
-  t:ts -> function t $ functionN ts
+  t:ts -> function t $ functionMany ts
 
 int16 :: TTerm Type
 int16 = typeLiteral $ literalTypeInteger integerTypeInt16

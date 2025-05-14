@@ -39,10 +39,10 @@ checkHelperFunctions = do
 
     H.it "Check n-ary functions" $ do
       check
-        (functionN ["a", "b"])
+        (functionMany ["a", "b"])
         (function "a" "b")
       check
-        (functionN [int32, string, boolean])
+        (functionMany [int32, string, boolean])
         (function int32 $ function string boolean)
 
 spec :: H.Spec

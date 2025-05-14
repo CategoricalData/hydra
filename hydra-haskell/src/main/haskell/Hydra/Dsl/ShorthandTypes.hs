@@ -19,7 +19,7 @@ ordA = (M.fromList [(Name "a", S.fromList [TypeClassOrdering])])
 -- Type constructors
 tA = tVar "a"
 tApply = Types.apply
-tApplyN = Types.applyN
+tApplyN = Types.applyMany
 tB = tVar "b"
 tBigfloat = Types.bigfloat
 tBigint = Types.bigint
@@ -37,7 +37,7 @@ tFlowSA = tFlow tS tA
 tFlowSS = tFlow tS tS
 tFlowState s x = tApplyN [flowStateT, s, x]
 tFun = Types.function
-tFunN = Types.functionN
+tFunN = Types.functionMany
 tInt8 = Types.int8
 tInt16 = Types.int16
 tInt32 = Types.int32

@@ -390,11 +390,11 @@ testNormalizeTypeVariablesInTerm = do
             ("id2", Just ft1t1, lambdaTyped "x" t1 $ var "x")])])
       H.it "No shadowing, locally free type variable" $ changesTo
         (tlet (var "fun1" @@ string "foo" @@ int32 42) [
-          ("fun1", Just (Types.poly ["a", "b"] $ Types.functionN [tA, tB, tPair tA tB]), lambdaTyped "x" tA $ lambdaTyped "y" tB $
+          ("fun1", Just (Types.poly ["a", "b"] $ Types.functionMany [tA, tB, tPair tA tB]), lambdaTyped "x" tA $ lambdaTyped "y" tB $
             tlet (var "fun2" @@ var "x") [
               ("fun2", Just (Types.poly ["c"] $ tFun tC $ tPair tC tB), lambdaTyped "z" tC $ pair (var "z") (var "y"))])])
         (tlet (var "fun1" @@ string "foo" @@ int32 42) [
-          ("fun1", Just (Types.poly ["t0", "t1"] $ Types.functionN [t0, t1, tPair t0 t1]), lambdaTyped "x" t0 $ lambdaTyped "y" t1 $
+          ("fun1", Just (Types.poly ["t0", "t1"] $ Types.functionMany [t0, t1, tPair t0 t1]), lambdaTyped "x" t0 $ lambdaTyped "y" t1 $
             tlet (var "fun2" @@ var "x") [
               ("fun2", Just (Types.poly ["t2"] $ tFun t2 $ tPair t2 t1), lambdaTyped "z" t2 $ pair (var "z") (var "y"))])])
   where

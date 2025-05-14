@@ -52,7 +52,7 @@ testGroupForFunctionTerms = supergroup "Function terms" [
     subgroup "List eliminations" [
       expectMono 1 [tag_disabledForMinimalInference]
         foldAdd
-        (T.functionN [T.int32, T.list T.int32, T.int32]),
+        (T.functionMany [T.int32, T.list T.int32, T.int32]),
       expectMono 2 [tag_disabledForMinimalInference]
         (apply foldAdd $ int32 0)
         (T.function (T.list T.int32) T.int32),
@@ -123,8 +123,8 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
               @@ (var "f" @@ (var "square" @@ var "x") @@ var "y")
               @@ (var "f" @@ var "x" @@ (var "f" @@ var "x" @@ var "y"))
               @@ (var "f" @@ var "x" @@ var "y"))
-        (T.functionN [
-          T.functionN [T.int32, T.boolean, T.boolean], T.int32, T.boolean, T.boolean])],
+        (T.functionMany [
+          T.functionMany [T.int32, T.boolean, T.boolean], T.int32, T.boolean, T.boolean])],
 
     subgroup "Optionals" [
       expectMono 1 [tag_disabledForMinimalInference]

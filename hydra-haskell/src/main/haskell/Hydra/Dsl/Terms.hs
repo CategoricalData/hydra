@@ -1,8 +1,7 @@
 -- | A domain-specific language for constructing Hydra terms in Haskell.
-
-{-# LANGUAGE FlexibleInstances #-} -- TODO: temporary, for IsString Term
 module Hydra.Dsl.Terms where
 
+import Hydra.Dsl.Common
 import Hydra.Compute
 import Hydra.Constants
 import Hydra.Core
@@ -16,10 +15,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import qualified Control.Monad as CM
 import Data.Int
-import Data.String(IsString(..))
 
-
-instance IsString Term where fromString = string
 
 -- Two alternative symbols for term application
 (@@) :: Term -> Term -> Term
@@ -69,9 +65,6 @@ false = boolean False
 
 field :: String -> Term -> Field
 field n = Field (Name n)
-
-fieldsToMap :: [Field] -> M.Map Name Term
-fieldsToMap fields = M.fromList $ (\(Field name term) -> (name, term)) <$> fields
 
 first :: Term
 first = untuple 2 0 Nothing
