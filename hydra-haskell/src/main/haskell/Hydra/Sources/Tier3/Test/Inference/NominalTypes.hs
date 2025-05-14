@@ -14,7 +14,7 @@ import qualified Hydra.Dsl.TTypes as T
 import Hydra.Sources.Tier3.Test.Inference.Fundamentals
 
 import qualified Data.Map as M
-import Prelude hiding (map, product, sum)
+import Prelude hiding (map, sum)
 
 
 nominalTypesTests :: TTerm TestGroup

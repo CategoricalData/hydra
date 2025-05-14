@@ -128,7 +128,7 @@ pair kCoder vCoder = TermCoder (Types.product [termCoderType kCoder, termCoderTy
     decode (k, v) = do
       kTerm <- coderDecode (termCoderCoder kCoder) k
       vTerm <- coderDecode (termCoderCoder vCoder) v
-      return $ Terms.product [kTerm, vTerm]
+      return $ Terms.tuple [kTerm, vTerm]
 
 prim0 :: Name -> x -> [String]  -> TermCoder x -> Primitive
 prim0 name value vars output = Primitive name typ impl

@@ -14,7 +14,7 @@ import qualified Hydra.Dsl.TTypes as T
 import Hydra.Sources.Tier3.Test.Inference.Fundamentals
 
 import qualified Data.Map as M
-import Prelude hiding (map, product, sum)
+import Prelude hiding (map, sum)
 
 
 algebraicTypesTests :: TTerm TestGroup
@@ -96,26 +96,26 @@ testGroupForProducts :: TTerm TestGroup
 testGroupForProducts = supergroup "Product terms" [
     subgroup "Empty products" [
       expectMono 1 []
-        (product [])
+        (tuple [])
         (T.product [])],
 
     subgroup "Non-empty, monotyped products" [
       expectMono 1 []
-        (product [string "foo", int32 42])
+        (tuple [string "foo", int32 42])
         (T.product [T.string, T.int32]),
       expectMono 2 []
-        (product [string "foo", list [float32 42.0, float32 137.0]])
+        (tuple [string "foo", list [float32 42.0, float32 137.0]])
         (T.product [T.string, T.list T.float32]),
       expectMono 3 [tag_disabledForMinimalInference]
-        (product [string "foo", int32 42, list [float32 42.0, float32 137.0]])
+        (tuple [string "foo", int32 42, list [float32 42.0, float32 137.0]])
         (T.product [T.string, T.int32, T.list T.float32])],
 
     subgroup "Polytyped products" [
       expectPoly 1 []
-        (product [list [], string "foo"])
+        (tuple [list [], string "foo"])
         ["t0"] (T.product [T.list $ T.var "t0", T.string]),
       expectPoly 2 [tag_disabledForMinimalInference]
-        (product [int32 42, string "foo", list []])
+        (tuple [int32 42, string "foo", list []])
         ["t0"] (T.product [T.int32, T.string, T.list $ T.var "t0"])],
 
     subgroup "Pairs" [

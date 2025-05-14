@@ -11,8 +11,9 @@ import qualified Data.Map as M
 
 -- * Operators
 
--- | Function type constructor
+-- | Function type constructor with infix syntax
 -- Example: int32 --> string
+-- Use this for more readable function type definitions
 infixr 0 -->
 (-->) :: Type -> Type -> Type
 dom --> cod = function dom cod
@@ -66,8 +67,10 @@ functionMany ts = L.foldl (\cod dom -> function dom cod) (L.head r) (L.tail r)
 
 -- * Polymorphism (System F)
 
--- | Universal quantification with a single variable
+-- | Create a universally quantified type (polymorphic type) with a singe variable
 -- Example: forAll "a" (var "a" --> var "a")
+-- This creates the polymorphic identity function type: ∀a. a -> a
+-- Universal quantification introduces type variables that can be used in the body
 forAll :: String -> Type -> Type
 forAll v body = TypeForall $ ForallType (Name v) body
 
@@ -81,8 +84,9 @@ forAlls vs body = L.foldr forAll body vs
 mono :: Type -> TypeScheme
 mono = TypeScheme []
 
--- | Create a polymorphic type scheme with type variables
+-- | Create a polymorphic type scheme with explicit type variables
 -- Example: poly ["a", "b"] (var "a" --> var "b")
+-- This represents a type forall a b. a -> b that can be instantiated with different types
 poly :: [String] -> Type -> TypeScheme
 poly vs t = TypeScheme (Name <$> vs) t
 
@@ -144,6 +148,8 @@ literal :: LiteralType -> Type
 literal = TypeLiteral
 
 -- | Non-negative 32-bit integer type
+-- Currently an alias for int32; intended for semantic annotation
+-- In future versions, this may include validation constraints
 nonNegativeInt32 :: Type
 nonNegativeInt32 = int32
 
@@ -201,12 +207,13 @@ enum names = union $ (`field` unit) <$> names
 field :: String -> Type -> FieldType
 field fn = FieldType (Name fn)
 
--- | Create a record type with the given fields and the default name
+-- | Create a record type with the given fields and the default type name
 -- Example: record ["name">: string, "age">: int32]
+-- Use 'recordWithName' to specify a custom type name
 record :: [FieldType] -> Type
 record = recordWithName placeholderName
 
--- | Create a named record type with the given fields
+-- | Create a record type with the given fields and a provided type name
 -- Example: recordWithName (Name "Person") ["name" >: string, "age" >: int32]
 recordWithName :: Name -> [FieldType] -> Type
 recordWithName tname fields = TypeRecord $ RowType tname fields
@@ -215,17 +222,20 @@ recordWithName tname fields = TypeRecord $ RowType tname fields
 unit :: Type
 unit = TypeRecord $ RowType (Name "hydra.core.Unit") []
 
--- | Create a union type with the given variants
--- Example: union ["success">: int32, "failure" >: string]
+-- | Create a union type with the given variants and the default type name
+-- Example: union ["success">: int32, "failure">: string]
+-- This creates a tagged union type (sum type with named variants)
+-- Similar to sum [int32, string] but with named branches
 union :: [FieldType] -> Type
 union fields = TypeUnion $ RowType placeholderName fields
 
--- | Create a wrapped type (newtype) with the default name
+-- | Create a wrapped type (newtype) with a provided base type and the default type name
 -- Example: wrap string
+-- Creates a newtype with placeholder name; use 'wrapWithName' for custom names
 wrap :: Type -> Type
 wrap = wrapWithName placeholderName
 
--- | Create a named wrapped type (newtype)
+-- | Create a wrapped type (newtype) with a provided base type and type name
 -- Example: wrapWithName (Name "Email") string
 wrapWithName :: Name -> Type -> Type
 wrapWithName name t = TypeWrap $ WrappedType name t

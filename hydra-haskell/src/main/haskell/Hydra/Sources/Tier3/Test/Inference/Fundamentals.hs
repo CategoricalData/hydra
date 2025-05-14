@@ -14,7 +14,7 @@ import           Hydra.Dsl.TTerms as TTerms
 import qualified Hydra.Dsl.TTypes as T
 
 import qualified Data.Map as M
-import Prelude hiding (map, product, sum)
+import Prelude hiding (map, sum)
 
 
 fundamentalsTests :: TTerm TestGroup
@@ -54,7 +54,7 @@ testGroupForLet = supergroup "Let terms" [
 
     subgroup "Simple" [
       expectPoly 1  []
-        (let1 "x" (float32 42.0) (lambda "y" (lambda "z" (var "x"))))
+        (lets ["x">: float32 42.0] (lambda "y" (lambda "z" (var "x"))))
         ["t0", "t1"] (T.function (T.var "t0") (T.function (T.var "t1") T.float32))],
     subgroup "Empty let" [
       expectMono 1 []

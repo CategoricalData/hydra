@@ -15,7 +15,7 @@ import qualified Hydra.Dsl.TTypes as T
 import Hydra.Sources.Tier3.Test.Inference.Fundamentals
 
 import qualified Data.Map as M
-import Prelude hiding (map, product, sum)
+import Prelude hiding (map, sum)
 
 
 simpleTermsTests :: TTerm TestGroup
@@ -113,7 +113,7 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
 
     subgroup "Let terms" [
       expectPoly 1 []
-        (let1 "x" (float32 42.0) $ lambdas ["y", "z"] $ var "x")
+        (lets ["x">: float32 42.0] $ lambdas ["y", "z"] $ var "x")
         ["t0", "t1"] (T.function (T.var "t0") (T.function (T.var "t1") T.float32)),
       -- Example from https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
       expectMono 2 []
@@ -136,7 +136,7 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
 
     subgroup "Products" [
       expectMono 1 []
-        (product [])
+        (tuple [])
         (T.product []),
       expectMono 2 []
         (pair (int32 42) (string "foo"))
@@ -157,7 +157,7 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
           (Terms.string "lastName", Terms.string "Dent")])
         (T.map T.string T.string),
       expectPoly 2 [tag_disabledForMinimalInference]
-        (mapTerm Maps.empty)
+        (TTerms.map Maps.empty)
         ["t0", "t1"] (T.map (T.var "t0") (T.var "t1")),
       expectPoly 3 [tag_disabledForMinimalInference]
         (lambdas ["x", "y"] $ mapTermCheat
@@ -239,18 +239,18 @@ testGroupForProductTerms = supergroup "Product terms" [
 
     subgroup "Empty product" [
       expectMono 1 []
-        (product [])
+        (tuple [])
         (T.product [])],
     subgroup "Non-empty monotyped products" [
       expectMono 1 []
-        (product [string "foo", int32 42])
+        (tuple [string "foo", int32 42])
         (T.product [T.string, T.int32]),
       expectMono 2 []
-        (product [string "foo", list [float32 42.0, float32 137.0]])
+        (tuple [string "foo", list [float32 42.0, float32 137.0]])
         (T.product [T.string, T.list T.float32])],
     subgroup "Polytyped products" [
       expectPoly 1 []
-        (product [list [], string "foo"])
+        (tuple [list [], string "foo"])
         ["t0"] (T.product [T.list $ T.var "t0", T.string])]]
 
 testGroupForSumTerms :: TTerm TestGroup

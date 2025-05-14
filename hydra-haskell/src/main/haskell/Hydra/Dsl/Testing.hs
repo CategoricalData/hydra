@@ -20,7 +20,7 @@ expectMono i tags term typ = infTest ("#" ++ show i) tags term $ T.mono typ
 
 expectPoly i tags term params typ = infTest ("#" ++ show i) tags term $ T.poly params typ
 
-groupRef = TTerms.variableFromName . elementName
+groupRef = TTerms.varNamePhantom . elementName
 
 infTest :: String -> [Tag] -> TTerm Term -> TTerm TypeScheme -> TTerm TestCaseWithMetadata
 infTest name tags term ts = testCaseWithMetadata (Phantoms.string name)

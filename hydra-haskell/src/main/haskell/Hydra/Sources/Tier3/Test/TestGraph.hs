@@ -93,8 +93,8 @@ testTypeLatLonPolyNameDef = testGraphDefinition "testTypeLatLonPolyName" $
 latlonRecordDef :: TElement (Float -> Float -> Term)
 latlonRecordDef = testGraphDefinition "latlonRecord" $
   Phantoms.lambdas ["lat", "lon"] $ record (ref testTypeLatLonNameDef) [
-    "lat">: float32Term $ variable "lat",
-    "lon">: float32Term $ variable "lon"]
+    "lat">: float32Lift $ varPhantom "lat",
+    "lon">: float32Lift $ varPhantom "lon"]
 
 testTypeLatLonDef :: TElement Type
 testTypeLatLonDef = testGraphType "testTypeLatLon" $
