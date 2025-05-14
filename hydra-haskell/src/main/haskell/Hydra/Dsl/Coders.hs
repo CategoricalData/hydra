@@ -23,9 +23,9 @@ language name eliminationVariants literalVariants floatTypes functionVariants in
   _Language_constraints>>: Phantoms.record _LanguageConstraints [
     _LanguageConstraints_eliminationVariants>>: Sets.fromList $ list (Mantle.eliminationVariant <$> eliminationVariants),
     _LanguageConstraints_literalVariants>>: Sets.fromList $ list (Mantle.literalVariant <$> literalVariants),
-    _LanguageConstraints_floatTypes>>: Sets.fromList $ list (T.floatType <$> floatTypes),
+    _LanguageConstraints_floatTypes>>: Sets.fromList $ list (T.float <$> floatTypes),
     _LanguageConstraints_functionVariants>>: Sets.fromList $ list (Mantle.functionVariant <$> functionVariants),
-    _LanguageConstraints_integerTypes>>: Sets.fromList $ list (T.integerType <$> integerTypes),
+    _LanguageConstraints_integerTypes>>: Sets.fromList $ list (T.integer <$> integerTypes),
     _LanguageConstraints_termVariants>>: Sets.fromList $ list (Mantle.termVariant <$> termVariants),
     _LanguageConstraints_typeVariants>>: Sets.fromList $ list (Mantle.typeVariant <$> typeVariants),
     _LanguageConstraints_types>>: typePredicate]]
