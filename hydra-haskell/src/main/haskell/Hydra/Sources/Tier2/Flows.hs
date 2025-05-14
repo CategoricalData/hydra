@@ -154,7 +154,7 @@ mutateTraceDef = flowsDefinition "mutateTrace" $
             _Either_right>>: var "forRight"])
           @@ (var "mutate" @@ var "t0")
   where
-    eitherT l r = Types.applyN [TypeVariable _Either, l, r]
+    eitherT l r = Types.applyMany [TypeVariable _Either, l, r]
 
 pureDef :: TElement (a -> Flow s a)
 pureDef = flowsDefinition "pureInternal" $

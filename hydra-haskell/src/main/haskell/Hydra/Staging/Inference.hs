@@ -112,7 +112,7 @@ typeOf cx vars types term = case term of
     TermList els -> typeOfCollection cx "list" TypeList vars types els
     TermLiteral lit -> return $ TypeLiteral $ literalType lit
     TermMap m -> if M.null m
-        then return $ typeSchemeToFType $ Types.scheme ["k", "v"] $ Types.map (Types.var "k") (Types.var "v")
+        then return $ typeSchemeToFType $ Types.poly ["k", "v"] $ Types.map (Types.var "k") (Types.var "v")
         else do
           kt <- (CM.mapM (typeOf cx vars types) $ fmap fst pairs) >>= singleType "map keys"
           vt <- (CM.mapM (typeOf cx vars types) $ fmap snd pairs) >>= singleType "map values"
@@ -151,7 +151,7 @@ typeOf cx vars types term = case term of
 
 typeOfCollection :: InferenceContext -> String -> (Type -> Type) -> S.Set Name -> Types -> [Term] -> Flow s Type
 typeOfCollection cx desc cons vars types els = if L.null els
-  then return $ typeSchemeToFType $ Types.scheme ["t"] $ cons $ Types.var "t"
+  then return $ typeSchemeToFType $ Types.poly ["t"] $ cons $ Types.var "t"
   else do
     et <- CM.mapM (typeOf cx vars types) els >>= singleType desc
     checkTypeVariables vars et

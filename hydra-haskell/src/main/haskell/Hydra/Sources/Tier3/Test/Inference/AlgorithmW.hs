@@ -31,7 +31,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  -- 	(v0 -> v0)
     expectPoly 1 []
       (lambda "x" $ var "x")
-      ["t0"] (T.functionN [T.var "t0", T.var "t0"]),
+      ["t0"] (T.functionMany [T.var "t0", T.var "t0"]),
 
 --  --Untyped input:
 --  --	letrecs foo = (\x. x)
@@ -125,7 +125,7 @@ testGroupForSystemF = subgroup "STLC to System F" [
       (lets [
         "f" >: lambdas ["x", "y"] (var "f" @@ int32 0 @@ var "x")]
         $ var "f")
-      ["t0"] (T.functionN [T.int32, T.int32, T.var "t0"]),
+      ["t0"] (T.functionMany [T.int32, T.int32, T.var "t0"]),
 
 ----Untyped input:
 ----	letrec f = (\x. (\y. (f 0 x)))
@@ -139,8 +139,8 @@ testGroupForSystemF = subgroup "STLC to System F" [
         "g">: lambda "xx" $ lambda "yy" (var "g" @@ int32 0 @@ var "xx")]
         $ pair (var "f") (var "g"))
       ["t0", "t1"] (T.pair
-        (T.functionN [T.int32, T.int32, T.var "t0"])
-        (T.functionN [T.int32, T.int32, T.var "t1"])),
+        (T.functionMany [T.int32, T.int32, T.var "t0"])
+        (T.functionMany [T.int32, T.int32, T.var "t1"])),
 
     -- Note: in the following three test cases, the original Algorithm W implementation and the new inference
     --       implementation find slightly different results. This is a result of tradeoffs between stronger support
@@ -157,8 +157,8 @@ testGroupForSystemF = subgroup "STLC to System F" [
         "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
         $ pair (var "f") (var "g"))
       ["t0", "t1", "t2", "t3"] (T.pair
-        (T.functionN [T.var "t0", T.int32, T.var "t1"])
-        (T.functionN [T.int32, T.var "t2", T.var "t3"])),
+        (T.functionMany [T.var "t0", T.int32, T.var "t1"])
+        (T.functionMany [T.int32, T.var "t2", T.var "t3"])),
 
 --  --Untyped input:
 --  --	letrecs f = (\x. (\y. (g 0 0)))
@@ -172,8 +172,8 @@ testGroupForSystemF = subgroup "STLC to System F" [
         "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
         $ pair (var "f") (var "g"))
       ["t0", "t1"] (T.pair
-        (T.functionN [T.int32, T.int32, T.var "t0"])
-        (T.functionN [T.int32, T.int32, T.var "t1"])),
+        (T.functionMany [T.int32, T.int32, T.var "t0"])
+        (T.functionMany [T.int32, T.int32, T.var "t1"])),
 
 --  --Untyped input:
 --  --	letrecs f = (\x. (\y. (g 0 x)))
@@ -187,8 +187,8 @@ testGroupForSystemF = subgroup "STLC to System F" [
         "g">: lambda "u" $ lambda "v" (var "f" @@ int32 0 @@ int32 0)]
         $ pair (var "f") (var "g"))
       ["t0", "t1"] (T.pair
-        (T.functionN [T.int32, T.int32, T.var "t0"])
-        (T.functionN [T.int32, T.int32, T.var "t1"]))]
+        (T.functionMany [T.int32, T.int32, T.var "t0"])
+        (T.functionMany [T.int32, T.int32, T.var "t1"]))]
   where
     -- Placeholders for the primitives in @wisnesky's test cases; they are not necessarily the same functions,
     -- but they have the same types.

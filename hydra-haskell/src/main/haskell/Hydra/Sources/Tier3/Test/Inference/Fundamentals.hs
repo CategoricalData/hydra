@@ -39,7 +39,7 @@ testGroupForLambdas = supergroup "Lambdas" [
     subgroup "Nested lambdas" [
       expectMono 1 []
         (lambda "x" $ lambda "y" $ primitive _math_add @@ var "x" @@ var "y")
-        (T.functionN [T.int32, T.int32, T.int32]),
+        (T.functionMany [T.int32, T.int32, T.int32]),
       expectMono 2 []
         (lambda "x" $ list [lambda "y" $ primitive _math_add @@ var "x" @@ var "y"])
         (T.function T.int32 $ T.list $ T.function T.int32 T.int32)],
@@ -188,8 +188,8 @@ testGroupForLet = supergroup "Let terms" [
           "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
           $ pair (var "f") (var "g"))
         ["t0", "t1"] (T.pair
-          (T.functionN [T.var "t0", T.int32, T.var "t1"])
-          (T.functionN [T.int32, T.var "v0", T.var "t1"])),
+          (T.functionMany [T.var "t0", T.int32, T.var "t1"])
+          (T.functionMany [T.int32, T.var "v0", T.var "t1"])),
       expectMono 4 []
         -- letrec + = (\x . (\y . (S (+ (P x) y)))) in (+ (S (S 0)) (S 0))
         (lets [
@@ -252,7 +252,7 @@ testGroupForLet = supergroup "Let terms" [
           "f">: lambda "b" $ lambda "x" $ primitive _logic_ifElse @@ var "b" @@ list [list [var "x"]] @@ (var "g" @@ var "b" @@ var "x"),
           "g">: lambda "b" $ lambda "x" $ primitive _logic_ifElse @@ var "b" @@ (var "f" @@ var "b" @@ var "x") @@ list [list [var "x"]]]
           $ var "f")
-        ["t0"] (T.functionN [T.boolean, T.var "t0", T.list $ T.list $ T.var "t0"]),
+        ["t0"] (T.functionMany [T.boolean, T.var "t0", T.list $ T.list $ T.var "t0"]),
 
       -- The recursive pattern of hydra.rewriting.foldOverType is similar to this example.
       expectPoly 2 [tag_disabledForMinimalInference]
@@ -260,20 +260,20 @@ testGroupForLet = supergroup "Let terms" [
           "inst">: var "rec" @@ (lambda "x" false) @@ false,
           "rec">: lambda "f" $ lambda "b0" $ var "f" @@ (var "rec" @@ var "f" @@ var "b0")] $
           pair (var "inst") (var "rec"))
-        ["t0", "t1"] (T.pair T.boolean (T.functionN [T.function (T.var "t1") (T.var "t1"), T.var "t0", T.var "t1"])),
+        ["t0", "t1"] (T.pair T.boolean (T.functionMany [T.function (T.var "t1") (T.var "t1"), T.var "t0", T.var "t1"])),
       expectPoly 3 [tag_disabledForMinimalInference] -- Try with GHC:    :t let inst = rec (\x -> False); rec = \f -> f (rec f) in (inst, rec)
         (lets [
           "inst">: var "rec" @@ (lambda "x" false),
           "rec">: lambda "f" $ var "f" @@ (var "rec" @@ var "f")] $
           pair (var "inst") (var "rec"))
-        ["t0"] (T.pair T.boolean (T.functionN [T.function (T.var "t0") (T.var "t0"), T.var "t0"])),
+        ["t0"] (T.pair T.boolean (T.functionMany [T.function (T.var "t0") (T.var "t0"), T.var "t0"])),
       expectPoly 4 [tag_disabledForMinimalInference]
         (lets [
           "inst1">: var "rec" @@ (lambda "x" false),
           "inst2">: var "rec" @@ (lambda "x" $ int32 42),
           "rec">: lambda "f" $ var "f" @@ (var "rec" @@ var "f")] $
           tuple [var "inst1", var "inst2", var "rec"])
-        ["t0"] (T.product [T.boolean, T.int32, T.functionN [T.function (T.var "t0") (T.var "t0"), T.var "t0"]]),
+        ["t0"] (T.product [T.boolean, T.int32, T.functionMany [T.function (T.var "t0") (T.var "t0"), T.var "t0"]]),
 
       -- Try: :t let foo = bar; bar = foo in (foo, bar)
       expectPoly 5 [tag_disabledForMinimalInference]
@@ -382,10 +382,10 @@ testGroupForPolymorphism = supergroup "Polymorphism" [
     subgroup "Lambdas and primitives" [
       expectMono 1 []
         (primitive _math_add)
-        (T.functionN [T.int32, T.int32, T.int32]),
+        (T.functionMany [T.int32, T.int32, T.int32]),
       expectMono 2 []
         (lambda "x" (primitive _math_add @@ var "x"))
-        (T.functionN [T.int32, T.int32, T.int32]),
+        (T.functionMany [T.int32, T.int32, T.int32]),
       expectMono 3 []
         (lambda "x" (primitive _math_add @@ var "x" @@ var "x"))
         (T.function T.int32 T.int32)],
@@ -404,7 +404,7 @@ testGroupForPrimitives = supergroup "Primitives" [
         (T.function T.string T.int32),
       expectMono 2 []
         (primitive _math_sub)
-        (T.functionN [T.int32, T.int32, T.int32])],
+        (T.functionMany [T.int32, T.int32, T.int32])],
 
     subgroup "Polymorphic primitive functions" [
       expectPoly 1 []

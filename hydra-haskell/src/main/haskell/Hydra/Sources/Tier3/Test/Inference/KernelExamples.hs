@@ -32,4 +32,4 @@ testGroupForNestedLet = supergroup "Nested let" [
             @@ (primitive _strings_isEmpty @@ var "s")
             @@ (var "s")
             @@ (primitive _strings_cat2 @@ var "firstLetter" @@ (primitive _strings_fromList @@ (primitive _lists_tail @@ var "list"))))
-        (T.functionN [T.function T.string T.string, T.string, T.string])]]
+        (T.functionMany [T.function T.string T.string, T.string, T.string])]]

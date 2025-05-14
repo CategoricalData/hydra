@@ -31,7 +31,7 @@ testGroupForFolds :: TTerm TestGroup
 testGroupForFolds = subgroup "List eliminations (folds)" [
     expectMono 1 [tag_disabledForMinimalInference]
       foldAdd
-      (T.functionN [T.int32, T.list T.int32, T.int32]),
+      (T.functionMany [T.int32, T.list T.int32, T.int32]),
     expectMono 2 [tag_disabledForMinimalInference]
       (foldAdd @@ int32 0)
       (T.function (T.list T.int32) T.int32),
