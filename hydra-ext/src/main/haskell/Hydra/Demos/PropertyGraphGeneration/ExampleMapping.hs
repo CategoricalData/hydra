@@ -6,6 +6,7 @@ import Hydra.Phantoms
 import Hydra.Dsl.Base
 import Hydra.Dsl.Pg.Mappings
 import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Lib.Strings as Strings
 
 
@@ -25,8 +26,11 @@ callInteractionType = "call"
 emailInteractionType = "email"
 meetingInteractionType = "meeting"
 
-interactionId :: TTerm String -> TTerm (r -> Int) -> TTerm (r -> String)
-interactionId itype iid = lambda "r" $ Strings.concat [itype, "_", Literals.showInt32 @@ (iid @@ var "r")]
+interactionId :: TTerm String -> TTerm (r -> Maybe Int) -> TTerm (r -> String)
+interactionId itype iid = lambda "r" $ Strings.concat [
+  itype,
+  "_",
+  Optionals.maybe (string "") Literals.showInt32 (iid @@ var "r")]
 
 interactionVertices itype column = vertex "CustomerInteraction"
   (interactionId itype (column "id"))

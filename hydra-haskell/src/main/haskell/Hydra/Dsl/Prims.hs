@@ -11,6 +11,7 @@ import Hydra.CoreEncoding
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Lib.Io
 
 import Data.Int
 import qualified Data.List as L
@@ -68,7 +69,7 @@ flow states values = TermCoder (TypeVariable _Flow Types.@@ (termCoderType state
 function :: TermCoder x -> TermCoder y -> TermCoder (x -> y)
 function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) $ Coder encode decode
   where
-    encode term = fail $ "cannot encode terms to functions"
+    encode term = fail $ "cannot encode term to a function: " ++ showTerm term
     decode _ = fail $ "cannot decode functions to terms"
 
 int8 :: TermCoder Int8
@@ -142,7 +143,7 @@ prim1 name compute vars input1 output = Primitive name typ impl
     typ = TypeScheme (Name <$> vars) $
       TypeFunction $ FunctionType (termCoderType input1) $ termCoderType output
     impl args = do
-      Expect.nArgs 1 args
+      Expect.nArgs name 1 args
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
       coderDecode (termCoderCoder output) $ compute arg1
 
@@ -152,7 +153,7 @@ prim2 name compute vars input1 input2 output = Primitive name typ impl
     typ = TypeScheme (Name <$> vars) $
       TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
     impl args = do
-      Expect.nArgs 2 args
+      Expect.nArgs name 2 args
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
       arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
       coderDecode (termCoderCoder output) $ compute arg1 arg2
@@ -163,7 +164,7 @@ prim2Interp name compute vars input1 input2 output = Primitive name typ impl
     typ = TypeScheme (Name <$> vars) $
       TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
     impl args = do
-      Expect.nArgs 2 args
+      Expect.nArgs name 2 args
       compute (args !! 0) (args !! 1)
 
 prim3 :: Name -> (w -> x -> y -> z) -> [String] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
@@ -175,7 +176,7 @@ prim3 name compute vars input1 input2 input3 output = Primitive name typ impl
         (Types.function (termCoderType input2)
         (Types.function (termCoderType input3) (termCoderType output)))
     impl args = do
-      Expect.nArgs 2 args
+      Expect.nArgs name 3 args
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
       arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
       arg3 <- coderEncode (termCoderCoder input3) (args !! 2)
