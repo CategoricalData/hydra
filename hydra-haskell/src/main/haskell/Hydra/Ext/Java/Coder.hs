@@ -513,7 +513,7 @@ encodeElimination aliases marg dom cod elm = case elm of
      case marg of
       Nothing -> do
         g <- getState
-        let lhs = setTermType (Just $ Types.function (TypeVariable tname) cod) $ Terms.elimination elm
+        let lhs = setTermType (Just $ Types.function (TypeVariable tname) cod) $ TermFunction $ FunctionElimination elm
         let var = "u"
         encodeTerm aliases $ Terms.lambda var $ Terms.apply lhs (Terms.var var)
         -- TODO: default value
