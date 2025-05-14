@@ -9,6 +9,7 @@ import Hydra.Lib.Io
 import Hydra.Lib.Literals
 import Hydra.Tools.Monads
 import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Sources.Tier0.Core (hydraCoreGraph)
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -104,24 +105,29 @@ transformRecord vspecs especs term = do
 transformTable :: TableType -> FilePath -> [Pg.Vertex Term] -> [Pg.Edge Term] -> IO ([Pg.Vertex Term], [Pg.Edge Term])
 transformTable tableType@(TableType (TableName tableName) _) path vspecs especs = do
     (Table _ rows) <- decodeTableIo tableType path
-    pairs <- fromFlowIo emptyGraph $ withTrace ("transforming" ++ filePath) $
+    pairs <- fromFlowIo hydraCoreGraph $ withTrace ("transforming " ++ filePath) $
       CM.mapM (transformRecord vspecs especs . termRowToRecord tableType) rows
     return $ L.foldl addRow ([], []) pairs
   where
     filePath = tableName
     addRow (vertices, edges) (v, e) = (vertices ++ v, edges ++ e)
 
-transformTables :: [TableType] -> PgTransform -> IO ([Pg.Vertex Term], [Pg.Edge Term])
-transformTables tableTypes transform = do
+transformTables :: FilePath -> [TableType] -> LazyGraph Term -> IO ([Pg.Vertex Term], [Pg.Edge Term])
+transformTables fileRoot tableTypes spec = do
+    transform <- case (elementSpecsByTable spec) of
+      Left err -> fail $ "Error in mapping specification: " ++ err
+      Right t -> return t
     pairs <- CM.mapM forTable $ M.toList transform
     return $ L.foldl addRow ([], []) pairs
   where
     addRow (vertices, edges) (v, e) = (vertices ++ v, edges ++ e)
     forTable (tname, (vspecs, especs)) = case M.lookup (TableName tname) tableTypesByName of
-      Nothing -> fail $ "Table specified in mapping does not exist: " ++ tname
-      Just tableType -> do
-        (vertices, edges) <- transformTable tableType tname vspecs especs
-        return (vertices, edges)
+        Nothing -> fail $ "Table specified in mapping does not exist: " ++ tname
+        Just tableType -> do
+          (vertices, edges) <- transformTable tableType path vspecs especs
+          return (vertices, edges)
+      where
+        path = fileRoot ++ "/" ++ tname
     tableTypesByName = M.fromList $ fmap (\t -> (tableTypeName t, t)) tableTypes
 
 
@@ -151,7 +157,7 @@ decodeTable (TableType _ colTypes) (Table mheader rows) = do
             where
               toEither mv = case mv of
                 Nothing -> Left $ "Invalid value of type " ++ showType typ ++ " for column " ++ show cname
-                  ++ "on line " ++ show lineno ++ ": " ++ value
+                  ++ " on line " ++ show lineno ++ ": " ++ value
                 Just v -> Right v
               unsupported = Left $ "Unsupported type for column " ++ show cname ++ ": " ++ showType typ
               readValue cons read value = (Just . cons) <$> (toEither $ read value)

@@ -97,3 +97,15 @@ meetingsTableType = tableType "meetings.csv" [
   columnType "duration_minutes" Types.int32,
   columnType "follow_up_required" Types.boolean,
   columnType "customer_initiated" Types.boolean]
+
+salesTableSchemas :: [TableType]
+salesTableSchemas = [
+  employeesTableType,
+  departmentsTableType,
+  customersTableType,
+  productsTableType,
+  salesTableType,
+  saleItemsTableType,
+  callsTableType,
+  emailsTableType,
+  meetingsTableType]
