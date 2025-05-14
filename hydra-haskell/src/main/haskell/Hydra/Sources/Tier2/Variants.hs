@@ -180,8 +180,8 @@ literalTypeDef = variantsDefinition "literalType" $
   match _Literal Nothing [
     TCase _Literal_binary  --> constant $ variant _LiteralType _LiteralType_binary unit,
     TCase _Literal_boolean --> constant $ variant _LiteralType _LiteralType_boolean unit,
-    TCase _Literal_float   --> inject2 _LiteralType _LiteralType_float <.> ref floatValueTypeDef,
-    TCase _Literal_integer --> inject2 _LiteralType _LiteralType_integer <.> ref integerValueTypeDef,
+    TCase _Literal_float   --> injectLambda _LiteralType _LiteralType_float <.> ref floatValueTypeDef,
+    TCase _Literal_integer --> injectLambda _LiteralType _LiteralType_integer <.> ref integerValueTypeDef,
     TCase _Literal_string  --> constant $ variant _LiteralType _LiteralType_string unit]
 
 literalTypeVariantDef :: TElement (LiteralType -> LiteralVariant)

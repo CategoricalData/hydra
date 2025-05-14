@@ -29,7 +29,7 @@ fun @@ arg = apply fun arg
 -- Example: "name">: string "John"
 infixr 0 >:
 (>:) :: String -> Term -> Field
-name >: term = field name term
+name>: term = field name term
 
 -- * Fundamentals
 
