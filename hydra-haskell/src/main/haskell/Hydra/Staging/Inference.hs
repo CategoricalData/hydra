@@ -480,7 +480,7 @@ inferTypeOfPrimitive cx name = case M.lookup name (inferenceContextPrimitiveType
 inferTypeOfProduct :: InferenceContext -> [Term] -> Flow s InferenceResult
 inferTypeOfProduct cx els = Flows.map withResults (inferMany cx $ fmap (\e -> (e, "tuple element")) els)
   where
-    withResults (iterms, itypes, isubst) = yield (Terms.product iterms) (Types.product itypes) isubst
+    withResults (iterms, itypes, isubst) = yield (Terms.tuple iterms) (Types.product itypes) isubst
 
 inferTypeOfProjection :: InferenceContext -> Projection -> Flow s InferenceResult
 inferTypeOfProjection cx (Projection tname fname) = Flows.bind (requireSchemaType cx tname) withSchemaType

@@ -123,7 +123,7 @@ toTerm expr = case expr of
     PrimTyped (TypedPrimitive name _) -> Core.TermFunction $ Core.FunctionPrimitive name
     Nil -> Core.TermList []
     Pair -> Terms.lambdas ["a", "b"] $ Terms.pair (Terms.var "a") (Terms.var "b")
-    TT -> Terms.product []
+    TT -> Terms.tuple []
     _ -> Terms.string $ "unexpected primitive: " ++ show prim
     -- Note: other prims are unsupported; they can be added here as needed
   FLetrec bindings env -> Core.TermLet $ Core.Let (fmap bindingToHydra bindings) (toTerm env)

@@ -127,6 +127,16 @@ primitive3 primName (TTerm a) (TTerm b) (TTerm c) = TTerm $ Terms.primitive prim
 fold :: TTerm (b -> a -> b) -> TTerm (b -> [a] -> b)
 fold f = (primitive _lists_foldl) @@ f
 
+-- | Create a 'Just' optional value
+-- Example: just (string "found")
+just :: TTerm a -> TTerm (Maybe a)
+just (TTerm term) = TTerm $ Terms.just term
+
+-- | Function that wraps a value in 'Just'
+-- Example: just_ @@ myValue
+just_ :: TTerm (a -> Maybe a)
+just_ = TTerm $ Terms.lambda "just_" $ Terms.just $ Terms.var "just_"
+
 -- | Create a list of terms
 -- Example: list [int32 1, int32 2, int32 3]
 list :: [TTerm a] -> TTerm [a]
@@ -139,6 +149,16 @@ map = TTerm . Terms.map . M.fromList . fmap fromTTerm . M.toList
   where
     fromTTerm (TTerm k, TTerm v) = (k, v)
 
+-- | Create a 'Nothing' optional value
+-- Example: nothing
+nothing :: TTerm (Maybe a)
+nothing = TTerm Terms.nothing
+
+-- | Create an optional value from a Maybe
+-- Example: opt (Just myValue)
+opt :: Maybe (TTerm a) -> TTerm (Maybe a)
+opt mc = TTerm $ Terms.optional (unTTerm <$> mc)
+
 -- | Create a set of terms
 -- Example: set [string "a", string "b", string "c"]
 set :: [TTerm a] -> TTerm (S.Set a)
@@ -146,15 +166,15 @@ set = TTerm . Terms.set . S.fromList . fmap unTTerm
 
 -- * Products and tuples
 
--- | Create a pair (2-tuple)
--- Example: pair (string "age") (int32 32)
-pair :: (TTerm a) -> (TTerm b) -> TTerm (a, b)
-pair (TTerm l) (TTerm r) = TTerm $ Terms.pair l r
-
 -- | First element projection function for pairs
 -- Example: first @@ myPair
 first :: TTerm ((a, b) -> a)
 first = TTerm $ Terms.untuple 2 0 Nothing
+
+-- | Create a pair (2-tuple)
+-- Example: pair (string "age") (int32 32)
+pair :: (TTerm a) -> (TTerm b) -> TTerm (a, b)
+pair (TTerm l) (TTerm r) = TTerm $ Terms.pair l r
 
 -- | Second element projection function for pairs
 -- Example: second @@ myPair
@@ -165,28 +185,6 @@ second = TTerm $ Terms.untuple 2 1 Nothing
 -- Example: untuple 3 1 extracts the second element of a 3-tuple
 untuple :: Int -> Int -> TTerm (a -> b)
 untuple arity idx = TTerm $ Terms.untuple arity idx Nothing
-
--- * Optional values
-
--- | Create a 'Just' optional value
--- Example: just (string "found")
-just :: TTerm a -> TTerm (Maybe a)
-just (TTerm term) = TTerm $ Terms.just term
-
--- | Function that wraps a value in 'Just'
--- Example: just_ @@ myValue
-just_ :: TTerm (a -> Maybe a)
-just_ = TTerm $ Terms.lambda "just_" $ Terms.just $ Terms.var "just_"
-
--- | Create a 'Nothing' optional value
--- Example: nothing
-nothing :: TTerm (Maybe a)
-nothing = TTerm Terms.nothing
-
--- | Create an optional value from a Maybe
--- Example: opt (Just myValue)
-opt :: Maybe (TTerm a) -> TTerm (Maybe a)
-opt mc = TTerm $ Terms.optional (unTTerm <$> mc)
 
 -- * Records, unions and newtypes
 
@@ -200,46 +198,6 @@ field fname (TTerm val) = Field fname val
 fld :: Name -> TTerm a -> TField a
 fld fname (TTerm val) = TField $ Field fname val
 
--- | Create a record with named fields
--- Example: record (Name "Person") [field (Name "name") (string "John"), field (Name "age") (int32 30)]
-record :: Name -> [Field] -> TTerm a
-record name fields = TTerm $ Terms.record name fields
-
--- | Extract a field from a record
--- Example: project (Name "Person") (Name "name")
-project :: Name -> Name -> TTerm (a -> b)
-project name fname = TTerm $ Terms.project name fname
-
--- | Unit value (empty record)
-unit :: TTerm a
-unit = TTerm Terms.unit
-
--- | Create a wrapped term (newtype)
--- Example: wrap (Name "Email") (string "user@example.com")
-wrap :: Name -> TTerm a -> TTerm b
-wrap name (TTerm term) = TTerm $ Terms.wrap name term
-
--- | Create an unwrap function for a wrapped type
--- Example: unwrap (Name "Email")
-unwrap :: Name -> TTerm (a -> b)
-unwrap = TTerm . Terms.unwrap
-
--- | Create a named wrapped term (alias for wrap, but without type safety)
--- Example: nom (Name "Email") (string "user@example.com")
--- Note: the phantom types provide no guarantee of type safety in this case
-nom :: Name -> TTerm a -> TTerm b
-nom name (TTerm term) = TTerm $ Terms.wrap name term
-
--- | Create a union variant
--- Example: variant (Name "Result") (Name "success") (string "ok")
-variant :: Name -> Name -> TTerm a -> TTerm b
-variant name fname (TTerm term) = TTerm $ Terms.inject name $ Field fname term
-
--- | Create a unit variant of a union
--- Example: unitVariant (Name "Result") (Name "success")
-unitVariant :: Name -> Name -> TTerm a
-unitVariant name fname = TTerm $ Terms.inject name $ Field fname Terms.unit
-
 -- | Create a union injection
 -- Example: inject (Name "Result") (Name "success") (string "ok")
 inject :: Name -> Name -> TTerm a -> TTerm b
@@ -249,6 +207,41 @@ inject name fname (TTerm term) = TTerm $ Terms.inject name (Field fname term)
 -- Example: injectLambda (Name "Result") (Name "success")
 injectLambda :: Name -> Name -> TTerm (a -> b)
 injectLambda name fname = lambda "injected_" $ inject name fname $ var "injected_"
+
+-- | Extract a field from a record
+-- Example: project (Name "Person") (Name "name")
+project :: Name -> Name -> TTerm (a -> b)
+project name fname = TTerm $ Terms.project name fname
+
+-- | Create a record with named fields
+-- Example: record (Name "Person") [field (Name "name") (string "John"), field (Name "age") (int32 30)]
+record :: Name -> [Field] -> TTerm a
+record name fields = TTerm $ Terms.record name fields
+
+-- | Unit value (empty record)
+unit :: TTerm a
+unit = TTerm Terms.unit
+
+-- | Create a unit variant of a union
+-- Example: unitVariant (Name "Result") (Name "success")
+unitVariant :: Name -> Name -> TTerm a
+unitVariant name fname = TTerm $ Terms.inject name $ Field fname Terms.unit
+
+-- | Create an unwrap function for a wrapped type
+-- Example: unwrap (Name "Email")
+unwrap :: Name -> TTerm (a -> b)
+unwrap = TTerm . Terms.unwrap
+
+-- | Create a union variant
+-- Example: variant (Name "Result") (Name "success") (string "ok")
+variant :: Name -> Name -> TTerm a -> TTerm b
+variant name fname (TTerm term) = TTerm $ Terms.inject name $ Field fname term
+
+-- | Create a wrapped term (instance of a newtype)
+-- Example: wrap (Name "Email") (string "user@example.com")
+-- Note: the phantom types provide no guarantee of type safety in this case
+wrap :: Name -> TTerm a -> TTerm b
+wrap name (TTerm term) = TTerm $ Terms.wrap name term
 
 -- * Pattern matching
 

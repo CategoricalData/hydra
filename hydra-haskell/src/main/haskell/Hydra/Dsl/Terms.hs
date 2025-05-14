@@ -57,8 +57,10 @@ var = TermVariable . Name
 
 -- * Functions
 
--- | Compose two functions (g then f)
+-- | Compose two functions (apply g then f) to create a new function
 -- Example: compose (var "stringLength") (var "toString")
+-- This creates a function equivalent to \x -> stringLength(toString(x))
+-- Function composition applies right-to-left: (f ∘ g)(x) = f(g(x))
 compose :: Term -> Term -> Term
 compose f g = lambda "arg_" $ apply f (apply g $ var "arg_")
 
@@ -76,8 +78,9 @@ identity = lambda ignoredVariable $ var ignoredVariable
 lambda :: String -> Term -> Term
 lambda param body = TermFunction $ FunctionLambda $ Lambda (Name param) Nothing body
 
--- | Create a multi-parameter lambda function
+-- | Create a multi-parameter lambda function (curried)
 -- Example: lambdas ["x", "y"] (var "add" @@ var "x" @@ var "y")
+-- This creates the function \x.\y.add x y
 lambdas :: [String] -> Term -> Term
 lambdas params body = case params of
   [] -> body
@@ -95,13 +98,20 @@ primitive = TermFunction . FunctionPrimitive
 
 -- * Polymorphism (System F)
 
--- | Apply types to a polymorphic term
--- Example: typeApplication (var "singleton") [int32]
+-- | Apply type arguments to a polymorphic term
+-- Example: typeApplication (var "map") [Types.int32, Types.string]
+-- This instantiates a polymorphic function with concrete types.
+-- For instance, if 'map' has type 'forall a b. (a -> b) -> list a -> list b',
+-- the example would instantiate it to '(int32 -> string) -> list int32 -> list string'.
 typeApplication :: Term -> [Type] -> Term
 typeApplication term types = L.foldl (\t ty -> TermTypeApplication $ TypedTerm t ty) term types
 
--- | Create a type abstraction
--- Example: typeAbstraction [Name "t1"] (lambdaTyped "x" (Types.var "t1") (var "x"))
+-- | Create a type abstraction (universal quantification)
+-- Example: typeAbstraction [Name "a", Name "b"] (lambdaTyped "f" (Types.function (Types.var "a") (Types.var "b"))
+--                                               (lambdaTyped "x" (Types.var "a") (var "f" @@ var "x")))
+-- This creates a polymorphic term with type variables.
+-- The example creates a higher-order function with type 'forall a b. (a -> b) -> a -> b',
+-- which is the polymorphic apply function that works for any types a and b.
 typeAbstraction :: [Name] -> Term -> Term
 typeAbstraction vars body = L.foldl (\b v -> TermTypeAbstraction $ TypeAbstraction v b) body vars
 
@@ -243,13 +253,19 @@ set = TermSet
 field :: String -> Term -> Field
 field n = Field (Name n)
 
--- | Create a union injection
--- Example: inject (Name "Result") (field "success" (int32 "42"))
+-- | Create a union value by injecting a value into a specific variant
+-- Example: inject (Name "Result") ("success">: int32 42)
+-- This creates a "Result" union with the "success" variant containing value 42
+-- Use this to construct values of union types at runtime
 inject :: Name -> Field -> Term
 inject tname = TermUnion . Injection tname
 
--- | Create a pattern match on a union
--- Example: match (Name "Result") (Just (string "unknown")) [field "success" (var "s"), field "error" (var "e")]
+-- | Create a pattern match on a union type
+-- Example: match (Name "Result") (Just (string "unknown"))
+--               ["success">: lambda "s" (var "processSuccess" @@ var "s"),
+--                "error">: lambda "e" (var "handleError" @@ var "e")]
+-- This allows handling different cases of a union type with specific logic for each variant.
+-- The optional second parameter provides a default case for any unmatched variants.
 match :: Name -> Maybe Term -> [Field] -> Term
 match tname def fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement tname def fields
 
@@ -265,8 +281,12 @@ matchWithVariants tname def pairs = match tname def (toField <$> pairs)
 project :: Name -> Name -> Term
 project tname fname = TermFunction $ FunctionElimination $ EliminationRecord $ Projection tname fname
 
--- | Create a record with named fields
--- Example: record (Name "Person") [field "name" (string "John"), field "age" (int32 30)]
+-- | Create a record with named fields of the specified type
+-- Example: record (Name "Person") [
+--            "name">: string "John",
+--            "age">: int32 30,
+--            "email">: string "john@example.com"]
+-- Records are products of named fields with values that can be accessed by field name
 record :: Name -> [Field] -> Term
 record tname fields = TermRecord $ Record tname fields
 
@@ -310,11 +330,6 @@ first = untuple 2 0 Nothing
 pair :: Term -> Term -> Term
 pair a b = TermProduct [a, b]
 
--- | Create a product (tuple) with multiple components
--- Example: product [string "name", int32 42, true]
-product :: [Term] -> Term
-product = TermProduct
-
 -- | Second element projection function for pairs
 second :: Term
 second = untuple 2 1 Nothing
@@ -323,6 +338,11 @@ second = untuple 2 1 Nothing
 -- Example: sum 0 3 (int32 1) represents the first element of a 3-element sum
 sum :: Int -> Int -> Term -> Term
 sum idx arity term = TermSum $ Sum idx arity term
+
+-- | Create a product (tuple) with multiple components
+-- Example: product [string "name", int32 42, true]
+tuple :: [Term] -> Term
+tuple = TermProduct
 
 -- | Create a tuple projection function
 -- Example: untuple 3 1 Nothing extracts the second element of a 3-tuple
