@@ -118,7 +118,7 @@ includesEdges = simpleEdge "includes"
 containsProductEdges = simpleEdge "containsProduct"
   (saleItemsColumn "sale_item_id")
   (saleItemsColumn "product_id")
-  [property "warrantyPeriod" $ saleItemsColumn "warranty_period"]
+  [property "warrantyPeriodYears" $ saleItemsColumn "warranty_period"]
 
 callEmployeeEdges = employeeEdges callInteractionType callsColumn
 callCustomerEdges = customerEdges callInteractionType callsColumn

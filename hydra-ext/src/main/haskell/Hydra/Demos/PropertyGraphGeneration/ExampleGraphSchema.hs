@@ -1,4 +1,4 @@
-module Hydra.Demos.PropertyGraphGeneration.ExampleSchema where
+module Hydra.Demos.PropertyGraphGeneration.ExampleGraphSchema where
 
 import Hydra.Core
 import Hydra.Dsl.Pg.Schemas
@@ -76,7 +76,7 @@ salesSchema = schema vertexTypes edgeTypes
         propertyType "discountApplied" Types.float64],
 
       simpleEdgeType "containsProduct" "SaleItem" "Product" [
-        propertyType "warrantyPeriod" Types.int32],
+        propertyType "warrantyPeriodYears" Types.int32],
 
       simpleEdgeType "employee" "CustomerInteraction" "Employee" [],
 

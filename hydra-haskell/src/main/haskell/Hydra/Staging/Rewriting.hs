@@ -204,9 +204,7 @@ replaceFreeName v rep = rewriteType mapExpr
       TypeVariable v' -> if v == v' then rep else t
       _ -> recurse t
 
-
-rewriteTermM ::
-  ((Term -> Flow s Term) -> Term -> (Flow s Term)) -> Term -> Flow s Term
+rewriteTermM :: ((Term -> Flow s Term) -> Term -> (Flow s Term)) -> Term -> Flow s Term
 rewriteTermM f = rewrite fsub f
   where
     fsub recurse term = case term of
