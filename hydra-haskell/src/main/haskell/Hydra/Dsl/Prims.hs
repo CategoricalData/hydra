@@ -21,7 +21,7 @@ import qualified Data.Maybe as Y
 import Hydra.Staging.Rewriting (removeTermAnnotations)
 import Data.String(IsString(..))
 
-instance IsString (TermCoder (Term)) where fromString = variable
+instance IsString (TermCoder Term) where fromString = variable
 
 bigfloat :: TermCoder Double
 bigfloat = TermCoder Types.bigfloat $ Coder encode decode
@@ -133,15 +133,15 @@ pair kCoder vCoder = TermCoder (Types.product [termCoderType kCoder, termCoderTy
 prim0 :: Name -> x -> [String]  -> TermCoder x -> Primitive
 prim0 name value vars output = Primitive name typ impl
   where
-    typ = TypeScheme (Name <$> vars) $
-      termCoderType output
+    typ = Types.poly vars $ termCoderType output
     impl _ = coderDecode (termCoderCoder output) value
 
 prim1 :: Name -> (x -> y) -> [String] -> TermCoder x -> TermCoder y -> Primitive
 prim1 name compute vars input1 output = Primitive name typ impl
   where
-    typ = TypeScheme (Name <$> vars) $
-      TypeFunction $ FunctionType (termCoderType input1) $ termCoderType output
+    typ = Types.poly vars $ Types.functionMany [
+      termCoderType input1,
+      termCoderType output]
     impl args = do
       Expect.nArgs name 1 args
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
@@ -150,19 +150,23 @@ prim1 name compute vars input1 output = Primitive name typ impl
 prim2 :: Name -> (x -> y -> z) -> [String] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
 prim2 name compute vars input1 input2 output = Primitive name typ impl
   where
-    typ = TypeScheme (Name <$> vars) $
-      TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
+    typ = Types.poly vars $ Types.functionMany [
+      termCoderType input1,
+      termCoderType input2,
+      termCoderType output]
     impl args = do
       Expect.nArgs name 2 args
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
       arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
       coderDecode (termCoderCoder output) $ compute arg1 arg2
 
-prim2Interp :: Name -> (Term -> Term -> Flow (Graph) (Term)) -> [String] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
+prim2Interp :: Name -> (Term -> Term -> Flow Graph Term) -> [String] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
 prim2Interp name compute vars input1 input2 output = Primitive name typ impl
   where
-    typ = TypeScheme (Name <$> vars) $
-      TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
+    typ = Types.poly vars $ Types.functionMany [
+      termCoderType input1,
+      termCoderType input2,
+      termCoderType output]
     impl args = do
       Expect.nArgs name 2 args
       compute (args !! 0) (args !! 1)
@@ -170,17 +174,29 @@ prim2Interp name compute vars input1 input2 output = Primitive name typ impl
 prim3 :: Name -> (w -> x -> y -> z) -> [String] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
 prim3 name compute vars input1 input2 input3 output = Primitive name typ impl
   where
-    typ = TypeScheme (Name <$> vars) $
-      TypeFunction $ FunctionType
-        (termCoderType input1)
-        (Types.function (termCoderType input2)
-        (Types.function (termCoderType input3) (termCoderType output)))
+    typ = Types.poly vars $ Types.functionMany [
+      termCoderType input1,
+      termCoderType input2,
+      termCoderType input3,
+      termCoderType output]
     impl args = do
       Expect.nArgs name 3 args
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
       arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
       arg3 <- coderEncode (termCoderCoder input3) (args !! 2)
       coderDecode (termCoderCoder output) $ compute arg1 arg2 arg3
+
+prim3Interp :: Name -> (Term -> Term -> Term -> Flow Graph Term) -> [String] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
+prim3Interp name compute vars input1 input2 input3 output = Primitive name typ impl
+  where
+    typ = Types.poly vars $ Types.functionMany [
+      termCoderType input1,
+      termCoderType input2,
+      termCoderType input3,
+      termCoderType output]
+    impl args = do
+      Expect.nArgs name 3 args
+      compute (args !! 0) (args !! 1) (args !! 2)
 
 set :: Ord x => TermCoder x -> TermCoder (S.Set x)
 set els = TermCoder (Types.set $ termCoderType els) $ Coder encode decode
@@ -194,7 +210,7 @@ string = TermCoder Types.string $ Coder encode decode
     encode = Expect.string
     decode = pure . Terms.string
 
-term :: TermCoder (Term)
+term :: TermCoder Term
 term = TermCoder (TypeVariable _Term) $ Coder encode decode
   where
     encode = pure
@@ -230,7 +246,7 @@ uint64 = TermCoder Types.uint64 $ Coder encode decode
     encode = Expect.uint64
     decode = pure . Terms.uint64
 
-variable :: String -> TermCoder (Term)
+variable :: String -> TermCoder Term
 variable v = TermCoder (Types.var v) $ Coder encode decode
   where
     encode = pure
