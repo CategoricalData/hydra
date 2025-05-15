@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+-- | Implementations of the Hydra standard libraries in Haskell
 module Hydra.Sources.Libraries where
 
 import Hydra.Kernel
@@ -24,6 +25,31 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Data.List as L
 
 
+-- * Hydra standard library
+
+standardLibrary :: Namespace -> [Primitive] -> Library
+standardLibrary ns prims = Library {
+  libraryNamespace = ns,
+  libraryPrefix = L.drop (L.length ("hydra.lib." :: String)) $ unNamespace ns,
+  libraryPrimitives = prims}
+
+standardLibraries :: [Library]
+standardLibraries = [
+  hydraLibChars,
+  hydraLibEquality,
+  hydraLibFlows,
+  hydraLibIo,
+  hydraLibLists,
+  hydraLibLiterals,
+  hydraLibLogic,
+  hydraLibMaps,
+  hydraLibMathInt32,
+  hydraLibOptionals,
+  hydraLibSets,
+  hydraLibStrings]
+
+-- * hydra.lib.chars primitives
+
 _hydra_lib_chars :: Namespace
 _hydra_lib_chars = Namespace "hydra.lib.chars"
 
@@ -40,6 +66,8 @@ hydraLibChars = standardLibrary _hydra_lib_strings [
   prim1 _chars_isUpper Chars.isUpper [] int32 boolean,
   prim1 _chars_toLower Chars.toLower [] int32 int32,
   prim1 _chars_toUpper Chars.toUpper [] int32 int32]
+
+-- * hydra.lib.equality primitives
 
 _hydra_lib_equality :: Namespace
 _hydra_lib_equality = Namespace "hydra.lib.equality"
@@ -96,6 +124,8 @@ hydraLibEquality = standardLibrary _hydra_lib_equality [
   where
     x = variable "x"
 
+-- * hydra.lib.flows primitives
+
 _hydra_lib_flows :: Namespace
 _hydra_lib_flows = Namespace "hydra.lib.flows"
 
@@ -121,23 +151,7 @@ hydraLibFlows = standardLibrary _hydra_lib_flows [
     x = variable "x"
     y = variable "y"
 
-applyInterp :: Term -> Term -> Flow Graph Term
-applyInterp funs' args' = do
-    funs <- Expect.list Prelude.pure funs'
-    args <- Expect.list Prelude.pure args'
-    return $ Terms.list $ L.concat (helper args <$> funs)
-  where
-    helper args f = Terms.apply f <$> args
-
-bindInterp :: Term -> Term -> Flow Graph Term
-bindInterp args' fun = do
-    args <- Expect.list Prelude.pure args'
-    return $ Terms.apply (Terms.primitive $ Name "hydra.lib.lists.concat") (Terms.list $ Terms.apply fun <$> args)
-
-mapInterp :: Term -> Term -> Flow Graph Term
-mapInterp fun args' = do
-    args <- Expect.list Prelude.pure args'
-    return $ Terms.list (Terms.apply fun <$> args)
+-- * hydra.lib.io primitives
 
 _hydra_lib_io :: Namespace
 _hydra_lib_io = Namespace "hydra.lib.io"
@@ -149,6 +163,8 @@ hydraLibIo :: Library
 hydraLibIo = standardLibrary _hydra_lib_io [
     prim1 _io_showTerm Io.showTerm [] term string,
     prim1 _io_showType Io.showType [] type_ string]
+
+-- * hydra.lib.lists primitives
 
 _hydra_lib_lists :: Namespace
 _hydra_lib_lists = Namespace "hydra.lib.lists"
@@ -206,6 +222,29 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     x = variable "x"
     y = variable "y"
     z = variable "z"
+
+-- | Interpreted implementation of hydra.lib.lists.apply
+applyInterp :: Term -> Term -> Flow Graph Term
+applyInterp funs' args' = do
+    funs <- Expect.list Prelude.pure funs'
+    args <- Expect.list Prelude.pure args'
+    return $ Terms.list $ L.concat (helper args <$> funs)
+  where
+    helper args f = Terms.apply f <$> args
+
+-- | Interpreted implementation of hydra.lib.lists.bind
+bindInterp :: Term -> Term -> Flow Graph Term
+bindInterp args' fun = do
+    args <- Expect.list Prelude.pure args'
+    return $ Terms.apply (Terms.primitive $ Name "hydra.lib.lists.concat") (Terms.list $ Terms.apply fun <$> args)
+
+-- | Interpreted implementation of hydra.lib.lists.map
+mapInterp :: Term -> Term -> Flow Graph Term
+mapInterp fun args' = do
+    args <- Expect.list Prelude.pure args'
+    return $ Terms.list (Terms.apply fun <$> args)
+
+-- * hydra.lib.literals primitives
 
 _hydra_lib_literals :: Namespace
 _hydra_lib_literals = Namespace "hydra.lib.literals"
@@ -274,6 +313,8 @@ hydraLibLiterals = standardLibrary _hydra_lib_literals [
   prim1 _literals_uint32ToBigint    Literals.uint32ToBigint    [] uint32 bigint,
   prim1 _literals_uint64ToBigint    Literals.uint64ToBigint    [] uint64 bigint]
 
+-- * hydra.lib.logic primitives
+
 _hydra_lib_logic :: Namespace
 _hydra_lib_logic = Namespace "hydra.lib.logic"
 
@@ -290,6 +331,8 @@ hydraLibLogic = standardLibrary _hydra_lib_logic [
     prim2 _logic_or     Logic.or     []    boolean boolean boolean]
   where
     x = variable "x"
+
+-- * hydra.lib.maps primitives
 
 _hydra_lib_maps :: Namespace
 _hydra_lib_maps = Namespace "hydra.lib.maps"
@@ -341,6 +384,8 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
     v2 = variable "v2"
     mapKv = Prims.map k v
 
+-- * hydra.lib.math primitives
+
 _hydra_lib_math :: Namespace
 _hydra_lib_math = Namespace "hydra.lib.math"
 
@@ -362,6 +407,8 @@ hydraLibMathInt32 = standardLibrary _hydra_lib_math [
   prim2 _math_rem Math.rem [] int32 int32 int32,
   prim2 _math_sub Math.sub [] int32 int32 int32]
 
+-- * hydra.lib.optionals primitives
+
 _hydra_lib_optionals :: Namespace
 _hydra_lib_optionals = Namespace "hydra.lib.optionals"
 
@@ -379,20 +426,30 @@ _optionals_pure      = qname _hydra_lib_optionals "pure" :: Name
 
 hydraLibOptionals :: Library
 hydraLibOptionals = standardLibrary _hydra_lib_optionals [
-    prim2 _optionals_apply     Optionals.apply     ["x", "y"]      (optional $ function x y) (optional x) (optional y),
-    prim2 _optionals_bind      Optionals.bind      ["x", "y"]      (optional x) (function x (optional y)) (optional y),
-    prim1 _optionals_cat       Optionals.cat       ["x"]           (list $ optional x) (list x),
-    prim2 _optionals_compose   Optionals.compose   ["x", "y", "z"] (function x $ optional y) (function y $ optional z) (function x $ optional z),
-    prim2 _optionals_fromMaybe Optionals.fromMaybe ["x"]           x (optional x) x,
-    prim1 _optionals_isJust    Optionals.isJust    ["x"]           (optional x) boolean,
-    prim1 _optionals_isNothing Optionals.isNothing ["x"]           (optional x) boolean,
-    prim2 _optionals_map       Optionals.map       ["x", "y"]      (function x y) (optional x) (optional y),
-    prim3 _optionals_maybe     Optionals.maybe     ["x", "y"]      y (function x y) (optional x) y,
-    prim1 _optionals_pure      Optionals.pure      ["x"]           x (optional x)]
+    prim2       _optionals_apply     Optionals.apply     ["x", "y"]      (optional $ function x y) (optional x) (optional y),
+    prim2       _optionals_bind      Optionals.bind      ["x", "y"]      (optional x) (function x (optional y)) (optional y),
+    prim1       _optionals_cat       Optionals.cat       ["x"]           (list $ optional x) (list x),
+    prim2       _optionals_compose   Optionals.compose   ["x", "y", "z"] (function x $ optional y) (function y $ optional z) (function x $ optional z),
+    prim2       _optionals_fromMaybe Optionals.fromMaybe ["x"]           x (optional x) x,
+    prim1       _optionals_isJust    Optionals.isJust    ["x"]           (optional x) boolean,
+    prim1       _optionals_isNothing Optionals.isNothing ["x"]           (optional x) boolean,
+    prim2       _optionals_map       Optionals.map       ["x", "y"]      (function x y) (optional x) (optional y),
+    prim3Interp _optionals_maybe     maybeInterp         ["x", "y"]      y (function x y) (optional x) y,
+    prim1       _optionals_pure      Optionals.pure      ["x"]           x (optional x)]
   where
     x = variable "x"
     y = variable "y"
     z = variable "z"
+
+-- | Interpreted implementation of hydra.lib.optionals.maybe
+maybeInterp :: Term -> Term -> Term -> Flow Graph Term
+maybeInterp def fun opt = do
+    mval <- Expect.optional Prelude.pure opt
+    return $ case mval of
+      Nothing -> def
+      Just val -> Terms.apply fun val
+
+-- * hydra.lib.sets primitives
 
 _hydra_lib_sets :: Namespace
 _hydra_lib_sets = Namespace "hydra.lib.sets"
@@ -430,6 +487,8 @@ hydraLibSets = standardLibrary _hydra_lib_sets [
     x = variable "x"
     y = variable "y"
 
+-- * hydra.lib.strings primitives
+
 _hydra_lib_strings :: Namespace
 _hydra_lib_strings = Namespace "hydra.lib.strings"
 
@@ -456,24 +515,3 @@ hydraLibStrings = standardLibrary _hydra_lib_strings [
   prim1 _strings_toList      Strings.toList      [] string (list int32),
   prim1 _strings_toLower     Strings.toLower     [] string string,
   prim1 _strings_toUpper     Strings.toUpper     [] string string]
-
-standardLibrary :: Namespace -> [Primitive] -> Library
-standardLibrary ns prims = Library {
-  libraryNamespace = ns,
-  libraryPrefix = L.drop (L.length ("hydra.lib." :: String)) $ unNamespace ns,
-  libraryPrimitives = prims}
-
-standardLibraries :: [Library]
-standardLibraries = [
-  hydraLibChars,
-  hydraLibEquality,
-  hydraLibFlows,
-  hydraLibIo,
-  hydraLibLists,
-  hydraLibLiterals,
-  hydraLibLogic,
-  hydraLibMaps,
-  hydraLibMathInt32,
-  hydraLibOptionals,
-  hydraLibSets,
-  hydraLibStrings]
