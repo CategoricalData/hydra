@@ -16,7 +16,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
--- end to end ------------------------------------------------------------------
+-- End to end ------------------------------------------------------------------
 
 data GraphsonContext s v = GraphsonContext {
   graphsonContextValueCoder :: Coder s s v G.Value}
