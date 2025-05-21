@@ -9,37 +9,67 @@ import qualified Hydra.Dsl.Types as Types
 dateType = Types.string
 decimalType = Types.float64
 
+-- Vertex labels -----------------------
+
+employeeVertexLabel = "Employee"
+departmentVertexLabel = "Department"
+customerVertexLabel = "Customer"
+productVertexLabel = "Product"
+saleVertexLabel = "Sale"
+saleItemVertexLabel = "SaleItem"
+customerInteractionVertexLabel = "CustomerInteraction"
+
+-- Edge labels -------------------------
+
+managesEdgeLabel = "manages"
+belongsToEdgeLabel = "belongsTo"
+parentDepartmentEdgeLabel = "parentDepartment"
+soldEdgeLabel = "sold"
+purchasedEdgeLabel = "purchased"
+includesEdgeLabel = "includes"
+containsProductEdgeLabel = "containsProduct"
+employeeEdgeLabel = "employee"
+customerEdgeLabel = "customer"
+
+-- Interaction types -------------------
+
+callInteractionType = "Call"
+emailInteractionType = "Email"
+meetingInteractionType = "Meeting"
+
+-- Graph Schema ------------------------
+
 salesGraphSchema = schema vertexTypes edgeTypes
   where
     vertexTypes = [
-      vertexType "Employee" Types.int32 [
+      vertexType employeeVertexLabel Types.int32 [
         required $ propertyType "firstName" Types.string,
         required $ propertyType "lastName" Types.string,
         required $ propertyType "email" Types.string,
         propertyType "hireDate" dateType],
 
-      vertexType "Department" Types.int32 [
+      vertexType departmentVertexLabel Types.int32 [
         required $ propertyType "name" Types.string],
 
-      vertexType "Customer" Types.int32 [
+      vertexType customerVertexLabel Types.int32 [
         required $ propertyType "companyName" Types.string,
         propertyType "contactName" Types.string,
         propertyType "email" Types.string,
         propertyType "phone" Types.string],
 
-      vertexType "Product" Types.int32 [
+      vertexType productVertexLabel Types.int32 [
         required $ propertyType "name" Types.string,
         propertyType "price" decimalType],
 
-      vertexType "Sale" Types.int32 [
+      vertexType saleVertexLabel Types.int32 [
         required $ propertyType "saleDate" dateType,
         propertyType "totalAmount" decimalType],
 
-      vertexType "SaleItem" Types.int32 [
+      vertexType saleItemVertexLabel Types.int32 [
         propertyType "quantity" Types.int32,
         propertyType "itemPrice" decimalType],
 
-      vertexType "CustomerInteraction" Types.string [
+      vertexType customerInteractionVertexLabel Types.string [
         required $ propertyType "interactionDate" dateType,
         required $ propertyType "interactionType" Types.string,
         propertyType "notes" Types.string,
@@ -48,36 +78,36 @@ salesGraphSchema = schema vertexTypes edgeTypes
         propertyType "customerInitiated" Types.boolean]]
 
     edgeTypes = [
-      simpleEdgeType "manages" "Employee" "Employee" [
+      simpleEdgeType managesEdgeLabel employeeVertexLabel employeeVertexLabel [
         propertyType "sinceDate" dateType],
 
-      simpleEdgeType "belongsTo" "Employee" "Department" [
+      simpleEdgeType belongsToEdgeLabel employeeVertexLabel departmentVertexLabel [
         required $ propertyType "joinDate" dateType,
         propertyType "role" Types.string],
 
-      simpleEdgeType "parentDepartment" "Department" "Department" [
+      simpleEdgeType parentDepartmentEdgeLabel departmentVertexLabel departmentVertexLabel [
         propertyType "since" dateType],
 
-      simpleEdgeType "hasCategory" "Product" "Category" [
+      simpleEdgeType "hasCategory" productVertexLabel "Category" [
         propertyType "sinceDate" dateType,
         required $ propertyType "isPrimary" Types.boolean],
 
-      simpleEdgeType "sold" "Employee" "Sale" [
+      simpleEdgeType soldEdgeLabel employeeVertexLabel saleVertexLabel [
         required $ propertyType "commissionRate" Types.float64,
         propertyType "salesChannel" Types.string],
 
-      simpleEdgeType "purchased" "Customer" "Sale" [
+      simpleEdgeType purchasedEdgeLabel customerVertexLabel saleVertexLabel [
         required $ propertyType "paymentMethod" Types.string,
         propertyType "satisfactionRating" Types.int32,
         propertyType "isRepeatCustomer" Types.boolean],
 
-      simpleEdgeType "includes" "Sale" "SaleItem" [
+      simpleEdgeType includesEdgeLabel saleVertexLabel saleItemVertexLabel [
         required $ propertyType "itemOrder" Types.int32,
         propertyType "discountApplied" Types.float64],
 
-      simpleEdgeType "containsProduct" "SaleItem" "Product" [
+      simpleEdgeType containsProductEdgeLabel saleItemVertexLabel productVertexLabel [
         propertyType "warrantyPeriodYears" Types.int32],
 
-      simpleEdgeType "employee" "CustomerInteraction" "Employee" [],
+      simpleEdgeType employeeEdgeLabel customerInteractionVertexLabel employeeVertexLabel [],
 
-      simpleEdgeType "customer" "CustomerInteraction" "Customer" []]
+      simpleEdgeType customerEdgeLabel customerInteractionVertexLabel customerVertexLabel []]

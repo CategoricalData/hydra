@@ -11,7 +11,7 @@ import Hydra.Dsl.Pg.Mappings
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Lib.Strings as Strings
-
+import Hydra.Demos.PropertyGraphGeneration.ExampleGraphSchema
 
 -- Columns -----------------------------
 
@@ -24,34 +24,6 @@ meetingsColumn = columnValue "meetings.csv"
 productsColumn = columnValue "products.csv"
 saleItemsColumn = columnValue "sale_items.csv"
 salesColumn = columnValue "sales.csv"
-
--- Vertex Labels -----------------------
-
-employeeVertexLabel = "Employee"
-departmentVertexLabel = "Department"
-customerVertexLabel = "Customer"
-productVertexLabel = "Product"
-saleVertexLabel = "Sale"
-saleItemVertexLabel = "SaleItem"
-customerInteractionVertexLabel = "CustomerInteraction"
-
--- Edge Labels -------------------------
-
-managesEdgeLabel = "manages"
-belongsToEdgeLabel = "belongsTo"
-parentDepartmentEdgeLabel = "parentDepartment"
-soldEdgeLabel = "sold"
-purchasedEdgeLabel = "purchased"
-includesEdgeLabel = "includes"
-containsProductEdgeLabel = "containsProduct"
-employeeEdgeLabel = "employee"
-customerEdgeLabel = "customer"
-
--- Interaction Types -------------------
-
-callInteractionType = "Call"
-emailInteractionType = "Email"
-meetingInteractionType = "Meeting"
 
 -- Other helpers -----------------------
 

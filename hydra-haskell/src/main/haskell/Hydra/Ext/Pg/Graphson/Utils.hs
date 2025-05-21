@@ -3,6 +3,8 @@ module Hydra.Ext.Pg.Graphson.Utils where
 import Hydra.Kernel
 import Hydra.Ext.Pg.Graphson.Coder
 import Hydra.Ext.Json.Coder
+import Hydra.Dsl.Pg.Mappings
+import Hydra.Lib.Io
 import qualified Hydra.Json as Json
 import qualified Hydra.Pg.Graphson.Syntax as G
 import qualified Hydra.Pg.Model as PG
@@ -82,6 +84,9 @@ pgElementToJson schema el = case el of
           json <- coderDecode (PGM.schemaPropertyValues schema) v >>= untypedTermToJson
           return (key, json)
 
+lazyGraphToElements :: LazyGraph v -> [PG.Element v]
+lazyGraphToElements (LazyGraph vertices edges) = fmap PG.ElementVertex vertices ++ fmap PG.ElementEdge edges
+
 pgElementsToGraphson :: (Ord v, Show v) => GraphsonContext s v -> [PG.Element v] -> Flow s [Json.Value]
 pgElementsToGraphson ctx els = CM.mapM encode vertices
   where
@@ -90,3 +95,28 @@ pgElementsToGraphson ctx els = CM.mapM encode vertices
 
 pgElementsToJson :: PGM.Schema Graph t v -> [PG.Element v] -> Flow Graph Json.Value
 pgElementsToJson schema els = Json.ValueArray <$> CM.mapM (pgElementToJson schema) els
+
+termGraphsonContext :: GraphsonContext s Term
+termGraphsonContext = GraphsonContext $ Coder encodeTerm decodeTerm
+  where
+    encodeTerm term = case fullyStripTerm term of
+        TermLiteral lv -> case lv of
+          LiteralBinary s -> pure $ G.ValueBinary s
+          LiteralBoolean b -> pure $ G.ValueBoolean b
+          LiteralFloat fv -> case fv of
+            FloatValueBigfloat f -> pure $ G.ValueBigDecimal $ G.BigDecimalValue $ show f
+            FloatValueFloat32 f -> pure $ G.ValueFloat $ G.FloatValueFinite f
+            FloatValueFloat64 f -> pure $ G.ValueDouble $ G.DoubleValueFinite f
+          LiteralInteger iv -> case iv of
+            IntegerValueBigint i -> pure $ G.ValueBigInteger i
+            IntegerValueInt32 i -> pure $ G.ValueInteger i
+            IntegerValueInt64 i -> pure $ G.ValueLong i
+            _ -> fail $ "integer type is not yet supported: " ++ show (integerValueType iv)
+          LiteralString s -> pure $ G.ValueString s
+        TermRecord r@(Record tname _) -> if tname == _Unit
+          then pure G.ValueNull
+          else unexp $ TermRecord r
+        t -> unexp t
+      where
+        unexp t = unexpected "literal or unit value" $ showTerm t
+    decodeTerm _ = fail "decoding from GraphSON is not yet supported"
