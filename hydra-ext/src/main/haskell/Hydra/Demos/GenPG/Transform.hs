@@ -1,4 +1,4 @@
-module Hydra.Demos.PropertyGraphGeneration.Transform where
+module Hydra.Demos.GenPG.Transform where
 
 import Hydra.Kernel
 import qualified Hydra.Pg.Model as Pg

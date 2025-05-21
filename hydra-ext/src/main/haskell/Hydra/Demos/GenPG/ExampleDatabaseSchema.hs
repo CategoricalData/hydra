@@ -1,4 +1,4 @@
-module Hydra.Demos.PropertyGraphGeneration.ExampleDatabaseSchema where
+module Hydra.Demos.GenPG.ExampleDatabaseSchema where
 
 import Hydra.Dsl.Ext.Tabular
 import qualified Hydra.Dsl.Types as Types

@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Demos.PropertyGraphGeneration.ExampleMapping where
+module Hydra.Demos.GenPG.ExampleMapping where
 
 import Hydra.Core
 import qualified Hydra.Pg.Model as Pg
@@ -11,7 +11,7 @@ import Hydra.Dsl.Pg.Mappings
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Lib.Strings as Strings
-import Hydra.Demos.PropertyGraphGeneration.ExampleGraphSchema
+import Hydra.Demos.GenPG.ExampleGraphSchema
 
 -- Columns -----------------------------
 
@@ -28,10 +28,6 @@ salesColumn = columnValue "sales.csv"
 -- Other helpers -----------------------
 
 intColumnToId :: String -> TTerm (r -> Maybe Int) -> TTerm (r -> String)
---intColumnToId itype iid = lambda "r" $ Strings.concat [
---  string $ decapitalize itype,
---  "_",
---  Optionals.maybe (string "") Literals.showInt32 (iid @@ var "r")]
 intColumnToId itype iid = lambda "r" $ Optionals.map
   (lambda "i" $ Strings.concat [
     string $ decapitalize itype,
