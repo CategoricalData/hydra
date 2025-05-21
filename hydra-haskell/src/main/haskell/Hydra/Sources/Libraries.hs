@@ -267,7 +267,10 @@ _literals_int8ToBigint      = qname _hydra_lib_literals "int8ToBigint" :: Name
 _literals_int16ToBigint     = qname _hydra_lib_literals "int16ToBigint" :: Name
 _literals_int32ToBigint     = qname _hydra_lib_literals "int32ToBigint" :: Name
 _literals_int64ToBigint     = qname _hydra_lib_literals "int64ToBigint" :: Name
+_literals_readBigfloat      = qname _hydra_lib_literals "readBigfloat" :: Name
 _literals_readBoolean       = qname _hydra_lib_literals "readBoolean" :: Name
+_literals_readFloat32       = qname _hydra_lib_literals "readFloat32" :: Name
+_literals_readFloat64       = qname _hydra_lib_literals "readFloat64" :: Name
 _literals_readInt32         = qname _hydra_lib_literals "readInt32" :: Name
 _literals_readInt64         = qname _hydra_lib_literals "readInt64" :: Name
 _literals_readString        = qname _hydra_lib_literals "readString" :: Name
@@ -300,7 +303,10 @@ hydraLibLiterals = standardLibrary _hydra_lib_literals [
   prim1 _literals_int16ToBigint     Literals.int16ToBigint     [] int16 bigint,
   prim1 _literals_int32ToBigint     Literals.int32ToBigint     [] int32 bigint,
   prim1 _literals_int64ToBigint     Literals.int64ToBigint     [] int64 bigint,
+  prim1 _literals_readBigfloat      Literals.readBigfloat      [] string (optional bigfloat),
   prim1 _literals_readBoolean       Literals.readBoolean       [] string (optional boolean),
+  prim1 _literals_readFloat32       Literals.readFloat32       [] string (optional float32),
+  prim1 _literals_readFloat64       Literals.readFloat64       [] string (optional float64),
   prim1 _literals_readInt32         Literals.readInt32         [] string (optional int32),
   prim1 _literals_readInt64         Literals.readInt64         [] string (optional int64),
   prim1 _literals_readString        Literals.readString        [] string (optional string),

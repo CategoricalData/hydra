@@ -60,10 +60,19 @@ int32ToBigint = fromIntegral
 int64ToBigint :: Int64 -> Integer
 int64ToBigint = fromIntegral
 
+readBigfloat :: String -> Maybe Double
+readBigfloat s = readMaybe s :: Maybe Double
+
 readBoolean :: String -> Maybe Bool
 readBoolean s = if s == "true" then Just True
   else if s == "false" then Just False
   else Nothing
+
+readFloat32 :: String -> Maybe Float
+readFloat32 s = readMaybe s :: Maybe Float
+
+readFloat64 :: String -> Maybe Double
+readFloat64 s = readMaybe s :: Maybe Double
 
 readInt32 :: String -> Maybe Int
 readInt32 s = readMaybe s :: Maybe Int
