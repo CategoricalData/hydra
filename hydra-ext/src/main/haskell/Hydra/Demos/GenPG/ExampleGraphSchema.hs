@@ -1,4 +1,4 @@
-module Hydra.Demos.PropertyGraphGeneration.ExampleGraphSchema where
+module Hydra.Demos.GenPG.ExampleGraphSchema where
 
 import Hydra.Core
 import Hydra.Dsl.Pg.Schemas
