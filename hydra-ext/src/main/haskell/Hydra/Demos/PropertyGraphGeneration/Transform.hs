@@ -116,13 +116,14 @@ transformTable tableType@(TableType (TableName tableName) _) path vspecs especs 
     filePath = tableName
     addRow (vertices, edges) (v, e) = (vertices ++ v, edges ++ e)
 
-transformTables :: FilePath -> [TableType] -> LazyGraph Term -> IO ([Pg.Vertex Term], [Pg.Edge Term])
+transformTables :: FilePath -> [TableType] -> LazyGraph Term -> IO (LazyGraph Term)
 transformTables fileRoot tableTypes spec = do
     transform <- case (elementSpecsByTable spec) of
       Left err -> fail $ "Error in mapping specification: " ++ err
       Right t -> return t
     pairs <- CM.mapM forTable $ M.toList transform
-    return $ L.foldl addRow ([], []) pairs
+    let (vertices, edges) = L.foldl addRow ([], []) pairs
+    return $ LazyGraph vertices edges
   where
     addRow (vertices, edges) (v, e) = (vertices ++ v, edges ++ e)
     forTable (tname, (vspecs, especs)) = case M.lookup (TableName tname) tableTypesByName of
@@ -156,7 +157,6 @@ decodeTable (TableType _ colTypes) (Table mheader rows) = do
                    FloatTypeBigfloat -> readValue Terms.bigfloat readFloat64 value
                    FloatTypeFloat32 -> readValue Terms.float32 readFloat32 value
                    FloatTypeFloat64 -> readValue Terms.float64 readFloat64 value
-                   _ -> unsupported
                 LiteralTypeInteger it -> case it of
                   IntegerTypeInt32 -> readValue Terms.int32 readInt32 value
                   IntegerTypeInt64 -> readValue Terms.int64 readInt64 value
