@@ -28,10 +28,16 @@ salesColumn = columnValue "sales.csv"
 -- Other helpers -----------------------
 
 intColumnToId :: String -> TTerm (r -> Maybe Int) -> TTerm (r -> String)
-intColumnToId itype iid = lambda "r" $ Strings.concat [
-  string $ decapitalize itype,
-  "_",
-  Optionals.maybe (string "") Literals.showInt32 (iid @@ var "r")]
+--intColumnToId itype iid = lambda "r" $ Strings.concat [
+--  string $ decapitalize itype,
+--  "_",
+--  Optionals.maybe (string "") Literals.showInt32 (iid @@ var "r")]
+intColumnToId itype iid = lambda "r" $ Optionals.map
+  (lambda "i" $ Strings.concat [
+    string $ decapitalize itype,
+    "_",
+    Literals.showInt32 @@ (var "i")])
+  (iid @@ var "r")
 
 interactionVertices :: String -> (String -> TTerm (r -> Maybe Int)) -> Pg.Vertex Term
 interactionVertices itype column = vertex customerInteractionVertexLabel

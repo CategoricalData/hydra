@@ -8,6 +8,7 @@ import Hydra.Dsl.Ext.Tabular
 import Hydra.Lib.Io
 import Hydra.Lib.Literals
 import Hydra.Tools.Monads
+import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Tier0.Core (hydraCoreGraph)
 
@@ -24,13 +25,17 @@ type PgTransform = M.Map String ([Pg.Vertex Term], [Pg.Edge Term])
 evaluate :: Term -> Flow Graph Term
 evaluate = reduceTerm True M.empty
 
-evaluateEdge :: Pg.Edge Term -> Term -> Flow Graph (Pg.Edge Term)
+evaluateEdge :: Pg.Edge Term -> Term -> Flow Graph (Maybe (Pg.Edge Term))
 evaluateEdge (Pg.Edge label idSpec outSpec inSpec propSpecs) term = do
-  id <- evaluate $ Terms.apply idSpec term
-  outId <- evaluate $ Terms.apply outSpec term
-  inId <- evaluate $ Terms.apply inSpec term
-  props <- evaluateProperties propSpecs term
-  return $ Pg.Edge label id outId inId props
+    id <- evaluate $ Terms.apply idSpec term
+    mOutId <- evaluate (Terms.apply outSpec term) >>= (Expect.optional pure)
+    mInId <- evaluate (Terms.apply inSpec term) >>= (Expect.optional pure)
+    props <- evaluateProperties propSpecs term
+    return $ case mOutId of
+      Nothing -> Nothing
+      Just outId -> case mInId of
+        Nothing -> Nothing
+        Just inId -> Just $ Pg.Edge label id outId inId props
 
 evaluateProperties :: M.Map Pg.PropertyKey Term -> Term -> Flow Graph (M.Map Pg.PropertyKey Term)
 evaluateProperties specs record = M.fromList . Y.catMaybes <$> (CM.mapM forPair $ M.toList specs)
@@ -43,11 +48,13 @@ evaluateProperties specs record = M.fromList . Y.catMaybes <$> (CM.mapM forPair 
           Just v -> return $ Just (k, v)
         _ -> fail $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ showTerm value
 
-evaluateVertex :: Pg.Vertex Term -> Term -> Flow Graph (Pg.Vertex Term)
+evaluateVertex :: Pg.Vertex Term -> Term -> Flow Graph (Maybe (Pg.Vertex Term))
 evaluateVertex (Pg.Vertex label idSpec propSpecs) record = do
-  id <- evaluate $ Terms.apply idSpec record
+  mId <- evaluate (Terms.apply idSpec record) >>= (Expect.optional pure)
   props <- evaluateProperties propSpecs record
-  return $ Pg.Vertex label id props
+  return $ case mId of
+    Nothing -> Nothing
+    Just id -> Just $ Pg.Vertex label id props
 
 findTablesInTerm :: Term -> S.Set String
 findTablesInTerm = foldOverTerm TraversalOrderPre f S.empty
@@ -104,7 +111,7 @@ transformRecord :: [Pg.Vertex Term] -> [Pg.Edge Term] -> Term -> Flow Graph ([Pg
 transformRecord vspecs especs term = do
   vertices <- CM.mapM (\s -> evaluateVertex s term) vspecs
   edges <- CM.mapM (\s -> evaluateEdge s term) especs
-  return (vertices, edges)
+  return (Y.catMaybes vertices, Y.catMaybes edges)
 
 transformTable :: TableType -> FilePath -> [Pg.Vertex Term] -> [Pg.Edge Term] -> IO ([Pg.Vertex Term], [Pg.Edge Term])
 transformTable tableType@(TableType (TableName tableName) _) path vspecs especs = do
