@@ -366,7 +366,7 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
     prim3 _maps_bimap         Maps.bimap     ["k1", "k2", "v1", "v2"] (function k1 k2) (function v1 v2) (Prims.map k1 v1) (Prims.map k2 v2),
     prim0 _maps_empty         Maps.empty     ["k", "v"]               mapKv,
     prim2 _maps_filter        Maps.filter    ["k", "v"]               (function v boolean) mapKv mapKv,
-    prim2 _maps_filterWithKey Maps.filterWithKey ["k", "v"]       (function k (function v boolean)) mapKv mapKv,
+    prim2 _maps_filterWithKey Maps.filterWithKey ["k", "v"]           (function k (function v boolean)) mapKv mapKv,
     prim1 _maps_fromList      Maps.fromList  ["k", "v"]               (list $ pair k v) mapKv,
     prim3 _maps_insert        Maps.insert    ["k", "v"]               k v mapKv mapKv,
     prim1 _maps_isEmpty       Maps.isEmpty   ["k", "v"]               mapKv boolean,
@@ -439,7 +439,7 @@ hydraLibOptionals = standardLibrary _hydra_lib_optionals [
     prim2       _optionals_fromMaybe Optionals.fromMaybe ["x"]           x (optional x) x,
     prim1       _optionals_isJust    Optionals.isJust    ["x"]           (optional x) boolean,
     prim1       _optionals_isNothing Optionals.isNothing ["x"]           (optional x) boolean,
-    prim2       _optionals_map       Optionals.map       ["x", "y"]      (function x y) (optional x) (optional y),
+    prim2Interp _optionals_map       optionalsMapInterp  ["x", "y"]      (function x y) (optional x) (optional y),
     prim3Interp _optionals_maybe     maybeInterp         ["x", "y"]      y (function x y) (optional x) y,
     prim1       _optionals_pure      Optionals.pure      ["x"]           x (optional x)]
   where
@@ -454,6 +454,13 @@ maybeInterp def fun opt = do
     return $ case mval of
       Nothing -> def
       Just val -> Terms.apply fun val
+
+optionalsMapInterp :: Term -> Term -> Flow Graph Term
+optionalsMapInterp fun opt = do
+    mval <- Expect.optional Prelude.pure opt
+    return $ case mval of
+      Nothing -> Terms.nothing
+      Just val -> Terms.just $ Terms.apply fun val
 
 -- * hydra.lib.sets primitives
 
