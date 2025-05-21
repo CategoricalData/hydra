@@ -46,7 +46,7 @@ edge label (TTerm idValue) (TTerm outValue) (TTerm inValue) propertiesList = Edg
 -- | Create an edge with a unit ID (when the edge id isn't significant)
 -- Example: simpleEdge "knows" person1 person2 [property "since" (int32 2020)]
 simpleEdge :: String -> TTerm vo -> TTerm vi -> [Property Term] -> Edge Term
-simpleEdge label = edge label unit
+simpleEdge label = edge label (constant unit)
 
 -- | Create a lazy graph from vertices and edges, without enforcing id uniqueness
 -- Example: graph [person1, person2] [knows]
