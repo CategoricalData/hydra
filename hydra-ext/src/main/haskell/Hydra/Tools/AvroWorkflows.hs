@@ -27,6 +27,7 @@ import Hydra.Ext.Json.Eliminate
 import Hydra.Ext.Json.Serde
 import Hydra.Ext.Avro.Coder
 import Hydra.Ext.Avro.SchemaJson
+import Hydra.Ext.Pg.Graphson.Utils
 import Hydra.Ext.Pg.Coder
 import qualified Hydra.Ext.Shacl.Coder as Shacl
 import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
@@ -114,85 +115,9 @@ listsToSets = rewriteTerm mapExpr
       TermList els -> TermSet $ S.fromList els
       _ -> term
 
-pgElementToJson :: PGM.Schema Graph t v -> PG.Element v -> Flow Graph Json.Value
-pgElementToJson schema el = case el of
-    PG.ElementVertex vertex -> do
-      let labelJson = Json.ValueString $ PG.unVertexLabel $ PG.vertexLabel vertex
-      idJson <- coderDecode (PGM.schemaVertexIds schema) (PG.vertexId vertex) >>= untypedTermToJson
-      propsJson <- propsToJson $ PG.vertexProperties vertex
-      return $ Json.ValueObject $ M.fromList $ Y.catMaybes [
-        Just ("label", labelJson),
-        Just ("id", idJson),
-        propsJson]
-    PG.ElementEdge edge -> do
-      let labelJson = Json.ValueString $ PG.unEdgeLabel $ PG.edgeLabel edge
-      idJson <- coderDecode (PGM.schemaEdgeIds schema) (PG.edgeId edge) >>= untypedTermToJson
-      outJson <- coderDecode (PGM.schemaVertexIds schema) (PG.edgeOut edge) >>= untypedTermToJson
-      inJson <- coderDecode (PGM.schemaVertexIds schema) (PG.edgeIn edge) >>= untypedTermToJson
-      propsJson <- propsToJson $ PG.edgeProperties edge
-      return $ Json.ValueObject $ M.fromList $ Y.catMaybes [
-        Just ("label", labelJson),
-        Just ("id", idJson),
-        Just ("out", outJson),
-        Just ("in", inJson),
-        propsJson]
-  where
-    propsToJson pairs = if L.null pairs
-        then pure Nothing
-        else do
-          p <- CM.mapM propToJson $ M.toList pairs
-          return $ Just $ ("properties", Json.ValueObject $ M.fromList p)
-      where
-        propToJson (PG.PropertyKey key, v) = do
-          json <- coderDecode (PGM.schemaPropertyValues schema) v >>= untypedTermToJson
-          return (key, json)
-
-pgElementsToJson :: PGM.Schema Graph t v -> [PG.Element v] -> Flow Graph Json.Value
-pgElementsToJson schema els = Json.ValueArray <$> CM.mapM (pgElementToJson schema) els
-
-pgElementsToPgVerticesWithAdjacentEdges :: Ord v => [PG.Element v] -> [PG.VertexWithAdjacentEdges v]
-pgElementsToPgVerticesWithAdjacentEdges els = M.elems vertexMap1
-  where
-    vertices = E.lefts eithers
-    edges = E.rights eithers
-    eithers = fmap toEither els
-      where
-        toEither el = case el of
-          PG.ElementVertex v -> Left v
-          PG.ElementEdge e -> Right e
-    vertexMap0 = M.fromList $ fmap toPair vertices
-      where
-        toPair v = (PG.vertexId v, PG.VertexWithAdjacentEdges v [] [])
-    vertexMap1 = L.foldl addEdges vertexMap0 edges
-      where
-        addEdges vertexMap (PG.Edge label id outV inV props) = addEdge True $ addEdge False vertexMap
-          where
-            addEdge out vertexMap = case M.lookup focusV vertexMap of
-                Nothing -> vertexMap -- Disconnected edges are ignored
-                Just v -> M.insert focusV (appendE v) vertexMap
-              where
-                focusV = if out then outV else inV
-                otherV = if out then inV else outV
-                adjEdge = PG.AdjacentEdge label id otherV props
-                appendE v = if out
-                  then v {PG.vertexWithAdjacentEdgesOuts = (adjEdge:(PG.vertexWithAdjacentEdgesOuts v))}
-                  else v {PG.vertexWithAdjacentEdgesIns = (adjEdge:(PG.vertexWithAdjacentEdgesIns v))}
-
-pgElementsToGraphson :: (Ord v, Show v) => GraphsonContext s v -> [PG.Element v] -> Flow s [Json.Value]
-pgElementsToGraphson ctx els = CM.mapM encode vertices
-  where
-    vertices = pgElementsToPgVerticesWithAdjacentEdges els
-    encode = coderEncode (vertexToJsonCoder ctx)
-
 propertyGraphGraphsonLastMile :: (Ord v, Show t, Show v) => GraphsonContext Graph v -> PGM.Schema Graph t v -> t -> t -> LastMile Graph (PG.Element v)
 propertyGraphGraphsonLastMile ctx schema vidType eidType =
   LastMile (\typ -> typedTermToPropertyGraph schema typ vidType eidType) (\els -> jsonValuesToString <$> pgElementsToGraphson ctx els) "jsonl"
-
-exampleGraphsonContext :: GraphsonContext s String
-exampleGraphsonContext = GraphsonContext $ Coder encodeValue decodeValue
-  where
-    encodeValue s = pure $ G.ValueString s
-    decodeValue _ = fail "decoding from GraphSON is not yet supported"
 
 propertyGraphJsonLastMile :: (Show t, Show v) => PGM.Schema Graph t v -> t -> t -> LastMile Graph (PG.Element v)
 propertyGraphJsonLastMile schema vidType eidType =
