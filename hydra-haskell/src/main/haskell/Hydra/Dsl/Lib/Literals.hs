@@ -61,8 +61,17 @@ int32ToBigint = TTerm $ Terms.primitive _literals_int32ToBigint
 int64ToBigint :: TTerm (Int64 -> Integer)
 int64ToBigint = TTerm $ Terms.primitive _literals_int64ToBigint
 
+readBigfloat :: TTerm (String -> Maybe Double)
+readBigfloat = TTerm $ Terms.primitive _literals_readBigfloat
+
 readBoolean :: TTerm (String -> Maybe Bool)
 readBoolean = TTerm $ Terms.primitive _literals_readBoolean
+
+readFloat32 :: TTerm (String -> Maybe Float)
+readFloat32 = TTerm $ Terms.primitive _literals_readFloat32
+
+readFloat64 :: TTerm (String -> Maybe Double)
+readFloat64 = TTerm $ Terms.primitive _literals_readFloat64
 
 readInt32 :: TTerm (String -> Maybe Int)
 readInt32 = TTerm $ Terms.primitive _literals_readInt32
