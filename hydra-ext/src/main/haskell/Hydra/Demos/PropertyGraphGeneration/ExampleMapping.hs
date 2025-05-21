@@ -34,7 +34,7 @@ interactionId itype iid = lambda "r" $ Strings.concat [
 
 interactionVertices itype column = vertex "CustomerInteraction"
   (interactionId itype (column "id"))
-  [property "interactionType" itype,
+  [property "interactionType" $ constant $ just itype,
    property "interactionDate" $ column "interaction_date",
    property "notes" $ column "notes",
    property "durationMinutes" $ column "duration_minutes",
