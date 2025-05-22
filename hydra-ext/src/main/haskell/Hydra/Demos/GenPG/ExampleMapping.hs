@@ -5,37 +5,25 @@ import Hydra.Pg.Model (Edge, Vertex)
 import Hydra.Formatting (decapitalize)
 import Hydra.Phantoms (TTerm)
 import Hydra.Dsl.Phantoms ((@@), constant, just, lambda, nothing, string, var)
-import Hydra.Dsl.Pg.Mappings (LazyGraph, columnValue, graph, property, simpleEdge, vertex)
+import Hydra.Dsl.Pg.Mappings (LazyGraph, column, edge, edgeNoId, graph, property, vertex)
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Lib.Strings as Strings
 import Hydra.Demos.GenPG.ExampleGraphSchema
 
--- Columns -----------------------------
+-- Helpers -----------------------
 
-callsColumn = columnValue "calls.csv"
-customersColumn = columnValue "customers.csv"
-departmentsColumn = columnValue "departments.csv"
-emailsColumn = columnValue "emails.csv"
-employeesColumn = columnValue "employees.csv"
-meetingsColumn = columnValue "meetings.csv"
-productsColumn = columnValue "products.csv"
-saleItemsColumn = columnValue "sale_items.csv"
-salesColumn = columnValue "sales.csv"
-
--- Other helpers -----------------------
-
-intColumnToId :: String -> TTerm (r -> Maybe Int) -> TTerm (r -> String)
-intColumnToId itype iid = lambda "r" $ Optionals.map
+labeledIntId :: String -> TTerm (r -> Maybe Int) -> TTerm (r -> String)
+labeledIntId itype iid = lambda "r" $ Optionals.map
   (lambda "i" $ Strings.concat [
     string $ decapitalize itype,
     string "_",
     Literals.showInt32 @@ (var "i")])
   (iid @@ var "r")
 
-interactionVertices :: String -> (String -> TTerm (r -> Maybe Int)) -> Vertex Term
-interactionVertices itype column = vertex customerInteractionVertexLabel
-  (intColumnToId itype (column "id"))
+interactionVertex :: String -> String -> Vertex Term
+interactionVertex tableName itype = vertex tableName customerInteractionVertexLabel
+  (labeledIntId itype (column "id"))
   [property "interactionType" $ constant $ just $ string itype,
    property "interactionDate" $ column "interaction_date",
    property "notes" $ column "notes",
@@ -43,134 +31,98 @@ interactionVertices itype column = vertex customerInteractionVertexLabel
    property "followUpRequired" $ column "follow_up_required",
    property "customerInitiated" $ column "customer_initiated"]
 
-employeeEdges :: String -> (String -> TTerm (r -> Maybe Int)) -> Edge Term
-employeeEdges itype column = simpleEdge employeeEdgeLabel
-  (intColumnToId itype (column "id"))
-  (intColumnToId employeeVertexLabel $ column "employee_id")
+employeeEdge :: String -> String -> Edge Term
+employeeEdge tableName itype = edgeNoId tableName employeeEdgeLabel
+  (labeledIntId itype (column "id"))
+  (labeledIntId employeeVertexLabel $ column "employee_id")
   []
 
-customerEdges :: String -> (String -> TTerm (r -> Maybe Int)) -> Edge Term
-customerEdges itype column = simpleEdge customerEdgeLabel
-  (intColumnToId itype (column "id"))
-  (intColumnToId customerVertexLabel $ column "customer_id")
+customerEdge :: String -> String -> Edge Term
+customerEdge tableName itype = edgeNoId tableName customerEdgeLabel
+  (labeledIntId itype (column "id"))
+  (labeledIntId customerVertexLabel $ column "customer_id")
   []
 
 -- Mapping -----------------------------
 
-employeeVertices :: Vertex Term
-employeeVertices = vertex employeeVertexLabel (intColumnToId employeeVertexLabel $ employeesColumn "employee_id") [
-  property "firstName" $ employeesColumn "first_name",
-  property "lastName" $ employeesColumn "last_name",
-  property "email" $ employeesColumn "email",
-  property "hireDate" $ employeesColumn "hire_date"]
+salesGraph :: LazyGraph Term
+salesGraph = graph
+  -- Vertices
+  [vertex "employees.csv" employeeVertexLabel (labeledIntId employeeVertexLabel $ column "employee_id") [
+     property "firstName" $ column "first_name",
+     property "lastName" $ column "last_name",
+     property "email" $ column "email",
+     property "hireDate" $ column "hire_date"],
 
-departmentVertices :: Vertex Term
-departmentVertices = vertex departmentVertexLabel (intColumnToId departmentVertexLabel $ departmentsColumn "department_id") [
-  property "name" $ departmentsColumn "department_name"]
+   vertex "departments.csv" departmentVertexLabel (labeledIntId departmentVertexLabel $ column "department_id") [
+     property "name" $ column "department_name"],
 
-customerVertices :: Vertex Term
-customerVertices = vertex customerVertexLabel (intColumnToId customerVertexLabel $ customersColumn "customer_id") [
-  property "companyName" $ customersColumn "company_name",
-  property "contactName" $ customersColumn "contact_name",
-  property "email" $ customersColumn "email",
-  property "phone" $ customersColumn "phone"]
+   vertex "customers.csv" customerVertexLabel (labeledIntId customerVertexLabel $ column "customer_id") [
+     property "companyName" $ column "company_name",
+     property "contactName" $ column "contact_name",
+     property "email" $ column "email",
+     property "phone" $ column "phone"],
 
-productVertices :: Vertex Term
-productVertices = vertex productVertexLabel (intColumnToId productVertexLabel $ productsColumn "product_id") [
-  property "name" $ productsColumn "product_name",
-  property "price" $ productsColumn "price"]
+   vertex "products.csv" productVertexLabel (labeledIntId productVertexLabel $ column "product_id") [
+     property "name" $ column "product_name",
+     property "price" $ column "price"],
 
-saleVertices :: Vertex Term
-saleVertices = vertex saleVertexLabel (intColumnToId saleVertexLabel $ salesColumn "sale_id") [
-  property "saleDate" $ salesColumn "sale_date",
-  property "totalAmount" $ salesColumn "total_amount"]
+   vertex "sales.csv" saleVertexLabel (labeledIntId saleVertexLabel $ column "sale_id") [
+     property "saleDate" $ column "sale_date",
+     property "totalAmount" $ column "total_amount"],
 
-saleItemVertices :: Vertex Term
-saleItemVertices = vertex saleItemVertexLabel (intColumnToId saleItemVertexLabel $ saleItemsColumn "sale_item_id") [
-  property "quantity" $ saleItemsColumn "quantity",
-  property "itemPrice" $ saleItemsColumn "item_price"]
+   vertex "sale_items.csv" saleItemVertexLabel (labeledIntId saleItemVertexLabel $ column "sale_item_id") [
+     property "quantity" $ column "quantity",
+     property "itemPrice" $ column "item_price"],
 
-callInteractionVertices :: Vertex Term
-callInteractionVertices = interactionVertices callInteractionType callsColumn
+   interactionVertex "calls.csv" callInteractionType,
+   interactionVertex "emails.csv" emailInteractionType,
+   interactionVertex "meetings.csv" meetingInteractionType]
 
-emailInteractionVertices :: Vertex Term
-emailInteractionVertices = interactionVertices emailInteractionType emailsColumn
+  -- Edges
+  [edgeNoId "employees.csv" managesEdgeLabel
+     (labeledIntId employeeVertexLabel $ column "manager_id")
+     (labeledIntId employeeVertexLabel $ column "employee_id")
+     [property "sinceDate" $ column "management_since_date"],
 
-meetingInteractionVertices :: Vertex Term
-meetingInteractionVertices = interactionVertices meetingInteractionType meetingsColumn
+   edgeNoId "employees.csv" belongsToEdgeLabel
+     (labeledIntId employeeVertexLabel $ column "employee_id")
+     (labeledIntId departmentVertexLabel $ column "department_id")
+     [property "joinDate" $ column "department_join_date",
+      property "role" $ column "department_role"],
 
-managesEdges :: Edge Term
-managesEdges = simpleEdge managesEdgeLabel
-  (intColumnToId employeeVertexLabel $ employeesColumn "manager_id")
-  (intColumnToId employeeVertexLabel $ employeesColumn "employee_id")
-  [property "sinceDate" $ employeesColumn "management_since_date"]
+   edgeNoId "departments.csv" parentDepartmentEdgeLabel
+     (labeledIntId departmentVertexLabel $ column "department_id")
+     (labeledIntId departmentVertexLabel $ column "parent_department_id")
+     [property "since" $ column "parent_department_since"],
 
-belongsToEdges :: Edge Term
-belongsToEdges = simpleEdge belongsToEdgeLabel
-  (intColumnToId employeeVertexLabel $ employeesColumn "employee_id")
-  (intColumnToId departmentVertexLabel $ employeesColumn "department_id")
-  [property "joinDate" $ employeesColumn "department_join_date",
-   property "role" $ employeesColumn "department_role"]
+   edgeNoId "sales.csv" soldEdgeLabel
+     (labeledIntId employeeVertexLabel $ column "employee_id")
+     (labeledIntId saleVertexLabel $ column "sale_id")
+     [property "commissionRate" $ column "commission_rate",
+      property "salesChannel" $ column "sales_channel"],
 
-parentDepartmentEdges :: Edge Term
-parentDepartmentEdges = simpleEdge parentDepartmentEdgeLabel
-  (intColumnToId departmentVertexLabel $ departmentsColumn "department_id")
-  (intColumnToId departmentVertexLabel $ departmentsColumn "parent_department_id")
-  [property "since" $ departmentsColumn "parent_department_since"]
+   edgeNoId "sales.csv" purchasedEdgeLabel
+     (labeledIntId customerVertexLabel $ column "customer_id")
+     (labeledIntId saleVertexLabel $ column "sale_id")
+     [property "paymentMethod" $ column "payment_method",
+      property "satisfactionRating" $ column "satisfaction_rating",
+      property "isRepeatCustomer" $ column "is_repeat_customer"],
 
-soldEdges :: Edge Term
-soldEdges = simpleEdge soldEdgeLabel
-  (intColumnToId employeeVertexLabel $ salesColumn "employee_id")
-  (intColumnToId saleVertexLabel $ salesColumn "sale_id")
-  [property "commissionRate" $ salesColumn "commission_rate",
-   property "salesChannel" $ salesColumn "sales_channel"]
+   edgeNoId "sale_items.csv" includesEdgeLabel
+     (labeledIntId saleVertexLabel $ column "sale_id")
+     (labeledIntId saleItemVertexLabel $ column "sale_item_id")
+     [property "itemOrder" $ column "item_order",
+      property "discountApplied" $ column "discount_applied"],
 
-purchasedEdges :: Edge Term
-purchasedEdges = simpleEdge purchasedEdgeLabel
-  (intColumnToId customerVertexLabel $ salesColumn "customer_id")
-  (intColumnToId saleVertexLabel $ salesColumn "sale_id")
-  [property "paymentMethod" $ salesColumn "payment_method",
-   property "satisfactionRating" $ salesColumn "satisfaction_rating",
-   property "isRepeatCustomer" $ salesColumn "is_repeat_customer"]
+   edgeNoId "sale_items.csv" containsProductEdgeLabel
+     (labeledIntId saleItemVertexLabel $ column "sale_item_id")
+     (labeledIntId productVertexLabel $ column "product_id")
+     [property "warrantyPeriodYears" $ column "warranty_period"],
 
-includesEdges :: Edge Term
-includesEdges = simpleEdge includesEdgeLabel
-  (intColumnToId saleVertexLabel $ saleItemsColumn "sale_id")
-  (intColumnToId saleItemVertexLabel $ saleItemsColumn "sale_item_id")
-  [property "itemOrder" $ saleItemsColumn "item_order",
-   property "discountApplied" $ saleItemsColumn "discount_applied"]
-
-containsProductEdges :: Edge Term
-containsProductEdges = simpleEdge containsProductEdgeLabel
-  (intColumnToId saleItemVertexLabel $ saleItemsColumn "sale_item_id")
-  (intColumnToId productVertexLabel $ saleItemsColumn "product_id")
-  [property "warrantyPeriodYears" $ saleItemsColumn "warranty_period"]
-
-callEmployeeEdges :: Edge Term
-callEmployeeEdges = employeeEdges callInteractionType callsColumn
-
-callCustomerEdges :: Edge Term
-callCustomerEdges = customerEdges callInteractionType callsColumn
-
-emailEmployeeEdges :: Edge Term
-emailEmployeeEdges = employeeEdges emailInteractionType emailsColumn
-
-emailCustomerEdges :: Edge Term
-emailCustomerEdges = customerEdges emailInteractionType emailsColumn
-
-meetingEmployeeEdges :: Edge Term
-meetingEmployeeEdges = employeeEdges meetingInteractionType meetingsColumn
-
-meetingCustomerEdges :: Edge Term
-meetingCustomerEdges = customerEdges meetingInteractionType meetingsColumn
-
-salesGraphMapping :: LazyGraph Term
-salesGraphMapping = graph
-  [employeeVertices, departmentVertices, customerVertices, productVertices,
-   saleVertices, saleItemVertices,
-   callInteractionVertices, emailInteractionVertices, meetingInteractionVertices]
-  [managesEdges, belongsToEdges, parentDepartmentEdges,
-   soldEdges, purchasedEdges, includesEdges, containsProductEdges,
-   callEmployeeEdges, callCustomerEdges,
-   emailEmployeeEdges, emailCustomerEdges,
-   meetingEmployeeEdges, meetingCustomerEdges]
+   employeeEdge "calls.csv" callInteractionType,
+   customerEdge "calls.csv" callInteractionType,
+   employeeEdge "emails.csv" emailInteractionType,
+   customerEdge "emails.csv" emailInteractionType,
+   employeeEdge "meetings.csv" meetingInteractionType,
+   customerEdge "meetings.csv" meetingInteractionType]
