@@ -1,13 +1,11 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Demos.GenPG.ExampleMapping where
 
-import Hydra.Core
-import qualified Hydra.Pg.Model as Pg
-import Hydra.Formatting
-import Hydra.Phantoms
-import Hydra.Dsl.Phantoms
-import Hydra.Dsl.Pg.Mappings
+import Hydra.Core (Term)
+import Hydra.Pg.Model (Edge, Vertex)
+import Hydra.Formatting (decapitalize)
+import Hydra.Phantoms (TTerm)
+import Hydra.Dsl.Phantoms ((@@), constant, just, lambda, nothing, string, var)
+import Hydra.Dsl.Pg.Mappings (LazyGraph, columnValue, graph, property, simpleEdge, vertex)
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Lib.Strings as Strings
@@ -31,11 +29,11 @@ intColumnToId :: String -> TTerm (r -> Maybe Int) -> TTerm (r -> String)
 intColumnToId itype iid = lambda "r" $ Optionals.map
   (lambda "i" $ Strings.concat [
     string $ decapitalize itype,
-    "_",
+    string "_",
     Literals.showInt32 @@ (var "i")])
   (iid @@ var "r")
 
-interactionVertices :: String -> (String -> TTerm (r -> Maybe Int)) -> Pg.Vertex Term
+interactionVertices :: String -> (String -> TTerm (r -> Maybe Int)) -> Vertex Term
 interactionVertices itype column = vertex customerInteractionVertexLabel
   (intColumnToId itype (column "id"))
   [property "interactionType" $ constant $ just $ string itype,
@@ -45,13 +43,13 @@ interactionVertices itype column = vertex customerInteractionVertexLabel
    property "followUpRequired" $ column "follow_up_required",
    property "customerInitiated" $ column "customer_initiated"]
 
-employeeEdges :: String -> (String -> TTerm (r -> Maybe Int)) -> Pg.Edge Term
+employeeEdges :: String -> (String -> TTerm (r -> Maybe Int)) -> Edge Term
 employeeEdges itype column = simpleEdge employeeEdgeLabel
   (intColumnToId itype (column "id"))
   (intColumnToId employeeVertexLabel $ column "employee_id")
   []
 
-customerEdges :: String -> (String -> TTerm (r -> Maybe Int)) -> Pg.Edge Term
+customerEdges :: String -> (String -> TTerm (r -> Maybe Int)) -> Edge Term
 customerEdges itype column = simpleEdge customerEdgeLabel
   (intColumnToId itype (column "id"))
   (intColumnToId customerVertexLabel $ column "customer_id")
@@ -59,75 +57,75 @@ customerEdges itype column = simpleEdge customerEdgeLabel
 
 -- Mapping -----------------------------
 
-employeeVertices :: Pg.Vertex Term
+employeeVertices :: Vertex Term
 employeeVertices = vertex employeeVertexLabel (intColumnToId employeeVertexLabel $ employeesColumn "employee_id") [
   property "firstName" $ employeesColumn "first_name",
   property "lastName" $ employeesColumn "last_name",
   property "email" $ employeesColumn "email",
   property "hireDate" $ employeesColumn "hire_date"]
 
-departmentVertices :: Pg.Vertex Term
+departmentVertices :: Vertex Term
 departmentVertices = vertex departmentVertexLabel (intColumnToId departmentVertexLabel $ departmentsColumn "department_id") [
   property "name" $ departmentsColumn "department_name"]
 
-customerVertices :: Pg.Vertex Term
+customerVertices :: Vertex Term
 customerVertices = vertex customerVertexLabel (intColumnToId customerVertexLabel $ customersColumn "customer_id") [
   property "companyName" $ customersColumn "company_name",
   property "contactName" $ customersColumn "contact_name",
   property "email" $ customersColumn "email",
   property "phone" $ customersColumn "phone"]
 
-productVertices :: Pg.Vertex Term
+productVertices :: Vertex Term
 productVertices = vertex productVertexLabel (intColumnToId productVertexLabel $ productsColumn "product_id") [
   property "name" $ productsColumn "product_name",
   property "price" $ productsColumn "price"]
 
-saleVertices :: Pg.Vertex Term
+saleVertices :: Vertex Term
 saleVertices = vertex saleVertexLabel (intColumnToId saleVertexLabel $ salesColumn "sale_id") [
   property "saleDate" $ salesColumn "sale_date",
   property "totalAmount" $ salesColumn "total_amount"]
 
-saleItemVertices :: Pg.Vertex Term
+saleItemVertices :: Vertex Term
 saleItemVertices = vertex saleItemVertexLabel (intColumnToId saleItemVertexLabel $ saleItemsColumn "sale_item_id") [
   property "quantity" $ saleItemsColumn "quantity",
   property "itemPrice" $ saleItemsColumn "item_price"]
 
-callInteractionVertices :: Pg.Vertex Term
+callInteractionVertices :: Vertex Term
 callInteractionVertices = interactionVertices callInteractionType callsColumn
 
-emailInteractionVertices :: Pg.Vertex Term
+emailInteractionVertices :: Vertex Term
 emailInteractionVertices = interactionVertices emailInteractionType emailsColumn
 
-meetingInteractionVertices :: Pg.Vertex Term
+meetingInteractionVertices :: Vertex Term
 meetingInteractionVertices = interactionVertices meetingInteractionType meetingsColumn
 
-managesEdges :: Pg.Edge Term
+managesEdges :: Edge Term
 managesEdges = simpleEdge managesEdgeLabel
   (intColumnToId employeeVertexLabel $ employeesColumn "manager_id")
   (intColumnToId employeeVertexLabel $ employeesColumn "employee_id")
   [property "sinceDate" $ employeesColumn "management_since_date"]
 
-belongsToEdges :: Pg.Edge Term
+belongsToEdges :: Edge Term
 belongsToEdges = simpleEdge belongsToEdgeLabel
   (intColumnToId employeeVertexLabel $ employeesColumn "employee_id")
   (intColumnToId departmentVertexLabel $ employeesColumn "department_id")
   [property "joinDate" $ employeesColumn "department_join_date",
    property "role" $ employeesColumn "department_role"]
 
-parentDepartmentEdges :: Pg.Edge Term
+parentDepartmentEdges :: Edge Term
 parentDepartmentEdges = simpleEdge parentDepartmentEdgeLabel
   (intColumnToId departmentVertexLabel $ departmentsColumn "department_id")
   (intColumnToId departmentVertexLabel $ departmentsColumn "parent_department_id")
   [property "since" $ departmentsColumn "parent_department_since"]
 
-soldEdges :: Pg.Edge Term
+soldEdges :: Edge Term
 soldEdges = simpleEdge soldEdgeLabel
   (intColumnToId employeeVertexLabel $ salesColumn "employee_id")
   (intColumnToId saleVertexLabel $ salesColumn "sale_id")
   [property "commissionRate" $ salesColumn "commission_rate",
    property "salesChannel" $ salesColumn "sales_channel"]
 
-purchasedEdges :: Pg.Edge Term
+purchasedEdges :: Edge Term
 purchasedEdges = simpleEdge purchasedEdgeLabel
   (intColumnToId customerVertexLabel $ salesColumn "customer_id")
   (intColumnToId saleVertexLabel $ salesColumn "sale_id")
@@ -135,35 +133,35 @@ purchasedEdges = simpleEdge purchasedEdgeLabel
    property "satisfactionRating" $ salesColumn "satisfaction_rating",
    property "isRepeatCustomer" $ salesColumn "is_repeat_customer"]
 
-includesEdges :: Pg.Edge Term
+includesEdges :: Edge Term
 includesEdges = simpleEdge includesEdgeLabel
   (intColumnToId saleVertexLabel $ saleItemsColumn "sale_id")
   (intColumnToId saleItemVertexLabel $ saleItemsColumn "sale_item_id")
   [property "itemOrder" $ saleItemsColumn "item_order",
    property "discountApplied" $ saleItemsColumn "discount_applied"]
 
-containsProductEdges :: Pg.Edge Term
+containsProductEdges :: Edge Term
 containsProductEdges = simpleEdge containsProductEdgeLabel
   (intColumnToId saleItemVertexLabel $ saleItemsColumn "sale_item_id")
   (intColumnToId productVertexLabel $ saleItemsColumn "product_id")
   [property "warrantyPeriodYears" $ saleItemsColumn "warranty_period"]
 
-callEmployeeEdges :: Pg.Edge Term
+callEmployeeEdges :: Edge Term
 callEmployeeEdges = employeeEdges callInteractionType callsColumn
 
-callCustomerEdges :: Pg.Edge Term
+callCustomerEdges :: Edge Term
 callCustomerEdges = customerEdges callInteractionType callsColumn
 
-emailEmployeeEdges :: Pg.Edge Term
+emailEmployeeEdges :: Edge Term
 emailEmployeeEdges = employeeEdges emailInteractionType emailsColumn
 
-emailCustomerEdges :: Pg.Edge Term
+emailCustomerEdges :: Edge Term
 emailCustomerEdges = customerEdges emailInteractionType emailsColumn
 
-meetingEmployeeEdges :: Pg.Edge Term
+meetingEmployeeEdges :: Edge Term
 meetingEmployeeEdges = employeeEdges meetingInteractionType meetingsColumn
 
-meetingCustomerEdges :: Pg.Edge Term
+meetingCustomerEdges :: Edge Term
 meetingCustomerEdges = customerEdges meetingInteractionType meetingsColumn
 
 salesGraphMapping :: LazyGraph Term
