@@ -21,17 +21,17 @@ import qualified Data.List as L
 
 generateExampleGraphSON :: IO ()
 generateExampleGraphSON = generateGraphSON
-  "/Users/josh/projects/github/CategoricalData/hydra/hydra-ext/data/genpg/sales"
+  "data/genpg/sources/sales"
   salesTableSchemas
   salesGraph
-  "/Users/josh/demos/genpg/sales.json"
+  "data/genpg/sales.json"
 
 generateCopilotGraphSON :: IO ()
 generateCopilotGraphSON = generateGraphSON
-  "/Users/josh/projects/github/CategoricalData/hydra/hydra-ext/data/genpg/health"
+  "data/genpg/sources/health"
   generatedTableSchemas
   generatedGraphMapping
-  "/Users/josh/demos/genpg/copilot.json"
+  "data/genpg/copilot.json"
 
 generateGraphSON :: FilePath -> [TableType] -> LazyGraph Term -> FilePath -> IO ()
 generateGraphSON sourceRoot tableSchemas graphMapping outputPath = do
