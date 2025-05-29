@@ -390,7 +390,7 @@ createAcceptImplementation env tname variants = Cpp.DeclarationTemplate $
 createLessThanOperator :: CppEnvironment -> Name -> [FieldType] -> Cpp.Declaration
 createLessThanOperator env typeName fields = Cpp.DeclarationFunction $
   Cpp.FunctionDeclaration
-    []
+    [Cpp.FunctionSpecifierPrefixInline]
     (Cpp.TypeExpressionBasic Cpp.BasicTypeBool)
     ("operator<")
     [unnamedParameter "lhs" $ Cpp.TypeExpressionBasic $ Cpp.BasicTypeNamed $ encodeName False CaseConventionPascal env typeName,

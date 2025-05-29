@@ -445,12 +445,15 @@ _FunctionDeclaration_suffixSpecifiers = (Core.Name "suffixSpecifiers")
 _FunctionDeclaration_body = (Core.Name "body")
 
 data FunctionSpecifierPrefix = 
+  FunctionSpecifierPrefixInline  |
   FunctionSpecifierPrefixVirtual  |
   FunctionSpecifierPrefixStatic  |
   FunctionSpecifierPrefixExplicit 
   deriving (Eq, Ord, Read, Show)
 
 _FunctionSpecifierPrefix = (Core.Name "hydra.ext.cpp.syntax.FunctionSpecifierPrefix")
+
+_FunctionSpecifierPrefix_inline = (Core.Name "inline")
 
 _FunctionSpecifierPrefix_virtual = (Core.Name "virtual")
 

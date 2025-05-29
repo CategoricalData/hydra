@@ -213,6 +213,7 @@ encodeFunctionDeclaration (Cpp.FunctionDeclaration prefixSpecs retType name para
 
 encodeFunctionSpecifierPrefix :: Cpp.FunctionSpecifierPrefix -> A.Expr
 encodeFunctionSpecifierPrefix s = case s of
+  Cpp.FunctionSpecifierPrefixInline  -> cst "inline"
   Cpp.FunctionSpecifierPrefixVirtual -> cst "virtual"
   Cpp.FunctionSpecifierPrefixStatic  -> cst "static"
   Cpp.FunctionSpecifierPrefixExplicit -> cst "explicit"
