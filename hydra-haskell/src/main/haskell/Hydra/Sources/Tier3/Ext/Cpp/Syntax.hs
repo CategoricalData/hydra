@@ -195,7 +195,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "body" >: cpp "FunctionBody"],
 
 -- <function-prefix-specifier> ::= "virtual" | "static"
-      def "FunctionSpecifierPrefix" $ enum ["virtual", "static", "explicit"],
+      def "FunctionSpecifierPrefix" $ enum ["inline", "virtual", "static", "explicit"],
 
 -- <function-suffix-specifier> ::= "const" | "noexcept" | "override" | "final"
       def "FunctionSpecifierSuffix" $ enum ["const", "noexcept", "override", "final"],
