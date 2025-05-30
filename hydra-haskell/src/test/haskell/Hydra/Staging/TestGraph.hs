@@ -37,6 +37,7 @@ testSchemaGraph = elementsToGraph hydraCoreGraph (Just hydraCoreGraph) [
     def testTypePersonOrSomethingName testTypePersonOrSomething,
     def testTypeSimpleNumberName testTypeSimpleNumber,
     def testTypeStringAliasName $ Ann.doc "An alias for the string type" testTypeStringAlias,
+    def testTypePolymorphicWrapperName testTypePolymorphicWrapper,
     def testTypeTimestampName testTypeTimestamp,
     def testTypeUnionMonomorphicName testTypeUnionMonomorphic,
     def testTypeUnionPolymorphicRecursiveName testTypeUnionPolymorphicRecursive]

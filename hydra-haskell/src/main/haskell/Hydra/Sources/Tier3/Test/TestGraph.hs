@@ -43,6 +43,8 @@ testGraphModule = Module (Namespace "hydra.test.testGraph") elements [] [hydraGr
       el testTypeLatLonPolyDef,
       el testTypeStringAliasDef,
       el testTypeStringAliasNameDef,
+      el testTypePolymorphicWrapperDef,
+      el testTypePolymorphicWrapperNameDef,
       el testElementArthurDef,
       el testElementFirstNameDef,
 --      el testGraphDef, -- TODO
@@ -115,6 +117,14 @@ testTypeStringAliasDef = testGraphType "testTypeStringAlias" $
 testTypeStringAliasNameDef :: TElement Name
 testTypeStringAliasNameDef = testGraphDefinition "testTypeStringAliasName" $
   name "StringTypeAlias"
+
+testTypePolymorphicWrapperDef :: TElement Type
+testTypePolymorphicWrapperDef = testGraphType "testTypePolymorphicWrapper" $
+  T.forAll "a" $ Core.typeWrap $ Core.wrappedType (ref testTypePolymorphicWrapperNameDef) (T.list $ T.var "a")
+
+testTypePolymorphicWrapperNameDef :: TElement Name
+testTypePolymorphicWrapperNameDef = testGraphDefinition "testTypePolymorphicWrapperName" $
+  name "PolymorphicWrapper"
 
 testElementArthurDef :: TElement Element
 testElementArthurDef = testGraphDefinition "testElementArthur" $
