@@ -59,6 +59,16 @@ testTypeStringAlias = (Core.TypeWrap (Core.WrappedType {
 testTypeStringAliasName :: Core.Name
 testTypeStringAliasName = (Core.Name "StringTypeAlias")
 
+testTypePolymorphicWrapper :: Core.Type
+testTypePolymorphicWrapper = (Core.TypeForall (Core.ForallType {
+  Core.forallTypeParameter = (Core.Name "a"),
+  Core.forallTypeBody = (Core.TypeWrap (Core.WrappedType {
+    Core.wrappedTypeTypeName = testTypePolymorphicWrapperName,
+    Core.wrappedTypeObject = (Core.TypeList (Core.TypeVariable (Core.Name "a")))}))}))
+
+testTypePolymorphicWrapperName :: Core.Name
+testTypePolymorphicWrapperName = (Core.Name "PolymorphicWrapper")
+
 testElementArthur :: Graph.Element
 testElementArthur = Graph.Element {
   Graph.elementName = (Core.Name "firstName"),
