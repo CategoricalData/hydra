@@ -533,6 +533,25 @@ testOne t = do { putStrLn $ "Untyped input: "
                ; putStrLn "------------------------"
                ; putStrLn ""  }
 
+--testOne t = do { putStrLn $ "Untyped input: "
+--               ; putStrLn $ "\t" ++  showExpr t
+--               ; let out = fst $ runState (runExceptT (w [] t)) 0
+--               ; case out of
+--                   Left  e -> putStrLn $ "\t" ++ "err: " ++ e
+--                   Right (s, (ty, f)) -> do {
+--                                            ; putStrLn $ "\nType inferred by Hindley-Milner: "
+--                                            ; putStrLn $ "\t" ++ showMTy ty
+--                                            ; putStrLn "\nSystem F translation: "
+--                                            ; putStrLn $ "\t" ++ showFExpr f
+--                                            ; putStrLn "\nSystem F type: "
+--                                            ; case (typeOf (vars ty) [] f) of
+--                                               Left err -> putStrLn $ "\t" ++  "err: " ++ err
+--                                               Right tt -> do { putStrLn $ " \t" ++ showFTy tt
+--                                                              ; if tt == mTyToFTy ty then return () else putStrLn "**** !!! NO MATCH" } }
+--               ; putStrLn ""
+--               ; putStrLn "------------------------"
+--               ; putStrLn ""  }
+
 stlc = Letrec [("x",Var "y"),("y",Var "x")] (App (App (Const Pair) (Var "x")) (Var "y"))
 --main = testOne stlc
 
