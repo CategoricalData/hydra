@@ -169,7 +169,7 @@ showType typ = case stripType typ of
           TypeFunction (FunctionType dom cod) -> gatherTypes (dom:prev) cod
           t1 -> L.intercalate " → " $ fmap showType $ L.reverse (t1:prev)
     TypeList etyp -> "list<" ++ showType etyp ++ ">"
-    TypeForall (ForallType (Name var) body) -> "∀" ++ var ++ "." ++ showType body
+    TypeForall (ForallType (Name var) body) -> "(∀" ++ var ++ "." ++ showType body ++ ")"
     TypeLiteral lt -> case lt of
       LiteralTypeBinary -> "binary"
       LiteralTypeBoolean -> "boolean"
@@ -205,7 +205,7 @@ showTypeConstraint :: TypeConstraint -> String
 showTypeConstraint (TypeConstraint ltyp rtyp _) = showType ltyp ++ "≡" ++ showType rtyp
 
 showTypeScheme :: TypeScheme -> String
-showTypeScheme (TypeScheme vars body) = fa ++ showType body
+showTypeScheme (TypeScheme vars body) = "(" ++ fa ++ showType body ++ ")"
   where
     fa = if L.null vars then "" else "∀[" ++ (L.intercalate "," (fmap (\(Name name) -> name) vars)) ++ "]."
 

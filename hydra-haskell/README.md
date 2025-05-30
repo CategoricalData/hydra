@@ -130,7 +130,7 @@ import Hydra.Langs.Json.Serde
 import Hydra.Dsl.Terms as Terms
 
 -- Choose a graph in which to execute flows; we will use the Hydra kernel graph.
-g = hydraKernel
+g = hydraCoreGraph
 flow = fromFlowIo g
 
 -- Choose a type for terms to encode. In this case, we will be encoding numeric precision values.
