@@ -5,6 +5,7 @@ module Hydra.Rewriting where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
@@ -45,6 +46,10 @@ freeVariablesInType typ =
     Core.TypeVariable v1 -> (Sets.singleton v1)
     _ -> dfltVars) typ)
 
+-- | Check whether a variable is free (not bound) in a term
+isFreeVariableInTerm :: (Core.Name -> Core.Term -> Bool)
+isFreeVariableInTerm v term = (Logic.not (Sets.member v (freeVariablesInTerm term)))
+
 -- | Check whether a term is a lambda, possibly nested within let and/or annotation terms
 isLambda :: (Core.Term -> Bool)
 isLambda term = ((\x -> case x of
@@ -53,6 +58,14 @@ isLambda term = ((\x -> case x of
     _ -> False) v1)
   Core.TermLet v1 -> (isLambda (Core.letEnvironment v1))
   _ -> False) (Strip.fullyStripTerm term))
+
+-- | Apply a transformation to the first type beneath a chain of annotations
+mapBeneathTypeAnnotations :: ((Core.Type -> Core.Type) -> Core.Type -> Core.Type)
+mapBeneathTypeAnnotations f t = ((\x -> case x of
+  Core.TypeAnnotated v1 -> (Core.TypeAnnotated (Core.AnnotatedType {
+    Core.annotatedTypeSubject = (mapBeneathTypeAnnotations f (Core.annotatedTypeSubject v1)),
+    Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))
+  _ -> (f t)) t)
 
 rewrite :: ((t1 -> t0) -> (t0 -> t1) -> t1)
 rewrite fsub f =  

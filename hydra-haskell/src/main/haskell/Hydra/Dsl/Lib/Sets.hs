@@ -8,9 +8,6 @@ import Hydra.Dsl.Phantoms
 import Data.Set
 
 
-contains :: TTerm a -> TTerm (Set a) -> TTerm Bool
-contains = primitive2 _sets_contains
-
 difference :: TTerm (Set a) -> TTerm (Set a) -> TTerm (Set a)
 difference = primitive2 _sets_difference
 
@@ -31,6 +28,9 @@ isEmpty = primitive1 _sets_isEmpty
 
 map :: TTerm (a -> b) -> TTerm (Set a) -> TTerm (Set b)
 map = primitive2 _sets_map
+
+member :: TTerm a -> TTerm (Set a) -> TTerm Bool
+member = primitive2 _sets_member
 
 remove :: TTerm a -> TTerm (Set a) -> TTerm (Set a)
 remove = primitive2 _sets_remove

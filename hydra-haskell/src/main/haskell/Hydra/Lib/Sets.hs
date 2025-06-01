@@ -5,9 +5,6 @@ module Hydra.Lib.Sets where
 import qualified Data.Set as S
 
 
-contains :: Ord x => x -> S.Set x -> Bool
-contains = S.member
-
 difference :: Ord x => S.Set x -> S.Set x -> S.Set x
 difference = S.difference
 
@@ -29,6 +26,9 @@ isEmpty = S.null
 -- Note: the presence of a 'map' function does not imply that sets are a functor in Hydra
 map :: Ord y => (x -> y) -> S.Set x -> S.Set y
 map f = S.fromList . fmap f . S.toList
+
+member :: Ord x => x -> S.Set x -> Bool
+member = S.member
 
 remove :: Ord x => x -> S.Set x -> S.Set x 
 remove = S.delete

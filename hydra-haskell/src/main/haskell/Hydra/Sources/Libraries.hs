@@ -467,14 +467,14 @@ optionalsMapInterp fun opt = do
 _hydra_lib_sets :: Namespace
 _hydra_lib_sets = Namespace "hydra.lib.sets"
 
-_sets_insert       = qname _hydra_lib_sets "add" :: Name
-_sets_contains     = qname _hydra_lib_sets "contains" :: Name
 _sets_difference   = qname _hydra_lib_sets "difference" :: Name
 _sets_empty        = qname _hydra_lib_sets "empty" :: Name
 _sets_fromList     = qname _hydra_lib_sets "fromList" :: Name
+_sets_insert       = qname _hydra_lib_sets "add" :: Name
 _sets_intersection = qname _hydra_lib_sets "intersection" :: Name
 _sets_isEmpty      = qname _hydra_lib_sets "isEmpty" :: Name
 _sets_map          = qname _hydra_lib_sets "map" :: Name
+_sets_member       = qname _hydra_lib_sets "member" :: Name
 _sets_remove       = qname _hydra_lib_sets "remove" :: Name
 _sets_singleton    = qname _hydra_lib_sets "singleton" :: Name
 _sets_size         = qname _hydra_lib_sets "size" :: Name
@@ -483,7 +483,6 @@ _sets_union        = qname _hydra_lib_sets "union" :: Name
 
 hydraLibSets :: Library
 hydraLibSets = standardLibrary _hydra_lib_sets [
-    prim2 _sets_contains     Sets.contains     ["x"]      x (set x) boolean,
     prim2 _sets_difference   Sets.difference   ["x"]      (set x) (set x) (set x),
     prim0 _sets_empty        Sets.empty        ["x"]      (set x),
     prim1 _sets_fromList     Sets.fromList     ["x"]      (list x) (set x),
@@ -491,6 +490,7 @@ hydraLibSets = standardLibrary _hydra_lib_sets [
     prim2 _sets_intersection Sets.intersection ["x"]      (set x) (set x) (set x),
     prim1 _sets_isEmpty      Sets.isEmpty      ["x"]      (set x) boolean,
     prim2 _sets_map          Sets.map          ["x", "y"] (function x y) (set x) (set y),
+    prim2 _sets_member       Sets.member       ["x"]      x (set x) boolean,
     prim2 _sets_remove       Sets.remove       ["x"]      x (set x) (set x),
     prim1 _sets_singleton    Sets.singleton    ["x"]      x (set x),
     prim1 _sets_size         Sets.size         ["x"]      (set x) int32,
