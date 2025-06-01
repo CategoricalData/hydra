@@ -198,7 +198,6 @@ public class Libraries {
 
     private static List<PrimitiveFunction> setsPrimitives() {
         return Arrays.asList(
-                new hydra.lib.sets.Contains(),
                 new hydra.lib.sets.Difference(),
                 new hydra.lib.sets.Empty(),
                 new hydra.lib.sets.FromList(),
@@ -206,6 +205,7 @@ public class Libraries {
                 new hydra.lib.sets.Intersection(),
                 new hydra.lib.sets.IsEmpty(),
                 new hydra.lib.sets.Map(),
+                new hydra.lib.sets.Member(),
                 new hydra.lib.sets.Remove(),
                 new hydra.lib.sets.Singleton(),
                 new hydra.lib.sets.Size(),

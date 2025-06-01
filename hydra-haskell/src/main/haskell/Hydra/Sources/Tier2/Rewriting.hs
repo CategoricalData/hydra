@@ -45,7 +45,9 @@ hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
      el foldOverTypeDef,
      el freeVariablesInTermDef,
      el freeVariablesInTypeDef,
+     el isFreeVariableInTermDef,
      el isLambdaDef,
+     el mapBeneathTypeAnnotationsDef,
      el rewriteDef,
      el rewriteTermDef,
      el rewriteTypeDef,
@@ -113,6 +115,12 @@ freeVariablesInTypeDef = rewritingDefinition "freeVariablesInType" $
   where
     recurse = ref freeVariablesInTypeDef
 
+isFreeVariableInTermDef :: TElement (Name -> Term -> Bool)
+isFreeVariableInTermDef = rewritingDefinition "isFreeVariableInTerm" $
+ doc "Check whether a variable is free (not bound) in a term" $
+ lambda "v" $ lambda "term" $
+   Logic.not $ Sets.member (var "v") (ref freeVariablesInTermDef @@ var "term")
+
 isLambdaDef :: TElement (Term -> Bool)
 isLambdaDef = rewritingDefinition "isLambda" $
   doc "Check whether a term is a lambda, possibly nested within let and/or annotation terms" $
@@ -121,6 +129,15 @@ isLambdaDef = rewritingDefinition "isLambda" $
         _Function_lambda>>: constant true],
       _Term_let>>: lambda "lt" (ref isLambdaDef @@ (project _Let _Let_environment @@ var "lt"))])
     @@ (ref fullyStripTermDef @@ var "term")
+
+mapBeneathTypeAnnotationsDef :: TElement ((Type -> Type) -> Type -> Type)
+mapBeneathTypeAnnotationsDef = rewritingDefinition "mapBeneathTypeAnnotations" $
+  doc "Apply a transformation to the first type beneath a chain of annotations" $
+  lambda "f" $ lambda "t" $
+    match _Type (Just $ var "f" @@ var "t") [
+      _Type_annotated>>: lambda "at" $ Core.typeAnnotated $ Core.annotatedType
+        (ref mapBeneathTypeAnnotationsDef @@ var "f" @@ (Core.annotatedTypeSubject @@ var "at"))
+        (Core.annotatedTypeAnnotation @@ var "at")] @@ var "t"
 
 rewriteDef :: TElement (((x -> y) -> x -> y) -> ((x -> y) -> x -> y) -> x -> y)
 rewriteDef = rewritingDefinition "rewrite" $ lambdas ["fsub", "f"] $ lets [

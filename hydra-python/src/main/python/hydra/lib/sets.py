@@ -6,19 +6,14 @@ from typing import Any
 from hydra.dsl.python import frozenlist
 
 
-def empty[A]():
-    """Create an empty set."""
-    return frozenset[A]()
-
-
-def contains[A](x: A, s: frozenset[A]) -> bool:
-    """Check if an element is in a set."""
-    return x in s
-
-
 def difference[A](s1: frozenset[A], s2: frozenset[A]) -> frozenset[A]:
     """Compute the difference of two sets."""
     return s1 - s2
+
+
+def empty[A]():
+"""Create an empty set."""
+return frozenset[A]()
 
 
 def from_list[A](xs: Sequence[A]) -> frozenset[A]:
@@ -44,6 +39,11 @@ def is_empty(s: frozenset[Any]) -> bool:
 def map[A, B](f: Callable[[A], B], s: frozenset[A]) -> frozenset[B]:
     """Map a function over a set."""
     return frozenset(f(x) for x in s)
+
+
+def member[A](x: A, s: frozenset[A]) -> bool:
+"""Check if an element is in a set."""
+return x in s
 
 
 def remove[A](x: A, s: frozenset[A]) -> frozenset[A]:

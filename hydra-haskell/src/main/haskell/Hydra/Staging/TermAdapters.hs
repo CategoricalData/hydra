@@ -20,6 +20,7 @@ import Hydra.Graph
 import Hydra.Staging.Lexical
 import Hydra.Lib.Io
 import Hydra.Mantle
+import Hydra.Rewriting
 import Hydra.Staging.Reduction
 import Hydra.Staging.Rewriting
 import Hydra.Staging.LiteralAdapters

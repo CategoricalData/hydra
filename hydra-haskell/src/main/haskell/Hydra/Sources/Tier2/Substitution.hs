@@ -104,7 +104,7 @@ substituteInTermDef = substitutionDefinition "substituteInTerm" $
       "withLet">: lambda "lt" $ lets [
         "bindings">: Core.letBindings @@ var "lt",
         "names">: Sets.fromList $ Lists.map Core.letBindingName (var "bindings"),
-        "subst2">: Typing.termSubst $ Maps.filterWithKey (lambdas ["k", "v"] $ Logic.not $ Sets.contains (var "k") (var "names")) (var "s"),
+        "subst2">: Typing.termSubst $ Maps.filterWithKey (lambdas ["k", "v"] $ Logic.not $ Sets.member (var "k") (var "names")) (var "s"),
         "rewriteBinding">: lambda "b" $ Core.letBinding
           (Core.letBindingName @@ var "b")
           (ref substituteInTermDef @@ var "subst2" @@ (Core.letBindingTerm @@ var "b"))

@@ -1,6 +1,6 @@
 package hydra.lib;
 
-import hydra.lib.sets.Contains;
+import hydra.lib.sets.Member;
 import hydra.lib.sets.Empty;
 import hydra.lib.sets.FromList;
 import hydra.lib.sets.Insert;
@@ -27,8 +27,8 @@ public class SetsTest {
     public void containsIsCorrect() {
         HashSet<Integer> testSet = new HashSet<Integer>(Arrays.asList(1, 2, 3));
 
-        assertEquals(true, Contains.apply(1, testSet));
-        assertEquals(false, Contains.apply(4, testSet));
+        assertEquals(true, Member.apply(1, testSet));
+        assertEquals(false, Member.apply(4, testSet));
     }
 
     @Test

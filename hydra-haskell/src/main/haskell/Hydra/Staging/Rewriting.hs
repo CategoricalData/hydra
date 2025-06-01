@@ -129,15 +129,6 @@ inlineType schema = rewriteTypeM f
           Nothing -> fail $ "No such type in schema: " ++ unName v
         t -> return t
 
-isFreeVariableInTerm :: Name -> Term -> Bool
-isFreeVariableInTerm v term = not $ S.member v $ freeVariablesInTerm term
-
--- | Apply a transformation to the first type beneath a chain of annotations
-mapBeneathTypeAnnotations :: (Type -> Type) -> Type -> Type
-mapBeneathTypeAnnotations f t = case t of
-  TypeAnnotated (AnnotatedType t1 ann) -> TypeAnnotated (AnnotatedType (mapBeneathTypeAnnotations f t1) ann)
-  _ -> f t
-
 -- | Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ...,
 --   e.g. (key = value : forall v, a, v_12. type) becomes (key = norm(S,value) : forall t0, t1, t2. S(type)),
 --   S(type) represents the substitution {t0/v, t1/a, t2/v_12} applied to the type, and norm(S, value) is the result
