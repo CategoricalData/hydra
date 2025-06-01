@@ -569,37 +569,6 @@ inferTypeOfRecord cx (Record tname fields) =
             (nominalApplication tname $ fmap TypeVariable svars)
             (composeTypeSubst isubst subst)
 
-
-
---inferTypeOfRecord :: InferenceContext -> Record -> Flow s InferenceResult
---inferTypeOfRecord cx (Record tname fields) =
---  bind2
---    (requireSchemaType cx tname)
---    (inferMany cx (fmap (\f -> (fieldTerm f, "field " ++ unName (fieldName f))) fields))
---    withResult
---  where
---    fnames = fmap fieldName fields
---
---    withResult (TypeScheme svars styp) (iterms, itypes, isubst) = do
---      freshVars <- freshNames (length svars)
---      let subst = TypeSubst (M.fromList (L.zip svars (fmap TypeVariable freshVars)))
---          stypInst = substInType subst styp
---          ityp = TypeRecord (RowType tname (L.zipWith FieldType fnames itypes))
---          nominalInst = nominalApplication tname $ fmap TypeVariable freshVars
---          rterm = TermRecord (Record tname (L.zipWith Field fnames iterms))
---          freeVars = S.toList $
---            S.unions (fmap freeVariablesInType itypes ++ fmap freeVariablesInTerm iterms) `S.union`
---            S.fromList freshVars
---
---      bindConstraints cx
---        (\subst2 -> yieldChecked cx freeVars rterm nominalInst (composeTypeSubst isubst subst2))
---        [TypeConstraint stypInst ityp "schema type of record"]
-
-
-
-
-
-
 inferTypeOfSet :: InferenceContext -> S.Set Term -> Flow s InferenceResult
 inferTypeOfSet cx = inferTypeOfCollection cx Types.set (Terms.set . S.fromList) "set element" . S.toList
 
