@@ -49,11 +49,11 @@ hydraQnamesModule = Module (Namespace "hydra.qnames") elements
 
 localNameOfDef :: TElement (Name -> String)
 localNameOfDef = qnamesDefinition "localNameOf" $
-  Module.qualifiedNameLocal <.> ref qualifyNameDef
+  asFunction Module.qualifiedNameLocal <.> ref qualifyNameDef
 
 namespaceOfDef :: TElement (Name -> Maybe Namespace)
 namespaceOfDef = qnamesDefinition "namespaceOf" $
-  Module.qualifiedNameNamespace <.> ref qualifyNameDef
+  asFunction Module.qualifiedNameNamespace <.> ref qualifyNameDef
 
 namespaceToFilePathDef :: TElement (CaseConvention -> FileExtension -> Namespace -> String)
 namespaceToFilePathDef = qnamesDefinition "namespaceToFilePath" $
@@ -61,7 +61,7 @@ namespaceToFilePathDef = qnamesDefinition "namespaceToFilePath" $
     "parts">: Lists.map
       (ref convertCaseDef @@ Mantle.caseConventionCamel @@ var "caseConv")
       (Strings.splitOn "." (Core.unNamespace $ var "ns"))]
-    $ (Strings.intercalate "/" $ var "parts") ++ "." ++ (Module.unFileExtension @@ var "ext")
+    $ (Strings.intercalate "/" $ var "parts") ++ "." ++ (Module.unFileExtension $ var "ext")
 
 qnameDef :: TElement (Namespace -> String -> Name)
 qnameDef = qnamesDefinition "qname" $

@@ -12,11 +12,11 @@ qualifiedName ns local = record _QualifiedName [
   _QualifiedName_namespace>>: ns,
   _QualifiedName_local>>: local]
 
-qualifiedNameLocal :: TTerm (QualifiedName -> String)
-qualifiedNameLocal = project _QualifiedName _QualifiedName_local
+qualifiedNameLocal :: TTerm QualifiedName -> TTerm String
+qualifiedNameLocal qn = project _QualifiedName _QualifiedName_local @@ qn
 
-qualifiedNameNamespace :: TTerm (QualifiedName -> Maybe Namespace)
-qualifiedNameNamespace = project _QualifiedName _QualifiedName_namespace
+qualifiedNameNamespace :: TTerm QualifiedName -> TTerm (Maybe Namespace)
+qualifiedNameNamespace qn = project _QualifiedName _QualifiedName_namespace @@ qn
 
-unFileExtension :: TTerm (FileExtension -> String)
-unFileExtension = unwrap _FileExtension
+unFileExtension :: TTerm FileExtension -> TTerm String
+unFileExtension fe = unwrap _FileExtension @@ fe
