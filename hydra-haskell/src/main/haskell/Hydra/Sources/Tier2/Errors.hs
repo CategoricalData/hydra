@@ -52,33 +52,33 @@ getStateDef :: TElement (Flow s s)
 getStateDef = errorsDefinition "getState" $ -- Flow s s
   doc "Get the state of the current flow" $
   wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
-    "fs1">: Compute.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"] $ -- FlowState s ()
+    "fs1">: Compute.unFlow (Flows.pure unit) (var "s0") (var "t0")] $ -- FlowState s ()
     (lambda "v" $ lambda "s" $ lambda "t" $ (
         (primitive _optionals_maybe
           @@ (Compute.flowState nothing (var "s") (var "t"))
           @@ (constant (Compute.flowState (just $ var "s") (var "s") (var "t"))))
          @@ var "v"))
-      @@ (Compute.flowStateValue @@ var "fs1") @@ (Compute.flowStateState @@ var "fs1") @@ (Compute.flowStateTrace @@ var "fs1")
+      @@ (Compute.flowStateValue $ var "fs1") @@ (Compute.flowStateState $ var "fs1") @@ (Compute.flowStateTrace $ var "fs1")
 
 putStateDef :: TElement (s -> Flow s ())
 putStateDef = errorsDefinition "putState" $
   doc "Set the state of a flow" $
   lambda "cx" $ wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
-    "f1">: Compute.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"] $
+    "f1">: Compute.unFlow (Flows.pure unit) (var "s0") (var "t0")] $
     Compute.flowState
-      (Compute.flowStateValue @@ var "f1")
+      (Compute.flowStateValue $ var "f1")
       (var "cx")
-      (Compute.flowStateTrace @@ var "f1")
+      (Compute.flowStateTrace $ var "f1")
 
 traceSummaryDef :: TElement (Trace -> String)
 traceSummaryDef = errorsDefinition "traceSummary" $
   doc "Summarize a trace as a string" $
   lambda "t" $ lets [
-    "messageLines">: (Lists.nub (Compute.traceMessages @@ var "t")),
-    "keyvalLines">: Logic.ifElse (Maps.isEmpty (Compute.traceOther @@ var "t"))
+    "messageLines">: (Lists.nub (Compute.traceMessages $ var "t")),
+    "keyvalLines">: Logic.ifElse (Maps.isEmpty (Compute.traceOther $ var "t"))
       (list [])
       (Lists.cons ("key/value pairs: ")
-        (Lists.map (var "toLine") (Maps.toList (Compute.traceOther @@ var "t")))),
+        (Lists.map (var "toLine") (Maps.toList (Compute.traceOther $ var "t")))),
     "toLine">:
       lambda "pair" $ "\t" ++ (Core.unName $ (first @@ var "pair")) ++ ": " ++ (Io.showTerm (second @@ var "pair"))] $
     Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines"))
