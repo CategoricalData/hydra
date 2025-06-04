@@ -14,14 +14,14 @@ flowState value state trace = record _FlowState [
   _FlowState_state>>: state,
   _FlowState_trace>>: trace]
 
-flowStateState :: TTerm (FlowState s x -> s)
-flowStateState = project _FlowState _FlowState_state
+flowStateState :: TTerm (FlowState s x) -> TTerm s
+flowStateState fs = project _FlowState _FlowState_state @@ fs
 
-flowStateTrace :: TTerm (FlowState s x -> Trace)
-flowStateTrace = project _FlowState _FlowState_trace
+flowStateTrace :: TTerm (FlowState s x) -> TTerm Trace
+flowStateTrace fs = project _FlowState _FlowState_trace @@ fs
 
-flowStateValue :: TTerm (FlowState s x -> Maybe x)
-flowStateValue = project _FlowState _FlowState_value
+flowStateValue :: TTerm (FlowState s x) -> TTerm (Maybe x)
+flowStateValue fs = project _FlowState _FlowState_value @@ fs
 
 trace :: TTerm [String] -> TTerm [String] -> TTerm (M.Map String (Term)) -> TTerm Trace
 trace stack messages other = record _Trace [
@@ -29,17 +29,17 @@ trace stack messages other = record _Trace [
   _Trace_messages>>: messages,
   _Trace_other>>: other]
 
-traceStack :: TTerm (Trace -> [String])
-traceStack = project _Trace _Trace_stack
+traceStack :: TTerm Trace -> TTerm [String]
+traceStack t = project _Trace _Trace_stack @@ t
 
-traceMessages :: TTerm (Trace -> [String])
-traceMessages = project _Trace _Trace_messages
+traceMessages :: TTerm Trace -> TTerm [String]
+traceMessages t = project _Trace _Trace_messages @@ t
 
-traceOther :: TTerm (Trace -> M.Map String (Term))
-traceOther = project _Trace _Trace_other
+traceOther :: TTerm Trace -> TTerm (M.Map String (Term))
+traceOther t = project _Trace _Trace_other @@ t
 
-unFlow :: TTerm (Flow s x -> s -> Trace -> FlowState s x)
-unFlow = unwrap _Flow
+unFlow :: TTerm (Flow s x) -> TTerm s -> TTerm Trace -> TTerm (FlowState s x)
+unFlow f s t = unwrap _Flow @@ f @@ s @@ t
 
 traversalOrderPre = unitVariant _TraversalOrder _TraversalOrder_pre
 traversalOrderPost = unitVariant _TraversalOrder _TraversalOrder_post

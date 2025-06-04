@@ -63,11 +63,11 @@ bindDef :: TElement (Flow s a -> (a -> Flow s b) -> Flow s b)
 bindDef = flowsDefinition "bind" $
   lambdas ["l", "r"] $ lets [
     "q">: lambdas ["s0", "t0"] $ lets [
-      "fs1">: Compute.unFlow @@ var "l" @@ var "s0" @@ var "t0"]
+      "fs1">: Compute.unFlow (var "l") (var "s0") (var "t0")]
       $ (primitive _optionals_maybe
-          @@ (Compute.flowState nothing (Compute.flowStateState @@ var "fs1") (Compute.flowStateTrace @@ var "fs1"))
-          @@ (lambda "v" $ Compute.unFlow @@ (var "r" @@ var "v") @@ (Compute.flowStateState @@ var "fs1") @@ (Compute.flowStateTrace @@ var "fs1")))
-        @@ (Compute.flowStateValue @@ var "fs1")]
+          @@ (Compute.flowState nothing (Compute.flowStateState $ var "fs1") (Compute.flowStateTrace $ var "fs1"))
+          @@ (lambda "v" $ Compute.unFlow (var "r" @@ var "v") (Compute.flowStateState $ var "fs1") (Compute.flowStateTrace $ var "fs1")))
+        @@ (Compute.flowStateValue $ var "fs1")]
     $ wrap _Flow $ var "q"
 
 bind2Def :: TElement ((Flow s a) -> (Flow s b) -> (a -> b -> Flow s c) -> Flow s c)
@@ -107,7 +107,7 @@ flowSucceedsDef :: TElement (Flow s a -> Bool)
 flowSucceedsDef = flowsDefinition "flowSucceeds" $
   doc "Check whether a flow succeeds" $
   lambda "cx" $ lambda "f" $
-    Optionals.isJust (Compute.flowStateValue @@ (Compute.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
+    Optionals.isJust (Compute.flowStateValue $ (Compute.unFlow (var "f") (var "cx") (ref emptyTraceDef)))
 
 fromFlowDef :: TElement (a -> s -> Flow s a -> a)
 fromFlowDef = flowsDefinition "fromFlow" $
@@ -115,17 +115,17 @@ fromFlowDef = flowsDefinition "fromFlow" $
   lambda "def" $ lambda "cx" $ lambda "f" $ Optionals.maybe
     (var "def")
     (lambda "xmo" $ var "xmo")
-    (Compute.flowStateValue @@ (Compute.unFlow @@ var "f" @@ var "cx" @@ ref emptyTraceDef))
+    (Compute.flowStateValue $ (Compute.unFlow (var "f") (var "cx") (ref emptyTraceDef)))
 
 mapDef :: TElement ((a -> b) -> Flow s a -> Flow s b)
 mapDef = flowsDefinition "map" $
   doc "Map a function over a flow" $
   lambdas ["f", "f1"] $ wrap _Flow $ lambdas ["s0", "t0"] $ lets [
-    "f2">: Compute.unFlow @@ var "f1" @@ var "s0" @@ var "t0"]
+    "f2">: Compute.unFlow (var "f1") (var "s0") (var "t0")]
     $ Compute.flowState
-      (Optionals.map (var "f") $ Compute.flowStateValue @@ var "f2")
-      (Compute.flowStateState @@ var "f2")
-      (Compute.flowStateTrace @@ var "f2")
+      (Optionals.map (var "f") $ Compute.flowStateValue $ var "f2")
+      (Compute.flowStateState $ var "f2")
+      (Compute.flowStateTrace $ var "f2")
 
 map2Def :: TElement ((Flow s a) -> (Flow s b) -> (a -> b -> c) -> Flow s c)
 map2Def = flowsDefinition "map2" $
@@ -146,11 +146,11 @@ mutateTraceDef = flowsDefinition "mutateTrace" $
         "forRight">:
           lambda "t1" $ lets [
             -- execute the internal flow after augmenting the trace
-            "f2">: Compute.unFlow @@ var "f" @@ var "s0" @@ var "t1"]
+            "f2">: Compute.unFlow (var "f") (var "s0") (var "t1")]
             $ Compute.flowState
-                (Compute.flowStateValue @@ var "f2")
-                (Compute.flowStateState @@ var "f2")
-                (var "restore" @@ var "t0" @@ (Compute.flowStateTrace @@ var "f2"))]
+                (Compute.flowStateValue $ var "f2")
+                (Compute.flowStateState $ var "f2")
+                (var "restore" @@ var "t0" @@ (Compute.flowStateTrace $ var "f2"))]
         $ (match _Either Nothing [
             _Either_left>>: var "forLeft",
             _Either_right>>: var "forRight"])
@@ -166,38 +166,38 @@ pushErrorDef :: TElement (String -> Trace -> Trace)
 pushErrorDef = flowsDefinition "pushError" $
   doc "Push an error message" $
   lambda "msg" $ lambda "t" $ lets [
-    "errorMsg">: Strings.concat ["Error: ", var "msg", " (", (Strings.intercalate " > " (Lists.reverse (Compute.traceStack @@ var "t"))), ")"]]
+    "errorMsg">: Strings.concat ["Error: ", var "msg", " (", (Strings.intercalate " > " (Lists.reverse (Compute.traceStack $ var "t"))), ")"]]
     $ Compute.trace
-        (Compute.traceStack @@ var "t")
-        (Lists.cons (var "errorMsg") (Compute.traceMessages @@ var "t"))
-        (Compute.traceOther @@ var "t")
+        (Compute.traceStack $ var "t")
+        (Lists.cons (var "errorMsg") (Compute.traceMessages $ var "t"))
+        (Compute.traceOther $ var "t")
 
 warnDef :: TElement (String -> Flow s a -> Flow s a)
 warnDef = flowsDefinition "warn" $
   doc "Continue the current flow after adding a warning message" $
   lambda "msg" $ lambda "b" $ wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
-    "f1">: Compute.unFlow @@ var "b" @@ var "s0" @@ var "t0",
+    "f1">: Compute.unFlow (var "b") (var "s0") (var "t0"),
     "addMessage">: lambda "t" $ Compute.trace
-      (Compute.traceStack @@ var "t")
-      (Lists.cons ("Warning: " ++ var "msg") (Compute.traceMessages @@ var "t"))
-      (Compute.traceOther @@ var "t")]
+      (Compute.traceStack $ var "t")
+      (Lists.cons ("Warning: " ++ var "msg") (Compute.traceMessages $ var "t"))
+      (Compute.traceOther $ var "t")]
     $ Compute.flowState
-        (Compute.flowStateValue @@ var "f1")
-        (Compute.flowStateState @@ var "f1")
-        (var "addMessage" @@ (Compute.flowStateTrace @@ var "f1"))
+        (Compute.flowStateValue $ var "f1")
+        (Compute.flowStateState $ var "f1")
+        (var "addMessage" @@ (Compute.flowStateTrace $ var "f1"))
 
 withFlagDef :: TElement (String -> Flow s a -> Flow s a)
 withFlagDef = flowsDefinition "withFlag" $
   doc "Continue the current flow after setting a flag" $
   lambda "flag" $ lets [
     "mutate">: lambda "t" $ inject _Either _Either_right $ (Compute.trace
-      (Compute.traceStack @@ var "t")
-      (Compute.traceMessages @@ var "t")
-      (Maps.insert (var "flag") (inject _Term _Term_literal $ inject _Literal _Literal_boolean $ boolean True) (Compute.traceOther @@ var "t"))),
+      (Compute.traceStack $ var "t")
+      (Compute.traceMessages $ var "t")
+      (Maps.insert (var "flag") (inject _Term _Term_literal $ inject _Literal _Literal_boolean $ boolean True) (Compute.traceOther $ var "t"))),
     "restore">: lambda "ignored" $ lambda "t1" $ Compute.trace
-      (Compute.traceStack @@ var "t1")
-      (Compute.traceMessages @@ var "t1")
-      (Maps.remove (var "flag") (Compute.traceOther @@ var "t1"))]
+      (Compute.traceStack $ var "t1")
+      (Compute.traceMessages $ var "t1")
+      (Maps.remove (var "flag") (Compute.traceOther $ var "t1"))]
     $ ref mutateTraceDef @@ var "mutate" @@ var "restore"
 
 withStateDef :: TElement (s1 -> Flow s1 a -> Flow s2 a)
@@ -206,26 +206,26 @@ withStateDef = flowsDefinition "withState" $
   lambda "cx0" $ lambda "f" $
     wrap _Flow $ lambda "cx1" $ lambda "t1" $ lets [
       "f1">:
-        Compute.unFlow @@ var "f" @@ var "cx0" @@ var "t1"]
+        Compute.unFlow (var "f") (var "cx0") (var "t1")]
       $ Compute.flowState
-          (Compute.flowStateValue @@ var "f1")
+          (Compute.flowStateValue $ var "f1")
           (var "cx1")
-          (Compute.flowStateTrace @@ var "f1")
+          (Compute.flowStateTrace $ var "f1")
 
 withTraceDef :: TElement (String -> Flow s a -> Flow s a)
 withTraceDef = flowsDefinition "withTrace" $
   doc "Continue the current flow after augmenting the trace" $
   lambda "msg" $ lets [
     -- augment the trace
-    "mutate">: lambda "t" $ Logic.ifElse (Equality.gteInt32 (Lists.length (Compute.traceStack @@ var "t")) $ ref maxTraceDepthDef)
+    "mutate">: lambda "t" $ Logic.ifElse (Equality.gteInt32 (Lists.length (Compute.traceStack $ var "t")) $ ref maxTraceDepthDef)
       (inject _Either _Either_left $ string "maximum trace depth exceeded. This may indicate an infinite loop")
       (inject _Either _Either_right $ Compute.trace
-        (Lists.cons (var "msg") (Compute.traceStack @@ var "t"))
-        (Compute.traceMessages @@ var "t")
-        (Compute.traceOther @@ var "t")),
+        (Lists.cons (var "msg") (Compute.traceStack $ var "t"))
+        (Compute.traceMessages $ var "t")
+        (Compute.traceOther $ var "t")),
     -- reset the trace stack after execution
     "restore">: lambda "t0" $ lambda "t1" $ Compute.trace
-      (Compute.traceStack @@ var "t0")
-      (Compute.traceMessages @@ var "t1")
-      (Compute.traceOther @@ var "t1")]
+      (Compute.traceStack $ var "t0")
+      (Compute.traceMessages $ var "t1")
+      (Compute.traceOther $ var "t1")]
     $ ref mutateTraceDef @@ var "mutate" @@ var "restore"
