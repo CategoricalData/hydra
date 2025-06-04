@@ -11,8 +11,6 @@ import qualified Hydra.Dsl.Types as Types
 import qualified Data.Map as M
 
 
--- Primitives
-
 apply :: TTerm (Flow s (x -> y)) -> TTerm (Flow s x) -> TTerm (Flow s y)
 apply = primitive2 _flows_apply
 

@@ -75,7 +75,7 @@ describePrecisionDef = printingDefinition "describePrecision" $
   doc "Display numeric precision as a string" $
   match _Precision Nothing [
     TCase _Precision_arbitrary --> constant $ string "arbitrary-precision",
-    TCase _Precision_bits      --> lambda "bits" $ Literals.showInt32 @@ var "bits" ++ string "-bit"]
+    TCase _Precision_bits      --> lambda "bits" $ Literals.showInt32 (var "bits") ++ string "-bit"]
 
 describeTypeDef :: TElement (Type -> String)
 describeTypeDef = printingDefinition "describeType" $
