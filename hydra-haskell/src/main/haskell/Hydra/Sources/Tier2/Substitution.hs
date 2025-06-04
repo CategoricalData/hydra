@@ -97,21 +97,21 @@ substituteInTermDef = substitutionDefinition "substituteInTerm" $
     "s">: Typing.unTermSubst @@ var "subst",
     "rewrite">: lambdas ["recurse", "term"] $ lets [
       "withLambda">: lambda "l" $ lets [
-        "v">: Core.lambdaParameter @@ var "l",
+        "v">: Core.lambdaParameter $ var "l",
         "subst2">: Typing.termSubst $ Maps.remove (var "v") (var "s")] $
         Core.termFunction $ Core.functionLambda $
-          Core.lambda (var "v") (Core.lambdaDomain @@ var "l") (ref substituteInTermDef @@ var "subst2" @@ (Core.lambdaBody @@ var "l")),
+          Core.lambda (var "v") (Core.lambdaDomain $ var "l") (ref substituteInTermDef @@ var "subst2" @@ (Core.lambdaBody $ var "l")),
       "withLet">: lambda "lt" $ lets [
-        "bindings">: Core.letBindings @@ var "lt",
-        "names">: Sets.fromList $ Lists.map Core.letBindingName (var "bindings"),
+        "bindings">: Core.letBindings $ var "lt",
+        "names">: Sets.fromList $ Lists.map (asFunction Core.letBindingName) (var "bindings"),
         "subst2">: Typing.termSubst $ Maps.filterWithKey (lambdas ["k", "v"] $ Logic.not $ Sets.member (var "k") (var "names")) (var "s"),
         "rewriteBinding">: lambda "b" $ Core.letBinding
-          (Core.letBindingName @@ var "b")
-          (ref substituteInTermDef @@ var "subst2" @@ (Core.letBindingTerm @@ var "b"))
-          (Core.letBindingType @@ var "b")] $
+          (Core.letBindingName $ var "b")
+          (ref substituteInTermDef @@ var "subst2" @@ (Core.letBindingTerm $ var "b"))
+          (Core.letBindingType $ var "b")] $
         Core.termLet $ Core.letExpression
           (Lists.map (var "rewriteBinding") (var "bindings"))
-          (ref substituteInTermDef @@ var "subst2" @@ (Core.letEnvironment @@ var "lt"))] $
+          (ref substituteInTermDef @@ var "subst2" @@ (Core.letEnvironment $ var "lt"))] $
       cases _Term (var "term")
         (Just $ var "recurse" @@ var "term") [
         _Term_function>>: lambda "fun" $ cases _Function (var "fun")
@@ -131,11 +131,11 @@ substInTypeDef = substitutionDefinition "substInType" $
       _Type_forall>>: lambda "lt" $ Optionals.maybe
         (var "recurse" @@ var "typ")
         (lambda "styp" $ Core.typeLambda $ Core.forallType
-          (Core.forallTypeParameter @@ var "lt")
+          (Core.forallTypeParameter $ var "lt")
           (ref substInTypeDef
-            @@ (var "removeVar" @@ (Core.forallTypeParameter @@ var "lt"))
-            @@ (Core.forallTypeBody @@ var "lt")))
-        (Maps.lookup (Core.forallTypeParameter @@ var "lt") (Typing.unTypeSubst @@ var "subst")),
+            @@ (var "removeVar" @@ (Core.forallTypeParameter $ var "lt"))
+            @@ (Core.forallTypeBody $ var "lt")))
+        (Maps.lookup (Core.forallTypeParameter $ var "lt") (Typing.unTypeSubst @@ var "subst")),
       _Type_variable>>: lambda "v" $ Optionals.maybe
         (var "typ")
         (lambda "styp" $ var "styp")
@@ -146,8 +146,8 @@ substInTypeDef = substitutionDefinition "substInType" $
 substInTypeSchemeDef :: TElement (TypeSubst -> TypeScheme -> TypeScheme)
 substInTypeSchemeDef = substitutionDefinition "substInTypeScheme" $
   lambdas ["subst", "ts"] $ Core.typeScheme
-    (Core.typeSchemeVariables @@ var "ts")
-    (ref substInTypeDef @@ var "subst" @@ (Core.typeSchemeType @@ var "ts"))
+    (Core.typeSchemeVariables $ var "ts")
+    (ref substInTypeDef @@ var "subst" @@ (Core.typeSchemeType $ var "ts"))
 
 substTypesInTermDef :: TElement (TypeSubst -> Term -> Term)
 substTypesInTermDef = substitutionDefinition "substTypesInTerm" $
@@ -162,32 +162,32 @@ substTypesInTermDef = substitutionDefinition "substTypesInTerm" $
         _Function_elimination>>: var "forElimination",
         _Function_lambda>>: var "forLambda"],
       "forLambda">: lambda "l" $ var "recurse" @@ (Core.termFunction $ Core.functionLambda $ Core.lambda
-        (Core.lambdaParameter @@ var "l")
-        (Optionals.map (ref substInTypeDef @@ var "subst") $ Core.lambdaDomain @@ var "l")
-        (Core.lambdaBody @@ var "l")),
+        (Core.lambdaParameter $ var "l")
+        (Optionals.map (ref substInTypeDef @@ var "subst") $ Core.lambdaDomain $ var "l")
+        (Core.lambdaBody $ var "l")),
       "forLet">: lambda "l" $ lets [
         "rewriteBinding">: lambda "b" $ Core.letBinding
-          (Core.letBindingName @@ var "b")
-          (Core.letBindingTerm @@ var "b")
-          (Optionals.map (ref substInTypeSchemeDef @@ var "subst") (Core.letBindingType @@ var "b"))] $
+          (Core.letBindingName $ var "b")
+          (Core.letBindingTerm $ var "b")
+          (Optionals.map (ref substInTypeSchemeDef @@ var "subst") (Core.letBindingType $ var "b"))] $
         var "recurse" @@ (Core.termLet $ Core.letExpression
-          (Lists.map (var "rewriteBinding") (Core.letBindings @@ var "l"))
-          (Core.letEnvironment @@ var "l")),
+          (Lists.map (var "rewriteBinding") (Core.letBindings $ var "l"))
+          (Core.letEnvironment $ var "l")),
       "forTupleProjection">: lambda "tp" $ var "recurse" @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $ Core.tupleProjection
-        (Core.tupleProjectionArity @@ var "tp")
-        (Core.tupleProjectionIndex @@ var "tp")
-        (Optionals.map (lambda "types" $ Lists.map (ref substInTypeDef @@ var "subst") (var "types")) (Core.tupleProjectionDomain @@ var "tp"))),
+        (Core.tupleProjectionArity $ var "tp")
+        (Core.tupleProjectionIndex $ var "tp")
+        (Optionals.map (lambda "types" $ Lists.map (ref substInTypeDef @@ var "subst") (var "types")) (Core.tupleProjectionDomain $ var "tp"))),
       "forTypeAbstraction">: lambda "ta" $ lets [
-        "param">: Core.typeAbstractionParameter @@ var "ta",
+        "param">: Core.typeAbstractionParameter $ var "ta",
         "subst2">: Typing.typeSubst $ Maps.remove (var "param") (Typing.unTypeSubst @@ var "subst")] $
         Core.termTypeAbstraction $ Core.typeAbstraction
           (var "param")
-          (ref substTypesInTermDef @@ var "subst2" @@ (Core.typeAbstractionBody @@ var "ta"))] $
+          (ref substTypesInTermDef @@ var "subst2" @@ (Core.typeAbstractionBody $ var "ta"))] $
       cases _Term (var "term") (Just $ var "recurse" @@ var "term") [
         _Term_function>>: var "forFunction",
         _Term_let>>: var "forLet",
         _Term_typeAbstraction>>: var "forTypeAbstraction",
         _Term_typeApplication>>: lambda "tt" $ var "recurse" @@ (Core.termTypeApplication $ Core.typedTerm
-          (Core.typedTermTerm @@ var "tt")
-          (ref substInTypeDef @@ var "subst" @@ (Core.typedTermType @@ var "tt")))]] $
+          (Core.typedTermTerm $ var "tt")
+          (ref substInTypeDef @@ var "subst" @@ (Core.typedTermType $ var "tt")))]] $
     ref rewriteTermDef @@ var "rewrite"

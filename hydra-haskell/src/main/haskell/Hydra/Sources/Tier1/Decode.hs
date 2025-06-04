@@ -127,8 +127,8 @@ casesDef = decodeDefinition "cases" $
     "matchElimination">: matchVariant _Function _Function_elimination,
     "matchUnion">: matchVariant _Elimination _Elimination_union]
     $ ref nominalDef
-      @@ Core.caseStatementTypeName
-      @@ Core.caseStatementCases
+      @@ (asFunction Core.caseStatementTypeName)
+      @@ (asFunction Core.caseStatementCases)
       @@ compose3 (var "matchFunction") (var "matchElimination") (var "matchUnion")
 
 caseFieldDef :: TElement (Name -> Name -> Term -> Y.Maybe Term)
@@ -142,10 +142,10 @@ fieldDef :: TElement (Name -> [Field] -> Maybe Term)
 fieldDef = decodeDefinition "field" $
   lambdas ["fname", "fields"] $ lets [
     "matches">: Lists.filter
-      (lambda "f" $ Equality.equal (Core.fieldName @@ var "f") $ var "fname")
+      (lambda "f" $ Equality.equal (Core.fieldName $ var "f") $ var "fname")
       (var "fields")]
     $ Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "matches"))
-      (just (Core.fieldTerm @@ (Lists.head $ var "matches")))
+      (just (Core.fieldTerm $ (Lists.head $ var "matches")))
       nothing
 
 float32Def :: TElement (Term -> Maybe Float)
@@ -232,7 +232,7 @@ letBindingDef :: TElement (Name -> Term -> Maybe LetBinding)
 letBindingDef = decodeDefinition "letBinding" $
   lambda "fname" $ lambda "term" $ Optionals.bind
     (Optionals.map
-      Core.letBindings
+      (asFunction Core.letBindings)
       (ref letTermDef @@ var "term"))
     (ref letBindingWithKeyDef @@ var "fname")
 
@@ -240,7 +240,7 @@ letBindingWithKeyDef :: TElement (Name -> [LetBinding] -> Maybe LetBinding)
 letBindingWithKeyDef = decodeDefinition "letBindingWithKey" $
   lambda "fname" $ lambda "bindings" $ lets [
     "matches">: Lists.filter
-      (lambda "b" $ Equality.equal (Core.letBindingName @@ var "b") $ var "fname")
+      (lambda "b" $ Equality.equal (Core.letBindingName $ var "b") $ var "fname")
       (var "bindings")]
     $ Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "matches"))
       (just (Lists.head $ var "matches"))
@@ -276,7 +276,7 @@ nominalDef :: TElement ((a -> Name) -> (a -> b) -> (c -> Maybe a) -> Name -> c -
 nominalDef = decodeDefinition "nominal" $
   lambda "getName" $ lambda "getB" $ lambda "getA" $ lambda "expected" $
     lets [
-      "namesEqual">: lambda "n1" $ lambda "n2" $ Equality.equalString (Core.unName @@ var "n1") (Core.unName @@ var "n2")] $
+      "namesEqual">: lambda "n1" $ lambda "n2" $ Equality.equalString (Core.unName $ var "n1") (Core.unName $ var "n2")] $
       compose2
         (var "getA")
         (lambda "a" $ (Logic.ifElse (var "namesEqual" @@ (var "getName" @@ var "a") @@ (var "expected")))
@@ -299,7 +299,9 @@ pairDef = decodeDefinition "pair" $
 
 recordDef :: TElement (Name -> Term -> Maybe [Field])
 recordDef = decodeDefinition "record" $
-  matchNominal _Term_record Core.recordTypeName Core.recordFields
+  matchNominal _Term_record
+    (asFunction Core.recordTypeName)
+    (asFunction Core.recordFields)
 
 setDef :: TElement (Term -> Maybe (S.Set Term))
 setDef = decodeDefinition "set" $
@@ -354,7 +356,7 @@ unitDef = decodeDefinition "unit" $
 unitVariantDef :: TElement (Name -> Term -> Maybe Name)
 unitVariantDef = decodeDefinition "unitVariant" $
   lambda "tname" $ lambda "term" $ Optionals.map
-    Core.fieldName
+    (asFunction Core.fieldName)
     (ref variantDef @@ var "tname" @@ var "term")
 
 variableDef :: TElement (Term -> Y.Maybe Name)
@@ -363,11 +365,15 @@ variableDef = decodeDefinition "variable" $
 
 variantDef :: TElement (Name -> Term -> Maybe Field)
 variantDef = decodeDefinition "variant" $
-  matchNominal _Term_union Core.injectionTypeName Core.injectionField
+  matchNominal _Term_union
+    (asFunction Core.injectionTypeName)
+    (asFunction Core.injectionField)
 
 wrapDef :: TElement (Name -> Term -> Maybe Term)
 wrapDef = decodeDefinition "wrap" $
-  matchNominal _Term_wrap Core.wrappedTermTypeName Core.wrappedTermObject
+  matchNominal _Term_wrap
+    (asFunction Core.wrappedTermTypeName)
+    (asFunction Core.wrappedTermObject)
 
 --
 
