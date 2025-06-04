@@ -3,6 +3,7 @@
 module Hydra.Sources.Tier2.Errors where
 
 -- Standard Tier-2 imports
+import qualified Hydra.Dsl.Compute         as Compute
 import qualified Hydra.Dsl.Core            as Core
 import qualified Hydra.Dsl.Graph           as Graph
 import qualified Hydra.Dsl.Lib.Chars       as Chars
@@ -51,33 +52,33 @@ getStateDef :: TElement (Flow s s)
 getStateDef = errorsDefinition "getState" $ -- Flow s s
   doc "Get the state of the current flow" $
   wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
-    "fs1">: Flows.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"] $ -- FlowState s ()
+    "fs1">: Compute.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"] $ -- FlowState s ()
     (lambda "v" $ lambda "s" $ lambda "t" $ (
         (primitive _optionals_maybe
-          @@ (Flows.flowState nothing (var "s") (var "t"))
-          @@ (constant (Flows.flowState (just $ var "s") (var "s") (var "t"))))
+          @@ (Compute.flowState nothing (var "s") (var "t"))
+          @@ (constant (Compute.flowState (just $ var "s") (var "s") (var "t"))))
          @@ var "v"))
-      @@ (Flows.flowStateValue @@ var "fs1") @@ (Flows.flowStateState @@ var "fs1") @@ (Flows.flowStateTrace @@ var "fs1")
+      @@ (Compute.flowStateValue @@ var "fs1") @@ (Compute.flowStateState @@ var "fs1") @@ (Compute.flowStateTrace @@ var "fs1")
 
 putStateDef :: TElement (s -> Flow s ())
 putStateDef = errorsDefinition "putState" $
   doc "Set the state of a flow" $
   lambda "cx" $ wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
-    "f1">: Flows.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"] $
-    Flows.flowState
-      (Flows.flowStateValue @@ var "f1")
+    "f1">: Compute.unFlow @@ (Flows.pure unit) @@ var "s0" @@ var "t0"] $
+    Compute.flowState
+      (Compute.flowStateValue @@ var "f1")
       (var "cx")
-      (Flows.flowStateTrace @@ var "f1")
+      (Compute.flowStateTrace @@ var "f1")
 
 traceSummaryDef :: TElement (Trace -> String)
 traceSummaryDef = errorsDefinition "traceSummary" $
   doc "Summarize a trace as a string" $
   lambda "t" $ lets [
-    "messageLines">: (Lists.nub (Flows.traceMessages @@ var "t")),
-    "keyvalLines">: Logic.ifElse (Maps.isEmpty (Flows.traceOther @@ var "t"))
+    "messageLines">: (Lists.nub (Compute.traceMessages @@ var "t")),
+    "keyvalLines">: Logic.ifElse (Maps.isEmpty (Compute.traceOther @@ var "t"))
       (list [])
       (Lists.cons ("key/value pairs: ")
-        (Lists.map (var "toLine") (Maps.toList (Flows.traceOther @@ var "t")))),
+        (Lists.map (var "toLine") (Maps.toList (Compute.traceOther @@ var "t")))),
     "toLine">:
       lambda "pair" $ "\t" ++ (Core.unName $ (first @@ var "pair")) ++ ": " ++ (Io.showTerm (second @@ var "pair"))] $
     Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines"))
