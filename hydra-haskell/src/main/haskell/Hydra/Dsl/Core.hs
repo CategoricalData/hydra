@@ -22,44 +22,44 @@ annotatedTerm subject annotation = Phantoms.record _AnnotatedTerm [
   _AnnotatedTerm_subject>>: subject,
   _AnnotatedTerm_annotation>>: annotation]
 
-annotatedTermSubject :: TTerm (AnnotatedTerm -> Term)
-annotatedTermSubject = Phantoms.project _AnnotatedTerm _AnnotatedTerm_subject
+annotatedTermSubject :: TTerm AnnotatedTerm -> TTerm Term
+annotatedTermSubject at = Phantoms.project _AnnotatedTerm _AnnotatedTerm_subject @@ at
 
-annotatedTermAnnotation :: TTerm (AnnotatedTerm -> M.Map String Term)
-annotatedTermAnnotation = Phantoms.project _AnnotatedTerm _AnnotatedTerm_annotation
+annotatedTermAnnotation :: TTerm AnnotatedTerm -> TTerm (M.Map String Term)
+annotatedTermAnnotation at = Phantoms.project _AnnotatedTerm _AnnotatedTerm_annotation @@ at
 
 annotatedType :: TTerm Type -> TTerm (M.Map String Term) -> TTerm AnnotatedType
 annotatedType subject annotation = Phantoms.record _AnnotatedType [
   _AnnotatedType_subject>>: subject,
   _AnnotatedType_annotation>>: annotation]
 
-annotatedTypeSubject :: TTerm (AnnotatedType -> Type)
-annotatedTypeSubject = Phantoms.project _AnnotatedType _AnnotatedType_subject
+annotatedTypeSubject :: TTerm AnnotatedType -> TTerm Type
+annotatedTypeSubject at = Phantoms.project _AnnotatedType _AnnotatedType_subject @@ at
 
-annotatedTypeAnnotation :: TTerm (AnnotatedType -> M.Map String Term)
-annotatedTypeAnnotation = Phantoms.project _AnnotatedType _AnnotatedType_annotation
+annotatedTypeAnnotation :: TTerm AnnotatedType -> TTerm (M.Map String Term)
+annotatedTypeAnnotation at = Phantoms.project _AnnotatedType _AnnotatedType_annotation @@ at
 
 application :: TTerm Term -> TTerm Term -> TTerm Application
 application function argument = Phantoms.record _Application [
   _Application_function>>: function,
   _Application_argument>>: argument]
 
-applicationFunction :: TTerm (Application -> Term)
-applicationFunction = Phantoms.project _Application _Application_function
+applicationFunction :: TTerm Application -> TTerm Term
+applicationFunction app = Phantoms.project _Application _Application_function @@ app
 
-applicationArgument :: TTerm (Application -> Term)
-applicationArgument = Phantoms.project _Application _Application_argument
+applicationArgument :: TTerm Application -> TTerm Term
+applicationArgument app = Phantoms.project _Application _Application_argument @@ app
 
 applicationType :: TTerm Type -> TTerm Type -> TTerm ApplicationType
 applicationType function argument = Phantoms.record _ApplicationType [
   _ApplicationType_function>>: function,
   _ApplicationType_argument>>: argument]
 
-applicationTypeFunction :: TTerm (ApplicationType -> Type)
-applicationTypeFunction = Phantoms.project _ApplicationType _ApplicationType_function
+applicationTypeFunction :: TTerm ApplicationType -> TTerm Type
+applicationTypeFunction app = Phantoms.project _ApplicationType _ApplicationType_function @@ app
 
-applicationTypeArgument :: TTerm (ApplicationType -> Type)
-applicationTypeArgument = Phantoms.project _ApplicationType _ApplicationType_argument
+applicationTypeArgument :: TTerm ApplicationType -> TTerm Type
+applicationTypeArgument app = Phantoms.project _ApplicationType _ApplicationType_argument @@ app
 
 caseStatement :: TTerm Name -> TTerm (Maybe Term) -> TTerm [Field] -> TTerm CaseStatement
 caseStatement typeName defaultTerm cases = Phantoms.record _CaseStatement [
@@ -67,14 +67,14 @@ caseStatement typeName defaultTerm cases = Phantoms.record _CaseStatement [
   _CaseStatement_default>>: defaultTerm,
   _CaseStatement_cases>>: cases]
 
-caseStatementTypeName :: TTerm (CaseStatement -> Name)
-caseStatementTypeName = Phantoms.project _CaseStatement _CaseStatement_typeName
+caseStatementTypeName :: TTerm CaseStatement -> TTerm Name
+caseStatementTypeName cs = Phantoms.project _CaseStatement _CaseStatement_typeName @@ cs
 
-caseStatementDefault :: TTerm (CaseStatement -> Maybe Term)
-caseStatementDefault = Phantoms.project _CaseStatement _CaseStatement_default
+caseStatementDefault :: TTerm CaseStatement -> TTerm (Maybe Term)
+caseStatementDefault cs = Phantoms.project _CaseStatement _CaseStatement_default @@ cs
 
-caseStatementCases :: TTerm (CaseStatement -> [Field])
-caseStatementCases = Phantoms.project _CaseStatement _CaseStatement_cases
+caseStatementCases :: TTerm CaseStatement -> TTerm [Field]
+caseStatementCases cs = Phantoms.project _CaseStatement _CaseStatement_cases @@ cs
 
 eliminationProduct :: TTerm TupleProjection -> TTerm Elimination
 eliminationProduct = variant _Elimination _Elimination_product
@@ -93,22 +93,22 @@ field name term = Phantoms.record _Field [
   _Field_name>>: name,
   _Field_term>>: term]
 
-fieldName :: TTerm (Field -> Name)
-fieldName = Phantoms.project _Field _Field_name
+fieldName :: TTerm Field -> TTerm Name
+fieldName f = Phantoms.project _Field _Field_name @@ f
 
-fieldTerm :: TTerm (Field -> Term)
-fieldTerm = Phantoms.project _Field _Field_term
+fieldTerm :: TTerm Field -> TTerm Term
+fieldTerm f = Phantoms.project _Field _Field_term @@ f
 
 fieldType :: TTerm Name -> TTerm Type -> TTerm FieldType
 fieldType name typ = Phantoms.record _FieldType [
   _FieldType_name>>: name,
   _FieldType_type>>: typ]
 
-fieldTypeName :: TTerm (FieldType -> Name)
-fieldTypeName = Phantoms.project _FieldType _FieldType_name
+fieldTypeName :: TTerm FieldType -> TTerm Name
+fieldTypeName ft = Phantoms.project _FieldType _FieldType_name @@ ft
 
-fieldTypeType :: TTerm (FieldType -> Type)
-fieldTypeType = Phantoms.project _FieldType _FieldType_type
+fieldTypeType :: TTerm FieldType -> TTerm Type
+fieldTypeType ft = Phantoms.project _FieldType _FieldType_type @@ ft
 
 floatValueFloat32 :: TTerm Float -> TTerm FloatValue
 floatValueFloat32 = inject _FloatValue _FloatValue_float32
@@ -121,11 +121,11 @@ forallType parameter body = Phantoms.record _ForallType [
   _ForallType_parameter>>: parameter,
   _ForallType_body>>: body]
 
-forallTypeParameter :: TTerm (ForallType -> Name)
-forallTypeParameter = Phantoms.project _ForallType _ForallType_parameter
+forallTypeParameter :: TTerm ForallType -> TTerm Name
+forallTypeParameter ft = Phantoms.project _ForallType _ForallType_parameter @@ ft
 
-forallTypeBody :: TTerm (ForallType -> Type)
-forallTypeBody = Phantoms.project _ForallType _ForallType_body
+forallTypeBody :: TTerm ForallType -> TTerm Type
+forallTypeBody ft = Phantoms.project _ForallType _ForallType_body @@ ft
 
 functionElimination :: TTerm Elimination -> TTerm Function
 functionElimination = variant _Function _Function_elimination
@@ -141,22 +141,22 @@ functionType domain codomain = Phantoms.record _FunctionType [
   _FunctionType_domain>>: domain,
   _FunctionType_codomain>>: codomain]
 
-functionTypeDomain :: TTerm (FunctionType -> Type)
-functionTypeDomain = Phantoms.project _FunctionType _FunctionType_domain
+functionTypeDomain :: TTerm FunctionType -> TTerm Type
+functionTypeDomain ft = Phantoms.project _FunctionType _FunctionType_domain @@ ft
 
-functionTypeCodomain :: TTerm (FunctionType -> Type)
-functionTypeCodomain = Phantoms.project _FunctionType _FunctionType_codomain
+functionTypeCodomain :: TTerm FunctionType -> TTerm Type
+functionTypeCodomain ft = Phantoms.project _FunctionType _FunctionType_codomain @@ ft
 
 injection :: TTerm Name -> TTerm Field -> TTerm Injection
 injection typeName field = Phantoms.record _Injection [
   _Injection_typeName>>: typeName,
   _Injection_field>>: field]
 
-injectionTypeName :: TTerm (Injection -> Name)
-injectionTypeName = Phantoms.project _Injection _Injection_typeName
+injectionTypeName :: TTerm Injection -> TTerm Name
+injectionTypeName inj = Phantoms.project _Injection _Injection_typeName @@ inj
 
-injectionField :: TTerm (Injection -> Field)
-injectionField = Phantoms.project _Injection _Injection_field
+injectionField :: TTerm Injection -> TTerm Field
+injectionField inj = Phantoms.project _Injection _Injection_field @@ inj
 
 integerTypeInt16 :: TTerm IntegerType
 integerTypeInt16 = unitVariant _IntegerType _IntegerType_int16
@@ -188,14 +188,14 @@ lambda parameter mdom body = Phantoms.record _Lambda [
   _Lambda_domain>>: mdom,
   _Lambda_body>>: body]
 
-lambdaParameter :: TTerm (Lambda -> Name)
-lambdaParameter = Phantoms.project _Lambda _Lambda_parameter
+lambdaParameter :: TTerm Lambda -> TTerm Name
+lambdaParameter l = Phantoms.project _Lambda _Lambda_parameter @@ l
 
-lambdaBody :: TTerm (Lambda -> Term)
-lambdaBody = Phantoms.project _Lambda _Lambda_body
+lambdaBody :: TTerm Lambda -> TTerm Term
+lambdaBody l = Phantoms.project _Lambda _Lambda_body @@ l
 
-lambdaDomain :: TTerm (Lambda -> Maybe Type)
-lambdaDomain = Phantoms.project _Lambda _Lambda_domain
+lambdaDomain :: TTerm Lambda -> TTerm (Maybe Type)
+lambdaDomain l = Phantoms.project _Lambda _Lambda_domain @@ l
 
 letBinding :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm LetBinding
 letBinding name term mtype = Phantoms.record _LetBinding [
@@ -208,20 +208,20 @@ letExpression bindings environment = Phantoms.record _Let [
   _Let_bindings>>: bindings,
   _Let_environment>>: environment]
 
-letBindings :: TTerm (Let -> [LetBinding])
-letBindings = Phantoms.project _Let _Let_bindings
+letBindings :: TTerm Let -> TTerm [LetBinding]
+letBindings l = Phantoms.project _Let _Let_bindings @@ l
 
-letBindingName :: TTerm (LetBinding -> Name)
-letBindingName = Phantoms.project _LetBinding _LetBinding_name
+letBindingName :: TTerm LetBinding -> TTerm Name
+letBindingName lb = Phantoms.project _LetBinding _LetBinding_name @@ lb
 
-letBindingTerm :: TTerm (LetBinding -> Term)
-letBindingTerm = Phantoms.project _LetBinding _LetBinding_term
+letBindingTerm :: TTerm LetBinding -> TTerm Term
+letBindingTerm lb = Phantoms.project _LetBinding _LetBinding_term @@ lb
 
-letBindingType :: TTerm (LetBinding -> Y.Maybe TypeScheme)
-letBindingType = Phantoms.project _LetBinding _LetBinding_type
+letBindingType :: TTerm LetBinding -> TTerm (Y.Maybe TypeScheme)
+letBindingType lb = Phantoms.project _LetBinding _LetBinding_type @@ lb
 
-letEnvironment :: TTerm (Let -> Term)
-letEnvironment = Phantoms.project _Let _Let_environment
+letEnvironment :: TTerm Let -> TTerm Term
+letEnvironment l = Phantoms.project _Let _Let_environment @@ l
 
 literalBinary :: TTerm String -> TTerm Literal
 literalBinary = variant _Literal _Literal_binary
@@ -255,11 +255,11 @@ mapType keys values = Phantoms.record _MapType [
   _MapType_keys>>: keys,
   _MapType_values>>: values]
 
-mapTypeKeys :: TTerm (MapType -> Type)
-mapTypeKeys = Phantoms.project _MapType _MapType_keys
+mapTypeKeys :: TTerm MapType -> TTerm Type
+mapTypeKeys mt = Phantoms.project _MapType _MapType_keys @@ mt
 
-mapTypeValues :: TTerm (MapType -> Type)
-mapTypeValues = Phantoms.project _MapType _MapType_values
+mapTypeValues :: TTerm MapType -> TTerm Type
+mapTypeValues mt = Phantoms.project _MapType _MapType_values @@ mt
 
 -- TODO: this is only here for legacy reasons
 name :: Name -> TTerm Name
@@ -273,33 +273,33 @@ projection tname fname = Phantoms.record _Projection [
   _Projection_typeName>>: tname,
   _Projection_field>>: fname]
 
-projectionTypeName :: TTerm (Projection -> Name)
-projectionTypeName = Phantoms.project _Projection _Projection_typeName
+projectionTypeName :: TTerm Projection -> TTerm Name
+projectionTypeName p = Phantoms.project _Projection _Projection_typeName @@ p
 
-projectionField :: TTerm (Projection -> Name)
-projectionField = Phantoms.project _Projection _Projection_field
+projectionField :: TTerm Projection -> TTerm Name
+projectionField p = Phantoms.project _Projection _Projection_field @@ p
 
 record :: TTerm Name -> TTerm [Field] -> TTerm Record
 record typeName fields = Phantoms.record _Record [
   _Record_typeName>>: typeName,
   _Record_fields>>: fields]
 
-recordTypeName :: TTerm (Record -> Name)
-recordTypeName = Phantoms.project _Record _Record_typeName
+recordTypeName :: TTerm Record -> TTerm Name
+recordTypeName r = Phantoms.project _Record _Record_typeName @@ r
 
-recordFields :: TTerm (Record -> [Field])
-recordFields = Phantoms.project _Record _Record_fields
+recordFields :: TTerm Record -> TTerm [Field]
+recordFields r = Phantoms.project _Record _Record_fields @@ r
 
 rowType :: TTerm Name -> TTerm [FieldType] -> TTerm (RowType)
 rowType typeName fields = Phantoms.record _RowType [
   _RowType_typeName>>: typeName,
   _RowType_fields>>: fields]
 
-rowTypeTypeName :: TTerm (RowType -> Name)
-rowTypeTypeName = Phantoms.project _RowType _RowType_typeName
+rowTypeTypeName :: TTerm RowType -> TTerm Name
+rowTypeTypeName rt = Phantoms.project _RowType _RowType_typeName @@ rt
 
-rowTypeFields :: TTerm (RowType -> [FieldType])
-rowTypeFields = Phantoms.project _RowType _RowType_fields
+rowTypeFields :: TTerm RowType -> TTerm [FieldType]
+rowTypeFields rt = Phantoms.project _RowType _RowType_fields @@ rt
 
 sum :: TTerm Int -> TTerm Int -> TTerm Term -> TTerm Sum
 sum index size term = Phantoms.record _Sum [
@@ -307,14 +307,14 @@ sum index size term = Phantoms.record _Sum [
   _Sum_size>>: size,
   _Sum_term>>: term]
 
-sumIndex :: TTerm (Sum -> Int)
-sumIndex = Phantoms.project _Sum _Sum_index
+sumIndex :: TTerm Sum -> TTerm Int
+sumIndex s = Phantoms.project _Sum _Sum_index @@ s
 
-sumSize :: TTerm (Sum -> Int)
-sumSize = Phantoms.project _Sum _Sum_size
+sumSize :: TTerm Sum -> TTerm Int
+sumSize s = Phantoms.project _Sum _Sum_size @@ s
 
-sumTerm :: TTerm (Sum -> Term)
-sumTerm = Phantoms.project _Sum _Sum_term
+sumTerm :: TTerm Sum -> TTerm Term
+sumTerm s = Phantoms.project _Sum _Sum_term @@ s
 
 termAnnotated :: TTerm AnnotatedTerm -> TTerm Term
 termAnnotated = variant _Term _Term_annotated
@@ -373,25 +373,25 @@ tupleProjection arity idx mdom = Phantoms.record _TupleProjection [
   _TupleProjection_index>>: idx,
   _TupleProjection_domain>>: mdom]
 
-tupleProjectionArity :: TTerm (TupleProjection -> Int)
-tupleProjectionArity = Phantoms.project _TupleProjection _TupleProjection_arity
+tupleProjectionArity :: TTerm TupleProjection -> TTerm Int
+tupleProjectionArity tp = Phantoms.project _TupleProjection _TupleProjection_arity @@ tp
 
-tupleProjectionIndex :: TTerm (TupleProjection -> Int)
-tupleProjectionIndex = Phantoms.project _TupleProjection _TupleProjection_index
+tupleProjectionIndex :: TTerm TupleProjection -> TTerm Int
+tupleProjectionIndex tp = Phantoms.project _TupleProjection _TupleProjection_index @@ tp
 
-tupleProjectionDomain :: TTerm (TupleProjection -> Maybe [Type])
-tupleProjectionDomain = Phantoms.project _TupleProjection _TupleProjection_domain
+tupleProjectionDomain :: TTerm TupleProjection -> TTerm (Maybe [Type])
+tupleProjectionDomain tp = Phantoms.project _TupleProjection _TupleProjection_domain @@ tp
 
 typeAbstraction :: TTerm Name -> TTerm Term -> TTerm TypeAbstraction
 typeAbstraction parameter body = Phantoms.record _TypeAbstraction [
   _TypeAbstraction_parameter>>: parameter,
   _TypeAbstraction_body>>: body]
 
-typeAbstractionParameter :: TTerm (TypeAbstraction -> Name)
-typeAbstractionParameter = Phantoms.project _TypeAbstraction _TypeAbstraction_parameter
+typeAbstractionParameter :: TTerm TypeAbstraction -> TTerm Name
+typeAbstractionParameter ta = Phantoms.project _TypeAbstraction _TypeAbstraction_parameter @@ ta
 
-typeAbstractionBody :: TTerm (TypeAbstraction -> Term)
-typeAbstractionBody = Phantoms.project _TypeAbstraction _TypeAbstraction_body
+typeAbstractionBody :: TTerm TypeAbstraction -> TTerm Term
+typeAbstractionBody ta = Phantoms.project _TypeAbstraction _TypeAbstraction_body @@ ta
 
 typeAnnotated :: TTerm AnnotatedType -> TTerm Type
 typeAnnotated = variant _Type _Type_annotated
@@ -428,11 +428,11 @@ typeScheme variables body = Phantoms.record _TypeScheme [
   _TypeScheme_variables>>: variables,
   _TypeScheme_type>>: body]
 
-typeSchemeVariables :: TTerm (TypeScheme -> [Name])
-typeSchemeVariables = Phantoms.project _TypeScheme _TypeScheme_variables
+typeSchemeVariables :: TTerm TypeScheme -> TTerm [Name]
+typeSchemeVariables ts = Phantoms.project _TypeScheme _TypeScheme_variables @@ ts
 
-typeSchemeType :: TTerm (TypeScheme -> Type)
-typeSchemeType = Phantoms.project _TypeScheme _TypeScheme_type
+typeSchemeType :: TTerm TypeScheme -> TTerm Type
+typeSchemeType ts = Phantoms.project _TypeScheme _TypeScheme_type @@ ts
 
 typeSet :: TTerm Type -> TTerm Type
 typeSet = variant _Type _Type_set
@@ -454,50 +454,50 @@ typedTerm term type_ = Phantoms.record _TypedTerm [
   _TypedTerm_term>>: term,
   _TypedTerm_type>>: type_]
 
-typedTermTerm :: TTerm (TypedTerm -> Term)
-typedTermTerm = Phantoms.project _TypedTerm _TypedTerm_term
+typedTermTerm :: TTerm TypedTerm -> TTerm Term
+typedTermTerm tt = Phantoms.project _TypedTerm _TypedTerm_term @@ tt
 
-typedTermType :: TTerm (TypedTerm -> Type)
-typedTermType = Phantoms.project _TypedTerm _TypedTerm_type
+typedTermType :: TTerm TypedTerm -> TTerm Type
+typedTermType tt = Phantoms.project _TypedTerm _TypedTerm_type @@ tt
 
-unName :: TTerm (Name -> String)
-unName = unwrap _Name
+unName :: TTerm Name -> TTerm String
+unName n = unwrap _Name @@ n
 
-unNamespace :: TTerm (Namespace -> String)
-unNamespace = unwrap _Namespace
+unNamespace :: TTerm Namespace -> TTerm String
+unNamespace ns = unwrap _Namespace @@ ns
 
 wrappedTerm :: TTerm Name -> TTerm Term -> TTerm WrappedTerm
 wrappedTerm typeName object = Phantoms.record _WrappedTerm [
   _WrappedTerm_typeName>>: typeName,
   _WrappedTerm_object>>: object]
 
-wrappedTermTypeName :: TTerm (WrappedTerm -> Name)
-wrappedTermTypeName = Phantoms.project _WrappedTerm _WrappedTerm_typeName
+wrappedTermTypeName :: TTerm WrappedTerm -> TTerm Name
+wrappedTermTypeName wt = Phantoms.project _WrappedTerm _WrappedTerm_typeName @@ wt
 
-wrappedTermObject :: TTerm (WrappedTerm -> Term)
-wrappedTermObject = Phantoms.project _WrappedTerm _WrappedTerm_object
+wrappedTermObject :: TTerm WrappedTerm -> TTerm Term
+wrappedTermObject wt = Phantoms.project _WrappedTerm _WrappedTerm_object @@ wt
 
 wrappedType :: TTerm Name -> TTerm Type -> TTerm WrappedType
 wrappedType typeName object = Phantoms.record _WrappedType [
   _WrappedType_typeName>>: typeName,
   _WrappedType_object>>: object]
 
-wrappedTypeTypeName :: TTerm (WrappedType -> Name)
-wrappedTypeTypeName = Phantoms.project _WrappedType _WrappedType_typeName
+wrappedTypeTypeName :: TTerm WrappedType -> TTerm Name
+wrappedTypeTypeName wt = Phantoms.project _WrappedType _WrappedType_typeName @@ wt
 
-wrappedTypeObject :: TTerm (WrappedType -> Type)
-wrappedTypeObject = Phantoms.project _WrappedType _WrappedType_object
+wrappedTypeObject :: TTerm WrappedType -> TTerm Type
+wrappedTypeObject wt = Phantoms.project _WrappedType _WrappedType_object @@ wt
 
 ----------------------------------------
 -- Non-schema helpers
 
 equalName :: TTerm (Name -> Name -> Bool)
 equalName = lambdas ["left", "right"] $ primitive _equality_equalString
-  @@ (Hydra.Dsl.Core.unName @@ var "left")
-  @@ (Hydra.Dsl.Core.unName @@ var "right")
+  @@ (Hydra.Dsl.Core.unName $ var "left")
+  @@ (Hydra.Dsl.Core.unName $ var "right")
 
 equalName_ :: TTerm Name -> TTerm Name -> TTerm Bool
-equalName_ left right = Equality.equalString (Hydra.Dsl.Core.unName @@ left) (Hydra.Dsl.Core.unName @@ right)
+equalName_ left right = Equality.equalString (Hydra.Dsl.Core.unName left) (Hydra.Dsl.Core.unName right)
 
 equalNameList :: TTerm ([Name] -> [Name] -> Bool)
 equalNameList = lambdas ["lefts", "rights"] $ Logic.and
@@ -510,7 +510,7 @@ equalNameList_ lefts rights = Logic.and
   (Logic.ands $ Lists.zipWith equalName lefts rights)
 
 fieldWithTerm :: TTerm Term -> TTerm Field -> TTerm Field
-fieldWithTerm t ft = Hydra.Dsl.Core.field (Hydra.Dsl.Core.fieldName @@ ft) t
+fieldWithTerm t ft = Hydra.Dsl.Core.field (Hydra.Dsl.Core.fieldName ft) t
 
 fieldTypeWithType :: TTerm FieldType -> TTerm Type -> TTerm FieldType
-fieldTypeWithType ft t = Hydra.Dsl.Core.fieldType (Hydra.Dsl.Core.fieldTypeName @@ ft) t
+fieldTypeWithType ft t = Hydra.Dsl.Core.fieldType (Hydra.Dsl.Core.fieldTypeName ft) t

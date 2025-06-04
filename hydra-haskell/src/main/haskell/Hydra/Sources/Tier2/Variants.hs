@@ -300,11 +300,11 @@ typeVariantsDef = variantsDefinition "typeVariants" $
 fieldMapDef :: TElement ([Field] -> M.Map Name Term)
 fieldMapDef = variantsDefinition "fieldMap" $
   lets [
-    "toPair">: lambda "f" $ pair (Core.fieldName @@ var "f") (Core.fieldTerm @@ var "f")]
+    "toPair">: lambda "f" $ pair (Core.fieldName $ var "f") (Core.fieldTerm $ var "f")]
     $ lambda "fields" $ Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
 fieldTypeMapDef :: TElement ([FieldType] -> M.Map Name Type)
 fieldTypeMapDef = variantsDefinition "fieldTypeMap" $
   lets [
-    "toPair">: lambda "f" $ pair (Core.fieldTypeName @@ var "f") (Core.fieldTypeType @@ var "f")]
+    "toPair">: lambda "f" $ pair (Core.fieldTypeName $ var "f") (Core.fieldTypeType $ var "f")]
     $ lambda "fields" $ Maps.fromList $ Lists.map (var "toPair") (var "fields")
