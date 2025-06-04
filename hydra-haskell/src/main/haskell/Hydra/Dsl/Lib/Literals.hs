@@ -3,105 +3,106 @@ module Hydra.Dsl.Lib.Literals where
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Dsl.Phantoms
 
 import Data.Int
 
 
-bigfloatToBigint :: TTerm (Double -> Double)
-bigfloatToBigint = TTerm $ Terms.primitive _literals_bigfloatToBigint
+bigfloatToBigint :: TTerm Double -> TTerm Double
+bigfloatToBigint = primitive1 _literals_bigfloatToBigint
 
-bigfloatToFloat32 :: TTerm (Double -> Float)
-bigfloatToFloat32 = TTerm $ Terms.primitive _literals_bigfloatToFloat32
+bigfloatToFloat32 :: TTerm Double -> TTerm Float
+bigfloatToFloat32 = primitive1 _literals_bigfloatToFloat32
 
-bigfloatToFloat64 :: TTerm (Double -> Double)
-bigfloatToFloat64 = TTerm $ Terms.primitive _literals_bigfloatToFloat64
+bigfloatToFloat64 :: TTerm Double -> TTerm Double
+bigfloatToFloat64 = primitive1 _literals_bigfloatToFloat64
 
-bigintToBigfloat :: TTerm (Integer -> Double)
-bigintToBigfloat = TTerm $ Terms.primitive _literals_bigintToBigfloat
+bigintToBigfloat :: TTerm Integer -> TTerm Double
+bigintToBigfloat = primitive1 _literals_bigintToBigfloat
 
-bigintToInt8 :: TTerm (Integer -> Int8)
-bigintToInt8 = TTerm $ Terms.primitive _literals_bigintToInt8
+bigintToInt8 :: TTerm Integer -> TTerm Int8
+bigintToInt8 = primitive1 _literals_bigintToInt8
 
-bigintToInt16 :: TTerm (Integer -> Int16)
-bigintToInt16 = TTerm $ Terms.primitive _literals_bigintToInt16
+bigintToInt16 :: TTerm Integer -> TTerm Int16
+bigintToInt16 = primitive1 _literals_bigintToInt16
 
-bigintToInt32 :: TTerm (Integer -> Int)
-bigintToInt32 = TTerm $ Terms.primitive _literals_bigintToInt32
+bigintToInt32 :: TTerm Integer -> TTerm Int
+bigintToInt32 = primitive1 _literals_bigintToInt32
 
-bigintToInt64 :: TTerm (Integer -> Int64)
-bigintToInt64 = TTerm $ Terms.primitive _literals_bigintToInt64
+bigintToInt64 :: TTerm Integer -> TTerm Int64
+bigintToInt64 = primitive1 _literals_bigintToInt64
 
-bigintToUint8 :: TTerm (Integer -> Int16)
-bigintToUint8 = TTerm $ Terms.primitive _literals_bigintToUint8
+bigintToUint8 :: TTerm Integer -> TTerm Int16
+bigintToUint8 = primitive1 _literals_bigintToUint8
 
-bigintToUint16 :: TTerm (Integer -> Int)
-bigintToUint16 = TTerm $ Terms.primitive _literals_bigintToUint16
+bigintToUint16 :: TTerm Integer -> TTerm Int
+bigintToUint16 = primitive1 _literals_bigintToUint16
 
-bigintToUint32 :: TTerm (Integer -> Int64)
-bigintToUint32 = TTerm $ Terms.primitive _literals_bigintToUint32
+bigintToUint32 :: TTerm Integer -> TTerm Int64
+bigintToUint32 = primitive1 _literals_bigintToUint32
 
-bigintToUint64 :: TTerm (Integer -> Integer)
-bigintToUint64 = TTerm $ Terms.primitive _literals_bigintToUint64
+bigintToUint64 :: TTerm Integer -> TTerm Integer
+bigintToUint64 = primitive1 _literals_bigintToUint64
 
-float32ToBigfloat :: TTerm (Float -> Double)
-float32ToBigfloat = TTerm $ Terms.primitive _literals_float32ToBigfloat
+float32ToBigfloat :: TTerm Float -> TTerm Double
+float32ToBigfloat = primitive1 _literals_float32ToBigfloat
 
-float64ToBigfloat :: TTerm (Double -> Double)
-float64ToBigfloat = TTerm $ Terms.primitive _literals_float64ToBigfloat
+float64ToBigfloat :: TTerm Double -> TTerm Double
+float64ToBigfloat = primitive1 _literals_float64ToBigfloat
 
-int8ToBigint :: TTerm (Int8 -> Integer)
-int8ToBigint = TTerm $ Terms.primitive _literals_int8ToBigint
+int8ToBigint :: TTerm Int8 -> TTerm Integer
+int8ToBigint = primitive1 _literals_int8ToBigint
 
-int16ToBigint :: TTerm (Int16 -> Integer)
-int16ToBigint = TTerm $ Terms.primitive _literals_int16ToBigint
+int16ToBigint :: TTerm Int16 -> TTerm Integer
+int16ToBigint = primitive1 _literals_int16ToBigint
 
-int32ToBigint :: TTerm (Int -> Integer)
-int32ToBigint = TTerm $ Terms.primitive _literals_int32ToBigint
+int32ToBigint :: TTerm Int -> TTerm Integer
+int32ToBigint = primitive1 _literals_int32ToBigint
 
-int64ToBigint :: TTerm (Int64 -> Integer)
-int64ToBigint = TTerm $ Terms.primitive _literals_int64ToBigint
+int64ToBigint :: TTerm Int64 -> TTerm Integer
+int64ToBigint = primitive1 _literals_int64ToBigint
 
-readBigfloat :: TTerm (String -> Maybe Double)
-readBigfloat = TTerm $ Terms.primitive _literals_readBigfloat
+readBigfloat :: TTerm String -> TTerm (Maybe Double)
+readBigfloat = primitive1 _literals_readBigfloat
 
-readBoolean :: TTerm (String -> Maybe Bool)
-readBoolean = TTerm $ Terms.primitive _literals_readBoolean
+readBoolean :: TTerm String -> TTerm (Maybe Bool)
+readBoolean = primitive1 _literals_readBoolean
 
-readFloat32 :: TTerm (String -> Maybe Float)
-readFloat32 = TTerm $ Terms.primitive _literals_readFloat32
+readFloat32 :: TTerm String -> TTerm (Maybe Float)
+readFloat32 = primitive1 _literals_readFloat32
 
-readFloat64 :: TTerm (String -> Maybe Double)
-readFloat64 = TTerm $ Terms.primitive _literals_readFloat64
+readFloat64 :: TTerm String -> TTerm (Maybe Double)
+readFloat64 = primitive1 _literals_readFloat64
 
-readInt32 :: TTerm (String -> Maybe Int)
-readInt32 = TTerm $ Terms.primitive _literals_readInt32
+readInt32 :: TTerm String -> TTerm (Maybe Int)
+readInt32 = primitive1 _literals_readInt32
 
-readInt64 :: TTerm (String -> Maybe Int64)
-readInt64 = TTerm $ Terms.primitive _literals_readInt64
+readInt64 :: TTerm String -> TTerm (Maybe Int64)
+readInt64 = primitive1 _literals_readInt64
 
-readString :: TTerm (String -> Maybe String)
-readString = TTerm $ Terms.primitive _literals_readString
+readString :: TTerm String -> TTerm (Maybe String)
+readString = primitive1 _literals_readString
 
-showBoolean :: TTerm (Bool -> String)
-showBoolean = TTerm $ Terms.primitive _literals_showBoolean
+showBoolean :: TTerm Bool -> TTerm String
+showBoolean = primitive1 _literals_showBoolean
 
-showInt32 :: TTerm (Int -> String)
-showInt32 = TTerm $ Terms.primitive _literals_showInt32
+showInt32 :: TTerm Int -> TTerm String
+showInt32 = primitive1 _literals_showInt32
 
-showInt64 :: TTerm (Int64 -> String)
-showInt64 = TTerm $ Terms.primitive _literals_showInt64
+showInt64 :: TTerm Int64 -> TTerm String
+showInt64 = primitive1 _literals_showInt64
 
-showString :: TTerm (String -> String)
-showString = TTerm $ Terms.primitive _literals_showString
+showString :: TTerm String -> TTerm String
+showString = primitive1 _literals_showString
 
-uint8ToBigint :: TTerm (Int16 -> Integer)
-uint8ToBigint = TTerm $ Terms.primitive _literals_uint8ToBigint
+uint8ToBigint :: TTerm Int16 -> TTerm Integer
+uint8ToBigint = primitive1 _literals_uint8ToBigint
 
-uint16ToBigint :: TTerm (Int -> Integer)
-uint16ToBigint = TTerm $ Terms.primitive _literals_uint16ToBigint
+uint16ToBigint :: TTerm Int -> TTerm Integer
+uint16ToBigint = primitive1 _literals_uint16ToBigint
 
-uint32ToBigint :: TTerm (Int64 -> Integer)
-uint32ToBigint = TTerm $ Terms.primitive _literals_uint32ToBigint
+uint32ToBigint :: TTerm Int64 -> TTerm Integer
+uint32ToBigint = primitive1 _literals_uint32ToBigint
 
-uint64ToBigint :: TTerm (Integer -> Integer)
-uint64ToBigint = TTerm $ Terms.primitive _literals_uint64ToBigint
+uint64ToBigint :: TTerm Integer -> TTerm Integer
+uint64ToBigint = primitive1 _literals_uint64ToBigint

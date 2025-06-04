@@ -40,19 +40,19 @@ floatValueToBigfloatDef = literalsDefinition "floatValueToBigfloat" $
   doc "Convert a floating-point value of any precision to a bigfloat" $
   match _FloatValue Nothing [
     _FloatValue_bigfloat>>: lambda "f" $ Equality.identity $ var "f",
-    _FloatValue_float32>>: Literals.float32ToBigfloat,
-    _FloatValue_float64>>: Literals.float64ToBigfloat]
+    _FloatValue_float32>>: asFunction Literals.float32ToBigfloat,
+    _FloatValue_float64>>: asFunction Literals.float64ToBigfloat]
 
 integerValueToBigintDef :: TElement (IntegerValue -> Integer)
 integerValueToBigintDef = literalsDefinition "integerValueToBigint" $
   doc "Convert an integer value of any precision to a bigint" $
   match _IntegerValue Nothing [
     _IntegerValue_bigint>>: lambda "i" $ Equality.identity $ var "i",
-    _IntegerValue_int8>>: Literals.int8ToBigint,
-    _IntegerValue_int16>>: Literals.int16ToBigint,
-    _IntegerValue_int32>>: Literals.int32ToBigint,
-    _IntegerValue_int64>>: Literals.int64ToBigint,
-    _IntegerValue_uint8>>: Literals.uint8ToBigint,
-    _IntegerValue_uint16>>: Literals.uint16ToBigint,
-    _IntegerValue_uint32>>: Literals.uint32ToBigint,
-    _IntegerValue_uint64>>: Literals.uint64ToBigint]
+    _IntegerValue_int8>>: asFunction Literals.int8ToBigint,
+    _IntegerValue_int16>>: asFunction Literals.int16ToBigint,
+    _IntegerValue_int32>>: asFunction Literals.int32ToBigint,
+    _IntegerValue_int64>>: asFunction Literals.int64ToBigint,
+    _IntegerValue_uint8>>: asFunction Literals.uint8ToBigint,
+    _IntegerValue_uint16>>: asFunction Literals.uint16ToBigint,
+    _IntegerValue_uint32>>: asFunction Literals.uint32ToBigint,
+    _IntegerValue_uint64>>: asFunction Literals.uint64ToBigint]
