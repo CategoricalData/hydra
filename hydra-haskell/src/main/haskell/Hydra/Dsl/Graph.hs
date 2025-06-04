@@ -12,8 +12,8 @@ element name term mtyp = record _Element [
   _Element_term>>: term,
   _Element_type>>: mtyp]
 
-elementName :: TTerm (Element -> Name)
-elementName = project _Element _Element_name
+elementName :: TTerm Element -> TTerm Name
+elementName el = project _Element _Element_name @@ el
 
 graph :: TTerm (M.Map Name Element)
     -> TTerm (M.Map Name (Maybe Term))
@@ -30,29 +30,29 @@ graph elements environment types body primitives schema = record _Graph [
     _Graph_primitives>>: primitives,
     _Graph_schema>>: schema]
 
-graphElements :: TTerm (Graph -> M.Map Name Element)
-graphElements = project _Graph _Graph_elements
+graphElements :: TTerm Graph -> TTerm (M.Map Name Element)
+graphElements g = project _Graph _Graph_elements @@ g
 
-graphEnvironment :: TTerm (Graph -> M.Map Name (Maybe Term))
-graphEnvironment = project _Graph _Graph_environment
+graphEnvironment :: TTerm Graph -> TTerm (M.Map Name (Maybe Term))
+graphEnvironment g = project _Graph _Graph_environment @@ g
 
-graphTypes :: TTerm (Graph -> M.Map Name TypeScheme)
-graphTypes = project _Graph _Graph_types
+graphTypes :: TTerm Graph -> TTerm (M.Map Name TypeScheme)
+graphTypes g = project _Graph _Graph_types @@ g
 
-graphBody :: TTerm (Graph -> Term)
-graphBody = project _Graph _Graph_body
+graphBody :: TTerm Graph -> TTerm Term
+graphBody g = project _Graph _Graph_body @@ g
 
-graphPrimitives :: TTerm (Graph -> M.Map Name Primitive)
-graphPrimitives = project _Graph _Graph_primitives
+graphPrimitives :: TTerm Graph -> TTerm (M.Map Name Primitive)
+graphPrimitives g = project _Graph _Graph_primitives @@ g
 
-graphSchema :: TTerm (Graph -> Maybe Graph)
-graphSchema = project _Graph _Graph_schema
+graphSchema :: TTerm Graph -> TTerm (Maybe Graph)
+graphSchema g = project _Graph _Graph_schema @@ g
 
-primitiveName :: TTerm (Primitive -> Name)
-primitiveName = project _Primitive _Primitive_name
+primitiveName :: TTerm Primitive -> TTerm Name
+primitiveName p = project _Primitive _Primitive_name @@ p
 
-primitiveType :: TTerm (Primitive -> TypeScheme)
-primitiveType = project _Primitive _Primitive_type
+primitiveType :: TTerm Primitive -> TTerm TypeScheme
+primitiveType p = project _Primitive _Primitive_type @@ p
 
-primitiveImplementation :: TTerm (Primitive -> ([Term] -> Flow Graph Term))
-primitiveImplementation = project _Primitive _Primitive_type
+primitiveImplementation :: TTerm Primitive -> TTerm ([Term] -> Flow Graph Term)
+primitiveImplementation p = project _Primitive _Primitive_type @@ p

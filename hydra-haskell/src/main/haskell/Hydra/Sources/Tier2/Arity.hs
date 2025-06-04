@@ -54,7 +54,7 @@ functionArityDef = arityDefinition "functionArity" $
 primitiveArityDef :: TElement (Primitive -> Int)
 primitiveArityDef = arityDefinition "primitiveArity" $
   doc "Find the arity (expected number of arguments) of a primitive constant or function" $
-  (ref typeArityDef <.> asFunction Core.typeSchemeType <.> Graph.primitiveType)
+  (ref typeArityDef <.> asFunction Core.typeSchemeType <.> asFunction Graph.primitiveType)
 
 termArityDef :: TElement (Term -> Int)
 termArityDef = arityDefinition "termArity" $
