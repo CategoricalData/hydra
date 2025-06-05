@@ -13,6 +13,7 @@ import qualified Data.Map              as M
 import qualified Data.Set              as S
 import qualified Data.Maybe            as Y
 
+import Hydra.Sources.Tier0.Core
 import Hydra.Sources.Tier1.Graph
 
 
@@ -21,11 +22,18 @@ hydraModuleModule = Module ns elements [hydraGraphModule] [hydraCoreModule] $
     Just "A model for Hydra namespaces and modules"
   where
     ns = Namespace "hydra.module"
+    core = typeref $ moduleNamespace hydraCoreModule
     graph = typeref $ moduleNamespace hydraGraphModule
     mod = typeref ns
     def = datatype ns
 
     elements = [
+
+      def "Definition" $
+        doc "A definition, which may be either a term or type definition" $
+        union [
+          "term">: mod "TermDefinition",
+          "type">: mod "TypeDefinition"],
 
       def "FileExtension" $
         doc "A file extension (without the dot), e.g. \"json\" or \"py\"" $
@@ -67,8 +75,28 @@ hydraModuleModule = Module ns elements [hydraGraphModule] [hydraCoreModule] $
         doc "A prefix for element names" $
         wrap string,
 
+      def "Namespaces" $
+        doc "A mapping from namespaces to values of type n, with a focus on one namespace" $
+        forAll "n" $ record [
+          "focus">: pair (mod "Namespace") (var "n"),
+          "mapping">: Types.map (mod "Namespace") (var "n")],
+
       def "QualifiedName" $
         doc "A qualified name consisting of an optional namespace together with a mandatory local name" $
         record [
           "namespace">: optional $ mod "Namespace",
-          "local">: string]]
+          "local">: string],
+
+      def "TermDefinition" $
+        doc "A term-level definition, including a name, a term, and the type of the term" $
+        record [
+          "name">: core "Name",
+          "term">: core "Term",
+          "type">: core "Type"],
+
+     def "TypeDefinition" $
+        doc "A type-level definition, including a name and the type" $
+        record [
+          "name">: core "Name",
+          -- TODO: consider using TypeScheme here instead of Type
+          "type">: core "Type"]]

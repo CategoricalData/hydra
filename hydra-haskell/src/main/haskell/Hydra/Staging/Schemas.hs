@@ -32,23 +32,6 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-
-data TermDefinition = TermDefinition {
-  termDefinitionName :: Name,
-  termDefinitionTerm :: Term,
-  termDefinitionType :: Type} deriving Show
-
-data TypeDefinition = TypeDefinition {
-  typeDefinitionName :: Name,
-  -- TODO: use TypeScheme here instead of Type
-  typeDefinitionType :: Type} deriving Show
-
-data Definition = DefinitionTerm TermDefinition | DefinitionType TypeDefinition
-
-data Namespaces n = Namespaces {
-  namespacesFocus :: (Namespace, n),
-  namespacesMapping :: M.Map Namespace n} deriving Show
-
 definitionDependencyNamespaces :: Bool -> [Definition] -> S.Set Namespace
 definitionDependencyNamespaces excludeUnit defs = S.fromList $ Y.catMaybes (namespaceOf <$> S.toList allNames)
   where
