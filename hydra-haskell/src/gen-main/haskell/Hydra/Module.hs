@@ -9,6 +9,18 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | A definition, which may be either a term or type definition
+data Definition = 
+  DefinitionTerm TermDefinition |
+  DefinitionType TypeDefinition
+  deriving (Eq, Ord, Read, Show)
+
+_Definition = (Core.Name "hydra.module.Definition")
+
+_Definition_term = (Core.Name "term")
+
+_Definition_type = (Core.Name "type")
+
 -- | A file extension (without the dot), e.g. "json" or "py"
 newtype FileExtension = 
   FileExtension {
@@ -70,6 +82,19 @@ newtype Namespace =
 
 _Namespace = (Core.Name "hydra.module.Namespace")
 
+-- | A mapping from namespaces to values of type n, with a focus on one namespace
+data Namespaces n = 
+  Namespaces {
+    namespacesFocus :: (Namespace, n),
+    namespacesMapping :: (M.Map Namespace n)}
+  deriving (Eq, Ord, Read, Show)
+
+_Namespaces = (Core.Name "hydra.module.Namespaces")
+
+_Namespaces_focus = (Core.Name "focus")
+
+_Namespaces_mapping = (Core.Name "mapping")
+
 -- | A qualified name consisting of an optional namespace together with a mandatory local name
 data QualifiedName = 
   QualifiedName {
@@ -82,3 +107,32 @@ _QualifiedName = (Core.Name "hydra.module.QualifiedName")
 _QualifiedName_namespace = (Core.Name "namespace")
 
 _QualifiedName_local = (Core.Name "local")
+
+-- | A term-level definition, including a name, a term, and the type of the term
+data TermDefinition = 
+  TermDefinition {
+    termDefinitionName :: Core.Name,
+    termDefinitionTerm :: Core.Term,
+    termDefinitionType :: Core.Type}
+  deriving (Eq, Ord, Read, Show)
+
+_TermDefinition = (Core.Name "hydra.module.TermDefinition")
+
+_TermDefinition_name = (Core.Name "name")
+
+_TermDefinition_term = (Core.Name "term")
+
+_TermDefinition_type = (Core.Name "type")
+
+-- | A type-level definition, including a name and the type
+data TypeDefinition = 
+  TypeDefinition {
+    typeDefinitionName :: Core.Name,
+    typeDefinitionType :: Core.Type}
+  deriving (Eq, Ord, Read, Show)
+
+_TypeDefinition = (Core.Name "hydra.module.TypeDefinition")
+
+_TypeDefinition_name = (Core.Name "name")
+
+_TypeDefinition_type = (Core.Name "type")
