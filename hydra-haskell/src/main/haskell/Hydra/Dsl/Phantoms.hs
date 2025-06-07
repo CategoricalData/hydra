@@ -78,6 +78,7 @@ var v = TTerm $ Terms.var v
 asFunction :: (TTerm a -> TTerm b) -> TTerm (a -> b)
 asFunction f = case (unTTerm $ f $ var "x") of
   TermApplication (Application lhs _) -> TTerm lhs
+  TermOptional (Just _) -> primitive _optionals_pure
 
 -- | Compose two functions (g then f)
 -- Example: compose (var "stringLength") (var "toString")

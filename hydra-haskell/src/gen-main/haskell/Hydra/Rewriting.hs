@@ -298,6 +298,29 @@ subtypes x = case x of
   Core.TypeWrap v1 -> [
     Core.wrappedTypeObject v1]
 
+-- | Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
+termDependencyNames :: (Bool -> Bool -> Bool -> Core.Term -> S.Set Core.Name)
+termDependencyNames withVars withPrims withNoms =  
+  let addNames = (\names -> \term ->  
+          let nominal = (\name -> Logic.ifElse withNoms (Sets.insert name names) names) 
+              prim = (\name -> Logic.ifElse withPrims (Sets.insert name names) names)
+              var = (\name -> Logic.ifElse withVars (Sets.insert name names) names)
+          in ((\x -> case x of
+            Core.TermFunction v1 -> ((\x -> case x of
+              Core.FunctionPrimitive v2 -> (prim v2)
+              Core.FunctionElimination v2 -> ((\x -> case x of
+                Core.EliminationRecord v3 -> (nominal (Core.projectionTypeName v3))
+                Core.EliminationUnion v3 -> (nominal (Core.caseStatementTypeName v3))
+                Core.EliminationWrap v3 -> (nominal v3)
+                _ -> names) v2)
+              _ -> names) v1)
+            Core.TermRecord v1 -> (nominal (Core.recordTypeName v1))
+            Core.TermUnion v1 -> (nominal (Core.injectionTypeName v1))
+            Core.TermVariable v1 -> (var v1)
+            Core.TermWrap v1 -> (nominal (Core.wrappedTermTypeName v1))
+            _ -> names) term))
+  in (foldOverTerm Coders.TraversalOrderPre addNames Sets.empty)
+
 typeDependencyNames :: (Bool -> Bool -> Core.Type -> S.Set Core.Name)
 typeDependencyNames withSchema excludeUnit typ = (Logic.ifElse withSchema (Sets.union (freeVariablesInType typ) (typeNamesInType excludeUnit typ)) (freeVariablesInType typ))
 

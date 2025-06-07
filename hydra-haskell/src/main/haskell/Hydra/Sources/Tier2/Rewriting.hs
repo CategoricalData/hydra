@@ -389,26 +389,27 @@ termDependencyNamesDef :: TElement (Bool -> Bool -> Bool -> Term -> S.Set Name)
 termDependencyNamesDef = rewritingDefinition "termDependencyNames" $
   doc "Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that" $
   lambdas ["withVars", "withPrims", "withNoms"] $ lets [
-    "nominal">: lambda "name" $ Logic.ifElse (var "withNoms")
-      (Sets.insert (var "name") (var "names"))
-      (var "names"),
-    "prim">: lambda "name" $ Logic.ifElse (var "withPrims")
-      (Sets.insert (var "name") (var "names"))
-      (var "names"),
-    "var">: lambda "name" $ Logic.ifElse (var "withVars")
-      (Sets.insert (var "name") (var "names"))
-      (var "names"),
-    "addNames">: lambdas ["names", "term"] $ cases _Term (var "term") (Just $ var "names") [
-      _Term_function>>: lambda "f" $ cases _Function (var "f") (Just $ var "names") [
-        _Function_primitive>>: lambda "name" $ var "prim" @@ var "name",
-        _Function_elimination>>: lambda "e" $ cases _Elimination (var "e") (Just $ var "names") [
-          _Elimination_record>>: lambda "proj" $ var "nominal" @@ (Core.projectionTypeName $ var "proj"),
-          _Elimination_union>>: lambda "caseStmt" $ var "nominal" @@ (Core.caseStatementTypeName $ var "caseStmt"),
-          _Elimination_wrap>>: lambda "name" $ var "nominal" @@ var "name"]],
-      _Term_record>>: lambda "record" $ var "nominal" @@ (Core.recordTypeName $ var "record"),
-      _Term_union>>: lambda "injection" $ var "nominal" @@ (Core.injectionTypeName $ var "injection"),
-      _Term_variable>>: lambda "name" $ var "var" @@ var "name",
-      _Term_wrap>>: lambda "wrappedTerm" $ var "nominal" @@ (Core.wrappedTermTypeName $ var "wrappedTerm")]]
+    "addNames">: lambdas ["names", "term"] $ lets [
+      "nominal">: lambda "name" $ Logic.ifElse (var "withNoms")
+        (Sets.insert (var "name") (var "names"))
+        (var "names"),
+      "prim">: lambda "name" $ Logic.ifElse (var "withPrims")
+        (Sets.insert (var "name") (var "names"))
+        (var "names"),
+      "var">: lambda "name" $ Logic.ifElse (var "withVars")
+        (Sets.insert (var "name") (var "names"))
+        (var "names")]
+      $ cases _Term (var "term") (Just $ var "names") [
+        _Term_function>>: lambda "f" $ cases _Function (var "f") (Just $ var "names") [
+          _Function_primitive>>: lambda "name" $ var "prim" @@ var "name",
+          _Function_elimination>>: lambda "e" $ cases _Elimination (var "e") (Just $ var "names") [
+            _Elimination_record>>: lambda "proj" $ var "nominal" @@ (Core.projectionTypeName $ var "proj"),
+            _Elimination_union>>: lambda "caseStmt" $ var "nominal" @@ (Core.caseStatementTypeName $ var "caseStmt"),
+            _Elimination_wrap>>: lambda "name" $ var "nominal" @@ var "name"]],
+        _Term_record>>: lambda "record" $ var "nominal" @@ (Core.recordTypeName $ var "record"),
+        _Term_union>>: lambda "injection" $ var "nominal" @@ (Core.injectionTypeName $ var "injection"),
+        _Term_variable>>: lambda "name" $ var "var" @@ var "name",
+        _Term_wrap>>: lambda "wrappedTerm" $ var "nominal" @@ (Core.wrappedTermTypeName $ var "wrappedTerm")]]
     $ ref foldOverTermDef @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty
 
 typeDependencyNamesDef :: TElement (Bool -> Bool -> Type -> S.Set Name)
