@@ -42,6 +42,9 @@ hydraFormattingModule = Module (Namespace "hydra.formatting") elements [] [hydra
       el convertCaseCamelToUpperSnakeDef,
       el convertCasePascalToUpperSnakeDef,
       el decapitalizeDef,
+      el escapeWithUnderscoreDef,
+      el indentLinesDef,
+      el javaStyleCommentDef,
       el mapFirstLetterDef]
 
 capitalizeDef :: TElement (String -> String)
@@ -94,6 +97,23 @@ decapitalizeDef :: TElement (String -> String)
 decapitalizeDef = formattingDefinition "decapitalize" $
   doc "Decapitalize the first letter of a string" $
   ref mapFirstLetterDef @@ primitive _strings_toLower
+
+escapeWithUnderscoreDef :: TElement (S.Set String -> String -> String)
+escapeWithUnderscoreDef = formattingDefinition "escapeWithUnderscore" $
+  lambdas ["reserved", "s"] $
+    Logic.ifElse (Sets.member (var "s") (var "reserved"))
+      (var "s" ++ string "_")
+      (var "s")
+
+indentLinesDef :: TElement (String -> String)
+indentLinesDef = formattingDefinition "indentLines" $
+  lambda "s" $ lets [
+    "indent">: lambda "l" $ string "    " ++ var "l"]
+    $ Strings.unlines $ Lists.map (var "indent") $ Strings.lines $ var "s"
+
+javaStyleCommentDef :: TElement (String -> String)
+javaStyleCommentDef = formattingDefinition "javaStyleComment" $
+  lambda "s" $ string "/**\n" ++ string " * " ++ var "s" ++ string "\n */"
 
 -- TODO: simplify this helper
 mapFirstLetterDef :: TElement ((String -> String) -> String -> String)
