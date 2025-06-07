@@ -29,3 +29,6 @@ language name eliminationVariants literalVariants floatTypes functionVariants in
     _LanguageConstraints_termVariants>>: Sets.fromList $ list (Mantle.termVariant <$> termVariants),
     _LanguageConstraints_typeVariants>>: Sets.fromList $ list (Mantle.typeVariant <$> typeVariants),
     _LanguageConstraints_types>>: typePredicate]]
+
+traversalOrderPre = unitVariant _TraversalOrder _TraversalOrder_pre
+traversalOrderPost = unitVariant _TraversalOrder _TraversalOrder_post

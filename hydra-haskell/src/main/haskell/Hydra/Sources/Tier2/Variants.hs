@@ -3,6 +3,7 @@
 module Hydra.Sources.Tier2.Variants where
 
 -- Standard Tier-2 imports
+import qualified Hydra.Dsl.Coders          as Coders
 import qualified Hydra.Dsl.Compute         as Compute
 import qualified Hydra.Dsl.Core            as Core
 import qualified Hydra.Dsl.Graph           as Graph

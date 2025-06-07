@@ -15,6 +15,12 @@ element name term mtyp = record _Element [
 elementName :: TTerm Element -> TTerm Name
 elementName el = project _Element _Element_name @@ el
 
+elementTerm :: TTerm Element -> TTerm Term
+elementTerm el = project _Element _Element_term @@ el
+
+elementType :: TTerm Element -> TTerm (Maybe TypeScheme)
+elementType el = project _Element _Element_type @@ el
+
 graph :: TTerm (M.Map Name Element)
     -> TTerm (M.Map Name (Maybe Term))
     -> TTerm (M.Map Name TypeScheme)
@@ -47,6 +53,15 @@ graphPrimitives g = project _Graph _Graph_primitives @@ g
 
 graphSchema :: TTerm Graph -> TTerm (Maybe Graph)
 graphSchema g = project _Graph _Graph_schema @@ g
+
+graphWithElements :: TTerm Graph -> TTerm (M.Map Name Element) -> TTerm Graph
+graphWithElements g newElements = graph
+    newElements
+    (Hydra.Dsl.Graph.graphEnvironment g)
+    (Hydra.Dsl.Graph.graphTypes g)
+    (Hydra.Dsl.Graph.graphBody g)
+    (Hydra.Dsl.Graph.graphPrimitives g)
+    (Hydra.Dsl.Graph.graphSchema g)
 
 primitiveName :: TTerm Primitive -> TTerm Name
 primitiveName p = project _Primitive _Primitive_name @@ p

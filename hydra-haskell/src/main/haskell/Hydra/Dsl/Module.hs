@@ -18,5 +18,20 @@ qualifiedNameLocal qn = project _QualifiedName _QualifiedName_local @@ qn
 qualifiedNameNamespace :: TTerm QualifiedName -> TTerm (Maybe Namespace)
 qualifiedNameNamespace qn = project _QualifiedName _QualifiedName_namespace @@ qn
 
+termDefinitionName :: TTerm TermDefinition -> TTerm Name
+termDefinitionName td = project _TermDefinition _TermDefinition_name @@ td
+
+termDefinitionTerm :: TTerm TermDefinition -> TTerm Term
+termDefinitionTerm td = project _TermDefinition _TermDefinition_term @@ td
+
+termDefinitionType :: TTerm TermDefinition -> TTerm Type
+termDefinitionType td = project _TermDefinition _TermDefinition_type @@ td
+
+typeDefinitionName :: TTerm TypeDefinition -> TTerm Name
+typeDefinitionName td = project _TypeDefinition _TypeDefinition_name @@ td
+
+typeDefinitionType :: TTerm TypeDefinition -> TTerm Type
+typeDefinitionType td = project _TypeDefinition _TypeDefinition_type @@ td
+
 unFileExtension :: TTerm FileExtension -> TTerm String
 unFileExtension fe = unwrap _FileExtension @@ fe

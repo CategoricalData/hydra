@@ -20,9 +20,9 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 
 
-public class Remove extends PrimitiveFunction {
+public class Delete extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.sets.remove");
+        return new Name("hydra.lib.sets.delete");
     }
 
     @Override

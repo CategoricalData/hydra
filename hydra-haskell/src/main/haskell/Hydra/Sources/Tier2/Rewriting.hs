@@ -3,6 +3,7 @@
 module Hydra.Sources.Tier2.Rewriting where
 
 -- Standard Tier-2 imports
+import qualified Hydra.Dsl.Coders          as Coders
 import qualified Hydra.Dsl.Compute         as Compute
 import qualified Hydra.Dsl.Core            as Core
 import qualified Hydra.Dsl.Graph           as Graph
@@ -54,7 +55,10 @@ hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
      el rewriteTypeDef,
      el subtermsDef,
      el subtermsWithAccessorsDef,
-     el subtypesDef]
+     el subtypesDef,
+     el termDependencyNamesDef,
+     el typeDependencyNamesDef,
+     el typeNamesInTypeDef]
 
 foldOverTermDef :: TElement (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
 foldOverTermDef = rewritingDefinition "foldOverTerm" $
@@ -91,7 +95,7 @@ freeVariablesInTermDef = rewritingDefinition "freeVariablesInTerm" $
       @@ (ref subtermsDef @@ var "term")]
     $ match _Term (Just $ var "dfltVars") [
       _Term_function>>: match _Function (Just $ var "dfltVars") [
-        _Function_lambda>>: lambda "l" (Sets.remove
+        _Function_lambda>>: lambda "l" (Sets.delete
           (Core.lambdaParameter $ var "l")
           (ref freeVariablesInTermDef @@ (Core.lambdaBody $ var "l")))],
 --      TODO: restore the following
@@ -108,7 +112,7 @@ freeVariablesInTypeDef = rewritingDefinition "freeVariablesInType" $
       @@ Sets.empty
       @@ (ref subtypesDef @@ var "typ")]
     $ match _Type (Just $ var "dfltVars") [
-      _Type_forall>>: lambda "lt" (Sets.remove
+      _Type_forall>>: lambda "lt" (Sets.delete
           (Core.forallTypeParameter $ var "lt")
           (recurse @@ (Core.forallTypeBody $ var "lt"))),
       -- TODO: let-types
@@ -273,7 +277,7 @@ subtermsDef = rewritingDefinition "subterms" $
     _Term_list>>: lambda "l" $ var "l",
     _Term_literal>>: constant $ list [],
     _Term_map>>: lambda "m" (Lists.concat
-      (Lists.map (lambda "p" $ list [first @@ var "p", second @@ var "p"]) (Maps.toList $ var "m"))),
+      (Lists.map (lambda "p" $ list [first $ var "p", second $ var "p"]) (Maps.toList $ var "m"))),
     _Term_optional>>: primitive _optionals_maybe @@  (list []) @@ (lambda "t" $ list [var "t"]),
     _Term_product>>: lambda "tuple" $ var "tuple",
     _Term_record>>: lambda "rt" (Lists.map (asFunction Core.fieldTerm) (Core.recordFields $ var "rt")),
@@ -317,8 +321,8 @@ subtermsWithAccessorsDef = rewritingDefinition "subtermsWithAccessors" $
       (Lists.map
         (lambda "p" $ list [
           -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-          result (termAccessorMapKey $ int32 0) $ first @@ var "p",
-          result (termAccessorMapValue $ int32 0) $ second @@ var "p"])
+          result (termAccessorMapKey $ int32 0) $ first $ var "p",
+          result (termAccessorMapValue $ int32 0) $ second $ var "p"])
         (Maps.toList $ var "m"))),
     _Term_optional>>: primitive _optionals_maybe @@  none @@ (lambda "t" $ single termAccessorOptionalTerm $ var "t"),
     _Term_product>>: lambda "p" $ Lists.map
@@ -380,3 +384,56 @@ subtypesDef = rewritingDefinition "subtypes" $
     _Type_union>>: lambda "rt" (Lists.map (asFunction Core.fieldTypeType) (Core.rowTypeFields $ var "rt")),
     _Type_variable>>: constant $ list [],
     _Type_wrap>>: lambda "nt" $ list [Core.wrappedTypeObject $ var "nt"]]
+
+termDependencyNamesDef :: TElement (Bool -> Bool -> Bool -> Term -> S.Set Name)
+termDependencyNamesDef = rewritingDefinition "termDependencyNames" $
+  doc "Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that" $
+  lambdas ["withVars", "withPrims", "withNoms"] $ lets [
+    "nominal">: lambda "name" $ Logic.ifElse (var "withNoms")
+      (Sets.insert (var "name") (var "names"))
+      (var "names"),
+    "prim">: lambda "name" $ Logic.ifElse (var "withPrims")
+      (Sets.insert (var "name") (var "names"))
+      (var "names"),
+    "var">: lambda "name" $ Logic.ifElse (var "withVars")
+      (Sets.insert (var "name") (var "names"))
+      (var "names"),
+    "addNames">: lambdas ["names", "term"] $ cases _Term (var "term") (Just $ var "names") [
+      _Term_function>>: lambda "f" $ cases _Function (var "f") (Just $ var "names") [
+        _Function_primitive>>: lambda "name" $ var "prim" @@ var "name",
+        _Function_elimination>>: lambda "e" $ cases _Elimination (var "e") (Just $ var "names") [
+          _Elimination_record>>: lambda "proj" $ var "nominal" @@ (Core.projectionTypeName $ var "proj"),
+          _Elimination_union>>: lambda "caseStmt" $ var "nominal" @@ (Core.caseStatementTypeName $ var "caseStmt"),
+          _Elimination_wrap>>: lambda "name" $ var "nominal" @@ var "name"]],
+      _Term_record>>: lambda "record" $ var "nominal" @@ (Core.recordTypeName $ var "record"),
+      _Term_union>>: lambda "injection" $ var "nominal" @@ (Core.injectionTypeName $ var "injection"),
+      _Term_variable>>: lambda "name" $ var "var" @@ var "name",
+      _Term_wrap>>: lambda "wrappedTerm" $ var "nominal" @@ (Core.wrappedTermTypeName $ var "wrappedTerm")]]
+    $ ref foldOverTermDef @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty
+
+typeDependencyNamesDef :: TElement (Bool -> Bool -> Type -> S.Set Name)
+typeDependencyNamesDef = rewritingDefinition "typeDependencyNames" $
+  lambdas ["withSchema", "excludeUnit", "typ"] $
+    Logic.ifElse (var "withSchema")
+      (Sets.union
+        (ref freeVariablesInTypeDef @@ var "typ")
+        (ref typeNamesInTypeDef @@ var "excludeUnit" @@ var "typ"))
+      (ref freeVariablesInTypeDef @@ var "typ")
+
+typeNamesInTypeDef :: TElement (Bool -> Type -> S.Set Name)
+typeNamesInTypeDef = rewritingDefinition "typeNamesInType" $
+  lambda "excludeUnit" $ lets [
+    "addNames">: lambdas ["names", "typ"] $ cases _Type (var "typ") (Just $ var "names") [
+      _Type_record>>: lambda "rowType" $ lets [
+        "tname">: Core.rowTypeTypeName $ var "rowType"]
+        $ Logic.ifElse
+          (Logic.or (Logic.not $ var "excludeUnit") (Logic.not $ Core.equalName_ (var "tname") $ Core.name _Unit))
+          (Sets.insert (var "tname") (var "names"))
+          (var "names"),
+      _Type_union>>: lambda "rowType" $ lets [
+        "tname">: Core.rowTypeTypeName $ var "rowType"]
+        $ Sets.insert (var "tname") (var "names"),
+      _Type_wrap>>: lambda "wrappedType" $ lets [
+        "tname">: Core.wrappedTypeTypeName $ var "wrappedType"]
+        $ Sets.insert (var "tname") (var "names")]]
+    $ ref foldOverTypeDef @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty

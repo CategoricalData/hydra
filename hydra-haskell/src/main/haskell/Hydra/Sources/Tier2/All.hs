@@ -12,6 +12,7 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.Printing,
   module Hydra.Sources.Tier2.Qnames,
   module Hydra.Sources.Tier2.Rewriting,
+  module Hydra.Sources.Tier2.Schemas,
   module Hydra.Sources.Tier2.Substitution,
   module Hydra.Sources.Tier2.Unification,
   module Hydra.Sources.Tier2.Variants,
@@ -27,6 +28,7 @@ import Hydra.Sources.Tier2.Lexical
 import Hydra.Sources.Tier2.Printing
 import Hydra.Sources.Tier2.Qnames
 import Hydra.Sources.Tier2.Rewriting
+import Hydra.Sources.Tier2.Schemas
 import Hydra.Sources.Tier2.Substitution
 import Hydra.Sources.Tier2.Unification
 import Hydra.Sources.Tier2.Variants
@@ -64,6 +66,7 @@ tier2Modules = [
   hydraPrintingModule,
   hydraQnamesModule,
   hydraRewritingModule,
+  hydraSchemasModule,
   hydraStripModule,
   hydraUnificationModule,
   hydraVariantsModule]

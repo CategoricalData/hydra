@@ -24,6 +24,8 @@ import hydra.lib.equality.Identity;
 import hydra.lib.equality.LtInt32;
 import hydra.lib.equality.LteInt32;
 import hydra.lib.io.ShowTerm;
+import hydra.lib.maps.Elems;
+import hydra.lib.sets.Delete;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.ArrayList;
@@ -169,7 +171,7 @@ public class Libraries {
                 new hydra.lib.maps.MapKeys(),
                 new hydra.lib.maps.Remove(),
                 new hydra.lib.maps.ToList(),
-                new hydra.lib.maps.Values());
+                new Elems());
     }
 
     private static List<PrimitiveFunction> mathPrimitives() {
@@ -206,7 +208,7 @@ public class Libraries {
                 new hydra.lib.sets.IsEmpty(),
                 new hydra.lib.sets.Map(),
                 new hydra.lib.sets.Member(),
-                new hydra.lib.sets.Remove(),
+                new Delete(),
                 new hydra.lib.sets.Singleton(),
                 new hydra.lib.sets.Size(),
                 new hydra.lib.sets.ToList(),

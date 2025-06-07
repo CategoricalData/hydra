@@ -8,6 +8,9 @@ import Hydra.Dsl.Phantoms
 import Data.Set
 
 
+delete :: TTerm a -> TTerm (Set a) -> TTerm (Set a)
+delete = primitive2 _sets_delete
+
 difference :: TTerm (Set a) -> TTerm (Set a) -> TTerm (Set a)
 difference = primitive2 _sets_difference
 
@@ -32,9 +35,6 @@ map = primitive2 _sets_map
 member :: TTerm a -> TTerm (Set a) -> TTerm Bool
 member = primitive2 _sets_member
 
-remove :: TTerm a -> TTerm (Set a) -> TTerm (Set a)
-remove = primitive2 _sets_remove
-
 singleton :: TTerm a -> TTerm (Set a)
 singleton = primitive1 _sets_singleton
 
@@ -46,3 +46,6 @@ toList = primitive1 _sets_toList
 
 union :: TTerm (Set a) -> TTerm (Set a) -> TTerm (Set a)
 union = primitive2 _sets_union
+
+unions :: TTerm [Set a] -> TTerm (Set a)
+unions = primitive1 _sets_unions

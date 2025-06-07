@@ -45,11 +45,11 @@ validateGraph :: (Ord t0) => ((t1 -> t0 -> Maybe String) -> (t0 -> String) -> Mo
 validateGraph checkValue showValue schema graph =  
   let checkVertices =  
           let checkVertex = (\el -> Optionals.maybe (Just (vertexError showValue el (prepend "Unexpected label" (Model.unVertexLabel (Model.vertexLabel el))))) (\t -> validateVertex checkValue showValue t el) (Maps.lookup (Model.vertexLabel el) (Model.graphSchemaVertices schema)))
-          in (checkAll (Lists.map checkVertex (Maps.values (Model.graphVertices graph)))) 
+          in (checkAll (Lists.map checkVertex (Maps.elems (Model.graphVertices graph))))
       checkEdges =  
               let checkEdge = (\el -> Optionals.maybe (Just (edgeError showValue el (prepend "Unexpected label" (Model.unEdgeLabel (Model.edgeLabel el))))) (\t -> validateEdge checkValue showValue labelForVertexId t el) (Maps.lookup (Model.edgeLabel el) (Model.graphSchemaEdges schema))) 
                   labelForVertexId = (Just (\i -> Optionals.map Model.vertexLabel (Maps.lookup i (Model.graphVertices graph))))
-              in (checkAll (Lists.map checkEdge (Maps.values (Model.graphEdges graph))))
+              in (checkAll (Lists.map checkEdge (Maps.elems (Model.graphEdges graph))))
   in (checkAll [
     checkVertices,
     checkEdges])

@@ -171,9 +171,9 @@ set = TTerm . Terms.set . S.fromList . fmap unTTerm
 -- * Products and tuples
 
 -- | First element projection function for pairs
--- Example: first @@ myPair
-first :: TTerm ((a, b) -> a)
-first = TTerm $ Terms.untuple 2 0 Nothing
+-- Example: first $ pair (string "foo") (string "bar")
+first :: TTerm (a, b) -> TTerm a
+first pair = TTerm (Terms.untuple 2 0 Nothing) @@ pair
 
 -- | Create a pair (2-tuple)
 -- Example: pair (string "age") (int32 32)
@@ -181,9 +181,9 @@ pair :: (TTerm a) -> (TTerm b) -> TTerm (a, b)
 pair (TTerm l) (TTerm r) = TTerm $ Terms.pair l r
 
 -- | Second element projection function for pairs
--- Example: second @@ myPair
-second :: TTerm ((a, b) -> b)
-second = TTerm $ Terms.untuple 2 1 Nothing
+-- Example: second $ pair (string "foo") (string "bar")
+second :: TTerm (a, b) -> TTerm b
+second pair = TTerm (Terms.untuple 2 1 Nothing) @@ pair
 
 -- | Create a tuple projection function
 -- Example: untuple 3 1 extracts the second element of a 3-tuple

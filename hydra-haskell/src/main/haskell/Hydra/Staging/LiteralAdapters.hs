@@ -13,7 +13,7 @@ import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
-import Hydra.Staging.Lexical
+import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Flows
 import Hydra.Errors

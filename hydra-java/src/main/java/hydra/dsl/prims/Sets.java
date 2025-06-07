@@ -7,7 +7,7 @@ import hydra.lib.sets.FromList;
 import hydra.lib.sets.Insert;
 import hydra.lib.sets.IsEmpty;
 import hydra.lib.sets.Map;
-import hydra.lib.sets.Remove;
+import hydra.lib.sets.Delete;
 import hydra.lib.sets.Singleton;
 import hydra.lib.sets.Size;
 import hydra.lib.sets.ToList;
@@ -38,7 +38,7 @@ public interface Sets {
     }
 
     static Term remove() {
-        return new Remove().term();
+        return new Delete().term();
     }
 
     static Term singleton() {

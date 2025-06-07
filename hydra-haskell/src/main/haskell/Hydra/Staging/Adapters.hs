@@ -14,7 +14,7 @@ import Hydra.Staging.Annotations
 import Hydra.CoreEncoding
 import Hydra.CoreLanguage
 import Hydra.Graph
-import Hydra.Staging.Lexical
+import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Module
 import Hydra.Strip

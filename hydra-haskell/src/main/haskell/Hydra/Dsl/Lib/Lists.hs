@@ -69,6 +69,9 @@ safeHead = primitive1 _lists_safeHead
 tail :: TTerm [a] -> TTerm [a]
 tail = primitive1 _lists_tail
 
+take :: TTerm Int -> TTerm [a] -> TTerm [a]
+take = primitive2 _lists_take
+
 zip :: TTerm [a] -> TTerm [b] -> TTerm [(a, b)]
 zip = primitive2 _lists_zip
 

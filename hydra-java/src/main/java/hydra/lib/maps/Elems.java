@@ -20,9 +20,9 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
 
-public class Values extends PrimitiveFunction {
+public class Elems extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.maps.values");
+        return new Name("hydra.lib.maps.elems");
     }
 
     @Override

@@ -4,6 +4,7 @@ module Hydra.Rewriting where
 
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
@@ -32,7 +33,7 @@ freeVariablesInTerm term =
   let dfltVars = (Lists.foldl (\s -> \t -> Sets.union s (freeVariablesInTerm t)) Sets.empty (subterms term))
   in ((\x -> case x of
     Core.TermFunction v1 -> ((\x -> case x of
-      Core.FunctionLambda v2 -> (Sets.remove (Core.lambdaParameter v2) (freeVariablesInTerm (Core.lambdaBody v2)))
+      Core.FunctionLambda v2 -> (Sets.delete (Core.lambdaParameter v2) (freeVariablesInTerm (Core.lambdaBody v2)))
       _ -> dfltVars) v1)
     Core.TermVariable v1 -> (Sets.singleton v1)
     _ -> dfltVars) term)
@@ -42,7 +43,7 @@ freeVariablesInType :: (Core.Type -> S.Set Core.Name)
 freeVariablesInType typ =  
   let dfltVars = (Lists.foldl (\s -> \t -> Sets.union s (freeVariablesInType t)) Sets.empty (subtypes typ))
   in ((\x -> case x of
-    Core.TypeForall v1 -> (Sets.remove (Core.forallTypeParameter v1) (freeVariablesInType (Core.forallTypeBody v1)))
+    Core.TypeForall v1 -> (Sets.delete (Core.forallTypeParameter v1) (freeVariablesInType (Core.forallTypeBody v1)))
     Core.TypeVariable v1 -> (Sets.singleton v1)
     _ -> dfltVars) typ)
 
@@ -296,3 +297,21 @@ subtypes x = case x of
   Core.TypeVariable _ -> []
   Core.TypeWrap v1 -> [
     Core.wrappedTypeObject v1]
+
+typeDependencyNames :: (Bool -> Bool -> Core.Type -> S.Set Core.Name)
+typeDependencyNames withSchema excludeUnit typ = (Logic.ifElse withSchema (Sets.union (freeVariablesInType typ) (typeNamesInType excludeUnit typ)) (freeVariablesInType typ))
+
+typeNamesInType :: (Bool -> Core.Type -> S.Set Core.Name)
+typeNamesInType excludeUnit =  
+  let addNames = (\names -> \typ -> (\x -> case x of
+          Core.TypeRecord v1 ->  
+            let tname = (Core.rowTypeTypeName v1)
+            in (Logic.ifElse (Logic.or (Logic.not excludeUnit) (Logic.not (Equality.equalString (Core.unName tname) (Core.unName (Core.Name "hydra.core.Unit"))))) (Sets.insert tname names) names)
+          Core.TypeUnion v1 ->  
+            let tname = (Core.rowTypeTypeName v1)
+            in (Sets.insert tname names)
+          Core.TypeWrap v1 ->  
+            let tname = (Core.wrappedTypeTypeName v1)
+            in (Sets.insert tname names)
+          _ -> names) typ)
+  in (foldOverType Coders.TraversalOrderPre addNames Sets.empty)
