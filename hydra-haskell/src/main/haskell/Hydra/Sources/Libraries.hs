@@ -156,11 +156,17 @@ hydraLibFlows = standardLibrary _hydra_lib_flows [
 _hydra_lib_io :: Namespace
 _hydra_lib_io = Namespace "hydra.lib.io"
 
+_io_showFloat = qname _hydra_lib_io "showFloat" :: Name
+_io_showInteger = qname _hydra_lib_io "showInteger" :: Name
+_io_showLiteral = qname _hydra_lib_io "showLiteral" :: Name
 _io_showTerm = qname _hydra_lib_io "showTerm" :: Name
 _io_showType = qname _hydra_lib_io "showType" :: Name
 
 hydraLibIo :: Library
 hydraLibIo = standardLibrary _hydra_lib_io [
+    prim1 _io_showFloat Io.showFloat [] floatValue string,
+    prim1 _io_showInteger Io.showInteger [] integerValue string,
+    prim1 _io_showLiteral Io.showLiteral [] literal string,
     prim1 _io_showTerm Io.showTerm [] term string,
     prim1 _io_showType Io.showType [] type_ string]
 

@@ -2,7 +2,10 @@
 
 module Hydra.Lib.Io (
   showElement,
+  showFloat,
   showGraph,
+  showInteger,
+  showLiteral,
   showTerm,
   showType,
   showTypeConstraint,
@@ -46,8 +49,34 @@ showElement el = unName (elementName el) ++ " = " ++ showTerm (elementTerm el) +
   Nothing -> ""
   Just ts -> " : " ++ showTypeScheme ts)
 
+showFloat :: FloatValue -> String
+showFloat fv = case fv of
+  FloatValueBigfloat v -> show v
+  FloatValueFloat32 v -> show v
+  FloatValueFloat64 v -> show v
+
 showGraph :: Graph -> String
 showGraph graph = "{" ++ (L.intercalate ", " $ fmap showElement $ M.elems $ graphElements graph) ++ "}"
+
+showInteger :: IntegerValue -> String
+showInteger iv = case iv of
+  IntegerValueBigint v -> show v
+  IntegerValueInt8 v -> show v
+  IntegerValueInt16 v -> show v
+  IntegerValueInt32 v -> show v
+  IntegerValueInt64 v -> show v
+  IntegerValueUint8 v -> show v
+  IntegerValueUint16 v -> show v
+  IntegerValueUint32 v -> show v
+  IntegerValueUint64 v -> show v
+
+showLiteral :: Literal -> String
+showLiteral l = case l of
+  LiteralBinary _ -> "[binary]"
+  LiteralBoolean b -> if b then "true" else "false"
+  LiteralFloat fv -> showFloat fv
+  LiteralInteger iv -> showInteger iv
+  LiteralString s -> show s
 
 --showTerm :: Term -> String
 ----showTerm term = fromFlow "fail" noGraph (jsonValueToString <$> untypedTermToJson term)
@@ -77,24 +106,7 @@ showTerm term = case stripTerm term of
       where
         showBinding (LetBinding (Name v) term mt) = v ++ "=" ++ showTerm term ++ (Y.maybe "" (\t -> ":" ++ showTypeScheme t) mt)
     TermList els -> "[" ++ (L.intercalate ", " $ fmap showTerm els) ++ "]"
-    TermLiteral lit -> case lit of
-      LiteralBinary _ -> "[binary]"
-      LiteralBoolean b -> if b then "true" else "false"
-      LiteralFloat fv -> case fv of
-        FloatValueBigfloat v -> show v
-        FloatValueFloat32 v -> show v
-        FloatValueFloat64 v -> show v
-      LiteralInteger iv -> case iv of
-        IntegerValueBigint v -> show v
-        IntegerValueInt8 v -> show v
-        IntegerValueInt16 v -> show v
-        IntegerValueInt32 v -> show v
-        IntegerValueInt64 v -> show v
-        IntegerValueUint8 v -> show v
-        IntegerValueUint16 v -> show v
-        IntegerValueUint32 v -> show v
-        IntegerValueUint64 v -> show v
-      LiteralString s -> show s
+    TermLiteral lit -> showLiteral lit
     TermOptional mt -> case mt of
       Nothing -> "nothing"
       Just t -> "just(" ++ showTerm t ++ ")"
