@@ -25,6 +25,9 @@ isEmpty = L.null
 length :: String -> Int
 length = L.length
 
+lines :: String -> [String]
+lines = L.lines
+
 splitOn :: String -> String -> [String]
 splitOn = LS.splitOn
 
@@ -36,3 +39,6 @@ toLower = fmap C.toLower
 
 toUpper :: String -> String
 toUpper = fmap C.toUpper
+
+unlines :: [String] -> String
+unlines = L.unlines
