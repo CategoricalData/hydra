@@ -369,29 +369,6 @@ substituteVariables subst = rewriteTerm replace
         Just _ -> term
       _ -> recurse term
 
--- Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
-termDependencyNames :: Bool -> Bool -> Bool -> Term -> S.Set Name
-termDependencyNames withVars withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
-  where
-    addNames names term = case term of
-        TermFunction f -> case f of
-          FunctionPrimitive name -> prim name
-          FunctionElimination e -> case e of
-            EliminationRecord (Projection name _) -> nominal name
-            EliminationUnion (CaseStatement name _ _) -> nominal name
-            EliminationWrap name -> nominal name
-            _ -> names
-          _ -> names
-        TermRecord (Record name _) -> nominal name
-        TermUnion (Injection name _) -> nominal name
-        TermVariable name -> var name
-        TermWrap (WrappedTerm name _) -> nominal name
-        _ -> names
-      where
-        nominal name = if withNoms then S.insert name names else names
-        prim name = if withPrims then S.insert name names else names
-        var name = if withVars then S.insert name names else names
-
 toShortNames :: [Name] -> M.Map Name Name
 toShortNames original = M.fromList $ L.concat (renameGroup <$> M.toList groups)
   where
@@ -425,19 +402,3 @@ topologicalSortElements :: [Element] -> Either [[Name]] [Name]
 topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames False True True $ elementTerm e)
-
---typeDependencyNames :: Bool -> Bool -> Type -> S.Set Name
---typeDependencyNames withSchema excludeUnit typ = if withSchema
---  then S.union (freeVariablesInType typ) (typeNamesInType excludeUnit typ)
---  else freeVariablesInType typ
-
---typeNamesInType :: Bool -> Type -> S.Set Name
---typeNamesInType excludeUnit = foldOverType TraversalOrderPre addNames S.empty
---  where
---    addNames names typ = case typ of
---      TypeRecord (RowType tname _) -> if (not excludeUnit) || tname /= _Unit
---        then S.insert tname names
---        else names
---      TypeUnion (RowType tname _) -> S.insert tname names
---      TypeWrap (WrappedType tname _) -> S.insert tname names
---      _ -> names
