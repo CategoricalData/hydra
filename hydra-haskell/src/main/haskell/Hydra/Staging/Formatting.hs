@@ -15,25 +15,17 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-escapeWithUnderscore :: S.Set String -> String -> String
-escapeWithUnderscore reserved s = if S.member s reserved then s ++ "_" else s
-
-indentLines :: String -> String
-indentLines s = unlines (indent <$> lines s)
-  where
-    indent l = "    " ++ l
-
-javaStyleComment :: String -> String
-javaStyleComment s = "/**\n" ++ " * " ++ s ++ "\n */"
-
 nonAlnumToUnderscores :: String -> String
 nonAlnumToUnderscores = L.reverse . fst . L.foldl replace ([], False)
   where
-    replace (s, b) c = if isAlnum c
-      then (c:s, False)
-      else if b
-        then (s, True)
-        else ('_':s, True)
+    replace p c = if isAlnum c
+        then (c:s, False)
+        else if b
+          then (s, True)
+          else ('_':s, True)
+      where
+        s = fst p
+        b = snd p
     isAlnum c = (c >= 'A' && c <= 'Z')
       || (c >= 'a' && c <= 'z')
       || (c >= '0' && c <= '9')
@@ -45,7 +37,7 @@ stripLeadingAndTrailingWhitespace :: String -> String
 stripLeadingAndTrailingWhitespace s = L.dropWhile C.isSpace $ L.reverse $ L.dropWhile C.isSpace $ L.reverse s
 
 withCharacterAliases :: String -> String
-withCharacterAliases original = L.filter C.isAlphaNum $ L.concat $ alias <$> original
+withCharacterAliases original = L.filter C.isAlphaNum $ L.concat $ fmap alias original
   where
     alias c = Y.maybe [c] capitalize $ M.lookup (C.ord c) aliases
 
@@ -96,5 +88,5 @@ wrapLine maxlen = L.intercalate "\n" . helper []
         else helper ((init prefix):prev) $ suffix ++ L.drop maxlen rem
       where
         trunc = L.take maxlen rem
-        (prefix, suffix) = case span (\c -> c /= ' ' && c /= '\t') (reverse trunc) of
-                                      (restRev, firstRev) -> (reverse firstRev, reverse restRev)
+        (prefix, suffix) = case L.span (\c -> c /= ' ' && c /= '\t') (L.reverse trunc) of
+                                      (restRev, firstRev) -> (L.reverse firstRev, L.reverse restRev)

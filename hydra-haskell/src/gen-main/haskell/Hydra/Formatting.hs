@@ -6,6 +6,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Chars as Chars
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
+import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Data.Int as I
@@ -53,6 +54,27 @@ convertCasePascalToUpperSnake = (convertCase Mantle.CaseConventionPascal Mantle.
 -- | Decapitalize the first letter of a string
 decapitalize :: (String -> String)
 decapitalize = (mapFirstLetter Strings.toLower)
+
+escapeWithUnderscore :: (S.Set String -> String -> String)
+escapeWithUnderscore reserved s = (Logic.ifElse (Sets.member s reserved) (Strings.cat [
+  s,
+  "_"]) s)
+
+indentLines :: (String -> String)
+indentLines s =  
+  let indent = (\l -> Strings.cat [
+          "    ",
+          l])
+  in (Strings.unlines (Lists.map indent (Strings.lines s)))
+
+javaStyleComment :: (String -> String)
+javaStyleComment s = (Strings.cat [
+  Strings.cat [
+    Strings.cat [
+      "/**\n",
+      " * "],
+    s],
+  "\n */"])
 
 -- | A helper which maps the first letter of a string to another string
 mapFirstLetter :: ((String -> String) -> String -> String)
