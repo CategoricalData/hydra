@@ -22,7 +22,7 @@ elementReference (Namespaces (gname, H.ModuleName gmod) namespaces) name = case 
       Nothing -> simpleName local
       Just (H.ModuleName a) -> if ns == gname
          then simpleName escLocal
-         else rawName $ a ++ "." ++ escLocal
+         else rawName $ a ++ "." ++ sanitizeWithUnderscores S.empty local
   where
     qname = qualifyName name
     local = qualifiedNameLocal qname
@@ -37,12 +37,6 @@ hslambda v rhs = H.ExpressionLambda (H.LambdaExpression [H.PatternName $ rawName
 
 hslit :: H.Literal -> H.Expression
 hslit = H.ExpressionLiteral
-
-hsPrimitiveReference :: Name -> H.Name
-hsPrimitiveReference name = H.NameNormal $ H.QualifiedName [prefix] $ H.NamePart local
-  where
-    QualifiedName (Just (Namespace ns)) local = qualifyName name
-    prefix = H.NamePart $ capitalize $ L.last $ Strings.splitOn "." ns
 
 hsvar :: String -> H.Expression
 hsvar s = H.ExpressionVariable $ rawName s
