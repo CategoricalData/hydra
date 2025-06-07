@@ -522,10 +522,12 @@ _strings_fromList    = qname _hydra_lib_strings "fromList" :: Name
 _strings_intercalate = qname _hydra_lib_strings "intercalate" :: Name
 _strings_isEmpty     = qname _hydra_lib_strings "isEmpty" :: Name
 _strings_length      = qname _hydra_lib_strings "length" :: Name
+_strings_lines       = qname _hydra_lib_strings "lines" :: Name
 _strings_splitOn     = qname _hydra_lib_strings "splitOn" :: Name
 _strings_toList      = qname _hydra_lib_strings "toList" :: Name
 _strings_toLower     = qname _hydra_lib_strings "toLower" :: Name
 _strings_toUpper     = qname _hydra_lib_strings "toUpper" :: Name
+_strings_unlines     = qname _hydra_lib_strings "unlines" :: Name
 
 hydraLibStrings :: Library
 hydraLibStrings = standardLibrary _hydra_lib_strings [
@@ -535,7 +537,9 @@ hydraLibStrings = standardLibrary _hydra_lib_strings [
   prim2 _strings_intercalate Strings.intercalate [] string (list string) string,
   prim1 _strings_isEmpty     Strings.isEmpty     [] string boolean,
   prim1 _strings_length      Strings.length      [] string int32,
+  prim1 _strings_lines       Strings.lines       [] string (list string),
   prim2 _strings_splitOn     Strings.splitOn     [] string string (list string),
   prim1 _strings_toList      Strings.toList      [] string (list int32),
   prim1 _strings_toLower     Strings.toLower     [] string string,
-  prim1 _strings_toUpper     Strings.toUpper     [] string string]
+  prim1 _strings_toUpper     Strings.toUpper     [] string string,
+  prim1 _strings_unlines     Strings.unlines     [] (list string) string]

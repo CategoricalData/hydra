@@ -28,6 +28,9 @@ isEmpty = primitive1 _strings_isEmpty
 length :: TTerm String -> TTerm Int
 length = primitive1 _strings_length
 
+lines :: TTerm String -> TTerm [String]
+lines = primitive1 _strings_lines
+
 splitOn :: TTerm String -> TTerm String -> TTerm [String]
 splitOn = primitive2 _strings_splitOn
 
@@ -39,6 +42,9 @@ toLower = primitive1 _strings_toLower
 
 toUpper :: TTerm String -> TTerm String
 toUpper = primitive1 _strings_toUpper
+
+unlines :: TTerm [String] -> TTerm String
+unlines = primitive1 _strings_unlines
 
 -- Helpers
 
