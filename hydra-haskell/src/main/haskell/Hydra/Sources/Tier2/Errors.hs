@@ -3,6 +3,7 @@
 module Hydra.Sources.Tier2.Errors where
 
 -- Standard Tier-2 imports
+import qualified Hydra.Dsl.Coders          as Coders
 import qualified Hydra.Dsl.Compute         as Compute
 import qualified Hydra.Dsl.Core            as Core
 import qualified Hydra.Dsl.Graph           as Graph
@@ -80,7 +81,7 @@ traceSummaryDef = errorsDefinition "traceSummary" $
       (Lists.cons ("key/value pairs: ")
         (Lists.map (var "toLine") (Maps.toList (Compute.traceOther $ var "t")))),
     "toLine">:
-      lambda "pair" $ "\t" ++ (Core.unName $ (first @@ var "pair")) ++ ": " ++ (Io.showTerm (second @@ var "pair"))] $
+      lambda "pair" $ "\t" ++ (Core.unName $ (first $ var "pair")) ++ ": " ++ (Io.showTerm (second $ var "pair"))] $
     Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines"))
 
 unexpectedDef :: TElement (String -> String -> Flow s x)

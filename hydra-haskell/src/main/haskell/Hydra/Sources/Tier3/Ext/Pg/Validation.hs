@@ -157,7 +157,7 @@ validateGraphDef = validationDefinition "validateGraph" $
           (project _Vertex _Vertex_label @@ var "el")
           (project _GraphSchema _GraphSchema_vertices @@ var "schema"))]
       $ ref checkAllDef
-          @@ (Lists.map (var "checkVertex") $ Maps.values $ project _Graph _Graph_vertices @@ var "graph"),
+          @@ (Lists.map (var "checkVertex") $ Maps.elems $ project _Graph _Graph_vertices @@ var "graph"),
     "checkEdges">: lets [
         "checkEdge">: lambda "el" $ Optionals.maybe
           (just (ref edgeErrorDef @@ var "showValue" @@ var "el"
@@ -174,7 +174,7 @@ validateGraphDef = validationDefinition "validateGraph" $
         "labelForVertexId">: just $ lambda "i" $
           Optionals.map (project _Vertex _Vertex_label) (Maps.lookup (var "i") (project _Graph _Graph_vertices @@ var "graph"))]
       $ ref checkAllDef
-          @@ (Lists.map (var "checkEdge") $ Maps.values $ project _Graph _Graph_edges @@ var "graph")]
+          @@ (Lists.map (var "checkEdge") $ Maps.elems $ project _Graph _Graph_edges @@ var "graph")]
     $ ref checkAllDef @@ list [var "checkVertices", var "checkEdges"]
 
 validatePropertiesDef :: TElement (
@@ -199,8 +199,8 @@ validatePropertiesDef = validationDefinition "validateProperties" $
             (project _PropertyType _PropertyType_value @@ var "p"))
           (var "types")),
       "checkPair">: lambda "pair" $ lets [
-        "key">: first @@ var "pair",
-        "val">: second @@ var "pair"]
+        "key">: first $ var "pair",
+        "val">: second $ var "pair"]
         $ Optionals.maybe
           (just (ref prependDef @@ "Unexpected key" @@ (unwrap _PropertyKey @@ var "key")))
           (lambda "typ" $ Optionals.map

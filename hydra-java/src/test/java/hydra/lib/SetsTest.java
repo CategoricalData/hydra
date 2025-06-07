@@ -6,7 +6,7 @@ import hydra.lib.sets.FromList;
 import hydra.lib.sets.Insert;
 import hydra.lib.sets.IsEmpty;
 import hydra.lib.sets.Map;
-import hydra.lib.sets.Remove;
+import hydra.lib.sets.Delete;
 import hydra.lib.sets.Singleton;
 import hydra.lib.sets.Size;
 import hydra.lib.sets.ToList;
@@ -79,9 +79,9 @@ public class SetsTest {
         final HashSet<Integer> testSet = new HashSet<Integer>(Arrays.asList(1, 2, 3));
         final HashSet<Integer> emptySet = new HashSet<Integer>();
 
-        final Set<Integer> newSet1 = Remove.apply(4, testSet);
-        final Set<Integer> newSet2 = Remove.apply(3, testSet);
-        final Set<Integer> newSet3 = Remove.apply(1, emptySet);
+        final Set<Integer> newSet1 = Delete.apply(4, testSet);
+        final Set<Integer> newSet2 = Delete.apply(3, testSet);
+        final Set<Integer> newSet3 = Delete.apply(1, emptySet);
     
         assertEquals(testSet, new HashSet<Integer>(Arrays.asList(1, 2, 3)));
         assertEquals(emptySet, new HashSet<Integer>());

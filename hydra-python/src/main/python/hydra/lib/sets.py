@@ -6,6 +6,11 @@ from typing import Any
 from hydra.dsl.python import frozenlist
 
 
+def delete[A](x: A, s: frozenset[A]) -> frozenset[A]:
+"""Delete an element from a set."""
+return s - {x}
+
+
 def difference[A](s1: frozenset[A], s2: frozenset[A]) -> frozenset[A]:
     """Compute the difference of two sets."""
     return s1 - s2
@@ -44,11 +49,6 @@ def map[A, B](f: Callable[[A], B], s: frozenset[A]) -> frozenset[B]:
 def member[A](x: A, s: frozenset[A]) -> bool:
 """Check if an element is in a set."""
 return x in s
-
-
-def remove[A](x: A, s: frozenset[A]) -> frozenset[A]:
-    """Remove an element from a set."""
-    return s - {x}
 
 
 def singleton[A](x: A) -> frozenset[A]:

@@ -2,6 +2,7 @@
 
 package hydra.pg.validation;
 
+import hydra.lib.maps.Elems;
 import hydra.pg.model.EdgeLabel;
 import hydra.pg.model.VertexLabel;
 import hydra.util.Opt;
@@ -83,7 +84,7 @@ public interface Validation {
         ((schema)).vertices)).map((java.util.function.Function<hydra.pg.model.VertexType<T>, Opt<String>>) (s1 -> (((hydra.pg.validation.Validation.validateVertex((checkValue))).apply((showValue))).apply((s1))).apply((s0))))).orElse(Opt.of(((hydra.pg.validation.Validation.vertexError((showValue))).apply((s0))).apply((hydra.pg.validation.Validation.prepend("Unexpected label")).apply((((s0)).label).value)))));
       Opt<String> checkVertices = hydra.pg.validation.Validation.checkAll(hydra.lib.lists.Map.apply(
         (checkVertices_checkVertex),
-        hydra.lib.maps.Values.apply(((graph)).vertices)));
+        Elems.apply(((graph)).vertices)));
       Opt<Function<V, hydra.util.Opt<VertexLabel>>> checkEdges_labelForVertexId = Opt.of((java.util.function.Function<V, Opt<VertexLabel>>) (i -> hydra.lib.optionals.Map.apply(
         (java.util.function.Function<hydra.pg.model.Vertex<V>, hydra.pg.model.VertexLabel>) (v1 -> ((v1)).label),
         hydra.lib.maps.Lookup.apply(
@@ -94,7 +95,7 @@ public interface Validation {
         ((schema)).edges)).map((java.util.function.Function<hydra.pg.model.EdgeType<T>, Opt<String>>) (t -> ((((hydra.pg.validation.Validation.validateEdge((checkValue))).apply((showValue))).apply((checkEdges_labelForVertexId))).apply((t))).apply((el))))).orElse(Opt.of(((hydra.pg.validation.Validation.edgeError((showValue))).apply((el))).apply((hydra.pg.validation.Validation.prepend("Unexpected label")).apply((((el)).label).value)))));
       Opt<String> checkEdges = hydra.pg.validation.Validation.checkAll(hydra.lib.lists.Map.apply(
         (checkEdges_checkEdge),
-        hydra.lib.maps.Values.apply(((graph)).edges)));
+        Elems.apply(((graph)).edges)));
       return hydra.pg.validation.Validation.checkAll(java.util.Arrays.asList(
         (checkVertices),
         (checkEdges)));

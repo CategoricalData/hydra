@@ -3,6 +3,7 @@
 module Hydra.Sources.Tier2.Unification where
 
 -- Standard Tier-2 imports
+import qualified Hydra.Dsl.Coders          as Coders
 import qualified Hydra.Dsl.Compute         as Compute
 import qualified Hydra.Dsl.Core            as Core
 import qualified Hydra.Dsl.Graph           as Graph
@@ -29,7 +30,6 @@ import qualified Data.Map                  as M
 import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
-import Hydra.Dsl.Compute
 import qualified Hydra.Dsl.Typing as Typing
 import Hydra.Sources.Tier2.Rewriting
 import Hydra.Sources.Tier2.Substitution
@@ -181,4 +181,4 @@ variableOccursInTypeDef = unificationDefinition "variableOccursInType" $
     "tryType">: lambdas ["b", "typ"] $ match _Type (Just $ var "b") [
       _Type_variable>>: lambda "v" $ Logic.or (var "b") (Core.equalName_ (var "v") (var "var"))]
       @@ var "typ"] $
-    ref foldOverTypeDef @@ traversalOrderPre @@ var "tryType" @@ false
+    ref foldOverTypeDef @@ Coders.traversalOrderPre @@ var "tryType" @@ false

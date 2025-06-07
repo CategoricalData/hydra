@@ -74,6 +74,9 @@ safeHead (x:_) = Just x
 tail :: [a] -> [a]
 tail = L.tail
 
+take :: Int -> [a] -> [a]
+take = L.take
+
 zip :: [a] -> [b] -> [(a, b)]
 zip = L.zip
 

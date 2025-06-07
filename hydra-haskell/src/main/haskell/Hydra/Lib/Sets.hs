@@ -5,6 +5,9 @@ module Hydra.Lib.Sets where
 import qualified Data.Set as S
 
 
+delete :: Ord x => x -> S.Set x -> S.Set x
+delete = S.delete
+
 difference :: Ord x => S.Set x -> S.Set x -> S.Set x
 difference = S.difference
 
@@ -30,9 +33,6 @@ map f = S.fromList . fmap f . S.toList
 member :: Ord x => x -> S.Set x -> Bool
 member = S.member
 
-remove :: Ord x => x -> S.Set x -> S.Set x 
-remove = S.delete
-
 singleton :: x -> S.Set x
 singleton = S.singleton
 
@@ -44,3 +44,6 @@ toList = S.toList
 
 union :: Ord x => S.Set x -> S.Set x -> S.Set x
 union = S.union
+
+unions :: Ord x => [S.Set x] -> S.Set x
+unions = S.unions

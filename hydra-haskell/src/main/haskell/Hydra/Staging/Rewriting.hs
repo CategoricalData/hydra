@@ -11,7 +11,7 @@ import Hydra.Core
 import Hydra.CoreEncoding
 import Hydra.Graph
 import Hydra.Module
-import Hydra.Staging.Lexical
+import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Staging.Sorting
 import Hydra.Rewriting
@@ -426,18 +426,18 @@ topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames False True True $ elementTerm e)
 
-typeDependencyNames :: Bool -> Bool -> Type -> S.Set Name
-typeDependencyNames withSchema excludeUnit typ = if withSchema
-  then S.union (freeVariablesInType typ) (typeNamesInType excludeUnit typ)
-  else freeVariablesInType typ
+--typeDependencyNames :: Bool -> Bool -> Type -> S.Set Name
+--typeDependencyNames withSchema excludeUnit typ = if withSchema
+--  then S.union (freeVariablesInType typ) (typeNamesInType excludeUnit typ)
+--  else freeVariablesInType typ
 
-typeNamesInType :: Bool -> Type -> S.Set Name
-typeNamesInType excludeUnit = foldOverType TraversalOrderPre addNames S.empty
-  where
-    addNames names typ = case typ of
-      TypeRecord (RowType tname _) -> if (not excludeUnit) || tname /= _Unit
-        then S.insert tname names
-        else names
-      TypeUnion (RowType tname _) -> S.insert tname names
-      TypeWrap (WrappedType tname _) -> S.insert tname names
-      _ -> names
+--typeNamesInType :: Bool -> Type -> S.Set Name
+--typeNamesInType excludeUnit = foldOverType TraversalOrderPre addNames S.empty
+--  where
+--    addNames names typ = case typ of
+--      TypeRecord (RowType tname _) -> if (not excludeUnit) || tname /= _Unit
+--        then S.insert tname names
+--        else names
+--      TypeUnion (RowType tname _) -> S.insert tname names
+--      TypeWrap (WrappedType tname _) -> S.insert tname names
+--      _ -> names

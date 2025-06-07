@@ -190,6 +190,7 @@ _lists_pure        = qname _hydra_lib_lists "pure" :: Name
 _lists_reverse     = qname _hydra_lib_lists "reverse" :: Name
 _lists_safeHead    = qname _hydra_lib_lists "safeHead" :: Name
 _lists_tail        = qname _hydra_lib_lists "tail" :: Name
+_lists_take        = qname _hydra_lib_lists "take" :: Name
 _lists_zip         = qname _hydra_lib_lists "zip" :: Name
 _lists_zipWith     = qname _hydra_lib_lists "zipWith" :: Name
 
@@ -216,6 +217,7 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim1       _lists_reverse     Lists.reverse     ["x"] (list x) (list x),
     prim1       _lists_safeHead    Lists.safeHead    ["x"] (list x) (optional x),
     prim1       _lists_tail        Lists.tail        ["x"] (list x) (list x),
+    prim2       _lists_take        Lists.take        ["x"] int32 (list x) (list x),
     prim2       _lists_zip         Lists.zip         ["x", "y"] (list x) (list y) (list (pair x y)),
     prim3       _lists_zipWith     Lists.zipWith     ["x", "y", "z"] (function x $ function y z) (list x) (list y) (list z)]
   where
@@ -344,6 +346,7 @@ _hydra_lib_maps :: Namespace
 _hydra_lib_maps = Namespace "hydra.lib.maps"
 
 _maps_bimap         = qname _hydra_lib_maps "bimap" :: Name
+_maps_elems         = qname _hydra_lib_maps "elems" :: Name
 _maps_empty         = qname _hydra_lib_maps "empty" :: Name
 _maps_filter        = qname _hydra_lib_maps "filter" :: Name
 _maps_filterWithKey = qname _hydra_lib_maps "filterWithKey" :: Name
@@ -364,6 +367,7 @@ _maps_values        = qname _hydra_lib_maps "values" :: Name
 hydraLibMaps :: Library
 hydraLibMaps = standardLibrary _hydra_lib_maps [
     prim3 _maps_bimap         Maps.bimap     ["k1", "k2", "v1", "v2"] (function k1 k2) (function v1 v2) (Prims.map k1 v1) (Prims.map k2 v2),
+    prim1 _maps_elems         Maps.elems     ["k", "v"]               mapKv (list v),
     prim0 _maps_empty         Maps.empty     ["k", "v"]               mapKv,
     prim2 _maps_filter        Maps.filter    ["k", "v"]               (function v boolean) mapKv mapKv,
     prim2 _maps_filterWithKey Maps.filterWithKey ["k", "v"]           (function k (function v boolean)) mapKv mapKv,
@@ -379,8 +383,7 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
     prim2 _maps_singleton     Maps.singleton ["k", "v"]               k v mapKv,
     prim1 _maps_size          Maps.size      ["k", "v"]               mapKv int32,
     prim1 _maps_toList        Maps.toList    ["k", "v"]               mapKv (list $ pair k v),
-    prim2 _maps_union         Maps.union     ["k", "v"]               mapKv mapKv mapKv,
-    prim1 _maps_values        Maps.values    ["k", "v"]               mapKv (list v)]
+    prim2 _maps_union         Maps.union     ["k", "v"]               mapKv mapKv mapKv]
   where
     k = variable "k"
     k1 = variable "k1"
@@ -467,22 +470,24 @@ optionalsMapInterp fun opt = do
 _hydra_lib_sets :: Namespace
 _hydra_lib_sets = Namespace "hydra.lib.sets"
 
+_sets_delete       = qname _hydra_lib_sets "delete" :: Name
 _sets_difference   = qname _hydra_lib_sets "difference" :: Name
 _sets_empty        = qname _hydra_lib_sets "empty" :: Name
 _sets_fromList     = qname _hydra_lib_sets "fromList" :: Name
-_sets_insert       = qname _hydra_lib_sets "add" :: Name
+_sets_insert       = qname _hydra_lib_sets "insert" :: Name
 _sets_intersection = qname _hydra_lib_sets "intersection" :: Name
 _sets_isEmpty      = qname _hydra_lib_sets "isEmpty" :: Name
 _sets_map          = qname _hydra_lib_sets "map" :: Name
 _sets_member       = qname _hydra_lib_sets "member" :: Name
-_sets_remove       = qname _hydra_lib_sets "remove" :: Name
 _sets_singleton    = qname _hydra_lib_sets "singleton" :: Name
 _sets_size         = qname _hydra_lib_sets "size" :: Name
 _sets_toList       = qname _hydra_lib_sets "toList" :: Name
 _sets_union        = qname _hydra_lib_sets "union" :: Name
+_sets_unions       = qname _hydra_lib_sets "unions" :: Name
 
 hydraLibSets :: Library
 hydraLibSets = standardLibrary _hydra_lib_sets [
+    prim2 _sets_delete       Sets.delete       ["x"]      x (set x) (set x),
     prim2 _sets_difference   Sets.difference   ["x"]      (set x) (set x) (set x),
     prim0 _sets_empty        Sets.empty        ["x"]      (set x),
     prim1 _sets_fromList     Sets.fromList     ["x"]      (list x) (set x),
@@ -491,11 +496,11 @@ hydraLibSets = standardLibrary _hydra_lib_sets [
     prim1 _sets_isEmpty      Sets.isEmpty      ["x"]      (set x) boolean,
     prim2 _sets_map          Sets.map          ["x", "y"] (function x y) (set x) (set y),
     prim2 _sets_member       Sets.member       ["x"]      x (set x) boolean,
-    prim2 _sets_remove       Sets.remove       ["x"]      x (set x) (set x),
     prim1 _sets_singleton    Sets.singleton    ["x"]      x (set x),
     prim1 _sets_size         Sets.size         ["x"]      (set x) int32,
     prim1 _sets_toList       Sets.toList       ["x"]      (set x) (list x),
-    prim2 _sets_union        Sets.union        ["x"]      (set x) (set x) (set x)]
+    prim2 _sets_union        Sets.union        ["x"]      (set x) (set x) (set x),
+    prim1 _sets_unions       Sets.unions       ["x"]      (list $ set x) (set x)]
   where
     x = variable "x"
     y = variable "y"

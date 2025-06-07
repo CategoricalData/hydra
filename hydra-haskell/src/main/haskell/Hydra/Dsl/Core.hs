@@ -110,6 +110,15 @@ fieldTypeName ft = Phantoms.project _FieldType _FieldType_name @@ ft
 fieldTypeType :: TTerm FieldType -> TTerm Type
 fieldTypeType ft = Phantoms.project _FieldType _FieldType_type @@ ft
 
+floatTypeBigfloat :: TTerm FloatType
+floatTypeBigfloat = unitVariant _FloatType _FloatType_bigfloat
+
+floatTypeFloat32 :: TTerm FloatType
+floatTypeFloat32 = unitVariant _FloatType _FloatType_float32
+
+floatTypeFloat64 :: TTerm FloatType
+floatTypeFloat64 = unitVariant _FloatType _FloatType_float64
+
 floatValueFloat32 :: TTerm Float -> TTerm FloatValue
 floatValueFloat32 = inject _FloatValue _FloatValue_float32
 
@@ -158,6 +167,12 @@ injectionTypeName inj = Phantoms.project _Injection _Injection_typeName @@ inj
 injectionField :: TTerm Injection -> TTerm Field
 injectionField inj = Phantoms.project _Injection _Injection_field @@ inj
 
+integerTypeBigint :: TTerm IntegerType
+integerTypeBigint = unitVariant _IntegerType _IntegerType_bigint
+
+integerTypeInt8 :: TTerm IntegerType
+integerTypeInt8 = unitVariant _IntegerType _IntegerType_int8
+
 integerTypeInt16 :: TTerm IntegerType
 integerTypeInt16 = unitVariant _IntegerType _IntegerType_int16
 
@@ -166,6 +181,15 @@ integerTypeInt32 = unitVariant _IntegerType _IntegerType_int32
 
 integerTypeInt64 :: TTerm IntegerType
 integerTypeInt64 = unitVariant _IntegerType _IntegerType_int64
+
+integerTypeUint8 :: TTerm IntegerType
+integerTypeUint8 = unitVariant _IntegerType _IntegerType_uint8
+
+integerTypeUint16 :: TTerm IntegerType
+integerTypeUint16 = unitVariant _IntegerType _IntegerType_uint16
+
+integerTypeUint32 :: TTerm IntegerType
+integerTypeUint32 = unitVariant _IntegerType _IntegerType_uint32
 
 integerTypeUint64 :: TTerm IntegerType
 integerTypeUint64 = unitVariant _IntegerType _IntegerType_uint64
@@ -237,6 +261,9 @@ literalInteger = variant _Literal _Literal_integer
 
 literalString :: TTerm String -> TTerm Literal
 literalString = variant _Literal _Literal_string
+
+literalTypeBinary :: TTerm LiteralType
+literalTypeBinary = unitVariant _LiteralType _LiteralType_binary
 
 literalTypeBoolean :: TTerm LiteralType
 literalTypeBoolean = unitVariant _LiteralType _LiteralType_boolean
@@ -398,6 +425,9 @@ typeAnnotated = variant _Type _Type_annotated
 
 typeApplication :: TTerm ApplicationType -> TTerm Type
 typeApplication = variant _Type _Type_application
+
+typeForall :: TTerm ForallType -> TTerm Type
+typeForall = variant _Type _Type_forall
 
 typeFunction :: TTerm FunctionType -> TTerm Type
 typeFunction = variant _Type _Type_function

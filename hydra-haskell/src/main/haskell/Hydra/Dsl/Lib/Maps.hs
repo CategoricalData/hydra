@@ -11,6 +11,9 @@ import Data.Map
 bimap :: TTerm (k1 -> k2) -> TTerm (v1 -> v2) -> TTerm (Map k1 v1) -> TTerm (Map k2 v2)
 bimap = primitive3 _maps_bimap
 
+elems :: TTerm (Map k v) -> TTerm [v]
+elems = primitive1 _maps_elems
+
 empty :: TTerm (Map k v)
 empty = primitive _maps_empty
 
@@ -55,6 +58,3 @@ toList = primitive1 _maps_toList
 
 union :: TTerm (Map k v) -> TTerm (Map k v) -> TTerm (Map k v)
 union = primitive2 _maps_union
-
-values :: TTerm (Map k v) -> TTerm [v]
-values = primitive1 _maps_values

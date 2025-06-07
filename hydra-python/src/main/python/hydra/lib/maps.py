@@ -13,6 +13,11 @@ def bimap[K1, K2, V1, V2](
     return FrozenDict({f(k): g(v) for k, v in mapping.items()})
 
 
+def elems[V](mapping: Mapping[Any, V]) -> frozenlist[V]:
+    """Get the values of a map."""
+    return tuple(mapping.values())
+
+
 def empty[K, V]():
     """Create an empty map."""
     return FrozenDict[K, V]()
@@ -73,8 +78,3 @@ def size(mapping: Mapping[Any, Any]) -> int:
 def to_list[K, V](mapping: Mapping[K, V]) -> frozenlist[tuple[K, V]]:
     """Convert a map to a list of key-value pairs."""
     return tuple(mapping.items())
-
-
-def values[V](mapping: Mapping[Any, V]) -> frozenlist[V]:
-    """Get the values of a map."""
-    return tuple(mapping.values())

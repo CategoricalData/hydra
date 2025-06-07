@@ -40,6 +40,3 @@ traceOther t = project _Trace _Trace_other @@ t
 
 unFlow :: TTerm (Flow s x) -> TTerm s -> TTerm Trace -> TTerm (FlowState s x)
 unFlow f s t = unwrap _Flow @@ f @@ s @@ t
-
-traversalOrderPre = unitVariant _TraversalOrder _TraversalOrder_pre
-traversalOrderPost = unitVariant _TraversalOrder _TraversalOrder_post

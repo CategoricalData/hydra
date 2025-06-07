@@ -9,7 +9,7 @@ import Hydra.Graph
 import Hydra.Strip
 import Hydra.Rewriting
 import Hydra.Errors
-import Hydra.Staging.Lexical
+import Hydra.Lexical
 import qualified Hydra.Lib.Flows as Flows
 
 import Prelude hiding (map)
