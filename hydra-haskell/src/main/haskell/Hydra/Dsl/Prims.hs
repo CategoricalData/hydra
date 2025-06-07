@@ -47,6 +47,12 @@ boolean = TermCoder Types.boolean $ Coder encode decode
     encode = Expect.boolean
     decode = pure . Terms.boolean
 
+floatValue :: TermCoder FloatValue
+floatValue = TermCoder (TypeVariable _FloatValue) $ Coder encode decode
+  where
+    encode = Expect.floatValue
+    decode = pure . Terms.float
+
 float32 :: TermCoder Float
 float32 = TermCoder Types.float32 $ Coder encode decode
   where
@@ -71,6 +77,12 @@ function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType 
   where
     encode term = fail $ "cannot encode term to a function: " ++ showTerm term
     decode _ = fail $ "cannot decode functions to terms"
+
+integerValue :: TermCoder IntegerValue
+integerValue = TermCoder (TypeVariable _IntegerValue) $ Coder encode decode
+  where
+    encode = Expect.integerValue
+    decode = pure . Terms.integer
 
 int8 :: TermCoder Int8
 int8 = TermCoder Types.int8 $ Coder encode decode
@@ -101,6 +113,12 @@ list els = TermCoder (Types.list $ termCoderType els) $ Coder encode decode
   where
     encode = Expect.list (coderEncode $ termCoderCoder els)
     decode l = Terms.list <$> mapM (coderDecode $ termCoderCoder els) l
+
+literal :: TermCoder Literal
+literal = TermCoder (TypeVariable _Literal) $ Coder encode decode
+  where
+    encode = Expect.literal
+    decode = pure . Terms.literal
 
 map :: Ord k => TermCoder k -> TermCoder v -> TermCoder (M.Map k v)
 map keys values = TermCoder (Types.map (termCoderType keys) (termCoderType values)) $ Coder encode decode
@@ -216,7 +234,7 @@ term = TermCoder (TypeVariable _Term) $ Coder encode decode
     encode = pure
     decode = pure
 
-type_ :: TermCoder (Type)
+type_ :: TermCoder Type
 type_ = TermCoder (TypeVariable _Type) $ Coder encode decode
   where
     encode = coreDecodeType

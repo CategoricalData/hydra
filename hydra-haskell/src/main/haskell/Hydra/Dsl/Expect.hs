@@ -214,6 +214,9 @@ floatLiteral lit = case lit of
   LiteralFloat v -> pure v
   _ -> unexpected "floating-point value" $ show lit
 
+floatValue :: Term -> Flow Graph FloatValue
+floatValue t = literal t >>= floatLiteral
+
 -- | Extract a 32-bit floating-point value from a term
 -- Example: float32 term
 float32 :: Term -> Flow Graph Float
@@ -237,6 +240,9 @@ float64Value :: FloatValue -> Flow Graph Double
 float64Value v = case v of
   FloatValueFloat64 f -> pure f
   _ -> unexpected "float64" $ show v
+
+integerValue :: Term -> Flow Graph IntegerValue
+integerValue t = literal t >>= integerLiteral
 
 -- * Collections
 

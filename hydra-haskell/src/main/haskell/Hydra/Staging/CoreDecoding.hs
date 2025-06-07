@@ -27,6 +27,7 @@ import Hydra.Lexical
 import Hydra.Staging.Rewriting
 import Hydra.Rewriting
 import Hydra.Errors
+import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
@@ -50,7 +51,7 @@ coreDecodeFieldType = matchRecord $ \m -> FieldType
 coreDecodeFieldTypes :: Term -> Flow Graph [FieldType]
 coreDecodeFieldTypes term = case fullyStripTerm term of
   TermList els -> CM.mapM coreDecodeFieldType els
-  _ -> unexpected "list" $ show term
+  _ -> unexpected "list" $ Io.showTerm term
 
 coreDecodeFloatType :: Term -> Flow Graph FloatType
 coreDecodeFloatType = matchEnum _FloatType [
@@ -143,7 +144,7 @@ coreDecodeTypeScheme = matchRecord $ \m -> TypeScheme
 
 getField :: M.Map Name (Term) -> Name -> (Term -> Flow Graph b) -> Flow Graph b
 getField m fname decode = case M.lookup fname m of
-  Nothing -> fail $ "expected field " ++ show fname ++ " not found"
+  Nothing -> fail $ "expected field " ++ unName fname ++ " not found"
   Just val -> decode val
 
 matchEnum :: Name -> [(Name, b)] -> Term -> Flow Graph b
@@ -152,7 +153,7 @@ matchEnum tname = matchUnion tname . fmap (uncurry matchUnitField)
 matchRecord :: (M.Map Name (Term) -> Flow Graph b) -> Term -> Flow Graph b
 matchRecord decode term = case fullyStripTerm term of
   TermRecord (Record _ fields) -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
-  _ -> unexpected "record" $ show term
+  _ -> unexpected "record" $ Io.showTerm term
 
 matchUnion :: Name -> [(Name, Term -> Flow Graph b)] -> Term -> Flow Graph b
 matchUnion tname pairs term = case fullyStripTerm term of
@@ -161,10 +162,10 @@ matchUnion tname pairs term = case fullyStripTerm term of
       matchUnion tname pairs (elementTerm el)
     TermUnion (Injection tname' (Field fname val)) -> if tname' == tname
       then case M.lookup fname mapping of
-        Nothing -> fail $ "no matching case for field " ++ show fname
+        Nothing -> fail $ "no matching case for field " ++ unName fname
         Just f -> f val
-      else unexpected ("injection for type " ++ show tname) $ show term
-    t -> unexpected ("union with one of {" ++ L.intercalate ", " (unName . fst <$> pairs) ++ "}") $ show t
+      else unexpected ("injection for type " ++ unName tname) $ Io.showTerm term
+    t -> unexpected ("union with one of {" ++ L.intercalate ", " (unName . fst <$> pairs) ++ "}") $ Io.showTerm t
   where
     mapping = M.fromList pairs
 
