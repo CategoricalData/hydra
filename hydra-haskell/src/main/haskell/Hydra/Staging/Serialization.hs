@@ -123,10 +123,10 @@ indent = customIndent doubleSpace
 indentBlock :: [Expr] -> Expr
 indentBlock = customIndentBlock doubleSpace
 
-indentLines :: Bool -> [Expr] -> Expr
-indentLines doubleSp els = ifx topOp (cst "") (if doubleSp then doubleNewlineSep els else newlineSep els)
-  where
-    topOp = Op (sym "") (Padding WsNone (WsBreakAndIndent doubleSpace)) (Precedence 0) AssociativityNone
+--indentLines :: Bool -> [Expr] -> Expr
+--indentLines doubleSp els = ifx topOp (cst "") (if doubleSp then doubleNewlineSep els else newlineSep els)
+--  where
+--    topOp = Op (sym "") (Padding WsNone (WsBreakAndIndent doubleSpace)) (Precedence 0) AssociativityNone
 
 indentSubsequentLines :: String -> Expr -> Expr
 indentSubsequentLines idt e = ExprIndent $ IndentedExpression (IndentStyleSubsequentLines idt) e
