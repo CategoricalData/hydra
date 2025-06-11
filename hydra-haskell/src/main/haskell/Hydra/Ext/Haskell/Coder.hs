@@ -79,7 +79,7 @@ encodeFunction namespaces fun = case fun of
         then return $ hsvar $ if idx == 0 then "fst" else "snd"
         else fail "Eliminations for tuples of arity > 2 are not supported yet in the Haskell coder"
       EliminationRecord (Projection dn fname) -> return $ H.ExpressionVariable $ recordFieldReference namespaces dn fname
-      EliminationUnion (CaseStatement dn def fields) -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
+      EliminationUnion (CaseStatement dn def fields) -> hslambda (rawName "x") <$> caseExpr -- note: could use a lambda case here
         where
           caseExpr = do
             rt <- withSchemaContext $ requireUnionType dn
@@ -106,7 +106,7 @@ encodeFunction namespaces fun = case fun of
             let lhs = applicationPattern hname args
             rhs <- H.CaseRhs <$> encodeTerm namespaces rhsTerm
             return $ H.Alternative lhs rhs Nothing
-    FunctionLambda (Lambda (Name v) _ body) -> hslambda v <$> encodeTerm namespaces body
+    FunctionLambda (Lambda v _ body) -> hslambda (elementReference namespaces v) <$> encodeTerm namespaces body
     FunctionPrimitive name -> pure $ H.ExpressionVariable $ elementReference namespaces name
 
 encodeLiteral :: Literal -> Flow Graph H.Expression
@@ -177,7 +177,7 @@ encodeTerm namespaces term = do
       case fullyStripTerm ft of
         TermRecord (Record _ []) -> pure lhs
         _ -> hsapp lhs <$> encode ft
-    TermVariable name -> pure $ H.ExpressionVariable $ elementReference namespaces name --pure $ hsvar v
+    TermVariable name -> pure $ H.ExpressionVariable $ elementReference namespaces name
     t -> fail $ "unexpected term: " ++ show t
   where
     encode = encodeTerm namespaces
