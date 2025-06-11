@@ -1236,10 +1236,10 @@ data ExecutableDirectiveLocation =
   ExecutableDirectiveLocationMUTATION  |
   ExecutableDirectiveLocationSUBSCRIPTION  |
   ExecutableDirectiveLocationFIELD  |
-  ExecutableDirectiveLocationFRAGMENTLowbarDEFINITION  |
-  ExecutableDirectiveLocationFRAGMENTLowbarSPREAD  |
-  ExecutableDirectiveLocationINLINELowbarFRAGMENT  |
-  ExecutableDirectiveLocationVARIABLELowbarDEFINITION 
+  ExecutableDirectiveLocationFRAGMENTlowbarDEFINITION  |
+  ExecutableDirectiveLocationFRAGMENTlowbarSPREAD  |
+  ExecutableDirectiveLocationINLINElowbarFRAGMENT  |
+  ExecutableDirectiveLocationVARIABLElowbarDEFINITION 
   deriving (Eq, Ord, Read, Show)
 
 _ExecutableDirectiveLocation = (Core.Name "hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation")
@@ -1252,26 +1252,26 @@ _ExecutableDirectiveLocation_sUBSCRIPTION = (Core.Name "sUBSCRIPTION")
 
 _ExecutableDirectiveLocation_fIELD = (Core.Name "fIELD")
 
-_ExecutableDirectiveLocation_fRAGMENTLowbarDEFINITION = (Core.Name "fRAGMENTLowbarDEFINITION")
+_ExecutableDirectiveLocation_fRAGMENTlowbarDEFINITION = (Core.Name "fRAGMENTlowbarDEFINITION")
 
-_ExecutableDirectiveLocation_fRAGMENTLowbarSPREAD = (Core.Name "fRAGMENTLowbarSPREAD")
+_ExecutableDirectiveLocation_fRAGMENTlowbarSPREAD = (Core.Name "fRAGMENTlowbarSPREAD")
 
-_ExecutableDirectiveLocation_iNLINELowbarFRAGMENT = (Core.Name "iNLINELowbarFRAGMENT")
+_ExecutableDirectiveLocation_iNLINElowbarFRAGMENT = (Core.Name "iNLINElowbarFRAGMENT")
 
-_ExecutableDirectiveLocation_vARIABLELowbarDEFINITION = (Core.Name "vARIABLELowbarDEFINITION")
+_ExecutableDirectiveLocation_vARIABLElowbarDEFINITION = (Core.Name "vARIABLElowbarDEFINITION")
 
 data TypeSystemDirectiveLocation = 
   TypeSystemDirectiveLocationSCHEMA  |
   TypeSystemDirectiveLocationSCALAR  |
   TypeSystemDirectiveLocationOBJECT  |
-  TypeSystemDirectiveLocationFIELDLowbarDEFINITION  |
-  TypeSystemDirectiveLocationARGUMENTLowbarDEFINITION  |
+  TypeSystemDirectiveLocationFIELDlowbarDEFINITION  |
+  TypeSystemDirectiveLocationARGUMENTlowbarDEFINITION  |
   TypeSystemDirectiveLocationINTERFACE  |
   TypeSystemDirectiveLocationUNION  |
   TypeSystemDirectiveLocationENUM  |
-  TypeSystemDirectiveLocationENUMLowbarVALUE  |
-  TypeSystemDirectiveLocationINPUTLowbarOBJECT  |
-  TypeSystemDirectiveLocationINPUTLowbarFIELDLowbarDEFINITION 
+  TypeSystemDirectiveLocationENUMlowbarVALUE  |
+  TypeSystemDirectiveLocationINPUTlowbarOBJECT  |
+  TypeSystemDirectiveLocationINPUTlowbarFIELDlowbarDEFINITION 
   deriving (Eq, Ord, Read, Show)
 
 _TypeSystemDirectiveLocation = (Core.Name "hydra.ext.org.graphql.syntax.TypeSystemDirectiveLocation")
@@ -1282,9 +1282,9 @@ _TypeSystemDirectiveLocation_sCALAR = (Core.Name "sCALAR")
 
 _TypeSystemDirectiveLocation_oBJECT = (Core.Name "oBJECT")
 
-_TypeSystemDirectiveLocation_fIELDLowbarDEFINITION = (Core.Name "fIELDLowbarDEFINITION")
+_TypeSystemDirectiveLocation_fIELDlowbarDEFINITION = (Core.Name "fIELDlowbarDEFINITION")
 
-_TypeSystemDirectiveLocation_aRGUMENTLowbarDEFINITION = (Core.Name "aRGUMENTLowbarDEFINITION")
+_TypeSystemDirectiveLocation_aRGUMENTlowbarDEFINITION = (Core.Name "aRGUMENTlowbarDEFINITION")
 
 _TypeSystemDirectiveLocation_iNTERFACE = (Core.Name "iNTERFACE")
 
@@ -1292,8 +1292,8 @@ _TypeSystemDirectiveLocation_uNION = (Core.Name "uNION")
 
 _TypeSystemDirectiveLocation_eNUM = (Core.Name "eNUM")
 
-_TypeSystemDirectiveLocation_eNUMLowbarVALUE = (Core.Name "eNUMLowbarVALUE")
+_TypeSystemDirectiveLocation_eNUMlowbarVALUE = (Core.Name "eNUMlowbarVALUE")
 
-_TypeSystemDirectiveLocation_iNPUTLowbarOBJECT = (Core.Name "iNPUTLowbarOBJECT")
+_TypeSystemDirectiveLocation_iNPUTlowbarOBJECT = (Core.Name "iNPUTlowbarOBJECT")
 
-_TypeSystemDirectiveLocation_iNPUTLowbarFIELDLowbarDEFINITION = (Core.Name "iNPUTLowbarFIELDLowbarDEFINITION")
+_TypeSystemDirectiveLocation_iNPUTlowbarFIELDlowbarDEFINITION = (Core.Name "iNPUTlowbarFIELDlowbarDEFINITION")

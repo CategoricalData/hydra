@@ -4,7 +4,7 @@ module Hydra.Ext.Protobuf.Serde (
   writeProtoFile) where
 
 import Hydra.Staging.Serialization
-import Hydra.Staging.Formatting
+import Hydra.Formatting
 import qualified Hydra.Ast as CT
 import qualified Hydra.Ext.Protobuf.Proto3 as P3
 

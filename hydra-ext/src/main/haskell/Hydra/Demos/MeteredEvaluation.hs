@@ -30,7 +30,7 @@ testModule = Module testNs elements [hydraMantleModule] [] Nothing
   where
     test local tterm = TElement (unqualifyName $ QualifiedName (Just testNs) local) tterm
     elements = [
-        el $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 @@ int32 42)),
+        el $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 $ int32 42)),
         el $ test "describeType" $ ref describeTypeDef @@ (TTerm $ coreEncodeType $ Types.list $ Types.int32)]
 
 demoMeteredEvaluation :: IO ()

@@ -30,6 +30,9 @@ bool = TTerm . Terms.boolean
 boolean :: Bool -> TTerm Bool
 boolean = bool
 
+char :: Char -> TTerm Int
+char = TTerm . Terms.char
+
 double :: Double -> TTerm Double
 double = float64
 

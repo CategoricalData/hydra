@@ -24,6 +24,12 @@ concat2 = primitive2 _lists_concat2
 cons :: TTerm a -> TTerm [a] -> TTerm [a]
 cons = primitive2 _lists_cons
 
+drop :: TTerm Int -> TTerm [a] -> TTerm [a]
+drop = primitive2 _lists_drop
+
+dropWhile :: TTerm (a -> Bool) -> TTerm [a] -> TTerm [a]
+dropWhile = primitive2 _lists_dropWhile
+
 elem :: Eq a => TTerm a -> TTerm [a] -> TTerm Bool
 elem = primitive2 _lists_elem
 
@@ -35,6 +41,9 @@ foldl = primitive3 _lists_foldl
 
 head :: TTerm [a] -> TTerm a
 head = primitive1 _lists_head
+
+init :: TTerm [a] -> TTerm [a]
+init = primitive1 _lists_init
 
 intercalate :: TTerm [a] -> TTerm [[a]] -> TTerm [a]
 intercalate = primitive2 _lists_intercalate
@@ -65,6 +74,9 @@ reverse = primitive1 _lists_reverse
 
 safeHead :: TTerm [a] -> TTerm (Maybe a)
 safeHead = primitive1 _lists_safeHead
+
+span :: TTerm (a -> Bool) -> TTerm [a] -> TTerm ([a], [a])
+span = primitive2 _lists_span
 
 tail :: TTerm [a] -> TTerm [a]
 tail = primitive1 _lists_tail

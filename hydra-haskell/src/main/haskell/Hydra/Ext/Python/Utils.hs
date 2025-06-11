@@ -1,6 +1,6 @@
 module Hydra.Ext.Python.Utils where
 
-import Hydra.Staging.Formatting
+import Hydra.Formatting
 import qualified Hydra.Ext.Python.Syntax as Py
 
 import qualified Data.List as L

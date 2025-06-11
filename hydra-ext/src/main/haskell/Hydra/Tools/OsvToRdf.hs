@@ -11,7 +11,7 @@ import Hydra.Ext.Json.Serde
 import Hydra.Ext.Json.Coder
 import Hydra.Staging.CoreDecoding
 import Hydra.Codegen
-import Hydra.Staging.Formatting
+import Hydra.Formatting
 import qualified Hydra.Json as Json
 import qualified Hydra.Ext.Shacl.Coder as Shacl
 import Hydra.Ext.Rdf.Serde

@@ -62,7 +62,9 @@ _chars_toUpper    = qname _hydra_lib_chars "toUpper" :: Name
 
 hydraLibChars :: Library
 hydraLibChars = standardLibrary _hydra_lib_strings [
+  prim1 _chars_isAlphaNum Chars.isAlphaNum [] int32 boolean,
   prim1 _chars_isLower Chars.isLower [] int32 boolean,
+  prim1 _chars_isSpace Chars.isSpace [] int32 boolean,
   prim1 _chars_isUpper Chars.isUpper [] int32 boolean,
   prim1 _chars_toLower Chars.toLower [] int32 int32,
   prim1 _chars_toUpper Chars.toUpper [] int32 int32]
@@ -181,10 +183,13 @@ _lists_bind        = qname _hydra_lib_lists "bind" :: Name
 _lists_concat      = qname _hydra_lib_lists "concat" :: Name
 _lists_concat2     = qname _hydra_lib_lists "concat2" :: Name
 _lists_cons        = qname _hydra_lib_lists "cons" :: Name
+_lists_drop        = qname _hydra_lib_lists "drop" :: Name
+_lists_dropWhile   = qname _hydra_lib_lists "dropWhile" :: Name
 _lists_elem        = qname _hydra_lib_lists "elem" :: Name
 _lists_filter      = qname _hydra_lib_lists "filter" :: Name
 _lists_foldl       = qname _hydra_lib_lists "foldl" :: Name
 _lists_head        = qname _hydra_lib_lists "head" :: Name
+_lists_init        = qname _hydra_lib_lists "init" :: Name
 _lists_intercalate = qname _hydra_lib_lists "intercalate" :: Name
 _lists_intersperse = qname _hydra_lib_lists "intersperse" :: Name
 _lists_last        = qname _hydra_lib_lists "last" :: Name
@@ -209,10 +214,13 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim1       _lists_concat      Lists.concat       ["x"] (list (list x)) (list x),
     prim2       _lists_concat2     Lists.concat2      ["x"] (list x) (list x) (list x),
     prim2       _lists_cons        Lists.cons         ["x"] x (list x) (list x),
+    prim2       _lists_drop        Lists.drop         ["x"] int32 (list x) (list x),
+    prim2Interp _lists_dropWhile   Nothing            ["x"] (function x boolean) (list x) (list x),
     prim2       _lists_elem        Lists.elem         ["x"] x (list x) boolean,
     prim2       _lists_filter      Lists.filter       ["x"] (function x boolean) (list x) (list x),
     prim3       _lists_foldl       Lists.foldl        ["x", "y"] (function y (function x y)) y (list x) y,
     prim1       _lists_head        Lists.head         ["x"] (list x) x,
+    prim1       _lists_init        Lists.init         ["x"] (list x) (list x),
     prim2       _lists_intercalate Lists.intercalate  ["x"] (list x) (list (list x)) (list x),
     prim2       _lists_intersperse Lists.intersperse  ["x"] x (list x) (list x),
     prim1       _lists_last        Lists.last         ["x"] (list x) x,

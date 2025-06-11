@@ -28,6 +28,12 @@ concat2 l1 l2 = l1 ++ l2
 cons :: a -> [a] -> [a]
 cons = (:)
 
+drop :: Int -> [a] -> [a]
+drop = L.drop
+
+dropWhile :: (a -> Bool) -> [a] -> [a]
+dropWhile = L.dropWhile
+
 elem :: Eq a => a -> [a] -> Bool
 elem = L.elem
 
@@ -39,6 +45,9 @@ foldl = L.foldl
 
 head :: [a] -> a
 head = L.head
+
+init :: [a] -> [a]
+init = L.init
 
 intercalate :: [a] -> [[a]] -> [a]
 intercalate = L.intercalate
@@ -70,6 +79,9 @@ reverse = L.reverse
 safeHead :: [a] -> Maybe a
 safeHead [] = Nothing
 safeHead (x:_) = Just x
+
+span :: (a -> Bool) -> [a] -> ([a], [a])
+span = L.span
 
 tail :: [a] -> [a]
 tail = L.tail
