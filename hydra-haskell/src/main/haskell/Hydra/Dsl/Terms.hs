@@ -8,6 +8,7 @@ import qualified Hydra.Dsl.Literals as Literals
 
 import Prelude hiding (map, product, sum)
 import Data.Int
+import qualified Data.Char as C
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -136,6 +137,9 @@ bigint = literal . Literals.bigint
 -- Example: boolean True
 boolean :: Bool -> Term
 boolean = literal . Literals.boolean
+
+char :: Char -> Term
+char = int32 . C.ord
 
 -- | Boolean false literal
 false :: Term

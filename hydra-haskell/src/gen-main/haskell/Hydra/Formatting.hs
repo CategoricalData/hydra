@@ -4,8 +4,11 @@ module Hydra.Formatting where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Chars as Chars
+import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
+import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
@@ -82,3 +85,70 @@ mapFirstLetter mapping s =
   let firstLetter = (mapping (Strings.fromList (Lists.pure (Lists.head list)))) 
       list = (Strings.toList s)
   in (Logic.ifElse (Strings.isEmpty s) s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))))
+
+nonAlnumToUnderscores :: (String -> String)
+nonAlnumToUnderscores input =  
+  let isAlnum = (\c -> Logic.or (Logic.and (Equality.gteInt32 c 65) (Equality.lteInt32 c 90)) (Logic.or (Logic.and (Equality.gteInt32 c 97) (Equality.lteInt32 c 122)) (Logic.and (Equality.gteInt32 c 48) (Equality.lteInt32 c 57)))) 
+      replace = (\p -> \c ->  
+              let s = (fst p) 
+                  b = (snd p)
+              in (Logic.ifElse (isAlnum c) (Lists.cons c s, False) (Logic.ifElse b (s, True) (Lists.cons 95 s, True))))
+      result = (Lists.foldl replace ([], False) (Strings.toList input))
+  in (Strings.fromList (Lists.reverse (fst result)))
+
+sanitizeWithUnderscores :: (S.Set String -> String -> String)
+sanitizeWithUnderscores reserved s = (escapeWithUnderscore reserved (nonAlnumToUnderscores s))
+
+stripLeadingAndTrailingWhitespace :: (String -> String)
+stripLeadingAndTrailingWhitespace s = (Strings.fromList (Lists.dropWhile Chars.isSpace (Lists.reverse (Lists.dropWhile Chars.isSpace (Lists.reverse (Strings.toList s))))))
+
+withCharacterAliases :: (String -> String)
+withCharacterAliases original =  
+  let aliases = (Maps.fromList [
+          (32, "sp"),
+          (33, "excl"),
+          (34, "quot"),
+          (35, "num"),
+          (36, "dollar"),
+          (37, "percnt"),
+          (38, "amp"),
+          (39, "apos"),
+          (40, "lpar"),
+          (41, "rpar"),
+          (42, "ast"),
+          (43, "plus"),
+          (44, "comma"),
+          (45, "minus"),
+          (46, "period"),
+          (47, "sol"),
+          (58, "colon"),
+          (59, "semi"),
+          (60, "lt"),
+          (61, "equals"),
+          (62, "gt"),
+          (63, "quest"),
+          (64, "commat"),
+          (91, "lsqb"),
+          (92, "bsol"),
+          (93, "rsqb"),
+          (94, "circ"),
+          (95, "lowbar"),
+          (96, "grave"),
+          (123, "lcub"),
+          (124, "verbar"),
+          (125, "rcub"),
+          (126, "tilde")]) 
+      alias = (\c -> Optionals.fromMaybe (Lists.pure c) (Optionals.map Strings.toList (Maps.lookup c aliases)))
+  in (Strings.fromList (Lists.filter Chars.isAlphaNum (Lists.concat (Lists.map alias (Strings.toList original)))))
+
+-- | A simple soft line wrap which is suitable for code comments
+wrapLine :: (Int -> String -> String)
+wrapLine maxlen input =  
+  let helper = (\prev -> \rem_ ->  
+          let trunc = (Lists.take maxlen rem_) 
+              spanResult = (Lists.span (\c -> Logic.and (Logic.not (Equality.equalInt32 c 32)) (Logic.not (Equality.equalInt32 c 9))) (Lists.reverse trunc))
+              prefix = (Lists.reverse (snd spanResult))
+              suffix = (Lists.reverse (fst spanResult))
+          in (Logic.ifElse (Equality.lteInt32 (Lists.length rem_) maxlen) (Lists.reverse (Lists.cons rem_ prev)) (Logic.ifElse (Lists.null prefix) (helper (Lists.cons trunc prev) (Lists.drop maxlen rem_)) (helper (Lists.cons (Lists.init prefix) prev) (Lists.concat2 suffix (Lists.drop maxlen rem_))))))
+  in (Strings.fromList (Lists.intercalate [
+    10] (helper [] (Strings.toList input))))

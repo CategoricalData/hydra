@@ -5,7 +5,7 @@ import Hydra.Ext.Graphql.Language
 import Hydra.Ext.Graphql.Serde
 import qualified Hydra.Ext.Org.Graphql.Syntax as G
 import Hydra.Staging.Serialization
-import Hydra.Staging.Formatting
+import Hydra.Formatting
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

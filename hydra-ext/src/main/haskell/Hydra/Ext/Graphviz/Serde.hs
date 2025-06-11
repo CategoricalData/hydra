@@ -3,7 +3,7 @@ module Hydra.Ext.Graphviz.Serde where
 import qualified Hydra.Ext.Org.Graphviz.Dot as Dot
 import qualified Hydra.Ast as CT
 import Hydra.Staging.Serialization
-import Hydra.Staging.Formatting
+import Hydra.Formatting
 
 import qualified Data.List as L
 import qualified Data.Maybe as Y
