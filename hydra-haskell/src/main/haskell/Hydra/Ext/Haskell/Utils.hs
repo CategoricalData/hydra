@@ -32,8 +32,8 @@ elementReference (Namespaces (gname, H.ModuleName gmod) namespaces) name = case 
 hsapp :: H.Expression -> H.Expression -> H.Expression
 hsapp l r = H.ExpressionApplication $ H.ApplicationExpression l r
 
-hslambda :: String -> H.Expression -> H.Expression
-hslambda v rhs = H.ExpressionLambda (H.LambdaExpression [H.PatternName $ rawName v] rhs)
+hslambda :: H.Name -> H.Expression -> H.Expression
+hslambda name rhs = H.ExpressionLambda (H.LambdaExpression [H.PatternName name] rhs)
 
 hslit :: H.Literal -> H.Expression
 hslit = H.ExpressionLiteral
