@@ -7,6 +7,7 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.Arity,
   module Hydra.Sources.Tier2.CoreLanguage,
   module Hydra.Sources.Tier2.Errors,
+--  module Hydra.Sources.Tier2.Extract,
   module Hydra.Sources.Tier2.Flows,
   module Hydra.Sources.Tier2.Lexical,
   module Hydra.Sources.Tier2.Printing,
@@ -23,6 +24,7 @@ import Hydra.Sources.Tier2.Annotations
 import Hydra.Sources.Tier2.Arity
 import Hydra.Sources.Tier2.CoreLanguage
 import Hydra.Sources.Tier2.Errors
+import Hydra.Sources.Tier2.Extract
 import Hydra.Sources.Tier2.Flows
 import Hydra.Sources.Tier2.Lexical
 import Hydra.Sources.Tier2.Printing
@@ -61,6 +63,7 @@ tier2Modules = [
   hydraArityModule,
   hydraCoreLanguageModule,
   hydraErrorsModule,
+  hydraExtractModule,
   hydraFlowsModule,
   hydraLexicalModule,
   hydraPrintingModule,

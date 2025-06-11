@@ -195,6 +195,7 @@ _lists_null        = qname _hydra_lib_lists "null" :: Name
 _lists_pure        = qname _hydra_lib_lists "pure" :: Name
 _lists_reverse     = qname _hydra_lib_lists "reverse" :: Name
 _lists_safeHead    = qname _hydra_lib_lists "safeHead" :: Name
+_lists_span        = qname _hydra_lib_lists "span" :: Name
 _lists_tail        = qname _hydra_lib_lists "tail" :: Name
 _lists_take        = qname _hydra_lib_lists "take" :: Name
 _lists_zip         = qname _hydra_lib_lists "zip" :: Name
@@ -202,30 +203,31 @@ _lists_zipWith     = qname _hydra_lib_lists "zipWith" :: Name
 
 hydraLibLists :: Library
 hydraLibLists = standardLibrary _hydra_lib_lists [
-    prim2Interp _lists_apply       applyInterp       ["x", "y"] (list $ function x y) (list x) (list y),
-    prim2       _lists_at          Lists.at          ["x"] int32 (list x) x,
-    prim2Interp _lists_bind        bindInterp        ["x", "y"] (list x) (function x (list y)) (list y),
-    prim1       _lists_concat      Lists.concat      ["x"] (list (list x)) (list x),
-    prim2       _lists_concat2     Lists.concat2     ["x"] (list x) (list x) (list x),
-    prim2       _lists_cons        Lists.cons        ["x"] x (list x) (list x),
-    prim2       _lists_elem        Lists.elem        ["x"] x (list x) boolean,
-    prim2       _lists_filter      Lists.filter      ["x"] (function x boolean) (list x) (list x),
-    prim3       _lists_foldl       Lists.foldl       ["x", "y"] (function y (function x y)) y (list x) y,
-    prim1       _lists_head        Lists.head        ["x"] (list x) x,
-    prim2       _lists_intercalate Lists.intercalate ["x"] (list x) (list (list x)) (list x),
-    prim2       _lists_intersperse Lists.intersperse ["x"] x (list x) (list x),
-    prim1       _lists_last        Lists.last        ["x"] (list x) x,
-    prim1       _lists_length      Lists.length      ["x"] (list x) int32,
-    prim2Interp _lists_map         mapInterp         ["x", "y"] (function x y) (list x) (list y),
-    prim1       _lists_nub         Lists.nub         ["x"] (list x) (list x),
-    prim1       _lists_null        Lists.null        ["x"] (list x) boolean,
-    prim1       _lists_pure        Lists.pure        ["x"] x (list x),
-    prim1       _lists_reverse     Lists.reverse     ["x"] (list x) (list x),
-    prim1       _lists_safeHead    Lists.safeHead    ["x"] (list x) (optional x),
-    prim1       _lists_tail        Lists.tail        ["x"] (list x) (list x),
-    prim2       _lists_take        Lists.take        ["x"] int32 (list x) (list x),
-    prim2       _lists_zip         Lists.zip         ["x", "y"] (list x) (list y) (list (pair x y)),
-    prim3       _lists_zipWith     Lists.zipWith     ["x", "y", "z"] (function x $ function y z) (list x) (list y) (list z)]
+    prim2Interp _lists_apply       (Just applyInterp) ["x", "y"] (list $ function x y) (list x) (list y),
+    prim2       _lists_at          Lists.at           ["x"] int32 (list x) x,
+    prim2Interp _lists_bind        (Just bindInterp)  ["x", "y"] (list x) (function x (list y)) (list y),
+    prim1       _lists_concat      Lists.concat       ["x"] (list (list x)) (list x),
+    prim2       _lists_concat2     Lists.concat2      ["x"] (list x) (list x) (list x),
+    prim2       _lists_cons        Lists.cons         ["x"] x (list x) (list x),
+    prim2       _lists_elem        Lists.elem         ["x"] x (list x) boolean,
+    prim2       _lists_filter      Lists.filter       ["x"] (function x boolean) (list x) (list x),
+    prim3       _lists_foldl       Lists.foldl        ["x", "y"] (function y (function x y)) y (list x) y,
+    prim1       _lists_head        Lists.head         ["x"] (list x) x,
+    prim2       _lists_intercalate Lists.intercalate  ["x"] (list x) (list (list x)) (list x),
+    prim2       _lists_intersperse Lists.intersperse  ["x"] x (list x) (list x),
+    prim1       _lists_last        Lists.last         ["x"] (list x) x,
+    prim1       _lists_length      Lists.length       ["x"] (list x) int32,
+    prim2Interp _lists_map         (Just mapInterp)   ["x", "y"] (function x y) (list x) (list y),
+    prim1       _lists_nub         Lists.nub          ["x"] (list x) (list x),
+    prim1       _lists_null        Lists.null         ["x"] (list x) boolean,
+    prim1       _lists_pure        Lists.pure         ["x"] x (list x),
+    prim1       _lists_reverse     Lists.reverse      ["x"] (list x) (list x),
+    prim1       _lists_safeHead    Lists.safeHead     ["x"] (list x) (optional x),
+    prim2Interp _lists_span        Nothing            ["x", "y"] (function x boolean) (list x) (pair (list x) (list x)),
+    prim1       _lists_tail        Lists.tail         ["x"] (list x) (list x),
+    prim2       _lists_take        Lists.take         ["x"] int32 (list x) (list x),
+    prim2       _lists_zip         Lists.zip          ["x", "y"] (list x) (list y) (list (pair x y)),
+    prim3       _lists_zipWith     Lists.zipWith      ["x", "y", "z"] (function x $ function y z) (list x) (list y) (list z)]
   where
     x = variable "x"
     y = variable "y"
@@ -441,16 +443,16 @@ _optionals_pure      = qname _hydra_lib_optionals "pure" :: Name
 
 hydraLibOptionals :: Library
 hydraLibOptionals = standardLibrary _hydra_lib_optionals [
-    prim2       _optionals_apply     Optionals.apply     ["x", "y"]      (optional $ function x y) (optional x) (optional y),
-    prim2       _optionals_bind      Optionals.bind      ["x", "y"]      (optional x) (function x (optional y)) (optional y),
-    prim1       _optionals_cat       Optionals.cat       ["x"]           (list $ optional x) (list x),
-    prim2       _optionals_compose   Optionals.compose   ["x", "y", "z"] (function x $ optional y) (function y $ optional z) (function x $ optional z),
-    prim2       _optionals_fromMaybe Optionals.fromMaybe ["x"]           x (optional x) x,
-    prim1       _optionals_isJust    Optionals.isJust    ["x"]           (optional x) boolean,
-    prim1       _optionals_isNothing Optionals.isNothing ["x"]           (optional x) boolean,
-    prim2Interp _optionals_map       optionalsMapInterp  ["x", "y"]      (function x y) (optional x) (optional y),
-    prim3Interp _optionals_maybe     maybeInterp         ["x", "y"]      y (function x y) (optional x) y,
-    prim1       _optionals_pure      Optionals.pure      ["x"]           x (optional x)]
+    prim2       _optionals_apply     Optionals.apply           ["x", "y"]      (optional $ function x y) (optional x) (optional y),
+    prim2       _optionals_bind      Optionals.bind            ["x", "y"]      (optional x) (function x (optional y)) (optional y),
+    prim1       _optionals_cat       Optionals.cat             ["x"]           (list $ optional x) (list x),
+    prim2       _optionals_compose   Optionals.compose         ["x", "y", "z"] (function x $ optional y) (function y $ optional z) (function x $ optional z),
+    prim2       _optionals_fromMaybe Optionals.fromMaybe       ["x"]           x (optional x) x,
+    prim1       _optionals_isJust    Optionals.isJust          ["x"]           (optional x) boolean,
+    prim1       _optionals_isNothing Optionals.isNothing       ["x"]           (optional x) boolean,
+    prim2Interp _optionals_map       (Just optionalsMapInterp) ["x", "y"]      (function x y) (optional x) (optional y),
+    prim3Interp _optionals_maybe     (Just maybeInterp)        ["x", "y"]      y (function x y) (optional x) y,
+    prim1       _optionals_pure      Optionals.pure            ["x"]           x (optional x)]
   where
     x = variable "x"
     y = variable "y"
