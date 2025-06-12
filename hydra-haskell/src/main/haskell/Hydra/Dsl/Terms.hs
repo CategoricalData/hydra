@@ -73,7 +73,7 @@ constant = lambda ignoredVariable
 
 -- | Identity function
 identity :: Term
-identity = lambda ignoredVariable $ var ignoredVariable
+identity = lambda "x_" $ var "x_"
 
 -- | Create a lambda function with one parameter
 -- Example: lambda "x" (var "x" @@ int32 1)

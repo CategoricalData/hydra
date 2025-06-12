@@ -5,7 +5,6 @@ import Hydra.Dsl.Terms
 import Hydra.Ext.Scala.Language
 import Hydra.Ext.Scala.Utils
 import Hydra.Staging.Adapters
-import Hydra.Staging.Serialization
 import Hydra.Ext.Scala.Serde
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Ext.Scala.Meta as Scala

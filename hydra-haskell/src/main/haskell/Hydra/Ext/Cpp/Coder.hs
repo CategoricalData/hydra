@@ -14,7 +14,6 @@ import Hydra.Lib.Io
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Staging.Adapters
 import Hydra.Formatting
-import Hydra.Staging.Serialization
 import qualified Hydra.Decode as Decode
 
 import qualified Control.Monad as CM

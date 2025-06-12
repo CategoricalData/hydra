@@ -1,6 +1,6 @@
 module Hydra.Ext.Java.Serde where
 
-import Hydra.Staging.Serialization
+import Hydra.Serialization
 import qualified Hydra.Ast as CT
 import qualified Hydra.Ext.Java.Syntax as Java
 import Hydra.Messages

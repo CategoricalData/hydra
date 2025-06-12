@@ -48,7 +48,7 @@ init = primitive1 _lists_init
 intercalate :: TTerm [a] -> TTerm [[a]] -> TTerm [a]
 intercalate = primitive2 _lists_intercalate
 
-intersperse :: TTerm [a] -> TTerm a -> TTerm [a]
+intersperse :: TTerm a -> TTerm [a] -> TTerm [a]
 intersperse = primitive2 _lists_intersperse
 
 last :: TTerm [a] -> TTerm a

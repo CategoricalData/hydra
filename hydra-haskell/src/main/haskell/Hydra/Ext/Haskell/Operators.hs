@@ -1,7 +1,7 @@
 module Hydra.Ext.Haskell.Operators where
 
 import Hydra.Ast
-import Hydra.Staging.Serialization
+import Hydra.Serialization
 
 
 andOp = op "&&" 3 AssociativityRight :: Op
