@@ -7,7 +7,6 @@ module Hydra.Ext.Graphviz.Coder (
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Ext.Org.Graphviz.Dot as Dot
-import Hydra.Staging.Accessors
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -60,7 +59,7 @@ termToAccessorDotStmts namespaces term = (nodeStmt <$> nodes) ++ (edgeStmt <$> e
     (AccessorGraph nodes edges) = termToAccessorGraph namespaces term
     nodeStmt (AccessorNode _ rawLabel uniqueLabel)
       = Dot.StmtNode $ Dot.NodeStmt (toNodeId $ Dot.Id uniqueLabel) $ Just $ Dot.AttrList [[labelAttr rawLabel]]
-    edgeStmt (AccessorEdge (AccessorNode _ _ lab1) path (AccessorNode _ _ lab2))
+    edgeStmt (AccessorEdge (AccessorNode _ _ lab1) (AccessorPath path) (AccessorNode _ _ lab2))
       = toEdgeStmt (Dot.Id lab1) (Dot.Id lab2) $ Just $ Dot.AttrList [[labelAttr $ showPath path]]
     showPath path = L.intercalate "/" $ Y.catMaybes (showTermAccessor <$> path)
 
