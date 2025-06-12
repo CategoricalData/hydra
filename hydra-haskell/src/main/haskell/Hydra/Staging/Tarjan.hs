@@ -1,7 +1,6 @@
 -- This implementation of Tarjan's algorithm was originally based on GraphSCC by Iavor S. Diatchki:
 --   https://hackage.haskell.org/package/GraphSCC
 
-{-# LANGUAGE BangPatterns #-}
 module Hydra.Staging.Tarjan (
   Graph,
   Vertex,
@@ -23,7 +22,7 @@ type Vertex = Int
 type Graph  = M.Map Vertex [Vertex]
 
 data TarjanState = TarjanState
-  { indexCounter :: !Int            -- next available index
+  { indexCounter :: Int            -- next available index
   , indices      :: M.Map Vertex Int -- vertex -> index
   , lowlinks     :: M.Map Vertex Int -- vertex -> lowest index reachable
   , stack        :: [Vertex]         -- current DFS stack (vertices in reverse order)
@@ -71,7 +70,7 @@ popStackUntil v = go []
 strongConnect :: Graph -> Vertex -> Flow TarjanState ()
 strongConnect graph v = do
   st <- getState
-  let !i = indexCounter st
+  let i = indexCounter st
   modify $ \s -> s { indexCounter = i + 1
                        , indices      = M.insert v i (indices s)
                        , lowlinks     = M.insert v i (lowlinks s)
@@ -111,11 +110,3 @@ stronglyConnectedComponents graph = reverse $ fmap L.sort $ sccs finalState
                       visited <- (M.member v . indices) <$> getState
                       if not visited then strongConnect graph v else return ()
                     ) verts) initialState
-
--- TODO: add to hydra.flows
-
-exec :: Flow s a -> s -> s
-exec f s0 = flowStateState $ unFlow f s0 emptyTrace
-
-modify :: (s -> s) -> Flow s ()
-modify f = (f <$> getState) >>= putState

@@ -17,6 +17,7 @@ import qualified Hydra.Dsl.Lib.Logic       as Logic
 import qualified Hydra.Dsl.Lib.Maps        as Maps
 import qualified Hydra.Dsl.Lib.Math        as Math
 import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Mantle          as Mantle
 import           Hydra.Dsl.Phantoms        as Phantoms
 import qualified Hydra.Dsl.Lib.Sets        as Sets
 import           Hydra.Dsl.Lib.Strings     as Strings
@@ -32,22 +33,30 @@ import qualified Data.Maybe                as Y
 
 import Hydra.Sources.Tier2.Variants
 import Hydra.Sources.Libraries
+import Hydra.Sources.Tier2.Flows
 
 
 hydraErrorsModule :: Module
 hydraErrorsModule = Module (Namespace "hydra.errors") elements
-    [hydraVariantsModule]
+    [hydraVariantsModule, hydraFlowsModule]
     [hydraComputeModule, hydraMantleModule] $
     Just "Utilities for working with errors and flow state"
   where
    elements = [
+      el execDef,
       el getStateDef,
+      el modifyDef,
       el putStateDef,
       el traceSummaryDef,
       el unexpectedDef]
 
 errorsDefinition :: String -> TTerm a -> TElement a
 errorsDefinition = definitionInModule hydraErrorsModule
+
+execDef :: TElement (Flow s a -> s -> s)
+execDef = errorsDefinition "exec" $
+  lambdas ["f", "s0"] $
+    Compute.flowStateState $ Compute.unFlow (var "f") (var "s0") (ref emptyTraceDef)
 
 getStateDef :: TElement (Flow s s)
 getStateDef = errorsDefinition "getState" $ -- Flow s s
@@ -60,6 +69,12 @@ getStateDef = errorsDefinition "getState" $ -- Flow s s
           @@ (constant (Compute.flowState (just $ var "s") (var "s") (var "t"))))
          @@ var "v"))
       @@ (Compute.flowStateValue $ var "fs1") @@ (Compute.flowStateState $ var "fs1") @@ (Compute.flowStateTrace $ var "fs1")
+
+modifyDef :: TElement ((s -> s) -> Flow s ())
+modifyDef = errorsDefinition "modify" $
+  lambda "f" $
+    (ref bindDef @@ (ref getStateDef) @@
+      (lambda "s" $ ref putStateDef @@ (var "f" @@ var "s")))
 
 putStateDef :: TElement (s -> Flow s ())
 putStateDef = errorsDefinition "putState" $
