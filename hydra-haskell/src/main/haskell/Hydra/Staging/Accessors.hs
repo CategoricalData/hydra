@@ -10,11 +10,6 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-type AccessorPath = [TermAccessor]
-data AccessorNode = AccessorNode Name String String deriving Show
-data AccessorEdge = AccessorEdge AccessorNode AccessorPath AccessorNode deriving Show
-data AccessorGraph = AccessorGraph [AccessorNode] [AccessorEdge] deriving Show
-
 showTermAccessor :: TermAccessor -> Maybe String
 showTermAccessor accessor = case accessor of
     TermAccessorAnnotatedSubject -> Nothing
@@ -69,7 +64,7 @@ termToAccessorGraph namespaces term = AccessorGraph nodesX edgesX
             Nothing -> (nodes, edges, visited)
             Just node -> (nodes, edge:edges, visited)
               where
-                edge = AccessorEdge root (L.reverse nextPath) node
+                edge = AccessorEdge root (AccessorPath $ L.reverse nextPath) node
         _ -> L.foldl (helper ids mroot nextPath) (nodes, edges, visited) $ subtermsWithAccessors term
       where
         nextPath = accessor:path
