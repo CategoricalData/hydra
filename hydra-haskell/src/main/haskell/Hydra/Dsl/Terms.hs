@@ -3,6 +3,7 @@ module Hydra.Dsl.Terms where
 
 import Hydra.Constants
 import Hydra.Core
+import Hydra.Graph
 import Hydra.Dsl.Common
 import qualified Hydra.Dsl.Literals as Literals
 
@@ -352,3 +353,11 @@ tuple = TermProduct
 -- Example: untuple 3 1 Nothing extracts the second element of a 3-tuple
 untuple :: Int -> Int -> Maybe [Type] -> Term
 untuple arity idx mtypes = TermFunction $ FunctionElimination $ EliminationProduct $ TupleProjection arity idx mtypes
+
+-- | Other
+
+comparison :: Comparison -> Term
+comparison t = case t of
+  ComparisonEqualTo -> unitVariant _Comparison _Comparison_equalTo
+  ComparisonLessThan -> unitVariant _Comparison _Comparison_lessThan
+  ComparisonGreaterThan -> unitVariant _Comparison _Comparison_greaterThan

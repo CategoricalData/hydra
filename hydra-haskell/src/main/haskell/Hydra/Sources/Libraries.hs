@@ -74,6 +74,7 @@ hydraLibChars = standardLibrary _hydra_lib_strings [
 _hydra_lib_equality :: Namespace
 _hydra_lib_equality = Namespace "hydra.lib.equality"
 
+_equality_compareInt32  = qname _hydra_lib_equality "compareInt32" :: Name
 _equality_equal         = qname _hydra_lib_equality "equal" :: Name
 _equality_equalBinary   = qname _hydra_lib_equality "equalBinary" :: Name
 _equality_equalBoolean  = qname _hydra_lib_equality "equalBoolean" :: Name
@@ -100,6 +101,7 @@ _equality_lteInt32      = qname _hydra_lib_equality "lteInt32" :: Name
 
 hydraLibEquality :: Library
 hydraLibEquality = standardLibrary _hydra_lib_equality [
+    prim2 _equality_compareInt32  Equality.compareInt32  []    int32 int32 comparison,
     prim2 _equality_equal         Equality.equal         []    x x boolean,
     prim2 _equality_equalBinary   Equality.equalBinary   []    binary binary boolean,
     prim2 _equality_equalBoolean  Equality.equalBoolean  []    boolean boolean boolean,

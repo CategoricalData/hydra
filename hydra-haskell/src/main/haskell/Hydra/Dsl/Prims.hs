@@ -47,6 +47,12 @@ boolean = TermCoder Types.boolean $ Coder encode decode
     encode = Expect.boolean
     decode = pure . Terms.boolean
 
+comparison :: TermCoder Comparison
+comparison = TermCoder (TypeVariable _Comparison) $ Coder encode decode
+  where
+    encode = Expect.comparison
+    decode = pure . Terms.comparison
+
 floatValue :: TermCoder FloatValue
 floatValue = TermCoder (TypeVariable _FloatValue) $ Coder encode decode
   where
