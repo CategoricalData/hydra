@@ -513,3 +513,17 @@ wrappedType ename typ = case stripType typ of
     then pure t
     else unexpected ("wrapped type " ++ unName ename) $ "wrapped type " ++ unName tname
   _ -> unexpected "wrapped type" $ show typ
+
+-- * Other
+
+comparison :: Term -> Flow Graph Comparison
+comparison term = do
+  fname <- unitVariant _Comparison term
+  if fname == _Comparison_equalTo
+  then return ComparisonEqualTo
+  else if fname == _Comparison_lessThan
+  then return ComparisonLessThan
+  else if fname == _Comparison_greaterThan
+  then return ComparisonGreaterThan
+  else unexpected "comparison" $ unName fname
+

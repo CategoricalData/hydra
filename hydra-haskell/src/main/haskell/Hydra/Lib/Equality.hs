@@ -3,9 +3,16 @@
 module Hydra.Lib.Equality where
 
 import Hydra.Core
+import Hydra.Graph
 
 import Data.Int
 
+
+compareInt32 :: Int -> Int -> Comparison
+compareInt32 x y
+  | x < y     = ComparisonLessThan
+  | x > y     = ComparisonGreaterThan
+  | otherwise = ComparisonEqualTo
 
 equal :: Eq a => a -> a -> Bool
 equal = (==)

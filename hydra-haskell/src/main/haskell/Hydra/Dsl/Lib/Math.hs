@@ -26,3 +26,12 @@ rem = primitive2 _math_rem
 
 sub :: TTerm Int -> TTerm Int -> TTerm Int
 sub = primitive2 _math_sub
+
+-- Some forward-looking aliases
+addInt32 = Hydra.Dsl.Lib.Math.add
+divInt32 = Hydra.Dsl.Lib.Math.div
+modInt32 = Hydra.Dsl.Lib.Math.mod
+mulInt32 = Hydra.Dsl.Lib.Math.mul
+negInt32 = Hydra.Dsl.Lib.Math.neg
+remInt32 = Hydra.Dsl.Lib.Math.rem
+subInt32 = Hydra.Dsl.Lib.Math.sub

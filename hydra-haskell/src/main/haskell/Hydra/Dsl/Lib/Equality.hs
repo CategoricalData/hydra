@@ -1,6 +1,7 @@
 module Hydra.Dsl.Lib.Equality where
 
 import Hydra.Core
+import Hydra.Graph
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
@@ -8,6 +9,9 @@ import Hydra.Dsl.Phantoms
 
 import Data.Int
 
+
+compareInt32 :: TTerm Int -> TTerm Int -> TTerm Comparison
+compareInt32 = primitive2 _equality_compareInt32
 
 equal :: TTerm a -> TTerm a -> TTerm Bool
 equal = primitive2 _equality_equal
