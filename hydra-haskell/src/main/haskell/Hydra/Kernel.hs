@@ -2,6 +2,7 @@
 
 -- Note: Hydra.Grammar is part of the kernel, but is not a default import because the names of its types clash with those of other types.
 module Hydra.Kernel (
+  module Hydra.Accessors,
   module Hydra.Annotations,
   module Hydra.Arity,
 --  module Hydra.Ast,
@@ -49,6 +50,7 @@ module Hydra.Kernel (
   module Hydra.Workflow,
 ) where
 
+import Hydra.Accessors
 import Hydra.Annotations
 import Hydra.Arity
 --import Hydra.Ast
