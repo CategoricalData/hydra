@@ -26,6 +26,26 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
     elements = [
 
+      def "AccessorEdge" $
+        record [
+          "source">: mantle "AccessorNode",
+          "path">: mantle "AccessorPath",
+          "target">: mantle "AccessorNode"],
+
+      def "AccessorGraph" $
+        record [
+          "nodes">: list $ mantle "AccessorNode",
+          "edges">: list $ mantle "AccessorEdge"],
+
+      def "AccessorNode" $
+        record [
+          "name">: core "Name",
+          "label">: string,
+          "id" >: string],
+
+      def "AccessorPath" $
+        list $ mantle "TermAccessor",
+
       def "CaseConvention" $
         Types.enum ["camel", "pascal", "lowerSnake", "upperSnake"],
 

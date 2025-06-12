@@ -8,6 +8,55 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+data AccessorEdge = 
+  AccessorEdge {
+    accessorEdgeSource :: AccessorNode,
+    accessorEdgePath :: AccessorPath,
+    accessorEdgeTarget :: AccessorNode}
+  deriving (Eq, Ord, Read, Show)
+
+_AccessorEdge = (Core.Name "hydra.mantle.AccessorEdge")
+
+_AccessorEdge_source = (Core.Name "source")
+
+_AccessorEdge_path = (Core.Name "path")
+
+_AccessorEdge_target = (Core.Name "target")
+
+data AccessorGraph = 
+  AccessorGraph {
+    accessorGraphNodes :: [AccessorNode],
+    accessorGraphEdges :: [AccessorEdge]}
+  deriving (Eq, Ord, Read, Show)
+
+_AccessorGraph = (Core.Name "hydra.mantle.AccessorGraph")
+
+_AccessorGraph_nodes = (Core.Name "nodes")
+
+_AccessorGraph_edges = (Core.Name "edges")
+
+data AccessorNode = 
+  AccessorNode {
+    accessorNodeName :: Core.Name,
+    accessorNodeLabel :: String,
+    accessorNodeId :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_AccessorNode = (Core.Name "hydra.mantle.AccessorNode")
+
+_AccessorNode_name = (Core.Name "name")
+
+_AccessorNode_label = (Core.Name "label")
+
+_AccessorNode_id = (Core.Name "id")
+
+newtype AccessorPath = 
+  AccessorPath {
+    unAccessorPath :: [TermAccessor]}
+  deriving (Eq, Ord, Read, Show)
+
+_AccessorPath = (Core.Name "hydra.mantle.AccessorPath")
+
 data CaseConvention = 
   CaseConventionCamel  |
   CaseConventionPascal  |
