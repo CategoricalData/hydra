@@ -3,6 +3,7 @@
 module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier1.All,
   module Hydra.Sources.Tier2.All,
+  module Hydra.Sources.Tier2.Accessors,
   module Hydra.Sources.Tier2.Annotations,
   module Hydra.Sources.Tier2.Arity,
   module Hydra.Sources.Tier2.CoreLanguage,
@@ -21,6 +22,7 @@ module Hydra.Sources.Tier2.All(
 ) where
 
 import Hydra.Sources.Tier1.All hiding (mapDef) -- hydra.decode and hydra.flows both export 'map'
+import Hydra.Sources.Tier2.Accessors
 import Hydra.Sources.Tier2.Annotations
 import Hydra.Sources.Tier2.Arity
 import Hydra.Sources.Tier2.CoreLanguage
@@ -61,6 +63,7 @@ kernelTypeModules = [
 
 tier2Modules :: [Module]
 tier2Modules = [
+  hydraAccessorsModule,
   hydraAnnotationsModule,
   hydraArityModule,
   hydraCoreLanguageModule,
