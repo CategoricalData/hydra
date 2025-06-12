@@ -41,31 +41,31 @@ showTermAccessor accessor = case accessor of
 termToAccessorGraph :: M.Map Namespace String -> Term -> AccessorGraph
 termToAccessorGraph namespaces term = AccessorGraph nodesX edgesX
   where
-    (nodesX, edgesX, _) = helper M.empty Nothing [] ([], [], S.empty) (dontCareAccessor, term)
+    ((nodesX, edgesX), _) = helper M.empty Nothing [] (([], []), S.empty) (dontCareAccessor, term)
     dontCareAccessor = TermAccessorAnnotatedSubject
-    helper ids mroot path (nodes, edges, visited) (accessor, term) = case term of
-        TermLet (Let bindings env) -> helper ids1 mroot nextPath (nodes2, edges2, visited2) (TermAccessorLetEnvironment, env)
+    helper ids mroot path ((nodes, edges), visited) (accessor, term) = case term of
+        TermLet (Let bindings env) -> helper ids1 mroot nextPath ((nodes2, edges2), visited2) (TermAccessorLetEnvironment, env)
           where
-            (nodes2, edges2, visited2) = L.foldl addBinding (nodes1++nodes, edges, visited1) (L.zip nodes1 bindings)
+            ((nodes2, edges2), visited2) = L.foldl addBinding ((nodes1++nodes, edges), visited1) (L.zip nodes1 bindings)
               where
-                addBinding (nodes, edges, visited) (root, (LetBinding name term1 _))
-                    = helper ids1 (Just root) [] (nodes, edges, visited) (dontCareAccessor, term1)
-            (nodes1, visited1, ids1) = L.foldl addBinding ([], visited, ids) (letBindingName <$> bindings)
+                addBinding ((nodes, edges), visited) (root, (LetBinding name term1 _))
+                    = helper ids1 (Just root) [] ((nodes, edges), visited) (dontCareAccessor, term1)
+            ((nodes1, visited1), ids1) = L.foldl addBinding (([], visited), ids) (letBindingName <$> bindings)
               where
-                addBinding (nodes, visited, ids) name =
-                    ((node:nodes), S.insert uniqueLabel visited, M.insert name node ids)
+                addBinding ((nodes, visited), ids) name =
+                    (((node:nodes), S.insert uniqueLabel visited), M.insert name node ids)
                   where
                     node = AccessorNode name rawLabel uniqueLabel
                     rawLabel = toCompactName namespaces name
                     uniqueLabel = toUniqueLabel visited rawLabel
         TermVariable name -> case mroot of
-          Nothing -> (nodes, edges, visited)
+          Nothing -> ((nodes, edges), visited)
           Just root -> case M.lookup name ids of
-            Nothing -> (nodes, edges, visited)
-            Just node -> (nodes, edge:edges, visited)
+            Nothing -> ((nodes, edges), visited)
+            Just node -> ((nodes, edge:edges), visited)
               where
                 edge = AccessorEdge root (AccessorPath $ L.reverse nextPath) node
-        _ -> L.foldl (helper ids mroot nextPath) (nodes, edges, visited) $ subtermsWithAccessors term
+        _ -> L.foldl (helper ids mroot nextPath) ((nodes, edges), visited) $ subtermsWithAccessors term
       where
         nextPath = accessor:path
 

@@ -2,11 +2,42 @@ module Hydra.Dsl.Mantle where
 
 import Hydra.Kernel
 import Hydra.Dsl.Phantoms
-import Hydra.Dsl.Core
+--import Hydra.Dsl.Core
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
+
+accessorEdge :: TTerm AccessorNode -> TTerm AccessorPath -> TTerm AccessorNode -> TTerm AccessorEdge
+accessorEdge source path target = record _AccessorEdge [
+  _AccessorEdge_source>>: source,
+  _AccessorEdge_path>>: path,
+  _AccessorEdge_target>>: target]
+
+accessorEdgeSource = unitVariant _AccessorEdge _AccessorEdge_source
+accessorEdgePath = unitVariant _AccessorEdge _AccessorEdge_path
+accessorEdgeTarget = unitVariant _AccessorEdge _AccessorEdge_target
+
+accessorGraph :: TTerm [AccessorNode] -> TTerm [AccessorEdge] -> TTerm AccessorGraph
+accessorGraph nodes edges = record _AccessorGraph [
+  _AccessorGraph_nodes>>: nodes,
+  _AccessorGraph_edges>>: edges]
+
+accessorGraphNodes = unitVariant _AccessorGraph _AccessorGraph_nodes
+accessorGraphEdges = unitVariant _AccessorGraph _AccessorGraph_edges
+
+accessorNode :: TTerm Name -> TTerm String -> TTerm String -> TTerm AccessorNode
+accessorNode name label id = record _AccessorNode [
+  _AccessorNode_name>>: name,
+  _AccessorNode_label>>: label,
+  _AccessorNode_id>>: id]
+
+accessorNodeName = unitVariant _AccessorNode _AccessorNode_name
+accessorNodeLabel = unitVariant _AccessorNode _AccessorNode_label
+accessorNodeId = unitVariant _AccessorNode _AccessorNode_id
+
+accessorPath :: TTerm [TermAccessor] -> TTerm AccessorPath
+accessorPath path = wrap _AccessorPath path
 
 caseConventionCamel = unitVariant _CaseConvention _CaseConvention_camel
 caseConventionPascal = unitVariant _CaseConvention _CaseConvention_pascal
@@ -134,3 +165,6 @@ typeVariant v = unitVariant _TypeVariant $ case v of
   TypeVariantUnion -> _TypeVariant_union
   TypeVariantVariable -> _TypeVariant_variable
   TypeVariantWrap -> _TypeVariant_wrap
+
+unAccessorPath :: TTerm AccessorPath -> TTerm [TermAccessor]
+unAccessorPath path = unwrap _AccessorPath @@ path

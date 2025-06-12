@@ -44,7 +44,7 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "id" >: string],
 
       def "AccessorPath" $
-        list $ mantle "TermAccessor",
+        wrap $ list $ mantle "TermAccessor",
 
       def "CaseConvention" $
         Types.enum ["camel", "pascal", "lowerSnake", "upperSnake"],
