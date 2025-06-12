@@ -3,7 +3,7 @@ module Hydra.SerializationSpec where
 import qualified Test.Hspec as H
 
 import Hydra.Ast
-import Hydra.Staging.Serialization
+import Hydra.Serialization
 import Hydra.Ext.Haskell.Operators
 
 

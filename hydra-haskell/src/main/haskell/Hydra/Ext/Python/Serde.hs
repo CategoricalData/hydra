@@ -1,7 +1,7 @@
 module Hydra.Ext.Python.Serde where
 
 import qualified Hydra.Ext.Python.Syntax as Py
-import Hydra.Staging.Serialization
+import Hydra.Serialization
 import qualified Hydra.Ast as A
 
 import qualified Data.List as L
@@ -541,3 +541,5 @@ toPythonComments c = L.intercalate "\n" $ ("# " ++) <$> L.lines c
 tripleQuotes :: String -> A.Expr
 tripleQuotes s = cst $ "\"\"\"" ++ s ++ "\"\"\"" -- TODO: escaping
 
+unsupportedVariant :: Show a => String -> a -> A.Expr
+unsupportedVariant label obj = cst $ "[unsupported " ++ label ++ ": " ++ show obj ++ "]"

@@ -7,7 +7,6 @@ import Hydra.Kernel
 import Hydra.Staging.TermAdapters
 import Hydra.Staging.Adapters
 import Hydra.Ext.Json.Schema.Language
-import Hydra.Staging.Serialization
 import Hydra.Ext.Json.Schema.Serde
 import qualified Hydra.Ext.Org.Json.Schema as JS
 import qualified Hydra.Json as J

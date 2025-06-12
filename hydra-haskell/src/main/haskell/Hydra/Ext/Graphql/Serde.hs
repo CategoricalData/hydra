@@ -1,7 +1,7 @@
 module Hydra.Ext.Graphql.Serde (exprDocument) where
 
-import Hydra.Staging.Serialization
 import Hydra.Formatting
+import Hydra.Serialization
 import qualified Hydra.Ast as CT
 import qualified Hydra.Ext.Org.Graphql.Syntax as G
 

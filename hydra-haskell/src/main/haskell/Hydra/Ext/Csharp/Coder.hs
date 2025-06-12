@@ -7,7 +7,6 @@ import Hydra.Ext.Csharp.Utils
 import Hydra.Ext.Csharp.Serde
 import Hydra.Dsl.Terms
 import Hydra.Staging.Adapters
-import Hydra.Staging.Serialization
 import Hydra.Formatting
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Types as Types

@@ -4,7 +4,6 @@ import Hydra.Kernel
 import Hydra.Staging.TermAdapters
 import Hydra.Staging.Adapters
 import Hydra.Ext.Pegasus.Language
-import Hydra.Staging.Serialization
 import Hydra.Ext.Pegasus.Serde
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
 import qualified Hydra.Dsl.Types as Types

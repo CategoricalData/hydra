@@ -3,7 +3,7 @@
 module Hydra.Ext.Cpp.Serde where
 
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
-import Hydra.Staging.Serialization
+import Hydra.Serialization
 import qualified Hydra.Ast as A
 
 import qualified Data.List as L

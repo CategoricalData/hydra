@@ -7,7 +7,7 @@
 module Hydra.Ext.Haskell.Serde where
 
 import Hydra.Ast
-import Hydra.Staging.Serialization
+import Hydra.Serialization
 import Hydra.Ext.Haskell.Operators
 import qualified Hydra.Ext.Haskell.Ast as H
 
