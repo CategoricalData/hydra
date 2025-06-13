@@ -414,7 +414,7 @@ termAnnotationInternalDef = annotationsDefinition "termAnnotationInternal" $
   doc "Get internal term annotations" $
   lets [
     "getAnn">: lambda "t" $
-      match _Term Nothing [
+      match _Term (Just nothing) [
         _Term_annotated>>: lambda "a" $ just $ var "a",
         _Term_typed>>: lambda "tt" $ var "getAnn" @@ Core.typedTermTerm (var "tt")]
       @@ var "t"]
@@ -425,7 +425,7 @@ typeAnnotationInternalDef = annotationsDefinition "typeAnnotationInternal" $
   doc "Get internal type annotations" $
   lets [
     "getAnn">: lambda "t" $
-      match _Type Nothing [
+      match _Type (Just nothing) [
         _Type_annotated>>: lambda "a" $ just $ var "a"]
       @@ var "t"]
     $ ref aggregateAnnotationsDef @@ var "getAnn" @@ (asFunction Core.annotatedTypeSubject) @@ (asFunction Core.annotatedTypeAnnotation)

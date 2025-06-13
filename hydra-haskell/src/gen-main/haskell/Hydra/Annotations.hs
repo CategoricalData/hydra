@@ -159,14 +159,16 @@ termAnnotationInternal = (aggregateAnnotations getAnn Core.annotatedTermSubject 
   where 
     getAnn = (\t -> (\x -> case x of
       Core.TermAnnotated v1 -> (Just v1)
-      Core.TermTyped v1 -> (getAnn (Core.typedTermTerm v1))) t)
+      Core.TermTyped v1 -> (getAnn (Core.typedTermTerm v1))
+      _ -> Nothing) t)
 
 -- | Get internal type annotations
 typeAnnotationInternal :: (Core.Type -> M.Map Core.Name Core.Term)
 typeAnnotationInternal = (aggregateAnnotations getAnn Core.annotatedTypeSubject Core.annotatedTypeAnnotation) 
   where 
     getAnn = (\t -> (\x -> case x of
-      Core.TypeAnnotated v1 -> (Just v1)) t)
+      Core.TypeAnnotated v1 -> (Just v1)
+      _ -> Nothing) t)
 
 withEmptyGraph :: (Compute.Flow Graph.Graph t1 -> Compute.Flow t0 t1)
 withEmptyGraph = (Flows.withState Lexical.emptyGraph)
