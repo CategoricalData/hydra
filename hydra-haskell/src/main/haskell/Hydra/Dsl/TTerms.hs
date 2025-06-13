@@ -250,6 +250,12 @@ record name pairs = Core.termRecord $ Core.record name $ Phantoms.list (toField 
 sum :: Int -> Int -> TTerm Term -> TTerm Term
 sum i s = Core.termSum . Core.sum (Phantoms.int32 i) (Phantoms.int32 s)
 
+unitVariantPhantom :: Name -> Name -> TTerm Term
+unitVariantPhantom tname fname = variantPhantom tname fname $ record (Core.name _Unit) []
+
+variantPhantom :: Name -> Name -> TTerm Term -> TTerm Term
+variantPhantom tname fname term = Core.termUnion $ Core.injection (Core.name tname) $ Core.field (Core.name fname) term
+
 -- | Create a term-encoded wrapped term (newtype)
 -- Example: wrap (name "Email") (string "user@example.com")
 wrap :: TTerm Name -> TTerm Term -> TTerm Term

@@ -17,7 +17,7 @@ import Data.Int
 import Prelude hiding (map, product, sum)
 
 
-annotatedTerm :: TTerm Term -> TTerm (M.Map String Term) -> TTerm AnnotatedTerm
+annotatedTerm :: TTerm Term -> TTerm (M.Map Name Term) -> TTerm AnnotatedTerm
 annotatedTerm subject annotation = Phantoms.record _AnnotatedTerm [
   _AnnotatedTerm_subject>>: subject,
   _AnnotatedTerm_annotation>>: annotation]
@@ -25,10 +25,10 @@ annotatedTerm subject annotation = Phantoms.record _AnnotatedTerm [
 annotatedTermSubject :: TTerm AnnotatedTerm -> TTerm Term
 annotatedTermSubject at = Phantoms.project _AnnotatedTerm _AnnotatedTerm_subject @@ at
 
-annotatedTermAnnotation :: TTerm AnnotatedTerm -> TTerm (M.Map String Term)
+annotatedTermAnnotation :: TTerm AnnotatedTerm -> TTerm (M.Map Name Term)
 annotatedTermAnnotation at = Phantoms.project _AnnotatedTerm _AnnotatedTerm_annotation @@ at
 
-annotatedType :: TTerm Type -> TTerm (M.Map String Term) -> TTerm AnnotatedType
+annotatedType :: TTerm Type -> TTerm (M.Map Name Term) -> TTerm AnnotatedType
 annotatedType subject annotation = Phantoms.record _AnnotatedType [
   _AnnotatedType_subject>>: subject,
   _AnnotatedType_annotation>>: annotation]
@@ -36,7 +36,7 @@ annotatedType subject annotation = Phantoms.record _AnnotatedType [
 annotatedTypeSubject :: TTerm AnnotatedType -> TTerm Type
 annotatedTypeSubject at = Phantoms.project _AnnotatedType _AnnotatedType_subject @@ at
 
-annotatedTypeAnnotation :: TTerm AnnotatedType -> TTerm (M.Map String Term)
+annotatedTypeAnnotation :: TTerm AnnotatedType -> TTerm (M.Map Name Term)
 annotatedTypeAnnotation at = Phantoms.project _AnnotatedType _AnnotatedType_annotation @@ at
 
 application :: TTerm Term -> TTerm Term -> TTerm Application
@@ -384,6 +384,9 @@ termTypeAbstraction = variant _Term _Term_typeAbstraction
 
 termTypeApplication :: TTerm TypedTerm -> TTerm Term
 termTypeApplication = variant _Term _Term_typeApplication
+
+termTyped :: TTerm TypedTerm -> TTerm Term
+termTyped = variant _Term _Term_typed
 
 termUnion :: TTerm Injection -> TTerm Term
 termUnion = variant _Term _Term_union

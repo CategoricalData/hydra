@@ -8,6 +8,9 @@ import Hydra.Dsl.Phantoms
 import Data.Map
 
 
+alter :: TTerm (Maybe v -> Maybe v) -> TTerm k -> TTerm (Map k v) -> TTerm (Map k v)
+alter = primitive3 _maps_alter
+
 bimap :: TTerm (k1 -> k2) -> TTerm (v1 -> v2) -> TTerm (Map k1 v1) -> TTerm (Map k2 v2)
 bimap = primitive3 _maps_bimap
 
@@ -43,6 +46,9 @@ map = primitive2 _maps_map
 
 mapKeys :: TTerm (k1 -> k2) -> TTerm (Map k1 v) -> TTerm (Map k2 v)
 mapKeys = primitive2 _maps_mapKeys
+
+null :: TTerm (Map k v) -> TTerm Bool
+null = primitive1 _maps_null
 
 remove :: TTerm k -> TTerm (Map k v) -> TTerm (Map k v)
 remove = primitive2 _maps_remove

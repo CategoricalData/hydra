@@ -1,6 +1,9 @@
 -- | Functions for working with term and type annotations
 
-module Hydra.Staging.Annotations where
+module Hydra.Staging.Annotations (
+  module Hydra.Annotations,
+  module Hydra.Staging.Annotations,
+) where
 
 import Hydra.Annotations
 import Hydra.Strip
@@ -24,13 +27,6 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
-
-aggregateAnnotations :: (x -> Maybe y) -> (y -> x) -> (y -> M.Map Name Term) -> x -> M.Map Name Term
-aggregateAnnotations getValue getX getAnns t = M.fromList $ L.concat $ toPairs [] t
-  where
-    toPairs rest t = case getValue t of
-      Nothing -> rest
-      Just yy -> toPairs ((M.toList (getAnns yy)):rest) (getX yy)
 
 debugIf :: String -> String -> Flow s ()
 debugIf debugId message = do
@@ -122,102 +118,6 @@ nextCount key = do
   putCount key $ count + 1
   return count
 
-putCount :: Name -> Int -> Flow s ()
-putCount key count = putAttr key (Terms.int32 count)
-
-resetCount :: Name -> Flow s ()
-resetCount key = do
-  putAttr key (Terms.int32 0)
-  return ()
-
-normalizeTermAnnotations :: Term -> Term
-normalizeTermAnnotations term = if M.null anns
-    then stripped
-    else TermAnnotated $ AnnotatedTerm stripped anns
-  where
-    anns = termAnnotationInternal term
-    stripped = stripTerm term
-
-normalizeTypeAnnotations :: Type -> Type
-normalizeTypeAnnotations typ = if M.null anns
-    then stripped
-    else TypeAnnotated $ AnnotatedType stripped anns
-  where
-    anns = typeAnnotationInternal typ
-    stripped = stripType typ
-
-putAttr :: Name -> Term -> Flow s ()
-putAttr key val = Flow q
-  where
-    q s0 t0 = FlowState (Just ()) s0 (t0 {traceOther = M.insert key val $ traceOther t0})
-
-setAnnotation :: Name -> Y.Maybe Term -> M.Map Name Term -> M.Map Name Term
-setAnnotation key val m = M.alter (const val) key m
-
-setDescription :: Y.Maybe String -> M.Map Name Term -> M.Map Name Term
-setDescription d = setAnnotation key_description (Terms.string <$> d)
-
-setTermAnnotation :: Name -> Y.Maybe Term -> Term -> Term
-setTermAnnotation key val term = if anns == M.empty
-    then term'
-    else TermAnnotated $ AnnotatedTerm term' anns
-  where
-    term' = stripTerm term
-    anns = setAnnotation key val $ termAnnotationInternal term
-
-setTermDescription :: Y.Maybe String -> Term -> Term
-setTermDescription d = setTermAnnotation key_description (Terms.string <$> d)
-
--- TODO: temporary. Move this function out of Annotations
-setTermType :: Y.Maybe Type -> Term -> Term
-setTermType mtyp term = case mtyp of
-    Nothing -> withoutType term
-    Just typ -> TermTyped $ TypedTerm (withoutType term) typ
-  where
-    withoutType term = case term of
-      TermAnnotated (AnnotatedTerm term1 ann) -> TermAnnotated $ AnnotatedTerm (withoutType term1) ann
-      TermTyped (TypedTerm term1 _) -> term1
-      _ -> term
-
-setType mt = setAnnotation key_type (coreEncodeType <$> mt)
-
-setTypeAnnotation :: Name -> Y.Maybe Term -> Type -> Type
-setTypeAnnotation key val typ = if anns == M.empty
-    then typ'
-    else TypeAnnotated $ AnnotatedType typ' anns
-  where
-    typ' = stripType typ
-    anns = setAnnotation key val $ typeAnnotationInternal typ
-
-setTypeClasses :: M.Map Name (S.Set TypeClass) -> Term -> Term
-setTypeClasses m = setTermAnnotation key_classes encoded
-  where
-    encoded = if M.null m
-      then Nothing
-      else Just $ Terms.map $ M.fromList (encodePair <$> M.toList m)
-    encodePair (name, classes) = (coreEncodeName name, Terms.set $ S.fromList (encodeClass <$> (S.toList classes)))
-    encodeClass tc = Terms.unitVariant _TypeClass $ case tc of
-      TypeClassEquality -> _TypeClass_equality
-      TypeClassOrdering -> _TypeClass_ordering
-
-setTypeDescription :: Y.Maybe String -> Type -> Type
-setTypeDescription d = setTypeAnnotation key_description (Terms.string <$> d)
-
-termAnnotationInternal :: Term -> M.Map Name Term
-termAnnotationInternal = aggregateAnnotations getAnn annotatedTermSubject annotatedTermAnnotation
-  where
-    getAnn t = case t of
-      TermAnnotated a -> Just a
-      TermTyped (TypedTerm t1 _) -> getAnn t1
-      _ -> Nothing
-
-typeAnnotationInternal :: Type -> M.Map Name Term
-typeAnnotationInternal = aggregateAnnotations getAnn annotatedTypeSubject annotatedTypeAnnotation
-  where
-    getAnn t = case t of
-      TypeAnnotated a -> Just a
-      _ -> Nothing
-
 whenFlag :: Name -> Flow s a -> Flow s a -> Flow s a
 whenFlag flag fthen felse = do
   b <- hasFlag flag
@@ -259,6 +159,3 @@ withDepth key f = do
   r <- f inc
   putCount key count
   return r
-
-withEmptyGraph :: Flow Graph a -> Flow s a
-withEmptyGraph = withState emptyGraph

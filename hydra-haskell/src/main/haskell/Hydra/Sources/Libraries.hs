@@ -363,6 +363,7 @@ hydraLibLogic = standardLibrary _hydra_lib_logic [
 _hydra_lib_maps :: Namespace
 _hydra_lib_maps = Namespace "hydra.lib.maps"
 
+_maps_alter         = qname _hydra_lib_maps "alter" :: Name
 _maps_bimap         = qname _hydra_lib_maps "bimap" :: Name
 _maps_elems         = qname _hydra_lib_maps "elems" :: Name
 _maps_empty         = qname _hydra_lib_maps "empty" :: Name
@@ -375,6 +376,7 @@ _maps_keys          = qname _hydra_lib_maps "keys" :: Name
 _maps_lookup        = qname _hydra_lib_maps "lookup" :: Name
 _maps_map           = qname _hydra_lib_maps "map" :: Name
 _maps_mapKeys       = qname _hydra_lib_maps "mapKeys" :: Name
+_maps_null          = qname _hydra_lib_maps "null" :: Name
 _maps_remove        = qname _hydra_lib_maps "remove" :: Name
 _maps_singleton     = qname _hydra_lib_maps "singleton" :: Name
 _maps_size          = qname _hydra_lib_maps "size" :: Name
@@ -384,6 +386,7 @@ _maps_values        = qname _hydra_lib_maps "values" :: Name
 
 hydraLibMaps :: Library
 hydraLibMaps = standardLibrary _hydra_lib_maps [
+    prim3Interp _maps_alter   Nothing        ["k", "v"]               (function (optional v) (optional v)) k mapKv mapKv,
     prim3 _maps_bimap         Maps.bimap     ["k1", "k2", "v1", "v2"] (function k1 k2) (function v1 v2) (Prims.map k1 v1) (Prims.map k2 v2),
     prim1 _maps_elems         Maps.elems     ["k", "v"]               mapKv (list v),
     prim0 _maps_empty         Maps.empty     ["k", "v"]               mapKv,
@@ -396,6 +399,7 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
     prim2 _maps_lookup        Maps.lookup    ["k", "v"]               k mapKv (optional v),
     prim2 _maps_map           Maps.map       ["k", "v1", "v2"]        (function v1 v2) (Prims.map k v1) (Prims.map k v2),
     prim2 _maps_mapKeys       Maps.mapKeys   ["k1", "k2", "v"]        (function k1 k2) (Prims.map k1 v) (Prims.map k2 v),
+    prim1 _maps_null          Maps.null      ["k", "v"]               mapKv boolean,
     prim1 _maps_size          Maps.size      ["k", "v"]               mapKv int32,
     prim2 _maps_remove        Maps.remove    ["k", "v"]               k mapKv mapKv,
     prim2 _maps_singleton     Maps.singleton ["k", "v"]               k v mapKv,
