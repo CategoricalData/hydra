@@ -41,7 +41,7 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
-generateSources :: (Module -> Flow (Graph) (M.Map FilePath String)) -> FilePath -> [Module] -> IO ()
+generateSources :: (Module -> Flow Graph (M.Map FilePath String)) -> FilePath -> [Module] -> IO ()
 generateSources printModule basePath mods = do
     mfiles <- runFlow bootstrapGraph generateFiles
     case mfiles of
@@ -69,6 +69,7 @@ generateSources printModule basePath mods = do
 
     forModule mod = withTrace ("module " ++ unNamespace (moduleNamespace mod)) $ printModule mod
 
+-- TODO: move into the kernel
 modulesToGraph :: [Module] -> Graph
 modulesToGraph mods = elementsToGraph parent (Just schemaGraph) dataElements
   where

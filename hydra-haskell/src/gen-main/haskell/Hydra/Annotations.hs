@@ -170,5 +170,21 @@ typeAnnotationInternal = (aggregateAnnotations getAnn Core.annotatedTypeSubject 
       Core.TypeAnnotated v1 -> (Just v1)
       _ -> Nothing) t)
 
+-- TODO: provide a TypeScheme, not just a type. Also, there is no longer any need to term-encode the type as an annotation.
+-- | Create a type element with proper annotations
+typeElement :: (Core.Name -> Core.Type -> Graph.Element)
+typeElement name typ =  
+  let schemaTerm = (Core.TermVariable (Core.Name "hydra.core.Type")) 
+      dataTerm = (normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
+              Core.annotatedTermSubject = (CoreEncoding.coreEncodeType typ),
+              Core.annotatedTermAnnotation = (Maps.fromList [
+                (Core.Name "type", schemaTerm)])})))
+  in Graph.Element {
+    Graph.elementName = name,
+    Graph.elementTerm = dataTerm,
+    Graph.elementType = (Just (Core.TypeScheme {
+      Core.typeSchemeVariables = [],
+      Core.typeSchemeType = typ}))}
+
 withEmptyGraph :: (Compute.Flow Graph.Graph t1 -> Compute.Flow t0 t1)
 withEmptyGraph = (Flows.withState Lexical.emptyGraph)

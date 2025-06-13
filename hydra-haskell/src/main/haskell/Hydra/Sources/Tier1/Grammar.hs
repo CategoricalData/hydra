@@ -30,7 +30,7 @@ hydraGrammarModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "Grammar" $
         doc "An enhanced Backus-Naur form (BNF) grammar" $
-        list $ grammar "Production",
+        wrap $ list $ grammar "Production",
 
       def "Label" $
         doc "A name for a pattern" $

@@ -4,6 +4,14 @@ import Hydra.Kernel
 import Hydra.Dsl.Phantoms
 
 
+module_ :: TTerm Namespace -> TTerm [Element] -> TTerm [Module] -> TTerm [Module] -> TTerm (Maybe String) -> TTerm Module
+module_ ns elems termDeps typeDeps desc = record _Module [
+  _Module_namespace>>: ns,
+  _Module_elements>>: elems,
+  _Module_termDependencies>>: termDeps,
+  _Module_typeDependencies>>: typeDeps,
+  _Module_description>>: desc]
+
 namespace :: TTerm String -> TTerm Namespace
 namespace ns = wrap _Namespace ns
 
