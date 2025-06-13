@@ -4,7 +4,7 @@ module Hydra.Ext.Other.Datalog where
 
 import Hydra.Sources.Tier3.All
 import Hydra.Dsl.Grammars
-import Hydra.Staging.GrammarToModule
+import Hydra.GrammarToModule
 import qualified Hydra.Grammar as G
 
 

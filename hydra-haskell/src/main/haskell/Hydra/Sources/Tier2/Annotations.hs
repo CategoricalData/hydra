@@ -22,6 +22,7 @@ import qualified Hydra.Dsl.Lib.Sets        as Sets
 import           Hydra.Dsl.Lib.Strings     as Strings
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.TTerms          as TTerms
+import qualified Hydra.Dsl.TTypes          as TTypes
 import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier1.All
@@ -83,6 +84,7 @@ hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
      el setTypeDescriptionDef,
      el termAnnotationInternalDef,
      el typeAnnotationInternalDef,
+     el typeElementDef,
 --     el whenFlagDef,
 --     el unshadowVariablesDef,
 --     el withDepthDef,
@@ -429,6 +431,16 @@ typeAnnotationInternalDef = annotationsDefinition "typeAnnotationInternal" $
         _Type_annotated>>: lambda "a" $ just $ var "a"]
       @@ var "t"]
     $ ref aggregateAnnotationsDef @@ var "getAnn" @@ (asFunction Core.annotatedTypeSubject) @@ (asFunction Core.annotatedTypeAnnotation)
+
+typeElementDef :: TElement (Name -> Type -> Element)
+typeElementDef = annotationsDefinition "typeElement" $
+  doc "Create a type element with proper annotations" $
+  lambda "name" $ lambda "typ" $ lets [
+    "schemaTerm">: Core.termVariable (Core.name _Type),
+    "dataTerm">: ref normalizeTermAnnotationsDef @@ (Core.termAnnotated $ Core.annotatedTerm
+      (ref coreEncodeTypeDef @@ var "typ")
+      (Maps.fromList $ list [pair (Core.name key_type) (var "schemaTerm")]))]
+    $ Graph.element (var "name") (var "dataTerm") (just $ Core.typeScheme (list []) (var "typ"))
 
 --whenFlagDef :: TElement (Name -> Flow s a -> Flow s a -> Flow s a)
 --whenFlagDef = annotationsDefinition "whenFlag" $

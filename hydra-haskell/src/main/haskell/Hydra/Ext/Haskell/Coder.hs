@@ -270,7 +270,7 @@ getImplicitTypeClasses :: Type -> M.Map Name (S.Set TypeClass)
 getImplicitTypeClasses = M.fromList . fmap toPair . S.toList . findOrdVariables
   where
     toPair name = (name, S.fromList [TypeClassOrdering])
-    
+
 moduleToHaskellModule :: Module -> Flow Graph H.Module
 moduleToHaskellModule mod = do
     namespaces <- namespacesForModule mod

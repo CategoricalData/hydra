@@ -8,10 +8,9 @@ import Hydra.Core
 import Hydra.CoreEncoding
 import Hydra.Graph
 import Hydra.Lexical
-import Hydra.Staging.Annotations
+import Hydra.Annotations
 import Hydra.Module
 import Hydra.Rewriting
-import Hydra.Staging.Rewriting
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -48,17 +47,6 @@ datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders 
 
 qualify :: Namespace -> Name -> Name
 qualify (Namespace gname) (Name lname) = Name $ gname ++ "." ++ lname
-
--- TODO: provide a TypeScheme, not just a type, and there is no need to term-encode the type.
-typeElement :: Name -> Type -> Element
-typeElement name typ = Element {
-    elementName = name,
-    elementTerm = dataTerm,
-    elementType = Just $ TypeScheme [] typ}
-  where
-    -- These type annotations allow type inference to proceed despite cyclic type definitions, e.g. in Hydra Core
-    dataTerm = normalizeTermAnnotations $ TermAnnotated $ AnnotatedTerm (coreEncodeType typ) $ M.fromList [(key_type, schemaTerm)]
-    schemaTerm = TermVariable _Type
 
 typeref :: Namespace -> String -> Type
 typeref ns = TypeVariable . qualify ns . Name
