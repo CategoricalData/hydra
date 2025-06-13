@@ -79,6 +79,7 @@ asFunction :: (TTerm a -> TTerm b) -> TTerm (a -> b)
 asFunction f = case (unTTerm $ f $ var "x") of
   TermApplication (Application lhs _) -> TTerm lhs
   TermOptional (Just _) -> primitive _optionals_pure
+  TermUnion (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
 
 -- | Compose two functions (g then f)
 -- Example: compose (var "stringLength") (var "toString")

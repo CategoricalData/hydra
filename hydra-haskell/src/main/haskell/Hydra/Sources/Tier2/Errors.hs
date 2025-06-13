@@ -22,6 +22,7 @@ import           Hydra.Dsl.Phantoms        as Phantoms
 import qualified Hydra.Dsl.Lib.Sets        as Sets
 import           Hydra.Dsl.Lib.Strings     as Strings
 import qualified Hydra.Dsl.Module          as Module
+import qualified Hydra.Dsl.TTerms          as TTerms
 import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
 import           Hydra.Sources.Tier1.All
