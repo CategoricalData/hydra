@@ -21,7 +21,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-aggregateAnnotations :: Ord t1 => ((t3 -> Maybe t0) -> (t0 -> t3) -> (t0 -> M.Map t1 t2) -> t3 -> M.Map t1 t2)
+aggregateAnnotations :: (Ord t1) => ((t3 -> Maybe t0) -> (t0 -> t3) -> (t0 -> M.Map t1 t2) -> t3 -> M.Map t1 t2)
 aggregateAnnotations getValue getX getAnns t =  
   let toPairs = (\rest -> \t -> Optionals.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t))
   in (Maps.fromList (Lists.concat (toPairs [] t)))
@@ -78,7 +78,7 @@ requireTermType =
 resetCount :: (Core.Name -> Compute.Flow t0 ())
 resetCount key = (putAttr key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))))
 
-setAnnotation :: Ord t0 => (t0 -> Maybe t1 -> M.Map t0 t1 -> M.Map t0 t1)
+setAnnotation :: (Ord t0) => (t0 -> Maybe t1 -> M.Map t0 t1 -> M.Map t0 t1)
 setAnnotation key val m = (Maps.alter (\_ -> val) key m)
 
 -- | Set description in annotations
