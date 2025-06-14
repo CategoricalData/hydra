@@ -26,14 +26,14 @@ insert = primitive2 _sets_insert
 intersection :: TTerm (Set a) -> TTerm (Set a) -> TTerm (Set a)
 intersection = primitive2 _sets_intersection
 
-isEmpty :: TTerm (Set a) -> TTerm Bool
-isEmpty = primitive1 _sets_isEmpty
-
 map :: TTerm (a -> b) -> TTerm (Set a) -> TTerm (Set b)
 map = primitive2 _sets_map
 
 member :: TTerm a -> TTerm (Set a) -> TTerm Bool
 member = primitive2 _sets_member
+
+null :: TTerm (Set a) -> TTerm Bool
+null = primitive1 _sets_null
 
 singleton :: TTerm a -> TTerm (Set a)
 singleton = primitive1 _sets_singleton

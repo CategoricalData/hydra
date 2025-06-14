@@ -371,7 +371,6 @@ _maps_filter        = qname _hydra_lib_maps "filter" :: Name
 _maps_filterWithKey = qname _hydra_lib_maps "filterWithKey" :: Name
 _maps_fromList      = qname _hydra_lib_maps "fromList" :: Name
 _maps_insert        = qname _hydra_lib_maps "insert" :: Name
-_maps_isEmpty       = qname _hydra_lib_maps "isEmpty" :: Name
 _maps_keys          = qname _hydra_lib_maps "keys" :: Name
 _maps_lookup        = qname _hydra_lib_maps "lookup" :: Name
 _maps_map           = qname _hydra_lib_maps "map" :: Name
@@ -394,7 +393,6 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
     prim2 _maps_filterWithKey Maps.filterWithKey ["k", "v"]           (function k (function v boolean)) mapKv mapKv,
     prim1 _maps_fromList      Maps.fromList  ["k", "v"]               (list $ pair k v) mapKv,
     prim3 _maps_insert        Maps.insert    ["k", "v"]               k v mapKv mapKv,
-    prim1 _maps_isEmpty       Maps.isEmpty   ["k", "v"]               mapKv boolean,
     prim1 _maps_keys          Maps.keys      ["k", "v"]               mapKv (list k),
     prim2 _maps_lookup        Maps.lookup    ["k", "v"]               k mapKv (optional v),
     prim2 _maps_map           Maps.map       ["k", "v1", "v2"]        (function v1 v2) (Prims.map k v1) (Prims.map k v2),
@@ -420,23 +418,25 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
 _hydra_lib_math :: Namespace
 _hydra_lib_math = Namespace "hydra.lib.math"
 
-_math_add = qname _hydra_lib_math "add" :: Name
-_math_div = qname _hydra_lib_math "div" :: Name
-_math_mod = qname _hydra_lib_math "mod" :: Name
-_math_mul = qname _hydra_lib_math "mul" :: Name
-_math_neg = qname _hydra_lib_math "neg" :: Name
-_math_rem = qname _hydra_lib_math "rem" :: Name
-_math_sub = qname _hydra_lib_math "sub" :: Name
+_math_add        = qname _hydra_lib_math "add" :: Name
+_math_div        = qname _hydra_lib_math "div" :: Name
+_math_mod        = qname _hydra_lib_math "mod" :: Name
+_math_mul        = qname _hydra_lib_math "mul" :: Name
+_math_neg        = qname _hydra_lib_math "neg" :: Name
+_math_rangeInt32 = qname _hydra_lib_math "rangeInt32" :: Name
+_math_rem        = qname _hydra_lib_math "rem" :: Name
+_math_sub        = qname _hydra_lib_math "sub" :: Name
 
 hydraLibMathInt32 :: Library
 hydraLibMathInt32 = standardLibrary _hydra_lib_math [
-  prim2 _math_add Math.add [] int32 int32 int32,
-  prim2 _math_div Math.div [] int32 int32 int32,
-  prim2 _math_mod Math.mod [] int32 int32 int32,
-  prim2 _math_mul Math.mul [] int32 int32 int32,
-  prim1 _math_neg Math.neg [] int32 int32,
-  prim2 _math_rem Math.rem [] int32 int32 int32,
-  prim2 _math_sub Math.sub [] int32 int32 int32]
+  prim2 _math_add        Math.add        [] int32 int32 int32,
+  prim2 _math_div        Math.div        [] int32 int32 int32,
+  prim2 _math_mod        Math.mod        [] int32 int32 int32,
+  prim2 _math_mul        Math.mul        [] int32 int32 int32,
+  prim1 _math_neg        Math.neg        [] int32 int32,
+  prim2 _math_rangeInt32 Math.rangeInt32 [] int32 int32 (list int32),
+  prim2 _math_rem        Math.rem        [] int32 int32 int32,
+  prim2 _math_sub        Math.sub        [] int32 int32 int32]
 
 -- * hydra.lib.optionals primitives
 
@@ -448,6 +448,7 @@ _optionals_apply     = qname _hydra_lib_optionals "apply" :: Name
 _optionals_bind      = qname _hydra_lib_optionals "bind" :: Name
 _optionals_cat       = qname _hydra_lib_optionals "cat" :: Name
 _optionals_compose   = qname _hydra_lib_optionals "compose" :: Name
+_optionals_fromJust  = qname _hydra_lib_optionals "fromJust" :: Name
 _optionals_fromMaybe = qname _hydra_lib_optionals "fromMaybe" :: Name
 _optionals_isJust    = qname _hydra_lib_optionals "isJust" :: Name
 _optionals_isNothing = qname _hydra_lib_optionals "isNothing" :: Name
@@ -461,6 +462,7 @@ hydraLibOptionals = standardLibrary _hydra_lib_optionals [
     prim2       _optionals_bind      Optionals.bind            ["x", "y"]      (optional x) (function x (optional y)) (optional y),
     prim1       _optionals_cat       Optionals.cat             ["x"]           (list $ optional x) (list x),
     prim2       _optionals_compose   Optionals.compose         ["x", "y", "z"] (function x $ optional y) (function y $ optional z) (function x $ optional z),
+    prim1       _optionals_fromJust  Optionals.fromJust        ["x"]           (optional x) x,
     prim2       _optionals_fromMaybe Optionals.fromMaybe       ["x"]           x (optional x) x,
     prim1       _optionals_isJust    Optionals.isJust          ["x"]           (optional x) boolean,
     prim1       _optionals_isNothing Optionals.isNothing       ["x"]           (optional x) boolean,
@@ -498,9 +500,9 @@ _sets_empty        = qname _hydra_lib_sets "empty" :: Name
 _sets_fromList     = qname _hydra_lib_sets "fromList" :: Name
 _sets_insert       = qname _hydra_lib_sets "insert" :: Name
 _sets_intersection = qname _hydra_lib_sets "intersection" :: Name
-_sets_isEmpty      = qname _hydra_lib_sets "isEmpty" :: Name
 _sets_map          = qname _hydra_lib_sets "map" :: Name
 _sets_member       = qname _hydra_lib_sets "member" :: Name
+_sets_null         = qname _hydra_lib_sets "null" :: Name
 _sets_singleton    = qname _hydra_lib_sets "singleton" :: Name
 _sets_size         = qname _hydra_lib_sets "size" :: Name
 _sets_toList       = qname _hydra_lib_sets "toList" :: Name
@@ -515,9 +517,9 @@ hydraLibSets = standardLibrary _hydra_lib_sets [
     prim1 _sets_fromList     Sets.fromList     ["x"]      (list x) (set x),
     prim2 _sets_insert       Sets.insert       ["x"]      x (set x) (set x),
     prim2 _sets_intersection Sets.intersection ["x"]      (set x) (set x) (set x),
-    prim1 _sets_isEmpty      Sets.isEmpty      ["x"]      (set x) boolean,
     prim2 _sets_map          Sets.map          ["x", "y"] (function x y) (set x) (set y),
     prim2 _sets_member       Sets.member       ["x"]      x (set x) boolean,
+    prim1 _sets_null         Sets.null         ["x"]      (set x) boolean,
     prim1 _sets_singleton    Sets.singleton    ["x"]      x (set x),
     prim1 _sets_size         Sets.size         ["x"]      (set x) int32,
     prim1 _sets_toList       Sets.toList       ["x"]      (set x) (list x),
@@ -536,7 +538,7 @@ _strings_cat         = qname _hydra_lib_strings "cat" :: Name
 _strings_cat2        = qname _hydra_lib_strings "cat2" :: Name
 _strings_fromList    = qname _hydra_lib_strings "fromList" :: Name
 _strings_intercalate = qname _hydra_lib_strings "intercalate" :: Name
-_strings_isEmpty     = qname _hydra_lib_strings "isEmpty" :: Name
+_strings_null        = qname _hydra_lib_strings "null" :: Name
 _strings_length      = qname _hydra_lib_strings "length" :: Name
 _strings_lines       = qname _hydra_lib_strings "lines" :: Name
 _strings_splitOn     = qname _hydra_lib_strings "splitOn" :: Name
@@ -551,9 +553,9 @@ hydraLibStrings = standardLibrary _hydra_lib_strings [
   prim2 _strings_cat2        Strings.cat2        [] string string string,
   prim1 _strings_fromList    Strings.fromList    [] (list int32) string,
   prim2 _strings_intercalate Strings.intercalate [] string (list string) string,
-  prim1 _strings_isEmpty     Strings.isEmpty     [] string boolean,
   prim1 _strings_length      Strings.length      [] string int32,
   prim1 _strings_lines       Strings.lines       [] string (list string),
+  prim1 _strings_null        Strings.null        [] string boolean,
   prim2 _strings_splitOn     Strings.splitOn     [] string string (list string),
   prim1 _strings_toList      Strings.toList      [] string (list int32),
   prim1 _strings_toLower     Strings.toLower     [] string string,

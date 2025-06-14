@@ -1,6 +1,9 @@
 -- | Functions for reducing terms and types, i.e. performing computations
 
-module Hydra.Staging.Reduction where
+module Hydra.Staging.Reduction (
+  module Hydra.Reduction,
+  module Hydra.Staging.Reduction
+) where
 
 import Hydra.Arity
 import Hydra.Strip
@@ -10,6 +13,7 @@ import Hydra.Staging.Schemas
 import Hydra.Graph
 import Hydra.Staging.Annotations
 import Hydra.Lexical
+import Hydra.Reduction
 import Hydra.Staging.Rewriting
 import Hydra.Rewriting
 import Hydra.Lexical
@@ -25,24 +29,9 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-alphaConvert :: Name -> Term -> Term -> Term
-alphaConvert vold tnew = rewriteTerm rewrite
-  where
-    rewrite recurse term = case term of
-      TermFunction (FunctionLambda (Lambda v _ _)) -> if v == vold
-        then term
-        else recurse term
-      TermVariable v -> if v == vold then tnew else TermVariable v
-      _ -> recurse term
-
--- For demo purposes. This should be generalized to enable additional side effects of interest.
-countPrimitiveInvocations :: Bool
-countPrimitiveInvocations = True
-
 -- A term evaluation function which is alternatively lazy or eager
 reduceTerm :: Bool -> M.Map Name Term -> Term -> Flow Graph Term
 reduceTerm eager env = rewriteTermM mapping
---reduceTerm eager env term = withTrace ("reducing " ++ showTerm term) $ rewriteTermM mapping term
   where
     reduce eager = reduceTerm eager M.empty
 
@@ -136,114 +125,3 @@ betaReduceType typ = rewriteTypeM mapExpr typ
           TypeVariable name -> do
             t' <- requireType name
             betaReduceType $ TypeApplication $ ApplicationType t' rhs
-
--- | Apply the special rules:
---     ((\x.e1) e2) == e1, where x does not appear free in e1
---   and
---     ((\x.e1) e2) = e1[x/e2]
---  These are both limited forms of beta reduction which help to "clean up" a term without fully evaluating it.
-contractTerm :: Term -> Term
-contractTerm = rewriteTerm rewrite
-  where
-    rewrite recurse term = case rec of
-        TermApplication (Application lhs rhs) -> case fullyStripTerm lhs of
-          TermFunction (FunctionLambda (Lambda v _ body)) -> if isFreeVariableInTerm v body
-            then body
-            else alphaConvert v rhs body
-          _ -> rec
-        _ -> rec
-      where
-        rec = recurse term
-
--- Note: unused / untested
-etaReduceTerm :: Term -> Term
-etaReduceTerm term = case term of
-    TermAnnotated (AnnotatedTerm term1 ann) -> TermAnnotated (AnnotatedTerm (etaReduceTerm term1) ann)
-    TermFunction (FunctionLambda l) -> reduceLambda l
-    _ -> noChange
-  where
-    reduceLambda (Lambda v d body) = case etaReduceTerm body of
-      TermAnnotated (AnnotatedTerm body1 ann) -> reduceLambda (Lambda v d body1)
-      TermApplication a -> reduceApplication a
-        where
-          reduceApplication (Application lhs rhs) = case etaReduceTerm rhs of
-            TermAnnotated (AnnotatedTerm rhs1 ann) -> reduceApplication (Application lhs rhs1)
-            TermVariable v1 -> if v == v1 && isFreeVariableInTerm v lhs
-              then etaReduceTerm lhs
-              else noChange
-            _ -> noChange
-      _ -> noChange
-    noChange = term
-
--- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', in which the implicit
---   parameters of primitive functions and eliminations are made into explicit lambda parameters.
---   Variable references are not expanded.
---   This is useful for targets like Python with weaker support for currying than Hydra or Haskell.
---   Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
-expandLambdas :: Graph -> Term -> Term
---expandLambdas g = contractTerm . unshadowVariables . expand
-expandLambdas graph term = contractTerm $ rewriteTerm (rewrite []) term
-  where
-    rewrite args recurse term = case term of
-        TermApplication (Application lhs rhs) -> rewrite (erhs:args) recurse lhs
-          where
-            erhs = rewrite [] recurse rhs
-        _ -> afterRecursion $ recurse term
-      where
-        afterRecursion term = expand args (expansionArity graph term) term
-    expand args arity term = pad is apps
-      where
-        apps = L.foldl (\lhs arg -> TermApplication $ Application lhs arg) term args
-        is = if arity <= L.length args then [] else [1..(arity - L.length args)]
-    pad is term = if L.null is
-        then term
-        else TermFunction $ FunctionLambda $
-          Lambda var Nothing $ pad (tail is) (TermApplication $ Application term $ TermVariable var)
-      where
-        var = (Name $ "v" ++ show (head is))
-
-expansionArity :: Graph -> Term -> Int
-expansionArity graph term = case fullyStripTerm term of
-  TermApplication (Application lhs rhs) -> expansionArity graph lhs - 1
-  TermFunction f -> case f of
-    FunctionElimination _ -> 1
-    FunctionLambda _ -> 0 -- lambdas increase logical arity, but they do not need to be expanded
-    FunctionPrimitive name -> primitiveArity $ Y.fromJust $ lookupPrimitive graph name
-  TermVariable name -> case typeSchemeType <$> (lookupElement graph name >>= elementType) of
-    Nothing -> 0
-    Just typ -> typeArity typ
-  _ -> 0
-
--- | Whether a term is closed, i.e. represents a complete program
-termIsClosed :: Term -> Bool
-termIsClosed = S.null . freeVariablesInTerm
-
--- | Whether a term has been fully reduced to a "value"
-termIsValue :: Graph -> Term -> Bool
-termIsValue g term = case stripTerm term of
-    TermApplication _ -> False
-    TermLiteral _ -> True
-    TermFunction f -> functionIsValue f
-    TermList els -> forList els
-    TermMap map -> L.foldl
-      (\b (k, v) -> b && termIsValue g k && termIsValue g v)
-      True $ M.toList map
-    TermOptional m -> case m of
-      Nothing -> True
-      Just term -> termIsValue g term
-    TermRecord (Record _ fields) -> checkFields fields
-    TermSet els -> forList $ S.toList els
-    TermUnion (Injection _ field) -> checkField field
-    TermVariable _ -> False
-  where
-    forList els = L.foldl (\b t -> b && termIsValue g t) True els
-    checkField = termIsValue g . fieldTerm
-    checkFields = L.foldl (\b f -> b && checkField f) True
-
-    functionIsValue f = case f of
-      FunctionElimination e -> case e of
-        EliminationWrap _ -> True
-        EliminationRecord _ -> True
-        EliminationUnion (CaseStatement _ def cases) -> checkFields cases && (Y.maybe True (termIsValue g) def)
-      FunctionLambda (Lambda _ _ body) -> termIsValue g body
-      FunctionPrimitive _ -> True

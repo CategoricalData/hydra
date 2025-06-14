@@ -22,14 +22,14 @@ fromList = primitive1 _strings_fromList
 intercalate :: TTerm String -> TTerm [String] -> TTerm String
 intercalate = primitive2 _strings_intercalate
 
-isEmpty :: TTerm String -> TTerm Bool
-isEmpty = primitive1 _strings_isEmpty
-
 length :: TTerm String -> TTerm Int
 length = primitive1 _strings_length
 
 lines :: TTerm String -> TTerm [String]
 lines = primitive1 _strings_lines
+
+null :: TTerm String -> TTerm Bool
+null = primitive1 _strings_null
 
 splitOn :: TTerm String -> TTerm String -> TTerm [String]
 splitOn = primitive2 _strings_splitOn

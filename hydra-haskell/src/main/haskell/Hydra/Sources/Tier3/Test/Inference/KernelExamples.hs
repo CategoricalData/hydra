@@ -29,7 +29,7 @@ testGroupForNestedLet = supergroup "Nested let" [
           "firstLetter">: var "mapping" @@ (primitive _strings_fromList @@ (primitive _lists_pure @@ (primitive _lists_head @@ var "list"))),
           "list">: primitive _strings_toList @@ var "s"] $
           primitive _logic_ifElse
-            @@ (primitive _strings_isEmpty @@ var "s")
+            @@ (primitive _strings_null @@ var "s")
             @@ (var "s")
             @@ (primitive _strings_cat2 @@ var "firstLetter" @@ (primitive _strings_fromList @@ (primitive _lists_tail @@ var "list"))))
         (T.functionMany [T.function T.string T.string, T.string, T.string])]]

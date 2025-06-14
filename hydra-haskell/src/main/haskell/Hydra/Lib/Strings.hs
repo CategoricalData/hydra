@@ -19,14 +19,14 @@ fromList = fmap C.chr
 intercalate :: String -> [String] -> String
 intercalate = L.intercalate
 
-isEmpty :: String -> Bool
-isEmpty = L.null
-
 length :: String -> Int
 length = L.length
 
 lines :: String -> [String]
 lines = L.lines
+
+null :: String -> Bool
+null = L.null
 
 splitOn :: String -> String -> [String]
 splitOn = LS.splitOn

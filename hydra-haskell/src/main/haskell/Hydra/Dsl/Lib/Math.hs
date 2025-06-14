@@ -21,6 +21,9 @@ mul = primitive2 _math_mul
 neg :: TTerm Int -> TTerm Int
 neg = primitive1 _math_neg
 
+rangeInt32 :: TTerm Int -> TTerm Int -> TTerm [Int]
+rangeInt32 start end = primitive2 _math_rangeInt32 start end
+
 rem :: TTerm Int -> TTerm Int -> TTerm Int
 rem = primitive2 _math_rem
 

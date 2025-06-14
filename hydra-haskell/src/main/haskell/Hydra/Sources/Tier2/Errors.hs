@@ -93,7 +93,7 @@ traceSummaryDef = errorsDefinition "traceSummary" $
   doc "Summarize a trace as a string" $
   lambda "t" $ lets [
     "messageLines">: (Lists.nub (Compute.traceMessages $ var "t")),
-    "keyvalLines">: Logic.ifElse (Maps.isEmpty (Compute.traceOther $ var "t"))
+    "keyvalLines">: Logic.ifElse (Maps.null (Compute.traceOther $ var "t"))
       (list [])
       (Lists.cons ("key/value pairs: ")
         (Lists.map (var "toLine") (Maps.toList (Compute.traceOther $ var "t")))),

@@ -18,6 +18,9 @@ cat = primitive1 _optionals_cat
 compose :: TTerm (a -> Maybe b) -> TTerm (b -> Maybe c) -> TTerm (a -> Maybe c)
 compose = primitive2 _optionals_compose
 
+fromJust :: TTerm (Maybe a) -> TTerm a
+fromJust = primitive1 _optionals_fromJust
+
 fromMaybe :: TTerm a -> TTerm (Maybe a) -> TTerm a
 fromMaybe = primitive2 _optionals_fromMaybe
 

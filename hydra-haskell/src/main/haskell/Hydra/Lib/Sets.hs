@@ -23,15 +23,15 @@ insert = S.insert
 intersection :: Ord x => S.Set x -> S.Set x -> S.Set x
 intersection = S.intersection
 
-isEmpty :: S.Set x -> Bool
-isEmpty = S.null
-
 -- Note: the presence of a 'map' function does not imply that sets are a functor in Hydra
 map :: Ord y => (x -> y) -> S.Set x -> S.Set y
 map f = S.fromList . fmap f . S.toList
 
 member :: Ord x => x -> S.Set x -> Bool
 member = S.member
+
+null :: S.Set x -> Bool
+null = S.null
 
 singleton :: x -> S.Set x
 singleton = S.singleton

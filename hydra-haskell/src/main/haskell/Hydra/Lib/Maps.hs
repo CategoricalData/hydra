@@ -29,9 +29,6 @@ fromList = M.fromList
 insert :: Ord k => k -> v -> M.Map k v -> M.Map k v
 insert = M.insert
 
-isEmpty :: M.Map k v -> Bool
-isEmpty = M.null
-
 keys :: M.Map k v -> [k]
 keys = M.keys
 
