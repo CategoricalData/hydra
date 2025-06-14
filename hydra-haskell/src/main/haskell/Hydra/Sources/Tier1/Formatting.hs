@@ -128,7 +128,7 @@ mapFirstLetterDef = formattingDefinition "mapFirstLetter" $
     "firstLetter">: var "mapping" @@ (Strings.fromList (Lists.pure (Lists.head $ var "list"))),
     "list">: Strings.toList $ var "s"]
     $ Logic.ifElse
-        (Strings.isEmpty $ var "s")
+        (Strings.null $ var "s")
         (var "s")
         (Strings.cat2 (var "firstLetter") (Strings.fromList (Lists.tail $ var "list")))
 

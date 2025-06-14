@@ -21,5 +21,8 @@ div = Prelude.div
 mod :: Int -> Int -> Int
 mod = Prelude.mod
 
+rangeInt32 :: Int -> Int -> [Int]
+rangeInt32 start end = [start .. end]
+
 rem :: Int -> Int -> Int
 rem = Prelude.rem

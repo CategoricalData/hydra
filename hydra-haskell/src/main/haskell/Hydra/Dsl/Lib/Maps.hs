@@ -32,9 +32,6 @@ fromList = primitive1 _maps_fromList
 insert :: TTerm k -> TTerm v -> TTerm (Map k v) -> TTerm (Map k v)
 insert = primitive3 _maps_insert
 
-isEmpty :: TTerm (Map k v) -> TTerm Bool
-isEmpty = primitive1 _maps_isEmpty
-
 keys :: TTerm (Map k v) -> TTerm [k]
 keys = primitive1 _maps_keys
 

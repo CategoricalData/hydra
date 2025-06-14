@@ -84,7 +84,7 @@ mapFirstLetter :: ((String -> String) -> String -> String)
 mapFirstLetter mapping s =  
   let firstLetter = (mapping (Strings.fromList (Lists.pure (Lists.head list)))) 
       list = (Strings.toList s)
-  in (Logic.ifElse (Strings.isEmpty s) s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))))
+  in (Logic.ifElse (Strings.null s) s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))))
 
 nonAlnumToUnderscores :: (String -> String)
 nonAlnumToUnderscores input =  

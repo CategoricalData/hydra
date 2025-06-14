@@ -17,6 +17,9 @@ cat = Y.catMaybes
 compose :: (a -> Y.Maybe b) -> (b -> Y.Maybe c) -> (a -> Y.Maybe c)
 compose f g = \x -> f x >>= g
 
+fromJust :: Y.Maybe a -> a
+fromJust = Y.fromJust
+
 fromMaybe :: a -> Y.Maybe a -> a
 fromMaybe = Y.fromMaybe
 

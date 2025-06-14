@@ -1,6 +1,7 @@
 -- | A proxy for the Hydra kernel, i.e. the code which must be present in every Hydra implementation, and can be imported as a unit.
 
--- Note: Hydra.Grammar is part of the kernel, but is not a default import because the names of its types clash with those of other types.
+-- Note: Hydra.Ast, Hydra.Grammar, and Hydra.GrammarToModule are part of the kernel,
+--       but they are not default imports because the names of their types clash with those of other types.
 module Hydra.Kernel (
   module Hydra.Accessors,
   module Hydra.Annotations,

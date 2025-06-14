@@ -46,7 +46,7 @@ putState cx = (Compute.Flow (\s0 -> \t0 ->
 traceSummary :: (Compute.Trace -> String)
 traceSummary t =  
   let messageLines = (Lists.nub (Compute.traceMessages t)) 
-      keyvalLines = (Logic.ifElse (Maps.isEmpty (Compute.traceOther t)) [] (Lists.cons "key/value pairs: " (Lists.map toLine (Maps.toList (Compute.traceOther t)))))
+      keyvalLines = (Logic.ifElse (Maps.null (Compute.traceOther t)) [] (Lists.cons "key/value pairs: " (Lists.map toLine (Maps.toList (Compute.traceOther t)))))
       toLine = (\pair -> Strings.cat [
               Strings.cat [
                 Strings.cat [
