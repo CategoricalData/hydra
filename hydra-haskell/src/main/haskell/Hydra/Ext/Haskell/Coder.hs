@@ -149,9 +149,7 @@ encodeTerm namespaces term = do
         return $ hsapp lhs rhs
       where
         encodePair (k, v) = H.ExpressionTuple <$> sequence [encode k, encode v]
-    TermWrap (WrappedTerm tname term') -> if newtypesNotTypedefs
-      then hsapp <$> pure (H.ExpressionVariable $ elementReference namespaces tname) <*> encode term'
-      else encode term'
+    TermWrap (WrappedTerm tname term') -> hsapp <$> pure (H.ExpressionVariable $ elementReference namespaces tname) <*> encode term'
     TermOptional m -> case m of
       Nothing -> pure $ hsvar "Nothing"
       Just t -> hsapp (hsvar "Just") <$> encode t
@@ -263,6 +261,7 @@ findOrdVariables = foldOverType TraversalOrderPre fold S.empty
         TypeVariable v -> if isTypeVariable v
           then S.insert v names
           else names
+        _ -> names
       _ -> names
     isTypeVariable v = Y.isNothing (namespaceOf v) && L.head (unName v) == 't'
 
@@ -359,13 +358,9 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
       TypeWrap (WrappedType tname wt) -> do
         cons <- newtypeCons el wt
         return $ H.DeclarationData $ H.DataDeclaration H.DataOrNewtypeNewtype [] hd [cons] [deriv]
-      _ -> if newtypesNotTypedefs
-        then do
-          cons <- newtypeCons el t'
-          return $ H.DeclarationData $ H.DataDeclaration H.DataOrNewtypeNewtype [] hd [cons] [deriv]
-        else do
-          htype <- adaptTypeToHaskellAndEncode namespaces t
-          return $ H.DeclarationType (H.TypeDeclaration hd htype)
+      _ -> do
+        htype <- adaptTypeToHaskellAndEncode namespaces t
+        return $ H.DeclarationType (H.TypeDeclaration hd htype)
     comments <- getTermDescription term
     tdecls <- if haskellGenerationOptionsIncludeTypeDefinitions defaultHaskellGenerationOptions
        then do
