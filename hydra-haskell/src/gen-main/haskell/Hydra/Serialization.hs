@@ -445,6 +445,17 @@ unsupportedType label = (cst (Strings.cat [
     label],
   "]"]))
 
+unsupportedVariant :: (String -> String -> Ast.Expr)
+unsupportedVariant label obj = (cst (Strings.cat [
+  Strings.cat [
+    Strings.cat [
+      Strings.cat [
+        "[unsupported ",
+        label],
+      ": "],
+    (Literals.showString obj)],
+  "]"]))
+
 withComma :: (Ast.Expr -> Ast.Expr)
 withComma e = (noSep [
   e,

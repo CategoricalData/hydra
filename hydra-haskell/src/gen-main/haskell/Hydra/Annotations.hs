@@ -21,7 +21,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-aggregateAnnotations :: (Ord t1) => ((t3 -> Maybe t0) -> (t0 -> t3) -> (t0 -> M.Map t1 t2) -> t3 -> M.Map t1 t2)
+aggregateAnnotations :: (Ord t2) => ((t0 -> Maybe t1) -> (t1 -> t0) -> (t1 -> M.Map t2 t3) -> t0 -> M.Map t2 t3)
 aggregateAnnotations getValue getX getAnns t =  
   let toPairs = (\rest -> \t -> Optionals.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t))
   in (Maps.fromList (Lists.concat (toPairs [] t)))
@@ -170,7 +170,6 @@ typeAnnotationInternal = (aggregateAnnotations getAnn Core.annotatedTypeSubject 
       Core.TypeAnnotated v1 -> (Just v1)
       _ -> Nothing) t)
 
--- TODO: provide a TypeScheme, not just a type. Also, there is no longer any need to term-encode the type as an annotation.
 -- | Create a type element with proper annotations
 typeElement :: (Core.Name -> Core.Type -> Graph.Element)
 typeElement name typ =  
