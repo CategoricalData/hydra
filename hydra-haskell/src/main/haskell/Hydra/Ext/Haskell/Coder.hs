@@ -33,7 +33,10 @@ defaultHaskellGenerationOptions = HaskellGenerationOptions False
 adaptTypeToHaskellAndEncode :: HaskellNamespaces -> Type -> Flow Graph H.Type
 adaptTypeToHaskellAndEncode namespaces = adaptAndEncodeType haskellLanguage (encodeType namespaces)
 
+constantForFieldName :: Name -> Name -> String
 constantForFieldName tname fname = "_" ++ localNameOf tname ++ "_" ++ unName fname
+
+constantForTypeName :: Name -> String
 constantForTypeName tname = "_" ++ localNameOf tname
 
 constructModule :: HaskellNamespaces
