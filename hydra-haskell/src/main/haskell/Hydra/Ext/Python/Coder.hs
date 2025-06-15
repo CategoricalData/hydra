@@ -219,7 +219,7 @@ encodeLiteralType lt = do
 
 encodeModule :: Module -> Flow Graph Py.Module
 encodeModule mod = do
-    defs <- adaptedModuleDefinitions pythonLanguage mod
+    defs <- reorderDefs <$> adaptedModuleDefinitions pythonLanguage mod
     let meta = gatherMetadata defs
     let namespaces = findNamespaces defs meta
     let tvars = pythonModuleMetadataTypeVariables meta
@@ -238,6 +238,13 @@ encodeModule mod = do
     let body = L.filter (not . L.null) $ [commentStmts, importStmts, tvarStmts] ++ defStmts
     return $ Py.Module body
   where
+    reorderDefs defs = fst p ++ snd p
+      where
+        p = L.partition isNameDef defs
+        isNameDef d = case d of
+          DefinitionType name _ -> name == _Name
+          _ -> False
+
     findNamespaces defs meta = if fst (namespacesFocus namespaces) == coreNs
         then namespaces
         else namespaces {namespacesMapping = M.insert coreNs (encodeNamespace coreNs) $ namespacesMapping namespaces}
