@@ -290,8 +290,9 @@ _Data_Ref_select = (Core.Name "select")
 
 _Data_Ref_applyUnary = (Core.Name "applyUnary")
 
-data Data_This = 
-  Data_This {}
+newtype Data_This = 
+  Data_This {
+    unData_This :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _Data_This = (Core.Name "hydra.ext.scala.meta.Data_This")
@@ -317,8 +318,9 @@ _Data_Name = (Core.Name "hydra.ext.scala.meta.Data_Name")
 
 _Data_Name_value = (Core.Name "value")
 
-data Data_Anonymous = 
-  Data_Anonymous {}
+newtype Data_Anonymous = 
+  Data_Anonymous {
+    unData_Anonymous :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _Data_Anonymous = (Core.Name "hydra.ext.scala.meta.Data_Anonymous")
@@ -857,8 +859,9 @@ _Type_Name = (Core.Name "hydra.ext.scala.meta.Type_Name")
 
 _Type_Name_value = (Core.Name "value")
 
-data Type_AnonymousName = 
-  Type_AnonymousName {}
+newtype Type_AnonymousName = 
+  Type_AnonymousName {
+    unType_AnonymousName :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _Type_AnonymousName = (Core.Name "hydra.ext.scala.meta.Type_AnonymousName")
@@ -1927,8 +1930,9 @@ _Init_name = (Core.Name "name")
 
 _Init_argss = (Core.Name "argss")
 
-data Self = 
-  Self {}
+newtype Self = 
+  Self {
+    unSelf :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _Self = (Core.Name "hydra.ext.scala.meta.Self")
@@ -2258,8 +2262,9 @@ _Source = (Core.Name "hydra.ext.scala.meta.Source")
 
 _Source_stats = (Core.Name "stats")
 
-data Quasi = 
-  Quasi {}
+newtype Quasi = 
+  Quasi {
+    unQuasi :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _Quasi = (Core.Name "hydra.ext.scala.meta.Quasi")

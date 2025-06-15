@@ -131,7 +131,7 @@ javaDeclName :: Name -> Java.TypeIdentifier
 javaDeclName = Java.TypeIdentifier . javaVariableName
 
 javaEmptyStatement :: Java.Statement
-javaEmptyStatement = Java.StatementWithoutTrailing $ Java.StatementWithoutTrailingSubstatementEmpty Java.EmptyStatement
+javaEmptyStatement = Java.StatementWithoutTrailing $ Java.StatementWithoutTrailingSubstatementEmpty
 
 javaEqualityExpressionToJavaExpression :: Java.EqualityExpression -> Java.Expression
 javaEqualityExpressionToJavaExpression eqEx = javaConditionalAndExpressionToJavaExpression $

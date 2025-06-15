@@ -150,7 +150,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "name">: string],
 
 -- <class-body> ::= "{" <member-specifications> "}" ";"
-      def "ClassBody" $ list $ cpp "MemberSpecification",
+      def "ClassBody" $ wrap $ list $ cpp "MemberSpecification",
 
 -- <member-specification> ::= <access-specifier> ":" | <member-declaration>
       def "MemberSpecification" $ union [
@@ -442,7 +442,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "addressOf", "preIncrement", "preDecrement"],
 
 -- <sizeof-expression> ::= "sizeof" "(" <type-expression> ")"
-      def "SizeofExpression" $ cpp "TypeExpression",
+      def "SizeofExpression" $ wrap $ cpp "TypeExpression",
 
 -- <postfix-expression> ::= <primary-expression> | <postfix-expression> "[" <expression> "]" | <postfix-expression> "(" <expression-list> ")" | <postfix-expression> "." <identifier> | <postfix-expression> "->" <identifier> | <postfix-expression> "++" | <postfix-expression> "--"
       def "PostfixExpression" $ union [
@@ -511,7 +511,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "overloaded">: cpp "OverloadedLambdas"],
 
 -- <overloaded-lambdas> ::= "overloaded" "{" <lambda-list> "}"
-      def "OverloadedLambdas" $ list $ cpp "LambdaExpression",
+      def "OverloadedLambdas" $ wrap $ list $ cpp "LambdaExpression",
 
 -- <function-application> ::= <function-identifier> "(" <expression-list> ")"
       def "FunctionApplication" $ record [
@@ -546,7 +546,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "statement">: cpp "Statement"],
 
 -- <compound-statement> ::= "{" <statement-list> "}"
-      def "CompoundStatement" $ list $ cpp "Statement",
+      def "CompoundStatement" $ wrap $ list $ cpp "Statement",
 
 -- <selection-statement> ::= "if" "(" <expression> ")" <statement> <else-clause>
       def "SelectionStatement" $ record [
@@ -615,7 +615,7 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "throw">: cpp "Expression"],
 
 -- <expression-statement> ::= <expression> ";"
-      def "ExpressionStatement" $ cpp "Expression"]
+      def "ExpressionStatement" $ wrap $ cpp "Expression"]
 
     -- Type-related types
     typeTypes = [
@@ -681,16 +681,16 @@ cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
         "binary">: string],
 
 -- <floating-literal> ::= <fractional-constant> <exponent-part> | <digit-sequence> <exponent-part>
-      def "FloatingLiteral" $ bigfloat,
+      def "FloatingLiteral" $ wrap bigfloat,
 
 -- <character-literal> ::= "'" <c-char> "'"
-      def "CharacterLiteral" $ string,
+      def "CharacterLiteral" $ wrap string,
 
 -- <string-literal> ::= "\"" <s-char-sequence> "\""
-      def "StringLiteral" $ string,
+      def "StringLiteral" $ wrap string,
 
 -- <boolean-literal> ::= "true" | "false"
-      def "BooleanLiteral" $ boolean]
+      def "BooleanLiteral" $ wrap boolean]
 
     -- Container-related types
     containers = [

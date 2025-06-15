@@ -28,7 +28,7 @@ geoJsonModule = Module ns elements [jsonModelModule] [] $
              "contained geometries, with all axes of the most southwesterly point " ++
              "followed by all axes of the more northeasterly point.  The axes order " ++
              "of a bbox follows the axes order of geometries.") $
-        list $ geoj "CoordinateRange",
+        wrap $ list $ geoj "CoordinateRange",
 
       def "CoordinateRange" $
         record [

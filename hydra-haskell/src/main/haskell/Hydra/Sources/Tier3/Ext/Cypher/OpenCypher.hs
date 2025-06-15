@@ -141,12 +141,13 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           
 -- Create = (C,R,E,A,T,E), [SP], Pattern ;
 
-      def "Create" $ cypher "Pattern",
+      def "Create" $
+        wrap $ cypher "Pattern",
 
 -- Set = (S,E,T), [SP], SetItem, { [SP], ',', [SP], SetItem } ;
 
       def "Set" $
-        nonemptyList $ cypher "SetItem",
+        wrap $ nonemptyList $ cypher "SetItem",
 
 -- SetItem = (PropertyExpression, [SP], '=', [SP], Expression)
 --         | (Variable, [SP], '=', [SP], Expression)
@@ -191,7 +192,7 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- Remove = (R,E,M,O,V,E), SP, RemoveItem, { [SP], ',', [SP], RemoveItem } ;
 
       def "Remove" $
-        nonemptyList $ cypher "RemoveItem",
+        wrap $ nonemptyList $ cypher "RemoveItem",
 
 -- RemoveItem = (Variable, NodeLabels)
 --            | PropertyExpression
@@ -250,7 +251,7 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- Return = (R,E,T,U,R,N), ProjectionBody ;
 
       def "Return" $
-        cypher "ProjectionBody",
+        wrap $ cypher "ProjectionBody",
 
 -- ProjectionBody = [[SP], (D,I,S,T,I,N,C,T)], SP, ProjectionItems, [SP, Order], [SP, Skip], [SP, Limit] ;
 
@@ -283,17 +284,17 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- Order = (O,R,D,E,R), SP, (B,Y), SP, SortItem, { ',', [SP], SortItem } ;
 
       def "Order" $
-        nonemptyList $ cypher "SortItem",
+        wrap $ nonemptyList $ cypher "SortItem",
 
 -- Skip = (S,K,I,P), SP, Expression ;
 
       def "Skip" $
-        cypher "Expression",
+        wrap $ cypher "Expression",
 
 -- Limit = (L,I,M,I,T), SP, Expression ;
 
       def "Limit" $
-        cypher "Expression",
+        wrap $ cypher "Expression",
 
 -- SortItem = Expression, [[SP], ((A,S,C,E,N,D,I,N,G) | (A,S,C) | (D,E,S,C,E,N,D,I,N,G) | (D,E,S,C))] ;
 
@@ -308,12 +309,12 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- Where = (W,H,E,R,E), SP, Expression ;
 
       def "Where" $
-        cypher "Expression",
+        wrap $ cypher "Expression",
 
 -- Pattern = PatternPart, { [SP], ',', [SP], PatternPart } ;
 
       def "Pattern" $
-        nonemptyList $ cypher "PatternPart",
+        wrap $ nonemptyList $ cypher "PatternPart",
 
 -- PatternPart = (Variable, [SP], '=', [SP], AnonymousPatternPart)
 --             | AnonymousPatternPart
@@ -327,7 +328,7 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- AnonymousPatternPart = PatternElement ;
 
         def "AnonymousPatternPart" $
-          cypher "PatternElement",
+          wrap $ cypher "PatternElement",
 
 -- PatternElement = (NodePattern, { [SP], PatternElementChain })
 --                | ('(', PatternElement, ')')
@@ -397,15 +398,18 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- RelationshipTypes = ':', [SP], RelTypeName, { [SP], '|', [':'], [SP], RelTypeName } ;
 
       -- TODO: check whether the slight difference in colon syntax is significant
-      def "RelationshipTypes" $ nonemptyList $ cypher "RelTypeName",
+      def "RelationshipTypes" $
+        wrap $ nonemptyList $ cypher "RelTypeName",
 
 -- NodeLabels = NodeLabel, { [SP], NodeLabel } ;
 
-      def "NodeLabels" $ nonemptyList $ cypher "NodeLabel",
+      def "NodeLabels" $
+        wrap $ nonemptyList $ cypher "NodeLabel",
 
 -- NodeLabel = ':', [SP], LabelName ;
 
-      def "NodeLabel" string,
+      def "NodeLabel" $
+        wrap string,
 
 -- RangeLiteral = '*', [SP], [IntegerLiteral, [SP]], ['..', [SP], [IntegerLiteral, [SP]]] ;
 
@@ -418,7 +422,8 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- 
 -- RelTypeName = SchemaName ;
 
-      def "RelTypeName" string,
+      def "RelTypeName" $
+        wrap string,
 
 -- PropertyExpression = Atom, { [SP], PropertyLookup }- ;
 
@@ -429,19 +434,23 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 -- Expression = OrExpression ;
 
-      def "Expression" $ cypher "OrExpression",
+      def "Expression" $
+        wrap $ cypher "OrExpression",
 
 -- OrExpression = XorExpression, { SP, (O,R), SP, XorExpression } ;
 
-      def "OrExpression" $ nonemptyList $ cypher "XorExpression",
+      def "OrExpression" $
+        wrap $ nonemptyList $ cypher "XorExpression",
 
 -- XorExpression = AndExpression, { SP, (X,O,R), SP, AndExpression } ;
 
-      def "XorExpression" $ nonemptyList $ cypher "AndExpression",
+      def "XorExpression" $
+        wrap $ nonemptyList $ cypher "AndExpression",
 
 -- AndExpression = NotExpression, { SP, (A,N,D), SP, NotExpression } ;
 
-      def "AndExpression" $ nonemptyList $ cypher "NotExpression",
+      def "AndExpression" $
+        wrap $ nonemptyList $ cypher "NotExpression",
 
 -- NotExpression = { (N,O,T), [SP] }, ComparisonExpression ;
 
@@ -508,14 +517,14 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- ListPredicateExpression = SP, (I,N), [SP], AddOrSubtractExpression ;
 
       def "ListPredicateExpression" $
-        cypher "AddOrSubtractExpression",
+        wrap $ cypher "AddOrSubtractExpression",
 
 -- NullPredicateExpression = (SP, (I,S), SP, (N,U,L,L))
 --                         | (SP, (I,S), SP, (N,O,T), SP, (N,U,L,L))
 --                         ;
 
       def "NullPredicateExpression" $
-        boolean, -- true: NULL, false: NOT NULL
+        wrap $ boolean, -- true: NULL, false: NOT NULL
 
 -- AddOrSubtractExpression = MultiplyDivideModuloExpression, { ([SP], '+', [SP], MultiplyDivideModuloExpression) | ([SP], '-', [SP], MultiplyDivideModuloExpression) } ;
 
@@ -554,7 +563,8 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 -- PowerOfExpression = UnaryAddOrSubtractExpression, { [SP], '^', [SP], UnaryAddOrSubtractExpression } ;
 
-      def "PowerOfExpression" $ nonemptyList $ cypher "UnaryAddOrSubtractExpression",
+      def "PowerOfExpression" $
+        wrap $ nonemptyList $ cypher "UnaryAddOrSubtractExpression",
 
 -- UnaryAddOrSubtractExpression = NonArithmeticOperatorExpression
 --                              | (('+' | '-'), [SP], NonArithmeticOperatorExpression)
@@ -595,7 +605,7 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- PropertyLookup = '.', [SP], (PropertyKeyName) ;
 
       def "PropertyLookup" $
-        cypher "PropertyKeyName",
+        wrap $ cypher "PropertyKeyName",
 
 -- Atom = Literal
 --      | Parameter
@@ -684,11 +694,13 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 -- PatternPredicate = RelationshipsPattern ;
 
-      def "PatternPredicate" $ cypher "RelationshipsPattern",
+      def "PatternPredicate" $
+        wrap $ cypher "RelationshipsPattern",
 
 -- ParenthesizedExpression = '(', [SP], Expression, [SP], ')' ;
 
-      def "ParenthesizedExpression" $ cypher "Expression",
+      def "ParenthesizedExpression" $
+        wrap $ cypher "Expression",
 
 -- IdInColl = Variable, SP, (I,N), SP, Expression ;
 
@@ -733,11 +745,13 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           
 -- ImplicitProcedureInvocation = ProcedureName ;
 
-      def "ImplicitProcedureInvocation" $ cypher "QualifiedName",
+      def "ImplicitProcedureInvocation" $
+        wrap $ cypher "QualifiedName",
 
 -- ProcedureResultField = SymbolicName ;
 
-      def "ProcedureResultField" string,
+      def "ProcedureResultField" $
+        wrap string,
 
 -- ProcedureName = Namespace, SymbolicName ;
 --        
@@ -745,7 +759,8 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- 
 -- Variable = SymbolicName ;
 
-      def "Variable" string,
+      def "Variable" $
+        wrap string,
 
 -- Literal = BooleanLiteral
 --         | (N,U,L,L)
@@ -838,19 +853,20 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --               | ("'", { ANY - ("'" | '\') | EscapedChar }, "'")
 --               ;
 
-      def "StringLiteral" string,
+      def "StringLiteral" $
+        wrap string,
 
 -- EscapedChar = '\', ('\' | "'" | '"' | (B) | (F) | (N) | (R) | (T) | ((U), 4 * HexDigit) | ((U), 8 * HexDigit)) ;
 -- 
 -- ListLiteral = '[', [SP], [Expression, [SP], { ',', [SP], Expression, [SP] }], ']' ;
 
       def "ListLiteral" $
-        list $ cypher "Expression",
+        wrap $ list $ cypher "Expression",
 
 -- MapLiteral = '{', [SP], [PropertyKeyName, [SP], ':', [SP], Expression, [SP], { ',', [SP], PropertyKeyName, [SP], ':', [SP], Expression, [SP] }], '}' ;
 
       def "MapLiteral" $
-        list $ cypher "KeyValuePair",
+        wrap $ list $ cypher "KeyValuePair",
 
       def "KeyValuePair" $
         record [
@@ -859,7 +875,8 @@ openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           
 -- PropertyKeyName = SchemaName ;
 
-      def "PropertyKeyName" string,
+      def "PropertyKeyName" $
+        wrap string,
 
 -- Parameter = '$', (SymbolicName | DecimalInteger) ;
 

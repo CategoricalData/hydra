@@ -28,13 +28,13 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 
       def "Module" $
         -- Groups of statements are separated by a double newline; see also the "Block" production.
-        list $ nonemptyList $ python "Statement",
+        wrap $ list $ nonemptyList $ python "Statement",
 
       def "QuoteStyle" $ enum ["single", "double", "triple"]]
 
     -- Terminals from the PEG grammar (see below)
     terminals = [
-      def "Name" string, -- NAME in the grammar
+      def "Name" $ wrap string, -- NAME in the grammar
 
       def "Number" $ union [ -- NUMBER in the grammar
         "integer">: bigint,
@@ -44,7 +44,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
         "value">: string,
         "quoteStyle">: python "QuoteStyle"],
 
-      def "TypeComment" string] -- TYPE_COMMENT in the grammar
+      def "TypeComment" $ wrap string] -- TYPE_COMMENT in the grammar
 
     -- Nonterminal productions from the PEG grammar (inline).
     -- Note: all significant deviations from the grammar are indicated with the word "Hydra" in comments.
@@ -110,15 +110,15 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 --
 -- file: [statements] ENDMARKER
 
-      def "File" $ list $ python "Statement",
+      def "File" $ wrap $ list $ python "Statement",
 
 -- interactive: statement_newline
 
-      def "Interactive" $ python "Statement",
+      def "Interactive" $ wrap $ python "Statement",
 
 -- eval: expressions NEWLINE* ENDMARKER
 
-      def "Eval" $ nonemptyList $ python "Expression",
+      def "Eval" $ wrap $ nonemptyList $ python "Expression",
 
 -- func_type: '(' [type_expressions] ')' '->' expression NEWLINE* ENDMARKER
 
@@ -272,13 +272,13 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- return_stmt:
 --     | 'return' [star_expressions]
 
-      def "ReturnStatement" $ list $ python "StarExpression",
+      def "ReturnStatement" $ wrap $ list $ python "StarExpression",
 
 -- raise_stmt:
 --     | 'raise' expression ['from' expression ]
 --     | 'raise'
 
-      def "RaiseStatement" $ optional $ python "RaiseExpression",
+      def "RaiseStatement" $ wrap $ optional $ python "RaiseExpression",
 
       def "RaiseExpression" $ record [
         "expression">: python "Expression",
@@ -291,11 +291,11 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- del_stmt:
 --     | 'del' del_targets &(';' | NEWLINE)
 
-      def "DelStatement" $ python "DelTargets",
+      def "DelStatement" $ wrap $ python "DelTargets",
 
 -- yield_stmt: yield_expr
 
-      def "YieldStatement" $ python "YieldExpression",
+      def "YieldStatement" $ wrap $ python "YieldExpression",
 
 -- assert_stmt: 'assert' expression [',' expression ]
 
@@ -316,7 +316,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 --
 -- import_name: 'import' dotted_as_names
 
-      def "ImportName" $ nonemptyList $ python "DottedAsName",
+      def "ImportName" $ wrap $ nonemptyList $ python "DottedAsName",
 
 -- # note below: the ('.' | '...') is necessary because '...' is tokenized as ELLIPSIS
 -- import_from:
@@ -364,7 +364,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 --     | dotted_name '.' NAME
 --     | NAME
 
-      def "DottedName" $ nonemptyList $ python "Name",
+      def "DottedName" $ wrap $ nonemptyList $ python "Name",
 
 --
 -- # COMPOUND STATEMENTS
@@ -384,7 +384,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 
 -- decorators: ('@' named_expression NEWLINE )+
 
-      def "Decorators" $ nonemptyList $ python "NamedExpression",
+      def "Decorators" $ wrap $ nonemptyList $ python "NamedExpression",
 
 -- # Class definitions
 -- # -----------------
@@ -474,7 +474,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 --     | param_no_default+ '/' ','
 --     | param_no_default+ '/' &')'
 
-      def "SlashNoDefault" $ nonemptyList $ python "ParamNoDefault",
+      def "SlashNoDefault" $ wrap $ nonemptyList $ python "ParamNoDefault",
 
 -- slash_with_default:
 --     | param_no_default* param_with_default+ '/' ','
@@ -513,7 +513,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- kwds:
 --     | '**' param_no_default
 
-      def "Keywords" $ python "ParamNoDefault",
+      def "Keywords" $ wrap $ python "ParamNoDefault",
 
 -- # One parameter.  This *includes* a following comma and type comment.
 -- #
@@ -576,15 +576,15 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 
 -- annotation: ':' expression
 
-      def "Annotation" $ python "Expression",
+      def "Annotation" $ wrap $ python "Expression",
 
 -- star_annotation: ':' star_expression
 
-      def "StarAnnotation" $ python "StarExpression",
+      def "StarAnnotation" $ wrap $ python "StarExpression",
 
 -- default: '=' expression  | invalid_default
 
-      def "Default" $ python "Expression",
+      def "Default" $ wrap $ python "Expression",
 
 -- # If statement
 -- # ------------
@@ -741,7 +741,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 
 -- guard: 'if' named_expression
 
-      def "Guard" $ python "NamedExpression",
+      def "Guard" $ wrap $ python "NamedExpression",
 
 -- patterns:
 --     | open_sequence_pattern
@@ -769,7 +769,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- or_pattern:
 --     | '|'.closed_pattern+
 
-      def "OrPattern" $ nonemptyList $ python "ClosedPattern",
+      def "OrPattern" $ wrap $ nonemptyList $ python "ClosedPattern",
 
 -- closed_pattern:
 --     | literal_pattern
@@ -849,22 +849,22 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- real_number:
 --     | NUMBER
 
-      def "RealNumber" $ python "Number",
+      def "RealNumber" $ wrap $ python "Number",
 
 -- imaginary_number:
 --     | NUMBER
 
-      def "ImaginaryNumber" $ python "Number",
+      def "ImaginaryNumber" $ wrap $ python "Number",
 
 -- capture_pattern:
 --     | pattern_capture_target
 
-      def "CapturePattern" $ python "PatternCaptureTarget",
+      def "CapturePattern" $ wrap $ python "PatternCaptureTarget",
 
 -- pattern_capture_target:
 --     | !"_" NAME !('.' | '(' | '=')
 
-      def "PatternCaptureTarget" $ python "Name",
+      def "PatternCaptureTarget" $ wrap $ python "Name",
 
 -- wildcard_pattern:
 --     | "_"
@@ -872,23 +872,23 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- value_pattern:
 --     | attr !('.' | '(' | '=')
 
-      def "ValuePattern" $ python "Attribute",
+      def "ValuePattern" $ wrap $ python "Attribute",
 
 -- attr:
 --     | name_or_attr '.' NAME
 
-      def "Attribute" $ nonemptyList $ python "Name", -- Actually list with length >= 2
+      def "Attribute" $ wrap $ nonemptyList $ python "Name", -- Actually list with length >= 2
 
 -- name_or_attr:
 --     | attr
 --     | NAME
 
-      def "NameOrAttribute" $ nonemptyList $ python "Name",
+      def "NameOrAttribute" $ wrap $ nonemptyList $ python "Name",
 
 -- group_pattern:
 --     | '(' pattern ')'
 
-      def "GroupPattern" $ python "Pattern",
+      def "GroupPattern" $ wrap $ python "Pattern",
 
 -- sequence_pattern:
 --     | '[' maybe_sequence_pattern? ']'
@@ -908,7 +908,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- maybe_sequence_pattern:
 --     | ','.maybe_star_pattern+ ','?
 
-      def "MaybeSequencePattern" $ nonemptyList $ python "MaybeStarPattern",
+      def "MaybeSequencePattern" $ wrap $ nonemptyList $ python "MaybeStarPattern",
 
 -- maybe_star_pattern:
 --     | star_pattern
@@ -939,7 +939,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- items_pattern:
 --     | ','.key_value_pattern+
 
-      def "ItemsPattern" $ nonemptyList $ python "KeyValuePattern",
+      def "ItemsPattern" $ wrap $ nonemptyList $ python "KeyValuePattern",
 
 -- key_value_pattern:
 --     | (literal_expr | attr) ':' pattern
@@ -955,7 +955,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- double_star_pattern:
 --     | '**' pattern_capture_target
 
-      def "DoubleStarPattern" $ python "PatternCaptureTarget",
+      def "DoubleStarPattern" $ wrap $ python "PatternCaptureTarget",
 
 -- class_pattern:
 --     | name_or_attr '(' ')'
@@ -971,12 +971,12 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- positional_patterns:
 --     | ','.pattern+
 
-      def "PositionalPatterns" $ nonemptyList $ python "Pattern",
+      def "PositionalPatterns" $ wrap $ nonemptyList $ python "Pattern",
 
 -- keyword_patterns:
 --     | ','.keyword_pattern+
 
-      def "KeywordPatterns" $ nonemptyList $ python "KeywordPattern",
+      def "KeywordPatterns" $ wrap $ nonemptyList $ python "KeywordPattern",
 
 -- keyword_pattern:
 --     | NAME '=' pattern
@@ -1078,7 +1078,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 
 -- star_named_expressions: ','.star_named_expression+ [',']
 
-      def "StarNamedExpressions" $ nonemptyList $ python "StarNamedExpression",
+      def "StarNamedExpressions" $ wrap $ nonemptyList $ python "StarNamedExpression",
 
 -- star_named_expression:
 --     | '*' bitwise_or
@@ -1107,13 +1107,13 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 --     | conjunction ('or' conjunction )+
 --     | conjunction
 
-      def "Disjunction" $ nonemptyList $ python "Conjunction",
+      def "Disjunction" $ wrap $ nonemptyList $ python "Conjunction",
 
 -- conjunction:
 --     | inversion ('and' inversion )+
 --     | inversion
 
-      def "Conjunction" $ nonemptyList $ python "Inversion",
+      def "Conjunction" $ wrap $ nonemptyList $ python "Inversion",
 
 -- inversion:
 --     | 'not' inversion
@@ -1421,13 +1421,13 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- lambda_kwds:
 --     | '**' lambda_param_no_default
 
-      def "LambdaKwds" $ python "LambdaParamNoDefault",
+      def "LambdaKwds" $ wrap $ python "LambdaParamNoDefault",
 
 -- lambda_param_no_default:
 --     | lambda_param ','
 --     | lambda_param &':'
 
-      def "LambdaParamNoDefault" $ python "Name",
+      def "LambdaParamNoDefault" $ wrap $ python "Name",
 
 -- lambda_param_with_default:
 --     | lambda_param default ','
@@ -1471,16 +1471,16 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- list:
 --     | '[' [star_named_expressions] ']'
 
-      def "List" $ list $ python "StarNamedExpression",
+      def "List" $ wrap $ list $ python "StarNamedExpression",
 
 -- tuple:
 --     | '(' [star_named_expression ',' [star_named_expressions]  ] ')'
 
-      def "Tuple" $ list $ python "StarNamedExpression",
+      def "Tuple" $ wrap $ list $ python "StarNamedExpression",
 
 -- set: '{' star_named_expressions '}'
 
-      def "Set" $ nonemptyList $ python "StarNamedExpression",
+      def "Set" $ wrap $ nonemptyList $ python "StarNamedExpression",
 
 -- # Dicts
 -- # -----
@@ -1488,7 +1488,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- dict:
 --     | '{' [double_starred_kvpairs] '}'
 
-      def "Dict" $ list $ python "DoubleStarredKvpair",
+      def "Dict" $ wrap $ list $ python "DoubleStarredKvpair",
 
 -- double_starred_kvpairs: ','.double_starred_kvpair+ [',']
 --
@@ -1512,7 +1512,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- for_if_clauses:
 --     | for_if_clause+
 
-      def "ForIfClauses" $ nonemptyList $ python "ForIfClause",
+      def "ForIfClauses" $ wrap $ nonemptyList $ python "ForIfClause",
 
 -- for_if_clause:
 --     | 'async' 'for' star_targets 'in' ~ disjunction ('if' disjunction )*
@@ -1584,7 +1584,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 -- starred_expression:
 --     | '*' expression
 
-      def "StarredExpression" $ python "Expression",
+      def "StarredExpression" $ wrap $ python "Expression",
 
 -- kwarg_or_starred:
 --     | NAME '=' expression
@@ -1619,13 +1619,13 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 --
 -- star_targets_list_seq: ','.star_target+ [',']
 
-      def "StarTargetsListSeq" $ nonemptyList $ python "StarTarget",
+      def "StarTargetsListSeq" $ wrap $ nonemptyList $ python "StarTarget",
 
 -- star_targets_tuple_seq:
 --     | star_target (',' star_target )+ [',']
 --     | star_target ','
 
-      def "StarTargetsTupleSeq" $ nonemptyList $ python "StarTarget",
+      def "StarTargetsTupleSeq" $ wrap $ nonemptyList $ python "StarTarget",
 
 -- star_target:
 --     | '*' (!'*' star_target)
@@ -1712,7 +1712,7 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 --
 -- del_targets: ','.del_target+ [',']
 
-      def "DelTargets" $ nonemptyList $ python "DelTarget",
+      def "DelTargets" $ wrap $ nonemptyList $ python "DelTarget",
 
 -- del_target:
 --     | t_primary '.' NAME !t_lookahead
@@ -1757,4 +1757,4 @@ pythonSyntaxModule = Module pythonNs elements [hydraCoreModule] [hydraCoreModule
 --     | NEWLINE TYPE_COMMENT &(NEWLINE INDENT)   # Must be followed by indented block
 --     | TYPE_COMMENT
 
-      def "FuncTypeComment" $ python "TypeComment"]
+      def "FuncTypeComment" $ wrap $ python "TypeComment"]

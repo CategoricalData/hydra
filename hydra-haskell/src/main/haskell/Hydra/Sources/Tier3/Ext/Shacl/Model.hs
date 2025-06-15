@@ -270,4 +270,4 @@ shaclModelModule = Module ns elements [rdfSyntaxModule] [hydraCoreModule] $
       def "ShapesGraph" $
         doc ("An RDF graph containing zero or more shapes that is passed into a SHACL validation process " ++
              "so that a data graph can be validated against the shapes") $
-        set $ shacl "Definition" @@ shacl "Shape"]
+        wrap $ set $ shacl "Definition" @@ shacl "Shape"]

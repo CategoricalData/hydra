@@ -27,7 +27,7 @@ pgQueryModule = Module ns elements [pgModelModule] [hydraCoreModule] $
           "count">: unit],
 
       def "ApplicationQuery" $
-        nonemptyList $ q "Query",
+        wrap $ nonemptyList $ q "Query",
 
       def "AssociativeExpression" $
         record [
@@ -105,7 +105,7 @@ pgQueryModule = Module ns elements [pgModelModule] [hydraCoreModule] $
           "key">: pg "PropertyKey"],
 
       -- TODO: temporary
-      def "PropertyValue" $ string,
+      def "PropertyValue" $ wrap string,
 
       def "PropertyValuePattern" $
         union [
@@ -134,7 +134,7 @@ pgQueryModule = Module ns elements [pgModelModule] [hydraCoreModule] $
       def "UnaryOperator" $
         enum ["negate"],
 
-      def "Variable" string,
+      def "Variable" $ wrap string,
 
       def "VertexPattern" $
         record [

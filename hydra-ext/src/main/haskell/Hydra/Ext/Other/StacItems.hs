@@ -91,7 +91,7 @@ stacModule = Module ns elements [geoJsonModule, ianaRelationsModule] [hydraCoreM
             doc "A human readable title to be used in rendered displays of the link." $
             optional string],
 
-      def "MediaType" string,
+      def "MediaType" $ wrap string,
 
       def "RelationType" $
         doc ("STAC Items use a variety of rel types in the link object, to describe the exact nature of the link " ++
@@ -146,8 +146,8 @@ stacModule = Module ns elements [geoJsonModule, ianaRelationsModule] [hydraCoreM
           "derivedFrom">:
             doc ("URL to a STAC Item that was used as input data in the creation of this Item.") unit],
 
-      def "StacVersion" string,
+      def "StacVersion" $ wrap string,
 
-      def "Uri" string,
+      def "Uri" $ wrap string,
 
-      def "Url" string]
+      def "Url" $ wrap string]

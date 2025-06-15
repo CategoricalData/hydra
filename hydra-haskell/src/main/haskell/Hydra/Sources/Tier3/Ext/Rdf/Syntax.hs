@@ -16,12 +16,12 @@ rdfSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
     elements = [
 
-      def "BlankNode" string,
+      def "BlankNode" $ wrap string,
 
       def "RdfsClass"
-        $ doc "Stand-in for rdfs:Class" unit,
+        $ doc "Stand-in for rdfs:Class" $ wrap unit,
 
-      def "Dataset" $ set $ rdf "Quad",
+      def "Dataset" $ wrap $ set $ rdf "Quad",
 
       def "Description" $
         doc "A graph of RDF statements together with a distinguished subject and/or object node" $
@@ -29,11 +29,11 @@ rdfSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "subject">: rdf "Node",
           "graph">: rdf "Graph"],
 
-      def "Graph" $ set $ rdf "Triple",
+      def "Graph" $ wrap $ set $ rdf "Triple",
 
       def "Iri" $
-        doc "An Internationalized Resource Identifier"
-        string,
+        doc "An Internationalized Resource Identifier" $
+        wrap string,
 
       def "IriOrLiteral" $
         doc ("An IRI or a literal; " ++
@@ -44,11 +44,11 @@ rdfSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "LangStrings" $
         doc "A convenience type which provides at most one string value per language, and optionally a value without a language" $
-        Types.map (optional $ rdf "LanguageTag") string,
+        wrap $ Types.map (optional $ rdf "LanguageTag") string,
 
       def "LanguageTag" $
-        doc "A BCP47 language tag"
-        string,
+        doc "A BCP47 language tag" $
+        wrap string,
 
       def "Literal" $
         doc "A value such as a string, number, or date" $

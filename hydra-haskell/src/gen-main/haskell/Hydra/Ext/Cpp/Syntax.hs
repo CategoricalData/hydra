@@ -1826,10 +1826,7 @@ _Optional_valueType = (Core.Name "valueType")
 
 _Optional_value = (Core.Name "value")
 
-newtype Identifier = 
-  Identifier {
-    unIdentifier :: String}
-  deriving (Eq, Ord, Read, Show)
+type Identifier = String
 
 _Identifier = (Core.Name "hydra.ext.cpp.syntax.Identifier")
 

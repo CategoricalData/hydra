@@ -919,15 +919,15 @@ data NumericValueExpression =
 _NumericValueExpression = (Core.Name "hydra.ext.org.ansi.sql.syntax.NumericValueExpression")
 
 data OverrideClause = 
-  OverrideClauseOVERRIDINGSpUSERSpVALUE  |
-  OverrideClauseOVERRIDINGSpSYSTEMSpVALUE 
+  OverrideClauseOVERRIDINGspUSERspVALUE  |
+  OverrideClauseOVERRIDINGspSYSTEMspVALUE 
   deriving (Eq, Ord, Read, Show)
 
 _OverrideClause = (Core.Name "hydra.ext.org.ansi.sql.syntax.OverrideClause")
 
-_OverrideClause_oVERRIDINGSpUSERSpVALUE = (Core.Name "oVERRIDINGSpUSERSpVALUE")
+_OverrideClause_oVERRIDINGspUSERspVALUE = (Core.Name "oVERRIDINGspUSERspVALUE")
 
-_OverrideClause_oVERRIDINGSpSYSTEMSpVALUE = (Core.Name "oVERRIDINGSpSYSTEMSpVALUE")
+_OverrideClause_oVERRIDINGspSYSTEMspVALUE = (Core.Name "oVERRIDINGspSYSTEMspVALUE")
 
 newtype ParenthesizedValueExpression = 
   ParenthesizedValueExpression {

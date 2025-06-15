@@ -140,7 +140,7 @@ dtldModule = Module dtldNs elements [hydraCoreModule] [] $
           displayNameField],
 
       def "Dtmi" $
-        doc "A digital twin model identifier" string,
+        doc "A digital twin model identifier" $ wrap string,
 
       def "EnumValue" $
         doc "An EnumValue describes an element of an Enum." $
@@ -202,7 +202,7 @@ dtldModule = Module dtldNs elements [hydraCoreModule] [] $
         "relationship">: dtld "Relationship",
         "telemetry">: dtld "Telemetry"],
 
-      def "Iri" string,
+      def "Iri" $ wrap string,
 
 --      -- Note: this is a helper type; not explicitly definde in DTLD
 --      def "IriOrSchema_Interface" $ union [
@@ -414,4 +414,4 @@ dtldModule = Module dtldNs elements [hydraCoreModule] [] $
           displayNameField,
           unitField "Telemetry"],
 
-      def "Unit" unit]
+      def "Unit" $ wrap unit]

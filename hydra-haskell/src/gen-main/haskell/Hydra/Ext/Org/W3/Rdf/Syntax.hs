@@ -16,8 +16,9 @@ newtype BlankNode =
 _BlankNode = (Core.Name "hydra.ext.org.w3.rdf.syntax.BlankNode")
 
 -- | Stand-in for rdfs:Class
-data RdfsClass = 
-  RdfsClass {}
+newtype RdfsClass = 
+  RdfsClass {
+    unRdfsClass :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _RdfsClass = (Core.Name "hydra.ext.org.w3.rdf.syntax.RdfsClass")

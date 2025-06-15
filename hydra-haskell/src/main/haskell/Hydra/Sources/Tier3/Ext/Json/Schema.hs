@@ -36,12 +36,12 @@ jsonSchemaModule = Module ns elements [jsonModelModule] [hydraCoreModule] $
 -- defs := "definitions": { kSch (, kSch)*}
 -- kSch := kword: { JSch }
 
-      def "Keyword"
-        string,
+      def "Keyword" $
+        wrap string,
 
 -- JSch := ( res (, res)*)
       def "Schema" $
-        nonemptyList $ js "Restriction",
+        wrap $ nonemptyList $ js "Restriction",
 
 -- res := type | strRes | numRes | arrRes | objRes | multRes | refSch | title | description
 
@@ -91,8 +91,8 @@ jsonSchemaModule = Module ns elements [jsonModelModule] [hydraCoreModule] $
 -- maxLen := "maxLength": n
 -- pattern := "pattern": "regExp"
 
-      def "RegularExpression"
-        string,
+      def "RegularExpression" $
+        wrap string,
 
 -- Here n is a natural number and r is a regular expression.
 --
@@ -205,7 +205,7 @@ jsonSchemaModule = Module ns elements [jsonModelModule] [hydraCoreModule] $
 -- refSch := "$ref": "uriRef"
 
          def "SchemaReference" $
-            string]
+            wrap string]
 
 -- uriRef := ( address )? ( # / JPointer )?
 -- JPointer := ( / path )

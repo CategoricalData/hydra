@@ -321,8 +321,9 @@ newtype UnsignedShort =
 _UnsignedShort = (Core.Name "hydra.ext.org.w3.xml.schema.UnsignedShort")
 
 -- | See https://www.w3.org/TR/xmlschema-2/#non-fundamental
-data ConstrainingFacet = 
-  ConstrainingFacet {}
+newtype ConstrainingFacet = 
+  ConstrainingFacet {
+    unConstrainingFacet :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _ConstrainingFacet = (Core.Name "hydra.ext.org.w3.xml.schema.ConstrainingFacet")

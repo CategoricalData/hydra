@@ -135,4 +135,4 @@ avroSchemaModule = Module ns elements [jsonModelModule] [hydraCoreModule] $
         ],
 
       def "Union" $
-        list $ avro "Schema"]
+        wrap $ list $ avro "Schema"]

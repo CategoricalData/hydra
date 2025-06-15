@@ -20,11 +20,11 @@ tabularModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "DataRow" $
         doc "A data row, containing optional-valued cells; one per column" $
-        forAll "v" $ list $ optional "v",
+        forAll "v" $ wrap $ list $ optional "v",
 
       def "HeaderRow" $
         doc "A header row, containing column names (but no types or data)" $
-        list string,
+        wrap $ list string,
 
       def "Table" $
         doc "A simple table as in a CSV file, having an optional header row and any number of data rows" $

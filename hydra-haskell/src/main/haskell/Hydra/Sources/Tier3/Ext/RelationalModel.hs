@@ -48,11 +48,11 @@ relationalModelModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "PrimaryKey" $
         doc "A primary key of a relation, specified either as a single column, or as a list of columns" $
-        nonemptyList $ rm "ColumnName",
+        wrap $ nonemptyList $ rm "ColumnName",
 
       def "Relation" $
         doc "A set of distinct n-tuples; a table" $
-        forAll "v" $ list (rm "Row" @@ "v"),
+        forAll "v" $ wrap $ list (rm "Row" @@ "v"),
 
       def "RelationName" $
         doc "A unique relation (table) name" $
@@ -76,8 +76,8 @@ relationalModelModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "Relationship" $
         doc "A domain-unordered (string-indexed, rather than position-indexed) relation" $
-        forAll "v" $ set $ Types.map (rm "ColumnName") "v",
+        forAll "v" $ wrap $ set $ Types.map (rm "ColumnName") "v",
 
       def "Row" $
         doc "An n-tuple which is an element of a given relation" $
-        forAll "v" $ nonemptyList "v"]
+        forAll "v" $ wrap $ nonemptyList "v"]

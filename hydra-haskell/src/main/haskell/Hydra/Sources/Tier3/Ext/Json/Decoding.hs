@@ -64,7 +64,6 @@ decodeBooleanDef  = jsonDecodingDefinition "Boolean" $
 
 decodeFieldDef :: TElement ((Json.Value -> Flow s a) -> String -> (M.Map String Json.Value) -> Flow s a)
 decodeFieldDef  = jsonDecodingDefinition "Field" $
-  withTypeClasses ordT0 $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     Flows.bind
       (ref decodeOptionalFieldDef @@ var "decodeValue" @@ var "name" @@ var "m")
@@ -84,7 +83,6 @@ decodeObjectDef  = jsonDecodingDefinition "Object" $
 
 decodeOptionalFieldDef :: TElement ((Json.Value -> Flow s a) -> String -> (M.Map String Json.Value) -> Flow s (Maybe a))
 decodeOptionalFieldDef  = jsonDecodingDefinition "OptionalField" $
-  withTypeClasses ordT0 $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     (primitive _optionals_maybe
         @@ (Flows.pure nothing)
@@ -95,6 +93,3 @@ decodeStringDef :: TElement (Json.Value -> Flow s String)
 decodeStringDef  = jsonDecodingDefinition "String" $
   match Json._Value (Just $ Flows.fail "expected a string") [
     Json._Value_string>>: lambda "s" $ Flows.pure $ var "s"]
-
--- TODO: this is a hack
-ordT0 = (M.fromList [(Name "t0", S.fromList [TypeClassOrdering])])

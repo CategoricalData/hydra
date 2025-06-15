@@ -822,7 +822,7 @@ csharpSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : '<' type_arguments '>'
 --     ;
 
-      def "TypeArgumentList" $ list $ csharp "Type",
+      def "TypeArgumentList" $ wrap $ list $ csharp "Type",
 
 -- type_arguments
 --     : type_argument (',' type_argument)*
@@ -908,7 +908,7 @@ csharpSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : argument (',' argument)*
 --     ;
 
-      def "ArgumentList" $ nonemptyList $ csharp "Argument",
+      def "ArgumentList" $ wrap $ nonemptyList $ csharp "Argument",
 
 -- argument
 --     : argument_name? argument_value
@@ -1399,7 +1399,7 @@ csharpSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | expression_list ',' expression
 --     ;
 
-      def "ExpressionList" $ nonemptyList $ csharp "Expression",
+      def "ExpressionList" $ wrap $ nonemptyList $ csharp "Expression",
 
 -- // Source: §12.8.16.5 Array creation expressions
 -- array_creation_expression
@@ -1451,7 +1451,7 @@ csharpSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : member_declarator (',' member_declarator)*
 --     ;
 
-      def "MemberDeclaratorList" $ nonemptyList $ csharp "MemberDeclarator",
+      def "MemberDeclaratorList" $ wrap $ nonemptyList $ csharp "MemberDeclarator",
 
 -- member_declarator
 --     : simple_name
@@ -2598,7 +2598,7 @@ csharpSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : statement_expression (',' statement_expression)*
 --     ;
 
-      def "StatementExpressionList" $ nonemptyList $ csharp "StatementExpression",
+      def "StatementExpressionList" $ wrap $ nonemptyList $ csharp "StatementExpression",
 
 -- // Source: §13.9.5 The foreach statement
 -- foreach_statement
@@ -2923,7 +2923,7 @@ csharpSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : '<' type_parameters '>'
 --     ;
 
-      def "TypeParameterList" $ nonemptyList $ csharp "TypeParameterPart",
+      def "TypeParameterList" $ wrap $ nonemptyList $ csharp "TypeParameterPart",
 
 -- type_parameters
 --     : attributes? type_parameter
@@ -2998,7 +2998,7 @@ csharpSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | secondary_constraints ',' type_parameter
 --     ;
 
-      def "SecondaryConstraints" $ nonemptyList $ csharp "SecondaryConstraint",
+      def "SecondaryConstraints" $ wrap $ nonemptyList $ csharp "SecondaryConstraint",
 
       def "SecondaryConstraint" $ union [
         "interface">: csharp "InterfaceType",
@@ -3108,7 +3108,7 @@ csharpSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : variable_declarator (',' variable_declarator)*
 --     ;
 
-      def "VariableDeclarators" $ nonemptyList $ csharp "VariableDeclarator",
+      def "VariableDeclarators" $ wrap $ nonemptyList $ csharp "VariableDeclarator",
 
 -- variable_declarator
 --     : identifier ('=' variable_initializer)?
@@ -4008,7 +4008,7 @@ csharpSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --       type_parameter
 --     ;
 
-      def "VariantTypeParameters" $ list $ csharp "VariantTypeParameter",
+      def "VariantTypeParameters" $ wrap $ list $ csharp "VariantTypeParameter",
 
       def "VariantTypeParameter" $ record [
         "attributes">: optional $ csharp "Attributes",
@@ -4265,7 +4265,7 @@ csharpSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : attribute_section+
 --     ;
 
-      def "Attributes" $ nonemptyList $ csharp "AttributeSection",
+      def "Attributes" $ wrap $ nonemptyList $ csharp "AttributeSection",
 
 -- attribute_section
 --     : '[' attribute_target_specifier? attribute_list ']'
@@ -4293,7 +4293,7 @@ csharpSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : attribute (',' attribute)*
 --     ;
 
-      def "AttributeList" $ nonemptyList $ csharp "Attribute",
+      def "AttributeList" $ wrap $ nonemptyList $ csharp "Attribute",
 
 -- attribute
 --     : attribute_name attribute_arguments?
@@ -4324,7 +4324,7 @@ csharpSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : positional_argument (',' positional_argument)*
 --     ;
 
-      def "PositionalArgumentList" $ nonemptyList $ csharp "PositionalArgument",
+      def "PositionalArgumentList" $ wrap $ nonemptyList $ csharp "PositionalArgument",
 
 -- positional_argument
 --     : argument_name? attribute_argument_expression
@@ -4338,7 +4338,7 @@ csharpSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : named_argument (','  named_argument)*
 --     ;
 
-      def "NamedArgumentList" $ nonemptyList $ csharp "NamedArgument",
+      def "NamedArgumentList" $ wrap $ nonemptyList $ csharp "NamedArgument",
 
 -- named_argument
 --     : identifier '=' attribute_argument_expression

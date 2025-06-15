@@ -117,7 +117,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : query (SEMI? query)* SEMI? EOF
 --     ;
 
-      def "QueryList" $ nonemptyList $ gremlin "Query",
+      def "QueryList" $ wrap $ nonemptyList $ gremlin "Query",
 
 -- query
       def "Query" $ union [
@@ -151,7 +151,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | traversalSource DOT traversalSourceSelfMethod
 --     ;
 
-      def "TraversalSource" $ list $ gremlin "TraversalSourceSelfMethod",
+      def "TraversalSource" $ wrap $ list $ gremlin "TraversalSourceSelfMethod",
 
 -- transactionPart
 --     : 'tx' LPAREN RPAREN DOT 'begin' LPAREN RPAREN
@@ -2387,7 +2387,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : genericLiteralExpr?
 --     ;
 
-      def "GenericLiteralList" $ list genericLiteral,
+      def "GenericLiteralList" $ wrap $ list genericLiteral,
 
 -- genericLiteralExpr
 --     : genericLiteral (COMMA genericLiteral)*
@@ -2414,13 +2414,13 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : LBRACE (genericLiteral (COMMA genericLiteral)*)? RBRACE
 --     ;
 
-      def "GenericLiteralSet" $ list genericLiteral,
+      def "GenericLiteralSet" $ wrap $ list genericLiteral,
 
 -- genericLiteralCollection
 --     : LBRACK (genericLiteral (COMMA genericLiteral)*)? RBRACK
 --     ;
 
-      def "GenericLiteralCollection" $ list genericLiteral,
+      def "GenericLiteralCollection" $ wrap $ list genericLiteral,
 
 -- stringLiteralVarargs
 --     : (stringNullableArgument (COMMA stringNullableArgument)*)?
@@ -2487,7 +2487,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | LBRACK mapEntry (COMMA mapEntry)* RBRACK
 --     ;
 
-      def "GenericLiteralMap" $ list $ gremlin "MapEntry",
+      def "GenericLiteralMap" $ wrap $ list $ gremlin "MapEntry",
 
 -- // allow builds of Map that sorta make sense in the Gremlin context.
 -- mapEntry
@@ -2536,14 +2536,14 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : IntegerLiteral
 --     ;
 
-      def "IntegerLiteral" bigint,
+      def "IntegerLiteral" $ wrap bigint,
 
 --
 -- floatLiteral
 --     : FloatingPointLiteral
 --     ;
 
-      def "FloatLiteral" bigfloat,
+      def "FloatLiteral" $ wrap bigfloat,
 
 -- numericLiteral
 --     : integerLiteral
@@ -2565,7 +2565,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     | 'datetime' LPAREN RPAREN
 --     ;
 
-      def "DateLiteral" $ optional stringArgument,
+      def "DateLiteral" $ wrap $ optional stringArgument,
 
 -- nullLiteral
 --     : NullLiteral
@@ -2904,7 +2904,7 @@ gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --     : IdentifierStart IdentifierPart*
 --     ;
 
-      def "Identifier" string]
+      def "Identifier" $ wrap string]
 
 -- // REFERENCE: https://github.com/antlr/grammars-v4/blob/master/java/java8/Java8Lexer.g4
 -- fragment
