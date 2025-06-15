@@ -18,13 +18,17 @@ test_type_lat_lon = hydra.core.TypeRecord(hydra.core.RowType("test_type_lat_lon_
   hydra.core.FieldType(hydra.core.Name("lat"), hydra.core.TypeLiteral(hydra.core.LiteralTypeFloat(hydra.core.FloatType.FLOAT32))),
   hydra.core.FieldType(hydra.core.Name("lon"), hydra.core.TypeLiteral(hydra.core.LiteralTypeFloat(hydra.core.FloatType.FLOAT32)))])))
 
-test_type_lat_lon_poly = hydra.core.TypeLambda(hydra.core.LambdaType(hydra.core.Name("a"), hydra.core.TypeRecord(hydra.core.RowType("test_type_lat_lon_poly_name", tuple([
+test_type_lat_lon_poly = hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("a"), hydra.core.TypeRecord(hydra.core.RowType("test_type_lat_lon_poly_name", tuple([
   hydra.core.FieldType(hydra.core.Name("lat"), hydra.core.TypeVariable(hydra.core.Name("a"))),
   hydra.core.FieldType(hydra.core.Name("lon"), hydra.core.TypeVariable(hydra.core.Name("a")))])))))
 
 test_type_string_alias = hydra.core.TypeWrap(hydra.core.WrappedType("test_type_string_alias_name", hydra.core.TypeLiteral(hydra.core.LiteralTypeString(hydra.core.Unit()))))
 
 test_type_string_alias_name = hydra.core.Name("StringTypeAlias")
+
+test_type_polymorphic_wrapper = hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("a"), hydra.core.TypeWrap(hydra.core.WrappedType("test_type_polymorphic_wrapper_name", hydra.core.TypeList(hydra.core.TypeVariable(hydra.core.Name("a")))))))
+
+test_type_polymorphic_wrapper_name = hydra.core.Name("PolymorphicWrapper")
 
 test_element_arthur = hydra.graph.Element(hydra.core.Name("firstName"), "test_data_arthur", hydra.core.TypeScheme(tuple([]), hydra.core.TypeVariable("test_type_person_name")))
 
@@ -39,13 +43,13 @@ test_data_arthur = hydra.core.TermRecord(hydra.core.Record("test_type_person_nam
   hydra.core.Field(hydra.core.Name("lastName"), hydra.core.TermLiteral(hydra.core.LiteralString("Dent"))),
   hydra.core.Field(hydra.core.Name("age"), hydra.core.TermLiteral(hydra.core.LiteralInteger(hydra.core.IntegerValueInt32(42))))])))
 
-test_type_buddy_list_a = hydra.core.TypeLambda(hydra.core.LambdaType(hydra.core.Name("a"), hydra.core.TypeRecord(hydra.core.RowType("test_type_buddy_list_a_name", tuple([
+test_type_buddy_list_a = hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("a"), hydra.core.TypeRecord(hydra.core.RowType("test_type_buddy_list_a_name", tuple([
   hydra.core.FieldType(hydra.core.Name("head"), hydra.core.TypeVariable(hydra.core.Name("a"))),
   hydra.core.FieldType(hydra.core.Name("tail"), hydra.core.TypeOptional(hydra.core.TypeApplication(hydra.core.ApplicationType(hydra.core.TypeVariable("test_type_buddy_list_b_name"), hydra.core.TypeVariable(hydra.core.Name("a"))))))])))))
 
 test_type_buddy_list_a_name = hydra.core.Name("BuddyListA")
 
-test_type_buddy_list_b = hydra.core.TypeLambda(hydra.core.LambdaType(hydra.core.Name("a"), hydra.core.TypeRecord(hydra.core.RowType("test_type_buddy_list_b_name", tuple([
+test_type_buddy_list_b = hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("a"), hydra.core.TypeRecord(hydra.core.RowType("test_type_buddy_list_b_name", tuple([
   hydra.core.FieldType(hydra.core.Name("head"), hydra.core.TypeVariable(hydra.core.Name("a"))),
   hydra.core.FieldType(hydra.core.Name("tail"), hydra.core.TypeOptional(hydra.core.TypeApplication(hydra.core.ApplicationType(hydra.core.TypeVariable("test_type_buddy_list_a_name"), hydra.core.TypeVariable(hydra.core.Name("a"))))))])))))
 
@@ -76,7 +80,7 @@ test_type_hydra_type = hydra.core.TypeUnion(hydra.core.RowType("test_type_hydra_
 
 test_type_hydra_type_name = hydra.core.Name("HydraType")
 
-test_type_list = hydra.core.TypeLambda(hydra.core.LambdaType(hydra.core.Name("a"), hydra.core.TypeRecord(hydra.core.RowType("test_type_list_name", tuple([
+test_type_list = hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("a"), hydra.core.TypeRecord(hydra.core.RowType("test_type_list_name", tuple([
   hydra.core.FieldType(hydra.core.Name("head"), hydra.core.TypeVariable(hydra.core.Name("a"))),
   hydra.core.FieldType(hydra.core.Name("tail"), hydra.core.TypeOptional(hydra.core.TypeApplication(hydra.core.ApplicationType(hydra.core.TypeVariable("test_type_list_name"), hydra.core.TypeVariable(hydra.core.Name("a"))))))])))))
 
@@ -95,7 +99,7 @@ test_type_person = hydra.core.TypeRecord(hydra.core.RowType("test_type_person_na
 
 test_type_person_name = hydra.core.Name("Person")
 
-test_type_person_or_something = hydra.core.TypeLambda(hydra.core.LambdaType(hydra.core.Name("a"), hydra.core.TypeUnion(hydra.core.RowType("test_type_person_or_something_name", tuple([
+test_type_person_or_something = hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("a"), hydra.core.TypeUnion(hydra.core.RowType("test_type_person_or_something_name", tuple([
   hydra.core.FieldType(hydra.core.Name("person"), hydra.core.TypeVariable("test_type_person_name")),
   hydra.core.FieldType(hydra.core.Name("other"), hydra.core.TypeVariable(hydra.core.Name("a")))])))))
 
@@ -120,7 +124,7 @@ test_type_union_monomorphic = hydra.core.TypeUnion(hydra.core.RowType("test_type
 
 test_type_union_monomorphic_name = hydra.core.Name("UnionMonomorphic")
 
-test_type_union_polymorphic_recursive = hydra.core.TypeLambda(hydra.core.LambdaType(hydra.core.Name("a"), hydra.core.TypeUnion(hydra.core.RowType("test_type_union_polymorphic_recursive_name", tuple([
+test_type_union_polymorphic_recursive = hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("a"), hydra.core.TypeUnion(hydra.core.RowType("test_type_union_polymorphic_recursive_name", tuple([
   hydra.core.FieldType(hydra.core.Name("bool"), hydra.core.TypeLiteral(hydra.core.LiteralTypeBoolean(hydra.core.Unit()))),
   hydra.core.FieldType(hydra.core.Name("value"), hydra.core.TypeVariable(hydra.core.Name("a"))),
   hydra.core.FieldType(hydra.core.Name("other"), hydra.core.TypeApplication(hydra.core.ApplicationType(hydra.core.TypeVariable("test_type_union_polymorphic_recursive_name"), hydra.core.TypeVariable(hydra.core.Name("a")))))])))))
