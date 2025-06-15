@@ -45,17 +45,17 @@ hydraGrammarModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "Pattern" $
         doc "A pattern which matches valid expressions in the language" $
         union [
-          "nil">: unit,
+          "alternatives">: list $ grammar "Pattern",
+          "constant">: grammar "Constant",
           "ignored">: grammar "Pattern",
           "labeled">: grammar "LabeledPattern",
-          "constant">: grammar "Constant",
-          "regex">: grammar "Regex",
+          "nil">: unit,
           "nonterminal">: grammar "Symbol",
-          "sequence">: list $ grammar "Pattern",
-          "alternatives">: list $ grammar "Pattern",
           "option">: grammar "Pattern",
-          "star">: grammar "Pattern",
-          "plus">: grammar "Pattern"],
+          "plus">: grammar "Pattern",
+          "regex">: grammar "Regex",
+          "sequence">: list $ grammar "Pattern",
+          "star">: grammar "Pattern"],
 
       def "Production" $
         doc "A BNF production" $

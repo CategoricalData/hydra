@@ -47,42 +47,42 @@ _LabeledPattern_pattern = (Core.Name "pattern")
 
 -- | A pattern which matches valid expressions in the language
 data Pattern = 
-  PatternNil  |
+  PatternAlternatives [Pattern] |
+  PatternConstant Constant |
   PatternIgnored Pattern |
   PatternLabeled LabeledPattern |
-  PatternConstant Constant |
-  PatternRegex Regex |
+  PatternNil  |
   PatternNonterminal Symbol |
-  PatternSequence [Pattern] |
-  PatternAlternatives [Pattern] |
   PatternOption Pattern |
-  PatternStar Pattern |
-  PatternPlus Pattern
+  PatternPlus Pattern |
+  PatternRegex Regex |
+  PatternSequence [Pattern] |
+  PatternStar Pattern
   deriving (Eq, Ord, Read, Show)
 
 _Pattern = (Core.Name "hydra.grammar.Pattern")
 
-_Pattern_nil = (Core.Name "nil")
+_Pattern_alternatives = (Core.Name "alternatives")
+
+_Pattern_constant = (Core.Name "constant")
 
 _Pattern_ignored = (Core.Name "ignored")
 
 _Pattern_labeled = (Core.Name "labeled")
 
-_Pattern_constant = (Core.Name "constant")
-
-_Pattern_regex = (Core.Name "regex")
+_Pattern_nil = (Core.Name "nil")
 
 _Pattern_nonterminal = (Core.Name "nonterminal")
 
-_Pattern_sequence = (Core.Name "sequence")
-
-_Pattern_alternatives = (Core.Name "alternatives")
-
 _Pattern_option = (Core.Name "option")
 
-_Pattern_star = (Core.Name "star")
-
 _Pattern_plus = (Core.Name "plus")
+
+_Pattern_regex = (Core.Name "regex")
+
+_Pattern_sequence = (Core.Name "sequence")
+
+_Pattern_star = (Core.Name "star")
 
 -- | A BNF production
 data Production = 

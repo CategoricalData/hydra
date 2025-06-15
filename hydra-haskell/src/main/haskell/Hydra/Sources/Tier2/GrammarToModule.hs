@@ -57,7 +57,8 @@ hydraGrammarToModuleModule = Module (Namespace "hydra.grammarToModule") elements
      el makeElementsDef,
      el rawNameDef,
      el simplifyDef,
-     el toNameDef]
+     el toNameDef,
+     el wrapTypeDef]
 
 childNameDef :: TElement (String -> String -> String)
 childNameDef = grammarToModuleDefinition "childName" $
@@ -102,7 +103,7 @@ grammarToModuleDef = grammarToModuleDefinition "grammarToModule" $
     "elements">: Lists.map
       (lambda "pair" $ lets [
         "lname">: first $ var "pair",
-        "typ">: second $ var "pair"]
+        "typ">: ref wrapTypeDef @@ (second $ var "pair")]
         $ ref typeElementDef @@ (ref toNameDef @@ var "ns" @@ var "lname") @@ var "typ")
       (var "elementPairs")]
     $ Module.module_ (var "ns") (var "elements") (list []) (list []) (var "desc")
@@ -158,20 +159,20 @@ makeElementsDef = grammarToModuleDefinition "makeElements" $
             (Lists.cons (pair (var "lname") (second $ Lists.head $ var "cpairs")) (Lists.tail $ var "cpairs"))),
 
     "forPat">: lambda "pat" $ match _Pattern Nothing [
-      _Pattern_nil>>: constant $ var "trivial",
-      _Pattern_ignored>>: constant $ list [],
-      _Pattern_labeled>>: lambda "lp" $ var "forPat" @@ Grammar.labeledPatternPattern (var "lp"),
-      _Pattern_constant>>: constant $ var "trivial",
-      _Pattern_regex>>: constant $ list [pair (var "lname") TTypes.string],
-      _Pattern_nonterminal>>: lambda "s" $ list [pair (var "lname") $ Core.typeVariable $
-        ref toNameDef @@ var "ns" @@ Grammar.unSymbol (var "s")],
-      _Pattern_sequence>>: lambda "pats" $ var "forRecordOrUnion" @@ true @@
-        (lambda "fields" $ Core.typeRecord $ Core.rowType (ref placeholderNameDef) (var "fields")) @@ var "pats",
       _Pattern_alternatives>>: lambda "pats" $ var "forRecordOrUnion" @@ false @@
         (lambda "fields" $ Core.typeUnion $ Core.rowType (ref placeholderNameDef) (var "fields")) @@ var "pats",
+      _Pattern_constant>>: constant $ var "trivial",
+      _Pattern_ignored>>: constant $ list [],
+      _Pattern_labeled>>: lambda "lp" $ var "forPat" @@ Grammar.labeledPatternPattern (var "lp"),
+      _Pattern_nil>>: constant $ var "trivial",
+      _Pattern_nonterminal>>: lambda "s" $ list [pair (var "lname") $ Core.typeVariable $
+        ref toNameDef @@ var "ns" @@ Grammar.unSymbol (var "s")],
       _Pattern_option>>: lambda "p" $ var "mod" @@ string "Option" @@ (asFunction TTypes.optional) @@ var "p",
-      _Pattern_star>>: lambda "p" $ var "mod" @@ string "Elmt" @@ (asFunction TTypes.list) @@ var "p",
-      _Pattern_plus>>: lambda "p" $ var "mod" @@ string "Elmt" @@ (asFunction TTypes.list) @@ var "p"]
+      _Pattern_plus>>: lambda "p" $ var "mod" @@ string "Elmt" @@ (asFunction TTypes.list) @@ var "p",
+      _Pattern_regex>>: constant $ list [pair (var "lname") TTypes.string],
+      _Pattern_sequence>>: lambda "pats" $ var "forRecordOrUnion" @@ true @@
+        (lambda "fields" $ Core.typeRecord $ Core.rowType (ref placeholderNameDef) (var "fields")) @@ var "pats",
+      _Pattern_star>>: lambda "p" $ var "mod" @@ string "Elmt" @@ (asFunction TTypes.list) @@ var "p"]
     @@ var "pat"]
     $ var "forPat" @@ var "pat"
 
@@ -179,19 +180,17 @@ rawNameDef :: TElement (Pattern -> String)
 rawNameDef = grammarToModuleDefinition "rawName" $
   doc "Get raw name from pattern" $
   lambda "pat" $ match _Pattern Nothing [
-    _Pattern_nil>>: constant $ string "none",
+    _Pattern_alternatives>>: constant $ string "alts",
+    _Pattern_constant>>: lambda "c" $ ref decapitalizeDef @@ (ref withCharacterAliasesDef @@ (Grammar.unConstant $ var "c")),
     _Pattern_ignored>>: constant $ string "ignored",
     _Pattern_labeled>>: lambda "lp" $ Grammar.unLabel $ Grammar.labeledPatternLabel $ var "lp",
-    _Pattern_constant>>: lambda "c" $
-      ref decapitalizeDef @@ (ref withCharacterAliasesDef @@ (Grammar.unConstant $ var "c")),
-    _Pattern_regex>>: constant $ string "regex",
-    _Pattern_nonterminal>>: lambda "s" $
-      ref decapitalizeDef @@ (Grammar.unSymbol $ var "s"),
-    _Pattern_sequence>>: constant $ string "sequence",
-    _Pattern_alternatives>>: constant $ string "alts",
+    _Pattern_nil>>: constant $ string "none",
+    _Pattern_nonterminal>>: lambda "s" $ ref decapitalizeDef @@ (Grammar.unSymbol $ var "s"),
     _Pattern_option>>: lambda "p" $ ref decapitalizeDef @@ (ref rawNameDef @@ var "p"),
-    _Pattern_star>>: lambda "p" $ Strings.cat2 (string "listOf") (ref capitalizeDef @@ (ref rawNameDef @@ var "p")),
-    _Pattern_plus>>: lambda "p" $ Strings.cat2 (string "listOf") (ref capitalizeDef @@ (ref rawNameDef @@ var "p"))]
+    _Pattern_plus>>: lambda "p" $ Strings.cat2 (string "listOf") (ref capitalizeDef @@ (ref rawNameDef @@ var "p")),
+    _Pattern_regex>>: constant $ string "regex",
+    _Pattern_sequence>>: constant $ string "sequence",
+    _Pattern_star>>: lambda "p" $ Strings.cat2 (string "listOf") (ref capitalizeDef @@ (ref rawNameDef @@ var "p"))]
   @@ var "pat"
 
 simplifyDef :: TElement (Bool -> [Pattern] -> [Pattern])
@@ -209,3 +208,11 @@ toNameDef = grammarToModuleDefinition "toName" $
   doc "Convert local name to qualified name" $
   lambda "ns" $ lambda "local" $
     ref unqualifyNameDef @@ (Module.qualifiedName (just $ var "ns") (var "local"))
+
+wrapTypeDef :: TElement (Type -> Type)
+wrapTypeDef = grammarToModuleDefinition "wrapType" $
+  doc "Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type" $
+  lambda "t" $ cases _Type (var "t") (Just $ Core.typeWrap $ Core.wrappedType (Core.name placeholderName) $ var "t") [
+    _Type_record>>: constant $ var "t",
+    _Type_union>>: constant $ var "t",
+    _Type_wrap>>: constant $ var "t"]
