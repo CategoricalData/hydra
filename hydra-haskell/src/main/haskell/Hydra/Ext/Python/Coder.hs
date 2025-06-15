@@ -242,7 +242,7 @@ encodeModule mod = do
       where
         p = L.partition isNameDef defs
         isNameDef d = case d of
-          DefinitionType name _ -> name == _Name
+          DefinitionType (TypeDefinition name _) -> name == _Name
           _ -> False
 
     findNamespaces defs meta = if fst (namespacesFocus namespaces) == coreNs
