@@ -32,8 +32,9 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesFrozenDict :: Bool,
   pythonModuleMetadataUsesFrozenList :: Bool,
   pythonModuleMetadataUsesGeneric :: Bool,
-  pythonModuleMetadataUsesTypeVar :: Bool,
-  pythonModuleMetadataUsesNode :: Bool}
+  pythonModuleMetadataUsesName :: Bool,
+  pythonModuleMetadataUsesNode :: Bool,
+  pythonModuleMetadataUsesTypeVar :: Bool}
 
 argsAndBindings :: Term -> Type -> ([Name], [LetBinding], Term, [Type], Type)
 argsAndBindings = gather [] [] []
@@ -92,12 +93,13 @@ encodeApplicationType env at = do
       TypeApplication (ApplicationType lhs rhs) -> gatherParams lhs (rhs:ps)
       _ -> (t, ps)
 
-encodeDefinition :: PythonEnvironment -> Definition -> Flow Graph [Py.Statement]
+encodeDefinition :: PythonEnvironment -> Definition -> Flow Graph [[Py.Statement]]
 encodeDefinition env def = case def of
   DefinitionTerm (TermDefinition name term typ) -> withTrace ("data element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTermDescription term
     g <- getState
-    encodeTermAssignment env name (fullyStripTerm $ expandLambdas g term) typ comment
+    stmts <- encodeTermAssignment env name (fullyStripTerm $ expandLambdas g term) typ comment
+    return [stmts]
   DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTypeDescription typ
     encodeTypeAssignment env name typ comment
@@ -218,23 +220,8 @@ encodeLiteralType lt = do
 encodeModule :: Module -> Flow Graph Py.Module
 encodeModule mod = do
     defs <- adaptedModuleDefinitions pythonLanguage mod
-    let namespaces = namespacesForDefinitions True encodeNamespace (moduleNamespace mod) defs
-
---    let def = defs !! 6
---    fail $ ""
---      ++ "\n\t defs: " ++ show (L.length defs)
---      ++ "\n\t namespaces: " ++ show namespaces
---      ++ "\n\t def dep namespaces: " ++ show (definitionDependencyNamespaces True defs)
---      ++ case def of
---        DefinitionType _ typ -> ""
---          ++ "\n\t type: " ++ showType typ
---          ++ "\n\t deps: " ++ show (typeDependencyNames True typ)
-
-    let env = PythonEnvironment {
-              pythonEnvironmentNamespaces = namespaces,
-              pythonEnvironmentBoundTypeVariables = ([], M.empty)}
-    defStmts <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
     let meta = gatherMetadata defs
+    let namespaces = findNamespaces defs meta
     let tvars = pythonModuleMetadataTypeVariables meta
     let importStmts = imports namespaces meta
     let tvarStmts = tvarStmt . encodeTypeVariable <$> S.toList tvars
@@ -242,11 +229,23 @@ encodeModule mod = do
     let commentStmts = case normalizeComment <$> moduleDescription mod of
                        Nothing -> []
                        Just c -> [commentStatement c]
-    let body = L.filter (not . L.null) [commentStmts, importStmts, tvarStmts] ++ (singleton <$> defStmts)
+
+    let env = PythonEnvironment {
+              pythonEnvironmentNamespaces = namespaces,
+              pythonEnvironmentBoundTypeVariables = ([], M.empty)}
+    defStmts <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
+
+    let body = L.filter (not . L.null) $ [commentStmts, importStmts, tvarStmts] ++ defStmts
     return $ Py.Module body
   where
-    singleton s = [s]
-    tvarStmt name = assignmentToExpression name $ functionCall (pyNameToPyPrimary $ Py.Name "TypeVar")
+    findNamespaces defs meta = if fst (namespacesFocus namespaces) == coreNs
+        then namespaces
+        else namespaces {namespacesMapping = M.insert coreNs (encodeNamespace coreNs) $ namespacesMapping namespaces}
+      where
+        coreNs = Namespace "hydra.core"
+        namespaces = namespacesForDefinitions encodeNamespace (moduleNamespace mod) defs
+
+    tvarStmt name = assignmentStatement name $ functionCall (pyNameToPyPrimary $ Py.Name "TypeVar")
       [doubleQuotedString $ Py.unName name]
     imports namespaces meta = pySimpleStatementToPyStatement . Py.SimpleStatementImport <$> (standardImports ++ domainImports)
       where
@@ -282,6 +281,24 @@ encodeModule mod = do
                   Py.ImportFromTargetsSimple (forSymbol <$> symbols)
               where
                 forSymbol s = Py.ImportFromAsName (Py.Name s) Nothing
+
+encodeNameConstants :: PythonEnvironment -> Name -> Type -> [Py.Statement]
+encodeNameConstants env name typ = toStmt <$> (namePair:(fieldPairs typ))
+  where
+    toStmt (pname, hname) = assignmentStatement pname $
+--      doubleQuotedString $ unName hname -- TODO
+
+      functionCall (pyNameToPyPrimary $ encodeName True CaseConventionPascal env _Name)
+        [doubleQuotedString $ unName hname]
+
+
+    namePair = (encodeConstantForTypeName env name, name)
+    fieldPair field = (encodeConstantForFieldName env name $ fieldTypeName field, fieldTypeName field)
+    fieldPairs typ = case stripType typ of
+      TypeForall (ForallType _ body) -> fieldPairs body
+      TypeRecord rt -> fieldPair <$> rowTypeFields rt
+      TypeUnion rt -> fieldPair <$> rowTypeFields rt
+      _ -> []
 
 encodeRecordType :: PythonEnvironment -> Name -> RowType -> Maybe String -> Flow Graph Py.Statement
 encodeRecordType env name (RowType _ tfields) comment = do
@@ -356,7 +373,7 @@ encodeTermAssignment env name term typ comment = if L.null args && L.null bindin
     -- If there are no arguments or let bindings, use a simple a = b assignment.
     then do
       bodyExpr <- encodeTerm env body
-      return [annotatedStatement comment $ assignmentToExpression (encodeName False CaseConventionLowerSnake env name) bodyExpr]
+      return [annotatedStatement comment $ assignmentStatement (encodeName False CaseConventionLowerSnake env name) bodyExpr]
     -- If there are either arguments or let bindings, then only a function definition will work.
     else do
         -- TODO: topological sort of bindings
@@ -450,8 +467,11 @@ encodeType env typ = case stripType typ of
     encode = encodeType env
     dflt = pure $ doubleQuotedString $ "type = " ++ show (stripType typ)
 
-encodeTypeAssignment :: PythonEnvironment -> Name -> Type -> Maybe String -> Flow Graph [Py.Statement]
-encodeTypeAssignment env name typ comment = encode env typ
+encodeTypeAssignment :: PythonEnvironment -> Name -> Type -> Maybe String -> Flow Graph [[Py.Statement]]
+encodeTypeAssignment env name typ comment = do
+    defStmts <- encode env typ
+    let constStmts = encodeNameConstants env name typ
+    return $ (pure <$> defStmts) ++ [constStmts]
   where
     encode env typ = case stripType typ of
       TypeForall (ForallType var body) -> encode newEnv body
@@ -486,7 +506,7 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumRowType rt th
         toVal (FieldType fname ftype) = do
           fcomment <- fmap normalizeComment <$> getTypeDescription ftype
           return $ Y.catMaybes [
-            Just $ assignmentToExpression (encodeEnumValue env fname) (doubleQuotedString $ unName fname),
+            Just $ assignmentStatement (encodeEnumValue env fname) (doubleQuotedString $ unName fname),
             pyExpressionToPyStatement . tripleQuotedString <$> fcomment]
     asUnion = do
       fieldStmts <- CM.mapM toFieldStmt tfields
@@ -553,11 +573,14 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataUsesFrozenDict = False,
       pythonModuleMetadataUsesFrozenList = False,
       pythonModuleMetadataUsesGeneric = False,
-      pythonModuleMetadataUsesTypeVar = False,
-      pythonModuleMetadataUsesNode = False}
+      pythonModuleMetadataUsesName = False,
+      pythonModuleMetadataUsesNode = False,
+      pythonModuleMetadataUsesTypeVar = False}
     addDef meta def = case def of
       DefinitionTerm (TermDefinition _ term typ) -> foldOverTerm TraversalOrderPre extendMetaForTerm (extendMetaForType True meta typ) term
       DefinitionType (TypeDefinition _ typ) -> foldOverType TraversalOrderPre (extendMetaForType False) meta typ
+        where
+          meta2 = meta {pythonModuleMetadataUsesName = True}
     extendMetaForTerm meta t = case t of
       TermLet (Let bindings _) -> L.foldl forBinding meta bindings
         where

@@ -20,21 +20,19 @@ data PythonEnvironment = PythonEnvironment {
   pythonEnvironmentNamespaces :: Namespaces Py.DottedName,
   pythonEnvironmentBoundTypeVariables :: ([Name], M.Map Name Py.Name)}
 
+encodeConstantForFieldName :: PythonEnvironment -> Name -> Name -> Py.Name
+encodeConstantForFieldName _ tname fname = Py.Name $
+  convertCase CaseConventionPascal CaseConventionUpperSnake (localNameOf tname) ++ "__"
+  ++ convertCase CaseConventionCamel CaseConventionUpperSnake (unName fname) ++ "__NAME"
+
+encodeConstantForTypeName :: PythonEnvironment -> Name -> Py.Name
+encodeConstantForTypeName _ tname = Py.Name $ (convertCase CaseConventionPascal CaseConventionUpperSnake $ localNameOf tname) ++ "__NAME"
+
 encodeEnumValue :: PythonEnvironment -> Name -> Py.Name
 encodeEnumValue = encodeName False CaseConventionUpperSnake
 
 encodeFieldName :: PythonEnvironment -> Name -> Py.Name
 encodeFieldName env fname = encodeName False CaseConventionLowerSnake env fname
-
-encodeNameQualified :: PythonEnvironment -> Name -> Py.Name
-encodeNameQualified env name = case M.lookup name (snd $ pythonEnvironmentBoundTypeVariables env) of
-    Just n -> n
-    Nothing -> if ns == Just focusNs
-      then Py.Name $ if _useFutureAnnotations_ then local else PySer.escapePythonString True local
-      else Py.Name $ L.intercalate "." (sanitizePythonName <$> (Strings.splitOn "." $ unName name))
-  where
-    focusNs = fst $ namespacesFocus $ pythonEnvironmentNamespaces env
-    QualifiedName ns local = qualifyName name
 
 encodeName :: Bool -> CaseConvention -> PythonEnvironment -> Name -> Py.Name
 encodeName isQualified conv env name = if isQualified
@@ -51,6 +49,16 @@ encodeName isQualified conv env name = if isQualified
     QualifiedName mns local = qualifyName name
     pyLocal = sanitizePythonName $ convertCase CaseConventionCamel conv local
     pyNs ns = L.intercalate "." $ fmap (convertCase CaseConventionCamel CaseConventionLowerSnake) $ Strings.splitOn "." $ unNamespace ns
+
+encodeNameQualified :: PythonEnvironment -> Name -> Py.Name
+encodeNameQualified env name = case M.lookup name (snd $ pythonEnvironmentBoundTypeVariables env) of
+    Just n -> n
+    Nothing -> if ns == Just focusNs
+      then Py.Name $ if _useFutureAnnotations_ then local else PySer.escapePythonString True local
+      else Py.Name $ L.intercalate "." (sanitizePythonName <$> (Strings.splitOn "." $ unName name))
+  where
+    focusNs = fst $ namespacesFocus $ pythonEnvironmentNamespaces env
+    QualifiedName ns local = qualifyName name
 
 encodeNamespace :: Namespace -> Py.DottedName
 encodeNamespace ns = Py.DottedName (Py.Name . (convertCase CaseConventionCamel CaseConventionLowerSnake) <$> (Strings.splitOn "." $ unNamespace ns))
