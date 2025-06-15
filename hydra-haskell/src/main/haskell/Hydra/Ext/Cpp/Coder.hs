@@ -134,6 +134,13 @@ encodeApplicationType env at = do
       Cpp.TypeExpressionBasic (Cpp.BasicTypeNamed name) -> createTemplateType name args
       _ -> error "Non-named type in template application"
 
+encodeDefinition :: CppEnvironment -> Definition -> Flow Graph [Cpp.Declaration]
+encodeDefinition env def = case def of
+  DefinitionTerm _ -> fail "term-level encoding is not yet supported"
+  DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name) $ do
+    comment <- fmap normalizeComment <$> getTypeDescription typ
+    encodeTypeDefinition env name typ comment
+
 encodeEnumType :: CppEnvironment -> Name -> [FieldType] -> Maybe String -> Flow Graph [Cpp.Declaration]
 encodeEnumType env name tfields _comment = return [
     cppEnumDeclaration (encodeName False CaseConventionPascal env name)
@@ -222,8 +229,56 @@ encodeLiteralType lt = do
         _ -> pure Cpp.BasicTypeInt
       LiteralTypeString -> pure Cpp.BasicTypeString
 
-encodeRecordType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph [Cpp.Declaration]
-encodeRecordType env name (RowType _ tfields) _comment = do
+encodeModule :: Module -> Flow Graph Cpp.Program
+encodeModule mod = do
+    defs <- adaptedModuleDefinitions cppLanguage mod
+    let namespaces = namespacesForDefinitions encodeNamespace (moduleNamespace mod) defs
+    let env = CppEnvironment {
+              cppEnvironmentNamespaces = namespaces,
+              cppEnvironmentBoundTypeVariables = ([], M.empty)}
+    let forwardDecls = forwardDeclarationsForDefs env defs
+    defDecls <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
+    let meta = gatherMetadata defs
+    let includeDirectives = includes meta
+    return $ Cpp.Program includeDirectives (wrapWithNamespace (moduleNamespace mod) (forwardDecls ++ defDecls))
+  where
+    wrapWithNamespace ns decls = [Cpp.DeclarationNamespace $
+      Cpp.NamespaceDeclaration (encodeNamespace ns) decls]
+
+    includes meta = addVersionInclude $ standardIncludes ++ containerIncludes
+      where
+        addVersionInclude includes =
+          Cpp.IncludeDirective "version" True : includes
+
+        standardIncludes = [
+          Cpp.IncludeDirective "iostream" True,
+          Cpp.IncludeDirective "string" True,
+          Cpp.IncludeDirective "cstdint" True]
+
+        containerIncludes = Y.catMaybes [
+          if cppModuleMetadataUsesVector meta then Just (Cpp.IncludeDirective "vector" True) else Nothing,
+          if cppModuleMetadataUsesMap meta then Just (Cpp.IncludeDirective "map" True) else Nothing,
+          if cppModuleMetadataUsesSet meta then Just (Cpp.IncludeDirective "set" True) else Nothing,
+          if cppModuleMetadataUsesVariant meta then Just (Cpp.IncludeDirective "variant" True) else Nothing,
+          if cppModuleMetadataUsesOptional meta then Just (Cpp.IncludeDirective "optional" True) else Nothing,
+          if cppModuleMetadataUsesMemory meta then Just (Cpp.IncludeDirective "memory" True) else Nothing,
+          if cppModuleMetadataUsesFunctional meta then Just (Cpp.IncludeDirective "functional" True) else Nothing,
+          if cppModuleMetadataUsesTypeTraits meta then Just (Cpp.IncludeDirective "type_traits" True) else Nothing]
+
+    forwardDeclarationsForDefs env defs = Y.catMaybes (toDecl <$> defs)
+      where
+        toDecl def = case def of
+          DefinitionType (TypeDefinition name typ) -> case stripType typ of
+            TypeRecord _ -> Just $ Cpp.DeclarationClass $
+                  Cpp.ClassDeclaration
+                    (Cpp.ClassSpecifier Cpp.ClassKeyStruct (encodeName False CaseConventionPascal env name) [])
+                    Nothing
+            _ -> Nothing
+          _ -> Nothing
+
+encodeRecordType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph Cpp.Declaration
+encodeRecordType env name (RowType _ tfields) comment = do
+    -- Get field declarations for member variables
     cppFields <- CM.mapM (encodeFieldType env False) tfields
     constructorParams <- createParameters tfields
     return [cppClassDeclaration (className name) [] $
