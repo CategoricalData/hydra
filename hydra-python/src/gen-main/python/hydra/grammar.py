@@ -10,8 +10,8 @@ class Constant(Node[str]):
 
 CONSTANT__NAME = hydra.core.Name("hydra.grammar.Constant")
 
-# An enhanced Backus-Naur form (BNF) grammar.
-type Grammar = frozenlist[Production]
+class Grammar(Node["frozenlist[Production]"]):
+    """An enhanced Backus-Naur form (BNF) grammar."""
 
 GRAMMAR__NAME = hydra.core.Name("hydra.grammar.Grammar")
 
@@ -31,43 +31,43 @@ LABELED_PATTERN__NAME = hydra.core.Name("hydra.grammar.LabeledPattern")
 LABELED_PATTERN__LABEL__NAME = hydra.core.Name("label")
 LABELED_PATTERN__PATTERN__NAME = hydra.core.Name("pattern")
 
-class PatternNil(Node[None]): ...
+class PatternAlternatives(Node["frozenlist[Pattern]"]): ...
+
+class PatternConstant(Node["Constant"]): ...
 
 class PatternIgnored(Node["Pattern"]): ...
 
 class PatternLabeled(Node["LabeledPattern"]): ...
 
-class PatternConstant(Node["Constant"]): ...
-
-class PatternRegex(Node["Regex"]): ...
+class PatternNil(Node[None]): ...
 
 class PatternNonterminal(Node["Symbol"]): ...
 
-class PatternSequence(Node["frozenlist[Pattern]"]): ...
-
-class PatternAlternatives(Node["frozenlist[Pattern]"]): ...
-
 class PatternOption(Node["Pattern"]): ...
-
-class PatternStar(Node["Pattern"]): ...
 
 class PatternPlus(Node["Pattern"]): ...
 
+class PatternRegex(Node["Regex"]): ...
+
+class PatternSequence(Node["frozenlist[Pattern]"]): ...
+
+class PatternStar(Node["Pattern"]): ...
+
 # A pattern which matches valid expressions in the language.
-type Pattern = PatternNil | PatternIgnored | PatternLabeled | PatternConstant | PatternRegex | PatternNonterminal | PatternSequence | PatternAlternatives | PatternOption | PatternStar | PatternPlus
+type Pattern = PatternAlternatives | PatternConstant | PatternIgnored | PatternLabeled | PatternNil | PatternNonterminal | PatternOption | PatternPlus | PatternRegex | PatternSequence | PatternStar
 
 PATTERN__NAME = hydra.core.Name("hydra.grammar.Pattern")
-PATTERN__NIL__NAME = hydra.core.Name("nil")
+PATTERN__ALTERNATIVES__NAME = hydra.core.Name("alternatives")
+PATTERN__CONSTANT__NAME = hydra.core.Name("constant")
 PATTERN__IGNORED__NAME = hydra.core.Name("ignored")
 PATTERN__LABELED__NAME = hydra.core.Name("labeled")
-PATTERN__CONSTANT__NAME = hydra.core.Name("constant")
-PATTERN__REGEX__NAME = hydra.core.Name("regex")
+PATTERN__NIL__NAME = hydra.core.Name("nil")
 PATTERN__NONTERMINAL__NAME = hydra.core.Name("nonterminal")
-PATTERN__SEQUENCE__NAME = hydra.core.Name("sequence")
-PATTERN__ALTERNATIVES__NAME = hydra.core.Name("alternatives")
 PATTERN__OPTION__NAME = hydra.core.Name("option")
-PATTERN__STAR__NAME = hydra.core.Name("star")
 PATTERN__PLUS__NAME = hydra.core.Name("plus")
+PATTERN__REGEX__NAME = hydra.core.Name("regex")
+PATTERN__SEQUENCE__NAME = hydra.core.Name("sequence")
+PATTERN__STAR__NAME = hydra.core.Name("star")
 
 @dataclass
 class Production:

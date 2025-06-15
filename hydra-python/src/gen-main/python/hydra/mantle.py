@@ -1,13 +1,49 @@
 """A set of types which supplement hydra.core with variants and accessors. Currently contains miscellaneous additional types including CaseConvention and Either."""
 
 from __future__ import annotations
+from dataclasses import dataclass
 from enum import Enum
-from hydra.dsl.python import Node
+from hydra.dsl.python import frozenlist, Node
 from typing import TypeVar
 import hydra.core
 
 A = TypeVar("A")
 B = TypeVar("B")
+
+@dataclass
+class AccessorEdge:
+    source: AccessorNode
+    path: AccessorPath
+    target: AccessorNode
+
+ACCESSOR_EDGE__NAME = hydra.core.Name("hydra.mantle.AccessorEdge")
+ACCESSOR_EDGE__SOURCE__NAME = hydra.core.Name("source")
+ACCESSOR_EDGE__PATH__NAME = hydra.core.Name("path")
+ACCESSOR_EDGE__TARGET__NAME = hydra.core.Name("target")
+
+@dataclass
+class AccessorGraph:
+    nodes: frozenlist[AccessorNode]
+    edges: frozenlist[AccessorEdge]
+
+ACCESSOR_GRAPH__NAME = hydra.core.Name("hydra.mantle.AccessorGraph")
+ACCESSOR_GRAPH__NODES__NAME = hydra.core.Name("nodes")
+ACCESSOR_GRAPH__EDGES__NAME = hydra.core.Name("edges")
+
+@dataclass
+class AccessorNode:
+    name: hydra.core.Name
+    label: str
+    id: str
+
+ACCESSOR_NODE__NAME = hydra.core.Name("hydra.mantle.AccessorNode")
+ACCESSOR_NODE__NAME__NAME = hydra.core.Name("name")
+ACCESSOR_NODE__LABEL__NAME = hydra.core.Name("label")
+ACCESSOR_NODE__ID__NAME = hydra.core.Name("id")
+
+class AccessorPath(Node["frozenlist[TermAccessor]"]): ...
+
+ACCESSOR_PATH__NAME = hydra.core.Name("hydra.mantle.AccessorPath")
 
 class CaseConvention(Enum):
     CAMEL = "camel"
