@@ -251,13 +251,6 @@ encodeModule mod = do
           DefinitionType (TypeDefinition name _) -> name == _Name
           _ -> False
 
-    findNamespaces defs meta = if fst (namespacesFocus namespaces) == coreNs
-        then namespaces
-        else namespaces {namespacesMapping = M.insert coreNs (encodeNamespace coreNs) $ namespacesMapping namespaces}
-      where
-        coreNs = Namespace "hydra.core"
-        namespaces = namespacesForDefinitions encodeNamespace (moduleNamespace mod) defs
-
     tvarStmt name = assignmentStatement name $ functionCall (pyNameToPyPrimary $ Py.Name "TypeVar")
       [doubleQuotedString $ Py.unName name]
     imports namespaces meta = pySimpleStatementToPyStatement . Py.SimpleStatementImport <$> (standardImports ++ domainImports)
