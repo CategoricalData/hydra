@@ -16,8 +16,8 @@ scalaMetaModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
     elements = [
 
-      def "PredefString" --  See scala/Predef.scala
-        string,
+      def "PredefString" $ --  See scala/Predef.scala
+        wrap string,
 
       def "ScalaSymbol" $ --  See scala/Symbol.scala
         record [
@@ -189,8 +189,8 @@ scalaMetaModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "select">: meta "Data_Select",
           "applyUnary">: meta "Data_ApplyUnary"],
 --   @ast class This(qual: scala.meta.Name) extends Data_Ref
-      def "Data_This"
-        unit,
+      def "Data_This" $
+        wrap unit,
 --   @ast class Super(thisp: scala.meta.Name, superp: scala.meta.Name) extends Data_Ref
       def "Data_Super" $
         record [
@@ -201,8 +201,8 @@ scalaMetaModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         record [
           "value">: meta "PredefString"],
 --   @ast class Anonymous() extends scala.meta.Name with Data_Ref {
-      def "Data_Anonymous"
-        unit,
+      def "Data_Anonymous" $
+        wrap unit,
 --     def value = ""
 --     checkParent(ParentChecks.AnonymousImport)
 --   }
@@ -484,8 +484,8 @@ scalaMetaModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         record [
           "value">: string],
 --   @ast class AnonymousName() extends Type
-      def "Type_AnonymousName"
-        unit,
+      def "Type_AnonymousName" $
+        wrap unit,
 --   @ast class Select(qual: Data_Ref, name: Type_Name) extends Type_Ref {
       def "Type_Select" $
         record [
@@ -1142,8 +1142,8 @@ scalaMetaModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 -- }
 --
 -- @ast class Self(name: Name, decltpe: Option[Type]) extends Member
-      def "Self"
-        unit,
+      def "Self" $
+        wrap unit,
 --
 -- @ast class Template(
       def "Template" $
@@ -1360,8 +1360,8 @@ scalaMetaModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --   //   * ...$xss => XXX.Quasi(2, XXX.Quasi(0, XXX.Name("xss"))
 --   //   * ..{$fs($args)} => Complex ellipses aren't supported yet
 --   @branch trait Quasi extends Tree {
-      def "Quasi" --  TODO
-        unit]
+      def "Quasi" $ --  TODO
+        wrap unit]
 --     def rank: Int
 --     def tree: Tree
 --     def pt: Class[_]

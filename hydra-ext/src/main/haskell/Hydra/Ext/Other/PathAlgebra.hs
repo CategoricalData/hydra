@@ -69,10 +69,10 @@ pathAlgebraModule = Module pathAlgNs elements [hydraCoreModule] [hydraCoreModule
         "shortest"],
 
 -- orderby         :   'ORDER BY' orderbyoption;
-      def "OrderBy" $ pathAlg "OrderByOption",
+      def "OrderBy" $ wrap $ pathAlg "OrderByOption",
 
 -- groupby         :   'GROUP BY' groupbyoption;
-      def "GroupBy" $ pathAlg "GroupByOption",
+      def "GroupBy" $ wrap $ pathAlg "GroupByOption",
 
 -- orderbyoption   :   'PARTITION' # PARTITION
 --                |   'GROUP'     #GROUP
@@ -165,7 +165,7 @@ pathAlgebraModule = Module pathAlgNs elements [hydraCoreModule] [hydraCoreModule
         "right">: pathAlg "Rpq"],
 
 -- rpqrestrictor   : '{'restrictor_ext'}';
-      def "RpqRestrictor" $ pathAlg "RestrictorExt",
+      def "RpqRestrictor" $ wrap $ pathAlg "RestrictorExt",
 
 -- var             :   '?'LETTER ( LETTER | DIGIT)*;
       -- Mapped to "Variable" in terminals

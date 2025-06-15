@@ -297,9 +297,6 @@ writeElementValue ev = case ev of
 writeElementValuePair :: Java.ElementValuePair -> CT.Expr
 writeElementValuePair (Java.ElementValuePair k v) = infixWs "=" (writeIdentifier k) (writeElementValue v)
 
-writeEmptyStatement :: Java.EmptyStatement -> CT.Expr
-writeEmptyStatement _ = semi
-
 writeEnumDeclaration :: Java.EnumDeclaration -> CT.Expr
 writeEnumDeclaration _ = cst "TODO:EnumDeclaration"
 
@@ -770,7 +767,7 @@ writeStatementExpression e = case e of
 writeStatementWithoutTrailingSubstatement :: Java.StatementWithoutTrailingSubstatement -> CT.Expr
 writeStatementWithoutTrailingSubstatement s = case s of
   Java.StatementWithoutTrailingSubstatementBlock b -> writeBlock b
-  Java.StatementWithoutTrailingSubstatementEmpty e -> writeEmptyStatement e
+  Java.StatementWithoutTrailingSubstatementEmpty -> semi
   Java.StatementWithoutTrailingSubstatementExpression e -> writeExpressionStatement e
   Java.StatementWithoutTrailingSubstatementAssert a -> writeAssertStatement a
   Java.StatementWithoutTrailingSubstatementSwitch s -> writeSwitchStatement s

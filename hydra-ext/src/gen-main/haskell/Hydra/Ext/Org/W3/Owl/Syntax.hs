@@ -181,8 +181,9 @@ _AnnotationPropertyRange_property = (Core.Name "property")
 _AnnotationPropertyRange_iri = (Core.Name "iri")
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Classes
-data Class = 
-  Class {}
+newtype Class = 
+  Class {
+    unClass :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _Class = (Core.Name "hydra.ext.org.w3.owl.syntax.Class")
@@ -201,20 +202,23 @@ _Datatype_xmlSchema = (Core.Name "xmlSchema")
 _Datatype_other = (Core.Name "other")
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Object_Properties
-data ObjectProperty = 
-  ObjectProperty {}
+newtype ObjectProperty = 
+  ObjectProperty {
+    unObjectProperty :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _ObjectProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.ObjectProperty")
 
-data DataProperty = 
-  DataProperty {}
+newtype DataProperty = 
+  DataProperty {
+    unDataProperty :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _DataProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.DataProperty")
 
-data AnnotationProperty = 
-  AnnotationProperty {}
+newtype AnnotationProperty = 
+  AnnotationProperty {
+    unAnnotationProperty :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotationProperty = (Core.Name "hydra.ext.org.w3.owl.syntax.AnnotationProperty")
@@ -230,14 +234,16 @@ _Individual_named = (Core.Name "named")
 
 _Individual_anonymous = (Core.Name "anonymous")
 
-data NamedIndividual = 
-  NamedIndividual {}
+newtype NamedIndividual = 
+  NamedIndividual {
+    unNamedIndividual :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _NamedIndividual = (Core.Name "hydra.ext.org.w3.owl.syntax.NamedIndividual")
 
-data AnonymousIndividual = 
-  AnonymousIndividual {}
+newtype AnonymousIndividual = 
+  AnonymousIndividual {
+    unAnonymousIndividual :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _AnonymousIndividual = (Core.Name "hydra.ext.org.w3.owl.syntax.AnonymousIndividual")

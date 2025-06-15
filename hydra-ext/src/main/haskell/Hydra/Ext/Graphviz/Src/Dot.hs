@@ -23,7 +23,7 @@ dotModule = Module ns elements [] [hydraCoreModule] $
 
     elements = [
 
-      def "Id" string,
+      def "Id" $ wrap string,
 
 --graph	:	[ strict ] (graph | digraph) [ ID ] '{' stmt_list '}'
       def "Graph" $
@@ -61,7 +61,7 @@ dotModule = Module ns elements [] [hydraCoreModule] $
       def "AttrType" $
         enum ["graph", "node", "edge"],
       def "AttrList" $
-        nonemptyList $ nonemptyList $ dot "EqualityPair",
+        wrap $ nonemptyList $ nonemptyList $ dot "EqualityPair",
 
 --edge_stmt	:	(node_id | subgraph) edgeRHS [ attr_list ]
 --edgeRHS	:	edgeop (node_id | subgraph) [ edgeRHS ]
@@ -100,7 +100,7 @@ dotModule = Module ns elements [] [hydraCoreModule] $
            "subgraphId">: optional $ dot "SubgraphId",
            "statements">: list $ dot "Stmt"],
        def "SubgraphId" $
-         optional $ dot "Id",
+         wrap $ optional $ dot "Id",
 
 --compass_pt	:	(n | ne | e | se | s | sw | w | nw | c | _)
       def "CompassPt" $

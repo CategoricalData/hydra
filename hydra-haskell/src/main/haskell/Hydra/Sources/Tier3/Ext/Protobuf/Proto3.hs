@@ -51,7 +51,8 @@ proto3Module = Module proto3Ns elements [hydraCoreModule] [hydraCoreModule] $
             doc "Protocol buffer options" $
             list $ proto3 "Option"],
 
-      def "EnumValueName" string,
+      def "EnumValueName" $
+        wrap string,
 
       def "Field" $
         doc "A single field of a message type" $
@@ -73,8 +74,8 @@ proto3Module = Module proto3Ns elements [hydraCoreModule] [hydraCoreModule] $
             list $ proto3 "Option"],
 
       def "FieldName" $
-        doc "The name of a field"
-        string,
+        doc "The name of a field" $
+        wrap string,
 
       def "FieldType" $
         union [
@@ -83,7 +84,8 @@ proto3Module = Module proto3Ns elements [hydraCoreModule] [hydraCoreModule] $
           "repeated">: proto3 "SimpleType",
           "simple">: proto3 "SimpleType"],
 
-      def "FileReference" string,
+      def "FileReference" $
+        wrap string,
 
       def "MapType" $
         record [
@@ -117,7 +119,8 @@ proto3Module = Module proto3Ns elements [hydraCoreModule] [hydraCoreModule] $
             doc ("The option's value") $
             proto3 "Value"],
 
-      def "PackageName" string,
+      def "PackageName" $
+        wrap string,
 
       def "ProtoFile" $
         doc "A .proto file, usually containing one or more enum or message type definitions" $
@@ -153,12 +156,12 @@ proto3Module = Module proto3Ns elements [hydraCoreModule] [hydraCoreModule] $
           "scalar">: proto3 "ScalarType"],
 
       def "TypeName" $
-        doc "The local name of an enum type or message type"
-        string,
+        doc "The local name of an enum type or message type" $
+        wrap string,
 
       def "TypeReference" $
-        doc "A reference to an enum type or message type"
-        string,
+        doc "A reference to an enum type or message type" $
+        wrap string,
 
       def "Value" $
         doc "A scalar value" $

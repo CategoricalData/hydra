@@ -76,7 +76,7 @@ coqSyntaxModule = Module ns elements [] [] $
         "inside2">: unit,
         "outside">: optional $ coq "IdentArg"],
 
-      def "FieldIdent" $ coq "Ident",
+      def "FieldIdent" $ wrap $ coq "Ident",
 
       def "Fix" $ union [
         "decl">: coq "Fix_Decl",
@@ -136,7 +136,7 @@ coqSyntaxModule = Module ns elements [] [] $
           doc "Terms surrounded by `[ ] introduce them as non-maximally inserted implicit arguments" $
           coq "TypeclassConstraint"],
 
-      def "Ident" $ coq "String",
+      def "Ident" $ wrap $ coq "String",
 
       def "IdentArg" $ record [
         "ident">: coq "Ident",
@@ -209,11 +209,11 @@ coqSyntaxModule = Module ns elements [] [] $
         "pipe">: boolean,
         "equations">: list $ coq "Equation"],
 
-      def "Name" $ optional $ coq "Ident",
+      def "Name" $ wrap $ optional $ coq "Ident",
 
       def "Natural" $
-        doc "A non-negative arbitrary-precision integer"
-        bigint,
+        doc "A non-negative arbitrary-precision integer" $
+        wrap bigint,
 
       def "NaturalArg" $ record [
         "natural">: coq "Natural",
@@ -223,7 +223,7 @@ coqSyntaxModule = Module ns elements [] [] $
         "lhs">: coq "Term1",
         "rhs">: nonemptyList $ coq "Arg"],
 
-      def "Number" bigfloat,
+      def "Number" $ wrap bigfloat,
 
       def "OneTerm" $ union [
         "explicit">: coq "QualidAnnotated",
@@ -288,7 +288,7 @@ coqSyntaxModule = Module ns elements [] [] $
         "as">: optional $ coq "Name",
         "return">: coq "Term100"],
 
-      def "ScopeKey" $ coq "Ident",
+      def "ScopeKey" $ wrap $ coq "Ident",
 
       def "Sort" $
         doc "The types of types are called sorts." $
@@ -303,7 +303,7 @@ coqSyntaxModule = Module ns elements [] [] $
           "typeWithAnyUniverse">: unit,
           "typeWithUniverse">: coq "Universe"],
 
-      def "String" string,
+      def "String" $ wrap string,
 
       def "Term" $ union [
         "forallOrFun">: coq "ForallOrFun",
@@ -338,7 +338,7 @@ coqSyntaxModule = Module ns elements [] [] $
         "cast">: coq "TypeCast",
         "term10">: coq "Term10"],
 
-      def "Type" $ coq "Term",
+      def "Type" $ wrap $ coq "Term",
 
       def "TypeCast" $ record [
         "term">: coq "Term10",
@@ -363,7 +363,8 @@ coqSyntaxModule = Module ns elements [] [] $
           "generalizing">: boolean,
           "term">: coq "Term"],
 
-      def "UnivAnnot" $ list $ coq "UniverseLevel",
+      def "UnivAnnot" $
+        wrap $ list $ coq "UniverseLevel",
 
       def "Universe" $ union [
         "max">: nonemptyList $ coq "Universe_Expr",

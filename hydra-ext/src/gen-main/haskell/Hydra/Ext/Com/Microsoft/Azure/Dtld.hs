@@ -731,8 +731,9 @@ _Telemetry_displayName = (Core.Name "displayName")
 
 _Telemetry_unit = (Core.Name "unit")
 
-data Unit = 
-  Unit {}
+newtype Unit = 
+  Unit {
+    unUnit :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _Unit = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Unit")

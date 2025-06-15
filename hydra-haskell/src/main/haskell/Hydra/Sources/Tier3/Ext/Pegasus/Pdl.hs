@@ -29,15 +29,15 @@ pegasusPdlModule = Module ns elements [jsonModelModule] [hydraCoreModule] $
           "name">: pdl "EnumFieldName",
           "annotations">: pdl "Annotations"],
 
-      def "EnumFieldName"
-        string,
+      def "EnumFieldName" $
+        wrap string,
 
       def "EnumSchema" $
         record [
           "fields">: list $ pdl "EnumField"],
 
-      def "FieldName"
-        string,
+      def "FieldName" $
+        wrap string,
 
       def "NamedSchema" $
         record [
@@ -51,14 +51,14 @@ pegasusPdlModule = Module ns elements [jsonModelModule] [hydraCoreModule] $
           "enum">: pdl "EnumSchema",
           "typeref">: pdl "Schema"],
 
-      def "Name"
-        string,
+      def "Name" $
+        wrap string,
 
-      def "Namespace"
-        string,
+      def "Namespace" $
+        wrap string,
 
-      def "Package"
-        string,
+      def "Package" $
+        wrap string,
 
       def "PrimitiveType" $
         enum [
@@ -70,8 +70,8 @@ pegasusPdlModule = Module ns elements [jsonModelModule] [hydraCoreModule] $
           "long",
           "string"],
 
-      def "PropertyKey"
-        string,
+      def "PropertyKey" $
+        wrap string,
 
       def "Property" $
         record [
@@ -125,4 +125,4 @@ pegasusPdlModule = Module ns elements [jsonModelModule] [hydraCoreModule] $
 
       -- Note: unions are not allowed as member types of other unions
       def "UnionSchema" $
-        list $ pdl "UnionMember"]
+        wrap $ list $ pdl "UnionMember"]

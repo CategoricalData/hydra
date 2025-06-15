@@ -24,8 +24,8 @@ osvSchemaModule = Module ns elements [] [] $
 
       def "Ecosystem" $
         doc ("One of a limited set of defined ecosystems, currently "
-          ++ "Go, npm, OSS-Fuzz, PyPI, RubyGems, crates.io, Packagist, Maven, NuGet, Linux, Debian, Hex, Android, GitHub Actions, or Pub")
-        string,
+          ++ "Go, npm, OSS-Fuzz, PyPI, RubyGems, crates.io, Packagist, Maven, NuGet, Linux, Debian, Hex, Android, GitHub Actions, or Pub") $
+        wrap string,
 
       def "Entry" $
         record [
@@ -54,16 +54,16 @@ osvSchemaModule = Module ns elements [] [] $
 
       def "Id" $
         doc ("A string of the format <DB>-<ENTRYID>, where DB names the database and ENTRYID is in the format used "
-          ++ "by the database. For example: OSV-2020-111, CVE-2021-3114, or GHSA-vp9c-fpxx-744v")
-        string,
+          ++ "by the database. For example: OSV-2020-111, CVE-2021-3114, or GHSA-vp9c-fpxx-744v") $
+        wrap string,
 
       def "Markdown" $
-        doc "CommonMark markdown text"
-        string,
+        doc "CommonMark markdown text" $
+        wrap string,
 
       def "OsvVersion" $
-        doc "A string which follows the SemVer 2.0.0 format, with no leading 'v' prefix"
-        string,
+        doc "A string which follows the SemVer 2.0.0 format, with no leading 'v' prefix" $
+        wrap string,
 
       def "Package" $
         record [
@@ -83,37 +83,37 @@ osvSchemaModule = Module ns elements [] [] $
           "url">: osv "Url"],
 
       def "ReferenceType" $
-        doc "One of ADVISORY, ARTICLE, REPORT, FIX, GIT, PACKAGE, EVIDENCE, or WEB"
-        string,
+        doc "One of ADVISORY, ARTICLE, REPORT, FIX, GIT, PACKAGE, EVIDENCE, or WEB" $
+        wrap string,
 
       def "Severity" $
         record [
           "type">: osv "SeverityType",
           "score">: osv "SeverityScore"],
 
-      def "SeverityScore" string,
+      def "SeverityScore" $ wrap string,
 
       def "SeverityType" $
-        doc "The value CVSS_V3, or future supported types"
-        string,
+        doc "The value CVSS_V3, or future supported types" $
+        wrap string,
 
       def "Timestamp" $
-        doc "An RFC3339-formatted timestamp in UTC (ending in 'Z')"
-        string,
+        doc "An RFC3339-formatted timestamp in UTC (ending in 'Z')" $
+        wrap string,
 
-      def "Url" string,
+      def "Url" $ wrap string,
 
       def "Version" $
-        doc "A version number in an ecosystem-specific format"
-        string,
+        doc "A version number in an ecosystem-specific format" $
+        wrap string,
 
       def "VersionOrStar" $
-        doc "An ecosystem-specific version number, or the string '*' representing infinity"
-        string,
+        doc "An ecosystem-specific version number, or the string '*' representing infinity" $
+        wrap string,
 
       def "VersionOrZero" $
-        doc "An ecosystem-specific version number, or the string '0' representing a version that sorts before any other version"
-        string,
+        doc "An ecosystem-specific version number, or the string '0' representing a version that sorts before any other version" $
+        wrap string,
 
       def "VersionRange" $
         record [
@@ -122,5 +122,5 @@ osvSchemaModule = Module ns elements [] [] $
           "events">: list $ osv "Event"],
 
       def "VersionType" $
-        doc "One of the values 'SEMVER', 'ECOSYSTEM', or 'GIT"
-        string]
+        doc "One of the values 'SEMVER', 'ECOSYSTEM', or 'GIT" $
+        wrap string]

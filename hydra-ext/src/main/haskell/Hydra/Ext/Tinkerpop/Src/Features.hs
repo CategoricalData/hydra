@@ -116,8 +116,7 @@ tinkerpopFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
           supports "transactions" "Determines if the Graph implementations supports transactions.",
           "variables">:
             doc "Gets the features related to graph sideEffects operation." $
-            features "VariableFeatures"
-        ],
+            features "VariableFeatures"],
 
       def "PropertyFeatures" $
         doc "A base interface for Edge or Vertex Property features." $

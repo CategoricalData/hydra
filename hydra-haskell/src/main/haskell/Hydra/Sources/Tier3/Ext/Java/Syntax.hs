@@ -22,7 +22,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --Identifier:
 --  IdentifierChars but not a Keyword or BooleanLiteral or NullLiteral
-      def "Identifier" string,
+      def "Identifier" $ wrap string,
 --IdentifierChars:
 --  JavaLetter {JavaLetterOrDigit}
 --
@@ -34,7 +34,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --TypeIdentifier:
 --  Identifier but not var
-      def "TypeIdentifier" $ java "Identifier",
+      def "TypeIdentifier" $ wrap $ java "Identifier",
 
 --Literal:
       def "Literal" $
@@ -52,14 +52,14 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --  StringLiteral
           "string">: java "StringLiteral"],
       def "IntegerLiteral" $
-        doc "Note: this is an approximation which ignores encoding"
-        bigint,
+        doc "Note: this is an approximation which ignores encoding" $
+        wrap bigint,
       def "FloatingPointLiteral" $
-        doc "Note: this is an approximation which ignores encoding"
-        bigfloat,
+        doc "Note: this is an approximation which ignores encoding" $
+        wrap bigfloat,
       def "StringLiteral" $
-        doc "Note: this is an approximation which ignores encoding"
-        string,
+        doc "Note: this is an approximation which ignores encoding" $
+        wrap string,
 
 --Productions from §4 (Types, Values, and Variables)
 
@@ -131,7 +131,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --InterfaceType:
 --  ClassType
-      def "InterfaceType" $ java "ClassType",
+      def "InterfaceType" $ wrap $ java "ClassType",
 
 --TypeVariable:
 --  {Annotation} TypeIdentifier
@@ -153,7 +153,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --Dims:
 --  {Annotation} [ ] {{Annotation} [ ]}
-      def "Dims" $ list $ list $ java "Annotation",
+      def "Dims" $ wrap $ list $ list $ java "Annotation",
 
 --TypeParameter:
 --  {TypeParameterModifier} TypeIdentifier [TypeBound]
@@ -164,7 +164,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --TypeParameterModifier:
 --  Annotation
-      def "TypeParameterModifier" $ java "Annotation",
+      def "TypeParameterModifier" $ wrap $ java "Annotation",
 
 --TypeBound:
       def "TypeBound" $ union [
@@ -178,7 +178,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --AdditionalBound:
 --  & InterfaceType
-      def "AdditionalBound" $ java "InterfaceType",
+      def "AdditionalBound" $ wrap $ java "InterfaceType",
 
 --TypeArguments:
 --  < TypeArgumentList >
@@ -217,7 +217,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --PackageName:
 --  Identifier
 --  PackageName . Identifier
-      def "PackageName" $ list $ java "Identifier",
+      def "PackageName" $ wrap $ list $ java "Identifier",
 
 --TypeName:
       def "TypeName" $ record [
@@ -235,17 +235,17 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --MethodName:
 --  Identifier
-      def "MethodName" $ java "Identifier",
+      def "MethodName" $ wrap $ java "Identifier",
 
 --PackageOrTypeName:
 --  Identifier
 --  PackageOrTypeName . Identifier
-      def "PackageOrTypeName" $ list $ java "Identifier",
+      def "PackageOrTypeName" $ wrap $ list $ java "Identifier",
 
 --AmbiguousName:
 --  Identifier
 --  AmbiguousName . Identifier
-      def "AmbiguousName" $ list $ java "Identifier",
+      def "AmbiguousName" $ wrap $ list $ java "Identifier",
 
 --Productions from §7 (Packages and Modules)
 
@@ -277,7 +277,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --PackageModifier:
 --  Annotation
-      def "PackageModifier" $ java "Annotation",
+      def "PackageModifier" $ wrap $ java "Annotation",
 
 --ImportDeclaration:
       def "ImportDeclaration" $ union [
@@ -292,11 +292,11 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --SingleTypeImportDeclaration:
 --  import TypeName ;
-      def "SingleTypeImportDeclaration" $ java "TypeName",
+      def "SingleTypeImportDeclaration" $ wrap $ java "TypeName",
 
 --TypeImportOnDemandDeclaration:
 --  import PackageOrTypeName . * ;
-      def "TypeImportOnDemandDeclaration" $ java "PackageOrTypeName",
+      def "TypeImportOnDemandDeclaration" $ wrap $ java "PackageOrTypeName",
 
 --SingleStaticImportDeclaration:
 --  import static TypeName . Identifier ;
@@ -306,7 +306,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --StaticImportOnDemandDeclaration:
 --  import static TypeName . * ;
-      def "StaticImportOnDemandDeclaration" $ java "TypeName",
+      def "StaticImportOnDemandDeclaration" $ wrap $ java "TypeName",
 
 --TypeDeclaration:
       def "TypeDeclaration" $ union [
@@ -407,7 +407,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --ClassBody:
 --  { {ClassBodyDeclaration} }
-      def "ClassBody" $ list $ java "ClassBodyDeclarationWithComments",
+      def "ClassBody" $ wrap $ list $ java "ClassBodyDeclarationWithComments",
 
 --ClassBodyDeclaration:
       def "ClassBodyDeclaration" $ union [
@@ -484,7 +484,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --  UnannReferenceType
       def "UnannType" $
         doc "A Type which does not allow annotations" $
-        java "Type",
+        wrap $ java "Type",
 --UnannPrimitiveType:
 --  NumericType
 --  boolean
@@ -501,7 +501,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --  UnannClassOrInterfaceType . {Annotation} TypeIdentifier [TypeArguments]
       def "UnannClassType" $
         doc "A ClassType which does not allow annotations" $
-        java "ClassType",
+        wrap $ java "ClassType",
 --UnannInterfaceType:
 --  UnannClassType
 --UnannTypeVariable:
@@ -597,7 +597,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --Throws:
 --  throws ExceptionTypeList
-      def "Throws" $ nonemptyList $ java "ExceptionType",
+      def "Throws" $ wrap $ nonemptyList $ java "ExceptionType",
 
 --ExceptionTypeList:
 --  ExceptionType {, ExceptionType}
@@ -617,11 +617,11 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --InstanceInitializer:
 --  Block
-      def "InstanceInitializer" $ java "Block",
+      def "InstanceInitializer" $ wrap $ java "Block",
 
 --StaticInitializer:
 --  static Block
-      def "StaticInitializer" $ java "Block",
+      def "StaticInitializer" $ wrap $ java "Block",
 
 --ConstructorDeclaration:
 --  {ConstructorModifier} ConstructorDeclarator [Throws] ConstructorBody
@@ -650,7 +650,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --SimpleTypeName:
 --  TypeIdentifier
-      def "SimpleTypeName" $ java "TypeIdentifier",
+      def "SimpleTypeName" $ wrap $ java "TypeIdentifier",
 
 --ConstructorBody:
 --  { [ExplicitConstructorInvocation] [BlockStatements] }
@@ -682,7 +682,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --EnumBody:
 --  { [EnumConstantList] [,] [EnumBodyDeclarations] }
-      def "EnumBody" $ list $ java "EnumBody_Element",
+      def "EnumBody" $ wrap $ list $ java "EnumBody_Element",
       def "EnumBody_Element" $ record [
         "constants">: list $ java "EnumConstant",
         "bodyDeclarations">: list $ java "ClassBodyDeclaration"],
@@ -699,7 +699,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --EnumConstantModifier:
 --  Annotation
-      def "EnumConstantModifier" $ java "Annotation",
+      def "EnumConstantModifier" $ wrap $ java "Annotation",
 
 --EnumBodyDeclarations:
 --  ; {ClassBodyDeclaration}
@@ -740,7 +740,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --InterfaceBody:
 --  { {InterfaceMemberDeclaration} }
-      def "InterfaceBody" $ list $ java "InterfaceMemberDeclaration",
+      def "InterfaceBody" $ wrap $ list $ java "InterfaceMemberDeclaration",
 
 --InterfaceMemberDeclaration:
       def "InterfaceMemberDeclaration" $ union [
@@ -800,7 +800,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --AnnotationTypeBody:
 --  { {AnnotationTypeMemberDeclaration} }
-      def "AnnotationTypeBody" $ list $ list $ java "AnnotationTypeMemberDeclaration",
+      def "AnnotationTypeBody" $ wrap $ list $ list $ java "AnnotationTypeMemberDeclaration",
 
 --AnnotationTypeMemberDeclaration:
       def "AnnotationTypeMemberDeclaration" $ union [
@@ -833,7 +833,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --DefaultValue:
 --  default ElementValue
-      def "DefaultValue" $ java "ElementValue",
+      def "DefaultValue" $ wrap $ java "ElementValue",
 
 --Annotation:
       def "Annotation" $ union [
@@ -869,13 +869,13 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --ElementValueArrayInitializer:
 --  { [ElementValueList] [,] }
-      def "ElementValueArrayInitializer" $ list $ java "ElementValue",
+      def "ElementValueArrayInitializer" $ wrap $ list $ java "ElementValue",
 --ElementValueList:
 --  ElementValue {, ElementValue}
 
 --MarkerAnnotation:
 --  @ TypeName
-      def "MarkerAnnotation" $ java "TypeName",
+      def "MarkerAnnotation" $ wrap $ java "TypeName",
 
 --SingleElementAnnotation:
       def "SingleElementAnnotation" $ record [
@@ -887,7 +887,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --ArrayInitializer:
 --  { [VariableInitializerList] [,] }
-      def "ArrayInitializer" $ list $ list $ java "VariableInitializer",
+      def "ArrayInitializer" $ wrap $ list $ list $ java "VariableInitializer",
 --VariableInitializerList:
 --  VariableInitializer {, VariableInitializer}
 
@@ -895,7 +895,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --Block:
 --  { [BlockStatements] }
-      def "Block" $ list $ java "BlockStatement",
+      def "Block" $ wrap $ list $ java "BlockStatement",
 
 --BlockStatements:
 --  BlockStatement {BlockStatement}
@@ -910,7 +910,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --LocalVariableDeclarationStatement:
 --  LocalVariableDeclaration ;
-      def "LocalVariableDeclarationStatement" $ java "LocalVariableDeclaration",
+      def "LocalVariableDeclarationStatement" $ wrap $ java "LocalVariableDeclaration",
 
 --LocalVariableDeclaration:
 --  {VariableModifier} LocalVariableType VariableDeclaratorList
@@ -959,7 +959,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --  Block
         "block">: java "Block",
 --  EmptyStatement
-        "empty">: java "EmptyStatement",
+        "empty">: unit,
 --  ExpressionStatement
         "expression">: java "ExpressionStatement",
 --  AssertStatement
@@ -983,8 +983,6 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --EmptyStatement:
 --  ;
-      def "EmptyStatement" unit,
-
 --LabeledStatement:
 --  Identifier : Statement
       def "LabeledStatement" $ record [
@@ -999,7 +997,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --ExpressionStatement:
 --  StatementExpression ;
-      def "ExpressionStatement" $ java "StatementExpression",
+      def "ExpressionStatement" $ wrap $ java "StatementExpression",
 
 --StatementExpression:
       def "StatementExpression" $ union [
@@ -1056,7 +1054,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --SwitchBlock:
 --  { {SwitchBlockStatementGroup} {SwitchLabel} }
-      def "SwitchBlock" $ list $ java "SwitchBlock_Pair",
+      def "SwitchBlock" $ wrap $ list $ java "SwitchBlock_Pair",
       def "SwitchBlock_Pair" $ record [
         "statements">: list $ java "SwitchBlockStatementGroup",
         "labels">: list $ java "SwitchLabel"],
@@ -1080,7 +1078,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --EnumConstantName:
 --  Identifier
-      def "EnumConstantName" $ java "Identifier",
+      def "EnumConstantName" $ wrap $ java "Identifier",
 
 --WhileStatement:
 --  while ( Expression ) Statement
@@ -1138,7 +1136,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --ForUpdate:
 --  StatementExpressionList
-      def "ForUpdate" $ nonemptyList $ java "StatementExpression",
+      def "ForUpdate" $ wrap $ nonemptyList $ java "StatementExpression",
 --  StatementExpressionList:
 --  StatementExpression {, StatementExpression}
 
@@ -1160,19 +1158,19 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --BreakStatement:
 --  break [Identifier] ;
-      def "BreakStatement" $ optional $ java "Identifier",
+      def "BreakStatement" $ wrap $ optional $ java "Identifier",
 
 --ContinueStatement:
 --  continue [Identifier] ;
-      def "ContinueStatement" $ optional $ java "Identifier",
+      def "ContinueStatement" $ wrap $ optional $ java "Identifier",
 
 --ReturnStatement:
 --  return [Expression] ;
-      def "ReturnStatement" $ optional $ java "Expression",
+      def "ReturnStatement" $ wrap $ optional $ java "Expression",
 
 --ThrowStatement:
 --  throw Expression ;
-      def "ThrowStatement" $ java "Expression",
+      def "ThrowStatement" $ wrap $ java "Expression",
 
 --SynchronizedStatement:
 --  synchronized ( Expression ) Block
@@ -1198,7 +1196,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --Catches:
 --  CatchClause {CatchClause}
-      def "Catches" $ list $ java "CatchClause",
+      def "Catches" $ wrap $ list $ java "CatchClause",
 
 --CatchClause:
 --  catch ( CatchFormalParameter ) Block
@@ -1221,7 +1219,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --Finally:
 --  finally Block
-      def "Finally" $ java "Block",
+      def "Finally" $ wrap $ java "Block",
 
 --TryWithResourcesStatement:
 --  try ResourceSpecification Block [Catches] [Finally]
@@ -1233,7 +1231,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --ResourceSpecification:
 --  ( ResourceList [;] )
-      def "ResourceSpecification" $ list $ java "Resource",
+      def "ResourceSpecification" $ wrap $ list $ java "Resource",
 
 --ResourceList:
 --  Resource {; Resource}
@@ -1426,7 +1424,7 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "MethodReference_New" $ record [
         "classType">: java "ClassType",
         "typeArguments">: list $ java "TypeArgument"],
-      def "MethodReference_Array" $ java "ArrayType",
+      def "MethodReference_Array" $ wrap $ java "ArrayType",
 
 --ArrayCreationExpression:
       def "ArrayCreationExpression" $ union [
@@ -1561,27 +1559,27 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 --ConditionalOrExpression:
 --  ConditionalAndExpression
 --  ConditionalOrExpression || ConditionalAndExpression
-      def "ConditionalOrExpression" $ nonemptyList $ java "ConditionalAndExpression",
+      def "ConditionalOrExpression" $ wrap $ nonemptyList $ java "ConditionalAndExpression",
 
 --ConditionalAndExpression:
 --  InclusiveOrExpression
 --  ConditionalAndExpression && InclusiveOrExpression
-      def "ConditionalAndExpression" $ nonemptyList $ java "InclusiveOrExpression",
+      def "ConditionalAndExpression" $ wrap $ nonemptyList $ java "InclusiveOrExpression",
 
 --InclusiveOrExpression:
 --  ExclusiveOrExpression
 --  InclusiveOrExpression | ExclusiveOrExpression
-      def "InclusiveOrExpression" $ nonemptyList $ java "ExclusiveOrExpression",
+      def "InclusiveOrExpression" $ wrap $ nonemptyList $ java "ExclusiveOrExpression",
 
 --ExclusiveOrExpression:
 --  AndExpression
 --  ExclusiveOrExpression ^ AndExpression
-      def "ExclusiveOrExpression" $ nonemptyList $ java "AndExpression",
+      def "ExclusiveOrExpression" $ wrap $ nonemptyList $ java "AndExpression",
 
 --AndExpression:
 --  EqualityExpression
 --  AndExpression & EqualityExpression
-      def "AndExpression" $ nonemptyList $ java "EqualityExpression",
+      def "AndExpression" $ wrap $ nonemptyList $ java "EqualityExpression",
 
 --EqualityExpression:
       def "EqualityExpression" $ union [
@@ -1680,11 +1678,11 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --PreIncrementExpression:
 --  ++ UnaryExpression
-      def "PreIncrementExpression" $ java "UnaryExpression",
+      def "PreIncrementExpression" $ wrap $ java "UnaryExpression",
 
 --PreDecrementExpression:
 --  -- UnaryExpression
-      def "PreDecrementExpression" $ java "UnaryExpression",
+      def "PreDecrementExpression" $ wrap $ java "UnaryExpression",
 
 --UnaryExpressionNotPlusMinus:
       def "UnaryExpressionNotPlusMinus" $ union [
@@ -1710,11 +1708,11 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --PostIncrementExpression:
 --  PostfixExpression ++
-      def "PostIncrementExpression" $ java "PostfixExpression",
+      def "PostIncrementExpression" $ wrap $ java "PostfixExpression",
 
 --PostDecrementExpression:
 --  PostfixExpression --
-      def "PostDecrementExpression" $ java "PostfixExpression",
+      def "PostDecrementExpression" $ wrap $ java "PostfixExpression",
 
 --CastExpression:
       def "CastExpression" $ union [
@@ -1739,4 +1737,4 @@ javaSyntaxModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
 --ConstantExpression:
 --  Expression
-      def "ConstantExpression" $ java "Expression"]
+      def "ConstantExpression" $ wrap $ java "Expression"]

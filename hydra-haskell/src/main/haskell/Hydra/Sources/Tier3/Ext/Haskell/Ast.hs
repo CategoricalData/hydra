@@ -38,7 +38,7 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "CaseRhs" $ -- UCaseRhs'
         doc "The right-hand side of a pattern-matching alternative" $
         -- omitted for now: guarded
-        ast "Expression",
+        wrap $ ast "Expression",
 
       def "Constructor" $ -- UConDecl
         doc "A data constructor" $
@@ -112,7 +112,7 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "Deriving" $ -- UDeriving
         doc "A 'deriving' statement" $
         -- omitted for now: infix, parenthesized, and application instance heads
-        list $ ast "Name",
+        wrap $ list $ ast "Name",
 
       def "Export" $ -- UExportSpec
         doc "An export statement" $
@@ -282,7 +282,7 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "value">: ast "ValueBinding"],
 
       def "LocalBindings" $ -- ULocalBinds
-        list $ ast "LocalBinding",
+        wrap $ list $ ast "LocalBinding",
 
       def "Module" $ -- UModule
         -- omitted for now: pragma
@@ -298,8 +298,8 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "name">: ast "ModuleName",
           "exports">: list $ ast "Export"], -- UExportSpecs
 
-      def "ModuleName" -- UModuleName
-        string,
+      def "ModuleName" $ -- UModuleName
+        wrap string,
 
       def "Name" $ -- UName
         union [
@@ -307,8 +307,8 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "normal">: ast "QualifiedName",
           "parens">: ast "QualifiedName"],
 
-      def "NamePart" -- UNamePart
-        string,
+      def "NamePart" $ -- UNamePart
+        wrap string,
 
       def "Operator" $ -- UOperator
         union [
@@ -362,10 +362,10 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "RightHandSide" $ -- URhs
         -- omitted for now: guarded rhs
-        ast "Expression",
+        wrap $ ast "Expression",
 
       def "Statement" $ -- UStmt
-        ast "Expression",
+        wrap $ ast "Expression",
 
       def "Type" $ -- UType
         -- omitted for now: forall, unboxed tuple, parallel array, kinded, promoted, splice, quasiquote, bang,
@@ -429,4 +429,4 @@ haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       def "Variable" $
         -- omitted for now: kind constraints
-        ast "Name"]
+        wrap $ ast "Name"]

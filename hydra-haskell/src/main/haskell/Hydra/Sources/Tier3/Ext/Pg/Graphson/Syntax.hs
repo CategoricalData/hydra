@@ -54,7 +54,7 @@ graphsonSyntaxModule = Module ns elements [] [hydraCoreModule] $
           "notANumber">: unit],
 
       def "Map" $
-        list $ gson "ValuePair",
+        wrap $ list $ gson "ValuePair",
 
       def "AdjacentEdge" $
         record [

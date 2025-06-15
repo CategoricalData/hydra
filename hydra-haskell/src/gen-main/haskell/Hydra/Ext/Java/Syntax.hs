@@ -1632,7 +1632,7 @@ _StatementNoShortIf_for = (Core.Name "for")
 
 data StatementWithoutTrailingSubstatement = 
   StatementWithoutTrailingSubstatementBlock Block |
-  StatementWithoutTrailingSubstatementEmpty EmptyStatement |
+  StatementWithoutTrailingSubstatementEmpty  |
   StatementWithoutTrailingSubstatementExpression ExpressionStatement |
   StatementWithoutTrailingSubstatementAssert AssertStatement |
   StatementWithoutTrailingSubstatementSwitch SwitchStatement |
@@ -1670,12 +1670,6 @@ _StatementWithoutTrailingSubstatement_synchronized = (Core.Name "synchronized")
 _StatementWithoutTrailingSubstatement_throw = (Core.Name "throw")
 
 _StatementWithoutTrailingSubstatement_try = (Core.Name "try")
-
-data EmptyStatement = 
-  EmptyStatement {}
-  deriving (Eq, Ord, Read, Show)
-
-_EmptyStatement = (Core.Name "hydra.ext.java.syntax.EmptyStatement")
 
 data LabeledStatement = 
   LabeledStatement {

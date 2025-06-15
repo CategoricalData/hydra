@@ -78,7 +78,7 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "column">: kql "ColumnName",
           "expression">: kql "Expression"],
 
-      def "ColumnName" string,
+      def "ColumnName" $ wrap string,
 
       def "Columns" $
         union [
@@ -112,7 +112,7 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "union">: kql "UnionCommand",
           "where">: kql "Expression"],
 
-      def "Datetime" string,
+      def "Datetime" $ wrap string,
 
       def "Duration" $
         record [
@@ -149,7 +149,7 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "function">: kql "Function",
           "arguments">: list $ kql "Expression"],
 
-      def "FunctionName" string,
+      def "FunctionName" $ wrap string,
 
       def "IndexExpression" $
         record [
@@ -206,7 +206,7 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
       -- TODO: what are these expressions actually called in KQL?
       def "PipelineExpression" $
-        nonemptyList $ kql "TabularExpression",
+        wrap $ nonemptyList $ kql "TabularExpression",
 
       def "PrintCommand" $
         record [
@@ -223,7 +223,7 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "expression">: kql "Expression",
           "property">: string],
 
-      def "Query" $ kql "TabularExpression",
+      def "Query" $ wrap $ kql "TabularExpression",
 
       def "SearchCommand" $
         doc "Search across all datasets and columns or, if provided, specific datasets and/or columns" $
@@ -236,7 +236,7 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
            "columns">: nonemptyList $ kql "ColumnAssignment",
            "by">: list $ kql "ColumnName"],
 
-      def "TableName" string,
+      def "TableName" $ wrap string,
 
       def "TopCommand" $
         record [
@@ -271,4 +271,5 @@ kqlModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "isFuzzy">: optional boolean,
           "tables">: nonemptyList $ kql "TableName"],
 
-      def "UnionKind" $ enum ["inner", "outer"]]
+      def "UnionKind" $
+        enum ["inner", "outer"]]

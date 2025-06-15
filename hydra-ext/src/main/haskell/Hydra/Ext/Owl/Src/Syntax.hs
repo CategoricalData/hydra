@@ -148,7 +148,7 @@ owlSyntaxModule = Module ns elements [hydraCoreModule, rdfSyntaxModule, xmlSchem
     owl2Definitions = [
 -- Class := IRI
       def "Class" $
-        see "https://www.w3.org/TR/owl2-syntax/#Classes" unit,
+        see "https://www.w3.org/TR/owl2-syntax/#Classes"  $ wrap unit,
 
 -- Datatype := IRI
       def "Datatype" $
@@ -162,13 +162,13 @@ owlSyntaxModule = Module ns elements [hydraCoreModule, rdfSyntaxModule, xmlSchem
 
 -- ObjectProperty := IRI
       def "ObjectProperty" $
-        see "https://www.w3.org/TR/owl2-syntax/#Object_Properties" unit,
+        see "https://www.w3.org/TR/owl2-syntax/#Object_Properties" $ wrap unit,
 
 -- DataProperty := IRI
-      def "DataProperty" unit,
+      def "DataProperty" $ wrap unit,
 
 -- AnnotationProperty := IRI
-      def "AnnotationProperty" unit,
+      def "AnnotationProperty" $ wrap unit,
 
 -- Individual := NamedIndividual | AnonymousIndividual
       def "Individual" $ union [
@@ -176,10 +176,10 @@ owlSyntaxModule = Module ns elements [hydraCoreModule, rdfSyntaxModule, xmlSchem
         "anonymous">: owl "AnonymousIndividual"],
 
 -- NamedIndividual := IRI
-      def "NamedIndividual" unit,
+      def "NamedIndividual" $ wrap unit,
 
 -- AnonymousIndividual := nodeID
-      def "AnonymousIndividual" unit,
+      def "AnonymousIndividual" $ wrap unit,
 
 -- Literal := typedLiteral | stringLiteralNoLanguage | stringLiteralWithLanguage
 -- typedLiteral := lexicalForm '^^' Datatype
@@ -193,10 +193,10 @@ owlSyntaxModule = Module ns elements [hydraCoreModule, rdfSyntaxModule, xmlSchem
         "inverseObject">: owl "InverseObjectProperty"],
 
 -- InverseObjectProperty := 'ObjectInverseOf' '(' ObjectProperty ')'
-      def "InverseObjectProperty" $ owl "ObjectProperty",
+      def "InverseObjectProperty" $ wrap $ owl "ObjectProperty",
 
 -- DataPropertyExpression := DataProperty
-      def "DataPropertyExpression" $ owl "DataProperty",
+      def "DataPropertyExpression" $ wrap $ owl "DataProperty",
 
 -- DataRange :=
 --     Datatype |
@@ -218,22 +218,22 @@ owlSyntaxModule = Module ns elements [hydraCoreModule, rdfSyntaxModule, xmlSchem
 -- DataIntersectionOf := 'DataIntersectionOf' '(' DataRange DataRange { DataRange } ')'
       def "DataIntersectionOf" $
         see "https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges" $
-        twoOrMoreList $ owl "DataRange",
+        wrap $ twoOrMoreList $ owl "DataRange",
 
 -- DataUnionOf := 'DataUnionOf' '(' DataRange DataRange { DataRange } ')'
       def "DataUnionOf" $
         see "https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges" $
-        twoOrMoreList $ owl "DataRange",
+        wrap $ twoOrMoreList $ owl "DataRange",
 
 -- DataComplementOf := 'DataComplementOf' '(' DataRange ')'
       def "DataComplementOf" $
         see "https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges" $
-        owl "DataRange",
+        wrap $ owl "DataRange",
 
 -- DataOneOf := 'DataOneOf' '(' Literal { Literal } ')'
       def "DataOneOf" $
         see "https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals" $
-        nonemptyList $ rdf "Literal",
+        wrap $ nonemptyList $ rdf "Literal",
 
 -- DatatypeRestriction := 'DatatypeRestriction' '(' Datatype constrainingFacet restrictionValue { constrainingFacet restrictionValue } ')'
 -- constrainingFacet := IRI
@@ -283,16 +283,16 @@ owlSyntaxModule = Module ns elements [hydraCoreModule, rdfSyntaxModule, xmlSchem
         "ObjectUnionOf"],
 
 -- ObjectIntersectionOf := 'ObjectIntersectionOf' '(' ClassExpression ClassExpression { ClassExpression } ')'
-      def "ObjectIntersectionOf" $ twoOrMoreList $ owl "ClassExpression",
+      def "ObjectIntersectionOf" $ wrap $ twoOrMoreList $ owl "ClassExpression",
 
 -- ObjectUnionOf := 'ObjectUnionOf' '(' ClassExpression ClassExpression { ClassExpression } ')'
-      def "ObjectUnionOf" $ twoOrMoreList $ owl "ClassExpression",
+      def "ObjectUnionOf" $ wrap $ twoOrMoreList $ owl "ClassExpression",
 
 -- ObjectComplementOf := 'ObjectComplementOf' '(' ClassExpression ')'
-      def "ObjectComplementOf" $ owl "ClassExpression",
+      def "ObjectComplementOf" $ wrap $ owl "ClassExpression",
 
 -- ObjectOneOf := 'ObjectOneOf' '(' Individual { Individual }')'
-      def "ObjectOneOf" $ nonemptyList $ owl "Individual",
+      def "ObjectOneOf" $ wrap $ nonemptyList $ owl "Individual",
 
 -- ObjectSomeValuesFrom := 'ObjectSomeValuesFrom' '(' ObjectPropertyExpression ClassExpression ')'
       def "ObjectSomeValuesFrom" $ record [
@@ -310,7 +310,7 @@ owlSyntaxModule = Module ns elements [hydraCoreModule, rdfSyntaxModule, xmlSchem
         "individual">: owl "Individual"],
 
 -- ObjectHasSelf := 'ObjectHasSelf' '(' ObjectPropertyExpression ')'
-      def "ObjectHasSelf" $ owl "ObjectPropertyExpression",
+      def "ObjectHasSelf" $ wrap $  owl "ObjectPropertyExpression",
 
 -- ObjectMinCardinality := 'ObjectMinCardinality' '(' nonNegativeInteger ObjectPropertyExpression [ ClassExpression ] ')'
       def "ObjectMinCardinality" $
