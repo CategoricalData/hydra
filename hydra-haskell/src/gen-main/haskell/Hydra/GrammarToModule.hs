@@ -51,7 +51,7 @@ grammarToModule ns grammar desc =
       elementPairs = (Lists.concat (Lists.zipWith (makeElements False ns) capitalizedNames patterns))
       elements = (Lists.map (\pair ->  
               let lname = (fst pair) 
-                  typ = (snd pair)
+                  typ = (wrapType (snd pair))
               in (Annotations.typeElement (toName ns lname) typ)) elementPairs)
   in Module.Module {
     Module.moduleNamespace = ns,
@@ -101,39 +101,39 @@ makeElements omitTrivial ns lname pat =
                   Core.rowTypeTypeName = (Core.Name "hydra.core.Unit"),
                   Core.rowTypeFields = []})))] (Lists.cons (lname, (snd (Lists.head cpairs))) (Lists.tail cpairs))))))
       forPat = (\pat -> (\x -> case x of
-              Grammar.PatternNil -> trivial
-              Grammar.PatternIgnored _ -> []
-              Grammar.PatternLabeled v1 -> (forPat (Grammar.labeledPatternPattern v1))
-              Grammar.PatternConstant _ -> trivial
-              Grammar.PatternRegex _ -> [
-                (lname, (Core.TypeLiteral Core.LiteralTypeString))]
-              Grammar.PatternNonterminal v1 -> [
-                (lname, (Core.TypeVariable (toName ns (Grammar.unSymbol v1))))]
-              Grammar.PatternSequence v1 -> (forRecordOrUnion True (\fields -> Core.TypeRecord (Core.RowType {
-                Core.rowTypeTypeName = Constants.placeholderName,
-                Core.rowTypeFields = fields})) v1)
               Grammar.PatternAlternatives v1 -> (forRecordOrUnion False (\fields -> Core.TypeUnion (Core.RowType {
                 Core.rowTypeTypeName = Constants.placeholderName,
                 Core.rowTypeFields = fields})) v1)
+              Grammar.PatternConstant _ -> trivial
+              Grammar.PatternIgnored _ -> []
+              Grammar.PatternLabeled v1 -> (forPat (Grammar.labeledPatternPattern v1))
+              Grammar.PatternNil -> trivial
+              Grammar.PatternNonterminal v1 -> [
+                (lname, (Core.TypeVariable (toName ns (Grammar.unSymbol v1))))]
               Grammar.PatternOption v1 -> (mod_ "Option" (\x -> Core.TypeOptional x) v1)
-              Grammar.PatternStar v1 -> (mod_ "Elmt" (\x -> Core.TypeList x) v1)
-              Grammar.PatternPlus v1 -> (mod_ "Elmt" (\x -> Core.TypeList x) v1)) pat)
+              Grammar.PatternPlus v1 -> (mod_ "Elmt" (\x -> Core.TypeList x) v1)
+              Grammar.PatternRegex _ -> [
+                (lname, (Core.TypeLiteral Core.LiteralTypeString))]
+              Grammar.PatternSequence v1 -> (forRecordOrUnion True (\fields -> Core.TypeRecord (Core.RowType {
+                Core.rowTypeTypeName = Constants.placeholderName,
+                Core.rowTypeFields = fields})) v1)
+              Grammar.PatternStar v1 -> (mod_ "Elmt" (\x -> Core.TypeList x) v1)) pat)
   in (forPat pat)
 
 -- | Get raw name from pattern
 rawName :: (Grammar.Pattern -> String)
 rawName pat = ((\x -> case x of
-  Grammar.PatternNil -> "none"
+  Grammar.PatternAlternatives _ -> "alts"
+  Grammar.PatternConstant v1 -> (Formatting.decapitalize (Formatting.withCharacterAliases (Grammar.unConstant v1)))
   Grammar.PatternIgnored _ -> "ignored"
   Grammar.PatternLabeled v1 -> (Grammar.unLabel (Grammar.labeledPatternLabel v1))
-  Grammar.PatternConstant v1 -> (Formatting.decapitalize (Formatting.withCharacterAliases (Grammar.unConstant v1)))
-  Grammar.PatternRegex _ -> "regex"
+  Grammar.PatternNil -> "none"
   Grammar.PatternNonterminal v1 -> (Formatting.decapitalize (Grammar.unSymbol v1))
-  Grammar.PatternSequence _ -> "sequence"
-  Grammar.PatternAlternatives _ -> "alts"
   Grammar.PatternOption v1 -> (Formatting.decapitalize (rawName v1))
-  Grammar.PatternStar v1 -> (Strings.cat2 "listOf" (Formatting.capitalize (rawName v1)))
-  Grammar.PatternPlus v1 -> (Strings.cat2 "listOf" (Formatting.capitalize (rawName v1)))) pat)
+  Grammar.PatternPlus v1 -> (Strings.cat2 "listOf" (Formatting.capitalize (rawName v1)))
+  Grammar.PatternRegex _ -> "regex"
+  Grammar.PatternSequence _ -> "sequence"
+  Grammar.PatternStar v1 -> (Strings.cat2 "listOf" (Formatting.capitalize (rawName v1)))) pat)
 
 -- | Remove trivial patterns from records
 simplify :: (Bool -> [Grammar.Pattern] -> [Grammar.Pattern])
@@ -148,3 +148,13 @@ toName :: (Module.Namespace -> String -> Core.Name)
 toName ns local = (Qnames.unqualifyName (Module.QualifiedName {
   Module.qualifiedNameNamespace = (Just ns),
   Module.qualifiedNameLocal = local}))
+
+-- | Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type
+wrapType :: (Core.Type -> Core.Type)
+wrapType t = ((\x -> case x of
+  Core.TypeRecord _ -> t
+  Core.TypeUnion _ -> t
+  Core.TypeWrap _ -> t
+  _ -> (Core.TypeWrap (Core.WrappedType {
+    Core.wrappedTypeTypeName = (Core.Name "Placeholder"),
+    Core.wrappedTypeObject = t}))) t)
