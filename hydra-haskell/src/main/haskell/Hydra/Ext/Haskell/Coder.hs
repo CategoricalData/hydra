@@ -231,15 +231,17 @@ encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
     unitTuple = H.TypeTuple []
 
 encodeTypeWithClassAssertions :: HaskellNamespaces -> M.Map Name (S.Set TypeClass) -> Type -> Flow Graph H.Type
-encodeTypeWithClassAssertions namespaces classes typ = withTrace "encode with assertions" $ do
-  htyp <- adaptTypeToHaskellAndEncode namespaces typ
-  if L.null assertPairs
-    then pure htyp
-    else do
-      let encoded = encodeAssertion <$> assertPairs
-      let hassert = if L.length encoded > 1 then L.head encoded else H.AssertionTuple encoded
-      return $ H.TypeCtx $ H.ContextType hassert htyp
+encodeTypeWithClassAssertions namespaces explicitClasses typ = withTrace "encode with assertions" $ do
+    htyp <- adaptTypeToHaskellAndEncode namespaces typ
+    if L.null assertPairs
+      then pure htyp
+      else do
+        let encoded = encodeAssertion <$> assertPairs
+        let hassert = if L.length encoded > 1 then L.head encoded else H.AssertionTuple encoded
+        return $ H.TypeCtx $ H.ContextType hassert htyp
   where
+    classes = M.unionWith S.union explicitClasses implicitClasses
+    implicitClasses = getImplicitTypeClasses typ
     encodeAssertion (name, cls) = H.AssertionClass $ H.ClassAssertion hname [htype]
       where
         hname = rawName $ case cls of
@@ -329,9 +331,8 @@ toDataDeclaration coders namespaces (el, TypedTerm term typ) = do
       _ -> do
         hterm <- coderEncode coder term
         let vb = simpleValueBinding hname hterm bindings
---        classes <- getTypeClasses $ stripTypesFromTerm $ elementTerm el
-        let classes = getImplicitTypeClasses typ
-        htype <- encodeTypeWithClassAssertions namespaces classes typ
+        explicitClasses <- getTypeClasses $ stripTypesFromTerm $ elementTerm el
+        htype <- encodeTypeWithClassAssertions namespaces explicitClasses typ
         let decl = H.DeclarationTypedBinding $ H.TypedBinding (H.TypeSignature hname htype) (rewriteValueBinding vb)
         return $ H.DeclarationWithComments decl comments
 
