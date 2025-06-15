@@ -41,8 +41,6 @@ data CppModuleMetadata = CppModuleMetadata {
 --------------------------------------------------------------------------------
 -- Entry point
 
-useStdVariants = False
-
 -- | Convert a module to C++ code files
 moduleToCpp :: Module -> Flow Graph (M.Map FilePath String)
 moduleToCpp mod = do
@@ -54,7 +52,6 @@ moduleToCpp mod = do
 
     let (typeDefs, termDefs) = E.partitionEithers $ fmap toEither defs
 
---    fail $ "components: " ++ show (fmap (fmap (\d -> localNameOf $ typeDefinitionName d)) $ topologicalSortTypeDefinitions typeDefs)
     typeFiles <- generateTypeFiles env ns typeDefs
 
     return $ M.fromList typeFiles -- TODO: also generate a term-level *.cpp file if nonempty
@@ -224,91 +221,8 @@ encodeLiteralType lt = do
         _ -> pure Cpp.BasicTypeInt
       LiteralTypeString -> pure Cpp.BasicTypeString
 
-encodeModule :: Module -> Flow Graph Cpp.Program
-encodeModule mod = do
-    defs <- adaptedModuleDefinitions cppLanguage mod
-    let namespaces = namespacesForDefinitions False encodeNamespace (moduleNamespace mod) defs
-    let env = CppEnvironment {
-              cppEnvironmentNamespaces = namespaces,
-              cppEnvironmentBoundTypeVariables = ([], M.empty)}
-    defDecls <- reorderedTypeDecls env defs
-    let meta = gatherMetadata defs
-    let includeDirectives = includes namespaces meta
-    return $ Cpp.Program includeDirectives (wrapWithNamespace (moduleNamespace mod) defDecls)
-  where
-    wrapWithNamespace ns decls = [Cpp.DeclarationNamespace $
-      Cpp.NamespaceDeclaration (encodeNamespace ns) decls]
-
-    includes namespaces meta = versionIncludes ++ standardIncludes ++ containerIncludes ++ domainIncludes
-      where
-        versionIncludes = [
-          Cpp.IncludeDirective "version" True]
-
-        standardIncludes = [
-          Cpp.IncludeDirective "iostream" True,
-          Cpp.IncludeDirective "string" True,
-          Cpp.IncludeDirective "cstdint" True]
-
-        containerIncludes = Y.catMaybes [
-          if cppModuleMetadataUsesVector meta then Just (Cpp.IncludeDirective "vector" True) else Nothing,
-          if cppModuleMetadataUsesMap meta then Just (Cpp.IncludeDirective "map" True) else Nothing,
-          if cppModuleMetadataUsesSet meta then Just (Cpp.IncludeDirective "set" True) else Nothing,
-          if cppModuleMetadataUsesVariant meta then Just (Cpp.IncludeDirective "variant" True) else Nothing,
-          if cppModuleMetadataUsesOptional meta then Just (Cpp.IncludeDirective "optional" True) else Nothing,
-          if cppModuleMetadataUsesMemory meta then Just (Cpp.IncludeDirective "memory" True) else Nothing,
-          if cppModuleMetadataUsesFunctional meta then Just (Cpp.IncludeDirective "functional" True) else Nothing,
-          if cppModuleMetadataUsesTypeTraits meta then Just (Cpp.IncludeDirective "type_traits" True) else Nothing]
-
-        domainIncludes = toCppInclude <$> names
-          where
-            names = L.sort $ M.elems $ namespacesMapping namespaces
-            toCppInclude ns = Cpp.IncludeDirective (namespaceToHeaderPath ns) False
-            namespaceToHeaderPath ns =
-              L.intercalate "/" (convertCase CaseConventionCamel CaseConventionLowerSnake <$> Strings.splitOn "::" ns) ++ ".h"
-
-    reorderedTypeDecls env defs = do
-        decls <- L.concat <$> CM.mapM encode typeDefs
-        let declMap = M.fromList $ L.zip (typeDefinitionName <$> typeDefs) decls
-        return $ L.concat (componentDecls declMap <$> typeComponents)
-      where
-        typeDefs = Y.catMaybes (toTypeDef <$> defs)
-          where
-            toTypeDef def = case def of
-              DefinitionType d -> Just d
-              _ -> Nothing
-        typeDefMap = M.fromList $ L.zip (typeDefinitionName <$> typeDefs) typeDefs
-        encode (TypeDefinition name typ) = withTrace ("type element " ++ unName name) $ do
-          comment <- fmap normalizeComment <$> getTypeDescription typ
-          encodeTypeDefinition env name typ comment
-        typeComponents = topologicalSortComponents (toAdjPair <$> typeDefs)
-          where
-            toAdjPair (TypeDefinition name typ) = (name, S.toList $ typeDependencyNames True False typ)
-        componentDecls :: M.Map Name Cpp.Declaration -> [Name] -> [Cpp.Declaration]
-        componentDecls declMap comp = forwardDecls ++ typeDecls
-            where
-              forwardDecls = if L.length comp < 2
-                  then []
-                  else toForwardDecl <$> recordDefs
-                where
-                  toForwardDecl (TypeDefinition name _) = Cpp.DeclarationClass $
-                      Cpp.ClassDeclaration
-                        (Cpp.ClassSpecifier Cpp.ClassKeyStruct (encodeName False CaseConventionPascal env name) [])
-                        Nothing
-              typeDecls = Y.catMaybes $ fmap (\d -> M.lookup (typeDefinitionName d) declMap) reorderedDefs
-              reorderedDefs = otherDefs ++ unionDefs ++ recordDefs
-              defs = Y.catMaybes $ fmap (\n -> M.lookup n typeDefMap) comp
-              (unionDefs, nonUnionDefs) = L.partition isUnion defs
-                where
-                  isUnion (TypeDefinition _ typ) = isEnumType typ
-                    || (useStdVariants && typeVariant (stripType typ) == TypeVariantUnion)
-              (recordDefs, otherDefs) = L.partition isRecord nonUnionDefs
-                where
-                  isRecord (TypeDefinition _ typ) = typeVariant (stripType typ) == TypeVariantRecord
-                    || (not useStdVariants && not (isEnumType typ) && typeVariant (stripType typ) == TypeVariantUnion)
-
-encodeRecordType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph Cpp.Declaration
-encodeRecordType env name (RowType _ tfields) comment = do
-    -- Get field declarations for member variables
+encodeRecordType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph [Cpp.Declaration]
+encodeRecordType env name (RowType _ tfields) _comment = do
     cppFields <- CM.mapM (encodeFieldType env False) tfields
     constructorParams <- createParameters tfields
     return [cppClassDeclaration (className name) [] $
@@ -391,38 +305,19 @@ encodeTypeDefinition env name typ = do
       _ -> fail $ "unexpected type in definition: " ++ showType typ
 
 encodeUnionType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph [Cpp.Declaration]
-encodeUnionType env name rt@(RowType _ tfields) comment =
-  if isEnumRowType rt
-    then encodeEnumType env name tfields comment
-    else encodeVariantType env name tfields comment
+encodeUnionType env name rt comment = if isEnumRowType rt
+  then encodeEnumType env name (rowTypeFields rt) comment
+  else encodeVariantType env name (rowTypeFields rt) comment
 
--- | Process a variant type (std::variant)
-encodeVariantType :: CppEnvironment -> Name -> [FieldType] -> Maybe String -> Flow Graph [Cpp.Declaration]
-encodeVariantType env name tfields comment = if useStdVariants
-    then encodeStdVariant
-    else L.singleton <$> encodeAsRecord
+encodeVariantType env name variants comment = do
+    variantClasses <- CM.mapM (createVariantClass env name name) variants
+    return $ forwardDecls ++ [visitorInterface, baseClass] ++ variantClasses ++ [partialVisitorInterface, acceptImpl]
   where
-    encodeAsRecord = encodeRecordType env name rowType comment
-      where
-        rowType = RowType name (toRecordField <$> tfields)
-        toRecordField (FieldType fname ftype) = FieldType fname $ mapBeneathTypeAnnotations TypeOptional ftype
-    encodeStdVariant = do
-        -- Encode each field type
-        variantTypes <- CM.mapM (encodeType env . fieldTypeType) tfields
-
-        -- Create a typedef declaration for the variant
-        let typedefDecl = Cpp.DeclarationTypedef $
-              Cpp.TypedefDeclaration
-                (encodeName False CaseConventionPascal env name)
-                (createTemplateType "std::variant" variantTypes)
-                True  -- Use "using" syntax instead of "typedef"
-
-        return [typedefDecl]
-      where
-        -- Helper to create a template type like std::variant<T1, T2, ...>
-        createTemplateType name args =
-          Cpp.TypeExpressionTemplate $
-            Cpp.TemplateType name [Cpp.TemplateArgumentType a | a <- args]
+    forwardDecls = generateForwardDeclarations env name variants
+    baseClass = createUnionBaseClass env name variants
+    visitorInterface = createVisitorInterface env name variants
+    partialVisitorInterface = createPartialVisitorInterface env name variants
+    acceptImpl = createAcceptImplementation env name variants
 
 encodeWrappedType :: CppEnvironment -> Name -> Type -> Maybe String -> Flow Graph [Cpp.Declaration]
 encodeWrappedType env name typ comment = encodeRecordType env name rt comment
