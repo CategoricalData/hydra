@@ -238,6 +238,12 @@ encodeModule mod = do
     let body = L.filter (not . L.null) $ [commentStmts, importStmts, tvarStmts] ++ defStmts
     return $ Py.Module body
   where
+    findNamespaces defs meta = if fst (namespacesFocus namespaces) == coreNs
+        then namespaces
+        else namespaces {namespacesMapping = M.insert coreNs (encodeNamespace coreNs) $ namespacesMapping namespaces}
+      where
+        coreNs = Namespace "hydra.core"
+        namespaces = namespacesForDefinitions True encodeNamespace (moduleNamespace mod) defs
     reorderDefs defs = fst p ++ snd p
       where
         p = L.partition isNameDef defs
