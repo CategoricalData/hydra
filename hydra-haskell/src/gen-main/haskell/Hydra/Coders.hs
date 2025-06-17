@@ -96,6 +96,11 @@ newtype LanguageName =
 
 _LanguageName = (Core.Name "hydra.coders.LanguageName")
 
+-- | A bidirectional encoder which maps between the same type and term languages on either side
+type SymmetricAdapter s t v = (Compute.Adapter s s t t v v)
+
+_SymmetricAdapter = (Core.Name "hydra.coders.SymmetricAdapter")
+
 -- | Specifies either a pre-order or post-order traversal
 data TraversalOrder = 
   -- | Pre-order traversal
@@ -109,3 +114,8 @@ _TraversalOrder = (Core.Name "hydra.coders.TraversalOrder")
 _TraversalOrder_pre = (Core.Name "pre")
 
 _TraversalOrder_post = (Core.Name "post")
+
+-- | A function which maps a Hydra type to a symmetric adapter between types and terms
+type TypeAdapter = (Core.Type -> Compute.Flow AdapterContext (SymmetricAdapter AdapterContext Core.Type Core.Term))
+
+_TypeAdapter = (Core.Name "hydra.coders.TypeAdapter")

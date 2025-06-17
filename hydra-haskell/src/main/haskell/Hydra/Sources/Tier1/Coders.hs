@@ -87,8 +87,17 @@ hydraCodersModule = Module ns elements [hydraMantleModule, hydraGraphModule] [hy
         doc "The unique name of a language" $
         wrap string,
 
+      def "SymmetricAdapter" $
+        doc "A bidirectional encoder which maps between the same type and term languages on either side" $
+        forAlls ["s", "t", "v"] $ compute "Adapter" @@ "s" @@ "s" @@ "t" @@ "t" @@ "v" @@ "v",
+
       def "TraversalOrder" $
         doc "Specifies either a pre-order or post-order traversal" $
         union [
           "pre">: doc "Pre-order traversal" unit,
-          "post">: doc "Post-order traversal" unit]]
+          "post">: doc "Post-order traversal" unit],
+
+      def "TypeAdapter" $
+        doc "A function which maps a Hydra type to a symmetric adapter between types and terms" $
+        core "Type" --> compute "Flow" @@ coders "AdapterContext" @@
+          (coders "SymmetricAdapter" @@ coders "AdapterContext" @@ core "Type" @@ core "Term")]

@@ -26,10 +26,6 @@ import qualified Data.Maybe as Y
 import Control.Monad
 
 
-type SymmetricAdapter s t v = Adapter s s t t v v
-
-type TypeAdapter = Type -> Flow AdapterContext (SymmetricAdapter AdapterContext Type Term)
-
 key_types = Name "types"
 
 bidirectional :: (CoderDirection -> b -> Flow s b) -> Coder s s b b
