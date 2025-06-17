@@ -19,7 +19,7 @@ module Hydra.TestUtils (
 import Hydra.Kernel
 import Hydra.Staging.LiteralAdapters
 import Hydra.Staging.TermAdapters
-import Hydra.Staging.AdapterUtils
+import Hydra.AdapterUtils
 import Hydra.Staging.TestGraph
 import Hydra.ArbitraryCore()
 import qualified Hydra.Dsl.Terms as Terms

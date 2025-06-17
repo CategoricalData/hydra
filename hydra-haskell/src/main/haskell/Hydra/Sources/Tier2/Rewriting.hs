@@ -20,6 +20,7 @@ import qualified Hydra.Dsl.Lib.Optionals   as Optionals
 import           Hydra.Dsl.Phantoms        as Phantoms
 import qualified Hydra.Dsl.Lib.Sets        as Sets
 import           Hydra.Dsl.Lib.Strings     as Strings
+import qualified Hydra.Dsl.Mantle          as Mantle
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.TTerms          as TTerms
 import qualified Hydra.Dsl.TTypes          as TTypes
@@ -271,18 +272,18 @@ subtermsDef = rewritingDefinition "subterms" $
         _Function_elimination>>: match _Elimination (Just $ list []) [
             _Elimination_union>>: lambda "cs" $ Lists.concat2
               ((primitive _optionals_maybe @@ (list []) @@ (lambda "t" $ list [var "t"])) @@ (Core.caseStatementDefault $ var "cs"))
-              (Lists.map (asFunction Core.fieldTerm) (Core.caseStatementCases $ var "cs"))],
+              (Lists.map (unaryFunction Core.fieldTerm) (Core.caseStatementCases $ var "cs"))],
         _Function_lambda>>: lambda "l" $ list [Core.lambdaBody $ var "l"]],
     _Term_let>>: lambda "lt" $ Lists.cons
       (Core.letEnvironment $ var "lt")
-      (Lists.map (asFunction Core.letBindingTerm) (Core.letBindings $ var "lt")),
+      (Lists.map (unaryFunction Core.letBindingTerm) (Core.letBindings $ var "lt")),
     _Term_list>>: lambda "l" $ var "l",
     _Term_literal>>: constant $ list [],
     _Term_map>>: lambda "m" (Lists.concat
       (Lists.map (lambda "p" $ list [first $ var "p", second $ var "p"]) (Maps.toList $ var "m"))),
     _Term_optional>>: primitive _optionals_maybe @@  (list []) @@ (lambda "t" $ list [var "t"]),
     _Term_product>>: lambda "tuple" $ var "tuple",
-    _Term_record>>: lambda "rt" (Lists.map (asFunction Core.fieldTerm) (Core.recordFields $ var "rt")),
+    _Term_record>>: lambda "rt" (Lists.map (unaryFunction Core.fieldTerm) (Core.recordFields $ var "rt")),
     _Term_set>>: lambda "l" $ Sets.toList $ var "l",
     _Term_sum>>: lambda "st" $ list [Core.sumTerm $ var "st"],
     _Term_typeAbstraction>>: lambda "ta" $ list [Core.typeAbstractionBody $ var "ta"],
@@ -380,10 +381,10 @@ subtypesDef = rewritingDefinition "subtypes" $
       Core.mapTypeValues $ var "mt"],
     _Type_optional>>: lambda "ot" $ list [var "ot"],
     _Type_product>>: lambda "pt" $ var "pt",
-    _Type_record>>: lambda "rt" (Lists.map (asFunction Core.fieldTypeType) (Core.rowTypeFields $ var "rt")),
+    _Type_record>>: lambda "rt" (Lists.map (unaryFunction Core.fieldTypeType) (Core.rowTypeFields $ var "rt")),
     _Type_set>>: lambda "st" $ list [var "st"],
     _Type_sum>>: lambda "st" $ var "st",
-    _Type_union>>: lambda "rt" (Lists.map (asFunction Core.fieldTypeType) (Core.rowTypeFields $ var "rt")),
+    _Type_union>>: lambda "rt" (Lists.map (unaryFunction Core.fieldTypeType) (Core.rowTypeFields $ var "rt")),
     _Type_variable>>: constant $ list [],
     _Type_wrap>>: lambda "nt" $ list [Core.wrappedTypeObject $ var "nt"]]
 

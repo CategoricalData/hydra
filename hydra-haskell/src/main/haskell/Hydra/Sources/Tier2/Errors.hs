@@ -21,6 +21,7 @@ import qualified Hydra.Dsl.Mantle          as Mantle
 import           Hydra.Dsl.Phantoms        as Phantoms
 import qualified Hydra.Dsl.Lib.Sets        as Sets
 import           Hydra.Dsl.Lib.Strings     as Strings
+import qualified Hydra.Dsl.Mantle          as Mantle
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.TTerms          as TTerms
 import qualified Hydra.Dsl.TTypes          as TTypes

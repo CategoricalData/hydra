@@ -20,6 +20,7 @@ import qualified Hydra.Dsl.Lib.Optionals   as Optionals
 import           Hydra.Dsl.Phantoms        as Phantoms
 import qualified Hydra.Dsl.Lib.Sets        as Sets
 import           Hydra.Dsl.Lib.Strings     as Strings
+import qualified Hydra.Dsl.Mantle          as Mantle
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.TTerms          as TTerms
 import qualified Hydra.Dsl.TTypes          as TTypes
@@ -136,7 +137,7 @@ requireElementDef = lexicalDefinition "requireElement" $
     $ Flows.bind (ref dereferenceElementDef @@ var "name") $
       lambda "mel" $ Optionals.maybe
         (Flows.bind (ref getStateDef) $ var "err")
-        (asFunction Flows.pure)
+        (unaryFunction Flows.pure)
         (var "mel")
 
 requirePrimitiveDef :: TElement (Name -> Flow Graph Primitive)
@@ -145,7 +146,7 @@ requirePrimitiveDef = lexicalDefinition "requirePrimitive" $
     Flows.bind (ref getStateDef) $
     lambda "g" $ Optionals.maybe
       (Flows.fail $ "no such primitive function: " ++ (Core.unName $ var "name"))
-      (asFunction Flows.pure)
+      (unaryFunction Flows.pure)
       (ref lookupPrimitiveDef @@ var "g" @@ var "name")
 
 requireTermDef :: TElement (Name -> Flow Graph Term)
@@ -154,7 +155,7 @@ requireTermDef = lexicalDefinition "requireTerm" $
     Flows.bind (ref resolveTermDef @@ var "name") $
     lambda "mt" $ Optionals.maybe
       (Flows.fail $ "no such element: " ++ (Core.unName $ var "name"))
-      (asFunction Flows.pure)
+      (unaryFunction Flows.pure)
       (var "mt")
 
 resolveTermDef :: TElement (Name -> Flow Graph (Maybe Term))
@@ -187,7 +188,7 @@ stripAndDereferenceTermDef = lexicalDefinition "stripAndDereferenceTerm" $
 
 typeOfPrimitiveDef :: TElement (Name -> Flow Graph TypeScheme)
 typeOfPrimitiveDef = lexicalDefinition "typeOfPrimitive" $
-  lambda "name" $ Flows.map (asFunction Graph.primitiveType) $ ref requirePrimitiveDef @@ var "name"
+  lambda "name" $ Flows.map (unaryFunction Graph.primitiveType) $ ref requirePrimitiveDef @@ var "name"
 
 withSchemaContextDef :: TElement (Flow Graph x -> Flow Graph x)
 withSchemaContextDef = lexicalDefinition "withSchemaContext" $

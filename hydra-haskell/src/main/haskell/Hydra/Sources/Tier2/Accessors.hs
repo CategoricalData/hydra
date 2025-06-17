@@ -20,6 +20,7 @@ import qualified Hydra.Dsl.Lib.Optionals   as Optionals
 import           Hydra.Dsl.Phantoms        as Phantoms
 import qualified Hydra.Dsl.Lib.Sets        as Sets
 import           Hydra.Dsl.Lib.Strings     as Strings
+import qualified Hydra.Dsl.Mantle          as Mantle
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.TTerms          as TTerms
 import qualified Hydra.Dsl.TTypes          as TTypes
@@ -107,7 +108,7 @@ termToAccessorGraphDef = accessorsDefinition "termToAccessorGraph" $
         _Term_let>>: lambda "letExpr" $ lets [
           "bindings">: Core.letBindings $ var "letExpr",
           "env">: Core.letEnvironment $ var "letExpr",
-          "bindingNames">: Lists.map (asFunction Core.letBindingName) (var "bindings"),
+          "bindingNames">: Lists.map (unaryFunction Core.letBindingName) (var "bindings"),
           -- First fold: build nodes and update ids for each binding name
           "addBindingName">: lambdas ["nodesVisitedIds", "name"] $ lets [
             "currentNodesVisited">: first $ var "nodesVisitedIds",

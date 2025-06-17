@@ -20,6 +20,7 @@ import qualified Hydra.Dsl.Lib.Optionals   as Optionals
 import           Hydra.Dsl.Phantoms        as Phantoms
 import qualified Hydra.Dsl.Lib.Sets        as Sets
 import           Hydra.Dsl.Lib.Strings     as Strings
+import qualified Hydra.Dsl.Mantle          as Mantle
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.TTerms          as TTerms
 import qualified Hydra.Dsl.TTypes          as TTypes
@@ -140,8 +141,8 @@ makeElementsDef = grammarToModuleDefinition "makeElements" $
         (lambda "pairs" $ pair (Core.fieldType (Core.name' $ var "n") (second $ Lists.head $ var "pairs")) (Lists.tail $ var "pairs")) @@
         var "p",
       "fieldPairs">: Lists.zipWith (var "toField") (var "fieldNames") (var "minPats"),
-      "fields">: Lists.map (asFunction first) (var "fieldPairs"),
-      "els">: Lists.concat $ Lists.map (asFunction second) (var "fieldPairs")]
+      "fields">: Lists.map (unaryFunction first) (var "fieldPairs"),
+      "els">: Lists.concat $ Lists.map (unaryFunction second) (var "fieldPairs")]
       $ Logic.ifElse (ref isNontrivialDef @@ var "isRecord" @@ var "pats")
           (Lists.cons (pair (var "lname") (var "construct" @@ var "fields")) (var "els"))
           (var "forPat" @@ (Lists.head $ var "minPats")),
@@ -167,12 +168,12 @@ makeElementsDef = grammarToModuleDefinition "makeElements" $
       _Pattern_nil>>: constant $ var "trivial",
       _Pattern_nonterminal>>: lambda "s" $ list [pair (var "lname") $ Core.typeVariable $
         ref toNameDef @@ var "ns" @@ Grammar.unSymbol (var "s")],
-      _Pattern_option>>: lambda "p" $ var "mod" @@ string "Option" @@ (asFunction TTypes.optional) @@ var "p",
-      _Pattern_plus>>: lambda "p" $ var "mod" @@ string "Elmt" @@ (asFunction TTypes.list) @@ var "p",
+      _Pattern_option>>: lambda "p" $ var "mod" @@ string "Option" @@ (unaryFunction TTypes.optional) @@ var "p",
+      _Pattern_plus>>: lambda "p" $ var "mod" @@ string "Elmt" @@ (unaryFunction TTypes.list) @@ var "p",
       _Pattern_regex>>: constant $ list [pair (var "lname") TTypes.string],
       _Pattern_sequence>>: lambda "pats" $ var "forRecordOrUnion" @@ true @@
         (lambda "fields" $ Core.typeRecord $ Core.rowType (ref placeholderNameDef) (var "fields")) @@ var "pats",
-      _Pattern_star>>: lambda "p" $ var "mod" @@ string "Elmt" @@ (asFunction TTypes.list) @@ var "p"]
+      _Pattern_star>>: lambda "p" $ var "mod" @@ string "Elmt" @@ (unaryFunction TTypes.list) @@ var "p"]
     @@ var "pat"]
     $ var "forPat" @@ var "pat"
 

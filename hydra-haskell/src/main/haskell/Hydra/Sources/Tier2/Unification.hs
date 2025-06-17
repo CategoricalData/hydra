@@ -20,6 +20,7 @@ import qualified Hydra.Dsl.Lib.Optionals   as Optionals
 import           Hydra.Dsl.Phantoms        as Phantoms
 import qualified Hydra.Dsl.Lib.Sets        as Sets
 import           Hydra.Dsl.Lib.Strings     as Strings
+import qualified Hydra.Dsl.Mantle          as Mantle
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.TTerms          as TTerms
 import qualified Hydra.Dsl.TTypes          as TTypes
@@ -74,11 +75,11 @@ joinTypesDef = unificationDefinition "joinTypes" $
       (Logic.and
         (Core.equalName_ (Core.rowTypeTypeName $ var "left") (Core.rowTypeTypeName $ var "right"))
         (Core.equalNameList_
-          (Lists.map (asFunction Core.fieldTypeName) $ Core.rowTypeFields $ var "left")
-          (Lists.map (asFunction Core.fieldTypeName) $ Core.rowTypeFields $ var "right")))
+          (Lists.map (unaryFunction Core.fieldTypeName) $ Core.rowTypeFields $ var "left")
+          (Lists.map (unaryFunction Core.fieldTypeName) $ Core.rowTypeFields $ var "right")))
       (var "joinList"
-        @@ (Lists.map (asFunction Core.fieldTypeType) $ Core.rowTypeFields $ var "left")
-        @@ (Lists.map (asFunction Core.fieldTypeType) $ Core.rowTypeFields $ var "right"))
+        @@ (Lists.map (unaryFunction Core.fieldTypeType) $ Core.rowTypeFields $ var "left")
+        @@ (Lists.map (unaryFunction Core.fieldTypeType) $ Core.rowTypeFields $ var "right"))
       (var "cannotUnify")] $
     cases _Type (var "sleft") (Just $ var "cannotUnify") [
       _Type_application>>: lambda "l" $ cases _Type (var "sright") (Just $ var "cannotUnify") [

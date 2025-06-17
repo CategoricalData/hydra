@@ -13,7 +13,7 @@ import Hydra.Staging.Adapters
 import Hydra.Staging.TermAdapters
 import Hydra.Ext.Json.Language
 import Hydra.Lib.Literals
-import Hydra.Staging.AdapterUtils
+import Hydra.AdapterUtils
 import qualified Hydra.Json as Json
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types

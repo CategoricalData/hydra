@@ -165,8 +165,8 @@ sanitizeWithUnderscoresDef = formattingDefinition "sanitizeWithUnderscores" $
 stripLeadingAndTrailingWhitespaceDef :: TElement (String -> String)
 stripLeadingAndTrailingWhitespaceDef = formattingDefinition "stripLeadingAndTrailingWhitespace" $
   lambda "s" $
-    Strings.fromList $ Lists.dropWhile (asFunction Chars.isSpace) $ Lists.reverse $
-    Lists.dropWhile (asFunction Chars.isSpace) $ Lists.reverse $ Strings.toList $ var "s"
+    Strings.fromList $ Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $
+    Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $ Strings.toList $ var "s"
 
 withCharacterAliasesDef :: TElement (String -> String)
 withCharacterAliasesDef = formattingDefinition "withCharacterAliases" $
@@ -208,8 +208,8 @@ withCharacterAliasesDef = formattingDefinition "withCharacterAliases" $
       pair (int32 126) (string "tilde")],
     "alias">: lambda "c" $ Optionals.fromMaybe
       (Lists.pure $ var "c")
-      (Optionals.map (asFunction Strings.toList) $ Maps.lookup (var "c") (var "aliases"))]
-    $ Strings.fromList $ Lists.filter (asFunction Chars.isAlphaNum) $ Lists.concat $
+      (Optionals.map (unaryFunction Strings.toList) $ Maps.lookup (var "c") (var "aliases"))]
+    $ Strings.fromList $ Lists.filter (unaryFunction Chars.isAlphaNum) $ Lists.concat $
       Lists.map (var "alias") $ Strings.toList $ var "original"
 
 wrapLineDef :: TElement (Int -> String -> String)
