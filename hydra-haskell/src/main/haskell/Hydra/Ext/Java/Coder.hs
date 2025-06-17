@@ -12,7 +12,7 @@ import Hydra.Ext.Java.Names
 import Hydra.Staging.Adapters
 import Hydra.Ext.Java.Serde
 import Hydra.Ext.Java.Settings
-import Hydra.Staging.AdapterUtils
+import Hydra.AdapterUtils
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Ext.Java.Syntax as Java

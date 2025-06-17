@@ -7,7 +7,7 @@ module Hydra.Staging.LiteralAdapters (
 ) where
 
 import Hydra.Printing
-import Hydra.Staging.AdapterUtils
+import Hydra.AdapterUtils
 import Hydra.Variants
 import Hydra.Coders
 import Hydra.Compute
@@ -26,7 +26,7 @@ import qualified Data.Set as S
 literalAdapter :: LiteralType -> Flow AdapterContext (SymmetricAdapter s LiteralType Literal)
 literalAdapter lt = do
     cx <- getState
-    chooseAdapter (alts cx) (supported cx) describeLiteralType lt
+    chooseAdapter (alts cx) (supported cx) show describeLiteralType lt
   where
     supported cx = literalTypeIsSupported (constraints cx)
     constraints cx = languageConstraints $ adapterContextLanguage cx
@@ -103,7 +103,7 @@ floatAdapter :: FloatType -> Flow AdapterContext (SymmetricAdapter s FloatType F
 floatAdapter ft = do
     cx <- getState
     let supported = floatTypeIsSupported $ languageConstraints $ adapterContextLanguage cx
-    chooseAdapter alts supported describeFloatType ft
+    chooseAdapter alts supported show describeFloatType ft
   where
     alts t = CM.mapM (makeAdapter t) $ case t of
         FloatTypeBigfloat -> [FloatTypeFloat64, FloatTypeFloat32]
@@ -120,7 +120,7 @@ integerAdapter :: IntegerType -> Flow AdapterContext (SymmetricAdapter s Integer
 integerAdapter it = do
     cx <- getState
     let supported = integerTypeIsSupported $ languageConstraints $ adapterContextLanguage cx
-    chooseAdapter alts supported describeIntegerType it
+    chooseAdapter alts supported show describeIntegerType it
   where
     alts t = CM.mapM (makeAdapter t) $ case t of
         IntegerTypeBigint -> L.reverse unsignedPref

@@ -4,6 +4,7 @@
 --       but they are not default imports because the names of their types clash with those of other types.
 module Hydra.Kernel (
   module Hydra.Accessors,
+  module Hydra.AdapterUtils,
   module Hydra.Annotations,
   module Hydra.Arity,
 --  module Hydra.Ast,
@@ -30,7 +31,6 @@ module Hydra.Kernel (
   module Hydra.Qnames,
   module Hydra.Query,
   module Hydra.Rewriting,
-  module Hydra.Staging.AdapterUtils,
   module Hydra.Staging.Adapters,
   module Hydra.Staging.Annotations,
   module Hydra.Staging.CoreDecoding,
@@ -53,6 +53,7 @@ module Hydra.Kernel (
 ) where
 
 import Hydra.Accessors
+import Hydra.AdapterUtils
 import Hydra.Annotations
 import Hydra.Arity
 --import Hydra.Ast
@@ -79,7 +80,6 @@ import Hydra.Printing
 import Hydra.Qnames
 import Hydra.Query
 import Hydra.Rewriting
-import Hydra.Staging.AdapterUtils
 import Hydra.Staging.Adapters
 import Hydra.Staging.Annotations
 import Hydra.Staging.CoreDecoding

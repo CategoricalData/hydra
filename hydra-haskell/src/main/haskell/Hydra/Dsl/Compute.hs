@@ -8,6 +8,36 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
+adapter :: TTerm Bool -> TTerm t1 -> TTerm t2 -> TTerm (Coder s1 s2 v1 v2) -> TTerm (Adapter s1 s2 t1 t2 v1 v2)
+adapter isLossy source target coder = record _Adapter [
+  _Adapter_isLossy>>: isLossy,
+  _Adapter_source>>: source,
+  _Adapter_target>>: target,
+  _Adapter_coder>>: coder]
+
+adapterIsLossy :: TTerm (Adapter s1 s2 t1 t2 v1 v2) -> TTerm Bool
+adapterIsLossy a = project _Adapter _Adapter_isLossy @@ a
+
+adapterSource :: TTerm (Adapter s1 s2 t1 t2 v1 v2) -> TTerm t1
+adapterSource a = project _Adapter _Adapter_source @@ a
+
+adapterTarget :: TTerm (Adapter s1 s2 t1 t2 v1 v2) -> TTerm t2
+adapterTarget a = project _Adapter _Adapter_target @@ a
+
+adapterCoder :: TTerm (Adapter s1 s2 t1 t2 v1 v2) -> TTerm (Coder s1 s2 v1 v2)
+adapterCoder a = project _Adapter _Adapter_coder @@ a
+
+coder :: TTerm (v1 -> Flow s1 v2) -> TTerm (v2 -> Flow s2 v1) -> TTerm (Coder s1 s2 v1 v2)
+coder encode decode = record _Coder [
+  _Coder_encode>>: encode,
+  _Coder_decode>>: decode]
+
+coderEncode :: TTerm (Coder s1 s2 v1 v2) -> TTerm (v1 -> Flow s1 v2)
+coderEncode c = project _Coder _Coder_encode @@ c
+
+coderDecode :: TTerm (Coder s1 s2 v1 v2) -> TTerm (v2 -> Flow s2 v1)
+coderDecode c = project _Coder _Coder_decode @@ c
+
 flow :: TTerm (s -> Trace -> FlowState s v) -> TTerm (Flow s v)
 flow = wrap _Flow
 

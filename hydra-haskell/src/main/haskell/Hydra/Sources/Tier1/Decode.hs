@@ -127,8 +127,8 @@ casesDef = decodeDefinition "cases" $
     "matchElimination">: matchVariant _Function _Function_elimination,
     "matchUnion">: matchVariant _Elimination _Elimination_union]
     $ ref nominalDef
-      @@ (asFunction Core.caseStatementTypeName)
-      @@ (asFunction Core.caseStatementCases)
+      @@ (unaryFunction Core.caseStatementTypeName)
+      @@ (unaryFunction Core.caseStatementCases)
       @@ compose3 (var "matchFunction") (var "matchElimination") (var "matchUnion")
 
 caseFieldDef :: TElement (Name -> Name -> Term -> Y.Maybe Term)
@@ -232,7 +232,7 @@ letBindingDef :: TElement (Name -> Term -> Maybe LetBinding)
 letBindingDef = decodeDefinition "letBinding" $
   lambda "fname" $ lambda "term" $ Optionals.bind
     (Optionals.map
-      (asFunction Core.letBindings)
+      (unaryFunction Core.letBindings)
       (ref letTermDef @@ var "term"))
     (ref letBindingWithKeyDef @@ var "fname")
 
@@ -300,8 +300,8 @@ pairDef = decodeDefinition "pair" $
 recordDef :: TElement (Name -> Term -> Maybe [Field])
 recordDef = decodeDefinition "record" $
   matchNominal _Term_record
-    (asFunction Core.recordTypeName)
-    (asFunction Core.recordFields)
+    (unaryFunction Core.recordTypeName)
+    (unaryFunction Core.recordFields)
 
 setDef :: TElement (Term -> Maybe (S.Set Term))
 setDef = decodeDefinition "set" $
@@ -356,7 +356,7 @@ unitDef = decodeDefinition "unit" $
 unitVariantDef :: TElement (Name -> Term -> Maybe Name)
 unitVariantDef = decodeDefinition "unitVariant" $
   lambda "tname" $ lambda "term" $ Optionals.map
-    (asFunction Core.fieldName)
+    (unaryFunction Core.fieldName)
     (ref variantDef @@ var "tname" @@ var "term")
 
 variableDef :: TElement (Term -> Y.Maybe Name)
@@ -366,14 +366,14 @@ variableDef = decodeDefinition "variable" $
 variantDef :: TElement (Name -> Term -> Maybe Field)
 variantDef = decodeDefinition "variant" $
   matchNominal _Term_union
-    (asFunction Core.injectionTypeName)
-    (asFunction Core.injectionField)
+    (unaryFunction Core.injectionTypeName)
+    (unaryFunction Core.injectionField)
 
 wrapDef :: TElement (Name -> Term -> Maybe Term)
 wrapDef = decodeDefinition "wrap" $
   matchNominal _Term_wrap
-    (asFunction Core.wrappedTermTypeName)
-    (asFunction Core.wrappedTermObject)
+    (unaryFunction Core.wrappedTermTypeName)
+    (unaryFunction Core.wrappedTermObject)
 
 --
 
