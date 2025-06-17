@@ -45,6 +45,9 @@ annot ann term = TermAnnotated $ AnnotatedTerm term ann
 apply :: Term -> Term -> Term
 apply fun arg = TermApplication $ Application fun arg
 
+applyAll :: Term -> [Term] -> Term
+applyAll fun args = foldl apply fun args
+
 -- | Create a let term with any number of bindings
 -- Example: lets ["x">: int32 1, "y">: int32 2] (pair (var "x") (var "y"))
 lets :: [Field] -> Term -> Term

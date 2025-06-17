@@ -20,6 +20,7 @@ import qualified Hydra.Dsl.Lib.Optionals   as Optionals
 import           Hydra.Dsl.Phantoms        as Phantoms
 import qualified Hydra.Dsl.Lib.Sets        as Sets
 import           Hydra.Dsl.Lib.Strings     as Strings
+import qualified Hydra.Dsl.Mantle          as Mantle
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.TTerms          as TTerms
 import qualified Hydra.Dsl.TTypes          as TTypes
@@ -334,7 +335,7 @@ setDescriptionDef = annotationsDefinition "setDescription" $
   doc "Set description in annotations" $
   lambda "d" $ ref setAnnotationDef
     @@ Core.name key_description
-    @@ Optionals.map (asFunction Core.termLiteral <.> asFunction Core.literalString) (var "d")
+    @@ Optionals.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
 
 setTermAnnotationDef :: TElement (Name -> Maybe Term -> Term -> Term)
 setTermAnnotationDef = annotationsDefinition "setTermAnnotation" $
@@ -351,7 +352,7 @@ setTermDescriptionDef = annotationsDefinition "setTermDescription" $
   doc "Set term description" $
   lambda "d" $ ref setTermAnnotationDef
     @@ Core.name key_description
-    @@ Optionals.map (asFunction Core.termLiteral <.> asFunction Core.literalString) (var "d")
+    @@ Optionals.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
 
 -- TODO: temporary. Move this function out of Annotations
 setTermTypeDef :: TElement (Maybe Type -> Term -> Term)
@@ -409,7 +410,7 @@ setTypeDescriptionDef = annotationsDefinition "setTypeDescription" $
   doc "Set type description" $
   lambda "d" $ ref setTypeAnnotationDef
     @@ Core.name key_description
-    @@ Optionals.map (asFunction Core.termLiteral <.> asFunction Core.literalString) (var "d")
+    @@ Optionals.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
 
 termAnnotationInternalDef :: TElement (Term -> M.Map Name Term)
 termAnnotationInternalDef = annotationsDefinition "termAnnotationInternal" $
@@ -420,7 +421,7 @@ termAnnotationInternalDef = annotationsDefinition "termAnnotationInternal" $
         _Term_annotated>>: lambda "a" $ just $ var "a",
         _Term_typed>>: lambda "tt" $ var "getAnn" @@ Core.typedTermTerm (var "tt")]
       @@ var "t"]
-    $ ref aggregateAnnotationsDef @@ var "getAnn" @@ (asFunction Core.annotatedTermSubject) @@ (asFunction Core.annotatedTermAnnotation)
+    $ ref aggregateAnnotationsDef @@ var "getAnn" @@ (unaryFunction Core.annotatedTermSubject) @@ (unaryFunction Core.annotatedTermAnnotation)
 
 typeAnnotationInternalDef :: TElement (Type -> M.Map Name Term)
 typeAnnotationInternalDef = annotationsDefinition "typeAnnotationInternal" $
@@ -430,7 +431,7 @@ typeAnnotationInternalDef = annotationsDefinition "typeAnnotationInternal" $
       match _Type (Just nothing) [
         _Type_annotated>>: lambda "a" $ just $ var "a"]
       @@ var "t"]
-    $ ref aggregateAnnotationsDef @@ var "getAnn" @@ (asFunction Core.annotatedTypeSubject) @@ (asFunction Core.annotatedTypeAnnotation)
+    $ ref aggregateAnnotationsDef @@ var "getAnn" @@ (unaryFunction Core.annotatedTypeSubject) @@ (unaryFunction Core.annotatedTypeAnnotation)
 
 typeElementDef :: TElement (Name -> Type -> Element)
 typeElementDef = annotationsDefinition "typeElement" $

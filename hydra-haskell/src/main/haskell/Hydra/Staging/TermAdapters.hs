@@ -9,7 +9,7 @@ module Hydra.Staging.TermAdapters (
 ) where
 
 import Hydra.Printing
-import Hydra.Staging.AdapterUtils
+import Hydra.AdapterUtils
 import Hydra.Variants
 import Hydra.Strip
 import Hydra.Coders
@@ -306,7 +306,7 @@ termAdapter typ = case typ of
       TypeVariable name -> forTypeReference name
       _ -> do
         cx <- getState
-        chooseAdapter (alts cx) (supported cx) describeType typ
+        chooseAdapter (alts cx) (supported cx) showType describeType typ
   where
     constraints = languageConstraints . adapterContextLanguage
     supported = typeIsSupported . constraints

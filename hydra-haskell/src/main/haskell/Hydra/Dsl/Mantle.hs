@@ -166,5 +166,47 @@ typeVariant v = unitVariant _TypeVariant $ case v of
   TypeVariantVariable -> _TypeVariant_variable
   TypeVariantWrap -> _TypeVariant_wrap
 
+typeVariantAnnotated :: TTerm TypeVariant
+typeVariantAnnotated = unitVariant _TypeVariant _TypeVariant_annotated
+
+typeVariantApplication :: TTerm TypeVariant
+typeVariantApplication = unitVariant _TypeVariant _TypeVariant_application
+
+typeVariantFunction :: TTerm TypeVariant
+typeVariantFunction = unitVariant _TypeVariant _TypeVariant_function
+
+typeVariantForall :: TTerm TypeVariant
+typeVariantForall = unitVariant _TypeVariant _TypeVariant_forall
+
+typeVariantList :: TTerm TypeVariant
+typeVariantList = unitVariant _TypeVariant _TypeVariant_list
+
+typeVariantLiteral :: TTerm TypeVariant
+typeVariantLiteral = unitVariant _TypeVariant _TypeVariant_literal
+
+typeVariantMap :: TTerm TypeVariant
+typeVariantMap = unitVariant _TypeVariant _TypeVariant_map
+
+typeVariantOptional :: TTerm TypeVariant
+typeVariantOptional = unitVariant _TypeVariant _TypeVariant_optional
+
+typeVariantProduct :: TTerm TypeVariant
+typeVariantProduct = unitVariant _TypeVariant _TypeVariant_product
+
+typeVariantRecord :: TTerm TypeVariant
+typeVariantRecord = unitVariant _TypeVariant _TypeVariant_record
+
+typeVariantSet :: TTerm TypeVariant
+typeVariantSet = unitVariant _TypeVariant _TypeVariant_set
+
+typeVariantUnion :: TTerm TypeVariant
+typeVariantUnion = unitVariant _TypeVariant _TypeVariant_union
+
+typeVariantVariable :: TTerm TypeVariant
+typeVariantVariable = unitVariant _TypeVariant _TypeVariant_variable
+
+typeVariantWrap :: TTerm TypeVariant
+typeVariantWrap = unitVariant _TypeVariant _TypeVariant_wrap
+
 unAccessorPath :: TTerm AccessorPath -> TTerm [TermAccessor]
 unAccessorPath path = unwrap _AccessorPath @@ path

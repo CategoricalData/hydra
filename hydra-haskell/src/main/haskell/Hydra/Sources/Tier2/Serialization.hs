@@ -20,6 +20,7 @@ import qualified Hydra.Dsl.Lib.Optionals   as Optionals
 import           Hydra.Dsl.Phantoms        as Phantoms
 import qualified Hydra.Dsl.Lib.Sets        as Sets
 import           Hydra.Dsl.Lib.Strings     as Strings
+import qualified Hydra.Dsl.Mantle          as Mantle
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.TTerms          as TTerms
 import qualified Hydra.Dsl.TTypes          as TTypes
@@ -221,7 +222,7 @@ expressionLengthDef = serializationDefinition "expressionLength" $
       _Ws_breakAndIndent>>: lambda "s" $ Math.addInt32 (int32 1) (Strings.length $ var "s"),
       _Ws_doubleBreak>>: constant $ int32 2],
     "blockStyleLength">: lambda "style" $ lets [
-      "mindentLen">: Optionals.maybe (int32 0) (asFunction Strings.length) (Ast.blockStyleIndent $ var "style"),
+      "mindentLen">: Optionals.maybe (int32 0) (unaryFunction Strings.length) (Ast.blockStyleIndent $ var "style"),
       "nlBeforeLen">: Logic.ifElse (Ast.blockStyleNewlineBeforeContent $ var "style") (int32 1) (int32 0),
       "nlAfterLen">: Logic.ifElse (Ast.blockStyleNewlineAfterContent $ var "style") (int32 1) (int32 0)]
       $ Math.addInt32 (var "mindentLen") $ Math.addInt32 (var "nlBeforeLen") (var "nlAfterLen"),

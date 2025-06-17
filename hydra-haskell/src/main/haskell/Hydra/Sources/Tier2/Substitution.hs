@@ -20,6 +20,7 @@ import qualified Hydra.Dsl.Lib.Optionals   as Optionals
 import           Hydra.Dsl.Phantoms        as Phantoms
 import qualified Hydra.Dsl.Lib.Sets        as Sets
 import           Hydra.Dsl.Lib.Strings     as Strings
+import qualified Hydra.Dsl.Mantle          as Mantle
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.TTerms          as TTerms
 import qualified Hydra.Dsl.TTypes          as TTypes
@@ -107,7 +108,7 @@ substituteInTermDef = substitutionDefinition "substituteInTerm" $
           Core.lambda (var "v") (Core.lambdaDomain $ var "l") (ref substituteInTermDef @@ var "subst2" @@ (Core.lambdaBody $ var "l")),
       "withLet">: lambda "lt" $ lets [
         "bindings">: Core.letBindings $ var "lt",
-        "names">: Sets.fromList $ Lists.map (asFunction Core.letBindingName) (var "bindings"),
+        "names">: Sets.fromList $ Lists.map (unaryFunction Core.letBindingName) (var "bindings"),
         "subst2">: Typing.termSubst $ Maps.filterWithKey (lambdas ["k", "v"] $ Logic.not $ Sets.member (var "k") (var "names")) (var "s"),
         "rewriteBinding">: lambda "b" $ Core.letBinding
           (Core.letBindingName $ var "b")

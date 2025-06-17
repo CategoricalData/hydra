@@ -75,11 +75,15 @@ var v = TTerm $ Terms.var v
 
 -- * Functions
 
-asFunction :: (TTerm a -> TTerm b) -> TTerm (a -> b)
-asFunction f = case (unTTerm $ f $ var "x") of
+unaryFunction :: (TTerm a -> TTerm b) -> TTerm (a -> b)
+unaryFunction f = case (unTTerm $ f $ var "x") of
   TermApplication (Application lhs _) -> TTerm lhs
   TermOptional (Just _) -> primitive _optionals_pure
   TermUnion (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
+
+binaryFunction :: (TTerm a -> TTerm b -> TTerm c) -> TTerm (a -> b -> c)
+binaryFunction f = case (unTTerm $ f (var "x") (var "y")) of
+  TermApplication (Application (TermApplication (Application lhs _)) _) -> TTerm lhs
 
 -- | Compose two functions (g then f)
 -- Example: compose (var "stringLength") (var "toString")

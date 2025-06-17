@@ -43,3 +43,6 @@ typeDefinitionType td = project _TypeDefinition _TypeDefinition_type @@ td
 
 unFileExtension :: TTerm FileExtension -> TTerm String
 unFileExtension fe = unwrap _FileExtension @@ fe
+
+unNamespace :: TTerm Namespace -> TTerm String
+unNamespace ns = unwrap _Namespace @@ ns
