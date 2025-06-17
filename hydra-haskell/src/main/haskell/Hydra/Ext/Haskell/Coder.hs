@@ -186,9 +186,7 @@ encodeType :: HaskellNamespaces -> Type -> Flow Graph H.Type
 encodeType namespaces typ = withTrace "encode type" $ case stripType typ of
     TypeApplication (ApplicationType lhs rhs) -> toTypeApplication <$> CM.sequence [encode lhs, encode rhs]
     TypeFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.FunctionType <$> encode dom <*> encode cod)
-    TypeForall (ForallType (Name v) body) -> toTypeApplication <$> CM.sequence [
-      encode body,
-      pure $ H.TypeVariable $ simpleName v]
+    TypeForall (ForallType (Name v) body) -> encode body
     TypeList lt -> H.TypeList <$> encode lt
     TypeLiteral lt -> H.TypeVariable . rawName <$> case lt of
       LiteralTypeBoolean -> pure "Bool"
