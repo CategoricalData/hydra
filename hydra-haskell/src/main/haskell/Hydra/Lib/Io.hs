@@ -5,6 +5,7 @@ module Hydra.Lib.Io (
   showFloat,
   showGraph,
   showInteger,
+  showList,
   showLiteral,
   showTerm,
   showType,
@@ -29,6 +30,7 @@ import qualified Hydra.Json as Json
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
+import Prelude hiding (showList)
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
@@ -69,6 +71,9 @@ showInteger iv = case iv of
   IntegerValueUint16 v -> show v
   IntegerValueUint32 v -> show v
   IntegerValueUint64 v -> show v
+
+showList :: (a -> String) -> [a] -> String
+showList f xs = "[" ++ (L.intercalate ", " $ fmap f xs) ++ "]"
 
 showLiteral :: Literal -> String
 showLiteral l = case l of
