@@ -13,6 +13,9 @@ showFloat = primitive1 _io_showFloat
 showInteger :: TTerm IntegerValue -> TTerm String
 showInteger = primitive1 _io_showInteger
 
+showList :: TTerm (a -> String) -> TTerm [a] -> TTerm String
+showList showElem xs = primitive2 _io_showList showElem xs
+
 showLiteral :: TTerm Literal -> TTerm String
 showLiteral = primitive1 _io_showLiteral
 

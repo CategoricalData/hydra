@@ -162,17 +162,31 @@ _hydra_lib_io = Namespace "hydra.lib.io"
 
 _io_showFloat = qname _hydra_lib_io "showFloat" :: Name
 _io_showInteger = qname _hydra_lib_io "showInteger" :: Name
+_io_showList = qname _hydra_lib_io "showList" :: Name
 _io_showLiteral = qname _hydra_lib_io "showLiteral" :: Name
 _io_showTerm = qname _hydra_lib_io "showTerm" :: Name
 _io_showType = qname _hydra_lib_io "showType" :: Name
 
 hydraLibIo :: Library
 hydraLibIo = standardLibrary _hydra_lib_io [
-    prim1 _io_showFloat Io.showFloat [] floatValue string,
-    prim1 _io_showInteger Io.showInteger [] integerValue string,
-    prim1 _io_showLiteral Io.showLiteral [] literal string,
-    prim1 _io_showTerm Io.showTerm [] term string,
-    prim1 _io_showType Io.showType [] type_ string]
+    prim1       _io_showFloat      Io.showFloat          []    floatValue string,
+    prim1       _io_showInteger    Io.showInteger        []    integerValue string,
+    prim2Interp _io_showList       (Just showListInterp) ["x"] (function x string) (list x) string,
+    prim1       _io_showLiteral    Io.showLiteral        []    literal string,
+    prim1       _io_showTerm       Io.showTerm           []    term string,
+    prim1       _io_showType       Io.showType           []    type_ string]
+  where
+    x = variable "x"
+
+showListInterp :: Term -> Term -> Flow Graph Term
+showListInterp fun lstRaw = do
+  lst <- Expect.list Flows.pure lstRaw
+  return $ Terms.apply (Terms.primitive _lists_concat) $ Terms.list [
+    Terms.string "[",
+    Terms.applyAll (Terms.primitive _lists_intercalate) [
+      Terms.string ", ",
+      Terms.applyAll (Terms.primitive _lists_map) [fun, Terms.list lst]],
+    Terms.string "]"]
 
 -- * hydra.lib.lists primitives
 
@@ -256,7 +270,7 @@ applyInterp funs' args' = do
 bindInterp :: Term -> Term -> Flow Graph Term
 bindInterp args' fun = do
     args <- Expect.list Prelude.pure args'
-    return $ Terms.apply (Terms.primitive $ Name "hydra.lib.lists.concat") (Terms.list $ Terms.apply fun <$> args)
+    return $ Terms.apply (Terms.primitive _lists_concat) (Terms.list $ Terms.apply fun <$> args)
 
 -- | Interpreted implementation of hydra.lib.lists.map
 mapInterp :: Term -> Term -> Flow Graph Term
