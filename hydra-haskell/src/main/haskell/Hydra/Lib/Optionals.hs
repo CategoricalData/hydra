@@ -32,6 +32,9 @@ isNothing = Y.isNothing
 map :: (a -> b) -> Y.Maybe a -> Y.Maybe b
 map = fmap
 
+mapMaybe :: (a -> Y.Maybe b) -> [a] -> [b]
+mapMaybe = Y.mapMaybe
+
 maybe :: b -> (a -> b) -> Y.Maybe a -> b
 maybe = Y.maybe
 

@@ -26,6 +26,9 @@ filter = primitive2 _maps_filter
 filterWithKey :: TTerm (k -> v -> Bool) -> TTerm (Map k v) -> TTerm (Map k v)
 filterWithKey = primitive2 _maps_filterWithKey
 
+findWithDefault :: TTerm v -> TTerm k -> TTerm (Map k v) -> TTerm v
+findWithDefault = primitive3 _maps_findWithDefault
+
 fromList :: TTerm [(k, v)] -> TTerm (Map k v)
 fromList = primitive1 _maps_fromList
 
@@ -43,6 +46,9 @@ map = primitive2 _maps_map
 
 mapKeys :: TTerm (k1 -> k2) -> TTerm (Map k1 v) -> TTerm (Map k2 v)
 mapKeys = primitive2 _maps_mapKeys
+
+member :: TTerm k -> TTerm (Map k v) -> TTerm Bool
+member = primitive2 _maps_member
 
 null :: TTerm (Map k v) -> TTerm Bool
 null = primitive1 _maps_null
