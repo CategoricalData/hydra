@@ -5,7 +5,7 @@ module Hydra.SortingSpec where
 
 import qualified Test.Hspec as H
 
-import Hydra.Staging.Sorting
+import Hydra.Sorting
 
 
 checkSort :: [(Int, [Int])] -> Either [[Int]] [Int] -> H.Expectation

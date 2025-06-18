@@ -19,7 +19,7 @@ import Hydra.Staging.CoreDecoding
 import Hydra.Lexical
 import Hydra.Staging.Rewriting
 import Hydra.Staging.Schemas
-import Hydra.Staging.Sorting
+import Hydra.Sorting
 import Hydra.Strip
 import Hydra.Substitution
 import Hydra.Unification

@@ -26,6 +26,15 @@ hydraTopologyModule = Module ns elements [] [hydraCoreModule] $
 
       def "Graph" $ Types.map (topo "Vertex") (list $ topo "Vertex"),
 
+      -- Note: useful, but currently unused
+      def "OrderingIsomorphism" $ forAlls ["a"] $ record [
+        "encode">:
+          doc "Mapping from source ordering to target ordering" $
+          list (var "a") --> list (var "a"),
+        "decode">:
+          doc "Mapping from target ordering to source ordering" $
+          list (var "a") --> list (var "a")],
+
       def "TarjanState" $ record [
         "counter">:
           doc "Next available index for vertices in the DFS traversal"

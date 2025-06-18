@@ -44,6 +44,12 @@ caseConventionPascal = unitVariant _CaseConvention _CaseConvention_pascal
 caseConventionLowerSnake = unitVariant _CaseConvention _CaseConvention_lowerSnake
 caseConventionUpperSnake = unitVariant _CaseConvention _CaseConvention_upperSnake
 
+eitherLeft :: TTerm a -> TTerm (Either_ a b)
+eitherLeft = variant _Either _Either_left
+
+eitherRight :: TTerm b -> TTerm (Either_ a b)
+eitherRight = variant _Either _Either_right
+
 eliminationVariant :: EliminationVariant -> TTerm EliminationVariant
 eliminationVariant v = unitVariant _EliminationVariant $ case v of
   EliminationVariantProduct -> _EliminationVariant_product

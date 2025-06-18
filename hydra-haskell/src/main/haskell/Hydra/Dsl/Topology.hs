@@ -2,11 +2,18 @@ module Hydra.Dsl.Topology where
 
 import Hydra.Kernel
 import Hydra.Dsl.Phantoms
-import Hydra.Topology
+import Hydra.Topology as Topology
 
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+
+orderingIsomorphism :: TTerm ([a] -> [a])
+                  -> TTerm ([a] -> [a])
+                  -> TTerm (Topology.OrderingIsomorphism a)
+orderingIsomorphism encode decode = record _OrderingIsomorphism [
+    _OrderingIsomorphism_encode>>: encode,
+    _OrderingIsomorphism_decode>>: decode]
 
 tarjanState :: TTerm Int
             -> TTerm (M.Map Vertex Int)

@@ -41,7 +41,7 @@ module Hydra.Kernel (
   module Hydra.Staging.Rewriting,
   module Hydra.Staging.Schemas,
   module Hydra.Serialization,
-  module Hydra.Staging.Sorting,
+  module Hydra.Sorting,
   module Hydra.Staging.TermAdapters,
   module Hydra.Strip,
   module Hydra.Substitution,
@@ -92,7 +92,7 @@ import Hydra.Staging.Reduction
 import Hydra.Staging.Rewriting
 import Hydra.Staging.Schemas
 import Hydra.Serialization
-import Hydra.Staging.Sorting
+import Hydra.Sorting
 import Hydra.Staging.TermAdapters
 import Hydra.Strip
 import Hydra.Substitution

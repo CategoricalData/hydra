@@ -25,6 +25,7 @@ import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.TTerms          as TTerms
 import qualified Hydra.Dsl.TTypes          as TTypes
 import qualified Hydra.Dsl.Terms           as Terms
+import qualified Hydra.Dsl.Topology        as Topology
 import qualified Hydra.Dsl.Types           as Types
 import Hydra.Kernel
 import           Hydra.Sources.Tier1.Coders
