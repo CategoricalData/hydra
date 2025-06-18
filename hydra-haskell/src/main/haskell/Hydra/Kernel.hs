@@ -1,6 +1,6 @@
 -- | A proxy for the Hydra kernel, i.e. the code which must be present in every Hydra implementation, and can be imported as a unit.
 
--- Note: Hydra.Ast, Hydra.Grammar, and Hydra.GrammarToModule are part of the kernel,
+-- Note: Hydra.Ast, Hydra.Grammar, Hydra.GrammarToModule, and Hydra.Topology are part of the kernel,
 --       but they are not default imports because the names of their types clash with those of other types.
 module Hydra.Kernel (
   module Hydra.Accessors,
@@ -46,6 +46,7 @@ module Hydra.Kernel (
   module Hydra.Strip,
   module Hydra.Substitution,
   module Hydra.Tools.Debug,
+--  module Hydra.Topology,
   module Hydra.Typing,
   module Hydra.Unification,
   module Hydra.Variants,
@@ -96,6 +97,7 @@ import Hydra.Staging.TermAdapters
 import Hydra.Strip
 import Hydra.Substitution
 import Hydra.Tools.Debug
+--import Hydra.Topology
 import Hydra.Typing
 import Hydra.Unification
 import Hydra.Variants
