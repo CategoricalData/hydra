@@ -61,6 +61,7 @@ adjacencyListsToGraphDef = tarjanDefinition "adjacencyListsToGraph" $
   doc ("Given a list of adjacency lists represented as (key, [key]) pairs,"
     <> " construct a graph along with a function mapping each vertex (an Int)"
     <> " back to its original key.") $
+  withOrd "t0" $
   lambda "edges0" $ lets [
     "sortedEdges">: Lists.sortOn (unaryFunction first) (var "edges0"),
     "indexedEdges">: Lists.zip (Math.rangeInt32 (int32 0) (Lists.length $ var "sortedEdges")) (var "sortedEdges"),
@@ -85,7 +86,7 @@ adjacencyListsToGraphDef = tarjanDefinition "adjacencyListsToGraph" $
         "neighbors">: second $ var "kNeighbors"]
         $ pair (var "v") (Optionals.mapMaybe (lambda "k" $ Maps.lookup (var "k") (var "keyToVertex")) (var "neighbors")))
       (var "indexedEdges"),
-    "vertexToKey">: lambda "v" $ Maps.lookup (var "v") (var "vertexMap")]
+    "vertexToKey">: lambda "v" $ Optionals.fromJust $ Maps.lookup (var "v") (var "vertexMap")]
     $ pair (var "graph") (var "vertexToKey")
 
 initialStateDef :: TElement TarjanState
@@ -122,15 +123,13 @@ strongConnectDef = tarjanDefinition "strongConnect" $
     Flows.bind (ref getStateDef) $
       lambda "st" $ lets [
         "i">: Topology.tarjanStateCounter $ var "st",
-        "newSt">: Topology.tarjanStateWithCounter
-          (Topology.tarjanStateWithIndices
-            (Topology.tarjanStateWithLowLinks
-              (Topology.tarjanStateWithStack
-                (Topology.tarjanStateWithOnStack (var "st") (Sets.insert (var "v") (Topology.tarjanStateOnStack $ var "st")))
-                (Lists.cons (var "v") (Topology.tarjanStateStack $ var "st")))
-              (Maps.insert (var "v") (var "i") (Topology.tarjanStateLowLinks $ var "st")))
-            (Maps.insert (var "v") (var "i") (Topology.tarjanStateIndices $ var "st")))
-          (Math.add (var "i") (int32 1)),
+        "newSt">: Topology.tarjanState
+          (Math.add (var "i") (int32 1))
+          (Maps.insert (var "v") (var "i") (Topology.tarjanStateIndices $ var "st"))
+          (Maps.insert (var "v") (var "i") (Topology.tarjanStateLowLinks $ var "st"))
+          (Lists.cons (var "v") (Topology.tarjanStateStack $ var "st"))
+          (Sets.insert (var "v") (Topology.tarjanStateOnStack $ var "st"))
+          (Topology.tarjanStateSccs $ var "st"),
         "neighbors">: Maps.findWithDefault (list []) (var "v") (var "graph"),
         "processNeighbor">: lambda "w" $
           Flows.bind (ref getStateDef) $

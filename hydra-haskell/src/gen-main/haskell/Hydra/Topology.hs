@@ -12,6 +12,19 @@ type Graph = (M.Map Vertex [Vertex])
 
 _Graph = (Core.Name "hydra.topology.Graph")
 
+data OrderingIsomorphism a = 
+  OrderingIsomorphism {
+    -- | Mapping from source ordering to target ordering
+    orderingIsomorphismEncode :: ([a] -> [a]),
+    -- | Mapping from target ordering to source ordering
+    orderingIsomorphismDecode :: ([a] -> [a])}
+
+_OrderingIsomorphism = (Core.Name "hydra.topology.OrderingIsomorphism")
+
+_OrderingIsomorphism_encode = (Core.Name "encode")
+
+_OrderingIsomorphism_decode = (Core.Name "decode")
+
 data TarjanState = 
   TarjanState {
     -- | Next available index for vertices in the DFS traversal

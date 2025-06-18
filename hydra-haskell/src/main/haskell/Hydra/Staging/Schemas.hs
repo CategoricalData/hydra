@@ -17,7 +17,7 @@ import Hydra.Mantle
 import Hydra.Module
 import Hydra.Lexical
 import Hydra.Staging.Rewriting
-import Hydra.Staging.Sorting
+import Hydra.Sorting
 import Hydra.Flows
 import Hydra.Rewriting
 import Hydra.Errors

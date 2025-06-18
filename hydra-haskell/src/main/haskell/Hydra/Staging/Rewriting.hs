@@ -13,7 +13,7 @@ import Hydra.Graph
 import Hydra.Module
 import Hydra.Lexical
 import Hydra.Mantle
-import Hydra.Staging.Sorting
+import Hydra.Sorting
 import Hydra.Rewriting
 import Hydra.Lexical
 import Hydra.Tools.Debug
@@ -399,6 +399,9 @@ topologicalSortBindings bindingMap = fmap (fmap toPair) (topologicalSortComponen
       _ -> False
 
 topologicalSortElements :: [Element] -> Either [[Name]] [Name]
-topologicalSortElements els = topologicalSort $ adjlist <$> els
+topologicalSortElements els = toEither $ topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames False True True $ elementTerm e)
+    toEither e = case e of
+       EitherLeft l -> Left l
+       EitherRight r -> Right r

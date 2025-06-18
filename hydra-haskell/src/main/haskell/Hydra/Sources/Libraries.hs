@@ -492,7 +492,7 @@ hydraLibOptionals = standardLibrary _hydra_lib_optionals [
     prim1       _optionals_isJust    Optionals.isJust          ["x"]           (optional x) boolean,
     prim1       _optionals_isNothing Optionals.isNothing       ["x"]           (optional x) boolean,
     prim2Interp _optionals_map       (Just optionalsMapInterp) ["x", "y"]      (function x y) (optional x) (optional y),
-    prim2Interp _optionals_mapMaybe  Nothing                   ["x", "y"]      (function x y) (list x) (list y),
+    prim2Interp _optionals_mapMaybe  Nothing                   ["x", "y"]      (function x $ optional y) (list x) (list y),
     prim3Interp _optionals_maybe     (Just maybeInterp)        ["x", "y"]      y (function x y) (optional x) y,
     prim1       _optionals_pure      Optionals.pure            ["x"]           x (optional x)]
   where
