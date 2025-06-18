@@ -42,8 +42,9 @@ key_preserveFieldName = (Core.Name "_preserveFieldName")
 key_type :: Core.Name
 key_type = (Core.Name "type")
 
+-- | The maximum value of a 32-bit integer
 maxInt32 :: Int
-maxInt32 = maxBound
+maxInt32 = 9223372036854775807
 
 -- | A placeholder name for row types as they are being constructed
 placeholderName :: Core.Name
