@@ -6,7 +6,7 @@ import Hydra.Kernel
 import Hydra.Pg.Mapping
 import Hydra.Ext.Pg.TermsToElements
 import qualified Hydra.Pg.Model as PG
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Control.Monad as CM

@@ -7,8 +7,15 @@ import Hydra.Dsl.Lib.Sets as Sets
 import Hydra.Dsl.Mantle as Mantle
 import qualified Hydra.Dsl.TTypes as T
 
+import qualified Data.Map as M
 import qualified Data.Set as S
 
+
+adapterContext :: TTerm Graph -> TTerm Language -> TTerm (M.Map Name (Adapter AdapterContext AdapterContext Type Type Term Term)) -> TTerm AdapterContext
+adapterContext graph language adapters = Phantoms.record _AdapterContext [
+  _AdapterContext_graph>>: graph,
+  _AdapterContext_language>>: language,
+  _AdapterContext_adapters>>: adapters]
 
 coderDirectionEncode :: TTerm CoderDirection
 coderDirectionEncode = unitVariant _CoderDirection _CoderDirection_encode

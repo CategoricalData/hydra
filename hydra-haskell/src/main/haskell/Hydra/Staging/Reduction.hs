@@ -19,7 +19,7 @@ import Hydra.Rewriting
 import Hydra.Lexical
 import Hydra.Lib.Io
 import Hydra.Flows
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Control.Monad as CM

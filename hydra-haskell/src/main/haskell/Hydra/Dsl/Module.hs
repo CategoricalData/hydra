@@ -4,6 +4,12 @@ import Hydra.Kernel
 import Hydra.Dsl.Phantoms
 
 
+definitionTerm :: TTerm TermDefinition -> TTerm Definition
+definitionTerm = variant _Definition _Definition_term
+
+definitionType :: TTerm TypeDefinition -> TTerm Definition
+definitionType = variant _Definition _Definition_type
+
 module_ :: TTerm Namespace -> TTerm [Element] -> TTerm [Module] -> TTerm [Module] -> TTerm (Maybe String) -> TTerm Module
 module_ ns elems termDeps typeDeps desc = record _Module [
   _Module_namespace>>: ns,
@@ -11,6 +17,21 @@ module_ ns elems termDeps typeDeps desc = record _Module [
   _Module_termDependencies>>: termDeps,
   _Module_typeDependencies>>: typeDeps,
   _Module_description>>: desc]
+
+moduleNamespace :: TTerm Module -> TTerm Namespace
+moduleNamespace m = project _Module _Module_namespace @@ m
+
+moduleElements :: TTerm Module -> TTerm [Element]
+moduleElements m = project _Module _Module_elements @@ m
+
+moduleTermDependencies :: TTerm Module -> TTerm [Module]
+moduleTermDependencies m = project _Module _Module_termDependencies @@ m
+
+moduleTypeDependencies :: TTerm Module -> TTerm [Module]
+moduleTypeDependencies m = project _Module _Module_typeDependencies @@ m
+
+moduleDescription :: TTerm Module -> TTerm (Maybe String)
+moduleDescription m = project _Module _Module_description @@ m
 
 namespace :: TTerm String -> TTerm Namespace
 namespace ns = wrap _Namespace ns
@@ -26,6 +47,12 @@ qualifiedNameLocal qn = project _QualifiedName _QualifiedName_local @@ qn
 qualifiedNameNamespace :: TTerm QualifiedName -> TTerm (Maybe Namespace)
 qualifiedNameNamespace qn = project _QualifiedName _QualifiedName_namespace @@ qn
 
+termDefinition :: TTerm Name -> TTerm Term -> TTerm Type -> TTerm TermDefinition
+termDefinition name term type_ = record _TermDefinition [
+  _TermDefinition_name>>: name,
+  _TermDefinition_term>>: term,
+  _TermDefinition_type>>: type_]
+
 termDefinitionName :: TTerm TermDefinition -> TTerm Name
 termDefinitionName td = project _TermDefinition _TermDefinition_name @@ td
 
@@ -34,6 +61,11 @@ termDefinitionTerm td = project _TermDefinition _TermDefinition_term @@ td
 
 termDefinitionType :: TTerm TermDefinition -> TTerm Type
 termDefinitionType td = project _TermDefinition _TermDefinition_type @@ td
+
+typeDefinition :: TTerm Name -> TTerm Type -> TTerm TypeDefinition
+typeDefinition name typ = record _TypeDefinition [
+  _TypeDefinition_name>>: name,
+  _TypeDefinition_type>>: typ]
 
 typeDefinitionName :: TTerm TypeDefinition -> TTerm Name
 typeDefinitionName td = project _TypeDefinition _TypeDefinition_name @@ td

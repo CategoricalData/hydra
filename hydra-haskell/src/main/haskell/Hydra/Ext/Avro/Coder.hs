@@ -9,7 +9,7 @@ module Hydra.Ext.Avro.Coder (
 import Hydra.Kernel
 import Hydra.Ext.Json.Eliminate
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
@@ -57,7 +57,7 @@ avroHydraAdapter schema = case schema of
             coderEncode = \(Json.ValueObject m) -> Terms.map . M.fromList <$> (CM.mapM pairToHydra $ M.toList m),
             coderDecode = \m -> do
               env <- getState
-              mp <- withEmptyGraph $ Expect.map Expect.string (\t -> withState env $ coderDecode (adapterCoder ad) t) m
+              mp <- withEmptyGraph $ Expect.map_ Expect.string (\t -> withState env $ coderDecode (adapterCoder ad) t) m
               return $ Json.ValueObject mp}
       return $ Adapter (adapterIsLossy ad) schema (Types.map Types.string $ adapterTarget ad) coder
     Avro.SchemaNamed n -> do
