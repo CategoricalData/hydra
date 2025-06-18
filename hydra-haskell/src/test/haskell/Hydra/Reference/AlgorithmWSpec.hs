@@ -11,7 +11,7 @@ import Hydra.Kernel
 import Hydra.Sources.Libraries
 import Hydra.TestUtils
 import Hydra.TestData
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Types as Types

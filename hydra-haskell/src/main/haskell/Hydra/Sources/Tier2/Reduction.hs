@@ -33,7 +33,7 @@ import qualified Data.Map                  as M
 import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 import Hydra.Sources.Libraries
 import Hydra.Sources.Tier2.Arity
 import Hydra.Sources.Tier2.Lexical

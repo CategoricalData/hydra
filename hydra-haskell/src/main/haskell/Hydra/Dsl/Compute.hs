@@ -27,6 +27,13 @@ adapterTarget a = project _Adapter _Adapter_target @@ a
 adapterCoder :: TTerm (Adapter s1 s2 t1 t2 v1 v2) -> TTerm (Coder s1 s2 v1 v2)
 adapterCoder a = project _Adapter _Adapter_coder @@ a
 
+adapterWithCoder :: TTerm (Adapter s1 s2 t1 t2 v1 v2) -> TTerm (Coder s1 s2 v1 v2) -> TTerm (Adapter s1 s2 t1 t2 v1 v2)
+adapterWithCoder a coder = adapter
+  (Hydra.Dsl.Compute.adapterIsLossy a)
+  (Hydra.Dsl.Compute.adapterSource a)
+  (Hydra.Dsl.Compute.adapterTarget a)
+  coder
+
 coder :: TTerm (v1 -> Flow s1 v2) -> TTerm (v2 -> Flow s2 v1) -> TTerm (Coder s1 s2 v1 v2)
 coder encode decode = record _Coder [
   _Coder_encode>>: encode,

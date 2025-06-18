@@ -28,7 +28,7 @@ import Hydra.Staging.Rewriting
 import Hydra.Rewriting
 import Hydra.Errors
 import qualified Hydra.Lib.Io as Io
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Control.Monad as CM

@@ -8,7 +8,7 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Staging.CoreDecoding
 import Hydra.CoreEncoding
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Lib.Io
@@ -129,7 +129,7 @@ literal = TermCoder (TypeVariable _Literal) $ Coder encode decode
 map :: Ord k => TermCoder k -> TermCoder v -> TermCoder (M.Map k v)
 map keys values = TermCoder (Types.map (termCoderType keys) (termCoderType values)) $ Coder encode decode
   where
-    encode = Expect.map (coderEncode $ termCoderCoder keys) (coderEncode $ termCoderCoder values)
+    encode = Expect.map_ (coderEncode $ termCoderCoder keys) (coderEncode $ termCoderCoder values)
     decode m = Terms.map . M.fromList <$> mapM decodePair (M.toList m)
       where
         decodePair (k, v) = do

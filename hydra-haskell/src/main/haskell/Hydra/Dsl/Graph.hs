@@ -6,6 +6,15 @@ import Hydra.Dsl.Phantoms
 import qualified Data.Map as M
 
 
+comparisonLessThan :: TTerm Comparison
+comparisonLessThan = unitVariant _Comparison _Comparison_lessThan
+
+comparisonEqualTo :: TTerm Comparison
+comparisonEqualTo = unitVariant _Comparison _Comparison_equalTo
+
+comparisonGreaterThan :: TTerm Comparison
+comparisonGreaterThan = unitVariant _Comparison _Comparison_greaterThan
+
 element :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm Element
 element name term mtyp = record _Element [
   _Element_name>>: name,

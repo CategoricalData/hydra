@@ -4,7 +4,7 @@
 module Hydra.Sources.Libraries where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 import Hydra.Dsl.Prims as Prims
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types

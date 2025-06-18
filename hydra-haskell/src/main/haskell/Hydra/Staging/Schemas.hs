@@ -22,7 +22,7 @@ import Hydra.Flows
 import Hydra.Rewriting
 import Hydra.Errors
 import Hydra.Lexical
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Control.Monad as CM

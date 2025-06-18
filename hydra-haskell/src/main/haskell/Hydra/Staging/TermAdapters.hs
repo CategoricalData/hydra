@@ -28,7 +28,7 @@ import Hydra.Dsl.Terms
 import Hydra.Flows
 import Hydra.Errors
 import Hydra.Lexical
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
@@ -159,11 +159,16 @@ optionalToList t@(TypeOptional ot) = do
 
 -- TODO: only tested for type mappings; not yet for types+terms
 passApplication :: TypeAdapter
-passApplication t = do
-  reduced <- withGraphContext $ betaReduceType t
-  ad <- termAdapter reduced
-  return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ bidirectional $
-    \dir term -> encodeDecode dir (adapterCoder ad) term
+passApplication t@(TypeApplication (ApplicationType lhs rhs)) = do
+--  reduced <- withGraphContext $ betaReduceType t
+--  ad <- termAdapter reduced
+  lhsAd <- termAdapter lhs
+  rhsAd <- termAdapter rhs
+  return $ Adapter (adapterIsLossy lhsAd || adapterIsLossy rhsAd) t
+    (TypeApplication (ApplicationType (adapterTarget lhsAd) (adapterTarget rhsAd))) $ bidirectional $
+--  return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ bidirectional $
+--    \dir term -> encodeDecode dir (adapterCoder ad) term
+    \dir term -> encodeDecode dir (adapterCoder lhsAd) term
 
 passFunction :: TypeAdapter
 passFunction t@(TypeFunction (FunctionType dom cod)) = do
