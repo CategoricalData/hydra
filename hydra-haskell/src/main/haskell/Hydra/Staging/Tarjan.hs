@@ -11,24 +11,13 @@ module Hydra.Staging.Tarjan (
 import Hydra.Compute
 import Hydra.Flows
 import Hydra.Errors
+import Hydra.Topology
 
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Maybe as Y
-
-type Vertex = Int
-type Graph  = M.Map Vertex [Vertex]
-
-data TarjanState = TarjanState
-  { indexCounter :: Int            -- next available index
-  , indices      :: M.Map Vertex Int -- vertex -> index
-  , lowlinks     :: M.Map Vertex Int -- vertex -> lowest index reachable
-  , stack        :: [Vertex]         -- current DFS stack (vertices in reverse order)
-  , onStack      :: S.Set Vertex    -- quick lookup for vertices on the stack
-  , sccs         :: [[Vertex]]       -- accumulated strongly connected components
-  }
 
 -- | Given a list of adjacency lists represented as (key, [key]) pairs,
 --   construct a graph along with a function mapping each vertex (an Int)
@@ -57,10 +46,10 @@ popStackUntil v = go []
   where
     go acc = do
       st <- getState
-      case stack st of
+      case tarjanStateStack st of
         []     -> error "popStackUntil: empty stack"
         (x:xs) -> do
-          modify $ \s -> s { stack = xs, onStack = S.delete x (onStack s) }
+          modify $ \s -> s { tarjanStateStack = xs, tarjanStateOnStack = S.delete x (tarjanStateOnStack s) }
           let acc' = x : acc
           if x == v
             then return (reverse acc')
@@ -70,43 +59,43 @@ popStackUntil v = go []
 strongConnect :: Graph -> Vertex -> Flow TarjanState ()
 strongConnect graph v = do
   st <- getState
-  let i = indexCounter st
-  modify $ \s -> s { indexCounter = i + 1
-                       , indices      = M.insert v i (indices s)
-                       , lowlinks     = M.insert v i (lowlinks s)
-                       , stack        = v : stack s
-                       , onStack      = S.insert v (onStack s)
+  let i = tarjanStateCounter st
+  modify $ \s -> s { tarjanStateCounter = i + 1
+                       , tarjanStateIndices      = M.insert v i (tarjanStateIndices s)
+                       , tarjanStateLowLinks     = M.insert v i (tarjanStateLowLinks s)
+                       , tarjanStateStack        = v : tarjanStateStack s
+                       , tarjanStateOnStack      = S.insert v (tarjanStateOnStack s)
                        }
   let neighbors = M.findWithDefault [] v graph
   CM.forM_ neighbors $ \w -> do
     st' <- getState
-    if not (M.member w (indices st'))
+    if not (M.member w (tarjanStateIndices st'))
       then do
          strongConnect graph w
          stAfter <- getState
-         let low_v = M.findWithDefault maxBound v (lowlinks stAfter)
-             low_w = M.findWithDefault maxBound w (lowlinks stAfter)
-         modify $ \s -> s { lowlinks = M.insert v (min low_v low_w) (lowlinks s) }
-      else if S.member w (onStack st')
+         let low_v = M.findWithDefault maxBound v (tarjanStateLowLinks stAfter)
+             low_w = M.findWithDefault maxBound w (tarjanStateLowLinks stAfter)
+         modify $ \s -> s { tarjanStateLowLinks = M.insert v (min low_v low_w) (tarjanStateLowLinks s) }
+      else if S.member w (tarjanStateOnStack st')
         then do
-         let low_v = M.findWithDefault maxBound v (lowlinks st')
-             idx_w = M.findWithDefault maxBound w (indices st')
-         modify $ \s -> s { lowlinks = M.insert v (min low_v idx_w) (lowlinks s) }
+         let low_v = M.findWithDefault maxBound v (tarjanStateLowLinks st')
+             idx_w = M.findWithDefault maxBound w (tarjanStateIndices st')
+         modify $ \s -> s { tarjanStateLowLinks = M.insert v (min low_v idx_w) (tarjanStateLowLinks s) }
         else return ()
   stFinal <- getState
-  let low_v = M.findWithDefault maxBound v (lowlinks stFinal)
-      idx_v = M.findWithDefault maxBound v (indices stFinal)
+  let low_v = M.findWithDefault maxBound v (tarjanStateLowLinks stFinal)
+      idx_v = M.findWithDefault maxBound v (tarjanStateIndices stFinal)
   CM.when (low_v == idx_v) $ do
     comp <- popStackUntil v
-    modify $ \s -> s { sccs = comp : sccs s }
+    modify $ \s -> s { tarjanStateSccs = comp : tarjanStateSccs s }
 
 -- | Compute the strongly connected components of the given graph.
 --   The components are returned in reverse topological order.
 stronglyConnectedComponents :: Graph -> [[Vertex]]
-stronglyConnectedComponents graph = reverse $ fmap L.sort $ sccs finalState
+stronglyConnectedComponents graph = reverse $ fmap L.sort $ tarjanStateSccs finalState
   where
     verts = M.keys graph
     finalState = exec (mapM_ (\v -> do
-                      visited <- (M.member v . indices) <$> getState
+                      visited <- (M.member v . tarjanStateIndices) <$> getState
                       if not visited then strongConnect graph v else return ()
                     ) verts) initialState
