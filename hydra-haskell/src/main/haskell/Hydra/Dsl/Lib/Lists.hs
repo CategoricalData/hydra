@@ -75,6 +75,12 @@ reverse = primitive1 _lists_reverse
 safeHead :: TTerm [a] -> TTerm (Maybe a)
 safeHead = primitive1 _lists_safeHead
 
+sort :: TTerm [a] -> TTerm [a]
+sort = primitive1 _lists_sort
+
+sortOn :: TTerm (a -> b) -> TTerm [a] -> TTerm [a]
+sortOn = primitive2 _lists_sortOn
+
 span :: TTerm (a -> Bool) -> TTerm [a] -> TTerm ([a], [a])
 span = primitive2 _lists_span
 

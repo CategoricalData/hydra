@@ -33,6 +33,9 @@ isNothing = primitive1 _optionals_isNothing
 map :: TTerm (a -> b) -> TTerm (Maybe a) -> TTerm (Maybe b)
 map = primitive2 _optionals_map
 
+mapMaybe :: TTerm (a -> Maybe b) -> TTerm [a] -> TTerm [b]
+mapMaybe = primitive2 _optionals_mapMaybe
+
 maybe :: TTerm b -> TTerm (a -> b) -> TTerm (Maybe a) -> TTerm b
 maybe = primitive3 _optionals_maybe
 

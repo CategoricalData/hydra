@@ -80,6 +80,12 @@ safeHead :: [a] -> Maybe a
 safeHead [] = Nothing
 safeHead (x:_) = Just x
 
+sort :: Ord a => [a] -> [a]
+sort = L.sort
+
+sortOn :: Ord b => (a -> b) -> [a] -> [a]
+sortOn = L.sortOn
+
 span :: (a -> Bool) -> [a] -> ([a], [a])
 span = L.span
 

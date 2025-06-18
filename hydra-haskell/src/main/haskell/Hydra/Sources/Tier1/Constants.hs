@@ -43,6 +43,7 @@ hydraConstantsModule = Module (Namespace "hydra.constants") elements [] [hydraCo
      el key_minLengthDef,
      el key_preserveFieldNameDef,
      el key_typeDef,
+     el maxInt32Def,
      el placeholderNameDef,
      el maxTraceDepthDef]
 
@@ -68,6 +69,11 @@ key_maxLengthDef = annotationKeyDef "_maxLength" Nothing
 key_minLengthDef = annotationKeyDef "_minLength" Nothing
 key_preserveFieldNameDef = annotationKeyDef "_preserveFieldName" Nothing
 key_typeDef = annotationKeyDef "type" Nothing
+
+maxInt32Def :: TElement Int
+maxInt32Def = constantsDefinition "maxInt32" $
+  doc "The maximum value of a 32-bit integer" $
+  int32 maxBound
 
 placeholderNameDef :: TElement Name
 placeholderNameDef = constantsDefinition "placeholderName" $

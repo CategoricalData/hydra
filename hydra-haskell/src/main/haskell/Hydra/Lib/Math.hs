@@ -18,6 +18,9 @@ mul x y = x * y
 div :: Int -> Int -> Int
 div = Prelude.div
 
+min :: Int -> Int -> Int
+min = Prelude.min
+
 mod :: Int -> Int -> Int
 mod = Prelude.mod
 
