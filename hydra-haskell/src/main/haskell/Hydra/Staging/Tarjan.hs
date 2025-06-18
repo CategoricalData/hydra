@@ -2,8 +2,6 @@
 --   https://hackage.haskell.org/package/GraphSCC
 
 module Hydra.Staging.Tarjan (
-  Graph,
-  Vertex,
   adjacencyListsToGraph,
   stronglyConnectedComponents
 ) where

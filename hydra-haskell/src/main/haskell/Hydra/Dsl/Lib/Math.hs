@@ -12,6 +12,9 @@ add = primitive2 _math_add
 div :: TTerm Int -> TTerm Int -> TTerm Int
 div = primitive2 _math_div
 
+min :: TTerm Int -> TTerm Int -> TTerm Int
+min = primitive2 _math_min
+
 mod :: TTerm Int -> TTerm Int -> TTerm Int
 mod = primitive2 _math_mod
 

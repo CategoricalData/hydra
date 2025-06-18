@@ -23,6 +23,9 @@ filter = M.filter
 filterWithKey :: Ord k => (k -> v -> Bool) -> M.Map k v -> M.Map k v
 filterWithKey = M.filterWithKey
 
+findWithDefault :: Ord k => v -> k -> M.Map k v -> v
+findWithDefault = M.findWithDefault
+
 fromList :: Ord k => [(k, v)] -> M.Map k v
 fromList = M.fromList
 
@@ -40,6 +43,9 @@ map = fmap
 
 mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> M.Map k1 v -> M.Map k2 v
 mapKeys = M.mapKeys
+
+member :: Ord k => k -> M.Map k v -> Bool
+member = M.member
 
 null :: M.Map k v -> Bool
 null = M.null
