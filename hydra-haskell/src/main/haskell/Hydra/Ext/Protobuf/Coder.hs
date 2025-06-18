@@ -9,7 +9,7 @@ import Hydra.Ext.Protobuf.Serde
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations
 import Hydra.Lib.Io
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

@@ -260,13 +260,15 @@ findOrdVariables :: Type -> S.Set Name
 findOrdVariables = foldOverType TraversalOrderPre fold S.empty
   where
     fold names typ = case typ of
-      TypeMap (MapType kt _) -> case stripType kt of
-        TypeVariable v -> if isTypeVariable v
-          then S.insert v names
-          else names
-        _ -> names
+      TypeMap (MapType kt _) -> tryType names kt
+      TypeSet et -> tryType names et
       _ -> names
     isTypeVariable v = Y.isNothing (namespaceOf v) && L.head (unName v) == 't'
+    tryType names t = case stripType t of
+      TypeVariable v -> if isTypeVariable v
+        then S.insert v names
+        else names
+      _ -> names
 
 getImplicitTypeClasses :: Type -> M.Map Name (S.Set TypeClass)
 getImplicitTypeClasses = M.fromList . fmap toPair . S.toList . findOrdVariables

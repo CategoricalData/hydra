@@ -19,7 +19,7 @@ import Hydra.Flows
 import Hydra.Errors
 import Hydra.Lexical
 import qualified Hydra.Decode as Decode
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.List as L
@@ -82,7 +82,7 @@ getTypeAnnotation key = M.lookup key . typeAnnotationInternal
 getTypeClasses :: Term -> Flow Graph (M.Map Name (S.Set TypeClass))
 getTypeClasses term = case getTermAnnotation key_classes term of
     Nothing -> pure M.empty
-    Just term -> Expect.map coreDecodeName (Expect.set decodeClass) term
+    Just term -> Expect.map_ coreDecodeName (Expect.set decodeClass) term
   where
     decodeClass term = Expect.unitVariant _TypeClass term >>= \fn -> Y.maybe
       (unexpected "type class" $ show term) pure $ M.lookup fn byName

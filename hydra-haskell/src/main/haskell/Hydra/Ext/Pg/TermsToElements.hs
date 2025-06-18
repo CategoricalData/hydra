@@ -7,7 +7,7 @@ module Hydra.Ext.Pg.TermsToElements (
 import Hydra.Kernel
 import Hydra.Pg.Mapping
 import qualified Hydra.Pg.Model as PG
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Control.Monad as CM
@@ -240,7 +240,7 @@ decodeVertexSpec term = withTrace "decode vertex spec" $ matchRecord (\fields ->
 
 matchInjection :: [(Name, Term -> Flow s x)] -> Term -> Flow s x
 matchInjection cases encoded = do
-  mp <- withEmptyGraph (Expect.map (\k -> Name <$> Expect.string k) pure encoded)
+  mp <- withEmptyGraph (Expect.map_ (\k -> Name <$> Expect.string k) pure encoded)
   f <- case M.toList mp of
     [] -> fail "empty injection"
     [(k, v)] -> pure $ Field k v
@@ -251,7 +251,7 @@ matchInjection cases encoded = do
     _ -> fail "duplicate field name in cases"
 
 matchRecord :: (M.Map Name Term -> Flow s x) -> Term -> Flow s x
-matchRecord cons term = withEmptyGraph (Expect.map (\k -> Name <$> Expect.string k) pure term) >>= cons
+matchRecord cons term = withEmptyGraph (Expect.map_ (\k -> Name <$> Expect.string k) pure term) >>= cons
 
 readField fields fname fun = case M.lookup fname fields of
   Nothing -> fail $ "no such field: " ++ unName fname

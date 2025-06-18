@@ -26,7 +26,7 @@ import Hydra.Unification
 import Hydra.Variants
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 
 import qualified Control.Monad as CM
 import qualified Data.Either   as E
