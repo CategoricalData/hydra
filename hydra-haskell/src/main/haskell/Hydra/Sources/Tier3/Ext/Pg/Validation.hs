@@ -142,7 +142,7 @@ validateGraphDef :: TElement (
   -> PG.Graph v
   -> Y.Maybe String)
 validateGraphDef = validationDefinition "validateGraph" $
-  withTypeClasses ordT0 $
+  withOrd "t0" $
   lambda "checkValue" $ lambda "showValue" $ lambda "schema" $ lambda "graph" $ lets [
     "checkVertices">: lets [
       "checkVertex">: lambda "el" $ Optionals.maybe

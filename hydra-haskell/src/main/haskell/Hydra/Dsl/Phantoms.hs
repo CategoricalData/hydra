@@ -336,7 +336,12 @@ docWrapped len = doc . wrapLine len
 firstClassType :: TTerm Type -> TTerm Type
 firstClassType typ = annot key_firstClassType (Just $ Terms.boolean True) typ
 
--- | Associate type classes with a term
--- Example: withTypeClasses (M.fromList [(Name "Ord", S.singleton ShowTC)]) myTerm
+-- | Associate the Ord type class with the inferred type of a term
+-- Example: withOrd "t0" myTerm
+withOrd :: String -> TTerm a -> TTerm a
+withOrd v = withTypeClasses $ M.fromList [(Name v, S.singleton TypeClassOrdering)]
+
+-- | Associate type classes with the inferred type of a term
+-- Example: withTypeClasses (M.fromList [(Name "t0", S.singleton TypeClassOrdering)]) myTerm
 withTypeClasses :: M.Map Name (S.Set TypeClass) -> TTerm a -> TTerm a
 withTypeClasses classes (TTerm term) = TTerm $ setTypeClasses classes term
