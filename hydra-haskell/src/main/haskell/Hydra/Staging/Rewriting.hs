@@ -1,6 +1,9 @@
 -- | Functions for type and term rewriting
 
-module Hydra.Staging.Rewriting where
+module Hydra.Staging.Rewriting (
+  module Hydra.Rewriting,
+  module Hydra.Staging.Rewriting,
+) where
 
 import Hydra.Annotations
 import Hydra.Qnames
@@ -194,51 +197,6 @@ replaceFreeName v rep = rewriteType mapExpr
         else TypeForall $ ForallType v' $ recurse body
       TypeVariable v' -> if v == v' then rep else t
       _ -> recurse t
-
-rewriteTermM :: ((Term -> Flow s Term) -> Term -> (Flow s Term)) -> Term -> Flow s Term
-rewriteTermM f = rewrite fsub f
-  where
-    fsub recurse term = case term of
-        TermAnnotated (AnnotatedTerm ex ma) -> TermAnnotated <$> (AnnotatedTerm <$> recurse ex <*> pure ma)
-        TermApplication (Application lhs rhs) -> TermApplication <$> (Application <$> recurse lhs <*> recurse rhs)
-        TermFunction fun -> TermFunction <$> case fun of
-          FunctionElimination e -> FunctionElimination <$> case e of
-            EliminationProduct tp -> pure $ EliminationProduct tp
-            EliminationRecord p -> pure $ EliminationRecord p
-            EliminationUnion (CaseStatement n def cases) -> do
-              rdef <- case def of
-                Nothing -> pure Nothing
-                Just t -> Just <$> recurse t
-              EliminationUnion <$> (CaseStatement n rdef <$> (CM.mapM forField cases))
-            EliminationWrap name -> pure $ EliminationWrap name
-          FunctionLambda (Lambda v d body) -> FunctionLambda <$> (Lambda v d <$> recurse body)
-          FunctionPrimitive name -> pure $ FunctionPrimitive name
-        TermLet (Let bindings env) -> TermLet <$> (Let <$> (CM.mapM mapBinding bindings) <*> recurse env)
-          where
-            mapBinding (LetBinding k v t) = do
-              v' <- recurse v
-              return $ LetBinding k v' t
-        TermList els -> TermList <$> (CM.mapM recurse els)
-        TermLiteral v -> pure $ TermLiteral v
-        TermMap m -> TermMap <$> (M.fromList <$> CM.mapM forPair (M.toList m))
-          where
-            forPair (k, v) = do
-              km <- recurse k
-              vm <- recurse v
-              return (km, vm)
-        TermOptional m -> TermOptional <$> (CM.mapM recurse m)
-        TermProduct tuple -> TermProduct <$> (CM.mapM recurse tuple)
-        TermRecord (Record n fields) -> TermRecord <$> (Record n <$> (CM.mapM forField fields))
-        TermSet s -> TermSet <$> (S.fromList <$> (CM.mapM recurse $ S.toList s))
-        TermSum (Sum i s trm) -> TermSum <$> (Sum i s <$> recurse trm)
-        TermTyped (TypedTerm term1 type2) -> TermTyped <$> (TypedTerm <$> recurse term1 <*> pure type2)
-        TermUnion (Injection n field) -> TermUnion <$> (Injection n <$> forField field)
-        TermVariable v -> pure $ TermVariable v
-        TermWrap (WrappedTerm name t) -> TermWrap <$> (WrappedTerm name <$> recurse t)
-      where
-        forField f = do
-          t <- recurse (fieldTerm f)
-          return f {fieldTerm = t}
 
 rewriteTermMeta :: (M.Map Name Term -> M.Map Name Term) -> Term -> Term
 rewriteTermMeta mapping = rewriteTerm rewrite

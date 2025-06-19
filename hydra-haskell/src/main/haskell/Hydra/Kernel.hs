@@ -32,7 +32,7 @@ module Hydra.Kernel (
   module Hydra.Query,
   module Hydra.Rewriting,
   module Hydra.Staging.Adapters,
-  module Hydra.Staging.Annotations,
+  module Hydra.Annotations,
   module Hydra.CoreDecoding,
 --  module Hydra.GrammarToModule,
   module Hydra.Staging.Inference,
@@ -82,7 +82,7 @@ import Hydra.Qnames
 import Hydra.Query
 import Hydra.Rewriting
 import Hydra.Staging.Adapters
-import Hydra.Staging.Annotations
+import Hydra.Annotations
 import Hydra.CoreDecoding
 --import Hydra.GrammarToModule
 import Hydra.Staging.Inference

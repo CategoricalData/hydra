@@ -3,8 +3,10 @@
 module Hydra.Rewriting where
 
 import qualified Hydra.Coders as Coders
+import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Equality as Equality
+import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
@@ -143,6 +145,100 @@ rewriteTerm f =
               Core.injectionTypeName = (Core.injectionTypeName v1),
               Core.injectionField = (forField (Core.injectionField v1))}))
             Core.TermVariable v1 -> (Core.TermVariable v1)) term))
+  in (rewrite fsub f)
+
+rewriteTermM :: (((Core.Term -> Compute.Flow t0 Core.Term) -> Core.Term -> Compute.Flow t0 Core.Term) -> Core.Term -> Compute.Flow t0 Core.Term)
+rewriteTermM f =  
+  let fsub = (\recurse -> \term ->  
+          let forField = (\f -> Flows.map (\t -> Core.Field {
+                  Core.fieldName = (Core.fieldName f),
+                  Core.fieldTerm = t}) (recurse (Core.fieldTerm f))) 
+              forPair = (\kv ->  
+                      let k = (fst kv) 
+                          v = (snd kv)
+                      in (Flows.bind (recurse k) (\km -> Flows.bind (recurse v) (\vm -> Flows.pure (km, vm)))))
+              mapBinding = (\binding ->  
+                      let k = (Core.letBindingName binding) 
+                          v = (Core.letBindingTerm binding)
+                          t = (Core.letBindingType binding)
+                      in (Flows.bind (recurse v) (\v_ -> Flows.pure (Core.LetBinding {
+                        Core.letBindingName = k,
+                        Core.letBindingTerm = v_,
+                        Core.letBindingType = t}))))
+          in ((\x -> case x of
+            Core.TermAnnotated v1 -> (Flows.bind (recurse (Core.annotatedTermSubject v1)) (\ex -> Flows.pure (Core.TermAnnotated (Core.AnnotatedTerm {
+              Core.annotatedTermSubject = ex,
+              Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))))
+            Core.TermApplication v1 -> (Flows.bind (recurse (Core.applicationFunction v1)) (\lhs -> Flows.bind (recurse (Core.applicationArgument v1)) (\rhs -> Flows.pure (Core.TermApplication (Core.Application {
+              Core.applicationFunction = lhs,
+              Core.applicationArgument = rhs})))))
+            Core.TermFunction v1 -> (Flows.bind ((\x -> case x of
+              Core.FunctionElimination v2 -> ((\x -> case x of
+                Core.EliminationProduct v3 -> (Flows.pure (Core.FunctionElimination (Core.EliminationProduct v3)))
+                Core.EliminationRecord v3 -> (Flows.pure (Core.FunctionElimination (Core.EliminationRecord v3)))
+                Core.EliminationUnion v3 ->  
+                  let n = (Core.caseStatementTypeName v3) 
+                      def = (Core.caseStatementDefault v3)
+                      cases = (Core.caseStatementCases v3)
+                  in (Flows.bind (Optionals.maybe (Flows.pure Nothing) (\t -> Flows.map Optionals.pure (recurse t)) def) (\rdef -> Flows.map (\rcases -> Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                    Core.caseStatementTypeName = n,
+                    Core.caseStatementDefault = rdef,
+                    Core.caseStatementCases = rcases}))) (Flows.mapList forField cases)))
+                Core.EliminationWrap v3 -> (Flows.pure (Core.FunctionElimination (Core.EliminationWrap v3)))) v2)
+              Core.FunctionLambda v2 ->  
+                let v = (Core.lambdaParameter v2) 
+                    d = (Core.lambdaDomain v2)
+                    body = (Core.lambdaBody v2)
+                in (Flows.bind (recurse body) (\rbody -> Flows.pure (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = v,
+                  Core.lambdaDomain = d,
+                  Core.lambdaBody = rbody}))))
+              Core.FunctionPrimitive v2 -> (Flows.pure (Core.FunctionPrimitive v2))) v1) (\rfun -> Flows.pure (Core.TermFunction rfun)))
+            Core.TermLet v1 ->  
+              let bindings = (Core.letBindings v1) 
+                  env = (Core.letEnvironment v1)
+              in (Flows.bind (Flows.mapList mapBinding bindings) (\rbindings -> Flows.bind (recurse env) (\renv -> Flows.pure (Core.TermLet (Core.Let {
+                Core.letBindings = rbindings,
+                Core.letEnvironment = renv})))))
+            Core.TermList v1 -> (Flows.bind (Flows.mapList recurse v1) (\rels -> Flows.pure (Core.TermList rels)))
+            Core.TermLiteral v1 -> (Flows.pure (Core.TermLiteral v1))
+            Core.TermMap v1 -> (Flows.bind (Flows.mapList forPair (Maps.toList v1)) (\pairs -> Flows.pure (Core.TermMap (Maps.fromList pairs))))
+            Core.TermOptional v1 -> (Flows.bind (Flows.traverseOptional recurse v1) (\rm -> Flows.pure (Core.TermOptional rm)))
+            Core.TermProduct v1 -> (Flows.map (\rtuple -> Core.TermProduct rtuple) (Flows.mapList recurse v1))
+            Core.TermRecord v1 ->  
+              let n = (Core.recordTypeName v1) 
+                  fields = (Core.recordFields v1)
+              in (Flows.map (\rfields -> Core.TermRecord (Core.Record {
+                Core.recordTypeName = n,
+                Core.recordFields = rfields})) (Flows.mapList forField fields))
+            Core.TermSet v1 -> (Flows.bind (Flows.mapList recurse (Sets.toList v1)) (\rlist -> Flows.pure (Core.TermSet (Sets.fromList rlist))))
+            Core.TermSum v1 ->  
+              let i = (Core.sumIndex v1) 
+                  s = (Core.sumSize v1)
+                  trm = (Core.sumTerm v1)
+              in (Flows.bind (recurse trm) (\rtrm -> Flows.pure (Core.TermSum (Core.Sum {
+                Core.sumIndex = i,
+                Core.sumSize = s,
+                Core.sumTerm = rtrm}))))
+            Core.TermTyped v1 ->  
+              let term1 = (Core.typedTermTerm v1) 
+                  type2 = (Core.typedTermType v1)
+              in (Flows.bind (recurse term1) (\rterm1 -> Flows.pure (Core.TermTyped (Core.TypedTerm {
+                Core.typedTermTerm = rterm1,
+                Core.typedTermType = type2}))))
+            Core.TermUnion v1 ->  
+              let n = (Core.injectionTypeName v1) 
+                  field = (Core.injectionField v1)
+              in (Flows.map (\rfield -> Core.TermUnion (Core.Injection {
+                Core.injectionTypeName = n,
+                Core.injectionField = rfield})) (forField field))
+            Core.TermVariable v1 -> (Flows.pure (Core.TermVariable v1))
+            Core.TermWrap v1 ->  
+              let name = (Core.wrappedTermTypeName v1) 
+                  t = (Core.wrappedTermObject v1)
+              in (Flows.bind (recurse t) (\rt -> Flows.pure (Core.TermWrap (Core.WrappedTerm {
+                Core.wrappedTermTypeName = name,
+                Core.wrappedTermObject = rt}))))) term))
   in (rewrite fsub f)
 
 rewriteType :: (((Core.Type -> Core.Type) -> Core.Type -> Core.Type) -> Core.Type -> Core.Type)

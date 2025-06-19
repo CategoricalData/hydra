@@ -38,36 +38,42 @@ import Hydra.Sources.Tier1.Compute
 import Hydra.Sources.Tier2.Variants
 import Hydra.Sources.Tier2.Lexical
 import Hydra.Sources.Tier2.Flows
+import qualified Hydra.Sources.Tier1.Constants as Constants
+import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
+import qualified Hydra.Sources.Tier1.Decode as Decode
+import qualified Hydra.Sources.Tier2.Errors as Errors
+import qualified Hydra.Sources.Tier2.Expect as Expect
+import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 import Hydra.Sources.Libraries
 
 
 hydraAnnotationsModule :: Module
 hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
-    [coreEncodingModule, hydraVariantsModule, hydraLexicalModule, hydraFlowsModule]
-    [hydraComputeModule, hydraGraphModule, hydraMantleModule] $
+    [Decode.hydraDecodeModule, CoreDecoding.hydraCoreDecodingModule, coreEncodingModule, Expect.hydraExpectModule, hydraVariantsModule, hydraLexicalModule, hydraFlowsModule]
+    [hydraCodersModule, hydraComputeModule, hydraGraphModule, hydraMantleModule] $
     Just "Utilities for reading and writing type and term annotations"
   where
    elements = [
      el aggregateAnnotationsDef,
---     el debugIfDef,
---     el failOnFlagDef,
---     el getDebugIdDef,
---     el getAttrDef,
---     el getAttrWithDefaultDef,
---     el getCountDef,
---     el getDescriptionDef,
---     el getTermAnnotationDef,
---     el getTermDescriptionDef,
+     el debugIfDef,
+     el failOnFlagDef,
+     el getDebugIdDef,
+     el getAttrDef,
+     el getAttrWithDefaultDef,
+     el getCountDef,
+     el getDescriptionDef,
+     el getTermAnnotationDef,
+     el getTermDescriptionDef,
      el getTermTypeDef,
---     el getTypeDef,
---     el getTypeAnnotationDef,
---     el getTypeClassesDef,
---     el getTypeDescriptionDef,
---     el isNativeTypeDef,
---     el hasDescriptionDef,
---     el hasFlagDef,
---     el hasTypeDescriptionDef,
---     el nextCountDef,
+     el getTypeDef,
+     el getTypeAnnotationDef,
+     el getTypeClassesDef,
+     el getTypeDescriptionDef,
+     el isNativeTypeDef,
+     el hasDescriptionDef,
+     el hasFlagDef,
+     el hasTypeDescriptionDef,
+     el nextCountDef,
      el normalizeTermAnnotationsDef,
      el normalizeTypeAnnotationsDef,
      el putAttrDef,
@@ -87,9 +93,9 @@ hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
      el termAnnotationInternalDef,
      el typeAnnotationInternalDef,
      el typeElementDef,
---     el whenFlagDef,
---     el unshadowVariablesDef,
---     el withDepthDef,
+     el whenFlagDef,
+     el unshadowVariablesDef,
+     el withDepthDef,
      el withEmptyGraphDef]
 
 annotationsDefinition :: String -> TTerm a -> TElement a
@@ -107,82 +113,77 @@ aggregateAnnotationsDef = annotationsDefinition "aggregateAnnotations" $
         (var "getValue" @@ var "t")]
     $ Maps.fromList $ Lists.concat $ var "toPairs" @@ list [] @@ var "t"
 
---debugIfDef :: TElement (String -> String -> Flow s ())
---debugIfDef = annotationsDefinition "debugIf" $
---  doc "Debug if the debug ID matches" $
---  lambda "debugId" $ lambda "message" $ lets [
---    "checkAndFail">: lambda "desc" $
---      Logic.ifElse (Equality.equalString (var "desc") (just $ string $ var "debugId"))
---        (Flows.fail $ var "message")
---        (Flows.pure unit)]
---    $ Flows.bind (ref getDebugIdDef) (var "checkAndFail")
+debugIfDef :: TElement (String -> String -> Flow s ())
+debugIfDef = annotationsDefinition "debugIf" $
+  doc "Debug if the debug ID matches" $
+  lambdas ["debugId", "message"] $ lets [
+    "checkAndFail">: lambda "desc" $
+      Logic.ifElse
+        (Equality.equal (var "desc") (just $ string "debugId"))
+        (Flows.fail $ var "message")
+        (Flows.pure unit)]
+    $ Flows.bind (ref getDebugIdDef) (var "checkAndFail")
 
---failOnFlagDef :: TElement (Name -> String -> Flow s ())
---failOnFlagDef = annotationsDefinition "failOnFlag" $
---  doc "Fail if the given flag is set" $
---  lambda "flag" $ lambda "msg" $
---    Flows.bind (ref hasFlagDef @@ var "flag") $
---      lambda "val" $ Logic.ifElse (var "val")
---        (Flows.fail $ var "msg")
---        (Flows.pure unit)
+failOnFlagDef :: TElement (Name -> String -> Flow s ())
+failOnFlagDef = annotationsDefinition "failOnFlag" $
+  doc "Fail if the given flag is set" $
+  lambdas ["flag", "msg"] $
+    Flows.bind (ref hasFlagDef @@ var "flag") $
+      lambda "val" $ Logic.ifElse (var "val")
+        (Flows.fail $ var "msg")
+        (Flows.pure unit)
 
---getAttrDef :: TElement (Name -> Flow s (Maybe Term))
---getAttrDef = annotationsDefinition "getAttr" $
---  doc "Get an attribute from the trace" $
---  lambda "key" $ Flows.flow $ lambda "q" $ lambda "s0" $ lambda "t0" $
---    Compute.flowState
---      (just $ Maps.lookup (var "key") (Compute.traceOther $ var "t0"))
---      (var "s0")
---      (var "t0")
---
---getAttrWithDefaultDef :: TElement (Name -> Term -> Flow s Term)
---getAttrWithDefaultDef = annotationsDefinition "getAttrWithDefault" $
---  doc "Get an attribute with a default value" $
---  lambda "key" $ lambda "def" $
---    Flows.bind (ref getAttrDef @@ var "key") $
---      lambda "mval" $ Flows.pure $ Optionals.fromMaybe (var "def") (var "mval")
+getAttrDef :: TElement (Name -> Flow s (Maybe Term))
+getAttrDef = annotationsDefinition "getAttr" $
+  doc "Get an attribute from the trace" $
+  lambda "key" $ Compute.flow $ lambdas ["s0", "t0"] $
+    Compute.flowState
+      (just $ Maps.lookup (var "key") (Compute.traceOther $ var "t0"))
+      (var "s0")
+      (var "t0")
 
---getCountDef :: TElement (Name -> Flow s Int)
---getCountDef = annotationsDefinition "getCount" $
---  doc "Get a counter value" $
---  lambda "key" $ ref withEmptyGraphDef @@
---    (Flows.bind (ref getAttrWithDefaultDef @@ var "key" @@ Terms.int32 @@ int32 0) $
---      lambda "term" $ Expect.int32 $ var "term")
+getAttrWithDefaultDef :: TElement (Name -> Term -> Flow s Term)
+getAttrWithDefaultDef = annotationsDefinition "getAttrWithDefault" $
+  doc "Get an attribute with a default value" $
+  lambdas ["key", "def"] $
+    Flows.map
+      (lambda "mval" $ Optionals.fromMaybe (var "def") (var "mval"))
+      (ref getAttrDef @@ var "key")
 
---getDebugIdDef :: TElement (Flow s (Maybe String))
---getDebugIdDef = annotationsDefinition "getDebugId" $
---  doc "Get the debug ID from flow state" $
---  ref withEmptyGraphDef @@
---    (Flows.bind (ref getAttrDef @@ Core.name key_debugId) $
---      lambda "desc" $ Optionals.traverse Expect.string (var "desc"))
+getCountDef :: TElement (Name -> Flow s Int)
+getCountDef = annotationsDefinition "getCount" $
+  doc "Get a counter value" $
+  lambda "key" $ ref withEmptyGraphDef @@
+    (Flows.bind
+      (ref getAttrWithDefaultDef @@ var "key" @@ (Core.int32 0))
+      (ref Expect.int32Def))
 
---getDescriptionDef :: TElement (M.Map Name Term -> Flow Graph (Maybe String))
---getDescriptionDef = annotationsDefinition "getDescription" $
---  doc "Get description from annotations map" $
---  lambda "anns" $
---    Optionals.maybe (Flows.pure nothing)
---      (lambda "term" $
---        match _Term (Just $ Flows.fail $ Strings.cat $ list [
---          string "unexpected value for ",
---          Strings.fromShow $ Core.name key_description,
---          string ": ",
---          Strings.fromShow $ var "term"]) [
---          _Term_literal>>: lambda "lit" $
---            match _Literal (Just $ Flows.fail $ string "not a string literal") [
---              _Literal_string>>: lambda "s" $ Flows.pure $ just $ var "s"] @@ var "lit"]
---        @@ var "term")
---      (Maps.lookup (Core.name key_description) (var "anns"))
+getDebugIdDef :: TElement (Flow s (Maybe String))
+getDebugIdDef = annotationsDefinition "getDebugId" $
+  doc "Get the debug ID from flow state" $
+  ref withEmptyGraphDef @@
+    (Flows.bind
+      (ref getAttrDef @@ ref Constants.key_debugIdDef)
+      (lambda "desc" $ Flows.traverseOptional (ref Expect.stringDef) (var "desc")))
 
---getTermAnnotationDef :: TElement (Name -> Term -> Maybe Term)
---getTermAnnotationDef = annotationsDefinition "getTermAnnotation" $
---  doc "Get a term annotation" $
---  lambda "key" $ lambda "term" $
---    Maps.lookup (var "key") (ref termAnnotationInternalDef @@ var "term")
+getDescriptionDef :: TElement (M.Map Name Term -> Flow Graph (Maybe String))
+getDescriptionDef = annotationsDefinition "getDescription" $
+  doc "Get description from annotations map" $
+  lambda "anns" $
+    Optionals.maybe (Flows.pure nothing)
+      (lambda "term" $ Flows.map (unaryFunction just) $ ref Expect.stringDef @@ var "term")
+      (Maps.lookup (Core.name key_description) (var "anns"))
 
---getTermDescriptionDef :: TElement (Term -> Flow Graph (Maybe String))
---getTermDescriptionDef = annotationsDefinition "getTermDescription" $
---  doc "Get term description" $
---  lambda "term" $ ref getDescriptionDef @@ (ref termAnnotationInternalDef @@ var "term")
+getTermAnnotationDef :: TElement (Name -> Term -> Maybe Term)
+getTermAnnotationDef = annotationsDefinition "getTermAnnotation" $
+  doc "Get a term annotation" $
+  lambdas ["key", "term"] $
+    Maps.lookup (var "key") (ref termAnnotationInternalDef @@ var "term")
+
+getTermDescriptionDef :: TElement (Term -> Flow Graph (Maybe String))
+getTermDescriptionDef = annotationsDefinition "getTermDescription" $
+  doc "Get term description" $
+  lambda "term" $ ref getDescriptionDef @@ (ref termAnnotationInternalDef @@ var "term")
 
 getTermTypeDef :: TElement (Term -> Maybe Type)
 getTermTypeDef = annotationsDefinition "getTermType" $
@@ -191,81 +192,89 @@ getTermTypeDef = annotationsDefinition "getTermType" $
     "annotated">: ref getTermTypeDef <.> project _AnnotatedTerm _AnnotatedTerm_subject,
     "typed">: lambda "tt" $ just (project _TypedTerm _TypedTerm_type @@ var "tt")]
 
---getTypeDef :: TElement (M.Map Name Term -> Flow Graph (Maybe Type))
---getTypeDef = annotationsDefinition "getType" $
---  doc "Get type from annotations" $
---  lambda "anns" $
---    Optionals.maybe (Flows.pure nothing)
---      (lambda "dat" $ Flows.map just $ ref coreDecodeTypeDef @@ var "dat")
---      (Maps.lookup (Core.name key_type) (var "anns"))
+getTypeDef :: TElement (M.Map Name Term -> Flow Graph (Maybe Type))
+getTypeDef = annotationsDefinition "getType" $
+  doc "Get type from annotations" $
+  lambda "anns" $
+    Optionals.maybe (Flows.pure nothing)
+      (lambda "dat" $ Flows.map (unaryFunction just) (ref CoreDecoding.coreDecodeTypeDef @@ var "dat"))
+      (Maps.lookup (ref Constants.key_typeDef) (var "anns"))
 
---getTypeAnnotationDef :: TElement (Name -> Type -> Maybe Term)
---getTypeAnnotationDef = annotationsDefinition "getTypeAnnotation" $
---  doc "Get a type annotation" $
---  lambda "key" $ lambda "typ" $
---    Maps.lookup (var "key") (ref typeAnnotationInternalDef @@ var "typ")
---
---getTypeClassesDef :: TElement (Term -> Flow Graph (M.Map Name (S.Set TypeClass)))
---getTypeClassesDef = annotationsDefinition "getTypeClasses" $
---  doc "Get type classes from term" $
---  lambda "term" $ lets [
---    "decodeClass">: lambda "term" $ lets [
---      "byName">: Maps.fromList $ list [
---        pair _TypeClass_equality Core.typeClassEquality,
---        pair _TypeClass_ordering Core.typeClassOrdering]]
---      $ Flows.bind (Expect.unitVariant _TypeClass (var "term")) $
---        lambda "fn" $
---          Optionals.maybe
---            (Flows.unexpected (string "type class") (Strings.fromShow $ var "term"))
---            (Flows.pure)
---            (Maps.lookup (var "fn") (var "byName"))]
---    $ Optionals.maybe (Flows.pure Maps.empty)
---        (lambda "term" $ Expect.map (ref coreDecodeNameDef) (Expect.set $ var "decodeClass") (var "term"))
---        (ref getTermAnnotationDef @@ Core.name key_classes @@ var "term")
---
---getTypeDescriptionDef :: TElement (Type -> Flow Graph (Maybe String))
---getTypeDescriptionDef = annotationsDefinition "getTypeDescription" $
---  doc "Get type description" $
---  lambda "typ" $ ref getDescriptionDef @@ (ref typeAnnotationInternalDef @@ var "typ")
+getTypeAnnotationDef :: TElement (Name -> Type -> Maybe Term)
+getTypeAnnotationDef = annotationsDefinition "getTypeAnnotation" $
+  doc "Get a type annotation" $
+  lambdas ["key", "typ"] $
+    Maps.lookup (var "key") (ref typeAnnotationInternalDef @@ var "typ")
 
---isNativeTypeDef :: TElement (Element -> Bool)
---isNativeTypeDef = annotationsDefinition "isNativeType" $
---  doc "Check if element should be encoded as native type" $
---  lambda "el" $ lets [
---    "isFlaggedAsFirstClassType">: Optionals.fromMaybe false $
---      Flows.bind (ref getTermAnnotationDef @@ Core.name key_firstClassType @@ (Core.elementTerm $ var "el")) $
---        lambda "mterm" $ Optionals.traverse primitive _decode_boolean (var "mterm")]
---    $ Optionals.maybe false
---        (lambda "ts" $ Logic.and
---          (Logic.equals (var "ts") (Core.typeScheme (list []) (Core.typeVariable _Type)))
---          (Logic.not $ var "isFlaggedAsFirstClassType"))
---        (Graph.elementType $ var "el")
+getTypeClassesDef :: TElement (Term -> Flow Graph (M.Map Name (S.Set TypeClass)))
+getTypeClassesDef = annotationsDefinition "getTypeClasses" $
+  doc "Get type classes from term" $
+  lambda "term" $ lets [
+    "decodeClass">: lambda "term" $ lets [
+      "byName">: Maps.fromList $ list [
+        pair (Core.name _TypeClass_equality) Graph.typeClassEquality,
+        pair (Core.name _TypeClass_ordering) Graph.typeClassOrdering]]
+      $ Flows.bind (ref Expect.unitVariantDef @@ Core.name _TypeClass @@ var "term") $
+        lambda "fn" $
+          Optionals.maybe
+            (ref Errors.unexpectedDef @@ string "type class" @@ (Io.showTerm $ var "term"))
+            (unaryFunction Flows.pure)
+            (Maps.lookup (var "fn") (var "byName"))]
+    $ Optionals.maybe
+        (Flows.pure Maps.empty)
+        (lambda "term" $ ref Expect.mapDef
+          @@ (ref CoreDecoding.coreDecodeNameDef)
+          @@ (ref Expect.setDef @@ var "decodeClass")
+          @@ (var "term"))
+        (ref getTermAnnotationDef @@ ref Constants.key_classesDef @@ var "term")
 
---hasDescriptionDef :: TElement (M.Map Name Term -> Bool)
---hasDescriptionDef = annotationsDefinition "hasDescription" $
---  doc "Check if annotations contain description" $
---  lambda "anns" $ Optionals.isJust $ Maps.lookup (Core.name key_description) (var "anns")
---
---hasFlagDef :: TElement (Name -> Flow s Bool)
---hasFlagDef = annotationsDefinition "hasFlag" $
---  doc "Check if flag is set" $
---  lambda "flag" $ ref withEmptyGraphDef @@
---    (Flows.bind (ref getAttrWithDefaultDef @@ var "flag" @@ Terms.boolean @@ false) $
---      lambda "term" $ Expect.boolean $ var "term")
---
---hasTypeDescriptionDef :: TElement (Type -> Bool)
---hasTypeDescriptionDef = annotationsDefinition "hasTypeDescription" $
---  doc "Check if type has description" $
---  lambda "typ" $ ref hasDescriptionDef @@ (ref typeAnnotationInternalDef @@ var "typ")
---
---nextCountDef :: TElement (Name -> Flow s Int)
---nextCountDef = annotationsDefinition "nextCount" $
---  doc "Get next counter value" $
---  lambda "key" $
---    Flows.bind (ref getCountDef @@ var "key") $
---      lambda "count" $
---        Flows.bind (ref putCountDef @@ var "key" @@ Math.add (var "count") (int32 1)) $
---          lambda "_" $ Flows.pure $ var "count"
+getTypeDescriptionDef :: TElement (Type -> Flow Graph (Maybe String))
+getTypeDescriptionDef = annotationsDefinition "getTypeDescription" $
+  doc "Get type description" $
+  lambda "typ" $ ref getDescriptionDef @@ (ref typeAnnotationInternalDef @@ var "typ")
+
+isNativeTypeDef :: TElement (Element -> Bool)
+isNativeTypeDef = annotationsDefinition "isNativeType" $
+  doc ("For a typed term, decide whether a coder should encode it as a native type expression,"
+    <> " or as a Hydra type expression.") $
+  lambda "el" $ lets [
+    "isFlaggedAsFirstClassType">: Optionals.fromMaybe false $
+      Optionals.bind
+        (ref getTermAnnotationDef @@ ref Constants.key_firstClassTypeDef @@ (Graph.elementTerm $ var "el"))
+        (ref Decode.booleanDef)]
+    $ Optionals.maybe
+        false
+        (lambda "ts" $ Logic.and
+          (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.name _Type)))
+          (Logic.not $ var "isFlaggedAsFirstClassType"))
+        (Graph.elementType $ var "el")
+
+hasDescriptionDef :: TElement (M.Map Name Term -> Bool)
+hasDescriptionDef = annotationsDefinition "hasDescription" $
+  doc "Check if annotations contain description" $
+  lambda "anns" $ Optionals.isJust $ Maps.lookup (ref Constants.key_descriptionDef) (var "anns")
+
+hasFlagDef :: TElement (Name -> Flow s Bool)
+hasFlagDef = annotationsDefinition "hasFlag" $
+  doc "Check if flag is set" $
+  lambda "flag" $ ref withEmptyGraphDef @@
+    (Flows.bind (ref getAttrWithDefaultDef @@ var "flag" @@ Core.false) $
+      lambda "term" $ ref Expect.booleanDef @@ var "term")
+
+hasTypeDescriptionDef :: TElement (Type -> Bool)
+hasTypeDescriptionDef = annotationsDefinition "hasTypeDescription" $
+  doc "Check if type has description" $
+  lambda "typ" $ ref hasDescriptionDef @@ (ref typeAnnotationInternalDef @@ var "typ")
+
+nextCountDef :: TElement (Name -> Flow s Int)
+nextCountDef = annotationsDefinition "nextCount" $
+  doc "Return a zero-indexed counter for the given key: 0, 1, 2, ..." $
+  lambda "key" $
+    Flows.bind (ref getCountDef @@ var "key") $
+      lambda "count" $
+        Flows.map
+          (constant $ var "count")
+          (ref putCountDef @@ var "key" @@ Math.add (var "count") (int32 1))
 
 normalizeTermAnnotationsDef :: TElement (Term -> Term)
 normalizeTermAnnotationsDef = annotationsDefinition "normalizeTermAnnotations" $
@@ -335,7 +344,7 @@ setDescriptionDef :: TElement (Maybe String -> M.Map Name Term -> M.Map Name Ter
 setDescriptionDef = annotationsDefinition "setDescription" $
   doc "Set description in annotations" $
   lambda "d" $ ref setAnnotationDef
-    @@ Core.name key_description
+    @@ ref Constants.key_descriptionDef
     @@ Optionals.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
 
 setTermAnnotationDef :: TElement (Name -> Maybe Term -> Term -> Term)
@@ -352,7 +361,7 @@ setTermDescriptionDef :: TElement (Maybe String -> Term -> Term)
 setTermDescriptionDef = annotationsDefinition "setTermDescription" $
   doc "Set term description" $
   lambda "d" $ ref setTermAnnotationDef
-    @@ Core.name key_description
+    @@ ref Constants.key_descriptionDef
     @@ Optionals.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
 
 -- TODO: temporary. Move this function out of Annotations
@@ -375,7 +384,7 @@ setTermTypeDef = annotationsDefinition "setTermType" $
 setTypeDef :: TElement (Maybe Type -> M.Map Name Term -> M.Map Name Term)
 setTypeDef = annotationsDefinition "setType" $
   doc "Set type in annotations" $
-  lambda "mt" $ ref setAnnotationDef @@ Core.name key_type @@ Optionals.map (ref coreEncodeTypeDef) (var "mt")
+  lambda "mt" $ ref setAnnotationDef @@ ref Constants.key_typeDef @@ Optionals.map (ref coreEncodeTypeDef) (var "mt")
 
 setTypeAnnotationDef :: TElement (Name -> Maybe Term -> Type -> Type)
 setTypeAnnotationDef = annotationsDefinition "setTypeAnnotation" $
@@ -404,13 +413,13 @@ setTypeClassesDef = annotationsDefinition "setTypeClasses" $
     "encoded">: Logic.ifElse (Maps.null $ var "m")
         nothing
         (just $ Core.termMap $ Maps.fromList $ Lists.map (var "encodePair") $ Maps.toList $ var "m")]
-    $ ref setTermAnnotationDef @@ Core.name key_classes @@ var "encoded"
+    $ ref setTermAnnotationDef @@ ref Constants.key_classesDef @@ var "encoded"
 
 setTypeDescriptionDef :: TElement (Maybe String -> Type -> Type)
 setTypeDescriptionDef = annotationsDefinition "setTypeDescription" $
   doc "Set type description" $
   lambda "d" $ ref setTypeAnnotationDef
-    @@ Core.name key_description
+    @@ ref Constants.key_descriptionDef
     @@ Optionals.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
 
 termAnnotationInternalDef :: TElement (Term -> M.Map Name Term)
@@ -441,75 +450,72 @@ typeElementDef = annotationsDefinition "typeElement" $
     "schemaTerm">: Core.termVariable (Core.name _Type),
     "dataTerm">: ref normalizeTermAnnotationsDef @@ (Core.termAnnotated $ Core.annotatedTerm
       (ref coreEncodeTypeDef @@ var "typ")
-      (Maps.fromList $ list [pair (Core.name key_type) (var "schemaTerm")]))]
+      (Maps.fromList $ list [pair (ref Constants.key_typeDef) (var "schemaTerm")]))]
     $ Graph.element (var "name") (var "dataTerm") (just $ Core.typeScheme (list []) (var "typ"))
 
---whenFlagDef :: TElement (Name -> Flow s a -> Flow s a -> Flow s a)
---whenFlagDef = annotationsDefinition "whenFlag" $
---  doc "Execute different flows based on flag" $
---  lambda "flag" $ lambda "fthen" $ lambda "felse" $
---    Flows.bind (ref hasFlagDef @@ var "flag") $
---      lambda "b" $ Logic.ifElse (var "b") (var "fthen") (var "felse")
+whenFlagDef :: TElement (Name -> Flow s a -> Flow s a -> Flow s a)
+whenFlagDef = annotationsDefinition "whenFlag" $
+  doc "Execute different flows based on flag" $
+  lambda "flag" $ lambda "fthen" $ lambda "felse" $
+    Flows.bind (ref hasFlagDef @@ var "flag") $
+      lambda "b" $ Logic.ifElse (var "b") (var "fthen") (var "felse")
 
----- TODO: move out of Annotations and into Rewriting
---unshadowVariablesDef :: TElement (Term -> Term)
---unshadowVariablesDef = annotationsDefinition "unshadowVariables" $
---  doc "Unshadow variables in term" $
---  lambda "term" $ lets [
---    "freshName">: Flows.map (lambda "n" $ Core.name $ Strings.cat2 (string "s") (Strings.fromShow $ var "n")) $
---      ref nextCountDef @@ Core.name (string "unshadow"),
---    "rewrite">: lambda "recurse" $ lambda "term" $ lets [
---      "handleOther">: var "recurse" @@ var "term"]
---      $ Flows.bind Flows.getState $
---        lambda "state" $ lets [
---          "reserved">: first $ var "state",
---          "subst">: second $ var "state"]
---          $ match _Term (Just $ var "handleOther") [
---            _Term_variable>>: lambda "v" $ Flows.pure $ Core.termVariable $
---              Optionals.fromMaybe (var "v") (Maps.lookup (var "v") (var "subst")),
---            _Term_function>>: lambda "f" $
---              match _Function (Just $ var "handleOther") [
---                _Function_lambda>>: lambda "l" $ lets [
---                  "v">: Core.lambdaParameter $ var "l",
---                  "d">: Core.lambdaDomain $ var "l",
---                  "body">: Core.lambdaBody $ var "l"]
---                  $ Logic.ifElse (Sets.member (var "v") (var "reserved"))
---                    (Flows.bind (var "freshName") $
---                      lambda "v'" $
---                        Flows.bind (Flows.putState $ pair (Sets.insert (var "v'") (var "reserved")) (Maps.insert (var "v") (var "v'") (var "subst"))) $
---                          lambda "_" $
---                            Flows.bind (var "recurse" @@ var "body") $
---                              lambda "body'" $
---                                Flows.bind (Flows.putState $ var "state") $
---                                  lambda "_" $ Flows.pure $ Core.termFunction $ Core.functionLambda $ Core.lambda (var "v'") (var "d") (var "body'"))
---                    (Flows.bind (Flows.putState $ pair (Sets.insert (var "v") (var "reserved")) (var "subst")) $
---                      lambda "_" $
---                        Flows.bind (var "recurse" @@ var "body") $
---                          lambda "body'" $ Flows.pure $ Core.termFunction $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "body'"))]
---              @@ var "f"]
---          @@ var "term"]
---    $ Optionals.fromJust $ Compute.flowStateValue $ Compute.unFlow
---        (ref rewriteTermMDef @@ var "rewrite" @@ var "term")
---        (pair Sets.empty Maps.empty)
---        Compute.emptyTrace
---
---withDepthDef :: TElement (Name -> (Int -> Flow s a) -> Flow s a)
---withDepthDef = annotationsDefinition "withDepth" $
---  doc "Execute flow with depth counter" $
---  doc ("Provide an one-indexed, integer-valued 'depth' to a flow, where the depth is the number of nested calls."
---    ++ " This is useful for generating variable names while avoiding conflicts between the variables of parents and children."
---    ++ " E.g. a variable in an outer case/match statement might be "v1", whereas the variable of another case/match statement"
---    ++ " inside of the first one becomes \"v2\". See also nextCount.") $
---  lambda "key" $ lambda "f" $
---    Flows.bind (ref getCountDef @@ var "key") $
---      lambda "count" $ lets [
---        "inc">: Math.add (var "count") (int32 1)]
---        $ Flows.bind (ref putCountDef @@ var "key" @@ var "inc") $
---          lambda "_" $
---            Flows.bind (var "f" @@ var "inc") $
---              lambda "r" $
---                Flows.bind (ref putCountDef @@ var "key" @@ var "count") $
---                  lambda "_" $ Flows.pure $ var "r"
+-- TODO: move out of Annotations and into Rewriting
+unshadowVariablesDef :: TElement (Term -> Term)
+unshadowVariablesDef = annotationsDefinition "unshadowVariables" $
+  doc "Unshadow variables in term" $
+  lambda "term" $ lets [
+    "freshName">: Flows.map (lambda "n" $ Core.name' $ Strings.cat2 (string "s") (Literals.showInt32 $ var "n")) $
+      ref nextCountDef @@ Core.name' (string "unshadow"),
+    "rewrite">: lambdas ["recurse", "term"] $ lets [
+      "handleOther">: var "recurse" @@ var "term"]
+      $ Flows.bind (ref Errors.getStateDef) $
+        lambda "state" $ lets [
+          "reserved">: first $ var "state",
+          "subst">: second $ var "state"]
+          $ cases _Term (var "term") (Just $ var "handleOther") [
+            _Term_variable>>: lambda "v" $ Flows.pure $ Core.termVariable $
+              Optionals.fromMaybe (var "v") (Maps.lookup (var "v") (var "subst")),
+            _Term_function>>: lambda "f" $
+              cases _Function (var "f") (Just $ var "handleOther") [
+                _Function_lambda>>: lambda "l" $ lets [
+                  "v">: Core.lambdaParameter $ var "l",
+                  "d">: Core.lambdaDomain $ var "l",
+                  "body">: Core.lambdaBody $ var "l"]
+                  $ Logic.ifElse (Sets.member (var "v") (var "reserved"))
+                    (Flows.bind (var "freshName") $
+                      lambda "v'" $
+                        Flows.bind (ref Errors.putStateDef @@ pair (Sets.insert (var "v'") (var "reserved")) (Maps.insert (var "v") (var "v'") (var "subst"))) $
+                          constant $
+                            Flows.bind (var "recurse" @@ var "body") $
+                              lambda "body'" $
+                                Flows.bind (ref Errors.putStateDef @@ var "state") $
+                                  constant $ Flows.pure $ Core.termFunction $ Core.functionLambda $ Core.lambda (var "v'") (var "d") (var "body'"))
+                    (Flows.bind (ref Errors.putStateDef @@ pair (Sets.insert (var "v") (var "reserved")) (var "subst")) $
+                      constant $
+                        Flows.map
+                          (lambda "body'" $ Core.termFunction $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "body'"))
+                          (var "recurse" @@ var "body"))]]]
+    $ Optionals.fromJust $ Compute.flowStateValue $ Compute.unFlow
+        (ref Rewriting.rewriteTermMDef @@ var "rewrite" @@ var "term")
+        (pair Sets.empty Maps.empty)
+        (ref emptyTraceDef)
+
+withDepthDef :: TElement (Name -> (Int -> Flow s a) -> Flow s a)
+withDepthDef = annotationsDefinition "withDepth" $
+  doc ("Provide an one-indexed, integer-valued 'depth' to a flow, where the depth is the number of nested calls."
+    <> " This is useful for generating variable names while avoiding conflicts between the variables of parents and children."
+    <> " E.g. a variable in an outer case/match statement might be \"v1\", whereas the variable of another case/match statement"
+    <> " inside of the first one becomes \"v2\". See also nextCount.") $
+  lambdas ["key", "f"] $
+    Flows.bind (ref getCountDef @@ var "key") $
+      lambda "count" $ lets [
+        "inc">: Math.add (var "count") (int32 1)]
+        $ Flows.bind (ref putCountDef @@ var "key" @@ var "inc") $ constant $
+            Flows.bind (var "f" @@ var "inc") $
+              lambda "r" $
+                Flows.bind (ref putCountDef @@ var "key" @@ var "count") $
+                  constant $ Flows.pure $ var "r"
 
 withEmptyGraphDef :: TElement (Flow Graph a -> Flow s a)
 withEmptyGraphDef = annotationsDefinition "withEmptyGraph" $
