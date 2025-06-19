@@ -10,7 +10,7 @@ import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Staging.Schemas
-import Hydra.Staging.Annotations
+import Hydra.Annotations
 import Hydra.CoreEncoding
 import Hydra.CoreLanguage
 import Hydra.Graph

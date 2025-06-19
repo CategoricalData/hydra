@@ -547,3 +547,9 @@ fieldWithTerm t ft = Hydra.Dsl.Core.field (Hydra.Dsl.Core.fieldName ft) t
 
 fieldTypeWithType :: TTerm FieldType -> TTerm Type -> TTerm FieldType
 fieldTypeWithType ft t = Hydra.Dsl.Core.fieldType (Hydra.Dsl.Core.fieldTypeName ft) t
+
+false :: TTerm Term
+false = termLiteral $ literalBoolean $ Phantoms.false
+
+int32 :: Int -> TTerm Term
+int32 = termLiteral . literalInteger . integerValueInt32 . Phantoms.int32

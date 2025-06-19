@@ -11,7 +11,7 @@ import Hydra.Compute
 import Hydra.Core
 import Hydra.Staging.Schemas
 import Hydra.Graph
-import Hydra.Staging.Annotations
+import Hydra.Annotations
 import Hydra.Lexical
 import Hydra.Reduction
 import Hydra.Staging.Rewriting
