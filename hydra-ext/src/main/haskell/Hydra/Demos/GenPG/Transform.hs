@@ -8,7 +8,7 @@ import Hydra.Dsl.Ext.Tabular
 import Hydra.Lib.Io
 import Hydra.Lib.Literals
 import Hydra.Tools.Monads
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Tier0.Core (hydraCoreGraph)
 

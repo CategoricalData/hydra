@@ -15,7 +15,7 @@ import Hydra.Mantle
 import Hydra.Rewriting
 import Hydra.Inference
 import Hydra.Staging.Annotations
-import Hydra.Staging.CoreDecoding
+import Hydra.CoreDecoding
 import Hydra.Lexical
 import Hydra.Staging.Rewriting
 import Hydra.Staging.Schemas

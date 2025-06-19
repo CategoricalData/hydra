@@ -6,10 +6,11 @@ module Hydra.SortingSpec where
 import qualified Test.Hspec as H
 
 import Hydra.Sorting
+import Hydra.Tools.Monads
 
 
 checkSort :: [(Int, [Int])] -> Either [[Int]] [Int] -> H.Expectation
-checkSort adj exp = H.shouldBe (topologicalSort adj) exp
+checkSort adj exp = H.shouldBe (fromHydraEither $ topologicalSort adj) exp
 
 checkSortSCC :: [(Int, [Int])] -> [[Int]] -> H.Expectation
 checkSortSCC adj exp = H.shouldBe (topologicalSortComponents adj) exp

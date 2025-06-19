@@ -198,7 +198,7 @@ decodeEdgeLabel :: Term -> Flow s PG.EdgeLabel
 decodeEdgeLabel t = PG.EdgeLabel <$> withEmptyGraph (Expect.string t)
 
 decodeEdgeSpec :: Term -> Flow s EdgeSpec
-decodeEdgeSpec term = withTrace "decode edge spec" $ matchRecord (\fields -> EdgeSpec
+decodeEdgeSpec term = withTrace "decode edge spec" $ readRecord (\fields -> EdgeSpec
   <$> readField fields _EdgeSpec_label decodeEdgeLabel
   <*> readField fields _EdgeSpec_id decodeValueSpec
   <*> readField fields _EdgeSpec_out decodeValueSpec
@@ -206,7 +206,7 @@ decodeEdgeSpec term = withTrace "decode edge spec" $ matchRecord (\fields -> Edg
   <*> readField fields _EdgeSpec_properties (expectList decodePropertySpec)) term
 
 decodeElementSpec :: Term -> Flow s ElementSpec
-decodeElementSpec term = withTrace "decode element spec" $ matchInjection [
+decodeElementSpec term = withTrace "decode element spec" $ readInjection [
   (_ElementSpec_vertex, \t -> ElementSpecVertex <$> decodeVertexSpec t),
   (_ElementSpec_edge, \t -> ElementSpecEdge <$> decodeEdgeSpec t)] term
 
@@ -214,7 +214,7 @@ decodePropertyKey :: Term -> Flow s PG.PropertyKey
 decodePropertyKey t = PG.PropertyKey <$> withEmptyGraph (Expect.string t)
 
 decodePropertySpec :: Term -> Flow s PropertySpec
-decodePropertySpec term = withTrace "decode property spec" $ matchRecord (\fields -> PropertySpec
+decodePropertySpec term = withTrace "decode property spec" $ readRecord (\fields -> PropertySpec
   <$> readField fields _PropertySpec_key decodePropertyKey
   <*> readField fields _PropertySpec_value decodeValueSpec) term
 
@@ -222,7 +222,7 @@ decodeValueSpec :: Term -> Flow s ValueSpec
 decodeValueSpec term = withTrace "decode value spec" $ case stripTerm term of
   -- Allow an abbreviated specification consisting of only the pattern string
   TermLiteral (LiteralString s) -> pure $ ValueSpecPattern s
-  _ -> matchInjection [
+  _ -> readInjection [
     (_ValueSpec_value, \t -> pure ValueSpecValue),
     (_ValueSpec_pattern, \t -> ValueSpecPattern <$> withEmptyGraph (Expect.string t))] term
 
@@ -230,7 +230,7 @@ decodeVertexLabel :: Term -> Flow s PG.VertexLabel
 decodeVertexLabel t = PG.VertexLabel <$> withEmptyGraph (Expect.string t)
 
 decodeVertexSpec :: Term -> Flow s VertexSpec
-decodeVertexSpec term = withTrace "decode vertex spec" $ matchRecord (\fields -> VertexSpec
+decodeVertexSpec term = withTrace "decode vertex spec" $ readRecord (\fields -> VertexSpec
   <$> readField fields _VertexSpec_label decodeVertexLabel
   <*> readField fields _VertexSpec_id decodeValueSpec
   <*> readField fields _VertexSpec_properties (expectList decodePropertySpec)) term
@@ -238,8 +238,8 @@ decodeVertexSpec term = withTrace "decode vertex spec" $ matchRecord (\fields ->
 
 -- General-purpose code for decoding
 
-matchInjection :: [(Name, Term -> Flow s x)] -> Term -> Flow s x
-matchInjection cases encoded = do
+readInjection :: [(Name, Term -> Flow s x)] -> Term -> Flow s x
+readInjection cases encoded = do
   mp <- withEmptyGraph (Expect.map_ (\k -> Name <$> Expect.string k) pure encoded)
   f <- case M.toList mp of
     [] -> fail "empty injection"
@@ -250,8 +250,8 @@ matchInjection cases encoded = do
     [fun] -> fun (fieldTerm f)
     _ -> fail "duplicate field name in cases"
 
-matchRecord :: (M.Map Name Term -> Flow s x) -> Term -> Flow s x
-matchRecord cons term = withEmptyGraph (Expect.map_ (\k -> Name <$> Expect.string k) pure term) >>= cons
+readRecord :: (M.Map Name Term -> Flow s x) -> Term -> Flow s x
+readRecord cons term = withEmptyGraph (Expect.map_ (\k -> Name <$> Expect.string k) pure term) >>= cons
 
 readField fields fname fun = case M.lookup fname fields of
   Nothing -> fail $ "no such field: " ++ unName fname
