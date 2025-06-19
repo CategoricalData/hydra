@@ -11,7 +11,7 @@ import Hydra.Core
 import Hydra.Compute
 import Hydra.Constants
 import Hydra.Graph
-import Hydra.Staging.CoreDecoding
+import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.Mantle
 import Hydra.Staging.Rewriting

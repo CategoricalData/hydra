@@ -24,7 +24,7 @@ import Hydra.Staging.Reduction
 import Hydra.Flows
 import Hydra.Errors
 import Hydra.Variants
-import Hydra.Staging.CoreDecoding
+import Hydra.CoreDecoding
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

@@ -80,6 +80,7 @@ unaryFunction f = case (unTTerm $ f $ var "x") of
   TermApplication (Application lhs _) -> TTerm lhs
   TermOptional (Just _) -> primitive _optionals_pure
   TermUnion (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
+  TermWrap (WrappedTerm tname _) -> lambda "x" $ wrap tname $ var "x"
 
 binaryFunction :: (TTerm a -> TTerm b -> TTerm c) -> TTerm (a -> b -> c)
 binaryFunction f = case (unTTerm $ f (var "x") (var "y")) of
