@@ -36,7 +36,7 @@ import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Pg.Mapping as PGM
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
-import qualified Hydra.Dsl.Expect as Expect
+import qualified Hydra.Expect as Expect
 import Hydra.Ext.Rdf.Serde
 import Hydra.Sources.Tier0.Core
 import Hydra.Ext.Pg.Graphson.Coder

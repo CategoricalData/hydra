@@ -398,10 +398,7 @@ topologicalSortBindings bindingMap = fmap (fmap toPair) (topologicalSortComponen
       TermTyped _ -> True
       _ -> False
 
-topologicalSortElements :: [Element] -> Either [[Name]] [Name]
-topologicalSortElements els = toEither $ topologicalSort $ adjlist <$> els
+topologicalSortElements :: [Element] -> Either_ [[Name]] [Name]
+topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames False True True $ elementTerm e)
-    toEither e = case e of
-       EitherLeft l -> Left l
-       EitherRight r -> Right r
