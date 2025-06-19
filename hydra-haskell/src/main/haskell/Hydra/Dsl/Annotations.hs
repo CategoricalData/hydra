@@ -5,7 +5,7 @@ module Hydra.Dsl.Annotations where
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Constants
-import Hydra.Staging.Annotations
+import Hydra.Annotations
 import Hydra.Formatting
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types

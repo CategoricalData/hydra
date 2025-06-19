@@ -31,3 +31,6 @@ pure = primitive1 _flows_pure
 
 sequence :: TTerm [Flow s a] -> TTerm (Flow s [a])
 sequence = primitive1 _flows_sequence
+
+traverseOptional :: TTerm (x -> Flow s y) -> TTerm (Maybe x) -> TTerm (Flow s (Maybe y))
+traverseOptional = primitive2 _flows_traverseOptional

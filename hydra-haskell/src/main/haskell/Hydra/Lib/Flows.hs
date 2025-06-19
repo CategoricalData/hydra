@@ -41,3 +41,6 @@ pure = Flows.pureInternal
 
 sequence :: [Flow s x] -> Flow s [x]
 sequence = CM.sequence
+
+traverseOptional :: (x -> Flow s y) -> Maybe x -> Flow s (Maybe y)
+traverseOptional = traverse
