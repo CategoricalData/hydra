@@ -1,6 +1,8 @@
 module Hydra.Sources.Tier1.Functions where
 
 -- Standard term-level Tier-1 imports
+import Hydra.Kernel
+import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Lib.Equality  as Equality
@@ -22,8 +24,6 @@ import qualified Data.List               as L
 import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
-
-import Hydra.Sources.Libraries
 
 
 functionsDefinition :: String -> TTerm a -> TElement a
