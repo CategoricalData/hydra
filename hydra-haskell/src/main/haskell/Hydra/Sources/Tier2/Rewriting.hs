@@ -3,39 +3,78 @@
 module Hydra.Sources.Tier2.Rewriting where
 
 -- Standard Tier-2 imports
-import qualified Hydra.Dsl.Coders          as Coders
-import qualified Hydra.Dsl.Compute         as Compute
-import qualified Hydra.Dsl.Core            as Core
-import qualified Hydra.Dsl.Graph           as Graph
-import qualified Hydra.Dsl.Lib.Chars       as Chars
-import qualified Hydra.Dsl.Lib.Equality    as Equality
-import qualified Hydra.Dsl.Lib.Flows       as Flows
-import qualified Hydra.Dsl.Lib.Io          as Io
-import qualified Hydra.Dsl.Lib.Lists       as Lists
-import qualified Hydra.Dsl.Lib.Literals    as Literals
-import qualified Hydra.Dsl.Lib.Logic       as Logic
-import qualified Hydra.Dsl.Lib.Maps        as Maps
-import qualified Hydra.Dsl.Lib.Math        as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import           Hydra.Dsl.Phantoms        as Phantoms
-import qualified Hydra.Dsl.Lib.Sets        as Sets
-import           Hydra.Dsl.Lib.Strings     as Strings
-import qualified Hydra.Dsl.Mantle          as Mantle
-import qualified Hydra.Dsl.Module          as Module
-import qualified Hydra.Dsl.TTerms          as TTerms
-import qualified Hydra.Dsl.TTypes          as TTypes
-import qualified Hydra.Dsl.Terms           as Terms
-import qualified Hydra.Dsl.Topology        as Topology
-import qualified Hydra.Dsl.Types           as Types
-import           Hydra.Sources.Tier1.All
+import Hydra.Kernel
+import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Coders                 as Coders
+import qualified Hydra.Dsl.Compute                as Compute
+import qualified Hydra.Dsl.Core                   as Core
+import qualified Hydra.Dsl.Graph                  as Graph
+import qualified Hydra.Dsl.Lib.Chars              as Chars
+import qualified Hydra.Dsl.Lib.Equality           as Equality
+import qualified Hydra.Dsl.Lib.Flows              as Flows
+import qualified Hydra.Dsl.Lib.Io                 as Io
+import qualified Hydra.Dsl.Lib.Lists              as Lists
+import qualified Hydra.Dsl.Lib.Literals           as Literals
+import qualified Hydra.Dsl.Lib.Logic              as Logic
+import qualified Hydra.Dsl.Lib.Maps               as Maps
+import qualified Hydra.Dsl.Lib.Math               as Math
+import qualified Hydra.Dsl.Lib.Optionals          as Optionals
+import           Hydra.Dsl.Phantoms               as Phantoms
+import qualified Hydra.Dsl.Lib.Sets               as Sets
+import           Hydra.Dsl.Lib.Strings            as Strings
+import qualified Hydra.Dsl.Mantle                 as Mantle
+import qualified Hydra.Dsl.Module                 as Module
+import qualified Hydra.Dsl.TTerms                 as TTerms
+import qualified Hydra.Dsl.TTypes                 as TTypes
+import qualified Hydra.Dsl.Terms                  as Terms
+import qualified Hydra.Dsl.Topology               as Topology
+import qualified Hydra.Dsl.Types                  as Types
+import qualified Hydra.Dsl.Typing                 as Typing
+import qualified Hydra.Sources.Tier1.All          as Tier1
+import qualified Hydra.Sources.Tier1.Constants    as Constants
+import qualified Hydra.Sources.Tier1.CoreEncoding as CoreEncoding
+import qualified Hydra.Sources.Tier1.Decode       as Decode
+import qualified Hydra.Sources.Tier1.Formatting   as Formatting
+import qualified Hydra.Sources.Tier1.Functions    as Functions
+import qualified Hydra.Sources.Tier1.Literals     as Literals
+import qualified Hydra.Sources.Tier1.Messages     as Messages
+import qualified Hydra.Sources.Tier1.Strip        as Strip
 import           Prelude hiding ((++))
+import qualified Data.Int                  as I
 import qualified Data.List                 as L
 import qualified Data.Map                  as M
 import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
-import Hydra.Dsl.Mantle
-import Hydra.Sources.Libraries
+-- Uncomment tier-2 sources as needed
+--import qualified Hydra.Sources.Tier2.Accessors as Accessors
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
+--import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Annotations as Annotations
+--import qualified Hydra.Sources.Tier2.Arity as Arity
+--import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
+--import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
+--import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Expect as Expect
+--import qualified Hydra.Sources.Tier2.Flows as Flows_
+--import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
+--import qualified Hydra.Sources.Tier2.Inference as Inference
+--import qualified Hydra.Sources.Tier2.Lexical as Lexical
+--import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
+--import qualified Hydra.Sources.Tier2.Printing as Printing
+--import qualified Hydra.Sources.Tier2.Qnames as Qnames
+--import qualified Hydra.Sources.Tier2.Reduction as Reduction
+--import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
+--import qualified Hydra.Sources.Tier2.Schemas as Schemas
+--import qualified Hydra.Sources.Tier2.Serialization as Serialization
+--import qualified Hydra.Sources.Tier2.Sorting as Sorting
+--import qualified Hydra.Sources.Tier2.Substitution as Substitution
+--import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
+--import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.TermAdapters as TermAdapters
+--import qualified Hydra.Sources.Tier2.TermEncoding as TermEncoding
+--import qualified Hydra.Sources.Tier2.Unification as Unification
+--import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
 rewritingDefinition :: String -> TTerm a -> TElement a
@@ -43,7 +82,8 @@ rewritingDefinition = definitionInModule hydraRewritingModule
 
 hydraRewritingModule :: Module
 hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
-    [hydraComputeModule, hydraConstantsModule, hydraStripModule] [hydraCodersModule, hydraMantleModule] $
+    [Strip.hydraStripModule]
+    [Tier1.hydraCodersModule] $
     Just ("Utilities for type and term rewriting and analysis.")
   where
    elements = [
@@ -138,7 +178,7 @@ isLambdaDef = rewritingDefinition "isLambda" $
       _Term_function>>: match _Function (Just false) [
         _Function_lambda>>: constant true],
       _Term_let>>: lambda "lt" (ref isLambdaDef @@ (project _Let _Let_environment @@ var "lt"))])
-    @@ (ref fullyStripTermDef @@ var "term")
+    @@ (ref Strip.fullyStripTermDef @@ var "term")
 
 mapBeneathTypeAnnotationsDef :: TElement ((Type -> Type) -> Type -> Type)
 mapBeneathTypeAnnotationsDef = rewritingDefinition "mapBeneathTypeAnnotations" $
@@ -416,70 +456,70 @@ subtermsWithAccessorsDef :: TElement (Term -> [(TermAccessor, Term)])
 subtermsWithAccessorsDef = rewritingDefinition "subtermsWithAccessors" $
   doc "Find the children of a given term" $
   match _Term Nothing [
-    _Term_annotated>>: lambda "at" $ single termAccessorAnnotatedSubject $ Core.annotatedTermSubject $ var "at",
+    _Term_annotated>>: lambda "at" $ single Mantle.termAccessorAnnotatedSubject $ Core.annotatedTermSubject $ var "at",
     _Term_application>>: lambda "p" $ list [
-      result termAccessorApplicationFunction $ Core.applicationFunction $ var "p",
-      result termAccessorApplicationArgument $ Core.applicationArgument $ var "p"],
+      result Mantle.termAccessorApplicationFunction $ Core.applicationFunction $ var "p",
+      result Mantle.termAccessorApplicationArgument $ Core.applicationArgument $ var "p"],
     _Term_function>>: match _Function (Just none) [
         _Function_elimination>>: match _Elimination (Just none) [
             _Elimination_union>>: lambda "cs" $ Lists.concat2
-              ((primitive _optionals_maybe @@  none @@ (lambda "t" $ single termAccessorUnionCasesDefault $ var "t"))
+              ((primitive _optionals_maybe @@  none @@ (lambda "t" $ single Mantle.termAccessorUnionCasesDefault $ var "t"))
                 @@ (Core.caseStatementDefault $ var "cs"))
               (Lists.map
-                (lambda "f" $ result (termAccessorUnionCasesBranch $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
+                (lambda "f" $ result (Mantle.termAccessorUnionCasesBranch $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
                 (Core.caseStatementCases $ var "cs"))],
-        _Function_lambda>>: lambda "l" $ single termAccessorLambdaBody $ Core.lambdaBody $ var "l"],
+        _Function_lambda>>: lambda "l" $ single Mantle.termAccessorLambdaBody $ Core.lambdaBody $ var "l"],
     _Term_let>>: lambda "lt" $ Lists.cons
-      (result termAccessorLetEnvironment $ Core.letEnvironment $ var "lt")
+      (result Mantle.termAccessorLetEnvironment $ Core.letEnvironment $ var "lt")
       (Lists.map
-        (lambda "b" $ result (termAccessorLetBinding $ Core.letBindingName $ var "b") $ Core.letBindingTerm $ var "b")
+        (lambda "b" $ result (Mantle.termAccessorLetBinding $ Core.letBindingName $ var "b") $ Core.letBindingTerm $ var "b")
         (Core.letBindings $ var "lt")),
     _Term_list>>: lambda "l" $ Lists.map
       -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-      (lambda "e" $ result (termAccessorListElement $ int32 0) $ var "e")
+      (lambda "e" $ result (Mantle.termAccessorListElement $ int32 0) $ var "e")
       (var "l"),
     _Term_literal>>: constant none,
     _Term_map>>: lambda "m" (Lists.concat
       (Lists.map
         (lambda "p" $ list [
           -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-          result (termAccessorMapKey $ int32 0) $ first $ var "p",
-          result (termAccessorMapValue $ int32 0) $ second $ var "p"])
+          result (Mantle.termAccessorMapKey $ int32 0) $ first $ var "p",
+          result (Mantle.termAccessorMapValue $ int32 0) $ second $ var "p"])
         (Maps.toList $ var "m"))),
-    _Term_optional>>: primitive _optionals_maybe @@  none @@ (lambda "t" $ single termAccessorOptionalTerm $ var "t"),
+    _Term_optional>>: primitive _optionals_maybe @@  none @@ (lambda "t" $ single Mantle.termAccessorOptionalTerm $ var "t"),
     _Term_product>>: lambda "p" $ Lists.map
       -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-      (lambda "e" $ result (termAccessorProductTerm $ int32 0) $ var "e")
+      (lambda "e" $ result (Mantle.termAccessorProductTerm $ int32 0) $ var "e")
       (var "p"),
     _Term_record>>: lambda "rt" (Lists.map
-      (lambda "f" $ result (termAccessorRecordField $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
+      (lambda "f" $ result (Mantle.termAccessorRecordField $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
       (Core.recordFields $ var "rt")),
     _Term_set>>: lambda "s" $ Lists.map
       -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-      (lambda "e" $ result (termAccessorListElement $ int32 0) $ var "e")
+      (lambda "e" $ result (Mantle.termAccessorListElement $ int32 0) $ var "e")
       (Sets.toList $ var "s"),
     _Term_sum>>: lambda "st" $
-      single termAccessorSumTerm $
+      single Mantle.termAccessorSumTerm $
       Core.sumTerm $ var "st",
     _Term_typeAbstraction>>: lambda "ta" $
-      single termAccessorTypeAbstractionBody $
+      single Mantle.termAccessorTypeAbstractionBody $
       Core.typeAbstractionBody $ var "ta",
     _Term_typeApplication>>: lambda "ta" $
-      single termAccessorTypeApplicationTerm $
+      single Mantle.termAccessorTypeApplicationTerm $
       Core.typedTermTerm $ var "ta",
     _Term_typed>>: lambda "tt" $
-      single termAccessorTypedTerm $
+      single Mantle.termAccessorTypedTerm $
       Core.typedTermTerm $ var "tt",
     _Term_union>>: lambda "ut" $
-      single termAccessorInjectionTerm $
+      single Mantle.termAccessorInjectionTerm $
       Core.fieldTerm $ (Core.injectionField $ var "ut"),
     _Term_variable>>: constant none,
-    _Term_wrap>>: lambda "n" $ single termAccessorWrappedTerm $ Core.wrappedTermObject $ var "n"]
+    _Term_wrap>>: lambda "n" $ single Mantle.termAccessorWrappedTerm $ Core.wrappedTermObject $ var "n"]
   where
     none = list []
     single accessor term = list [result accessor term]
     result accessor term = pair accessor term
-    simple term = result termAccessorAnnotatedSubject term
+    simple term = result Mantle.termAccessorAnnotatedSubject term
 
 subtypesDef :: TElement (Type -> [Type])
 subtypesDef = rewritingDefinition "subtypes" $

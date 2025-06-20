@@ -3,41 +3,78 @@
 module Hydra.Sources.Tier2.AdapterUtils where
 
 -- Standard Tier-2 imports
-import qualified Hydra.Dsl.Coders          as Coders
-import qualified Hydra.Dsl.Compute         as Compute
-import qualified Hydra.Dsl.Core            as Core
-import qualified Hydra.Dsl.Graph           as Graph
-import qualified Hydra.Dsl.Lib.Chars       as Chars
-import qualified Hydra.Dsl.Lib.Equality    as Equality
-import qualified Hydra.Dsl.Lib.Flows       as Flows
-import qualified Hydra.Dsl.Lib.Io          as Io
-import qualified Hydra.Dsl.Lib.Lists       as Lists
-import qualified Hydra.Dsl.Lib.Literals    as Literals
-import qualified Hydra.Dsl.Lib.Logic       as Logic
-import qualified Hydra.Dsl.Lib.Maps        as Maps
-import qualified Hydra.Dsl.Lib.Math        as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import           Hydra.Dsl.Phantoms        as Phantoms
-import qualified Hydra.Dsl.Lib.Sets        as Sets
-import           Hydra.Dsl.Lib.Strings     as Strings
-import qualified Hydra.Dsl.Mantle          as Mantle
-import qualified Hydra.Dsl.Module          as Module
-import qualified Hydra.Dsl.TTerms          as TTerms
-import qualified Hydra.Dsl.TTypes          as TTypes
-import qualified Hydra.Dsl.Terms           as Terms
-import qualified Hydra.Dsl.Topology        as Topology
-import qualified Hydra.Dsl.Types           as Types
-import           Hydra.Sources.Tier1.All
+import Hydra.Kernel
+import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Coders                 as Coders
+import qualified Hydra.Dsl.Compute                as Compute
+import qualified Hydra.Dsl.Core                   as Core
+import qualified Hydra.Dsl.Graph                  as Graph
+import qualified Hydra.Dsl.Lib.Chars              as Chars
+import qualified Hydra.Dsl.Lib.Equality           as Equality
+import qualified Hydra.Dsl.Lib.Flows              as Flows
+import qualified Hydra.Dsl.Lib.Io                 as Io
+import qualified Hydra.Dsl.Lib.Lists              as Lists
+import qualified Hydra.Dsl.Lib.Literals           as Literals
+import qualified Hydra.Dsl.Lib.Logic              as Logic
+import qualified Hydra.Dsl.Lib.Maps               as Maps
+import qualified Hydra.Dsl.Lib.Math               as Math
+import qualified Hydra.Dsl.Lib.Optionals          as Optionals
+import           Hydra.Dsl.Phantoms               as Phantoms
+import qualified Hydra.Dsl.Lib.Sets               as Sets
+import           Hydra.Dsl.Lib.Strings            as Strings
+import qualified Hydra.Dsl.Mantle                 as Mantle
+import qualified Hydra.Dsl.Module                 as Module
+import qualified Hydra.Dsl.TTerms                 as TTerms
+import qualified Hydra.Dsl.TTypes                 as TTypes
+import qualified Hydra.Dsl.Terms                  as Terms
+import qualified Hydra.Dsl.Topology               as Topology
+import qualified Hydra.Dsl.Types                  as Types
+import qualified Hydra.Dsl.Typing                 as Typing
+import qualified Hydra.Sources.Tier1.All          as Tier1
+import qualified Hydra.Sources.Tier1.Constants    as Constants
+import qualified Hydra.Sources.Tier1.CoreEncoding as CoreEncoding
+import qualified Hydra.Sources.Tier1.Decode       as Decode
+import qualified Hydra.Sources.Tier1.Formatting   as Formatting
+import qualified Hydra.Sources.Tier1.Functions    as Functions
+import qualified Hydra.Sources.Tier1.Literals     as Literals
+import qualified Hydra.Sources.Tier1.Messages     as Messages
+import qualified Hydra.Sources.Tier1.Strip        as Strip
 import           Prelude hiding ((++))
+import qualified Data.Int                  as I
 import qualified Data.List                 as L
 import qualified Data.Map                  as M
 import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
-import qualified Hydra.Expect as Expect
-import Hydra.Sources.Libraries
-import Hydra.Sources.Tier2.Qnames
-import Hydra.Sources.Tier2.Variants
+-- Uncomment tier-2 sources as needed
+--import qualified Hydra.Sources.Tier2.Accessors as Accessors
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
+--import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Annotations as Annotations
+--import qualified Hydra.Sources.Tier2.Arity as Arity
+--import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
+--import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
+--import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Expect as Expect
+--import qualified Hydra.Sources.Tier2.Flows as Flows_
+--import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
+--import qualified Hydra.Sources.Tier2.Inference as Inference
+--import qualified Hydra.Sources.Tier2.Lexical as Lexical
+--import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
+--import qualified Hydra.Sources.Tier2.Printing as Printing
+import qualified Hydra.Sources.Tier2.Qnames as Qnames
+--import qualified Hydra.Sources.Tier2.Reduction as Reduction
+--import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
+--import qualified Hydra.Sources.Tier2.Schemas as Schemas
+--import qualified Hydra.Sources.Tier2.Serialization as Serialization
+--import qualified Hydra.Sources.Tier2.Sorting as Sorting
+--import qualified Hydra.Sources.Tier2.Substitution as Substitution
+--import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
+--import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.TermAdapters as TermAdapters
+--import qualified Hydra.Sources.Tier2.TermEncoding as TermEncoding
+--import qualified Hydra.Sources.Tier2.Unification as Unification
+import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
 adapterUtilsDefinition :: String -> TTerm a -> TElement a
@@ -45,8 +82,8 @@ adapterUtilsDefinition = definitionInModule hydraAdapterUtilsModule
 
 hydraAdapterUtilsModule :: Module
 hydraAdapterUtilsModule = Module (Namespace "hydra.adapterUtils") elements
-    [hydraQnamesModule, hydraStripModule, hydraVariantsModule]
-    [hydraCodersModule, hydraComputeModule, hydraMantleModule, hydraModuleModule] $
+    [Qnames.hydraQnamesModule, Strip.hydraStripModule, Variants.hydraVariantsModule]
+    [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule] $
     Just ("Additional adapter utilities, above and beyond the generated ones.")
   where
    elements = [
@@ -144,7 +181,7 @@ literalTypeIsSupportedDef = adapterUtilsDefinition "literalTypeIsSupported" $
   doc "Check if literal type is supported by language constraints" $
   lambda "constraints" $ lambda "at" $
     Logic.and
-      (Sets.member (ref literalTypeVariantDef @@ var "at") (Coders.languageConstraintsLiteralVariants $ var "constraints"))
+      (Sets.member (ref Variants.literalTypeVariantDef @@ var "at") (Coders.languageConstraintsLiteralVariants $ var "constraints"))
       (match _LiteralType (Just true) [
         _LiteralType_float>>: lambda "ft" $ ref floatTypeIsSupportedDef @@ var "constraints" @@ var "ft",
         _LiteralType_integer>>: lambda "it" $ ref integerTypeIsSupportedDef @@ var "constraints" @@ var "it"]
@@ -154,37 +191,37 @@ nameToFilePathDef :: TElement (CaseConvention -> FileExtension -> Name -> FilePa
 nameToFilePathDef = adapterUtilsDefinition "nameToFilePath" $
   doc "Convert name to file path" $
   lambda "caseConv" $ lambda "ext" $ lambda "name" $ lets [
-    "qualName">: ref qualifyNameDef @@ var "name",
+    "qualName">: ref Qnames.qualifyNameDef @@ var "name",
     "ns">: Module.qualifiedNameNamespace $ var "qualName",
     "local">: Module.qualifiedNameLocal $ var "qualName",
     "prefix">: Optionals.maybe (string "")
       (lambda "n" $ Strings.cat2 (Module.unNamespace $ var "n") (string "/"))
       (var "ns")]
-    $ ref namespaceToFilePathDef @@ var "caseConv" @@ var "ext" @@
+    $ ref Qnames.namespaceToFilePathDef @@ var "caseConv" @@ var "ext" @@
       (Module.namespace $ Strings.cat2 (var "prefix") (var "local"))
 
 nameToFilePathNewDef :: TElement (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
 nameToFilePathNewDef = adapterUtilsDefinition "nameToFilePathNew" $
   doc "Convert name to file path with different case conventions" $
   lambda "nsConv" $ lambda "localConv" $ lambda "ext" $ lambda "name" $ lets [
-    "qualName">: ref qualifyNameDef @@ var "name",
+    "qualName">: ref Qnames.qualifyNameDef @@ var "name",
     "ns">: Module.qualifiedNameNamespace $ var "qualName",
     "local">: Module.qualifiedNameLocal $ var "qualName",
     "nsToFilePath">: lambda "ns" $
       Strings.intercalate (string "/") $ Lists.map
-        (lambda "part" $ ref convertCaseDef @@ Mantle.caseConventionCamel @@ var "nsConv" @@ var "part")
+        (lambda "part" $ ref Formatting.convertCaseDef @@ Mantle.caseConventionCamel @@ var "nsConv" @@ var "part")
         (Strings.splitOn (string ".") $ Module.unNamespace $ var "ns"),
     "prefix">: Optionals.maybe (string "")
       (lambda "n" $ Strings.cat2 (var "nsToFilePath" @@ var "n") (string "/"))
       (var "ns"),
-    "suffix">: ref convertCaseDef @@ Mantle.caseConventionPascal @@ var "localConv" @@ var "local"]
+    "suffix">: ref Formatting.convertCaseDef @@ Mantle.caseConventionPascal @@ var "localConv" @@ var "local"]
     $ Strings.cat $ list [var "prefix", var "suffix", string ".", Module.unFileExtension $ var "ext"]
 
 typeIsSupportedDef :: TElement (LanguageConstraints -> Type -> Bool)
 typeIsSupportedDef = adapterUtilsDefinition "typeIsSupported" $
   doc "Check if type is supported by language constraints" $
   lambda "constraints" $ lambda "t" $ lets [
-    "base">: ref stripTypeDef @@ var "t",
+    "base">: ref Strip.stripTypeDef @@ var "t",
     "isSupportedVariant">: lambda "v" $
       Logic.or
 --        (Equality.equal (var "v") Mantle.typeVariantVariable)
@@ -193,7 +230,7 @@ typeIsSupportedDef = adapterUtilsDefinition "typeIsSupported" $
     $ Logic.and
         (Coders.languageConstraintsTypes (var "constraints") @@ var "base")
         (Logic.and
-          (var "isSupportedVariant" @@ (ref typeVariantDef @@ var "base"))
+          (var "isSupportedVariant" @@ (ref Variants.typeVariantDef @@ var "base"))
           (match _Type Nothing [
             _Type_annotated>>: lambda "at" $ ref typeIsSupportedDef @@ var "constraints" @@ Core.annotatedTypeSubject (var "at"),
             _Type_application>>: lambda "app" $

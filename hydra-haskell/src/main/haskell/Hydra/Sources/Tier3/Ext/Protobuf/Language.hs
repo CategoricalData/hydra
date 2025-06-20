@@ -3,6 +3,7 @@
 module Hydra.Sources.Tier3.Ext.Protobuf.Language (protobufLanguageModule) where
 
 -- Standard Tier-3 imports
+import Hydra.Kernel
 import           Prelude hiding ((++))
 import qualified Data.List                 as L
 import qualified Data.Map                  as M
@@ -25,7 +26,9 @@ import           Hydra.Dsl.Lib.Strings     as Strings
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
-import           Hydra.Sources.Tier2.All
+
+import Hydra.Sources.Tier2.All
+import qualified Hydra.Sources.Tier1.Strip as Strip
 
 
 protobufLanguageDefinition :: String -> TTerm a -> TElement a
@@ -80,7 +83,7 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
         _TypeVariant_variable]),
       _LanguageConstraints_types>>: match _Type (Just true) [
         _Type_map>>: lambda "mt" (match _Type (Just true) [
-          _Type_optional>>: constant false] @@ (ref stripTypeDef @@ (Core.mapTypeValues $ var "mt")))]]]
+          _Type_optional>>: constant false] @@ (ref Strip.stripTypeDef @@ (Core.mapTypeValues $ var "mt")))]]]
 
 protobufReservedWordsDef :: TElement (S.Set String)
 protobufReservedWordsDef = protobufLanguageDefinition "protobufReservedWords" $

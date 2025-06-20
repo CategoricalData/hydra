@@ -26,11 +26,13 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import Hydra.Sources.Libraries -- TODO: use DSL primitives instead of raw primitive references
-import Hydra.Sources.Tier1.Strip
+import qualified Hydra.Sources.Tier1.Strip as Strip
 
 
 coreEncodingModule :: Module
-coreEncodingModule = Module (Namespace "hydra.coreEncoding") elements [hydraStripModule] [hydraCoreModule] $
+coreEncodingModule = Module (Namespace "hydra.coreEncoding") elements
+    [Strip.hydraStripModule]
+    [hydraCoreModule] $
     Just ("Mapping of hydra.core constructs in a host language like Haskell or Java "
       <> " to their native Hydra counterparts as terms. "
       <> " This includes an implementation of LambdaGraph's epsilon encoding (types to terms).")
@@ -464,7 +466,7 @@ isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
         ref isEncodedTypeDef @@ (Core.applicationFunction $ var "a"),
       TCase _Term_union       --> lambda "i" $
         Equality.equalString (string $ unName _Type) (Core.unName $ (Core.injectionTypeName $ var "i"))
-    ]) @@ (ref stripTermDef @@ var "t")
+    ]) @@ (ref Strip.stripTermDef @@ var "t")
 
 isTypeDef :: TElement (Type -> Bool)
 isTypeDef = coreEncodingExtrasDefinition "isType" $
@@ -476,12 +478,12 @@ isTypeDef = coreEncodingExtrasDefinition "isType" $
       TCase _Type_union --> lambda "rt" $
         Equality.equalString (string $ unName _Type) (Core.unName $ (Core.rowTypeTypeName $ var "rt"))
 --      TCase _Type_variable --> constant true
-    ]) @@ (ref stripTypeDef @@ var "t")
+    ]) @@ (ref Strip.stripTypeDef @@ var "t")
 
 isUnitTermDef :: TElement (Term -> Bool)
 isUnitTermDef = coreEncodingExtrasDefinition "isUnitTerm" $
-  lambda "t" $ Equality.equalTerm (ref fullyStripTermDef @@ var "t") $ TTerm (coreEncodeTerm Terms.unit)
+  lambda "t" $ Equality.equalTerm (ref Strip.fullyStripTermDef @@ var "t") $ TTerm (coreEncodeTerm Terms.unit)
 
 isUnitTypeDef :: TElement (Type -> Bool)
 isUnitTypeDef = coreEncodingExtrasDefinition "isUnitType" $
-  lambda "t" $ Equality.equalType (ref stripTypeDef @@ var "t") $ TTerm (coreEncodeType Types.unit)
+  lambda "t" $ Equality.equalType (ref Strip.stripTypeDef @@ var "t") $ TTerm (coreEncodeType Types.unit)
