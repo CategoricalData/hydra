@@ -5,6 +5,7 @@
 module Hydra.Kernel (
   module Hydra.Accessors,
   module Hydra.AdapterUtils,
+  module Hydra.Staging.Adapters,
   module Hydra.Annotations,
   module Hydra.Arity,
 --  module Hydra.Ast,
@@ -13,6 +14,7 @@ module Hydra.Kernel (
   module Hydra.Constants,
   module Hydra.Constraints,
   module Hydra.Core,
+  module Hydra.CoreDecoding,
   module Hydra.CoreEncoding,
   module Hydra.CoreLanguage,
   module Hydra.Errors,
@@ -20,8 +22,10 @@ module Hydra.Kernel (
   module Hydra.Formatting,
   module Hydra.Graph,
 --  module Hydra.Grammar,
-  module Hydra.Inference,
+--  module Hydra.GrammarToModule,
+  module Hydra.Staging.Inference,
   module Hydra.Lexical,
+  module Hydra.Staging.LiteralAdapters,
   module Hydra.Literals,
   module Hydra.Mantle,
   module Hydra.Messages,
@@ -30,31 +34,25 @@ module Hydra.Kernel (
   module Hydra.Printing,
   module Hydra.Qnames,
   module Hydra.Query,
-  module Hydra.Rewriting,
-  module Hydra.Staging.Adapters,
-  module Hydra.Annotations,
-  module Hydra.CoreDecoding,
---  module Hydra.GrammarToModule,
-  module Hydra.Staging.Inference,
-  module Hydra.Staging.LiteralAdapters,
   module Hydra.Staging.Reduction,
   module Hydra.Staging.Rewriting,
-  module Hydra.Staging.Schemas,
+  module Hydra.Schemas,
   module Hydra.Serialization,
   module Hydra.Sorting,
-  module Hydra.Staging.TermAdapters,
   module Hydra.Strip,
   module Hydra.Substitution,
-  module Hydra.Tools.Debug,
+  module Hydra.Staging.TermAdapters,
 --  module Hydra.Topology,
   module Hydra.Typing,
   module Hydra.Unification,
   module Hydra.Variants,
   module Hydra.Workflow,
+--  module Hydra.Tools.Debug,
 ) where
 
 import Hydra.Accessors
 import Hydra.AdapterUtils
+import Hydra.Staging.Adapters
 import Hydra.Annotations
 import Hydra.Arity
 --import Hydra.Ast
@@ -63,6 +61,7 @@ import Hydra.Compute
 import Hydra.Constants
 import Hydra.Constraints
 import Hydra.Core
+import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.CoreLanguage
 import Hydra.Errors
@@ -70,8 +69,10 @@ import Hydra.Flows
 import Hydra.Formatting
 import Hydra.Graph
 --import Hydra.Grammar
-import Hydra.Inference
+--import Hydra.GrammarToModule
+import Hydra.Staging.Inference
 import Hydra.Lexical
+import Hydra.Staging.LiteralAdapters
 import Hydra.Literals
 import Hydra.Mantle
 import Hydra.Messages
@@ -80,25 +81,17 @@ import Hydra.Phantoms
 import Hydra.Printing
 import Hydra.Qnames
 import Hydra.Query
-import Hydra.Rewriting
-import Hydra.Staging.Adapters
-import Hydra.Annotations
-import Hydra.CoreDecoding
---import Hydra.GrammarToModule
-import Hydra.Staging.Inference
-import Hydra.Lexical
-import Hydra.Staging.LiteralAdapters
 import Hydra.Staging.Reduction
 import Hydra.Staging.Rewriting
-import Hydra.Staging.Schemas
+import Hydra.Schemas
 import Hydra.Serialization
 import Hydra.Sorting
-import Hydra.Staging.TermAdapters
 import Hydra.Strip
 import Hydra.Substitution
-import Hydra.Tools.Debug
+import Hydra.Staging.TermAdapters
 --import Hydra.Topology
 import Hydra.Typing
 import Hydra.Unification
 import Hydra.Variants
 import Hydra.Workflow
+--import Hydra.Tools.Debug
