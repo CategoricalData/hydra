@@ -23,14 +23,16 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import Hydra.Sources.Tier1.Strip
+import qualified Hydra.Sources.Tier1.Strip as Strip
 
 
 decodeDefinition :: String -> TTerm a -> TElement a
 decodeDefinition = definitionInModule hydraDecodeModule
 
 hydraDecodeModule :: Module
-hydraDecodeModule = Module (Namespace "hydra.decode") elements [hydraStripModule] [hydraCoreModule] $
+hydraDecodeModule = Module (Namespace "hydra.decode") elements
+    [Strip.hydraStripModule]
+    [hydraCoreModule] $
     Just "A module for decoding terms to native objects"
   where
     elements = [
@@ -387,7 +389,7 @@ matchNominal :: Name -> TTerm (a -> Name) -> TTerm (a -> b) -> TTerm (Name -> Te
 matchNominal fname getName getB = ref nominalDef @@ getName @@ getB @@ matchTermVariant fname
 
 matchTermVariant :: Name -> TTerm (Term -> Maybe a)
-matchTermVariant fname = matchVariant _Term fname <.> ref fullyStripTermDef
+matchTermVariant fname = matchVariant _Term fname <.> ref Strip.fullyStripTermDef
 
 matchVariant :: Name -> Name -> TTerm (a -> Maybe b)
 matchVariant tname fname = match tname (Just nothing) [TCase fname --> lambda "matched_" $ Optionals.pure $ var "matched_"]

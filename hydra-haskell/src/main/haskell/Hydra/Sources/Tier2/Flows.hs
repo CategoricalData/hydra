@@ -3,38 +3,78 @@
 module Hydra.Sources.Tier2.Flows where
 
 -- Standard Tier-2 imports
-import qualified Hydra.Dsl.Coders          as Coders
-import qualified Hydra.Dsl.Compute         as Compute
-import qualified Hydra.Dsl.Core            as Core
-import qualified Hydra.Dsl.Graph           as Graph
-import qualified Hydra.Dsl.Lib.Chars       as Chars
-import qualified Hydra.Dsl.Lib.Equality    as Equality
-import qualified Hydra.Dsl.Lib.Flows       as Flows
-import qualified Hydra.Dsl.Lib.Io          as Io
-import qualified Hydra.Dsl.Lib.Lists       as Lists
-import qualified Hydra.Dsl.Lib.Literals    as Literals
-import qualified Hydra.Dsl.Lib.Logic       as Logic
-import qualified Hydra.Dsl.Lib.Maps        as Maps
-import qualified Hydra.Dsl.Lib.Math        as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import           Hydra.Dsl.Phantoms        as Phantoms
-import qualified Hydra.Dsl.Lib.Sets        as Sets
-import           Hydra.Dsl.Lib.Strings     as Strings
-import qualified Hydra.Dsl.Mantle          as Mantle
-import qualified Hydra.Dsl.Module          as Module
-import qualified Hydra.Dsl.TTerms          as TTerms
-import qualified Hydra.Dsl.TTypes          as TTypes
-import qualified Hydra.Dsl.Terms           as Terms
-import qualified Hydra.Dsl.Topology        as Topology
-import qualified Hydra.Dsl.Types           as Types
-import           Hydra.Sources.Tier1.All hiding (mapDef)
+import Hydra.Kernel
+import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Coders                 as Coders
+import qualified Hydra.Dsl.Compute                as Compute
+import qualified Hydra.Dsl.Core                   as Core
+import qualified Hydra.Dsl.Graph                  as Graph
+import qualified Hydra.Dsl.Lib.Chars              as Chars
+import qualified Hydra.Dsl.Lib.Equality           as Equality
+import qualified Hydra.Dsl.Lib.Flows              as Flows
+import qualified Hydra.Dsl.Lib.Io                 as Io
+import qualified Hydra.Dsl.Lib.Lists              as Lists
+import qualified Hydra.Dsl.Lib.Literals           as Literals
+import qualified Hydra.Dsl.Lib.Logic              as Logic
+import qualified Hydra.Dsl.Lib.Maps               as Maps
+import qualified Hydra.Dsl.Lib.Math               as Math
+import qualified Hydra.Dsl.Lib.Optionals          as Optionals
+import           Hydra.Dsl.Phantoms               as Phantoms
+import qualified Hydra.Dsl.Lib.Sets               as Sets
+import           Hydra.Dsl.Lib.Strings            as Strings
+import qualified Hydra.Dsl.Mantle                 as Mantle
+import qualified Hydra.Dsl.Module                 as Module
+import qualified Hydra.Dsl.TTerms                 as TTerms
+import qualified Hydra.Dsl.TTypes                 as TTypes
+import qualified Hydra.Dsl.Terms                  as Terms
+import qualified Hydra.Dsl.Topology               as Topology
+import qualified Hydra.Dsl.Types                  as Types
+import qualified Hydra.Dsl.Typing                 as Typing
+import qualified Hydra.Sources.Tier1.All          as Tier1
+import qualified Hydra.Sources.Tier1.Constants    as Constants
+import qualified Hydra.Sources.Tier1.CoreEncoding as CoreEncoding
+import qualified Hydra.Sources.Tier1.Decode       as Decode
+import qualified Hydra.Sources.Tier1.Formatting   as Formatting
+import qualified Hydra.Sources.Tier1.Functions    as Functions
+import qualified Hydra.Sources.Tier1.Literals     as Literals
+import qualified Hydra.Sources.Tier1.Messages     as Messages
+import qualified Hydra.Sources.Tier1.Strip        as Strip
 import           Prelude hiding ((++))
+import qualified Data.Int                  as I
 import qualified Data.List                 as L
 import qualified Data.Map                  as M
 import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
-import Hydra.Sources.Libraries
+-- Uncomment tier-2 sources as needed
+--import qualified Hydra.Sources.Tier2.Accessors as Accessors
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
+--import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Annotations as Annotations
+--import qualified Hydra.Sources.Tier2.Arity as Arity
+--import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
+--import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
+--import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Expect as Expect
+--import qualified Hydra.Sources.Tier2.Flows as Flows_
+--import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
+--import qualified Hydra.Sources.Tier2.Inference as Inference
+--import qualified Hydra.Sources.Tier2.Lexical as Lexical
+--import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
+--import qualified Hydra.Sources.Tier2.Printing as Printing
+--import qualified Hydra.Sources.Tier2.Qnames as Qnames
+--import qualified Hydra.Sources.Tier2.Reduction as Reduction
+--import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
+--import qualified Hydra.Sources.Tier2.Schemas as Schemas
+--import qualified Hydra.Sources.Tier2.Serialization as Serialization
+--import qualified Hydra.Sources.Tier2.Sorting as Sorting
+--import qualified Hydra.Sources.Tier2.Substitution as Substitution
+--import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
+--import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.TermAdapters as TermAdapters
+--import qualified Hydra.Sources.Tier2.TermEncoding as TermEncoding
+--import qualified Hydra.Sources.Tier2.Unification as Unification
+--import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
 flowsDefinition :: String -> TTerm a -> TElement a
@@ -42,7 +82,8 @@ flowsDefinition = definitionInModule hydraFlowsModule
 
 hydraFlowsModule :: Module
 hydraFlowsModule = Module (Namespace "hydra.flows") elements
-    [hydraConstantsModule] [hydraMantleModule, hydraComputeModule] $
+    [Constants.hydraConstantsModule]
+    [Tier1.hydraMantleModule, Tier1.hydraComputeModule] $
     Just ("Functions for working with flows (the Hydra state monad).")
   where
     elements = [
@@ -64,6 +105,7 @@ hydraFlowsModule = Module (Namespace "hydra.flows") elements
       el withStateDef,
       el withTraceDef]
 
+-- TODO: consider removing bind and map from the module, as they are present as primitive functions
 bindDef :: TElement (Flow s a -> (a -> Flow s b) -> Flow s b)
 bindDef = flowsDefinition "bind" $
   lambdas ["l", "r"] $ lets [
@@ -122,6 +164,7 @@ fromFlowDef = flowsDefinition "fromFlow" $
     (lambda "xmo" $ var "xmo")
     (Compute.flowStateValue $ (Compute.unFlow (var "f") (var "cx") (ref emptyTraceDef)))
 
+-- TODO: consider removing bind and map from the module, as they are present as primitive functions
 mapDef :: TElement ((a -> b) -> Flow s a -> Flow s b)
 mapDef = flowsDefinition "map" $
   doc "Map a function over a flow" $
@@ -222,7 +265,7 @@ withTraceDef = flowsDefinition "withTrace" $
   doc "Continue the current flow after augmenting the trace" $
   lambda "msg" $ lets [
     -- augment the trace
-    "mutate">: lambda "t" $ Logic.ifElse (Equality.gteInt32 (Lists.length (Compute.traceStack $ var "t")) $ ref maxTraceDepthDef)
+    "mutate">: lambda "t" $ Logic.ifElse (Equality.gteInt32 (Lists.length (Compute.traceStack $ var "t")) $ ref Constants.maxTraceDepthDef)
       (inject _Either _Either_left $ string "maximum trace depth exceeded. This may indicate an infinite loop")
       (inject _Either _Either_right $ Compute.trace
         (Lists.cons (var "msg") (Compute.traceStack $ var "t"))

@@ -3,42 +3,78 @@
 module Hydra.Sources.Tier2.CoreDecoding where
 
 -- Standard Tier-2 imports
-import qualified Hydra.Dsl.Compute         as Compute
-import qualified Hydra.Dsl.Core            as Core
-import qualified Hydra.Dsl.Graph           as Graph
-import qualified Hydra.Dsl.Lib.Chars       as Chars
-import qualified Hydra.Dsl.Lib.Equality    as Equality
-import qualified Hydra.Dsl.Lib.Flows       as Flows
-import qualified Hydra.Dsl.Lib.Io          as Io
-import qualified Hydra.Dsl.Lib.Lists       as Lists
-import qualified Hydra.Dsl.Lib.Literals    as Literals
-import qualified Hydra.Dsl.Lib.Logic       as Logic
-import qualified Hydra.Dsl.Lib.Maps        as Maps
-import qualified Hydra.Dsl.Lib.Math        as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import           Hydra.Dsl.Phantoms        as Phantoms
-import qualified Hydra.Dsl.Lib.Sets        as Sets
-import           Hydra.Dsl.Lib.Strings     as Strings
-import qualified Hydra.Dsl.Mantle          as Mantle
-import qualified Hydra.Dsl.Module          as Module
-import qualified Hydra.Dsl.TTerms          as TTerms
-import qualified Hydra.Dsl.TTypes          as TTypes
-import qualified Hydra.Dsl.Terms           as Terms
-import qualified Hydra.Dsl.Topology        as Topology
-import qualified Hydra.Dsl.Types           as Types
-import           Hydra.Sources.Tier1.All
+import Hydra.Kernel
+import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Coders                 as Coders
+import qualified Hydra.Dsl.Compute                as Compute
+import qualified Hydra.Dsl.Core                   as Core
+import qualified Hydra.Dsl.Graph                  as Graph
+import qualified Hydra.Dsl.Lib.Chars              as Chars
+import qualified Hydra.Dsl.Lib.Equality           as Equality
+import qualified Hydra.Dsl.Lib.Flows              as Flows
+import qualified Hydra.Dsl.Lib.Io                 as Io
+import qualified Hydra.Dsl.Lib.Lists              as Lists
+import qualified Hydra.Dsl.Lib.Literals           as Literals
+import qualified Hydra.Dsl.Lib.Logic              as Logic
+import qualified Hydra.Dsl.Lib.Maps               as Maps
+import qualified Hydra.Dsl.Lib.Math               as Math
+import qualified Hydra.Dsl.Lib.Optionals          as Optionals
+import           Hydra.Dsl.Phantoms               as Phantoms
+import qualified Hydra.Dsl.Lib.Sets               as Sets
+import           Hydra.Dsl.Lib.Strings            as Strings
+import qualified Hydra.Dsl.Mantle                 as Mantle
+import qualified Hydra.Dsl.Module                 as Module
+import qualified Hydra.Dsl.TTerms                 as TTerms
+import qualified Hydra.Dsl.TTypes                 as TTypes
+import qualified Hydra.Dsl.Terms                  as Terms
+import qualified Hydra.Dsl.Topology               as Topology
+import qualified Hydra.Dsl.Types                  as Types
+import qualified Hydra.Dsl.Typing                 as Typing
+import qualified Hydra.Sources.Tier1.All          as Tier1
+import qualified Hydra.Sources.Tier1.Constants    as Constants
+import qualified Hydra.Sources.Tier1.CoreEncoding as CoreEncoding
+import qualified Hydra.Sources.Tier1.Decode       as Decode
+import qualified Hydra.Sources.Tier1.Formatting   as Formatting
+import qualified Hydra.Sources.Tier1.Functions    as Functions
+import qualified Hydra.Sources.Tier1.Literals     as Literals
+import qualified Hydra.Sources.Tier1.Messages     as Messages
+import qualified Hydra.Sources.Tier1.Strip        as Strip
 import           Prelude hiding ((++))
+import qualified Data.Int                  as I
 import qualified Data.List                 as L
 import qualified Data.Map                  as M
 import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
-import Hydra.Sources.Libraries
+-- Uncomment tier-2 sources as needed
+--import qualified Hydra.Sources.Tier2.Accessors as Accessors
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
+--import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Annotations as Annotations
+--import qualified Hydra.Sources.Tier2.Arity as Arity
+--import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
+--import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Expect as Expect
-import Hydra.Sources.Tier2.Flows
-import Hydra.Sources.Tier2.Lexical
-import Hydra.Sources.Tier2.Rewriting
+import qualified Hydra.Sources.Tier2.Flows as Flows_
+--import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
+--import qualified Hydra.Sources.Tier2.Inference as Inference
+import qualified Hydra.Sources.Tier2.Lexical as Lexical
+--import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
+--import qualified Hydra.Sources.Tier2.Printing as Printing
+--import qualified Hydra.Sources.Tier2.Qnames as Qnames
+--import qualified Hydra.Sources.Tier2.Reduction as Reduction
+import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
+--import qualified Hydra.Sources.Tier2.Schemas as Schemas
+--import qualified Hydra.Sources.Tier2.Serialization as Serialization
+--import qualified Hydra.Sources.Tier2.Sorting as Sorting
+--import qualified Hydra.Sources.Tier2.Substitution as Substitution
+--import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
+--import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.TermAdapters as TermAdapters
+--import qualified Hydra.Sources.Tier2.TermEncoding as TermEncoding
+--import qualified Hydra.Sources.Tier2.Unification as Unification
+--import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
 coreDecodingDefinition :: String -> TTerm a -> TElement a
@@ -46,8 +82,8 @@ coreDecodingDefinition = definitionInModule hydraCoreDecodingModule
 
 hydraCoreDecodingModule :: Module
 hydraCoreDecodingModule = Module (Namespace "hydra.coreDecoding") elements
-    [Errors.hydraErrorsModule, Expect.hydraExpectModule, hydraFlowsModule, hydraLexicalModule, hydraRewritingModule]
-    [hydraCodersModule, hydraMantleModule] $
+    [Errors.hydraErrorsModule, Expect.hydraExpectModule, Flows_.hydraFlowsModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule]
+    [Tier1.hydraCodersModule, Tier1.hydraMantleModule] $
     Just ("Decoding of encoded types (as terms) back to types according to LambdaGraph's epsilon encoding.")
   where
    elements = [
@@ -95,7 +131,7 @@ matchEnumDef = coreDecodingDefinition "matchEnum" $
 matchRecordDef :: TElement ((M.Map Name Term -> Flow Graph b) -> Term -> Flow Graph b)
 matchRecordDef = coreDecodingDefinition "matchRecord" $
   lambdas ["decode", "term"] $ lets [
-    "stripped">: ref fullyStripTermDef @@ var "term"]
+    "stripped">: ref Strip.fullyStripTermDef @@ var "term"]
     $ cases _Term (var "stripped")
         (Just $ ref Errors.unexpectedDef @@ string "record" @@ (Io.showTerm $ var "term")) [
       _Term_record>>: lambda "record" $ var "decode" @@
@@ -106,14 +142,14 @@ matchRecordDef = coreDecodingDefinition "matchRecord" $
 matchUnionDef :: TElement (Name -> [(Name, Term -> Flow Graph b)] -> Term -> Flow Graph b)
 matchUnionDef = coreDecodingDefinition "matchUnion" $
   lambdas ["tname", "pairs", "term"] $ lets [
-    "stripped">: ref fullyStripTermDef @@ var "term",
+    "stripped">: ref Strip.fullyStripTermDef @@ var "term",
     "mapping">: Maps.fromList $ var "pairs"]
     $ cases _Term (var "stripped")
         (Just $ ref Errors.unexpectedDef @@
           ("union with one of {" ++ (Strings.intercalate ", " $ Lists.map (lambda "pair" $ Core.unName $ first $ var "pair") $ var "pairs") ++ "}") @@
           (Io.showTerm $ var "stripped")) [
       _Term_variable>>: lambda "name" $
-        Flows.bind (ref requireElementDef @@ var "name") $
+        Flows.bind (ref Lexical.requireElementDef @@ var "name") $
         lambda "el" $ ref matchUnionDef @@ var "tname" @@ var "pairs" @@ (Graph.elementTerm $ var "el"),
       _Term_union>>: lambda "injection" $
         Logic.ifElse (Core.equalName_ (Core.injectionTypeName $ var "injection") (var "tname"))
@@ -136,7 +172,7 @@ coreDecodeNameDef = coreDecodingDefinition "coreDecodeName" $
 
 coreDecodeStringDef :: TElement (Term -> Flow Graph String)
 coreDecodeStringDef = coreDecodingDefinition "coreDecodeString" $
-  lambda "term" $ ref Expect.stringDef @@ (ref fullyStripTermDef @@ var "term")
+  lambda "term" $ ref Expect.stringDef @@ (ref Strip.fullyStripTermDef @@ var "term")
 
 -- Enum decoding functions
 
@@ -165,7 +201,7 @@ coreDecodeIntegerTypeDef = coreDecodingDefinition "coreDecodeIntegerType" $
 coreDecodeApplicationTypeDef :: TElement (Term -> Flow Graph ApplicationType)
 coreDecodeApplicationTypeDef = coreDecodingDefinition "coreDecodeApplicationType" $
   ref matchRecordDef @@ (lambda "m" $
-    ref map2Def
+    ref Flows_.map2Def
       @@ (ref getFieldDef @@ var "m" @@ Core.name _ApplicationType_function @@ ref coreDecodeTypeDef)
       @@ (ref getFieldDef @@ var "m" @@ Core.name _ApplicationType_argument @@ ref coreDecodeTypeDef)
       @@ (lambdas ["function", "argument"] $ Core.applicationType (var "function") (var "argument")))
@@ -173,7 +209,7 @@ coreDecodeApplicationTypeDef = coreDecodingDefinition "coreDecodeApplicationType
 coreDecodeFieldTypeDef :: TElement (Term -> Flow Graph FieldType)
 coreDecodeFieldTypeDef = coreDecodingDefinition "coreDecodeFieldType" $
   ref matchRecordDef @@ (lambda "m" $
-    ref map2Def
+    ref Flows_.map2Def
       @@ (ref getFieldDef @@ var "m" @@ Core.name _FieldType_name @@ ref coreDecodeNameDef)
       @@ (ref getFieldDef @@ var "m" @@ Core.name _FieldType_type @@ ref coreDecodeTypeDef)
       @@ (lambdas ["name", "typ"] $ Core.fieldType (var "name") (var "typ")))
@@ -181,7 +217,7 @@ coreDecodeFieldTypeDef = coreDecodingDefinition "coreDecodeFieldType" $
 coreDecodeForallTypeDef :: TElement (Term -> Flow Graph ForallType)
 coreDecodeForallTypeDef = coreDecodingDefinition "coreDecodeForallType" $
   ref matchRecordDef @@ (lambda "m" $
-    ref map2Def
+    ref Flows_.map2Def
       @@ (ref getFieldDef @@ var "m" @@ Core.name _ForallType_parameter @@ ref coreDecodeNameDef)
       @@ (ref getFieldDef @@ var "m" @@ Core.name _ForallType_body @@ ref coreDecodeTypeDef)
       @@ (lambdas ["parameter", "body"] $ Core.forallType (var "parameter") (var "body")))
@@ -189,7 +225,7 @@ coreDecodeForallTypeDef = coreDecodingDefinition "coreDecodeForallType" $
 coreDecodeFunctionTypeDef :: TElement (Term -> Flow Graph FunctionType)
 coreDecodeFunctionTypeDef = coreDecodingDefinition "coreDecodeFunctionType" $
   ref matchRecordDef @@ (lambda "m" $
-    ref map2Def
+    ref Flows_.map2Def
       @@ (ref getFieldDef @@ var "m" @@ Core.name _FunctionType_domain @@ ref coreDecodeTypeDef)
       @@ (ref getFieldDef @@ var "m" @@ Core.name _FunctionType_codomain @@ ref coreDecodeTypeDef)
       @@ (lambdas ["domain", "codomain"] $ Core.functionType (var "domain") (var "codomain")))
@@ -197,7 +233,7 @@ coreDecodeFunctionTypeDef = coreDecodingDefinition "coreDecodeFunctionType" $
 coreDecodeMapTypeDef :: TElement (Term -> Flow Graph MapType)
 coreDecodeMapTypeDef = coreDecodingDefinition "coreDecodeMapType" $
   ref matchRecordDef @@ (lambda "m" $
-    ref map2Def
+    ref Flows_.map2Def
       @@ (ref getFieldDef @@ var "m" @@ Core.name _MapType_keys @@ ref coreDecodeTypeDef)
       @@ (ref getFieldDef @@ var "m" @@ Core.name _MapType_values @@ ref coreDecodeTypeDef)
       @@ (lambdas ["keys", "values"] $ Core.mapType (var "keys") (var "values")))
@@ -205,7 +241,7 @@ coreDecodeMapTypeDef = coreDecodingDefinition "coreDecodeMapType" $
 coreDecodeRowTypeDef :: TElement (Term -> Flow Graph RowType)
 coreDecodeRowTypeDef = coreDecodingDefinition "coreDecodeRowType" $
   ref matchRecordDef @@ (lambda "m" $
-    ref map2Def
+    ref Flows_.map2Def
       @@ (ref getFieldDef @@ var "m" @@ Core.name _RowType_typeName @@ ref coreDecodeNameDef)
       @@ (ref getFieldDef @@ var "m" @@ Core.name _RowType_fields @@ ref coreDecodeFieldTypesDef)
       @@ (lambdas ["typeName", "fields"] $ Core.rowType (var "typeName") (var "fields")))
@@ -214,7 +250,7 @@ coreDecodeWrappedTypeDef :: TElement (Term -> Flow Graph WrappedType)
 coreDecodeWrappedTypeDef = coreDecodingDefinition "coreDecodeWrappedType" $
   lambda "term" $
     Flows.bind (ref Expect.recordDef @@ Core.name _WrappedType @@ var "term") $
-      lambda "fields" $ ref map2Def
+      lambda "fields" $ ref Flows_.map2Def
         @@ (ref Expect.fieldDef @@ Core.name _WrappedType_typeName @@ ref coreDecodeNameDef @@ var "fields")
         @@ (ref Expect.fieldDef @@ Core.name _WrappedType_object @@ ref coreDecodeTypeDef @@ var "fields")
         @@ (lambdas ["name", "obj"] $ Core.wrappedType (var "name") (var "obj"))
@@ -224,7 +260,7 @@ coreDecodeWrappedTypeDef = coreDecodingDefinition "coreDecodeWrappedType" $
 coreDecodeFieldTypesDef :: TElement (Term -> Flow Graph [FieldType])
 coreDecodeFieldTypesDef = coreDecodingDefinition "coreDecodeFieldTypes" $
   lambda "term" $ lets [
-    "stripped">: ref fullyStripTermDef @@ var "term"]
+    "stripped">: ref Strip.fullyStripTermDef @@ var "term"]
     $ cases _Term (var "stripped")
         (Just $ ref Errors.unexpectedDef @@ string "list" @@ (Io.showTerm $ var "term")) [
       _Term_list>>: lambda "els" $ Flows.mapList (ref coreDecodeFieldTypeDef) (var "els")]
@@ -298,7 +334,7 @@ coreDecodeTypeDef = coreDecodingDefinition "coreDecodeType" $
 coreDecodeTypeSchemeDef :: TElement (Term -> Flow Graph TypeScheme)
 coreDecodeTypeSchemeDef = coreDecodingDefinition "coreDecodeTypeScheme" $
   ref matchRecordDef @@ (lambda "m" $
-    ref map2Def
+    ref Flows_.map2Def
       @@ (ref getFieldDef @@ var "m" @@ Core.name _TypeScheme_variables @@ (ref Expect.listDef @@ ref coreDecodeNameDef))
       @@ (ref getFieldDef @@ var "m" @@ Core.name _TypeScheme_type @@ ref coreDecodeTypeDef)
       @@ (lambdas ["vars", "body"] $ Core.typeScheme (var "vars") (var "body")))

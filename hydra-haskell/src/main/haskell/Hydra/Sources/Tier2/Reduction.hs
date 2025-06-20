@@ -3,43 +3,78 @@
 module Hydra.Sources.Tier2.Reduction where
 
 -- Standard Tier-2 imports
-import qualified Hydra.Dsl.Coders          as Coders
-import qualified Hydra.Dsl.Compute         as Compute
-import qualified Hydra.Dsl.Core            as Core
-import qualified Hydra.Dsl.Graph           as Graph
-import qualified Hydra.Dsl.Lib.Chars       as Chars
-import qualified Hydra.Dsl.Lib.Equality    as Equality
-import qualified Hydra.Dsl.Lib.Flows       as Flows
-import qualified Hydra.Dsl.Lib.Io          as Io
-import qualified Hydra.Dsl.Lib.Lists       as Lists
-import qualified Hydra.Dsl.Lib.Literals    as Literals
-import qualified Hydra.Dsl.Lib.Logic       as Logic
-import qualified Hydra.Dsl.Lib.Maps        as Maps
-import qualified Hydra.Dsl.Lib.Math        as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import           Hydra.Dsl.Phantoms        as Phantoms
-import qualified Hydra.Dsl.Lib.Sets        as Sets
-import           Hydra.Dsl.Lib.Strings     as Strings
-import qualified Hydra.Dsl.Mantle          as Mantle
-import qualified Hydra.Dsl.Module          as Module
-import qualified Hydra.Dsl.TTerms          as TTerms
-import qualified Hydra.Dsl.TTypes          as TTypes
-import qualified Hydra.Dsl.Terms           as Terms
-import qualified Hydra.Dsl.Topology        as Topology
-import qualified Hydra.Dsl.Types           as Types
-import           Hydra.Sources.Tier1.All
+import Hydra.Kernel
+import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Coders                 as Coders
+import qualified Hydra.Dsl.Compute                as Compute
+import qualified Hydra.Dsl.Core                   as Core
+import qualified Hydra.Dsl.Graph                  as Graph
+import qualified Hydra.Dsl.Lib.Chars              as Chars
+import qualified Hydra.Dsl.Lib.Equality           as Equality
+import qualified Hydra.Dsl.Lib.Flows              as Flows
+import qualified Hydra.Dsl.Lib.Io                 as Io
+import qualified Hydra.Dsl.Lib.Lists              as Lists
+import qualified Hydra.Dsl.Lib.Literals           as Literals
+import qualified Hydra.Dsl.Lib.Logic              as Logic
+import qualified Hydra.Dsl.Lib.Maps               as Maps
+import qualified Hydra.Dsl.Lib.Math               as Math
+import qualified Hydra.Dsl.Lib.Optionals          as Optionals
+import           Hydra.Dsl.Phantoms               as Phantoms
+import qualified Hydra.Dsl.Lib.Sets               as Sets
+import           Hydra.Dsl.Lib.Strings            as Strings
+import qualified Hydra.Dsl.Mantle                 as Mantle
+import qualified Hydra.Dsl.Module                 as Module
+import qualified Hydra.Dsl.TTerms                 as TTerms
+import qualified Hydra.Dsl.TTypes                 as TTypes
+import qualified Hydra.Dsl.Terms                  as Terms
+import qualified Hydra.Dsl.Topology               as Topology
+import qualified Hydra.Dsl.Types                  as Types
+import qualified Hydra.Dsl.Typing                 as Typing
+import qualified Hydra.Sources.Tier1.All          as Tier1
+import qualified Hydra.Sources.Tier1.Constants    as Constants
+import qualified Hydra.Sources.Tier1.CoreEncoding as CoreEncoding
+import qualified Hydra.Sources.Tier1.Decode       as Decode
+import qualified Hydra.Sources.Tier1.Formatting   as Formatting
+import qualified Hydra.Sources.Tier1.Functions    as Functions
+import qualified Hydra.Sources.Tier1.Literals     as Literals
+import qualified Hydra.Sources.Tier1.Messages     as Messages
+import qualified Hydra.Sources.Tier1.Strip        as Strip
 import           Prelude hiding ((++))
+import qualified Data.Int                  as I
 import qualified Data.List                 as L
 import qualified Data.Map                  as M
 import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
-import qualified Hydra.Expect as Expect
-import Hydra.Sources.Libraries
-import Hydra.Sources.Tier2.Arity
-import Hydra.Sources.Tier2.Lexical
-import Hydra.Sources.Tier2.Rewriting
-import Hydra.Sources.Tier2.Schemas
+-- Uncomment tier-2 sources as needed
+--import qualified Hydra.Sources.Tier2.Accessors as Accessors
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
+--import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Annotations as Annotations
+import qualified Hydra.Sources.Tier2.Arity as Arity
+--import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
+--import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
+--import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Expect as Expect
+--import qualified Hydra.Sources.Tier2.Flows as Flows_
+--import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
+--import qualified Hydra.Sources.Tier2.Inference as Inference
+import qualified Hydra.Sources.Tier2.Lexical as Lexical
+--import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
+--import qualified Hydra.Sources.Tier2.Printing as Printing
+--import qualified Hydra.Sources.Tier2.Qnames as Qnames
+--import qualified Hydra.Sources.Tier2.Reduction as Reduction
+import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
+import qualified Hydra.Sources.Tier2.Schemas as Schemas
+--import qualified Hydra.Sources.Tier2.Serialization as Serialization
+--import qualified Hydra.Sources.Tier2.Sorting as Sorting
+--import qualified Hydra.Sources.Tier2.Substitution as Substitution
+--import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
+--import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.TermAdapters as TermAdapters
+--import qualified Hydra.Sources.Tier2.TermEncoding as TermEncoding
+--import qualified Hydra.Sources.Tier2.Unification as Unification
+--import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
 reductionDefinition :: String -> TTerm a -> TElement a
@@ -47,8 +82,8 @@ reductionDefinition = definitionInModule hydraReductionModule
 
 hydraReductionModule :: Module
 hydraReductionModule = Module (Namespace "hydra.reduction") elements
-    [hydraArityModule, hydraLexicalModule, hydraRewritingModule, hydraSchemasModule]
-    [hydraGraphModule, hydraCodersModule, hydraComputeModule, hydraMantleModule, hydraModuleModule] $
+    [Arity.hydraArityModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule, Schemas.hydraSchemasModule]
+    [Tier1.hydraGraphModule, Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule] $
     Just ("Functions for reducing terms and types, i.e. performing computations.")
   where
    elements = [
@@ -82,7 +117,7 @@ alphaConvertDef = reductionDefinition "alphaConvert" $
             (var "tnew")
             (Core.termVariable $ var "v")]
       @@ var "t"]
-    $ ref rewriteTermDef @@ var "rewrite" @@ var "term"
+    $ ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term"
 
 -- For demo purposes. This should be generalized to enable additional side effects of interest.
 countPrimitiveInvocationsDef :: TElement Bool
@@ -129,12 +164,12 @@ countPrimitiveInvocationsDef = reductionDefinition "countPrimitiveInvocations" t
 --              (var "replacement")
 --              (var "inner")]
 --        @@ var "inner"]
---      $ ref rewriteTermDef @@ var "mapping" @@ var "term",
+--      $ ref Rewriting.rewriteTermDef @@ var "mapping" @@ var "term",
 --
 --    "applyElimination">: lambda "elm" $ lambda "reducedArg" $
 --      match _Elimination Nothing [
 --        _Elimination_record>>: lambda "proj" $
---          Flows.bind (Expect.record (Core.projectionTypeName $ var "proj") (ref stripTermDef @@ var "reducedArg")) $
+--          Flows.bind (Expect.record (Core.projectionTypeName $ var "proj") (ref Strip.stripTermDef @@ var "reducedArg")) $
 --            lambda "fields" $ lets [
 --              "matchingFields">: Lists.filter
 --                (lambda "f" $ Equality.equalString (Core.unName $ Core.fieldName $ var "f") (Core.unName $ Core.projectionField $ var "proj"))
@@ -177,7 +212,7 @@ countPrimitiveInvocationsDef = reductionDefinition "countPrimitiveInvocations" t
 --            _Function_elimination>>: lambda "elm" $
 --              Logic.ifElse (Lists.null $ var "args")
 --                (Flows.pure $ var "original")
---                (Flows.bind (var "reduceArg" @@ var "eager" @@ (ref stripTermDef @@ (Lists.head $ var "args"))) $
+--                (Flows.bind (var "reduceArg" @@ var "eager" @@ (ref Strip.stripTermDef @@ (Lists.head $ var "args"))) $
 --                  lambda "reducedArg" $
 --                    Flows.bind (Flows.bind (var "applyElimination" @@ var "elm" @@ var "reducedArg") (var "reduce" @@ var "eager")) $
 --                      lambda "reducedResult" $
@@ -185,7 +220,7 @@ countPrimitiveInvocationsDef = reductionDefinition "countPrimitiveInvocations" t
 --            _Function_lambda>>: lambda "l" $
 --              Logic.ifElse (Lists.null $ var "args")
 --                (Flows.pure $ var "original")
---                (Flows.bind (var "reduce" @@ var "eager" @@ (ref stripTermDef @@ (Lists.head $ var "args"))) $
+--                (Flows.bind (var "reduce" @@ var "eager" @@ (ref Strip.stripTermDef @@ (Lists.head $ var "args"))) $
 --                  lambda "reducedArg" $
 --                    Flows.bind (var "reduce" @@ var "eager" @@
 --                      (var "replaceFreeName" @@ (Core.lambdaParameter $ var "l") @@ var "reducedArg" @@ (Core.lambdaBody $ var "l"))) $
@@ -194,7 +229,7 @@ countPrimitiveInvocationsDef = reductionDefinition "countPrimitiveInvocations" t
 --            _Function_primitive>>: lambda "name" $
 --              Flows.bind (ref requirePrimitiveDef @@ var "name") $
 --                lambda "prim" $ lets [
---                  "arity">: ref primitiveArityDef @@ var "prim"]
+--                  "arity">: ref Arity.primitiveArityDef @@ var "prim"]
 --                  $ Logic.ifElse (Equality.gtInt32 (var "arity") (Lists.length $ var "args"))
 --                      (Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args")
 --                      (Flows.bind (Flows.mapList (var "reduceArg" @@ var "eager") (Lists.take (var "arity") (var "args"))) $
@@ -204,7 +239,7 @@ countPrimitiveInvocationsDef = reductionDefinition "countPrimitiveInvocations" t
 --                              var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ (Lists.drop (var "arity") (var "args")))]
 --          @@ var "fun",
 --        _Term_variable>>: constant $ Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args"]
---      @@ (ref stripTermDef @@ var "original"),
+--      @@ (ref Strip.stripTermDef @@ var "original"),
 --
 --    "mapping">: lambda "recurse" $ lambda "mid" $
 --      Flows.bind
@@ -212,7 +247,7 @@ countPrimitiveInvocationsDef = reductionDefinition "countPrimitiveInvocations" t
 --          (var "recurse" @@ var "mid")
 --          (Flows.pure $ var "mid"))
 --        (lambda "inner" $ var "applyIfNullary" @@ var "eager" @@ var "inner" @@ (list []))]
---    $ ref rewriteTermDef @@ var "mapping" @@ var "term"
+--    $ ref Rewriting.rewriteTermDef @@ var "mapping" @@ var "term"
 
 ---- Note: this is eager beta reduction, in that we always descend into subtypes,
 ----       and always reduce the right-hand side of an application prior to substitution
@@ -263,13 +298,13 @@ contractTermDef = reductionDefinition "contractTerm" $
                 _Function_lambda>>: lambda "l" $ lets [
                   "v">: Core.lambdaParameter $ var "l",
                   "body">: Core.lambdaBody $ var "l"]
-                  $ Logic.ifElse (ref isFreeVariableInTermDef @@ var "v" @@ var "body")
+                  $ Logic.ifElse (ref Rewriting.isFreeVariableInTermDef @@ var "v" @@ var "body")
                       (var "body")
                       (ref alphaConvertDef @@ var "v" @@ var "rhs" @@ var "body")]
               @@ var "f"]
-          @@ (ref fullyStripTermDef @@ var "lhs")]
+          @@ (ref Strip.fullyStripTermDef @@ var "lhs")]
       @@ var "rec"]
-    $ ref rewriteTermDef @@ var "rewrite" @@ var "term"
+    $ ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term"
 
 -- Note: unused / untested
 etaReduceTermDef :: TElement (Term -> Term)
@@ -294,7 +329,7 @@ etaReduceTermDef = reductionDefinition "etaReduceTerm" $
               Logic.ifElse
                 (Logic.and
                   (Equality.equalString (Core.unName $ var "v") (Core.unName $ var "v1"))
-                  (Logic.not $ ref isFreeVariableInTermDef @@ var "v" @@ var "lhs"))
+                  (Logic.not $ ref Rewriting.isFreeVariableInTermDef @@ var "v" @@ var "lhs"))
                 (ref etaReduceTermDef @@ var "lhs")
                 (var "noChange")]
           @@ (ref etaReduceTermDef @@ var "rhs")]
@@ -341,7 +376,7 @@ expandLambdasDef = reductionDefinition "expandLambdas" $
           "erhs">: var "rewrite" @@ (list []) @@ var "recurse" @@ var "rhs"]
           $ var "rewrite" @@ (Lists.cons (var "erhs") (var "args")) @@ var "recurse" @@ var "lhs"]
       @@ var "t"]
-    $ ref contractTermDef @@ (ref rewriteTermDef @@ (var "rewrite" @@ (list [])) @@ var "term")
+    $ ref contractTermDef @@ (ref Rewriting.rewriteTermDef @@ (var "rewrite" @@ (list [])) @@ var "term")
 
 expansionArityDef :: TElement (Graph -> Term -> Int)
 expansionArityDef = reductionDefinition "expansionArity" $
@@ -357,20 +392,20 @@ expansionArityDef = reductionDefinition "expansionArity" $
           _Function_elimination>>: constant $ int32 1,
           _Function_lambda>>: constant $ int32 0,
           _Function_primitive>>: lambda "name" $
-            ref primitiveArityDef @@ (Optionals.fromJust (ref lookupPrimitiveDef @@ var "graph" @@ var "name"))]
+            ref Arity.primitiveArityDef @@ (Optionals.fromJust (ref Lexical.lookupPrimitiveDef @@ var "graph" @@ var "name"))]
         @@ var "f",
       _Term_variable>>: lambda "name" $
         Optionals.maybe (int32 0)
-          (lambda "ts" $ ref typeArityDef @@ (Core.typeSchemeType $ var "ts"))
+          (lambda "ts" $ ref Arity.typeArityDef @@ (Core.typeSchemeType $ var "ts"))
           (Optionals.bind
-            (ref lookupElementDef @@ var "graph" @@ var "name")
+            (ref Lexical.lookupElementDef @@ var "graph" @@ var "name")
             (lambda "el" $ Graph.elementType $ var "el"))]
-    @@ (ref fullyStripTermDef @@ var "term")
+    @@ (ref Strip.fullyStripTermDef @@ var "term")
 
 termIsClosedDef :: TElement (Term -> Bool)
 termIsClosedDef = reductionDefinition "termIsClosed" $
   doc "Whether a term is closed, i.e. represents a complete program" $
-  lambda "term" $ Sets.null $ ref freeVariablesInTermDef @@ var "term"
+  lambda "term" $ Sets.null $ ref Rewriting.freeVariablesInTermDef @@ var "term"
 
 termIsValueDef :: TElement (Graph -> Term -> Bool)
 termIsValueDef = reductionDefinition "termIsValue" $
@@ -409,4 +444,4 @@ termIsValueDef = reductionDefinition "termIsValue" $
       _Term_set>>: lambda "s" $ var "forList" @@ Sets.toList (var "s"),
       _Term_union>>: lambda "i" $ var "checkField" @@ Core.injectionField (var "i"),
       _Term_variable>>: constant false]
-    @@ (ref stripTermDef @@ var "term")
+    @@ (ref Strip.stripTermDef @@ var "term")
