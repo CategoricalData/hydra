@@ -14,7 +14,7 @@ import Hydra.Sources.Libraries
 import Hydra.Strip
 import Hydra.Rewriting
 import Hydra.Coders
-import Hydra.Staging.Rewriting
+import Hydra.Rewriting
 
 import qualified Data.List as L
 import qualified Data.Map as M

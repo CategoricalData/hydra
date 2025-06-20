@@ -1,6 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 {-
+stack ghci hydra:lib hydra:hydra-test
+
 Test.Hspec.hspec Hydra.RewritingSpec.spec
 -}
 module Hydra.RewritingSpec where

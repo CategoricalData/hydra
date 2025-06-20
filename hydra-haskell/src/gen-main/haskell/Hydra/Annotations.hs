@@ -71,13 +71,6 @@ getTermAnnotation key term = (Maps.lookup key (termAnnotationInternal term))
 getTermDescription :: (Core.Term -> Compute.Flow Graph.Graph (Maybe String))
 getTermDescription term = (getDescription (termAnnotationInternal term))
 
--- | Get the annotated type of a given term, if any
-getTermType :: (Core.Term -> Maybe Core.Type)
-getTermType x = case x of
-  Core.TermAnnotated v1 -> (getTermType (Core.annotatedTermSubject v1))
-  Core.TermTyped v1 -> (Just (Core.typedTermType v1))
-  _ -> Nothing
-
 -- | Get type from annotations
 getType :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe Core.Type))
 getType anns = (Optionals.maybe (Flows_.pure Nothing) (\dat -> Flows_.map Optionals.pure (CoreDecoding.coreDecodeType dat)) (Maps.lookup Constants.key_type anns))
@@ -156,12 +149,12 @@ requireElementType el =
   let withType = (Optionals.maybe (Flows_.fail (Strings.cat [
           "missing type annotation for element ",
           (Core.unName (Graph.elementName el))])) (\t -> Flows_.pure t))
-  in (withType (getTermType (Graph.elementTerm el)))
+  in (withType (Rewriting.getTermType (Graph.elementTerm el)))
 
 requireTermType :: (Core.Term -> Compute.Flow t0 Core.Type)
 requireTermType =  
   let withType = (Optionals.maybe (Flows_.fail "missing type annotation") (\t -> Flows_.pure t))
-  in (\arg_ -> withType (getTermType arg_))
+  in (\arg_ -> withType (Rewriting.getTermType arg_))
 
 resetCount :: (Core.Name -> Compute.Flow t0 ())
 resetCount key = (putAttr key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))))
