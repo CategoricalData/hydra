@@ -1,6 +1,8 @@
 module Hydra.Sources.Tier1.Formatting where
 
 -- Standard term-level Tier-1 imports
+import Hydra.Kernel
+import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Lib.Equality  as Equality
@@ -25,7 +27,6 @@ import qualified Data.Maybe              as Y
 
 import qualified Hydra.Dsl.Mantle as Mantle
 import Hydra.Sources.Tier1.Mantle
-import Hydra.Sources.Libraries
 
 
 formattingDefinition :: String -> TTerm a -> TElement a
