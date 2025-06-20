@@ -38,6 +38,7 @@ module Hydra.Kernel (
   module Hydra.Staging.Rewriting,
   module Hydra.Schemas,
   module Hydra.Serialization,
+  module Hydra.Settings,
   module Hydra.Sorting,
   module Hydra.Strip,
   module Hydra.Substitution,
@@ -85,6 +86,7 @@ import Hydra.Staging.Reduction
 import Hydra.Staging.Rewriting
 import Hydra.Schemas
 import Hydra.Serialization
+import Hydra.Settings
 import Hydra.Sorting
 import Hydra.Strip
 import Hydra.Substitution
