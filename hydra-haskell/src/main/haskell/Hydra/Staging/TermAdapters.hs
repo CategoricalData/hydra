@@ -21,7 +21,7 @@ import Hydra.Lexical
 import Hydra.Lib.Io
 import Hydra.Mantle
 import Hydra.Rewriting
-import Hydra.Staging.Reduction
+import Hydra.Reduction
 import Hydra.Rewriting
 import Hydra.Staging.LiteralAdapters
 import Hydra.Dsl.Terms

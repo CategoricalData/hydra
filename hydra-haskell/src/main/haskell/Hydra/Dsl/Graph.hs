@@ -79,7 +79,7 @@ primitiveType :: TTerm Primitive -> TTerm TypeScheme
 primitiveType p = project _Primitive _Primitive_type @@ p
 
 primitiveImplementation :: TTerm Primitive -> TTerm ([Term] -> Flow Graph Term)
-primitiveImplementation p = project _Primitive _Primitive_type @@ p
+primitiveImplementation p = project _Primitive _Primitive_implementation @@ p
 
 typeClassEquality :: TTerm TypeClass
 typeClassEquality = unitVariant _TypeClass _TypeClass_equality

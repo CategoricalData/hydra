@@ -55,7 +55,7 @@ import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 --import qualified Hydra.Sources.Tier2.Errors as Errors
---import qualified Hydra.Sources.Tier2.Expect as Expect
+import qualified Hydra.Sources.Tier2.Expect as Expect
 --import qualified Hydra.Sources.Tier2.Flows as Flows_
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
@@ -82,19 +82,21 @@ reductionDefinition = definitionInModule hydraReductionModule
 
 hydraReductionModule :: Module
 hydraReductionModule = Module (Namespace "hydra.reduction") elements
-    [Arity.hydraArityModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule, Schemas.hydraSchemasModule]
-    [Tier1.hydraGraphModule, Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule] $
+    [Arity.hydraArityModule, Expect.hydraExpectModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule,
+      Schemas.hydraSchemasModule]
+    [Tier1.hydraGraphModule, Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraMantleModule,
+      Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just ("Functions for reducing terms and types, i.e. performing computations.")
   where
    elements = [
      el alphaConvertDef,
-     el countPrimitiveInvocationsDef,
---     el reduceTermDef,
---     el betaReduceTypeDef,
+     el betaReduceTypeDef,
      el contractTermDef,
+     el countPrimitiveInvocationsDef,
      el etaReduceTermDef,
      el expandLambdasDef,
      el expansionArityDef,
+     el reduceTermDef,
      el termIsClosedDef,
      el termIsValueDef]
 
@@ -119,164 +121,34 @@ alphaConvertDef = reductionDefinition "alphaConvert" $
       @@ var "t"]
     $ ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term"
 
--- For demo purposes. This should be generalized to enable additional side effects of interest.
-countPrimitiveInvocationsDef :: TElement Bool
-countPrimitiveInvocationsDef = reductionDefinition "countPrimitiveInvocations" true
-
---reduceTermDef :: TElement (Bool -> M.Map Name Term -> Term -> Flow Graph Term)
---reduceTermDef = reductionDefinition "reduceTerm" $
---  doc "A term evaluation function which is alternatively lazy or eager" $
---  lambda "eager" $ lambda "env" $ lambda "term" $ lets [
---    "reduce">: lambda "eager" $ ref reduceTermDef @@ var "eager" @@ Maps.empty,
---
---    "doRecurse">: lambda "eager" $ lambda "term" $
---      Logic.and (var "eager") $
---        match _Term (Just true) [
---          _Term_function>>: lambda "f" $
---            match _Function (Just true) [
---              _Function_lambda>>: constant false]
---            @@ var "f"]
---        @@ var "term",
---
---    "reduceArg">: lambda "eager" $ lambda "arg" $
---      Logic.ifElse (var "eager")
---        (Flows.pure $ var "arg")
---        (var "reduce" @@ false @@ var "arg"),
---
---    "applyToArguments">: lambda "fun" $ lambda "args" $
---      Logic.ifElse (Lists.null $ var "args")
---        (var "fun")
---        (var "applyToArguments" @@ (Terms.apply (var "fun") (Lists.head $ var "args")) @@ (Lists.tail $ var "args")),
---
---    "replaceFreeName">: lambda "toReplace" $ lambda "replacement" $ lambda "term" $ lets [
---      "mapping">: lambda "recurse" $ lambda "inner" $
---        match _Term (Just $ var "recurse" @@ var "inner") [
---          _Term_function>>: lambda "f" $
---            match _Function (Just $ var "recurse" @@ var "inner") [
---              _Function_lambda>>: lambda "l" $ lets [
---                "param">: Core.lambdaParameter $ var "l"]
---                $ Logic.ifElse (Equality.equalString (Core.unName $ var "param") (Core.unName $ var "toReplace"))
---                    (var "inner")
---                    (var "recurse" @@ var "inner")]
---            @@ var "f",
---          _Term_variable>>: lambda "name" $
---            Logic.ifElse (Equality.equalString (Core.unName $ var "name") (Core.unName $ var "toReplace"))
---              (var "replacement")
---              (var "inner")]
---        @@ var "inner"]
---      $ ref Rewriting.rewriteTermDef @@ var "mapping" @@ var "term",
---
---    "applyElimination">: lambda "elm" $ lambda "reducedArg" $
---      match _Elimination Nothing [
---        _Elimination_record>>: lambda "proj" $
---          Flows.bind (Expect.record (Core.projectionTypeName $ var "proj") (ref Strip.stripTermDef @@ var "reducedArg")) $
---            lambda "fields" $ lets [
---              "matchingFields">: Lists.filter
---                (lambda "f" $ Equality.equalString (Core.unName $ Core.fieldName $ var "f") (Core.unName $ Core.projectionField $ var "proj"))
---                (var "fields")]
---              $ Logic.ifElse (Lists.null $ var "matchingFields")
---                  (Flows.fail $ Strings.cat $ list [
---                    string "no such field: ",
---                    Core.unName $ Core.projectionField $ var "proj",
---                    string " in ",
---                    Core.unName $ Core.projectionTypeName $ var "proj",
---                    string " record"])
---                  (Flows.pure $ Core.fieldTerm $ Lists.head $ var "matchingFields"),
---        _Elimination_union>>: lambda "cs" $
---          Flows.bind (Expect.injection (Core.caseStatementTypeName $ var "cs") (var "reducedArg")) $
---            lambda "field" $ lets [
---              "matchingFields">: Lists.filter
---                (lambda "f" $ Equality.equalString (Core.unName $ Core.fieldName $ var "f") (Core.unName $ Core.fieldName $ var "field"))
---                (Core.caseStatementCases $ var "cs")]
---              $ Logic.ifElse (Lists.null $ var "matchingFields")
---                  (Optionals.maybe
---                    (Flows.fail $ Strings.cat $ list [
---                      string "no such field ",
---                      Core.unName $ Core.fieldName $ var "field",
---                      string " in ",
---                      Core.unName $ Core.caseStatementTypeName $ var "cs",
---                      string " case statement"])
---                    (Flows.pure)
---                    (Core.caseStatementDefault $ var "cs"))
---                  (Flows.pure $ Terms.apply (Core.fieldTerm $ Lists.head $ var "matchingFields") (Core.fieldTerm $ var "field")),
---        _Elimination_wrap>>: lambda "name" $ Expect.wrap (var "name") (var "reducedArg")]
---      @@ var "elm",
---
---    "applyIfNullary">: lambda "eager" $ lambda "original" $ lambda "args" $
---      match _Term (Just $ Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args") [
---        _Term_application>>: lambda "app" $
---          var "applyIfNullary" @@ var "eager" @@ (Core.applicationFunction $ var "app") @@
---            (Lists.cons (Core.applicationArgument $ var "app") (var "args")),
---        _Term_function>>: lambda "fun" $
---          match _Function (Just $ Flows.pure $ var "original") [
---            _Function_elimination>>: lambda "elm" $
---              Logic.ifElse (Lists.null $ var "args")
---                (Flows.pure $ var "original")
---                (Flows.bind (var "reduceArg" @@ var "eager" @@ (ref Strip.stripTermDef @@ (Lists.head $ var "args"))) $
---                  lambda "reducedArg" $
---                    Flows.bind (Flows.bind (var "applyElimination" @@ var "elm" @@ var "reducedArg") (var "reduce" @@ var "eager")) $
---                      lambda "reducedResult" $
---                        var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ (Lists.tail $ var "args")),
---            _Function_lambda>>: lambda "l" $
---              Logic.ifElse (Lists.null $ var "args")
---                (Flows.pure $ var "original")
---                (Flows.bind (var "reduce" @@ var "eager" @@ (ref Strip.stripTermDef @@ (Lists.head $ var "args"))) $
---                  lambda "reducedArg" $
---                    Flows.bind (var "reduce" @@ var "eager" @@
---                      (var "replaceFreeName" @@ (Core.lambdaParameter $ var "l") @@ var "reducedArg" @@ (Core.lambdaBody $ var "l"))) $
---                        lambda "reducedResult" $
---                          var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ (Lists.tail $ var "args")),
---            _Function_primitive>>: lambda "name" $
---              Flows.bind (ref requirePrimitiveDef @@ var "name") $
---                lambda "prim" $ lets [
---                  "arity">: ref Arity.primitiveArityDef @@ var "prim"]
---                  $ Logic.ifElse (Equality.gtInt32 (var "arity") (Lists.length $ var "args"))
---                      (Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args")
---                      (Flows.bind (Flows.mapList (var "reduceArg" @@ var "eager") (Lists.take (var "arity") (var "args"))) $
---                        lambda "reducedArgs" $
---                          Flows.bind (Flows.bind ((Graph.primitiveImplementation $ var "prim") @@ var "reducedArgs") (var "reduce" @@ var "eager")) $
---                            lambda "reducedResult" $
---                              var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ (Lists.drop (var "arity") (var "args")))]
---          @@ var "fun",
---        _Term_variable>>: constant $ Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args"]
---      @@ (ref Strip.stripTermDef @@ var "original"),
---
---    "mapping">: lambda "recurse" $ lambda "mid" $
---      Flows.bind
---        (Logic.ifElse (var "doRecurse" @@ var "eager" @@ var "mid")
---          (var "recurse" @@ var "mid")
---          (Flows.pure $ var "mid"))
---        (lambda "inner" $ var "applyIfNullary" @@ var "eager" @@ var "inner" @@ (list []))]
---    $ ref Rewriting.rewriteTermDef @@ var "mapping" @@ var "term"
-
----- Note: this is eager beta reduction, in that we always descend into subtypes,
-----       and always reduce the right-hand side of an application prior to substitution
---betaReduceTypeDef :: TElement (Type -> Flow Graph Type)
---betaReduceTypeDef = reductionDefinition "betaReduceType" $
---  doc "Eager beta reduction for types" $
---  lambda "typ" $ lets [
---    "reduceApp">: lambda "app" $ lets [
---      "lhs">: Core.applicationTypeFunction $ var "app",
---      "rhs">: Core.applicationTypeArgument $ var "app"]
---      $ match _Type (Just $
---          Flows.bind (ref requireTypeDef @@ var "name") $
---            lambda "t'" $ ref betaReduceTypeDef $ Core.typeApplication $ Core.applicationType (var "t'") (var "rhs")) [
---        _Type_annotated>>: lambda "at" $
---          Flows.bind (var "reduceApp" $ Core.applicationType (Core.annotatedTypeSubject $ var "at") (var "rhs")) $
---            lambda "a" $ Flows.pure $ Core.typeAnnotated $ Core.annotatedType (var "a") (Core.annotatedTypeAnnotation $ var "at"),
---        _Type_forall>>: lambda "ft" $
---          ref betaReduceTypeDef $ var "replaceFreeName" @@ Core.forallTypeParameter (var "ft") @@ var "rhs" @@ Core.forallTypeBody (var "ft"),
---        _Type_variable>>: lambda "name" $
---          Flows.bind (ref requireTypeDef @@ var "name") $
---            lambda "t'" $ ref betaReduceTypeDef $ Core.typeApplication $ Core.applicationType (var "t'") (var "rhs")]
---      @@ var "lhs",
---    "mapExpr">: lambda "recurse" $ lambda "t" $
---      Flows.bind (var "recurse" @@ var "t") $
---        lambda "r" $
---          match _Type (Just $ Flows.pure $ var "r") [
---            _Type_application>>: lambda "a" $ var "reduceApp" @@ var "a"]
---          @@ var "r"]
---    $ ref rewriteTypeDef @@ var "mapExpr" @@ var "typ"
+-- Note: this is eager beta reduction, in that we always descend into subtypes,
+--       and always reduce the right-hand side of an application prior to substitution
+betaReduceTypeDef :: TElement (Type -> Flow Graph Type)
+betaReduceTypeDef = reductionDefinition "betaReduceType" $
+  lambda "typ" $ lets [
+    "mapExpr">: lambdas ["recurse", "t"] $
+      Flows.bind (var "recurse" @@ var "t") $
+        lambda "r" $
+          match _Type (Just $ Flows.pure $ var "r") [
+            _Type_application>>: lambda "a" $ var "reduceApp" @@ var "a"] @@ var "r",
+    "reduceApp">: lambda "app" $ lets [
+      "lhs">: Core.applicationTypeFunction $ var "app",
+      "rhs">: Core.applicationTypeArgument $ var "app"]
+      $ match _Type Nothing [
+        _Type_annotated>>: lambda "at" $
+          Flows.bind (var "reduceApp" @@ (Core.applicationType
+            (Core.annotatedTypeSubject $ var "at")
+            (var "rhs"))) $
+            lambda "a" $ Flows.pure $ Core.typeAnnotated $ Core.annotatedType (var "a") (Core.annotatedTypeAnnotation $ var "at"),
+        _Type_forall>>: lambda "ft" $
+          ref betaReduceTypeDef @@ (ref Rewriting.replaceFreeNameDef
+            @@ (Core.forallTypeParameter $ var "ft")
+            @@ var "rhs"
+            @@ (Core.forallTypeBody $ var "ft")),
+        _Type_variable>>: lambda "name" $
+          Flows.bind (ref Schemas.requireTypeDef @@ var "name") $
+            lambda "t'" $ ref betaReduceTypeDef @@ (Core.typeApplication $ Core.applicationType (var "t'") (var "rhs"))] @@ var "lhs"]
+    $ ref Rewriting.rewriteTypeMDef @@ var "mapExpr" @@ var "typ"
 
 contractTermDef :: TElement (Term -> Term)
 contractTermDef = reductionDefinition "contractTerm" $
@@ -305,6 +177,10 @@ contractTermDef = reductionDefinition "contractTerm" $
           @@ (ref Strip.fullyStripTermDef @@ var "lhs")]
       @@ var "rec"]
     $ ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term"
+
+-- For demo purposes. This should be generalized to enable additional side effects of interest.
+countPrimitiveInvocationsDef :: TElement Bool
+countPrimitiveInvocationsDef = reductionDefinition "countPrimitiveInvocations" true
 
 -- Note: unused / untested
 etaReduceTermDef :: TElement (Term -> Term)
@@ -401,6 +277,245 @@ expansionArityDef = reductionDefinition "expansionArity" $
             (ref Lexical.lookupElementDef @@ var "graph" @@ var "name")
             (lambda "el" $ Graph.elementType $ var "el"))]
     @@ (ref Strip.fullyStripTermDef @@ var "term")
+
+
+
+
+
+
+
+
+--reduceTermDef :: TElement (Bool -> M.Map Name Term -> Term -> Flow Graph Term)
+--reduceTermDef = reductionDefinition "reduceTerm" $
+--  lambda "term" $ lets [
+--    "mapping">: lambdas ["recurse", "mid"] $ Flows.pure $ var "mid"]
+--    $ ref Rewriting.rewriteTermMDef @@ var "mapping" @@ var "term"
+
+
+--    mapping recurse mid = do
+--      inner <- if doRecurse eager mid then recurse mid else pure mid
+--      applyIfNullary eager inner []
+
+
+
+
+--
+--reduceTermDef :: TElement (Bool -> M.Map Name Term -> Term -> Flow Graph Term)
+--reduceTermDef = reductionDefinition "reduceTerm" $
+--  doc "A term evaluation function which is alternatively lazy or eager" $
+--  lambdas ["eager", "env", "term"] $ lets [
+--    "reduce">: lambda "eager" $ ref reduceTermDef @@ var "eager" @@ Maps.empty,
+--
+--    "doRecurse">: lambdas ["eager", "term"] $
+--      Logic.and (var "eager") $ cases _Term (var "term") (Just true) [
+--        _Term_function>>: match _Function (Just true) [
+--          _Function_lambda>>: constant false]],
+--
+--    "reduceArg">: lambdas ["eager", "arg"] $
+--      Logic.ifElse (var "eager")
+--        (Flows.pure $ var "arg")
+--        (var "reduce" @@ false @@ var "arg"),
+--
+--    "applyToArguments">: lambdas ["fun", "args"] $
+--      Logic.ifElse (Lists.null $ var "args")
+--        (var "fun")
+--        (var "applyToArguments" @@
+--          (Core.termApplication $ Core.application (var "fun") (Lists.head $ var "args")) @@
+--          (Lists.tail $ var "args")),
+--
+----    applyToArguments fun args = case args of
+----      [] -> fun
+----      (h:r) -> applyToArguments (Terms.apply fun h) r
+----
+--
+--    "replaceFreeName">: lambdas ["toReplace", "replacement", "term"] $ lets [
+--      "mapping">: lambdas ["recurse", "inner"] $
+--        match _Term (Just $ var "recurse" @@ var "inner") [
+--          _Term_function>>: match _Function (Just $ var "recurse" @@ var "inner") [
+--            _Function_lambda>>: lambda "l" $ Logic.ifElse
+--              (Equality.equal (Core.lambdaParameter $ var "l") (var "toReplace"))
+--              (var "inner")
+--              (var "recurse" @@ var "inner")],
+--          _Term_variable>>: lambda "name" $ Logic.ifElse
+--            (Equality.equal (var "name") (var "toReplace"))
+--            (var "replacement")
+--            (var "inner")] @@ var "inner"]
+--      $ ref Rewriting.rewriteTermDef @@ var "mapping" @@ var "term",
+--
+--    "applyElimination">: lambdas ["elm", "reducedArg"] $
+--      match _Elimination Nothing [] @@ var "elm",
+--
+--    "applyIfNullary">: lambdas ["eager", "original", "args"] $ lets [
+--      "stripped">: ref Strip.stripTermDef @@ var "original"]
+--      $ cases _Term (var "stripped") Nothing [
+--        _Term_function>>: match _Function (Just $ Flows.pure (var "applyToArguments" @@ var "original" @@ var "args")) [
+--            _Function_primitive>>: lambda "name" $
+--              Flows.bind (ref Lexical.requirePrimitiveDef @@ var "name") $ lambda "prim" $
+--                lets [
+--                  "arity">: ref Arity.primitiveArityDef @@ var "prim"]
+--                  $ Logic.ifElse (Equality.gtInt32 (var "arity") (Lists.length $ var "args"))
+--                    (Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args")
+--                    (lets [
+--                      "argList">: Lists.take (var "arity") (var "args"),
+--                      "remainingArgs">: Lists.drop (var "arity") (var "args")]
+--                      $ Flows.bind (Flows.mapList (var "reduceArg" @@ var "eager") (var "argList")) $ lambda "reducedArgs" $
+--                          Flows.bind
+--                            (Flows.bind
+--                              (Graph.primitiveImplementation (var "prim") @@ var "reducedArgs")
+--                              (var "reduce" @@ var "eager")) $ lambda "reducedResult" $
+--                                var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs")]],
+--    "mapping">: lambdas ["recurse", "mid"] $
+--      Flows.bind
+--        (Logic.ifElse (var "doRecurse" @@ var "eager" @@ var "mid")
+--          (var "recurse" @@ var "mid")
+--          (Flows.pure $ var "mid")) $
+--        lambda "inner" $ var "applyIfNullary" @@ var "eager" @@ var "inner" @@ (list [])]
+--    $ ref Rewriting.rewriteTermMDef @@ var "mapping" @@ var "term"
+--
+
+
+
+
+
+{--}
+reduceTermDef :: TElement (Bool -> M.Map Name Term -> Term -> Flow Graph Term)
+reduceTermDef = reductionDefinition "reduceTerm" $
+  doc "A term evaluation function which is alternatively lazy or eager" $
+  lambdas ["eager", "env", "term"] $ lets [
+    "reduce">: lambda "eager" $ ref reduceTermDef @@ var "eager" @@ Maps.empty,
+
+    "doRecurse">: lambdas ["eager", "term"] $
+      Logic.and (var "eager") $ cases _Term (var "term") (Just true) [
+        _Term_function>>: match _Function (Just true) [
+          _Function_lambda>>: constant false]],
+
+    "reduceArg">: lambdas ["eager", "arg"] $
+      Logic.ifElse (var "eager")
+        (Flows.pure $ var "arg")
+        (var "reduce" @@ false @@ var "arg"),
+
+    "applyToArguments">: lambdas ["fun", "args"] $
+      Logic.ifElse (Lists.null $ var "args")
+        (var "fun")
+        (var "applyToArguments" @@
+          (Core.termApplication $ Core.application (var "fun") (Lists.head $ var "args")) @@
+          (Lists.tail $ var "args")),
+
+    "replaceFreeName">: lambdas ["toReplace", "replacement", "term"] $ lets [
+      "mapping">: lambdas ["recurse", "inner"] $
+        match _Term (Just $ var "recurse" @@ var "inner") [
+          _Term_function>>: match _Function (Just $ var "recurse" @@ var "inner") [
+            _Function_lambda>>: lambda "l" $ Logic.ifElse
+              (Equality.equal (Core.lambdaParameter $ var "l") (var "toReplace"))
+              (var "inner")
+              (var "recurse" @@ var "inner")],
+          _Term_variable>>: lambda "name" $ Logic.ifElse
+            (Equality.equal (var "name") (var "toReplace"))
+            (var "replacement")
+            (var "inner")] @@ var "inner"]
+      $ ref Rewriting.rewriteTermDef @@ var "mapping" @@ var "term",
+
+    "applyElimination">: lambdas ["elm", "reducedArg"] $
+      match _Elimination Nothing [
+        _Elimination_record>>: lambda "proj" $
+          Flows.bind (ref Expect.recordDef @@ (Core.projectionTypeName $ var "proj") @@ (ref Strip.stripTermDef @@ var "reducedArg")) $
+            lambda "fields" $ lets [
+              "matchingFields">: Lists.filter
+                (lambda "f" $ Equality.equal (Core.fieldName $ var "f") (Core.projectionField $ var "proj"))
+                (var "fields")]
+              $ Logic.ifElse
+                (Lists.null $ var "matchingFields")
+                (Flows.fail $ Strings.cat $ list [
+                  string "no such field: ",
+                  unwrap _Name @@ (Core.projectionField $ var "proj"),
+                  string " in ",
+                  unwrap _Name @@ (Core.projectionTypeName $ var "proj"),
+                  string " record"])
+                (Flows.pure $ Core.fieldTerm $ Lists.head $ var "matchingFields"),
+        _Elimination_union>>: lambda "cs" $
+          Flows.bind (ref Expect.injectionDef @@ (Core.caseStatementTypeName $ var "cs") @@ var "reducedArg") $
+            lambda "field" $ lets [
+              "matchingFields">: Lists.filter
+                (lambda "f" $ Equality.equal (Core.fieldName $ var "f") (Core.fieldName $ var "field"))
+                (Core.caseStatementCases $ var "cs")]
+              $ Logic.ifElse (Lists.null $ var "matchingFields")
+                (Optionals.maybe
+                  (Flows.fail $ Strings.cat $ list [
+                    string "no such field ",
+                    unwrap _Name @@ (Core.fieldName $ var "field"),
+                    string " in ",
+                    unwrap _Name @@ (Core.caseStatementTypeName $ var "cs"),
+                    string " case statement"])
+                  (unaryFunction Flows.pure)
+                  (Core.caseStatementDefault $ var "cs"))
+                (Flows.pure $ Core.termApplication $ Core.application
+                  (Core.fieldTerm $ Lists.head $ var "matchingFields")
+                  (Core.fieldTerm $ var "field")),
+        _Elimination_wrap>>: lambda "name" $ ref Expect.wrapDef @@ var "name" @@ var "reducedArg"] @@ var "elm",
+
+    "applyIfNullary">: lambdas ["eager", "original", "args"] $ lets [
+      "stripped">: ref Strip.stripTermDef @@ var "original"]
+      $ cases _Term (var "stripped") (Just $ Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args") [
+        _Term_application>>: lambda "app" $ var "applyIfNullary" @@ var "eager" @@
+          (Core.applicationFunction $ var "app") @@
+          (Lists.cons (Core.applicationArgument $ var "app") (var "args")),
+        _Term_function>>: match _Function Nothing [
+            _Function_elimination>>: lambda "elm" $
+              Logic.ifElse (Lists.null $ var "args")
+                (Flows.pure $ var "original")
+                (lets [
+                  "arg">: Lists.head $ var "args",
+                  "remainingArgs">: Lists.tail $ var "args"]
+                  $ Flows.bind (var "reduceArg" @@ var "eager" @@ (ref Strip.stripTermDef @@ var "arg")) $
+                    lambda "reducedArg" $
+                      Flows.bind (Flows.bind (var "applyElimination" @@ var "elm" @@ var "reducedArg") (var "reduce" @@ var "eager")) $
+                        lambda "reducedResult" $ var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs"),
+            _Function_lambda>>: lambda "l" $
+              Logic.ifElse (Lists.null $ var "args")
+                (Flows.pure $ var "original")
+                (lets [
+                  "param">: Core.lambdaParameter $ var "l",
+                  "body">: Core.lambdaBody $ var "l",
+                  "arg">: Lists.head $ var "args",
+                  "remainingArgs">: Lists.tail $ var "args"]
+                  $ Flows.bind (var "reduce" @@ var "eager" @@ (ref Strip.stripTermDef @@ var "arg")) $
+                    lambda "reducedArg" $
+                      Flows.bind (var "reduce" @@ var "eager" @@ (var "replaceFreeName" @@ var "param" @@ var "reducedArg" @@ var "body")) $
+                        lambda "reducedResult" $ var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs"),
+            _Function_primitive>>: lambda "name" $
+              Flows.bind (ref Lexical.requirePrimitiveDef @@ var "name") $ lambda "prim" $
+                lets [
+                  "arity">: ref Arity.primitiveArityDef @@ var "prim"]
+                  $ Logic.ifElse (Equality.gtInt32 (var "arity") (Lists.length $ var "args"))
+                    (Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args")
+                    (lets [
+                      "argList">: Lists.take (var "arity") (var "args"),
+                      "remainingArgs">: Lists.drop (var "arity") (var "args")]
+                      $ Flows.bind (Flows.mapList (var "reduceArg" @@ var "eager") (var "argList")) $ lambda "reducedArgs" $
+                          Flows.bind
+                            (Flows.bind
+                              (Graph.primitiveImplementation (var "prim") @@ var "reducedArgs")
+                              (var "reduce" @@ var "eager")) $ lambda "reducedResult" $
+                                var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs")],
+        _Term_variable>>: lambda "v" $ Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args"],
+    "mapping">: lambdas ["recurse", "mid"] $
+      Flows.bind
+        (Logic.ifElse (var "doRecurse" @@ var "eager" @@ var "mid")
+          (var "recurse" @@ var "mid")
+          (Flows.pure $ var "mid")) $
+        lambda "inner" $ var "applyIfNullary" @@ var "eager" @@ var "inner" @@ (list [])]
+    $ ref Rewriting.rewriteTermMDef @@ var "mapping" @@ var "term"
+
+{--}
+
+
+
+
+
+
+
+
+
 
 termIsClosedDef :: TElement (Term -> Bool)
 termIsClosedDef = reductionDefinition "termIsClosed" $
