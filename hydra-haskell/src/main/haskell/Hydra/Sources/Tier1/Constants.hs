@@ -1,6 +1,8 @@
 module Hydra.Sources.Tier1.Constants where
 
 -- Standard term-level Tier-1 imports
+import Hydra.Kernel
+import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Lib.Equality  as Equality
