@@ -3,6 +3,8 @@ module Hydra.Dsl.Module where
 import Hydra.Kernel
 import Hydra.Dsl.Phantoms
 
+import qualified Data.Map as M
+
 
 definitionTerm :: TTerm TermDefinition -> TTerm Definition
 definitionTerm = variant _Definition _Definition_term
@@ -35,6 +37,11 @@ moduleDescription m = project _Module _Module_description @@ m
 
 namespace :: TTerm String -> TTerm Namespace
 namespace ns = wrap _Namespace ns
+
+namespaces :: TTerm (Namespace, n) -> TTerm (M.Map Namespace n) -> TTerm (Namespaces n)
+namespaces focus mapping = record _Namespaces [
+  _Namespaces_focus>>: focus,
+  _Namespaces_mapping>>: mapping]
 
 qualifiedName :: TTerm (Maybe Namespace) -> TTerm String -> TTerm QualifiedName
 qualifiedName ns local = record _QualifiedName [

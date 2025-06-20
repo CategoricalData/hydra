@@ -9,7 +9,7 @@ import Hydra.Arity
 import Hydra.Strip
 import Hydra.Compute
 import Hydra.Core
-import Hydra.Staging.Schemas
+import Hydra.Schemas
 import Hydra.Graph
 import Hydra.Annotations
 import Hydra.Lexical
