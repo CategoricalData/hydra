@@ -20,7 +20,7 @@ import Hydra.Inference
 import Hydra.Annotations
 import Hydra.CoreDecoding
 import Hydra.Lexical
-import Hydra.Staging.Rewriting
+import Hydra.Rewriting
 import Hydra.Schemas
 import Hydra.Sorting
 import Hydra.Strip

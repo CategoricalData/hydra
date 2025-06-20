@@ -21,7 +21,7 @@ import Hydra.Graph
 --import Hydra.Dsl.Annotations
 --import Hydra.Ext.Json.Serde
 import Hydra.CoreEncoding
---import Hydra.Staging.Rewriting
+--import Hydra.Rewriting
 --import Hydra.Annotations
 import Hydra.Flows
 import Hydra.Typing

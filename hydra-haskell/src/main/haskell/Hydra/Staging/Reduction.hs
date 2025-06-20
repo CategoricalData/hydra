@@ -14,7 +14,7 @@ import Hydra.Graph
 import Hydra.Annotations
 import Hydra.Lexical
 import Hydra.Reduction
-import Hydra.Staging.Rewriting
+import Hydra.Rewriting
 import Hydra.Rewriting
 import Hydra.Lexical
 import Hydra.Lib.Io
