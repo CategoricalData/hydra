@@ -1,4 +1,7 @@
-module Hydra.Staging.Inference where
+module Hydra.Staging.Inference (
+  module Hydra.Inference,
+  module Hydra.Staging.Inference,
+) where
 
 import Hydra.Coders
 import Hydra.Compute
@@ -18,7 +21,7 @@ import Hydra.Annotations
 import Hydra.CoreDecoding
 import Hydra.Lexical
 import Hydra.Staging.Rewriting
-import Hydra.Staging.Schemas
+import Hydra.Schemas
 import Hydra.Sorting
 import Hydra.Strip
 import Hydra.Substitution

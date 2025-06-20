@@ -7,78 +7,94 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.AdapterUtils,
   module Hydra.Sources.Tier2.Annotations,
   module Hydra.Sources.Tier2.Arity,
+  module Hydra.Sources.Tier2.CoreDecoding,
   module Hydra.Sources.Tier2.CoreLanguage,
   module Hydra.Sources.Tier2.Errors,
---  module Hydra.Sources.Tier2.Expect,
+--  module Hydra.Sources.Tier2.Expect, -- hydra.expect symbols conflict with several other modules
   module Hydra.Sources.Tier2.Flows,
+  module Hydra.Sources.Tier2.GrammarToModule,
+  module Hydra.Sources.Tier2.Inference,
   module Hydra.Sources.Tier2.Lexical,
   module Hydra.Sources.Tier2.Printing,
   module Hydra.Sources.Tier2.Qnames,
+  module Hydra.Sources.Tier2.Reduction,
   module Hydra.Sources.Tier2.Rewriting,
---  module Hydra.Sources.Tier2.Schemas,
+  module Hydra.Sources.Tier2.Schemas,
   module Hydra.Sources.Tier2.Serialization,
+  module Hydra.Sources.Tier2.Sorting,
   module Hydra.Sources.Tier2.Substitution,
+  module Hydra.Sources.Tier2.Tarjan,
   module Hydra.Sources.Tier2.Unification,
   module Hydra.Sources.Tier2.Variants,
 ) where
 
-import Hydra.Sources.Tier1.All hiding (mapDef) -- hydra.decode and hydra.flows both export 'map'
+import Hydra.Sources.Tier1.All hiding (mapDef) -- hydra.decode, hydra.expect, and hydra.flows all export 'map'
 import Hydra.Sources.Tier2.Accessors
 import Hydra.Sources.Tier2.AdapterUtils
 import Hydra.Sources.Tier2.Annotations
 import Hydra.Sources.Tier2.Arity
+import Hydra.Sources.Tier2.CoreDecoding
 import Hydra.Sources.Tier2.CoreLanguage
 import Hydra.Sources.Tier2.Errors
---import Hydra.Sources.Tier2.Expect
+import Hydra.Sources.Tier2.Expect
 import Hydra.Sources.Tier2.Flows
+import Hydra.Sources.Tier2.GrammarToModule
+import Hydra.Sources.Tier2.Inference
 import Hydra.Sources.Tier2.Lexical
 import Hydra.Sources.Tier2.Printing
 import Hydra.Sources.Tier2.Qnames
+import Hydra.Sources.Tier2.Reduction
 import Hydra.Sources.Tier2.Rewriting
---import Hydra.Sources.Tier2.Schemas
+import Hydra.Sources.Tier2.Schemas
 import Hydra.Sources.Tier2.Serialization
+import Hydra.Sources.Tier2.Sorting
 import Hydra.Sources.Tier2.Substitution
 import Hydra.Sources.Tier2.Unification
+import Hydra.Sources.Tier2.Tarjan
 import Hydra.Sources.Tier2.Variants
 
-kernelModules :: [Module]
-kernelModules = [hydraCoreModule] ++ tier1Modules ++ tier2Modules
 
--- | A convenient list of the Hydra kernel modules which contain primarily type definitions.
---   Not guaranteed to be up to date.
+kernelModules :: [Module]
+kernelModules = kernelTypeModules ++ kernelTermModules
+
 kernelTypeModules :: [Module]
-kernelTypeModules = [
-  hydraCoreModule,
-  hydraAstModule,
-  hydraCodersModule,
-  hydraComputeModule,
-  hydraConstraintsModule,
-  hydraGrammarModule,
-  hydraGraphModule,
-  jsonModelModule,
-  hydraMantleModule,
-  hydraModuleModule,
-  hydraPhantomsModule,
-  hydraQueryModule,
-  hydraTestingModule,
-  hydraWorkflowModule]
+kernelTypeModules = [hydraCoreModule] ++ tier1TypeModules ++ tier2TypeModules
+
+kernelTermModules :: [Module]
+kernelTermModules = tier1TermModules ++ tier2TermModules
 
 tier2Modules :: [Module]
-tier2Modules = [
+tier2Modules = tier2TypeModules ++ tier2TermModules
+
+-- There are no tier-2 type modules at this time; all types are defined in Hydra Core and tier-1.
+tier2TypeModules = []
+
+tier2TermModules = [
   hydraAccessorsModule,
+--  hydraAdaptersModule,
   hydraAdapterUtilsModule,
   hydraAnnotationsModule,
   hydraArityModule,
+  hydraCoreDecodingModule,
   hydraCoreLanguageModule,
   hydraErrorsModule,
---  hydraExpectModule,
+  hydraExpectModule,
   hydraFlowsModule,
+  hydraGrammarToModuleModule,
+  hydraInferenceModule,
   hydraLexicalModule,
+--  hydraLiteralAdaptersModule,
   hydraPrintingModule,
   hydraQnamesModule,
+  hydraReductionModule,
   hydraRewritingModule,
---  hydraSchemasModule,
+  hydraSchemasModule,
   hydraSerializationModule,
-  hydraStripModule,
+  hydraSortingModule,
+  hydraSubstitutionModule,
+--  hydraTemplatingModule,
+  tarjanModule,
+--  hydraTermAdaptersModule,
+--  hydraTermEncodingModule,
   hydraUnificationModule,
   hydraVariantsModule]
