@@ -5,7 +5,6 @@ module Hydra.Ext.Java.Coder (
 ) where
 
 import Hydra.Kernel
-import Hydra.Staging.Reduction
 import Hydra.Ext.Java.Utils
 import Hydra.Ext.Java.Language
 import Hydra.Ext.Java.Names

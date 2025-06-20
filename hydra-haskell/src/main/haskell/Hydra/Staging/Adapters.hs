@@ -20,7 +20,7 @@ import Hydra.Module
 import Hydra.Strip
 import Hydra.Staging.TermAdapters
 import Hydra.AdapterUtils
-import Hydra.Staging.Reduction
+import Hydra.Reduction
 import Hydra.Flows
 import Hydra.Errors
 import Hydra.Variants
