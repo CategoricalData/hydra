@@ -18,7 +18,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
-import Hydra.Staging.Rewriting (removeTermAnnotations)
+import Hydra.Rewriting (removeTermAnnotations)
 import Data.String(IsString(..))
 
 instance IsString (TermCoder Term) where fromString = variable

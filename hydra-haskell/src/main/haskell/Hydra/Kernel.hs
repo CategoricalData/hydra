@@ -35,7 +35,7 @@ module Hydra.Kernel (
   module Hydra.Qnames,
   module Hydra.Query,
   module Hydra.Staging.Reduction,
-  module Hydra.Staging.Rewriting,
+  module Hydra.Rewriting,
   module Hydra.Schemas,
   module Hydra.Serialization,
   module Hydra.Settings,
@@ -83,7 +83,7 @@ import Hydra.Printing
 import Hydra.Qnames
 import Hydra.Query
 import Hydra.Staging.Reduction
-import Hydra.Staging.Rewriting
+import Hydra.Rewriting
 import Hydra.Schemas
 import Hydra.Serialization
 import Hydra.Settings

@@ -79,7 +79,8 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 
 hydraAnnotationsModule :: Module
 hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
-    [Decode.hydraDecodeModule, CoreDecoding.hydraCoreDecodingModule, CoreEncoding.coreEncodingModule, Expect.hydraExpectModule, Variants.hydraVariantsModule, Lexical.hydraLexicalModule, Flows_.hydraFlowsModule]
+    [Decode.hydraDecodeModule, CoreDecoding.hydraCoreDecodingModule, CoreEncoding.coreEncodingModule,
+      Expect.hydraExpectModule, Variants.hydraVariantsModule, Lexical.hydraLexicalModule, Flows_.hydraFlowsModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule] $
     Just "Utilities for reading and writing type and term annotations"
   where
@@ -94,7 +95,6 @@ hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
      el getDescriptionDef,
      el getTermAnnotationDef,
      el getTermDescriptionDef,
-     el getTermTypeDef,
      el getTypeDef,
      el getTypeAnnotationDef,
      el getTypeClassesDef,
@@ -214,13 +214,6 @@ getTermDescriptionDef :: TElement (Term -> Flow Graph (Maybe String))
 getTermDescriptionDef = annotationsDefinition "getTermDescription" $
   doc "Get term description" $
   lambda "term" $ ref getDescriptionDef @@ (ref termAnnotationInternalDef @@ var "term")
-
-getTermTypeDef :: TElement (Term -> Maybe Type)
-getTermTypeDef = annotationsDefinition "getTermType" $
-  doc "Get the annotated type of a given term, if any" $
-  match _Term (Just nothing) [
-    "annotated">: ref getTermTypeDef <.> project _AnnotatedTerm _AnnotatedTerm_subject,
-    "typed">: lambda "tt" $ just (project _TypedTerm _TypedTerm_type @@ var "tt")]
 
 getTypeDef :: TElement (M.Map Name Term -> Flow Graph (Maybe Type))
 getTypeDef = annotationsDefinition "getType" $
@@ -348,7 +341,7 @@ requireElementTypeDef = annotationsDefinition "requireElementType" $
     "withType">: primitive _optionals_maybe
       @@ (Flows.fail ("missing type annotation for element " ++ (unwrap _Name @@ (project _Element _Element_name @@ var "el"))))
       @@ (lambda "t" $ Flows.pure $ var "t")] $
-    var "withType" @@ (ref getTermTypeDef @@ (project _Element _Element_term @@ var "el"))
+    var "withType" @@ (ref Rewriting.getTermTypeDef @@ (project _Element _Element_term @@ var "el"))
 
 requireTermTypeDef :: TElement (Term -> Flow Graph Type)
 requireTermTypeDef = annotationsDefinition "requireTermType" $
@@ -357,7 +350,7 @@ requireTermTypeDef = annotationsDefinition "requireTermType" $
     "withType">: primitive _optionals_maybe
       @@ (Flows.fail "missing type annotation")
       @@ (lambda "t" $ Flows.pure $ var "t")] $
-    var "withType" <.> ref getTermTypeDef
+    var "withType" <.> ref Rewriting.getTermTypeDef
 
 resetCountDef :: TElement (Name -> Flow s ())
 resetCountDef = annotationsDefinition "resetCount" $
