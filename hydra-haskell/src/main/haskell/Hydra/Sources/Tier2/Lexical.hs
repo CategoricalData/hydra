@@ -3,40 +3,78 @@
 module Hydra.Sources.Tier2.Lexical where
 
 -- Standard Tier-2 imports
-import qualified Hydra.Dsl.Coders          as Coders
-import qualified Hydra.Dsl.Compute         as Compute
-import qualified Hydra.Dsl.Core            as Core
-import qualified Hydra.Dsl.Graph           as Graph
-import qualified Hydra.Dsl.Lib.Chars       as Chars
-import qualified Hydra.Dsl.Lib.Equality    as Equality
-import qualified Hydra.Dsl.Lib.Flows       as Flows
-import qualified Hydra.Dsl.Lib.Io          as Io
-import qualified Hydra.Dsl.Lib.Lists       as Lists
-import qualified Hydra.Dsl.Lib.Literals    as Literals
-import qualified Hydra.Dsl.Lib.Logic       as Logic
-import qualified Hydra.Dsl.Lib.Maps        as Maps
-import qualified Hydra.Dsl.Lib.Math        as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import           Hydra.Dsl.Phantoms        as Phantoms
-import qualified Hydra.Dsl.Lib.Sets        as Sets
-import           Hydra.Dsl.Lib.Strings     as Strings
-import qualified Hydra.Dsl.Mantle          as Mantle
-import qualified Hydra.Dsl.Module          as Module
-import qualified Hydra.Dsl.TTerms          as TTerms
-import qualified Hydra.Dsl.TTypes          as TTypes
-import qualified Hydra.Dsl.Terms           as Terms
-import qualified Hydra.Dsl.Topology        as Topology
-import qualified Hydra.Dsl.Types           as Types
-import           Hydra.Sources.Tier1.All
+import Hydra.Kernel
+import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Coders                 as Coders
+import qualified Hydra.Dsl.Compute                as Compute
+import qualified Hydra.Dsl.Core                   as Core
+import qualified Hydra.Dsl.Graph                  as Graph
+import qualified Hydra.Dsl.Lib.Chars              as Chars
+import qualified Hydra.Dsl.Lib.Equality           as Equality
+import qualified Hydra.Dsl.Lib.Flows              as Flows
+import qualified Hydra.Dsl.Lib.Io                 as Io
+import qualified Hydra.Dsl.Lib.Lists              as Lists
+import qualified Hydra.Dsl.Lib.Literals           as Literals
+import qualified Hydra.Dsl.Lib.Logic              as Logic
+import qualified Hydra.Dsl.Lib.Maps               as Maps
+import qualified Hydra.Dsl.Lib.Math               as Math
+import qualified Hydra.Dsl.Lib.Optionals          as Optionals
+import           Hydra.Dsl.Phantoms               as Phantoms
+import qualified Hydra.Dsl.Lib.Sets               as Sets
+import           Hydra.Dsl.Lib.Strings            as Strings
+import qualified Hydra.Dsl.Mantle                 as Mantle
+import qualified Hydra.Dsl.Module                 as Module
+import qualified Hydra.Dsl.TTerms                 as TTerms
+import qualified Hydra.Dsl.TTypes                 as TTypes
+import qualified Hydra.Dsl.Terms                  as Terms
+import qualified Hydra.Dsl.Topology               as Topology
+import qualified Hydra.Dsl.Types                  as Types
+import qualified Hydra.Dsl.Typing                 as Typing
+import qualified Hydra.Sources.Tier1.All          as Tier1
+import qualified Hydra.Sources.Tier1.Constants    as Constants
+import qualified Hydra.Sources.Tier1.CoreEncoding as CoreEncoding
+import qualified Hydra.Sources.Tier1.Decode       as Decode
+import qualified Hydra.Sources.Tier1.Formatting   as Formatting
+import qualified Hydra.Sources.Tier1.Functions    as Functions
+import qualified Hydra.Sources.Tier1.Literals     as Literals
+import qualified Hydra.Sources.Tier1.Messages     as Messages
+import qualified Hydra.Sources.Tier1.Strip        as Strip
 import           Prelude hiding ((++))
+import qualified Data.Int                  as I
 import qualified Data.List                 as L
 import qualified Data.Map                  as M
 import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
-import Hydra.Sources.Libraries
-import Hydra.Sources.Tier2.Errors
-import Hydra.Sources.Tier2.Flows
+-- Uncomment tier-2 sources as needed
+--import qualified Hydra.Sources.Tier2.Accessors as Accessors
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
+--import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Annotations as Annotations
+--import qualified Hydra.Sources.Tier2.Arity as Arity
+--import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
+--import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
+import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Expect as Expect
+import qualified Hydra.Sources.Tier2.Flows as Flows_
+--import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
+--import qualified Hydra.Sources.Tier2.Inference as Inference
+--import qualified Hydra.Sources.Tier2.Lexical as Lexical
+--import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
+--import qualified Hydra.Sources.Tier2.Printing as Printing
+--import qualified Hydra.Sources.Tier2.Qnames as Qnames
+--import qualified Hydra.Sources.Tier2.Reduction as Reduction
+--import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
+--import qualified Hydra.Sources.Tier2.Schemas as Schemas
+--import qualified Hydra.Sources.Tier2.Serialization as Serialization
+--import qualified Hydra.Sources.Tier2.Sorting as Sorting
+--import qualified Hydra.Sources.Tier2.Substitution as Substitution
+--import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
+--import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.TermAdapters as TermAdapters
+--import qualified Hydra.Sources.Tier2.TermEncoding as TermEncoding
+--import qualified Hydra.Sources.Tier2.Unification as Unification
+--import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
 lexicalDefinition :: String -> TTerm a -> TElement a
@@ -44,7 +82,8 @@ lexicalDefinition = definitionInModule hydraLexicalModule
 
 hydraLexicalModule :: Module
 hydraLexicalModule = Module (Namespace "hydra.lexical") elements
-   [hydraErrorsModule, hydraFlowsModule, hydraComputeModule, hydraStripModule] [hydraGraphModule, hydraMantleModule] $
+   [Errors.hydraErrorsModule, Flows_.hydraFlowsModule, Strip.hydraStripModule]
+   [Tier1.hydraGraphModule, Tier1.hydraMantleModule] $
     Just ("A module for lexical operations over graphs.")
   where
     elements = [
@@ -68,7 +107,7 @@ dereferenceElementDef :: TElement (Name -> Flow Graph (Maybe Element))
 dereferenceElementDef = lexicalDefinition "dereferenceElement" $
   lambda "name" $ Flows.map
     (lambda "g" $ ref lookupElementDef @@ var "g" @@ var "name")
-    (ref getStateDef)
+    (ref Errors.getStateDef)
 
 elementsToGraphDef :: TElement (Graph -> Maybe Graph -> [Element] -> Graph)
 elementsToGraphDef = lexicalDefinition "elementsToGraph" $
@@ -107,7 +146,7 @@ extendGraphWithBindingsDef = lexicalDefinition "extendGraphWithBindings" $
 fieldsOfDef :: TElement (Type -> [FieldType])
 fieldsOfDef = lexicalDefinition "fieldsOf" $
   lambda "t" $ lets [
-    "stripped">: ref stripTypeDef @@ var "t"]
+    "stripped">: ref Strip.stripTypeDef @@ var "t"]
     $ cases _Type (var "stripped") (Just $ list []) [
       _Type_forall>>: lambda "forallType" $ ref fieldsOfDef @@ (Core.forallTypeBody $ var "forallType"),
       _Type_record>>: lambda "rt" $ Core.rowTypeFields $ var "rt",
@@ -137,14 +176,14 @@ requireElementDef = lexicalDefinition "requireElement" $
       "}"]
     $ Flows.bind (ref dereferenceElementDef @@ var "name") $
       lambda "mel" $ Optionals.maybe
-        (Flows.bind (ref getStateDef) $ var "err")
+        (Flows.bind (ref Errors.getStateDef) $ var "err")
         (unaryFunction Flows.pure)
         (var "mel")
 
 requirePrimitiveDef :: TElement (Name -> Flow Graph Primitive)
 requirePrimitiveDef = lexicalDefinition "requirePrimitive" $
   lambda "name" $
-    Flows.bind (ref getStateDef) $
+    Flows.bind (ref Errors.getStateDef) $
     lambda "g" $ Optionals.maybe
       (Flows.fail $ "no such primitive function: " ++ (Core.unName $ var "name"))
       (unaryFunction Flows.pure)
@@ -164,10 +203,10 @@ resolveTermDef = lexicalDefinition "resolveTerm" $
   doc "TODO: distinguish between lambda-bound and let-bound variables" $
   lambda "name" $ lets [
     "recurse">: lambda "el" $ lets [
-      "stripped">: ref fullyStripTermDef @@ (Graph.elementTerm $ var "el")]
+      "stripped">: ref Strip.fullyStripTermDef @@ (Graph.elementTerm $ var "el")]
       $ cases _Term (var "stripped") (Just $ Flows.pure $ just $ Graph.elementTerm $ var "el") [
         _Term_variable>>: lambda "name'" $ ref resolveTermDef @@ var "name'"]]
-    $ Flows.bind (ref getStateDef) $
+    $ Flows.bind (ref Errors.getStateDef) $
       lambda "g" $ Optionals.maybe
         (Flows.pure nothing)
         (var "recurse")
@@ -181,7 +220,7 @@ schemaContextDef = lexicalDefinition "schemaContext" $
 stripAndDereferenceTermDef :: TElement (Term -> Flow Graph Term)
 stripAndDereferenceTermDef = lexicalDefinition "stripAndDereferenceTerm" $
   lambda "term" $ lets [
-    "stripped">: ref fullyStripTermDef @@ var "term"]
+    "stripped">: ref Strip.fullyStripTermDef @@ var "term"]
     $ cases _Term (var "stripped") (Just $ Flows.pure $ var "stripped") [
       _Term_variable>>: lambda "v" $
         Flows.bind (ref requireTermDef @@ var "v") $
@@ -194,5 +233,5 @@ typeOfPrimitiveDef = lexicalDefinition "typeOfPrimitive" $
 withSchemaContextDef :: TElement (Flow Graph x -> Flow Graph x)
 withSchemaContextDef = lexicalDefinition "withSchemaContext" $
   lambda "f" $
-    Flows.bind (ref getStateDef) $
-    lambda "g" $ ref withStateDef @@ (ref schemaContextDef @@ var "g") @@ var "f"
+    Flows.bind (ref Errors.getStateDef) $
+    lambda "g" $ ref Flows_.withStateDef @@ (ref schemaContextDef @@ var "g") @@ var "f"

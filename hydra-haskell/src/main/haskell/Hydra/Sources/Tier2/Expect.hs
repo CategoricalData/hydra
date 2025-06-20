@@ -2,54 +2,88 @@
 
 module Hydra.Sources.Tier2.Expect where
 
--- Slightly nonstandard Tier-2 imports (avoiding conflict with Hydra.Decode)
-import qualified Hydra.Dsl.Coders          as Coders
-import qualified Hydra.Dsl.Compute         as Compute
-import qualified Hydra.Dsl.Core            as Core
-import qualified Hydra.Dsl.Graph           as Graph
-import qualified Hydra.Dsl.Lib.Chars       as Chars
-import qualified Hydra.Dsl.Lib.Equality    as Equality
-import qualified Hydra.Dsl.Lib.Flows       as Flows
-import qualified Hydra.Dsl.Lib.Io          as Io
-import qualified Hydra.Dsl.Lib.Lists       as Lists
-import qualified Hydra.Dsl.Lib.Literals    as Literals
-import qualified Hydra.Dsl.Lib.Logic       as Logic
-import qualified Hydra.Dsl.Lib.Maps        as Maps
-import qualified Hydra.Dsl.Lib.Math        as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import           Hydra.Dsl.Phantoms        as Phantoms
-import qualified Hydra.Dsl.Lib.Sets        as Sets
-import           Hydra.Dsl.Lib.Strings     as Strings
-import qualified Hydra.Dsl.Mantle          as Mantle
-import qualified Hydra.Dsl.Module          as Module
-import qualified Hydra.Dsl.TTerms          as TTerms
-import qualified Hydra.Dsl.TTypes          as TTypes
-import qualified Hydra.Dsl.Terms           as Terms
-import qualified Hydra.Dsl.Topology        as Topology
-import qualified Hydra.Dsl.Types           as Types
+-- Standard Tier-2 imports
 import Hydra.Kernel
-import           Hydra.Sources.Tier1.Coders
-import           Hydra.Sources.Tier1.Mantle
-import           Hydra.Sources.Tier1.Strip
+import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Coders                 as Coders
+import qualified Hydra.Dsl.Compute                as Compute
+import qualified Hydra.Dsl.Core                   as Core
+import qualified Hydra.Dsl.Graph                  as Graph
+import qualified Hydra.Dsl.Lib.Chars              as Chars
+import qualified Hydra.Dsl.Lib.Equality           as Equality
+import qualified Hydra.Dsl.Lib.Flows              as Flows
+import qualified Hydra.Dsl.Lib.Io                 as Io
+import qualified Hydra.Dsl.Lib.Lists              as Lists
+import qualified Hydra.Dsl.Lib.Literals           as Literals
+import qualified Hydra.Dsl.Lib.Logic              as Logic
+import qualified Hydra.Dsl.Lib.Maps               as Maps
+import qualified Hydra.Dsl.Lib.Math               as Math
+import qualified Hydra.Dsl.Lib.Optionals          as Optionals
+import           Hydra.Dsl.Phantoms               as Phantoms
+import qualified Hydra.Dsl.Lib.Sets               as Sets
+import           Hydra.Dsl.Lib.Strings            as Strings
+import qualified Hydra.Dsl.Mantle                 as Mantle
+import qualified Hydra.Dsl.Module                 as Module
+import qualified Hydra.Dsl.TTerms                 as TTerms
+import qualified Hydra.Dsl.TTypes                 as TTypes
+import qualified Hydra.Dsl.Terms                  as Terms
+import qualified Hydra.Dsl.Topology               as Topology
+import qualified Hydra.Dsl.Types                  as Types
+import qualified Hydra.Dsl.Typing                 as Typing
+import qualified Hydra.Sources.Tier1.All          as Tier1
+import qualified Hydra.Sources.Tier1.Constants    as Constants
+import qualified Hydra.Sources.Tier1.CoreEncoding as CoreEncoding
+import qualified Hydra.Sources.Tier1.Decode       as Decode
+import qualified Hydra.Sources.Tier1.Formatting   as Formatting
+import qualified Hydra.Sources.Tier1.Functions    as Functions
+import qualified Hydra.Sources.Tier1.Literals     as Literals
+import qualified Hydra.Sources.Tier1.Messages     as Messages
+import qualified Hydra.Sources.Tier1.Strip        as Strip
 import           Prelude hiding ((++))
-import Data.Int
+import qualified Data.Int                  as I
 import qualified Data.List                 as L
 import qualified Data.Map                  as M
 import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
-import Hydra.Sources.Libraries
-import Hydra.Sources.Tier2.Errors
-import Hydra.Sources.Tier2.Flows hiding (mapDef)
-import Hydra.Sources.Tier2.Lexical
-import Hydra.Sources.Tier2.Rewriting
+-- Uncomment tier-2 sources as needed
+--import qualified Hydra.Sources.Tier2.Accessors as Accessors
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
+--import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Annotations as Annotations
+--import qualified Hydra.Sources.Tier2.Arity as Arity
+--import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
+--import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
+import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Expect as Expect
+import qualified Hydra.Sources.Tier2.Flows as Flows_
+--import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
+--import qualified Hydra.Sources.Tier2.Inference as Inference
+import qualified Hydra.Sources.Tier2.Lexical as Lexical
+--import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
+--import qualified Hydra.Sources.Tier2.Printing as Printing
+--import qualified Hydra.Sources.Tier2.Qnames as Qnames
+--import qualified Hydra.Sources.Tier2.Reduction as Reduction
+import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
+--import qualified Hydra.Sources.Tier2.Schemas as Schemas
+--import qualified Hydra.Sources.Tier2.Serialization as Serialization
+--import qualified Hydra.Sources.Tier2.Sorting as Sorting
+--import qualified Hydra.Sources.Tier2.Substitution as Substitution
+--import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
+--import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.TermAdapters as TermAdapters
+--import qualified Hydra.Sources.Tier2.TermEncoding as TermEncoding
+--import qualified Hydra.Sources.Tier2.Unification as Unification
+--import qualified Hydra.Sources.Tier2.Variants as Variants
+
 
 expectDefinition :: String -> TTerm a -> TElement a
 expectDefinition = definitionInModule hydraExpectModule
 
 hydraExpectModule :: Module
 hydraExpectModule = Module (Namespace "hydra.expect") elements
-    [hydraErrorsModule, hydraFlowsModule, hydraLexicalModule, hydraRewritingModule] [hydraCodersModule, hydraMantleModule] $
+    [Errors.hydraErrorsModule, Flows_.hydraFlowsModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule]
+    [Tier1.hydraCodersModule, Tier1.hydraMantleModule] $
     Just ("A DSL for decoding and validating Hydra terms at runtime. This module provides functions to extract typed values from Hydra terms with appropriate error handling.")
   where
    elements = [
@@ -138,7 +172,7 @@ nArgsDef = expectDefinition "nArgs" $
   lambdas ["name", "n", "args"] $
     Logic.ifElse (Equality.equalInt32 (Lists.length $ var "args") (var "n"))
       (Flows.pure unit)
-      (ref unexpectedDef @@ (Strings.concat [
+      (ref Errors.unexpectedDef @@ (Strings.concat [
         Literals.showInt32 $ var "n",
         " arguments to primitive ",
         Literals.showString (Core.unName $ var "name")]) @@ (Literals.showInt32 (Lists.length $ var "args")))
@@ -153,7 +187,7 @@ binaryDef = expectDefinition "binary" $
 binaryLiteralDef :: TElement (Literal -> Flow Graph String)
 binaryLiteralDef = expectDefinition "binaryLiteral" $
   doc "Extract a binary literal from a Literal value" $
-  lambda "v" $ cases _Literal (var "v") (Just $ ref unexpectedDef @@ string "binary" @@ (Io.showLiteral $ var "v")) [
+  lambda "v" $ cases _Literal (var "v") (Just $ ref Errors.unexpectedDef @@ string "binary" @@ (Io.showLiteral $ var "v")) [
     _Literal_binary>>: lambda "b" $ Flows.pure $ var "b"]
 
 booleanDef :: TElement (Term -> Flow Graph Bool)
@@ -164,14 +198,14 @@ booleanDef = expectDefinition "boolean" $
 booleanLiteralDef :: TElement (Literal -> Flow Graph Bool)
 booleanLiteralDef = expectDefinition "booleanLiteral" $
   doc "Extract a boolean literal from a Literal value" $
-  lambda "v" $ cases _Literal (var "v") (Just $ ref unexpectedDef @@ string "boolean" @@ (Io.showLiteral $ var "v")) [
+  lambda "v" $ cases _Literal (var "v") (Just $ ref Errors.unexpectedDef @@ string "boolean" @@ (Io.showLiteral $ var "v")) [
     _Literal_boolean>>: lambda "b" $ Flows.pure $ var "b"]
 
 literalDef :: TElement (Term -> Flow Graph Literal)
 literalDef = expectDefinition "literal" $
   doc "Extract a literal value from a term" $
-  lambda "term0" $ Flows.bind (ref stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref unexpectedDef @@ string "literal" @@ (Io.showTerm $ var "term")) [
+  lambda "term0" $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
+    lambda "term" $ cases _Term (var "term") (Just $ ref Errors.unexpectedDef @@ string "literal" @@ (Io.showTerm $ var "term")) [
       _Term_literal>>: lambda "lit" $ Flows.pure $ var "lit"]
 
 stringDef :: TElement (Term -> Flow Graph String)
@@ -182,7 +216,7 @@ stringDef = expectDefinition "string" $
 stringLiteralDef :: TElement (Literal -> Flow Graph String)
 stringLiteralDef = expectDefinition "stringLiteral" $
   doc "Extract a string literal from a Literal value" $
-  lambda "v" $ cases _Literal (var "v") (Just $ ref unexpectedDef @@ string "string" @@ (Io.showLiteral $ var "v")) [
+  lambda "v" $ cases _Literal (var "v") (Just $ ref Errors.unexpectedDef @@ string "string" @@ (Io.showLiteral $ var "v")) [
     _Literal_string>>: lambda "s" $ Flows.pure $ var "s"]
 
 ---- Integer functions
@@ -197,13 +231,13 @@ bigintDef = expectDefinition "bigint" $
 bigintValueDef :: TElement (IntegerValue -> Flow Graph Integer)
 bigintValueDef = expectDefinition "bigintValue" $
   doc "Extract a bigint value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref unexpectedDef @@ string "bigint" @@ (Io.showInteger $ var "v")) [
+  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Errors.unexpectedDef @@ string "bigint" @@ (Io.showInteger $ var "v")) [
     _IntegerValue_bigint>>: lambda "i" $ Flows.pure $ var "i"]
 
 integerLiteralDef :: TElement (Literal -> Flow Graph IntegerValue)
 integerLiteralDef = expectDefinition "integerLiteral" $
   doc "Extract an integer literal from a Literal value" $
-  lambda "lit" $ cases _Literal (var "lit") (Just $ ref unexpectedDef @@ string "integer value" @@ (Io.showLiteral $ var "lit")) [
+  lambda "lit" $ cases _Literal (var "lit") (Just $ ref Errors.unexpectedDef @@ string "integer value" @@ (Io.showLiteral $ var "lit")) [
     _Literal_integer>>: lambda "v" $ Flows.pure $ var "v"]
 
 integerValueDef :: TElement (Term -> Flow Graph IntegerValue)
@@ -211,30 +245,30 @@ integerValueDef = expectDefinition "integerValue" $
   doc "Extract an integer value from a term" $
   lambda "t" $ Flows.bind (ref literalDef @@ var "t") (ref integerLiteralDef)
 
-int8Def :: TElement (Term -> Flow Graph Int8)
+int8Def :: TElement (Term -> Flow Graph I.Int8)
 int8Def = expectDefinition "int8" $
   doc "Extract an 8-bit signed integer value from a term" $
   lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
     Flows.bind (ref integerLiteralDef @@ var "l") $ lambda "i" $
       ref int8ValueDef @@ var "i"
 
-int8ValueDef :: TElement (IntegerValue -> Flow Graph Int8)
+int8ValueDef :: TElement (IntegerValue -> Flow Graph I.Int8)
 int8ValueDef = expectDefinition "int8Value" $
   doc "Extract an int8 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref unexpectedDef @@ string "int8" @@ (Io.showInteger $ var "v")) [
+  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Errors.unexpectedDef @@ string "int8" @@ (Io.showInteger $ var "v")) [
     _IntegerValue_int8>>: lambda "i" $ Flows.pure $ var "i"]
 
-int16Def :: TElement (Term -> Flow Graph Int16)
+int16Def :: TElement (Term -> Flow Graph I.Int16)
 int16Def = expectDefinition "int16" $
   doc "Extract a 16-bit signed integer value from a term" $
   lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
     Flows.bind (ref integerLiteralDef @@ var "l") $ lambda "i" $
       ref int16ValueDef @@ var "i"
 
-int16ValueDef :: TElement (IntegerValue -> Flow Graph Int16)
+int16ValueDef :: TElement (IntegerValue -> Flow Graph I.Int16)
 int16ValueDef = expectDefinition "int16Value" $
   doc "Extract an int16 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref unexpectedDef @@ string "int16" @@ (Io.showInteger $ var "v")) [
+  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Errors.unexpectedDef @@ string "int16" @@ (Io.showInteger $ var "v")) [
     _IntegerValue_int16>>: lambda "i" $ Flows.pure $ var "i"]
 
 int32Def :: TElement (Term -> Flow Graph Int)
@@ -247,33 +281,33 @@ int32Def = expectDefinition "int32" $
 int32ValueDef :: TElement (IntegerValue -> Flow Graph Int)
 int32ValueDef = expectDefinition "int32Value" $
   doc "Extract an int32 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref unexpectedDef @@ string "int32" @@ (Io.showInteger $ var "v")) [
+  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Errors.unexpectedDef @@ string "int32" @@ (Io.showInteger $ var "v")) [
     _IntegerValue_int32>>: lambda "i" $ Flows.pure $ var "i"]
 
-int64Def :: TElement (Term -> Flow Graph Int64)
+int64Def :: TElement (Term -> Flow Graph I.Int64)
 int64Def = expectDefinition "int64" $
   doc "Extract a 64-bit signed integer value from a term" $
   lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
     Flows.bind (ref integerLiteralDef @@ var "l") $ lambda "i" $
       ref int64ValueDef @@ var "i"
 
-int64ValueDef :: TElement (IntegerValue -> Flow Graph Int64)
+int64ValueDef :: TElement (IntegerValue -> Flow Graph I.Int64)
 int64ValueDef = expectDefinition "int64Value" $
   doc "Extract an int64 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref unexpectedDef @@ string "int64" @@ (Io.showInteger $ var "v")) [
+  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Errors.unexpectedDef @@ string "int64" @@ (Io.showInteger $ var "v")) [
     _IntegerValue_int64>>: lambda "i" $ Flows.pure $ var "i"]
 
-uint8Def :: TElement (Term -> Flow Graph Int16)
+uint8Def :: TElement (Term -> Flow Graph I.Int16)
 uint8Def = expectDefinition "uint8" $
   doc "Extract an 8-bit unsigned integer value from a term" $
   lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
     Flows.bind (ref integerLiteralDef @@ var "l") $ lambda "i" $
       ref uint8ValueDef @@ var "i"
 
-uint8ValueDef :: TElement (IntegerValue -> Flow Graph Int16)
+uint8ValueDef :: TElement (IntegerValue -> Flow Graph I.Int16)
 uint8ValueDef = expectDefinition "uint8Value" $
   doc "Extract a uint8 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref unexpectedDef @@ string "uint8" @@ (Io.showInteger $ var "v")) [
+  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Errors.unexpectedDef @@ string "uint8" @@ (Io.showInteger $ var "v")) [
     _IntegerValue_uint8>>: lambda "i" $ Flows.pure $ var "i"]
 
 uint16Def :: TElement (Term -> Flow Graph Int)
@@ -286,20 +320,20 @@ uint16Def = expectDefinition "uint16" $
 uint16ValueDef :: TElement (IntegerValue -> Flow Graph Int)
 uint16ValueDef = expectDefinition "uint16Value" $
   doc "Extract a uint16 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref unexpectedDef @@ string "uint16" @@ (Io.showInteger $ var "v")) [
+  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Errors.unexpectedDef @@ string "uint16" @@ (Io.showInteger $ var "v")) [
     _IntegerValue_uint16>>: lambda "i" $ Flows.pure $ var "i"]
 
-uint32Def :: TElement (Term -> Flow Graph Int64)
+uint32Def :: TElement (Term -> Flow Graph I.Int64)
 uint32Def = expectDefinition "uint32" $
   doc "Extract a 32-bit unsigned integer value from a term" $
   lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
     Flows.bind (ref integerLiteralDef @@ var "l") $ lambda "i" $
       ref uint32ValueDef @@ var "i"
 
-uint32ValueDef :: TElement (IntegerValue -> Flow Graph Int64)
+uint32ValueDef :: TElement (IntegerValue -> Flow Graph I.Int64)
 uint32ValueDef = expectDefinition "uint32Value" $
   doc "Extract a uint32 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref unexpectedDef @@ string "uint32" @@ (Io.showInteger $ var "v")) [
+  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Errors.unexpectedDef @@ string "uint32" @@ (Io.showInteger $ var "v")) [
     _IntegerValue_uint32>>: lambda "i" $ Flows.pure $ var "i"]
 
 uint64Def :: TElement (Term -> Flow Graph Integer)
@@ -312,7 +346,7 @@ uint64Def = expectDefinition "uint64" $
 uint64ValueDef :: TElement (IntegerValue -> Flow Graph Integer)
 uint64ValueDef = expectDefinition "uint64Value" $
   doc "Extract a uint64 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref unexpectedDef @@ string "uint64" @@ (Io.showInteger $ var "v")) [
+  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Errors.unexpectedDef @@ string "uint64" @@ (Io.showInteger $ var "v")) [
     _IntegerValue_uint64>>: lambda "i" $ Flows.pure $ var "i"]
 
 ---- Float functions
@@ -327,13 +361,13 @@ bigfloatDef = expectDefinition "bigfloat" $
 bigfloatValueDef :: TElement (FloatValue -> Flow Graph Double)
 bigfloatValueDef = expectDefinition "bigfloatValue" $
   doc "Extract a bigfloat value from a FloatValue" $
-  lambda "v" $ cases _FloatValue (var "v") (Just $ ref unexpectedDef @@ string "bigfloat" @@ (Io.showFloat $ var "v")) [
+  lambda "v" $ cases _FloatValue (var "v") (Just $ ref Errors.unexpectedDef @@ string "bigfloat" @@ (Io.showFloat $ var "v")) [
     _FloatValue_bigfloat>>: lambda "f" $ Flows.pure $ var "f"]
 
 floatLiteralDef :: TElement (Literal -> Flow Graph FloatValue)
 floatLiteralDef = expectDefinition "floatLiteral" $
   doc "Extract a floating-point literal from a Literal value" $
-  lambda "lit" $ cases _Literal (var "lit") (Just $ ref unexpectedDef @@ string "floating-point value" @@ (Io.showLiteral $ var "lit")) [
+  lambda "lit" $ cases _Literal (var "lit") (Just $ ref Errors.unexpectedDef @@ string "floating-point value" @@ (Io.showLiteral $ var "lit")) [
     _Literal_float>>: lambda "v" $ Flows.pure $ var "v"]
 
 floatValueDef :: TElement (Term -> Flow Graph FloatValue)
@@ -351,7 +385,7 @@ float32Def = expectDefinition "float32" $
 float32ValueDef :: TElement (FloatValue -> Flow Graph Float)
 float32ValueDef = expectDefinition "float32Value" $
   doc "Extract a float32 value from a FloatValue" $
-  lambda "v" $ cases _FloatValue (var "v") (Just $ ref unexpectedDef @@ string "float32" @@ (Io.showFloat $ var "v")) [
+  lambda "v" $ cases _FloatValue (var "v") (Just $ ref Errors.unexpectedDef @@ string "float32" @@ (Io.showFloat $ var "v")) [
     _FloatValue_float32>>: lambda "f" $ Flows.pure $ var "f"]
 
 float64Def :: TElement (Term -> Flow Graph Double)
@@ -364,7 +398,7 @@ float64Def = expectDefinition "float64" $
 float64ValueDef :: TElement (FloatValue -> Flow Graph Double)
 float64ValueDef = expectDefinition "float64Value" $
   doc "Extract a float64 value from a FloatValue" $
-  lambda "v" $ cases _FloatValue (var "v") (Just $ ref unexpectedDef @@ string "float64" @@ (Io.showFloat $ var "v")) [
+  lambda "v" $ cases _FloatValue (var "v") (Just $ ref Errors.unexpectedDef @@ string "float64" @@ (Io.showFloat $ var "v")) [
     _FloatValue_float64>>: lambda "f" $ Flows.pure $ var "f"]
 
 ---- Collections
@@ -372,8 +406,8 @@ float64ValueDef = expectDefinition "float64Value" $
 listDef :: TElement ((Term -> Flow Graph x) -> Term -> Flow Graph [x])
 listDef = expectDefinition "list" $
   doc "Extract a list of values from a term, mapping a function over each element" $
-  lambdas ["f", "term0"] $ Flows.bind (ref stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref unexpectedDef @@ string "list" @@ (Io.showTerm $ var "term")) [
+  lambdas ["f", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
+    lambda "term" $ cases _Term (var "term") (Just $ ref Errors.unexpectedDef @@ string "list" @@ (Io.showTerm $ var "term")) [
       _Term_list>>: lambda "l" $ Flows.mapList (var "f") (var "l")]
 
 listHeadDef :: TElement (Term -> Flow Graph Term)
@@ -388,8 +422,8 @@ listTypeDef :: TElement (Type -> Flow s Type)
 listTypeDef = expectDefinition "listType" $
   doc "Extract the element type from a list type" $
   lambda "typ" $ lets [
-    "stripped">: ref stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref unexpectedDef @@ string "list type" @@ (Io.showType $ var "typ")) [
+    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "list type" @@ (Io.showType $ var "typ")) [
       _Type_list>>: lambda "t" $ Flows.pure $ var "t"]
 
 mapDef :: TElement ((Term -> Flow Graph k) -> (Term -> Flow Graph v) -> Term -> Flow Graph (M.Map k v))
@@ -402,23 +436,23 @@ mapDef = expectDefinition "map" $
       $ Flows.bind (var "fk" @@ var "kterm") $
         lambda "kval" $ Flows.bind (var "fv" @@ var "vterm") $
           lambda "vval" $ Flows.pure $ pair (var "kval") (var "vval")]
-    $ Flows.bind (ref stripAndDereferenceTermDef @@ var "term0") $
-      lambda "term" $ cases _Term (var "term") (Just $ ref unexpectedDef @@ string "map" @@ (Io.showTerm $ var "term")) [
+    $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
+      lambda "term" $ cases _Term (var "term") (Just $ ref Errors.unexpectedDef @@ string "map" @@ (Io.showTerm $ var "term")) [
         _Term_map>>: lambda "m" $ Flows.map (unaryFunction Maps.fromList) $ Flows.mapList (var "pair") $ Maps.toList $ var "m"]
 
 mapTypeDef :: TElement (Type -> Flow s MapType)
 mapTypeDef = expectDefinition "mapType" $
   doc "Extract the key and value types from a map type" $
   lambda "typ" $ lets [
-    "stripped">: ref stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref unexpectedDef @@ string "map type" @@ (Io.showType $ var "typ")) [
+    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "map type" @@ (Io.showType $ var "typ")) [
       _Type_map>>: lambda "mt" $ Flows.pure $ var "mt"]
 
 optionalDef :: TElement ((Term -> Flow Graph x) -> Term -> Flow Graph (Maybe x))
 optionalDef = expectDefinition "optional" $
   doc "Extract an optional value from a term, applying a function to the value if present" $
-  lambdas ["f", "term0"] $ Flows.bind (ref stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref unexpectedDef @@ string "optional value" @@ (Io.showTerm $ var "term")) [
+  lambdas ["f", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
+    lambda "term" $ cases _Term (var "term") (Just $ ref Errors.unexpectedDef @@ string "optional value" @@ (Io.showTerm $ var "term")) [
       _Term_optional>>: lambda "mt" $ Optionals.maybe
         (Flows.pure nothing)
         (lambda "t" $ Flows.map (unaryFunction just) $ var "f" @@ var "t")
@@ -428,23 +462,23 @@ optionalTypeDef :: TElement (Type -> Flow s Type)
 optionalTypeDef = expectDefinition "optionalType" $
   doc "Extract the base type from an optional type" $
   lambda "typ" $ lets [
-    "stripped">: ref stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref unexpectedDef @@ string "optional type" @@ (Io.showType $ var "typ")) [
+    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "optional type" @@ (Io.showType $ var "typ")) [
       _Type_optional>>: lambda "t" $ Flows.pure $ var "t"]
 
 setDef :: TElement ((Term -> Flow Graph x) -> Term -> Flow Graph (S.Set x))
 setDef = expectDefinition "set" $
   doc "Extract a set of values from a term, mapping a function over each element" $
-  lambdas ["f", "term0"] $ Flows.bind (ref stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref unexpectedDef @@ string "set" @@ (Io.showTerm $ var "term")) [
+  lambdas ["f", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
+    lambda "term" $ cases _Term (var "term") (Just $ ref Errors.unexpectedDef @@ string "set" @@ (Io.showTerm $ var "term")) [
       _Term_set>>: lambda "s" $ Flows.map (unaryFunction Sets.fromList) $ Flows.mapList (var "f") $ Sets.toList $ var "s"]
 
 setTypeDef :: TElement (Type -> Flow s Type)
 setTypeDef = expectDefinition "setType" $
   doc "Extract the element type from a set type" $
   lambda "typ" $ lets [
-    "stripped">: ref stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref unexpectedDef @@ string "set type" @@ (Io.showType $ var "typ")) [
+    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "set type" @@ (Io.showType $ var "typ")) [
       _Type_set>>: lambda "t" $ Flows.pure $ var "t"]
 
 ---- Products and sums
@@ -452,29 +486,29 @@ setTypeDef = expectDefinition "setType" $
 pairDef :: TElement ((Term -> Flow Graph k) -> (Term -> Flow Graph v) -> Term -> Flow Graph (k, v))
 pairDef = expectDefinition "pair" $
   doc "Extract a pair of values from a term, applying functions to each component" $
-  lambdas ["kf", "vf", "term0"] $ Flows.bind (ref stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref unexpectedDef @@ string "product" @@ (Io.showTerm $ var "term")) [
+  lambdas ["kf", "vf", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
+    lambda "term" $ cases _Term (var "term") (Just $ ref Errors.unexpectedDef @@ string "product" @@ (Io.showTerm $ var "term")) [
       _Term_product>>: lambda "terms" $
         Logic.ifElse (Equality.equalInt32 (Lists.length $ var "terms") $ int32 2)
           (Flows.bind (var "kf" @@ (Lists.head $ var "terms")) $
             lambda "kVal" $ Flows.bind (var "vf" @@ (Lists.head $ Lists.tail $ var "terms")) $
               lambda "vVal" $ Flows.pure $ pair (var "kVal") (var "vVal"))
-          (ref unexpectedDef @@ string "pair" @@ (Io.showTerm $ var "term"))]
+          (ref Errors.unexpectedDef @@ string "pair" @@ (Io.showTerm $ var "term"))]
 
 productTypeDef :: TElement (Type -> Flow s [Type])
 productTypeDef = expectDefinition "productType" $
   doc "Extract the component types from a product type" $
   lambda "typ" $ lets [
-    "stripped">: ref stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref unexpectedDef @@ string "product type" @@ (Io.showType $ var "typ")) [
+    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "product type" @@ (Io.showType $ var "typ")) [
       _Type_product>>: lambda "types" $ Flows.pure $ var "types"]
 
 sumTypeDef :: TElement (Type -> Flow s [Type])
 sumTypeDef = expectDefinition "sumType" $
   doc "Extract the component types from a sum type" $
   lambda "typ" $ lets [
-    "stripped">: ref stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref unexpectedDef @@ string "sum type" @@ (Io.showType $ var "typ")) [
+    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "sum type" @@ (Io.showType $ var "typ")) [
       _Type_sum>>: lambda "types" $ Flows.pure $ var "types"]
 
 ---- Function types
@@ -483,16 +517,16 @@ functionTypeDef :: TElement (Type -> Flow s FunctionType)
 functionTypeDef = expectDefinition "functionType" $
   doc "Extract a function type from a type" $
   lambda "typ" $ lets [
-    "stripped">: ref stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref unexpectedDef @@ string "function type" @@ (Io.showType $ var "typ")) [
+    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "function type" @@ (Io.showType $ var "typ")) [
       _Type_function>>: lambda "ft" $ Flows.pure $ var "ft"]
 
 lambdaDef :: TElement (Term -> Flow Graph Lambda)
 lambdaDef = expectDefinition "lambda" $
   doc "Extract a lambda from a term" $
-  lambda "term0" $ Flows.bind (ref stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref unexpectedDef @@ string "lambda" @@ (Io.showTerm $ var "term")) [
-      _Term_function>>: lambda "function" $ cases _Function (var "function") (Just $ ref unexpectedDef @@ string "lambda" @@ (Io.showTerm $ var "term")) [
+  lambda "term0" $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
+    lambda "term" $ cases _Term (var "term") (Just $ ref Errors.unexpectedDef @@ string "lambda" @@ (Io.showTerm $ var "term")) [
+      _Term_function>>: lambda "function" $ cases _Function (var "function") (Just $ ref Errors.unexpectedDef @@ string "lambda" @@ (Io.showTerm $ var "term")) [
         _Function_lambda>>: lambda "l" $ Flows.pure $ var "l"]]
 
 lambdaBodyDef :: TElement (Term -> Flow Graph Term)
@@ -505,8 +539,8 @@ lambdaBodyDef = expectDefinition "lambdaBody" $
 letTermDef :: TElement (Term -> Flow Graph Let)
 letTermDef = expectDefinition "letTerm" $
   doc "Extract a let expression from a term" $
-  lambda "term0" $ Flows.bind (ref stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref unexpectedDef @@ string "let term" @@ (Io.showTerm $ var "term")) [
+  lambda "term0" $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
+    lambda "term" $ cases _Term (var "term") (Just $ ref Errors.unexpectedDef @@ string "let term" @@ (Io.showTerm $ var "term")) [
       _Term_let>>: lambda "lt" $ Flows.pure $ var "lt"]
 
 letBindingDef :: TElement (String -> Term -> Flow Graph Term)
@@ -530,14 +564,14 @@ letBindingDef = expectDefinition "letBinding" $
 casesDef :: TElement (Name -> Term -> Flow Graph CaseStatement)
 casesDef = expectDefinition "cases" $
   doc "Extract case statement from a term" $
-  lambdas ["name", "term0"] $ Flows.bind (ref stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref unexpectedDef @@ string "case statement" @@ (Io.showTerm $ var "term")) [
-      _Term_function>>: lambda "function" $ cases _Function (var "function") (Just $ ref unexpectedDef @@ string "case statement" @@ (Io.showTerm $ var "term")) [
-        _Function_elimination>>: lambda "elimination" $ cases _Elimination (var "elimination") (Just $ ref unexpectedDef @@ string "case statement" @@ (Io.showTerm $ var "term")) [
+  lambdas ["name", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
+    lambda "term" $ cases _Term (var "term") (Just $ ref Errors.unexpectedDef @@ string "case statement" @@ (Io.showTerm $ var "term")) [
+      _Term_function>>: lambda "function" $ cases _Function (var "function") (Just $ ref Errors.unexpectedDef @@ string "case statement" @@ (Io.showTerm $ var "term")) [
+        _Function_elimination>>: lambda "elimination" $ cases _Elimination (var "elimination") (Just $ ref Errors.unexpectedDef @@ string "case statement" @@ (Io.showTerm $ var "term")) [
           _Elimination_union>>: lambda "cs" $
             Logic.ifElse (Core.equalName_ (Core.caseStatementTypeName $ var "cs") (var "name"))
               (Flows.pure $ var "cs")
-              (ref unexpectedDef @@ ("case statement for type " ++ (Core.unName $ var "name")) @@ (Io.showTerm $ var "term"))]]]
+              (ref Errors.unexpectedDef @@ ("case statement for type " ++ (Core.unName $ var "name")) @@ (Io.showTerm $ var "term"))]]]
 
 caseFieldDef :: TElement (Name -> String -> Term -> Flow Graph Field)
 caseFieldDef = expectDefinition "caseField" $
@@ -563,29 +597,29 @@ fieldDef = expectDefinition "field" $
     $ Logic.ifElse (Lists.null $ var "matchingFields")
       (Flows.fail $ "field " ++ (Core.unName $ var "fname") ++ " not found")
       (Logic.ifElse (Equality.equalInt32 (Lists.length $ var "matchingFields") $ int32 1)
-        (Flows.bind (ref stripAndDereferenceTermDef @@ (Core.fieldTerm $ Lists.head $ var "matchingFields")) $ var "mapping")
+        (Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ (Core.fieldTerm $ Lists.head $ var "matchingFields")) $ var "mapping")
         (Flows.fail $ "multiple fields named " ++ (Core.unName $ var "fname")))
 
 recordDef :: TElement (Name -> Term -> Flow Graph [Field])
 recordDef = expectDefinition "record" $
   doc "Extract a record's fields from a term" $
-  lambdas ["expected", "term0"] $ Flows.bind (ref stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref unexpectedDef @@ string "record" @@ (Io.showTerm $ var "term")) [
+  lambdas ["expected", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
+    lambda "term" $ cases _Term (var "term") (Just $ ref Errors.unexpectedDef @@ string "record" @@ (Io.showTerm $ var "term")) [
       _Term_record>>: lambda "record" $
         Logic.ifElse (Core.equalName_ (Core.recordTypeName $ var "record") (var "expected"))
           (Flows.pure $ Core.recordFields $ var "record")
-          (ref unexpectedDef @@ ("record of type " ++ (Core.unName $ var "expected")) @@ (Core.unName $ Core.recordTypeName $ var "record"))]
+          (ref Errors.unexpectedDef @@ ("record of type " ++ (Core.unName $ var "expected")) @@ (Core.unName $ Core.recordTypeName $ var "record"))]
 
 recordTypeDef :: TElement (Name -> Type -> Flow s [FieldType])
 recordTypeDef = expectDefinition "recordType" $
   doc "Extract the field types from a record type" $
   lambdas ["ename", "typ"] $ lets [
-    "stripped">: ref stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref unexpectedDef @@ string "record type" @@ (Io.showType $ var "typ")) [
+    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "record type" @@ (Io.showType $ var "typ")) [
       _Type_record>>: lambda "rowType" $
         Logic.ifElse (Core.equalName_ (Core.rowTypeTypeName $ var "rowType") (var "ename"))
           (Flows.pure $ Core.rowTypeFields $ var "rowType")
-          (ref unexpectedDef @@ ("record of type " ++ (Core.unName $ var "ename")) @@ ("record of type " ++ (Core.unName $ Core.rowTypeTypeName $ var "rowType")))]
+          (ref Errors.unexpectedDef @@ ("record of type " ++ (Core.unName $ var "ename")) @@ ("record of type " ++ (Core.unName $ Core.rowTypeTypeName $ var "rowType")))]
 
 unitDef :: TElement (Term -> Flow Graph ())
 unitDef = expectDefinition "unit" $
@@ -594,17 +628,17 @@ unitDef = expectDefinition "unit" $
     lambda "fields" $
       Logic.ifElse (Lists.null $ var "fields")
         (Flows.pure unit)
-        (ref unexpectedDef @@ string "unit" @@ (Io.showTerm $ var "term0"))
+        (ref Errors.unexpectedDef @@ string "unit" @@ (Io.showTerm $ var "term0"))
 
 injectionDef :: TElement (Name -> Term -> Flow Graph Field)
 injectionDef = expectDefinition "injection" $
   doc "Extract a field from a union term" $
-  lambdas ["expected", "term0"] $ Flows.bind (ref stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref unexpectedDef @@ string "injection" @@ (Io.showTerm $ var "term")) [
+  lambdas ["expected", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
+    lambda "term" $ cases _Term (var "term") (Just $ ref Errors.unexpectedDef @@ string "injection" @@ (Io.showTerm $ var "term")) [
       _Term_union>>: lambda "injection" $
         Logic.ifElse (Core.equalName_ (Core.injectionTypeName $ var "injection") (var "expected"))
           (Flows.pure $ Core.injectionField $ var "injection")
-          (ref unexpectedDef @@ ("injection of type " ++ (Core.unName $ var "expected")) @@ (Core.unName $ Core.injectionTypeName $ var "injection"))]
+          (ref Errors.unexpectedDef @@ ("injection of type " ++ (Core.unName $ var "expected")) @@ (Core.unName $ Core.injectionTypeName $ var "injection"))]
 
 variantDef :: TElement (Name -> Term -> Flow Graph Field)
 variantDef = expectDefinition "variant" $
@@ -622,33 +656,33 @@ unionTypeDef :: TElement (Name -> Type -> Flow s [FieldType])
 unionTypeDef = expectDefinition "unionType" $
   doc "Extract the field types from a union type" $
   lambdas ["ename", "typ"] $ lets [
-    "stripped">: ref stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref unexpectedDef @@ string "union type" @@ (Io.showType $ var "typ")) [
+    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "union type" @@ (Io.showType $ var "typ")) [
       _Type_union>>: lambda "rowType" $
         Logic.ifElse (Core.equalName_ (Core.rowTypeTypeName $ var "rowType") (var "ename"))
           (Flows.pure $ Core.rowTypeFields $ var "rowType")
-          (ref unexpectedDef @@ ("union of type " ++ (Core.unName $ var "ename")) @@ ("union of type " ++ (Core.unName $ Core.rowTypeTypeName $ var "rowType")))]
+          (ref Errors.unexpectedDef @@ ("union of type " ++ (Core.unName $ var "ename")) @@ ("union of type " ++ (Core.unName $ Core.rowTypeTypeName $ var "rowType")))]
 
 wrapDef :: TElement (Name -> Term -> Flow Graph Term)
 wrapDef = expectDefinition "wrap" $
   doc "Extract the wrapped value from a wrapped term" $
-  lambdas ["expected", "term0"] $ Flows.bind (ref stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref unexpectedDef @@ ("wrap(" ++ (Core.unName $ var "expected") ++ ")") @@ (Io.showTerm $ var "term")) [
+  lambdas ["expected", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
+    lambda "term" $ cases _Term (var "term") (Just $ ref Errors.unexpectedDef @@ ("wrap(" ++ (Core.unName $ var "expected") ++ ")") @@ (Io.showTerm $ var "term")) [
       _Term_wrap>>: lambda "wrappedTerm" $
         Logic.ifElse (Core.equalName_ (Core.wrappedTermTypeName $ var "wrappedTerm") (var "expected"))
           (Flows.pure $ Core.wrappedTermObject $ var "wrappedTerm")
-          (ref unexpectedDef @@ ("wrapper of type " ++ (Core.unName $ var "expected")) @@ (Core.unName $ Core.wrappedTermTypeName $ var "wrappedTerm"))]
+          (ref Errors.unexpectedDef @@ ("wrapper of type " ++ (Core.unName $ var "expected")) @@ (Core.unName $ Core.wrappedTermTypeName $ var "wrappedTerm"))]
 
 wrappedTypeDef :: TElement (Name -> Type -> Flow s Type)
 wrappedTypeDef = expectDefinition "wrappedType" $
   doc "Extract the wrapped type from a wrapper type" $
   lambdas ["ename", "typ"] $ lets [
-    "stripped">: ref stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref unexpectedDef @@ string "wrapped type" @@ (Io.showType $ var "typ")) [
+    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "wrapped type" @@ (Io.showType $ var "typ")) [
       _Type_wrap>>: lambda "wrappedType" $
         Logic.ifElse (Core.equalName_ (Core.wrappedTypeTypeName $ var "wrappedType") (var "ename"))
           (Flows.pure $ Core.wrappedTypeObject $ var "wrappedType")
-          (ref unexpectedDef @@ ("wrapped type " ++ (Core.unName $ var "ename")) @@ ("wrapped type " ++ (Core.unName $ Core.wrappedTypeTypeName $ var "wrappedType")))]
+          (ref Errors.unexpectedDef @@ ("wrapped type " ++ (Core.unName $ var "ename")) @@ ("wrapped type " ++ (Core.unName $ Core.wrappedTypeTypeName $ var "wrappedType")))]
 
 ---- Other
 
@@ -664,4 +698,4 @@ comparisonDef = expectDefinition "comparison" $
             (Flows.pure Graph.comparisonLessThan)
             (Logic.ifElse (Equality.equalString (Core.unName $ var "fname") (string $ unName _Comparison_greaterThan))
               (Flows.pure Graph.comparisonGreaterThan)
-              (ref unexpectedDef @@ string "comparison" @@ Core.unName (var "fname"))))
+              (ref Errors.unexpectedDef @@ string "comparison" @@ Core.unName (var "fname"))))

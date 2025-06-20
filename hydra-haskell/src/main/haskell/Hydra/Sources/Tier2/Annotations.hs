@@ -3,54 +3,84 @@
 module Hydra.Sources.Tier2.Annotations where
 
 -- Standard Tier-2 imports
-import qualified Hydra.Dsl.Coders          as Coders
-import qualified Hydra.Dsl.Compute         as Compute
-import qualified Hydra.Dsl.Core            as Core
-import qualified Hydra.Dsl.Graph           as Graph
-import qualified Hydra.Dsl.Lib.Chars       as Chars
-import qualified Hydra.Dsl.Lib.Equality    as Equality
-import qualified Hydra.Dsl.Lib.Flows       as Flows
-import qualified Hydra.Dsl.Lib.Io          as Io
-import qualified Hydra.Dsl.Lib.Lists       as Lists
-import qualified Hydra.Dsl.Lib.Literals    as Literals
-import qualified Hydra.Dsl.Lib.Logic       as Logic
-import qualified Hydra.Dsl.Lib.Maps        as Maps
-import qualified Hydra.Dsl.Lib.Math        as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import           Hydra.Dsl.Phantoms        as Phantoms
-import qualified Hydra.Dsl.Lib.Sets        as Sets
-import           Hydra.Dsl.Lib.Strings     as Strings
-import qualified Hydra.Dsl.Mantle          as Mantle
-import qualified Hydra.Dsl.Module          as Module
-import qualified Hydra.Dsl.TTerms          as TTerms
-import qualified Hydra.Dsl.TTypes          as TTypes
-import qualified Hydra.Dsl.Terms           as Terms
-import qualified Hydra.Dsl.Topology        as Topology
-import qualified Hydra.Dsl.Types           as Types
-import           Hydra.Sources.Tier1.All
+import Hydra.Kernel
+import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Coders                 as Coders
+import qualified Hydra.Dsl.Compute                as Compute
+import qualified Hydra.Dsl.Core                   as Core
+import qualified Hydra.Dsl.Graph                  as Graph
+import qualified Hydra.Dsl.Lib.Chars              as Chars
+import qualified Hydra.Dsl.Lib.Equality           as Equality
+import qualified Hydra.Dsl.Lib.Flows              as Flows
+import qualified Hydra.Dsl.Lib.Io                 as Io
+import qualified Hydra.Dsl.Lib.Lists              as Lists
+import qualified Hydra.Dsl.Lib.Literals           as Literals
+import qualified Hydra.Dsl.Lib.Logic              as Logic
+import qualified Hydra.Dsl.Lib.Maps               as Maps
+import qualified Hydra.Dsl.Lib.Math               as Math
+import qualified Hydra.Dsl.Lib.Optionals          as Optionals
+import           Hydra.Dsl.Phantoms               as Phantoms
+import qualified Hydra.Dsl.Lib.Sets               as Sets
+import           Hydra.Dsl.Lib.Strings            as Strings
+import qualified Hydra.Dsl.Mantle                 as Mantle
+import qualified Hydra.Dsl.Module                 as Module
+import qualified Hydra.Dsl.TTerms                 as TTerms
+import qualified Hydra.Dsl.TTypes                 as TTypes
+import qualified Hydra.Dsl.Terms                  as Terms
+import qualified Hydra.Dsl.Topology               as Topology
+import qualified Hydra.Dsl.Types                  as Types
+import qualified Hydra.Dsl.Typing                 as Typing
+import qualified Hydra.Sources.Tier1.All          as Tier1
+import qualified Hydra.Sources.Tier1.Constants    as Constants
+import qualified Hydra.Sources.Tier1.CoreEncoding as CoreEncoding
+import qualified Hydra.Sources.Tier1.Decode       as Decode
+import qualified Hydra.Sources.Tier1.Formatting   as Formatting
+import qualified Hydra.Sources.Tier1.Functions    as Functions
+import qualified Hydra.Sources.Tier1.Literals     as Literals
+import qualified Hydra.Sources.Tier1.Messages     as Messages
+import qualified Hydra.Sources.Tier1.Strip        as Strip
 import           Prelude hiding ((++))
+import qualified Data.Int                  as I
 import qualified Data.List                 as L
 import qualified Data.Map                  as M
 import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
-import Hydra.Sources.Tier1.Compute
-import Hydra.Sources.Tier2.Variants
-import Hydra.Sources.Tier2.Lexical
-import Hydra.Sources.Tier2.Flows
-import qualified Hydra.Sources.Tier1.Constants as Constants
+-- Uncomment tier-2 sources as needed
+--import qualified Hydra.Sources.Tier2.Accessors as Accessors
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
+--import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Annotations as Annotations
+--import qualified Hydra.Sources.Tier2.Arity as Arity
 import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
-import qualified Hydra.Sources.Tier1.Decode as Decode
+--import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Expect as Expect
+import qualified Hydra.Sources.Tier2.Flows as Flows_
+--import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
+--import qualified Hydra.Sources.Tier2.Inference as Inference
+import qualified Hydra.Sources.Tier2.Lexical as Lexical
+--import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
+--import qualified Hydra.Sources.Tier2.Printing as Printing
+--import qualified Hydra.Sources.Tier2.Qnames as Qnames
+--import qualified Hydra.Sources.Tier2.Reduction as Reduction
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
-import Hydra.Sources.Libraries
+--import qualified Hydra.Sources.Tier2.Schemas as Schemas
+--import qualified Hydra.Sources.Tier2.Serialization as Serialization
+--import qualified Hydra.Sources.Tier2.Sorting as Sorting
+--import qualified Hydra.Sources.Tier2.Substitution as Substitution
+--import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
+--import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.TermAdapters as TermAdapters
+--import qualified Hydra.Sources.Tier2.TermEncoding as TermEncoding
+--import qualified Hydra.Sources.Tier2.Unification as Unification
+import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
 hydraAnnotationsModule :: Module
 hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
-    [Decode.hydraDecodeModule, CoreDecoding.hydraCoreDecodingModule, coreEncodingModule, Expect.hydraExpectModule, hydraVariantsModule, hydraLexicalModule, hydraFlowsModule]
-    [hydraCodersModule, hydraComputeModule, hydraGraphModule, hydraMantleModule] $
+    [Decode.hydraDecodeModule, CoreDecoding.hydraCoreDecodingModule, CoreEncoding.coreEncodingModule, Expect.hydraExpectModule, Variants.hydraVariantsModule, Lexical.hydraLexicalModule, Flows_.hydraFlowsModule]
+    [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule] $
     Just "Utilities for reading and writing type and term annotations"
   where
    elements = [
@@ -281,7 +311,7 @@ normalizeTermAnnotationsDef = annotationsDefinition "normalizeTermAnnotations" $
   doc "Normalize term annotations" $
   lambda "term" $ lets [
     "anns">: ref termAnnotationInternalDef @@ var "term",
-    "stripped">: ref stripTermDef @@ var "term"]
+    "stripped">: ref Strip.stripTermDef @@ var "term"]
     $ Logic.ifElse (Maps.null $ var "anns")
         (var "stripped")
         (Core.termAnnotated $ Core.annotatedTerm (var "stripped") (var "anns"))
@@ -291,7 +321,7 @@ normalizeTypeAnnotationsDef = annotationsDefinition "normalizeTypeAnnotations" $
   doc "Normalize type annotations" $
   lambda "typ" $ lets [
     "anns">: ref typeAnnotationInternalDef @@ var "typ",
-    "stripped">: ref stripTypeDef @@ var "typ"]
+    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
     $ Logic.ifElse (Maps.null $ var "anns")
         (var "stripped")
         (Core.typeAnnotated $ Core.annotatedType (var "stripped") (var "anns"))
@@ -351,7 +381,7 @@ setTermAnnotationDef :: TElement (Name -> Maybe Term -> Term -> Term)
 setTermAnnotationDef = annotationsDefinition "setTermAnnotation" $
   doc "Set term annotation" $
   lambda "key" $ lambda "val" $ lambda "term" $ lets [
-    "term'">: ref stripTermDef @@ var "term",
+    "term'">: ref Strip.stripTermDef @@ var "term",
     "anns">: ref setAnnotationDef @@ var "key" @@ var "val" @@ (ref termAnnotationInternalDef @@ var "term")]
     $ Logic.ifElse (Maps.null $ var "anns")
         (var "term'")
@@ -370,12 +400,11 @@ setTermTypeDef = annotationsDefinition "setTermType" $
   doc "Set term type" $
   lambda "mtyp" $ lambda "term" $ lets [
     "withoutType">: lambdas ["term"] $
-      match _Term (Just $ var "term") [
+      cases _Term (var "term") (Just $ var "term") [
         _Term_annotated>>: lambda "at" $ Core.termAnnotated $ Core.annotatedTerm
           (var "withoutType" @@ Core.annotatedTermSubject (var "at"))
           (Core.annotatedTermAnnotation $ var "at"),
-        _Term_typed>>: lambda "tt" $ Core.typedTermTerm $ var "tt"]
-      @@ var "term"]
+        _Term_typed>>: lambda "tt" $ Core.typedTermTerm $ var "tt"]]
     $ Optionals.maybe
         (var "withoutType" @@ var "term")
         (lambda "typ" $ Core.termTyped $ Core.typedTerm (var "withoutType" @@ var "term") (var "typ"))
@@ -384,13 +413,13 @@ setTermTypeDef = annotationsDefinition "setTermType" $
 setTypeDef :: TElement (Maybe Type -> M.Map Name Term -> M.Map Name Term)
 setTypeDef = annotationsDefinition "setType" $
   doc "Set type in annotations" $
-  lambda "mt" $ ref setAnnotationDef @@ ref Constants.key_typeDef @@ Optionals.map (ref coreEncodeTypeDef) (var "mt")
+  lambda "mt" $ ref setAnnotationDef @@ ref Constants.key_typeDef @@ Optionals.map (ref CoreEncoding.coreEncodeTypeDef) (var "mt")
 
 setTypeAnnotationDef :: TElement (Name -> Maybe Term -> Type -> Type)
 setTypeAnnotationDef = annotationsDefinition "setTypeAnnotation" $
   doc "Set type annotation" $
   lambda "key" $ lambda "val" $ lambda "typ" $ lets [
-    "typ'">: ref stripTypeDef @@ var "typ",
+    "typ'">: ref Strip.stripTypeDef @@ var "typ",
     "anns">: ref setAnnotationDef @@ var "key" @@ var "val" @@ (ref typeAnnotationInternalDef @@ var "typ")]
     $ Logic.ifElse (Maps.null (var "anns"))
         (var "typ'")
@@ -401,14 +430,13 @@ setTypeClassesDef = annotationsDefinition "setTypeClasses" $
   doc "Set type classes on term" $
   lambda "m" $ lets [
     "encodeClass">: lambda "tc" $
-      match _TypeClass Nothing [
+      cases _TypeClass (var "tc") Nothing [
         _TypeClass_equality>>: constant $ TTerms.unitVariantPhantom _TypeClass _TypeClass_equality,
-        _TypeClass_ordering>>: constant $ TTerms.unitVariantPhantom _TypeClass _TypeClass_ordering]
-      @@ var "tc",
+        _TypeClass_ordering>>: constant $ TTerms.unitVariantPhantom _TypeClass _TypeClass_ordering],
     "encodePair">: lambda "nameClasses" $ lets [
       "name">: first $ var "nameClasses",
       "classes">: second $ var "nameClasses"]
-      $ pair (ref coreEncodeNameDef @@ var "name")
+      $ pair (ref CoreEncoding.coreEncodeNameDef @@ var "name")
               (Core.termSet $ Sets.fromList $ Lists.map (var "encodeClass") $ Sets.toList $ var "classes"),
     "encoded">: Logic.ifElse (Maps.null $ var "m")
         nothing
@@ -427,10 +455,9 @@ termAnnotationInternalDef = annotationsDefinition "termAnnotationInternal" $
   doc "Get internal term annotations" $
   lets [
     "getAnn">: lambda "t" $
-      match _Term (Just nothing) [
+      cases _Term (var "t") (Just nothing) [
         _Term_annotated>>: lambda "a" $ just $ var "a",
-        _Term_typed>>: lambda "tt" $ var "getAnn" @@ Core.typedTermTerm (var "tt")]
-      @@ var "t"]
+        _Term_typed>>: lambda "tt" $ var "getAnn" @@ Core.typedTermTerm (var "tt")]]
     $ ref aggregateAnnotationsDef @@ var "getAnn" @@ (unaryFunction Core.annotatedTermSubject) @@ (unaryFunction Core.annotatedTermAnnotation)
 
 typeAnnotationInternalDef :: TElement (Type -> M.Map Name Term)
@@ -438,9 +465,8 @@ typeAnnotationInternalDef = annotationsDefinition "typeAnnotationInternal" $
   doc "Get internal type annotations" $
   lets [
     "getAnn">: lambda "t" $
-      match _Type (Just nothing) [
-        _Type_annotated>>: lambda "a" $ just $ var "a"]
-      @@ var "t"]
+      cases _Type (var "t") (Just nothing) [
+        _Type_annotated>>: lambda "a" $ just $ var "a"]]
     $ ref aggregateAnnotationsDef @@ var "getAnn" @@ (unaryFunction Core.annotatedTypeSubject) @@ (unaryFunction Core.annotatedTypeAnnotation)
 
 typeElementDef :: TElement (Name -> Type -> Element)
@@ -449,7 +475,7 @@ typeElementDef = annotationsDefinition "typeElement" $
   lambda "name" $ lambda "typ" $ lets [
     "schemaTerm">: Core.termVariable (Core.name _Type),
     "dataTerm">: ref normalizeTermAnnotationsDef @@ (Core.termAnnotated $ Core.annotatedTerm
-      (ref coreEncodeTypeDef @@ var "typ")
+      (ref CoreEncoding.coreEncodeTypeDef @@ var "typ")
       (Maps.fromList $ list [pair (ref Constants.key_typeDef) (var "schemaTerm")]))]
     $ Graph.element (var "name") (var "dataTerm") (just $ Core.typeScheme (list []) (var "typ"))
 
@@ -499,7 +525,7 @@ unshadowVariablesDef = annotationsDefinition "unshadowVariables" $
     $ Optionals.fromJust $ Compute.flowStateValue $ Compute.unFlow
         (ref Rewriting.rewriteTermMDef @@ var "rewrite" @@ var "term")
         (pair Sets.empty Maps.empty)
-        (ref emptyTraceDef)
+        (ref Flows_.emptyTraceDef)
 
 withDepthDef :: TElement (Name -> (Int -> Flow s a) -> Flow s a)
 withDepthDef = annotationsDefinition "withDepth" $
@@ -520,4 +546,4 @@ withDepthDef = annotationsDefinition "withDepth" $
 withEmptyGraphDef :: TElement (Flow Graph a -> Flow s a)
 withEmptyGraphDef = annotationsDefinition "withEmptyGraph" $
   doc "Execute flow with empty graph" $
-  ref withStateDef @@ ref emptyGraphDef
+  ref Flows_.withStateDef @@ ref Lexical.emptyGraphDef

@@ -17,6 +17,8 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
 
+import qualified Hydra.Sources.Tier1.Strip as Strip
+
 import qualified Data.Set as S
 
 
@@ -68,7 +70,7 @@ typeScriptLanguageDef = typeScriptLanguageDefinition "typeScriptLanguage" $
         _TypeVariant_variable]),
       _LanguageConstraints_types>>: match _Type (Just true) [
         _Type_map>>: lambda "mt" (match _Type (Just true) [
-          _Type_optional>>: constant false] @@ (ref stripTypeDef @@ (Core.mapTypeValues $ var "mt")))]]]
+          _Type_optional>>: constant false] @@ (ref Strip.stripTypeDef @@ (Core.mapTypeValues $ var "mt")))]]]
 
 typeScriptReservedWordsDef :: TElement (S.Set String)
 typeScriptReservedWordsDef = typeScriptLanguageDefinition "typeScriptReservedWords" $

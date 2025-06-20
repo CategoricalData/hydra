@@ -3,49 +3,78 @@
 module Hydra.Sources.Tier2.Schemas where
 
 -- Standard Tier-2 imports
-import qualified Hydra.Dsl.Coders          as Coders
-import qualified Hydra.Dsl.Compute         as Compute
-import qualified Hydra.Dsl.Core            as Core
-import qualified Hydra.Dsl.Graph           as Graph
-import qualified Hydra.Dsl.Lib.Chars       as Chars
-import qualified Hydra.Dsl.Lib.Equality    as Equality
-import qualified Hydra.Dsl.Lib.Flows       as Flows
-import qualified Hydra.Dsl.Lib.Io          as Io
-import qualified Hydra.Dsl.Lib.Lists       as Lists
-import qualified Hydra.Dsl.Lib.Literals    as Literals
-import qualified Hydra.Dsl.Lib.Logic       as Logic
-import qualified Hydra.Dsl.Lib.Maps        as Maps
-import qualified Hydra.Dsl.Lib.Math        as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import           Hydra.Dsl.Phantoms        as Phantoms
-import qualified Hydra.Dsl.Lib.Sets        as Sets
-import           Hydra.Dsl.Lib.Strings     as Strings
-import qualified Hydra.Dsl.Mantle          as Mantle
-import qualified Hydra.Dsl.Module          as Module
-import qualified Hydra.Dsl.TTerms          as TTerms
-import qualified Hydra.Dsl.TTypes          as TTypes
-import qualified Hydra.Dsl.Terms           as Terms
-import qualified Hydra.Dsl.Topology        as Topology
-import qualified Hydra.Dsl.Types           as Types
-import           Hydra.Sources.Tier1.All
+import Hydra.Kernel
+import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Coders                 as Coders
+import qualified Hydra.Dsl.Compute                as Compute
+import qualified Hydra.Dsl.Core                   as Core
+import qualified Hydra.Dsl.Graph                  as Graph
+import qualified Hydra.Dsl.Lib.Chars              as Chars
+import qualified Hydra.Dsl.Lib.Equality           as Equality
+import qualified Hydra.Dsl.Lib.Flows              as Flows
+import qualified Hydra.Dsl.Lib.Io                 as Io
+import qualified Hydra.Dsl.Lib.Lists              as Lists
+import qualified Hydra.Dsl.Lib.Literals           as Literals
+import qualified Hydra.Dsl.Lib.Logic              as Logic
+import qualified Hydra.Dsl.Lib.Maps               as Maps
+import qualified Hydra.Dsl.Lib.Math               as Math
+import qualified Hydra.Dsl.Lib.Optionals          as Optionals
+import           Hydra.Dsl.Phantoms               as Phantoms
+import qualified Hydra.Dsl.Lib.Sets               as Sets
+import           Hydra.Dsl.Lib.Strings            as Strings
+import qualified Hydra.Dsl.Mantle                 as Mantle
+import qualified Hydra.Dsl.Module                 as Module
+import qualified Hydra.Dsl.TTerms                 as TTerms
+import qualified Hydra.Dsl.TTypes                 as TTypes
+import qualified Hydra.Dsl.Terms                  as Terms
+import qualified Hydra.Dsl.Topology               as Topology
+import qualified Hydra.Dsl.Types                  as Types
+import qualified Hydra.Dsl.Typing                 as Typing
+import qualified Hydra.Sources.Tier1.All          as Tier1
+import qualified Hydra.Sources.Tier1.Constants    as Constants
+import qualified Hydra.Sources.Tier1.CoreEncoding as CoreEncoding
+import qualified Hydra.Sources.Tier1.Decode       as Decode
+import qualified Hydra.Sources.Tier1.Formatting   as Formatting
+import qualified Hydra.Sources.Tier1.Functions    as Functions
+import qualified Hydra.Sources.Tier1.Literals     as Literals
+import qualified Hydra.Sources.Tier1.Messages     as Messages
+import qualified Hydra.Sources.Tier1.Strip        as Strip
 import           Prelude hiding ((++))
+import qualified Data.Int                  as I
 import qualified Data.List                 as L
 import qualified Data.Map                  as M
 import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
-import qualified Hydra.Sources.Tier1.Constants as Constants
+-- Uncomment tier-2 sources as needed
+--import qualified Hydra.Sources.Tier2.Accessors as Accessors
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
+--import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Annotations as Annotations
+--import qualified Hydra.Sources.Tier2.Arity as Arity
 import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
+--import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Expect as Expect
+import qualified Hydra.Sources.Tier2.Flows as Flows_
+--import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
+--import qualified Hydra.Sources.Tier2.Inference as Inference
 import qualified Hydra.Sources.Tier2.Lexical as Lexical
+--import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
+--import qualified Hydra.Sources.Tier2.Printing as Printing
 import qualified Hydra.Sources.Tier2.Qnames as Qnames
+--import qualified Hydra.Sources.Tier2.Reduction as Reduction
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
+--import qualified Hydra.Sources.Tier2.Schemas as Schemas
+--import qualified Hydra.Sources.Tier2.Serialization as Serialization
 import qualified Hydra.Sources.Tier2.Sorting as Sorting
-import qualified Hydra.Sources.Tier1.Strip as Strip
+--import qualified Hydra.Sources.Tier2.Substitution as Substitution
+--import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
+--import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.TermAdapters as TermAdapters
+--import qualified Hydra.Sources.Tier2.TermEncoding as TermEncoding
+--import qualified Hydra.Sources.Tier2.Unification as Unification
 import qualified Hydra.Sources.Tier2.Variants as Variants
-import Hydra.Sources.Tier2.Flows
-import Hydra.Sources.Libraries
 
 
 schemasDefinition :: String -> TTerm a -> TElement a
@@ -53,8 +82,8 @@ schemasDefinition = definitionInModule hydraSchemasModule
 
 hydraSchemasModule :: Module
 hydraSchemasModule = Module (Namespace "hydra.schemas") elements
-    [CoreDecoding.hydraCoreDecodingModule, coreEncodingModule, Qnames.hydraQnamesModule, Rewriting.hydraRewritingModule, Sorting.hydraSortingModule]
-    [hydraCodersModule, hydraModuleModule, hydraTopologyModule] $
+    [CoreDecoding.hydraCoreDecodingModule, CoreEncoding.coreEncodingModule, Qnames.hydraQnamesModule, Rewriting.hydraRewritingModule, Sorting.hydraSortingModule]
+    [Tier1.hydraCodersModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just ("Various functions for dereferencing and decoding schema types.")
   where
    elements = [
@@ -105,7 +134,7 @@ dependencyNamespacesDef = schemasDefinition "dependencyNamespaces" $
           (lambda "ts" $ ref Rewriting.typeDependencyNamesDef @@ true @@ true @@ Core.typeSchemeType (var "ts"))
           (Graph.elementType $ var "el"))
         Sets.empty]
-      $ Logic.ifElse (ref isEncodedTypeDef @@ (ref fullyStripTermDef @@ var "term"))
+      $ Logic.ifElse (ref CoreEncoding.isEncodedTypeDef @@ (ref Strip.fullyStripTermDef @@ var "term"))
           (Flows.bind (ref CoreDecoding.coreDecodeTypeDef @@ var "term") $
             lambda "typ" $ Flows.pure $ Sets.unions $ list [
               var "dataNames", var "schemaNames",
@@ -158,12 +187,12 @@ fieldTypesDef = schemasDefinition "fieldTypes" $
       _Type_record>>: lambda "rt" $ Flows.pure $ var "toMap" @@ Core.rowTypeFields (var "rt"),
       _Type_union>>: lambda "rt" $ Flows.pure $ var "toMap" @@ Core.rowTypeFields (var "rt"),
       _Type_variable>>: lambda "name" $
-        ref withTraceDef @@ (Strings.cat2 (string "field types of ") (Core.unName $ var "name")) @@
+        ref Flows_.withTraceDef @@ (Strings.cat2 (string "field types of ") (Core.unName $ var "name")) @@
           (Flows.bind (ref Lexical.requireElementDef @@ var "name") $
             lambda "el" $
               Flows.bind (ref CoreDecoding.coreDecodeTypeDef @@ Graph.elementTerm (var "el")) $
                 ref fieldTypesDef)]
-    @@ (ref stripTypeDef @@ var "t")
+    @@ (ref Strip.stripTypeDef @@ var "t")
 
 fullyStripTypeDef :: TElement (Type -> Type)
 fullyStripTypeDef = schemasDefinition "fullyStripType" $
@@ -171,13 +200,13 @@ fullyStripTypeDef = schemasDefinition "fullyStripType" $
   lambda "typ" $
     match _Type (Just $ var "typ") [
       _Type_forall>>: lambda "ft" $ ref fullyStripTypeDef @@ Core.forallTypeBody (var "ft")]
-    @@ (ref stripTypeDef @@ var "typ")
+    @@ (ref Strip.stripTypeDef @@ var "typ")
 
 isEnumRowTypeDef :: TElement (RowType -> Bool)
 isEnumRowTypeDef = schemasDefinition "isEnumRowType" $
   doc "Check if a row type represents an enum (all fields are unit-typed)" $
   lambda "rt" $ Lists.foldl (binaryFunction Logic.and) true $
-    Lists.map (lambda "f" $ ref isUnitTypeDef @@ (Core.fieldTypeType $ var "f")) $
+    Lists.map (lambda "f" $ ref CoreEncoding.isUnitTypeDef @@ (Core.fieldTypeType $ var "f")) $
       Core.rowTypeFields $ var "rt"
 
 isEnumTypeDef :: TElement (Type -> Bool)
@@ -186,7 +215,7 @@ isEnumTypeDef = schemasDefinition "isEnumType" $
   lambda "typ" $
     match _Type (Just false) [
       _Type_union>>: lambda "rt" $ ref isEnumRowTypeDef @@ var "rt"]
-    @@ (ref stripTypeDef @@ var "typ")
+    @@ (ref Strip.stripTypeDef @@ var "typ")
 
 isSerializableDef :: TElement (Element -> Flow Graph Bool)
 isSerializableDef = schemasDefinition "isSerializable" $
@@ -248,7 +277,7 @@ requireTypeDef :: TElement (Name -> Flow Graph Type)
 requireTypeDef = schemasDefinition "requireType" $
   doc "Require a type by name" $
   lambda "name" $
-    ref withTraceDef @@ (Strings.cat2 (string "require type ") (Core.unName $ var "name")) @@
+    ref Flows_.withTraceDef @@ (Strings.cat2 (string "require type ") (Core.unName $ var "name")) @@
       (Flows.bind (ref Lexical.withSchemaContextDef @@ (ref Lexical.requireElementDef @@ var "name")) $
         lambda "el" $ ref CoreDecoding.coreDecodeTypeDef @@ Graph.elementTerm (var "el"))
 
@@ -273,7 +302,7 @@ resolveTypeDef = schemasDefinition "resolveType" $
               Optionals.maybe (Flows.pure nothing)
                 (lambda "t" $ Flows.map (unaryFunction just) $ ref CoreDecoding.coreDecodeTypeDef @@ var "t")
                 (var "mterm"))]
-    @@ (ref stripTypeDef @@ var "typ")
+    @@ (ref Strip.stripTypeDef @@ var "typ")
 
 schemaGraphToTypingEnvironmentDef :: TElement (Graph -> Flow s (M.Map Name TypeScheme))
 schemaGraphToTypingEnvironmentDef = schemasDefinition "schemaGraphToTypingEnvironment" $
@@ -296,7 +325,7 @@ schemaGraphToTypingEnvironmentDef = schemasDefinition "schemaGraphToTypingEnviro
               (Logic.ifElse
                 (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.name _Type)))
                 (Flows.map (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded") $ ref CoreDecoding.coreDecodeTypeDef @@ Graph.elementTerm (var "el"))
-                (cases _Term (ref fullyStripTermDef @@ (Graph.elementTerm $ var "el")) (Just $ Flows.pure nothing) [
+                (cases _Term (ref Strip.fullyStripTermDef @@ (Graph.elementTerm $ var "el")) (Just $ Flows.pure nothing) [
                   _Term_record>>: lambda "r" $
                     Logic.ifElse
                       (Equality.equal (Core.recordTypeName $ var "r") (Core.name _TypeScheme))
@@ -311,7 +340,7 @@ schemaGraphToTypingEnvironmentDef = schemasDefinition "schemaGraphToTypingEnviro
                         (ref CoreDecoding.coreDecodeTypeDef @@ Graph.elementTerm (var "el")))
                       (Flows.pure nothing)])))
           (Graph.elementType $ var "el"))]
-    $ ref withStateDef @@ var "g" @@
+    $ ref Flows_.withStateDef @@ var "g" @@
       (Flows.bind (Flows.mapList (var "toPair") $ Maps.elems $ Graph.graphElements $ var "g") $
         lambda "mpairs" $ Flows.pure $ Maps.fromList $ Optionals.cat $ var "mpairs")
 
@@ -334,7 +363,7 @@ typeDependenciesDef = schemasDefinition "typeDependencies" $
   doc "Get all type dependencies for a given type name" $
   lambda "withSchema" $ lambda "transform" $ lambda "name" $ lets [
     "requireType">: lambda "name" $
-      ref withTraceDef @@ (Strings.cat2 (string "type dependencies of ") (Core.unName $ var "name")) @@
+      ref Flows_.withTraceDef @@ (Strings.cat2 (string "type dependencies of ") (Core.unName $ var "name")) @@
         (Flows.bind (ref Lexical.requireElementDef @@ var "name") $
           lambda "el" $ ref CoreDecoding.coreDecodeTypeDef @@ Graph.elementTerm (var "el")),
     "toPair">: lambda "name" $
