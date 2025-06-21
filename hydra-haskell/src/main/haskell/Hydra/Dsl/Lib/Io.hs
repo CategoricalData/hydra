@@ -10,14 +10,23 @@ import Hydra.Dsl.Phantoms
 showFloat :: TTerm FloatValue -> TTerm String
 showFloat = primitive1 _io_showFloat
 
+showFloatType :: TTerm FloatType -> TTerm String
+showFloatType = primitive1 _io_showFloatType
+
 showInteger :: TTerm IntegerValue -> TTerm String
 showInteger = primitive1 _io_showInteger
+
+showIntegerType :: TTerm IntegerType -> TTerm String
+showIntegerType = primitive1 _io_showIntegerType
 
 showList :: TTerm (a -> String) -> TTerm [a] -> TTerm String
 showList showElem xs = primitive2 _io_showList showElem xs
 
 showLiteral :: TTerm Literal -> TTerm String
 showLiteral = primitive1 _io_showLiteral
+
+showLiteralType :: TTerm LiteralType -> TTerm String
+showLiteralType = primitive1 _io_showLiteralType
 
 showTerm :: TTerm Term -> TTerm String
 showTerm = primitive1 _io_showTerm
