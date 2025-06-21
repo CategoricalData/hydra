@@ -49,7 +49,6 @@ module Hydra.Kernel (
   module Hydra.Unification,
   module Hydra.Variants,
   module Hydra.Workflow,
---  module Hydra.Tools.Debug,
 ) where
 
 import Hydra.Accessors
@@ -98,4 +97,3 @@ import Hydra.Typing
 import Hydra.Unification
 import Hydra.Variants
 import Hydra.Workflow
---import Hydra.Tools.Debug

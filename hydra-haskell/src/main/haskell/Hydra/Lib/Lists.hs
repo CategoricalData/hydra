@@ -95,6 +95,9 @@ tail = L.tail
 take :: Int -> [a] -> [a]
 take = L.take
 
+transpose :: [[a]] -> [[a]]
+transpose = L.transpose
+
 zip :: [a] -> [b] -> [(a, b)]
 zip = L.zip
 

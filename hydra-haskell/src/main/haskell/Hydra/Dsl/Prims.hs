@@ -53,6 +53,12 @@ comparison = TermCoder (TypeVariable _Comparison) $ Coder encode decode
     encode = Expect.comparison
     decode = pure . Terms.comparison
 
+floatType :: TermCoder FloatType
+floatType = TermCoder (TypeVariable _FloatType) $ Coder encode decode
+  where
+    encode = coreDecodeFloatType
+    decode = pure . coreEncodeFloatType
+
 floatValue :: TermCoder FloatValue
 floatValue = TermCoder (TypeVariable _FloatValue) $ Coder encode decode
   where
@@ -83,6 +89,12 @@ function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType 
   where
     encode term = fail $ "cannot encode term to a function: " ++ showTerm term
     decode _ = fail $ "cannot decode functions to terms"
+
+integerType :: TermCoder IntegerType
+integerType = TermCoder (TypeVariable _IntegerType) $ Coder encode decode
+  where
+    encode = coreDecodeIntegerType
+    decode = pure . coreEncodeIntegerType
 
 integerValue :: TermCoder IntegerValue
 integerValue = TermCoder (TypeVariable _IntegerValue) $ Coder encode decode
@@ -125,6 +137,12 @@ literal = TermCoder (TypeVariable _Literal) $ Coder encode decode
   where
     encode = Expect.literal
     decode = pure . Terms.literal
+
+literalType :: TermCoder LiteralType
+literalType = TermCoder (TypeVariable _LiteralType) $ Coder encode decode
+  where
+    encode = coreDecodeLiteralType
+    decode = pure . coreEncodeLiteralType
 
 map :: Ord k => TermCoder k -> TermCoder v -> TermCoder (M.Map k v)
 map keys values = TermCoder (Types.map (termCoderType keys) (termCoderType values)) $ Coder encode decode

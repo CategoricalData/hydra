@@ -3,10 +3,13 @@
 module Hydra.Lib.Io (
   showElement,
   showFloat,
+  showFloatType,
   showGraph,
   showInteger,
+  showIntegerType,
   showList,
   showLiteral,
+  showLiteralType,
   showTerm,
   showType,
   showTypeConstraint,
@@ -17,12 +20,7 @@ module Hydra.Lib.Io (
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
---import Hydra.Ext.Json.Coder
---import Hydra.Dsl.Annotations
---import Hydra.Ext.Json.Serde
 import Hydra.CoreEncoding
---import Hydra.Rewriting
---import Hydra.Annotations
 import Hydra.Flows
 import Hydra.Typing
 import Hydra.Strip
@@ -57,6 +55,12 @@ showFloat fv = case fv of
   FloatValueFloat32 v -> show v
   FloatValueFloat64 v -> show v
 
+showFloatType :: FloatType -> String
+showFloatType fv = case fv of
+  FloatTypeBigfloat -> "bigfloat"
+  FloatTypeFloat32 -> "float32"
+  FloatTypeFloat64 -> "float64"
+
 showGraph :: Graph -> String
 showGraph graph = "{" ++ (L.intercalate ", " $ fmap showElement $ M.elems $ graphElements graph) ++ "}"
 
@@ -72,6 +76,18 @@ showInteger iv = case iv of
   IntegerValueUint32 v -> show v
   IntegerValueUint64 v -> show v
 
+showIntegerType :: IntegerType -> String
+showIntegerType iv = case iv of
+  IntegerTypeBigint -> "bigint"
+  IntegerTypeInt8 -> "int8"
+  IntegerTypeInt16 -> "int16"
+  IntegerTypeInt32 -> "int32"
+  IntegerTypeInt64 -> "int64"
+  IntegerTypeUint8 -> "uint8"
+  IntegerTypeUint16 -> "uint16"
+  IntegerTypeUint32 -> "uint32"
+  IntegerTypeUint64 -> "uint64"
+
 showList :: (a -> String) -> [a] -> String
 showList f xs = "[" ++ (L.intercalate ", " $ fmap f xs) ++ "]"
 
@@ -83,9 +99,13 @@ showLiteral l = case l of
   LiteralInteger iv -> showInteger iv
   LiteralString s -> show s
 
---showTerm :: Term -> String
-----showTerm term = fromFlow "fail" noGraph (jsonValueToString <$> untypedTermToJson term)
---showTerm = show
+showLiteralType :: LiteralType -> String
+showLiteralType lt = case lt of
+  LiteralTypeBinary -> "binary"
+  LiteralTypeBoolean -> "boolean"
+  LiteralTypeFloat ft -> showFloatType ft
+  LiteralTypeInteger it -> showIntegerType it
+  LiteralTypeString -> "string"
 
 showTerm :: Term -> String
 showTerm term = case stripTerm term of
@@ -187,24 +207,7 @@ showType typ = case stripType typ of
           t1 -> L.intercalate " → " $ fmap showType $ L.reverse (t1:prev)
     TypeList etyp -> "list<" ++ showType etyp ++ ">"
     TypeForall (ForallType (Name var) body) -> "(∀" ++ var ++ "." ++ showType body ++ ")"
-    TypeLiteral lt -> case lt of
-      LiteralTypeBinary -> "binary"
-      LiteralTypeBoolean -> "boolean"
-      LiteralTypeFloat ft -> case ft of
-        FloatTypeBigfloat -> "bigfloat"
-        FloatTypeFloat32 -> "float32"
-        FloatTypeFloat64 -> "float64"
-      LiteralTypeInteger it -> case it of
-        IntegerTypeBigint -> "bigint"
-        IntegerTypeInt8 -> "int8"
-        IntegerTypeInt16 -> "int16"
-        IntegerTypeInt32 -> "int32"
-        IntegerTypeInt64 -> "int64"
-        IntegerTypeUint8 -> "uint8"
-        IntegerTypeUint16 -> "uint16"
-        IntegerTypeUint32 -> "uint32"
-        IntegerTypeUint64 -> "uint64"
-      LiteralTypeString -> "string"
+    TypeLiteral lt -> showLiteralType lt
     TypeMap (MapType keyTyp valTyp) -> "map<" ++ showType keyTyp ++ ", " ++ showType valTyp ++ ">"
     TypeOptional etyp -> "optional<" ++ showType etyp ++ ">"
     TypeProduct types -> L.intercalate "×" (fmap showType types)
