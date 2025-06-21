@@ -7,8 +7,8 @@ from hydra.dsl.python import frozenlist
 
 
 def delete[A](x: A, s: frozenset[A]) -> frozenset[A]:
-"""Delete an element from a set."""
-return s - {x}
+    """Delete an element from a set."""
+    return s - {x}
 
 
 def difference[A](s1: frozenset[A], s2: frozenset[A]) -> frozenset[A]:
@@ -17,8 +17,8 @@ def difference[A](s1: frozenset[A], s2: frozenset[A]) -> frozenset[A]:
 
 
 def empty[A]():
-"""Create an empty set."""
-return frozenset[A]()
+    """Create an empty set."""
+    return frozenset[A]()
 
 
 def from_list[A](xs: Sequence[A]) -> frozenset[A]:
@@ -47,8 +47,8 @@ def map[A, B](f: Callable[[A], B], s: frozenset[A]) -> frozenset[B]:
 
 
 def member[A](x: A, s: frozenset[A]) -> bool:
-"""Check if an element is in a set."""
-return x in s
+    """Check if an element is in a set."""
+    return x in s
 
 
 def singleton[A](x: A) -> frozenset[A]:
