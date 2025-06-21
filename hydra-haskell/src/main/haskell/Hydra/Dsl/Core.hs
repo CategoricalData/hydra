@@ -119,10 +119,13 @@ floatTypeFloat32 = unitVariant _FloatType _FloatType_float32
 floatTypeFloat64 :: TTerm FloatType
 floatTypeFloat64 = unitVariant _FloatType _FloatType_float64
 
+floatValueBigfloat :: TTerm Double -> TTerm FloatValue
+floatValueBigfloat = inject _FloatValue _FloatValue_bigfloat
+
 floatValueFloat32 :: TTerm Float -> TTerm FloatValue
 floatValueFloat32 = inject _FloatValue _FloatValue_float32
 
-floatValueFloat64 :: TTerm Float -> TTerm FloatValue
+floatValueFloat64 :: TTerm Double -> TTerm FloatValue
 floatValueFloat64 = inject _FloatValue _FloatValue_float64
 
 forallType :: TTerm Name -> TTerm Type -> TTerm ForallType
@@ -194,14 +197,29 @@ integerTypeUint32 = unitVariant _IntegerType _IntegerType_uint32
 integerTypeUint64 :: TTerm IntegerType
 integerTypeUint64 = unitVariant _IntegerType _IntegerType_uint64
 
+integerValueBigint :: TTerm Integer -> TTerm IntegerValue
+integerValueBigint = inject _IntegerValue _IntegerValue_bigint
+
+integerValueInt8 :: TTerm Int8 -> TTerm IntegerValue
+integerValueInt8 = inject _IntegerValue _IntegerValue_int8
+
 integerValueInt16 :: TTerm Int16 -> TTerm IntegerValue
 integerValueInt16 = inject _IntegerValue _IntegerValue_int16
 
 integerValueInt32 :: TTerm Int -> TTerm IntegerValue
 integerValueInt32 = inject _IntegerValue _IntegerValue_int32
 
-integerValueInt64 :: TTerm Int -> TTerm IntegerValue
+integerValueInt64 :: TTerm Int64 -> TTerm IntegerValue
 integerValueInt64 = inject _IntegerValue _IntegerValue_int64
+
+integerValueUint8 :: TTerm Int16 -> TTerm IntegerValue
+integerValueUint8 = inject _IntegerValue _IntegerValue_uint8
+
+integerValueUint16 :: TTerm Int -> TTerm IntegerValue
+integerValueUint16 = inject _IntegerValue _IntegerValue_uint16
+
+integerValueUint32 :: TTerm Int64 -> TTerm IntegerValue
+integerValueUint32 = inject _IntegerValue _IntegerValue_uint32
 
 integerValueUint64 :: TTerm Integer -> TTerm IntegerValue
 integerValueUint64 = inject _IntegerValue _IntegerValue_uint64

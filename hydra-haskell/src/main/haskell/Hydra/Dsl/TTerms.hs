@@ -101,6 +101,16 @@ unwrap = Core.termFunction . Core.functionElimination . Core.eliminationWrap
 
 -- * Literal values
 
+-- | Create a term-encoded unlimited precision integer
+-- Example: bigint 42
+bigint :: Integer -> TTerm Term
+bigint = bigintLift . TTerm . Terms.bigint
+
+-- | Lift a TTerm Integer to a term-encoded bigint literal
+-- Example: bigintLift (varPhantom "x" :: TTerm Integer)
+bigintLift :: TTerm Integer -> TTerm Term
+bigintLift = Core.termLiteral . Core.literalInteger . Core.integerValueBigint
+
 -- | Create a term-encoded boolean literal
 -- Example: boolean True
 boolean :: Bool -> TTerm Term
@@ -109,6 +119,15 @@ boolean = Core.termLiteral . Core.literalBoolean . TTerm . Terms.boolean
 -- | Term-encoded boolean false literal
 false :: TTerm Term
 false = boolean False
+
+-- | Create a term-encoded unlimited precision floating point literal
+-- Example: bigfloat 3.14159
+bigfloat :: Double -> TTerm Term
+bigfloat = bigfloatLift . TTerm . Terms.bigfloat
+
+-- | Lift a TTerm Double to a term-encoded bigfloat literal
+bigfloatLift :: TTerm Double -> TTerm Term
+bigfloatLift = Core.termLiteral . Core.literalFloat . Core.floatValueBigfloat
 
 -- | Create a term-encoded 32-bit floating point literal
 -- Example: float32 3.14
@@ -127,8 +146,18 @@ float64 = float64Lift . TTerm . Terms.float64
 
 -- | Lift a TTerm Float to a term-encoded float64 literal
 -- Example: float64Lift (varPhantom "x" :: TTerm Float)
-float64Lift :: TTerm Float -> TTerm Term
+float64Lift :: TTerm Double -> TTerm Term
 float64Lift = Core.termLiteral . Core.literalFloat . Core.floatValueFloat64
+
+-- | Create a term-encoded 8-bit signed integer literal
+-- Example: int8 127
+int8 :: Int8 -> TTerm Term
+int8 = int8Lift . TTerm . Terms.int8
+
+-- | Lift a TTerm Int8 to a term-encoded int8 literal
+-- Example: int8Lift (varPhantom "x" :: TTerm Int8)
+int8Lift :: TTerm Int8 -> TTerm Term
+int8Lift = Core.termLiteral . Core.literalInteger . Core.integerValueInt8
 
 -- | Create a term-encoded 16-bit signed integer literal
 -- Example: int16 32767
@@ -150,6 +179,16 @@ int32 = int32Lift . TTerm . Terms.int32
 int32Lift :: TTerm Int -> TTerm Term
 int32Lift = Core.termLiteral . Core.literalInteger . Core.integerValueInt32
 
+-- | Create a term-encoded 64-bit signed integer literal
+-- Example: int64 9223372036854775807
+int64 :: Int64 -> TTerm Term
+int64 = int64Lift . TTerm . Terms.int64
+
+-- | Lift a TTerm Int64 to a term-encoded int64 literal
+-- Example: int64Lift (varPhantom "x" :: TTerm Int64)
+int64Lift :: TTerm Int64 -> TTerm Term
+int64Lift = Core.termLiteral . Core.literalInteger . Core.integerValueInt64
+
 -- | Create a term-encoded string literal
 -- Example: string "hello world"
 string :: String -> TTerm Term
@@ -158,6 +197,33 @@ string = Core.termLiteral . Core.literalString . TTerm . Terms.string
 -- | Term-encoded boolean true literal
 true :: TTerm Term
 true = boolean True
+
+-- | Create a term-encoded 8-bit unsigned integer literal
+-- Example: uint8 255
+uint8 :: Int16 -> TTerm Term
+uint8 = uint8Lift . TTerm . Terms.uint8
+
+uint8Lift :: TTerm Int16 -> TTerm Term
+uint8Lift = Core.termLiteral . Core.literalInteger . Core.integerValueUint8
+
+-- | Create a term-encoded 16-bit unsigned integer literal
+-- Example: uint16 65535
+uint16 :: Int -> TTerm Term
+uint16 = uint16Lift . TTerm . Terms.uint16
+
+-- | Lift a TTerm Int to a term-encoded uint16 literal
+-- Example: uint16Lift (varPhantom "x" :: TTerm Int)
+uint16Lift :: TTerm Int -> TTerm Term
+uint16Lift = Core.termLiteral . Core.literalInteger . Core.integerValueUint16
+
+-- | Create a term-encoded 32-bit unsigned integer literal
+-- Example: uint32 4294967295
+uint32 :: Int64 -> TTerm Term
+uint32 = uint32Lift . TTerm . Terms.uint32
+
+-- | Lift a TTerm Int64 to a term-encoded uint32 literal
+uint32Lift :: TTerm Int64 -> TTerm Term
+uint32Lift = Core.termLiteral . Core.literalInteger . Core.integerValueUint32
 
 -- | Create a term-encoded 64-bit unsigned integer literal
 -- Example: uint64 18446744073709551615

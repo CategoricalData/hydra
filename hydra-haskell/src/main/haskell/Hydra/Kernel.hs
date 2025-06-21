@@ -42,6 +42,7 @@ module Hydra.Kernel (
   module Hydra.Sorting,
   module Hydra.Strip,
   module Hydra.Substitution,
+  module Hydra.Templating,
   module Hydra.Staging.TermAdapters,
 --  module Hydra.Topology,
   module Hydra.Typing,
@@ -90,6 +91,7 @@ import Hydra.Settings
 import Hydra.Sorting
 import Hydra.Strip
 import Hydra.Substitution
+import Hydra.Templating
 import Hydra.Staging.TermAdapters
 --import Hydra.Topology
 import Hydra.Typing
