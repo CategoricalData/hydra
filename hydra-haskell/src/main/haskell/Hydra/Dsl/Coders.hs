@@ -17,6 +17,15 @@ adapterContext graph language adapters = Phantoms.record _AdapterContext [
   _AdapterContext_language>>: language,
   _AdapterContext_adapters>>: adapters]
 
+adapterContextGraph :: TTerm AdapterContext -> TTerm Graph
+adapterContextGraph c = project _AdapterContext _AdapterContext_graph @@ c
+
+adapterContextLanguage :: TTerm AdapterContext -> TTerm Language
+adapterContextLanguage c = project _AdapterContext _AdapterContext_language @@ c
+
+adapterContextAdapters :: TTerm AdapterContext -> TTerm (M.Map Name (Adapter AdapterContext AdapterContext Type Type Term Term))
+adapterContextAdapters c = project _AdapterContext _AdapterContext_adapters @@ c
+
 coderDirectionEncode :: TTerm CoderDirection
 coderDirectionEncode = unitVariant _CoderDirection _CoderDirection_encode
 
@@ -45,6 +54,12 @@ language name eliminationVariants literalVariants floatTypes functionVariants in
     _LanguageConstraints_termVariants>>: Sets.fromList $ list (Mantle.termVariant <$> termVariants),
     _LanguageConstraints_typeVariants>>: Sets.fromList $ list (Mantle.typeVariant <$> typeVariants),
     _LanguageConstraints_types>>: typePredicate]]
+
+languageName :: TTerm Language -> TTerm LanguageName
+languageName c = project _Language _Language_name @@ c
+
+languageConstraints :: TTerm Language -> TTerm LanguageConstraints
+languageConstraints c = project _Language _Language_constraints @@ c
 
 languageConstraintsEliminationVariants :: TTerm LanguageConstraints -> TTerm (S.Set EliminationVariant)
 languageConstraintsEliminationVariants c = project _LanguageConstraints _LanguageConstraints_eliminationVariants @@ c
