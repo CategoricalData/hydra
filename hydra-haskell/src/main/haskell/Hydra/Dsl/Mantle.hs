@@ -71,6 +71,27 @@ literalVariant v = unitVariant _LiteralVariant $ case v of
   LiteralVariantInteger -> _LiteralVariant_integer
   LiteralVariantString -> _LiteralVariant_string
 
+literalVariantBinary :: TTerm LiteralVariant
+literalVariantBinary = unitVariant _LiteralVariant _LiteralVariant_binary
+
+literalVariantBoolean :: TTerm LiteralVariant
+literalVariantBoolean = unitVariant _LiteralVariant _LiteralVariant_boolean
+
+literalVariantFloat :: TTerm LiteralVariant
+literalVariantFloat = unitVariant _LiteralVariant _LiteralVariant_float
+
+literalVariantInteger :: TTerm LiteralVariant
+literalVariantInteger = unitVariant _LiteralVariant _LiteralVariant_integer
+
+literalVariantString :: TTerm LiteralVariant
+literalVariantString = unitVariant _LiteralVariant _LiteralVariant_string
+
+precisionArbitrary :: TTerm Precision
+precisionArbitrary = unitVariant _Precision _Precision_arbitrary
+
+precisionBits :: TTerm Int -> TTerm Precision
+precisionBits = variant _Precision _Precision_bits
+
 termAccessorAnnotatedSubject :: TTerm TermAccessor
 termAccessorAnnotatedSubject = unitVariant _TermAccessor _TermAccessor_annotatedSubject
 
