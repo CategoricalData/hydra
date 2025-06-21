@@ -69,13 +69,14 @@ string = TTerm . Terms.string
 true :: TTerm Bool
 true = bool True
 
--- Note: untyped integers are not yet properly supported by the DSL,
---       because they are not properly supported by code generation.
-uint8 :: Int8 -> TTerm Int8
-uint8 = int8
-uint16 :: Int16 -> TTerm Int16
-uint16 = int16
-uint32 :: Int -> TTerm Int
-uint32 = int
-uint64 :: Int64 -> TTerm Int64
-uint64 = int64
+uint8 :: Int16 -> TTerm Int16
+uint8 = TTerm . Terms.uint8
+
+uint16 :: Int -> TTerm Int
+uint16 = TTerm . Terms.uint16
+
+uint32 :: Int64 -> TTerm Int64
+uint32 = TTerm . Terms.uint32
+
+uint64 :: Integer -> TTerm Integer
+uint64 = TTerm . Terms.uint64

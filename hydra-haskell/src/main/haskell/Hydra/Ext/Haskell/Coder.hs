@@ -117,16 +117,21 @@ encodeLiteral av = case av of
     LiteralFloat fv -> case fv of
       FloatValueFloat32 f -> pure $ hslit $ H.LiteralFloat f
       FloatValueFloat64 f -> pure $ hslit $ H.LiteralDouble f
-      _ -> unexpected "floating-point number" $ show fv
+      -- TODO: remove this variant; the fact that it is appearing here is a bug
+      FloatValueBigfloat f -> pure $ hslit $ H.LiteralDouble f
+--      _ -> unexpected "floating-point number" $ show fv
     LiteralInteger iv -> case iv of
       IntegerValueBigint i -> pure $ hslit $ H.LiteralInteger i
       IntegerValueInt8 i -> pure $ hslit $ H.LiteralInteger $ fromIntegral i
       IntegerValueInt16 i -> pure $ hslit $ H.LiteralInteger $ fromIntegral i
       IntegerValueInt32 i -> pure $ hslit $ H.LiteralInt i
       IntegerValueInt64 i -> pure $ hslit $ H.LiteralInteger $ fromIntegral i
-      -- TODO: remove these variants; the fact that the int32 type is appearing here is a bug
+      -- TODO: remove these variants; the fact that they are appearing here is a bug
+      IntegerValueUint8 i -> pure $ hslit $ H.LiteralInteger $ fromIntegral i
+      IntegerValueUint16 i -> pure $ hslit $ H.LiteralInteger $ fromIntegral i
+      IntegerValueUint32 i -> pure $ hslit $ H.LiteralInteger $ fromIntegral i
       IntegerValueUint64 i -> pure $ hslit $ H.LiteralInteger $ fromIntegral i
-      _ -> unexpected "integer" $ show iv
+--      _ -> unexpected "integer" $ show iv
     LiteralString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "literal value" $ show av
 
