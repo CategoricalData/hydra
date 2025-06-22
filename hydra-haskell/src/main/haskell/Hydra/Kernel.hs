@@ -25,7 +25,7 @@ module Hydra.Kernel (
 --  module Hydra.GrammarToModule,
   module Hydra.Staging.Inference,
   module Hydra.Lexical,
-  module Hydra.Staging.LiteralAdapters,
+  module Hydra.LiteralAdapters,
   module Hydra.Literals,
   module Hydra.Mantle,
   module Hydra.Messages,
@@ -73,7 +73,7 @@ import Hydra.Graph
 --import Hydra.GrammarToModule
 import Hydra.Staging.Inference
 import Hydra.Lexical
-import Hydra.Staging.LiteralAdapters
+import Hydra.LiteralAdapters
 import Hydra.Literals
 import Hydra.Mantle
 import Hydra.Messages
