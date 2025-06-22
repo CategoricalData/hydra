@@ -23,7 +23,7 @@ import Hydra.Mantle
 import Hydra.Rewriting
 import Hydra.Reduction
 import Hydra.Rewriting
-import Hydra.Staging.LiteralAdapters
+import Hydra.LiteralAdapters
 import Hydra.Dsl.Terms
 import Hydra.Flows
 import Hydra.Errors

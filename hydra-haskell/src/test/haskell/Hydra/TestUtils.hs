@@ -17,7 +17,7 @@ module Hydra.TestUtils (
 ) where
 
 import Hydra.Kernel
-import Hydra.Staging.LiteralAdapters
+import Hydra.LiteralAdapters
 import Hydra.Staging.TermAdapters
 import Hydra.AdapterUtils
 import Hydra.Staging.TestGraph
