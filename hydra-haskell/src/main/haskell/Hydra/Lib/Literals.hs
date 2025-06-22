@@ -42,6 +42,9 @@ bigintToUint32 = fromIntegral
 bigintToUint64 :: Integer -> Integer
 bigintToUint64 = id
 
+binaryToString :: String -> String
+binaryToString s = s
+
 float32ToBigfloat :: Float -> Double
 float32ToBigfloat = realToFrac
 
@@ -96,6 +99,9 @@ showInt64 = show
 
 showString :: String -> String
 showString = show
+
+stringToBinary :: String -> String
+stringToBinary s = s
 
 uint8ToBigint :: Int16 -> Integer
 uint8ToBigint = fromIntegral

@@ -44,6 +44,9 @@ bigintToUint32 = primitive1 _literals_bigintToUint32
 bigintToUint64 :: TTerm Integer -> TTerm Integer
 bigintToUint64 = primitive1 _literals_bigintToUint64
 
+binaryToString :: TTerm String -> TTerm String
+binaryToString = primitive1 _literals_binaryToString
+
 float32ToBigfloat :: TTerm Float -> TTerm Double
 float32ToBigfloat = primitive1 _literals_float32ToBigfloat
 
@@ -94,6 +97,9 @@ showInt64 = primitive1 _literals_showInt64
 
 showString :: TTerm String -> TTerm String
 showString = primitive1 _literals_showString
+
+stringToBinary :: TTerm String -> TTerm String
+stringToBinary = primitive1 _literals_stringToBinary
 
 uint8ToBigint :: TTerm Int16 -> TTerm Integer
 uint8ToBigint = primitive1 _literals_uint8ToBigint
