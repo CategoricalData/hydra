@@ -1,6 +1,7 @@
 -- | Haskell implementations of hydra.lib.io primitives.
 
 module Hydra.Lib.Io (
+  readTerm,
   showElement,
   showFloat,
   showFloatType,
@@ -43,6 +44,9 @@ noGraph = Graph {
   graphPrimitives = M.empty,
   graphSchema = Nothing}
 
+-- | A placeholder for reading terms from their serialized form. Not implemented.
+readTerm :: String -> Maybe Term
+readTerm s = Nothing
 
 showElement :: Element -> String
 showElement el = unName (elementName el) ++ " = " ++ showTerm (elementTerm el) ++ (case elementType el of
