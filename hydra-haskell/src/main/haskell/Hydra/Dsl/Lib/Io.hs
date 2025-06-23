@@ -7,6 +7,9 @@ import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Dsl.Phantoms
 
 
+readTerm :: TTerm String -> TTerm (Maybe Term)
+readTerm = primitive1 _io_readTerm
+
 showFloat :: TTerm FloatValue -> TTerm String
 showFloat = primitive1 _io_showFloat
 
