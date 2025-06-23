@@ -81,7 +81,7 @@ hydraAnnotationsModule :: Module
 hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
     [Decode.hydraDecodeModule, CoreDecoding.hydraCoreDecodingModule, CoreEncoding.coreEncodingModule,
       Expect.hydraExpectModule, Variants.hydraVariantsModule, Lexical.hydraLexicalModule, Flows_.hydraFlowsModule]
-    [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule] $
+    [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just "Utilities for reading and writing type and term annotations"
   where
    elements = [
@@ -158,8 +158,8 @@ failOnFlagDef :: TElement (Name -> String -> Flow s ())
 failOnFlagDef = annotationsDefinition "failOnFlag" $
   doc "Fail if the given flag is set" $
   lambdas ["flag", "msg"] $
-    Flows.bind (ref hasFlagDef @@ var "flag") $
-      lambda "val" $ Logic.ifElse (var "val")
+    withVar "val" (ref hasFlagDef @@ var "flag") $
+      Logic.ifElse (var "val")
         (Flows.fail $ var "msg")
         (Flows.pure unit)
 
@@ -237,8 +237,7 @@ getTypeClassesDef = annotationsDefinition "getTypeClasses" $
       "byName">: Maps.fromList $ list [
         pair (Core.name _TypeClass_equality) Graph.typeClassEquality,
         pair (Core.name _TypeClass_ordering) Graph.typeClassOrdering]]
-      $ Flows.bind (ref Expect.unitVariantDef @@ Core.name _TypeClass @@ var "term") $
-        lambda "fn" $
+      $ withVar "fn" (ref Expect.unitVariantDef @@ Core.name _TypeClass @@ var "term") $
           Optionals.maybe
             (ref Errors.unexpectedDef @@ string "type class" @@ (Io.showTerm $ var "term"))
             (unaryFunction Flows.pure)
@@ -281,8 +280,7 @@ hasFlagDef :: TElement (Name -> Flow s Bool)
 hasFlagDef = annotationsDefinition "hasFlag" $
   doc "Check if flag is set" $
   lambda "flag" $ ref withEmptyGraphDef @@
-    (Flows.bind (ref getAttrWithDefaultDef @@ var "flag" @@ Core.false) $
-      lambda "term" $ ref Expect.booleanDef @@ var "term")
+    (withVar "term" (ref getAttrWithDefaultDef @@ var "flag" @@ Core.false) $ ref Expect.booleanDef @@ var "term")
 
 hasTypeDescriptionDef :: TElement (Type -> Bool)
 hasTypeDescriptionDef = annotationsDefinition "hasTypeDescription" $
@@ -293,11 +291,10 @@ nextCountDef :: TElement (Name -> Flow s Int)
 nextCountDef = annotationsDefinition "nextCount" $
   doc "Return a zero-indexed counter for the given key: 0, 1, 2, ..." $
   lambda "key" $
-    Flows.bind (ref getCountDef @@ var "key") $
-      lambda "count" $
-        Flows.map
-          (constant $ var "count")
-          (ref putCountDef @@ var "key" @@ Math.add (var "count") (int32 1))
+    withVar "count" (ref getCountDef @@ var "key") $
+      Flows.map
+        (constant $ var "count")
+        (ref putCountDef @@ var "key" @@ Math.add (var "count") (int32 1))
 
 normalizeTermAnnotationsDef :: TElement (Term -> Term)
 normalizeTermAnnotationsDef = annotationsDefinition "normalizeTermAnnotations" $
@@ -476,8 +473,8 @@ whenFlagDef :: TElement (Name -> Flow s a -> Flow s a -> Flow s a)
 whenFlagDef = annotationsDefinition "whenFlag" $
   doc "Execute different flows based on flag" $
   lambda "flag" $ lambda "fthen" $ lambda "felse" $
-    Flows.bind (ref hasFlagDef @@ var "flag") $
-      lambda "b" $ Logic.ifElse (var "b") (var "fthen") (var "felse")
+    withVar "b" (ref hasFlagDef @@ var "flag") $
+      Logic.ifElse (var "b") (var "fthen") (var "felse")
 
 -- TODO: move out of Annotations and into Rewriting
 unshadowVariablesDef :: TElement (Term -> Term)
@@ -488,8 +485,8 @@ unshadowVariablesDef = annotationsDefinition "unshadowVariables" $
       ref nextCountDef @@ Core.name' (string "unshadow"),
     "rewrite">: lambdas ["recurse", "term"] $ lets [
       "handleOther">: var "recurse" @@ var "term"]
-      $ Flows.bind (ref Errors.getStateDef) $
-        lambda "state" $ lets [
+      $ withVar "state" (ref Errors.getStateDef) $
+        lets [
           "reserved">: first $ var "state",
           "subst">: second $ var "state"]
           $ cases _Term (var "term") (Just $ var "handleOther") [
@@ -502,14 +499,13 @@ unshadowVariablesDef = annotationsDefinition "unshadowVariables" $
                   "d">: Core.lambdaDomain $ var "l",
                   "body">: Core.lambdaBody $ var "l"]
                   $ Logic.ifElse (Sets.member (var "v") (var "reserved"))
-                    (Flows.bind (var "freshName") $
-                      lambda "v'" $
-                        Flows.bind (ref Errors.putStateDef @@ pair (Sets.insert (var "v'") (var "reserved")) (Maps.insert (var "v") (var "v'") (var "subst"))) $
-                          constant $
-                            Flows.bind (var "recurse" @@ var "body") $
-                              lambda "body'" $
-                                Flows.bind (ref Errors.putStateDef @@ var "state") $
-                                  constant $ Flows.pure $ Core.termFunction $ Core.functionLambda $ Core.lambda (var "v'") (var "d") (var "body'"))
+                    (withVar "v'" (var "freshName") $
+                      Flows.bind (ref Errors.putStateDef @@ pair (Sets.insert (var "v'") (var "reserved")) (Maps.insert (var "v") (var "v'") (var "subst"))) $
+                        constant $
+                          Flows.bind (var "recurse" @@ var "body") $
+                            lambda "body'" $
+                              Flows.bind (ref Errors.putStateDef @@ var "state") $
+                                constant $ Flows.pure $ Core.termFunction $ Core.functionLambda $ Core.lambda (var "v'") (var "d") (var "body'"))
                     (Flows.bind (ref Errors.putStateDef @@ pair (Sets.insert (var "v") (var "reserved")) (var "subst")) $
                       constant $
                         Flows.map
@@ -527,14 +523,13 @@ withDepthDef = annotationsDefinition "withDepth" $
     <> " E.g. a variable in an outer case/match statement might be \"v1\", whereas the variable of another case/match statement"
     <> " inside of the first one becomes \"v2\". See also nextCount.") $
   lambdas ["key", "f"] $
-    Flows.bind (ref getCountDef @@ var "key") $
-      lambda "count" $ lets [
+    withVar "count" (ref getCountDef @@ var "key") $
+      lets [
         "inc">: Math.add (var "count") (int32 1)]
         $ Flows.bind (ref putCountDef @@ var "key" @@ var "inc") $ constant $
-            Flows.bind (var "f" @@ var "inc") $
-              lambda "r" $
-                Flows.bind (ref putCountDef @@ var "key" @@ var "count") $
-                  constant $ Flows.pure $ var "r"
+            withVar "r" (var "f" @@ var "inc") $
+              Flows.bind (ref putCountDef @@ var "key" @@ var "count") $
+                constant $ Flows.pure $ var "r"
 
 withEmptyGraphDef :: TElement (Flow Graph a -> Flow s a)
 withEmptyGraphDef = annotationsDefinition "withEmptyGraph" $

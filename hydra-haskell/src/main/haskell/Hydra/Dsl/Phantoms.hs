@@ -73,6 +73,9 @@ lets fields (TTerm env) = TTerm $ TermLet $ Let (toBinding <$> fields) env
 var :: String -> TTerm a
 var v = TTerm $ Terms.var v
 
+withVar :: String -> TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
+withVar v def body = primitive2 _flows_bind def $ lambda v $ body
+
 -- * Functions
 
 unaryFunction :: (TTerm a -> TTerm b) -> TTerm (a -> b)

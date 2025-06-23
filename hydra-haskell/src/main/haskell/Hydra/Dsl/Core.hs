@@ -308,10 +308,13 @@ mapTypeValues mt = Phantoms.project _MapType _MapType_values @@ mt
 
 -- TODO: this is only here for legacy reasons
 name :: Name -> TTerm Name
-name (Name n) = wrap _Name $ string n
+name (Name n) = wrap _Name $ Phantoms.string n
 
 name' :: TTerm String -> TTerm Name
 name' = wrap _Name
+
+nameLift :: TTerm String -> TTerm Name
+nameLift = wrap _Name
 
 projection :: TTerm Name -> TTerm Name -> TTerm Projection
 projection tname fname = Phantoms.record _Projection [
@@ -571,3 +574,6 @@ false = termLiteral $ literalBoolean $ Phantoms.false
 
 int32 :: Int -> TTerm Term
 int32 = termLiteral . literalInteger . integerValueInt32 . Phantoms.int32
+
+string :: String -> TTerm Term
+string = termLiteral . literalString . Phantoms.string

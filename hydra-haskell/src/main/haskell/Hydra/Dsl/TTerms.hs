@@ -86,7 +86,10 @@ lambdas params body = case params of
 -- | Create a term-encoded primitive function reference
 -- Example: primitive (Name "hydra.lib.strings.length")
 primitive :: Name -> TTerm Term
-primitive = Core.termFunction . Core.functionPrimitive . TTerm . coreEncodeName
+primitive = primitiveLift . TTerm . coreEncodeName
+
+primitiveLift :: TTerm Name -> TTerm Term
+primitiveLift = Core.termFunction . Core.functionPrimitive
 
 -- | Create a term-encoded field projection function
 -- Example: project (name "Person") (name "firstName")
