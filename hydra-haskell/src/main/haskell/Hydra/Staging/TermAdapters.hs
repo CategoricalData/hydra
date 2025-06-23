@@ -18,7 +18,7 @@ import Hydra.Core
 import Hydra.Schemas
 import Hydra.Graph
 import Hydra.Lexical
-import Hydra.Lib.Io
+import qualified Hydra.Lib.Io as Io
 import Hydra.Mantle
 import Hydra.Rewriting
 import Hydra.Reduction
@@ -99,9 +99,9 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
       TermFunction f -> case f of
         FunctionElimination e -> case e of
           EliminationWrap (Name name) -> variant functionProxyName _Elimination_wrap $ string name
-          EliminationRecord _ -> variant functionProxyName _Elimination_record $ string $ show term -- TODO
-          EliminationUnion _ -> variant functionProxyName _Elimination_union $ string $ show term -- TODO
-        FunctionLambda _ -> variant functionProxyName _Function_lambda $ string $ show term -- TODO
+          EliminationRecord _ -> variant functionProxyName _Elimination_record $ string $ Io.showTerm term -- TODO
+          EliminationUnion _ -> variant functionProxyName _Elimination_union $ string $ Io.showTerm term -- TODO
+        FunctionLambda _ -> variant functionProxyName _Function_lambda $ string $ Io.showTerm term -- TODO
         FunctionPrimitive (Name name) -> variant functionProxyName _Function_primitive $ string name
       TermVariable (Name var) -> variant functionProxyName _Term_variable $ string var
 
@@ -160,14 +160,10 @@ optionalToList t@(TypeOptional ot) = do
 -- TODO: only tested for type mappings; not yet for types+terms
 passApplication :: TypeAdapter
 passApplication t@(TypeApplication (ApplicationType lhs rhs)) = do
---  reduced <- withGraphContext $ betaReduceType t
---  ad <- termAdapter reduced
   lhsAd <- termAdapter lhs
   rhsAd <- termAdapter rhs
   return $ Adapter (adapterIsLossy lhsAd || adapterIsLossy rhsAd) t
     (TypeApplication (ApplicationType (adapterTarget lhsAd) (adapterTarget rhsAd))) $ bidirectional $
---  return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ bidirectional $
---    \dir term -> encodeDecode dir (adapterCoder ad) term
     \dir term -> encodeDecode dir (adapterCoder lhsAd) term
 
 passFunction :: TypeAdapter
@@ -199,7 +195,7 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
                 getCoder fname = Y.maybe idCoder adapterCoder $ M.lookup fname caseAds
           FunctionLambda (Lambda var d body) -> FunctionLambda <$> (Lambda var d <$> encodeDecode dir (adapterCoder codAd) body)
           FunctionPrimitive name -> pure $ FunctionPrimitive name
---        _ -> unexpected "function term" $ show term
+--        _ -> unexpected "function term" $ Io.showTerm term
         t -> pure t
 
 passForall :: TypeAdapter
@@ -300,7 +296,7 @@ simplifyApplication t@(TypeApplication (ApplicationType lhs _)) = do
   return $ Adapter False t (adapterTarget ad) $ bidirectional $ \dir term -> encodeDecode dir (adapterCoder ad) term
 
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
---       preserved as strings using Haskell's derived show/read format.
+--       preserved as strings.
 termAdapter :: TypeAdapter
 termAdapter typ = case typ of
     TypeAnnotated (AnnotatedType typ2 ann) -> do
@@ -311,7 +307,7 @@ termAdapter typ = case typ of
       TypeVariable name -> forTypeReference name
       _ -> do
         cx <- getState
-        chooseAdapter (alts cx) (supported cx) showType describeType typ
+        chooseAdapter (alts cx) (supported cx) Io.showType describeType typ
   where
     constraints = languageConstraints . adapterContextLanguage
     supported = typeIsSupported . constraints
@@ -364,8 +360,8 @@ unionToRecord t@(TypeUnion rt) = do
       TermOptional $ if fn' == fn then Just term else Nothing
 
     fromRecordFields term term' t' fields = if L.null matches
-        then fail $ "cannot convert term back to union: " ++ show term
-          ++ " where type = " ++ show t ++ "    and target type = " ++ show t'
+        then fail $ "cannot convert term back to union: " ++ Io.showTerm term
+          ++ " where type = " ++ Io.showType t ++ "    and target type = " ++ Io.showType t'
         else pure $ L.head matches
       where
         matches = Y.mapMaybe (\(Field fn (TermOptional opt)) -> (Just . Field fn) =<< opt) fields
@@ -378,7 +374,7 @@ unionTypeToRecordType rt = rt {rowTypeFields = makeOptional <$> rowTypeFields rt
 unsupportedToString :: TypeAdapter
 unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decode
   where
-    encode term = pure $ string $ "unsupported: " ++ showTerm term
+    encode term = pure $ string $ "unsupported: " ++ Io.showTerm term
     decode term = do
       s <- withGraphContext $ Expect.string term
       case TR.readEither s of
