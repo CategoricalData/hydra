@@ -220,7 +220,7 @@ getTypeDef = annotationsDefinition "getType" $
   doc "Get type from annotations" $
   lambda "anns" $
     Optionals.maybe (Flows.pure nothing)
-      (lambda "dat" $ Flows.map (unaryFunction just) (ref DecodeCore.type_Def @@ var "dat"))
+      (lambda "dat" $ Flows.map (unaryFunction just) (ref DecodeCore.typeDef @@ var "dat"))
       (Maps.lookup (ref Constants.key_typeDef) (var "anns"))
 
 getTypeAnnotationDef :: TElement (Name -> Type -> Maybe Term)
@@ -403,7 +403,7 @@ setTermTypeDef = annotationsDefinition "setTermType" $
 setTypeDef :: TElement (Maybe Type -> M.Map Name Term -> M.Map Name Term)
 setTypeDef = annotationsDefinition "setType" $
   doc "Set type in annotations" $
-  lambda "mt" $ ref setAnnotationDef @@ ref Constants.key_typeDef @@ Optionals.map (ref EncodeCore.coreEncodeTypeDef) (var "mt")
+  lambda "mt" $ ref setAnnotationDef @@ ref Constants.key_typeDef @@ Optionals.map (ref EncodeCore.typeDef) (var "mt")
 
 setTypeAnnotationDef :: TElement (Name -> Maybe Term -> Type -> Type)
 setTypeAnnotationDef = annotationsDefinition "setTypeAnnotation" $
@@ -426,7 +426,7 @@ setTypeClassesDef = annotationsDefinition "setTypeClasses" $
     "encodePair">: lambda "nameClasses" $ lets [
       "name">: first $ var "nameClasses",
       "classes">: second $ var "nameClasses"]
-      $ pair (ref EncodeCore.coreEncodeNameDef @@ var "name")
+      $ pair (ref EncodeCore.nameDef @@ var "name")
               (Core.termSet $ Sets.fromList $ Lists.map (var "encodeClass") $ Sets.toList $ var "classes"),
     "encoded">: Logic.ifElse (Maps.null $ var "m")
         nothing
@@ -465,7 +465,7 @@ typeElementDef = annotationsDefinition "typeElement" $
   lambda "name" $ lambda "typ" $ lets [
     "schemaTerm">: Core.termVariable (Core.nameLift _Type),
     "dataTerm">: ref normalizeTermAnnotationsDef @@ (Core.termAnnotated $ Core.annotatedTerm
-      (ref EncodeCore.coreEncodeTypeDef @@ var "typ")
+      (ref EncodeCore.typeDef @@ var "typ")
       (Maps.fromList $ list [pair (ref Constants.key_typeDef) (var "schemaTerm")]))]
     $ Graph.element (var "name") (var "dataTerm") (just $ Core.typeScheme (list []) (var "typ"))
 

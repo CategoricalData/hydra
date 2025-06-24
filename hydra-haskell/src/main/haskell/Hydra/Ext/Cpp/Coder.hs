@@ -8,6 +8,7 @@ import Hydra.Ext.Cpp.Language
 import Hydra.Ext.Cpp.Names
 import Hydra.Ext.Cpp.Utils
 import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Ext.Cpp.Serde as CppSer
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
 import Hydra.Kernel
@@ -505,7 +506,7 @@ createVariantClass env tname parentClass (FieldType fname variantType) = do
       [baseClass]
       (Just $ Cpp.ClassBody ([memberSpecificationPublic] ++ valueField ++ [constructor]))
   where
-    hasValue = not (isUnitType variantType)
+    hasValue = not (EncodeCore.isUnitType variantType)
 
 createVisitorInterface :: CppEnvironment -> Name -> [FieldType] -> Cpp.Declaration
 createVisitorInterface env tname variants = Cpp.DeclarationTemplate $

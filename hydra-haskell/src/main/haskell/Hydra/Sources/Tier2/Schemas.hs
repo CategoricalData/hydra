@@ -135,7 +135,7 @@ dependencyNamespacesDef = schemasDefinition "dependencyNamespaces" $
           (Graph.elementType $ var "el"))
         Sets.empty]
       $ Logic.ifElse (ref EncodeCore.isEncodedTypeDef @@ (ref Strip.fullyStripTermDef @@ var "term"))
-          (Flows.bind (ref DecodeCore.type_Def @@ var "term") $
+          (Flows.bind (ref DecodeCore.typeDef @@ var "term") $
             lambda "typ" $ Flows.pure $ Sets.unions $ list [
               var "dataNames", var "schemaNames",
               ref Rewriting.typeDependencyNamesDef @@ true @@ true @@ var "typ"])
@@ -151,7 +151,7 @@ dereferenceTypeDef = schemasDefinition "dereferenceType" $
     Flows.bind (ref Lexical.dereferenceElementDef @@ var "name") $
       lambda "mel" $
         Optionals.maybe (Flows.pure nothing)
-          (lambda "el" $ Flows.map (unaryFunction just) $ ref DecodeCore.type_Def @@ Graph.elementTerm (var "el"))
+          (lambda "el" $ Flows.map (unaryFunction just) $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el"))
           (var "mel")
 
 elementAsTypedTermDef :: TElement (Element -> Flow Graph TypedTerm)
@@ -190,7 +190,7 @@ fieldTypesDef = schemasDefinition "fieldTypes" $
         ref Flows_.withTraceDef @@ (Strings.cat2 (string "field types of ") (Core.unName $ var "name")) @@
           (Flows.bind (ref Lexical.requireElementDef @@ var "name") $
             lambda "el" $
-              Flows.bind (ref DecodeCore.type_Def @@ Graph.elementTerm (var "el")) $
+              Flows.bind (ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")) $
                 ref fieldTypesDef)]
     @@ (ref Strip.stripTypeDef @@ var "t")
 
@@ -279,7 +279,7 @@ requireTypeDef = schemasDefinition "requireType" $
   lambda "name" $
     ref Flows_.withTraceDef @@ (Strings.cat2 (string "require type ") (Core.unName $ var "name")) @@
       (Flows.bind (ref Lexical.withSchemaContextDef @@ (ref Lexical.requireElementDef @@ var "name")) $
-        lambda "el" $ ref DecodeCore.type_Def @@ Graph.elementTerm (var "el"))
+        lambda "el" $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el"))
 
 requireUnionTypeDef :: TElement (Name -> Flow Graph RowType)
 requireUnionTypeDef = schemasDefinition "requireUnionType" $
@@ -300,7 +300,7 @@ resolveTypeDef = schemasDefinition "resolveType" $
           (Flows.bind (ref Lexical.resolveTermDef @@ var "name") $
             lambda "mterm" $
               Optionals.maybe (Flows.pure nothing)
-                (lambda "t" $ Flows.map (unaryFunction just) $ ref DecodeCore.type_Def @@ var "t")
+                (lambda "t" $ Flows.map (unaryFunction just) $ ref DecodeCore.typeDef @@ var "t")
                 (var "mterm"))]
     @@ (ref Strip.stripTypeDef @@ var "typ")
 
@@ -324,7 +324,7 @@ schemaGraphToTypingEnvironmentDef = schemasDefinition "schemaGraphToTypingEnviro
               (Flows.map (unaryFunction just) $ ref DecodeCore.typeSchemeDef @@ Graph.elementTerm (var "el"))
               (Logic.ifElse
                 (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _Type)))
-                (Flows.map (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded") $ ref DecodeCore.type_Def @@ Graph.elementTerm (var "el"))
+                (Flows.map (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded") $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el"))
                 (cases _Term (ref Strip.fullyStripTermDef @@ (Graph.elementTerm $ var "el")) (Just $ Flows.pure nothing) [
                   _Term_record>>: lambda "r" $
                     Logic.ifElse
@@ -337,7 +337,7 @@ schemaGraphToTypingEnvironmentDef = schemasDefinition "schemaGraphToTypingEnviro
                     Logic.ifElse (Equality.equal (Core.injectionTypeName $ var "i") (Core.nameLift _Type))
                       (Flows.map
                         (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded")
-                        (ref DecodeCore.type_Def @@ Graph.elementTerm (var "el")))
+                        (ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")))
                       (Flows.pure nothing)])))
           (Graph.elementType $ var "el"))]
     $ ref Flows_.withStateDef @@ var "g" @@
@@ -365,7 +365,7 @@ typeDependenciesDef = schemasDefinition "typeDependencies" $
     "requireType">: lambda "name" $
       ref Flows_.withTraceDef @@ (Strings.cat2 (string "type dependencies of ") (Core.unName $ var "name")) @@
         (Flows.bind (ref Lexical.requireElementDef @@ var "name") $
-          lambda "el" $ ref DecodeCore.type_Def @@ Graph.elementTerm (var "el")),
+          lambda "el" $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")),
     "toPair">: lambda "name" $
       Flows.bind (var "requireType" @@ var "name") $
         lambda "typ" $ Flows.pure $ pair (var "name") (var "transform" @@ var "typ"),

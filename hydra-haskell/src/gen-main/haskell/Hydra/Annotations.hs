@@ -194,7 +194,7 @@ setTermType mtyp term =
 
 -- | Set type in annotations
 setType :: (Maybe Core.Type -> M.Map Core.Name Core.Term -> M.Map Core.Name Core.Term)
-setType mt = (setAnnotation Constants.key_type (Optionals.map EncodeCore.coreEncodeType mt))
+setType mt = (setAnnotation Constants.key_type (Optionals.map EncodeCore.type_ mt))
 
 -- | Set type annotation
 setTypeAnnotation :: (Core.Name -> Maybe Core.Term -> Core.Type -> Core.Type)
@@ -226,7 +226,7 @@ setTypeClasses m =
       encodePair = (\nameClasses ->  
               let name = (fst nameClasses) 
                   classes = (snd nameClasses)
-              in (EncodeCore.coreEncodeName name, (Core.TermSet (Sets.fromList (Lists.map encodeClass (Sets.toList classes))))))
+              in (EncodeCore.name name, (Core.TermSet (Sets.fromList (Lists.map encodeClass (Sets.toList classes))))))
       encoded = (Logic.ifElse (Maps.null m) Nothing (Just (Core.TermMap (Maps.fromList (Lists.map encodePair (Maps.toList m))))))
   in (setTermAnnotation Constants.key_classes encoded)
 
@@ -256,7 +256,7 @@ typeElement :: (Core.Name -> Core.Type -> Graph.Element)
 typeElement name typ =  
   let schemaTerm = (Core.TermVariable (Core.Name "hydra.core.Type")) 
       dataTerm = (normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
-              Core.annotatedTermSubject = (EncodeCore.coreEncodeType typ),
+              Core.annotatedTermSubject = (EncodeCore.type_ typ),
               Core.annotatedTermAnnotation = (Maps.fromList [
                 (Constants.key_type, schemaTerm)])})))
   in Graph.Element {

@@ -5,6 +5,7 @@ import Hydra.Adapters
 import Hydra.Ext.Haskell.Language
 import Hydra.Ext.Haskell.Utils
 import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Dsl.Terms
 import Hydra.Ext.Haskell.Serde
 import Hydra.Ext.Haskell.Settings
@@ -433,7 +434,7 @@ typeDecl namespaces name typ = do
   where
     typeName ns name = qname ns (typeNameLocal name)
     typeNameLocal name = "_" ++ localNameOf name ++ "_type_"
-    rawTerm = coreEncodeType typ
+    rawTerm = EncodeCore.type_ typ
     finalTerm = rewriteTerm rewrite rawTerm
       where
         rewrite :: (Term -> Term) -> Term -> Term

@@ -97,7 +97,7 @@ graphToSchemaDef = templatingDefinition "graphToSchema" $
     "toPair">: lambda "nameAndEl" $ lets [
       "name">: first $ var "nameAndEl",
       "el">: second $ var "nameAndEl"]
-      $ Flows.bind (ref DecodeCore.type_Def @@ (Graph.elementTerm $ var "el")) $
+      $ Flows.bind (ref DecodeCore.typeDef @@ (Graph.elementTerm $ var "el")) $
         lambda "t" $ Flows.pure $ pair (var "name") (var "t")]
     $ Flows.bind (Flows.mapList (var "toPair") $ Maps.toList $ Graph.graphElements $ var "g") $
       lambda "pairs" $ Flows.pure $ Maps.fromList $ var "pairs"

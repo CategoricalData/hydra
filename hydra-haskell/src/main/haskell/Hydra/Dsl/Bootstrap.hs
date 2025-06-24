@@ -5,7 +5,7 @@ module Hydra.Dsl.Bootstrap where
 import Hydra.Compute
 import Hydra.Constants
 import Hydra.Core
-import Hydra.Encode.Core
+import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Annotations

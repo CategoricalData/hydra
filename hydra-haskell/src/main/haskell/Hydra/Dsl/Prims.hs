@@ -6,7 +6,7 @@ module Hydra.Dsl.Prims where
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
-import Hydra.Encode.Core
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Dsl.Terms as Terms
@@ -57,7 +57,7 @@ floatType :: TermCoder FloatType
 floatType = TermCoder (TypeVariable _FloatType) $ Coder encode decode
   where
     encode = DecodeCore.floatType
-    decode = pure . coreEncodeFloatType
+    decode = pure . EncodeCore.floatType
 
 floatValue :: TermCoder FloatValue
 floatValue = TermCoder (TypeVariable _FloatValue) $ Coder encode decode
@@ -94,7 +94,7 @@ integerType :: TermCoder IntegerType
 integerType = TermCoder (TypeVariable _IntegerType) $ Coder encode decode
   where
     encode = DecodeCore.integerType
-    decode = pure . coreEncodeIntegerType
+    decode = pure . EncodeCore.integerType
 
 integerValue :: TermCoder IntegerValue
 integerValue = TermCoder (TypeVariable _IntegerValue) $ Coder encode decode
@@ -142,7 +142,7 @@ literalType :: TermCoder LiteralType
 literalType = TermCoder (TypeVariable _LiteralType) $ Coder encode decode
   where
     encode = DecodeCore.literalType
-    decode = pure . coreEncodeLiteralType
+    decode = pure . EncodeCore.literalType
 
 map :: Ord k => TermCoder k -> TermCoder v -> TermCoder (M.Map k v)
 map keys values = TermCoder (Types.map (termCoderType keys) (termCoderType values)) $ Coder encode decode
@@ -267,7 +267,7 @@ type_ :: TermCoder Type
 type_ = TermCoder (TypeVariable _Type) $ Coder encode decode
   where
     encode = DecodeCore.type_
-    decode = pure . coreEncodeType
+    decode = pure . EncodeCore.type_
 
 uint8 :: TermCoder Int16
 uint8 = TermCoder Types.uint8 $ Coder encode decode
