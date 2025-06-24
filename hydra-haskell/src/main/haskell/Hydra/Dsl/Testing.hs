@@ -4,6 +4,7 @@ module Hydra.Dsl.Testing where
 import Hydra.Kernel
 import Hydra.Testing as Testing
 import Hydra.Dsl.Phantoms as Phantoms
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Dsl.Core as Core
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.TTerms as TTerms
@@ -31,7 +32,7 @@ isDisabledForMinimalInference tcase = tag_disabledForMinimalInference `L.elem` T
 
 -- Note: this is a cheat for an encoded map term; consider using the TTerms DSL
 mapTermCheat :: [(Term, Term)] -> TTerm Term
-mapTermCheat = TTerm . coreEncodeTerm . Terms.map . M.fromList
+mapTermCheat = TTerm . EncodeCore.term . Terms.map . M.fromList
 
 subgroup :: String -> [TTerm TestCaseWithMetadata] -> TTerm TestGroup
 subgroup name = tgroup name Nothing []
@@ -75,11 +76,11 @@ encodeEvaluationTestCase (EvaluationTestCase style input output) = Terms.record 
   Field _EvaluationTestCase_evaluationStyle $ Terms.variant _EvaluationStyle (case style of
     EvaluationStyleEager -> _EvaluationStyle_eager
     EvaluationStyleLazy -> _EvaluationStyle_lazy) Terms.unit,
-  Field _EvaluationTestCase_input $ coreEncodeTerm input,
-  Field _EvaluationTestCase_output $ coreEncodeTerm output]
+  Field _EvaluationTestCase_input $ EncodeCore.term input,
+  Field _EvaluationTestCase_output $ EncodeCore.term output]
 encodeInferenceTestCase (InferenceTestCase input output) = Terms.record _InferenceTestCase [
-  Field _InferenceTestCase_input $ coreEncodeTerm input,
-  Field _InferenceTestCase_output $ coreEncodeTypeScheme output]
+  Field _InferenceTestCase_input $ EncodeCore.term input,
+  Field _InferenceTestCase_output $ EncodeCore.typeScheme output]
 
 ----------------------------------------
 

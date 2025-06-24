@@ -7,6 +7,7 @@ import Hydra.Dsl.Terms
 import qualified Hydra.Ext.Python.Syntax as Py
 import Hydra.Ext.Python.Names
 import Hydra.Ext.Python.Utils
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Ext.Python.Serde as PySer
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
@@ -461,7 +462,7 @@ encodeType env typ = case stripType typ of
       return $ nameAndParams (Py.Name "FrozenDict") [pykt, pyvt]
     TypeLiteral lt -> encodeLiteralType lt
     TypeOptional et -> orNull . pyExpressionToPyPrimary <$> encode et
-    TypeRecord rt -> pure $ if isUnitType (TypeRecord rt)
+    TypeRecord rt -> pure $ if EncodeCore.isUnitType (TypeRecord rt)
       then pyNameToPyExpression pyNone
       else typeVariableReference env $ rowTypeTypeName rt
     TypeSet et -> nameAndParams (Py.Name "frozenset") . L.singleton <$> encode et
@@ -638,8 +639,8 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
               else meta {
                 pythonModuleMetadataUsesNode = pythonModuleMetadataUsesNode meta || (not $ L.null fields)}
             where
-              checkForLiteral b (FieldType _ ft) = b || isUnitType (stripType ft)
-              checkForNewType b (FieldType _ ft) = b || not (isUnitType (stripType ft))
+              checkForLiteral b (FieldType _ ft) = b || EncodeCore.isUnitType (stripType ft)
+              checkForNewType b (FieldType _ ft) = b || not (EncodeCore.isUnitType (stripType ft))
           _ -> meta
 
 genericArg :: [Name] -> Y.Maybe Py.Expression

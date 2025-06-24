@@ -4,6 +4,7 @@ import Hydra.Kernel
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Encode.Core as EncodeCore
 
 import Hydra.TestData
 import Hydra.TestUtils
@@ -20,22 +21,22 @@ individualEncoderTestCases = do
 
     H.it "string literal type" $ do
       H.shouldBe
-        (strip $ coreEncodeLiteralType LiteralTypeString :: Term)
+        (strip $ EncodeCore.literalType LiteralTypeString :: Term)
         (strip $ unitVariant _LiteralType _LiteralType_string)
 
     H.it "string type" $ do
       H.shouldBe
-        (strip $ coreEncodeType Types.string :: Term)
+        (strip $ EncodeCore.type_ Types.string :: Term)
         (strip $ variant _Type _Type_literal (unitVariant _LiteralType _LiteralType_string))
 
     H.it "int32 type" $ do
       H.shouldBe
-        (strip $ coreEncodeType Types.int32 :: Term)
+        (strip $ EncodeCore.type_ Types.int32 :: Term)
         (strip $ variant _Type _Type_literal (variant _LiteralType _LiteralType_integer $ unitVariant _IntegerType _IntegerType_int32))
 
     H.it "record type" $ do
       H.shouldBe
-        (strip $ coreEncodeType (TypeRecord $ RowType (Name "Example")
+        (strip $ EncodeCore.type_ (TypeRecord $ RowType (Name "Example")
           [Types.field "something" Types.string, Types.field "nothing" Types.unit]) :: Term)
         (strip $ variant _Type _Type_record $
           record _RowType [
@@ -101,13 +102,13 @@ metadataIsPreserved = do
 
     H.it "Basic metadata" $ do
       shouldSucceedWith
-        (DecodeCore.type_ $ coreEncodeType annotatedStringType)
+        (DecodeCore.type_ $ EncodeCore.type_ annotatedStringType)
         annotatedStringType
   where
     annotatedStringType :: Type
     annotatedStringType = TypeAnnotated $ AnnotatedType Types.string $ M.fromList [
       (key_description, Terms.string "The string literal type"),
-      (key_type, coreEncodeType $ TypeVariable _Type)]
+      (key_type, EncodeCore.type_ $ TypeVariable _Type)]
 
 testRoundTripsFromType :: H.SpecWith ()
 testRoundTripsFromType = do
@@ -116,7 +117,7 @@ testRoundTripsFromType = do
     H.it "Try random types" $
       QC.property $ \typ ->
         shouldSucceedWith
-          (DecodeCore.type_ $ coreEncodeType typ)
+          (DecodeCore.type_ $ EncodeCore.type_ typ)
           typ
 
 spec :: H.Spec

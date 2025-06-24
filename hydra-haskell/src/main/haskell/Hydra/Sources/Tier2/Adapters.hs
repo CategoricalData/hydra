@@ -171,7 +171,7 @@ adaptedModuleDefinitionsDef = adaptersDefinition "adaptedModuleDefinitions" $
       "typ">: Core.typedTermType $ var "tt",
       "name">: Graph.elementName $ var "el"] $
       Logic.ifElse (ref Annotations.isNativeTypeDef @@ var "el")
-        (withVar "adaptedTyp" (withVar "coreTyp" (ref DecodeCore.type_Def @@ var "term") $ ref adaptTypeDef @@ var "lang" @@ var "coreTyp") $
+        (withVar "adaptedTyp" (withVar "coreTyp" (ref DecodeCore.typeDef @@ var "term") $ ref adaptTypeDef @@ var "lang" @@ var "coreTyp") $
          Flows.pure $ Module.definitionType $ Module.typeDefinition (var "name") (var "adaptedTyp"))
         (Optionals.maybe
           (Flows.fail $ Strings.cat2 (string "no adapter for element ") (unwrap _Name @@ var "name"))

@@ -8,6 +8,7 @@ import Hydra.TermAdapters
 import Hydra.Adapters
 import Hydra.Ext.Json.Schema.Language
 import Hydra.Ext.Json.Schema.Serde
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Ext.Org.Json.Schema as JS
 import qualified Hydra.Json as J
 import qualified Hydra.Dsl.Types as Types
@@ -119,7 +120,7 @@ encodeType optional typ = case typ of
           JS.RestrictionMultiple $ JS.MultipleRestrictionEnum (J.ValueString . unName <$> names)]
         asRecord rt = encodeRecordOrUnion True $ unionTypeToRecordType rt
         (simpleFields, nonsimpleFields) = L.partition isSimple $ rowTypeFields rt
-        isSimple (FieldType _ ft) = isUnitType $ stripType ft
+        isSimple (FieldType _ ft) = EncodeCore.isUnitType $ stripType ft
     TypeVariable name -> pure [referenceRestriction name]
     _ -> fail $ "unsupported type variant: " ++ show (typeVariant typ)
   where

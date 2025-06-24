@@ -5,7 +5,7 @@ import Hydra.Compute
 import Hydra.Graph
 import Hydra.Strip
 import Hydra.Variants
-import Hydra.Encode.Core
+import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Literals
 import Hydra.Rewriting
 import Hydra.Errors
@@ -147,7 +147,7 @@ untypedTermToJson term = case term of
         _ -> unexp $ "unexpected elimination variant: " ++ show (eliminationVariant elm)
       FunctionLambda (Lambda v d body) -> asRecord [
         Field _Lambda_parameter $ TermVariable v,
-        Field _Lambda_domain $ TermOptional (coreEncodeType <$> d),
+        Field _Lambda_domain $ TermOptional (EncodeCore.type_ <$> d),
         Field _Lambda_body body]
       FunctionPrimitive name -> pure $ Json.ValueString $ unName name
     TermLet (Let bindings env) -> asRecord [
@@ -179,10 +179,10 @@ untypedTermToJson term = case term of
       Field _TypeAbstraction_body term]
     TermTypeApplication (TypedTerm term1 typ) -> asRecord [ -- Note: TermTypeApplication and TermTyped appear identical
       Field _TypedTerm_term term1,
-      Field _TypedTerm_type $ coreEncodeType typ]
+      Field _TypedTerm_type $ EncodeCore.type_ typ]
     TermTyped (TypedTerm term1 typ) -> asRecord [
       Field _TypedTerm_term term1,
-      Field _TypedTerm_type $ coreEncodeType typ]
+      Field _TypedTerm_type $ EncodeCore.type_ typ]
     TermUnion (Injection _ field) -> if fieldTerm field == Terms.unit
       then return $ Json.ValueString $ unName $ fieldName field
       else do

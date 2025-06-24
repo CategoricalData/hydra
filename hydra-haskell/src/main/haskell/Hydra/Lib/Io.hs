@@ -21,7 +21,7 @@ module Hydra.Lib.Io (
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
-import Hydra.Encode.Core
+import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Flows
 import Hydra.Typing
 import Hydra.Strip
@@ -155,7 +155,7 @@ showTerm term = case stripTerm term of
 --     coder <- termStringCoder
 --     coderEncode coder encoded
 --   where
---     --encoded = coreEncodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
+--     --encoded = term $ rewriteTermMeta (const $ Kv M.empty) term
 --     encoded = rewriteTermMeta (const $ Kv M.empty) term
 
 --termStringCoder :: Flow Graph (Coder Graph Graph Term String)
@@ -173,11 +173,11 @@ showTerm term = case stripTerm term of
 --    coder <- typeStringCoder
 --    coderEncode coder encoded
 --  where
---    encoded = coreEncodeType $ rewriteTypeMeta (const $ Kv M.empty) typ
+--    encoded = type_ $ rewriteTypeMeta (const $ Kv M.empty) typ
 
 -- TODO: for now, we are bypassing the complexity of TermAdapters because of issues yet to be resolved
 --showType :: Type -> String
-----showType = showTerm . coreEncodeType
+----showType = showTerm . type_
 --showType = show
 
 --showType typ = case flowStateValue result of
@@ -185,7 +185,7 @@ showTerm term = case stripTerm term of
 --    Just s -> s
 --  where
 --    result = unFlow (jsonValueToString <$> untypedTermToJson encoded) noGraph emptyTrace
---    encoded = stripTermRecursive $ coreEncodeType typ
+--    encoded = stripTermRecursive $ type_ typ
 
 --typeStringCoder :: Flow Graph (Coder Graph Graph Term String)
 --typeStringCoder = do

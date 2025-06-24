@@ -13,6 +13,7 @@ import Hydra.Ext.Java.Serde
 import Hydra.Ext.Java.Settings
 import Hydra.AdapterUtils
 import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Ext.Java.Syntax as Java
@@ -351,7 +352,7 @@ declarationForUnionType isSer aliases tparams elName fields = do
   where
     privateConstructor = makeConstructor aliases elName True [] []
     unionFieldClass (FieldType fname ftype) = do
-      let rtype = Types.record $ if isUnitType ftype then [] else [FieldType (Name valueFieldName) $ stripType ftype]
+      let rtype = Types.record $ if EncodeCore.isUnitType ftype then [] else [FieldType (Name valueFieldName) $ stripType ftype]
       toClassDecl True isSer aliases [] (variantClassName False elName fname) rtype
     augmentVariantClass (Java.ClassDeclarationNormal cd) = Java.ClassDeclarationNormal $ cd {
         Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal],
@@ -702,7 +703,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
         TermUnion (Injection name (Field (Name fname) v)) -> do
           let (Java.Identifier typeId) = nameToJavaName aliases name
           let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
-          args <- if isUnitTerm v
+          args <- if EncodeCore.isUnitTerm v
             then return []
             else do
               ex <- encode v
