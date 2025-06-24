@@ -13,71 +13,71 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Display a floating-point type as a string
-describeFloatType :: (Core.FloatType -> String)
-describeFloatType t = (Strings.cat [
-  (\arg_ -> describePrecision (Variants.floatTypePrecision arg_)) t,
+floatType :: (Core.FloatType -> String)
+floatType t = (Strings.cat [
+  (\arg_ -> precision (Variants.floatTypePrecision arg_)) t,
   " floating-point numbers"])
 
 -- | Display an integer type as a string
-describeIntegerType :: (Core.IntegerType -> String)
-describeIntegerType t = (Strings.cat [
-  (\arg_ -> describePrecision (Variants.integerTypePrecision arg_)) t,
+integerType :: (Core.IntegerType -> String)
+integerType t = (Strings.cat [
+  (\arg_ -> precision (Variants.integerTypePrecision arg_)) t,
   " integers"])
 
 -- | Display a literal type as a string
-describeLiteralType :: (Core.LiteralType -> String)
-describeLiteralType x = case x of
+literalType :: (Core.LiteralType -> String)
+literalType x = case x of
   Core.LiteralTypeBinary -> "binary strings"
   Core.LiteralTypeBoolean -> "boolean values"
-  Core.LiteralTypeFloat v1 -> (describeFloatType v1)
-  Core.LiteralTypeInteger v1 -> (describeIntegerType v1)
+  Core.LiteralTypeFloat v1 -> (floatType v1)
+  Core.LiteralTypeInteger v1 -> (integerType v1)
   Core.LiteralTypeString -> "character strings"
 
 -- | Display numeric precision as a string
-describePrecision :: (Mantle.Precision -> String)
-describePrecision x = case x of
+precision :: (Mantle.Precision -> String)
+precision x = case x of
   Mantle.PrecisionArbitrary -> "arbitrary-precision"
   Mantle.PrecisionBits v1 -> (Strings.cat [
     Literals.showInt32 v1,
     "-bit"])
 
 -- | Display a type as a string
-describeType :: (Core.Type -> String)
-describeType x = case x of
+type_ :: (Core.Type -> String)
+type_ x = case x of
   Core.TypeAnnotated v1 -> (Strings.cat [
     "annotated ",
-    (describeType (Core.annotatedTypeSubject v1))])
+    (type_ (Core.annotatedTypeSubject v1))])
   Core.TypeApplication _ -> "instances of an application type"
-  Core.TypeLiteral v1 -> (describeLiteralType v1)
+  Core.TypeLiteral v1 -> (literalType v1)
   Core.TypeFunction v1 -> (Strings.cat [
     Strings.cat [
       Strings.cat [
         "functions from ",
-        (describeType (Core.functionTypeDomain v1))],
+        (type_ (Core.functionTypeDomain v1))],
       " to "],
-    (describeType (Core.functionTypeCodomain v1))])
+    (type_ (Core.functionTypeCodomain v1))])
   Core.TypeForall _ -> "polymorphic terms"
   Core.TypeList v1 -> (Strings.cat [
     "lists of ",
-    (describeType v1)])
+    (type_ v1)])
   Core.TypeMap v1 -> (Strings.cat [
     Strings.cat [
       Strings.cat [
         "maps from ",
-        (describeType (Core.mapTypeKeys v1))],
+        (type_ (Core.mapTypeKeys v1))],
       " to "],
-    (describeType (Core.mapTypeValues v1))])
+    (type_ (Core.mapTypeValues v1))])
   Core.TypeOptional v1 -> (Strings.cat [
     "optional ",
-    (describeType v1)])
+    (type_ v1)])
   Core.TypeProduct _ -> "tuples"
   Core.TypeRecord _ -> "records"
   Core.TypeSet v1 -> (Strings.cat [
     "sets of ",
-    (describeType v1)])
+    (type_ v1)])
   Core.TypeSum _ -> "variant tuples"
   Core.TypeUnion _ -> "unions"
   Core.TypeVariable _ -> "instances of a named type"
   Core.TypeWrap v1 -> (Strings.cat [
     "wrapper for ",
-    (describeType (Core.wrappedTypeObject v1))])
+    (type_ (Core.wrappedTypeObject v1))])

@@ -15,7 +15,7 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.GrammarToModule,
   module Hydra.Sources.Tier2.Inference,
   module Hydra.Sources.Tier2.Lexical,
-  module Hydra.Sources.Tier2.Describe.Core,
+--  module Hydra.Sources.Tier2.Describe.Core,
   module Hydra.Sources.Tier2.Qnames,
   module Hydra.Sources.Tier2.Reduction,
   module Hydra.Sources.Tier2.Rewriting,

@@ -115,7 +115,7 @@ constructCoderDef = adaptersDefinition "constructCoder" $
   doc "Given a target language, a unidirectional last-mile encoding, and a source type, construct a unidirectional adapting coder for terms of that type" $
   lambdas ["lang", "encodeTerm", "typ"] $
     ref Flows_.withTraceDef
-      @@ (Strings.cat2 (string "coder for ") (ref DescribeCore.describeTypeDef @@ var "typ"))
+      @@ (Strings.cat2 (string "coder for ") (ref DescribeCore.typeDef @@ var "typ"))
       @@ (withVar "adapter" (ref languageAdapterDef @@ var "lang" @@ var "typ") $
           Flows.pure $ ref AdapterUtils.composeCodersDef
             @@ (Compute.adapterCoder $ var "adapter")

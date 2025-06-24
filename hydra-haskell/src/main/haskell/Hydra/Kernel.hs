@@ -35,7 +35,6 @@ module Hydra.Kernel (
   module Hydra.Messages,
   module Hydra.Module,
   module Hydra.Phantoms,
-  module Hydra.Describe.Core,
   module Hydra.Qnames,
   module Hydra.Query,
   module Hydra.Reduction,
@@ -77,7 +76,6 @@ import Hydra.Mantle
 import Hydra.Messages
 import Hydra.Module
 import Hydra.Phantoms
-import Hydra.Describe.Core
 import Hydra.Qnames
 import Hydra.Query
 import Hydra.Reduction

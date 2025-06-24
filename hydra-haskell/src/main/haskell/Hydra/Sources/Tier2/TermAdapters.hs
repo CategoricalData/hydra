@@ -709,7 +709,7 @@ termAdapterDef = termAdaptersDefinition "termAdapter" $
            (var "trySubstitution" @@ var "t")] $
     cases _Type (var "typ")
       (Just $ ref Flows_.withTraceDef
-        @@ (Strings.cat2 (string "adapter for ") (ref DescribeCore.describeTypeDef @@ var "typ"))
+        @@ (Strings.cat2 (string "adapter for ") (ref DescribeCore.typeDef @@ var "typ"))
         @@ (cases _Type (var "typ")
           (Just $
             withVar "cx" (ref Errors.getStateDef) $
@@ -717,7 +717,7 @@ termAdapterDef = termAdaptersDefinition "termAdapter" $
               @@ (var "alts" @@ var "cx")
               @@ (var "supported" @@ var "cx")
               @@ (unaryFunction Io.showType)
-              @@ (ref DescribeCore.describeTypeDef)
+              @@ (ref DescribeCore.typeDef)
               @@ (var "typ")) [
           -- Account for let-bound variables
           _Type_variable>>: lambda "name" $ ref forTypeReferenceDef @@ var "name"])) [

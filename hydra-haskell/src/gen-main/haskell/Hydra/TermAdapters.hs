@@ -531,9 +531,9 @@ termAdapter typ =
         Core.annotatedTypeSubject = (Compute.adapterTarget ad),
         Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)})),
       Compute.adapterCoder = (Compute.adapterCoder ad)})))
-    _ -> (Flows.withTrace (Strings.cat2 "adapter for " (DescribeCore.describeType typ)) ((\x -> case x of
+    _ -> (Flows.withTrace (Strings.cat2 "adapter for " (DescribeCore.type_ typ)) ((\x -> case x of
       Core.TypeVariable v1 -> (forTypeReference v1)
-      _ -> (Flows_.bind Errors.getState (\cx -> AdapterUtils.chooseAdapter (alts cx) (supported cx) Io.showType DescribeCore.describeType typ))) typ))) typ)
+      _ -> (Flows_.bind Errors.getState (\cx -> AdapterUtils.chooseAdapter (alts cx) (supported cx) Io.showType DescribeCore.type_ typ))) typ))) typ)
 
 -- | Convert union types to record types
 unionToRecord :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
