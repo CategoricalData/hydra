@@ -10,7 +10,7 @@ import Hydra.Literals
 import Hydra.Rewriting
 import Hydra.Errors
 import Hydra.Staging.Adapters
-import Hydra.Staging.TermAdapters
+import Hydra.TermAdapters
 import Hydra.Ext.Json.Language
 import Hydra.Lib.Literals
 import Hydra.AdapterUtils
