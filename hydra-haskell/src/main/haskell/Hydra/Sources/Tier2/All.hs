@@ -7,7 +7,7 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.AdapterUtils,
   module Hydra.Sources.Tier2.Annotations,
   module Hydra.Sources.Tier2.Arity,
-  module Hydra.Sources.Tier2.CoreDecoding,
+  module Hydra.Sources.Tier2.Decode.Core,
   module Hydra.Sources.Tier2.CoreLanguage,
   module Hydra.Sources.Tier2.Errors,
 --  module Hydra.Sources.Tier2.Extract.Core, -- hydra.expect symbols conflict with several other modules
@@ -33,7 +33,7 @@ import Hydra.Sources.Tier2.Accessors
 import Hydra.Sources.Tier2.AdapterUtils
 import Hydra.Sources.Tier2.Annotations
 import Hydra.Sources.Tier2.Arity
-import Hydra.Sources.Tier2.CoreDecoding
+import Hydra.Sources.Tier2.Decode.Core
 import Hydra.Sources.Tier2.CoreLanguage
 import Hydra.Sources.Tier2.Errors
 import Hydra.Sources.Tier2.Extract.Core
