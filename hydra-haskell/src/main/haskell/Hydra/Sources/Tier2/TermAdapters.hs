@@ -53,7 +53,7 @@ import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Flows as Flows_
 import qualified Hydra.Sources.Tier2.Lexical as Lexical
 import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
-import qualified Hydra.Sources.Tier2.Printing as Printing
+import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
 import qualified Hydra.Sources.Tier2.Reduction as Reduction
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 import qualified Hydra.Sources.Tier2.Schemas as Schemas
@@ -709,7 +709,7 @@ termAdapterDef = termAdaptersDefinition "termAdapter" $
            (var "trySubstitution" @@ var "t")] $
     cases _Type (var "typ")
       (Just $ ref Flows_.withTraceDef
-        @@ (Strings.cat2 (string "adapter for ") (ref Printing.describeTypeDef @@ var "typ"))
+        @@ (Strings.cat2 (string "adapter for ") (ref DescribeCore.describeTypeDef @@ var "typ"))
         @@ (cases _Type (var "typ")
           (Just $
             withVar "cx" (ref Errors.getStateDef) $
@@ -717,7 +717,7 @@ termAdapterDef = termAdaptersDefinition "termAdapter" $
               @@ (var "alts" @@ var "cx")
               @@ (var "supported" @@ var "cx")
               @@ (unaryFunction Io.showType)
-              @@ (ref Printing.describeTypeDef)
+              @@ (ref DescribeCore.describeTypeDef)
               @@ (var "typ")) [
           -- Account for let-bound variables
           _Type_variable>>: lambda "name" $ ref forTypeReferenceDef @@ var "name"])) [

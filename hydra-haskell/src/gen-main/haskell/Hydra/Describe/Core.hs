@@ -1,6 +1,6 @@
 -- | Utilities for use in transformations
 
-module Hydra.Printing where
+module Hydra.Describe.Core where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Literals as Literals

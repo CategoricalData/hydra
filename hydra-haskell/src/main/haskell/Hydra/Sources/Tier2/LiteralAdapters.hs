@@ -61,7 +61,7 @@ import qualified Hydra.Sources.Tier2.Flows as Flows_
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
 --import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
-import qualified Hydra.Sources.Tier2.Printing as Printing
+import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
 --import qualified Hydra.Sources.Tier2.Qnames as Qnames
 --import qualified Hydra.Sources.Tier2.Reduction as Reduction
 --import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
@@ -82,7 +82,7 @@ literalAdaptersDefinition = definitionInModule hydraLiteralAdaptersModule
 
 hydraLiteralAdaptersModule :: Module
 hydraLiteralAdaptersModule = Module (Namespace "hydra.literalAdapters") elements
-    [Errors.hydraErrorsModule, ExtractCore.hydraExpectModule, Flows_.hydraFlowsModule, Printing.hydraPrintingModule,
+    [Errors.hydraErrorsModule, ExtractCore.hydraExpectModule, Flows_.hydraFlowsModule, DescribeCore.hydraPrintingModule,
       AdapterUtils.hydraAdapterUtilsModule, Variants.hydraVariantsModule]
     [Tier1.hydraCodersModule, Tier1.hydraModuleModule] $
     Just "Adapter framework for literal types and terms"
@@ -244,7 +244,7 @@ literalAdapterDef = literalAdaptersDefinition "literalAdapter" $
     @@ var "alts"
     @@ var "supported"
     @@ unaryFunction Io.showLiteralType
-    @@ ref Printing.describeLiteralTypeDef
+    @@ ref DescribeCore.describeLiteralTypeDef
     @@ var "lt"
 
 floatAdapterDef :: TElement (FloatType -> Flow AdapterContext (SymmetricAdapter s FloatType FloatValue))
@@ -266,8 +266,8 @@ floatAdapterDef = literalAdaptersDefinition "floatAdapter" $
             (lambda "fv" $ Flows.pure $ ref convertFloatValueDef @@ var "source" @@ var "fv"),
           "msg">: ref disclaimerDef
             @@ var "lossy"
-            @@ (ref Printing.describeFloatTypeDef @@ var "source")
-            @@ (ref Printing.describeFloatTypeDef @@ var "target")] $
+            @@ (ref DescribeCore.describeFloatTypeDef @@ var "source")
+            @@ (ref DescribeCore.describeFloatTypeDef @@ var "target")] $
         ref Flows_.warnDef
           @@ var "msg"
           @@ (Flows.pure (Compute.adapter (var "lossy") (var "source") (var "target") (var "step")))] $
@@ -279,7 +279,7 @@ floatAdapterDef = literalAdaptersDefinition "floatAdapter" $
         @@ var "alts"
         @@ var "supported"
         @@ unaryFunction Io.showFloatType
-        @@ ref Printing.describeFloatTypeDef
+        @@ ref DescribeCore.describeFloatTypeDef
         @@ var "ft"
 
 integerAdapterDef :: TElement (IntegerType -> Flow AdapterContext (SymmetricAdapter s IntegerType IntegerValue))
@@ -330,8 +330,8 @@ integerAdapterDef = literalAdaptersDefinition "integerAdapter" $
         (lambda "iv" $ Flows.pure $ ref convertIntegerValueDef @@ var "source" @@ var "iv"),
       "msg">: ref disclaimerDef
         @@ var "lossy"
-        @@ (ref Printing.describeIntegerTypeDef @@ var "source")
-        @@ (ref Printing.describeIntegerTypeDef @@ var "target")] $
+        @@ (ref DescribeCore.describeIntegerTypeDef @@ var "source")
+        @@ (ref DescribeCore.describeIntegerTypeDef @@ var "target")] $
       ref Flows_.warnDef
         @@ var "msg"
         @@ (Flows.pure $ Compute.adapter (var "lossy") (var "source") (var "target") (var "step"))] $
@@ -343,5 +343,5 @@ integerAdapterDef = literalAdaptersDefinition "integerAdapter" $
       @@ var "alts"
       @@ var "supported"
       @@ unaryFunction Io.showIntegerType
-      @@ ref Printing.describeIntegerTypeDef
+      @@ ref DescribeCore.describeIntegerTypeDef
       @@ var "it"

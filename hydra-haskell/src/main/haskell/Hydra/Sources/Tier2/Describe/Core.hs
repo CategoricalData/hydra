@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier2.Printing where
+module Hydra.Sources.Tier2.Describe.Core where
 
 -- Standard Tier-2 imports
 import Hydra.Kernel
@@ -61,7 +61,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
 --import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
---import qualified Hydra.Sources.Tier2.Printing as Printing
+--import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
 --import qualified Hydra.Sources.Tier2.Qnames as Qnames
 --import qualified Hydra.Sources.Tier2.Reduction as Reduction
 --import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
@@ -78,7 +78,7 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
 hydraPrintingModule :: Module
-hydraPrintingModule = Module (Namespace "hydra.printing") elements
+hydraPrintingModule = Module (Namespace "hydra.describe.core") elements
     [Variants.hydraVariantsModule]
     [Tier1.hydraCoreModule] $
     Just "Utilities for use in transformations"
@@ -87,7 +87,7 @@ hydraPrintingModule = Module (Namespace "hydra.printing") elements
      el describeFloatTypeDef,
      el describeIntegerTypeDef,
      el describeLiteralTypeDef,
-     el describePrecisionDef,
+     el describePrecisionDef, -- TODO: move out of hydra.describe.core
      el describeTypeDef]
 
 printingDefinition :: String -> TTerm a -> TElement a

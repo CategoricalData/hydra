@@ -21,7 +21,7 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.LiteralAdapters as LiteralAdapters
 import qualified Hydra.Mantle as Mantle
-import qualified Hydra.Printing as Printing
+import qualified Hydra.Describe.Core as DescribeCore
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Strip as Strip
@@ -531,9 +531,9 @@ termAdapter typ =
         Core.annotatedTypeSubject = (Compute.adapterTarget ad),
         Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)})),
       Compute.adapterCoder = (Compute.adapterCoder ad)})))
-    _ -> (Flows.withTrace (Strings.cat2 "adapter for " (Printing.describeType typ)) ((\x -> case x of
+    _ -> (Flows.withTrace (Strings.cat2 "adapter for " (DescribeCore.describeType typ)) ((\x -> case x of
       Core.TypeVariable v1 -> (forTypeReference v1)
-      _ -> (Flows_.bind Errors.getState (\cx -> AdapterUtils.chooseAdapter (alts cx) (supported cx) Io.showType Printing.describeType typ))) typ))) typ)
+      _ -> (Flows_.bind Errors.getState (\cx -> AdapterUtils.chooseAdapter (alts cx) (supported cx) Io.showType DescribeCore.describeType typ))) typ))) typ)
 
 -- | Convert union types to record types
 unionToRecord :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))

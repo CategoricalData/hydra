@@ -15,7 +15,7 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.GrammarToModule,
   module Hydra.Sources.Tier2.Inference,
   module Hydra.Sources.Tier2.Lexical,
-  module Hydra.Sources.Tier2.Printing,
+  module Hydra.Sources.Tier2.Describe.Core,
   module Hydra.Sources.Tier2.Qnames,
   module Hydra.Sources.Tier2.Reduction,
   module Hydra.Sources.Tier2.Rewriting,
@@ -41,7 +41,7 @@ import Hydra.Sources.Tier2.Flows
 import Hydra.Sources.Tier2.GrammarToModule
 import Hydra.Sources.Tier2.Inference
 import Hydra.Sources.Tier2.Lexical
-import Hydra.Sources.Tier2.Printing
+import Hydra.Sources.Tier2.Describe.Core
 import Hydra.Sources.Tier2.Qnames
 import Hydra.Sources.Tier2.Reduction
 import Hydra.Sources.Tier2.Rewriting

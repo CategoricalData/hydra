@@ -61,7 +61,7 @@ import qualified Hydra.Sources.Tier2.Flows as Flows_
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 import qualified Hydra.Sources.Tier2.Lexical as Lexical
 --import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
-import qualified Hydra.Sources.Tier2.Printing as Printing
+import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
 --import qualified Hydra.Sources.Tier2.Qnames as Qnames
 --import qualified Hydra.Sources.Tier2.Reduction as Reduction
 --import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
@@ -115,7 +115,7 @@ constructCoderDef = adaptersDefinition "constructCoder" $
   doc "Given a target language, a unidirectional last-mile encoding, and a source type, construct a unidirectional adapting coder for terms of that type" $
   lambdas ["lang", "encodeTerm", "typ"] $
     ref Flows_.withTraceDef
-      @@ (Strings.cat2 (string "coder for ") (ref Printing.describeTypeDef @@ var "typ"))
+      @@ (Strings.cat2 (string "coder for ") (ref DescribeCore.describeTypeDef @@ var "typ"))
       @@ (withVar "adapter" (ref languageAdapterDef @@ var "lang" @@ var "typ") $
           Flows.pure $ ref AdapterUtils.composeCodersDef
             @@ (Compute.adapterCoder $ var "adapter")
