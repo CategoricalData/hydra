@@ -12,7 +12,7 @@ import qualified Hydra.Ext.Cpp.Syntax as Cpp
 import Hydra.Kernel
 import Hydra.Lib.Io
 import qualified Hydra.Lib.Strings as Strings
-import Hydra.Staging.Adapters
+import Hydra.Adapters
 import Hydra.Formatting
 import qualified Hydra.Decode as Decode
 

@@ -55,7 +55,7 @@ import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
 --import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
---import qualified Hydra.Sources.Tier2.Expect as Expect
+import qualified Hydra.Sources.Tier2.Expect as Expect
 import qualified Hydra.Sources.Tier2.Flows as Flows_
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
@@ -82,7 +82,7 @@ literalAdaptersDefinition = definitionInModule hydraLiteralAdaptersModule
 
 hydraLiteralAdaptersModule :: Module
 hydraLiteralAdaptersModule = Module (Namespace "hydra.literalAdapters") elements
-    [Errors.hydraErrorsModule, Flows_.hydraFlowsModule, Printing.hydraPrintingModule,
+    [Errors.hydraErrorsModule, Expect.hydraExpectModule, Flows_.hydraFlowsModule, Printing.hydraPrintingModule,
       AdapterUtils.hydraAdapterUtilsModule, Variants.hydraVariantsModule]
     [Tier1.hydraCodersModule, Tier1.hydraModuleModule] $
     Just "Adapter framework for literal types and terms"
@@ -181,11 +181,12 @@ literalAdapterDef = literalAdaptersDefinition "literalAdapter" $
             _Literal_string>>: lambda "s" $ Flows.pure $ Core.literalBinary $ Literals.stringToBinary $ var "s"])] $
         Flows.pure $ list [Compute.adapter false (var "t") Core.literalTypeString (var "step")],
       _LiteralType_boolean>>: constant $
-        Flows.bind (ref Errors.getStateDef) $ lambda "cx" $ lets [
-          "constraints">: Coders.languageConstraints $ Coders.adapterContextLanguage $ var "cx",
-          "hasIntegers">: Logic.not $ Sets.null $ Coders.languageConstraintsIntegerTypes $ var "constraints"] $
+        withVar "cx" (ref Errors.getStateDef) $ lets [
+        "constraints">: Coders.languageConstraints $ Coders.adapterContextLanguage $ var "cx",
+        "hasIntegers">: Logic.not $ Sets.null $ Coders.languageConstraintsIntegerTypes $ var "constraints",
+        "hasStrings">: Sets.member Mantle.literalVariantString (Coders.languageConstraintsLiteralVariants $ var "constraints")] $
         Logic.ifElse (var "hasIntegers")
-          (Flows.bind (ref integerAdapterDef @@ Core.integerTypeUint8) $ lambda "adapter" $ lets [
+          (withVar "adapter" (ref integerAdapterDef @@ Core.integerTypeUint8) $ lets [
             "step'">: Compute.adapterCoder $ var "adapter",
             "step">: Compute.coder
               (lambda "lit" $ cases _Literal (var "lit") Nothing [
@@ -198,7 +199,20 @@ literalAdapterDef = literalAdaptersDefinition "literalAdapter" $
                   (lambda "val" $ cases _IntegerValue (var "val") Nothing [
                     _IntegerValue_uint8>>: lambda "v" $ Flows.pure $ Core.literalBoolean $ Equality.equal (var "v") (uint8 1)])])] $
             Flows.pure $ list [Compute.adapter false (var "t") (Core.literalTypeInteger $ Compute.adapterTarget $ var "adapter") (var "step")])
-          (Flows.fail $ string "no integer types available for boolean encoding"),
+          (Logic.ifElse (var "hasStrings")
+            (Flows.pure $ lets [
+              "encode">: lambda "lit" $
+                withVar "b" (ref Expect.booleanLiteralDef @@ var "lit") $
+                Flows.pure $ Core.literalString $ Logic.ifElse (var "b") "true" "false",
+              "decode">: lambda "lit" $
+                withVar "s" (ref Expect.stringLiteralDef @@ var "lit") $
+                Logic.ifElse (Equality.equalString (var "s") (string "true"))
+                  (Flows.pure $ Core.literalBoolean true)
+                  (Logic.ifElse (Equality.equalString (var "s") (string "false"))
+                    (Flows.pure $ Core.literalBoolean false)
+                    (ref Errors.unexpectedDef @@ "boolean literal" @@ var "s"))] $
+              list [Compute.adapter false (var "t") Core.literalTypeString (Compute.coder (var "encode") (var "decode"))])
+            (Flows.fail $ string "no alternatives available for boolean encoding")),
       _LiteralType_float>>: lambda "ft" $
         Flows.bind (ref Errors.getStateDef) $ lambda "cx" $ lets [
           "constraints">: Coders.languageConstraints $ Coders.adapterContextLanguage $ var "cx",

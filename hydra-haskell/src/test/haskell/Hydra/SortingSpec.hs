@@ -1,4 +1,6 @@
 {-
+stack ghci hydra:lib hydra:hydra-test
+
 Test.Hspec.hspec Hydra.SortingSpec.spec
 -}
 module Hydra.SortingSpec where

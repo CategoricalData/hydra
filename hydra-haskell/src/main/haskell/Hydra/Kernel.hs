@@ -5,7 +5,7 @@
 module Hydra.Kernel (
   module Hydra.Accessors,
   module Hydra.AdapterUtils,
-  module Hydra.Staging.Adapters,
+  module Hydra.Adapters,
   module Hydra.Annotations,
   module Hydra.Arity,
 --  module Hydra.Ast,
@@ -53,7 +53,7 @@ module Hydra.Kernel (
 
 import Hydra.Accessors
 import Hydra.AdapterUtils
-import Hydra.Staging.Adapters
+import Hydra.Adapters
 import Hydra.Annotations
 import Hydra.Arity
 --import Hydra.Ast

@@ -5,7 +5,7 @@ module Hydra.Ext.Json.Schema.Coder (
 
 import Hydra.Kernel
 import Hydra.TermAdapters
-import Hydra.Staging.Adapters
+import Hydra.Adapters
 import Hydra.Ext.Json.Schema.Language
 import Hydra.Ext.Json.Schema.Serde
 import qualified Hydra.Ext.Org.Json.Schema as JS

@@ -7,6 +7,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
+import qualified Hydra.Expect as Expect
 import qualified Hydra.Flows as Flows
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
@@ -101,6 +102,7 @@ literalAdapter lt =
           Core.LiteralTypeBoolean -> (Flows_.bind Errors.getState (\cx ->  
             let constraints = (Coders.languageConstraints (Coders.adapterContextLanguage cx)) 
                 hasIntegers = (Logic.not (Sets.null (Coders.languageConstraintsIntegerTypes constraints)))
+                hasStrings = (Sets.member Mantle.LiteralVariantString (Coders.languageConstraintsLiteralVariants constraints))
             in (Logic.ifElse hasIntegers (Flows_.bind (integerAdapter Core.IntegerTypeUint8) (\adapter ->  
               let step_ = (Compute.adapterCoder adapter) 
                   step = Compute.Coder {
@@ -114,7 +116,17 @@ literalAdapter lt =
                   Compute.adapterIsLossy = False,
                   Compute.adapterSource = t,
                   Compute.adapterTarget = (Core.LiteralTypeInteger (Compute.adapterTarget adapter)),
-                  Compute.adapterCoder = step}]))) (Flows_.fail "no integer types available for boolean encoding"))))
+                  Compute.adapterCoder = step}]))) (Logic.ifElse hasStrings (Flows_.pure ( 
+              let encode = (\lit -> Flows_.bind (Expect.booleanLiteral lit) (\b -> Flows_.pure (Core.LiteralString (Logic.ifElse b "true" "false")))) 
+                  decode = (\lit -> Flows_.bind (Expect.stringLiteral lit) (\s -> Logic.ifElse (Equality.equalString s "true") (Flows_.pure (Core.LiteralBoolean True)) (Logic.ifElse (Equality.equalString s "false") (Flows_.pure (Core.LiteralBoolean False)) (Errors.unexpected "boolean literal" s))))
+              in [
+                Compute.Adapter {
+                  Compute.adapterIsLossy = False,
+                  Compute.adapterSource = t,
+                  Compute.adapterTarget = Core.LiteralTypeString,
+                  Compute.adapterCoder = Compute.Coder {
+                    Compute.coderEncode = encode,
+                    Compute.coderDecode = decode}}])) (Flows_.fail "no alternatives available for boolean encoding")))))
           Core.LiteralTypeFloat v1 -> (Flows_.bind Errors.getState (\cx ->  
             let constraints = (Coders.languageConstraints (Coders.adapterContextLanguage cx)) 
                 hasFloats = (Logic.not (Sets.null (Coders.languageConstraintsFloatTypes constraints)))

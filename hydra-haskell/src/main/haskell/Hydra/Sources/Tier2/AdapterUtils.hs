@@ -179,13 +179,13 @@ integerTypeIsSupportedDef = adapterUtilsDefinition "integerTypeIsSupported" $
 literalTypeIsSupportedDef :: TElement (LanguageConstraints -> LiteralType -> Bool)
 literalTypeIsSupportedDef = adapterUtilsDefinition "literalTypeIsSupported" $
   doc "Check if literal type is supported by language constraints" $
-  lambda "constraints" $ lambda "at" $
+  lambda "constraints" $ lambda "lt" $
     Logic.and
-      (Sets.member (ref Variants.literalTypeVariantDef @@ var "at") (Coders.languageConstraintsLiteralVariants $ var "constraints"))
+      (Sets.member (ref Variants.literalTypeVariantDef @@ var "lt") (Coders.languageConstraintsLiteralVariants $ var "constraints"))
       (match _LiteralType (Just true) [
         _LiteralType_float>>: lambda "ft" $ ref floatTypeIsSupportedDef @@ var "constraints" @@ var "ft",
         _LiteralType_integer>>: lambda "it" $ ref integerTypeIsSupportedDef @@ var "constraints" @@ var "it"]
-      @@ var "at")
+      @@ var "lt")
 
 nameToFilePathDef :: TElement (CaseConvention -> FileExtension -> Name -> FilePath)
 nameToFilePathDef = adapterUtilsDefinition "nameToFilePath" $

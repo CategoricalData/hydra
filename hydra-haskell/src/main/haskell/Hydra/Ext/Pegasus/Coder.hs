@@ -2,7 +2,7 @@ module Hydra.Ext.Pegasus.Coder (moduleToPdl) where
 
 import Hydra.Kernel
 import Hydra.TermAdapters
-import Hydra.Staging.Adapters
+import Hydra.Adapters
 import Hydra.Ext.Pegasus.Language
 import Hydra.Ext.Pegasus.Serde
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
