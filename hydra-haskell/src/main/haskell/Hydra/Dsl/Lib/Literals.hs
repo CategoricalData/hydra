@@ -86,14 +86,44 @@ readInt64 = primitive1 _literals_readInt64
 readString :: TTerm String -> TTerm (Maybe String)
 readString = primitive1 _literals_readString
 
+showBigfloat :: TTerm Double -> TTerm String
+showBigfloat = primitive1 _literals_showBigfloat
+
+showBigint :: TTerm Integer -> TTerm String
+showBigint = primitive1 _literals_showBigint
+
 showBoolean :: TTerm Bool -> TTerm String
 showBoolean = primitive1 _literals_showBoolean
+
+showFloat32 :: TTerm Float -> TTerm String
+showFloat32 = primitive1 _literals_showFloat32
+
+showFloat64 :: TTerm Double -> TTerm String
+showFloat64 = primitive1 _literals_showFloat64
+
+showInt8 :: TTerm Int8 -> TTerm String
+showInt8 = primitive1 _literals_showInt8
+
+showInt16 :: TTerm Int16 -> TTerm String
+showInt16 = primitive1 _literals_showInt16
 
 showInt32 :: TTerm Int -> TTerm String
 showInt32 = primitive1 _literals_showInt32
 
 showInt64 :: TTerm Int64 -> TTerm String
 showInt64 = primitive1 _literals_showInt64
+
+showUint8 :: TTerm Int16 -> TTerm String
+showUint8 = primitive1 _literals_showUint8
+
+showUint16 :: TTerm Int -> TTerm String
+showUint16 = primitive1 _literals_showUint16
+
+showUint32 :: TTerm Int64 -> TTerm String
+showUint32 = primitive1 _literals_showUint32
+
+showUint64 :: TTerm Integer -> TTerm String
+showUint64 = primitive1 _literals_showUint64
 
 showString :: TTerm String -> TTerm String
 showString = primitive1 _literals_showString

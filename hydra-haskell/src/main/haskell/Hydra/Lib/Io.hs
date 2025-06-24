@@ -35,15 +35,6 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-noGraph :: Graph
-noGraph = Graph {
-  graphElements = M.empty,
-  graphEnvironment = M.empty,
-  graphTypes = M.empty,
-  graphBody = Terms.list [],
-  graphPrimitives = M.empty,
-  graphSchema = Nothing}
-
 -- | A placeholder for reading terms from their serialized form. Not implemented.
 readTerm :: String -> Maybe Term
 readTerm s = Nothing
@@ -151,51 +142,6 @@ showTerm term = case stripTerm term of
   where
     showField (Field fname term) = unName fname ++ "=" ++ showTerm term
     showFields fields = "{" ++ (L.intercalate ", " $ fmap showField fields) ++ "}"
-
---     coder <- termStringCoder
---     coderEncode coder encoded
---   where
---     --encoded = term $ rewriteTermMeta (const $ Kv M.empty) term
---     encoded = rewriteTermMeta (const $ Kv M.empty) term
-
---termStringCoder :: Flow Graph (Coder Graph Graph Term String)
---termStringCoder = do
---    termJsonCoder <- jsonCoder $ TypeVariable _Term
---    return $ Coder (mout termJsonCoder) (min termJsonCoder)
---  where
---    mout termJsonCoder term = jsonValueToString <$> coderEncode termJsonCoder term
---    min termJsonCoder s = case stringToJsonValue s of
---      Left msg -> fail $ "failed to parse JSON value: " ++ msg
---      Right v -> coderDecode termJsonCoder v
-
---showType :: Type -> String
---showType typ = fromFlow "fail" noGraph $ do
---    coder <- typeStringCoder
---    coderEncode coder encoded
---  where
---    encoded = type_ $ rewriteTypeMeta (const $ Kv M.empty) typ
-
--- TODO: for now, we are bypassing the complexity of TermAdapters because of issues yet to be resolved
---showType :: Type -> String
-----showType = showTerm . type_
---showType = show
-
---showType typ = case flowStateValue result of
---    Nothing -> "failed to encode type:\n" ++ show (traceMessages $ flowStateTrace result)
---    Just s -> s
---  where
---    result = unFlow (jsonValueToString <$> untypedTermToJson encoded) noGraph emptyTrace
---    encoded = stripTermRecursive $ type_ typ
-
---typeStringCoder :: Flow Graph (Coder Graph Graph Term String)
---typeStringCoder = do
---    typeJsonCoder <- jsonCoder $ TypeVariable _Type
---    return $ Coder (mout typeJsonCoder) (min typeJsonCoder)
---  where
---    mout typeJsonCoder term = jsonValueToString <$> coderEncode typeJsonCoder term
---    min typeJsonCoder s = case stringToJsonValue s of
---      Left msg -> fail $ "failed to parse as JSON value: " ++ msg
---      Right v -> coderDecode typeJsonCoder v
 
 showType :: Type -> String
 showType typ = case stripType typ of
