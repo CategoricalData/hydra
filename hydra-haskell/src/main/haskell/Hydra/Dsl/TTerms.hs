@@ -195,7 +195,12 @@ int64Lift = Core.termLiteral . Core.literalInteger . Core.integerValueInt64
 -- | Create a term-encoded string literal
 -- Example: string "hello world"
 string :: String -> TTerm Term
-string = Core.termLiteral . Core.literalString . TTerm . Terms.string
+string = stringLift . TTerm . Terms.string
+
+-- | Lift a TTerm String to a term-encoded string literal
+-- Example: stringLift $ Phantoms.string "hello world"
+stringLift :: TTerm String -> TTerm Term
+stringLift = Core.termLiteral . Core.literalString
 
 -- | Term-encoded boolean true literal
 true :: TTerm Term

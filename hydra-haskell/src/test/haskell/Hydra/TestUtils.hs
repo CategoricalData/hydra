@@ -18,7 +18,7 @@ module Hydra.TestUtils (
 
 import Hydra.Kernel
 import Hydra.LiteralAdapters
-import Hydra.Staging.TermAdapters
+import Hydra.TermAdapters
 import Hydra.AdapterUtils
 import Hydra.Staging.TestGraph
 import Hydra.ArbitraryCore()

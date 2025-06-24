@@ -4,7 +4,7 @@
 
 module Hydra.Staging.Adapters where
 
-import Hydra.Staging.TermAdapters
+import Hydra.TermAdapters
 import Hydra.Printing
 import Hydra.Coders
 import Hydra.Compute
@@ -18,7 +18,7 @@ import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Module
 import Hydra.Strip
-import Hydra.Staging.TermAdapters
+import Hydra.TermAdapters
 import Hydra.AdapterUtils
 import Hydra.Reduction
 import Hydra.Flows
