@@ -105,7 +105,7 @@ hydraAdapterUtilsModule = Module (Namespace "hydra.adapterUtils") elements
 keyTypesDef :: TElement Name
 keyTypesDef = adapterUtilsDefinition "key_types" $
   doc "Key for types in adapter utilities" $
-  Core.name' "types"
+  Core.name "types"
 
 bidirectionalDef :: TElement ((CoderDirection -> b -> Flow s b) -> Coder s s b b)
 bidirectionalDef = adapterUtilsDefinition "bidirectional" $

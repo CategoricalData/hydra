@@ -102,4 +102,4 @@ emptyInferenceContextDef = inferenceDefinition "emptyInferenceContext" $
 normalTypeVariableDef :: TElement (Int -> Name)
 normalTypeVariableDef = inferenceDefinition "normalTypeVariable" $
   doc "Type variable naming convention follows Haskell: t0, t1, etc." $
-  lambda "i" $ Core.name' (Strings.cat2 (string "t") (Literals.showInt32 $ var "i"))
+  lambda "i" $ Core.name (Strings.cat2 (string "t") (Literals.showInt32 $ var "i"))

@@ -157,18 +157,18 @@ forTypeReferenceDef = termAdaptersDefinition "forTypeReference" $
 
 functionProxyNameDef :: TElement Name
 functionProxyNameDef = termAdaptersDefinition "functionProxyName" $
-  Core.name' "hydra.core.FunctionProxy"
+  Core.name "hydra.core.FunctionProxy"
 
 functionProxyTypeDef :: TElement (a -> Type)
 functionProxyTypeDef = termAdaptersDefinition "functionProxyType" $
   doc "Generate a function proxy type for a given domain type" $
   constant $ Core.typeUnion $ Core.rowType (ref functionProxyNameDef) $ list [
-    Core.fieldType (Core.name _Elimination_wrap) TTypes.string,
-    Core.fieldType (Core.name _Elimination_record) TTypes.string,
-    Core.fieldType (Core.name _Elimination_union) TTypes.string,
-    Core.fieldType (Core.name _Function_lambda) TTypes.string,
-    Core.fieldType (Core.name _Function_primitive) TTypes.string,
-    Core.fieldType (Core.name _Term_variable) TTypes.string]
+    Core.fieldType (Core.nameLift _Elimination_wrap) TTypes.string,
+    Core.fieldType (Core.nameLift _Elimination_record) TTypes.string,
+    Core.fieldType (Core.nameLift _Elimination_union) TTypes.string,
+    Core.fieldType (Core.nameLift _Function_lambda) TTypes.string,
+    Core.fieldType (Core.nameLift _Function_primitive) TTypes.string,
+    Core.fieldType (Core.nameLift _Term_variable) TTypes.string]
 
 functionToUnionDef :: TElement TypeAdapter
 functionToUnionDef = termAdaptersDefinition "functionToUnion" $
@@ -180,29 +180,29 @@ functionToUnionDef = termAdaptersDefinition "functionToUnion" $
       "unionType">:
         withVar "domAd" (ref termAdapterDef @@ var "dom") $
         Flows.pure $ Core.typeUnion $ Core.rowType (ref functionProxyNameDef) $ list [
-          Core.fieldType (Core.name _Elimination_wrap) TTypes.string,
-          Core.fieldType (Core.name _Elimination_record) TTypes.string,
-          Core.fieldType (Core.name _Elimination_union) TTypes.string,
-          Core.fieldType (Core.name _Function_lambda) TTypes.string,
-          Core.fieldType (Core.name _Function_primitive) TTypes.string,
-          Core.fieldType (Core.name _Term_variable) TTypes.string],
+          Core.fieldType (Core.nameLift _Elimination_wrap) TTypes.string,
+          Core.fieldType (Core.nameLift _Elimination_record) TTypes.string,
+          Core.fieldType (Core.nameLift _Elimination_union) TTypes.string,
+          Core.fieldType (Core.nameLift _Function_lambda) TTypes.string,
+          Core.fieldType (Core.nameLift _Function_primitive) TTypes.string,
+          Core.fieldType (Core.nameLift _Term_variable) TTypes.string],
       "encode">: lambdas ["ad", "term"] $ lets [
         "strippedTerm">: ref Strip.fullyStripTermDef @@ var "term"] $
         Compute.coderEncode (Compute.adapterCoder $ var "ad") @@ (cases _Term (var "strippedTerm") Nothing [
           _Term_function>>: lambda "f" $ cases _Function (var "f") Nothing [
             _Function_elimination>>: lambda "e" $ cases _Elimination (var "e") Nothing [
               _Elimination_wrap>>: lambda "name" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
-                Core.field (Core.name _Elimination_wrap) $ TTerms.stringLift $ unwrap _Name @@ var "name",
+                Core.field (Core.nameLift _Elimination_wrap) $ TTerms.stringLift $ unwrap _Name @@ var "name",
               _Elimination_record>>: lambda "r" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
-                Core.field (Core.name _Elimination_record) $ TTerms.stringLift $ Io.showTerm $ var "term",
+                Core.field (Core.nameLift _Elimination_record) $ TTerms.stringLift $ Io.showTerm $ var "term",
               _Elimination_union>>: lambda "u" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
-                Core.field (Core.name _Elimination_union) $ TTerms.stringLift $ Io.showTerm $ var "term"],
+                Core.field (Core.nameLift _Elimination_union) $ TTerms.stringLift $ Io.showTerm $ var "term"],
             _Function_lambda>>: lambda "l" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
-              Core.field (Core.name _Function_lambda) $ TTerms.stringLift $ Io.showTerm $ var "term",
+              Core.field (Core.nameLift _Function_lambda) $ TTerms.stringLift $ Io.showTerm $ var "term",
             _Function_primitive>>: lambda "name" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
-              Core.field (Core.name _Function_primitive) $ TTerms.stringLift $ unwrap _Name @@ var "name"],
+              Core.field (Core.nameLift _Function_primitive) $ TTerms.stringLift $ unwrap _Name @@ var "name"],
           _Term_variable>>: lambda "name" $
-            Core.termUnion $ Core.injection (ref functionProxyNameDef) $ Core.field (Core.name _Term_variable) $ TTerms.stringLift $ unwrap _Name @@ var "name"]),
+            Core.termUnion $ Core.injection (ref functionProxyNameDef) $ Core.field (Core.nameLift _Term_variable) $ TTerms.stringLift $ unwrap _Name @@ var "name"]),
       "decode">: lambdas ["ad", "term"] $ lets [
         "readFromString">: lambda "term" $
           withVar "s" (ref Expect.stringDef @@ var "term") $
@@ -213,21 +213,21 @@ functionToUnionDef = termAdaptersDefinition "functionToUnion" $
         "notFound">: lambda "fname" $ Flows.fail $ Strings.cat2 (string "unexpected field: ") (unwrap _Name @@ var "fname"),
         "forCases">: lambda "fterm" $ ref withGraphContextDef @@ (var "readFromString" @@ var "fterm"),
         "forLambda">: lambda "fterm" $ ref withGraphContextDef @@ (var "readFromString" @@ var "fterm"),
-        "forWrapped">: lambda "fterm" $ ref withGraphContextDef @@ (Flows.map (lambda "s" $ TTerms.unwrap $ Core.nameLift $ var "s") (ref Expect.stringDef @@ var "fterm")),
-        "forPrimitive">: lambda "fterm" $ ref withGraphContextDef @@ (Flows.map (lambda "s" $ TTerms.primitiveLift $ Core.nameLift $ var "s") (ref Expect.stringDef @@ var "fterm")),
+        "forWrapped">: lambda "fterm" $ ref withGraphContextDef @@ (Flows.map (lambda "s" $ TTerms.unwrap $ Core.name $ var "s") (ref Expect.stringDef @@ var "fterm")),
+        "forPrimitive">: lambda "fterm" $ ref withGraphContextDef @@ (Flows.map (lambda "s" $ TTerms.primitiveLift $ Core.name $ var "s") (ref Expect.stringDef @@ var "fterm")),
         "forProjection">: lambda "fterm" $ ref withGraphContextDef @@ (var "readFromString" @@ var "fterm"),
-        "forVariable">: lambda "fterm" $ ref withGraphContextDef @@ (Flows.map (lambda "s" $ Core.termVariable $ Core.nameLift $ var "s") (ref Expect.stringDef @@ var "fterm"))] $
+        "forVariable">: lambda "fterm" $ ref withGraphContextDef @@ (Flows.map (lambda "s" $ Core.termVariable $ Core.name $ var "s") (ref Expect.stringDef @@ var "fterm"))] $
         withVar "injTerm" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ var "term") $
         withVar "field" (ref withGraphContextDef @@ (ref Expect.injectionDef @@ (ref functionProxyNameDef) @@ var "injTerm")) $ lets [
             "fname">: Core.fieldName $ var "field",
             "fterm">: Core.fieldTerm $ var "field"] $
             Optionals.fromMaybe (var "notFound" @@ var "fname") $ Maps.lookup (var "fname") $ Maps.fromList $ list [
-              pair (Core.name _Elimination_wrap) (var "forWrapped" @@ var "fterm"),
-              pair (Core.name _Elimination_record) (var "forProjection" @@ var "fterm"),
-              pair (Core.name _Elimination_union) (var "forCases" @@ var "fterm"),
-              pair (Core.name _Function_lambda) (var "forLambda" @@ var "fterm"),
-              pair (Core.name _Function_primitive) (var "forPrimitive" @@ var "fterm"),
-              pair (Core.name _Term_variable) (var "forVariable" @@ var "fterm")]] $
+              pair (Core.nameLift _Elimination_wrap) (var "forWrapped" @@ var "fterm"),
+              pair (Core.nameLift _Elimination_record) (var "forProjection" @@ var "fterm"),
+              pair (Core.nameLift _Elimination_union) (var "forCases" @@ var "fterm"),
+              pair (Core.nameLift _Function_lambda) (var "forLambda" @@ var "fterm"),
+              pair (Core.nameLift _Function_primitive) (var "forPrimitive" @@ var "fterm"),
+              pair (Core.nameLift _Term_variable) (var "forVariable" @@ var "fterm")]] $
     withVar "ut" (var "unionType") $
     withVar "ad" (ref termAdapterDef @@ var "ut") $
     Flows.pure $ Compute.adapter

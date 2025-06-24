@@ -238,10 +238,10 @@ expandLambdasDef = reductionDefinition "expandLambdas" $
         Logic.ifElse (Lists.null $ var "indices")
           (var "t")
           (Core.termFunction $ Core.functionLambda $
-            Core.lambda (Core.name' $ Strings.cat2 (string "v") (Literals.showInt32 $ Lists.head $ var "indices")) nothing $
+            Core.lambda (Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ Lists.head $ var "indices")) nothing $
               var "pad" @@ Lists.tail (var "indices") @@
                 (Core.termApplication $ Core.application (var "t") $ Core.termVariable $
-                  Core.name' $ Strings.cat2 (string "v") (Literals.showInt32 $ Lists.head $ var "indices")))]
+                  Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ Lists.head $ var "indices")))]
       $ var "pad" @@ var "is" @@ var "apps",
     "rewrite">: lambda "args" $ lambda "recurse" $ lambda "t" $ lets [
       "afterRecursion">: lambda "term" $ var "expand" @@ var "args" @@ (ref expansionArityDef @@ var "graph" @@ var "term") @@ var "term"]

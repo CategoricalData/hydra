@@ -206,7 +206,7 @@ caseFieldDef :: TElement (Name -> String -> Term -> Flow Graph Field)
 caseFieldDef = expectDefinition "caseField" $
   doc "Extract a specific case handler from a case statement term" $
   lambdas ["name", "n", "term"] $ lets [
-    "fieldName">: Core.name' $ var "n"]
+    "fieldName">: Core.name $ var "n"]
     $ Flows.bind (ref casesDef @@ var "name" @@ var "term") $
       lambda "cs" $ lets [
         "matching">: Lists.filter
@@ -232,7 +232,7 @@ comparisonDef :: TElement (Term -> Flow Graph Comparison)
 comparisonDef = expectDefinition "comparison" $
   doc "Extract a comparison from a term" $
   lambda "term" $
-    Flows.bind (ref unitVariantDef @@ Core.name _Comparison @@ var "term") $
+    Flows.bind (ref unitVariantDef @@ Core.nameLift _Comparison @@ var "term") $
       lambda "fname" $
         Logic.ifElse (Equality.equalString (Core.unName $ var "fname") (string $ unName _Comparison_equalTo))
           (Flows.pure Graph.comparisonEqualTo)
@@ -390,7 +390,7 @@ letBindingDef :: TElement (String -> Term -> Flow Graph Term)
 letBindingDef = expectDefinition "letBinding" $
   doc "Extract a binding with the given name from a let term" $
   lambdas ["n", "term"] $ lets [
-    "name">: Core.name' $ var "n"]
+    "name">: Core.name $ var "n"]
     $ Flows.bind (ref letTermDef @@ var "term") $
       lambda "letExpr" $ lets [
         "matchingBindings">: Lists.filter
@@ -631,7 +631,7 @@ unionTypeDef = expectDefinition "unionType" $
 unitDef :: TElement (Term -> Flow Graph ())
 unitDef = expectDefinition "unit" $
   doc "Extract a unit value (empty record) from a term" $
-  lambda "term0" $ Flows.bind (ref recordDef @@ Core.name _Unit @@ var "term0") $
+  lambda "term0" $ Flows.bind (ref recordDef @@ Core.nameLift _Unit @@ var "term0") $
     lambda "fields" $
       Logic.ifElse (Lists.null $ var "fields")
         (Flows.pure unit)

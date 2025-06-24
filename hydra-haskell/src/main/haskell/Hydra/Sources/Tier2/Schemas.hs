@@ -320,21 +320,21 @@ schemaGraphToTypingEnvironmentDef = schemasDefinition "schemaGraphToTypingEnviro
           (Flows.pure nothing)
           (lambda "ts" $
             Logic.ifElse
-              (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.name _TypeScheme)))
+              (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _TypeScheme)))
               (Flows.map (unaryFunction just) $ ref CoreDecoding.coreDecodeTypeSchemeDef @@ Graph.elementTerm (var "el"))
               (Logic.ifElse
-                (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.name _Type)))
+                (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _Type)))
                 (Flows.map (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded") $ ref CoreDecoding.coreDecodeTypeDef @@ Graph.elementTerm (var "el"))
                 (cases _Term (ref Strip.fullyStripTermDef @@ (Graph.elementTerm $ var "el")) (Just $ Flows.pure nothing) [
                   _Term_record>>: lambda "r" $
                     Logic.ifElse
-                      (Equality.equal (Core.recordTypeName $ var "r") (Core.name _TypeScheme))
+                      (Equality.equal (Core.recordTypeName $ var "r") (Core.nameLift _TypeScheme))
                       (Flows.map
                         (unaryFunction just)
                         (ref CoreDecoding.coreDecodeTypeSchemeDef @@ Graph.elementTerm (var "el")))
                       (Flows.pure nothing),
                   _Term_union>>: lambda "i" $
-                    Logic.ifElse (Equality.equal (Core.injectionTypeName $ var "i") (Core.name _Type))
+                    Logic.ifElse (Equality.equal (Core.injectionTypeName $ var "i") (Core.nameLift _Type))
                       (Flows.map
                         (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded")
                         (ref CoreDecoding.coreDecodeTypeDef @@ Graph.elementTerm (var "el")))
