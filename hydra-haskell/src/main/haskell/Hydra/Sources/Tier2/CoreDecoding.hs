@@ -55,7 +55,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
-import qualified Hydra.Sources.Tier2.Expect as Expect
+import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Flows as Flows_
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
@@ -82,7 +82,7 @@ coreDecodingDefinition = definitionInModule hydraCoreDecodingModule
 
 hydraCoreDecodingModule :: Module
 hydraCoreDecodingModule = Module (Namespace "hydra.coreDecoding") elements
-    [Errors.hydraErrorsModule, Expect.hydraExpectModule, Flows_.hydraFlowsModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule]
+    [Errors.hydraErrorsModule, ExtractCore.hydraExpectModule, Flows_.hydraFlowsModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule]
     [Tier1.hydraCodersModule, Tier1.hydraMantleModule] $
     Just ("Decoding of encoded types (as terms) back to types according to LambdaGraph's epsilon encoding.")
   where
@@ -192,8 +192,8 @@ coreDecodeMapTypeDef = coreDecodingDefinition "coreDecodeMapType" $
 coreDecodeNameDef :: TElement (Term -> Flow Graph Name)
 coreDecodeNameDef = coreDecodingDefinition "coreDecodeName" $
   lambda "term" $ Flows.map (unaryFunction Core.name) $
-    Flows.bind (ref Expect.wrapDef @@ Core.nameLift _Name @@ var "term") $
-    ref Expect.stringDef
+    Flows.bind (ref ExtractCore.wrapDef @@ Core.nameLift _Name @@ var "term") $
+    ref ExtractCore.stringDef
 
 coreDecodeRowTypeDef :: TElement (Term -> Flow Graph RowType)
 coreDecodeRowTypeDef = coreDecodingDefinition "coreDecodeRowType" $
@@ -205,7 +205,7 @@ coreDecodeRowTypeDef = coreDecodingDefinition "coreDecodeRowType" $
 
 coreDecodeStringDef :: TElement (Term -> Flow Graph String)
 coreDecodeStringDef = coreDecodingDefinition "coreDecodeString" $
-  lambda "term" $ ref Expect.stringDef @@ (ref Strip.fullyStripTermDef @@ var "term")
+  lambda "term" $ ref ExtractCore.stringDef @@ (ref Strip.fullyStripTermDef @@ var "term")
 
 coreDecodeTypeDef :: TElement (Term -> Flow Graph Type)
 coreDecodeTypeDef = coreDecodingDefinition "coreDecodeType" $
@@ -234,7 +234,7 @@ coreDecodeTypeDef = coreDecodingDefinition "coreDecodeType" $
         (lambda "et" $ Flows.map (unaryFunction Core.typeOptional) $ ref coreDecodeTypeDef @@ var "et"),
       pair
         (Core.nameLift _Type_product)
-        (lambda "types" $ Flows.map (unaryFunction Core.typeProduct) $ ref Expect.listDef @@ ref coreDecodeTypeDef @@ var "types"),
+        (lambda "types" $ Flows.map (unaryFunction Core.typeProduct) $ ref ExtractCore.listDef @@ ref coreDecodeTypeDef @@ var "types"),
       pair
         (Core.nameLift _Type_record)
         (lambda "rt" $ Flows.map (unaryFunction Core.typeRecord) $ ref coreDecodeRowTypeDef @@ var "rt"),
@@ -243,7 +243,7 @@ coreDecodeTypeDef = coreDecodingDefinition "coreDecodeType" $
         (lambda "et" $ Flows.map (unaryFunction Core.typeSet) $ ref coreDecodeTypeDef @@ var "et"),
       pair
         (Core.nameLift _Type_sum)
-        (lambda "types" $ Flows.map (unaryFunction Core.typeSum) $ ref Expect.listDef @@ ref coreDecodeTypeDef @@ var "types"),
+        (lambda "types" $ Flows.map (unaryFunction Core.typeSum) $ ref ExtractCore.listDef @@ ref coreDecodeTypeDef @@ var "types"),
       pair
         (Core.nameLift _Type_union)
         (lambda "rt" $ Flows.map (unaryFunction Core.typeUnion) $ ref coreDecodeRowTypeDef @@ var "rt"),
@@ -264,17 +264,17 @@ coreDecodeTypeSchemeDef :: TElement (Term -> Flow Graph TypeScheme)
 coreDecodeTypeSchemeDef = coreDecodingDefinition "coreDecodeTypeScheme" $
   ref matchRecordDef @@ (lambda "m" $
     ref Flows_.map2Def
-      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _TypeScheme_variables @@ (ref Expect.listDef @@ ref coreDecodeNameDef))
+      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _TypeScheme_variables @@ (ref ExtractCore.listDef @@ ref coreDecodeNameDef))
       @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _TypeScheme_type @@ ref coreDecodeTypeDef)
       @@ (lambdas ["vars", "body"] $ Core.typeScheme (var "vars") (var "body")))
 
 coreDecodeWrappedTypeDef :: TElement (Term -> Flow Graph WrappedType)
 coreDecodeWrappedTypeDef = coreDecodingDefinition "coreDecodeWrappedType" $
   lambda "term" $
-    Flows.bind (ref Expect.recordDef @@ Core.nameLift _WrappedType @@ var "term") $
+    Flows.bind (ref ExtractCore.recordDef @@ Core.nameLift _WrappedType @@ var "term") $
       lambda "fields" $ ref Flows_.map2Def
-        @@ (ref Expect.fieldDef @@ Core.nameLift _WrappedType_typeName @@ ref coreDecodeNameDef @@ var "fields")
-        @@ (ref Expect.fieldDef @@ Core.nameLift _WrappedType_object @@ ref coreDecodeTypeDef @@ var "fields")
+        @@ (ref ExtractCore.fieldDef @@ Core.nameLift _WrappedType_typeName @@ ref coreDecodeNameDef @@ var "fields")
+        @@ (ref ExtractCore.fieldDef @@ Core.nameLift _WrappedType_object @@ ref coreDecodeTypeDef @@ var "fields")
         @@ (lambdas ["name", "obj"] $ Core.wrappedType (var "name") (var "obj"))
 
 getFieldDef :: TElement (M.Map Name Term -> Name -> (Term -> Flow Graph b) -> Flow Graph b)

@@ -5,7 +5,7 @@ module Hydra.CoreDecoding where
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Expect as Expect
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Flows as Flows
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
@@ -82,7 +82,7 @@ coreDecodeMapType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "keys"
   Core.mapTypeValues = values})))
 
 coreDecodeName :: (Core.Term -> Compute.Flow Graph.Graph Core.Name)
-coreDecodeName term = (Flows_.map (\x -> Core.Name x) (Flows_.bind (Expect.wrap (Core.Name "hydra.core.Name") term) Expect.string))
+coreDecodeName term = (Flows_.map (\x -> Core.Name x) (Flows_.bind (ExtractCore.wrap (Core.Name "hydra.core.Name") term) ExtractCore.string))
 
 coreDecodeRowType :: (Core.Term -> Compute.Flow Graph.Graph Core.RowType)
 coreDecodeRowType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "typeName") coreDecodeName) (getField m (Core.Name "fields") coreDecodeFieldTypes) (\typeName -> \fields -> Core.RowType {
@@ -90,7 +90,7 @@ coreDecodeRowType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "typeN
   Core.rowTypeFields = fields})))
 
 coreDecodeString :: (Core.Term -> Compute.Flow Graph.Graph String)
-coreDecodeString term = (Expect.string (Strip.fullyStripTerm term))
+coreDecodeString term = (ExtractCore.string (Strip.fullyStripTerm term))
 
 coreDecodeType :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)
 coreDecodeType dat = ((\x -> case x of
@@ -106,21 +106,21 @@ coreDecodeType dat = ((\x -> case x of
     (Core.Name "literal", (\lt -> Flows_.map (\x -> Core.TypeLiteral x) (coreDecodeLiteralType lt))),
     (Core.Name "map", (\mt -> Flows_.map (\x -> Core.TypeMap x) (coreDecodeMapType mt))),
     (Core.Name "optional", (\et -> Flows_.map (\x -> Core.TypeOptional x) (coreDecodeType et))),
-    (Core.Name "product", (\types -> Flows_.map (\x -> Core.TypeProduct x) (Expect.list coreDecodeType types))),
+    (Core.Name "product", (\types -> Flows_.map (\x -> Core.TypeProduct x) (ExtractCore.list coreDecodeType types))),
     (Core.Name "record", (\rt -> Flows_.map (\x -> Core.TypeRecord x) (coreDecodeRowType rt))),
     (Core.Name "set", (\et -> Flows_.map (\x -> Core.TypeSet x) (coreDecodeType et))),
-    (Core.Name "sum", (\types -> Flows_.map (\x -> Core.TypeSum x) (Expect.list coreDecodeType types))),
+    (Core.Name "sum", (\types -> Flows_.map (\x -> Core.TypeSum x) (ExtractCore.list coreDecodeType types))),
     (Core.Name "union", (\rt -> Flows_.map (\x -> Core.TypeUnion x) (coreDecodeRowType rt))),
     (Core.Name "variable", (\n -> Flows_.map (\x -> Core.TypeVariable x) (coreDecodeName n))),
     (Core.Name "wrap", (\wt -> Flows_.map (\x -> Core.TypeWrap x) (coreDecodeWrappedType wt)))] dat)) dat)
 
 coreDecodeTypeScheme :: (Core.Term -> Compute.Flow Graph.Graph Core.TypeScheme)
-coreDecodeTypeScheme = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "variables") (Expect.list coreDecodeName)) (getField m (Core.Name "type") coreDecodeType) (\vars -> \body -> Core.TypeScheme {
+coreDecodeTypeScheme = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "variables") (ExtractCore.list coreDecodeName)) (getField m (Core.Name "type") coreDecodeType) (\vars -> \body -> Core.TypeScheme {
   Core.typeSchemeVariables = vars,
   Core.typeSchemeType = body})))
 
 coreDecodeWrappedType :: (Core.Term -> Compute.Flow Graph.Graph Core.WrappedType)
-coreDecodeWrappedType term = (Flows_.bind (Expect.record (Core.Name "hydra.core.WrappedType") term) (\fields -> Flows.map2 (Expect.field (Core.Name "typeName") coreDecodeName fields) (Expect.field (Core.Name "object") coreDecodeType fields) (\name -> \obj -> Core.WrappedType {
+coreDecodeWrappedType term = (Flows_.bind (ExtractCore.record (Core.Name "hydra.core.WrappedType") term) (\fields -> Flows.map2 (ExtractCore.field (Core.Name "typeName") coreDecodeName fields) (ExtractCore.field (Core.Name "object") coreDecodeType fields) (\name -> \obj -> Core.WrappedType {
   Core.wrappedTypeTypeName = name,
   Core.wrappedTypeObject = obj})))
 

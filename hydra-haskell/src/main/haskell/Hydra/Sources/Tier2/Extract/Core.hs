@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier2.Expect where
+module Hydra.Sources.Tier2.Extract.Core where
 
 -- Standard Tier-2 imports
 import Hydra.Kernel
@@ -55,7 +55,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
---import qualified Hydra.Sources.Tier2.Expect as Expect
+--import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Flows as Flows_
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
@@ -81,7 +81,7 @@ expectDefinition :: String -> TTerm a -> TElement a
 expectDefinition = definitionInModule hydraExpectModule
 
 hydraExpectModule :: Module
-hydraExpectModule = Module (Namespace "hydra.expect") elements
+hydraExpectModule = Module (Namespace "hydra.extract.core") elements
     [Errors.hydraErrorsModule, Flows_.hydraFlowsModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule]
     [Tier1.hydraCodersModule, Tier1.hydraMantleModule] $
     Just ("A DSL for decoding and validating Hydra terms at runtime. This module provides functions to extract typed values from Hydra terms with appropriate error handling.")
@@ -97,7 +97,7 @@ hydraExpectModule = Module (Namespace "hydra.expect") elements
      el booleanLiteralDef,
      el caseFieldDef,
      el casesDef,
-     el comparisonDef,
+     el comparisonDef, -- TODO: move out of hydra.extract.core
      el fieldDef,
      el float32Def,
      el float32ValueDef,

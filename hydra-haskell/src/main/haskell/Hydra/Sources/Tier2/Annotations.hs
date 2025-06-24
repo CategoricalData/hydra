@@ -55,7 +55,7 @@ import qualified Data.Maybe                as Y
 import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
-import qualified Hydra.Sources.Tier2.Expect as Expect
+import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Flows as Flows_
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
@@ -80,7 +80,7 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 hydraAnnotationsModule :: Module
 hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
     [Decode.hydraDecodeModule, CoreDecoding.hydraCoreDecodingModule, CoreEncoding.coreEncodingModule,
-      Expect.hydraExpectModule, Variants.hydraVariantsModule, Lexical.hydraLexicalModule, Flows_.hydraFlowsModule]
+      ExtractCore.hydraExpectModule, Variants.hydraVariantsModule, Lexical.hydraLexicalModule, Flows_.hydraFlowsModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just "Utilities for reading and writing type and term annotations"
   where
@@ -186,7 +186,7 @@ getCountDef = annotationsDefinition "getCount" $
   lambda "key" $ ref withEmptyGraphDef @@
     (Flows.bind
       (ref getAttrWithDefaultDef @@ var "key" @@ (Core.int32 0))
-      (ref Expect.int32Def))
+      (ref ExtractCore.int32Def))
 
 getDebugIdDef :: TElement (Flow s (Maybe String))
 getDebugIdDef = annotationsDefinition "getDebugId" $
@@ -194,14 +194,14 @@ getDebugIdDef = annotationsDefinition "getDebugId" $
   ref withEmptyGraphDef @@
     (Flows.bind
       (ref getAttrDef @@ ref Constants.key_debugIdDef)
-      (lambda "desc" $ Flows.traverseOptional (ref Expect.stringDef) (var "desc")))
+      (lambda "desc" $ Flows.traverseOptional (ref ExtractCore.stringDef) (var "desc")))
 
 getDescriptionDef :: TElement (M.Map Name Term -> Flow Graph (Maybe String))
 getDescriptionDef = annotationsDefinition "getDescription" $
   doc "Get description from annotations map" $
   lambda "anns" $
     Optionals.maybe (Flows.pure nothing)
-      (lambda "term" $ Flows.map (unaryFunction just) $ ref Expect.stringDef @@ var "term")
+      (lambda "term" $ Flows.map (unaryFunction just) $ ref ExtractCore.stringDef @@ var "term")
       (Maps.lookup (Core.nameLift key_description) (var "anns"))
 
 getTermAnnotationDef :: TElement (Name -> Term -> Maybe Term)
@@ -237,16 +237,16 @@ getTypeClassesDef = annotationsDefinition "getTypeClasses" $
       "byName">: Maps.fromList $ list [
         pair (Core.nameLift _TypeClass_equality) Graph.typeClassEquality,
         pair (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]]
-      $ withVar "fn" (ref Expect.unitVariantDef @@ Core.nameLift _TypeClass @@ var "term") $
+      $ withVar "fn" (ref ExtractCore.unitVariantDef @@ Core.nameLift _TypeClass @@ var "term") $
           Optionals.maybe
             (ref Errors.unexpectedDef @@ string "type class" @@ (Io.showTerm $ var "term"))
             (unaryFunction Flows.pure)
             (Maps.lookup (var "fn") (var "byName"))]
     $ Optionals.maybe
         (Flows.pure Maps.empty)
-        (lambda "term" $ ref Expect.mapDef
+        (lambda "term" $ ref ExtractCore.mapDef
           @@ (ref CoreDecoding.coreDecodeNameDef)
-          @@ (ref Expect.setDef @@ var "decodeClass")
+          @@ (ref ExtractCore.setDef @@ var "decodeClass")
           @@ (var "term"))
         (ref getTermAnnotationDef @@ ref Constants.key_classesDef @@ var "term")
 
@@ -280,7 +280,7 @@ hasFlagDef :: TElement (Name -> Flow s Bool)
 hasFlagDef = annotationsDefinition "hasFlag" $
   doc "Check if flag is set" $
   lambda "flag" $ ref withEmptyGraphDef @@
-    (withVar "term" (ref getAttrWithDefaultDef @@ var "flag" @@ Core.false) $ ref Expect.booleanDef @@ var "term")
+    (withVar "term" (ref getAttrWithDefaultDef @@ var "flag" @@ Core.false) $ ref ExtractCore.booleanDef @@ var "term")
 
 hasTypeDescriptionDef :: TElement (Type -> Bool)
 hasTypeDescriptionDef = annotationsDefinition "hasTypeDescription" $

@@ -55,7 +55,7 @@ import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 --import qualified Hydra.Sources.Tier2.Errors as Errors
-import qualified Hydra.Sources.Tier2.Expect as Expect
+import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 --import qualified Hydra.Sources.Tier2.Flows as Flows_
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
@@ -82,7 +82,7 @@ reductionDefinition = definitionInModule hydraReductionModule
 
 hydraReductionModule :: Module
 hydraReductionModule = Module (Namespace "hydra.reduction") elements
-    [Arity.hydraArityModule, Expect.hydraExpectModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule,
+    [Arity.hydraArityModule, ExtractCore.hydraExpectModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule,
       Schemas.hydraSchemasModule]
     [Tier1.hydraGraphModule, Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraMantleModule,
       Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
@@ -418,7 +418,7 @@ reduceTermDef = reductionDefinition "reduceTerm" $
     "applyElimination">: lambdas ["elm", "reducedArg"] $
       match _Elimination Nothing [
         _Elimination_record>>: lambda "proj" $
-          Flows.bind (ref Expect.recordDef @@ (Core.projectionTypeName $ var "proj") @@ (ref Strip.stripTermDef @@ var "reducedArg")) $
+          Flows.bind (ref ExtractCore.recordDef @@ (Core.projectionTypeName $ var "proj") @@ (ref Strip.stripTermDef @@ var "reducedArg")) $
             lambda "fields" $ lets [
               "matchingFields">: Lists.filter
                 (lambda "f" $ Equality.equal (Core.fieldName $ var "f") (Core.projectionField $ var "proj"))
@@ -433,7 +433,7 @@ reduceTermDef = reductionDefinition "reduceTerm" $
                   string " record"])
                 (Flows.pure $ Core.fieldTerm $ Lists.head $ var "matchingFields"),
         _Elimination_union>>: lambda "cs" $
-          Flows.bind (ref Expect.injectionDef @@ (Core.caseStatementTypeName $ var "cs") @@ var "reducedArg") $
+          Flows.bind (ref ExtractCore.injectionDef @@ (Core.caseStatementTypeName $ var "cs") @@ var "reducedArg") $
             lambda "field" $ lets [
               "matchingFields">: Lists.filter
                 (lambda "f" $ Equality.equal (Core.fieldName $ var "f") (Core.fieldName $ var "field"))
@@ -451,7 +451,7 @@ reduceTermDef = reductionDefinition "reduceTerm" $
                 (Flows.pure $ Core.termApplication $ Core.application
                   (Core.fieldTerm $ Lists.head $ var "matchingFields")
                   (Core.fieldTerm $ var "field")),
-        _Elimination_wrap>>: lambda "name" $ ref Expect.wrapDef @@ var "name" @@ var "reducedArg"] @@ var "elm",
+        _Elimination_wrap>>: lambda "name" $ ref ExtractCore.wrapDef @@ var "name" @@ var "reducedArg"] @@ var "elm",
 
     "applyIfNullary">: lambdas ["eager", "original", "args"] $ lets [
       "stripped">: ref Strip.stripTermDef @@ var "original"]

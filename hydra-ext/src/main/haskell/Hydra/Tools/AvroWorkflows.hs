@@ -36,7 +36,7 @@ import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Pg.Mapping as PGM
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
-import qualified Hydra.Expect as Expect
+import qualified Hydra.Extract.Core as ExtractCore
 import Hydra.Ext.Rdf.Serde
 import Hydra.Sources.Tier0.Core
 import Hydra.Ext.Pg.Graphson.Coder
@@ -102,7 +102,7 @@ executeAvroTransformWorkflow lastMile (TransformWorkflow name schemaSpec srcDir 
     transformAvroJsonDirectory lastMile schemaPath srcDir destDir
 
 expString :: Term -> Flow s String
-expString term = withEmptyGraph $ Expect.string term
+expString term = withEmptyGraph $ ExtractCore.string term
 
 -- Replace all lists with sets, for better query performance.
 -- This is a last-mile step which breaks type/term conformance
