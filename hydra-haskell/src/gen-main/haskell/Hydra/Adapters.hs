@@ -20,7 +20,7 @@ import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
-import qualified Hydra.Printing as Printing
+import qualified Hydra.Describe.Core as DescribeCore
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Strip as Strip
 import qualified Hydra.TermAdapters as TermAdapters
@@ -60,7 +60,7 @@ adaptedModuleDefinitions lang mod_ =
     in (Flows_.bind (adaptersFor types) (\adapters -> Flows_.mapList (classify adapters) (Lists.zip els tterms)))))
 
 constructCoder :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> Core.Type -> Compute.Flow Graph.Graph (Compute.Coder t0 t2 Core.Term t1))
-constructCoder lang encodeTerm typ = (Flows.withTrace (Strings.cat2 "coder for " (Printing.describeType typ)) (Flows_.bind (languageAdapter lang typ) (\adapter -> Flows_.pure (AdapterUtils.composeCoders (Compute.adapterCoder adapter) (AdapterUtils.unidirectionalCoder encodeTerm)))))
+constructCoder lang encodeTerm typ = (Flows.withTrace (Strings.cat2 "coder for " (DescribeCore.describeType typ)) (Flows_.bind (languageAdapter lang typ) (\adapter -> Flows_.pure (AdapterUtils.composeCoders (Compute.adapterCoder adapter) (AdapterUtils.unidirectionalCoder encodeTerm)))))
 
 languageAdapter :: (Coders.Language -> Core.Type -> Compute.Flow Graph.Graph (Compute.Adapter t0 t1 Core.Type Core.Type Core.Term Core.Term))
 languageAdapter lang typ = (Flows_.bind Errors.getState (\g ->  
