@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Types                  as Types
 import qualified Hydra.Dsl.Typing                 as Typing
 import qualified Hydra.Sources.Tier1.All          as Tier1
 import qualified Hydra.Sources.Tier1.Constants    as Constants
-import qualified Hydra.Sources.Tier1.CoreEncoding as CoreEncoding
+import qualified Hydra.Sources.Tier1.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Tier1.Decode       as Decode
 import qualified Hydra.Sources.Tier1.Formatting   as Formatting
 import qualified Hydra.Sources.Tier1.Functions    as Functions
@@ -79,7 +79,7 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 
 hydraAnnotationsModule :: Module
 hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
-    [Decode.hydraDecodeModule, DecodeCore.hydraCoreDecodingModule, CoreEncoding.coreEncodingModule,
+    [Decode.hydraDecodeModule, DecodeCore.hydraCoreDecodingModule, EncodeCore.coreEncodingModule,
       ExtractCore.hydraExpectModule, Variants.hydraVariantsModule, Lexical.hydraLexicalModule, Flows_.hydraFlowsModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just "Utilities for reading and writing type and term annotations"
@@ -403,7 +403,7 @@ setTermTypeDef = annotationsDefinition "setTermType" $
 setTypeDef :: TElement (Maybe Type -> M.Map Name Term -> M.Map Name Term)
 setTypeDef = annotationsDefinition "setType" $
   doc "Set type in annotations" $
-  lambda "mt" $ ref setAnnotationDef @@ ref Constants.key_typeDef @@ Optionals.map (ref CoreEncoding.coreEncodeTypeDef) (var "mt")
+  lambda "mt" $ ref setAnnotationDef @@ ref Constants.key_typeDef @@ Optionals.map (ref EncodeCore.coreEncodeTypeDef) (var "mt")
 
 setTypeAnnotationDef :: TElement (Name -> Maybe Term -> Type -> Type)
 setTypeAnnotationDef = annotationsDefinition "setTypeAnnotation" $
@@ -426,7 +426,7 @@ setTypeClassesDef = annotationsDefinition "setTypeClasses" $
     "encodePair">: lambda "nameClasses" $ lets [
       "name">: first $ var "nameClasses",
       "classes">: second $ var "nameClasses"]
-      $ pair (ref CoreEncoding.coreEncodeNameDef @@ var "name")
+      $ pair (ref EncodeCore.coreEncodeNameDef @@ var "name")
               (Core.termSet $ Sets.fromList $ Lists.map (var "encodeClass") $ Sets.toList $ var "classes"),
     "encoded">: Logic.ifElse (Maps.null $ var "m")
         nothing
@@ -465,7 +465,7 @@ typeElementDef = annotationsDefinition "typeElement" $
   lambda "name" $ lambda "typ" $ lets [
     "schemaTerm">: Core.termVariable (Core.nameLift _Type),
     "dataTerm">: ref normalizeTermAnnotationsDef @@ (Core.termAnnotated $ Core.annotatedTerm
-      (ref CoreEncoding.coreEncodeTypeDef @@ var "typ")
+      (ref EncodeCore.coreEncodeTypeDef @@ var "typ")
       (Maps.fromList $ list [pair (ref Constants.key_typeDef) (var "schemaTerm")]))]
     $ Graph.element (var "name") (var "dataTerm") (just $ Core.typeScheme (list []) (var "typ"))
 
