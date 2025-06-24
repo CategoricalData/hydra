@@ -4,6 +4,7 @@ import Hydra.Kernel
 import Hydra.Adapters
 import Hydra.Ext.Haskell.Language
 import Hydra.Ext.Haskell.Utils
+import qualified Hydra.Decode.Core as DecodeCore
 import Hydra.Dsl.Terms
 import Hydra.Ext.Haskell.Serde
 import Hydra.Ext.Haskell.Settings
@@ -349,7 +350,7 @@ toTypeDeclarations namespaces el term = withTrace ("type element " ++ unName (el
     g <- getState
     let lname = localNameOf $ elementName el
     let hname = simpleName lname
-    t <- coreDecodeType term
+    t <- DecodeCore.type_ term
 
     isSer <- isSerializable el
     let deriv = H.Deriving $ if isSer

@@ -7,6 +7,7 @@ import Hydra.Dsl.Terms
 import Hydra.Ext.Cpp.Language
 import Hydra.Ext.Cpp.Names
 import Hydra.Ext.Cpp.Utils
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Ext.Cpp.Serde as CppSer
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
 import Hydra.Kernel
@@ -266,7 +267,7 @@ encodeType env typ = case stripType typ of
     TypeRecord rt -> typeref typ (rowTypeTypeName rt)
     TypeSet et -> toConstType <$> (createTemplateType "std::set" <$> ((:[]) <$> encode et))
     TypeUnion rt -> typeref typ (rowTypeTypeName rt)
-    TypeVariable name -> (elementTerm <$> requireElement name) >>= coreDecodeType >>= \t -> typeref t name
+    TypeVariable name -> (elementTerm <$> requireElement name) >>= DecodeCore.type_ >>= \t -> typeref t name
     TypeWrap (WrappedType name _) -> typeref typ name
     _ -> fail $ "Unsupported type: " ++ show (stripType typ)
   where

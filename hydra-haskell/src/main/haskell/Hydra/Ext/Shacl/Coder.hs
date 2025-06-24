@@ -4,6 +4,7 @@ import Hydra.Kernel
 import Hydra.Ext.Rdf.Utils
 import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Org.W3.Shacl.Model as Shacl
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Dsl.Literals as Literals
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Dsl.Terms as Terms
@@ -27,7 +28,7 @@ shaclCoder mod = do
     return (sg, termFlow)
   where
     toShape el = do
-      typ <- coreDecodeType $ elementTerm el
+      typ <- DecodeCore.type_ $ elementTerm el
       common <- encodeType typ
       return $ Shacl.Definition (elementIri el) $ Shacl.ShapeNode $ Shacl.NodeShape common
 

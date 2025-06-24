@@ -220,7 +220,7 @@ getTypeDef = annotationsDefinition "getType" $
   doc "Get type from annotations" $
   lambda "anns" $
     Optionals.maybe (Flows.pure nothing)
-      (lambda "dat" $ Flows.map (unaryFunction just) (ref DecodeCore.coreDecodeTypeDef @@ var "dat"))
+      (lambda "dat" $ Flows.map (unaryFunction just) (ref DecodeCore.type_Def @@ var "dat"))
       (Maps.lookup (ref Constants.key_typeDef) (var "anns"))
 
 getTypeAnnotationDef :: TElement (Name -> Type -> Maybe Term)
@@ -245,7 +245,7 @@ getTypeClassesDef = annotationsDefinition "getTypeClasses" $
     $ Optionals.maybe
         (Flows.pure Maps.empty)
         (lambda "term" $ ref ExtractCore.mapDef
-          @@ (ref DecodeCore.coreDecodeNameDef)
+          @@ (ref DecodeCore.nameDef)
           @@ (ref ExtractCore.setDef @@ var "decodeClass")
           @@ (var "term"))
         (ref getTermAnnotationDef @@ ref Constants.key_classesDef @@ var "term")

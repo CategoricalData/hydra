@@ -1,28 +1,33 @@
 -- | A proxy for the Hydra kernel, i.e. the code which must be present in every Hydra implementation, and can be imported as a unit.
+{-
+Note: the following modules are part of the kernel, but they are not default imports because of name collisions:
+- Hydra.Ast
+- Hydra.Decode.Core
+- Hydra.Describe.Core
+- Hydra.Encode.Core
+- Hydra.Extract.Core
+- Hydra.Grammar
+- Hydra.GrammarToModule
+- Hydra.Topology
+-}
 
--- Note: Hydra.Ast, Hydra.Grammar, Hydra.GrammarToModule, and Hydra.Topology are part of the kernel,
---       but they are not default imports because the names of their types clash with those of other types.
 module Hydra.Kernel (
   module Hydra.Accessors,
   module Hydra.AdapterUtils,
   module Hydra.Adapters,
   module Hydra.Annotations,
   module Hydra.Arity,
---  module Hydra.Ast,
   module Hydra.Coders,
   module Hydra.Compute,
   module Hydra.Constants,
   module Hydra.Constraints,
   module Hydra.Core,
-  module Hydra.Decode.Core,
   module Hydra.Encode.Core,
   module Hydra.CoreLanguage,
   module Hydra.Errors,
   module Hydra.Flows,
   module Hydra.Formatting,
   module Hydra.Graph,
---  module Hydra.Grammar,
---  module Hydra.GrammarToModule,
   module Hydra.Staging.Inference,
   module Hydra.Lexical,
   module Hydra.LiteralAdapters,
@@ -44,7 +49,6 @@ module Hydra.Kernel (
   module Hydra.Substitution,
   module Hydra.Templating,
   module Hydra.TermAdapters,
---  module Hydra.Topology,
   module Hydra.Typing,
   module Hydra.Unification,
   module Hydra.Variants,
@@ -56,21 +60,17 @@ import Hydra.AdapterUtils
 import Hydra.Adapters
 import Hydra.Annotations
 import Hydra.Arity
---import Hydra.Ast
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Constants
 import Hydra.Constraints
 import Hydra.Core
-import Hydra.Decode.Core
 import Hydra.Encode.Core
 import Hydra.CoreLanguage
 import Hydra.Errors
 import Hydra.Flows
 import Hydra.Formatting
 import Hydra.Graph
---import Hydra.Grammar
---import Hydra.GrammarToModule
 import Hydra.Staging.Inference
 import Hydra.Lexical
 import Hydra.LiteralAdapters
@@ -92,7 +92,6 @@ import Hydra.Strip
 import Hydra.Substitution
 import Hydra.Templating
 import Hydra.TermAdapters
---import Hydra.Topology
 import Hydra.Typing
 import Hydra.Unification
 import Hydra.Variants
