@@ -55,7 +55,7 @@ import qualified Data.Maybe                as Y
 import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 --import qualified Hydra.Sources.Tier2.Errors as Errors
---import qualified Hydra.Sources.Tier2.Expect as Expect
+--import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 --import qualified Hydra.Sources.Tier2.Flows as Flows_
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference

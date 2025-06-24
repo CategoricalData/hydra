@@ -8,7 +8,7 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
-import qualified Hydra.Expect as Expect
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Lib.Io
@@ -26,31 +26,31 @@ instance IsString (TermCoder Term) where fromString = variable
 bigfloat :: TermCoder Double
 bigfloat = TermCoder Types.bigfloat $ Coder encode decode
   where
-    encode = Expect.bigfloat
+    encode = ExtractCore.bigfloat
     decode = pure . Terms.bigfloat
 
 bigint :: TermCoder Integer
 bigint = TermCoder Types.bigint $ Coder encode decode
   where
-    encode = Expect.bigint
+    encode = ExtractCore.bigint
     decode = pure . Terms.bigint
 
 binary :: TermCoder String
 binary = TermCoder Types.binary $ Coder encode decode
   where
-    encode = Expect.binary
+    encode = ExtractCore.binary
     decode = pure . Terms.binary
 
 boolean :: TermCoder Bool
 boolean = TermCoder Types.boolean $ Coder encode decode
   where
-    encode = Expect.boolean
+    encode = ExtractCore.boolean
     decode = pure . Terms.boolean
 
 comparison :: TermCoder Comparison
 comparison = TermCoder (TypeVariable _Comparison) $ Coder encode decode
   where
-    encode = Expect.comparison
+    encode = ExtractCore.comparison
     decode = pure . Terms.comparison
 
 floatType :: TermCoder FloatType
@@ -62,19 +62,19 @@ floatType = TermCoder (TypeVariable _FloatType) $ Coder encode decode
 floatValue :: TermCoder FloatValue
 floatValue = TermCoder (TypeVariable _FloatValue) $ Coder encode decode
   where
-    encode = Expect.floatValue
+    encode = ExtractCore.floatValue
     decode = pure . Terms.float
 
 float32 :: TermCoder Float
 float32 = TermCoder Types.float32 $ Coder encode decode
   where
-    encode = Expect.float32
+    encode = ExtractCore.float32
     decode = pure . Terms.float32
 
 float64 :: TermCoder Double
 float64 = TermCoder Types.float64 $ Coder encode decode
   where
-    encode = Expect.float64
+    encode = ExtractCore.float64
     decode = pure . Terms.float64
 
 flow :: TermCoder s -> TermCoder x -> TermCoder (Flow s x)
@@ -99,43 +99,43 @@ integerType = TermCoder (TypeVariable _IntegerType) $ Coder encode decode
 integerValue :: TermCoder IntegerValue
 integerValue = TermCoder (TypeVariable _IntegerValue) $ Coder encode decode
   where
-    encode = Expect.integerValue
+    encode = ExtractCore.integerValue
     decode = pure . Terms.integer
 
 int8 :: TermCoder Int8
 int8 = TermCoder Types.int8 $ Coder encode decode
   where
-    encode = Expect.int8
+    encode = ExtractCore.int8
     decode = pure . Terms.int8
 
 int16 :: TermCoder Int16
 int16 = TermCoder Types.int16 $ Coder encode decode
   where
-    encode = Expect.int16
+    encode = ExtractCore.int16
     decode = pure . Terms.int16
 
 int32 :: TermCoder Int
 int32 = TermCoder Types.int32 $ Coder encode decode
   where
-    encode = Expect.int32
+    encode = ExtractCore.int32
     decode = pure . Terms.int32
 
 int64 :: TermCoder Int64
 int64 = TermCoder Types.int64 $ Coder encode decode
   where
-    encode = Expect.int64
+    encode = ExtractCore.int64
     decode = pure . Terms.int64
 
 list :: TermCoder x -> TermCoder [x]
 list els = TermCoder (Types.list $ termCoderType els) $ Coder encode decode
   where
-    encode = Expect.list (coderEncode $ termCoderCoder els)
+    encode = ExtractCore.list (coderEncode $ termCoderCoder els)
     decode l = Terms.list <$> mapM (coderDecode $ termCoderCoder els) l
 
 literal :: TermCoder Literal
 literal = TermCoder (TypeVariable _Literal) $ Coder encode decode
   where
-    encode = Expect.literal
+    encode = ExtractCore.literal
     decode = pure . Terms.literal
 
 literalType :: TermCoder LiteralType
@@ -147,7 +147,7 @@ literalType = TermCoder (TypeVariable _LiteralType) $ Coder encode decode
 map :: Ord k => TermCoder k -> TermCoder v -> TermCoder (M.Map k v)
 map keys values = TermCoder (Types.map (termCoderType keys) (termCoderType values)) $ Coder encode decode
   where
-    encode = Expect.map_ (coderEncode $ termCoderCoder keys) (coderEncode $ termCoderCoder values)
+    encode = ExtractCore.map_ (coderEncode $ termCoderCoder keys) (coderEncode $ termCoderCoder values)
     decode m = Terms.map . M.fromList <$> mapM decodePair (M.toList m)
       where
         decodePair (k, v) = do
@@ -161,7 +161,7 @@ noInterpretedForm name = fail $ "primitive " ++ unName name ++ " does not have a
 optional :: TermCoder x -> TermCoder (Y.Maybe x)
 optional mel = TermCoder (Types.optional $ termCoderType mel) $ Coder encode decode
   where
-    encode = Expect.optional (coderEncode $ termCoderCoder mel)
+    encode = ExtractCore.optional (coderEncode $ termCoderCoder mel)
     decode mv = Terms.optional <$> case mv of
       Nothing -> pure Nothing
       Just v -> Just <$> (coderDecode $ termCoderCoder mel) v
@@ -169,7 +169,7 @@ optional mel = TermCoder (Types.optional $ termCoderType mel) $ Coder encode dec
 pair :: TermCoder k -> TermCoder v -> TermCoder (k, v)
 pair kCoder vCoder = TermCoder (Types.product [termCoderType kCoder, termCoderType vCoder]) $ Coder encode decode
   where
-    encode = Expect.pair (coderEncode $ termCoderCoder kCoder) (coderEncode $ termCoderCoder vCoder)
+    encode = ExtractCore.pair (coderEncode $ termCoderCoder kCoder) (coderEncode $ termCoderCoder vCoder)
     decode (k, v) = do
       kTerm <- coderDecode (termCoderCoder kCoder) k
       vTerm <- coderDecode (termCoderCoder vCoder) v
@@ -188,7 +188,7 @@ prim1 name compute vars input1 output = Primitive name typ impl
       termCoderType input1,
       termCoderType output]
     impl args = do
-      Expect.nArgs name 1 args
+      ExtractCore.nArgs name 1 args
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
       coderDecode (termCoderCoder output) $ compute arg1
 
@@ -200,7 +200,7 @@ prim2 name compute vars input1 input2 output = Primitive name typ impl
       termCoderType input2,
       termCoderType output]
     impl args = do
-      Expect.nArgs name 2 args
+      ExtractCore.nArgs name 2 args
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
       arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
       coderDecode (termCoderCoder output) $ compute arg1 arg2
@@ -214,7 +214,7 @@ prim2Interp name mcompute vars input1 input2 output = Primitive name typ impl
       termCoderType input2,
       termCoderType output]
     impl args = do
-      Expect.nArgs name 2 args
+      ExtractCore.nArgs name 2 args
       compute (args !! 0) (args !! 1)
 
 prim3 :: Name -> (w -> x -> y -> z) -> [String] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
@@ -226,7 +226,7 @@ prim3 name compute vars input1 input2 input3 output = Primitive name typ impl
       termCoderType input3,
       termCoderType output]
     impl args = do
-      Expect.nArgs name 3 args
+      ExtractCore.nArgs name 3 args
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
       arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
       arg3 <- coderEncode (termCoderCoder input3) (args !! 2)
@@ -242,19 +242,19 @@ prim3Interp name mcompute vars input1 input2 input3 output = Primitive name typ 
       termCoderType input3,
       termCoderType output]
     impl args = do
-      Expect.nArgs name 3 args
+      ExtractCore.nArgs name 3 args
       compute (args !! 0) (args !! 1) (args !! 2)
 
 set :: Ord x => TermCoder x -> TermCoder (S.Set x)
 set els = TermCoder (Types.set $ termCoderType els) $ Coder encode decode
   where
-    encode = Expect.set (coderEncode $ termCoderCoder els)
+    encode = ExtractCore.set (coderEncode $ termCoderCoder els)
     decode s = Terms.set . S.fromList <$> mapM (coderDecode $ termCoderCoder els) (S.toList s)
 
 string :: TermCoder String
 string = TermCoder Types.string $ Coder encode decode
   where
-    encode = Expect.string
+    encode = ExtractCore.string
     decode = pure . Terms.string
 
 term :: TermCoder Term
@@ -272,25 +272,25 @@ type_ = TermCoder (TypeVariable _Type) $ Coder encode decode
 uint8 :: TermCoder Int16
 uint8 = TermCoder Types.uint8 $ Coder encode decode
   where
-    encode = Expect.uint8
+    encode = ExtractCore.uint8
     decode = pure . Terms.uint8
 
 uint16 :: TermCoder Int
 uint16 = TermCoder Types.uint16 $ Coder encode decode
   where
-    encode = Expect.uint16
+    encode = ExtractCore.uint16
     decode = pure . Terms.uint16
 
 uint32 :: TermCoder Int64
 uint32 = TermCoder Types.uint32 $ Coder encode decode
   where
-    encode = Expect.uint32
+    encode = ExtractCore.uint32
     decode = pure . Terms.uint32
 
 uint64 :: TermCoder Integer
 uint64 = TermCoder Types.uint64 $ Coder encode decode
   where
-    encode = Expect.uint64
+    encode = ExtractCore.uint64
     decode = pure . Terms.uint64
 
 variable :: String -> TermCoder Term

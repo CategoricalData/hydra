@@ -9,7 +9,7 @@ module Hydra.Ext.Avro.Coder (
 import Hydra.Kernel
 import Hydra.Ext.Json.Eliminate
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Expect as Expect
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
@@ -57,7 +57,7 @@ avroHydraAdapter schema = case schema of
             coderEncode = \(Json.ValueObject m) -> Terms.map . M.fromList <$> (CM.mapM pairToHydra $ M.toList m),
             coderDecode = \m -> do
               env <- getState
-              mp <- withEmptyGraph $ Expect.map_ Expect.string (\t -> withState env $ coderDecode (adapterCoder ad) t) m
+              mp <- withEmptyGraph $ ExtractCore.map_ ExtractCore.string (\t -> withState env $ coderDecode (adapterCoder ad) t) m
               return $ Json.ValueObject mp}
       return $ Adapter (adapterIsLossy ad) schema (Types.map Types.string $ adapterTarget ad) coder
     Avro.SchemaNamed n -> do
@@ -91,7 +91,7 @@ avroHydraAdapter schema = case schema of
               Avro.NamedTypeFixed (Avro.Fixed size) -> simpleAdapter Types.binary encode decode
                 where
                   encode (Json.ValueString s) = pure $ Terms.binary s
-                  decode term = Json.ValueString <$> (withEmptyGraph $ Expect.binary term)
+                  decode term = Json.ValueString <$> (withEmptyGraph $ ExtractCore.binary term)
               Avro.NamedTypeRecord r -> do
                   let avroFields = Avro.recordFields r
                   adaptersByFieldName <- M.fromList <$> (CM.mapM prepareField avroFields)
@@ -191,35 +191,35 @@ avroHydraAdapter schema = case schema of
         Avro.PrimitiveNull -> simpleAdapter Types.unit encode decode
           where
             encode (Json.ValueString s) = pure $ Terms.string s
-            decode term = Json.ValueString <$> withEmptyGraph (Expect.string term)
+            decode term = Json.ValueString <$> withEmptyGraph (ExtractCore.string term)
         Avro.PrimitiveBoolean -> simpleAdapter Types.boolean encode decode
           where
             encode (Json.ValueBoolean b) = pure $ Terms.boolean b
-            decode term = Json.ValueBoolean <$> withEmptyGraph (Expect.boolean term)
+            decode term = Json.ValueBoolean <$> withEmptyGraph (ExtractCore.boolean term)
         Avro.PrimitiveInt -> simpleAdapter Types.int32 encode decode
           where
             encode (Json.ValueNumber d) = pure $ Terms.int32 $ doubleToInt d
-            decode term = Json.ValueNumber . fromIntegral <$> withEmptyGraph (Expect.int32 term)
+            decode term = Json.ValueNumber . fromIntegral <$> withEmptyGraph (ExtractCore.int32 term)
         Avro.PrimitiveLong -> simpleAdapter Types.int64 encode decode
           where
             encode (Json.ValueNumber d) = pure $ Terms.int64 $ doubleToInt d
-            decode term = Json.ValueNumber . fromIntegral <$> withEmptyGraph (Expect.int64 term)
+            decode term = Json.ValueNumber . fromIntegral <$> withEmptyGraph (ExtractCore.int64 term)
         Avro.PrimitiveFloat -> simpleAdapter Types.float32 encode decode
           where
             encode (Json.ValueNumber d) = pure $ Terms.float32 $ realToFrac d
-            decode term = Json.ValueNumber . realToFrac <$> withEmptyGraph (Expect.float32 term)
+            decode term = Json.ValueNumber . realToFrac <$> withEmptyGraph (ExtractCore.float32 term)
         Avro.PrimitiveDouble -> simpleAdapter Types.float64 encode decode
           where
             encode (Json.ValueNumber d) = pure $ Terms.float64 d
-            decode term = Json.ValueNumber <$> withEmptyGraph (Expect.float64 term)
+            decode term = Json.ValueNumber <$> withEmptyGraph (ExtractCore.float64 term)
         Avro.PrimitiveBytes -> simpleAdapter Types.binary encode decode
           where
             encode (Json.ValueString s) = pure $ Terms.binary s
-            decode term = Json.ValueString <$> withEmptyGraph (Expect.binary term)
+            decode term = Json.ValueString <$> withEmptyGraph (ExtractCore.binary term)
         Avro.PrimitiveString -> simpleAdapter Types.string encode decode
           where
             encode (Json.ValueString s) = pure $ Terms.string s
-            decode term = Json.ValueString <$> withEmptyGraph (Expect.string term)
+            decode term = Json.ValueString <$> withEmptyGraph (ExtractCore.string term)
       where
         doubleToInt d = if d < 0 then ceiling d else floor d
     Avro.SchemaReference name -> do

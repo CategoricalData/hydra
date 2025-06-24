@@ -5,7 +5,7 @@ module Hydra.Reduction where
 import qualified Hydra.Arity as Arity
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
-import qualified Hydra.Expect as Expect
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Equality as Equality
@@ -178,7 +178,7 @@ reduceTerm eager env term =
                       _ -> (recurse inner)) inner)
               in (Rewriting.rewriteTerm mapping term))
       applyElimination = (\elm -> \reducedArg -> (\x -> case x of
-              Core.EliminationRecord v1 -> (Flows.bind (Expect.record (Core.projectionTypeName v1) (Strip.stripTerm reducedArg)) (\fields ->  
+              Core.EliminationRecord v1 -> (Flows.bind (ExtractCore.record (Core.projectionTypeName v1) (Strip.stripTerm reducedArg)) (\fields ->  
                 let matchingFields = (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField v1)) fields)
                 in (Logic.ifElse (Lists.null matchingFields) (Flows.fail (Strings.cat [
                   "no such field: ",
@@ -186,7 +186,7 @@ reduceTerm eager env term =
                   " in ",
                   Core.unName (Core.projectionTypeName v1),
                   " record"])) (Flows.pure (Core.fieldTerm (Lists.head matchingFields))))))
-              Core.EliminationUnion v1 -> (Flows.bind (Expect.injection (Core.caseStatementTypeName v1) reducedArg) (\field ->  
+              Core.EliminationUnion v1 -> (Flows.bind (ExtractCore.injection (Core.caseStatementTypeName v1) reducedArg) (\field ->  
                 let matchingFields = (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases v1))
                 in (Logic.ifElse (Lists.null matchingFields) (Optionals.maybe (Flows.fail (Strings.cat [
                   "no such field ",
@@ -196,7 +196,7 @@ reduceTerm eager env term =
                   " case statement"])) Flows.pure (Core.caseStatementDefault v1)) (Flows.pure (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.fieldTerm (Lists.head matchingFields)),
                   Core.applicationArgument = (Core.fieldTerm field)}))))))
-              Core.EliminationWrap v1 -> (Expect.wrap v1 reducedArg)) elm)
+              Core.EliminationWrap v1 -> (ExtractCore.wrap v1 reducedArg)) elm)
       applyIfNullary = (\eager -> \original -> \args ->  
               let stripped = (Strip.stripTerm original)
               in ((\x -> case x of

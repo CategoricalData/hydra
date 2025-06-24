@@ -9,7 +9,7 @@ import qualified Hydra.CoreDecoding as CoreDecoding
 import qualified Hydra.CoreEncoding as CoreEncoding
 import qualified Hydra.Decode as Decode
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Expect as Expect
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Flows as Flows
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
@@ -45,7 +45,7 @@ failOnFlag :: (Core.Name -> String -> Compute.Flow t0 ())
 failOnFlag flag msg = (Flows_.bind (hasFlag flag) (\val -> Logic.ifElse val (Flows_.fail msg) (Flows_.pure ())))
 
 getDebugId :: (Compute.Flow t0 (Maybe String))
-getDebugId = (withEmptyGraph (Flows_.bind (getAttr Constants.key_debugId) (\desc -> Flows_.traverseOptional Expect.string desc)))
+getDebugId = (withEmptyGraph (Flows_.bind (getAttr Constants.key_debugId) (\desc -> Flows_.traverseOptional ExtractCore.string desc)))
 
 getAttr :: (Core.Name -> Compute.Flow t0 (Maybe Core.Term))
 getAttr key = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
@@ -57,11 +57,11 @@ getAttrWithDefault :: (Core.Name -> Core.Term -> Compute.Flow t0 Core.Term)
 getAttrWithDefault key def = (Flows_.map (\mval -> Optionals.fromMaybe def mval) (getAttr key))
 
 getCount :: (Core.Name -> Compute.Flow t0 Int)
-getCount key = (withEmptyGraph (Flows_.bind (getAttrWithDefault key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))) Expect.int32))
+getCount key = (withEmptyGraph (Flows_.bind (getAttrWithDefault key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))) ExtractCore.int32))
 
 -- | Get description from annotations map
 getDescription :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe String))
-getDescription anns = (Optionals.maybe (Flows_.pure Nothing) (\term -> Flows_.map Optionals.pure (Expect.string term)) (Maps.lookup (Core.Name "description") anns))
+getDescription anns = (Optionals.maybe (Flows_.pure Nothing) (\term -> Flows_.map Optionals.pure (ExtractCore.string term)) (Maps.lookup (Core.Name "description") anns))
 
 -- | Get a term annotation
 getTermAnnotation :: (Core.Name -> Core.Term -> Maybe Core.Term)
@@ -86,8 +86,8 @@ getTypeClasses term =
           let byName = (Maps.fromList [
                   (Core.Name "equality", Graph.TypeClassEquality),
                   (Core.Name "ordering", Graph.TypeClassOrdering)])
-          in (Flows_.bind (Expect.unitVariant (Core.Name "hydra.graph.TypeClass") term) (\fn -> Optionals.maybe (Errors.unexpected "type class" (Io.showTerm term)) Flows_.pure (Maps.lookup fn byName))))
-  in (Optionals.maybe (Flows_.pure Maps.empty) (\term -> Expect.map_ CoreDecoding.coreDecodeName (Expect.set decodeClass) term) (getTermAnnotation Constants.key_classes term))
+          in (Flows_.bind (ExtractCore.unitVariant (Core.Name "hydra.graph.TypeClass") term) (\fn -> Optionals.maybe (Errors.unexpected "type class" (Io.showTerm term)) Flows_.pure (Maps.lookup fn byName))))
+  in (Optionals.maybe (Flows_.pure Maps.empty) (\term -> ExtractCore.map_ CoreDecoding.coreDecodeName (ExtractCore.set decodeClass) term) (getTermAnnotation Constants.key_classes term))
 
 -- | Get type description
 getTypeDescription :: (Core.Type -> Compute.Flow Graph.Graph (Maybe String))
@@ -105,7 +105,7 @@ hasDescription :: (M.Map Core.Name t0 -> Bool)
 hasDescription anns = (Optionals.isJust (Maps.lookup Constants.key_description anns))
 
 hasFlag :: (Core.Name -> Compute.Flow t0 Bool)
-hasFlag flag = (withEmptyGraph (Flows_.bind (getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False))) (\term -> Expect.boolean term)))
+hasFlag flag = (withEmptyGraph (Flows_.bind (getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False))) (\term -> ExtractCore.boolean term)))
 
 -- | Check if type has description
 hasTypeDescription :: (Core.Type -> Bool)

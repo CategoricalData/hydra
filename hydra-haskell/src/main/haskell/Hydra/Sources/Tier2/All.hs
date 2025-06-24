@@ -10,7 +10,7 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.CoreDecoding,
   module Hydra.Sources.Tier2.CoreLanguage,
   module Hydra.Sources.Tier2.Errors,
---  module Hydra.Sources.Tier2.Expect, -- hydra.expect symbols conflict with several other modules
+--  module Hydra.Sources.Tier2.Extract.Core, -- hydra.expect symbols conflict with several other modules
   module Hydra.Sources.Tier2.Flows,
   module Hydra.Sources.Tier2.GrammarToModule,
   module Hydra.Sources.Tier2.Inference,
@@ -36,7 +36,7 @@ import Hydra.Sources.Tier2.Arity
 import Hydra.Sources.Tier2.CoreDecoding
 import Hydra.Sources.Tier2.CoreLanguage
 import Hydra.Sources.Tier2.Errors
-import Hydra.Sources.Tier2.Expect
+import Hydra.Sources.Tier2.Extract.Core
 import Hydra.Sources.Tier2.Flows
 import Hydra.Sources.Tier2.GrammarToModule
 import Hydra.Sources.Tier2.Inference

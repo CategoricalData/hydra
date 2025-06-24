@@ -9,7 +9,7 @@ import Hydra.Ext.Protobuf.Serde
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations
 import Hydra.Lib.Io
-import qualified Hydra.Expect as Expect
+import qualified Hydra.Extract.Core as ExtractCore
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -292,7 +292,7 @@ nextIndex = nextCount key_proto_field_index
 readBooleanAnnotation :: Name -> Type -> Flow Graph Bool
 readBooleanAnnotation key typ = case M.lookup key (typeAnnotationInternal typ) of
   Nothing -> return False
-  Just term -> Expect.boolean term
+  Just term -> ExtractCore.boolean term
 
 -- Note: this should probably be done in the term adapters
 simplifyType :: Type -> Type
