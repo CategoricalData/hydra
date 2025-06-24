@@ -244,7 +244,7 @@ literalAdapterDef = literalAdaptersDefinition "literalAdapter" $
     @@ var "alts"
     @@ var "supported"
     @@ unaryFunction Io.showLiteralType
-    @@ ref DescribeCore.describeLiteralTypeDef
+    @@ ref DescribeCore.literalTypeDef
     @@ var "lt"
 
 floatAdapterDef :: TElement (FloatType -> Flow AdapterContext (SymmetricAdapter s FloatType FloatValue))
@@ -266,8 +266,8 @@ floatAdapterDef = literalAdaptersDefinition "floatAdapter" $
             (lambda "fv" $ Flows.pure $ ref convertFloatValueDef @@ var "source" @@ var "fv"),
           "msg">: ref disclaimerDef
             @@ var "lossy"
-            @@ (ref DescribeCore.describeFloatTypeDef @@ var "source")
-            @@ (ref DescribeCore.describeFloatTypeDef @@ var "target")] $
+            @@ (ref DescribeCore.floatTypeDef @@ var "source")
+            @@ (ref DescribeCore.floatTypeDef @@ var "target")] $
         ref Flows_.warnDef
           @@ var "msg"
           @@ (Flows.pure (Compute.adapter (var "lossy") (var "source") (var "target") (var "step")))] $
@@ -279,7 +279,7 @@ floatAdapterDef = literalAdaptersDefinition "floatAdapter" $
         @@ var "alts"
         @@ var "supported"
         @@ unaryFunction Io.showFloatType
-        @@ ref DescribeCore.describeFloatTypeDef
+        @@ ref DescribeCore.floatTypeDef
         @@ var "ft"
 
 integerAdapterDef :: TElement (IntegerType -> Flow AdapterContext (SymmetricAdapter s IntegerType IntegerValue))
@@ -330,8 +330,8 @@ integerAdapterDef = literalAdaptersDefinition "integerAdapter" $
         (lambda "iv" $ Flows.pure $ ref convertIntegerValueDef @@ var "source" @@ var "iv"),
       "msg">: ref disclaimerDef
         @@ var "lossy"
-        @@ (ref DescribeCore.describeIntegerTypeDef @@ var "source")
-        @@ (ref DescribeCore.describeIntegerTypeDef @@ var "target")] $
+        @@ (ref DescribeCore.integerTypeDef @@ var "source")
+        @@ (ref DescribeCore.integerTypeDef @@ var "target")] $
       ref Flows_.warnDef
         @@ var "msg"
         @@ (Flows.pure $ Compute.adapter (var "lossy") (var "source") (var "target") (var "step"))] $
@@ -343,5 +343,5 @@ integerAdapterDef = literalAdaptersDefinition "integerAdapter" $
       @@ var "alts"
       @@ var "supported"
       @@ unaryFunction Io.showIntegerType
-      @@ ref DescribeCore.describeIntegerTypeDef
+      @@ ref DescribeCore.integerTypeDef
       @@ var "it"

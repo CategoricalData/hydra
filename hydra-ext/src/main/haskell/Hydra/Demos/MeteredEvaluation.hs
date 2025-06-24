@@ -10,6 +10,7 @@ import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Lib.Lists as Lists
 import Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
 import Hydra.Codegen
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Math as Math
@@ -32,7 +33,7 @@ testModule = Module testNs elements [hydraMantleModule] [] Nothing
     test local tterm = TElement (unqualifyName $ QualifiedName (Just testNs) local) tterm
     elements = [
         el $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 $ int32 42)),
-        el $ test "describeType" $ ref describeTypeDef @@ (TTerm $ EncodeCore.type_ $ Types.list $ Types.int32)]
+        el $ test "describeType" $ ref DescribeCore.typeDef @@ (TTerm $ EncodeCore.type_ $ Types.list $ Types.int32)]
 
 demoMeteredEvaluation :: IO ()
 demoMeteredEvaluation = do
