@@ -60,7 +60,7 @@ adaptedModuleDefinitions lang mod_ =
     in (Flows_.bind (adaptersFor types) (\adapters -> Flows_.mapList (classify adapters) (Lists.zip els tterms)))))
 
 constructCoder :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> Core.Type -> Compute.Flow Graph.Graph (Compute.Coder t0 t2 Core.Term t1))
-constructCoder lang encodeTerm typ = (Flows.withTrace (Strings.cat2 "coder for " (DescribeCore.describeType typ)) (Flows_.bind (languageAdapter lang typ) (\adapter -> Flows_.pure (AdapterUtils.composeCoders (Compute.adapterCoder adapter) (AdapterUtils.unidirectionalCoder encodeTerm)))))
+constructCoder lang encodeTerm typ = (Flows.withTrace (Strings.cat2 "coder for " (DescribeCore.type_ typ)) (Flows_.bind (languageAdapter lang typ) (\adapter -> Flows_.pure (AdapterUtils.composeCoders (Compute.adapterCoder adapter) (AdapterUtils.unidirectionalCoder encodeTerm)))))
 
 languageAdapter :: (Coders.Language -> Core.Type -> Compute.Flow Graph.Graph (Compute.Adapter t0 t1 Core.Type Core.Type Core.Term Core.Term))
 languageAdapter lang typ = (Flows_.bind Errors.getState (\g ->  

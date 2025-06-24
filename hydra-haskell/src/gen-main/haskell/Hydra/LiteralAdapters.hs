@@ -156,7 +156,7 @@ literalAdapter lt =
           Core.LiteralTypeString -> (Flows_.fail "no substitute for the literal string type")) t)
   in (Flows_.bind Errors.getState (\cx ->  
     let supported = (AdapterUtils.literalTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
-    in (AdapterUtils.chooseAdapter alts supported Io.showLiteralType DescribeCore.describeLiteralType lt)))
+    in (AdapterUtils.chooseAdapter alts supported Io.showLiteralType DescribeCore.literalType lt)))
 
 floatAdapter :: (Core.FloatType -> Compute.Flow Coders.AdapterContext (Compute.Adapter t0 t1 Core.FloatType Core.FloatType Core.FloatValue Core.FloatValue))
 floatAdapter ft =  
@@ -175,7 +175,7 @@ floatAdapter ft =
                   step = Compute.Coder {
                           Compute.coderEncode = (\fv -> Flows_.pure (convertFloatValue target fv)),
                           Compute.coderDecode = (\fv -> Flows_.pure (convertFloatValue source fv))}
-                  msg = (disclaimer lossy (DescribeCore.describeFloatType source) (DescribeCore.describeFloatType target))
+                  msg = (disclaimer lossy (DescribeCore.floatType source) (DescribeCore.floatType target))
               in (Flows.warn msg (Flows_.pure (Compute.Adapter {
                 Compute.adapterIsLossy = lossy,
                 Compute.adapterSource = source,
@@ -183,7 +183,7 @@ floatAdapter ft =
                 Compute.adapterCoder = step}))))
   in (Flows_.bind Errors.getState (\cx ->  
     let supported = (AdapterUtils.floatTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
-    in (AdapterUtils.chooseAdapter alts supported Io.showFloatType DescribeCore.describeFloatType ft)))
+    in (AdapterUtils.chooseAdapter alts supported Io.showFloatType DescribeCore.floatType ft)))
 
 integerAdapter :: (Core.IntegerType -> Compute.Flow Coders.AdapterContext (Compute.Adapter t0 t1 Core.IntegerType Core.IntegerType Core.IntegerValue Core.IntegerValue))
 integerAdapter it =  
@@ -221,7 +221,7 @@ integerAdapter it =
                   step = Compute.Coder {
                           Compute.coderEncode = (\iv -> Flows_.pure (convertIntegerValue target iv)),
                           Compute.coderDecode = (\iv -> Flows_.pure (convertIntegerValue source iv))}
-                  msg = (disclaimer lossy (DescribeCore.describeIntegerType source) (DescribeCore.describeIntegerType target))
+                  msg = (disclaimer lossy (DescribeCore.integerType source) (DescribeCore.integerType target))
               in (Flows.warn msg (Flows_.pure (Compute.Adapter {
                 Compute.adapterIsLossy = lossy,
                 Compute.adapterSource = source,
@@ -229,4 +229,4 @@ integerAdapter it =
                 Compute.adapterCoder = step}))))
   in (Flows_.bind Errors.getState (\cx ->  
     let supported = (AdapterUtils.integerTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
-    in (AdapterUtils.chooseAdapter alts supported Io.showIntegerType DescribeCore.describeIntegerType it)))
+    in (AdapterUtils.chooseAdapter alts supported Io.showIntegerType DescribeCore.integerType it)))
