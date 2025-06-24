@@ -325,9 +325,19 @@ _literals_readFloat64       = qname _hydra_lib_literals "readFloat64" :: Name
 _literals_readInt32         = qname _hydra_lib_literals "readInt32" :: Name
 _literals_readInt64         = qname _hydra_lib_literals "readInt64" :: Name
 _literals_readString        = qname _hydra_lib_literals "readString" :: Name
+_literals_showBigfloat      = qname _hydra_lib_literals "showBigfloat" :: Name
+_literals_showBigint        = qname _hydra_lib_literals "showBigint" :: Name
 _literals_showBoolean       = qname _hydra_lib_literals "show" :: Name
+_literals_showFloat32       = qname _hydra_lib_literals "showFloat32" :: Name
+_literals_showFloat64       = qname _hydra_lib_literals "showFloat64" :: Name
+_literals_showInt8          = qname _hydra_lib_literals "showInt8" :: Name
+_literals_showInt16         = qname _hydra_lib_literals "showInt16" :: Name
 _literals_showInt32         = qname _hydra_lib_literals "showInt32" :: Name
 _literals_showInt64         = qname _hydra_lib_literals "showInt64" :: Name
+_literals_showUint8         = qname _hydra_lib_literals "showUint8" :: Name
+_literals_showUint16        = qname _hydra_lib_literals "showUint16" :: Name
+_literals_showUint32        = qname _hydra_lib_literals "showUint32" :: Name
+_literals_showUint64        = qname _hydra_lib_literals "showUint64" :: Name
 _literals_showString        = qname _hydra_lib_literals "showString" :: Name
 _literals_stringToBinary    = qname _hydra_lib_literals "stringToBinary" :: Name
 _literals_uint8ToBigint     = qname _hydra_lib_literals "uint8ToBigint" :: Name
@@ -363,9 +373,19 @@ hydraLibLiterals = standardLibrary _hydra_lib_literals [
   prim1 _literals_readInt32         Literals.readInt32         [] string (optional int32),
   prim1 _literals_readInt64         Literals.readInt64         [] string (optional int64),
   prim1 _literals_readString        Literals.readString        [] string (optional string),
+  prim1 _literals_showBigfloat      Literals.showBigfloat      [] bigfloat string,
+  prim1 _literals_showBigint        Literals.showBigint        [] bigint string,
   prim1 _literals_showBoolean       Literals.showBoolean       [] boolean string,
+  prim1 _literals_showFloat32       Literals.showFloat32       [] float32 string,
+  prim1 _literals_showFloat64       Literals.showFloat64       [] float64 string,
+  prim1 _literals_showInt8          Literals.showInt8          [] int8 string,
+  prim1 _literals_showInt16         Literals.showInt16         [] int16 string,
   prim1 _literals_showInt32         Literals.showInt32         [] int32 string,
   prim1 _literals_showInt64         Literals.showInt64         [] int64 string,
+  prim1 _literals_showUint8         Literals.showUint8         [] uint8 string,
+  prim1 _literals_showUint16        Literals.showUint16        [] uint16 string,
+  prim1 _literals_showUint32        Literals.showUint32        [] uint32 string,
+  prim1 _literals_showUint64        Literals.showUint64        [] uint64 string,
   prim1 _literals_showString        Literals.showString        [] string string,
   prim1 _literals_stringToBinary    Literals.stringToBinary    [] string binary,
   prim1 _literals_uint8ToBigint     Literals.uint8ToBigint     [] uint8 bigint,
