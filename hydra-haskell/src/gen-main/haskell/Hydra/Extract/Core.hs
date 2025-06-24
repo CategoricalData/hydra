@@ -1,6 +1,6 @@
 -- | A DSL for decoding and validating Hydra terms at runtime. This module provides functions to extract typed values from Hydra terms with appropriate error handling.
 
-module Hydra.Expect where
+module Hydra.Extract.Core where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core

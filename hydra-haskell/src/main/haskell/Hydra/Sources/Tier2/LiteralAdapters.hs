@@ -55,7 +55,7 @@ import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
 --import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
-import qualified Hydra.Sources.Tier2.Expect as Expect
+import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Flows as Flows_
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
@@ -82,7 +82,7 @@ literalAdaptersDefinition = definitionInModule hydraLiteralAdaptersModule
 
 hydraLiteralAdaptersModule :: Module
 hydraLiteralAdaptersModule = Module (Namespace "hydra.literalAdapters") elements
-    [Errors.hydraErrorsModule, Expect.hydraExpectModule, Flows_.hydraFlowsModule, Printing.hydraPrintingModule,
+    [Errors.hydraErrorsModule, ExtractCore.hydraExpectModule, Flows_.hydraFlowsModule, Printing.hydraPrintingModule,
       AdapterUtils.hydraAdapterUtilsModule, Variants.hydraVariantsModule]
     [Tier1.hydraCodersModule, Tier1.hydraModuleModule] $
     Just "Adapter framework for literal types and terms"
@@ -202,10 +202,10 @@ literalAdapterDef = literalAdaptersDefinition "literalAdapter" $
           (Logic.ifElse (var "hasStrings")
             (Flows.pure $ lets [
               "encode">: lambda "lit" $
-                withVar "b" (ref Expect.booleanLiteralDef @@ var "lit") $
+                withVar "b" (ref ExtractCore.booleanLiteralDef @@ var "lit") $
                 Flows.pure $ Core.literalString $ Logic.ifElse (var "b") "true" "false",
               "decode">: lambda "lit" $
-                withVar "s" (ref Expect.stringLiteralDef @@ var "lit") $
+                withVar "s" (ref ExtractCore.stringLiteralDef @@ var "lit") $
                 Logic.ifElse (Equality.equalString (var "s") (string "true"))
                   (Flows.pure $ Core.literalBoolean true)
                   (Logic.ifElse (Equality.equalString (var "s") (string "false"))

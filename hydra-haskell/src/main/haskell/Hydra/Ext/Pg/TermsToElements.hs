@@ -7,7 +7,7 @@ module Hydra.Ext.Pg.TermsToElements (
 import Hydra.Kernel
 import Hydra.Pg.Mapping
 import qualified Hydra.Pg.Model as PG
-import qualified Hydra.Expect as Expect
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Control.Monad as CM
@@ -24,7 +24,7 @@ key_elements = Name "elements"
 expectList :: (Term -> Flow s x) -> Term -> Flow s [x]
 expectList f term = do
   s <- getState
-  withEmptyGraph $ Expect.list (\t -> withState s $ f t) term
+  withEmptyGraph $ ExtractCore.list (\t -> withState s $ f t) term
 
 termToElementsAdapter :: Schema s t v -> Type -> Flow s (PgAdapter s v)
 termToElementsAdapter schema typ = do
@@ -195,7 +195,7 @@ requireUnique context fun term = do
 -- Element spec decoding. TODO: this should code should really be generated rather than hand-written.
 
 decodeEdgeLabel :: Term -> Flow s PG.EdgeLabel
-decodeEdgeLabel t = PG.EdgeLabel <$> withEmptyGraph (Expect.string t)
+decodeEdgeLabel t = PG.EdgeLabel <$> withEmptyGraph (ExtractCore.string t)
 
 decodeEdgeSpec :: Term -> Flow s EdgeSpec
 decodeEdgeSpec term = withTrace "decode edge spec" $ readRecord (\fields -> EdgeSpec
@@ -211,7 +211,7 @@ decodeElementSpec term = withTrace "decode element spec" $ readInjection [
   (_ElementSpec_edge, \t -> ElementSpecEdge <$> decodeEdgeSpec t)] term
 
 decodePropertyKey :: Term -> Flow s PG.PropertyKey
-decodePropertyKey t = PG.PropertyKey <$> withEmptyGraph (Expect.string t)
+decodePropertyKey t = PG.PropertyKey <$> withEmptyGraph (ExtractCore.string t)
 
 decodePropertySpec :: Term -> Flow s PropertySpec
 decodePropertySpec term = withTrace "decode property spec" $ readRecord (\fields -> PropertySpec
@@ -224,10 +224,10 @@ decodeValueSpec term = withTrace "decode value spec" $ case stripTerm term of
   TermLiteral (LiteralString s) -> pure $ ValueSpecPattern s
   _ -> readInjection [
     (_ValueSpec_value, \t -> pure ValueSpecValue),
-    (_ValueSpec_pattern, \t -> ValueSpecPattern <$> withEmptyGraph (Expect.string t))] term
+    (_ValueSpec_pattern, \t -> ValueSpecPattern <$> withEmptyGraph (ExtractCore.string t))] term
 
 decodeVertexLabel :: Term -> Flow s PG.VertexLabel
-decodeVertexLabel t = PG.VertexLabel <$> withEmptyGraph (Expect.string t)
+decodeVertexLabel t = PG.VertexLabel <$> withEmptyGraph (ExtractCore.string t)
 
 decodeVertexSpec :: Term -> Flow s VertexSpec
 decodeVertexSpec term = withTrace "decode vertex spec" $ readRecord (\fields -> VertexSpec
@@ -240,7 +240,7 @@ decodeVertexSpec term = withTrace "decode vertex spec" $ readRecord (\fields -> 
 
 readInjection :: [(Name, Term -> Flow s x)] -> Term -> Flow s x
 readInjection cases encoded = do
-  mp <- withEmptyGraph (Expect.map_ (\k -> Name <$> Expect.string k) pure encoded)
+  mp <- withEmptyGraph (ExtractCore.map_ (\k -> Name <$> ExtractCore.string k) pure encoded)
   f <- case M.toList mp of
     [] -> fail "empty injection"
     [(k, v)] -> pure $ Field k v
@@ -251,7 +251,7 @@ readInjection cases encoded = do
     _ -> fail "duplicate field name in cases"
 
 readRecord :: (M.Map Name Term -> Flow s x) -> Term -> Flow s x
-readRecord cons term = withEmptyGraph (Expect.map_ (\k -> Name <$> Expect.string k) pure term) >>= cons
+readRecord cons term = withEmptyGraph (ExtractCore.map_ (\k -> Name <$> ExtractCore.string k) pure term) >>= cons
 
 readField fields fname fun = case M.lookup fname fields of
   Nothing -> fail $ "no such field: " ++ unName fname

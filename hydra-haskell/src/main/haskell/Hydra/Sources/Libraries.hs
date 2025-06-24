@@ -4,7 +4,7 @@
 module Hydra.Sources.Libraries where
 
 import Hydra.Kernel
-import qualified Hydra.Expect as Expect
+import qualified Hydra.Extract.Core as ExtractCore
 import Hydra.Dsl.Prims as Prims
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -190,7 +190,7 @@ hydraLibIo = standardLibrary _hydra_lib_io [
 
 showListInterp :: Term -> Term -> Flow Graph Term
 showListInterp fun lstRaw = do
-  lst <- Expect.list Flows.pure lstRaw
+  lst <- ExtractCore.list Flows.pure lstRaw
   return $ Terms.apply (Terms.primitive _lists_concat) $ Terms.list [
     Terms.string "[",
     Terms.applyAll (Terms.primitive _lists_intercalate) [
@@ -276,8 +276,8 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
 -- | Interpreted implementation of hydra.lib.lists.apply
 applyInterp :: Term -> Term -> Flow Graph Term
 applyInterp funs' args' = do
-    funs <- Expect.list Prelude.pure funs'
-    args <- Expect.list Prelude.pure args'
+    funs <- ExtractCore.list Prelude.pure funs'
+    args <- ExtractCore.list Prelude.pure args'
     return $ Terms.list $ L.concat (helper args <$> funs)
   where
     helper args f = Terms.apply f <$> args
@@ -285,13 +285,13 @@ applyInterp funs' args' = do
 -- | Interpreted implementation of hydra.lib.lists.bind
 bindInterp :: Term -> Term -> Flow Graph Term
 bindInterp args' fun = do
-    args <- Expect.list Prelude.pure args'
+    args <- ExtractCore.list Prelude.pure args'
     return $ Terms.apply (Terms.primitive _lists_concat) (Terms.list $ Terms.apply fun <$> args)
 
 -- | Interpreted implementation of hydra.lib.lists.map
 mapInterp :: Term -> Term -> Flow Graph Term
 mapInterp fun args' = do
-    args <- Expect.list Prelude.pure args'
+    args <- ExtractCore.list Prelude.pure args'
     return $ Terms.list (Terms.apply fun <$> args)
 
 -- * hydra.lib.literals primitives
@@ -519,14 +519,14 @@ hydraLibOptionals = standardLibrary _hydra_lib_optionals [
 -- | Interpreted implementation of hydra.lib.optionals.maybe
 maybeInterp :: Term -> Term -> Term -> Flow Graph Term
 maybeInterp def fun opt = do
-    mval <- Expect.optional Prelude.pure opt
+    mval <- ExtractCore.optional Prelude.pure opt
     return $ case mval of
       Nothing -> def
       Just val -> Terms.apply fun val
 
 optionalsMapInterp :: Term -> Term -> Flow Graph Term
 optionalsMapInterp fun opt = do
-    mval <- Expect.optional Prelude.pure opt
+    mval <- ExtractCore.optional Prelude.pure opt
     return $ case mval of
       Nothing -> Terms.nothing
       Just val -> Terms.just $ Terms.apply fun val

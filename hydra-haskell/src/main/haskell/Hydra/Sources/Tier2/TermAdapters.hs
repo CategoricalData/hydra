@@ -49,7 +49,7 @@ import qualified Data.Maybe                as Y
 -- Uncomment tier-2 sources as needed
 import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
 import qualified Hydra.Sources.Tier2.Errors as Errors
-import qualified Hydra.Sources.Tier2.Expect as Expect
+import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Flows as Flows_
 import qualified Hydra.Sources.Tier2.Lexical as Lexical
 import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
@@ -62,7 +62,7 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 
 hydraTermAdaptersModule :: Module
 hydraTermAdaptersModule = Module (Namespace "hydra.termAdapters") elements
-    [Errors.hydraErrorsModule, Expect.hydraExpectModule, LiteralAdapters.hydraLiteralAdaptersModule, Schemas.hydraSchemasModule]
+    [Errors.hydraErrorsModule, ExtractCore.hydraExpectModule, LiteralAdapters.hydraLiteralAdaptersModule, Schemas.hydraSchemasModule]
     [Tier1.hydraCodersModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just "Adapter framework for types and terms"
   where
@@ -205,7 +205,7 @@ functionToUnionDef = termAdaptersDefinition "functionToUnion" $
             Core.termUnion $ Core.injection (ref functionProxyNameDef) $ Core.field (Core.nameLift _Term_variable) $ TTerms.stringLift $ unwrap _Name @@ var "name"]),
       "decode">: lambdas ["ad", "term"] $ lets [
         "readFromString">: lambda "term" $
-          withVar "s" (ref Expect.stringDef @@ var "term") $
+          withVar "s" (ref ExtractCore.stringDef @@ var "term") $
             Optionals.maybe
               (Flows.fail $ Strings.cat2 ("failed to parse term: ") (var "s"))
               (unaryFunction Flows.pure)
@@ -213,12 +213,12 @@ functionToUnionDef = termAdaptersDefinition "functionToUnion" $
         "notFound">: lambda "fname" $ Flows.fail $ Strings.cat2 (string "unexpected field: ") (unwrap _Name @@ var "fname"),
         "forCases">: lambda "fterm" $ ref withGraphContextDef @@ (var "readFromString" @@ var "fterm"),
         "forLambda">: lambda "fterm" $ ref withGraphContextDef @@ (var "readFromString" @@ var "fterm"),
-        "forWrapped">: lambda "fterm" $ ref withGraphContextDef @@ (Flows.map (lambda "s" $ TTerms.unwrap $ Core.name $ var "s") (ref Expect.stringDef @@ var "fterm")),
-        "forPrimitive">: lambda "fterm" $ ref withGraphContextDef @@ (Flows.map (lambda "s" $ TTerms.primitiveLift $ Core.name $ var "s") (ref Expect.stringDef @@ var "fterm")),
+        "forWrapped">: lambda "fterm" $ ref withGraphContextDef @@ (Flows.map (lambda "s" $ TTerms.unwrap $ Core.name $ var "s") (ref ExtractCore.stringDef @@ var "fterm")),
+        "forPrimitive">: lambda "fterm" $ ref withGraphContextDef @@ (Flows.map (lambda "s" $ TTerms.primitiveLift $ Core.name $ var "s") (ref ExtractCore.stringDef @@ var "fterm")),
         "forProjection">: lambda "fterm" $ ref withGraphContextDef @@ (var "readFromString" @@ var "fterm"),
-        "forVariable">: lambda "fterm" $ ref withGraphContextDef @@ (Flows.map (lambda "s" $ Core.termVariable $ Core.name $ var "s") (ref Expect.stringDef @@ var "fterm"))] $
+        "forVariable">: lambda "fterm" $ ref withGraphContextDef @@ (Flows.map (lambda "s" $ Core.termVariable $ Core.name $ var "s") (ref ExtractCore.stringDef @@ var "fterm"))] $
         withVar "injTerm" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ var "term") $
-        withVar "field" (ref withGraphContextDef @@ (ref Expect.injectionDef @@ (ref functionProxyNameDef) @@ var "injTerm")) $ lets [
+        withVar "field" (ref withGraphContextDef @@ (ref ExtractCore.injectionDef @@ (ref functionProxyNameDef) @@ var "injTerm")) $ lets [
             "fname">: Core.fieldName $ var "field",
             "fterm">: Core.fieldTerm $ var "field"] $
             Optionals.fromMaybe (var "notFound" @@ var "fname") $ Maps.lookup (var "fname") $ Maps.fromList $ list [
@@ -383,7 +383,7 @@ passLiteralDef = termAdaptersDefinition "passLiteral" $
     _Type_literal>>: lambda "lt" $
       withVar "ad" (ref LiteralAdapters.literalAdapterDef @@ var "lt") $ lets [
         "step">: ref AdapterUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
-          withVar "l" (ref withGraphContextDef @@ (ref Expect.literalDef @@ var "term")) $
+          withVar "l" (ref withGraphContextDef @@ (ref ExtractCore.literalDef @@ var "term")) $
           Flows.map (unaryFunction $ Core.termLiteral) (ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "l"))] $
         Flows.pure $ Compute.adapter
           (Compute.adapterIsLossy $ var "ad")
@@ -437,7 +437,7 @@ passOptionalDef = termAdaptersDefinition "passOptional" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_optional>>: lambda "ot" $ lets [
       "mapTerm">: lambdas ["coder", "dir", "term"] $
-        withVar "opt" (ref withGraphContextDef @@ (ref Expect.optionalDef @@ unaryFunction Flows.pure @@ var "term")) $
+        withVar "opt" (ref withGraphContextDef @@ (ref ExtractCore.optionalDef @@ unaryFunction Flows.pure @@ var "term")) $
         withVar "newOpt" (Flows.traverseOptional (ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ var "coder") (var "opt")) $
         Flows.pure $ Core.termOptional $ var "newOpt"] $
       withVar "adapter" (ref termAdapterDef @@ var "ot") $
@@ -544,7 +544,7 @@ passUnionDef = termAdaptersDefinition "passUnion" $
           (var "t")
           (Core.typeUnion $ Core.rowType (var "tname") (var "sfields'"))
           (ref AdapterUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
-            withVar "dfield" (ref withGraphContextDef @@ (ref Expect.injectionDef @@ var "tname" @@ var "term")) $
+            withVar "dfield" (ref withGraphContextDef @@ (ref ExtractCore.injectionDef @@ var "tname" @@ var "term")) $
             withVar "ad" (var "getAdapter" @@ var "adaptersMap" @@ var "dfield") $
             withVar "newField" (ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "dfield") $
             Flows.pure $ Core.termUnion $ Core.injection (var "tname") (var "newField")))]
@@ -557,7 +557,7 @@ passWrappedDef = termAdaptersDefinition "passWrapped" $
         "tname">: Core.wrappedTypeTypeName $ var "wt",
         "ot">: Core.wrappedTypeObject $ var "wt",
         "mapTerm">: lambdas ["coder", "dir", "term"] $
-          withVar "unwrapped" (ref withGraphContextDef @@ (ref Expect.wrapDef @@ var "tname" @@ var "term")) $
+          withVar "unwrapped" (ref withGraphContextDef @@ (ref ExtractCore.wrapDef @@ var "tname" @@ var "term")) $
           withVar "newTerm" (ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ var "coder" @@ var "unwrapped") $
           Flows.pure $ Core.termWrap $ Core.wrappedTerm (var "tname") (var "newTerm")] $
         withVar "adapter" (ref termAdapterDef @@ var "ot") $
@@ -620,7 +620,7 @@ unionToRecordDef = termAdaptersDefinition "unionToRecord" $
         (Compute.adapterTarget $ var "ad")
         (Compute.coder
           (lambda "term'" $
-            withVar "field" (ref withGraphContextDef @@ (ref Expect.injectionDef @@ (Core.rowTypeTypeName $ var "rt") @@ var "term'")) $ lets [
+            withVar "field" (ref withGraphContextDef @@ (ref ExtractCore.injectionDef @@ (Core.rowTypeTypeName $ var "rt") @@ var "term'")) $ lets [
               "fn">: Core.fieldName $ var "field",
               "term">: Core.fieldTerm $ var "field"] $
             Compute.coderEncode (Compute.adapterCoder $ var "ad") @@
@@ -656,7 +656,7 @@ wrapToUnwrappedDef = termAdaptersDefinition "wrapToUnwrapped" $
         "tname">: Core.wrappedTypeTypeName $ var "wt",
         "typ">: Core.wrappedTypeObject $ var "wt",
         "encode">: lambda "ad" $ lambda "term" $
-          withVar "unwrapped" (ref withGraphContextDef @@ (ref Expect.wrapDef @@ var "tname" @@ var "term")) $
+          withVar "unwrapped" (ref withGraphContextDef @@ (ref ExtractCore.wrapDef @@ var "tname" @@ var "term")) $
           Compute.coderEncode (Compute.adapterCoder $ var "ad") @@ var "unwrapped",
         "decode">: lambda "ad" $ lambda "term" $
           withVar "decoded" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ var "term") $

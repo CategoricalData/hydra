@@ -7,7 +7,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Expect as Expect
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Flows as Flows
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
@@ -166,15 +166,15 @@ functionToUnion t = ((\x -> case x of
                       Core.fieldName = (Core.Name "variable"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Core.unName v2)))}}))) strippedTerm)))
         decode = (\ad -> \term ->  
-                let readFromString = (\term -> Flows_.bind (Expect.string term) (\s -> Optionals.maybe (Flows_.fail (Strings.cat2 "failed to parse term: " s)) Flows_.pure (Io.readTerm s))) 
+                let readFromString = (\term -> Flows_.bind (ExtractCore.string term) (\s -> Optionals.maybe (Flows_.fail (Strings.cat2 "failed to parse term: " s)) Flows_.pure (Io.readTerm s))) 
                     notFound = (\fname -> Flows_.fail (Strings.cat2 "unexpected field: " (Core.unName fname)))
                     forCases = (\fterm -> withGraphContext (readFromString fterm))
                     forLambda = (\fterm -> withGraphContext (readFromString fterm))
-                    forWrapped = (\fterm -> withGraphContext (Flows_.map (\s -> Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name s)))) (Expect.string fterm)))
-                    forPrimitive = (\fterm -> withGraphContext (Flows_.map (\s -> Core.TermFunction (Core.FunctionPrimitive (Core.Name s))) (Expect.string fterm)))
+                    forWrapped = (\fterm -> withGraphContext (Flows_.map (\s -> Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name s)))) (ExtractCore.string fterm)))
+                    forPrimitive = (\fterm -> withGraphContext (Flows_.map (\s -> Core.TermFunction (Core.FunctionPrimitive (Core.Name s))) (ExtractCore.string fterm)))
                     forProjection = (\fterm -> withGraphContext (readFromString fterm))
-                    forVariable = (\fterm -> withGraphContext (Flows_.map (\s -> Core.TermVariable (Core.Name s)) (Expect.string fterm)))
-                in (Flows_.bind (Compute.coderDecode (Compute.adapterCoder ad) term) (\injTerm -> Flows_.bind (withGraphContext (Expect.injection functionProxyName injTerm)) (\field ->  
+                    forVariable = (\fterm -> withGraphContext (Flows_.map (\s -> Core.TermVariable (Core.Name s)) (ExtractCore.string fterm)))
+                in (Flows_.bind (Compute.coderDecode (Compute.adapterCoder ad) term) (\injTerm -> Flows_.bind (withGraphContext (ExtractCore.injection functionProxyName injTerm)) (\field ->  
                   let fname = (Core.fieldName field) 
                       fterm = (Core.fieldTerm field)
                   in (Optionals.fromMaybe (notFound fname) (Maps.lookup fname (Maps.fromList [
@@ -317,7 +317,7 @@ passForall t = ((\x -> case x of
 passLiteral :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passLiteral t = ((\x -> case x of
   Core.TypeLiteral v1 -> (Flows_.bind (LiteralAdapters.literalAdapter v1) (\ad ->  
-    let step = (AdapterUtils.bidirectional (\dir -> \term -> Flows_.bind (withGraphContext (Expect.literal term)) (\l -> Flows_.map (\x -> Core.TermLiteral x) (AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) l))))
+    let step = (AdapterUtils.bidirectional (\dir -> \term -> Flows_.bind (withGraphContext (ExtractCore.literal term)) (\l -> Flows_.map (\x -> Core.TermLiteral x) (AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) l))))
     in (Flows_.pure (Compute.Adapter {
       Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
       Compute.adapterSource = (Core.TypeLiteral (Compute.adapterSource ad)),
@@ -356,7 +356,7 @@ passMap t = ((\x -> case x of
 passOptional :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passOptional t = ((\x -> case x of
   Core.TypeOptional v1 ->  
-    let mapTerm = (\coder -> \dir -> \term -> Flows_.bind (withGraphContext (Expect.optional Flows_.pure term)) (\opt -> Flows_.bind (Flows_.traverseOptional (AdapterUtils.encodeDecode dir coder) opt) (\newOpt -> Flows_.pure (Core.TermOptional newOpt))))
+    let mapTerm = (\coder -> \dir -> \term -> Flows_.bind (withGraphContext (ExtractCore.optional Flows_.pure term)) (\opt -> Flows_.bind (Flows_.traverseOptional (AdapterUtils.encodeDecode dir coder) opt) (\newOpt -> Flows_.pure (Core.TermOptional newOpt))))
     in (Flows_.bind (termAdapter v1) (\adapter -> Flows_.pure (Compute.Adapter {
       Compute.adapterIsLossy = (Compute.adapterIsLossy adapter),
       Compute.adapterSource = t,
@@ -440,7 +440,7 @@ passUnion t = ((\x -> case x of
         Compute.adapterTarget = (Core.TypeUnion (Core.RowType {
           Core.rowTypeTypeName = tname,
           Core.rowTypeFields = sfields_})),
-        Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> Flows_.bind (withGraphContext (Expect.injection tname term)) (\dfield -> Flows_.bind (getAdapter adaptersMap dfield) (\ad -> Flows_.bind (AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) dfield) (\newField -> Flows_.pure (Core.TermUnion (Core.Injection {
+        Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> Flows_.bind (withGraphContext (ExtractCore.injection tname term)) (\dfield -> Flows_.bind (getAdapter adaptersMap dfield) (\ad -> Flows_.bind (AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) dfield) (\newField -> Flows_.pure (Core.TermUnion (Core.Injection {
           Core.injectionTypeName = tname,
           Core.injectionField = newField})))))))}))))) t)
 
@@ -450,7 +450,7 @@ passWrapped t = ((\x -> case x of
   Core.TypeWrap v1 ->  
     let tname = (Core.wrappedTypeTypeName v1) 
         ot = (Core.wrappedTypeObject v1)
-        mapTerm = (\coder -> \dir -> \term -> Flows_.bind (withGraphContext (Expect.wrap tname term)) (\unwrapped -> Flows_.bind (AdapterUtils.encodeDecode dir coder unwrapped) (\newTerm -> Flows_.pure (Core.TermWrap (Core.WrappedTerm {
+        mapTerm = (\coder -> \dir -> \term -> Flows_.bind (withGraphContext (ExtractCore.wrap tname term)) (\unwrapped -> Flows_.bind (AdapterUtils.encodeDecode dir coder unwrapped) (\newTerm -> Flows_.pure (Core.TermWrap (Core.WrappedTerm {
                 Core.wrappedTermTypeName = tname,
                 Core.wrappedTermObject = newTerm})))))
     in (Flows_.bind (termAdapter ot) (\adapter -> Flows_.pure (Compute.Adapter {
@@ -567,7 +567,7 @@ unionToRecord t = ((\x -> case x of
       Compute.adapterSource = t,
       Compute.adapterTarget = (Compute.adapterTarget ad),
       Compute.adapterCoder = Compute.Coder {
-        Compute.coderEncode = (\term_ -> Flows_.bind (withGraphContext (Expect.injection (Core.rowTypeTypeName v1) term_)) (\field ->  
+        Compute.coderEncode = (\term_ -> Flows_.bind (withGraphContext (ExtractCore.injection (Core.rowTypeTypeName v1) term_)) (\field ->  
           let fn = (Core.fieldName field) 
               term = (Core.fieldTerm field)
           in (Compute.coderEncode (Compute.adapterCoder ad) (Core.TermRecord (Core.Record {
@@ -601,7 +601,7 @@ wrapToUnwrapped t = ((\x -> case x of
   Core.TypeWrap v1 ->  
     let tname = (Core.wrappedTypeTypeName v1) 
         typ = (Core.wrappedTypeObject v1)
-        encode = (\ad -> \term -> Flows_.bind (withGraphContext (Expect.wrap tname term)) (\unwrapped -> Compute.coderEncode (Compute.adapterCoder ad) unwrapped))
+        encode = (\ad -> \term -> Flows_.bind (withGraphContext (ExtractCore.wrap tname term)) (\unwrapped -> Compute.coderEncode (Compute.adapterCoder ad) unwrapped))
         decode = (\ad -> \term -> Flows_.bind (Compute.coderDecode (Compute.adapterCoder ad) term) (\decoded -> Flows_.pure (Core.TermWrap (Core.WrappedTerm {
                 Core.wrappedTermTypeName = tname,
                 Core.wrappedTermObject = decoded}))))

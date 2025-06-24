@@ -29,7 +29,7 @@ import Hydra.Unification
 import Hydra.Variants
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
-import qualified Hydra.Expect as Expect
+import qualified Hydra.Extract.Core as ExtractCore
 
 import qualified Control.Monad as CM
 import qualified Data.Either   as E
@@ -170,7 +170,7 @@ typeOf cx vars types term = withTrace ("checking type of: " ++ showTerm term ++ 
         checkTypeVariables vars ftype
 
         TypeScheme svars styp <- requireSchemaType cx tname
-        sfields <- Expect.unionType tname styp
+        sfields <- ExtractCore.unionType tname styp
         let fnames = fmap fieldTypeName sfields
         ftypes <- CM.mapM (fieldTypeOf ftype) fnames
 
@@ -326,7 +326,7 @@ inferTypeOf cx term = bindInferredTerm cx letTerm "infer type of term" unifyAndS
   where
     letTerm = TermLet $ Let [LetBinding (Name "ignoredVariableName") term Nothing] $ Terms.string "ignoredEnvironment"
     unifyAndSubst result = do
-        (Let bindings _) <- withEmptyGraph $ Expect.letTerm $ normalizeTypeVariablesInTerm $ inferenceResultTerm result
+        (Let bindings _) <- withEmptyGraph $ ExtractCore.letTerm $ normalizeTypeVariablesInTerm $ inferenceResultTerm result
         case bindings of
           [LetBinding _ term1 (Just ts)] -> return (term1, ts)
           _ -> Flows.fail $ "Expected a single binding with a type scheme, but got: " ++ show bindings
@@ -362,7 +362,7 @@ inferTypeOfCaseStatement :: InferenceContext -> CaseStatement -> Flow s Inferenc
 inferTypeOfCaseStatement cx (CaseStatement tname dflt cases) = Flows.bind (requireSchemaType cx tname) withSchemaType
   where
     fnames = fmap fieldName cases
-    withSchemaType (TypeScheme svars styp) = Flows.bind (Expect.unionType tname styp) withFields
+    withSchemaType (TypeScheme svars styp) = Flows.bind (ExtractCore.unionType tname styp) withFields
       where
         withFields sfields = bind2 (traverse (\t -> inferTypeOfTerm cx t "default") dflt) (inferMany cx $ fmap (\f -> (fieldTerm f, "case " ++ unName (fieldName f))) cases) withResults
           where
@@ -412,7 +412,7 @@ inferTypeOfInjection :: InferenceContext -> Injection -> Flow s InferenceResult
 inferTypeOfInjection cx (Injection tname (Field fname term)) = bind2 (requireSchemaType cx tname) (inferTypeOfTerm cx term "injected term") withResults
   where
     withResults (TypeScheme svars styp) (InferenceResult iterm ityp isubst) =
-        Flows.bind (Expect.unionType tname styp) withFields
+        Flows.bind (ExtractCore.unionType tname styp) withFields
       where
         withFields sfields = Flows.bind (findFieldType fname sfields) withField
           where
@@ -549,7 +549,7 @@ inferTypeOfProduct cx els = Flows.map withResults (inferMany cx $ fmap (\e -> (e
 inferTypeOfProjection :: InferenceContext -> Projection -> Flow s InferenceResult
 inferTypeOfProjection cx (Projection tname fname) = Flows.bind (requireSchemaType cx tname) withSchemaType
   where
-    withSchemaType (TypeScheme svars styp) = Flows.bind (Expect.recordType tname styp) withRecordType
+    withSchemaType (TypeScheme svars styp) = Flows.bind (ExtractCore.recordType tname styp) withRecordType
       where
         withRecordType sfields = Flows.map withField $ findFieldType fname sfields
           where
@@ -634,7 +634,7 @@ inferTypeOfTypedTerm cx (TypedTerm term _) = inferTypeOfTerm cx term "typed term
 inferTypeOfUnwrap :: InferenceContext -> Name -> Flow s InferenceResult
 inferTypeOfUnwrap cx tname = Flows.bind (requireSchemaType cx tname) withSchemaType
   where
-    withSchemaType (TypeScheme svars styp) = Flows.map withWrappedType (Expect.wrappedType tname styp)
+    withSchemaType (TypeScheme svars styp) = Flows.map withWrappedType (ExtractCore.wrappedType tname styp)
       where
         withWrappedType wtyp = yield
           (Terms.unwrap tname)
