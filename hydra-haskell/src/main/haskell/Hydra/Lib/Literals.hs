@@ -86,16 +86,46 @@ readInt64 s = readMaybe s :: Maybe Int64
 readString :: String -> Maybe String
 readString s = readMaybe s :: Maybe String
 
+showBigfloat :: Double -> String
+showBigfloat = show
+
+showBigint :: Integer -> String
+showBigint = show
+
 showBoolean :: Bool -> String
 showBoolean b = case b of
   True -> "true"
   False -> "false"
+
+showFloat32 :: Float -> String
+showFloat32 = show
+
+showFloat64 :: Double -> String
+showFloat64 = show
+
+showInt8 :: Int8 -> String
+showInt8 = show
+
+showInt16 :: Int16 -> String
+showInt16 = show
 
 showInt32 :: Int -> String
 showInt32 = show
 
 showInt64 :: Int64 -> String
 showInt64 = show
+
+showUint8 :: Int16 -> String
+showUint8 = show
+
+showUint16 :: Int -> String
+showUint16 = show
+
+showUint32 :: Int64 -> String
+showUint32 = show
+
+showUint64 :: Integer -> String
+showUint64 = show
 
 showString :: String -> String
 showString = show
