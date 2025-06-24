@@ -6,7 +6,7 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
-import qualified Hydra.CoreEncoding as CoreEncoding
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Decode as Decode
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
@@ -194,7 +194,7 @@ setTermType mtyp term =
 
 -- | Set type in annotations
 setType :: (Maybe Core.Type -> M.Map Core.Name Core.Term -> M.Map Core.Name Core.Term)
-setType mt = (setAnnotation Constants.key_type (Optionals.map CoreEncoding.coreEncodeType mt))
+setType mt = (setAnnotation Constants.key_type (Optionals.map EncodeCore.coreEncodeType mt))
 
 -- | Set type annotation
 setTypeAnnotation :: (Core.Name -> Maybe Core.Term -> Core.Type -> Core.Type)
@@ -226,7 +226,7 @@ setTypeClasses m =
       encodePair = (\nameClasses ->  
               let name = (fst nameClasses) 
                   classes = (snd nameClasses)
-              in (CoreEncoding.coreEncodeName name, (Core.TermSet (Sets.fromList (Lists.map encodeClass (Sets.toList classes))))))
+              in (EncodeCore.coreEncodeName name, (Core.TermSet (Sets.fromList (Lists.map encodeClass (Sets.toList classes))))))
       encoded = (Logic.ifElse (Maps.null m) Nothing (Just (Core.TermMap (Maps.fromList (Lists.map encodePair (Maps.toList m))))))
   in (setTermAnnotation Constants.key_classes encoded)
 
@@ -256,7 +256,7 @@ typeElement :: (Core.Name -> Core.Type -> Graph.Element)
 typeElement name typ =  
   let schemaTerm = (Core.TermVariable (Core.Name "hydra.core.Type")) 
       dataTerm = (normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
-              Core.annotatedTermSubject = (CoreEncoding.coreEncodeType typ),
+              Core.annotatedTermSubject = (EncodeCore.coreEncodeType typ),
               Core.annotatedTermAnnotation = (Maps.fromList [
                 (Constants.key_type, schemaTerm)])})))
   in Graph.Element {

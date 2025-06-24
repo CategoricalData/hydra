@@ -30,7 +30,7 @@ import qualified Hydra.Dsl.Types                  as Types
 import qualified Hydra.Dsl.Typing                 as Typing
 import qualified Hydra.Sources.Tier1.All          as Tier1
 import qualified Hydra.Sources.Tier1.Constants    as Constants
-import qualified Hydra.Sources.Tier1.CoreEncoding as CoreEncoding
+import qualified Hydra.Sources.Tier1.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Tier1.Decode       as Decode
 import qualified Hydra.Sources.Tier1.Formatting   as Formatting
 import qualified Hydra.Sources.Tier1.Functions    as Functions

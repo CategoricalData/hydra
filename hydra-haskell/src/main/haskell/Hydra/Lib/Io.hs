@@ -21,7 +21,7 @@ module Hydra.Lib.Io (
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
-import Hydra.CoreEncoding
+import Hydra.Encode.Core
 import Hydra.Flows
 import Hydra.Typing
 import Hydra.Strip

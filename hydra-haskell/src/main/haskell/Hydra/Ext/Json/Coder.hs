@@ -5,7 +5,7 @@ import Hydra.Compute
 import Hydra.Graph
 import Hydra.Strip
 import Hydra.Variants
-import Hydra.CoreEncoding
+import Hydra.Encode.Core
 import Hydra.Literals
 import Hydra.Rewriting
 import Hydra.Errors

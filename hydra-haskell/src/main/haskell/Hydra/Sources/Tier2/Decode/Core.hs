@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Types                  as Types
 import qualified Hydra.Dsl.Typing                 as Typing
 import qualified Hydra.Sources.Tier1.All          as Tier1
 import qualified Hydra.Sources.Tier1.Constants    as Constants
-import qualified Hydra.Sources.Tier1.CoreEncoding as CoreEncoding
+import qualified Hydra.Sources.Tier1.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Tier1.Decode       as Decode
 import qualified Hydra.Sources.Tier1.Formatting   as Formatting
 import qualified Hydra.Sources.Tier1.Functions    as Functions
@@ -81,7 +81,7 @@ coreDecodingDefinition :: String -> TTerm a -> TElement a
 coreDecodingDefinition = definitionInModule hydraCoreDecodingModule
 
 hydraCoreDecodingModule :: Module
-hydraCoreDecodingModule = Module (Namespace "hydra.coreDecoding") elements
+hydraCoreDecodingModule = Module (Namespace "hydra.decode.core") elements
     [Errors.hydraErrorsModule, ExtractCore.hydraExpectModule, Flows_.hydraFlowsModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule]
     [Tier1.hydraCodersModule, Tier1.hydraMantleModule] $
     Just ("Decoding of encoded types (as terms) back to types according to LambdaGraph's epsilon encoding.")

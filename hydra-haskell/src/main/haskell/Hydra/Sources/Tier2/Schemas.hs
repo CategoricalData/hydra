@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Types                  as Types
 import qualified Hydra.Dsl.Typing                 as Typing
 import qualified Hydra.Sources.Tier1.All          as Tier1
 import qualified Hydra.Sources.Tier1.Constants    as Constants
-import qualified Hydra.Sources.Tier1.CoreEncoding as CoreEncoding
+import qualified Hydra.Sources.Tier1.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Tier1.Decode       as Decode
 import qualified Hydra.Sources.Tier1.Formatting   as Formatting
 import qualified Hydra.Sources.Tier1.Functions    as Functions
@@ -82,7 +82,7 @@ schemasDefinition = definitionInModule hydraSchemasModule
 
 hydraSchemasModule :: Module
 hydraSchemasModule = Module (Namespace "hydra.schemas") elements
-    [DecodeCore.hydraCoreDecodingModule, CoreEncoding.coreEncodingModule, Qnames.hydraQnamesModule, Rewriting.hydraRewritingModule, Sorting.hydraSortingModule]
+    [DecodeCore.hydraCoreDecodingModule, EncodeCore.coreEncodingModule, Qnames.hydraQnamesModule, Rewriting.hydraRewritingModule, Sorting.hydraSortingModule]
     [Tier1.hydraCodersModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just ("Various functions for dereferencing and decoding schema types.")
   where
@@ -134,7 +134,7 @@ dependencyNamespacesDef = schemasDefinition "dependencyNamespaces" $
           (lambda "ts" $ ref Rewriting.typeDependencyNamesDef @@ true @@ true @@ Core.typeSchemeType (var "ts"))
           (Graph.elementType $ var "el"))
         Sets.empty]
-      $ Logic.ifElse (ref CoreEncoding.isEncodedTypeDef @@ (ref Strip.fullyStripTermDef @@ var "term"))
+      $ Logic.ifElse (ref EncodeCore.isEncodedTypeDef @@ (ref Strip.fullyStripTermDef @@ var "term"))
           (Flows.bind (ref DecodeCore.coreDecodeTypeDef @@ var "term") $
             lambda "typ" $ Flows.pure $ Sets.unions $ list [
               var "dataNames", var "schemaNames",
@@ -206,7 +206,7 @@ isEnumRowTypeDef :: TElement (RowType -> Bool)
 isEnumRowTypeDef = schemasDefinition "isEnumRowType" $
   doc "Check if a row type represents an enum (all fields are unit-typed)" $
   lambda "rt" $ Lists.foldl (binaryFunction Logic.and) true $
-    Lists.map (lambda "f" $ ref CoreEncoding.isUnitTypeDef @@ (Core.fieldTypeType $ var "f")) $
+    Lists.map (lambda "f" $ ref EncodeCore.isUnitTypeDef @@ (Core.fieldTypeType $ var "f")) $
       Core.rowTypeFields $ var "rt"
 
 isEnumTypeDef :: TElement (Type -> Bool)
