@@ -52,7 +52,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
-import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
+import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
@@ -82,7 +82,7 @@ templatingDefinition = definitionInModule hydraTemplatingModule
 
 hydraTemplatingModule :: Module
 hydraTemplatingModule = Module (Namespace "hydra.templating") elements
-    [CoreDecoding.hydraCoreDecodingModule]
+    [DecodeCore.hydraCoreDecodingModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just "A utility which instantiates a nonrecursive type with default values"
   where
@@ -97,7 +97,7 @@ graphToSchemaDef = templatingDefinition "graphToSchema" $
     "toPair">: lambda "nameAndEl" $ lets [
       "name">: first $ var "nameAndEl",
       "el">: second $ var "nameAndEl"]
-      $ Flows.bind (ref CoreDecoding.coreDecodeTypeDef @@ (Graph.elementTerm $ var "el")) $
+      $ Flows.bind (ref DecodeCore.coreDecodeTypeDef @@ (Graph.elementTerm $ var "el")) $
         lambda "t" $ Flows.pure $ pair (var "name") (var "t")]
     $ Flows.bind (Flows.mapList (var "toPair") $ Maps.toList $ Graph.graphElements $ var "g") $
       lambda "pairs" $ Flows.pure $ Maps.fromList $ var "pairs"

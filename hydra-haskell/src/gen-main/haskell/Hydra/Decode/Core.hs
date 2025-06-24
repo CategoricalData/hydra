@@ -1,6 +1,6 @@
 -- | Decoding of encoded types (as terms) back to types according to LambdaGraph's epsilon encoding.
 
-module Hydra.CoreDecoding where
+module Hydra.Decode.Core where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core

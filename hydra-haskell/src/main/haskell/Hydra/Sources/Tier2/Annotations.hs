@@ -52,7 +52,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
-import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
+import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
@@ -79,7 +79,7 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 
 hydraAnnotationsModule :: Module
 hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
-    [Decode.hydraDecodeModule, CoreDecoding.hydraCoreDecodingModule, CoreEncoding.coreEncodingModule,
+    [Decode.hydraDecodeModule, DecodeCore.hydraCoreDecodingModule, CoreEncoding.coreEncodingModule,
       ExtractCore.hydraExpectModule, Variants.hydraVariantsModule, Lexical.hydraLexicalModule, Flows_.hydraFlowsModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just "Utilities for reading and writing type and term annotations"
@@ -220,7 +220,7 @@ getTypeDef = annotationsDefinition "getType" $
   doc "Get type from annotations" $
   lambda "anns" $
     Optionals.maybe (Flows.pure nothing)
-      (lambda "dat" $ Flows.map (unaryFunction just) (ref CoreDecoding.coreDecodeTypeDef @@ var "dat"))
+      (lambda "dat" $ Flows.map (unaryFunction just) (ref DecodeCore.coreDecodeTypeDef @@ var "dat"))
       (Maps.lookup (ref Constants.key_typeDef) (var "anns"))
 
 getTypeAnnotationDef :: TElement (Name -> Type -> Maybe Term)
@@ -245,7 +245,7 @@ getTypeClassesDef = annotationsDefinition "getTypeClasses" $
     $ Optionals.maybe
         (Flows.pure Maps.empty)
         (lambda "term" $ ref ExtractCore.mapDef
-          @@ (ref CoreDecoding.coreDecodeNameDef)
+          @@ (ref DecodeCore.coreDecodeNameDef)
           @@ (ref ExtractCore.setDef @@ var "decodeClass")
           @@ (var "term"))
         (ref getTermAnnotationDef @@ ref Constants.key_classesDef @@ var "term")

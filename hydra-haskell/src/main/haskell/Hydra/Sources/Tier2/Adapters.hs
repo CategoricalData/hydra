@@ -52,7 +52,7 @@ import qualified Data.Maybe                as Y
 import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
 import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
-import qualified Hydra.Sources.Tier2.CoreDecoding as CoreDecoding
+import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
@@ -171,7 +171,7 @@ adaptedModuleDefinitionsDef = adaptersDefinition "adaptedModuleDefinitions" $
       "typ">: Core.typedTermType $ var "tt",
       "name">: Graph.elementName $ var "el"] $
       Logic.ifElse (ref Annotations.isNativeTypeDef @@ var "el")
-        (withVar "adaptedTyp" (withVar "coreTyp" (ref CoreDecoding.coreDecodeTypeDef @@ var "term") $ ref adaptTypeDef @@ var "lang" @@ var "coreTyp") $
+        (withVar "adaptedTyp" (withVar "coreTyp" (ref DecodeCore.coreDecodeTypeDef @@ var "term") $ ref adaptTypeDef @@ var "lang" @@ var "coreTyp") $
          Flows.pure $ Module.definitionType $ Module.typeDefinition (var "name") (var "adaptedTyp"))
         (Optionals.maybe
           (Flows.fail $ Strings.cat2 (string "no adapter for element ") (unwrap _Name @@ var "name"))
