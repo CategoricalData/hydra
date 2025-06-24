@@ -7,7 +7,7 @@ import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Decode.Core
-import Hydra.CoreEncoding
+import Hydra.Encode.Core
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types

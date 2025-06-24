@@ -1,6 +1,6 @@
 -- | Mapping of hydra.core constructs in a host language like Haskell or Java  to their native Hydra counterparts as terms.  This includes an implementation of LambdaGraph's epsilon encoding (types to terms).
 
-module Hydra.CoreEncoding where
+module Hydra.Encode.Core where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Equality as Equality

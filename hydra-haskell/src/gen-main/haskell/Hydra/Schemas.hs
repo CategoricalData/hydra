@@ -7,7 +7,7 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
-import qualified Hydra.CoreEncoding as CoreEncoding
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Flows as Flows
 import qualified Hydra.Graph as Graph
@@ -49,7 +49,7 @@ dependencyNamespaces withVars withPrims withNoms withSchema els =
           let term = (Graph.elementTerm el) 
               dataNames = (Rewriting.termDependencyNames withVars withPrims withNoms term)
               schemaNames = (Logic.ifElse withSchema (Optionals.maybe Sets.empty (\ts -> Rewriting.typeDependencyNames True True (Core.typeSchemeType ts)) (Graph.elementType el)) Sets.empty)
-          in (Logic.ifElse (CoreEncoding.isEncodedType (Strip.fullyStripTerm term)) (Flows_.bind (DecodeCore.coreDecodeType term) (\typ -> Flows_.pure (Sets.unions [
+          in (Logic.ifElse (EncodeCore.isEncodedType (Strip.fullyStripTerm term)) (Flows_.bind (DecodeCore.coreDecodeType term) (\typ -> Flows_.pure (Sets.unions [
             dataNames,
             schemaNames,
             (Rewriting.typeDependencyNames True True typ)]))) (Flows_.pure (Sets.unions [
@@ -90,7 +90,7 @@ fullyStripType typ = ((\x -> case x of
 
 -- | Check if a row type represents an enum (all fields are unit-typed)
 isEnumRowType :: (Core.RowType -> Bool)
-isEnumRowType rt = (Lists.foldl Logic.and True (Lists.map (\f -> CoreEncoding.isUnitType (Core.fieldTypeType f)) (Core.rowTypeFields rt)))
+isEnumRowType rt = (Lists.foldl Logic.and True (Lists.map (\f -> EncodeCore.isUnitType (Core.fieldTypeType f)) (Core.rowTypeFields rt)))
 
 -- | Check if a type is an enum type
 isEnumType :: (Core.Type -> Bool)

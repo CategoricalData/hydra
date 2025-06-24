@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier1.CoreEncoding where
+module Hydra.Sources.Tier1.Encode.Core where
 
 -- Standard term-level Tier-1 imports
 import Hydra.Kernel
@@ -31,7 +31,7 @@ import qualified Hydra.Sources.Tier1.Strip as Strip
 
 
 coreEncodingModule :: Module
-coreEncodingModule = Module (Namespace "hydra.coreEncoding") elements
+coreEncodingModule = Module (Namespace "hydra.encode.core") elements
     [Strip.hydraStripModule]
     [hydraCoreModule] $
     Just ("Mapping of hydra.core constructs in a host language like Haskell or Java "

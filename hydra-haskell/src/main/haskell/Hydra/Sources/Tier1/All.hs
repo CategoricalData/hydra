@@ -8,7 +8,7 @@ module Hydra.Sources.Tier1.All(
   module Hydra.Sources.Tier1.Compute,
   module Hydra.Sources.Tier1.Constants,
   module Hydra.Sources.Tier1.Constraints,
-  module Hydra.Sources.Tier1.CoreEncoding,
+  module Hydra.Sources.Tier1.Encode.Core,
   module Hydra.Sources.Tier1.Decode,
   module Hydra.Sources.Tier1.Formatting,
   module Hydra.Sources.Tier1.Functions,
@@ -34,7 +34,7 @@ import Hydra.Sources.Tier1.Coders
 import Hydra.Sources.Tier1.Compute
 import Hydra.Sources.Tier1.Constants
 import Hydra.Sources.Tier1.Constraints
-import Hydra.Sources.Tier1.CoreEncoding hiding (ref)
+import Hydra.Sources.Tier1.Encode.Core hiding (ref)
 import Hydra.Sources.Tier1.Decode
 import Hydra.Sources.Tier1.Formatting
 import Hydra.Sources.Tier1.Functions
