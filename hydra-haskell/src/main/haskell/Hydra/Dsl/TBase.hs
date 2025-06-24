@@ -23,4 +23,4 @@ infixr 0 >:
 n >: d = (name n, d)
 
 name :: String -> TTerm Name
-name s = Core.name $ Name s
+name s = Core.nameLift $ Name s

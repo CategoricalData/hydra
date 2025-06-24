@@ -178,7 +178,7 @@ makeElementsDef = grammarToModuleDefinition "makeElements" $
       "minPats">: ref simplifyDef @@ var "isRecord" @@ var "pats",
       "fieldNames">: ref findNamesDef @@ var "minPats",
       "toField">: lambda "n" $ lambda "p" $ var "descend" @@ var "n" @@
-        (lambda "pairs" $ pair (Core.fieldType (Core.name' $ var "n") (second $ Lists.head $ var "pairs")) (Lists.tail $ var "pairs")) @@
+        (lambda "pairs" $ pair (Core.fieldType (Core.name $ var "n") (second $ Lists.head $ var "pairs")) (Lists.tail $ var "pairs")) @@
         var "p",
       "fieldPairs">: Lists.zipWith (var "toField") (var "fieldNames") (var "minPats"),
       "fields">: Lists.map (unaryFunction first) (var "fieldPairs"),
@@ -253,7 +253,7 @@ toNameDef = grammarToModuleDefinition "toName" $
 wrapTypeDef :: TElement (Type -> Type)
 wrapTypeDef = grammarToModuleDefinition "wrapType" $
   doc "Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type" $
-  lambda "t" $ cases _Type (var "t") (Just $ Core.typeWrap $ Core.wrappedType (Core.name placeholderName) $ var "t") [
+  lambda "t" $ cases _Type (var "t") (Just $ Core.typeWrap $ Core.wrappedType (Core.nameLift placeholderName) $ var "t") [
     _Type_record>>: constant $ var "t",
     _Type_union>>: constant $ var "t",
     _Type_wrap>>: constant $ var "t"]

@@ -163,7 +163,7 @@ expandTypedLambdasDef = rewritingDefinition "expandTypedLambdas" $
         (var "term")
         (lets [
           "dom">: Lists.head $ var "doms",
-          "var">: Core.name' $ Strings.cat2 (string "v") (Literals.showInt32 $ var "i"),
+          "var">: Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ var "i"),
           "tailDoms">: Lists.tail $ var "doms",
           "typedTerm">: lambda "typ" $ lambda "term" $ Core.termTyped $ Core.typedTerm (var "term") (var "typ"),
           "toFunctionType">: lambdas ["doms", "cod"] $
@@ -243,7 +243,7 @@ flattenLetTermsDef = rewritingDefinition "flattenLetTerms" $
           "bindings1">: Core.letBindings $ var "innerLet",
           "body1">: Core.letEnvironment $ var "innerLet",
           "prefix">: Strings.cat2 (unwrap _Name @@ var "key0") (string "_"),
-          "qualify">: lambda "n" $ Core.name' $ Strings.cat2 (var "prefix") (unwrap _Name @@ var "n"),
+          "qualify">: lambda "n" $ Core.name $ Strings.cat2 (var "prefix") (unwrap _Name @@ var "n"),
           "toSubstPair">: lambda "b" $ pair (Core.letBindingName $ var "b") (var "qualify" @@ (Core.letBindingName $ var "b")),
           "subst">: Maps.fromList $ Lists.map (var "toSubstPair") (var "bindings1"),
           "replaceVars">: ref substituteVariablesDef @@ var "subst",
@@ -428,7 +428,7 @@ normalizeTypeVariablesInTermDef = rewritingDefinition "normalizeTypeVariablesInT
                   "typ">: Core.typeSchemeType $ var "ts",
                   "varsLen">: Lists.length $ var "vars",
                   "boundVarsLen">: Sets.size $ var "boundVars",
-                  "normalVariables">: Lists.map (lambda "i" $ Core.name' $ Strings.cat2 (string "t") (Literals.showInt32 $ var "i")) $
+                  "normalVariables">: Lists.map (lambda "i" $ Core.name $ Strings.cat2 (string "t") (Literals.showInt32 $ var "i")) $
                     Math.rangeInt32 (int32 0) (Math.add (var "varsLen") (var "boundVarsLen")),
                   "newVars">: Lists.take (Lists.length $ var "vars") $ Lists.filter
                     (lambda "n" $ Logic.not $ Sets.member (var "n") (var "boundVars"))
@@ -1116,7 +1116,7 @@ toShortNamesDef = rewritingDefinition "toShortNames" $
       "local">: first $ var "localNames",
       "names">: second $ var "localNames",
       "rangeFrom">: lambda "start" $ Lists.cons (var "start") (var "rangeFrom" @@ (Math.add (var "start") (int32 1))),
-      "rename">: lambda "name" $ lambda "i" $ pair (var "name") $ Core.name' $
+      "rename">: lambda "name" $ lambda "i" $ pair (var "name") $ Core.name $
         Logic.ifElse (Equality.gtInt32 (var "i") (int32 1))
           (Strings.cat2 (var "local") (Literals.showInt32 $ var "i"))
           (var "local")]
@@ -1169,7 +1169,7 @@ typeNamesInTypeDef = rewritingDefinition "typeNamesInType" $
       _Type_record>>: lambda "rowType" $ lets [
         "tname">: Core.rowTypeTypeName $ var "rowType"]
         $ Logic.ifElse
-          (Logic.or (Logic.not $ var "excludeUnit") (Logic.not $ Core.equalName_ (var "tname") $ Core.name _Unit))
+          (Logic.or (Logic.not $ var "excludeUnit") (Logic.not $ Core.equalName_ (var "tname") $ Core.nameLift _Unit))
           (Sets.insert (var "tname") (var "names"))
           (var "names"),
       _Type_union>>: lambda "rowType" $ lets [

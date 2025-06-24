@@ -306,15 +306,11 @@ mapTypeKeys mt = Phantoms.project _MapType _MapType_keys @@ mt
 mapTypeValues :: TTerm MapType -> TTerm Type
 mapTypeValues mt = Phantoms.project _MapType _MapType_values @@ mt
 
--- TODO: this is only here for legacy reasons
-name :: Name -> TTerm Name
-name (Name n) = wrap _Name $ Phantoms.string n
+name :: TTerm String -> TTerm Name
+name = wrap _Name
 
-name' :: TTerm String -> TTerm Name
-name' = wrap _Name
-
-nameLift :: TTerm String -> TTerm Name
-nameLift = wrap _Name
+nameLift :: Name -> TTerm Name
+nameLift (Name n) = wrap _Name $ Phantoms.string n
 
 projection :: TTerm Name -> TTerm Name -> TTerm Projection
 projection tname fname = Phantoms.record _Projection [

@@ -202,7 +202,7 @@ getDescriptionDef = annotationsDefinition "getDescription" $
   lambda "anns" $
     Optionals.maybe (Flows.pure nothing)
       (lambda "term" $ Flows.map (unaryFunction just) $ ref Expect.stringDef @@ var "term")
-      (Maps.lookup (Core.name key_description) (var "anns"))
+      (Maps.lookup (Core.nameLift key_description) (var "anns"))
 
 getTermAnnotationDef :: TElement (Name -> Term -> Maybe Term)
 getTermAnnotationDef = annotationsDefinition "getTermAnnotation" $
@@ -235,9 +235,9 @@ getTypeClassesDef = annotationsDefinition "getTypeClasses" $
   lambda "term" $ lets [
     "decodeClass">: lambda "term" $ lets [
       "byName">: Maps.fromList $ list [
-        pair (Core.name _TypeClass_equality) Graph.typeClassEquality,
-        pair (Core.name _TypeClass_ordering) Graph.typeClassOrdering]]
-      $ withVar "fn" (ref Expect.unitVariantDef @@ Core.name _TypeClass @@ var "term") $
+        pair (Core.nameLift _TypeClass_equality) Graph.typeClassEquality,
+        pair (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]]
+      $ withVar "fn" (ref Expect.unitVariantDef @@ Core.nameLift _TypeClass @@ var "term") $
           Optionals.maybe
             (ref Errors.unexpectedDef @@ string "type class" @@ (Io.showTerm $ var "term"))
             (unaryFunction Flows.pure)
@@ -267,7 +267,7 @@ isNativeTypeDef = annotationsDefinition "isNativeType" $
     $ Optionals.maybe
         false
         (lambda "ts" $ Logic.and
-          (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.name _Type)))
+          (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _Type)))
           (Logic.not $ var "isFlaggedAsFirstClassType"))
         (Graph.elementType $ var "el")
 
@@ -463,7 +463,7 @@ typeElementDef :: TElement (Name -> Type -> Element)
 typeElementDef = annotationsDefinition "typeElement" $
   doc "Create a type element with proper annotations" $
   lambda "name" $ lambda "typ" $ lets [
-    "schemaTerm">: Core.termVariable (Core.name _Type),
+    "schemaTerm">: Core.termVariable (Core.nameLift _Type),
     "dataTerm">: ref normalizeTermAnnotationsDef @@ (Core.termAnnotated $ Core.annotatedTerm
       (ref CoreEncoding.coreEncodeTypeDef @@ var "typ")
       (Maps.fromList $ list [pair (ref Constants.key_typeDef) (var "schemaTerm")]))]
@@ -481,8 +481,8 @@ unshadowVariablesDef :: TElement (Term -> Term)
 unshadowVariablesDef = annotationsDefinition "unshadowVariables" $
   doc "Unshadow variables in term" $
   lambda "term" $ lets [
-    "freshName">: Flows.map (lambda "n" $ Core.name' $ Strings.cat2 (string "s") (Literals.showInt32 $ var "n")) $
-      ref nextCountDef @@ Core.name' (string "unshadow"),
+    "freshName">: Flows.map (lambda "n" $ Core.name $ Strings.cat2 (string "s") (Literals.showInt32 $ var "n")) $
+      ref nextCountDef @@ Core.name (string "unshadow"),
     "rewrite">: lambdas ["recurse", "term"] $ lets [
       "handleOther">: var "recurse" @@ var "term"]
       $ withVar "state" (ref Errors.getStateDef) $

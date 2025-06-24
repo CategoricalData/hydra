@@ -270,7 +270,7 @@ nameDef :: TElement (Term -> Name)
 nameDef = decodeDefinition "name" $
   lambda "term" $ Optionals.map nm
     (Optionals.bind
-      (ref wrapDef @@ Core.name _Name @@ var "term")
+      (ref wrapDef @@ Core.nameLift _Name @@ var "term")
       (ref stringDef))
   where
     nm :: TTerm (String -> Name)
@@ -355,7 +355,7 @@ unitDef :: TElement (Term -> Maybe ())
 unitDef = decodeDefinition "unit" $
   lambda "term" $ Optionals.map
     (constant unit)
-    (ref recordDef @@ Core.name _Unit @@ var "term")
+    (ref recordDef @@ Core.nameLift _Unit @@ var "term")
 
 unitVariantDef :: TElement (Name -> Term -> Maybe Name)
 unitVariantDef = decodeDefinition "unitVariant" $
