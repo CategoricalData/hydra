@@ -18,7 +18,6 @@ import Hydra.Mantle
 import Hydra.Rewriting
 import Hydra.Inference
 import Hydra.Annotations
-import Hydra.Decode.Core
 import Hydra.Lexical
 import Hydra.Rewriting
 import Hydra.Schemas

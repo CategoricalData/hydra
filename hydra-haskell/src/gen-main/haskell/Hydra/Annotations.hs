@@ -73,7 +73,7 @@ getTermDescription term = (getDescription (termAnnotationInternal term))
 
 -- | Get type from annotations
 getType :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe Core.Type))
-getType anns = (Optionals.maybe (Flows_.pure Nothing) (\dat -> Flows_.map Optionals.pure (DecodeCore.coreDecodeType dat)) (Maps.lookup Constants.key_type anns))
+getType anns = (Optionals.maybe (Flows_.pure Nothing) (\dat -> Flows_.map Optionals.pure (DecodeCore.type_ dat)) (Maps.lookup Constants.key_type anns))
 
 -- | Get a type annotation
 getTypeAnnotation :: (Core.Name -> Core.Type -> Maybe Core.Term)
@@ -87,7 +87,7 @@ getTypeClasses term =
                   (Core.Name "equality", Graph.TypeClassEquality),
                   (Core.Name "ordering", Graph.TypeClassOrdering)])
           in (Flows_.bind (ExtractCore.unitVariant (Core.Name "hydra.graph.TypeClass") term) (\fn -> Optionals.maybe (Errors.unexpected "type class" (Io.showTerm term)) Flows_.pure (Maps.lookup fn byName))))
-  in (Optionals.maybe (Flows_.pure Maps.empty) (\term -> ExtractCore.map_ DecodeCore.coreDecodeName (ExtractCore.set decodeClass) term) (getTermAnnotation Constants.key_classes term))
+  in (Optionals.maybe (Flows_.pure Maps.empty) (\term -> ExtractCore.map_ DecodeCore.name (ExtractCore.set decodeClass) term) (getTermAnnotation Constants.key_classes term))
 
 -- | Get type description
 getTypeDescription :: (Core.Type -> Compute.Flow Graph.Graph (Maybe String))

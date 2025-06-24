@@ -3,6 +3,7 @@ module Hydra.CoreCodersSpec where
 import Hydra.Kernel
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
+import qualified Hydra.Decode.Core as DecodeCore
 
 import Hydra.TestData
 import Hydra.TestUtils
@@ -55,19 +56,19 @@ individualDecoderTestCases = do
 
     H.it "float32 literal type" $ do
       shouldSucceedWith
-        (coreDecodeLiteralType
+        (DecodeCore.literalType
           (variant _LiteralType _LiteralType_float $ unitVariant _FloatType _FloatType_float32))
         (LiteralTypeFloat FloatTypeFloat32)
 
     H.it "float32 type" $ do
       shouldSucceedWith
-        (coreDecodeType
+        (DecodeCore.type_
           (variant _Type _Type_literal $ variant _LiteralType _LiteralType_float $ unitVariant _FloatType _FloatType_float32))
         Types.float32
 
     H.it "union type" $ do
       shouldSucceedWith
-        (coreDecodeType $
+        (DecodeCore.type_ $
           variant _Type _Type_union $ record _RowType [
             Field _RowType_typeName $ wrap _Name $ string (unName testTypeName),
             Field _RowType_fields $
@@ -89,10 +90,10 @@ decodeInvalidTerms = do
   H.describe "Decode invalid terms" $ do
 
     H.it "Try to decode a term with wrong fields for Type" $ do
-      shouldFail (coreDecodeType $ variant untyped (Name "unknownField") $ list [])
+      shouldFail (DecodeCore.type_ $ variant untyped (Name "unknownField") $ list [])
 
     H.it "Try to decode an incomplete representation of a Type" $ do
-      shouldFail (coreDecodeType $ variant _Type _Type_literal $ unitVariant _LiteralType _LiteralType_integer)
+      shouldFail (DecodeCore.type_ $ variant _Type _Type_literal $ unitVariant _LiteralType _LiteralType_integer)
 
 metadataIsPreserved :: H.SpecWith ()
 metadataIsPreserved = do
@@ -100,7 +101,7 @@ metadataIsPreserved = do
 
     H.it "Basic metadata" $ do
       shouldSucceedWith
-        (coreDecodeType $ coreEncodeType annotatedStringType)
+        (DecodeCore.type_ $ coreEncodeType annotatedStringType)
         annotatedStringType
   where
     annotatedStringType :: Type
@@ -115,7 +116,7 @@ testRoundTripsFromType = do
     H.it "Try random types" $
       QC.property $ \typ ->
         shouldSucceedWith
-          (coreDecodeType $ coreEncodeType typ)
+          (DecodeCore.type_ $ coreEncodeType typ)
           typ
 
 spec :: H.Spec

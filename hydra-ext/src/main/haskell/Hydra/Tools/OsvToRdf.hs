@@ -9,7 +9,6 @@ import Hydra.Kernel
 import Hydra.Tools.Monads
 import Hydra.Ext.Json.Serde
 import Hydra.Ext.Json.Coder
-import Hydra.CoreDecoding
 import Hydra.Codegen
 import Hydra.Formatting
 import qualified Hydra.Json as Json
