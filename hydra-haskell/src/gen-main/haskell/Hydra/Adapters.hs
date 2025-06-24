@@ -49,7 +49,7 @@ adaptedModuleDefinitions lang mod_ =
                   term = (Core.typedTermTerm tt)
                   typ = (Core.typedTermType tt)
                   name = (Graph.elementName el)
-              in (Logic.ifElse (Annotations.isNativeType el) (Flows_.bind (Flows_.bind (DecodeCore.coreDecodeType term) (\coreTyp -> adaptType lang coreTyp)) (\adaptedTyp -> Flows_.pure (Module.DefinitionType (Module.TypeDefinition {
+              in (Logic.ifElse (Annotations.isNativeType el) (Flows_.bind (Flows_.bind (DecodeCore.type_ term) (\coreTyp -> adaptType lang coreTyp)) (\adaptedTyp -> Flows_.pure (Module.DefinitionType (Module.TypeDefinition {
                 Module.typeDefinitionName = name,
                 Module.typeDefinitionType = adaptedTyp})))) (Optionals.maybe (Flows_.fail (Strings.cat2 "no adapter for element " (Core.unName name))) (\adapter -> Flows_.bind (Compute.coderEncode (Compute.adapterCoder adapter) term) (\adapted -> Flows_.pure (Module.DefinitionTerm (Module.TermDefinition {
                 Module.termDefinitionName = name,

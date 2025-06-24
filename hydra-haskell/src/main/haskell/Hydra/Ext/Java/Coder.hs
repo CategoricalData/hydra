@@ -12,6 +12,7 @@ import Hydra.Adapters
 import Hydra.Ext.Java.Serde
 import Hydra.Ext.Java.Settings
 import Hydra.AdapterUtils
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Ext.Java.Syntax as Java
@@ -328,7 +329,7 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
 
 declarationForType :: Bool -> Aliases -> (Element, TypedTerm) -> Flow Graph Java.TypeDeclarationWithComments
 declarationForType isSer aliases (el, TypedTerm term _) = withTrace ("element " ++ unName (elementName el)) $ do
-    t <- coreDecodeType term >>= adaptType javaLanguage
+    t <- DecodeCore.type_ term >>= adaptType javaLanguage
     cd <- toClassDecl False isSer aliases [] (elementName el) t
     comments <- commentsFromElement el
     return $ Java.TypeDeclarationWithComments (Java.TypeDeclarationClass cd) comments

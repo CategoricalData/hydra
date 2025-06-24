@@ -23,41 +23,41 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-coreDecodeApplicationType :: (Core.Term -> Compute.Flow Graph.Graph Core.ApplicationType)
-coreDecodeApplicationType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "function") coreDecodeType) (getField m (Core.Name "argument") coreDecodeType) (\function -> \argument -> Core.ApplicationType {
+applicationType :: (Core.Term -> Compute.Flow Graph.Graph Core.ApplicationType)
+applicationType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "function") type_) (getField m (Core.Name "argument") type_) (\function -> \argument -> Core.ApplicationType {
   Core.applicationTypeFunction = function,
   Core.applicationTypeArgument = argument})))
 
-coreDecodeFieldType :: (Core.Term -> Compute.Flow Graph.Graph Core.FieldType)
-coreDecodeFieldType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "name") coreDecodeName) (getField m (Core.Name "type") coreDecodeType) (\name -> \typ -> Core.FieldType {
+fieldType :: (Core.Term -> Compute.Flow Graph.Graph Core.FieldType)
+fieldType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "name") name) (getField m (Core.Name "type") type_) (\name -> \typ -> Core.FieldType {
   Core.fieldTypeName = name,
   Core.fieldTypeType = typ})))
 
-coreDecodeFieldTypes :: (Core.Term -> Compute.Flow Graph.Graph [Core.FieldType])
-coreDecodeFieldTypes term =  
+fieldTypes :: (Core.Term -> Compute.Flow Graph.Graph [Core.FieldType])
+fieldTypes term =  
   let stripped = (Strip.fullyStripTerm term)
   in ((\x -> case x of
-    Core.TermList v1 -> (Flows_.mapList coreDecodeFieldType v1)
+    Core.TermList v1 -> (Flows_.mapList fieldType v1)
     _ -> (Errors.unexpected "list" (Io.showTerm term))) stripped)
 
-coreDecodeFloatType :: (Core.Term -> Compute.Flow Graph.Graph Core.FloatType)
-coreDecodeFloatType = (matchEnum (Core.Name "hydra.core.FloatType") [
+floatType :: (Core.Term -> Compute.Flow Graph.Graph Core.FloatType)
+floatType = (matchEnum (Core.Name "hydra.core.FloatType") [
   (Core.Name "bigfloat", Core.FloatTypeBigfloat),
   (Core.Name "float32", Core.FloatTypeFloat32),
   (Core.Name "float64", Core.FloatTypeFloat64)])
 
-coreDecodeForallType :: (Core.Term -> Compute.Flow Graph.Graph Core.ForallType)
-coreDecodeForallType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "parameter") coreDecodeName) (getField m (Core.Name "body") coreDecodeType) (\parameter -> \body -> Core.ForallType {
+forallType :: (Core.Term -> Compute.Flow Graph.Graph Core.ForallType)
+forallType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "parameter") name) (getField m (Core.Name "body") type_) (\parameter -> \body -> Core.ForallType {
   Core.forallTypeParameter = parameter,
   Core.forallTypeBody = body})))
 
-coreDecodeFunctionType :: (Core.Term -> Compute.Flow Graph.Graph Core.FunctionType)
-coreDecodeFunctionType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "domain") coreDecodeType) (getField m (Core.Name "codomain") coreDecodeType) (\domain -> \codomain -> Core.FunctionType {
+functionType :: (Core.Term -> Compute.Flow Graph.Graph Core.FunctionType)
+functionType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "domain") type_) (getField m (Core.Name "codomain") type_) (\domain -> \codomain -> Core.FunctionType {
   Core.functionTypeDomain = domain,
   Core.functionTypeCodomain = codomain})))
 
-coreDecodeIntegerType :: (Core.Term -> Compute.Flow Graph.Graph Core.IntegerType)
-coreDecodeIntegerType = (matchEnum (Core.Name "hydra.core.IntegerType") [
+integerType :: (Core.Term -> Compute.Flow Graph.Graph Core.IntegerType)
+integerType = (matchEnum (Core.Name "hydra.core.IntegerType") [
   (Core.Name "bigint", Core.IntegerTypeBigint),
   (Core.Name "int8", Core.IntegerTypeInt8),
   (Core.Name "int16", Core.IntegerTypeInt16),
@@ -68,59 +68,59 @@ coreDecodeIntegerType = (matchEnum (Core.Name "hydra.core.IntegerType") [
   (Core.Name "uint32", Core.IntegerTypeUint32),
   (Core.Name "uint64", Core.IntegerTypeUint64)])
 
-coreDecodeLiteralType :: (Core.Term -> Compute.Flow Graph.Graph Core.LiteralType)
-coreDecodeLiteralType = (matchUnion (Core.Name "hydra.core.LiteralType") [
+literalType :: (Core.Term -> Compute.Flow Graph.Graph Core.LiteralType)
+literalType = (matchUnion (Core.Name "hydra.core.LiteralType") [
   matchUnitField (Core.Name "binary") Core.LiteralTypeBinary,
   matchUnitField (Core.Name "boolean") Core.LiteralTypeBoolean,
-  (Core.Name "float", (\ft -> Flows_.map (\x -> Core.LiteralTypeFloat x) (coreDecodeFloatType ft))),
-  (Core.Name "integer", (\it -> Flows_.map (\x -> Core.LiteralTypeInteger x) (coreDecodeIntegerType it))),
+  (Core.Name "float", (\ft -> Flows_.map (\x -> Core.LiteralTypeFloat x) (floatType ft))),
+  (Core.Name "integer", (\it -> Flows_.map (\x -> Core.LiteralTypeInteger x) (integerType it))),
   (matchUnitField (Core.Name "string") Core.LiteralTypeString)])
 
-coreDecodeMapType :: (Core.Term -> Compute.Flow Graph.Graph Core.MapType)
-coreDecodeMapType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "keys") coreDecodeType) (getField m (Core.Name "values") coreDecodeType) (\keys -> \values -> Core.MapType {
+mapType :: (Core.Term -> Compute.Flow Graph.Graph Core.MapType)
+mapType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "keys") type_) (getField m (Core.Name "values") type_) (\keys -> \values -> Core.MapType {
   Core.mapTypeKeys = keys,
   Core.mapTypeValues = values})))
 
-coreDecodeName :: (Core.Term -> Compute.Flow Graph.Graph Core.Name)
-coreDecodeName term = (Flows_.map (\x -> Core.Name x) (Flows_.bind (ExtractCore.wrap (Core.Name "hydra.core.Name") term) ExtractCore.string))
+name :: (Core.Term -> Compute.Flow Graph.Graph Core.Name)
+name term = (Flows_.map (\x -> Core.Name x) (Flows_.bind (ExtractCore.wrap (Core.Name "hydra.core.Name") term) ExtractCore.string))
 
-coreDecodeRowType :: (Core.Term -> Compute.Flow Graph.Graph Core.RowType)
-coreDecodeRowType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "typeName") coreDecodeName) (getField m (Core.Name "fields") coreDecodeFieldTypes) (\typeName -> \fields -> Core.RowType {
+rowType :: (Core.Term -> Compute.Flow Graph.Graph Core.RowType)
+rowType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "typeName") name) (getField m (Core.Name "fields") fieldTypes) (\typeName -> \fields -> Core.RowType {
   Core.rowTypeTypeName = typeName,
   Core.rowTypeFields = fields})))
 
-coreDecodeString :: (Core.Term -> Compute.Flow Graph.Graph String)
-coreDecodeString term = (ExtractCore.string (Strip.fullyStripTerm term))
+string :: (Core.Term -> Compute.Flow Graph.Graph String)
+string term = (ExtractCore.string (Strip.fullyStripTerm term))
 
-coreDecodeType :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)
-coreDecodeType dat = ((\x -> case x of
+type_ :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)
+type_ dat = ((\x -> case x of
   Core.TermAnnotated v1 -> (Flows_.map (\t -> Core.TypeAnnotated (Core.AnnotatedType {
     Core.annotatedTypeSubject = t,
-    Core.annotatedTypeAnnotation = (Core.annotatedTermAnnotation v1)})) (coreDecodeType (Core.annotatedTermSubject v1)))
-  Core.TermTyped v1 -> (coreDecodeType (Core.typedTermTerm v1))
+    Core.annotatedTypeAnnotation = (Core.annotatedTermAnnotation v1)})) (type_ (Core.annotatedTermSubject v1)))
+  Core.TermTyped v1 -> (type_ (Core.typedTermTerm v1))
   _ -> (matchUnion (Core.Name "hydra.core.Type") [
-    (Core.Name "application", (\at -> Flows_.map (\x -> Core.TypeApplication x) (coreDecodeApplicationType at))),
-    (Core.Name "forall", (\ft -> Flows_.map (\x -> Core.TypeForall x) (coreDecodeForallType ft))),
-    (Core.Name "function", (\ft -> Flows_.map (\x -> Core.TypeFunction x) (coreDecodeFunctionType ft))),
-    (Core.Name "list", (\et -> Flows_.map (\x -> Core.TypeList x) (coreDecodeType et))),
-    (Core.Name "literal", (\lt -> Flows_.map (\x -> Core.TypeLiteral x) (coreDecodeLiteralType lt))),
-    (Core.Name "map", (\mt -> Flows_.map (\x -> Core.TypeMap x) (coreDecodeMapType mt))),
-    (Core.Name "optional", (\et -> Flows_.map (\x -> Core.TypeOptional x) (coreDecodeType et))),
-    (Core.Name "product", (\types -> Flows_.map (\x -> Core.TypeProduct x) (ExtractCore.list coreDecodeType types))),
-    (Core.Name "record", (\rt -> Flows_.map (\x -> Core.TypeRecord x) (coreDecodeRowType rt))),
-    (Core.Name "set", (\et -> Flows_.map (\x -> Core.TypeSet x) (coreDecodeType et))),
-    (Core.Name "sum", (\types -> Flows_.map (\x -> Core.TypeSum x) (ExtractCore.list coreDecodeType types))),
-    (Core.Name "union", (\rt -> Flows_.map (\x -> Core.TypeUnion x) (coreDecodeRowType rt))),
-    (Core.Name "variable", (\n -> Flows_.map (\x -> Core.TypeVariable x) (coreDecodeName n))),
-    (Core.Name "wrap", (\wt -> Flows_.map (\x -> Core.TypeWrap x) (coreDecodeWrappedType wt)))] dat)) dat)
+    (Core.Name "application", (\at -> Flows_.map (\x -> Core.TypeApplication x) (applicationType at))),
+    (Core.Name "forall", (\ft -> Flows_.map (\x -> Core.TypeForall x) (forallType ft))),
+    (Core.Name "function", (\ft -> Flows_.map (\x -> Core.TypeFunction x) (functionType ft))),
+    (Core.Name "list", (\et -> Flows_.map (\x -> Core.TypeList x) (type_ et))),
+    (Core.Name "literal", (\lt -> Flows_.map (\x -> Core.TypeLiteral x) (literalType lt))),
+    (Core.Name "map", (\mt -> Flows_.map (\x -> Core.TypeMap x) (mapType mt))),
+    (Core.Name "optional", (\et -> Flows_.map (\x -> Core.TypeOptional x) (type_ et))),
+    (Core.Name "product", (\types -> Flows_.map (\x -> Core.TypeProduct x) (ExtractCore.list type_ types))),
+    (Core.Name "record", (\rt -> Flows_.map (\x -> Core.TypeRecord x) (rowType rt))),
+    (Core.Name "set", (\et -> Flows_.map (\x -> Core.TypeSet x) (type_ et))),
+    (Core.Name "sum", (\types -> Flows_.map (\x -> Core.TypeSum x) (ExtractCore.list type_ types))),
+    (Core.Name "union", (\rt -> Flows_.map (\x -> Core.TypeUnion x) (rowType rt))),
+    (Core.Name "variable", (\n -> Flows_.map (\x -> Core.TypeVariable x) (name n))),
+    (Core.Name "wrap", (\wt -> Flows_.map (\x -> Core.TypeWrap x) (wrappedType wt)))] dat)) dat)
 
-coreDecodeTypeScheme :: (Core.Term -> Compute.Flow Graph.Graph Core.TypeScheme)
-coreDecodeTypeScheme = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "variables") (ExtractCore.list coreDecodeName)) (getField m (Core.Name "type") coreDecodeType) (\vars -> \body -> Core.TypeScheme {
+typeScheme :: (Core.Term -> Compute.Flow Graph.Graph Core.TypeScheme)
+typeScheme = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "variables") (ExtractCore.list name)) (getField m (Core.Name "type") type_) (\vars -> \body -> Core.TypeScheme {
   Core.typeSchemeVariables = vars,
   Core.typeSchemeType = body})))
 
-coreDecodeWrappedType :: (Core.Term -> Compute.Flow Graph.Graph Core.WrappedType)
-coreDecodeWrappedType term = (Flows_.bind (ExtractCore.record (Core.Name "hydra.core.WrappedType") term) (\fields -> Flows.map2 (ExtractCore.field (Core.Name "typeName") coreDecodeName fields) (ExtractCore.field (Core.Name "object") coreDecodeType fields) (\name -> \obj -> Core.WrappedType {
+wrappedType :: (Core.Term -> Compute.Flow Graph.Graph Core.WrappedType)
+wrappedType term = (Flows_.bind (ExtractCore.record (Core.Name "hydra.core.WrappedType") term) (\fields -> Flows.map2 (ExtractCore.field (Core.Name "typeName") name fields) (ExtractCore.field (Core.Name "object") type_ fields) (\name -> \obj -> Core.WrappedType {
   Core.wrappedTypeTypeName = name,
   Core.wrappedTypeObject = obj})))
 

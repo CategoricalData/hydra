@@ -3,6 +3,7 @@ module Hydra.Ext.Graphql.Coder (moduleToGraphql) where
 import Hydra.Kernel
 import Hydra.Ext.Graphql.Language
 import Hydra.Ext.Graphql.Serde
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Ext.Org.Graphql.Syntax as G
 import Hydra.Formatting
 
@@ -47,7 +48,7 @@ constructModule mod coders pairs = do
     toTypeDef prefixes el = do
       typ <- requireTermType term
       if isNativeType el
-        then coreDecodeType (elementTerm el) >>= encodeNamedType prefixes el
+        then DecodeCore.type_ (elementTerm el) >>= encodeNamedType prefixes el
         else fail $ "mapping of non-type elements to GraphQL is not yet supported: " ++ unName (elementName el)
      where
        term = elementTerm el
