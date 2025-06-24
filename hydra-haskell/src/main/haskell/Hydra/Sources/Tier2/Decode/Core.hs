@@ -99,7 +99,7 @@ hydraCoreDecodingModule = Module (Namespace "hydra.decode.core") elements
      el nameDef,
      el rowTypeDef,
      el stringDef,
-     el type_Def,
+     el typeDef,
      el typeSchemeDef,
      el wrappedTypeDef,
      -- TODO: move these
@@ -113,8 +113,8 @@ applicationTypeDef :: TElement (Term -> Flow Graph ApplicationType)
 applicationTypeDef = coreDecodingDefinition "applicationType" $
   ref matchRecordDef @@ (lambda "m" $
     ref Flows_.map2Def
-      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _ApplicationType_function @@ ref type_Def)
-      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _ApplicationType_argument @@ ref type_Def)
+      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _ApplicationType_function @@ ref typeDef)
+      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _ApplicationType_argument @@ ref typeDef)
       @@ (lambdas ["function", "argument"] $ Core.applicationType (var "function") (var "argument")))
 
 fieldTypeDef :: TElement (Term -> Flow Graph FieldType)
@@ -122,7 +122,7 @@ fieldTypeDef = coreDecodingDefinition "fieldType" $
   ref matchRecordDef @@ (lambda "m" $
     ref Flows_.map2Def
       @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _FieldType_name @@ ref nameDef)
-      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _FieldType_type @@ ref type_Def)
+      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _FieldType_type @@ ref typeDef)
       @@ (lambdas ["name", "typ"] $ Core.fieldType (var "name") (var "typ")))
 
 fieldTypesDef :: TElement (Term -> Flow Graph [FieldType])
@@ -145,15 +145,15 @@ forallTypeDef = coreDecodingDefinition "forallType" $
   ref matchRecordDef @@ (lambda "m" $
     ref Flows_.map2Def
       @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _ForallType_parameter @@ ref nameDef)
-      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _ForallType_body @@ ref type_Def)
+      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _ForallType_body @@ ref typeDef)
       @@ (lambdas ["parameter", "body"] $ Core.forallType (var "parameter") (var "body")))
 
 functionTypeDef :: TElement (Term -> Flow Graph FunctionType)
 functionTypeDef = coreDecodingDefinition "functionType" $
   ref matchRecordDef @@ (lambda "m" $
     ref Flows_.map2Def
-      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _FunctionType_domain @@ ref type_Def)
-      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _FunctionType_codomain @@ ref type_Def)
+      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _FunctionType_domain @@ ref typeDef)
+      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _FunctionType_codomain @@ ref typeDef)
       @@ (lambdas ["domain", "codomain"] $ Core.functionType (var "domain") (var "codomain")))
 
 integerTypeDef :: TElement (Term -> Flow Graph IntegerType)
@@ -186,8 +186,8 @@ mapTypeDef :: TElement (Term -> Flow Graph MapType)
 mapTypeDef = coreDecodingDefinition "mapType" $
   ref matchRecordDef @@ (lambda "m" $
     ref Flows_.map2Def
-      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _MapType_keys @@ ref type_Def)
-      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _MapType_values @@ ref type_Def)
+      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _MapType_keys @@ ref typeDef)
+      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _MapType_values @@ ref typeDef)
       @@ (lambdas ["keys", "values"] $ Core.mapType (var "keys") (var "values")))
 
 nameDef :: TElement (Term -> Flow Graph Name)
@@ -208,8 +208,8 @@ stringDef :: TElement (Term -> Flow Graph String)
 stringDef = coreDecodingDefinition "string" $
   lambda "term" $ ref ExtractCore.stringDef @@ (ref Strip.fullyStripTermDef @@ var "term")
 
-type_Def :: TElement (Term -> Flow Graph Type)
-type_Def = coreDecodingDefinition "type_" $
+typeDef :: TElement (Term -> Flow Graph Type)
+typeDef = coreDecodingDefinition "type" $
   lambda "dat" $ cases _Term (var "dat")
     (Just $ ref matchUnionDef @@ Core.nameLift _Type @@ list [
       pair
@@ -223,7 +223,7 @@ type_Def = coreDecodingDefinition "type_" $
         (lambda "ft" $ Flows.map (unaryFunction Core.typeFunction) $ ref functionTypeDef @@ var "ft"),
       pair
         (Core.nameLift _Type_list)
-        (lambda "et" $ Flows.map (unaryFunction Core.typeList) $ ref type_Def @@ var "et"),
+        (lambda "et" $ Flows.map (unaryFunction Core.typeList) $ ref typeDef @@ var "et"),
       pair
         (Core.nameLift _Type_literal)
         (lambda "lt" $ Flows.map (unaryFunction Core.typeLiteral) $ ref literalTypeDef @@ var "lt"),
@@ -232,19 +232,19 @@ type_Def = coreDecodingDefinition "type_" $
         (lambda "mt" $ Flows.map (unaryFunction Core.typeMap) $ ref mapTypeDef @@ var "mt"),
       pair
         (Core.nameLift _Type_optional)
-        (lambda "et" $ Flows.map (unaryFunction Core.typeOptional) $ ref type_Def @@ var "et"),
+        (lambda "et" $ Flows.map (unaryFunction Core.typeOptional) $ ref typeDef @@ var "et"),
       pair
         (Core.nameLift _Type_product)
-        (lambda "types" $ Flows.map (unaryFunction Core.typeProduct) $ ref ExtractCore.listDef @@ ref type_Def @@ var "types"),
+        (lambda "types" $ Flows.map (unaryFunction Core.typeProduct) $ ref ExtractCore.listDef @@ ref typeDef @@ var "types"),
       pair
         (Core.nameLift _Type_record)
         (lambda "rt" $ Flows.map (unaryFunction Core.typeRecord) $ ref rowTypeDef @@ var "rt"),
       pair
         (Core.nameLift _Type_set)
-        (lambda "et" $ Flows.map (unaryFunction Core.typeSet) $ ref type_Def @@ var "et"),
+        (lambda "et" $ Flows.map (unaryFunction Core.typeSet) $ ref typeDef @@ var "et"),
       pair
         (Core.nameLift _Type_sum)
-        (lambda "types" $ Flows.map (unaryFunction Core.typeSum) $ ref ExtractCore.listDef @@ ref type_Def @@ var "types"),
+        (lambda "types" $ Flows.map (unaryFunction Core.typeSum) $ ref ExtractCore.listDef @@ ref typeDef @@ var "types"),
       pair
         (Core.nameLift _Type_union)
         (lambda "rt" $ Flows.map (unaryFunction Core.typeUnion) $ ref rowTypeDef @@ var "rt"),
@@ -257,16 +257,16 @@ type_Def = coreDecodingDefinition "type_" $
     _Term_annotated>>: lambda "annotatedTerm" $
       Flows.map
         (lambda "t" $ Core.typeAnnotated $ Core.annotatedType (var "t") (Core.annotatedTermAnnotation $ var "annotatedTerm"))
-        (ref type_Def @@ (Core.annotatedTermSubject $ var "annotatedTerm")),
+        (ref typeDef @@ (Core.annotatedTermSubject $ var "annotatedTerm")),
     _Term_typed>>: lambda "typedTerm" $
-      ref type_Def @@ (Core.typedTermTerm $ var "typedTerm")]
+      ref typeDef @@ (Core.typedTermTerm $ var "typedTerm")]
 
 typeSchemeDef :: TElement (Term -> Flow Graph TypeScheme)
 typeSchemeDef = coreDecodingDefinition "typeScheme" $
   ref matchRecordDef @@ (lambda "m" $
     ref Flows_.map2Def
       @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _TypeScheme_variables @@ (ref ExtractCore.listDef @@ ref nameDef))
-      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _TypeScheme_type @@ ref type_Def)
+      @@ (ref getFieldDef @@ var "m" @@ Core.nameLift _TypeScheme_type @@ ref typeDef)
       @@ (lambdas ["vars", "body"] $ Core.typeScheme (var "vars") (var "body")))
 
 wrappedTypeDef :: TElement (Term -> Flow Graph WrappedType)
@@ -275,7 +275,7 @@ wrappedTypeDef = coreDecodingDefinition "wrappedType" $
     Flows.bind (ref ExtractCore.recordDef @@ Core.nameLift _WrappedType @@ var "term") $
       lambda "fields" $ ref Flows_.map2Def
         @@ (ref ExtractCore.fieldDef @@ Core.nameLift _WrappedType_typeName @@ ref nameDef @@ var "fields")
-        @@ (ref ExtractCore.fieldDef @@ Core.nameLift _WrappedType_object @@ ref type_Def @@ var "fields")
+        @@ (ref ExtractCore.fieldDef @@ Core.nameLift _WrappedType_object @@ ref typeDef @@ var "fields")
         @@ (lambdas ["name", "obj"] $ Core.wrappedType (var "name") (var "obj"))
 
 -- TODO: move these

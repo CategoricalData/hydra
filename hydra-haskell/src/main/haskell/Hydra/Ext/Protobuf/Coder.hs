@@ -5,6 +5,7 @@ import Hydra.Ext.Protobuf.Language
 import qualified Hydra.Ext.Protobuf.Proto3 as P3
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Ext.Protobuf.Language
 import Hydra.Ext.Protobuf.Serde
 import qualified Hydra.Dsl.Types as Types
@@ -268,7 +269,7 @@ findOptions typ = do
 isEnumFields :: [FieldType] -> Bool
 isEnumFields fields = L.foldl (&&) True $ fmap isEnumField fields
   where
-    isEnumField = isUnitType . simplifyType . fieldTypeType
+    isEnumField = EncodeCore.isUnitType . simplifyType . fieldTypeType
 
 isEnumDefinition :: Type -> Bool
 isEnumDefinition typ = case simplifyType typ of

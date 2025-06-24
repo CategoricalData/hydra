@@ -8,6 +8,7 @@ module Hydra.Dsl.TTerms (
 import Hydra.Kernel
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Core as Core
+import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Dsl.TBase
 import qualified Hydra.Dsl.Phantoms as Phantoms
 
@@ -86,7 +87,7 @@ lambdas params body = case params of
 -- | Create a term-encoded primitive function reference
 -- Example: primitive (Name "hydra.lib.strings.length")
 primitive :: Name -> TTerm Term
-primitive = primitiveLift . TTerm . coreEncodeName
+primitive = primitiveLift . TTerm . EncodeCore.name
 
 primitiveLift :: TTerm Name -> TTerm Term
 primitiveLift = Core.termFunction . Core.functionPrimitive
