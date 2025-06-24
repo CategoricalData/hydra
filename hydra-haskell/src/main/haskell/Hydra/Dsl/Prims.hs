@@ -6,7 +6,7 @@ module Hydra.Dsl.Prims where
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
-import Hydra.CoreDecoding
+import Hydra.Decode.Core
 import Hydra.CoreEncoding
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Dsl.Terms as Terms

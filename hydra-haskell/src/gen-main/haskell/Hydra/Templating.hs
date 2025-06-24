@@ -4,7 +4,7 @@ module Hydra.Templating where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
-import qualified Hydra.CoreDecoding as CoreDecoding
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Io as Io
@@ -24,7 +24,7 @@ graphToSchema g =
   let toPair = (\nameAndEl ->  
           let name = (fst nameAndEl) 
               el = (snd nameAndEl)
-          in (Flows.bind (CoreDecoding.coreDecodeType (Graph.elementTerm el)) (\t -> Flows.pure (name, t))))
+          in (Flows.bind (DecodeCore.coreDecodeType (Graph.elementTerm el)) (\t -> Flows.pure (name, t))))
   in (Flows.bind (Flows.mapList toPair (Maps.toList (Graph.graphElements g))) (\pairs -> Flows.pure (Maps.fromList pairs)))
 
 instantiateTemplate :: (Bool -> M.Map Core.Name Core.Type -> Core.Type -> Compute.Flow t0 Core.Term)
