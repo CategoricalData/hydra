@@ -1,7 +1,7 @@
 module Hydra.Ext.Haskell.Coder (moduleToHaskell) where
 
 import Hydra.Kernel
-import Hydra.Staging.Adapters
+import Hydra.Adapters
 import Hydra.Ext.Haskell.Language
 import Hydra.Ext.Haskell.Utils
 import Hydra.Dsl.Terms

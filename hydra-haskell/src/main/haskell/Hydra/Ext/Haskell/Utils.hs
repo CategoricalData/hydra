@@ -1,7 +1,7 @@
 module Hydra.Ext.Haskell.Utils where
 
 import Hydra.Kernel
-import Hydra.Staging.Adapters
+import Hydra.Adapters
 import Hydra.Ext.Haskell.Language
 import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings

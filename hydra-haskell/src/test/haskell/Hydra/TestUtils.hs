@@ -69,12 +69,17 @@ checkLiteralAdapter :: [LiteralVariant] -> LiteralType -> LiteralType -> Bool ->
 checkLiteralAdapter = checkAdapter id literalAdapter context
   where
     context variants = withConstraints $ (languageConstraints baseLanguage) {
-        languageConstraintsLiteralVariants = S.fromList variants,
+        languageConstraintsLiteralVariants = variantSet,
         languageConstraintsFloatTypes = floatVars,
         languageConstraintsIntegerTypes = integerVars }
       where
-        floatVars = S.fromList [FloatTypeFloat32]
-        integerVars = S.fromList [IntegerTypeInt16, IntegerTypeInt32]
+        variantSet = S.fromList variants
+        floatVars = if (S.member LiteralVariantFloat variantSet)
+          then S.fromList [FloatTypeFloat32]
+          else S.empty
+        integerVars = if (S.member LiteralVariantInteger variantSet)
+          then S.fromList [IntegerTypeInt16, IntegerTypeInt32]
+          else S.empty
 
 checkFieldAdapter :: [TypeVariant] -> FieldType -> FieldType -> Bool -> Field -> Field -> H.Expectation
 checkFieldAdapter = checkAdapter id fieldAdapter termTestContext

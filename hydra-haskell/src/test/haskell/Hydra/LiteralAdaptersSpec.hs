@@ -1,3 +1,9 @@
+{-
+stack ghci hydra:lib hydra:hydra-test
+
+Test.Hspec.hspec Hydra.LiteralAdaptersSpec.spec
+-}
+
 module Hydra.LiteralAdaptersSpec where
 
 import Hydra.Kernel

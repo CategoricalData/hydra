@@ -117,7 +117,12 @@ bigintLift = Core.termLiteral . Core.literalInteger . Core.integerValueBigint
 -- | Create a term-encoded boolean literal
 -- Example: boolean True
 boolean :: Bool -> TTerm Term
-boolean = Core.termLiteral . Core.literalBoolean . TTerm . Terms.boolean
+boolean = booleanLift . TTerm . Terms.boolean
+
+-- | Lift a TTerm Bool to a term-encoded boolean literal
+-- Example: booleanLift $ Phantoms.true
+booleanLift :: TTerm Bool -> TTerm Term
+booleanLift = Core.termLiteral . Core.literalBoolean
 
 -- | Term-encoded boolean false literal
 false :: TTerm Term

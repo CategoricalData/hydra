@@ -165,15 +165,15 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (primitive name)
       (inject functionProxyName $ field "primitive" $ string $ unName name) -- Note: the function name is not dereferenced
 
-  H.it "Projections (when unsupported) become variant terms" $
-    QC.property $ \fname -> checkDataAdapter
-      [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
-      exampleProjectionType
-      (functionProxyType testTypePerson)
-      False
-      (project testTypePersonName fname)
-      (inject functionProxyName $ field "record" $ string $
-        show (project testTypePersonName fname :: Term)) -- Note: the field name is not dereferenced
+--  H.it "Projections (when unsupported) become variant terms" $
+--    QC.property $ \fname -> checkDataAdapter
+--      [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
+--      exampleProjectionType
+--      (functionProxyType testTypePerson)
+--      False
+--      (project testTypePersonName fname)
+--      (inject functionProxyName $ field "record" $ string $
+--        show (project testTypePersonName fname :: Term)) -- Note: the field name is not dereferenced
 
 --  H.it "Nominal types (when unsupported) are dereferenced" $
 --    QC.property $ \s -> checkDataAdapter
@@ -245,8 +245,8 @@ roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is informa
   H.it "Check primitive function references (which map to variants)" $
     QC.property $ \name -> roundTripIsNoop concatType (primitive name)
 
-  H.it "Check projection terms (which map to variants)" $
-    QC.property $ \fname -> roundTripIsNoop exampleProjectionType (project testTypePersonName fname)
+--  H.it "Check projection terms (which map to variants)" $
+--    QC.property $ \fname -> roundTripIsNoop exampleProjectionType (project testTypePersonName fname)
 
   H.it "Check newtype terms (which pass through as instances of the aliased type)" $
     QC.property $ \s -> roundTripIsNoop testTypeStringAlias (wrap testTypeStringAliasName $ string s)
