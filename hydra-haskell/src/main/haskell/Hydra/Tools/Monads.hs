@@ -5,7 +5,7 @@ module Hydra.Tools.Monads where
 import Hydra.Compute
 import Hydra.Errors
 import Hydra.Flows
-import Hydra.Mantle
+import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Lib.Flows as Flows
 
 import qualified Control.Monad as CM
@@ -24,7 +24,7 @@ fromFlowIo cx f = case mv of
   where
     FlowState mv _ trace = unFlow f cx emptyTrace
 
-fromHydraEither :: Either_ a b -> Either a b
+fromHydraEither :: Mantle.Either a b -> Either a b
 fromHydraEither e = case e of
-   EitherLeft l -> Left l
-   EitherRight r -> Right r
+   Mantle.EitherLeft l -> Left l
+   Mantle.EitherRight r -> Right r

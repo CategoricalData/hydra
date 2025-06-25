@@ -67,7 +67,7 @@ decodeEnum m = do
   symbolsJson <- requireArray avro_symbols m
   symbols <- CM.mapM expectString symbolsJson
   dflt <- optString avro_default m
-  return $ Avro.NamedTypeEnum $ Avro.Enum_ symbols dflt
+  return $ Avro.NamedTypeEnum $ Avro.Enum symbols dflt
 
 decodeField :: M.Map String Json.Value -> Flow s Avro.Field
 decodeField m = do
