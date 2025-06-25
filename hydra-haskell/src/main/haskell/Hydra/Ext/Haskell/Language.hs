@@ -64,8 +64,18 @@ haskellLanguage = Language (LanguageName "hydra.ext.haskell") $ LanguageConstrai
   See also https://www.haskell.org/onlinereport/standard-prelude.html
 -}
 reservedWords :: S.Set String
-reservedWords = S.fromList $ classSymbols ++ dataSymbols ++ functionSymbols ++ newtypeSymbols ++ typeSymbols
+reservedWords = S.fromList $ keywordSymbols ++ essentialDataSymbols
+--reservedWords = S.fromList $ keywordSymbols ++ classSymbols ++ dataSymbols ++ functionSymbols ++ newtypeSymbols ++ typeSymbols
   where
+    -- This is a minimal list of symbols which absolutely must be escaped; they cannot be overloaded.
+    keywordSymbols = [
+      "let", "type"]
+
+    -- These symbols should not be overloaded either, as Hydra uses them in their unqualified form in generated code.
+    essentialDataSymbols = [
+      "Bool", "Float", "Double", "Int", "Integer", "String"]
+
+    -- TODO: remove the nonessential symbols if they will not be used
     {-
       cat /tmp/browse_Prelude.txt | grep "^class" | sed 's/^class *//' | sed 's/.*=>//' | sed 's/^ *//' | sed 's/ .*//' | grep "^[A-Z]" | sort | sed 's/^/"/' | sed 's/$/",/' | tr '\n' ' '
     -}
