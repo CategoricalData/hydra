@@ -7,16 +7,17 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
-import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -36,9 +37,9 @@ joinTypes left right comment =
               Strings.cat [
                 Strings.cat [
                   "Cannot unify ",
-                  (Io.showType sleft)],
+                  (Core_.showType sleft)],
                 " with "],
-              (Io.showType sright)]))
+              (Core_.showType sright)]))
       assertEqual = (Logic.ifElse (Equality.equalType sleft sright) (Flows.pure []) cannotUnify)
       joinList = (\lefts -> \rights -> Logic.ifElse (Equality.equalInt32 (Lists.length lefts) (Lists.length rights)) (Flows.pure (Lists.zipWith joinOne lefts rights)) cannotUnify)
       joinRowTypes = (\left -> \right -> Logic.ifElse (Logic.and (Equality.equalString (Core.unName (Core.rowTypeTypeName left)) (Core.unName (Core.rowTypeTypeName right))) (Logic.and (Equality.equalInt32 (Lists.length (Lists.map Core.fieldTypeName (Core.rowTypeFields left))) (Lists.length (Lists.map Core.fieldTypeName (Core.rowTypeFields right)))) (Lists.foldl Logic.and True (Lists.zipWith (\left -> \right -> Equality.equalString (Core.unName left) (Core.unName right)) (Lists.map Core.fieldTypeName (Core.rowTypeFields left)) (Lists.map Core.fieldTypeName (Core.rowTypeFields right)))))) (joinList (Lists.map Core.fieldTypeType (Core.rowTypeFields left)) (Lists.map Core.fieldTypeType (Core.rowTypeFields right))) cannotUnify)
@@ -104,7 +105,7 @@ unifyTypeConstraints schemaTypes constraints =
                                 "Variable ",
                                 (Core.unName v)],
                               " appears free in type "],
-                            (Io.showType t)],
+                            (Core_.showType t)],
                           " ("],
                         comment],
                       ")"])) (bind v t))

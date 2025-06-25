@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -54,8 +55,8 @@ flowSucceeds cx f = (Optionals.isJust (Compute.flowStateValue (Compute.unFlow f 
 fromFlow :: (t1 -> t0 -> Compute.Flow t0 t1 -> t1)
 fromFlow def cx f = (Optionals.maybe def (\xmo -> xmo) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
 
-map_ :: ((t0 -> t1) -> Compute.Flow t2 t0 -> Compute.Flow t2 t1)
-map_ f f1 = (Compute.Flow (\s0 -> \t0 ->  
+map :: ((t0 -> t1) -> Compute.Flow t2 t0 -> Compute.Flow t2 t1)
+map f f1 = (Compute.Flow (\s0 -> \t0 ->  
   let f2 = (Compute.unFlow f1 s0 t0)
   in Compute.FlowState {
     Compute.flowStateValue = (Optionals.map f (Compute.flowStateValue f2)),
@@ -63,9 +64,9 @@ map_ f f1 = (Compute.Flow (\s0 -> \t0 ->
     Compute.flowStateTrace = (Compute.flowStateTrace f2)}))
 
 map2 :: (Compute.Flow t1 t0 -> Compute.Flow t1 t2 -> (t0 -> t2 -> t3) -> Compute.Flow t1 t3)
-map2 f1 f2 f = (bind f1 (\r1 -> map_ (\r2 -> f r1 r2) f2))
+map2 f1 f2 f = (bind f1 (\r1 -> map (\r2 -> f r1 r2) f2))
 
-mutateTrace :: ((Compute.Trace -> Mantle.Either_ String Compute.Trace) -> (Compute.Trace -> Compute.Trace -> Compute.Trace) -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
+mutateTrace :: ((Compute.Trace -> Mantle.Either String Compute.Trace) -> (Compute.Trace -> Compute.Trace -> Compute.Trace) -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->  
   let forLeft = (\msg -> Compute.FlowState {
           Compute.flowStateValue = Nothing,

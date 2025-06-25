@@ -8,6 +8,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Strip as Strip
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -157,8 +158,8 @@ literal arg_ = ((\x -> case x of
   Core.TermLiteral v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm arg_))
 
-map_ :: (Core.Term -> Maybe (M.Map Core.Term Core.Term))
-map_ arg_ = ((\x -> case x of
+map :: (Core.Term -> Maybe (M.Map Core.Term Core.Term))
+map arg_ = ((\x -> case x of
   Core.TermMap v1 -> (Optionals.pure v1)
   _ -> Nothing) (Strip.fullyStripTerm arg_))
 

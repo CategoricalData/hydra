@@ -17,6 +17,7 @@ import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Qnames as Qnames
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -93,7 +94,7 @@ makeElements omitTrivial ns lname pat =
                   fields = (Lists.map fst fieldPairs)
                   els = (Lists.concat (Lists.map snd fieldPairs))
               in (Logic.ifElse (isNontrivial isRecord pats) (Lists.cons (lname, (construct fields)) els) (forPat (Lists.head minPats))))
-      mod_ = (\n -> \f -> \p -> descend n (\pairs -> Lists.cons (lname, (f (snd (Lists.head pairs)))) (Lists.tail pairs)) p)
+      mod = (\n -> \f -> \p -> descend n (\pairs -> Lists.cons (lname, (f (snd (Lists.head pairs)))) (Lists.tail pairs)) p)
       descend = (\n -> \f -> \p ->  
               let cpairs = (makeElements False ns (childName lname n) p)
               in (f (Logic.ifElse (isComplex p) (Lists.cons (lname, (Core.TypeVariable (toName ns (fst (Lists.head cpairs))))) cpairs) (Logic.ifElse (Lists.null cpairs) [
@@ -110,26 +111,26 @@ makeElements omitTrivial ns lname pat =
               Grammar.PatternNil -> trivial
               Grammar.PatternNonterminal v1 -> [
                 (lname, (Core.TypeVariable (toName ns (Grammar.unSymbol v1))))]
-              Grammar.PatternOption v1 -> (mod_ "Option" (\x -> Core.TypeOptional x) v1)
-              Grammar.PatternPlus v1 -> (mod_ "Elmt" (\x -> Core.TypeList x) v1)
+              Grammar.PatternOption v1 -> (mod "Option" (\x -> Core.TypeOptional x) v1)
+              Grammar.PatternPlus v1 -> (mod "Elmt" (\x -> Core.TypeList x) v1)
               Grammar.PatternRegex _ -> [
                 (lname, (Core.TypeLiteral Core.LiteralTypeString))]
               Grammar.PatternSequence v1 -> (forRecordOrUnion True (\fields -> Core.TypeRecord (Core.RowType {
                 Core.rowTypeTypeName = Constants.placeholderName,
                 Core.rowTypeFields = fields})) v1)
-              Grammar.PatternStar v1 -> (mod_ "Elmt" (\x -> Core.TypeList x) v1)) pat)
+              Grammar.PatternStar v1 -> (mod "Elmt" (\x -> Core.TypeList x) v1)) pat)
   in (forPat pat)
 
 -- | Get raw name from pattern
 rawName :: (Grammar.Pattern -> String)
 rawName pat = ((\x -> case x of
   Grammar.PatternAlternatives _ -> "alts"
-  Grammar.PatternConstant v1 -> (Formatting.decapitalize (Formatting.withCharacterAliases (Grammar.unConstant v1)))
+  Grammar.PatternConstant v1 -> (Formatting.capitalize (Formatting.withCharacterAliases (Grammar.unConstant v1)))
   Grammar.PatternIgnored _ -> "ignored"
   Grammar.PatternLabeled v1 -> (Grammar.unLabel (Grammar.labeledPatternLabel v1))
   Grammar.PatternNil -> "none"
-  Grammar.PatternNonterminal v1 -> (Formatting.decapitalize (Grammar.unSymbol v1))
-  Grammar.PatternOption v1 -> (Formatting.decapitalize (rawName v1))
+  Grammar.PatternNonterminal v1 -> (Formatting.capitalize (Grammar.unSymbol v1))
+  Grammar.PatternOption v1 -> (Formatting.capitalize (rawName v1))
   Grammar.PatternPlus v1 -> (Strings.cat2 "listOf" (Formatting.capitalize (rawName v1)))
   Grammar.PatternRegex _ -> "regex"
   Grammar.PatternSequence _ -> "sequence"

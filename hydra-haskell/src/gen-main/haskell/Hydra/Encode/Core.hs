@@ -9,6 +9,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Strip as Strip
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -464,8 +465,8 @@ rowType rt = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "fields"),
       Core.fieldTerm = (Core.TermList (Lists.map fieldType (Core.rowTypeFields rt)))}]}))
 
-sum_ :: (Core.Sum -> Core.Term)
-sum_ s = (Core.TermRecord (Core.Record {
+sum :: (Core.Sum -> Core.Term)
+sum s = (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.core.Sum"),
   Core.recordFields = [
     Core.Field {
@@ -539,7 +540,7 @@ term x = case x of
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "sum"),
-      Core.fieldTerm = (sum_ v1)}}))
+      Core.fieldTerm = (sum v1)}}))
   Core.TermTypeAbstraction v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {

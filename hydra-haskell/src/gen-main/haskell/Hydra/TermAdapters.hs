@@ -6,13 +6,13 @@ import qualified Hydra.AdapterUtils as AdapterUtils
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
+import qualified Hydra.Describe.Core as Core_
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as ExtractCore
+import qualified Hydra.Extract.Core as Core__
 import qualified Hydra.Flows as Flows
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows_
-import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
@@ -21,11 +21,12 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.LiteralAdapters as LiteralAdapters
 import qualified Hydra.Mantle as Mantle
-import qualified Hydra.Describe.Core as DescribeCore
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Show.Core as Core___
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
+import Prelude hiding  (map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -144,17 +145,17 @@ functionToUnion t = ((\x -> case x of
                         Core.injectionTypeName = functionProxyName,
                         Core.injectionField = Core.Field {
                           Core.fieldName = (Core.Name "record"),
-                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Io.showTerm term)))}}))
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Core___.showTerm term)))}}))
                       Core.EliminationUnion _ -> (Core.TermUnion (Core.Injection {
                         Core.injectionTypeName = functionProxyName,
                         Core.injectionField = Core.Field {
                           Core.fieldName = (Core.Name "union"),
-                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Io.showTerm term)))}}))) v3)
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Core___.showTerm term)))}}))) v3)
                     Core.FunctionLambda _ -> (Core.TermUnion (Core.Injection {
                       Core.injectionTypeName = functionProxyName,
                       Core.injectionField = Core.Field {
                         Core.fieldName = (Core.Name "lambda"),
-                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Io.showTerm term)))}}))
+                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Core___.showTerm term)))}}))
                     Core.FunctionPrimitive v3 -> (Core.TermUnion (Core.Injection {
                       Core.injectionTypeName = functionProxyName,
                       Core.injectionField = Core.Field {
@@ -166,15 +167,15 @@ functionToUnion t = ((\x -> case x of
                       Core.fieldName = (Core.Name "variable"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Core.unName v2)))}}))) strippedTerm)))
         decode = (\ad -> \term ->  
-                let readFromString = (\term -> Flows_.bind (ExtractCore.string term) (\s -> Optionals.maybe (Flows_.fail (Strings.cat2 "failed to parse term: " s)) Flows_.pure (Io.readTerm s))) 
+                let readFromString = (\term -> Flows_.bind (Core__.string term) (\s -> Optionals.maybe (Flows_.fail (Strings.cat2 "failed to parse term: " s)) Flows_.pure (Core___.readTerm s))) 
                     notFound = (\fname -> Flows_.fail (Strings.cat2 "unexpected field: " (Core.unName fname)))
                     forCases = (\fterm -> withGraphContext (readFromString fterm))
                     forLambda = (\fterm -> withGraphContext (readFromString fterm))
-                    forWrapped = (\fterm -> withGraphContext (Flows_.map (\s -> Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name s)))) (ExtractCore.string fterm)))
-                    forPrimitive = (\fterm -> withGraphContext (Flows_.map (\s -> Core.TermFunction (Core.FunctionPrimitive (Core.Name s))) (ExtractCore.string fterm)))
+                    forWrapped = (\fterm -> withGraphContext (Flows_.map (\s -> Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name s)))) (Core__.string fterm)))
+                    forPrimitive = (\fterm -> withGraphContext (Flows_.map (\s -> Core.TermFunction (Core.FunctionPrimitive (Core.Name s))) (Core__.string fterm)))
                     forProjection = (\fterm -> withGraphContext (readFromString fterm))
-                    forVariable = (\fterm -> withGraphContext (Flows_.map (\s -> Core.TermVariable (Core.Name s)) (ExtractCore.string fterm)))
-                in (Flows_.bind (Compute.coderDecode (Compute.adapterCoder ad) term) (\injTerm -> Flows_.bind (withGraphContext (ExtractCore.injection functionProxyName injTerm)) (\field ->  
+                    forVariable = (\fterm -> withGraphContext (Flows_.map (\s -> Core.TermVariable (Core.Name s)) (Core__.string fterm)))
+                in (Flows_.bind (Compute.coderDecode (Compute.adapterCoder ad) term) (\injTerm -> Flows_.bind (withGraphContext (Core__.injection functionProxyName injTerm)) (\field ->  
                   let fname = (Core.fieldName field) 
                       fterm = (Core.fieldTerm field)
                   in (Optionals.fromMaybe (notFound fname) (Maps.lookup fname (Maps.fromList [
@@ -256,48 +257,47 @@ passFunction t = ((\x -> case x of
   Core.TypeFunction v1 ->  
     let dom = (Core.functionTypeDomain v1) 
         cod = (Core.functionTypeCodomain v1)
-    in (Flows_.bind (termAdapter dom) (\domAd -> Flows_.bind (termAdapter cod) (\codAd ->  
-      let getCaseAds = ((\x -> case x of
-              Core.TypeUnion v2 -> (Flows_.bind (Flows_.mapList (\f -> Flows_.bind (fieldAdapter (Core.FieldType {
-                Core.fieldTypeName = (Core.fieldTypeName f),
-                Core.fieldTypeType = (Core.TypeFunction (Core.FunctionType {
-                  Core.functionTypeDomain = (Core.fieldTypeType f),
-                  Core.functionTypeCodomain = cod}))})) (\ad -> Flows_.pure (Core.fieldTypeName f, ad))) (Core.rowTypeFields v2)) (\pairs -> Flows_.pure (Maps.fromList pairs)))) (Strip.stripType dom)) 
-          getOptionAd = ((\x -> case x of
-                  Core.TypeOptional v2 -> (Flows_.map Optionals.pure (termAdapter (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = v2,
-                    Core.functionTypeCodomain = cod}))))) (Strip.stripType dom))
-      in (Flows_.bind getCaseAds (\caseAds -> Flows_.bind getOptionAd (\optionAd ->  
-        let lossy = (Logic.or (Compute.adapterIsLossy codAd) (Lists.foldl Logic.or False (Lists.map (\pair -> Compute.adapterIsLossy (snd pair)) (Maps.toList caseAds)))) 
-            target = (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Compute.adapterTarget domAd),
-                    Core.functionTypeCodomain = (Compute.adapterTarget codAd)}))
-            getCoder = (\fname -> Optionals.maybe AdapterUtils.idCoder Compute.adapterCoder (Maps.lookup fname caseAds))
-        in (Flows_.pure (Compute.Adapter {
-          Compute.adapterIsLossy = lossy,
-          Compute.adapterSource = t,
-          Compute.adapterTarget = target,
-          Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> (\x -> case x of
-            Core.TermFunction v2 -> (Flows_.map (\x -> Core.TermFunction x) ((\x -> case x of
-              Core.FunctionElimination v3 -> (Flows_.map (\x -> Core.FunctionElimination x) ((\x -> case x of
-                Core.EliminationUnion v4 ->  
-                  let n = (Core.caseStatementTypeName v4) 
-                      def = (Core.caseStatementDefault v4)
-                      cases = (Core.caseStatementCases v4)
-                  in (Flows_.bind (Flows_.mapList (\f -> AdapterUtils.encodeDecode dir (getCoder (Core.fieldName f)) f) cases) (\rcases -> Flows_.bind (Optionals.maybe (Flows_.pure Nothing) (\d -> Flows_.map Optionals.pure (AdapterUtils.encodeDecode dir (Compute.adapterCoder codAd) d)) def) (\rdef -> Flows_.pure (Core.EliminationUnion (Core.CaseStatement {
-                    Core.caseStatementTypeName = n,
-                    Core.caseStatementDefault = rdef,
-                    Core.caseStatementCases = rcases})))))) v3))
-              Core.FunctionLambda v3 ->  
-                let var = (Core.lambdaParameter v3) 
-                    d = (Core.lambdaDomain v3)
-                    body = (Core.lambdaBody v3)
-                in (Flows_.bind (AdapterUtils.encodeDecode dir (Compute.adapterCoder codAd) body) (\newBody -> Flows_.pure (Core.FunctionLambda (Core.Lambda {
-                  Core.lambdaParameter = var,
-                  Core.lambdaDomain = d,
-                  Core.lambdaBody = newBody}))))
-              Core.FunctionPrimitive v3 -> (Flows_.pure (Core.FunctionPrimitive v3))) v2))
-            _ -> (Flows_.pure term)) (Strip.fullyStripTerm term)))}))))))))) t)
+    in (Flows_.bind (termAdapter dom) (\domAd -> Flows_.bind (termAdapter cod) (\codAd -> Flows_.bind ((\x -> case x of
+      Core.TypeUnion v2 -> (Flows_.bind (Flows_.mapList (\f -> Flows_.bind (fieldAdapter (Core.FieldType {
+        Core.fieldTypeName = (Core.fieldTypeName f),
+        Core.fieldTypeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.fieldTypeType f),
+          Core.functionTypeCodomain = cod}))})) (\ad -> Flows_.pure (Core.fieldTypeName f, ad))) (Core.rowTypeFields v2)) (\pairs -> Flows_.pure (Maps.fromList pairs)))
+      _ -> (Flows_.pure Maps.empty)) (Strip.stripType dom)) (\caseAds -> Flows_.bind ((\x -> case x of
+      Core.TypeOptional v2 -> (Flows_.map Optionals.pure (termAdapter (Core.TypeFunction (Core.FunctionType {
+        Core.functionTypeDomain = v2,
+        Core.functionTypeCodomain = cod}))))
+      _ -> (Flows_.pure Nothing)) (Strip.stripType dom)) (\optionAd ->  
+      let lossy = (Logic.or (Compute.adapterIsLossy codAd) (Lists.foldl Logic.or False (Lists.map (\pair -> Compute.adapterIsLossy (snd pair)) (Maps.toList caseAds)))) 
+          target = (Core.TypeFunction (Core.FunctionType {
+                  Core.functionTypeDomain = (Compute.adapterTarget domAd),
+                  Core.functionTypeCodomain = (Compute.adapterTarget codAd)}))
+          getCoder = (\fname -> Optionals.maybe AdapterUtils.idCoder Compute.adapterCoder (Maps.lookup fname caseAds))
+      in (Flows_.pure (Compute.Adapter {
+        Compute.adapterIsLossy = lossy,
+        Compute.adapterSource = t,
+        Compute.adapterTarget = target,
+        Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> (\x -> case x of
+          Core.TermFunction v2 -> (Flows_.map (\x -> Core.TermFunction x) ((\x -> case x of
+            Core.FunctionElimination v3 -> (Flows_.map (\x -> Core.FunctionElimination x) ((\x -> case x of
+              Core.EliminationUnion v4 ->  
+                let n = (Core.caseStatementTypeName v4) 
+                    def = (Core.caseStatementDefault v4)
+                    cases = (Core.caseStatementCases v4)
+                in (Flows_.bind (Flows_.mapList (\f -> AdapterUtils.encodeDecode dir (getCoder (Core.fieldName f)) f) cases) (\rcases -> Flows_.bind (Optionals.maybe (Flows_.pure Nothing) (\d -> Flows_.map Optionals.pure (AdapterUtils.encodeDecode dir (Compute.adapterCoder codAd) d)) def) (\rdef -> Flows_.pure (Core.EliminationUnion (Core.CaseStatement {
+                  Core.caseStatementTypeName = n,
+                  Core.caseStatementDefault = rdef,
+                  Core.caseStatementCases = rcases})))))) v3))
+            Core.FunctionLambda v3 ->  
+              let var = (Core.lambdaParameter v3) 
+                  d = (Core.lambdaDomain v3)
+                  body = (Core.lambdaBody v3)
+              in (Flows_.bind (AdapterUtils.encodeDecode dir (Compute.adapterCoder codAd) body) (\newBody -> Flows_.pure (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = var,
+                Core.lambdaDomain = d,
+                Core.lambdaBody = newBody}))))
+            Core.FunctionPrimitive v3 -> (Flows_.pure (Core.FunctionPrimitive v3))) v2))
+          _ -> (Flows_.pure term)) (Strip.fullyStripTerm term)))})))))))) t)
 
 -- | Pass through forall types
 passForall :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
@@ -317,7 +317,7 @@ passForall t = ((\x -> case x of
 passLiteral :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passLiteral t = ((\x -> case x of
   Core.TypeLiteral v1 -> (Flows_.bind (LiteralAdapters.literalAdapter v1) (\ad ->  
-    let step = (AdapterUtils.bidirectional (\dir -> \term -> Flows_.bind (withGraphContext (ExtractCore.literal term)) (\l -> Flows_.map (\x -> Core.TermLiteral x) (AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) l))))
+    let step = (AdapterUtils.bidirectional (\dir -> \term -> Flows_.bind (withGraphContext (Core__.literal term)) (\l -> Flows_.map (\x -> Core.TermLiteral x) (AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) l))))
     in (Flows_.pure (Compute.Adapter {
       Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
       Compute.adapterSource = (Core.TypeLiteral (Compute.adapterSource ad)),
@@ -356,7 +356,7 @@ passMap t = ((\x -> case x of
 passOptional :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passOptional t = ((\x -> case x of
   Core.TypeOptional v1 ->  
-    let mapTerm = (\coder -> \dir -> \term -> Flows_.bind (withGraphContext (ExtractCore.optional Flows_.pure term)) (\opt -> Flows_.bind (Flows_.traverseOptional (AdapterUtils.encodeDecode dir coder) opt) (\newOpt -> Flows_.pure (Core.TermOptional newOpt))))
+    let mapTerm = (\coder -> \dir -> \term -> Flows_.bind (withGraphContext (Core__.optional Flows_.pure term)) (\opt -> Flows_.bind (Flows_.traverseOptional (AdapterUtils.encodeDecode dir coder) opt) (\newOpt -> Flows_.pure (Core.TermOptional newOpt))))
     in (Flows_.bind (termAdapter v1) (\adapter -> Flows_.pure (Compute.Adapter {
       Compute.adapterIsLossy = (Compute.adapterIsLossy adapter),
       Compute.adapterSource = t,
@@ -440,7 +440,7 @@ passUnion t = ((\x -> case x of
         Compute.adapterTarget = (Core.TypeUnion (Core.RowType {
           Core.rowTypeTypeName = tname,
           Core.rowTypeFields = sfields_})),
-        Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> Flows_.bind (withGraphContext (ExtractCore.injection tname term)) (\dfield -> Flows_.bind (getAdapter adaptersMap dfield) (\ad -> Flows_.bind (AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) dfield) (\newField -> Flows_.pure (Core.TermUnion (Core.Injection {
+        Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> Flows_.bind (withGraphContext (Core__.injection tname term)) (\dfield -> Flows_.bind (getAdapter adaptersMap dfield) (\ad -> Flows_.bind (AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) dfield) (\newField -> Flows_.pure (Core.TermUnion (Core.Injection {
           Core.injectionTypeName = tname,
           Core.injectionField = newField})))))))}))))) t)
 
@@ -450,7 +450,7 @@ passWrapped t = ((\x -> case x of
   Core.TypeWrap v1 ->  
     let tname = (Core.wrappedTypeTypeName v1) 
         ot = (Core.wrappedTypeObject v1)
-        mapTerm = (\coder -> \dir -> \term -> Flows_.bind (withGraphContext (ExtractCore.wrap tname term)) (\unwrapped -> Flows_.bind (AdapterUtils.encodeDecode dir coder unwrapped) (\newTerm -> Flows_.pure (Core.TermWrap (Core.WrappedTerm {
+        mapTerm = (\coder -> \dir -> \term -> Flows_.bind (withGraphContext (Core__.wrap tname term)) (\unwrapped -> Flows_.bind (AdapterUtils.encodeDecode dir coder unwrapped) (\newTerm -> Flows_.pure (Core.TermWrap (Core.WrappedTerm {
                 Core.wrappedTermTypeName = tname,
                 Core.wrappedTermObject = newTerm})))))
     in (Flows_.bind (termAdapter ot) (\adapter -> Flows_.pure (Compute.Adapter {
@@ -531,9 +531,9 @@ termAdapter typ =
         Core.annotatedTypeSubject = (Compute.adapterTarget ad),
         Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)})),
       Compute.adapterCoder = (Compute.adapterCoder ad)})))
-    _ -> (Flows.withTrace (Strings.cat2 "adapter for " (DescribeCore.type_ typ)) ((\x -> case x of
+    _ -> (Flows.withTrace (Strings.cat2 "adapter for " (Core_.type_ typ)) ((\x -> case x of
       Core.TypeVariable v1 -> (forTypeReference v1)
-      _ -> (Flows_.bind Errors.getState (\cx -> AdapterUtils.chooseAdapter (alts cx) (supported cx) Io.showType DescribeCore.type_ typ))) typ))) typ)
+      _ -> (Flows_.bind Errors.getState (\cx -> AdapterUtils.chooseAdapter (alts cx) (supported cx) Core___.showType Core_.type_ typ))) typ))) typ)
 
 -- | Convert union types to record types
 unionToRecord :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
@@ -557,17 +557,17 @@ unionToRecord t = ((\x -> case x of
                             Core.fieldTerm = t})))) fterm)) fields)
                 in (Logic.ifElse (Lists.null matches) (Flows_.fail (Strings.cat [
                   "cannot convert term back to union: ",
-                  Io.showTerm term,
+                  Core___.showTerm term,
                   " where type = ",
-                  Io.showType t,
+                  Core___.showType t,
                   "    and target type = ",
-                  (Io.showType t_)])) (Flows_.pure (Lists.head matches))))
+                  (Core___.showType t_)])) (Flows_.pure (Lists.head matches))))
     in (Flows_.bind (termAdapter target) (\ad -> Flows_.pure (Compute.Adapter {
       Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
       Compute.adapterSource = t,
       Compute.adapterTarget = (Compute.adapterTarget ad),
       Compute.adapterCoder = Compute.Coder {
-        Compute.coderEncode = (\term_ -> Flows_.bind (withGraphContext (ExtractCore.injection (Core.rowTypeTypeName v1) term_)) (\field ->  
+        Compute.coderEncode = (\term_ -> Flows_.bind (withGraphContext (Core__.injection (Core.rowTypeTypeName v1) term_)) (\field ->  
           let fn = (Core.fieldName field) 
               term = (Core.fieldTerm field)
           in (Compute.coderEncode (Compute.adapterCoder ad) (Core.TermRecord (Core.Record {
@@ -601,7 +601,7 @@ wrapToUnwrapped t = ((\x -> case x of
   Core.TypeWrap v1 ->  
     let tname = (Core.wrappedTypeTypeName v1) 
         typ = (Core.wrappedTypeObject v1)
-        encode = (\ad -> \term -> Flows_.bind (withGraphContext (ExtractCore.wrap tname term)) (\unwrapped -> Compute.coderEncode (Compute.adapterCoder ad) unwrapped))
+        encode = (\ad -> \term -> Flows_.bind (withGraphContext (Core__.wrap tname term)) (\unwrapped -> Compute.coderEncode (Compute.adapterCoder ad) unwrapped))
         decode = (\ad -> \term -> Flows_.bind (Compute.coderDecode (Compute.adapterCoder ad) term) (\decoded -> Flows_.pure (Core.TermWrap (Core.WrappedTerm {
                 Core.wrappedTermTypeName = tname,
                 Core.wrappedTermObject = decoded}))))

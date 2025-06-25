@@ -21,6 +21,7 @@ import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Qnames as Qnames
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -904,7 +905,7 @@ topologicalSortBindings bindingMap =
   in (Lists.map (Lists.map toPair) (Sorting.topologicalSortComponents (Lists.map depsOf bindings)))
 
 -- | Topological sort of elements based on their dependencies
-topologicalSortElements :: ([Graph.Element] -> Mantle.Either_ [[Core.Name]] [Core.Name])
+topologicalSortElements :: ([Graph.Element] -> Mantle.Either [[Core.Name]] [Core.Name])
 topologicalSortElements els =  
   let adjlist = (\e -> (Graph.elementName e, (Sets.toList (termDependencyNames False True True (Graph.elementTerm e)))))
   in (Sorting.topologicalSort (Lists.map adjlist els))

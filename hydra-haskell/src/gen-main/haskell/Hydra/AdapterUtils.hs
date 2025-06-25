@@ -7,7 +7,6 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Flows as Flows
-import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -17,8 +16,10 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
 import qualified Hydra.Qnames as Qnames
+import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -34,7 +35,7 @@ bidirectional f = Compute.Coder {
   Compute.coderDecode = (f Coders.CoderDirectionDecode)}
 
 chooseAdapter :: ((t2 -> Compute.Flow t4 [Compute.Adapter t0 t1 t2 t2 t3 t3]) -> (t2 -> Bool) -> (t2 -> String) -> (t2 -> String) -> t2 -> Compute.Flow t4 (Compute.Adapter t0 t1 t2 t2 t3 t3))
-chooseAdapter alts supported show_ describe typ = (Logic.ifElse (supported typ) (Flows.pure (Compute.Adapter {
+chooseAdapter alts supported show describe typ = (Logic.ifElse (supported typ) (Flows.pure (Compute.Adapter {
   Compute.adapterIsLossy = False,
   Compute.adapterSource = typ,
   Compute.adapterTarget = typ,
@@ -47,10 +48,10 @@ chooseAdapter alts supported show_ describe typ = (Logic.ifElse (supported typ) 
       " (discarded ",
       Literals.showInt32 (Lists.length raw),
       " unsupported candidate types: ",
-      Io.showList show_ (Lists.map Compute.adapterTarget raw),
+      Core_.showList show (Lists.map Compute.adapterTarget raw),
       ")"]),
     ". Original type: ",
-    (show_ typ)])) (Flows.pure (Lists.head candidates))))))
+    (show typ)])) (Flows.pure (Lists.head candidates))))))
 
 composeCoders :: (Compute.Coder t2 t1 t0 t3 -> Compute.Coder t2 t1 t3 t4 -> Compute.Coder t2 t1 t0 t4)
 composeCoders c1 c2 = Compute.Coder {
@@ -84,10 +85,10 @@ integerTypeIsSupported constraints it = (Sets.member it (Coders.languageConstrai
 
 -- | Check if literal type is supported by language constraints
 literalTypeIsSupported :: (Coders.LanguageConstraints -> Core.LiteralType -> Bool)
-literalTypeIsSupported constraints at = (Logic.and (Sets.member (Variants.literalTypeVariant at) (Coders.languageConstraintsLiteralVariants constraints)) ((\x -> case x of
+literalTypeIsSupported constraints lt = (Logic.and (Sets.member (Variants.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) ((\x -> case x of
   Core.LiteralTypeFloat v1 -> (floatTypeIsSupported constraints v1)
   Core.LiteralTypeInteger v1 -> (integerTypeIsSupported constraints v1)
-  _ -> True) at))
+  _ -> True) lt))
 
 -- | Convert name to file path
 nameToFilePath :: (Mantle.CaseConvention -> Module.FileExtension -> Core.Name -> String)

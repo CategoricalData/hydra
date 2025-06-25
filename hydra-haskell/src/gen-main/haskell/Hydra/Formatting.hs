@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -144,11 +145,11 @@ withCharacterAliases original =
 -- | A simple soft line wrap which is suitable for code comments
 wrapLine :: (Int -> String -> String)
 wrapLine maxlen input =  
-  let helper = (\prev -> \rem_ ->  
-          let trunc = (Lists.take maxlen rem_) 
+  let helper = (\prev -> \rem ->  
+          let trunc = (Lists.take maxlen rem) 
               spanResult = (Lists.span (\c -> Logic.and (Logic.not (Equality.equalInt32 c 32)) (Logic.not (Equality.equalInt32 c 9))) (Lists.reverse trunc))
               prefix = (Lists.reverse (snd spanResult))
               suffix = (Lists.reverse (fst spanResult))
-          in (Logic.ifElse (Equality.lteInt32 (Lists.length rem_) maxlen) (Lists.reverse (Lists.cons rem_ prev)) (Logic.ifElse (Lists.null prefix) (helper (Lists.cons trunc prev) (Lists.drop maxlen rem_)) (helper (Lists.cons (Lists.init prefix) prev) (Lists.concat2 suffix (Lists.drop maxlen rem_))))))
+          in (Logic.ifElse (Equality.lteInt32 (Lists.length rem) maxlen) (Lists.reverse (Lists.cons rem prev)) (Logic.ifElse (Lists.null prefix) (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (helper (Lists.cons (Lists.init prefix) prev) (Lists.concat2 suffix (Lists.drop maxlen rem))))))
   in (Strings.fromList (Lists.intercalate [
     10] (helper [] (Strings.toList input))))

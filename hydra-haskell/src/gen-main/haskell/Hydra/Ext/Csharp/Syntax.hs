@@ -4,6 +4,7 @@
 module Hydra.Ext.Csharp.Syntax where
 
 import qualified Hydra.Core as Core
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -1806,7 +1807,7 @@ data QueryBodyClause =
   QueryBodyClauseLet LetClause |
   QueryBodyClauseWhere BooleanExpression |
   QueryBodyClauseJoin JoinClause |
-  QueryBodyClauseOrderby [Ordering_]
+  QueryBodyClauseOrderby [Ordering]
   deriving (Eq, Ord, Read, Show)
 
 _QueryBodyClause = (Core.Name "hydra.ext.csharp.syntax.QueryBodyClause")
@@ -1857,8 +1858,8 @@ _JoinClause_equals = (Core.Name "equals")
 
 _JoinClause_into = (Core.Name "into")
 
-data Ordering_ = 
-  Ordering_ {
+data Ordering = 
+  Ordering {
     orderingExpression :: Expression,
     orderingDirection :: (Maybe OrderingDirection)}
   deriving (Eq, Ord, Read, Show)
