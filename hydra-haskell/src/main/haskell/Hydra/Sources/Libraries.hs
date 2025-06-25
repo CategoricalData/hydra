@@ -38,7 +38,6 @@ standardLibraries = [
   hydraLibChars,
   hydraLibEquality,
   hydraLibFlows,
-  hydraLibIo,
   hydraLibLists,
   hydraLibLiterals,
   hydraLibLogic,
@@ -156,47 +155,6 @@ hydraLibFlows = standardLibrary _hydra_lib_flows [
     s = variable "s"
     x = variable "x"
     y = variable "y"
-
--- * hydra.lib.io primitives
-
-_hydra_lib_io :: Namespace
-_hydra_lib_io = Namespace "hydra.lib.io"
-
-_io_readTerm        = qname _hydra_lib_io "readTerm"        :: Name
-_io_showFloat       = qname _hydra_lib_io "showFloat"       :: Name
-_io_showFloatType   = qname _hydra_lib_io "showFloatType"   :: Name
-_io_showInteger     = qname _hydra_lib_io "showInteger"     :: Name
-_io_showIntegerType = qname _hydra_lib_io "showIntegerType" :: Name
-_io_showList        = qname _hydra_lib_io "showList"        :: Name
-_io_showLiteral     = qname _hydra_lib_io "showLiteral"     :: Name
-_io_showLiteralType = qname _hydra_lib_io "showLiteralType" :: Name
-_io_showTerm        = qname _hydra_lib_io "showTerm"        :: Name
-_io_showType        = qname _hydra_lib_io "showType"        :: Name
-
-hydraLibIo :: Library
-hydraLibIo = standardLibrary _hydra_lib_io [
-    prim1       _io_readTerm        Io.readTerm           []    string (optional term),
-    prim1       _io_showFloat       Io.showFloat          []    floatValue string,
-    prim1       _io_showFloatType   Io.showFloatType      []    floatType string,
-    prim1       _io_showInteger     Io.showInteger        []    integerValue string,
-    prim1       _io_showIntegerType Io.showIntegerType    []    integerType string,
-    prim2Interp _io_showList        (Just showListInterp) ["x"] (function x string) (list x) string,
-    prim1       _io_showLiteral     Io.showLiteral        []    literal string,
-    prim1       _io_showLiteralType Io.showLiteralType    []    Prims.literalType string,
-    prim1       _io_showTerm        Io.showTerm           []    term string,
-    prim1       _io_showType        Io.showType           []    type_ string]
-  where
-    x = variable "x"
-
-showListInterp :: Term -> Term -> Flow Graph Term
-showListInterp fun lstRaw = do
-  lst <- ExtractCore.list Flows.pure lstRaw
-  return $ Terms.apply (Terms.primitive _lists_concat) $ Terms.list [
-    Terms.string "[",
-    Terms.applyAll (Terms.primitive _lists_intercalate) [
-      Terms.string ", ",
-      Terms.applyAll (Terms.primitive _lists_map) [fun, Terms.list lst]],
-    Terms.string "]"]
 
 -- * hydra.lib.lists primitives
 
