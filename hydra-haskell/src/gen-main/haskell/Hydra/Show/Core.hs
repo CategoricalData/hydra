@@ -9,6 +9,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Typing as Typing
@@ -148,6 +149,16 @@ term t =
         ")"])
     Core.TermFunction v1 -> ((\x -> case x of
       Core.FunctionElimination v2 -> ((\x -> case x of
+        Core.EliminationProduct v3 ->  
+          let arity = (Core.tupleProjectionArity v3) 
+              index = (Core.tupleProjectionIndex v3)
+              domain = (Core.tupleProjectionDomain v3)
+          in (Strings.cat [
+            "]",
+            Literals.showInt32 index,
+            "/",
+            Literals.showInt32 arity,
+            "]"])
         Core.EliminationRecord v3 ->  
           let tname = (Core.unName (Core.projectionTypeName v3)) 
               fname = (Core.unName (Core.projectionField v3))
@@ -205,6 +216,15 @@ term t =
         Strings.intercalate ", " termStrs,
         "]"])
     Core.TermLiteral v1 -> (literal v1)
+    Core.TermMap v1 ->  
+      let entry = (\p -> Strings.cat [
+              term (fst p),
+              "=",
+              (term (snd p))])
+      in (Strings.cat [
+        "{",
+        Strings.intercalate ", " (Lists.map entry (Maps.toList v1)),
+        "}"])
     Core.TermOptional v1 -> (Optionals.maybe "nothing" (\t -> Strings.cat [
       "just(",
       term t,
@@ -223,6 +243,22 @@ term t =
         tname,
         ")",
         (showFields fields)])
+    Core.TermSet v1 -> (Strings.cat [
+      "{",
+      Strings.intercalate ", " (Lists.map term (Sets.toList v1)),
+      "}"])
+    Core.TermSum v1 ->  
+      let index = (Core.sumIndex v1) 
+          size = (Core.sumSize v1)
+          t2 = (Core.sumTerm v1)
+      in (Strings.cat [
+        "(",
+        Literals.showInt32 index,
+        "/",
+        Literals.showInt32 size,
+        "=",
+        term t2,
+        ")"])
     Core.TermTypeAbstraction v1 ->  
       let param = (Core.unName (Core.typeAbstractionParameter v1)) 
           body = (Core.typeAbstractionBody v1)
@@ -306,6 +342,15 @@ type_ typ =
         "(",
         Strings.intercalate " @ " typeStrs,
         ")"])
+    Core.TypeForall v1 ->  
+      let var = (Core.unName (Core.forallTypeParameter v1)) 
+          body = (Core.forallTypeBody v1)
+      in (Strings.cat [
+        "(\8704",
+        var,
+        ".",
+        type_ body,
+        ")"])
     Core.TypeFunction _ ->  
       let types = (gatherFunctionTypes [] typ) 
           typeStrs = (Lists.map type_ types)
@@ -317,15 +362,6 @@ type_ typ =
       "list<",
       type_ v1,
       ">"])
-    Core.TypeForall v1 ->  
-      let var = (Core.unName (Core.forallTypeParameter v1)) 
-          body = (Core.forallTypeBody v1)
-      in (Strings.cat [
-        "(\8704",
-        var,
-        ".",
-        type_ body,
-        ")"])
     Core.TypeLiteral v1 -> (literalType v1)
     Core.TypeMap v1 ->  
       let keyTyp = (Core.mapTypeKeys v1) 
@@ -348,6 +384,9 @@ type_ typ =
       "set<",
       type_ v1,
       ">"])
+    Core.TypeSum v1 ->  
+      let typeStrs = (Lists.map type_ v1)
+      in (Strings.intercalate "+" typeStrs)
     Core.TypeUnion v1 -> (Strings.cat2 "union" (showRowType v1))
     Core.TypeVariable v1 -> (Core.unName v1)
     Core.TypeWrap v1 ->  
