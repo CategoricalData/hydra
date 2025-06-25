@@ -12,7 +12,6 @@ import qualified Hydra.Dsl.Graph                  as Graph
 import qualified Hydra.Dsl.Lib.Chars              as Chars
 import qualified Hydra.Dsl.Lib.Equality           as Equality
 import qualified Hydra.Dsl.Lib.Flows              as Flows
-import qualified Hydra.Dsl.Lib.Io                 as Io
 import qualified Hydra.Dsl.Lib.Lists              as Lists
 import qualified Hydra.Dsl.Lib.Literals           as Literals
 import qualified Hydra.Dsl.Lib.Logic              as Logic
@@ -67,6 +66,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
+--import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
@@ -77,8 +77,8 @@ import qualified Data.Maybe                as Y
 import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
-hydraPrintingModule :: Module
-hydraPrintingModule = Module (Namespace "hydra.describe.core") elements
+describeCoreModule :: Module
+describeCoreModule = Module (Namespace "hydra.describe.core") elements
     [Variants.hydraVariantsModule]
     [Tier1.hydraCoreModule] $
     Just "Utilities for use in transformations"
@@ -91,7 +91,7 @@ hydraPrintingModule = Module (Namespace "hydra.describe.core") elements
      el typeDef]
 
 printingDefinition :: String -> TTerm a -> TElement a
-printingDefinition = definitionInModule hydraPrintingModule
+printingDefinition = definitionInModule describeCoreModule
 
 
 floatTypeDef :: TElement (FloatType -> String)

@@ -59,7 +59,7 @@ tier1Modules = tier1TypeModules ++ tier1TermModules
 
 tier1TermModules :: [Module]
 tier1TermModules = [
-  coreEncodingModule,
+  encodeCoreModule,
   hydraDecodeModule,
   hydraConstantsModule,
   hydraFormattingModule,

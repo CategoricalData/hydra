@@ -5,25 +5,30 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.All,
   module Hydra.Sources.Tier2.Accessors,
   module Hydra.Sources.Tier2.AdapterUtils,
+  module Hydra.Sources.Tier2.Adapters,
   module Hydra.Sources.Tier2.Annotations,
   module Hydra.Sources.Tier2.Arity,
---  module Hydra.Sources.Tier2.Decode.Core,
   module Hydra.Sources.Tier2.CoreLanguage,
+--  module Hydra.Sources.Tier2.Decode.Core,
+--  module Hydra.Sources.Tier2.Describe.Core,
   module Hydra.Sources.Tier2.Errors,
---  module Hydra.Sources.Tier2.Extract.Core, -- hydra.expect symbols conflict with several other modules
+--  module Hydra.Sources.Tier2.Extract.Core,
   module Hydra.Sources.Tier2.Flows,
   module Hydra.Sources.Tier2.GrammarToModule,
   module Hydra.Sources.Tier2.Inference,
   module Hydra.Sources.Tier2.Lexical,
---  module Hydra.Sources.Tier2.Describe.Core,
+  module Hydra.Sources.Tier2.LiteralAdapters,
   module Hydra.Sources.Tier2.Qnames,
   module Hydra.Sources.Tier2.Reduction,
   module Hydra.Sources.Tier2.Rewriting,
   module Hydra.Sources.Tier2.Schemas,
   module Hydra.Sources.Tier2.Serialization,
+--  module Hydra.Sources.Tier2.Show.Core,
   module Hydra.Sources.Tier2.Sorting,
   module Hydra.Sources.Tier2.Substitution,
   module Hydra.Sources.Tier2.Tarjan,
+  module Hydra.Sources.Tier2.Templating,
+  module Hydra.Sources.Tier2.TermAdapters,
   module Hydra.Sources.Tier2.Unification,
   module Hydra.Sources.Tier2.Variants,
 ) where
@@ -31,26 +36,31 @@ module Hydra.Sources.Tier2.All(
 import Hydra.Sources.Tier1.All hiding (mapDef) -- hydra.decode, hydra.expect, and hydra.flows all export 'map'
 import Hydra.Sources.Tier2.Accessors
 import Hydra.Sources.Tier2.AdapterUtils
+import Hydra.Sources.Tier2.Adapters
 import Hydra.Sources.Tier2.Annotations
 import Hydra.Sources.Tier2.Arity
-import Hydra.Sources.Tier2.Decode.Core
 import Hydra.Sources.Tier2.CoreLanguage
+import Hydra.Sources.Tier2.Decode.Core
+import Hydra.Sources.Tier2.Describe.Core
 import Hydra.Sources.Tier2.Errors
 import Hydra.Sources.Tier2.Extract.Core
 import Hydra.Sources.Tier2.Flows
 import Hydra.Sources.Tier2.GrammarToModule
 import Hydra.Sources.Tier2.Inference
 import Hydra.Sources.Tier2.Lexical
-import Hydra.Sources.Tier2.Describe.Core
+import Hydra.Sources.Tier2.LiteralAdapters
 import Hydra.Sources.Tier2.Qnames
 import Hydra.Sources.Tier2.Reduction
 import Hydra.Sources.Tier2.Rewriting
 import Hydra.Sources.Tier2.Schemas
 import Hydra.Sources.Tier2.Serialization
+import Hydra.Sources.Tier2.Show.Core
 import Hydra.Sources.Tier2.Sorting
 import Hydra.Sources.Tier2.Substitution
-import Hydra.Sources.Tier2.Unification
 import Hydra.Sources.Tier2.Tarjan
+import Hydra.Sources.Tier2.Templating
+import Hydra.Sources.Tier2.TermAdapters hiding (optionalToListDef)
+import Hydra.Sources.Tier2.Unification
 import Hydra.Sources.Tier2.Variants
 
 
@@ -70,21 +80,22 @@ tier2Modules = tier2TypeModules ++ tier2TermModules
 tier2TypeModules = []
 
 tier2TermModules = [
+  decodeCoreModule,
+  describeCoreModule,
+  extractCoreModule,
+  showCoreModule,
   hydraAccessorsModule,
---  hydraAdaptersModule,
+  hydraAdaptersModule,
   hydraAdapterUtilsModule,
   hydraAnnotationsModule,
   hydraArityModule,
-  hydraCoreDecodingModule,
   hydraCoreLanguageModule,
   hydraErrorsModule,
-  hydraExpectModule,
   hydraFlowsModule,
   hydraGrammarToModuleModule,
   hydraInferenceModule,
   hydraLexicalModule,
---  hydraLiteralAdaptersModule,
-  hydraPrintingModule,
+  hydraLiteralAdaptersModule,
   hydraQnamesModule,
   hydraReductionModule,
   hydraRewritingModule,
@@ -92,8 +103,8 @@ tier2TermModules = [
   hydraSerializationModule,
   hydraSortingModule,
   hydraSubstitutionModule,
---  hydraTemplatingModule,
   tarjanModule,
+--  hydraTemplatingModule,
 --  hydraTermAdaptersModule,
 --  hydraTermEncodingModule,
   hydraUnificationModule,

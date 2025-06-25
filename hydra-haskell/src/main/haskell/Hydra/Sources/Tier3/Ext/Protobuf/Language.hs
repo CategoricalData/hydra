@@ -14,7 +14,6 @@ import qualified Hydra.Dsl.Core            as Core
 import qualified Hydra.Dsl.Graph           as Graph
 import qualified Hydra.Dsl.Lib.Equality    as Equality
 import qualified Hydra.Dsl.Lib.Flows       as Flows
-import qualified Hydra.Dsl.Lib.Io          as Io
 import qualified Hydra.Dsl.Lib.Lists       as Lists
 import qualified Hydra.Dsl.Lib.Literals    as Literals
 import qualified Hydra.Dsl.Lib.Logic       as Logic

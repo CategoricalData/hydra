@@ -12,7 +12,6 @@ import qualified Hydra.Dsl.Graph                  as Graph
 import qualified Hydra.Dsl.Lib.Chars              as Chars
 import qualified Hydra.Dsl.Lib.Equality           as Equality
 import qualified Hydra.Dsl.Lib.Flows              as Flows
-import qualified Hydra.Dsl.Lib.Io                 as Io
 import qualified Hydra.Dsl.Lib.Lists              as Lists
 import qualified Hydra.Dsl.Lib.Literals           as Literals
 import qualified Hydra.Dsl.Lib.Logic              as Logic
@@ -67,6 +66,7 @@ import qualified Hydra.Sources.Tier2.Lexical as Lexical
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
+import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
@@ -78,11 +78,12 @@ import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 
 
 coreDecodingDefinition :: String -> TTerm a -> TElement a
-coreDecodingDefinition = definitionInModule hydraCoreDecodingModule
+coreDecodingDefinition = definitionInModule decodeCoreModule
 
-hydraCoreDecodingModule :: Module
-hydraCoreDecodingModule = Module (Namespace "hydra.decode.core") elements
-    [Errors.hydraErrorsModule, ExtractCore.hydraExpectModule, Flows_.hydraFlowsModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule]
+decodeCoreModule :: Module
+decodeCoreModule = Module (Namespace "hydra.decode.core") elements
+    [Errors.hydraErrorsModule, ExtractCore.extractCoreModule, Flows_.hydraFlowsModule, Lexical.hydraLexicalModule,
+      Rewriting.hydraRewritingModule, ShowCore.showCoreModule]
     [Tier1.hydraCodersModule, Tier1.hydraMantleModule] $
     Just ("Decoding of encoded types (as terms) back to types according to LambdaGraph's epsilon encoding.")
   where
@@ -130,7 +131,7 @@ fieldTypesDef = coreDecodingDefinition "fieldTypes" $
   lambda "term" $ lets [
     "stripped">: ref Strip.fullyStripTermDef @@ var "term"]
     $ cases _Term (var "stripped")
-        (Just $ ref Errors.unexpectedDef @@ string "list" @@ (Io.showTerm $ var "term")) [
+        (Just $ ref Errors.unexpectedDef @@ string "list" @@ (ref ShowCore.showTermDef @@ var "term")) [
       _Term_list>>: lambda "els" $ Flows.mapList (ref fieldTypeDef) (var "els")]
 
 floatTypeDef :: TElement (Term -> Flow Graph FloatType)
@@ -299,7 +300,7 @@ matchRecordDef = coreDecodingDefinition "matchRecord" $
   lambdas ["decode", "term"] $ lets [
     "stripped">: ref Strip.fullyStripTermDef @@ var "term"]
     $ cases _Term (var "stripped")
-        (Just $ ref Errors.unexpectedDef @@ string "record" @@ (Io.showTerm $ var "term")) [
+        (Just $ ref Errors.unexpectedDef @@ string "record" @@ (ref ShowCore.showTermDef @@ var "term")) [
       _Term_record>>: lambda "record" $ var "decode" @@
         (Maps.fromList $ Lists.map
           (lambda "field" $ pair (Core.fieldName $ var "field") (Core.fieldTerm $ var "field"))
@@ -313,7 +314,7 @@ matchUnionDef = coreDecodingDefinition "matchUnion" $
     $ cases _Term (var "stripped")
         (Just $ ref Errors.unexpectedDef @@
           ("union with one of {" ++ (Strings.intercalate ", " $ Lists.map (lambda "pair" $ Core.unName $ first $ var "pair") $ var "pairs") ++ "}") @@
-          (Io.showTerm $ var "stripped")) [
+          (ref ShowCore.showTermDef @@ var "stripped")) [
       _Term_variable>>: lambda "name" $
         Flows.bind (ref Lexical.requireElementDef @@ var "name") $
         lambda "el" $ ref matchUnionDef @@ var "tname" @@ var "pairs" @@ (Graph.elementTerm $ var "el"),
@@ -326,7 +327,7 @@ matchUnionDef = coreDecodingDefinition "matchUnion" $
               (Flows.fail $ "no matching case for field " ++ (Core.unName $ var "fname"))
               (lambda "f" $ var "f" @@ var "val")
               (Maps.lookup (var "fname") (var "mapping")))
-          (ref Errors.unexpectedDef @@ ("injection for type " ++ (Core.unName $ var "tname")) @@ (Io.showTerm $ var "term"))]
+          (ref Errors.unexpectedDef @@ ("injection for type " ++ (Core.unName $ var "tname")) @@ (ref ShowCore.showTermDef @@ var "term"))]
 
 matchUnitFieldDef :: TElement (Name -> y -> (Name, x -> Flow Graph y))
 matchUnitFieldDef = coreDecodingDefinition "matchUnitField" $
