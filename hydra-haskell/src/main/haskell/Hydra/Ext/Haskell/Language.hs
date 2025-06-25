@@ -64,16 +64,16 @@ haskellLanguage = Language (LanguageName "hydra.ext.haskell") $ LanguageConstrai
   See also https://www.haskell.org/onlinereport/standard-prelude.html
 -}
 reservedWords :: S.Set String
-reservedWords = S.fromList $ keywordSymbols ++ essentialDataSymbols
+reservedWords = S.fromList $ keywordSymbols ++ reservedSymbols
 --reservedWords = S.fromList $ keywordSymbols ++ classSymbols ++ dataSymbols ++ functionSymbols ++ newtypeSymbols ++ typeSymbols
   where
-    -- This is a minimal list of symbols which absolutely must be escaped; they cannot be overloaded.
+    -- Haskell's strictly reserved keywords; they cannot be used as identifiers.
     keywordSymbols = [
-      "let", "type"]
+      "case", "class", "data", "default", "deriving", "do", "else", "forall", "foreign", "if", "import", "in", "infix", "infixl", "infixr", "instance", "let", "module", "newtype", "of", "then", "type", "where"]
 
-    -- These symbols should not be overloaded either, as Hydra uses them in their unqualified form in generated code.
-    essentialDataSymbols = [
-      "Bool", "Float", "Double", "Int", "Integer", "String"]
+    -- Hydra uses these symbols in generated code, so we reserve them to avoid conflicts.
+    reservedSymbols = [
+      "Bool", "Double", "False", "Float", "Int", "Integer", "Just", "Maybe", "Nothing", "Ord", "Show", "String", "True"]
 
     -- TODO: remove the nonessential symbols if they will not be used
     {-
