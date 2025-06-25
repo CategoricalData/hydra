@@ -11,7 +11,7 @@ import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
-import Hydra.Lib.Io
+import qualified Hydra.Show.Core as ShowCore
 
 import Data.Int
 import qualified Data.List as L
@@ -87,7 +87,7 @@ flow states values = TermCoder (TypeVariable _Flow Types.@@ (termCoderType state
 function :: TermCoder x -> TermCoder y -> TermCoder (x -> y)
 function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) $ Coder encode decode
   where
-    encode term = fail $ "cannot encode term to a function: " ++ showTerm term
+    encode term = fail $ "cannot encode term to a function: " ++ ShowCore.term term
     decode _ = fail $ "cannot decode functions to terms"
 
 integerType :: TermCoder IntegerType

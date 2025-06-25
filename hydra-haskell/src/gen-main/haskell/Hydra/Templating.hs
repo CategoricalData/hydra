@@ -4,15 +4,16 @@ module Hydra.Templating where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Flows as Flows
-import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Show.Core as Core__
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -24,7 +25,7 @@ graphToSchema g =
   let toPair = (\nameAndEl ->  
           let name = (fst nameAndEl) 
               el = (snd nameAndEl)
-          in (Flows.bind (DecodeCore.type_ (Graph.elementTerm el)) (\t -> Flows.pure (name, t))))
+          in (Flows.bind (Core_.type_ (Graph.elementTerm el)) (\t -> Flows.pure (name, t))))
   in (Flows.bind (Flows.mapList toPair (Maps.toList (Graph.graphElements g))) (\pairs -> Flows.pure (Maps.fromList pairs)))
 
 instantiateTemplate :: (Bool -> M.Map Core.Name Core.Type -> Core.Type -> Compute.Flow t0 Core.Term)
@@ -73,7 +74,7 @@ instantiateTemplate minimal schema t =
         Core.recordFields = dfields}))))
     Core.TypeSet v1 -> (Logic.ifElse minimal (Flows.pure (Core.TermSet Sets.empty)) (Flows.bind (inst v1) (\e -> Flows.pure (Core.TermSet (Sets.fromList [
       e])))))
-    Core.TypeVariable v1 -> (Optionals.maybe (Flows.fail (Strings.cat2 "Type variable " (Strings.cat2 (Io.showTerm (Core.TermVariable v1)) " not found in schema"))) inst (Maps.lookup v1 schema))
+    Core.TypeVariable v1 -> (Optionals.maybe (Flows.fail (Strings.cat2 "Type variable " (Strings.cat2 (Core__.term (Core.TermVariable v1)) " not found in schema"))) inst (Maps.lookup v1 schema))
     Core.TypeWrap v1 ->  
       let tname = (Core.wrappedTypeTypeName v1) 
           t_ = (Core.wrappedTypeObject v1)

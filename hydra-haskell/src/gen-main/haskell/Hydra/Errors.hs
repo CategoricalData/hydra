@@ -54,7 +54,7 @@ traceSummary t =
                   "\t",
                   (Core.unName (fst pair))],
                 ": "],
-              (Core_.showTerm (snd pair))])
+              (Core_.term (snd pair))])
   in (Strings.intercalate "\n" (Lists.concat2 messageLines keyvalLines))
 
 unexpected :: (String -> String -> Compute.Flow t0 t1)

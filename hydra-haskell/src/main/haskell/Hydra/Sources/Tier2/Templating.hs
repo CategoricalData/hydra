@@ -172,7 +172,7 @@ instantiateTemplateDef = templatingDefinition "instantiateTemplate" $
       -- TODO: TypeUnion (RowType tname _ fields)
       _Type_variable>>: lambda "tname" $
         Optionals.maybe
-          (Flows.fail $ Strings.cat2 (string "Type variable ") $ Strings.cat2 (ref ShowCore.showTermDef @@ (Core.termVariable $ var "tname")) (string " not found in schema"))
+          (Flows.fail $ Strings.cat2 (string "Type variable ") $ Strings.cat2 (ref ShowCore.termDef @@ (Core.termVariable $ var "tname")) (string " not found in schema"))
           (var "inst")
           (Maps.lookup (var "tname") (var "schema")),
       _Type_wrap>>: lambda "wt" $ lets [

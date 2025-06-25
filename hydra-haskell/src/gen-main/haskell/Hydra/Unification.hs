@@ -37,9 +37,9 @@ joinTypes left right comment =
               Strings.cat [
                 Strings.cat [
                   "Cannot unify ",
-                  (Core_.showType sleft)],
+                  (Core_.type_ sleft)],
                 " with "],
-              (Core_.showType sright)]))
+              (Core_.type_ sright)]))
       assertEqual = (Logic.ifElse (Equality.equalType sleft sright) (Flows.pure []) cannotUnify)
       joinList = (\lefts -> \rights -> Logic.ifElse (Equality.equalInt32 (Lists.length lefts) (Lists.length rights)) (Flows.pure (Lists.zipWith joinOne lefts rights)) cannotUnify)
       joinRowTypes = (\left -> \right -> Logic.ifElse (Logic.and (Equality.equalString (Core.unName (Core.rowTypeTypeName left)) (Core.unName (Core.rowTypeTypeName right))) (Logic.and (Equality.equalInt32 (Lists.length (Lists.map Core.fieldTypeName (Core.rowTypeFields left))) (Lists.length (Lists.map Core.fieldTypeName (Core.rowTypeFields right)))) (Lists.foldl Logic.and True (Lists.zipWith (\left -> \right -> Equality.equalString (Core.unName left) (Core.unName right)) (Lists.map Core.fieldTypeName (Core.rowTypeFields left)) (Lists.map Core.fieldTypeName (Core.rowTypeFields right)))))) (joinList (Lists.map Core.fieldTypeType (Core.rowTypeFields left)) (Lists.map Core.fieldTypeType (Core.rowTypeFields right))) cannotUnify)
@@ -105,7 +105,7 @@ unifyTypeConstraints schemaTypes constraints =
                                 "Variable ",
                                 (Core.unName v)],
                               " appears free in type "],
-                            (Core_.showType t)],
+                            (Core_.type_ t)],
                           " ("],
                         comment],
                       ")"])) (bind v t))

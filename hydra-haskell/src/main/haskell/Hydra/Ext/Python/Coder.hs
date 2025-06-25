@@ -11,7 +11,6 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Ext.Python.Serde as PySer
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
-import Hydra.Lib.Io
 import Hydra.Formatting
 import qualified Hydra.Decode as Decode
 

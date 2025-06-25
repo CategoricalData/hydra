@@ -5,10 +5,10 @@ import qualified Hydra.Pg.Model as Pg
 import Hydra.Dsl.Pg.Mappings
 import Hydra.Ext.Tabular
 import Hydra.Dsl.Ext.Tabular
-import Hydra.Lib.Io
 import Hydra.Lib.Literals
 import Hydra.Tools.Monads
 import qualified Hydra.Extract.Core as ExtractCore
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Tier0.Core (hydraCoreGraph)
 
@@ -46,7 +46,7 @@ evaluateProperties specs record = M.fromList . Y.catMaybes <$> (CM.mapM forPair 
         TermOptional mv -> case mv of
           Nothing -> return Nothing
           Just v -> return $ Just (k, v)
-        _ -> fail $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ showTerm value
+        _ -> fail $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ ShowCore.term value
 
 evaluateVertex :: Pg.Vertex Term -> Term -> Flow Graph (Maybe (Pg.Vertex Term))
 evaluateVertex (Pg.Vertex label idSpec propSpecs) record = do
@@ -172,10 +172,10 @@ decodeTable (TableType _ colTypes) (Table mheader rows) = do
               _ -> unsupported
             where
               toEither mv = case mv of
-                Nothing -> Left $ "Invalid value of type " ++ showType typ ++ " for column " ++ show cname
+                Nothing -> Left $ "Invalid value of type " ++ ShowCore.type_ typ ++ " for column " ++ show cname
                   ++ " on line " ++ show lineno ++ ": " ++ value
                 Just v -> Right v
-              unsupported = Left $ "Unsupported type for column " ++ show cname ++ ": " ++ showType typ
+              unsupported = Left $ "Unsupported type for column " ++ show cname ++ ": " ++ ShowCore.type_ typ
               readValue cons read value = (Just . cons) <$> (toEither $ read value)
 
 decodeTableIo :: TableType -> FilePath -> IO (Table Term)
