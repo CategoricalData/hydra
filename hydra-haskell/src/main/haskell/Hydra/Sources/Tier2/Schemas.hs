@@ -12,7 +12,6 @@ import qualified Hydra.Dsl.Graph                  as Graph
 import qualified Hydra.Dsl.Lib.Chars              as Chars
 import qualified Hydra.Dsl.Lib.Equality           as Equality
 import qualified Hydra.Dsl.Lib.Flows              as Flows
-import qualified Hydra.Dsl.Lib.Io                 as Io
 import qualified Hydra.Dsl.Lib.Lists              as Lists
 import qualified Hydra.Dsl.Lib.Literals           as Literals
 import qualified Hydra.Dsl.Lib.Logic              as Logic
@@ -48,8 +47,8 @@ import qualified Data.Maybe                as Y
 
 -- Uncomment tier-2 sources as needed
 --import qualified Hydra.Sources.Tier2.Accessors as Accessors
---import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
@@ -67,6 +66,7 @@ import qualified Hydra.Sources.Tier2.Qnames as Qnames
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
+import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
@@ -82,7 +82,8 @@ schemasDefinition = definitionInModule hydraSchemasModule
 
 hydraSchemasModule :: Module
 hydraSchemasModule = Module (Namespace "hydra.schemas") elements
-    [DecodeCore.hydraCoreDecodingModule, EncodeCore.coreEncodingModule, Qnames.hydraQnamesModule, Rewriting.hydraRewritingModule, Sorting.hydraSortingModule]
+    [DecodeCore.decodeCoreModule, EncodeCore.encodeCoreModule, Qnames.hydraQnamesModule, Rewriting.hydraRewritingModule,
+      ShowCore.showCoreModule, Sorting.hydraSortingModule]
     [Tier1.hydraCodersModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just ("Various functions for dereferencing and decoding schema types.")
   where
@@ -182,7 +183,7 @@ fieldTypesDef = schemasDefinition "fieldTypes" $
     "toMap">: lambda "fields" $ Maps.fromList $ Lists.map
       (lambda "ft" $ pair (Core.fieldTypeName $ var "ft") (Core.fieldTypeType $ var "ft"))
       (var "fields")]
-    $ match _Type (Just $ ref Errors.unexpectedDef @@ string "record or union type" @@ Io.showType (var "t")) [
+    $ match _Type (Just $ ref Errors.unexpectedDef @@ string "record or union type" @@ (ref ShowCore.showTypeDef @@ var "t")) [
       _Type_forall>>: lambda "ft" $ ref fieldTypesDef @@ Core.forallTypeBody (var "ft"),
       _Type_record>>: lambda "rt" $ Flows.pure $ var "toMap" @@ Core.rowTypeFields (var "rt"),
       _Type_union>>: lambda "rt" $ Flows.pure $ var "toMap" @@ Core.rowTypeFields (var "rt"),
@@ -269,7 +270,7 @@ requireRowTypeDef = schemasDefinition "requireRowType" $
             string " does not resolve to a ",
             var "label",
             string " type: ",
-            Io.showType $ var "t"])
+            ref ShowCore.showTypeDef @@ var "t"])
           (unaryFunction Flows.pure)
           (var "getter" @@ (var "rawType" @@ var "t"))
 

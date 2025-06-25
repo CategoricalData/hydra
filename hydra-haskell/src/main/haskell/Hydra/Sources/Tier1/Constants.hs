@@ -6,7 +6,6 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Lib.Equality  as Equality
-import qualified Hydra.Dsl.Lib.Io        as Io
 import qualified Hydra.Dsl.Lib.Lists     as Lists
 import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic

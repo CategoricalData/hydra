@@ -12,7 +12,6 @@ import qualified Hydra.Dsl.Graph                  as Graph
 import qualified Hydra.Dsl.Lib.Chars              as Chars
 import qualified Hydra.Dsl.Lib.Equality           as Equality
 import qualified Hydra.Dsl.Lib.Flows              as Flows
-import qualified Hydra.Dsl.Lib.Io                 as Io
 import qualified Hydra.Dsl.Lib.Lists              as Lists
 import qualified Hydra.Dsl.Lib.Literals           as Literals
 import qualified Hydra.Dsl.Lib.Logic              as Logic
@@ -48,8 +47,8 @@ import qualified Data.Maybe                as Y
 
 -- Uncomment tier-2 sources as needed
 --import qualified Hydra.Sources.Tier2.Accessors as Accessors
---import qualified Hydra.Sources.Tier2.Adapters as Adapters
 import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
@@ -67,6 +66,7 @@ import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
 --import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
+import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
@@ -82,8 +82,8 @@ literalAdaptersDefinition = definitionInModule hydraLiteralAdaptersModule
 
 hydraLiteralAdaptersModule :: Module
 hydraLiteralAdaptersModule = Module (Namespace "hydra.literalAdapters") elements
-    [Errors.hydraErrorsModule, ExtractCore.hydraExpectModule, Flows_.hydraFlowsModule, DescribeCore.hydraPrintingModule,
-      AdapterUtils.hydraAdapterUtilsModule, Variants.hydraVariantsModule]
+    [Errors.hydraErrorsModule, ExtractCore.extractCoreModule, Flows_.hydraFlowsModule, DescribeCore.describeCoreModule,
+      AdapterUtils.hydraAdapterUtilsModule, ShowCore.showCoreModule, Variants.hydraVariantsModule]
     [Tier1.hydraCodersModule, Tier1.hydraModuleModule] $
     Just "Adapter framework for literal types and terms"
   where
@@ -220,7 +220,7 @@ literalAdapterDef = literalAdaptersDefinition "literalAdapter" $
         Logic.ifElse (var "hasFloats")
           (Flows.bind (ref floatAdapterDef @@ var "ft") $ lambda "adapter" $ lets [
             "step">: ref AdapterUtils.bidirectionalDef @@ (lambdas ["dir", "l"] $
-              cases _Literal (var "l") (Just $ ref Errors.unexpectedDef @@ string "floating-point literal" @@ (Io.showLiteral $ var "l")) [
+              cases _Literal (var "l") (Just $ ref Errors.unexpectedDef @@ string "floating-point literal" @@ (ref ShowCore.showLiteralDef @@ var "l")) [
                 _Literal_float>>: lambda "fv" $ Flows.map (unaryFunction Core.literalFloat) $
                   ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "adapter") @@ var "fv"])] $
             Flows.pure $ list [Compute.adapter (Compute.adapterIsLossy $ var "adapter") (var "t") (Core.literalTypeFloat $ Compute.adapterTarget $ var "adapter") (var "step")])
@@ -232,7 +232,7 @@ literalAdapterDef = literalAdaptersDefinition "literalAdapter" $
         Logic.ifElse (var "hasIntegers")
           (Flows.bind (ref integerAdapterDef @@ var "it") $ lambda "adapter" $ lets [
             "step">: ref AdapterUtils.bidirectionalDef @@ (lambdas ["dir", "lit"] $
-              cases _Literal (var "lit") (Just $ ref Errors.unexpectedDef @@ string "integer literal" @@ (Io.showLiteral $ var "lit")) [
+              cases _Literal (var "lit") (Just $ ref Errors.unexpectedDef @@ string "integer literal" @@ (ref ShowCore.showLiteralDef @@ var "lit")) [
                 _Literal_integer>>: lambda "iv" $ Flows.map (unaryFunction Core.literalInteger) $
                   ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "adapter") @@ var "iv"])] $
             Flows.pure $ list [Compute.adapter (Compute.adapterIsLossy $ var "adapter") (var "t") (Core.literalTypeInteger $ Compute.adapterTarget $ var "adapter") (var "step")])
@@ -243,7 +243,7 @@ literalAdapterDef = literalAdaptersDefinition "literalAdapter" $
   ref AdapterUtils.chooseAdapterDef
     @@ var "alts"
     @@ var "supported"
-    @@ unaryFunction Io.showLiteralType
+    @@ ref ShowCore.showLiteralTypeDef
     @@ ref DescribeCore.literalTypeDef
     @@ var "lt"
 
@@ -278,7 +278,7 @@ floatAdapterDef = literalAdaptersDefinition "floatAdapter" $
       ref AdapterUtils.chooseAdapterDef
         @@ var "alts"
         @@ var "supported"
-        @@ unaryFunction Io.showFloatType
+        @@ ref ShowCore.showFloatTypeDef
         @@ ref DescribeCore.floatTypeDef
         @@ var "ft"
 
@@ -342,6 +342,6 @@ integerAdapterDef = literalAdaptersDefinition "integerAdapter" $
     ref AdapterUtils.chooseAdapterDef
       @@ var "alts"
       @@ var "supported"
-      @@ unaryFunction Io.showIntegerType
+      @@ ref ShowCore.showIntegerTypeDef
       @@ ref DescribeCore.integerTypeDef
       @@ var "it"
