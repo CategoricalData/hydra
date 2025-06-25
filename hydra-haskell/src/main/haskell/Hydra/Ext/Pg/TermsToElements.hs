@@ -240,7 +240,7 @@ decodeVertexSpec term = withTrace "decode vertex spec" $ readRecord (\fields -> 
 
 readInjection :: [(Name, Term -> Flow s x)] -> Term -> Flow s x
 readInjection cases encoded = do
-  mp <- withEmptyGraph (ExtractCore.map_ (\k -> Name <$> ExtractCore.string k) pure encoded)
+  mp <- withEmptyGraph (ExtractCore.map (\k -> Name <$> ExtractCore.string k) pure encoded)
   f <- case M.toList mp of
     [] -> fail "empty injection"
     [(k, v)] -> pure $ Field k v
@@ -251,7 +251,7 @@ readInjection cases encoded = do
     _ -> fail "duplicate field name in cases"
 
 readRecord :: (M.Map Name Term -> Flow s x) -> Term -> Flow s x
-readRecord cons term = withEmptyGraph (ExtractCore.map_ (\k -> Name <$> ExtractCore.string k) pure term) >>= cons
+readRecord cons term = withEmptyGraph (ExtractCore.map (\k -> Name <$> ExtractCore.string k) pure term) >>= cons
 
 readField fields fname fun = case M.lookup fname fields of
   Nothing -> fail $ "no such field: " ++ unName fname

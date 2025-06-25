@@ -2,7 +2,7 @@ module Hydra.Dsl.Mantle where
 
 import Hydra.Kernel
 import Hydra.Dsl.Phantoms
---import Hydra.Dsl.Core
+import Hydra.Mantle
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
@@ -44,10 +44,10 @@ caseConventionPascal = unitVariant _CaseConvention _CaseConvention_pascal
 caseConventionLowerSnake = unitVariant _CaseConvention _CaseConvention_lowerSnake
 caseConventionUpperSnake = unitVariant _CaseConvention _CaseConvention_upperSnake
 
-eitherLeft :: TTerm a -> TTerm (Either_ a b)
+eitherLeft :: TTerm a -> TTerm (Hydra.Mantle.Either a b)
 eitherLeft = variant _Either _Either_left
 
-eitherRight :: TTerm b -> TTerm (Either_ a b)
+eitherRight :: TTerm b -> TTerm (Hydra.Mantle.Either a b)
 eitherRight = variant _Either _Either_right
 
 eliminationVariant :: EliminationVariant -> TTerm EliminationVariant
