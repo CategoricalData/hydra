@@ -22,7 +22,7 @@ elementReference (Namespaces (gname, H.ModuleName gmod) namespaces) name = case 
       Nothing -> simpleName local
       Just (H.ModuleName a) -> if ns == gname
          then simpleName escLocal
-         else rawName $ a ++ "." ++ sanitizeWithUnderscores S.empty local
+         else rawName $ a ++ "." ++ sanitizeHaskellName local
   where
     qname = qualifyName name
     local = qualifiedNameLocal qname
