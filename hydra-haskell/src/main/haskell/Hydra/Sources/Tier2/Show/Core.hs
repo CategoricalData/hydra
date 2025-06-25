@@ -93,7 +93,7 @@ showCoreModule = Module (Namespace "hydra.show.core") elements
      el literalDef,
      el literalTypeDef,
      el termDef,
-     el type_Def,
+     el typeDef,
      el typeConstraintDef, -- TODO: move this to hydra.show.typing
      el typeSchemeDef,
      el typeSubstDef] -- TODO: move this to hydra.show.typing
@@ -250,6 +250,16 @@ termDef = showCoreDefinition "term" $
           string ")"],
       _Term_function>>: lambda "f" $ cases _Function (var "f") Nothing [
         _Function_elimination>>: lambda "elm" $ cases _Elimination (var "elm") Nothing [
+          _Elimination_product>>: lambda "tp" $ lets [
+            "arity">: Core.tupleProjectionArity $ var "tp",
+            "index">: Core.tupleProjectionIndex $ var "tp",
+            "domain">: Core.tupleProjectionDomain $ var "tp"] $ -- TODO: show domain if present
+            Strings.cat $ list [
+              string "]",
+              Literals.showInt32 $ var "index",
+              string "/",
+              Literals.showInt32 $ var "arity",
+              string "]"],
           _Elimination_record>>: lambda "proj" $ lets [
             "tname">: unwrap _Name @@ (Core.projectionTypeName $ var "proj"),
             "fname">: unwrap _Name @@ (Core.projectionField $ var "proj")] $
@@ -283,7 +293,7 @@ termDef = showCoreDefinition "term" $
           "body">: Core.lambdaBody $ var "l",
           "typeStr">: Optionals.maybe
             (string "")
-            (lambda "t" $ Strings.cat2 (string ":") (ref type_Def @@ var "t"))
+            (lambda "t" $ Strings.cat2 (string ":") (ref typeDef @@ var "t"))
             (var "mt")] $
           Strings.cat $ list [
             string "λ",
@@ -308,6 +318,15 @@ termDef = showCoreDefinition "term" $
           Strings.intercalate (string ", ") (var "termStrs"),
           string "]"],
       _Term_literal>>: lambda "lit" $ ref literalDef @@ var "lit",
+      _Term_map>>: lambda "m" $ lets [
+        "entry">: lambda "p" $ Strings.cat $ list [
+          ref termDef @@ (first $ var "p"),
+          string "=",
+          ref termDef @@ (second $ var "p")]] $
+        Strings.cat $ list [
+          string "{",
+          Strings.intercalate (string ", ") $ Lists.map (var "entry") $ Maps.toList $ var "m",
+          string "}"],
       _Term_optional>>: lambda "mt" $ Optionals.maybe
         (string "nothing")
         (lambda "t" $ Strings.cat $ list [
@@ -329,6 +348,23 @@ termDef = showCoreDefinition "term" $
           var "tname",
           string ")",
           var "showFields" @@ var "fields"],
+      _Term_set>>: lambda "s" $
+        Strings.cat $ list [
+          string "{",
+          Strings.intercalate (string ", ") (Lists.map (ref termDef) $ Sets.toList $ var "s"),
+          string "}"],
+      _Term_sum>>: lambda "s" $ lets [
+        "index">: Core.sumIndex $ var "s",
+        "size">: Core.sumSize $ var "s",
+        "t2">: Core.sumTerm $ var "s"] $
+        Strings.cat $ list [
+          string "(",
+          Literals.showInt32 $ var "index",
+          string "/",
+          Literals.showInt32 $ var "size",
+          string "=",
+          ref termDef @@ var "t2",
+          string ")"],
       _Term_typeAbstraction>>: lambda "ta" $ lets [
         "param">: unwrap _Name @@ (Core.typeAbstractionParameter $ var "ta"),
         "body">: Core.typeAbstractionBody $ var "ta"] $
@@ -343,7 +379,7 @@ termDef = showCoreDefinition "term" $
         Strings.cat $ list [
           ref termDef @@ var "t2",
           string "⟨",
-          ref type_Def @@ var "typ",
+          ref typeDef @@ var "typ",
           string "⟩"],
       _Term_typed>>: lambda "tt" $ lets [
         "t2">: Core.typedTermTerm $ var "tt",
@@ -352,7 +388,7 @@ termDef = showCoreDefinition "term" $
           string "(",
           ref termDef @@ var "t2",
           string " : ",
-          ref type_Def @@ var "typ",
+          ref typeDef @@ var "typ",
           string ")"],
       _Term_union>>: lambda "inj" $ lets [
         "tname">: unwrap _Name @@ (Core.injectionTypeName $ var "inj"),
@@ -373,8 +409,8 @@ termDef = showCoreDefinition "term" $
           ref termDef @@ var "term1",
           string "}"]]
 
-type_Def :: TElement (Type -> String)
-type_Def = showCoreDefinition "type_" $
+typeDef :: TElement (Type -> String)
+typeDef = showCoreDefinition "type_" $
   doc "Show a type as a string" $
   lambda "typ" $ lets [
     "showFieldType">: lambda "ft" $ lets [
@@ -383,7 +419,7 @@ type_Def = showCoreDefinition "type_" $
       Strings.cat $ list [
         var "fname",
         string " = ",
-        ref type_Def @@ var "ftyp"],
+        ref typeDef @@ var "ftyp"],
     "showRowType">: lambda "rt" $ lets [
       "fields">: Core.rowTypeFields $ var "rt",
       "fieldStrs">: Lists.map (var "showFieldType") (var "fields")] $
@@ -408,22 +444,11 @@ type_Def = showCoreDefinition "type_" $
     cases _Type (ref Strip.stripTypeDef @@ var "typ") Nothing [
       _Type_application>>: lambda "app" $ lets [
         "types">: var "gatherTypes" @@ (list []) @@ var "app",
-        "typeStrs">: Lists.map (ref type_Def) (var "types")] $
+        "typeStrs">: Lists.map (ref typeDef) (var "types")] $
         Strings.cat $ list [
           string "(",
           Strings.intercalate (string " @ ") (var "typeStrs"),
           string ")"],
-      _Type_function>>: lambda "ft" $ lets [
-        "types">: var "gatherFunctionTypes" @@ (list []) @@ var "typ",
-        "typeStrs">: Lists.map (ref type_Def) (var "types")] $
-        Strings.cat $ list [
-          string "(",
-          Strings.intercalate (string " → ") (var "typeStrs"),
-          string ")"],
-      _Type_list>>: lambda "etyp" $ Strings.cat $ list [
-        string "list<",
-        ref type_Def @@ var "etyp",
-        string ">"],
       _Type_forall>>: lambda "ft" $ lets [
         "var">: unwrap _Name @@ (Core.forallTypeParameter $ var "ft"),
         "body">: Core.forallTypeBody $ var "ft"] $
@@ -431,30 +456,44 @@ type_Def = showCoreDefinition "type_" $
           string "(∀",
           var "var",
           string ".",
-          ref type_Def @@ var "body",
+          ref typeDef @@ var "body",
           string ")"],
+      _Type_function>>: lambda "ft" $ lets [
+        "types">: var "gatherFunctionTypes" @@ (list []) @@ var "typ",
+        "typeStrs">: Lists.map (ref typeDef) (var "types")] $
+        Strings.cat $ list [
+          string "(",
+          Strings.intercalate (string " → ") (var "typeStrs"),
+          string ")"],
+      _Type_list>>: lambda "etyp" $ Strings.cat $ list [
+        string "list<",
+        ref typeDef @@ var "etyp",
+        string ">"],
       _Type_literal>>: lambda "lt" $ ref literalTypeDef @@ var "lt",
       _Type_map>>: lambda "mt" $ lets [
         "keyTyp">: Core.mapTypeKeys $ var "mt",
         "valTyp">: Core.mapTypeValues $ var "mt"] $
         Strings.cat $ list [
           string "map<",
-          ref type_Def @@ var "keyTyp",
+          ref typeDef @@ var "keyTyp",
           string ", ",
-          ref type_Def @@ var "valTyp",
+          ref typeDef @@ var "valTyp",
           string ">"],
       _Type_optional>>: lambda "etyp" $ Strings.cat $ list [
         string "optional<",
-        ref type_Def @@ var "etyp",
+        ref typeDef @@ var "etyp",
         string ">"],
       _Type_product>>: lambda "types" $ lets [
-        "typeStrs">: Lists.map (ref type_Def) (var "types")] $
+        "typeStrs">: Lists.map (ref typeDef) (var "types")] $
         Strings.intercalate (string "×") (var "typeStrs"),
       _Type_record>>: lambda "rt" $ Strings.cat2 (string "record") (var "showRowType" @@ var "rt"),
       _Type_set>>: lambda "etyp" $ Strings.cat $ list [
         string "set<",
-        ref type_Def @@ var "etyp",
+        ref typeDef @@ var "etyp",
         string ">"],
+      _Type_sum>>: lambda "types" $ lets [
+        "typeStrs">: Lists.map (ref typeDef) (var "types")] $
+        Strings.intercalate (string "+") (var "typeStrs"),
       _Type_union>>: lambda "rt" $ Strings.cat2 (string "union") (var "showRowType" @@ var "rt"),
       _Type_variable>>: lambda "name" $ unwrap _Name @@ var "name",
       _Type_wrap>>: lambda "wt" $ lets [
@@ -464,7 +503,7 @@ type_Def = showCoreDefinition "type_" $
           string "wrap[",
           var "tname",
           string "](",
-          ref type_Def @@ var "typ1",
+          ref typeDef @@ var "typ1",
           string ")"]]
 
 typeConstraintDef :: TElement (TypeConstraint -> String)
@@ -474,9 +513,9 @@ typeConstraintDef = showCoreDefinition "typeConstraint" $
     "ltyp">: Typing.typeConstraintLeft $ var "tc",
     "rtyp">: Typing.typeConstraintRight $ var "tc"] $
     Strings.cat $ list [
-      ref type_Def @@ var "ltyp",
+      ref typeDef @@ var "ltyp",
       string "≡",
-      ref type_Def @@ var "rtyp"]
+      ref typeDef @@ var "rtyp"]
 
 typeSchemeDef :: TElement (TypeScheme -> String)
 typeSchemeDef = showCoreDefinition "typeScheme" $
@@ -494,7 +533,7 @@ typeSchemeDef = showCoreDefinition "typeScheme" $
     Strings.cat $ list [
       string "(",
       var "fa",
-      ref type_Def @@ var "body",
+      ref typeDef @@ var "body",
       string ")"]
 
 typeSubstDef :: TElement (TypeSubst -> String)
@@ -509,7 +548,7 @@ typeSubstDef = showCoreDefinition "typeSubst" $
       Strings.cat $ list [
         var "name",
         string "↦",
-        ref type_Def @@ var "typ"],
+        ref typeDef @@ var "typ"],
     "pairStrs">: Lists.map (var "showPair") (var "pairs")] $
     Strings.cat $ list [
       string "{",
