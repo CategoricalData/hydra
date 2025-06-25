@@ -297,7 +297,7 @@ functionTypeDef = expectDefinition "functionType" $
   doc "Extract a function type from a type" $
   lambda "typ" $ lets [
     "stripped">: ref Strip.stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "function type" @@ (ref ShowCore.type_Def @@ var "typ")) [
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "function type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_function>>: lambda "ft" $ Flows.pure $ var "ft"]
 
 injectionDef :: TElement (Name -> Term -> Flow Graph Field)
@@ -429,7 +429,7 @@ listTypeDef = expectDefinition "listType" $
   doc "Extract the element type from a list type" $
   lambda "typ" $ lets [
     "stripped">: ref Strip.stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "list type" @@ (ref ShowCore.type_Def @@ var "typ")) [
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "list type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_list>>: lambda "t" $ Flows.pure $ var "t"]
 
 literalDef :: TElement (Term -> Flow Graph Literal)
@@ -458,7 +458,7 @@ mapTypeDef = expectDefinition "mapType" $
   doc "Extract the key and value types from a map type" $
   lambda "typ" $ lets [
     "stripped">: ref Strip.stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "map type" @@ (ref ShowCore.type_Def @@ var "typ")) [
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "map type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_map>>: lambda "mt" $ Flows.pure $ var "mt"]
 
 nArgsDef :: TElement (Name -> Int -> [Term] -> Flow s ())
@@ -487,7 +487,7 @@ optionalTypeDef = expectDefinition "optionalType" $
   doc "Extract the base type from an optional type" $
   lambda "typ" $ lets [
     "stripped">: ref Strip.stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "optional type" @@ (ref ShowCore.type_Def @@ var "typ")) [
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "optional type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_optional>>: lambda "t" $ Flows.pure $ var "t"]
 
 pairDef :: TElement ((Term -> Flow Graph k) -> (Term -> Flow Graph v) -> Term -> Flow Graph (k, v))
@@ -507,7 +507,7 @@ productTypeDef = expectDefinition "productType" $
   doc "Extract the component types from a product type" $
   lambda "typ" $ lets [
     "stripped">: ref Strip.stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "product type" @@ (ref ShowCore.type_Def @@ var "typ")) [
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "product type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_product>>: lambda "types" $ Flows.pure $ var "types"]
 
 recordDef :: TElement (Name -> Term -> Flow Graph [Field])
@@ -525,7 +525,7 @@ recordTypeDef = expectDefinition "recordType" $
   doc "Extract the field types from a record type" $
   lambdas ["ename", "typ"] $ lets [
     "stripped">: ref Strip.stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "record type" @@ (ref ShowCore.type_Def @@ var "typ")) [
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "record type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_record>>: lambda "rowType" $
         Logic.ifElse (Core.equalName_ (Core.rowTypeTypeName $ var "rowType") (var "ename"))
           (Flows.pure $ Core.rowTypeFields $ var "rowType")
@@ -543,7 +543,7 @@ setTypeDef = expectDefinition "setType" $
   doc "Extract the element type from a set type" $
   lambda "typ" $ lets [
     "stripped">: ref Strip.stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "set type" @@ (ref ShowCore.type_Def @@ var "typ")) [
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "set type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_set>>: lambda "t" $ Flows.pure $ var "t"]
 
 stringDef :: TElement (Term -> Flow Graph String)
@@ -562,7 +562,7 @@ sumTypeDef = expectDefinition "sumType" $
   doc "Extract the component types from a sum type" $
   lambda "typ" $ lets [
     "stripped">: ref Strip.stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "sum type" @@ (ref ShowCore.type_Def @@ var "typ")) [
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "sum type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_sum>>: lambda "types" $ Flows.pure $ var "types"]
 
 uint16Def :: TElement (Term -> Flow Graph Int)
@@ -622,7 +622,7 @@ unionTypeDef = expectDefinition "unionType" $
   doc "Extract the field types from a union type" $
   lambdas ["ename", "typ"] $ lets [
     "stripped">: ref Strip.stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "union type" @@ (ref ShowCore.type_Def @@ var "typ")) [
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "union type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_union>>: lambda "rowType" $
         Logic.ifElse (Core.equalName_ (Core.rowTypeTypeName $ var "rowType") (var "ename"))
           (Flows.pure $ Core.rowTypeFields $ var "rowType")
@@ -664,7 +664,7 @@ wrappedTypeDef = expectDefinition "wrappedType" $
   doc "Extract the wrapped type from a wrapper type" $
   lambdas ["ename", "typ"] $ lets [
     "stripped">: ref Strip.stripTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "wrapped type" @@ (ref ShowCore.type_Def @@ var "typ")) [
+    $ cases _Type (var "stripped") (Just $ ref Errors.unexpectedDef @@ string "wrapped type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_wrap>>: lambda "wrappedType" $
         Logic.ifElse (Core.equalName_ (Core.wrappedTypeTypeName $ var "wrappedType") (var "ename"))
           (Flows.pure $ Core.wrappedTypeObject $ var "wrappedType")

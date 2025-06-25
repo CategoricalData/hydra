@@ -101,7 +101,7 @@ joinTypesDef = unificationDefinition "joinTypes" $
     "sleft">: ref Strip.stripTypeDef @@ var  "left",
     "sright">: ref Strip.stripTypeDef @@ var "right",
     "joinOne">: lambdas ["l", "r"] $ Typing.typeConstraint (var "l") (var "r") ("join types; " ++ var "comment"),
-    "cannotUnify">: Flows.fail ("Cannot unify " ++ (ref ShowCore.type_Def @@ var "sleft") ++ " with " ++ (ref ShowCore.type_Def @@ var "sright")),
+    "cannotUnify">: Flows.fail ("Cannot unify " ++ (ref ShowCore.typeDef @@ var "sleft") ++ " with " ++ (ref ShowCore.typeDef @@ var "sright")),
     "assertEqual">: Logic.ifElse
       (Equality.equalType (var "sleft") (var "sright"))
       (Flows.pure $ list [])
@@ -174,7 +174,7 @@ unifyTypeConstraintsDef = unificationDefinition "unifyTypeConstraints" $
       "comment">: Typing.typeConstraintComment $ var "c",
       -- TODO: this occurrence check is expensive; consider delaying it until the time of substitution
       "tryBinding">: lambdas ["v", "t"] $ Logic.ifElse (ref variableOccursInTypeDef @@ var "v" @@ var "t")
-        (Flows.fail $ "Variable " ++ (Core.unName $ var "v") ++ " appears free in type " ++ (ref ShowCore.type_Def @@ var "t")
+        (Flows.fail $ "Variable " ++ (Core.unName $ var "v") ++ " appears free in type " ++ (ref ShowCore.typeDef @@ var "t")
           ++ " (" ++ var "comment" ++ ")")
         (var "bind" @@ var "v" @@ var "t"),
       "bind">: lambdas ["v", "t"] $ lets [

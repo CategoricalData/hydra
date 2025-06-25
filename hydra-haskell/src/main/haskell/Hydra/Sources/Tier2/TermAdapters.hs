@@ -638,9 +638,9 @@ unionToRecordDef = termAdaptersDefinition "unionToRecord" $
             string "cannot convert term back to union: ",
             ref ShowCore.termDef @@ var "term",
             string " where type = ",
-            ref ShowCore.type_Def @@ var "t",
+            ref ShowCore.typeDef @@ var "t",
             string "    and target type = ",
-            ref ShowCore.type_Def @@ var "t'"])
+            ref ShowCore.typeDef @@ var "t'"])
           (Flows.pure $ Lists.head $ var "matches")] $
       withVar "ad" (ref termAdapterDef @@ var "target") $
       Flows.pure $ Compute.adapter
@@ -745,7 +745,7 @@ termAdapterDef = termAdaptersDefinition "termAdapter" $
             ref AdapterUtils.chooseAdapterDef
               @@ (var "alts" @@ var "cx")
               @@ (var "supported" @@ var "cx")
-              @@ ref ShowCore.type_Def
+              @@ ref ShowCore.typeDef
               @@ (ref DescribeCore.typeDef)
               @@ (var "typ")) [
           -- Account for let-bound variables
