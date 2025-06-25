@@ -11,8 +11,8 @@ import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Ext.Cpp.Serde as CppSer
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
+import qualified Hydra.Show.Core as ShowCore
 import Hydra.Kernel
-import Hydra.Lib.Io
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Adapters
 import Hydra.Formatting
@@ -304,7 +304,7 @@ encodeTypeDefinition env name typ = do
       TypeRecord rt -> encodeRecordType env name rt comment
       TypeUnion rt -> encodeUnionType env name rt comment
       TypeWrap (WrappedType _ t) -> encodeWrappedType env name t comment
-      _ -> fail $ "unexpected type in definition: " ++ showType typ
+      _ -> fail $ "unexpected type in definition: " ++ ShowCore.type_ typ
 
 encodeUnionType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph [Cpp.Declaration]
 encodeUnionType env name rt comment = if isEnumRowType rt

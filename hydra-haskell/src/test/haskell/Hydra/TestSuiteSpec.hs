@@ -11,7 +11,7 @@ import Hydra.TestUtils
 import Hydra.Testing
 import Hydra.Staging.Inference
 import Hydra.Test.TestSuite
-import Hydra.Lib.Io
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Dsl.Testing as Testing
 
 import qualified Control.Monad as CM
@@ -41,8 +41,8 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
 
 expectInferenceResult :: String -> Term -> TypeScheme -> H.Expectation
 expectInferenceResult desc term expected = do
-    expectSuccess desc (showTypeScheme . snd <$> result) (showTypeScheme expected)
-    expectSuccess desc (showTerm . stripTypesFromTerm . fst <$> result) (showTerm $ stripTypesFromTerm term)
+    expectSuccess desc (ShowCore.typeScheme . snd <$> result) (ShowCore.typeScheme expected)
+    expectSuccess desc (ShowCore.term . stripTypesFromTerm . fst <$> result) (ShowCore.term $ stripTypesFromTerm term)
   where
     result = do
       cx <- graphToInferenceContext testGraph

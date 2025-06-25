@@ -48,7 +48,7 @@ chooseAdapter alts supported show describe typ = (Logic.ifElse (supported typ) (
       " (discarded ",
       Literals.showInt32 (Lists.length raw),
       " unsupported candidate types: ",
-      Core_.showList show (Lists.map Compute.adapterTarget raw),
+      Core_.list show (Lists.map Compute.adapterTarget raw),
       ")"]),
     ". Original type: ",
     (show typ)])) (Flows.pure (Lists.head candidates))))))

@@ -131,7 +131,7 @@ chooseAdapterDef = adapterUtilsDefinition "chooseAdapter" $
                     string " (discarded ",
                     Literals.showInt32 $ Lists.length $ var "raw",
                     string " unsupported candidate types: ",
-                    ref ShowCore.showListDef @@ var "show" @@ (Lists.map (unaryFunction Compute.adapterTarget) (var "raw")),
+                    ref ShowCore.listDef @@ var "show" @@ (Lists.map (unaryFunction Compute.adapterTarget) (var "raw")),
                     string ")"]),
                 string ". Original type: ",
                 var "show" @@ var "typ"])

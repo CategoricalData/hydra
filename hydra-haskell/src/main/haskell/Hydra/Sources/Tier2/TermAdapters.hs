@@ -214,11 +214,11 @@ functionToUnionDef = termAdaptersDefinition "functionToUnion" $
               _Elimination_wrap>>: lambda "name" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
                 Core.field (Core.nameLift _Elimination_wrap) $ TTerms.stringLift $ unwrap _Name @@ var "name",
               _Elimination_record>>: lambda "r" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
-                Core.field (Core.nameLift _Elimination_record) $ TTerms.stringLift (ref ShowCore.showTermDef @@ var "term"),
+                Core.field (Core.nameLift _Elimination_record) $ TTerms.stringLift (ref ShowCore.termDef @@ var "term"),
               _Elimination_union>>: lambda "u" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
-                Core.field (Core.nameLift _Elimination_union) $ TTerms.stringLift (ref ShowCore.showTermDef @@ var "term")],
+                Core.field (Core.nameLift _Elimination_union) $ TTerms.stringLift (ref ShowCore.termDef @@ var "term")],
             _Function_lambda>>: lambda "l" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
-              Core.field (Core.nameLift _Function_lambda) $ TTerms.stringLift (ref ShowCore.showTermDef @@ var "term"),
+              Core.field (Core.nameLift _Function_lambda) $ TTerms.stringLift (ref ShowCore.termDef @@ var "term"),
             _Function_primitive>>: lambda "name" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
               Core.field (Core.nameLift _Function_primitive) $ TTerms.stringLift $ unwrap _Name @@ var "name"],
           _Term_variable>>: lambda "name" $
@@ -636,11 +636,11 @@ unionToRecordDef = termAdaptersDefinition "unionToRecord" $
         Logic.ifElse (Lists.null $ var "matches")
           (Flows.fail $ Strings.cat $ list [
             string "cannot convert term back to union: ",
-            ref ShowCore.showTermDef @@ var "term",
+            ref ShowCore.termDef @@ var "term",
             string " where type = ",
-            ref ShowCore.showTypeDef @@ var "t",
+            ref ShowCore.type_Def @@ var "t",
             string "    and target type = ",
-            ref ShowCore.showTypeDef @@ var "t'"])
+            ref ShowCore.type_Def @@ var "t'"])
           (Flows.pure $ Lists.head $ var "matches")] $
       withVar "ad" (ref termAdapterDef @@ var "target") $
       Flows.pure $ Compute.adapter
@@ -745,7 +745,7 @@ termAdapterDef = termAdaptersDefinition "termAdapter" $
             ref AdapterUtils.chooseAdapterDef
               @@ (var "alts" @@ var "cx")
               @@ (var "supported" @@ var "cx")
-              @@ ref ShowCore.showTypeDef
+              @@ ref ShowCore.type_Def
               @@ (ref DescribeCore.typeDef)
               @@ (var "typ")) [
           -- Account for let-bound variables

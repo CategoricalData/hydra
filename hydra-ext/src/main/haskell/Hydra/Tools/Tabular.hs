@@ -7,7 +7,7 @@ module Hydra.Tools.Tabular (
 
 import Hydra.Kernel
 import Hydra.Ext.Tabular
-import Hydra.Lib.Io
+import qualified Hydra.Show.Core as ShowCore
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -31,7 +31,7 @@ referenceCoder fieldCoders = Coder encode decode
         decodeField field@(Field fname fterm) = case M.lookup fname fieldCoders of
           Just coder -> case fterm of
             TermVariable v -> Field fname <$> coderDecode coder v
-            _ -> unexpected "variable" (showTerm fterm)
+            _ -> unexpected "variable" (ShowCore.term fterm)
           Nothing -> return field
 
 -- | Consumes a row type and a cell-level coder, producing a record coder.

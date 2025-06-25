@@ -13,7 +13,6 @@ import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
-import Hydra.Lib.Io
 import qualified Hydra.Decode as Decode
 
 import qualified Control.Monad as CM

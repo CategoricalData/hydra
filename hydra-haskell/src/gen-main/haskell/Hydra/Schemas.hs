@@ -81,7 +81,7 @@ fieldTypes t =
     Core.TypeRecord v1 -> (Flows_.pure (toMap (Core.rowTypeFields v1)))
     Core.TypeUnion v1 -> (Flows_.pure (toMap (Core.rowTypeFields v1)))
     Core.TypeVariable v1 -> (Flows.withTrace (Strings.cat2 "field types of " (Core.unName v1)) (Flows_.bind (Lexical.requireElement v1) (\el -> Flows_.bind (Core_.type_ (Graph.elementTerm el)) fieldTypes)))
-    _ -> (Errors.unexpected "record or union type" (Core___.showType t))) (Strip.stripType t))
+    _ -> (Errors.unexpected "record or union type" (Core___.type_ t))) (Strip.stripType t))
 
 -- | Fully strip a type of forall quantifiers
 fullyStripType :: (Core.Type -> Core.Type)
@@ -136,7 +136,7 @@ requireRowType label getter name =
     " does not resolve to a ",
     label,
     " type: ",
-    (Core___.showType t)])) Flows_.pure (getter (rawType t))))
+    (Core___.type_ t)])) Flows_.pure (getter (rawType t))))
 
 -- | Require a type by name
 requireType :: (Core.Name -> Compute.Flow Graph.Graph Core.Type)

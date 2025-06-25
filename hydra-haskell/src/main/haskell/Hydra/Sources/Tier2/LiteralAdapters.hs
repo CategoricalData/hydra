@@ -220,7 +220,7 @@ literalAdapterDef = literalAdaptersDefinition "literalAdapter" $
         Logic.ifElse (var "hasFloats")
           (Flows.bind (ref floatAdapterDef @@ var "ft") $ lambda "adapter" $ lets [
             "step">: ref AdapterUtils.bidirectionalDef @@ (lambdas ["dir", "l"] $
-              cases _Literal (var "l") (Just $ ref Errors.unexpectedDef @@ string "floating-point literal" @@ (ref ShowCore.showLiteralDef @@ var "l")) [
+              cases _Literal (var "l") (Just $ ref Errors.unexpectedDef @@ string "floating-point literal" @@ (ref ShowCore.literalDef @@ var "l")) [
                 _Literal_float>>: lambda "fv" $ Flows.map (unaryFunction Core.literalFloat) $
                   ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "adapter") @@ var "fv"])] $
             Flows.pure $ list [Compute.adapter (Compute.adapterIsLossy $ var "adapter") (var "t") (Core.literalTypeFloat $ Compute.adapterTarget $ var "adapter") (var "step")])
@@ -232,7 +232,7 @@ literalAdapterDef = literalAdaptersDefinition "literalAdapter" $
         Logic.ifElse (var "hasIntegers")
           (Flows.bind (ref integerAdapterDef @@ var "it") $ lambda "adapter" $ lets [
             "step">: ref AdapterUtils.bidirectionalDef @@ (lambdas ["dir", "lit"] $
-              cases _Literal (var "lit") (Just $ ref Errors.unexpectedDef @@ string "integer literal" @@ (ref ShowCore.showLiteralDef @@ var "lit")) [
+              cases _Literal (var "lit") (Just $ ref Errors.unexpectedDef @@ string "integer literal" @@ (ref ShowCore.literalDef @@ var "lit")) [
                 _Literal_integer>>: lambda "iv" $ Flows.map (unaryFunction Core.literalInteger) $
                   ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "adapter") @@ var "iv"])] $
             Flows.pure $ list [Compute.adapter (Compute.adapterIsLossy $ var "adapter") (var "t") (Core.literalTypeInteger $ Compute.adapterTarget $ var "adapter") (var "step")])
@@ -243,7 +243,7 @@ literalAdapterDef = literalAdaptersDefinition "literalAdapter" $
   ref AdapterUtils.chooseAdapterDef
     @@ var "alts"
     @@ var "supported"
-    @@ ref ShowCore.showLiteralTypeDef
+    @@ ref ShowCore.literalTypeDef
     @@ ref DescribeCore.literalTypeDef
     @@ var "lt"
 
@@ -278,7 +278,7 @@ floatAdapterDef = literalAdaptersDefinition "floatAdapter" $
       ref AdapterUtils.chooseAdapterDef
         @@ var "alts"
         @@ var "supported"
-        @@ ref ShowCore.showFloatTypeDef
+        @@ ref ShowCore.floatTypeDef
         @@ ref DescribeCore.floatTypeDef
         @@ var "ft"
 
@@ -342,6 +342,6 @@ integerAdapterDef = literalAdaptersDefinition "integerAdapter" $
     ref AdapterUtils.chooseAdapterDef
       @@ var "alts"
       @@ var "supported"
-      @@ ref ShowCore.showIntegerTypeDef
+      @@ ref ShowCore.integerTypeDef
       @@ ref DescribeCore.integerTypeDef
       @@ var "it"

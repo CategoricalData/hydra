@@ -87,7 +87,7 @@ getTypeClasses term =
           let byName = (Maps.fromList [
                   (Core.Name "equality", Graph.TypeClassEquality),
                   (Core.Name "ordering", Graph.TypeClassOrdering)])
-          in (Flows_.bind (Core___.unitVariant (Core.Name "hydra.graph.TypeClass") term) (\fn -> Optionals.maybe (Errors.unexpected "type class" (Core____.showTerm term)) Flows_.pure (Maps.lookup fn byName))))
+          in (Flows_.bind (Core___.unitVariant (Core.Name "hydra.graph.TypeClass") term) (\fn -> Optionals.maybe (Errors.unexpected "type class" (Core____.term term)) Flows_.pure (Maps.lookup fn byName))))
   in (Optionals.maybe (Flows_.pure Maps.empty) (\term -> Core___.map Core_.name (Core___.set decodeClass) term) (getTermAnnotation Constants.key_classes term))
 
 -- | Get type description

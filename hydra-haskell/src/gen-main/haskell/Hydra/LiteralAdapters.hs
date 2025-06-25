@@ -134,7 +134,7 @@ literalAdapter lt =
             in (Logic.ifElse hasFloats (Flows_.bind (floatAdapter v1) (\adapter ->  
               let step = (AdapterUtils.bidirectional (\dir -> \l -> (\x -> case x of
                       Core.LiteralFloat v2 -> (Flows_.map (\x -> Core.LiteralFloat x) (AdapterUtils.encodeDecode dir (Compute.adapterCoder adapter) v2))
-                      _ -> (Errors.unexpected "floating-point literal" (Core___.showLiteral l))) l))
+                      _ -> (Errors.unexpected "floating-point literal" (Core___.literal l))) l))
               in (Flows_.pure [
                 Compute.Adapter {
                   Compute.adapterIsLossy = (Compute.adapterIsLossy adapter),
@@ -147,7 +147,7 @@ literalAdapter lt =
             in (Logic.ifElse hasIntegers (Flows_.bind (integerAdapter v1) (\adapter ->  
               let step = (AdapterUtils.bidirectional (\dir -> \lit -> (\x -> case x of
                       Core.LiteralInteger v2 -> (Flows_.map (\x -> Core.LiteralInteger x) (AdapterUtils.encodeDecode dir (Compute.adapterCoder adapter) v2))
-                      _ -> (Errors.unexpected "integer literal" (Core___.showLiteral lit))) lit))
+                      _ -> (Errors.unexpected "integer literal" (Core___.literal lit))) lit))
               in (Flows_.pure [
                 Compute.Adapter {
                   Compute.adapterIsLossy = (Compute.adapterIsLossy adapter),
@@ -157,7 +157,7 @@ literalAdapter lt =
           Core.LiteralTypeString -> (Flows_.fail "no substitute for the literal string type")) t)
   in (Flows_.bind Errors.getState (\cx ->  
     let supported = (AdapterUtils.literalTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
-    in (AdapterUtils.chooseAdapter alts supported Core___.showLiteralType Core_.literalType lt)))
+    in (AdapterUtils.chooseAdapter alts supported Core___.literalType Core_.literalType lt)))
 
 floatAdapter :: (Core.FloatType -> Compute.Flow Coders.AdapterContext (Compute.Adapter t0 t1 Core.FloatType Core.FloatType Core.FloatValue Core.FloatValue))
 floatAdapter ft =  
@@ -184,7 +184,7 @@ floatAdapter ft =
                 Compute.adapterCoder = step}))))
   in (Flows_.bind Errors.getState (\cx ->  
     let supported = (AdapterUtils.floatTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
-    in (AdapterUtils.chooseAdapter alts supported Core___.showFloatType Core_.floatType ft)))
+    in (AdapterUtils.chooseAdapter alts supported Core___.floatType Core_.floatType ft)))
 
 integerAdapter :: (Core.IntegerType -> Compute.Flow Coders.AdapterContext (Compute.Adapter t0 t1 Core.IntegerType Core.IntegerType Core.IntegerValue Core.IntegerValue))
 integerAdapter it =  
@@ -230,4 +230,4 @@ integerAdapter it =
                 Compute.adapterCoder = step}))))
   in (Flows_.bind Errors.getState (\cx ->  
     let supported = (AdapterUtils.integerTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
-    in (AdapterUtils.chooseAdapter alts supported Core___.showIntegerType Core_.integerType it)))
+    in (AdapterUtils.chooseAdapter alts supported Core___.integerType Core_.integerType it)))

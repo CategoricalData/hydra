@@ -12,12 +12,12 @@ import Hydra.Adapters
 import Hydra.Ext.Java.Serde
 import Hydra.Ext.Java.Settings
 import Hydra.AdapterUtils
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Ext.Java.Syntax as Java
-import Hydra.Lib.Io
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -458,8 +458,8 @@ encodeApplication aliases app@(Application lhs rhs) = case fullyStripTerm fun of
 
     fallback = withTrace "fallback" $ do
         if Y.isNothing (getTermType lhs)
-          -- then fail $ "app: " ++ showTerm (TermApplication app)
-          then fail $ "lhs: " ++ showTerm lhs
+          -- then fail $ "app: " ++ ShowCore.term (TermApplication app)
+          then fail $ "lhs: " ++ ShowCore.term lhs
           else pure ()
 
         t <- requireTermType lhs
@@ -662,7 +662,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
               encodeFunction aliases dom cod f
             _ -> encodeNullaryConstant aliases t f
 
-        TermLet _ -> fail $ "nested let is unsupported for Java: " ++ showTerm term
+        TermLet _ -> fail $ "nested let is unsupported for Java: " ++ ShowCore.term term
 
         TermList els -> do
           jels <- CM.mapM encode els

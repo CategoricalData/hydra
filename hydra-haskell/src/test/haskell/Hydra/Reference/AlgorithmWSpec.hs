@@ -16,8 +16,8 @@ import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Reference.AlgorithmWBridge as W
-import Hydra.Lib.Io
 
 import qualified Hydra.TestUtils as TU
 import Hydra.Testing
@@ -41,8 +41,8 @@ inferType = W.termToInferredTerm testHydraContext
 expectType :: Term -> TypeScheme -> H.Expectation
 expectType term ts = do
   result <- inferType term
-  H.shouldBe (showTypeScheme $ snd result) (showTypeScheme ts)
-  H.shouldBe (showTerm $ stripTypesFromTerm $ fst result) (showTerm $ stripTypesFromTerm term)
+  H.shouldBe (ShowCore.typeScheme $ snd result) (ShowCore.typeScheme ts)
+  H.shouldBe (ShowCore.term $ stripTypesFromTerm $ fst result) (ShowCore.term $ stripTypesFromTerm term)
 
 algorithmWRunner :: TestRunner
 algorithmWRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabledForMinimalInference tcase

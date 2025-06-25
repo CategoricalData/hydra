@@ -104,8 +104,7 @@ tier2TermModules = [
   hydraSortingModule,
   hydraSubstitutionModule,
   tarjanModule,
---  hydraTemplatingModule,
---  hydraTermAdaptersModule,
---  hydraTermEncodingModule,
+  hydraTemplatingModule,
+  hydraTermAdaptersModule,
   hydraUnificationModule,
   hydraVariantsModule]

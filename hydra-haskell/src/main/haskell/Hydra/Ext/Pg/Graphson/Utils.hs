@@ -4,11 +4,11 @@ import Hydra.Kernel
 import Hydra.Ext.Pg.Graphson.Coder
 import Hydra.Ext.Json.Coder
 import Hydra.Dsl.Pg.Mappings
-import Hydra.Lib.Io
 import qualified Hydra.Json as Json
 import qualified Hydra.Pg.Graphson.Syntax as G
 import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Pg.Mapping as PGM
+import qualified Hydra.Show.Core as ShowCore
 
 import qualified Control.Monad as CM
 import qualified Data.Either as E
@@ -118,5 +118,5 @@ termGraphsonContext = GraphsonContext $ Coder encodeTerm decodeTerm
           else unexp $ TermRecord r
         t -> unexp t
       where
-        unexp t = unexpected "literal or unit value" $ showTerm t
+        unexp t = unexpected "literal or unit value" $ ShowCore.term t
     decodeTerm _ = fail "decoding from GraphSON is not yet supported"
