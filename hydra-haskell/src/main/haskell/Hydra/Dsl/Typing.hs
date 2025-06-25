@@ -23,17 +23,17 @@ inferenceContext schemaTypes primitiveTypes dataTypes debug = Phantoms.record _I
   _InferenceContext_dataTypes>>: dataTypes,
   _InferenceContext_debug>>: debug]
 
-inferenceContextSchemaTypes :: TTerm (InferenceContext -> M.Map Name TypeScheme)
-inferenceContextSchemaTypes = Phantoms.project _InferenceContext _InferenceContext_schemaTypes
+inferenceContextSchemaTypes :: TTerm InferenceContext -> TTerm (M.Map Name TypeScheme)
+inferenceContextSchemaTypes ic = Phantoms.project _InferenceContext _InferenceContext_schemaTypes @@ ic
 
-inferenceContextPrimitiveTypes :: TTerm (InferenceContext -> M.Map Name TypeScheme)
-inferenceContextPrimitiveTypes = Phantoms.project _InferenceContext _InferenceContext_primitiveTypes
+inferenceContextPrimitiveTypes :: TTerm InferenceContext -> TTerm (M.Map Name TypeScheme)
+inferenceContextPrimitiveTypes ic = Phantoms.project _InferenceContext _InferenceContext_primitiveTypes @@ ic
 
-inferenceContextDataTypes :: TTerm (InferenceContext -> M.Map Name TypeScheme)
-inferenceContextDataTypes = Phantoms.project _InferenceContext _InferenceContext_dataTypes
+inferenceContextDataTypes :: TTerm InferenceContext -> TTerm (M.Map Name TypeScheme)
+inferenceContextDataTypes ic = Phantoms.project _InferenceContext _InferenceContext_dataTypes @@ ic
 
-inferenceContextDebug :: TTerm (InferenceContext -> Bool)
-inferenceContextDebug = Phantoms.project _InferenceContext _InferenceContext_debug
+inferenceContextDebug :: TTerm InferenceContext -> TTerm Bool
+inferenceContextDebug ic = Phantoms.project _InferenceContext _InferenceContext_debug @@ ic
 
 termSubst :: TTerm (M.Map Name Term) -> TTerm TermSubst
 termSubst = Phantoms.wrap _TermSubst
@@ -44,29 +44,29 @@ typeConstraint t1 t2 comment = Phantoms.record _TypeConstraint [
   _TypeConstraint_right>>: t2,
   _TypeConstraint_comment>>: comment]
 
-typeConstraintLeft :: TTerm (TypeConstraint -> Type)
-typeConstraintLeft = Phantoms.project _TypeConstraint _TypeConstraint_left
+typeConstraintLeft :: TTerm TypeConstraint -> TTerm Type
+typeConstraintLeft tc = Phantoms.project _TypeConstraint _TypeConstraint_left @@ tc
 
-typeConstraintRight :: TTerm (TypeConstraint -> Type)
-typeConstraintRight = Phantoms.project _TypeConstraint _TypeConstraint_right
+typeConstraintRight :: TTerm TypeConstraint -> TTerm Type
+typeConstraintRight tc = Phantoms.project _TypeConstraint _TypeConstraint_right @@ tc
 
-typeConstraintComment :: TTerm (TypeConstraint -> String)
-typeConstraintComment = Phantoms.project _TypeConstraint _TypeConstraint_comment
+typeConstraintComment :: TTerm TypeConstraint -> TTerm String
+typeConstraintComment tc = Phantoms.project _TypeConstraint _TypeConstraint_comment @@ tc
 
 typeSubst :: TTerm (M.Map Name Type) -> TTerm TypeSubst
 typeSubst = Phantoms.wrap _TypeSubst
 
-unTermSubst :: TTerm (TermSubst -> M.Map Name Term)
-unTermSubst = unwrap _TermSubst
+unTermSubst :: TTerm TermSubst -> TTerm (M.Map Name Term)
+unTermSubst ts = unwrap _TermSubst @@ ts
 
-unTypeSubst :: TTerm (TypeSubst -> M.Map Name Type)
-unTypeSubst = unwrap _TypeSubst
+unTypeSubst :: TTerm TypeSubst -> TTerm (M.Map Name Type)
+unTypeSubst ts = unwrap _TypeSubst @@ ts
 
 --
 
 inferenceContextWithDataTypes :: TTerm (M.Map Name TypeScheme) -> TTerm InferenceContext -> TTerm InferenceContext
 inferenceContextWithDataTypes dataTypes ctx = inferenceContext
-  (Hydra.Dsl.Typing.inferenceContextSchemaTypes @@ ctx)
-  (Hydra.Dsl.Typing.inferenceContextPrimitiveTypes @@ ctx)
+  (Hydra.Dsl.Typing.inferenceContextSchemaTypes ctx)
+  (Hydra.Dsl.Typing.inferenceContextPrimitiveTypes ctx)
   dataTypes
-  (Hydra.Dsl.Typing.inferenceContextDebug @@ ctx)
+  (Hydra.Dsl.Typing.inferenceContextDebug ctx)

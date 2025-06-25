@@ -57,7 +57,7 @@ avroHydraAdapter schema = case schema of
             coderEncode = \(Json.ValueObject m) -> Terms.map . M.fromList <$> (CM.mapM pairToHydra $ M.toList m),
             coderDecode = \m -> do
               env <- getState
-              mp <- withEmptyGraph $ ExtractCore.map_ ExtractCore.string (\t -> withState env $ coderDecode (adapterCoder ad) t) m
+              mp <- withEmptyGraph $ ExtractCore.map ExtractCore.string (\t -> withState env $ coderDecode (adapterCoder ad) t) m
               return $ Json.ValueObject mp}
       return $ Adapter (adapterIsLossy ad) schema (Types.map Types.string $ adapterTarget ad) coder
     Avro.SchemaNamed n -> do
@@ -80,7 +80,7 @@ avroHydraAdapter schema = case schema of
           Just ad -> fail $ "Avro named type defined more than once: " ++ show qname
           Nothing -> do
             ad <- case Avro.namedType n of
-              Avro.NamedTypeEnum (Avro.Enum_ syms mdefault) -> simpleAdapter typ encode decode  -- TODO: use default value
+              Avro.NamedTypeEnum (Avro.Enum syms mdefault) -> simpleAdapter typ encode decode  -- TODO: use default value
                 where
                   typ = TypeUnion (RowType hydraName $ toField <$> syms)
                     where

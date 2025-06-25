@@ -72,7 +72,7 @@ import Hydra.Staging.Inference
 import Hydra.Lexical
 import Hydra.LiteralAdapters
 import Hydra.Literals
-import Hydra.Mantle
+import Hydra.Mantle hiding (Either)
 import Hydra.Messages
 import Hydra.Module
 import Hydra.Phantoms

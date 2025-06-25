@@ -147,7 +147,7 @@ literalType = TermCoder (TypeVariable _LiteralType) $ Coder encode decode
 map :: Ord k => TermCoder k -> TermCoder v -> TermCoder (M.Map k v)
 map keys values = TermCoder (Types.map (termCoderType keys) (termCoderType values)) $ Coder encode decode
   where
-    encode = ExtractCore.map_ (coderEncode $ termCoderCoder keys) (coderEncode $ termCoderCoder values)
+    encode = ExtractCore.map (coderEncode $ termCoderCoder keys) (coderEncode $ termCoderCoder values)
     decode m = Terms.map . M.fromList <$> mapM decodePair (M.toList m)
       where
         decodePair (k, v) = do
