@@ -465,6 +465,7 @@ wrappedTypeDef = coreEncodingDefinition "WrappedType" $
 
 isEncodedTypeDef :: TElement (Term -> Bool)
 isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
+  doc "Determines whether a given term is an encoded type" $
   lambda "t" $ (match _Term (Just false) [
       TCase _Term_application --> lambda "a" $
         ref isEncodedTypeDef @@ (Core.applicationFunction $ var "a"),
@@ -480,8 +481,8 @@ isTypeDef = coreEncodingExtrasDefinition "isType" $
       TCase _Type_forall --> lambda "l" $
         ref isTypeDef @@ (Core.forallTypeBody $ var "l"),
       TCase _Type_union --> lambda "rt" $
-        Equality.equalString (string $ unName _Type) (Core.unName $ (Core.rowTypeTypeName $ var "rt"))
---      TCase _Type_variable --> constant true
+        Equality.equalString (string $ unName _Type) (Core.unName $ (Core.rowTypeTypeName $ var "rt")),
+      TCase _Type_variable --> lambda "v" $ Equality.equal (var "v") (Core.nameLift _Type)
     ]) @@ (ref Strip.stripTypeDef @@ var "t")
 
 isUnitTermDef :: TElement (Term -> Bool)

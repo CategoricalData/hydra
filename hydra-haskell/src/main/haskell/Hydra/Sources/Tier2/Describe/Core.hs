@@ -80,7 +80,7 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 describeCoreModule :: Module
 describeCoreModule = Module (Namespace "hydra.describe.core") elements
     [Variants.hydraVariantsModule]
-    [Tier1.hydraCoreModule] $
+    [Tier1.hydraCoreModule, Tier1.hydraMantleModule] $
     Just "Utilities for use in transformations"
   where
    elements = [
@@ -97,55 +97,58 @@ printingDefinition = definitionInModule describeCoreModule
 floatTypeDef :: TElement (FloatType -> String)
 floatTypeDef = printingDefinition "floatType" $
   doc "Display a floating-point type as a string" $
-  lambda "t" $ (ref precisionDef <.> ref Variants.floatTypePrecisionDef @@ var "t") ++ string " floating-point numbers"
+  lambda "t" $ (ref precisionDef <.> ref Variants.floatTypePrecisionDef @@ var "t") ++ string " floating-point number"
 
 integerTypeDef :: TElement (IntegerType -> String)
 integerTypeDef = printingDefinition "integerType" $
   doc "Display an integer type as a string" $
   lambda "t" $ (ref precisionDef <.> ref Variants.integerTypePrecisionDef @@ var "t")
-    ++ string " integers"
+    ++ string " integer"
 
 literalTypeDef :: TElement (LiteralType -> String)
 literalTypeDef = printingDefinition "literalType" $
   doc "Display a literal type as a string" $
   match _LiteralType Nothing [
-    TCase _LiteralType_binary  --> constant $ string "binary strings",
-    TCase _LiteralType_boolean --> constant $ string "boolean values",
-    TCase _LiteralType_float   --> ref floatTypeDef,
-    TCase _LiteralType_integer --> ref integerTypeDef,
-    TCase _LiteralType_string  --> constant $ string "character strings"]
+    _LiteralType_binary>>: constant $ string "binary string",
+    _LiteralType_boolean>>: constant $ string "boolean value",
+    _LiteralType_float>>: ref floatTypeDef,
+    _LiteralType_integer>>: ref integerTypeDef,
+    _LiteralType_string>>: constant $ string "character string"]
 
 precisionDef :: TElement (Precision -> String)
 precisionDef = printingDefinition "precision" $
   doc "Display numeric precision as a string" $
   match _Precision Nothing [
-    TCase _Precision_arbitrary --> constant $ string "arbitrary-precision",
-    TCase _Precision_bits      --> lambda "bits" $ Literals.showInt32 (var "bits") ++ string "-bit"]
+    _Precision_arbitrary>>: constant $ string "arbitrary-precision",
+    _Precision_bits>>: lambda "bits" $ Literals.showInt32 (var "bits") ++ string "-bit"]
 
 typeDef :: TElement (Type -> String)
 typeDef = printingDefinition "type" $
   doc "Display a type as a string" $
   match _Type Nothing [
-    TCase _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref typeDef @@
+    _Type_annotated>>: lambda "a" $ string "annotated " ++ (ref typeDef @@
       (project _AnnotatedType _AnnotatedType_subject @@ var "a")),
-    TCase _Type_application --> constant $ string "instances of an application type",
-    TCase _Type_literal     --> ref literalTypeDef,
-    TCase _Type_function    --> lambda "ft" $ string "functions from "
+    _Type_application>>: lambda "at" $ Strings.cat $ list [
+      ref typeDef @@ (Core.applicationTypeFunction $ var "at"),
+      string " applied to ",
+      ref typeDef @@ (Core.applicationTypeArgument $ var "at")],
+    _Type_literal>>: ref literalTypeDef,
+    _Type_function>>: lambda "ft" $ string "function from "
       ++ (ref typeDef @@ (project _FunctionType _FunctionType_domain @@ var "ft"))
       ++ string " to "
       ++ (ref typeDef @@ (project _FunctionType _FunctionType_codomain @@ var "ft")),
-    TCase _Type_forall      --> constant $ string "polymorphic terms",
-    TCase _Type_list        --> lambda "t" $ string "lists of " ++ (ref typeDef @@ var "t"),
-    TCase _Type_map         --> lambda "mt" $ string "maps from "
+    _Type_forall>>: lambda "fat" $ Strings.cat2 (string "polymorphic ") (ref typeDef @@ (Core.forallTypeBody $ var "fat")),
+    _Type_list>>: lambda "t" $ string "list of " ++ (ref typeDef @@ var "t"),
+    _Type_map>>: lambda "mt" $ string "map from "
       ++ (ref typeDef @@ (project _MapType _MapType_keys @@ var "mt"))
       ++ string " to "
       ++ (ref typeDef @@ (project _MapType _MapType_values  @@ var "mt")),
-    TCase _Type_optional    --> lambda "ot" $ string "optional " ++ (ref typeDef @@ var "ot"),
-    TCase _Type_product     --> constant $ string "tuples",
-    TCase _Type_record      --> constant $ string "records",
-    TCase _Type_set         --> lambda "st" $ string "sets of " ++ (ref typeDef @@ var "st"),
-    TCase _Type_sum         --> constant $ string "variant tuples",
-    TCase _Type_union       --> constant $ string "unions",
-    TCase _Type_variable    --> constant $ string "instances of a named type",
-    TCase _Type_wrap        --> lambda "n" $ string "wrapper for "
+    _Type_optional>>: lambda "ot" $ string "optional " ++ (ref typeDef @@ var "ot"),
+    _Type_product>>: constant $ string "tuple",
+    _Type_record>>: constant $ string "record",
+    _Type_set>>: lambda "st" $ string "set of " ++ (ref typeDef @@ var "st"),
+    _Type_sum>>: constant $ string "variant tuple",
+    _Type_union>>: constant $ string "union",
+    _Type_variable>>: constant $ string "instance of a named type",
+    _Type_wrap>>: lambda "n" $ string "wrapper for "
       ++ (ref typeDef @@ (project _WrappedType _WrappedType_object @@ var "n"))]

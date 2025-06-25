@@ -17,22 +17,22 @@ import qualified Data.Set as S
 floatType :: (Core.FloatType -> String)
 floatType t = (Strings.cat [
   (\arg_ -> precision (Variants.floatTypePrecision arg_)) t,
-  " floating-point numbers"])
+  " floating-point number"])
 
 -- | Display an integer type as a string
 integerType :: (Core.IntegerType -> String)
 integerType t = (Strings.cat [
   (\arg_ -> precision (Variants.integerTypePrecision arg_)) t,
-  " integers"])
+  " integer"])
 
 -- | Display a literal type as a string
 literalType :: (Core.LiteralType -> String)
 literalType x = case x of
-  Core.LiteralTypeBinary -> "binary strings"
-  Core.LiteralTypeBoolean -> "boolean values"
+  Core.LiteralTypeBinary -> "binary string"
+  Core.LiteralTypeBoolean -> "boolean value"
   Core.LiteralTypeFloat v1 -> (floatType v1)
   Core.LiteralTypeInteger v1 -> (integerType v1)
-  Core.LiteralTypeString -> "character strings"
+  Core.LiteralTypeString -> "character string"
 
 -- | Display numeric precision as a string
 precision :: (Mantle.Precision -> String)
@@ -48,37 +48,40 @@ type_ x = case x of
   Core.TypeAnnotated v1 -> (Strings.cat [
     "annotated ",
     (type_ (Core.annotatedTypeSubject v1))])
-  Core.TypeApplication _ -> "instances of an application type"
+  Core.TypeApplication v1 -> (Strings.cat [
+    type_ (Core.applicationTypeFunction v1),
+    " applied to ",
+    (type_ (Core.applicationTypeArgument v1))])
   Core.TypeLiteral v1 -> (literalType v1)
   Core.TypeFunction v1 -> (Strings.cat [
     Strings.cat [
       Strings.cat [
-        "functions from ",
+        "function from ",
         (type_ (Core.functionTypeDomain v1))],
       " to "],
     (type_ (Core.functionTypeCodomain v1))])
-  Core.TypeForall _ -> "polymorphic terms"
+  Core.TypeForall v1 -> (Strings.cat2 "polymorphic " (type_ (Core.forallTypeBody v1)))
   Core.TypeList v1 -> (Strings.cat [
-    "lists of ",
+    "list of ",
     (type_ v1)])
   Core.TypeMap v1 -> (Strings.cat [
     Strings.cat [
       Strings.cat [
-        "maps from ",
+        "map from ",
         (type_ (Core.mapTypeKeys v1))],
       " to "],
     (type_ (Core.mapTypeValues v1))])
   Core.TypeOptional v1 -> (Strings.cat [
     "optional ",
     (type_ v1)])
-  Core.TypeProduct _ -> "tuples"
-  Core.TypeRecord _ -> "records"
+  Core.TypeProduct _ -> "tuple"
+  Core.TypeRecord _ -> "record"
   Core.TypeSet v1 -> (Strings.cat [
-    "sets of ",
+    "set of ",
     (type_ v1)])
-  Core.TypeSum _ -> "variant tuples"
-  Core.TypeUnion _ -> "unions"
-  Core.TypeVariable _ -> "instances of a named type"
+  Core.TypeSum _ -> "variant tuple"
+  Core.TypeUnion _ -> "union"
+  Core.TypeVariable _ -> "instance of a named type"
   Core.TypeWrap v1 -> (Strings.cat [
     "wrapper for ",
     (type_ (Core.wrappedTypeObject v1))])
