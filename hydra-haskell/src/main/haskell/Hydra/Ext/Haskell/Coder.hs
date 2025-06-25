@@ -67,12 +67,17 @@ constructModule namespaces mod coders pairs = do
           where
             toImport (Namespace name, alias) = H.Import True (importName name) (Just alias) Nothing
         standardImports = toImport <$> [
-            ("Data.Int", "I"),
-            ("Data.List", "L"),
-            ("Data.Map", "M"),
-            ("Data.Set", "S")]
+            ("Prelude", Nothing, ["Enum", "Ordering", "map", "pure", "sum"]),
+            ("Data.Int", Just "I", []),
+            ("Data.List", Just "L", []),
+            ("Data.Map", Just "M", []),
+            ("Data.Set", Just "S", [])]
           where
-            toImport (name, alias) = H.Import True (H.ModuleName name) (Just $ H.ModuleName alias) Nothing
+            toImport (name, malias, hidden) = H.Import (Y.isJust malias) (H.ModuleName name) (fmap H.ModuleName malias) spec
+              where
+                spec = if L.null hidden
+                  then Nothing
+                  else Just $ H.SpecImportHiding $ fmap (\n -> H.ImportExportSpec Nothing (simpleName n) Nothing) hidden
 
 encodeFunction :: HaskellNamespaces -> Function -> Flow Graph H.Expression
 encodeFunction namespaces fun = case fun of

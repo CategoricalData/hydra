@@ -144,11 +144,19 @@ instance ToTree H.FieldWithComments where
       Just c -> newlineSep [cst $ toHaskellComments c, toTree field]
 
 instance ToTree H.Import where
-  toTree (H.Import qual (H.ModuleName name) mod _) = spaceSep $ Y.catMaybes [
+  toTree (H.Import qual (H.ModuleName name) mod mspec) = spaceSep $ Y.catMaybes [
       Just $ cst "import",
       if qual then Just (cst "qualified") else Nothing,
       Just $ cst name,
-      (\(H.ModuleName m) -> cst $ "as " ++ m) <$> mod]
+      (\(H.ModuleName m) -> cst $ "as " ++ m) <$> mod,
+      fmap hidingSec mspec]
+    where
+      hidingSec (H.SpecImportHiding names) = spaceSep [
+        cst $ "hiding ",
+        parens $ commaSep inlineStyle (toTree <$> names)]
+
+instance ToTree H.ImportExportSpec where
+  toTree (H.ImportExportSpec _ name _) = toTree name
 
 instance ToTree H.Literal where
   toTree lit = cst $ case lit of
