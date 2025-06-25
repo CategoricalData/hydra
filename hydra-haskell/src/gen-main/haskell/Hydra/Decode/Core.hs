@@ -39,7 +39,7 @@ fieldTypes term =
   let stripped = (Strip.fullyStripTerm term)
   in ((\x -> case x of
     Core.TermList v1 -> (Flows_.mapList fieldType v1)
-    _ -> (Errors.unexpected "list" (Core__.showTerm term))) stripped)
+    _ -> (Errors.unexpected "list" (Core__.term term))) stripped)
 
 floatType :: (Core.Term -> Compute.Flow Graph.Graph Core.FloatType)
 floatType = (matchEnum (Core.Name "hydra.core.FloatType") [
@@ -140,7 +140,7 @@ matchRecord decode term =
   let stripped = (Strip.fullyStripTerm term)
   in ((\x -> case x of
     Core.TermRecord v1 -> (decode (Maps.fromList (Lists.map (\field -> (Core.fieldName field, (Core.fieldTerm field))) (Core.recordFields v1))))
-    _ -> (Errors.unexpected "record" (Core__.showTerm term))) stripped)
+    _ -> (Errors.unexpected "record" (Core__.term term))) stripped)
 
 matchUnion :: (Core.Name -> [(Core.Name, (Core.Term -> Compute.Flow Graph.Graph t0))] -> Core.Term -> Compute.Flow Graph.Graph t0)
 matchUnion tname pairs term =  
@@ -155,12 +155,12 @@ matchUnion tname pairs term =
         "no matching case for field ",
         (Core.unName fname)])) (\f -> f val) (Maps.lookup fname mapping))) (Errors.unexpected (Strings.cat [
       "injection for type ",
-      (Core.unName tname)]) (Core__.showTerm term)))
+      (Core.unName tname)]) (Core__.term term)))
     _ -> (Errors.unexpected (Strings.cat [
       Strings.cat [
         "union with one of {",
         (Strings.intercalate ", " (Lists.map (\pair -> Core.unName (fst pair)) pairs))],
-      "}"]) (Core__.showTerm stripped))) stripped)
+      "}"]) (Core__.term stripped))) stripped)
 
 matchUnitField :: (t0 -> t1 -> (t0, (t2 -> Compute.Flow t3 t1)))
 matchUnitField fname x = (fname, (\ignored -> Flows_.pure x))

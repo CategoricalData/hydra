@@ -22,44 +22,44 @@ readTerm :: (t0 -> Maybe t1)
 readTerm _ = Nothing
 
 -- | Show an element as a string
-showElement :: (Graph.Element -> String)
-showElement el =  
+element :: (Graph.Element -> String)
+element el =  
   let name = (Core.unName (Graph.elementName el)) 
-      term = (Graph.elementTerm el)
-      typeStr = (Optionals.maybe "" (\ts -> Strings.cat2 " : " (showTypeScheme ts)) (Graph.elementType el))
+      t = (Graph.elementTerm el)
+      typeStr = (Optionals.maybe "" (\ts -> Strings.cat2 " : " (typeScheme ts)) (Graph.elementType el))
   in (Strings.cat [
     name,
     " = ",
-    showTerm term,
+    term t,
     typeStr])
 
 -- | Show a float value as a string
-showFloat :: (Core.FloatValue -> String)
-showFloat fv = ((\x -> case x of
+float :: (Core.FloatValue -> String)
+float fv = ((\x -> case x of
   Core.FloatValueBigfloat v1 -> (Literals.showBigfloat v1)
   Core.FloatValueFloat32 v1 -> (Literals.showFloat32 v1)
   Core.FloatValueFloat64 v1 -> (Literals.showFloat64 v1)) fv)
 
 -- | Show a float type as a string
-showFloatType :: (Core.FloatType -> String)
-showFloatType ft = ((\x -> case x of
+floatType :: (Core.FloatType -> String)
+floatType ft = ((\x -> case x of
   Core.FloatTypeBigfloat -> "bigfloat"
   Core.FloatTypeFloat32 -> "float32"
   Core.FloatTypeFloat64 -> "float64") ft)
 
 -- | Show a graph as a string
-showGraph :: (Graph.Graph -> String)
-showGraph graph =  
+graph :: (Graph.Graph -> String)
+graph graph =  
   let elements = (Maps.elems (Graph.graphElements graph)) 
-      elementStrs = (Lists.map showElement elements)
+      elementStrs = (Lists.map element elements)
   in (Strings.cat [
     "{",
     Strings.intercalate ", " elementStrs,
     "}"])
 
 -- | Show an integer value as a string
-showInteger :: (Core.IntegerValue -> String)
-showInteger iv = ((\x -> case x of
+integer :: (Core.IntegerValue -> String)
+integer iv = ((\x -> case x of
   Core.IntegerValueBigint v1 -> (Literals.showBigint v1)
   Core.IntegerValueInt8 v1 -> (Literals.showInt8 v1)
   Core.IntegerValueInt16 v1 -> (Literals.showInt16 v1)
@@ -71,8 +71,8 @@ showInteger iv = ((\x -> case x of
   Core.IntegerValueUint64 v1 -> (Literals.showUint64 v1)) iv)
 
 -- | Show an integer type as a string
-showIntegerType :: (Core.IntegerType -> String)
-showIntegerType it = ((\x -> case x of
+integerType :: (Core.IntegerType -> String)
+integerType it = ((\x -> case x of
   Core.IntegerTypeBigint -> "bigint"
   Core.IntegerTypeInt8 -> "int8"
   Core.IntegerTypeInt16 -> "int16"
@@ -83,8 +83,8 @@ showIntegerType it = ((\x -> case x of
   Core.IntegerTypeUint32 -> "uint32"
   Core.IntegerTypeUint64 -> "uint64") it)
 
-showList :: ((t0 -> String) -> [t0] -> String)
-showList f xs =  
+list :: ((t0 -> String) -> [t0] -> String)
+list f xs =  
   let elementStrs = (Lists.map f xs)
   in (Strings.cat [
     "[",
@@ -92,30 +92,30 @@ showList f xs =
     "]"])
 
 -- | Show a literal as a string
-showLiteral :: (Core.Literal -> String)
-showLiteral l = ((\x -> case x of
+literal :: (Core.Literal -> String)
+literal l = ((\x -> case x of
   Core.LiteralBinary _ -> "[binary]"
   Core.LiteralBoolean v1 -> (Logic.ifElse v1 "true" "false")
-  Core.LiteralFloat v1 -> (showFloat v1)
-  Core.LiteralInteger v1 -> (showInteger v1)
+  Core.LiteralFloat v1 -> (float v1)
+  Core.LiteralInteger v1 -> (integer v1)
   Core.LiteralString v1 -> (Literals.showString v1)) l)
 
 -- | Show a literal type as a string
-showLiteralType :: (Core.LiteralType -> String)
-showLiteralType lt = ((\x -> case x of
+literalType :: (Core.LiteralType -> String)
+literalType lt = ((\x -> case x of
   Core.LiteralTypeBinary -> "binary"
   Core.LiteralTypeBoolean -> "boolean"
-  Core.LiteralTypeFloat v1 -> (showFloatType v1)
-  Core.LiteralTypeInteger v1 -> (showIntegerType v1)
+  Core.LiteralTypeFloat v1 -> (floatType v1)
+  Core.LiteralTypeInteger v1 -> (integerType v1)
   Core.LiteralTypeString -> "string") lt)
 
 -- | Show a term as a string
-showTerm :: (Core.Term -> String)
-showTerm term =  
+term :: (Core.Term -> String)
+term t =  
   let showField = (\field ->  
           let fname = (Core.unName (Core.fieldName field)) 
               fterm = (Core.fieldTerm field)
-          in (Strings.cat2 fname (Strings.cat2 "=" (showTerm fterm)))) 
+          in (Strings.cat2 fname (Strings.cat2 "=" (term fterm)))) 
       showFields = (\fields ->  
               let fieldStrs = (Lists.map showField fields)
               in (Strings.cat [
@@ -132,16 +132,16 @@ showTerm term =
       showBinding = (\binding ->  
               let v = (Core.unName (Core.letBindingName binding)) 
                   bindingTerm = (Core.letBindingTerm binding)
-                  typeStr = (Optionals.maybe "" (\ts -> Strings.cat2 ":" (showTypeScheme ts)) (Core.letBindingType binding))
+                  typeStr = (Optionals.maybe "" (\ts -> Strings.cat2 ":" (typeScheme ts)) (Core.letBindingType binding))
               in (Strings.cat [
                 v,
                 "=",
-                showTerm bindingTerm,
+                term bindingTerm,
                 typeStr]))
   in ((\x -> case x of
     Core.TermApplication v1 ->  
       let terms = (gatherTerms [] v1) 
-          termStrs = (Lists.map showTerm terms)
+          termStrs = (Lists.map term terms)
       in (Strings.cat [
         "(",
         Strings.intercalate " @ " termStrs,
@@ -181,13 +181,13 @@ showTerm term =
         let v = (Core.unName (Core.lambdaParameter v2)) 
             mt = (Core.lambdaDomain v2)
             body = (Core.lambdaBody v2)
-            typeStr = (Optionals.maybe "" (\t -> Strings.cat2 ":" (showType t)) mt)
+            typeStr = (Optionals.maybe "" (\t -> Strings.cat2 ":" (type_ t)) mt)
         in (Strings.cat [
           "\955",
           v,
           typeStr,
           ".",
-          (showTerm body)])
+          (term body)])
       Core.FunctionPrimitive v2 -> (Strings.cat2 (Core.unName v2) "!")) v1)
     Core.TermLet v1 ->  
       let bindings = (Core.letBindings v1) 
@@ -197,20 +197,20 @@ showTerm term =
         "let ",
         Strings.intercalate ", " bindingStrs,
         " in ",
-        (showTerm env)])
+        (term env)])
     Core.TermList v1 ->  
-      let termStrs = (Lists.map showTerm v1)
+      let termStrs = (Lists.map term v1)
       in (Strings.cat [
         "[",
         Strings.intercalate ", " termStrs,
         "]"])
-    Core.TermLiteral v1 -> (showLiteral v1)
+    Core.TermLiteral v1 -> (literal v1)
     Core.TermOptional v1 -> (Optionals.maybe "nothing" (\t -> Strings.cat [
       "just(",
-      showTerm t,
+      term t,
       ")"]) v1)
     Core.TermProduct v1 ->  
-      let termStrs = (Lists.map showTerm v1)
+      let termStrs = (Lists.map term v1)
       in (Strings.cat [
         "(",
         Strings.intercalate ", " termStrs,
@@ -230,23 +230,23 @@ showTerm term =
         "\923",
         param,
         ".",
-        (showTerm body)])
+        (term body)])
     Core.TermTypeApplication v1 ->  
-      let term = (Core.typedTermTerm v1) 
+      let t2 = (Core.typedTermTerm v1) 
           typ = (Core.typedTermType v1)
       in (Strings.cat [
-        showTerm term,
+        term t2,
         "\10216",
-        showType typ,
+        type_ typ,
         "\10217"])
     Core.TermTyped v1 ->  
-      let term = (Core.typedTermTerm v1) 
+      let t2 = (Core.typedTermTerm v1) 
           typ = (Core.typedTermType v1)
       in (Strings.cat [
         "(",
-        showTerm term,
+        term t2,
         " : ",
-        showType typ,
+        type_ typ,
         ")"])
     Core.TermUnion v1 ->  
       let tname = (Core.unName (Core.injectionTypeName v1)) 
@@ -265,19 +265,19 @@ showTerm term =
         "wrap(",
         tname,
         "){",
-        showTerm term1,
-        "}"])) (Strip.stripTerm term))
+        term term1,
+        "}"])) (Strip.stripTerm t))
 
 -- | Show a type as a string
-showType :: (Core.Type -> String)
-showType typ =  
+type_ :: (Core.Type -> String)
+type_ typ =  
   let showFieldType = (\ft ->  
           let fname = (Core.unName (Core.fieldTypeName ft)) 
               ftyp = (Core.fieldTypeType ft)
           in (Strings.cat [
             fname,
             " = ",
-            (showType ftyp)])) 
+            (type_ ftyp)])) 
       showRowType = (\rt ->  
               let fields = (Core.rowTypeFields rt) 
                   fieldStrs = (Lists.map showFieldType fields)
@@ -301,21 +301,21 @@ showType typ =
   in ((\x -> case x of
     Core.TypeApplication v1 ->  
       let types = (gatherTypes [] v1) 
-          typeStrs = (Lists.map showType types)
+          typeStrs = (Lists.map type_ types)
       in (Strings.cat [
         "(",
         Strings.intercalate " @ " typeStrs,
         ")"])
     Core.TypeFunction _ ->  
       let types = (gatherFunctionTypes [] typ) 
-          typeStrs = (Lists.map showType types)
+          typeStrs = (Lists.map type_ types)
       in (Strings.cat [
         "(",
         Strings.intercalate " \8594 " typeStrs,
         ")"])
     Core.TypeList v1 -> (Strings.cat [
       "list<",
-      showType v1,
+      type_ v1,
       ">"])
     Core.TypeForall v1 ->  
       let var = (Core.unName (Core.forallTypeParameter v1)) 
@@ -324,29 +324,29 @@ showType typ =
         "(\8704",
         var,
         ".",
-        showType body,
+        type_ body,
         ")"])
-    Core.TypeLiteral v1 -> (showLiteralType v1)
+    Core.TypeLiteral v1 -> (literalType v1)
     Core.TypeMap v1 ->  
       let keyTyp = (Core.mapTypeKeys v1) 
           valTyp = (Core.mapTypeValues v1)
       in (Strings.cat [
         "map<",
-        showType keyTyp,
+        type_ keyTyp,
         ", ",
-        showType valTyp,
+        type_ valTyp,
         ">"])
     Core.TypeOptional v1 -> (Strings.cat [
       "optional<",
-      showType v1,
+      type_ v1,
       ">"])
     Core.TypeProduct v1 ->  
-      let typeStrs = (Lists.map showType v1)
+      let typeStrs = (Lists.map type_ v1)
       in (Strings.intercalate "\215" typeStrs)
     Core.TypeRecord v1 -> (Strings.cat2 "record" (showRowType v1))
     Core.TypeSet v1 -> (Strings.cat [
       "set<",
-      showType v1,
+      type_ v1,
       ">"])
     Core.TypeUnion v1 -> (Strings.cat2 "union" (showRowType v1))
     Core.TypeVariable v1 -> (Core.unName v1)
@@ -357,22 +357,22 @@ showType typ =
         "wrap[",
         tname,
         "](",
-        showType typ1,
+        type_ typ1,
         ")"])) (Strip.stripType typ))
 
 -- | Show a type constraint as a string
-showTypeConstraint :: (Typing.TypeConstraint -> String)
-showTypeConstraint tc =  
+typeConstraint :: (Typing.TypeConstraint -> String)
+typeConstraint tc =  
   let ltyp = (Typing.typeConstraintLeft tc) 
       rtyp = (Typing.typeConstraintRight tc)
   in (Strings.cat [
-    showType ltyp,
+    type_ ltyp,
     "\8801",
-    (showType rtyp)])
+    (type_ rtyp)])
 
 -- | Show a type scheme as a string
-showTypeScheme :: (Core.TypeScheme -> String)
-showTypeScheme ts =  
+typeScheme :: (Core.TypeScheme -> String)
+typeScheme ts =  
   let vars = (Core.typeSchemeVariables ts) 
       body = (Core.typeSchemeType ts)
       varNames = (Lists.map Core.unName vars)
@@ -383,12 +383,12 @@ showTypeScheme ts =
   in (Strings.cat [
     "(",
     fa,
-    showType body,
+    type_ body,
     ")"])
 
 -- | Show a type substitution as a string
-showTypeSubst :: (Typing.TypeSubst -> String)
-showTypeSubst ts =  
+typeSubst :: (Typing.TypeSubst -> String)
+typeSubst ts =  
   let subst = (Typing.unTypeSubst ts) 
       pairs = (Maps.toList subst)
       showPair = (\pair ->  
@@ -397,7 +397,7 @@ showTypeSubst ts =
               in (Strings.cat [
                 name,
                 "\8614",
-                (showType typ)]))
+                (type_ typ)]))
       pairStrs = (Lists.map showPair pairs)
   in (Strings.cat [
     "{",

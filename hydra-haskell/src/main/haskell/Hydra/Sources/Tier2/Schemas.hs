@@ -183,7 +183,7 @@ fieldTypesDef = schemasDefinition "fieldTypes" $
     "toMap">: lambda "fields" $ Maps.fromList $ Lists.map
       (lambda "ft" $ pair (Core.fieldTypeName $ var "ft") (Core.fieldTypeType $ var "ft"))
       (var "fields")]
-    $ match _Type (Just $ ref Errors.unexpectedDef @@ string "record or union type" @@ (ref ShowCore.showTypeDef @@ var "t")) [
+    $ match _Type (Just $ ref Errors.unexpectedDef @@ string "record or union type" @@ (ref ShowCore.type_Def @@ var "t")) [
       _Type_forall>>: lambda "ft" $ ref fieldTypesDef @@ Core.forallTypeBody (var "ft"),
       _Type_record>>: lambda "rt" $ Flows.pure $ var "toMap" @@ Core.rowTypeFields (var "rt"),
       _Type_union>>: lambda "rt" $ Flows.pure $ var "toMap" @@ Core.rowTypeFields (var "rt"),
@@ -270,7 +270,7 @@ requireRowTypeDef = schemasDefinition "requireRowType" $
             string " does not resolve to a ",
             var "label",
             string " type: ",
-            ref ShowCore.showTypeDef @@ var "t"])
+            ref ShowCore.type_Def @@ var "t"])
           (unaryFunction Flows.pure)
           (var "getter" @@ (var "rawType" @@ var "t"))
 

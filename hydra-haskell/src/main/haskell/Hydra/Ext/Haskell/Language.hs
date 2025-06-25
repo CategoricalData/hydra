@@ -108,7 +108,7 @@ reservedWords = S.fromList $ keywordSymbols ++ essentialDataSymbols
       "quot", "quotRem", "read", "readFile", "readIO", "readList", "readListPrec", "readLn", "readParen", "readPrec",
       "reads", "readsPrec", "realToFrac", "recip", "rem", "repeat", "replicate", "return", "reverse", "round",
       "scaleFloat", "scanl", "scanl1", "scanr", "scanr1", "sconcat", "seq", "sequence", "sequenceA", "sequence_",
-      "show", "showChar", "showList", "showParen", "showString", "shows", "showsPrec", "significand", "signum", "sin",
+      "show", "showChar", "list", "showParen", "showString", "shows", "showsPrec", "significand", "signum", "sin",
       "sinh", "snd", "span", "splitAt", "sqrt", "stimes", "subtract", "succ", "sum", "tail", "take", "takeWhile", "tan",
       "tanh", "toEnum", "toInteger", "toList", "toRational", "traverse", "truncate", "uncurry", "undefined", "unlines",
       "until", "unwords", "unzip", "unzip3", "userError", "words", "writeFile", "zip", "zip3", "zipWith", "zipWith3"]

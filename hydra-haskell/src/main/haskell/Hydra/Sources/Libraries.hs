@@ -12,7 +12,6 @@ import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Lib.Chars as Chars
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
-import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic

@@ -131,7 +131,7 @@ fieldTypesDef = coreDecodingDefinition "fieldTypes" $
   lambda "term" $ lets [
     "stripped">: ref Strip.fullyStripTermDef @@ var "term"]
     $ cases _Term (var "stripped")
-        (Just $ ref Errors.unexpectedDef @@ string "list" @@ (ref ShowCore.showTermDef @@ var "term")) [
+        (Just $ ref Errors.unexpectedDef @@ string "list" @@ (ref ShowCore.termDef @@ var "term")) [
       _Term_list>>: lambda "els" $ Flows.mapList (ref fieldTypeDef) (var "els")]
 
 floatTypeDef :: TElement (Term -> Flow Graph FloatType)
@@ -300,7 +300,7 @@ matchRecordDef = coreDecodingDefinition "matchRecord" $
   lambdas ["decode", "term"] $ lets [
     "stripped">: ref Strip.fullyStripTermDef @@ var "term"]
     $ cases _Term (var "stripped")
-        (Just $ ref Errors.unexpectedDef @@ string "record" @@ (ref ShowCore.showTermDef @@ var "term")) [
+        (Just $ ref Errors.unexpectedDef @@ string "record" @@ (ref ShowCore.termDef @@ var "term")) [
       _Term_record>>: lambda "record" $ var "decode" @@
         (Maps.fromList $ Lists.map
           (lambda "field" $ pair (Core.fieldName $ var "field") (Core.fieldTerm $ var "field"))
@@ -314,7 +314,7 @@ matchUnionDef = coreDecodingDefinition "matchUnion" $
     $ cases _Term (var "stripped")
         (Just $ ref Errors.unexpectedDef @@
           ("union with one of {" ++ (Strings.intercalate ", " $ Lists.map (lambda "pair" $ Core.unName $ first $ var "pair") $ var "pairs") ++ "}") @@
-          (ref ShowCore.showTermDef @@ var "stripped")) [
+          (ref ShowCore.termDef @@ var "stripped")) [
       _Term_variable>>: lambda "name" $
         Flows.bind (ref Lexical.requireElementDef @@ var "name") $
         lambda "el" $ ref matchUnionDef @@ var "tname" @@ var "pairs" @@ (Graph.elementTerm $ var "el"),
@@ -327,7 +327,7 @@ matchUnionDef = coreDecodingDefinition "matchUnion" $
               (Flows.fail $ "no matching case for field " ++ (Core.unName $ var "fname"))
               (lambda "f" $ var "f" @@ var "val")
               (Maps.lookup (var "fname") (var "mapping")))
-          (ref Errors.unexpectedDef @@ ("injection for type " ++ (Core.unName $ var "tname")) @@ (ref ShowCore.showTermDef @@ var "term"))]
+          (ref Errors.unexpectedDef @@ ("injection for type " ++ (Core.unName $ var "tname")) @@ (ref ShowCore.termDef @@ var "term"))]
 
 matchUnitFieldDef :: TElement (Name -> y -> (Name, x -> Flow Graph y))
 matchUnitFieldDef = coreDecodingDefinition "matchUnitField" $

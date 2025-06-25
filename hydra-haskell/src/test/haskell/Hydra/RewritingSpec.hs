@@ -11,9 +11,9 @@ import Hydra.Kernel
 import Hydra.Flows
 import Hydra.Tools.Monads
 import Hydra.Dsl.Terms as Terms
-import Hydra.Lib.Io
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
+import qualified Hydra.Show.Core as ShowCore
 
 import Hydra.TestUtils
 
@@ -229,7 +229,7 @@ testExpandTypedLambdas = do
 --      H.shouldBe result termAfter
        inf <- fromFlowIo testGraph (inferenceResultTerm <$> inferInGraphContext termBefore)
        let result = expandTypedLambdas inf
-       H.shouldBe (showTerm (removeTermAnnotations result)) (showTerm termAfter)
+       H.shouldBe (ShowCore.term (removeTermAnnotations result)) (ShowCore.term termAfter)
     noChange term = expandsTo term term
 
 testFoldOverTerm :: H.SpecWith ()

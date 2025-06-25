@@ -13,7 +13,6 @@ import Hydra.Ext.Json.Serde
 import Hydra.Ext.Pg.Graphson.Utils
 import Hydra.Ext.Pg.Printing
 import Hydra.Kernel
-import Hydra.Lib.Io
 import Hydra.Sources.Tier0.Core
 import Hydra.Tools.Monads
 

@@ -239,7 +239,7 @@ getTypeClassesDef = annotationsDefinition "getTypeClasses" $
         pair (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]]
       $ withVar "fn" (ref ExtractCore.unitVariantDef @@ Core.nameLift _TypeClass @@ var "term") $
           Optionals.maybe
-            (ref Errors.unexpectedDef @@ string "type class" @@ (ref ShowCore.showTermDef @@ var "term"))
+            (ref Errors.unexpectedDef @@ string "type class" @@ (ref ShowCore.termDef @@ var "term"))
             (unaryFunction Flows.pure)
             (Maps.lookup (var "fn") (var "byName"))]
     $ Optionals.maybe

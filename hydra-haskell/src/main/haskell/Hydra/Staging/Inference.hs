@@ -13,7 +13,6 @@ import Hydra.Functions
 import Hydra.Graph
 import Hydra.Typing
 import Hydra.Lib.Flows as Flows
-import Hydra.Lib.Io
 import Hydra.Mantle
 import Hydra.Rewriting
 import Hydra.Inference
@@ -26,6 +25,7 @@ import Hydra.Strip
 import Hydra.Substitution
 import Hydra.Unification
 import Hydra.Variants
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Extract.Core as ExtractCore
@@ -63,7 +63,7 @@ type Types = M.Map Name Type
 
 typeOf :: InferenceContext -> S.Set Name -> Types -> Term -> Flow s Type
 --typeOf cx vars types term = case term of
-typeOf cx vars types term = withTrace ("checking type of: " ++ showTerm term ++ " (vars: " ++ show (fmap unName $ S.toList vars) ++ ", types: " ++ (show types) ++ ")") $ case term of
+typeOf cx vars types term = withTrace ("checking type of: " ++ ShowCore.term term ++ " (vars: " ++ show (fmap unName $ S.toList vars) ++ ", types: " ++ (show types) ++ ")") $ case term of
     TermAnnotated (AnnotatedTerm term1 _) -> typeOf cx vars types term1
     TermApplication (Application a b) -> do
       t1 <- typeOf cx vars types a
@@ -73,12 +73,12 @@ typeOf cx vars types term = withTrace ("checking type of: " ++ showTerm term ++ 
       case t1 of
         TypeFunction (FunctionType p q) -> if p == t2
           then return q
-          else Flows.fail $ "expected " ++ showType p ++ " in " ++ showTerm term ++ " but found " ++ showType t2
-        _ -> Flows.fail $ "left hand side of application " ++ showTerm term ++ " is not a function type: " ++ showType t1
+          else Flows.fail $ "expected " ++ ShowCore.type_ p ++ " in " ++ ShowCore.term term ++ " but found " ++ ShowCore.type_ t2
+        _ -> Flows.fail $ "left hand side of application " ++ ShowCore.term term ++ " is not a function type: " ++ ShowCore.type_ t1
     TermFunction f -> case f of
       FunctionElimination elm -> case elm of
         EliminationProduct (TupleProjection index arity mtypes) -> case mtypes of
-          Nothing -> Flows.fail $ "untyped tuple projection: " ++ showTerm term
+          Nothing -> Flows.fail $ "untyped tuple projection: " ++ ShowCore.term term
           Just types -> do
             CM.mapM (checkTypeVariables vars) types
             return $ Types.function (Types.product types) (types !! index)
@@ -86,7 +86,7 @@ typeOf cx vars types term = withTrace ("checking type of: " ++ showTerm term ++ 
 --        EliminationUnion (CaseStatement tname def cases) -> ...
 --        EliminationWrap tname -> ...
       FunctionLambda (Lambda x mt e) -> case mt of
-        Nothing -> Flows.fail $ "untyped lambda: " ++ showTerm term
+        Nothing -> Flows.fail $ "untyped lambda: " ++ ShowCore.term term
         Just t -> do
           checkTypeVariables vars t
           t1 <- typeOf cx vars (M.insert x t types) e
@@ -106,12 +106,12 @@ typeOf cx vars types term = withTrace ("checking type of: " ++ showTerm term ++ 
         CM.mapM (checkTypeVariables vars) btypes
         if est == btypes
           then typeOf cx vars types2 e
-          else Flows.fail $ "binding types disagree: " ++ show (fmap showType est) ++ " and " ++ show (fmap showType btypes)
+          else Flows.fail $ "binding types disagree: " ++ show (fmap ShowCore.type_ est) ++ " and " ++ show (fmap ShowCore.type_ btypes)
       where
         bnames = fmap letBindingName es
         bterms = fmap letBindingTerm es
         binType b = case letBindingType b of
-          Nothing -> Flows.fail $ "untyped let binding in " ++ showTerm term
+          Nothing -> Flows.fail $ "untyped let binding in " ++ ShowCore.term term
           Just ts -> return $ typeSchemeToFType ts
     TermList els -> case els of
       [] -> do
@@ -157,13 +157,13 @@ typeOf cx vars types term = withTrace ("checking type of: " ++ showTerm term ++ 
       t1 <- typeOf cx vars types e
       checkTypeVariables vars t1
 --      Flows.fail $ "type-checking type application"
---        ++ "\n\tterm: " ++ showTerm e
---        ++ "\n\ttype: " ++ showType t
+--        ++ "\n\tterm: " ++ ShowCore.term e
+--        ++ "\n\ttype: " ++ ShowCore.type_ t
 --        ++ "\n\tvars: " ++ show (fmap unName $ S.toList vars)
---        ++ "\n\tt1: " ++ showType t1
+--        ++ "\n\tt1: " ++ ShowCore.type_ t1
       case t1 of
         TypeForall (ForallType v t2) -> return $ substInType (TypeSubst $ M.fromList [(v, t)]) t2
-        _ -> Flows.fail $ "not a forall type: " ++ showType t1 ++ " in " ++ showTerm term
+        _ -> Flows.fail $ "not a forall type: " ++ ShowCore.type_ t1 ++ " in " ++ ShowCore.term term
     TermUnion (Injection tname (Field fname term1)) -> do
         ftype <- typeOf cx vars types term1
         checkTypeVariables vars ftype
@@ -207,8 +207,8 @@ typeOfNominal :: String -> InferenceContext -> Name -> Type -> Flow s Type
 typeOfNominal desc cx tname expected = do
     TypeScheme svars styp <- requireSchemaType cx tname
 
---      Flows.fail $ "svars: " ++ show svars ++ ", styp: " ++ showType styp
---      Flows.fail $ "expected: " ++ showType expected ++ ", schema type: " ++ showType styp
+--      Flows.fail $ "svars: " ++ show svars ++ ", styp: " ++ ShowCore.type_ styp
+--      Flows.fail $ "expected: " ++ ShowCore.type_ expected ++ ", schema type: " ++ ShowCore.type_ styp
 
     (TypeSubst subst) <- unifyTypes (inferenceContextSchemaTypes cx) styp expected desc
 
@@ -220,7 +220,7 @@ typeOfNominal desc cx tname expected = do
 singleType :: String -> [Type] -> Flow s Type
 singleType desc types = if (L.foldl (\b t -> b && t == h) True types)
     then return h
-    else Flows.fail $ "unequal types " ++ show (fmap showType types) ++ " in " ++ desc
+    else Flows.fail $ "unequal types " ++ show (fmap ShowCore.type_ types) ++ " in " ++ desc
   where
     h = L.head types
 
@@ -230,7 +230,7 @@ checkType k g t e = if debugInference
     t0 <- typeOf g k (toFContext g) e
     if t0 == t
       then return ()
-      else Flows.fail $ "type checking failed: expected " ++ showType t ++ " but found " ++ showType t0
+      else Flows.fail $ "type checking failed: expected " ++ ShowCore.type_ t ++ " but found " ++ ShowCore.type_ t0
   else return ()
 
 checkTypeVariables :: S.Set Name -> Type -> Flow s ()
@@ -238,7 +238,7 @@ checkTypeVariables vars typ = case typ of
   TypeForall (ForallType v body) -> checkTypeVariables (S.insert v vars) body
   TypeVariable v -> if S.member v vars
     then return ()
-    else Flows.fail $ "unbound type variable \"" ++ unName v ++ "\" in " ++ showType typ
+    else Flows.fail $ "unbound type variable \"" ++ unName v ++ "\" in " ++ ShowCore.type_ typ
   _ -> do
     CM.sequence $ fmap (checkTypeVariables vars) $ subtypes typ
     return ()
@@ -254,9 +254,9 @@ toFContext = fmap typeSchemeToFType . inferenceContextDataTypes
 
 showInferenceResult :: InferenceResult -> String
 showInferenceResult (InferenceResult term typ subst) = "{"
-    ++ "term=" ++ showTerm term ++ ", "
-    ++ "type= " ++ showType typ ++ ", "
-    ++ "subst= " ++ showTypeSubst subst ++ "}"
+    ++ "term=" ++ ShowCore.term term ++ ", "
+    ++ "type= " ++ ShowCore.type_ typ ++ ", "
+    ++ "subst= " ++ ShowCore.typeSubst subst ++ "}"
 
 freeVariablesInContext :: InferenceContext -> S.Set Name
 freeVariablesInContext cx = L.foldl S.union S.empty $ fmap freeVariablesInTypeSchemeSimple $ M.elems $ inferenceContextDataTypes cx
@@ -760,11 +760,11 @@ yieldDebug :: InferenceContext -> String -> Term -> Type -> TypeSubst -> Flow s 
 yieldDebug cx debugId term typ subst = do
 
     debugIf debugId $ ""
-        ++ "\n\tterm: " ++ showTerm term
-        ++ "\n\ttyp: " ++ showType typ
-        ++ "\n\tsubst: " ++ showTypeSubst subst
-        ++ "\n\trterm: " ++ showTerm rterm
-        ++ "\n\trtyp: " ++ showType rtyp
+        ++ "\n\tterm: " ++ ShowCore.term term
+        ++ "\n\ttyp: " ++ ShowCore.type_ typ
+        ++ "\n\tsubst: " ++ ShowCore.typeSubst subst
+        ++ "\n\trterm: " ++ ShowCore.term rterm
+        ++ "\n\trtyp: " ++ ShowCore.type_ rtyp
 
     return $ InferenceResult rterm rtyp subst
   where

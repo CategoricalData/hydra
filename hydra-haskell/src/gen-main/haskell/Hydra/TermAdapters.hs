@@ -26,7 +26,7 @@ import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core___
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
-import Prelude hiding  (map, pure, sum)
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -145,17 +145,17 @@ functionToUnion t = ((\x -> case x of
                         Core.injectionTypeName = functionProxyName,
                         Core.injectionField = Core.Field {
                           Core.fieldName = (Core.Name "record"),
-                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Core___.showTerm term)))}}))
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Core___.term term)))}}))
                       Core.EliminationUnion _ -> (Core.TermUnion (Core.Injection {
                         Core.injectionTypeName = functionProxyName,
                         Core.injectionField = Core.Field {
                           Core.fieldName = (Core.Name "union"),
-                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Core___.showTerm term)))}}))) v3)
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Core___.term term)))}}))) v3)
                     Core.FunctionLambda _ -> (Core.TermUnion (Core.Injection {
                       Core.injectionTypeName = functionProxyName,
                       Core.injectionField = Core.Field {
                         Core.fieldName = (Core.Name "lambda"),
-                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Core___.showTerm term)))}}))
+                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Core___.term term)))}}))
                     Core.FunctionPrimitive v3 -> (Core.TermUnion (Core.Injection {
                       Core.injectionTypeName = functionProxyName,
                       Core.injectionField = Core.Field {
@@ -533,7 +533,7 @@ termAdapter typ =
       Compute.adapterCoder = (Compute.adapterCoder ad)})))
     _ -> (Flows.withTrace (Strings.cat2 "adapter for " (Core_.type_ typ)) ((\x -> case x of
       Core.TypeVariable v1 -> (forTypeReference v1)
-      _ -> (Flows_.bind Errors.getState (\cx -> AdapterUtils.chooseAdapter (alts cx) (supported cx) Core___.showType Core_.type_ typ))) typ))) typ)
+      _ -> (Flows_.bind Errors.getState (\cx -> AdapterUtils.chooseAdapter (alts cx) (supported cx) Core___.type_ Core_.type_ typ))) typ))) typ)
 
 -- | Convert union types to record types
 unionToRecord :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
@@ -557,11 +557,11 @@ unionToRecord t = ((\x -> case x of
                             Core.fieldTerm = t})))) fterm)) fields)
                 in (Logic.ifElse (Lists.null matches) (Flows_.fail (Strings.cat [
                   "cannot convert term back to union: ",
-                  Core___.showTerm term,
+                  Core___.term term,
                   " where type = ",
-                  Core___.showType t,
+                  Core___.type_ t,
                   "    and target type = ",
-                  (Core___.showType t_)])) (Flows_.pure (Lists.head matches))))
+                  (Core___.type_ t_)])) (Flows_.pure (Lists.head matches))))
     in (Flows_.bind (termAdapter target) (\ad -> Flows_.pure (Compute.Adapter {
       Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
       Compute.adapterSource = t,

@@ -138,7 +138,7 @@ traceSummaryDef = errorsDefinition "traceSummary" $
       (Lists.cons ("key/value pairs: ")
         (Lists.map (var "toLine") (Maps.toList (Compute.traceOther $ var "t")))),
     "toLine">:
-      lambda "pair" $ "\t" ++ (Core.unName $ (first $ var "pair")) ++ ": " ++ (ref ShowCore.showTermDef @@ (second $ var "pair"))] $
+      lambda "pair" $ "\t" ++ (Core.unName $ (first $ var "pair")) ++ ": " ++ (ref ShowCore.termDef @@ (second $ var "pair"))] $
     Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines"))
 
 unexpectedDef :: TElement (String -> String -> Flow s x)

@@ -10,7 +10,6 @@ import Hydra.Ext.Protobuf.Language
 import Hydra.Ext.Protobuf.Serde
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations
-import Hydra.Lib.Io
 import qualified Hydra.Extract.Core as ExtractCore
 
 import qualified Control.Monad as CM
