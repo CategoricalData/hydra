@@ -3,6 +3,7 @@
 module Hydra.Ext.Datalog.Syntax where
 
 import qualified Hydra.Core as Core
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -43,9 +44,9 @@ data Program_Elmt =
 
 _Program_Elmt = (Core.Name "hydra.ext.datalog.syntax.Program_Elmt")
 
-_Program_Elmt_fact = (Core.Name "fact")
+_Program_Elmt_Fact = (Core.Name "Fact")
 
-_Program_Elmt_rule = (Core.Name "rule")
+_Program_Elmt_Rule = (Core.Name "Rule")
 
 data Fact = 
   Fact {
@@ -55,9 +56,9 @@ data Fact =
 
 _Fact = (Core.Name "hydra.ext.datalog.syntax.Fact")
 
-_Fact_relation = (Core.Name "relation")
+_Fact_Relation = (Core.Name "Relation")
 
-_Fact_constantList = (Core.Name "constantList")
+_Fact_ConstantList = (Core.Name "ConstantList")
 
 data Rule = 
   Rule {
@@ -67,9 +68,9 @@ data Rule =
 
 _Rule = (Core.Name "hydra.ext.datalog.syntax.Rule")
 
-_Rule_atom = (Core.Name "atom")
+_Rule_Atom = (Core.Name "Atom")
 
-_Rule_atomList = (Core.Name "atomList")
+_Rule_AtomList = (Core.Name "AtomList")
 
 data Atom = 
   Atom {
@@ -79,9 +80,9 @@ data Atom =
 
 _Atom = (Core.Name "hydra.ext.datalog.syntax.Atom")
 
-_Atom_relation = (Core.Name "relation")
+_Atom_Relation = (Core.Name "Relation")
 
-_Atom_termList = (Core.Name "termList")
+_Atom_TermList = (Core.Name "TermList")
 
 data AtomList = 
   AtomListSingle Atom |
@@ -102,9 +103,9 @@ data AtomList_Multiple =
 
 _AtomList_Multiple = (Core.Name "hydra.ext.datalog.syntax.AtomList_Multiple")
 
-_AtomList_Multiple_atom = (Core.Name "atom")
+_AtomList_Multiple_Atom = (Core.Name "Atom")
 
-_AtomList_Multiple_atomList = (Core.Name "atomList")
+_AtomList_Multiple_AtomList = (Core.Name "AtomList")
 
 data Term = 
   TermConstant Constant |
@@ -113,9 +114,9 @@ data Term =
 
 _Term = (Core.Name "hydra.ext.datalog.syntax.Term")
 
-_Term_constant = (Core.Name "constant")
+_Term_Constant = (Core.Name "Constant")
 
-_Term_variable = (Core.Name "variable")
+_Term_Variable = (Core.Name "Variable")
 
 data TermList = 
   TermListSingle Term |
@@ -136,9 +137,9 @@ data TermList_Multiple =
 
 _TermList_Multiple = (Core.Name "hydra.ext.datalog.syntax.TermList_Multiple")
 
-_TermList_Multiple_term = (Core.Name "term")
+_TermList_Multiple_Term = (Core.Name "Term")
 
-_TermList_Multiple_termList = (Core.Name "termList")
+_TermList_Multiple_TermList = (Core.Name "TermList")
 
 data ConstantList = 
   ConstantListSingle Constant |
@@ -159,6 +160,6 @@ data ConstantList_Multiple =
 
 _ConstantList_Multiple = (Core.Name "hydra.ext.datalog.syntax.ConstantList_Multiple")
 
-_ConstantList_Multiple_constant = (Core.Name "constant")
+_ConstantList_Multiple_Constant = (Core.Name "Constant")
 
-_ConstantList_Multiple_constantList = (Core.Name "constantList")
+_ConstantList_Multiple_ConstantList = (Core.Name "ConstantList")

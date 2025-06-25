@@ -5,6 +5,7 @@ module Hydra.Ext.Org.Apache.Avro.Schema where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Json as Json
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -19,8 +20,8 @@ _Array = (Core.Name "hydra.ext.org.apache.avro.schema.Array")
 
 _Array_items = (Core.Name "items")
 
-data Enum_ = 
-  Enum_ {
+data Enum = 
+  Enum {
     -- | a JSON array, listing symbols, as JSON strings. All symbols in an enum must be unique; duplicates are prohibited. Every symbol must match the regular expression [A-Za-z_][A-Za-z0-9_]* (the same requirement as for names)
     enumSymbols :: [String],
     -- | A default value for this enumeration, used during resolution when the reader encounters a symbol from the writer that isn't defined in the reader's schema. The value provided here must be a JSON string that's a member of the symbols array
@@ -116,7 +117,7 @@ _Named_type = (Core.Name "type")
 _Named_annotations = (Core.Name "annotations")
 
 data NamedType = 
-  NamedTypeEnum Enum_ |
+  NamedTypeEnum Enum |
   NamedTypeFixed Fixed |
   NamedTypeRecord Record
   deriving (Eq, Ord, Read, Show)

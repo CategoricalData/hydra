@@ -4,6 +4,7 @@
 module Hydra.Ext.Org.Graphql.Syntax where
 
 import qualified Hydra.Core as Core
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -82,7 +83,7 @@ _OperationDefinition = (Core.Name "hydra.ext.org.graphql.syntax.OperationDefinit
 
 _OperationDefinition_sequence = (Core.Name "sequence")
 
-_OperationDefinition_selectionSet = (Core.Name "selectionSet")
+_OperationDefinition_SelectionSet = (Core.Name "SelectionSet")
 
 data OperationDefinition_Sequence = 
   OperationDefinition_Sequence {
@@ -95,15 +96,15 @@ data OperationDefinition_Sequence =
 
 _OperationDefinition_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.OperationDefinition_Sequence")
 
-_OperationDefinition_Sequence_operationType = (Core.Name "operationType")
+_OperationDefinition_Sequence_OperationType = (Core.Name "OperationType")
 
-_OperationDefinition_Sequence_name = (Core.Name "name")
+_OperationDefinition_Sequence_Name = (Core.Name "Name")
 
-_OperationDefinition_Sequence_variablesDefinition = (Core.Name "variablesDefinition")
+_OperationDefinition_Sequence_VariablesDefinition = (Core.Name "VariablesDefinition")
 
-_OperationDefinition_Sequence_directives = (Core.Name "directives")
+_OperationDefinition_Sequence_Directives = (Core.Name "Directives")
 
-_OperationDefinition_Sequence_selectionSet = (Core.Name "selectionSet")
+_OperationDefinition_Sequence_SelectionSet = (Core.Name "SelectionSet")
 
 data OperationType = 
   OperationTypeQuery  |
@@ -113,11 +114,11 @@ data OperationType =
 
 _OperationType = (Core.Name "hydra.ext.org.graphql.syntax.OperationType")
 
-_OperationType_query = (Core.Name "query")
+_OperationType_Query = (Core.Name "Query")
 
-_OperationType_mutation = (Core.Name "mutation")
+_OperationType_Mutation = (Core.Name "Mutation")
 
-_OperationType_subscription = (Core.Name "subscription")
+_OperationType_Subscription = (Core.Name "Subscription")
 
 newtype SelectionSet = 
   SelectionSet {
@@ -134,11 +135,11 @@ data Selection =
 
 _Selection = (Core.Name "hydra.ext.org.graphql.syntax.Selection")
 
-_Selection_field = (Core.Name "field")
+_Selection_Field = (Core.Name "Field")
 
-_Selection_fragmentSpread = (Core.Name "fragmentSpread")
+_Selection_FragmentSpread = (Core.Name "FragmentSpread")
 
-_Selection_inlineFragment = (Core.Name "inlineFragment")
+_Selection_InlineFragment = (Core.Name "InlineFragment")
 
 data Field = 
   Field {
@@ -151,15 +152,15 @@ data Field =
 
 _Field = (Core.Name "hydra.ext.org.graphql.syntax.Field")
 
-_Field_alias = (Core.Name "alias")
+_Field_Alias = (Core.Name "Alias")
 
-_Field_name = (Core.Name "name")
+_Field_Name = (Core.Name "Name")
 
-_Field_arguments = (Core.Name "arguments")
+_Field_Arguments = (Core.Name "Arguments")
 
-_Field_directives = (Core.Name "directives")
+_Field_Directives = (Core.Name "Directives")
 
-_Field_selectionSet = (Core.Name "selectionSet")
+_Field_SelectionSet = (Core.Name "SelectionSet")
 
 data Alias = 
   AliasName Name |
@@ -168,9 +169,9 @@ data Alias =
 
 _Alias = (Core.Name "hydra.ext.org.graphql.syntax.Alias")
 
-_Alias_name = (Core.Name "name")
+_Alias_Name = (Core.Name "Name")
 
-_Alias_colon = (Core.Name "colon")
+_Alias_Colon = (Core.Name "Colon")
 
 newtype Arguments = 
   Arguments {
@@ -187,9 +188,9 @@ data Argument =
 
 _Argument = (Core.Name "hydra.ext.org.graphql.syntax.Argument")
 
-_Argument_name = (Core.Name "name")
+_Argument_Name = (Core.Name "Name")
 
-_Argument_value = (Core.Name "value")
+_Argument_Value = (Core.Name "Value")
 
 data FragmentSpread = 
   FragmentSpread {
@@ -199,9 +200,9 @@ data FragmentSpread =
 
 _FragmentSpread = (Core.Name "hydra.ext.org.graphql.syntax.FragmentSpread")
 
-_FragmentSpread_fragmentName = (Core.Name "fragmentName")
+_FragmentSpread_FragmentName = (Core.Name "FragmentName")
 
-_FragmentSpread_directives = (Core.Name "directives")
+_FragmentSpread_Directives = (Core.Name "Directives")
 
 data InlineFragment = 
   InlineFragment {
@@ -212,11 +213,11 @@ data InlineFragment =
 
 _InlineFragment = (Core.Name "hydra.ext.org.graphql.syntax.InlineFragment")
 
-_InlineFragment_typeCondition = (Core.Name "typeCondition")
+_InlineFragment_TypeCondition = (Core.Name "TypeCondition")
 
-_InlineFragment_directives = (Core.Name "directives")
+_InlineFragment_Directives = (Core.Name "Directives")
 
-_InlineFragment_selectionSet = (Core.Name "selectionSet")
+_InlineFragment_SelectionSet = (Core.Name "SelectionSet")
 
 data FragmentDefinition = 
   FragmentDefinition {
@@ -228,13 +229,13 @@ data FragmentDefinition =
 
 _FragmentDefinition = (Core.Name "hydra.ext.org.graphql.syntax.FragmentDefinition")
 
-_FragmentDefinition_fragmentName = (Core.Name "fragmentName")
+_FragmentDefinition_FragmentName = (Core.Name "FragmentName")
 
-_FragmentDefinition_typeCondition = (Core.Name "typeCondition")
+_FragmentDefinition_TypeCondition = (Core.Name "TypeCondition")
 
-_FragmentDefinition_directives = (Core.Name "directives")
+_FragmentDefinition_Directives = (Core.Name "Directives")
 
-_FragmentDefinition_selectionSet = (Core.Name "selectionSet")
+_FragmentDefinition_SelectionSet = (Core.Name "SelectionSet")
 
 newtype FragmentName = 
   FragmentName {
@@ -250,9 +251,9 @@ data TypeCondition =
 
 _TypeCondition = (Core.Name "hydra.ext.org.graphql.syntax.TypeCondition")
 
-_TypeCondition_on = (Core.Name "on")
+_TypeCondition_On = (Core.Name "On")
 
-_TypeCondition_namedType = (Core.Name "namedType")
+_TypeCondition_NamedType = (Core.Name "NamedType")
 
 data Value = 
   ValueVariable Variable |
@@ -268,7 +269,7 @@ data Value =
 
 _Value = (Core.Name "hydra.ext.org.graphql.syntax.Value")
 
-_Value_variable = (Core.Name "variable")
+_Value_Variable = (Core.Name "Variable")
 
 _Value_int = (Core.Name "int")
 
@@ -293,9 +294,9 @@ data BooleanValue =
 
 _BooleanValue = (Core.Name "hydra.ext.org.graphql.syntax.BooleanValue")
 
-_BooleanValue_true = (Core.Name "true")
+_BooleanValue_True = (Core.Name "True")
 
-_BooleanValue_false = (Core.Name "false")
+_BooleanValue_False = (Core.Name "False")
 
 data NullValue = 
   NullValue {}
@@ -352,9 +353,9 @@ data ObjectField =
 
 _ObjectField = (Core.Name "hydra.ext.org.graphql.syntax.ObjectField")
 
-_ObjectField_name = (Core.Name "name")
+_ObjectField_Name = (Core.Name "Name")
 
-_ObjectField_value = (Core.Name "value")
+_ObjectField_Value = (Core.Name "Value")
 
 data VariablesDefinition = 
   VariablesDefinition {
@@ -366,13 +367,13 @@ data VariablesDefinition =
 
 _VariablesDefinition = (Core.Name "hydra.ext.org.graphql.syntax.VariablesDefinition")
 
-_VariablesDefinition_variable = (Core.Name "variable")
+_VariablesDefinition_Variable = (Core.Name "Variable")
 
-_VariablesDefinition_type = (Core.Name "type")
+_VariablesDefinition_Type = (Core.Name "Type")
 
-_VariablesDefinition_defaultValue = (Core.Name "defaultValue")
+_VariablesDefinition_DefaultValue = (Core.Name "DefaultValue")
 
-_VariablesDefinition_directives = (Core.Name "directives")
+_VariablesDefinition_Directives = (Core.Name "Directives")
 
 newtype Variable = 
   Variable {
@@ -442,9 +443,9 @@ data Directive =
 
 _Directive = (Core.Name "hydra.ext.org.graphql.syntax.Directive")
 
-_Directive_name = (Core.Name "name")
+_Directive_Name = (Core.Name "Name")
 
-_Directive_arguments = (Core.Name "arguments")
+_Directive_Arguments = (Core.Name "Arguments")
 
 newtype TypeSystemDocment = 
   TypeSystemDocment {
@@ -505,11 +506,11 @@ data SchemaDefinition =
 
 _SchemaDefinition = (Core.Name "hydra.ext.org.graphql.syntax.SchemaDefinition")
 
-_SchemaDefinition_description = (Core.Name "description")
+_SchemaDefinition_Description = (Core.Name "Description")
 
-_SchemaDefinition_directives = (Core.Name "directives")
+_SchemaDefinition_Directives = (Core.Name "Directives")
 
-_SchemaDefinition_rootOperationTypeDefinition = (Core.Name "rootOperationTypeDefinition")
+_SchemaDefinition_RootOperationTypeDefinition = (Core.Name "RootOperationTypeDefinition")
 
 data SchemaExtension = 
   SchemaExtensionSequence SchemaExtension_Sequence |
@@ -530,9 +531,9 @@ data SchemaExtension_Sequence =
 
 _SchemaExtension_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.SchemaExtension_Sequence")
 
-_SchemaExtension_Sequence_directives = (Core.Name "directives")
+_SchemaExtension_Sequence_Directives = (Core.Name "Directives")
 
-_SchemaExtension_Sequence_rootOperationTypeDefinition = (Core.Name "rootOperationTypeDefinition")
+_SchemaExtension_Sequence_RootOperationTypeDefinition = (Core.Name "RootOperationTypeDefinition")
 
 data RootOperationTypeDefinition = 
   RootOperationTypeDefinition {
@@ -542,9 +543,9 @@ data RootOperationTypeDefinition =
 
 _RootOperationTypeDefinition = (Core.Name "hydra.ext.org.graphql.syntax.RootOperationTypeDefinition")
 
-_RootOperationTypeDefinition_operationType = (Core.Name "operationType")
+_RootOperationTypeDefinition_OperationType = (Core.Name "OperationType")
 
-_RootOperationTypeDefinition_namedType = (Core.Name "namedType")
+_RootOperationTypeDefinition_NamedType = (Core.Name "NamedType")
 
 newtype Description = 
   Description {
@@ -608,11 +609,11 @@ data ScalarTypeDefinition =
 
 _ScalarTypeDefinition = (Core.Name "hydra.ext.org.graphql.syntax.ScalarTypeDefinition")
 
-_ScalarTypeDefinition_description = (Core.Name "description")
+_ScalarTypeDefinition_Description = (Core.Name "Description")
 
-_ScalarTypeDefinition_name = (Core.Name "name")
+_ScalarTypeDefinition_Name = (Core.Name "Name")
 
-_ScalarTypeDefinition_directives = (Core.Name "directives")
+_ScalarTypeDefinition_Directives = (Core.Name "Directives")
 
 data ScalarTypeExtension = 
   ScalarTypeExtension {
@@ -622,9 +623,9 @@ data ScalarTypeExtension =
 
 _ScalarTypeExtension = (Core.Name "hydra.ext.org.graphql.syntax.ScalarTypeExtension")
 
-_ScalarTypeExtension_name = (Core.Name "name")
+_ScalarTypeExtension_Name = (Core.Name "Name")
 
-_ScalarTypeExtension_directives = (Core.Name "directives")
+_ScalarTypeExtension_Directives = (Core.Name "Directives")
 
 data ObjectTypeDefinition = 
   ObjectTypeDefinition {
@@ -637,15 +638,15 @@ data ObjectTypeDefinition =
 
 _ObjectTypeDefinition = (Core.Name "hydra.ext.org.graphql.syntax.ObjectTypeDefinition")
 
-_ObjectTypeDefinition_description = (Core.Name "description")
+_ObjectTypeDefinition_Description = (Core.Name "Description")
 
-_ObjectTypeDefinition_name = (Core.Name "name")
+_ObjectTypeDefinition_Name = (Core.Name "Name")
 
-_ObjectTypeDefinition_implementsInterfaces = (Core.Name "implementsInterfaces")
+_ObjectTypeDefinition_ImplementsInterfaces = (Core.Name "ImplementsInterfaces")
 
-_ObjectTypeDefinition_directives = (Core.Name "directives")
+_ObjectTypeDefinition_Directives = (Core.Name "Directives")
 
-_ObjectTypeDefinition_fieldsDefinition = (Core.Name "fieldsDefinition")
+_ObjectTypeDefinition_FieldsDefinition = (Core.Name "FieldsDefinition")
 
 data ObjectTypeExtension = 
   ObjectTypeExtensionSequence ObjectTypeExtension_Sequence |
@@ -671,13 +672,13 @@ data ObjectTypeExtension_Sequence =
 
 _ObjectTypeExtension_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence")
 
-_ObjectTypeExtension_Sequence_name = (Core.Name "name")
+_ObjectTypeExtension_Sequence_Name = (Core.Name "Name")
 
-_ObjectTypeExtension_Sequence_implementsInterfaces = (Core.Name "implementsInterfaces")
+_ObjectTypeExtension_Sequence_ImplementsInterfaces = (Core.Name "ImplementsInterfaces")
 
-_ObjectTypeExtension_Sequence_directives = (Core.Name "directives")
+_ObjectTypeExtension_Sequence_Directives = (Core.Name "Directives")
 
-_ObjectTypeExtension_Sequence_fieldsDefinition = (Core.Name "fieldsDefinition")
+_ObjectTypeExtension_Sequence_FieldsDefinition = (Core.Name "FieldsDefinition")
 
 data ObjectTypeExtension_Sequence2 = 
   ObjectTypeExtension_Sequence2 {
@@ -688,11 +689,11 @@ data ObjectTypeExtension_Sequence2 =
 
 _ObjectTypeExtension_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence2")
 
-_ObjectTypeExtension_Sequence2_name = (Core.Name "name")
+_ObjectTypeExtension_Sequence2_Name = (Core.Name "Name")
 
-_ObjectTypeExtension_Sequence2_implementsInterfaces = (Core.Name "implementsInterfaces")
+_ObjectTypeExtension_Sequence2_ImplementsInterfaces = (Core.Name "ImplementsInterfaces")
 
-_ObjectTypeExtension_Sequence2_directives = (Core.Name "directives")
+_ObjectTypeExtension_Sequence2_Directives = (Core.Name "Directives")
 
 data ObjectTypeExtension_Sequence3 = 
   ObjectTypeExtension_Sequence3 {
@@ -702,9 +703,9 @@ data ObjectTypeExtension_Sequence3 =
 
 _ObjectTypeExtension_Sequence3 = (Core.Name "hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence3")
 
-_ObjectTypeExtension_Sequence3_name = (Core.Name "name")
+_ObjectTypeExtension_Sequence3_Name = (Core.Name "Name")
 
-_ObjectTypeExtension_Sequence3_implementsInterfaces = (Core.Name "implementsInterfaces")
+_ObjectTypeExtension_Sequence3_ImplementsInterfaces = (Core.Name "ImplementsInterfaces")
 
 data ImplementsInterfaces = 
   ImplementsInterfacesSequence ImplementsInterfaces_Sequence |
@@ -725,9 +726,9 @@ data ImplementsInterfaces_Sequence =
 
 _ImplementsInterfaces_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.ImplementsInterfaces_Sequence")
 
-_ImplementsInterfaces_Sequence_implementsInterfaces = (Core.Name "implementsInterfaces")
+_ImplementsInterfaces_Sequence_ImplementsInterfaces = (Core.Name "ImplementsInterfaces")
 
-_ImplementsInterfaces_Sequence_namedType = (Core.Name "namedType")
+_ImplementsInterfaces_Sequence_NamedType = (Core.Name "NamedType")
 
 data ImplementsInterfaces_Sequence2 = 
   ImplementsInterfaces_Sequence2 {
@@ -737,9 +738,9 @@ data ImplementsInterfaces_Sequence2 =
 
 _ImplementsInterfaces_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.ImplementsInterfaces_Sequence2")
 
-_ImplementsInterfaces_Sequence2_amp = (Core.Name "amp")
+_ImplementsInterfaces_Sequence2_Amp = (Core.Name "Amp")
 
-_ImplementsInterfaces_Sequence2_namedType = (Core.Name "namedType")
+_ImplementsInterfaces_Sequence2_NamedType = (Core.Name "NamedType")
 
 newtype FieldsDefinition = 
   FieldsDefinition {
@@ -759,15 +760,15 @@ data FieldDefinition =
 
 _FieldDefinition = (Core.Name "hydra.ext.org.graphql.syntax.FieldDefinition")
 
-_FieldDefinition_description = (Core.Name "description")
+_FieldDefinition_Description = (Core.Name "Description")
 
-_FieldDefinition_name = (Core.Name "name")
+_FieldDefinition_Name = (Core.Name "Name")
 
-_FieldDefinition_argumentsDefinition = (Core.Name "argumentsDefinition")
+_FieldDefinition_ArgumentsDefinition = (Core.Name "ArgumentsDefinition")
 
-_FieldDefinition_type = (Core.Name "type")
+_FieldDefinition_Type = (Core.Name "Type")
 
-_FieldDefinition_directives = (Core.Name "directives")
+_FieldDefinition_Directives = (Core.Name "Directives")
 
 newtype ArgumentsDefinition = 
   ArgumentsDefinition {
@@ -787,15 +788,15 @@ data InputValueDefinition =
 
 _InputValueDefinition = (Core.Name "hydra.ext.org.graphql.syntax.InputValueDefinition")
 
-_InputValueDefinition_description = (Core.Name "description")
+_InputValueDefinition_Description = (Core.Name "Description")
 
-_InputValueDefinition_name = (Core.Name "name")
+_InputValueDefinition_Name = (Core.Name "Name")
 
-_InputValueDefinition_type = (Core.Name "type")
+_InputValueDefinition_Type = (Core.Name "Type")
 
-_InputValueDefinition_defaultValue = (Core.Name "defaultValue")
+_InputValueDefinition_DefaultValue = (Core.Name "DefaultValue")
 
-_InputValueDefinition_directives = (Core.Name "directives")
+_InputValueDefinition_Directives = (Core.Name "Directives")
 
 data InterfaceTypeDefinition = 
   InterfaceTypeDefinitionSequence InterfaceTypeDefinition_Sequence |
@@ -819,15 +820,15 @@ data InterfaceTypeDefinition_Sequence =
 
 _InterfaceTypeDefinition_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.InterfaceTypeDefinition_Sequence")
 
-_InterfaceTypeDefinition_Sequence_description = (Core.Name "description")
+_InterfaceTypeDefinition_Sequence_Description = (Core.Name "Description")
 
-_InterfaceTypeDefinition_Sequence_name = (Core.Name "name")
+_InterfaceTypeDefinition_Sequence_Name = (Core.Name "Name")
 
-_InterfaceTypeDefinition_Sequence_implementsInterfaces = (Core.Name "implementsInterfaces")
+_InterfaceTypeDefinition_Sequence_ImplementsInterfaces = (Core.Name "ImplementsInterfaces")
 
-_InterfaceTypeDefinition_Sequence_directives = (Core.Name "directives")
+_InterfaceTypeDefinition_Sequence_Directives = (Core.Name "Directives")
 
-_InterfaceTypeDefinition_Sequence_fieldsDefinition = (Core.Name "fieldsDefinition")
+_InterfaceTypeDefinition_Sequence_FieldsDefinition = (Core.Name "FieldsDefinition")
 
 data InterfaceTypeDefinition_Sequence2 = 
   InterfaceTypeDefinition_Sequence2 {
@@ -839,13 +840,13 @@ data InterfaceTypeDefinition_Sequence2 =
 
 _InterfaceTypeDefinition_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.InterfaceTypeDefinition_Sequence2")
 
-_InterfaceTypeDefinition_Sequence2_description = (Core.Name "description")
+_InterfaceTypeDefinition_Sequence2_Description = (Core.Name "Description")
 
-_InterfaceTypeDefinition_Sequence2_name = (Core.Name "name")
+_InterfaceTypeDefinition_Sequence2_Name = (Core.Name "Name")
 
-_InterfaceTypeDefinition_Sequence2_implementsInterfaces = (Core.Name "implementsInterfaces")
+_InterfaceTypeDefinition_Sequence2_ImplementsInterfaces = (Core.Name "ImplementsInterfaces")
 
-_InterfaceTypeDefinition_Sequence2_directives = (Core.Name "directives")
+_InterfaceTypeDefinition_Sequence2_Directives = (Core.Name "Directives")
 
 data InterfaceTypeExtension = 
   InterfaceTypeExtensionSequence InterfaceTypeExtension_Sequence |
@@ -871,13 +872,13 @@ data InterfaceTypeExtension_Sequence =
 
 _InterfaceTypeExtension_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.InterfaceTypeExtension_Sequence")
 
-_InterfaceTypeExtension_Sequence_name = (Core.Name "name")
+_InterfaceTypeExtension_Sequence_Name = (Core.Name "Name")
 
-_InterfaceTypeExtension_Sequence_implementsInterfaces = (Core.Name "implementsInterfaces")
+_InterfaceTypeExtension_Sequence_ImplementsInterfaces = (Core.Name "ImplementsInterfaces")
 
-_InterfaceTypeExtension_Sequence_directives = (Core.Name "directives")
+_InterfaceTypeExtension_Sequence_Directives = (Core.Name "Directives")
 
-_InterfaceTypeExtension_Sequence_fieldsDefinition = (Core.Name "fieldsDefinition")
+_InterfaceTypeExtension_Sequence_FieldsDefinition = (Core.Name "FieldsDefinition")
 
 data InterfaceTypeExtension_Sequence2 = 
   InterfaceTypeExtension_Sequence2 {
@@ -888,11 +889,11 @@ data InterfaceTypeExtension_Sequence2 =
 
 _InterfaceTypeExtension_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.InterfaceTypeExtension_Sequence2")
 
-_InterfaceTypeExtension_Sequence2_name = (Core.Name "name")
+_InterfaceTypeExtension_Sequence2_Name = (Core.Name "Name")
 
-_InterfaceTypeExtension_Sequence2_implementsInterfaces = (Core.Name "implementsInterfaces")
+_InterfaceTypeExtension_Sequence2_ImplementsInterfaces = (Core.Name "ImplementsInterfaces")
 
-_InterfaceTypeExtension_Sequence2_directives = (Core.Name "directives")
+_InterfaceTypeExtension_Sequence2_Directives = (Core.Name "Directives")
 
 data InterfaceTypeExtension_Sequence3 = 
   InterfaceTypeExtension_Sequence3 {
@@ -902,9 +903,9 @@ data InterfaceTypeExtension_Sequence3 =
 
 _InterfaceTypeExtension_Sequence3 = (Core.Name "hydra.ext.org.graphql.syntax.InterfaceTypeExtension_Sequence3")
 
-_InterfaceTypeExtension_Sequence3_name = (Core.Name "name")
+_InterfaceTypeExtension_Sequence3_Name = (Core.Name "Name")
 
-_InterfaceTypeExtension_Sequence3_implementsInterfaces = (Core.Name "implementsInterfaces")
+_InterfaceTypeExtension_Sequence3_ImplementsInterfaces = (Core.Name "ImplementsInterfaces")
 
 data UnionTypeDefinition = 
   UnionTypeDefinition {
@@ -916,13 +917,13 @@ data UnionTypeDefinition =
 
 _UnionTypeDefinition = (Core.Name "hydra.ext.org.graphql.syntax.UnionTypeDefinition")
 
-_UnionTypeDefinition_description = (Core.Name "description")
+_UnionTypeDefinition_Description = (Core.Name "Description")
 
-_UnionTypeDefinition_name = (Core.Name "name")
+_UnionTypeDefinition_Name = (Core.Name "Name")
 
-_UnionTypeDefinition_directives = (Core.Name "directives")
+_UnionTypeDefinition_Directives = (Core.Name "Directives")
 
-_UnionTypeDefinition_unionMemberTypes = (Core.Name "unionMemberTypes")
+_UnionTypeDefinition_UnionMemberTypes = (Core.Name "UnionMemberTypes")
 
 data UnionMemberTypes = 
   UnionMemberTypesSequence UnionMemberTypes_Sequence |
@@ -943,9 +944,9 @@ data UnionMemberTypes_Sequence =
 
 _UnionMemberTypes_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.UnionMemberTypes_Sequence")
 
-_UnionMemberTypes_Sequence_unionMemberTypes = (Core.Name "unionMemberTypes")
+_UnionMemberTypes_Sequence_UnionMemberTypes = (Core.Name "UnionMemberTypes")
 
-_UnionMemberTypes_Sequence_namedType = (Core.Name "namedType")
+_UnionMemberTypes_Sequence_NamedType = (Core.Name "NamedType")
 
 data UnionMemberTypes_Sequence2 = 
   UnionMemberTypes_Sequence2 {
@@ -955,9 +956,9 @@ data UnionMemberTypes_Sequence2 =
 
 _UnionMemberTypes_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.UnionMemberTypes_Sequence2")
 
-_UnionMemberTypes_Sequence2_or = (Core.Name "or")
+_UnionMemberTypes_Sequence2_Or = (Core.Name "Or")
 
-_UnionMemberTypes_Sequence2_namedType = (Core.Name "namedType")
+_UnionMemberTypes_Sequence2_NamedType = (Core.Name "NamedType")
 
 data UnionTypeExtension = 
   UnionTypeExtensionSequence UnionTypeExtension_Sequence |
@@ -979,11 +980,11 @@ data UnionTypeExtension_Sequence =
 
 _UnionTypeExtension_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.UnionTypeExtension_Sequence")
 
-_UnionTypeExtension_Sequence_name = (Core.Name "name")
+_UnionTypeExtension_Sequence_Name = (Core.Name "Name")
 
-_UnionTypeExtension_Sequence_directives = (Core.Name "directives")
+_UnionTypeExtension_Sequence_Directives = (Core.Name "Directives")
 
-_UnionTypeExtension_Sequence_unionMemberTypes = (Core.Name "unionMemberTypes")
+_UnionTypeExtension_Sequence_UnionMemberTypes = (Core.Name "UnionMemberTypes")
 
 data UnionTypeExtension_Sequence2 = 
   UnionTypeExtension_Sequence2 {
@@ -993,9 +994,9 @@ data UnionTypeExtension_Sequence2 =
 
 _UnionTypeExtension_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.UnionTypeExtension_Sequence2")
 
-_UnionTypeExtension_Sequence2_name = (Core.Name "name")
+_UnionTypeExtension_Sequence2_Name = (Core.Name "Name")
 
-_UnionTypeExtension_Sequence2_directives = (Core.Name "directives")
+_UnionTypeExtension_Sequence2_Directives = (Core.Name "Directives")
 
 data EnumTypeDefinition = 
   EnumTypeDefinition {
@@ -1007,13 +1008,13 @@ data EnumTypeDefinition =
 
 _EnumTypeDefinition = (Core.Name "hydra.ext.org.graphql.syntax.EnumTypeDefinition")
 
-_EnumTypeDefinition_description = (Core.Name "description")
+_EnumTypeDefinition_Description = (Core.Name "Description")
 
-_EnumTypeDefinition_name = (Core.Name "name")
+_EnumTypeDefinition_Name = (Core.Name "Name")
 
-_EnumTypeDefinition_directives = (Core.Name "directives")
+_EnumTypeDefinition_Directives = (Core.Name "Directives")
 
-_EnumTypeDefinition_enumValuesDefinition = (Core.Name "enumValuesDefinition")
+_EnumTypeDefinition_EnumValuesDefinition = (Core.Name "EnumValuesDefinition")
 
 newtype EnumValuesDefinition = 
   EnumValuesDefinition {
@@ -1031,11 +1032,11 @@ data EnumValueDefinition =
 
 _EnumValueDefinition = (Core.Name "hydra.ext.org.graphql.syntax.EnumValueDefinition")
 
-_EnumValueDefinition_description = (Core.Name "description")
+_EnumValueDefinition_Description = (Core.Name "Description")
 
-_EnumValueDefinition_enumValue = (Core.Name "enumValue")
+_EnumValueDefinition_EnumValue = (Core.Name "EnumValue")
 
-_EnumValueDefinition_directives = (Core.Name "directives")
+_EnumValueDefinition_Directives = (Core.Name "Directives")
 
 data EnumTypeExtension = 
   EnumTypeExtensionSequence EnumTypeExtension_Sequence |
@@ -1057,11 +1058,11 @@ data EnumTypeExtension_Sequence =
 
 _EnumTypeExtension_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.EnumTypeExtension_Sequence")
 
-_EnumTypeExtension_Sequence_name = (Core.Name "name")
+_EnumTypeExtension_Sequence_Name = (Core.Name "Name")
 
-_EnumTypeExtension_Sequence_directives = (Core.Name "directives")
+_EnumTypeExtension_Sequence_Directives = (Core.Name "Directives")
 
-_EnumTypeExtension_Sequence_enumValuesDefinition = (Core.Name "enumValuesDefinition")
+_EnumTypeExtension_Sequence_EnumValuesDefinition = (Core.Name "EnumValuesDefinition")
 
 data EnumTypeExtension_Sequence2 = 
   EnumTypeExtension_Sequence2 {
@@ -1071,9 +1072,9 @@ data EnumTypeExtension_Sequence2 =
 
 _EnumTypeExtension_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.EnumTypeExtension_Sequence2")
 
-_EnumTypeExtension_Sequence2_name = (Core.Name "name")
+_EnumTypeExtension_Sequence2_Name = (Core.Name "Name")
 
-_EnumTypeExtension_Sequence2_directives = (Core.Name "directives")
+_EnumTypeExtension_Sequence2_Directives = (Core.Name "Directives")
 
 data InputObjectTypeDefinition = 
   InputObjectTypeDefinitionSequence InputObjectTypeDefinition_Sequence |
@@ -1096,13 +1097,13 @@ data InputObjectTypeDefinition_Sequence =
 
 _InputObjectTypeDefinition_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.InputObjectTypeDefinition_Sequence")
 
-_InputObjectTypeDefinition_Sequence_description = (Core.Name "description")
+_InputObjectTypeDefinition_Sequence_Description = (Core.Name "Description")
 
-_InputObjectTypeDefinition_Sequence_name = (Core.Name "name")
+_InputObjectTypeDefinition_Sequence_Name = (Core.Name "Name")
 
-_InputObjectTypeDefinition_Sequence_directives = (Core.Name "directives")
+_InputObjectTypeDefinition_Sequence_Directives = (Core.Name "Directives")
 
-_InputObjectTypeDefinition_Sequence_inputFieldsDefinition = (Core.Name "inputFieldsDefinition")
+_InputObjectTypeDefinition_Sequence_InputFieldsDefinition = (Core.Name "InputFieldsDefinition")
 
 data InputObjectTypeDefinition_Sequence2 = 
   InputObjectTypeDefinition_Sequence2 {
@@ -1113,11 +1114,11 @@ data InputObjectTypeDefinition_Sequence2 =
 
 _InputObjectTypeDefinition_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.InputObjectTypeDefinition_Sequence2")
 
-_InputObjectTypeDefinition_Sequence2_description = (Core.Name "description")
+_InputObjectTypeDefinition_Sequence2_Description = (Core.Name "Description")
 
-_InputObjectTypeDefinition_Sequence2_name = (Core.Name "name")
+_InputObjectTypeDefinition_Sequence2_Name = (Core.Name "Name")
 
-_InputObjectTypeDefinition_Sequence2_directives = (Core.Name "directives")
+_InputObjectTypeDefinition_Sequence2_Directives = (Core.Name "Directives")
 
 newtype InputFieldsDefinition = 
   InputFieldsDefinition {
@@ -1146,11 +1147,11 @@ data InputObjectTypeExtension_Sequence =
 
 _InputObjectTypeExtension_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.InputObjectTypeExtension_Sequence")
 
-_InputObjectTypeExtension_Sequence_name = (Core.Name "name")
+_InputObjectTypeExtension_Sequence_Name = (Core.Name "Name")
 
-_InputObjectTypeExtension_Sequence_directives = (Core.Name "directives")
+_InputObjectTypeExtension_Sequence_Directives = (Core.Name "Directives")
 
-_InputObjectTypeExtension_Sequence_inputFieldsDefinition = (Core.Name "inputFieldsDefinition")
+_InputObjectTypeExtension_Sequence_InputFieldsDefinition = (Core.Name "InputFieldsDefinition")
 
 data InputObjectTypeExtension_Sequence2 = 
   InputObjectTypeExtension_Sequence2 {
@@ -1160,9 +1161,9 @@ data InputObjectTypeExtension_Sequence2 =
 
 _InputObjectTypeExtension_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.InputObjectTypeExtension_Sequence2")
 
-_InputObjectTypeExtension_Sequence2_name = (Core.Name "name")
+_InputObjectTypeExtension_Sequence2_Name = (Core.Name "Name")
 
-_InputObjectTypeExtension_Sequence2_directives = (Core.Name "directives")
+_InputObjectTypeExtension_Sequence2_Directives = (Core.Name "Directives")
 
 data DirectiveDefinition = 
   DirectiveDefinition {
@@ -1175,15 +1176,15 @@ data DirectiveDefinition =
 
 _DirectiveDefinition = (Core.Name "hydra.ext.org.graphql.syntax.DirectiveDefinition")
 
-_DirectiveDefinition_description = (Core.Name "description")
+_DirectiveDefinition_Description = (Core.Name "Description")
 
-_DirectiveDefinition_name = (Core.Name "name")
+_DirectiveDefinition_Name = (Core.Name "Name")
 
-_DirectiveDefinition_argumentsDefinition = (Core.Name "argumentsDefinition")
+_DirectiveDefinition_ArgumentsDefinition = (Core.Name "ArgumentsDefinition")
 
-_DirectiveDefinition_repeatable = (Core.Name "repeatable")
+_DirectiveDefinition_Repeatable = (Core.Name "Repeatable")
 
-_DirectiveDefinition_directiveLocations = (Core.Name "directiveLocations")
+_DirectiveDefinition_DirectiveLocations = (Core.Name "DirectiveLocations")
 
 data DirectiveLocations = 
   DirectiveLocationsSequence DirectiveLocations_Sequence |
@@ -1204,9 +1205,9 @@ data DirectiveLocations_Sequence =
 
 _DirectiveLocations_Sequence = (Core.Name "hydra.ext.org.graphql.syntax.DirectiveLocations_Sequence")
 
-_DirectiveLocations_Sequence_directiveLocations = (Core.Name "directiveLocations")
+_DirectiveLocations_Sequence_DirectiveLocations = (Core.Name "DirectiveLocations")
 
-_DirectiveLocations_Sequence_directiveLocation = (Core.Name "directiveLocation")
+_DirectiveLocations_Sequence_DirectiveLocation = (Core.Name "DirectiveLocation")
 
 data DirectiveLocations_Sequence2 = 
   DirectiveLocations_Sequence2 {
@@ -1216,9 +1217,9 @@ data DirectiveLocations_Sequence2 =
 
 _DirectiveLocations_Sequence2 = (Core.Name "hydra.ext.org.graphql.syntax.DirectiveLocations_Sequence2")
 
-_DirectiveLocations_Sequence2_or = (Core.Name "or")
+_DirectiveLocations_Sequence2_Or = (Core.Name "Or")
 
-_DirectiveLocations_Sequence2_directiveLocation = (Core.Name "directiveLocation")
+_DirectiveLocations_Sequence2_DirectiveLocation = (Core.Name "DirectiveLocation")
 
 data DirectiveLocation = 
   DirectiveLocationExecutable ExecutableDirectiveLocation |
@@ -1244,21 +1245,21 @@ data ExecutableDirectiveLocation =
 
 _ExecutableDirectiveLocation = (Core.Name "hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation")
 
-_ExecutableDirectiveLocation_qUERY = (Core.Name "qUERY")
+_ExecutableDirectiveLocation_QUERY = (Core.Name "QUERY")
 
-_ExecutableDirectiveLocation_mUTATION = (Core.Name "mUTATION")
+_ExecutableDirectiveLocation_MUTATION = (Core.Name "MUTATION")
 
-_ExecutableDirectiveLocation_sUBSCRIPTION = (Core.Name "sUBSCRIPTION")
+_ExecutableDirectiveLocation_SUBSCRIPTION = (Core.Name "SUBSCRIPTION")
 
-_ExecutableDirectiveLocation_fIELD = (Core.Name "fIELD")
+_ExecutableDirectiveLocation_FIELD = (Core.Name "FIELD")
 
-_ExecutableDirectiveLocation_fRAGMENTlowbarDEFINITION = (Core.Name "fRAGMENTlowbarDEFINITION")
+_ExecutableDirectiveLocation_FRAGMENTlowbarDEFINITION = (Core.Name "FRAGMENTlowbarDEFINITION")
 
-_ExecutableDirectiveLocation_fRAGMENTlowbarSPREAD = (Core.Name "fRAGMENTlowbarSPREAD")
+_ExecutableDirectiveLocation_FRAGMENTlowbarSPREAD = (Core.Name "FRAGMENTlowbarSPREAD")
 
-_ExecutableDirectiveLocation_iNLINElowbarFRAGMENT = (Core.Name "iNLINElowbarFRAGMENT")
+_ExecutableDirectiveLocation_INLINElowbarFRAGMENT = (Core.Name "INLINElowbarFRAGMENT")
 
-_ExecutableDirectiveLocation_vARIABLElowbarDEFINITION = (Core.Name "vARIABLElowbarDEFINITION")
+_ExecutableDirectiveLocation_VARIABLElowbarDEFINITION = (Core.Name "VARIABLElowbarDEFINITION")
 
 data TypeSystemDirectiveLocation = 
   TypeSystemDirectiveLocationSCHEMA  |
@@ -1276,24 +1277,24 @@ data TypeSystemDirectiveLocation =
 
 _TypeSystemDirectiveLocation = (Core.Name "hydra.ext.org.graphql.syntax.TypeSystemDirectiveLocation")
 
-_TypeSystemDirectiveLocation_sCHEMA = (Core.Name "sCHEMA")
+_TypeSystemDirectiveLocation_SCHEMA = (Core.Name "SCHEMA")
 
-_TypeSystemDirectiveLocation_sCALAR = (Core.Name "sCALAR")
+_TypeSystemDirectiveLocation_SCALAR = (Core.Name "SCALAR")
 
-_TypeSystemDirectiveLocation_oBJECT = (Core.Name "oBJECT")
+_TypeSystemDirectiveLocation_OBJECT = (Core.Name "OBJECT")
 
-_TypeSystemDirectiveLocation_fIELDlowbarDEFINITION = (Core.Name "fIELDlowbarDEFINITION")
+_TypeSystemDirectiveLocation_FIELDlowbarDEFINITION = (Core.Name "FIELDlowbarDEFINITION")
 
-_TypeSystemDirectiveLocation_aRGUMENTlowbarDEFINITION = (Core.Name "aRGUMENTlowbarDEFINITION")
+_TypeSystemDirectiveLocation_ARGUMENTlowbarDEFINITION = (Core.Name "ARGUMENTlowbarDEFINITION")
 
-_TypeSystemDirectiveLocation_iNTERFACE = (Core.Name "iNTERFACE")
+_TypeSystemDirectiveLocation_INTERFACE = (Core.Name "INTERFACE")
 
-_TypeSystemDirectiveLocation_uNION = (Core.Name "uNION")
+_TypeSystemDirectiveLocation_UNION = (Core.Name "UNION")
 
-_TypeSystemDirectiveLocation_eNUM = (Core.Name "eNUM")
+_TypeSystemDirectiveLocation_ENUM = (Core.Name "ENUM")
 
-_TypeSystemDirectiveLocation_eNUMlowbarVALUE = (Core.Name "eNUMlowbarVALUE")
+_TypeSystemDirectiveLocation_ENUMlowbarVALUE = (Core.Name "ENUMlowbarVALUE")
 
-_TypeSystemDirectiveLocation_iNPUTlowbarOBJECT = (Core.Name "iNPUTlowbarOBJECT")
+_TypeSystemDirectiveLocation_INPUTlowbarOBJECT = (Core.Name "INPUTlowbarOBJECT")
 
-_TypeSystemDirectiveLocation_iNPUTlowbarFIELDlowbarDEFINITION = (Core.Name "iNPUTlowbarFIELDlowbarDEFINITION")
+_TypeSystemDirectiveLocation_INPUTlowbarFIELDlowbarDEFINITION = (Core.Name "INPUTlowbarFIELDlowbarDEFINITION")

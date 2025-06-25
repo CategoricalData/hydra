@@ -5,17 +5,16 @@ module Hydra.Annotations where
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as DecodeCore
-import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Decode as Decode
+import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Encode.Core as Core__
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as ExtractCore
+import qualified Hydra.Extract.Core as Core___
 import qualified Hydra.Flows as Flows
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows_
-import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -25,13 +24,15 @@ import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Show.Core as Core____
 import qualified Hydra.Strip as Strip
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-aggregateAnnotations :: (Ord t1) => ((t3 -> Maybe t0) -> (t0 -> t3) -> (t0 -> M.Map t1 t2) -> t3 -> M.Map t1 t2)
+aggregateAnnotations :: (Ord t2) => ((t0 -> Maybe t1) -> (t1 -> t0) -> (t1 -> M.Map t2 t3) -> t0 -> M.Map t2 t3)
 aggregateAnnotations getValue getX getAnns t =  
   let toPairs = (\rest -> \t -> Optionals.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t))
   in (Maps.fromList (Lists.concat (toPairs [] t)))
@@ -45,7 +46,7 @@ failOnFlag :: (Core.Name -> String -> Compute.Flow t0 ())
 failOnFlag flag msg = (Flows_.bind (hasFlag flag) (\val -> Logic.ifElse val (Flows_.fail msg) (Flows_.pure ())))
 
 getDebugId :: (Compute.Flow t0 (Maybe String))
-getDebugId = (withEmptyGraph (Flows_.bind (getAttr Constants.key_debugId) (\desc -> Flows_.traverseOptional ExtractCore.string desc)))
+getDebugId = (withEmptyGraph (Flows_.bind (getAttr Constants.key_debugId) (\desc -> Flows_.traverseOptional Core___.string desc)))
 
 getAttr :: (Core.Name -> Compute.Flow t0 (Maybe Core.Term))
 getAttr key = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
@@ -57,11 +58,11 @@ getAttrWithDefault :: (Core.Name -> Core.Term -> Compute.Flow t0 Core.Term)
 getAttrWithDefault key def = (Flows_.map (\mval -> Optionals.fromMaybe def mval) (getAttr key))
 
 getCount :: (Core.Name -> Compute.Flow t0 Int)
-getCount key = (withEmptyGraph (Flows_.bind (getAttrWithDefault key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))) ExtractCore.int32))
+getCount key = (withEmptyGraph (Flows_.bind (getAttrWithDefault key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))) Core___.int32))
 
 -- | Get description from annotations map
 getDescription :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe String))
-getDescription anns = (Optionals.maybe (Flows_.pure Nothing) (\term -> Flows_.map Optionals.pure (ExtractCore.string term)) (Maps.lookup (Core.Name "description") anns))
+getDescription anns = (Optionals.maybe (Flows_.pure Nothing) (\term -> Flows_.map Optionals.pure (Core___.string term)) (Maps.lookup (Core.Name "description") anns))
 
 -- | Get a term annotation
 getTermAnnotation :: (Core.Name -> Core.Term -> Maybe Core.Term)
@@ -73,7 +74,7 @@ getTermDescription term = (getDescription (termAnnotationInternal term))
 
 -- | Get type from annotations
 getType :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe Core.Type))
-getType anns = (Optionals.maybe (Flows_.pure Nothing) (\dat -> Flows_.map Optionals.pure (DecodeCore.type_ dat)) (Maps.lookup Constants.key_type anns))
+getType anns = (Optionals.maybe (Flows_.pure Nothing) (\dat -> Flows_.map Optionals.pure (Core_.type_ dat)) (Maps.lookup Constants.key_type anns))
 
 -- | Get a type annotation
 getTypeAnnotation :: (Core.Name -> Core.Type -> Maybe Core.Term)
@@ -86,8 +87,8 @@ getTypeClasses term =
           let byName = (Maps.fromList [
                   (Core.Name "equality", Graph.TypeClassEquality),
                   (Core.Name "ordering", Graph.TypeClassOrdering)])
-          in (Flows_.bind (ExtractCore.unitVariant (Core.Name "hydra.graph.TypeClass") term) (\fn -> Optionals.maybe (Errors.unexpected "type class" (Io.showTerm term)) Flows_.pure (Maps.lookup fn byName))))
-  in (Optionals.maybe (Flows_.pure Maps.empty) (\term -> ExtractCore.map_ DecodeCore.name (ExtractCore.set decodeClass) term) (getTermAnnotation Constants.key_classes term))
+          in (Flows_.bind (Core___.unitVariant (Core.Name "hydra.graph.TypeClass") term) (\fn -> Optionals.maybe (Errors.unexpected "type class" (Core____.showTerm term)) Flows_.pure (Maps.lookup fn byName))))
+  in (Optionals.maybe (Flows_.pure Maps.empty) (\term -> Core___.map Core_.name (Core___.set decodeClass) term) (getTermAnnotation Constants.key_classes term))
 
 -- | Get type description
 getTypeDescription :: (Core.Type -> Compute.Flow Graph.Graph (Maybe String))
@@ -105,7 +106,7 @@ hasDescription :: (M.Map Core.Name t0 -> Bool)
 hasDescription anns = (Optionals.isJust (Maps.lookup Constants.key_description anns))
 
 hasFlag :: (Core.Name -> Compute.Flow t0 Bool)
-hasFlag flag = (withEmptyGraph (Flows_.bind (getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False))) (\term -> ExtractCore.boolean term)))
+hasFlag flag = (withEmptyGraph (Flows_.bind (getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False))) (\term -> Core___.boolean term)))
 
 -- | Check if type has description
 hasTypeDescription :: (Core.Type -> Bool)
@@ -194,7 +195,7 @@ setTermType mtyp term =
 
 -- | Set type in annotations
 setType :: (Maybe Core.Type -> M.Map Core.Name Core.Term -> M.Map Core.Name Core.Term)
-setType mt = (setAnnotation Constants.key_type (Optionals.map EncodeCore.type_ mt))
+setType mt = (setAnnotation Constants.key_type (Optionals.map Core__.type_ mt))
 
 -- | Set type annotation
 setTypeAnnotation :: (Core.Name -> Maybe Core.Term -> Core.Type -> Core.Type)
@@ -226,7 +227,7 @@ setTypeClasses m =
       encodePair = (\nameClasses ->  
               let name = (fst nameClasses) 
                   classes = (snd nameClasses)
-              in (EncodeCore.name name, (Core.TermSet (Sets.fromList (Lists.map encodeClass (Sets.toList classes))))))
+              in (Core__.name name, (Core.TermSet (Sets.fromList (Lists.map encodeClass (Sets.toList classes))))))
       encoded = (Logic.ifElse (Maps.null m) Nothing (Just (Core.TermMap (Maps.fromList (Lists.map encodePair (Maps.toList m))))))
   in (setTermAnnotation Constants.key_classes encoded)
 
@@ -256,7 +257,7 @@ typeElement :: (Core.Name -> Core.Type -> Graph.Element)
 typeElement name typ =  
   let schemaTerm = (Core.TermVariable (Core.Name "hydra.core.Type")) 
       dataTerm = (normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
-              Core.annotatedTermSubject = (EncodeCore.type_ typ),
+              Core.annotatedTermSubject = (Core__.type_ typ),
               Core.annotatedTermAnnotation = (Maps.fromList [
                 (Constants.key_type, schemaTerm)])})))
   in Graph.Element {

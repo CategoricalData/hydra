@@ -3,6 +3,7 @@
 module Hydra.Ext.Org.Ansi.Sql.Syntax where
 
 import qualified Hydra.Core as Core
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -185,11 +186,11 @@ data ArrayValueConstructorByEnumeration =
 
 _ArrayValueConstructorByEnumeration = (Core.Name "hydra.ext.org.ansi.sql.syntax.ArrayValueConstructorByEnumeration")
 
-_ArrayValueConstructorByEnumeration_leftBracketOrTrigraph = (Core.Name "leftBracketOrTrigraph")
+_ArrayValueConstructorByEnumeration_LeftBracketOrTrigraph = (Core.Name "LeftBracketOrTrigraph")
 
-_ArrayValueConstructorByEnumeration_arrayElementList = (Core.Name "arrayElementList")
+_ArrayValueConstructorByEnumeration_ArrayElementList = (Core.Name "ArrayElementList")
 
-_ArrayValueConstructorByEnumeration_rightBracketOrTrigraph = (Core.Name "rightBracketOrTrigraph")
+_ArrayValueConstructorByEnumeration_RightBracketOrTrigraph = (Core.Name "RightBracketOrTrigraph")
 
 data ArrayValueExpression = 
   ArrayValueExpression {}
@@ -228,9 +229,9 @@ data BooleanFactor =
 
 _BooleanFactor = (Core.Name "hydra.ext.org.ansi.sql.syntax.BooleanFactor")
 
-_BooleanFactor_nOT = (Core.Name "nOT")
+_BooleanFactor_NOT = (Core.Name "NOT")
 
-_BooleanFactor_booleanTest = (Core.Name "booleanTest")
+_BooleanFactor_BooleanTest = (Core.Name "BooleanTest")
 
 data BooleanLiteral = 
   BooleanLiteralTRUE  |
@@ -240,11 +241,11 @@ data BooleanLiteral =
 
 _BooleanLiteral = (Core.Name "hydra.ext.org.ansi.sql.syntax.BooleanLiteral")
 
-_BooleanLiteral_tRUE = (Core.Name "tRUE")
+_BooleanLiteral_TRUE = (Core.Name "TRUE")
 
-_BooleanLiteral_fALSE = (Core.Name "fALSE")
+_BooleanLiteral_FALSE = (Core.Name "FALSE")
 
-_BooleanLiteral_uNKNOWN = (Core.Name "uNKNOWN")
+_BooleanLiteral_UNKNOWN = (Core.Name "UNKNOWN")
 
 data BooleanPredicand = 
   BooleanPredicand {}
@@ -294,9 +295,9 @@ data BooleanTest =
 
 _BooleanTest = (Core.Name "hydra.ext.org.ansi.sql.syntax.BooleanTest")
 
-_BooleanTest_booleanPrimary = (Core.Name "booleanPrimary")
+_BooleanTest_BooleanPrimary = (Core.Name "BooleanPrimary")
 
-_BooleanTest_sequence = (Core.Name "sequence")
+_BooleanTest_Sequence = (Core.Name "Sequence")
 
 data BooleanTest_Sequence_Option = 
   BooleanTest_Sequence_Option {
@@ -306,9 +307,9 @@ data BooleanTest_Sequence_Option =
 
 _BooleanTest_Sequence_Option = (Core.Name "hydra.ext.org.ansi.sql.syntax.BooleanTest_Sequence_Option")
 
-_BooleanTest_Sequence_Option_nOT = (Core.Name "nOT")
+_BooleanTest_Sequence_Option_NOT = (Core.Name "NOT")
 
-_BooleanTest_Sequence_Option_truthValue = (Core.Name "truthValue")
+_BooleanTest_Sequence_Option_TruthValue = (Core.Name "TruthValue")
 
 data BooleanType = 
   BooleanType {}
@@ -462,9 +463,9 @@ data ColumnDefinition_TypeOrDomain_Option =
 
 _ColumnDefinition_TypeOrDomain_Option = (Core.Name "hydra.ext.org.ansi.sql.syntax.ColumnDefinition_TypeOrDomain_Option")
 
-_ColumnDefinition_TypeOrDomain_Option_dataType = (Core.Name "dataType")
+_ColumnDefinition_TypeOrDomain_Option_DataType = (Core.Name "DataType")
 
-_ColumnDefinition_TypeOrDomain_Option_domainName = (Core.Name "domainName")
+_ColumnDefinition_TypeOrDomain_Option_DomainName = (Core.Name "DomainName")
 
 data ColumnDefinition_DefaultOrIdentityOrGeneration_Option = 
   ColumnDefinition_DefaultOrIdentityOrGeneration_OptionDefaultClause DefaultClause |
@@ -474,11 +475,11 @@ data ColumnDefinition_DefaultOrIdentityOrGeneration_Option =
 
 _ColumnDefinition_DefaultOrIdentityOrGeneration_Option = (Core.Name "hydra.ext.org.ansi.sql.syntax.ColumnDefinition_DefaultOrIdentityOrGeneration_Option")
 
-_ColumnDefinition_DefaultOrIdentityOrGeneration_Option_defaultClause = (Core.Name "defaultClause")
+_ColumnDefinition_DefaultOrIdentityOrGeneration_Option_DefaultClause = (Core.Name "DefaultClause")
 
-_ColumnDefinition_DefaultOrIdentityOrGeneration_Option_identityColumnSpecification = (Core.Name "identityColumnSpecification")
+_ColumnDefinition_DefaultOrIdentityOrGeneration_Option_IdentityColumnSpecification = (Core.Name "IdentityColumnSpecification")
 
-_ColumnDefinition_DefaultOrIdentityOrGeneration_Option_generationClause = (Core.Name "generationClause")
+_ColumnDefinition_DefaultOrIdentityOrGeneration_Option_GenerationClause = (Core.Name "GenerationClause")
 
 data ColumnNameList = 
   ColumnNameList {
@@ -659,9 +660,9 @@ data ExactNumericType_Numeric_Option =
 
 _ExactNumericType_Numeric_Option = (Core.Name "hydra.ext.org.ansi.sql.syntax.ExactNumericType_Numeric_Option")
 
-_ExactNumericType_Numeric_Option_precision = (Core.Name "precision")
+_ExactNumericType_Numeric_Option_Precision = (Core.Name "Precision")
 
-_ExactNumericType_Numeric_Option_sequence = (Core.Name "sequence")
+_ExactNumericType_Numeric_Option_Sequence = (Core.Name "Sequence")
 
 data ExactNumericType_Decimal_Option = 
   ExactNumericType_Decimal_Option {
@@ -671,9 +672,9 @@ data ExactNumericType_Decimal_Option =
 
 _ExactNumericType_Decimal_Option = (Core.Name "hydra.ext.org.ansi.sql.syntax.ExactNumericType_Decimal_Option")
 
-_ExactNumericType_Decimal_Option_precision = (Core.Name "precision")
+_ExactNumericType_Decimal_Option_Precision = (Core.Name "Precision")
 
-_ExactNumericType_Decimal_Option_sequence = (Core.Name "sequence")
+_ExactNumericType_Decimal_Option_Sequence = (Core.Name "Sequence")
 
 data ExactNumericType_Dec_Option = 
   ExactNumericType_Dec_Option {
@@ -683,9 +684,9 @@ data ExactNumericType_Dec_Option =
 
 _ExactNumericType_Dec_Option = (Core.Name "hydra.ext.org.ansi.sql.syntax.ExactNumericType_Dec_Option")
 
-_ExactNumericType_Dec_Option_precision = (Core.Name "precision")
+_ExactNumericType_Dec_Option_Precision = (Core.Name "Precision")
 
-_ExactNumericType_Dec_Option_sequence = (Core.Name "sequence")
+_ExactNumericType_Dec_Option_Sequence = (Core.Name "Sequence")
 
 data FieldReference = 
   FieldReference {}
@@ -925,9 +926,9 @@ data OverrideClause =
 
 _OverrideClause = (Core.Name "hydra.ext.org.ansi.sql.syntax.OverrideClause")
 
-_OverrideClause_oVERRIDINGspUSERspVALUE = (Core.Name "oVERRIDINGspUSERspVALUE")
+_OverrideClause_OVERRIDINGspUSERspVALUE = (Core.Name "OVERRIDINGspUSERspVALUE")
 
-_OverrideClause_oVERRIDINGspSYSTEMspVALUE = (Core.Name "oVERRIDINGspSYSTEMspVALUE")
+_OverrideClause_OVERRIDINGspSYSTEMspVALUE = (Core.Name "OVERRIDINGspSYSTEMspVALUE")
 
 newtype ParenthesizedValueExpression = 
   ParenthesizedValueExpression {
@@ -1295,11 +1296,11 @@ data TruthValue =
 
 _TruthValue = (Core.Name "hydra.ext.org.ansi.sql.syntax.TruthValue")
 
-_TruthValue_tRUE = (Core.Name "tRUE")
+_TruthValue_TRUE = (Core.Name "TRUE")
 
-_TruthValue_fALSE = (Core.Name "fALSE")
+_TruthValue_FALSE = (Core.Name "FALSE")
 
-_TruthValue_uNKNOWN = (Core.Name "uNKNOWN")
+_TruthValue_UNKNOWN = (Core.Name "UNKNOWN")
 
 data UnsignedLiteral = 
   UnsignedLiteralNumeric UnsignedNumericLiteral |

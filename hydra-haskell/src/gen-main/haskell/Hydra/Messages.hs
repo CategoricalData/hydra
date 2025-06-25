@@ -2,6 +2,7 @@
 
 module Hydra.Messages where
 
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M

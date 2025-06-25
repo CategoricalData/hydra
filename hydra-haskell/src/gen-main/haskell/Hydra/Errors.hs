@@ -6,12 +6,13 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Flows as Flows
 import qualified Hydra.Lib.Flows as Flows_
-import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Show.Core as Core_
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -32,7 +33,7 @@ getState = (Compute.Flow (\s0 -> \t0 ->
     Compute.flowStateTrace = t}) v) (Compute.flowStateValue fs1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))))
 
 modify :: ((t0 -> t0) -> Compute.Flow t0 ())
-modify f = (Flows.bind getState (\s -> putState (f s)))
+modify f = (Flows_.bind getState (\s -> putState (f s)))
 
 putState :: (t0 -> Compute.Flow t0 ())
 putState cx = (Compute.Flow (\s0 -> \t0 ->  
@@ -53,7 +54,7 @@ traceSummary t =
                   "\t",
                   (Core.unName (fst pair))],
                 ": "],
-              (Io.showTerm (snd pair))])
+              (Core_.showTerm (snd pair))])
   in (Strings.intercalate "\n" (Lists.concat2 messageLines keyvalLines))
 
 unexpected :: (String -> String -> Compute.Flow t0 t1)
