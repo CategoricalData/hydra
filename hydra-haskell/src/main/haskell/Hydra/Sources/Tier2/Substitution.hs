@@ -12,7 +12,6 @@ import qualified Hydra.Dsl.Graph                  as Graph
 import qualified Hydra.Dsl.Lib.Chars              as Chars
 import qualified Hydra.Dsl.Lib.Equality           as Equality
 import qualified Hydra.Dsl.Lib.Flows              as Flows
-import qualified Hydra.Dsl.Lib.Io                 as Io
 import qualified Hydra.Dsl.Lib.Lists              as Lists
 import qualified Hydra.Dsl.Lib.Literals           as Literals
 import qualified Hydra.Dsl.Lib.Logic              as Logic
@@ -48,8 +47,8 @@ import qualified Data.Maybe                as Y
 
 -- Uncomment tier-2 sources as needed
 --import qualified Hydra.Sources.Tier2.Accessors as Accessors
---import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
@@ -67,6 +66,7 @@ import qualified Data.Maybe                as Y
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
+--import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
@@ -102,9 +102,9 @@ hydraSubstitutionModule = Module (Namespace "hydra.substitution") elements
 composeTypeSubstDef :: TElement (TypeSubst -> TypeSubst -> TypeSubst)
 composeTypeSubstDef = substitutionDefinition "composeTypeSubst" $
   lambdas ["s1", "s2"] $ lets [
-    "isExtra">: lambdas ["k", "v"] $ Optionals.isNothing (Maps.lookup (var "k") (Typing.unTypeSubst @@ var "s1")),
-    "withExtra">: Maps.filterWithKey (var "isExtra") (Typing.unTypeSubst @@ var "s2")] $
-    Typing.typeSubst $ Maps.union (var "withExtra") $ Maps.map (ref substInTypeDef @@ var "s2") $ Typing.unTypeSubst @@ var "s1"
+    "isExtra">: lambdas ["k", "v"] $ Optionals.isNothing (Maps.lookup (var "k") (Typing.unTypeSubst $ var "s1")),
+    "withExtra">: Maps.filterWithKey (var "isExtra") (Typing.unTypeSubst $ var "s2")] $
+    Typing.typeSubst $ Maps.union (var "withExtra") $ Maps.map (ref substInTypeDef @@ var "s2") $ Typing.unTypeSubst $ var "s1"
 
 composeTypeSubstListDef :: TElement ([TypeSubst] -> TypeSubst)
 composeTypeSubstListDef = substitutionDefinition "composeTypeSubstList" $
@@ -121,9 +121,9 @@ singletonTypeSubstDef = substitutionDefinition "singletonTypeSubst" $
 substituteInConstraintDef :: TElement (TypeSubst -> TypeConstraint -> TypeConstraint)
 substituteInConstraintDef = substitutionDefinition "substituteInConstraint" $
   lambdas ["subst", "c"] $ Typing.typeConstraint
-    (ref substInTypeDef @@ var "subst" @@ (Typing.typeConstraintLeft @@ var "c"))
-    (ref substInTypeDef @@ var "subst" @@ (Typing.typeConstraintRight @@ var "c"))
-    (Typing.typeConstraintComment @@ var "c")
+    (ref substInTypeDef @@ var "subst" @@ (Typing.typeConstraintLeft $ var "c"))
+    (ref substInTypeDef @@ var "subst" @@ (Typing.typeConstraintRight $ var "c"))
+    (Typing.typeConstraintComment $ var "c")
 
 substituteInConstraintsDef :: TElement (TypeSubst -> [TypeConstraint] -> [TypeConstraint])
 substituteInConstraintsDef = substitutionDefinition "substituteInConstraints" $
@@ -132,13 +132,13 @@ substituteInConstraintsDef = substitutionDefinition "substituteInConstraints" $
 substInContextDef :: TElement (TypeSubst -> InferenceContext -> InferenceContext)
 substInContextDef = substitutionDefinition "substInContext" $
   lambdas ["subst", "cx"] $ Typing.inferenceContextWithDataTypes
-    (Maps.map (ref substInTypeSchemeDef @@ var "subst") (Typing.inferenceContextDataTypes @@ var "cx"))
+    (Maps.map (ref substInTypeSchemeDef @@ var "subst") (Typing.inferenceContextDataTypes $ var "cx"))
     (var "cx")
 
 substituteInTermDef :: TElement (TermSubst -> Term -> Term)
 substituteInTermDef = substitutionDefinition "substituteInTerm" $
   lambda "subst" $ lets [
-    "s">: Typing.unTermSubst @@ var "subst",
+    "s">: Typing.unTermSubst $ var "subst",
     "rewrite">: lambdas ["recurse", "term"] $ lets [
       "withLambda">: lambda "l" $ lets [
         "v">: Core.lambdaParameter $ var "l",
@@ -179,12 +179,12 @@ substInTypeDef = substitutionDefinition "substInType" $
           (ref substInTypeDef
             @@ (var "removeVar" @@ (Core.forallTypeParameter $ var "lt"))
             @@ (Core.forallTypeBody $ var "lt")))
-        (Maps.lookup (Core.forallTypeParameter $ var "lt") (Typing.unTypeSubst @@ var "subst")),
+        (Maps.lookup (Core.forallTypeParameter $ var "lt") (Typing.unTypeSubst $ var "subst")),
       _Type_variable>>: lambda "v" $ Optionals.maybe
         (var "typ")
         (lambda "styp" $ var "styp")
-        (Maps.lookup (var "v") (Typing.unTypeSubst @@ var "subst"))],
-    "removeVar">: lambdas ["v"] $ Typing.typeSubst $ Maps.remove (var "v") (Typing.unTypeSubst @@ var "subst")] $
+        (Maps.lookup (var "v") (Typing.unTypeSubst $ var "subst"))],
+    "removeVar">: lambdas ["v"] $ Typing.typeSubst $ Maps.remove (var "v") (Typing.unTypeSubst $ var "subst")] $
     (ref Rewriting.rewriteTypeDef) @@ var "rewrite"
 
 substInTypeSchemeDef :: TElement (TypeSubst -> TypeScheme -> TypeScheme)
@@ -223,7 +223,7 @@ substTypesInTermDef = substitutionDefinition "substTypesInTerm" $
         (Optionals.map (lambda "types" $ Lists.map (ref substInTypeDef @@ var "subst") (var "types")) (Core.tupleProjectionDomain $ var "tp"))),
       "forTypeAbstraction">: lambda "ta" $ lets [
         "param">: Core.typeAbstractionParameter $ var "ta",
-        "subst2">: Typing.typeSubst $ Maps.remove (var "param") (Typing.unTypeSubst @@ var "subst")] $
+        "subst2">: Typing.typeSubst $ Maps.remove (var "param") (Typing.unTypeSubst $ var "subst")] $
         Core.termTypeAbstraction $ Core.typeAbstraction
           (var "param")
           (ref substTypesInTermDef @@ var "subst2" @@ (Core.typeAbstractionBody $ var "ta"))] $

@@ -12,7 +12,6 @@ import qualified Hydra.Dsl.Graph                  as Graph
 import qualified Hydra.Dsl.Lib.Chars              as Chars
 import qualified Hydra.Dsl.Lib.Equality           as Equality
 import qualified Hydra.Dsl.Lib.Flows              as Flows
-import qualified Hydra.Dsl.Lib.Io                 as Io
 import qualified Hydra.Dsl.Lib.Lists              as Lists
 import qualified Hydra.Dsl.Lib.Literals           as Literals
 import qualified Hydra.Dsl.Lib.Logic              as Logic
@@ -47,23 +46,44 @@ import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
 -- Uncomment tier-2 sources as needed
+--import qualified Hydra.Sources.Tier2.Accessors as Accessors
 import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
+--import qualified Hydra.Sources.Tier2.Annotations as Annotations
+--import qualified Hydra.Sources.Tier2.Arity as Arity
+--import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
+import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
+--import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Flows as Flows_
-import qualified Hydra.Sources.Tier2.Lexical as Lexical
+--import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
+--import qualified Hydra.Sources.Tier2.Inference as Inference
+--import qualified Hydra.Sources.Tier2.Lexical as Lexical
 import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
-import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
-import qualified Hydra.Sources.Tier2.Reduction as Reduction
+--import qualified Hydra.Sources.Tier2.Qnames as Qnames
+--import qualified Hydra.Sources.Tier2.Reduction as Reduction
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 import qualified Hydra.Sources.Tier2.Schemas as Schemas
+--import qualified Hydra.Sources.Tier2.Serialization as Serialization
+import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
+--import qualified Hydra.Sources.Tier2.Sorting as Sorting
+--import qualified Hydra.Sources.Tier2.Substitution as Substitution
+--import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
+--import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.TermAdapters as TermAdapters
+--import qualified Hydra.Sources.Tier2.TermEncoding as TermEncoding
+--import qualified Hydra.Sources.Tier2.Unification as Unification
 import qualified Hydra.Sources.Tier2.Variants as Variants
+
 
 
 hydraTermAdaptersModule :: Module
 hydraTermAdaptersModule = Module (Namespace "hydra.termAdapters") elements
-    [Errors.hydraErrorsModule, ExtractCore.hydraExpectModule, LiteralAdapters.hydraLiteralAdaptersModule, Schemas.hydraSchemasModule]
-    [Tier1.hydraCodersModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
+    [Errors.hydraErrorsModule, ExtractCore.extractCoreModule, LiteralAdapters.hydraLiteralAdaptersModule,
+      Schemas.hydraSchemasModule, ShowCore.showCoreModule]
+    [Tier1.hydraCodersModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule,
+      Tier1.hydraTypingModule] $
     Just "Adapter framework for types and terms"
   where
    elements = [
@@ -194,11 +214,11 @@ functionToUnionDef = termAdaptersDefinition "functionToUnion" $
               _Elimination_wrap>>: lambda "name" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
                 Core.field (Core.nameLift _Elimination_wrap) $ TTerms.stringLift $ unwrap _Name @@ var "name",
               _Elimination_record>>: lambda "r" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
-                Core.field (Core.nameLift _Elimination_record) $ TTerms.stringLift $ Io.showTerm $ var "term",
+                Core.field (Core.nameLift _Elimination_record) $ TTerms.stringLift (ref ShowCore.showTermDef @@ var "term"),
               _Elimination_union>>: lambda "u" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
-                Core.field (Core.nameLift _Elimination_union) $ TTerms.stringLift $ Io.showTerm $ var "term"],
+                Core.field (Core.nameLift _Elimination_union) $ TTerms.stringLift (ref ShowCore.showTermDef @@ var "term")],
             _Function_lambda>>: lambda "l" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
-              Core.field (Core.nameLift _Function_lambda) $ TTerms.stringLift $ Io.showTerm $ var "term",
+              Core.field (Core.nameLift _Function_lambda) $ TTerms.stringLift (ref ShowCore.showTermDef @@ var "term"),
             _Function_primitive>>: lambda "name" $ Core.termUnion $ Core.injection (ref functionProxyNameDef) $
               Core.field (Core.nameLift _Function_primitive) $ TTerms.stringLift $ unwrap _Name @@ var "name"],
           _Term_variable>>: lambda "name" $
@@ -209,7 +229,7 @@ functionToUnionDef = termAdaptersDefinition "functionToUnion" $
             Optionals.maybe
               (Flows.fail $ Strings.cat2 ("failed to parse term: ") (var "s"))
               (unaryFunction Flows.pure)
-              (Io.readTerm $ var "s"),
+              (ref ShowCore.readTermDef @@ var "s"),
         "notFound">: lambda "fname" $ Flows.fail $ Strings.cat2 (string "unexpected field: ") (unwrap _Name @@ var "fname"),
         "forCases">: lambda "fterm" $ ref withGraphContextDef @@ (var "readFromString" @@ var "fterm"),
         "forLambda">: lambda "fterm" $ ref withGraphContextDef @@ (var "readFromString" @@ var "fterm"),
@@ -312,54 +332,63 @@ passFunctionDef :: TElement TypeAdapter
 passFunctionDef = termAdaptersDefinition "passFunction" $
   doc "Pass through function types with adaptation" $
   lambda "t" $ cases _Type (var "t") Nothing [
-    _Type_function>>: lambda "ft" $ lets [
-        "dom">: Core.functionTypeDomain $ var "ft",
-        "cod">: Core.functionTypeCodomain $ var "ft"] $
-        withVar "domAd" (ref termAdapterDef @@ var "dom") $
-          withVar "codAd" (ref termAdapterDef @@ var "cod") $ lets [
-            "getCaseAds">: cases _Type (ref Strip.stripTypeDef @@ var "dom") Nothing [
-              _Type_union>>: lambda "rt" $
-                withVar "pairs" (Flows.mapList
-                  (lambda "f" $
-                    withVar "ad" (ref fieldAdapterDef @@ (Core.fieldType (Core.fieldTypeName $ var "f") (Core.typeFunction $ Core.functionType (Core.fieldTypeType $ var "f") (var "cod")))) $
-                    Flows.pure $ pair (Core.fieldTypeName $ var "f") (var "ad"))
-                  (Core.rowTypeFields $ var "rt")) $
-                Flows.pure $ Maps.fromList $ var "pairs"],
-            "getOptionAd">: cases _Type (ref Strip.stripTypeDef @@ var "dom") Nothing [
-              _Type_optional>>: lambda "ot" $ Flows.map (unaryFunction just) $ ref termAdapterDef @@ (TTypes.function (var "ot") (var "cod"))]] $
-            withVar "caseAds" (var "getCaseAds") $
-            withVar "optionAd" (var "getOptionAd") $ lets [
-              "lossy">: Logic.or
-                (Compute.adapterIsLossy $ var "codAd")
-                (Logic.ors $ Lists.map (lambda "pair" $ Compute.adapterIsLossy $ second $ var "pair") $ Maps.toList $ var "caseAds"),
-              "target">: TTypes.function (Compute.adapterTarget $ var "domAd") (Compute.adapterTarget $ var "codAd"),
-              "getCoder">: lambda "fname" $ Optionals.maybe
-                (ref AdapterUtils.idCoderDef)
-                (unaryFunction Compute.adapterCoder)
-                (Maps.lookup (var "fname") (var "caseAds"))] $
-              Flows.pure $ Compute.adapter (var "lossy") (var "t") (var "target") $
-                ref AdapterUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $ cases _Term (ref Strip.fullyStripTermDef @@ var "term") (Just $ Flows.pure $ var "term") [
-                  _Term_function>>: lambda "f" $ Flows.map (unaryFunction Core.termFunction) $ cases _Function (var "f") Nothing [
-                    _Function_elimination>>: lambda "e" $ Flows.map (unaryFunction Core.functionElimination) $ cases _Elimination (var "e") Nothing [
-                      _Elimination_union>>: lambda "cs" $ lets [
+    _Type_function >>: lambda "ft" $ lets [
+      "dom">: Core.functionTypeDomain $ var "ft",
+      "cod">: Core.functionTypeCodomain $ var "ft"] $
+      withVar "domAd" (ref termAdapterDef @@ var "dom") $
+      withVar "codAd" (ref termAdapterDef @@ var "cod") $
+      withVar "caseAds" (cases _Type (ref Strip.stripTypeDef @@ var "dom") (Just $ Flows.pure $ Maps.empty) [
+        _Type_union >>: lambda "rt" $
+          withVar "pairs" (Flows.mapList
+            (lambda "f" $
+              withVar "ad" (ref fieldAdapterDef @@ Core.fieldType
+                (Core.fieldTypeName $ var "f")
+                (Core.typeFunction $ Core.functionType
+                  (Core.fieldTypeType $ var "f")
+                  (var "cod")))
+              $ Flows.pure $ pair (Core.fieldTypeName $ var "f") (var "ad"))
+            (Core.rowTypeFields $ var "rt")) $
+          Flows.pure $ Maps.fromList $ var "pairs"]) $
+      withVar "optionAd" (cases _Type (ref Strip.stripTypeDef @@ var "dom") (Just $ Flows.pure nothing) [
+        _Type_optional >>: lambda "ot" $
+          Flows.map (unaryFunction just) $ ref termAdapterDef @@ TTypes.function (var "ot") (var "cod")]) $ lets [
+      "lossy">: Logic.or
+        (Compute.adapterIsLossy $ var "codAd")
+        (Logic.ors $ Lists.map (lambda "pair" $ Compute.adapterIsLossy $ second $ var "pair") $ Maps.toList $ var "caseAds"),
+      "target">: TTypes.function (Compute.adapterTarget $ var "domAd") (Compute.adapterTarget $ var "codAd"),
+      "getCoder">: lambda "fname" $ Optionals.maybe
+        (ref AdapterUtils.idCoderDef)
+        (unaryFunction Compute.adapterCoder)
+        (Maps.lookup (var "fname") (var "caseAds"))] $
+      Flows.pure $ Compute.adapter (var "lossy") (var "t") (var "target") $
+        ref AdapterUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
+          cases _Term (ref Strip.fullyStripTermDef @@ var "term") (Just $ Flows.pure $ var "term") [
+            _Term_function >>: lambda "f" $
+              Flows.map (unaryFunction Core.termFunction) $
+                cases _Function (var "f") Nothing [
+                  _Function_elimination >>: lambda "e" $
+                    Flows.map (unaryFunction Core.functionElimination) $
+                      cases _Elimination (var "e") Nothing [
+                        _Elimination_union >>: lambda "cs" $ lets [
                           "n">: Core.caseStatementTypeName $ var "cs",
                           "def">: Core.caseStatementDefault $ var "cs",
                           "cases">: Core.caseStatementCases $ var "cs"] $
                           withVar "rcases" (Flows.mapList
-                              (lambda "f" $ ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ (var "getCoder" @@ (Core.fieldName $ var "f")) @@ var "f")
-                              (var "cases")) $
+                            (lambda "f" $ ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ (var "getCoder" @@ Core.fieldName (var "f")) @@ var "f")
+                            (var "cases")) $
                           withVar "rdef" (Optionals.maybe
                             (Flows.pure nothing)
-                            (lambda "d" $ Flows.map (unaryFunction just) $ ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "codAd") @@ var "d")
+                            (lambda "d" $ Flows.map (unaryFunction just) $ ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ Compute.adapterCoder (var "codAd") @@ var "d")
                             (var "def")) $
                           Flows.pure $ Core.eliminationUnion $ Core.caseStatement (var "n") (var "rdef") (var "rcases")],
-                    _Function_lambda>>: lambda "l" $ lets [
-                        "var">: Core.lambdaParameter $ var "l",
-                        "d">: Core.lambdaDomain $ var "l",
-                        "body">: Core.lambdaBody $ var "l"] $
-                        withVar "newBody" (ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "codAd") @@ var "body") $
-                        Flows.pure $ Core.functionLambda $ Core.lambda (var "var") (var "d") (var "newBody"),
-                    _Function_primitive>>: lambda "name" $ Flows.pure $ Core.functionPrimitive $ var "name"]])]
+                  _Function_lambda >>: lambda "l" $ lets [
+                    "var">: Core.lambdaParameter $ var "l",
+                    "d" >: Core.lambdaDomain $ var "l",
+                    "body">: Core.lambdaBody $ var "l"] $
+                    withVar "newBody" (ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ Compute.adapterCoder (var "codAd") @@ var "body") $
+                    Flows.pure $ Core.functionLambda $ Core.lambda (var "var") (var "d") (var "newBody"),
+                  _Function_primitive >>: lambda "name" $ Flows.pure $ Core.functionPrimitive $ var "name"]]
+         )]
 
 passForallDef :: TElement TypeAdapter
 passForallDef = termAdaptersDefinition "passForall" $
@@ -607,11 +636,11 @@ unionToRecordDef = termAdaptersDefinition "unionToRecord" $
         Logic.ifElse (Lists.null $ var "matches")
           (Flows.fail $ Strings.cat $ list [
             string "cannot convert term back to union: ",
-            Io.showTerm $ var "term",
+            ref ShowCore.showTermDef @@ var "term",
             string " where type = ",
-            Io.showType $ var "t",
+            ref ShowCore.showTypeDef @@ var "t",
             string "    and target type = ",
-            Io.showType $ var "t'"])
+            ref ShowCore.showTypeDef @@ var "t'"])
           (Flows.pure $ Lists.head $ var "matches")] $
       withVar "ad" (ref termAdapterDef @@ var "target") $
       Flows.pure $ Compute.adapter
@@ -716,7 +745,7 @@ termAdapterDef = termAdaptersDefinition "termAdapter" $
             ref AdapterUtils.chooseAdapterDef
               @@ (var "alts" @@ var "cx")
               @@ (var "supported" @@ var "cx")
-              @@ (unaryFunction Io.showType)
+              @@ ref ShowCore.showTypeDef
               @@ (ref DescribeCore.typeDef)
               @@ (var "typ")) [
           -- Account for let-bound variables

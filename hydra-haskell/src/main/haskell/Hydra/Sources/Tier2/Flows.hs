@@ -12,7 +12,6 @@ import qualified Hydra.Dsl.Graph                  as Graph
 import qualified Hydra.Dsl.Lib.Chars              as Chars
 import qualified Hydra.Dsl.Lib.Equality           as Equality
 import qualified Hydra.Dsl.Lib.Flows              as Flows
-import qualified Hydra.Dsl.Lib.Io                 as Io
 import qualified Hydra.Dsl.Lib.Lists              as Lists
 import qualified Hydra.Dsl.Lib.Literals           as Literals
 import qualified Hydra.Dsl.Lib.Logic              as Logic
@@ -46,10 +45,12 @@ import qualified Data.Map                  as M
 import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
+import Hydra.Mantle
+
 -- Uncomment tier-2 sources as needed
 --import qualified Hydra.Sources.Tier2.Accessors as Accessors
---import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
@@ -67,6 +68,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
+--import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
@@ -184,7 +186,7 @@ map2Def = flowsDefinition "map2" $
       @@ (lambda "r2" $ var "f" @@ var "r1" @@ var "r2")
       @@ var "f2")
 
-mutateTraceDef :: TElement ((Trace -> Either_ String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a)
+mutateTraceDef :: TElement ((Trace -> Hydra.Mantle.Either String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a)
 mutateTraceDef = flowsDefinition "mutateTrace" $
     lambda "mutate" $ lambda "restore" $ lambda "f"
       $ wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [

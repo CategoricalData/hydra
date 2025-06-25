@@ -12,7 +12,6 @@ import qualified Hydra.Dsl.Graph                  as Graph
 import qualified Hydra.Dsl.Lib.Chars              as Chars
 import qualified Hydra.Dsl.Lib.Equality           as Equality
 import qualified Hydra.Dsl.Lib.Flows              as Flows
-import qualified Hydra.Dsl.Lib.Io                 as Io
 import qualified Hydra.Dsl.Lib.Lists              as Lists
 import qualified Hydra.Dsl.Lib.Literals           as Literals
 import qualified Hydra.Dsl.Lib.Logic              as Logic
@@ -48,8 +47,8 @@ import qualified Data.Maybe                as Y
 
 -- Uncomment tier-2 sources as needed
 --import qualified Hydra.Sources.Tier2.Accessors as Accessors
---import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
@@ -67,6 +66,7 @@ import qualified Data.Maybe                as Y
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
+import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
@@ -82,7 +82,7 @@ unificationDefinition = definitionInModule hydraUnificationModule
 
 hydraUnificationModule :: Module
 hydraUnificationModule = Module (Namespace "hydra.unification") elements
-    [Substitution.hydraSubstitutionModule]
+    [ShowCore.showCoreModule, Substitution.hydraSubstitutionModule]
     [Tier1.hydraTypingModule] $
     Just ("Utilities for type unification.")
   where
@@ -101,7 +101,7 @@ joinTypesDef = unificationDefinition "joinTypes" $
     "sleft">: ref Strip.stripTypeDef @@ var  "left",
     "sright">: ref Strip.stripTypeDef @@ var "right",
     "joinOne">: lambdas ["l", "r"] $ Typing.typeConstraint (var "l") (var "r") ("join types; " ++ var "comment"),
-    "cannotUnify">: Flows.fail ("Cannot unify " ++ Io.showType (var "sleft") ++ " with " ++ Io.showType (var "sright")),
+    "cannotUnify">: Flows.fail ("Cannot unify " ++ (ref ShowCore.showTypeDef @@ var "sleft") ++ " with " ++ (ref ShowCore.showTypeDef @@ var "sright")),
     "assertEqual">: Logic.ifElse
       (Equality.equalType (var "sleft") (var "sright"))
       (Flows.pure $ list [])
@@ -169,12 +169,12 @@ unifyTypeConstraintsDef = unificationDefinition "unifyTypeConstraints" $
     <> "  * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))") $
   lambdas ["schemaTypes", "constraints"] $ lets [
     "withConstraint">: lambdas ["c", "rest"] $ lets [
-      "sleft">: ref Strip.stripTypeDef @@ (Typing.typeConstraintLeft @@ var "c"),
-      "sright">: ref Strip.stripTypeDef @@ (Typing.typeConstraintRight @@ var "c"),
-      "comment">: Typing.typeConstraintComment @@ var "c",
+      "sleft">: ref Strip.stripTypeDef @@ (Typing.typeConstraintLeft $ var "c"),
+      "sright">: ref Strip.stripTypeDef @@ (Typing.typeConstraintRight $ var "c"),
+      "comment">: Typing.typeConstraintComment $ var "c",
       -- TODO: this occurrence check is expensive; consider delaying it until the time of substitution
       "tryBinding">: lambdas ["v", "t"] $ Logic.ifElse (ref variableOccursInTypeDef @@ var "v" @@ var "t")
-        (Flows.fail $ "Variable " ++ (Core.unName $ var "v") ++ " appears free in type " ++ Io.showType (var "t")
+        (Flows.fail $ "Variable " ++ (Core.unName $ var "v") ++ " appears free in type " ++ (ref ShowCore.showTypeDef @@ var "t")
           ++ " (" ++ var "comment" ++ ")")
         (var "bind" @@ var "v" @@ var "t"),
       "bind">: lambdas ["v", "t"] $ lets [

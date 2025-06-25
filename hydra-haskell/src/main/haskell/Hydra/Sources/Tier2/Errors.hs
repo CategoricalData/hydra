@@ -12,7 +12,6 @@ import qualified Hydra.Dsl.Graph                  as Graph
 import qualified Hydra.Dsl.Lib.Chars              as Chars
 import qualified Hydra.Dsl.Lib.Equality           as Equality
 import qualified Hydra.Dsl.Lib.Flows              as Flows
-import qualified Hydra.Dsl.Lib.Io                 as Io
 import qualified Hydra.Dsl.Lib.Lists              as Lists
 import qualified Hydra.Dsl.Lib.Literals           as Literals
 import qualified Hydra.Dsl.Lib.Logic              as Logic
@@ -48,8 +47,8 @@ import qualified Data.Maybe                as Y
 
 -- Uncomment tier-2 sources as needed
 --import qualified Hydra.Sources.Tier2.Accessors as Accessors
---import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
@@ -67,6 +66,7 @@ import qualified Hydra.Sources.Tier2.Flows as Flows_
 --import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
+import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
@@ -79,7 +79,7 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 
 hydraErrorsModule :: Module
 hydraErrorsModule = Module (Namespace "hydra.errors") elements
-    [Variants.hydraVariantsModule, Flows_.hydraFlowsModule]
+    [Variants.hydraVariantsModule, Flows_.hydraFlowsModule, ShowCore.showCoreModule]
     [Tier1.hydraComputeModule, Tier1.hydraMantleModule] $
     Just "Utilities for working with errors and flow state"
   where
@@ -138,7 +138,7 @@ traceSummaryDef = errorsDefinition "traceSummary" $
       (Lists.cons ("key/value pairs: ")
         (Lists.map (var "toLine") (Maps.toList (Compute.traceOther $ var "t")))),
     "toLine">:
-      lambda "pair" $ "\t" ++ (Core.unName $ (first $ var "pair")) ++ ": " ++ (Io.showTerm (second $ var "pair"))] $
+      lambda "pair" $ "\t" ++ (Core.unName $ (first $ var "pair")) ++ ": " ++ (ref ShowCore.showTermDef @@ (second $ var "pair"))] $
     Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines"))
 
 unexpectedDef :: TElement (String -> String -> Flow s x)

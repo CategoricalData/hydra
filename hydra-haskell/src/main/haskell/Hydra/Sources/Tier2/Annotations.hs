@@ -12,7 +12,6 @@ import qualified Hydra.Dsl.Graph                  as Graph
 import qualified Hydra.Dsl.Lib.Chars              as Chars
 import qualified Hydra.Dsl.Lib.Equality           as Equality
 import qualified Hydra.Dsl.Lib.Flows              as Flows
-import qualified Hydra.Dsl.Lib.Io                 as Io
 import qualified Hydra.Dsl.Lib.Lists              as Lists
 import qualified Hydra.Dsl.Lib.Literals           as Literals
 import qualified Hydra.Dsl.Lib.Logic              as Logic
@@ -48,8 +47,8 @@ import qualified Data.Maybe                as Y
 
 -- Uncomment tier-2 sources as needed
 --import qualified Hydra.Sources.Tier2.Accessors as Accessors
---import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
@@ -67,6 +66,7 @@ import qualified Hydra.Sources.Tier2.Lexical as Lexical
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
+import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
@@ -79,8 +79,8 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 
 hydraAnnotationsModule :: Module
 hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
-    [Decode.hydraDecodeModule, DecodeCore.hydraCoreDecodingModule, EncodeCore.coreEncodingModule,
-      ExtractCore.hydraExpectModule, Variants.hydraVariantsModule, Lexical.hydraLexicalModule, Flows_.hydraFlowsModule]
+    [Decode.hydraDecodeModule, DecodeCore.decodeCoreModule, EncodeCore.encodeCoreModule,
+      ExtractCore.extractCoreModule, ShowCore.showCoreModule, Variants.hydraVariantsModule, Lexical.hydraLexicalModule, Flows_.hydraFlowsModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just "Utilities for reading and writing type and term annotations"
   where
@@ -239,7 +239,7 @@ getTypeClassesDef = annotationsDefinition "getTypeClasses" $
         pair (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]]
       $ withVar "fn" (ref ExtractCore.unitVariantDef @@ Core.nameLift _TypeClass @@ var "term") $
           Optionals.maybe
-            (ref Errors.unexpectedDef @@ string "type class" @@ (Io.showTerm $ var "term"))
+            (ref Errors.unexpectedDef @@ string "type class" @@ (ref ShowCore.showTermDef @@ var "term"))
             (unaryFunction Flows.pure)
             (Maps.lookup (var "fn") (var "byName"))]
     $ Optionals.maybe

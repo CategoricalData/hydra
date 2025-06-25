@@ -10,7 +10,6 @@ import qualified Hydra.Describe.Core     as DescribeCore
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Lib.Equality  as Equality
-import qualified Hydra.Dsl.Lib.Io        as Io
 import qualified Hydra.Dsl.Lib.Lists     as Lists
 import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
@@ -33,8 +32,8 @@ import qualified Data.Maybe              as Y
 import qualified Hydra.Sources.Tier1.Strip as Strip
 
 
-coreEncodingModule :: Module
-coreEncodingModule = Module (Namespace "hydra.encode.core") elements
+encodeCoreModule :: Module
+encodeCoreModule = Module (Namespace "hydra.encode.core") elements
     [Strip.hydraStripModule]
     [hydraCoreModule] $
     Just ("Mapping of hydra.core constructs in a host language like Haskell or Java "
@@ -86,10 +85,10 @@ coreEncodingModule = Module (Namespace "hydra.encode.core") elements
       el isUnitTypeDef]
 
 coreEncodingDefinition :: String -> TTerm x -> TElement x
-coreEncodingDefinition label = definitionInModule coreEncodingModule ("coreEncode" <> label)
+coreEncodingDefinition label = definitionInModule encodeCoreModule (decapitalize label)
 
 coreEncodingExtrasDefinition :: String -> TTerm a -> TElement a
-coreEncodingExtrasDefinition = definitionInModule coreEncodingModule
+coreEncodingExtrasDefinition = definitionInModule encodeCoreModule
 
 encodedBinary :: TTerm String -> TTerm Term
 encodedBinary = encodedLiteral . Core.literalBinary

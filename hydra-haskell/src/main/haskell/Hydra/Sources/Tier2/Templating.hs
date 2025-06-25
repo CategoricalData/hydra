@@ -12,7 +12,6 @@ import qualified Hydra.Dsl.Graph                  as Graph
 import qualified Hydra.Dsl.Lib.Chars              as Chars
 import qualified Hydra.Dsl.Lib.Equality           as Equality
 import qualified Hydra.Dsl.Lib.Flows              as Flows
-import qualified Hydra.Dsl.Lib.Io                 as Io
 import qualified Hydra.Dsl.Lib.Lists              as Lists
 import qualified Hydra.Dsl.Lib.Literals           as Literals
 import qualified Hydra.Dsl.Lib.Logic              as Logic
@@ -48,8 +47,8 @@ import qualified Data.Maybe                as Y
 
 -- Uncomment tier-2 sources as needed
 --import qualified Hydra.Sources.Tier2.Accessors as Accessors
---import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
@@ -67,6 +66,7 @@ import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
+import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
@@ -82,7 +82,7 @@ templatingDefinition = definitionInModule hydraTemplatingModule
 
 hydraTemplatingModule :: Module
 hydraTemplatingModule = Module (Namespace "hydra.templating") elements
-    [DecodeCore.hydraCoreDecodingModule]
+    [DecodeCore.decodeCoreModule, ShowCore.showCoreModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just "A utility which instantiates a nonrecursive type with default values"
   where
@@ -172,7 +172,7 @@ instantiateTemplateDef = templatingDefinition "instantiateTemplate" $
       -- TODO: TypeUnion (RowType tname _ fields)
       _Type_variable>>: lambda "tname" $
         Optionals.maybe
-          (Flows.fail $ Strings.cat2 (string "Type variable ") $ Strings.cat2 (Io.showTerm $ Core.termVariable $ var "tname") (string " not found in schema"))
+          (Flows.fail $ Strings.cat2 (string "Type variable ") $ Strings.cat2 (ref ShowCore.showTermDef @@ (Core.termVariable $ var "tname")) (string " not found in schema"))
           (var "inst")
           (Maps.lookup (var "tname") (var "schema")),
       _Type_wrap>>: lambda "wt" $ lets [

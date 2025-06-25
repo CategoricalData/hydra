@@ -12,7 +12,6 @@ import qualified Hydra.Dsl.Graph                  as Graph
 import qualified Hydra.Dsl.Lib.Chars              as Chars
 import qualified Hydra.Dsl.Lib.Equality           as Equality
 import qualified Hydra.Dsl.Lib.Flows              as Flows
-import qualified Hydra.Dsl.Lib.Io                 as Io
 import qualified Hydra.Dsl.Lib.Lists              as Lists
 import qualified Hydra.Dsl.Lib.Literals           as Literals
 import qualified Hydra.Dsl.Lib.Logic              as Logic
@@ -48,8 +47,8 @@ import qualified Data.Maybe                as Y
 
 -- Uncomment tier-2 sources as needed
 --import qualified Hydra.Sources.Tier2.Accessors as Accessors
---import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
@@ -67,6 +66,7 @@ import qualified Hydra.Sources.Tier2.Qnames as Qnames
 --import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
+import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
@@ -82,7 +82,7 @@ adapterUtilsDefinition = definitionInModule hydraAdapterUtilsModule
 
 hydraAdapterUtilsModule :: Module
 hydraAdapterUtilsModule = Module (Namespace "hydra.adapterUtils") elements
-    [Qnames.hydraQnamesModule, Strip.hydraStripModule, Variants.hydraVariantsModule]
+    [Qnames.hydraQnamesModule, Strip.hydraStripModule, Variants.hydraVariantsModule, ShowCore.showCoreModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule] $
     Just ("Additional adapter utilities, above and beyond the generated ones.")
   where
@@ -131,7 +131,7 @@ chooseAdapterDef = adapterUtilsDefinition "chooseAdapter" $
                     string " (discarded ",
                     Literals.showInt32 $ Lists.length $ var "raw",
                     string " unsupported candidate types: ",
-                    Io.showList (var "show") $ Lists.map (unaryFunction Compute.adapterTarget) (var "raw"),
+                    ref ShowCore.showListDef @@ var "show" @@ (Lists.map (unaryFunction Compute.adapterTarget) (var "raw")),
                     string ")"]),
                 string ". Original type: ",
                 var "show" @@ var "typ"])
