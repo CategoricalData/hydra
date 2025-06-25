@@ -3,6 +3,7 @@
 module Hydra.Mantle where
 
 import qualified Hydra.Core as Core
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -75,7 +76,7 @@ _CaseConvention_lowerSnake = (Core.Name "lowerSnake")
 _CaseConvention_upperSnake = (Core.Name "upperSnake")
 
 -- | A disjoint union between a 'left' type and a 'right' type
-data Either_ a b = 
+data Either a b = 
   EitherLeft a |
   EitherRight b
   deriving (Eq, Ord, Read, Show)

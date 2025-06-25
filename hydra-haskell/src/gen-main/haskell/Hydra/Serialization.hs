@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -71,7 +72,7 @@ customIndent idt s = (Strings.cat (Lists.intersperse "\n" (Lists.map (\line -> S
 
 customIndentBlock :: (String -> [Ast.Expr] -> Ast.Expr)
 customIndentBlock idt els = (Logic.ifElse (Lists.null els) (cst "") (Logic.ifElse (Equality.equalInt32 (Lists.length els) 1) (Lists.head els) ( 
-  let head_ = (Lists.head els) 
+  let head = (Lists.head els) 
       rest = (Lists.tail els)
       idtOp = Ast.Op {
               Ast.opSymbol = (sym ""),
@@ -80,7 +81,7 @@ customIndentBlock idt els = (Logic.ifElse (Lists.null els) (cst "") (Logic.ifEls
                 Ast.paddingRight = (Ast.WsBreakAndIndent idt)},
               Ast.opPrecedence = (Ast.Precedence 0),
               Ast.opAssociativity = Ast.AssociativityNone}
-  in (ifx idtOp head_ (newlineSep rest)))))
+  in (ifx idtOp head (newlineSep rest)))))
 
 dotSep :: ([Ast.Expr] -> Ast.Expr)
 dotSep = (sep (Ast.Op {
@@ -256,7 +257,7 @@ parentheses = Ast.Brackets {
   Ast.bracketsClose = (sym ")")}
 
 parenthesize :: (Ast.Expr -> Ast.Expr)
-parenthesize exp_ =  
+parenthesize exp =  
   let assocLeft = (\a -> (\x -> case x of
           Ast.AssociativityRight -> False
           _ -> True) a) 
@@ -268,7 +269,7 @@ parenthesize exp_ =
       Ast.bracketExprBrackets = (Ast.bracketExprBrackets v1),
       Ast.bracketExprEnclosed = (parenthesize (Ast.bracketExprEnclosed v1)),
       Ast.bracketExprStyle = (Ast.bracketExprStyle v1)}))
-    Ast.ExprConst _ -> exp_
+    Ast.ExprConst _ -> exp
     Ast.ExprIndent v1 -> (Ast.ExprIndent (Ast.IndentedExpression {
       Ast.indentedExpressionStyle = (Ast.indentedExpressionStyle v1),
       Ast.indentedExpressionExpr = (parenthesize (Ast.indentedExpressionExpr v1))}))
@@ -305,7 +306,7 @@ parenthesize exp_ =
       in (Ast.ExprOp (Ast.OpExpr {
         Ast.opExprOp = op,
         Ast.opExprLhs = lhs2,
-        Ast.opExprRhs = rhs2}))) exp_)
+        Ast.opExprRhs = rhs2}))) exp)
 
 prefix :: (String -> Ast.Expr -> Ast.Expr)
 prefix p expr =  
@@ -417,12 +418,12 @@ symbolSep symb style l = (Logic.ifElse (Lists.null l) (cst "") (Logic.ifElse (Eq
       breakCount = (Lists.length (Lists.filter (\x_ -> x_) [
               Ast.blockStyleNewlineBeforeContent style,
               (Ast.blockStyleNewlineAfterContent style)]))
-      break_ = (Logic.ifElse (Equality.equalInt32 breakCount 0) Ast.WsSpace (Logic.ifElse (Equality.equalInt32 breakCount 1) Ast.WsBreak Ast.WsDoubleBreak))
+      break = (Logic.ifElse (Equality.equalInt32 breakCount 0) Ast.WsSpace (Logic.ifElse (Equality.equalInt32 breakCount 1) Ast.WsBreak Ast.WsDoubleBreak))
       commaOp = Ast.Op {
               Ast.opSymbol = (sym symb),
               Ast.opPadding = Ast.Padding {
                 Ast.paddingLeft = Ast.WsNone,
-                Ast.paddingRight = break_},
+                Ast.paddingRight = break},
               Ast.opPrecedence = (Ast.Precedence 0),
               Ast.opAssociativity = Ast.AssociativityNone}
   in (ifx commaOp h (symbolSep symb style r)))))

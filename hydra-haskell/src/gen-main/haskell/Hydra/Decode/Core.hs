@@ -5,19 +5,20 @@ module Hydra.Decode.Core where
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as ExtractCore
+import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Flows as Flows
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows_
-import qualified Hydra.Lib.Io as Io
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Show.Core as Core__
 import qualified Hydra.Strip as Strip
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -38,7 +39,7 @@ fieldTypes term =
   let stripped = (Strip.fullyStripTerm term)
   in ((\x -> case x of
     Core.TermList v1 -> (Flows_.mapList fieldType v1)
-    _ -> (Errors.unexpected "list" (Io.showTerm term))) stripped)
+    _ -> (Errors.unexpected "list" (Core__.showTerm term))) stripped)
 
 floatType :: (Core.Term -> Compute.Flow Graph.Graph Core.FloatType)
 floatType = (matchEnum (Core.Name "hydra.core.FloatType") [
@@ -82,7 +83,7 @@ mapType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "keys") type_) (
   Core.mapTypeValues = values})))
 
 name :: (Core.Term -> Compute.Flow Graph.Graph Core.Name)
-name term = (Flows_.map (\x -> Core.Name x) (Flows_.bind (ExtractCore.wrap (Core.Name "hydra.core.Name") term) ExtractCore.string))
+name term = (Flows_.map (\x -> Core.Name x) (Flows_.bind (Core_.wrap (Core.Name "hydra.core.Name") term) Core_.string))
 
 rowType :: (Core.Term -> Compute.Flow Graph.Graph Core.RowType)
 rowType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "typeName") name) (getField m (Core.Name "fields") fieldTypes) (\typeName -> \fields -> Core.RowType {
@@ -90,7 +91,7 @@ rowType = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "typeName") name
   Core.rowTypeFields = fields})))
 
 string :: (Core.Term -> Compute.Flow Graph.Graph String)
-string term = (ExtractCore.string (Strip.fullyStripTerm term))
+string term = (Core_.string (Strip.fullyStripTerm term))
 
 type_ :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)
 type_ dat = ((\x -> case x of
@@ -106,21 +107,21 @@ type_ dat = ((\x -> case x of
     (Core.Name "literal", (\lt -> Flows_.map (\x -> Core.TypeLiteral x) (literalType lt))),
     (Core.Name "map", (\mt -> Flows_.map (\x -> Core.TypeMap x) (mapType mt))),
     (Core.Name "optional", (\et -> Flows_.map (\x -> Core.TypeOptional x) (type_ et))),
-    (Core.Name "product", (\types -> Flows_.map (\x -> Core.TypeProduct x) (ExtractCore.list type_ types))),
+    (Core.Name "product", (\types -> Flows_.map (\x -> Core.TypeProduct x) (Core_.list type_ types))),
     (Core.Name "record", (\rt -> Flows_.map (\x -> Core.TypeRecord x) (rowType rt))),
     (Core.Name "set", (\et -> Flows_.map (\x -> Core.TypeSet x) (type_ et))),
-    (Core.Name "sum", (\types -> Flows_.map (\x -> Core.TypeSum x) (ExtractCore.list type_ types))),
+    (Core.Name "sum", (\types -> Flows_.map (\x -> Core.TypeSum x) (Core_.list type_ types))),
     (Core.Name "union", (\rt -> Flows_.map (\x -> Core.TypeUnion x) (rowType rt))),
     (Core.Name "variable", (\n -> Flows_.map (\x -> Core.TypeVariable x) (name n))),
     (Core.Name "wrap", (\wt -> Flows_.map (\x -> Core.TypeWrap x) (wrappedType wt)))] dat)) dat)
 
 typeScheme :: (Core.Term -> Compute.Flow Graph.Graph Core.TypeScheme)
-typeScheme = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "variables") (ExtractCore.list name)) (getField m (Core.Name "type") type_) (\vars -> \body -> Core.TypeScheme {
+typeScheme = (matchRecord (\m -> Flows.map2 (getField m (Core.Name "variables") (Core_.list name)) (getField m (Core.Name "type") type_) (\vars -> \body -> Core.TypeScheme {
   Core.typeSchemeVariables = vars,
   Core.typeSchemeType = body})))
 
 wrappedType :: (Core.Term -> Compute.Flow Graph.Graph Core.WrappedType)
-wrappedType term = (Flows_.bind (ExtractCore.record (Core.Name "hydra.core.WrappedType") term) (\fields -> Flows.map2 (ExtractCore.field (Core.Name "typeName") name fields) (ExtractCore.field (Core.Name "object") type_ fields) (\name -> \obj -> Core.WrappedType {
+wrappedType term = (Flows_.bind (Core_.record (Core.Name "hydra.core.WrappedType") term) (\fields -> Flows.map2 (Core_.field (Core.Name "typeName") name fields) (Core_.field (Core.Name "object") type_ fields) (\name -> \obj -> Core.WrappedType {
   Core.wrappedTypeTypeName = name,
   Core.wrappedTypeObject = obj})))
 
@@ -139,7 +140,7 @@ matchRecord decode term =
   let stripped = (Strip.fullyStripTerm term)
   in ((\x -> case x of
     Core.TermRecord v1 -> (decode (Maps.fromList (Lists.map (\field -> (Core.fieldName field, (Core.fieldTerm field))) (Core.recordFields v1))))
-    _ -> (Errors.unexpected "record" (Io.showTerm term))) stripped)
+    _ -> (Errors.unexpected "record" (Core__.showTerm term))) stripped)
 
 matchUnion :: (Core.Name -> [(Core.Name, (Core.Term -> Compute.Flow Graph.Graph t0))] -> Core.Term -> Compute.Flow Graph.Graph t0)
 matchUnion tname pairs term =  
@@ -154,12 +155,12 @@ matchUnion tname pairs term =
         "no matching case for field ",
         (Core.unName fname)])) (\f -> f val) (Maps.lookup fname mapping))) (Errors.unexpected (Strings.cat [
       "injection for type ",
-      (Core.unName tname)]) (Io.showTerm term)))
+      (Core.unName tname)]) (Core__.showTerm term)))
     _ -> (Errors.unexpected (Strings.cat [
       Strings.cat [
         "union with one of {",
         (Strings.intercalate ", " (Lists.map (\pair -> Core.unName (fst pair)) pairs))],
-      "}"]) (Io.showTerm stripped))) stripped)
+      "}"]) (Core__.showTerm stripped))) stripped)
 
 matchUnitField :: (t0 -> t1 -> (t0, (t2 -> Compute.Flow t3 t1)))
 matchUnitField fname x = (fname, (\ignored -> Flows_.pure x))

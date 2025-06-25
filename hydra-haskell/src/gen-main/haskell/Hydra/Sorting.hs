@@ -9,6 +9,7 @@ import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Tarjan as Tarjan
 import qualified Hydra.Topology as Topology
+import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -26,7 +27,7 @@ createOrderingIsomorphism sourceOrd targetOrd =
     Topology.orderingIsomorphismEncode = sourceToTargetMapping,
     Topology.orderingIsomorphismDecode = targetToSourceMapping}
 
-topologicalSort :: (Ord t0) => ([(t0, [t0])] -> Mantle.Either_ [[t0]] [t0])
+topologicalSort :: (Ord t0) => ([(t0, [t0])] -> Mantle.Either [[t0]] [t0])
 topologicalSort pairs =  
   let sccs = (topologicalSortComponents pairs) 
       isCycle = (\scc -> Logic.not (Lists.null (Lists.tail scc)))
