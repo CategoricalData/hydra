@@ -40,7 +40,7 @@ This ensures that each Hydra implementation behaves the same,
 and we think it will be very useful in heterogeneous environments like TinkerPop where we need exactly the same logic
 -- validation, query steps, user-defined functions, etc. -- to be manifested identically in more than one programming language.
 
-If any of the above sounds interesting, feel free to ask questions or get involved via the [LambdaGraph Discord](https://lg-discord) server.
+If any of the above sounds interesting, feel free to ask questions or get involved via the [LambdaGraph Discord](https://bit.ly/lg-discord) server.
 Near-term goals of the project include what we call "closing the loop" (completely folding Hydra's kernel into the Hydra DSL),
 [finishing](https://github.com/CategoricalData/hydra/wiki/New-Hydra-implementations) Hydra-Python and updating Hydra-Java,
 and getting Hydra out into the community.
