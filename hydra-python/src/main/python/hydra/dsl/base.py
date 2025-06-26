@@ -67,9 +67,9 @@ from hydra.phantoms import TCase, TElement, TField, TTerm
 # annot key mvalue (TTerm term) = TTerm $ Ann.annotateTerm key mvalue term
 
 
-def apply[T](lhs: TTerm[T], rhs: TTerm[T]) -> TTerm[T]:
+def apply[T](func: TTerm[T], a: TTerm[T]) -> TTerm[T]:
     """Apply a function to an argument."""
-    return TTerm[T](terms.apply(lhs.value, rhs.value))
+    return TTerm[T](terms.apply(func.value, a.value))
 
 
 def apply2[T](func: TTerm[T], a: TTerm[T], b: TTerm[T]) -> TTerm[T]:
@@ -127,7 +127,7 @@ def field[T](fname: Name, val: TTerm[T]) -> Field:
 
 def first[T]():
     """Construct a first."""
-    return TTerm[T](terms.untuple(2, 0))
+    return TTerm[T](terms.untuple(2, 0, None))
 
 
 # firstClassType :: TTerm Type -> TTerm Type
@@ -244,9 +244,11 @@ def primitive[T](name: Name):
     return TTerm[T](terms.primitive(name))
 
 
-def primitive1[T](prim_name: Name, term: TTerm[T]) -> TTerm[T]:
+def primitive1[A, B](
+    prim_name: Name, term: TTerm[A], meaningless: B | None = None
+) -> TTerm[B]:
     """Construct a primitive1."""
-    return TTerm[T](terms.apply(terms.primitive(prim_name), term.value))
+    return TTerm[B](terms.apply(terms.primitive(prim_name), term.value))
 
 
 def primitive2[T](prim_name: Name, a: TTerm[T], b: TTerm[T]) -> TTerm[T]:
@@ -283,7 +285,7 @@ def ref[T](name: TElement[T]):
 
 def second[T]():
     """Construct a second."""
-    return TTerm[T](terms.untuple(2, 1))
+    return TTerm[T](terms.untuple(2, 1, None))
 
 
 # set :: [TTerm a] -> TTerm (S.Set a)
@@ -302,7 +304,7 @@ def unit_variant[T](name: Name, fname: Name):
 
 def untuple[T](arity: int, idx: int):
     """Construct a tuple."""
-    return TTerm[T](terms.untuple(arity, idx))
+    return TTerm[T](terms.untuple(arity, idx, None))
 
 
 def unwrap[T](name: Name):

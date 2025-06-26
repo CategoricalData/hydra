@@ -1,32 +1,40 @@
 """DSL for character functions."""
 
-# module Hydra.Dsl.Lib.Chars where
+from hydra.tools import primitive
 
-# import Hydra.Dsl.Base
-# import Hydra.Phantoms
-# import Hydra.Sources.Libraries
-# import qualified Hydra.Dsl.Terms as Terms
 
-# -- Follow's GHC.s Data.Char.isAlphaNum
-# isAlphaNum :: TTerm Int -> TTerm Bool
-# isAlphaNum = primitive1 _chars_isAlphaNum
+@primitive()
+def is_alpha_num(c: int) -> bool:
+    """Check if a character is alphanumeric."""
+    return chr(c).isalnum()
 
-# -- Follows GHC's Data.Char.isLower (GHC.Internal.Unicode.isLower)
-# isLower :: TTerm Int -> TTerm Bool
-# isLower = primitive1 _chars_isLower
 
-# -- Follow's GHC.s Data.Char.isSpace
-# isSpace :: TTerm Int -> TTerm Bool
-# isSpace = primitive1 _chars_isSpace
+@primitive()
+def is_lower(c: int) -> bool:
+    """Check if a character is lowercase."""
+    return chr(c).islower()
 
-# -- Follows GHC's Data.Char.isUpper (GHC.Internal.Unicode.isUpper)
-# isUpper :: TTerm Int -> TTerm Bool
-# isUpper = primitive1 _chars_isUpper
 
-# -- Follows GHC's toLower (GHC.Internal.Unicode.Char.UnicodeData.SimpleLowerCaseMapping.toSimpleLowerCase)
-# toLower :: TTerm Int -> TTerm Int
-# toLower = primitive1 _chars_toLower
+@primitive()
+def is_space(c: int) -> bool:
+    """Check if a character is a whitespace character."""
+    return chr(c).isspace()
 
-# -- Follows GHC's toUpper (GHC.Internal.Unicode.Char.UnicodeData.SimpleUpperCaseMapping.toSimpleUpperCase)
-# toUpper :: TTerm Int -> TTerm Int
-# toUpper = primitive1 _chars_toUpper
+
+@primitive()
+def is_upper(c: int) -> bool:
+    """Check if a character is uppercase."""
+    return chr(c).isupper()
+
+
+@primitive()
+def to_lower(c: int) -> int:
+    """Convert a character to lowercase."""
+    return ord(chr(c).lower())
+
+
+@primitive()
+def to_upper(c: int) -> int:
+    """Convert a character to uppercase."""
+    return ord(chr(c).upper())
+
