@@ -16,229 +16,229 @@ import qualified Data.List as L
 import qualified Data.Maybe as Y
 
 
-class ToTree a where
-  toTree :: a -> Expr
+alternativeToExpr :: H.Alternative -> Expr
+alternativeToExpr (H.Alternative pat rhs _) = ifx caseOp (patternToExpr pat) (caseRhsToExpr rhs)
 
-instance ToTree H.Alternative where
-  toTree (H.Alternative pat rhs _) = ifx caseOp (toTree pat) (toTree rhs)
+applicationExpressionToExpr :: H.ApplicationExpression -> Expr
+applicationExpressionToExpr (H.ApplicationExpression fun arg) = ifx appOp (expressionToExpr fun) (expressionToExpr arg)
 
-instance ToTree H.Assertion where
-  toTree sert = case sert of
-    H.AssertionClass cls -> toTree cls
-    H.AssertionTuple serts -> parenList False (toTree <$> serts)
+applicationPatternToExpr :: H.ApplicationPattern -> Expr
+applicationPatternToExpr (H.ApplicationPattern name pats) =
+  spaceSep $ nameToExpr name : (patternToExpr <$> pats)
 
-instance ToTree H.ClassAssertion where
-  toTree (H.ClassAssertion name types) = spaceSep [toTree name, commaSep halfBlockStyle (toTree <$> types)]
+assertionToExpr :: H.Assertion -> Expr
+assertionToExpr sert = case sert of
+  H.AssertionClass cls -> classAssertionToExpr cls
+  H.AssertionTuple serts -> parenList False (assertionToExpr <$> serts)
 
-instance ToTree H.CaseRhs where
-  toTree (H.CaseRhs expr) = toTree expr
+caseExpressionToExpr :: H.CaseExpression -> Expr
+caseExpressionToExpr (H.CaseExpression cs alts) = ifx ofOp lhs rhs
+  where
+    lhs = spaceSep [cst "case", expressionToExpr cs]
+    rhs = newlineSep (alternativeToExpr <$> alts)
+    ofOp = Op (Symbol "of") (Padding WsSpace $ WsBreakAndIndent "  ") (Precedence 0) AssociativityNone
 
-instance ToTree H.Constructor where
-  toTree cons = case cons of
-    H.ConstructorOrdinary (H.OrdinaryConstructor name types) -> spaceSep [
-      toTree name,
-      spaceSep (toTree <$> types)]
-    H.ConstructorRecord (H.RecordConstructor name fields) -> spaceSep [
-      toTree name,
-      curlyBracesList Nothing halfBlockStyle (toTree <$> fields)]
+caseRhsToExpr :: H.CaseRhs -> Expr
+caseRhsToExpr (H.CaseRhs expr) = expressionToExpr expr
 
-instance ToTree H.ConstructorWithComments where
-  toTree (H.ConstructorWithComments body mc) = case mc of
-    Nothing -> toTree body
-    Just c -> newlineSep [cst $ toHaskellComments c, toTree body]
+classAssertionToExpr :: H.ClassAssertion -> Expr
+classAssertionToExpr (H.ClassAssertion name types) =
+  spaceSep [nameToExpr name, commaSep halfBlockStyle (typeToExpr <$> types)]
 
-instance ToTree H.DataOrNewtype where
-  toTree kw = case kw of
-    H.DataOrNewtypeData -> cst "data"
-    H.DataOrNewtypeNewtype -> cst "newtype"
+constructorToExpr :: H.Constructor -> Expr
+constructorToExpr cons = case cons of
+  H.ConstructorOrdinary (H.OrdinaryConstructor name types) ->
+    spaceSep [nameToExpr name, spaceSep (typeToExpr <$> types)]
+  H.ConstructorRecord (H.RecordConstructor name fields) ->
+    spaceSep [nameToExpr name, curlyBracesList Nothing halfBlockStyle (fieldWithCommentsToExpr <$> fields)]
 
-instance ToTree H.Declaration where
-  toTree decl = case decl of
-    H.DeclarationData (H.DataDeclaration kw _ hd cons deriv) -> indentBlock $
-        [spaceSep [toTree kw, toTree hd, cst "="], constructors]
-        ++ if L.null derivCat then [] else [spaceSep [cst "deriving", parenList False (toTree <$> derivCat)]]
-      where
-        derivCat = L.concat $ h <$> deriv
-          where
-            h (H.Deriving names) = names
-        constructors = orSep halfBlockStyle (toTree <$> cons)
-    H.DeclarationType (H.TypeDeclaration hd typ) -> spaceSep [cst "type", toTree hd, cst "=", toTree typ]
-    H.DeclarationValueBinding vb -> toTree vb
-    H.DeclarationTypedBinding (H.TypedBinding (H.TypeSignature name htype) vb) -> newlineSep [ -- TODO: local bindings
-        ifx typeOp (toTree name) (toTree htype),
-        toTree vb]
+constructorWithCommentsToExpr :: H.ConstructorWithComments -> Expr
+constructorWithCommentsToExpr (H.ConstructorWithComments body mc) = case mc of
+  Nothing -> constructorToExpr body
+  Just c -> newlineSep [cst $ toHaskellComments c, constructorToExpr body]
 
-instance ToTree H.DeclarationHead where
-  toTree hd = case hd of
-    H.DeclarationHeadApplication (H.ApplicationDeclarationHead fun op) -> spaceSep [toTree fun, toTree op]
---    H.DeclarationHeadParens ... ->
-    H.DeclarationHeadSimple name -> toTree name
+dataOrNewtypeToExpr :: H.DataOrNewtype -> Expr
+dataOrNewtypeToExpr kw = case kw of
+  H.DataOrNewtypeData -> cst "data"
+  H.DataOrNewtypeNewtype -> cst "newtype"
 
-instance ToTree H.DeclarationWithComments where
-  toTree (H.DeclarationWithComments body mc) = case mc of
-    Nothing -> toTree body
-    Just c -> newlineSep [cst $ toHaskellComments c, toTree body]
+declarationHeadToExpr :: H.DeclarationHead -> Expr
+declarationHeadToExpr hd = case hd of
+  H.DeclarationHeadApplication (H.ApplicationDeclarationHead fun op) -> spaceSep [declarationHeadToExpr fun, variableToExpr op]
+  -- H.DeclarationHeadParens not handled in original; ignoring
+  H.DeclarationHeadSimple name -> nameToExpr name
 
-instance ToTree H.Expression where
-  toTree expr = case expr of
-      H.ExpressionApplication app -> toTree app
-      H.ExpressionCase cases -> toTree cases
-      H.ExpressionConstructRecord r -> toTree r
-      H.ExpressionDo statements -> indentBlock $ [cst "do"] ++ (toTree <$> statements)
-      H.ExpressionIf ifte -> toTree ifte
-    --  H.ExpressionInfixApplication InfixApplicationTerm
-      H.ExpressionLiteral lit -> toTree lit
-      -- Note: the need for extra parens may point to an operator precedence issue
-      H.ExpressionLambda lam -> parenthesize $ toTree lam
-    --  H.ExpressionLeftSection SectionTerm
-      H.ExpressionLet (H.LetExpression bindings inner) -> indentBlock [
-          cst "",
-          spaceSep [cst "let", customIndentBlock "    " (encodeBinding <$> bindings)],
-          spaceSep [cst "in", toTree inner]]
+declarationToExpr :: H.Declaration -> Expr
+declarationToExpr decl = case decl of
+  H.DeclarationData (H.DataDeclaration kw _ hd cons deriv) -> indentBlock $
+      [spaceSep [dataOrNewtypeToExpr kw, declarationHeadToExpr hd, cst "="], constructors]
+      ++ if L.null derivCat then [] else [spaceSep [cst "deriving", parenList False (nameToExpr <$> derivCat)]]
+    where
+      derivCat = L.concat $ h <$> deriv
         where
-          -- Note: indentation should depend on the length of the pattern
-          encodeBinding = indentSubsequentLines "      " . toTree
-      H.ExpressionList exprs -> bracketList halfBlockStyle $ toTree <$> exprs
-      H.ExpressionParens expr' -> parenthesize $ toTree expr'
-    --  H.ExpressionPrefixApplication PrefixApplicationTerm
-    --  H.ExpressionRightSection SectionTerm
-      H.ExpressionTuple exprs -> parenList False $ toTree <$> exprs
-    --  H.ExpressionTypeSignature TypeSignatureTerm
-    --  H.ExpressionUpdateRecord UpdateRecordTerm
-      H.ExpressionVariable name -> toTree name
+          h (H.Deriving names) = names
+      constructors = orSep halfBlockStyle (constructorWithCommentsToExpr <$> cons)
+  H.DeclarationType (H.TypeDeclaration hd typ) -> spaceSep [cst "type", declarationHeadToExpr hd, cst "=", typeToExpr typ]
+  H.DeclarationValueBinding vb -> valueBindingToExpr vb
+  H.DeclarationTypedBinding (H.TypedBinding (H.TypeSignature name htype) vb) -> newlineSep [
+      ifx typeOp (nameToExpr name) (typeToExpr htype),
+      valueBindingToExpr vb]
 
-instance ToTree H.ApplicationExpression where
-  toTree (H.ApplicationExpression fun arg) = ifx appOp (toTree fun) (toTree arg)
+declarationWithCommentsToExpr :: H.DeclarationWithComments -> Expr
+declarationWithCommentsToExpr (H.DeclarationWithComments body mc) = case mc of
+  Nothing -> declarationToExpr body
+  Just c -> newlineSep [cst $ toHaskellComments c, declarationToExpr body]
 
-instance ToTree H.CaseExpression where
-  toTree (H.CaseExpression cs alts) = ifx ofOp lhs rhs
-    where
-      lhs = spaceSep [cst "case", toTree cs]
-      rhs = newlineSep (toTree <$> alts)
-      ofOp = Op (Symbol "of") (Padding WsSpace $ WsBreakAndIndent "  ") (Precedence 0) AssociativityNone
-
-instance ToTree H.ConstructRecordExpression where
-  toTree (H.ConstructRecordExpression name updates) = spaceSep [toTree name, brackets curlyBraces halfBlockStyle body]
-    where
-      body = commaSep halfBlockStyle (fromUpdate <$> updates)
-      fromUpdate (H.FieldUpdate fn val) = ifx defineOp (toTree fn) (toTree val)
-
-instance ToTree H.IfExpression where
-  toTree (H.IfExpression eif ethen eelse) = ifx ifOp (spaceSep [cst "if", toTree eif]) body
-    where
-      ifOp = Op (Symbol "") (Padding WsNone $ WsBreakAndIndent "  ") (Precedence 0) AssociativityNone
-      body = newlineSep [spaceSep [cst "then", toTree ethen], spaceSep [cst "else", toTree eelse]]
-
-instance ToTree H.LambdaExpression where
-  toTree (H.LambdaExpression bindings inner) = ifx lambdaOp (prefix "\\" head) body
-    where
-      head = spaceSep (toTree <$> bindings)
-      body = toTree inner
-
-instance ToTree H.Field where
-  toTree (H.Field name typ) = spaceSep [toTree name, cst "::", toTree typ]
-
-instance ToTree H.FieldWithComments where
-  toTree (H.FieldWithComments field mc) = case mc of
-      Nothing -> toTree field
-      Just c -> newlineSep [cst $ toHaskellComments c, toTree field]
-
-instance ToTree H.Import where
-  toTree (H.Import qual (H.ModuleName name) mod mspec) = spaceSep $ Y.catMaybes [
-      Just $ cst "import",
-      if qual then Just (cst "qualified") else Nothing,
-      Just $ cst name,
-      (\(H.ModuleName m) -> cst $ "as " ++ m) <$> mod,
-      fmap hidingSec mspec]
-    where
-      hidingSec (H.SpecImportHiding names) = spaceSep [
-        cst $ "hiding ",
-        parens $ commaSep inlineStyle (toTree <$> names)]
-
-instance ToTree H.ImportExportSpec where
-  toTree (H.ImportExportSpec _ name _) = toTree name
-
-instance ToTree H.Literal where
-  toTree lit = cst $ case lit of
-    H.LiteralChar c -> show $ C.chr $ fromIntegral c
-    H.LiteralDouble d -> if d < 0 then "(0" ++ show d ++ ")" else show d
-    H.LiteralFloat f -> if f < 0 then "(0" ++ show f ++ ")" else show f
-    H.LiteralInt i -> if i < 0 then "(0" ++ show i ++ ")" else show i
-    H.LiteralInteger i -> show i
-    H.LiteralString s -> show s
-
-instance ToTree H.LocalBinding where
-  toTree binding = case binding of
-    H.LocalBindingSignature ts -> toTree ts
-    H.LocalBindingValue vb -> toTree vb
-
-instance ToTree H.Module where
-  toTree (H.Module mh imports decls) = doubleNewlineSep $
-      headerLine ++ importLines ++ declLines
-    where
-      headerLine = Y.maybe [] (\h -> [toTree h]) mh
-      declLines = toTree <$> decls
-      importLines = [newlineSep $ toTree <$> imports | not (L.null imports)]
-
-instance ToTree H.Name where
-  toTree name = cst $ case name of
-    H.NameImplicit qn -> "?" ++ writeQualifiedName qn
-    H.NameNormal qn -> writeQualifiedName qn
-    H.NameParens qn -> "(" ++ writeQualifiedName qn ++ ")"
-
-instance ToTree H.ModuleHead where
-  toTree (H.ModuleHead mc (H.ModuleName mname) _) = case mc of
-    Nothing -> head
-    Just c -> newlineSep [cst $ toHaskellComments c, cst "", head]
-    where
-      head = spaceSep [cst "module", cst mname, cst "where"]
-
-instance ToTree H.Pattern where
-  toTree pat = case pat of
-      H.PatternApplication app -> toTree app
---      H.PatternAs (H.AsPattern ) ->
-      H.PatternList pats -> bracketList halfBlockStyle $ toTree <$> pats
-      H.PatternLiteral lit -> toTree lit
-      H.PatternName name -> toTree name
-      H.PatternParens pat -> parenthesize $ toTree pat
---      H.PatternRecord (H.RecordPattern ) ->
-      H.PatternTuple pats -> parenList False $ toTree <$> pats
---      H.PatternTyped (H.TypedPattern ) ->
-      H.PatternWildcard -> cst "_"
-
-instance ToTree H.ApplicationPattern where
-  toTree (H.ApplicationPattern name pats) = spaceSep $ toTree name:(toTree <$> pats)
-
-instance ToTree H.RightHandSide where
-  toTree (H.RightHandSide expr) = toTree expr
-
-instance ToTree H.Statement where
-  toTree (H.Statement expr) = toTree expr
-
-instance ToTree H.Type where
-  toTree htype = case htype of
-    H.TypeApplication (H.ApplicationType lhs rhs) -> ifx appOp (toTree lhs) (toTree rhs)
-    H.TypeCtx (H.ContextType ctx typ) -> ifx assertOp (toTree ctx) (toTree typ)
-    H.TypeFunction (H.FunctionType dom cod) -> ifx arrowOp (toTree dom) (toTree cod)
---  H.TypeInfix InfixType
-    H.TypeList htype -> bracketList inlineStyle [toTree htype]
---  H.TypeParens Type
-    H.TypeTuple types -> parenList False $ toTree <$> types
-    H.TypeVariable name -> toTree name
-
-instance ToTree H.TypeSignature where
-  toTree (H.TypeSignature name typ) = spaceSep [toTree name, cst "::", toTree typ]
-
-instance ToTree H.ValueBinding where
-  toTree vb = case vb of
-    H.ValueBindingSimple (H.SimpleValueBinding pat rhs local) -> case local of
-        Nothing -> body
-        Just (H.LocalBindings bindings) -> indentBlock [body, indentBlock $ [cst "where"] ++ (toTree <$> bindings)]
+expressionToExpr :: H.Expression -> Expr
+expressionToExpr expr = case expr of
+    H.ExpressionApplication app -> applicationExpressionToExpr app
+    H.ExpressionCase cases -> caseExpressionToExpr cases
+    H.ExpressionConstructRecord r -> constructRecordExpressionToExpr r
+    H.ExpressionDo statements -> indentBlock $ [cst "do"] ++ (statementToExpr <$> statements)
+    H.ExpressionIf ifte -> ifExpressionToExpr ifte
+    -- H.ExpressionInfixApplication skipped as in original
+    H.ExpressionLiteral lit -> literalToExpr lit
+    -- Note: the need for extra parens may point to an operator precedence issue
+    H.ExpressionLambda lam -> parenthesize $ lambdaExpressionToExpr lam
+    -- H.ExpressionLeftSection skipped
+    H.ExpressionLet (H.LetExpression bindings inner) -> indentBlock [
+        cst "",
+        spaceSep [cst "let", customIndentBlock "    " (encodeBinding <$> bindings)],
+        spaceSep [cst "in", expressionToExpr inner]]
       where
-        body = ifx defineOp (toTree pat) (toTree rhs)
+        encodeBinding = indentSubsequentLines "      " . localBindingToExpr
+    H.ExpressionList exprs -> bracketList halfBlockStyle $ expressionToExpr <$> exprs
+    H.ExpressionParens expr' -> parenthesize $ expressionToExpr expr'
+    -- H.ExpressionPrefixApplication skipped
+    -- H.ExpressionRightSection skipped
+    H.ExpressionTuple exprs -> parenList False $ expressionToExpr <$> exprs
+    -- H.ExpressionTypeSignature skipped
+    -- H.ExpressionUpdateRecord skipped
+    H.ExpressionVariable name -> nameToExpr name
 
-instance ToTree H.Variable where
-  toTree (H.Variable v) = toTree v
+constructRecordExpressionToExpr :: H.ConstructRecordExpression -> Expr
+constructRecordExpressionToExpr (H.ConstructRecordExpression name updates) =
+  spaceSep [nameToExpr name, brackets curlyBraces halfBlockStyle body]
+  where
+    body = commaSep halfBlockStyle (fromUpdate <$> updates)
+    fromUpdate (H.FieldUpdate fn val) = ifx defineOp (nameToExpr fn) (expressionToExpr val)
+
+fieldToExpr :: H.Field -> Expr
+fieldToExpr (H.Field name typ) = spaceSep [nameToExpr name, cst "::", typeToExpr typ]
+
+fieldWithCommentsToExpr :: H.FieldWithComments -> Expr
+fieldWithCommentsToExpr (H.FieldWithComments field mc) = case mc of
+  Nothing -> fieldToExpr field
+  Just c -> newlineSep [cst $ toHaskellComments c, fieldToExpr field]
+
+ifExpressionToExpr :: H.IfExpression -> Expr
+ifExpressionToExpr (H.IfExpression eif ethen eelse) = ifx ifOp (spaceSep [cst "if", expressionToExpr eif]) body
+  where
+    ifOp = Op (Symbol "") (Padding WsNone $ WsBreakAndIndent "  ") (Precedence 0) AssociativityNone
+    body = newlineSep [spaceSep [cst "then", expressionToExpr ethen], spaceSep [cst "else", expressionToExpr eelse]]
+
+importExportSpecToExpr :: H.ImportExportSpec -> Expr
+importExportSpecToExpr (H.ImportExportSpec _ name _) = nameToExpr name
+
+importToExpr :: H.Import -> Expr
+importToExpr (H.Import qual (H.ModuleName name) mod mspec) = spaceSep $ Y.catMaybes [
+    Just $ cst "import",
+    if qual then Just (cst "qualified") else Nothing,
+    Just $ cst name,
+    (\(H.ModuleName m) -> cst $ "as " ++ m) <$> mod,
+    fmap hidingSec mspec]
+  where
+    hidingSec (H.SpecImportHiding names) = spaceSep [
+      cst $ "hiding ",
+      parens $ commaSep inlineStyle (importExportSpecToExpr <$> names)]
+
+lambdaExpressionToExpr :: H.LambdaExpression -> Expr
+lambdaExpressionToExpr (H.LambdaExpression bindings inner) = ifx lambdaOp (prefix "\\" head) body
+  where
+    head = spaceSep (patternToExpr <$> bindings)
+    body = expressionToExpr inner
+
+literalToExpr :: H.Literal -> Expr
+literalToExpr lit = cst $ case lit of
+  H.LiteralChar c -> show $ C.chr $ fromIntegral c
+  H.LiteralDouble d -> if d < 0 then "(0" ++ show d ++ ")" else show d
+  H.LiteralFloat f -> if f < 0 then "(0" ++ show f ++ ")" else show f
+  H.LiteralInt i -> if i < 0 then "(0" ++ show i ++ ")" else show i
+  H.LiteralInteger i -> show i
+  H.LiteralString s -> show s
+
+localBindingToExpr :: H.LocalBinding -> Expr
+localBindingToExpr binding = case binding of
+  H.LocalBindingSignature ts -> typeSignatureToExpr ts
+  H.LocalBindingValue vb -> valueBindingToExpr vb
+
+moduleHeadToExpr :: H.ModuleHead -> Expr
+moduleHeadToExpr (H.ModuleHead mc (H.ModuleName mname) _) = case mc of
+  Nothing -> head
+  Just c -> newlineSep [cst $ toHaskellComments c, cst "", head]
+  where
+    head = spaceSep [cst "module", cst mname, cst "where"]
+
+moduleToExpr :: H.Module -> Expr
+moduleToExpr (H.Module mh imports decls) = doubleNewlineSep $
+    headerLine ++ importLines ++ declLines
+  where
+    headerLine = maybe [] (\h -> [moduleHeadToExpr h]) mh
+    declLines = declarationWithCommentsToExpr <$> decls
+    importLines = [newlineSep $ importToExpr <$> imports | not (L.null imports)]
+
+nameToExpr :: H.Name -> Expr
+nameToExpr name = cst $ case name of
+  H.NameImplicit qn -> "?" ++ writeQualifiedName qn
+  H.NameNormal qn -> writeQualifiedName qn
+  H.NameParens qn -> "(" ++ writeQualifiedName qn ++ ")"
+
+patternToExpr :: H.Pattern -> Expr
+patternToExpr pat = case pat of
+    H.PatternApplication app -> applicationPatternToExpr app
+    -- H.PatternAs skipped
+    H.PatternList pats -> bracketList halfBlockStyle $ patternToExpr <$> pats
+    H.PatternLiteral lit -> literalToExpr lit
+    H.PatternName name -> nameToExpr name
+    H.PatternParens pat' -> parenthesize $ patternToExpr pat'
+    -- H.PatternRecord skipped
+    H.PatternTuple pats -> parenList False $ patternToExpr <$> pats
+    -- H.PatternTyped skipped
+    H.PatternWildcard -> cst "_"
+
+rightHandSideToExpr :: H.RightHandSide -> Expr
+rightHandSideToExpr (H.RightHandSide expr) = expressionToExpr expr
+
+statementToExpr :: H.Statement -> Expr
+statementToExpr (H.Statement expr) = expressionToExpr expr
+
+typeSignatureToExpr :: H.TypeSignature -> Expr
+typeSignatureToExpr (H.TypeSignature name typ) = spaceSep [nameToExpr name, cst "::", typeToExpr typ]
+
+typeToExpr :: H.Type -> Expr
+typeToExpr htype = case htype of
+  H.TypeApplication (H.ApplicationType lhs rhs) -> ifx appOp (typeToExpr lhs) (typeToExpr rhs)
+  H.TypeCtx (H.ContextType ctx typ) -> ifx assertOp (assertionToExpr ctx) (typeToExpr typ)
+  H.TypeFunction (H.FunctionType dom cod) -> ifx arrowOp (typeToExpr dom) (typeToExpr cod)
+  -- H.TypeInfix skipped
+  H.TypeList htype' -> bracketList inlineStyle [typeToExpr htype']
+  -- H.TypeParens skipped
+  H.TypeTuple types -> parenList False $ typeToExpr <$> types
+  H.TypeVariable name -> nameToExpr name
+
+valueBindingToExpr :: H.ValueBinding -> Expr
+valueBindingToExpr vb = case vb of
+  H.ValueBindingSimple (H.SimpleValueBinding pat rhs local) -> case local of
+      Nothing -> body
+      Just (H.LocalBindings bindings) -> indentBlock [body, indentBlock $ (cst "where") : (localBindingToExpr <$> bindings)]
+    where
+      body = ifx defineOp (patternToExpr pat) (rightHandSideToExpr rhs)
+
+variableToExpr :: H.Variable -> Expr
+variableToExpr (H.Variable v) = nameToExpr v
+
+
+-- Helpers from original module:
 
 toHaskellComments :: String -> String
 toHaskellComments c = L.intercalate "\n" $ ("-- | " ++) <$> L.lines c
