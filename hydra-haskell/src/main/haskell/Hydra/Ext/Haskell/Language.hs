@@ -1,59 +1,62 @@
 module Hydra.Ext.Haskell.Language where
 
-import Hydra.Kernel
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
+import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Variants as Variants
 
 import qualified Data.Set as S
 
 
-haskellLanguage :: Language
-haskellLanguage = Language (LanguageName "hydra.ext.haskell") $ LanguageConstraints {
-  languageConstraintsEliminationVariants = S.fromList eliminationVariants,
-  languageConstraintsLiteralVariants = S.fromList [
-    LiteralVariantBoolean,
-    LiteralVariantFloat,
-    LiteralVariantInteger,
-    LiteralVariantString],
-  languageConstraintsFloatTypes = S.fromList [
+haskellLanguage :: Coders.Language
+haskellLanguage = Coders.Language (Coders.LanguageName "hydra.ext.haskell") $ Coders.LanguageConstraints {
+  Coders.languageConstraintsEliminationVariants = S.fromList Variants.eliminationVariants,
+  Coders.languageConstraintsLiteralVariants = S.fromList [
+    Mantle.LiteralVariantBoolean,
+    Mantle.LiteralVariantFloat,
+    Mantle.LiteralVariantInteger,
+    Mantle.LiteralVariantString],
+  Coders.languageConstraintsFloatTypes = S.fromList [
     -- Bigfloat is excluded for now
-    FloatTypeFloat32, -- Float
-    FloatTypeFloat64], -- Double
-  languageConstraintsFunctionVariants = S.fromList functionVariants,
-  languageConstraintsIntegerTypes = S.fromList [
-    IntegerTypeBigint, -- Integer
-    IntegerTypeInt8, -- Int8
-    IntegerTypeInt16, -- Int16
-    IntegerTypeInt32, -- Int
-    IntegerTypeInt64], -- Int64
-  languageConstraintsTermVariants = S.fromList [
-    TermVariantApplication,
-    TermVariantFunction,
-    TermVariantLet,
-    TermVariantList,
-    TermVariantLiteral,
-    TermVariantMap,
-    TermVariantOptional,
-    TermVariantProduct,
-    TermVariantRecord,
-    TermVariantSet,
-    TermVariantUnion,
-    TermVariantVariable,
-    TermVariantWrap],
-  languageConstraintsTypeVariants = S.fromList [
-    TypeVariantAnnotated,
-    TypeVariantApplication,
-    TypeVariantFunction,
-    TypeVariantForall,
-    TypeVariantList,
-    TypeVariantLiteral,
-    TypeVariantMap,
-    TypeVariantOptional,
-    TypeVariantProduct,
-    TypeVariantRecord,
-    TypeVariantSet,
-    TypeVariantUnion,
-    TypeVariantVariable,
-    TypeVariantWrap],
-  languageConstraintsTypes = const True }
+    Core.FloatTypeFloat32, -- Float
+    Core.FloatTypeFloat64], -- Double
+  Coders.languageConstraintsFunctionVariants = S.fromList Variants.functionVariants,
+  Coders.languageConstraintsIntegerTypes = S.fromList [
+    Core.IntegerTypeBigint, -- Integer
+    Core.IntegerTypeInt8, -- Int8
+    Core.IntegerTypeInt16, -- Int16
+    Core.IntegerTypeInt32, -- Int
+    Core.IntegerTypeInt64], -- Int64
+  Coders.languageConstraintsTermVariants = S.fromList [
+    Mantle.TermVariantApplication,
+    Mantle.TermVariantFunction,
+    Mantle.TermVariantLet,
+    Mantle.TermVariantList,
+    Mantle.TermVariantLiteral,
+    Mantle.TermVariantMap,
+    Mantle.TermVariantOptional,
+    Mantle.TermVariantProduct,
+    Mantle.TermVariantRecord,
+    Mantle.TermVariantSet,
+    Mantle.TermVariantUnion,
+    Mantle.TermVariantVariable,
+    Mantle.TermVariantWrap],
+  Coders.languageConstraintsTypeVariants = S.fromList [
+    Mantle.TypeVariantAnnotated,
+    Mantle.TypeVariantApplication,
+    Mantle.TypeVariantFunction,
+    Mantle.TypeVariantForall,
+    Mantle.TypeVariantList,
+    Mantle.TypeVariantLiteral,
+    Mantle.TypeVariantMap,
+    Mantle.TypeVariantOptional,
+    Mantle.TypeVariantProduct,
+    Mantle.TypeVariantRecord,
+    Mantle.TypeVariantSet,
+    Mantle.TypeVariantUnion,
+    Mantle.TypeVariantVariable,
+    Mantle.TypeVariantWrap],
+  Coders.languageConstraintsTypes = const True }
 
 {-
   Created on 2025-02-28 using GHCi 9.6.6
