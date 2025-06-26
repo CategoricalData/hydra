@@ -107,6 +107,7 @@ def uint8_to_bigint(x: int) -> int:
     """Convert a logical uint8 to a logical bigint."""
     return x
 
+
 def uint16_to_bigint(x: int) -> int:
     """Convert a logical uint16 to a logical bigint."""
     return x

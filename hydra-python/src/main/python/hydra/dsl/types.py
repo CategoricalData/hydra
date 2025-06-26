@@ -1,38 +1,42 @@
 """A domain-specific language for constructing Hydra types in Python."""
 
+from collections.abc import Sequence
 from functools import reduce
+
+import hydra.dsl.literal_types as lt
 from hydra.core import (
-    Name,
-    Type,
-    TypeFunction,
-    FunctionType,
-    TypeApplication,
-    ApplicationType,
-    TypeAnnotated,
     AnnotatedType,
+    ApplicationType,
+    FieldType,
+    FloatType,
+    ForallType,
+    FunctionType,
+    IntegerType,
+    LiteralType,
+    MapType,
+    Name,
+    RowType,
+    Term,
+    Type,
+    TypeAnnotated,
+    TypeApplication,
     TypeForall,
+    TypeFunction,
     TypeList,
     TypeLiteral,
     TypeMap,
     TypeOptional,
     TypeProduct,
     TypeRecord,
+    TypeScheme,
     TypeSet,
     TypeSum,
     TypeUnion,
     TypeVariable,
     TypeWrap,
-    ForallType,
-    LiteralType,
-    MapType,
-    RowType,
-    FieldType,
     WrappedType,
-    TypeScheme,
-    Term,
 )
-import hydra.dsl.literal_types as lt
-
+from hydra.dsl.python import FrozenDict
 
 PLACEHOLDER_NAME = Name("placeholder")
 
@@ -52,7 +56,7 @@ def string() -> Type:
     return literal(lt.string())
 
 
-def integer(itype: lt.IntegerType) -> Type:
+def integer(itype: IntegerType) -> Type:
     """Construct an integer type."""
     return literal(lt.integer(itype))
 
@@ -107,7 +111,7 @@ def bigint() -> Type:
     return literal(lt.bigint())
 
 
-def float_(ftype: lt.FloatType) -> Type:
+def float_(ftype: FloatType) -> Type:
     """Construct a float type."""
     return literal(lt.float_(ftype))
 
@@ -129,7 +133,9 @@ def bigfloat() -> Type:
 
 def annot(ann: dict[str, Term], t: Type) -> Type:
     """Construct an annotated type."""
-    return TypeAnnotated(AnnotatedType(t, {Name(k): v for k, v in ann.items()}))
+    return TypeAnnotated(
+        AnnotatedType(t, FrozenDict({Name(k): v for k, v in ann.items()}))
+    )
 
 
 def apply(lhs: Type, rhs: Type) -> Type:
@@ -147,14 +153,14 @@ def set_(t: Type) -> Type:
     return TypeSet(t)
 
 
-def sum_(ts: list[Type]) -> Type:
+def sum_(ts: Sequence[Type]) -> Type:
     """Construct a sum type."""
-    return TypeSum(ts)
+    return TypeSum(tuple(ts))
 
 
-def union(fields: list[FieldType]) -> Type:
+def union(fields: Sequence[FieldType]) -> Type:
     """Construct a union type."""
-    return TypeUnion(RowType(PLACEHOLDER_NAME, fields))
+    return TypeUnion(RowType(PLACEHOLDER_NAME, tuple(fields)))
 
 
 def unit() -> Type:
@@ -214,7 +220,7 @@ def map_(k: Type, v: Type) -> Type:
 
 def mono(t: Type) -> TypeScheme:
     """Construct a type scheme."""
-    return TypeScheme([], t)
+    return TypeScheme((), t)
 
 
 def optional(t: Type) -> Type:
@@ -227,24 +233,24 @@ def pair(a: Type, b: Type) -> Type:
     return product([a, b])
 
 
-def poly(vs: list[str], t: Type) -> TypeScheme:
+def poly(vs: Sequence[str], t: Type) -> TypeScheme:
     """Construct a type scheme."""
-    return TypeScheme([Name(v) for v in vs], t)
+    return TypeScheme(tuple(Name(v) for v in vs), t)
 
 
-def product(ts: list[Type]) -> Type:
+def product(ts: Sequence[Type]) -> Type:
     """Construct a product type."""
-    return TypeProduct(ts)
+    return TypeProduct(tuple(ts))
 
 
-def record(fields: list[FieldType]) -> Type:
+def record(fields: Sequence[FieldType]) -> Type:
     """Construct a record type."""
-    return TypeRecord(RowType(PLACEHOLDER_NAME, fields))
+    return TypeRecord(RowType(PLACEHOLDER_NAME, tuple(fields)))
 
 
-def scheme(variables: list[str], body: Type) -> TypeScheme:
+def scheme(variables: Sequence[str], body: Type) -> TypeScheme:
     """Construct a type scheme."""
-    return TypeScheme([Name(v) for v in variables], body)
+    return TypeScheme(tuple(Name(v) for v in variables), body)
 
 
 def var(n: Name) -> Type:

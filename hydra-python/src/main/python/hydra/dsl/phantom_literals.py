@@ -1,7 +1,7 @@
 """A DSL for constructing literal terms using Python's built-in datatypes."""
 
-from hydra.phantoms import TTerm
 import hydra.dsl.terms as terms
+from hydra.phantoms import TTerm
 
 type Bigfloat = float
 
@@ -14,6 +14,7 @@ def string(value: str) -> TTerm[str]:
 def boolean(value: bool) -> TTerm[bool]:
     """Construct a boolean term."""
     return TTerm[bool](terms.boolean(value))
+
 
 def true() -> TTerm[bool]:
     """Construct a true term."""
@@ -38,7 +39,6 @@ def bigint(value: int) -> TTerm[int]:
 def binary(value: bytes) -> TTerm[bytes]:
     """Construct a binary term."""
     return TTerm[bytes](terms.binary(value))
-
 
 
 def double(value: float) -> TTerm[float]:
