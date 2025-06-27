@@ -16,6 +16,9 @@ cat = primitive1 _strings_cat
 cat2 :: TTerm String -> TTerm String -> TTerm String
 cat2 = primitive2 _strings_cat2
 
+charAt :: TTerm Int -> TTerm String -> TTerm Int
+charAt = primitive2 _strings_charAt
+
 fromList :: TTerm [Int] -> TTerm String
 fromList = primitive1 _strings_fromList
 

@@ -12,6 +12,9 @@ apply = primitive2 _optionals_apply
 bind :: TTerm (Maybe a) -> TTerm (a -> Maybe b) -> TTerm (Maybe b)
 bind = primitive2 _optionals_bind
 
+cases :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
+cases = primitive3 _optionals_cases
+
 cat :: TTerm [Maybe a] -> TTerm [a]
 cat = primitive1 _optionals_cat
 
