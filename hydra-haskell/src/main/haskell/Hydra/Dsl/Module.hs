@@ -43,6 +43,12 @@ namespaces focus mapping = record _Namespaces [
   _Namespaces_focus>>: focus,
   _Namespaces_mapping>>: mapping]
 
+namespacesFocus :: TTerm (Namespaces n) -> TTerm (Namespace, n)
+namespacesFocus ns = project _Namespaces _Namespaces_focus @@ ns
+
+namespacesMapping :: TTerm (Namespaces n) -> TTerm (M.Map Namespace n)
+namespacesMapping ns = project _Namespaces _Namespaces_mapping @@ ns
+
 qualifiedName :: TTerm (Maybe Namespace) -> TTerm String -> TTerm QualifiedName
 qualifiedName ns local = record _QualifiedName [
   _QualifiedName_namespace>>: ns,

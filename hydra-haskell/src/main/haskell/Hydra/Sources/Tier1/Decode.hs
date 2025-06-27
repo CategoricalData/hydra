@@ -265,7 +265,7 @@ mapDef :: TElement (Term -> Maybe (M.Map Term Term))
 mapDef = decodeDefinition "map" $
   matchTermVariant _Term_map
 
-nameDef :: TElement (Term -> Name)
+nameDef :: TElement (Term -> Maybe Name)
 nameDef = decodeDefinition "name" $
   lambda "term" $ Optionals.map nm
     (Optionals.bind

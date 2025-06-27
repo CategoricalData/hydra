@@ -147,14 +147,14 @@ putCount key count = (putAttr key (Core.TermLiteral (Core.LiteralInteger (Core.I
 
 requireElementType :: (Graph.Element -> Compute.Flow t0 Core.Type)
 requireElementType el =  
-  let withType = (Optionals.maybe (Flows_.fail (Strings.cat [
+  let withType = (\m -> Optionals.maybe (Flows_.fail (Strings.cat [
           "missing type annotation for element ",
-          (Core.unName (Graph.elementName el))])) (\t -> Flows_.pure t))
+          (Core.unName (Graph.elementName el))])) (\t -> Flows_.pure t) m)
   in (withType (Rewriting.getTermType (Graph.elementTerm el)))
 
 requireTermType :: (Core.Term -> Compute.Flow t0 Core.Type)
 requireTermType =  
-  let withType = (Optionals.maybe (Flows_.fail "missing type annotation") (\t -> Flows_.pure t))
+  let withType = (\m -> Optionals.maybe (Flows_.fail "missing type annotation") (\t -> Flows_.pure t) m)
   in (\arg_ -> withType (Rewriting.getTermType arg_))
 
 resetCount :: (Core.Name -> Compute.Flow t0 ())

@@ -363,7 +363,9 @@ inferTypeOfCaseStatement cx (CaseStatement tname dflt cases) = Flows.bind (requi
     fnames = fmap fieldName cases
     withSchemaType (TypeScheme svars styp) = Flows.bind (ExtractCore.unionType tname styp) withFields
       where
-        withFields sfields = bind2 (traverse (\t -> inferTypeOfTerm cx t "default") dflt) (inferMany cx $ fmap (\f -> (fieldTerm f, "case " ++ unName (fieldName f))) cases) withResults
+        withFields sfields = bind2
+           (traverse (\t -> inferTypeOfTerm cx t $ "case " ++ unName tname ++ ".<default>") dflt)
+           (inferMany cx $ fmap (\f -> (fieldTerm f, "case " ++ unName tname ++ "." ++ unName (fieldName f))) cases) withResults
           where
             withResults mr (iterms, itypes, isubst) = bindVar withCod
               where
