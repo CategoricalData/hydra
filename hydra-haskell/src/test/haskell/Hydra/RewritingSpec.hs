@@ -225,9 +225,9 @@ testExpandTypedLambdas = do
     splitOn = primitive $ Name "hydra.lib.strings.splitOn"
     toLower = primitive $ Name "hydra.lib.strings.toLower"
     expandsTo termBefore termAfter = do
---      result <- fromFlowIo testGraph $ expandLambdas termBefore
+--      result <- flowToIo testGraph $ expandLambdas termBefore
 --      H.shouldBe result termAfter
-       inf <- fromFlowIo testGraph (inferenceResultTerm <$> inferInGraphContext termBefore)
+       inf <- flowToIo testGraph (inferenceResultTerm <$> inferInGraphContext termBefore)
        let result = expandTypedLambdas inf
        H.shouldBe (ShowCore.term (removeTermAnnotations result)) (ShowCore.term termAfter)
     noChange term = expandsTo term term

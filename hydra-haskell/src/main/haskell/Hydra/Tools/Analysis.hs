@@ -12,7 +12,7 @@ import Hydra.Sources.Tier1.All
 import Hydra.Sources.Tier2.All
 
 -- Create an exhaustive list of Hydra kernel elements and primitives for code generation
-fromFlowIo hydraCoreGraph (graphSummary True $ modulesToGraph kernelModules) >>= putStrLn
+flowToIo hydraCoreGraph (graphSummary True $ modulesToGraph kernelModules) >>= putStrLn
 -}
 module Hydra.Tools.Analysis where
 

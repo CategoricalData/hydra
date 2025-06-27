@@ -36,5 +36,5 @@ generateGraphSON :: FilePath -> [TableType] -> LazyGraph Term -> FilePath -> IO 
 generateGraphSON sourceRoot tableSchemas graphMapping outputPath = do
   g <- transformTables sourceRoot tableSchemas graphMapping
   let els = lazyGraphToElements g
-  jsonResult <- fromFlowIo hydraCoreGraph (pgElementsToGraphson termGraphsonContext els)
+  jsonResult <- flowToIo hydraCoreGraph (pgElementsToGraphson termGraphsonContext els)
   writeFile outputPath (jsonValuesToString jsonResult)

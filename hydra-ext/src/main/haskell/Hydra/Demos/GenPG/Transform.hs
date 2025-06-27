@@ -116,7 +116,7 @@ transformRecord vspecs especs term = do
 transformTable :: TableType -> FilePath -> [Pg.Vertex Term] -> [Pg.Edge Term] -> IO ([Pg.Vertex Term], [Pg.Edge Term])
 transformTable tableType@(TableType (TableName tableName) _) path vspecs especs = do
     (Table _ rows) <- decodeTableIo tableType path
-    pairs <- fromFlowIo hydraCoreGraph $ withTrace ("transforming " ++ filePath) $
+    pairs <- flowToIo hydraCoreGraph $ withTrace ("transforming " ++ filePath) $
       CM.mapM (transformRecord vspecs especs . termRowToRecord tableType) rows
     return $ L.foldl addRow ([], []) pairs
   where
