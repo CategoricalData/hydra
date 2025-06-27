@@ -11,6 +11,9 @@ apply = (<*>)
 bind :: Y.Maybe a -> (a -> Y.Maybe b) -> Y.Maybe b
 bind = (>>=)
 
+cases :: Y.Maybe a -> b -> (a -> b) -> b
+cases m n j = Y.maybe n j m
+
 cat :: [Y.Maybe a] -> [a]
 cat = Y.catMaybes
 

@@ -91,10 +91,18 @@ _equality_equalUint16   = qname _hydra_lib_equality "equalUint16" :: Name
 _equality_equalUint32   = qname _hydra_lib_equality "equalUint32" :: Name
 _equality_equalUint64   = qname _hydra_lib_equality "equalUint64" :: Name
 _equality_equalString   = qname _hydra_lib_equality "equalString" :: Name
-_equality_identity      = qname _hydra_lib_equality "identity" :: Name
+_equality_gtFloat32     = qname _hydra_lib_equality "gtFloat32" :: Name
+_equality_gtFloat64     = qname _hydra_lib_equality "gtFloat64" :: Name
 _equality_gtInt32       = qname _hydra_lib_equality "gtInt32" :: Name
+_equality_gteFloat32    = qname _hydra_lib_equality "gteFloat32" :: Name
+_equality_gteFloat64    = qname _hydra_lib_equality "gteFloat64" :: Name
 _equality_gteInt32      = qname _hydra_lib_equality "gteInt32" :: Name
+_equality_identity      = qname _hydra_lib_equality "identity" :: Name
+_equality_ltFloat32     = qname _hydra_lib_equality "ltFloat32" :: Name
+_equality_ltFloat64     = qname _hydra_lib_equality "ltFloat64" :: Name
 _equality_ltInt32       = qname _hydra_lib_equality "ltInt32" :: Name
+_equality_lteFloat32    = qname _hydra_lib_equality "lteFloat32" :: Name
+_equality_lteFloat64    = qname _hydra_lib_equality "lteFloat64" :: Name
 _equality_lteInt32      = qname _hydra_lib_equality "lteInt32" :: Name
 
 hydraLibEquality :: Library
@@ -119,9 +127,17 @@ hydraLibEquality = standardLibrary _hydra_lib_equality [
     prim2 _equality_equalUint64   Equality.equalUint64   []    uint64 uint64 boolean,
     prim2 _equality_equalString   Equality.equalString   []    string string boolean,
     prim1 _equality_identity      Equality.identity      ["x"] x x,
+    prim2 _equality_gtFloat32     Equality.gtFloat32     []    float32 float32 boolean,
+    prim2 _equality_gtFloat64     Equality.gtFloat64     []    float64 float64 boolean,
     prim2 _equality_gtInt32       Equality.gtInt32       []    int32 int32 boolean,
+    prim2 _equality_gteFloat32    Equality.gteFloat32    []    float32 float32 boolean,
+    prim2 _equality_gteFloat64    Equality.gteFloat64    []    float64 float64 boolean,
     prim2 _equality_gteInt32      Equality.gteInt32      []    int32 int32 boolean,
+    prim2 _equality_ltFloat32     Equality.ltFloat32     []    float32 float32 boolean,
+    prim2 _equality_ltFloat64     Equality.ltFloat64     []    float64 float64 boolean,
     prim2 _equality_ltInt32       Equality.ltInt32       []    int32 int32 boolean,
+    prim2 _equality_lteFloat32    Equality.lteFloat32    []    float32 float32 boolean,
+    prim2 _equality_lteFloat64    Equality.lteFloat64    []    float64 float64 boolean,
     prim2 _equality_lteInt32      Equality.lteInt32      []    int32 int32 boolean]
   where
     x = variable "x"
@@ -463,6 +479,7 @@ _hydra_lib_optionals = Namespace "hydra.lib.optionals"
 _optionals_apply :: Name
 _optionals_apply     = qname _hydra_lib_optionals "apply" :: Name
 _optionals_bind      = qname _hydra_lib_optionals "bind" :: Name
+_optionals_cases     = qname _hydra_lib_optionals "cases" :: Name
 _optionals_cat       = qname _hydra_lib_optionals "cat" :: Name
 _optionals_compose   = qname _hydra_lib_optionals "compose" :: Name
 _optionals_fromJust  = qname _hydra_lib_optionals "fromJust" :: Name
@@ -478,6 +495,7 @@ hydraLibOptionals :: Library
 hydraLibOptionals = standardLibrary _hydra_lib_optionals [
     prim2       _optionals_apply     Optionals.apply           ["x", "y"]      (optional $ function x y) (optional x) (optional y),
     prim2       _optionals_bind      Optionals.bind            ["x", "y"]      (optional x) (function x (optional y)) (optional y),
+    prim3Interp _optionals_cases     (Just casesInterp)        ["x", "y"]      (optional x) y (function x y) y,
     prim1       _optionals_cat       Optionals.cat             ["x"]           (list $ optional x) (list x),
     prim2       _optionals_compose   Optionals.compose         ["x", "y", "z"] (function x $ optional y) (function y $ optional z) (function x $ optional z),
     prim1       _optionals_fromJust  Optionals.fromJust        ["x"]           (optional x) x,
@@ -492,6 +510,10 @@ hydraLibOptionals = standardLibrary _hydra_lib_optionals [
     x = variable "x"
     y = variable "y"
     z = variable "z"
+
+-- | Interpreted implementation of hydra.lib.optionals.cases
+casesInterp :: Term -> Term -> Term -> Flow Graph Term
+casesInterp opt def fun = maybeInterp def fun opt
 
 -- | Interpreted implementation of hydra.lib.optionals.maybe
 maybeInterp :: Term -> Term -> Term -> Flow Graph Term
@@ -555,6 +577,7 @@ _hydra_lib_strings = Namespace "hydra.lib.strings"
 
 _strings_cat         = qname _hydra_lib_strings "cat" :: Name
 _strings_cat2        = qname _hydra_lib_strings "cat2" :: Name
+_strings_charAt      = qname _hydra_lib_strings "charAt" :: Name
 _strings_fromList    = qname _hydra_lib_strings "fromList" :: Name
 _strings_intercalate = qname _hydra_lib_strings "intercalate" :: Name
 _strings_null        = qname _hydra_lib_strings "null" :: Name
@@ -570,6 +593,7 @@ hydraLibStrings :: Library
 hydraLibStrings = standardLibrary _hydra_lib_strings [
   prim1 _strings_cat         Strings.cat         [] (list string) string,
   prim2 _strings_cat2        Strings.cat2        [] string string string,
+  prim2 _strings_charAt      Strings.charAt      [] int32 string int32,
   prim1 _strings_fromList    Strings.fromList    [] (list int32) string,
   prim2 _strings_intercalate Strings.intercalate [] string (list string) string,
   prim1 _strings_length      Strings.length      [] string int32,
