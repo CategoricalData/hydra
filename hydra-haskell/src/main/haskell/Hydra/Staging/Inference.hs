@@ -58,10 +58,7 @@ freshVariableType = TypeVariable <$> freshName
 --------------------------------------------------------------------------------
 -- Type checking
 
--- | A local typing context for inference, mapping term variables to types.
-type Types = M.Map Name Type
-
-typeOf :: InferenceContext -> S.Set Name -> Types -> Term -> Flow s Type
+typeOf :: InferenceContext -> S.Set Name -> M.Map Name Type -> Term -> Flow s Type
 --typeOf cx vars types term = case term of
 typeOf cx vars types term = withTrace ("checking type of: " ++ ShowCore.term term ++ " (vars: " ++ show (fmap unName $ S.toList vars) ++ ", types: " ++ (show types) ++ ")") $ case term of
     TermAnnotated (AnnotatedTerm term1 _) -> typeOf cx vars types term1
@@ -195,7 +192,7 @@ typeOf cx vars types term = withTrace ("checking type of: " ++ ShowCore.term ter
 
     _ -> Flows.fail $ "unsupported term variant in typeOf: " ++ show (termVariant term)
 
-typeOfCollection :: InferenceContext -> String -> (Type -> Type) -> S.Set Name -> Types -> [Term] -> Flow s Type
+typeOfCollection :: InferenceContext -> String -> (Type -> Type) -> S.Set Name -> M.Map Name Type -> [Term] -> Flow s Type
 typeOfCollection cx desc cons vars types els = if L.null els
   then return $ typeSchemeToFType $ Types.poly ["t"] $ cons $ Types.var "t"
   else do
@@ -246,7 +243,7 @@ checkTypeVariables vars typ = case typ of
 typeSchemeToFType :: TypeScheme -> Type
 typeSchemeToFType (TypeScheme vars body) = L.foldl (\t v -> TypeForall $ ForallType v t) body $ L.reverse vars
 
-toFContext :: InferenceContext -> Types
+toFContext :: InferenceContext -> M.Map Name Type
 toFContext = fmap typeSchemeToFType . inferenceContextDataTypes
 
 --------------------------------------------------------------------------------
