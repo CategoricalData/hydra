@@ -13,6 +13,9 @@ cat = L.concat
 cat2 :: String -> String -> String
 cat2 s1 s2 = s1 ++ s2
 
+charAt :: Int -> String -> Int
+charAt i s = C.ord (s !! i)
+
 fromList :: [Int] -> String
 fromList = fmap C.chr
 
