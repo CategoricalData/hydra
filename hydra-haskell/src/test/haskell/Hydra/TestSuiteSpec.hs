@@ -20,6 +20,7 @@ import qualified Test.HUnit.Lang as HL
 import qualified Test.QuickCheck as QC
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
@@ -38,15 +39,6 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
     TestCaseInference (InferenceTestCase input output) -> expectInferenceResult desc input output
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
-
-expectInferenceResult :: String -> Term -> TypeScheme -> H.Expectation
-expectInferenceResult desc term expected = do
-    expectSuccess desc (ShowCore.typeScheme . snd <$> result) (ShowCore.typeScheme expected)
-    expectSuccess desc (ShowCore.term . stripTypesFromTerm . fst <$> result) (ShowCore.term $ stripTypesFromTerm term)
-  where
-    result = do
-      cx <- graphToInferenceContext testGraph
-      inferTypeOf cx term
 
 runTestCase :: String -> TestRunner -> TestCaseWithMetadata -> H.SpecWith ()
 runTestCase pdesc runner tcase@(TestCaseWithMetadata name _ mdesc _) = case runner cdesc tcase of
