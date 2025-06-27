@@ -161,9 +161,9 @@ transformAvroJson format adapter lastMile inFile outFile = do
     let entities = case format of
           Json -> [contents]
           Jsonl -> L.filter (not . L.null) $ lines contents
-    lmEncoder <- fromFlowIo hydraCoreGraph $ lastMileEncoder lastMile (adapterTarget adapter)
-    descs <- L.concat <$> fromFlowIo hydraCoreGraph (CM.zipWithM (jsonToTarget inFile adapter lmEncoder) [1..] entities)
-    result <- fromFlowIo hydraCoreGraph $ lastMileSerializer lastMile descs
+    lmEncoder <- flowToIo hydraCoreGraph $ lastMileEncoder lastMile (adapterTarget adapter)
+    descs <- L.concat <$> flowToIo hydraCoreGraph (CM.zipWithM (jsonToTarget inFile adapter lmEncoder) [1..] entities)
+    result <- flowToIo hydraCoreGraph $ lastMileSerializer lastMile descs
     writeFile outFile result
     putStrLn $ outFile ++ " (" ++ descEntities entities ++ ")"
   where
@@ -190,7 +190,7 @@ transformAvroJsonDirectory :: LastMile Graph x -> FilePath -> FilePath -> FilePa
 transformAvroJsonDirectory lastMile schemaPath srcDir destDir = do
     createDirectoryIfMissing True destDir
     schemaStr <- readFile schemaPath
-    adapter <- fromFlowIo () $ loadAdapter schemaStr
+    adapter <- flowToIo () $ loadAdapter schemaStr
     paths <- getDirectoryContents srcDir
     conf <- CM.mapM (transformFile adapter) paths
     return ()

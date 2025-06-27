@@ -190,7 +190,7 @@ import Hydra.Flows
 import Data.Map as M
 import Data.Maybe as Y
 
-ff = fromFlowIo bootstrapGraph
+ff = flowToIo bootstrapGraph
 
 schema <- ff $ graphToSchema $ modulesToGraph [openCypherFeaturesModule]
 
