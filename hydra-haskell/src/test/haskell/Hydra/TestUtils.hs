@@ -8,7 +8,9 @@ module Hydra.TestUtils (
   checkSerdeRoundTrip,
   checkSerialization,
   eval,
+  expectInferenceResult,
   expectSuccess,
+  expectTypeOfResult,
   shouldFail,
   shouldSucceedWith,
   strip,
@@ -23,6 +25,7 @@ import Hydra.AdapterUtils
 import Hydra.Staging.TestGraph
 import Hydra.ArbitraryCore()
 import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Show.Core as ShowCore
 
 import qualified Test.Hspec as H
 import qualified Test.HUnit.Lang as HL
@@ -125,6 +128,15 @@ checkSerialization mkSerdeStr (TypedTerm term typ) expected = do
 eval :: Term -> Flow Graph Term
 eval = reduceTerm True M.empty
 
+expectInferenceResult :: String -> Term -> TypeScheme -> H.Expectation
+expectInferenceResult desc term expected = do
+    expectSuccess desc (ShowCore.typeScheme . snd <$> result) (ShowCore.typeScheme expected)
+    expectSuccess desc (ShowCore.term . stripTypesFromTerm . fst <$> result) (ShowCore.term $ stripTypesFromTerm term)
+  where
+    result = do
+      cx <- graphToInferenceContext testGraph
+      inferTypeOf cx term
+
 expectSuccess :: (Eq a, Show a) => String -> Flow () a -> a -> H.Expectation
 expectSuccess desc f x = case my of
     Nothing -> HL.assertFailure $ "Error: " ++ traceSummary trace
@@ -134,6 +146,14 @@ expectSuccess desc f x = case my of
     f2 = do
       putAttr key_debugId $ Terms.string desc
       f
+
+expectTypeOfResult :: String -> S.Set Name -> M.Map Name Type -> Term -> Type -> H.Expectation
+expectTypeOfResult desc vars types term expected = do
+    expectSuccess desc (ShowCore.type_ <$> result) (ShowCore.type_ expected)
+  where
+    result = do
+      cx <- graphToInferenceContext testGraph
+      typeOf cx vars types term
 
 shouldFail :: Flow Graph a -> H.Expectation
 shouldFail f = H.shouldBe True (Y.isNothing $ flowStateValue $ unFlow f testGraph emptyTrace)
