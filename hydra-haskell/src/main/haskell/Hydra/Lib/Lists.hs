@@ -73,12 +73,18 @@ null = L.null
 pure :: a -> [a]
 pure e = [e]
 
+replicate :: Int -> a -> [a]
+replicate = L.replicate
+
 reverse :: [a] -> [a]
 reverse = L.reverse
 
 safeHead :: [a] -> Maybe a
 safeHead [] = Nothing
 safeHead (x:_) = Just x
+
+singleton :: a -> [a]
+singleton e = [e]
 
 sort :: Ord a => [a] -> [a]
 sort = L.sort

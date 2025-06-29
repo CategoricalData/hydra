@@ -197,8 +197,10 @@ _lists_map         = qname _hydra_lib_lists "map" :: Name
 _lists_nub         = qname _hydra_lib_lists "nub" :: Name
 _lists_null        = qname _hydra_lib_lists "null" :: Name
 _lists_pure        = qname _hydra_lib_lists "pure" :: Name
+_lists_replicate   = qname _hydra_lib_lists "replicate" :: Name
 _lists_reverse     = qname _hydra_lib_lists "reverse" :: Name
 _lists_safeHead    = qname _hydra_lib_lists "safeHead" :: Name
+_lists_singleton   = qname _hydra_lib_lists "singleton" :: Name
 _lists_sort        = qname _hydra_lib_lists "sort" :: Name
 _lists_sortOn      = qname _hydra_lib_lists "sortOn" :: Name
 _lists_span        = qname _hydra_lib_lists "span" :: Name
@@ -231,8 +233,10 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim1       _lists_nub         Lists.nub          ["x"] (list x) (list x),
     prim1       _lists_null        Lists.null         ["x"] (list x) boolean,
     prim1       _lists_pure        Lists.pure         ["x"] x (list x),
+    prim2       _lists_replicate   Lists.replicate    ["x"] int32 x (list x),
     prim1       _lists_reverse     Lists.reverse      ["x"] (list x) (list x),
     prim1       _lists_safeHead    Lists.safeHead     ["x"] (list x) (optional x),
+    prim1       _lists_singleton   Lists.singleton    ["x"] x (list x),
     prim2Interp _lists_sortOn      Nothing            ["x", "y"] (function x y) (list x) (list x),
     prim2Interp _lists_span        Nothing            ["x", "y"] (function x boolean) (list x) (pair (list x) (list x)),
     prim1       _lists_sort        Lists.sort         ["x"] (list x) (list x),
