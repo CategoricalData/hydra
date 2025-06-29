@@ -132,8 +132,8 @@ substituteInConstraintsDef = substitutionDefinition "substituteInConstraints" $
 substInContextDef :: TElement (TypeSubst -> InferenceContext -> InferenceContext)
 substInContextDef = substitutionDefinition "substInContext" $
   lambdas ["subst", "cx"] $ Typing.inferenceContextWithDataTypes
-    (Maps.map (ref substInTypeSchemeDef @@ var "subst") (Typing.inferenceContextDataTypes $ var "cx"))
     (var "cx")
+    (Maps.map (ref substInTypeSchemeDef @@ var "subst") (Typing.inferenceContextDataTypes $ var "cx"))
 
 substituteInTermDef :: TElement (TermSubst -> Term -> Term)
 substituteInTermDef = substitutionDefinition "substituteInTerm" $
@@ -153,7 +153,7 @@ substituteInTermDef = substitutionDefinition "substituteInTerm" $
           (Core.letBindingName $ var "b")
           (ref substituteInTermDef @@ var "subst2" @@ (Core.letBindingTerm $ var "b"))
           (Core.letBindingType $ var "b")] $
-        Core.termLet $ Core.letExpression
+        Core.termLet $ Core.let_
           (Lists.map (var "rewriteBinding") (var "bindings"))
           (ref substituteInTermDef @@ var "subst2" @@ (Core.letEnvironment $ var "lt"))] $
       cases _Term (var "term")
@@ -214,7 +214,7 @@ substTypesInTermDef = substitutionDefinition "substTypesInTerm" $
           (Core.letBindingName $ var "b")
           (Core.letBindingTerm $ var "b")
           (Optionals.map (ref substInTypeSchemeDef @@ var "subst") (Core.letBindingType $ var "b"))] $
-        var "recurse" @@ (Core.termLet $ Core.letExpression
+        var "recurse" @@ (Core.termLet $ Core.let_
           (Lists.map (var "rewriteBinding") (Core.letBindings $ var "l"))
           (Core.letEnvironment $ var "l")),
       "forTupleProjection">: lambda "tp" $ var "recurse" @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $ Core.tupleProjection
