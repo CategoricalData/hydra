@@ -100,6 +100,12 @@ nonAlnumToUnderscores input =
 sanitizeWithUnderscores :: (S.Set String -> String -> String)
 sanitizeWithUnderscores reserved s = (escapeWithUnderscore reserved (nonAlnumToUnderscores s))
 
+showList :: ((t0 -> String) -> [t0] -> String)
+showList f els = (Strings.cat [
+  "[",
+  Strings.intercalate ", " (Lists.map f els),
+  "]"])
+
 stripLeadingAndTrailingWhitespace :: (String -> String)
 stripLeadingAndTrailingWhitespace s = (Strings.fromList (Lists.dropWhile Chars.isSpace (Lists.reverse (Lists.dropWhile Chars.isSpace (Lists.reverse (Strings.toList s))))))
 

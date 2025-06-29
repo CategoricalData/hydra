@@ -48,6 +48,7 @@ hydraFormattingModule = Module (Namespace "hydra.formatting") elements [] [hydra
       el mapFirstLetterDef,
       el nonAlnumToUnderscoresDef,
       el sanitizeWithUnderscoresDef,
+      el showListDef,
       el stripLeadingAndTrailingWhitespaceDef,
       el withCharacterAliasesDef,
       el wrapLineDef]
@@ -161,6 +162,13 @@ sanitizeWithUnderscoresDef :: TElement (S.Set String -> String -> String)
 sanitizeWithUnderscoresDef = formattingDefinition "sanitizeWithUnderscores" $
   lambdas ["reserved", "s"] $
     ref escapeWithUnderscoreDef @@ var "reserved" @@ (ref nonAlnumToUnderscoresDef @@ var "s")
+
+showListDef :: TElement ((a -> String) -> [a] -> String)
+showListDef = formattingDefinition "showList" $
+  lambdas ["f", "els"] $ Strings.cat $ list [
+    string "[",
+    Strings.intercalate (string ", ") $ Lists.map (var "f") $ var "els",
+    string "]"]
 
 stripLeadingAndTrailingWhitespaceDef :: TElement (String -> String)
 stripLeadingAndTrailingWhitespaceDef = formattingDefinition "stripLeadingAndTrailingWhitespace" $
