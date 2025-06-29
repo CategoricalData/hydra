@@ -69,11 +69,17 @@ null = primitive1 _lists_null
 pure :: TTerm a -> TTerm [a]
 pure = primitive1 _lists_pure
 
+replicate :: TTerm Int -> TTerm a -> TTerm [a]
+replicate = primitive2 _lists_replicate
+
 reverse :: TTerm [a] -> TTerm [a]
 reverse = primitive1 _lists_reverse
 
 safeHead :: TTerm [a] -> TTerm (Maybe a)
 safeHead = primitive1 _lists_safeHead
+
+singleton :: TTerm a -> TTerm [a]
+singleton = primitive1 _lists_singleton
 
 sort :: TTerm [a] -> TTerm [a]
 sort = primitive1 _lists_sort
