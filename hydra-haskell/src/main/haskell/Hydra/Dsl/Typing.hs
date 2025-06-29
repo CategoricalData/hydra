@@ -35,6 +35,28 @@ inferenceContextDataTypes ic = Phantoms.project _InferenceContext _InferenceCont
 inferenceContextDebug :: TTerm InferenceContext -> TTerm Bool
 inferenceContextDebug ic = Phantoms.project _InferenceContext _InferenceContext_debug @@ ic
 
+inferenceContextWithDataTypes :: TTerm InferenceContext -> TTerm (M.Map Name TypeScheme) -> TTerm InferenceContext
+inferenceContextWithDataTypes ctx dataTypes = inferenceContext
+  (Hydra.Dsl.Typing.inferenceContextSchemaTypes ctx)
+  (Hydra.Dsl.Typing.inferenceContextPrimitiveTypes ctx)
+  dataTypes
+  (Hydra.Dsl.Typing.inferenceContextDebug ctx)
+
+inferenceResult :: TTerm Term -> TTerm Type -> TTerm TypeSubst -> TTerm InferenceResult
+inferenceResult term type_ subst = Phantoms.record _InferenceResult [
+  _InferenceResult_term>>: term,
+  _InferenceResult_type>>: type_,
+  _InferenceResult_subst>>: subst]
+
+inferenceResultTerm :: TTerm InferenceResult -> TTerm Term
+inferenceResultTerm ir = Phantoms.project _InferenceResult _InferenceResult_term @@ ir
+
+inferenceResultType :: TTerm InferenceResult -> TTerm Type
+inferenceResultType ir = Phantoms.project _InferenceResult _InferenceResult_type @@ ir
+
+inferenceResultSubst :: TTerm InferenceResult -> TTerm TypeSubst
+inferenceResultSubst ir = Phantoms.project _InferenceResult _InferenceResult_subst @@ ir
+
 termSubst :: TTerm (M.Map Name Term) -> TTerm TermSubst
 termSubst = Phantoms.wrap _TermSubst
 
@@ -61,12 +83,3 @@ unTermSubst ts = unwrap _TermSubst @@ ts
 
 unTypeSubst :: TTerm TypeSubst -> TTerm (M.Map Name Type)
 unTypeSubst ts = unwrap _TypeSubst @@ ts
-
---
-
-inferenceContextWithDataTypes :: TTerm (M.Map Name TypeScheme) -> TTerm InferenceContext -> TTerm InferenceContext
-inferenceContextWithDataTypes dataTypes ctx = inferenceContext
-  (Hydra.Dsl.Typing.inferenceContextSchemaTypes ctx)
-  (Hydra.Dsl.Typing.inferenceContextPrimitiveTypes ctx)
-  dataTypes
-  (Hydra.Dsl.Typing.inferenceContextDebug ctx)

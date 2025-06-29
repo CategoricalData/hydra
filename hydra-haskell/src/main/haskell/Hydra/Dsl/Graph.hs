@@ -72,6 +72,51 @@ graphWithElements g newElements = graph
     (Hydra.Dsl.Graph.graphPrimitives g)
     (Hydra.Dsl.Graph.graphSchema g)
 
+graphWithEnvironment :: TTerm Graph -> TTerm (M.Map Name (Maybe Term)) -> TTerm Graph
+graphWithEnvironment g newEnvironment = graph
+    (Hydra.Dsl.Graph.graphElements g)
+    newEnvironment
+    (Hydra.Dsl.Graph.graphTypes g)
+    (Hydra.Dsl.Graph.graphBody g)
+    (Hydra.Dsl.Graph.graphPrimitives g)
+    (Hydra.Dsl.Graph.graphSchema g)
+
+graphWithTypes :: TTerm Graph -> TTerm (M.Map Name TypeScheme) -> TTerm Graph
+graphWithTypes g newTypes = graph
+    (Hydra.Dsl.Graph.graphElements g)
+    (Hydra.Dsl.Graph.graphEnvironment g)
+    newTypes
+    (Hydra.Dsl.Graph.graphBody g)
+    (Hydra.Dsl.Graph.graphPrimitives g)
+    (Hydra.Dsl.Graph.graphSchema g)
+
+graphWithBody :: TTerm Graph -> TTerm Term -> TTerm Graph
+graphWithBody g newBody = graph
+    (Hydra.Dsl.Graph.graphElements g)
+    (Hydra.Dsl.Graph.graphEnvironment g)
+    (Hydra.Dsl.Graph.graphTypes g)
+    newBody
+    (Hydra.Dsl.Graph.graphPrimitives g)
+    (Hydra.Dsl.Graph.graphSchema g)
+
+graphWithPrimitives :: TTerm Graph -> TTerm (M.Map Name Primitive) -> TTerm Graph
+graphWithPrimitives g newPrimitives = graph
+    (Hydra.Dsl.Graph.graphElements g)
+    (Hydra.Dsl.Graph.graphEnvironment g)
+    (Hydra.Dsl.Graph.graphTypes g)
+    (Hydra.Dsl.Graph.graphBody g)
+    newPrimitives
+    (Hydra.Dsl.Graph.graphSchema g)
+
+graphWithSchema :: TTerm Graph -> TTerm (Maybe Graph) -> TTerm Graph
+graphWithSchema g newSchema = graph
+    (Hydra.Dsl.Graph.graphElements g)
+    (Hydra.Dsl.Graph.graphEnvironment g)
+    (Hydra.Dsl.Graph.graphTypes g)
+    (Hydra.Dsl.Graph.graphBody g)
+    (Hydra.Dsl.Graph.graphPrimitives g)
+    newSchema
+
 primitiveName :: TTerm Primitive -> TTerm Name
 primitiveName p = project _Primitive _Primitive_name @@ p
 
