@@ -239,16 +239,16 @@ lambdaBody l = Phantoms.project _Lambda _Lambda_body @@ l
 lambdaDomain :: TTerm Lambda -> TTerm (Maybe Type)
 lambdaDomain l = Phantoms.project _Lambda _Lambda_domain @@ l
 
+let_ :: TTerm [LetBinding] -> TTerm Term -> TTerm Let
+let_ bindings environment = Phantoms.record _Let [
+  _Let_bindings>>: bindings,
+  _Let_environment>>: environment]
+
 letBinding :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm LetBinding
 letBinding name term mtype = Phantoms.record _LetBinding [
   _LetBinding_name>>: name,
   _LetBinding_term>>: term,
   _LetBinding_type>>: mtype]
-
-letExpression :: TTerm [LetBinding] -> TTerm Term -> TTerm Let
-letExpression bindings environment = Phantoms.record _Let [
-  _Let_bindings>>: bindings,
-  _Let_environment>>: environment]
 
 letBindings :: TTerm Let -> TTerm [LetBinding]
 letBindings l = Phantoms.project _Let _Let_bindings @@ l

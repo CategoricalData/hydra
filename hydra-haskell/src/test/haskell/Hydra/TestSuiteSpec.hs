@@ -9,7 +9,7 @@ module Hydra.TestSuiteSpec where
 import Hydra.Kernel
 import Hydra.TestUtils
 import Hydra.Testing
-import Hydra.Staging.Inference
+import Hydra.Inference
 import Hydra.Test.TestSuite
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Dsl.Testing as Testing

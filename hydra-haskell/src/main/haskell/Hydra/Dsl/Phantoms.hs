@@ -12,6 +12,7 @@ import Hydra.Sources.Tier0.Core
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Show.Core as ShowCore
 
 import Prelude hiding ((++))
 import qualified Data.Map as M
@@ -88,6 +89,7 @@ unaryFunction f = case (unTTerm $ f $ var "x") of
 binaryFunction :: (TTerm a -> TTerm b -> TTerm c) -> TTerm (a -> b -> c)
 binaryFunction f = case (unTTerm $ f (var "x") (var "y")) of
   TermApplication (Application (TermApplication (Application lhs _)) _) -> TTerm lhs
+  t -> TTerm $ Terms.string $ "unexpected term as binary function: " <> ShowCore.term t
 
 -- | Compose two functions (g then f)
 -- Example: compose (var "stringLength") (var "toString")
@@ -194,6 +196,15 @@ pair (TTerm l) (TTerm r) = TTerm $ Terms.pair l r
 -- Example: second $ pair (string "foo") (string "bar")
 second :: TTerm (a, b) -> TTerm b
 second pair = TTerm (Terms.untuple 2 1 Nothing) @@ pair
+
+triple :: TTerm a -> TTerm b -> TTerm c -> TTerm (a, b, c)
+triple (TTerm a) (TTerm b) (TTerm c) = TTerm $ Terms.triple a b c
+
+tuple4 :: TTerm a -> TTerm b -> TTerm c -> TTerm d -> TTerm (a, b, c, d)
+tuple4 (TTerm a) (TTerm b) (TTerm c) (TTerm d) = TTerm $ Terms.tuple4 a b c d
+
+tuple5 :: TTerm a -> TTerm b -> TTerm c -> TTerm d -> TTerm e -> TTerm (a, b, c, d, e)
+tuple5 (TTerm a) (TTerm b) (TTerm c) (TTerm d) (TTerm e) = TTerm $ Terms.tuple5 a b c d e
 
 -- | Create a tuple projection function
 -- Example: untuple 3 1 extracts the second element of a 3-tuple

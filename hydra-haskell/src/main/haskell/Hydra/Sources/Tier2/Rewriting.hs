@@ -204,7 +204,7 @@ expandTypedLambdasDef = rewritingDefinition "expandTypedLambdas" $
             (Core.letBindingName $ var "b")
             (ref expandTypedLambdasDef @@ (Core.letBindingTerm $ var "b"))
             (Core.letBindingType $ var "b")]
-          $ Core.termLet $ Core.letExpression
+          $ Core.termLet $ Core.let_
             (Lists.map (var "expandBinding") (Core.letBindings $ var "lt"))
             (var "expand" @@ var "doms" @@ var "cod" @@ (Core.letEnvironment $ var "lt")),
         _Term_typed>>: lambda "tt" $ Core.termTyped $ Core.typedTerm
@@ -263,7 +263,7 @@ flattenLetTermsDef = rewritingDefinition "flattenLetTerms" $
           "body">: Core.letEnvironment $ var "lt",
           "forResult">: lambda "hr" $ Lists.cons (first $ var "hr") (second $ var "hr"),
           "newBindings">: Lists.concat $ Lists.map (var "forResult" <.> var "rewriteBinding") (var "bindings")]
-          $ Core.termLet $ Core.letExpression (var "newBindings") (var "body")] @@ var "rewritten"]
+          $ Core.termLet $ Core.let_ (var "newBindings") (var "body")] @@ var "rewritten"]
     $ ref rewriteTermDef @@ var "flatten" @@ var "term"
 
 foldOverTermDef :: TElement (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
@@ -440,7 +440,7 @@ normalizeTypeVariablesInTermDef = rewritingDefinition "normalizeTypeVariablesInT
                     (var "newValue")
                     (just $ Core.typeScheme (var "newVars") (var "substType" @@ var "newSubst" @@ var "typ")))
                 (Core.letBindingType $ var "b")]
-            $ Core.termLet $ Core.letExpression
+            $ Core.termLet $ Core.let_
               (Lists.map (var "rewriteBinding") (var "bindings"))
               (var "rewriteWithSubst" @@ (pair (var "subst") (var "boundVars")) @@ var "env"),
           _Term_typeAbstraction>>: lambda "ta" $ Core.termTypeAbstraction $ Core.typeAbstraction
@@ -520,7 +520,7 @@ rewriteTermDef = rewritingDefinition "rewriteTerm" $ lambda "f" $ lets [
         (Core.letBindingName $ var "b")
         (var "recurse" @@ (Core.letBindingTerm $ var "b"))
         (Core.letBindingType $ var "b")] $
-      Core.letExpression
+      Core.let_
         (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
         (var "recurse" @@ (Core.letEnvironment $ var "lt")),
     "forMap">: lambda "m" $ lets [
@@ -633,7 +633,7 @@ rewriteTermMDef = rewritingDefinition "rewriteTermM" $
           $ Flows.bind (Flows.mapList (var "mapBinding") (var "bindings")) $
             lambda "rbindings" $
               Flows.bind (var "recurse" @@ var "env") $
-                lambda "renv" $ Flows.pure $ Core.termLet $ Core.letExpression (var "rbindings") (var "renv"),
+                lambda "renv" $ Flows.pure $ Core.termLet $ Core.let_ (var "rbindings") (var "renv"),
         _Term_list>>: lambda "els" $
           Flows.bind (Flows.mapList (var "recurse") (var "els")) $
             lambda "rels" $ Flows.pure $ Core.termList $ var "rels",
@@ -901,7 +901,7 @@ stripTypesFromTermDef = rewritingDefinition "stripTypesFromTerm" $
             (Core.lambdaParameter $ var "l")
             nothing
             (Core.lambdaBody $ var "l")],
-        _Term_let>>: lambda "lt" $ Core.termLet $ Core.letExpression
+        _Term_let>>: lambda "lt" $ Core.termLet $ Core.let_
           (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
           (Core.letEnvironment $ var "lt"),
         _Term_typeAbstraction>>: lambda "ta" $ Core.typeAbstractionBody $ var "ta",

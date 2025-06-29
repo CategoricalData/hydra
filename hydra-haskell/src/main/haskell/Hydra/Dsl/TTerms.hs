@@ -12,6 +12,7 @@ import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Dsl.TBase
 import qualified Hydra.Dsl.Phantoms as Phantoms
 
+import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
@@ -41,7 +42,7 @@ field s = Core.field (name s)
 -- | Create a term-encoded let expression with multiple bindings
 -- Example: lets ["x">: int32 1, "y">: int32 2] (var "add" @@ var "x" @@ var "y")
 lets :: [(TTerm Name, TTerm Term)] -> TTerm Term -> TTerm Term
-lets pairs body = Core.termLet $ Core.letExpression (Phantoms.list $ toBinding pairs) body
+lets pairs body = Core.termLet $ Core.let_ (Phantoms.list $ toBinding pairs) body
   where
     toBinding = fmap (\(n, t) -> Core.letBinding n t Phantoms.nothing)
 

@@ -347,10 +347,19 @@ second = untuple 2 1 Nothing
 sum :: Int -> Int -> Term -> Term
 sum idx arity term = TermSum $ Sum idx arity term
 
+triple :: Term -> Term -> Term -> Term
+triple a b c = tuple [a, b, c]
+
 -- | Create a product (tuple) with multiple components
 -- Example: product [string "name", int32 42, true]
 tuple :: [Term] -> Term
 tuple = TermProduct
+
+tuple4 :: Term -> Term -> Term -> Term -> Term
+tuple4 a b c d = tuple [a, b, c, d]
+
+tuple5 :: Term -> Term -> Term -> Term -> Term -> Term
+tuple5 a b c d e = tuple [a, b, c, d, e]
 
 -- | Create a tuple projection function
 -- Example: untuple 3 1 Nothing extracts the second element of a 3-tuple

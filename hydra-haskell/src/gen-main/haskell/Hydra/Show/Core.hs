@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, map, pure, sum)
@@ -303,6 +304,28 @@ term t =
         "){",
         term term1,
         "}"])) (Strip.stripTerm t))
+
+-- | Show a TermVariant as a string
+termVariant :: (Mantle.TermVariant -> String)
+termVariant x = case x of
+  Mantle.TermVariantAnnotated -> "annotated"
+  Mantle.TermVariantApplication -> "application"
+  Mantle.TermVariantFunction -> "function"
+  Mantle.TermVariantLet -> "let"
+  Mantle.TermVariantList -> "list"
+  Mantle.TermVariantLiteral -> "literal"
+  Mantle.TermVariantMap -> "map"
+  Mantle.TermVariantOptional -> "optional"
+  Mantle.TermVariantProduct -> "product"
+  Mantle.TermVariantRecord -> "record"
+  Mantle.TermVariantSet -> "set"
+  Mantle.TermVariantSum -> "sum"
+  Mantle.TermVariantTypeAbstraction -> "typeAbstraction"
+  Mantle.TermVariantTypeApplication -> "typeApplication"
+  Mantle.TermVariantTyped -> "typed"
+  Mantle.TermVariantUnion -> "union"
+  Mantle.TermVariantVariable -> "variable"
+  Mantle.TermVariantWrap -> "wrap"
 
 -- | Show a type as a string
 type_ :: (Core.Type -> String)

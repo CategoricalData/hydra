@@ -93,6 +93,7 @@ showCoreModule = Module (Namespace "hydra.show.core") elements
      el literalDef,
      el literalTypeDef,
      el termDef,
+     el termVariantDef, -- TODO: move this to hydra.show.mantle
      el typeDef,
      el typeConstraintDef, -- TODO: move this to hydra.show.typing
      el typeSchemeDef,
@@ -408,6 +409,29 @@ termDef = showCoreDefinition "term" $
           string "){",
           ref termDef @@ var "term1",
           string "}"]]
+
+termVariantDef :: TElement (TermVariant -> String)
+termVariantDef = showCoreDefinition "termVariant" $
+  doc "Show a TermVariant as a string" $
+  match _TermVariant Nothing [
+    _TermVariant_annotated>>: constant $ string "annotated",
+    _TermVariant_application>>: constant $ string "application",
+    _TermVariant_function>>: constant $ string "function",
+    _TermVariant_let>>: constant $ string "let",
+    _TermVariant_list>>: constant $ string "list",
+    _TermVariant_literal>>: constant $ string "literal",
+    _TermVariant_map>>: constant $ string "map",
+    _TermVariant_optional>>: constant $ string "optional",
+    _TermVariant_product>>: constant $ string "product",
+    _TermVariant_record>>: constant $ string "record",
+    _TermVariant_set>>: constant $ string "set",
+    _TermVariant_sum>>: constant $ string "sum",
+    _TermVariant_typeAbstraction>>: constant $ string "typeAbstraction",
+    _TermVariant_typeApplication>>: constant $ string "typeApplication",
+    _TermVariant_typed>>: constant $ string "typed",
+    _TermVariant_union>>: constant $ string "union",
+    _TermVariant_variable>>: constant $ string "variable",
+    _TermVariant_wrap>>: constant $ string "wrap"]
 
 typeDef :: TElement (Type -> String)
 typeDef = showCoreDefinition "type_" $
