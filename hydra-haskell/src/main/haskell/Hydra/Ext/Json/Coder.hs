@@ -180,9 +180,6 @@ untypedTermToJson term = case term of
     TermTypeApplication (TypedTerm term1 typ) -> asRecord [ -- Note: TermTypeApplication and TermTyped appear identical
       Field _TypedTerm_term term1,
       Field _TypedTerm_type $ EncodeCore.type_ typ]
-    TermTyped (TypedTerm term1 typ) -> asRecord [
-      Field _TypedTerm_term term1,
-      Field _TypedTerm_type $ EncodeCore.type_ typ]
     TermUnion (Injection _ field) -> if fieldTerm field == Terms.unit
       then return $ Json.ValueString $ unName $ fieldName field
       else do

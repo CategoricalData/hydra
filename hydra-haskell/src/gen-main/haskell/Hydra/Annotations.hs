@@ -145,18 +145,6 @@ putAttr key val = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
 putCount :: (Core.Name -> Int -> Compute.Flow t0 ())
 putCount key count = (putAttr key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 count))))
 
-requireElementType :: (Graph.Element -> Compute.Flow t0 Core.Type)
-requireElementType el =  
-  let withType = (\m -> Optionals.maybe (Flows_.fail (Strings.cat [
-          "missing type annotation for element ",
-          (Core.unName (Graph.elementName el))])) (\t -> Flows_.pure t) m)
-  in (withType (Rewriting.getTermType (Graph.elementTerm el)))
-
-requireTermType :: (Core.Term -> Compute.Flow t0 Core.Type)
-requireTermType =  
-  let withType = (\m -> Optionals.maybe (Flows_.fail "missing type annotation") (\t -> Flows_.pure t) m)
-  in (\arg_ -> withType (Rewriting.getTermType arg_))
-
 resetCount :: (Core.Name -> Compute.Flow t0 ())
 resetCount key = (putAttr key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))))
 
@@ -179,19 +167,6 @@ setTermAnnotation key val term =
 -- | Set term description
 setTermDescription :: (Maybe String -> Core.Term -> Core.Term)
 setTermDescription d = (setTermAnnotation Constants.key_description (Optionals.map (\arg_ -> (\x -> Core.TermLiteral x) ((\x -> Core.LiteralString x) arg_)) d))
-
--- | Set term type
-setTermType :: (Maybe Core.Type -> Core.Term -> Core.Term)
-setTermType mtyp term =  
-  let withoutType = (\term -> (\x -> case x of
-          Core.TermAnnotated v1 -> (Core.TermAnnotated (Core.AnnotatedTerm {
-            Core.annotatedTermSubject = (withoutType (Core.annotatedTermSubject v1)),
-            Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))
-          Core.TermTyped v1 -> (Core.typedTermTerm v1)
-          _ -> term) term)
-  in (Optionals.maybe (withoutType term) (\typ -> Core.TermTyped (Core.TypedTerm {
-    Core.typedTermTerm = (withoutType term),
-    Core.typedTermType = typ})) mtyp)
 
 -- | Set type in annotations
 setType :: (Maybe Core.Type -> M.Map Core.Name Core.Term -> M.Map Core.Name Core.Term)
@@ -241,7 +216,6 @@ termAnnotationInternal = (aggregateAnnotations getAnn Core.annotatedTermSubject 
   where 
     getAnn = (\t -> (\x -> case x of
       Core.TermAnnotated v1 -> (Just v1)
-      Core.TermTyped v1 -> (getAnn (Core.typedTermTerm v1))
       _ -> Nothing) t)
 
 -- | Get internal type annotations

@@ -98,7 +98,6 @@ type_ dat = ((\x -> case x of
   Core.TermAnnotated v1 -> (Flows_.map (\t -> Core.TypeAnnotated (Core.AnnotatedType {
     Core.annotatedTypeSubject = t,
     Core.annotatedTypeAnnotation = (Core.annotatedTermAnnotation v1)})) (type_ (Core.annotatedTermSubject v1)))
-  Core.TermTyped v1 -> (type_ (Core.typedTermTerm v1))
   _ -> (matchUnion (Core.Name "hydra.core.Type") [
     (Core.Name "application", (\at -> Flows_.map (\x -> Core.TypeApplication x) (applicationType at))),
     (Core.Name "forall", (\ft -> Flows_.map (\x -> Core.TypeForall x) (forallType ft))),

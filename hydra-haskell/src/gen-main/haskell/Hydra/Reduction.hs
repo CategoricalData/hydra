@@ -158,9 +158,10 @@ expansionArity graph term = ((\x -> case x of
   Core.TermVariable v1 -> (Optionals.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Optionals.bind (Lexical.lookupElement graph v1) (\el -> Graph.elementType el)))
   _ -> 0) (Strip.fullyStripTerm term))
 
-reduceTerm :: (Bool -> M.Map t0 t1 -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
-reduceTerm eager env term =  
-  let reduce = (\eager -> reduceTerm eager Maps.empty) 
+-- | A term evaluation function which is alternatively lazy or eager
+reduceTerm :: (Bool -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
+reduceTerm eager term =  
+  let reduce = (\eager -> reduceTerm eager) 
       doRecurse = (\eager -> \term -> Logic.and eager ((\x -> case x of
               Core.TermFunction v1 -> ((\x -> case x of
                 Core.FunctionLambda _ -> False

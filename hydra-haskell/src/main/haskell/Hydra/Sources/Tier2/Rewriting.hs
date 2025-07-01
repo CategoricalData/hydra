@@ -83,7 +83,7 @@ rewritingDefinition = definitionInModule hydraRewritingModule
 hydraRewritingModule :: Module
 hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
     [Strip.hydraStripModule, Lexical.hydraLexicalModule, Qnames.hydraQnamesModule, Sorting.hydraSortingModule]
-    [Tier1.hydraCodersModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
+    [Tier1.hydraCodersModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule, Tier1.hydraTypingModule] $
     Just ("Utilities for type and term rewriting and analysis.")
   where
    elements = [
@@ -97,7 +97,6 @@ hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
      el freeVariablesInTypeSchemeSimpleDef,
      el freeVariablesInTypeSchemeDef,
      el freeVariablesInTypeSimpleDef,
-     el getTermTypeDef,
      el inlineTypeDef,
      el isFreeVariableInTermDef,
      el isLambdaDef,
@@ -157,7 +156,6 @@ expandTypedLambdasDef = rewritingDefinition "expandTypedLambdas" $
             "cod1">: second $ var "recursive"]
             $ pair (Lists.cons (var "dom0") (var "doms")) (var "cod1")] @@ var "t"]
       $ var "helper" @@ (ref Strip.stripTypeDef @@ var "typ"),
-    "getFunType">: lambda "term" $ Optionals.map (var "toNaryFunType") (ref getTermTypeDef @@ var "term"),
     "padTerm">: lambdas ["i", "doms", "cod", "term"] $
       Logic.ifElse (Lists.null $ var "doms")
         (var "term")
@@ -165,7 +163,6 @@ expandTypedLambdasDef = rewritingDefinition "expandTypedLambdas" $
           "dom">: Lists.head $ var "doms",
           "var">: Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ var "i"),
           "tailDoms">: Lists.tail $ var "doms",
-          "typedTerm">: lambda "typ" $ lambda "term" $ Core.termTyped $ Core.typedTerm (var "term") (var "typ"),
           "toFunctionType">: lambdas ["doms", "cod"] $
             Lists.foldl
               (lambda "c" $ lambda "d" $ Core.typeFunction $ Core.functionType (var "d") (var "c"))
@@ -176,10 +173,9 @@ expandTypedLambdasDef = rewritingDefinition "expandTypedLambdas" $
               @@ (Math.add (var "i") (int32 1))
               @@ (var "tailDoms")
               @@ (var "cod")
-              @@ (var "typedTerm" @@ (var "toFunctionType" @@ var "tailDoms" @@ var "cod") @@
-                  (Core.termApplication $ Core.application
-                    (var "typedTerm" @@ (var "toFunctionType" @@ var "doms" @@ var "cod") @@ var "term")
-                    (Core.termVariable $ var "var")))),
+              @@ (Core.termApplication $ Core.application
+                    (var "term")
+                    (Core.termVariable $ var "var"))),
     "expand">: lambdas ["doms", "cod", "term"] $
       match _Term (Just $ ref rewriteTermDef @@ var "rewrite" @@ var "term") [
         _Term_annotated>>: lambda "at" $ Core.termAnnotated $ Core.annotatedTerm
@@ -188,12 +184,7 @@ expandTypedLambdasDef = rewritingDefinition "expandTypedLambdas" $
         _Term_application>>: lambda "app" $ lets [
           "lhs">: Core.applicationFunction $ var "app",
           "rhs">: Core.applicationArgument $ var "app"]
-          $ Optionals.maybe
-            (ref rewriteTermDef @@ var "rewrite" @@ var "term")
-            (lambda "typ" $ Core.termApplication $ Core.application
-              (var "expand" @@ (Lists.cons (var "typ") (var "doms")) @@ var "cod" @@ var "lhs")
-              (ref expandTypedLambdasDef @@ var "rhs"))
-            (ref getTermTypeDef @@ var "rhs"),
+          $ ref rewriteTermDef @@ var "rewrite" @@ var "term",
         _Term_function>>: match _Function (Just $ var "padTerm" @@ int32 1 @@ var "doms" @@ var "cod" @@ var "term") [
           _Function_lambda>>: lambda "l" $ Core.termFunction $ Core.functionLambda $ Core.lambda
             (Core.lambdaParameter $ var "l")
@@ -206,18 +197,8 @@ expandTypedLambdasDef = rewritingDefinition "expandTypedLambdas" $
             (Core.letBindingType $ var "b")]
           $ Core.termLet $ Core.let_
             (Lists.map (var "expandBinding") (Core.letBindings $ var "lt"))
-            (var "expand" @@ var "doms" @@ var "cod" @@ (Core.letEnvironment $ var "lt")),
-        _Term_typed>>: lambda "tt" $ Core.termTyped $ Core.typedTerm
-          (var "expand" @@ var "doms" @@ var "cod" @@ (Core.typedTermTerm $ var "tt"))
-          (Core.typedTermType $ var "tt")] @@ var "term",
-    "rewrite">: lambdas ["recurse", "term"] $
-      Optionals.maybe
-        (var "recurse" @@ var "term")
-        (lambda "domsAndCod" $ lets [
-          "doms">: first $ var "domsAndCod",
-          "cod">: second $ var "domsAndCod"]
-          $ var "expand" @@ var "doms" @@ var "cod" @@ var "term")
-        (var "getFunType" @@ var "term")]
+            (var "expand" @@ var "doms" @@ var "cod" @@ (Core.letEnvironment $ var "lt"))] @@ var "term",
+    "rewrite">: lambdas ["recurse", "term"] $ var "recurse" @@ var "term"]
     $ ref rewriteTermDef @@ var "rewrite" @@ var "term"
 
 flattenLetTermsDef :: TElement (Term -> Term)
@@ -351,13 +332,6 @@ freeVariablesInTypeSchemeSimpleDef = rewritingDefinition "freeVariablesInTypeSch
     "t">: Core.typeSchemeType $ var "ts"]
     $ Sets.difference (ref freeVariablesInTypeSimpleDef @@ var "t") (Sets.fromList $ var "vars")
 
-getTermTypeDef :: TElement (Term -> Maybe Type)
-getTermTypeDef = rewritingDefinition "getTermType" $
-  doc "Get the annotated type of a given term, if any" $
-  match _Term (Just nothing) [
-    "annotated">: ref getTermTypeDef <.> project _AnnotatedTerm _AnnotatedTerm_subject,
-    "typed">: lambda "tt" $ just (project _TypedTerm _TypedTerm_type @@ var "tt")]
-
 inlineTypeDef :: TElement (M.Map Name Type -> Type -> Flow s Type)
 inlineTypeDef = rewritingDefinition "inlineType" $
   doc "Inline all type variables in a type using the provided schema. Note: this function is only appropriate for nonrecursive type definitions" $
@@ -457,10 +431,10 @@ removeTermAnnotationsDef = rewritingDefinition "removeTermAnnotations" $
   doc "Recursively remove term annotations, including within subterms" $
   lambda "term" $ lets [
     "remove">: lambdas ["recurse", "term"] $ lets [
-      "rewritten">: var "recurse" @@ var "term"]
-      $ match _Term (Just $ var "rewritten") [
-        _Term_annotated>>: lambda "at" $ Core.annotatedTermSubject $ var "at",
-        _Term_typed>>: lambda "tt" $ Core.typedTermTerm $ var "tt"] @@ var "rewritten"]
+      "rewritten">: var "recurse" @@ var "term"] $
+      cases _Term (var "term")
+        (Just $ var "rewritten") [
+        _Term_annotated>>: lambda "at" $ Core.annotatedTermSubject $ var "at"]]
     $ ref rewriteTermDef @@ var "remove" @@ var "term"
 
 removeTypeAnnotationsDef :: TElement (Type -> Type)
@@ -555,9 +529,6 @@ rewriteTermDef = rewritingDefinition "rewriteTerm" $ lambda "f" $ lets [
         (Core.typeAbstractionParameter $ var "ta")
         (var "recurse" @@ (Core.typeAbstractionBody $ var "ta")),
       _Term_typeApplication>>: lambda "tt" $ Core.termTypeApplication $ Core.typedTerm
-        (var "recurse" @@ (Core.typedTermTerm $ var "tt"))
-        (Core.typedTermType $ var "tt"),
-      _Term_typed>>: lambda "tt" $ Core.termTypeApplication $ Core.typedTerm
         (var "recurse" @@ (Core.typedTermTerm $ var "tt"))
         (Core.typedTermType $ var "tt"),
       _Term_union>>: lambda "i" $ Core.termUnion $ Core.injection
@@ -663,11 +634,6 @@ rewriteTermMDef = rewritingDefinition "rewriteTermM" $
           "trm">: Core.sumTerm $ var "sum"]
           $ Flows.bind (var "recurse" @@ var "trm") $
             lambda "rtrm" $ Flows.pure $ Core.termSum $ Core.sum (var "i") (var "s") (var "rtrm"),
-        _Term_typed>>: lambda "tt" $ lets [
-          "term1">: Core.typedTermTerm $ var "tt",
-          "type2">: Core.typedTermType $ var "tt"]
-          $ Flows.bind (var "recurse" @@ var "term1") $
-            lambda "rterm1" $ Flows.pure $ Core.termTyped $ Core.typedTerm (var "rterm1") (var "type2"),
         _Term_union>>: lambda "i" $ lets [
           "n">: Core.injectionTypeName $ var "i",
           "field">: Core.injectionField $ var "i"]
@@ -855,29 +821,30 @@ stripTermRecursiveDef = rewritingDefinition "stripTermRecursive" $
   doc "Recursively strip all annotations from a term" $
   lambda "term" $ lets [
     "strip">: lambdas ["recurse", "term"] $ lets [
-      "rewritten">: var "recurse" @@ var "term"]
-      $ match _Term (Just $ var "rewritten") [
-        _Term_annotated>>: lambda "at" $ Core.annotatedTermSubject $ var "at",
-        _Term_typed>>: lambda "tt" $ Core.typedTermTerm $ var "tt"] @@ var "rewritten"]
-    $ ref rewriteTermDef @@ var "strip" @@ var "term"
+      "rewritten">: var "recurse" @@ var "term"] $
+      cases _Term (var "term")
+        (Just $ var "rewritten") [
+        _Term_annotated>>: lambda "at" $ Core.annotatedTermSubject $ var "at"]] $
+    ref rewriteTermDef @@ var "strip" @@ var "term"
 
 stripTypeRecursiveDef :: TElement (Type -> Type)
 stripTypeRecursiveDef = rewritingDefinition "stripTypeRecursive" $
   doc "Recursively strip all annotations from a type" $
   lambda "typ" $ lets [
     "strip">: lambdas ["recurse", "typ"] $ lets [
-      "rewritten">: var "recurse" @@ var "typ"]
-      $ match _Type (Just $ var "rewritten") [
-        _Type_annotated>>: lambda "at" $ Core.annotatedTypeSubject $ var "at"] @@ var "rewritten"]
-    $ ref rewriteTypeDef @@ var "strip" @@ var "typ"
+      "rewritten">: var "recurse" @@ var "typ"] $
+      cases _Type (var "rewritten")
+        (Just $ var "rewritten") [
+        _Type_annotated>>: lambda "at" $ Core.annotatedTypeSubject $ var "at"]] $
+    ref rewriteTypeDef @@ var "strip" @@ var "typ"
 
 stripTypeSchemeRecursiveDef :: TElement (TypeScheme -> TypeScheme)
 stripTypeSchemeRecursiveDef = rewritingDefinition "stripTypeSchemeRecursive" $
   doc "Recursively strip all annotations from a type scheme" $
   lambda "ts" $ lets [
     "vars">: Core.typeSchemeVariables $ var "ts",
-    "typ">: Core.typeSchemeType $ var "ts"]
-    $ Core.typeScheme (var "vars") (ref stripTypeRecursiveDef @@ var "typ")
+    "typ">: Core.typeSchemeType $ var "ts"] $
+    Core.typeScheme (var "vars") (ref stripTypeRecursiveDef @@ var "typ")
 
 stripTypesFromTermDef :: TElement (Term -> Term)
 stripTypesFromTermDef = rewritingDefinition "stripTypesFromTerm" $
@@ -905,8 +872,7 @@ stripTypesFromTermDef = rewritingDefinition "stripTypesFromTerm" $
           (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
           (Core.letEnvironment $ var "lt"),
         _Term_typeAbstraction>>: lambda "ta" $ Core.typeAbstractionBody $ var "ta",
-        _Term_typeApplication>>: lambda "tt" $ Core.typedTermTerm $ var "tt",
-        _Term_typed>>: lambda "tt" $ Core.typedTermTerm $ var "tt"]]
+        _Term_typeApplication>>: lambda "tt" $ Core.typedTermTerm $ var "tt"]]
     $ ref rewriteTermDef @@ var "strip" @@ var "term"
 
 substituteTypeVariablesDef :: TElement (M.Map Name Name -> Type -> Type)
@@ -975,7 +941,6 @@ subtermsDef = rewritingDefinition "subterms" $
     _Term_sum>>: lambda "st" $ list [Core.sumTerm $ var "st"],
     _Term_typeAbstraction>>: lambda "ta" $ list [Core.typeAbstractionBody $ var "ta"],
     _Term_typeApplication>>: lambda "ta" $ list [Core.typedTermTerm $ var "ta"],
-    _Term_typed>>: lambda "tt" $ list [Core.typedTermTerm $ var "tt"],
     _Term_union>>: lambda "ut" $ list [Core.fieldTerm $ (Core.injectionField $ var "ut")],
     _Term_variable>>: constant $ list [],
     _Term_wrap>>: lambda "n" $ list [Core.wrappedTermObject $ var "n"]]
@@ -1035,9 +1000,6 @@ subtermsWithAccessorsDef = rewritingDefinition "subtermsWithAccessors" $
     _Term_typeApplication>>: lambda "ta" $
       single Mantle.termAccessorTypeApplicationTerm $
       Core.typedTermTerm $ var "ta",
-    _Term_typed>>: lambda "tt" $
-      single Mantle.termAccessorTypedTerm $
-      Core.typedTermTerm $ var "tt",
     _Term_union>>: lambda "ut" $
       single Mantle.termAccessorInjectionTerm $
       Core.fieldTerm $ (Core.injectionField $ var "ut"),
@@ -1131,8 +1093,7 @@ topologicalSortBindingsDef = rewritingDefinition "topologicalSortBindings" $
     "keys">: Sets.fromList $ Lists.map (unaryFunction first) (var "bindings"),
     "hasTypeAnnotation">: lambda "term" $
       cases _Term (var "term") (Just false) [
-        _Term_annotated>>: lambda "at" $ var "hasTypeAnnotation" @@ (Core.annotatedTermSubject $ var "at"),
-        _Term_typed>>: constant true],
+        _Term_annotated>>: lambda "at" $ var "hasTypeAnnotation" @@ (Core.annotatedTermSubject $ var "at")],
     "depsOf">: lambda "nameAndTerm" $ lets [
       "name">: first $ var "nameAndTerm",
       "term">: second $ var "nameAndTerm"]

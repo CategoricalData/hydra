@@ -552,9 +552,6 @@ testTopologicalSortBindings = do
         bindingMap = M.mapKeys (\k -> Name k) $ M.fromList bindings
         expected = fmap (fmap (\k -> (Name k, Y.fromMaybe unit $ M.lookup (Name k) bindingMap))) expectedVars
 
---withType :: Graph -> Type -> Term -> Term
---withType typ = setTermType $ Just typ
-
 spec :: H.Spec
 spec = do
   checkFoldOverTerm

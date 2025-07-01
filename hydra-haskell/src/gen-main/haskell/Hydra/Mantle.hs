@@ -173,7 +173,6 @@ data TermAccessor =
   TermAccessorSumTerm  |
   TermAccessorTypeAbstractionBody  |
   TermAccessorTypeApplicationTerm  |
-  TermAccessorTypedTerm  |
   TermAccessorInjectionTerm  |
   TermAccessorWrappedTerm 
   deriving (Eq, Ord, Read, Show)
@@ -216,8 +215,6 @@ _TermAccessor_typeAbstractionBody = (Core.Name "typeAbstractionBody")
 
 _TermAccessor_typeApplicationTerm = (Core.Name "typeApplicationTerm")
 
-_TermAccessor_typedTerm = (Core.Name "typedTerm")
-
 _TermAccessor_injectionTerm = (Core.Name "injectionTerm")
 
 _TermAccessor_wrappedTerm = (Core.Name "wrappedTerm")
@@ -238,7 +235,6 @@ data TermVariant =
   TermVariantSum  |
   TermVariantTypeAbstraction  |
   TermVariantTypeApplication  |
-  TermVariantTyped  |
   TermVariantUnion  |
   TermVariantVariable  |
   TermVariantWrap 
@@ -273,8 +269,6 @@ _TermVariant_sum = (Core.Name "sum")
 _TermVariant_typeAbstraction = (Core.Name "typeAbstraction")
 
 _TermVariant_typeApplication = (Core.Name "typeApplication")
-
-_TermVariant_typed = (Core.Name "typed")
 
 _TermVariant_union = (Core.Name "union")
 
