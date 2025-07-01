@@ -1,37 +1,15 @@
 -- | Entry point for Hydra code generation utilities
 
-module Hydra.Codegen (
-  modulesToGraph,
-  writeCpp,
-  writeGraphql,
-  writeHaskell,
-  writeJava,
-  writeJsonSchema,
-  writePdl,
-  writeProtobuf,
-  writePython,
-  writeScala,
-  writeYaml,
---  module Hydra.Sources.Tier3.All
-) where
+module Hydra.Codegen where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Ext.Cpp.Coder
-import Hydra.Ext.Graphql.Coder
 import Hydra.Ext.Haskell.Coder
-import Hydra.Ext.Java.Coder
 import Hydra.Ext.Json.Coder
 import Hydra.Ext.Json.Schema.Coder
-import Hydra.Ext.Pegasus.Coder
-import Hydra.Ext.Protobuf.Coder
-import Hydra.Ext.Python.Coder
-import Hydra.Ext.Scala.Coder
 import Hydra.Ext.Yaml.Modules
-
 import Hydra.Sources.Libraries
---import Hydra.Sources.Tier3.All
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
@@ -92,35 +70,14 @@ runFlow s f = do
   where
     FlowState v _ t = unFlow f s emptyTrace
 
-writeCpp :: FP.FilePath -> [Module] -> IO ()
-writeCpp = generateSources moduleToCpp
-
-writeGraphql :: FP.FilePath -> [Module] -> IO ()
-writeGraphql = generateSources moduleToGraphql
-
 writeHaskell :: FilePath -> [Module] -> IO ()
 writeHaskell = generateSources moduleToHaskell
-
-writeJava :: FP.FilePath -> [Module] -> IO ()
-writeJava = generateSources moduleToJava
 
 -- writeJson :: FP.FilePath -> [Module] -> IO ()
 -- writeJson = generateSources Json.printModule
 
 writeJsonSchema :: FP.FilePath -> [Module] -> IO ()
 writeJsonSchema = generateSources (moduleToJsonSchemaFiles (JsonSchemaOptions True))
-
-writePdl :: FP.FilePath -> [Module] -> IO ()
-writePdl = generateSources moduleToPdl
-
-writeProtobuf :: FP.FilePath -> [Module] -> IO ()
-writeProtobuf = generateSources moduleToProtobuf
-
-writePython :: FP.FilePath -> [Module] -> IO ()
-writePython = generateSources moduleToPython
-
-writeScala :: FP.FilePath -> [Module] -> IO ()
-writeScala = generateSources moduleToScala
 
 writeYaml :: FP.FilePath -> [Module] -> IO ()
 writeYaml = generateSources moduleToYaml
