@@ -47,11 +47,16 @@ hspec Hydra.TermAdaptersSpec.termsAreAdaptedRecursively
 
 ## Code generation
 
-It is a long-term goal for Hydra to generate its own source code into various languages,
-producing nearly-complete Hydra implementations in those languages.
-Both Haskell and Java are fully supported as target languages,
-which means that all of Hydra's types and programs currently specified in the Haskell DSL are mapped correctly to both Haskell and Java.
-Scala support, on the other hand, is partial and experimental at this time.
+Hydra is a self-hosting compiler in Haskell, which means that it can generate
+all of its own Haskell source code, with the exception of a few built-in
+artifacts including Haskell-specific implementations of Hydra's primitive
+functions.
+
+We are currently working on "closing the loop" in Java and Python, as well,
+but that code is currently in `hydra-ext`; see the [Hydra-Ext README](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/README.md)
+for details on Java and Python code generation, as well as many other coders
+including property graphs and their formats, RDF and their formats, Avro,
+Protobuf, C++, Scala, and others.
 
 You can generate Hydra's Haskell sources by first entering the GHCi REPL as above, then:
 
@@ -74,48 +79,6 @@ To generate test modules, use:
 ```haskell
 writeHaskell "src/gen-test/haskell" testModules
 ```
-
-Java generation is similar, e.g.
-
-```haskell
-writeJava "../hydra-java/src/gen-main/java" mainModules
-```
-
-For Java tests, use:
-
-```haskell
-writeJava "../hydra-java/src/gen-test/java" testModules
-```
-
-Scala generation has known bugs, but you can try it out with:
-
-```haskell
-writeScala "../hydra-scala/src/gen-main/scala" kernelModules
-```
-
-There is schema-only support for GraphQL:
-
-```haskell
-import Hydra.Sources.Langs.Graphql.Syntax
-import Hydra.Sources.Langs.Json.Model
-writeGraphql "/tmp/graphql" [graphqlSyntaxModule, jsonModelModule]
-```
-
-Because GraphQL does not support imports, the GraphQL coder will gather all of the dependencies of a given module together,
-and map them to a single `.graphql` file.
-Hydra has a similar level of schema-only support for [Protobuf](https://protobuf.dev/):
-
-```haskell
-writeProtobuf "/tmp/proto" [jsonModelModule]
-```
-
-...and similarly for [PDL](https://linkedin.github.io/rest.li/pdl_schema):
-
-```haskell
-writePdl "/tmp/pdl" [jsonModelModule]
-```
-
-Note that neither the Protobuf nor PDL coder currently supports polymorphic models.
 
 ### JSON and YAML generation
 
