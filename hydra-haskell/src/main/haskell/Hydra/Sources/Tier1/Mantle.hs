@@ -106,7 +106,6 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "sumTerm">: unit,
           "typeAbstractionBody">: unit,
           "typeApplicationTerm">: unit,
-          "typedTerm">: unit,
           "injectionTerm">: unit,
           "wrappedTerm">: unit],
 
@@ -127,7 +126,6 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "sum",
           "typeAbstraction",
           "typeApplication",
-          "typed",
           "union",
           "variable",
           "wrap"],

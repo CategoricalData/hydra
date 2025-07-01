@@ -126,7 +126,7 @@ checkSerialization mkSerdeStr (TypedTerm term typ) expected = do
     FlowState mserde _ trace = unFlow (mkSerdeStr typ) testGraph emptyTrace
 
 eval :: Term -> Flow Graph Term
-eval = reduceTerm True M.empty
+eval = reduceTerm True
 
 expectInferenceResult :: String -> Term -> TypeScheme -> H.Expectation
 expectInferenceResult desc term expected = do

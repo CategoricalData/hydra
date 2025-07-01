@@ -323,9 +323,6 @@ hydraCoreModule = Module ns elements [] [] $
           "typeApplication">:
             doc "A System F type application term" $
             core "TypedTerm",
-          "typed">:
-            doc "A term annotated with its type" $
-            core "TypedTerm",
           "union">:
             doc "An injection; an instance of a union type" $
             core "Injection",
@@ -377,16 +374,16 @@ hydraCoreModule = Module ns elements [] [] $
             doc "The body of the abstraction" $
             core "Term"],
 
+      def "TypedTerm" $
+        doc "A term applied to a type; a type application" $
+        record [
+          "term">: core "Term",
+          "type">: core "Type"],
+
       def "TypeScheme" $
         doc "A type expression together with free type variables occurring in the expression" $
         record [
           "variables">: list $ core "Name",
-          "type">: core "Type"],
-
-      def "TypedTerm" $
-        doc "A term together with its type" $
-        record [
-          "term">: core "Term",
           "type">: core "Type"],
 
       def "Unit" $

@@ -382,15 +382,6 @@ termDef = showCoreDefinition "term" $
           string "⟨",
           ref typeDef @@ var "typ",
           string "⟩"],
-      _Term_typed>>: lambda "tt" $ lets [
-        "t2">: Core.typedTermTerm $ var "tt",
-        "typ">: Core.typedTermType $ var "tt"] $
-        Strings.cat $ list [
-          string "(",
-          ref termDef @@ var "t2",
-          string " : ",
-          ref typeDef @@ var "typ",
-          string ")"],
       _Term_union>>: lambda "inj" $ lets [
         "tname">: unwrap _Name @@ (Core.injectionTypeName $ var "inj"),
         "f">: Core.injectionField $ var "inj"] $
@@ -428,7 +419,6 @@ termVariantDef = showCoreDefinition "termVariant" $
     _TermVariant_sum>>: constant $ string "sum",
     _TermVariant_typeAbstraction>>: constant $ string "typeAbstraction",
     _TermVariant_typeApplication>>: constant $ string "typeApplication",
-    _TermVariant_typed>>: constant $ string "typed",
     _TermVariant_union>>: constant $ string "union",
     _TermVariant_variable>>: constant $ string "variable",
     _TermVariant_wrap>>: constant $ string "wrap"]

@@ -504,8 +504,6 @@ data Term =
   TermTypeAbstraction TypeAbstraction |
   -- | A System F type application term
   TermTypeApplication TypedTerm |
-  -- | A term annotated with its type
-  TermTyped TypedTerm |
   -- | An injection; an instance of a union type
   TermUnion Injection |
   -- | A variable reference
@@ -542,8 +540,6 @@ _Term_sum = (Name "sum")
 _Term_typeAbstraction = (Name "typeAbstraction")
 
 _Term_typeApplication = (Name "typeApplication")
-
-_Term_typed = (Name "typed")
 
 _Term_union = (Name "union")
 

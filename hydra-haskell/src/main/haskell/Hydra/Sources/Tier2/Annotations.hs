@@ -109,14 +109,11 @@ hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
      el normalizeTypeAnnotationsDef,
      el putAttrDef,
      el putCountDef,
-     el requireElementTypeDef,
-     el requireTermTypeDef,
      el resetCountDef,
      el setAnnotationDef,
      el setDescriptionDef,
      el setTermAnnotationDef,
      el setTermDescriptionDef,
-     el setTermTypeDef,
      el setTypeDef,
      el setTypeAnnotationDef,
      el setTypeClassesDef,
@@ -325,25 +322,6 @@ putCountDef = annotationsDefinition "putCount" $
   lambdas ["key", "count"] $
     ref putAttrDef @@ var "key" @@ (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ var "count")
 
-requireElementTypeDef :: TElement (Element -> Flow Graph Type)
-requireElementTypeDef = annotationsDefinition "requireElementType" $
-  doc "Get the annotated type of a given element, or fail if it is missing" $
-  lambda "el" $ lets [
-    "withType">: lambda "m" $ Optionals.maybe
-      (Flows.fail ("missing type annotation for element " ++ (Core.unName $ Graph.elementName $ var "el")))
-      (lambda "t" $ Flows.pure $ var "t")
-      (var "m")] $
-    var "withType" @@ (ref Rewriting.getTermTypeDef @@ (project _Element _Element_term @@ var "el"))
-
-requireTermTypeDef :: TElement (Term -> Flow Graph Type)
-requireTermTypeDef = annotationsDefinition "requireTermType" $
-  doc "Get the annotated type of a given term, or fail if it is missing" $ lets [
-    "withType">: lambda "m" $ Optionals.maybe
-      (Flows.fail "missing type annotation")
-      (lambda "t" $ Flows.pure $ var "t")
-      (var "m")] $
-    var "withType" <.> ref Rewriting.getTermTypeDef
-
 resetCountDef :: TElement (Name -> Flow s ())
 resetCountDef = annotationsDefinition "resetCount" $
   doc "Reset counter to zero" $
@@ -377,21 +355,6 @@ setTermDescriptionDef = annotationsDefinition "setTermDescription" $
   lambda "d" $ ref setTermAnnotationDef
     @@ ref Constants.key_descriptionDef
     @@ Optionals.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
-
--- TODO: temporary. Move this function out of Annotations
-setTermTypeDef :: TElement (Maybe Type -> Term -> Term)
-setTermTypeDef = annotationsDefinition "setTermType" $
-  doc "Set term type" $
-  lambda "mtyp" $ lambda "term" $ lets [
-    "withoutType">: lambdas ["term"] $ cases _Term (var "term") (Just $ var "term") [
-      _Term_annotated>>: lambda "at" $ Core.termAnnotated $ Core.annotatedTerm
-        (var "withoutType" @@ Core.annotatedTermSubject (var "at"))
-        (Core.annotatedTermAnnotation $ var "at"),
-      _Term_typed>>: lambda "tt" $ Core.typedTermTerm $ var "tt"]] $
-    Optionals.maybe
-      (var "withoutType" @@ var "term")
-      (lambda "typ" $ Core.termTyped $ Core.typedTerm (var "withoutType" @@ var "term") (var "typ"))
-      (var "mtyp")
 
 setTypeDef :: TElement (Maybe Type -> M.Map Name Term -> M.Map Name Term)
 setTypeDef = annotationsDefinition "setType" $
@@ -438,8 +401,7 @@ termAnnotationInternalDef = annotationsDefinition "termAnnotationInternal" $
   doc "Get internal term annotations" $
   lets [
     "getAnn">: lambda "t" $ cases _Term (var "t") (Just nothing) [
-      _Term_annotated>>: lambda "a" $ just $ var "a",
-      _Term_typed>>: lambda "tt" $ var "getAnn" @@ Core.typedTermTerm (var "tt")]] $
+      _Term_annotated>>: lambda "a" $ just $ var "a"]] $
     ref aggregateAnnotationsDef @@ var "getAnn" @@ (unaryFunction Core.annotatedTermSubject) @@ (unaryFunction Core.annotatedTermAnnotation)
 
 typeAnnotationInternalDef :: TElement (Type -> M.Map Name Term)

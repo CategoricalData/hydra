@@ -146,9 +146,6 @@ termAccessorTypeAbstractionBody = unitVariant _TermAccessor _TermAccessor_typeAb
 termAccessorTypeApplicationTerm :: TTerm TermAccessor
 termAccessorTypeApplicationTerm = unitVariant _TermAccessor _TermAccessor_typeApplicationTerm
 
-termAccessorTypedTerm :: TTerm TermAccessor
-termAccessorTypedTerm = unitVariant _TermAccessor _TermAccessor_typedTerm
-
 termAccessorInjectionTerm :: TTerm TermAccessor
 termAccessorInjectionTerm = unitVariant _TermAccessor _TermAccessor_injectionTerm
 
@@ -171,7 +168,6 @@ termVariant v = unitVariant _TermVariant $ case v of
   TermVariantSum -> _TermVariant_sum
   TermVariantTypeAbstraction -> _TermVariant_typeAbstraction
   TermVariantTypeApplication -> _TermVariant_typeApplication
-  TermVariantTyped -> _TermVariant_typed
   TermVariantUnion -> _TermVariant_union
   TermVariantVariable -> _TermVariant_variable
   TermVariantWrap -> _TermVariant_wrap

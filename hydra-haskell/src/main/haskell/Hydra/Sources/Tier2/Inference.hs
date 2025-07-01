@@ -1184,7 +1184,6 @@ inferTypeOfTermDef = inferenceDefinition "inferTypeOfTerm" $
         _Term_sum>>: lambda "s" $ ref inferTypeOfSumDef @@ var "cx" @@ var "s",
         _Term_typeAbstraction>>: lambda "ta" $ ref inferTypeOfTypeAbstractionDef @@ var "cx" @@ var "ta",
         _Term_typeApplication>>: lambda "tt" $ ref inferTypeOfTypeApplicationDef @@ var "cx" @@ var "tt",
-        _Term_typed>>: lambda "t" $ ref inferTypeOfTypedTermDef @@ var "cx" @@ var "t",
         _Term_union>>: lambda "i" $ ref inferTypeOfInjectionDef @@ var "cx" @@ var "i",
         _Term_variable>>: lambda "name" $ ref inferTypeOfVariableDef @@ var "cx" @@ var "name",
         _Term_wrap>>: lambda "w" $ ref inferTypeOfWrappedTermDef @@ var "cx" @@ var "w"])

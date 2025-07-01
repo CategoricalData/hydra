@@ -23,7 +23,7 @@ type PgTransform = M.Map String ([Pg.Vertex Term], [Pg.Edge Term])
 
 
 evaluate :: Term -> Flow Graph Term
-evaluate = reduceTerm True M.empty
+evaluate = reduceTerm True
 
 evaluateEdge :: Pg.Edge Term -> Term -> Flow Graph (Maybe (Pg.Edge Term))
 evaluateEdge (Pg.Edge label idSpec outSpec inSpec propSpecs) term = do

@@ -278,7 +278,6 @@ termVariantDef = variantsDefinition "termVariant" $
     _Term_sum         @-> _TermVariant_sum,
     _Term_typeAbstraction @-> _TermVariant_typeAbstraction,
     _Term_typeApplication @-> _TermVariant_typeApplication,
-    _Term_typed       @-> _TermVariant_typed,
     _Term_union       @-> _TermVariant_union,
     _Term_variable    @-> _TermVariant_variable,
     _Term_wrap        @-> _TermVariant_wrap]
@@ -300,7 +299,6 @@ termVariantsDef = variantsDefinition "termVariants" $
     _TermVariant_sum,
     _TermVariant_typeAbstraction,
     _TermVariant_typeApplication,
-    _TermVariant_typed,
     _TermVariant_union,
     _TermVariant_variable,
     _TermVariant_wrap]

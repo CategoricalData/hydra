@@ -119,7 +119,6 @@ showTermAccessorDef = accessorsDefinition "showTermAccessor" $
       _TermAccessor_sumTerm>>: constant nothing,
       _TermAccessor_typeAbstractionBody>>: constant nothing,
       _TermAccessor_typeApplicationTerm>>: constant nothing,
-      _TermAccessor_typedTerm>>: constant nothing,
       _TermAccessor_injectionTerm>>: constant nothing,
       _TermAccessor_wrappedTerm>>: constant nothing] @@ var "accessor"
 

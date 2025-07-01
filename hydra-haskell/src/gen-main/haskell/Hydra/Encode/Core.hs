@@ -551,11 +551,6 @@ term x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "typeApplication"),
       Core.fieldTerm = (typedTerm v1)}}))
-  Core.TermTyped v1 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "typed"),
-      Core.fieldTerm = (typedTerm v1)}}))
   Core.TermUnion v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {

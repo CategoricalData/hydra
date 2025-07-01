@@ -402,9 +402,6 @@ termTypeAbstraction = variant _Term _Term_typeAbstraction
 termTypeApplication :: TTerm TypedTerm -> TTerm Term
 termTypeApplication = variant _Term _Term_typeApplication
 
-termTyped :: TTerm TypedTerm -> TTerm Term
-termTyped = variant _Term _Term_typed
-
 termUnion :: TTerm Injection -> TTerm Term
 termUnion = variant _Term _Term_union
 

@@ -42,6 +42,18 @@ java11Features = JavaFeatures {
   supportsDiamondOperator = True
 }
 
+-- TODO
+getTermType :: Term -> Maybe Type
+getTermType term = Nothing
+
+-- TODO
+requireElementType :: Element -> Flow Graph Type
+requireElementType el = fail $ "update me: types are derived using typeOf now, rather than from explicitly typed terms"
+
+-- TODO
+requireTermType :: Term -> Flow s Type
+requireTermType term = fail $ "update me: types are derived using typeOf now, rather than from explicitly typed terms"
+
 -- For now, the supported features are hard-coded to those of Java 11, rather than being configurable.
 javaFeatures = java11Features
 
@@ -513,7 +525,7 @@ encodeElimination aliases marg dom cod elm = case elm of
      case marg of
       Nothing -> do
         g <- getState
-        let lhs = setTermType (Just $ Types.function (TypeVariable tname) cod) $ TermFunction $ FunctionElimination elm
+        let lhs = TermFunction $ FunctionElimination elm
         let var = "u"
         encodeTerm aliases $ Terms.lambda var $ Terms.apply lhs (Terms.var var)
         -- TODO: default value
@@ -698,8 +710,6 @@ encodeTerm aliases term0 = encodeInternal [] term0
           return $ javaMethodInvocationToJavaExpression $
             methodInvocation (Just $ Right prim) (Java.Identifier "collect") [coll]
 
-        TermTyped (TypedTerm term1 _) -> encodeInternal anns term1
-
         TermUnion (Injection name (Field (Name fname) v)) -> do
           let (Java.Identifier typeId) = nameToJavaName aliases name
           let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
@@ -866,7 +876,6 @@ maybeLet aliases term cons = helper Nothing [] term
     -- Note: let-flattening could be done at the top level for better efficiency
     helper mtyp anns term = case flattenLetTerms term of
       TermAnnotated (AnnotatedTerm term' ann) -> helper mtyp (ann:anns) term'
-      TermTyped (TypedTerm term' typ) -> helper (Just typ) anns term'
       TermLet (Let bindings env) -> do
           stmts <- L.concat <$> CM.mapM toDeclStatements sorted
           maybeLet aliasesWithRecursive env $ \aliases' tm stmts' -> cons aliases' (reannotate mtyp anns tm) (stmts ++ stmts')
@@ -934,9 +943,7 @@ moduleToJavaCompilationUnit mod = transformModule javaLanguage encode constructM
 noComment :: Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments
 noComment decl = Java.ClassBodyDeclarationWithComments decl Nothing
 
-reannotate mtyp anns term = case mtyp of
-    Nothing -> base
-    Just typ -> TermTyped (TypedTerm base typ)
+reannotate mtyp anns term = base
   where
     base = reann anns term
     reann anns term = case anns of

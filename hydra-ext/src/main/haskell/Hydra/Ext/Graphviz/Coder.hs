@@ -157,7 +157,6 @@ termLabel compact namespaces term = case term of
     TermTypeAbstraction (TypeAbstraction v term1) -> simpleLabel "tyabs"
     TermTypeApplication (TypedTerm term _) -> simpleLabel "tyapp"
     TermUnion (Injection tname _) -> simpleLabel $ "\x22BB" ++ toCompactName namespaces tname
-    TermTyped (TypedTerm term1 _) -> simpleLabel ":t"
     TermVariable name -> simpleLabel $ toCompactName namespaces name
     TermWrap (WrappedTerm name term1) -> simpleLabel $ "(" ++ toCompactName namespaces name ++ ")"
     _ -> simpleLabel "?"

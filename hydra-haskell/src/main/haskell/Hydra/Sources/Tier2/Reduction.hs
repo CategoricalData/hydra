@@ -278,111 +278,11 @@ expansionArityDef = reductionDefinition "expansionArity" $
             (lambda "el" $ Graph.elementType $ var "el"))]
     @@ (ref Strip.fullyStripTermDef @@ var "term")
 
-
-
-
-
-
-
-
---reduceTermDef :: TElement (Bool -> M.Map Name Term -> Term -> Flow Graph Term)
---reduceTermDef = reductionDefinition "reduceTerm" $
---  lambda "term" $ lets [
---    "mapping">: lambdas ["recurse", "mid"] $ Flows.pure $ var "mid"]
---    $ ref Rewriting.rewriteTermMDef @@ var "mapping" @@ var "term"
-
-
---    mapping recurse mid = do
---      inner <- if doRecurse eager mid then recurse mid else pure mid
---      applyIfNullary eager inner []
-
-
-
-
---
---reduceTermDef :: TElement (Bool -> M.Map Name Term -> Term -> Flow Graph Term)
---reduceTermDef = reductionDefinition "reduceTerm" $
---  doc "A term evaluation function which is alternatively lazy or eager" $
---  lambdas ["eager", "env", "term"] $ lets [
---    "reduce">: lambda "eager" $ ref reduceTermDef @@ var "eager" @@ Maps.empty,
---
---    "doRecurse">: lambdas ["eager", "term"] $
---      Logic.and (var "eager") $ cases _Term (var "term") (Just true) [
---        _Term_function>>: match _Function (Just true) [
---          _Function_lambda>>: constant false]],
---
---    "reduceArg">: lambdas ["eager", "arg"] $
---      Logic.ifElse (var "eager")
---        (Flows.pure $ var "arg")
---        (var "reduce" @@ false @@ var "arg"),
---
---    "applyToArguments">: lambdas ["fun", "args"] $
---      Logic.ifElse (Lists.null $ var "args")
---        (var "fun")
---        (var "applyToArguments" @@
---          (Core.termApplication $ Core.application (var "fun") (Lists.head $ var "args")) @@
---          (Lists.tail $ var "args")),
---
-----    applyToArguments fun args = case args of
-----      [] -> fun
-----      (h:r) -> applyToArguments (Terms.apply fun h) r
-----
---
---    "replaceFreeName">: lambdas ["toReplace", "replacement", "term"] $ lets [
---      "mapping">: lambdas ["recurse", "inner"] $
---        match _Term (Just $ var "recurse" @@ var "inner") [
---          _Term_function>>: match _Function (Just $ var "recurse" @@ var "inner") [
---            _Function_lambda>>: lambda "l" $ Logic.ifElse
---              (Equality.equal (Core.lambdaParameter $ var "l") (var "toReplace"))
---              (var "inner")
---              (var "recurse" @@ var "inner")],
---          _Term_variable>>: lambda "name" $ Logic.ifElse
---            (Equality.equal (var "name") (var "toReplace"))
---            (var "replacement")
---            (var "inner")] @@ var "inner"]
---      $ ref Rewriting.rewriteTermDef @@ var "mapping" @@ var "term",
---
---    "applyElimination">: lambdas ["elm", "reducedArg"] $
---      match _Elimination Nothing [] @@ var "elm",
---
---    "applyIfNullary">: lambdas ["eager", "original", "args"] $ lets [
---      "stripped">: ref Strip.stripTermDef @@ var "original"]
---      $ cases _Term (var "stripped") Nothing [
---        _Term_function>>: match _Function (Just $ Flows.pure (var "applyToArguments" @@ var "original" @@ var "args")) [
---            _Function_primitive>>: lambda "name" $
---              Flows.bind (ref Lexical.requirePrimitiveDef @@ var "name") $ lambda "prim" $
---                lets [
---                  "arity">: ref Arity.primitiveArityDef @@ var "prim"]
---                  $ Logic.ifElse (Equality.gtInt32 (var "arity") (Lists.length $ var "args"))
---                    (Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args")
---                    (lets [
---                      "argList">: Lists.take (var "arity") (var "args"),
---                      "remainingArgs">: Lists.drop (var "arity") (var "args")]
---                      $ Flows.bind (Flows.mapList (var "reduceArg" @@ var "eager") (var "argList")) $ lambda "reducedArgs" $
---                          Flows.bind
---                            (Flows.bind
---                              (Graph.primitiveImplementation (var "prim") @@ var "reducedArgs")
---                              (var "reduce" @@ var "eager")) $ lambda "reducedResult" $
---                                var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs")]],
---    "mapping">: lambdas ["recurse", "mid"] $
---      Flows.bind
---        (Logic.ifElse (var "doRecurse" @@ var "eager" @@ var "mid")
---          (var "recurse" @@ var "mid")
---          (Flows.pure $ var "mid")) $
---        lambda "inner" $ var "applyIfNullary" @@ var "eager" @@ var "inner" @@ (list [])]
---    $ ref Rewriting.rewriteTermMDef @@ var "mapping" @@ var "term"
---
-
-
-
-
-
-{--}
-reduceTermDef :: TElement (Bool -> M.Map Name Term -> Term -> Flow Graph Term)
+reduceTermDef :: TElement (Bool -> Term -> Flow Graph Term)
 reduceTermDef = reductionDefinition "reduceTerm" $
   doc "A term evaluation function which is alternatively lazy or eager" $
-  lambdas ["eager", "env", "term"] $ lets [
-    "reduce">: lambda "eager" $ ref reduceTermDef @@ var "eager" @@ Maps.empty,
+  lambdas ["eager", "term"] $ lets [
+    "reduce">: lambda "eager" $ ref reduceTermDef @@ var "eager",
 
     "doRecurse">: lambdas ["eager", "term"] $
       Logic.and (var "eager") $ cases _Term (var "term") (Just true) [

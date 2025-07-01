@@ -809,7 +809,6 @@ inferTypeOfTerm cx term desc = (Flows.withTrace desc ((\x -> case x of
   Core.TermSum v1 -> (inferTypeOfSum cx v1)
   Core.TermTypeAbstraction v1 -> (inferTypeOfTypeAbstraction cx v1)
   Core.TermTypeApplication v1 -> (inferTypeOfTypeApplication cx v1)
-  Core.TermTyped v1 -> (inferTypeOfTypedTerm cx v1)
   Core.TermUnion v1 -> (inferTypeOfInjection cx v1)
   Core.TermVariable v1 -> (inferTypeOfVariable cx v1)
   Core.TermWrap v1 -> (inferTypeOfWrappedTerm cx v1)) term))

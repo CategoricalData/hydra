@@ -276,15 +276,6 @@ term t =
         "\10216",
         type_ typ,
         "\10217"])
-    Core.TermTyped v1 ->  
-      let t2 = (Core.typedTermTerm v1) 
-          typ = (Core.typedTermType v1)
-      in (Strings.cat [
-        "(",
-        term t2,
-        " : ",
-        type_ typ,
-        ")"])
     Core.TermUnion v1 ->  
       let tname = (Core.unName (Core.injectionTypeName v1)) 
           f = (Core.injectionField v1)
@@ -322,7 +313,6 @@ termVariant x = case x of
   Mantle.TermVariantSum -> "sum"
   Mantle.TermVariantTypeAbstraction -> "typeAbstraction"
   Mantle.TermVariantTypeApplication -> "typeApplication"
-  Mantle.TermVariantTyped -> "typed"
   Mantle.TermVariantUnion -> "union"
   Mantle.TermVariantVariable -> "variable"
   Mantle.TermVariantWrap -> "wrap"
