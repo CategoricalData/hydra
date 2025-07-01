@@ -1,3 +1,4 @@
+unnamed package
 hydra
 hydra.ast
 hydra.basics
@@ -10,17 +11,19 @@ hydra.coreEncoding
 hydra.coreLanguage
 hydra.dsl
 hydra.dsl.prims
+hydra.ext.csharp.language
+hydra.ext.csharp.syntax
 hydra.ext.cypher
 hydra.ext.cypher.features
 hydra.ext.cypher.openCypher
 hydra.ext.gql
-hydra.ext.graphql.syntax
 hydra.ext.haskell.ast
 hydra.ext.java.language
 hydra.ext.java.syntax
 hydra.ext.json
 hydra.ext.org.apache.avro.schema
-hydra.ext.org.json.decoding
+hydra.ext.org.graphql.syntax
+hydra.ext.org.json.schema
 hydra.ext.org.w3.rdf.syntax
 hydra.ext.org.w3.shacl.model
 hydra.ext.org.yaml.model
@@ -29,11 +32,14 @@ hydra.ext.protobuf.any
 hydra.ext.protobuf.language
 hydra.ext.protobuf.proto3
 hydra.ext.protobuf.sourceContext
-hydra.ext.protobuf.type
+hydra.ext.python.language
+hydra.ext.python.syntax
 hydra.ext.rdf
 hydra.ext.relationalModel
 hydra.ext.scala.meta
 hydra.ext.tabular
+hydra.ext.typeScript.language
+hydra.ext.typeScript.model
 hydra.extras
 hydra.grammar
 hydra.graph
@@ -55,6 +61,7 @@ hydra.messages
 hydra.module
 hydra.pg
 hydra.pg.dsl
+hydra.pg.graphson.syntax
 hydra.pg.mapping
 hydra.pg.model
 hydra.pg.query
