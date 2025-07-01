@@ -48,23 +48,19 @@ expandTypedLambdas term =
                     in (Lists.cons dom0 doms, cod1)
                   _ -> ([], t)) t)
           in (helper (Strip.stripType typ))) 
-      getFunType = (\term -> Optionals.map toNaryFunType (getTermType term))
       padTerm = (\i -> \doms -> \cod -> \term -> Logic.ifElse (Lists.null doms) term ( 
               let dom = (Lists.head doms) 
                   var = (Core.Name (Strings.cat2 "v" (Literals.showInt32 i)))
                   tailDoms = (Lists.tail doms)
-                  typedTerm = (\typ -> \term -> Core.TermTyped (Core.TypedTerm {
-                          Core.typedTermTerm = term,
-                          Core.typedTermType = typ}))
                   toFunctionType = (\doms -> \cod -> Lists.foldl (\c -> \d -> Core.TypeFunction (Core.FunctionType {
                           Core.functionTypeDomain = d,
                           Core.functionTypeCodomain = c})) cod doms)
               in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = var,
                 Core.lambdaDomain = (Just dom),
-                Core.lambdaBody = (padTerm (Math.add i 1) tailDoms cod (typedTerm (toFunctionType tailDoms cod) (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (typedTerm (toFunctionType doms cod) term),
-                  Core.applicationArgument = (Core.TermVariable var)}))))})))))
+                Core.lambdaBody = (padTerm (Math.add i 1) tailDoms cod (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = term,
+                  Core.applicationArgument = (Core.TermVariable var)})))})))))
       expand = (\doms -> \cod -> \term -> (\x -> case x of
               Core.TermAnnotated v1 -> (Core.TermAnnotated (Core.AnnotatedTerm {
                 Core.annotatedTermSubject = (expand doms cod (Core.annotatedTermSubject v1)),
@@ -72,9 +68,7 @@ expandTypedLambdas term =
               Core.TermApplication v1 ->  
                 let lhs = (Core.applicationFunction v1) 
                     rhs = (Core.applicationArgument v1)
-                in (Optionals.maybe (rewriteTerm rewrite term) (\typ -> Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (expand (Lists.cons typ doms) cod lhs),
-                  Core.applicationArgument = (expandTypedLambdas rhs)})) (getTermType rhs))
+                in (rewriteTerm rewrite term)
               Core.TermFunction v1 -> ((\x -> case x of
                 Core.FunctionLambda v2 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.lambdaParameter v2),
@@ -89,14 +83,8 @@ expandTypedLambdas term =
                 in (Core.TermLet (Core.Let {
                   Core.letBindings = (Lists.map expandBinding (Core.letBindings v1)),
                   Core.letEnvironment = (expand doms cod (Core.letEnvironment v1))}))
-              Core.TermTyped v1 -> (Core.TermTyped (Core.TypedTerm {
-                Core.typedTermTerm = (expand doms cod (Core.typedTermTerm v1)),
-                Core.typedTermType = (Core.typedTermType v1)}))
               _ -> (rewriteTerm rewrite term)) term)
-      rewrite = (\recurse -> \term -> Optionals.maybe (recurse term) (\domsAndCod ->  
-              let doms = (fst domsAndCod) 
-                  cod = (snd domsAndCod)
-              in (expand doms cod term)) (getFunType term))
+      rewrite = (\recurse -> \term -> recurse term)
   in (rewriteTerm rewrite term)
 
 -- | Flatten nested let expressions
@@ -210,13 +198,6 @@ freeVariablesInTypeSimple typ =
           _ -> types) typ)
   in (foldOverType Coders.TraversalOrderPre helper Sets.empty typ)
 
--- | Get the annotated type of a given term, if any
-getTermType :: (Core.Term -> Maybe Core.Type)
-getTermType x = case x of
-  Core.TermAnnotated v1 -> (getTermType (Core.annotatedTermSubject v1))
-  Core.TermTyped v1 -> (Just (Core.typedTermType v1))
-  _ -> Nothing
-
 inlineType :: (M.Map Core.Name Core.Type -> Core.Type -> Compute.Flow t0 Core.Type)
 inlineType schema typ =  
   let f = (\recurse -> \typ -> Flows.bind (recurse typ) (\tr -> (\x -> case x of
@@ -302,8 +283,7 @@ removeTermAnnotations term =
           let rewritten = (recurse term)
           in ((\x -> case x of
             Core.TermAnnotated v1 -> (Core.annotatedTermSubject v1)
-            Core.TermTyped v1 -> (Core.typedTermTerm v1)
-            _ -> rewritten) rewritten))
+            _ -> rewritten) term))
   in (rewriteTerm remove term)
 
 -- | Recursively remove type annotations, including within subtypes
@@ -395,9 +375,6 @@ rewriteTerm f =
             Core.TermTypeApplication v1 -> (Core.TermTypeApplication (Core.TypedTerm {
               Core.typedTermTerm = (recurse (Core.typedTermTerm v1)),
               Core.typedTermType = (Core.typedTermType v1)}))
-            Core.TermTyped v1 -> (Core.TermTypeApplication (Core.TypedTerm {
-              Core.typedTermTerm = (recurse (Core.typedTermTerm v1)),
-              Core.typedTermType = (Core.typedTermType v1)}))
             Core.TermUnion v1 -> (Core.TermUnion (Core.Injection {
               Core.injectionTypeName = (Core.injectionTypeName v1),
               Core.injectionField = (forField (Core.injectionField v1))}))
@@ -477,12 +454,6 @@ rewriteTermM f =
                 Core.sumIndex = i,
                 Core.sumSize = s,
                 Core.sumTerm = rtrm}))))
-            Core.TermTyped v1 ->  
-              let term1 = (Core.typedTermTerm v1) 
-                  type2 = (Core.typedTermType v1)
-              in (Flows.bind (recurse term1) (\rterm1 -> Flows.pure (Core.TermTyped (Core.TypedTerm {
-                Core.typedTermTerm = rterm1,
-                Core.typedTermType = type2}))))
             Core.TermUnion v1 ->  
               let n = (Core.injectionTypeName v1) 
                   field = (Core.injectionField v1)
@@ -651,8 +622,7 @@ stripTermRecursive term =
           let rewritten = (recurse term)
           in ((\x -> case x of
             Core.TermAnnotated v1 -> (Core.annotatedTermSubject v1)
-            Core.TermTyped v1 -> (Core.typedTermTerm v1)
-            _ -> rewritten) rewritten))
+            _ -> rewritten) term))
   in (rewriteTerm strip term)
 
 -- | Recursively strip all annotations from a type
@@ -701,7 +671,6 @@ stripTypesFromTerm term =
               Core.letEnvironment = (Core.letEnvironment v1)}))
             Core.TermTypeAbstraction v1 -> (Core.typeAbstractionBody v1)
             Core.TermTypeApplication v1 -> (Core.typedTermTerm v1)
-            Core.TermTyped v1 -> (Core.typedTermTerm v1)
             _ -> rewritten) rewritten))
   in (rewriteTerm strip term)
 
@@ -768,8 +737,6 @@ subterms x = case x of
     Core.typeAbstractionBody v1]
   Core.TermTypeApplication v1 -> [
     Core.typedTermTerm v1]
-  Core.TermTyped v1 -> [
-    Core.typedTermTerm v1]
   Core.TermUnion v1 -> [
     Core.fieldTerm (Core.injectionField v1)]
   Core.TermVariable _ -> []
@@ -809,8 +776,6 @@ subtermsWithAccessors x = case x of
     (Mantle.TermAccessorTypeAbstractionBody, (Core.typeAbstractionBody v1))]
   Core.TermTypeApplication v1 -> [
     (Mantle.TermAccessorTypeApplicationTerm, (Core.typedTermTerm v1))]
-  Core.TermTyped v1 -> [
-    (Mantle.TermAccessorTypedTerm, (Core.typedTermTerm v1))]
   Core.TermUnion v1 -> [
     (Mantle.TermAccessorInjectionTerm, (Core.fieldTerm (Core.injectionField v1)))]
   Core.TermVariable _ -> []
@@ -895,7 +860,6 @@ topologicalSortBindings bindingMap =
       keys = (Sets.fromList (Lists.map fst bindings))
       hasTypeAnnotation = (\term -> (\x -> case x of
               Core.TermAnnotated v1 -> (hasTypeAnnotation (Core.annotatedTermSubject v1))
-              Core.TermTyped _ -> True
               _ -> False) term)
       depsOf = (\nameAndTerm ->  
               let name = (fst nameAndTerm) 

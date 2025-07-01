@@ -390,7 +390,6 @@ termDef = coreEncodingDefinition "Term" $
     ecase _Term_sum (ref sumDef),
     ecase _Term_typeAbstraction $ ref typeAbstractionDef,
     ecase _Term_typeApplication $ ref typedTermDef,
-    ecase _Term_typed $ ref typedTermDef,
     ecase _Term_union (ref injectionDef),
     ecase _Term_variable $ ref nameDef,
     ecase _Term_wrap $ ref wrappedTermDef]

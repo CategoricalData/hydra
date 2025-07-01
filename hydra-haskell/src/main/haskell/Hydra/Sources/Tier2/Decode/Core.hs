@@ -258,9 +258,7 @@ typeDef = coreDecodingDefinition "type" $
     _Term_annotated>>: lambda "annotatedTerm" $
       Flows.map
         (lambda "t" $ Core.typeAnnotated $ Core.annotatedType (var "t") (Core.annotatedTermAnnotation $ var "annotatedTerm"))
-        (ref typeDef @@ (Core.annotatedTermSubject $ var "annotatedTerm")),
-    _Term_typed>>: lambda "typedTerm" $
-      ref typeDef @@ (Core.typedTermTerm $ var "typedTerm")]
+        (ref typeDef @@ (Core.annotatedTermSubject $ var "annotatedTerm"))]
 
 typeSchemeDef :: TElement (Term -> Flow Graph TypeScheme)
 typeSchemeDef = coreDecodingDefinition "typeScheme" $

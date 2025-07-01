@@ -85,7 +85,7 @@ encodeInferenceTestCase (InferenceTestCase input output) = Terms.record _Inferen
 ----------------------------------------
 
 encodedTestGroupToElement :: Namespace -> String -> TTerm TestGroup -> Element
-encodedTestGroupToElement ns lname group = Element name (setTermType (Just typ) $ unTTerm group)
+encodedTestGroupToElement ns lname group = Element name (unTTerm group)
     $ Just $ TypeScheme [] typ
   where
     name = unqualifyName $ QualifiedName (Just ns) lname

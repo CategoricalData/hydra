@@ -16,6 +16,10 @@ import qualified Data.Maybe as Y
 
 type Prefixes = M.Map Namespace String
 
+-- TODO
+requireTermType :: Term -> Flow s Type
+requireTermType term = fail $ "update me: types are derived using typeOf now, rather than from explicitly typed terms"
+
 moduleToGraphql :: Module -> Flow Graph (M.Map FilePath String)
 moduleToGraphql mod = do
     files <- moduleToGraphqlSchemas mod

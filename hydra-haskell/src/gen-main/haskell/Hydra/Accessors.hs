@@ -43,7 +43,6 @@ showTermAccessor accessor =
     Mantle.TermAccessorSumTerm -> Nothing
     Mantle.TermAccessorTypeAbstractionBody -> Nothing
     Mantle.TermAccessorTypeApplicationTerm -> Nothing
-    Mantle.TermAccessorTypedTerm -> Nothing
     Mantle.TermAccessorInjectionTerm -> Nothing
     Mantle.TermAccessorWrappedTerm -> Nothing) accessor)
 

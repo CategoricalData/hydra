@@ -42,8 +42,7 @@ fullyStripTermDef :: TElement (Term -> Term)
 fullyStripTermDef = stripDefinition "fullyStripTerm" $
   doc "Strip all annotations from a term, including first-class type annotations" $
   lambda "t" $ match _Term (Just $ var "t") [
-    TCase _Term_annotated --> ref fullyStripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject),
-    TCase _Term_typed --> ref fullyStripTermDef <.> (project _TypedTerm _TypedTerm_term)]
+    TCase _Term_annotated --> ref fullyStripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject)]
     @@ (var "t")
 
 stripTermDef :: TElement (Term -> Term)
@@ -63,6 +62,6 @@ stripTypeDef = stripDefinition "stripType" $
 stripTypeParametersDef :: TElement (Type -> Type)
 stripTypeParametersDef = stripDefinition "stripTypeParameters" $
   doc "Strip any top-level type lambdas from a type, extracting the (possibly nested) type body" $
-  lambda "t" $ match _Type (Just $ var "t") [
-    TCase _Type_forall --> lambda "lt" (ref stripTypeParametersDef @@ (project _ForallType _ForallType_body @@ var "lt"))
-    ] @@ (ref stripTypeDef @@ var "t")
+  lambda "t" $ cases _Type (ref stripTypeDef @@ var "t")
+    (Just $ var "t") [
+    _Type_forall>>: lambda "lt" (ref stripTypeParametersDef @@ (project _ForallType _ForallType_body @@ var "lt"))]
