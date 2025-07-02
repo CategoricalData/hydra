@@ -1,0 +1,174 @@
+-- | A module for creating graphs of dependencies between Hydra terms and types
+
+{-
+Usage example:
+
+:m
+import Hydra.Kernel
+import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Tier1.All
+import Hydra.Sources.Tier2.All
+import Hydra.Ext.Json.Serde
+import Hydra.Tools.Monads
+import Hydra.Tools.Analysis.Dependencies
+import Hydra.Codegen (modulesToGraph)
+import System.IO
+
+typeGraphToGraphson modules =
+
+
+flowToIo hydraCoreGraph (jsonValuesToString <$> typeGraphToDependencyGraphson hydraCoreGraph) >>= writeFile "/tmp/type-dependencies.json"
+
+tier1TypeGraph = modulesToGraph (hydraCoreModule:tier1TypeModules)
+flowToIo hydraCoreGraph (jsonValuesToString <$> typeGraphToDependencyGraphson tier1TypeGraph) >>= writeFile "/tmp/type-dependencies.json"
+
+tier1TermGraph = modulesToGraph tier1TermModules
+flowToIo hydraCoreGraph (jsonValuesToString <$> termGraphToDependencyGraphson True tier1TermGraph) >>= writeFile "/tmp/term-dependencies.json"
+
+tier2TermGraph = modulesToGraph (tier1TermModules ++ tier2Modules)
+flowToIo hydraCoreGraph (jsonValuesToString <$> termGraphToDependencyGraphson True tier2TermGraph) >>= writeFile "/tmp/term-dependencies.json"
+
+Now in G.V():
+
+g.io("/tmp/type-dependencies.json").read().iterate()
+g.io("/tmp/term-dependencies.json").read().iterate()
+-}
+module Hydra.Tools.Analysis.Dependencies where
+
+import Hydra.Kernel
+import Hydra.Codegen
+import Hydra.Sources.Tier2.All
+import Hydra.Sources.Libraries
+import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Describe.Core as DescribeCore
+import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Pg.Model as PG
+import qualified Hydra.Json as Json
+import Hydra.Ext.Pg.Utils
+import Hydra.Ext.Pg.Graphson.Utils
+
+import qualified Control.Monad as CM
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Ord as O
+import qualified Data.Set as S
+import qualified Data.Maybe as Y
+
+
+--
+
+vertexLabel_Primitive = PG.VertexLabel "Primitive"
+vertexLabel_TermElement = PG.VertexLabel "Term"
+vertexLabel_TypeElement = PG.VertexLabel "Type"
+edgeLabel_primitive = PG.EdgeLabel "primitive"
+edgeLabel_subterm = PG.EdgeLabel "subterm"
+edgeLabel_subtype = PG.EdgeLabel "subtype"
+propertyKey_localName = PG.PropertyKey "localName"
+propertyKey_arity = PG.PropertyKey "arity"
+propertyKey_name = PG.PropertyKey "name"
+propertyKey_namespace = PG.PropertyKey "namespace"
+propertyKey_termExpression = PG.PropertyKey "termExpression"
+propertyKey_termVariant = PG.PropertyKey "termVariant"
+propertyKey_typeExpression = PG.PropertyKey "typeExpression"
+propertyKey_typeVariant = PG.PropertyKey "typeVariant"
+
+--
+
+descriptiveEdgeId :: PG.EdgeLabel -> String -> String -> String
+descriptiveEdgeId label outId inId = outId ++ "_" ++ PG.unEdgeLabel label ++ "_" ++ inId
+
+namePairToEdge :: PG.EdgeLabel -> Name -> Name -> PG.Edge String
+namePairToEdge label outName inName = PG.Edge label edgeId outId inId M.empty
+  where
+    label = edgeLabel_subtype
+    outId = nameToVertexId outName
+    inId = nameToVertexId inName
+    edgeId = descriptiveEdgeId label outId inId
+
+nameToNamespace :: Name -> String
+nameToNamespace name = Y.maybe "default" unNamespace $ namespaceOf name
+
+nameToVertexId :: Name -> String
+nameToVertexId = unName
+
+termGraphToDependencyGraphson :: Bool -> Graph -> Flow s [Json.Value]
+termGraphToDependencyGraphson withPrimitives g = pgElementsToGraphson stringGraphsonContext $ propertyGraphElements $
+    termGraphToDependencyPropertyGraph withPrimitives g
+
+-- | Given a Hydra graph, create a property graph in which the vertices are all elements of the graph
+--   (plus all primitives, if selected) and the edges are all direct dependencies between elements
+--   (and between elements and primitives, if selected).
+--   Each vertex has an id based on the name of the element or primitive, in addition to a "namespace" property.
+termGraphToDependencyPropertyGraph :: Bool -> Graph -> PG.Graph String
+termGraphToDependencyPropertyGraph withPrimitives g = PG.Graph vertexMap edgeMap
+  where
+    primitives = graphPrimitives g
+    elements = graphElements g
+    nameToVertexId = unName
+    vertexMap = M.fromList $ fmap (\v -> (PG.vertexId v, v)) vertices
+      where
+        vertices = prims ++ els
+          where
+            prims = if withPrimitives
+                then fmap toVertex $ M.elems primitives
+                else []
+              where
+                toVertex prim = PG.Vertex vertexLabel_Primitive (nameToVertexId $ primitiveName prim) $ M.fromList [
+                    (propertyKey_arity, show $ primitiveArity prim),
+                    (propertyKey_localName, localNameOf name),
+                    (propertyKey_name, unName name),
+                    (propertyKey_namespace, nameToNamespace name)]
+                  where
+                    name = primitiveName prim
+            els = fmap toVertex $ M.elems elements
+              where
+                toVertex el = PG.Vertex vertexLabel_TermElement (nameToVertexId $ elementName el) $ M.fromList [
+                    (propertyKey_localName, localNameOf name),
+                    (propertyKey_name, unName name),
+                    (propertyKey_namespace, nameToNamespace name),
+                    (propertyKey_termVariant, ShowCore.termVariant $ termVariant term)]
+                  where
+                    name = elementName el
+                    term = elementTerm el
+    edgeMap = M.fromList $ fmap (\e -> (PG.edgeId e, e)) edges
+      where
+        edges = primEdges ++ elEdges
+          where
+            primEdges = if withPrimitives
+                then L.concat $ fmap edgesFrom elements
+                else []
+              where
+                edgesFrom el = fmap (namePairToEdge edgeLabel_primitive (elementName el)) $
+                  S.toList $ termDependencyNames False True False $ elementTerm el
+            elEdges = L.concat $ fmap edgesFrom elements
+              where
+                edgesFrom el = fmap (namePairToEdge edgeLabel_subterm (elementName el)) $
+                  S.toList $ freeVariablesInTerm $ elementTerm el
+
+typeGraphToDependencyGraphson :: Graph -> Flow Graph [Json.Value]
+typeGraphToDependencyGraphson g = do
+  pg <- typeGraphToDependencyPropertyGraph g
+  pgElementsToGraphson stringGraphsonContext $ propertyGraphElements pg
+
+typeGraphToDependencyPropertyGraph :: Graph -> Flow Graph (PG.Graph String)
+typeGraphToDependencyPropertyGraph g = do
+    types <- CM.mapM DecodeCore.type_ terms
+    let vertices = L.zipWith toVertex names types
+    let edges = L.concat $ L.zipWith toEdges names $ fmap (S.toList . freeVariablesInType) types
+    return $ PG.Graph
+      (M.fromList $ fmap (\v -> (PG.vertexId v, v)) vertices)
+      (M.fromList $ fmap (\e -> (PG.edgeId e, e)) edges)
+  where
+    elements = M.elems $ graphElements g
+    terms = fmap elementTerm elements
+    names = fmap elementName elements
+    toVertex name typ = PG.Vertex vertexLabel_TypeElement (nameToVertexId name) $
+      M.fromList [
+        (propertyKey_localName, localNameOf name),
+        (propertyKey_name, unName name),
+        (propertyKey_namespace, nameToNamespace name),
+        (propertyKey_typeExpression, ShowCore.type_ typ),
+--        (propertyKey_typeVariant, ShowCore.typeVariant $ typeVariant typ)]
+        (propertyKey_typeVariant, show $ typeVariant typ)]
+    toEdges name deps = fmap (namePairToEdge edgeLabel_subtype name) deps
