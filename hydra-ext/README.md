@@ -60,7 +60,8 @@ writeHaskell "src/gen-main/haskell" hydraExtModules
 
 ## Tools
 
-Experimental tools include:
+Miscellaneous tools include:
+* **Analysis**: utilities for analyzing the Hydra kernel or other Hydra graphs, for the sake of optimization, visualization, or LLM-based features
 * **AvroWorkflows**: transform Avro schemas and matching JSON data to one of multiple targets (RDF with SHACL, property graphs with schemas)
 * **Csv**: utilities for working with CSV data
 * **OsvToRdf**: transform [OSV](https://osv.dev) dumps to RDF
