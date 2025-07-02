@@ -1,8 +1,8 @@
 module Hydra.Ext.Pg.Graphson.Coder (
   GraphsonContext(..),
-  graphsonToJsonCoder,
-  vertexToGraphsonCoder,
-  vertexToJsonCoder)
+  graphsonVertexToJsonCoder,
+  pgVertexWithAdjacentEdgesToGraphsonVertexCoder,
+  pgVertexWithAdjacentEdgesToJsonCoder)
 where
 
 import Hydra.Kernel
@@ -21,8 +21,8 @@ import qualified Data.Maybe as Y
 data GraphsonContext s v = GraphsonContext {
   graphsonContextValueCoder :: Coder s s v G.Value}
 
-vertexToJsonCoder :: GraphsonContext s v -> Coder s s (PG.VertexWithAdjacentEdges v) Json.Value
-vertexToJsonCoder ctx = composeCoders (vertexToGraphsonCoder ctx) graphsonToJsonCoder
+pgVertexWithAdjacentEdgesToJsonCoder :: GraphsonContext s v -> Coder s s (PG.VertexWithAdjacentEdges v) Json.Value
+pgVertexWithAdjacentEdgesToJsonCoder ctx = composeCoders (pgVertexWithAdjacentEdgesToGraphsonVertexCoder ctx) graphsonVertexToJsonCoder
 
 -- PG to GraphSON --------------------------------------------------------------
 
@@ -50,8 +50,8 @@ vertexPropertyToGraphson encodeValue (PG.PropertyKey k, v) = do
   gv <- encodeValue v
   return (G.PropertyKey k, G.VertexPropertyValue Nothing gv)
 
-vertexToGraphson :: GraphsonContext s v -> PG.VertexWithAdjacentEdges v -> Flow s G.Vertex
-vertexToGraphson ctx (PG.VertexWithAdjacentEdges (PG.Vertex (PG.VertexLabel label) id props) ins outs) = do
+pgVertexWithAdjacentEdgesToGraphsonVertex :: GraphsonContext s v -> PG.VertexWithAdjacentEdges v -> Flow s G.Vertex
+pgVertexWithAdjacentEdgesToGraphsonVertex ctx (PG.VertexWithAdjacentEdges (PG.Vertex (PG.VertexLabel label) id props) ins outs) = do
     gid <- encodeValue id
     propPairs <- CM.mapM (vertexPropertyToGraphson encodeValue) $ M.toList props
     inPairs <- CM.mapM (adjacentEdgeToGraphson encodeValue) ins
@@ -60,8 +60,8 @@ vertexToGraphson ctx (PG.VertexWithAdjacentEdges (PG.Vertex (PG.VertexLabel labe
   where
     encodeValue = coderEncode $ graphsonContextValueCoder ctx
 
-vertexToGraphsonCoder :: GraphsonContext s v -> Coder s s (PG.VertexWithAdjacentEdges v) G.Vertex
-vertexToGraphsonCoder ctx = Coder (vertexToGraphson ctx) decode
+pgVertexWithAdjacentEdgesToGraphsonVertexCoder :: GraphsonContext s v -> Coder s s (PG.VertexWithAdjacentEdges v) G.Vertex
+pgVertexWithAdjacentEdgesToGraphsonVertexCoder ctx = Coder (pgVertexWithAdjacentEdgesToGraphsonVertex ctx) decode
   where
     decode _ = fail "decoding GraphSON is currently unsupported"
 
@@ -95,8 +95,9 @@ floatValueToJson v = case v of
   G.FloatValueNegativeInfinity -> Json.ValueString "-Infinity"
   G.FloatValueNotANumber -> Json.ValueString "NaN"
 
-graphsonToJsonCoder :: Coder s s G.Vertex Json.Value
-graphsonToJsonCoder = Coder encode decode
+-- | Map a GraphSON vertex to a JSON object. The reverse is currently unsupported.
+graphsonVertexToJsonCoder :: Coder s s G.Vertex Json.Value
+graphsonVertexToJsonCoder = Coder encode decode
   where
     encode = pure . vertexToJson
     decode _ = fail "decoding GraphSON JSON is currently unsupported"

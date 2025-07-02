@@ -9,6 +9,8 @@ import qualified Hydra.Pg.Graphson.Syntax as G
 import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Pg.Mapping as PGM
 import qualified Hydra.Show.Core as ShowCore
+import Hydra.Ext.Pg.Utils
+import Hydra.Ext.Json.Serde
 
 import qualified Control.Monad as CM
 import qualified Data.Either as E
@@ -51,7 +53,7 @@ exampleGraphsonContext = GraphsonContext $ Coder encodeValue decodeValue
     encodeValue s = pure $ G.ValueString s
     decodeValue _ = fail "decoding from GraphSON is not yet supported"
 
-pgElementToJson :: PGM.Schema Graph t v -> PG.Element v -> Flow Graph Json.Value
+pgElementToJson :: PGM.Schema s t v -> PG.Element v -> Flow s Json.Value
 pgElementToJson schema el = case el of
     PG.ElementVertex vertex -> do
       let labelJson = Json.ValueString $ PG.unVertexLabel $ PG.vertexLabel vertex
@@ -91,10 +93,26 @@ pgElementsToGraphson :: (Ord v, Show v) => GraphsonContext s v -> [PG.Element v]
 pgElementsToGraphson ctx els = CM.mapM encode vertices
   where
     vertices = elementsToVerticesWithAdjacentEdges els
-    encode = coderEncode (vertexToJsonCoder ctx)
+    encode = coderEncode (pgVertexWithAdjacentEdgesToJsonCoder ctx)
 
-pgElementsToJson :: PGM.Schema Graph t v -> [PG.Element v] -> Flow Graph Json.Value
+pgElementsToJson :: PGM.Schema s t v -> [PG.Element v] -> Flow s Json.Value
 pgElementsToJson schema els = Json.ValueArray <$> CM.mapM (pgElementToJson schema) els
+
+propertyGraphGraphsonLastMile :: (Ord v, Show t, Show v) => GraphsonContext Graph v -> PGM.Schema Graph t v -> t -> t -> LastMile Graph (PG.Element v)
+propertyGraphGraphsonLastMile ctx schema vidType eidType =
+  LastMile (\typ -> typedTermToPropertyGraph schema typ vidType eidType) (\els -> jsonValuesToString <$> pgElementsToGraphson ctx els) "jsonl"
+
+propertyGraphJsonLastMile :: (Show t, Show v) => PGM.Schema Graph t v -> t -> t -> LastMile Graph (PG.Element v)
+propertyGraphJsonLastMile schema vidType eidType =
+  LastMile (\typ -> typedTermToPropertyGraph schema typ vidType eidType) (\els -> jsonValueToString <$> pgElementsToJson schema els) "json"
+
+stringGraphsonContext :: GraphsonContext s String
+stringGraphsonContext = GraphsonContext $ Coder encodeString decodeString
+  where
+    encodeString s = pure $ G.ValueString s
+    decodeString v = case v of
+      G.ValueString s -> pure s
+      _ -> fail $ "expected a string value, got: " ++ show v
 
 termGraphsonContext :: GraphsonContext s Term
 termGraphsonContext = GraphsonContext $ Coder encodeTerm decodeTerm
