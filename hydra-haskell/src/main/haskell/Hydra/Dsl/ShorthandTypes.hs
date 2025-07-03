@@ -1,5 +1,6 @@
 module Hydra.Dsl.ShorthandTypes where
 
+import Hydra.Accessors
 import Hydra.Coders
 import Hydra.Core
 import Hydra.Compute

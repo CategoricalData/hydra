@@ -26,26 +26,6 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
     elements = [
 
-      def "AccessorEdge" $
-        record [
-          "source">: mantle "AccessorNode",
-          "path">: mantle "AccessorPath",
-          "target">: mantle "AccessorNode"],
-
-      def "AccessorGraph" $
-        record [
-          "nodes">: list $ mantle "AccessorNode",
-          "edges">: list $ mantle "AccessorEdge"],
-
-      def "AccessorNode" $
-        record [
-          "name">: core "Name",
-          "label">: string,
-          "id" >: string],
-
-      def "AccessorPath" $
-        wrap $ list $ mantle "TermAccessor",
-
       def "CaseConvention" $
         Types.enum ["camel", "pascal", "lowerSnake", "upperSnake"],
 
@@ -84,30 +64,6 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
         union [
           "arbitrary">: unit,
           "bits">: int32],
-
-      def "TermAccessor" $
-        doc "A function which maps from a term to a particular immediate subterm" $
-        union [
-          "annotatedSubject">: unit,
-          "applicationFunction">: unit,
-          "applicationArgument">: unit,
-          "lambdaBody">: unit,
-          "unionCasesDefault">: unit,
-          "unionCasesBranch">: core "Name",
-          "letEnvironment">: unit,
-          "letBinding">: core "Name",
-          "listElement">: int32,
-          "mapKey">: int32,
-          "mapValue">: int32,
-          "optionalTerm">: unit,
-          "productTerm">: int32,
-          "recordField">: core "Name",
-          "setElement">: int32,
-          "sumTerm">: unit,
-          "typeAbstractionBody">: unit,
-          "typeApplicationTerm">: unit,
-          "injectionTerm">: unit,
-          "wrappedTerm">: unit],
 
       def "TermVariant" $
         doc "The identifier of a term expression constructor" $

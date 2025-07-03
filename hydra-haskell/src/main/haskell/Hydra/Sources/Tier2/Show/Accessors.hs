@@ -1,10 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier2.Accessors where
+module Hydra.Sources.Tier2.Show.Accessors where
 
 -- Standard Tier-2 imports
 import Hydra.Kernel
 import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Accessors              as Accessors
+import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Coders                 as Coders
 import qualified Hydra.Dsl.Compute                as Compute
 import qualified Hydra.Dsl.Core                   as Core
@@ -45,7 +47,6 @@ import qualified Data.Map                  as M
 import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
---import qualified Hydra.Sources.Tier2.Accessors as Accessors
 --import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
 --import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
@@ -65,6 +66,7 @@ import qualified Hydra.Sources.Tier2.Qnames as Qnames
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
+--import qualified Hydra.Sources.Tier2.Show.Accessors as ShowAccessors
 --import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
@@ -76,10 +78,10 @@ import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 
 
 accessorsDefinition :: String -> TTerm a -> TElement a
-accessorsDefinition = definitionInModule hydraAccessorsModule
+accessorsDefinition = definitionInModule showAccessorsModule
 
-hydraAccessorsModule :: Module
-hydraAccessorsModule = Module (Namespace "hydra.accessors") elements
+showAccessorsModule :: Module
+showAccessorsModule = Module (Namespace "hydra.show.accessors") elements
     [Qnames.hydraQnamesModule, Rewriting.hydraRewritingModule]
     [Tier1.hydraCodersModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule] $
     Just ("Utilities for working with term accessors.")
@@ -152,7 +154,7 @@ termToAccessorGraphDef = accessorsDefinition "termToAccessorGraph" $
             "currentVisited">: second $ var "currentNodesVisited",
             "rawLabel">: ref toCompactNameDef @@ var "namespaces" @@ var "name",
             "uniqueLabel">: ref toUniqueLabelDef @@ var "currentVisited" @@ var "rawLabel",
-            "node">: Mantle.accessorNode (var "name") (var "rawLabel") (var "uniqueLabel"),
+            "node">: Accessors.accessorNode (var "name") (var "rawLabel") (var "uniqueLabel"),
             "newVisited">: Sets.insert (var "uniqueLabel") (var "currentVisited"),
             "newNodes">: Lists.cons (var "node") (var "currentNodes"),
             "newIds">: Maps.insert (var "name") (var "node") (var "currentIds")]
@@ -183,8 +185,8 @@ termToAccessorGraphDef = accessorsDefinition "termToAccessorGraph" $
             (lambda "root" $
               Optionals.maybe (var "state")
                 (lambda "node" $ lets [
-                  "edge">: Mantle.accessorEdge (var "root")
-                    (Mantle.accessorPath $ Lists.reverse $ var "nextPath") (var "node"),
+                  "edge">: Accessors.accessorEdge (var "root")
+                    (Accessors.accessorPath $ Lists.reverse $ var "nextPath") (var "node"),
                   "newEdges">: Lists.cons (var "edge") (var "edges")]
                   $ pair (pair (var "nodes") (var "newEdges")) (var "visited"))
                 (Maps.lookup (var "name") (var "ids")))
@@ -196,7 +198,7 @@ termToAccessorGraphDef = accessorsDefinition "termToAccessorGraph" $
     "finalNodesEdges">: first $ var "result",
     "finalNodes">: first $ var "finalNodesEdges",
     "finalEdges">: second $ var "finalNodesEdges"]
-    $ Mantle.accessorGraph (var "finalNodes") (var "finalEdges")
+    $ Accessors.accessorGraph (var "finalNodes") (var "finalEdges")
 
 toCompactNameDef :: TElement (M.Map Namespace String -> Name -> String)
 toCompactNameDef = accessorsDefinition "toCompactName" $
