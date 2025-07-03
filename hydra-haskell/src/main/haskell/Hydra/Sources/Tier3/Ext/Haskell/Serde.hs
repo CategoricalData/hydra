@@ -38,7 +38,6 @@ import qualified Hydra.Sources.Tier1.Encode.Core      as EncodeCore
 import qualified Hydra.Sources.Tier1.Formatting       as Formatting
 import qualified Hydra.Sources.Tier1.Functions        as Functions
 import qualified Hydra.Sources.Tier1.Literals         as Literals
-import qualified Hydra.Sources.Tier1.Messages         as Messages
 import qualified Hydra.Sources.Tier1.Strip            as Strip
 import qualified Hydra.Sources.Tier2.AdapterUtils     as AdapterUtils
 import qualified Hydra.Sources.Tier2.Adapters         as Adapters
