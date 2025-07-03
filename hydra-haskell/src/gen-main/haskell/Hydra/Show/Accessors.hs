@@ -20,8 +20,8 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Convert a term accessor to a string representation
-showTermAccessor :: (Accessors.TermAccessor -> Maybe String)
-showTermAccessor accessor =  
+termAccessor :: (Accessors.TermAccessor -> Maybe String)
+termAccessor accessor =  
   let idx = (\i -> Nothing) 
       idxSuff = (\suffix -> \i -> Optionals.map (\s -> Strings.cat2 s suffix) (idx i))
   in ((\x -> case x of

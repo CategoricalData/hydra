@@ -86,13 +86,13 @@ showAccessorsModule = Module (Namespace "hydra.show.accessors") elements
     Just ("Utilities for working with term accessors.")
   where
    elements = [
-     el showTermAccessorDef,
+     el termAccessorDef,
      el termToAccessorGraphDef,
      el toCompactNameDef,
      el toUniqueLabelDef]
 
-showTermAccessorDef :: TElement (TermAccessor -> Maybe String)
-showTermAccessorDef = accessorsDefinition "showTermAccessor" $
+termAccessorDef :: TElement (TermAccessor -> Maybe String)
+termAccessorDef = accessorsDefinition "termAccessor" $
   doc "Convert a term accessor to a string representation" $
   lambda "accessor" $ lets [
     "idx">: lambda "i" nothing,  -- TODO: restore index functionality

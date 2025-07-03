@@ -4,7 +4,6 @@ module Hydra.Lexical where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
-import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
@@ -22,7 +21,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 dereferenceElement :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Graph.Element))
-dereferenceElement name = (Flows.map (\g -> lookupElement g name) Errors.getState)
+dereferenceElement name = (Flows.map (\g -> lookupElement g name) Monads.getState)
 
 elementsToGraph :: (Graph.Graph -> Maybe Graph.Graph -> [Graph.Element] -> Graph.Graph)
 elementsToGraph parent schema elements =  
@@ -93,10 +92,10 @@ requireElement name =
                   ". Available elements: {"],
                 (Strings.intercalate ", " (ellipsis (Lists.map (\el -> Core.unName (Graph.elementName el)) (Maps.elems (Graph.graphElements g)))))],
               "}"]))
-  in (Flows.bind (dereferenceElement name) (\mel -> Optionals.maybe (Flows.bind Errors.getState err) Flows.pure mel))
+  in (Flows.bind (dereferenceElement name) (\mel -> Optionals.maybe (Flows.bind Monads.getState err) Flows.pure mel))
 
 requirePrimitive :: (Core.Name -> Compute.Flow Graph.Graph Graph.Primitive)
-requirePrimitive name = (Flows.bind Errors.getState (\g -> Optionals.maybe (Flows.fail (Strings.cat [
+requirePrimitive name = (Flows.bind Monads.getState (\g -> Optionals.maybe (Flows.fail (Strings.cat [
   "no such primitive function: ",
   (Core.unName name)])) Flows.pure (lookupPrimitive g name)))
 
@@ -113,7 +112,7 @@ resolveTerm name =
           in ((\x -> case x of
             Core.TermVariable v1 -> (resolveTerm v1)
             _ -> (Flows.pure (Just (Graph.elementTerm el)))) stripped))
-  in (Flows.bind Errors.getState (\g -> Optionals.maybe (Flows.pure Nothing) recurse (Maps.lookup name (Graph.graphElements g))))
+  in (Flows.bind Monads.getState (\g -> Optionals.maybe (Flows.pure Nothing) recurse (Maps.lookup name (Graph.graphElements g))))
 
 -- | Note: assuming for now that primitive functions are the same in the schema graph
 schemaContext :: (Graph.Graph -> Graph.Graph)
@@ -130,4 +129,4 @@ typeOfPrimitive :: (Core.Name -> Compute.Flow Graph.Graph Core.TypeScheme)
 typeOfPrimitive name = (Flows.map Graph.primitiveType (requirePrimitive name))
 
 withSchemaContext :: (Compute.Flow Graph.Graph t0 -> Compute.Flow Graph.Graph t0)
-withSchemaContext f = (Flows.bind Errors.getState (\g -> Monads.withState (schemaContext g) f))
+withSchemaContext f = (Flows.bind Monads.getState (\g -> Monads.withState (schemaContext g) f))

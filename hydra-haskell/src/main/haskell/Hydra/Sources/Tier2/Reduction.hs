@@ -6,7 +6,7 @@ module Hydra.Sources.Tier2.Reduction where
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Accessors              as Accessors
-import qualified Hydra.Dsl.Ast                        as Ast
+import qualified Hydra.Dsl.Ast                    as Ast
 import qualified Hydra.Dsl.Coders                 as Coders
 import qualified Hydra.Dsl.Compute                as Compute
 import qualified Hydra.Dsl.Core                   as Core
@@ -33,7 +33,7 @@ import qualified Hydra.Dsl.Types                  as Types
 import qualified Hydra.Dsl.Typing                 as Typing
 import qualified Hydra.Sources.Tier1.All          as Tier1
 import qualified Hydra.Sources.Tier1.Constants    as Constants
-import qualified Hydra.Sources.Tier1.Encode.Core as EncodeCore
+import qualified Hydra.Sources.Tier1.Encode.Core  as EncodeCore
 import qualified Hydra.Sources.Tier1.Decode       as Decode
 import qualified Hydra.Sources.Tier1.Formatting   as Formatting
 import qualified Hydra.Sources.Tier1.Functions    as Functions

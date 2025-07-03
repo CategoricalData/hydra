@@ -53,7 +53,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
-import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
@@ -231,7 +231,7 @@ getTypeClassesDef = annotationsDefinition "getTypeClasses" $
         pair (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]] $
       withVar "fn" (ref ExtractCore.unitVariantDef @@ Core.nameLift _TypeClass @@ var "term") $
       Optionals.maybe
-        (ref Errors.unexpectedDef @@ string "type class" @@ (ref ShowCore.termDef @@ var "term"))
+        (ref Monads.unexpectedDef @@ string "type class" @@ (ref ShowCore.termDef @@ var "term"))
         (unaryFunction Flows.pure)
         (Maps.lookup (var "fn") (var "byName"))] $
     Optionals.maybe
@@ -439,7 +439,7 @@ unshadowVariablesDef = annotationsDefinition "unshadowVariables" $
       ref nextCountDef @@ Core.name (string "unshadow"),
     "rewrite">: lambdas ["recurse", "term"] $ lets [
       "handleOther">: var "recurse" @@ var "term"] $
-      withVar "state" (ref Errors.getStateDef) $ lets [
+      withVar "state" (ref Monads.getStateDef) $ lets [
         "reserved">: first $ var "state",
         "subst">: second $ var "state"] $
         cases _Term (var "term") (Just $ var "handleOther") [
@@ -453,13 +453,13 @@ unshadowVariablesDef = annotationsDefinition "unshadowVariables" $
                 "body">: Core.lambdaBody $ var "l"] $
                 Logic.ifElse (Sets.member (var "v")(var "reserved"))
                   (withVar "v'" (var "freshName") $
-                    Flows.bind (ref Errors.putStateDef @@ pair (Sets.insert (var "v'") (var "reserved")) (Maps.insert (var "v") (var "v'") (var "subst"))) $
+                    Flows.bind (ref Monads.putStateDef @@ pair (Sets.insert (var "v'") (var "reserved")) (Maps.insert (var "v") (var "v'") (var "subst"))) $
                       constant $
                         Flows.bind (var "recurse" @@ var "body") $
                           lambda "body'" $
-                            Flows.bind (ref Errors.putStateDef @@ var "state") $
+                            Flows.bind (ref Monads.putStateDef @@ var "state") $
                               constant $ Flows.pure $ Core.termFunction $ Core.functionLambda $ Core.lambda (var "v'") (var "d") (var "body'"))
-                  (Flows.bind (ref Errors.putStateDef @@ pair (Sets.insert (var "v") (var "reserved")) (var "subst")) $
+                  (Flows.bind (ref Monads.putStateDef @@ pair (Sets.insert (var "v") (var "reserved")) (var "subst")) $
                     constant $
                       Flows.map
                         (lambda "body'" $ Core.termFunction $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "body'"))
