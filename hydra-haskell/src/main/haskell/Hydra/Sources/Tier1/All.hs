@@ -9,8 +9,6 @@ module Hydra.Sources.Tier1.All(
   module Hydra.Sources.Tier1.Compute,
   module Hydra.Sources.Tier1.Constants,
   module Hydra.Sources.Tier1.Constraints,
---  module Hydra.Sources.Tier1.Decode.Core,
---  module Hydra.Sources.Tier1.Encode.Core,
   module Hydra.Sources.Tier1.Decode,
   module Hydra.Sources.Tier1.Formatting,
   module Hydra.Sources.Tier1.Grammar,
@@ -18,7 +16,6 @@ module Hydra.Sources.Tier1.All(
   module Hydra.Sources.Tier1.Json,
   module Hydra.Sources.Tier1.Literals,
   module Hydra.Sources.Tier1.Mantle,
-  module Hydra.Sources.Tier1.Messages,
   module Hydra.Sources.Tier1.Module,
   module Hydra.Sources.Tier1.Phantoms,
   module Hydra.Sources.Tier1.Query,
@@ -44,7 +41,6 @@ import Hydra.Sources.Tier1.Graph
 import Hydra.Sources.Tier1.Json
 import Hydra.Sources.Tier1.Literals
 import Hydra.Sources.Tier1.Mantle
-import Hydra.Sources.Tier1.Messages
 import Hydra.Sources.Tier1.Module
 import Hydra.Sources.Tier1.Phantoms
 import Hydra.Sources.Tier1.Query
@@ -64,7 +60,6 @@ tier1TermModules = [
   hydraConstantsModule,
   hydraFormattingModule,
   hydraLiteralsModule,
-  hydraMessagesModule,
   hydraStripModule]
 
 tier1TypeModules :: [Module]

@@ -38,7 +38,6 @@ import qualified Hydra.Sources.Tier1.Decode       as Decode
 import qualified Hydra.Sources.Tier1.Formatting   as Formatting
 import qualified Hydra.Sources.Tier1.Functions    as Functions
 import qualified Hydra.Sources.Tier1.Literals     as Literals
-import qualified Hydra.Sources.Tier1.Messages     as Messages
 import qualified Hydra.Sources.Tier1.Strip        as Strip
 import           Prelude hiding ((++))
 import qualified Data.Int                  as I
