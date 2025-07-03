@@ -2,6 +2,7 @@
 
 module Hydra.Rewriting where
 
+import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
@@ -701,43 +702,43 @@ subterms x = case x of
     Core.wrappedTermObject v1]
 
 -- | Find the children of a given term
-subtermsWithAccessors :: (Core.Term -> [(Mantle.TermAccessor, Core.Term)])
+subtermsWithAccessors :: (Core.Term -> [(Accessors.TermAccessor, Core.Term)])
 subtermsWithAccessors x = case x of
   Core.TermAnnotated v1 -> [
-    (Mantle.TermAccessorAnnotatedSubject, (Core.annotatedTermSubject v1))]
+    (Accessors.TermAccessorAnnotatedSubject, (Core.annotatedTermSubject v1))]
   Core.TermApplication v1 -> [
-    (Mantle.TermAccessorApplicationFunction, (Core.applicationFunction v1)),
-    (Mantle.TermAccessorApplicationArgument, (Core.applicationArgument v1))]
+    (Accessors.TermAccessorApplicationFunction, (Core.applicationFunction v1)),
+    (Accessors.TermAccessorApplicationArgument, (Core.applicationArgument v1))]
   Core.TermFunction v1 -> ((\x -> case x of
     Core.FunctionElimination v2 -> ((\x -> case x of
       Core.EliminationUnion v3 -> (Lists.concat2 (Optionals.maybe [] (\t -> [
-        (Mantle.TermAccessorUnionCasesDefault, t)]) (Core.caseStatementDefault v3)) (Lists.map (\f -> (Mantle.TermAccessorUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v3)))
+        (Accessors.TermAccessorUnionCasesDefault, t)]) (Core.caseStatementDefault v3)) (Lists.map (\f -> (Accessors.TermAccessorUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v3)))
       _ -> []) v2)
     Core.FunctionLambda v2 -> [
-      (Mantle.TermAccessorLambdaBody, (Core.lambdaBody v2))]
+      (Accessors.TermAccessorLambdaBody, (Core.lambdaBody v2))]
     _ -> []) v1)
-  Core.TermLet v1 -> (Lists.cons (Mantle.TermAccessorLetEnvironment, (Core.letEnvironment v1)) (Lists.map (\b -> (Mantle.TermAccessorLetBinding (Core.letBindingName b), (Core.letBindingTerm b))) (Core.letBindings v1)))
-  Core.TermList v1 -> (Lists.map (\e -> (Mantle.TermAccessorListElement 0, e)) v1)
+  Core.TermLet v1 -> (Lists.cons (Accessors.TermAccessorLetEnvironment, (Core.letEnvironment v1)) (Lists.map (\b -> (Accessors.TermAccessorLetBinding (Core.letBindingName b), (Core.letBindingTerm b))) (Core.letBindings v1)))
+  Core.TermList v1 -> (Lists.map (\e -> (Accessors.TermAccessorListElement 0, e)) v1)
   Core.TermLiteral _ -> []
   Core.TermMap v1 -> (Lists.concat (Lists.map (\p -> [
-    (Mantle.TermAccessorMapKey 0, (fst p)),
-    (Mantle.TermAccessorMapValue 0, (snd p))]) (Maps.toList v1)))
+    (Accessors.TermAccessorMapKey 0, (fst p)),
+    (Accessors.TermAccessorMapValue 0, (snd p))]) (Maps.toList v1)))
   Core.TermOptional v1 -> (Optionals.maybe [] (\t -> [
-    (Mantle.TermAccessorOptionalTerm, t)]) v1)
-  Core.TermProduct v1 -> (Lists.map (\e -> (Mantle.TermAccessorProductTerm 0, e)) v1)
-  Core.TermRecord v1 -> (Lists.map (\f -> (Mantle.TermAccessorRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v1))
-  Core.TermSet v1 -> (Lists.map (\e -> (Mantle.TermAccessorListElement 0, e)) (Sets.toList v1))
+    (Accessors.TermAccessorOptionalTerm, t)]) v1)
+  Core.TermProduct v1 -> (Lists.map (\e -> (Accessors.TermAccessorProductTerm 0, e)) v1)
+  Core.TermRecord v1 -> (Lists.map (\f -> (Accessors.TermAccessorRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v1))
+  Core.TermSet v1 -> (Lists.map (\e -> (Accessors.TermAccessorListElement 0, e)) (Sets.toList v1))
   Core.TermSum v1 -> [
-    (Mantle.TermAccessorSumTerm, (Core.sumTerm v1))]
+    (Accessors.TermAccessorSumTerm, (Core.sumTerm v1))]
   Core.TermTypeAbstraction v1 -> [
-    (Mantle.TermAccessorTypeAbstractionBody, (Core.typeAbstractionBody v1))]
+    (Accessors.TermAccessorTypeAbstractionBody, (Core.typeAbstractionBody v1))]
   Core.TermTypeApplication v1 -> [
-    (Mantle.TermAccessorTypeApplicationTerm, (Core.typedTermTerm v1))]
+    (Accessors.TermAccessorTypeApplicationTerm, (Core.typedTermTerm v1))]
   Core.TermUnion v1 -> [
-    (Mantle.TermAccessorInjectionTerm, (Core.fieldTerm (Core.injectionField v1)))]
+    (Accessors.TermAccessorInjectionTerm, (Core.fieldTerm (Core.injectionField v1)))]
   Core.TermVariable _ -> []
   Core.TermWrap v1 -> [
-    (Mantle.TermAccessorWrappedTerm, (Core.wrappedTermObject v1))]
+    (Accessors.TermAccessorWrappedTerm, (Core.wrappedTermObject v1))]
 
 -- | Find the children of a given type expression
 subtypes :: (Core.Type -> [Core.Type])

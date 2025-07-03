@@ -3,6 +3,7 @@
 module Hydra.Sources.Tier1.All(
   module Hydra.Sources.Tier0.Core,
   module Hydra.Sources.Tier1.All,
+  module Hydra.Sources.Tier1.Accessors,
   module Hydra.Sources.Tier1.Ast,
   module Hydra.Sources.Tier1.Coders,
   module Hydra.Sources.Tier1.Compute,
@@ -29,6 +30,7 @@ module Hydra.Sources.Tier1.All(
 ) where
 
 import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Tier1.Accessors
 import Hydra.Sources.Tier1.Ast
 import Hydra.Sources.Tier1.Coders
 import Hydra.Sources.Tier1.Compute
@@ -67,6 +69,7 @@ tier1TermModules = [
 
 tier1TypeModules :: [Module]
 tier1TypeModules = [
+  hydraAccessorsModule,
   hydraAstModule,
   hydraCodersModule,
   hydraComputeModule,

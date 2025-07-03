@@ -30,7 +30,7 @@ bidirectional f = Compute.Coder {
   Compute.coderEncode = (f Coders.CoderDirectionEncode),
   Compute.coderDecode = (f Coders.CoderDirectionDecode)}
 
-chooseAdapter :: ((t2 -> Compute.Flow t4 [Compute.Adapter t0 t1 t2 t2 t3 t3]) -> (t2 -> Bool) -> (t2 -> String) -> (t2 -> String) -> t2 -> Compute.Flow t4 (Compute.Adapter t0 t1 t2 t2 t3 t3))
+chooseAdapter :: ((t3 -> Compute.Flow t0 [Compute.Adapter t1 t2 t3 t3 t4 t4]) -> (t3 -> Bool) -> (t3 -> String) -> (t3 -> String) -> t3 -> Compute.Flow t0 (Compute.Adapter t1 t2 t3 t3 t4 t4))
 chooseAdapter alts supported show describe typ = (Logic.ifElse (supported typ) (Flows.pure (Compute.Adapter {
   Compute.adapterIsLossy = False,
   Compute.adapterSource = typ,

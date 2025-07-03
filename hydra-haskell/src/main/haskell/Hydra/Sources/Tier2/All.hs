@@ -3,7 +3,6 @@
 module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier1.All,
   module Hydra.Sources.Tier2.All,
-  module Hydra.Sources.Tier2.Accessors,
   module Hydra.Sources.Tier2.AdapterUtils,
   module Hydra.Sources.Tier2.Adapters,
   module Hydra.Sources.Tier2.Annotations,
@@ -34,7 +33,6 @@ module Hydra.Sources.Tier2.All(
 ) where
 
 import Hydra.Sources.Tier1.All hiding (mapDef) -- hydra.decode, hydra.expect, and hydra.flows all export 'map'
-import Hydra.Sources.Tier2.Accessors
 import Hydra.Sources.Tier2.AdapterUtils
 import Hydra.Sources.Tier2.Adapters
 import Hydra.Sources.Tier2.Annotations
@@ -54,6 +52,7 @@ import Hydra.Sources.Tier2.Reduction
 import Hydra.Sources.Tier2.Rewriting
 import Hydra.Sources.Tier2.Schemas
 import Hydra.Sources.Tier2.Serialization
+import Hydra.Sources.Tier2.Show.Accessors
 import Hydra.Sources.Tier2.Show.Core
 import Hydra.Sources.Tier2.Sorting
 import Hydra.Sources.Tier2.Substitution
@@ -84,7 +83,7 @@ tier2TermModules = [
   describeCoreModule,
   extractCoreModule,
   showCoreModule,
-  hydraAccessorsModule,
+  showAccessorsModule,
   hydraAdaptersModule,
   hydraAdapterUtilsModule,
   hydraAnnotationsModule,

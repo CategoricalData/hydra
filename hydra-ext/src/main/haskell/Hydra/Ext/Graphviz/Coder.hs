@@ -7,6 +7,7 @@ module Hydra.Ext.Graphviz.Coder (
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Ext.Org.Graphviz.Dot as Dot
+import qualified Hydra.Show.Accessors as ShowAccessors
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -56,12 +57,12 @@ standardNamespaces = M.fromList (toPair <$> standardLibraries)
 termToAccessorDotStmts :: M.Map Namespace String -> Term -> [Dot.Stmt]
 termToAccessorDotStmts namespaces term = (nodeStmt <$> nodes) ++ (edgeStmt <$> edges)
   where
-    (AccessorGraph nodes edges) = termToAccessorGraph namespaces term
+    (AccessorGraph nodes edges) = ShowAccessors.termToAccessorGraph namespaces term
     nodeStmt (AccessorNode _ rawLabel uniqueLabel)
       = Dot.StmtNode $ Dot.NodeStmt (toNodeId $ Dot.Id uniqueLabel) $ Just $ Dot.AttrList [[labelAttr rawLabel]]
     edgeStmt (AccessorEdge (AccessorNode _ _ lab1) (AccessorPath path) (AccessorNode _ _ lab2))
       = toEdgeStmt (Dot.Id lab1) (Dot.Id lab2) $ Just $ Dot.AttrList [[labelAttr $ showPath path]]
-    showPath path = L.intercalate "/" $ Y.catMaybes (showTermAccessor <$> path)
+    showPath path = L.intercalate "/" $ Y.catMaybes (ShowAccessors.showTermAccessor <$> path)
 
 termToDotStmts :: M.Map Namespace String -> Term -> [Dot.Stmt]
 termToDotStmts namespaces term = fst $ encode Nothing False M.empty Nothing ([], S.empty) (TermAccessorAnnotatedSubject, term)
@@ -71,7 +72,7 @@ termToDotStmts namespaces term = fst $ encode Nothing False M.empty Nothing ([],
             encode Nothing False ids1 (Just selfId) (selfStmts ++ [varNodeStmt, varEdgeStmt], visited1) (TermAccessorLambdaBody, body)
           where
             ids1 = M.insert v varId ids
-            var = toUniqueLabel selfVisited (unName v)
+            var = ShowAccessors.toUniqueLabel selfVisited (unName v)
             varId = Dot.Id var
             visited1 = S.insert var selfVisited
             varNodeStmt = Dot.StmtNode $ Dot.NodeStmt {
@@ -104,14 +105,14 @@ termToDotStmts namespaces term = fst $ encode Nothing False M.empty Nothing ([],
           Just parent -> [toAccessorEdgeStmt accessor style parent selfId]
         toAccessorEdgeStmt accessor style i1 i2 = toEdgeStmt i1 i2 attrs
           where
-            attrs = fmap (labelAttrs style) (showTermAccessor accessor)
+            attrs = fmap (labelAttrs style) (ShowAccessors.showTermAccessor accessor)
         edgeAttrs lab = Dot.AttrList [[Dot.EqualityPair (Dot.Id "label") (Dot.Id lab)]]
         nodeStmt = Dot.StmtNode $ Dot.NodeStmt {
           Dot.nodeStmtId = toNodeId selfId,
           Dot.nodeStmtAttributes = Just $ labelAttrs style rawLabel}
         selfId = Dot.Id label
         (label, style) = Y.fromMaybe (labelOf visited term) mlabstyle
-        labelOf visited term = (toUniqueLabel visited l, s)
+        labelOf visited term = (ShowAccessors.toUniqueLabel visited l, s)
           where
             (l, s) = termLabel True namespaces term
         (rawLabel, nodeStyle) = (l, if isElement then NodeStyleElement else s)
@@ -126,10 +127,10 @@ termLabel compact namespaces term = case term of
       FunctionLambda (Lambda v _ body) -> simpleLabel $ if compact then "\x03BB" else "lambda"
       FunctionElimination e -> case e of
         EliminationProduct (TupleProjection n i _) -> simpleLabel $ "[" ++ show i ++ "/" ++ show n ++ "]"
-        EliminationRecord (Projection tname fname) -> simpleLabel $ "{" ++ toCompactName namespaces tname ++ "}." ++ unName fname
-        EliminationUnion (CaseStatement tname _ _) -> simpleLabel $ "cases_{" ++ toCompactName namespaces tname ++ "}"
-        EliminationWrap name -> simpleLabel $ "unwrap_{" ++ toCompactName namespaces name ++ "}"
-      FunctionPrimitive name -> (toCompactName namespaces name, NodeStylePrimitive)
+        EliminationRecord (Projection tname fname) -> simpleLabel $ "{" ++ ShowAccessors.toCompactName namespaces tname ++ "}." ++ unName fname
+        EliminationUnion (CaseStatement tname _ _) -> simpleLabel $ "cases_{" ++ ShowAccessors.toCompactName namespaces tname ++ "}"
+        EliminationWrap name -> simpleLabel $ "unwrap_{" ++ ShowAccessors.toCompactName namespaces name ++ "}"
+      FunctionPrimitive name -> (ShowAccessors.toCompactName namespaces name, NodeStylePrimitive)
     TermLet (Let bindings env) -> simpleLabel "let"
     TermList _ -> simpleLabel $ if compact then "[]" else "list"
     TermLiteral l -> simpleLabel $ case l of
@@ -153,12 +154,12 @@ termLabel compact namespaces term = case term of
     TermMap _ -> simpleLabel $ if compact then "<,>" else "map"
     TermOptional _ -> simpleLabel $ if compact then "opt" else "optional"
     TermProduct _ -> simpleLabel $ if compact then "\x2227" else "product"
-    TermRecord (Record name _) -> simpleLabel $ "\x2227" ++ toCompactName namespaces name
+    TermRecord (Record name _) -> simpleLabel $ "\x2227" ++ ShowAccessors.toCompactName namespaces name
     TermTypeAbstraction (TypeAbstraction v term1) -> simpleLabel "tyabs"
     TermTypeApplication (TypedTerm term _) -> simpleLabel "tyapp"
-    TermUnion (Injection tname _) -> simpleLabel $ "\x22BB" ++ toCompactName namespaces tname
-    TermVariable name -> simpleLabel $ toCompactName namespaces name
-    TermWrap (WrappedTerm name term1) -> simpleLabel $ "(" ++ toCompactName namespaces name ++ ")"
+    TermUnion (Injection tname _) -> simpleLabel $ "\x22BB" ++ ShowAccessors.toCompactName namespaces tname
+    TermVariable name -> simpleLabel $ ShowAccessors.toCompactName namespaces name
+    TermWrap (WrappedTerm name term1) -> simpleLabel $ "(" ++ ShowAccessors.toCompactName namespaces name ++ ")"
     _ -> simpleLabel "?"
   where
     simpleLabel lab = (lab, NodeStyleSimple)

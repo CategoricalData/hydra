@@ -3,6 +3,8 @@ module Hydra.Sources.Tier3.Ext.Haskell.Language where
 -- Standard Tier-3 imports
 import Hydra.Kernel
 import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Accessors              as Accessors
+import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Compute                    as Compute
 import qualified Hydra.Dsl.Core                       as Core
@@ -36,7 +38,6 @@ import qualified Hydra.Sources.Tier1.Functions        as Functions
 import qualified Hydra.Sources.Tier1.Literals         as Literals
 import qualified Hydra.Sources.Tier1.Messages         as Messages
 import qualified Hydra.Sources.Tier1.Strip            as Strip
-import qualified Hydra.Sources.Tier2.Accessors        as Accessors
 import qualified Hydra.Sources.Tier2.AdapterUtils     as AdapterUtils
 import qualified Hydra.Sources.Tier2.Adapters         as Adapters
 import qualified Hydra.Sources.Tier2.Annotations      as Annotations
@@ -56,6 +57,7 @@ import qualified Hydra.Sources.Tier2.Reduction        as Reduction
 import qualified Hydra.Sources.Tier2.Rewriting        as Rewriting
 import qualified Hydra.Sources.Tier2.Schemas          as Schemas
 import qualified Hydra.Sources.Tier2.Serialization    as Serialization
+import qualified Hydra.Sources.Tier2.Show.Accessors   as ShowAccessors
 import qualified Hydra.Sources.Tier2.Show.Core        as ShowCore
 import qualified Hydra.Sources.Tier2.Sorting          as Sorting
 import qualified Hydra.Sources.Tier2.Substitution     as Substitution
