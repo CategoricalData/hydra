@@ -87,7 +87,7 @@ import Hydra.Sorting
 import Hydra.Strip
 import Hydra.Substitution
 import Hydra.Templating
-import Hydra.TermAdapters
+import Hydra.TermAdapters hiding (optionalToList)
 import Hydra.Typing
 import Hydra.Unification
 import Hydra.Variants

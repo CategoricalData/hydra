@@ -32,10 +32,4 @@ hydraFunctionsModule :: Module
 hydraFunctionsModule = Module (Namespace "hydra.functions") elements [] [hydraCoreModule] $
     Just "Various general-purpose helper functions."
   where
-    elements = [
-      el optionalToListDef]
-
-optionalToListDef :: TElement (Maybe a -> [a])
-optionalToListDef = functionsDefinition "optionalToList" $
-  doc "Converts an optional value either to an empty list (if nothing) or a singleton list (if just)." $
-  lambda "mx" $ Optionals.maybe (list []) (primitive _lists_pure) (var "mx")
+    elements = []

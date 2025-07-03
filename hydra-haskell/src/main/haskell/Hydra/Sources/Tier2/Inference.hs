@@ -79,7 +79,7 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 
 hydraInferenceModule :: Module
 hydraInferenceModule = Module (Namespace "hydra.inference") elements
-    [Annotations.hydraAnnotationsModule, Tier1.hydraFunctionsModule, Schemas.hydraSchemasModule, Unification.hydraUnificationModule]
+    [Annotations.hydraAnnotationsModule, Schemas.hydraSchemasModule, Unification.hydraUnificationModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule, Tier1.hydraTypingModule] $
     Just "Type inference following Algorithm W, extended for nominal terms and types"
   where
@@ -772,7 +772,7 @@ inferTypeOfCaseStatementDef = inferenceDefinition "inferTypeOfCaseStatement" $
       withVar "codv" (ref freshNameDef) $ lets [
       "cod">: Core.typeVariable $ var "codv",
       "caseMap">: Maps.fromList $ Lists.map (lambda "ft" $ pair (Core.fieldTypeName $ var "ft") (Core.fieldTypeType $ var "ft")) (var "sfields"),
-      "dfltConstraints">: ref Functions.optionalToListDef @@ (Optionals.map (lambda "r" $ Typing.typeConstraint (var "cod") (Typing.inferenceResultType $ var "r") (string "match default")) (var "dfltResult")),
+      "dfltConstraints">: ref Monads.optionalToListDef @@ (Optionals.map (lambda "r" $ Typing.typeConstraint (var "cod") (Typing.inferenceResultType $ var "r") (string "match default")) (var "dfltResult")),
       "caseConstraints">: Optionals.cat $ Lists.zipWith
         (lambdas ["fname", "itype"] $ Optionals.map (lambda "ftype" $ Typing.typeConstraint (var "itype") (Core.typeFunction $ Core.functionType (var "ftype") (var "cod")) (string "case type"))
           (Maps.lookup (var "fname") (var "caseMap")))
@@ -786,7 +786,7 @@ inferTypeOfCaseStatementDef = inferenceDefinition "inferTypeOfCaseStatement" $
               (ref nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
               (var "cod"))
           @@ (ref Substitution.composeTypeSubstListDef @@ (Lists.concat $ list [
-              ref Functions.optionalToListDef @@ (Optionals.map (unaryFunction Typing.inferenceResultSubst) (var "dfltResult")),
+              ref Monads.optionalToListDef @@ (Optionals.map (unaryFunction Typing.inferenceResultSubst) (var "dfltResult")),
               list [var "isubst", var "subst"]]))) @@
         (Lists.concat $ list [var "dfltConstraints", var "caseConstraints"])
 

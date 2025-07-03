@@ -97,6 +97,7 @@ hydraMonadsModule = Module (Namespace "hydra.monads") elements
       el mapDef,
       el map2Def,
       el mutateTraceDef,
+      el optionalToListDef,
       el pureDef,
       el pushErrorDef,
       el warnDef,
@@ -178,6 +179,11 @@ mutateTraceDef = flowsDefinition "mutateTrace" $
           @@ (var "mutate" @@ var "t0")
   where
     eitherT l r = Types.applyMany [TypeVariable _Either, l, r]
+
+optionalToListDef :: TElement (Maybe a -> [a])
+optionalToListDef = flowsDefinition "optionalToList" $
+  doc "Converts an optional value either to an empty list (if nothing) or a singleton list (if just)." $
+  lambda "mx" $ Optionals.maybe (list []) (primitive _lists_pure) (var "mx")
 
 pureDef :: TElement (a -> Flow s a)
 pureDef = flowsDefinition "pure" $
