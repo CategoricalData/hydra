@@ -5,15 +5,15 @@ module Hydra.Lexical where
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Flows as Flows
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Flows as Flows_
+import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, map, pure, sum)
 import qualified Data.Int as I
@@ -22,7 +22,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 dereferenceElement :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Graph.Element))
-dereferenceElement name = (Flows_.map (\g -> lookupElement g name) Errors.getState)
+dereferenceElement name = (Flows.map (\g -> lookupElement g name) Errors.getState)
 
 elementsToGraph :: (Graph.Graph -> Maybe Graph.Graph -> [Graph.Element] -> Graph.Graph)
 elementsToGraph parent schema elements =  
@@ -84,7 +84,7 @@ requireElement name =
   let showAll = False 
       ellipsis = (\strings -> Logic.ifElse (Logic.and (Equality.gtInt32 (Lists.length strings) 3) (Logic.not showAll)) (Lists.concat2 (Lists.take 3 strings) [
               "..."]) strings)
-      err = (\g -> Flows_.fail (Strings.cat [
+      err = (\g -> Flows.fail (Strings.cat [
               Strings.cat [
                 Strings.cat [
                   Strings.cat [
@@ -93,17 +93,17 @@ requireElement name =
                   ". Available elements: {"],
                 (Strings.intercalate ", " (ellipsis (Lists.map (\el -> Core.unName (Graph.elementName el)) (Maps.elems (Graph.graphElements g)))))],
               "}"]))
-  in (Flows_.bind (dereferenceElement name) (\mel -> Optionals.maybe (Flows_.bind Errors.getState err) Flows_.pure mel))
+  in (Flows.bind (dereferenceElement name) (\mel -> Optionals.maybe (Flows.bind Errors.getState err) Flows.pure mel))
 
 requirePrimitive :: (Core.Name -> Compute.Flow Graph.Graph Graph.Primitive)
-requirePrimitive name = (Flows_.bind Errors.getState (\g -> Optionals.maybe (Flows_.fail (Strings.cat [
+requirePrimitive name = (Flows.bind Errors.getState (\g -> Optionals.maybe (Flows.fail (Strings.cat [
   "no such primitive function: ",
-  (Core.unName name)])) Flows_.pure (lookupPrimitive g name)))
+  (Core.unName name)])) Flows.pure (lookupPrimitive g name)))
 
 requireTerm :: (Core.Name -> Compute.Flow Graph.Graph Core.Term)
-requireTerm name = (Flows_.bind (resolveTerm name) (\mt -> Optionals.maybe (Flows_.fail (Strings.cat [
+requireTerm name = (Flows.bind (resolveTerm name) (\mt -> Optionals.maybe (Flows.fail (Strings.cat [
   "no such element: ",
-  (Core.unName name)])) Flows_.pure mt))
+  (Core.unName name)])) Flows.pure mt))
 
 -- | TODO: distinguish between lambda-bound and let-bound variables
 resolveTerm :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Term))
@@ -112,8 +112,8 @@ resolveTerm name =
           let stripped = (Strip.fullyStripTerm (Graph.elementTerm el))
           in ((\x -> case x of
             Core.TermVariable v1 -> (resolveTerm v1)
-            _ -> (Flows_.pure (Just (Graph.elementTerm el)))) stripped))
-  in (Flows_.bind Errors.getState (\g -> Optionals.maybe (Flows_.pure Nothing) recurse (Maps.lookup name (Graph.graphElements g))))
+            _ -> (Flows.pure (Just (Graph.elementTerm el)))) stripped))
+  in (Flows.bind Errors.getState (\g -> Optionals.maybe (Flows.pure Nothing) recurse (Maps.lookup name (Graph.graphElements g))))
 
 -- | Note: assuming for now that primitive functions are the same in the schema graph
 schemaContext :: (Graph.Graph -> Graph.Graph)
@@ -123,11 +123,11 @@ stripAndDereferenceTerm :: (Core.Term -> Compute.Flow Graph.Graph Core.Term)
 stripAndDereferenceTerm term =  
   let stripped = (Strip.fullyStripTerm term)
   in ((\x -> case x of
-    Core.TermVariable v1 -> (Flows_.bind (requireTerm v1) (\t -> stripAndDereferenceTerm t))
-    _ -> (Flows_.pure stripped)) stripped)
+    Core.TermVariable v1 -> (Flows.bind (requireTerm v1) (\t -> stripAndDereferenceTerm t))
+    _ -> (Flows.pure stripped)) stripped)
 
 typeOfPrimitive :: (Core.Name -> Compute.Flow Graph.Graph Core.TypeScheme)
-typeOfPrimitive name = (Flows_.map Graph.primitiveType (requirePrimitive name))
+typeOfPrimitive name = (Flows.map Graph.primitiveType (requirePrimitive name))
 
 withSchemaContext :: (Compute.Flow Graph.Graph t0 -> Compute.Flow Graph.Graph t0)
-withSchemaContext f = (Flows_.bind Errors.getState (\g -> Flows.withState (schemaContext g) f))
+withSchemaContext f = (Flows.bind Errors.getState (\g -> Monads.withState (schemaContext g) f))

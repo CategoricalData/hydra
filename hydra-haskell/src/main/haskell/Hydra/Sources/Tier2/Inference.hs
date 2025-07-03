@@ -55,7 +55,7 @@ import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Tier2.Flows as Flows_
+import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
@@ -190,7 +190,7 @@ typeOfDef :: TElement (InferenceContext -> S.Set Name -> M.Map Name Type -> Term
 typeOfDef = inferenceDefinition "typeOf" $
   doc "Infer the type of a term given context and type environment" $
   lambdas ["cx", "vars", "types", "term"] $
-    ref Flows_.withTraceDef @@
+    ref Monads.withTraceDef @@
       (Strings.cat $ list [
         string "checking type of: ",
         ref ShowCore.termDef @@ var "term",
@@ -645,7 +645,7 @@ inferGraphTypesDef = inferenceDefinition "inferGraphTypes" $
       cases _Term (ref Rewriting.normalizeTypeVariablesInTermDef @@ var "term") Nothing [
         _Term_let>>: lambda "l" $ Flows.pure $ var "fromLetTerm" @@ var "l",
         _Term_variable>>: constant $ Flows.fail $ string "Expected inferred graph as let term"]] $
-    ref Flows_.withTraceDef @@ string "graph inference" @@
+    ref Monads.withTraceDef @@ string "graph inference" @@
       (withVar "cx" (ref graphToInferenceContextDef @@ var "g0") $
         Flows.bind
           (ref inferTypeOfTermDef @@ var "cx" @@ (var "toLetTerm" @@ var "g0") @@ string "graph term")
@@ -1168,7 +1168,7 @@ inferTypeOfTermDef :: TElement (InferenceContext -> Term -> String -> Flow s Inf
 inferTypeOfTermDef = inferenceDefinition "inferTypeOfTerm" $
   doc "Infer the type of a term with description" $
   lambdas ["cx", "term", "desc"] $
-    ref Flows_.withTraceDef @@ var "desc" @@ (
+    ref Monads.withTraceDef @@ var "desc" @@ (
       cases _Term (var "term") Nothing [
         _Term_annotated>>: lambda "a" $ ref inferTypeOfAnnotatedTermDef @@ var "cx" @@ var "a",
         _Term_application>>: lambda "a" $ ref inferTypeOfApplicationDef @@ var "cx" @@ var "a",

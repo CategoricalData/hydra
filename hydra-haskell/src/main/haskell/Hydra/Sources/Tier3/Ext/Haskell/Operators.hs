@@ -47,7 +47,7 @@ import qualified Hydra.Sources.Tier2.Decode.Core     as DecodeCore
 import qualified Hydra.Sources.Tier2.Describe.Core   as DescribeCore
 import qualified Hydra.Sources.Tier2.Errors          as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core    as ExtractCore
-import qualified Hydra.Sources.Tier2.Flows           as Flows_
+import qualified Hydra.Sources.Tier2.Monads           as Flows_
 import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 import qualified Hydra.Sources.Tier2.Inference       as Inference
 import qualified Hydra.Sources.Tier2.Lexical         as Lexical
