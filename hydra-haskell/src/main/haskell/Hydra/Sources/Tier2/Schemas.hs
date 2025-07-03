@@ -53,7 +53,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
-import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
@@ -184,7 +184,7 @@ fieldTypesDef = schemasDefinition "fieldTypes" $
     "toMap">: lambda "fields" $ Maps.fromList $ Lists.map
       (lambda "ft" $ pair (Core.fieldTypeName $ var "ft") (Core.fieldTypeType $ var "ft"))
       (var "fields")]
-    $ match _Type (Just $ ref Errors.unexpectedDef @@ string "record or union type" @@ (ref ShowCore.typeDef @@ var "t")) [
+    $ match _Type (Just $ ref Monads.unexpectedDef @@ string "record or union type" @@ (ref ShowCore.typeDef @@ var "t")) [
       _Type_forall>>: lambda "ft" $ ref fieldTypesDef @@ Core.forallTypeBody (var "ft"),
       _Type_record>>: lambda "rt" $ Flows.pure $ var "toMap" @@ Core.rowTypeFields (var "rt"),
       _Type_union>>: lambda "rt" $ Flows.pure $ var "toMap" @@ Core.rowTypeFields (var "rt"),

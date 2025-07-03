@@ -8,7 +8,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Decode as Decode
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Encode.Core as Core__
-import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core___
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
@@ -87,7 +86,7 @@ getTypeClasses term =
           let byName = (Maps.fromList [
                   (Core.Name "equality", Graph.TypeClassEquality),
                   (Core.Name "ordering", Graph.TypeClassOrdering)])
-          in (Flows.bind (Core___.unitVariant (Core.Name "hydra.graph.TypeClass") term) (\fn -> Optionals.maybe (Errors.unexpected "type class" (Core____.term term)) Flows.pure (Maps.lookup fn byName))))
+          in (Flows.bind (Core___.unitVariant (Core.Name "hydra.graph.TypeClass") term) (\fn -> Optionals.maybe (Monads.unexpected "type class" (Core____.term term)) Flows.pure (Maps.lookup fn byName))))
   in (Optionals.maybe (Flows.pure Maps.empty) (\term -> Core___.map Core_.name (Core___.set decodeClass) term) (getTermAnnotation Constants.key_classes term))
 
 -- | Get type description
@@ -250,7 +249,7 @@ unshadowVariables term =
   let freshName = (Flows.map (\n -> Core.Name (Strings.cat2 "s" (Literals.showInt32 n))) (nextCount (Core.Name "unshadow"))) 
       rewrite = (\recurse -> \term ->  
               let handleOther = (recurse term)
-              in (Flows.bind Errors.getState (\state ->  
+              in (Flows.bind Monads.getState (\state ->  
                 let reserved = (fst state) 
                     subst = (snd state)
                 in ((\x -> case x of
@@ -260,10 +259,10 @@ unshadowVariables term =
                       let v = (Core.lambdaParameter v2) 
                           d = (Core.lambdaDomain v2)
                           body = (Core.lambdaBody v2)
-                      in (Logic.ifElse (Sets.member v reserved) (Flows.bind freshName (\v_ -> Flows.bind (Errors.putState (Sets.insert v_ reserved, (Maps.insert v v_ subst))) (\_ -> Flows.bind (recurse body) (\body_ -> Flows.bind (Errors.putState state) (\_ -> Flows.pure (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      in (Logic.ifElse (Sets.member v reserved) (Flows.bind freshName (\v_ -> Flows.bind (Monads.putState (Sets.insert v_ reserved, (Maps.insert v v_ subst))) (\_ -> Flows.bind (recurse body) (\body_ -> Flows.bind (Monads.putState state) (\_ -> Flows.pure (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = v_,
                         Core.lambdaDomain = d,
-                        Core.lambdaBody = body_})))))))) (Flows.bind (Errors.putState (Sets.insert v reserved, subst)) (\_ -> Flows.map (\body_ -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = body_})))))))) (Flows.bind (Monads.putState (Sets.insert v reserved, subst)) (\_ -> Flows.map (\body_ -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = v,
                         Core.lambdaDomain = d,
                         Core.lambdaBody = body_}))) (recurse body))))

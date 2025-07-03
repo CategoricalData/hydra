@@ -23,7 +23,6 @@ module Hydra.Kernel (
   module Hydra.Constraints,
   module Hydra.Core,
   module Hydra.CoreLanguage,
-  module Hydra.Errors,
   module Hydra.Monads,
   module Hydra.Formatting,
   module Hydra.Graph,
@@ -63,7 +62,6 @@ import Hydra.Constants
 import Hydra.Constraints
 import Hydra.Core
 import Hydra.CoreLanguage
-import Hydra.Errors
 import Hydra.Monads hiding (fail, pure)
 import Hydra.Formatting
 import Hydra.Graph

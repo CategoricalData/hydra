@@ -55,7 +55,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Tier2.Monads as Monads
+--import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
@@ -78,7 +78,7 @@ import qualified Hydra.Sources.Tier2.Monads as Monads
 
 showCoreModule :: Module
 showCoreModule = Module (Namespace "hydra.show.core") elements
-    [Monads.hydraMonadsModule, Tier1.hydraStripModule]
+    [Tier1.hydraStripModule]
     [Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraTypingModule] $
     Just "Haskell implementations of hydra.lib.io primitives"
   where

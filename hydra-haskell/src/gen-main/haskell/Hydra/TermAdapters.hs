@@ -7,7 +7,6 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Describe.Core as Core_
-import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core__
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
@@ -55,10 +54,10 @@ forTypeReference name = (Monads.withTrace (Strings.cat2 "adapt named type " (Cor
               Compute.adapterIsLossy = lossy,
               Compute.adapterSource = (Core.TypeVariable name),
               Compute.adapterTarget = (Core.TypeVariable name),
-              Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> Flows.bind Errors.getState (\cx ->  
+              Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> Flows.bind Monads.getState (\cx ->  
                 let adapters = (Coders.adapterContextAdapters cx)
                 in (Optionals.maybe (Flows.fail (Strings.cat2 "no adapter for reference type " (Core.unName name))) (\ad -> AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) term) (Maps.lookup name adapters)))))}
-  in (Flows.bind Errors.getState (\cx ->  
+  in (Flows.bind Monads.getState (\cx ->  
     let adapters = (Coders.adapterContextAdapters cx)
     in (Optionals.maybe ( 
       let newAdapters = (Maps.insert name placeholder adapters) 
@@ -66,7 +65,7 @@ forTypeReference name = (Monads.withTrace (Strings.cat2 "adapt named type " (Cor
                   Coders.adapterContextGraph = (Coders.adapterContextGraph cx),
                   Coders.adapterContextLanguage = (Coders.adapterContextLanguage cx),
                   Coders.adapterContextAdapters = newAdapters}
-      in (Flows.bind (Errors.putState newCx) (\_ -> Flows.bind (withGraphContext (Schemas.resolveType (Core.TypeVariable name))) (\mt -> Optionals.maybe (Flows.pure (Compute.Adapter {
+      in (Flows.bind (Monads.putState newCx) (\_ -> Flows.bind (withGraphContext (Schemas.resolveType (Core.TypeVariable name))) (\mt -> Optionals.maybe (Flows.pure (Compute.Adapter {
         Compute.adapterIsLossy = lossy,
         Compute.adapterSource = (Core.TypeVariable name),
         Compute.adapterTarget = (Core.TypeVariable name),
@@ -76,7 +75,7 @@ forTypeReference name = (Monads.withTrace (Strings.cat2 "adapt named type " (Cor
                     Coders.adapterContextGraph = (Coders.adapterContextGraph cx),
                     Coders.adapterContextLanguage = (Coders.adapterContextLanguage cx),
                     Coders.adapterContextAdapters = finalAdapters}
-        in (Flows.bind (Errors.putState finalCx) (\_ -> Flows.pure actual)))) mt)))) Flows.pure (Maps.lookup name adapters))))))
+        in (Flows.bind (Monads.putState finalCx) (\_ -> Flows.pure actual)))) mt)))) Flows.pure (Maps.lookup name adapters))))))
 
 functionProxyName :: Core.Name
 functionProxyName = (Core.Name "hydra.core.FunctionProxy")
@@ -533,7 +532,7 @@ termAdapter typ =
       Compute.adapterCoder = (Compute.adapterCoder ad)})))
     _ -> (Monads.withTrace (Strings.cat2 "adapter for " (Core_.type_ typ)) ((\x -> case x of
       Core.TypeVariable v1 -> (forTypeReference v1)
-      _ -> (Flows.bind Errors.getState (\cx -> AdapterUtils.chooseAdapter (alts cx) (supported cx) Core___.type_ Core_.type_ typ))) typ))) typ)
+      _ -> (Flows.bind Monads.getState (\cx -> AdapterUtils.chooseAdapter (alts cx) (supported cx) Core___.type_ Core_.type_ typ))) typ))) typ)
 
 -- | Convert union types to record types
 unionToRecord :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
@@ -614,4 +613,4 @@ wrapToUnwrapped t = ((\x -> case x of
         Compute.coderDecode = (decode ad)}})))) t)
 
 withGraphContext :: (Compute.Flow Graph.Graph t0 -> Compute.Flow Coders.AdapterContext t0)
-withGraphContext f = (Flows.bind Errors.getState (\cx -> Monads.withState (Coders.adapterContextGraph cx) f))
+withGraphContext f = (Flows.bind Monads.getState (\cx -> Monads.withState (Coders.adapterContextGraph cx) f))

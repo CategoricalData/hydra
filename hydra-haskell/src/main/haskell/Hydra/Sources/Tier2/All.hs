@@ -8,10 +8,6 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.Annotations,
   module Hydra.Sources.Tier2.Arity,
   module Hydra.Sources.Tier2.CoreLanguage,
---  module Hydra.Sources.Tier2.Decode.Core,
---  module Hydra.Sources.Tier2.Describe.Core,
-  module Hydra.Sources.Tier2.Errors,
---  module Hydra.Sources.Tier2.Extract.Core,
   module Hydra.Sources.Tier2.Monads,
   module Hydra.Sources.Tier2.GrammarToModule,
   module Hydra.Sources.Tier2.Inference,
@@ -22,7 +18,6 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.Rewriting,
   module Hydra.Sources.Tier2.Schemas,
   module Hydra.Sources.Tier2.Serialization,
---  module Hydra.Sources.Tier2.Show.Core,
   module Hydra.Sources.Tier2.Sorting,
   module Hydra.Sources.Tier2.Substitution,
   module Hydra.Sources.Tier2.Tarjan,
@@ -40,7 +35,6 @@ import Hydra.Sources.Tier2.Arity
 import Hydra.Sources.Tier2.CoreLanguage
 import Hydra.Sources.Tier2.Decode.Core
 import Hydra.Sources.Tier2.Describe.Core
-import Hydra.Sources.Tier2.Errors
 import Hydra.Sources.Tier2.Extract.Core
 import Hydra.Sources.Tier2.Monads
 import Hydra.Sources.Tier2.GrammarToModule
@@ -89,7 +83,6 @@ tier2TermModules = [
   hydraAnnotationsModule,
   hydraArityModule,
   hydraCoreLanguageModule,
-  hydraErrorsModule,
   hydraMonadsModule,
   hydraGrammarToModuleModule,
   hydraInferenceModule,

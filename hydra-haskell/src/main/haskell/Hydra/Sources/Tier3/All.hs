@@ -15,6 +15,12 @@ import Hydra.Sources.Tier3.Ext.Cypher.OpenCypher
 import Hydra.Sources.Tier3.Ext.Gql.OpenGql
 import Hydra.Sources.Tier3.Ext.Graphql.Syntax
 import Hydra.Sources.Tier3.Ext.Haskell.Ast
+import Hydra.Sources.Tier3.Ext.Haskell.Ast
+import Hydra.Sources.Tier3.Ext.Haskell.Coder
+import Hydra.Sources.Tier3.Ext.Haskell.Language
+import Hydra.Sources.Tier3.Ext.Haskell.Operators
+import Hydra.Sources.Tier3.Ext.Haskell.Serde
+import Hydra.Sources.Tier3.Ext.Haskell.Utils
 import Hydra.Sources.Tier3.Ext.Java.Language
 import Hydra.Sources.Tier3.Ext.Java.Syntax
 import Hydra.Sources.Tier3.Ext.Json.Decoding
@@ -62,6 +68,11 @@ tier3ExtModules = [
   csharpSyntaxModule,
   graphqlSyntaxModule,
   haskellAstModule,
+  haskellCoderModule,
+  haskellLanguageModule,
+  haskellOperatorsModule,
+  haskellSerdeModule,
+  haskellUtilsModule,
   javaLanguageModule,
   javaSyntaxModule,
   jsonDecodingModule,

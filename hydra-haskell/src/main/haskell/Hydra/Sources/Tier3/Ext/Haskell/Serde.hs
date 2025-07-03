@@ -46,7 +46,6 @@ import qualified Hydra.Sources.Tier2.Arity            as Arity
 import qualified Hydra.Sources.Tier2.CoreLanguage     as CoreLanguage
 import qualified Hydra.Sources.Tier2.Decode.Core      as DecodeCore
 import qualified Hydra.Sources.Tier2.Describe.Core    as DescribeCore
-import qualified Hydra.Sources.Tier2.Errors           as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core     as ExtractCore
 import qualified Hydra.Sources.Tier2.Monads           as Monads
 import qualified Hydra.Sources.Tier2.GrammarToModule  as GrammarToModule

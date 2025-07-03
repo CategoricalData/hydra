@@ -7,7 +7,6 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Describe.Core as Core_
-import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core__
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
@@ -100,7 +99,7 @@ literalAdapter lt =
                 Compute.adapterSource = t,
                 Compute.adapterTarget = Core.LiteralTypeString,
                 Compute.adapterCoder = step}])
-          Core.LiteralTypeBoolean -> (Flows.bind Errors.getState (\cx ->  
+          Core.LiteralTypeBoolean -> (Flows.bind Monads.getState (\cx ->  
             let constraints = (Coders.languageConstraints (Coders.adapterContextLanguage cx)) 
                 hasIntegers = (Logic.not (Sets.null (Coders.languageConstraintsIntegerTypes constraints)))
                 hasStrings = (Sets.member Mantle.LiteralVariantString (Coders.languageConstraintsLiteralVariants constraints))
@@ -119,7 +118,7 @@ literalAdapter lt =
                   Compute.adapterTarget = (Core.LiteralTypeInteger (Compute.adapterTarget adapter)),
                   Compute.adapterCoder = step}]))) (Logic.ifElse hasStrings (Flows.pure ( 
               let encode = (\lit -> Flows.bind (Core__.booleanLiteral lit) (\b -> Flows.pure (Core.LiteralString (Logic.ifElse b "true" "false")))) 
-                  decode = (\lit -> Flows.bind (Core__.stringLiteral lit) (\s -> Logic.ifElse (Equality.equalString s "true") (Flows.pure (Core.LiteralBoolean True)) (Logic.ifElse (Equality.equalString s "false") (Flows.pure (Core.LiteralBoolean False)) (Errors.unexpected "boolean literal" s))))
+                  decode = (\lit -> Flows.bind (Core__.stringLiteral lit) (\s -> Logic.ifElse (Equality.equalString s "true") (Flows.pure (Core.LiteralBoolean True)) (Logic.ifElse (Equality.equalString s "false") (Flows.pure (Core.LiteralBoolean False)) (Monads.unexpected "boolean literal" s))))
               in [
                 Compute.Adapter {
                   Compute.adapterIsLossy = False,
@@ -128,26 +127,26 @@ literalAdapter lt =
                   Compute.adapterCoder = Compute.Coder {
                     Compute.coderEncode = encode,
                     Compute.coderDecode = decode}}])) (Flows.fail "no alternatives available for boolean encoding")))))
-          Core.LiteralTypeFloat v1 -> (Flows.bind Errors.getState (\cx ->  
+          Core.LiteralTypeFloat v1 -> (Flows.bind Monads.getState (\cx ->  
             let constraints = (Coders.languageConstraints (Coders.adapterContextLanguage cx)) 
                 hasFloats = (Logic.not (Sets.null (Coders.languageConstraintsFloatTypes constraints)))
             in (Logic.ifElse hasFloats (Flows.bind (floatAdapter v1) (\adapter ->  
               let step = (AdapterUtils.bidirectional (\dir -> \l -> (\x -> case x of
                       Core.LiteralFloat v2 -> (Flows.map (\x -> Core.LiteralFloat x) (AdapterUtils.encodeDecode dir (Compute.adapterCoder adapter) v2))
-                      _ -> (Errors.unexpected "floating-point literal" (Core___.literal l))) l))
+                      _ -> (Monads.unexpected "floating-point literal" (Core___.literal l))) l))
               in (Flows.pure [
                 Compute.Adapter {
                   Compute.adapterIsLossy = (Compute.adapterIsLossy adapter),
                   Compute.adapterSource = t,
                   Compute.adapterTarget = (Core.LiteralTypeFloat (Compute.adapterTarget adapter)),
                   Compute.adapterCoder = step}]))) (Flows.fail "no float types available"))))
-          Core.LiteralTypeInteger v1 -> (Flows.bind Errors.getState (\cx ->  
+          Core.LiteralTypeInteger v1 -> (Flows.bind Monads.getState (\cx ->  
             let constraints = (Coders.languageConstraints (Coders.adapterContextLanguage cx)) 
                 hasIntegers = (Logic.not (Sets.null (Coders.languageConstraintsIntegerTypes constraints)))
             in (Logic.ifElse hasIntegers (Flows.bind (integerAdapter v1) (\adapter ->  
               let step = (AdapterUtils.bidirectional (\dir -> \lit -> (\x -> case x of
                       Core.LiteralInteger v2 -> (Flows.map (\x -> Core.LiteralInteger x) (AdapterUtils.encodeDecode dir (Compute.adapterCoder adapter) v2))
-                      _ -> (Errors.unexpected "integer literal" (Core___.literal lit))) lit))
+                      _ -> (Monads.unexpected "integer literal" (Core___.literal lit))) lit))
               in (Flows.pure [
                 Compute.Adapter {
                   Compute.adapterIsLossy = (Compute.adapterIsLossy adapter),
@@ -155,7 +154,7 @@ literalAdapter lt =
                   Compute.adapterTarget = (Core.LiteralTypeInteger (Compute.adapterTarget adapter)),
                   Compute.adapterCoder = step}]))) (Flows.fail "no integer types available"))))
           Core.LiteralTypeString -> (Flows.fail "no substitute for the literal string type")) t)
-  in (Flows.bind Errors.getState (\cx ->  
+  in (Flows.bind Monads.getState (\cx ->  
     let supported = (AdapterUtils.literalTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
     in (AdapterUtils.chooseAdapter alts supported Core___.literalType Core_.literalType lt)))
 
@@ -182,7 +181,7 @@ floatAdapter ft =
                 Compute.adapterSource = source,
                 Compute.adapterTarget = target,
                 Compute.adapterCoder = step}))))
-  in (Flows.bind Errors.getState (\cx ->  
+  in (Flows.bind Monads.getState (\cx ->  
     let supported = (AdapterUtils.floatTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
     in (AdapterUtils.chooseAdapter alts supported Core___.floatType Core_.floatType ft)))
 
@@ -228,6 +227,6 @@ integerAdapter it =
                 Compute.adapterSource = source,
                 Compute.adapterTarget = target,
                 Compute.adapterCoder = step}))))
-  in (Flows.bind Errors.getState (\cx ->  
+  in (Flows.bind Monads.getState (\cx ->  
     let supported = (AdapterUtils.integerTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
     in (AdapterUtils.chooseAdapter alts supported Core___.integerType Core_.integerType it)))

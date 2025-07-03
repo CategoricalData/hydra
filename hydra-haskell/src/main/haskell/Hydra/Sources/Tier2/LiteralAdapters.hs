@@ -53,7 +53,7 @@ import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
-import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
@@ -83,7 +83,7 @@ literalAdaptersDefinition = definitionInModule hydraLiteralAdaptersModule
 
 hydraLiteralAdaptersModule :: Module
 hydraLiteralAdaptersModule = Module (Namespace "hydra.literalAdapters") elements
-    [Errors.hydraErrorsModule, ExtractCore.extractCoreModule, Monads.hydraMonadsModule, DescribeCore.describeCoreModule,
+    [ExtractCore.extractCoreModule, Monads.hydraMonadsModule, DescribeCore.describeCoreModule,
       AdapterUtils.hydraAdapterUtilsModule, ShowCore.showCoreModule, Variants.hydraVariantsModule]
     [Tier1.hydraCodersModule, Tier1.hydraModuleModule] $
     Just "Adapter framework for literal types and terms"
@@ -182,7 +182,7 @@ literalAdapterDef = literalAdaptersDefinition "literalAdapter" $
             _Literal_string>>: lambda "s" $ Flows.pure $ Core.literalBinary $ Literals.stringToBinary $ var "s"])] $
         Flows.pure $ list [Compute.adapter false (var "t") Core.literalTypeString (var "step")],
       _LiteralType_boolean>>: constant $
-        withVar "cx" (ref Errors.getStateDef) $ lets [
+        withVar "cx" (ref Monads.getStateDef) $ lets [
         "constraints">: Coders.languageConstraints $ Coders.adapterContextLanguage $ var "cx",
         "hasIntegers">: Logic.not $ Sets.null $ Coders.languageConstraintsIntegerTypes $ var "constraints",
         "hasStrings">: Sets.member Mantle.literalVariantString (Coders.languageConstraintsLiteralVariants $ var "constraints")] $
@@ -211,35 +211,35 @@ literalAdapterDef = literalAdaptersDefinition "literalAdapter" $
                   (Flows.pure $ Core.literalBoolean true)
                   (Logic.ifElse (Equality.equalString (var "s") (string "false"))
                     (Flows.pure $ Core.literalBoolean false)
-                    (ref Errors.unexpectedDef @@ "boolean literal" @@ var "s"))] $
+                    (ref Monads.unexpectedDef @@ "boolean literal" @@ var "s"))] $
               list [Compute.adapter false (var "t") Core.literalTypeString (Compute.coder (var "encode") (var "decode"))])
             (Flows.fail $ string "no alternatives available for boolean encoding")),
       _LiteralType_float>>: lambda "ft" $
-        Flows.bind (ref Errors.getStateDef) $ lambda "cx" $ lets [
+        Flows.bind (ref Monads.getStateDef) $ lambda "cx" $ lets [
           "constraints">: Coders.languageConstraints $ Coders.adapterContextLanguage $ var "cx",
           "hasFloats">: Logic.not $ Sets.null $ Coders.languageConstraintsFloatTypes $ var "constraints"] $
         Logic.ifElse (var "hasFloats")
           (Flows.bind (ref floatAdapterDef @@ var "ft") $ lambda "adapter" $ lets [
             "step">: ref AdapterUtils.bidirectionalDef @@ (lambdas ["dir", "l"] $
-              cases _Literal (var "l") (Just $ ref Errors.unexpectedDef @@ string "floating-point literal" @@ (ref ShowCore.literalDef @@ var "l")) [
+              cases _Literal (var "l") (Just $ ref Monads.unexpectedDef @@ string "floating-point literal" @@ (ref ShowCore.literalDef @@ var "l")) [
                 _Literal_float>>: lambda "fv" $ Flows.map (unaryFunction Core.literalFloat) $
                   ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "adapter") @@ var "fv"])] $
             Flows.pure $ list [Compute.adapter (Compute.adapterIsLossy $ var "adapter") (var "t") (Core.literalTypeFloat $ Compute.adapterTarget $ var "adapter") (var "step")])
           (Flows.fail $ string "no float types available"),
       _LiteralType_integer>>: lambda "it" $
-        Flows.bind (ref Errors.getStateDef) $ lambda "cx" $ lets [
+        Flows.bind (ref Monads.getStateDef) $ lambda "cx" $ lets [
           "constraints">: Coders.languageConstraints $ Coders.adapterContextLanguage $ var "cx",
           "hasIntegers">: Logic.not $ Sets.null $ Coders.languageConstraintsIntegerTypes $ var "constraints"] $
         Logic.ifElse (var "hasIntegers")
           (Flows.bind (ref integerAdapterDef @@ var "it") $ lambda "adapter" $ lets [
             "step">: ref AdapterUtils.bidirectionalDef @@ (lambdas ["dir", "lit"] $
-              cases _Literal (var "lit") (Just $ ref Errors.unexpectedDef @@ string "integer literal" @@ (ref ShowCore.literalDef @@ var "lit")) [
+              cases _Literal (var "lit") (Just $ ref Monads.unexpectedDef @@ string "integer literal" @@ (ref ShowCore.literalDef @@ var "lit")) [
                 _Literal_integer>>: lambda "iv" $ Flows.map (unaryFunction Core.literalInteger) $
                   ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "adapter") @@ var "iv"])] $
             Flows.pure $ list [Compute.adapter (Compute.adapterIsLossy $ var "adapter") (var "t") (Core.literalTypeInteger $ Compute.adapterTarget $ var "adapter") (var "step")])
           (Flows.fail $ string "no integer types available"),
       _LiteralType_string>>: constant $ Flows.fail $ string "no substitute for the literal string type"]] $
-  Flows.bind (ref Errors.getStateDef) $ lambda "cx" $ lets [
+  Flows.bind (ref Monads.getStateDef) $ lambda "cx" $ lets [
     "supported">: ref AdapterUtils.literalTypeIsSupportedDef @@ (Coders.languageConstraints $ Coders.adapterContextLanguage $ var "cx")] $
   ref AdapterUtils.chooseAdapterDef
     @@ var "alts"
@@ -272,7 +272,7 @@ floatAdapterDef = literalAdaptersDefinition "floatAdapter" $
         ref Monads.warnDef
           @@ var "msg"
           @@ (Flows.pure (Compute.adapter (var "lossy") (var "source") (var "target") (var "step")))] $
-    Flows.bind (ref Errors.getStateDef) $ lambda "cx" $
+    Flows.bind (ref Monads.getStateDef) $ lambda "cx" $
       lets [
         "supported">: ref AdapterUtils.floatTypeIsSupportedDef
           @@ (Coders.languageConstraints $ Coders.adapterContextLanguage $ var "cx")] $
@@ -336,7 +336,7 @@ integerAdapterDef = literalAdaptersDefinition "integerAdapter" $
       ref Monads.warnDef
         @@ var "msg"
         @@ (Flows.pure $ Compute.adapter (var "lossy") (var "source") (var "target") (var "step"))] $
-  Flows.bind (ref Errors.getStateDef) $ lambda "cx" $
+  Flows.bind (ref Monads.getStateDef) $ lambda "cx" $
     lets [
       "supported">: ref AdapterUtils.integerTypeIsSupportedDef
         @@ (Coders.languageConstraints $ Coders.adapterContextLanguage $ var "cx")] $

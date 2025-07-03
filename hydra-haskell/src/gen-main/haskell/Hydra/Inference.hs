@@ -5,7 +5,6 @@ module Hydra.Inference where
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
-import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
@@ -331,7 +330,7 @@ graphToInferenceContext g0 =
 
 -- | Infer the type of a term in graph context
 inferInGraphContext :: (Core.Term -> Compute.Flow Graph.Graph Typing.InferenceResult)
-inferInGraphContext term = (Flows.bind Errors.getState (\g -> Flows.bind (graphToInferenceContext g) (\cx -> inferTypeOfTerm cx term "single term")))
+inferInGraphContext term = (Flows.bind Monads.getState (\g -> Flows.bind (graphToInferenceContext g) (\cx -> inferTypeOfTerm cx term "single term")))
 
 inferGraphTypes :: (Graph.Graph -> Compute.Flow t0 Graph.Graph)
 inferGraphTypes g0 =  

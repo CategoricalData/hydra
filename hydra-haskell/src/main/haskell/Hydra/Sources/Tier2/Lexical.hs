@@ -53,7 +53,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
-import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
@@ -83,7 +83,7 @@ lexicalDefinition = definitionInModule hydraLexicalModule
 
 hydraLexicalModule :: Module
 hydraLexicalModule = Module (Namespace "hydra.lexical") elements
-   [Errors.hydraErrorsModule, Monads.hydraMonadsModule, Strip.hydraStripModule]
+   [Monads.hydraMonadsModule, Strip.hydraStripModule]
    [Tier1.hydraGraphModule, Tier1.hydraMantleModule] $
     Just ("A module for lexical operations over graphs.")
   where
@@ -108,7 +108,7 @@ dereferenceElementDef :: TElement (Name -> Flow Graph (Maybe Element))
 dereferenceElementDef = lexicalDefinition "dereferenceElement" $
   lambda "name" $ Flows.map
     (lambda "g" $ ref lookupElementDef @@ var "g" @@ var "name")
-    (ref Errors.getStateDef)
+    (ref Monads.getStateDef)
 
 elementsToGraphDef :: TElement (Graph -> Maybe Graph -> [Element] -> Graph)
 elementsToGraphDef = lexicalDefinition "elementsToGraph" $
@@ -177,14 +177,14 @@ requireElementDef = lexicalDefinition "requireElement" $
       "}"]
     $ Flows.bind (ref dereferenceElementDef @@ var "name") $
       lambda "mel" $ Optionals.maybe
-        (Flows.bind (ref Errors.getStateDef) $ var "err")
+        (Flows.bind (ref Monads.getStateDef) $ var "err")
         (unaryFunction Flows.pure)
         (var "mel")
 
 requirePrimitiveDef :: TElement (Name -> Flow Graph Primitive)
 requirePrimitiveDef = lexicalDefinition "requirePrimitive" $
   lambda "name" $
-    Flows.bind (ref Errors.getStateDef) $
+    Flows.bind (ref Monads.getStateDef) $
     lambda "g" $ Optionals.maybe
       (Flows.fail $ "no such primitive function: " ++ (Core.unName $ var "name"))
       (unaryFunction Flows.pure)
@@ -207,7 +207,7 @@ resolveTermDef = lexicalDefinition "resolveTerm" $
       "stripped">: ref Strip.fullyStripTermDef @@ (Graph.elementTerm $ var "el")]
       $ cases _Term (var "stripped") (Just $ Flows.pure $ just $ Graph.elementTerm $ var "el") [
         _Term_variable>>: lambda "name'" $ ref resolveTermDef @@ var "name'"]]
-    $ Flows.bind (ref Errors.getStateDef) $
+    $ Flows.bind (ref Monads.getStateDef) $
       lambda "g" $ Optionals.maybe
         (Flows.pure nothing)
         (var "recurse")
@@ -234,5 +234,5 @@ typeOfPrimitiveDef = lexicalDefinition "typeOfPrimitive" $
 withSchemaContextDef :: TElement (Flow Graph x -> Flow Graph x)
 withSchemaContextDef = lexicalDefinition "withSchemaContext" $
   lambda "f" $
-    Flows.bind (ref Errors.getStateDef) $
+    Flows.bind (ref Monads.getStateDef) $
     lambda "g" $ ref Monads.withStateDef @@ (ref schemaContextDef @@ var "g") @@ var "f"

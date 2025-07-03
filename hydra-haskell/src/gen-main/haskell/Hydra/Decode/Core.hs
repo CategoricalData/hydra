@@ -4,7 +4,6 @@ module Hydra.Decode.Core where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
-import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
@@ -39,7 +38,7 @@ fieldTypes term =
   let stripped = (Strip.fullyStripTerm term)
   in ((\x -> case x of
     Core.TermList v1 -> (Flows.mapList fieldType v1)
-    _ -> (Errors.unexpected "list" (Core__.term term))) stripped)
+    _ -> (Monads.unexpected "list" (Core__.term term))) stripped)
 
 floatType :: (Core.Term -> Compute.Flow Graph.Graph Core.FloatType)
 floatType = (matchEnum (Core.Name "hydra.core.FloatType") [
@@ -139,7 +138,7 @@ matchRecord decode term =
   let stripped = (Strip.fullyStripTerm term)
   in ((\x -> case x of
     Core.TermRecord v1 -> (decode (Maps.fromList (Lists.map (\field -> (Core.fieldName field, (Core.fieldTerm field))) (Core.recordFields v1))))
-    _ -> (Errors.unexpected "record" (Core__.term term))) stripped)
+    _ -> (Monads.unexpected "record" (Core__.term term))) stripped)
 
 matchUnion :: (Core.Name -> [(Core.Name, (Core.Term -> Compute.Flow Graph.Graph t0))] -> Core.Term -> Compute.Flow Graph.Graph t0)
 matchUnion tname pairs term =  
@@ -152,10 +151,10 @@ matchUnion tname pairs term =
           val = (Core.fieldTerm (Core.injectionField v1))
       in (Optionals.maybe (Flows.fail (Strings.cat [
         "no matching case for field ",
-        (Core.unName fname)])) (\f -> f val) (Maps.lookup fname mapping))) (Errors.unexpected (Strings.cat [
+        (Core.unName fname)])) (\f -> f val) (Maps.lookup fname mapping))) (Monads.unexpected (Strings.cat [
       "injection for type ",
       (Core.unName tname)]) (Core__.term term)))
-    _ -> (Errors.unexpected (Strings.cat [
+    _ -> (Monads.unexpected (Strings.cat [
       Strings.cat [
         "union with one of {",
         (Strings.intercalate ", " (Lists.map (\pair -> Core.unName (fst pair)) pairs))],

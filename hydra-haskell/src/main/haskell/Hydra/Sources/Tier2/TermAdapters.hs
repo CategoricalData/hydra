@@ -54,7 +54,7 @@ import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
-import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
@@ -81,7 +81,7 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 
 hydraTermAdaptersModule :: Module
 hydraTermAdaptersModule = Module (Namespace "hydra.termAdapters") elements
-    [Errors.hydraErrorsModule, ExtractCore.extractCoreModule, LiteralAdapters.hydraLiteralAdaptersModule,
+    [ExtractCore.extractCoreModule, LiteralAdapters.hydraLiteralAdaptersModule,
       Schemas.hydraSchemasModule, ShowCore.showCoreModule]
     [Tier1.hydraCodersModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule,
       Tier1.hydraTypingModule] $
@@ -144,13 +144,13 @@ forTypeReferenceDef = termAdaptersDefinition "forTypeReference" $
         "lossy">: false,
         "placeholder">: Compute.adapter (var "lossy") (Core.typeVariable $ var "name") (Core.typeVariable $ var "name") $
           ref AdapterUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
-            withVar "cx" (ref Errors.getStateDef) $ lets [
+            withVar "cx" (ref Monads.getStateDef) $ lets [
               "adapters">: Coders.adapterContextAdapters $ var "cx"] $
               Optionals.maybe
                 (Flows.fail $ Strings.cat2 (string "no adapter for reference type ") (unwrap _Name @@ var "name"))
                 (lambda "ad" $ ref AdapterUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "term")
                 (Maps.lookup (var "name") (var "adapters")))] $
-      withVar "cx" (ref Errors.getStateDef) $ lets [
+      withVar "cx" (ref Monads.getStateDef) $ lets [
         "adapters">: Coders.adapterContextAdapters $ var "cx"] $
         Optionals.maybe
           (lets [
@@ -159,7 +159,7 @@ forTypeReferenceDef = termAdaptersDefinition "forTypeReference" $
               (Coders.adapterContextGraph $ var "cx")
               (Coders.adapterContextLanguage $ var "cx")
               (var "newAdapters")] $
-            Flows.bind (ref Errors.putStateDef @@ var "newCx") $ constant $
+            Flows.bind (ref Monads.putStateDef @@ var "newCx") $ constant $
               withVar "mt" (ref withGraphContextDef @@ (ref Schemas.resolveTypeDef @@ (Core.typeVariable $ var "name"))) $
                 Optionals.maybe
                   (Flows.pure $ Compute.adapter (var "lossy") (Core.typeVariable $ var "name") (Core.typeVariable $ var "name") $
@@ -171,7 +171,7 @@ forTypeReferenceDef = termAdaptersDefinition "forTypeReference" $
                         (Coders.adapterContextGraph $ var "cx")
                         (Coders.adapterContextLanguage $ var "cx")
                         (var "finalAdapters")] $
-                    Flows.bind (ref Errors.putStateDef @@ var "finalCx") $ constant $ Flows.pure $ var "actual")
+                    Flows.bind (ref Monads.putStateDef @@ var "finalCx") $ constant $ Flows.pure $ var "actual")
                   (var "mt"))
           (unaryFunction Flows.pure)
           (Maps.lookup (var "name") (var "adapters")))
@@ -742,7 +742,7 @@ termAdapterDef = termAdaptersDefinition "termAdapter" $
         @@ (Strings.cat2 (string "adapter for ") (ref DescribeCore.typeDef @@ var "typ"))
         @@ (cases _Type (var "typ")
           (Just $
-            withVar "cx" (ref Errors.getStateDef) $
+            withVar "cx" (ref Monads.getStateDef) $
             ref AdapterUtils.chooseAdapterDef
               @@ (var "alts" @@ var "cx")
               @@ (var "supported" @@ var "cx")
@@ -760,5 +760,5 @@ withGraphContextDef :: TElement (Flow Graph a -> Flow AdapterContext a)
 withGraphContextDef = termAdaptersDefinition "withGraphContext" $
   doc "Execute a flow with graph context" $
   lambda "f" $
-    Flows.bind (ref Errors.getStateDef) $ lambda "cx" $
+    Flows.bind (ref Monads.getStateDef) $ lambda "cx" $
       ref Monads.withStateDef @@ (Coders.adapterContextGraph $ var "cx") @@ var "f"

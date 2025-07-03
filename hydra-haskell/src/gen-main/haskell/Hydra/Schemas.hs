@@ -8,7 +8,6 @@ import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Encode.Core as Core__
-import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Equality as Equality
@@ -81,7 +80,7 @@ fieldTypes t =
     Core.TypeRecord v1 -> (Flows.pure (toMap (Core.rowTypeFields v1)))
     Core.TypeUnion v1 -> (Flows.pure (toMap (Core.rowTypeFields v1)))
     Core.TypeVariable v1 -> (Monads.withTrace (Strings.cat2 "field types of " (Core.unName v1)) (Flows.bind (Lexical.requireElement v1) (\el -> Flows.bind (Core_.type_ (Graph.elementTerm el)) fieldTypes)))
-    _ -> (Errors.unexpected "record or union type" (Core___.type_ t))) (Strip.stripType t))
+    _ -> (Monads.unexpected "record or union type" (Core___.type_ t))) (Strip.stripType t))
 
 -- | Fully strip a type of forall quantifiers
 fullyStripType :: (Core.Type -> Core.Type)

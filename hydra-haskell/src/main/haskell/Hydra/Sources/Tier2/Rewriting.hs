@@ -6,7 +6,7 @@ module Hydra.Sources.Tier2.Rewriting where
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Accessors              as Accessors
-import qualified Hydra.Dsl.Ast                        as Ast
+import qualified Hydra.Dsl.Ast                    as Ast
 import qualified Hydra.Dsl.Coders                 as Coders
 import qualified Hydra.Dsl.Compute                as Compute
 import qualified Hydra.Dsl.Core                   as Core

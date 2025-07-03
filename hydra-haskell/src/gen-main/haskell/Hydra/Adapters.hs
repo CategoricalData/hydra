@@ -9,7 +9,6 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Describe.Core as Core__
-import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Flows as Flows
@@ -64,12 +63,12 @@ constructCoder :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> Core.
 constructCoder lang encodeTerm typ = (Monads.withTrace (Strings.cat2 "coder for " (Core__.type_ typ)) (Flows.bind (languageAdapter lang typ) (\adapter -> Flows.pure (AdapterUtils.composeCoders (Compute.adapterCoder adapter) (AdapterUtils.unidirectionalCoder encodeTerm)))))
 
 languageAdapter :: (Coders.Language -> Core.Type -> Compute.Flow Graph.Graph (Compute.Adapter t0 t1 Core.Type Core.Type Core.Term Core.Term))
-languageAdapter lang typ = (Flows.bind Errors.getState (\g ->  
+languageAdapter lang typ = (Flows.bind Monads.getState (\g ->  
   let cx0 = Coders.AdapterContext {
           Coders.adapterContextGraph = g,
           Coders.adapterContextLanguage = lang,
           Coders.adapterContextAdapters = Maps.empty}
-  in (Flows.bind (Monads.withState cx0 (Flows.bind (TermAdapters.termAdapter typ) (\ad -> Flows.bind Errors.getState (\cx -> Flows.pure (ad, cx))))) (\result ->  
+  in (Flows.bind (Monads.withState cx0 (Flows.bind (TermAdapters.termAdapter typ) (\ad -> Flows.bind Monads.getState (\cx -> Flows.pure (ad, cx))))) (\result ->  
     let adapter = (fst result) 
         cx = (snd result)
         encode = (\term -> Monads.withState cx (Compute.coderEncode (Compute.adapterCoder adapter) term))

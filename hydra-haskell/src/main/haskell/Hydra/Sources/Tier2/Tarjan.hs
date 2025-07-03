@@ -53,9 +53,9 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
-import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
---import qualified Hydra.Sources.Tier2.Monads as Monads
+import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
@@ -85,7 +85,7 @@ tarjanDefinition = definitionInModule tarjanModule
 
 tarjanModule :: Module
 tarjanModule = Module (Namespace "hydra.tarjan") elements
-    [Constants.hydraConstantsModule, Errors.hydraErrorsModule]
+    [Constants.hydraConstantsModule, Monads.hydraMonadsModule]
     [Tier1.hydraComputeModule, Tier1.hydraMantleModule, Tier1.hydraTopologyModule] $
     Just ("This implementation of Tarjan's algorithm was originally based on GraphSCC by Iavor S. Diatchki:"
       <> " https://hackage.haskell.org/package/GraphSCC.")
@@ -140,7 +140,7 @@ popStackUntilDef = tarjanDefinition "popStackUntil" $
   doc "Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component" $
   lambda "v" $ lets [
     "go">: lambda "acc" $
-      Flows.bind (ref Errors.getStateDef) $
+      Flows.bind (ref Monads.getStateDef) $
         lambda "st" $
           Logic.ifElse (Lists.null $ Topology.tarjanStateStack $ var "st")
             (Flows.fail $ string "popStackUntil: empty stack")
@@ -150,7 +150,7 @@ popStackUntilDef = tarjanDefinition "popStackUntil" $
               "newSt">: Topology.tarjanStateWithStack (var "st") (var "xs"),
               "newSt2">: Topology.tarjanStateWithOnStack (var "newSt") (Sets.delete (var "x") (Topology.tarjanStateOnStack $ var "st")),
               "acc'">: Lists.cons (var "x") (var "acc")]
-              $ Flows.bind (ref Errors.putStateDef @@ var "newSt2") $
+              $ Flows.bind (ref Monads.putStateDef @@ var "newSt2") $
                 lambda "_" $
                   Logic.ifElse (Equality.equalInt32 (var "x") (var "v"))
                     (Flows.pure $ Lists.reverse $ var "acc'")
@@ -161,7 +161,7 @@ strongConnectDef :: TElement (Topo.Graph -> Topo.Vertex -> Flow Topo.TarjanState
 strongConnectDef = tarjanDefinition "strongConnect" $
   doc "Visit a vertex and recursively explore its successors" $
   lambdas ["graph", "v"] $
-    Flows.bind (ref Errors.getStateDef) $
+    Flows.bind (ref Monads.getStateDef) $
       lambda "st" $ lets [
         "i">: Topology.tarjanStateCounter $ var "st",
         "newSt">: Topology.tarjanState
@@ -173,16 +173,16 @@ strongConnectDef = tarjanDefinition "strongConnect" $
           (Topology.tarjanStateSccs $ var "st"),
         "neighbors">: Maps.findWithDefault (list []) (var "v") (var "graph"),
         "processNeighbor">: lambda "w" $
-          Flows.bind (ref Errors.getStateDef) $
+          Flows.bind (ref Monads.getStateDef) $
             lambda "st'" $
               Logic.ifElse (Logic.not $ Maps.member (var "w") (Topology.tarjanStateIndices $ var "st'"))
                 (Flows.bind (ref strongConnectDef @@ var "graph" @@ var "w") $
                   lambda "_" $
-                    Flows.bind (ref Errors.getStateDef) $
+                    Flows.bind (ref Monads.getStateDef) $
                       lambda "stAfter" $ lets [
                         "low_v">: Maps.findWithDefault (ref Constants.maxInt32Def) (var "v") (Topology.tarjanStateLowLinks $ var "stAfter"),
                         "low_w">: Maps.findWithDefault (ref Constants.maxInt32Def) (var "w") (Topology.tarjanStateLowLinks $ var "stAfter")]
-                        $ Flows.bind (ref Errors.modifyDef @@ (lambda "s" $
+                        $ Flows.bind (ref Monads.modifyDef @@ (lambda "s" $
                             Topology.tarjanStateWithLowLinks (var "s")
                               (Maps.insert (var "v") (Math.min (var "low_v") (var "low_w")) (Topology.tarjanStateLowLinks $ var "s")))) $
                           lambda "_" $ Flows.pure unit)
@@ -190,23 +190,23 @@ strongConnectDef = tarjanDefinition "strongConnect" $
                   (lets [
                     "low_v">: Maps.findWithDefault (ref Constants.maxInt32Def) (var "v") (Topology.tarjanStateLowLinks $ var "st'"),
                     "idx_w">: Maps.findWithDefault (ref Constants.maxInt32Def) (var "w") (Topology.tarjanStateIndices $ var "st'")]
-                    $ Flows.bind (ref Errors.modifyDef @@ (lambda "s" $
+                    $ Flows.bind (ref Monads.modifyDef @@ (lambda "s" $
                         Topology.tarjanStateWithLowLinks (var "s")
                           (Maps.insert (var "v") (Math.min (var "low_v") (var "idx_w")) (Topology.tarjanStateLowLinks $ var "s")))) $
                       lambda "_" $ Flows.pure unit)
                   (Flows.pure unit))]
-        $ Flows.bind (ref Errors.putStateDef @@ var "newSt") $
+        $ Flows.bind (ref Monads.putStateDef @@ var "newSt") $
           lambda "_" $
             Flows.bind (Flows.mapList (var "processNeighbor") (var "neighbors")) $
               lambda "_" $
-                Flows.bind (ref Errors.getStateDef) $
+                Flows.bind (ref Monads.getStateDef) $
                   lambda "stFinal" $ lets [
                     "low_v">: Maps.findWithDefault (ref Constants.maxInt32Def) (var "v") (Topology.tarjanStateLowLinks $ var "stFinal"),
                     "idx_v">: Maps.findWithDefault (ref Constants.maxInt32Def) (var "v") (Topology.tarjanStateIndices $ var "stFinal")]
                     $ Logic.ifElse (Equality.equalInt32 (var "low_v") (var "idx_v"))
                         (Flows.bind (ref popStackUntilDef @@ var "v") $
                           lambda "comp" $
-                            Flows.bind (ref Errors.modifyDef @@ (lambda "s" $
+                            Flows.bind (ref Monads.modifyDef @@ (lambda "s" $
                               Topology.tarjanStateWithSccs (var "s") (Lists.cons (var "comp") (Topology.tarjanStateSccs $ var "s")))) $
                               lambda "_" $ Flows.pure unit)
                         (Flows.pure unit)
@@ -217,10 +217,10 @@ stronglyConnectedComponentsDef = tarjanDefinition "stronglyConnectedComponents" 
   lambda "graph" $ lets [
     "verts">: Maps.keys $ var "graph",
     "processVertex">: lambda "v" $
-      Flows.bind (Flows.map (lambda "st" $ Maps.member (var "v") (Topology.tarjanStateIndices $ var "st")) $ ref Errors.getStateDef) $
+      Flows.bind (Flows.map (lambda "st" $ Maps.member (var "v") (Topology.tarjanStateIndices $ var "st")) $ ref Monads.getStateDef) $
         lambda "visited" $
           Logic.ifElse (Logic.not $ var "visited")
             (ref strongConnectDef @@ var "graph" @@ var "v")
             (Flows.pure unit),
-    "finalState">: ref Errors.execDef @@ (Flows.mapList (var "processVertex") (var "verts")) @@ ref initialStateDef]
+    "finalState">: ref Monads.execDef @@ (Flows.mapList (var "processVertex") (var "verts")) @@ ref initialStateDef]
     $ Lists.reverse $ Lists.map (unaryFunction Lists.sort) $ Topology.tarjanStateSccs $ var "finalState"
