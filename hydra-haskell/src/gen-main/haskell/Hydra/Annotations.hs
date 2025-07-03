@@ -10,11 +10,10 @@ import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Encode.Core as Core__
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core___
-import qualified Hydra.Flows as Flows
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Flows as Flows_
+import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -23,6 +22,7 @@ import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core____
 import qualified Hydra.Strip as Strip
@@ -39,14 +39,14 @@ aggregateAnnotations getValue getX getAnns t =
 
 debugIf :: (t0 -> String -> Compute.Flow t1 ())
 debugIf debugId message =  
-  let checkAndFail = (\desc -> Logic.ifElse (Equality.equal desc (Just "debugId")) (Flows_.fail message) (Flows_.pure ()))
-  in (Flows_.bind getDebugId checkAndFail)
+  let checkAndFail = (\desc -> Logic.ifElse (Equality.equal desc (Just "debugId")) (Flows.fail message) (Flows.pure ()))
+  in (Flows.bind getDebugId checkAndFail)
 
 failOnFlag :: (Core.Name -> String -> Compute.Flow t0 ())
-failOnFlag flag msg = (Flows_.bind (hasFlag flag) (\val -> Logic.ifElse val (Flows_.fail msg) (Flows_.pure ())))
+failOnFlag flag msg = (Flows.bind (hasFlag flag) (\val -> Logic.ifElse val (Flows.fail msg) (Flows.pure ())))
 
 getDebugId :: (Compute.Flow t0 (Maybe String))
-getDebugId = (withEmptyGraph (Flows_.bind (getAttr Constants.key_debugId) (\desc -> Flows_.traverseOptional Core___.string desc)))
+getDebugId = (withEmptyGraph (Flows.bind (getAttr Constants.key_debugId) (\desc -> Flows.traverseOptional Core___.string desc)))
 
 getAttr :: (Core.Name -> Compute.Flow t0 (Maybe Core.Term))
 getAttr key = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
@@ -55,14 +55,14 @@ getAttr key = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
   Compute.flowStateTrace = t0}))
 
 getAttrWithDefault :: (Core.Name -> Core.Term -> Compute.Flow t0 Core.Term)
-getAttrWithDefault key def = (Flows_.map (\mval -> Optionals.fromMaybe def mval) (getAttr key))
+getAttrWithDefault key def = (Flows.map (\mval -> Optionals.fromMaybe def mval) (getAttr key))
 
 getCount :: (Core.Name -> Compute.Flow t0 Int)
-getCount key = (withEmptyGraph (Flows_.bind (getAttrWithDefault key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))) Core___.int32))
+getCount key = (withEmptyGraph (Flows.bind (getAttrWithDefault key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))) Core___.int32))
 
 -- | Get description from annotations map
 getDescription :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe String))
-getDescription anns = (Optionals.maybe (Flows_.pure Nothing) (\term -> Flows_.map Optionals.pure (Core___.string term)) (Maps.lookup (Core.Name "description") anns))
+getDescription anns = (Optionals.maybe (Flows.pure Nothing) (\term -> Flows.map Optionals.pure (Core___.string term)) (Maps.lookup (Core.Name "description") anns))
 
 -- | Get a term annotation
 getTermAnnotation :: (Core.Name -> Core.Term -> Maybe Core.Term)
@@ -74,7 +74,7 @@ getTermDescription term = (getDescription (termAnnotationInternal term))
 
 -- | Get type from annotations
 getType :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe Core.Type))
-getType anns = (Optionals.maybe (Flows_.pure Nothing) (\dat -> Flows_.map Optionals.pure (Core_.type_ dat)) (Maps.lookup Constants.key_type anns))
+getType anns = (Optionals.maybe (Flows.pure Nothing) (\dat -> Flows.map Optionals.pure (Core_.type_ dat)) (Maps.lookup Constants.key_type anns))
 
 -- | Get a type annotation
 getTypeAnnotation :: (Core.Name -> Core.Type -> Maybe Core.Term)
@@ -87,8 +87,8 @@ getTypeClasses term =
           let byName = (Maps.fromList [
                   (Core.Name "equality", Graph.TypeClassEquality),
                   (Core.Name "ordering", Graph.TypeClassOrdering)])
-          in (Flows_.bind (Core___.unitVariant (Core.Name "hydra.graph.TypeClass") term) (\fn -> Optionals.maybe (Errors.unexpected "type class" (Core____.term term)) Flows_.pure (Maps.lookup fn byName))))
-  in (Optionals.maybe (Flows_.pure Maps.empty) (\term -> Core___.map Core_.name (Core___.set decodeClass) term) (getTermAnnotation Constants.key_classes term))
+          in (Flows.bind (Core___.unitVariant (Core.Name "hydra.graph.TypeClass") term) (\fn -> Optionals.maybe (Errors.unexpected "type class" (Core____.term term)) Flows.pure (Maps.lookup fn byName))))
+  in (Optionals.maybe (Flows.pure Maps.empty) (\term -> Core___.map Core_.name (Core___.set decodeClass) term) (getTermAnnotation Constants.key_classes term))
 
 -- | Get type description
 getTypeDescription :: (Core.Type -> Compute.Flow Graph.Graph (Maybe String))
@@ -106,14 +106,14 @@ hasDescription :: (M.Map Core.Name t0 -> Bool)
 hasDescription anns = (Optionals.isJust (Maps.lookup Constants.key_description anns))
 
 hasFlag :: (Core.Name -> Compute.Flow t0 Bool)
-hasFlag flag = (withEmptyGraph (Flows_.bind (getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False))) (\term -> Core___.boolean term)))
+hasFlag flag = (withEmptyGraph (Flows.bind (getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False))) (\term -> Core___.boolean term)))
 
 -- | Check if type has description
 hasTypeDescription :: (Core.Type -> Bool)
 hasTypeDescription typ = (hasDescription (typeAnnotationInternal typ))
 
 nextCount :: (Core.Name -> Compute.Flow t0 Int)
-nextCount key = (Flows_.bind (getCount key) (\count -> Flows_.map (\_ -> count) (putCount key (Math.add count 1))))
+nextCount key = (Flows.bind (getCount key) (\count -> Flows.map (\_ -> count) (putCount key (Math.add count 1))))
 
 -- | Normalize term annotations
 normalizeTermAnnotations :: (Core.Term -> Core.Term)
@@ -242,39 +242,39 @@ typeElement name typ =
       Core.typeSchemeType = typ}))}
 
 whenFlag :: (Core.Name -> Compute.Flow t1 t0 -> Compute.Flow t1 t0 -> Compute.Flow t1 t0)
-whenFlag flag fthen felse = (Flows_.bind (hasFlag flag) (\b -> Logic.ifElse b fthen felse))
+whenFlag flag fthen felse = (Flows.bind (hasFlag flag) (\b -> Logic.ifElse b fthen felse))
 
 -- | Unshadow variables in term
 unshadowVariables :: (Core.Term -> Core.Term)
 unshadowVariables term =  
-  let freshName = (Flows_.map (\n -> Core.Name (Strings.cat2 "s" (Literals.showInt32 n))) (nextCount (Core.Name "unshadow"))) 
+  let freshName = (Flows.map (\n -> Core.Name (Strings.cat2 "s" (Literals.showInt32 n))) (nextCount (Core.Name "unshadow"))) 
       rewrite = (\recurse -> \term ->  
               let handleOther = (recurse term)
-              in (Flows_.bind Errors.getState (\state ->  
+              in (Flows.bind Errors.getState (\state ->  
                 let reserved = (fst state) 
                     subst = (snd state)
                 in ((\x -> case x of
-                  Core.TermVariable v1 -> (Flows_.pure (Core.TermVariable (Optionals.fromMaybe v1 (Maps.lookup v1 subst))))
+                  Core.TermVariable v1 -> (Flows.pure (Core.TermVariable (Optionals.fromMaybe v1 (Maps.lookup v1 subst))))
                   Core.TermFunction v1 -> ((\x -> case x of
                     Core.FunctionLambda v2 ->  
                       let v = (Core.lambdaParameter v2) 
                           d = (Core.lambdaDomain v2)
                           body = (Core.lambdaBody v2)
-                      in (Logic.ifElse (Sets.member v reserved) (Flows_.bind freshName (\v_ -> Flows_.bind (Errors.putState (Sets.insert v_ reserved, (Maps.insert v v_ subst))) (\_ -> Flows_.bind (recurse body) (\body_ -> Flows_.bind (Errors.putState state) (\_ -> Flows_.pure (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      in (Logic.ifElse (Sets.member v reserved) (Flows.bind freshName (\v_ -> Flows.bind (Errors.putState (Sets.insert v_ reserved, (Maps.insert v v_ subst))) (\_ -> Flows.bind (recurse body) (\body_ -> Flows.bind (Errors.putState state) (\_ -> Flows.pure (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = v_,
                         Core.lambdaDomain = d,
-                        Core.lambdaBody = body_})))))))) (Flows_.bind (Errors.putState (Sets.insert v reserved, subst)) (\_ -> Flows_.map (\body_ -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = body_})))))))) (Flows.bind (Errors.putState (Sets.insert v reserved, subst)) (\_ -> Flows.map (\body_ -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = v,
                         Core.lambdaDomain = d,
                         Core.lambdaBody = body_}))) (recurse body))))
                     _ -> handleOther) v1)
                   _ -> handleOther) term))))
-  in (Optionals.fromJust (Compute.flowStateValue (Compute.unFlow (Rewriting.rewriteTermM rewrite term) (Sets.empty, Maps.empty) Flows.emptyTrace)))
+  in (Optionals.fromJust (Compute.flowStateValue (Compute.unFlow (Rewriting.rewriteTermM rewrite term) (Sets.empty, Maps.empty) Monads.emptyTrace)))
 
 withDepth :: (Core.Name -> (Int -> Compute.Flow t1 t0) -> Compute.Flow t1 t0)
-withDepth key f = (Flows_.bind (getCount key) (\count ->  
+withDepth key f = (Flows.bind (getCount key) (\count ->  
   let inc = (Math.add count 1)
-  in (Flows_.bind (putCount key inc) (\_ -> Flows_.bind (f inc) (\r -> Flows_.bind (putCount key count) (\_ -> Flows_.pure r))))))
+  in (Flows.bind (putCount key inc) (\_ -> Flows.bind (f inc) (\r -> Flows.bind (putCount key count) (\_ -> Flows.pure r))))))
 
 withEmptyGraph :: (Compute.Flow Graph.Graph t1 -> Compute.Flow t0 t1)
-withEmptyGraph = (Flows.withState Lexical.emptyGraph)
+withEmptyGraph = (Monads.withState Lexical.emptyGraph)

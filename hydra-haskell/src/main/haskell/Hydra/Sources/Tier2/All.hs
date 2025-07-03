@@ -13,7 +13,7 @@ module Hydra.Sources.Tier2.All(
 --  module Hydra.Sources.Tier2.Describe.Core,
   module Hydra.Sources.Tier2.Errors,
 --  module Hydra.Sources.Tier2.Extract.Core,
-  module Hydra.Sources.Tier2.Flows,
+  module Hydra.Sources.Tier2.Monads,
   module Hydra.Sources.Tier2.GrammarToModule,
   module Hydra.Sources.Tier2.Inference,
   module Hydra.Sources.Tier2.Lexical,
@@ -44,7 +44,7 @@ import Hydra.Sources.Tier2.Decode.Core
 import Hydra.Sources.Tier2.Describe.Core
 import Hydra.Sources.Tier2.Errors
 import Hydra.Sources.Tier2.Extract.Core
-import Hydra.Sources.Tier2.Flows
+import Hydra.Sources.Tier2.Monads
 import Hydra.Sources.Tier2.GrammarToModule
 import Hydra.Sources.Tier2.Inference
 import Hydra.Sources.Tier2.Lexical
@@ -91,7 +91,7 @@ tier2TermModules = [
   hydraArityModule,
   hydraCoreLanguageModule,
   hydraErrorsModule,
-  hydraFlowsModule,
+  hydraMonadsModule,
   hydraGrammarToModuleModule,
   hydraInferenceModule,
   hydraLexicalModule,

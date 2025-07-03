@@ -16,7 +16,7 @@ import qualified Hydra.Ext.Haskell.Ast as Ast
 import qualified Hydra.Ext.Haskell.Language as Language
 import qualified Hydra.Ext.Haskell.Serde as Serde
 import qualified Hydra.Ext.Haskell.Utils as Utils
-import qualified Hydra.Flows as Flows
+import qualified Hydra.Monads as Flows
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical

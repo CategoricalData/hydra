@@ -55,7 +55,7 @@ import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Tier2.Flows as Flows_
+import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 import qualified Hydra.Sources.Tier2.Lexical as Lexical
@@ -80,7 +80,7 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 hydraAnnotationsModule :: Module
 hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
     [Decode.hydraDecodeModule, DecodeCore.decodeCoreModule, EncodeCore.encodeCoreModule, ExtractCore.extractCoreModule,
-      ShowCore.showCoreModule, Variants.hydraVariantsModule, Lexical.hydraLexicalModule, Flows_.hydraFlowsModule]
+      ShowCore.showCoreModule, Variants.hydraVariantsModule, Lexical.hydraLexicalModule, Monads.hydraMonadsModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule,
       Tier1.hydraModuleModule, Tier1.hydraTopologyModule, Tier1.hydraTypingModule] $
     Just "Utilities for reading and writing type and term annotations"
@@ -466,7 +466,7 @@ unshadowVariablesDef = annotationsDefinition "unshadowVariables" $
     Optionals.fromJust $ Compute.flowStateValue $ Compute.unFlow
       (ref Rewriting.rewriteTermMDef @@ var "rewrite" @@ var "term")
       (pair Sets.empty Maps.empty)
-      (ref Flows_.emptyTraceDef)
+      (ref Monads.emptyTraceDef)
 
 withDepthDef :: TElement (Name -> (Int -> Flow s a) -> Flow s a)
 withDepthDef = annotationsDefinition "withDepth" $
@@ -486,4 +486,4 @@ withDepthDef = annotationsDefinition "withDepth" $
 withEmptyGraphDef :: TElement (Flow Graph a -> Flow s a)
 withEmptyGraphDef = annotationsDefinition "withEmptyGraph" $
   doc "Execute flow with empty graph" $
-  ref Flows_.withStateDef @@ ref Lexical.emptyGraphDef
+  ref Monads.withStateDef @@ ref Lexical.emptyGraphDef

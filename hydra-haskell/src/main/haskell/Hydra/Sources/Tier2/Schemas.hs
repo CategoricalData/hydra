@@ -55,7 +55,7 @@ import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Tier2.Flows as Flows_
+import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 import qualified Hydra.Sources.Tier2.Lexical as Lexical
@@ -188,7 +188,7 @@ fieldTypesDef = schemasDefinition "fieldTypes" $
       _Type_record>>: lambda "rt" $ Flows.pure $ var "toMap" @@ Core.rowTypeFields (var "rt"),
       _Type_union>>: lambda "rt" $ Flows.pure $ var "toMap" @@ Core.rowTypeFields (var "rt"),
       _Type_variable>>: lambda "name" $
-        ref Flows_.withTraceDef @@ (Strings.cat2 (string "field types of ") (Core.unName $ var "name")) @@
+        ref Monads.withTraceDef @@ (Strings.cat2 (string "field types of ") (Core.unName $ var "name")) @@
           (Flows.bind (ref Lexical.requireElementDef @@ var "name") $
             lambda "el" $
               Flows.bind (ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")) $
@@ -278,7 +278,7 @@ requireTypeDef :: TElement (Name -> Flow Graph Type)
 requireTypeDef = schemasDefinition "requireType" $
   doc "Require a type by name" $
   lambda "name" $
-    ref Flows_.withTraceDef @@ (Strings.cat2 (string "require type ") (Core.unName $ var "name")) @@
+    ref Monads.withTraceDef @@ (Strings.cat2 (string "require type ") (Core.unName $ var "name")) @@
       (Flows.bind (ref Lexical.withSchemaContextDef @@ (ref Lexical.requireElementDef @@ var "name")) $
         lambda "el" $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el"))
 
@@ -341,7 +341,7 @@ schemaGraphToTypingEnvironmentDef = schemasDefinition "schemaGraphToTypingEnviro
                         (ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")))
                       (Flows.pure nothing)])))
           (Graph.elementType $ var "el"))]
-    $ ref Flows_.withStateDef @@ var "g" @@
+    $ ref Monads.withStateDef @@ var "g" @@
       (Flows.bind (Flows.mapList (var "toPair") $ Maps.elems $ Graph.graphElements $ var "g") $
         lambda "mpairs" $ Flows.pure $ Maps.fromList $ Optionals.cat $ var "mpairs")
 
@@ -364,7 +364,7 @@ typeDependenciesDef = schemasDefinition "typeDependencies" $
   doc "Get all type dependencies for a given type name" $
   lambda "withSchema" $ lambda "transform" $ lambda "name" $ lets [
     "requireType">: lambda "name" $
-      ref Flows_.withTraceDef @@ (Strings.cat2 (string "type dependencies of ") (Core.unName $ var "name")) @@
+      ref Monads.withTraceDef @@ (Strings.cat2 (string "type dependencies of ") (Core.unName $ var "name")) @@
         (Flows.bind (ref Lexical.requireElementDef @@ var "name") $
           lambda "el" $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")),
     "toPair">: lambda "name" $

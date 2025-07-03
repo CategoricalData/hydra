@@ -3,78 +3,79 @@ module Hydra.Sources.Tier3.Ext.Haskell.Coder where
 -- Standard Tier-3 imports
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Coders                    as Coders
-import qualified Hydra.Dsl.Compute                   as Compute
-import qualified Hydra.Dsl.Core                      as Core
-import qualified Hydra.Dsl.Graph                     as Graph
-import qualified Hydra.Dsl.Lib.Chars                 as Chars
-import qualified Hydra.Dsl.Lib.Equality              as Equality
-import qualified Hydra.Dsl.Lib.Flows                 as Flows
-import qualified Hydra.Dsl.Lib.Lists                 as Lists
-import qualified Hydra.Dsl.Lib.Literals              as Literals
-import qualified Hydra.Dsl.Lib.Logic                 as Logic
-import qualified Hydra.Dsl.Lib.Maps                  as Maps
-import qualified Hydra.Dsl.Lib.Math                  as Math
-import qualified Hydra.Dsl.Lib.Optionals             as Optionals
-import           Hydra.Dsl.Phantoms                  as Phantoms
-import qualified Hydra.Dsl.Lib.Sets                  as Sets
-import qualified Hydra.Dsl.Lib.Strings               as Strings
-import qualified Hydra.Dsl.Mantle                    as Mantle
-import qualified Hydra.Dsl.Module                    as Module
-import qualified Hydra.Dsl.TTerms                    as TTerms
-import qualified Hydra.Dsl.TTypes                    as TTypes
-import qualified Hydra.Dsl.Terms                     as Terms
-import qualified Hydra.Dsl.Topology                  as Topology
-import qualified Hydra.Dsl.Types                     as Types
-import qualified Hydra.Dsl.Typing                    as Typing
-import qualified Hydra.Sources.Tier1.All             as Tier1
-import qualified Hydra.Sources.Tier1.Constants       as Constants
-import qualified Hydra.Sources.Tier1.Decode          as Decode
-import qualified Hydra.Sources.Tier1.Encode.Core     as EncodeCore
-import qualified Hydra.Sources.Tier1.Formatting      as Formatting
-import qualified Hydra.Sources.Tier1.Functions       as Functions
-import qualified Hydra.Sources.Tier1.Literals        as Literals
-import qualified Hydra.Sources.Tier1.Messages        as Messages
-import qualified Hydra.Sources.Tier1.Strip           as Strip
-import qualified Hydra.Sources.Tier2.Accessors       as Accessors
-import qualified Hydra.Sources.Tier2.AdapterUtils    as AdapterUtils
-import qualified Hydra.Sources.Tier2.Adapters        as Adapters
-import qualified Hydra.Sources.Tier2.Annotations     as Annotations
-import qualified Hydra.Sources.Tier2.Arity           as Arity
-import qualified Hydra.Sources.Tier2.CoreLanguage    as CoreLanguage
-import qualified Hydra.Sources.Tier2.Decode.Core     as DecodeCore
-import qualified Hydra.Sources.Tier2.Describe.Core   as DescribeCore
-import qualified Hydra.Sources.Tier2.Errors          as Errors
-import qualified Hydra.Sources.Tier2.Extract.Core    as ExtractCore
-import qualified Hydra.Sources.Tier2.Flows           as Flows_
-import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
-import qualified Hydra.Sources.Tier2.Inference       as Inference
-import qualified Hydra.Sources.Tier2.Lexical         as Lexical
-import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
-import qualified Hydra.Sources.Tier2.Qnames          as Qnames
-import qualified Hydra.Sources.Tier2.Reduction       as Reduction
-import qualified Hydra.Sources.Tier2.Rewriting       as Rewriting
-import qualified Hydra.Sources.Tier2.Schemas         as Schemas
-import qualified Hydra.Sources.Tier2.Serialization   as Serialization
-import qualified Hydra.Sources.Tier2.Show.Core       as ShowCore
-import qualified Hydra.Sources.Tier2.Sorting         as Sorting
-import qualified Hydra.Sources.Tier2.Substitution    as Substitution
-import qualified Hydra.Sources.Tier2.Tarjan          as Tarjan
-import qualified Hydra.Sources.Tier2.Templating      as Templating
-import qualified Hydra.Sources.Tier2.TermAdapters    as TermAdapters
-import qualified Hydra.Sources.Tier2.Unification     as Unification
-import qualified Hydra.Sources.Tier2.Variants        as Variants
+import qualified Hydra.Dsl.Coders                     as Coders
+import qualified Hydra.Dsl.Compute                    as Compute
+import qualified Hydra.Dsl.Core                       as Core
+import qualified Hydra.Dsl.Graph                      as Graph
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Flows                  as Flows
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals              as Optionals
+import           Hydra.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Mantle                     as Mantle
+import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.TTerms                     as TTerms
+import qualified Hydra.Dsl.TTypes                     as TTypes
+import qualified Hydra.Dsl.Terms                      as Terms
+import qualified Hydra.Dsl.Topology                   as Topology
+import qualified Hydra.Dsl.Types                      as Types
+import qualified Hydra.Dsl.Typing                     as Typing
+import qualified Hydra.Sources.Tier1.All              as Tier1
+import qualified Hydra.Sources.Tier1.Constants        as Constants
+import qualified Hydra.Sources.Tier1.Decode           as Decode
+import qualified Hydra.Sources.Tier1.Encode.Core      as EncodeCore
+import qualified Hydra.Sources.Tier1.Formatting       as Formatting
+import qualified Hydra.Sources.Tier1.Functions        as Functions
+import qualified Hydra.Sources.Tier1.Literals         as Literals
+import qualified Hydra.Sources.Tier1.Messages         as Messages
+import qualified Hydra.Sources.Tier1.Strip            as Strip
+import qualified Hydra.Sources.Tier2.Accessors        as Accessors
+import qualified Hydra.Sources.Tier2.AdapterUtils     as AdapterUtils
+import qualified Hydra.Sources.Tier2.Adapters         as Adapters
+import qualified Hydra.Sources.Tier2.Annotations      as Annotations
+import qualified Hydra.Sources.Tier2.Arity            as Arity
+import qualified Hydra.Sources.Tier2.CoreLanguage     as CoreLanguage
+import qualified Hydra.Sources.Tier2.Decode.Core      as DecodeCore
+import qualified Hydra.Sources.Tier2.Describe.Core    as DescribeCore
+import qualified Hydra.Sources.Tier2.Errors           as Errors
+import qualified Hydra.Sources.Tier2.Extract.Core     as ExtractCore
+import qualified Hydra.Sources.Tier2.Monads           as Monads
+import qualified Hydra.Sources.Tier2.GrammarToModule  as GrammarToModule
+import qualified Hydra.Sources.Tier2.Inference        as Inference
+import qualified Hydra.Sources.Tier2.Lexical          as Lexical
+import qualified Hydra.Sources.Tier2.LiteralAdapters  as LiteralAdapters
+import qualified Hydra.Sources.Tier2.Qnames           as Qnames
+import qualified Hydra.Sources.Tier2.Reduction        as Reduction
+import qualified Hydra.Sources.Tier2.Rewriting        as Rewriting
+import qualified Hydra.Sources.Tier2.Schemas          as Schemas
+import qualified Hydra.Sources.Tier2.Serialization    as Serialization
+import qualified Hydra.Sources.Tier2.Show.Core        as ShowCore
+import qualified Hydra.Sources.Tier2.Sorting          as Sorting
+import qualified Hydra.Sources.Tier2.Substitution     as Substitution
+import qualified Hydra.Sources.Tier2.Tarjan           as Tarjan
+import qualified Hydra.Sources.Tier2.Templating       as Templating
+import qualified Hydra.Sources.Tier2.TermAdapters     as TermAdapters
+import qualified Hydra.Sources.Tier2.Unification      as Unification
+import qualified Hydra.Sources.Tier2.Variants         as Variants
+import qualified Data.Int                             as I
+import qualified Data.List                            as L
+import qualified Data.Map                             as M
+import qualified Data.Set                             as S
+import qualified Data.Maybe                           as Y
+
+-- Additional imports
+import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Sources.Tier3.Ext.Haskell.Language as HaskellLanguage
 import qualified Hydra.Sources.Tier3.Ext.Haskell.Ast as HaskellAst
 import qualified Hydra.Sources.Tier3.Ext.Haskell.Serde as HaskellSerde
 import qualified Hydra.Sources.Tier3.Ext.Haskell.Utils as HaskellUtils
-import qualified Data.Int                            as I
-import qualified Data.List                           as L
-import qualified Data.Map                            as M
-import qualified Data.Set                            as S
-import qualified Data.Maybe                          as Y
-
-import qualified Hydra.Ext.Haskell.Ast as H
 
 
 type HaskellNamespaces = Namespaces H.ModuleName
@@ -441,7 +442,7 @@ encodeTypeDef = haskellCoderDefinition "encodeType" $
     "ref">: lambda "name" $
       Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.elementReferenceDef @@ var "namespaces" @@ var "name",
     "unitTuple">: inject H._Type H._Type_tuple $ list []] $
-    ref Flows_.withTraceDef @@ (string "encode type") @@
+    ref Monads.withTraceDef @@ (string "encode type") @@
       (cases _Type (ref Strip.stripTypeDef @@ var "typ")
         (Just $ Flows.fail $ Strings.cat2 (string "unexpected type: ") (ref ShowCore.typeDef @@ var "typ")) [
         _Type_application>>: lambda "app" $ lets [
@@ -558,7 +559,7 @@ encodeTypeWithClassAssertionsDef = haskellCoderDefinition "encodeTypeWithClassAs
       "toPair">: lambda "c" $
         pair (var "name") (var "c")] $
       Lists.map (var "toPair") (Sets.toList $ var "clsSet")] $
-    ref Flows_.withTraceDef @@ (string "encode with assertions") @@
+    ref Monads.withTraceDef @@ (string "encode with assertions") @@
       (withVar "htyp" (ref adaptTypeToHaskellAndEncodeDef @@ var "namespaces" @@ var "typ") $
       Logic.ifElse (Lists.null $ var "assertPairs")
         (Flows.pure $ var "htyp") (lets [
@@ -774,7 +775,7 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
           H._OrdinaryConstructor_name>>: ref HaskellUtils.simpleNameDef @@ var "nm",
           H._OrdinaryConstructor_fields>>: var "typeList"],
         H._ConstructorWithComments_comments>>: var "comments"]] $
-    ref Flows_.withTraceDef @@ (Strings.cat2 (string "type element ") (Core.unName $ var "elementName")) @@ (
+    ref Monads.withTraceDef @@ (Strings.cat2 (string "type element ") (Core.unName $ var "elementName")) @@ (
       withVar "g" (ref Errors.getStateDef) $
       withVar "t" (ref DecodeCore.typeDef @@ var "term") $
       withVar "isSer" (ref Schemas.isSerializableDef @@ var "el") $ lets [

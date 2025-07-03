@@ -632,6 +632,19 @@ _TypeAbstraction_parameter = (Name "parameter")
 
 _TypeAbstraction_body = (Name "body")
 
+-- | A term applied to a type; a type application
+data TypedTerm = 
+  TypedTerm {
+    typedTermTerm :: Term,
+    typedTermType :: Type}
+  deriving (Eq, Ord, Read, Show)
+
+_TypedTerm = (Name "hydra.core.TypedTerm")
+
+_TypedTerm_term = (Name "term")
+
+_TypedTerm_type = (Name "type")
+
 -- | A type expression together with free type variables occurring in the expression
 data TypeScheme = 
   TypeScheme {
@@ -644,19 +657,6 @@ _TypeScheme = (Name "hydra.core.TypeScheme")
 _TypeScheme_variables = (Name "variables")
 
 _TypeScheme_type = (Name "type")
-
--- | A term together with its type
-data TypedTerm = 
-  TypedTerm {
-    typedTermTerm :: Term,
-    typedTermType :: Type}
-  deriving (Eq, Ord, Read, Show)
-
-_TypedTerm = (Name "hydra.core.TypedTerm")
-
-_TypedTerm_term = (Name "term")
-
-_TypedTerm_type = (Name "type")
 
 -- | An empty record as a canonical unit value
 data Unit = 
