@@ -90,9 +90,6 @@ hydraFlowsModule = Module (Namespace "hydra.flows") elements
   where
     elements = [
       el bindDef,
-      el bind2Def,
-      el bind3Def,
-      el bind4Def,
       el emptyTraceDef,
       el failDef,
       el flowSucceedsDef,
@@ -107,7 +104,6 @@ hydraFlowsModule = Module (Namespace "hydra.flows") elements
       el withStateDef,
       el withTraceDef]
 
--- TODO: consider removing bind and map from the module, as they are present as primitive functions
 bindDef :: TElement (Flow s a -> (a -> Flow s b) -> Flow s b)
 bindDef = flowsDefinition "bind" $
   lambdas ["l", "r"] $ lets [
@@ -119,44 +115,20 @@ bindDef = flowsDefinition "bind" $
         @@ (Compute.flowStateValue $ var "fs1")]
     $ wrap _Flow $ var "q"
 
-bind2Def :: TElement ((Flow s a) -> (Flow s b) -> (a -> b -> Flow s c) -> Flow s c)
-bind2Def = flowsDefinition "bind2" $
-  doc "Bind the results of two flows into another flow" $
-  lambdas ["f1", "f2", "f"] $ ref bindDef @@ var "f1" @@
-    (lambda "r1" $ ref bindDef @@ var "f2" @@
-      (lambda "r2" $ var "f" @@ var "r1" @@ var "r2"))
-
-bind3Def :: TElement ((Flow s a) -> (Flow s b) -> (Flow s c) -> (a -> b -> c -> Flow s d) -> Flow s d)
-bind3Def = flowsDefinition "bind3" $
-  doc "Bind the results of three flows into another flow" $
-  lambdas ["f1", "f2", "f3", "f"] $ ref bindDef @@ var "f1" @@
-    (lambda "r1" $ ref bindDef @@ var "f2" @@
-      (lambda "r2" $ ref bindDef @@ var "f3" @@
-        (lambda "r3" $ var "f" @@ var "r1" @@ var "r2" @@ var "r3")))
-
-bind4Def :: TElement ((Flow s a) -> (Flow s b) -> (Flow s c) -> (a -> b -> c -> Flow s d) -> Flow s d)
-bind4Def = flowsDefinition "bind4" $
-  doc "Bind the results of four flows into another flow" $
-  lambdas ["f1", "f2", "f3", "f4", "f"] $ ref bindDef @@ var "f1" @@
-    (lambda "r1" $ ref bindDef @@ var "f2" @@
-      (lambda "r2" $ ref bindDef @@ var "f3" @@
-        (lambda "r3" $ ref bindDef @@ var "f4" @@
-          (lambda "r4" $ var "f" @@ var "r1" @@ var "r2" @@ var "r3" @@ var "r4"))))
-
 emptyTraceDef :: TElement Trace
 emptyTraceDef = flowsDefinition "emptyTrace" $
   Compute.trace (list []) (list []) Maps.empty
 
 failDef :: TElement (String -> Flow s a)
-failDef = flowsDefinition "failInternal" $
+failDef = flowsDefinition "fail" $
   lambda "msg" $ wrap _Flow $ lambdas ["s", "t"] $
     Compute.flowState nothing (var "s") (ref pushErrorDef @@ var "msg" @@ var "t")
 
 flowSucceedsDef :: TElement (Flow s a -> Bool)
 flowSucceedsDef = flowsDefinition "flowSucceeds" $
   doc "Check whether a flow succeeds" $
-  lambda "cx" $ lambda "f" $
-    Optionals.isJust (Compute.flowStateValue $ (Compute.unFlow (var "f") (var "cx") (ref emptyTraceDef)))
+  lambda "s" $ lambda "f" $
+    Optionals.isJust (Compute.flowStateValue $ (Compute.unFlow (var "f") (var "s") (ref emptyTraceDef)))
 
 fromFlowDef :: TElement (a -> s -> Flow s a -> a)
 fromFlowDef = flowsDefinition "fromFlow" $
@@ -166,7 +138,6 @@ fromFlowDef = flowsDefinition "fromFlow" $
     (lambda "xmo" $ var "xmo")
     (Compute.flowStateValue $ (Compute.unFlow (var "f") (var "cx") (ref emptyTraceDef)))
 
--- TODO: consider removing bind and map from the module, as they are present as primitive functions
 mapDef :: TElement ((a -> b) -> Flow s a -> Flow s b)
 mapDef = flowsDefinition "map" $
   doc "Map a function over a flow" $
@@ -209,7 +180,7 @@ mutateTraceDef = flowsDefinition "mutateTrace" $
     eitherT l r = Types.applyMany [TypeVariable _Either, l, r]
 
 pureDef :: TElement (a -> Flow s a)
-pureDef = flowsDefinition "pureInternal" $
+pureDef = flowsDefinition "pure" $
   lambda "xp" $ wrap _Flow $ lambdas ["s", "t"] $ Compute.flowState (just $ var "xp") (var "s") (var "t")
 
 pushErrorDef :: TElement (String -> Trace -> Trace)
