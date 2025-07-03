@@ -43,8 +43,8 @@ emptyTrace = Compute.Trace {
   Compute.traceMessages = [],
   Compute.traceOther = Maps.empty}
 
-failInternal :: (String -> Compute.Flow t0 t1)
-failInternal msg = (Compute.Flow (\s -> \t -> Compute.FlowState {
+fail :: (String -> Compute.Flow t0 t1)
+fail msg = (Compute.Flow (\s -> \t -> Compute.FlowState {
   Compute.flowStateValue = Nothing,
   Compute.flowStateState = s,
   Compute.flowStateTrace = (pushError msg t)}))
@@ -82,8 +82,8 @@ mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->
     Mantle.EitherLeft v1 -> (forLeft v1)
     Mantle.EitherRight v1 -> (forRight v1)) (mutate t0))))
 
-pureInternal :: (t0 -> Compute.Flow t1 t0)
-pureInternal xp = (Compute.Flow (\s -> \t -> Compute.FlowState {
+pure :: (t0 -> Compute.Flow t1 t0)
+pure xp = (Compute.Flow (\s -> \t -> Compute.FlowState {
   Compute.flowStateValue = (Just xp),
   Compute.flowStateState = s,
   Compute.flowStateTrace = t}))

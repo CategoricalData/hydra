@@ -65,7 +65,7 @@ import Hydra.Constraints
 import Hydra.Core
 import Hydra.CoreLanguage
 import Hydra.Errors
-import Hydra.Flows
+import Hydra.Flows hiding (fail, pure)
 import Hydra.Formatting
 import Hydra.Graph
 import Hydra.Inference
