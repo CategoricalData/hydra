@@ -53,7 +53,7 @@ import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
-import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
@@ -126,11 +126,11 @@ languageAdapterDef :: TElement (Language -> Type -> Flow Graph (SymmetricAdapter
 languageAdapterDef = adaptersDefinition "languageAdapter" $
   doc "Given a target language and a source type, produce an adapter, which rewrites the type and its terms according to the language's constraints" $
   lambdas ["lang", "typ"] $
-    withVar "g" (ref Errors.getStateDef) $ lets [
+    withVar "g" (ref Monads.getStateDef) $ lets [
       "cx0">: Coders.adapterContext (var "g") (var "lang") Maps.empty] $
     withVar "result" (ref Monads.withStateDef @@ var "cx0" @@
       (withVar "ad" (ref TermAdapters.termAdapterDef @@ var "typ") $
-       withVar "cx" (ref Errors.getStateDef) $
+       withVar "cx" (ref Monads.getStateDef) $
        Flows.pure $ pair (var "ad") (var "cx"))) $ lets [
       "adapter">: first $ var "result",
       "cx">: second $ var "result",

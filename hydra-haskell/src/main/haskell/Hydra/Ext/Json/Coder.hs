@@ -8,7 +8,7 @@ import Hydra.Variants
 import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Literals
 import Hydra.Rewriting
-import Hydra.Errors
+import Hydra.Monads hiding (fail, pure)
 import Hydra.Adapters
 import Hydra.TermAdapters
 import Hydra.Ext.Json.Language

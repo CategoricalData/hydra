@@ -53,7 +53,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
-import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
@@ -83,7 +83,7 @@ coreDecodingDefinition = definitionInModule decodeCoreModule
 
 decodeCoreModule :: Module
 decodeCoreModule = Module (Namespace "hydra.decode.core") elements
-    [Errors.hydraErrorsModule, ExtractCore.extractCoreModule, Monads.hydraMonadsModule, Lexical.hydraLexicalModule,
+    [ExtractCore.extractCoreModule, Monads.hydraMonadsModule, Lexical.hydraLexicalModule,
       Rewriting.hydraRewritingModule, ShowCore.showCoreModule]
     [Tier1.hydraCodersModule, Tier1.hydraMantleModule] $
     Just ("Decoding of encoded types (as terms) back to types according to LambdaGraph's epsilon encoding.")
@@ -132,7 +132,7 @@ fieldTypesDef = coreDecodingDefinition "fieldTypes" $
   lambda "term" $ lets [
     "stripped">: ref Strip.fullyStripTermDef @@ var "term"]
     $ cases _Term (var "stripped")
-        (Just $ ref Errors.unexpectedDef @@ string "list" @@ (ref ShowCore.termDef @@ var "term")) [
+        (Just $ ref Monads.unexpectedDef @@ string "list" @@ (ref ShowCore.termDef @@ var "term")) [
       _Term_list>>: lambda "els" $ Flows.mapList (ref fieldTypeDef) (var "els")]
 
 floatTypeDef :: TElement (Term -> Flow Graph FloatType)
@@ -299,7 +299,7 @@ matchRecordDef = coreDecodingDefinition "matchRecord" $
   lambdas ["decode", "term"] $ lets [
     "stripped">: ref Strip.fullyStripTermDef @@ var "term"]
     $ cases _Term (var "stripped")
-        (Just $ ref Errors.unexpectedDef @@ string "record" @@ (ref ShowCore.termDef @@ var "term")) [
+        (Just $ ref Monads.unexpectedDef @@ string "record" @@ (ref ShowCore.termDef @@ var "term")) [
       _Term_record>>: lambda "record" $ var "decode" @@
         (Maps.fromList $ Lists.map
           (lambda "field" $ pair (Core.fieldName $ var "field") (Core.fieldTerm $ var "field"))
@@ -311,7 +311,7 @@ matchUnionDef = coreDecodingDefinition "matchUnion" $
     "stripped">: ref Strip.fullyStripTermDef @@ var "term",
     "mapping">: Maps.fromList $ var "pairs"]
     $ cases _Term (var "stripped")
-        (Just $ ref Errors.unexpectedDef @@
+        (Just $ ref Monads.unexpectedDef @@
           ("union with one of {" ++ (Strings.intercalate ", " $ Lists.map (lambda "pair" $ Core.unName $ first $ var "pair") $ var "pairs") ++ "}") @@
           (ref ShowCore.termDef @@ var "stripped")) [
       _Term_variable>>: lambda "name" $
@@ -326,7 +326,7 @@ matchUnionDef = coreDecodingDefinition "matchUnion" $
               (Flows.fail $ "no matching case for field " ++ (Core.unName $ var "fname"))
               (lambda "f" $ var "f" @@ var "val")
               (Maps.lookup (var "fname") (var "mapping")))
-          (ref Errors.unexpectedDef @@ ("injection for type " ++ (Core.unName $ var "tname")) @@ (ref ShowCore.termDef @@ var "term"))]
+          (ref Monads.unexpectedDef @@ ("injection for type " ++ (Core.unName $ var "tname")) @@ (ref ShowCore.termDef @@ var "term"))]
 
 matchUnitFieldDef :: TElement (Name -> y -> (Name, x -> Flow Graph y))
 matchUnitFieldDef = coreDecodingDefinition "matchUnitField" $

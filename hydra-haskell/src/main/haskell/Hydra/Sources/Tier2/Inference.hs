@@ -53,7 +53,7 @@ import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
-import qualified Hydra.Sources.Tier2.Errors as Errors
+--import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
@@ -607,7 +607,7 @@ inferInGraphContextDef :: TElement (Term -> Flow Graph InferenceResult)
 inferInGraphContextDef = inferenceDefinition "inferInGraphContext" $
   doc "Infer the type of a term in graph context" $
   lambda "term" $
-    withVar "g" (ref Errors.getStateDef) $
+    withVar "g" (ref Monads.getStateDef) $
     withVar "cx" (ref graphToInferenceContextDef @@ var "g") $
     ref inferTypeOfTermDef @@ var "cx" @@ var "term" @@ string "single term"
 

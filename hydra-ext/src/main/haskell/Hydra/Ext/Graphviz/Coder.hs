@@ -62,7 +62,7 @@ termToAccessorDotStmts namespaces term = (nodeStmt <$> nodes) ++ (edgeStmt <$> e
       = Dot.StmtNode $ Dot.NodeStmt (toNodeId $ Dot.Id uniqueLabel) $ Just $ Dot.AttrList [[labelAttr rawLabel]]
     edgeStmt (AccessorEdge (AccessorNode _ _ lab1) (AccessorPath path) (AccessorNode _ _ lab2))
       = toEdgeStmt (Dot.Id lab1) (Dot.Id lab2) $ Just $ Dot.AttrList [[labelAttr $ showPath path]]
-    showPath path = L.intercalate "/" $ Y.catMaybes (ShowAccessors.showTermAccessor <$> path)
+    showPath path = L.intercalate "/" $ Y.catMaybes (ShowAccessors.termAccessor <$> path)
 
 termToDotStmts :: M.Map Namespace String -> Term -> [Dot.Stmt]
 termToDotStmts namespaces term = fst $ encode Nothing False M.empty Nothing ([], S.empty) (TermAccessorAnnotatedSubject, term)
@@ -105,7 +105,7 @@ termToDotStmts namespaces term = fst $ encode Nothing False M.empty Nothing ([],
           Just parent -> [toAccessorEdgeStmt accessor style parent selfId]
         toAccessorEdgeStmt accessor style i1 i2 = toEdgeStmt i1 i2 attrs
           where
-            attrs = fmap (labelAttrs style) (ShowAccessors.showTermAccessor accessor)
+            attrs = fmap (labelAttrs style) (ShowAccessors.termAccessor accessor)
         edgeAttrs lab = Dot.AttrList [[Dot.EqualityPair (Dot.Id "label") (Dot.Id lab)]]
         nodeStmt = Dot.StmtNode $ Dot.NodeStmt {
           Dot.nodeStmtId = toNodeId selfId,

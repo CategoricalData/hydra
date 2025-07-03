@@ -44,7 +44,6 @@ import qualified Hydra.Sources.Tier2.Arity            as Arity
 import qualified Hydra.Sources.Tier2.CoreLanguage     as CoreLanguage
 import qualified Hydra.Sources.Tier2.Decode.Core      as DecodeCore
 import qualified Hydra.Sources.Tier2.Describe.Core    as DescribeCore
-import qualified Hydra.Sources.Tier2.Errors           as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core     as ExtractCore
 import qualified Hydra.Sources.Tier2.Monads           as Monads
 import qualified Hydra.Sources.Tier2.GrammarToModule  as GrammarToModule
@@ -191,12 +190,13 @@ constructModuleDef = haskellCoderDefinition "constructModule" $ lambdas ["namesp
           H._Import_as>>: Optionals.map (unaryFunction $ wrap H._ModuleName) (var "malias"),
           H._Import_spec>>: var "spec"]] $
       Lists.map (var "toImport") $ list [
-        pair (pair (string "Prelude") nothing) (list [string "Enum", string "Ordering", string "map", string "pure", string "sum"]),
+        pair (pair (string "Prelude") nothing) (list $ string <$> [
+          "Enum", "Ordering", "fail", "map", "pure", "sum"]),
         pair (pair (string "Data.Int") (just $ string "I")) (list []),
         pair (pair (string "Data.List") (just $ string "L")) (list []),
         pair (pair (string "Data.Map") (just $ string "M")) (list []),
         pair (pair (string "Data.Set") (just $ string "S")) (list [])]] $
-    withVar "g" (ref Errors.getStateDef) $
+    withVar "g" (ref Monads.getStateDef) $
     withVar "declLists" (Flows.mapList (var "createDeclarations" @@ var "g") (var "pairs")) $ lets [
     "decls">: Lists.concat $ var "declLists",
     "mc">: Module.moduleDescription $ var "mod"] $
@@ -777,7 +777,7 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
           H._OrdinaryConstructor_fields>>: var "typeList"],
         H._ConstructorWithComments_comments>>: var "comments"]] $
     ref Monads.withTraceDef @@ (Strings.cat2 (string "type element ") (Core.unName $ var "elementName")) @@ (
-      withVar "g" (ref Errors.getStateDef) $
+      withVar "g" (ref Monads.getStateDef) $
       withVar "t" (ref DecodeCore.typeDef @@ var "term") $
       withVar "isSer" (ref Schemas.isSerializableDef @@ var "el") $ lets [
       "deriv">: wrap H._Deriving $ Logic.ifElse (var "isSer")
