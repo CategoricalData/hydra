@@ -55,7 +55,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Tier2.Flows as Flows_
+import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
@@ -82,7 +82,7 @@ lexicalDefinition = definitionInModule hydraLexicalModule
 
 hydraLexicalModule :: Module
 hydraLexicalModule = Module (Namespace "hydra.lexical") elements
-   [Errors.hydraErrorsModule, Flows_.hydraFlowsModule, Strip.hydraStripModule]
+   [Errors.hydraErrorsModule, Monads.hydraMonadsModule, Strip.hydraStripModule]
    [Tier1.hydraGraphModule, Tier1.hydraMantleModule] $
     Just ("A module for lexical operations over graphs.")
   where
@@ -234,4 +234,4 @@ withSchemaContextDef :: TElement (Flow Graph x -> Flow Graph x)
 withSchemaContextDef = lexicalDefinition "withSchemaContext" $
   lambda "f" $
     Flows.bind (ref Errors.getStateDef) $
-    lambda "g" $ ref Flows_.withStateDef @@ (ref schemaContextDef @@ var "g") @@ var "f"
+    lambda "g" $ ref Monads.withStateDef @@ (ref schemaContextDef @@ var "g") @@ var "f"

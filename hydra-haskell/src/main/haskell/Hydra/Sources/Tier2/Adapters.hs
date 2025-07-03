@@ -55,7 +55,7 @@ import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Tier2.Flows as Flows_
+import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 import qualified Hydra.Sources.Tier2.Lexical as Lexical
@@ -114,7 +114,7 @@ constructCoderDef :: TElement (Language -> (Term -> Flow Graph c) -> Type -> Flo
 constructCoderDef = adaptersDefinition "constructCoder" $
   doc "Given a target language, a unidirectional last-mile encoding, and a source type, construct a unidirectional adapting coder for terms of that type" $
   lambdas ["lang", "encodeTerm", "typ"] $
-    ref Flows_.withTraceDef
+    ref Monads.withTraceDef
       @@ (Strings.cat2 (string "coder for ") (ref DescribeCore.typeDef @@ var "typ"))
       @@ (withVar "adapter" (ref languageAdapterDef @@ var "lang" @@ var "typ") $
           Flows.pure $ ref AdapterUtils.composeCodersDef
@@ -127,15 +127,15 @@ languageAdapterDef = adaptersDefinition "languageAdapter" $
   lambdas ["lang", "typ"] $
     withVar "g" (ref Errors.getStateDef) $ lets [
       "cx0">: Coders.adapterContext (var "g") (var "lang") Maps.empty] $
-    withVar "result" (ref Flows_.withStateDef @@ var "cx0" @@
+    withVar "result" (ref Monads.withStateDef @@ var "cx0" @@
       (withVar "ad" (ref TermAdapters.termAdapterDef @@ var "typ") $
        withVar "cx" (ref Errors.getStateDef) $
        Flows.pure $ pair (var "ad") (var "cx"))) $ lets [
       "adapter">: first $ var "result",
       "cx">: second $ var "result",
-      "encode">: lambda "term" $ ref Flows_.withStateDef @@ var "cx" @@
+      "encode">: lambda "term" $ ref Monads.withStateDef @@ var "cx" @@
         (Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "term"),
-      "decode">: lambda "term" $ ref Flows_.withStateDef @@ var "cx" @@
+      "decode">: lambda "term" $ ref Monads.withStateDef @@ var "cx" @@
         (Compute.coderDecode (Compute.adapterCoder $ var "adapter") @@ var "term"),
       "ac">: Compute.coder (var "encode") (var "decode")] $
     Flows.pure $ Compute.adapterWithCoder (var "adapter") (var "ac")
@@ -144,7 +144,7 @@ transformModuleDef :: TElement (Language -> (Term -> Flow Graph e) -> (Module ->
 transformModuleDef = adaptersDefinition "transformModule" $
   doc "Given a target language, a unidirectional last mile encoding, and an intermediate helper function, transform a given module into a target representation" $
   lambdas ["lang", "encodeTerm", "createModule", "mod"] $
-    ref Flows_.withTraceDef
+    ref Monads.withTraceDef
       @@ (Strings.cat2 (string "transform module ") (unwrap _Namespace @@ (Module.moduleNamespace $ var "mod")))
       @@ (lets [
         "els">: Module.moduleElements $ var "mod",

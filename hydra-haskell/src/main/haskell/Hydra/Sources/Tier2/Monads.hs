@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier2.Flows where
+module Hydra.Sources.Tier2.Monads where
 
 -- Standard Tier-2 imports
 import Hydra.Kernel
@@ -57,7 +57,7 @@ import Hydra.Mantle
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
---import qualified Hydra.Sources.Tier2.Flows as Flows_
+--import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
@@ -80,13 +80,13 @@ import Hydra.Mantle
 
 
 flowsDefinition :: String -> TTerm a -> TElement a
-flowsDefinition = definitionInModule hydraFlowsModule
+flowsDefinition = definitionInModule hydraMonadsModule
 
-hydraFlowsModule :: Module
-hydraFlowsModule = Module (Namespace "hydra.flows") elements
+hydraMonadsModule :: Module
+hydraMonadsModule = Module (Namespace "hydra.monads") elements
     [Constants.hydraConstantsModule]
     [Tier1.hydraMantleModule, Tier1.hydraComputeModule] $
-    Just ("Functions for working with flows (the Hydra state monad).")
+    Just ("Functions for working with Hydra's 'flow' and other monads.")
   where
     elements = [
       el bindDef,

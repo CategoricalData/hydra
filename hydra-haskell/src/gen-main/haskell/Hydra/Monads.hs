@@ -1,6 +1,6 @@
--- | Functions for working with flows (the Hydra state monad).
+-- | Functions for working with Hydra's 'flow' and other monads.
 
-module Hydra.Flows where
+module Hydra.Monads where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
@@ -28,15 +28,6 @@ bind l r =
             Compute.flowStateTrace = (Compute.flowStateTrace fs1)}) (\v -> Compute.unFlow (r v) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1)) (Compute.flowStateValue fs1)))
   in (Compute.Flow q)
 
-bind2 :: (Compute.Flow t2 t0 -> Compute.Flow t2 t3 -> (t0 -> t3 -> Compute.Flow t2 t1) -> Compute.Flow t2 t1)
-bind2 f1 f2 f = (bind f1 (\r1 -> bind f2 (\r2 -> f r1 r2)))
-
-bind3 :: (Compute.Flow t3 t0 -> Compute.Flow t3 t1 -> Compute.Flow t3 t4 -> (t0 -> t1 -> t4 -> Compute.Flow t3 t2) -> Compute.Flow t3 t2)
-bind3 f1 f2 f3 f = (bind f1 (\r1 -> bind f2 (\r2 -> bind f3 (\r3 -> f r1 r2 r3))))
-
-bind4 :: (Compute.Flow t4 t0 -> Compute.Flow t4 t1 -> Compute.Flow t4 t2 -> Compute.Flow t4 t5 -> (t0 -> t1 -> t2 -> t5 -> Compute.Flow t4 t3) -> Compute.Flow t4 t3)
-bind4 f1 f2 f3 f4 f = (bind f1 (\r1 -> bind f2 (\r2 -> bind f3 (\r3 -> bind f4 (\r4 -> f r1 r2 r3 r4)))))
-
 emptyTrace :: Compute.Trace
 emptyTrace = Compute.Trace {
   Compute.traceStack = [],
@@ -50,7 +41,7 @@ fail msg = (Compute.Flow (\s -> \t -> Compute.FlowState {
   Compute.flowStateTrace = (pushError msg t)}))
 
 flowSucceeds :: (t0 -> Compute.Flow t0 t1 -> Bool)
-flowSucceeds cx f = (Optionals.isJust (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
+flowSucceeds s f = (Optionals.isJust (Compute.flowStateValue (Compute.unFlow f s emptyTrace)))
 
 fromFlow :: (t1 -> t0 -> Compute.Flow t0 t1 -> t1)
 fromFlow def cx f = (Optionals.maybe def (\xmo -> xmo) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))

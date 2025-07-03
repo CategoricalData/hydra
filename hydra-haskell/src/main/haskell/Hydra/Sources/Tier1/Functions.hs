@@ -33,13 +33,7 @@ hydraFunctionsModule = Module (Namespace "hydra.functions") elements [] [hydraCo
     Just "Various general-purpose helper functions."
   where
     elements = [
-      el idDef,
       el optionalToListDef]
-
-idDef :: TElement (a -> a)
-idDef = functionsDefinition "id" $
-  doc "The identity function" $
-  lambda "any_" $ var "any_"
 
 optionalToListDef :: TElement (Maybe a -> [a])
 optionalToListDef = functionsDefinition "optionalToList" $

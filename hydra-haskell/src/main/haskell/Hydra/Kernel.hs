@@ -24,7 +24,7 @@ module Hydra.Kernel (
   module Hydra.Core,
   module Hydra.CoreLanguage,
   module Hydra.Errors,
-  module Hydra.Flows,
+  module Hydra.Monads,
   module Hydra.Formatting,
   module Hydra.Graph,
   module Hydra.Inference,
@@ -65,7 +65,7 @@ import Hydra.Constraints
 import Hydra.Core
 import Hydra.CoreLanguage
 import Hydra.Errors
-import Hydra.Flows hiding (fail, pure)
+import Hydra.Monads hiding (fail, pure)
 import Hydra.Formatting
 import Hydra.Graph
 import Hydra.Inference

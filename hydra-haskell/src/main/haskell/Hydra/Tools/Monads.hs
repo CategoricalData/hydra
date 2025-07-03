@@ -4,7 +4,7 @@ module Hydra.Tools.Monads where
 
 import Hydra.Compute
 import Hydra.Errors
-import Hydra.Flows
+import Hydra.Monads
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Lib.Flows as Flows
 

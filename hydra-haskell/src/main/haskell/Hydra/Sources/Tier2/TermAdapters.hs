@@ -56,7 +56,7 @@ import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Tier2.Flows as Flows_
+import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
@@ -137,7 +137,7 @@ forTypeReferenceDef :: TElement (Name -> Flow AdapterContext (SymmetricAdapter A
 forTypeReferenceDef = termAdaptersDefinition "forTypeReference" $
   doc "This function accounts for recursive type definitions" $
   lambda "name" $
-    ref Flows_.withTraceDef
+    ref Monads.withTraceDef
       @@ (Strings.cat2 (string "adapt named type ") (unwrap _Name @@ var "name"))
       @@ (lets [
         "lossy">: false,
@@ -737,7 +737,7 @@ termAdapterDef = termAdaptersDefinition "termAdapter" $
            (var "pass" @@ var "t")
            (var "trySubstitution" @@ var "t")] $
     cases _Type (var "typ")
-      (Just $ ref Flows_.withTraceDef
+      (Just $ ref Monads.withTraceDef
         @@ (Strings.cat2 (string "adapter for ") (ref DescribeCore.typeDef @@ var "typ"))
         @@ (cases _Type (var "typ")
           (Just $
@@ -760,4 +760,4 @@ withGraphContextDef = termAdaptersDefinition "withGraphContext" $
   doc "Execute a flow with graph context" $
   lambda "f" $
     Flows.bind (ref Errors.getStateDef) $ lambda "cx" $
-      ref Flows_.withStateDef @@ (Coders.adapterContextGraph $ var "cx") @@ var "f"
+      ref Monads.withStateDef @@ (Coders.adapterContextGraph $ var "cx") @@ var "f"

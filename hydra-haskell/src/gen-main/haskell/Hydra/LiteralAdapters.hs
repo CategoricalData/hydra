@@ -9,10 +9,9 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Describe.Core as Core_
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core__
-import qualified Hydra.Flows as Flows
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Flows as Flows_
+import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -20,6 +19,7 @@ import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Show.Core as Core___
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, map, pure, sum)
@@ -91,35 +91,35 @@ literalAdapter lt =
           Core.LiteralTypeBinary ->  
             let step = Compute.Coder {
                     Compute.coderEncode = (\lit -> (\x -> case x of
-                      Core.LiteralBinary v2 -> (Flows_.pure (Core.LiteralString (Literals.binaryToString v2)))) lit),
+                      Core.LiteralBinary v2 -> (Flows.pure (Core.LiteralString (Literals.binaryToString v2)))) lit),
                     Compute.coderDecode = (\lit -> (\x -> case x of
-                      Core.LiteralString v2 -> (Flows_.pure (Core.LiteralBinary (Literals.stringToBinary v2)))) lit)}
-            in (Flows_.pure [
+                      Core.LiteralString v2 -> (Flows.pure (Core.LiteralBinary (Literals.stringToBinary v2)))) lit)}
+            in (Flows.pure [
               Compute.Adapter {
                 Compute.adapterIsLossy = False,
                 Compute.adapterSource = t,
                 Compute.adapterTarget = Core.LiteralTypeString,
                 Compute.adapterCoder = step}])
-          Core.LiteralTypeBoolean -> (Flows_.bind Errors.getState (\cx ->  
+          Core.LiteralTypeBoolean -> (Flows.bind Errors.getState (\cx ->  
             let constraints = (Coders.languageConstraints (Coders.adapterContextLanguage cx)) 
                 hasIntegers = (Logic.not (Sets.null (Coders.languageConstraintsIntegerTypes constraints)))
                 hasStrings = (Sets.member Mantle.LiteralVariantString (Coders.languageConstraintsLiteralVariants constraints))
-            in (Logic.ifElse hasIntegers (Flows_.bind (integerAdapter Core.IntegerTypeUint8) (\adapter ->  
+            in (Logic.ifElse hasIntegers (Flows.bind (integerAdapter Core.IntegerTypeUint8) (\adapter ->  
               let step_ = (Compute.adapterCoder adapter) 
                   step = Compute.Coder {
                           Compute.coderEncode = (\lit -> (\x -> case x of
-                            Core.LiteralBoolean v2 -> (Flows_.bind (Compute.coderEncode step_ (Core.IntegerValueUint8 (Logic.ifElse v2 1 0))) (\iv -> Flows_.pure (Core.LiteralInteger iv)))) lit),
+                            Core.LiteralBoolean v2 -> (Flows.bind (Compute.coderEncode step_ (Core.IntegerValueUint8 (Logic.ifElse v2 1 0))) (\iv -> Flows.pure (Core.LiteralInteger iv)))) lit),
                           Compute.coderDecode = (\lit -> (\x -> case x of
-                            Core.LiteralInteger v2 -> (Flows_.bind (Compute.coderDecode step_ v2) (\val -> (\x -> case x of
-                              Core.IntegerValueUint8 v3 -> (Flows_.pure (Core.LiteralBoolean (Equality.equal v3 1)))) val))) lit)}
-              in (Flows_.pure [
+                            Core.LiteralInteger v2 -> (Flows.bind (Compute.coderDecode step_ v2) (\val -> (\x -> case x of
+                              Core.IntegerValueUint8 v3 -> (Flows.pure (Core.LiteralBoolean (Equality.equal v3 1)))) val))) lit)}
+              in (Flows.pure [
                 Compute.Adapter {
                   Compute.adapterIsLossy = False,
                   Compute.adapterSource = t,
                   Compute.adapterTarget = (Core.LiteralTypeInteger (Compute.adapterTarget adapter)),
-                  Compute.adapterCoder = step}]))) (Logic.ifElse hasStrings (Flows_.pure ( 
-              let encode = (\lit -> Flows_.bind (Core__.booleanLiteral lit) (\b -> Flows_.pure (Core.LiteralString (Logic.ifElse b "true" "false")))) 
-                  decode = (\lit -> Flows_.bind (Core__.stringLiteral lit) (\s -> Logic.ifElse (Equality.equalString s "true") (Flows_.pure (Core.LiteralBoolean True)) (Logic.ifElse (Equality.equalString s "false") (Flows_.pure (Core.LiteralBoolean False)) (Errors.unexpected "boolean literal" s))))
+                  Compute.adapterCoder = step}]))) (Logic.ifElse hasStrings (Flows.pure ( 
+              let encode = (\lit -> Flows.bind (Core__.booleanLiteral lit) (\b -> Flows.pure (Core.LiteralString (Logic.ifElse b "true" "false")))) 
+                  decode = (\lit -> Flows.bind (Core__.stringLiteral lit) (\s -> Logic.ifElse (Equality.equalString s "true") (Flows.pure (Core.LiteralBoolean True)) (Logic.ifElse (Equality.equalString s "false") (Flows.pure (Core.LiteralBoolean False)) (Errors.unexpected "boolean literal" s))))
               in [
                 Compute.Adapter {
                   Compute.adapterIsLossy = False,
@@ -127,41 +127,41 @@ literalAdapter lt =
                   Compute.adapterTarget = Core.LiteralTypeString,
                   Compute.adapterCoder = Compute.Coder {
                     Compute.coderEncode = encode,
-                    Compute.coderDecode = decode}}])) (Flows_.fail "no alternatives available for boolean encoding")))))
-          Core.LiteralTypeFloat v1 -> (Flows_.bind Errors.getState (\cx ->  
+                    Compute.coderDecode = decode}}])) (Flows.fail "no alternatives available for boolean encoding")))))
+          Core.LiteralTypeFloat v1 -> (Flows.bind Errors.getState (\cx ->  
             let constraints = (Coders.languageConstraints (Coders.adapterContextLanguage cx)) 
                 hasFloats = (Logic.not (Sets.null (Coders.languageConstraintsFloatTypes constraints)))
-            in (Logic.ifElse hasFloats (Flows_.bind (floatAdapter v1) (\adapter ->  
+            in (Logic.ifElse hasFloats (Flows.bind (floatAdapter v1) (\adapter ->  
               let step = (AdapterUtils.bidirectional (\dir -> \l -> (\x -> case x of
-                      Core.LiteralFloat v2 -> (Flows_.map (\x -> Core.LiteralFloat x) (AdapterUtils.encodeDecode dir (Compute.adapterCoder adapter) v2))
+                      Core.LiteralFloat v2 -> (Flows.map (\x -> Core.LiteralFloat x) (AdapterUtils.encodeDecode dir (Compute.adapterCoder adapter) v2))
                       _ -> (Errors.unexpected "floating-point literal" (Core___.literal l))) l))
-              in (Flows_.pure [
+              in (Flows.pure [
                 Compute.Adapter {
                   Compute.adapterIsLossy = (Compute.adapterIsLossy adapter),
                   Compute.adapterSource = t,
                   Compute.adapterTarget = (Core.LiteralTypeFloat (Compute.adapterTarget adapter)),
-                  Compute.adapterCoder = step}]))) (Flows_.fail "no float types available"))))
-          Core.LiteralTypeInteger v1 -> (Flows_.bind Errors.getState (\cx ->  
+                  Compute.adapterCoder = step}]))) (Flows.fail "no float types available"))))
+          Core.LiteralTypeInteger v1 -> (Flows.bind Errors.getState (\cx ->  
             let constraints = (Coders.languageConstraints (Coders.adapterContextLanguage cx)) 
                 hasIntegers = (Logic.not (Sets.null (Coders.languageConstraintsIntegerTypes constraints)))
-            in (Logic.ifElse hasIntegers (Flows_.bind (integerAdapter v1) (\adapter ->  
+            in (Logic.ifElse hasIntegers (Flows.bind (integerAdapter v1) (\adapter ->  
               let step = (AdapterUtils.bidirectional (\dir -> \lit -> (\x -> case x of
-                      Core.LiteralInteger v2 -> (Flows_.map (\x -> Core.LiteralInteger x) (AdapterUtils.encodeDecode dir (Compute.adapterCoder adapter) v2))
+                      Core.LiteralInteger v2 -> (Flows.map (\x -> Core.LiteralInteger x) (AdapterUtils.encodeDecode dir (Compute.adapterCoder adapter) v2))
                       _ -> (Errors.unexpected "integer literal" (Core___.literal lit))) lit))
-              in (Flows_.pure [
+              in (Flows.pure [
                 Compute.Adapter {
                   Compute.adapterIsLossy = (Compute.adapterIsLossy adapter),
                   Compute.adapterSource = t,
                   Compute.adapterTarget = (Core.LiteralTypeInteger (Compute.adapterTarget adapter)),
-                  Compute.adapterCoder = step}]))) (Flows_.fail "no integer types available"))))
-          Core.LiteralTypeString -> (Flows_.fail "no substitute for the literal string type")) t)
-  in (Flows_.bind Errors.getState (\cx ->  
+                  Compute.adapterCoder = step}]))) (Flows.fail "no integer types available"))))
+          Core.LiteralTypeString -> (Flows.fail "no substitute for the literal string type")) t)
+  in (Flows.bind Errors.getState (\cx ->  
     let supported = (AdapterUtils.literalTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
     in (AdapterUtils.chooseAdapter alts supported Core___.literalType Core_.literalType lt)))
 
 floatAdapter :: (Core.FloatType -> Compute.Flow Coders.AdapterContext (Compute.Adapter t0 t1 Core.FloatType Core.FloatType Core.FloatValue Core.FloatValue))
 floatAdapter ft =  
-  let alts = (\t -> Flows_.mapList (makeAdapter t) ((\x -> case x of
+  let alts = (\t -> Flows.mapList (makeAdapter t) ((\x -> case x of
           Core.FloatTypeBigfloat -> [
             Core.FloatTypeFloat64,
             Core.FloatTypeFloat32]
@@ -174,15 +174,15 @@ floatAdapter ft =
       makeAdapter = (\source -> \target ->  
               let lossy = (Equality.equal (comparePrecision (Variants.floatTypePrecision source) (Variants.floatTypePrecision target)) Graph.ComparisonGreaterThan) 
                   step = Compute.Coder {
-                          Compute.coderEncode = (\fv -> Flows_.pure (convertFloatValue target fv)),
-                          Compute.coderDecode = (\fv -> Flows_.pure (convertFloatValue source fv))}
+                          Compute.coderEncode = (\fv -> Flows.pure (convertFloatValue target fv)),
+                          Compute.coderDecode = (\fv -> Flows.pure (convertFloatValue source fv))}
                   msg = (disclaimer lossy (Core_.floatType source) (Core_.floatType target))
-              in (Flows.warn msg (Flows_.pure (Compute.Adapter {
+              in (Monads.warn msg (Flows.pure (Compute.Adapter {
                 Compute.adapterIsLossy = lossy,
                 Compute.adapterSource = source,
                 Compute.adapterTarget = target,
                 Compute.adapterCoder = step}))))
-  in (Flows_.bind Errors.getState (\cx ->  
+  in (Flows.bind Errors.getState (\cx ->  
     let supported = (AdapterUtils.floatTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
     in (AdapterUtils.chooseAdapter alts supported Core___.floatType Core_.floatType ft)))
 
@@ -207,7 +207,7 @@ integerAdapter it =
               [
                 Core.IntegerTypeBigint],
               (Lists.drop (Math.add (Math.sub 8 (Math.mul i 2)) 1) unsignedNonPref)])
-      alts = (\t -> Flows_.mapList (makeAdapter t) ((\x -> case x of
+      alts = (\t -> Flows.mapList (makeAdapter t) ((\x -> case x of
               Core.IntegerTypeBigint -> (Lists.reverse unsignedPref)
               Core.IntegerTypeInt8 -> (signed 1)
               Core.IntegerTypeInt16 -> (signed 2)
@@ -220,14 +220,14 @@ integerAdapter it =
       makeAdapter = (\source -> \target ->  
               let lossy = (Logic.not (Equality.equal (comparePrecision (Variants.integerTypePrecision source) (Variants.integerTypePrecision target)) Graph.ComparisonLessThan)) 
                   step = Compute.Coder {
-                          Compute.coderEncode = (\iv -> Flows_.pure (convertIntegerValue target iv)),
-                          Compute.coderDecode = (\iv -> Flows_.pure (convertIntegerValue source iv))}
+                          Compute.coderEncode = (\iv -> Flows.pure (convertIntegerValue target iv)),
+                          Compute.coderDecode = (\iv -> Flows.pure (convertIntegerValue source iv))}
                   msg = (disclaimer lossy (Core_.integerType source) (Core_.integerType target))
-              in (Flows.warn msg (Flows_.pure (Compute.Adapter {
+              in (Monads.warn msg (Flows.pure (Compute.Adapter {
                 Compute.adapterIsLossy = lossy,
                 Compute.adapterSource = source,
                 Compute.adapterTarget = target,
                 Compute.adapterCoder = step}))))
-  in (Flows_.bind Errors.getState (\cx ->  
+  in (Flows.bind Errors.getState (\cx ->  
     let supported = (AdapterUtils.integerTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
     in (AdapterUtils.chooseAdapter alts supported Core___.integerType Core_.integerType it)))

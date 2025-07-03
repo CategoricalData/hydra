@@ -55,7 +55,7 @@ import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Tier2.Flows as Flows_
+import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
@@ -82,7 +82,7 @@ literalAdaptersDefinition = definitionInModule hydraLiteralAdaptersModule
 
 hydraLiteralAdaptersModule :: Module
 hydraLiteralAdaptersModule = Module (Namespace "hydra.literalAdapters") elements
-    [Errors.hydraErrorsModule, ExtractCore.extractCoreModule, Flows_.hydraFlowsModule, DescribeCore.describeCoreModule,
+    [Errors.hydraErrorsModule, ExtractCore.extractCoreModule, Monads.hydraMonadsModule, DescribeCore.describeCoreModule,
       AdapterUtils.hydraAdapterUtilsModule, ShowCore.showCoreModule, Variants.hydraVariantsModule]
     [Tier1.hydraCodersModule, Tier1.hydraModuleModule] $
     Just "Adapter framework for literal types and terms"
@@ -268,7 +268,7 @@ floatAdapterDef = literalAdaptersDefinition "floatAdapter" $
             @@ var "lossy"
             @@ (ref DescribeCore.floatTypeDef @@ var "source")
             @@ (ref DescribeCore.floatTypeDef @@ var "target")] $
-        ref Flows_.warnDef
+        ref Monads.warnDef
           @@ var "msg"
           @@ (Flows.pure (Compute.adapter (var "lossy") (var "source") (var "target") (var "step")))] $
     Flows.bind (ref Errors.getStateDef) $ lambda "cx" $
@@ -332,7 +332,7 @@ integerAdapterDef = literalAdaptersDefinition "integerAdapter" $
         @@ var "lossy"
         @@ (ref DescribeCore.integerTypeDef @@ var "source")
         @@ (ref DescribeCore.integerTypeDef @@ var "target")] $
-      ref Flows_.warnDef
+      ref Monads.warnDef
         @@ var "msg"
         @@ (Flows.pure $ Compute.adapter (var "lossy") (var "source") (var "target") (var "step"))] $
   Flows.bind (ref Errors.getStateDef) $ lambda "cx" $

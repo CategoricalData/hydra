@@ -55,7 +55,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Tier2.Flows as Flows_
+import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
@@ -79,7 +79,7 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 
 hydraErrorsModule :: Module
 hydraErrorsModule = Module (Namespace "hydra.errors") elements
-    [Variants.hydraVariantsModule, Flows_.hydraFlowsModule, ShowCore.showCoreModule]
+    [Variants.hydraVariantsModule, Monads.hydraMonadsModule, ShowCore.showCoreModule]
     [Tier1.hydraComputeModule, Tier1.hydraMantleModule] $
     Just "Utilities for working with errors and flow state"
   where
@@ -97,7 +97,7 @@ errorsDefinition = definitionInModule hydraErrorsModule
 execDef :: TElement (Flow s a -> s -> s)
 execDef = errorsDefinition "exec" $
   lambdas ["f", "s0"] $
-    Compute.flowStateState $ Compute.unFlow (var "f") (var "s0") (ref Flows_.emptyTraceDef)
+    Compute.flowStateState $ Compute.unFlow (var "f") (var "s0") (ref Monads.emptyTraceDef)
 
 getStateDef :: TElement (Flow s s)
 getStateDef = errorsDefinition "getState" $ -- Flow s s

@@ -55,7 +55,7 @@ import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
---import qualified Hydra.Sources.Tier2.Flows as Flows_
+--import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
@@ -186,7 +186,7 @@ instantiateTemplateDef = templatingDefinition "instantiateTemplate" $
 -- Example of type-to-term instantiation which creates a YAML-based template out of the OpenCypher feature model.
 
 import Hydra.Ext.Yaml.Model as Yaml
-import Hydra.Flows
+import Hydra.Monads
 import Data.Map as M
 import Data.Maybe as Y
 

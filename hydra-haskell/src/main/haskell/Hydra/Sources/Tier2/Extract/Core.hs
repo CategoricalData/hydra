@@ -55,7 +55,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
 import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Tier2.Flows as Flows_
+import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 import qualified Hydra.Sources.Tier2.Lexical as Lexical
@@ -82,7 +82,7 @@ expectDefinition = definitionInModule extractCoreModule
 
 extractCoreModule :: Module
 extractCoreModule = Module (Namespace "hydra.extract.core") elements
-    [Errors.hydraErrorsModule, Flows_.hydraFlowsModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule, ShowCore.showCoreModule]
+    [Errors.hydraErrorsModule, Monads.hydraMonadsModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule, ShowCore.showCoreModule]
     [Tier1.hydraCodersModule, Tier1.hydraMantleModule] $
     Just ("A DSL for decoding and validating Hydra terms at runtime. This module provides functions to extract typed values from Hydra terms with appropriate error handling.")
   where
