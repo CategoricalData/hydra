@@ -8,7 +8,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Formatting as Formatting
-import qualified Hydra.Functions as Functions
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
@@ -470,7 +469,7 @@ inferTypeOfCaseStatement cx caseStmt =
       in (Flows.bind freshName (\codv ->  
         let cod = (Core.TypeVariable codv) 
             caseMap = (Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) sfields))
-            dfltConstraints = (Functions.optionalToList (Optionals.map (\r -> Typing.TypeConstraint {
+            dfltConstraints = (Monads.optionalToList (Optionals.map (\r -> Typing.TypeConstraint {
                     Typing.typeConstraintLeft = cod,
                     Typing.typeConstraintRight = (Typing.inferenceResultType r),
                     Typing.typeConstraintComment = "match default"}) dfltResult))
@@ -488,7 +487,7 @@ inferTypeOfCaseStatement cx caseStmt =
             Core.fieldTerm = t}) fnames iterms)})))) (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
           Core.functionTypeCodomain = cod})) (Substitution.composeTypeSubstList (Lists.concat [
-          Functions.optionalToList (Optionals.map Typing.inferenceResultSubst dfltResult),
+          Monads.optionalToList (Optionals.map Typing.inferenceResultSubst dfltResult),
           [
             isubst,
             subst]]))) (Lists.concat [
