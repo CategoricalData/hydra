@@ -439,7 +439,7 @@ elementJavaIdentifier isPrim isMethod aliases name = Java.Identifier $ if isPrim
     QualifiedName ns local = qualifyName name
 
 elementNameToFilePath :: Name -> FilePath
-elementNameToFilePath name = nameToFilePathNew CaseConventionCamel CaseConventionPascal (FileExtension "java")
+elementNameToFilePath name = nameToFilePath CaseConventionCamel CaseConventionPascal (FileExtension "java")
     $ unqualifyName $ QualifiedName ns (sanitizeJavaName local)
   where
     QualifiedName ns local = qualifyName name

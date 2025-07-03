@@ -133,7 +133,6 @@ hydraInferenceModule = Module (Namespace "hydra.inference") elements
       el inferTypeOfTupleProjectionDef,
       el inferTypeOfTypeAbstractionDef,
       el inferTypeOfTypeApplicationDef,
-      el inferTypeOfTypedTermDef,
       el inferTypeOfUnwrapDef,
       el inferTypeOfVariableDef,
       el inferTypeOfWrappedTermDef,
@@ -1215,13 +1214,6 @@ inferTypeOfTypeApplicationDef = inferenceDefinition "inferTypeOfTypeApplication"
   lambdas ["cx", "tt"] $
     ref inferTypeOfTermDef @@ var "cx" @@ (Core.typedTermTerm $ var "tt") @@ string "type application term"
 
--- For now, type annotations are simply ignored during inference.
-inferTypeOfTypedTermDef :: TElement (InferenceContext -> TypedTerm -> Flow s InferenceResult)
-inferTypeOfTypedTermDef = inferenceDefinition "inferTypeOfTypedTerm" $
-  doc "Infer the type of a typed term" $
-  lambdas ["cx", "tt"] $
-    ref inferTypeOfTermDef @@ var "cx" @@ (Core.typedTermTerm $ var "tt") @@ string "typed term"
-
 inferTypeOfUnwrapDef :: TElement (InferenceContext -> Name -> Flow s InferenceResult)
 inferTypeOfUnwrapDef = inferenceDefinition "inferTypeOfUnwrap" $
   doc "Infer the type of an unwrap operation" $
@@ -1312,17 +1304,17 @@ inferTypesOfTemporaryLetBindingsDef = inferenceDefinition "inferTypesOfTemporary
             (Lists.cons (ref Substitution.substInTypeDef @@ var "r" @@ var "u_prime") (var "r_prime"))
             (ref Substitution.composeTypeSubstDef @@ var "u" @@ var "r")))
 
-forVarsDef :: TElement (Int -> ([Name] -> a) -> Flow s a)
-forVarsDef = inferenceDefinition "forVars" $
-  doc "Generate fresh variables and map over them" $
-  lambdas ["n", "f"] $
-    Flows.map (var "f") $ ref freshNamesDef @@ var "n"
-
 forVarDef :: TElement ((Name -> a) -> Flow s a)
 forVarDef = inferenceDefinition "forVar" $
   doc "Generate a fresh variable and map over it" $
   lambda "f" $
     Flows.map (var "f") $ ref freshNameDef
+
+forVarsDef :: TElement (Int -> ([Name] -> a) -> Flow s a)
+forVarsDef = inferenceDefinition "forVars" $
+  doc "Generate fresh variables and map over them" $
+  lambdas ["n", "f"] $
+    Flows.map (var "f") $ ref freshNamesDef @@ var "n"
 
 forInferredTermDef :: TElement (InferenceContext -> Term -> String -> (InferenceResult -> a) -> Flow s a)
 forInferredTermDef = inferenceDefinition "forInferredTerm" $

@@ -108,13 +108,9 @@ hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
      el rewriteDef,
      el rewriteTermDef,
      el rewriteTermMDef,
-     el rewriteTermMetaDef,
-     el rewriteTermMetaMDef,
      el rewriteTypeDef,
      el rewriteTypeMDef,
-     el rewriteTypeMetaDef,
      el simplifyTermDef,
-     el stripTermRecursiveDef,
      el stripTypeRecursiveDef,
      el stripTypeSchemeRecursiveDef,
      el stripTypesFromTermDef,
@@ -649,33 +645,6 @@ rewriteTermMDef = rewritingDefinition "rewriteTermM" $
       @@ var "term"]
     $ ref rewriteDef @@ var "fsub" @@ var "f"
 
-rewriteTermMetaDef :: TElement ((M.Map Name Term -> M.Map Name Term) -> Term -> Term)
-rewriteTermMetaDef = rewritingDefinition "rewriteTermMeta" $
-  doc "Rewrite term metadata/annotations" $
-  lambda "mapping" $ lets [
-    "rewrite">: lambdas ["recurse", "term"] $ lets [
-      "rewritten">: var "recurse" @@ var "term"]
-      $ match _Term (Just $ var "rewritten") [
-        _Term_annotated>>: lambda "at" $ Core.termAnnotated $ Core.annotatedTerm
-          (Core.annotatedTermSubject $ var "at")
-          (var "mapping" @@ (Core.annotatedTermAnnotation $ var "at"))] @@ var "rewritten"]
-    $ ref rewriteTermDef @@ var "rewrite"
-
-rewriteTermMetaMDef :: TElement ((M.Map Name Term -> Flow s (M.Map Name Term)) -> Term -> Flow s Term)
-rewriteTermMetaMDef = rewritingDefinition "rewriteTermMetaM" $
-  doc "Monadic rewrite of term metadata/annotations" $
-  lambda "mapping" $ lets [
-    "rewrite">: lambdas ["recurse", "term"] $
-      Flows.bind (var "recurse" @@ var "term") $
-        lambda "r" $
-          match _Term (Just $ Flows.pure $ var "r") [
-            _Term_annotated>>: lambda "at" $
-              Flows.bind (var "mapping" @@ (Core.annotatedTermAnnotation $ var "at")) $
-                lambda "newAnn" $ Flows.pure $ Core.termAnnotated $ Core.annotatedTerm
-                  (Core.annotatedTermSubject $ var "at")
-                  (var "newAnn")] @@ var "r"]
-    $ ref rewriteTermMDef @@ var "rewrite"
-
 rewriteTypeDef :: TElement (((Type -> Type) -> Type -> Type) -> Type -> Type)
 rewriteTypeDef = rewritingDefinition "rewriteType" $ lambda "f" $ lets [
   "fsub">: lambdas ["recurse", "typ"] $ lets [
@@ -780,18 +749,6 @@ rewriteTypeMDef = rewritingDefinition "rewriteTypeM" $
       @@ var "typ"]
     $ ref rewriteDef @@ var "fsub" @@ var "f"
 
-rewriteTypeMetaDef :: TElement ((M.Map Name Term -> M.Map Name Term) -> Type -> Type)
-rewriteTypeMetaDef = rewritingDefinition "rewriteTypeMeta" $
-  doc "Rewrite type metadata/annotations" $
-  lambda "mapping" $ lets [
-    "rewrite">: lambdas ["recurse", "typ"] $ lets [
-      "rewritten">: var "recurse" @@ var "typ"]
-      $ match _Type (Just $ var "rewritten") [
-        _Type_annotated>>: lambda "at" $ Core.typeAnnotated $ Core.annotatedType
-          (Core.annotatedTypeSubject $ var "at")
-          (var "mapping" @@ (Core.annotatedTypeAnnotation $ var "at"))] @@ var "rewritten"]
-    $ ref rewriteTypeDef @@ var "rewrite"
-
 simplifyTermDef :: TElement (Term -> Term)
 simplifyTermDef = rewritingDefinition "simplifyTerm" $
   doc "Simplify terms by applying beta reduction where possible" $
@@ -815,17 +772,6 @@ simplifyTermDef = rewritingDefinition "simplifyTerm" $
                       _Term_variable>>: lambda "v" $ ref simplifyTermDef @@ (ref substituteVariableDef @@ var "var" @@ var "v" @@ var "body")] @@ var "strippedRhs")
                   (ref simplifyTermDef @@ var "body")]]])]
     $ ref rewriteTermDef @@ var "simplify" @@ var "term"
-
-stripTermRecursiveDef :: TElement (Term -> Term)
-stripTermRecursiveDef = rewritingDefinition "stripTermRecursive" $
-  doc "Recursively strip all annotations from a term" $
-  lambda "term" $ lets [
-    "strip">: lambdas ["recurse", "term"] $ lets [
-      "rewritten">: var "recurse" @@ var "term"] $
-      cases _Term (var "term")
-        (Just $ var "rewritten") [
-        _Term_annotated>>: lambda "at" $ Core.annotatedTermSubject $ var "at"]] $
-    ref rewriteTermDef @@ var "strip" @@ var "term"
 
 stripTypeRecursiveDef :: TElement (Type -> Type)
 stripTypeRecursiveDef = rewritingDefinition "stripTypeRecursive" $
@@ -855,8 +801,8 @@ stripTypesFromTermDef = rewritingDefinition "stripTypesFromTerm" $
       "stripBinding">: lambda "b" $ Core.letBinding
         (Core.letBindingName $ var "b")
         (Core.letBindingTerm $ var "b")
-        nothing]
-      $ cases _Term (var "rewritten") (Just $ var "rewritten") [
+        nothing] $
+      cases _Term (var "rewritten") (Just $ var "rewritten") [
         _Term_function>>: lambda "f" $ cases _Function (var "f") (Just $ Core.termFunction $ var "f") [
           _Function_elimination>>: lambda "e" $ cases _Elimination (var "e") (Just $ Core.termFunction $ Core.functionElimination $ var "e") [
             _Elimination_product>>: lambda "tp" $ Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $

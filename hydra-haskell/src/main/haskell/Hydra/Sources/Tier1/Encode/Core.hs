@@ -465,24 +465,22 @@ wrappedTypeDef = coreEncodingDefinition "WrappedType" $
 isEncodedTypeDef :: TElement (Term -> Bool)
 isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
   doc "Determines whether a given term is an encoded type" $
-  lambda "t" $ (match _Term (Just false) [
-      TCase _Term_application --> lambda "a" $
-        ref isEncodedTypeDef @@ (Core.applicationFunction $ var "a"),
-      TCase _Term_union       --> lambda "i" $
-        Equality.equalString (string $ unName _Type) (Core.unName $ (Core.injectionTypeName $ var "i"))
-    ]) @@ (ref Strip.stripTermDef @@ var "t")
+  lambda "t" $ cases _Term (ref Strip.stripTermDef @@ var "t") (Just false) [
+    _Term_application>>: lambda "a" $
+      ref isEncodedTypeDef @@ (Core.applicationFunction $ var "a"),
+    _Term_union>>: lambda "i" $
+      Equality.equalString (string $ unName _Type) (Core.unName $ (Core.injectionTypeName $ var "i"))]
 
 isTypeDef :: TElement (Type -> Bool)
 isTypeDef = coreEncodingExtrasDefinition "isType" $
-  lambda "t" $ (match _Type (Just false) [
-      TCase _Type_application --> lambda "a" $
-        ref isTypeDef @@ (Core.applicationTypeFunction $ var "a"),
-      TCase _Type_forall --> lambda "l" $
-        ref isTypeDef @@ (Core.forallTypeBody $ var "l"),
-      TCase _Type_union --> lambda "rt" $
-        Equality.equalString (string $ unName _Type) (Core.unName $ (Core.rowTypeTypeName $ var "rt")),
-      TCase _Type_variable --> lambda "v" $ Equality.equal (var "v") (Core.nameLift _Type)
-    ]) @@ (ref Strip.stripTypeDef @@ var "t")
+  lambda "t" $ cases _Type (ref Strip.stripTypeDef @@ var "t") (Just false) [
+    _Type_application>>: lambda "a" $
+      ref isTypeDef @@ (Core.applicationTypeFunction $ var "a"),
+    _Type_forall>>: lambda "l" $
+      ref isTypeDef @@ (Core.forallTypeBody $ var "l"),
+    _Type_union>>: lambda "rt" $
+      Equality.equalString (string $ unName _Type) (Core.unName $ (Core.rowTypeTypeName $ var "rt")),
+    _Type_variable>>: lambda "v" $ Equality.equal (var "v") (Core.nameLift _Type)]
 
 isUnitTermDef :: TElement (Term -> Bool)
 isUnitTermDef = coreEncodingExtrasDefinition "isUnitTerm" $

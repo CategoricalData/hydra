@@ -32,7 +32,7 @@ f <.> g = compose f g
 fun @@ arg = apply fun arg
 
 -- | Field definition operator for records: name>: value
--- Example: "name" >: string "John"
+-- Example: "name">: string "John"
 infixr 0 >:
 (>:) :: String -> TTerm a -> Field
 name>: term = Field (Name name) (unTTerm term)
@@ -42,18 +42,6 @@ name>: term = Field (Name name) (unTTerm term)
 infixr 0 >>:
 (>>:) :: Name -> TTerm a -> Field
 fname >>: d = Field fname (unTTerm d)
-
--- | Pair constructor used in pattern matching
--- Example: "Red" @-> rgb255
-infixr 0 @->
-(@->) :: a -> b -> (a, b)
-x @-> y = (x, y)
-
--- | Case mapping operator for pattern matching
--- Example: TCase _Result_success --> string "success"
-infixr 0 -->
-(-->) :: TCase a -> TTerm (a -> b) -> Field
-c --> t = caseField c t
 
 -- * Fundamentals
 
@@ -270,42 +258,16 @@ wrap name (TTerm term) = TTerm $ Terms.wrap name term
 
 -- * Pattern matching
 
--- | Create a case field for pattern matching
--- Example: caseField (TCase "success") handleSuccess
-caseField :: TCase a -> TTerm (a -> b) -> Field
-caseField (TCase fname) (TTerm f) = Field fname f
-
 -- | Apply a named case match to an argument
 -- Example: cases resultTypeName myResult Nothing [onSuccess, onError]
 -- See also: 'match'
 cases :: Name -> TTerm a -> Maybe (TTerm b) -> [Field] -> TTerm b
 cases name arg dflt fields = TTerm $ Terms.apply (Terms.match name (unTTerm <$> dflt) fields) (unTTerm arg)
 
--- | Create a pattern match on a union
+-- | Create a pattern match on a union term
 -- Example: match (Name "Result") (Just $ string "what?") ["success">: string "yay", "error">: string "boo"]
 match :: Name -> Maybe (TTerm b) -> [Field] -> TTerm (a -> b)
 match name dflt fields = TTerm $ Terms.match name (unTTerm <$> dflt) fields
-
--- | Create a pattern match on a union with explicit handlers
--- Example: matchData (Name "Result") Nothing [(Name "success", handleSuccess), (Name "error", handleError)]
-matchData :: Name -> Maybe (TTerm b) -> [(Name, TTerm (x -> b))] -> TTerm (a -> b)
-matchData name dflt pairs = TTerm $ Terms.match name (unTTerm <$> dflt) (toField <$> pairs)
-  where
-    toField (fname, TTerm term) = Field fname term
-
--- | Create a pattern match that maps enum variants to enum variants
--- Example: matchToEnum (Name "Color") (Name "Result") Nothing [(Name "Red", Name "Success"), (Name "Green", Name "Success"), (Name "Blue", Name "Error")]
-matchToEnum :: Name -> Name -> Maybe (TTerm b) -> [(Name, Name)] -> TTerm (a -> b)
-matchToEnum domName codName dflt pairs = matchData domName dflt (toCase <$> pairs)
-  where
-    toCase (fromName, toName) = (fromName, constant $ unitVariant codName toName)
-
--- | Create a pattern match that maps enum variants to union fields
--- Example: matchToUnion (Name "Color") (Name "Result") Nothing [(Name "Red", field (Name "success") (string "ok")), (Name "Blue", field (Name "error") (string "bad"))]
-matchToUnion :: Name -> Name -> Maybe (TTerm b) -> [(Name, Field)] -> TTerm (a -> b)
-matchToUnion domName codName dflt pairs = matchData domName dflt (toCase <$> pairs)
-  where
-    toCase (fromName, fld) = (fromName, constant $ TTerm $ Terms.inject codName fld)
 
 -- * Definitions and modules
 

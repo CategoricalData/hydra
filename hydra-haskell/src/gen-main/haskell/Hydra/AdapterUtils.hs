@@ -25,10 +25,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Key for types in adapter utilities
-key_types :: Core.Name
-key_types = (Core.Name "types")
-
 bidirectional :: ((Coders.CoderDirection -> t1 -> Compute.Flow t0 t1) -> Compute.Coder t0 t0 t1 t1)
 bidirectional f = Compute.Coder {
   Compute.coderEncode = (f Coders.CoderDirectionEncode),
@@ -90,18 +86,9 @@ literalTypeIsSupported constraints lt = (Logic.and (Sets.member (Variants.litera
   Core.LiteralTypeInteger v1 -> (integerTypeIsSupported constraints v1)
   _ -> True) lt))
 
--- | Convert name to file path
-nameToFilePath :: (Mantle.CaseConvention -> Module.FileExtension -> Core.Name -> String)
-nameToFilePath caseConv ext name =  
-  let qualName = (Qnames.qualifyName name) 
-      ns = (Module.qualifiedNameNamespace qualName)
-      local = (Module.qualifiedNameLocal qualName)
-      prefix = (Optionals.maybe "" (\n -> Strings.cat2 (Module.unNamespace n) "/") ns)
-  in (Qnames.namespaceToFilePath caseConv ext (Module.Namespace (Strings.cat2 prefix local)))
-
--- | Convert name to file path with different case conventions
-nameToFilePathNew :: (Mantle.CaseConvention -> Mantle.CaseConvention -> Module.FileExtension -> Core.Name -> String)
-nameToFilePathNew nsConv localConv ext name =  
+-- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
+nameToFilePath :: (Mantle.CaseConvention -> Mantle.CaseConvention -> Module.FileExtension -> Core.Name -> String)
+nameToFilePath nsConv localConv ext name =  
   let qualName = (Qnames.qualifyName name) 
       ns = (Module.qualifiedNameNamespace qualName)
       local = (Module.qualifiedNameLocal qualName)

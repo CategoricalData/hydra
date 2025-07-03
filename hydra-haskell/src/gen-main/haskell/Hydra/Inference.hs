@@ -832,9 +832,6 @@ inferTypeOfTypeAbstraction cx ta = (inferTypeOfTerm cx (Core.typeAbstractionBody
 inferTypeOfTypeApplication :: (Typing.InferenceContext -> Core.TypedTerm -> Compute.Flow t0 Typing.InferenceResult)
 inferTypeOfTypeApplication cx tt = (inferTypeOfTerm cx (Core.typedTermTerm tt) "type application term")
 
-inferTypeOfTypedTerm :: (Typing.InferenceContext -> Core.TypedTerm -> Compute.Flow t0 Typing.InferenceResult)
-inferTypeOfTypedTerm cx tt = (inferTypeOfTerm cx (Core.typedTermTerm tt) "typed term")
-
 inferTypeOfUnwrap :: (Typing.InferenceContext -> Core.Name -> Compute.Flow t0 Typing.InferenceResult)
 inferTypeOfUnwrap cx tname = (Flows.bind (requireSchemaType cx tname) (\schemaType ->  
   let svars = (Core.typeSchemeVariables schemaType) 
