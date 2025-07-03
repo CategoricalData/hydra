@@ -19,7 +19,7 @@ key_debugId :: Core.Name
 key_debugId = (Core.Name "debugId")
 
 key_deprecated :: Core.Name
-key_deprecated = (Core.Name "_deprecated")
+key_deprecated = (Core.Name "deprecated")
 
 key_description :: Core.Name
 key_description = (Core.Name "description")
@@ -32,13 +32,13 @@ key_firstClassType :: Core.Name
 key_firstClassType = (Core.Name "firstClassType")
 
 key_maxLength :: Core.Name
-key_maxLength = (Core.Name "_maxLength")
+key_maxLength = (Core.Name "maxLength")
 
 key_minLength :: Core.Name
-key_minLength = (Core.Name "_minLength")
+key_minLength = (Core.Name "minLength")
 
 key_preserveFieldName :: Core.Name
-key_preserveFieldName = (Core.Name "_preserveFieldName")
+key_preserveFieldName = (Core.Name "preserveFieldName")
 
 key_type :: Core.Name
 key_type = (Core.Name "type")

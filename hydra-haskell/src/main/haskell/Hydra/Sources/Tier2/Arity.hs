@@ -96,9 +96,9 @@ hydraArityModule = Module (Namespace "hydra.arity") elements
 functionArityDef :: TElement (Function -> Int)
 functionArityDef = arityDefinition "functionArity" $
   match _Function Nothing [
-    TCase _Function_elimination --> constant (int32 1),
-    TCase _Function_lambda --> (lambda "i" $ Math.add (int32 1) (var "i")) <.> (ref termArityDef <.> unaryFunction Core.lambdaBody),
-    TCase _Function_primitive --> constant $
+    _Function_elimination>>: constant (int32 1),
+    _Function_lambda>>: (lambda "i" $ Math.add (int32 1) (var "i")) <.> (ref termArityDef <.> unaryFunction Core.lambdaBody),
+    _Function_primitive>>: constant $
       doc "TODO: This function needs to be monadic, so we can look up the primitive" (int32 42)]
 
 primitiveArityDef :: TElement (Primitive -> Int)
@@ -109,17 +109,17 @@ primitiveArityDef = arityDefinition "primitiveArity" $
 termArityDef :: TElement (Term -> Int)
 termArityDef = arityDefinition "termArity" $
   match _Term (Just $ int32 0) [
-    TCase _Term_application --> (lambda "xapp" $ Math.sub (var "xapp") (int32 1)) <.> ref termArityDef <.> unaryFunction Core.applicationFunction,
-    TCase _Term_function --> ref functionArityDef]
+    _Term_application>>: (lambda "xapp" $ Math.sub (var "xapp") (int32 1)) <.> ref termArityDef <.> unaryFunction Core.applicationFunction,
+    _Term_function>>: ref functionArityDef]
     -- Note: ignoring variables which might resolve to functions
 
 typeArityDef :: TElement (Type -> Int)
 typeArityDef = arityDefinition "typeArity" $
   match _Type (Just $ int32 0) [
-    TCase _Type_annotated --> ref typeArityDef <.> unaryFunction Core.annotatedTypeSubject,
-    TCase _Type_application --> ref typeArityDef <.> unaryFunction Core.applicationTypeFunction,
-    TCase _Type_forall --> ref typeArityDef <.> unaryFunction Core.forallTypeBody,
-    TCase _Type_function --> lambda "f" $
+    _Type_annotated>>: ref typeArityDef <.> unaryFunction Core.annotatedTypeSubject,
+    _Type_application>>: ref typeArityDef <.> unaryFunction Core.applicationTypeFunction,
+    _Type_forall>>: ref typeArityDef <.> unaryFunction Core.forallTypeBody,
+    _Type_function>>: lambda "f" $
       Math.add (int32 1) (ref typeArityDef @@ (Core.functionTypeCodomain $ var "f"))]
 
 uncurryTypeDef :: TElement (Type -> [Type])

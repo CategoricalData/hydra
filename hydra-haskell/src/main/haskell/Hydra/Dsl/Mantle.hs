@@ -57,11 +57,32 @@ eliminationVariant v = unitVariant _EliminationVariant $ case v of
   EliminationVariantUnion -> _EliminationVariant_union
   EliminationVariantWrap -> _EliminationVariant_wrap
 
+eliminationVariantProduct :: TTerm EliminationVariant
+eliminationVariantProduct = unitVariant _EliminationVariant _EliminationVariant_product
+
+eliminationVariantRecord :: TTerm EliminationVariant
+eliminationVariantRecord = unitVariant _EliminationVariant _EliminationVariant_record
+
+eliminationVariantUnion :: TTerm EliminationVariant
+eliminationVariantUnion = unitVariant _EliminationVariant _EliminationVariant_union
+
+eliminationVariantWrap :: TTerm EliminationVariant
+eliminationVariantWrap = unitVariant _EliminationVariant _EliminationVariant_wrap
+
 functionVariant :: FunctionVariant -> TTerm FunctionVariant
 functionVariant v = unitVariant _FunctionVariant $ case v of
   FunctionVariantElimination -> _FunctionVariant_elimination
   FunctionVariantLambda -> _FunctionVariant_lambda
   FunctionVariantPrimitive -> _FunctionVariant_primitive
+
+functionVariantElimination :: TTerm FunctionVariant
+functionVariantElimination = unitVariant _FunctionVariant _FunctionVariant_elimination
+
+functionVariantLambda :: TTerm FunctionVariant
+functionVariantLambda = unitVariant _FunctionVariant _FunctionVariant_lambda
+
+functionVariantPrimitive :: TTerm FunctionVariant
+functionVariantPrimitive = unitVariant _FunctionVariant _FunctionVariant_primitive
 
 literalVariant :: LiteralVariant -> TTerm LiteralVariant
 literalVariant v = unitVariant _LiteralVariant $ case v of
@@ -172,6 +193,57 @@ termVariant v = unitVariant _TermVariant $ case v of
   TermVariantVariable -> _TermVariant_variable
   TermVariantWrap -> _TermVariant_wrap
 
+termVariantAnnotated :: TTerm TermVariant
+termVariantAnnotated = unitVariant _TermVariant _TermVariant_annotated
+
+termVariantApplication :: TTerm TermVariant
+termVariantApplication = unitVariant _TermVariant _TermVariant_application
+
+termVariantFunction :: TTerm TermVariant
+termVariantFunction = unitVariant _TermVariant _TermVariant_function
+
+termVariantLet :: TTerm TermVariant
+termVariantLet = unitVariant _TermVariant _TermVariant_let
+
+termVariantList :: TTerm TermVariant
+termVariantList = unitVariant _TermVariant _TermVariant_list
+
+termVariantLiteral :: TTerm TermVariant
+termVariantLiteral = unitVariant _TermVariant _TermVariant_literal
+
+termVariantMap :: TTerm TermVariant
+termVariantMap = unitVariant _TermVariant _TermVariant_map
+
+termVariantOptional :: TTerm TermVariant
+termVariantOptional = unitVariant _TermVariant _TermVariant_optional
+
+termVariantProduct :: TTerm TermVariant
+termVariantProduct = unitVariant _TermVariant _TermVariant_product
+
+termVariantRecord :: TTerm TermVariant
+termVariantRecord = unitVariant _TermVariant _TermVariant_record
+
+termVariantSet :: TTerm TermVariant
+termVariantSet = unitVariant _TermVariant _TermVariant_set
+
+termVariantSum :: TTerm TermVariant
+termVariantSum = unitVariant _TermVariant _TermVariant_sum
+
+termVariantTypeAbstraction :: TTerm TermVariant
+termVariantTypeAbstraction = unitVariant _TermVariant _TermVariant_typeAbstraction
+
+termVariantTypeApplication :: TTerm TermVariant
+termVariantTypeApplication = unitVariant _TermVariant _TermVariant_typeApplication
+
+termVariantUnion :: TTerm TermVariant
+termVariantUnion = unitVariant _TermVariant _TermVariant_union
+
+termVariantVariable :: TTerm TermVariant
+termVariantVariable = unitVariant _TermVariant _TermVariant_variable
+
+termVariantWrap :: TTerm TermVariant
+termVariantWrap = unitVariant _TermVariant _TermVariant_wrap
+
 typeVariant :: TypeVariant -> TTerm TypeVariant
 typeVariant v = unitVariant _TypeVariant $ case v of
   TypeVariantAnnotated -> _TypeVariant_annotated
@@ -221,6 +293,9 @@ typeVariantRecord = unitVariant _TypeVariant _TypeVariant_record
 
 typeVariantSet :: TTerm TypeVariant
 typeVariantSet = unitVariant _TypeVariant _TypeVariant_set
+
+typeVariantSum :: TTerm TypeVariant
+typeVariantSum = unitVariant _TypeVariant _TypeVariant_sum
 
 typeVariantUnion :: TTerm TypeVariant
 typeVariantUnion = unitVariant _TypeVariant _TypeVariant_union

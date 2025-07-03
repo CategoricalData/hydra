@@ -406,17 +406,6 @@ reduceTermDef = reductionDefinition "reduceTerm" $
         lambda "inner" $ var "applyIfNullary" @@ var "eager" @@ var "inner" @@ (list [])]
     $ ref Rewriting.rewriteTermMDef @@ var "mapping" @@ var "term"
 
-{--}
-
-
-
-
-
-
-
-
-
-
 termIsClosedDef :: TElement (Term -> Bool)
 termIsClosedDef = reductionDefinition "termIsClosed" $
   doc "Whether a term is closed, i.e. represents a complete program" $

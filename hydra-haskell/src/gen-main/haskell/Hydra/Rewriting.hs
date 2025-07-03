@@ -469,27 +469,6 @@ rewriteTermM f =
                 Core.wrappedTermObject = rt}))))) term))
   in (rewrite fsub f)
 
--- | Rewrite term metadata/annotations
-rewriteTermMeta :: ((M.Map Core.Name Core.Term -> M.Map Core.Name Core.Term) -> Core.Term -> Core.Term)
-rewriteTermMeta mapping =  
-  let rewrite = (\recurse -> \term ->  
-          let rewritten = (recurse term)
-          in ((\x -> case x of
-            Core.TermAnnotated v1 -> (Core.TermAnnotated (Core.AnnotatedTerm {
-              Core.annotatedTermSubject = (Core.annotatedTermSubject v1),
-              Core.annotatedTermAnnotation = (mapping (Core.annotatedTermAnnotation v1))}))
-            _ -> rewritten) rewritten))
-  in (rewriteTerm rewrite)
-
-rewriteTermMetaM :: ((M.Map Core.Name Core.Term -> Compute.Flow t0 (M.Map Core.Name Core.Term)) -> Core.Term -> Compute.Flow t0 Core.Term)
-rewriteTermMetaM mapping =  
-  let rewrite = (\recurse -> \term -> Flows.bind (recurse term) (\r -> (\x -> case x of
-          Core.TermAnnotated v1 -> (Flows.bind (mapping (Core.annotatedTermAnnotation v1)) (\newAnn -> Flows.pure (Core.TermAnnotated (Core.AnnotatedTerm {
-            Core.annotatedTermSubject = (Core.annotatedTermSubject v1),
-            Core.annotatedTermAnnotation = newAnn}))))
-          _ -> (Flows.pure r)) r))
-  in (rewriteTermM rewrite)
-
 rewriteType :: (((Core.Type -> Core.Type) -> Core.Type -> Core.Type) -> Core.Type -> Core.Type)
 rewriteType f =  
   let fsub = (\recurse -> \typ ->  
@@ -578,18 +557,6 @@ rewriteTypeM f =
             Core.wrappedTypeObject = t}))))) typ)
   in (rewrite fsub f)
 
--- | Rewrite type metadata/annotations
-rewriteTypeMeta :: ((M.Map Core.Name Core.Term -> M.Map Core.Name Core.Term) -> Core.Type -> Core.Type)
-rewriteTypeMeta mapping =  
-  let rewrite = (\recurse -> \typ ->  
-          let rewritten = (recurse typ)
-          in ((\x -> case x of
-            Core.TypeAnnotated v1 -> (Core.TypeAnnotated (Core.AnnotatedType {
-              Core.annotatedTypeSubject = (Core.annotatedTypeSubject v1),
-              Core.annotatedTypeAnnotation = (mapping (Core.annotatedTypeAnnotation v1))}))
-            _ -> rewritten) rewritten))
-  in (rewriteType rewrite)
-
 -- | Simplify terms by applying beta reduction where possible
 simplifyTerm :: (Core.Term -> Core.Term)
 simplifyTerm term =  
@@ -614,16 +581,6 @@ simplifyTerm term =
                 _ -> term) strippedLhs)
             _ -> term) stripped)))
   in (rewriteTerm simplify term)
-
--- | Recursively strip all annotations from a term
-stripTermRecursive :: (Core.Term -> Core.Term)
-stripTermRecursive term =  
-  let strip = (\recurse -> \term ->  
-          let rewritten = (recurse term)
-          in ((\x -> case x of
-            Core.TermAnnotated v1 -> (Core.annotatedTermSubject v1)
-            _ -> rewritten) term))
-  in (rewriteTerm strip term)
 
 -- | Recursively strip all annotations from a type
 stripTypeRecursive :: (Core.Type -> Core.Type)

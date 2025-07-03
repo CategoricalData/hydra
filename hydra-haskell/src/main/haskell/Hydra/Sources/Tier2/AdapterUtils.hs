@@ -87,7 +87,6 @@ hydraAdapterUtilsModule = Module (Namespace "hydra.adapterUtils") elements
     Just ("Additional adapter utilities, above and beyond the generated ones.")
   where
    elements = [
-     el keyTypesDef,
      el bidirectionalDef,
      el chooseAdapterDef,
      el composeCodersDef,
@@ -98,14 +97,8 @@ hydraAdapterUtilsModule = Module (Namespace "hydra.adapterUtils") elements
      el integerTypeIsSupportedDef,
      el literalTypeIsSupportedDef,
      el nameToFilePathDef,
-     el nameToFilePathNewDef,
      el typeIsSupportedDef,
      el unidirectionalCoderDef]
-
-keyTypesDef :: TElement Name
-keyTypesDef = adapterUtilsDefinition "key_types" $
-  doc "Key for types in adapter utilities" $
-  Core.name "types"
 
 bidirectionalDef :: TElement ((CoderDirection -> b -> Flow s b) -> Coder s s b b)
 bidirectionalDef = adapterUtilsDefinition "bidirectional" $
@@ -187,22 +180,9 @@ literalTypeIsSupportedDef = adapterUtilsDefinition "literalTypeIsSupported" $
         _LiteralType_integer>>: lambda "it" $ ref integerTypeIsSupportedDef @@ var "constraints" @@ var "it"]
       @@ var "lt")
 
-nameToFilePathDef :: TElement (CaseConvention -> FileExtension -> Name -> FilePath)
+nameToFilePathDef :: TElement (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
 nameToFilePathDef = adapterUtilsDefinition "nameToFilePath" $
-  doc "Convert name to file path" $
-  lambda "caseConv" $ lambda "ext" $ lambda "name" $ lets [
-    "qualName">: ref Qnames.qualifyNameDef @@ var "name",
-    "ns">: Module.qualifiedNameNamespace $ var "qualName",
-    "local">: Module.qualifiedNameLocal $ var "qualName",
-    "prefix">: Optionals.maybe (string "")
-      (lambda "n" $ Strings.cat2 (Module.unNamespace $ var "n") (string "/"))
-      (var "ns")]
-    $ ref Qnames.namespaceToFilePathDef @@ var "caseConv" @@ var "ext" @@
-      (Module.namespace $ Strings.cat2 (var "prefix") (var "local"))
-
-nameToFilePathNewDef :: TElement (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
-nameToFilePathNewDef = adapterUtilsDefinition "nameToFilePathNew" $
-  doc "Convert name to file path with different case conventions" $
+  doc "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator" $
   lambda "nsConv" $ lambda "localConv" $ lambda "ext" $ lambda "name" $ lets [
     "qualName">: ref Qnames.qualifyNameDef @@ var "name",
     "ns">: Module.qualifiedNameNamespace $ var "qualName",
