@@ -1,9 +1,9 @@
 module Hydra.Ext.Java.Serde where
 
+import Hydra.Kernel
 import Hydra.Serialization
-import qualified Hydra.Ast as CT
+import qualified Hydra.Ast as Ast
 import qualified Hydra.Ext.Java.Syntax as Java
-import Hydra.Messages
 
 import qualified Data.List as L
 import qualified Data.Maybe as Y
@@ -17,10 +17,10 @@ sanitizeJavaComment s = L.concat (fromChar <$> s)
       '>' -> "&gt;"
       _ -> [c]
 
-singleLineComment :: String -> CT.Expr
+singleLineComment :: String -> Ast.Expr
 singleLineComment c = cst $ "// " ++ sanitizeJavaComment c
 
-withComments :: Maybe String -> CT.Expr -> CT.Expr
+withComments :: Maybe String -> Ast.Expr -> Ast.Expr
 withComments mc expr = case mc of
     Nothing -> expr
     Just c -> newlineSep [writeComments c, expr]
@@ -29,10 +29,10 @@ withComments mc expr = case mc of
       where
         toLine l = " * " ++ l
 
-writeAdditionalBound :: Java.AdditionalBound -> CT.Expr
+writeAdditionalBound :: Java.AdditionalBound -> Ast.Expr
 writeAdditionalBound _ = cst "TODO:AdditionalBound"
 
-writeAdditiveExpression :: Java.AdditiveExpression -> CT.Expr
+writeAdditiveExpression :: Java.AdditiveExpression -> Ast.Expr
 writeAdditiveExpression e = case e of
   Java.AdditiveExpressionUnary m -> writeMultiplicativeExpression m
   Java.AdditiveExpressionPlus (Java.AdditiveExpression_Binary lhs rhs) ->
@@ -40,40 +40,40 @@ writeAdditiveExpression e = case e of
   Java.AdditiveExpressionMinus (Java.AdditiveExpression_Binary lhs rhs) ->
     infixWs "-" (writeAdditiveExpression lhs) (writeMultiplicativeExpression rhs)
 
-writeAmbiguousName :: Java.AmbiguousName -> CT.Expr
+writeAmbiguousName :: Java.AmbiguousName -> Ast.Expr
 writeAmbiguousName (Java.AmbiguousName parts) = dotSep (writeIdentifier <$> parts)
 
-writeAndExpression :: Java.AndExpression -> CT.Expr
+writeAndExpression :: Java.AndExpression -> Ast.Expr
 writeAndExpression (Java.AndExpression eqs) = infixWsList "&" (writeEqualityExpression <$> eqs)
 
-writeAnnotatedIdentifier :: Java.AnnotatedIdentifier -> CT.Expr
+writeAnnotatedIdentifier :: Java.AnnotatedIdentifier -> Ast.Expr
 writeAnnotatedIdentifier (Java.AnnotatedIdentifier anns id) = writeIdentifier id -- Note: ignoring annotations for now
 
-writeAnnotation :: Java.Annotation -> CT.Expr
+writeAnnotation :: Java.Annotation -> Ast.Expr
 writeAnnotation ann = case ann of
   Java.AnnotationNormal n -> writeNormalAnnotation n
   Java.AnnotationMarker m -> writeMarkerAnnotation m
   Java.AnnotationSingleElement s -> writeSingleElementAnnotation s
 
-writeAnnotationTypeDeclaration :: Java.AnnotationTypeDeclaration -> CT.Expr
+writeAnnotationTypeDeclaration :: Java.AnnotationTypeDeclaration -> Ast.Expr
 writeAnnotationTypeDeclaration _ = cst "TODO:AnnotationTypeDeclaration"
 
-writeArrayAccess :: Java.ArrayAccess -> CT.Expr
+writeArrayAccess :: Java.ArrayAccess -> Ast.Expr
 writeArrayAccess _ = cst "TODO:ArrayAccess"
 
-writeArrayCreationExpression :: Java.ArrayCreationExpression -> CT.Expr
+writeArrayCreationExpression :: Java.ArrayCreationExpression -> Ast.Expr
 writeArrayCreationExpression _ = cst "TODO:ArrayCreationExpression"
 
-writeArrayInitializer :: Java.ArrayInitializer -> CT.Expr
+writeArrayInitializer :: Java.ArrayInitializer -> Ast.Expr
 writeArrayInitializer _ = cst "TODO:ArrayInitializer"
 
-writeArrayType :: Java.ArrayType -> CT.Expr
+writeArrayType :: Java.ArrayType -> Ast.Expr
 writeArrayType _ = cst "TODO:ArrayType"
 
-writeAssertStatement :: Java.AssertStatement -> CT.Expr
+writeAssertStatement :: Java.AssertStatement -> Ast.Expr
 writeAssertStatement _ = cst "TODO:AssertStatement"
 
-writeAssignment :: Java.Assignment -> CT.Expr
+writeAssignment :: Java.Assignment -> Ast.Expr
 writeAssignment (Java.Assignment lhs op rhs) = infixWs ctop (writeLeftHandSide lhs) (writeExpression rhs)
   where
     ctop = case op of
@@ -90,82 +90,82 @@ writeAssignment (Java.Assignment lhs op rhs) = infixWs ctop (writeLeftHandSide l
       Java.AssignmentOperatorXor -> "^="
       Java.AssignmentOperatorOr -> "|="
 
-writeAssignmentExpression :: Java.AssignmentExpression -> CT.Expr
+writeAssignmentExpression :: Java.AssignmentExpression -> Ast.Expr
 writeAssignmentExpression e = case e of
   Java.AssignmentExpressionConditional c -> writeConditionalExpression c
   Java.AssignmentExpressionAssignment a -> writeAssignment a
 
-writeBlock :: Java.Block -> CT.Expr
+writeBlock :: Java.Block -> Ast.Expr
 writeBlock (Java.Block stmts) = curlyBlock fullBlockStyle $ newlineSep (writeBlockStatement <$> stmts)
 
-writeBlockStatement :: Java.BlockStatement -> CT.Expr
+writeBlockStatement :: Java.BlockStatement -> Ast.Expr
 writeBlockStatement s = case s of
   Java.BlockStatementLocalVariableDeclaration d -> writeLocalVariableDeclarationStatement d
   Java.BlockStatementClass cd -> writeClassDeclaration cd
   Java.BlockStatementStatement s -> writeStatement s
 
-writeBreakStatement :: Java.BreakStatement -> CT.Expr
+writeBreakStatement :: Java.BreakStatement -> Ast.Expr
 writeBreakStatement _ = cst "TODO:BreakStatement"
 
-writeCastExpression :: Java.CastExpression -> CT.Expr
+writeCastExpression :: Java.CastExpression -> Ast.Expr
 writeCastExpression e = case e of
   Java.CastExpressionPrimitive p -> writeCastExpression_Primitive p
   Java.CastExpressionNotPlusMinus npm -> writeCastExpression_NotPlusMinus npm
   Java.CastExpressionLambda l -> writeCastExpression_Lambda l
 
-writeCastExpression_Lambda :: Java.CastExpression_Lambda -> CT.Expr
+writeCastExpression_Lambda :: Java.CastExpression_Lambda -> Ast.Expr
 writeCastExpression_Lambda _ = cst "TODO:CastExpression_Lambda"
 
-writeCastExpression_NotPlusMinus :: Java.CastExpression_NotPlusMinus -> CT.Expr
+writeCastExpression_NotPlusMinus :: Java.CastExpression_NotPlusMinus -> Ast.Expr
 writeCastExpression_NotPlusMinus (Java.CastExpression_NotPlusMinus rb ex) = spaceSep [
   writeCastExpression_RefAndBounds rb,
   writeUnaryExpression ex]
 
-writeCastExpression_RefAndBounds :: Java.CastExpression_RefAndBounds -> CT.Expr
+writeCastExpression_RefAndBounds :: Java.CastExpression_RefAndBounds -> Ast.Expr
 writeCastExpression_RefAndBounds (Java.CastExpression_RefAndBounds rt adds) = parenList False [spaceSep $ Y.catMaybes [
   Just $ writeReferenceType rt,
   if L.null adds then Nothing else Just $ spaceSep (writeAdditionalBound <$> adds)]]
 
-writeCastExpression_Primitive :: Java.CastExpression_Primitive -> CT.Expr
+writeCastExpression_Primitive :: Java.CastExpression_Primitive -> Ast.Expr
 writeCastExpression_Primitive _ = cst "TODO:CastExpression_Primitive"
 
-writeCharacterLiteral :: Int -> CT.Expr
+writeCharacterLiteral :: Int -> Ast.Expr
 writeCharacterLiteral _ = cst "TODO:CharacterLiteral"
 
-writeClassBody :: Java.ClassBody -> CT.Expr
+writeClassBody :: Java.ClassBody -> Ast.Expr
 writeClassBody (Java.ClassBody decls) = curlyBlock fullBlockStyle $
   doubleNewlineSep (writeClassBodyDeclarationWithComments <$> decls)
 
-writeClassBodyDeclaration :: Java.ClassBodyDeclaration -> CT.Expr
+writeClassBodyDeclaration :: Java.ClassBodyDeclaration -> Ast.Expr
 writeClassBodyDeclaration d = case d of
   Java.ClassBodyDeclarationClassMember d -> writeClassMemberDeclaration d
   Java.ClassBodyDeclarationInstanceInitializer i -> writeInstanceInitializer i
   Java.ClassBodyDeclarationStaticInitializer i -> writeStaticInitializer i
   Java.ClassBodyDeclarationConstructorDeclaration d -> writeConstructorDeclaration d
 
-writeClassBodyDeclarationWithComments :: Java.ClassBodyDeclarationWithComments -> CT.Expr
+writeClassBodyDeclarationWithComments :: Java.ClassBodyDeclarationWithComments -> Ast.Expr
 writeClassBodyDeclarationWithComments (Java.ClassBodyDeclarationWithComments d mc) = withComments mc $
   writeClassBodyDeclaration d
 
-writeClassDeclaration :: Java.ClassDeclaration -> CT.Expr
+writeClassDeclaration :: Java.ClassDeclaration -> Ast.Expr
 writeClassDeclaration d = case d of
   Java.ClassDeclarationNormal nd -> writeNormalClassDeclaration nd
   Java.ClassDeclarationEnum ed -> writeEnumDeclaration ed
 
-writeClassInstanceCreationExpression :: Java.ClassInstanceCreationExpression -> CT.Expr
+writeClassInstanceCreationExpression :: Java.ClassInstanceCreationExpression -> Ast.Expr
 writeClassInstanceCreationExpression (Java.ClassInstanceCreationExpression mqual e) = case mqual of
   Nothing -> writeUnqualifiedClassInstanceCreationExpression e
   Just q -> dotSep [writeClassInstanceCreationExpression_Qualifier q, writeUnqualifiedClassInstanceCreationExpression e]
 
-writeClassInstanceCreationExpression_Qualifier :: Java.ClassInstanceCreationExpression_Qualifier -> CT.Expr
+writeClassInstanceCreationExpression_Qualifier :: Java.ClassInstanceCreationExpression_Qualifier -> Ast.Expr
 writeClassInstanceCreationExpression_Qualifier q = case q of
   Java.ClassInstanceCreationExpression_QualifierExpression en -> writeExpressionName en
   Java.ClassInstanceCreationExpression_QualifierPrimary p -> writePrimary p
 
-writeClassLiteral :: Java.ClassLiteral -> CT.Expr
+writeClassLiteral :: Java.ClassLiteral -> Ast.Expr
 writeClassLiteral _ = cst "TODO:ClassLiteral"
 
-writeClassMemberDeclaration :: Java.ClassMemberDeclaration -> CT.Expr
+writeClassMemberDeclaration :: Java.ClassMemberDeclaration -> Ast.Expr
 writeClassMemberDeclaration d = case d of
   Java.ClassMemberDeclarationField fd -> writeFieldDeclaration fd
   Java.ClassMemberDeclarationMethod md -> writeMethodDeclaration md
@@ -173,7 +173,7 @@ writeClassMemberDeclaration d = case d of
   Java.ClassMemberDeclarationInterface id -> writeInterfaceDeclaration id
   Java.ClassMemberDeclarationNone -> semi
 
-writeClassModifier :: Java.ClassModifier -> CT.Expr
+writeClassModifier :: Java.ClassModifier -> Ast.Expr
 writeClassModifier m = case m of
   Java.ClassModifierAnnotation ann -> writeAnnotation ann
   Java.ClassModifierPublic -> cst "public"
@@ -184,18 +184,18 @@ writeClassModifier m = case m of
   Java.ClassModifierFinal -> cst "final"
   Java.ClassModifierStrictfp -> cst "strictfp"
 
-writeClassOrInterfaceType :: Java.ClassOrInterfaceType -> CT.Expr
+writeClassOrInterfaceType :: Java.ClassOrInterfaceType -> Ast.Expr
 writeClassOrInterfaceType cit = case cit of
   Java.ClassOrInterfaceTypeClass ct -> writeClassType ct
   Java.ClassOrInterfaceTypeInterface it -> writeInterfaceType it
 
-writeClassOrInterfaceTypeToInstantiate :: Java.ClassOrInterfaceTypeToInstantiate -> CT.Expr
+writeClassOrInterfaceTypeToInstantiate :: Java.ClassOrInterfaceTypeToInstantiate -> Ast.Expr
 writeClassOrInterfaceTypeToInstantiate (Java.ClassOrInterfaceTypeToInstantiate ids margs) =
   noSep $ Y.catMaybes [
     Just $ dotSep (writeAnnotatedIdentifier <$> ids),
     writeTypeArgumentsOrDiamond <$> margs]
 
-writeClassType :: Java.ClassType -> CT.Expr
+writeClassType :: Java.ClassType -> Ast.Expr
 writeClassType (Java.ClassType anns qual id args) = noSep $ Y.catMaybes [
     Just $ spaceSep $ Y.catMaybes [
       if L.null anns then Nothing else Just $ commaSep inlineStyle (writeAnnotation <$> anns),
@@ -207,7 +207,7 @@ writeClassType (Java.ClassType anns qual id args) = noSep $ Y.catMaybes [
       Java.ClassTypeQualifierPackage pkg -> dotSep [writePackageName pkg, writeTypeIdentifier id]
       Java.ClassTypeQualifierParent cit -> dotSep [writeClassOrInterfaceType cit, writeTypeIdentifier id]
 
-writeCompilationUnit :: Java.CompilationUnit -> CT.Expr
+writeCompilationUnit :: Java.CompilationUnit -> Ast.Expr
 writeCompilationUnit u = case u of
   Java.CompilationUnitOrdinary (Java.OrdinaryCompilationUnit mpkg imports types) -> doubleNewlineSep $ Y.catMaybes
       [warning, pkgSec, importsSec, typesSec]
@@ -221,86 +221,86 @@ writeCompilationUnit u = case u of
         then Nothing
         else Just $ doubleNewlineSep (writeTypeDeclarationWithComments <$> types)
 
-writeConditionalAndExpression :: Java.ConditionalAndExpression -> CT.Expr
+writeConditionalAndExpression :: Java.ConditionalAndExpression -> Ast.Expr
 writeConditionalAndExpression (Java.ConditionalAndExpression ors)
   = infixWsList "&&" (writeInclusiveOrExpression <$> ors)
 
-writeConditionalExpression :: Java.ConditionalExpression -> CT.Expr
+writeConditionalExpression :: Java.ConditionalExpression -> Ast.Expr
 writeConditionalExpression c = case c of
   Java.ConditionalExpressionSimple co -> writeConditionalOrExpression co
   Java.ConditionalExpressionTernaryCond tc -> writeConditionalExpression_TernaryCond tc
   Java.ConditionalExpressionTernaryLambda tl -> writeConditionalExpression_TernaryLambda tl
 
-writeConditionalExpression_TernaryCond :: Java.ConditionalExpression_TernaryCond -> CT.Expr
+writeConditionalExpression_TernaryCond :: Java.ConditionalExpression_TernaryCond -> Ast.Expr
 writeConditionalExpression_TernaryCond _ = cst "TODO:ConditionalExpression_TernaryCond"
 
-writeConditionalExpression_TernaryLambda :: Java.ConditionalExpression_TernaryLambda -> CT.Expr
+writeConditionalExpression_TernaryLambda :: Java.ConditionalExpression_TernaryLambda -> Ast.Expr
 writeConditionalExpression_TernaryLambda _ = cst "TODO:ConditionalExpression_TernaryLambda"
 
-writeConditionalOrExpression :: Java.ConditionalOrExpression -> CT.Expr
+writeConditionalOrExpression :: Java.ConditionalOrExpression -> Ast.Expr
 writeConditionalOrExpression (Java.ConditionalOrExpression ands)
   = infixWsList "||" (writeConditionalAndExpression <$> ands)
 
-writeConstantDeclaration :: Java.ConstantDeclaration -> CT.Expr
+writeConstantDeclaration :: Java.ConstantDeclaration -> Ast.Expr
 writeConstantDeclaration (Java.ConstantDeclaration mods typ vars) = suffixSemi $ spaceSep $ Y.catMaybes [
   if L.null mods then Nothing else Just $ spaceSep (writeConstantModifier <$> mods),
   Just $ writeUnannType typ,
   Just $ commaSep inlineStyle (writeVariableDeclarator <$> vars)]
 
-writeConstantModifier :: Java.ConstantModifier -> CT.Expr
+writeConstantModifier :: Java.ConstantModifier -> Ast.Expr
 writeConstantModifier _ = cst "TODO:ConstantModifier"
 
-writeConstructorBody :: Java.ConstructorBody -> CT.Expr
+writeConstructorBody :: Java.ConstructorBody -> Ast.Expr
 writeConstructorBody (Java.ConstructorBody minvoc stmts) = curlyBlock fullBlockStyle $ doubleNewlineSep $ Y.catMaybes [
   writeExplicitConstructorInvocation <$> minvoc,
   Just $ newlineSep (writeBlockStatement <$> stmts)]
 
-writeConstructorDeclaration :: Java.ConstructorDeclaration -> CT.Expr
+writeConstructorDeclaration :: Java.ConstructorDeclaration -> Ast.Expr
 writeConstructorDeclaration (Java.ConstructorDeclaration mods cons mthrows body) = spaceSep $ Y.catMaybes [
   if L.null mods then Nothing else Just $ spaceSep (writeConstructorModifier <$> mods),
   Just $ writeConstructorDeclarator cons,
   writeThrows <$> mthrows,
   Just $ writeConstructorBody body]
 
-writeConstructorDeclarator :: Java.ConstructorDeclarator -> CT.Expr
+writeConstructorDeclarator :: Java.ConstructorDeclarator -> Ast.Expr
 writeConstructorDeclarator (Java.ConstructorDeclarator tparams name mrecparam fparams) = spaceSep $ Y.catMaybes [
   if L.null tparams then Nothing else Just $ angleBracesList inlineStyle (writeTypeParameter <$> tparams),
   Just $ writeSimpleTypeName name,
   writeReceiverParameter <$> mrecparam,
   Just $ parenList False (writeFormalParameter <$> fparams)]
 
-writeConstructorModifier :: Java.ConstructorModifier -> CT.Expr
+writeConstructorModifier :: Java.ConstructorModifier -> Ast.Expr
 writeConstructorModifier m = case m of
   Java.ConstructorModifierAnnotation ann -> writeAnnotation ann
   Java.ConstructorModifierPublic -> cst "public"
   Java.ConstructorModifierProtected -> cst "protected"
   Java.ConstructorModifierPrivate -> cst "private"
 
-writeContinueStatement :: Java.ContinueStatement -> CT.Expr
+writeContinueStatement :: Java.ContinueStatement -> Ast.Expr
 writeContinueStatement _ = cst "TODO:ContinueStatement"
 
-writeDims :: Java.Dims -> CT.Expr
+writeDims :: Java.Dims -> Ast.Expr
 writeDims (Java.Dims anns) = noSep (write <$> anns)
   where
     write _ = cst "[]" -- Note: ignoring annotations on dimensions for now
 
-writeDoStatement :: Java.DoStatement -> CT.Expr
+writeDoStatement :: Java.DoStatement -> Ast.Expr
 writeDoStatement _ = cst "TODO:DoStatement"
 
-writeElementValue :: Java.ElementValue -> CT.Expr
+writeElementValue :: Java.ElementValue -> Ast.Expr
 writeElementValue ev = case ev of
   Java.ElementValueConditionalExpression c -> writeConditionalExpression c
   Java.ElementValueElementValueArrayInitializer (Java.ElementValueArrayInitializer values) ->
     commaSep inlineStyle (writeElementValue <$> values)
   Java.ElementValueAnnotation ann -> writeAnnotation ann
 
-writeElementValuePair :: Java.ElementValuePair -> CT.Expr
+writeElementValuePair :: Java.ElementValuePair -> Ast.Expr
 writeElementValuePair (Java.ElementValuePair k v) = infixWs "=" (writeIdentifier k) (writeElementValue v)
 
-writeEnumDeclaration :: Java.EnumDeclaration -> CT.Expr
+writeEnumDeclaration :: Java.EnumDeclaration -> Ast.Expr
 writeEnumDeclaration _ = cst "TODO:EnumDeclaration"
 
-writeEqualityExpression :: Java.EqualityExpression -> CT.Expr
+writeEqualityExpression :: Java.EqualityExpression -> Ast.Expr
 writeEqualityExpression e = case e of
   Java.EqualityExpressionUnary r -> writeRelationalExpression r
   Java.EqualityExpressionEqual (Java.EqualityExpression_Binary lhs rhs) ->
@@ -308,38 +308,38 @@ writeEqualityExpression e = case e of
   Java.EqualityExpressionNotEqual (Java.EqualityExpression_Binary lhs rhs) ->
     infixWs "!=" (writeEqualityExpression lhs) (writeRelationalExpression rhs)
 
-writeExclusiveOrExpression :: Java.ExclusiveOrExpression -> CT.Expr
+writeExclusiveOrExpression :: Java.ExclusiveOrExpression -> Ast.Expr
 writeExclusiveOrExpression (Java.ExclusiveOrExpression ands) = infixWsList "^" (writeAndExpression <$> ands)
 
-writeExplicitConstructorInvocation :: Java.ExplicitConstructorInvocation -> CT.Expr
+writeExplicitConstructorInvocation :: Java.ExplicitConstructorInvocation -> Ast.Expr
 writeExplicitConstructorInvocation _ = cst "TODO:ExplicitConstructorInvocation"
 
-writeExpression :: Java.Expression -> CT.Expr
+writeExpression :: Java.Expression -> Ast.Expr
 writeExpression e = case e of
   Java.ExpressionLambda l -> writeLambdaExpression l
   Java.ExpressionAssignment a -> writeAssignmentExpression a
 
-writeExpressionName :: Java.ExpressionName -> CT.Expr
+writeExpressionName :: Java.ExpressionName -> Ast.Expr
 writeExpressionName (Java.ExpressionName mqual id) = dotSep $ Y.catMaybes [
   writeAmbiguousName <$> mqual,
   Just $ writeIdentifier id]
 
-writeExpressionStatement :: Java.ExpressionStatement -> CT.Expr
+writeExpressionStatement :: Java.ExpressionStatement -> Ast.Expr
 writeExpressionStatement (Java.ExpressionStatement stmt) = suffixSemi $ writeStatementExpression stmt
 
-writeFieldAccess :: Java.FieldAccess -> CT.Expr
+writeFieldAccess :: Java.FieldAccess -> Ast.Expr
 writeFieldAccess (Java.FieldAccess qual id) = dotSep $ case qual of
   Java.FieldAccess_QualifierPrimary p -> [writePrimary p, writeIdentifier id]
   Java.FieldAccess_QualifierSuper -> [cst "super", writeIdentifier id]
   Java.FieldAccess_QualifierTyped tn -> [writeTypeName tn, cst "super", writeIdentifier id]
 
-writeFieldDeclaration :: Java.FieldDeclaration -> CT.Expr
+writeFieldDeclaration :: Java.FieldDeclaration -> Ast.Expr
 writeFieldDeclaration (Java.FieldDeclaration mods typ vars) = suffixSemi $ spaceSep $ Y.catMaybes [
     if L.null mods then Nothing else Just $ spaceSep (writeFieldModifier <$> mods),
     Just $ writeUnannType typ,
     Just $ commaSep inlineStyle (writeVariableDeclarator <$> vars)]
 
-writeFieldModifier :: Java.FieldModifier -> CT.Expr
+writeFieldModifier :: Java.FieldModifier -> Ast.Expr
 writeFieldModifier m = case m of
   Java.FieldModifierAnnotation ann -> writeAnnotation ann
   Java.FieldModifierPublic -> cst "public"
@@ -350,39 +350,39 @@ writeFieldModifier m = case m of
   Java.FieldModifierTransient -> cst "transient"
   Java.FieldModifierVolatile -> cst "volatile"
 
-writeFloatingPointLiteral :: Java.FloatingPointLiteral -> CT.Expr
+writeFloatingPointLiteral :: Java.FloatingPointLiteral -> Ast.Expr
 writeFloatingPointLiteral _ = cst "TODO:FloatingPointLiteral"
 
-writeFloatingPointType :: Java.FloatingPointType -> CT.Expr
+writeFloatingPointType :: Java.FloatingPointType -> Ast.Expr
 writeFloatingPointType _ = cst "TODO:FloatingPointType"
 
-writeForStatement :: Java.ForStatement -> CT.Expr
+writeForStatement :: Java.ForStatement -> Ast.Expr
 writeForStatement _ = cst "TODO:ForStatement"
 
-writeFormalParameter :: Java.FormalParameter -> CT.Expr
+writeFormalParameter :: Java.FormalParameter -> Ast.Expr
 writeFormalParameter p = case p of
   Java.FormalParameterSimple s -> writeFormalParameter_Simple s
   Java.FormalParameterVariableArity v -> writeVariableArityParameter v
 
-writeFormalParameter_Simple :: Java.FormalParameter_Simple -> CT.Expr
+writeFormalParameter_Simple :: Java.FormalParameter_Simple -> Ast.Expr
 writeFormalParameter_Simple (Java.FormalParameter_Simple mods typ id) = spaceSep $ Y.catMaybes [
   if L.null mods then Nothing else Just $ spaceSep (writeVariableModifier <$> mods),
   Just $ writeUnannType typ,
   Just $ writeVariableDeclaratorId id]
 
-writeIdentifier :: Java.Identifier -> CT.Expr
+writeIdentifier :: Java.Identifier -> Ast.Expr
 writeIdentifier (Java.Identifier s) = cst s
 
-writeIfThenStatement :: Java.IfThenStatement -> CT.Expr
+writeIfThenStatement :: Java.IfThenStatement -> Ast.Expr
 writeIfThenStatement (Java.IfThenStatement cond thn) = spaceSep [
   cst "if",
   parenList False [writeExpression cond],
   writeBlock (Java.Block [Java.BlockStatementStatement thn])]
 
-writeIfThenElseStatement :: Java.IfThenElseStatement -> CT.Expr
+writeIfThenElseStatement :: Java.IfThenElseStatement -> Ast.Expr
 writeIfThenElseStatement _ = cst "TODO:IfThenElseStatement"
 
-writeImportDeclaration :: Java.ImportDeclaration -> CT.Expr
+writeImportDeclaration :: Java.ImportDeclaration -> Ast.Expr
 writeImportDeclaration imp = case imp of
   Java.ImportDeclarationSingleType (Java.SingleTypeImportDeclaration tn) -> suffixSemi $
     spaceSep [cst "import", writeTypeName tn]
@@ -390,17 +390,17 @@ writeImportDeclaration imp = case imp of
   Java.ImportDeclarationSingleStaticImport d -> cst "TODO:ImportDeclarationSingleStaticImport"
   Java.ImportDeclarationStaticImportOnDemand d -> cst "TODO:ImportDeclarationStaticImportOnDemand"
 
-writeInclusiveOrExpression :: Java.InclusiveOrExpression -> CT.Expr
+writeInclusiveOrExpression :: Java.InclusiveOrExpression -> Ast.Expr
 writeInclusiveOrExpression (Java.InclusiveOrExpression ors)
   = infixWsList "|" (writeExclusiveOrExpression <$> ors)
 
-writeInstanceInitializer :: Java.InstanceInitializer -> CT.Expr
+writeInstanceInitializer :: Java.InstanceInitializer -> Ast.Expr
 writeInstanceInitializer _ = cst "TODO:InstanceInitializer"
 
-writeIntegerLiteral :: Java.IntegerLiteral -> CT.Expr
+writeIntegerLiteral :: Java.IntegerLiteral -> Ast.Expr
 writeIntegerLiteral (Java.IntegerLiteral i) = cst $ show i
 
-writeIntegralType :: Java.IntegralType -> CT.Expr
+writeIntegralType :: Java.IntegralType -> Ast.Expr
 writeIntegralType t = cst $ case t of
   Java.IntegralTypeByte -> "byte"
   Java.IntegralTypeShort -> "short"
@@ -408,29 +408,29 @@ writeIntegralType t = cst $ case t of
   Java.IntegralTypeLong -> "long"
   Java.IntegralTypeChar -> "char"
 
-writeInterfaceBody :: Java.InterfaceBody -> CT.Expr
+writeInterfaceBody :: Java.InterfaceBody -> Ast.Expr
 writeInterfaceBody (Java.InterfaceBody decls) = curlyBlock fullBlockStyle $ doubleNewlineSep
   (writeInterfaceMemberDeclaration <$> decls)
 
-writeInterfaceDeclaration :: Java.InterfaceDeclaration -> CT.Expr
+writeInterfaceDeclaration :: Java.InterfaceDeclaration -> Ast.Expr
 writeInterfaceDeclaration d = case d of
   Java.InterfaceDeclarationNormalInterface n -> writeNormalInterfaceDeclaration n
   Java.InterfaceDeclarationAnnotationType a -> writeAnnotationTypeDeclaration a
 
-writeInterfaceMemberDeclaration :: Java.InterfaceMemberDeclaration -> CT.Expr
+writeInterfaceMemberDeclaration :: Java.InterfaceMemberDeclaration -> Ast.Expr
 writeInterfaceMemberDeclaration d = case d of
   Java.InterfaceMemberDeclarationConstant c -> writeConstantDeclaration c
   Java.InterfaceMemberDeclarationInterfaceMethod im -> writeInterfaceMethodDeclaration im
   Java.InterfaceMemberDeclarationClass cd -> writeClassDeclaration cd
   Java.InterfaceMemberDeclarationInterface id -> writeInterfaceDeclaration id
 
-writeInterfaceMethodDeclaration :: Java.InterfaceMethodDeclaration -> CT.Expr
+writeInterfaceMethodDeclaration :: Java.InterfaceMethodDeclaration -> Ast.Expr
 writeInterfaceMethodDeclaration (Java.InterfaceMethodDeclaration mods header body) = spaceSep $ Y.catMaybes [
       if L.null mods then Nothing else Just $ spaceSep (writeInterfaceMethodModifier <$> mods),
       Just $ writeMethodHeader header,
       Just $ writeMethodBody body]
 
-writeInterfaceMethodModifier :: Java.InterfaceMethodModifier -> CT.Expr
+writeInterfaceMethodModifier :: Java.InterfaceMethodModifier -> Ast.Expr
 writeInterfaceMethodModifier m = case m of
   Java.InterfaceMethodModifierAnnotation a -> writeAnnotation a
   Java.InterfaceMethodModifierPublic -> cst "public"
@@ -440,7 +440,7 @@ writeInterfaceMethodModifier m = case m of
   Java.InterfaceMethodModifierStatic -> cst "static"
   Java.InterfaceMethodModifierStrictfp -> cst "strictfp"
 
-writeInterfaceModifier :: Java.InterfaceModifier -> CT.Expr
+writeInterfaceModifier :: Java.InterfaceModifier -> Ast.Expr
 writeInterfaceModifier m = case m of
   Java.InterfaceModifierAnnotation a -> writeAnnotation a
   Java.InterfaceModifierPublic -> cst "public"
@@ -450,33 +450,33 @@ writeInterfaceModifier m = case m of
   Java.InterfaceModifierStatic -> cst "static"
   Java.InterfaceModifierStrictfb -> cst "strictfb"
 
-writeInterfaceType :: Java.InterfaceType -> CT.Expr
+writeInterfaceType :: Java.InterfaceType -> Ast.Expr
 writeInterfaceType (Java.InterfaceType ct) = writeClassType ct
 
-writeLabeledStatement :: Java.LabeledStatement -> CT.Expr
+writeLabeledStatement :: Java.LabeledStatement -> Ast.Expr
 writeLabeledStatement _ = cst "TODO:LabeledStatement"
 
-writeLambdaBody :: Java.LambdaBody -> CT.Expr
+writeLambdaBody :: Java.LambdaBody -> Ast.Expr
 writeLambdaBody b = case b of
   Java.LambdaBodyExpression e -> writeExpression e
   Java.LambdaBodyBlock b -> writeBlock b
 
-writeLambdaExpression :: Java.LambdaExpression -> CT.Expr
+writeLambdaExpression :: Java.LambdaExpression -> Ast.Expr
 writeLambdaExpression (Java.LambdaExpression params body) =
   infixWs "->" (writeLambdaParameters params) (writeLambdaBody body)
 
-writeLambdaParameters :: Java.LambdaParameters -> CT.Expr
+writeLambdaParameters :: Java.LambdaParameters -> Ast.Expr
 writeLambdaParameters p = case p of
   Java.LambdaParametersTuple l -> parenList False (writeLambdaParameters <$> l)
   Java.LambdaParametersSingle id -> writeIdentifier id
 
-writeLeftHandSide :: Java.LeftHandSide -> CT.Expr
+writeLeftHandSide :: Java.LeftHandSide -> Ast.Expr
 writeLeftHandSide lhs = case lhs of
   Java.LeftHandSideExpressionName en -> writeExpressionName en
   Java.LeftHandSideFieldAccess fa -> writeFieldAccess fa
   Java.LeftHandSideArrayAccess aa -> writeArrayAccess aa
 
-writeLiteral :: Java.Literal -> CT.Expr
+writeLiteral :: Java.Literal -> Ast.Expr
 writeLiteral l = case l of
   Java.LiteralNull -> cst "null"
   Java.LiteralInteger il -> writeIntegerLiteral il
@@ -485,29 +485,29 @@ writeLiteral l = case l of
   Java.LiteralCharacter c -> writeCharacterLiteral c
   Java.LiteralString sl -> writeStringLiteral sl
 
-writeLocalVariableDeclaration :: Java.LocalVariableDeclaration -> CT.Expr
+writeLocalVariableDeclaration :: Java.LocalVariableDeclaration -> Ast.Expr
 writeLocalVariableDeclaration (Java.LocalVariableDeclaration mods t decls) = spaceSep $ Y.catMaybes [
   if L.null mods then Nothing else Just $ spaceSep (writeVariableModifier <$> mods),
   Just $ writeLocalName t,
   Just $ commaSep inlineStyle (writeVariableDeclarator <$> decls)]
 
-writeLocalVariableDeclarationStatement :: Java.LocalVariableDeclarationStatement -> CT.Expr
+writeLocalVariableDeclarationStatement :: Java.LocalVariableDeclarationStatement -> Ast.Expr
 writeLocalVariableDeclarationStatement (Java.LocalVariableDeclarationStatement d) = suffixSemi $ writeLocalVariableDeclaration d
 
-writeLocalName :: Java.LocalVariableType -> CT.Expr
+writeLocalName :: Java.LocalVariableType -> Ast.Expr
 writeLocalName t = case t of
   Java.LocalVariableTypeType ut -> writeUnannType ut
   Java.LocalVariableTypeVar -> cst "var"
 
-writeMarkerAnnotation :: Java.MarkerAnnotation -> CT.Expr
+writeMarkerAnnotation :: Java.MarkerAnnotation -> Ast.Expr
 writeMarkerAnnotation (Java.MarkerAnnotation tname) = prefixAt $ writeTypeName tname
 
-writeMethodBody :: Java.MethodBody -> CT.Expr
+writeMethodBody :: Java.MethodBody -> Ast.Expr
 writeMethodBody b = case b of
   Java.MethodBodyBlock block -> writeBlock block
   Java.MethodBodyNone -> semi
 
-writeMethodDeclaration :: Java.MethodDeclaration -> CT.Expr
+writeMethodDeclaration :: Java.MethodDeclaration -> Ast.Expr
 writeMethodDeclaration (Java.MethodDeclaration anns mods header body) = newlineSep $ Y.catMaybes [
     if L.null anns then Nothing else Just $ newlineSep (writeAnnotation <$> anns),
     Just headerAndBody]
@@ -517,20 +517,20 @@ writeMethodDeclaration (Java.MethodDeclaration anns mods header body) = newlineS
       Just $ writeMethodHeader header,
       Just $ writeMethodBody body]
 
-writeMethodDeclarator :: Java.MethodDeclarator -> CT.Expr
+writeMethodDeclarator :: Java.MethodDeclarator -> Ast.Expr
 writeMethodDeclarator (Java.MethodDeclarator id rparam params) = noSep [
   writeIdentifier id,
   -- Note: ignoring receiver param for now
   parenList False (writeFormalParameter <$> params)]
 
-writeMethodHeader :: Java.MethodHeader -> CT.Expr
+writeMethodHeader :: Java.MethodHeader -> Ast.Expr
 writeMethodHeader (Java.MethodHeader params result decl mthrows) = spaceSep $ Y.catMaybes [
   if L.null params then Nothing else Just $ angleBracesList inlineStyle (writeTypeParameter <$> params),
   Just $ writeResult result,
   Just $ writeMethodDeclarator decl,
   writeThrows <$> mthrows]
 
-writeMethodInvocation :: Java.MethodInvocation -> CT.Expr
+writeMethodInvocation :: Java.MethodInvocation -> Ast.Expr
 writeMethodInvocation (Java.MethodInvocation header args) = noSep [headerSec, argSec]
   where
     argSec = parenList True (writeExpression <$> args)
@@ -548,7 +548,7 @@ writeMethodInvocation (Java.MethodInvocation header args) = noSep [headerSec, ar
             if L.null targs then Nothing else Just $ angleBracesList inlineStyle (writeTypeArgument <$> targs),
             Just $ writeIdentifier id]
 
-writeMethodModifier :: Java.MethodModifier -> CT.Expr
+writeMethodModifier :: Java.MethodModifier -> Ast.Expr
 writeMethodModifier m = case m of
   Java.MethodModifierAnnotation ann -> writeAnnotation ann
   Java.MethodModifierPublic -> cst "public"
@@ -560,13 +560,13 @@ writeMethodModifier m = case m of
   Java.MethodModifierNative -> cst "native"
   Java.MethodModifierStrictfb -> cst "strictfb"
 
-writeMethodName :: Java.MethodName -> CT.Expr
+writeMethodName :: Java.MethodName -> Ast.Expr
 writeMethodName (Java.MethodName id) = writeIdentifier id
 
-writeMethodReference :: Java.MethodReference -> CT.Expr
+writeMethodReference :: Java.MethodReference -> Ast.Expr
 writeMethodReference _ = cst "TODO:MethodReference"
 
-writeMultiplicativeExpression :: Java.MultiplicativeExpression -> CT.Expr
+writeMultiplicativeExpression :: Java.MultiplicativeExpression -> Ast.Expr
 writeMultiplicativeExpression e = case e of
   Java.MultiplicativeExpressionUnary u -> writeUnaryExpression u
   Java.MultiplicativeExpressionTimes (Java.MultiplicativeExpression_Binary lhs rhs) ->
@@ -576,12 +576,12 @@ writeMultiplicativeExpression e = case e of
   Java.MultiplicativeExpressionMod (Java.MultiplicativeExpression_Binary lhs rhs) ->
     infixWs "%" (writeMultiplicativeExpression lhs) (writeUnaryExpression rhs)
 
-writeNormalAnnotation :: Java.NormalAnnotation -> CT.Expr
+writeNormalAnnotation :: Java.NormalAnnotation -> Ast.Expr
 writeNormalAnnotation (Java.NormalAnnotation tname pairs) = prefixAt $ noSep [
   writeTypeName tname,
   commaSep inlineStyle (writeElementValuePair <$> pairs)]
 
-writeNormalClassDeclaration :: Java.NormalClassDeclaration -> CT.Expr
+writeNormalClassDeclaration :: Java.NormalClassDeclaration -> Ast.Expr
 writeNormalClassDeclaration (Java.NormalClassDeclaration mods id tparams msuperc superi body) =
     spaceSep $ Y.catMaybes [modSec, classSec, idSec, extendsSec, implementsSec, bodySec]
   where
@@ -600,7 +600,7 @@ writeNormalClassDeclaration (Java.NormalClassDeclaration mods id tparams msuperc
       else Just $ spaceSep [cst "implements", commaSep inlineStyle (writeInterfaceType <$> superi)]
     bodySec = Just $ writeClassBody body
 
-writeNormalInterfaceDeclaration :: Java.NormalInterfaceDeclaration -> CT.Expr
+writeNormalInterfaceDeclaration :: Java.NormalInterfaceDeclaration -> Ast.Expr
 writeNormalInterfaceDeclaration (Java.NormalInterfaceDeclaration mods id tparams extends body) =
     spaceSep $ Y.catMaybes [modSec, classSec, idSec, extendsSec, bodySec]
   where
@@ -617,50 +617,50 @@ writeNormalInterfaceDeclaration (Java.NormalInterfaceDeclaration mods id tparams
       spaceSep [cst "extends", commaSep inlineStyle (writeInterfaceType <$> extends)]
     bodySec = Just $ writeInterfaceBody body
 
-writeNumericType :: Java.NumericType -> CT.Expr
+writeNumericType :: Java.NumericType -> Ast.Expr
 writeNumericType nt = case nt of
   Java.NumericTypeIntegral it -> writeIntegralType it
   Java.NumericTypeFloatingPoint ft -> writeFloatingPointType ft
 
-writePackageDeclaration :: Java.PackageDeclaration -> CT.Expr
+writePackageDeclaration :: Java.PackageDeclaration -> Ast.Expr
 writePackageDeclaration (Java.PackageDeclaration mods ids) = suffixSemi $ spaceSep $ Y.catMaybes [
     if L.null mods then Nothing else Just $ spaceSep (writePackageModifier <$> mods),
     Just $ spaceSep [cst "package", cst $ L.intercalate "." (Java.unIdentifier <$> ids)]]
 
-writePackageName :: Java.PackageName -> CT.Expr
+writePackageName :: Java.PackageName -> Ast.Expr
 writePackageName (Java.PackageName ids) = dotSep (writeIdentifier <$> ids)
 
-writePackageOrTypeName :: Java.PackageOrTypeName -> CT.Expr
+writePackageOrTypeName :: Java.PackageOrTypeName -> Ast.Expr
 writePackageOrTypeName (Java.PackageOrTypeName ids) = dotSep (writeIdentifier <$> ids)
 
-writePackageModifier :: Java.PackageModifier -> CT.Expr
+writePackageModifier :: Java.PackageModifier -> Ast.Expr
 writePackageModifier (Java.PackageModifier ann) = writeAnnotation ann
 
-writePostDecrementExpression :: Java.PostDecrementExpression -> CT.Expr
+writePostDecrementExpression :: Java.PostDecrementExpression -> Ast.Expr
 writePostDecrementExpression _ = cst "TODO:PostDecrementExpression"
 
-writePostIncrementExpression :: Java.PostIncrementExpression -> CT.Expr
+writePostIncrementExpression :: Java.PostIncrementExpression -> Ast.Expr
 writePostIncrementExpression _ = cst "TODO:PostIncrementExpression"
 
-writePostfixExpression :: Java.PostfixExpression -> CT.Expr
+writePostfixExpression :: Java.PostfixExpression -> Ast.Expr
 writePostfixExpression e = case e of
   Java.PostfixExpressionPrimary p -> writePrimary p
   Java.PostfixExpressionName en -> writeExpressionName en
   Java.PostfixExpressionPostIncrement pi -> writePostIncrementExpression pi
   Java.PostfixExpressionPostDecrement pd -> writePostDecrementExpression pd
 
-writePreDecrementExpression:: Java.PreDecrementExpression -> CT.Expr
+writePreDecrementExpression:: Java.PreDecrementExpression -> Ast.Expr
 writePreDecrementExpression _ = cst "TODO:PreDecrementExpression"
 
-writePreIncrementExpression :: Java.PreIncrementExpression -> CT.Expr
+writePreIncrementExpression :: Java.PreIncrementExpression -> Ast.Expr
 writePreIncrementExpression _ = cst "TODO:PreIncrementExpression"
 
-writePrimary :: Java.Primary -> CT.Expr
+writePrimary :: Java.Primary -> Ast.Expr
 writePrimary p = case p of
   Java.PrimaryNoNewArray_ n -> writePrimaryNoNewArray n
   Java.PrimaryArrayCreation a -> writeArrayCreationExpression a
 
-writePrimaryNoNewArray :: Java.PrimaryNoNewArray -> CT.Expr
+writePrimaryNoNewArray :: Java.PrimaryNoNewArray -> Ast.Expr
 writePrimaryNoNewArray p = case p of
   Java.PrimaryNoNewArrayLiteral l -> writeLiteral l
   Java.PrimaryNoNewArrayClassLiteral cl -> writeClassLiteral cl
@@ -673,26 +673,26 @@ writePrimaryNoNewArray p = case p of
   Java.PrimaryNoNewArrayMethodInvocation mi -> writeMethodInvocation mi
   Java.PrimaryNoNewArrayMethodReference mr -> writeMethodReference mr
 
-writePrimitiveType :: Java.PrimitiveType -> CT.Expr
+writePrimitiveType :: Java.PrimitiveType -> Ast.Expr
 writePrimitiveType pt = case pt of
   Java.PrimitiveTypeNumeric nt -> writeNumericType nt
   Java.PrimitiveTypeBoolean -> cst "boolean"
 
-writePrimitiveTypeWithAnnotations :: Java.PrimitiveTypeWithAnnotations -> CT.Expr
+writePrimitiveTypeWithAnnotations :: Java.PrimitiveTypeWithAnnotations -> Ast.Expr
 writePrimitiveTypeWithAnnotations (Java.PrimitiveTypeWithAnnotations pt anns) = spaceSep $ Y.catMaybes [
   if L.null anns then Nothing else Just $ spaceSep (writeAnnotation <$> anns),
   Just $ writePrimitiveType pt]
 
-writeReceiverParameter :: Java.ReceiverParameter -> CT.Expr
+writeReceiverParameter :: Java.ReceiverParameter -> Ast.Expr
 writeReceiverParameter _ = cst "TODO:ReceiverParameter"
 
-writeReferenceType :: Java.ReferenceType -> CT.Expr
+writeReferenceType :: Java.ReferenceType -> Ast.Expr
 writeReferenceType rt = case rt of
   Java.ReferenceTypeClassOrInterface cit -> writeClassOrInterfaceType cit
   Java.ReferenceTypeVariable v -> writeName v
   Java.ReferenceTypeArray at -> writeArrayType at
 
-writeRelationalExpression :: Java.RelationalExpression -> CT.Expr
+writeRelationalExpression :: Java.RelationalExpression -> Ast.Expr
 writeRelationalExpression e = case e of
   Java.RelationalExpressionSimple s -> writeShiftExpression s
   Java.RelationalExpressionLessThan lt -> writeRelationalExpression_LessThan lt
@@ -701,33 +701,33 @@ writeRelationalExpression e = case e of
   Java.RelationalExpressionGreaterThanEqual gte -> writeRelationalExpression_GreaterThanEqual gte
   Java.RelationalExpressionInstanceof i -> writeRelationalExpression_InstanceOf i
 
-writeRelationalExpression_GreaterThan :: Java.RelationalExpression_GreaterThan -> CT.Expr
+writeRelationalExpression_GreaterThan :: Java.RelationalExpression_GreaterThan -> Ast.Expr
 writeRelationalExpression_GreaterThan _ = cst "TODO:RelationalExpression_GreaterThan"
 
-writeRelationalExpression_GreaterThanEqual :: Java.RelationalExpression_GreaterThanEqual -> CT.Expr
+writeRelationalExpression_GreaterThanEqual :: Java.RelationalExpression_GreaterThanEqual -> Ast.Expr
 writeRelationalExpression_GreaterThanEqual _ = cst "TODO:RelationalExpression_GreaterThanEqual"
 
-writeRelationalExpression_InstanceOf :: Java.RelationalExpression_InstanceOf -> CT.Expr
+writeRelationalExpression_InstanceOf :: Java.RelationalExpression_InstanceOf -> Ast.Expr
 writeRelationalExpression_InstanceOf (Java.RelationalExpression_InstanceOf lhs rhs) =
   infixWs "instanceof" (writeRelationalExpression lhs) (writeReferenceType rhs)
 
-writeRelationalExpression_LessThan :: Java.RelationalExpression_LessThan -> CT.Expr
+writeRelationalExpression_LessThan :: Java.RelationalExpression_LessThan -> Ast.Expr
 writeRelationalExpression_LessThan _ = cst "TODO:RelationalExpression_LessThan"
 
-writeRelationalExpression_LessThanEqual :: Java.RelationalExpression_LessThanEqual -> CT.Expr
+writeRelationalExpression_LessThanEqual :: Java.RelationalExpression_LessThanEqual -> Ast.Expr
 writeRelationalExpression_LessThanEqual _ = cst "TODO:RelationalExpression_LessThanEqual"
 
-writeResult :: Java.Result -> CT.Expr
+writeResult :: Java.Result -> Ast.Expr
 writeResult r = case r of
   Java.ResultType t -> writeUnannType t
   Java.ResultVoid -> cst "void"
 
-writeReturnStatement :: Java.ReturnStatement -> CT.Expr
+writeReturnStatement :: Java.ReturnStatement -> Ast.Expr
 writeReturnStatement (Java.ReturnStatement mex) = suffixSemi $ spaceSep $ Y.catMaybes [
   Just $ cst "return",
   writeExpression <$> mex]
 
-writeShiftExpression :: Java.ShiftExpression -> CT.Expr
+writeShiftExpression :: Java.ShiftExpression -> Ast.Expr
 writeShiftExpression e = case e of
   Java.ShiftExpressionUnary a -> writeAdditiveExpression a
   Java.ShiftExpressionShiftLeft (Java.ShiftExpression_Binary lhs rhs) ->
@@ -737,15 +737,15 @@ writeShiftExpression e = case e of
   Java.ShiftExpressionShiftRightZeroFill (Java.ShiftExpression_Binary lhs rhs) ->
     infixWs ">>>" (writeShiftExpression lhs) (writeAdditiveExpression rhs)
 
-writeSimpleTypeName :: Java.SimpleTypeName -> CT.Expr
+writeSimpleTypeName :: Java.SimpleTypeName -> Ast.Expr
 writeSimpleTypeName (Java.SimpleTypeName tid) = writeTypeIdentifier tid
 
-writeSingleElementAnnotation :: Java.SingleElementAnnotation -> CT.Expr
+writeSingleElementAnnotation :: Java.SingleElementAnnotation -> Ast.Expr
 writeSingleElementAnnotation (Java.SingleElementAnnotation tname mv) = case mv of
   Nothing -> writeMarkerAnnotation (Java.MarkerAnnotation tname)
   Just v -> prefixAt $ noSep [writeTypeName tname, parenList False [writeElementValue v]]
 
-writeStatement :: Java.Statement -> CT.Expr
+writeStatement :: Java.Statement -> Ast.Expr
 writeStatement s = case s of
   Java.StatementWithoutTrailing s -> writeStatementWithoutTrailingSubstatement s
   Java.StatementLabeled l -> writeLabeledStatement l
@@ -754,7 +754,7 @@ writeStatement s = case s of
   Java.StatementWhile w -> writeWhileStatement w
   Java.StatementFor f -> writeForStatement f
 
-writeStatementExpression :: Java.StatementExpression -> CT.Expr
+writeStatementExpression :: Java.StatementExpression -> Ast.Expr
 writeStatementExpression e = case e of
   Java.StatementExpressionAssignment ass -> writeAssignment ass
   Java.StatementExpressionPreIncrement pi -> writePreIncrementExpression pi
@@ -764,7 +764,7 @@ writeStatementExpression e = case e of
   Java.StatementExpressionMethodInvocation m -> writeMethodInvocation m
   Java.StatementExpressionClassInstanceCreation cic -> writeClassInstanceCreationExpression cic
 
-writeStatementWithoutTrailingSubstatement :: Java.StatementWithoutTrailingSubstatement -> CT.Expr
+writeStatementWithoutTrailingSubstatement :: Java.StatementWithoutTrailingSubstatement -> Ast.Expr
 writeStatementWithoutTrailingSubstatement s = case s of
   Java.StatementWithoutTrailingSubstatementBlock b -> writeBlock b
   Java.StatementWithoutTrailingSubstatementEmpty -> semi
@@ -779,80 +779,80 @@ writeStatementWithoutTrailingSubstatement s = case s of
   Java.StatementWithoutTrailingSubstatementThrow t -> writeThrowStatement t
   Java.StatementWithoutTrailingSubstatementTry t -> writeTryStatement t
 
-writeStaticInitializer :: Java.StaticInitializer -> CT.Expr
+writeStaticInitializer :: Java.StaticInitializer -> Ast.Expr
 writeStaticInitializer _ = cst "TODO:StaticInitializer"
 
-writeStringLiteral :: Java.StringLiteral -> CT.Expr
+writeStringLiteral :: Java.StringLiteral -> Ast.Expr
 writeStringLiteral (Java.StringLiteral s) = cst $ show s
 
-writeSwitchStatement :: Java.SwitchStatement -> CT.Expr
+writeSwitchStatement :: Java.SwitchStatement -> Ast.Expr
 writeSwitchStatement _ = cst "TODO:SwitchStatement"
 
-writeSynchronizedStatement :: Java.SynchronizedStatement -> CT.Expr
+writeSynchronizedStatement :: Java.SynchronizedStatement -> Ast.Expr
 writeSynchronizedStatement _ = cst "TODO:SynchronizedStatement"
 
-writeThrowStatement :: Java.ThrowStatement -> CT.Expr
+writeThrowStatement :: Java.ThrowStatement -> Ast.Expr
 writeThrowStatement (Java.ThrowStatement ex) = suffixSemi $ spaceSep [cst "throw", writeExpression ex]
 
-writeThrows :: Java.Throws -> CT.Expr
+writeThrows :: Java.Throws -> Ast.Expr
 writeThrows _ = cst "TODO:Throws"
 
-writeTryStatement :: Java.TryStatement -> CT.Expr
+writeTryStatement :: Java.TryStatement -> Ast.Expr
 writeTryStatement _ = cst "TODO:TryStatement"
 
-writeType :: Java.Type -> CT.Expr
+writeType :: Java.Type -> Ast.Expr
 writeType t = case t of
   Java.TypePrimitive pt -> writePrimitiveTypeWithAnnotations pt
   Java.TypeReference rt -> writeReferenceType rt
 
-writeTypeArgument :: Java.TypeArgument -> CT.Expr
+writeTypeArgument :: Java.TypeArgument -> Ast.Expr
 writeTypeArgument a = case a of
   Java.TypeArgumentReference rt -> writeReferenceType rt
   Java.TypeArgumentWildcard w -> writeWildcard w
 
-writeTypeArgumentsOrDiamond :: Java.TypeArgumentsOrDiamond -> CT.Expr
+writeTypeArgumentsOrDiamond :: Java.TypeArgumentsOrDiamond -> Ast.Expr
 writeTypeArgumentsOrDiamond targs = case targs of
   Java.TypeArgumentsOrDiamondArguments args -> angleBracesList inlineStyle (writeTypeArgument <$> args)
   Java.TypeArgumentsOrDiamondDiamond -> cst "<>"
 
-writeTypeBound :: Java.TypeBound -> CT.Expr
+writeTypeBound :: Java.TypeBound -> Ast.Expr
 writeTypeBound _ = cst "TODO:TypeBound"
 
-writeTypeDeclaration :: Java.TypeDeclaration -> CT.Expr
+writeTypeDeclaration :: Java.TypeDeclaration -> Ast.Expr
 writeTypeDeclaration d = case d of
   Java.TypeDeclarationClass d -> writeClassDeclaration d
   Java.TypeDeclarationInterface d -> writeInterfaceDeclaration d
   Java.TypeDeclarationNone -> semi
 
-writeTypeDeclarationWithComments :: Java.TypeDeclarationWithComments -> CT.Expr
+writeTypeDeclarationWithComments :: Java.TypeDeclarationWithComments -> Ast.Expr
 writeTypeDeclarationWithComments (Java.TypeDeclarationWithComments d mc) = withComments mc $ writeTypeDeclaration d
 
-writeTypeIdentifier :: Java.TypeIdentifier -> CT.Expr
+writeTypeIdentifier :: Java.TypeIdentifier -> Ast.Expr
 writeTypeIdentifier (Java.TypeIdentifier id) = writeIdentifier id
 
-writeTypeName :: Java.TypeName -> CT.Expr
+writeTypeName :: Java.TypeName -> Ast.Expr
 writeTypeName (Java.TypeName id mqual) = dotSep $ Y.catMaybes [
   writePackageOrTypeName <$> mqual,
   Just $ writeTypeIdentifier id]
 
-writeTypeParameter :: Java.TypeParameter -> CT.Expr
+writeTypeParameter :: Java.TypeParameter -> Ast.Expr
 writeTypeParameter (Java.TypeParameter mods id bound) = spaceSep $ Y.catMaybes [
   if L.null mods then Nothing else Just $ spaceSep (writeTypeParameterModifier <$> mods),
   Just $ writeTypeIdentifier id,
   fmap (\b -> spaceSep [cst "extends", writeTypeBound b]) bound]
 
-writeTypeParameterModifier :: Java.TypeParameterModifier -> CT.Expr
+writeTypeParameterModifier :: Java.TypeParameterModifier -> Ast.Expr
 writeTypeParameterModifier (Java.TypeParameterModifier ann) = writeAnnotation ann
 
-writeName :: Java.TypeVariable -> CT.Expr
+writeName :: Java.TypeVariable -> Ast.Expr
 writeName (Java.TypeVariable anns id) = spaceSep $ Y.catMaybes [
   if L.null anns then Nothing else Just $ spaceSep (writeAnnotation <$> anns),
   Just $ writeTypeIdentifier id]
 
-writeUnannType :: Java.UnannType -> CT.Expr
+writeUnannType :: Java.UnannType -> Ast.Expr
 writeUnannType (Java.UnannType t) = writeType t
 
-writeUnaryExpression :: Java.UnaryExpression -> CT.Expr
+writeUnaryExpression :: Java.UnaryExpression -> Ast.Expr
 writeUnaryExpression e = case e of
   Java.UnaryExpressionPreIncrement pi -> writePreIncrementExpression pi
   Java.UnaryExpressionPreDecrement pd -> writePreDecrementExpression pd
@@ -860,14 +860,14 @@ writeUnaryExpression e = case e of
   Java.UnaryExpressionMinus m -> spaceSep [cst "-", writeUnaryExpression m]
   Java.UnaryExpressionOther o -> writeUnaryExpressionNotPlusMinus o
 
-writeUnaryExpressionNotPlusMinus :: Java.UnaryExpressionNotPlusMinus -> CT.Expr
+writeUnaryExpressionNotPlusMinus :: Java.UnaryExpressionNotPlusMinus -> Ast.Expr
 writeUnaryExpressionNotPlusMinus e = case e of
   Java.UnaryExpressionNotPlusMinusPostfix p -> writePostfixExpression p
   Java.UnaryExpressionNotPlusMinusTilde u -> spaceSep [cst "~", writeUnaryExpression u]
   Java.UnaryExpressionNotPlusMinusNot u -> noSep [cst "!", writeUnaryExpression u]
   Java.UnaryExpressionNotPlusMinusCast c -> writeCastExpression c
 
-writeUnqualifiedClassInstanceCreationExpression  :: Java.UnqualifiedClassInstanceCreationExpression -> CT.Expr
+writeUnqualifiedClassInstanceCreationExpression  :: Java.UnqualifiedClassInstanceCreationExpression -> Ast.Expr
 writeUnqualifiedClassInstanceCreationExpression (Java.UnqualifiedClassInstanceCreationExpression targs cit args mbody)
   = spaceSep $ Y.catMaybes [
     Just $ cst "new",
@@ -875,49 +875,49 @@ writeUnqualifiedClassInstanceCreationExpression (Java.UnqualifiedClassInstanceCr
     Just $ noSep [writeClassOrInterfaceTypeToInstantiate cit, parenList False (writeExpression <$> args)],
     writeClassBody <$> mbody]
 
-writeVariableArityParameter :: Java.VariableArityParameter -> CT.Expr
+writeVariableArityParameter :: Java.VariableArityParameter -> Ast.Expr
 writeVariableArityParameter _ = cst "TODO:VariableArityParameter"
 
-writeVariableDeclarator :: Java.VariableDeclarator -> CT.Expr
+writeVariableDeclarator :: Java.VariableDeclarator -> Ast.Expr
 writeVariableDeclarator (Java.VariableDeclarator id minit) =
     Y.maybe idSec (infixWs "=" idSec . writeVariableInitializer) minit
   where
     idSec = writeVariableDeclaratorId id
 
-writeVariableDeclaratorId :: Java.VariableDeclaratorId -> CT.Expr
+writeVariableDeclaratorId :: Java.VariableDeclaratorId -> Ast.Expr
 writeVariableDeclaratorId (Java.VariableDeclaratorId id mdims) = noSep $ Y.catMaybes [
   Just $ writeIdentifier id,
   writeDims <$> mdims]
 
-writeVariableInitializer :: Java.VariableInitializer -> CT.Expr
+writeVariableInitializer :: Java.VariableInitializer -> Ast.Expr
 writeVariableInitializer i = case i of
   Java.VariableInitializerExpression e -> writeExpression e
   Java.VariableInitializerArrayInitializer ai -> writeArrayInitializer ai
 
-writeVariableModifier :: Java.VariableModifier -> CT.Expr
+writeVariableModifier :: Java.VariableModifier -> Ast.Expr
 writeVariableModifier m = case m of
   Java.VariableModifierAnnotation ann -> writeAnnotation ann
   Java.VariableModifierFinal -> cst "final"
 
-writeWhileStatement :: Java.WhileStatement -> CT.Expr
+writeWhileStatement :: Java.WhileStatement -> Ast.Expr
 writeWhileStatement _ = cst "TODO:WhileStatement"
 
-writeWildcard :: Java.Wildcard -> CT.Expr
+writeWildcard :: Java.Wildcard -> Ast.Expr
 writeWildcard (Java.Wildcard anns mbounds) = spaceSep $ Y.catMaybes [
   if L.null anns then Nothing else Just $ commaSep inlineStyle (writeAnnotation <$> anns),
   Just $ cst "*",
   writeWildcardBounds <$> mbounds]
 
-writeWildcardBounds :: Java.WildcardBounds -> CT.Expr
+writeWildcardBounds :: Java.WildcardBounds -> Ast.Expr
 writeWildcardBounds b = case b of
   Java.WildcardBoundsExtends rt -> spaceSep [cst "extends", writeReferenceType rt]
   Java.WildcardBoundsSuper rt -> spaceSep [cst "super", writeReferenceType rt]
 
-prefixAt :: CT.Expr -> CT.Expr
+prefixAt :: Ast.Expr -> Ast.Expr
 prefixAt e = noSep [cst "@", e]
 
-semi :: CT.Expr
+semi :: Ast.Expr
 semi = cst ";"
 
-suffixSemi :: CT.Expr -> CT.Expr
+suffixSemi :: Ast.Expr -> Ast.Expr
 suffixSemi e = noSep [e, semi]

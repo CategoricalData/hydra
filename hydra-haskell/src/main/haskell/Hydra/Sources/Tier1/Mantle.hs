@@ -16,8 +16,7 @@ import qualified Data.Maybe            as Y
 
 hydraMantleModule :: Module
 hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
-    Just ("A set of types which supplement hydra.core with variants and accessors."
-      ++ " Currently contains miscellaneous additional types including CaseConvention and Either.")
+    Just ("A set of types which supplement hydra.core, but are not referenced by hydra.core.")
   where
     ns = Namespace "hydra.mantle"
     core = typeref $ moduleNamespace hydraCoreModule

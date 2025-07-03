@@ -32,7 +32,6 @@ module Hydra.Kernel (
   module Hydra.LiteralAdapters,
   module Hydra.Literals,
   module Hydra.Mantle,
-  module Hydra.Messages,
   module Hydra.Module,
   module Hydra.Phantoms,
   module Hydra.Qnames,
@@ -73,7 +72,6 @@ import Hydra.Lexical
 import Hydra.LiteralAdapters
 import Hydra.Literals
 import Hydra.Mantle hiding (Either)
-import Hydra.Messages
 import Hydra.Module
 import Hydra.Phantoms
 import Hydra.Qnames
