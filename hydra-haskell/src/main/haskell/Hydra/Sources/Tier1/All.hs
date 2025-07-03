@@ -12,7 +12,6 @@ module Hydra.Sources.Tier1.All(
 --  module Hydra.Sources.Tier1.Encode.Core,
   module Hydra.Sources.Tier1.Decode,
   module Hydra.Sources.Tier1.Formatting,
-  module Hydra.Sources.Tier1.Functions,
   module Hydra.Sources.Tier1.Grammar,
   module Hydra.Sources.Tier1.Graph,
   module Hydra.Sources.Tier1.Json,
@@ -38,7 +37,6 @@ import Hydra.Sources.Tier1.Constraints
 import Hydra.Sources.Tier1.Encode.Core hiding (ref)
 import Hydra.Sources.Tier1.Decode
 import Hydra.Sources.Tier1.Formatting
-import Hydra.Sources.Tier1.Functions
 import Hydra.Sources.Tier1.Grammar
 import Hydra.Sources.Tier1.Graph
 import Hydra.Sources.Tier1.Json
@@ -63,7 +61,6 @@ tier1TermModules = [
   hydraDecodeModule,
   hydraConstantsModule,
   hydraFormattingModule,
-  hydraFunctionsModule,
   hydraLiteralsModule,
   hydraMessagesModule,
   hydraStripModule]

@@ -73,6 +73,9 @@ mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->
     Mantle.EitherLeft v1 -> (forLeft v1)
     Mantle.EitherRight v1 -> (forRight v1)) (mutate t0))))
 
+optionalToList :: (Maybe t0 -> [t0])
+optionalToList mx = (Optionals.maybe [] Lists.pure mx)
+
 pure :: (t0 -> Compute.Flow t1 t0)
 pure xp = (Compute.Flow (\s -> \t -> Compute.FlowState {
   Compute.flowStateValue = (Just xp),
