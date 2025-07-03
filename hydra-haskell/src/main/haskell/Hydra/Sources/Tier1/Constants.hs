@@ -61,14 +61,14 @@ ignoredVariableDef = constantsDefinition "ignoredVariable" $
 
 key_classesDef = annotationKeyDef "classes" Nothing
 key_debugIdDef = annotationKeyDef "debugId" Nothing
-key_deprecatedDef = annotationKeyDef "_deprecated" Nothing
+key_deprecatedDef = annotationKeyDef "deprecated" Nothing
 key_descriptionDef = annotationKeyDef "description" Nothing
 key_excludeDef = annotationKeyDef "exclude" Nothing
 key_firstClassTypeDef = annotationKeyDef "firstClassType"
   $ Just "A flag which tells the language coders to encode a given encoded type as a term rather than a native type"
-key_maxLengthDef = annotationKeyDef "_maxLength" Nothing
-key_minLengthDef = annotationKeyDef "_minLength" Nothing
-key_preserveFieldNameDef = annotationKeyDef "_preserveFieldName" Nothing
+key_maxLengthDef = annotationKeyDef "maxLength" Nothing
+key_minLengthDef = annotationKeyDef "minLength" Nothing
+key_preserveFieldNameDef = annotationKeyDef "preserveFieldName" Nothing
 key_typeDef = annotationKeyDef "type" Nothing
 
 maxInt32Def :: TElement Int

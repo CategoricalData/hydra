@@ -545,7 +545,7 @@ createVisitorInterface env tname variants = Cpp.DeclarationTemplate $
         Cpp.FunctionBodyDefault
 
 elementNameToFilePath :: Name -> FilePath
-elementNameToFilePath = nameToFilePathNew CaseConventionLowerSnake CaseConventionLowerSnake (FileExtension "h")
+elementNameToFilePath = nameToFilePath CaseConventionLowerSnake CaseConventionLowerSnake (FileExtension "h")
 
 findIncludes :: Bool -> Namespace -> [TypeDefinition] -> [Cpp.IncludeDirective]
 findIncludes withFwd ns defs = systemIncludes ++ domainIncludes
