@@ -36,7 +36,6 @@ import qualified Hydra.Sources.Tier1.Constants    as Constants
 import qualified Hydra.Sources.Tier1.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Tier1.Decode       as Decode
 import qualified Hydra.Sources.Tier1.Formatting   as Formatting
-import qualified Hydra.Sources.Tier1.Functions    as Functions
 import qualified Hydra.Sources.Tier1.Literals     as Literals
 import qualified Hydra.Sources.Tier1.Strip        as Strip
 import           Prelude hiding ((++))
