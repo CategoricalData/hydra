@@ -5,6 +5,8 @@ module Hydra.Sources.Tier2.Errors where
 -- Standard Tier-2 imports
 import Hydra.Kernel
 import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Accessors              as Accessors
+import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Coders                 as Coders
 import qualified Hydra.Dsl.Compute                as Compute
 import qualified Hydra.Dsl.Core                   as Core
@@ -46,7 +48,6 @@ import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
 -- Uncomment tier-2 sources as needed
---import qualified Hydra.Sources.Tier2.Accessors as Accessors
 --import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
 --import qualified Hydra.Sources.Tier2.Adapters as Adapters
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
@@ -66,6 +67,7 @@ import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
+--import qualified Hydra.Sources.Tier2.Show.Accessors as ShowAccessors
 import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
