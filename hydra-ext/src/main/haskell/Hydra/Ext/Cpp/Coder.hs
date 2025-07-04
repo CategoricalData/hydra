@@ -14,7 +14,7 @@ import qualified Hydra.Ext.Cpp.Syntax as Cpp
 import qualified Hydra.Show.Core as ShowCore
 import Hydra.Kernel
 import qualified Hydra.Lib.Strings as Strings
-import Hydra.Adapters
+import Hydra.Adapt.Modules
 import Hydra.Formatting
 import qualified Hydra.Decode as Decode
 

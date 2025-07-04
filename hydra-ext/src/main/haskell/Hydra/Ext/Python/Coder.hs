@@ -1,7 +1,7 @@
 module Hydra.Ext.Python.Coder (moduleToPython) where
 
 import Hydra.Kernel
-import Hydra.Adapters
+import Hydra.Adapt.Modules
 import Hydra.Ext.Python.Language
 import Hydra.Dsl.Terms
 import qualified Hydra.Ext.Python.Syntax as Py

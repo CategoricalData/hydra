@@ -6,7 +6,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Math as Math
-import Prelude hiding  (Enum, Ordering, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M

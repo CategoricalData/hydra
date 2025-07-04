@@ -3,8 +3,8 @@
 module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier1.All,
   module Hydra.Sources.Tier2.All,
-  module Hydra.Sources.Tier2.AdapterUtils,
-  module Hydra.Sources.Tier2.Adapters,
+  module Hydra.Sources.Tier2.Adapt.Utils,
+  module Hydra.Sources.Tier2.Adapt.Modules,
   module Hydra.Sources.Tier2.Annotations,
   module Hydra.Sources.Tier2.Arity,
   module Hydra.Sources.Tier2.CoreLanguage,
@@ -12,7 +12,7 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.GrammarToModule,
   module Hydra.Sources.Tier2.Inference,
   module Hydra.Sources.Tier2.Lexical,
-  module Hydra.Sources.Tier2.LiteralAdapters,
+  module Hydra.Sources.Tier2.Adapt.Literals,
   module Hydra.Sources.Tier2.Qnames,
   module Hydra.Sources.Tier2.Reduction,
   module Hydra.Sources.Tier2.Rewriting,
@@ -22,14 +22,14 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.Substitution,
   module Hydra.Sources.Tier2.Tarjan,
   module Hydra.Sources.Tier2.Templating,
-  module Hydra.Sources.Tier2.TermAdapters,
+  module Hydra.Sources.Tier2.Adapt.Terms,
   module Hydra.Sources.Tier2.Unification,
   module Hydra.Sources.Tier2.Variants,
 ) where
 
 import Hydra.Sources.Tier1.All hiding (mapDef) -- hydra.decode, hydra.expect, and hydra.flows all export 'map'
-import Hydra.Sources.Tier2.AdapterUtils
-import Hydra.Sources.Tier2.Adapters
+import Hydra.Sources.Tier2.Adapt.Utils
+import Hydra.Sources.Tier2.Adapt.Modules
 import Hydra.Sources.Tier2.Annotations
 import Hydra.Sources.Tier2.Arity
 import Hydra.Sources.Tier2.CoreLanguage
@@ -40,7 +40,7 @@ import Hydra.Sources.Tier2.Monads
 import Hydra.Sources.Tier2.GrammarToModule
 import Hydra.Sources.Tier2.Inference
 import Hydra.Sources.Tier2.Lexical
-import Hydra.Sources.Tier2.LiteralAdapters
+import Hydra.Sources.Tier2.Adapt.Literals
 import Hydra.Sources.Tier2.Qnames
 import Hydra.Sources.Tier2.Reduction
 import Hydra.Sources.Tier2.Rewriting
@@ -52,7 +52,7 @@ import Hydra.Sources.Tier2.Sorting
 import Hydra.Sources.Tier2.Substitution
 import Hydra.Sources.Tier2.Tarjan
 import Hydra.Sources.Tier2.Templating
-import Hydra.Sources.Tier2.TermAdapters hiding (optionalToListDef)
+import Hydra.Sources.Tier2.Adapt.Terms hiding (optionalToListDef)
 import Hydra.Sources.Tier2.Unification
 import Hydra.Sources.Tier2.Variants
 
@@ -78,8 +78,8 @@ tier2TermModules = [
   extractCoreModule,
   showCoreModule,
   showAccessorsModule,
-  hydraAdaptersModule,
-  hydraAdapterUtilsModule,
+  adaptModulesModule,
+  hydraAdaptUtilsModule,
   hydraAnnotationsModule,
   hydraArityModule,
   hydraCoreLanguageModule,
@@ -87,7 +87,7 @@ tier2TermModules = [
   hydraGrammarToModuleModule,
   hydraInferenceModule,
   hydraLexicalModule,
-  hydraLiteralAdaptersModule,
+  adaptLiteralsModule,
   hydraQnamesModule,
   hydraReductionModule,
   hydraRewritingModule,
@@ -97,6 +97,6 @@ tier2TermModules = [
   hydraSubstitutionModule,
   tarjanModule,
   hydraTemplatingModule,
-  hydraTermAdaptersModule,
+  adaptTermsModule,
   hydraUnificationModule,
   hydraVariantsModule]

@@ -1,8 +1,9 @@
 -- | Entry point for Hydra's adapter (type/term rewriting) framework
 
-module Hydra.Adapters where
+module Hydra.Adapt.Modules where
 
-import qualified Hydra.AdapterUtils as AdapterUtils
+import qualified Hydra.Adapt.Terms as Terms
+import qualified Hydra.Adapt.Utils as Utils
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
@@ -22,8 +23,7 @@ import qualified Hydra.Module as Module
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Strip as Strip
-import qualified Hydra.TermAdapters as TermAdapters
-import Prelude hiding  (Enum, Ordering, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -60,7 +60,7 @@ adaptedModuleDefinitions lang mod =
     in (Flows.bind (adaptersFor types) (\adapters -> Flows.mapList (classify adapters) (Lists.zip els tterms)))))
 
 constructCoder :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> Core.Type -> Compute.Flow Graph.Graph (Compute.Coder t0 t2 Core.Term t1))
-constructCoder lang encodeTerm typ = (Monads.withTrace (Strings.cat2 "coder for " (Core__.type_ typ)) (Flows.bind (languageAdapter lang typ) (\adapter -> Flows.pure (AdapterUtils.composeCoders (Compute.adapterCoder adapter) (AdapterUtils.unidirectionalCoder encodeTerm)))))
+constructCoder lang encodeTerm typ = (Monads.withTrace (Strings.cat2 "coder for " (Core__.type_ typ)) (Flows.bind (languageAdapter lang typ) (\adapter -> Flows.pure (Utils.composeCoders (Compute.adapterCoder adapter) (Utils.unidirectionalCoder encodeTerm)))))
 
 languageAdapter :: (Coders.Language -> Core.Type -> Compute.Flow Graph.Graph (Compute.Adapter t0 t1 Core.Type Core.Type Core.Term Core.Term))
 languageAdapter lang typ = (Flows.bind Monads.getState (\g ->  
@@ -68,7 +68,7 @@ languageAdapter lang typ = (Flows.bind Monads.getState (\g ->
           Coders.adapterContextGraph = g,
           Coders.adapterContextLanguage = lang,
           Coders.adapterContextAdapters = Maps.empty}
-  in (Flows.bind (Monads.withState cx0 (Flows.bind (TermAdapters.termAdapter typ) (\ad -> Flows.bind Monads.getState (\cx -> Flows.pure (ad, cx))))) (\result ->  
+  in (Flows.bind (Monads.withState cx0 (Flows.bind (Terms.termAdapter typ) (\ad -> Flows.bind Monads.getState (\cx -> Flows.pure (ad, cx))))) (\result ->  
     let adapter = (fst result) 
         cx = (snd result)
         encode = (\term -> Monads.withState cx (Compute.coderEncode (Compute.adapterCoder adapter) term))
