@@ -7,7 +7,7 @@ Note: the following modules are part of the kernel, but they are not default imp
 - Hydra.Encode.Core
 - Hydra.Extract.Core
 - Hydra.Grammar
-- Hydra.GrammarToModule
+- Hydra.Grammars
 - Hydra.Topology
 -}
 

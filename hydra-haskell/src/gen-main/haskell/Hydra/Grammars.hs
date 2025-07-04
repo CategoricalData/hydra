@@ -1,6 +1,6 @@
 -- | A utility for converting a BNF grammar to a Hydra module.
 
-module Hydra.GrammarToModule where
+module Hydra.Grammars where
 
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Constants as Constants

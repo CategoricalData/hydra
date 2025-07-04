@@ -55,7 +55,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 --import qualified Hydra.Sources.Tier2.Monads as Monads
---import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
+--import qualified Hydra.Sources.Tier2.Grammars as Grammars
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
 --import qualified Hydra.Sources.Tier2.Adapt.Literals as AdaptLiterals
@@ -203,7 +203,6 @@ typeIsSupportedDef = adaptUtilsDefinition "typeIsSupported" $
     "base">: ref Strip.stripTypeDef @@ var "t",
     "isSupportedVariant">: lambda "v" $
       Logic.or
---        (Equality.equal (var "v") Mantle.typeVariantVariable)
         (cases _TypeVariant (var "v") (Just false) [_TypeVariant_variable>>: constant true])
         (Sets.member (var "v") (Coders.languageConstraintsTypeVariants $ var "constraints"))]
     $ Logic.and
