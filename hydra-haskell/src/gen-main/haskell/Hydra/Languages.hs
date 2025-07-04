@@ -1,6 +1,6 @@
 -- | Language constraints for Hydra Core
 
-module Hydra.CoreLanguage where
+module Hydra.Languages where
 
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Lib.Sets as Sets
@@ -12,8 +12,8 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Language constraints for Java
-hydraCoreLanguage :: Coders.Language
-hydraCoreLanguage = Coders.Language {
+hydraLanguage :: Coders.Language
+hydraLanguage = Coders.Language {
   Coders.languageName = (Coders.LanguageName "hydra.core"),
   Coders.languageConstraints = Coders.LanguageConstraints {
     Coders.languageConstraintsEliminationVariants = (Sets.fromList Variants.eliminationVariants),

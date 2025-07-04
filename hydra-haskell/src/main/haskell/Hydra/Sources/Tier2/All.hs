@@ -7,7 +7,7 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.Adapt.Modules,
   module Hydra.Sources.Tier2.Annotations,
   module Hydra.Sources.Tier2.Arity,
-  module Hydra.Sources.Tier2.CoreLanguage,
+  module Hydra.Sources.Tier2.Languages,
   module Hydra.Sources.Tier2.Monads,
   module Hydra.Sources.Tier2.Grammars,
   module Hydra.Sources.Tier2.Inference,
@@ -32,7 +32,7 @@ import Hydra.Sources.Tier2.Adapt.Utils
 import Hydra.Sources.Tier2.Adapt.Modules
 import Hydra.Sources.Tier2.Annotations
 import Hydra.Sources.Tier2.Arity
-import Hydra.Sources.Tier2.CoreLanguage
+import Hydra.Sources.Tier2.Languages
 import Hydra.Sources.Tier2.Decode.Core
 import Hydra.Sources.Tier2.Describe.Core
 import Hydra.Sources.Tier2.Extract.Core
@@ -82,7 +82,7 @@ tier2TermModules = [
   hydraAdaptUtilsModule,
   hydraAnnotationsModule,
   hydraArityModule,
-  hydraCoreLanguageModule,
+  languagesModule,
   hydraMonadsModule,
   hydraGrammarsModule,
   hydraInferenceModule,

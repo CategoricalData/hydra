@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier2.CoreLanguage where
+module Hydra.Sources.Tier2.Languages where
 
 -- Standard Tier-2 imports
 import Hydra.Kernel
@@ -51,7 +51,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
---import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
+--import qualified Hydra.Sources.Tier2.Languages as Languages
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 --import qualified Hydra.Sources.Tier2.Monads as Monads
@@ -76,17 +76,17 @@ import qualified Data.Maybe                as Y
 import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
-hydraCoreLanguageModule :: Module
-hydraCoreLanguageModule = Module ns elements
+languagesModule :: Module
+languagesModule = Module ns elements
     [Variants.hydraVariantsModule]
     [Tier1.hydraCoreModule] $
     Just "Language constraints for Hydra Core"
   where
     ns = Namespace "hydra.coreLanguage"
-    elements = [el hydraCoreLanguageDef]
+    elements = [el languagesDef]
 
-hydraCoreLanguageDef :: TElement Language
-hydraCoreLanguageDef = definitionInModule hydraCoreLanguageModule "hydraCoreLanguage" $
+languagesDef :: TElement Language
+languagesDef = definitionInModule languagesModule "hydraLanguage" $
   doc "Language constraints for Hydra Core, i.e. no constraints." $
   record _Language [
     _Language_name>>: wrap _LanguageName "hydra.core",
