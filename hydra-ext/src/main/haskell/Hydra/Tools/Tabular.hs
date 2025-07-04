@@ -6,7 +6,7 @@ module Hydra.Tools.Tabular (
 ) where
 
 import Hydra.Kernel
-import Hydra.Ext.Tabular
+import Hydra.Tabular
 import qualified Hydra.Show.Core as ShowCore
 
 import qualified Control.Monad as CM

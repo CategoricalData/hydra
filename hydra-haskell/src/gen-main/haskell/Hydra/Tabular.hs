@@ -1,6 +1,6 @@
 -- | A simple, untyped tabular data model, suitable for CSVs and TSVs
 
-module Hydra.Ext.Tabular where
+module Hydra.Tabular where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)

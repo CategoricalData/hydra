@@ -3,8 +3,7 @@ module Hydra.Demos.GenPG.Transform where
 import Hydra.Kernel
 import qualified Hydra.Pg.Model as Pg
 import Hydra.Dsl.Pg.Mappings
-import Hydra.Ext.Tabular
-import Hydra.Dsl.Ext.Tabular
+import Hydra.Dsl.Tabular
 import Hydra.Lib.Literals
 import Hydra.Tools.Monads
 import qualified Hydra.Extract.Core as ExtractCore
@@ -102,7 +101,7 @@ tableForVertex (Pg.Vertex label id props) = if S.size tables == 1
     tables = findTablesInTerms $ [id] ++ M.elems props
 
 termRowToRecord :: TableType -> DataRow Term -> Term
-termRowToRecord (TableType (TableName tname) colTypes) (DataRow cells) = TermRecord $ Record (Name tname) $
+termRowToRecord (TableType (RelationName tname) colTypes) (DataRow cells) = TermRecord $ Record (Name tname) $
     L.zipWith toField colTypes cells
   where
     toField (ColumnType (ColumnName cname) _) mvalue = Field (Name cname) $ TermOptional mvalue
@@ -114,7 +113,7 @@ transformRecord vspecs especs term = do
   return (Y.catMaybes vertices, Y.catMaybes edges)
 
 transformTable :: TableType -> FilePath -> [Pg.Vertex Term] -> [Pg.Edge Term] -> IO ([Pg.Vertex Term], [Pg.Edge Term])
-transformTable tableType@(TableType (TableName tableName) _) path vspecs especs = do
+transformTable tableType@(TableType (RelationName tableName) _) path vspecs especs = do
     (Table _ rows) <- decodeTableIo tableType path
     pairs <- flowToIo hydraCoreGraph $ withTrace ("transforming " ++ filePath) $
       CM.mapM (transformRecord vspecs especs . termRowToRecord tableType) rows
@@ -133,7 +132,7 @@ transformTables fileRoot tableTypes spec = do
     return $ LazyGraph vertices edges
   where
     addRow (vertices, edges) (v, e) = (vertices ++ v, edges ++ e)
-    forTable (tname, (vspecs, especs)) = case M.lookup (TableName tname) tableTypesByName of
+    forTable (tname, (vspecs, especs)) = case M.lookup (RelationName tname) tableTypesByName of
         Nothing -> fail $ "Table specified in mapping does not exist: " ++ tname
         Just tableType -> do
           (vertices, edges) <- transformTable tableType path vspecs especs

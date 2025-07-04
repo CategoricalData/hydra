@@ -19,7 +19,9 @@ module Hydra.Sources.Tier1.All(
   module Hydra.Sources.Tier1.Module,
   module Hydra.Sources.Tier1.Phantoms,
   module Hydra.Sources.Tier1.Query,
+  module Hydra.Sources.Tier1.Relational,
   module Hydra.Sources.Tier1.Strip,
+  module Hydra.Sources.Tier1.Tabular,
   module Hydra.Sources.Tier1.Testing,
   module Hydra.Sources.Tier1.Topology,
   module Hydra.Sources.Tier1.Typing,
@@ -43,8 +45,10 @@ import Hydra.Sources.Tier1.Literals
 import Hydra.Sources.Tier1.Mantle
 import Hydra.Sources.Tier1.Module
 import Hydra.Sources.Tier1.Phantoms
+import Hydra.Sources.Tier1.Relational
 import Hydra.Sources.Tier1.Query
 import Hydra.Sources.Tier1.Strip
+import Hydra.Sources.Tier1.Tabular
 import Hydra.Sources.Tier1.Testing
 import Hydra.Sources.Tier1.Topology
 import Hydra.Sources.Tier1.Typing
@@ -75,6 +79,8 @@ tier1TypeModules = [
   hydraModuleModule,
   hydraPhantomsModule,
   hydraQueryModule,
+  hydraRelationalModule,
+  hydraTabularModule,
   hydraTestingModule,
   hydraTopologyModule,
   hydraTypingModule,
