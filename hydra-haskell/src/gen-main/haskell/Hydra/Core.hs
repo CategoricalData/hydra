@@ -1,4 +1,4 @@
--- | Hydra's core data model of type and term expressions
+-- | Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies.
 
 module Hydra.Core where
 
