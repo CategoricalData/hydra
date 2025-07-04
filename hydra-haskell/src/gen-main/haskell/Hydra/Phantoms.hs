@@ -9,14 +9,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | An association of a field name (as in a case statement) with a phantom type
-newtype TCase a = 
-  TCase {
-    unTCase :: Core.Name}
-  deriving (Eq, Ord, Read, Show)
-
-_TCase = (Core.Name "hydra.phantoms.TCase")
-
 -- | An association with a named term (element) with a phantom type
 data TElement a = 
   TElement {
@@ -29,14 +21,6 @@ _TElement = (Core.Name "hydra.phantoms.TElement")
 _TElement_name = (Core.Name "name")
 
 _TElement_term = (Core.Name "term")
-
--- | An association with a term-level field with a phantom type
-newtype TField a = 
-  TField {
-    unTField :: Core.Field}
-  deriving (Eq, Ord, Read, Show)
-
-_TField = (Core.Name "hydra.phantoms.TField")
 
 -- | An association of a term with a phantom type
 newtype TTerm a = 
