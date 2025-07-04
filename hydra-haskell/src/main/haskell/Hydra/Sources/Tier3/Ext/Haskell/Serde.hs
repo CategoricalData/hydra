@@ -42,7 +42,7 @@ import qualified Hydra.Sources.Tier2.Adapt.Utils     as AdaptUtils
 import qualified Hydra.Sources.Tier2.Adapt.Modules         as AdaptModules
 import qualified Hydra.Sources.Tier2.Annotations      as Annotations
 import qualified Hydra.Sources.Tier2.Arity            as Arity
-import qualified Hydra.Sources.Tier2.CoreLanguage     as CoreLanguage
+import qualified Hydra.Sources.Tier2.Languages     as Languages
 import qualified Hydra.Sources.Tier2.Decode.Core      as DecodeCore
 import qualified Hydra.Sources.Tier2.Describe.Core    as DescribeCore
 import qualified Hydra.Sources.Tier2.Extract.Core     as ExtractCore

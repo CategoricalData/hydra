@@ -37,7 +37,7 @@ import qualified Data.ByteString.Lazy as BS
 
 
 baseLanguage :: Language
-baseLanguage = hydraCoreLanguage
+baseLanguage = hydraLanguage
 
 baseContext :: AdapterContext
 baseContext = AdapterContext testGraph baseLanguage M.empty
