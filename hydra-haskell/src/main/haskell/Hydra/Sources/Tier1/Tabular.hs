@@ -1,15 +1,21 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier3.Ext.Tabular where
+module Hydra.Sources.Tier1.Tabular where
 
-import Hydra.Sources.Tier2.All
-import Hydra.Dsl.Annotations
-import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Types as Types
+-- Standard type-level Tier-1 imports
+import           Hydra.Dsl.Annotations
+import           Hydra.Dsl.Bootstrap
+import qualified Hydra.Dsl.Terms       as Terms
+import           Hydra.Dsl.Types       as Types
+import           Hydra.Sources.Tier0.Core
+import qualified Data.List             as L
+import qualified Data.Map              as M
+import qualified Data.Set              as S
+import qualified Data.Maybe            as Y
 
 
-tabularModule :: Module
-tabularModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
+hydraTabularModule :: Module
+hydraTabularModule = Module ns elements [] [hydraCoreModule] $
     Just ("A simple, untyped tabular data model, suitable for CSVs and TSVs")
   where
     ns = Namespace "hydra.ext.tabular"

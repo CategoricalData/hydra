@@ -37,6 +37,7 @@ module Hydra.Kernel (
   module Hydra.Qnames,
   module Hydra.Query,
   module Hydra.Reduction,
+  module Hydra.Relational,
   module Hydra.Rewriting,
   module Hydra.Schemas,
   module Hydra.Serialization,
@@ -44,6 +45,7 @@ module Hydra.Kernel (
   module Hydra.Sorting,
   module Hydra.Strip,
   module Hydra.Substitution,
+  module Hydra.Tabular,
   module Hydra.Templating,
   module Hydra.Typing,
   module Hydra.Unification,
@@ -76,6 +78,7 @@ import Hydra.Phantoms
 import Hydra.Qnames
 import Hydra.Query
 import Hydra.Reduction
+import Hydra.Relational
 import Hydra.Rewriting
 import Hydra.Schemas
 import Hydra.Serialization
@@ -83,6 +86,7 @@ import Hydra.Settings
 import Hydra.Sorting
 import Hydra.Strip
 import Hydra.Substitution
+import Hydra.Tabular
 import Hydra.Templating
 import Hydra.Typing
 import Hydra.Unification

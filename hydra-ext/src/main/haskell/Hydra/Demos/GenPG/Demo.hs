@@ -7,7 +7,7 @@ import Hydra.Demos.GenPG.Generated.DatabaseSchema
 import Hydra.Demos.GenPG.Generated.GraphSchema
 import Hydra.Demos.GenPG.Generated.Mapping
 import Hydra.Demos.GenPG.Transform
-import Hydra.Dsl.Ext.Tabular
+import Hydra.Dsl.Tabular
 import Hydra.Dsl.Pg.Mappings
 import Hydra.Ext.Json.Serde
 import Hydra.Ext.Pg.Graphson.Utils
