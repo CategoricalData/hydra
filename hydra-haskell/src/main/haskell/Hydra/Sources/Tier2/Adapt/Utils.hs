@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier2.AdapterUtils where
+module Hydra.Sources.Tier2.Adapt.Utils where
 
 -- Standard Tier-2 imports
 import Hydra.Kernel
@@ -46,8 +46,8 @@ import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
 -- Uncomment tier-2 sources as needed
---import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
---import qualified Hydra.Sources.Tier2.Adapters as Adapters
+--import qualified Hydra.Sources.Tier2.Adapt.Utils as AdaptUtils
+--import qualified Hydra.Sources.Tier2.Adapt.Modules as AdaptModules
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
@@ -58,7 +58,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
---import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
+--import qualified Hydra.Sources.Tier2.Adapt.Literals as AdaptLiterals
 --import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
 import qualified Hydra.Sources.Tier2.Qnames as Qnames
 --import qualified Hydra.Sources.Tier2.Reduction as Reduction
@@ -71,17 +71,16 @@ import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
 --import qualified Hydra.Sources.Tier2.Templating as Templating
---import qualified Hydra.Sources.Tier2.TermAdapters as TermAdapters
---import qualified Hydra.Sources.Tier2.TermEncoding as TermEncoding
+--import qualified Hydra.Sources.Tier2.Adapt.Terms as AdaptTerms
 --import qualified Hydra.Sources.Tier2.Unification as Unification
 import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
-adapterUtilsDefinition :: String -> TTerm a -> TElement a
-adapterUtilsDefinition = definitionInModule hydraAdapterUtilsModule
+adaptUtilsDefinition :: String -> TTerm a -> TElement a
+adaptUtilsDefinition = definitionInModule hydraAdaptUtilsModule
 
-hydraAdapterUtilsModule :: Module
-hydraAdapterUtilsModule = Module (Namespace "hydra.adapterUtils") elements
+hydraAdaptUtilsModule :: Module
+hydraAdaptUtilsModule = Module (Namespace "hydra.adapt.utils") elements
     [Qnames.hydraQnamesModule, Strip.hydraStripModule, Variants.hydraVariantsModule, ShowCore.showCoreModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule] $
     Just ("Additional adapter utilities, above and beyond the generated ones.")
@@ -101,12 +100,12 @@ hydraAdapterUtilsModule = Module (Namespace "hydra.adapterUtils") elements
      el unidirectionalCoderDef]
 
 bidirectionalDef :: TElement ((CoderDirection -> b -> Flow s b) -> Coder s s b b)
-bidirectionalDef = adapterUtilsDefinition "bidirectional" $
+bidirectionalDef = adaptUtilsDefinition "bidirectional" $
   doc "Create a bidirectional coder from a direction-aware function" $
   lambda "f" $ Compute.coder (var "f" @@ Coders.coderDirectionEncode) (var "f" @@ Coders.coderDirectionDecode)
 
 chooseAdapterDef :: TElement ((t -> Flow so [SymmetricAdapter si t v]) -> (t -> Bool) -> (t -> String ) -> (t -> String) -> t -> Flow so (SymmetricAdapter si t v))
-chooseAdapterDef = adapterUtilsDefinition "chooseAdapter" $
+chooseAdapterDef = adaptUtilsDefinition "chooseAdapter" $
   doc "Choose an appropriate adapter for a type" $
   lambdas ["alts", "supported", "show", "describe", "typ"] $
     Logic.ifElse (var "supported" @@ var "typ")
@@ -131,7 +130,7 @@ chooseAdapterDef = adapterUtilsDefinition "chooseAdapter" $
               (Flows.pure $ Lists.head $ var "candidates"))
 
 composeCodersDef :: TElement (Coder s s a b -> Coder s s b c -> Coder s s a c)
-composeCodersDef = adapterUtilsDefinition "composeCoders" $
+composeCodersDef = adaptUtilsDefinition "composeCoders" $
   doc "Compose two coders" $
   lambda "c1" $ lambda "c2" $
     Compute.coder
@@ -139,7 +138,7 @@ composeCodersDef = adapterUtilsDefinition "composeCoders" $
       (lambda "c" $ Flows.bind (Compute.coderDecode (var "c2") @@ var "c") (Compute.coderDecode (var "c1")))
 
 encodeDecodeDef :: TElement (CoderDirection -> Coder s s x x -> x -> Flow s x)
-encodeDecodeDef = adapterUtilsDefinition "encodeDecode" $
+encodeDecodeDef = adaptUtilsDefinition "encodeDecode" $
   doc "Apply coder in the specified direction" $
   lambda "dir" $ lambda "coder" $
     match _CoderDirection Nothing [
@@ -148,29 +147,29 @@ encodeDecodeDef = adapterUtilsDefinition "encodeDecode" $
     @@ var "dir"
 
 floatTypeIsSupportedDef :: TElement (LanguageConstraints -> FloatType -> Bool)
-floatTypeIsSupportedDef = adapterUtilsDefinition "floatTypeIsSupported" $
+floatTypeIsSupportedDef = adaptUtilsDefinition "floatTypeIsSupported" $
   doc "Check if float type is supported by language constraints" $
   lambda "constraints" $ lambda "ft" $
     Sets.member (var "ft") (Coders.languageConstraintsFloatTypes $ var "constraints")
 
 idAdapterDef :: TElement (t -> SymmetricAdapter s t v)
-idAdapterDef = adapterUtilsDefinition "idAdapter" $
+idAdapterDef = adaptUtilsDefinition "idAdapter" $
   doc "Identity adapter" $
   lambda "t" $ Compute.adapter false (var "t") (var "t") (ref idCoderDef)
 
 idCoderDef :: TElement (Coder s s a a)
-idCoderDef = adapterUtilsDefinition "idCoder" $
+idCoderDef = adaptUtilsDefinition "idCoder" $
   doc "Identity coder" $
   Compute.coder (unaryFunction Flows.pure) (unaryFunction Flows.pure)
 
 integerTypeIsSupportedDef :: TElement (LanguageConstraints -> IntegerType -> Bool)
-integerTypeIsSupportedDef = adapterUtilsDefinition "integerTypeIsSupported" $
+integerTypeIsSupportedDef = adaptUtilsDefinition "integerTypeIsSupported" $
   doc "Check if integer type is supported by language constraints" $
   lambda "constraints" $ lambda "it" $
     Sets.member (var "it") (Coders.languageConstraintsIntegerTypes $ var "constraints")
 
 literalTypeIsSupportedDef :: TElement (LanguageConstraints -> LiteralType -> Bool)
-literalTypeIsSupportedDef = adapterUtilsDefinition "literalTypeIsSupported" $
+literalTypeIsSupportedDef = adaptUtilsDefinition "literalTypeIsSupported" $
   doc "Check if literal type is supported by language constraints" $
   lambda "constraints" $ lambda "lt" $
     Logic.and
@@ -181,7 +180,7 @@ literalTypeIsSupportedDef = adapterUtilsDefinition "literalTypeIsSupported" $
       @@ var "lt")
 
 nameToFilePathDef :: TElement (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
-nameToFilePathDef = adapterUtilsDefinition "nameToFilePath" $
+nameToFilePathDef = adaptUtilsDefinition "nameToFilePath" $
   doc "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator" $
   lambda "nsConv" $ lambda "localConv" $ lambda "ext" $ lambda "name" $ lets [
     "qualName">: ref Qnames.qualifyNameDef @@ var "name",
@@ -198,7 +197,7 @@ nameToFilePathDef = adapterUtilsDefinition "nameToFilePath" $
     $ Strings.cat $ list [var "prefix", var "suffix", string ".", Module.unFileExtension $ var "ext"]
 
 typeIsSupportedDef :: TElement (LanguageConstraints -> Type -> Bool)
-typeIsSupportedDef = adapterUtilsDefinition "typeIsSupported" $
+typeIsSupportedDef = adaptUtilsDefinition "typeIsSupported" $
   doc "Check if type is supported by language constraints" $
   lambda "constraints" $ lambda "t" $ lets [
     "base">: ref Strip.stripTypeDef @@ var "t",
@@ -249,7 +248,7 @@ typeIsSupportedDef = adapterUtilsDefinition "typeIsSupported" $
     andAll = Lists.foldl (binaryFunction Logic.and) true
 
 unidirectionalCoderDef :: TElement ((a -> Flow s b) -> Coder s s a b)
-unidirectionalCoderDef = adapterUtilsDefinition "unidirectionalCoder" $
+unidirectionalCoderDef = adaptUtilsDefinition "unidirectionalCoder" $
   doc "Create a unidirectional coder" $
   lambda "m" $
     Compute.coder

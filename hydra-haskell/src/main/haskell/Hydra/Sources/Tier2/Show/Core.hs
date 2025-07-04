@@ -45,8 +45,8 @@ import qualified Data.Map                  as M
 import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
---import qualified Hydra.Sources.Tier2.Adapters as Adapters
---import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
+--import qualified Hydra.Sources.Tier2.Adapt.Modules as AdaptModules
+--import qualified Hydra.Sources.Tier2.Adapt.Utils as AdaptUtils
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.CoreLanguage as CoreLanguage
@@ -58,7 +58,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
---import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
+--import qualified Hydra.Sources.Tier2.Adapt.Literals as AdaptLiterals
 --import qualified Hydra.Sources.Tier2.Qnames as Qnames
 --import qualified Hydra.Sources.Tier2.Reduction as Reduction
 --import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
@@ -70,7 +70,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
 --import qualified Hydra.Sources.Tier2.Templating as Templating
---import qualified Hydra.Sources.Tier2.TermAdapters as TermAdapters
+--import qualified Hydra.Sources.Tier2.Adapt.Terms as AdaptTerms
 --import qualified Hydra.Sources.Tier2.Unification as Unification
 --import qualified Hydra.Sources.Tier2.Variants as Variants
 

@@ -13,8 +13,10 @@ Note: the following modules are part of the kernel, but they are not default imp
 
 module Hydra.Kernel (
   module Hydra.Accessors,
-  module Hydra.AdapterUtils,
-  module Hydra.Adapters,
+  module Hydra.Adapt.Literals,
+  module Hydra.Adapt.Modules,
+  module Hydra.Adapt.Terms,
+  module Hydra.Adapt.Utils,
   module Hydra.Annotations,
   module Hydra.Arity,
   module Hydra.Coders,
@@ -28,7 +30,6 @@ module Hydra.Kernel (
   module Hydra.Graph,
   module Hydra.Inference,
   module Hydra.Lexical,
-  module Hydra.LiteralAdapters,
   module Hydra.Literals,
   module Hydra.Mantle,
   module Hydra.Module,
@@ -44,7 +45,6 @@ module Hydra.Kernel (
   module Hydra.Strip,
   module Hydra.Substitution,
   module Hydra.Templating,
-  module Hydra.TermAdapters,
   module Hydra.Typing,
   module Hydra.Unification,
   module Hydra.Variants,
@@ -52,8 +52,10 @@ module Hydra.Kernel (
 ) where
 
 import Hydra.Accessors
-import Hydra.AdapterUtils
-import Hydra.Adapters
+import Hydra.Adapt.Literals
+import Hydra.Adapt.Modules
+import Hydra.Adapt.Terms hiding (optionalToList)
+import Hydra.Adapt.Utils
 import Hydra.Annotations
 import Hydra.Arity
 import Hydra.Coders
@@ -67,7 +69,6 @@ import Hydra.Formatting
 import Hydra.Graph
 import Hydra.Inference
 import Hydra.Lexical
-import Hydra.LiteralAdapters
 import Hydra.Literals
 import Hydra.Mantle hiding (Either)
 import Hydra.Module
@@ -83,7 +84,6 @@ import Hydra.Sorting
 import Hydra.Strip
 import Hydra.Substitution
 import Hydra.Templating
-import Hydra.TermAdapters hiding (optionalToList)
 import Hydra.Typing
 import Hydra.Unification
 import Hydra.Variants

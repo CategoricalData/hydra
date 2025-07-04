@@ -36,8 +36,8 @@ import qualified Hydra.Sources.Tier1.Encode.Core      as EncodeCore
 import qualified Hydra.Sources.Tier1.Formatting       as Formatting
 import qualified Hydra.Sources.Tier1.Literals         as Literals
 import qualified Hydra.Sources.Tier1.Strip            as Strip
-import qualified Hydra.Sources.Tier2.AdapterUtils     as AdapterUtils
-import qualified Hydra.Sources.Tier2.Adapters         as Adapters
+import qualified Hydra.Sources.Tier2.Adapt.Utils     as AdaptUtils
+import qualified Hydra.Sources.Tier2.Adapt.Modules         as AdaptModules
 import qualified Hydra.Sources.Tier2.Annotations      as Annotations
 import qualified Hydra.Sources.Tier2.Arity            as Arity
 import qualified Hydra.Sources.Tier2.CoreLanguage     as CoreLanguage
@@ -48,7 +48,7 @@ import qualified Hydra.Sources.Tier2.Monads           as Monads
 import qualified Hydra.Sources.Tier2.GrammarToModule  as GrammarToModule
 import qualified Hydra.Sources.Tier2.Inference        as Inference
 import qualified Hydra.Sources.Tier2.Lexical          as Lexical
-import qualified Hydra.Sources.Tier2.LiteralAdapters  as LiteralAdapters
+import qualified Hydra.Sources.Tier2.Adapt.Literals  as AdaptLiterals
 import qualified Hydra.Sources.Tier2.Qnames           as Qnames
 import qualified Hydra.Sources.Tier2.Reduction        as Reduction
 import qualified Hydra.Sources.Tier2.Rewriting        as Rewriting
@@ -60,7 +60,7 @@ import qualified Hydra.Sources.Tier2.Sorting          as Sorting
 import qualified Hydra.Sources.Tier2.Substitution     as Substitution
 import qualified Hydra.Sources.Tier2.Tarjan           as Tarjan
 import qualified Hydra.Sources.Tier2.Templating       as Templating
-import qualified Hydra.Sources.Tier2.TermAdapters     as TermAdapters
+import qualified Hydra.Sources.Tier2.Adapt.Terms     as AdaptTerms
 import qualified Hydra.Sources.Tier2.Unification      as Unification
 import qualified Hydra.Sources.Tier2.Variants         as Variants
 import qualified Data.Int                             as I
@@ -85,7 +85,7 @@ haskellCoderDefinition = definitionInModule haskellCoderModule
 haskellCoderModule :: Module
 haskellCoderModule = Module ns elements
     [HaskellSerde.haskellSerdeModule, HaskellUtils.haskellUtilsModule,
-      Adapters.hydraAdaptersModule, Serialization.hydraSerializationModule]
+      AdaptModules.adaptModulesModule, Serialization.hydraSerializationModule]
     [HaskellAst.haskellAstModule,
       Tier1.hydraAstModule, Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule,
       Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule, Tier1.hydraTypingModule] $
@@ -129,7 +129,7 @@ keyHaskellVarDef = haskellCoderDefinition "keyHaskellVar" $
 adaptTypeToHaskellAndEncodeDef :: TElement (HaskellNamespaces -> Type -> Flow Graph H.Type)
 adaptTypeToHaskellAndEncodeDef = haskellCoderDefinition "adaptTypeToHaskellAndEncode" $
   lambda "namespaces" $
-    ref Adapters.adaptAndEncodeTypeDef @@ (ref HaskellLanguage.haskellLanguageDef) @@ (ref encodeTypeDef @@ var "namespaces")
+    ref AdaptModules.adaptAndEncodeTypeDef @@ (ref HaskellLanguage.haskellLanguageDef) @@ (ref encodeTypeDef @@ var "namespaces")
 
 constantForFieldNameDef :: TElement (Name -> Name -> String)
 constantForFieldNameDef = haskellCoderDefinition "constantForFieldName" $
@@ -607,7 +607,7 @@ moduleToHaskellModuleDef :: TElement (Module -> Flow Graph H.Module)
 moduleToHaskellModuleDef = haskellCoderDefinition "moduleToHaskellModule" $
   lambda "mod" $
     withVar "namespaces" (ref HaskellUtils.namespacesForModuleDef @@ var "mod") $
-      ref Adapters.transformModuleDef @@ (ref HaskellLanguage.haskellLanguageDef) @@ (ref encodeTermDef @@ var "namespaces") @@ (ref constructModuleDef @@ var "namespaces") @@ var "mod"
+      ref AdaptModules.transformModuleDef @@ (ref HaskellLanguage.haskellLanguageDef) @@ (ref encodeTermDef @@ var "namespaces") @@ (ref constructModuleDef @@ var "namespaces") @@ var "mod"
 
 moduleToHaskellDef :: TElement (Module -> Flow Graph (M.Map String String))
 moduleToHaskellDef = haskellCoderDefinition "moduleToHaskell" $ lambda "mod" $
@@ -696,7 +696,7 @@ toDataDeclarationDef = haskellCoderDefinition "toDataDeclaration" $
           "toBinding">: lambda "hname''" $ lambda "hterm'" $
             inject H._LocalBinding H._LocalBinding_value $ ref HaskellUtils.simpleValueBindingDef @@ var "hname''" @@ var "hterm'" @@ nothing,
           "ts">: Lists.map (lambda "binding" $ Core.typeSchemeType $ Optionals.fromJust $ Core.letBindingType $ var "binding") (var "lbindings")] $
-          withVar "coders'" (Flows.mapList (lambda "t" $ ref Adapters.constructCoderDef @@ (ref HaskellLanguage.haskellLanguageDef) @@ (ref encodeTermDef @@ var "namespaces") @@ var "t") (var "ts")) $ lets [
+          withVar "coders'" (Flows.mapList (lambda "t" $ ref AdaptModules.constructCoderDef @@ (ref HaskellLanguage.haskellLanguageDef) @@ (ref encodeTermDef @@ var "namespaces") @@ var "t") (var "ts")) $ lets [
           "hnames">: Lists.map (lambda "binding" $ ref HaskellUtils.simpleNameDef @@ (Core.unName $ Core.letBindingName $ var "binding")) (var "lbindings"),
           "terms">: Lists.map (unaryFunction $ Core.letBindingTerm) (var "lbindings")] $
           withVar "hterms" (Flows.sequence $ Lists.zipWith (lambdas ["e", "t"] $ Compute.coderEncode (var "e") @@ var "t") (var "coders'") (var "terms")) $ lets [
@@ -854,7 +854,7 @@ typeDeclDef = haskellCoderDefinition "typeDecl" $
       Optionals.fromMaybe (var "recurse" @@ var "term") (Optionals.bind (var "variantResult") (var "forType")),
     "finalTerm">: ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "rawTerm"] $
     -- Note: consider constructing this coder just once, then reusing it
-    withVar "coder" (ref Adapters.constructCoderDef @@ (ref HaskellLanguage.haskellLanguageDef) @@ (ref encodeTermDef @@ var "namespaces") @@ (Core.typeVariable $ Core.nameLift _Type)) $
+    withVar "coder" (ref AdaptModules.constructCoderDef @@ (ref HaskellLanguage.haskellLanguageDef) @@ (ref encodeTermDef @@ var "namespaces") @@ (Core.typeVariable $ Core.nameLift _Type)) $
     withVar "expr" (Compute.coderEncode (var "coder") @@ var "finalTerm") $ lets [
     "rhs">: wrap H._RightHandSide $ var "expr",
     "hname">: ref HaskellUtils.simpleNameDef @@ (var "typeNameLocal" @@ var "name"),

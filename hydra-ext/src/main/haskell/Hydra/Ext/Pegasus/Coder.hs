@@ -1,8 +1,8 @@
 module Hydra.Ext.Pegasus.Coder (moduleToPdl) where
 
 import Hydra.Kernel
-import Hydra.TermAdapters
-import Hydra.Adapters
+import Hydra.Adapt.Terms
+import Hydra.Adapt.Modules
 import Hydra.Ext.Pegasus.Language
 import Hydra.Ext.Pegasus.Serde
 import qualified Hydra.Decode.Core as DecodeCore

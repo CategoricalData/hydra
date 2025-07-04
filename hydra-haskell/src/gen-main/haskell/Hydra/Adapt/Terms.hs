@@ -1,8 +1,9 @@
 -- | Adapter framework for types and terms
 
-module Hydra.TermAdapters where
+module Hydra.Adapt.Terms where
 
-import qualified Hydra.AdapterUtils as AdapterUtils
+import qualified Hydra.Adapt.Literals as Literals
+import qualified Hydra.Adapt.Utils as Utils
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
@@ -17,7 +18,6 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.LiteralAdapters as LiteralAdapters
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
@@ -25,7 +25,7 @@ import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core___
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
-import Prelude hiding  (Enum, Ordering, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -39,12 +39,12 @@ fieldAdapter ftyp = (Flows.bind (termAdapter (Core.fieldTypeType ftyp)) (\ad -> 
   Compute.adapterTarget = Core.FieldType {
     Core.fieldTypeName = (Core.fieldTypeName ftyp),
     Core.fieldTypeType = (Compute.adapterTarget ad)},
-  Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \field ->  
+  Compute.adapterCoder = (Utils.bidirectional (\dir -> \field ->  
     let name = (Core.fieldName field) 
         term = (Core.fieldTerm field)
     in (Flows.map (\newTerm -> Core.Field {
       Core.fieldName = name,
-      Core.fieldTerm = newTerm}) (AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) term))))})))
+      Core.fieldTerm = newTerm}) (Utils.encodeDecode dir (Compute.adapterCoder ad) term))))})))
 
 -- | This function accounts for recursive type definitions
 forTypeReference :: (Core.Name -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
@@ -54,9 +54,9 @@ forTypeReference name = (Monads.withTrace (Strings.cat2 "adapt named type " (Cor
               Compute.adapterIsLossy = lossy,
               Compute.adapterSource = (Core.TypeVariable name),
               Compute.adapterTarget = (Core.TypeVariable name),
-              Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> Flows.bind Monads.getState (\cx ->  
+              Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> Flows.bind Monads.getState (\cx ->  
                 let adapters = (Coders.adapterContextAdapters cx)
-                in (Optionals.maybe (Flows.fail (Strings.cat2 "no adapter for reference type " (Core.unName name))) (\ad -> AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) term) (Maps.lookup name adapters)))))}
+                in (Optionals.maybe (Flows.fail (Strings.cat2 "no adapter for reference type " (Core.unName name))) (\ad -> Utils.encodeDecode dir (Compute.adapterCoder ad) term) (Maps.lookup name adapters)))))}
   in (Flows.bind Monads.getState (\cx ->  
     let adapters = (Coders.adapterContextAdapters cx)
     in (Optionals.maybe ( 
@@ -69,7 +69,7 @@ forTypeReference name = (Monads.withTrace (Strings.cat2 "adapt named type " (Cor
         Compute.adapterIsLossy = lossy,
         Compute.adapterSource = (Core.TypeVariable name),
         Compute.adapterTarget = (Core.TypeVariable name),
-        Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> Flows.pure term))})) (\t -> Flows.bind (termAdapter t) (\actual ->  
+        Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> Flows.pure term))})) (\t -> Flows.bind (termAdapter t) (\actual ->  
         let finalAdapters = (Maps.insert name actual adapters) 
             finalCx = Coders.AdapterContext {
                     Coders.adapterContextGraph = (Coders.adapterContextGraph cx),
@@ -248,7 +248,7 @@ passApplication t = ((\x -> case x of
       Compute.adapterTarget = (Core.TypeApplication (Core.ApplicationType {
         Core.applicationTypeFunction = (Compute.adapterTarget lhsAd),
         Core.applicationTypeArgument = (Compute.adapterTarget rhsAd)})),
-      Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> AdapterUtils.encodeDecode dir (Compute.adapterCoder lhsAd) term))}))))) t)
+      Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> Utils.encodeDecode dir (Compute.adapterCoder lhsAd) term))}))))) t)
 
 -- | Pass through function types with adaptation
 passFunction :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
@@ -271,19 +271,19 @@ passFunction t = ((\x -> case x of
           target = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Compute.adapterTarget domAd),
                   Core.functionTypeCodomain = (Compute.adapterTarget codAd)}))
-          getCoder = (\fname -> Optionals.maybe AdapterUtils.idCoder Compute.adapterCoder (Maps.lookup fname caseAds))
+          getCoder = (\fname -> Optionals.maybe Utils.idCoder Compute.adapterCoder (Maps.lookup fname caseAds))
       in (Flows.pure (Compute.Adapter {
         Compute.adapterIsLossy = lossy,
         Compute.adapterSource = t,
         Compute.adapterTarget = target,
-        Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> (\x -> case x of
+        Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> (\x -> case x of
           Core.TermFunction v2 -> (Flows.map (\x -> Core.TermFunction x) ((\x -> case x of
             Core.FunctionElimination v3 -> (Flows.map (\x -> Core.FunctionElimination x) ((\x -> case x of
               Core.EliminationUnion v4 ->  
                 let n = (Core.caseStatementTypeName v4) 
                     def = (Core.caseStatementDefault v4)
                     cases = (Core.caseStatementCases v4)
-                in (Flows.bind (Flows.mapList (\f -> AdapterUtils.encodeDecode dir (getCoder (Core.fieldName f)) f) cases) (\rcases -> Flows.bind (Optionals.maybe (Flows.pure Nothing) (\d -> Flows.map Optionals.pure (AdapterUtils.encodeDecode dir (Compute.adapterCoder codAd) d)) def) (\rdef -> Flows.pure (Core.EliminationUnion (Core.CaseStatement {
+                in (Flows.bind (Flows.mapList (\f -> Utils.encodeDecode dir (getCoder (Core.fieldName f)) f) cases) (\rcases -> Flows.bind (Optionals.maybe (Flows.pure Nothing) (\d -> Flows.map Optionals.pure (Utils.encodeDecode dir (Compute.adapterCoder codAd) d)) def) (\rdef -> Flows.pure (Core.EliminationUnion (Core.CaseStatement {
                   Core.caseStatementTypeName = n,
                   Core.caseStatementDefault = rdef,
                   Core.caseStatementCases = rcases})))))) v3))
@@ -291,7 +291,7 @@ passFunction t = ((\x -> case x of
               let var = (Core.lambdaParameter v3) 
                   d = (Core.lambdaDomain v3)
                   body = (Core.lambdaBody v3)
-              in (Flows.bind (AdapterUtils.encodeDecode dir (Compute.adapterCoder codAd) body) (\newBody -> Flows.pure (Core.FunctionLambda (Core.Lambda {
+              in (Flows.bind (Utils.encodeDecode dir (Compute.adapterCoder codAd) body) (\newBody -> Flows.pure (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = var,
                 Core.lambdaDomain = d,
                 Core.lambdaBody = newBody}))))
@@ -310,13 +310,13 @@ passForall t = ((\x -> case x of
       Compute.adapterTarget = (Core.TypeForall (Core.ForallType {
         Core.forallTypeParameter = v,
         Core.forallTypeBody = (Compute.adapterTarget ad)})),
-      Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) term))})))) t)
+      Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> Utils.encodeDecode dir (Compute.adapterCoder ad) term))})))) t)
 
 -- | Pass through literal types with literal adaptation
 passLiteral :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passLiteral t = ((\x -> case x of
-  Core.TypeLiteral v1 -> (Flows.bind (LiteralAdapters.literalAdapter v1) (\ad ->  
-    let step = (AdapterUtils.bidirectional (\dir -> \term -> Flows.bind (withGraphContext (Core__.literal term)) (\l -> Flows.map (\x -> Core.TermLiteral x) (AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) l))))
+  Core.TypeLiteral v1 -> (Flows.bind (Literals.literalAdapter v1) (\ad ->  
+    let step = (Utils.bidirectional (\dir -> \term -> Flows.bind (withGraphContext (Core__.literal term)) (\l -> Flows.map (\x -> Core.TermLiteral x) (Utils.encodeDecode dir (Compute.adapterCoder ad) l))))
     in (Flows.pure (Compute.Adapter {
       Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
       Compute.adapterSource = (Core.TypeLiteral (Compute.adapterSource ad)),
@@ -330,8 +330,8 @@ passList t = ((\x -> case x of
     Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
     Compute.adapterSource = t,
     Compute.adapterTarget = (Core.TypeList (Compute.adapterTarget ad)),
-    Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> (\x -> case x of
-      Core.TermList v2 -> (Flows.bind (Flows.mapList (AdapterUtils.encodeDecode dir (Compute.adapterCoder ad)) v2) (\newTerms -> Flows.pure (Core.TermList newTerms)))) term))})))) t)
+    Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> (\x -> case x of
+      Core.TermList v2 -> (Flows.bind (Flows.mapList (Utils.encodeDecode dir (Compute.adapterCoder ad)) v2) (\newTerms -> Flows.pure (Core.TermList newTerms)))) term))})))) t)
 
 -- | Pass through map types
 passMap :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
@@ -345,22 +345,22 @@ passMap t = ((\x -> case x of
       Compute.adapterTarget = (Core.TypeMap (Core.MapType {
         Core.mapTypeKeys = (Compute.adapterTarget kad),
         Core.mapTypeValues = (Compute.adapterTarget vad)})),
-      Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> (\x -> case x of
+      Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> (\x -> case x of
         Core.TermMap v2 -> (Flows.bind (Flows.mapList (\pair ->  
           let k = (fst pair) 
               v = (snd pair)
-          in (Flows.bind (AdapterUtils.encodeDecode dir (Compute.adapterCoder kad) k) (\newK -> Flows.bind (AdapterUtils.encodeDecode dir (Compute.adapterCoder vad) v) (\newV -> Flows.pure (newK, newV))))) (Maps.toList v2)) (\newPairs -> Flows.pure (Core.TermMap (Maps.fromList newPairs))))) term))}))))) t)
+          in (Flows.bind (Utils.encodeDecode dir (Compute.adapterCoder kad) k) (\newK -> Flows.bind (Utils.encodeDecode dir (Compute.adapterCoder vad) v) (\newV -> Flows.pure (newK, newV))))) (Maps.toList v2)) (\newPairs -> Flows.pure (Core.TermMap (Maps.fromList newPairs))))) term))}))))) t)
 
 -- | Pass through optional types
 passOptional :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passOptional t = ((\x -> case x of
   Core.TypeOptional v1 ->  
-    let mapTerm = (\coder -> \dir -> \term -> Flows.bind (withGraphContext (Core__.optional Flows.pure term)) (\opt -> Flows.bind (Flows.traverseOptional (AdapterUtils.encodeDecode dir coder) opt) (\newOpt -> Flows.pure (Core.TermOptional newOpt))))
+    let mapTerm = (\coder -> \dir -> \term -> Flows.bind (withGraphContext (Core__.optional Flows.pure term)) (\opt -> Flows.bind (Flows.traverseOptional (Utils.encodeDecode dir coder) opt) (\newOpt -> Flows.pure (Core.TermOptional newOpt))))
     in (Flows.bind (termAdapter v1) (\adapter -> Flows.pure (Compute.Adapter {
       Compute.adapterIsLossy = (Compute.adapterIsLossy adapter),
       Compute.adapterSource = t,
       Compute.adapterTarget = (Core.TypeOptional (Compute.adapterTarget adapter)),
-      Compute.adapterCoder = (AdapterUtils.bidirectional (mapTerm (Compute.adapterCoder adapter)))})))) t)
+      Compute.adapterCoder = (Utils.bidirectional (mapTerm (Compute.adapterCoder adapter)))})))) t)
 
 -- | Pass through product types
 passProduct :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
@@ -371,8 +371,8 @@ passProduct t = ((\x -> case x of
       Compute.adapterIsLossy = lossy,
       Compute.adapterSource = t,
       Compute.adapterTarget = (Core.TypeProduct (Lists.map Compute.adapterTarget ads)),
-      Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> (\x -> case x of
-        Core.TermProduct v2 -> (Flows.bind (Flows.sequence (Lists.zipWith (\term -> \ad -> AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) term) v2 ads)) (\newTuple -> Flows.pure (Core.TermProduct newTuple)))) term))}))))) t)
+      Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> (\x -> case x of
+        Core.TermProduct v2 -> (Flows.bind (Flows.sequence (Lists.zipWith (\term -> \ad -> Utils.encodeDecode dir (Compute.adapterCoder ad) term) v2 ads)) (\newTuple -> Flows.pure (Core.TermProduct newTuple)))) term))}))))) t)
 
 -- | Pass through record types
 passRecord :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
@@ -386,10 +386,10 @@ passRecord t = ((\x -> case x of
       Compute.adapterTarget = (Core.TypeRecord (Core.RowType {
         Core.rowTypeTypeName = (Core.rowTypeTypeName v1),
         Core.rowTypeFields = sfields_})),
-      Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> (\x -> case x of
+      Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> (\x -> case x of
         Core.TermRecord v2 ->  
           let dfields = (Core.recordFields v2)
-          in (Flows.bind (Flows.sequence (Lists.zipWith (\ad -> \f -> AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) f) adapters dfields)) (\newFields -> Flows.pure (Core.TermRecord (Core.Record {
+          in (Flows.bind (Flows.sequence (Lists.zipWith (\ad -> \f -> Utils.encodeDecode dir (Compute.adapterCoder ad) f) adapters dfields)) (\newFields -> Flows.pure (Core.TermRecord (Core.Record {
             Core.recordTypeName = (Core.rowTypeTypeName v1),
             Core.recordFields = newFields}))))) term))}))))) t)
 
@@ -400,8 +400,8 @@ passSet t = ((\x -> case x of
     Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
     Compute.adapterSource = t,
     Compute.adapterTarget = (Core.TypeSet (Compute.adapterTarget ad)),
-    Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> (\x -> case x of
-      Core.TermSet v2 -> (Flows.bind (Flows.mapList (AdapterUtils.encodeDecode dir (Compute.adapterCoder ad)) (Sets.toList v2)) (\newTerms -> Flows.pure (Core.TermSet (Sets.fromList newTerms))))) term))})))) t)
+    Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> (\x -> case x of
+      Core.TermSet v2 -> (Flows.bind (Flows.mapList (Utils.encodeDecode dir (Compute.adapterCoder ad)) (Sets.toList v2)) (\newTerms -> Flows.pure (Core.TermSet (Sets.fromList newTerms))))) term))})))) t)
 
 -- | Pass through sum types
 passSum :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
@@ -412,12 +412,12 @@ passSum t = ((\x -> case x of
       Compute.adapterIsLossy = lossy,
       Compute.adapterSource = t,
       Compute.adapterTarget = (Core.TypeSum (Lists.map Compute.adapterTarget ads)),
-      Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> (\x -> case x of
+      Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> (\x -> case x of
         Core.TermSum v2 ->  
           let i = (Core.sumIndex v2) 
               n = (Core.sumSize v2)
               term = (Core.sumTerm v2)
-          in (Flows.bind (AdapterUtils.encodeDecode dir (Compute.adapterCoder (Lists.at i ads)) term) (\newTerm -> Flows.pure (Core.TermSum (Core.Sum {
+          in (Flows.bind (Utils.encodeDecode dir (Compute.adapterCoder (Lists.at i ads)) term) (\newTerm -> Flows.pure (Core.TermSum (Core.Sum {
             Core.sumIndex = i,
             Core.sumSize = n,
             Core.sumTerm = newTerm}))))) term))}))))) t)
@@ -439,7 +439,7 @@ passUnion t = ((\x -> case x of
         Compute.adapterTarget = (Core.TypeUnion (Core.RowType {
           Core.rowTypeTypeName = tname,
           Core.rowTypeFields = sfields_})),
-        Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> Flows.bind (withGraphContext (Core__.injection tname term)) (\dfield -> Flows.bind (getAdapter adaptersMap dfield) (\ad -> Flows.bind (AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) dfield) (\newField -> Flows.pure (Core.TermUnion (Core.Injection {
+        Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> Flows.bind (withGraphContext (Core__.injection tname term)) (\dfield -> Flows.bind (getAdapter adaptersMap dfield) (\ad -> Flows.bind (Utils.encodeDecode dir (Compute.adapterCoder ad) dfield) (\newField -> Flows.pure (Core.TermUnion (Core.Injection {
           Core.injectionTypeName = tname,
           Core.injectionField = newField})))))))}))))) t)
 
@@ -449,7 +449,7 @@ passWrapped t = ((\x -> case x of
   Core.TypeWrap v1 ->  
     let tname = (Core.wrappedTypeTypeName v1) 
         ot = (Core.wrappedTypeObject v1)
-        mapTerm = (\coder -> \dir -> \term -> Flows.bind (withGraphContext (Core__.wrap tname term)) (\unwrapped -> Flows.bind (AdapterUtils.encodeDecode dir coder unwrapped) (\newTerm -> Flows.pure (Core.TermWrap (Core.WrappedTerm {
+        mapTerm = (\coder -> \dir -> \term -> Flows.bind (withGraphContext (Core__.wrap tname term)) (\unwrapped -> Flows.bind (Utils.encodeDecode dir coder unwrapped) (\newTerm -> Flows.pure (Core.TermWrap (Core.WrappedTerm {
                 Core.wrappedTermTypeName = tname,
                 Core.wrappedTermObject = newTerm})))))
     in (Flows.bind (termAdapter ot) (\adapter -> Flows.pure (Compute.Adapter {
@@ -458,7 +458,7 @@ passWrapped t = ((\x -> case x of
       Compute.adapterTarget = (Core.TypeWrap (Core.WrappedType {
         Core.wrappedTypeTypeName = tname,
         Core.wrappedTypeObject = (Compute.adapterTarget adapter)})),
-      Compute.adapterCoder = (AdapterUtils.bidirectional (mapTerm (Compute.adapterCoder adapter)))})))) t)
+      Compute.adapterCoder = (Utils.bidirectional (mapTerm (Compute.adapterCoder adapter)))})))) t)
 
 -- | Simplify application types
 simplifyApplication :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
@@ -469,13 +469,13 @@ simplifyApplication t = ((\x -> case x of
       Compute.adapterIsLossy = False,
       Compute.adapterSource = t,
       Compute.adapterTarget = (Compute.adapterTarget ad),
-      Compute.adapterCoder = (AdapterUtils.bidirectional (\dir -> \term -> AdapterUtils.encodeDecode dir (Compute.adapterCoder ad) term))})))) t)
+      Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> Utils.encodeDecode dir (Compute.adapterCoder ad) term))})))) t)
 
 -- | Create an adapter for any type
 termAdapter :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 termAdapter typ =  
   let constraints = (\cx -> Coders.languageConstraints (Coders.adapterContextLanguage cx)) 
-      supported = (\cx -> AdapterUtils.typeIsSupported (constraints cx))
+      supported = (\cx -> Utils.typeIsSupported (constraints cx))
       variantIsSupported = (\cx -> \t -> Sets.member (Variants.typeVariant t) (Coders.languageConstraintsTypeVariants (constraints cx)))
       supportedAtTopLevel = (\cx -> \t -> Logic.and (variantIsSupported cx t) (Coders.languageConstraintsTypes (constraints cx) t))
       pass = (\t -> (\x -> case x of
@@ -532,7 +532,7 @@ termAdapter typ =
       Compute.adapterCoder = (Compute.adapterCoder ad)})))
     _ -> (Monads.withTrace (Strings.cat2 "adapter for " (Core_.type_ typ)) ((\x -> case x of
       Core.TypeVariable v1 -> (forTypeReference v1)
-      _ -> (Flows.bind Monads.getState (\cx -> AdapterUtils.chooseAdapter (alts cx) (supported cx) Core___.type_ Core_.type_ typ))) typ))) typ)
+      _ -> (Flows.bind Monads.getState (\cx -> Utils.chooseAdapter (alts cx) (supported cx) Core___.type_ Core_.type_ typ))) typ))) typ)
 
 -- | Convert union types to record types
 unionToRecord :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))

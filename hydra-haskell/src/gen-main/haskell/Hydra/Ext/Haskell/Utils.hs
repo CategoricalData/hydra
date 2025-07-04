@@ -20,7 +20,7 @@ import qualified Hydra.Module as Module
 import qualified Hydra.Qnames as Qnames
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Strip as Strip
-import Prelude hiding  (Enum, Ordering, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M

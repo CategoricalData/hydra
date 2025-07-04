@@ -4,8 +4,8 @@ module Hydra.Ext.Json.Schema.Coder (
 ) where
 
 import Hydra.Kernel
-import Hydra.TermAdapters
-import Hydra.Adapters
+import Hydra.Adapt.Terms
+import Hydra.Adapt.Modules
 import Hydra.Ext.Json.Schema.Language
 import Hydra.Ext.Json.Schema.Serde
 import qualified Hydra.Encode.Core as EncodeCore

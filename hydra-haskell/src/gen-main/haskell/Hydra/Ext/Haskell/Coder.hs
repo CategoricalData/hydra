@@ -2,7 +2,7 @@
 
 module Hydra.Ext.Haskell.Coder where
 
-import qualified Hydra.Adapters as Adapters
+import qualified Hydra.Adapt.Modules as Modules
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
@@ -36,7 +36,7 @@ import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as Core___
 import qualified Hydra.Strip as Strip
-import Prelude hiding  (Enum, Ordering, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -52,7 +52,7 @@ keyHaskellVar :: Core.Name
 keyHaskellVar = (Core.Name "haskellVar")
 
 adaptTypeToHaskellAndEncode :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Compute.Flow Graph.Graph Ast.Type)
-adaptTypeToHaskellAndEncode namespaces = (Adapters.adaptAndEncodeType Language.haskellLanguage (encodeType namespaces))
+adaptTypeToHaskellAndEncode namespaces = (Modules.adaptAndEncodeType Language.haskellLanguage (encodeType namespaces))
 
 constantForFieldName :: (Core.Name -> Core.Name -> String)
 constantForFieldName tname fname = (Strings.cat [
@@ -403,7 +403,7 @@ getImplicitTypeClasses typ =
   in (Maps.fromList (Lists.map toPair (Sets.toList (findOrdVariables typ))))
 
 moduleToHaskellModule :: (Module.Module -> Compute.Flow Graph.Graph Ast.Module)
-moduleToHaskellModule mod = (Flows.bind (Utils.namespacesForModule mod) (\namespaces -> Adapters.transformModule Language.haskellLanguage (encodeTerm namespaces) (constructModule namespaces) mod))
+moduleToHaskellModule mod = (Flows.bind (Utils.namespacesForModule mod) (\namespaces -> Modules.transformModule Language.haskellLanguage (encodeTerm namespaces) (constructModule namespaces) mod))
 
 moduleToHaskell :: (Module.Module -> Compute.Flow Graph.Graph (M.Map String String))
 moduleToHaskell mod = (Flows.bind (moduleToHaskellModule mod) (\hsmod ->  
@@ -469,7 +469,7 @@ toDataDeclaration coders namespaces pair =
                     env = (Core.letEnvironment v1)
                     toBinding = (\hname_ -> \hterm_ -> Ast.LocalBindingValue (Utils.simpleValueBinding hname_ hterm_ Nothing))
                     ts = (Lists.map (\binding -> Core.typeSchemeType (Optionals.fromJust (Core.letBindingType binding))) lbindings)
-                in (Flows.bind (Flows.mapList (\t -> Adapters.constructCoder Language.haskellLanguage (encodeTerm namespaces) t) ts) (\coders_ ->  
+                in (Flows.bind (Flows.mapList (\t -> Modules.constructCoder Language.haskellLanguage (encodeTerm namespaces) t) ts) (\coders_ ->  
                   let hnames = (Lists.map (\binding -> Utils.simpleName (Core.unName (Core.letBindingName binding))) lbindings) 
                       terms = (Lists.map Core.letBindingTerm lbindings)
                   in (Flows.bind (Flows.sequence (Lists.zipWith (\e -> \t -> Compute.coderEncode e t) coders_ terms)) (\hterms ->  
@@ -623,7 +623,7 @@ typeDecl namespaces name typ =
                             "_type_"]))) mns))
               in (Optionals.fromMaybe (recurse term) (Optionals.bind variantResult forType)))
       finalTerm = (Rewriting.rewriteTerm rewrite rawTerm)
-  in (Flows.bind (Adapters.constructCoder Language.haskellLanguage (encodeTerm namespaces) (Core.TypeVariable (Core.Name "hydra.core.Type"))) (\coder -> Flows.bind (Compute.coderEncode coder finalTerm) (\expr ->  
+  in (Flows.bind (Modules.constructCoder Language.haskellLanguage (encodeTerm namespaces) (Core.TypeVariable (Core.Name "hydra.core.Type"))) (\coder -> Flows.bind (Compute.coderEncode coder finalTerm) (\expr ->  
     let rhs = (Ast.RightHandSide expr) 
         hname = (Utils.simpleName (typeNameLocal name))
         pat = (Utils.applicationPattern hname [])

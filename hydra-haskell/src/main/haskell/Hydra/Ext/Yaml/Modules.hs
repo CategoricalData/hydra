@@ -1,7 +1,7 @@
 module Hydra.Ext.Yaml.Modules (moduleToYaml) where
 
 import Hydra.Kernel
-import Hydra.Adapters
+import Hydra.Adapt.Modules
 import Hydra.Ext.Yaml.Serde
 import Hydra.Ext.Yaml.Language
 import qualified Hydra.Ext.Org.Yaml.Model as YM

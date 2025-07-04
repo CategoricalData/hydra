@@ -8,10 +8,10 @@ import Hydra.Kernel
 import Hydra.Ext.Java.Utils
 import Hydra.Ext.Java.Language
 import Hydra.Ext.Java.Names
-import Hydra.Adapters
+import Hydra.Adapt.Modules
 import Hydra.Ext.Java.Serde
 import Hydra.Ext.Java.Settings
-import Hydra.AdapterUtils
+import Hydra.Adapt.Utils
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore

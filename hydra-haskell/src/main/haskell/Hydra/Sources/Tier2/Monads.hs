@@ -48,8 +48,8 @@ import qualified Data.Maybe                as Y
 import Hydra.Mantle
 
 -- Uncomment tier-2 sources as needed
---import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
---import qualified Hydra.Sources.Tier2.Adapters as Adapters
+--import qualified Hydra.Sources.Tier2.Adapt.Utils as AdaptUtils
+--import qualified Hydra.Sources.Tier2.Adapt.Modules as AdaptModules
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
@@ -60,7 +60,7 @@ import Hydra.Mantle
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
---import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
+--import qualified Hydra.Sources.Tier2.Adapt.Literals as AdaptLiterals
 --import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
 --import qualified Hydra.Sources.Tier2.Qnames as Qnames
 --import qualified Hydra.Sources.Tier2.Reduction as Reduction
@@ -73,8 +73,7 @@ import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
 --import qualified Hydra.Sources.Tier2.Templating as Templating
---import qualified Hydra.Sources.Tier2.TermAdapters as TermAdapters
---import qualified Hydra.Sources.Tier2.TermEncoding as TermEncoding
+--import qualified Hydra.Sources.Tier2.Adapt.Terms as AdaptTerms
 --import qualified Hydra.Sources.Tier2.Unification as Unification
 import qualified Hydra.Sources.Tier2.Variants as Variants
 
@@ -85,7 +84,7 @@ flowsDefinition = definitionInModule hydraMonadsModule
 hydraMonadsModule :: Module
 hydraMonadsModule = Module (Namespace "hydra.monads") elements
     [Constants.hydraConstantsModule, ShowCore.showCoreModule]
-    [Tier1.hydraMantleModule, Tier1.hydraComputeModule] $
+    [Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraComputeModule, Tier1.hydraTypingModule] $
     Just ("Functions for working with Hydra's 'flow' and other monads.")
   where
     elements = [
@@ -128,6 +127,11 @@ emptyTraceDef :: TElement Trace
 emptyTraceDef = flowsDefinition "emptyTrace" $
   Compute.trace (list []) (list []) Maps.empty
 
+execDef :: TElement (Flow s a -> s -> s)
+execDef = flowsDefinition "exec" $
+  lambdas ["f", "s0"] $
+    Compute.flowStateState $ Compute.unFlow (var "f") (var "s0") (ref emptyTraceDef)
+
 failDef :: TElement (String -> Flow s a)
 failDef = flowsDefinition "fail" $
   lambda "msg" $ wrap _Flow $ lambdas ["s", "t"] $
@@ -147,6 +151,18 @@ fromFlowDef = flowsDefinition "fromFlow" $
     (lambda "xmo" $ var "xmo")
     (Compute.flowStateValue $ (Compute.unFlow (var "f") (var "cx") (ref emptyTraceDef)))
 
+getStateDef :: TElement (Flow s s)
+getStateDef = flowsDefinition "getState" $ -- Flow s s
+  doc "Get the state of the current flow" $
+  wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
+    "fs1">: Compute.unFlow (ref pureDef @@ unit) (var "s0") (var "t0")] $ -- FlowState s ()
+    (lambda "v" $ lambda "s" $ lambda "t" $ (
+        (primitive _optionals_maybe
+          @@ (Compute.flowState nothing (var "s") (var "t"))
+          @@ (constant (Compute.flowState (just $ var "s") (var "s") (var "t"))))
+         @@ var "v"))
+      @@ (Compute.flowStateValue $ var "fs1") @@ (Compute.flowStateState $ var "fs1") @@ (Compute.flowStateTrace $ var "fs1")
+
 mapDef :: TElement ((a -> b) -> Flow s a -> Flow s b)
 mapDef = flowsDefinition "map" $
   doc "Map a function over a flow" $
@@ -165,6 +181,13 @@ map2Def = flowsDefinition "map2" $
     @@ (lambda "r1" $ ref mapDef
       @@ (lambda "r2" $ var "f" @@ var "r1" @@ var "r2")
       @@ var "f2")
+
+modifyDef :: TElement ((s -> s) -> Flow s ())
+modifyDef = flowsDefinition "modify" $
+  lambda "f" $
+    ref bindDef
+      @@ (ref getStateDef)
+      @@ (lambda "s" $ ref putStateDef @@ (var "f" @@ var "s"))
 
 mutateTraceDef :: TElement ((Trace -> Hydra.Mantle.Either String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a)
 mutateTraceDef = flowsDefinition "mutateTrace" $
@@ -206,6 +229,34 @@ pushErrorDef = flowsDefinition "pushError" $
         (Compute.traceStack $ var "t")
         (Lists.cons (var "errorMsg") (Compute.traceMessages $ var "t"))
         (Compute.traceOther $ var "t")
+
+putStateDef :: TElement (s -> Flow s ())
+putStateDef = flowsDefinition "putState" $
+  doc "Set the state of a flow" $
+  lambda "cx" $ wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
+    "f1">: Compute.unFlow (ref pureDef @@ unit) (var "s0") (var "t0")] $
+    Compute.flowState
+      (Compute.flowStateValue $ var "f1")
+      (var "cx")
+      (Compute.flowStateTrace $ var "f1")
+
+traceSummaryDef :: TElement (Trace -> String)
+traceSummaryDef = flowsDefinition "traceSummary" $
+  doc "Summarize a trace as a string" $
+  lambda "t" $ lets [
+    "messageLines">: (Lists.nub (Compute.traceMessages $ var "t")),
+    "keyvalLines">: Logic.ifElse (Maps.null (Compute.traceOther $ var "t"))
+      (list [])
+      (Lists.cons ("key/value pairs: ")
+        (Lists.map (var "toLine") (Maps.toList (Compute.traceOther $ var "t")))),
+    "toLine">:
+      lambda "pair" $ "\t" ++ (Core.unName $ (first $ var "pair")) ++ ": " ++ (ref ShowCore.termDef @@ (second $ var "pair"))] $
+    Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines"))
+
+unexpectedDef :: TElement (String -> String -> Flow s x)
+unexpectedDef = flowsDefinition "unexpected" $
+  doc "Fail if an actual value does not match an expected value" $
+  lambda "expected" $ lambda "actual" $ ref failDef @@ ("expected " ++ var "expected" ++ " but found: " ++ var "actual")
 
 warnDef :: TElement (String -> Flow s a -> Flow s a)
 warnDef = flowsDefinition "warn" $
@@ -264,63 +315,3 @@ withTraceDef = flowsDefinition "withTrace" $
       (Compute.traceMessages $ var "t1")
       (Compute.traceOther $ var "t1")]
     $ ref mutateTraceDef @@ var "mutate" @@ var "restore"
-
-
-
-
---
-
-
-
-
-execDef :: TElement (Flow s a -> s -> s)
-execDef = flowsDefinition "exec" $
-  lambdas ["f", "s0"] $
-    Compute.flowStateState $ Compute.unFlow (var "f") (var "s0") (ref emptyTraceDef)
-
-getStateDef :: TElement (Flow s s)
-getStateDef = flowsDefinition "getState" $ -- Flow s s
-  doc "Get the state of the current flow" $
-  wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
-    "fs1">: Compute.unFlow (ref pureDef @@ unit) (var "s0") (var "t0")] $ -- FlowState s ()
-    (lambda "v" $ lambda "s" $ lambda "t" $ (
-        (primitive _optionals_maybe
-          @@ (Compute.flowState nothing (var "s") (var "t"))
-          @@ (constant (Compute.flowState (just $ var "s") (var "s") (var "t"))))
-         @@ var "v"))
-      @@ (Compute.flowStateValue $ var "fs1") @@ (Compute.flowStateState $ var "fs1") @@ (Compute.flowStateTrace $ var "fs1")
-
-modifyDef :: TElement ((s -> s) -> Flow s ())
-modifyDef = flowsDefinition "modify" $
-  lambda "f" $
-    ref bindDef
-      @@ (ref getStateDef)
-      @@ (lambda "s" $ ref putStateDef @@ (var "f" @@ var "s"))
-
-putStateDef :: TElement (s -> Flow s ())
-putStateDef = flowsDefinition "putState" $
-  doc "Set the state of a flow" $
-  lambda "cx" $ wrap _Flow $ lambda "s0" $ lambda "t0" $ lets [
-    "f1">: Compute.unFlow (ref pureDef @@ unit) (var "s0") (var "t0")] $
-    Compute.flowState
-      (Compute.flowStateValue $ var "f1")
-      (var "cx")
-      (Compute.flowStateTrace $ var "f1")
-
-traceSummaryDef :: TElement (Trace -> String)
-traceSummaryDef = flowsDefinition "traceSummary" $
-  doc "Summarize a trace as a string" $
-  lambda "t" $ lets [
-    "messageLines">: (Lists.nub (Compute.traceMessages $ var "t")),
-    "keyvalLines">: Logic.ifElse (Maps.null (Compute.traceOther $ var "t"))
-      (list [])
-      (Lists.cons ("key/value pairs: ")
-        (Lists.map (var "toLine") (Maps.toList (Compute.traceOther $ var "t")))),
-    "toLine">:
-      lambda "pair" $ "\t" ++ (Core.unName $ (first $ var "pair")) ++ ": " ++ (ref ShowCore.termDef @@ (second $ var "pair"))] $
-    Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines"))
-
-unexpectedDef :: TElement (String -> String -> Flow s x)
-unexpectedDef = flowsDefinition "unexpected" $
-  doc "Fail if an actual value does not match an expected value" $
-  lambda "expected" $ lambda "actual" $ ref failDef @@ ("expected " ++ var "expected" ++ " but found: " ++ var "actual")
