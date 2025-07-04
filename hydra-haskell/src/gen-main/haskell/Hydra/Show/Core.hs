@@ -296,7 +296,7 @@ term t =
         term term1,
         "}"])) (Strip.stripTerm t))
 
--- | Show a TermVariant as a string
+-- | Show a term variant as a string
 termVariant :: (Mantle.TermVariant -> String)
 termVariant x = case x of
   Mantle.TermVariantAnnotated -> "annotated"
@@ -455,3 +455,22 @@ typeSubst ts =
     "{",
     Strings.intercalate "," pairStrs,
     "}"])
+
+-- | Show a type variant as a string
+typeVariant :: (Mantle.TypeVariant -> String)
+typeVariant x = case x of
+  Mantle.TypeVariantAnnotated -> "annotated"
+  Mantle.TypeVariantApplication -> "application"
+  Mantle.TypeVariantForall -> "forall"
+  Mantle.TypeVariantFunction -> "function"
+  Mantle.TypeVariantList -> "list"
+  Mantle.TypeVariantLiteral -> "literal"
+  Mantle.TypeVariantMap -> "map"
+  Mantle.TypeVariantOptional -> "optional"
+  Mantle.TypeVariantProduct -> "product"
+  Mantle.TypeVariantRecord -> "record"
+  Mantle.TypeVariantSet -> "set"
+  Mantle.TypeVariantSum -> "sum"
+  Mantle.TypeVariantUnion -> "union"
+  Mantle.TypeVariantVariable -> "variable"
+  Mantle.TypeVariantWrap -> "wrap"

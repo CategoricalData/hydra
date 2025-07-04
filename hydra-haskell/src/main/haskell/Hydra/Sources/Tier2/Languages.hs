@@ -82,7 +82,7 @@ languagesModule = Module ns elements
     [Tier1.hydraCoreModule] $
     Just "Language constraints for Hydra Core"
   where
-    ns = Namespace "hydra.coreLanguage"
+    ns = Namespace "hydra.languages"
     elements = [el languagesDef]
 
 languagesDef :: TElement Language

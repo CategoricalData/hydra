@@ -21,7 +21,7 @@ hydraRelationalModule = Module ns elements [] [hydraCoreModule] $
       "Types ('domains') and values are parameterized so as to allow for application-specific implementations. " ++
       "No special support is provided for 'nonsimple' domains; i.e. relations are assumed to be normalized.")
   where
-    ns = Namespace "hydra.ext.relationalModel"
+    ns = Namespace "hydra.relational"
     def = datatype ns
     rm = typeref ns
 

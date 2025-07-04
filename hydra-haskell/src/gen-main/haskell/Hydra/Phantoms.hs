@@ -9,7 +9,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | An association with a named term (element) with a phantom type
+-- | An association of a named term (element) with a phantom type
 data TElement a = 
   TElement {
     tElementName :: Core.Name,

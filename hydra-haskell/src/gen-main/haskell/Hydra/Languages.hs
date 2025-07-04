@@ -11,7 +11,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Language constraints for Java
+-- | Language constraints for Hydra Core, i.e. no constraints.
 hydraLanguage :: Coders.Language
 hydraLanguage = Coders.Language {
   Coders.languageName = (Coders.LanguageName "hydra.core"),
