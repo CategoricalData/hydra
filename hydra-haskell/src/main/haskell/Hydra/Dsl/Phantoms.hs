@@ -206,11 +206,6 @@ untuple arity idx = TTerm $ Terms.untuple arity idx Nothing
 field :: Name -> TTerm a -> Field
 field fname (TTerm val) = Field fname val
 
--- | Create a typed field
--- Example: fld (Name "age") (int32 30)
-fld :: Name -> TTerm a -> TField a
-fld fname (TTerm val) = TField $ Field fname val
-
 -- | Create a union injection
 -- Example: inject (Name "Result") (Name "success") (string "ok")
 inject :: Name -> Name -> TTerm a -> TTerm b

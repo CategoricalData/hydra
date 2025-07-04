@@ -16,7 +16,7 @@ hydraCoreGraph = elementsToGraph bootstrapGraph Nothing (moduleElements hydraCor
 
 hydraCoreModule :: Module
 hydraCoreModule = Module ns elements [] [] $
-    Just "Hydra's core data model of type and term expressions"
+    Just "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."
   where
     ns = Namespace "hydra.core"
     core = typeref ns
