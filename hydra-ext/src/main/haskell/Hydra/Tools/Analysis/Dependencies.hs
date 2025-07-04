@@ -14,25 +14,31 @@ import Hydra.Tools.Analysis.Dependencies
 import Hydra.Codegen (modulesToGraph)
 import System.IO
 
-termModulesToGraphson withPrims modules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> termGraphToDependencyGraphson withPrims (modulesToGraph modules)) >>= writeFile outFile
+termModulesToGraphson withPrims modules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> termGraphToDependencyGraphson withPrims False (modulesToGraph modules)) >>= writeFile outFile
 typeModulesToGraphson modules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> typeGraphToDependencyGraphson (modulesToGraph modules)) >>= writeFile outFile
+combinedModulesToGraphson dataModules schemaModules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> combinedGraphToDependencyGraphson (modulesToGraph dataModules) (modulesToGraph schemaModules)) >>= writeFile outFile
 
 typeModulesToGraphson [hydraCoreModule] "/tmp/tier0-type-deps.json"
 typeModulesToGraphson (hydraCoreModule:tier1TypeModules) "/tmp/tier1-type-deps.json"
-termModulesToGraphson True True tier1TermModules "/tmp/tier1-term-deps-withPrims-withTypes.json"
-termModulesToGraphson False False tier1TermModules "/tmp/tier1-term-deps-noPrims-noTypes.json"
-termModulesToGraphson True True (tier1TermModules ++ tier2Modules) "/tmp/tier2-term-deps-withPrims-withTypes.json"
-termModulesToGraphson False False (tier1TermModules ++ tier2Modules) "/tmp/tier2-term-deps-noPrims-noTypes.json"
+termModulesToGraphson True tier1TermModules "/tmp/tier1-term-deps-withPrims.json"
+termModulesToGraphson False tier1TermModules "/tmp/tier1-term-deps-noPrims.json"
+termModulesToGraphson True (tier1TermModules ++ tier2Modules) "/tmp/tier2-term-deps-withPrims.json"
+termModulesToGraphson False (tier1TermModules ++ tier2Modules) "/tmp/tier2-term-deps-noPrims.json"
+combinedModulesToGraphson (tier1TermModules ++ tier2Modules) (hydraCoreModule:tier1TypeModules) "/tmp/tier2-combined-deps.json"
 
 Now in G.V():
 
+// Clear
 g.V().drop()
+// Choose one of the following
 g.io("/tmp/tier0-type-deps.json").read().iterate()
 g.io("/tmp/tier1-type-deps.json").read().iterate()
-g.io("/tmp/tier1-term-deps-withPrims-withTypes.json").read().iterate()
-g.io("/tmp/tier1-term-deps-noPrims-noTypes.json").read().iterate()
-g.io("/tmp/tier2-term-deps-withPrims-withTypes.json").read().iterate()
-g.io("/tmp/tier2-term-deps-noPrims-noTypes.json").read().iterate()
+g.io("/tmp/tier1-term-deps-withPrims.json").read().iterate()
+g.io("/tmp/tier1-term-deps-noPrims.json").read().iterate()
+g.io("/tmp/tier2-term-deps-withPrims.json").read().iterate()
+g.io("/tmp/tier2-term-deps-noPrims.json").read().iterate()
+g.io("/tmp/tier2-combined-deps.json").read().iterate()
+// Display
 g.E()
 -}
 module Hydra.Tools.Analysis.Dependencies where
@@ -61,13 +67,14 @@ import qualified Data.Maybe as Y
 --
 
 vertexLabel_Primitive = PG.VertexLabel "Primitive"
-vertexLabel_TermElement = PG.VertexLabel "Term"
-vertexLabel_TypeElement = PG.VertexLabel "Type"
-edgeLabel_primitive = PG.EdgeLabel "primitive"
+vertexLabel_Term = PG.VertexLabel "Term"
+vertexLabel_Type = PG.VertexLabel "Type"
+edgeLabel_hasType = PG.EdgeLabel "hasType"
 edgeLabel_subterm = PG.EdgeLabel "subterm"
 edgeLabel_subtype = PG.EdgeLabel "subtype"
-propertyKey_localName = PG.PropertyKey "localName"
+edgeLabel_usesPrimitive = PG.EdgeLabel "usesPrimitive"
 propertyKey_arity = PG.PropertyKey "arity"
+propertyKey_localName = PG.PropertyKey "localName"
 propertyKey_name = PG.PropertyKey "name"
 propertyKey_namespace = PG.PropertyKey "namespace"
 propertyKey_termExpression = PG.PropertyKey "termExpression"
@@ -76,6 +83,19 @@ propertyKey_typeExpression = PG.PropertyKey "typeExpression"
 propertyKey_typeVariant = PG.PropertyKey "typeVariant"
 
 --
+
+combinedGraphToDependencyGraphson :: Graph -> Graph -> Flow Graph [Json.Value]
+combinedGraphToDependencyGraphson dataGraph schemaGraph = do
+  pg <- combinedGraphToDependencyPropertyGraph dataGraph schemaGraph
+  pgElementsToGraphson stringGraphsonContext $ propertyGraphElements pg
+
+combinedGraphToDependencyPropertyGraph :: Graph -> Graph -> Flow Graph (PG.Graph String)
+combinedGraphToDependencyPropertyGraph dataGraph schemaGraph = do
+  let pgDataGraph = termGraphToDependencyPropertyGraph True True dataGraph
+  pgSchemaGraph <- typeGraphToDependencyPropertyGraph schemaGraph
+  return $ PG.Graph
+    (M.union (PG.graphVertices pgDataGraph) (PG.graphVertices pgSchemaGraph))
+    (M.union (PG.graphEdges pgDataGraph) (PG.graphEdges pgSchemaGraph))
 
 descriptiveEdgeId :: PG.EdgeLabel -> String -> String -> String
 descriptiveEdgeId label outId inId = outId ++ "_" ++ PG.unEdgeLabel label ++ "_" ++ inId
@@ -94,8 +114,8 @@ nameToVertexId :: Name -> String
 nameToVertexId = unName
 
 termGraphToDependencyGraphson :: Bool -> Bool -> Graph -> Flow s [Json.Value]
-termGraphToDependencyGraphson withPrims withTypes g = pgElementsToGraphson stringGraphsonContext $ propertyGraphElements $
-    termGraphToDependencyPropertyGraph withPrims withTypes g
+termGraphToDependencyGraphson withPrims withTypes g = pgElementsToGraphson stringGraphsonContext $
+  propertyGraphElements $ termGraphToDependencyPropertyGraph withPrims withTypes g
 
 -- | Given a Hydra graph, create a property graph in which the vertices are all elements of the graph
 --   (plus all primitives, if selected) and the edges are all direct dependencies between elements
@@ -109,11 +129,8 @@ termGraphToDependencyPropertyGraph withPrims withTypes g = PG.Graph vertexMap ed
     nameToVertexId = unName
     vertexMap = M.fromList $ fmap (\v -> (PG.vertexId v, v)) vertices
       where
-        vertices = prims ++ els ++ types
+        vertices = prims ++ els
           where
-            types = if withTypes
-              then [] -- TODO
-              else []
             prims = if withPrims
                 then fmap toVertex $ M.elems primitives
                 else []
@@ -127,7 +144,7 @@ termGraphToDependencyPropertyGraph withPrims withTypes g = PG.Graph vertexMap ed
                     name = primitiveName prim
             els = fmap toVertex $ M.elems elements
               where
-                toVertex el = PG.Vertex vertexLabel_TermElement (nameToVertexId $ elementName el) $ M.fromList [
+                toVertex el = PG.Vertex vertexLabel_Term (nameToVertexId $ elementName el) $ M.fromList [
                     (propertyKey_localName, localNameOf name),
                     (propertyKey_name, unName name),
                     (propertyKey_namespace, nameToNamespace name),
@@ -137,13 +154,19 @@ termGraphToDependencyPropertyGraph withPrims withTypes g = PG.Graph vertexMap ed
                     term = elementTerm el
     edgeMap = M.fromList $ fmap (\e -> (PG.edgeId e, e)) edges
       where
-        edges = primEdges ++ elEdges
+        edges = typeEdges ++ primEdges ++ elEdges
           where
+            typeEdges = if withTypes
+                then L.concat $ fmap edgesFrom elements
+                else []
+              where
+                edgesFrom el = fmap (namePairToEdge edgeLabel_hasType (elementName el)) $
+                  S.toList $ termDependencyNames False False True $ elementTerm el
             primEdges = if withPrims
                 then L.concat $ fmap edgesFrom elements
                 else []
               where
-                edgesFrom el = fmap (namePairToEdge edgeLabel_primitive (elementName el)) $
+                edgesFrom el = fmap (namePairToEdge edgeLabel_usesPrimitive (elementName el)) $
                   S.toList $ termDependencyNames False True False $ elementTerm el
             elEdges = L.concat $ fmap edgesFrom elements
               where
@@ -167,11 +190,11 @@ typeGraphToDependencyPropertyGraph g = do
     elements = M.elems $ graphElements g
     terms = fmap elementTerm elements
     names = fmap elementName elements
-    toVertex name typ = PG.Vertex vertexLabel_TypeElement (nameToVertexId name) $
+    toEdges name deps = fmap (namePairToEdge edgeLabel_subtype name) deps
+    toVertex name typ = PG.Vertex vertexLabel_Type (nameToVertexId name) $
       M.fromList [
         (propertyKey_localName, localNameOf name),
         (propertyKey_name, unName name),
         (propertyKey_namespace, nameToNamespace name),
         (propertyKey_typeExpression, ShowCore.type_ typ),
         (propertyKey_typeVariant, ShowCore.typeVariant $ typeVariant typ)]
-    toEdges name deps = fmap (namePairToEdge edgeLabel_subtype name) deps
