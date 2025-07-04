@@ -97,7 +97,8 @@ showCoreModule = Module (Namespace "hydra.show.core") elements
      el typeDef,
      el typeConstraintDef, -- TODO: move this to hydra.show.typing
      el typeSchemeDef,
-     el typeSubstDef] -- TODO: move this to hydra.show.typing
+     el typeSubstDef, -- TODO: move this to hydra.show.typing
+     el typeVariantDef] -- TODO: move this to hydra.show.mantle
 
 showCoreDefinition :: String -> TTerm a -> TElement a
 showCoreDefinition = definitionInModule showCoreModule
@@ -180,7 +181,7 @@ integerTypeDef = showCoreDefinition "integerType" $
 
 listDef :: TElement ((a -> String) -> [a] -> String)
 listDef = showCoreDefinition "list" $
-  doc "Show a list using a function to show each element" $
+  doc "Show a list using a given function to show each element" $
   lambdas ["f", "xs"] $ lets [
     "elementStrs">: Lists.map (var "f") (var "xs")] $
     Strings.cat $ list [
@@ -403,7 +404,7 @@ termDef = showCoreDefinition "term" $
 
 termVariantDef :: TElement (TermVariant -> String)
 termVariantDef = showCoreDefinition "termVariant" $
-  doc "Show a TermVariant as a string" $
+  doc "Show a term variant as a string" $
   match _TermVariant Nothing [
     _TermVariant_annotated>>: constant $ string "annotated",
     _TermVariant_application>>: constant $ string "application",
@@ -568,3 +569,23 @@ typeSubstDef = showCoreDefinition "typeSubst" $
       string "{",
       Strings.intercalate (string ",") (var "pairStrs"),
       string "}"]
+
+typeVariantDef :: TElement (TypeVariant -> String)
+typeVariantDef = showCoreDefinition "typeVariant" $
+  doc "Show a type variant as a string" $
+  match _TypeVariant Nothing [
+    _TypeVariant_annotated>>: constant $ string "annotated",
+    _TypeVariant_application>>: constant $ string "application",
+    _TypeVariant_forall>>: constant $ string "forall",
+    _TypeVariant_function>>: constant $ string "function",
+    _TypeVariant_list>>: constant $ string "list",
+    _TypeVariant_literal>>: constant $ string "literal",
+    _TypeVariant_map>>: constant $ string "map",
+    _TypeVariant_optional>>: constant $ string "optional",
+    _TypeVariant_product>>: constant $ string "product",
+    _TypeVariant_record>>: constant $ string "record",
+    _TypeVariant_set>>: constant $ string "set",
+    _TypeVariant_sum>>: constant $ string "sum",
+    _TypeVariant_union>>: constant $ string "union",
+    _TypeVariant_variable>>: constant $ string "variable",
+    _TypeVariant_wrap>>: constant $ string "wrap"]

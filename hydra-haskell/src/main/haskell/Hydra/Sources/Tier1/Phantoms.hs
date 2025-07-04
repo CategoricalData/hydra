@@ -28,7 +28,7 @@ hydraPhantomsModule = Module ns elements [hydraComputeModule] [hydraCoreModule] 
     elements = [
 
       def "TElement" $
-        doc "An association with a named term (element) with a phantom type" $
+        doc "An association of a named term (element) with a phantom type" $
         forAll "a" $ record [
           "name">: core "Name",
           "term">: phantoms "TTerm" @@ "a"],
