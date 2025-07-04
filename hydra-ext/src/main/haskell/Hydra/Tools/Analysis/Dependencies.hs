@@ -14,24 +14,26 @@ import Hydra.Tools.Analysis.Dependencies
 import Hydra.Codegen (modulesToGraph)
 import System.IO
 
-typeGraphToGraphson modules =
+termModulesToGraphson withPrims modules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> termGraphToDependencyGraphson withPrims (modulesToGraph modules)) >>= writeFile outFile
+typeModulesToGraphson modules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> typeGraphToDependencyGraphson (modulesToGraph modules)) >>= writeFile outFile
 
-
-flowToIo hydraCoreGraph (jsonValuesToString <$> typeGraphToDependencyGraphson hydraCoreGraph) >>= writeFile "/tmp/type-dependencies.json"
-
-tier1TypeGraph = modulesToGraph (hydraCoreModule:tier1TypeModules)
-flowToIo hydraCoreGraph (jsonValuesToString <$> typeGraphToDependencyGraphson tier1TypeGraph) >>= writeFile "/tmp/type-dependencies.json"
-
-tier1TermGraph = modulesToGraph tier1TermModules
-flowToIo hydraCoreGraph (jsonValuesToString <$> termGraphToDependencyGraphson True tier1TermGraph) >>= writeFile "/tmp/term-dependencies.json"
-
-tier2TermGraph = modulesToGraph (tier1TermModules ++ tier2Modules)
-flowToIo hydraCoreGraph (jsonValuesToString <$> termGraphToDependencyGraphson True tier2TermGraph) >>= writeFile "/tmp/term-dependencies.json"
+typeModulesToGraphson [hydraCoreModule] "/tmp/tier0-type-deps.json"
+typeModulesToGraphson (hydraCoreModule:tier1TypeModules) "/tmp/tier1-type-deps.json"
+termModulesToGraphson True tier1TermModules "/tmp/tier1-term-deps-withPrims.json"
+termModulesToGraphson False tier1TermModules "/tmp/tier1-term-deps-noPrims.json"
+termModulesToGraphson True (tier1TermModules ++ tier2Modules) "/tmp/tier2-term-deps-withPrims.json"
+termModulesToGraphson False (tier1TermModules ++ tier2Modules) "/tmp/tier2-term-deps-noPrims.json"
 
 Now in G.V():
 
-g.io("/tmp/type-dependencies.json").read().iterate()
-g.io("/tmp/term-dependencies.json").read().iterate()
+g.V().drop()
+g.io("/tmp/tier0-type-deps.json").read().iterate()
+g.io("/tmp/tier1-type-deps.json").read().iterate()
+g.io("/tmp/tier1-term-deps-withPrims.json").read().iterate()
+g.io("/tmp/tier1-term-deps-noPrims.json").read().iterate()
+g.io("/tmp/tier2-term-deps-withPrims.json").read().iterate()
+g.io("/tmp/tier2-term-deps-noPrims.json").read().iterate()
+g.E()
 -}
 module Hydra.Tools.Analysis.Dependencies where
 
@@ -81,7 +83,6 @@ descriptiveEdgeId label outId inId = outId ++ "_" ++ PG.unEdgeLabel label ++ "_"
 namePairToEdge :: PG.EdgeLabel -> Name -> Name -> PG.Edge String
 namePairToEdge label outName inName = PG.Edge label edgeId outId inId M.empty
   where
-    label = edgeLabel_subtype
     outId = nameToVertexId outName
     inId = nameToVertexId inName
     edgeId = descriptiveEdgeId label outId inId
