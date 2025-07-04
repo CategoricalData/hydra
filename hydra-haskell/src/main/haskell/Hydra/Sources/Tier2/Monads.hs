@@ -57,7 +57,7 @@ import Hydra.Mantle
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 --import qualified Hydra.Sources.Tier2.Monads as Monads
---import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
+--import qualified Hydra.Sources.Tier2.Grammars as Grammars
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
 --import qualified Hydra.Sources.Tier2.Adapt.Literals as AdaptLiterals

@@ -4,7 +4,7 @@ module Hydra.Sources.Tier3.Ext.Graphql.Syntax where
 
 import Hydra.Sources.Tier2.All
 import Hydra.Dsl.Grammars
-import Hydra.GrammarToModule
+import Hydra.Grammars
 import qualified Hydra.Grammar as G
 
 

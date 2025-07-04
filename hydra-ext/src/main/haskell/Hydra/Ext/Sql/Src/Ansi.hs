@@ -4,7 +4,7 @@ module Hydra.Ext.Sql.Src.Ansi where
 
 import Hydra.Sources.Tier3.All hiding (parens)
 import Hydra.Dsl.Grammars
-import Hydra.GrammarToModule
+import Hydra.Grammars
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Grammar as G
 
