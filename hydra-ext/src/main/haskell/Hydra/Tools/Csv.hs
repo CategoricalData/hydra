@@ -3,8 +3,8 @@
 module Hydra.Tools.Csv where
 
 import Hydra.Kernel
-import Hydra.Ext.Tabular
-import qualified Hydra.Ext.RelationalModel as RM
+import Hydra.Tabular
+import qualified Hydra.Relational as RM
 import Hydra.Tools.Tabular
 
 import qualified Control.Monad as CM

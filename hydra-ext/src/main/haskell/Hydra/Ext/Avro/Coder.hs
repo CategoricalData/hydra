@@ -31,9 +31,9 @@ type AvroHydraAdapter = Adapter AvroEnvironment AvroEnvironment Avro.Schema Type
 
 data AvroQualifiedName = AvroQualifiedName (Maybe String) String deriving (Eq, Ord, Show)
 
-data ForeignKey = ForeignKey Name (String -> Name)
+data AvroForeignKey = AvroForeignKey Name (String -> Name)
 
-data PrimaryKey = PrimaryKey Name (String -> Name)
+data AvroPrimaryKey = AvroPrimaryKey Name (String -> Name)
 
 emptyAvroEnvironment = AvroEnvironment M.empty Nothing M.empty
 
@@ -95,7 +95,7 @@ avroHydraAdapter schema = case schema of
               Avro.NamedTypeRecord r -> do
                   let avroFields = Avro.recordFields r
                   adaptersByFieldName <- M.fromList <$> (CM.mapM prepareField avroFields)
-                  pk <- findPrimaryKeyField qname avroFields
+                  pk <- findAvroPrimaryKeyField qname avroFields
                   -- TODO: Nothing values for optional fields
                   let encodePair (k, v) = case M.lookup k adaptersByFieldName of
                         Nothing -> fail $ "unrecognized field for " ++ showQname qname ++ ": " ++ show k
@@ -131,7 +131,7 @@ avroHydraAdapter schema = case schema of
       where
         addElement term typ pk fields = case pk of
           Nothing -> pure ()
-          Just (PrimaryKey fname constr) -> case L.filter isPkField fields of
+          Just (AvroPrimaryKey fname constr) -> case L.filter isPkField fields of
               [] -> pure ()
               [field] -> do
                   s <- termToString $ fieldTerm field
@@ -143,7 +143,7 @@ avroHydraAdapter schema = case schema of
               _ -> fail $ "multiple fields named " ++ unName fname
             where
               isPkField field = fieldName field == fname
-        findPrimaryKeyField qname avroFields = do
+        findAvroPrimaryKeyField qname avroFields = do
           keys <- Y.catMaybes <$> CM.mapM primaryKey avroFields
           case keys of
             [] -> pure Nothing
@@ -157,7 +157,7 @@ avroHydraAdapter schema = case schema of
 
           ad <- case fk of
             Nothing -> avroHydraAdapter $ Avro.fieldType f
-            Just (ForeignKey name constr) -> do
+            Just (AvroForeignKey name constr) -> do
                 ad <- avroHydraAdapter $ Avro.fieldType f
                 let decodeTerm = \(TermVariable name) -> do -- TODO: not symmetrical
                       term <- stringToTerm (adapterTarget ad) $ unName name
@@ -290,7 +290,7 @@ namedAnnotationsToCore n = M.fromList (toCore <$> (M.toList $ Avro.namedAnnotati
 getAvroHydraAdapter :: AvroQualifiedName -> AvroEnvironment -> Y.Maybe AvroHydraAdapter
 getAvroHydraAdapter qname = M.lookup qname . avroEnvironmentNamedAdapters
 
-foreignKey :: Avro.Field -> Flow s (Maybe ForeignKey)
+foreignKey :: Avro.Field -> Flow s (Maybe AvroForeignKey)
 foreignKey f = case M.lookup avro_foreignKey (Avro.fieldAnnotations f) of
     Nothing -> pure Nothing
     Just v -> do
@@ -300,18 +300,18 @@ foreignKey f = case M.lookup avro_foreignKey (Avro.fieldAnnotations f) of
       let constr = case pattern of
             Nothing -> Name
             Just pat -> patternToNameConstructor pat
-      return $ Just $ ForeignKey tname constr
+      return $ Just $ AvroForeignKey tname constr
 
 patternToNameConstructor :: String -> String -> Name
 patternToNameConstructor pat = \s -> Name $ L.intercalate s $ Strings.splitOn "${}" pat
 
-primaryKey :: Avro.Field -> Flow s (Maybe PrimaryKey)
+primaryKey :: Avro.Field -> Flow s (Maybe AvroPrimaryKey)
 primaryKey f = do
   case M.lookup avro_primaryKey $ Avro.fieldAnnotations f of
     Nothing -> pure Nothing
     Just v -> do
       s <- expectString v
-      return $ Just $ PrimaryKey (Name $ Avro.fieldName f) $ patternToNameConstructor s
+      return $ Just $ AvroPrimaryKey (Name $ Avro.fieldName f) $ patternToNameConstructor s
 
 parseAvroName :: Maybe String -> String -> AvroQualifiedName
 parseAvroName mns name = case L.reverse $ Strings.splitOn "." name of

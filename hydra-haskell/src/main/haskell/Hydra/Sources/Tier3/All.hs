@@ -38,10 +38,8 @@ import Hydra.Sources.Tier3.Ext.Protobuf.SourceContext
 import Hydra.Sources.Tier3.Ext.Python.Language
 import Hydra.Sources.Tier3.Ext.Python.Syntax
 import Hydra.Sources.Tier3.Ext.Rdf.Syntax
-import Hydra.Sources.Tier3.Ext.RelationalModel
 import Hydra.Sources.Tier3.Ext.Scala.Meta
 import Hydra.Sources.Tier3.Ext.Shacl.Model
-import Hydra.Sources.Tier3.Ext.Tabular
 import Hydra.Sources.Tier3.Ext.TypeScript.Language
 import Hydra.Sources.Tier3.Ext.TypeScript.Model
 import Hydra.Sources.Tier3.Ext.Yaml.Model
@@ -88,10 +86,8 @@ tier3ExtModules = [
   pythonLanguageModule,
   pythonSyntaxModule,
   rdfSyntaxModule,
-  relationalModelModule,
   scalaMetaModule,
   shaclModelModule,
-  tabularModule,
   pgMappingModule,
   pgModelModule,
   pgQueryModule,
