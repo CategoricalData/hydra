@@ -1,6 +1,6 @@
 -- | Additional adapter utilities, above and beyond the generated ones.
 
-module Hydra.AdapterUtils where
+module Hydra.Adapt.Utils where
 
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
@@ -19,7 +19,7 @@ import qualified Hydra.Qnames as Qnames
 import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
-import Prelude hiding  (Enum, Ordering, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -30,7 +30,7 @@ bidirectional f = Compute.Coder {
   Compute.coderEncode = (f Coders.CoderDirectionEncode),
   Compute.coderDecode = (f Coders.CoderDirectionDecode)}
 
-chooseAdapter :: ((t3 -> Compute.Flow t0 [Compute.Adapter t1 t2 t3 t3 t4 t4]) -> (t3 -> Bool) -> (t3 -> String) -> (t3 -> String) -> t3 -> Compute.Flow t0 (Compute.Adapter t1 t2 t3 t3 t4 t4))
+chooseAdapter :: ((t2 -> Compute.Flow t4 [Compute.Adapter t0 t1 t2 t2 t3 t3]) -> (t2 -> Bool) -> (t2 -> String) -> (t2 -> String) -> t2 -> Compute.Flow t4 (Compute.Adapter t0 t1 t2 t2 t3 t3))
 chooseAdapter alts supported show describe typ = (Logic.ifElse (supported typ) (Flows.pure (Compute.Adapter {
   Compute.adapterIsLossy = False,
   Compute.adapterSource = typ,

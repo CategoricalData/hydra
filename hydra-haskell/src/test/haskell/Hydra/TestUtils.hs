@@ -19,9 +19,9 @@ module Hydra.TestUtils (
 ) where
 
 import Hydra.Kernel
-import Hydra.LiteralAdapters
-import Hydra.TermAdapters
-import Hydra.AdapterUtils
+import Hydra.Adapt.Literals
+import Hydra.Adapt.Terms
+import Hydra.Adapt.Utils
 import Hydra.Staging.TestGraph
 import Hydra.ArbitraryCore()
 import qualified Hydra.Dsl.Terms as Terms

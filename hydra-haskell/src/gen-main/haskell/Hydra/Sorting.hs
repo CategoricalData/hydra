@@ -9,7 +9,7 @@ import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Tarjan as Tarjan
 import qualified Hydra.Topology as Topology
-import Prelude hiding  (Enum, Ordering, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M

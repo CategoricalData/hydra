@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier2.Adapters where
+module Hydra.Sources.Tier2.Adapt.Modules where
 
 -- Standard Tier-2 imports
 import Hydra.Kernel
@@ -46,8 +46,8 @@ import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
 -- Uncomment tier-2 sources as needed
-import qualified Hydra.Sources.Tier2.AdapterUtils as AdapterUtils
---import qualified Hydra.Sources.Tier2.Adapters as Adapters
+import qualified Hydra.Sources.Tier2.Adapt.Utils as AdaptUtils
+--import qualified Hydra.Sources.Tier2.Adapt.Modules as AdaptModules
 import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
@@ -58,7 +58,7 @@ import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.GrammarToModule as GrammarToModule
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 import qualified Hydra.Sources.Tier2.Lexical as Lexical
---import qualified Hydra.Sources.Tier2.LiteralAdapters as LiteralAdapters
+--import qualified Hydra.Sources.Tier2.Adapt.Literals as AdaptLiterals
 import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
 --import qualified Hydra.Sources.Tier2.Qnames as Qnames
 --import qualified Hydra.Sources.Tier2.Reduction as Reduction
@@ -71,15 +71,14 @@ import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
 --import qualified Hydra.Sources.Tier2.Templating as Templating
-import qualified Hydra.Sources.Tier2.TermAdapters as TermAdapters
---import qualified Hydra.Sources.Tier2.TermEncoding as TermEncoding
+import qualified Hydra.Sources.Tier2.Adapt.Terms as AdaptTerms
 --import qualified Hydra.Sources.Tier2.Unification as Unification
 --import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
-hydraAdaptersModule :: Module
-hydraAdaptersModule = Module (Namespace "hydra.adapters") elements
-    [Annotations.hydraAnnotationsModule, TermAdapters.hydraTermAdaptersModule]
+adaptModulesModule :: Module
+adaptModulesModule = Module (Namespace "hydra.adapt.modules") elements
+    [Annotations.hydraAnnotationsModule, AdaptTerms.adaptTermsModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just "Entry point for Hydra's adapter (type/term rewriting) framework"
   where
@@ -91,11 +90,11 @@ hydraAdaptersModule = Module (Namespace "hydra.adapters") elements
      el languageAdapterDef,
      el transformModuleDef]
 
-adaptersDefinition :: String -> TTerm a -> TElement a
-adaptersDefinition = definitionInModule hydraAdaptersModule
+adaptModulesDefinition :: String -> TTerm a -> TElement a
+adaptModulesDefinition = definitionInModule adaptModulesModule
 
 adaptAndEncodeTypeDef :: TElement (Language -> (Type -> Flow Graph t) -> Type -> Flow Graph t)
-adaptAndEncodeTypeDef = adaptersDefinition "adaptAndEncodeType" $
+adaptAndEncodeTypeDef = adaptModulesDefinition "adaptAndEncodeType" $
   doc "Given a target language, an encoding function, and a type, adapt and encode the type" $
   lambdas ["lang", "enc", "typ"] $
     cases _Type (ref Strip.stripTypeDef @@ var "typ")
@@ -104,31 +103,31 @@ adaptAndEncodeTypeDef = adaptersDefinition "adaptAndEncodeType" $
       _Type_variable>>: constant (var "enc" @@ var "typ")]
 
 adaptTypeDef :: TElement (Language -> Type -> Flow Graph Type)
-adaptTypeDef = adaptersDefinition "adaptType" $
+adaptTypeDef = adaptModulesDefinition "adaptType" $
   doc "Given a target language and a source type, find the target type to which the latter will be adapted" $
   lambdas ["lang", "typ"] $
     withVar "adapter" (ref languageAdapterDef @@ var "lang" @@ var "typ") $
       Flows.pure $ Compute.adapterTarget $ var "adapter"
 
 constructCoderDef :: TElement (Language -> (Term -> Flow Graph c) -> Type -> Flow Graph (Coder Graph Graph Term c))
-constructCoderDef = adaptersDefinition "constructCoder" $
+constructCoderDef = adaptModulesDefinition "constructCoder" $
   doc "Given a target language, a unidirectional last-mile encoding, and a source type, construct a unidirectional adapting coder for terms of that type" $
   lambdas ["lang", "encodeTerm", "typ"] $
     ref Monads.withTraceDef
       @@ (Strings.cat2 (string "coder for ") (ref DescribeCore.typeDef @@ var "typ"))
       @@ (withVar "adapter" (ref languageAdapterDef @@ var "lang" @@ var "typ") $
-          Flows.pure $ ref AdapterUtils.composeCodersDef
+          Flows.pure $ ref AdaptUtils.composeCodersDef
             @@ (Compute.adapterCoder $ var "adapter")
-            @@ (ref AdapterUtils.unidirectionalCoderDef @@ var "encodeTerm"))
+            @@ (ref AdaptUtils.unidirectionalCoderDef @@ var "encodeTerm"))
 
 languageAdapterDef :: TElement (Language -> Type -> Flow Graph (SymmetricAdapter Graph Type Term))
-languageAdapterDef = adaptersDefinition "languageAdapter" $
+languageAdapterDef = adaptModulesDefinition "languageAdapter" $
   doc "Given a target language and a source type, produce an adapter, which rewrites the type and its terms according to the language's constraints" $
   lambdas ["lang", "typ"] $
     withVar "g" (ref Monads.getStateDef) $ lets [
       "cx0">: Coders.adapterContext (var "g") (var "lang") Maps.empty] $
     withVar "result" (ref Monads.withStateDef @@ var "cx0" @@
-      (withVar "ad" (ref TermAdapters.termAdapterDef @@ var "typ") $
+      (withVar "ad" (ref AdaptTerms.termAdapterDef @@ var "typ") $
        withVar "cx" (ref Monads.getStateDef) $
        Flows.pure $ pair (var "ad") (var "cx"))) $ lets [
       "adapter">: first $ var "result",
@@ -141,7 +140,7 @@ languageAdapterDef = adaptersDefinition "languageAdapter" $
     Flows.pure $ Compute.adapterWithCoder (var "adapter") (var "ac")
 
 transformModuleDef :: TElement (Language -> (Term -> Flow Graph e) -> (Module -> M.Map Type (Coder Graph Graph Term e) -> [(Element, TypedTerm)] -> Flow Graph d) -> Module -> Flow Graph d)
-transformModuleDef = adaptersDefinition "transformModule" $
+transformModuleDef = adaptModulesDefinition "transformModule" $
   doc "Given a target language, a unidirectional last mile encoding, and an intermediate helper function, transform a given module into a target representation" $
   lambdas ["lang", "encodeTerm", "createModule", "mod"] $
     ref Monads.withTraceDef
@@ -157,7 +156,7 @@ transformModuleDef = adaptersDefinition "transformModule" $
       var "createModule" @@ var "mod" @@ var "coders" @@ (Lists.zip (var "els") (var "tterms")))
 
 adaptedModuleDefinitionsDef :: TElement (Language -> Module -> Flow Graph [Definition])
-adaptedModuleDefinitionsDef = adaptersDefinition "adaptedModuleDefinitions" $
+adaptedModuleDefinitionsDef = adaptModulesDefinition "adaptedModuleDefinitions" $
   doc "Map a Hydra module to a list of type and/or term definitions which have been adapted to the target language" $
   lambdas ["lang", "mod"] $ lets [
     "els">: Module.moduleElements $ var "mod",
