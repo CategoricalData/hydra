@@ -271,10 +271,7 @@ encodeFunctionDef = haskellCoderDefinition "encodeFunction" $
                           "singleArg">: Flows.pure $ list [inject H._Pattern H._Pattern_name $ ref HaskellUtils.rawNameDef @@ var "v1"]] $
                           cases _Type (ref Strip.stripTypeDef @@ var "ft")
                             (Just $ var "singleArg") [
-                            _Type_record>>: lambda "rt" $
-                              Logic.ifElse (Lists.null $ Core.rowTypeFields $ var "rt")
-                                (var "noArgs")
-                                (var "singleArg")])) $ lets [
+                            _Type_unit>>: constant $ var "noArgs"])) $ lets [
                     "lhs">: ref HaskellUtils.applicationPatternDef @@ var "hname" @@ var "args"] $
                     withVar "rhs" (Flows.map (unaryFunction $ wrap H._CaseRhs) $ ref encodeTermDef @@ var "namespaces" @@ var "rhsTerm") $
                     Flows.pure $ record H._Alternative [
@@ -394,15 +391,12 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
           withVar "hft" (var "encode" @@ var "ft") $
           Flows.pure $ record H._FieldUpdate [
             H._FieldUpdate_name>>: var "fieldRef",
-            H._FieldUpdate_value>>: var "hft"]] $
-        Logic.ifElse (Lists.null $ var "fields")
-          (Flows.pure $ inject H._Expression H._Expression_tuple $ list [])  -- TODO: too permissive; not all empty record types are the unit type
-          (lets [
-            "typeName">: ref HaskellUtils.elementReferenceDef @@ var "namespaces" @@ var "sname"] $
-            withVar "updates" (Flows.mapList (var "toFieldUpdate") (var "fields")) $
-            Flows.pure $ inject H._Expression H._Expression_constructRecord $ record H._ConstructRecordExpression [
-              H._ConstructRecordExpression_name>>: var "typeName",
-              H._ConstructRecordExpression_fields>>: var "updates"]),
+            H._FieldUpdate_value>>: var "hft"],
+          "typeName">: ref HaskellUtils.elementReferenceDef @@ var "namespaces" @@ var "sname"] $
+          withVar "updates" (Flows.mapList (var "toFieldUpdate") (var "fields")) $
+          Flows.pure $ inject H._Expression H._Expression_constructRecord $ record H._ConstructRecordExpression [
+            H._ConstructRecordExpression_name>>: var "typeName",
+            H._ConstructRecordExpression_fields>>: var "updates"],
       _Term_set>>: lambda "s" $ lets [
         "lhs">: ref HaskellUtils.hsvarDef @@ string "S.fromList" ] $
         withVar "rhs" (ref encodeTermDef @@ var "namespaces" @@ (inject _Term _Term_list $ Sets.toList $ var "s")) $
@@ -422,10 +416,8 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
         "dflt">: Flows.map (ref HaskellUtils.hsappDef @@ var "lhs") (var "encode" @@ var "ft")] $
         cases _Term (ref Strip.fullyStripTermDef @@ var "ft")
           (Just $ var "dflt") [
-          _Term_record>>: lambda "record" $
-            Logic.ifElse (Lists.null $ Core.recordFields $ var "record")
-              (Flows.pure $ var "lhs")
-              (var "dflt")],
+          _Term_unit>>: constant $ Flows.pure $ var "lhs"],
+      _Term_unit>>: constant $ Flows.pure $ inject H._Expression H._Expression_tuple $ list [],
       _Term_variable>>: lambda "name" $
         Flows.pure $ inject H._Expression H._Expression_variable $ ref HaskellUtils.elementReferenceDef @@ var "namespaces" @@ var "name",
       _Term_wrap>>: lambda "wrapped" $ lets [
@@ -512,14 +504,7 @@ encodeTypeDef = haskellCoderDefinition "encodeType" $
         _Type_product>>: lambda "types" $
           Flows.bind (Flows.mapList (var "encode") (var "types")) $ lambda "htypes" $
             Flows.pure $ inject H._Type H._Type_tuple $ var "htypes",
-        _Type_record>>: lambda "rt" $ lets [
-          "fields">: Core.rowTypeFields $ var "rt",
-          "typeName">: Core.rowTypeTypeName $ var "rt"] $
-          Logic.ifElse (Lists.null $ var "fields")
-            (Logic.ifElse (Equality.equal (var "typeName") $ Core.nameLift _Unit)
-              (Flows.pure $ var "unitTuple")
-              (var "ref" @@ var "typeName"))
-            (var "ref" @@ var "typeName"),
+        _Type_record>>: lambda "rt" $ var "ref" @@ (Core.rowTypeTypeName $ var "rt"),
         _Type_set>>: lambda "st" $
           Flows.map
             (ref HaskellUtils.toTypeApplicationDef)
@@ -529,10 +514,8 @@ encodeTypeDef = haskellCoderDefinition "encodeType" $
         _Type_union>>: lambda "rt" $ lets [
           "typeName">: Core.rowTypeTypeName $ var "rt"] $
           var "ref" @@ var "typeName",
-        _Type_variable>>: lambda "v" $
-          Logic.ifElse (Equality.equal (var "v") $ Core.nameLift _Unit)
-            (Flows.pure $ var "unitTuple")
-            (var "ref" @@ var "v"),
+        _Type_unit>>: constant $ Flows.pure $ var "unitTuple",
+        _Type_variable>>: lambda "v1" $ var "ref" @@ var "v1",
         _Type_wrap>>: lambda "wrapped" $ lets [
           "name">: Core.wrappedTypeTypeName $ var "wrapped"] $
           var "ref" @@ var "name"])
@@ -793,20 +776,20 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
             H._TypeDeclaration_type>>: var "htype"]) [
         _Type_record>>: lambda "rt" $
           withVar "cons" (var "recordCons" @@ var "lname" @@ (Core.rowTypeFields $ var "rt")) $
-            Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
-              H._DataDeclaration_keyword>>: unitVariant H._DataOrNewtype H._DataOrNewtype_data,
-              H._DataDeclaration_context>>: list [],
-              H._DataDeclaration_head>>: var "hd",
-              H._DataDeclaration_constructors>>: list [var "cons"],
-              H._DataDeclaration_deriving>>: list [var "deriv"]],
+          Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
+            H._DataDeclaration_keyword>>: unitVariant H._DataOrNewtype H._DataOrNewtype_data,
+            H._DataDeclaration_context>>: list [],
+            H._DataDeclaration_head>>: var "hd",
+            H._DataDeclaration_constructors>>: list [var "cons"],
+            H._DataDeclaration_deriving>>: list [var "deriv"]],
         _Type_union>>: lambda "rt" $
           withVar "cons" (Flows.mapList (var "unionCons" @@ var "g" @@ var "lname") (Core.rowTypeFields $ var "rt")) $
-            Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
-              H._DataDeclaration_keyword>>: unitVariant H._DataOrNewtype H._DataOrNewtype_data,
-              H._DataDeclaration_context>>: list [],
-              H._DataDeclaration_head>>: var "hd",
-              H._DataDeclaration_constructors>>: var "cons",
-              H._DataDeclaration_deriving>>: list [var "deriv"]],
+          Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
+            H._DataDeclaration_keyword>>: unitVariant H._DataOrNewtype H._DataOrNewtype_data,
+            H._DataDeclaration_context>>: list [],
+            H._DataDeclaration_head>>: var "hd",
+            H._DataDeclaration_constructors>>: var "cons",
+            H._DataDeclaration_deriving>>: list [var "deriv"]],
         _Type_wrap>>: lambda "wrapped" $ lets [
           "tname">: Core.wrappedTypeTypeName $ var "wrapped",
           "wt">: Core.wrappedTypeObject $ var "wrapped"] $

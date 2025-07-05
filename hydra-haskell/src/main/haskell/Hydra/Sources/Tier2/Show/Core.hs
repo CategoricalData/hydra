@@ -391,6 +391,7 @@ termDef = showCoreDefinition "term" $
           var "tname",
           string ")",
           var "showFields" @@ (list [var "f"])],
+      _Term_unit>>: constant $ string "unit",
       _Term_variable>>: lambda "name" $ unwrap _Name @@ var "name",
       _Term_wrap>>: lambda "wt" $ lets [
         "tname">: unwrap _Name @@ (Core.wrappedTermTypeName $ var "wt"),
@@ -421,6 +422,7 @@ termVariantDef = showCoreDefinition "termVariant" $
     _TermVariant_typeAbstraction>>: constant $ string "typeAbstraction",
     _TermVariant_typeApplication>>: constant $ string "typeApplication",
     _TermVariant_union>>: constant $ string "union",
+    _TermVariant_unit>>: constant $ string "unit",
     _TermVariant_variable>>: constant $ string "variable",
     _TermVariant_wrap>>: constant $ string "wrap"]
 
@@ -510,6 +512,7 @@ typeDef = showCoreDefinition "type_" $
         "typeStrs">: Lists.map (ref typeDef) (var "types")] $
         Strings.intercalate (string "+") (var "typeStrs"),
       _Type_union>>: lambda "rt" $ Strings.cat2 (string "union") (var "showRowType" @@ var "rt"),
+      _Type_unit>>: constant $ string "unit",
       _Type_variable>>: lambda "name" $ unwrap _Name @@ var "name",
       _Type_wrap>>: lambda "wt" $ lets [
         "tname">: unwrap _Name @@ (Core.wrappedTypeTypeName $ var "wt"),
@@ -587,5 +590,6 @@ typeVariantDef = showCoreDefinition "typeVariant" $
     _TypeVariant_set>>: constant $ string "set",
     _TypeVariant_sum>>: constant $ string "sum",
     _TypeVariant_union>>: constant $ string "union",
+    _TypeVariant_unit>>: constant $ string "unit",
     _TypeVariant_variable>>: constant $ string "variable",
     _TypeVariant_wrap>>: constant $ string "wrap"]

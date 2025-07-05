@@ -240,6 +240,7 @@ typeIsSupportedDef = adaptUtilsDefinition "typeIsSupported" $
               andAll $ Lists.map
                 (lambda "field" $ ref typeIsSupportedDef @@ var "constraints" @@ Core.fieldTypeType (var "field"))
                 (Core.rowTypeFields $ var "rt"),
+            _Type_unit>>: constant true,
             _Type_wrap>>: lambda "wt" $ ref typeIsSupportedDef @@ var "constraints" @@ Core.wrappedTypeObject (var "wt"),
             _Type_variable>>: constant true]
           @@ var "base"))

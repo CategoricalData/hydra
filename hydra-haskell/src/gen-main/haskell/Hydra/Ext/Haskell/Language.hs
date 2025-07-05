@@ -53,6 +53,7 @@ haskellLanguage = Coders.Language {
       Mantle.TermVariantRecord,
       Mantle.TermVariantSet,
       Mantle.TermVariantUnion,
+      Mantle.TermVariantUnit,
       Mantle.TermVariantVariable,
       Mantle.TermVariantWrap]),
     Coders.languageConstraintsTypeVariants = (Sets.fromList [
@@ -68,6 +69,7 @@ haskellLanguage = Coders.Language {
       Mantle.TypeVariantRecord,
       Mantle.TypeVariantSet,
       Mantle.TypeVariantUnion,
+      Mantle.TypeVariantUnit,
       Mantle.TypeVariantVariable,
       Mantle.TypeVariantWrap]),
     Coders.languageConstraintsTypes = (\_ -> True)}}

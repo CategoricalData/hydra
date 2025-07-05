@@ -200,6 +200,7 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
             let subst = (Typing.unTypeSubst substWrapper) 
                 tparams = (Lists.map (resolveType subst) svars)
             in (Flows.pure (nominalApplication tname tparams))))))))))))
+  Core.TermUnit -> (Flows.pure Core.TypeUnit)
   Core.TermVariable v1 -> (Optionals.maybe (Flows.fail (Strings.cat [
     "unbound variable: ",
     (Core.unName v1)])) Flows.pure (Maps.lookup v1 types))
@@ -808,6 +809,10 @@ inferTypeOfTerm cx term desc = (Monads.withTrace desc ((\x -> case x of
   Core.TermTypeAbstraction v1 -> (inferTypeOfTypeAbstraction cx v1)
   Core.TermTypeApplication v1 -> (inferTypeOfTypeApplication cx v1)
   Core.TermUnion v1 -> (inferTypeOfInjection cx v1)
+  Core.TermUnit -> (Flows.pure (Typing.InferenceResult {
+    Typing.inferenceResultTerm = Core.TermUnit,
+    Typing.inferenceResultType = Core.TypeUnit,
+    Typing.inferenceResultSubst = Substitution.idTypeSubst}))
   Core.TermVariable v1 -> (inferTypeOfVariable cx v1)
   Core.TermWrap v1 -> (inferTypeOfWrappedTerm cx v1)) term))
 

@@ -4,7 +4,7 @@
 module Hydra.Ext.Io.Shex.Syntax where
 
 import qualified Hydra.Core as Core
-import Prelude hiding  (Enum, Ordering, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -753,8 +753,9 @@ _Cardinality_Quest = (Core.Name "Quest")
 
 _Cardinality_RepeatRange = (Core.Name "RepeatRange")
 
-data SenseFlags = 
-  SenseFlags {}
+newtype SenseFlags = 
+  SenseFlags {
+    unSenseFlags :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _SenseFlags = (Core.Name "hydra.ext.io.shex.syntax.SenseFlags")
@@ -1066,8 +1067,9 @@ _RepeatRange_Sequence_Option_Option_Option_Integer = (Core.Name "Integer")
 
 _RepeatRange_Sequence_Option_Option_Option_Ast = (Core.Name "Ast")
 
-data RdfType = 
-  RdfType {}
+newtype RdfType = 
+  RdfType {
+    unRdfType :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _RdfType = (Core.Name "hydra.ext.io.shex.syntax.RdfType")

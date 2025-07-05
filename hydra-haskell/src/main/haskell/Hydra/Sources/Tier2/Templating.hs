@@ -167,8 +167,9 @@ instantiateTemplateDef = templatingDefinition "instantiateTemplate" $
         (Flows.pure $ Core.termSet Sets.empty)
         (Flows.bind (var "inst" @@ var "et") $
           lambda "e" $ Flows.pure $ Core.termSet $ Sets.fromList $ list [var "e"]),
-      -- TODO: TypeSum types
-      -- TODO: TypeUnion (RowType tname _ fields)
+      -- TODO: _Type_sum
+      -- TODO: _Type_union
+      -- TODO: _Type_unit>>: constant $ Flows.pure Core.termUnit,
       _Type_variable>>: lambda "tname" $
         Optionals.maybe
           (Flows.fail $ Strings.cat2 (string "Type variable ") $ Strings.cat2 (ref ShowCore.termDef @@ (Core.termVariable $ var "tname")) (string " not found in schema"))

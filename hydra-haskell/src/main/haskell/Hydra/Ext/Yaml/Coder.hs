@@ -12,7 +12,7 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-literalCoder :: LiteralType -> Flow (Graph) (Coder (Graph) (Graph) Literal YM.Scalar)
+literalCoder :: LiteralType -> Flow Graph (Coder Graph Graph Literal YM.Scalar)
 literalCoder at = pure $ case at of
   LiteralTypeBoolean -> Coder {
     coderEncode = \(LiteralBoolean b) -> pure $ YM.ScalarBool b,
@@ -35,7 +35,7 @@ literalCoder at = pure $ case at of
       YM.ScalarStr s' -> pure $ LiteralString s'
       _ -> unexpected "string" $ show s}
 
-recordCoder :: RowType -> Flow (Graph) (Coder (Graph) (Graph) (Term) YM.Node)
+recordCoder :: RowType -> Flow Graph (Coder Graph Graph Term YM.Node)
 recordCoder rt = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) (rowTypeFields rt)
     return $ Coder (encode coders) (decode coders)
@@ -59,7 +59,7 @@ recordCoder rt = do
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: Type -> Flow (Graph) (Coder (Graph) (Graph) (Term) YM.Node)
+termCoder :: Type -> Flow Graph (Coder Graph Graph Term YM.Node)
 termCoder typ = case stripType typ of
   TypeLiteral at -> do
     ac <- literalCoder at
@@ -101,9 +101,20 @@ termCoder typ = case stripType typ of
         YM.NodeMapping m -> Terms.map . M.fromList <$> CM.mapM decodeEntry (M.toList m)
         _ -> unexpected "mapping" $ show n}
   TypeRecord rt -> recordCoder rt
+  TypeUnit -> pure unitCoder
   _ -> fail $ "unsupported type variant: " ++ show (typeVariant typ)
 
-yamlCoder :: Type -> Flow (Graph) (Coder (Graph) (Graph) (Term) YM.Node)
+unitCoder :: Coder Graph Graph Term YM.Node
+unitCoder = Coder encode decode
+  where
+    encode term = case stripTerm term of
+      TermUnit -> pure $ YM.NodeScalar $ YM.ScalarNull
+      _ -> unexpected "unit" $ show term
+    decode n = case n of
+      (YM.NodeScalar YM.ScalarNull) -> pure Terms.unit
+      _ -> unexpected "null" $ show n
+
+yamlCoder :: Type -> Flow Graph (Coder Graph Graph Term YM.Node)
 yamlCoder typ = do
   adapter <- languageAdapter yamlLanguage typ
   coder <- termCoder $ adapterTarget adapter

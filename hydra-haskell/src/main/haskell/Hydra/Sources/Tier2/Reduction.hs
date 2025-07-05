@@ -445,5 +445,6 @@ termIsValueDef = reductionDefinition "termIsValue" $
       _Term_record>>: lambda "r" $ var "checkFields" @@ Core.recordFields (var "r"),
       _Term_set>>: lambda "s" $ var "forList" @@ Sets.toList (var "s"),
       _Term_union>>: lambda "i" $ var "checkField" @@ Core.injectionField (var "i"),
+      _Term_unit>>: constant true,
       _Term_variable>>: constant false]
     @@ (ref Strip.stripTermDef @@ var "term")

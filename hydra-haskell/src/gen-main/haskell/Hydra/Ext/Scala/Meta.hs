@@ -718,9 +718,7 @@ _Data_NewAnonymous = (Core.Name "hydra.ext.scala.meta.Data_NewAnonymous")
 
 _Data_NewAnonymous_templ = (Core.Name "templ")
 
-data Data_Placeholder = 
-  Data_Placeholder {}
-  deriving (Eq, Ord, Read, Show)
+type Data_Placeholder = ()
 
 _Data_Placeholder = (Core.Name "hydra.ext.scala.meta.Data_Placeholder")
 

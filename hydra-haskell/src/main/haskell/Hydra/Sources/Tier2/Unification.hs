@@ -150,6 +150,8 @@ joinTypesDef = unificationDefinition "joinTypes" $
         _Type_sum>>: lambda "r" $ var "joinList" @@ (var "l") @@ (var "r")],
       _Type_union>>: lambda "l" $ cases _Type (var "sright") (Just $ var "cannotUnify") [
         _Type_union>>: lambda "r" $ var "joinRowTypes" @@ (var "l") @@ (var "r")],
+      _Type_unit>>: constant $ cases _Type (var "sright") (Just $ var "cannotUnify") [
+        _Type_unit>>: constant $ Flows.pure $ list []],
       _Type_wrap>>: lambda "l" $ cases _Type (var "sright") (Just $ var "cannotUnify") [
         _Type_wrap>>: lambda "r" $ Logic.ifElse
           (Core.equalName_ (Core.wrappedTypeTypeName $ var "l") (Core.wrappedTypeTypeName $ var "r"))

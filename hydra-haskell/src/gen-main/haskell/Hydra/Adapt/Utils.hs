@@ -122,6 +122,7 @@ typeIsSupported constraints t =
     Core.TypeSet v1 -> (typeIsSupported constraints v1)
     Core.TypeSum v1 -> (Lists.foldl Logic.and True (Lists.map (typeIsSupported constraints) v1))
     Core.TypeUnion v1 -> (Lists.foldl Logic.and True (Lists.map (\field -> typeIsSupported constraints (Core.fieldTypeType field)) (Core.rowTypeFields v1)))
+    Core.TypeUnit -> True
     Core.TypeWrap v1 -> (typeIsSupported constraints (Core.wrappedTypeObject v1))
     Core.TypeVariable _ -> True) base)))
 

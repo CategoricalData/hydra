@@ -4,7 +4,7 @@ module Hydra.Ext.Org.Geojson.Model where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Json as Json
-import Prelude hiding  (Enum, Ordering, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M

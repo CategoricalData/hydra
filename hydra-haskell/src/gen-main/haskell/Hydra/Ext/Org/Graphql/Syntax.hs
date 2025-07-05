@@ -298,8 +298,9 @@ _BooleanValue_True = (Core.Name "True")
 
 _BooleanValue_False = (Core.Name "False")
 
-data NullValue = 
-  NullValue {}
+newtype NullValue = 
+  NullValue {
+    unNullValue :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _NullValue = (Core.Name "hydra.ext.org.graphql.syntax.NullValue")

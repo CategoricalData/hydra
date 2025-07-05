@@ -131,9 +131,8 @@ termGraphsonContext = GraphsonContext $ Coder encodeTerm decodeTerm
             IntegerValueInt64 i -> pure $ G.ValueLong i
             _ -> fail $ "integer type is not yet supported: " ++ show (integerValueType iv)
           LiteralString s -> pure $ G.ValueString s
-        TermRecord r@(Record tname _) -> if tname == _Unit
-          then pure G.ValueNull
-          else unexp $ TermRecord r
+        TermRecord r@(Record tname _) -> unexp $ TermRecord r
+        TermUnit -> pure G.ValueNull
         t -> unexp t
       where
         unexp t = unexpected "literal or unit value" $ ShowCore.term t

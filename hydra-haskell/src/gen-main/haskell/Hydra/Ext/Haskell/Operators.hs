@@ -3,7 +3,6 @@
 module Hydra.Ext.Haskell.Operators where
 
 import qualified Hydra.Ast as Ast
-import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)

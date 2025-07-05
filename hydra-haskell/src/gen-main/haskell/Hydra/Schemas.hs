@@ -34,10 +34,10 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Get dependency namespaces from definitions
-definitionDependencyNamespaces :: (Bool -> [Module.Definition] -> S.Set Module.Namespace)
-definitionDependencyNamespaces excludeUnit defs =  
+definitionDependencyNamespaces :: ([Module.Definition] -> S.Set Module.Namespace)
+definitionDependencyNamespaces defs =  
   let defNames = (\def -> (\x -> case x of
-          Module.DefinitionType v1 -> (Rewriting.typeDependencyNames True excludeUnit (Module.typeDefinitionType v1))
+          Module.DefinitionType v1 -> (Rewriting.typeDependencyNames True (Module.typeDefinitionType v1))
           Module.DefinitionTerm v1 -> (Rewriting.termDependencyNames True True True (Module.termDefinitionTerm v1))) def) 
       allNames = (Sets.unions (Lists.map defNames defs))
   in (Sets.fromList (Optionals.cat (Lists.map Qnames.namespaceOf (Sets.toList allNames))))
@@ -48,11 +48,11 @@ dependencyNamespaces withVars withPrims withNoms withSchema els =
   let depNames = (\el ->  
           let term = (Graph.elementTerm el) 
               dataNames = (Rewriting.termDependencyNames withVars withPrims withNoms term)
-              schemaNames = (Logic.ifElse withSchema (Optionals.maybe Sets.empty (\ts -> Rewriting.typeDependencyNames True True (Core.typeSchemeType ts)) (Graph.elementType el)) Sets.empty)
+              schemaNames = (Logic.ifElse withSchema (Optionals.maybe Sets.empty (\ts -> Rewriting.typeDependencyNames True (Core.typeSchemeType ts)) (Graph.elementType el)) Sets.empty)
           in (Logic.ifElse (Core__.isEncodedType (Strip.fullyStripTerm term)) (Flows.bind (Core_.type_ term) (\typ -> Flows.pure (Sets.unions [
             dataNames,
             schemaNames,
-            (Rewriting.typeDependencyNames True True typ)]))) (Flows.pure (Sets.unions [
+            (Rewriting.typeDependencyNames True typ)]))) (Flows.pure (Sets.unions [
             dataNames,
             schemaNames]))))
   in (Flows.bind (Flows.mapList depNames els) (\namesList -> Flows.pure (Sets.fromList (Optionals.cat (Lists.map Qnames.namespaceOf (Sets.toList (Sets.delete Constants.placeholderName (Sets.unions namesList))))))))
@@ -110,9 +110,9 @@ isSerializable el =
 moduleDependencyNamespaces :: (Bool -> Bool -> Bool -> Bool -> Module.Module -> Compute.Flow Graph.Graph (S.Set Module.Namespace))
 moduleDependencyNamespaces withVars withPrims withNoms withSchema mod = (Flows.bind (dependencyNamespaces withVars withPrims withNoms withSchema (Module.moduleElements mod)) (\deps -> Flows.pure (Sets.delete (Module.moduleNamespace mod) deps)))
 
-namespacesForDefinitions :: (Bool -> (Module.Namespace -> t0) -> Module.Namespace -> [Module.Definition] -> Module.Namespaces t0)
-namespacesForDefinitions excludeUnit encodeNamespace focusNs defs =  
-  let nss = (Sets.delete focusNs (definitionDependencyNamespaces excludeUnit defs)) 
+namespacesForDefinitions :: ((Module.Namespace -> t0) -> Module.Namespace -> [Module.Definition] -> Module.Namespaces t0)
+namespacesForDefinitions encodeNamespace focusNs defs =  
+  let nss = (Sets.delete focusNs (definitionDependencyNamespaces defs)) 
       toPair = (\ns -> (ns, (encodeNamespace ns)))
   in Module.Namespaces {
     Module.namespacesFocus = (toPair focusNs),
@@ -173,7 +173,7 @@ schemaGraphToTypingEnvironment g =
 -- | Topologically sort type definitions by dependencies
 topologicalSortTypeDefinitions :: ([Module.TypeDefinition] -> [[Module.TypeDefinition]])
 topologicalSortTypeDefinitions defs =  
-  let toPair = (\def -> (Module.typeDefinitionName def, (Sets.toList (Rewriting.typeDependencyNames False True (Module.typeDefinitionType def))))) 
+  let toPair = (\def -> (Module.typeDefinitionName def, (Sets.toList (Rewriting.typeDependencyNames False (Module.typeDefinitionType def))))) 
       nameToDef = (Maps.fromList (Lists.map (\d -> (Module.typeDefinitionName d, d)) defs))
       sorted = (Sorting.topologicalSortComponents (Lists.map toPair defs))
   in (Lists.map (\names -> Optionals.cat (Lists.map (\n -> Maps.lookup n nameToDef) names)) sorted)
@@ -185,7 +185,7 @@ typeDependencies withSchema transform name =
       toPair = (\name -> Flows.bind (requireType name) (\typ -> Flows.pure (name, (transform typ))))
       deps = (\seeds -> \names -> Logic.ifElse (Sets.null seeds) (Flows.pure names) (Flows.bind (Flows.mapList toPair (Sets.toList seeds)) (\pairs ->  
               let newNames = (Maps.union names (Maps.fromList pairs)) 
-                  refs = (Lists.foldl Sets.union Sets.empty (Lists.map (\pair -> Rewriting.typeDependencyNames withSchema True (snd pair)) pairs))
+                  refs = (Lists.foldl Sets.union Sets.empty (Lists.map (\pair -> Rewriting.typeDependencyNames withSchema (snd pair)) pairs))
                   visited = (Sets.fromList (Maps.keys names))
                   newSeeds = (Sets.difference refs visited)
               in (deps newSeeds newNames))))
