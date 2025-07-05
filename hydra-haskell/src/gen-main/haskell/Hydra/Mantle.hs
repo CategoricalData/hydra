@@ -121,6 +121,7 @@ data TermVariant =
   TermVariantTypeAbstraction  |
   TermVariantTypeApplication  |
   TermVariantUnion  |
+  TermVariantUnit  |
   TermVariantVariable  |
   TermVariantWrap 
   deriving (Eq, Ord, Read, Show)
@@ -157,6 +158,8 @@ _TermVariant_typeApplication = (Core.Name "typeApplication")
 
 _TermVariant_union = (Core.Name "union")
 
+_TermVariant_unit = (Core.Name "unit")
+
 _TermVariant_variable = (Core.Name "variable")
 
 _TermVariant_wrap = (Core.Name "wrap")
@@ -176,6 +179,7 @@ data TypeVariant =
   TypeVariantSet  |
   TypeVariantSum  |
   TypeVariantUnion  |
+  TypeVariantUnit  |
   TypeVariantVariable  |
   TypeVariantWrap 
   deriving (Eq, Ord, Read, Show)
@@ -207,6 +211,8 @@ _TypeVariant_set = (Core.Name "set")
 _TypeVariant_sum = (Core.Name "sum")
 
 _TypeVariant_union = (Core.Name "union")
+
+_TypeVariant_unit = (Core.Name "unit")
 
 _TypeVariant_variable = (Core.Name "variable")
 

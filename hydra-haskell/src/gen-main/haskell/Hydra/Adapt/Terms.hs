@@ -443,6 +443,15 @@ passUnion t = ((\x -> case x of
           Core.injectionTypeName = tname,
           Core.injectionField = newField})))))))}))))) t)
 
+passUnit :: (t0 -> Compute.Flow t1 (Compute.Adapter t2 t3 Core.Type Core.Type Core.Term Core.Term))
+passUnit _ = (Flows.pure (Compute.Adapter {
+  Compute.adapterIsLossy = False,
+  Compute.adapterSource = Core.TypeUnit,
+  Compute.adapterTarget = Core.TypeUnit,
+  Compute.adapterCoder = Compute.Coder {
+    Compute.coderEncode = (\_ -> Flows.pure Core.TermUnit),
+    Compute.coderDecode = (\_ -> Flows.pure Core.TermUnit)}}))
+
 -- | Pass through wrapped types
 passWrapped :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passWrapped t = ((\x -> case x of
@@ -504,6 +513,8 @@ termAdapter typ =
                 passSum]
               Mantle.TypeVariantUnion -> [
                 passUnion]
+              Mantle.TypeVariantUnit -> [
+                passUnit]
               Mantle.TypeVariantWrap -> [
                 passWrapped]) (Variants.typeVariant (Strip.stripType t)))
       trySubstitution = (\t -> (\x -> case x of
@@ -519,6 +530,8 @@ termAdapter typ =
                 listToSet]
               Mantle.TypeVariantUnion -> [
                 unionToRecord]
+              Mantle.TypeVariantUnit -> [
+                unitToRecord]
               Mantle.TypeVariantWrap -> [
                 wrapToUnwrapped]) (Variants.typeVariant t))
       alts = (\cx -> \t -> Flows.mapList (\c -> c t) (Logic.ifElse (supportedAtTopLevel cx t) (pass t) (trySubstitution t)))
@@ -593,6 +606,19 @@ unionTypeToRecordType rt =
   in Core.RowType {
     Core.rowTypeTypeName = (Core.rowTypeTypeName rt),
     Core.rowTypeFields = (Lists.map makeOptional (Core.rowTypeFields rt))}
+
+unitToRecord :: (t0 -> Compute.Flow t1 (Compute.Adapter t2 t3 Core.Type Core.Type Core.Term Core.Term))
+unitToRecord _ = (Flows.pure (Compute.Adapter {
+  Compute.adapterIsLossy = False,
+  Compute.adapterSource = Core.TypeUnit,
+  Compute.adapterTarget = (Core.TypeRecord (Core.RowType {
+    Core.rowTypeTypeName = (Core.Name "_Unit"),
+    Core.rowTypeFields = []})),
+  Compute.adapterCoder = Compute.Coder {
+    Compute.coderEncode = (\_ -> Flows.pure (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "_Unit"),
+      Core.recordFields = []}))),
+    Compute.coderDecode = (\_ -> Flows.pure Core.TermUnit)}}))
 
 -- | Convert wrapped types to unwrapped types
 wrapToUnwrapped :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))

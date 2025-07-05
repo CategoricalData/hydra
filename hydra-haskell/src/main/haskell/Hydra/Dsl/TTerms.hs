@@ -332,7 +332,7 @@ sum :: Int -> Int -> TTerm Term -> TTerm Term
 sum i s = Core.termSum . Core.sum (Phantoms.int32 i) (Phantoms.int32 s)
 
 unitVariantPhantom :: Name -> Name -> TTerm Term
-unitVariantPhantom tname fname = variantPhantom tname fname $ record (Core.nameLift _Unit) []
+unitVariantPhantom tname fname = variantPhantom tname fname Core.termUnit
 
 variantPhantom :: Name -> Name -> TTerm Term -> TTerm Term
 variantPhantom tname fname term = Core.termUnion $ Core.injection (Core.nameLift tname) $ Core.field (Core.nameLift fname) term

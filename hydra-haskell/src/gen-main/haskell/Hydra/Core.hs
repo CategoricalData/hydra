@@ -506,6 +506,8 @@ data Term =
   TermTypeApplication TypedTerm |
   -- | An injection; an instance of a union type
   TermUnion Injection |
+  -- | A unit value; a term with no value
+  TermUnit  |
   -- | A variable reference
   TermVariable Name |
   TermWrap WrappedTerm
@@ -542,6 +544,8 @@ _Term_typeAbstraction = (Name "typeAbstraction")
 _Term_typeApplication = (Name "typeApplication")
 
 _Term_union = (Name "union")
+
+_Term_unit = (Name "unit")
 
 _Term_variable = (Name "variable")
 
@@ -581,6 +585,7 @@ data Type =
   TypeSet Type |
   TypeSum [Type] |
   TypeUnion RowType |
+  TypeUnit  |
   TypeVariable Name |
   TypeWrap WrappedType
   deriving (Eq, Ord, Read, Show)
@@ -612,6 +617,8 @@ _Type_set = (Name "set")
 _Type_sum = (Name "sum")
 
 _Type_union = (Name "union")
+
+_Type_unit = (Name "unit")
 
 _Type_variable = (Name "variable")
 
@@ -657,13 +664,6 @@ _TypeScheme = (Name "hydra.core.TypeScheme")
 _TypeScheme_variables = (Name "variables")
 
 _TypeScheme_type = (Name "type")
-
--- | An empty record as a canonical unit value
-data Unit = 
-  Unit {}
-  deriving (Eq, Ord, Read, Show)
-
-_Unit = (Name "hydra.core.Unit")
 
 -- | A term wrapped in a type name
 data WrappedTerm = 

@@ -81,9 +81,7 @@ isNontrivial isRecord pats =
 makeElements :: (Bool -> Module.Namespace -> String -> Grammar.Pattern -> [(String, Core.Type)])
 makeElements omitTrivial ns lname pat =  
   let trivial = (Logic.ifElse omitTrivial [] [
-          (lname, (Core.TypeRecord (Core.RowType {
-            Core.rowTypeTypeName = (Core.Name "hydra.core.Unit"),
-            Core.rowTypeFields = []})))]) 
+          (lname, Core.TypeUnit)]) 
       forRecordOrUnion = (\isRecord -> \construct -> \pats ->  
               let minPats = (simplify isRecord pats) 
                   fieldNames = (findNames minPats)
@@ -98,9 +96,7 @@ makeElements omitTrivial ns lname pat =
       descend = (\n -> \f -> \p ->  
               let cpairs = (makeElements False ns (childName lname n) p)
               in (f (Logic.ifElse (isComplex p) (Lists.cons (lname, (Core.TypeVariable (toName ns (fst (Lists.head cpairs))))) cpairs) (Logic.ifElse (Lists.null cpairs) [
-                (lname, (Core.TypeRecord (Core.RowType {
-                  Core.rowTypeTypeName = (Core.Name "hydra.core.Unit"),
-                  Core.rowTypeFields = []})))] (Lists.cons (lname, (snd (Lists.head cpairs))) (Lists.tail cpairs))))))
+                (lname, Core.TypeUnit)] (Lists.cons (lname, (snd (Lists.head cpairs))) (Lists.tail cpairs))))))
       forPat = (\pat -> (\x -> case x of
               Grammar.PatternAlternatives v1 -> (forRecordOrUnion False (\fields -> Core.TypeUnion (Core.RowType {
                 Core.rowTypeTypeName = Constants.placeholderName,

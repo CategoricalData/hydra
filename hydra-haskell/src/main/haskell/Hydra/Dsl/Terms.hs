@@ -300,7 +300,7 @@ record tname fields = TermRecord $ Record tname fields
 
 -- | Unit value (empty record)
 unit :: Term
-unit = TermRecord $ Record _Unit []
+unit = TermUnit
 
 -- | Create a unit variant of a union
 -- Example: unitVariant (Name "Result") (Name "success")

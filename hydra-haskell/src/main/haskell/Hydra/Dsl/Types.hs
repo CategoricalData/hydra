@@ -220,7 +220,7 @@ recordWithName tname fields = TypeRecord $ RowType tname fields
 
 -- | Unit type (empty record type)
 unit :: Type
-unit = TypeRecord $ RowType (Name "hydra.core.Unit") []
+unit = TypeUnit
 
 -- | Create a union type with the given variants and the default type name
 -- Example: union ["success">: int32, "failure">: string]

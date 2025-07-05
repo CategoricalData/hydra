@@ -425,6 +425,8 @@ typeOfDef = inferenceDefinition "typeOf" $
             "tparams">: Lists.map (var "resolveType" @@ var "subst") (var "svars")] $
           Flows.pure $ ref nominalApplicationDef @@ var "tname" @@ var "tparams",
 
+        _Term_unit>>: constant $ Flows.pure Core.typeUnit,
+
         _Term_variable>>: lambda "name" $
           Optionals.maybe
             (Flows.fail $ Strings.cat $ list [
@@ -1183,6 +1185,10 @@ inferTypeOfTermDef = inferenceDefinition "inferTypeOfTerm" $
         _Term_typeAbstraction>>: lambda "ta" $ ref inferTypeOfTypeAbstractionDef @@ var "cx" @@ var "ta",
         _Term_typeApplication>>: lambda "tt" $ ref inferTypeOfTypeApplicationDef @@ var "cx" @@ var "tt",
         _Term_union>>: lambda "i" $ ref inferTypeOfInjectionDef @@ var "cx" @@ var "i",
+        _Term_unit>>: constant $ Flows.pure $ Typing.inferenceResult
+          (Core.termUnit)
+          (Core.typeUnit)
+          (ref Substitution.idTypeSubstDef),
         _Term_variable>>: lambda "name" $ ref inferTypeOfVariableDef @@ var "cx" @@ var "name",
         _Term_wrap>>: lambda "w" $ ref inferTypeOfWrappedTermDef @@ var "cx" @@ var "w"])
 

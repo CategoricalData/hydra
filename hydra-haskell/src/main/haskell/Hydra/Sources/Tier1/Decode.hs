@@ -352,9 +352,8 @@ uint64ValueDef = decodeDefinition "uint64Value" $
 
 unitDef :: TElement (Term -> Maybe ())
 unitDef = decodeDefinition "unit" $
-  lambda "term" $ Optionals.map
-    (constant unit)
-    (ref recordDef @@ Core.nameLift _Unit @@ var "term")
+  lambda "term" $ cases _Term (var "term") (Just nothing) [
+    _Term_unit>>: constant $ just unit]
 
 unitVariantDef :: TElement (Name -> Term -> Maybe Name)
 unitVariantDef = decodeDefinition "unitVariant" $

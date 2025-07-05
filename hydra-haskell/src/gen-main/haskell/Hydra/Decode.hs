@@ -234,7 +234,9 @@ uint8Value x = case x of
   _ -> Nothing
 
 unit :: (Core.Term -> Maybe ())
-unit term = (Optionals.map (\_ -> ()) (record (Core.Name "hydra.core.Unit") term))
+unit term = ((\x -> case x of
+  Core.TermUnit -> (Just ())
+  _ -> Nothing) term)
 
 unitVariant :: (Core.Name -> Core.Term -> Maybe Core.Name)
 unitVariant tname term = (Optionals.map Core.fieldName (variant tname term))

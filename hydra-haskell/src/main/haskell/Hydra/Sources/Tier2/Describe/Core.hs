@@ -148,6 +148,7 @@ typeDef = printingDefinition "type" $
     _Type_set>>: lambda "st" $ string "set of " ++ (ref typeDef @@ var "st"),
     _Type_sum>>: constant $ string "variant tuple",
     _Type_union>>: constant $ string "union",
+    _Type_unit>>: constant $ string "unit",
     _Type_variable>>: constant $ string "instance of a named type",
     _Type_wrap>>: lambda "n" $ string "wrapper for "
       ++ (ref typeDef @@ (project _WrappedType _WrappedType_object @@ var "n"))]

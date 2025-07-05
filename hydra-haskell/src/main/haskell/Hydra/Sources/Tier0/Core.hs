@@ -326,6 +326,9 @@ hydraCoreModule = Module ns elements [] [] $
           "union">:
             doc "An injection; an instance of a union type" $
             core "Injection",
+          "unit">:
+            doc "A unit value; a term with no value" $
+            unit,
           "variable">:
             doc "A variable reference" $
             core "Name",
@@ -361,6 +364,7 @@ hydraCoreModule = Module ns elements [] [] $
           "set">: core "Type",
           "sum">: list (core "Type"),
           "union">: core "RowType",
+          "unit">: unit,
           "variable">: core "Name",
           "wrap">: core "WrappedType"],
 
@@ -385,10 +389,6 @@ hydraCoreModule = Module ns elements [] [] $
         record [
           "variables">: list $ core "Name",
           "type">: core "Type"],
-
-      def "Unit" $
-        doc "An empty record as a canonical unit value" $
-        record [],
 
       def "WrappedTerm" $
         doc "A term wrapped in a type name" $

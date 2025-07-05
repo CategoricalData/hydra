@@ -128,3 +128,6 @@ jsonInt = Json.ValueNumber . bigintToBigfloat . fromIntegral
 
 jsonMap :: [(String, Json.Value)] -> Json.Value
 jsonMap = Json.ValueObject . M.fromList
+
+jsonNull :: Json.Value
+jsonNull = Json.ValueNull

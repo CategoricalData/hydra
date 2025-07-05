@@ -249,6 +249,9 @@ typeDef = coreDecodingDefinition "type" $
         (Core.nameLift _Type_union)
         (lambda "rt" $ Flows.map (unaryFunction Core.typeUnion) $ ref rowTypeDef @@ var "rt"),
       pair
+        (Core.nameLift _Type_unit)
+        (constant $ Flows.pure Core.typeUnit),
+      pair
         (Core.nameLift _Type_variable)
         (lambda "n" $ Flows.map (unaryFunction Core.typeVariable) $ ref nameDef @@ var "n"),
       pair
@@ -307,11 +310,11 @@ matchUnionDef :: TElement (Name -> [(Name, Term -> Flow Graph b)] -> Term -> Flo
 matchUnionDef = coreDecodingDefinition "matchUnion" $
   lambdas ["tname", "pairs", "term"] $ lets [
     "stripped">: ref Strip.fullyStripTermDef @@ var "term",
-    "mapping">: Maps.fromList $ var "pairs"]
-    $ cases _Term (var "stripped")
-        (Just $ ref Monads.unexpectedDef @@
-          ("union with one of {" ++ (Strings.intercalate ", " $ Lists.map (lambda "pair" $ Core.unName $ first $ var "pair") $ var "pairs") ++ "}") @@
-          (ref ShowCore.termDef @@ var "stripped")) [
+    "mapping">: Maps.fromList $ var "pairs"] $
+    cases _Term (var "stripped")
+      (Just $ ref Monads.unexpectedDef @@
+        ("union with one of {" ++ (Strings.intercalate ", " $ Lists.map (lambda "pair" $ Core.unName $ first $ var "pair") $ var "pairs") ++ "}") @@
+        (ref ShowCore.termDef @@ var "stripped")) [
       _Term_variable>>: lambda "name" $
         Flows.bind (ref Lexical.requireElementDef @@ var "name") $
         lambda "el" $ ref matchUnionDef @@ var "tname" @@ var "pairs" @@ (Graph.elementTerm $ var "el"),
@@ -319,9 +322,10 @@ matchUnionDef = coreDecodingDefinition "matchUnion" $
         Logic.ifElse (Core.equalName_ (Core.injectionTypeName $ var "injection") (var "tname"))
           (lets [
             "fname">: Core.fieldName $ Core.injectionField $ var "injection",
-            "val">: Core.fieldTerm $ Core.injectionField $ var "injection"]
-            $ Optionals.maybe
-              (Flows.fail $ "no matching case for field " ++ (Core.unName $ var "fname"))
+            "val">: Core.fieldTerm $ Core.injectionField $ var "injection"] $
+            Optionals.maybe
+              (Flows.fail $ "no matching case for field " ++ (Core.unName $ var "fname")
+                ++ " in union type " ++ (Core.unName $ var "tname"))
               (lambda "f" $ var "f" @@ var "val")
               (Maps.lookup (var "fname") (var "mapping")))
           (ref Monads.unexpectedDef @@ ("injection for type " ++ (Core.unName $ var "tname")) @@ (ref ShowCore.termDef @@ var "term"))]
