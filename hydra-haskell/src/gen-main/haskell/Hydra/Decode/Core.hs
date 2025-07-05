@@ -110,6 +110,7 @@ type_ dat = ((\x -> case x of
     (Core.Name "set", (\et -> Flows.map (\x -> Core.TypeSet x) (type_ et))),
     (Core.Name "sum", (\types -> Flows.map (\x -> Core.TypeSum x) (Core_.list type_ types))),
     (Core.Name "union", (\rt -> Flows.map (\x -> Core.TypeUnion x) (rowType rt))),
+    (Core.Name "unit", (\_ -> Flows.pure Core.TypeUnit)),
     (Core.Name "variable", (\n -> Flows.map (\x -> Core.TypeVariable x) (name n))),
     (Core.Name "wrap", (\wt -> Flows.map (\x -> Core.TypeWrap x) (wrappedType wt)))] dat)) dat)
 
@@ -150,8 +151,12 @@ matchUnion tname pairs term =
       let fname = (Core.fieldName (Core.injectionField v1)) 
           val = (Core.fieldTerm (Core.injectionField v1))
       in (Optionals.maybe (Flows.fail (Strings.cat [
-        "no matching case for field ",
-        (Core.unName fname)])) (\f -> f val) (Maps.lookup fname mapping))) (Monads.unexpected (Strings.cat [
+        Strings.cat [
+          Strings.cat [
+            "no matching case for field ",
+            (Core.unName fname)],
+          " in union type "],
+        (Core.unName tname)])) (\f -> f val) (Maps.lookup fname mapping))) (Monads.unexpected (Strings.cat [
       "injection for type ",
       (Core.unName tname)]) (Core__.term term)))
     _ -> (Monads.unexpected (Strings.cat [

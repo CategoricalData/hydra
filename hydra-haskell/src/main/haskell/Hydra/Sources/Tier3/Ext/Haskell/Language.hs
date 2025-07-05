@@ -124,6 +124,7 @@ haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
         TermVariantRecord,
         TermVariantSet,
         TermVariantUnion,
+        TermVariantUnit,
         TermVariantVariable,
         TermVariantWrap]
       typeVariants = [
@@ -139,6 +140,7 @@ haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
         TypeVariantRecord,
         TypeVariantSet,
         TypeVariantUnion,
+        TypeVariantUnit,
         TypeVariantVariable,
         TypeVariantWrap]
       typePredicate = constant true

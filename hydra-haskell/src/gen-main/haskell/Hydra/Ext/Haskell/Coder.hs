@@ -174,7 +174,7 @@ encodeFunction namespaces fun = ((\x -> case x of
                           singleArg = (Flows.pure [
                                   Ast.PatternName (Utils.rawName v1)])
                       in ((\x -> case x of
-                        Core.TypeRecord v3 -> (Logic.ifElse (Lists.null (Core.rowTypeFields v3)) noArgs singleArg)
+                        Core.TypeUnit -> noArgs
                         _ -> singleArg) (Strip.stripType ft)))) (\args ->  
                       let lhs = (Utils.applicationPattern hname args)
                       in (Flows.bind (Flows.map (\x -> Ast.CaseRhs x) (encodeTerm namespaces rhsTerm)) (\rhs -> Flows.pure (Ast.Alternative {
@@ -253,11 +253,10 @@ encodeTerm namespaces term =
                   in (Flows.bind (encode ft) (\hft -> Flows.pure (Ast.FieldUpdate {
                     Ast.fieldUpdateName = fieldRef,
                     Ast.fieldUpdateValue = hft}))))
-      in (Logic.ifElse (Lists.null fields) (Flows.pure (Ast.ExpressionTuple [])) ( 
-        let typeName = (Utils.elementReference namespaces sname)
-        in (Flows.bind (Flows.mapList toFieldUpdate fields) (\updates -> Flows.pure (Ast.ExpressionConstructRecord (Ast.ConstructRecordExpression {
-          Ast.constructRecordExpressionName = typeName,
-          Ast.constructRecordExpressionFields = updates}))))))
+          typeName = (Utils.elementReference namespaces sname)
+      in (Flows.bind (Flows.mapList toFieldUpdate fields) (\updates -> Flows.pure (Ast.ExpressionConstructRecord (Ast.ConstructRecordExpression {
+        Ast.constructRecordExpressionName = typeName,
+        Ast.constructRecordExpressionFields = updates}))))
     Core.TermSet v1 ->  
       let lhs = (Utils.hsvar "S.fromList")
       in (Flows.bind (encodeTerm namespaces (Core.TermList (Sets.toList v1))) (\rhs -> Flows.pure (Utils.hsapp lhs rhs)))
@@ -275,8 +274,9 @@ encodeTerm namespaces term =
           lhs = (Ast.ExpressionVariable (Utils.unionFieldReference namespaces sname fn))
           dflt = (Flows.map (Utils.hsapp lhs) (encode ft))
       in ((\x -> case x of
-        Core.TermRecord v2 -> (Logic.ifElse (Lists.null (Core.recordFields v2)) (Flows.pure lhs) dflt)
+        Core.TermUnit -> (Flows.pure lhs)
         _ -> dflt) (Strip.fullyStripTerm ft))
+    Core.TermUnit -> (Flows.pure (Ast.ExpressionTuple []))
     Core.TermVariable v1 -> (Flows.pure (Ast.ExpressionVariable (Utils.elementReference namespaces v1)))
     Core.TermWrap v1 ->  
       let tname = (Core.wrappedTermTypeName v1) 
@@ -334,17 +334,15 @@ encodeType namespaces typ =
       Flows.pure (Ast.TypeVariable (Utils.rawName "Maybe")),
       (encode v1)]))
     Core.TypeProduct v1 -> (Flows.bind (Flows.mapList encode v1) (\htypes -> Flows.pure (Ast.TypeTuple htypes)))
-    Core.TypeRecord v1 ->  
-      let fields = (Core.rowTypeFields v1) 
-          typeName = (Core.rowTypeTypeName v1)
-      in (Logic.ifElse (Lists.null fields) (Logic.ifElse (Equality.equal typeName (Core.Name "hydra.core.Unit")) (Flows.pure unitTuple) (ref typeName)) (ref typeName))
+    Core.TypeRecord v1 -> (ref (Core.rowTypeTypeName v1))
     Core.TypeSet v1 -> (Flows.map Utils.toTypeApplication (Flows.sequence [
       Flows.pure (Ast.TypeVariable (Utils.rawName "S.Set")),
       (encode v1)]))
     Core.TypeUnion v1 ->  
       let typeName = (Core.rowTypeTypeName v1)
       in (ref typeName)
-    Core.TypeVariable v1 -> (Logic.ifElse (Equality.equal v1 (Core.Name "hydra.core.Unit")) (Flows.pure unitTuple) (ref v1))
+    Core.TypeUnit -> (Flows.pure unitTuple)
+    Core.TypeVariable v1 -> (ref v1)
     Core.TypeWrap v1 ->  
       let name = (Core.wrappedTypeTypeName v1)
       in (ref name)
@@ -540,9 +538,7 @@ toTypeDeclarations namespaces el term =
                           in (Logic.ifElse (Optionals.isJust (Maps.lookup tname (Graph.graphElements g_))) (deconflict (Strings.cat2 name "_")) name))
               in (Flows.bind (Annotations.getTypeDescription ftype) (\comments ->  
                 let nm = (deconflict (Strings.cat2 (Formatting.capitalize lname_) (Formatting.capitalize (Core.unName fname))))
-                in (Flows.bind (Logic.ifElse (Equality.equal (Strip.stripType ftype) (Core.TypeRecord (Core.RowType {
-                  Core.rowTypeTypeName = (Core.Name "hydra.core.Unit"),
-                  Core.rowTypeFields = []}))) (Flows.pure []) (Flows.bind (adaptTypeToHaskellAndEncode namespaces ftype) (\htype -> Flows.pure [
+                in (Flows.bind (Logic.ifElse (Equality.equal (Strip.stripType ftype) Core.TypeUnit) (Flows.pure []) (Flows.bind (adaptTypeToHaskellAndEncode namespaces ftype) (\htype -> Flows.pure [
                   htype]))) (\typeList -> Flows.pure (Ast.ConstructorWithComments {
                   Ast.constructorWithCommentsBody = (Ast.ConstructorOrdinary (Ast.OrdinaryConstructor {
                     Ast.ordinaryConstructorName = (Utils.simpleName nm),

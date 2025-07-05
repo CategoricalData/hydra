@@ -391,6 +391,7 @@ termDef = coreEncodingDefinition "Term" $
     ecase _Term_typeAbstraction $ ref typeAbstractionDef,
     ecase _Term_typeApplication $ ref typedTermDef,
     ecase _Term_union (ref injectionDef),
+    ecase _Term_unit $ constant Core.termUnit,
     ecase _Term_variable $ ref nameDef,
     ecase _Term_wrap $ ref wrappedTermDef]
   where
@@ -424,6 +425,7 @@ typeDef = coreEncodingDefinition "Type" $
     csref _Type_set typeDef,
     cs _Type_sum $ encodedList $ primitive _lists_map @@ ref typeDef @@ var "v",
     csref _Type_union rowTypeDef,
+    field _Type_unit $ constant $ encodedVariant _Type _Type_unit Core.termUnit,
     csref _Type_variable nameDef,
     csref _Type_wrap wrappedTypeDef]
   where
@@ -484,8 +486,8 @@ isTypeDef = coreEncodingExtrasDefinition "isType" $
 
 isUnitTermDef :: TElement (Term -> Bool)
 isUnitTermDef = coreEncodingExtrasDefinition "isUnitTerm" $
-  lambda "t" $ Equality.equalTerm (ref Strip.fullyStripTermDef @@ var "t") $ TTerm (EncodeCore.term Terms.unit)
+  match _Term (Just false) [_Term_unit>>: constant true]
 
 isUnitTypeDef :: TElement (Type -> Bool)
 isUnitTypeDef = coreEncodingExtrasDefinition "isUnitType" $
-  lambda "t" $ Equality.equalType (ref Strip.stripTypeDef @@ var "t") $ TTerm (EncodeCore.type_ Types.unit)
+  match _Type (Just false) [_Type_unit>>: constant true]

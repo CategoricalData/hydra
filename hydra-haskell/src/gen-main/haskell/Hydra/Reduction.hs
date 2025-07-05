@@ -251,5 +251,6 @@ termIsValue g term =
     Core.TermRecord v1 -> (checkFields (Core.recordFields v1))
     Core.TermSet v1 -> (forList (Sets.toList v1))
     Core.TermUnion v1 -> (checkField (Core.injectionField v1))
+    Core.TermUnit -> True
     Core.TermVariable _ -> False
     _ -> False) (Strip.stripTerm term))

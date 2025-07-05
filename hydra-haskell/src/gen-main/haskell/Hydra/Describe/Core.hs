@@ -81,6 +81,7 @@ type_ x = case x of
     (type_ v1)])
   Core.TypeSum _ -> "variant tuple"
   Core.TypeUnion _ -> "union"
+  Core.TypeUnit -> "unit"
   Core.TypeVariable _ -> "instance of a named type"
   Core.TypeWrap v1 -> (Strings.cat [
     "wrapper for ",

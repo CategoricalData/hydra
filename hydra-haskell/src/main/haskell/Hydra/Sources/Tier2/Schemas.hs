@@ -82,7 +82,7 @@ schemasDefinition = definitionInModule hydraSchemasModule
 hydraSchemasModule :: Module
 hydraSchemasModule = Module (Namespace "hydra.schemas") elements
     [DecodeCore.decodeCoreModule, EncodeCore.encodeCoreModule, Qnames.hydraQnamesModule, Rewriting.hydraRewritingModule,
-      ShowCore.showCoreModule, Sorting.hydraSortingModule]
+      ShowCore.showCoreModule, Sorting.hydraSortingModule, Variants.hydraVariantsModule]
     [Tier1.hydraCodersModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just ("Various functions for dereferencing and decoding schema types.")
   where
@@ -108,14 +108,14 @@ hydraSchemasModule = Module (Namespace "hydra.schemas") elements
      el topologicalSortTypeDefinitionsDef,
      el typeDependenciesDef]
 
-definitionDependencyNamespacesDef :: TElement (Bool -> [Definition] -> S.Set Namespace)
+definitionDependencyNamespacesDef :: TElement ([Definition] -> S.Set Namespace)
 definitionDependencyNamespacesDef = schemasDefinition "definitionDependencyNamespaces" $
   doc "Get dependency namespaces from definitions" $
-  lambdas ["excludeUnit", "defs"] $ lets [
+  lambdas ["defs"] $ lets [
     "defNames">: lambda "def" $
       match _Definition Nothing [
         _Definition_type>>: lambda "typeDef" $
-          ref Rewriting.typeDependencyNamesDef @@ true @@ var "excludeUnit" @@ Module.typeDefinitionType (var "typeDef"),
+          ref Rewriting.typeDependencyNamesDef @@ true @@ Module.typeDefinitionType (var "typeDef"),
         _Definition_term>>: lambda "termDef" $
           ref Rewriting.termDependencyNamesDef @@ true @@ true @@ true @@ Module.termDefinitionTerm (var "termDef")]
       @@ var "def",
@@ -131,14 +131,14 @@ dependencyNamespacesDef = schemasDefinition "dependencyNamespaces" $
       "dataNames">: ref Rewriting.termDependencyNamesDef @@ var "withVars" @@ var "withPrims" @@ var "withNoms" @@ var "term",
       "schemaNames">: Logic.ifElse (var "withSchema")
         (Optionals.maybe Sets.empty
-          (lambda "ts" $ ref Rewriting.typeDependencyNamesDef @@ true @@ true @@ Core.typeSchemeType (var "ts"))
+          (lambda "ts" $ ref Rewriting.typeDependencyNamesDef @@ true @@ Core.typeSchemeType (var "ts"))
           (Graph.elementType $ var "el"))
         Sets.empty]
       $ Logic.ifElse (ref EncodeCore.isEncodedTypeDef @@ (ref Strip.fullyStripTermDef @@ var "term"))
           (Flows.bind (ref DecodeCore.typeDef @@ var "term") $
             lambda "typ" $ Flows.pure $ Sets.unions $ list [
               var "dataNames", var "schemaNames",
-              ref Rewriting.typeDependencyNamesDef @@ true @@ true @@ var "typ"])
+              ref Rewriting.typeDependencyNamesDef @@ true @@ var "typ"])
           (Flows.pure $ Sets.unions $ list [var "dataNames", var "schemaNames"])]
     $ Flows.bind (Flows.mapList (var "depNames") (var "els")) $
       lambda "namesList" $ Flows.pure $ Sets.fromList $ Optionals.cat $ Lists.map (ref Qnames.namespaceOfDef) $
@@ -238,11 +238,11 @@ moduleDependencyNamespacesDef = schemasDefinition "moduleDependencyNamespaces" $
       Module.moduleElements (var "mod")) $
       lambda "deps" $ Flows.pure $ Sets.delete (Module.moduleNamespace $ var "mod") (var "deps")
 
-namespacesForDefinitionsDef :: TElement (Bool -> (Namespace -> a) -> Namespace -> [Definition] -> Namespaces a)
+namespacesForDefinitionsDef :: TElement ((Namespace -> a) -> Namespace -> [Definition] -> Namespaces a)
 namespacesForDefinitionsDef = schemasDefinition "namespacesForDefinitions" $
   doc "Create namespaces mapping for definitions" $
-  lambda "excludeUnit" $ lambda "encodeNamespace" $ lambda "focusNs" $ lambda "defs" $ lets [
-    "nss">: Sets.delete (var "focusNs") $ ref definitionDependencyNamespacesDef @@ var "excludeUnit" @@ var "defs",
+  lambdas ["encodeNamespace", "focusNs", "defs"] $ lets [
+    "nss">: Sets.delete (var "focusNs") $ ref definitionDependencyNamespacesDef @@ var "defs",
     "toPair">: lambda "ns" $ pair (var "ns") (var "encodeNamespace" @@ var "ns")]
     $ Module.namespaces (var "toPair" @@ var "focusNs") $ Maps.fromList $ Lists.map (var "toPair") $ Sets.toList $ var "nss"
 
@@ -350,7 +350,7 @@ topologicalSortTypeDefinitionsDef = schemasDefinition "topologicalSortTypeDefini
   lambda "defs" $ lets [
     "toPair">: lambda "def" $ pair
       (Module.typeDefinitionName $ var "def")
-      (Sets.toList $ ref Rewriting.typeDependencyNamesDef @@ false @@ true @@ Module.typeDefinitionType (var "def")),
+      (Sets.toList $ ref Rewriting.typeDependencyNamesDef @@ false @@ Module.typeDefinitionType (var "def")),
     "nameToDef">: Maps.fromList $ Lists.map
       (lambda "d" $ pair (Module.typeDefinitionName $ var "d") (var "d"))
       (var "defs"),
@@ -376,7 +376,7 @@ typeDependenciesDef = schemasDefinition "typeDependencies" $
           lambda "pairs" $ lets [
             "newNames">: Maps.union (var "names") $ Maps.fromList $ var "pairs",
             "refs">: Lists.foldl (binaryFunction Sets.union) Sets.empty $ Lists.map
-              (lambda "pair" $ ref Rewriting.typeDependencyNamesDef @@ var "withSchema" @@ true @@ second (var "pair"))
+              (lambda "pair" $ ref Rewriting.typeDependencyNamesDef @@ var "withSchema" @@ second (var "pair"))
               (var "pairs"),
             "visited">: Sets.fromList $ Maps.keys $ var "names",
             "newSeeds">: Sets.difference (var "refs") (var "visited")]

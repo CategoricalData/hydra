@@ -1,6 +1,7 @@
 module Hydra.Ext.Graphql.Language where
 
 import Hydra.Kernel
+import qualified Hydra.Encode.Core as EncodeCore
 
 import qualified Data.List as L
 import qualified Data.Set as S
@@ -38,10 +39,7 @@ graphqlLanguage = Language (LanguageName "hydra.ext.graphql") $ LanguageConstrai
     -- If it is a union type, make sure it can be treated as an enum.
     TypeUnion rt -> L.foldl (\b f -> b && isEnumField f) True $ rowTypeFields rt
       where
-        isUnitType t = case stripType t of
-          TypeRecord (RowType name fields) -> L.null fields || name == _Unit
-          _ -> False
-        isEnumField = isUnitType . fieldTypeType
+        isEnumField = EncodeCore.isUnitType . fieldTypeType
     TypeOptional et -> case stripType et of
       TypeOptional _ -> False  -- No encoding for optionals within optionals
       _ -> True

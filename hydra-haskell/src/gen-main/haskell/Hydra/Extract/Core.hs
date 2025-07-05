@@ -375,9 +375,10 @@ unionType ename typ =
       (Core.unName (Core.rowTypeTypeName v1))])))
     _ -> (Monads.unexpected "union type" (Core_.type_ typ))) stripped)
 
--- | Extract a unit value (empty record) from a term
-unit :: (Core.Term -> Compute.Flow Graph.Graph ())
-unit term0 = (Flows.bind (record (Core.Name "hydra.core.Unit") term0) (\fields -> Logic.ifElse (Lists.null fields) (Flows.pure ()) (Monads.unexpected "unit" (Core_.term term0))))
+unit :: (Core.Term -> Compute.Flow t0 ())
+unit term = ((\x -> case x of
+  Core.TermUnit -> (Flows.pure ())
+  _ -> (Monads.unexpected "unit" (Core_.term term))) term)
 
 -- | Extract a unit variant (a variant with an empty record value) from a union term
 unitVariant :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.Name)

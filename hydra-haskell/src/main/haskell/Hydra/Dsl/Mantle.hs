@@ -190,6 +190,7 @@ termVariant v = unitVariant _TermVariant $ case v of
   TermVariantTypeAbstraction -> _TermVariant_typeAbstraction
   TermVariantTypeApplication -> _TermVariant_typeApplication
   TermVariantUnion -> _TermVariant_union
+  TermVariantUnit -> _TermVariant_unit
   TermVariantVariable -> _TermVariant_variable
   TermVariantWrap -> _TermVariant_wrap
 
@@ -238,6 +239,9 @@ termVariantTypeApplication = unitVariant _TermVariant _TermVariant_typeApplicati
 termVariantUnion :: TTerm TermVariant
 termVariantUnion = unitVariant _TermVariant _TermVariant_union
 
+termVariantUnit :: TTerm TermVariant
+termVariantUnit = unitVariant _TermVariant _TermVariant_unit
+
 termVariantVariable :: TTerm TermVariant
 termVariantVariable = unitVariant _TermVariant _TermVariant_variable
 
@@ -258,6 +262,7 @@ typeVariant v = unitVariant _TypeVariant $ case v of
   TypeVariantRecord -> _TypeVariant_record
   TypeVariantSet -> _TypeVariant_set
   TypeVariantUnion -> _TypeVariant_union
+  TypeVariantUnit -> _TypeVariant_unit
   TypeVariantVariable -> _TypeVariant_variable
   TypeVariantWrap -> _TypeVariant_wrap
 
@@ -299,6 +304,9 @@ typeVariantSum = unitVariant _TypeVariant _TypeVariant_sum
 
 typeVariantUnion :: TTerm TypeVariant
 typeVariantUnion = unitVariant _TypeVariant _TypeVariant_union
+
+typeVariantUnit :: TTerm TypeVariant
+typeVariantUnit = unitVariant _TypeVariant _TypeVariant_unit
 
 typeVariantVariable :: TTerm TypeVariant
 typeVariantVariable = unitVariant _TypeVariant _TypeVariant_variable

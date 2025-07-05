@@ -379,6 +379,7 @@ rewriteTerm f =
             Core.TermUnion v1 -> (Core.TermUnion (Core.Injection {
               Core.injectionTypeName = (Core.injectionTypeName v1),
               Core.injectionField = (forField (Core.injectionField v1))}))
+            Core.TermUnit -> Core.TermUnit
             Core.TermVariable v1 -> (Core.TermVariable v1)) term))
   in (rewrite fsub f)
 
@@ -461,6 +462,7 @@ rewriteTermM f =
               in (Flows.map (\rfield -> Core.TermUnion (Core.Injection {
                 Core.injectionTypeName = n,
                 Core.injectionField = rfield})) (forField field))
+            Core.TermUnit -> (Flows.pure Core.TermUnit)
             Core.TermVariable v1 -> (Flows.pure (Core.TermVariable v1))
             Core.TermWrap v1 ->  
               let name = (Core.wrappedTermTypeName v1) 
@@ -504,6 +506,7 @@ rewriteType f =
             Core.TypeUnion v1 -> (Core.TypeUnion (Core.RowType {
               Core.rowTypeTypeName = (Core.rowTypeTypeName v1),
               Core.rowTypeFields = (Lists.map forField (Core.rowTypeFields v1))}))
+            Core.TypeUnit -> Core.TypeUnit
             Core.TypeVariable v1 -> (Core.TypeVariable v1)
             Core.TypeWrap v1 -> (Core.TypeWrap (Core.WrappedType {
               Core.wrappedTypeTypeName = (Core.wrappedTypeTypeName v1),
@@ -552,6 +555,7 @@ rewriteTypeM f =
             in (Flows.bind (Flows.mapList forField fields) (\rfields -> Flows.pure (Core.TypeUnion (Core.RowType {
               Core.rowTypeTypeName = name,
               Core.rowTypeFields = rfields}))))
+          Core.TypeUnit -> (Flows.pure Core.TypeUnit)
           Core.TypeVariable v1 -> (Flows.pure (Core.TypeVariable v1))
           Core.TypeWrap v1 -> (Flows.bind (recurse (Core.wrappedTypeObject v1)) (\t -> Flows.pure (Core.TypeWrap (Core.WrappedType {
             Core.wrappedTypeTypeName = (Core.wrappedTypeTypeName v1),
@@ -697,6 +701,7 @@ subterms x = case x of
     Core.typedTermTerm v1]
   Core.TermUnion v1 -> [
     Core.fieldTerm (Core.injectionField v1)]
+  Core.TermUnit -> []
   Core.TermVariable _ -> []
   Core.TermWrap v1 -> [
     Core.wrappedTermObject v1]
@@ -736,6 +741,7 @@ subtermsWithAccessors x = case x of
     (Accessors.TermAccessorTypeApplicationTerm, (Core.typedTermTerm v1))]
   Core.TermUnion v1 -> [
     (Accessors.TermAccessorInjectionTerm, (Core.fieldTerm (Core.injectionField v1)))]
+  Core.TermUnit -> []
   Core.TermVariable _ -> []
   Core.TermWrap v1 -> [
     (Accessors.TermAccessorWrappedTerm, (Core.wrappedTermObject v1))]
@@ -767,6 +773,7 @@ subtypes x = case x of
     v1]
   Core.TypeSum v1 -> v1
   Core.TypeUnion v1 -> (Lists.map Core.fieldTypeType (Core.rowTypeFields v1))
+  Core.TypeUnit -> []
   Core.TypeVariable _ -> []
   Core.TypeWrap v1 -> [
     Core.wrappedTypeObject v1]
@@ -832,20 +839,20 @@ topologicalSortElements els =
   let adjlist = (\e -> (Graph.elementName e, (Sets.toList (termDependencyNames False True True (Graph.elementTerm e)))))
   in (Sorting.topologicalSort (Lists.map adjlist els))
 
-typeDependencyNames :: (Bool -> Bool -> Core.Type -> S.Set Core.Name)
-typeDependencyNames withSchema excludeUnit typ = (Logic.ifElse withSchema (Sets.union (freeVariablesInType typ) (typeNamesInType excludeUnit typ)) (freeVariablesInType typ))
+typeDependencyNames :: (Bool -> Core.Type -> S.Set Core.Name)
+typeDependencyNames withSchema typ = (Logic.ifElse withSchema (Sets.union (freeVariablesInType typ) (typeNamesInType typ)) (freeVariablesInType typ))
 
-typeNamesInType :: (Bool -> Core.Type -> S.Set Core.Name)
-typeNamesInType excludeUnit =  
-  let addNames = (\names -> \typ -> (\x -> case x of
-          Core.TypeRecord v1 ->  
-            let tname = (Core.rowTypeTypeName v1)
-            in (Logic.ifElse (Logic.or (Logic.not excludeUnit) (Logic.not (Equality.equalString (Core.unName tname) (Core.unName (Core.Name "hydra.core.Unit"))))) (Sets.insert tname names) names)
-          Core.TypeUnion v1 ->  
-            let tname = (Core.rowTypeTypeName v1)
-            in (Sets.insert tname names)
-          Core.TypeWrap v1 ->  
-            let tname = (Core.wrappedTypeTypeName v1)
-            in (Sets.insert tname names)
-          _ -> names) typ)
-  in (foldOverType Coders.TraversalOrderPre addNames Sets.empty)
+typeNamesInType :: (Core.Type -> S.Set Core.Name)
+typeNamesInType = (foldOverType Coders.TraversalOrderPre addNames Sets.empty) 
+  where 
+    addNames = (\names -> \typ -> (\x -> case x of
+      Core.TypeRecord v1 ->  
+        let tname = (Core.rowTypeTypeName v1)
+        in (Sets.insert tname names)
+      Core.TypeUnion v1 ->  
+        let tname = (Core.rowTypeTypeName v1)
+        in (Sets.insert tname names)
+      Core.TypeWrap v1 ->  
+        let tname = (Core.wrappedTypeTypeName v1)
+        in (Sets.insert tname names)
+      _ -> names) typ)

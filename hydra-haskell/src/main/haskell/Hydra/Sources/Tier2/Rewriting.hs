@@ -529,6 +529,7 @@ rewriteTermDef = rewritingDefinition "rewriteTerm" $ lambda "f" $ lets [
       _Term_union>>: lambda "i" $ Core.termUnion $ Core.injection
         (Core.injectionTypeName $ var "i")
         (var "forField" @@ (Core.injectionField $ var "i")),
+      _Term_unit>>: constant Core.termUnit,
       _Term_variable>>: lambda "v" $ Core.termVariable $ var "v"]] $
   ref rewriteDef @@ var "fsub" @@ var "f"
 
@@ -635,6 +636,7 @@ rewriteTermMDef = rewritingDefinition "rewriteTermM" $
           $ Flows.map
             (lambda "rfield" $ Core.termUnion $ Core.injection (var "n") (var "rfield"))
             (var "forField" @@ var "field"),
+        _Term_unit>>: constant $ Flows.pure Core.termUnit,
         _Term_variable>>: lambda "v" $ Flows.pure $ Core.termVariable $ var "v",
         _Term_wrap>>: lambda "wt" $ lets [
           "name">: Core.wrappedTermTypeName $ var "wt",
@@ -676,6 +678,7 @@ rewriteTypeDef = rewritingDefinition "rewriteType" $ lambda "f" $ lets [
       _Type_union>>: lambda "rt" $ Core.typeUnion $ Core.rowType
         (Core.rowTypeTypeName $ var "rt")
         (Lists.map (var "forField") (Core.rowTypeFields $ var "rt")),
+      _Type_unit>>: constant Core.typeUnit,
       _Type_variable>>: lambda "v" $ Core.typeVariable $ var "v",
       _Type_wrap>>: lambda "wt" $ Core.typeWrap $ Core.wrappedType
         (Core.wrappedTypeTypeName $ var "wt")
@@ -741,6 +744,7 @@ rewriteTypeMDef = rewritingDefinition "rewriteTypeM" $
               lambda "t" $ Flows.pure $ Core.fieldTypeWithType (var "f") (var "t")]
           $ Flows.bind (Flows.mapList (var "forField") (var "fields")) $
             lambda "rfields" $ Flows.pure $ Core.typeUnion $ Core.rowType (var "name") (var "rfields"),
+        _Type_unit>>: constant $ Flows.pure Core.typeUnit,
         _Type_variable>>: lambda "v" $ Flows.pure $ Core.typeVariable $ var "v",
         _Type_wrap>>: lambda "wt" $
           Flows.bind (var "recurse" @@ (Core.wrappedTypeObject $ var "wt")) $
@@ -887,6 +891,7 @@ subtermsDef = rewritingDefinition "subterms" $
     _Term_typeAbstraction>>: lambda "ta" $ list [Core.typeAbstractionBody $ var "ta"],
     _Term_typeApplication>>: lambda "ta" $ list [Core.typedTermTerm $ var "ta"],
     _Term_union>>: lambda "ut" $ list [Core.fieldTerm $ (Core.injectionField $ var "ut")],
+    _Term_unit>>: constant $ list [],
     _Term_variable>>: constant $ list [],
     _Term_wrap>>: lambda "n" $ list [Core.wrappedTermObject $ var "n"]]
 
@@ -948,6 +953,7 @@ subtermsWithAccessorsDef = rewritingDefinition "subtermsWithAccessors" $
     _Term_union>>: lambda "ut" $
       single Mantle.termAccessorInjectionTerm $
       Core.fieldTerm $ (Core.injectionField $ var "ut"),
+    _Term_unit>>: constant none,
     _Term_variable>>: constant none,
     _Term_wrap>>: lambda "n" $ single Mantle.termAccessorWrappedTerm $ Core.wrappedTermObject $ var "n"]
   where
@@ -979,6 +985,7 @@ subtypesDef = rewritingDefinition "subtypes" $
     _Type_set>>: lambda "st" $ list [var "st"],
     _Type_sum>>: lambda "st" $ var "st",
     _Type_union>>: lambda "rt" (Lists.map (unaryFunction Core.fieldTypeType) (Core.rowTypeFields $ var "rt")),
+    _Type_unit>>: constant $ list [],
     _Type_variable>>: constant $ list [],
     _Type_wrap>>: lambda "nt" $ list [Core.wrappedTypeObject $ var "nt"]]
 
@@ -1059,29 +1066,25 @@ topologicalSortElementsDef = rewritingDefinition "topologicalSortElements" $
       (Sets.toList $ ref termDependencyNamesDef @@ false @@ true @@ true @@ (Graph.elementTerm $ var "e"))]
     $ ref Sorting.topologicalSortDef @@ Lists.map (var "adjlist") (var "els")
 
-typeDependencyNamesDef :: TElement (Bool -> Bool -> Type -> S.Set Name)
+typeDependencyNamesDef :: TElement (Bool -> Type -> S.Set Name)
 typeDependencyNamesDef = rewritingDefinition "typeDependencyNames" $
-  lambdas ["withSchema", "excludeUnit", "typ"] $
+  lambdas ["withSchema", "typ"] $
     Logic.ifElse (var "withSchema")
       (Sets.union
         (ref freeVariablesInTypeDef @@ var "typ")
-        (ref typeNamesInTypeDef @@ var "excludeUnit" @@ var "typ"))
+        (ref typeNamesInTypeDef @@ var "typ"))
       (ref freeVariablesInTypeDef @@ var "typ")
 
-typeNamesInTypeDef :: TElement (Bool -> Type -> S.Set Name)
-typeNamesInTypeDef = rewritingDefinition "typeNamesInType" $
-  lambda "excludeUnit" $ lets [
-    "addNames">: lambdas ["names", "typ"] $ cases _Type (var "typ") (Just $ var "names") [
-      _Type_record>>: lambda "rowType" $ lets [
-        "tname">: Core.rowTypeTypeName $ var "rowType"]
-        $ Logic.ifElse
-          (Logic.or (Logic.not $ var "excludeUnit") (Logic.not $ Core.equalName_ (var "tname") $ Core.nameLift _Unit))
-          (Sets.insert (var "tname") (var "names"))
-          (var "names"),
-      _Type_union>>: lambda "rowType" $ lets [
-        "tname">: Core.rowTypeTypeName $ var "rowType"]
-        $ Sets.insert (var "tname") (var "names"),
-      _Type_wrap>>: lambda "wrappedType" $ lets [
-        "tname">: Core.wrappedTypeTypeName $ var "wrappedType"]
-        $ Sets.insert (var "tname") (var "names")]]
-    $ ref foldOverTypeDef @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty
+typeNamesInTypeDef :: TElement (Type -> S.Set Name)
+typeNamesInTypeDef = rewritingDefinition "typeNamesInType" $ lets [
+  "addNames">: lambdas ["names", "typ"] $ cases _Type (var "typ") (Just $ var "names") [
+    _Type_record>>: lambda "rowType" $ lets [
+      "tname">: Core.rowTypeTypeName $ var "rowType"] $
+      Sets.insert (var "tname") (var "names"),
+    _Type_union>>: lambda "rowType" $ lets [
+      "tname">: Core.rowTypeTypeName $ var "rowType"] $
+      Sets.insert (var "tname") (var "names"),
+    _Type_wrap>>: lambda "wrappedType" $ lets [
+      "tname">: Core.wrappedTypeTypeName $ var "wrappedType"] $
+      Sets.insert (var "tname") (var "names")]] $
+  ref foldOverTypeDef @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty

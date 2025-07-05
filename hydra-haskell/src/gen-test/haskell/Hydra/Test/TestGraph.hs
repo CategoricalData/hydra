@@ -5,7 +5,7 @@ module Hydra.Test.TestGraph where
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Module as Module
-import Prelude hiding  (Enum, Ordering, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -152,19 +152,13 @@ testTypeComparison = (Core.TypeUnion (Core.RowType {
   Core.rowTypeFields = [
     Core.FieldType {
       Core.fieldTypeName = (Core.Name "lessThan"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra.core.Unit"),
-        Core.rowTypeFields = []}))},
+      Core.fieldTypeType = Core.TypeUnit},
     Core.FieldType {
       Core.fieldTypeName = (Core.Name "equalTo"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra.core.Unit"),
-        Core.rowTypeFields = []}))},
+      Core.fieldTypeType = Core.TypeUnit},
     Core.FieldType {
       Core.fieldTypeName = (Core.Name "greaterThan"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra.core.Unit"),
-        Core.rowTypeFields = []}))}]}))
+      Core.fieldTypeType = Core.TypeUnit}]}))
 
 testTypeComparisonName :: Core.Name
 testTypeComparisonName = (Core.Name "Comparison")
@@ -316,9 +310,7 @@ testTypeUnionMonomorphic = (Core.TypeUnion (Core.RowType {
       Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
     Core.FieldType {
       Core.fieldTypeName = (Core.Name "unit"),
-      Core.fieldTypeType = (Core.TypeRecord (Core.RowType {
-        Core.rowTypeTypeName = (Core.Name "hydra.core.Unit"),
-        Core.rowTypeFields = []}))}]}))
+      Core.fieldTypeType = Core.TypeUnit}]}))
 
 testTypeUnionMonomorphicName :: Core.Name
 testTypeUnionMonomorphicName = (Core.Name "UnionMonomorphic")

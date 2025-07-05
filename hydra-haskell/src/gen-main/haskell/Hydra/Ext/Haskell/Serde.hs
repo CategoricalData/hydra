@@ -7,7 +7,6 @@
 module Hydra.Ext.Haskell.Serde where
 
 import qualified Hydra.Ast as Ast
-import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Haskell.Ast as Ast_
 import qualified Hydra.Ext.Haskell.Operators as Operators
 import qualified Hydra.Lib.Equality as Equality

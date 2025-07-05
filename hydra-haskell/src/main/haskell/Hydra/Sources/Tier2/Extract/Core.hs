@@ -629,19 +629,18 @@ unionTypeDef = expectDefinition "unionType" $
 
 unitDef :: TElement (Term -> Flow Graph ())
 unitDef = expectDefinition "unit" $
-  doc "Extract a unit value (empty record) from a term" $
-  lambda "term0" $ Flows.bind (ref recordDef @@ Core.nameLift _Unit @@ var "term0") $
-    lambda "fields" $
-      Logic.ifElse (Lists.null $ var "fields")
-        (Flows.pure unit)
-        (ref Monads.unexpectedDef @@ string "unit" @@ (ref ShowCore.termDef @@ var "term0"))
+  doc "Extract a unit value from a term" $
+  lambda "term" $ cases _Term (var "term")
+    (Just $ ref Monads.unexpectedDef @@ string "unit" @@ (ref ShowCore.termDef @@ var "term")) [
+    _Term_unit>>: constant $ Flows.pure unit]
 
 unitVariantDef :: TElement (Name -> Term -> Flow Graph Name)
 unitVariantDef = expectDefinition "unitVariant" $
   doc "Extract a unit variant (a variant with an empty record value) from a union term" $
-  lambdas ["tname", "term"] $ Flows.bind (ref variantDef @@ var "tname" @@ var "term") $
-    lambda "field" $ Flows.bind (ref unitDef @@ (Core.fieldTerm $ var "field")) $
-      lambda "ignored" $ Flows.pure $ Core.fieldName $ var "field"
+  lambdas ["tname", "term"] $
+    withVar "field" (ref variantDef @@ var "tname" @@ var "term") $
+    withVar "ignored" (ref unitDef @@ (Core.fieldTerm $ var "field")) $
+    Flows.pure $ Core.fieldName $ var "field"
 
 variantDef :: TElement (Name -> Term -> Flow Graph Field)
 variantDef = expectDefinition "variant" $

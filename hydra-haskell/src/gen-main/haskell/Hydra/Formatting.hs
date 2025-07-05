@@ -2,7 +2,6 @@
 
 module Hydra.Formatting where
 
-import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Chars as Chars
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists

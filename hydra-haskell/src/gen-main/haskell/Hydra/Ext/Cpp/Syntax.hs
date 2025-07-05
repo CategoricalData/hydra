@@ -246,15 +246,11 @@ _ElifDirective = (Core.Name "hydra.ext.cpp.syntax.ElifDirective")
 
 _ElifDirective_condition = (Core.Name "condition")
 
-data ElseDirective = 
-  ElseDirective {}
-  deriving (Eq, Ord, Read, Show)
+type ElseDirective = ()
 
 _ElseDirective = (Core.Name "hydra.ext.cpp.syntax.ElseDirective")
 
-data EndifDirective = 
-  EndifDirective {}
-  deriving (Eq, Ord, Read, Show)
+type EndifDirective = ()
 
 _EndifDirective = (Core.Name "hydra.ext.cpp.syntax.EndifDirective")
 

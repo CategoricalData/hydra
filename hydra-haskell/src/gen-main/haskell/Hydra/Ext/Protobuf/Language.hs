@@ -41,7 +41,8 @@ protobufLanguage = Coders.Language {
       Mantle.TermVariantMap,
       Mantle.TermVariantOptional,
       Mantle.TermVariantRecord,
-      Mantle.TermVariantUnion]),
+      Mantle.TermVariantUnion,
+      Mantle.TermVariantUnit]),
     Coders.languageConstraintsTypeVariants = (Sets.fromList [
       Mantle.TypeVariantAnnotated,
       Mantle.TypeVariantList,
@@ -50,6 +51,7 @@ protobufLanguage = Coders.Language {
       Mantle.TypeVariantOptional,
       Mantle.TypeVariantRecord,
       Mantle.TypeVariantUnion,
+      Mantle.TypeVariantUnit,
       Mantle.TypeVariantVariable]),
     Coders.languageConstraintsTypes = (\x -> case x of
       Core.TypeMap v1 -> ((\x -> case x of

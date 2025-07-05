@@ -75,7 +75,7 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
   H.it "Empty records become empty objects" $
     QC.property $ \() -> checkSerialization yamlStringCoder
       (TypedTerm unit Types.unit)
-      "{}"
+      "null"
 
   H.it "Simple records become simple objects" $
     QC.property $ \() -> checkSerialization yamlStringCoder

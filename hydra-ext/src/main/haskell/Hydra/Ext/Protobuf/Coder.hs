@@ -94,16 +94,13 @@ constructModule mod@(Module ns els _ _ desc) _ pairs = do
             TypeLiteral _ -> True
             _ -> False
           _ -> False
-    emptyImport types = if checkFields checkType isUnitField types
+    emptyImport types = if checkFields checkType EncodeCore.isUnitType types
         then [P3.FileReference "google/protobuf/empty.proto"]
         else []
       where
         checkType typ = if isEnumDefinition typ
           then Just False
           else Nothing
-        isUnitField typ = case typ of
-          TypeRecord (RowType name _) -> name == _Unit
-          _ -> False
 
 encodeDefinition :: Namespace -> Name -> Type -> Flow Graph P3.Definition
 encodeDefinition localNs name typ = withTrace ("encoding " ++ unName name) $ do
@@ -179,10 +176,9 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
         P3.FieldTypeSimple <$> encodeSimpleType True typ
     encodeSimpleType noms typ = case simplifyType typ of
         TypeLiteral lt -> P3.SimpleTypeScalar <$> encodeScalarType lt
-        TypeRecord (RowType name _) -> if name == _Unit
-          then pure $ P3.SimpleTypeReference $ P3.TypeName $ "google.protobuf.Empty"
-          else forNominal name
+        TypeRecord (RowType name _) -> forNominal name
         TypeUnion (RowType name _) -> forNominal name
+        TypeUnit -> pure $ P3.SimpleTypeReference $ P3.TypeName $ "google.protobuf.Empty"
         TypeVariable name -> if noms
           then forNominal name
           else do

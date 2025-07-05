@@ -71,7 +71,7 @@ recordCoder rt = do
           decodeField a (FieldType fname _, coder) = do
             v <- coderDecode coder $ Y.fromMaybe Json.ValueNull $ M.lookup (unName fname) m
             return $ Field fname v
-      _ -> unexpected "mapping" $ show n
+      _ -> unexpected "object" $ show n
     getCoder coders fname = Y.maybe error pure $ M.lookup fname coders
       where
         error = fail $ "no such field: " ++ fname
@@ -119,11 +119,23 @@ termCoder typ = case stripType typ of
       fromString cx s = Terms.string $ if isStringKey cx then s else read s
       isStringKey cx = stripType kt == Types.string
   TypeRecord rt -> recordCoder rt
+  TypeUnit -> pure $ unitCoder
   TypeVariable name -> return $ Coder encode decode
     where
       encode term = pure $ Json.ValueString $ "variable '" ++ unName name ++ "' for: " ++ show term
       decode term = fail $ "type variable " ++ unName name ++ " does not support decoding"
   _ -> fail $ "unsupported type in JSON: " ++ show (typeVariant typ)
+
+-- Note: unused because we currently use JSON unit for optionals
+unitCoder :: Coder Graph Graph Term Json.Value
+unitCoder = Coder encode decode
+  where
+    encode term = case stripTerm term of
+      TermUnit -> pure Json.ValueNull
+      _ -> unexpected "unit" $ show term
+    decode n = case n of
+      Json.ValueNull -> pure Terms.unit
+      _ -> unexpected "null" $ show n
 
 -- | A simplistic, unidirectional encoding for terms as JSON values. Not type-aware; best used for human consumption.
 untypedTermToJson :: Term -> Flow s Json.Value

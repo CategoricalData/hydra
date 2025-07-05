@@ -164,6 +164,7 @@ termVariant x = case x of
   Core.TermTypeAbstraction _ -> Mantle.TermVariantTypeAbstraction
   Core.TermTypeApplication _ -> Mantle.TermVariantTypeApplication
   Core.TermUnion _ -> Mantle.TermVariantUnion
+  Core.TermUnit -> Mantle.TermVariantUnit
   Core.TermVariable _ -> Mantle.TermVariantVariable
   Core.TermWrap _ -> Mantle.TermVariantWrap
 
@@ -184,6 +185,7 @@ termVariants = [
   Mantle.TermVariantTypeAbstraction,
   Mantle.TermVariantTypeApplication,
   Mantle.TermVariantUnion,
+  Mantle.TermVariantUnit,
   Mantle.TermVariantVariable,
   Mantle.TermVariantWrap]
 
@@ -203,6 +205,7 @@ typeVariant x = case x of
   Core.TypeSet _ -> Mantle.TypeVariantSet
   Core.TypeSum _ -> Mantle.TypeVariantSum
   Core.TypeUnion _ -> Mantle.TypeVariantUnion
+  Core.TypeUnit -> Mantle.TypeVariantUnit
   Core.TypeVariable _ -> Mantle.TypeVariantVariable
   Core.TypeWrap _ -> Mantle.TypeVariantWrap
 
@@ -223,6 +226,7 @@ typeVariants = [
   Mantle.TypeVariantSet,
   Mantle.TypeVariantSum,
   Mantle.TypeVariantUnion,
+  Mantle.TypeVariantUnit,
   Mantle.TypeVariantVariable]
 
 fieldMap :: ([Core.Field] -> M.Map Core.Name Core.Term)

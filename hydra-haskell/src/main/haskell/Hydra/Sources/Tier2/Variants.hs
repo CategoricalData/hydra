@@ -278,6 +278,7 @@ termVariantDef = variantsDefinition "termVariant" $
     _Term_typeAbstraction>>: constant Mantle.termVariantTypeAbstraction,
     _Term_typeApplication>>: constant Mantle.termVariantTypeApplication,
     _Term_union>>: constant Mantle.termVariantUnion,
+    _Term_unit>>: constant Mantle.termVariantUnit,
     _Term_variable>>: constant Mantle.termVariantVariable,
     _Term_wrap>>: constant Mantle.termVariantWrap]
 
@@ -299,6 +300,7 @@ termVariantsDef = variantsDefinition "termVariants" $
     _TermVariant_typeAbstraction,
     _TermVariant_typeApplication,
     _TermVariant_union,
+    _TermVariant_unit,
     _TermVariant_variable,
     _TermVariant_wrap]
 
@@ -319,6 +321,7 @@ typeVariantDef = variantsDefinition "typeVariant" $
     _Type_set>>: constant Mantle.typeVariantSet,
     _Type_sum>>: constant Mantle.typeVariantSum,
     _Type_union>>: constant Mantle.typeVariantUnion,
+    _Type_unit>>: constant Mantle.typeVariantUnit,
     _Type_variable>>: constant Mantle.typeVariantVariable,
     _Type_wrap>>: constant Mantle.typeVariantWrap]
 
@@ -340,6 +343,7 @@ typeVariantsDef = variantsDefinition "typeVariants" $
     _TypeVariant_set,
     _TypeVariant_sum,
     _TypeVariant_union,
+    _TypeVariant_unit,
     _TypeVariant_variable]
 
 -- Additional definitions; consider moving out of hydra.variants  

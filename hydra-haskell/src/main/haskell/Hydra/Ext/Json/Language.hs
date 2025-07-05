@@ -22,12 +22,14 @@ jsonLanguage = Language (LanguageName "hydra.ext.json") $ LanguageConstraints {
     TermVariantMap,
     TermVariantOptional,
     TermVariantRecord],
+    -- Note: TermVariantUnit is excluded because JSON null is used for optionals
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantList,
     TypeVariantLiteral,
     TypeVariantMap,
     TypeVariantOptional,
     TypeVariantRecord],
+    -- Note: TypeVariantUnit is excluded because JSON null is used for optionals
   languageConstraintsTypes = \typ -> case stripType typ of
     TypeOptional (TypeOptional _) -> False
     _ -> True }

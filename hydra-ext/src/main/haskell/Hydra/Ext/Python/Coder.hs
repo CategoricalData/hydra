@@ -243,7 +243,7 @@ encodeModule mod = do
         else namespaces {namespacesMapping = M.insert coreNs (encodeNamespace coreNs) $ namespacesMapping namespaces}
       where
         coreNs = Namespace "hydra.core"
-        namespaces = namespacesForDefinitions True encodeNamespace (moduleNamespace mod) defs
+        namespaces = namespacesForDefinitions encodeNamespace (moduleNamespace mod) defs
     reorderDefs defs = fst p ++ snd p
       where
         p = L.partition isNameDef defs

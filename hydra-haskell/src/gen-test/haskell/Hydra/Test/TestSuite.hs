@@ -7,7 +7,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
-import Prelude hiding  (Enum, Ordering, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M

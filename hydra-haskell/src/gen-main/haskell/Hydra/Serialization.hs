@@ -3,7 +3,6 @@
 module Hydra.Serialization where
 
 import qualified Hydra.Ast as Ast
-import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists

@@ -73,6 +73,7 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
         TermVariantRecord,
         TermVariantSet,
         TermVariantUnion,
+        -- TODO: TermVariantUnit, mapping to Python's None
         TermVariantVariable,
         TermVariantWrap]
       typeVariants = [ -- TODO: verify whether all are supported
@@ -88,6 +89,7 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
         TypeVariantRecord,
         TypeVariantSet,
         TypeVariantUnion,
+        -- TODO: TypeVariantUnit, mapping to Python's NoneType
         TypeVariantVariable,
         TypeVariantWrap]
       typePredicate = constant true -- TODO: verify whether all are supported

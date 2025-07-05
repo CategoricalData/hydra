@@ -285,6 +285,7 @@ term t =
         ")",
         (showFields [
           f])])
+    Core.TermUnit -> "unit"
     Core.TermVariable v1 -> (Core.unName v1)
     Core.TermWrap v1 ->  
       let tname = (Core.unName (Core.wrappedTermTypeName v1)) 
@@ -314,6 +315,7 @@ termVariant x = case x of
   Mantle.TermVariantTypeAbstraction -> "typeAbstraction"
   Mantle.TermVariantTypeApplication -> "typeApplication"
   Mantle.TermVariantUnion -> "union"
+  Mantle.TermVariantUnit -> "unit"
   Mantle.TermVariantVariable -> "variable"
   Mantle.TermVariantWrap -> "wrap"
 
@@ -401,6 +403,7 @@ type_ typ =
       let typeStrs = (Lists.map type_ v1)
       in (Strings.intercalate "+" typeStrs)
     Core.TypeUnion v1 -> (Strings.cat2 "union" (showRowType v1))
+    Core.TypeUnit -> "unit"
     Core.TypeVariable v1 -> (Core.unName v1)
     Core.TypeWrap v1 ->  
       let tname = (Core.unName (Core.wrappedTypeTypeName v1)) 
@@ -472,5 +475,6 @@ typeVariant x = case x of
   Mantle.TypeVariantSet -> "set"
   Mantle.TypeVariantSum -> "sum"
   Mantle.TypeVariantUnion -> "union"
+  Mantle.TypeVariantUnit -> "unit"
   Mantle.TypeVariantVariable -> "variable"
   Mantle.TypeVariantWrap -> "wrap"

@@ -405,6 +405,9 @@ termTypeApplication = variant _Term _Term_typeApplication
 termUnion :: TTerm Injection -> TTerm Term
 termUnion = variant _Term _Term_union
 
+termUnit :: TTerm Term
+termUnit = unitVariant _Term _Term_unit
+
 termVariable :: TTerm Name -> TTerm Term
 termVariable = variant _Term _Term_variable
 
@@ -489,6 +492,9 @@ typeSum = variant _Type _Type_sum
 
 typeUnion :: TTerm RowType -> TTerm Type
 typeUnion = variant _Type _Type_union
+
+typeUnit :: TTerm Type
+typeUnit = unitVariant _Type _Type_unit
 
 typeVariable :: TTerm Name -> TTerm Type
 typeVariable = variant _Type _Type_variable

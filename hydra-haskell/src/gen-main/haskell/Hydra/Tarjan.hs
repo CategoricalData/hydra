@@ -4,7 +4,6 @@ module Hydra.Tarjan where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
-import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists

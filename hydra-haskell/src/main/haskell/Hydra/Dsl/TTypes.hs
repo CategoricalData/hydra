@@ -181,7 +181,7 @@ union name pairs = typeUnion $ rowType name $ Phantoms.list (toField <$> pairs)
 -- | Term-encoded unit type (empty record type)
 -- Example: unit
 unit :: TTerm Type
-unit = typeRecord $ rowType (Phantoms.wrap _Name $ Phantoms.string $ unName _Unit) $ Phantoms.list []
+unit = typeUnit
 
 -- * Products and sums
 

@@ -105,11 +105,13 @@ adaptTermsModule = Module (Namespace "hydra.adapt.terms") elements
      el passSetDef,
      el passSumDef,
      el passUnionDef,
+     el passUnitDef,
      el passWrappedDef,
      el simplifyApplicationDef,
      el termAdapterDef,
      el unionToRecordDef,
      el unionTypeToRecordTypeDef,
+     el unitToRecordDef,
      el wrapToUnwrappedDef,
      el withGraphContextDef]
 
@@ -409,14 +411,14 @@ passLiteralDef = adaptTermsDefinition "passLiteral" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_literal>>: lambda "lt" $
       withVar "ad" (ref AdaptLiterals.literalAdapterDef @@ var "lt") $ lets [
-        "step">: ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
-          withVar "l" (ref withGraphContextDef @@ (ref ExtractCore.literalDef @@ var "term")) $
-          Flows.map (unaryFunction $ Core.termLiteral) (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "l"))] $
-        Flows.pure $ Compute.adapter
-          (Compute.adapterIsLossy $ var "ad")
-          (Core.typeLiteral $ Compute.adapterSource $ var "ad")
-          (Core.typeLiteral $ Compute.adapterTarget $ var "ad")
-          (var "step")]
+      "step">: ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
+        withVar "l" (ref withGraphContextDef @@ (ref ExtractCore.literalDef @@ var "term")) $
+        Flows.map (unaryFunction $ Core.termLiteral) (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "l"))] $
+      Flows.pure $ Compute.adapter
+        (Compute.adapterIsLossy $ var "ad")
+        (Core.typeLiteral $ Compute.adapterSource $ var "ad")
+        (Core.typeLiteral $ Compute.adapterTarget $ var "ad")
+        (var "step")]
 
 passListDef :: TElement TypeAdapter
 passListDef = adaptTermsDefinition "passList" $
@@ -576,6 +578,14 @@ passUnionDef = adaptTermsDefinition "passUnion" $
             withVar "newField" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "dfield") $
             Flows.pure $ Core.termUnion $ Core.injection (var "tname") (var "newField")))]
 
+passUnitDef :: TElement TypeAdapter
+passUnitDef = adaptTermsDefinition "passUnit" $
+  doc "Pass through unit types" $
+  constant $ Flows.pure $ Compute.adapter false Core.typeUnit Core.typeUnit $
+    Compute.coder
+      (constant $ Flows.pure Core.termUnit)
+      (constant $ Flows.pure Core.termUnit)
+
 passWrappedDef :: TElement TypeAdapter
 passWrappedDef = adaptTermsDefinition "passWrapped" $
   doc "Pass through wrapped types" $
@@ -607,6 +617,17 @@ simplifyApplicationDef = adaptTermsDefinition "simplifyApplication" $
             (Compute.adapterTarget $ var "ad")
             (ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
               ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "term"))]
+
+unitToRecordDef :: TElement TypeAdapter
+unitToRecordDef = adaptTermsDefinition "unitToRecord" $
+    doc "Convert unit terms to records" $
+    constant $ Flows.pure $
+      Compute.adapter false Core.typeUnit (Core.typeRecord $ Core.rowType unitName $ list []) $
+        Compute.coder
+          (constant $ Flows.pure $ Core.termRecord $ Core.record unitName $ list [])
+          (constant $ Flows.pure Core.termUnit)
+  where
+    unitName = Core.name $ string "_Unit"
 
 unionToRecordDef :: TElement TypeAdapter
 unionToRecordDef = adaptTermsDefinition "unionToRecord" $
@@ -720,6 +741,7 @@ termAdapterDef = adaptTermsDefinition "termAdapter" $
       _TypeVariant_set>>: constant $ list [ref passSetDef],
       _TypeVariant_sum>>: constant $ list [ref passSumDef],
       _TypeVariant_union>>: constant $ list [ref passUnionDef],
+      _TypeVariant_unit>>: constant $ list [ref passUnitDef],
       _TypeVariant_wrap>>: constant $ list [ref passWrappedDef]],
     "trySubstitution">: lambda "t" $ cases _TypeVariant (ref Variants.typeVariantDef @@ var "t") Nothing [
       _TypeVariant_application>>: constant $ list [ref simplifyApplicationDef],
@@ -728,6 +750,7 @@ termAdapterDef = adaptTermsDefinition "termAdapter" $
       _TypeVariant_optional>>: constant $ list [ref optionalToListDef],
       _TypeVariant_set>>: constant $ list [ref listToSetDef],
       _TypeVariant_union>>: constant $ list [ref unionToRecordDef],
+      _TypeVariant_unit>>: constant $ list [ref unitToRecordDef],
       _TypeVariant_wrap>>: constant $ list [ref wrapToUnwrappedDef]],
     "alts">: lambdas ["cx", "t"] $
        Flows.mapList (lambda "c" $ var "c" @@ var "t") $

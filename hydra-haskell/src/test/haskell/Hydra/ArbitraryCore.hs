@@ -1,5 +1,5 @@
 
-{-# LANGUAGE FlexibleInstances #-} -- TODO: temporary, for QC.Arbitrary (Term) and QC.Arbitrary (Type)
+{-# LANGUAGE FlexibleInstances #-} -- TODO: temporary, for QC.Arbitrary Term and QC.Arbitrary Type
 module Hydra.ArbitraryCore where
 
 import Hydra.Kernel
@@ -72,7 +72,7 @@ instance QC.Arbitrary IntegerValue
       IntegerValueUint32 <$> QC.arbitrary,
       IntegerValueUint64 <$> QC.arbitrary]
 
-instance QC.Arbitrary (Term) where
+instance QC.Arbitrary Term where
   arbitrary = (\(TypedTerm term _) -> term) <$> QC.sized arbitraryTypedTerm
 
 instance QC.Arbitrary Name
@@ -80,7 +80,7 @@ instance QC.Arbitrary Name
     arbitrary = Name <$> QC.arbitrary
     shrink (Name name)= Name <$> QC.shrink name
 
-instance QC.Arbitrary (Type) where
+instance QC.Arbitrary Type where
   arbitrary = QC.sized arbitraryType
   shrink typ = case typ of
     TypeLiteral at -> Types.literal <$> case at of
@@ -89,7 +89,7 @@ instance QC.Arbitrary (Type) where
       _ -> []
     _ -> [] -- TODO
 
-instance QC.Arbitrary (TypedTerm) where
+instance QC.Arbitrary TypedTerm where
   arbitrary = QC.sized arbitraryTypedTerm
   shrink (TypedTerm term typ) = L.concat ((\(t, m) -> TypedTerm <$> m term <*> pure t) <$> shrinkers typ)
 
@@ -101,7 +101,7 @@ arbitraryLiteral at = case at of
   LiteralTypeInteger it -> LiteralInteger <$> arbitraryIntegerValue it
   LiteralTypeString -> LiteralString <$> QC.arbitrary
 
-arbitraryField :: FieldType -> Int -> QC.Gen (Field)
+arbitraryField :: FieldType -> Int -> QC.Gen Field
 arbitraryField (FieldType fn ft) n = Field fn <$> arbitraryTerm ft n
 
 arbitraryFieldType :: Int -> QC.Gen (FieldType)
@@ -114,7 +114,7 @@ arbitraryFloatValue ft = case ft of
   FloatTypeFloat64 -> FloatValueFloat64 <$> QC.arbitrary
 
 -- Note: primitive functions and data terms are not currently generated, as they require a context.
-arbitraryFunction :: FunctionType -> Int -> QC.Gen (Function)
+arbitraryFunction :: FunctionType -> Int -> QC.Gen Function
 arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ domainSpecific
   where
     n' = decr n
@@ -168,7 +168,7 @@ arbitraryPair c g n = c <$> g n' <*> g n'
   where n' = div n 2
 
 -- Note: variables and function applications are not (currently) generated
-arbitraryTerm :: Type -> Int -> QC.Gen (Term)
+arbitraryTerm :: Type -> Int -> QC.Gen Term
 arbitraryTerm typ n = case typ of
     TypeLiteral at -> literal <$> arbitraryLiteral at
     TypeFunction ft -> TermFunction <$> arbitraryFunction ft n'
@@ -189,6 +189,7 @@ arbitraryTerm typ n = case typ of
       let fn = fieldTypeName f
       ft <- arbitraryTerm (fieldTypeType f) n'
       return $ Field fn ft
+    TypeUnit -> pure TermUnit
   where
     n' = decr n
     arbitraryFields sfields = if L.null sfields
@@ -198,7 +199,7 @@ arbitraryTerm typ n = case typ of
         n2 = div n' $ L.length sfields
 
 -- Note: nominal types and element types are not currently generated, as instantiating them requires a context
-arbitraryType :: Int -> QC.Gen (Type)
+arbitraryType :: Int -> QC.Gen Type
 arbitraryType n = if n == 0 then pure Types.unit else QC.oneof [
     TypeLiteral <$> QC.arbitrary,
     TypeFunction <$> arbitraryPair FunctionType arbitraryType n',
@@ -210,7 +211,7 @@ arbitraryType n = if n == 0 then pure Types.unit else QC.oneof [
 --    TypeUnion <$> arbitraryList True arbitraryFieldType n'] -- TODO: avoid duplicate field names
   where n' = decr n
 
-arbitraryTypedTerm :: Int -> QC.Gen (TypedTerm)
+arbitraryTypedTerm :: Int -> QC.Gen TypedTerm
 arbitraryTypedTerm n = do
     typ <- arbitraryType n'
     term <- arbitraryTerm typ n'
