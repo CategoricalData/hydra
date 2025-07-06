@@ -131,10 +131,6 @@ termToAccessorGraphDef = accessorsDefinition "termToAccessorGraph" $
   doc "Build an accessor graph from a term" $
   lambda "namespaces" $ lambda "term" $ lets [
     "dontCareAccessor">: Mantle.termAccessorAnnotatedSubject,
-    "toUniqueLabel">: lambda "visited" $ lambda "l" $
-      Logic.ifElse (Sets.member (var "l") (var "visited"))
-        (var "toUniqueLabel" @@ var "visited" @@ Strings.cat2 (var "l") (string "'"))
-        (var "l"),
     "helper">: lambdas ["ids", "mroot", "path", "state", "accessorTerm"] $ lets [
       "accessor">: first $ var "accessorTerm",
       "currentTerm">: second $ var "accessorTerm",
@@ -159,7 +155,7 @@ termToAccessorGraphDef = accessorsDefinition "termToAccessorGraph" $
             "currentNodes">: first $ var "currentNodesVisited",
             "currentVisited">: second $ var "currentNodesVisited",
             "rawLabel">: ref Names.compactNameDef @@ var "namespaces" @@ var "name",
-            "uniqueLabel">: var "toUniqueLabel" @@ var "currentVisited" @@ var "rawLabel",
+            "uniqueLabel">: ref Names.uniqueLabelDef @@ var "currentVisited" @@ var "rawLabel",
             "node">: Accessors.accessorNode (var "name") (var "rawLabel") (var "uniqueLabel"),
             "newVisited">: Sets.insert (var "uniqueLabel") (var "currentVisited"),
             "newNodes">: Lists.cons (var "node") (var "currentNodes"),
