@@ -72,7 +72,7 @@ hydraLibChars = standardLibrary _hydra_lib_strings [
 _hydra_lib_equality :: Namespace
 _hydra_lib_equality = Namespace "hydra.lib.equality"
 
-_equality_compareInt32  = qname _hydra_lib_equality "compareInt32" :: Name
+_equality_compare  = qname _hydra_lib_equality "compare" :: Name
 _equality_equal         = qname _hydra_lib_equality "equal" :: Name
 _equality_gtFloat32     = qname _hydra_lib_equality "gtFloat32" :: Name
 _equality_gtFloat64     = qname _hydra_lib_equality "gtFloat64" :: Name
@@ -90,7 +90,7 @@ _equality_lteInt32      = qname _hydra_lib_equality "lteInt32" :: Name
 
 hydraLibEquality :: Library
 hydraLibEquality = standardLibrary _hydra_lib_equality [
-    prim2 _equality_compareInt32  Equality.compareInt32  []    int32 int32 comparison,
+    prim2 _equality_compare  Equality.compare  []    int32 int32 comparison,
     prim2 _equality_equal         Equality.equal         []    x x boolean,
     prim1 _equality_identity      Equality.identity      ["x"] x x,
     prim2 _equality_gtFloat32     Equality.gtFloat32     []    float32 float32 boolean,

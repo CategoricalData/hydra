@@ -8,8 +8,8 @@ import Hydra.Graph
 import Data.Int
 
 
-compareInt32 :: Int -> Int -> Comparison
-compareInt32 x y
+compare :: Ord a => a -> a -> Comparison
+compare x y
   | x < y     = ComparisonLessThan
   | x > y     = ComparisonGreaterThan
   | otherwise = ComparisonEqualTo
