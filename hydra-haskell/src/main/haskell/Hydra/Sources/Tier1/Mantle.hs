@@ -25,6 +25,7 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
 
     elements = [
 
+      -- TODO: find another home for CaseConvention; it doesn't really belong in hydra.mantle
       def "CaseConvention" $
         Types.enum ["camel", "pascal", "lowerSnake", "upperSnake"],
 
@@ -92,6 +93,12 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
           "unit",
           "variable",
           "wrap"],
+
+      def "TypeClass" $
+        doc "Any of a small number of built-in type classes" $
+        enum [
+          "equality",
+          "ordering"],
 
       def "TypeVariant" $
         doc "The identifier of a type constructor" $
