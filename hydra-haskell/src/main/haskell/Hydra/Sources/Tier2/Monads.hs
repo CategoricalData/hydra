@@ -48,8 +48,10 @@ import qualified Data.Maybe                as Y
 import Hydra.Mantle
 
 -- Uncomment tier-2 sources as needed
---import qualified Hydra.Sources.Tier2.Adapt.Utils as AdaptUtils
+--import qualified Hydra.Sources.Tier2.Adapt.Literals as AdaptLiterals
 --import qualified Hydra.Sources.Tier2.Adapt.Modules as AdaptModules
+--import qualified Hydra.Sources.Tier2.Adapt.Terms as AdaptTerms
+--import qualified Hydra.Sources.Tier2.Adapt.Utils as AdaptUtils
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
@@ -62,8 +64,6 @@ import Hydra.Mantle
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Languages as Languages
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
---import qualified Hydra.Sources.Tier2.Adapt.Literals as AdaptLiterals
---import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
 --import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.Names as Names
 --import qualified Hydra.Sources.Tier2.Reduction as Reduction
@@ -76,7 +76,6 @@ import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
 --import qualified Hydra.Sources.Tier2.Templates as Templates
---import qualified Hydra.Sources.Tier2.Adapt.Terms as AdaptTerms
 --import qualified Hydra.Sources.Tier2.Unification as Unification
 import qualified Hydra.Sources.Tier2.Variants as Variants
 
