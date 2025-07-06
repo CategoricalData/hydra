@@ -73,11 +73,55 @@ fieldsOf t =
     Core.TypeUnion v1 -> (Core.rowTypeFields v1)
     _ -> []) stripped)
 
+getField :: (M.Map Core.Name t2 -> Core.Name -> (t2 -> Compute.Flow t0 t1) -> Compute.Flow t0 t1)
+getField m fname decode = (Optionals.maybe (Flows.fail (Strings.cat [
+  Strings.cat [
+    "expected field ",
+    (Core.unName fname)],
+  " not found"])) decode (Maps.lookup fname m))
+
 lookupElement :: (Graph.Graph -> Core.Name -> Maybe Graph.Element)
 lookupElement g name = (Maps.lookup name (Graph.graphElements g))
 
 lookupPrimitive :: (Graph.Graph -> Core.Name -> Maybe Graph.Primitive)
 lookupPrimitive g name = (Maps.lookup name (Graph.graphPrimitives g))
+
+matchEnum :: (Core.Name -> [(Core.Name, t0)] -> Core.Term -> Compute.Flow Graph.Graph t0)
+matchEnum tname pairs = (matchUnion tname (Lists.map (\pair -> matchUnitField (fst pair) (snd pair)) pairs))
+
+matchRecord :: ((M.Map Core.Name Core.Term -> Compute.Flow t0 t1) -> Core.Term -> Compute.Flow t0 t1)
+matchRecord decode term =  
+  let stripped = (Strip.fullyStripTerm term)
+  in ((\x -> case x of
+    Core.TermRecord v1 -> (decode (Maps.fromList (Lists.map (\field -> (Core.fieldName field, (Core.fieldTerm field))) (Core.recordFields v1))))
+    _ -> (Monads.unexpected "record" (Core_.term term))) stripped)
+
+matchUnion :: (Core.Name -> [(Core.Name, (Core.Term -> Compute.Flow Graph.Graph t0))] -> Core.Term -> Compute.Flow Graph.Graph t0)
+matchUnion tname pairs term =  
+  let stripped = (Strip.fullyStripTerm term) 
+      mapping = (Maps.fromList pairs)
+  in ((\x -> case x of
+    Core.TermVariable v1 -> (Flows.bind (requireElement v1) (\el -> matchUnion tname pairs (Graph.elementTerm el)))
+    Core.TermUnion v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v1)) (Core.unName tname)) ( 
+      let fname = (Core.fieldName (Core.injectionField v1)) 
+          val = (Core.fieldTerm (Core.injectionField v1))
+      in (Optionals.maybe (Flows.fail (Strings.cat [
+        Strings.cat [
+          Strings.cat [
+            "no matching case for field ",
+            (Core.unName fname)],
+          " in union type "],
+        (Core.unName tname)])) (\f -> f val) (Maps.lookup fname mapping))) (Monads.unexpected (Strings.cat [
+      "injection for type ",
+      (Core.unName tname)]) (Core_.term term)))
+    _ -> (Monads.unexpected (Strings.cat [
+      Strings.cat [
+        "union with one of {",
+        (Strings.intercalate ", " (Lists.map (\pair -> Core.unName (fst pair)) pairs))],
+      "}"]) (Core_.term stripped))) stripped)
+
+matchUnitField :: (t0 -> t1 -> (t0, (t2 -> Compute.Flow t3 t1)))
+matchUnitField fname x = (fname, (\ignored -> Flows.pure x))
 
 requireElement :: (Core.Name -> Compute.Flow Graph.Graph Graph.Element)
 requireElement name =  
@@ -131,47 +175,3 @@ typeOfPrimitive name = (Flows.map Graph.primitiveType (requirePrimitive name))
 
 withSchemaContext :: (Compute.Flow Graph.Graph t0 -> Compute.Flow Graph.Graph t0)
 withSchemaContext f = (Flows.bind Monads.getState (\g -> Monads.withState (schemaContext g) f))
-
-getField :: (M.Map Core.Name t2 -> Core.Name -> (t2 -> Compute.Flow t0 t1) -> Compute.Flow t0 t1)
-getField m fname decode = (Optionals.maybe (Flows.fail (Strings.cat [
-  Strings.cat [
-    "expected field ",
-    (Core.unName fname)],
-  " not found"])) decode (Maps.lookup fname m))
-
-matchEnum :: (Core.Name -> [(Core.Name, t0)] -> Core.Term -> Compute.Flow Graph.Graph t0)
-matchEnum tname pairs = (matchUnion tname (Lists.map (\pair -> matchUnitField (fst pair) (snd pair)) pairs))
-
-matchRecord :: ((M.Map Core.Name Core.Term -> Compute.Flow t0 t1) -> Core.Term -> Compute.Flow t0 t1)
-matchRecord decode term =  
-  let stripped = (Strip.fullyStripTerm term)
-  in ((\x -> case x of
-    Core.TermRecord v1 -> (decode (Maps.fromList (Lists.map (\field -> (Core.fieldName field, (Core.fieldTerm field))) (Core.recordFields v1))))
-    _ -> (Monads.unexpected "record" (Core_.term term))) stripped)
-
-matchUnion :: (Core.Name -> [(Core.Name, (Core.Term -> Compute.Flow Graph.Graph t0))] -> Core.Term -> Compute.Flow Graph.Graph t0)
-matchUnion tname pairs term =  
-  let stripped = (Strip.fullyStripTerm term) 
-      mapping = (Maps.fromList pairs)
-  in ((\x -> case x of
-    Core.TermVariable v1 -> (Flows.bind (requireElement v1) (\el -> matchUnion tname pairs (Graph.elementTerm el)))
-    Core.TermUnion v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v1)) (Core.unName tname)) ( 
-      let fname = (Core.fieldName (Core.injectionField v1)) 
-          val = (Core.fieldTerm (Core.injectionField v1))
-      in (Optionals.maybe (Flows.fail (Strings.cat [
-        Strings.cat [
-          Strings.cat [
-            "no matching case for field ",
-            (Core.unName fname)],
-          " in union type "],
-        (Core.unName tname)])) (\f -> f val) (Maps.lookup fname mapping))) (Monads.unexpected (Strings.cat [
-      "injection for type ",
-      (Core.unName tname)]) (Core_.term term)))
-    _ -> (Monads.unexpected (Strings.cat [
-      Strings.cat [
-        "union with one of {",
-        (Strings.intercalate ", " (Lists.map (\pair -> Core.unName (fst pair)) pairs))],
-      "}"]) (Core_.term stripped))) stripped)
-
-matchUnitField :: (t0 -> t1 -> (t0, (t2 -> Compute.Flow t3 t1)))
-matchUnitField fname x = (fname, (\ignored -> Flows.pure x))
