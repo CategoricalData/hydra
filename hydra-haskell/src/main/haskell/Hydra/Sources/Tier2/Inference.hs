@@ -70,6 +70,9 @@ import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
 --import qualified Hydra.Sources.Tier2.Show.Accessors as ShowAccessors
 import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
+--import qualified Hydra.Sources.Tier2.Show.Graph as ShowGraph
+import qualified Hydra.Sources.Tier2.Show.Mantle as ShowMantle
+import qualified Hydra.Sources.Tier2.Show.Typing as ShowTyping
 import qualified Hydra.Sources.Tier2.Sorting as Sorting
 import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
@@ -80,7 +83,8 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 
 hydraInferenceModule :: Module
 hydraInferenceModule = Module (Namespace "hydra.inference") elements
-    [Annotations.hydraAnnotationsModule, Schemas.hydraSchemasModule, Unification.hydraUnificationModule]
+    [Annotations.hydraAnnotationsModule, Schemas.hydraSchemasModule, Unification.hydraUnificationModule,
+      ShowCore.showCoreModule, ShowMantle.showMantleModule, ShowTyping.showTypingModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule, Tier1.hydraTypingModule] $
     Just "Type inference following Algorithm W, extended for nominal terms and types"
   where
@@ -202,7 +206,7 @@ typeOfDef = inferenceDefinition "typeOf" $
       (cases _Term (var "term")
         (Just $ Flows.fail $ Strings.cat $ list [
           string "unsupported term variant in typeOf: ",
-          ref ShowCore.termVariantDef @@ (ref Variants.termVariantDef @@ var "term")]) [
+          ref ShowMantle.termVariantDef @@ (ref Variants.termVariantDef @@ var "term")]) [
         _Term_annotated>>: lambda "at" $ lets [
           "term1">: Core.annotatedTermSubject $ var "at"] $
           ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ var "term1",
@@ -556,7 +560,7 @@ showInferenceResultDef = inferenceDefinition "showInferenceResult" $
       string ", type=",
       ref ShowCore.typeDef @@ var "typ",
       string ", subst=",
-      ref ShowCore.typeSubstDef @@ var "subst",
+      ref ShowTyping.typeSubstDef @@ var "subst",
       string "}"]
 
 emptyInferenceContextDef :: TElement InferenceContext
@@ -1428,7 +1432,7 @@ yieldDebugDef = inferenceDefinition "yieldDebug" $
       (Strings.cat $ list [
         string "\n\tterm: ",  ref ShowCore.termDef @@ var "term",
         string "\n\ttyp: ",   ref ShowCore.typeDef @@ var "typ",
-        string "\n\tsubst: ", ref ShowCore.typeSubstDef @@ var "subst",
+        string "\n\tsubst: ", ref ShowTyping.typeSubstDef @@ var "subst",
         string "\n\trterm: ", ref ShowCore.termDef @@ var "rterm",
         string "\n\trtyp: ",  ref ShowCore.typeDef @@ var "rtyp"])) $
     Flows.pure $ Typing.inferenceResult (var "rterm") (var "rtyp") (var "subst")

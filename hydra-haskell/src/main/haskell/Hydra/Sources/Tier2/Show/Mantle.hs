@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier2.Sorting where
+module Hydra.Sources.Tier2.Show.Mantle where
 
 -- Standard Tier-2 imports
 import Hydra.Kernel
@@ -33,8 +33,8 @@ import qualified Hydra.Dsl.Types                  as Types
 import qualified Hydra.Dsl.Typing                 as Typing
 import qualified Hydra.Sources.Tier1.All          as Tier1
 import qualified Hydra.Sources.Tier1.Constants    as Constants
-import qualified Hydra.Sources.Tier1.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Tier1.Decode       as Decode
+import qualified Hydra.Sources.Tier1.Encode.Core  as EncodeCore
 import qualified Hydra.Sources.Tier1.Formatting   as Formatting
 import qualified Hydra.Sources.Tier1.Literals     as Literals
 import qualified Hydra.Sources.Tier1.Strip        as Strip
@@ -75,59 +75,65 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Show.Typing as ShowTyping
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
-import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
+--import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
 --import qualified Hydra.Sources.Tier2.Templates as Templates
 --import qualified Hydra.Sources.Tier2.Unification as Unification
 --import qualified Hydra.Sources.Tier2.Variants as Variants
 
-import qualified Hydra.Topology as Topo
 
-
-sortingDefinition :: String -> TTerm a -> TElement a
-sortingDefinition = definitionInModule hydraSortingModule
-
-hydraSortingModule :: Module
-hydraSortingModule = Module (Namespace "hydra.sorting") elements
-    [Tarjan.tarjanModule]
-    [Tier1.hydraComputeModule, Tier1.hydraMantleModule, Tier1.hydraTopologyModule] $
-    Just ("Utilities for sorting.")
+showMantleModule :: Module
+showMantleModule = Module (Namespace "hydra.show.mantle") elements
+    [Tier1.hydraStripModule]
+    [Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraTypingModule] $
+    Just "String representations of hydra.mantle types"
   where
    elements = [
-     el createOrderingIsomorphismDef,
-     el topologicalSortDef,
-     el topologicalSortComponentsDef]
+     el termVariantDef,
+     el typeVariantDef]
 
-createOrderingIsomorphismDef :: TElement ([a] -> [a] -> Topo.OrderingIsomorphism b)
-createOrderingIsomorphismDef = sortingDefinition "createOrderingIsomorphism" $
-  withOrd "t0" $
-  lambdas ["sourceOrd", "targetOrd"] $ lets [
-    "sourceToTargetMapping">: lambda "els" $ lets [
-      "mp">: Maps.fromList $ Lists.zip (var "sourceOrd") (var "els")]
-      $ Optionals.cat $ Lists.map (lambda "n" $ Maps.lookup (var "n") (var "mp")) (var "targetOrd"),
-    "targetToSourceMapping">: lambda "els" $ lets [
-      "mp">: Maps.fromList $ Lists.zip (var "targetOrd") (var "els")]
-      $ Optionals.cat $ Lists.map (lambda "n" $ Maps.lookup (var "n") (var "mp")) (var "sourceOrd")]
-    $ Topology.orderingIsomorphism (var "sourceToTargetMapping") (var "targetToSourceMapping")
+showMantleDefinition :: String -> TTerm a -> TElement a
+showMantleDefinition = definitionInModule showMantleModule
 
-topologicalSortDef :: TElement ([(a, [a])] -> Either [[a]] [a])
-topologicalSortDef = sortingDefinition "topologicalSort" $
-  doc "Sort a directed acyclic graph (DAG) based on an adjacency list. Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list." $
-  withOrd "t0" $
-  lambda "pairs" $ lets [
-    "sccs">: ref topologicalSortComponentsDef @@ var "pairs",
-    "isCycle">: lambda "scc" $ Logic.not $ Lists.null $ Lists.tail $ var "scc",
-    "withCycles">: Lists.filter (var "isCycle") (var "sccs")]
-    $ Logic.ifElse (Lists.null $ var "withCycles")
-      (Mantle.eitherRight $ Lists.concat $ var "sccs")
-      (Mantle.eitherLeft $ var "withCycles")
+termVariantDef :: TElement (TermVariant -> String)
+termVariantDef = showMantleDefinition "termVariant" $
+  doc "Show a term variant as a string" $
+  match _TermVariant Nothing [
+    _TermVariant_annotated>>: constant $ string "annotated",
+    _TermVariant_application>>: constant $ string "application",
+    _TermVariant_function>>: constant $ string "function",
+    _TermVariant_let>>: constant $ string "let",
+    _TermVariant_list>>: constant $ string "list",
+    _TermVariant_literal>>: constant $ string "literal",
+    _TermVariant_map>>: constant $ string "map",
+    _TermVariant_optional>>: constant $ string "optional",
+    _TermVariant_product>>: constant $ string "product",
+    _TermVariant_record>>: constant $ string "record",
+    _TermVariant_set>>: constant $ string "set",
+    _TermVariant_sum>>: constant $ string "sum",
+    _TermVariant_typeAbstraction>>: constant $ string "typeAbstraction",
+    _TermVariant_typeApplication>>: constant $ string "typeApplication",
+    _TermVariant_union>>: constant $ string "union",
+    _TermVariant_unit>>: constant $ string "unit",
+    _TermVariant_variable>>: constant $ string "variable",
+    _TermVariant_wrap>>: constant $ string "wrap"]
 
-topologicalSortComponentsDef :: TElement ([(a, [a])] -> [[a]])
-topologicalSortComponentsDef = sortingDefinition "topologicalSortComponents" $
-  doc "Find the strongly connected components (including cycles and isolated vertices) of a graph, in (reverse) topological order, i.e. dependencies before dependents" $
-  withOrd "t0" $
-  lambda "pairs" $ lets [
-    "graphResult">: ref Tarjan.adjacencyListsToGraphDef @@ var "pairs",
-    "g">: first $ var "graphResult",
-    "getKey">: second $ var "graphResult"]
-    $ Lists.map (lambda "component" $ Lists.map (var "getKey") (var "component")) $
-      ref Tarjan.stronglyConnectedComponentsDef @@ var "g"
+typeVariantDef :: TElement (TypeVariant -> String)
+typeVariantDef = showMantleDefinition "typeVariant" $
+  doc "Show a type variant as a string" $
+  match _TypeVariant Nothing [
+    _TypeVariant_annotated>>: constant $ string "annotated",
+    _TypeVariant_application>>: constant $ string "application",
+    _TypeVariant_forall>>: constant $ string "forall",
+    _TypeVariant_function>>: constant $ string "function",
+    _TypeVariant_list>>: constant $ string "list",
+    _TypeVariant_literal>>: constant $ string "literal",
+    _TypeVariant_map>>: constant $ string "map",
+    _TypeVariant_optional>>: constant $ string "optional",
+    _TypeVariant_product>>: constant $ string "product",
+    _TypeVariant_record>>: constant $ string "record",
+    _TypeVariant_set>>: constant $ string "set",
+    _TypeVariant_sum>>: constant $ string "sum",
+    _TypeVariant_union>>: constant $ string "union",
+    _TypeVariant_unit>>: constant $ string "unit",
+    _TypeVariant_variable>>: constant $ string "variable",
+    _TypeVariant_wrap>>: constant $ string "wrap"]

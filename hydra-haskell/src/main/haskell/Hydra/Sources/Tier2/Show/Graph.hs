@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier2.Sorting where
+module Hydra.Sources.Tier2.Show.Graph where
 
 -- Standard Tier-2 imports
 import Hydra.Kernel
@@ -33,8 +33,8 @@ import qualified Hydra.Dsl.Types                  as Types
 import qualified Hydra.Dsl.Typing                 as Typing
 import qualified Hydra.Sources.Tier1.All          as Tier1
 import qualified Hydra.Sources.Tier1.Constants    as Constants
-import qualified Hydra.Sources.Tier1.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Tier1.Decode       as Decode
+import qualified Hydra.Sources.Tier1.Encode.Core  as EncodeCore
 import qualified Hydra.Sources.Tier1.Formatting   as Formatting
 import qualified Hydra.Sources.Tier1.Literals     as Literals
 import qualified Hydra.Sources.Tier1.Strip        as Strip
@@ -69,65 +69,54 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
 --import qualified Hydra.Sources.Tier2.Show.Accessors as ShowAccessors
---import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
+import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Show.Graph as ShowGraph
 --import qualified Hydra.Sources.Tier2.Show.Mantle as ShowMantle
 --import qualified Hydra.Sources.Tier2.Show.Typing as ShowTyping
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
-import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
+--import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
 --import qualified Hydra.Sources.Tier2.Templates as Templates
 --import qualified Hydra.Sources.Tier2.Unification as Unification
 --import qualified Hydra.Sources.Tier2.Variants as Variants
 
-import qualified Hydra.Topology as Topo
 
-
-sortingDefinition :: String -> TTerm a -> TElement a
-sortingDefinition = definitionInModule hydraSortingModule
-
-hydraSortingModule :: Module
-hydraSortingModule = Module (Namespace "hydra.sorting") elements
-    [Tarjan.tarjanModule]
-    [Tier1.hydraComputeModule, Tier1.hydraMantleModule, Tier1.hydraTopologyModule] $
-    Just ("Utilities for sorting.")
+showGraphModule :: Module
+showGraphModule = Module (Namespace "hydra.show.graph") elements
+    [Tier1.hydraStripModule, ShowCore.showCoreModule]
+    [Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraTypingModule] $
+    Just "String representations of hydra.graph types"
   where
    elements = [
-     el createOrderingIsomorphismDef,
-     el topologicalSortDef,
-     el topologicalSortComponentsDef]
+     el elementDef,
+     el graphDef]
 
-createOrderingIsomorphismDef :: TElement ([a] -> [a] -> Topo.OrderingIsomorphism b)
-createOrderingIsomorphismDef = sortingDefinition "createOrderingIsomorphism" $
-  withOrd "t0" $
-  lambdas ["sourceOrd", "targetOrd"] $ lets [
-    "sourceToTargetMapping">: lambda "els" $ lets [
-      "mp">: Maps.fromList $ Lists.zip (var "sourceOrd") (var "els")]
-      $ Optionals.cat $ Lists.map (lambda "n" $ Maps.lookup (var "n") (var "mp")) (var "targetOrd"),
-    "targetToSourceMapping">: lambda "els" $ lets [
-      "mp">: Maps.fromList $ Lists.zip (var "targetOrd") (var "els")]
-      $ Optionals.cat $ Lists.map (lambda "n" $ Maps.lookup (var "n") (var "mp")) (var "sourceOrd")]
-    $ Topology.orderingIsomorphism (var "sourceToTargetMapping") (var "targetToSourceMapping")
+showGraphDefinition :: String -> TTerm a -> TElement a
+showGraphDefinition = definitionInModule showGraphModule
 
-topologicalSortDef :: TElement ([(a, [a])] -> Either [[a]] [a])
-topologicalSortDef = sortingDefinition "topologicalSort" $
-  doc "Sort a directed acyclic graph (DAG) based on an adjacency list. Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list." $
-  withOrd "t0" $
-  lambda "pairs" $ lets [
-    "sccs">: ref topologicalSortComponentsDef @@ var "pairs",
-    "isCycle">: lambda "scc" $ Logic.not $ Lists.null $ Lists.tail $ var "scc",
-    "withCycles">: Lists.filter (var "isCycle") (var "sccs")]
-    $ Logic.ifElse (Lists.null $ var "withCycles")
-      (Mantle.eitherRight $ Lists.concat $ var "sccs")
-      (Mantle.eitherLeft $ var "withCycles")
+elementDef :: TElement (Element -> String)
+elementDef = showGraphDefinition "element" $
+  doc "Show an element as a string" $
+  lambda "el" $ lets [
+    "name">: unwrap _Name @@ (Graph.elementName $ var "el"),
+    "t">: Graph.elementTerm $ var "el",
+    "typeStr">: Optionals.maybe
+      (string "")
+      (lambda "ts" $ Strings.cat2 (string " : ") (ref ShowCore.typeSchemeDef @@ var "ts"))
+      (Graph.elementType $ var "el")] $
+    Strings.cat $ list [
+      var "name",
+      string " = ",
+      ref ShowCore.termDef @@ var "t",
+      var "typeStr"]
 
-topologicalSortComponentsDef :: TElement ([(a, [a])] -> [[a]])
-topologicalSortComponentsDef = sortingDefinition "topologicalSortComponents" $
-  doc "Find the strongly connected components (including cycles and isolated vertices) of a graph, in (reverse) topological order, i.e. dependencies before dependents" $
-  withOrd "t0" $
-  lambda "pairs" $ lets [
-    "graphResult">: ref Tarjan.adjacencyListsToGraphDef @@ var "pairs",
-    "g">: first $ var "graphResult",
-    "getKey">: second $ var "graphResult"]
-    $ Lists.map (lambda "component" $ Lists.map (var "getKey") (var "component")) $
-      ref Tarjan.stronglyConnectedComponentsDef @@ var "g"
+graphDef :: TElement (Graph -> String)
+graphDef = showGraphDefinition "graph" $
+  doc "Show a graph as a string" $
+  lambda "graph" $ lets [
+    "elements">: Maps.elems $ Graph.graphElements $ var "graph",
+    "elementStrs">: Lists.map (ref elementDef) (var "elements")] $
+    Strings.cat $ list [
+      string "{",
+      Strings.intercalate (string ", ") (var "elementStrs"),
+      string "}"]
