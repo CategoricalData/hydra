@@ -85,15 +85,3 @@ _TermCoder = (Core.Name "hydra.graph.TermCoder")
 _TermCoder_type = (Core.Name "type")
 
 _TermCoder_coder = (Core.Name "coder")
-
--- | Any of a small number of built-in type classes
-data TypeClass = 
-  TypeClassEquality  |
-  TypeClassOrdering 
-  deriving (Eq, Ord, Read, Show)
-
-_TypeClass = (Core.Name "hydra.graph.TypeClass")
-
-_TypeClass_equality = (Core.Name "equality")
-
-_TypeClass_ordering = (Core.Name "ordering")
