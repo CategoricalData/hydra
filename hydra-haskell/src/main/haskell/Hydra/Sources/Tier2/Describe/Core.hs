@@ -51,12 +51,14 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
---import qualified Hydra.Sources.Tier2.Languages as Languages
+--import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
+import qualified Hydra.Sources.Tier2.Describe.Mantle as DescribeMantle
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 --import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.Grammars as Grammars
 --import qualified Hydra.Sources.Tier2.Inference as Inference
+--import qualified Hydra.Sources.Tier2.Languages as Languages
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
 --import qualified Hydra.Sources.Tier2.Adapt.Literals as AdaptLiterals
 --import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
@@ -78,34 +80,33 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 
 describeCoreModule :: Module
 describeCoreModule = Module (Namespace "hydra.describe.core") elements
-    [Variants.hydraVariantsModule]
+    [DescribeMantle.describeMantleModule, Variants.hydraVariantsModule]
     [Tier1.hydraCoreModule, Tier1.hydraMantleModule] $
-    Just "Utilities for use in transformations"
+    Just "Natural-language descriptions for hydra.core types"
   where
    elements = [
      el floatTypeDef,
      el integerTypeDef,
      el literalTypeDef,
-     el precisionDef, -- TODO: move out of hydra.describe.core
      el typeDef]
 
-printingDefinition :: String -> TTerm a -> TElement a
-printingDefinition = definitionInModule describeCoreModule
+describeCoreDefinition :: String -> TTerm a -> TElement a
+describeCoreDefinition = definitionInModule describeCoreModule
 
 
 floatTypeDef :: TElement (FloatType -> String)
-floatTypeDef = printingDefinition "floatType" $
+floatTypeDef = describeCoreDefinition "floatType" $
   doc "Display a floating-point type as a string" $
-  lambda "t" $ (ref precisionDef <.> ref Variants.floatTypePrecisionDef @@ var "t") ++ string " floating-point number"
+  lambda "t" $ (ref DescribeMantle.precisionDef <.> ref Variants.floatTypePrecisionDef @@ var "t") ++ string " floating-point number"
 
 integerTypeDef :: TElement (IntegerType -> String)
-integerTypeDef = printingDefinition "integerType" $
+integerTypeDef = describeCoreDefinition "integerType" $
   doc "Display an integer type as a string" $
-  lambda "t" $ (ref precisionDef <.> ref Variants.integerTypePrecisionDef @@ var "t")
+  lambda "t" $ (ref DescribeMantle.precisionDef <.> ref Variants.integerTypePrecisionDef @@ var "t")
     ++ string " integer"
 
 literalTypeDef :: TElement (LiteralType -> String)
-literalTypeDef = printingDefinition "literalType" $
+literalTypeDef = describeCoreDefinition "literalType" $
   doc "Display a literal type as a string" $
   match _LiteralType Nothing [
     _LiteralType_binary>>: constant $ string "binary string",
@@ -114,15 +115,8 @@ literalTypeDef = printingDefinition "literalType" $
     _LiteralType_integer>>: ref integerTypeDef,
     _LiteralType_string>>: constant $ string "character string"]
 
-precisionDef :: TElement (Precision -> String)
-precisionDef = printingDefinition "precision" $
-  doc "Display numeric precision as a string" $
-  match _Precision Nothing [
-    _Precision_arbitrary>>: constant $ string "arbitrary-precision",
-    _Precision_bits>>: lambda "bits" $ Literals.showInt32 (var "bits") ++ string "-bit"]
-
 typeDef :: TElement (Type -> String)
-typeDef = printingDefinition "type" $
+typeDef = describeCoreDefinition "type" $
   doc "Display a type as a string" $
   match _Type Nothing [
     _Type_annotated>>: lambda "a" $ string "annotated " ++ (ref typeDef @@

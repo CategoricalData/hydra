@@ -35,6 +35,7 @@ import Hydra.Sources.Tier2.Arity
 import Hydra.Sources.Tier2.Languages
 import Hydra.Sources.Tier2.Decode.Core
 import Hydra.Sources.Tier2.Describe.Core
+import Hydra.Sources.Tier2.Describe.Mantle
 import Hydra.Sources.Tier2.Extract.Core
 import Hydra.Sources.Tier2.Monads
 import Hydra.Sources.Tier2.Grammars
@@ -75,6 +76,7 @@ tier2TypeModules = []
 tier2TermModules = [
   decodeCoreModule,
   describeCoreModule,
+  describeMantleModule,
   extractCoreModule,
   showCoreModule,
   showAccessorsModule,
