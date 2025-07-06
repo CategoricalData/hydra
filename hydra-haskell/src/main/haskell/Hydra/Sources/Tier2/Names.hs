@@ -88,12 +88,28 @@ hydraNamesModule = Module (Namespace "hydra.names") elements
     Just ("Functions for working with qualified names.")
   where
    elements = [
+     el compactNameDef,
      el localNameOfDef,
      el namespaceOfDef,
      el namespaceToFilePathDef,
      el qnameDef,
      el qualifyNameDef,
      el unqualifyNameDef]
+
+compactNameDef :: TElement (M.Map Namespace String -> Name -> String)
+compactNameDef = namesDefinition "compactName" $
+  doc "Given a mapping of namespaces to prefixes, convert a name to a compact string representation" $
+  lambda "namespaces" $ lambda "name" $ lets [
+    "qualName">: ref qualifyNameDef @@ var "name",
+    "mns">: Module.qualifiedNameNamespace $ var "qualName",
+    "local">: Module.qualifiedNameLocal $ var "qualName"]
+    $ Optionals.maybe
+        (Core.unName $ var "name")
+        (lambda "ns" $
+          Optionals.maybe (var "local")
+            (lambda "pre" $ Strings.cat $ list [var "pre", string ":", var "local"])
+            (Maps.lookup (var "ns") (var "namespaces")))
+        (var "mns")
 
 localNameOfDef :: TElement (Name -> String)
 localNameOfDef = namesDefinition "localNameOf" $
