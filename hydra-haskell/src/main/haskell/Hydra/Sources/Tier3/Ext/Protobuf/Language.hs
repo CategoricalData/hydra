@@ -34,7 +34,9 @@ protobufLanguageDefinition :: String -> TTerm a -> TElement a
 protobufLanguageDefinition = definitionInModule protobufLanguageModule
 
 protobufLanguageModule :: Module
-protobufLanguageModule = Module ns elements [hydraCodersModule, hydraLexicalModule, hydraStripModule] [hydraCoreModule] $
+protobufLanguageModule = Module ns elements
+    [hydraCodersModule, hydraLexicalModule, hydraStripModule]
+    [hydraCodersModule] $
     Just "Language constraints for Protobuf v3"
   where
     ns = Namespace "hydra.ext.protobuf.language"
@@ -70,7 +72,8 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
         _TermVariant_map,
         _TermVariant_optional,
         _TermVariant_record,
-        _TermVariant_union]),
+        _TermVariant_union,
+        _TermVariant_unit]),
       _LanguageConstraints_typeVariants>>: Sets.fromList $ list (unitVariant _TypeVariant <$> [
         _TypeVariant_annotated,
         _TypeVariant_list,
@@ -79,6 +82,7 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
         _TypeVariant_optional,
         _TypeVariant_record,
         _TypeVariant_union,
+        _TypeVariant_unit,
         _TypeVariant_variable]),
       _LanguageConstraints_types>>: match _Type (Just true) [
         _Type_map>>: lambda "mt" (match _Type (Just true) [

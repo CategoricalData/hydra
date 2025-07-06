@@ -10,6 +10,7 @@ import Hydra.Mantle
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Extract.Core as ExtractCore
+import qualified Hydra.Extract.Mantle as ExtractMantle
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Show.Core as ShowCore
@@ -51,7 +52,7 @@ boolean = TermCoder Types.boolean $ Coder encode decode
 comparison :: TermCoder Comparison
 comparison = TermCoder (TypeVariable _Comparison) $ Coder encode decode
   where
-    encode = ExtractCore.comparison
+    encode = ExtractMantle.comparison
     decode = pure . Terms.comparison
 
 floatType :: TermCoder FloatType
