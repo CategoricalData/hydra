@@ -7,6 +7,7 @@ import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
+import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
@@ -16,6 +17,17 @@ import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+
+-- | Given a mapping of namespaces to prefixes, convert a name to a compact string representation
+compactName :: (M.Map Module.Namespace String -> Core.Name -> String)
+compactName namespaces name =  
+  let qualName = (qualifyName name) 
+      mns = (Module.qualifiedNameNamespace qualName)
+      local = (Module.qualifiedNameLocal qualName)
+  in (Optionals.maybe (Core.unName name) (\ns -> Optionals.maybe local (\pre -> Strings.cat [
+    pre,
+    ":",
+    local]) (Maps.lookup ns namespaces)) mns)
 
 localNameOf :: (Core.Name -> String)
 localNameOf arg_ = (Module.qualifiedNameLocal (qualifyName arg_))

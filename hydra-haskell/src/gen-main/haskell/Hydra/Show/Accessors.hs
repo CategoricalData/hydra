@@ -68,7 +68,7 @@ termToAccessorGraph namespaces term =
                                   currentIds = (snd nodesVisitedIds)
                                   currentNodes = (fst currentNodesVisited)
                                   currentVisited = (snd currentNodesVisited)
-                                  rawLabel = (toCompactName namespaces name)
+                                  rawLabel = (Names.compactName namespaces name)
                                   uniqueLabel = (toUniqueLabel currentVisited rawLabel)
                                   node = Accessors.AccessorNode {
                                           Accessors.accessorNodeName = name,
@@ -106,17 +106,6 @@ termToAccessorGraph namespaces term =
   in Accessors.AccessorGraph {
     Accessors.accessorGraphNodes = finalNodes,
     Accessors.accessorGraphEdges = finalEdges}
-
--- | Convert a name to a compact string representation
-toCompactName :: (M.Map Module.Namespace String -> Core.Name -> String)
-toCompactName namespaces name =  
-  let qualName = (Names.qualifyName name) 
-      mns = (Module.qualifiedNameNamespace qualName)
-      local = (Module.qualifiedNameLocal qualName)
-  in (Optionals.maybe (Core.unName name) (\ns -> Optionals.maybe local (\pre -> Strings.cat [
-    pre,
-    ":",
-    local]) (Maps.lookup ns namespaces)) mns)
 
 -- | Generate a unique label by appending apostrophes if needed
 toUniqueLabel :: (S.Set String -> String -> String)

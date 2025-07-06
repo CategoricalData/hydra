@@ -90,7 +90,6 @@ showAccessorsModule = Module (Namespace "hydra.show.accessors") elements
    elements = [
      el termAccessorDef,
      el termToAccessorGraphDef,
-     el toCompactNameDef,
      el toUniqueLabelDef]
 
 termAccessorDef :: TElement (TermAccessor -> Maybe String)
@@ -153,7 +152,7 @@ termToAccessorGraphDef = accessorsDefinition "termToAccessorGraph" $
             "currentIds">: second $ var "nodesVisitedIds",
             "currentNodes">: first $ var "currentNodesVisited",
             "currentVisited">: second $ var "currentNodesVisited",
-            "rawLabel">: ref toCompactNameDef @@ var "namespaces" @@ var "name",
+            "rawLabel">: ref Names.compactNameDef @@ var "namespaces" @@ var "name",
             "uniqueLabel">: ref toUniqueLabelDef @@ var "currentVisited" @@ var "rawLabel",
             "node">: Accessors.accessorNode (var "name") (var "rawLabel") (var "uniqueLabel"),
             "newVisited">: Sets.insert (var "uniqueLabel") (var "currentVisited"),
@@ -200,21 +199,6 @@ termToAccessorGraphDef = accessorsDefinition "termToAccessorGraph" $
     "finalNodes">: first $ var "finalNodesEdges",
     "finalEdges">: second $ var "finalNodesEdges"]
     $ Accessors.accessorGraph (var "finalNodes") (var "finalEdges")
-
-toCompactNameDef :: TElement (M.Map Namespace String -> Name -> String)
-toCompactNameDef = accessorsDefinition "toCompactName" $
-  doc "Convert a name to a compact string representation" $
-  lambda "namespaces" $ lambda "name" $ lets [
-    "qualName">: ref Names.qualifyNameDef @@ var "name",
-    "mns">: Module.qualifiedNameNamespace $ var "qualName",
-    "local">: Module.qualifiedNameLocal $ var "qualName"]
-    $ Optionals.maybe
-        (Core.unName $ var "name")
-        (lambda "ns" $
-          Optionals.maybe (var "local")
-            (lambda "pre" $ Strings.cat $ list [var "pre", string ":", var "local"])
-            (Maps.lookup (var "ns") (var "namespaces")))
-        (var "mns")
 
 toUniqueLabelDef :: TElement (S.Set String -> String -> String)
 toUniqueLabelDef = accessorsDefinition "toUniqueLabel" $
