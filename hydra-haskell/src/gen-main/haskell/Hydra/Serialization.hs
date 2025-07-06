@@ -70,7 +70,7 @@ customIndent idt s = (Strings.cat (Lists.intersperse "\n" (Lists.map (\line -> S
   line]) (Strings.lines s))))
 
 customIndentBlock :: (String -> [Ast.Expr] -> Ast.Expr)
-customIndentBlock idt els = (Logic.ifElse (Lists.null els) (cst "") (Logic.ifElse (Equality.equalInt32 (Lists.length els) 1) (Lists.head els) ( 
+customIndentBlock idt els = (Logic.ifElse (Lists.null els) (cst "") (Logic.ifElse (Equality.equal (Lists.length els) 1) (Lists.head els) ( 
   let head = (Lists.head els) 
       rest = (Lists.tail els)
       idtOp = Ast.Op {
@@ -236,7 +236,7 @@ orOp newlines = Ast.Op {
   Ast.opAssociativity = Ast.AssociativityNone}
 
 orSep :: (Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr)
-orSep style l = (Logic.ifElse (Lists.null l) (cst "") (Logic.ifElse (Equality.equalInt32 (Lists.length l) 1) (Lists.head l) ( 
+orSep style l = (Logic.ifElse (Lists.null l) (cst "") (Logic.ifElse (Equality.equal (Lists.length l) 1) (Lists.head l) ( 
   let h = (Lists.head l) 
       r = (Lists.tail l)
       newlines = (Ast.blockStyleNewlineBeforeContent style)
@@ -339,7 +339,7 @@ printExpr e =
         Ast.IndentStyleAllLines v2 -> (Lists.map (\line -> Strings.cat [
           v2,
           line]) lns)
-        Ast.IndentStyleSubsequentLines v2 -> (Logic.ifElse (Equality.equalInt32 (Lists.length lns) 1) lns (Lists.cons (Lists.head lns) (Lists.map (\line -> Strings.cat [
+        Ast.IndentStyleSubsequentLines v2 -> (Logic.ifElse (Equality.equal (Lists.length lns) 1) lns (Lists.cons (Lists.head lns) (Lists.map (\line -> Strings.cat [
           v2,
           line]) (Lists.tail lns))))) style))
     Ast.ExprOp v1 ->  
@@ -388,7 +388,7 @@ semicolonSep :: ([Ast.Expr] -> Ast.Expr)
 semicolonSep = (symbolSep ";" inlineStyle)
 
 sep :: (Ast.Op -> [Ast.Expr] -> Ast.Expr)
-sep op els = (Logic.ifElse (Lists.null els) (cst "") (Logic.ifElse (Equality.equalInt32 (Lists.length els) 1) (Lists.head els) ( 
+sep op els = (Logic.ifElse (Lists.null els) (cst "") (Logic.ifElse (Equality.equal (Lists.length els) 1) (Lists.head els) ( 
   let h = (Lists.head els) 
       r = (Lists.tail els)
   in (ifx op h (sep op r)))))
@@ -411,13 +411,13 @@ sym :: (String -> Ast.Symbol)
 sym s = (Ast.Symbol s)
 
 symbolSep :: (String -> Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr)
-symbolSep symb style l = (Logic.ifElse (Lists.null l) (cst "") (Logic.ifElse (Equality.equalInt32 (Lists.length l) 1) (Lists.head l) ( 
+symbolSep symb style l = (Logic.ifElse (Lists.null l) (cst "") (Logic.ifElse (Equality.equal (Lists.length l) 1) (Lists.head l) ( 
   let h = (Lists.head l) 
       r = (Lists.tail l)
       breakCount = (Lists.length (Lists.filter (\x_ -> x_) [
               Ast.blockStyleNewlineBeforeContent style,
               (Ast.blockStyleNewlineAfterContent style)]))
-      break = (Logic.ifElse (Equality.equalInt32 breakCount 0) Ast.WsSpace (Logic.ifElse (Equality.equalInt32 breakCount 1) Ast.WsBreak Ast.WsDoubleBreak))
+      break = (Logic.ifElse (Equality.equal breakCount 0) Ast.WsSpace (Logic.ifElse (Equality.equal breakCount 1) Ast.WsBreak Ast.WsDoubleBreak))
       commaOp = Ast.Op {
               Ast.opSymbol = (sym symb),
               Ast.opPadding = Ast.Padding {

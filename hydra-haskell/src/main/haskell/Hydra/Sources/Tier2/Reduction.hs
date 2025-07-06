@@ -108,12 +108,12 @@ alphaConvertDef = reductionDefinition "alphaConvert" $
           match _Function (Just $ var "recurse" @@ var "t") [
             _Function_lambda>>: lambda "l" $ lets [
               "v">: Core.lambdaParameter $ var "l"]
-              $ Logic.ifElse (Equality.equalString (Core.unName $ var "v") (Core.unName $ var "vold"))
+              $ Logic.ifElse (Equality.equal (Core.unName $ var "v") (Core.unName $ var "vold"))
                   (var "t")
                   (var "recurse" @@ var "t")]
           @@ var "f",
         _Term_variable>>: lambda "v" $
-          Logic.ifElse (Equality.equalString (Core.unName $ var "v") (Core.unName $ var "vold"))
+          Logic.ifElse (Equality.equal (Core.unName $ var "v") (Core.unName $ var "vold"))
             (var "tnew")
             (Core.termVariable $ var "v")]
       @@ var "t"]
@@ -202,7 +202,7 @@ etaReduceTermDef = reductionDefinition "etaReduceTerm" $
             _Term_variable>>: lambda "v1" $
               Logic.ifElse
                 (Logic.and
-                  (Equality.equalString (Core.unName $ var "v") (Core.unName $ var "v1"))
+                  (Equality.equal (Core.unName $ var "v") (Core.unName $ var "v1"))
                   (Logic.not $ ref Rewriting.isFreeVariableInTermDef @@ var "v" @@ var "lhs"))
                 (ref etaReduceTermDef @@ var "lhs")
                 (var "noChange")]

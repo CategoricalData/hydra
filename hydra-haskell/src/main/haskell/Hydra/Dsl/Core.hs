@@ -545,21 +545,21 @@ wrappedTypeObject wt = Phantoms.project _WrappedType _WrappedType_object @@ wt
 -- Non-schema helpers
 
 equalName :: TTerm (Name -> Name -> Bool)
-equalName = lambdas ["left", "right"] $ primitive _equality_equalString
+equalName = lambdas ["left", "right"] $ primitive _equality_equal
   @@ (Hydra.Dsl.Core.unName $ var "left")
   @@ (Hydra.Dsl.Core.unName $ var "right")
 
 equalName_ :: TTerm Name -> TTerm Name -> TTerm Bool
-equalName_ left right = Equality.equalString (Hydra.Dsl.Core.unName left) (Hydra.Dsl.Core.unName right)
+equalName_ left right = Equality.equal (Hydra.Dsl.Core.unName left) (Hydra.Dsl.Core.unName right)
 
 equalNameList :: TTerm ([Name] -> [Name] -> Bool)
 equalNameList = lambdas ["lefts", "rights"] $ Logic.and
-  (Equality.equalInt32 (Lists.length (var "lefts")) (Lists.length (var "rights")))
+  (Equality.equal (Lists.length (var "lefts")) (Lists.length (var "rights")))
   (Logic.ands $ Lists.zipWith equalName (var "lefts") (var "rights"))
 
 equalNameList_ :: TTerm [Name] -> TTerm [Name] -> TTerm Bool
 equalNameList_ lefts rights = Logic.and
-  (Equality.equalInt32 (Lists.length lefts) (Lists.length rights))
+  (Equality.equal (Lists.length lefts) (Lists.length rights))
   (Logic.ands $ Lists.zipWith equalName lefts rights)
 
 fieldWithTerm :: TTerm Term -> TTerm Field -> TTerm Field

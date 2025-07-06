@@ -73,7 +73,7 @@ isComplex pat = ((\x -> case x of
 isNontrivial :: (Bool -> [Grammar.Pattern] -> Bool)
 isNontrivial isRecord pats =  
   let minPats = (simplify isRecord pats)
-  in (Logic.ifElse (Equality.equalInt32 (Lists.length minPats) 1) ((\x -> case x of
+  in (Logic.ifElse (Equality.equal (Lists.length minPats) 1) ((\x -> case x of
     Grammar.PatternLabeled _ -> True
     _ -> False) (Lists.head minPats)) True)
 

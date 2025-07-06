@@ -40,9 +40,9 @@ joinTypes left right comment =
                   (Core_.type_ sleft)],
                 " with "],
               (Core_.type_ sright)]))
-      assertEqual = (Logic.ifElse (Equality.equalType sleft sright) (Flows.pure []) cannotUnify)
-      joinList = (\lefts -> \rights -> Logic.ifElse (Equality.equalInt32 (Lists.length lefts) (Lists.length rights)) (Flows.pure (Lists.zipWith joinOne lefts rights)) cannotUnify)
-      joinRowTypes = (\left -> \right -> Logic.ifElse (Logic.and (Equality.equalString (Core.unName (Core.rowTypeTypeName left)) (Core.unName (Core.rowTypeTypeName right))) (Logic.and (Equality.equalInt32 (Lists.length (Lists.map Core.fieldTypeName (Core.rowTypeFields left))) (Lists.length (Lists.map Core.fieldTypeName (Core.rowTypeFields right)))) (Lists.foldl Logic.and True (Lists.zipWith (\left -> \right -> Equality.equalString (Core.unName left) (Core.unName right)) (Lists.map Core.fieldTypeName (Core.rowTypeFields left)) (Lists.map Core.fieldTypeName (Core.rowTypeFields right)))))) (joinList (Lists.map Core.fieldTypeType (Core.rowTypeFields left)) (Lists.map Core.fieldTypeType (Core.rowTypeFields right))) cannotUnify)
+      assertEqual = (Logic.ifElse (Equality.equal sleft sright) (Flows.pure []) cannotUnify)
+      joinList = (\lefts -> \rights -> Logic.ifElse (Equality.equal (Lists.length lefts) (Lists.length rights)) (Flows.pure (Lists.zipWith joinOne lefts rights)) cannotUnify)
+      joinRowTypes = (\left -> \right -> Logic.ifElse (Logic.and (Equality.equal (Core.unName (Core.rowTypeTypeName left)) (Core.unName (Core.rowTypeTypeName right))) (Logic.and (Equality.equal (Lists.length (Lists.map Core.fieldTypeName (Core.rowTypeFields left))) (Lists.length (Lists.map Core.fieldTypeName (Core.rowTypeFields right)))) (Lists.foldl Logic.and True (Lists.zipWith (\left -> \right -> Equality.equal (Core.unName left) (Core.unName right)) (Lists.map Core.fieldTypeName (Core.rowTypeFields left)) (Lists.map Core.fieldTypeName (Core.rowTypeFields right)))))) (joinList (Lists.map Core.fieldTypeType (Core.rowTypeFields left)) (Lists.map Core.fieldTypeType (Core.rowTypeFields right))) cannotUnify)
   in ((\x -> case x of
     Core.TypeApplication v1 -> ((\x -> case x of
       Core.TypeApplication v2 -> (Flows.pure [
@@ -88,7 +88,7 @@ joinTypes left right comment =
       Core.TypeUnit -> (Flows.pure [])
       _ -> cannotUnify) sright)
     Core.TypeWrap v1 -> ((\x -> case x of
-      Core.TypeWrap v2 -> (Logic.ifElse (Equality.equalString (Core.unName (Core.wrappedTypeTypeName v1)) (Core.unName (Core.wrappedTypeTypeName v2))) (Flows.pure [
+      Core.TypeWrap v2 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTypeTypeName v1)) (Core.unName (Core.wrappedTypeTypeName v2))) (Flows.pure [
         joinOne (Core.wrappedTypeObject v1) (Core.wrappedTypeObject v2)]) cannotUnify)
       _ -> cannotUnify) sright)
     _ -> cannotUnify) sleft)
@@ -121,7 +121,7 @@ unifyTypeConstraints schemaTypes constraints =
                       in (Flows.bind (joinTypes sleft sright comment) withConstraints)
           in ((\x -> case x of
             Core.TypeVariable v1 -> ((\x -> case x of
-              Core.TypeVariable v2 -> (Logic.ifElse (Equality.equalString (Core.unName v1) (Core.unName v2)) (unifyTypeConstraints schemaTypes rest) (Logic.ifElse (Optionals.isJust (Maps.lookup v1 schemaTypes)) (Logic.ifElse (Optionals.isJust (Maps.lookup v2 schemaTypes)) (Flows.fail (Strings.cat [
+              Core.TypeVariable v2 -> (Logic.ifElse (Equality.equal (Core.unName v1) (Core.unName v2)) (unifyTypeConstraints schemaTypes rest) (Logic.ifElse (Optionals.isJust (Maps.lookup v1 schemaTypes)) (Logic.ifElse (Optionals.isJust (Maps.lookup v2 schemaTypes)) (Flows.fail (Strings.cat [
                 Strings.cat [
                   Strings.cat [
                     Strings.cat [
@@ -159,6 +159,6 @@ unifyTypes schemaTypes l r comment = (unifyTypeConstraints schemaTypes [
 variableOccursInType :: (Core.Name -> Core.Type -> Bool)
 variableOccursInType var =  
   let tryType = (\b -> \typ -> (\x -> case x of
-          Core.TypeVariable v1 -> (Logic.or b (Equality.equalString (Core.unName v1) (Core.unName var)))
+          Core.TypeVariable v1 -> (Logic.or b (Equality.equal (Core.unName v1) (Core.unName var)))
           _ -> b) typ)
   in (Rewriting.foldOverType Coders.TraversalOrderPre tryType False)

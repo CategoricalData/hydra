@@ -102,11 +102,11 @@ joinTypesDef = unificationDefinition "joinTypes" $
     "joinOne">: lambdas ["l", "r"] $ Typing.typeConstraint (var "l") (var "r") ("join types; " ++ var "comment"),
     "cannotUnify">: Flows.fail ("Cannot unify " ++ (ref ShowCore.typeDef @@ var "sleft") ++ " with " ++ (ref ShowCore.typeDef @@ var "sright")),
     "assertEqual">: Logic.ifElse
-      (Equality.equalType (var "sleft") (var "sright"))
+      (Equality.equal (var "sleft") (var "sright"))
       (Flows.pure $ list [])
       (var "cannotUnify"),
     "joinList">: lambdas ["lefts", "rights"] $ Logic.ifElse
-      (Equality.equalInt32 (Lists.length (var "lefts")) (Lists.length (var "rights")))
+      (Equality.equal (Lists.length (var "lefts")) (Lists.length (var "rights")))
       (Flows.pure $ Lists.zipWith (var "joinOne") (var "lefts") (var "rights"))
       (var "cannotUnify"),
     "joinRowTypes">: lambdas ["left", "right"] $ Logic.ifElse

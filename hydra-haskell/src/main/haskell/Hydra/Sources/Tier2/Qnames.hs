@@ -122,7 +122,7 @@ qualifyNameDef = qnamesDefinition "qualifyName" $
   lambda "name" $ lets [
     "parts">: Lists.reverse (Strings.splitOn "." (Core.unName $ var "name"))]
     $ Logic.ifElse
-      (Equality.equalInt32 (int32 1) (Lists.length $ var "parts"))
+      (Equality.equal (int32 1) (Lists.length $ var "parts"))
       (Module.qualifiedName nothing (Core.unName $ var "name"))
       (Module.qualifiedName
         (just $ wrap _Namespace (Strings.intercalate "." (Lists.reverse (Lists.tail $ var "parts"))))

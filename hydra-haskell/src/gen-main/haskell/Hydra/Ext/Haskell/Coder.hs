@@ -131,7 +131,7 @@ encodeFunction namespaces fun = ((\x -> case x of
     Core.EliminationProduct v2 ->  
       let arity = (Core.tupleProjectionArity v2) 
           idx = (Core.tupleProjectionIndex v2)
-      in (Logic.ifElse (Equality.equalInt32 arity 2) (Flows.pure (Utils.hsvar (Logic.ifElse (Equality.equalInt32 idx 0) "fst" "snd"))) (Flows.fail "Eliminations for tuples of arity > 2 are not supported yet in the Haskell coder"))
+      in (Logic.ifElse (Equality.equal arity 2) (Flows.pure (Utils.hsvar (Logic.ifElse (Equality.equal idx 0) "fst" "snd"))) (Flows.fail "Eliminations for tuples of arity > 2 are not supported yet in the Haskell coder"))
     Core.EliminationRecord v2 ->  
       let dn = (Core.projectionTypeName v2) 
           fname = (Core.projectionField v2)
@@ -387,7 +387,7 @@ findOrdVariables typ =
       isTypeVariable = (\v ->  
               let nameStr = (Core.unName v) 
                   hasNoNamespace = (Optionals.isNothing (Qnames.namespaceOf v))
-                  startsWithT = (Equality.equalInt32 (Strings.charAt 0 nameStr) 116)
+                  startsWithT = (Equality.equal (Strings.charAt 0 nameStr) 116)
               in (Logic.and hasNoNamespace startsWithT))
       tryType = (\names -> \t -> (\x -> case x of
               Core.TypeVariable v1 -> (Logic.ifElse (isTypeVariable v1) (Sets.insert v1 names) names)

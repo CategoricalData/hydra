@@ -219,8 +219,8 @@ encodeFunctionDef = haskellCoderDefinition "encodeFunction" $
           _Elimination_product>>: lambda "proj" $ lets [
             "arity">: Core.tupleProjectionArity $ var "proj",
             "idx">: Core.tupleProjectionIndex $ var "proj"] $
-            Logic.ifElse (Equality.equalInt32 (var "arity") (int32 2))
-              (Flows.pure $ ref HaskellUtils.hsvarDef @@ Logic.ifElse (Equality.equalInt32 (var "idx") (int32 0)) (string "fst") (string "snd"))
+            Logic.ifElse (Equality.equal (var "arity") (int32 2))
+              (Flows.pure $ ref HaskellUtils.hsvarDef @@ Logic.ifElse (Equality.equal (var "idx") (int32 0)) (string "fst") (string "snd"))
               (Flows.fail $ string "Eliminations for tuples of arity > 2 are not supported yet in the Haskell coder"),
           _Elimination_record>>: lambda "proj" $ lets [
             "dn">: Core.projectionTypeName $ var "proj",
@@ -568,7 +568,7 @@ findOrdVariablesDef = haskellCoderDefinition "findOrdVariables" $
     "isTypeVariable">: lambda "v" $ lets [
       "nameStr">: Core.unName $ var "v",
       "hasNoNamespace">: Optionals.isNothing $ ref Qnames.namespaceOfDef @@ var "v",
-      "startsWithT">: Equality.equalInt32 (Strings.charAt (int32 0) (var "nameStr")) (int32 116)] $ -- 't' character
+      "startsWithT">: Equality.equal (Strings.charAt (int32 0) (var "nameStr")) (int32 116)] $ -- 't' character
       Logic.and (var "hasNoNamespace") (var "startsWithT"),
     "tryType">: lambda "names" $ lambda "t" $
       cases _Type (ref Strip.stripTypeDef @@ var "t")

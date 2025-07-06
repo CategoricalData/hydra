@@ -167,11 +167,11 @@ findFieldTypeDef = schemasDefinition "findFieldType" $
   doc "Find a field type by name in a list of field types" $
   lambda "fname" $ lambda "fields" $ lets [
     "matchingFields">: Lists.filter
-      (lambda "ft" $ Equality.equalString (Core.unName $ Core.fieldTypeName $ var "ft") (Core.unName $ var "fname"))
+      (lambda "ft" $ Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (Core.unName $ var "fname"))
       (var "fields")]
     $ Logic.ifElse (Lists.null $ var "matchingFields")
         (Flows.fail $ Strings.cat2 (string "No such field: ") (Core.unName $ var "fname"))
-        (Logic.ifElse (Equality.equalInt32 (Lists.length $ var "matchingFields") (int32 1))
+        (Logic.ifElse (Equality.equal (Lists.length $ var "matchingFields") (int32 1))
           (Flows.pure $ Core.fieldTypeType $ Lists.head $ var "matchingFields")
           (Flows.fail $ Strings.cat2 (string "Multiple fields named ") (Core.unName $ var "fname")))
 

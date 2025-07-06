@@ -471,7 +471,7 @@ isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
     _Term_application>>: lambda "a" $
       ref isEncodedTypeDef @@ (Core.applicationFunction $ var "a"),
     _Term_union>>: lambda "i" $
-      Equality.equalString (string $ unName _Type) (Core.unName $ (Core.injectionTypeName $ var "i"))]
+      Equality.equal (string $ unName _Type) (Core.unName $ (Core.injectionTypeName $ var "i"))]
 
 isTypeDef :: TElement (Type -> Bool)
 isTypeDef = coreEncodingExtrasDefinition "isType" $
@@ -481,7 +481,7 @@ isTypeDef = coreEncodingExtrasDefinition "isType" $
     _Type_forall>>: lambda "l" $
       ref isTypeDef @@ (Core.forallTypeBody $ var "l"),
     _Type_union>>: lambda "rt" $
-      Equality.equalString (string $ unName _Type) (Core.unName $ (Core.rowTypeTypeName $ var "rt")),
+      Equality.equal (string $ unName _Type) (Core.unName $ (Core.rowTypeTypeName $ var "rt")),
     _Type_variable>>: lambda "v" $ Equality.equal (var "v") (Core.nameLift _Type)]
 
 isUnitTermDef :: TElement (Term -> Bool)
