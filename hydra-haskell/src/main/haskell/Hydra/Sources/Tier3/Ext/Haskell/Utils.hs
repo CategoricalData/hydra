@@ -49,7 +49,7 @@ import qualified Hydra.Sources.Tier2.Grammars  as Grammars
 import qualified Hydra.Sources.Tier2.Inference        as Inference
 import qualified Hydra.Sources.Tier2.Lexical          as Lexical
 import qualified Hydra.Sources.Tier2.Adapt.Literals  as AdaptLiterals
-import qualified Hydra.Sources.Tier2.Qnames           as Qnames
+import qualified Hydra.Sources.Tier2.Names           as Names
 import qualified Hydra.Sources.Tier2.Reduction        as Reduction
 import qualified Hydra.Sources.Tier2.Rewriting        as Rewriting
 import qualified Hydra.Sources.Tier2.Schemas          as Schemas
@@ -59,7 +59,7 @@ import qualified Hydra.Sources.Tier2.Show.Core        as ShowCore
 import qualified Hydra.Sources.Tier2.Sorting          as Sorting
 import qualified Hydra.Sources.Tier2.Substitution     as Substitution
 import qualified Hydra.Sources.Tier2.Tarjan           as Tarjan
-import qualified Hydra.Sources.Tier2.Templating       as Templating
+import qualified Hydra.Sources.Tier2.Templates       as Templates
 import qualified Hydra.Sources.Tier2.Adapt.Terms     as AdaptTerms
 import qualified Hydra.Sources.Tier2.Unification      as Unification
 import qualified Hydra.Sources.Tier2.Variants         as Variants
@@ -81,7 +81,7 @@ haskellUtilsDefinition = definitionInModule haskellUtilsModule
 
 haskellUtilsModule :: Module
 haskellUtilsModule = Module ns elements
-    [Tier1.hydraFormattingModule, HaskellLanguage.haskellLanguageModule, Schemas.hydraSchemasModule, Qnames.hydraQnamesModule]
+    [Tier1.hydraFormattingModule, HaskellLanguage.haskellLanguageModule, Schemas.hydraSchemasModule, Names.hydraNamesModule]
     [Tier1.hydraCodersModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule, Tier1.hydraTypingModule, HaskellAst.haskellAstModule] $
     Just "Utilities for working with Haskell syntax trees"
   where
@@ -120,7 +120,7 @@ elementReferenceDef = haskellUtilsDefinition "elementReference" $
     "gname">: first $ var "namespacePair",
     "gmod">: unwrap H._ModuleName @@ (second $ var "namespacePair"),
     "namespacesMap">: Module.namespacesMapping $ var "namespaces",
-    "qname">: ref Qnames.qualifyNameDef @@ var "name",
+    "qname">: ref Names.qualifyNameDef @@ var "name",
     "local">: Module.qualifiedNameLocal $ var "qname",
     "escLocal">: ref sanitizeHaskellNameDef @@ var "local",
     "mns">: Module.qualifiedNameNamespace $ var "qname"] $
@@ -198,7 +198,7 @@ namespacesForModuleDef = haskellUtilsDefinition "namespacesForModule" $
 newtypeAccessorNameDef :: TElement (Name -> String)
 newtypeAccessorNameDef = haskellUtilsDefinition "newtypeAccessorName" $
   lambda "name" $
-    Strings.cat2 (string "un") (ref Qnames.localNameOfDef @@ var "name")
+    Strings.cat2 (string "un") (ref Names.localNameOfDef @@ var "name")
 
 rawNameDef :: TElement (String -> H.Name)
 rawNameDef = haskellUtilsDefinition "rawName" $
@@ -212,7 +212,7 @@ recordFieldReferenceDef :: TElement (HaskellNamespaces -> Name -> Name -> H.Name
 recordFieldReferenceDef = haskellUtilsDefinition "recordFieldReference" $
   lambda "namespaces" $ lambda "sname" $ lambda "fname" $ lets [
     "fnameStr">: unwrap _Name @@ var "fname",
-    "qname">: ref Qnames.qualifyNameDef @@ var "sname",
+    "qname">: ref Names.qualifyNameDef @@ var "sname",
     "ns">: Module.qualifiedNameNamespace $ var "qname",
     "typeNameStr">: ref typeNameForRecordDef @@ var "sname",
     "decapitalized">: ref Formatting.decapitalizeDef @@ var "typeNameStr",
@@ -221,7 +221,7 @@ recordFieldReferenceDef = haskellUtilsDefinition "recordFieldReference" $
     "qualName">: record _QualifiedName [
       _QualifiedName_namespace>>: var "ns",
       _QualifiedName_local>>: var "nm"],
-    "unqualName">: ref Qnames.unqualifyNameDef @@ var "qualName"] $
+    "unqualName">: ref Names.unqualifyNameDef @@ var "qualName"] $
     ref elementReferenceDef @@ var "namespaces" @@ var "unqualName"
 
 sanitizeHaskellNameDef :: TElement (String -> String)
@@ -268,7 +268,7 @@ unionFieldReferenceDef :: TElement (HaskellNamespaces -> Name -> Name -> H.Name)
 unionFieldReferenceDef = haskellUtilsDefinition "unionFieldReference" $
   lambda "namespaces" $ lambda "sname" $ lambda "fname" $ lets [
     "fnameStr">: unwrap _Name @@ var "fname",
-    "qname">: ref Qnames.qualifyNameDef @@ var "sname",
+    "qname">: ref Names.qualifyNameDef @@ var "sname",
     "ns">: Module.qualifiedNameNamespace $ var "qname",
     "typeNameStr">: ref typeNameForRecordDef @@ var "sname",
     "capitalizedTypeName">: ref Formatting.capitalizeDef @@ var "typeNameStr",
@@ -277,7 +277,7 @@ unionFieldReferenceDef = haskellUtilsDefinition "unionFieldReference" $
     "qualName">: record _QualifiedName [
       _QualifiedName_namespace>>: var "ns",
       _QualifiedName_local>>: var "nm"],
-    "unqualName">: ref Qnames.unqualifyNameDef @@ var "qualName"] $
+    "unqualName">: ref Names.unqualifyNameDef @@ var "qualName"] $
     ref elementReferenceDef @@ var "namespaces" @@ var "unqualName"
 
 unpackForallTypeDef :: TElement (Graph -> Type -> ([Name], Type))

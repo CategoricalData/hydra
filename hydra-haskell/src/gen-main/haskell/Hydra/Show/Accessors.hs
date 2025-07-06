@@ -11,7 +11,7 @@ import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
-import qualified Hydra.Qnames as Qnames
+import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -110,7 +110,7 @@ termToAccessorGraph namespaces term =
 -- | Convert a name to a compact string representation
 toCompactName :: (M.Map Module.Namespace String -> Core.Name -> String)
 toCompactName namespaces name =  
-  let qualName = (Qnames.qualifyName name) 
+  let qualName = (Names.qualifyName name) 
       mns = (Module.qualifiedNameNamespace qualName)
       local = (Module.qualifiedNameLocal qualName)
   in (Optionals.maybe (Core.unName name) (\ns -> Optionals.maybe local (\pre -> Strings.cat [

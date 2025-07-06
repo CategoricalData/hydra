@@ -19,7 +19,7 @@ import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
-import qualified Hydra.Qnames as Qnames
+import qualified Hydra.Names as Names
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -806,7 +806,7 @@ toShortNames :: ([Core.Name] -> M.Map Core.Name Core.Name)
 toShortNames original =  
   let groupNamesByLocal = (\names -> Lists.foldl addName Maps.empty names) 
       addName = (\acc -> \name ->  
-              let local = (Qnames.localNameOf name) 
+              let local = (Names.localNameOf name) 
                   group = (Optionals.fromMaybe Sets.empty (Maps.lookup local acc))
               in (Maps.insert local (Sets.insert name group) acc))
       groups = (groupNamesByLocal original)

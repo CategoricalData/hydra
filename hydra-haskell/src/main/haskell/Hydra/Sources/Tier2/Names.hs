@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier2.Qnames where
+module Hydra.Sources.Tier2.Names where
 
 -- Standard Tier-2 imports
 import Hydra.Kernel
@@ -56,14 +56,14 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 --import qualified Hydra.Sources.Tier2.Extract.Mantle as ExtractMantle
---import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.Grammars as Grammars
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Languages as Languages
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
 --import qualified Hydra.Sources.Tier2.Adapt.Literals as AdaptLiterals
 --import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
---import qualified Hydra.Sources.Tier2.Qnames as Qnames
+--import qualified Hydra.Sources.Tier2.Monads as Monads
+--import qualified Hydra.Sources.Tier2.Names as Names
 --import qualified Hydra.Sources.Tier2.Reduction as Reduction
 --import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
@@ -73,17 +73,17 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
---import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.Templates as Templates
 --import qualified Hydra.Sources.Tier2.Adapt.Terms as AdaptTerms
 --import qualified Hydra.Sources.Tier2.Unification as Unification
 --import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
-qnamesDefinition :: String -> TTerm a -> TElement a
-qnamesDefinition = definitionInModule hydraQnamesModule
+namesDefinition :: String -> TTerm a -> TElement a
+namesDefinition = definitionInModule hydraNamesModule
 
-hydraQnamesModule :: Module
-hydraQnamesModule = Module (Namespace "hydra.qnames") elements
+hydraNamesModule :: Module
+hydraNamesModule = Module (Namespace "hydra.names") elements
     [Formatting.hydraFormattingModule]
     [Tier1.hydraMantleModule, Tier1.hydraModuleModule] $
     Just ("Functions for working with qualified names.")
@@ -97,15 +97,15 @@ hydraQnamesModule = Module (Namespace "hydra.qnames") elements
      el unqualifyNameDef]
 
 localNameOfDef :: TElement (Name -> String)
-localNameOfDef = qnamesDefinition "localNameOf" $
+localNameOfDef = namesDefinition "localNameOf" $
   unaryFunction Module.qualifiedNameLocal <.> ref qualifyNameDef
 
 namespaceOfDef :: TElement (Name -> Maybe Namespace)
-namespaceOfDef = qnamesDefinition "namespaceOf" $
+namespaceOfDef = namesDefinition "namespaceOf" $
   unaryFunction Module.qualifiedNameNamespace <.> ref qualifyNameDef
 
 namespaceToFilePathDef :: TElement (CaseConvention -> FileExtension -> Namespace -> String)
-namespaceToFilePathDef = qnamesDefinition "namespaceToFilePath" $
+namespaceToFilePathDef = namesDefinition "namespaceToFilePath" $
   lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
     "parts">: Lists.map
       (ref Formatting.convertCaseDef @@ Mantle.caseConventionCamel @@ var "caseConv")
@@ -113,7 +113,7 @@ namespaceToFilePathDef = qnamesDefinition "namespaceToFilePath" $
     $ (Strings.intercalate "/" $ var "parts") ++ "." ++ (Module.unFileExtension $ var "ext")
 
 qnameDef :: TElement (Namespace -> String -> Name)
-qnameDef = qnamesDefinition "qname" $
+qnameDef = namesDefinition "qname" $
   doc "Construct a qualified (dot-separated) name" $
   lambda "ns" $ lambda "name" $
     wrap _Name $
@@ -121,7 +121,7 @@ qnameDef = qnamesDefinition "qname" $
         list [apply (unwrap _Namespace) (var "ns"), string ".", var "name"]
 
 qualifyNameDef :: TElement (Name -> QualifiedName)
-qualifyNameDef = qnamesDefinition "qualifyName" $
+qualifyNameDef = namesDefinition "qualifyName" $
   lambda "name" $ lets [
     "parts">: Lists.reverse (Strings.splitOn "." (Core.unName $ var "name"))]
     $ Logic.ifElse
@@ -132,7 +132,7 @@ qualifyNameDef = qnamesDefinition "qualifyName" $
         (Lists.head $ var "parts"))
 
 unqualifyNameDef :: TElement (QualifiedName -> Name)
-unqualifyNameDef = qnamesDefinition "unqualifyName" $
+unqualifyNameDef = namesDefinition "unqualifyName" $
   doc "Convert a qualified name to a dot-separated name" $
   lambda "qname" $ lets [
     "prefix">: Optionals.maybe

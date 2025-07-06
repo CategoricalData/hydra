@@ -55,13 +55,13 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 --import qualified Hydra.Sources.Tier2.Extract.Mantle as ExtractMantle
---import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.Grammars as Grammars
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Languages as Languages
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
 --import qualified Hydra.Sources.Tier2.Adapt.Literals as AdaptLiterals
-import qualified Hydra.Sources.Tier2.Qnames as Qnames
+--import qualified Hydra.Sources.Tier2.Monads as Monads
+import qualified Hydra.Sources.Tier2.Names as Names
 --import qualified Hydra.Sources.Tier2.Reduction as Reduction
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
@@ -71,7 +71,7 @@ import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
---import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.Templates as Templates
 --import qualified Hydra.Sources.Tier2.Adapt.Terms as AdaptTerms
 --import qualified Hydra.Sources.Tier2.Unification as Unification
 --import qualified Hydra.Sources.Tier2.Variants as Variants
@@ -82,7 +82,7 @@ accessorsDefinition = definitionInModule showAccessorsModule
 
 showAccessorsModule :: Module
 showAccessorsModule = Module (Namespace "hydra.show.accessors") elements
-    [Qnames.hydraQnamesModule, Rewriting.hydraRewritingModule]
+    [Names.hydraNamesModule, Rewriting.hydraRewritingModule]
     [Tier1.hydraCodersModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule] $
     Just ("Utilities for working with term accessors.")
   where
@@ -204,7 +204,7 @@ toCompactNameDef :: TElement (M.Map Namespace String -> Name -> String)
 toCompactNameDef = accessorsDefinition "toCompactName" $
   doc "Convert a name to a compact string representation" $
   lambda "namespaces" $ lambda "name" $ lets [
-    "qualName">: ref Qnames.qualifyNameDef @@ var "name",
+    "qualName">: ref Names.qualifyNameDef @@ var "name",
     "mns">: Module.qualifiedNameNamespace $ var "qualName",
     "local">: Module.qualifiedNameLocal $ var "qualName"]
     $ Optionals.maybe

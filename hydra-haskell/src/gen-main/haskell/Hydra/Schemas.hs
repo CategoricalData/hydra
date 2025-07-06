@@ -21,7 +21,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
 import qualified Hydra.Monads as Monads
-import qualified Hydra.Qnames as Qnames
+import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core___
 import qualified Hydra.Sorting as Sorting
@@ -40,7 +40,7 @@ definitionDependencyNamespaces defs =
           Module.DefinitionType v1 -> (Rewriting.typeDependencyNames True (Module.typeDefinitionType v1))
           Module.DefinitionTerm v1 -> (Rewriting.termDependencyNames True True True (Module.termDefinitionTerm v1))) def) 
       allNames = (Sets.unions (Lists.map defNames defs))
-  in (Sets.fromList (Optionals.cat (Lists.map Qnames.namespaceOf (Sets.toList allNames))))
+  in (Sets.fromList (Optionals.cat (Lists.map Names.namespaceOf (Sets.toList allNames))))
 
 -- | Find dependency namespaces in all of a set of terms
 dependencyNamespaces :: (Bool -> Bool -> Bool -> Bool -> [Graph.Element] -> Compute.Flow Graph.Graph (S.Set Module.Namespace))
@@ -55,7 +55,7 @@ dependencyNamespaces withVars withPrims withNoms withSchema els =
             (Rewriting.typeDependencyNames True typ)]))) (Flows.pure (Sets.unions [
             dataNames,
             schemaNames]))))
-  in (Flows.bind (Flows.mapList depNames els) (\namesList -> Flows.pure (Sets.fromList (Optionals.cat (Lists.map Qnames.namespaceOf (Sets.toList (Sets.delete Constants.placeholderName (Sets.unions namesList))))))))
+  in (Flows.bind (Flows.mapList depNames els) (\namesList -> Flows.pure (Sets.fromList (Optionals.cat (Lists.map Names.namespaceOf (Sets.toList (Sets.delete Constants.placeholderName (Sets.unions namesList))))))))
 
 -- | Dereference a type name to get the actual type
 dereferenceType :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Type))

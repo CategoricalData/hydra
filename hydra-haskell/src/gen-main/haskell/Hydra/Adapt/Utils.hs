@@ -15,7 +15,7 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
-import qualified Hydra.Qnames as Qnames
+import qualified Hydra.Names as Names
 import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
@@ -89,7 +89,7 @@ literalTypeIsSupported constraints lt = (Logic.and (Sets.member (Variants.litera
 -- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
 nameToFilePath :: (Mantle.CaseConvention -> Mantle.CaseConvention -> Module.FileExtension -> Core.Name -> String)
 nameToFilePath nsConv localConv ext name =  
-  let qualName = (Qnames.qualifyName name) 
+  let qualName = (Names.qualifyName name) 
       ns = (Module.qualifiedNameNamespace qualName)
       local = (Module.qualifiedNameLocal qualName)
       nsToFilePath = (\ns -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Mantle.CaseConventionCamel nsConv part) (Strings.splitOn "." (Module.unNamespace ns))))

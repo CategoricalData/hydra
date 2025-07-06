@@ -56,14 +56,14 @@ import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 --import qualified Hydra.Sources.Tier2.Extract.Mantle as ExtractMantle
-import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.Grammars as Grammars
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Languages as Languages
 import qualified Hydra.Sources.Tier2.Lexical as Lexical
 --import qualified Hydra.Sources.Tier2.Adapt.Literals as AdaptLiterals
 --import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
-import qualified Hydra.Sources.Tier2.Qnames as Qnames
+import qualified Hydra.Sources.Tier2.Monads as Monads
+import qualified Hydra.Sources.Tier2.Names as Names
 --import qualified Hydra.Sources.Tier2.Reduction as Reduction
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
@@ -73,7 +73,7 @@ import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
---import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.Templates as Templates
 --import qualified Hydra.Sources.Tier2.Adapt.Terms as AdaptTerms
 --import qualified Hydra.Sources.Tier2.Unification as Unification
 import qualified Hydra.Sources.Tier2.Variants as Variants
@@ -84,7 +84,7 @@ schemasDefinition = definitionInModule hydraSchemasModule
 
 hydraSchemasModule :: Module
 hydraSchemasModule = Module (Namespace "hydra.schemas") elements
-    [DecodeCore.decodeCoreModule, EncodeCore.encodeCoreModule, Qnames.hydraQnamesModule, Rewriting.hydraRewritingModule,
+    [DecodeCore.decodeCoreModule, EncodeCore.encodeCoreModule, Names.hydraNamesModule, Rewriting.hydraRewritingModule,
       ShowCore.showCoreModule, Sorting.hydraSortingModule, Variants.hydraVariantsModule]
     [Tier1.hydraCodersModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just ("Various functions for dereferencing and decoding schema types.")
@@ -123,7 +123,7 @@ definitionDependencyNamespacesDef = schemasDefinition "definitionDependencyNames
           ref Rewriting.termDependencyNamesDef @@ true @@ true @@ true @@ Module.termDefinitionTerm (var "termDef")]
       @@ var "def",
     "allNames">: Sets.unions $ Lists.map (var "defNames") (var "defs")]
-    $ Sets.fromList $ Optionals.cat $ Lists.map (ref Qnames.namespaceOfDef) (Sets.toList $ var "allNames")
+    $ Sets.fromList $ Optionals.cat $ Lists.map (ref Names.namespaceOfDef) (Sets.toList $ var "allNames")
 
 dependencyNamespacesDef :: TElement (Bool -> Bool -> Bool -> Bool -> [Element] -> Flow Graph (S.Set Namespace))
 dependencyNamespacesDef = schemasDefinition "dependencyNamespaces" $
@@ -144,7 +144,7 @@ dependencyNamespacesDef = schemasDefinition "dependencyNamespaces" $
               ref Rewriting.typeDependencyNamesDef @@ true @@ var "typ"])
           (Flows.pure $ Sets.unions $ list [var "dataNames", var "schemaNames"])]
     $ Flows.bind (Flows.mapList (var "depNames") (var "els")) $
-      lambda "namesList" $ Flows.pure $ Sets.fromList $ Optionals.cat $ Lists.map (ref Qnames.namespaceOfDef) $
+      lambda "namesList" $ Flows.pure $ Sets.fromList $ Optionals.cat $ Lists.map (ref Names.namespaceOfDef) $
         Sets.toList $ Sets.delete (ref Constants.placeholderNameDef) $ Sets.unions $ var "namesList"
 
 dereferenceTypeDef :: TElement (Name -> Flow Graph (Maybe Type))

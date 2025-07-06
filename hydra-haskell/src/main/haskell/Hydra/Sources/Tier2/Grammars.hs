@@ -56,14 +56,14 @@ import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 --import qualified Hydra.Sources.Tier2.Extract.Mantle as ExtractMantle
---import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.Grammars as Grammars
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Languages as Languages
 --import qualified Hydra.Sources.Tier2.Lexical as Lexical
 --import qualified Hydra.Sources.Tier2.Adapt.Literals as AdaptLiterals
 --import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
-import qualified Hydra.Sources.Tier2.Qnames as Qnames
+--import qualified Hydra.Sources.Tier2.Monads as Monads
+import qualified Hydra.Sources.Tier2.Names as Names
 --import qualified Hydra.Sources.Tier2.Reduction as Reduction
 --import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
@@ -73,7 +73,7 @@ import qualified Hydra.Sources.Tier2.Qnames as Qnames
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
---import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.Templates as Templates
 --import qualified Hydra.Sources.Tier2.Adapt.Terms as AdaptTerms
 --import qualified Hydra.Sources.Tier2.Unification as Unification
 --import qualified Hydra.Sources.Tier2.Variants as Variants
@@ -87,7 +87,7 @@ grammarToModuleDefinition = definitionInModule hydraGrammarsModule
 
 hydraGrammarsModule :: Module
 hydraGrammarsModule = Module (Namespace "hydra.grammars") elements
-    [Annotations.hydraAnnotationsModule, Formatting.hydraFormattingModule, Qnames.hydraQnamesModule]
+    [Annotations.hydraAnnotationsModule, Formatting.hydraFormattingModule, Names.hydraNamesModule]
     [Tier1.hydraGrammarModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule] $
     Just ("A utility for converting a BNF grammar to a Hydra module.")
   where
@@ -250,7 +250,7 @@ toNameDef :: TElement (Namespace -> String -> Name)
 toNameDef = grammarToModuleDefinition "toName" $
   doc "Convert local name to qualified name" $
   lambda "ns" $ lambda "local" $
-    ref Qnames.unqualifyNameDef @@ (Module.qualifiedName (just $ var "ns") (var "local"))
+    ref Names.unqualifyNameDef @@ (Module.qualifiedName (just $ var "ns") (var "local"))
 
 wrapTypeDef :: TElement (Type -> Type)
 wrapTypeDef = grammarToModuleDefinition "wrapType" $
