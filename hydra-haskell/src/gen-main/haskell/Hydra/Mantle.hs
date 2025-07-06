@@ -179,6 +179,18 @@ _TermVariant_variable = (Core.Name "variable")
 
 _TermVariant_wrap = (Core.Name "wrap")
 
+-- | Any of a small number of built-in type classes
+data TypeClass = 
+  TypeClassEquality  |
+  TypeClassOrdering 
+  deriving (Eq, Ord, Read, Show)
+
+_TypeClass = (Core.Name "hydra.mantle.TypeClass")
+
+_TypeClass_equality = (Core.Name "equality")
+
+_TypeClass_ordering = (Core.Name "ordering")
+
 -- | The identifier of a type constructor
 data TypeVariant = 
   TypeVariantAnnotated  |

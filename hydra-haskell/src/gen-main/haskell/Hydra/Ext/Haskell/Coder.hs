@@ -348,7 +348,7 @@ encodeType namespaces typ =
       in (ref name)
     _ -> (Flows.fail (Strings.cat2 "unexpected type: " (Core___.type_ typ)))) (Strip.stripType typ)))
 
-encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core.Name (S.Set Graph.TypeClass) -> Core.Type -> Compute.Flow Graph.Graph Ast.Type)
+encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core.Name (S.Set Mantle.TypeClass) -> Core.Type -> Compute.Flow Graph.Graph Ast.Type)
 encodeTypeWithClassAssertions namespaces explicitClasses typ =  
   let classes = (Maps.union explicitClasses (getImplicitTypeClasses typ)) 
       implicitClasses = (getImplicitTypeClasses typ)
@@ -356,8 +356,8 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ =
               let name = (fst pair) 
                   cls = (snd pair)
                   hname = (Utils.rawName ((\x -> case x of
-                          Graph.TypeClassEquality -> "Eq"
-                          Graph.TypeClassOrdering -> "Ord") cls))
+                          Mantle.TypeClassEquality -> "Eq"
+                          Mantle.TypeClassOrdering -> "Ord") cls))
                   htype = (Ast.TypeVariable (Utils.rawName (Core.unName name)))
               in (Ast.AssertionClass (Ast.ClassAssertion {
                 Ast.classAssertionName = hname,
@@ -394,10 +394,10 @@ findOrdVariables typ =
               _ -> names) (Strip.stripType t))
   in (Rewriting.foldOverType Coders.TraversalOrderPre fold Sets.empty typ)
 
-getImplicitTypeClasses :: (Core.Type -> M.Map Core.Name (S.Set Graph.TypeClass))
+getImplicitTypeClasses :: (Core.Type -> M.Map Core.Name (S.Set Mantle.TypeClass))
 getImplicitTypeClasses typ =  
   let toPair = (\name -> (name, (Sets.fromList [
-          Graph.TypeClassOrdering])))
+          Mantle.TypeClassOrdering])))
   in (Maps.fromList (Lists.map toPair (Sets.toList (findOrdVariables typ))))
 
 moduleToHaskellModule :: (Module.Module -> Compute.Flow Graph.Graph Ast.Module)
