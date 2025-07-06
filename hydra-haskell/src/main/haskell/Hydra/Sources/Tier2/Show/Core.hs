@@ -70,6 +70,9 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
 --import qualified Hydra.Sources.Tier2.Show.Accessors as ShowAccessors
 --import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
+--import qualified Hydra.Sources.Tier2.Show.Graph as ShowGraph
+--import qualified Hydra.Sources.Tier2.Show.Mantle as ShowMantle
+--import qualified Hydra.Sources.Tier2.Show.Typing as ShowTyping
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
@@ -82,26 +85,20 @@ showCoreModule :: Module
 showCoreModule = Module (Namespace "hydra.show.core") elements
     [Tier1.hydraStripModule]
     [Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraTypingModule] $
-    Just "Haskell implementations of hydra.lib.io primitives"
+    Just "String representations of hydra.core types"
   where
    elements = [
      el readTermDef, -- TODO: move this to hydra.read.core
-     el elementDef, -- TODO: move this to hydra.show.graph
      el floatValueDef,
      el floatTypeDef,
-     el graphDef, -- TODO: move this to hydra.show.graph
      el integerValueDef,
      el integerTypeDef,
      el listDef,
      el literalDef,
      el literalTypeDef,
      el termDef,
-     el termVariantDef, -- TODO: move this to hydra.show.mantle
      el typeDef,
-     el typeConstraintDef, -- TODO: move this to hydra.show.typing
-     el typeSchemeDef,
-     el typeSubstDef, -- TODO: move this to hydra.show.typing
-     el typeVariantDef] -- TODO: move this to hydra.show.mantle
+     el typeSchemeDef]
 
 showCoreDefinition :: String -> TTerm a -> TElement a
 showCoreDefinition = definitionInModule showCoreModule
@@ -110,22 +107,6 @@ readTermDef :: TElement (String -> Maybe Term)
 readTermDef = showCoreDefinition "readTerm" $
   doc "A placeholder for reading terms from their serialized form. Not implemented." $
   constant nothing
-
-elementDef :: TElement (Element -> String)
-elementDef = showCoreDefinition "element" $
-  doc "Show an element as a string" $
-  lambda "el" $ lets [
-    "name">: unwrap _Name @@ (Graph.elementName $ var "el"),
-    "t">: Graph.elementTerm $ var "el",
-    "typeStr">: Optionals.maybe
-      (string "")
-      (lambda "ts" $ Strings.cat2 (string " : ") (ref typeSchemeDef @@ var "ts"))
-      (Graph.elementType $ var "el")] $
-    Strings.cat $ list [
-      var "name",
-      string " = ",
-      ref termDef @@ var "t",
-      var "typeStr"]
 
 floatValueDef :: TElement (FloatValue -> String)
 floatValueDef = showCoreDefinition "float" $
@@ -142,17 +123,6 @@ floatTypeDef = showCoreDefinition "floatType" $
     _FloatType_bigfloat>>: constant $ string "bigfloat",
     _FloatType_float32>>: constant $ string "float32",
     _FloatType_float64>>: constant $ string "float64"]
-
-graphDef :: TElement (Graph -> String)
-graphDef = showCoreDefinition "graph" $
-  doc "Show a graph as a string" $
-  lambda "graph" $ lets [
-    "elements">: Maps.elems $ Graph.graphElements $ var "graph",
-    "elementStrs">: Lists.map (ref elementDef) (var "elements")] $
-    Strings.cat $ list [
-      string "{",
-      Strings.intercalate (string ", ") (var "elementStrs"),
-      string "}"]
 
 integerValueDef :: TElement (IntegerValue -> String)
 integerValueDef = showCoreDefinition "integer" $
@@ -406,29 +376,6 @@ termDef = showCoreDefinition "term" $
           ref termDef @@ var "term1",
           string "}"]]
 
-termVariantDef :: TElement (TermVariant -> String)
-termVariantDef = showCoreDefinition "termVariant" $
-  doc "Show a term variant as a string" $
-  match _TermVariant Nothing [
-    _TermVariant_annotated>>: constant $ string "annotated",
-    _TermVariant_application>>: constant $ string "application",
-    _TermVariant_function>>: constant $ string "function",
-    _TermVariant_let>>: constant $ string "let",
-    _TermVariant_list>>: constant $ string "list",
-    _TermVariant_literal>>: constant $ string "literal",
-    _TermVariant_map>>: constant $ string "map",
-    _TermVariant_optional>>: constant $ string "optional",
-    _TermVariant_product>>: constant $ string "product",
-    _TermVariant_record>>: constant $ string "record",
-    _TermVariant_set>>: constant $ string "set",
-    _TermVariant_sum>>: constant $ string "sum",
-    _TermVariant_typeAbstraction>>: constant $ string "typeAbstraction",
-    _TermVariant_typeApplication>>: constant $ string "typeApplication",
-    _TermVariant_union>>: constant $ string "union",
-    _TermVariant_unit>>: constant $ string "unit",
-    _TermVariant_variable>>: constant $ string "variable",
-    _TermVariant_wrap>>: constant $ string "wrap"]
-
 typeDef :: TElement (Type -> String)
 typeDef = showCoreDefinition "type_" $
   doc "Show a type as a string" $
@@ -527,17 +474,6 @@ typeDef = showCoreDefinition "type_" $
           ref typeDef @@ var "typ1",
           string ")"]]
 
-typeConstraintDef :: TElement (TypeConstraint -> String)
-typeConstraintDef = showCoreDefinition "typeConstraint" $
-  doc "Show a type constraint as a string" $
-  lambda "tc" $ lets [
-    "ltyp">: Typing.typeConstraintLeft $ var "tc",
-    "rtyp">: Typing.typeConstraintRight $ var "tc"] $
-    Strings.cat $ list [
-      ref typeDef @@ var "ltyp",
-      string "≡",
-      ref typeDef @@ var "rtyp"]
-
 typeSchemeDef :: TElement (TypeScheme -> String)
 typeSchemeDef = showCoreDefinition "typeScheme" $
   doc "Show a type scheme as a string" $
@@ -556,43 +492,3 @@ typeSchemeDef = showCoreDefinition "typeScheme" $
       var "fa",
       ref typeDef @@ var "body",
       string ")"]
-
-typeSubstDef :: TElement (TypeSubst -> String)
-typeSubstDef = showCoreDefinition "typeSubst" $
-  doc "Show a type substitution as a string" $
-  lambda "ts" $ lets [
-    "subst">: Typing.unTypeSubst $ var "ts",
-    "pairs">: Maps.toList $ var "subst",
-    "showPair">: lambda "pair" $ lets [
-      "name">: unwrap _Name @@ (first $ var "pair"),
-      "typ">: second $ var "pair"] $
-      Strings.cat $ list [
-        var "name",
-        string "↦",
-        ref typeDef @@ var "typ"],
-    "pairStrs">: Lists.map (var "showPair") (var "pairs")] $
-    Strings.cat $ list [
-      string "{",
-      Strings.intercalate (string ",") (var "pairStrs"),
-      string "}"]
-
-typeVariantDef :: TElement (TypeVariant -> String)
-typeVariantDef = showCoreDefinition "typeVariant" $
-  doc "Show a type variant as a string" $
-  match _TypeVariant Nothing [
-    _TypeVariant_annotated>>: constant $ string "annotated",
-    _TypeVariant_application>>: constant $ string "application",
-    _TypeVariant_forall>>: constant $ string "forall",
-    _TypeVariant_function>>: constant $ string "function",
-    _TypeVariant_list>>: constant $ string "list",
-    _TypeVariant_literal>>: constant $ string "literal",
-    _TypeVariant_map>>: constant $ string "map",
-    _TypeVariant_optional>>: constant $ string "optional",
-    _TypeVariant_product>>: constant $ string "product",
-    _TypeVariant_record>>: constant $ string "record",
-    _TypeVariant_set>>: constant $ string "set",
-    _TypeVariant_sum>>: constant $ string "sum",
-    _TypeVariant_union>>: constant $ string "union",
-    _TypeVariant_unit>>: constant $ string "unit",
-    _TypeVariant_variable>>: constant $ string "variable",
-    _TypeVariant_wrap>>: constant $ string "wrap"]

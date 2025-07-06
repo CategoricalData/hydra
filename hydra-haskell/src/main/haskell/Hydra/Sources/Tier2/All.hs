@@ -50,6 +50,9 @@ import Hydra.Sources.Tier2.Schemas
 import Hydra.Sources.Tier2.Serialization
 import Hydra.Sources.Tier2.Show.Accessors
 import Hydra.Sources.Tier2.Show.Core
+import Hydra.Sources.Tier2.Show.Graph
+import Hydra.Sources.Tier2.Show.Mantle
+import Hydra.Sources.Tier2.Show.Typing
 import Hydra.Sources.Tier2.Sorting
 import Hydra.Sources.Tier2.Substitution
 import Hydra.Sources.Tier2.Tarjan
@@ -81,6 +84,9 @@ tier2TermModules = [
   extractCoreModule,
   extractMantleModule,
   showCoreModule,
+  showGraphModule,
+  showMantleModule,
+  showTypingModule,
   showAccessorsModule,
   adaptModulesModule,
   hydraAdaptUtilsModule,
