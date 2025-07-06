@@ -233,11 +233,11 @@ comparisonDef = expectDefinition "comparison" $
   lambda "term" $
     Flows.bind (ref unitVariantDef @@ Core.nameLift _Comparison @@ var "term") $
       lambda "fname" $
-        Logic.ifElse (Equality.equalString (Core.unName $ var "fname") (string $ unName _Comparison_equalTo))
+        Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_equalTo))
           (Flows.pure Graph.comparisonEqualTo)
-          (Logic.ifElse (Equality.equalString (Core.unName $ var "fname") (string $ unName _Comparison_lessThan))
+          (Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_lessThan))
             (Flows.pure Graph.comparisonLessThan)
-            (Logic.ifElse (Equality.equalString (Core.unName $ var "fname") (string $ unName _Comparison_greaterThan))
+            (Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_greaterThan))
               (Flows.pure Graph.comparisonGreaterThan)
               (ref Monads.unexpectedDef @@ string "comparison" @@ Core.unName (var "fname"))))
 
@@ -250,7 +250,7 @@ fieldDef = expectDefinition "field" $
       (var "fields")]
     $ Logic.ifElse (Lists.null $ var "matchingFields")
       (Flows.fail $ "field " ++ (Core.unName $ var "fname") ++ " not found")
-      (Logic.ifElse (Equality.equalInt32 (Lists.length $ var "matchingFields") $ int32 1)
+      (Logic.ifElse (Equality.equal (Lists.length $ var "matchingFields") $ int32 1)
         (Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ (Core.fieldTerm $ Lists.head $ var "matchingFields")) $ var "mapping")
         (Flows.fail $ "multiple fields named " ++ (Core.unName $ var "fname")))
 
@@ -397,7 +397,7 @@ letBindingDef = expectDefinition "letBinding" $
           (Core.letBindings $ var "letExpr")]
         $ Logic.ifElse (Lists.null $ var "matchingBindings")
           (Flows.fail $ "no such binding: " ++ var "n")
-          (Logic.ifElse (Equality.equalInt32 (Lists.length $ var "matchingBindings") $ int32 1)
+          (Logic.ifElse (Equality.equal (Lists.length $ var "matchingBindings") $ int32 1)
             (Flows.pure $ Core.letBindingTerm $ Lists.head $ var "matchingBindings")
             (Flows.fail $ "multiple bindings named " ++ var "n"))
 
@@ -464,7 +464,7 @@ nArgsDef :: TElement (Name -> Int -> [Term] -> Flow s ())
 nArgsDef = expectDefinition "nArgs" $
   doc "Ensure a function has the expected number of arguments" $
   lambdas ["name", "n", "args"] $
-    Logic.ifElse (Equality.equalInt32 (Lists.length $ var "args") (var "n"))
+    Logic.ifElse (Equality.equal (Lists.length $ var "args") (var "n"))
       (Flows.pure unit)
       (ref Monads.unexpectedDef @@ (Strings.concat [
         Literals.showInt32 $ var "n",
@@ -495,7 +495,7 @@ pairDef = expectDefinition "pair" $
   lambdas ["kf", "vf", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
     lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ string "product" @@ (ref ShowCore.termDef @@ var "term")) [
       _Term_product>>: lambda "terms" $
-        Logic.ifElse (Equality.equalInt32 (Lists.length $ var "terms") $ int32 2)
+        Logic.ifElse (Equality.equal (Lists.length $ var "terms") $ int32 2)
           (Flows.bind (var "kf" @@ (Lists.head $ var "terms")) $
             lambda "kVal" $ Flows.bind (var "vf" @@ (Lists.head $ Lists.tail $ var "terms")) $
               lambda "vVal" $ Flows.pure $ pair (var "kVal") (var "vVal"))

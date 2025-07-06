@@ -118,7 +118,7 @@ literalAdapter lt =
                   Compute.adapterTarget = (Core.LiteralTypeInteger (Compute.adapterTarget adapter)),
                   Compute.adapterCoder = step}]))) (Logic.ifElse hasStrings (Flows.pure ( 
               let encode = (\lit -> Flows.bind (Core__.booleanLiteral lit) (\b -> Flows.pure (Core.LiteralString (Logic.ifElse b "true" "false")))) 
-                  decode = (\lit -> Flows.bind (Core__.stringLiteral lit) (\s -> Logic.ifElse (Equality.equalString s "true") (Flows.pure (Core.LiteralBoolean True)) (Logic.ifElse (Equality.equalString s "false") (Flows.pure (Core.LiteralBoolean False)) (Monads.unexpected "boolean literal" s))))
+                  decode = (\lit -> Flows.bind (Core__.stringLiteral lit) (\s -> Logic.ifElse (Equality.equal s "true") (Flows.pure (Core.LiteralBoolean True)) (Logic.ifElse (Equality.equal s "false") (Flows.pure (Core.LiteralBoolean False)) (Monads.unexpected "boolean literal" s))))
               in [
                 Compute.Adapter {
                   Compute.adapterIsLossy = False,

@@ -152,7 +152,7 @@ wrapLine :: (Int -> String -> String)
 wrapLine maxlen input =  
   let helper = (\prev -> \rem ->  
           let trunc = (Lists.take maxlen rem) 
-              spanResult = (Lists.span (\c -> Logic.and (Logic.not (Equality.equalInt32 c 32)) (Logic.not (Equality.equalInt32 c 9))) (Lists.reverse trunc))
+              spanResult = (Lists.span (\c -> Logic.and (Logic.not (Equality.equal c 32)) (Logic.not (Equality.equal c 9))) (Lists.reverse trunc))
               prefix = (Lists.reverse (snd spanResult))
               suffix = (Lists.reverse (fst spanResult))
           in (Logic.ifElse (Equality.lteInt32 (Lists.length rem) maxlen) (Lists.reverse (Lists.cons rem prev)) (Logic.ifElse (Lists.null prefix) (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (helper (Lists.cons (Lists.init prefix) prev) (Lists.concat2 suffix (Lists.drop maxlen rem))))))

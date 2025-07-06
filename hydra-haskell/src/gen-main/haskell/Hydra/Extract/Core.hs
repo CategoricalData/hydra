@@ -65,7 +65,7 @@ caseField :: (Core.Name -> String -> Core.Term -> Compute.Flow Graph.Graph Core.
 caseField name n term =  
   let fieldName = (Core.Name n)
   in (Flows.bind (cases name term) (\cs ->  
-    let matching = (Lists.filter (\f -> Equality.equalString (Core.unName (Core.fieldName f)) (Core.unName fieldName)) (Core.caseStatementCases cs))
+    let matching = (Lists.filter (\f -> Equality.equal (Core.unName (Core.fieldName f)) (Core.unName fieldName)) (Core.caseStatementCases cs))
     in (Logic.ifElse (Lists.null matching) (Flows.fail "not enough cases") (Flows.pure (Lists.head matching)))))
 
 -- | Extract case statement from a term
@@ -73,7 +73,7 @@ cases :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.CaseStatement)
 cases name term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> (\x -> case x of
   Core.TermFunction v1 -> ((\x -> case x of
     Core.FunctionElimination v2 -> ((\x -> case x of
-      Core.EliminationUnion v3 -> (Logic.ifElse (Equality.equalString (Core.unName (Core.caseStatementTypeName v3)) (Core.unName name)) (Flows.pure v3) (Monads.unexpected (Strings.cat [
+      Core.EliminationUnion v3 -> (Logic.ifElse (Equality.equal (Core.unName (Core.caseStatementTypeName v3)) (Core.unName name)) (Flows.pure v3) (Monads.unexpected (Strings.cat [
         "case statement for type ",
         (Core.unName name)]) (Core_.term term)))
       _ -> (Monads.unexpected "case statement" (Core_.term term))) v2)
@@ -82,16 +82,16 @@ cases name term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term ->
 
 -- | Extract a comparison from a term
 comparison :: (Core.Term -> Compute.Flow Graph.Graph Graph.Comparison)
-comparison term = (Flows.bind (unitVariant (Core.Name "hydra.graph.Comparison") term) (\fname -> Logic.ifElse (Equality.equalString (Core.unName fname) "equalTo") (Flows.pure Graph.ComparisonEqualTo) (Logic.ifElse (Equality.equalString (Core.unName fname) "lessThan") (Flows.pure Graph.ComparisonLessThan) (Logic.ifElse (Equality.equalString (Core.unName fname) "greaterThan") (Flows.pure Graph.ComparisonGreaterThan) (Monads.unexpected "comparison" (Core.unName fname))))))
+comparison term = (Flows.bind (unitVariant (Core.Name "hydra.graph.Comparison") term) (\fname -> Logic.ifElse (Equality.equal (Core.unName fname) "equalTo") (Flows.pure Graph.ComparisonEqualTo) (Logic.ifElse (Equality.equal (Core.unName fname) "lessThan") (Flows.pure Graph.ComparisonLessThan) (Logic.ifElse (Equality.equal (Core.unName fname) "greaterThan") (Flows.pure Graph.ComparisonGreaterThan) (Monads.unexpected "comparison" (Core.unName fname))))))
 
 field :: (Core.Name -> (Core.Term -> Compute.Flow Graph.Graph t0) -> [Core.Field] -> Compute.Flow Graph.Graph t0)
 field fname mapping fields =  
-  let matchingFields = (Lists.filter (\f -> Equality.equalString (Core.unName (Core.fieldName f)) (Core.unName fname)) fields)
+  let matchingFields = (Lists.filter (\f -> Equality.equal (Core.unName (Core.fieldName f)) (Core.unName fname)) fields)
   in (Logic.ifElse (Lists.null matchingFields) (Flows.fail (Strings.cat [
     Strings.cat [
       "field ",
       (Core.unName fname)],
-    " not found"])) (Logic.ifElse (Equality.equalInt32 (Lists.length matchingFields) 1) (Flows.bind (Lexical.stripAndDereferenceTerm (Core.fieldTerm (Lists.head matchingFields))) mapping) (Flows.fail (Strings.cat [
+    " not found"])) (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Flows.bind (Lexical.stripAndDereferenceTerm (Core.fieldTerm (Lists.head matchingFields))) mapping) (Flows.fail (Strings.cat [
     "multiple fields named ",
     (Core.unName fname)]))))
 
@@ -132,7 +132,7 @@ functionType typ =
 -- | Extract a field from a union term
 injection :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.Field)
 injection expected term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> (\x -> case x of
-  Core.TermUnion v1 -> (Logic.ifElse (Equality.equalString (Core.unName (Core.injectionTypeName v1)) (Core.unName expected)) (Flows.pure (Core.injectionField v1)) (Monads.unexpected (Strings.cat [
+  Core.TermUnion v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v1)) (Core.unName expected)) (Flows.pure (Core.injectionField v1)) (Monads.unexpected (Strings.cat [
     "injection of type ",
     (Core.unName expected)]) (Core.unName (Core.injectionTypeName v1))))
   _ -> (Monads.unexpected "injection" (Core_.term term))) term))
@@ -199,10 +199,10 @@ letBinding :: (String -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 letBinding n term =  
   let name = (Core.Name n)
   in (Flows.bind (letTerm term) (\letExpr ->  
-    let matchingBindings = (Lists.filter (\b -> Equality.equalString (Core.unName (Core.letBindingName b)) (Core.unName name)) (Core.letBindings letExpr))
+    let matchingBindings = (Lists.filter (\b -> Equality.equal (Core.unName (Core.letBindingName b)) (Core.unName name)) (Core.letBindings letExpr))
     in (Logic.ifElse (Lists.null matchingBindings) (Flows.fail (Strings.cat [
       "no such binding: ",
-      n])) (Logic.ifElse (Equality.equalInt32 (Lists.length matchingBindings) 1) (Flows.pure (Core.letBindingTerm (Lists.head matchingBindings))) (Flows.fail (Strings.cat [
+      n])) (Logic.ifElse (Equality.equal (Lists.length matchingBindings) 1) (Flows.pure (Core.letBindingTerm (Lists.head matchingBindings))) (Flows.fail (Strings.cat [
       "multiple bindings named ",
       n]))))))
 
@@ -252,7 +252,7 @@ mapType typ =
     _ -> (Monads.unexpected "map type" (Core_.type_ typ))) stripped)
 
 nArgs :: (Core.Name -> Int -> [t0] -> Compute.Flow t1 ())
-nArgs name n args = (Logic.ifElse (Equality.equalInt32 (Lists.length args) n) (Flows.pure ()) (Monads.unexpected (Strings.cat [
+nArgs name n args = (Logic.ifElse (Equality.equal (Lists.length args) n) (Flows.pure ()) (Monads.unexpected (Strings.cat [
   Literals.showInt32 n,
   " arguments to primitive ",
   (Literals.showString (Core.unName name))]) (Literals.showInt32 (Lists.length args))))
@@ -271,7 +271,7 @@ optionalType typ =
 
 pair :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flow Graph.Graph t1) -> Core.Term -> Compute.Flow Graph.Graph (t0, t1))
 pair kf vf term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> (\x -> case x of
-  Core.TermProduct v1 -> (Logic.ifElse (Equality.equalInt32 (Lists.length v1) 2) (Flows.bind (kf (Lists.head v1)) (\kVal -> Flows.bind (vf (Lists.head (Lists.tail v1))) (\vVal -> Flows.pure (kVal, vVal)))) (Monads.unexpected "pair" (Core_.term term)))
+  Core.TermProduct v1 -> (Logic.ifElse (Equality.equal (Lists.length v1) 2) (Flows.bind (kf (Lists.head v1)) (\kVal -> Flows.bind (vf (Lists.head (Lists.tail v1))) (\vVal -> Flows.pure (kVal, vVal)))) (Monads.unexpected "pair" (Core_.term term)))
   _ -> (Monads.unexpected "product" (Core_.term term))) term))
 
 productType :: (Core.Type -> Compute.Flow t0 [Core.Type])
@@ -284,7 +284,7 @@ productType typ =
 -- | Extract a record's fields from a term
 record :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph [Core.Field])
 record expected term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> (\x -> case x of
-  Core.TermRecord v1 -> (Logic.ifElse (Equality.equalString (Core.unName (Core.recordTypeName v1)) (Core.unName expected)) (Flows.pure (Core.recordFields v1)) (Monads.unexpected (Strings.cat [
+  Core.TermRecord v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.recordTypeName v1)) (Core.unName expected)) (Flows.pure (Core.recordFields v1)) (Monads.unexpected (Strings.cat [
     "record of type ",
     (Core.unName expected)]) (Core.unName (Core.recordTypeName v1))))
   _ -> (Monads.unexpected "record" (Core_.term term))) term))
@@ -293,7 +293,7 @@ recordType :: (Core.Name -> Core.Type -> Compute.Flow t0 [Core.FieldType])
 recordType ename typ =  
   let stripped = (Strip.stripType typ)
   in ((\x -> case x of
-    Core.TypeRecord v1 -> (Logic.ifElse (Equality.equalString (Core.unName (Core.rowTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.rowTypeFields v1)) (Monads.unexpected (Strings.cat [
+    Core.TypeRecord v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.rowTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.rowTypeFields v1)) (Monads.unexpected (Strings.cat [
       "record of type ",
       (Core.unName ename)]) (Strings.cat [
       "record of type ",
@@ -368,7 +368,7 @@ unionType :: (Core.Name -> Core.Type -> Compute.Flow t0 [Core.FieldType])
 unionType ename typ =  
   let stripped = (Strip.stripType typ)
   in ((\x -> case x of
-    Core.TypeUnion v1 -> (Logic.ifElse (Equality.equalString (Core.unName (Core.rowTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.rowTypeFields v1)) (Monads.unexpected (Strings.cat [
+    Core.TypeUnion v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.rowTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.rowTypeFields v1)) (Monads.unexpected (Strings.cat [
       "union of type ",
       (Core.unName ename)]) (Strings.cat [
       "union of type ",
@@ -391,7 +391,7 @@ variant = injection
 -- | Extract the wrapped value from a wrapped term
 wrap :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 wrap expected term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> (\x -> case x of
-  Core.TermWrap v1 -> (Logic.ifElse (Equality.equalString (Core.unName (Core.wrappedTermTypeName v1)) (Core.unName expected)) (Flows.pure (Core.wrappedTermObject v1)) (Monads.unexpected (Strings.cat [
+  Core.TermWrap v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTermTypeName v1)) (Core.unName expected)) (Flows.pure (Core.wrappedTermObject v1)) (Monads.unexpected (Strings.cat [
     "wrapper of type ",
     (Core.unName expected)]) (Core.unName (Core.wrappedTermTypeName v1))))
   _ -> (Monads.unexpected (Strings.cat [
@@ -404,7 +404,7 @@ wrappedType :: (Core.Name -> Core.Type -> Compute.Flow t0 Core.Type)
 wrappedType ename typ =  
   let stripped = (Strip.stripType typ)
   in ((\x -> case x of
-    Core.TypeWrap v1 -> (Logic.ifElse (Equality.equalString (Core.unName (Core.wrappedTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.wrappedTypeObject v1)) (Monads.unexpected (Strings.cat [
+    Core.TypeWrap v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.wrappedTypeObject v1)) (Monads.unexpected (Strings.cat [
       "wrapped type ",
       (Core.unName ename)]) (Strings.cat [
       "wrapped type ",

@@ -42,7 +42,7 @@ qname ns name = (Core.Name (Strings.cat [
 qualifyName :: (Core.Name -> Module.QualifiedName)
 qualifyName name =  
   let parts = (Lists.reverse (Strings.splitOn "." (Core.unName name)))
-  in (Logic.ifElse (Equality.equalInt32 1 (Lists.length parts)) (Module.QualifiedName {
+  in (Logic.ifElse (Equality.equal 1 (Lists.length parts)) (Module.QualifiedName {
     Module.qualifiedNameNamespace = Nothing,
     Module.qualifiedNameLocal = (Core.unName name)}) (Module.QualifiedName {
     Module.qualifiedNameNamespace = (Just (Module.Namespace (Strings.intercalate "." (Lists.reverse (Lists.tail parts))))),

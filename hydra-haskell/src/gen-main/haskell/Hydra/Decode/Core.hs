@@ -147,7 +147,7 @@ matchUnion tname pairs term =
       mapping = (Maps.fromList pairs)
   in ((\x -> case x of
     Core.TermVariable v1 -> (Flows.bind (Lexical.requireElement v1) (\el -> matchUnion tname pairs (Graph.elementTerm el)))
-    Core.TermUnion v1 -> (Logic.ifElse (Equality.equalString (Core.unName (Core.injectionTypeName v1)) (Core.unName tname)) ( 
+    Core.TermUnion v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v1)) (Core.unName tname)) ( 
       let fname = (Core.fieldName (Core.injectionField v1)) 
           val = (Core.fieldTerm (Core.injectionField v1))
       in (Optionals.maybe (Flows.fail (Strings.cat [

@@ -74,23 +74,6 @@ _hydra_lib_equality = Namespace "hydra.lib.equality"
 
 _equality_compareInt32  = qname _hydra_lib_equality "compareInt32" :: Name
 _equality_equal         = qname _hydra_lib_equality "equal" :: Name
-_equality_equalBinary   = qname _hydra_lib_equality "equalBinary" :: Name
-_equality_equalBoolean  = qname _hydra_lib_equality "equalBoolean" :: Name
-_equality_equalBigfloat = qname _hydra_lib_equality "equalBigfloat" :: Name
-_equality_equalFloat32  = qname _hydra_lib_equality "equalFloat32" :: Name
-_equality_equalFloat64  = qname _hydra_lib_equality "equalFloat64" :: Name
-_equality_equalBigint   = qname _hydra_lib_equality "equalBigint" :: Name
-_equality_equalInt8     = qname _hydra_lib_equality "equalInt8" :: Name
-_equality_equalInt16    = qname _hydra_lib_equality "equalInt16" :: Name
-_equality_equalInt32    = qname _hydra_lib_equality "equalInt32" :: Name
-_equality_equalInt64    = qname _hydra_lib_equality "equalInt64" :: Name
-_equality_equalTerm     = qname _hydra_lib_equality "equalTerm" :: Name
-_equality_equalType     = qname _hydra_lib_equality "equalType" :: Name
-_equality_equalUint8    = qname _hydra_lib_equality "equalUint8" :: Name
-_equality_equalUint16   = qname _hydra_lib_equality "equalUint16" :: Name
-_equality_equalUint32   = qname _hydra_lib_equality "equalUint32" :: Name
-_equality_equalUint64   = qname _hydra_lib_equality "equalUint64" :: Name
-_equality_equalString   = qname _hydra_lib_equality "equalString" :: Name
 _equality_gtFloat32     = qname _hydra_lib_equality "gtFloat32" :: Name
 _equality_gtFloat64     = qname _hydra_lib_equality "gtFloat64" :: Name
 _equality_gtInt32       = qname _hydra_lib_equality "gtInt32" :: Name
@@ -109,23 +92,6 @@ hydraLibEquality :: Library
 hydraLibEquality = standardLibrary _hydra_lib_equality [
     prim2 _equality_compareInt32  Equality.compareInt32  []    int32 int32 comparison,
     prim2 _equality_equal         Equality.equal         []    x x boolean,
-    prim2 _equality_equalBinary   Equality.equalBinary   []    binary binary boolean,
-    prim2 _equality_equalBoolean  Equality.equalBoolean  []    boolean boolean boolean,
-    prim2 _equality_equalBigfloat Equality.equalBigfloat []    bigfloat bigfloat boolean,
-    prim2 _equality_equalFloat32  Equality.equalFloat32  []    float32 float32 boolean,
-    prim2 _equality_equalFloat64  Equality.equalFloat64  []    float64 float64 boolean,
-    prim2 _equality_equalBigint   Equality.equalBigint   []    bigint bigint boolean,
-    prim2 _equality_equalInt8     Equality.equalInt8     []    int8 int8 boolean,
-    prim2 _equality_equalInt16    Equality.equalInt16    []    int16 int16 boolean,
-    prim2 _equality_equalInt32    Equality.equalInt32    []    int32 int32 boolean,
-    prim2 _equality_equalInt64    Equality.equalInt64    []    int64 int64 boolean,
-    prim2 _equality_equalTerm     Equality.equalTerm     []    term term boolean,
-    prim2 _equality_equalType     Equality.equalType     []    type_ type_ boolean,
-    prim2 _equality_equalUint8    Equality.equalUint8    []    uint8 uint8 boolean,
-    prim2 _equality_equalUint16   Equality.equalUint16   []    uint16 uint16 boolean,
-    prim2 _equality_equalUint32   Equality.equalUint32   []    uint32 uint32 boolean,
-    prim2 _equality_equalUint64   Equality.equalUint64   []    uint64 uint64 boolean,
-    prim2 _equality_equalString   Equality.equalString   []    string string boolean,
     prim1 _equality_identity      Equality.identity      ["x"] x x,
     prim2 _equality_gtFloat32     Equality.gtFloat32     []    float32 float32 boolean,
     prim2 _equality_gtFloat64     Equality.gtFloat64     []    float64 float64 boolean,

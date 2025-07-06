@@ -34,9 +34,9 @@ alphaConvert vold tnew term =
           Core.TermFunction v1 -> ((\x -> case x of
             Core.FunctionLambda v2 ->  
               let v = (Core.lambdaParameter v2)
-              in (Logic.ifElse (Equality.equalString (Core.unName v) (Core.unName vold)) t (recurse t))
+              in (Logic.ifElse (Equality.equal (Core.unName v) (Core.unName vold)) t (recurse t))
             _ -> (recurse t)) v1)
-          Core.TermVariable v1 -> (Logic.ifElse (Equality.equalString (Core.unName v1) (Core.unName vold)) tnew (Core.TermVariable v1))
+          Core.TermVariable v1 -> (Logic.ifElse (Equality.equal (Core.unName v1) (Core.unName vold)) tnew (Core.TermVariable v1))
           _ -> (recurse t)) t)
   in (Rewriting.rewriteTerm rewrite term)
 
@@ -109,7 +109,7 @@ etaReduceTerm term =
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = lhs,
                         Core.applicationArgument = (Core.annotatedTermSubject v2)}))}))
-                    Core.TermVariable v2 -> (Logic.ifElse (Logic.and (Equality.equalString (Core.unName v) (Core.unName v2)) (Logic.not (Rewriting.isFreeVariableInTerm v lhs))) (etaReduceTerm lhs) noChange)
+                    Core.TermVariable v2 -> (Logic.ifElse (Logic.and (Equality.equal (Core.unName v) (Core.unName v2)) (Logic.not (Rewriting.isFreeVariableInTerm v lhs))) (etaReduceTerm lhs) noChange)
                     _ -> noChange) (etaReduceTerm rhs))
                 _ -> noChange) (etaReduceTerm body)))
   in ((\x -> case x of
