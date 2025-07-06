@@ -96,7 +96,7 @@ classifyDataTerm typ term = if isLambda term
       else JavaSymbolClassConstant
   where
     hasTypeParameters = not $ S.null $ freeVariablesInType typ
-    isUnsupportedVariant = case fullyStripTerm term of
+    isUnsupportedVariant = case stripTerm term of
       TermLet _ -> True
       _ -> False
 
@@ -197,7 +197,7 @@ constructModule mod coders pairs = do
               return $ interfaceMethodDeclaration mods tparams mname [] result (Just $ stmts ++ [returnSt])
 
         termToUnaryMethod coders el term = case stripType typ of
-          TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \aliases2 term2 stmts2 -> case fullyStripTerm term2 of
+          TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \aliases2 term2 stmts2 -> case stripTerm term2 of
             TermFunction (FunctionLambda (Lambda v _ body)) -> do
               jdom <- adaptTypeToJavaAndEncode aliases2 dom
               jcod <- adaptTypeToJavaAndEncode aliases2 cod
@@ -448,7 +448,7 @@ elementsClassName :: Namespace -> String
 elementsClassName (Namespace ns) = capitalize $ L.last $ LS.splitOn "." ns
 
 encodeApplication :: Aliases -> Application -> Flow Graph Java.Expression
-encodeApplication aliases app@(Application lhs rhs) = case fullyStripTerm fun of
+encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
     TermFunction f -> case f of
       FunctionPrimitive name -> functionCall aliases True name args
       _ -> fallback
@@ -465,7 +465,7 @@ encodeApplication aliases app@(Application lhs rhs) = case fullyStripTerm fun of
   where
     (fun, args) = uncurry [] lhs rhs
       where
-       uncurry args lhs rhs = case fullyStripTerm lhs of
+       uncurry args lhs rhs = case stripTerm lhs of
          TermApplication (Application lhs' rhs') -> uncurry (rhs:args) lhs' rhs'
          _ -> (lhs, (rhs:args))
 
@@ -479,7 +479,7 @@ encodeApplication aliases app@(Application lhs rhs) = case fullyStripTerm fun of
         (dom, cod) <- case stripTypeParameters $ stripType t of
             TypeFunction (FunctionType dom cod) -> pure (dom, cod)
             t' -> fail $ "expected a function type on function " ++ show lhs ++ ", but found " ++ show t'
-        case fullyStripTerm lhs of
+        case stripTerm lhs of
           TermFunction f -> case f of
             FunctionElimination e -> do
                 jarg <- encodeTerm aliases rhs

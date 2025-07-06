@@ -194,7 +194,7 @@ encodeProperty fields adapter = do
       TypeOptional _ -> pure Nothing
       _ -> fail $ "expected field not found in record: " ++ unName fname
     Just value -> case ftyp of
-      TypeOptional _ -> case fullyStripTerm value of
+      TypeOptional _ -> case stripTerm value of
         TermOptional ov -> case ov of
           Nothing -> pure Nothing
           Just v -> Just <$> encodeValue v
