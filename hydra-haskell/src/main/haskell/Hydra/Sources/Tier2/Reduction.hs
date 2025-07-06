@@ -231,7 +231,7 @@ expandLambdasDef = reductionDefinition "expandLambdas" $
       "apps">: Lists.foldl (lambda "lhs" $ lambda "arg" $ Core.termApplication $ Core.application (var "lhs") (var "arg")) (var "t") (var "args"),
       "is">: Logic.ifElse (Equality.lte (var "arity") (Lists.length $ var "args"))
         (list [])
-        (Math.rangeInt32 (int32 1) (Math.sub (var "arity") (Lists.length $ var "args"))),
+        (Math.range (int32 1) (Math.sub (var "arity") (Lists.length $ var "args"))),
       "pad">: lambda "indices" $ lambda "t" $
         Logic.ifElse (Lists.null $ var "indices")
           (var "t")

@@ -238,7 +238,7 @@ testFoldOverTerm = do
 
     H.it "Try a simple fold" $ do
       H.shouldBe
-        (foldOverTerm TraversalOrderPre addInt32s 0
+        (foldOverTerm TraversalOrderPre adds 0
           (list [int32 42, (lambda "x" $ var "x") @@ int32 10]))
         52
 
@@ -252,7 +252,7 @@ testFoldOverTerm = do
           (list [list [string "foo", string "bar"], (lambda "x" $ var "x") @@ (list [string "quux"])]))
         [2, 1, 2]
   where
-    addInt32s sum term = case term of
+    adds sum term = case term of
       TermLiteral (LiteralInteger (IntegerValueInt32 i)) -> sum + i
       _ -> sum
     listLengths l term = case term of
