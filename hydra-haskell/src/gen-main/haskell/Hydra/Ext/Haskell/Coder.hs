@@ -275,7 +275,7 @@ encodeTerm namespaces term =
           dflt = (Flows.map (Utils.hsapp lhs) (encode ft))
       in ((\x -> case x of
         Core.TermUnit -> (Flows.pure lhs)
-        _ -> dflt) (Strip.fullyStripTerm ft))
+        _ -> dflt) (Strip.stripTerm ft))
     Core.TermUnit -> (Flows.pure (Ast.ExpressionTuple []))
     Core.TermVariable v1 -> (Flows.pure (Ast.ExpressionVariable (Utils.elementReference namespaces v1)))
     Core.TermWrap v1 ->  
@@ -283,7 +283,7 @@ encodeTerm namespaces term =
           term_ = (Core.wrappedTermObject v1)
           lhs = (Ast.ExpressionVariable (Utils.elementReference namespaces tname))
       in (Flows.bind (encode term_) (\rhs -> Flows.pure (Utils.hsapp lhs rhs)))
-    _ -> (Flows.fail (Strings.cat2 "unexpected term: " (Core___.term term)))) (Strip.fullyStripTerm term))
+    _ -> (Flows.fail (Strings.cat2 "unexpected term: " (Core___.term term)))) (Strip.stripTerm term))
 
 encodeType :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Compute.Flow t0 Ast.Type)
 encodeType namespaces typ =  
@@ -483,7 +483,7 @@ toDataDeclaration coders namespaces pair =
                           Ast.typedBindingValueBinding = (rewriteValueBinding vb)}))
                   in (Flows.pure (Ast.DeclarationWithComments {
                     Ast.declarationWithCommentsBody = decl,
-                    Ast.declarationWithCommentsComments = comments})))))))) (Strip.fullyStripTerm term_))
+                    Ast.declarationWithCommentsComments = comments})))))))) (Strip.stripTerm term_))
   in (Flows.bind (Annotations.getTermDescription term) (\comments -> toDecl comments hname term coder Nothing))
 
 toTypeDeclarations :: (Module.Namespaces Ast.ModuleName -> Graph.Element -> Core.Term -> Compute.Flow Graph.Graph [Ast.DeclarationWithComments])

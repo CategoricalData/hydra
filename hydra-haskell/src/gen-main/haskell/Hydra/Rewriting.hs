@@ -217,7 +217,7 @@ isLambda term = ((\x -> case x of
     Core.FunctionLambda _ -> True
     _ -> False) v1)
   Core.TermLet v1 -> (isLambda (Core.letEnvironment v1))
-  _ -> False) (Strip.fullyStripTerm term))
+  _ -> False) (Strip.stripTerm term))
 
 -- | Apply a transformation to the first type beneath a chain of annotations
 mapBeneathTypeAnnotations :: ((Core.Type -> Core.Type) -> Core.Type -> Core.Type)
@@ -566,19 +566,19 @@ rewriteTypeM f =
 simplifyTerm :: (Core.Term -> Core.Term)
 simplifyTerm term =  
   let simplify = (\recurse -> \term ->  
-          let stripped = (Strip.fullyStripTerm term)
+          let stripped = (Strip.stripTerm term)
           in (recurse ((\x -> case x of
             Core.TermApplication v1 ->  
               let lhs = (Core.applicationFunction v1) 
                   rhs = (Core.applicationArgument v1)
-                  strippedLhs = (Strip.fullyStripTerm lhs)
+                  strippedLhs = (Strip.stripTerm lhs)
               in ((\x -> case x of
                 Core.TermFunction v2 -> ((\x -> case x of
                   Core.FunctionLambda v3 ->  
                     let var = (Core.lambdaParameter v3) 
                         body = (Core.lambdaBody v3)
                     in (Logic.ifElse (Sets.member var (freeVariablesInTerm body)) ( 
-                      let strippedRhs = (Strip.fullyStripTerm rhs)
+                      let strippedRhs = (Strip.stripTerm rhs)
                       in ((\x -> case x of
                         Core.TermVariable v4 -> (simplifyTerm (substituteVariable var v4 body))
                         _ -> term) strippedRhs)) (simplifyTerm body))

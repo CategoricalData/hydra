@@ -174,7 +174,7 @@ contractTermDef = reductionDefinition "contractTerm" $
                       (var "body")
                       (ref alphaConvertDef @@ var "v" @@ var "rhs" @@ var "body")]
               @@ var "f"]
-          @@ (ref Strip.fullyStripTermDef @@ var "lhs")]
+          @@ (ref Strip.stripTermDef @@ var "lhs")]
       @@ var "rec"]
     $ ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term"
 
@@ -276,7 +276,7 @@ expansionArityDef = reductionDefinition "expansionArity" $
           (Optionals.bind
             (ref Lexical.lookupElementDef @@ var "graph" @@ var "name")
             (lambda "el" $ Graph.elementType $ var "el"))]
-    @@ (ref Strip.fullyStripTermDef @@ var "term")
+    @@ (ref Strip.stripTermDef @@ var "term")
 
 reduceTermDef :: TElement (Bool -> Term -> Flow Graph Term)
 reduceTermDef = reductionDefinition "reduceTerm" $

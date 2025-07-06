@@ -80,7 +80,7 @@ contractTerm term =
                         body = (Core.lambdaBody v3)
                     in (Logic.ifElse (Rewriting.isFreeVariableInTerm v body) body (alphaConvert v rhs body))
                   _ -> rec) v2)
-                _ -> rec) (Strip.fullyStripTerm lhs))
+                _ -> rec) (Strip.stripTerm lhs))
             _ -> rec) rec))
   in (Rewriting.rewriteTerm rewrite term)
 
@@ -156,7 +156,7 @@ expansionArity graph term = ((\x -> case x of
     Core.FunctionLambda _ -> 0
     Core.FunctionPrimitive v2 -> (Arity.primitiveArity (Optionals.fromJust (Lexical.lookupPrimitive graph v2)))) v1)
   Core.TermVariable v1 -> (Optionals.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Optionals.bind (Lexical.lookupElement graph v1) (\el -> Graph.elementType el)))
-  _ -> 0) (Strip.fullyStripTerm term))
+  _ -> 0) (Strip.stripTerm term))
 
 -- | A term evaluation function which is alternatively lazy or eager
 reduceTerm :: (Bool -> Core.Term -> Compute.Flow Graph.Graph Core.Term)

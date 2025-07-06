@@ -9,12 +9,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Strip all annotations from a term, including first-class type annotations
-fullyStripTerm :: (Core.Term -> Core.Term)
-fullyStripTerm t = ((\x -> case x of
-  Core.TermAnnotated v1 -> (fullyStripTerm (Core.annotatedTermSubject v1))
-  _ -> t) t)
-
 -- | Strip all annotations from a term
 stripTerm :: (Core.Term -> Core.Term)
 stripTerm t = ((\x -> case x of
