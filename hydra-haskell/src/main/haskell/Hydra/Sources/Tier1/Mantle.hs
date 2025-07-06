@@ -28,6 +28,13 @@ hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
       def "CaseConvention" $
         Types.enum ["camel", "pascal", "lowerSnake", "upperSnake"],
 
+      def "Comparison" $
+        doc "An equality judgement: less than, equal to, or greater than" $
+        enum [
+          "lessThan",
+          "equalTo",
+          "greaterThan"],
+
       def "Either" $
         doc "A disjoint union between a 'left' type and a 'right' type" $
         forAlls ["a", "b"] $ union [

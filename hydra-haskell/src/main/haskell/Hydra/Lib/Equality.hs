@@ -2,8 +2,7 @@
 
 module Hydra.Lib.Equality where
 
-import Hydra.Core
-import Hydra.Graph
+import Hydra.Mantle
 
 import Data.Int
 

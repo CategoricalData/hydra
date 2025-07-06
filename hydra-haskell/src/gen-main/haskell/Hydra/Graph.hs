@@ -10,21 +10,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | An equality judgement: less than, equal to, or greater than
-data Comparison = 
-  ComparisonLessThan  |
-  ComparisonEqualTo  |
-  ComparisonGreaterThan 
-  deriving (Eq, Ord, Read, Show)
-
-_Comparison = (Core.Name "hydra.graph.Comparison")
-
-_Comparison_lessThan = (Core.Name "lessThan")
-
-_Comparison_equalTo = (Core.Name "equalTo")
-
-_Comparison_greaterThan = (Core.Name "greaterThan")
-
 -- | A graph element, having a name, data term (value), and schema term (type)
 data Element = 
   Element {

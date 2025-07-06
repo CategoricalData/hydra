@@ -21,7 +21,9 @@ testSuiteNs = Namespace "hydra.test.testSuite"
 testSuitePrimitivesNs = Namespace "hydra.test.testSuite.primitives"
 
 testSuiteModule :: Module
-testSuiteModule = Module testSuiteNs elements [testGraphModule] [hydraCoreModule, hydraTestingModule] $
+testSuiteModule = Module testSuiteNs elements
+    [testGraphModule]
+    [hydraCoreModule, hydraMantleModule, hydraTestingModule] $
     Just "Test cases for primitive functions"
   where
     elements = [
