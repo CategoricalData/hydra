@@ -1031,7 +1031,7 @@ toShortNamesDef = rewritingDefinition "toShortNames" $
       "names">: second $ var "localNames",
       "rangeFrom">: lambda "start" $ Lists.cons (var "start") (var "rangeFrom" @@ (Math.add (var "start") (int32 1))),
       "rename">: lambda "name" $ lambda "i" $ pair (var "name") $ Core.name $
-        Logic.ifElse (Equality.gtInt32 (var "i") (int32 1))
+        Logic.ifElse (Equality.gt (var "i") (int32 1))
           (Strings.cat2 (var "local") (Literals.showInt32 $ var "i"))
           (var "local")]
       $ Lists.zipWith (var "rename") (Sets.toList $ var "names") (var "rangeFrom" @@ int32 1)]

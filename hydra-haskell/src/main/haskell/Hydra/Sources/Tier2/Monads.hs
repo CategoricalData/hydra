@@ -303,7 +303,7 @@ withTraceDef = flowsDefinition "withTrace" $
   doc "Continue the current flow after augmenting the trace" $
   lambda "msg" $ lets [
     -- augment the trace
-    "mutate">: lambda "t" $ Logic.ifElse (Equality.gteInt32 (Lists.length (Compute.traceStack $ var "t")) $ ref Constants.maxTraceDepthDef)
+    "mutate">: lambda "t" $ Logic.ifElse (Equality.gte (Lists.length (Compute.traceStack $ var "t")) $ ref Constants.maxTraceDepthDef)
       (inject _Either _Either_left $ string "maximum trace depth exceeded. This may indicate an infinite loop")
       (inject _Either _Either_right $ Compute.trace
         (Lists.cons (var "msg") (Compute.traceStack $ var "t"))

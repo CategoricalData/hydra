@@ -402,15 +402,15 @@ literalToExprDef = haskellSerdeDefinition "literalToExpr" $
       cases H._Literal (var "lit") Nothing [
         H._Literal_char>>: lambda "c" $ Literals.showString $ Literals.showUint16 $ var "c", -- Simplified char handling
         H._Literal_double>>: lambda "d" $
-          Logic.ifElse (Equality.ltFloat64 (var "d") (float64 0.0))
+          Logic.ifElse (Equality.lt (var "d") (float64 0.0))
             (Strings.cat2 (string "(0") (Strings.cat2 (Literals.showFloat64 $ var "d") (string ")")))
             (Literals.showFloat64 $ var "d"),
         H._Literal_float>>: lambda "f" $
-          Logic.ifElse (Equality.ltFloat32 (var "f") (float32 0.0))
+          Logic.ifElse (Equality.lt (var "f") (float32 0.0))
             (Strings.cat2 (string "(0") (Strings.cat2 (Literals.showFloat32 $ var "f") (string ")")))
             (Literals.showFloat32 $ var "f"),
         H._Literal_int>>: lambda "i" $
-          Logic.ifElse (Equality.ltInt32 (var "i") (int32 0))
+          Logic.ifElse (Equality.lt (var "i") (int32 0))
             (Strings.cat2 (string "(0") (Strings.cat2 (Literals.showInt32 $ var "i") (string ")")))
             (Literals.showInt32 $ var "i"),
         H._Literal_integer>>: lambda "i" $ Literals.showBigint $ var "i",

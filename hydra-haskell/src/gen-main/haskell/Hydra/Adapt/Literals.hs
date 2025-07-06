@@ -35,7 +35,7 @@ comparePrecision p1 p2 = ((\x -> case x of
     Mantle.PrecisionBits _ -> Graph.ComparisonGreaterThan) p2)
   Mantle.PrecisionBits v1 -> ((\x -> case x of
     Mantle.PrecisionArbitrary -> Graph.ComparisonLessThan
-    Mantle.PrecisionBits v2 -> (Logic.ifElse (Equality.ltInt32 v1 v2) Graph.ComparisonLessThan Graph.ComparisonGreaterThan)) p2)) p1)
+    Mantle.PrecisionBits v2 -> (Logic.ifElse (Equality.lt v1 v2) Graph.ComparisonLessThan Graph.ComparisonGreaterThan)) p2)) p1)
 
 -- | Convert a float value to a different float type
 convertFloatValue :: (Core.FloatType -> Core.FloatValue -> Core.FloatValue)
