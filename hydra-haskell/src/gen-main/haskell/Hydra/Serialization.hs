@@ -3,7 +3,6 @@
 module Hydra.Serialization where
 
 import qualified Hydra.Ast as Ast
-import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
@@ -11,6 +10,7 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Mantle as Mantle
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -287,9 +287,9 @@ parenthesize exp =
                         lassoc = (Ast.opAssociativity lop)
                         comparison = (Equality.compare prec lprec)
                     in ((\x -> case x of
-                      Graph.ComparisonLessThan -> lhs_
-                      Graph.ComparisonGreaterThan -> (parens lhs_)
-                      Graph.ComparisonEqualTo -> (Logic.ifElse (Logic.and (assocLeft assoc) (assocLeft lassoc)) lhs_ (parens lhs_))) comparison)
+                      Mantle.ComparisonLessThan -> lhs_
+                      Mantle.ComparisonGreaterThan -> (parens lhs_)
+                      Mantle.ComparisonEqualTo -> (Logic.ifElse (Logic.and (assocLeft assoc) (assocLeft lassoc)) lhs_ (parens lhs_))) comparison)
                   _ -> lhs_) lhs_)
           rhs2 = ((\x -> case x of
                   Ast.ExprOp v2 ->  
@@ -298,9 +298,9 @@ parenthesize exp =
                         rassoc = (Ast.opAssociativity rop)
                         comparison = (Equality.compare prec rprec)
                     in ((\x -> case x of
-                      Graph.ComparisonLessThan -> rhs_
-                      Graph.ComparisonGreaterThan -> (parens rhs_)
-                      Graph.ComparisonEqualTo -> (Logic.ifElse (Logic.and (assocRight assoc) (assocRight rassoc)) rhs_ (parens rhs_))) comparison)
+                      Mantle.ComparisonLessThan -> rhs_
+                      Mantle.ComparisonGreaterThan -> (parens rhs_)
+                      Mantle.ComparisonEqualTo -> (Logic.ifElse (Logic.and (assocRight assoc) (assocRight rassoc)) rhs_ (parens rhs_))) comparison)
                   _ -> rhs_) rhs_)
       in (Ast.ExprOp (Ast.OpExpr {
         Ast.opExprOp = op,

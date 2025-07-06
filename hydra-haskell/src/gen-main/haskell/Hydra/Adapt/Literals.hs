@@ -8,7 +8,6 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Describe.Core as Core_
 import qualified Hydra.Extract.Core as Core__
-import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -28,14 +27,14 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Compare two precision values
-comparePrecision :: (Mantle.Precision -> Mantle.Precision -> Graph.Comparison)
+comparePrecision :: (Mantle.Precision -> Mantle.Precision -> Mantle.Comparison)
 comparePrecision p1 p2 = ((\x -> case x of
   Mantle.PrecisionArbitrary -> ((\x -> case x of
-    Mantle.PrecisionArbitrary -> Graph.ComparisonEqualTo
-    Mantle.PrecisionBits _ -> Graph.ComparisonGreaterThan) p2)
+    Mantle.PrecisionArbitrary -> Mantle.ComparisonEqualTo
+    Mantle.PrecisionBits _ -> Mantle.ComparisonGreaterThan) p2)
   Mantle.PrecisionBits v1 -> ((\x -> case x of
-    Mantle.PrecisionArbitrary -> Graph.ComparisonLessThan
-    Mantle.PrecisionBits v2 -> (Logic.ifElse (Equality.lt v1 v2) Graph.ComparisonLessThan Graph.ComparisonGreaterThan)) p2)) p1)
+    Mantle.PrecisionArbitrary -> Mantle.ComparisonLessThan
+    Mantle.PrecisionBits v2 -> (Logic.ifElse (Equality.lt v1 v2) Mantle.ComparisonLessThan Mantle.ComparisonGreaterThan)) p2)) p1)
 
 -- | Convert a float value to a different float type
 convertFloatValue :: (Core.FloatType -> Core.FloatValue -> Core.FloatValue)
@@ -171,7 +170,7 @@ floatAdapter ft =
             Core.FloatTypeBigfloat,
             Core.FloatTypeFloat32]) t)) 
       makeAdapter = (\source -> \target ->  
-              let lossy = (Equality.equal (comparePrecision (Variants.floatTypePrecision source) (Variants.floatTypePrecision target)) Graph.ComparisonGreaterThan) 
+              let lossy = (Equality.equal (comparePrecision (Variants.floatTypePrecision source) (Variants.floatTypePrecision target)) Mantle.ComparisonGreaterThan) 
                   step = Compute.Coder {
                           Compute.coderEncode = (\fv -> Flows.pure (convertFloatValue target fv)),
                           Compute.coderDecode = (\fv -> Flows.pure (convertFloatValue source fv))}
@@ -217,7 +216,7 @@ integerAdapter it =
               Core.IntegerTypeUint32 -> (unsigned 3)
               Core.IntegerTypeUint64 -> (unsigned 4)) t))
       makeAdapter = (\source -> \target ->  
-              let lossy = (Logic.not (Equality.equal (comparePrecision (Variants.integerTypePrecision source) (Variants.integerTypePrecision target)) Graph.ComparisonLessThan)) 
+              let lossy = (Logic.not (Equality.equal (comparePrecision (Variants.integerTypePrecision source) (Variants.integerTypePrecision target)) Mantle.ComparisonLessThan)) 
                   step = Compute.Coder {
                           Compute.coderEncode = (\iv -> Flows.pure (convertIntegerValue target iv)),
                           Compute.coderDecode = (\iv -> Flows.pure (convertIntegerValue source iv))}

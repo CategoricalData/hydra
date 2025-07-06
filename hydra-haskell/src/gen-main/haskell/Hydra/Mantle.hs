@@ -26,6 +26,21 @@ _CaseConvention_lowerSnake = (Core.Name "lowerSnake")
 
 _CaseConvention_upperSnake = (Core.Name "upperSnake")
 
+-- | An equality judgement: less than, equal to, or greater than
+data Comparison = 
+  ComparisonLessThan  |
+  ComparisonEqualTo  |
+  ComparisonGreaterThan 
+  deriving (Eq, Ord, Read, Show)
+
+_Comparison = (Core.Name "hydra.mantle.Comparison")
+
+_Comparison_lessThan = (Core.Name "lessThan")
+
+_Comparison_equalTo = (Core.Name "equalTo")
+
+_Comparison_greaterThan = (Core.Name "greaterThan")
+
 -- | A disjoint union between a 'left' type and a 'right' type
 data Either a b = 
   EitherLeft a |
