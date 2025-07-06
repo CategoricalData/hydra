@@ -56,14 +56,14 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 --import qualified Hydra.Sources.Tier2.Extract.Mantle as ExtractMantle
---import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.Grammars as Grammars
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Languages as Languages
 import qualified Hydra.Sources.Tier2.Lexical as Lexical
 --import qualified Hydra.Sources.Tier2.Adapt.Literals as AdaptLiterals
 --import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
-import qualified Hydra.Sources.Tier2.Qnames as Qnames
+--import qualified Hydra.Sources.Tier2.Monads as Monads
+import qualified Hydra.Sources.Tier2.Names as Names
 --import qualified Hydra.Sources.Tier2.Reduction as Reduction
 --import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
@@ -73,7 +73,7 @@ import qualified Hydra.Sources.Tier2.Qnames as Qnames
 import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
---import qualified Hydra.Sources.Tier2.Templating as Templating
+--import qualified Hydra.Sources.Tier2.Templates as Templates
 --import qualified Hydra.Sources.Tier2.Adapt.Terms as AdaptTerms
 --import qualified Hydra.Sources.Tier2.Unification as Unification
 --import qualified Hydra.Sources.Tier2.Variants as Variants
@@ -84,7 +84,7 @@ rewritingDefinition = definitionInModule hydraRewritingModule
 
 hydraRewritingModule :: Module
 hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
-    [Strip.hydraStripModule, Lexical.hydraLexicalModule, Qnames.hydraQnamesModule, Sorting.hydraSortingModule]
+    [Strip.hydraStripModule, Lexical.hydraLexicalModule, Names.hydraNamesModule, Sorting.hydraSortingModule]
     [Tier1.hydraAccessorsModule, Tier1.hydraCodersModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule, Tier1.hydraTypingModule] $
     Just ("Utilities for type and term rewriting and analysis.")
   where
@@ -1025,7 +1025,7 @@ toShortNamesDef = rewritingDefinition "toShortNames" $
   lambda "original" $ lets [
     "groupNamesByLocal">: lambda "names" $ Lists.foldl (var "addName") Maps.empty (var "names"),
     "addName">: lambda "acc" $ lambda "name" $ lets [
-      "local">: ref Qnames.localNameOfDef @@ var "name",
+      "local">: ref Names.localNameOfDef @@ var "name",
       "group">: Optionals.fromMaybe Sets.empty $ Maps.lookup (var "local") (var "acc")]
       $ Maps.insert (var "local") (Sets.insert (var "name") (var "group")) (var "acc"),
     "groups">: var "groupNamesByLocal" @@ var "original",

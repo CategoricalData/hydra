@@ -17,7 +17,7 @@ import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
-import qualified Hydra.Qnames as Qnames
+import qualified Hydra.Names as Names
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -37,7 +37,7 @@ elementReference namespaces name =
       gname = (fst namespacePair)
       gmod = (Ast.unModuleName (snd namespacePair))
       namespacesMap = (Module.namespacesMapping namespaces)
-      qname = (Qnames.qualifyName name)
+      qname = (Names.qualifyName name)
       local = (Module.qualifiedNameLocal qname)
       escLocal = (sanitizeHaskellName local)
       mns = (Module.qualifiedNameNamespace qname)
@@ -93,7 +93,7 @@ namespacesForModule mod = (Flows.bind (Schemas.moduleDependencyNamespaces True T
     Module.namespacesMapping = resultMap}))))
 
 newtypeAccessorName :: (Core.Name -> String)
-newtypeAccessorName name = (Strings.cat2 "un" (Qnames.localNameOf name))
+newtypeAccessorName name = (Strings.cat2 "un" (Names.localNameOf name))
 
 rawName :: (String -> Ast.Name)
 rawName n = (Ast.NameNormal (Ast.QualifiedName {
@@ -103,7 +103,7 @@ rawName n = (Ast.NameNormal (Ast.QualifiedName {
 recordFieldReference :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Name -> Ast.Name)
 recordFieldReference namespaces sname fname =  
   let fnameStr = (Core.unName fname) 
-      qname = (Qnames.qualifyName sname)
+      qname = (Names.qualifyName sname)
       ns = (Module.qualifiedNameNamespace qname)
       typeNameStr = (typeNameForRecord sname)
       decapitalized = (Formatting.decapitalize typeNameStr)
@@ -112,7 +112,7 @@ recordFieldReference namespaces sname fname =
       qualName = Module.QualifiedName {
               Module.qualifiedNameNamespace = ns,
               Module.qualifiedNameLocal = nm}
-      unqualName = (Qnames.unqualifyName qualName)
+      unqualName = (Names.unqualifyName qualName)
   in (elementReference namespaces unqualName)
 
 sanitizeHaskellName :: (String -> String)
@@ -148,7 +148,7 @@ typeNameForRecord sname =
 unionFieldReference :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Name -> Ast.Name)
 unionFieldReference namespaces sname fname =  
   let fnameStr = (Core.unName fname) 
-      qname = (Qnames.qualifyName sname)
+      qname = (Names.qualifyName sname)
       ns = (Module.qualifiedNameNamespace qname)
       typeNameStr = (typeNameForRecord sname)
       capitalizedTypeName = (Formatting.capitalize typeNameStr)
@@ -157,7 +157,7 @@ unionFieldReference namespaces sname fname =
       qualName = Module.QualifiedName {
               Module.qualifiedNameNamespace = ns,
               Module.qualifiedNameLocal = nm}
-      unqualName = (Qnames.unqualifyName qualName)
+      unqualName = (Names.unqualifyName qualName)
   in (elementReference namespaces unqualName)
 
 unpackForallType :: (t0 -> Core.Type -> ([Core.Name], Core.Type))

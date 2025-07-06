@@ -34,7 +34,7 @@ module Hydra.Kernel (
   module Hydra.Mantle,
   module Hydra.Module,
   module Hydra.Phantoms,
-  module Hydra.Qnames,
+  module Hydra.Names,
   module Hydra.Query,
   module Hydra.Reduction,
   module Hydra.Relational,
@@ -46,7 +46,7 @@ module Hydra.Kernel (
   module Hydra.Strip,
   module Hydra.Substitution,
   module Hydra.Tabular,
-  module Hydra.Templating,
+  module Hydra.Templates,
   module Hydra.Typing,
   module Hydra.Unification,
   module Hydra.Variants,
@@ -75,7 +75,7 @@ import Hydra.Literals
 import Hydra.Mantle hiding (Either)
 import Hydra.Module
 import Hydra.Phantoms
-import Hydra.Qnames
+import Hydra.Names
 import Hydra.Query
 import Hydra.Reduction
 import Hydra.Relational
@@ -87,7 +87,7 @@ import Hydra.Sorting
 import Hydra.Strip
 import Hydra.Substitution
 import Hydra.Tabular
-import Hydra.Templating
+import Hydra.Templates
 import Hydra.Typing
 import Hydra.Unification
 import Hydra.Variants

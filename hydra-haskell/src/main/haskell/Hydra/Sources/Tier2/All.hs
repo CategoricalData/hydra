@@ -13,7 +13,7 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.Inference,
   module Hydra.Sources.Tier2.Lexical,
   module Hydra.Sources.Tier2.Adapt.Literals,
-  module Hydra.Sources.Tier2.Qnames,
+  module Hydra.Sources.Tier2.Names,
   module Hydra.Sources.Tier2.Reduction,
   module Hydra.Sources.Tier2.Rewriting,
   module Hydra.Sources.Tier2.Schemas,
@@ -21,7 +21,7 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.Sorting,
   module Hydra.Sources.Tier2.Substitution,
   module Hydra.Sources.Tier2.Tarjan,
-  module Hydra.Sources.Tier2.Templating,
+  module Hydra.Sources.Tier2.Templates,
   module Hydra.Sources.Tier2.Adapt.Terms,
   module Hydra.Sources.Tier2.Unification,
   module Hydra.Sources.Tier2.Variants,
@@ -43,7 +43,7 @@ import Hydra.Sources.Tier2.Grammars
 import Hydra.Sources.Tier2.Inference
 import Hydra.Sources.Tier2.Lexical
 import Hydra.Sources.Tier2.Adapt.Literals
-import Hydra.Sources.Tier2.Qnames
+import Hydra.Sources.Tier2.Names
 import Hydra.Sources.Tier2.Reduction
 import Hydra.Sources.Tier2.Rewriting
 import Hydra.Sources.Tier2.Schemas
@@ -53,7 +53,7 @@ import Hydra.Sources.Tier2.Show.Core
 import Hydra.Sources.Tier2.Sorting
 import Hydra.Sources.Tier2.Substitution
 import Hydra.Sources.Tier2.Tarjan
-import Hydra.Sources.Tier2.Templating
+import Hydra.Sources.Tier2.Templates
 import Hydra.Sources.Tier2.Adapt.Terms hiding (optionalToListDef)
 import Hydra.Sources.Tier2.Unification
 import Hydra.Sources.Tier2.Variants
@@ -92,7 +92,7 @@ tier2TermModules = [
   hydraInferenceModule,
   hydraLexicalModule,
   adaptLiteralsModule,
-  hydraQnamesModule,
+  hydraNamesModule,
   hydraReductionModule,
   hydraRewritingModule,
   hydraSchemasModule,
