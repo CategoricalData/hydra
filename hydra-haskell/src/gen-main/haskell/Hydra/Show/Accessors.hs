@@ -50,6 +50,7 @@ termAccessor accessor =
 termToAccessorGraph :: (M.Map Module.Namespace String -> Core.Term -> Accessors.AccessorGraph)
 termToAccessorGraph namespaces term =  
   let dontCareAccessor = Accessors.TermAccessorAnnotatedSubject 
+      toUniqueLabel = (\visited -> \l -> Logic.ifElse (Sets.member l visited) (toUniqueLabel visited (Strings.cat2 l "'")) l)
       helper = (\ids -> \mroot -> \path -> \state -> \accessorTerm ->  
               let accessor = (fst accessorTerm) 
                   currentTerm = (snd accessorTerm)
@@ -106,7 +107,3 @@ termToAccessorGraph namespaces term =
   in Accessors.AccessorGraph {
     Accessors.accessorGraphNodes = finalNodes,
     Accessors.accessorGraphEdges = finalEdges}
-
--- | Generate a unique label by appending apostrophes if needed
-toUniqueLabel :: (S.Set String -> String -> String)
-toUniqueLabel visited l = (Logic.ifElse (Sets.member l visited) (toUniqueLabel visited (Strings.cat2 l "'")) l)
