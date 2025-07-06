@@ -23,10 +23,12 @@ import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core__
+import qualified Hydra.Show.Mantle as Mantle_
+import qualified Hydra.Show.Typing as Typing
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Substitution as Substitution
-import qualified Hydra.Typing as Typing
+import qualified Hydra.Typing as Typing_
 import qualified Hydra.Unification as Unification
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -56,7 +58,7 @@ freshNames n = (Flows.sequence (Lists.replicate n freshName))
 freshVariableType :: (Compute.Flow t0 Core.Type)
 freshVariableType = (Flows.map (\x -> Core.TypeVariable x) freshName)
 
-typeOf :: (Typing.InferenceContext -> S.Set Core.Name -> M.Map Core.Name Core.Type -> Core.Term -> Compute.Flow t0 Core.Type)
+typeOf :: (Typing_.InferenceContext -> S.Set Core.Name -> M.Map Core.Name Core.Type -> Core.Term -> Compute.Flow t0 Core.Type)
 typeOf cx vars types term = (Monads.withTrace (Strings.cat [
   "checking type of: ",
   Core__.term term,
@@ -110,7 +112,7 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
     Core.FunctionPrimitive v2 ->  
       let ts = (Optionals.maybe (Flows.fail (Strings.cat [
               "no such primitive: ",
-              (Core.unName v2)])) Flows.pure (Maps.lookup v2 (Typing.inferenceContextPrimitiveTypes cx)))
+              (Core.unName v2)])) Flows.pure (Maps.lookup v2 (Typing_.inferenceContextPrimitiveTypes cx)))
       in (Flows.map typeSchemeToFType ts)) v1)
   Core.TermLet v1 ->  
     let es = (Core.letBindings v1) 
@@ -134,7 +136,7 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
       Core.forallTypeBody = (Core.TypeList var)}))))) ( 
     let x = (Lists.head v1) 
         xs = (Lists.tail v1)
-    in (Flows.bind (Flows.bind (typeOf cx vars types x) instantiateFType) (\tx -> Flows.bind (Flows.sequence (Lists.map (\e -> Flows.bind (Flows.bind (typeOf cx vars types e) instantiateFType) (\t -> Unification.unifyTypes (Typing.inferenceContextSchemaTypes cx) t tx "type check over collection")) xs)) (\_ -> Flows.bind (checkTypeVariables vars tx) (\_ -> Flows.pure (Core.TypeList tx)))))))
+    in (Flows.bind (Flows.bind (typeOf cx vars types x) instantiateFType) (\tx -> Flows.bind (Flows.sequence (Lists.map (\e -> Flows.bind (Flows.bind (typeOf cx vars types e) instantiateFType) (\t -> Unification.unifyTypes (Typing_.inferenceContextSchemaTypes cx) t tx "type check over collection")) xs)) (\_ -> Flows.bind (checkTypeVariables vars tx) (\_ -> Flows.pure (Core.TypeList tx)))))))
   Core.TermLiteral v1 -> (Flows.pure (Core.TypeLiteral (Variants.literalType v1)))
   Core.TermMap v1 -> (Logic.ifElse (Maps.null v1) (Flows.pure (typeSchemeToFType (Core.TypeScheme {
     Core.typeSchemeVariables = [
@@ -171,7 +173,7 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
       Core.TypeForall v2 ->  
         let v = (Core.forallTypeParameter v2) 
             t2 = (Core.forallTypeBody v2)
-        in (Flows.pure (Substitution.substInType (Typing.TypeSubst (Maps.fromList [
+        in (Flows.pure (Substitution.substInType (Typing_.TypeSubst (Maps.fromList [
           (v, t)])) t2))
       Core.TypeVariable _ -> (Flows.fail (Strings.cat [
         "not a forall type: ",
@@ -196,8 +198,8 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
                   Core.rowTypeFields = (Lists.zipWith (\n -> \t -> Core.FieldType {
                     Core.fieldTypeName = n,
                     Core.fieldTypeType = t}) fnames ftypes)}))
-          in (Flows.bind (Unification.unifyTypes (Typing.inferenceContextSchemaTypes cx) styp expected "union typeOf") (\substWrapper ->  
-            let subst = (Typing.unTypeSubst substWrapper) 
+          in (Flows.bind (Unification.unifyTypes (Typing_.inferenceContextSchemaTypes cx) styp expected "union typeOf") (\substWrapper ->  
+            let subst = (Typing_.unTypeSubst substWrapper) 
                 tparams = (Lists.map (resolveType subst) svars)
             in (Flows.pure (nominalApplication tname tparams))))))))))))
   Core.TermUnit -> (Flows.pure Core.TypeUnit)
@@ -212,22 +214,22 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
       Core.wrappedTypeObject = innerType})))))
   _ -> (Flows.fail (Strings.cat [
     "unsupported term variant in typeOf: ",
-    (Core__.termVariant (Variants.termVariant term))]))) term))
+    (Mantle_.termVariant (Variants.termVariant term))]))) term))
 
-typeOfCollection :: (Typing.InferenceContext -> String -> (Core.Type -> Core.Type) -> S.Set Core.Name -> M.Map Core.Name Core.Type -> [Core.Term] -> Compute.Flow t0 Core.Type)
+typeOfCollection :: (Typing_.InferenceContext -> String -> (Core.Type -> Core.Type) -> S.Set Core.Name -> M.Map Core.Name Core.Type -> [Core.Term] -> Compute.Flow t0 Core.Type)
 typeOfCollection cx desc cons vars types els = (Logic.ifElse (Lists.null els) (Flows.pure (typeSchemeToFType (Core.TypeScheme {
   Core.typeSchemeVariables = [
     Core.Name "t"],
   Core.typeSchemeType = (cons (Core.TypeVariable (Core.Name "t")))}))) (Flows.bind (Flows.mapList (\el -> typeOf cx vars types el) els) (\etypes -> Flows.bind (singleType desc etypes) (\et -> Flows.bind (checkTypeVariables vars et) (\result -> Flows.pure (cons et))))))
 
-typeOfNominal :: (String -> Typing.InferenceContext -> Core.Name -> Core.Type -> Compute.Flow t0 Core.Type)
+typeOfNominal :: (String -> Typing_.InferenceContext -> Core.Name -> Core.Type -> Compute.Flow t0 Core.Type)
 typeOfNominal desc cx tname expected =  
   let resolveType = (\subst -> \v -> Optionals.fromMaybe (Core.TypeVariable v) (Maps.lookup v subst))
   in (Flows.bind (requireSchemaType cx tname) (\schemaType ->  
     let svars = (Core.typeSchemeVariables schemaType) 
         styp = (Core.typeSchemeType schemaType)
-    in (Flows.bind (Unification.unifyTypes (Typing.inferenceContextSchemaTypes cx) styp expected desc) (\substWrapper ->  
-      let subst = (Typing.unTypeSubst substWrapper) 
+    in (Flows.bind (Unification.unifyTypes (Typing_.inferenceContextSchemaTypes cx) styp expected desc) (\substWrapper ->  
+      let subst = (Typing_.unTypeSubst substWrapper) 
           tparams = (Lists.map (resolveType subst) svars)
       in (Flows.pure (nominalApplication tname tparams))))))
 
@@ -241,7 +243,7 @@ singleType desc types =
     " in ",
     desc])))
 
-checkType :: (S.Set Core.Name -> Typing.InferenceContext -> Core.Type -> Core.Term -> Compute.Flow t0 ())
+checkType :: (S.Set Core.Name -> Typing_.InferenceContext -> Core.Type -> Core.Term -> Compute.Flow t0 ())
 checkType k g t e = (Logic.ifElse debugInference (Flows.bind (typeOf g k (toFContext g) e) (\t0 -> Logic.ifElse (Equality.equal t0 t) (Flows.pure ()) (Flows.fail (Strings.cat [
   "type checking failed: expected ",
   Core__.type_ t,
@@ -276,38 +278,38 @@ typeSchemeToFType ts =
     Core.forallTypeBody = t})) body (Lists.reverse vars))
 
 -- | Convert inference context to type context
-toFContext :: (Typing.InferenceContext -> M.Map Core.Name Core.Type)
-toFContext cx = (Maps.map typeSchemeToFType (Typing.inferenceContextDataTypes cx))
+toFContext :: (Typing_.InferenceContext -> M.Map Core.Name Core.Type)
+toFContext cx = (Maps.map typeSchemeToFType (Typing_.inferenceContextDataTypes cx))
 
 -- | Show an inference result for debugging
-showInferenceResult :: (Typing.InferenceResult -> String)
+showInferenceResult :: (Typing_.InferenceResult -> String)
 showInferenceResult result =  
-  let term = (Typing.inferenceResultTerm result) 
-      typ = (Typing.inferenceResultType result)
-      subst = (Typing.inferenceResultSubst result)
+  let term = (Typing_.inferenceResultTerm result) 
+      typ = (Typing_.inferenceResultType result)
+      subst = (Typing_.inferenceResultSubst result)
   in (Strings.cat [
     "{term=",
     Core__.term term,
     ", type=",
     Core__.type_ typ,
     ", subst=",
-    Core__.typeSubst subst,
+    Typing.typeSubst subst,
     "}"])
 
 -- | An empty inference context
-emptyInferenceContext :: Typing.InferenceContext
-emptyInferenceContext = Typing.InferenceContext {
-  Typing.inferenceContextSchemaTypes = (M.fromList []),
-  Typing.inferenceContextPrimitiveTypes = (M.fromList []),
-  Typing.inferenceContextDataTypes = (M.fromList []),
-  Typing.inferenceContextDebug = False}
+emptyInferenceContext :: Typing_.InferenceContext
+emptyInferenceContext = Typing_.InferenceContext {
+  Typing_.inferenceContextSchemaTypes = (M.fromList []),
+  Typing_.inferenceContextPrimitiveTypes = (M.fromList []),
+  Typing_.inferenceContextDataTypes = (M.fromList []),
+  Typing_.inferenceContextDebug = False}
 
 -- | Get all free variables in an inference context
-freeVariablesInContext :: (Typing.InferenceContext -> S.Set Core.Name)
-freeVariablesInContext cx = (Lists.foldl Sets.union Sets.empty (Lists.map Rewriting.freeVariablesInTypeSchemeSimple (Maps.elems (Typing.inferenceContextDataTypes cx))))
+freeVariablesInContext :: (Typing_.InferenceContext -> S.Set Core.Name)
+freeVariablesInContext cx = (Lists.foldl Sets.union Sets.empty (Lists.map Rewriting.freeVariablesInTypeSchemeSimple (Maps.elems (Typing_.inferenceContextDataTypes cx))))
 
 -- | Generalize a type to a type scheme
-generalize :: (Typing.InferenceContext -> Core.Type -> Core.TypeScheme)
+generalize :: (Typing_.InferenceContext -> Core.Type -> Core.TypeScheme)
 generalize cx typ =  
   let vars = (Lists.nub (Lists.filter (isUnbound cx) (Sets.toList (Rewriting.freeVariablesInType typ))))
   in Core.TypeScheme {
@@ -315,22 +317,22 @@ generalize cx typ =
     Core.typeSchemeType = typ}
 
 -- | Check if a variable is unbound in context
-isUnbound :: (Typing.InferenceContext -> Core.Name -> Bool)
-isUnbound cx v = (Logic.and (Logic.not (Sets.member v (freeVariablesInContext cx))) (Logic.not (Maps.member v (Typing.inferenceContextSchemaTypes cx))))
+isUnbound :: (Typing_.InferenceContext -> Core.Name -> Bool)
+isUnbound cx v = (Logic.and (Logic.not (Sets.member v (freeVariablesInContext cx))) (Logic.not (Maps.member v (Typing_.inferenceContextSchemaTypes cx))))
 
-graphToInferenceContext :: (Graph.Graph -> Compute.Flow t0 Typing.InferenceContext)
+graphToInferenceContext :: (Graph.Graph -> Compute.Flow t0 Typing_.InferenceContext)
 graphToInferenceContext g0 =  
   let schema = (Optionals.fromMaybe g0 (Graph.graphSchema g0)) 
       primTypes = (Maps.fromList (Lists.map (\p -> (Graph.primitiveName p, (Graph.primitiveType p))) (Maps.elems (Graph.graphPrimitives g0))))
       varTypes = Maps.empty
-  in (Flows.bind (Schemas.schemaGraphToTypingEnvironment schema) (\schemaTypes -> Flows.pure (Typing.InferenceContext {
-    Typing.inferenceContextSchemaTypes = schemaTypes,
-    Typing.inferenceContextPrimitiveTypes = primTypes,
-    Typing.inferenceContextDataTypes = varTypes,
-    Typing.inferenceContextDebug = False})))
+  in (Flows.bind (Schemas.schemaGraphToTypingEnvironment schema) (\schemaTypes -> Flows.pure (Typing_.InferenceContext {
+    Typing_.inferenceContextSchemaTypes = schemaTypes,
+    Typing_.inferenceContextPrimitiveTypes = primTypes,
+    Typing_.inferenceContextDataTypes = varTypes,
+    Typing_.inferenceContextDebug = False})))
 
 -- | Infer the type of a term in graph context
-inferInGraphContext :: (Core.Term -> Compute.Flow Graph.Graph Typing.InferenceResult)
+inferInGraphContext :: (Core.Term -> Compute.Flow Graph.Graph Typing_.InferenceResult)
 inferInGraphContext term = (Flows.bind Monads.getState (\g -> Flows.bind (graphToInferenceContext g) (\cx -> inferTypeOfTerm cx term "single term")))
 
 inferGraphTypes :: (Graph.Graph -> Compute.Flow t0 Graph.Graph)
@@ -358,29 +360,29 @@ inferGraphTypes g0 =
                 Core.letBindings = (Lists.map toBinding (Maps.elems (Graph.graphElements g))),
                 Core.letEnvironment = (Graph.graphBody g)})))
       withResult = (\result ->  
-              let term = (Typing.inferenceResultTerm result) 
-                  ts = (Typing.inferenceResultType result)
+              let term = (Typing_.inferenceResultTerm result) 
+                  ts = (Typing_.inferenceResultType result)
               in ((\x -> case x of
                 Core.TermLet v1 -> (Flows.pure (fromLetTerm v1))
                 Core.TermVariable _ -> (Flows.fail "Expected inferred graph as let term")) (Rewriting.normalizeTypeVariablesInTerm term)))
   in (Monads.withTrace "graph inference" (Flows.bind (graphToInferenceContext g0) (\cx -> Flows.bind (inferTypeOfTerm cx (toLetTerm g0) "graph term") withResult)))
 
-inferMany :: (Typing.InferenceContext -> [(Core.Term, String)] -> Compute.Flow t0 ([Core.Term], ([Core.Type], Typing.TypeSubst)))
+inferMany :: (Typing_.InferenceContext -> [(Core.Term, String)] -> Compute.Flow t0 ([Core.Term], ([Core.Type], Typing_.TypeSubst)))
 inferMany cx pairs = (Logic.ifElse (Lists.null pairs) (Flows.pure ([], ([], Substitution.idTypeSubst))) ( 
   let e = (fst (Lists.head pairs)) 
       desc = (snd (Lists.head pairs))
       tl = (Lists.tail pairs)
   in (Flows.bind (inferTypeOfTerm cx e desc) (\result1 ->  
-    let e1 = (Typing.inferenceResultTerm result1) 
-        t1 = (Typing.inferenceResultType result1)
-        s1 = (Typing.inferenceResultSubst result1)
+    let e1 = (Typing_.inferenceResultTerm result1) 
+        t1 = (Typing_.inferenceResultType result1)
+        s1 = (Typing_.inferenceResultSubst result1)
     in (Flows.bind (inferMany (Substitution.substInContext s1 cx) tl) (\result2 ->  
       let e2 = (fst result2) 
           t2 = (fst (snd result2))
           s2 = (snd (snd result2))
       in (Flows.pure (Lists.cons (Substitution.substTypesInTerm s2 e1) e2, (Lists.cons (Substitution.substInType s2 t1) t2, (Substitution.composeTypeSubst s1 s2))))))))))
 
-inferTypeOf :: (Typing.InferenceContext -> Core.Term -> Compute.Flow t0 (Core.Term, Core.TypeScheme))
+inferTypeOf :: (Typing_.InferenceContext -> Core.Term -> Compute.Flow t0 (Core.Term, Core.TypeScheme))
 inferTypeOf cx term =  
   let letTerm = (Core.TermLet (Core.Let {
           Core.letBindings = [
@@ -390,8 +392,8 @@ inferTypeOf cx term =
               Core.letBindingType = Nothing}],
           Core.letEnvironment = (Core.TermLiteral (Core.LiteralString "ignoredEnvironment"))})) 
       unifyAndSubst = (\result ->  
-              let subst = (Typing.inferenceResultSubst result)
-              in (Flows.bind (Annotations.withEmptyGraph (Core_.letTerm (Rewriting.normalizeTypeVariablesInTerm (Typing.inferenceResultTerm result)))) (\letResult ->  
+              let subst = (Typing_.inferenceResultSubst result)
+              in (Flows.bind (Annotations.withEmptyGraph (Core_.letTerm (Rewriting.normalizeTypeVariablesInTerm (Typing_.inferenceResultTerm result)))) (\letResult ->  
                 let bindings = (Core.letBindings letResult)
                 in (Logic.ifElse (Equality.equal 1 (Lists.length bindings)) ( 
                   let binding = (Lists.head bindings) 
@@ -403,34 +405,34 @@ inferTypeOf cx term =
                   " bindings"]))))))
   in (Flows.bind (inferTypeOfTerm cx letTerm "infer type of term") (\result -> unifyAndSubst result))
 
-inferTypeOfAnnotatedTerm :: (Typing.InferenceContext -> Core.AnnotatedTerm -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfAnnotatedTerm :: (Typing_.InferenceContext -> Core.AnnotatedTerm -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfAnnotatedTerm cx at =  
   let term = (Core.annotatedTermSubject at) 
       ann = (Core.annotatedTermAnnotation at)
   in (Flows.map (\result ->  
-    let iterm = (Typing.inferenceResultTerm result) 
-        itype = (Typing.inferenceResultType result)
-        isubst = (Typing.inferenceResultSubst result)
-    in Typing.InferenceResult {
-      Typing.inferenceResultTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+    let iterm = (Typing_.inferenceResultTerm result) 
+        itype = (Typing_.inferenceResultType result)
+        isubst = (Typing_.inferenceResultSubst result)
+    in Typing_.InferenceResult {
+      Typing_.inferenceResultTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermSubject = iterm,
         Core.annotatedTermAnnotation = ann})),
-      Typing.inferenceResultType = itype,
-      Typing.inferenceResultSubst = isubst}) (inferTypeOfTerm cx term "annotated term"))
+      Typing_.inferenceResultType = itype,
+      Typing_.inferenceResultSubst = isubst}) (inferTypeOfTerm cx term "annotated term"))
 
-inferTypeOfApplication :: (Typing.InferenceContext -> Core.Application -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfApplication :: (Typing_.InferenceContext -> Core.Application -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfApplication cx app =  
   let e0 = (Core.applicationFunction app) 
       e1 = (Core.applicationArgument app)
   in (Flows.bind (inferTypeOfTerm cx e0 "lhs") (\lhsResult ->  
-    let a = (Typing.inferenceResultTerm lhsResult) 
-        t0 = (Typing.inferenceResultType lhsResult)
-        s0 = (Typing.inferenceResultSubst lhsResult)
+    let a = (Typing_.inferenceResultTerm lhsResult) 
+        t0 = (Typing_.inferenceResultType lhsResult)
+        s0 = (Typing_.inferenceResultSubst lhsResult)
     in (Flows.bind (inferTypeOfTerm (Substitution.substInContext s0 cx) e1 "rhs") (\rhsResult ->  
-      let b = (Typing.inferenceResultTerm rhsResult) 
-          t1 = (Typing.inferenceResultType rhsResult)
-          s1 = (Typing.inferenceResultSubst rhsResult)
-      in (Flows.bind freshName (\v -> Flows.bind (Unification.unifyTypes (Typing.inferenceContextSchemaTypes cx) (Substitution.substInType s1 t0) (Core.TypeFunction (Core.FunctionType {
+      let b = (Typing_.inferenceResultTerm rhsResult) 
+          t1 = (Typing_.inferenceResultType rhsResult)
+          s1 = (Typing_.inferenceResultSubst rhsResult)
+      in (Flows.bind freshName (\v -> Flows.bind (Unification.unifyTypes (Typing_.inferenceContextSchemaTypes cx) (Substitution.substInType s1 t0) (Core.TypeFunction (Core.FunctionType {
         Core.functionTypeDomain = t1,
         Core.functionTypeCodomain = (Core.TypeVariable v)})) "application lhs") (\s2 ->  
         let rExpr = (Core.TermApplication (Core.Application {
@@ -441,12 +443,12 @@ inferTypeOfApplication cx app =
                     s0,
                     s1,
                     s2])
-        in (Flows.pure (Typing.InferenceResult {
-          Typing.inferenceResultTerm = rExpr,
-          Typing.inferenceResultType = rType,
-          Typing.inferenceResultSubst = rSubst})))))))))
+        in (Flows.pure (Typing_.InferenceResult {
+          Typing_.inferenceResultTerm = rExpr,
+          Typing_.inferenceResultType = rType,
+          Typing_.inferenceResultSubst = rSubst})))))))))
 
-inferTypeOfCaseStatement :: (Typing.InferenceContext -> Core.CaseStatement -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfCaseStatement :: (Typing_.InferenceContext -> Core.CaseStatement -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfCaseStatement cx caseStmt =  
   let tname = (Core.caseStatementTypeName caseStmt) 
       dflt = (Core.caseStatementDefault caseStmt)
@@ -469,62 +471,62 @@ inferTypeOfCaseStatement cx caseStmt =
       in (Flows.bind freshName (\codv ->  
         let cod = (Core.TypeVariable codv) 
             caseMap = (Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) sfields))
-            dfltConstraints = (Monads.optionalToList (Optionals.map (\r -> Typing.TypeConstraint {
-                    Typing.typeConstraintLeft = cod,
-                    Typing.typeConstraintRight = (Typing.inferenceResultType r),
-                    Typing.typeConstraintComment = "match default"}) dfltResult))
-            caseConstraints = (Optionals.cat (Lists.zipWith (\fname -> \itype -> Optionals.map (\ftype -> Typing.TypeConstraint {
-                    Typing.typeConstraintLeft = itype,
-                    Typing.typeConstraintRight = (Core.TypeFunction (Core.FunctionType {
+            dfltConstraints = (Monads.optionalToList (Optionals.map (\r -> Typing_.TypeConstraint {
+                    Typing_.typeConstraintLeft = cod,
+                    Typing_.typeConstraintRight = (Typing_.inferenceResultType r),
+                    Typing_.typeConstraintComment = "match default"}) dfltResult))
+            caseConstraints = (Optionals.cat (Lists.zipWith (\fname -> \itype -> Optionals.map (\ftype -> Typing_.TypeConstraint {
+                    Typing_.typeConstraintLeft = itype,
+                    Typing_.typeConstraintRight = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = ftype,
                       Core.functionTypeCodomain = cod})),
-                    Typing.typeConstraintComment = "case type"}) (Maps.lookup fname caseMap)) fnames itypes))
+                    Typing_.typeConstraintComment = "case type"}) (Maps.lookup fname caseMap)) fnames itypes))
         in (mapConstraints cx (\subst -> yield (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
           Core.caseStatementTypeName = tname,
-          Core.caseStatementDefault = (Optionals.map Typing.inferenceResultTerm dfltResult),
+          Core.caseStatementDefault = (Optionals.map Typing_.inferenceResultTerm dfltResult),
           Core.caseStatementCases = (Lists.zipWith (\n -> \t -> Core.Field {
             Core.fieldName = n,
             Core.fieldTerm = t}) fnames iterms)})))) (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
           Core.functionTypeCodomain = cod})) (Substitution.composeTypeSubstList (Lists.concat [
-          Monads.optionalToList (Optionals.map Typing.inferenceResultSubst dfltResult),
+          Monads.optionalToList (Optionals.map Typing_.inferenceResultSubst dfltResult),
           [
             isubst,
             subst]]))) (Lists.concat [
           dfltConstraints,
           caseConstraints]))))))))))
 
-inferTypeOfCollection :: (Typing.InferenceContext -> (Core.Type -> Core.Type) -> ([Core.Term] -> Core.Term) -> String -> [Core.Term] -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfCollection :: (Typing_.InferenceContext -> (Core.Type -> Core.Type) -> ([Core.Term] -> Core.Term) -> String -> [Core.Term] -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfCollection cx typCons trmCons desc els = (Flows.bind freshName (\var -> Flows.bind (inferMany cx (Lists.zip els (Lists.map (\i -> Strings.cat [
   "#",
   (Literals.showInt32 i)]) (Math.range 1 (Math.add (Lists.length els) 1))))) (\results ->  
   let terms = (fst results) 
       types = (fst (snd results))
       subst1 = (snd (snd results))
-      constraints = (Lists.map (\t -> Typing.TypeConstraint {
-              Typing.typeConstraintLeft = (Core.TypeVariable var),
-              Typing.typeConstraintRight = t,
-              Typing.typeConstraintComment = desc}) types)
+      constraints = (Lists.map (\t -> Typing_.TypeConstraint {
+              Typing_.typeConstraintLeft = (Core.TypeVariable var),
+              Typing_.typeConstraintRight = t,
+              Typing_.typeConstraintComment = desc}) types)
   in (mapConstraints cx (\subst2 ->  
     let iterm = (trmCons terms) 
         itype = (typCons (Core.TypeVariable var))
         isubst = (Substitution.composeTypeSubst subst1 subst2)
     in (yield iterm itype isubst)) constraints))))
 
-inferTypeOfElimination :: (Typing.InferenceContext -> Core.Elimination -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfElimination :: (Typing_.InferenceContext -> Core.Elimination -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfElimination cx elm = ((\x -> case x of
   Core.EliminationProduct v1 -> (inferTypeOfTupleProjection cx v1)
   Core.EliminationRecord v1 -> (inferTypeOfProjection cx v1)
   Core.EliminationUnion v1 -> (inferTypeOfCaseStatement cx v1)
   Core.EliminationWrap v1 -> (inferTypeOfUnwrap cx v1)) elm)
 
-inferTypeOfFunction :: (Typing.InferenceContext -> Core.Function -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfFunction :: (Typing_.InferenceContext -> Core.Function -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfFunction cx f = ((\x -> case x of
   Core.FunctionElimination v1 -> (inferTypeOfElimination cx v1)
   Core.FunctionLambda v1 -> (inferTypeOfLambda cx v1)
   Core.FunctionPrimitive v1 -> (inferTypeOfPrimitive cx v1)) f)
 
-inferTypeOfInjection :: (Typing.InferenceContext -> Core.Injection -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfInjection :: (Typing_.InferenceContext -> Core.Injection -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfInjection cx injection =  
   let tname = (Core.injectionTypeName injection) 
       field = (Core.injectionField injection)
@@ -533,20 +535,20 @@ inferTypeOfInjection cx injection =
   in (Flows.bind (requireSchemaType cx tname) (\schemaType -> Flows.bind (inferTypeOfTerm cx term "injected term") (\result ->  
     let svars = (Core.typeSchemeVariables schemaType) 
         styp = (Core.typeSchemeType schemaType)
-        iterm = (Typing.inferenceResultTerm result)
-        ityp = (Typing.inferenceResultType result)
-        isubst = (Typing.inferenceResultSubst result)
+        iterm = (Typing_.inferenceResultTerm result)
+        ityp = (Typing_.inferenceResultType result)
+        isubst = (Typing_.inferenceResultSubst result)
     in (Flows.bind (Core_.unionType tname styp) (\sfields -> Flows.bind (Schemas.findFieldType fname sfields) (\ftyp -> mapConstraints cx (\subst -> yield (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = tname,
       Core.injectionField = Core.Field {
         Core.fieldName = fname,
         Core.fieldTerm = iterm}})) (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
-      Typing.TypeConstraint {
-        Typing.typeConstraintLeft = ftyp,
-        Typing.typeConstraintRight = ityp,
-        Typing.typeConstraintComment = "schema type of injected field"}]))))))
+      Typing_.TypeConstraint {
+        Typing_.typeConstraintLeft = ftyp,
+        Typing_.typeConstraintRight = ityp,
+        Typing_.typeConstraintComment = "schema type of injected field"}]))))))
 
-inferTypeOfLambda :: (Typing.InferenceContext -> Core.Lambda -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfLambda :: (Typing_.InferenceContext -> Core.Lambda -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfLambda cx lambda =  
   let var = (Core.lambdaParameter lambda) 
       body = (Core.lambdaBody lambda)
@@ -557,9 +559,9 @@ inferTypeOfLambda cx lambda =
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = dom})] cx)
     in (Flows.bind (inferTypeOfTerm cx2 body "lambda body") (\result ->  
-      let iterm = (Typing.inferenceResultTerm result) 
-          icod = (Typing.inferenceResultType result)
-          isubst = (Typing.inferenceResultSubst result)
+      let iterm = (Typing_.inferenceResultTerm result) 
+          icod = (Typing_.inferenceResultType result)
+          isubst = (Typing_.inferenceResultSubst result)
           rdom = (Substitution.substInType isubst dom)
           rterm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = var,
@@ -573,12 +575,12 @@ inferTypeOfLambda cx lambda =
                   Rewriting.freeVariablesInType icod,
                   (freeVariablesInContext (Substitution.substInContext isubst cx2))])
           cx3 = (Substitution.substInContext isubst cx)
-      in (Flows.pure (Typing.InferenceResult {
-        Typing.inferenceResultTerm = rterm,
-        Typing.inferenceResultType = rtype,
-        Typing.inferenceResultSubst = isubst}))))))
+      in (Flows.pure (Typing_.InferenceResult {
+        Typing_.inferenceResultTerm = rterm,
+        Typing_.inferenceResultType = rtype,
+        Typing_.inferenceResultSubst = isubst}))))))
 
-inferTypeOfLet :: (Typing.InferenceContext -> Core.Let -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfLet :: (Typing_.InferenceContext -> Core.Let -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfLet cx let0 =  
   let bindings0 = (Core.letBindings let0) 
       env0 = (Core.letEnvironment let0)
@@ -611,18 +613,18 @@ inferTypeOfLet cx let0 =
                 Core.letBindings = (Optionals.cat (Lists.map (\n -> Maps.lookup n bindingMap2) names)),
                 Core.letEnvironment = e})))
       rewriteResult = (\result ->  
-              let iterm = (Typing.inferenceResultTerm result) 
-                  itype = (Typing.inferenceResultType result)
-                  isubst = (Typing.inferenceResultSubst result)
-              in Typing.InferenceResult {
-                Typing.inferenceResultTerm = (restoreLet iterm),
-                Typing.inferenceResultType = itype,
-                Typing.inferenceResultSubst = isubst})
+              let iterm = (Typing_.inferenceResultTerm result) 
+                  itype = (Typing_.inferenceResultType result)
+                  isubst = (Typing_.inferenceResultSubst result)
+              in Typing_.InferenceResult {
+                Typing_.inferenceResultTerm = (restoreLet iterm),
+                Typing_.inferenceResultType = itype,
+                Typing_.inferenceResultSubst = isubst})
   in (Flows.map rewriteResult ((\x -> case x of
     Core.TermLet v1 -> (inferTypeOfLetAfterNormalization cx v1)
     _ -> (inferTypeOfTerm cx rewrittenLet "empty let term")) rewrittenLet))
 
-inferTypeOfLetAfterNormalization :: (Typing.InferenceContext -> Core.Let -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfLetAfterNormalization :: (Typing_.InferenceContext -> Core.Let -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfLetAfterNormalization cx0 letTerm =  
   let bins0 = (Core.letBindings letTerm) 
       env0 = (Core.letEnvironment letTerm)
@@ -636,14 +638,14 @@ inferTypeOfLetAfterNormalization cx0 letTerm =
       let bterms1 = (fst inferredResult) 
           tbins1 = (fst (snd inferredResult))
           s1 = (snd (snd inferredResult))
-      in (Flows.bind (Unification.unifyTypeLists (Typing.inferenceContextSchemaTypes cx0) (Lists.map (Substitution.substInType s1) tbins0) tbins1 "temporary type bindings") (\s2 ->  
+      in (Flows.bind (Unification.unifyTypeLists (Typing_.inferenceContextSchemaTypes cx0) (Lists.map (Substitution.substInType s1) tbins0) tbins1 "temporary type bindings") (\s2 ->  
         let g2 = (Substitution.substInContext (Substitution.composeTypeSubst s1 s2) cx0) 
             tsbins1 = (Lists.zip bnames (Lists.map (\t -> generalize g2 (Substitution.substInType s2 t)) tbins1))
         in (Flows.bind (inferTypeOfTerm (extendContext tsbins1 g2) env0 "let environment") (\envResult ->  
-          let env1 = (Typing.inferenceResultTerm envResult) 
-              tenv = (Typing.inferenceResultType envResult)
-              senv = (Typing.inferenceResultSubst envResult)
-              st1 = (Typing.TermSubst (Maps.fromList (Lists.map (\pair ->  
+          let env1 = (Typing_.inferenceResultTerm envResult) 
+              tenv = (Typing_.inferenceResultType envResult)
+              senv = (Typing_.inferenceResultSubst envResult)
+              st1 = (Typing_.TermSubst (Maps.fromList (Lists.map (\pair ->  
                       let name = (fst pair) 
                           ts = (snd pair)
                       in (name, (Lists.foldl (\t -> \v -> Core.TermTypeApplication (Core.TypedTerm {
@@ -662,27 +664,27 @@ inferTypeOfLetAfterNormalization cx0 letTerm =
                         Core.letBindingTerm = (Substitution.substTypesInTerm (Substitution.composeTypeSubst senv s2) typeAbstractedTerm),
                         Core.letBindingType = (Just (Substitution.substInTypeScheme senv ts))})
               bins1 = (Lists.map createBinding (Lists.zip tsbins1 bterms1))
-              ret = Typing.InferenceResult {
-                      Typing.inferenceResultTerm = (Core.TermLet (Core.Let {
+              ret = Typing_.InferenceResult {
+                      Typing_.inferenceResultTerm = (Core.TermLet (Core.Let {
                         Core.letBindings = bins1,
                         Core.letEnvironment = env1})),
-                      Typing.inferenceResultType = tenv,
-                      Typing.inferenceResultSubst = (Substitution.composeTypeSubstList [
+                      Typing_.inferenceResultType = tenv,
+                      Typing_.inferenceResultSubst = (Substitution.composeTypeSubstList [
                         s1,
                         s2,
                         senv])}
           in (Flows.pure ret)))))))))
 
-inferTypeOfList :: (Typing.InferenceContext -> [Core.Term] -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfList :: (Typing_.InferenceContext -> [Core.Term] -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfList cx = (inferTypeOfCollection cx (\x -> Core.TypeList x) (\x -> Core.TermList x) "list element")
 
-inferTypeOfLiteral :: (t0 -> Core.Literal -> Compute.Flow t1 Typing.InferenceResult)
-inferTypeOfLiteral _ lit = (Flows.pure (Typing.InferenceResult {
-  Typing.inferenceResultTerm = (Core.TermLiteral lit),
-  Typing.inferenceResultType = (Core.TypeLiteral (Variants.literalType lit)),
-  Typing.inferenceResultSubst = Substitution.idTypeSubst}))
+inferTypeOfLiteral :: (t0 -> Core.Literal -> Compute.Flow t1 Typing_.InferenceResult)
+inferTypeOfLiteral _ lit = (Flows.pure (Typing_.InferenceResult {
+  Typing_.inferenceResultTerm = (Core.TermLiteral lit),
+  Typing_.inferenceResultType = (Core.TypeLiteral (Variants.literalType lit)),
+  Typing_.inferenceResultSubst = Substitution.idTypeSubst}))
 
-inferTypeOfMap :: (Typing.InferenceContext -> M.Map Core.Term Core.Term -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfMap :: (Typing_.InferenceContext -> M.Map Core.Term Core.Term -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfMap cx m = (Flows.bind freshName (\kvar -> Flows.bind freshName (\vvar -> Logic.ifElse (Maps.null m) (Flows.pure (yield (Core.TermMap Maps.empty) (Core.TypeMap (Core.MapType {
   Core.mapTypeKeys = (Core.TypeVariable kvar),
   Core.mapTypeValues = (Core.TypeVariable vvar)})) Substitution.idTypeSubst)) (Flows.bind (inferMany cx (Lists.map (\k -> (k, "map key")) (Maps.keys m))) (\kresults ->  
@@ -693,14 +695,14 @@ inferTypeOfMap cx m = (Flows.bind freshName (\kvar -> Flows.bind freshName (\vva
     let vterms = (fst vresults) 
         vtypes = (fst (snd vresults))
         vsubst = (snd (snd vresults))
-        kcons = (Lists.map (\t -> Typing.TypeConstraint {
-                Typing.typeConstraintLeft = (Core.TypeVariable kvar),
-                Typing.typeConstraintRight = t,
-                Typing.typeConstraintComment = "map key"}) ktypes)
-        vcons = (Lists.map (\t -> Typing.TypeConstraint {
-                Typing.typeConstraintLeft = (Core.TypeVariable vvar),
-                Typing.typeConstraintRight = t,
-                Typing.typeConstraintComment = "map value"}) vtypes)
+        kcons = (Lists.map (\t -> Typing_.TypeConstraint {
+                Typing_.typeConstraintLeft = (Core.TypeVariable kvar),
+                Typing_.typeConstraintRight = t,
+                Typing_.typeConstraintComment = "map key"}) ktypes)
+        vcons = (Lists.map (\t -> Typing_.TypeConstraint {
+                Typing_.typeConstraintLeft = (Core.TypeVariable vvar),
+                Typing_.typeConstraintRight = t,
+                Typing_.typeConstraintComment = "map value"}) vtypes)
     in (mapConstraints cx (\subst -> yield (Core.TermMap (Maps.fromList (Lists.zip kterms vterms))) (Core.TypeMap (Core.MapType {
       Core.mapTypeKeys = (Core.TypeVariable kvar),
       Core.mapTypeValues = (Core.TypeVariable vvar)})) (Substitution.composeTypeSubstList [
@@ -710,28 +712,28 @@ inferTypeOfMap cx m = (Flows.bind freshName (\kvar -> Flows.bind freshName (\vva
       kcons,
       vcons])))))))))
 
-inferTypeOfOptional :: (Typing.InferenceContext -> Maybe Core.Term -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfOptional :: (Typing_.InferenceContext -> Maybe Core.Term -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfOptional cx m =  
   let trmCons = (\terms -> Logic.ifElse (Lists.null terms) (Core.TermOptional Nothing) (Core.TermOptional (Just (Lists.head terms))))
   in (inferTypeOfCollection cx (\x -> Core.TypeOptional x) trmCons "optional element" (Optionals.maybe [] Lists.singleton m))
 
-inferTypeOfPrimitive :: (Typing.InferenceContext -> Core.Name -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfPrimitive :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfPrimitive cx name = (Optionals.maybe (Flows.fail (Strings.cat2 "No such primitive: " (Core.unName name))) (\scheme -> Flows.bind (instantiateTypeScheme scheme) (\ts ->  
   let vars = (Core.typeSchemeVariables ts) 
       itype = (Core.typeSchemeType ts)
       iterm = (Lists.foldl (\t -> \v -> Core.TermTypeApplication (Core.TypedTerm {
               Core.typedTermTerm = t,
               Core.typedTermType = (Core.TypeVariable v)})) (Core.TermFunction (Core.FunctionPrimitive name)) vars)
-  in (yieldChecked cx vars iterm itype Substitution.idTypeSubst))) (Maps.lookup name (Typing.inferenceContextPrimitiveTypes cx)))
+  in (yieldChecked cx vars iterm itype Substitution.idTypeSubst))) (Maps.lookup name (Typing_.inferenceContextPrimitiveTypes cx)))
 
-inferTypeOfProduct :: (Typing.InferenceContext -> [Core.Term] -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfProduct :: (Typing_.InferenceContext -> [Core.Term] -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfProduct cx els = (Flows.map (\results ->  
   let iterms = (fst results) 
       itypes = (fst (snd results))
       isubst = (snd (snd results))
   in (yield (Core.TermProduct iterms) (Core.TypeProduct itypes) isubst)) (inferMany cx (Lists.map (\e -> (e, "tuple element")) els)))
 
-inferTypeOfProjection :: (Typing.InferenceContext -> Core.Projection -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfProjection :: (Typing_.InferenceContext -> Core.Projection -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfProjection cx proj =  
   let tname = (Core.projectionTypeName proj) 
       fname = (Core.projectionField proj)
@@ -744,7 +746,7 @@ inferTypeOfProjection cx proj =
       Core.functionTypeDomain = (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
       Core.functionTypeCodomain = ftyp})) Substitution.idTypeSubst))))))
 
-inferTypeOfRecord :: (Typing.InferenceContext -> Core.Record -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfRecord :: (Typing_.InferenceContext -> Core.Record -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfRecord cx record =  
   let tname = (Core.recordTypeName record) 
       fields = (Core.recordFields record)
@@ -765,23 +767,23 @@ inferTypeOfRecord cx record =
       Core.recordFields = (Lists.zipWith (\n -> \t -> Core.Field {
         Core.fieldName = n,
         Core.fieldTerm = t}) fnames iterms)})) (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
-      Typing.TypeConstraint {
-        Typing.typeConstraintLeft = styp,
-        Typing.typeConstraintRight = ityp,
-        Typing.typeConstraintComment = "schema type of record"}]))))
+      Typing_.TypeConstraint {
+        Typing_.typeConstraintLeft = styp,
+        Typing_.typeConstraintRight = ityp,
+        Typing_.typeConstraintComment = "schema type of record"}]))))
 
-inferTypeOfSet :: (Typing.InferenceContext -> S.Set Core.Term -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfSet :: (Typing_.InferenceContext -> S.Set Core.Term -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfSet cx s = (inferTypeOfCollection cx (\x -> Core.TypeSet x) (\terms -> Core.TermSet (Sets.fromList terms)) "set element" (Sets.toList s))
 
-inferTypeOfSum :: (Typing.InferenceContext -> Core.Sum -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfSum :: (Typing_.InferenceContext -> Core.Sum -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfSum cx sum =  
   let i = (Core.sumIndex sum) 
       s = (Core.sumSize sum)
       term = (Core.sumTerm sum)
   in (Flows.bind (inferTypeOfTerm cx term "sum term") (\result ->  
-    let iterm = (Typing.inferenceResultTerm result) 
-        ityp = (Typing.inferenceResultType result)
-        isubst = (Typing.inferenceResultSubst result)
+    let iterm = (Typing_.inferenceResultTerm result) 
+        ityp = (Typing_.inferenceResultType result)
+        isubst = (Typing_.inferenceResultSubst result)
         varOrTerm = (\t -> \j -> Logic.ifElse (Equality.equal i j) (Flows.pure (Mantle.EitherLeft t)) (Flows.map (\x -> Mantle.EitherRight x) freshName))
     in (Flows.bind (Flows.sequence (Lists.map (varOrTerm ityp) (Math.range 0 (Math.sub s 1)))) (\vars ->  
       let toType = (\e -> (\x -> case x of
@@ -792,7 +794,7 @@ inferTypeOfSum cx sum =
         Core.sumSize = s,
         Core.sumTerm = iterm})) (Core.TypeSum (Lists.map toType vars)) isubst))))))
 
-inferTypeOfTerm :: (Typing.InferenceContext -> Core.Term -> String -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfTerm :: (Typing_.InferenceContext -> Core.Term -> String -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfTerm cx term desc = (Monads.withTrace desc ((\x -> case x of
   Core.TermAnnotated v1 -> (inferTypeOfAnnotatedTerm cx v1)
   Core.TermApplication v1 -> (inferTypeOfApplication cx v1)
@@ -809,14 +811,14 @@ inferTypeOfTerm cx term desc = (Monads.withTrace desc ((\x -> case x of
   Core.TermTypeAbstraction v1 -> (inferTypeOfTypeAbstraction cx v1)
   Core.TermTypeApplication v1 -> (inferTypeOfTypeApplication cx v1)
   Core.TermUnion v1 -> (inferTypeOfInjection cx v1)
-  Core.TermUnit -> (Flows.pure (Typing.InferenceResult {
-    Typing.inferenceResultTerm = Core.TermUnit,
-    Typing.inferenceResultType = Core.TypeUnit,
-    Typing.inferenceResultSubst = Substitution.idTypeSubst}))
+  Core.TermUnit -> (Flows.pure (Typing_.InferenceResult {
+    Typing_.inferenceResultTerm = Core.TermUnit,
+    Typing_.inferenceResultType = Core.TypeUnit,
+    Typing_.inferenceResultSubst = Substitution.idTypeSubst}))
   Core.TermVariable v1 -> (inferTypeOfVariable cx v1)
   Core.TermWrap v1 -> (inferTypeOfWrappedTerm cx v1)) term))
 
-inferTypeOfTupleProjection :: (t0 -> Core.TupleProjection -> Compute.Flow t1 Typing.InferenceResult)
+inferTypeOfTupleProjection :: (t0 -> Core.TupleProjection -> Compute.Flow t1 Typing_.InferenceResult)
 inferTypeOfTupleProjection _ tp =  
   let arity = (Core.tupleProjectionArity tp) 
       idx = (Core.tupleProjectionIndex tp)
@@ -830,13 +832,13 @@ inferTypeOfTupleProjection _ tp =
       Core.functionTypeDomain = (Core.TypeProduct types),
       Core.functionTypeCodomain = cod})) Substitution.idTypeSubst)))
 
-inferTypeOfTypeAbstraction :: (Typing.InferenceContext -> Core.TypeAbstraction -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfTypeAbstraction :: (Typing_.InferenceContext -> Core.TypeAbstraction -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfTypeAbstraction cx ta = (inferTypeOfTerm cx (Core.typeAbstractionBody ta) "type abstraction")
 
-inferTypeOfTypeApplication :: (Typing.InferenceContext -> Core.TypedTerm -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfTypeApplication :: (Typing_.InferenceContext -> Core.TypedTerm -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfTypeApplication cx tt = (inferTypeOfTerm cx (Core.typedTermTerm tt) "type application term")
 
-inferTypeOfUnwrap :: (Typing.InferenceContext -> Core.Name -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfUnwrap :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfUnwrap cx tname = (Flows.bind (requireSchemaType cx tname) (\schemaType ->  
   let svars = (Core.typeSchemeVariables schemaType) 
       styp = (Core.typeSchemeType schemaType)
@@ -844,30 +846,30 @@ inferTypeOfUnwrap cx tname = (Flows.bind (requireSchemaType cx tname) (\schemaTy
     Core.functionTypeDomain = (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
     Core.functionTypeCodomain = wtyp})) Substitution.idTypeSubst)))))
 
-inferTypeOfVariable :: (Typing.InferenceContext -> Core.Name -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfVariable :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfVariable cx name = (Optionals.maybe (Flows.fail (Strings.cat2 "Variable not bound to type: " (Core.unName name))) (\scheme -> Flows.bind (instantiateTypeScheme scheme) (\ts ->  
   let vars = (Core.typeSchemeVariables ts) 
       itype = (Core.typeSchemeType ts)
       iterm = (Lists.foldl (\t -> \ty -> Core.TermTypeApplication (Core.TypedTerm {
               Core.typedTermTerm = t,
               Core.typedTermType = ty})) (Core.TermVariable name) (Lists.map (\x -> Core.TypeVariable x) vars))
-  in (Flows.pure (Typing.InferenceResult {
-    Typing.inferenceResultTerm = iterm,
-    Typing.inferenceResultType = itype,
-    Typing.inferenceResultSubst = Substitution.idTypeSubst})))) (Maps.lookup name (Typing.inferenceContextDataTypes cx)))
+  in (Flows.pure (Typing_.InferenceResult {
+    Typing_.inferenceResultTerm = iterm,
+    Typing_.inferenceResultType = itype,
+    Typing_.inferenceResultSubst = Substitution.idTypeSubst})))) (Maps.lookup name (Typing_.inferenceContextDataTypes cx)))
 
-inferTypeOfWrappedTerm :: (Typing.InferenceContext -> Core.WrappedTerm -> Compute.Flow t0 Typing.InferenceResult)
+inferTypeOfWrappedTerm :: (Typing_.InferenceContext -> Core.WrappedTerm -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfWrappedTerm cx wt =  
   let tname = (Core.wrappedTermTypeName wt) 
       term = (Core.wrappedTermObject wt)
   in (Flows.bind (requireSchemaType cx tname) (\schemaType -> Flows.bind (inferTypeOfTerm cx term "wrapped term") (\result ->  
     let svars = (Core.typeSchemeVariables schemaType) 
         styp = (Core.typeSchemeType schemaType)
-        iterm = (Typing.inferenceResultTerm result)
-        ityp = (Typing.inferenceResultType result)
-        isubst = (Typing.inferenceResultSubst result)
+        iterm = (Typing_.inferenceResultTerm result)
+        ityp = (Typing_.inferenceResultType result)
+        isubst = (Typing_.inferenceResultSubst result)
     in (Flows.bind (freshNames (Lists.length svars)) (\freshVars ->  
-      let subst = (Typing.TypeSubst (Maps.fromList (Lists.zip svars (Lists.map (\x -> Core.TypeVariable x) freshVars)))) 
+      let subst = (Typing_.TypeSubst (Maps.fromList (Lists.zip svars (Lists.map (\x -> Core.TypeVariable x) freshVars)))) 
           stypInst = (Substitution.substInType subst styp)
           nominalInst = (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) freshVars))
           expected = (Core.TypeWrap (Core.WrappedType {
@@ -880,12 +882,12 @@ inferTypeOfWrappedTerm cx wt =
       in (bindConstraints cx (\subst2 -> yieldChecked cx freeVars (Core.TermWrap (Core.WrappedTerm {
         Core.wrappedTermTypeName = tname,
         Core.wrappedTermObject = iterm})) nominalInst (Substitution.composeTypeSubst isubst subst2)) [
-        Typing.TypeConstraint {
-          Typing.typeConstraintLeft = stypInst,
-          Typing.typeConstraintRight = expected,
-          Typing.typeConstraintComment = "schema type of wrapper"}]))))))
+        Typing_.TypeConstraint {
+          Typing_.typeConstraintLeft = stypInst,
+          Typing_.typeConstraintRight = expected,
+          Typing_.typeConstraintComment = "schema type of wrapper"}]))))))
 
-inferTypesOfTemporaryLetBindings :: (Typing.InferenceContext -> [Core.LetBinding] -> Compute.Flow t0 ([Core.Term], ([Core.Type], Typing.TypeSubst)))
+inferTypesOfTemporaryLetBindings :: (Typing_.InferenceContext -> [Core.LetBinding] -> Compute.Flow t0 ([Core.Term], ([Core.Type], Typing_.TypeSubst)))
 inferTypesOfTemporaryLetBindings cx bins = (Logic.ifElse (Lists.null bins) (Flows.pure ([], ([], Substitution.idTypeSubst))) ( 
   let binding = (Lists.head bins) 
       k = (Core.letBindingName binding)
@@ -895,19 +897,19 @@ inferTypesOfTemporaryLetBindings cx bins = (Logic.ifElse (Lists.null bins) (Flow
     "temporary let binding '",
     Core.unName k,
     "'"])) (\result1 ->  
-    let j = (Typing.inferenceResultTerm result1) 
-        u_prime = (Typing.inferenceResultType result1)
-        u = (Typing.inferenceResultSubst result1)
+    let j = (Typing_.inferenceResultTerm result1) 
+        u_prime = (Typing_.inferenceResultType result1)
+        u = (Typing_.inferenceResultSubst result1)
     in (Flows.bind (inferTypesOfTemporaryLetBindings (Substitution.substInContext u cx) tl) (\result2 ->  
       let h = (fst result2) 
           r_prime = (fst (snd result2))
           r = (snd (snd result2))
       in (Flows.pure (Lists.cons (Substitution.substTypesInTerm r j) h, (Lists.cons (Substitution.substInType r u_prime) r_prime, (Substitution.composeTypeSubst u r))))))))))
 
-bindConstraints :: (Typing.InferenceContext -> (Typing.TypeSubst -> Compute.Flow t1 t0) -> [Typing.TypeConstraint] -> Compute.Flow t1 t0)
-bindConstraints cx f constraints = (Flows.bind (Unification.unifyTypeConstraints (Typing.inferenceContextSchemaTypes cx) constraints) f)
+bindConstraints :: (Typing_.InferenceContext -> (Typing_.TypeSubst -> Compute.Flow t1 t0) -> [Typing_.TypeConstraint] -> Compute.Flow t1 t0)
+bindConstraints cx f constraints = (Flows.bind (Unification.unifyTypeConstraints (Typing_.inferenceContextSchemaTypes cx) constraints) f)
 
-forInferredTerm :: (Typing.InferenceContext -> Core.Term -> String -> (Typing.InferenceResult -> t0) -> Compute.Flow t1 t0)
+forInferredTerm :: (Typing_.InferenceContext -> Core.Term -> String -> (Typing_.InferenceResult -> t0) -> Compute.Flow t1 t0)
 forInferredTerm cx term desc f = (Flows.map f (inferTypeOfTerm cx term desc))
 
 forVar :: ((Core.Name -> t0) -> Compute.Flow t1 t0)
@@ -927,13 +929,13 @@ instantiateTypeScheme :: (Core.TypeScheme -> Compute.Flow t0 Core.TypeScheme)
 instantiateTypeScheme scheme =  
   let oldVars = (Core.typeSchemeVariables scheme)
   in (Flows.bind (freshNames (Lists.length oldVars)) (\newVars ->  
-    let subst = (Typing.TypeSubst (Maps.fromList (Lists.zip oldVars (Lists.map (\x -> Core.TypeVariable x) newVars))))
+    let subst = (Typing_.TypeSubst (Maps.fromList (Lists.zip oldVars (Lists.map (\x -> Core.TypeVariable x) newVars))))
     in (Flows.pure (Core.TypeScheme {
       Core.typeSchemeVariables = newVars,
       Core.typeSchemeType = (Substitution.substInType subst (Core.typeSchemeType scheme))}))))
 
-mapConstraints :: (Typing.InferenceContext -> (Typing.TypeSubst -> t0) -> [Typing.TypeConstraint] -> Compute.Flow t1 t0)
-mapConstraints cx f constraints = (Flows.map f (Unification.unifyTypeConstraints (Typing.inferenceContextSchemaTypes cx) constraints))
+mapConstraints :: (Typing_.InferenceContext -> (Typing_.TypeSubst -> t0) -> [Typing_.TypeConstraint] -> Compute.Flow t1 t0)
+mapConstraints cx f constraints = (Flows.map f (Unification.unifyTypeConstraints (Typing_.inferenceContextSchemaTypes cx) constraints))
 
 -- | Apply type arguments to a nominal type
 nominalApplication :: (Core.Name -> [Core.Type] -> Core.Type)
@@ -941,34 +943,34 @@ nominalApplication tname args = (Lists.foldl (\t -> \a -> Core.TypeApplication (
   Core.applicationTypeFunction = t,
   Core.applicationTypeArgument = a})) (Core.TypeVariable tname) args)
 
-requireSchemaType :: (Typing.InferenceContext -> Core.Name -> Compute.Flow t0 Core.TypeScheme)
-requireSchemaType cx tname = (Optionals.maybe (Flows.fail (Strings.cat2 "No such schema type: " (Core.unName tname))) (\ts -> instantiateTypeScheme (Rewriting.stripTypeSchemeRecursive ts)) (Maps.lookup tname (Typing.inferenceContextSchemaTypes cx)))
+requireSchemaType :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 Core.TypeScheme)
+requireSchemaType cx tname = (Optionals.maybe (Flows.fail (Strings.cat2 "No such schema type: " (Core.unName tname))) (\ts -> instantiateTypeScheme (Rewriting.stripTypeSchemeRecursive ts)) (Maps.lookup tname (Typing_.inferenceContextSchemaTypes cx)))
 
 -- | Add (term variable, type scheme) pairs to the typing environment
-extendContext :: ([(Core.Name, Core.TypeScheme)] -> Typing.InferenceContext -> Typing.InferenceContext)
-extendContext pairs cx = Typing.InferenceContext {
-  Typing.inferenceContextSchemaTypes = (Typing.inferenceContextSchemaTypes cx),
-  Typing.inferenceContextPrimitiveTypes = (Typing.inferenceContextPrimitiveTypes cx),
-  Typing.inferenceContextDataTypes = (Maps.union (Maps.fromList pairs) (Typing.inferenceContextDataTypes cx)),
-  Typing.inferenceContextDebug = (Typing.inferenceContextDebug cx)}
+extendContext :: ([(Core.Name, Core.TypeScheme)] -> Typing_.InferenceContext -> Typing_.InferenceContext)
+extendContext pairs cx = Typing_.InferenceContext {
+  Typing_.inferenceContextSchemaTypes = (Typing_.inferenceContextSchemaTypes cx),
+  Typing_.inferenceContextPrimitiveTypes = (Typing_.inferenceContextPrimitiveTypes cx),
+  Typing_.inferenceContextDataTypes = (Maps.union (Maps.fromList pairs) (Typing_.inferenceContextDataTypes cx)),
+  Typing_.inferenceContextDebug = (Typing_.inferenceContextDebug cx)}
 
 -- | Create an inference result
-yield :: (Core.Term -> Core.Type -> Typing.TypeSubst -> Typing.InferenceResult)
-yield term typ subst = Typing.InferenceResult {
-  Typing.inferenceResultTerm = (Substitution.substTypesInTerm subst term),
-  Typing.inferenceResultType = (Substitution.substInType subst typ),
-  Typing.inferenceResultSubst = subst}
+yield :: (Core.Term -> Core.Type -> Typing_.TypeSubst -> Typing_.InferenceResult)
+yield term typ subst = Typing_.InferenceResult {
+  Typing_.inferenceResultTerm = (Substitution.substTypesInTerm subst term),
+  Typing_.inferenceResultType = (Substitution.substInType subst typ),
+  Typing_.inferenceResultSubst = subst}
 
-yieldChecked :: (t0 -> t1 -> Core.Term -> Core.Type -> Typing.TypeSubst -> Compute.Flow t2 Typing.InferenceResult)
+yieldChecked :: (t0 -> t1 -> Core.Term -> Core.Type -> Typing_.TypeSubst -> Compute.Flow t2 Typing_.InferenceResult)
 yieldChecked cx vars term typ subst =  
   let iterm = (Substitution.substTypesInTerm subst term) 
       itype = (Substitution.substInType subst typ)
-  in (Flows.pure (Typing.InferenceResult {
-    Typing.inferenceResultTerm = iterm,
-    Typing.inferenceResultType = itype,
-    Typing.inferenceResultSubst = subst}))
+  in (Flows.pure (Typing_.InferenceResult {
+    Typing_.inferenceResultTerm = iterm,
+    Typing_.inferenceResultType = itype,
+    Typing_.inferenceResultSubst = subst}))
 
-yieldDebug :: (t0 -> t1 -> Core.Term -> Core.Type -> Typing.TypeSubst -> Compute.Flow t2 Typing.InferenceResult)
+yieldDebug :: (t0 -> t1 -> Core.Term -> Core.Type -> Typing_.TypeSubst -> Compute.Flow t2 Typing_.InferenceResult)
 yieldDebug cx debugId term typ subst =  
   let rterm = (Substitution.substTypesInTerm subst term) 
       rtyp = (Substitution.substInType subst typ)
@@ -978,11 +980,11 @@ yieldDebug cx debugId term typ subst =
     "\n\ttyp: ",
     Core__.type_ typ,
     "\n\tsubst: ",
-    Core__.typeSubst subst,
+    Typing.typeSubst subst,
     "\n\trterm: ",
     Core__.term rterm,
     "\n\trtyp: ",
-    (Core__.type_ rtyp)])) (\result -> Flows.pure (Typing.InferenceResult {
-    Typing.inferenceResultTerm = rterm,
-    Typing.inferenceResultType = rtyp,
-    Typing.inferenceResultSubst = subst})))
+    (Core__.type_ rtyp)])) (\result -> Flows.pure (Typing_.InferenceResult {
+    Typing_.inferenceResultTerm = rterm,
+    Typing_.inferenceResultType = rtyp,
+    Typing_.inferenceResultSubst = subst})))

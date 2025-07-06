@@ -1,9 +1,8 @@
--- | Haskell implementations of hydra.lib.io primitives
+-- | String representations of hydra.core types
 
 module Hydra.Show.Core where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -11,9 +10,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Strip as Strip
-import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -22,18 +19,6 @@ import qualified Data.Set as S
 
 readTerm :: (t0 -> Maybe t1)
 readTerm _ = Nothing
-
--- | Show an element as a string
-element :: (Graph.Element -> String)
-element el =  
-  let name = (Core.unName (Graph.elementName el)) 
-      t = (Graph.elementTerm el)
-      typeStr = (Optionals.maybe "" (\ts -> Strings.cat2 " : " (typeScheme ts)) (Graph.elementType el))
-  in (Strings.cat [
-    name,
-    " = ",
-    term t,
-    typeStr])
 
 -- | Show a float value as a string
 float :: (Core.FloatValue -> String)
@@ -48,16 +33,6 @@ floatType ft = ((\x -> case x of
   Core.FloatTypeBigfloat -> "bigfloat"
   Core.FloatTypeFloat32 -> "float32"
   Core.FloatTypeFloat64 -> "float64") ft)
-
--- | Show a graph as a string
-graph :: (Graph.Graph -> String)
-graph graph =  
-  let elements = (Maps.elems (Graph.graphElements graph)) 
-      elementStrs = (Lists.map element elements)
-  in (Strings.cat [
-    "{",
-    Strings.intercalate ", " elementStrs,
-    "}"])
 
 -- | Show an integer value as a string
 integer :: (Core.IntegerValue -> String)
@@ -297,28 +272,6 @@ term t =
         term term1,
         "}"])) (Strip.stripTerm t))
 
--- | Show a term variant as a string
-termVariant :: (Mantle.TermVariant -> String)
-termVariant x = case x of
-  Mantle.TermVariantAnnotated -> "annotated"
-  Mantle.TermVariantApplication -> "application"
-  Mantle.TermVariantFunction -> "function"
-  Mantle.TermVariantLet -> "let"
-  Mantle.TermVariantList -> "list"
-  Mantle.TermVariantLiteral -> "literal"
-  Mantle.TermVariantMap -> "map"
-  Mantle.TermVariantOptional -> "optional"
-  Mantle.TermVariantProduct -> "product"
-  Mantle.TermVariantRecord -> "record"
-  Mantle.TermVariantSet -> "set"
-  Mantle.TermVariantSum -> "sum"
-  Mantle.TermVariantTypeAbstraction -> "typeAbstraction"
-  Mantle.TermVariantTypeApplication -> "typeApplication"
-  Mantle.TermVariantUnion -> "union"
-  Mantle.TermVariantUnit -> "unit"
-  Mantle.TermVariantVariable -> "variable"
-  Mantle.TermVariantWrap -> "wrap"
-
 -- | Show a type as a string
 type_ :: (Core.Type -> String)
 type_ typ =  
@@ -415,16 +368,6 @@ type_ typ =
         type_ typ1,
         ")"])) (Strip.stripType typ))
 
--- | Show a type constraint as a string
-typeConstraint :: (Typing.TypeConstraint -> String)
-typeConstraint tc =  
-  let ltyp = (Typing.typeConstraintLeft tc) 
-      rtyp = (Typing.typeConstraintRight tc)
-  in (Strings.cat [
-    type_ ltyp,
-    "\8801",
-    (type_ rtyp)])
-
 -- | Show a type scheme as a string
 typeScheme :: (Core.TypeScheme -> String)
 typeScheme ts =  
@@ -440,41 +383,3 @@ typeScheme ts =
     fa,
     type_ body,
     ")"])
-
--- | Show a type substitution as a string
-typeSubst :: (Typing.TypeSubst -> String)
-typeSubst ts =  
-  let subst = (Typing.unTypeSubst ts) 
-      pairs = (Maps.toList subst)
-      showPair = (\pair ->  
-              let name = (Core.unName (fst pair)) 
-                  typ = (snd pair)
-              in (Strings.cat [
-                name,
-                "\8614",
-                (type_ typ)]))
-      pairStrs = (Lists.map showPair pairs)
-  in (Strings.cat [
-    "{",
-    Strings.intercalate "," pairStrs,
-    "}"])
-
--- | Show a type variant as a string
-typeVariant :: (Mantle.TypeVariant -> String)
-typeVariant x = case x of
-  Mantle.TypeVariantAnnotated -> "annotated"
-  Mantle.TypeVariantApplication -> "application"
-  Mantle.TypeVariantForall -> "forall"
-  Mantle.TypeVariantFunction -> "function"
-  Mantle.TypeVariantList -> "list"
-  Mantle.TypeVariantLiteral -> "literal"
-  Mantle.TypeVariantMap -> "map"
-  Mantle.TypeVariantOptional -> "optional"
-  Mantle.TypeVariantProduct -> "product"
-  Mantle.TypeVariantRecord -> "record"
-  Mantle.TypeVariantSet -> "set"
-  Mantle.TypeVariantSum -> "sum"
-  Mantle.TypeVariantUnion -> "union"
-  Mantle.TypeVariantUnit -> "unit"
-  Mantle.TypeVariantVariable -> "variable"
-  Mantle.TypeVariantWrap -> "wrap"
