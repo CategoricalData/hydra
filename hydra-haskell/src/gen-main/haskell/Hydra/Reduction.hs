@@ -128,7 +128,7 @@ expandLambdas graph term =
           let apps = (Lists.foldl (\lhs -> \arg -> Core.TermApplication (Core.Application {
                   Core.applicationFunction = lhs,
                   Core.applicationArgument = arg})) t args) 
-              is = (Logic.ifElse (Equality.lteInt32 arity (Lists.length args)) [] (Math.rangeInt32 1 (Math.sub arity (Lists.length args))))
+              is = (Logic.ifElse (Equality.lte arity (Lists.length args)) [] (Math.rangeInt32 1 (Math.sub arity (Lists.length args))))
               pad = (\indices -> \t -> Logic.ifElse (Lists.null indices) t (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name (Strings.cat2 "v" (Literals.showInt32 (Lists.head indices)))),
                       Core.lambdaDomain = Nothing,
@@ -216,7 +216,7 @@ reduceTerm eager term =
                     in (Flows.bind (reduce eager (Strip.stripTerm arg)) (\reducedArg -> Flows.bind (reduce eager (replaceFreeName param reducedArg body)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))
                   Core.FunctionPrimitive v2 -> (Flows.bind (Lexical.requirePrimitive v2) (\prim ->  
                     let arity = (Arity.primitiveArity prim)
-                    in (Logic.ifElse (Equality.gtInt32 arity (Lists.length args)) (Flows.pure (applyToArguments original args)) ( 
+                    in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Flows.pure (applyToArguments original args)) ( 
                       let argList = (Lists.take arity args) 
                           remainingArgs = (Lists.drop arity args)
                       in (Flows.bind (Flows.mapList (reduceArg eager) argList) (\reducedArgs -> Flows.bind (Flows.bind (Graph.primitiveImplementation prim reducedArgs) (reduce eager)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))))) v1)

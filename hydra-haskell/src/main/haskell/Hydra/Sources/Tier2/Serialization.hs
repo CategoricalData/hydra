@@ -158,7 +158,7 @@ bracesListAdaptiveDef = serializationDefinition "bracesListAdaptive" $
   doc "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression." $
   lambda "els" $ lets [
     "inlineList">: ref curlyBracesListDef @@ nothing @@ ref inlineStyleDef @@ var "els"]
-    $ Logic.ifElse (Equality.gtInt32 (ref expressionLengthDef @@ var "inlineList") (int32 70))
+    $ Logic.ifElse (Equality.gt (ref expressionLengthDef @@ var "inlineList") (int32 70))
       (ref curlyBracesListDef @@ nothing @@ ref halfBlockStyleDef @@ var "els")
       (var "inlineList")
 
@@ -167,7 +167,7 @@ bracketListAdaptiveDef = serializationDefinition "bracketListAdaptive" $
   doc "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression." $
   lambda "els" $ lets [
     "inlineList">: ref bracketListDef @@ ref inlineStyleDef @@ var "els"]
-    $ Logic.ifElse (Equality.gtInt32 (ref expressionLengthDef @@ var "inlineList") (int32 70))
+    $ Logic.ifElse (Equality.gt (ref expressionLengthDef @@ var "inlineList") (int32 70))
       (ref bracketListDef @@ ref halfBlockStyleDef @@ var "els")
       (var "inlineList")
 
@@ -405,7 +405,7 @@ parenListDef = serializationDefinition "parenList" $
     Logic.ifElse (Lists.null $ var "els")
       (ref cstDef @@ string "()")
       (lets [
-        "style">: Logic.ifElse (Logic.and (var "newlines") (Equality.gtInt32 (Lists.length $ var "els") (int32 1)))
+        "style">: Logic.ifElse (Logic.and (var "newlines") (Equality.gt (Lists.length $ var "els") (int32 1)))
           (ref halfBlockStyleDef)
           (ref inlineStyleDef)]
         $ ref bracketsDef @@ ref parenthesesDef @@ var "style" @@ (ref commaSepDef @@ var "style" @@ var "els"))

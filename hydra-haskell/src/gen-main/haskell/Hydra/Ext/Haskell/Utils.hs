@@ -134,7 +134,7 @@ simpleValueBinding hname rhs bindings =
 
 toTypeApplication :: ([Ast.Type] -> Ast.Type)
 toTypeApplication types =  
-  let app = (\l -> Logic.ifElse (Equality.gtInt32 (Lists.length l) 1) (Ast.TypeApplication (Ast.ApplicationType {
+  let app = (\l -> Logic.ifElse (Equality.gt (Lists.length l) 1) (Ast.TypeApplication (Ast.ApplicationType {
           Ast.applicationTypeContext = (app (Lists.tail l)),
           Ast.applicationTypeArgument = (Lists.head l)})) (Lists.head l))
   in (app (Lists.reverse types))

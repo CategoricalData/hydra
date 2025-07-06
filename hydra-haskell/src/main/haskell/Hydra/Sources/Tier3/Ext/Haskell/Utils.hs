@@ -250,7 +250,7 @@ toTypeApplicationDef :: TElement ([H.Type] -> H.Type)
 toTypeApplicationDef = haskellUtilsDefinition "toTypeApplication" $
   lambda "types" $ lets [
     "app">: lambda "l" $
-      Logic.ifElse (Equality.gtInt32 (Lists.length (var "l")) (int32 1))
+      Logic.ifElse (Equality.gt (Lists.length (var "l")) (int32 1))
         (inject H._Type H._Type_application $ record H._ApplicationType [
           H._ApplicationType_context>>: var "app" @@ (Lists.tail (var "l")),
           H._ApplicationType_argument>>: Lists.head (var "l")])

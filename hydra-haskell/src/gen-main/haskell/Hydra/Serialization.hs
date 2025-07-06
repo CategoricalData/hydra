@@ -29,7 +29,7 @@ angleBracesList style els = (Logic.ifElse (Lists.null els) (cst "<>") (brackets 
 bracesListAdaptive :: ([Ast.Expr] -> Ast.Expr)
 bracesListAdaptive els =  
   let inlineList = (curlyBracesList Nothing inlineStyle els)
-  in (Logic.ifElse (Equality.gtInt32 (expressionLength inlineList) 70) (curlyBracesList Nothing halfBlockStyle els) inlineList)
+  in (Logic.ifElse (Equality.gt (expressionLength inlineList) 70) (curlyBracesList Nothing halfBlockStyle els) inlineList)
 
 bracketList :: (Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr)
 bracketList style els = (Logic.ifElse (Lists.null els) (cst "[]") (brackets squareBrackets style (commaSep style els)))
@@ -38,7 +38,7 @@ bracketList style els = (Logic.ifElse (Lists.null els) (cst "[]") (brackets squa
 bracketListAdaptive :: ([Ast.Expr] -> Ast.Expr)
 bracketListAdaptive els =  
   let inlineList = (bracketList inlineStyle els)
-  in (Logic.ifElse (Equality.gtInt32 (expressionLength inlineList) 70) (bracketList halfBlockStyle els) inlineList)
+  in (Logic.ifElse (Equality.gt (expressionLength inlineList) 70) (bracketList halfBlockStyle els) inlineList)
 
 brackets :: (Ast.Brackets -> Ast.BlockStyle -> Ast.Expr -> Ast.Expr)
 brackets br style e = (Ast.ExprBrackets (Ast.BracketExpr {
@@ -244,7 +244,7 @@ orSep style l = (Logic.ifElse (Lists.null l) (cst "") (Logic.ifElse (Equality.eq
 
 parenList :: (Bool -> [Ast.Expr] -> Ast.Expr)
 parenList newlines els = (Logic.ifElse (Lists.null els) (cst "()") ( 
-  let style = (Logic.ifElse (Logic.and newlines (Equality.gtInt32 (Lists.length els) 1)) halfBlockStyle inlineStyle)
+  let style = (Logic.ifElse (Logic.and newlines (Equality.gt (Lists.length els) 1)) halfBlockStyle inlineStyle)
   in (brackets parentheses style (commaSep style els))))
 
 parens :: (Ast.Expr -> Ast.Expr)

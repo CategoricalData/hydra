@@ -371,7 +371,7 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ =
               in (Lists.map toPair (Sets.toList clsSet)))
   in (Monads.withTrace "encode with assertions" (Flows.bind (adaptTypeToHaskellAndEncode namespaces typ) (\htyp -> Logic.ifElse (Lists.null assertPairs) (Flows.pure htyp) ( 
     let encoded = (Lists.map encodeAssertion assertPairs) 
-        hassert = (Logic.ifElse (Equality.gtInt32 (Lists.length encoded) 1) (Lists.head encoded) (Ast.AssertionTuple encoded))
+        hassert = (Logic.ifElse (Equality.gt (Lists.length encoded) 1) (Lists.head encoded) (Ast.AssertionTuple encoded))
     in (Flows.pure (Ast.TypeCtx (Ast.ContextType {
       Ast.contextTypeCtx = hassert,
       Ast.contextTypeType = htyp})))))))

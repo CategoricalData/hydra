@@ -229,7 +229,7 @@ expandLambdasDef = reductionDefinition "expandLambdas" $
   lambda "graph" $ lambda "term" $ lets [
     "expand">: lambda "args" $ lambda "arity" $ lambda "t" $ lets [
       "apps">: Lists.foldl (lambda "lhs" $ lambda "arg" $ Core.termApplication $ Core.application (var "lhs") (var "arg")) (var "t") (var "args"),
-      "is">: Logic.ifElse (Equality.lteInt32 (var "arity") (Lists.length $ var "args"))
+      "is">: Logic.ifElse (Equality.lte (var "arity") (Lists.length $ var "args"))
         (list [])
         (Math.rangeInt32 (int32 1) (Math.sub (var "arity") (Lists.length $ var "args"))),
       "pad">: lambda "indices" $ lambda "t" $
@@ -384,7 +384,7 @@ reduceTermDef = reductionDefinition "reduceTerm" $
               Flows.bind (ref Lexical.requirePrimitiveDef @@ var "name") $ lambda "prim" $
                 lets [
                   "arity">: ref Arity.primitiveArityDef @@ var "prim"]
-                  $ Logic.ifElse (Equality.gtInt32 (var "arity") (Lists.length $ var "args"))
+                  $ Logic.ifElse (Equality.gt (var "arity") (Lists.length $ var "args"))
                     (Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args")
                     (lets [
                       "argList">: Lists.take (var "arity") (var "args"),

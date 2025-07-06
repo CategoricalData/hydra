@@ -88,7 +88,7 @@ mapFirstLetter mapping s =
 
 nonAlnumToUnderscores :: (String -> String)
 nonAlnumToUnderscores input =  
-  let isAlnum = (\c -> Logic.or (Logic.and (Equality.gteInt32 c 65) (Equality.lteInt32 c 90)) (Logic.or (Logic.and (Equality.gteInt32 c 97) (Equality.lteInt32 c 122)) (Logic.and (Equality.gteInt32 c 48) (Equality.lteInt32 c 57)))) 
+  let isAlnum = (\c -> Logic.or (Logic.and (Equality.gte c 65) (Equality.lte c 90)) (Logic.or (Logic.and (Equality.gte c 97) (Equality.lte c 122)) (Logic.and (Equality.gte c 48) (Equality.lte c 57)))) 
       replace = (\p -> \c ->  
               let s = (fst p) 
                   b = (snd p)
@@ -155,6 +155,6 @@ wrapLine maxlen input =
               spanResult = (Lists.span (\c -> Logic.and (Logic.not (Equality.equal c 32)) (Logic.not (Equality.equal c 9))) (Lists.reverse trunc))
               prefix = (Lists.reverse (snd spanResult))
               suffix = (Lists.reverse (fst spanResult))
-          in (Logic.ifElse (Equality.lteInt32 (Lists.length rem) maxlen) (Lists.reverse (Lists.cons rem prev)) (Logic.ifElse (Lists.null prefix) (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (helper (Lists.cons (Lists.init prefix) prev) (Lists.concat2 suffix (Lists.drop maxlen rem))))))
+          in (Logic.ifElse (Equality.lte (Lists.length rem) maxlen) (Lists.reverse (Lists.cons rem prev)) (Logic.ifElse (Lists.null prefix) (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (helper (Lists.cons (Lists.init prefix) prev) (Lists.concat2 suffix (Lists.drop maxlen rem))))))
   in (Strings.fromList (Lists.intercalate [
     10] (helper [] (Strings.toList input))))

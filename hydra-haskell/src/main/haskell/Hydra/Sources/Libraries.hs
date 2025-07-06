@@ -74,37 +74,21 @@ _hydra_lib_equality = Namespace "hydra.lib.equality"
 
 _equality_compare  = qname _hydra_lib_equality "compare" :: Name
 _equality_equal         = qname _hydra_lib_equality "equal" :: Name
-_equality_gtFloat32     = qname _hydra_lib_equality "gtFloat32" :: Name
-_equality_gtFloat64     = qname _hydra_lib_equality "gtFloat64" :: Name
-_equality_gtInt32       = qname _hydra_lib_equality "gtInt32" :: Name
-_equality_gteFloat32    = qname _hydra_lib_equality "gteFloat32" :: Name
-_equality_gteFloat64    = qname _hydra_lib_equality "gteFloat64" :: Name
-_equality_gteInt32      = qname _hydra_lib_equality "gteInt32" :: Name
+_equality_gt     = qname _hydra_lib_equality "gt" :: Name
+_equality_gte    = qname _hydra_lib_equality "gte" :: Name
 _equality_identity      = qname _hydra_lib_equality "identity" :: Name
-_equality_ltFloat32     = qname _hydra_lib_equality "ltFloat32" :: Name
-_equality_ltFloat64     = qname _hydra_lib_equality "ltFloat64" :: Name
-_equality_ltInt32       = qname _hydra_lib_equality "ltInt32" :: Name
-_equality_lteFloat32    = qname _hydra_lib_equality "lteFloat32" :: Name
-_equality_lteFloat64    = qname _hydra_lib_equality "lteFloat64" :: Name
-_equality_lteInt32      = qname _hydra_lib_equality "lteInt32" :: Name
+_equality_lt     = qname _hydra_lib_equality "lt" :: Name
+_equality_lte    = qname _hydra_lib_equality "lte" :: Name
 
 hydraLibEquality :: Library
 hydraLibEquality = standardLibrary _hydra_lib_equality [
-    prim2 _equality_compare  Equality.compare  []    int32 int32 comparison,
-    prim2 _equality_equal         Equality.equal         []    x x boolean,
-    prim1 _equality_identity      Equality.identity      ["x"] x x,
-    prim2 _equality_gtFloat32     Equality.gtFloat32     []    float32 float32 boolean,
-    prim2 _equality_gtFloat64     Equality.gtFloat64     []    float64 float64 boolean,
-    prim2 _equality_gtInt32       Equality.gtInt32       []    int32 int32 boolean,
-    prim2 _equality_gteFloat32    Equality.gteFloat32    []    float32 float32 boolean,
-    prim2 _equality_gteFloat64    Equality.gteFloat64    []    float64 float64 boolean,
-    prim2 _equality_gteInt32      Equality.gteInt32      []    int32 int32 boolean,
-    prim2 _equality_ltFloat32     Equality.ltFloat32     []    float32 float32 boolean,
-    prim2 _equality_ltFloat64     Equality.ltFloat64     []    float64 float64 boolean,
-    prim2 _equality_ltInt32       Equality.ltInt32       []    int32 int32 boolean,
-    prim2 _equality_lteFloat32    Equality.lteFloat32    []    float32 float32 boolean,
-    prim2 _equality_lteFloat64    Equality.lteFloat64    []    float64 float64 boolean,
-    prim2 _equality_lteInt32      Equality.lteInt32      []    int32 int32 boolean]
+    prim2 _equality_compare  Equality.compare  []    x x comparison,
+    prim2 _equality_equal    Equality.equal    []    x x boolean,
+    prim1 _equality_identity Equality.identity ["x"] x x,
+    prim2 _equality_gt       Equality.gt       []    x x boolean,
+    prim2 _equality_gte      Equality.gte      []    x x boolean,
+    prim2 _equality_lt       Equality.lt       []    x x boolean,
+    prim2 _equality_lte      Equality.lte      []    x x boolean]
   where
     x = variable "x"
 
