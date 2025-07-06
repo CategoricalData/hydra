@@ -7,6 +7,7 @@ module Hydra.Ext.Graphviz.Coder (
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Ext.Org.Graphviz.Dot as Dot
+import qualified Hydra.Names as Names
 import qualified Hydra.Show.Accessors as ShowAccessors
 
 import qualified Data.List as L
@@ -127,10 +128,10 @@ termLabel compact namespaces term = case term of
       FunctionLambda (Lambda v _ body) -> simpleLabel $ if compact then "\x03BB" else "lambda"
       FunctionElimination e -> case e of
         EliminationProduct (TupleProjection n i _) -> simpleLabel $ "[" ++ show i ++ "/" ++ show n ++ "]"
-        EliminationRecord (Projection tname fname) -> simpleLabel $ "{" ++ ShowAccessors.toCompactName namespaces tname ++ "}." ++ unName fname
-        EliminationUnion (CaseStatement tname _ _) -> simpleLabel $ "cases_{" ++ ShowAccessors.toCompactName namespaces tname ++ "}"
-        EliminationWrap name -> simpleLabel $ "unwrap_{" ++ ShowAccessors.toCompactName namespaces name ++ "}"
-      FunctionPrimitive name -> (ShowAccessors.toCompactName namespaces name, NodeStylePrimitive)
+        EliminationRecord (Projection tname fname) -> simpleLabel $ "{" ++ Names.compactName namespaces tname ++ "}." ++ unName fname
+        EliminationUnion (CaseStatement tname _ _) -> simpleLabel $ "cases_{" ++ Names.compactName namespaces tname ++ "}"
+        EliminationWrap name -> simpleLabel $ "unwrap_{" ++ Names.compactName namespaces name ++ "}"
+      FunctionPrimitive name -> (Names.compactName namespaces name, NodeStylePrimitive)
     TermLet (Let bindings env) -> simpleLabel "let"
     TermList _ -> simpleLabel $ if compact then "[]" else "list"
     TermLiteral l -> simpleLabel $ case l of
@@ -154,12 +155,12 @@ termLabel compact namespaces term = case term of
     TermMap _ -> simpleLabel $ if compact then "<,>" else "map"
     TermOptional _ -> simpleLabel $ if compact then "opt" else "optional"
     TermProduct _ -> simpleLabel $ if compact then "\x2227" else "product"
-    TermRecord (Record name _) -> simpleLabel $ "\x2227" ++ ShowAccessors.toCompactName namespaces name
+    TermRecord (Record name _) -> simpleLabel $ "\x2227" ++ Names.compactName namespaces name
     TermTypeAbstraction (TypeAbstraction v term1) -> simpleLabel "tyabs"
     TermTypeApplication (TypedTerm term _) -> simpleLabel "tyapp"
-    TermUnion (Injection tname _) -> simpleLabel $ "\x22BB" ++ ShowAccessors.toCompactName namespaces tname
-    TermVariable name -> simpleLabel $ ShowAccessors.toCompactName namespaces name
-    TermWrap (WrappedTerm name term1) -> simpleLabel $ "(" ++ ShowAccessors.toCompactName namespaces name ++ ")"
+    TermUnion (Injection tname _) -> simpleLabel $ "\x22BB" ++ Names.compactName namespaces tname
+    TermVariable name -> simpleLabel $ Names.compactName namespaces name
+    TermWrap (WrappedTerm name term1) -> simpleLabel $ "(" ++ Names.compactName namespaces name ++ ")"
     _ -> simpleLabel "?"
   where
     simpleLabel lab = (lab, NodeStyleSimple)
