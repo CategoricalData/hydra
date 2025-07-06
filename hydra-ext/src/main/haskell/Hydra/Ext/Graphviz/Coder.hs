@@ -73,7 +73,7 @@ termToDotStmts namespaces term = fst $ encode Nothing False M.empty Nothing ([],
             encode Nothing False ids1 (Just selfId) (selfStmts ++ [varNodeStmt, varEdgeStmt], visited1) (TermAccessorLambdaBody, body)
           where
             ids1 = M.insert v varId ids
-            var = ShowAccessors.toUniqueLabel selfVisited (unName v)
+            var = Names.uniqueLabel selfVisited (unName v)
             varId = Dot.Id var
             visited1 = S.insert var selfVisited
             varNodeStmt = Dot.StmtNode $ Dot.NodeStmt {
@@ -113,7 +113,7 @@ termToDotStmts namespaces term = fst $ encode Nothing False M.empty Nothing ([],
           Dot.nodeStmtAttributes = Just $ labelAttrs style rawLabel}
         selfId = Dot.Id label
         (label, style) = Y.fromMaybe (labelOf visited term) mlabstyle
-        labelOf visited term = (ShowAccessors.toUniqueLabel visited l, s)
+        labelOf visited term = (Names.uniqueLabel visited l, s)
           where
             (l, s) = termLabel True namespaces term
         (rawLabel, nodeStyle) = (l, if isElement then NodeStyleElement else s)

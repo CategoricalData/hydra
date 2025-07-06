@@ -5,7 +5,6 @@ module Hydra.Show.Accessors where
 import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
@@ -50,7 +49,6 @@ termAccessor accessor =
 termToAccessorGraph :: (M.Map Module.Namespace String -> Core.Term -> Accessors.AccessorGraph)
 termToAccessorGraph namespaces term =  
   let dontCareAccessor = Accessors.TermAccessorAnnotatedSubject 
-      toUniqueLabel = (\visited -> \l -> Logic.ifElse (Sets.member l visited) (toUniqueLabel visited (Strings.cat2 l "'")) l)
       helper = (\ids -> \mroot -> \path -> \state -> \accessorTerm ->  
               let accessor = (fst accessorTerm) 
                   currentTerm = (snd accessorTerm)
@@ -70,7 +68,7 @@ termToAccessorGraph namespaces term =
                                   currentNodes = (fst currentNodesVisited)
                                   currentVisited = (snd currentNodesVisited)
                                   rawLabel = (Names.compactName namespaces name)
-                                  uniqueLabel = (toUniqueLabel currentVisited rawLabel)
+                                  uniqueLabel = (Names.uniqueLabel currentVisited rawLabel)
                                   node = Accessors.AccessorNode {
                                           Accessors.accessorNodeName = name,
                                           Accessors.accessorNodeLabel = rawLabel,

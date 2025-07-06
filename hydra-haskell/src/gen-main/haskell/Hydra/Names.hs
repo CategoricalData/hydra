@@ -9,6 +9,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
@@ -59,6 +60,10 @@ qualifyName name =
     Module.qualifiedNameLocal = (Core.unName name)}) (Module.QualifiedName {
     Module.qualifiedNameNamespace = (Just (Module.Namespace (Strings.intercalate "." (Lists.reverse (Lists.tail parts))))),
     Module.qualifiedNameLocal = (Lists.head parts)}))
+
+-- | Generate a unique label by appending a suffix if the label is already in use
+uniqueLabel :: (S.Set String -> String -> String)
+uniqueLabel visited l = (Logic.ifElse (Sets.member l visited) (uniqueLabel visited (Strings.cat2 l "'")) l)
 
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: (Module.QualifiedName -> Core.Name)

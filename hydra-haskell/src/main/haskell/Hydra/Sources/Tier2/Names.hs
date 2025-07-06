@@ -97,6 +97,7 @@ hydraNamesModule = Module (Namespace "hydra.names") elements
      el namespaceToFilePathDef,
      el qnameDef,
      el qualifyNameDef,
+     el uniqueLabelDef,
      el unqualifyNameDef]
 
 compactNameDef :: TElement (M.Map Namespace String -> Name -> String)
@@ -148,6 +149,14 @@ qualifyNameDef = namesDefinition "qualifyName" $
       (Module.qualifiedName
         (just $ wrap _Namespace (Strings.intercalate "." (Lists.reverse (Lists.tail $ var "parts"))))
         (Lists.head $ var "parts"))
+
+uniqueLabelDef :: TElement (S.Set String -> String -> String)
+uniqueLabelDef = namesDefinition "uniqueLabel" $
+  doc "Generate a unique label by appending a suffix if the label is already in use" $
+  lambda "visited" $ lambda "l" $
+  Logic.ifElse (Sets.member (var "l") (var "visited"))
+    (ref uniqueLabelDef @@ var "visited" @@ Strings.cat2 (var "l") (string "'"))
+    (var "l")
 
 unqualifyNameDef :: TElement (QualifiedName -> Name)
 unqualifyNameDef = namesDefinition "unqualifyName" $
