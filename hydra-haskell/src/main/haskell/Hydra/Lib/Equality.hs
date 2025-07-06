@@ -31,3 +31,9 @@ lt = (<)
 
 lte :: Ord a => a -> a -> Bool
 lte = (<=)
+
+max :: Ord a => a -> a -> a
+max = Prelude.max
+
+min :: Ord a => a -> a -> a
+min = Prelude.min

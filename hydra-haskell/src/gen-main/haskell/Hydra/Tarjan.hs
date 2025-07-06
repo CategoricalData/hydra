@@ -23,7 +23,7 @@ import qualified Data.Set as S
 adjacencyListsToGraph :: (Ord t0) => ([(t0, [t0])] -> (M.Map Int [Int], (Int -> t0)))
 adjacencyListsToGraph edges0 =  
   let sortedEdges = (Lists.sortOn fst edges0) 
-      indexedEdges = (Lists.zip (Math.rangeInt32 0 (Lists.length sortedEdges)) sortedEdges)
+      indexedEdges = (Lists.zip (Math.range 0 (Lists.length sortedEdges)) sortedEdges)
       keyToVertex = (Maps.fromList (Lists.map (\vkNeighbors ->  
               let v = (fst vkNeighbors) 
                   kNeighbors = (snd vkNeighbors)
@@ -102,7 +102,7 @@ strongConnect graph v = (Flows.bind Monads.getState (\st ->
               in (Flows.bind (Monads.modify (\s -> Topology.TarjanState {
                 Topology.tarjanStateCounter = (Topology.tarjanStateCounter s),
                 Topology.tarjanStateIndices = (Topology.tarjanStateIndices s),
-                Topology.tarjanStateLowLinks = (Maps.insert v (Math.min low_v low_w) (Topology.tarjanStateLowLinks s)),
+                Topology.tarjanStateLowLinks = (Maps.insert v (Equality.min low_v low_w) (Topology.tarjanStateLowLinks s)),
                 Topology.tarjanStateStack = (Topology.tarjanStateStack s),
                 Topology.tarjanStateOnStack = (Topology.tarjanStateOnStack s),
                 Topology.tarjanStateSccs = (Topology.tarjanStateSccs s)})) (\_ -> Flows.pure ()))))) (Logic.ifElse (Sets.member w (Topology.tarjanStateOnStack st_)) ( 
@@ -111,7 +111,7 @@ strongConnect graph v = (Flows.bind Monads.getState (\st ->
               in (Flows.bind (Monads.modify (\s -> Topology.TarjanState {
                 Topology.tarjanStateCounter = (Topology.tarjanStateCounter s),
                 Topology.tarjanStateIndices = (Topology.tarjanStateIndices s),
-                Topology.tarjanStateLowLinks = (Maps.insert v (Math.min low_v idx_w) (Topology.tarjanStateLowLinks s)),
+                Topology.tarjanStateLowLinks = (Maps.insert v (Equality.min low_v idx_w) (Topology.tarjanStateLowLinks s)),
                 Topology.tarjanStateStack = (Topology.tarjanStateStack s),
                 Topology.tarjanStateOnStack = (Topology.tarjanStateOnStack s),
                 Topology.tarjanStateSccs = (Topology.tarjanStateSccs s)})) (\_ -> Flows.pure ()))) (Flows.pure ()))))

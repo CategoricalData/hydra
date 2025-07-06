@@ -398,7 +398,7 @@ normalizeTypeVariablesInTermDef = rewritingDefinition "normalizeTypeVariablesInT
                   "varsLen">: Lists.length $ var "vars",
                   "boundVarsLen">: Sets.size $ var "boundVars",
                   "normalVariables">: Lists.map (lambda "i" $ Core.name $ Strings.cat2 (string "t") (Literals.showInt32 $ var "i")) $
-                    Math.rangeInt32 (int32 0) (Math.add (var "varsLen") (var "boundVarsLen")),
+                    Math.range (int32 0) (Math.add (var "varsLen") (var "boundVarsLen")),
                   "newVars">: Lists.take (Lists.length $ var "vars") $ Lists.filter
                     (lambda "n" $ Logic.not $ Sets.member (var "n") (var "boundVars"))
                     (var "normalVariables"),

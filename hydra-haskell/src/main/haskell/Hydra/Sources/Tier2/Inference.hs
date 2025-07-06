@@ -797,7 +797,7 @@ inferTypeOfCollectionDef = inferenceDefinition "inferTypeOfCollection" $
     withVar "var" (ref freshNameDef) $
     withVar "results" (ref inferManyDef @@ var "cx" @@
       (Lists.zip (var "els") $ Lists.map (lambda "i" $ Strings.cat $ list [string "#", Literals.showInt32 $ var "i"]) $
-        Math.rangeInt32 (int32 1) (Math.add (Lists.length $ var "els") (int32 1)))) $ lets [
+        Math.range (int32 1) (Math.add (Lists.length $ var "els") (int32 1)))) $ lets [
     "terms">: first $ var "results",
     "types">: first $ second $ var "results",
     "subst1">: second $ second $ var "results",
@@ -1154,7 +1154,7 @@ inferTypeOfSumDef = inferenceDefinition "inferTypeOfSum" $
         (Flows.pure $ Mantle.eitherLeft $ var "t")
         (Flows.map (unaryFunction Mantle.eitherRight) $ ref freshNameDef)] $
     withVar "vars" (Flows.sequence $ Lists.map (var "varOrTerm" @@ var "ityp") $
-      Math.rangeInt32 (int32 0) (Math.sub (var "s") (int32 1))) $ lets [
+      Math.range (int32 0) (Math.sub (var "s") (int32 1))) $ lets [
         "toType">: lambda "e" $
           cases _Either (var "e") Nothing [
             _Either_left>>: lambda "t" $ var "t",

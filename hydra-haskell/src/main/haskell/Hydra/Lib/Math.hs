@@ -3,29 +3,26 @@
 module Hydra.Lib.Math where
 
 
-neg :: Int -> Int
+neg :: Num a => a -> a
 neg = negate
 
-add :: Int -> Int -> Int
+add :: Num a => a -> a -> a
 add x y = x + y
 
-sub :: Int -> Int -> Int
-sub x y = x - y
-
-mul :: Int -> Int -> Int
-mul x y = x * y
-
-div :: Int -> Int -> Int
+div :: Integral a => a -> a -> a
 div = Prelude.div
 
-min :: Int -> Int -> Int
-min = Prelude.min
-
-mod :: Int -> Int -> Int
+mod :: Integral a => a -> a -> a
 mod = Prelude.mod
 
-rangeInt32 :: Int -> Int -> [Int]
-rangeInt32 start end = [start .. end]
+mul :: Num a => a -> a -> a
+mul x y = x * y
 
-rem :: Int -> Int -> Int
+range :: Enum a => a -> a -> [a]
+range start end = [start .. end]
+
+rem :: Integral a => a -> a -> a
 rem = Prelude.rem
+
+sub :: Num a => a -> a -> a
+sub x y = x - y

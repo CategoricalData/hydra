@@ -497,7 +497,7 @@ inferTypeOfCaseStatement cx caseStmt =
 inferTypeOfCollection :: (Typing.InferenceContext -> (Core.Type -> Core.Type) -> ([Core.Term] -> Core.Term) -> String -> [Core.Term] -> Compute.Flow t0 Typing.InferenceResult)
 inferTypeOfCollection cx typCons trmCons desc els = (Flows.bind freshName (\var -> Flows.bind (inferMany cx (Lists.zip els (Lists.map (\i -> Strings.cat [
   "#",
-  (Literals.showInt32 i)]) (Math.rangeInt32 1 (Math.add (Lists.length els) 1))))) (\results ->  
+  (Literals.showInt32 i)]) (Math.range 1 (Math.add (Lists.length els) 1))))) (\results ->  
   let terms = (fst results) 
       types = (fst (snd results))
       subst1 = (snd (snd results))
@@ -783,7 +783,7 @@ inferTypeOfSum cx sum =
         ityp = (Typing.inferenceResultType result)
         isubst = (Typing.inferenceResultSubst result)
         varOrTerm = (\t -> \j -> Logic.ifElse (Equality.equal i j) (Flows.pure (Mantle.EitherLeft t)) (Flows.map (\x -> Mantle.EitherRight x) freshName))
-    in (Flows.bind (Flows.sequence (Lists.map (varOrTerm ityp) (Math.rangeInt32 0 (Math.sub s 1)))) (\vars ->  
+    in (Flows.bind (Flows.sequence (Lists.map (varOrTerm ityp) (Math.range 0 (Math.sub s 1)))) (\vars ->  
       let toType = (\e -> (\x -> case x of
               Mantle.EitherLeft v1 -> v1
               Mantle.EitherRight v1 -> (Core.TypeVariable v1)) e)

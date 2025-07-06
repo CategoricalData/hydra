@@ -73,22 +73,26 @@ _hydra_lib_equality :: Namespace
 _hydra_lib_equality = Namespace "hydra.lib.equality"
 
 _equality_compare  = qname _hydra_lib_equality "compare" :: Name
-_equality_equal         = qname _hydra_lib_equality "equal" :: Name
-_equality_gt     = qname _hydra_lib_equality "gt" :: Name
-_equality_gte    = qname _hydra_lib_equality "gte" :: Name
-_equality_identity      = qname _hydra_lib_equality "identity" :: Name
-_equality_lt     = qname _hydra_lib_equality "lt" :: Name
-_equality_lte    = qname _hydra_lib_equality "lte" :: Name
+_equality_equal    = qname _hydra_lib_equality "equal" :: Name
+_equality_gt       = qname _hydra_lib_equality "gt" :: Name
+_equality_gte      = qname _hydra_lib_equality "gte" :: Name
+_equality_identity = qname _hydra_lib_equality "identity" :: Name
+_equality_lt       = qname _hydra_lib_equality "lt" :: Name
+_equality_lte      = qname _hydra_lib_equality "lte" :: Name
+_equality_max      = qname _hydra_lib_equality "max" :: Name
+_equality_min      = qname _hydra_lib_equality "min" :: Name
 
 hydraLibEquality :: Library
 hydraLibEquality = standardLibrary _hydra_lib_equality [
-    prim2 _equality_compare  Equality.compare  []    x x comparison,
-    prim2 _equality_equal    Equality.equal    []    x x boolean,
+    prim2 _equality_compare  Equality.compare  ["x"] x x comparison,
+    prim2 _equality_equal    Equality.equal    ["x"] x x boolean,
     prim1 _equality_identity Equality.identity ["x"] x x,
-    prim2 _equality_gt       Equality.gt       []    x x boolean,
-    prim2 _equality_gte      Equality.gte      []    x x boolean,
-    prim2 _equality_lt       Equality.lt       []    x x boolean,
-    prim2 _equality_lte      Equality.lte      []    x x boolean]
+    prim2 _equality_gt       Equality.gt       ["x"] x x boolean,
+    prim2 _equality_gte      Equality.gte      ["x"] x x boolean,
+    prim2 _equality_lt       Equality.lt       ["x"] x x boolean,
+    prim2 _equality_lte      Equality.lte      ["x"] x x boolean,
+    prim2 _equality_max      Equality.max      ["x"] x x x,
+    prim2 _equality_min      Equality.min      ["x"] x x x]
   where
     x = variable "x"
 
@@ -403,27 +407,25 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
 _hydra_lib_math :: Namespace
 _hydra_lib_math = Namespace "hydra.lib.math"
 
-_math_add        = qname _hydra_lib_math "add" :: Name
-_math_div        = qname _hydra_lib_math "div" :: Name
-_math_min        = qname _hydra_lib_math "min" :: Name
-_math_mod        = qname _hydra_lib_math "mod" :: Name
-_math_mul        = qname _hydra_lib_math "mul" :: Name
-_math_neg        = qname _hydra_lib_math "neg" :: Name
-_math_rangeInt32 = qname _hydra_lib_math "rangeInt32" :: Name
-_math_rem        = qname _hydra_lib_math "rem" :: Name
-_math_sub        = qname _hydra_lib_math "sub" :: Name
+_math_add   = qname _hydra_lib_math "add" :: Name
+_math_div   = qname _hydra_lib_math "div" :: Name
+_math_mod   = qname _hydra_lib_math "mod" :: Name
+_math_mul   = qname _hydra_lib_math "mul" :: Name
+_math_neg   = qname _hydra_lib_math "neg" :: Name
+_math_range = qname _hydra_lib_math "range" :: Name
+_math_rem   = qname _hydra_lib_math "rem" :: Name
+_math_sub   = qname _hydra_lib_math "sub" :: Name
 
 hydraLibMathInt32 :: Library
 hydraLibMathInt32 = standardLibrary _hydra_lib_math [
-  prim2 _math_add        Math.add        [] int32 int32 int32,
-  prim2 _math_div        Math.div        [] int32 int32 int32,
-  prim2 _math_min        Math.min        [] int32 int32 int32,
-  prim2 _math_mod        Math.mod        [] int32 int32 int32,
-  prim2 _math_mul        Math.mul        [] int32 int32 int32,
-  prim1 _math_neg        Math.neg        [] int32 int32,
-  prim2 _math_rangeInt32 Math.rangeInt32 [] int32 int32 (list int32),
-  prim2 _math_rem        Math.rem        [] int32 int32 int32,
-  prim2 _math_sub        Math.sub        [] int32 int32 int32]
+  prim2 _math_add   Math.add   [] int32 int32 int32,
+  prim2 _math_div   Math.div   [] int32 int32 int32,
+  prim2 _math_mod   Math.mod   [] int32 int32 int32,
+  prim2 _math_mul   Math.mul   [] int32 int32 int32,
+  prim1 _math_neg   Math.neg   [] int32 int32,
+  prim2 _math_range Math.range [] int32 int32 (list int32),
+  prim2 _math_rem   Math.rem   [] int32 int32 int32,
+  prim2 _math_sub   Math.sub   [] int32 int32 int32]
 
 -- * hydra.lib.optionals primitives
 

@@ -103,7 +103,7 @@ adjacencyListsToGraphDef = tarjanDefinition "adjacencyListsToGraph" $
   withOrd "t0" $
   lambda "edges0" $ lets [
     "sortedEdges">: Lists.sortOn (unaryFunction first) (var "edges0"),
-    "indexedEdges">: Lists.zip (Math.rangeInt32 (int32 0) (Lists.length $ var "sortedEdges")) (var "sortedEdges"),
+    "indexedEdges">: Lists.zip (Math.range (int32 0) (Lists.length $ var "sortedEdges")) (var "sortedEdges"),
     "keyToVertex">: Maps.fromList $ Lists.map
       (lambda "vkNeighbors" $ lets [
         "v">: first $ var "vkNeighbors",
@@ -182,7 +182,7 @@ strongConnectDef = tarjanDefinition "strongConnect" $
                         "low_w">: Maps.findWithDefault (ref Constants.maxInt32Def) (var "w") (Topology.tarjanStateLowLinks $ var "stAfter")]
                         $ Flows.bind (ref Monads.modifyDef @@ (lambda "s" $
                             Topology.tarjanStateWithLowLinks (var "s")
-                              (Maps.insert (var "v") (Math.min (var "low_v") (var "low_w")) (Topology.tarjanStateLowLinks $ var "s")))) $
+                              (Maps.insert (var "v") (Equality.min (var "low_v") (var "low_w")) (Topology.tarjanStateLowLinks $ var "s")))) $
                           lambda "_" $ Flows.pure unit)
                 (Logic.ifElse (Sets.member (var "w") (Topology.tarjanStateOnStack $ var "st'"))
                   (lets [
@@ -190,7 +190,7 @@ strongConnectDef = tarjanDefinition "strongConnect" $
                     "idx_w">: Maps.findWithDefault (ref Constants.maxInt32Def) (var "w") (Topology.tarjanStateIndices $ var "st'")]
                     $ Flows.bind (ref Monads.modifyDef @@ (lambda "s" $
                         Topology.tarjanStateWithLowLinks (var "s")
-                          (Maps.insert (var "v") (Math.min (var "low_v") (var "idx_w")) (Topology.tarjanStateLowLinks $ var "s")))) $
+                          (Maps.insert (var "v") (Equality.min (var "low_v") (var "idx_w")) (Topology.tarjanStateLowLinks $ var "s")))) $
                       lambda "_" $ Flows.pure unit)
                   (Flows.pure unit))]
         $ Flows.bind (ref Monads.putStateDef @@ var "newSt") $
