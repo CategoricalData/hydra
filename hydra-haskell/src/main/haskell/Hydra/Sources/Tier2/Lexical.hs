@@ -66,7 +66,7 @@ import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.Schemas as Schemas
 --import qualified Hydra.Sources.Tier2.Serialization as Serialization
 --import qualified Hydra.Sources.Tier2.Show.Accessors as ShowAccessors
---import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
+import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 --import qualified Hydra.Sources.Tier2.Sorting as Sorting
 --import qualified Hydra.Sources.Tier2.Substitution as Substitution
 --import qualified Hydra.Sources.Tier2.Tarjan as Tarjan
@@ -81,7 +81,7 @@ lexicalDefinition = definitionInModule hydraLexicalModule
 
 hydraLexicalModule :: Module
 hydraLexicalModule = Module (Namespace "hydra.lexical") elements
-   [Monads.hydraMonadsModule, Strip.hydraStripModule]
+   [Monads.hydraMonadsModule, Strip.hydraStripModule, ShowCore.showCoreModule]
    [Tier1.hydraGraphModule, Tier1.hydraMantleModule] $
     Just ("A module for lexical operations over graphs.")
   where
@@ -91,8 +91,13 @@ hydraLexicalModule = Module (Namespace "hydra.lexical") elements
       el emptyGraphDef,
       el extendGraphWithBindingsDef,
       el fieldsOfDef,
+      el getFieldDef,
       el lookupElementDef,
       el lookupPrimitiveDef,
+      el matchEnumDef,
+      el matchRecordDef,
+      el matchUnionDef,
+      el matchUnitFieldDef,
       el requireElementDef,
       el requirePrimitiveDef,
       el requireTermDef,
@@ -151,6 +156,14 @@ fieldsOfDef = lexicalDefinition "fieldsOf" $
       _Type_record>>: lambda "rt" $ Core.rowTypeFields $ var "rt",
       _Type_union>>: lambda "rt" $ Core.rowTypeFields $ var "rt"]
 
+getFieldDef :: TElement (M.Map Name Term -> Name -> (Term -> Flow Graph b) -> Flow Graph b)
+getFieldDef = lexicalDefinition "getField" $
+  lambdas ["m", "fname", "decode"] $
+    Optionals.maybe
+      (Flows.fail $ "expected field " ++ (Core.unName $ var "fname") ++ " not found")
+      (var "decode")
+      (Maps.lookup (var "fname") (var "m"))
+
 lookupElementDef :: TElement (Graph -> Name -> Maybe Element)
 lookupElementDef = lexicalDefinition "lookupElement" $
   lambdas ["g", "name"] $ Maps.lookup (var "name") (Graph.graphElements $ var "g")
@@ -159,6 +172,51 @@ lookupPrimitiveDef :: TElement (Graph -> Name -> Maybe Primitive)
 lookupPrimitiveDef = lexicalDefinition "lookupPrimitive" $
   lambda "g" $ lambda "name" $
     Maps.lookup (var "name") (Graph.graphPrimitives $ var "g")
+
+matchEnumDef :: TElement (Name -> [(Name, b)] -> Term -> Flow Graph b)
+matchEnumDef = lexicalDefinition "matchEnum" $
+  lambdas ["tname", "pairs"] $
+    ref matchUnionDef @@ var "tname" @@ (Lists.map (lambda "pair" $
+      ref matchUnitFieldDef @@ (first $ var "pair") @@ (second $ var "pair")) $ var "pairs")
+
+matchRecordDef :: TElement ((M.Map Name Term -> Flow Graph b) -> Term -> Flow Graph b)
+matchRecordDef = lexicalDefinition "matchRecord" $
+  lambdas ["decode", "term"] $ lets [
+    "stripped">: ref Strip.fullyStripTermDef @@ var "term"]
+    $ cases _Term (var "stripped")
+        (Just $ ref Monads.unexpectedDef @@ string "record" @@ (ref ShowCore.termDef @@ var "term")) [
+      _Term_record>>: lambda "record" $ var "decode" @@
+        (Maps.fromList $ Lists.map
+          (lambda "field" $ pair (Core.fieldName $ var "field") (Core.fieldTerm $ var "field"))
+          (Core.recordFields $ var "record"))]
+
+matchUnionDef :: TElement (Name -> [(Name, Term -> Flow Graph b)] -> Term -> Flow Graph b)
+matchUnionDef = lexicalDefinition "matchUnion" $
+  lambdas ["tname", "pairs", "term"] $ lets [
+    "stripped">: ref Strip.fullyStripTermDef @@ var "term",
+    "mapping">: Maps.fromList $ var "pairs"] $
+    cases _Term (var "stripped")
+      (Just $ ref Monads.unexpectedDef @@
+        ("union with one of {" ++ (Strings.intercalate ", " $ Lists.map (lambda "pair" $ Core.unName $ first $ var "pair") $ var "pairs") ++ "}") @@
+        (ref ShowCore.termDef @@ var "stripped")) [
+      _Term_variable>>: lambda "name" $
+        Flows.bind (ref requireElementDef @@ var "name") $
+        lambda "el" $ ref matchUnionDef @@ var "tname" @@ var "pairs" @@ (Graph.elementTerm $ var "el"),
+      _Term_union>>: lambda "injection" $
+        Logic.ifElse (Core.equalName_ (Core.injectionTypeName $ var "injection") (var "tname"))
+          (lets [
+            "fname">: Core.fieldName $ Core.injectionField $ var "injection",
+            "val">: Core.fieldTerm $ Core.injectionField $ var "injection"] $
+            Optionals.maybe
+              (Flows.fail $ "no matching case for field " ++ (Core.unName $ var "fname")
+                ++ " in union type " ++ (Core.unName $ var "tname"))
+              (lambda "f" $ var "f" @@ var "val")
+              (Maps.lookup (var "fname") (var "mapping")))
+          (ref Monads.unexpectedDef @@ ("injection for type " ++ (Core.unName $ var "tname")) @@ (ref ShowCore.termDef @@ var "term"))]
+
+matchUnitFieldDef :: TElement (Name -> y -> (Name, x -> Flow Graph y))
+matchUnitFieldDef = lexicalDefinition "matchUnitField" $
+  lambdas ["fname", "x"] $ pair (var "fname") (lambda "ignored" $ Flows.pure $ var "x")
 
 requireElementDef :: TElement (Name -> Flow Graph Element)
 requireElementDef = lexicalDefinition "requireElement" $
