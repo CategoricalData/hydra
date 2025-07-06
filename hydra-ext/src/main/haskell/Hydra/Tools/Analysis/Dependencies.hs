@@ -139,7 +139,8 @@ termGraphToDependencyPropertyGraph withPrims withTypes g = PG.Graph vertexMap ed
                     (propertyKey_arity, show $ primitiveArity prim),
                     (propertyKey_localName, localNameOf name),
                     (propertyKey_name, unName name),
-                    (propertyKey_namespace, nameToNamespace name)]
+                    (propertyKey_namespace, nameToNamespace name),
+                    (propertyKey_typeExpression, ShowCore.typeScheme $ primitiveType prim)]
                   where
                     name = primitiveName prim
             els = fmap toVertex $ M.elems elements
@@ -148,6 +149,7 @@ termGraphToDependencyPropertyGraph withPrims withTypes g = PG.Graph vertexMap ed
                     (propertyKey_localName, localNameOf name),
                     (propertyKey_name, unName name),
                     (propertyKey_namespace, nameToNamespace name),
+                    (propertyKey_termExpression, ShowCore.term term),
                     (propertyKey_termVariant, ShowCore.termVariant $ termVariant term)]
                   where
                     name = elementName el
