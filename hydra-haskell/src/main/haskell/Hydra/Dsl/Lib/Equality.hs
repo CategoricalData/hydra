@@ -30,3 +30,9 @@ lt = primitive2 _equality_lt
 
 lte :: TTerm a -> TTerm a -> TTerm Bool
 lte = primitive2 _equality_lte
+
+max :: TTerm a -> TTerm a -> TTerm a
+max = primitive2 _equality_max
+
+min :: TTerm a -> TTerm a -> TTerm a
+min = primitive2 _equality_min

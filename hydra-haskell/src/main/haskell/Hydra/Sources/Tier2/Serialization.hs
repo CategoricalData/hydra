@@ -259,21 +259,21 @@ expressionLengthDef = serializationDefinition "expressionLength" $
       _Ws_none>>: constant $ int32 0,
       _Ws_space>>: constant $ int32 1,
       _Ws_break>>: constant $ int32 1,
-      _Ws_breakAndIndent>>: lambda "s" $ Math.addInt32 (int32 1) (Strings.length $ var "s"),
+      _Ws_breakAndIndent>>: lambda "s" $ Math.add (int32 1) (Strings.length $ var "s"),
       _Ws_doubleBreak>>: constant $ int32 2],
     "blockStyleLength">: lambda "style" $ lets [
       "mindentLen">: Optionals.maybe (int32 0) (unaryFunction Strings.length) (Ast.blockStyleIndent $ var "style"),
       "nlBeforeLen">: Logic.ifElse (Ast.blockStyleNewlineBeforeContent $ var "style") (int32 1) (int32 0),
       "nlAfterLen">: Logic.ifElse (Ast.blockStyleNewlineAfterContent $ var "style") (int32 1) (int32 0)]
-      $ Math.addInt32 (var "mindentLen") $ Math.addInt32 (var "nlBeforeLen") (var "nlAfterLen"),
+      $ Math.add (var "mindentLen") $ Math.add (var "nlBeforeLen") (var "nlAfterLen"),
     "bracketsLength">: lambda "brackets" $
-      Math.addInt32
+      Math.add
         (var "symbolLength" @@ (Ast.bracketsOpen $ var "brackets"))
         (var "symbolLength" @@ (Ast.bracketsClose $ var "brackets")),
     "bracketExprLength">: lambda "be" $
-      Math.addInt32
+      Math.add
         (var "bracketsLength" @@ (Ast.bracketExprBrackets $ var "be"))
-        (Math.addInt32
+        (Math.add
           (ref expressionLengthDef @@ (Ast.bracketExprEnclosed $ var "be"))
           (var "blockStyleLength" @@ (Ast.bracketExprStyle $ var "be"))),
     "indentedExpressionLength">: lambda "ie" $ lets [
@@ -281,18 +281,18 @@ expressionLengthDef = serializationDefinition "expressionLength" $
       "indentLen">: cases _IndentStyle (Ast.indentedExpressionStyle $ var "ie") Nothing [
         _IndentStyle_allLines>>: lambda "s" $ Strings.length $ var "s",
         _IndentStyle_subsequentLines>>: lambda "s" $ Strings.length $ var "s"]]
-      $ Math.addInt32 (var "baseLen") (var "indentLen"),
+      $ Math.add (var "baseLen") (var "indentLen"),
     "opLength">: lambda "op" $ lets [
       "symLen">: var "symbolLength" @@ (Ast.opSymbol $ var "op"),
       "padding">: Ast.opPadding $ var "op",
       "leftLen">: var "wsLength" @@ (Ast.paddingLeft $ var "padding"),
       "rightLen">: var "wsLength" @@ (Ast.paddingRight $ var "padding")]
-      $ Math.addInt32 (var "symLen") $ Math.addInt32 (var "leftLen") (var "rightLen"),
+      $ Math.add (var "symLen") $ Math.add (var "leftLen") (var "rightLen"),
     "opExprLength">: lambda "oe" $ lets [
       "opLen">: var "opLength" @@ (Ast.opExprOp $ var "oe"),
       "leftLen">: ref expressionLengthDef @@ (Ast.opExprLhs $ var "oe"),
       "rightLen">: ref expressionLengthDef @@ (Ast.opExprRhs $ var "oe")]
-      $ Math.addInt32 (var "opLen") $ Math.addInt32 (var "leftLen") (var "rightLen")]
+      $ Math.add (var "opLen") $ Math.add (var "leftLen") (var "rightLen")]
     $ cases _Expr (var "e") Nothing [
       _Expr_const>>: lambda "s" $ var "symbolLength" @@ var "s",
       _Expr_indent>>: lambda "ie" $ var "indentedExpressionLength" @@ var "ie",
