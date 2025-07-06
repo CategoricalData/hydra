@@ -16,7 +16,7 @@ import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
-import qualified Hydra.Qnames as Qnames
+import qualified Hydra.Names as Names
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -142,7 +142,7 @@ simplify isRecord pats =
 
 -- | Convert local name to qualified name
 toName :: (Module.Namespace -> String -> Core.Name)
-toName ns local = (Qnames.unqualifyName (Module.QualifiedName {
+toName ns local = (Names.unqualifyName (Module.QualifiedName {
   Module.qualifiedNameNamespace = (Just ns),
   Module.qualifiedNameLocal = local}))
 

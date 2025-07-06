@@ -1,6 +1,6 @@
 -- | Functions for working with qualified names.
 
-module Hydra.Qnames where
+module Hydra.Names where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Formatting as Formatting

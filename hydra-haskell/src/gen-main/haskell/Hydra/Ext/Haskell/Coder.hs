@@ -30,7 +30,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
 import qualified Hydra.Monads as Monads
-import qualified Hydra.Qnames as Qnames
+import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Serialization as Serialization
@@ -57,12 +57,12 @@ adaptTypeToHaskellAndEncode namespaces = (Modules.adaptAndEncodeType Language.ha
 constantForFieldName :: (Core.Name -> Core.Name -> String)
 constantForFieldName tname fname = (Strings.cat [
   "_",
-  Qnames.localNameOf tname,
+  Names.localNameOf tname,
   "_",
   (Core.unName fname)])
 
 constantForTypeName :: (Core.Name -> String)
-constantForTypeName tname = (Strings.cat2 "_" (Qnames.localNameOf tname))
+constantForTypeName tname = (Strings.cat2 "_" (Names.localNameOf tname))
 
 constructModule :: (Module.Namespaces Ast.ModuleName -> Module.Module -> M.Map Core.Type (Compute.Coder Graph.Graph t0 Core.Term Ast.Expression) -> [(Graph.Element, Core.TypedTerm)] -> Compute.Flow Graph.Graph Ast.Module)
 constructModule namespaces mod coders pairs =  
@@ -127,7 +127,7 @@ constructModule namespaces mod coders pairs =
 encodeFunction :: (Module.Namespaces Ast.ModuleName -> Core.Function -> Compute.Flow Graph.Graph Ast.Expression)
 encodeFunction namespaces fun = ((\x -> case x of
   Core.FunctionElimination v1 -> ((\x -> case x of
-    Core.EliminationWrap v2 -> (Flows.pure (Ast.ExpressionVariable (Utils.elementReference namespaces (Qnames.qname (Optionals.fromJust (Qnames.namespaceOf v2)) (Utils.newtypeAccessorName v2)))))
+    Core.EliminationWrap v2 -> (Flows.pure (Ast.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Optionals.fromJust (Names.namespaceOf v2)) (Utils.newtypeAccessorName v2)))))
     Core.EliminationProduct v2 ->  
       let arity = (Core.tupleProjectionArity v2) 
           idx = (Core.tupleProjectionIndex v2)
@@ -386,7 +386,7 @@ findOrdVariables typ =
           _ -> names) typ_) 
       isTypeVariable = (\v ->  
               let nameStr = (Core.unName v) 
-                  hasNoNamespace = (Optionals.isNothing (Qnames.namespaceOf v))
+                  hasNoNamespace = (Optionals.isNothing (Names.namespaceOf v))
                   startsWithT = (Equality.equal (Strings.charAt 0 nameStr) 116)
               in (Logic.and hasNoNamespace startsWithT))
       tryType = (\names -> \t -> (\x -> case x of
@@ -406,7 +406,7 @@ moduleToHaskellModule mod = (Flows.bind (Utils.namespacesForModule mod) (\namesp
 moduleToHaskell :: (Module.Module -> Compute.Flow Graph.Graph (M.Map String String))
 moduleToHaskell mod = (Flows.bind (moduleToHaskellModule mod) (\hsmod ->  
   let s = (Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr hsmod))) 
-      filepath = (Qnames.namespaceToFilePath Mantle.CaseConventionPascal (Module.FileExtension "hs") (Module.moduleNamespace mod))
+      filepath = (Names.namespaceToFilePath Mantle.CaseConventionPascal (Module.FileExtension "hs") (Module.moduleNamespace mod))
   in (Flows.pure (Maps.singleton filepath s))))
 
 nameDecls :: (t0 -> Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> [Ast.DeclarationWithComments])
@@ -438,7 +438,7 @@ toDataDeclaration coders namespaces pair =
       term = (Core.typedTermTerm tt)
       typ = (Core.typedTermType tt)
       coder = (Optionals.fromJust (Maps.lookup typ coders))
-      hname = (Utils.simpleName (Qnames.localNameOf (Graph.elementName el)))
+      hname = (Utils.simpleName (Names.localNameOf (Graph.elementName el)))
       rewriteValueBinding = (\vb -> (\x -> case x of
               Ast.ValueBindingSimple v1 ->  
                 let pattern_ = (Ast.simpleValueBindingPattern v1) 
@@ -489,7 +489,7 @@ toDataDeclaration coders namespaces pair =
 toTypeDeclarations :: (Module.Namespaces Ast.ModuleName -> Graph.Element -> Core.Term -> Compute.Flow Graph.Graph [Ast.DeclarationWithComments])
 toTypeDeclarations namespaces el term =  
   let elementName = (Graph.elementName el) 
-      lname = (Qnames.localNameOf elementName)
+      lname = (Names.localNameOf elementName)
       hname = (Utils.simpleName lname)
       declHead = (\name -> \vars_ -> Logic.ifElse (Lists.null vars_) (Ast.DeclarationHeadSimple name) ( 
               let h = (Lists.head vars_) 
@@ -506,7 +506,7 @@ toTypeDeclarations namespaces el term =
                           Ast.fieldName = hname,
                           Ast.fieldType = htype},
                         Ast.fieldWithCommentsComments = Nothing} 
-                    constructorName = (Utils.simpleName (Qnames.localNameOf (Graph.elementName el_)))
+                    constructorName = (Utils.simpleName (Names.localNameOf (Graph.elementName el_)))
                 in (Flows.pure (Ast.ConstructorWithComments {
                   Ast.constructorWithCommentsBody = (Ast.ConstructorRecord (Ast.RecordConstructor {
                     Ast.recordConstructorName = constructorName,
@@ -532,7 +532,7 @@ toTypeDeclarations namespaces el term =
               let fname = (Core.fieldTypeName fieldType) 
                   ftype = (Core.fieldTypeType fieldType)
                   deconflict = (\name ->  
-                          let tname = (Qnames.unqualifyName (Module.QualifiedName {
+                          let tname = (Names.unqualifyName (Module.QualifiedName {
                                   Module.qualifiedNameNamespace = (Just (fst (Module.namespacesFocus namespaces))),
                                   Module.qualifiedNameLocal = name}))
                           in (Logic.ifElse (Optionals.isJust (Maps.lookup tname (Graph.graphElements g_))) (deconflict (Strings.cat2 name "_")) name))
@@ -597,10 +597,10 @@ toTypeDeclarations namespaces el term =
 
 typeDecl :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> Compute.Flow Graph.Graph Ast.DeclarationWithComments)
 typeDecl namespaces name typ =  
-  let typeName = (\ns -> \name_ -> Qnames.qname ns (typeNameLocal name_)) 
+  let typeName = (\ns -> \name_ -> Names.qname ns (typeNameLocal name_)) 
       typeNameLocal = (\name_ -> Strings.cat [
               "_",
-              Qnames.localNameOf name_,
+              Names.localNameOf name_,
               "_type_"])
       rawTerm = (Core__.type_ typ)
       rewrite = (\recurse -> \term ->  
@@ -610,10 +610,10 @@ typeDecl namespaces name typ =
                               fterm = (Core.fieldTerm field)
                           in (Logic.ifElse (Equality.equal fname (Core.Name "record")) Nothing (Logic.ifElse (Equality.equal fname (Core.Name "variable")) (Optionals.bind (Decode.name fterm) forVariableType) Nothing)))
                   forVariableType = (\name_ ->  
-                          let qname = (Qnames.qualifyName name_) 
+                          let qname = (Names.qualifyName name_) 
                               mns = (Module.qualifiedNameNamespace qname)
                               local = (Module.qualifiedNameLocal qname)
-                          in (Optionals.map (\ns -> Core.TermVariable (Qnames.qname ns (Strings.cat [
+                          in (Optionals.map (\ns -> Core.TermVariable (Names.qname ns (Strings.cat [
                             "_",
                             local,
                             "_type_"]))) mns))

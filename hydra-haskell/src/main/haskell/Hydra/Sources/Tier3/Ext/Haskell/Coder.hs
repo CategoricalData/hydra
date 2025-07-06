@@ -49,7 +49,7 @@ import qualified Hydra.Sources.Tier2.Grammars  as Grammars
 import qualified Hydra.Sources.Tier2.Inference        as Inference
 import qualified Hydra.Sources.Tier2.Lexical          as Lexical
 import qualified Hydra.Sources.Tier2.Adapt.Literals  as AdaptLiterals
-import qualified Hydra.Sources.Tier2.Qnames           as Qnames
+import qualified Hydra.Sources.Tier2.Names           as Names
 import qualified Hydra.Sources.Tier2.Reduction        as Reduction
 import qualified Hydra.Sources.Tier2.Rewriting        as Rewriting
 import qualified Hydra.Sources.Tier2.Schemas          as Schemas
@@ -59,7 +59,7 @@ import qualified Hydra.Sources.Tier2.Show.Core        as ShowCore
 import qualified Hydra.Sources.Tier2.Sorting          as Sorting
 import qualified Hydra.Sources.Tier2.Substitution     as Substitution
 import qualified Hydra.Sources.Tier2.Tarjan           as Tarjan
-import qualified Hydra.Sources.Tier2.Templating       as Templating
+import qualified Hydra.Sources.Tier2.Templates       as Templates
 import qualified Hydra.Sources.Tier2.Adapt.Terms     as AdaptTerms
 import qualified Hydra.Sources.Tier2.Unification      as Unification
 import qualified Hydra.Sources.Tier2.Variants         as Variants
@@ -136,14 +136,14 @@ constantForFieldNameDef = haskellCoderDefinition "constantForFieldName" $
   lambda "tname" $ lambda "fname" $
     Strings.cat $ list [
       string "_",
-      ref Qnames.localNameOfDef @@ var "tname",
+      ref Names.localNameOfDef @@ var "tname",
       string "_",
       Core.unName $ var "fname"]
 
 constantForTypeNameDef :: TElement (Name -> String)
 constantForTypeNameDef = haskellCoderDefinition "constantForTypeName" $
   lambda "tname" $
-    Strings.cat2 (string "_") (ref Qnames.localNameOfDef @@ var "tname")
+    Strings.cat2 (string "_") (ref Names.localNameOfDef @@ var "tname")
 
 constructModuleDef :: TElement (HaskellNamespaces -> Module -> M.Map Type (Coder Graph Graph Term H.Expression) -> [(Element, TypedTerm)] -> Flow Graph H.Module)
 constructModuleDef = haskellCoderDefinition "constructModule" $ lambdas ["namespaces", "mod", "coders", "pairs"] $ lets [
@@ -215,7 +215,7 @@ encodeFunctionDef = haskellCoderDefinition "encodeFunction" $
         cases _Elimination (var "e") Nothing [
           _Elimination_wrap>>: lambda "name" $
             Flows.pure $ inject H._Expression H._Expression_variable $ ref HaskellUtils.elementReferenceDef @@ var "namespaces" @@
-              (ref Qnames.qnameDef @@ (Optionals.fromJust $ ref Qnames.namespaceOfDef @@ var "name") @@ (ref HaskellUtils.newtypeAccessorNameDef @@ var "name")),
+              (ref Names.qnameDef @@ (Optionals.fromJust $ ref Names.namespaceOfDef @@ var "name") @@ (ref HaskellUtils.newtypeAccessorNameDef @@ var "name")),
           _Elimination_product>>: lambda "proj" $ lets [
             "arity">: Core.tupleProjectionArity $ var "proj",
             "idx">: Core.tupleProjectionIndex $ var "proj"] $
@@ -567,7 +567,7 @@ findOrdVariablesDef = haskellCoderDefinition "findOrdVariables" $
           var "tryType" @@ var "names" @@ var "et"],
     "isTypeVariable">: lambda "v" $ lets [
       "nameStr">: Core.unName $ var "v",
-      "hasNoNamespace">: Optionals.isNothing $ ref Qnames.namespaceOfDef @@ var "v",
+      "hasNoNamespace">: Optionals.isNothing $ ref Names.namespaceOfDef @@ var "v",
       "startsWithT">: Equality.equal (Strings.charAt (int32 0) (var "nameStr")) (int32 116)] $ -- 't' character
       Logic.and (var "hasNoNamespace") (var "startsWithT"),
     "tryType">: lambda "names" $ lambda "t" $
@@ -596,7 +596,7 @@ moduleToHaskellDef :: TElement (Module -> Flow Graph (M.Map String String))
 moduleToHaskellDef = haskellCoderDefinition "moduleToHaskell" $ lambda "mod" $
   withVar "hsmod" (ref moduleToHaskellModuleDef @@ var "mod") $ lets [
   "s">: ref Serialization.printExprDef @@ (ref Serialization.parenthesizeDef @@ (ref HaskellSerde.moduleToExprDef @@ var "hsmod")),
-  "filepath">: ref Qnames.namespaceToFilePathDef @@ Mantle.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Module.moduleNamespace $ var "mod")] $
+  "filepath">: ref Names.namespaceToFilePathDef @@ Mantle.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Module.moduleNamespace $ var "mod")] $
   Flows.pure $ Maps.singleton (var "filepath") (var "s")
 
 nameDeclsDef :: TElement (Graph -> HaskellNamespaces -> Name -> Type -> [H.DeclarationWithComments])
@@ -632,7 +632,7 @@ toDataDeclarationDef = haskellCoderDefinition "toDataDeclaration" $
     "term">: Core.typedTermTerm $ var "tt",
     "typ">: Core.typedTermType $ var "tt",
     "coder">: Optionals.fromJust $ Maps.lookup (var "typ") (var "coders"),
-    "hname">: ref HaskellUtils.simpleNameDef @@ (ref Qnames.localNameOfDef @@ (Graph.elementName $ var "el")),
+    "hname">: ref HaskellUtils.simpleNameDef @@ (ref Names.localNameOfDef @@ (Graph.elementName $ var "el")),
     "rewriteValueBinding">: lambda "vb" $
       cases H._ValueBinding (var "vb") Nothing [
         H._ValueBinding_simple>>: lambda "simple" $ lets [
@@ -692,7 +692,7 @@ toTypeDeclarationsDef :: TElement (HaskellNamespaces -> Element -> Term -> Flow 
 toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
   lambda "namespaces" $ lambda "el" $ lambda "term" $ lets [
     "elementName">: Graph.elementName $ var "el",
-    "lname">: ref Qnames.localNameOfDef @@ var "elementName",
+    "lname">: ref Names.localNameOfDef @@ var "elementName",
     "hname">: ref HaskellUtils.simpleNameDef @@ var "lname",
     "declHead">: lambdas ["name", "vars'"] $ Logic.ifElse (Lists.null $ var "vars'")
       (inject H._DeclarationHead H._DeclarationHead_simple $ var "name")
@@ -711,7 +711,7 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
           H._Field_name>>: var "hname",
           H._Field_type>>: var "htype"],
         H._FieldWithComments_comments>>: nothing],
-      "constructorName">: ref HaskellUtils.simpleNameDef @@ (ref Qnames.localNameOfDef @@ (Graph.elementName $ var "el'"))] $
+      "constructorName">: ref HaskellUtils.simpleNameDef @@ (ref Names.localNameOfDef @@ (Graph.elementName $ var "el'"))] $
       Flows.pure $ record H._ConstructorWithComments [
         H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_record $ record H._RecordConstructor [
           H._RecordConstructor_name>>: var "constructorName",
@@ -741,7 +741,7 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
       "fname">: Core.fieldTypeName $ var "fieldType",
       "ftype">: Core.fieldTypeType $ var "fieldType",
       "deconflict">: lambda "name" $ lets [
-        "tname">: ref Qnames.unqualifyNameDef @@ record _QualifiedName [
+        "tname">: ref Names.unqualifyNameDef @@ record _QualifiedName [
           _QualifiedName_namespace>>: just $ first $ Module.namespacesFocus $ var "namespaces",
           _QualifiedName_local>>: var "name"]] $
         Logic.ifElse (Optionals.isJust $ Maps.lookup (var "tname") (Graph.graphElements $ var "g'"))
@@ -815,9 +815,9 @@ typeDeclDef :: TElement (HaskellNamespaces -> Name -> Type -> Flow Graph H.Decla
 typeDeclDef = haskellCoderDefinition "typeDecl" $
   lambda "namespaces" $ lambda "name" $ lambda "typ" $ lets [
     "typeName">: lambda "ns" $ lambda "name'" $
-      ref Qnames.qnameDef @@ var "ns" @@ (var "typeNameLocal" @@ var "name'"),
+      ref Names.qnameDef @@ var "ns" @@ (var "typeNameLocal" @@ var "name'"),
     "typeNameLocal">: lambda "name'" $
-      Strings.cat $ list [string "_", ref Qnames.localNameOfDef @@ var "name'", string "_type_"],
+      Strings.cat $ list [string "_", ref Names.localNameOfDef @@ var "name'", string "_type_"],
     "rawTerm">: ref EncodeCore.typeDef @@ var "typ",
     "rewrite">: lambda "recurse" $ lambda "term" $ lets [
       "variantResult">: ref Decode.variantDef @@ Core.nameLift _Type @@ var "term",
@@ -830,10 +830,10 @@ typeDeclDef = haskellCoderDefinition "typeDecl" $
             (Optionals.bind (ref Decode.nameDef @@ var "fterm") (var "forVariableType"))
             nothing),
       "forVariableType">: lambda "name''" $ lets [
-        "qname">: ref Qnames.qualifyNameDef @@ var "name''",
+        "qname">: ref Names.qualifyNameDef @@ var "name''",
         "mns">: Module.qualifiedNameNamespace $ var "qname",
         "local">: Module.qualifiedNameLocal $ var "qname"] $
-        Optionals.map (lambda "ns" $ Core.termVariable $ ref Qnames.qnameDef @@ var "ns" @@ (Strings.cat $ list [string "_", var "local", string "_type_"])) (var "mns")] $
+        Optionals.map (lambda "ns" $ Core.termVariable $ ref Names.qnameDef @@ var "ns" @@ (Strings.cat $ list [string "_", var "local", string "_type_"])) (var "mns")] $
       Optionals.fromMaybe (var "recurse" @@ var "term") (Optionals.bind (var "variantResult") (var "forType")),
     "finalTerm">: ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "rawTerm"] $
     -- Note: consider constructing this coder just once, then reusing it
