@@ -28,13 +28,6 @@ hydraGraphModule = Module ns elements [hydraComputeModule] [hydraCoreModule] $
 
     elements = [
 
-      def "Comparison" $
-        doc "An equality judgement: less than, equal to, or greater than" $
-        enum [
-          "lessThan",
-          "equalTo",
-          "greaterThan"],
-
       -- TODO: merge with hydra.core.LetBinding
       def "Element" $
         doc "A graph element, having a name, data term (value), and schema term (type)" $

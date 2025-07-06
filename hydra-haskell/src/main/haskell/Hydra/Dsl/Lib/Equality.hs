@@ -1,7 +1,7 @@
 module Hydra.Dsl.Lib.Equality where
 
 import Hydra.Core
-import Hydra.Graph
+import Hydra.Mantle
 import Hydra.Phantoms
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms

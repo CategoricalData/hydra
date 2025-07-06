@@ -4,6 +4,7 @@ module Hydra.Dsl.Terms where
 import Hydra.Constants
 import Hydra.Core
 import Hydra.Graph
+import Hydra.Mantle
 import Hydra.Dsl.Common
 import qualified Hydra.Dsl.Literals as Literals
 
