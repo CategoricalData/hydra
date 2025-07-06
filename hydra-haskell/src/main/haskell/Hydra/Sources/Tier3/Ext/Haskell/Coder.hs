@@ -85,7 +85,7 @@ haskellCoderDefinition = definitionInModule haskellCoderModule
 haskellCoderModule :: Module
 haskellCoderModule = Module ns elements
     [HaskellSerde.haskellSerdeModule, HaskellUtils.haskellUtilsModule,
-      AdaptModules.adaptModulesModule, Serialization.hydraSerializationModule]
+      AdaptModules.adaptModulesModule, Rewriting.hydraRewritingModule, Serialization.hydraSerializationModule]
     [HaskellAst.haskellAstModule,
       Tier1.hydraAstModule, Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule,
       Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule, Tier1.hydraTypingModule] $
