@@ -26,7 +26,9 @@ import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
 
-import Hydra.Sources.Tier2.All
+import Hydra.Kernel
+import qualified Hydra.Sources.Tier1.All as Tier1
+import qualified Hydra.Sources.Tier2.All as Tier2
 import qualified Hydra.Sources.Tier1.Strip as Strip
 
 
@@ -35,8 +37,8 @@ protobufLanguageDefinition = definitionInModule protobufLanguageModule
 
 protobufLanguageModule :: Module
 protobufLanguageModule = Module ns elements
-    [hydraCodersModule, hydraLexicalModule, hydraStripModule]
-    [hydraCodersModule] $
+    [Tier1.hydraCodersModule, Tier2.hydraLexicalModule, Tier1.hydraStripModule]
+    [Tier1.hydraCodersModule] $
     Just "Language constraints for Protobuf v3"
   where
     ns = Namespace "hydra.ext.protobuf.language"

@@ -2,20 +2,22 @@
 
 module Hydra.Sources.Tier3.Ext.Json.Schema where
 
-import Hydra.Sources.Tier2.All
+import Hydra.Kernel
+import qualified Hydra.Sources.Tier1.All as Tier1
+import qualified Hydra.Sources.Tier2.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
 jsonSchemaModule :: Module
-jsonSchemaModule = Module ns elements [jsonModelModule] [hydraCoreModule] $
+jsonSchemaModule = Module ns elements [Tier1.jsonModelModule] [Tier1.hydraCoreModule] $
     Just ("A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar")
   where
     ns = Namespace "hydra.ext.org.json.schema"
     def = datatype ns
     js = typeref ns
-    json = typeref $ moduleNamespace jsonModelModule
+    json = typeref $ moduleNamespace Tier1.jsonModelModule
 
     keywordSchemaMap = Types.map (js "Keyword") (js "Schema")
     keywordSchemaOrArrayMap = Types.map (js "Keyword") (js "SchemaOrArray")
