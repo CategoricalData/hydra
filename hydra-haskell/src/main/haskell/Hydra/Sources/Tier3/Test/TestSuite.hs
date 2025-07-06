@@ -7,6 +7,9 @@ import Hydra.Sources.Tier2.All
 import Hydra.Dsl.Phantoms as Base
 import Hydra.Dsl.Testing
 import qualified Hydra.Dsl.TTerms as TTerms
+import Hydra.Kernel
+import qualified Hydra.Sources.Tier1.All as Tier1
+import qualified Hydra.Sources.Tier2.All as Tier2
 
 import Hydra.Sources.Tier3.Test.Lib.Lists
 import Hydra.Sources.Tier3.Test.Lib.Strings
@@ -23,7 +26,7 @@ testSuitePrimitivesNs = Namespace "hydra.test.testSuite.primitives"
 testSuiteModule :: Module
 testSuiteModule = Module testSuiteNs elements
     [testGraphModule]
-    [hydraCoreModule, hydraMantleModule, hydraTestingModule] $
+    [Tier1.hydraCoreModule, Tier1.hydraMantleModule, Tier1.hydraTestingModule] $
     Just "Test cases for primitive functions"
   where
     elements = [

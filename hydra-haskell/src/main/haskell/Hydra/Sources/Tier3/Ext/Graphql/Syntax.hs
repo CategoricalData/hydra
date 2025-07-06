@@ -2,7 +2,9 @@
 
 module Hydra.Sources.Tier3.Ext.Graphql.Syntax where
 
-import Hydra.Sources.Tier2.All
+import Hydra.Kernel
+import qualified Hydra.Sources.Tier1.All as Tier1
+import qualified Hydra.Sources.Tier2.All as Tier2
 import Hydra.Dsl.Grammars
 import Hydra.Grammars
 import qualified Hydra.Grammar as G

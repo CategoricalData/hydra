@@ -2,7 +2,9 @@
 
 module Hydra.Sources.Tier3.Ext.Java.Language where
 
-import Hydra.Sources.Tier2.All
+import Hydra.Kernel
+import qualified Hydra.Sources.Tier1.All as Tier1
+import qualified Hydra.Sources.Tier2.All as Tier2
 import Hydra.Dsl.Phantoms as Base
 import Hydra.Dsl.Coders as Coders
 import Hydra.Dsl.Lib.Equality as Equality
@@ -23,7 +25,7 @@ javaLanguageDefinition = definitionInModule javaLanguageModule
 
 javaLanguageModule :: Module
 javaLanguageModule = Module ns elements
-    [hydraCodersModule, hydraLexicalModule] [hydraCoreModule, hydraGraphModule, hydraCodersModule] $
+    [Tier1.hydraCodersModule, Tier2.hydraLexicalModule] [Tier1.hydraCoreModule, Tier1.hydraGraphModule, Tier1.hydraCodersModule] $
     Just "Language constraints and reserved words for Java"
   where
     ns = Namespace "hydra.ext.java.language"

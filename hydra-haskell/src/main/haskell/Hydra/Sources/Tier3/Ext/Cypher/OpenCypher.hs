@@ -2,14 +2,16 @@
 
 module Hydra.Sources.Tier3.Ext.Cypher.OpenCypher where
 
-import Hydra.Sources.Tier2.All
+import Hydra.Kernel
+import qualified Hydra.Sources.Tier1.All as Tier1
+import qualified Hydra.Sources.Tier2.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
 openCypherModule :: Module
-openCypherModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
+openCypherModule = Module ns elements [Tier1.hydraCoreModule] [Tier1.hydraCoreModule] $
     Just ("A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n" ++
       "  https://opencypher.org/resources/")
   where

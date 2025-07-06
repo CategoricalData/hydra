@@ -4,7 +4,9 @@
 
 module Hydra.Sources.Tier3.Ext.Cpp.Syntax where
 
-import Hydra.Sources.Tier2.All
+import Hydra.Kernel
+import qualified Hydra.Sources.Tier1.All as Tier1
+import qualified Hydra.Sources.Tier2.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
@@ -14,7 +16,7 @@ cppNs = Namespace "hydra.ext.cpp.syntax"
 cpp = typeref cppNs
 
 cppSyntaxModule :: Module
-cppSyntaxModule = Module cppNs elements [hydraCoreModule] [hydraCoreModule] $
+cppSyntaxModule = Module cppNs elements [Tier1.hydraCoreModule] [Tier1.hydraCoreModule] $
     Just ("A C++ syntax model, focusing on features for representing algebraic data types and declarative computations")
   where
     def = datatype cppNs
