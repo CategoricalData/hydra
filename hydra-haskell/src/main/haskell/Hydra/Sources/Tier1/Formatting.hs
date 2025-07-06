@@ -143,10 +143,10 @@ nonAlnumToUnderscoresDef :: TElement (String -> String)
 nonAlnumToUnderscoresDef = formattingDefinition "nonAlnumToUnderscores" $
   lambda "input" $ lets [
     "isAlnum">: lambda "c" $ Logic.or
-      (Logic.and (Equality.gteInt32 (var "c") (char 'A')) (Equality.lteInt32 (var "c") (char 'Z')))
+      (Logic.and (Equality.gte (var "c") (char 'A')) (Equality.lte (var "c") (char 'Z')))
       (Logic.or
-        (Logic.and (Equality.gteInt32 (var "c") (char 'a')) (Equality.lteInt32 (var "c") (char 'z')))
-        (Logic.and (Equality.gteInt32 (var "c") (char '0')) (Equality.lteInt32 (var "c") (char '9')))),
+        (Logic.and (Equality.gte (var "c") (char 'a')) (Equality.lte (var "c") (char 'z')))
+        (Logic.and (Equality.gte (var "c") (char '0')) (Equality.lte (var "c") (char '9')))),
     "replace">: lambdas ["p", "c"] $ lets [
       "s">: first $ var "p",
       "b">: second $ var "p"]
@@ -229,7 +229,7 @@ wrapLineDef = formattingDefinition "wrapLine" $
       "spanResult">: Lists.span (lambda "c" $ Logic.and (Logic.not $ Equality.equal (var "c") (char ' ')) (Logic.not $ Equality.equal (var "c") (char '\t'))) (Lists.reverse $ var "trunc"),
       "prefix">: Lists.reverse $ second $ var "spanResult",
       "suffix">: Lists.reverse $ first $ var "spanResult"]
-      $ Logic.ifElse (Equality.lteInt32 (Lists.length $ var "rem") (var "maxlen"))
+      $ Logic.ifElse (Equality.lte (Lists.length $ var "rem") (var "maxlen"))
         (Lists.reverse $ Lists.cons (var "rem") (var "prev"))
         (Logic.ifElse (Lists.null $ var "prefix")
           (var "helper" @@ (Lists.cons (var "trunc") (var "prev")) @@ (Lists.drop (var "maxlen") (var "rem")))

@@ -814,7 +814,7 @@ toShortNames original =
               let local = (fst localNames) 
                   names = (snd localNames)
                   rangeFrom = (\start -> Lists.cons start (rangeFrom (Math.add start 1)))
-                  rename = (\name -> \i -> (name, (Core.Name (Logic.ifElse (Equality.gtInt32 i 1) (Strings.cat2 local (Literals.showInt32 i)) local))))
+                  rename = (\name -> \i -> (name, (Core.Name (Logic.ifElse (Equality.gt i 1) (Strings.cat2 local (Literals.showInt32 i)) local))))
               in (Lists.zipWith rename (Sets.toList names) (rangeFrom 1)))
   in (Maps.fromList (Lists.concat (Lists.map renameGroup (Maps.toList groups))))
 

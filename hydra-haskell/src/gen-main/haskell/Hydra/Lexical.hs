@@ -81,7 +81,7 @@ lookupPrimitive g name = (Maps.lookup name (Graph.graphPrimitives g))
 requireElement :: (Core.Name -> Compute.Flow Graph.Graph Graph.Element)
 requireElement name =  
   let showAll = False 
-      ellipsis = (\strings -> Logic.ifElse (Logic.and (Equality.gtInt32 (Lists.length strings) 3) (Logic.not showAll)) (Lists.concat2 (Lists.take 3 strings) [
+      ellipsis = (\strings -> Logic.ifElse (Logic.and (Equality.gt (Lists.length strings) 3) (Logic.not showAll)) (Lists.concat2 (Lists.take 3 strings) [
               "..."]) strings)
       err = (\g -> Flows.fail (Strings.cat [
               Strings.cat [

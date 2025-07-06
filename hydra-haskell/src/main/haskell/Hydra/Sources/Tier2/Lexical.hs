@@ -165,7 +165,7 @@ requireElementDef = lexicalDefinition "requireElement" $
   lambda "name" $ lets [
     "showAll">: false,
     "ellipsis">: lambda "strings" $
-      Logic.ifElse (Logic.and (Equality.gtInt32 (Lists.length $ var "strings") (int32 3)) (Logic.not $ var "showAll"))
+      Logic.ifElse (Logic.and (Equality.gt (Lists.length $ var "strings") (int32 3)) (Logic.not $ var "showAll"))
         (Lists.concat2 (Lists.take (int32 3) (var "strings")) (list [string "..."]))
         (var "strings"),
     "err">: lambda "g" $ Flows.fail $

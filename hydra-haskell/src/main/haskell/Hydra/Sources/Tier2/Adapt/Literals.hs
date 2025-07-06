@@ -108,7 +108,7 @@ comparePrecisionDef = adaptLiteralsDefinition "comparePrecision" $
         cases _Precision (var "p2") Nothing [
           _Precision_arbitrary>>: constant Graph.comparisonLessThan,
           _Precision_bits>>: lambda "b2" $
-            Logic.ifElse (Equality.ltInt32 (var "b1") (var "b2"))
+            Logic.ifElse (Equality.lt (var "b1") (var "b2"))
               Graph.comparisonLessThan
               Graph.comparisonGreaterThan]]
 

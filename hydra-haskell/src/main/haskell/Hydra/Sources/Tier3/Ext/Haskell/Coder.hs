@@ -547,7 +547,7 @@ encodeTypeWithClassAssertionsDef = haskellCoderDefinition "encodeTypeWithClassAs
       Logic.ifElse (Lists.null $ var "assertPairs")
         (Flows.pure $ var "htyp") (lets [
           "encoded">: Lists.map (var "encodeAssertion") (var "assertPairs"),
-          "hassert">: Logic.ifElse (Equality.gtInt32 (Lists.length $ var "encoded") (int32 1))
+          "hassert">: Logic.ifElse (Equality.gt (Lists.length $ var "encoded") (int32 1))
             (Lists.head $ var "encoded")
             (inject H._Assertion H._Assertion_tuple $ var "encoded")] $
           Flows.pure $ inject H._Type H._Type_ctx $ record H._ContextType [

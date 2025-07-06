@@ -106,7 +106,7 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
         TypeVariantVariable,
         TypeVariantWrap]
       typePredicate = match _Type (Just true) [
-        _Type_product>>: lambda "types" $ Equality.ltInt32 (Lists.length $ var "types") (ref javaMaxTupleLengthDef)]
+        _Type_product>>: lambda "types" $ Equality.lt (Lists.length $ var "types") (ref javaMaxTupleLengthDef)]
 
 reservedWordsDef :: TElement (S.Set String)
 reservedWordsDef = javaLanguageDefinition "reservedWords" $

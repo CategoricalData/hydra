@@ -17,41 +17,17 @@ compare x y
 equal :: Eq a => a -> a -> Bool
 equal = (==)
 
-gtFloat32 :: Float -> Float -> Bool
-gtFloat32 = (>)
+gt :: Ord a => a -> a -> Bool
+gt = (>)
 
-gtFloat64 :: Double -> Double -> Bool
-gtFloat64 = (>)
+gte :: Ord a => a -> a -> Bool
+gte = (>=)
 
-gtInt32 :: Int -> Int -> Bool
-gtInt32 = (>)
-
-gteFloat32 :: Float -> Float -> Bool
-gteFloat32 = (>=)
-
-gteFloat64 :: Double -> Double -> Bool
-gteFloat64 = (>=)
-
-gteInt32 :: Int -> Int -> Bool
-gteInt32 = (>=)
-
-identity :: x -> x
+identity :: a -> a
 identity = id
 
-ltFloat32 :: Float -> Float -> Bool
-ltFloat32 = (<)
+lt :: Ord a => a -> a -> Bool
+lt = (<)
 
-ltFloat64 :: Double -> Double -> Bool
-ltFloat64 = (<)
-
-ltInt32 :: Int -> Int -> Bool
-ltInt32 = (<)
-
-lteFloat32 :: Float -> Float -> Bool
-lteFloat32 = (<=)
-
-lteFloat64 :: Double -> Double -> Bool
-lteFloat64 = (<=)
-
-lteInt32 :: Int -> Int -> Bool
-lteInt32 = (<=)
+lte :: Ord a => a -> a -> Bool
+lte = (<=)
