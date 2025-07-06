@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier2.Languages where
+module Hydra.Sources.Tier2.Describe.Mantle where
 
 -- Standard Tier-2 imports
 import Hydra.Kernel
@@ -46,8 +46,8 @@ import qualified Data.Set                  as S
 import qualified Data.Maybe                as Y
 
 -- Uncomment tier-2 sources as needed
---import qualified Hydra.Sources.Tier2.Adapt.Utils as AdaptUtils
 --import qualified Hydra.Sources.Tier2.Adapt.Modules as AdaptModules
+--import qualified Hydra.Sources.Tier2.Adapt.Utils as AdaptUtils
 --import qualified Hydra.Sources.Tier2.Annotations as Annotations
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
@@ -75,29 +75,25 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Templating as Templating
 --import qualified Hydra.Sources.Tier2.Adapt.Terms as AdaptTerms
 --import qualified Hydra.Sources.Tier2.Unification as Unification
-import qualified Hydra.Sources.Tier2.Variants as Variants
+--import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
-languagesModule :: Module
-languagesModule = Module ns elements
-    [Variants.hydraVariantsModule]
-    [Tier1.hydraCoreModule] $
-    Just "Language constraints for Hydra Core"
+describeMantleModule :: Module
+describeMantleModule = Module (Namespace "hydra.describe.mantle") elements
+    []
+    [Tier1.hydraCoreModule, Tier1.hydraMantleModule] $
+    Just "Natural-language descriptions for hydra.mantle types"
   where
-    ns = Namespace "hydra.languages"
-    elements = [el languagesDef]
+   elements = [
+     el precisionDef]
 
-languagesDef :: TElement Language
-languagesDef = definitionInModule languagesModule "hydraLanguage" $
-  doc "Language constraints for Hydra Core, i.e. no constraints." $
-  record _Language [
-    _Language_name>>: wrap _LanguageName "hydra.core",
-    _Language_constraints>>: record _LanguageConstraints [
-    _LanguageConstraints_eliminationVariants>>: Sets.fromList $ ref Variants.eliminationVariantsDef,
-    _LanguageConstraints_literalVariants>>: Sets.fromList $ ref Variants.literalVariantsDef,
-    _LanguageConstraints_floatTypes>>: Sets.fromList $ ref Variants.floatTypesDef,
-    _LanguageConstraints_functionVariants>>: Sets.fromList $ ref Variants.functionVariantsDef,
-    _LanguageConstraints_integerTypes>>: Sets.fromList $ ref Variants.integerTypesDef,
-    _LanguageConstraints_termVariants>>: Sets.fromList $ ref Variants.termVariantsDef,
-    _LanguageConstraints_typeVariants>>: Sets.fromList $ ref Variants.typeVariantsDef,
-    _LanguageConstraints_types>>: constant true]]
+describeMantleDefinition :: String -> TTerm a -> TElement a
+describeMantleDefinition = definitionInModule describeMantleModule
+
+
+precisionDef :: TElement (Precision -> String)
+precisionDef = describeMantleDefinition "precision" $
+  doc "Display numeric precision as a string" $
+  match _Precision Nothing [
+    _Precision_arbitrary>>: constant $ string "arbitrary-precision",
+    _Precision_bits>>: lambda "bits" $ Literals.showInt32 (var "bits") ++ string "-bit"]

@@ -1,11 +1,10 @@
--- | Utilities for use in transformations
+-- | Natural-language descriptions for hydra.core types
 
 module Hydra.Describe.Core where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Lib.Literals as Literals
+import qualified Hydra.Describe.Mantle as Mantle
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -16,13 +15,13 @@ import qualified Data.Set as S
 -- | Display a floating-point type as a string
 floatType :: (Core.FloatType -> String)
 floatType t = (Strings.cat [
-  (\arg_ -> precision (Variants.floatTypePrecision arg_)) t,
+  (\arg_ -> Mantle.precision (Variants.floatTypePrecision arg_)) t,
   " floating-point number"])
 
 -- | Display an integer type as a string
 integerType :: (Core.IntegerType -> String)
 integerType t = (Strings.cat [
-  (\arg_ -> precision (Variants.integerTypePrecision arg_)) t,
+  (\arg_ -> Mantle.precision (Variants.integerTypePrecision arg_)) t,
   " integer"])
 
 -- | Display a literal type as a string
@@ -33,14 +32,6 @@ literalType x = case x of
   Core.LiteralTypeFloat v1 -> (floatType v1)
   Core.LiteralTypeInteger v1 -> (integerType v1)
   Core.LiteralTypeString -> "character string"
-
--- | Display numeric precision as a string
-precision :: (Mantle.Precision -> String)
-precision x = case x of
-  Mantle.PrecisionArbitrary -> "arbitrary-precision"
-  Mantle.PrecisionBits v1 -> (Strings.cat [
-    Literals.showInt32 v1,
-    "-bit"])
 
 -- | Display a type as a string
 type_ :: (Core.Type -> String)
