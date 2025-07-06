@@ -329,7 +329,7 @@ encodeTermDef :: TElement (HaskellNamespaces -> Term -> Flow Graph H.Expression)
 encodeTermDef = haskellCoderDefinition "encodeTerm" $
   lambda "namespaces" $ lambda "term" $ lets [
     "encode">: ref encodeTermDef @@ var "namespaces"] $
-    cases _Term (ref Strip.fullyStripTermDef @@ var "term")
+    cases _Term (ref Strip.stripTermDef @@ var "term")
       (Just $ Flows.fail $ Strings.cat2 (string "unexpected term: ") (ref ShowCore.termDef @@ var "term")) [
       _Term_application>>: lambda "app" $ lets [
         "fun">: Core.applicationFunction $ var "app",
@@ -414,7 +414,7 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
         "ft">: Core.fieldTerm $ var "field",
         "lhs">: inject H._Expression H._Expression_variable $ ref HaskellUtils.unionFieldReferenceDef @@ var "namespaces" @@ var "sname" @@ var "fn",
         "dflt">: Flows.map (ref HaskellUtils.hsappDef @@ var "lhs") (var "encode" @@ var "ft")] $
-        cases _Term (ref Strip.fullyStripTermDef @@ var "ft")
+        cases _Term (ref Strip.stripTermDef @@ var "ft")
           (Just $ var "dflt") [
           _Term_unit>>: constant $ Flows.pure $ var "lhs"],
       _Term_unit>>: constant $ Flows.pure $ inject H._Expression H._Expression_tuple $ list [],
@@ -657,7 +657,7 @@ toDataDeclarationDef = haskellCoderDefinition "toDataDeclaration" $
                     H._SimpleValueBinding_rhs>>: var "newRhs",
                     H._SimpleValueBinding_localBindings>>: var "bindings"])]]],
     "toDecl">: lambda "comments" $ lambda "hname'" $ lambda "term'" $ lambda "coder'" $ lambda "bindings" $
-      cases _Term (ref Strip.fullyStripTermDef @@ var "term'")
+      cases _Term (ref Strip.stripTermDef @@ var "term'")
         (Just $
           withVar "hterm" (Compute.coderEncode (var "coder'") @@ (var "term'")) $ lets [
          "vb">: ref HaskellUtils.simpleValueBindingDef @@ var "hname'" @@ var "hterm" @@ var "bindings"] $

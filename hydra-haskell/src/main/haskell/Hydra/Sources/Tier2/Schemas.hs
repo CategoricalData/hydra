@@ -136,7 +136,7 @@ dependencyNamespacesDef = schemasDefinition "dependencyNamespaces" $
           (lambda "ts" $ ref Rewriting.typeDependencyNamesDef @@ true @@ Core.typeSchemeType (var "ts"))
           (Graph.elementType $ var "el"))
         Sets.empty]
-      $ Logic.ifElse (ref EncodeCore.isEncodedTypeDef @@ (ref Strip.fullyStripTermDef @@ var "term"))
+      $ Logic.ifElse (ref EncodeCore.isEncodedTypeDef @@ (ref Strip.stripTermDef @@ var "term"))
           (Flows.bind (ref DecodeCore.typeDef @@ var "term") $
             lambda "typ" $ Flows.pure $ Sets.unions $ list [
               var "dataNames", var "schemaNames",
@@ -327,7 +327,7 @@ schemaGraphToTypingEnvironmentDef = schemasDefinition "schemaGraphToTypingEnviro
               (Logic.ifElse
                 (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _Type)))
                 (Flows.map (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded") $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el"))
-                (cases _Term (ref Strip.fullyStripTermDef @@ (Graph.elementTerm $ var "el")) (Just $ Flows.pure nothing) [
+                (cases _Term (ref Strip.stripTermDef @@ (Graph.elementTerm $ var "el")) (Just $ Flows.pure nothing) [
                   _Term_record>>: lambda "r" $
                     Logic.ifElse
                       (Equality.equal (Core.recordTypeName $ var "r") (Core.nameLift _TypeScheme))

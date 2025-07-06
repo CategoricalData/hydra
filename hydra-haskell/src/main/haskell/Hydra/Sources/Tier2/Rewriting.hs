@@ -357,7 +357,7 @@ isLambdaDef = rewritingDefinition "isLambda" $
       _Term_function>>: match _Function (Just false) [
         _Function_lambda>>: constant true],
       _Term_let>>: lambda "lt" (ref isLambdaDef @@ (project _Let _Let_environment @@ var "lt"))])
-    @@ (ref Strip.fullyStripTermDef @@ var "term")
+    @@ (ref Strip.stripTermDef @@ var "term")
 
 mapBeneathTypeAnnotationsDef :: TElement ((Type -> Type) -> Type -> Type)
 mapBeneathTypeAnnotationsDef = rewritingDefinition "mapBeneathTypeAnnotations" $
@@ -759,12 +759,12 @@ simplifyTermDef = rewritingDefinition "simplifyTerm" $
   doc "Simplify terms by applying beta reduction where possible" $
   lambda "term" $ lets [
     "simplify">: lambdas ["recurse", "term"] $ lets [
-      "stripped">: ref Strip.fullyStripTermDef @@ var "term"]
+      "stripped">: ref Strip.stripTermDef @@ var "term"]
       $ var "recurse" @@ (cases _Term (var "stripped") (Just $ var "term") [
         _Term_application>>: lambda "app" $ lets [
           "lhs">: Core.applicationFunction $ var "app",
           "rhs">: Core.applicationArgument $ var "app",
-          "strippedLhs">: ref Strip.fullyStripTermDef @@ var "lhs"]
+          "strippedLhs">: ref Strip.stripTermDef @@ var "lhs"]
           $ cases _Term (var "strippedLhs") (Just $ var "term") [
             _Term_function>>: match _Function (Just $ var "term") [
               _Function_lambda>>: lambda "l" $ lets [
@@ -772,7 +772,7 @@ simplifyTermDef = rewritingDefinition "simplifyTerm" $
                 "body">: Core.lambdaBody $ var "l"]
                 $ Logic.ifElse (Sets.member (var "var") (ref freeVariablesInTermDef @@ var "body"))
                   (lets [
-                    "strippedRhs">: ref Strip.fullyStripTermDef @@ var "rhs"]
+                    "strippedRhs">: ref Strip.stripTermDef @@ var "rhs"]
                     $ match _Term (Just $ var "term") [
                       _Term_variable>>: lambda "v" $ ref simplifyTermDef @@ (ref substituteVariableDef @@ var "var" @@ var "v" @@ var "body")] @@ var "strippedRhs")
                   (ref simplifyTermDef @@ var "body")]]])]

@@ -49,7 +49,7 @@ dependencyNamespaces withVars withPrims withNoms withSchema els =
           let term = (Graph.elementTerm el) 
               dataNames = (Rewriting.termDependencyNames withVars withPrims withNoms term)
               schemaNames = (Logic.ifElse withSchema (Optionals.maybe Sets.empty (\ts -> Rewriting.typeDependencyNames True (Core.typeSchemeType ts)) (Graph.elementType el)) Sets.empty)
-          in (Logic.ifElse (Core__.isEncodedType (Strip.fullyStripTerm term)) (Flows.bind (Core_.type_ term) (\typ -> Flows.pure (Sets.unions [
+          in (Logic.ifElse (Core__.isEncodedType (Strip.stripTerm term)) (Flows.bind (Core_.type_ term) (\typ -> Flows.pure (Sets.unions [
             dataNames,
             schemaNames,
             (Rewriting.typeDependencyNames True typ)]))) (Flows.pure (Sets.unions [
@@ -167,7 +167,7 @@ schemaGraphToTypingEnvironment g =
               Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type"))})) (Flows.map (\decoded -> Just (toTypeScheme [] decoded)) (Core_.type_ (Graph.elementTerm el))) ((\x -> case x of
               Core.TermRecord v1 -> (Logic.ifElse (Equality.equal (Core.recordTypeName v1) (Core.Name "hydra.core.TypeScheme")) (Flows.map Optionals.pure (Core_.typeScheme (Graph.elementTerm el))) (Flows.pure Nothing))
               Core.TermUnion v1 -> (Logic.ifElse (Equality.equal (Core.injectionTypeName v1) (Core.Name "hydra.core.Type")) (Flows.map (\decoded -> Just (toTypeScheme [] decoded)) (Core_.type_ (Graph.elementTerm el))) (Flows.pure Nothing))
-              _ -> (Flows.pure Nothing)) (Strip.fullyStripTerm (Graph.elementTerm el))))) (Graph.elementType el)))
+              _ -> (Flows.pure Nothing)) (Strip.stripTerm (Graph.elementTerm el))))) (Graph.elementType el)))
   in (Monads.withState g (Flows.bind (Flows.mapList toPair (Maps.elems (Graph.graphElements g))) (\mpairs -> Flows.pure (Maps.fromList (Optionals.cat mpairs)))))
 
 -- | Topologically sort type definitions by dependencies

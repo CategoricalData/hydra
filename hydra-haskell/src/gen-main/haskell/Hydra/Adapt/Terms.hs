@@ -131,7 +131,7 @@ functionToUnion t = ((\x -> case x of
                     Core.fieldTypeName = (Core.Name "variable"),
                     Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}]}))))
         encode = (\ad -> \term ->  
-                let strippedTerm = (Strip.fullyStripTerm term)
+                let strippedTerm = (Strip.stripTerm term)
                 in (Compute.coderEncode (Compute.adapterCoder ad) ((\x -> case x of
                   Core.TermFunction v2 -> ((\x -> case x of
                     Core.FunctionElimination v3 -> ((\x -> case x of
@@ -296,7 +296,7 @@ passFunction t = ((\x -> case x of
                 Core.lambdaDomain = d,
                 Core.lambdaBody = newBody}))))
             Core.FunctionPrimitive v3 -> (Flows.pure (Core.FunctionPrimitive v3))) v2))
-          _ -> (Flows.pure term)) (Strip.fullyStripTerm term)))})))))))) t)
+          _ -> (Flows.pure term)) (Strip.stripTerm term)))})))))))) t)
 
 -- | Pass through forall types
 passForall :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))

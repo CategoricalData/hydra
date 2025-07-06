@@ -29,7 +29,7 @@ fieldType = (Lexical.matchRecord (\m -> Monads.map2 (Lexical.getField m (Core.Na
 
 fieldTypes :: (Core.Term -> Compute.Flow Graph.Graph [Core.FieldType])
 fieldTypes term =  
-  let stripped = (Strip.fullyStripTerm term)
+  let stripped = (Strip.stripTerm term)
   in ((\x -> case x of
     Core.TermList v1 -> (Flows.mapList fieldType v1)
     _ -> (Monads.unexpected "list" (Core__.term term))) stripped)
@@ -84,7 +84,7 @@ rowType = (Lexical.matchRecord (\m -> Monads.map2 (Lexical.getField m (Core.Name
   Core.rowTypeFields = fields})))
 
 string :: (Core.Term -> Compute.Flow Graph.Graph String)
-string term = (Core_.string (Strip.fullyStripTerm term))
+string term = (Core_.string (Strip.stripTerm term))
 
 type_ :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)
 type_ dat = ((\x -> case x of

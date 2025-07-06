@@ -39,7 +39,7 @@ data PythonModuleMetadata = PythonModuleMetadata {
 argsAndBindings :: Term -> Type -> ([Name], [LetBinding], Term, [Type], Type)
 argsAndBindings = gather [] [] []
   where
-    gather prevArgs prevBindings prevDoms term typ = case fullyStripTerm term of
+    gather prevArgs prevBindings prevDoms term typ = case stripTerm term of
       TermFunction (FunctionLambda (Lambda var _ body)) -> case stripType typ of
         TypeFunction (FunctionType dom cod) -> gather (var:prevArgs) prevBindings (dom:prevDoms) body cod
       TermLet (Let bindings body) -> gather prevArgs (bindings ++ prevBindings) prevDoms body typ
@@ -56,7 +56,7 @@ encodeApplication env app = do
     return $ L.foldl (\t a -> functionCall (pyExpressionToPyPrimary t) [a]) lhs rargs
   where
     (fun, args) = gatherArgs (TermApplication app) []
-    gatherArgs term args = case fullyStripTerm term of
+    gatherArgs term args = case stripTerm term of
       TermApplication (Application lhs rhs) -> gatherArgs lhs (rhs:args)
       _ -> (term, args)
     applyArgs hargs = case fun of
@@ -98,7 +98,7 @@ encodeDefinition env def = case def of
   DefinitionTerm (TermDefinition name term typ) -> withTrace ("data element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTermDescription term
     g <- getState
-    stmts <- encodeTermAssignment env name (fullyStripTerm $ expandLambdas g term) typ comment
+    stmts <- encodeTermAssignment env name (stripTerm $ expandLambdas g term) typ comment
     return [stmts]
   DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTypeDescription typ
@@ -318,7 +318,7 @@ encodeRecordType env name (RowType _ tfields) comment = do
     decs = Py.Decorators [pyNameToPyNamedExpression $ Py.Name "dataclass"]
 
 encodeTerm :: PythonEnvironment -> Term -> Flow Graph Py.Expression
-encodeTerm env term = case fullyStripTerm term of
+encodeTerm env term = case stripTerm term of
     TermApplication a -> encodeApplication env a
     TermFunction f -> encodeFunction env f
     TermLet _ -> pure $ stringToPyExpression Py.QuoteStyleDouble "let terms are not supported here"
@@ -403,13 +403,13 @@ encodeTopLevelTerm env term = if L.length args == 1
     else dflt
   where
     (args, body) = gatherArgs [] term
-    gatherArgs rest term = case fullyStripTerm term of
+    gatherArgs rest term = case stripTerm term of
       TermApplication (Application l r) -> gatherArgs (r:rest) l
       t -> (rest, t)
     dflt = do
       expr <- encodeTerm env term
       return [returnSingle expr]
-    withArg body arg = case fullyStripTerm body of
+    withArg body arg = case stripTerm body of
       TermFunction (FunctionElimination (EliminationUnion (CaseStatement tname dflt cases))) -> do
           rt <- requireUnionType tname
           let isEnum = isEnumRowType rt
@@ -429,7 +429,7 @@ encodeTopLevelTerm env term = if L.length args == 1
               let patterns = pyClosedPatternToPyPatterns Py.ClosedPatternWildcard
               let body = indentedBlock Nothing [[stmt]]
               return [Py.CaseBlock patterns Nothing body]
-          toCaseBlock isEnum (Field fname fterm) = case fullyStripTerm fterm of
+          toCaseBlock isEnum (Field fname fterm) = case stripTerm fterm of
             TermFunction (FunctionLambda (Lambda v _ body)) -> do
                 pyReturn <- encodeTerm env body
                 let body = indentedBlock Nothing [[returnSingle pyReturn]]

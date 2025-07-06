@@ -33,17 +33,9 @@ hydraStripModule = Module (Namespace "hydra.strip") elements [] [hydraCoreModule
     Just "Several functions for stripping annotations from types and terms."
   where
    elements = [
-     el fullyStripTermDef,
      el stripTermDef,
      el stripTypeDef,
      el stripTypeParametersDef]
-
-fullyStripTermDef :: TElement (Term -> Term)
-fullyStripTermDef = stripDefinition "fullyStripTerm" $
-  doc "Strip all annotations from a term, including first-class type annotations" $
-  lambda "t" $ match _Term (Just $ var "t") [
-    _Term_annotated>>: ref fullyStripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject)]
-    @@ (var "t")
 
 stripTermDef :: TElement (Term -> Term)
 stripTermDef = stripDefinition "stripTerm" $

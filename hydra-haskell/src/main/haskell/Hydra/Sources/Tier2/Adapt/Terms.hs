@@ -209,7 +209,7 @@ functionToUnionDef = adaptTermsDefinition "functionToUnion" $
           Core.fieldType (Core.nameLift _Function_primitive) TTypes.string,
           Core.fieldType (Core.nameLift _Term_variable) TTypes.string],
       "encode">: lambdas ["ad", "term"] $ lets [
-        "strippedTerm">: ref Strip.fullyStripTermDef @@ var "term"] $
+        "strippedTerm">: ref Strip.stripTermDef @@ var "term"] $
         Compute.coderEncode (Compute.adapterCoder $ var "ad") @@ (cases _Term (var "strippedTerm") Nothing [
           _Term_function>>: lambda "f" $ cases _Function (var "f") Nothing [
             _Function_elimination>>: lambda "e" $ cases _Elimination (var "e") Nothing [
@@ -364,7 +364,7 @@ passFunctionDef = adaptTermsDefinition "passFunction" $
         (Maps.lookup (var "fname") (var "caseAds"))] $
       Flows.pure $ Compute.adapter (var "lossy") (var "t") (var "target") $
         ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
-          cases _Term (ref Strip.fullyStripTermDef @@ var "term") (Just $ Flows.pure $ var "term") [
+          cases _Term (ref Strip.stripTermDef @@ var "term") (Just $ Flows.pure $ var "term") [
             _Term_function >>: lambda "f" $
               Flows.map (unaryFunction Core.termFunction) $
                 cases _Function (var "f") Nothing [
