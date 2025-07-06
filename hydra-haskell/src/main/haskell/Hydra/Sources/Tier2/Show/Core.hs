@@ -54,6 +54,7 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Describe.Mantle as DescribeMantle
 --import qualified Hydra.Sources.Tier2.Errors as Errors
 --import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
+--import qualified Hydra.Sources.Tier2.Extract.Mantle as ExtractMantle
 --import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.Grammars as Grammars
 --import qualified Hydra.Sources.Tier2.Inference as Inference

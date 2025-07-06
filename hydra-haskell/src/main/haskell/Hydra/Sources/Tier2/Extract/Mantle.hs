@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Tier2.Describe.Core where
+module Hydra.Sources.Tier2.Extract.Mantle where
 
 -- Standard Tier-2 imports
 import Hydra.Kernel
@@ -52,11 +52,12 @@ import qualified Data.Maybe                as Y
 --import qualified Hydra.Sources.Tier2.Arity as Arity
 --import qualified Hydra.Sources.Tier2.Decode.Core as DecodeCore
 --import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
-import qualified Hydra.Sources.Tier2.Describe.Mantle as DescribeMantle
+--import qualified Hydra.Sources.Tier2.Describe.Mantle as DescribeMantle
 --import qualified Hydra.Sources.Tier2.Errors as Errors
---import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
+import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 --import qualified Hydra.Sources.Tier2.Extract.Mantle as ExtractMantle
---import qualified Hydra.Sources.Tier2.Monads as Monads
+--import qualified Hydra.Sources.Tier2.Extract.Mantle as ExtractMantle
+import qualified Hydra.Sources.Tier2.Monads as Monads
 --import qualified Hydra.Sources.Tier2.Grammars as Grammars
 --import qualified Hydra.Sources.Tier2.Inference as Inference
 --import qualified Hydra.Sources.Tier2.Languages as Languages
@@ -76,74 +77,31 @@ import qualified Hydra.Sources.Tier2.Describe.Mantle as DescribeMantle
 --import qualified Hydra.Sources.Tier2.Templating as Templating
 --import qualified Hydra.Sources.Tier2.Adapt.Terms as AdaptTerms
 --import qualified Hydra.Sources.Tier2.Unification as Unification
-import qualified Hydra.Sources.Tier2.Variants as Variants
+--import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
-describeCoreModule :: Module
-describeCoreModule = Module (Namespace "hydra.describe.core") elements
-    [DescribeMantle.describeMantleModule, Variants.hydraVariantsModule]
-    [Tier1.hydraCoreModule, Tier1.hydraMantleModule] $
-    Just "Natural-language descriptions for hydra.core types"
+extractMantleDefinition :: String -> TTerm a -> TElement a
+extractMantleDefinition = definitionInModule extractMantleModule
+
+extractMantleModule :: Module
+extractMantleModule = Module (Namespace "hydra.extract.mantle") elements
+    [ExtractCore.extractCoreModule, Monads.hydraMonadsModule]
+    [Tier1.hydraCodersModule, Tier1.hydraMantleModule] $
+    Just ("A DSL for decoding and validating Hydra terms at runtime. This module provides functions to extract typed values from Hydra terms with appropriate error handling.")
   where
    elements = [
-     el floatTypeDef,
-     el integerTypeDef,
-     el literalTypeDef,
-     el typeDef]
+     el comparisonDef]
 
-describeCoreDefinition :: String -> TTerm a -> TElement a
-describeCoreDefinition = definitionInModule describeCoreModule
-
-
-floatTypeDef :: TElement (FloatType -> String)
-floatTypeDef = describeCoreDefinition "floatType" $
-  doc "Display a floating-point type as a string" $
-  lambda "t" $ (ref DescribeMantle.precisionDef <.> ref Variants.floatTypePrecisionDef @@ var "t") ++ string " floating-point number"
-
-integerTypeDef :: TElement (IntegerType -> String)
-integerTypeDef = describeCoreDefinition "integerType" $
-  doc "Display an integer type as a string" $
-  lambda "t" $ (ref DescribeMantle.precisionDef <.> ref Variants.integerTypePrecisionDef @@ var "t")
-    ++ string " integer"
-
-literalTypeDef :: TElement (LiteralType -> String)
-literalTypeDef = describeCoreDefinition "literalType" $
-  doc "Display a literal type as a string" $
-  match _LiteralType Nothing [
-    _LiteralType_binary>>: constant $ string "binary string",
-    _LiteralType_boolean>>: constant $ string "boolean value",
-    _LiteralType_float>>: ref floatTypeDef,
-    _LiteralType_integer>>: ref integerTypeDef,
-    _LiteralType_string>>: constant $ string "character string"]
-
-typeDef :: TElement (Type -> String)
-typeDef = describeCoreDefinition "type" $
-  doc "Display a type as a string" $
-  match _Type Nothing [
-    _Type_annotated>>: lambda "a" $ string "annotated " ++ (ref typeDef @@
-      (project _AnnotatedType _AnnotatedType_subject @@ var "a")),
-    _Type_application>>: lambda "at" $ Strings.cat $ list [
-      ref typeDef @@ (Core.applicationTypeFunction $ var "at"),
-      string " applied to ",
-      ref typeDef @@ (Core.applicationTypeArgument $ var "at")],
-    _Type_literal>>: ref literalTypeDef,
-    _Type_function>>: lambda "ft" $ string "function from "
-      ++ (ref typeDef @@ (project _FunctionType _FunctionType_domain @@ var "ft"))
-      ++ string " to "
-      ++ (ref typeDef @@ (project _FunctionType _FunctionType_codomain @@ var "ft")),
-    _Type_forall>>: lambda "fat" $ Strings.cat2 (string "polymorphic ") (ref typeDef @@ (Core.forallTypeBody $ var "fat")),
-    _Type_list>>: lambda "t" $ string "list of " ++ (ref typeDef @@ var "t"),
-    _Type_map>>: lambda "mt" $ string "map from "
-      ++ (ref typeDef @@ (project _MapType _MapType_keys @@ var "mt"))
-      ++ string " to "
-      ++ (ref typeDef @@ (project _MapType _MapType_values  @@ var "mt")),
-    _Type_optional>>: lambda "ot" $ string "optional " ++ (ref typeDef @@ var "ot"),
-    _Type_product>>: constant $ string "tuple",
-    _Type_record>>: constant $ string "record",
-    _Type_set>>: lambda "st" $ string "set of " ++ (ref typeDef @@ var "st"),
-    _Type_sum>>: constant $ string "variant tuple",
-    _Type_union>>: constant $ string "union",
-    _Type_unit>>: constant $ string "unit",
-    _Type_variable>>: constant $ string "instance of a named type",
-    _Type_wrap>>: lambda "n" $ string "wrapper for "
-      ++ (ref typeDef @@ (project _WrappedType _WrappedType_object @@ var "n"))]
+comparisonDef :: TElement (Term -> Flow Graph Comparison)
+comparisonDef = extractMantleDefinition "comparison" $
+  doc "Extract a comparison from a term" $
+  lambda "term" $
+    Flows.bind (ref ExtractCore.unitVariantDef @@ Core.nameLift _Comparison @@ var "term") $
+      lambda "fname" $
+        Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_equalTo))
+          (Flows.pure Graph.comparisonEqualTo)
+          (Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_lessThan))
+            (Flows.pure Graph.comparisonLessThan)
+            (Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_greaterThan))
+              (Flows.pure Graph.comparisonGreaterThan)
+              (ref Monads.unexpectedDef @@ string "comparison" @@ Core.unName (var "fname"))))

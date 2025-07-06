@@ -15,7 +15,6 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Strip as Strip
@@ -80,10 +79,6 @@ cases name term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term ->
       _ -> (Monads.unexpected "case statement" (Core_.term term))) v2)
     _ -> (Monads.unexpected "case statement" (Core_.term term))) v1)
   _ -> (Monads.unexpected "case statement" (Core_.term term))) term))
-
--- | Extract a comparison from a term
-comparison :: (Core.Term -> Compute.Flow Graph.Graph Mantle.Comparison)
-comparison term = (Flows.bind (unitVariant (Core.Name "hydra.mantle.Comparison") term) (\fname -> Logic.ifElse (Equality.equal (Core.unName fname) "equalTo") (Flows.pure Mantle.ComparisonEqualTo) (Logic.ifElse (Equality.equal (Core.unName fname) "lessThan") (Flows.pure Mantle.ComparisonLessThan) (Logic.ifElse (Equality.equal (Core.unName fname) "greaterThan") (Flows.pure Mantle.ComparisonGreaterThan) (Monads.unexpected "comparison" (Core.unName fname))))))
 
 field :: (Core.Name -> (Core.Term -> Compute.Flow Graph.Graph t0) -> [Core.Field] -> Compute.Flow Graph.Graph t0)
 field fname mapping fields =  
