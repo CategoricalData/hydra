@@ -89,8 +89,7 @@ showAccessorsModule = Module (Namespace "hydra.show.accessors") elements
   where
    elements = [
      el termAccessorDef,
-     el termToAccessorGraphDef,
-     el toUniqueLabelDef]
+     el termToAccessorGraphDef] -- TODO: move out of hydra.show.accessors
 
 termAccessorDef :: TElement (TermAccessor -> Maybe String)
 termAccessorDef = accessorsDefinition "termAccessor" $
@@ -129,6 +128,10 @@ termToAccessorGraphDef = accessorsDefinition "termToAccessorGraph" $
   doc "Build an accessor graph from a term" $
   lambda "namespaces" $ lambda "term" $ lets [
     "dontCareAccessor">: Mantle.termAccessorAnnotatedSubject,
+    "toUniqueLabel">: lambda "visited" $ lambda "l" $
+      Logic.ifElse (Sets.member (var "l") (var "visited"))
+        (var "toUniqueLabel" @@ var "visited" @@ Strings.cat2 (var "l") (string "'"))
+        (var "l"),
     "helper">: lambdas ["ids", "mroot", "path", "state", "accessorTerm"] $ lets [
       "accessor">: first $ var "accessorTerm",
       "currentTerm">: second $ var "accessorTerm",
@@ -153,7 +156,7 @@ termToAccessorGraphDef = accessorsDefinition "termToAccessorGraph" $
             "currentNodes">: first $ var "currentNodesVisited",
             "currentVisited">: second $ var "currentNodesVisited",
             "rawLabel">: ref Names.compactNameDef @@ var "namespaces" @@ var "name",
-            "uniqueLabel">: ref toUniqueLabelDef @@ var "currentVisited" @@ var "rawLabel",
+            "uniqueLabel">: var "toUniqueLabel" @@ var "currentVisited" @@ var "rawLabel",
             "node">: Accessors.accessorNode (var "name") (var "rawLabel") (var "uniqueLabel"),
             "newVisited">: Sets.insert (var "uniqueLabel") (var "currentVisited"),
             "newNodes">: Lists.cons (var "node") (var "currentNodes"),
@@ -199,11 +202,3 @@ termToAccessorGraphDef = accessorsDefinition "termToAccessorGraph" $
     "finalNodes">: first $ var "finalNodesEdges",
     "finalEdges">: second $ var "finalNodesEdges"]
     $ Accessors.accessorGraph (var "finalNodes") (var "finalEdges")
-
-toUniqueLabelDef :: TElement (S.Set String -> String -> String)
-toUniqueLabelDef = accessorsDefinition "toUniqueLabel" $
-  doc "Generate a unique label by appending apostrophes if needed" $
-  lambda "visited" $ lambda "l" $
-    Logic.ifElse (Sets.member (var "l") (var "visited"))
-      (ref toUniqueLabelDef @@ var "visited" @@ Strings.cat2 (var "l") (string "'"))
-      (var "l")
