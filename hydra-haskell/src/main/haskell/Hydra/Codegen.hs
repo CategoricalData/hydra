@@ -52,9 +52,10 @@ modulesToGraph :: [Module] -> Graph
 modulesToGraph mods = elementsToGraph parent (Just schemaGraph) dataElements
   where
     parent = bootstrapGraph
-    dataElements = L.concat (moduleElements <$> (L.concat (close <$> mods)))
-    schemaElements = L.concat (moduleElements <$> (L.concat (close <$> (L.nub $ L.concat (moduleTypeDependencies <$> mods)))))
+    dataElements = L.concat (moduleElements <$> closedMods)
+    schemaElements = L.concat (moduleElements <$> (L.concat (moduleTypeDependencies <$> closedMods)))
     schemaGraph = elementsToGraph bootstrapGraph Nothing schemaElements
+    closedMods = L.concat (close <$> mods)
     close mod = mod:(L.concat (close <$> moduleTermDependencies mod))
 
 printTrace :: Bool -> Trace -> IO ()
