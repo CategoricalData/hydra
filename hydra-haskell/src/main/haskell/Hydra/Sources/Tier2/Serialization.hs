@@ -213,7 +213,7 @@ customIndentBlockDef = serializationDefinition "customIndentBlock" $
   lambdas ["idt", "els"] $
     Logic.ifElse (Lists.null $ var "els")
       (ref cstDef @@ string "")
-      (Logic.ifElse (Equality.equalInt32 (Lists.length $ var "els") (int32 1))
+      (Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
         (Lists.head $ var "els")
         (lets [
           "head">: Lists.head $ var "els",
@@ -391,7 +391,7 @@ orSepDef = serializationDefinition "orSep" $
   lambdas ["style", "l"] $
     Logic.ifElse (Lists.null $ var "l")
       (ref cstDef @@ string "")
-      (Logic.ifElse (Equality.equalInt32 (Lists.length $ var "l") (int32 1))
+      (Logic.ifElse (Equality.equal (Lists.length $ var "l") (int32 1))
         (Lists.head $ var "l")
         (lets [
           "h">: Lists.head $ var "l",
@@ -502,7 +502,7 @@ printExprDef = serializationDefinition "printExpr" $
         $ Strings.intercalate (string "\n") $ cases _IndentStyle (var "style") Nothing [
           _IndentStyle_allLines>>: lambda "idt" $ Lists.map (lambda "line" $ var "idt" ++ var "line") (var "lns"),
           _IndentStyle_subsequentLines>>: lambda "idt" $
-            Logic.ifElse (Equality.equalInt32 (Lists.length $ var "lns") (int32 1))
+            Logic.ifElse (Equality.equal (Lists.length $ var "lns") (int32 1))
               (var "lns")
               (Lists.cons (Lists.head $ var "lns") $ Lists.map (lambda "line" $ var "idt" ++ var "line") $ Lists.tail $ var "lns")],
       _Expr_op>>: lambda "opExpr" $ lets [
@@ -540,7 +540,7 @@ sepDef = serializationDefinition "sep" $
   lambdas ["op", "els"] $
     Logic.ifElse (Lists.null $ var "els")
       (ref cstDef @@ string "")
-      (Logic.ifElse (Equality.equalInt32 (Lists.length $ var "els") (int32 1))
+      (Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
         (Lists.head $ var "els")
         (lets [
           "h">: Lists.head $ var "els",
@@ -568,7 +568,7 @@ symbolSepDef = serializationDefinition "symbolSep" $
   lambdas ["symb", "style", "l"] $
     Logic.ifElse (Lists.null $ var "l")
       (ref cstDef @@ string "")
-      (Logic.ifElse (Equality.equalInt32 (Lists.length $ var "l") (int32 1))
+      (Logic.ifElse (Equality.equal (Lists.length $ var "l") (int32 1))
         (Lists.head $ var "l")
         (lets [
           "h">: Lists.head $ var "l",
@@ -576,9 +576,9 @@ symbolSepDef = serializationDefinition "symbolSep" $
           "breakCount">: Lists.length $ Lists.filter identity $ list [
             Ast.blockStyleNewlineBeforeContent $ var "style",
             Ast.blockStyleNewlineAfterContent $ var "style"],
-          "break">: Logic.ifElse (Equality.equalInt32 (var "breakCount") (int32 0))
+          "break">: Logic.ifElse (Equality.equal (var "breakCount") (int32 0))
             Ast.wsSpace
-            (Logic.ifElse (Equality.equalInt32 (var "breakCount") (int32 1))
+            (Logic.ifElse (Equality.equal (var "breakCount") (int32 1))
               Ast.wsBreak
               Ast.wsDoubleBreak),
           "commaOp">: Ast.op

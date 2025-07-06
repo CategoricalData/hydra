@@ -162,7 +162,7 @@ isNontrivialDef = grammarToModuleDefinition "isNontrivial" $
   doc "Check if patterns are nontrivial" $
   lambda "isRecord" $ lambda "pats" $ lets [
     "minPats">: ref simplifyDef @@ var "isRecord" @@ var "pats"]
-    $ Logic.ifElse (Equality.equalInt32 (Lists.length $ var "minPats") (int32 1))
+    $ Logic.ifElse (Equality.equal (Lists.length $ var "minPats") (int32 1))
         (match G._Pattern (Just false) [
           _Pattern_labeled>>: constant true] @@ Lists.head (var "minPats"))
         true

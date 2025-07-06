@@ -150,7 +150,7 @@ popStackUntilDef = tarjanDefinition "popStackUntil" $
               "acc'">: Lists.cons (var "x") (var "acc")]
               $ Flows.bind (ref Monads.putStateDef @@ var "newSt2") $
                 lambda "_" $
-                  Logic.ifElse (Equality.equalInt32 (var "x") (var "v"))
+                  Logic.ifElse (Equality.equal (var "x") (var "v"))
                     (Flows.pure $ Lists.reverse $ var "acc'")
                     (var "go" @@ var "acc'"))]
     $ var "go" @@ list []
@@ -201,7 +201,7 @@ strongConnectDef = tarjanDefinition "strongConnect" $
                   lambda "stFinal" $ lets [
                     "low_v">: Maps.findWithDefault (ref Constants.maxInt32Def) (var "v") (Topology.tarjanStateLowLinks $ var "stFinal"),
                     "idx_v">: Maps.findWithDefault (ref Constants.maxInt32Def) (var "v") (Topology.tarjanStateIndices $ var "stFinal")]
-                    $ Logic.ifElse (Equality.equalInt32 (var "low_v") (var "idx_v"))
+                    $ Logic.ifElse (Equality.equal (var "low_v") (var "idx_v"))
                         (Flows.bind (ref popStackUntilDef @@ var "v") $
                           lambda "comp" $
                             Flows.bind (ref Monads.modifyDef @@ (lambda "s" $

@@ -81,7 +81,7 @@ popStackUntil v =
                       Topology.tarjanStateOnStack = (Sets.delete x (Topology.tarjanStateOnStack st)),
                       Topology.tarjanStateSccs = (Topology.tarjanStateSccs newSt)}
               acc_ = (Lists.cons x acc)
-          in (Flows.bind (Monads.putState newSt2) (\_ -> Logic.ifElse (Equality.equalInt32 x v) (Flows.pure (Lists.reverse acc_)) (go acc_))))))
+          in (Flows.bind (Monads.putState newSt2) (\_ -> Logic.ifElse (Equality.equal x v) (Flows.pure (Lists.reverse acc_)) (go acc_))))))
   in (go [])
 
 -- | Visit a vertex and recursively explore its successors
@@ -118,7 +118,7 @@ strongConnect graph v = (Flows.bind Monads.getState (\st ->
   in (Flows.bind (Monads.putState newSt) (\_ -> Flows.bind (Flows.mapList processNeighbor neighbors) (\_ -> Flows.bind Monads.getState (\stFinal ->  
     let low_v = (Maps.findWithDefault Constants.maxInt32 v (Topology.tarjanStateLowLinks stFinal)) 
         idx_v = (Maps.findWithDefault Constants.maxInt32 v (Topology.tarjanStateIndices stFinal))
-    in (Logic.ifElse (Equality.equalInt32 low_v idx_v) (Flows.bind (popStackUntil v) (\comp -> Flows.bind (Monads.modify (\s -> Topology.TarjanState {
+    in (Logic.ifElse (Equality.equal low_v idx_v) (Flows.bind (popStackUntil v) (\comp -> Flows.bind (Monads.modify (\s -> Topology.TarjanState {
       Topology.tarjanStateCounter = (Topology.tarjanStateCounter s),
       Topology.tarjanStateIndices = (Topology.tarjanStateIndices s),
       Topology.tarjanStateLowLinks = (Topology.tarjanStateLowLinks s),

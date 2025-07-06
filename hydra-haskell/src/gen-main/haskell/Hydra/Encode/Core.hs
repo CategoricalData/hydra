@@ -698,14 +698,14 @@ wrappedType nt = (Core.TermRecord (Core.Record {
 isEncodedType :: (Core.Term -> Bool)
 isEncodedType t = ((\x -> case x of
   Core.TermApplication v1 -> (isEncodedType (Core.applicationFunction v1))
-  Core.TermUnion v1 -> (Equality.equalString "hydra.core.Type" (Core.unName (Core.injectionTypeName v1)))
+  Core.TermUnion v1 -> (Equality.equal "hydra.core.Type" (Core.unName (Core.injectionTypeName v1)))
   _ -> False) (Strip.stripTerm t))
 
 isType :: (Core.Type -> Bool)
 isType t = ((\x -> case x of
   Core.TypeApplication v1 -> (isType (Core.applicationTypeFunction v1))
   Core.TypeForall v1 -> (isType (Core.forallTypeBody v1))
-  Core.TypeUnion v1 -> (Equality.equalString "hydra.core.Type" (Core.unName (Core.rowTypeTypeName v1)))
+  Core.TypeUnion v1 -> (Equality.equal "hydra.core.Type" (Core.unName (Core.rowTypeTypeName v1)))
   Core.TypeVariable v1 -> (Equality.equal v1 (Core.Name "hydra.core.Type"))
   _ -> False) (Strip.stripType t))
 

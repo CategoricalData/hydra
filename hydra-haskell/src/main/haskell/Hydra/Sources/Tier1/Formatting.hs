@@ -226,7 +226,7 @@ wrapLineDef = formattingDefinition "wrapLine" $
   lambdas ["maxlen", "input"] $ lets [
     "helper">: lambdas ["prev", "rem"] $ lets [
       "trunc">: Lists.take (var "maxlen") (var "rem"),
-      "spanResult">: Lists.span (lambda "c" $ Logic.and (Logic.not $ Equality.equalInt32 (var "c") (char ' ')) (Logic.not $ Equality.equalInt32 (var "c") (char '\t'))) (Lists.reverse $ var "trunc"),
+      "spanResult">: Lists.span (lambda "c" $ Logic.and (Logic.not $ Equality.equal (var "c") (char ' ')) (Logic.not $ Equality.equal (var "c") (char '\t'))) (Lists.reverse $ var "trunc"),
       "prefix">: Lists.reverse $ second $ var "spanResult",
       "suffix">: Lists.reverse $ first $ var "spanResult"]
       $ Logic.ifElse (Equality.lteInt32 (Lists.length $ var "rem") (var "maxlen"))

@@ -782,7 +782,7 @@ inferTypeOfSum cx sum =
     let iterm = (Typing.inferenceResultTerm result) 
         ityp = (Typing.inferenceResultType result)
         isubst = (Typing.inferenceResultSubst result)
-        varOrTerm = (\t -> \j -> Logic.ifElse (Equality.equalInt32 i j) (Flows.pure (Mantle.EitherLeft t)) (Flows.map (\x -> Mantle.EitherRight x) freshName))
+        varOrTerm = (\t -> \j -> Logic.ifElse (Equality.equal i j) (Flows.pure (Mantle.EitherLeft t)) (Flows.map (\x -> Mantle.EitherRight x) freshName))
     in (Flows.bind (Flows.sequence (Lists.map (varOrTerm ityp) (Math.rangeInt32 0 (Math.sub s 1)))) (\vars ->  
       let toType = (\e -> (\x -> case x of
               Mantle.EitherLeft v1 -> v1

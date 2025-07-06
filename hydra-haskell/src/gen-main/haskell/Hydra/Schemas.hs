@@ -68,8 +68,8 @@ elementAsTypedTerm el = (Optionals.maybe (Flows.fail "missing element type") (\t
 
 findFieldType :: (Core.Name -> [Core.FieldType] -> Compute.Flow t0 Core.Type)
 findFieldType fname fields =  
-  let matchingFields = (Lists.filter (\ft -> Equality.equalString (Core.unName (Core.fieldTypeName ft)) (Core.unName fname)) fields)
-  in (Logic.ifElse (Lists.null matchingFields) (Flows.fail (Strings.cat2 "No such field: " (Core.unName fname))) (Logic.ifElse (Equality.equalInt32 (Lists.length matchingFields) 1) (Flows.pure (Core.fieldTypeType (Lists.head matchingFields))) (Flows.fail (Strings.cat2 "Multiple fields named " (Core.unName fname)))))
+  let matchingFields = (Lists.filter (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName fname)) fields)
+  in (Logic.ifElse (Lists.null matchingFields) (Flows.fail (Strings.cat2 "No such field: " (Core.unName fname))) (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Flows.pure (Core.fieldTypeType (Lists.head matchingFields))) (Flows.fail (Strings.cat2 "Multiple fields named " (Core.unName fname)))))
 
 -- | Get field types from a record or union type
 fieldTypes :: (Core.Type -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type))

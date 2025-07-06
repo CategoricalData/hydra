@@ -279,7 +279,7 @@ nominalDef :: TElement ((a -> Name) -> (a -> b) -> (c -> Maybe a) -> Name -> c -
 nominalDef = decodeDefinition "nominal" $
   lambda "getName" $ lambda "getB" $ lambda "getA" $ lambda "expected" $
     lets [
-      "namesEqual">: lambda "n1" $ lambda "n2" $ Equality.equalString (Core.unName $ var "n1") (Core.unName $ var "n2")] $
+      "namesEqual">: lambda "n1" $ lambda "n2" $ Equality.equal (Core.unName $ var "n1") (Core.unName $ var "n2")] $
       compose2
         (var "getA")
         (lambda "a" $ (Logic.ifElse (var "namesEqual" @@ (var "getName" @@ var "a") @@ (var "expected")))

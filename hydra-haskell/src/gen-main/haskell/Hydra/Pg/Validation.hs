@@ -21,11 +21,11 @@ validateEdge checkValue showValue labelForVertexId typ el =
       checkLabel =  
               let expected = (Model.edgeTypeLabel typ) 
                   actual = (Model.edgeLabel el)
-              in (verify (Equality.equalString (Model.unEdgeLabel actual) (Model.unEdgeLabel expected)) (failWith (prepend "Wrong label" (edgeLabelMismatch expected actual))))
+              in (verify (Equality.equal (Model.unEdgeLabel actual) (Model.unEdgeLabel expected)) (failWith (prepend "Wrong label" (edgeLabelMismatch expected actual))))
       checkId = (Optionals.map (\arg_ -> failWith (prepend "Invalid id" arg_)) (checkValue (Model.edgeTypeId typ) (Model.edgeId el)))
       checkProperties = (Optionals.map (\arg_ -> failWith (prepend "Invalid property" arg_)) (validateProperties checkValue (Model.edgeTypeProperties typ) (Model.edgeProperties el)))
-      checkOut = (Optionals.maybe Nothing (\f -> Optionals.maybe (Just (failWith (prepend "Out-vertex does not exist" (showValue (Model.edgeOut el))))) (\label -> verify (Equality.equalString (Model.unVertexLabel label) (Model.unVertexLabel (Model.edgeTypeOut typ))) (failWith (prepend "Wrong out-vertex label" (vertexLabelMismatch (Model.edgeTypeOut typ) label)))) (f (Model.edgeOut el))) labelForVertexId)
-      checkIn = (Optionals.maybe Nothing (\f -> Optionals.maybe (Just (failWith (prepend "In-vertex does not exist" (showValue (Model.edgeIn el))))) (\label -> verify (Equality.equalString (Model.unVertexLabel label) (Model.unVertexLabel (Model.edgeTypeIn typ))) (failWith (prepend "Wrong in-vertex label" (vertexLabelMismatch (Model.edgeTypeIn typ) label)))) (f (Model.edgeIn el))) labelForVertexId)
+      checkOut = (Optionals.maybe Nothing (\f -> Optionals.maybe (Just (failWith (prepend "Out-vertex does not exist" (showValue (Model.edgeOut el))))) (\label -> verify (Equality.equal (Model.unVertexLabel label) (Model.unVertexLabel (Model.edgeTypeOut typ))) (failWith (prepend "Wrong out-vertex label" (vertexLabelMismatch (Model.edgeTypeOut typ) label)))) (f (Model.edgeOut el))) labelForVertexId)
+      checkIn = (Optionals.maybe Nothing (\f -> Optionals.maybe (Just (failWith (prepend "In-vertex does not exist" (showValue (Model.edgeIn el))))) (\label -> verify (Equality.equal (Model.unVertexLabel label) (Model.unVertexLabel (Model.edgeTypeIn typ))) (failWith (prepend "Wrong in-vertex label" (vertexLabelMismatch (Model.edgeTypeIn typ) label)))) (f (Model.edgeIn el))) labelForVertexId)
   in (checkAll [
     checkLabel,
     checkId,
@@ -76,7 +76,7 @@ validateVertex checkValue showValue typ el =
       checkLabel =  
               let expected = (Model.vertexTypeLabel typ) 
                   actual = (Model.vertexLabel el)
-              in (verify (Equality.equalString (Model.unVertexLabel actual) (Model.unVertexLabel expected)) (failWith (prepend "Wrong label" (vertexLabelMismatch expected actual))))
+              in (verify (Equality.equal (Model.unVertexLabel actual) (Model.unVertexLabel expected)) (failWith (prepend "Wrong label" (vertexLabelMismatch expected actual))))
       checkId = (Optionals.map (\arg_ -> failWith (prepend "Invalid id" arg_)) (checkValue (Model.vertexTypeId typ) (Model.vertexId el)))
       checkProperties = (Optionals.map (\arg_ -> failWith (prepend "Invalid property" arg_)) (validateProperties checkValue (Model.vertexTypeProperties typ) (Model.vertexProperties el)))
   in (checkAll [

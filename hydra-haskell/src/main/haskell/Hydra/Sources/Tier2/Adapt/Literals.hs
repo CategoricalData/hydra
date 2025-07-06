@@ -205,9 +205,9 @@ literalAdapterDef = adaptLiteralsDefinition "literalAdapter" $
                 Flows.pure $ Core.literalString $ Logic.ifElse (var "b") "true" "false",
               "decode">: lambda "lit" $
                 withVar "s" (ref ExtractCore.stringLiteralDef @@ var "lit") $
-                Logic.ifElse (Equality.equalString (var "s") (string "true"))
+                Logic.ifElse (Equality.equal (var "s") (string "true"))
                   (Flows.pure $ Core.literalBoolean true)
-                  (Logic.ifElse (Equality.equalString (var "s") (string "false"))
+                  (Logic.ifElse (Equality.equal (var "s") (string "false"))
                     (Flows.pure $ Core.literalBoolean false)
                     (ref Monads.unexpectedDef @@ "boolean literal" @@ var "s"))] $
               list [Compute.adapter false (var "t") Core.literalTypeString (Compute.coder (var "encode") (var "decode"))])

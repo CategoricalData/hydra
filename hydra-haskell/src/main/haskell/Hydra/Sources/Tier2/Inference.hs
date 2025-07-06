@@ -1150,7 +1150,7 @@ inferTypeOfSumDef = inferenceDefinition "inferTypeOfSum" $
     "ityp">: Typing.inferenceResultType $ var "result",
     "isubst">: Typing.inferenceResultSubst $ var "result",
     "varOrTerm">: lambda "t" $ lambda "j" $
-      Logic.ifElse (Equality.equalInt32 (var "i") (var "j"))
+      Logic.ifElse (Equality.equal (var "i") (var "j"))
         (Flows.pure $ Mantle.eitherLeft $ var "t")
         (Flows.map (unaryFunction Mantle.eitherRight) $ ref freshNameDef)] $
     withVar "vars" (Flows.sequence $ Lists.map (var "varOrTerm" @@ var "ityp") $

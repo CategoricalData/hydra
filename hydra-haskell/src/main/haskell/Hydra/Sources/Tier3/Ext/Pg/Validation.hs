@@ -70,7 +70,7 @@ validateEdgeDef = validationDefinition "validateEdge" $
         "expected">: project _EdgeType _EdgeType_label @@ var "typ",
         "actual">: project _Edge _Edge_label @@ var "el"]
         $ ref verifyDef
-          @@ (Equality.equalString
+          @@ (Equality.equal
             (unwrap _EdgeLabel @@ var "actual")
             (unwrap _EdgeLabel @@ var "expected"))
           @@ (var "failWith" @@ (ref prependDef @@ "Wrong label" @@ (ref edgeLabelMismatchDef @@ var "expected" @@ var "actual"))),
@@ -88,7 +88,7 @@ validateEdgeDef = validationDefinition "validateEdge" $
         (lambda "f" $ Optionals.maybe
           (just (var "failWith" @@ (ref prependDef @@ "Out-vertex does not exist" @@ (var "showValue" @@ (project _Edge _Edge_out @@ var "el")))))
           (lambda "label" $ ref verifyDef
-            @@ (Equality.equalString
+            @@ (Equality.equal
               (unwrap _VertexLabel @@ var "label")
               (unwrap _VertexLabel @@ (project _EdgeType _EdgeType_out @@ var "typ")))
             @@ (var "failWith" @@ (ref prependDef @@ "Wrong out-vertex label" @@ (ref vertexLabelMismatchDef @@ (project _EdgeType _EdgeType_out @@ var "typ") @@ var "label"))))
@@ -99,7 +99,7 @@ validateEdgeDef = validationDefinition "validateEdge" $
         (lambda "f" $ Optionals.maybe
           (just (var "failWith" @@ (ref prependDef @@ "In-vertex does not exist" @@ (var "showValue" @@ (project _Edge _Edge_in @@ var "el")))))
           (lambda "label" $ ref verifyDef
-            @@ (Equality.equalString
+            @@ (Equality.equal
               (unwrap _VertexLabel @@ var "label")
               (unwrap _VertexLabel @@ (project _EdgeType _EdgeType_in @@ var "typ")))
             @@ (var "failWith" @@ (ref prependDef @@ "Wrong in-vertex label" @@ (ref vertexLabelMismatchDef @@ (project _EdgeType _EdgeType_in @@ var "typ") @@ var "label"))))
@@ -222,7 +222,7 @@ validateVertexDef = validationDefinition "validateVertex" $
       "expected">: project _VertexType _VertexType_label @@ var "typ",
       "actual">: project _Vertex _Vertex_label @@ var "el"]
       $ ref verifyDef
-        @@ (Equality.equalString
+        @@ (Equality.equal
           (unwrap _VertexLabel @@ var "actual")
           (unwrap _VertexLabel @@ var "expected"))
         @@ (var "failWith" @@ (ref prependDef @@ "Wrong label" @@ (ref vertexLabelMismatchDef @@ var "expected" @@ var "actual"))),

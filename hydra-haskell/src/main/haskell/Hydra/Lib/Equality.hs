@@ -17,57 +17,6 @@ compareInt32 x y
 equal :: Eq a => a -> a -> Bool
 equal = (==)
 
-equalBinary :: String -> String -> Bool
-equalBinary = (==)
-
-equalBoolean :: Bool -> Bool -> Bool
-equalBoolean = (==)
-
-equalBigfloat :: Double -> Double -> Bool
-equalBigfloat = (==)
-
-equalFloat32 :: Float -> Float -> Bool
-equalFloat32 = (==)
-
-equalFloat64 :: Double -> Double -> Bool
-equalFloat64 = (==)
-
-equalBigint :: Integer -> Integer -> Bool
-equalBigint = (==)
-
-equalInt8 :: Int8 -> Int8 -> Bool
-equalInt8 = (==)
-
-equalInt16 :: Int16 -> Int16 -> Bool
-equalInt16 = (==)
-
-equalInt32 :: Int -> Int -> Bool
-equalInt32 = (==)
-
-equalInt64 :: Int64 -> Int64 -> Bool
-equalInt64 = (==)
-
-equalString :: String -> String -> Bool
-equalString = (==)
-
-equalTerm :: Term -> Term -> Bool
-equalTerm = (==)
-
-equalType :: Type -> Type -> Bool
-equalType = (==)
-
-equalUint8 :: Int16 -> Int16 -> Bool
-equalUint8 = (==)
-
-equalUint16 :: Int -> Int -> Bool
-equalUint16 = (==)
-
-equalUint32 :: Int64 -> Int64 -> Bool
-equalUint32 = (==)
-
-equalUint64 :: Integer -> Integer -> Bool
-equalUint64 = (==)
-
 gtFloat32 :: Float -> Float -> Bool
 gtFloat32 = (>)
 

@@ -168,7 +168,7 @@ name term = (Optionals.map (\s -> Core.Name s) (Optionals.bind (wrap (Core.Name 
 
 nominal :: ((t1 -> Core.Name) -> (t1 -> t2) -> (t0 -> Maybe t1) -> Core.Name -> t0 -> Maybe t2)
 nominal getName getB getA expected =  
-  let namesEqual = (\n1 -> \n2 -> Equality.equalString (Core.unName n1) (Core.unName n2))
+  let namesEqual = (\n1 -> \n2 -> Equality.equal (Core.unName n1) (Core.unName n2))
   in (Optionals.compose getA (\a -> Logic.ifElse (namesEqual (getName a) expected) (Just (getB a)) Nothing))
 
 optional :: (Core.Term -> Maybe (Maybe Core.Term))
