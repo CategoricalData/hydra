@@ -2,7 +2,9 @@
 
 module Hydra.Sources.Tier3.Ext.Protobuf.SourceContext where
 
-import Hydra.Sources.Tier2.All
+import Hydra.Kernel
+import qualified Hydra.Sources.Tier1.All as Tier1
+import qualified Hydra.Sources.Tier2.All as Tier2
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
@@ -12,7 +14,7 @@ pbSourceContextNs = Namespace "hydra.ext.protobuf.sourceContext"
 pbSourceContext = typeref pbSourceContextNs
 
 protobufSourceContextModule :: Module
-protobufSourceContextModule = Module pbSourceContextNs elements [hydraCoreModule] [hydraCoreModule] $
+protobufSourceContextModule = Module pbSourceContextNs elements [Tier1.hydraCoreModule] [Tier1.hydraCoreModule] $
     Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/source_context.proto"
   where
     def = datatype pbSourceContextNs

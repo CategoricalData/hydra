@@ -25,8 +25,11 @@ import           Hydra.Dsl.Lib.Strings     as Strings
 import qualified Hydra.Dsl.Module          as Module
 import qualified Hydra.Dsl.Terms           as Terms
 import qualified Hydra.Dsl.Types           as Types
-import           Hydra.Sources.Tier2.All
+import           Hydra.Kernel
 
+import Hydra.Kernel
+import qualified Hydra.Sources.Tier1.All as Tier1
+import qualified Hydra.Sources.Tier2.All as Tier2
 import qualified Hydra.Json as Json
 import Hydra.Sources.Tier1.Json
 import Hydra.Sources.Libraries
@@ -34,7 +37,8 @@ import Hydra.Sources.Libraries
 
 jsonDecodingModule :: Module
 jsonDecodingModule = Module (Namespace "hydra.ext.org.json.decoding") elements
-    [jsonModelModule, hydraCoreModule] (jsonModelModule:[hydraCoreModule, hydraComputeModule]) $
+    [Tier1.jsonModelModule, Tier1.hydraCoreModule]
+    [Tier1.jsonModelModule, Tier1.hydraComputeModule] $
     Just "Decoding functions for JSON data"
   where
    elements = [

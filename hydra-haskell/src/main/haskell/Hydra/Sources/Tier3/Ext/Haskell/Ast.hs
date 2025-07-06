@@ -1,13 +1,15 @@
 module Hydra.Sources.Tier3.Ext.Haskell.Ast where
 
-import Hydra.Sources.Tier2.All
+import Hydra.Kernel
+import qualified Hydra.Sources.Tier1.All as Tier1
+import qualified Hydra.Sources.Tier2.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
 haskellAstModule :: Module
-haskellAstModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
+haskellAstModule = Module ns elements [Tier1.hydraCoreModule] [Tier1.hydraCoreModule] $
     Just "A Haskell syntax model, loosely based on Language.Haskell.Tools.AST"
   where
     ns = Namespace "hydra.ext.haskell.ast"
