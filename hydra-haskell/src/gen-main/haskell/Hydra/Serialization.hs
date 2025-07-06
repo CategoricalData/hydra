@@ -285,7 +285,7 @@ parenthesize exp =
                     let lop = (Ast.opExprOp v2) 
                         lprec = (Ast.unPrecedence (Ast.opPrecedence lop))
                         lassoc = (Ast.opAssociativity lop)
-                        comparison = (Equality.compareInt32 prec lprec)
+                        comparison = (Equality.compare prec lprec)
                     in ((\x -> case x of
                       Graph.ComparisonLessThan -> lhs_
                       Graph.ComparisonGreaterThan -> (parens lhs_)
@@ -296,7 +296,7 @@ parenthesize exp =
                     let rop = (Ast.opExprOp v2) 
                         rprec = (Ast.unPrecedence (Ast.opPrecedence rop))
                         rassoc = (Ast.opAssociativity rop)
-                        comparison = (Equality.compareInt32 prec rprec)
+                        comparison = (Equality.compare prec rprec)
                     in ((\x -> case x of
                       Graph.ComparisonLessThan -> rhs_
                       Graph.ComparisonGreaterThan -> (parens rhs_)
