@@ -449,7 +449,7 @@ parenthesizeDef = serializationDefinition "parenthesize" $
             "lop">: Ast.opExprOp $ var "lopExpr",
             "lprec">: Ast.unPrecedence $ Ast.opPrecedence $ var "lop",
             "lassoc">: Ast.opAssociativity $ var "lop",
-            "comparison">: Equality.compareInt32 (var "prec") (var "lprec")]
+            "comparison">: Equality.compare (var "prec") (var "lprec")]
             $ cases _Comparison (var "comparison") Nothing [
               _Comparison_lessThan>>: constant $ var "lhs'",
               _Comparison_greaterThan>>: constant (ref parensDef @@ var "lhs'"),
@@ -462,7 +462,7 @@ parenthesizeDef = serializationDefinition "parenthesize" $
             "rop">: Ast.opExprOp $ var "ropExpr",
             "rprec">: Ast.unPrecedence $ Ast.opPrecedence $ var "rop",
             "rassoc">: Ast.opAssociativity $ var "rop",
-            "comparison">: Equality.compareInt32 (var "prec") (var "rprec")]
+            "comparison">: Equality.compare (var "prec") (var "rprec")]
             $ cases _Comparison (var "comparison") Nothing [
               _Comparison_lessThan>>: constant $ var "rhs'",
               _Comparison_greaterThan>>: constant (ref parensDef @@ var "rhs'"),

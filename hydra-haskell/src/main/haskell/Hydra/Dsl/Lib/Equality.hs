@@ -10,8 +10,8 @@ import Hydra.Dsl.Phantoms
 import Data.Int
 
 
-compareInt32 :: TTerm Int -> TTerm Int -> TTerm Comparison
-compareInt32 = primitive2 _equality_compareInt32
+compare :: TTerm Int -> TTerm Int -> TTerm Comparison
+compare = primitive2 _equality_compare
 
 equal :: TTerm a -> TTerm a -> TTerm Bool
 equal = primitive2 _equality_equal
