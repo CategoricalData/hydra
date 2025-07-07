@@ -5,8 +5,8 @@ module Hydra.Annotations where
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode as Decode
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Encode.Core as Core__
 import qualified Hydra.Extract.Core as Core___
 import qualified Hydra.Graph as Graph
@@ -97,7 +97,7 @@ getTypeDescription typ = (getDescription (typeAnnotationInternal typ))
 -- | For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression.
 isNativeType :: (Graph.Element -> Bool)
 isNativeType el =  
-  let isFlaggedAsFirstClassType = (Optionals.fromMaybe False (Optionals.bind (getTermAnnotation Constants.key_firstClassType (Graph.elementTerm el)) Decode.boolean))
+  let isFlaggedAsFirstClassType = (Optionals.fromMaybe False (Optionals.bind (getTermAnnotation Constants.key_firstClassType (Graph.elementTerm el)) Decoding.boolean))
   in (Optionals.maybe False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
     Core.typeSchemeVariables = [],
     Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type"))})) (Logic.not isFlaggedAsFirstClassType)) (Graph.elementType el))

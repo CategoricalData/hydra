@@ -8,7 +8,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode as Decode
+import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Encode.Core as Core__
 import qualified Hydra.Ext.Haskell.Ast as Ast
@@ -604,11 +604,11 @@ typeDecl namespaces name typ =
               "_type_"])
       rawTerm = (Core__.type_ typ)
       rewrite = (\recurse -> \term ->  
-              let variantResult = (Decode.variant (Core.Name "hydra.core.Type") term) 
+              let variantResult = (Decoding.variant (Core.Name "hydra.core.Type") term)
                   forType = (\field ->  
                           let fname = (Core.fieldName field) 
                               fterm = (Core.fieldTerm field)
-                          in (Logic.ifElse (Equality.equal fname (Core.Name "record")) Nothing (Logic.ifElse (Equality.equal fname (Core.Name "variable")) (Optionals.bind (Decode.name fterm) forVariableType) Nothing)))
+                          in (Logic.ifElse (Equality.equal fname (Core.Name "record")) Nothing (Logic.ifElse (Equality.equal fname (Core.Name "variable")) (Optionals.bind (Decoding.name fterm) forVariableType) Nothing)))
                   forVariableType = (\name_ ->  
                           let qname = (Names.qualifyName name_) 
                               mns = (Module.qualifiedNameNamespace qname)

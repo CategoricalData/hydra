@@ -12,7 +12,6 @@ import qualified Hydra.Ext.Python.Serde as PySer
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
 import Hydra.Formatting
-import qualified Hydra.Decode as Decode
 
 import qualified Control.Monad as CM
 import qualified Data.List  as L

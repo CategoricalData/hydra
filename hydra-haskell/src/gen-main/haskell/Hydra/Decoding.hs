@@ -1,6 +1,6 @@
 -- | A module for decoding terms to native objects
 
-module Hydra.Decode where
+module Hydra.Decoding where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Equality as Equality
