@@ -21,8 +21,8 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Monads as Monads
+import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
-import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -32,7 +32,7 @@ import qualified Data.Set as S
 adaptAndEncodeType :: (Coders.Language -> (Core.Type -> Compute.Flow Graph.Graph t0) -> Core.Type -> Compute.Flow Graph.Graph t0)
 adaptAndEncodeType lang enc typ = ((\x -> case x of
   Core.TypeVariable _ -> (enc typ)
-  _ -> (Flows.bind (adaptType lang typ) (\adaptedType -> enc adaptedType))) (Strip.stripType typ))
+  _ -> (Flows.bind (adaptType lang typ) (\adaptedType -> enc adaptedType))) (Rewriting.stripType typ))
 
 -- | Given a target language and a source type, find the target type to which the latter will be adapted
 adaptType :: (Coders.Language -> Core.Type -> Compute.Flow Graph.Graph Core.Type)
@@ -56,7 +56,7 @@ adaptedModuleDefinitions lang mod =
                 Module.termDefinitionTerm = adapted,
                 Module.termDefinitionType = (Compute.adapterTarget adapter)})))) (Maps.lookup typ adapters))))
   in (Flows.bind (Lexical.withSchemaContext (Flows.mapList Schemas.elementAsTypedTerm els)) (\tterms ->  
-    let types = (Sets.toList (Sets.fromList (Lists.map (\arg_ -> Strip.stripType (Core.typedTermType arg_)) tterms)))
+    let types = (Sets.toList (Sets.fromList (Lists.map (\arg_ -> Rewriting.stripType (Core.typedTermType arg_)) tterms)))
     in (Flows.bind (adaptersFor types) (\adapters -> Flows.mapList (classify adapters) (Lists.zip els tterms)))))
 
 constructCoder :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> Core.Type -> Compute.Flow Graph.Graph (Compute.Coder t0 t2 Core.Term t1))

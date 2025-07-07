@@ -14,7 +14,6 @@ import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
-import qualified Hydra.Strip as Strip
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -25,8 +24,8 @@ import qualified Data.Set as S
 
 joinTypes :: (Core.Type -> Core.Type -> String -> Compute.Flow t0 [Typing.TypeConstraint])
 joinTypes left right comment =  
-  let sleft = (Strip.stripType left) 
-      sright = (Strip.stripType right)
+  let sleft = (Rewriting.stripType left) 
+      sright = (Rewriting.stripType right)
       joinOne = (\l -> \r -> Typing.TypeConstraint {
               Typing.typeConstraintLeft = l,
               Typing.typeConstraintRight = r,
@@ -96,8 +95,8 @@ joinTypes left right comment =
 unifyTypeConstraints :: (M.Map Core.Name t1 -> [Typing.TypeConstraint] -> Compute.Flow t0 Typing.TypeSubst)
 unifyTypeConstraints schemaTypes constraints =  
   let withConstraint = (\c -> \rest ->  
-          let sleft = (Strip.stripType (Typing.typeConstraintLeft c)) 
-              sright = (Strip.stripType (Typing.typeConstraintRight c))
+          let sleft = (Rewriting.stripType (Typing.typeConstraintLeft c)) 
+              sright = (Rewriting.stripType (Typing.typeConstraintRight c))
               comment = (Typing.typeConstraintComment c)
               tryBinding = (\v -> \t -> Logic.ifElse (variableOccursInType v t) (Flows.fail (Strings.cat [
                       Strings.cat [

@@ -8,8 +8,8 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
-import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Encode.Core as Core__
 import qualified Hydra.Ext.Haskell.Ast as Ast
 import qualified Hydra.Ext.Haskell.Language as Language
@@ -35,7 +35,6 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as Core___
-import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -175,7 +174,7 @@ encodeFunction namespaces fun = ((\x -> case x of
                                   Ast.PatternName (Utils.rawName v1)])
                       in ((\x -> case x of
                         Core.TypeUnit -> noArgs
-                        _ -> singleArg) (Strip.stripType ft)))) (\args ->  
+                        _ -> singleArg) (Rewriting.stripType ft)))) (\args ->  
                       let lhs = (Utils.applicationPattern hname args)
                       in (Flows.bind (Flows.map (\x -> Ast.CaseRhs x) (encodeTerm namespaces rhsTerm)) (\rhs -> Flows.pure (Ast.Alternative {
                         Ast.alternativePattern = lhs,
@@ -275,7 +274,7 @@ encodeTerm namespaces term =
           dflt = (Flows.map (Utils.hsapp lhs) (encode ft))
       in ((\x -> case x of
         Core.TermUnit -> (Flows.pure lhs)
-        _ -> dflt) (Strip.stripTerm ft))
+        _ -> dflt) (Rewriting.stripTerm ft))
     Core.TermUnit -> (Flows.pure (Ast.ExpressionTuple []))
     Core.TermVariable v1 -> (Flows.pure (Ast.ExpressionVariable (Utils.elementReference namespaces v1)))
     Core.TermWrap v1 ->  
@@ -283,7 +282,7 @@ encodeTerm namespaces term =
           term_ = (Core.wrappedTermObject v1)
           lhs = (Ast.ExpressionVariable (Utils.elementReference namespaces tname))
       in (Flows.bind (encode term_) (\rhs -> Flows.pure (Utils.hsapp lhs rhs)))
-    _ -> (Flows.fail (Strings.cat2 "unexpected term: " (Core___.term term)))) (Strip.stripTerm term))
+    _ -> (Flows.fail (Strings.cat2 "unexpected term: " (Core___.term term)))) (Rewriting.stripTerm term))
 
 encodeType :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Compute.Flow t0 Ast.Type)
 encodeType namespaces typ =  
@@ -346,7 +345,7 @@ encodeType namespaces typ =
     Core.TypeWrap v1 ->  
       let name = (Core.wrappedTypeTypeName v1)
       in (ref name)
-    _ -> (Flows.fail (Strings.cat2 "unexpected type: " (Core___.type_ typ)))) (Strip.stripType typ)))
+    _ -> (Flows.fail (Strings.cat2 "unexpected type: " (Core___.type_ typ)))) (Rewriting.stripType typ)))
 
 encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core.Name (S.Set Mantle.TypeClass) -> Core.Type -> Compute.Flow Graph.Graph Ast.Type)
 encodeTypeWithClassAssertions namespaces explicitClasses typ =  
@@ -391,7 +390,7 @@ findOrdVariables typ =
               in (Logic.and hasNoNamespace startsWithT))
       tryType = (\names -> \t -> (\x -> case x of
               Core.TypeVariable v1 -> (Logic.ifElse (isTypeVariable v1) (Sets.insert v1 names) names)
-              _ -> names) (Strip.stripType t))
+              _ -> names) (Rewriting.stripType t))
   in (Rewriting.foldOverType Coders.TraversalOrderPre fold Sets.empty typ)
 
 getImplicitTypeClasses :: (Core.Type -> M.Map Core.Name (S.Set Mantle.TypeClass))
@@ -483,7 +482,7 @@ toDataDeclaration coders namespaces pair =
                           Ast.typedBindingValueBinding = (rewriteValueBinding vb)}))
                   in (Flows.pure (Ast.DeclarationWithComments {
                     Ast.declarationWithCommentsBody = decl,
-                    Ast.declarationWithCommentsComments = comments})))))))) (Strip.stripTerm term_))
+                    Ast.declarationWithCommentsComments = comments})))))))) (Rewriting.stripTerm term_))
   in (Flows.bind (Annotations.getTermDescription term) (\comments -> toDecl comments hname term coder Nothing))
 
 toTypeDeclarations :: (Module.Namespaces Ast.ModuleName -> Graph.Element -> Core.Term -> Compute.Flow Graph.Graph [Ast.DeclarationWithComments])
@@ -538,7 +537,7 @@ toTypeDeclarations namespaces el term =
                           in (Logic.ifElse (Optionals.isJust (Maps.lookup tname (Graph.graphElements g_))) (deconflict (Strings.cat2 name "_")) name))
               in (Flows.bind (Annotations.getTypeDescription ftype) (\comments ->  
                 let nm = (deconflict (Strings.cat2 (Formatting.capitalize lname_) (Formatting.capitalize (Core.unName fname))))
-                in (Flows.bind (Logic.ifElse (Equality.equal (Strip.stripType ftype) Core.TypeUnit) (Flows.pure []) (Flows.bind (adaptTypeToHaskellAndEncode namespaces ftype) (\htype -> Flows.pure [
+                in (Flows.bind (Logic.ifElse (Equality.equal (Rewriting.stripType ftype) Core.TypeUnit) (Flows.pure []) (Flows.bind (adaptTypeToHaskellAndEncode namespaces ftype) (\htype -> Flows.pure [
                   htype]))) (\typeList -> Flows.pure (Ast.ConstructorWithComments {
                   Ast.constructorWithCommentsBody = (Ast.ConstructorOrdinary (Ast.OrdinaryConstructor {
                     Ast.ordinaryConstructorName = (Utils.simpleName nm),
@@ -583,7 +582,7 @@ toTypeDeclarations namespaces el term =
             deriv]}))))
       _ -> (Flows.bind (adaptTypeToHaskellAndEncode namespaces t) (\htype -> Flows.pure (Ast.DeclarationType (Ast.TypeDeclaration {
         Ast.typeDeclarationName = hd,
-        Ast.typeDeclarationType = htype}))))) (Strip.stripType t_)) (\decl -> Flows.bind (Annotations.getTermDescription term) (\comments -> Flows.bind (Logic.ifElse includeTypeDefinitions (Flows.bind (typeDecl namespaces elementName t) (\decl_ -> Flows.pure [
+        Ast.typeDeclarationType = htype}))))) (Rewriting.stripType t_)) (\decl -> Flows.bind (Annotations.getTermDescription term) (\comments -> Flows.bind (Logic.ifElse includeTypeDefinitions (Flows.bind (typeDecl namespaces elementName t) (\decl_ -> Flows.pure [
       decl_])) (Flows.pure [])) (\tdecls ->  
       let mainDecl = Ast.DeclarationWithComments {
               Ast.declarationWithCommentsBody = decl,
@@ -604,7 +603,7 @@ typeDecl namespaces name typ =
               "_type_"])
       rawTerm = (Core__.type_ typ)
       rewrite = (\recurse -> \term ->  
-              let variantResult = (Decoding.variant (Core.Name "hydra.core.Type") term)
+              let variantResult = (Decoding.variant (Core.Name "hydra.core.Type") term) 
                   forType = (\field ->  
                           let fname = (Core.fieldName field) 
                               fterm = (Core.fieldTerm field)

@@ -2,8 +2,8 @@ module Hydra.Ext.Json.Language where
 
 import Hydra.Core
 import Hydra.Coders
-import Hydra.Strip
 import Hydra.Mantle
+import Hydra.Rewriting
 
 import qualified Data.Set as S
 

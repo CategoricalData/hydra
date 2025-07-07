@@ -48,12 +48,12 @@ import qualified Hydra.Sources.Tier2.Describe.Core as DescribeCore
 import qualified Hydra.Sources.Tier2.Lexical as Lexical
 import qualified Hydra.Sources.Tier2.Monads as Monads
 import qualified Hydra.Sources.Tier2.Schemas as Schemas
-import qualified Hydra.Sources.Tier2.Strip as Strip
+import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 
 
 adaptModulesModule :: Module
 adaptModulesModule = Module (Namespace "hydra.adapt.modules") elements
-    [Annotations.hydraAnnotationsModule, AdaptTerms.adaptTermsModule]
+    [Rewriting.hydraRewritingModule, AdaptTerms.adaptTermsModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule] $
     Just "Entry point for Hydra's adapter (type/term rewriting) framework"
   where
@@ -72,7 +72,7 @@ adaptAndEncodeTypeDef :: TElement (Language -> (Type -> Flow Graph t) -> Type ->
 adaptAndEncodeTypeDef = adaptModulesDefinition "adaptAndEncodeType" $
   doc "Given a target language, an encoding function, and a type, adapt and encode the type" $
   lambdas ["lang", "enc", "typ"] $
-    cases _Type (ref Strip.stripTypeDef @@ var "typ")
+    cases _Type (ref Rewriting.stripTypeDef @@ var "typ")
       (Just $ withVar "adaptedType" (ref adaptTypeDef @@ var "lang" @@ var "typ") $
         var "enc" @@ var "adaptedType") [
       _Type_variable>>: constant (var "enc" @@ var "typ")]
@@ -154,6 +154,6 @@ adaptedModuleDefinitionsDef = adaptModulesDefinition "adaptedModuleDefinitions" 
             Flows.pure $ Module.definitionTerm $ Module.termDefinition (var "name") (var "adapted") (Compute.adapterTarget $ var "adapter"))
           (Maps.lookup (var "typ") (var "adapters")))] $
   withVar "tterms" (ref Lexical.withSchemaContextDef @@ (Flows.mapList (ref Schemas.elementAsTypedTermDef) (var "els"))) $
-  lets ["types">: Sets.toList $ Sets.fromList $ Lists.map (ref Strip.stripTypeDef <.> unaryFunction Core.typedTermType) (var "tterms")] $
+  lets ["types">: Sets.toList $ Sets.fromList $ Lists.map (ref Rewriting.stripTypeDef <.> unaryFunction Core.typedTermType) (var "tterms")] $
   withVar "adapters" (var "adaptersFor" @@ var "types") $
   Flows.mapList (var "classify" @@ var "adapters") $ Lists.zip (var "els") (var "tterms")

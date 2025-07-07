@@ -40,12 +40,10 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Tier2.Strip as Strip
-
 
 showCoreModule :: Module
 showCoreModule = Module (Namespace "hydra.show.core") elements
-    [Strip.hydraStripModule]
+    []
     [Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraTypingModule] $
     Just "String representations of hydra.core types"
   where
@@ -160,10 +158,9 @@ termDef = showCoreDefinition "term" $
         string "}"],
     "gatherTerms">: lambdas ["prev", "app"] $ lets [
       "lhs">: Core.applicationFunction $ var "app",
-      "rhs">: Core.applicationArgument $ var "app",
-      "strippedLhs">: ref Strip.stripTermDef @@ var "lhs"] $
-      cases _Term (var "strippedLhs")
-        (Just $ Lists.cons (var "strippedLhs") (Lists.cons (var "rhs") (var "prev"))) [
+      "rhs">: Core.applicationArgument $ var "app"] $
+      cases _Term (var "lhs")
+        (Just $ Lists.cons (var "lhs") (Lists.cons (var "rhs") (var "prev"))) [
         _Term_application>>: lambda "app2" $ var "gatherTerms" @@ (Lists.cons (var "rhs") (var "prev")) @@ var "app2"],
     "showBinding">: lambda "binding" $ lets [
       "v">: unwrap _Name @@ (Core.letBindingName $ var "binding"),
@@ -177,7 +174,7 @@ termDef = showCoreDefinition "term" $
         string "=",
         ref termDef @@ var "bindingTerm",
         var "typeStr"]] $
-    cases _Term (ref Strip.stripTermDef @@ var "t") Nothing [
+    cases _Term (var "t") Nothing [
       _Term_application>>: lambda "app" $ lets [
         "terms">: var "gatherTerms" @@ (list []) @@ var "app",
         "termStrs">: Lists.map (ref termDef) (var "terms")] $
@@ -358,19 +355,18 @@ typeDef = showCoreDefinition "type_" $
         string "}"],
     "gatherTypes">: lambdas ["prev", "app"] $ lets [
       "lhs">: Core.applicationTypeFunction $ var "app",
-      "rhs">: Core.applicationTypeArgument $ var "app",
-      "strippedLhs">: ref Strip.stripTypeDef @@ var "lhs"] $
-      cases _Type (var "strippedLhs")
-        (Just $ Lists.cons (var "strippedLhs") (Lists.cons (var "rhs") (var "prev"))) [
+      "rhs">: Core.applicationTypeArgument $ var "app"] $
+      cases _Type (var "lhs")
+        (Just $ Lists.cons (var "lhs") (Lists.cons (var "rhs") (var "prev"))) [
         _Type_application>>: lambda "app2" $ var "gatherTypes" @@ (Lists.cons (var "rhs") (var "prev")) @@ var "app2"],
     "gatherFunctionTypes">: lambdas ["prev", "t"] $
-      cases _Type (ref Strip.stripTypeDef @@ var "t")
+      cases _Type (var "t")
         (Just $ Lists.reverse $ Lists.cons (var "t") (var "prev")) [
           _Type_function>>: lambda "ft" $ lets [
             "dom">: Core.functionTypeDomain $ var "ft",
             "cod">: Core.functionTypeCodomain $ var "ft"] $
             var "gatherFunctionTypes" @@ (Lists.cons (var "dom") (var "prev")) @@ var "cod"]] $
-    cases _Type (ref Strip.stripTypeDef @@ var "typ") Nothing [
+    cases _Type (var "typ") Nothing [
       _Type_application>>: lambda "app" $ lets [
         "types">: var "gatherTypes" @@ (list []) @@ var "app",
         "typeStrs">: Lists.map (ref typeDef) (var "types")] $

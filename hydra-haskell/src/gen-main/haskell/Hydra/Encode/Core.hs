@@ -8,7 +8,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Strip as Strip
+import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -699,7 +699,7 @@ isEncodedType :: (Core.Term -> Bool)
 isEncodedType t = ((\x -> case x of
   Core.TermApplication v1 -> (isEncodedType (Core.applicationFunction v1))
   Core.TermUnion v1 -> (Equality.equal "hydra.core.Type" (Core.unName (Core.injectionTypeName v1)))
-  _ -> False) (Strip.stripTerm t))
+  _ -> False) (Rewriting.stripTerm t))
 
 isType :: (Core.Type -> Bool)
 isType t = ((\x -> case x of
@@ -707,7 +707,7 @@ isType t = ((\x -> case x of
   Core.TypeForall v1 -> (isType (Core.forallTypeBody v1))
   Core.TypeUnion v1 -> (Equality.equal "hydra.core.Type" (Core.unName (Core.rowTypeTypeName v1)))
   Core.TypeVariable v1 -> (Equality.equal v1 (Core.Name "hydra.core.Type"))
-  _ -> False) (Strip.stripType t))
+  _ -> False) (Rewriting.stripType t))
 
 isUnitTerm :: (Core.Term -> Bool)
 isUnitTerm x = case x of

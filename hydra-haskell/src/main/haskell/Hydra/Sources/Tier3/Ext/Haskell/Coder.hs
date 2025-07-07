@@ -35,7 +35,7 @@ import qualified Hydra.Sources.Tier2.Decoding           as Decoding
 import qualified Hydra.Sources.Tier2.Encode.Core      as EncodeCore
 import qualified Hydra.Sources.Tier2.Formatting       as Formatting
 import qualified Hydra.Sources.Tier2.Literals         as Literals
-import qualified Hydra.Sources.Tier2.Strip            as Strip
+import qualified Hydra.Sources.Tier2.Annotations            as Annotations
 import qualified Hydra.Sources.Tier2.Adapt.Utils     as AdaptUtils
 import qualified Hydra.Sources.Tier2.Adapt.Modules         as AdaptModules
 import qualified Hydra.Sources.Tier2.Annotations      as Annotations
@@ -269,7 +269,7 @@ encodeFunctionDef = haskellCoderDefinition "encodeFunction" $
                           "ft">: Core.fieldTypeType $ var "fieldType",
                           "noArgs">: Flows.pure $ list [],
                           "singleArg">: Flows.pure $ list [inject H._Pattern H._Pattern_name $ ref HaskellUtils.rawNameDef @@ var "v1"]] $
-                          cases _Type (ref Strip.stripTypeDef @@ var "ft")
+                          cases _Type (ref Rewriting.stripTypeDef @@ var "ft")
                             (Just $ var "singleArg") [
                             _Type_unit>>: constant $ var "noArgs"])) $ lets [
                     "lhs">: ref HaskellUtils.applicationPatternDef @@ var "hname" @@ var "args"] $
@@ -329,7 +329,7 @@ encodeTermDef :: TElement (HaskellNamespaces -> Term -> Flow Graph H.Expression)
 encodeTermDef = haskellCoderDefinition "encodeTerm" $
   lambda "namespaces" $ lambda "term" $ lets [
     "encode">: ref encodeTermDef @@ var "namespaces"] $
-    cases _Term (ref Strip.stripTermDef @@ var "term")
+    cases _Term (ref Rewriting.stripTermDef @@ var "term")
       (Just $ Flows.fail $ Strings.cat2 (string "unexpected term: ") (ref ShowCore.termDef @@ var "term")) [
       _Term_application>>: lambda "app" $ lets [
         "fun">: Core.applicationFunction $ var "app",
@@ -414,7 +414,7 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
         "ft">: Core.fieldTerm $ var "field",
         "lhs">: inject H._Expression H._Expression_variable $ ref HaskellUtils.unionFieldReferenceDef @@ var "namespaces" @@ var "sname" @@ var "fn",
         "dflt">: Flows.map (ref HaskellUtils.hsappDef @@ var "lhs") (var "encode" @@ var "ft")] $
-        cases _Term (ref Strip.stripTermDef @@ var "ft")
+        cases _Term (ref Rewriting.stripTermDef @@ var "ft")
           (Just $ var "dflt") [
           _Term_unit>>: constant $ Flows.pure $ var "lhs"],
       _Term_unit>>: constant $ Flows.pure $ inject H._Expression H._Expression_tuple $ list [],
@@ -435,7 +435,7 @@ encodeTypeDef = haskellCoderDefinition "encodeType" $
       Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.elementReferenceDef @@ var "namespaces" @@ var "name",
     "unitTuple">: inject H._Type H._Type_tuple $ list []] $
     ref Monads.withTraceDef @@ (string "encode type") @@
-      (cases _Type (ref Strip.stripTypeDef @@ var "typ")
+      (cases _Type (ref Rewriting.stripTypeDef @@ var "typ")
         (Just $ Flows.fail $ Strings.cat2 (string "unexpected type: ") (ref ShowCore.typeDef @@ var "typ")) [
         _Type_application>>: lambda "app" $ lets [
           "lhs">: Core.applicationTypeFunction $ var "app",
@@ -571,7 +571,7 @@ findOrdVariablesDef = haskellCoderDefinition "findOrdVariables" $
       "startsWithT">: Equality.equal (Strings.charAt (int32 0) (var "nameStr")) (int32 116)] $ -- 't' character
       Logic.and (var "hasNoNamespace") (var "startsWithT"),
     "tryType">: lambda "names" $ lambda "t" $
-      cases _Type (ref Strip.stripTypeDef @@ var "t")
+      cases _Type (ref Rewriting.stripTypeDef @@ var "t")
         (Just $ var "names") [
         _Type_variable>>: lambda "v" $
           Logic.ifElse (var "isTypeVariable" @@ var "v")
@@ -657,7 +657,7 @@ toDataDeclarationDef = haskellCoderDefinition "toDataDeclaration" $
                     H._SimpleValueBinding_rhs>>: var "newRhs",
                     H._SimpleValueBinding_localBindings>>: var "bindings"])]]],
     "toDecl">: lambda "comments" $ lambda "hname'" $ lambda "term'" $ lambda "coder'" $ lambda "bindings" $
-      cases _Term (ref Strip.stripTermDef @@ var "term'")
+      cases _Term (ref Rewriting.stripTermDef @@ var "term'")
         (Just $
           withVar "hterm" (Compute.coderEncode (var "coder'") @@ (var "term'")) $ lets [
          "vb">: ref HaskellUtils.simpleValueBindingDef @@ var "hname'" @@ var "hterm" @@ var "bindings"] $
@@ -749,7 +749,7 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
           (var "name")] $
       withVar "comments" (ref Annotations.getTypeDescriptionDef @@ var "ftype") $ lets [
       "nm">: var "deconflict" @@ Strings.cat2 (ref Formatting.capitalizeDef @@ var "lname'") (ref Formatting.capitalizeDef @@ (Core.unName $ var "fname"))] $
-      withVar "typeList" (Logic.ifElse (Equality.equal (ref Strip.stripTypeDef @@ var "ftype") TTypes.unit)
+      withVar "typeList" (Logic.ifElse (Equality.equal (ref Rewriting.stripTypeDef @@ var "ftype") TTypes.unit)
         (Flows.pure $ list []) $
         Flows.bind (ref adaptTypeToHaskellAndEncodeDef @@ var "namespaces" @@ var "ftype") $ lambda "htype" $
           Flows.pure $ list [var "htype"]) $
@@ -769,7 +769,7 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
       "vars">: first $ var "unpackResult",
       "t'">: second $ var "unpackResult",
       "hd">: var "declHead" @@ var "hname" @@ (Lists.reverse $ var "vars")] $
-      withVar "decl" (cases _Type (ref Strip.stripTypeDef @@ var "t'")
+      withVar "decl" (cases _Type (ref Rewriting.stripTypeDef @@ var "t'")
         (Just $ withVar "htype" (ref adaptTypeToHaskellAndEncodeDef @@ var "namespaces" @@ var "t") $
           Flows.pure $ inject H._Declaration H._Declaration_type $ record H._TypeDeclaration [
             H._TypeDeclaration_name>>: var "hd",

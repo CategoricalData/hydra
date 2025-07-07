@@ -49,7 +49,6 @@ import qualified Hydra.Sources.Tier2.Names as Names
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 import qualified Hydra.Sources.Tier2.Sorting as Sorting
-import qualified Hydra.Sources.Tier2.Strip as Strip
 import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
@@ -68,6 +67,7 @@ hydraSchemasModule = Module (Namespace "hydra.schemas") elements
      el dependencyNamespacesDef,
      el dereferenceTypeDef,
      el elementAsTypedTermDef,
+     el elementsWithDependenciesDef,
      el findFieldTypeDef,
      el fieldTypesDef,
      el fullyStripTypeDef,
@@ -111,7 +111,7 @@ dependencyNamespacesDef = schemasDefinition "dependencyNamespaces" $
           (lambda "ts" $ ref Rewriting.typeDependencyNamesDef @@ true @@ Core.typeSchemeType (var "ts"))
           (Graph.elementType $ var "el"))
         Sets.empty]
-      $ Logic.ifElse (ref EncodeCore.isEncodedTypeDef @@ (ref Strip.stripTermDef @@ var "term"))
+      $ Logic.ifElse (ref EncodeCore.isEncodedTypeDef @@ (ref Rewriting.stripTermDef @@ var "term"))
           (Flows.bind (ref DecodeCore.typeDef @@ var "term") $
             lambda "typ" $ Flows.pure $ Sets.unions $ list [
               var "dataNames", var "schemaNames",
@@ -138,6 +138,16 @@ elementAsTypedTermDef = schemasDefinition "elementAsTypedTerm" $
     Optionals.maybe (Flows.fail $ string "missing element type")
       (lambda "ts" $ Flows.pure $ Core.typedTerm (Graph.elementTerm $ var "el") (Core.typeSchemeType $ var "ts"))
       (Graph.elementType $ var "el")
+
+elementsWithDependenciesDef :: TElement ([Element] -> Flow Graph [Element])
+elementsWithDependenciesDef = schemasDefinition "elementsWithDependencies" $
+  doc "Get elements with their dependencies" $
+  lambda "original" $ lets [
+    "depNames">: lambda "el" $ Sets.toList $ ref Rewriting.termDependencyNamesDef @@ true @@ false @@ false @@ (Graph.elementTerm $ var "el"),
+    "allDepNames">: Lists.nub $ Lists.concat2
+      (Lists.map (unaryFunction Graph.elementName) (var "original"))
+      (Lists.concat $ Lists.map (var "depNames") (var "original"))]
+    $ Flows.mapList (ref Lexical.requireElementDef) (var "allDepNames")
 
 findFieldTypeDef :: TElement (Name -> [FieldType] -> Flow s Type)
 findFieldTypeDef = schemasDefinition "findFieldType" $
@@ -169,7 +179,7 @@ fieldTypesDef = schemasDefinition "fieldTypes" $
             lambda "el" $
               Flows.bind (ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")) $
                 ref fieldTypesDef)]
-    @@ (ref Strip.stripTypeDef @@ var "t")
+    @@ (ref Rewriting.stripTypeDef @@ var "t")
 
 fullyStripTypeDef :: TElement (Type -> Type)
 fullyStripTypeDef = schemasDefinition "fullyStripType" $
@@ -177,7 +187,7 @@ fullyStripTypeDef = schemasDefinition "fullyStripType" $
   lambda "typ" $
     match _Type (Just $ var "typ") [
       _Type_forall>>: lambda "ft" $ ref fullyStripTypeDef @@ Core.forallTypeBody (var "ft")]
-    @@ (ref Strip.stripTypeDef @@ var "typ")
+    @@ (ref Rewriting.stripTypeDef @@ var "typ")
 
 isEnumRowTypeDef :: TElement (RowType -> Bool)
 isEnumRowTypeDef = schemasDefinition "isEnumRowType" $
@@ -192,7 +202,7 @@ isEnumTypeDef = schemasDefinition "isEnumType" $
   lambda "typ" $
     match _Type (Just false) [
       _Type_union>>: lambda "rt" $ ref isEnumRowTypeDef @@ var "rt"]
-    @@ (ref Strip.stripTypeDef @@ var "typ")
+    @@ (ref Rewriting.stripTypeDef @@ var "typ")
 
 isSerializableDef :: TElement (Element -> Flow Graph Bool)
 isSerializableDef = schemasDefinition "isSerializable" $
@@ -279,7 +289,7 @@ resolveTypeDef = schemasDefinition "resolveType" $
               Optionals.maybe (Flows.pure nothing)
                 (lambda "t" $ Flows.map (unaryFunction just) $ ref DecodeCore.typeDef @@ var "t")
                 (var "mterm"))]
-    @@ (ref Strip.stripTypeDef @@ var "typ")
+    @@ (ref Rewriting.stripTypeDef @@ var "typ")
 
 schemaGraphToTypingEnvironmentDef :: TElement (Graph -> Flow s (M.Map Name TypeScheme))
 schemaGraphToTypingEnvironmentDef = schemasDefinition "schemaGraphToTypingEnvironment" $
@@ -289,7 +299,7 @@ schemaGraphToTypingEnvironmentDef = schemasDefinition "schemaGraphToTypingEnviro
       match _Type (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ")) [
         _Type_forall>>: lambda "ft" $
           var "toTypeScheme" @@ Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars") @@ Core.forallTypeBody (var "ft")]
-      @@ (ref Strip.stripTypeDef @@ var "typ"),
+      @@ (ref Rewriting.stripTypeDef @@ var "typ"),
     "toPair">: lambda "el" $
       Flows.map
         (lambda "mts" $ Optionals.map (lambda "ts" $ pair (Graph.elementName $ var "el") (var "ts")) (var "mts"))
@@ -302,7 +312,7 @@ schemaGraphToTypingEnvironmentDef = schemasDefinition "schemaGraphToTypingEnviro
               (Logic.ifElse
                 (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _Type)))
                 (Flows.map (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded") $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el"))
-                (cases _Term (ref Strip.stripTermDef @@ (Graph.elementTerm $ var "el")) (Just $ Flows.pure nothing) [
+                (cases _Term (ref Rewriting.stripTermDef @@ (Graph.elementTerm $ var "el")) (Just $ Flows.pure nothing) [
                   _Term_record>>: lambda "r" $
                     Logic.ifElse
                       (Equality.equal (Core.recordTypeName $ var "r") (Core.nameLift _TypeScheme))

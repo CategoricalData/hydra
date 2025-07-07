@@ -7,7 +7,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Mantle as Mantle
-import qualified Hydra.Strip as Strip
+import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -56,7 +56,7 @@ protobufLanguage = Coders.Language {
     Coders.languageConstraintsTypes = (\x -> case x of
       Core.TypeMap v1 -> ((\x -> case x of
         Core.TypeOptional _ -> False
-        _ -> True) (Strip.stripType (Core.mapTypeValues v1)))
+        _ -> True) (Rewriting.stripType (Core.mapTypeValues v1)))
       _ -> True)}}
 
 -- | A set of reserved words in Protobuf
