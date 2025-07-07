@@ -3,8 +3,8 @@
 module Hydra.Sources.Tier3.Ext.Protobuf.Proto3 where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
@@ -14,7 +14,7 @@ proto3Ns = Namespace "hydra.ext.protobuf.proto3"
 proto3 = typeref proto3Ns
 
 proto3Module :: Module
-proto3Module = Module proto3Ns elements [Tier1.hydraCoreModule] [Tier1.hydraCoreModule] $
+proto3Module = Module proto3Ns elements [KernelTypes.hydraCoreModule] [KernelTypes.hydraCoreModule] $
     Just ("A model for Protocol Buffers v3 enum and message types, designed as a target for transformations."
       ++ "This model is loosely based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/type.proto,"
       ++ " as well as the proto3 reference documentation")

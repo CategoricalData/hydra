@@ -3,8 +3,8 @@
 module Hydra.Sources.Tier3.Ext.Shacl.Model where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Sources.Tier3.Ext.Rdf.Syntax
@@ -12,7 +12,7 @@ import Hydra.Dsl.Types as Types
 
 
 shaclModelModule :: Module
-shaclModelModule = Module ns elements [rdfSyntaxModule] [Tier1.hydraCoreModule] $
+shaclModelModule = Module ns elements [rdfSyntaxModule] [KernelTypes.hydraCoreModule] $
     Just "A SHACL syntax model. See https://www.w3.org/TR/shacl"
   where
     ns = Namespace "hydra.ext.org.w3.shacl.model"

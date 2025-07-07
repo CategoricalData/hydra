@@ -7,7 +7,7 @@ module Hydra.Staging.TestGraph (
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import Hydra.Dsl.Terms
-import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Kernel.Types.Core
 import Hydra.Dsl.Annotations as Ann
 import Hydra.Dsl.Bootstrap
 import qualified Hydra.Dsl.Types as Types

@@ -3,8 +3,8 @@
 module Hydra.Sources.Tier3.Ext.Pg.Mapping where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Pg.Mapping
@@ -15,13 +15,13 @@ import Hydra.Sources.Tier3.Ext.Pg.Model
 
 pgMappingModule :: Module
 pgMappingModule = Module ns elements
-    [pgModelModule, Tier1.hydraCoreModule, Tier1.hydraComputeModule] [Tier1.hydraCoreModule] $
+    [pgModelModule, KernelTypes.hydraCoreModule, KernelTypes.hydraComputeModule] [KernelTypes.hydraCoreModule] $
     Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"
   where
     ns = Namespace "hydra.pg.mapping"
     mappings = typeref ns
-    compute = typeref $ moduleNamespace Tier1.hydraComputeModule
-    core = typeref $ moduleNamespace Tier1.hydraCoreModule
+    compute = typeref $ moduleNamespace KernelTypes.hydraComputeModule
+    core = typeref $ moduleNamespace KernelTypes.hydraCoreModule
     v3 = typeref $ moduleNamespace pgModelModule
     def = datatype ns
     toField (k, v) = Field k $ Terms.string v

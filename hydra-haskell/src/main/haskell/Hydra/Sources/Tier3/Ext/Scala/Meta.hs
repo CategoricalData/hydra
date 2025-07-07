@@ -1,15 +1,15 @@
 module Hydra.Sources.Tier3.Ext.Scala.Meta where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
 scalaMetaModule :: Module
-scalaMetaModule = Module ns elements [Tier1.hydraCoreModule] [Tier1.hydraCoreModule] $
+scalaMetaModule = Module ns elements [KernelTypes.hydraCoreModule] [KernelTypes.hydraCoreModule] $
     Just "A Scala syntax model based on Scalameta (https://scalameta.org)"
   where
     ns = Namespace "hydra.ext.scala.meta"

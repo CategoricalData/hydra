@@ -2,14 +2,14 @@
 module Hydra.Sources.Tier3.Ext.Gql.OpenGql where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 openGqlModule :: Module
-openGqlModule = Module ns elements [Tier1.hydraCoreModule] [Tier1.hydraCoreModule]
+openGqlModule = Module ns elements [KernelTypes.hydraCoreModule] [KernelTypes.hydraCoreModule]
   $ Just ("A GQL model based on the OpenGQL ANTLR grammar, version 15b256b (2024-09-05), available at:"
     ++ " https://github.com/opengql/grammar/blob/main/GQL.g4")
   where

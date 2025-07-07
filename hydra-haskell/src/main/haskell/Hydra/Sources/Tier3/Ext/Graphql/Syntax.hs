@@ -3,8 +3,8 @@
 module Hydra.Sources.Tier3.Ext.Graphql.Syntax where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Grammars
 import Hydra.Grammars
 import qualified Hydra.Grammar as G

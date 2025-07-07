@@ -1,15 +1,15 @@
 module Hydra.Sources.Tier3.Ext.Csharp.Syntax where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 
 
 csharpSyntaxModule :: Module
-csharpSyntaxModule = Module ns elements [Tier1.hydraCoreModule] [Tier1.hydraCoreModule] $
+csharpSyntaxModule = Module ns elements [KernelTypes.hydraCoreModule] [KernelTypes.hydraCoreModule] $
     Just ("A C# syntax module based on the ANTLR grammar dated 02/07/2024 and available at:\n"
       ++ "  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/grammar")
   where
