@@ -145,7 +145,7 @@ contractTermDef = reductionDefinition "contractTerm" $
                       (var "body")
                       (ref alphaConvertDef @@ var "v" @@ var "rhs" @@ var "body")]
               @@ var "f"]
-          @@ (ref Rewriting.stripTermDef @@ var "lhs")]
+          @@ (ref Rewriting.deannotateTermDef @@ var "lhs")]
       @@ var "rec"]
     $ ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term"
 
@@ -247,7 +247,7 @@ expansionArityDef = reductionDefinition "expansionArity" $
           (Optionals.bind
             (ref Lexical.lookupElementDef @@ var "graph" @@ var "name")
             (lambda "el" $ Graph.elementType $ var "el"))]
-    @@ (ref Rewriting.stripTermDef @@ var "term")
+    @@ (ref Rewriting.deannotateTermDef @@ var "term")
 
 reduceTermDef :: TElement (Bool -> Term -> Flow Graph Term)
 reduceTermDef = reductionDefinition "reduceTerm" $
@@ -289,7 +289,7 @@ reduceTermDef = reductionDefinition "reduceTerm" $
     "applyElimination">: lambdas ["elm", "reducedArg"] $
       match _Elimination Nothing [
         _Elimination_record>>: lambda "proj" $
-          Flows.bind (ref ExtractCore.recordDef @@ (Core.projectionTypeName $ var "proj") @@ (ref Rewriting.stripTermDef @@ var "reducedArg")) $
+          Flows.bind (ref ExtractCore.recordDef @@ (Core.projectionTypeName $ var "proj") @@ (ref Rewriting.deannotateTermDef @@ var "reducedArg")) $
             lambda "fields" $ lets [
               "matchingFields">: Lists.filter
                 (lambda "f" $ Equality.equal (Core.fieldName $ var "f") (Core.projectionField $ var "proj"))
@@ -325,7 +325,7 @@ reduceTermDef = reductionDefinition "reduceTerm" $
         _Elimination_wrap>>: lambda "name" $ ref ExtractCore.wrapDef @@ var "name" @@ var "reducedArg"] @@ var "elm",
 
     "applyIfNullary">: lambdas ["eager", "original", "args"] $ lets [
-      "stripped">: ref Rewriting.stripTermDef @@ var "original"]
+      "stripped">: ref Rewriting.deannotateTermDef @@ var "original"]
       $ cases _Term (var "stripped") (Just $ Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args") [
         _Term_application>>: lambda "app" $ var "applyIfNullary" @@ var "eager" @@
           (Core.applicationFunction $ var "app") @@
@@ -337,7 +337,7 @@ reduceTermDef = reductionDefinition "reduceTerm" $
                 (lets [
                   "arg">: Lists.head $ var "args",
                   "remainingArgs">: Lists.tail $ var "args"]
-                  $ Flows.bind (var "reduceArg" @@ var "eager" @@ (ref Rewriting.stripTermDef @@ var "arg")) $
+                  $ Flows.bind (var "reduceArg" @@ var "eager" @@ (ref Rewriting.deannotateTermDef @@ var "arg")) $
                     lambda "reducedArg" $
                       Flows.bind (Flows.bind (var "applyElimination" @@ var "elm" @@ var "reducedArg") (var "reduce" @@ var "eager")) $
                         lambda "reducedResult" $ var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs"),
@@ -349,7 +349,7 @@ reduceTermDef = reductionDefinition "reduceTerm" $
                   "body">: Core.lambdaBody $ var "l",
                   "arg">: Lists.head $ var "args",
                   "remainingArgs">: Lists.tail $ var "args"]
-                  $ Flows.bind (var "reduce" @@ var "eager" @@ (ref Rewriting.stripTermDef @@ var "arg")) $
+                  $ Flows.bind (var "reduce" @@ var "eager" @@ (ref Rewriting.deannotateTermDef @@ var "arg")) $
                     lambda "reducedArg" $
                       Flows.bind (var "reduce" @@ var "eager" @@ (var "replaceFreeName" @@ var "param" @@ var "reducedArg" @@ var "body")) $
                         lambda "reducedResult" $ var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs"),
@@ -420,4 +420,4 @@ termIsValueDef = reductionDefinition "termIsValue" $
       _Term_union>>: lambda "i" $ var "checkField" @@ Core.injectionField (var "i"),
       _Term_unit>>: constant true,
       _Term_variable>>: constant false]
-    @@ (ref Rewriting.stripTermDef @@ var "term")
+    @@ (ref Rewriting.deannotateTermDef @@ var "term")

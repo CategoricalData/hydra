@@ -100,7 +100,7 @@ checkIntegerAdapter = checkAdapter id integerAdapter context
       languageConstraintsIntegerTypes = S.fromList variants }
 
 checkDataAdapter :: [TypeVariant] -> Type -> Type -> Bool -> Term -> Term -> H.Expectation
-checkDataAdapter = checkAdapter stripTerm termAdapter termTestContext
+checkDataAdapter = checkAdapter deannotateTerm termAdapter termTestContext
 
 checkSerdeRoundTrip :: (Type -> Flow Graph (Coder Graph Graph Term BS.ByteString))
   -> TypedTerm -> H.Expectation
@@ -108,8 +108,8 @@ checkSerdeRoundTrip mkSerde (TypedTerm term typ) = do
     case mserde of
       Nothing -> HL.assertFailure (traceSummary trace)
       Just serde -> shouldSucceedWith
-        (stripTerm <$> (coderEncode serde term >>= coderDecode serde))
-        (stripTerm term)
+        (deannotateTerm <$> (coderEncode serde term >>= coderDecode serde))
+        (deannotateTerm term)
   where
     FlowState mserde _ trace = unFlow (mkSerde typ) testGraph emptyTrace
 
@@ -131,7 +131,7 @@ eval = reduceTerm True
 expectInferenceResult :: String -> Term -> TypeScheme -> H.Expectation
 expectInferenceResult desc term expected = do
     expectSuccess desc (ShowCore.typeScheme . snd <$> result) (ShowCore.typeScheme expected)
-    expectSuccess desc (ShowCore.term . stripTypesFromTerm . fst <$> result) (ShowCore.term $ stripTypesFromTerm term)
+    expectSuccess desc (ShowCore.term . removeTypesFromTerm . fst <$> result) (ShowCore.term $ removeTypesFromTerm term)
   where
     result = do
       cx <- graphToInferenceContext testGraph
@@ -173,7 +173,7 @@ shouldSucceedWith f x = case my of
     FlowState my _ trace = unFlow f testGraph emptyTrace
 
 strip :: Term -> Term
-strip = stripTerm
+strip = deannotateTerm
 
 termTestContext :: [TypeVariant] -> AdapterContext
 termTestContext variants = withConstraints $ (languageConstraints baseLanguage) {

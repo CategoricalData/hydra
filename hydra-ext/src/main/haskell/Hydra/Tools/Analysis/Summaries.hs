@@ -42,9 +42,9 @@ elementSummary withTypes el = do
     findTypeInfo = if withTypes
       then case elementType el of
         Nothing -> return Nothing
-        Just ts -> Just <$> if EncodeCore.isType (stripType $ typeSchemeType ts)
+        Just ts -> Just <$> if EncodeCore.isType (deannotateType $ typeSchemeType ts)
           then do
-            typ <- stripType <$> (DecodeCore.type_ $ elementTerm el)
+            typ <- deannotateType <$> (DecodeCore.type_ $ elementTerm el)
             return $ " = " ++ ShowCore.type_ typ
           else pure $ " : " ++ ShowCore.typeScheme ts
       else pure Nothing

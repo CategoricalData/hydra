@@ -282,7 +282,7 @@ unionFieldReferenceDef = haskellUtilsDefinition "unionFieldReference" $
 
 unpackForallTypeDef :: TElement (Graph -> Type -> ([Name], Type))
 unpackForallTypeDef = haskellUtilsDefinition "unpackForallType" $
-  lambdas ["cx", "t"] $ cases _Type (ref Rewriting.stripTypeDef @@ var "t")
+  lambdas ["cx", "t"] $ cases _Type (ref Rewriting.deannotateTypeDef @@ var "t")
     (Just $ pair (list []) (var "t")) [
     _Type_forall>>: lambda "fat" $ lets [
       "v">: Core.forallTypeParameter $ var "fat",

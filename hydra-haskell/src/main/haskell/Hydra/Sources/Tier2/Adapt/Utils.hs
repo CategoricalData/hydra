@@ -171,7 +171,7 @@ typeIsSupportedDef :: TElement (LanguageConstraints -> Type -> Bool)
 typeIsSupportedDef = adaptUtilsDefinition "typeIsSupported" $
   doc "Check if type is supported by language constraints" $
   lambda "constraints" $ lambda "t" $ lets [
-    "base">: ref Rewriting.stripTypeDef @@ var "t",
+    "base">: ref Rewriting.deannotateTypeDef @@ var "t",
     "isSupportedVariant">: lambda "v" $
       Logic.or
         (cases _TypeVariant (var "v") (Just false) [_TypeVariant_variable>>: constant true])

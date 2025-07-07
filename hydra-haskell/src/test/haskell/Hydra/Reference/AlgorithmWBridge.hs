@@ -68,7 +68,7 @@ hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
     sbody <- toStlc body
     return $ Forall (Core.unName <$> vars) sbody
   where
-    toStlc typ = case stripType typ of
+    toStlc typ = case deannotateType typ of
       Core.TypeFunction (Core.FunctionType dom cod) -> TyFn <$> toStlc dom <*> toStlc cod
       Core.TypeList et -> TyList <$> toStlc et
       Core.TypeLiteral lt -> pure $ TyLit lt

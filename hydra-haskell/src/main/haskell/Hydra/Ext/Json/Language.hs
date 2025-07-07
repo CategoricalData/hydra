@@ -30,6 +30,6 @@ jsonLanguage = Language (LanguageName "hydra.ext.json") $ LanguageConstraints {
     TypeVariantOptional,
     TypeVariantRecord],
     -- Note: TypeVariantUnit is excluded because JSON null is used for optionals
-  languageConstraintsTypes = \typ -> case stripType typ of
+  languageConstraintsTypes = \typ -> case deannotateType typ of
     TypeOptional (TypeOptional _) -> False
     _ -> True }

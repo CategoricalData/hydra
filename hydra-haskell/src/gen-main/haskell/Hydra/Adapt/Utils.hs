@@ -104,7 +104,7 @@ nameToFilePath nsConv localConv ext name =
 -- | Check if type is supported by language constraints
 typeIsSupported :: (Coders.LanguageConstraints -> Core.Type -> Bool)
 typeIsSupported constraints t =  
-  let base = (Rewriting.stripType t) 
+  let base = (Rewriting.deannotateType t) 
       isSupportedVariant = (\v -> Logic.or ((\x -> case x of
               Mantle.TypeVariantVariable -> True
               _ -> False) v) (Sets.member v (Coders.languageConstraintsTypeVariants constraints)))

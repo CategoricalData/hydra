@@ -480,7 +480,7 @@ wrappedTypeDef = coreEncodingDefinition "WrappedType" $
 isEncodedTypeDef :: TElement (Term -> Bool)
 isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
   doc "Determines whether a given term is an encoded type" $
-  lambda "t" $ cases _Term (ref Rewriting.stripTermDef @@ var "t") (Just false) [
+  lambda "t" $ cases _Term (ref Rewriting.deannotateTermDef @@ var "t") (Just false) [
     _Term_application>>: lambda "a" $
       ref isEncodedTypeDef @@ (Core.applicationFunction $ var "a"),
     _Term_union>>: lambda "i" $
@@ -488,7 +488,7 @@ isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
 
 isTypeDef :: TElement (Type -> Bool)
 isTypeDef = coreEncodingExtrasDefinition "isType" $
-  lambda "t" $ cases _Type (ref Rewriting.stripTypeDef @@ var "t") (Just false) [
+  lambda "t" $ cases _Type (ref Rewriting.deannotateTypeDef @@ var "t") (Just false) [
     _Type_application>>: lambda "a" $
       ref isTypeDef @@ (Core.applicationTypeFunction $ var "a"),
     _Type_forall>>: lambda "l" $

@@ -116,7 +116,7 @@ parsePattern pat = withTrace "parse path pattern" $ do
       where
         evalStep step term = if L.null step
           then pure [term]
-          else case stripTerm term of
+          else case deannotateTerm term of
               TermList terms -> L.concat <$> CM.mapM (evalStep step) terms
               TermOptional mt -> case mt of
                 Nothing -> pure []
@@ -131,7 +131,7 @@ parsePattern pat = withTrace "parse path pattern" $ do
               _ -> fail $ "Can't traverse through term for step " ++ show step ++ ": " ++ show term
 
     -- TODO: replace this with a more standard function
-    toString term = case stripTerm term of
+    toString term = case deannotateTerm term of
       TermLiteral lit -> pure $ case lit of
         LiteralBinary b -> b
         LiteralBoolean b -> show b
@@ -219,7 +219,7 @@ decodePropertySpec term = withTrace "decode property spec" $ readRecord (\fields
   <*> readField fields _PropertySpec_value decodeValueSpec) term
 
 decodeValueSpec :: Term -> Flow s ValueSpec
-decodeValueSpec term = withTrace "decode value spec" $ case stripTerm term of
+decodeValueSpec term = withTrace "decode value spec" $ case deannotateTerm term of
   -- Allow an abbreviated specification consisting of only the pattern string
   TermLiteral (LiteralString s) -> pure $ ValueSpecPattern s
   _ -> readInjection [

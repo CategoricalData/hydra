@@ -35,12 +35,12 @@ graphqlLanguage = Language (LanguageName "hydra.ext.graphql") $ LanguageConstrai
     TypeVariantRecord,
     TypeVariantUnion, -- Unions are supported only in the form of enums
     TypeVariantVariable],
-  languageConstraintsTypes = \typ -> case stripType typ of
+  languageConstraintsTypes = \typ -> case deannotateType typ of
     -- If it is a union type, make sure it can be treated as an enum.
     TypeUnion rt -> L.foldl (\b f -> b && isEnumField f) True $ rowTypeFields rt
       where
         isEnumField = EncodeCore.isUnitType . fieldTypeType
-    TypeOptional et -> case stripType et of
+    TypeOptional et -> case deannotateType et of
       TypeOptional _ -> False  -- No encoding for optionals within optionals
       _ -> True
     _ -> True}

@@ -169,4 +169,4 @@ unpackForallType cx t = ((\x -> case x of
         vars = (fst recursiveResult)
         finalType = (snd recursiveResult)
     in (Lists.cons v vars, finalType)
-  _ -> ([], t)) (Rewriting.stripType t))
+  _ -> ([], t)) (Rewriting.deannotateType t))
