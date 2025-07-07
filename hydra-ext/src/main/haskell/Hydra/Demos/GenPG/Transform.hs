@@ -41,7 +41,7 @@ evaluateProperties specs record = M.fromList . Y.catMaybes <$> (CM.mapM forPair 
   where
     forPair (k, spec) = do
       value <- (evaluate $ Terms.apply spec record)
-      case stripTerm value of
+      case deannotateTerm value of
         TermOptional mv -> case mv of
           Nothing -> return Nothing
           Just v -> return $ Just (k, v)

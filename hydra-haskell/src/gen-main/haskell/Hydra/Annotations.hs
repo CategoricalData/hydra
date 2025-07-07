@@ -118,7 +118,7 @@ nextCount key = (Flows.bind (getCount key) (\count -> Flows.map (\_ -> count) (p
 normalizeTermAnnotations :: (Core.Term -> Core.Term)
 normalizeTermAnnotations term =  
   let anns = (termAnnotationInternal term) 
-      stripped = (Rewriting.stripTerm term)
+      stripped = (Rewriting.deannotateTerm term)
   in (Logic.ifElse (Maps.null anns) stripped (Core.TermAnnotated (Core.AnnotatedTerm {
     Core.annotatedTermSubject = stripped,
     Core.annotatedTermAnnotation = anns})))
@@ -127,7 +127,7 @@ normalizeTermAnnotations term =
 normalizeTypeAnnotations :: (Core.Type -> Core.Type)
 normalizeTypeAnnotations typ =  
   let anns = (typeAnnotationInternal typ) 
-      stripped = (Rewriting.stripType typ)
+      stripped = (Rewriting.deannotateType typ)
   in (Logic.ifElse (Maps.null anns) stripped (Core.TypeAnnotated (Core.AnnotatedType {
     Core.annotatedTypeSubject = stripped,
     Core.annotatedTypeAnnotation = anns})))
@@ -157,7 +157,7 @@ setDescription d = (setAnnotation Constants.key_description (Optionals.map (\arg
 -- | Set term annotation
 setTermAnnotation :: (Core.Name -> Maybe Core.Term -> Core.Term -> Core.Term)
 setTermAnnotation key val term =  
-  let term_ = (Rewriting.stripTerm term) 
+  let term_ = (Rewriting.deannotateTerm term) 
       anns = (setAnnotation key val (termAnnotationInternal term))
   in (Logic.ifElse (Maps.null anns) term_ (Core.TermAnnotated (Core.AnnotatedTerm {
     Core.annotatedTermSubject = term_,
@@ -174,7 +174,7 @@ setType mt = (setAnnotation Constants.key_type (Optionals.map Core__.type_ mt))
 -- | Set type annotation
 setTypeAnnotation :: (Core.Name -> Maybe Core.Term -> Core.Type -> Core.Type)
 setTypeAnnotation key val typ =  
-  let typ_ = (Rewriting.stripType typ) 
+  let typ_ = (Rewriting.deannotateType typ) 
       anns = (setAnnotation key val (typeAnnotationInternal typ))
   in (Logic.ifElse (Maps.null anns) typ_ (Core.TypeAnnotated (Core.AnnotatedType {
     Core.annotatedTypeSubject = typ_,

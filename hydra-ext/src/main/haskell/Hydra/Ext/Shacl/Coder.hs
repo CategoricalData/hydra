@@ -63,7 +63,7 @@ encodeFieldType rname order (FieldType fname ft) = do
     return $ Shacl.Definition iri shape
   where
     iri = propertyIri rname fname
-    forType mn mx t = case stripType t of
+    forType mn mx t = case deannotateType t of
       TypeOptional ot -> forType (Just 0) mx ot
       TypeSet st -> forType mn Nothing st
       _ -> do
@@ -124,7 +124,7 @@ encodeTerm subject term = case term of
     where
       forKeyVal subj (k, v) = do
         -- Note: only string-valued keys are supported
-        ks <- ExtractCore.string $ stripTerm k
+        ks <- ExtractCore.string $ deannotateTerm k
         node <- nextBlankNode
         descs <- encodeTerm node v
         let pred = keyIri ks
@@ -151,7 +151,7 @@ encodeTerm subject term = case term of
   _ -> unexpected "RDF-compatible term" $ show term
 
 encodeType :: Type -> Flow Graph Shacl.CommonProperties
-encodeType typ = case stripType typ of
+encodeType typ = case deannotateType typ of
     TypeList _ -> any
     TypeLiteral lt -> pure $ encodeLiteralType lt
     TypeMap _ -> any

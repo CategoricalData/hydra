@@ -93,7 +93,7 @@ fieldTypeDef = coreDecodingDefinition "fieldType" $
 fieldTypesDef :: TElement (Term -> Flow Graph [FieldType])
 fieldTypesDef = coreDecodingDefinition "fieldTypes" $
   lambda "term" $ lets [
-    "stripped">: ref Rewriting.stripTermDef @@ var "term"]
+    "stripped">: ref Rewriting.deannotateTermDef @@ var "term"]
     $ cases _Term (var "stripped")
         (Just $ ref Monads.unexpectedDef @@ string "list" @@ (ref ShowCore.termDef @@ var "term")) [
       _Term_list>>: lambda "els" $ Flows.mapList (ref fieldTypeDef) (var "els")]
@@ -171,7 +171,7 @@ rowTypeDef = coreDecodingDefinition "rowType" $
 
 stringDef :: TElement (Term -> Flow Graph String)
 stringDef = coreDecodingDefinition "string" $
-  lambda "term" $ ref ExtractCore.stringDef @@ (ref Rewriting.stripTermDef @@ var "term")
+  lambda "term" $ ref ExtractCore.stringDef @@ (ref Rewriting.deannotateTermDef @@ var "term")
 
 typeDef :: TElement (Term -> Flow Graph Type)
 typeDef = coreDecodingDefinition "type" $

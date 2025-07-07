@@ -79,7 +79,7 @@ contractTerm term =
                         body = (Core.lambdaBody v3)
                     in (Logic.ifElse (Rewriting.isFreeVariableInTerm v body) body (alphaConvert v rhs body))
                   _ -> rec) v2)
-                _ -> rec) (Rewriting.stripTerm lhs))
+                _ -> rec) (Rewriting.deannotateTerm lhs))
             _ -> rec) rec))
   in (Rewriting.rewriteTerm rewrite term)
 
@@ -155,7 +155,7 @@ expansionArity graph term = ((\x -> case x of
     Core.FunctionLambda _ -> 0
     Core.FunctionPrimitive v2 -> (Arity.primitiveArity (Optionals.fromJust (Lexical.lookupPrimitive graph v2)))) v1)
   Core.TermVariable v1 -> (Optionals.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Optionals.bind (Lexical.lookupElement graph v1) (\el -> Graph.elementType el)))
-  _ -> 0) (Rewriting.stripTerm term))
+  _ -> 0) (Rewriting.deannotateTerm term))
 
 -- | A term evaluation function which is alternatively lazy or eager
 reduceTerm :: (Bool -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
@@ -179,7 +179,7 @@ reduceTerm eager term =
                       _ -> (recurse inner)) inner)
               in (Rewriting.rewriteTerm mapping term))
       applyElimination = (\elm -> \reducedArg -> (\x -> case x of
-              Core.EliminationRecord v1 -> (Flows.bind (Core_.record (Core.projectionTypeName v1) (Rewriting.stripTerm reducedArg)) (\fields ->  
+              Core.EliminationRecord v1 -> (Flows.bind (Core_.record (Core.projectionTypeName v1) (Rewriting.deannotateTerm reducedArg)) (\fields ->  
                 let matchingFields = (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField v1)) fields)
                 in (Logic.ifElse (Lists.null matchingFields) (Flows.fail (Strings.cat [
                   "no such field: ",
@@ -199,20 +199,20 @@ reduceTerm eager term =
                   Core.applicationArgument = (Core.fieldTerm field)}))))))
               Core.EliminationWrap v1 -> (Core_.wrap v1 reducedArg)) elm)
       applyIfNullary = (\eager -> \original -> \args ->  
-              let stripped = (Rewriting.stripTerm original)
+              let stripped = (Rewriting.deannotateTerm original)
               in ((\x -> case x of
                 Core.TermApplication v1 -> (applyIfNullary eager (Core.applicationFunction v1) (Lists.cons (Core.applicationArgument v1) args))
                 Core.TermFunction v1 -> ((\x -> case x of
                   Core.FunctionElimination v2 -> (Logic.ifElse (Lists.null args) (Flows.pure original) ( 
                     let arg = (Lists.head args) 
                         remainingArgs = (Lists.tail args)
-                    in (Flows.bind (reduceArg eager (Rewriting.stripTerm arg)) (\reducedArg -> Flows.bind (Flows.bind (applyElimination v2 reducedArg) (reduce eager)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))
+                    in (Flows.bind (reduceArg eager (Rewriting.deannotateTerm arg)) (\reducedArg -> Flows.bind (Flows.bind (applyElimination v2 reducedArg) (reduce eager)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))
                   Core.FunctionLambda v2 -> (Logic.ifElse (Lists.null args) (Flows.pure original) ( 
                     let param = (Core.lambdaParameter v2) 
                         body = (Core.lambdaBody v2)
                         arg = (Lists.head args)
                         remainingArgs = (Lists.tail args)
-                    in (Flows.bind (reduce eager (Rewriting.stripTerm arg)) (\reducedArg -> Flows.bind (reduce eager (replaceFreeName param reducedArg body)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))
+                    in (Flows.bind (reduce eager (Rewriting.deannotateTerm arg)) (\reducedArg -> Flows.bind (reduce eager (replaceFreeName param reducedArg body)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))
                   Core.FunctionPrimitive v2 -> (Flows.bind (Lexical.requirePrimitive v2) (\prim ->  
                     let arity = (Arity.primitiveArity prim)
                     in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Flows.pure (applyToArguments original args)) ( 
@@ -252,4 +252,4 @@ termIsValue g term =
     Core.TermUnion v1 -> (checkField (Core.injectionField v1))
     Core.TermUnit -> True
     Core.TermVariable _ -> False
-    _ -> False) (Rewriting.stripTerm term))
+    _ -> False) (Rewriting.deannotateTerm term))

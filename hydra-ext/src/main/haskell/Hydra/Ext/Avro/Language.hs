@@ -27,6 +27,6 @@ avroLanguage = Language (LanguageName "hydra.ext.avro") $ LanguageConstraints {
     TypeVariantWrap,
     TypeVariantOptional,
     TypeVariantRecord],
-  languageConstraintsTypes = \typ -> case stripType typ of
+  languageConstraintsTypes = \typ -> case deannotateType typ of
     TypeOptional (TypeOptional _) -> False
     _ -> True }

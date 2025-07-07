@@ -29,6 +29,6 @@ yamlLanguage = Language (LanguageName "hydra.ext.yaml") $ LanguageConstraints {
     TypeVariantRecord,
     TypeVariantUnit],
     -- Note: TypeVariantUnit is excluded because YAML null is used for optionals
-  languageConstraintsTypes = \typ -> case stripType typ of
+  languageConstraintsTypes = \typ -> case deannotateType typ of
     TypeOptional (TypeOptional _) -> False
     _ -> True }

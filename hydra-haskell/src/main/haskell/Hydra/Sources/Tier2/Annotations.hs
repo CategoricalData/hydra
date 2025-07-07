@@ -268,7 +268,7 @@ normalizeTermAnnotationsDef = annotationsDefinition "normalizeTermAnnotations" $
   doc "Normalize term annotations" $
   lambda "term" $ lets [
     "anns">: ref termAnnotationInternalDef @@ var "term",
-    "stripped">: ref Rewriting.stripTermDef @@ var "term"] $
+    "stripped">: ref Rewriting.deannotateTermDef @@ var "term"] $
     Logic.ifElse (Maps.null $ var "anns")
       (var "stripped")
       (Core.termAnnotated $ Core.annotatedTerm (var "stripped") (var "anns"))
@@ -279,7 +279,7 @@ normalizeTypeAnnotationsDef = annotationsDefinition "normalizeTypeAnnotations" $
   doc "Normalize type annotations" $
   lambda "typ" $ lets [
     "anns">: ref typeAnnotationInternalDef @@ var "typ",
-    "stripped">: ref Rewriting.stripTypeDef @@ var "typ"] $
+    "stripped">: ref Rewriting.deannotateTypeDef @@ var "typ"] $
     Logic.ifElse (Maps.null $ var "anns")
       (var "stripped")
       (Core.typeAnnotated $ Core.annotatedType (var "stripped") (var "anns"))
@@ -320,7 +320,7 @@ setTermAnnotationDef :: TElement (Name -> Maybe Term -> Term -> Term)
 setTermAnnotationDef = annotationsDefinition "setTermAnnotation" $
   doc "Set term annotation" $
   lambda "key" $ lambda "val" $ lambda "term" $ lets [
-    "term'">: ref Rewriting.stripTermDef @@ var "term",
+    "term'">: ref Rewriting.deannotateTermDef @@ var "term",
     "anns">: ref setAnnotationDef @@ var "key" @@ var "val" @@ (ref termAnnotationInternalDef @@ var "term")] $
     Logic.ifElse (Maps.null $ var "anns")
       (var "term'")
@@ -342,7 +342,7 @@ setTypeAnnotationDef :: TElement (Name -> Maybe Term -> Type -> Type)
 setTypeAnnotationDef = annotationsDefinition "setTypeAnnotation" $
   doc "Set type annotation" $
   lambda "key" $ lambda "val" $ lambda "typ" $ lets [
-    "typ'">: ref Rewriting.stripTypeDef @@ var "typ",
+    "typ'">: ref Rewriting.deannotateTypeDef @@ var "typ",
     "anns">: ref setAnnotationDef @@ var "key" @@ var "val" @@ (ref typeAnnotationInternalDef @@ var "typ")] $
     Logic.ifElse (Maps.null (var "anns"))
       (var "typ'")

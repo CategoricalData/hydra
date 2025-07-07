@@ -51,9 +51,9 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       Just TypeVariantOptional,
       Just TypeVariantWrap],
 
-    languageConstraintsTypes = \typ -> case stripType typ of
+    languageConstraintsTypes = \typ -> case deannotateType typ of
       -- Only lists of literal values are supported, as nothing else is mentioned in Graph.Features
-      TypeList t -> case stripType t of
+      TypeList t -> case deannotateType t of
         TypeLiteral lt -> case lt of
           LiteralTypeBoolean -> dataTypeFeaturesSupportsBooleanArrayValues vpFeatures
           LiteralTypeFloat ft -> case ft of
@@ -71,7 +71,7 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       TypeLiteral _ -> True
       TypeMap (MapType kt _) -> extraFeaturesSupportsMapKey extras kt
       TypeWrap _ -> True
-      TypeOptional ot -> case stripType ot of
+      TypeOptional ot -> case deannotateType ot of
         TypeLiteral _ -> True
         _ -> False
       _ -> True}

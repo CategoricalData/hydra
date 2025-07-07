@@ -1324,7 +1324,7 @@ gatherForallDef :: TElement ([Name] -> Type -> TypeScheme)
 gatherForallDef = inferenceDefinition "gatherForall" $
   doc "Helper to gather forall variables" $
   lambdas ["vars", "typ"] $
-    cases _Type (ref Rewriting.stripTypeDef @@ var "typ") Nothing [
+    cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ") Nothing [
       _Type_forall>>: lambda "ft" $ ref gatherForallDef @@
         (Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars")) @@
         (Core.forallTypeBody $ var "ft"),
@@ -1369,7 +1369,7 @@ requireSchemaTypeDef = inferenceDefinition "requireSchemaType" $
   lambdas ["cx", "tname"] $
     Optionals.maybe
       (Flows.fail $ Strings.cat2 (string "No such schema type: ") (Core.unName $ var "tname"))
-      (lambda "ts" $ ref instantiateTypeSchemeDef @@ (ref Rewriting.stripTypeSchemeRecursiveDef @@ var "ts"))
+      (lambda "ts" $ ref instantiateTypeSchemeDef @@ (ref Rewriting.deannotateTypeSchemeRecursiveDef @@ var "ts"))
       (Maps.lookup (var "tname") (Typing.inferenceContextSchemaTypes $ var "cx"))
 
 extendContextDef :: TElement ([(Name, TypeScheme)] -> InferenceContext -> InferenceContext)

@@ -45,7 +45,7 @@ prepareIntegerType it = case it of
   _ -> same it
 
 prepareType :: Graph -> Type -> (Type, Term -> Term, S.Set String)
-prepareType cx typ = case stripType typ of
+prepareType cx typ = case deannotateType typ of
   TypeLiteral at -> (Types.literal rtyp, \(TermLiteral av) -> TermLiteral $ rep av, msgs)
     where
       (rtyp, rep, msgs) = prepareLiteralType at

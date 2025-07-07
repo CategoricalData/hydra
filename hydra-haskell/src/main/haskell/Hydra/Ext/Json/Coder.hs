@@ -57,7 +57,7 @@ recordCoder rt = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) (rowTypeFields rt)
     return $ Coder (encode coders) (decode coders)
   where
-    encode coders term = case stripTerm term of
+    encode coders term = case deannotateTerm term of
       TermRecord (Record _ fields) -> Json.ValueObject . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
           encodeField (ft, coder) (Field fname fv) = case (fieldTypeType ft, fv) of
@@ -76,7 +76,7 @@ recordCoder rt = do
         error = fail $ "no such field: " ++ fname
 
 termCoder :: Type -> Flow Graph (Coder Graph Graph Term Json.Value)
-termCoder typ = case stripType typ of
+termCoder typ = case deannotateType typ of
   TypeLiteral at -> do
     ac <- literalJsonCoder at
     return Coder {
@@ -93,7 +93,7 @@ termCoder typ = case stripType typ of
   TypeOptional ot -> do
     oc <- termCoder ot
     return Coder {
-      coderEncode = \t -> case stripTerm t of
+      coderEncode = \t -> case deannotateTerm t of
         TermOptional el -> Y.maybe (pure Json.ValueNull) (coderEncode oc) el
         _ -> unexpected "optional term" $ show t,
       coderDecode = \n -> case n of
@@ -112,11 +112,11 @@ termCoder typ = case stripType typ of
           _ -> unexpected "mapping" $ show n}
     where
       toString cx v = if isStringKey cx
-        then case stripTerm v of
+        then case deannotateTerm v of
           TermLiteral (LiteralString s) -> s
         else show v
       fromString cx s = Terms.string $ if isStringKey cx then s else read s
-      isStringKey cx = stripType kt == Types.string
+      isStringKey cx = deannotateType kt == Types.string
   TypeRecord rt -> recordCoder rt
   TypeUnit -> pure $ unitCoder
   TypeVariable name -> return $ Coder encode decode
@@ -129,7 +129,7 @@ termCoder typ = case stripType typ of
 unitCoder :: Coder Graph Graph Term Json.Value
 unitCoder = Coder encode decode
   where
-    encode term = case stripTerm term of
+    encode term = case deannotateTerm term of
       TermUnit -> pure Json.ValueNull
       _ -> unexpected "unit" $ show term
     decode n = case n of

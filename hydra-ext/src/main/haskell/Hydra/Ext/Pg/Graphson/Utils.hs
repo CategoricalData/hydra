@@ -117,7 +117,7 @@ stringGraphsonContext = GraphsonContext $ Coder encodeString decodeString
 termGraphsonContext :: GraphsonContext s Term
 termGraphsonContext = GraphsonContext $ Coder encodeTerm decodeTerm
   where
-    encodeTerm term = case stripTerm term of
+    encodeTerm term = case deannotateTerm term of
         TermLiteral lv -> case lv of
           LiteralBinary s -> pure $ G.ValueBinary s
           LiteralBoolean b -> pure $ G.ValueBoolean b

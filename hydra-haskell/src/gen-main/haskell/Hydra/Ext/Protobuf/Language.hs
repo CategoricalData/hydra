@@ -56,7 +56,7 @@ protobufLanguage = Coders.Language {
     Coders.languageConstraintsTypes = (\x -> case x of
       Core.TypeMap v1 -> ((\x -> case x of
         Core.TypeOptional _ -> False
-        _ -> True) (Rewriting.stripType (Core.mapTypeValues v1)))
+        _ -> True) (Rewriting.deannotateType (Core.mapTypeValues v1)))
       _ -> True)}}
 
 -- | A set of reserved words in Protobuf

@@ -38,8 +38,8 @@ data PythonModuleMetadata = PythonModuleMetadata {
 argsAndBindings :: Term -> Type -> ([Name], [LetBinding], Term, [Type], Type)
 argsAndBindings = gather [] [] []
   where
-    gather prevArgs prevBindings prevDoms term typ = case stripTerm term of
-      TermFunction (FunctionLambda (Lambda var _ body)) -> case stripType typ of
+    gather prevArgs prevBindings prevDoms term typ = case deannotateTerm term of
+      TermFunction (FunctionLambda (Lambda var _ body)) -> case deannotateType typ of
         TypeFunction (FunctionType dom cod) -> gather (var:prevArgs) prevBindings (dom:prevDoms) body cod
       TermLet (Let bindings body) -> gather prevArgs (bindings ++ prevBindings) prevDoms body typ
       t -> (L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ)
@@ -55,7 +55,7 @@ encodeApplication env app = do
     return $ L.foldl (\t a -> functionCall (pyExpressionToPyPrimary t) [a]) lhs rargs
   where
     (fun, args) = gatherArgs (TermApplication app) []
-    gatherArgs term args = case stripTerm term of
+    gatherArgs term args = case deannotateTerm term of
       TermApplication (Application lhs rhs) -> gatherArgs lhs (rhs:args)
       _ -> (term, args)
     applyArgs hargs = case fun of
@@ -88,7 +88,7 @@ encodeApplicationType env at = do
     return $ primaryAndParams (pyExpressionToPyPrimary pyBody) pyArgs
   where
     (body, args) = gatherParams (TypeApplication at) []
-    gatherParams t ps = case stripType t of
+    gatherParams t ps = case deannotateType t of
       TypeApplication (ApplicationType lhs rhs) -> gatherParams lhs (rhs:ps)
       _ -> (t, ps)
 
@@ -97,7 +97,7 @@ encodeDefinition env def = case def of
   DefinitionTerm (TermDefinition name term typ) -> withTrace ("data element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTermDescription term
     g <- getState
-    stmts <- encodeTermAssignment env name (stripTerm $ expandLambdas g term) typ comment
+    stmts <- encodeTermAssignment env name (deannotateTerm $ expandLambdas g term) typ comment
     return [stmts]
   DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTypeDescription typ
@@ -149,7 +149,7 @@ encodeFunctionDefinition env name args body doms cod comment prefixes = do
     tryType typ = if isTemporaryTypeVariable typ
       then pure Nothing
       else Just <$> encodeType env typ
-    isTemporaryTypeVariable typ = case stripType typ of
+    isTemporaryTypeVariable typ = case deannotateType typ of
       TypeVariable (Name v) -> L.head v == 't' && Y.isJust (TR.readMaybe (L.tail v) :: Maybe Int)
       _ -> False
 
@@ -163,7 +163,7 @@ encodeFunctionType env ft = do
   where
     encode = encodeType env
     (doms, cod) = gatherParams [] ft
-    gatherParams rdoms (FunctionType dom cod) = case stripType cod of
+    gatherParams rdoms (FunctionType dom cod) = case deannotateType cod of
       TypeFunction ft2 -> gatherParams (dom:rdoms) ft2
       _ -> (L.reverse (dom:rdoms), cod)
 
@@ -187,7 +187,7 @@ encodeForallType env lt = do
     return $ primaryAndParams (pyExpressionToPyPrimary pyBody) (pyNameToPyExpression . Py.Name . unName <$> params)
   where
     (body, params) = gatherParams (TypeForall lt) []
-    gatherParams t ps = case stripType t of
+    gatherParams t ps = case deannotateType t of
       TypeForall (ForallType name body) -> gatherParams body (name:ps)
       _ -> (t, L.reverse ps)
 
@@ -299,7 +299,7 @@ encodeNameConstants env name typ = toStmt <$> (namePair:(fieldPairs typ))
 
     namePair = (encodeConstantForTypeName env name, name)
     fieldPair field = (encodeConstantForFieldName env name $ fieldTypeName field, fieldTypeName field)
-    fieldPairs typ = case stripType typ of
+    fieldPairs typ = case deannotateType typ of
       TypeForall (ForallType _ body) -> fieldPairs body
       TypeRecord rt -> fieldPair <$> rowTypeFields rt
       TypeUnion rt -> fieldPair <$> rowTypeFields rt
@@ -317,7 +317,7 @@ encodeRecordType env name (RowType _ tfields) comment = do
     decs = Py.Decorators [pyNameToPyNamedExpression $ Py.Name "dataclass"]
 
 encodeTerm :: PythonEnvironment -> Term -> Flow Graph Py.Expression
-encodeTerm env term = case stripTerm term of
+encodeTerm env term = case deannotateTerm term of
     TermApplication a -> encodeApplication env a
     TermFunction f -> encodeFunction env f
     TermLet _ -> pure $ stringToPyExpression Py.QuoteStyleDouble "let terms are not supported here"
@@ -402,13 +402,13 @@ encodeTopLevelTerm env term = if L.length args == 1
     else dflt
   where
     (args, body) = gatherArgs [] term
-    gatherArgs rest term = case stripTerm term of
+    gatherArgs rest term = case deannotateTerm term of
       TermApplication (Application l r) -> gatherArgs (r:rest) l
       t -> (rest, t)
     dflt = do
       expr <- encodeTerm env term
       return [returnSingle expr]
-    withArg body arg = case stripTerm body of
+    withArg body arg = case deannotateTerm body of
       TermFunction (FunctionElimination (EliminationUnion (CaseStatement tname dflt cases))) -> do
           rt <- requireUnionType tname
           let isEnum = isEnumRowType rt
@@ -428,7 +428,7 @@ encodeTopLevelTerm env term = if L.length args == 1
               let patterns = pyClosedPatternToPyPatterns Py.ClosedPatternWildcard
               let body = indentedBlock Nothing [[stmt]]
               return [Py.CaseBlock patterns Nothing body]
-          toCaseBlock isEnum (Field fname fterm) = case stripTerm fterm of
+          toCaseBlock isEnum (Field fname fterm) = case deannotateTerm fterm of
             TermFunction (FunctionLambda (Lambda v _ body)) -> do
                 pyReturn <- encodeTerm env body
                 let body = indentedBlock Nothing [[returnSingle pyReturn]]
@@ -449,7 +449,7 @@ encodeTopLevelTerm env term = if L.length args == 1
       _ -> dflt
 
 encodeType :: PythonEnvironment -> Type -> Flow Graph Py.Expression
-encodeType env typ = case stripType typ of
+encodeType env typ = case deannotateType typ of
     TypeApplication at -> encodeApplicationType env at
     TypeFunction ft -> encodeFunctionType env ft
     TypeForall lt -> encodeForallType env lt
@@ -470,7 +470,7 @@ encodeType env typ = case stripType typ of
     _ -> dflt
   where
     encode = encodeType env
-    dflt = pure $ doubleQuotedString $ "type = " ++ show (stripType typ)
+    dflt = pure $ doubleQuotedString $ "type = " ++ show (deannotateType typ)
 
 encodeTypeAssignment :: PythonEnvironment -> Name -> Type -> Maybe String -> Flow Graph [[Py.Statement]]
 encodeTypeAssignment env name typ comment = do
@@ -478,7 +478,7 @@ encodeTypeAssignment env name typ comment = do
     let constStmts = encodeNameConstants env name typ
     return $ (pure <$> defStmts) ++ [constStmts]
   where
-    encode env typ = case stripType typ of
+    encode env typ = case deannotateType typ of
       TypeForall (ForallType var body) -> encode newEnv body
         where
           (tparamList, tparamMap) = pythonEnvironmentBoundTypeVariables env
@@ -599,7 +599,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
         tvars = pythonModuleMetadataTypeVariables meta
         meta3 = digForWrap typ
           where
-            digForWrap typ = case stripType typ of
+            digForWrap typ = case deannotateType typ of
               TypeForall (ForallType _ body) -> digForWrap body
               TypeWrap _ -> if isTermAnnot
                 -- No need to import Node for instantiations of a Node type, e.g.
@@ -609,7 +609,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
               _ -> meta2
         meta2 = meta {pythonModuleMetadataTypeVariables = newTvars tvars typ}
           where
-            newTvars s t = case stripType t of
+            newTvars s t = case deannotateType t of
               TypeForall (ForallType v body) -> newTvars (S.insert v s) body
               _ -> s
         extendFor meta t = case t of
@@ -622,7 +622,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
               TypeRecord _ -> meta {pythonModuleMetadataUsesGeneric = True}
               _ -> meta
             where
-              baseType t = case stripType t of
+              baseType t = case deannotateType t of
                 TypeForall (ForallType _ body2) -> baseType body2
                 t2 -> t2
           TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True}
@@ -637,8 +637,8 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
               else meta {
                 pythonModuleMetadataUsesNode = pythonModuleMetadataUsesNode meta || (not $ L.null fields)}
             where
-              checkForLiteral b (FieldType _ ft) = b || EncodeCore.isUnitType (stripType ft)
-              checkForNewType b (FieldType _ ft) = b || not (EncodeCore.isUnitType (stripType ft))
+              checkForLiteral b (FieldType _ ft) = b || EncodeCore.isUnitType (deannotateType ft)
+              checkForNewType b (FieldType _ ft) = b || not (EncodeCore.isUnitType (deannotateType ft))
           _ -> meta
 
 genericArg :: [Name] -> Y.Maybe Py.Expression

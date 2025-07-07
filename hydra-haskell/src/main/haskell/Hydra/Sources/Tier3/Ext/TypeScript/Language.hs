@@ -73,7 +73,7 @@ typeScriptLanguageDef = typeScriptLanguageDefinition "typeScriptLanguage" $
         _TypeVariant_variable]),
       _LanguageConstraints_types>>: match _Type (Just true) [
         _Type_map>>: lambda "mt" (match _Type (Just true) [
-          _Type_optional>>: constant false] @@ (ref Rewriting.stripTypeDef @@ (Core.mapTypeValues $ var "mt")))]]]
+          _Type_optional>>: constant false] @@ (ref Rewriting.deannotateTypeDef @@ (Core.mapTypeValues $ var "mt")))]]]
 
 typeScriptReservedWordsDef :: TElement (S.Set String)
 typeScriptReservedWordsDef = typeScriptLanguageDefinition "typeScriptReservedWords" $

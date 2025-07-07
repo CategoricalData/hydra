@@ -84,13 +84,13 @@ constructModule mod@(Module ns els _ _ desc) _ pairs = do
             TypeUnion rt -> checkRowType rt
             _ -> False
         checkRowType (RowType _ fields) = L.foldl (||) False (checkField <$> fields)
-        checkField (FieldType _ typ) = checkFieldType $ stripType typ
+        checkField (FieldType _ typ) = checkFieldType $ deannotateType typ
     wrapperImport types = if checkFields (const Nothing) isOptionalScalarField types
         then [P3.FileReference "google/protobuf/wrappers.proto"]
         else []
       where
         isOptionalScalarField typ = case typ of
-          TypeOptional ot -> case stripType ot of
+          TypeOptional ot -> case deannotateType ot of
             TypeLiteral _ -> True
             _ -> False
           _ -> False
@@ -166,7 +166,7 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
       TypeList lt -> do
         P3.FieldTypeRepeated <$> encodeSimpleType True lt
       TypeMap (MapType kt vt) -> P3.FieldTypeMap <$> (P3.MapType <$> encodeSimpleType False kt <*> encodeSimpleType True vt)
-      TypeOptional ot -> case stripType ot of
+      TypeOptional ot -> case deannotateType ot of
         TypeLiteral lt -> P3.FieldTypeSimple <$> encodeScalarTypeWrapped lt
         _ -> encodeType ot -- TODO
       TypeUnion (RowType _ fields) -> do
@@ -293,6 +293,6 @@ readBooleanAnnotation key typ = case M.lookup key (typeAnnotationInternal typ) o
 
 -- Note: this should probably be done in the term adapters
 simplifyType :: Type -> Type
-simplifyType typ = case stripType typ of
+simplifyType typ = case deannotateType typ of
   TypeWrap (WrappedType _ t) -> simplifyType t
   t -> t

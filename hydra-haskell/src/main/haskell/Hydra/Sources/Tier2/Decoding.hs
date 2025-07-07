@@ -403,7 +403,7 @@ matchNominal :: Name -> TTerm (a -> Name) -> TTerm (a -> b) -> TTerm (Name -> Te
 matchNominal fname getName getB = ref nominalDef @@ getName @@ getB @@ matchTermVariant fname
 
 matchTermVariant :: Name -> TTerm (Term -> Maybe a)
-matchTermVariant fname = matchVariant _Term fname <.> ref Rewriting.stripTermDef
+matchTermVariant fname = matchVariant _Term fname <.> ref Rewriting.deannotateTermDef
 
 matchVariant :: Name -> Name -> TTerm (a -> Maybe b)
 matchVariant tname fname = match tname (Just nothing) [

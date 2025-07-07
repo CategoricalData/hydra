@@ -113,10 +113,10 @@ encodeType aliases typ = case typ of
           return $ Right $ PDL.NamedSchemaTypeEnum $ PDL.EnumSchema fs
         else Left . PDL.SchemaUnion . PDL.UnionSchema <$> CM.mapM encodeUnionField (rowTypeFields rt)
       where
-        isEnum = L.foldl (\b t -> b && stripType t == Types.unit) True $ fmap fieldTypeType (rowTypeFields rt)
+        isEnum = L.foldl (\b t -> b && deannotateType t == Types.unit) True $ fmap fieldTypeType (rowTypeFields rt)
     _ -> unexpected "PDL-supported type" $ show typ
   where
-    encode t = case stripType t of
+    encode t = case deannotateType t of
       TypeRecord (RowType _ []) -> encode Types.int32 -- special case for the unit type
       _ -> do
         res <- encodeType aliases t
@@ -147,7 +147,7 @@ encodeType aliases typ = case typ of
       return PDL.EnumField {
         PDL.enumFieldName = PDL.EnumFieldName $ convertCase CaseConventionCamel CaseConventionUpperSnake name,
         PDL.enumFieldAnnotations = anns}
-    encodePossiblyOptionalType typ = case stripType typ of
+    encodePossiblyOptionalType typ = case deannotateType typ of
       TypeOptional ot -> do
         t <- encode ot
         return (t, True)

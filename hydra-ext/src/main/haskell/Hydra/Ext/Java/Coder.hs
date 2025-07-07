@@ -96,7 +96,7 @@ classifyDataTerm typ term = if isLambda term
       else JavaSymbolClassConstant
   where
     hasTypeParameters = not $ S.null $ freeVariablesInType typ
-    isUnsupportedVariant = case stripTerm term of
+    isUnsupportedVariant = case deannotateTerm term of
       TermLet _ -> True
       _ -> False
 
@@ -196,8 +196,8 @@ constructModule mod coders pairs = do
               let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
               return $ interfaceMethodDeclaration mods tparams mname [] result (Just $ stmts ++ [returnSt])
 
-        termToUnaryMethod coders el term = case stripType typ of
-          TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \aliases2 term2 stmts2 -> case stripTerm term2 of
+        termToUnaryMethod coders el term = case deannotateType typ of
+          TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \aliases2 term2 stmts2 -> case deannotateTerm term2 of
             TermFunction (FunctionLambda (Lambda v _ body)) -> do
               jdom <- adaptTypeToJavaAndEncode aliases2 dom
               jcod <- adaptTypeToJavaAndEncode aliases2 cod
@@ -364,7 +364,7 @@ declarationForUnionType isSer aliases tparams elName fields = do
   where
     privateConstructor = makeConstructor aliases elName True [] []
     unionFieldClass (FieldType fname ftype) = do
-      let rtype = Types.record $ if EncodeCore.isUnitType ftype then [] else [FieldType (Name valueFieldName) $ stripType ftype]
+      let rtype = Types.record $ if EncodeCore.isUnitType ftype then [] else [FieldType (Name valueFieldName) $ deannotateType ftype]
       toClassDecl True isSer aliases [] (variantClassName False elName fname) rtype
     augmentVariantClass (Java.ClassDeclarationNormal cd) = Java.ClassDeclarationNormal $ cd {
         Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal],
@@ -448,7 +448,7 @@ elementsClassName :: Namespace -> String
 elementsClassName (Namespace ns) = capitalize $ L.last $ LS.splitOn "." ns
 
 encodeApplication :: Aliases -> Application -> Flow Graph Java.Expression
-encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
+encodeApplication aliases app@(Application lhs rhs) = case deannotateTerm fun of
     TermFunction f -> case f of
       FunctionPrimitive name -> functionCall aliases True name args
       _ -> fallback
@@ -465,7 +465,7 @@ encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
   where
     (fun, args) = uncurry [] lhs rhs
       where
-       uncurry args lhs rhs = case stripTerm lhs of
+       uncurry args lhs rhs = case deannotateTerm lhs of
          TermApplication (Application lhs' rhs') -> uncurry (rhs:args) lhs' rhs'
          _ -> (lhs, (rhs:args))
 
@@ -476,10 +476,10 @@ encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
           else pure ()
 
         t <- requireTermType lhs
-        (dom, cod) <- case stripTypeParameters $ stripType t of
+        (dom, cod) <- case deannotateTypeParameters $ deannotateType t of
             TypeFunction (FunctionType dom cod) -> pure (dom, cod)
             t' -> fail $ "expected a function type on function " ++ show lhs ++ ", but found " ++ show t'
-        case stripTerm lhs of
+        case deannotateTerm lhs of
           TermFunction f -> case f of
             FunctionElimination e -> do
                 jarg <- encodeTerm aliases rhs
@@ -670,7 +670,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
 
         TermFunction f -> withTrace ("encode function (" ++ show (functionVariant f) ++ ")") $ do
           t <- requireTermType term0
-          case stripType t of
+          case deannotateType t of
             TypeFunction (FunctionType dom cod) -> do
               encodeFunction aliases dom cod f
             _ -> encodeNullaryConstant aliases t f
@@ -730,7 +730,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
         _ -> failAsLiteral $ "Unimplemented term variant: " ++ show (termVariant term)
 
 encodeType :: Aliases -> Type -> Flow Graph Java.Type
-encodeType aliases t = case stripType t of
+encodeType aliases t = case deannotateType t of
     TypeApplication (ApplicationType lhs rhs) -> do
       jlhs <- encode lhs
       jrhs <- encode rhs >>= javaTypeToJavaReferenceType
@@ -866,7 +866,7 @@ javaTypeParametersForType typ = toParam <$> vars
   where
     toParam (Name v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) Nothing
     vars = L.nub $ boundVars typ ++ freeVars
-    boundVars t = case stripType t of
+    boundVars t = case deannotateType t of
       TypeForall (ForallType v body) -> v:(boundVars body)
       _ -> []
     freeVars = L.filter isLambdaBoundVariable $ S.toList $ freeVariablesInType typ
@@ -953,7 +953,7 @@ reannotate mtyp anns term = base
 
 toClassDecl :: Bool -> Bool -> Aliases -> [Java.TypeParameter]
   -> Name -> Type -> Flow Graph Java.ClassDeclaration
-toClassDecl isInner isSer aliases tparams elName t = case stripType t of
+toClassDecl isInner isSer aliases tparams elName t = case deannotateType t of
     TypeRecord rt -> declarationForRecordType isInner isSer aliases tparams elName $ rowTypeFields rt
     TypeUnion rt -> declarationForUnionType isSer aliases tparams elName $ rowTypeFields rt
     TypeForall ut -> declarationForForallType isSer aliases tparams elName ut
@@ -962,7 +962,7 @@ toClassDecl isInner isSer aliases tparams elName t = case stripType t of
     -- Other types are not supported as class declarations, so we wrap them as record types.
     _ -> wrap t -- TODO: wrap and unwrap the corresponding terms as record terms.
   where
-    wrap t' = declarationForRecordType isInner isSer aliases tparams elName [Types.field valueFieldName $ stripType t']
+    wrap t' = declarationForRecordType isInner isSer aliases tparams elName [Types.field valueFieldName $ deannotateType t']
 
 toDataDeclaration :: Aliases -> (a, TypedTerm) -> Flow Graph a
 toDataDeclaration aliases (el, TypedTerm term typ) = do

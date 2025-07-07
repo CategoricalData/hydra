@@ -78,11 +78,11 @@ checkStripTerm = do
     H.it "Un-annotated terms are not affected" $
       QC.property $ \term -> case (term :: Term) of
         TermAnnotated _ -> True
-        _ -> stripTerm term == term
+        _ -> deannotateTerm term == term
     H.it "Terms are stripped recursively" $
       QC.property $ \term -> case (term :: Term) of
         TermAnnotated _ -> True
-        _ -> stripTerm (Terms.annot M.empty (Terms.annot M.empty term)) == term
+        _ -> deannotateTerm (Terms.annot M.empty (Terms.annot M.empty term)) == term
 
 checkStripType :: H.SpecWith ()
 checkStripType = do
@@ -90,11 +90,11 @@ checkStripType = do
     H.it "Un-annotated types are not affected" $
       QC.property $ \typ -> case (typ :: Type) of
         TypeAnnotated _ -> True
-        _ -> stripType typ == typ
+        _ -> deannotateType typ == typ
     H.it "Types are stripped recursively" $
       QC.property $ \typ -> case (typ :: Type) of
         TypeAnnotated _ -> True
-        _ -> stripType (Types.annot M.empty (Types.annot M.empty typ)) == typ
+        _ -> deannotateType (Types.annot M.empty (Types.annot M.empty typ)) == typ
 
 testExpandLambdas :: Graph -> H.SpecWith ()
 testExpandLambdas g = do

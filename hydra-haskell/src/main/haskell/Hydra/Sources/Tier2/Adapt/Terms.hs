@@ -183,7 +183,7 @@ functionToUnionDef = adaptTermsDefinition "functionToUnion" $
           Core.fieldType (Core.nameLift _Function_primitive) TTypes.string,
           Core.fieldType (Core.nameLift _Term_variable) TTypes.string],
       "encode">: lambdas ["ad", "term"] $ lets [
-        "strippedTerm">: ref Rewriting.stripTermDef @@ var "term"] $
+        "strippedTerm">: ref Rewriting.deannotateTermDef @@ var "term"] $
         Compute.coderEncode (Compute.adapterCoder $ var "ad") @@ (cases _Term (var "strippedTerm") Nothing [
           _Term_function>>: lambda "f" $ cases _Function (var "f") Nothing [
             _Function_elimination>>: lambda "e" $ cases _Elimination (var "e") Nothing [
@@ -313,7 +313,7 @@ passFunctionDef = adaptTermsDefinition "passFunction" $
       "cod">: Core.functionTypeCodomain $ var "ft"] $
       withVar "domAd" (ref termAdapterDef @@ var "dom") $
       withVar "codAd" (ref termAdapterDef @@ var "cod") $
-      withVar "caseAds" (cases _Type (ref Rewriting.stripTypeDef @@ var "dom") (Just $ Flows.pure $ Maps.empty) [
+      withVar "caseAds" (cases _Type (ref Rewriting.deannotateTypeDef @@ var "dom") (Just $ Flows.pure $ Maps.empty) [
         _Type_union >>: lambda "rt" $
           withVar "pairs" (Flows.mapList
             (lambda "f" $
@@ -325,7 +325,7 @@ passFunctionDef = adaptTermsDefinition "passFunction" $
               $ Flows.pure $ pair (Core.fieldTypeName $ var "f") (var "ad"))
             (Core.rowTypeFields $ var "rt")) $
           Flows.pure $ Maps.fromList $ var "pairs"]) $
-      withVar "optionAd" (cases _Type (ref Rewriting.stripTypeDef @@ var "dom") (Just $ Flows.pure nothing) [
+      withVar "optionAd" (cases _Type (ref Rewriting.deannotateTypeDef @@ var "dom") (Just $ Flows.pure nothing) [
         _Type_optional >>: lambda "ot" $
           Flows.map (unaryFunction just) $ ref termAdapterDef @@ TTypes.function (var "ot") (var "cod")]) $ lets [
       "lossy">: Logic.or
@@ -338,7 +338,7 @@ passFunctionDef = adaptTermsDefinition "passFunction" $
         (Maps.lookup (var "fname") (var "caseAds"))] $
       Flows.pure $ Compute.adapter (var "lossy") (var "t") (var "target") $
         ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
-          cases _Term (ref Rewriting.stripTermDef @@ var "term") (Just $ Flows.pure $ var "term") [
+          cases _Term (ref Rewriting.deannotateTermDef @@ var "term") (Just $ Flows.pure $ var "term") [
             _Term_function >>: lambda "f" $
               Flows.map (unaryFunction Core.termFunction) $
                 cases _Function (var "f") Nothing [
@@ -704,7 +704,7 @@ termAdapterDef = adaptTermsDefinition "termAdapter" $
     "supportedAtTopLevel">: lambdas ["cx", "t"] $ Logic.and
       (var "variantIsSupported" @@ var "cx" @@ var "t")
       (Coders.languageConstraintsTypes (var "constraints" @@ var "cx") @@ var "t"),
-    "pass">: lambda "t" $ cases _TypeVariant (ref Variants.typeVariantDef @@ (ref Rewriting.stripTypeDef @@ var "t")) Nothing [
+    "pass">: lambda "t" $ cases _TypeVariant (ref Variants.typeVariantDef @@ (ref Rewriting.deannotateTypeDef @@ var "t")) Nothing [
       _TypeVariant_application>>: constant $ list [ref passApplicationDef],
       _TypeVariant_forall>>: constant $ list [ref passForallDef],
       _TypeVariant_function>>: constant $ list [ref passFunctionDef],

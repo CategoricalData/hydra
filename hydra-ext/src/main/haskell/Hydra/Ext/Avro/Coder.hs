@@ -166,7 +166,7 @@ avroHydraAdapter schema = case schema of
                       s <- coderEncode (adapterCoder ad) v >>= termToString
                       return $ TermVariable $ constr s
                 -- Support three special cases of foreign key types: plain, optional, and list
-                case stripType (adapterTarget ad) of
+                case deannotateType (adapterTarget ad) of
                   TypeOptional (TypeLiteral lit) -> forTypeAndCoder ad (Types.optional elTyp) coder
                     where
                       coder = Coder {
@@ -352,7 +352,7 @@ showQname :: AvroQualifiedName -> String
 showQname (AvroQualifiedName mns local) = (Y.maybe "" (\ns -> ns ++ ".") mns) ++ local
 
 stringToTerm :: Type -> String -> Flow s Term
-stringToTerm typ s = case stripType typ of
+stringToTerm typ s = case deannotateType typ of
     TypeLiteral lt -> TermLiteral <$> case lt of
       LiteralTypeBoolean -> LiteralBoolean <$> doRead s
       LiteralTypeInteger it -> LiteralInteger <$> case it of
@@ -373,7 +373,7 @@ stringToTerm typ s = case stripType typ of
       Right term -> pure term
 
 termToString :: Term -> Flow s String
-termToString term = case stripTerm term of
+termToString term = case deannotateTerm term of
   TermLiteral l -> case l of
     LiteralBoolean b -> pure $ show b
     LiteralInteger iv -> pure $ case iv of

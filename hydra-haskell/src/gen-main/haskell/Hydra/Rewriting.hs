@@ -39,7 +39,7 @@ expandTypedLambdas term =
                         cod1 = (snd recursive)
                     in (Lists.cons dom0 doms, cod1)
                   _ -> ([], t)) t)
-          in (helper (stripType typ))) 
+          in (helper (deannotateType typ))) 
       padTerm = (\i -> \doms -> \cod -> \term -> Logic.ifElse (Lists.null doms) term ( 
               let dom = (Lists.head doms) 
                   var = (Core.Name (Strings.cat2 "v" (Literals.showInt32 i)))
@@ -208,7 +208,7 @@ isLambda term = ((\x -> case x of
     Core.FunctionLambda _ -> True
     _ -> False) v1)
   Core.TermLet v1 -> (isLambda (Core.letEnvironment v1))
-  _ -> False) (stripTerm term))
+  _ -> False) (deannotateTerm term))
 
 -- | Apply a transformation to the first type beneath a chain of annotations
 mapBeneathTypeAnnotations :: ((Core.Type -> Core.Type) -> Core.Type -> Core.Type)
@@ -557,19 +557,19 @@ rewriteTypeM f =
 simplifyTerm :: (Core.Term -> Core.Term)
 simplifyTerm term =  
   let simplify = (\recurse -> \term ->  
-          let stripped = (stripTerm term)
+          let stripped = (deannotateTerm term)
           in (recurse ((\x -> case x of
             Core.TermApplication v1 ->  
               let lhs = (Core.applicationFunction v1) 
                   rhs = (Core.applicationArgument v1)
-                  strippedLhs = (stripTerm lhs)
+                  strippedLhs = (deannotateTerm lhs)
               in ((\x -> case x of
                 Core.TermFunction v2 -> ((\x -> case x of
                   Core.FunctionLambda v3 ->  
                     let var = (Core.lambdaParameter v3) 
                         body = (Core.lambdaBody v3)
                     in (Logic.ifElse (Sets.member var (freeVariablesInTerm body)) ( 
-                      let strippedRhs = (stripTerm rhs)
+                      let strippedRhs = (deannotateTerm rhs)
                       in ((\x -> case x of
                         Core.TermVariable v4 -> (simplifyTerm (substituteVariable var v4 body))
                         _ -> term) strippedRhs)) (simplifyTerm body))
@@ -579,26 +579,26 @@ simplifyTerm term =
   in (rewriteTerm simplify term)
 
 -- | Strip all annotations from a term
-stripTerm :: (Core.Term -> Core.Term)
-stripTerm t = ((\x -> case x of
-  Core.TermAnnotated v1 -> (stripTerm (Core.annotatedTermSubject v1))
+deannotateTerm :: (Core.Term -> Core.Term)
+deannotateTerm t = ((\x -> case x of
+  Core.TermAnnotated v1 -> (deannotateTerm (Core.annotatedTermSubject v1))
   _ -> t) t)
 
 -- | Strip all annotations from a term
-stripType :: (Core.Type -> Core.Type)
-stripType t = ((\x -> case x of
-  Core.TypeAnnotated v1 -> (stripType (Core.annotatedTypeSubject v1))
+deannotateType :: (Core.Type -> Core.Type)
+deannotateType t = ((\x -> case x of
+  Core.TypeAnnotated v1 -> (deannotateType (Core.annotatedTypeSubject v1))
   _ -> t) t)
 
 -- | Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
-stripTypeParameters :: (Core.Type -> Core.Type)
-stripTypeParameters t = ((\x -> case x of
-  Core.TypeForall v1 -> (stripTypeParameters (Core.forallTypeBody v1))
-  _ -> t) (stripType t))
+deannotateTypeParameters :: (Core.Type -> Core.Type)
+deannotateTypeParameters t = ((\x -> case x of
+  Core.TypeForall v1 -> (deannotateTypeParameters (Core.forallTypeBody v1))
+  _ -> t) (deannotateType t))
 
 -- | Recursively strip all annotations from a type
-stripTypeRecursive :: (Core.Type -> Core.Type)
-stripTypeRecursive typ =  
+deannotateTypeRecursive :: (Core.Type -> Core.Type)
+deannotateTypeRecursive typ =  
   let strip = (\recurse -> \typ ->  
           let rewritten = (recurse typ)
           in ((\x -> case x of
@@ -607,17 +607,17 @@ stripTypeRecursive typ =
   in (rewriteType strip typ)
 
 -- | Recursively strip all annotations from a type scheme
-stripTypeSchemeRecursive :: (Core.TypeScheme -> Core.TypeScheme)
-stripTypeSchemeRecursive ts =  
+deannotateTypeSchemeRecursive :: (Core.TypeScheme -> Core.TypeScheme)
+deannotateTypeSchemeRecursive ts =  
   let vars = (Core.typeSchemeVariables ts) 
       typ = (Core.typeSchemeType ts)
   in Core.TypeScheme {
     Core.typeSchemeVariables = vars,
-    Core.typeSchemeType = (stripTypeRecursive typ)}
+    Core.typeSchemeType = (deannotateTypeRecursive typ)}
 
 -- | Strip type annotations from terms while preserving other annotations
-stripTypesFromTerm :: (Core.Term -> Core.Term)
-stripTypesFromTerm term =  
+removeTypesFromTerm :: (Core.Term -> Core.Term)
+removeTypesFromTerm term =  
   let strip = (\recurse -> \term ->  
           let rewritten = (recurse term) 
               stripBinding = (\b -> Core.LetBinding {

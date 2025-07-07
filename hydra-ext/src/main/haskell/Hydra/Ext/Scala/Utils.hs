@@ -11,7 +11,7 @@ import qualified Data.Maybe as Y
 
 
 nameOfType :: Graph -> Type -> Y.Maybe Name
-nameOfType cx t = case stripType t of
+nameOfType cx t = case deannotateType t of
   TypeVariable name -> Just name
   TypeForall (ForallType _ body) -> nameOfType cx body
   _ -> Nothing

@@ -54,6 +54,11 @@ hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
     Just ("Utilities for type and term rewriting and analysis.")
   where
    elements = [
+     el deannotateTermDef,
+     el deannotateTypeDef,
+     el deannotateTypeParametersDef,
+     el deannotateTypeRecursiveDef,
+     el deannotateTypeSchemeRecursiveDef,
      el expandTypedLambdasDef,
      el flattenLetTermsDef,
      el foldOverTermDef,
@@ -70,6 +75,7 @@ hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
      el normalizeTypeVariablesInTermDef,
      el removeTermAnnotationsDef,
      el removeTypeAnnotationsDef,
+     el removeTypesFromTermDef,
      el replaceFreeNameDef,
      el rewriteDef,
      el rewriteTermDef,
@@ -77,12 +83,6 @@ hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
      el rewriteTypeDef,
      el rewriteTypeMDef,
      el simplifyTermDef,
-     el stripTermDef,
-     el stripTypeDef,
-     el stripTypeParametersDef,
-     el stripTypeRecursiveDef,
-     el stripTypeSchemeRecursiveDef,
-     el stripTypesFromTermDef,
      el substituteTypeVariablesDef,
      el substituteVariableDef,
      el substituteVariablesDef,
@@ -95,6 +95,46 @@ hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
      el topologicalSortElementsDef,
      el typeDependencyNamesDef,
      el typeNamesInTypeDef]
+
+deannotateTermDef :: TElement (Term -> Term)
+deannotateTermDef = rewritingDefinition "deannotateTerm" $
+  doc "Strip all annotations from a term" $
+  lambda "t" $ match _Term (Just $ var "t") [
+    _Term_annotated>>: ref deannotateTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject)]
+    @@ (var "t")
+
+deannotateTypeDef :: TElement (Type -> Type)
+deannotateTypeDef = rewritingDefinition "deannotateType" $
+  doc "Strip all annotations from a term" $
+  lambda "t" $ match _Type (Just $ var "t") [
+    _Type_annotated>>: ref deannotateTypeDef <.> (project _AnnotatedType _AnnotatedType_subject)]
+    @@ (var "t")
+
+deannotateTypeParametersDef :: TElement (Type -> Type)
+deannotateTypeParametersDef = rewritingDefinition "deannotateTypeParameters" $
+  doc "Strip any top-level type lambdas from a type, extracting the (possibly nested) type body" $
+  lambda "t" $ cases _Type (ref deannotateTypeDef @@ var "t")
+    (Just $ var "t") [
+    _Type_forall>>: lambda "lt" (ref deannotateTypeParametersDef @@ (project _ForallType _ForallType_body @@ var "lt"))]
+
+deannotateTypeRecursiveDef :: TElement (Type -> Type)
+deannotateTypeRecursiveDef = rewritingDefinition "deannotateTypeRecursive" $
+  doc "Recursively strip all annotations from a type" $
+  lambda "typ" $ lets [
+    "strip">: lambdas ["recurse", "typ"] $ lets [
+      "rewritten">: var "recurse" @@ var "typ"] $
+      cases _Type (var "rewritten")
+        (Just $ var "rewritten") [
+        _Type_annotated>>: lambda "at" $ Core.annotatedTypeSubject $ var "at"]] $
+    ref rewriteTypeDef @@ var "strip" @@ var "typ"
+
+deannotateTypeSchemeRecursiveDef :: TElement (TypeScheme -> TypeScheme)
+deannotateTypeSchemeRecursiveDef = rewritingDefinition "deannotateTypeSchemeRecursive" $
+  doc "Recursively strip all annotations from a type scheme" $
+  lambda "ts" $ lets [
+    "vars">: Core.typeSchemeVariables $ var "ts",
+    "typ">: Core.typeSchemeType $ var "ts"] $
+    Core.typeScheme (var "vars") (ref deannotateTypeRecursiveDef @@ var "typ")
 
 expandTypedLambdasDef :: TElement (Term -> Term)
 expandTypedLambdasDef = rewritingDefinition "expandTypedLambdas" $
@@ -110,7 +150,7 @@ expandTypedLambdasDef = rewritingDefinition "expandTypedLambdas" $
             "doms">: first $ var "recursive",
             "cod1">: second $ var "recursive"]
             $ pair (Lists.cons (var "dom0") (var "doms")) (var "cod1")] @@ var "t"]
-      $ var "helper" @@ (ref stripTypeDef @@ var "typ"),
+      $ var "helper" @@ (ref deannotateTypeDef @@ var "typ"),
     "padTerm">: lambdas ["i", "doms", "cod", "term"] $
       Logic.ifElse (Lists.null $ var "doms")
         (var "term")
@@ -315,7 +355,7 @@ isLambdaDef = rewritingDefinition "isLambda" $
       _Term_function>>: match _Function (Just false) [
         _Function_lambda>>: constant true],
       _Term_let>>: lambda "lt" (ref isLambdaDef @@ (project _Let _Let_environment @@ var "lt"))])
-    @@ (ref stripTermDef @@ var "term")
+    @@ (ref deannotateTermDef @@ var "term")
 
 mapBeneathTypeAnnotationsDef :: TElement ((Type -> Type) -> Type -> Type)
 mapBeneathTypeAnnotationsDef = rewritingDefinition "mapBeneathTypeAnnotations" $
@@ -397,10 +437,39 @@ removeTypeAnnotationsDef = rewritingDefinition "removeTypeAnnotations" $
   doc "Recursively remove type annotations, including within subtypes" $
   lambda "typ" $ lets [
     "remove">: lambdas ["recurse", "typ"] $ lets [
-      "rewritten">: var "recurse" @@ var "typ"]
-      $ match _Type (Just $ var "rewritten") [
-        _Type_annotated>>: lambda "at" $ Core.annotatedTypeSubject $ var "at"] @@ var "rewritten"]
-    $ ref rewriteTypeDef @@ var "remove" @@ var "typ"
+      "rewritten">: var "recurse" @@ var "typ"] $
+      match _Type (Just $ var "rewritten") [
+        _Type_annotated>>: lambda "at" $ Core.annotatedTypeSubject $ var "at"] @@ var "rewritten"] $
+    ref rewriteTypeDef @@ var "remove" @@ var "typ"
+
+removeTypesFromTermDef :: TElement (Term -> Term)
+removeTypesFromTermDef = rewritingDefinition "removeTypesFromTerm" $
+  doc "Strip type annotations from terms while preserving other annotations" $
+  lambda "term" $ lets [
+    "strip">: lambdas ["recurse", "term"] $ lets [
+      "rewritten">: var "recurse" @@ var "term",
+      "stripBinding">: lambda "b" $ Core.letBinding
+        (Core.letBindingName $ var "b")
+        (Core.letBindingTerm $ var "b")
+        nothing] $
+      cases _Term (var "rewritten") (Just $ var "rewritten") [
+        _Term_function>>: lambda "f" $ cases _Function (var "f") (Just $ Core.termFunction $ var "f") [
+          _Function_elimination>>: lambda "e" $ cases _Elimination (var "e") (Just $ Core.termFunction $ Core.functionElimination $ var "e") [
+            _Elimination_product>>: lambda "tp" $ Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $
+              Core.tupleProjection
+                (Core.tupleProjectionIndex $ var "tp")
+                (Core.tupleProjectionArity $ var "tp")
+                nothing],
+          _Function_lambda>>: lambda "l" $ Core.termFunction $ Core.functionLambda $ Core.lambda
+            (Core.lambdaParameter $ var "l")
+            nothing
+            (Core.lambdaBody $ var "l")],
+        _Term_let>>: lambda "lt" $ Core.termLet $ Core.let_
+          (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
+          (Core.letEnvironment $ var "lt"),
+        _Term_typeAbstraction>>: lambda "ta" $ Core.typeAbstractionBody $ var "ta",
+        _Term_typeApplication>>: lambda "tt" $ Core.typedTermTerm $ var "tt"]]
+    $ ref rewriteTermDef @@ var "strip" @@ var "term"
 
 replaceFreeNameDef :: TElement (Name -> Type -> Type -> Type)
 replaceFreeNameDef = rewritingDefinition "replaceFreeName" $
@@ -717,12 +786,12 @@ simplifyTermDef = rewritingDefinition "simplifyTerm" $
   doc "Simplify terms by applying beta reduction where possible" $
   lambda "term" $ lets [
     "simplify">: lambdas ["recurse", "term"] $ lets [
-      "stripped">: ref stripTermDef @@ var "term"]
+      "stripped">: ref deannotateTermDef @@ var "term"]
       $ var "recurse" @@ (cases _Term (var "stripped") (Just $ var "term") [
         _Term_application>>: lambda "app" $ lets [
           "lhs">: Core.applicationFunction $ var "app",
           "rhs">: Core.applicationArgument $ var "app",
-          "strippedLhs">: ref stripTermDef @@ var "lhs"]
+          "strippedLhs">: ref deannotateTermDef @@ var "lhs"]
           $ cases _Term (var "strippedLhs") (Just $ var "term") [
             _Term_function>>: match _Function (Just $ var "term") [
               _Function_lambda>>: lambda "l" $ lets [
@@ -730,80 +799,11 @@ simplifyTermDef = rewritingDefinition "simplifyTerm" $
                 "body">: Core.lambdaBody $ var "l"]
                 $ Logic.ifElse (Sets.member (var "var") (ref freeVariablesInTermDef @@ var "body"))
                   (lets [
-                    "strippedRhs">: ref stripTermDef @@ var "rhs"]
+                    "strippedRhs">: ref deannotateTermDef @@ var "rhs"]
                     $ match _Term (Just $ var "term") [
                       _Term_variable>>: lambda "v" $ ref simplifyTermDef @@ (ref substituteVariableDef @@ var "var" @@ var "v" @@ var "body")] @@ var "strippedRhs")
                   (ref simplifyTermDef @@ var "body")]]])]
     $ ref rewriteTermDef @@ var "simplify" @@ var "term"
-
-stripTermDef :: TElement (Term -> Term)
-stripTermDef = rewritingDefinition "stripTerm" $
-  doc "Strip all annotations from a term" $
-  lambda "t" $ match _Term (Just $ var "t") [
-    _Term_annotated>>: ref stripTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject)]
-    @@ (var "t")
-
-stripTypeDef :: TElement (Type -> Type)
-stripTypeDef = rewritingDefinition "stripType" $
-  doc "Strip all annotations from a term" $
-  lambda "t" $ match _Type (Just $ var "t") [
-    _Type_annotated>>: ref stripTypeDef <.> (project _AnnotatedType _AnnotatedType_subject)]
-    @@ (var "t")
-
-stripTypeParametersDef :: TElement (Type -> Type)
-stripTypeParametersDef = rewritingDefinition "stripTypeParameters" $
-  doc "Strip any top-level type lambdas from a type, extracting the (possibly nested) type body" $
-  lambda "t" $ cases _Type (ref stripTypeDef @@ var "t")
-    (Just $ var "t") [
-    _Type_forall>>: lambda "lt" (ref stripTypeParametersDef @@ (project _ForallType _ForallType_body @@ var "lt"))]
-
-stripTypeRecursiveDef :: TElement (Type -> Type)
-stripTypeRecursiveDef = rewritingDefinition "stripTypeRecursive" $
-  doc "Recursively strip all annotations from a type" $
-  lambda "typ" $ lets [
-    "strip">: lambdas ["recurse", "typ"] $ lets [
-      "rewritten">: var "recurse" @@ var "typ"] $
-      cases _Type (var "rewritten")
-        (Just $ var "rewritten") [
-        _Type_annotated>>: lambda "at" $ Core.annotatedTypeSubject $ var "at"]] $
-    ref rewriteTypeDef @@ var "strip" @@ var "typ"
-
-stripTypeSchemeRecursiveDef :: TElement (TypeScheme -> TypeScheme)
-stripTypeSchemeRecursiveDef = rewritingDefinition "stripTypeSchemeRecursive" $
-  doc "Recursively strip all annotations from a type scheme" $
-  lambda "ts" $ lets [
-    "vars">: Core.typeSchemeVariables $ var "ts",
-    "typ">: Core.typeSchemeType $ var "ts"] $
-    Core.typeScheme (var "vars") (ref stripTypeRecursiveDef @@ var "typ")
-
-stripTypesFromTermDef :: TElement (Term -> Term)
-stripTypesFromTermDef = rewritingDefinition "stripTypesFromTerm" $
-  doc "Strip type annotations from terms while preserving other annotations" $
-  lambda "term" $ lets [
-    "strip">: lambdas ["recurse", "term"] $ lets [
-      "rewritten">: var "recurse" @@ var "term",
-      "stripBinding">: lambda "b" $ Core.letBinding
-        (Core.letBindingName $ var "b")
-        (Core.letBindingTerm $ var "b")
-        nothing] $
-      cases _Term (var "rewritten") (Just $ var "rewritten") [
-        _Term_function>>: lambda "f" $ cases _Function (var "f") (Just $ Core.termFunction $ var "f") [
-          _Function_elimination>>: lambda "e" $ cases _Elimination (var "e") (Just $ Core.termFunction $ Core.functionElimination $ var "e") [
-            _Elimination_product>>: lambda "tp" $ Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $
-              Core.tupleProjection
-                (Core.tupleProjectionIndex $ var "tp")
-                (Core.tupleProjectionArity $ var "tp")
-                nothing],
-          _Function_lambda>>: lambda "l" $ Core.termFunction $ Core.functionLambda $ Core.lambda
-            (Core.lambdaParameter $ var "l")
-            nothing
-            (Core.lambdaBody $ var "l")],
-        _Term_let>>: lambda "lt" $ Core.termLet $ Core.let_
-          (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
-          (Core.letEnvironment $ var "lt"),
-        _Term_typeAbstraction>>: lambda "ta" $ Core.typeAbstractionBody $ var "ta",
-        _Term_typeApplication>>: lambda "tt" $ Core.typedTermTerm $ var "tt"]]
-    $ ref rewriteTermDef @@ var "strip" @@ var "term"
 
 substituteTypeVariablesDef :: TElement (M.Map Name Name -> Type -> Type)
 substituteTypeVariablesDef = rewritingDefinition "substituteTypeVariables" $

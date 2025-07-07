@@ -111,7 +111,7 @@ dependencyNamespacesDef = schemasDefinition "dependencyNamespaces" $
           (lambda "ts" $ ref Rewriting.typeDependencyNamesDef @@ true @@ Core.typeSchemeType (var "ts"))
           (Graph.elementType $ var "el"))
         Sets.empty]
-      $ Logic.ifElse (ref EncodeCore.isEncodedTypeDef @@ (ref Rewriting.stripTermDef @@ var "term"))
+      $ Logic.ifElse (ref EncodeCore.isEncodedTypeDef @@ (ref Rewriting.deannotateTermDef @@ var "term"))
           (Flows.bind (ref DecodeCore.typeDef @@ var "term") $
             lambda "typ" $ Flows.pure $ Sets.unions $ list [
               var "dataNames", var "schemaNames",
@@ -179,7 +179,7 @@ fieldTypesDef = schemasDefinition "fieldTypes" $
             lambda "el" $
               Flows.bind (ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")) $
                 ref fieldTypesDef)]
-    @@ (ref Rewriting.stripTypeDef @@ var "t")
+    @@ (ref Rewriting.deannotateTypeDef @@ var "t")
 
 fullyStripTypeDef :: TElement (Type -> Type)
 fullyStripTypeDef = schemasDefinition "fullyStripType" $
@@ -187,7 +187,7 @@ fullyStripTypeDef = schemasDefinition "fullyStripType" $
   lambda "typ" $
     match _Type (Just $ var "typ") [
       _Type_forall>>: lambda "ft" $ ref fullyStripTypeDef @@ Core.forallTypeBody (var "ft")]
-    @@ (ref Rewriting.stripTypeDef @@ var "typ")
+    @@ (ref Rewriting.deannotateTypeDef @@ var "typ")
 
 isEnumRowTypeDef :: TElement (RowType -> Bool)
 isEnumRowTypeDef = schemasDefinition "isEnumRowType" $
@@ -202,7 +202,7 @@ isEnumTypeDef = schemasDefinition "isEnumType" $
   lambda "typ" $
     match _Type (Just false) [
       _Type_union>>: lambda "rt" $ ref isEnumRowTypeDef @@ var "rt"]
-    @@ (ref Rewriting.stripTypeDef @@ var "typ")
+    @@ (ref Rewriting.deannotateTypeDef @@ var "typ")
 
 isSerializableDef :: TElement (Element -> Flow Graph Bool)
 isSerializableDef = schemasDefinition "isSerializable" $
@@ -289,7 +289,7 @@ resolveTypeDef = schemasDefinition "resolveType" $
               Optionals.maybe (Flows.pure nothing)
                 (lambda "t" $ Flows.map (unaryFunction just) $ ref DecodeCore.typeDef @@ var "t")
                 (var "mterm"))]
-    @@ (ref Rewriting.stripTypeDef @@ var "typ")
+    @@ (ref Rewriting.deannotateTypeDef @@ var "typ")
 
 schemaGraphToTypingEnvironmentDef :: TElement (Graph -> Flow s (M.Map Name TypeScheme))
 schemaGraphToTypingEnvironmentDef = schemasDefinition "schemaGraphToTypingEnvironment" $
@@ -299,7 +299,7 @@ schemaGraphToTypingEnvironmentDef = schemasDefinition "schemaGraphToTypingEnviro
       match _Type (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ")) [
         _Type_forall>>: lambda "ft" $
           var "toTypeScheme" @@ Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars") @@ Core.forallTypeBody (var "ft")]
-      @@ (ref Rewriting.stripTypeDef @@ var "typ"),
+      @@ (ref Rewriting.deannotateTypeDef @@ var "typ"),
     "toPair">: lambda "el" $
       Flows.map
         (lambda "mts" $ Optionals.map (lambda "ts" $ pair (Graph.elementName $ var "el") (var "ts")) (var "mts"))
@@ -312,7 +312,7 @@ schemaGraphToTypingEnvironmentDef = schemasDefinition "schemaGraphToTypingEnviro
               (Logic.ifElse
                 (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _Type)))
                 (Flows.map (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded") $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el"))
-                (cases _Term (ref Rewriting.stripTermDef @@ (Graph.elementTerm $ var "el")) (Just $ Flows.pure nothing) [
+                (cases _Term (ref Rewriting.deannotateTermDef @@ (Graph.elementTerm $ var "el")) (Just $ Flows.pure nothing) [
                   _Term_record>>: lambda "r" $
                     Logic.ifElse
                       (Equality.equal (Core.recordTypeName $ var "r") (Core.nameLift _TypeScheme))

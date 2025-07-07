@@ -82,13 +82,13 @@ encodeTerm term = fail "not yet implemented"
 
 encodeNamedType :: Name -> Type -> Flow Graph [JS.Restriction]
 encodeNamedType name typ = do
-  res <- encodeType False $ stripType typ
+  res <- encodeType False $ deannotateType typ
   return $ [JS.RestrictionTitle $ unName name] ++ res
 
 encodeType :: Bool -> Type -> Flow Graph [JS.Restriction]
 encodeType optional typ = case typ of
     TypeAnnotated _ -> do
-      res <- encodeType optional $ stripType typ
+      res <- encodeType optional $ deannotateType typ
       mdesc <- getTypeDescription typ
       let desc = Y.maybe [] (\d -> [JS.RestrictionDescription d]) mdesc
       return $ desc ++ res
@@ -120,7 +120,7 @@ encodeType optional typ = case typ of
           JS.RestrictionMultiple $ JS.MultipleRestrictionEnum (J.ValueString . unName <$> names)]
         asRecord rt = encodeRecordOrUnion True $ unionTypeToRecordType rt
         (simpleFields, nonsimpleFields) = L.partition isSimple $ rowTypeFields rt
-        isSimple (FieldType _ ft) = EncodeCore.isUnitType $ stripType ft
+        isSimple (FieldType _ ft) = EncodeCore.isUnitType $ deannotateType ft
     TypeVariable name -> pure [referenceRestriction name]
     _ -> fail $ "unsupported type variant: " ++ show (typeVariant typ)
   where
@@ -144,7 +144,7 @@ encodeType optional typ = case typ of
           else JS.TypeSingle tname
 
 isRequiredField :: FieldType -> Bool
-isRequiredField (FieldType _ typ) = case stripType typ of
+isRequiredField (FieldType _ typ) = case deannotateType typ of
   TypeOptional _ -> False
   _ -> True
 

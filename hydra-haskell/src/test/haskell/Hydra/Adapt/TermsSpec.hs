@@ -287,7 +287,7 @@ roundTripIsNoop typ term = shouldSucceedWith
       languageConstraintsTermVariants = S.fromList termVariants,
       languageConstraintsTypeVariants = S.fromList [
         TypeVariantAnnotated, TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion],
-      languageConstraintsTypes = \typ -> case stripType typ of
+      languageConstraintsTypes = \typ -> case deannotateType typ of
         TypeOptional (TypeOptional _) -> False
         _ -> True }
 
