@@ -51,7 +51,7 @@ constructModule mod coders pairs = do
         rhs <- coderEncode coder term
         Scala.StatDefn <$> case rhs of
           Scala.DataApply _ -> toVal rhs
-          Scala.DataFunctionData fun -> case stripType typ of
+          Scala.DataFunctionData fun -> case deannotateType typ of
             TypeFunction (FunctionType _ cod) -> toDefn fun cod
             _ -> fail $ "expected function type, but found " ++ show typ
           Scala.DataLit _ -> toVal rhs
@@ -103,7 +103,7 @@ encodeFunction meta fun arg = case fun of
               return $ Scala.Case pat Nothing body
             where
               v = Name "y"
-          applyVar fterm avar@(Name v) = case stripTerm fterm of
+          applyVar fterm avar@(Name v) = case deannotateTerm fterm of
             TermFunction (FunctionLambda (Lambda v1 _ body)) -> if isFreeVariableInTerm v1 body
               then body
               else substituteVariable v1 avar body
@@ -117,7 +117,7 @@ encodeFunction meta fun arg = case fun of
           Nothing -> fail "expected a typed term"
           Just t -> domainOf t
       where
-        domainOf t = case stripType t of
+        domainOf t = case deannotateType t of
           TypeFunction (FunctionType dom _) -> pure dom
           _ -> fail $ "expected a function type, but found " ++ show t
 
@@ -138,8 +138,8 @@ encodeLiteral av = case av of
     _ -> unexpected "literal value" $ show av
 
 encodeTerm :: Term -> Flow Graph Scala.Data
-encodeTerm term = case stripTerm term of
-    TermApplication (Application fun arg) -> case stripTerm fun of
+encodeTerm term = case deannotateTerm term of
+    TermApplication (Application fun arg) -> case deannotateTerm fun of
         TermFunction f -> case f of
           FunctionElimination e -> case e of
             EliminationWrap name -> fallback
@@ -173,7 +173,7 @@ encodeTerm term = case stripTerm term of
     TermSet s -> sapply (sname "Set") <$> CM.mapM encodeTerm (S.toList s)
     TermUnion (Injection sn (Field fn ft)) -> do
       let lhs = sname $ qualifyUnionFieldName "UNION." (Just sn) fn
-      args <- case stripTerm ft of
+      args <- case deannotateTerm ft of
         TermRecord (Record _ []) -> pure []
         _ -> do
           arg <- encodeTerm ft
@@ -184,7 +184,7 @@ encodeTerm term = case stripTerm term of
 
 
 encodeType :: Type -> Flow Graph Scala.Type
-encodeType t = case stripType t of
+encodeType t = case deannotateType t of
   TypeFunction (FunctionType dom cod) -> do
     sdom <- encodeType dom
     scod <- encodeType cod

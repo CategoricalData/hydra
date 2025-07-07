@@ -266,7 +266,7 @@ gatherForall vars typ = ((\x -> case x of
   Core.TypeForall v1 -> (gatherForall (Lists.cons (Core.forallTypeParameter v1) vars) (Core.forallTypeBody v1))
   Core.TypeVariable _ -> Core.TypeScheme {
     Core.typeSchemeVariables = (Lists.reverse vars),
-    Core.typeSchemeType = typ}) (Rewriting.stripType typ))
+    Core.typeSchemeType = typ}) (Rewriting.deannotateType typ))
 
 -- | Convert a type scheme to a forall type
 typeSchemeToFType :: (Core.TypeScheme -> Core.Type)
@@ -944,7 +944,7 @@ nominalApplication tname args = (Lists.foldl (\t -> \a -> Core.TypeApplication (
   Core.applicationTypeArgument = a})) (Core.TypeVariable tname) args)
 
 requireSchemaType :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 Core.TypeScheme)
-requireSchemaType cx tname = (Optionals.maybe (Flows.fail (Strings.cat2 "No such schema type: " (Core.unName tname))) (\ts -> instantiateTypeScheme (Rewriting.stripTypeSchemeRecursive ts)) (Maps.lookup tname (Typing_.inferenceContextSchemaTypes cx)))
+requireSchemaType cx tname = (Optionals.maybe (Flows.fail (Strings.cat2 "No such schema type: " (Core.unName tname))) (\ts -> instantiateTypeScheme (Rewriting.deannotateTypeSchemeRecursive ts)) (Maps.lookup tname (Typing_.inferenceContextSchemaTypes cx)))
 
 -- | Add (term variable, type scheme) pairs to the typing environment
 extendContext :: ([(Core.Name, Core.TypeScheme)] -> Typing_.InferenceContext -> Typing_.InferenceContext)

@@ -104,7 +104,7 @@ encodeNamedType prefixes el typ = do
     g <- getState
     let cx = AdapterContext g graphqlLanguage M.empty
     ad <- withState cx $ termAdapter typ
-    case stripType (adapterTarget ad) of
+    case deannotateType (adapterTarget ad) of
       TypeRecord rt -> do
         gfields <- CM.mapM (encodeFieldType prefixes) $ rowTypeFields rt
         desc <- descriptionFromType typ
@@ -134,8 +134,8 @@ encodeTerm :: Term -> Flow Graph ()
 encodeTerm term = fail "not yet implemented"
 
 encodeType :: Prefixes -> Type -> Flow Graph G.Type
-encodeType prefixes typ = case stripType typ of
-    TypeOptional et -> case stripType et of
+encodeType prefixes typ = case deannotateType typ of
+    TypeOptional et -> case deannotateType et of
         TypeList et -> G.TypeList . G.ListType <$> encodeType prefixes et
         TypeLiteral lt -> G.TypeNamed <$> encodeLiteralType lt
         TypeRecord rt -> forRowType rt
@@ -148,7 +148,7 @@ encodeType prefixes typ = case stripType typ of
         forRowType = forName . rowTypeTypeName
     t -> G.TypeNonNull <$> nonnull t
   where
-    nonnull t = case stripType t of
+    nonnull t = case deannotateType t of
         TypeList et -> G.NonNullTypeList . G.ListType <$> encodeType prefixes et
         TypeLiteral lt -> G.NonNullTypeNamed <$> encodeLiteralType lt
         TypeRecord rt -> forRowType rt

@@ -78,7 +78,7 @@ generateTypeFiles env ns defs = do
   where
     (usingDefs, classDefs) = L.partition (isUsingDef . typeDefinitionType) defs
       where
-        isUsingDef typ = case stripType typ of
+        isUsingDef typ = case deannotateType typ of
           TypeForall (ForallType _ body) -> isUsingDef body
           TypeRecord _ -> False
           TypeUnion _ -> False
@@ -126,7 +126,7 @@ encodeApplicationType env at = do
   where
     (body, args) = gatherParams (TypeApplication at) []
 
-    gatherParams t ps = case stripType t of
+    gatherParams t ps = case deannotateType t of
       TypeApplication (ApplicationType lhs rhs) -> gatherParams lhs (rhs:ps)
       _ -> (t, ps)
 
@@ -159,7 +159,7 @@ encodeFieldType env isParameter (FieldType fname ftype) = do
     Nothing
     False
   where
-    isBasicType = typeVariant (stripType ftype) == TypeVariantLiteral
+    isBasicType = typeVariant (deannotateType ftype) == TypeVariantLiteral
     isContainerType = isStdContainerType ftype
 
     fieldType typ =
@@ -182,7 +182,7 @@ encodeForallType env lt = do
   where
     (body, _) = gatherParams (TypeForall lt) []
 
-    gatherParams t ps = case stripType t of
+    gatherParams t ps = case deannotateType t of
       TypeForall (ForallType name body) -> gatherParams body (name:ps)
       _ -> (t, L.reverse ps)
 
@@ -195,7 +195,7 @@ encodeFunctionType env ft = do
     encode = encodeType env
     (doms, cod) = gatherParams [] ft
 
-    gatherParams rdoms (FunctionType dom cod) = case stripType cod of
+    gatherParams rdoms (FunctionType dom cod) = case deannotateType cod of
       TypeFunction ft2 -> gatherParams (dom:rdoms) ft2
       _ -> (L.reverse (dom:rdoms), cod)
 
@@ -256,7 +256,7 @@ encodeRecordType env name (RowType _ tfields) _comment = do
         Nothing
 
 encodeType :: CppEnvironment -> Type -> Flow Graph Cpp.TypeExpression
-encodeType env typ = case stripType typ of
+encodeType env typ = case deannotateType typ of
     TypeApplication at -> encodeApplicationType env at
     TypeFunction ft -> encodeFunctionType env ft
     TypeForall lt -> encodeForallType env lt
@@ -269,7 +269,7 @@ encodeType env typ = case stripType typ of
     TypeUnion rt -> typeref typ (rowTypeTypeName rt)
     TypeVariable name -> (elementTerm <$> requireElement name) >>= DecodeCore.type_ >>= \t -> typeref t name
     TypeWrap (WrappedType name _) -> typeref typ name
-    _ -> fail $ "Unsupported type: " ++ show (stripType typ)
+    _ -> fail $ "Unsupported type: " ++ show (deannotateType typ)
   where
     encode = encodeType env
     typeref t name = pure $ if EncodeCore.isUnitType t
@@ -291,7 +291,7 @@ encodeTypeDefinition env name typ = do
     encode env typ comment
   where
     -- TODO: use the comment
-    encode env typ comment = case stripType typ of
+    encode env typ comment = case deannotateType typ of
       TypeForall (ForallType var body) ->
         encode env2 body comment
         where
@@ -473,14 +473,14 @@ createVariantClass :: CppEnvironment -> Name -> Name -> FieldType -> Flow Graph 
 createVariantClass env tname parentClass (FieldType fname variantType) = do
     valueField <- if hasValue
       then do
-        cppType <- encodeType env (stripType variantType)
+        cppType <- encodeType env (deannotateType variantType)
         return [Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable $
                   Cpp.VariableDeclaration (Just cppType) "value" Nothing False]
       else return []
 
     constructorParams <- if hasValue
       then do
-        paramType <- encodeType env (stripType variantType)
+        paramType <- encodeType env (deannotateType variantType)
         return [Cpp.Parameter paramType "value" False Nothing]
       else return []
 
@@ -602,7 +602,7 @@ gatherMetadata defs = L.foldl addDef start defs
       TermOptional _ -> meta {cppModuleMetadataUsesOptional = True}
       _ -> meta
 
-    extendMetaForType meta typ = case stripType typ of
+    extendMetaForType meta typ = case deannotateType typ of
       TypeForall (ForallType _ body) ->
         meta {cppModuleMetadataTypeVariables = S.union (cppModuleMetadataTypeVariables meta) (freeVariablesInType body)}
       TypeList _ -> meta {cppModuleMetadataUsesVector = True}
@@ -626,7 +626,7 @@ generateForwardDeclarations env tname fields = fmap declare variantNames
     declare name = cppClassDeclaration name [] Nothing
 
 isStdContainerType :: Type -> Bool
-isStdContainerType typ = case stripType typ of
+isStdContainerType typ = case deannotateType typ of
   TypeApplication (ApplicationType lhs _) -> isStdContainerType lhs
   TypeList _ -> True
   TypeMap _ -> True
@@ -640,7 +640,7 @@ isStructType rawType = var /= TypeVariantLiteral && not (isEnumType rawType)
     var = typeVariant $ fullyStripType rawType
 
 isTemplateType :: Type -> Bool
-isTemplateType typ = case stripType typ of
+isTemplateType typ = case deannotateType typ of
   TypeLiteral LiteralTypeString -> True
   _ -> isStdContainerType typ
 

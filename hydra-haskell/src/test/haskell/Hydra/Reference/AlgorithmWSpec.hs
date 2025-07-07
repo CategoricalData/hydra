@@ -42,7 +42,7 @@ expectType :: Term -> TypeScheme -> H.Expectation
 expectType term ts = do
   result <- inferType term
   H.shouldBe (ShowCore.typeScheme $ snd result) (ShowCore.typeScheme ts)
-  H.shouldBe (ShowCore.term $ stripTypesFromTerm $ fst result) (ShowCore.term $ stripTypesFromTerm term)
+  H.shouldBe (ShowCore.term $ removeTypesFromTerm $ fst result) (ShowCore.term $ removeTypesFromTerm term)
 
 algorithmWRunner :: TestRunner
 algorithmWRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabledForMinimalInference tcase

@@ -130,7 +130,7 @@ functionToUnion t = ((\x -> case x of
                     Core.fieldTypeName = (Core.Name "variable"),
                     Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}]}))))
         encode = (\ad -> \term ->  
-                let strippedTerm = (Rewriting.stripTerm term)
+                let strippedTerm = (Rewriting.deannotateTerm term)
                 in (Compute.coderEncode (Compute.adapterCoder ad) ((\x -> case x of
                   Core.TermFunction v2 -> ((\x -> case x of
                     Core.FunctionElimination v3 -> ((\x -> case x of
@@ -261,11 +261,11 @@ passFunction t = ((\x -> case x of
         Core.fieldTypeType = (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = (Core.fieldTypeType f),
           Core.functionTypeCodomain = cod}))})) (\ad -> Flows.pure (Core.fieldTypeName f, ad))) (Core.rowTypeFields v2)) (\pairs -> Flows.pure (Maps.fromList pairs)))
-      _ -> (Flows.pure Maps.empty)) (Rewriting.stripType dom)) (\caseAds -> Flows.bind ((\x -> case x of
+      _ -> (Flows.pure Maps.empty)) (Rewriting.deannotateType dom)) (\caseAds -> Flows.bind ((\x -> case x of
       Core.TypeOptional v2 -> (Flows.map Optionals.pure (termAdapter (Core.TypeFunction (Core.FunctionType {
         Core.functionTypeDomain = v2,
         Core.functionTypeCodomain = cod}))))
-      _ -> (Flows.pure Nothing)) (Rewriting.stripType dom)) (\optionAd ->  
+      _ -> (Flows.pure Nothing)) (Rewriting.deannotateType dom)) (\optionAd ->  
       let lossy = (Logic.or (Compute.adapterIsLossy codAd) (Lists.foldl Logic.or False (Lists.map (\pair -> Compute.adapterIsLossy (snd pair)) (Maps.toList caseAds)))) 
           target = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Compute.adapterTarget domAd),
@@ -295,7 +295,7 @@ passFunction t = ((\x -> case x of
                 Core.lambdaDomain = d,
                 Core.lambdaBody = newBody}))))
             Core.FunctionPrimitive v3 -> (Flows.pure (Core.FunctionPrimitive v3))) v2))
-          _ -> (Flows.pure term)) (Rewriting.stripTerm term)))})))))))) t)
+          _ -> (Flows.pure term)) (Rewriting.deannotateTerm term)))})))))))) t)
 
 -- | Pass through forall types
 passForall :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
@@ -515,7 +515,7 @@ termAdapter typ =
               Mantle.TypeVariantUnit -> [
                 passUnit]
               Mantle.TypeVariantWrap -> [
-                passWrapped]) (Variants.typeVariant (Rewriting.stripType t)))
+                passWrapped]) (Variants.typeVariant (Rewriting.deannotateType t)))
       trySubstitution = (\t -> (\x -> case x of
               Mantle.TypeVariantApplication -> [
                 simplifyApplication]

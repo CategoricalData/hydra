@@ -103,7 +103,7 @@ edgeCoder dir schema source eidType tname label outLabel inLabel mIdAdapter outA
     et = PG.EdgeType label eidType outLabel inLabel $ propertyTypes propAdapters
     coder = Coder encode decode
       where
-        encode term = case stripTerm term of
+        encode term = case deannotateTerm term of
           TermOptional (Just ot) -> encode ot
           TermRecord (Record tname' fields) -> do
               checkRecordName tname tname'
@@ -145,7 +145,7 @@ elementCoder :: (Show t, Show v)
   -> Type
   -> t -> t
   -> Flow s (ElementAdapter s t v)
-elementCoder mparent schema source vidType eidType = case stripType source of
+elementCoder mparent schema source vidType eidType = case deannotateType source of
     TypeOptional ot -> elementCoder mparent schema ot vidType eidType
 
     TypeRecord (RowType name fields) -> withTrace ("adapter for " ++ unName name) $ do
@@ -194,7 +194,7 @@ encodeProperty fields adapter = do
       TypeOptional _ -> pure Nothing
       _ -> fail $ "expected field not found in record: " ++ unName fname
     Just value -> case ftyp of
-      TypeOptional _ -> case stripTerm value of
+      TypeOptional _ -> case deannotateTerm value of
         TermOptional ov -> case ov of
           Nothing -> pure Nothing
           Just v -> Just <$> encodeValue v
@@ -202,7 +202,7 @@ encodeProperty fields adapter = do
       _ -> Just <$> encodeValue value
   where
     fname = fieldTypeName $ adapterSource adapter
-    ftyp = stripType (fieldTypeType $ adapterSource adapter)
+    ftyp = deannotateType (fieldTypeType $ adapterSource adapter)
     encodeValue v = coderEncode (adapterCoder adapter) (Field fname v)
 
 findAdjacenEdgeAdapters :: (Show t, Show v)
@@ -365,7 +365,7 @@ vertexCoder schema source vidType tname vlabel idAdapter propAdapters edgeAdapte
     depTypes = adapterTarget . adjacentEdgeAdapterAdapter <$> edgeAdapters
     coder = Coder encode decode
       where
-        encode term = case stripTerm term of
+        encode term = case deannotateTerm term of
             TermOptional (Just ot) -> encode ot
             TermRecord (Record tname' fields) -> do
               checkRecordName tname tname'
