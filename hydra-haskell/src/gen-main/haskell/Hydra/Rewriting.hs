@@ -26,6 +26,43 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Strip all annotations from a term
+deannotateTerm :: (Core.Term -> Core.Term)
+deannotateTerm t = ((\x -> case x of
+  Core.TermAnnotated v1 -> (deannotateTerm (Core.annotatedTermSubject v1))
+  _ -> t) t)
+
+-- | Strip all annotations from a term
+deannotateType :: (Core.Type -> Core.Type)
+deannotateType t = ((\x -> case x of
+  Core.TypeAnnotated v1 -> (deannotateType (Core.annotatedTypeSubject v1))
+  _ -> t) t)
+
+-- | Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
+deannotateTypeParameters :: (Core.Type -> Core.Type)
+deannotateTypeParameters t = ((\x -> case x of
+  Core.TypeForall v1 -> (deannotateTypeParameters (Core.forallTypeBody v1))
+  _ -> t) (deannotateType t))
+
+-- | Recursively strip all annotations from a type
+deannotateTypeRecursive :: (Core.Type -> Core.Type)
+deannotateTypeRecursive typ =  
+  let strip = (\recurse -> \typ ->  
+          let rewritten = (recurse typ)
+          in ((\x -> case x of
+            Core.TypeAnnotated v1 -> (Core.annotatedTypeSubject v1)
+            _ -> rewritten) rewritten))
+  in (rewriteType strip typ)
+
+-- | Recursively strip all annotations from a type scheme
+deannotateTypeSchemeRecursive :: (Core.TypeScheme -> Core.TypeScheme)
+deannotateTypeSchemeRecursive ts =  
+  let vars = (Core.typeSchemeVariables ts) 
+      typ = (Core.typeSchemeType ts)
+  in Core.TypeScheme {
+    Core.typeSchemeVariables = vars,
+    Core.typeSchemeType = (deannotateTypeRecursive typ)}
+
 -- | A variation of expandLambdas which also attaches type annotations when padding function terms
 expandTypedLambdas :: (Core.Term -> Core.Term)
 expandTypedLambdas term =  
@@ -287,6 +324,36 @@ removeTypeAnnotations typ =
             Core.TypeAnnotated v1 -> (Core.annotatedTypeSubject v1)
             _ -> rewritten) rewritten))
   in (rewriteType remove typ)
+
+-- | Strip type annotations from terms while preserving other annotations
+removeTypesFromTerm :: (Core.Term -> Core.Term)
+removeTypesFromTerm term =  
+  let strip = (\recurse -> \term ->  
+          let rewritten = (recurse term) 
+              stripBinding = (\b -> Core.LetBinding {
+                      Core.letBindingName = (Core.letBindingName b),
+                      Core.letBindingTerm = (Core.letBindingTerm b),
+                      Core.letBindingType = Nothing})
+          in ((\x -> case x of
+            Core.TermFunction v1 -> ((\x -> case x of
+              Core.FunctionElimination v2 -> ((\x -> case x of
+                Core.EliminationProduct v3 -> (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+                  Core.tupleProjectionArity = (Core.tupleProjectionIndex v3),
+                  Core.tupleProjectionIndex = (Core.tupleProjectionArity v3),
+                  Core.tupleProjectionDomain = Nothing}))))
+                _ -> (Core.TermFunction (Core.FunctionElimination v2))) v2)
+              Core.FunctionLambda v2 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.lambdaParameter v2),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.lambdaBody v2)})))
+              _ -> (Core.TermFunction v1)) v1)
+            Core.TermLet v1 -> (Core.TermLet (Core.Let {
+              Core.letBindings = (Lists.map stripBinding (Core.letBindings v1)),
+              Core.letEnvironment = (Core.letEnvironment v1)}))
+            Core.TermTypeAbstraction v1 -> (Core.typeAbstractionBody v1)
+            Core.TermTypeApplication v1 -> (Core.typedTermTerm v1)
+            _ -> rewritten) rewritten))
+  in (rewriteTerm strip term)
 
 -- | Replace free occurrences of a name in a type
 replaceFreeName :: (Core.Name -> Core.Type -> Core.Type -> Core.Type)
@@ -577,73 +644,6 @@ simplifyTerm term =
                 _ -> term) strippedLhs)
             _ -> term) stripped)))
   in (rewriteTerm simplify term)
-
--- | Strip all annotations from a term
-deannotateTerm :: (Core.Term -> Core.Term)
-deannotateTerm t = ((\x -> case x of
-  Core.TermAnnotated v1 -> (deannotateTerm (Core.annotatedTermSubject v1))
-  _ -> t) t)
-
--- | Strip all annotations from a term
-deannotateType :: (Core.Type -> Core.Type)
-deannotateType t = ((\x -> case x of
-  Core.TypeAnnotated v1 -> (deannotateType (Core.annotatedTypeSubject v1))
-  _ -> t) t)
-
--- | Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
-deannotateTypeParameters :: (Core.Type -> Core.Type)
-deannotateTypeParameters t = ((\x -> case x of
-  Core.TypeForall v1 -> (deannotateTypeParameters (Core.forallTypeBody v1))
-  _ -> t) (deannotateType t))
-
--- | Recursively strip all annotations from a type
-deannotateTypeRecursive :: (Core.Type -> Core.Type)
-deannotateTypeRecursive typ =  
-  let strip = (\recurse -> \typ ->  
-          let rewritten = (recurse typ)
-          in ((\x -> case x of
-            Core.TypeAnnotated v1 -> (Core.annotatedTypeSubject v1)
-            _ -> rewritten) rewritten))
-  in (rewriteType strip typ)
-
--- | Recursively strip all annotations from a type scheme
-deannotateTypeSchemeRecursive :: (Core.TypeScheme -> Core.TypeScheme)
-deannotateTypeSchemeRecursive ts =  
-  let vars = (Core.typeSchemeVariables ts) 
-      typ = (Core.typeSchemeType ts)
-  in Core.TypeScheme {
-    Core.typeSchemeVariables = vars,
-    Core.typeSchemeType = (deannotateTypeRecursive typ)}
-
--- | Strip type annotations from terms while preserving other annotations
-removeTypesFromTerm :: (Core.Term -> Core.Term)
-removeTypesFromTerm term =  
-  let strip = (\recurse -> \term ->  
-          let rewritten = (recurse term) 
-              stripBinding = (\b -> Core.LetBinding {
-                      Core.letBindingName = (Core.letBindingName b),
-                      Core.letBindingTerm = (Core.letBindingTerm b),
-                      Core.letBindingType = Nothing})
-          in ((\x -> case x of
-            Core.TermFunction v1 -> ((\x -> case x of
-              Core.FunctionElimination v2 -> ((\x -> case x of
-                Core.EliminationProduct v3 -> (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
-                  Core.tupleProjectionArity = (Core.tupleProjectionIndex v3),
-                  Core.tupleProjectionIndex = (Core.tupleProjectionArity v3),
-                  Core.tupleProjectionDomain = Nothing}))))
-                _ -> (Core.TermFunction (Core.FunctionElimination v2))) v2)
-              Core.FunctionLambda v2 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.lambdaParameter v2),
-                Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.lambdaBody v2)})))
-              _ -> (Core.TermFunction v1)) v1)
-            Core.TermLet v1 -> (Core.TermLet (Core.Let {
-              Core.letBindings = (Lists.map stripBinding (Core.letBindings v1)),
-              Core.letEnvironment = (Core.letEnvironment v1)}))
-            Core.TermTypeAbstraction v1 -> (Core.typeAbstractionBody v1)
-            Core.TermTypeApplication v1 -> (Core.typedTermTerm v1)
-            _ -> rewritten) rewritten))
-  in (rewriteTerm strip term)
 
 -- | Substitute type variables in a type
 substituteTypeVariables :: (M.Map Core.Name Core.Name -> Core.Type -> Core.Type)

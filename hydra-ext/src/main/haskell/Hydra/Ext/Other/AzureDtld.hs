@@ -3,7 +3,7 @@ module Hydra.Ext.Other.AzureDtld (dtldModule) where
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Annotations
-import Hydra.Sources.Tier3.All
+import Hydra.Sources.Ext.All
 
 
 dtmi128 :: Type

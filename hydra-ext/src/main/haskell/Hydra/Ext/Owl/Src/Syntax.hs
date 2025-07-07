@@ -1,9 +1,9 @@
 module Hydra.Ext.Owl.Src.Syntax where
 
-import Hydra.Sources.Tier3.All
+import Hydra.Sources.Ext.All
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Sources.Tier3.Ext.Rdf.Syntax
+import Hydra.Sources.Ext.Rdf.Syntax
 import Hydra.Ext.Xml.Src.Schema
 import Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Terms as Terms

@@ -1,6 +1,6 @@
 module Hydra.Ext.Xml.Src.Schema where
 
-import Hydra.Sources.Tier3.All
+import Hydra.Sources.Ext.All
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types

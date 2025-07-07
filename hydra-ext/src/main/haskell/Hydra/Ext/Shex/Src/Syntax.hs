@@ -2,7 +2,7 @@
 
 module Hydra.Ext.Shex.Src.Syntax where
 
-import Hydra.Sources.Tier3.All
+import Hydra.Sources.Ext.All
 import Hydra.Dsl.Grammars
 import Hydra.Grammars
 import qualified Hydra.Dsl.Annotations as Ann
