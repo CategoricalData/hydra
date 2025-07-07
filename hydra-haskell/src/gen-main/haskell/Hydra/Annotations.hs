@@ -25,7 +25,6 @@ import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core____
-import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -46,7 +45,7 @@ failOnFlag :: (Core.Name -> String -> Compute.Flow t0 ())
 failOnFlag flag msg = (Flows.bind (hasFlag flag) (\val -> Logic.ifElse val (Flows.fail msg) (Flows.pure ())))
 
 getDebugId :: (Compute.Flow t0 (Maybe String))
-getDebugId = (withEmptyGraph (Flows.bind (getAttr Constants.key_debugId) (\desc -> Flows.traverseOptional Core___.string desc)))
+getDebugId = (Lexical.withEmptyGraph (Flows.bind (getAttr Constants.key_debugId) (\desc -> Flows.traverseOptional Core___.string desc)))
 
 getAttr :: (Core.Name -> Compute.Flow t0 (Maybe Core.Term))
 getAttr key = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
@@ -58,7 +57,7 @@ getAttrWithDefault :: (Core.Name -> Core.Term -> Compute.Flow t0 Core.Term)
 getAttrWithDefault key def = (Flows.map (\mval -> Optionals.fromMaybe def mval) (getAttr key))
 
 getCount :: (Core.Name -> Compute.Flow t0 Int)
-getCount key = (withEmptyGraph (Flows.bind (getAttrWithDefault key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))) Core___.int32))
+getCount key = (Lexical.withEmptyGraph (Flows.bind (getAttrWithDefault key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))) Core___.int32))
 
 -- | Get description from annotations map
 getDescription :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe String))
@@ -106,7 +105,7 @@ hasDescription :: (M.Map Core.Name t0 -> Bool)
 hasDescription anns = (Optionals.isJust (Maps.lookup Constants.key_description anns))
 
 hasFlag :: (Core.Name -> Compute.Flow t0 Bool)
-hasFlag flag = (withEmptyGraph (Flows.bind (getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False))) (\term -> Core___.boolean term)))
+hasFlag flag = (Lexical.withEmptyGraph (Flows.bind (getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False))) (\term -> Core___.boolean term)))
 
 -- | Check if type has description
 hasTypeDescription :: (Core.Type -> Bool)
@@ -119,7 +118,7 @@ nextCount key = (Flows.bind (getCount key) (\count -> Flows.map (\_ -> count) (p
 normalizeTermAnnotations :: (Core.Term -> Core.Term)
 normalizeTermAnnotations term =  
   let anns = (termAnnotationInternal term) 
-      stripped = (Strip.stripTerm term)
+      stripped = (Rewriting.stripTerm term)
   in (Logic.ifElse (Maps.null anns) stripped (Core.TermAnnotated (Core.AnnotatedTerm {
     Core.annotatedTermSubject = stripped,
     Core.annotatedTermAnnotation = anns})))
@@ -128,7 +127,7 @@ normalizeTermAnnotations term =
 normalizeTypeAnnotations :: (Core.Type -> Core.Type)
 normalizeTypeAnnotations typ =  
   let anns = (typeAnnotationInternal typ) 
-      stripped = (Strip.stripType typ)
+      stripped = (Rewriting.stripType typ)
   in (Logic.ifElse (Maps.null anns) stripped (Core.TypeAnnotated (Core.AnnotatedType {
     Core.annotatedTypeSubject = stripped,
     Core.annotatedTypeAnnotation = anns})))
@@ -158,7 +157,7 @@ setDescription d = (setAnnotation Constants.key_description (Optionals.map (\arg
 -- | Set term annotation
 setTermAnnotation :: (Core.Name -> Maybe Core.Term -> Core.Term -> Core.Term)
 setTermAnnotation key val term =  
-  let term_ = (Strip.stripTerm term) 
+  let term_ = (Rewriting.stripTerm term) 
       anns = (setAnnotation key val (termAnnotationInternal term))
   in (Logic.ifElse (Maps.null anns) term_ (Core.TermAnnotated (Core.AnnotatedTerm {
     Core.annotatedTermSubject = term_,
@@ -175,7 +174,7 @@ setType mt = (setAnnotation Constants.key_type (Optionals.map Core__.type_ mt))
 -- | Set type annotation
 setTypeAnnotation :: (Core.Name -> Maybe Core.Term -> Core.Type -> Core.Type)
 setTypeAnnotation key val typ =  
-  let typ_ = (Strip.stripType typ) 
+  let typ_ = (Rewriting.stripType typ) 
       anns = (setAnnotation key val (typeAnnotationInternal typ))
   in (Logic.ifElse (Maps.null anns) typ_ (Core.TypeAnnotated (Core.AnnotatedType {
     Core.annotatedTypeSubject = typ_,
@@ -271,6 +270,3 @@ withDepth :: (Core.Name -> (Int -> Compute.Flow t1 t0) -> Compute.Flow t1 t0)
 withDepth key f = (Flows.bind (getCount key) (\count ->  
   let inc = (Math.add count 1)
   in (Flows.bind (putCount key inc) (\_ -> Flows.bind (f inc) (\r -> Flows.bind (putCount key count) (\_ -> Flows.pure r))))))
-
-withEmptyGraph :: (Compute.Flow Graph.Graph t1 -> Compute.Flow t0 t1)
-withEmptyGraph = (Monads.withState Lexical.emptyGraph)

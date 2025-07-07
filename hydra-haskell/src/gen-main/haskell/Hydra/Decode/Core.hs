@@ -9,8 +9,8 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Monads as Monads
+import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core__
-import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -29,7 +29,7 @@ fieldType = (Lexical.matchRecord (\m -> Monads.map2 (Lexical.getField m (Core.Na
 
 fieldTypes :: (Core.Term -> Compute.Flow Graph.Graph [Core.FieldType])
 fieldTypes term =  
-  let stripped = (Strip.stripTerm term)
+  let stripped = (Rewriting.stripTerm term)
   in ((\x -> case x of
     Core.TermList v1 -> (Flows.mapList fieldType v1)
     _ -> (Monads.unexpected "list" (Core__.term term))) stripped)
@@ -84,7 +84,7 @@ rowType = (Lexical.matchRecord (\m -> Monads.map2 (Lexical.getField m (Core.Name
   Core.rowTypeFields = fields})))
 
 string :: (Core.Term -> Compute.Flow Graph.Graph String)
-string term = (Core_.string (Strip.stripTerm term))
+string term = (Core_.string (Rewriting.stripTerm term))
 
 type_ :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)
 type_ dat = ((\x -> case x of

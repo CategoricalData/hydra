@@ -40,14 +40,14 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Tier2.Strip as Strip
+import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 
 import qualified Hydra.Encode.Core as EncodeCore
 
 
 encodeCoreModule :: Module
 encodeCoreModule = Module (Namespace "hydra.encode.core") elements
-    [Strip.hydraStripModule]
+    [Rewriting.hydraRewritingModule]
     [Tier1.hydraCoreModule] $
     Just ("Mapping of hydra.core constructs in a host language like Haskell or Java "
       <> " to their native Hydra counterparts as terms. "
@@ -480,7 +480,7 @@ wrappedTypeDef = coreEncodingDefinition "WrappedType" $
 isEncodedTypeDef :: TElement (Term -> Bool)
 isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
   doc "Determines whether a given term is an encoded type" $
-  lambda "t" $ cases _Term (ref Strip.stripTermDef @@ var "t") (Just false) [
+  lambda "t" $ cases _Term (ref Rewriting.stripTermDef @@ var "t") (Just false) [
     _Term_application>>: lambda "a" $
       ref isEncodedTypeDef @@ (Core.applicationFunction $ var "a"),
     _Term_union>>: lambda "i" $
@@ -488,7 +488,7 @@ isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
 
 isTypeDef :: TElement (Type -> Bool)
 isTypeDef = coreEncodingExtrasDefinition "isType" $
-  lambda "t" $ cases _Type (ref Strip.stripTypeDef @@ var "t") (Just false) [
+  lambda "t" $ cases _Type (ref Rewriting.stripTypeDef @@ var "t") (Just false) [
     _Type_application>>: lambda "a" $
       ref isTypeDef @@ (Core.applicationTypeFunction $ var "a"),
     _Type_forall>>: lambda "l" $

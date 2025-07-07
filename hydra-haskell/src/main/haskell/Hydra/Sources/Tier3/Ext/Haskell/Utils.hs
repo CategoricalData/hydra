@@ -35,7 +35,7 @@ import qualified Hydra.Sources.Tier2.Decoding           as Decoding
 import qualified Hydra.Sources.Tier2.Encode.Core      as EncodeCore
 import qualified Hydra.Sources.Tier2.Formatting       as Formatting
 import qualified Hydra.Sources.Tier2.Literals         as Literals
-import qualified Hydra.Sources.Tier2.Strip            as Strip
+import qualified Hydra.Sources.Tier2.Annotations            as Annotations
 import qualified Hydra.Sources.Tier2.Adapt.Utils     as AdaptUtils
 import qualified Hydra.Sources.Tier2.Adapt.Modules         as AdaptModules
 import qualified Hydra.Sources.Tier2.Annotations      as Annotations
@@ -282,7 +282,7 @@ unionFieldReferenceDef = haskellUtilsDefinition "unionFieldReference" $
 
 unpackForallTypeDef :: TElement (Graph -> Type -> ([Name], Type))
 unpackForallTypeDef = haskellUtilsDefinition "unpackForallType" $
-  lambdas ["cx", "t"] $ cases _Type (ref Strip.stripTypeDef @@ var "t")
+  lambdas ["cx", "t"] $ cases _Type (ref Rewriting.stripTypeDef @@ var "t")
     (Just $ pair (list []) (var "t")) [
     _Type_forall>>: lambda "fat" $ lets [
       "v">: Core.forallTypeParameter $ var "fat",

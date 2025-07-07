@@ -43,7 +43,7 @@ import qualified Data.Maybe              as Y
 import qualified Hydra.Sources.Tier2.Formatting as Formatting
 import qualified Hydra.Sources.Tier2.Names as Names
 import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
-import qualified Hydra.Sources.Tier2.Strip as Strip
+import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
@@ -52,7 +52,7 @@ adaptUtilsDefinition = definitionInModule hydraAdaptUtilsModule
 
 hydraAdaptUtilsModule :: Module
 hydraAdaptUtilsModule = Module (Namespace "hydra.adapt.utils") elements
-    [Names.hydraNamesModule, Strip.hydraStripModule, Variants.hydraVariantsModule, ShowCore.showCoreModule]
+    [Names.hydraNamesModule, Rewriting.hydraRewritingModule, Variants.hydraVariantsModule, ShowCore.showCoreModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule] $
     Just ("Additional adapter utilities, above and beyond the generated ones.")
   where
@@ -171,7 +171,7 @@ typeIsSupportedDef :: TElement (LanguageConstraints -> Type -> Bool)
 typeIsSupportedDef = adaptUtilsDefinition "typeIsSupported" $
   doc "Check if type is supported by language constraints" $
   lambda "constraints" $ lambda "t" $ lets [
-    "base">: ref Strip.stripTypeDef @@ var "t",
+    "base">: ref Rewriting.stripTypeDef @@ var "t",
     "isSupportedVariant">: lambda "v" $
       Logic.or
         (cases _TypeVariant (var "v") (Just false) [_TypeVariant_variable>>: constant true])

@@ -38,7 +38,7 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Tier2.Strip as Strip
+import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 
 
 decodingDefinition :: String -> TTerm a -> TElement a
@@ -46,7 +46,7 @@ decodingDefinition = definitionInModule hydraDecodingModule
 
 hydraDecodingModule :: Module
 hydraDecodingModule = Module (Namespace "hydra.decoding") elements
-    [Strip.hydraStripModule]
+    [Rewriting.hydraRewritingModule]
     [Tier1.hydraCoreModule] $
     Just "A module for decoding terms to native objects"
   where
@@ -403,7 +403,7 @@ matchNominal :: Name -> TTerm (a -> Name) -> TTerm (a -> b) -> TTerm (Name -> Te
 matchNominal fname getName getB = ref nominalDef @@ getName @@ getB @@ matchTermVariant fname
 
 matchTermVariant :: Name -> TTerm (Term -> Maybe a)
-matchTermVariant fname = matchVariant _Term fname <.> ref Strip.stripTermDef
+matchTermVariant fname = matchVariant _Term fname <.> ref Rewriting.stripTermDef
 
 matchVariant :: Name -> Name -> TTerm (a -> Maybe b)
 matchVariant tname fname = match tname (Just nothing) [

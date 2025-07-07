@@ -41,12 +41,12 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
-import qualified Hydra.Sources.Tier2.Strip as Strip
+import qualified Hydra.Sources.Tier2.Annotations as Annotations
 
 
 showGraphModule :: Module
 showGraphModule = Module (Namespace "hydra.show.graph") elements
-    [Strip.hydraStripModule, ShowCore.showCoreModule]
+    [Annotations.hydraAnnotationsModule, ShowCore.showCoreModule]
     [Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraTypingModule] $
     Just "String representations of hydra.graph types"
   where

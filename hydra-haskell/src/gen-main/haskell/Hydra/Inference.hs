@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -26,7 +27,6 @@ import qualified Hydra.Show.Core as Core__
 import qualified Hydra.Show.Mantle as Mantle_
 import qualified Hydra.Show.Typing as Typing
 import qualified Hydra.Sorting as Sorting
-import qualified Hydra.Strip as Strip
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing_
 import qualified Hydra.Unification as Unification
@@ -266,7 +266,7 @@ gatherForall vars typ = ((\x -> case x of
   Core.TypeForall v1 -> (gatherForall (Lists.cons (Core.forallTypeParameter v1) vars) (Core.forallTypeBody v1))
   Core.TypeVariable _ -> Core.TypeScheme {
     Core.typeSchemeVariables = (Lists.reverse vars),
-    Core.typeSchemeType = typ}) (Strip.stripType typ))
+    Core.typeSchemeType = typ}) (Rewriting.stripType typ))
 
 -- | Convert a type scheme to a forall type
 typeSchemeToFType :: (Core.TypeScheme -> Core.Type)
@@ -393,7 +393,7 @@ inferTypeOf cx term =
           Core.letEnvironment = (Core.TermLiteral (Core.LiteralString "ignoredEnvironment"))})) 
       unifyAndSubst = (\result ->  
               let subst = (Typing_.inferenceResultSubst result)
-              in (Flows.bind (Annotations.withEmptyGraph (Core_.letTerm (Rewriting.normalizeTypeVariablesInTerm (Typing_.inferenceResultTerm result)))) (\letResult ->  
+              in (Flows.bind (Lexical.withEmptyGraph (Core_.letTerm (Rewriting.normalizeTypeVariablesInTerm (Typing_.inferenceResultTerm result)))) (\letResult ->  
                 let bindings = (Core.letBindings letResult)
                 in (Logic.ifElse (Equality.equal 1 (Lists.length bindings)) ( 
                   let binding = (Lists.head bindings) 

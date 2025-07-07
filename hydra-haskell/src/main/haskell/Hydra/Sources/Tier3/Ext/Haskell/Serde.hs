@@ -37,7 +37,7 @@ import qualified Hydra.Sources.Tier2.Decoding           as Decoding
 import qualified Hydra.Sources.Tier2.Encode.Core      as EncodeCore
 import qualified Hydra.Sources.Tier2.Formatting       as Formatting
 import qualified Hydra.Sources.Tier2.Literals         as Literals
-import qualified Hydra.Sources.Tier2.Strip            as Strip
+import qualified Hydra.Sources.Tier2.Annotations            as Annotations
 import qualified Hydra.Sources.Tier2.Adapt.Utils     as AdaptUtils
 import qualified Hydra.Sources.Tier2.Adapt.Modules         as AdaptModules
 import qualified Hydra.Sources.Tier2.Annotations      as Annotations

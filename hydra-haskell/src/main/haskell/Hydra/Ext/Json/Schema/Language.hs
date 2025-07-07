@@ -2,7 +2,6 @@ module Hydra.Ext.Json.Schema.Language where
 
 import Hydra.Core
 import Hydra.Coders
-import Hydra.Strip
 import Hydra.Mantle
 import Hydra.Variants
 

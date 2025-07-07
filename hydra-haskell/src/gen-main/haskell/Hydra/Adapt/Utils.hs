@@ -16,8 +16,8 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
-import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -104,7 +104,7 @@ nameToFilePath nsConv localConv ext name =
 -- | Check if type is supported by language constraints
 typeIsSupported :: (Coders.LanguageConstraints -> Core.Type -> Bool)
 typeIsSupported constraints t =  
-  let base = (Strip.stripType t) 
+  let base = (Rewriting.stripType t) 
       isSupportedVariant = (\v -> Logic.or ((\x -> case x of
               Mantle.TypeVariantVariable -> True
               _ -> False) v) (Sets.member v (Coders.languageConstraintsTypeVariants constraints)))
