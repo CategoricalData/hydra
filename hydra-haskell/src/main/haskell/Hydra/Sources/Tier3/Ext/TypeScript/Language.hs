@@ -3,8 +3,8 @@
 module Hydra.Sources.Tier3.Ext.TypeScript.Language (typeScriptLanguageModule) where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Phantoms as Base
 import Hydra.Dsl.Coders as Coders
 import Hydra.Dsl.Lib.Equality as Equality
@@ -19,7 +19,7 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
 
-import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 
 import qualified Data.Set as S
 
@@ -30,7 +30,7 @@ typeScriptLanguageDefinition = definitionInModule typeScriptLanguageModule
 typeScriptLanguageModule :: Module
 typeScriptLanguageModule = Module ns elements
     [Rewriting.hydraRewritingModule]
-    [Tier1.hydraCoreModule, Tier1.hydraGraphModule, Tier1.hydraCodersModule] $
+    [KernelTypes.hydraCoreModule, KernelTypes.hydraGraphModule, KernelTypes.hydraCodersModule] $
     Just "Language constraints for TypeScript"
   where
     ns = Namespace "hydra.ext.typeScript.language"

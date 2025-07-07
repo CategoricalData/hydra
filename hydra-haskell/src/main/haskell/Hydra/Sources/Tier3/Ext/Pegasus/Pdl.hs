@@ -1,22 +1,22 @@
 module Hydra.Sources.Tier3.Ext.Pegasus.Pdl where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
 pegasusPdlModule :: Module
-pegasusPdlModule = Module ns elements [Tier1.jsonModelModule] [Tier1.hydraCoreModule] $
+pegasusPdlModule = Module ns elements [KernelTypes.jsonModelModule] [KernelTypes.hydraCoreModule] $
     Just ("A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n" ++
       "  https://linkedin.github.io/rest.li/pdl_schema")
   where
     ns = Namespace "hydra.ext.pegasus.pdl"
     def = datatype ns
     pdl = typeref ns
-    json = typeref $ moduleNamespace Tier1.jsonModelModule
+    json = typeref $ moduleNamespace KernelTypes.jsonModelModule
 
     elements = [
 

@@ -5,9 +5,9 @@ Usage example:
 
 :m
 import Hydra.Kernel
-import Hydra.Sources.Tier0.Core
-import Hydra.Sources.Tier1.All
-import Hydra.Sources.Tier2.All
+import Hydra.Sources.Kernel.Types.Core
+import Hydra.Sources.Kernel.Types.All
+import Hydra.Sources.Kernel.Terms.All
 import Hydra.Ext.Json.Serde
 import Hydra.Tools.Monads
 import Hydra.Tools.Analysis.Dependencies
@@ -18,26 +18,22 @@ termModulesToGraphson withPrims modules outFile = flowToIo hydraCoreGraph (jsonV
 typeModulesToGraphson modules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> typeGraphToDependencyGraphson (modulesToGraph modules)) >>= writeFile outFile
 combinedModulesToGraphson dataModules schemaModules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> combinedGraphToDependencyGraphson (modulesToGraph dataModules) (modulesToGraph schemaModules)) >>= writeFile outFile
 
-typeModulesToGraphson [hydraCoreModule] "/tmp/tier0-type-deps.json"
-typeModulesToGraphson (hydraCoreModule:tier1TypeModules) "/tmp/tier1-type-deps.json"
-termModulesToGraphson True tier1TermModules "/tmp/tier1-term-deps-withPrims.json"
-termModulesToGraphson False tier1TermModules "/tmp/tier1-term-deps-noPrims.json"
-termModulesToGraphson True (tier1TermModules ++ tier2Modules) "/tmp/tier2-term-deps-withPrims.json"
-termModulesToGraphson False (tier1TermModules ++ tier2Modules) "/tmp/tier2-term-deps-noPrims.json"
-combinedModulesToGraphson (tier1TermModules ++ tier2Modules) (hydraCoreModule:tier1TypeModules) "/tmp/tier2-combined-deps.json"
+typeModulesToGraphson [hydraCoreModule] "/tmp/hydra-core-deps.json"
+typeModulesToGraphson kernelTypesModules "/tmp/kernel-types-deps.json"
+termModulesToGraphson True kernelTermsModules "/tmp/kernel-terms-deps-withPrims.json"
+termModulesToGraphson False kernelTermsModules "/tmp/kernel-terms-deps-noPrims.json"
+combinedModulesToGraphson kernelTermsModules kernelTypesModules "/tmp/kernel-combined-deps.json"
 
 Now in G.V():
 
 // Clear
 g.V().drop()
 // Choose one of the following
-g.io("/tmp/tier0-type-deps.json").read().iterate()
-g.io("/tmp/tier1-type-deps.json").read().iterate()
-g.io("/tmp/tier1-term-deps-withPrims.json").read().iterate()
-g.io("/tmp/tier1-term-deps-noPrims.json").read().iterate()
-g.io("/tmp/tier2-term-deps-withPrims.json").read().iterate()
-g.io("/tmp/tier2-term-deps-noPrims.json").read().iterate()
-g.io("/tmp/tier2-combined-deps.json").read().iterate()
+g.io("/tmp/hydra-core-deps.json").read().iterate()
+g.io("/tmp/kernel-types-deps.json").read().iterate()
+g.io("/tmp/kernel-terms-deps-withPrims.json").read().iterate()
+g.io("/tmp/kernel-terms-deps-noPrims.json").read().iterate()
+g.io("/tmp/kernel-combined-deps.json").read().iterate()
 // Display
 g.E()
 -}
@@ -45,7 +41,7 @@ module Hydra.Tools.Analysis.Dependencies where
 
 import Hydra.Kernel
 import Hydra.Codegen
-import Hydra.Sources.Tier2.All
+import Hydra.Sources.Kernel.Terms.All
 import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Describe.Core as DescribeCore

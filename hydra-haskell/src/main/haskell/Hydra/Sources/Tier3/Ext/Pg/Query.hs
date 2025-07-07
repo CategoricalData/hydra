@@ -3,17 +3,17 @@
 module Hydra.Sources.Tier3.Ext.Pg.Query where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
-import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Kernel.Types.Core
 import Hydra.Sources.Tier3.Ext.Pg.Model
 
 
 pgQueryModule :: Module
-pgQueryModule = Module ns elements [pgModelModule] [Tier1.hydraCoreModule] $
+pgQueryModule = Module ns elements [pgModelModule] [KernelTypes.hydraCoreModule] $
     Just ("A common model for pattern-matching queries over property graphs")
   where
     ns = Namespace "hydra.pg.query"
