@@ -19,7 +19,7 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
 
-import qualified Hydra.Sources.Tier1.Strip as Strip
+import qualified Hydra.Sources.Tier2.Strip as Strip
 
 import qualified Data.Set as S
 

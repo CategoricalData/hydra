@@ -16,7 +16,6 @@ import Hydra.Kernel
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Adapt.Modules
 import Hydra.Formatting
-import qualified Hydra.Decode as Decode
 
 import qualified Control.Monad as CM
 import qualified Data.Either as E

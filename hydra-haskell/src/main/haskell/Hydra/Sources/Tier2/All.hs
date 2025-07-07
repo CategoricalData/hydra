@@ -9,10 +9,13 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.Adapt.Utils,
   module Hydra.Sources.Tier2.Annotations,
   module Hydra.Sources.Tier2.Arity,
+  module Hydra.Sources.Tier2.Constants,
+  module Hydra.Sources.Tier2.Formatting,
   module Hydra.Sources.Tier2.Grammars,
   module Hydra.Sources.Tier2.Inference,
   module Hydra.Sources.Tier2.Languages,
   module Hydra.Sources.Tier2.Lexical,
+  module Hydra.Sources.Tier2.Literals,
   module Hydra.Sources.Tier2.Monads,
   module Hydra.Sources.Tier2.Names,
   module Hydra.Sources.Tier2.Reduction,
@@ -20,6 +23,7 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.Schemas,
   module Hydra.Sources.Tier2.Serialization,
   module Hydra.Sources.Tier2.Sorting,
+  module Hydra.Sources.Tier2.Strip,
   module Hydra.Sources.Tier2.Substitution,
   module Hydra.Sources.Tier2.Tarjan,
   module Hydra.Sources.Tier2.Templates,
@@ -28,11 +32,13 @@ module Hydra.Sources.Tier2.All(
 ) where
 
 import Hydra.Sources.Tier1.All hiding (mapDef) -- hydra.decode, hydra.expect, and hydra.flows all export 'map'
-import Hydra.Sources.Tier2.Adapt.Utils
+import Hydra.Sources.Tier2.Adapt.Literals
 import Hydra.Sources.Tier2.Adapt.Modules
+import Hydra.Sources.Tier2.Adapt.Terms hiding (optionalToListDef)
+import Hydra.Sources.Tier2.Adapt.Utils
 import Hydra.Sources.Tier2.Annotations
 import Hydra.Sources.Tier2.Arity
-import Hydra.Sources.Tier2.Languages
+import Hydra.Sources.Tier2.Constants
 import Hydra.Sources.Tier2.Decode.Core
 import Hydra.Sources.Tier2.Decoding
 import Hydra.Sources.Tier2.Describe.Core
@@ -40,11 +46,13 @@ import Hydra.Sources.Tier2.Describe.Mantle
 import Hydra.Sources.Tier2.Encode.Core hiding (ref)
 import Hydra.Sources.Tier2.Extract.Core
 import Hydra.Sources.Tier2.Extract.Mantle
-import Hydra.Sources.Tier2.Monads
+import Hydra.Sources.Tier2.Formatting
 import Hydra.Sources.Tier2.Grammars
 import Hydra.Sources.Tier2.Inference
+import Hydra.Sources.Tier2.Languages
 import Hydra.Sources.Tier2.Lexical
-import Hydra.Sources.Tier2.Adapt.Literals
+import Hydra.Sources.Tier2.Literals
+import Hydra.Sources.Tier2.Monads
 import Hydra.Sources.Tier2.Names
 import Hydra.Sources.Tier2.Reduction
 import Hydra.Sources.Tier2.Rewriting
@@ -56,10 +64,10 @@ import Hydra.Sources.Tier2.Show.Graph
 import Hydra.Sources.Tier2.Show.Mantle
 import Hydra.Sources.Tier2.Show.Typing
 import Hydra.Sources.Tier2.Sorting
+import Hydra.Sources.Tier2.Strip
 import Hydra.Sources.Tier2.Substitution
 import Hydra.Sources.Tier2.Tarjan
 import Hydra.Sources.Tier2.Templates
-import Hydra.Sources.Tier2.Adapt.Terms hiding (optionalToListDef)
 import Hydra.Sources.Tier2.Unification
 import Hydra.Sources.Tier2.Variants
 
@@ -68,18 +76,18 @@ kernelModules :: [Module]
 kernelModules = kernelTypeModules ++ kernelTermModules
 
 kernelTypeModules :: [Module]
-kernelTypeModules = [hydraCoreModule] ++ tier1TypeModules ++ tier2TypeModules
+kernelTypeModules = [hydraCoreModule] ++ tier1Modules
 
 kernelTermModules :: [Module]
-kernelTermModules = tier1TermModules ++ tier2TermModules
+kernelTermModules =  tier2Modules
+
+
+
+
+
 
 tier2Modules :: [Module]
-tier2Modules = tier2TypeModules ++ tier2TermModules
-
--- There are no tier-2 type modules at this time; all types are defined in Hydra Core and tier-1.
-tier2TypeModules = []
-
-tier2TermModules = [
+tier2Modules = [
   decodeCoreModule,
   describeCoreModule,
   describeMantleModule,
@@ -95,8 +103,11 @@ tier2TermModules = [
   hydraAdaptUtilsModule,
   hydraAnnotationsModule,
   hydraArityModule,
+  hydraConstantsModule,
   hydraDecodingModule,
+  hydraFormattingModule,
   languagesModule,
+  hydraLiteralsModule,
   hydraMonadsModule,
   hydraGrammarsModule,
   hydraInferenceModule,
@@ -108,6 +119,7 @@ tier2TermModules = [
   hydraSchemasModule,
   hydraSerializationModule,
   hydraSortingModule,
+  hydraStripModule,
   hydraSubstitutionModule,
   tarjanModule,
   hydraTemplatingModule,

@@ -30,12 +30,12 @@ import qualified Hydra.Dsl.Topology                   as Topology
 import qualified Hydra.Dsl.Types                      as Types
 import qualified Hydra.Dsl.Typing                     as Typing
 import qualified Hydra.Sources.Tier1.All              as Tier1
-import qualified Hydra.Sources.Tier1.Constants        as Constants
+import qualified Hydra.Sources.Tier2.Constants        as Constants
 import qualified Hydra.Sources.Tier2.Decoding           as Decoding
 import qualified Hydra.Sources.Tier2.Encode.Core      as EncodeCore
-import qualified Hydra.Sources.Tier1.Formatting       as Formatting
-import qualified Hydra.Sources.Tier1.Literals         as Literals
-import qualified Hydra.Sources.Tier1.Strip            as Strip
+import qualified Hydra.Sources.Tier2.Formatting       as Formatting
+import qualified Hydra.Sources.Tier2.Literals         as Literals
+import qualified Hydra.Sources.Tier2.Strip            as Strip
 import qualified Hydra.Sources.Tier2.Adapt.Utils     as AdaptUtils
 import qualified Hydra.Sources.Tier2.Adapt.Modules         as AdaptModules
 import qualified Hydra.Sources.Tier2.Annotations      as Annotations
@@ -72,7 +72,7 @@ import qualified Data.Maybe                           as Y
 import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Sources.Tier3.Ext.Haskell.Ast as HaskellAst
 import qualified Hydra.Sources.Tier3.Ext.Haskell.Language as HaskellLanguage
-
+import qualified Hydra.Sources.Tier2.Formatting as Formatting
 
 type HaskellNamespaces = Namespaces H.ModuleName
 
@@ -81,7 +81,7 @@ haskellUtilsDefinition = definitionInModule haskellUtilsModule
 
 haskellUtilsModule :: Module
 haskellUtilsModule = Module ns elements
-    [Tier1.hydraFormattingModule, HaskellLanguage.haskellLanguageModule, Schemas.hydraSchemasModule, Names.hydraNamesModule]
+    [Formatting.hydraFormattingModule, HaskellLanguage.haskellLanguageModule, Schemas.hydraSchemasModule, Names.hydraNamesModule]
     [Tier1.hydraCodersModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule, Tier1.hydraTypingModule, HaskellAst.haskellAstModule] $
     Just "Utilities for working with Haskell syntax trees"
   where
