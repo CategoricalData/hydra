@@ -2,7 +2,7 @@
 
 module Hydra.Ext.Other.PathAlgebra where
 
-import Hydra.Sources.Tier2.All
+import Hydra.Sources.Kernel.Terms.All
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types

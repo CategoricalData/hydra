@@ -3,17 +3,17 @@
 module Hydra.Sources.Tier3.Ext.Pg.Model where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
-import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Kernel.Types.Core
 
 
 pgModelModule :: Module
-pgModelModule = Module ns elements [] [Tier1.hydraCoreModule] $
+pgModelModule = Module ns elements [] [KernelTypes.hydraCoreModule] $
     Just ("A typed property graph data model. " ++
       "Property graphs are parameterized a type for property and id values, " ++
       "while property graph schemas are parameterized by a type for property and id types")

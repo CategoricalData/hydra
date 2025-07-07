@@ -3,8 +3,8 @@
 module Hydra.Sources.Tier3.Ext.Csharp.Language where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Phantoms as Base
 import Hydra.Dsl.Coders as Coders
 import Hydra.Dsl.Lib.Equality as Equality
@@ -26,7 +26,7 @@ csharpLanguageDefinition = definitionInModule csharpLanguageModule
 
 csharpLanguageModule :: Module
 csharpLanguageModule = Module ns elements
-    [Tier1.hydraCodersModule, Tier2.hydraLexicalModule] [Tier1.hydraGraphModule, Tier1.hydraCodersModule] $
+    [KernelTypes.hydraCodersModule, Tier2.hydraLexicalModule] [KernelTypes.hydraGraphModule, KernelTypes.hydraCodersModule] $
     Just "Language constraints and reserved words for C Sharp (C#)"
   where
     ns = Namespace "hydra.ext.csharp.language"

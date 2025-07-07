@@ -3,22 +3,22 @@
 module Hydra.Sources.Tier3.Ext.Avro.Schema where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
 
 avroSchemaModule :: Module
-avroSchemaModule = Module ns elements [Tier1.jsonModelModule] [Tier1.hydraCoreModule] $
+avroSchemaModule = Module ns elements [KernelTypes.jsonModelModule] [KernelTypes.hydraCoreModule] $
     Just ("A model for Avro schemas. Based on the Avro 1.11.1 specification:\n" ++
       "  https://avro.apache.org/docs/1.11.1/specification")
   where
     ns = Namespace "hydra.ext.org.apache.avro.schema"
     def = datatype ns
     avro = typeref ns
-    json = typeref $ moduleNamespace Tier1.jsonModelModule
+    json = typeref $ moduleNamespace KernelTypes.jsonModelModule
 
     elements = [
       def "Array" $

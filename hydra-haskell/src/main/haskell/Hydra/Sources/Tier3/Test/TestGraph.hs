@@ -16,7 +16,7 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Types         as Types
-import           Hydra.Sources.Tier2.All
+import           Hydra.Sources.Kernel.Terms.All
 import           Prelude hiding ((++))
 import qualified Data.List               as L
 import qualified Data.Map                as M

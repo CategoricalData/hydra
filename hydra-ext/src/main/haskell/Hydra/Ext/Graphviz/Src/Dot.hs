@@ -9,7 +9,7 @@ import           Hydra.Dsl.Annotations
 import           Hydra.Dsl.Bootstrap
 import qualified Hydra.Dsl.Terms       as Terms
 import           Hydra.Dsl.Types       as Types
-import           Hydra.Sources.Tier0.Core
+import           Hydra.Sources.Kernel.Types.Core
 
 
 dotModule :: Module

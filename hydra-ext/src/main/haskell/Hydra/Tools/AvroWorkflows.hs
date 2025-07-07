@@ -35,7 +35,7 @@ import qualified Hydra.Ext.Rdf.Utils as RdfUt
 import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Pg.Mapping as PGM
 import Hydra.Ext.Rdf.Serde
-import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Kernel.Types.Core
 import Hydra.Ext.Pg.Graphson.Coder
 import Hydra.Pg.Graphson.Syntax as G
 import Hydra.Ext.Pg.Utils

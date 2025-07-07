@@ -5,11 +5,11 @@
 import Hydra.Kernel
 import Hydra.Tools.Analysis
 import qualified Data.List as L
-import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Kernel.Types.Core
 import Hydra.Tools.Monads
 import Hydra.Codegen
-import Hydra.Sources.Tier1.All
-import Hydra.Sources.Tier2.All
+import Hydra.Sources.Kernel.Types.All
+import Hydra.Sources.Kernel.Terms.All
 
 -- Create an exhaustive list of Hydra kernel elements and primitives for code generation
 flowToIo hydraCoreGraph (graphSummary True $ modulesToGraph kernelModules) >>= putStrLn
@@ -18,7 +18,7 @@ module Hydra.Tools.Analysis.Summaries where
 
 import Hydra.Kernel
 import Hydra.Codegen
-import Hydra.Sources.Tier2.All
+import Hydra.Sources.Kernel.Terms.All
 import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Describe.Core as DescribeCore

@@ -3,17 +3,17 @@
 module Hydra.Sources.Tier3.Ext.Pg.Graphson.Syntax where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
-import Hydra.Sources.Tier0.Core
+import Hydra.Sources.Kernel.Types.Core
 
 
 graphsonSyntaxModule :: Module
-graphsonSyntaxModule = Module ns elements [] [Tier1.hydraCoreModule] $
+graphsonSyntaxModule = Module ns elements [] [KernelTypes.hydraCoreModule] $
     Just ("A syntax model for TinkerPop's GraphSON format."
       ++ " This model is designed to be as inclusive as possible, supporting GraphSON 4.0 as well as earlier versions."
       ++ " See https://github.com/apache/tinkerpop/blob/master/docs/src/dev/io/graphson.asciidoc.")

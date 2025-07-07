@@ -1,10 +1,10 @@
 module Hydra.Sources.Tier3.All(
   module Hydra.Sources.Tier3.All,
-  module Hydra.Sources.Tier2.All,
+  module Hydra.Sources.Kernel.Terms.All,
   -- Note: individual Tier-3 modules are not exported, as they are currently not guaranteed to be free of name collisions
 ) where
 
-import Hydra.Sources.Tier2.All
+import Hydra.Sources.Kernel.Terms.All
 import Hydra.Sources.Tier3.Ext.Avro.Schema
 import Hydra.Sources.Tier3.Ext.Cpp.Language
 import Hydra.Sources.Tier3.Ext.Cpp.Syntax

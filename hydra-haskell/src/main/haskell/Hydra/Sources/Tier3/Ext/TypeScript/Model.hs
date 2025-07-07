@@ -3,8 +3,8 @@
 module Hydra.Sources.Tier3.Ext.TypeScript.Model where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
@@ -14,7 +14,7 @@ typeScriptNs = Namespace "hydra.ext.typeScript.model"
 ts = typeref typeScriptNs
 
 typeScriptModelModule :: Module
-typeScriptModelModule = Module typeScriptNs elements [Tier1.hydraCoreModule] [Tier1.hydraCoreModule] $
+typeScriptModelModule = Module typeScriptNs elements [KernelTypes.hydraCoreModule] [KernelTypes.hydraCoreModule] $
     Just ("A basic TypeScript model, constructed on the basis of the typescriptlang.org documentation")
   where
     def = datatype typeScriptNs

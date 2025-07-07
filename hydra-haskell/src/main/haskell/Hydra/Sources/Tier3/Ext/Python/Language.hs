@@ -3,8 +3,8 @@
 module Hydra.Sources.Tier3.Ext.Python.Language where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Phantoms
 import Hydra.Dsl.Coders as Coders
 import Hydra.Dsl.Lib.Equality as Equality
@@ -25,7 +25,7 @@ pythonLanguageDefinition = definitionInModule pythonLanguageModule
 
 pythonLanguageModule :: Module
 pythonLanguageModule = Module ns elements
-    [Tier1.hydraCodersModule, Tier2.hydraLexicalModule] [Tier1.hydraCoreModule, Tier1.hydraGraphModule, Tier1.hydraCodersModule] $
+    [KernelTypes.hydraCodersModule, Tier2.hydraLexicalModule] [KernelTypes.hydraCoreModule, KernelTypes.hydraGraphModule, KernelTypes.hydraCodersModule] $
     Just "Language constraints and reserved words for Python 3"
   where
     ns = Namespace "hydra.ext.python.language"

@@ -3,8 +3,8 @@
 module Hydra.Sources.Tier3.Ext.Protobuf.Any where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Tier1.All as Tier1
-import qualified Hydra.Sources.Tier2.All as Tier2
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
@@ -14,7 +14,7 @@ pbAnyNs = Namespace "hydra.ext.protobuf.any"
 pbAny = typeref pbAnyNs
 
 protobufAnyModule :: Module
-protobufAnyModule = Module pbAnyNs elements [Tier1.hydraCoreModule] [Tier1.hydraCoreModule] $
+protobufAnyModule = Module pbAnyNs elements [KernelTypes.hydraCoreModule] [KernelTypes.hydraCoreModule] $
     Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto"
   where
     def = datatype pbAnyNs

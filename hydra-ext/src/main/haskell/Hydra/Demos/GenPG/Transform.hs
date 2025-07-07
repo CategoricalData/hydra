@@ -9,7 +9,7 @@ import Hydra.Tools.Monads
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Dsl.Terms as Terms
-import Hydra.Sources.Tier0.Core (hydraCoreGraph)
+import Hydra.Sources.Kernel.Types.Core (hydraCoreGraph)
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
