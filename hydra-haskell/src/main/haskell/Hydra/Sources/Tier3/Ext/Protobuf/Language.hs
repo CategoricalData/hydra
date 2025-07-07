@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Types           as Types
 
 import qualified Hydra.Sources.Tier1.All as Tier1
 import qualified Hydra.Sources.Tier2.Lexical as Lexical
-import qualified Hydra.Sources.Tier2.Strip as Strip
+import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 
 
 protobufLanguageDefinition :: String -> TTerm a -> TElement a
@@ -36,7 +36,7 @@ protobufLanguageDefinition = definitionInModule protobufLanguageModule
 
 protobufLanguageModule :: Module
 protobufLanguageModule = Module ns elements
-    [Lexical.hydraLexicalModule, Strip.hydraStripModule]
+    [Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule]
     [Tier1.hydraCodersModule] $
     Just "Language constraints for Protobuf v3"
   where
@@ -87,7 +87,7 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
         _TypeVariant_variable]),
       _LanguageConstraints_types>>: match _Type (Just true) [
         _Type_map>>: lambda "mt" (match _Type (Just true) [
-          _Type_optional>>: constant false] @@ (ref Strip.stripTypeDef @@ (Core.mapTypeValues $ var "mt")))]]]
+          _Type_optional>>: constant false] @@ (ref Rewriting.stripTypeDef @@ (Core.mapTypeValues $ var "mt")))]]]
 
 protobufReservedWordsDef :: TElement (S.Set String)
 protobufReservedWordsDef = protobufLanguageDefinition "protobufReservedWords" $

@@ -49,14 +49,14 @@ import qualified Hydra.Sources.Tier2.Lexical as Lexical
 import qualified Hydra.Sources.Tier2.Monads as Monads
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
-import qualified Hydra.Sources.Tier2.Strip as Strip
 import qualified Hydra.Sources.Tier2.Variants as Variants
 
 
 hydraAnnotationsModule :: Module
 hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
-    [Decoding.hydraDecodingModule, DecodeCore.decodeCoreModule, EncodeCore.encodeCoreModule, ExtractCore.extractCoreModule,
-      ShowCore.showCoreModule, Variants.hydraVariantsModule, Lexical.hydraLexicalModule, Monads.hydraMonadsModule]
+    [Decoding.hydraDecodingModule, DecodeCore.decodeCoreModule, EncodeCore.encodeCoreModule,
+      ExtractCore.extractCoreModule, Lexical.hydraLexicalModule,
+      ShowCore.showCoreModule, Variants.hydraVariantsModule, Monads.hydraMonadsModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule,
       Tier1.hydraModuleModule, Tier1.hydraTopologyModule, Tier1.hydraTypingModule] $
     Just "Utilities for reading and writing type and term annotations"
@@ -99,8 +99,7 @@ hydraAnnotationsModule = Module (Namespace "hydra.annotations") elements
      el typeElementDef,
      el whenFlagDef,
      el unshadowVariablesDef,
-     el withDepthDef,
-     el withEmptyGraphDef]
+     el withDepthDef]
 
 annotationsDefinition :: String -> TTerm a -> TElement a
 annotationsDefinition = definitionInModule hydraAnnotationsModule
@@ -154,7 +153,7 @@ getAttrWithDefaultDef = annotationsDefinition "getAttrWithDefault" $
 getCountDef :: TElement (Name -> Flow s Int)
 getCountDef = annotationsDefinition "getCount" $
   doc "Get a counter value" $
-  lambda "key" $ ref withEmptyGraphDef @@
+  lambda "key" $ ref Lexical.withEmptyGraphDef @@
     (Flows.bind
       (ref getAttrWithDefaultDef @@ var "key" @@ (Core.int32 0))
       (ref ExtractCore.int32Def))
@@ -162,7 +161,7 @@ getCountDef = annotationsDefinition "getCount" $
 getDebugIdDef :: TElement (Flow s (Maybe String))
 getDebugIdDef = annotationsDefinition "getDebugId" $
   doc "Get the debug ID from flow state" $
-  ref withEmptyGraphDef @@
+  ref Lexical.withEmptyGraphDef @@
     (Flows.bind
       (ref getAttrDef @@ ref Constants.key_debugIdDef)
       (lambda "desc" $ Flows.traverseOptional (ref ExtractCore.stringDef) (var "desc")))
@@ -246,7 +245,7 @@ hasDescriptionDef = annotationsDefinition "hasDescription" $
 hasFlagDef :: TElement (Name -> Flow s Bool)
 hasFlagDef = annotationsDefinition "hasFlag" $
   doc "Check if flag is set" $
-  lambda "flag" $ ref withEmptyGraphDef @@
+  lambda "flag" $ ref Lexical.withEmptyGraphDef @@
     (withVar "term" (ref getAttrWithDefaultDef @@ var "flag" @@ Core.false) $ ref ExtractCore.booleanDef @@ var "term")
 
 hasTypeDescriptionDef :: TElement (Type -> Bool)
@@ -263,22 +262,24 @@ nextCountDef = annotationsDefinition "nextCount" $
       (constant $ var "count")
       (ref putCountDef @@ var "key" @@ Math.add (var "count") (int32 1))
 
+-- TODO: move into hydra.rewriting
 normalizeTermAnnotationsDef :: TElement (Term -> Term)
 normalizeTermAnnotationsDef = annotationsDefinition "normalizeTermAnnotations" $
   doc "Normalize term annotations" $
   lambda "term" $ lets [
     "anns">: ref termAnnotationInternalDef @@ var "term",
-    "stripped">: ref Strip.stripTermDef @@ var "term"] $
+    "stripped">: ref Rewriting.stripTermDef @@ var "term"] $
     Logic.ifElse (Maps.null $ var "anns")
       (var "stripped")
       (Core.termAnnotated $ Core.annotatedTerm (var "stripped") (var "anns"))
 
+-- TODO: move into hydra.rewriting
 normalizeTypeAnnotationsDef :: TElement (Type -> Type)
 normalizeTypeAnnotationsDef = annotationsDefinition "normalizeTypeAnnotations" $
   doc "Normalize type annotations" $
   lambda "typ" $ lets [
     "anns">: ref typeAnnotationInternalDef @@ var "typ",
-    "stripped">: ref Strip.stripTypeDef @@ var "typ"] $
+    "stripped">: ref Rewriting.stripTypeDef @@ var "typ"] $
     Logic.ifElse (Maps.null $ var "anns")
       (var "stripped")
       (Core.typeAnnotated $ Core.annotatedType (var "stripped") (var "anns"))
@@ -319,7 +320,7 @@ setTermAnnotationDef :: TElement (Name -> Maybe Term -> Term -> Term)
 setTermAnnotationDef = annotationsDefinition "setTermAnnotation" $
   doc "Set term annotation" $
   lambda "key" $ lambda "val" $ lambda "term" $ lets [
-    "term'">: ref Strip.stripTermDef @@ var "term",
+    "term'">: ref Rewriting.stripTermDef @@ var "term",
     "anns">: ref setAnnotationDef @@ var "key" @@ var "val" @@ (ref termAnnotationInternalDef @@ var "term")] $
     Logic.ifElse (Maps.null $ var "anns")
       (var "term'")
@@ -341,7 +342,7 @@ setTypeAnnotationDef :: TElement (Name -> Maybe Term -> Type -> Type)
 setTypeAnnotationDef = annotationsDefinition "setTypeAnnotation" $
   doc "Set type annotation" $
   lambda "key" $ lambda "val" $ lambda "typ" $ lets [
-    "typ'">: ref Strip.stripTypeDef @@ var "typ",
+    "typ'">: ref Rewriting.stripTypeDef @@ var "typ",
     "anns">: ref setAnnotationDef @@ var "key" @@ var "val" @@ (ref typeAnnotationInternalDef @@ var "typ")] $
     Logic.ifElse (Maps.null (var "anns"))
       (var "typ'")
@@ -388,6 +389,7 @@ typeAnnotationInternalDef = annotationsDefinition "typeAnnotationInternal" $
       _Type_annotated>>: lambda "a" $ just $ var "a"]] $
     ref aggregateAnnotationsDef @@ var "getAnn" @@ (unaryFunction Core.annotatedTypeSubject) @@ (unaryFunction Core.annotatedTypeAnnotation)
 
+-- TODO: deprecate
 typeElementDef :: TElement (Name -> Type -> Element)
 typeElementDef = annotationsDefinition "typeElement" $
   doc "Create a type element with proper annotations" $
@@ -405,7 +407,7 @@ whenFlagDef = annotationsDefinition "whenFlag" $
     withVar "b" (ref hasFlagDef @@ var "flag") $
       Logic.ifElse (var "b") (var "fthen") (var "felse")
 
--- TODO: move out of Annotations and into Rewriting
+-- TODO: move into hydra.rewriting
 unshadowVariablesDef :: TElement (Term -> Term)
 unshadowVariablesDef = annotationsDefinition "unshadowVariables" $
   doc "Unshadow variables in term" $
@@ -451,15 +453,9 @@ withDepthDef = annotationsDefinition "withDepth" $
     <> " E.g. a variable in an outer case/match statement might be \"v1\", whereas the variable of another case/match statement"
     <> " inside of the first one becomes \"v2\". See also nextCount.") $
   lambdas ["key", "f"] $
-    withVar "count" (ref getCountDef @@ var "key") $
-      lets [
-        "inc">: Math.add (var "count") (int32 1)] $
-        Flows.bind (ref putCountDef @@ var "key" @@ var "inc") $ constant $
-          withVar "r" (var "f" @@ var "inc") $
-          Flows.bind (ref putCountDef @@ var "key" @@ var "count") $
-            constant $ Flows.pure $ var "r"
-
-withEmptyGraphDef :: TElement (Flow Graph a -> Flow s a)
-withEmptyGraphDef = annotationsDefinition "withEmptyGraph" $
-  doc "Execute flow with empty graph" $
-  ref Monads.withStateDef @@ ref Lexical.emptyGraphDef
+    withVar "count" (ref getCountDef @@ var "key") $ lets [
+    "inc">: Math.add (var "count") (int32 1)] $
+    Flows.bind (ref putCountDef @@ var "key" @@ var "inc") $ constant $
+    withVar "r" (var "f" @@ var "inc") $
+    Flows.bind (ref putCountDef @@ var "key" @@ var "count") $ constant $
+    Flows.pure $ var "r"

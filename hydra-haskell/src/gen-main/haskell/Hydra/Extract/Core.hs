@@ -16,8 +16,8 @@ import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
+import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
-import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -120,7 +120,7 @@ floatValue t = (Flows.bind (literal t) floatLiteral)
 
 functionType :: (Core.Type -> Compute.Flow t0 Core.FunctionType)
 functionType typ =  
-  let stripped = (Strip.stripType typ)
+  let stripped = (Rewriting.stripType typ)
   in ((\x -> case x of
     Core.TypeFunction v1 -> (Flows.pure v1)
     _ -> (Monads.unexpected "function type" (Core_.type_ typ))) stripped)
@@ -219,7 +219,7 @@ listHead term = (Flows.bind (list Flows.pure term) (\l -> Logic.ifElse (Lists.nu
 
 listType :: (Core.Type -> Compute.Flow t0 Core.Type)
 listType typ =  
-  let stripped = (Strip.stripType typ)
+  let stripped = (Rewriting.stripType typ)
   in ((\x -> case x of
     Core.TypeList v1 -> (Flows.pure v1)
     _ -> (Monads.unexpected "list type" (Core_.type_ typ))) stripped)
@@ -242,7 +242,7 @@ map fk fv term0 =
 
 mapType :: (Core.Type -> Compute.Flow t0 Core.MapType)
 mapType typ =  
-  let stripped = (Strip.stripType typ)
+  let stripped = (Rewriting.stripType typ)
   in ((\x -> case x of
     Core.TypeMap v1 -> (Flows.pure v1)
     _ -> (Monads.unexpected "map type" (Core_.type_ typ))) stripped)
@@ -260,7 +260,7 @@ optional f term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term ->
 
 optionalType :: (Core.Type -> Compute.Flow t0 Core.Type)
 optionalType typ =  
-  let stripped = (Strip.stripType typ)
+  let stripped = (Rewriting.stripType typ)
   in ((\x -> case x of
     Core.TypeOptional v1 -> (Flows.pure v1)
     _ -> (Monads.unexpected "optional type" (Core_.type_ typ))) stripped)
@@ -272,7 +272,7 @@ pair kf vf term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term ->
 
 productType :: (Core.Type -> Compute.Flow t0 [Core.Type])
 productType typ =  
-  let stripped = (Strip.stripType typ)
+  let stripped = (Rewriting.stripType typ)
   in ((\x -> case x of
     Core.TypeProduct v1 -> (Flows.pure v1)
     _ -> (Monads.unexpected "product type" (Core_.type_ typ))) stripped)
@@ -287,7 +287,7 @@ record expected term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\te
 
 recordType :: (Core.Name -> Core.Type -> Compute.Flow t0 [Core.FieldType])
 recordType ename typ =  
-  let stripped = (Strip.stripType typ)
+  let stripped = (Rewriting.stripType typ)
   in ((\x -> case x of
     Core.TypeRecord v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.rowTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.rowTypeFields v1)) (Monads.unexpected (Strings.cat [
       "record of type ",
@@ -303,7 +303,7 @@ set f term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> (\x 
 
 setType :: (Core.Type -> Compute.Flow t0 Core.Type)
 setType typ =  
-  let stripped = (Strip.stripType typ)
+  let stripped = (Rewriting.stripType typ)
   in ((\x -> case x of
     Core.TypeSet v1 -> (Flows.pure v1)
     _ -> (Monads.unexpected "set type" (Core_.type_ typ))) stripped)
@@ -319,7 +319,7 @@ stringLiteral v = ((\x -> case x of
 
 sumType :: (Core.Type -> Compute.Flow t0 [Core.Type])
 sumType typ =  
-  let stripped = (Strip.stripType typ)
+  let stripped = (Rewriting.stripType typ)
   in ((\x -> case x of
     Core.TypeSum v1 -> (Flows.pure v1)
     _ -> (Monads.unexpected "sum type" (Core_.type_ typ))) stripped)
@@ -362,7 +362,7 @@ uint8Value v = ((\x -> case x of
 
 unionType :: (Core.Name -> Core.Type -> Compute.Flow t0 [Core.FieldType])
 unionType ename typ =  
-  let stripped = (Strip.stripType typ)
+  let stripped = (Rewriting.stripType typ)
   in ((\x -> case x of
     Core.TypeUnion v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.rowTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.rowTypeFields v1)) (Monads.unexpected (Strings.cat [
       "union of type ",
@@ -398,7 +398,7 @@ wrap expected term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term
 
 wrappedType :: (Core.Name -> Core.Type -> Compute.Flow t0 Core.Type)
 wrappedType ename typ =  
-  let stripped = (Strip.stripType typ)
+  let stripped = (Rewriting.stripType typ)
   in ((\x -> case x of
     Core.TypeWrap v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.wrappedTypeObject v1)) (Monads.unexpected (Strings.cat [
       "wrapped type ",

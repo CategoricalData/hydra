@@ -7,7 +7,6 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -21,19 +20,11 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Names as Names
 import qualified Hydra.Sorting as Sorting
-import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
-
--- | Get elements with their dependencies
-elementsWithDependencies :: ([Graph.Element] -> Compute.Flow Graph.Graph [Graph.Element])
-elementsWithDependencies original =  
-  let depNames = (\el -> Sets.toList (termDependencyNames True False False (Graph.elementTerm el))) 
-      allDepNames = (Lists.nub (Lists.concat2 (Lists.map Graph.elementName original) (Lists.concat (Lists.map depNames original))))
-  in (Flows.mapList Lexical.requireElement allDepNames)
 
 -- | A variation of expandLambdas which also attaches type annotations when padding function terms
 expandTypedLambdas :: (Core.Term -> Core.Term)
@@ -48,7 +39,7 @@ expandTypedLambdas term =
                         cod1 = (snd recursive)
                     in (Lists.cons dom0 doms, cod1)
                   _ -> ([], t)) t)
-          in (helper (Strip.stripType typ))) 
+          in (helper (stripType typ))) 
       padTerm = (\i -> \doms -> \cod -> \term -> Logic.ifElse (Lists.null doms) term ( 
               let dom = (Lists.head doms) 
                   var = (Core.Name (Strings.cat2 "v" (Literals.showInt32 i)))
@@ -217,7 +208,7 @@ isLambda term = ((\x -> case x of
     Core.FunctionLambda _ -> True
     _ -> False) v1)
   Core.TermLet v1 -> (isLambda (Core.letEnvironment v1))
-  _ -> False) (Strip.stripTerm term))
+  _ -> False) (stripTerm term))
 
 -- | Apply a transformation to the first type beneath a chain of annotations
 mapBeneathTypeAnnotations :: ((Core.Type -> Core.Type) -> Core.Type -> Core.Type)
@@ -566,19 +557,19 @@ rewriteTypeM f =
 simplifyTerm :: (Core.Term -> Core.Term)
 simplifyTerm term =  
   let simplify = (\recurse -> \term ->  
-          let stripped = (Strip.stripTerm term)
+          let stripped = (stripTerm term)
           in (recurse ((\x -> case x of
             Core.TermApplication v1 ->  
               let lhs = (Core.applicationFunction v1) 
                   rhs = (Core.applicationArgument v1)
-                  strippedLhs = (Strip.stripTerm lhs)
+                  strippedLhs = (stripTerm lhs)
               in ((\x -> case x of
                 Core.TermFunction v2 -> ((\x -> case x of
                   Core.FunctionLambda v3 ->  
                     let var = (Core.lambdaParameter v3) 
                         body = (Core.lambdaBody v3)
                     in (Logic.ifElse (Sets.member var (freeVariablesInTerm body)) ( 
-                      let strippedRhs = (Strip.stripTerm rhs)
+                      let strippedRhs = (stripTerm rhs)
                       in ((\x -> case x of
                         Core.TermVariable v4 -> (simplifyTerm (substituteVariable var v4 body))
                         _ -> term) strippedRhs)) (simplifyTerm body))
@@ -586,6 +577,24 @@ simplifyTerm term =
                 _ -> term) strippedLhs)
             _ -> term) stripped)))
   in (rewriteTerm simplify term)
+
+-- | Strip all annotations from a term
+stripTerm :: (Core.Term -> Core.Term)
+stripTerm t = ((\x -> case x of
+  Core.TermAnnotated v1 -> (stripTerm (Core.annotatedTermSubject v1))
+  _ -> t) t)
+
+-- | Strip all annotations from a term
+stripType :: (Core.Type -> Core.Type)
+stripType t = ((\x -> case x of
+  Core.TypeAnnotated v1 -> (stripType (Core.annotatedTypeSubject v1))
+  _ -> t) t)
+
+-- | Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
+stripTypeParameters :: (Core.Type -> Core.Type)
+stripTypeParameters t = ((\x -> case x of
+  Core.TypeForall v1 -> (stripTypeParameters (Core.forallTypeBody v1))
+  _ -> t) (stripType t))
 
 -- | Recursively strip all annotations from a type
 stripTypeRecursive :: (Core.Type -> Core.Type)

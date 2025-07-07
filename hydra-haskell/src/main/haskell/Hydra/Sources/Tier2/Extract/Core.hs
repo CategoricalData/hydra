@@ -44,7 +44,6 @@ import qualified Hydra.Sources.Tier2.Lexical as Lexical
 import qualified Hydra.Sources.Tier2.Monads as Monads
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
-import qualified Hydra.Sources.Tier2.Strip as Strip
 
 
 extractCoreDefinition :: String -> TTerm a -> TElement a
@@ -251,7 +250,7 @@ functionTypeDef :: TElement (Type -> Flow s FunctionType)
 functionTypeDef = extractCoreDefinition "functionType" $
   doc "Extract a function type from a type" $
   lambda "typ" $ lets [
-    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    "stripped">: ref Rewriting.stripTypeDef @@ var "typ"]
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "function type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_function>>: lambda "ft" $ Flows.pure $ var "ft"]
 
@@ -383,7 +382,7 @@ listTypeDef :: TElement (Type -> Flow s Type)
 listTypeDef = extractCoreDefinition "listType" $
   doc "Extract the element type from a list type" $
   lambda "typ" $ lets [
-    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    "stripped">: ref Rewriting.stripTypeDef @@ var "typ"]
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "list type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_list>>: lambda "t" $ Flows.pure $ var "t"]
 
@@ -412,7 +411,7 @@ mapTypeDef :: TElement (Type -> Flow s MapType)
 mapTypeDef = extractCoreDefinition "mapType" $
   doc "Extract the key and value types from a map type" $
   lambda "typ" $ lets [
-    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    "stripped">: ref Rewriting.stripTypeDef @@ var "typ"]
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "map type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_map>>: lambda "mt" $ Flows.pure $ var "mt"]
 
@@ -441,7 +440,7 @@ optionalTypeDef :: TElement (Type -> Flow s Type)
 optionalTypeDef = extractCoreDefinition "optionalType" $
   doc "Extract the base type from an optional type" $
   lambda "typ" $ lets [
-    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    "stripped">: ref Rewriting.stripTypeDef @@ var "typ"]
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "optional type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_optional>>: lambda "t" $ Flows.pure $ var "t"]
 
@@ -461,7 +460,7 @@ productTypeDef :: TElement (Type -> Flow s [Type])
 productTypeDef = extractCoreDefinition "productType" $
   doc "Extract the component types from a product type" $
   lambda "typ" $ lets [
-    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    "stripped">: ref Rewriting.stripTypeDef @@ var "typ"]
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "product type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_product>>: lambda "types" $ Flows.pure $ var "types"]
 
@@ -479,7 +478,7 @@ recordTypeDef :: TElement (Name -> Type -> Flow s [FieldType])
 recordTypeDef = extractCoreDefinition "recordType" $
   doc "Extract the field types from a record type" $
   lambdas ["ename", "typ"] $ lets [
-    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    "stripped">: ref Rewriting.stripTypeDef @@ var "typ"]
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "record type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_record>>: lambda "rowType" $
         Logic.ifElse (Core.equalName_ (Core.rowTypeTypeName $ var "rowType") (var "ename"))
@@ -497,7 +496,7 @@ setTypeDef :: TElement (Type -> Flow s Type)
 setTypeDef = extractCoreDefinition "setType" $
   doc "Extract the element type from a set type" $
   lambda "typ" $ lets [
-    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    "stripped">: ref Rewriting.stripTypeDef @@ var "typ"]
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "set type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_set>>: lambda "t" $ Flows.pure $ var "t"]
 
@@ -516,7 +515,7 @@ sumTypeDef :: TElement (Type -> Flow s [Type])
 sumTypeDef = extractCoreDefinition "sumType" $
   doc "Extract the component types from a sum type" $
   lambda "typ" $ lets [
-    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    "stripped">: ref Rewriting.stripTypeDef @@ var "typ"]
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "sum type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_sum>>: lambda "types" $ Flows.pure $ var "types"]
 
@@ -576,7 +575,7 @@ unionTypeDef :: TElement (Name -> Type -> Flow s [FieldType])
 unionTypeDef = extractCoreDefinition "unionType" $
   doc "Extract the field types from a union type" $
   lambdas ["ename", "typ"] $ lets [
-    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    "stripped">: ref Rewriting.stripTypeDef @@ var "typ"]
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "union type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_union>>: lambda "rowType" $
         Logic.ifElse (Core.equalName_ (Core.rowTypeTypeName $ var "rowType") (var "ename"))
@@ -617,7 +616,7 @@ wrappedTypeDef :: TElement (Name -> Type -> Flow s Type)
 wrappedTypeDef = extractCoreDefinition "wrappedType" $
   doc "Extract the wrapped type from a wrapper type" $
   lambdas ["ename", "typ"] $ lets [
-    "stripped">: ref Strip.stripTypeDef @@ var "typ"]
+    "stripped">: ref Rewriting.stripTypeDef @@ var "typ"]
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "wrapped type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_wrap>>: lambda "wrappedType" $
         Logic.ifElse (Core.equalName_ (Core.wrappedTypeTypeName $ var "wrappedType") (var "ename"))

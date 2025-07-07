@@ -18,8 +18,8 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
-import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -169,4 +169,4 @@ unpackForallType cx t = ((\x -> case x of
         vars = (fst recursiveResult)
         finalType = (snd recursiveResult)
     in (Lists.cons v vars, finalType)
-  _ -> ([], t)) (Strip.stripType t))
+  _ -> ([], t)) (Rewriting.stripType t))

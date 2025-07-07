@@ -42,7 +42,7 @@ import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
-import qualified Hydra.Sources.Tier2.Strip as Strip
+import qualified Hydra.Sources.Tier2.Annotations as Annotations
 import qualified Hydra.Sources.Tier2.Substitution as Substitution
 
 
@@ -67,8 +67,8 @@ joinTypesDef = unificationDefinition "joinTypes" $
   doc ("Join two types, producing a list of type constraints."
     <> "The comment is used to provide context for the constraints.") $
   lambdas ["left", "right", "comment"] $ lets [
-    "sleft">: ref Strip.stripTypeDef @@ var  "left",
-    "sright">: ref Strip.stripTypeDef @@ var "right",
+    "sleft">: ref Rewriting.stripTypeDef @@ var  "left",
+    "sright">: ref Rewriting.stripTypeDef @@ var "right",
     "joinOne">: lambdas ["l", "r"] $ Typing.typeConstraint (var "l") (var "r") ("join types; " ++ var "comment"),
     "cannotUnify">: Flows.fail ("Cannot unify " ++ (ref ShowCore.typeDef @@ var "sleft") ++ " with " ++ (ref ShowCore.typeDef @@ var "sright")),
     "assertEqual">: Logic.ifElse
@@ -140,8 +140,8 @@ unifyTypeConstraintsDef = unificationDefinition "unifyTypeConstraints" $
     <> "  * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))") $
   lambdas ["schemaTypes", "constraints"] $ lets [
     "withConstraint">: lambdas ["c", "rest"] $ lets [
-      "sleft">: ref Strip.stripTypeDef @@ (Typing.typeConstraintLeft $ var "c"),
-      "sright">: ref Strip.stripTypeDef @@ (Typing.typeConstraintRight $ var "c"),
+      "sleft">: ref Rewriting.stripTypeDef @@ (Typing.typeConstraintLeft $ var "c"),
+      "sright">: ref Rewriting.stripTypeDef @@ (Typing.typeConstraintRight $ var "c"),
       "comment">: Typing.typeConstraintComment $ var "c",
       -- TODO: this occurrence check is expensive; consider delaying it until the time of substitution
       "tryBinding">: lambdas ["v", "t"] $ Logic.ifElse (ref variableOccursInTypeDef @@ var "v" @@ var "t")

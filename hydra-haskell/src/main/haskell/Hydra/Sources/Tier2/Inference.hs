@@ -43,6 +43,7 @@ import qualified Data.Maybe              as Y
 import qualified Hydra.Sources.Tier2.Annotations as Annotations
 import qualified Hydra.Sources.Tier2.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Tier2.Formatting as Formatting
+import qualified Hydra.Sources.Tier2.Lexical as Lexical
 import qualified Hydra.Sources.Tier2.Monads as Monads
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 import qualified Hydra.Sources.Tier2.Schemas as Schemas
@@ -50,7 +51,7 @@ import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
 import qualified Hydra.Sources.Tier2.Show.Mantle as ShowMantle
 import qualified Hydra.Sources.Tier2.Show.Typing as ShowTyping
 import qualified Hydra.Sources.Tier2.Sorting as Sorting
-import qualified Hydra.Sources.Tier2.Strip as Strip
+import qualified Hydra.Sources.Tier2.Annotations as Annotations
 import qualified Hydra.Sources.Tier2.Substitution as Substitution
 import qualified Hydra.Sources.Tier2.Unification as Unification
 import qualified Hydra.Sources.Tier2.Variants as Variants
@@ -58,7 +59,7 @@ import qualified Hydra.Sources.Tier2.Variants as Variants
 
 hydraInferenceModule :: Module
 hydraInferenceModule = Module (Namespace "hydra.inference") elements
-    [Annotations.hydraAnnotationsModule, Schemas.hydraSchemasModule, Unification.hydraUnificationModule,
+    [Annotations.hydraAnnotationsModule, Lexical.hydraLexicalModule, Schemas.hydraSchemasModule, Unification.hydraUnificationModule,
       ShowCore.showCoreModule, ShowMantle.showMantleModule, ShowTyping.showTypingModule]
     [Tier1.hydraCodersModule, Tier1.hydraComputeModule, Tier1.hydraMantleModule, Tier1.hydraModuleModule, Tier1.hydraTopologyModule, Tier1.hydraTypingModule] $
     Just "Type inference following Algorithm W, extended for nominal terms and types"
@@ -665,7 +666,7 @@ inferTypeOfDef = inferenceDefinition "inferTypeOf" $
       (TTerms.string "ignoredEnvironment"),
     "unifyAndSubst">: lambda "result" $ lets [
       "subst">: Typing.inferenceResultSubst $ var "result"] $
-      withVar "letResult" (ref Annotations.withEmptyGraphDef @@
+      withVar "letResult" (ref Lexical.withEmptyGraphDef @@
         (ref ExtractCore.letTermDef @@
           (ref Rewriting.normalizeTypeVariablesInTermDef @@
             Typing.inferenceResultTerm (var "result")))) $ lets [
@@ -1323,7 +1324,7 @@ gatherForallDef :: TElement ([Name] -> Type -> TypeScheme)
 gatherForallDef = inferenceDefinition "gatherForall" $
   doc "Helper to gather forall variables" $
   lambdas ["vars", "typ"] $
-    cases _Type (ref Strip.stripTypeDef @@ var "typ") Nothing [
+    cases _Type (ref Rewriting.stripTypeDef @@ var "typ") Nothing [
       _Type_forall>>: lambda "ft" $ ref gatherForallDef @@
         (Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars")) @@
         (Core.forallTypeBody $ var "ft"),

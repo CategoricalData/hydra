@@ -43,7 +43,6 @@ module Hydra.Kernel (
   module Hydra.Serialization,
   module Hydra.Settings,
   module Hydra.Sorting,
-  module Hydra.Strip,
   module Hydra.Substitution,
   module Hydra.Tabular,
   module Hydra.Templates,
@@ -84,7 +83,6 @@ import Hydra.Schemas
 import Hydra.Serialization
 import Hydra.Settings
 import Hydra.Sorting
-import Hydra.Strip
 import Hydra.Substitution
 import Hydra.Tabular
 import Hydra.Templates

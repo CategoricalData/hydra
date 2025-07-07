@@ -3,7 +3,6 @@ module Hydra.Ext.Json.Coder (jsonCoder, literalJsonCoder, untypedTermToJson) whe
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
-import Hydra.Strip
 import Hydra.Variants
 import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Literals

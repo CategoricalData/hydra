@@ -10,7 +10,6 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -102,10 +101,9 @@ term t =
       gatherTerms = (\prev -> \app ->  
               let lhs = (Core.applicationFunction app) 
                   rhs = (Core.applicationArgument app)
-                  strippedLhs = (Strip.stripTerm lhs)
               in ((\x -> case x of
                 Core.TermApplication v1 -> (gatherTerms (Lists.cons rhs prev) v1)
-                _ -> (Lists.cons strippedLhs (Lists.cons rhs prev))) strippedLhs))
+                _ -> (Lists.cons lhs (Lists.cons rhs prev))) lhs))
       showBinding = (\binding ->  
               let v = (Core.unName (Core.letBindingName binding)) 
                   bindingTerm = (Core.letBindingTerm binding)
@@ -270,7 +268,7 @@ term t =
         tname,
         "){",
         term term1,
-        "}"])) (Strip.stripTerm t))
+        "}"])) t)
 
 -- | Show a type as a string
 type_ :: (Core.Type -> String)
@@ -292,16 +290,15 @@ type_ typ =
       gatherTypes = (\prev -> \app ->  
               let lhs = (Core.applicationTypeFunction app) 
                   rhs = (Core.applicationTypeArgument app)
-                  strippedLhs = (Strip.stripType lhs)
               in ((\x -> case x of
                 Core.TypeApplication v1 -> (gatherTypes (Lists.cons rhs prev) v1)
-                _ -> (Lists.cons strippedLhs (Lists.cons rhs prev))) strippedLhs))
+                _ -> (Lists.cons lhs (Lists.cons rhs prev))) lhs))
       gatherFunctionTypes = (\prev -> \t -> (\x -> case x of
               Core.TypeFunction v1 ->  
                 let dom = (Core.functionTypeDomain v1) 
                     cod = (Core.functionTypeCodomain v1)
                 in (gatherFunctionTypes (Lists.cons dom prev) cod)
-              _ -> (Lists.reverse (Lists.cons t prev))) (Strip.stripType t))
+              _ -> (Lists.reverse (Lists.cons t prev))) t)
   in ((\x -> case x of
     Core.TypeApplication v1 ->  
       let types = (gatherTypes [] v1) 
@@ -366,7 +363,7 @@ type_ typ =
         tname,
         "](",
         type_ typ1,
-        ")"])) (Strip.stripType typ))
+        ")"])) typ)
 
 -- | Show a type scheme as a string
 typeScheme :: (Core.TypeScheme -> String)

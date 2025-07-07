@@ -45,7 +45,6 @@ import qualified Hydra.Sources.Tier2.Lexical as Lexical
 import qualified Hydra.Sources.Tier2.Monads as Monads
 import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
-import qualified Hydra.Sources.Tier2.Strip as Strip
 
 
 coreDecodingDefinition :: String -> TTerm a -> TElement a
@@ -94,7 +93,7 @@ fieldTypeDef = coreDecodingDefinition "fieldType" $
 fieldTypesDef :: TElement (Term -> Flow Graph [FieldType])
 fieldTypesDef = coreDecodingDefinition "fieldTypes" $
   lambda "term" $ lets [
-    "stripped">: ref Strip.stripTermDef @@ var "term"]
+    "stripped">: ref Rewriting.stripTermDef @@ var "term"]
     $ cases _Term (var "stripped")
         (Just $ ref Monads.unexpectedDef @@ string "list" @@ (ref ShowCore.termDef @@ var "term")) [
       _Term_list>>: lambda "els" $ Flows.mapList (ref fieldTypeDef) (var "els")]
@@ -172,7 +171,7 @@ rowTypeDef = coreDecodingDefinition "rowType" $
 
 stringDef :: TElement (Term -> Flow Graph String)
 stringDef = coreDecodingDefinition "string" $
-  lambda "term" $ ref ExtractCore.stringDef @@ (ref Strip.stripTermDef @@ var "term")
+  lambda "term" $ ref ExtractCore.stringDef @@ (ref Rewriting.stripTermDef @@ var "term")
 
 typeDef :: TElement (Term -> Flow Graph Type)
 typeDef = coreDecodingDefinition "type" $

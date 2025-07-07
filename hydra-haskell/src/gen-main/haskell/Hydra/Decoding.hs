@@ -7,7 +7,7 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Optionals as Optionals
-import qualified Hydra.Strip as Strip
+import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -54,7 +54,7 @@ cases = (nominal Core.caseStatementTypeName Core.caseStatementCases (Optionals.c
   where 
     matchFunction = (\arg_ -> (\x -> case x of
       Core.TermFunction v1 -> (Optionals.pure v1)
-      _ -> Nothing) (Strip.stripTerm arg_))
+      _ -> Nothing) (Rewriting.stripTerm arg_))
     matchElimination = (\x -> case x of
       Core.FunctionElimination v1 -> (Optionals.pure v1)
       _ -> Nothing)
@@ -130,7 +130,7 @@ lambda = (Optionals.compose matchFunction matchLambda)
   where 
     matchFunction = (\arg_ -> (\x -> case x of
       Core.TermFunction v1 -> (Optionals.pure v1)
-      _ -> Nothing) (Strip.stripTerm arg_))
+      _ -> Nothing) (Rewriting.stripTerm arg_))
     matchLambda = (\x -> case x of
       Core.FunctionLambda v1 -> (Optionals.pure v1)
       _ -> Nothing)
@@ -146,22 +146,22 @@ letBindingWithKey fname bindings =
 letTerm :: (Core.Term -> Maybe Core.Let)
 letTerm arg_ = ((\x -> case x of
   Core.TermLet v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.stripTerm arg_))
+  _ -> Nothing) (Rewriting.stripTerm arg_))
 
 list :: (Core.Term -> Maybe [Core.Term])
 list arg_ = ((\x -> case x of
   Core.TermList v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.stripTerm arg_))
+  _ -> Nothing) (Rewriting.stripTerm arg_))
 
 literal :: (Core.Term -> Maybe Core.Literal)
 literal arg_ = ((\x -> case x of
   Core.TermLiteral v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.stripTerm arg_))
+  _ -> Nothing) (Rewriting.stripTerm arg_))
 
 map :: (Core.Term -> Maybe (M.Map Core.Term Core.Term))
 map arg_ = ((\x -> case x of
   Core.TermMap v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.stripTerm arg_))
+  _ -> Nothing) (Rewriting.stripTerm arg_))
 
 name :: (Core.Term -> Maybe Core.Name)
 name term = (Optionals.map (\s -> Core.Name s) (Optionals.bind (wrap (Core.Name "hydra.core.Name") term) string))
@@ -174,24 +174,24 @@ nominal getName getB getA expected =
 optional :: (Core.Term -> Maybe (Maybe Core.Term))
 optional arg_ = ((\x -> case x of
   Core.TermOptional v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.stripTerm arg_))
+  _ -> Nothing) (Rewriting.stripTerm arg_))
 
 pair :: (Core.Term -> Maybe (Core.Term, Core.Term))
 pair = (Optionals.compose matchProduct (\l -> Logic.ifElse (Equality.equal 2 (Lists.length l)) (Just (Lists.at 0 l, (Lists.at 1 l))) Nothing)) 
   where 
     matchProduct = (\arg_ -> (\x -> case x of
       Core.TermProduct v1 -> (Optionals.pure v1)
-      _ -> Nothing) (Strip.stripTerm arg_))
+      _ -> Nothing) (Rewriting.stripTerm arg_))
 
 record :: (Core.Name -> Core.Term -> Maybe [Core.Field])
 record = (nominal Core.recordTypeName Core.recordFields (\arg_ -> (\x -> case x of
   Core.TermRecord v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.stripTerm arg_)))
+  _ -> Nothing) (Rewriting.stripTerm arg_)))
 
 set :: (Core.Term -> Maybe (S.Set Core.Term))
 set arg_ = ((\x -> case x of
   Core.TermSet v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.stripTerm arg_))
+  _ -> Nothing) (Rewriting.stripTerm arg_))
 
 string :: (Core.Term -> Maybe String)
 string = (Optionals.compose literal stringLiteral)
@@ -244,14 +244,14 @@ unitVariant tname term = (Optionals.map Core.fieldName (variant tname term))
 variable :: (Core.Term -> Maybe Core.Name)
 variable arg_ = ((\x -> case x of
   Core.TermVariable v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.stripTerm arg_))
+  _ -> Nothing) (Rewriting.stripTerm arg_))
 
 variant :: (Core.Name -> Core.Term -> Maybe Core.Field)
 variant = (nominal Core.injectionTypeName Core.injectionField (\arg_ -> (\x -> case x of
   Core.TermUnion v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.stripTerm arg_)))
+  _ -> Nothing) (Rewriting.stripTerm arg_)))
 
 wrap :: (Core.Name -> Core.Term -> Maybe Core.Term)
 wrap = (nominal Core.wrappedTermTypeName Core.wrappedTermObject (\arg_ -> (\x -> case x of
   Core.TermWrap v1 -> (Optionals.pure v1)
-  _ -> Nothing) (Strip.stripTerm arg_)))
+  _ -> Nothing) (Rewriting.stripTerm arg_)))

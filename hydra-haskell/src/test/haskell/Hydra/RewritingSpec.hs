@@ -72,6 +72,30 @@ checkFoldOverTerm = do
     node1 = node "a" []
     node2 = node "a" [node "b" [], node "c" [node "d" []]]
 
+checkStripTerm :: H.SpecWith ()
+checkStripTerm = do
+  H.describe "Tests for stripping annotations from terms" $ do
+    H.it "Un-annotated terms are not affected" $
+      QC.property $ \term -> case (term :: Term) of
+        TermAnnotated _ -> True
+        _ -> stripTerm term == term
+    H.it "Terms are stripped recursively" $
+      QC.property $ \term -> case (term :: Term) of
+        TermAnnotated _ -> True
+        _ -> stripTerm (Terms.annot M.empty (Terms.annot M.empty term)) == term
+
+checkStripType :: H.SpecWith ()
+checkStripType = do
+  H.describe "Tests for stripping annotations from types" $ do
+    H.it "Un-annotated types are not affected" $
+      QC.property $ \typ -> case (typ :: Type) of
+        TypeAnnotated _ -> True
+        _ -> stripType typ == typ
+    H.it "Types are stripped recursively" $
+      QC.property $ \typ -> case (typ :: Type) of
+        TypeAnnotated _ -> True
+        _ -> stripType (Types.annot M.empty (Types.annot M.empty typ)) == typ
+
 testExpandLambdas :: Graph -> H.SpecWith ()
 testExpandLambdas g = do
   H.describe "Test expanding to (untyped) lambda terms" $ do
@@ -555,6 +579,9 @@ testTopologicalSortBindings = do
 spec :: H.Spec
 spec = do
   checkFoldOverTerm
+  checkStripTerm
+  checkStripType
+
   testFoldOverTerm
 
   testExpandLambdas testGraph

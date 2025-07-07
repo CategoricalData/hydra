@@ -23,7 +23,6 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.Schemas,
   module Hydra.Sources.Tier2.Serialization,
   module Hydra.Sources.Tier2.Sorting,
-  module Hydra.Sources.Tier2.Strip,
   module Hydra.Sources.Tier2.Substitution,
   module Hydra.Sources.Tier2.Tarjan,
   module Hydra.Sources.Tier2.Templates,
@@ -64,7 +63,6 @@ import Hydra.Sources.Tier2.Show.Graph
 import Hydra.Sources.Tier2.Show.Mantle
 import Hydra.Sources.Tier2.Show.Typing
 import Hydra.Sources.Tier2.Sorting
-import Hydra.Sources.Tier2.Strip
 import Hydra.Sources.Tier2.Substitution
 import Hydra.Sources.Tier2.Tarjan
 import Hydra.Sources.Tier2.Templates
@@ -80,11 +78,6 @@ kernelTypeModules = [hydraCoreModule] ++ tier1Modules
 
 kernelTermModules :: [Module]
 kernelTermModules =  tier2Modules
-
-
-
-
-
 
 tier2Modules :: [Module]
 tier2Modules = [
@@ -119,7 +112,6 @@ tier2Modules = [
   hydraSchemasModule,
   hydraSerializationModule,
   hydraSortingModule,
-  hydraStripModule,
   hydraSubstitutionModule,
   tarjanModule,
   hydraTemplatingModule,

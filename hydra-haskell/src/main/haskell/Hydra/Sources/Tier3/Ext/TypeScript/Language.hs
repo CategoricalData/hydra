@@ -19,7 +19,7 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
 
-import qualified Hydra.Sources.Tier2.Strip as Strip
+import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 
 import qualified Data.Set as S
 
@@ -29,7 +29,8 @@ typeScriptLanguageDefinition = definitionInModule typeScriptLanguageModule
 
 typeScriptLanguageModule :: Module
 typeScriptLanguageModule = Module ns elements
-    [Tier1.hydraCodersModule, Tier2.hydraLexicalModule] [Tier1.hydraCoreModule, Tier1.hydraGraphModule, Tier1.hydraCodersModule] $
+    [Rewriting.hydraRewritingModule]
+    [Tier1.hydraCoreModule, Tier1.hydraGraphModule, Tier1.hydraCodersModule] $
     Just "Language constraints for TypeScript"
   where
     ns = Namespace "hydra.ext.typeScript.language"
@@ -72,7 +73,7 @@ typeScriptLanguageDef = typeScriptLanguageDefinition "typeScriptLanguage" $
         _TypeVariant_variable]),
       _LanguageConstraints_types>>: match _Type (Just true) [
         _Type_map>>: lambda "mt" (match _Type (Just true) [
-          _Type_optional>>: constant false] @@ (ref Strip.stripTypeDef @@ (Core.mapTypeValues $ var "mt")))]]]
+          _Type_optional>>: constant false] @@ (ref Rewriting.stripTypeDef @@ (Core.mapTypeValues $ var "mt")))]]]
 
 typeScriptReservedWordsDef :: TElement (S.Set String)
 typeScriptReservedWordsDef = typeScriptLanguageDefinition "typeScriptReservedWords" $

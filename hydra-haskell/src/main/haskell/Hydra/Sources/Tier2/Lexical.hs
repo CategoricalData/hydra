@@ -41,8 +41,8 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Tier2.Monads as Monads
+import qualified Hydra.Sources.Tier2.Rewriting as Rewriting
 import qualified Hydra.Sources.Tier2.Show.Core as ShowCore
-import qualified Hydra.Sources.Tier2.Strip as Strip
 
 
 lexicalDefinition :: String -> TTerm a -> TElement a
@@ -50,7 +50,7 @@ lexicalDefinition = definitionInModule hydraLexicalModule
 
 hydraLexicalModule :: Module
 hydraLexicalModule = Module (Namespace "hydra.lexical") elements
-   [Monads.hydraMonadsModule, Strip.hydraStripModule, ShowCore.showCoreModule]
+   [Monads.hydraMonadsModule, Rewriting.hydraRewritingModule, ShowCore.showCoreModule]
    [Tier1.hydraGraphModule, Tier1.hydraMantleModule] $
     Just ("A module for lexical operations over graphs.")
   where
@@ -74,6 +74,7 @@ hydraLexicalModule = Module (Namespace "hydra.lexical") elements
       el schemaContextDef,
       el stripAndDereferenceTermDef,
       el typeOfPrimitiveDef,
+      el withEmptyGraphDef,
       el withSchemaContextDef]
 
 dereferenceElementDef :: TElement (Name -> Flow Graph (Maybe Element))
@@ -119,7 +120,7 @@ extendGraphWithBindingsDef = lexicalDefinition "extendGraphWithBindings" $
 fieldsOfDef :: TElement (Type -> [FieldType])
 fieldsOfDef = lexicalDefinition "fieldsOf" $
   lambda "t" $ lets [
-    "stripped">: ref Strip.stripTypeDef @@ var "t"]
+    "stripped">: ref Rewriting.stripTypeDef @@ var "t"]
     $ cases _Type (var "stripped") (Just $ list []) [
       _Type_forall>>: lambda "forallType" $ ref fieldsOfDef @@ (Core.forallTypeBody $ var "forallType"),
       _Type_record>>: lambda "rt" $ Core.rowTypeFields $ var "rt",
@@ -151,7 +152,7 @@ matchEnumDef = lexicalDefinition "matchEnum" $
 matchRecordDef :: TElement ((M.Map Name Term -> Flow Graph b) -> Term -> Flow Graph b)
 matchRecordDef = lexicalDefinition "matchRecord" $
   lambdas ["decode", "term"] $ lets [
-    "stripped">: ref Strip.stripTermDef @@ var "term"]
+    "stripped">: ref Rewriting.stripTermDef @@ var "term"]
     $ cases _Term (var "stripped")
         (Just $ ref Monads.unexpectedDef @@ string "record" @@ (ref ShowCore.termDef @@ var "term")) [
       _Term_record>>: lambda "record" $ var "decode" @@
@@ -162,7 +163,7 @@ matchRecordDef = lexicalDefinition "matchRecord" $
 matchUnionDef :: TElement (Name -> [(Name, Term -> Flow Graph b)] -> Term -> Flow Graph b)
 matchUnionDef = lexicalDefinition "matchUnion" $
   lambdas ["tname", "pairs", "term"] $ lets [
-    "stripped">: ref Strip.stripTermDef @@ var "term",
+    "stripped">: ref Rewriting.stripTermDef @@ var "term",
     "mapping">: Maps.fromList $ var "pairs"] $
     cases _Term (var "stripped")
       (Just $ ref Monads.unexpectedDef @@
@@ -229,7 +230,7 @@ resolveTermDef = lexicalDefinition "resolveTerm" $
   doc "TODO: distinguish between lambda-bound and let-bound variables" $
   lambda "name" $ lets [
     "recurse">: lambda "el" $ lets [
-      "stripped">: ref Strip.stripTermDef @@ (Graph.elementTerm $ var "el")]
+      "stripped">: ref Rewriting.stripTermDef @@ (Graph.elementTerm $ var "el")]
       $ cases _Term (var "stripped") (Just $ Flows.pure $ just $ Graph.elementTerm $ var "el") [
         _Term_variable>>: lambda "name'" $ ref resolveTermDef @@ var "name'"]]
     $ Flows.bind (ref Monads.getStateDef) $
@@ -246,7 +247,7 @@ schemaContextDef = lexicalDefinition "schemaContext" $
 stripAndDereferenceTermDef :: TElement (Term -> Flow Graph Term)
 stripAndDereferenceTermDef = lexicalDefinition "stripAndDereferenceTerm" $
   lambda "term" $ lets [
-    "stripped">: ref Strip.stripTermDef @@ var "term"]
+    "stripped">: ref Rewriting.stripTermDef @@ var "term"]
     $ cases _Term (var "stripped") (Just $ Flows.pure $ var "stripped") [
       _Term_variable>>: lambda "v" $
         Flows.bind (ref requireTermDef @@ var "v") $
@@ -255,6 +256,12 @@ stripAndDereferenceTermDef = lexicalDefinition "stripAndDereferenceTerm" $
 typeOfPrimitiveDef :: TElement (Name -> Flow Graph TypeScheme)
 typeOfPrimitiveDef = lexicalDefinition "typeOfPrimitive" $
   lambda "name" $ Flows.map (unaryFunction Graph.primitiveType) $ ref requirePrimitiveDef @@ var "name"
+
+-- TODO: move into hydra.lexical
+withEmptyGraphDef :: TElement (Flow Graph a -> Flow s a)
+withEmptyGraphDef = lexicalDefinition "withEmptyGraph" $
+  doc "Execute flow with empty graph" $
+  ref Monads.withStateDef @@ ref emptyGraphDef
 
 withSchemaContextDef :: TElement (Flow Graph x -> Flow Graph x)
 withSchemaContextDef = lexicalDefinition "withSchemaContext" $

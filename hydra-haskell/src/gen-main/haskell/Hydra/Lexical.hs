@@ -13,8 +13,8 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
+import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
-import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -66,7 +66,7 @@ extendGraphWithBindings bindings g =
 
 fieldsOf :: (Core.Type -> [Core.FieldType])
 fieldsOf t =  
-  let stripped = (Strip.stripType t)
+  let stripped = (Rewriting.stripType t)
   in ((\x -> case x of
     Core.TypeForall v1 -> (fieldsOf (Core.forallTypeBody v1))
     Core.TypeRecord v1 -> (Core.rowTypeFields v1)
@@ -91,14 +91,14 @@ matchEnum tname pairs = (matchUnion tname (Lists.map (\pair -> matchUnitField (f
 
 matchRecord :: ((M.Map Core.Name Core.Term -> Compute.Flow t0 t1) -> Core.Term -> Compute.Flow t0 t1)
 matchRecord decode term =  
-  let stripped = (Strip.stripTerm term)
+  let stripped = (Rewriting.stripTerm term)
   in ((\x -> case x of
     Core.TermRecord v1 -> (decode (Maps.fromList (Lists.map (\field -> (Core.fieldName field, (Core.fieldTerm field))) (Core.recordFields v1))))
     _ -> (Monads.unexpected "record" (Core_.term term))) stripped)
 
 matchUnion :: (Core.Name -> [(Core.Name, (Core.Term -> Compute.Flow Graph.Graph t0))] -> Core.Term -> Compute.Flow Graph.Graph t0)
 matchUnion tname pairs term =  
-  let stripped = (Strip.stripTerm term) 
+  let stripped = (Rewriting.stripTerm term) 
       mapping = (Maps.fromList pairs)
   in ((\x -> case x of
     Core.TermVariable v1 -> (Flows.bind (requireElement v1) (\el -> matchUnion tname pairs (Graph.elementTerm el)))
@@ -153,7 +153,7 @@ requireTerm name = (Flows.bind (resolveTerm name) (\mt -> Optionals.maybe (Flows
 resolveTerm :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Term))
 resolveTerm name =  
   let recurse = (\el ->  
-          let stripped = (Strip.stripTerm (Graph.elementTerm el))
+          let stripped = (Rewriting.stripTerm (Graph.elementTerm el))
           in ((\x -> case x of
             Core.TermVariable v1 -> (resolveTerm v1)
             _ -> (Flows.pure (Just (Graph.elementTerm el)))) stripped))
@@ -165,13 +165,16 @@ schemaContext g = (Optionals.fromMaybe g (Graph.graphSchema g))
 
 stripAndDereferenceTerm :: (Core.Term -> Compute.Flow Graph.Graph Core.Term)
 stripAndDereferenceTerm term =  
-  let stripped = (Strip.stripTerm term)
+  let stripped = (Rewriting.stripTerm term)
   in ((\x -> case x of
     Core.TermVariable v1 -> (Flows.bind (requireTerm v1) (\t -> stripAndDereferenceTerm t))
     _ -> (Flows.pure stripped)) stripped)
 
 typeOfPrimitive :: (Core.Name -> Compute.Flow Graph.Graph Core.TypeScheme)
 typeOfPrimitive name = (Flows.map Graph.primitiveType (requirePrimitive name))
+
+withEmptyGraph :: (Compute.Flow Graph.Graph t1 -> Compute.Flow t0 t1)
+withEmptyGraph = (Monads.withState emptyGraph)
 
 withSchemaContext :: (Compute.Flow Graph.Graph t0 -> Compute.Flow Graph.Graph t0)
 withSchemaContext f = (Flows.bind Monads.getState (\g -> Monads.withState (schemaContext g) f))

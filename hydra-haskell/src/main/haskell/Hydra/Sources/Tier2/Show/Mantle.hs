@@ -40,12 +40,12 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Tier2.Strip as Strip
+import qualified Hydra.Sources.Tier2.Annotations as Annotations
 
 
 showMantleModule :: Module
 showMantleModule = Module (Namespace "hydra.show.mantle") elements
-    [Strip.hydraStripModule]
+    [Annotations.hydraAnnotationsModule]
     [Tier1.hydraComputeModule, Tier1.hydraGraphModule, Tier1.hydraMantleModule, Tier1.hydraTypingModule] $
     Just "String representations of hydra.mantle types"
   where
