@@ -31,8 +31,8 @@ import qualified Hydra.Dsl.Types                      as Types
 import qualified Hydra.Dsl.Typing                     as Typing
 import qualified Hydra.Sources.Tier1.All              as Tier1
 import qualified Hydra.Sources.Tier1.Constants        as Constants
-import qualified Hydra.Sources.Tier1.Decode           as Decode
-import qualified Hydra.Sources.Tier1.Encode.Core      as EncodeCore
+import qualified Hydra.Sources.Tier2.Decoding           as Decoding
+import qualified Hydra.Sources.Tier2.Encode.Core      as EncodeCore
 import qualified Hydra.Sources.Tier1.Formatting       as Formatting
 import qualified Hydra.Sources.Tier1.Literals         as Literals
 import qualified Hydra.Sources.Tier1.Strip            as Strip
@@ -820,14 +820,14 @@ typeDeclDef = haskellCoderDefinition "typeDecl" $
       Strings.cat $ list [string "_", ref Names.localNameOfDef @@ var "name'", string "_type_"],
     "rawTerm">: ref EncodeCore.typeDef @@ var "typ",
     "rewrite">: lambda "recurse" $ lambda "term" $ lets [
-      "variantResult">: ref Decode.variantDef @@ Core.nameLift _Type @@ var "term",
+      "variantResult">: ref Decoding.variantDef @@ Core.nameLift _Type @@ var "term",
       "forType">: lambda "field" $ lets [
         "fname">: Core.fieldName $ var "field",
         "fterm">: Core.fieldTerm $ var "field"] $
         Logic.ifElse (Equality.equal (var "fname") $ Core.nameLift _Type_record)
           nothing
           (Logic.ifElse (Equality.equal (var "fname") $ Core.nameLift _Type_variable)
-            (Optionals.bind (ref Decode.nameDef @@ var "fterm") (var "forVariableType"))
+            (Optionals.bind (ref Decoding.nameDef @@ var "fterm") (var "forVariableType"))
             nothing),
       "forVariableType">: lambda "name''" $ lets [
         "qname">: ref Names.qualifyNameDef @@ var "name''",

@@ -3,16 +3,17 @@
 module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier1.All,
   module Hydra.Sources.Tier2.All,
-  module Hydra.Sources.Tier2.Adapt.Utils,
+  module Hydra.Sources.Tier2.Adapt.Literals,
   module Hydra.Sources.Tier2.Adapt.Modules,
+  module Hydra.Sources.Tier2.Adapt.Terms,
+  module Hydra.Sources.Tier2.Adapt.Utils,
   module Hydra.Sources.Tier2.Annotations,
   module Hydra.Sources.Tier2.Arity,
-  module Hydra.Sources.Tier2.Languages,
-  module Hydra.Sources.Tier2.Monads,
   module Hydra.Sources.Tier2.Grammars,
   module Hydra.Sources.Tier2.Inference,
+  module Hydra.Sources.Tier2.Languages,
   module Hydra.Sources.Tier2.Lexical,
-  module Hydra.Sources.Tier2.Adapt.Literals,
+  module Hydra.Sources.Tier2.Monads,
   module Hydra.Sources.Tier2.Names,
   module Hydra.Sources.Tier2.Reduction,
   module Hydra.Sources.Tier2.Rewriting,
@@ -22,7 +23,6 @@ module Hydra.Sources.Tier2.All(
   module Hydra.Sources.Tier2.Substitution,
   module Hydra.Sources.Tier2.Tarjan,
   module Hydra.Sources.Tier2.Templates,
-  module Hydra.Sources.Tier2.Adapt.Terms,
   module Hydra.Sources.Tier2.Unification,
   module Hydra.Sources.Tier2.Variants,
 ) where
@@ -34,8 +34,10 @@ import Hydra.Sources.Tier2.Annotations
 import Hydra.Sources.Tier2.Arity
 import Hydra.Sources.Tier2.Languages
 import Hydra.Sources.Tier2.Decode.Core
+import Hydra.Sources.Tier2.Decoding
 import Hydra.Sources.Tier2.Describe.Core
 import Hydra.Sources.Tier2.Describe.Mantle
+import Hydra.Sources.Tier2.Encode.Core hiding (ref)
 import Hydra.Sources.Tier2.Extract.Core
 import Hydra.Sources.Tier2.Extract.Mantle
 import Hydra.Sources.Tier2.Monads
@@ -81,6 +83,7 @@ tier2TermModules = [
   decodeCoreModule,
   describeCoreModule,
   describeMantleModule,
+  encodeCoreModule,
   extractCoreModule,
   extractMantleModule,
   showCoreModule,
@@ -92,6 +95,7 @@ tier2TermModules = [
   hydraAdaptUtilsModule,
   hydraAnnotationsModule,
   hydraArityModule,
+  hydraDecodingModule,
   languagesModule,
   hydraMonadsModule,
   hydraGrammarsModule,

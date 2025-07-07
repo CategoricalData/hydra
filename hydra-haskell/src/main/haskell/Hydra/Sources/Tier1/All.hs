@@ -9,7 +9,6 @@ module Hydra.Sources.Tier1.All(
   module Hydra.Sources.Tier1.Compute,
   module Hydra.Sources.Tier1.Constants,
   module Hydra.Sources.Tier1.Constraints,
-  module Hydra.Sources.Tier1.Decode,
   module Hydra.Sources.Tier1.Formatting,
   module Hydra.Sources.Tier1.Grammar,
   module Hydra.Sources.Tier1.Graph,
@@ -35,8 +34,6 @@ import Hydra.Sources.Tier1.Coders
 import Hydra.Sources.Tier1.Compute
 import Hydra.Sources.Tier1.Constants
 import Hydra.Sources.Tier1.Constraints
-import Hydra.Sources.Tier1.Encode.Core hiding (ref)
-import Hydra.Sources.Tier1.Decode
 import Hydra.Sources.Tier1.Formatting
 import Hydra.Sources.Tier1.Grammar
 import Hydra.Sources.Tier1.Graph
@@ -59,8 +56,6 @@ tier1Modules = tier1TypeModules ++ tier1TermModules
 
 tier1TermModules :: [Module]
 tier1TermModules = [
-  encodeCoreModule,
-  hydraDecodeModule,
   hydraConstantsModule,
   hydraFormattingModule,
   hydraLiteralsModule,
