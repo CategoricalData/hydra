@@ -41,8 +41,8 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
-describeMantleModule :: Module
-describeMantleModule = Module (Namespace "hydra.describe.mantle") elements
+module_ :: Module
+module_ = Module (Namespace "hydra.describe.mantle") elements
     []
     [KernelTypes.hydraCoreModule, KernelTypes.hydraMantleModule] $
     Just "Natural-language descriptions for hydra.mantle types"
@@ -50,12 +50,11 @@ describeMantleModule = Module (Namespace "hydra.describe.mantle") elements
    elements = [
      el precisionDef]
 
-describeMantleDefinition :: String -> TTerm a -> TElement a
-describeMantleDefinition = definitionInModule describeMantleModule
-
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
 
 precisionDef :: TElement (Precision -> String)
-precisionDef = describeMantleDefinition "precision" $
+precisionDef = define "precision" $
   doc "Display numeric precision as a string" $
   match _Precision Nothing [
     _Precision_arbitrary>>: constant $ string "arbitrary-precision",

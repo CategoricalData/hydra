@@ -44,9 +44,9 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 
 
-showGraphModule :: Module
-showGraphModule = Module (Namespace "hydra.show.graph") elements
-    [Annotations.hydraAnnotationsModule, ShowCore.showCoreModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.show.graph") elements
+    [Annotations.module_, ShowCore.module_]
     [KernelTypes.hydraComputeModule, KernelTypes.hydraGraphModule, KernelTypes.hydraMantleModule, KernelTypes.hydraTypingModule] $
     Just "String representations of hydra.graph types"
   where
@@ -54,11 +54,11 @@ showGraphModule = Module (Namespace "hydra.show.graph") elements
      el elementDef,
      el graphDef]
 
-showGraphDefinition :: String -> TTerm a -> TElement a
-showGraphDefinition = definitionInModule showGraphModule
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
 
 elementDef :: TElement (Element -> String)
-elementDef = showGraphDefinition "element" $
+elementDef = define "element" $
   doc "Show an element as a string" $
   lambda "el" $ lets [
     "name">: unwrap _Name @@ (Graph.elementName $ var "el"),
@@ -74,7 +74,7 @@ elementDef = showGraphDefinition "element" $
       var "typeStr"]
 
 graphDef :: TElement (Graph -> String)
-graphDef = showGraphDefinition "graph" $
+graphDef = define "graph" $
   doc "Show a graph as a string" $
   lambda "graph" $ lets [
     "elements">: Maps.elems $ Graph.graphElements $ var "graph",

@@ -84,7 +84,7 @@ javaLanguageDefinition = definitionInModule javaLanguageModule
 
 javaLanguageModule :: Module
 javaLanguageModule = Module ns elements
-    [KernelTypes.hydraCodersModule, Lexical.hydraLexicalModule]
+    [KernelTypes.hydraCodersModule, Lexical.module_]
     [KernelTypes.hydraCoreModule, KernelTypes.hydraGraphModule, KernelTypes.hydraCodersModule] $
     Just "Language constraints and reserved words for Java"
   where

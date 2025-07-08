@@ -44,9 +44,9 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 
 
-showTypingModule :: Module
-showTypingModule = Module (Namespace "hydra.show.typing") elements
-    [Annotations.hydraAnnotationsModule, ShowCore.showCoreModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.show.typing") elements
+    [Annotations.module_, ShowCore.module_]
     [KernelTypes.hydraComputeModule, KernelTypes.hydraGraphModule, KernelTypes.hydraMantleModule, KernelTypes.hydraTypingModule] $
     Just "String representations of hydra.typing types"
   where
@@ -54,11 +54,11 @@ showTypingModule = Module (Namespace "hydra.show.typing") elements
      el typeConstraintDef,
      el typeSubstDef]
 
-showTypingDefinition :: String -> TTerm a -> TElement a
-showTypingDefinition = definitionInModule showTypingModule
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
 
 typeConstraintDef :: TElement (TypeConstraint -> String)
-typeConstraintDef = showTypingDefinition "typeConstraint" $
+typeConstraintDef = define "typeConstraint" $
   doc "Show a type constraint as a string" $
   lambda "tc" $ lets [
     "ltyp">: Typing.typeConstraintLeft $ var "tc",
@@ -69,7 +69,7 @@ typeConstraintDef = showTypingDefinition "typeConstraint" $
       ref ShowCore.typeDef @@ var "rtyp"]
 
 typeSubstDef :: TElement (TypeSubst -> String)
-typeSubstDef = showTypingDefinition "typeSubst" $
+typeSubstDef = define "typeSubst" $
   doc "Show a type substitution as a string" $
   lambda "ts" $ lets [
     "subst">: Typing.unTypeSubst $ var "ts",

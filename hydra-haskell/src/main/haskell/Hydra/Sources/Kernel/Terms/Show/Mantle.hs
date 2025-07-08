@@ -43,9 +43,9 @@ import qualified Data.Maybe              as Y
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 
 
-showMantleModule :: Module
-showMantleModule = Module (Namespace "hydra.show.mantle") elements
-    [Annotations.hydraAnnotationsModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.show.mantle") elements
+    [Annotations.module_]
     [KernelTypes.hydraComputeModule, KernelTypes.hydraGraphModule, KernelTypes.hydraMantleModule, KernelTypes.hydraTypingModule] $
     Just "String representations of hydra.mantle types"
   where
@@ -53,11 +53,11 @@ showMantleModule = Module (Namespace "hydra.show.mantle") elements
      el termVariantDef,
      el typeVariantDef]
 
-showMantleDefinition :: String -> TTerm a -> TElement a
-showMantleDefinition = definitionInModule showMantleModule
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
 
 termVariantDef :: TElement (TermVariant -> String)
-termVariantDef = showMantleDefinition "termVariant" $
+termVariantDef = define "termVariant" $
   doc "Show a term variant as a string" $
   match _TermVariant Nothing [
     _TermVariant_annotated>>: constant $ string "annotated",
@@ -80,7 +80,7 @@ termVariantDef = showMantleDefinition "termVariant" $
     _TermVariant_wrap>>: constant $ string "wrap"]
 
 typeVariantDef :: TElement (TypeVariant -> String)
-typeVariantDef = showMantleDefinition "typeVariant" $
+typeVariantDef = define "typeVariant" $
   doc "Show a type variant as a string" $
   match _TypeVariant Nothing [
     _TypeVariant_annotated>>: constant $ string "annotated",

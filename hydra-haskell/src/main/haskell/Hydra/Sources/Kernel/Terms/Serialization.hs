@@ -43,11 +43,8 @@ import qualified Data.Maybe              as Y
 import Hydra.Ast
 
 
-serializationDefinition :: String -> TTerm a -> TElement a
-serializationDefinition = definitionInModule hydraSerializationModule
-
-hydraSerializationModule :: Module
-hydraSerializationModule = Module (Namespace "hydra.serialization") elements
+module_ :: Module
+module_ = Module (Namespace "hydra.serialization") elements
     []
     [KernelTypes.hydraAstModule, KernelTypes.hydraGraphModule] $
     Just ("Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.")
@@ -106,19 +103,22 @@ hydraSerializationModule = Module (Namespace "hydra.serialization") elements
      el withCommaDef,
      el withSemiDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 angleBracesDef :: TElement Brackets
-angleBracesDef = serializationDefinition "angleBraces" $
+angleBracesDef = define "angleBraces" $
   Ast.brackets (ref symDef @@ string "<") (ref symDef @@ string ">")
 
 angleBracesListDef :: TElement (BlockStyle -> [Expr] -> Expr)
-angleBracesListDef = serializationDefinition "angleBracesList" $
+angleBracesListDef = define "angleBracesList" $
   lambdas ["style", "els"] $
     Logic.ifElse (Lists.null $ var "els")
       (ref cstDef @@ string "<>")
       (ref bracketsDef @@ ref angleBracesDef @@ var "style" @@ (ref commaSepDef @@ var "style" @@ var "els"))
 
 bracesListAdaptiveDef :: TElement ([Expr] -> Expr)
-bracesListAdaptiveDef = serializationDefinition "bracesListAdaptive" $
+bracesListAdaptiveDef = define "bracesListAdaptive" $
   doc "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression." $
   lambda "els" $ lets [
     "inlineList">: ref curlyBracesListDef @@ nothing @@ ref inlineStyleDef @@ var "els"]
@@ -127,7 +127,7 @@ bracesListAdaptiveDef = serializationDefinition "bracesListAdaptive" $
       (var "inlineList")
 
 bracketListAdaptiveDef :: TElement ([Expr] -> Expr)
-bracketListAdaptiveDef = serializationDefinition "bracketListAdaptive" $
+bracketListAdaptiveDef = define "bracketListAdaptive" $
   doc "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression." $
   lambda "els" $ lets [
     "inlineList">: ref bracketListDef @@ ref inlineStyleDef @@ var "els"]
@@ -136,36 +136,36 @@ bracketListAdaptiveDef = serializationDefinition "bracketListAdaptive" $
       (var "inlineList")
 
 bracketListDef :: TElement (BlockStyle -> [Expr] -> Expr)
-bracketListDef = serializationDefinition "bracketList" $
+bracketListDef = define "bracketList" $
   lambdas ["style", "els"] $
     Logic.ifElse (Lists.null $ var "els")
       (ref cstDef @@ string "[]")
       (ref bracketsDef @@ ref squareBracketsDef @@ var "style" @@ (ref commaSepDef @@ var "style" @@ var "els"))
 
 bracketsDef :: TElement (Brackets -> BlockStyle -> Expr -> Expr)
-bracketsDef = serializationDefinition "brackets" $
+bracketsDef = define "brackets" $
   lambdas ["br", "style", "e"] $
     Ast.exprBrackets $ Ast.bracketExpr (var "br") (var "e") (var "style")
 
 commaSepDef :: TElement (BlockStyle -> [Expr] -> Expr)
-commaSepDef = serializationDefinition "commaSep" $
+commaSepDef = define "commaSep" $
   ref symbolSepDef @@ string ","
 
 cstDef :: TElement (String -> Expr)
-cstDef = serializationDefinition "cst" $
+cstDef = define "cst" $
   lambda "s" $ Ast.exprConst $ ref symDef @@ var "s"
 
 curlyBlockDef :: TElement (BlockStyle -> Expr -> Expr)
-curlyBlockDef = serializationDefinition "curlyBlock" $
+curlyBlockDef = define "curlyBlock" $
   lambdas ["style", "e"] $
     ref curlyBracesListDef @@ nothing @@ var "style" @@ (list [var "e"])
 
 curlyBracesDef :: TElement Brackets
-curlyBracesDef = serializationDefinition "curlyBraces" $
+curlyBracesDef = define "curlyBraces" $
   Ast.brackets (ref symDef @@ string "{") (ref symDef @@ string "}")
 
 curlyBracesListDef :: TElement (Maybe String -> BlockStyle -> [Expr] -> Expr)
-curlyBracesListDef = serializationDefinition "curlyBracesList" $
+curlyBracesListDef = define "curlyBracesList" $
   lambdas ["msymb", "style", "els"] $
     Logic.ifElse (Lists.null $ var "els")
       (ref cstDef @@ string "{}")
@@ -173,7 +173,7 @@ curlyBracesListDef = serializationDefinition "curlyBracesList" $
         (ref symbolSepDef @@ (Optionals.fromMaybe (string ",") (var "msymb")) @@ var "style" @@ var "els"))
 
 customIndentBlockDef :: TElement (String -> [Expr] -> Expr)
-customIndentBlockDef = serializationDefinition "customIndentBlock" $
+customIndentBlockDef = define "customIndentBlock" $
   lambdas ["idt", "els"] $
     Logic.ifElse (Lists.null $ var "els")
       (ref cstDef @@ string "")
@@ -190,12 +190,12 @@ customIndentBlockDef = serializationDefinition "customIndentBlock" $
           $ ref ifxDef @@ var "idtOp" @@ var "head" @@ (ref newlineSepDef @@ var "rest")))
 
 customIndentDef :: TElement (String -> String -> String)
-customIndentDef = serializationDefinition "customIndent" $
+customIndentDef = define "customIndent" $
   lambdas ["idt", "s"] $ Strings.cat $
     Lists.intersperse (string "\n") $ Lists.map (lambda "line" $ var "idt" ++ var "line") $ Strings.lines $ var "s"
 
 dotSepDef :: TElement ([Expr] -> Expr)
-dotSepDef = serializationDefinition "dotSep" $
+dotSepDef = define "dotSep" $
   ref sepDef @@ (Ast.op
     (ref symDef @@ string ".")
     (Ast.padding Ast.wsNone Ast.wsNone)
@@ -203,7 +203,7 @@ dotSepDef = serializationDefinition "dotSep" $
     Ast.associativityNone)
 
 doubleNewlineSepDef :: TElement ([Expr] -> Expr)
-doubleNewlineSepDef = serializationDefinition "doubleNewlineSep" $
+doubleNewlineSepDef = define "doubleNewlineSep" $
   ref sepDef @@ (Ast.op
     (ref symDef @@ string "")
     (Ast.padding Ast.wsBreak Ast.wsBreak)
@@ -211,11 +211,11 @@ doubleNewlineSepDef = serializationDefinition "doubleNewlineSep" $
     Ast.associativityNone)
 
 doubleSpaceDef :: TElement String
-doubleSpaceDef = serializationDefinition "doubleSpace" $
+doubleSpaceDef = define "doubleSpace" $
   string "  "
 
 expressionLengthDef :: TElement (Expr -> Int)
-expressionLengthDef = serializationDefinition "expressionLength" $
+expressionLengthDef = define "expressionLength" $
   doc "Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it." $
   lambda "e" $ lets [
     "symbolLength">: lambda "s" $ Strings.length $ Ast.unSymbol $ var "s",
@@ -264,38 +264,38 @@ expressionLengthDef = serializationDefinition "expressionLength" $
       _Expr_brackets>>: lambda "be" $ var "bracketExprLength" @@ var "be"]
 
 fullBlockStyleDef :: TElement BlockStyle
-fullBlockStyleDef = serializationDefinition "fullBlockStyle" $
+fullBlockStyleDef = define "fullBlockStyle" $
   Ast.blockStyle (just $ ref doubleSpaceDef) true true
 
 halfBlockStyleDef :: TElement BlockStyle
-halfBlockStyleDef = serializationDefinition "halfBlockStyle" $
+halfBlockStyleDef = define "halfBlockStyle" $
   Ast.blockStyle (just $ ref doubleSpaceDef) true false
 
 ifxDef :: TElement (Op -> Expr -> Expr -> Expr)
-ifxDef = serializationDefinition "ifx" $
+ifxDef = define "ifx" $
   lambdas ["op", "lhs", "rhs"] $
     Ast.exprOp $ Ast.opExpr (var "op") (var "lhs") (var "rhs")
 
 indentBlockDef :: TElement ([Expr] -> Expr)
-indentBlockDef = serializationDefinition "indentBlock" $
+indentBlockDef = define "indentBlock" $
   ref customIndentBlockDef @@ ref doubleSpaceDef
 
 indentDef :: TElement (String -> String)
-indentDef = serializationDefinition "indent" $
+indentDef = define "indent" $
   ref customIndentDef @@ ref doubleSpaceDef
 
 indentSubsequentLinesDef :: TElement (String -> Expr -> Expr)
-indentSubsequentLinesDef = serializationDefinition "indentSubsequentLines" $
+indentSubsequentLinesDef = define "indentSubsequentLines" $
   lambdas ["idt", "e"] $
     Ast.exprIndent $ Ast.indentedExpression (Ast.indentStyleSubsequentLines $ var "idt") (var "e")
 
 infixWsDef :: TElement (String -> Expr -> Expr -> Expr)
-infixWsDef = serializationDefinition "infixWs" $
+infixWsDef = define "infixWs" $
   lambdas ["op", "l", "r"] $
     ref spaceSepDef @@ list [var "l", ref cstDef @@ var "op", var "r"]
 
 infixWsListDef :: TElement (String -> [Expr] -> Expr)
-infixWsListDef = serializationDefinition "infixWsList" $
+infixWsListDef = define "infixWsList" $
   lambdas ["op", "opers"] $ lets [
     "opExpr">: ref cstDef @@ var "op",
     "foldFun">: lambdas ["e", "r"] $
@@ -305,11 +305,11 @@ infixWsListDef = serializationDefinition "infixWsList" $
     $ ref spaceSepDef @@ (Lists.foldl (var "foldFun") (list []) $ Lists.reverse $ var "opers")
 
 inlineStyleDef :: TElement BlockStyle
-inlineStyleDef = serializationDefinition "inlineStyle" $
+inlineStyleDef = define "inlineStyle" $
   Ast.blockStyle nothing false false
 
 newlineSepDef :: TElement ([Expr] -> Expr)
-newlineSepDef = serializationDefinition "newlineSep" $
+newlineSepDef = define "newlineSep" $
   ref sepDef @@ (Ast.op
     (ref symDef @@ string "")
     (Ast.padding Ast.wsNone Ast.wsBreak)
@@ -317,11 +317,11 @@ newlineSepDef = serializationDefinition "newlineSep" $
     Ast.associativityNone)
 
 noPaddingDef :: TElement Padding
-noPaddingDef = serializationDefinition "noPadding" $
+noPaddingDef = define "noPadding" $
   Ast.padding Ast.wsNone Ast.wsNone
 
 noSepDef :: TElement ([Expr] -> Expr)
-noSepDef = serializationDefinition "noSep" $
+noSepDef = define "noSep" $
   ref sepDef @@ (Ast.op
     (ref symDef @@ string "")
     (Ast.padding Ast.wsNone Ast.wsNone)
@@ -329,11 +329,11 @@ noSepDef = serializationDefinition "noSep" $
     Ast.associativityNone)
 
 numDef :: TElement (Int -> Expr)
-numDef = serializationDefinition "num" $
+numDef = define "num" $
   lambda "i" $ ref cstDef @@ (Literals.showInt32 $ var "i")
 
 opDef :: TElement (String -> Int -> Associativity -> Op)
-opDef = serializationDefinition "op" $
+opDef = define "op" $
   lambdas ["s", "p", "assoc"] $
     Ast.op
       (ref symDef @@ var "s")
@@ -342,7 +342,7 @@ opDef = serializationDefinition "op" $
       (var "assoc")
 
 orOpDef :: TElement (Bool -> Op)
-orOpDef = serializationDefinition "orOp" $
+orOpDef = define "orOp" $
   lambda "newlines" $
     Ast.op
       (ref symDef @@ string "|")
@@ -351,7 +351,7 @@ orOpDef = serializationDefinition "orOp" $
       Ast.associativityNone
 
 orSepDef :: TElement (BlockStyle -> [Expr] -> Expr)
-orSepDef = serializationDefinition "orSep" $
+orSepDef = define "orSep" $
   lambdas ["style", "l"] $
     Logic.ifElse (Lists.null $ var "l")
       (ref cstDef @@ string "")
@@ -364,7 +364,7 @@ orSepDef = serializationDefinition "orSep" $
           $ ref ifxDef @@ (ref orOpDef @@ var "newlines") @@ var "h" @@ (ref orSepDef @@ var "style" @@ var "r")))
 
 parenListDef :: TElement (Bool -> [Expr] -> Expr)
-parenListDef = serializationDefinition "parenList" $
+parenListDef = define "parenList" $
   lambdas ["newlines", "els"] $
     Logic.ifElse (Lists.null $ var "els")
       (ref cstDef @@ string "()")
@@ -375,15 +375,15 @@ parenListDef = serializationDefinition "parenList" $
         $ ref bracketsDef @@ ref parenthesesDef @@ var "style" @@ (ref commaSepDef @@ var "style" @@ var "els"))
 
 parensDef :: TElement (Expr -> Expr)
-parensDef = serializationDefinition "parens" $
+parensDef = define "parens" $
   ref bracketsDef @@ ref parenthesesDef @@ ref inlineStyleDef
 
 parenthesesDef :: TElement Brackets
-parenthesesDef = serializationDefinition "parentheses" $
+parenthesesDef = define "parentheses" $
   Ast.brackets (ref symDef @@ string "(") (ref symDef @@ string ")")
 
 parenthesizeDef :: TElement (Expr -> Expr)
-parenthesizeDef = serializationDefinition "parenthesize" $
+parenthesizeDef = define "parenthesize" $
   lambda "exp" $ lets [
     "assocLeft">: lambda "a" $ cases _Associativity (var "a") (Just true) [
       _Associativity_right>>: constant false],
@@ -437,7 +437,7 @@ parenthesizeDef = serializationDefinition "parenthesize" $
         $ Ast.exprOp $ Ast.opExpr (var "op") (var "lhs2") (var "rhs2")]
 
 prefixDef :: TElement (String -> Expr -> Expr)
-prefixDef = serializationDefinition "prefix" $
+prefixDef = define "prefix" $
   lambdas ["p", "expr"] $ lets [
     "preOp">: Ast.op
       (ref symDef @@ var "p")
@@ -447,7 +447,7 @@ prefixDef = serializationDefinition "prefix" $
     $ ref ifxDef @@ var "preOp" @@ (ref cstDef @@ string "") @@ var "expr"
 
 printExprDef :: TElement (Expr -> String)
-printExprDef = serializationDefinition "printExpr" $
+printExprDef = define "printExpr" $
   lambda "e" $ lets [
     "pad">: lambda "ws" $ cases _Ws (var "ws") Nothing [
       _Ws_none>>: constant $ string "",
@@ -496,11 +496,11 @@ printExprDef = serializationDefinition "printExpr" $
         $ var "l" ++ var "pre" ++ var "ibody" ++ var "suf" ++ var "r"]
 
 semicolonSepDef :: TElement ([Expr] -> Expr)
-semicolonSepDef = serializationDefinition "semicolonSep" $
+semicolonSepDef = define "semicolonSep" $
   ref symbolSepDef @@ string ";" @@ ref inlineStyleDef
 
 sepDef :: TElement (Op -> [Expr] -> Expr)
-sepDef = serializationDefinition "sep" $
+sepDef = define "sep" $
   lambdas ["op", "els"] $
     Logic.ifElse (Lists.null $ var "els")
       (ref cstDef @@ string "")
@@ -512,7 +512,7 @@ sepDef = serializationDefinition "sep" $
           $ ref ifxDef @@ var "op" @@ var "h" @@ (ref sepDef @@ var "op" @@ var "r")))
 
 spaceSepDef :: TElement ([Expr] -> Expr)
-spaceSepDef = serializationDefinition "spaceSep" $
+spaceSepDef = define "spaceSep" $
   ref sepDef @@ (Ast.op
     (ref symDef @@ string "")
     (Ast.padding Ast.wsSpace Ast.wsNone)
@@ -520,15 +520,15 @@ spaceSepDef = serializationDefinition "spaceSep" $
     Ast.associativityNone)
 
 squareBracketsDef :: TElement Brackets
-squareBracketsDef = serializationDefinition "squareBrackets" $
+squareBracketsDef = define "squareBrackets" $
   Ast.brackets (ref symDef @@ string "[") (ref symDef @@ string "]")
 
 symDef :: TElement (String -> Symbol)
-symDef = serializationDefinition "sym" $
+symDef = define "sym" $
   lambda "s" $ Ast.symbol $ var "s"
 
 symbolSepDef :: TElement (String -> BlockStyle -> [Expr] -> Expr)
-symbolSepDef = serializationDefinition "symbolSep" $
+symbolSepDef = define "symbolSep" $
   lambdas ["symb", "style", "l"] $
     Logic.ifElse (Lists.null $ var "l")
       (ref cstDef @@ string "")
@@ -553,32 +553,32 @@ symbolSepDef = serializationDefinition "symbolSep" $
           $ ref ifxDef @@ var "commaOp" @@ var "h" @@ (ref symbolSepDef @@ var "symb" @@ var "style" @@ var "r")))
 
 tabIndentDef :: TElement (Expr -> Expr)
-tabIndentDef = serializationDefinition "tabIndent" $
+tabIndentDef = define "tabIndent" $
   lambda "e" $ Ast.exprIndent $ Ast.indentedExpression
     (Ast.indentStyleAllLines $ string "    ")
     (var "e")
 
 tabIndentDoubleSpaceDef :: TElement ([Expr] -> Expr)
-tabIndentDoubleSpaceDef = serializationDefinition "tabIndentDoubleSpace" $
+tabIndentDoubleSpaceDef = define "tabIndentDoubleSpace" $
   lambda "exprs" $ ref tabIndentDef @@ (ref doubleNewlineSepDef @@ var "exprs")
 
 tabIndentSingleSpaceDef :: TElement ([Expr] -> Expr)
-tabIndentSingleSpaceDef = serializationDefinition "tabIndentSingleSpace" $
+tabIndentSingleSpaceDef = define "tabIndentSingleSpace" $
   lambda "exprs" $ ref tabIndentDef @@ (ref newlineSepDef @@ var "exprs")
 
 unsupportedTypeDef :: TElement (String -> Expr)
-unsupportedTypeDef = serializationDefinition "unsupportedType" $
+unsupportedTypeDef = define "unsupportedType" $
   lambda "label" $ ref cstDef @@ ("[" ++ var "label" ++ "]")
 
 unsupportedVariantDef :: TElement (String -> a -> Expr)
-unsupportedVariantDef = serializationDefinition "unsupportedVariant" $
+unsupportedVariantDef = define "unsupportedVariant" $
   lambdas ["label", "obj"] $ ref cstDef @@
     ("[unsupported " ++ var "label" ++ ": " ++ (Literals.showString $ var "obj") ++ "]")
 
 withCommaDef :: TElement (Expr -> Expr)
-withCommaDef = serializationDefinition "withComma" $
+withCommaDef = define "withComma" $
   lambda "e" $ ref noSepDef @@ list [var "e", ref cstDef @@ string ","]
 
 withSemiDef :: TElement (Expr -> Expr)
-withSemiDef = serializationDefinition "withSemi" $
+withSemiDef = define "withSemi" $
   lambda "e" $ ref noSepDef @@ list [var "e", ref cstDef @@ string ";"]

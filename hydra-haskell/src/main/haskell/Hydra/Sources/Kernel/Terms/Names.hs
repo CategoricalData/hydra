@@ -43,12 +43,9 @@ import qualified Data.Maybe              as Y
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
 
-namesDefinition :: String -> TTerm a -> TElement a
-namesDefinition = definitionInModule hydraNamesModule
-
-hydraNamesModule :: Module
-hydraNamesModule = Module (Namespace "hydra.names") elements
-    [Formatting.hydraFormattingModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.names") elements
+    [Formatting.module_]
     [KernelTypes.hydraMantleModule, KernelTypes.hydraModuleModule] $
     Just ("Functions for working with qualified names.")
   where
@@ -62,8 +59,11 @@ hydraNamesModule = Module (Namespace "hydra.names") elements
      el uniqueLabelDef,
      el unqualifyNameDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 compactNameDef :: TElement (M.Map Namespace String -> Name -> String)
-compactNameDef = namesDefinition "compactName" $
+compactNameDef = define "compactName" $
   doc "Given a mapping of namespaces to prefixes, convert a name to a compact string representation" $
   lambda "namespaces" $ lambda "name" $ lets [
     "qualName">: ref qualifyNameDef @@ var "name",
@@ -78,15 +78,15 @@ compactNameDef = namesDefinition "compactName" $
         (var "mns")
 
 localNameOfDef :: TElement (Name -> String)
-localNameOfDef = namesDefinition "localNameOf" $
+localNameOfDef = define "localNameOf" $
   unaryFunction Module.qualifiedNameLocal <.> ref qualifyNameDef
 
 namespaceOfDef :: TElement (Name -> Maybe Namespace)
-namespaceOfDef = namesDefinition "namespaceOf" $
+namespaceOfDef = define "namespaceOf" $
   unaryFunction Module.qualifiedNameNamespace <.> ref qualifyNameDef
 
 namespaceToFilePathDef :: TElement (CaseConvention -> FileExtension -> Namespace -> String)
-namespaceToFilePathDef = namesDefinition "namespaceToFilePath" $
+namespaceToFilePathDef = define "namespaceToFilePath" $
   lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
     "parts">: Lists.map
       (ref Formatting.convertCaseDef @@ Mantle.caseConventionCamel @@ var "caseConv")
@@ -94,7 +94,7 @@ namespaceToFilePathDef = namesDefinition "namespaceToFilePath" $
     $ (Strings.intercalate "/" $ var "parts") ++ "." ++ (Module.unFileExtension $ var "ext")
 
 qnameDef :: TElement (Namespace -> String -> Name)
-qnameDef = namesDefinition "qname" $
+qnameDef = define "qname" $
   doc "Construct a qualified (dot-separated) name" $
   lambda "ns" $ lambda "name" $
     wrap _Name $
@@ -102,7 +102,7 @@ qnameDef = namesDefinition "qname" $
         list [apply (unwrap _Namespace) (var "ns"), string ".", var "name"]
 
 qualifyNameDef :: TElement (Name -> QualifiedName)
-qualifyNameDef = namesDefinition "qualifyName" $
+qualifyNameDef = define "qualifyName" $
   lambda "name" $ lets [
     "parts">: Lists.reverse (Strings.splitOn "." (Core.unName $ var "name"))]
     $ Logic.ifElse
@@ -113,7 +113,7 @@ qualifyNameDef = namesDefinition "qualifyName" $
         (Lists.head $ var "parts"))
 
 uniqueLabelDef :: TElement (S.Set String -> String -> String)
-uniqueLabelDef = namesDefinition "uniqueLabel" $
+uniqueLabelDef = define "uniqueLabel" $
   doc "Generate a unique label by appending a suffix if the label is already in use" $
   lambda "visited" $ lambda "l" $
   Logic.ifElse (Sets.member (var "l") (var "visited"))
@@ -121,7 +121,7 @@ uniqueLabelDef = namesDefinition "uniqueLabel" $
     (var "l")
 
 unqualifyNameDef :: TElement (QualifiedName -> Name)
-unqualifyNameDef = namesDefinition "unqualifyName" $
+unqualifyNameDef = define "unqualifyName" $
   doc "Convert a qualified name to a dot-separated name" $
   lambda "qname" $ lets [
     "prefix">: Optionals.maybe

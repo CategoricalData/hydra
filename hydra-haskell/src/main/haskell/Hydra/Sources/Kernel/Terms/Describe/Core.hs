@@ -44,9 +44,9 @@ import qualified Hydra.Sources.Kernel.Terms.Describe.Mantle as DescribeMantle
 import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 
-describeCoreModule :: Module
-describeCoreModule = Module (Namespace "hydra.describe.core") elements
-    [DescribeMantle.describeMantleModule, Variants.hydraVariantsModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.describe.core") elements
+    [DescribeMantle.module_, Variants.module_]
     [KernelTypes.hydraCoreModule, KernelTypes.hydraMantleModule] $
     Just "Natural-language descriptions for hydra.core types"
   where
@@ -56,23 +56,22 @@ describeCoreModule = Module (Namespace "hydra.describe.core") elements
      el literalTypeDef,
      el typeDef]
 
-describeCoreDefinition :: String -> TTerm a -> TElement a
-describeCoreDefinition = definitionInModule describeCoreModule
-
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
 
 floatTypeDef :: TElement (FloatType -> String)
-floatTypeDef = describeCoreDefinition "floatType" $
+floatTypeDef = define "floatType" $
   doc "Display a floating-point type as a string" $
   lambda "t" $ (ref DescribeMantle.precisionDef <.> ref Variants.floatTypePrecisionDef @@ var "t") ++ string " floating-point number"
 
 integerTypeDef :: TElement (IntegerType -> String)
-integerTypeDef = describeCoreDefinition "integerType" $
+integerTypeDef = define "integerType" $
   doc "Display an integer type as a string" $
   lambda "t" $ (ref DescribeMantle.precisionDef <.> ref Variants.integerTypePrecisionDef @@ var "t")
     ++ string " integer"
 
 literalTypeDef :: TElement (LiteralType -> String)
-literalTypeDef = describeCoreDefinition "literalType" $
+literalTypeDef = define "literalType" $
   doc "Display a literal type as a string" $
   match _LiteralType Nothing [
     _LiteralType_binary>>: constant $ string "binary string",
@@ -82,7 +81,7 @@ literalTypeDef = describeCoreDefinition "literalType" $
     _LiteralType_string>>: constant $ string "character string"]
 
 typeDef :: TElement (Type -> String)
-typeDef = describeCoreDefinition "type" $
+typeDef = define "type" $
   doc "Display a type as a string" $
   match _Type Nothing [
     _Type_annotated>>: lambda "a" $ string "annotated " ++ (ref typeDef @@

@@ -47,12 +47,9 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 
-adaptUtilsDefinition :: String -> TTerm a -> TElement a
-adaptUtilsDefinition = definitionInModule hydraAdaptUtilsModule
-
-hydraAdaptUtilsModule :: Module
-hydraAdaptUtilsModule = Module (Namespace "hydra.adapt.utils") elements
-    [Names.hydraNamesModule, Rewriting.hydraRewritingModule, Variants.hydraVariantsModule, ShowCore.showCoreModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.adapt.utils") elements
+    [Names.module_, Rewriting.module_, Variants.module_, ShowCore.module_]
     [KernelTypes.hydraCodersModule, KernelTypes.hydraComputeModule, KernelTypes.hydraMantleModule, KernelTypes.hydraModuleModule] $
     Just ("Additional adapter utilities, above and beyond the generated ones.")
   where
@@ -70,13 +67,16 @@ hydraAdaptUtilsModule = Module (Namespace "hydra.adapt.utils") elements
      el typeIsSupportedDef,
      el unidirectionalCoderDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 bidirectionalDef :: TElement ((CoderDirection -> b -> Flow s b) -> Coder s s b b)
-bidirectionalDef = adaptUtilsDefinition "bidirectional" $
+bidirectionalDef = define "bidirectional" $
   doc "Create a bidirectional coder from a direction-aware function" $
   lambda "f" $ Compute.coder (var "f" @@ Coders.coderDirectionEncode) (var "f" @@ Coders.coderDirectionDecode)
 
 chooseAdapterDef :: TElement ((t -> Flow so [SymmetricAdapter si t v]) -> (t -> Bool) -> (t -> String ) -> (t -> String) -> t -> Flow so (SymmetricAdapter si t v))
-chooseAdapterDef = adaptUtilsDefinition "chooseAdapter" $
+chooseAdapterDef = define "chooseAdapter" $
   doc "Choose an appropriate adapter for a type" $
   lambdas ["alts", "supported", "show", "describe", "typ"] $
     Logic.ifElse (var "supported" @@ var "typ")
@@ -101,7 +101,7 @@ chooseAdapterDef = adaptUtilsDefinition "chooseAdapter" $
               (Flows.pure $ Lists.head $ var "candidates"))
 
 composeCodersDef :: TElement (Coder s s a b -> Coder s s b c -> Coder s s a c)
-composeCodersDef = adaptUtilsDefinition "composeCoders" $
+composeCodersDef = define "composeCoders" $
   doc "Compose two coders" $
   lambda "c1" $ lambda "c2" $
     Compute.coder
@@ -109,7 +109,7 @@ composeCodersDef = adaptUtilsDefinition "composeCoders" $
       (lambda "c" $ Flows.bind (Compute.coderDecode (var "c2") @@ var "c") (Compute.coderDecode (var "c1")))
 
 encodeDecodeDef :: TElement (CoderDirection -> Coder s s x x -> x -> Flow s x)
-encodeDecodeDef = adaptUtilsDefinition "encodeDecode" $
+encodeDecodeDef = define "encodeDecode" $
   doc "Apply coder in the specified direction" $
   lambda "dir" $ lambda "coder" $
     match _CoderDirection Nothing [
@@ -118,29 +118,29 @@ encodeDecodeDef = adaptUtilsDefinition "encodeDecode" $
     @@ var "dir"
 
 floatTypeIsSupportedDef :: TElement (LanguageConstraints -> FloatType -> Bool)
-floatTypeIsSupportedDef = adaptUtilsDefinition "floatTypeIsSupported" $
+floatTypeIsSupportedDef = define "floatTypeIsSupported" $
   doc "Check if float type is supported by language constraints" $
   lambda "constraints" $ lambda "ft" $
     Sets.member (var "ft") (Coders.languageConstraintsFloatTypes $ var "constraints")
 
 idAdapterDef :: TElement (t -> SymmetricAdapter s t v)
-idAdapterDef = adaptUtilsDefinition "idAdapter" $
+idAdapterDef = define "idAdapter" $
   doc "Identity adapter" $
   lambda "t" $ Compute.adapter false (var "t") (var "t") (ref idCoderDef)
 
 idCoderDef :: TElement (Coder s s a a)
-idCoderDef = adaptUtilsDefinition "idCoder" $
+idCoderDef = define "idCoder" $
   doc "Identity coder" $
   Compute.coder (unaryFunction Flows.pure) (unaryFunction Flows.pure)
 
 integerTypeIsSupportedDef :: TElement (LanguageConstraints -> IntegerType -> Bool)
-integerTypeIsSupportedDef = adaptUtilsDefinition "integerTypeIsSupported" $
+integerTypeIsSupportedDef = define "integerTypeIsSupported" $
   doc "Check if integer type is supported by language constraints" $
   lambda "constraints" $ lambda "it" $
     Sets.member (var "it") (Coders.languageConstraintsIntegerTypes $ var "constraints")
 
 literalTypeIsSupportedDef :: TElement (LanguageConstraints -> LiteralType -> Bool)
-literalTypeIsSupportedDef = adaptUtilsDefinition "literalTypeIsSupported" $
+literalTypeIsSupportedDef = define "literalTypeIsSupported" $
   doc "Check if literal type is supported by language constraints" $
   lambda "constraints" $ lambda "lt" $
     Logic.and
@@ -151,7 +151,7 @@ literalTypeIsSupportedDef = adaptUtilsDefinition "literalTypeIsSupported" $
       @@ var "lt")
 
 nameToFilePathDef :: TElement (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
-nameToFilePathDef = adaptUtilsDefinition "nameToFilePath" $
+nameToFilePathDef = define "nameToFilePath" $
   doc "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator" $
   lambda "nsConv" $ lambda "localConv" $ lambda "ext" $ lambda "name" $ lets [
     "qualName">: ref Names.qualifyNameDef @@ var "name",
@@ -168,7 +168,7 @@ nameToFilePathDef = adaptUtilsDefinition "nameToFilePath" $
     $ Strings.cat $ list [var "prefix", var "suffix", string ".", Module.unFileExtension $ var "ext"]
 
 typeIsSupportedDef :: TElement (LanguageConstraints -> Type -> Bool)
-typeIsSupportedDef = adaptUtilsDefinition "typeIsSupported" $
+typeIsSupportedDef = define "typeIsSupported" $
   doc "Check if type is supported by language constraints" $
   lambda "constraints" $ lambda "t" $ lets [
     "base">: ref Rewriting.deannotateTypeDef @@ var "t",
@@ -219,7 +219,7 @@ typeIsSupportedDef = adaptUtilsDefinition "typeIsSupported" $
     andAll = Lists.foldl (binaryFunction Logic.and) true
 
 unidirectionalCoderDef :: TElement ((a -> Flow s b) -> Coder s s a b)
-unidirectionalCoderDef = adaptUtilsDefinition "unidirectionalCoder" $
+unidirectionalCoderDef = define "unidirectionalCoder" $
   doc "Create a unidirectional coder" $
   lambda "m" $
     Compute.coder

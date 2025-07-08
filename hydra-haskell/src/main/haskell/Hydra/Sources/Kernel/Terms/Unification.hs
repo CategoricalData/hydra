@@ -46,12 +46,9 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
 
-unificationDefinition :: String -> TTerm a -> TElement a
-unificationDefinition = definitionInModule hydraUnificationModule
-
-hydraUnificationModule :: Module
-hydraUnificationModule = Module (Namespace "hydra.unification") elements
-    [ShowCore.showCoreModule, Substitution.hydraSubstitutionModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.unification") elements
+    [ShowCore.module_, Substitution.module_]
     [KernelTypes.hydraTypingModule] $
     Just ("Utilities for type unification.")
   where
@@ -62,8 +59,11 @@ hydraUnificationModule = Module (Namespace "hydra.unification") elements
      el unifyTypesDef,
      el variableOccursInTypeDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 joinTypesDef :: TElement (Type -> Type -> String -> Flow s [TypeConstraint])
-joinTypesDef = unificationDefinition "joinTypes" $
+joinTypesDef = define "joinTypes" $
   doc ("Join two types, producing a list of type constraints."
     <> "The comment is used to provide context for the constraints.") $
   lambdas ["left", "right", "comment"] $ lets [
@@ -130,7 +130,7 @@ joinTypesDef = unificationDefinition "joinTypes" $
           (var "cannotUnify")]]
 
 unifyTypeConstraintsDef :: TElement (M.Map Name TypeScheme -> [TypeConstraint] -> Flow s TypeSubst)
-unifyTypeConstraintsDef = unificationDefinition "unifyTypeConstraints" $
+unifyTypeConstraintsDef = define "unifyTypeConstraints" $
   doc (""
     <> "Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf\n"
     <> "Specifically this is an implementation of the following rules:\n"
@@ -176,18 +176,18 @@ unifyTypeConstraintsDef = unificationDefinition "unifyTypeConstraints" $
       (var "withConstraint" @@ (Lists.head $ var "constraints") @@ (Lists.tail $ var "constraints"))
 
 unifyTypeListsDef :: TElement (M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Flow s TypeSubst)
-unifyTypeListsDef = unificationDefinition "unifyTypeLists" $
+unifyTypeListsDef = define "unifyTypeLists" $
   lambdas ["schemaTypes", "l", "r", "comment"] $ lets [
     "toConstraint">: lambdas ["l", "r"] $ Typing.typeConstraint (var "l") (var "r") (var "comment")] $
     ref unifyTypeConstraintsDef @@ var "schemaTypes" @@ (Lists.zipWith (var "toConstraint") (var "l") (var "r"))
 
 unifyTypesDef :: TElement (M.Map Name TypeScheme -> Type -> Type -> String -> Flow s TypeSubst)
-unifyTypesDef = unificationDefinition "unifyTypes" $
+unifyTypesDef = define "unifyTypes" $
   lambdas ["schemaTypes", "l", "r", "comment"] $
     ref unifyTypeConstraintsDef @@ var "schemaTypes" @@ list [Typing.typeConstraint (var "l") (var "r") (var "comment")]
 
 variableOccursInTypeDef :: TElement (Name -> Type -> Bool)
-variableOccursInTypeDef = unificationDefinition "variableOccursInType" $
+variableOccursInTypeDef = define "variableOccursInType" $
   doc ("Determine whether a type variable appears within a type expression."
     <> "No distinction is made between free and bound type variables.") $
   lambda "var" $ lets [

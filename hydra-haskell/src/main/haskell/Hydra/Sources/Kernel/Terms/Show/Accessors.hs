@@ -44,12 +44,9 @@ import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 
 
-accessorsDefinition :: String -> TTerm a -> TElement a
-accessorsDefinition = definitionInModule showAccessorsModule
-
-showAccessorsModule :: Module
-showAccessorsModule = Module (Namespace "hydra.show.accessors") elements
-    [Names.hydraNamesModule, Rewriting.hydraRewritingModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.show.accessors") elements
+    [Names.module_, Rewriting.module_]
     [KernelTypes.hydraCodersModule, KernelTypes.hydraMantleModule, KernelTypes.hydraModuleModule] $
     Just ("Utilities for working with term accessors.")
   where
@@ -57,8 +54,11 @@ showAccessorsModule = Module (Namespace "hydra.show.accessors") elements
      el termAccessorDef,
      el termToAccessorGraphDef] -- TODO: move out of hydra.show.accessors
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 termAccessorDef :: TElement (TermAccessor -> Maybe String)
-termAccessorDef = accessorsDefinition "termAccessor" $
+termAccessorDef = define "termAccessor" $
   doc "Convert a term accessor to a string representation" $
   lambda "accessor" $ lets [
     "idx">: lambda "i" nothing,  -- TODO: restore index functionality
@@ -90,7 +90,7 @@ termAccessorDef = accessorsDefinition "termAccessor" $
       _TermAccessor_wrappedTerm>>: constant nothing] @@ var "accessor"
 
 termToAccessorGraphDef :: TElement (M.Map Namespace String -> Term -> AccessorGraph)
-termToAccessorGraphDef = accessorsDefinition "termToAccessorGraph" $
+termToAccessorGraphDef = define "termToAccessorGraph" $
   doc "Build an accessor graph from a term" $
   lambda "namespaces" $ lambda "term" $ lets [
     "dontCareAccessor">: Mantle.termAccessorAnnotatedSubject,

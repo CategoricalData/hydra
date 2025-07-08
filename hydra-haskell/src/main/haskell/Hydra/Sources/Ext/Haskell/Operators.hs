@@ -85,7 +85,7 @@ haskellOperatorsDefinition = definitionInModule haskellOperatorsModule
 
 haskellOperatorsModule :: Module
 haskellOperatorsModule = Module ns elements
-    [Serialization.hydraSerializationModule]
+    [Serialization.module_]
     [KernelTypes.hydraAstModule, KernelTypes.hydraGraphModule] $
     Just "AST operators for Haskell"
   where

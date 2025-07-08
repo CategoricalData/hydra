@@ -89,7 +89,7 @@ haskellUtilsDefinition = definitionInModule haskellUtilsModule
 
 haskellUtilsModule :: Module
 haskellUtilsModule = Module ns elements
-    [Formatting.hydraFormattingModule, HaskellLanguage.haskellLanguageModule, Schemas.hydraSchemasModule, Names.hydraNamesModule]
+    [Formatting.module_, HaskellLanguage.haskellLanguageModule, Schemas.module_, Names.module_]
     [KernelTypes.hydraCodersModule, KernelTypes.hydraModuleModule, KernelTypes.hydraTopologyModule, KernelTypes.hydraTypingModule, HaskellAst.haskellAstModule] $
     Just "Utilities for working with Haskell syntax trees"
   where

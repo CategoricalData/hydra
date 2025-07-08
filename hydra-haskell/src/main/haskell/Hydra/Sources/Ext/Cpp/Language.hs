@@ -86,7 +86,7 @@ cppLanguageDefinition = definitionInModule cppLanguageModule
 
 cppLanguageModule :: Module
 cppLanguageModule = Module ns elements
-    [KernelTypes.hydraCodersModule, Lexical.hydraLexicalModule]
+    [KernelTypes.hydraCodersModule, Lexical.module_]
     [KernelTypes.hydraGraphModule, KernelTypes.hydraCodersModule] $
     Just "Language constraints and reserved words for C++"
   where

@@ -44,12 +44,9 @@ import qualified Hydra.Sources.Kernel.Terms.Decode.Core as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
-templatingDefinition :: String -> TTerm a -> TElement a
-templatingDefinition = definitionInModule hydraTemplatingModule
-
-hydraTemplatingModule :: Module
-hydraTemplatingModule = Module (Namespace "hydra.templates") elements
-    [DecodeCore.decodeCoreModule, ShowCore.showCoreModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.templates") elements
+    [DecodeCore.module_, ShowCore.module_]
     [KernelTypes.hydraCodersModule, KernelTypes.hydraComputeModule, KernelTypes.hydraGraphModule, KernelTypes.hydraMantleModule, KernelTypes.hydraModuleModule, KernelTypes.hydraTopologyModule] $
     Just "A utility which instantiates a nonrecursive type with default values"
   where
@@ -57,8 +54,11 @@ hydraTemplatingModule = Module (Namespace "hydra.templates") elements
      el graphToSchemaDef,
      el instantiateTemplateDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 graphToSchemaDef :: TElement (Graph -> Flow Graph (M.Map Name Type))
-graphToSchemaDef = templatingDefinition "graphToSchema" $
+graphToSchemaDef = define "graphToSchema" $
   doc "Create a graph schema from a graph which contains nothing but encoded type definitions" $
   lambda "g" $ lets [
     "toPair">: lambda "nameAndEl" $ lets [
@@ -70,7 +70,7 @@ graphToSchemaDef = templatingDefinition "graphToSchema" $
       lambda "pairs" $ Flows.pure $ Maps.fromList $ var "pairs"
 
 instantiateTemplateDef :: TElement (Bool -> M.Map Name Type -> Type -> Flow s Term)
-instantiateTemplateDef = templatingDefinition "instantiateTemplate" $
+instantiateTemplateDef = define "instantiateTemplate" $
   doc ("Given a graph schema and a nonrecursive type, instantiate it with default values."
     <> " If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm"
     <> " is produced for constructors which do not otherwise require one, e.g. in lists and optionals") $

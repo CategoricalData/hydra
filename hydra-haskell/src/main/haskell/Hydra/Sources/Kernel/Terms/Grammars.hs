@@ -48,12 +48,9 @@ import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import Hydra.Grammar as G
 
 
-grammarToModuleDefinition :: String -> TTerm a -> TElement a
-grammarToModuleDefinition = definitionInModule hydraGrammarsModule
-
-hydraGrammarsModule :: Module
-hydraGrammarsModule = Module (Namespace "hydra.grammars") elements
-    [Annotations.hydraAnnotationsModule, Formatting.hydraFormattingModule, Names.hydraNamesModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.grammars") elements
+    [Annotations.module_, Formatting.module_, Names.module_]
     [KernelTypes.hydraGrammarModule, KernelTypes.hydraComputeModule, KernelTypes.hydraGraphModule, KernelTypes.hydraMantleModule, KernelTypes.hydraModuleModule] $
     Just ("A utility for converting a BNF grammar to a Hydra module.")
   where
@@ -69,14 +66,17 @@ hydraGrammarsModule = Module (Namespace "hydra.grammars") elements
      el toNameDef,
      el wrapTypeDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 childNameDef :: TElement (String -> String -> String)
-childNameDef = grammarToModuleDefinition "childName" $
+childNameDef = define "childName" $
   doc "Generate child name" $
   lambda "lname" $ lambda "n" $
     Strings.cat $ list [var "lname", string "_", ref Formatting.capitalizeDef @@ var "n"]
 
 findNamesDef :: TElement ([G.Pattern] -> [String])
-findNamesDef = grammarToModuleDefinition "findNames" $
+findNamesDef = define "findNames" $
   doc "Find unique names for patterns" $
   lambda "pats" $ lets [
     "nextName">: lambda "acc" $ lambda "pat" $ lets [
@@ -95,7 +95,7 @@ findNamesDef = grammarToModuleDefinition "findNames" $
     $ Lists.reverse $ first $ Lists.foldl (var "nextName") (pair (list []) Maps.empty) (var "pats")
 
 grammarToModuleDef :: TElement (Namespace -> G.Grammar -> Maybe String -> Module)
-grammarToModuleDef = grammarToModuleDefinition "grammarToModule" $
+grammarToModuleDef = define "grammarToModule" $
   doc "Convert a BNF grammar to a Hydra module" $
   lambda "ns" $ lambda "grammar" $ lambda "desc" $ lets [
     "prodPairs">: Lists.map
@@ -118,7 +118,7 @@ grammarToModuleDef = grammarToModuleDefinition "grammarToModule" $
     $ Module.module_ (var "ns") (var "elements") (list []) (list []) (var "desc")
 
 isComplexDef :: TElement (G.Pattern -> Bool)
-isComplexDef = grammarToModuleDefinition "isComplex" $
+isComplexDef = define "isComplex" $
   doc "Check if pattern is complex" $
   lambda "pat" $ match G._Pattern (Just false) [
     _Pattern_labeled>>: lambda "lp" $ ref isComplexDef @@ (Grammar.labeledPatternPattern $ var "lp"),
@@ -127,7 +127,7 @@ isComplexDef = grammarToModuleDefinition "isComplex" $
   @@ var "pat"
 
 isNontrivialDef :: TElement (Bool -> [G.Pattern] -> Bool)
-isNontrivialDef = grammarToModuleDefinition "isNontrivial" $
+isNontrivialDef = define "isNontrivial" $
   doc "Check if patterns are nontrivial" $
   lambda "isRecord" $ lambda "pats" $ lets [
     "minPats">: ref simplifyDef @@ var "isRecord" @@ var "pats"]
@@ -137,7 +137,7 @@ isNontrivialDef = grammarToModuleDefinition "isNontrivial" $
         true
 
 makeElementsDef :: TElement (Bool -> Namespace -> String -> G.Pattern -> [(String, Type)])
-makeElementsDef = grammarToModuleDefinition "makeElements" $
+makeElementsDef = define "makeElements" $
   doc "Create elements from pattern" $
   lambda "omitTrivial" $ lambda "ns" $ lambda "lname" $ lambda "pat" $ lets [
     "trivial">: Logic.ifElse (var "omitTrivial") (list []) (list [pair (var "lname") TTypes.unit]),
@@ -186,7 +186,7 @@ makeElementsDef = grammarToModuleDefinition "makeElements" $
     $ var "forPat" @@ var "pat"
 
 rawNameDef :: TElement (G.Pattern -> String)
-rawNameDef = grammarToModuleDefinition "rawName" $
+rawNameDef = define "rawName" $
   doc "Get raw name from pattern" $
   lambda "pat" $ match G._Pattern Nothing [
     _Pattern_alternatives>>: constant $ string "alts",
@@ -203,7 +203,7 @@ rawNameDef = grammarToModuleDefinition "rawName" $
   @@ var "pat"
 
 simplifyDef :: TElement (Bool -> [G.Pattern] -> [G.Pattern])
-simplifyDef = grammarToModuleDefinition "simplify" $
+simplifyDef = define "simplify" $
   doc "Remove trivial patterns from records" $
   lambda "isRecord" $ lambda "pats" $ lets [
     "isConstant">: lambda "p" $ match G._Pattern (Just false) [
@@ -213,13 +213,13 @@ simplifyDef = grammarToModuleDefinition "simplify" $
         (var "pats")
 
 toNameDef :: TElement (Namespace -> String -> Name)
-toNameDef = grammarToModuleDefinition "toName" $
+toNameDef = define "toName" $
   doc "Convert local name to qualified name" $
   lambda "ns" $ lambda "local" $
     ref Names.unqualifyNameDef @@ (Module.qualifiedName (just $ var "ns") (var "local"))
 
 wrapTypeDef :: TElement (Type -> Type)
-wrapTypeDef = grammarToModuleDefinition "wrapType" $
+wrapTypeDef = define "wrapType" $
   doc "Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type" $
   lambda "t" $ cases _Type (var "t") (Just $ Core.typeWrap $ Core.wrappedType (Core.nameLift placeholderName) $ var "t") [
     _Type_record>>: constant $ var "t",
