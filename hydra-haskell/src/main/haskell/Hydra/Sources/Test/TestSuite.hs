@@ -1,5 +1,6 @@
 module Hydra.Sources.Test.TestSuite (testSuiteModule) where
 
+import Hydra.Kernel
 import Hydra.Testing
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -7,7 +8,6 @@ import Hydra.Sources.Kernel.Terms.All
 import Hydra.Dsl.Phantoms as Base
 import Hydra.Dsl.Testing
 import qualified Hydra.Dsl.TTerms as TTerms
-import Hydra.Kernel
 import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
 import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 
@@ -26,7 +26,7 @@ testSuitePrimitivesNs = Namespace "hydra.test.testSuite.primitives"
 testSuiteModule :: Module
 testSuiteModule = Module testSuiteNs elements
     [testGraphModule]
-    [KernelTypes.hydraCoreModule, KernelTypes.hydraMantleModule, KernelTypes.hydraTestingModule] $
+    KernelTypes.kernelTypesModules $
     Just "Test cases for primitive functions"
   where
     elements = [

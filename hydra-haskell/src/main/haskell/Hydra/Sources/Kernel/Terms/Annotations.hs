@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Topology      as Topology
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
 import qualified Data.List               as L
@@ -57,8 +57,7 @@ module_ = Module (Namespace "hydra.annotations") elements
     [Decoding.module_, DecodeCore.module_, EncodeCore.module_,
       ExtractCore.module_, Lexical.module_,
       ShowCore.module_, Variants.module_, Monads.module_]
-    [KernelTypes.hydraCodersModule, KernelTypes.hydraComputeModule, KernelTypes.hydraGraphModule, KernelTypes.hydraMantleModule,
-      KernelTypes.hydraModuleModule, KernelTypes.hydraTopologyModule, KernelTypes.hydraTypingModule] $
+    kernelTypesModules $
     Just "Utilities for reading and writing type and term annotations"
   where
    elements = [

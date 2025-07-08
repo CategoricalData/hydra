@@ -2,15 +2,36 @@
 
 module Hydra.Ext.Parquet.Src.Format where
 
+import Hydra.Kernel
 import Hydra.Sources.Ext.All
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
+import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
+import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
+import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
+import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
+import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
+import qualified Hydra.Sources.Kernel.Types.Core        as Core
+import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
+import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
+import qualified Hydra.Sources.Kernel.Types.Json        as Json
+import qualified Hydra.Sources.Kernel.Types.Mantle      as Mantle
+import qualified Hydra.Sources.Kernel.Types.Module      as Module
+import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
+import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
+import qualified Hydra.Sources.Kernel.Types.Query       as Query
+import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
+import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
+import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
+import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
+import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
+
 
 -- Note: deprecated and trivial/empty type definitions are excluded from this model
 parquetFormatModule :: Module
-parquetFormatModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
+parquetFormatModule = Module ns elements [Core.module_] [Core.module_] $
     Just ("A model for the Parquet format. Based on the Thrift-based specification at:\n" ++
       "  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift")
   where

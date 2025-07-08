@@ -1,65 +1,46 @@
 -- | All of Hydra's type-level kernel modules
-module Hydra.Sources.Kernel.Types.All(
-  module Hydra.Sources.Kernel.Types.Core,
-  module Hydra.Sources.Kernel.Types.All,
-  module Hydra.Sources.Kernel.Types.Accessors,
-  module Hydra.Sources.Kernel.Types.Ast,
-  module Hydra.Sources.Kernel.Types.Coders,
-  module Hydra.Sources.Kernel.Types.Compute,
-  module Hydra.Sources.Kernel.Types.Constraints,
-  module Hydra.Sources.Kernel.Types.Grammar,
-  module Hydra.Sources.Kernel.Types.Graph,
-  module Hydra.Sources.Kernel.Types.Json,
-  module Hydra.Sources.Kernel.Types.Mantle,
-  module Hydra.Sources.Kernel.Types.Module,
-  module Hydra.Sources.Kernel.Types.Phantoms,
-  module Hydra.Sources.Kernel.Types.Query,
-  module Hydra.Sources.Kernel.Types.Relational,
-  module Hydra.Sources.Kernel.Types.Tabular,
-  module Hydra.Sources.Kernel.Types.Testing,
-  module Hydra.Sources.Kernel.Types.Topology,
-  module Hydra.Sources.Kernel.Types.Typing,
-  module Hydra.Sources.Kernel.Types.Workflow,
-) where
+module Hydra.Sources.Kernel.Types.All where
 
-import Hydra.Sources.Kernel.Types.Core
-import Hydra.Sources.Kernel.Types.Accessors
-import Hydra.Sources.Kernel.Types.Ast
-import Hydra.Sources.Kernel.Types.Coders
-import Hydra.Sources.Kernel.Types.Compute
-import Hydra.Sources.Kernel.Types.Constraints
-import Hydra.Sources.Kernel.Types.Grammar
-import Hydra.Sources.Kernel.Types.Graph
-import Hydra.Sources.Kernel.Types.Json
-import Hydra.Sources.Kernel.Types.Mantle
-import Hydra.Sources.Kernel.Types.Module
-import Hydra.Sources.Kernel.Types.Phantoms
-import Hydra.Sources.Kernel.Types.Relational
-import Hydra.Sources.Kernel.Types.Query
-import Hydra.Sources.Kernel.Types.Tabular
-import Hydra.Sources.Kernel.Types.Testing
-import Hydra.Sources.Kernel.Types.Topology
-import Hydra.Sources.Kernel.Types.Typing
-import Hydra.Sources.Kernel.Types.Workflow
+import Hydra.Kernel
+import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
+import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
+import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
+import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
+import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
+import qualified Hydra.Sources.Kernel.Types.Core        as Core
+import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
+import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
+import qualified Hydra.Sources.Kernel.Types.Json        as Json
+import qualified Hydra.Sources.Kernel.Types.Mantle      as Mantle
+import qualified Hydra.Sources.Kernel.Types.Module      as Module
+import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
+import qualified Hydra.Sources.Kernel.Types.Query       as Query
+import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
+import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
+import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
+import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
+import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
+import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
 
 
 kernelTypesModules :: [Module]
 kernelTypesModules = [
-  hydraAccessorsModule,
-  hydraAstModule,
-  hydraCodersModule,
-  hydraComputeModule,
-  hydraConstraintsModule,
-  hydraGrammarModule,
-  hydraGraphModule,
-  hydraMantleModule,
-  hydraModuleModule,
-  hydraPhantomsModule,
-  hydraQueryModule,
-  hydraRelationalModule,
-  hydraTabularModule,
-  hydraTestingModule,
-  hydraTopologyModule,
-  hydraTypingModule,
-  hydraWorkflowModule,
-  jsonModelModule]
+  Accessors.module_,
+  Ast.module_,
+  Coders.module_,
+  Compute.module_,
+  Constraints.module_,
+  Core.module_,
+  Grammar.module_,
+  Graph.module_,
+  Json.module_,
+  Mantle.module_,
+  Module.module_,
+  Phantoms.module_,
+  Query.module_,
+  Relational.module_,
+  Tabular.module_,
+  Testing.module_,
+  Topology.module_,
+  Typing.module_,
+  Workflow.module_]

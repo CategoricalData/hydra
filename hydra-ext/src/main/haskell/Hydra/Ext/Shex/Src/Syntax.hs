@@ -2,6 +2,7 @@
 
 module Hydra.Ext.Shex.Src.Syntax where
 
+import Hydra.Kernel
 import Hydra.Sources.Ext.All
 import Hydra.Dsl.Grammars
 import Hydra.Grammars

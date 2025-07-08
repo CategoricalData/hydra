@@ -2,31 +2,32 @@
 
 module Hydra.Sources.Kernel.Types.Coders where
 
--- Standard type-level Tier-1 imports
+-- Standard type-level kernel imports
+import           Hydra.Kernel
 import           Hydra.Dsl.Annotations
 import           Hydra.Dsl.Bootstrap
-import qualified Hydra.Dsl.Terms       as Terms
-import           Hydra.Dsl.Types       as Types
-import           Hydra.Sources.Kernel.Types.Core
-import qualified Data.List             as L
-import qualified Data.Map              as M
-import qualified Data.Set              as S
-import qualified Data.Maybe            as Y
+import qualified Hydra.Dsl.Terms                 as Terms
+import           Hydra.Dsl.Types                 as Types
+import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Data.List                       as L
+import qualified Data.Map                        as M
+import qualified Data.Set                        as S
+import qualified Data.Maybe                      as Y
 
-import Hydra.Sources.Kernel.Types.Compute
-import Hydra.Sources.Kernel.Types.Graph
-import Hydra.Sources.Kernel.Types.Mantle
+import qualified Hydra.Sources.Kernel.Types.Compute as Compute
+import qualified Hydra.Sources.Kernel.Types.Graph as Graph
+import qualified Hydra.Sources.Kernel.Types.Mantle as Mantle
 
 
-hydraCodersModule :: Module
-hydraCodersModule = Module ns elements [hydraMantleModule, hydraGraphModule] [hydraCoreModule] $
+module_ :: Module
+module_ = Module ns elements [Graph.module_, Compute.module_] [Core.module_] $
     Just "Abstractions for paired transformations between languages"
   where
     ns = Namespace "hydra.coders"
-    core = typeref $ moduleNamespace hydraCoreModule
-    compute = typeref $ moduleNamespace hydraComputeModule
-    graph = typeref $ moduleNamespace hydraGraphModule
-    mantle = typeref $ moduleNamespace hydraMantleModule
+    core = typeref $ moduleNamespace Core.module_
+    compute = typeref $ moduleNamespace Compute.module_
+    graph = typeref $ moduleNamespace Graph.module_
+    mantle = typeref $ moduleNamespace Mantle.module_
     coders = typeref ns
 
     def = datatype ns

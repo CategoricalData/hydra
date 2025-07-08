@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Topology      as Topology
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
 import qualified Data.List               as L
@@ -50,7 +50,7 @@ import Hydra.Mantle
 module_ :: Module
 module_ = Module (Namespace "hydra.monads") elements
     [Constants.module_, ShowCore.module_]
-    [KernelTypes.hydraGraphModule, KernelTypes.hydraMantleModule, KernelTypes.hydraComputeModule, KernelTypes.hydraTypingModule] $
+    kernelTypesModules $
     Just ("Functions for working with Hydra's 'flow' and other monads.")
   where
     elements = [

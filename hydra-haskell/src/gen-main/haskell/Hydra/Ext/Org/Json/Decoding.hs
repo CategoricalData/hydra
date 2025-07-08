@@ -25,9 +25,7 @@ decodeBoolean x = case x of
   _ -> (Flows.fail "expected a boolean")
 
 decodeField :: ((t0 -> Compute.Flow t2 t1) -> String -> M.Map String t0 -> Compute.Flow t2 t1)
-decodeField decodeValue name m = (Flows.bind (decodeOptionalField decodeValue name m) (Optionals.maybe (Flows.fail (Strings.cat [
-  "missing field: ",
-  name])) (\f -> Flows.pure f)))
+decodeField decodeValue name m = (Flows.bind (decodeOptionalField decodeValue name m) (Optionals.maybe (Flows.fail (Strings.cat2 "missing field: " name)) (\f -> Flows.pure f)))
 
 decodeObject :: (Json.Value -> Compute.Flow t0 (M.Map String Json.Value))
 decodeObject x = case x of

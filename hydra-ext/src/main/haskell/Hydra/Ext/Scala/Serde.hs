@@ -1,5 +1,6 @@
 module Hydra.Ext.Scala.Serde where
 
+import Hydra.Kernel
 import Hydra.Ast
 import Hydra.Serialization
 import qualified Hydra.Lib.Literals as Literals

@@ -18,7 +18,7 @@ termModulesToGraphson withPrims modules outFile = flowToIo hydraCoreGraph (jsonV
 typeModulesToGraphson modules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> typeGraphToDependencyGraphson (modulesToGraph modules)) >>= writeFile outFile
 combinedModulesToGraphson dataModules schemaModules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> combinedGraphToDependencyGraphson (modulesToGraph dataModules) (modulesToGraph schemaModules)) >>= writeFile outFile
 
-typeModulesToGraphson [hydraCoreModule] "/tmp/hydra-core-deps.json"
+typeModulesToGraphson [module_] "/tmp/hydra-core-deps.json"
 typeModulesToGraphson kernelTypesModules "/tmp/kernel-types-deps.json"
 termModulesToGraphson True kernelTermsModules "/tmp/kernel-terms-deps-withPrims.json"
 termModulesToGraphson False kernelTermsModules "/tmp/kernel-terms-deps-noPrims.json"

@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Topology      as Topology
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
 import qualified Data.List               as L
@@ -61,7 +61,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.inference") elements
     [Annotations.module_, Lexical.module_, Schemas.module_, Unification.module_,
       ShowCore.module_, ShowMantle.module_, ShowTyping.module_]
-    [KernelTypes.hydraCodersModule, KernelTypes.hydraComputeModule, KernelTypes.hydraMantleModule, KernelTypes.hydraModuleModule, KernelTypes.hydraTopologyModule, KernelTypes.hydraTypingModule] $
+    kernelTypesModules $
     Just "Type inference following Algorithm W, extended for nominal terms and types"
   where
     elements = [

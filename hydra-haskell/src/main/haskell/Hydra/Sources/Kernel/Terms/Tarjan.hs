@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Topology      as Topology
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
 import qualified Data.List               as L
@@ -49,7 +49,7 @@ import qualified Hydra.Topology as Topo
 module_ :: Module
 module_ = Module (Namespace "hydra.tarjan") elements
     [Constants.module_, Monads.module_]
-    [KernelTypes.hydraComputeModule, KernelTypes.hydraMantleModule, KernelTypes.hydraTopologyModule] $
+    kernelTypesModules $
     Just ("This implementation of Tarjan's algorithm was originally based on GraphSCC by Iavor S. Diatchki:"
       <> " https://hackage.haskell.org/package/GraphSCC.")
   where

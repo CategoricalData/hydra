@@ -1,5 +1,6 @@
 module Hydra.Ext.Csharp.Serde where
 
+import Hydra.Kernel
 import qualified Hydra.Ext.Csharp.Syntax as Cs
 import Hydra.Serialization
 import qualified Hydra.Ast as A

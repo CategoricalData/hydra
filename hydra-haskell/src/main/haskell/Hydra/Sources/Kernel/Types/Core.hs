@@ -1,10 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Kernel.Types.Core(
-  hydraCoreGraph,
-  hydraCoreModule,
-  module Hydra.Kernel,
-) where
+module Hydra.Sources.Kernel.Types.Core where
 
 import Hydra.Kernel
 import Hydra.Dsl.Bootstrap
@@ -12,10 +8,10 @@ import Hydra.Dsl.Types as Types
 
 
 hydraCoreGraph :: Graph
-hydraCoreGraph = elementsToGraph bootstrapGraph Nothing (moduleElements hydraCoreModule)
+hydraCoreGraph = elementsToGraph bootstrapGraph Nothing (moduleElements module_)
 
-hydraCoreModule :: Module
-hydraCoreModule = Module ns elements [] [] $
+module_ :: Module
+module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes itself as a type-level dependency
     Just "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."
   where
     ns = Namespace "hydra.core"

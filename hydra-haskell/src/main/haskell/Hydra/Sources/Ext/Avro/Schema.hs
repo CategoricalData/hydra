@@ -3,22 +3,40 @@
 module Hydra.Sources.Ext.Avro.Schema where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
-import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
+import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
+import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
+import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
+import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
+import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
+import qualified Hydra.Sources.Kernel.Types.Core        as Core
+import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
+import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
+import qualified Hydra.Sources.Kernel.Types.Json        as Json
+import qualified Hydra.Sources.Kernel.Types.Mantle      as Mantle
+import qualified Hydra.Sources.Kernel.Types.Module      as Module
+import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
+import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
+import qualified Hydra.Sources.Kernel.Types.Query       as Query
+import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
+import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
+import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
+import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
+import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
+
 
 avroSchemaModule :: Module
-avroSchemaModule = Module ns elements [KernelTypes.jsonModelModule] [KernelTypes.hydraCoreModule] $
+avroSchemaModule = Module ns elements [Json.module_] [Core.module_] $
     Just ("A model for Avro schemas. Based on the Avro 1.11.1 specification:\n" ++
       "  https://avro.apache.org/docs/1.11.1/specification")
   where
     ns = Namespace "hydra.ext.org.apache.avro.schema"
     def = datatype ns
     avro = typeref ns
-    json = typeref $ moduleNamespace KernelTypes.jsonModelModule
+    json = typeref $ moduleNamespace Json.module_
 
     elements = [
       def "Array" $

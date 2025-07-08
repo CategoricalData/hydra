@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Topology      as Topology
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
 import qualified Data.List               as L
@@ -51,7 +51,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.decode.core") elements
     [ExtractCore.module_, Monads.module_, Lexical.module_,
       Rewriting.module_, ShowCore.module_]
-    [KernelTypes.hydraCodersModule, KernelTypes.hydraMantleModule] $
+    kernelTypesModules $
     Just ("Decode hydra.core types from the hydra.core.Term type")
   where
    elements = [

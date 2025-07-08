@@ -1,6 +1,6 @@
 module Hydra.Ext.Graphviz.Src.Dot where
 
--- Standard Tier-0 imports
+import Hydra.Kernel
 import qualified Data.List             as L
 import qualified Data.Map              as M
 import qualified Data.Set              as S
@@ -13,7 +13,7 @@ import           Hydra.Sources.Kernel.Types.Core
 
 
 dotModule :: Module
-dotModule = Module ns elements [] [hydraCoreModule] $
+dotModule = Module ns elements [] [module_] $
     Just ("A model from the Graphviz DOT graph description language."
       ++ " Based on the grammar at https://graphviz.org/doc/info/lang.html")
   where

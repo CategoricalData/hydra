@@ -1,15 +1,33 @@
 module Hydra.Sources.Ext.Yaml.Model where
 
 import Hydra.Kernel
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
-import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
+import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
+import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
+import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
+import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
+import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
+import qualified Hydra.Sources.Kernel.Types.Core        as Core
+import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
+import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
+import qualified Hydra.Sources.Kernel.Types.Json        as Json
+import qualified Hydra.Sources.Kernel.Types.Mantle      as Mantle
+import qualified Hydra.Sources.Kernel.Types.Module      as Module
+import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
+import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
+import qualified Hydra.Sources.Kernel.Types.Query       as Query
+import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
+import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
+import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
+import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
+import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
+
 
 yamlModelModule :: Module
-yamlModelModule = Module ns elements [KernelTypes.hydraCoreModule] [KernelTypes.hydraCoreModule] $
+yamlModelModule = Module ns elements [Core.module_] [Core.module_] $
     Just ("A basic YAML representation model. Based on:\n" ++
       "  https://yaml.org/spec/1.2/spec.html\n" ++
       "The Serialization and Presentation properties of YAML,\n" ++

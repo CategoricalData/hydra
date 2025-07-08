@@ -1,5 +1,6 @@
 module Hydra.Ext.Graphviz.Serde where
 
+import Hydra.Kernel
 import qualified Hydra.Ext.Org.Graphviz.Dot as Dot
 import qualified Hydra.Ast as CT
 import Hydra.Serialization

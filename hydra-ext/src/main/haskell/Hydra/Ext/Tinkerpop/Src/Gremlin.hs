@@ -2,6 +2,7 @@
 
 module Hydra.Ext.Tinkerpop.Src.Gremlin where
 
+import Hydra.Kernel
 import Hydra.Sources.Ext.All
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
@@ -11,7 +12,7 @@ import Hydra.Sources.Kernel.Types.Core
 
 
 gremlinModule :: Module
-gremlinModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
+gremlinModule = Module ns elements [module_] [module_] $
     Just ("A Gremlin model, based on the Gremlin ANTLR grammar "
       ++ "(master branch, as of 2024-06-30).")
   where

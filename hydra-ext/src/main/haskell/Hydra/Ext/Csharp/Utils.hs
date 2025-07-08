@@ -1,5 +1,6 @@
 module Hydra.Ext.Csharp.Utils where
 
+import Hydra.Kernel
 import qualified Hydra.Ext.Csharp.Syntax as Cs
 import Hydra.Formatting
 

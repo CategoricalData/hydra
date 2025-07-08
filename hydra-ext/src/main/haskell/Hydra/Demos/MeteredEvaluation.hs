@@ -4,6 +4,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Hydra.Demos.MeteredEvaluation (demoMeteredEvaluation) where
 
+import Hydra.Kernel
 import Hydra.Sources.Ext.All
 import Hydra.Dsl.Phantoms
 import qualified Hydra.Dsl.Types as Types
@@ -28,7 +29,7 @@ import Prelude hiding ((++))
 testNs = Namespace "hydra.demos.meteredEvaluation"
 
 testModule :: Module
-testModule = Module testNs elements [hydraMantleModule] [] Nothing
+testModule = Module testNs elements [] [] Nothing
   where
     test local tterm = TElement (unqualifyName $ QualifiedName (Just testNs) local) tterm
     elements = [
