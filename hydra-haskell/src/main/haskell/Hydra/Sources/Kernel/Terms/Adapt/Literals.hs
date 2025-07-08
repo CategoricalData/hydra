@@ -48,13 +48,10 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 
-adaptLiteralsDefinition :: String -> TTerm a -> TElement a
-adaptLiteralsDefinition = definitionInModule adaptLiteralsModule
-
-adaptLiteralsModule :: Module
-adaptLiteralsModule = Module (Namespace "hydra.adapt.literals") elements
-    [ExtractCore.extractCoreModule, Monads.hydraMonadsModule, DescribeCore.describeCoreModule,
-      AdaptUtils.hydraAdaptUtilsModule, ShowCore.showCoreModule, Variants.hydraVariantsModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.adapt.literals") elements
+    [ExtractCore.module_, Monads.module_, DescribeCore.module_,
+      AdaptUtils.module_, ShowCore.module_, Variants.module_]
     [KernelTypes.hydraCodersModule, KernelTypes.hydraModuleModule] $
     Just "Adapter framework for literal types and terms"
   where
@@ -67,8 +64,11 @@ adaptLiteralsModule = Module (Namespace "hydra.adapt.literals") elements
      el floatAdapterDef,
      el integerAdapterDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 comparePrecisionDef :: TElement (Precision -> Precision -> Comparison)
-comparePrecisionDef = adaptLiteralsDefinition "comparePrecision" $
+comparePrecisionDef = define "comparePrecision" $
   doc "Compare two precision values" $
   lambdas ["p1", "p2"] $
     cases _Precision (var "p1") Nothing [
@@ -85,7 +85,7 @@ comparePrecisionDef = adaptLiteralsDefinition "comparePrecision" $
               Graph.comparisonGreaterThan]]
 
 convertFloatValueDef :: TElement (FloatType -> FloatValue -> FloatValue)
-convertFloatValueDef = adaptLiteralsDefinition "convertFloatValue" $
+convertFloatValueDef = define "convertFloatValue" $
   doc "Convert a float value to a different float type" $
   lambdas ["target", "fv"] $ lets [
     "decoder">: lambda "fv" $
@@ -101,7 +101,7 @@ convertFloatValueDef = adaptLiteralsDefinition "convertFloatValue" $
     $ var "encoder" @@ (var "decoder" @@ var "fv")
 
 convertIntegerValueDef :: TElement (IntegerType -> IntegerValue -> IntegerValue)
-convertIntegerValueDef = adaptLiteralsDefinition "convertIntegerValue" $
+convertIntegerValueDef = define "convertIntegerValue" $
   doc "Convert an integer value to a different integer type" $
   lambdas ["target", "iv"] $ lets [
     "decoder">: lambda "iv" $
@@ -129,7 +129,7 @@ convertIntegerValueDef = adaptLiteralsDefinition "convertIntegerValue" $
     $ var "encoder" @@ (var "decoder" @@ var "iv")
 
 disclaimerDef :: TElement (Bool -> String -> String -> String)
-disclaimerDef = adaptLiteralsDefinition "disclaimer" $
+disclaimerDef = define "disclaimer" $
   doc "Generate a disclaimer message for type conversions" $
   lambdas ["lossy", "source", "target"] $
     Strings.cat $ list [
@@ -140,7 +140,7 @@ disclaimerDef = adaptLiteralsDefinition "disclaimer" $
       Logic.ifElse (var "lossy") (string " (lossy)") (string "")]
 
 literalAdapterDef :: TElement (LiteralType -> Flow AdapterContext (SymmetricAdapter s LiteralType Literal))
-literalAdapterDef = adaptLiteralsDefinition "literalAdapter" $
+literalAdapterDef = define "literalAdapter" $
   doc "Create an adapter for literal types" $
   lambda "lt" $ lets [
     "alts">: lambda "t" $ cases _LiteralType (var "t") Nothing [
@@ -219,7 +219,7 @@ literalAdapterDef = adaptLiteralsDefinition "literalAdapter" $
     @@ var "lt"
 
 floatAdapterDef :: TElement (FloatType -> Flow AdapterContext (SymmetricAdapter s FloatType FloatValue))
-floatAdapterDef = adaptLiteralsDefinition "floatAdapter" $
+floatAdapterDef = define "floatAdapter" $
   doc "Create an adapter for float types" $
   lambda "ft" $ lets [
       "alts">: lambda "t" $ Flows.mapList (var "makeAdapter" @@ var "t") $ cases _FloatType (var "t") Nothing [
@@ -254,7 +254,7 @@ floatAdapterDef = adaptLiteralsDefinition "floatAdapter" $
         @@ var "ft"
 
 integerAdapterDef :: TElement (IntegerType -> Flow AdapterContext (SymmetricAdapter s IntegerType IntegerValue))
-integerAdapterDef = adaptLiteralsDefinition "integerAdapter" $
+integerAdapterDef = define "integerAdapter" $
   doc "Create an adapter for integer types" $
   lambda "it" $ lets [
     "interleave">: lambdas ["xs", "ys"] $ Lists.concat $ Lists.transpose $ list [var "xs", var "ys"],

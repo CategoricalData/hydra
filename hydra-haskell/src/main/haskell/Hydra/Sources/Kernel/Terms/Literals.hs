@@ -39,19 +39,19 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
-literalsDefinition :: String -> TTerm a -> TElement a
-literalsDefinition = definitionInModule hydraLiteralsModule
-
-hydraLiteralsModule :: Module
-hydraLiteralsModule = Module (Namespace "hydra.literals") elements [] [KernelTypes.hydraCoreModule] $
+module_ :: Module
+module_ = Module (Namespace "hydra.literals") elements [] [KernelTypes.hydraCoreModule] $
     Just "Conversion functions for literal values."
   where
    elements = [
      el floatValueToBigfloatDef,
      el integerValueToBigintDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 floatValueToBigfloatDef :: TElement (Double -> Double)
-floatValueToBigfloatDef = literalsDefinition "floatValueToBigfloat" $
+floatValueToBigfloatDef = define "floatValueToBigfloat" $
   doc "Convert a floating-point value of any precision to a bigfloat" $
   match _FloatValue Nothing [
     _FloatValue_bigfloat>>: lambda "f" $ Equality.identity $ var "f",
@@ -59,7 +59,7 @@ floatValueToBigfloatDef = literalsDefinition "floatValueToBigfloat" $
     _FloatValue_float64>>: unaryFunction Literals.float64ToBigfloat]
 
 integerValueToBigintDef :: TElement (IntegerValue -> Integer)
-integerValueToBigintDef = literalsDefinition "integerValueToBigint" $
+integerValueToBigintDef = define "integerValueToBigint" $
   doc "Convert an integer value of any precision to a bigint" $
   match _IntegerValue Nothing [
     _IntegerValue_bigint>>: lambda "i" $ Equality.identity $ var "i",

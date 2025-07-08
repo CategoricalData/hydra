@@ -44,20 +44,20 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 
 
-extractMantleDefinition :: String -> TTerm a -> TElement a
-extractMantleDefinition = definitionInModule extractMantleModule
-
-extractMantleModule :: Module
-extractMantleModule = Module (Namespace "hydra.extract.mantle") elements
-    [ExtractCore.extractCoreModule, Monads.hydraMonadsModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.extract.mantle") elements
+    [ExtractCore.module_, Monads.module_]
     [KernelTypes.hydraCodersModule, KernelTypes.hydraMantleModule] $
     Just ("A DSL for decoding and validating Hydra terms at runtime. This module provides functions to extract typed values from Hydra terms with appropriate error handling.")
   where
    elements = [
      el comparisonDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 comparisonDef :: TElement (Term -> Flow Graph Comparison)
-comparisonDef = extractMantleDefinition "comparison" $
+comparisonDef = define "comparison" $
   doc "Extract a comparison from a term" $
   lambda "term" $
     Flows.bind (ref ExtractCore.unitVariantDef @@ Core.nameLift _Comparison @@ var "term") $

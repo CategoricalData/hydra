@@ -44,12 +44,9 @@ import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
 
 
-rewritingDefinition :: String -> TTerm a -> TElement a
-rewritingDefinition = definitionInModule hydraRewritingModule
-
-hydraRewritingModule :: Module
-hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
-    [Names.hydraNamesModule, Sorting.hydraSortingModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.rewriting") elements
+    [Names.module_, Sorting.module_]
     [KernelTypes.hydraAccessorsModule, KernelTypes.hydraCodersModule, KernelTypes.hydraMantleModule, KernelTypes.hydraModuleModule, KernelTypes.hydraTopologyModule, KernelTypes.hydraTypingModule] $
     Just ("Utilities for type and term rewriting and analysis.")
   where
@@ -96,29 +93,32 @@ hydraRewritingModule = Module (Namespace "hydra.rewriting") elements
      el typeDependencyNamesDef,
      el typeNamesInTypeDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 deannotateTermDef :: TElement (Term -> Term)
-deannotateTermDef = rewritingDefinition "deannotateTerm" $
+deannotateTermDef = define "deannotateTerm" $
   doc "Strip all annotations from a term" $
   lambda "t" $ match _Term (Just $ var "t") [
     _Term_annotated>>: ref deannotateTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject)]
     @@ (var "t")
 
 deannotateTypeDef :: TElement (Type -> Type)
-deannotateTypeDef = rewritingDefinition "deannotateType" $
+deannotateTypeDef = define "deannotateType" $
   doc "Strip all annotations from a term" $
   lambda "t" $ match _Type (Just $ var "t") [
     _Type_annotated>>: ref deannotateTypeDef <.> (project _AnnotatedType _AnnotatedType_subject)]
     @@ (var "t")
 
 deannotateTypeParametersDef :: TElement (Type -> Type)
-deannotateTypeParametersDef = rewritingDefinition "deannotateTypeParameters" $
+deannotateTypeParametersDef = define "deannotateTypeParameters" $
   doc "Strip any top-level type lambdas from a type, extracting the (possibly nested) type body" $
   lambda "t" $ cases _Type (ref deannotateTypeDef @@ var "t")
     (Just $ var "t") [
     _Type_forall>>: lambda "lt" (ref deannotateTypeParametersDef @@ (project _ForallType _ForallType_body @@ var "lt"))]
 
 deannotateTypeRecursiveDef :: TElement (Type -> Type)
-deannotateTypeRecursiveDef = rewritingDefinition "deannotateTypeRecursive" $
+deannotateTypeRecursiveDef = define "deannotateTypeRecursive" $
   doc "Recursively strip all annotations from a type" $
   lambda "typ" $ lets [
     "strip">: lambdas ["recurse", "typ"] $ lets [
@@ -129,7 +129,7 @@ deannotateTypeRecursiveDef = rewritingDefinition "deannotateTypeRecursive" $
     ref rewriteTypeDef @@ var "strip" @@ var "typ"
 
 deannotateTypeSchemeRecursiveDef :: TElement (TypeScheme -> TypeScheme)
-deannotateTypeSchemeRecursiveDef = rewritingDefinition "deannotateTypeSchemeRecursive" $
+deannotateTypeSchemeRecursiveDef = define "deannotateTypeSchemeRecursive" $
   doc "Recursively strip all annotations from a type scheme" $
   lambda "ts" $ lets [
     "vars">: Core.typeSchemeVariables $ var "ts",
@@ -137,7 +137,7 @@ deannotateTypeSchemeRecursiveDef = rewritingDefinition "deannotateTypeSchemeRecu
     Core.typeScheme (var "vars") (ref deannotateTypeRecursiveDef @@ var "typ")
 
 expandTypedLambdasDef :: TElement (Term -> Term)
-expandTypedLambdasDef = rewritingDefinition "expandTypedLambdas" $
+expandTypedLambdasDef = define "expandTypedLambdas" $
   doc "A variation of expandLambdas which also attaches type annotations when padding function terms" $
   lambda "term" $ lets [
     "toNaryFunType">: lambda "typ" $ lets [
@@ -197,7 +197,7 @@ expandTypedLambdasDef = rewritingDefinition "expandTypedLambdas" $
     $ ref rewriteTermDef @@ var "rewrite" @@ var "term"
 
 flattenLetTermsDef :: TElement (Term -> Term)
-flattenLetTermsDef = rewritingDefinition "flattenLetTerms" $
+flattenLetTermsDef = define "flattenLetTerms" $
   doc "Flatten nested let expressions" $
   lambda "term" $ lets [
     "rewriteBinding">: lambda "binding" $ lets [
@@ -243,7 +243,7 @@ flattenLetTermsDef = rewritingDefinition "flattenLetTerms" $
     $ ref rewriteTermDef @@ var "flatten" @@ var "term"
 
 foldOverTermDef :: TElement (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
-foldOverTermDef = rewritingDefinition "foldOverTerm" $
+foldOverTermDef = define "foldOverTerm" $
   doc "Fold over a term, traversing its subterms in the specified order" $
   lambda "order" $ lambda "fld" $ lambda "b0" $ lambda "term" $ (match _TraversalOrder Nothing [
     _TraversalOrder_pre>>: constant (Phantoms.fold (ref foldOverTermDef @@ var "order" @@ var "fld")
@@ -256,7 +256,7 @@ foldOverTermDef = rewritingDefinition "foldOverTerm" $
       @@ var "term")] @@ var "order")
 
 foldOverTypeDef :: TElement (TraversalOrder -> (x -> Type -> x) -> x -> Type -> x)
-foldOverTypeDef = rewritingDefinition "foldOverType" $
+foldOverTypeDef = define "foldOverType" $
   doc "Fold over a type, traversing its subtypes in the specified order" $
   lambda "order" $ lambda "fld" $ lambda "b0" $ lambda "typ" $ (match _TraversalOrder Nothing [
     _TraversalOrder_pre>>: constant (Phantoms.fold (ref foldOverTypeDef @@ var "order" @@ var "fld")
@@ -269,7 +269,7 @@ foldOverTypeDef = rewritingDefinition "foldOverType" $
       @@ var "typ")] @@ var "order")
 
 freeVariablesInTermDef :: TElement (Term -> S.Set Name)
-freeVariablesInTermDef = rewritingDefinition "freeVariablesInTerm" $
+freeVariablesInTermDef = define "freeVariablesInTerm" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a term" $
   lambda "term" $ lets [
     "dfltVars">: Phantoms.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (ref freeVariablesInTermDef @@ var "t"))
@@ -287,7 +287,7 @@ freeVariablesInTermDef = rewritingDefinition "freeVariablesInTerm" $
       _Term_variable>>: lambda "v" (Sets.singleton $ var "v")] @@ var "term"
 
 freeVariablesInTypeDef :: TElement (Type -> S.Set Name)
-freeVariablesInTypeDef = rewritingDefinition "freeVariablesInType" $
+freeVariablesInTypeDef = define "freeVariablesInType" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a type" $
   lambda "typ" $ lets [
     "dfltVars">: Phantoms.fold (lambda "s" $ lambda "t" $ Sets.union (var "s") (recurse @@ var "t"))
@@ -303,7 +303,7 @@ freeVariablesInTypeDef = rewritingDefinition "freeVariablesInType" $
     recurse = ref freeVariablesInTypeDef
 
 freeVariablesInTypeSimpleDef :: TElement (Type -> S.Set Name)
-freeVariablesInTypeSimpleDef = rewritingDefinition "freeVariablesInTypeSimple" $
+freeVariablesInTypeSimpleDef = define "freeVariablesInTypeSimple" $
   doc "Same as freeVariablesInType, but ignores the binding action of lambda types" $
   lambda "typ" $ lets [
     "helper">: lambdas ["types", "typ"] $
@@ -312,7 +312,7 @@ freeVariablesInTypeSimpleDef = rewritingDefinition "freeVariablesInTypeSimple" $
     $ ref foldOverTypeDef @@ Coders.traversalOrderPre @@ var "helper" @@ Sets.empty @@ var "typ"
 
 freeVariablesInTypeSchemeDef :: TElement (TypeScheme -> S.Set Name)
-freeVariablesInTypeSchemeDef = rewritingDefinition "freeVariablesInTypeScheme" $
+freeVariablesInTypeSchemeDef = define "freeVariablesInTypeScheme" $
   doc "Find free variables in a type scheme" $
   lambda "ts" $ lets [
     "vars">: Core.typeSchemeVariables $ var "ts",
@@ -320,7 +320,7 @@ freeVariablesInTypeSchemeDef = rewritingDefinition "freeVariablesInTypeScheme" $
     $ Sets.difference (ref freeVariablesInTypeDef @@ var "t") (Sets.fromList $ var "vars")
 
 freeVariablesInTypeSchemeSimpleDef :: TElement (TypeScheme -> S.Set Name)
-freeVariablesInTypeSchemeSimpleDef = rewritingDefinition "freeVariablesInTypeSchemeSimple" $
+freeVariablesInTypeSchemeSimpleDef = define "freeVariablesInTypeSchemeSimple" $
   doc "Find free variables in a type scheme (simple version)" $
   lambda "ts" $ lets [
     "vars">: Core.typeSchemeVariables $ var "ts",
@@ -328,7 +328,7 @@ freeVariablesInTypeSchemeSimpleDef = rewritingDefinition "freeVariablesInTypeSch
     $ Sets.difference (ref freeVariablesInTypeSimpleDef @@ var "t") (Sets.fromList $ var "vars")
 
 inlineTypeDef :: TElement (M.Map Name Type -> Type -> Flow s Type)
-inlineTypeDef = rewritingDefinition "inlineType" $
+inlineTypeDef = define "inlineType" $
   doc "Inline all type variables in a type using the provided schema. Note: this function is only appropriate for nonrecursive type definitions" $
   lambdas ["schema", "typ"] $ lets [
     "f">: lambdas ["recurse", "typ"] $
@@ -343,13 +343,13 @@ inlineTypeDef = rewritingDefinition "inlineType" $
     $ ref rewriteTypeMDef @@ var "f" @@ var "typ"
 
 isFreeVariableInTermDef :: TElement (Name -> Term -> Bool)
-isFreeVariableInTermDef = rewritingDefinition "isFreeVariableInTerm" $
+isFreeVariableInTermDef = define "isFreeVariableInTerm" $
  doc "Check whether a variable is free (not bound) in a term" $
  lambda "v" $ lambda "term" $
    Logic.not $ Sets.member (var "v") (ref freeVariablesInTermDef @@ var "term")
 
 isLambdaDef :: TElement (Term -> Bool)
-isLambdaDef = rewritingDefinition "isLambda" $
+isLambdaDef = define "isLambda" $
   doc "Check whether a term is a lambda, possibly nested within let and/or annotation terms" $
   lambda "term" $ (match _Term (Just false) [
       _Term_function>>: match _Function (Just false) [
@@ -358,7 +358,7 @@ isLambdaDef = rewritingDefinition "isLambda" $
     @@ (ref deannotateTermDef @@ var "term")
 
 mapBeneathTypeAnnotationsDef :: TElement ((Type -> Type) -> Type -> Type)
-mapBeneathTypeAnnotationsDef = rewritingDefinition "mapBeneathTypeAnnotations" $
+mapBeneathTypeAnnotationsDef = define "mapBeneathTypeAnnotations" $
   doc "Apply a transformation to the first type beneath a chain of annotations" $
   lambda "f" $ lambda "t" $
     match _Type (Just $ var "f" @@ var "t") [
@@ -367,7 +367,7 @@ mapBeneathTypeAnnotationsDef = rewritingDefinition "mapBeneathTypeAnnotations" $
         (Core.annotatedTypeAnnotation $ var "at")] @@ var "t"
 
 normalizeTypeVariablesInTermDef :: TElement (Term -> Term)
-normalizeTypeVariablesInTermDef = rewritingDefinition "normalizeTypeVariablesInTerm" $
+normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
   doc "Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ..." $
   lambda "term" $ lets [
     "substType">: lambdas ["subst", "typ"] $ lets [
@@ -422,7 +422,7 @@ normalizeTypeVariablesInTermDef = rewritingDefinition "normalizeTypeVariablesInT
     $ var "rewriteWithSubst" @@ (pair Maps.empty Sets.empty) @@ var "term"
 
 removeTermAnnotationsDef :: TElement (Term -> Term)
-removeTermAnnotationsDef = rewritingDefinition "removeTermAnnotations" $
+removeTermAnnotationsDef = define "removeTermAnnotations" $
   doc "Recursively remove term annotations, including within subterms" $
   lambda "term" $ lets [
     "remove">: lambdas ["recurse", "term"] $ lets [
@@ -433,7 +433,7 @@ removeTermAnnotationsDef = rewritingDefinition "removeTermAnnotations" $
     $ ref rewriteTermDef @@ var "remove" @@ var "term"
 
 removeTypeAnnotationsDef :: TElement (Type -> Type)
-removeTypeAnnotationsDef = rewritingDefinition "removeTypeAnnotations" $
+removeTypeAnnotationsDef = define "removeTypeAnnotations" $
   doc "Recursively remove type annotations, including within subtypes" $
   lambda "typ" $ lets [
     "remove">: lambdas ["recurse", "typ"] $ lets [
@@ -443,7 +443,7 @@ removeTypeAnnotationsDef = rewritingDefinition "removeTypeAnnotations" $
     ref rewriteTypeDef @@ var "remove" @@ var "typ"
 
 removeTypesFromTermDef :: TElement (Term -> Term)
-removeTypesFromTermDef = rewritingDefinition "removeTypesFromTerm" $
+removeTypesFromTermDef = define "removeTypesFromTerm" $
   doc "Strip type annotations from terms while preserving other annotations" $
   lambda "term" $ lets [
     "strip">: lambdas ["recurse", "term"] $ lets [
@@ -472,7 +472,7 @@ removeTypesFromTermDef = rewritingDefinition "removeTypesFromTerm" $
     $ ref rewriteTermDef @@ var "strip" @@ var "term"
 
 replaceFreeNameDef :: TElement (Name -> Type -> Type -> Type)
-replaceFreeNameDef = rewritingDefinition "replaceFreeName" $
+replaceFreeNameDef = define "replaceFreeName" $
   doc "Replace free occurrences of a name in a type" $
   lambdas ["v", "rep", "typ"] $ lets [
     "mapExpr">: lambdas ["recurse", "t"] $
@@ -490,12 +490,12 @@ replaceFreeNameDef = rewritingDefinition "replaceFreeName" $
     $ ref rewriteTypeDef @@ var "mapExpr" @@ var "typ"
 
 rewriteDef :: TElement (((x -> y) -> x -> y) -> ((x -> y) -> x -> y) -> x -> y)
-rewriteDef = rewritingDefinition "rewrite" $ lambdas ["fsub", "f"] $ lets [
+rewriteDef = define "rewrite" $ lambdas ["fsub", "f"] $ lets [
   "recurse">: var "f" @@ (var "fsub" @@ var "recurse")] $
   var "recurse"
 
 rewriteTermDef :: TElement (((Term -> Term) -> Term -> Term) -> Term -> Term)
-rewriteTermDef = rewritingDefinition "rewriteTerm" $ lambda "f" $ lets [
+rewriteTermDef = define "rewriteTerm" $ lambda "f" $ lets [
   "fsub">: lambdas ["recurse", "term"] $ lets [
     "forElimination">: lambda "elm" $ cases _Elimination (var "elm") Nothing [
       _Elimination_product>>: lambda "tp" $ Core.eliminationProduct $ var "tp",
@@ -563,7 +563,7 @@ rewriteTermDef = rewritingDefinition "rewriteTerm" $ lambda "f" $ lets [
   ref rewriteDef @@ var "fsub" @@ var "f"
 
 rewriteTermMDef :: TElement (((Term -> Flow s Term) -> Term -> Flow s Term) -> Term -> Flow s Term)
-rewriteTermMDef = rewritingDefinition "rewriteTermM" $
+rewriteTermMDef = define "rewriteTermM" $
   doc "Monadic term rewriting with custom transformation function" $
   lambda "f" $ lets [
     "fsub">: lambda "recurse" $ lambda "term" $ lets [
@@ -676,7 +676,7 @@ rewriteTermMDef = rewritingDefinition "rewriteTermM" $
     $ ref rewriteDef @@ var "fsub" @@ var "f"
 
 rewriteTypeDef :: TElement (((Type -> Type) -> Type -> Type) -> Type -> Type)
-rewriteTypeDef = rewritingDefinition "rewriteType" $ lambda "f" $ lets [
+rewriteTypeDef = define "rewriteType" $ lambda "f" $ lets [
   "fsub">: lambdas ["recurse", "typ"] $ lets [
     "forField">: lambda "f" $ Core.fieldTypeWithType (var "f") (var "recurse" @@ (Core.fieldTypeType $ var "f"))] $
     cases _Type (var "typ") Nothing [
@@ -715,7 +715,7 @@ rewriteTypeDef = rewritingDefinition "rewriteType" $ lambda "f" $ lets [
   ref rewriteDef @@ var "fsub" @@ var "f"
 
 rewriteTypeMDef :: TElement (((Type -> Flow s Type) -> Type -> Flow s Type) -> Type -> Flow s Type)
-rewriteTypeMDef = rewritingDefinition "rewriteTypeM" $
+rewriteTypeMDef = define "rewriteTypeM" $
   doc "Monadic type rewriting" $
   lambda "f" $ lets [
     "fsub">: lambda "recurse" $ lambda "typ" $
@@ -782,7 +782,7 @@ rewriteTypeMDef = rewritingDefinition "rewriteTypeM" $
     $ ref rewriteDef @@ var "fsub" @@ var "f"
 
 simplifyTermDef :: TElement (Term -> Term)
-simplifyTermDef = rewritingDefinition "simplifyTerm" $
+simplifyTermDef = define "simplifyTerm" $
   doc "Simplify terms by applying beta reduction where possible" $
   lambda "term" $ lets [
     "simplify">: lambdas ["recurse", "term"] $ lets [
@@ -806,7 +806,7 @@ simplifyTermDef = rewritingDefinition "simplifyTerm" $
     $ ref rewriteTermDef @@ var "simplify" @@ var "term"
 
 substituteTypeVariablesDef :: TElement (M.Map Name Name -> Type -> Type)
-substituteTypeVariablesDef = rewritingDefinition "substituteTypeVariables" $
+substituteTypeVariablesDef = define "substituteTypeVariables" $
   doc "Substitute type variables in a type" $
   lambdas ["subst", "typ"] $ lets [
     "replace">: lambdas ["recurse", "typ"] $
@@ -815,7 +815,7 @@ substituteTypeVariablesDef = rewritingDefinition "substituteTypeVariables" $
     $ ref rewriteTypeDef @@ var "replace" @@ var "typ"
 
 substituteVariableDef :: TElement (Name -> Name -> Term -> Term)
-substituteVariableDef = rewritingDefinition "substituteVariable" $
+substituteVariableDef = define "substituteVariable" $
   doc "Substitute one variable for another in a term" $
   lambdas ["from", "to", "term"] $ lets [
     "replace">: lambdas ["recurse", "term"] $
@@ -829,7 +829,7 @@ substituteVariableDef = rewritingDefinition "substituteVariable" $
     $ ref rewriteTermDef @@ var "replace" @@ var "term"
 
 substituteVariablesDef :: TElement (M.Map Name Name -> Term -> Term)
-substituteVariablesDef = rewritingDefinition "substituteVariables" $
+substituteVariablesDef = define "substituteVariables" $
   doc "Substitute multiple variables in a term" $
   lambdas ["subst", "term"] $ lets [
     "replace">: lambdas ["recurse", "term"] $
@@ -844,7 +844,7 @@ substituteVariablesDef = rewritingDefinition "substituteVariables" $
     $ ref rewriteTermDef @@ var "replace" @@ var "term"
 
 subtermsDef :: TElement (Term -> [Term])
-subtermsDef = rewritingDefinition "subterms" $
+subtermsDef = define "subterms" $
   doc "Find the children of a given term" $
   match _Term Nothing [
     _Term_annotated>>: lambda "at" $ list [Core.annotatedTermSubject $ var "at"],
@@ -877,7 +877,7 @@ subtermsDef = rewritingDefinition "subterms" $
     _Term_wrap>>: lambda "n" $ list [Core.wrappedTermObject $ var "n"]]
 
 subtermsWithAccessorsDef :: TElement (Term -> [(TermAccessor, Term)])
-subtermsWithAccessorsDef = rewritingDefinition "subtermsWithAccessors" $
+subtermsWithAccessorsDef = define "subtermsWithAccessors" $
   doc "Find the children of a given term" $
   match _Term Nothing [
     _Term_annotated>>: lambda "at" $ single Mantle.termAccessorAnnotatedSubject $ Core.annotatedTermSubject $ var "at",
@@ -944,7 +944,7 @@ subtermsWithAccessorsDef = rewritingDefinition "subtermsWithAccessors" $
     simple term = result Mantle.termAccessorAnnotatedSubject term
 
 subtypesDef :: TElement (Type -> [Type])
-subtypesDef = rewritingDefinition "subtypes" $
+subtypesDef = define "subtypes" $
   doc "Find the children of a given type expression" $
   match _Type Nothing [
     _Type_annotated>>: lambda "at" $ list [Core.annotatedTypeSubject $ var "at"],
@@ -971,7 +971,7 @@ subtypesDef = rewritingDefinition "subtypes" $
     _Type_wrap>>: lambda "nt" $ list [Core.wrappedTypeObject $ var "nt"]]
 
 termDependencyNamesDef :: TElement (Bool -> Bool -> Bool -> Term -> S.Set Name)
-termDependencyNamesDef = rewritingDefinition "termDependencyNames" $
+termDependencyNamesDef = define "termDependencyNames" $
   doc "Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that" $
   lambdas ["withVars", "withPrims", "withNoms"] $ lets [
     "addNames">: lambdas ["names", "term"] $ lets [
@@ -998,7 +998,7 @@ termDependencyNamesDef = rewritingDefinition "termDependencyNames" $
     $ ref foldOverTermDef @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty
 
 toShortNamesDef :: TElement ([Name] -> M.Map Name Name)
-toShortNamesDef = rewritingDefinition "toShortNames" $
+toShortNamesDef = define "toShortNames" $
   doc "Generate short names from a list of fully qualified names" $
   lambda "original" $ lets [
     "groupNamesByLocal">: lambda "names" $ Lists.foldl (var "addName") Maps.empty (var "names"),
@@ -1019,7 +1019,7 @@ toShortNamesDef = rewritingDefinition "toShortNames" $
     $ Maps.fromList $ Lists.concat $ Lists.map (var "renameGroup") $ Maps.toList $ var "groups"
 
 topologicalSortBindingsDef :: TElement (M.Map Name Term -> [[(Name, Term)]])
-topologicalSortBindingsDef = rewritingDefinition "topologicalSortBindings" $
+topologicalSortBindingsDef = define "topologicalSortBindings" $
   doc "Topological sort of connected components, in terms of dependencies between variable/term binding pairs" $
   lambda "bindingMap" $ lets [
     "bindings">: Maps.toList $ var "bindingMap",
@@ -1039,7 +1039,7 @@ topologicalSortBindingsDef = rewritingDefinition "topologicalSortBindings" $
     $ Lists.map (unaryFunction $ Lists.map $ var "toPair") (ref Sorting.topologicalSortComponentsDef @@ Lists.map (var "depsOf") (var "bindings"))
 
 topologicalSortElementsDef :: TElement ([Element] -> Either [[Name]] [Name])
-topologicalSortElementsDef = rewritingDefinition "topologicalSortElements" $
+topologicalSortElementsDef = define "topologicalSortElements" $
   doc "Topological sort of elements based on their dependencies" $
   lambda "els" $ lets [
     "adjlist">: lambda "e" $ pair
@@ -1048,7 +1048,7 @@ topologicalSortElementsDef = rewritingDefinition "topologicalSortElements" $
     $ ref Sorting.topologicalSortDef @@ Lists.map (var "adjlist") (var "els")
 
 typeDependencyNamesDef :: TElement (Bool -> Type -> S.Set Name)
-typeDependencyNamesDef = rewritingDefinition "typeDependencyNames" $
+typeDependencyNamesDef = define "typeDependencyNames" $
   lambdas ["withSchema", "typ"] $
     Logic.ifElse (var "withSchema")
       (Sets.union
@@ -1057,7 +1057,7 @@ typeDependencyNamesDef = rewritingDefinition "typeDependencyNames" $
       (ref freeVariablesInTypeDef @@ var "typ")
 
 typeNamesInTypeDef :: TElement (Type -> S.Set Name)
-typeNamesInTypeDef = rewritingDefinition "typeNamesInType" $ lets [
+typeNamesInTypeDef = define "typeNamesInType" $ lets [
   "addNames">: lambdas ["names", "typ"] $ cases _Type (var "typ") (Just $ var "names") [
     _Type_record>>: lambda "rowType" $ lets [
       "tname">: Core.rowTypeTypeName $ var "rowType"] $

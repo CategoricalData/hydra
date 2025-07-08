@@ -41,8 +41,8 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
-showCoreModule :: Module
-showCoreModule = Module (Namespace "hydra.show.core") elements
+module_ :: Module
+module_ = Module (Namespace "hydra.show.core") elements
     []
     [KernelTypes.hydraComputeModule, KernelTypes.hydraGraphModule, KernelTypes.hydraMantleModule, KernelTypes.hydraTypingModule] $
     Just "String representations of hydra.core types"
@@ -60,16 +60,16 @@ showCoreModule = Module (Namespace "hydra.show.core") elements
      el typeDef,
      el typeSchemeDef]
 
-showCoreDefinition :: String -> TTerm a -> TElement a
-showCoreDefinition = definitionInModule showCoreModule
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
 
 readTermDef :: TElement (String -> Maybe Term)
-readTermDef = showCoreDefinition "readTerm" $
+readTermDef = define "readTerm" $
   doc "A placeholder for reading terms from their serialized form. Not implemented." $
   constant nothing
 
 floatValueDef :: TElement (FloatValue -> String)
-floatValueDef = showCoreDefinition "float" $
+floatValueDef = define "float" $
   doc "Show a float value as a string" $
   lambda "fv" $ cases _FloatValue (var "fv") Nothing [
     _FloatValue_bigfloat>>: lambda "v" $ Literals.showBigfloat $ var "v",
@@ -77,7 +77,7 @@ floatValueDef = showCoreDefinition "float" $
     _FloatValue_float64>>: lambda "v" $ Literals.showFloat64 $ var "v"]
 
 floatTypeDef :: TElement (FloatType -> String)
-floatTypeDef = showCoreDefinition "floatType" $
+floatTypeDef = define "floatType" $
   doc "Show a float type as a string" $
   lambda "ft" $ cases _FloatType (var "ft") Nothing [
     _FloatType_bigfloat>>: constant $ string "bigfloat",
@@ -85,7 +85,7 @@ floatTypeDef = showCoreDefinition "floatType" $
     _FloatType_float64>>: constant $ string "float64"]
 
 integerValueDef :: TElement (IntegerValue -> String)
-integerValueDef = showCoreDefinition "integer" $
+integerValueDef = define "integer" $
   doc "Show an integer value as a string" $
   lambda "iv" $ cases _IntegerValue (var "iv") Nothing [
     _IntegerValue_bigint>>: lambda "v" $ Literals.showBigint $ var "v",
@@ -99,7 +99,7 @@ integerValueDef = showCoreDefinition "integer" $
     _IntegerValue_uint64>>: lambda "v" $ Literals.showUint64 $ var "v"]
 
 integerTypeDef :: TElement (IntegerType -> String)
-integerTypeDef = showCoreDefinition "integerType" $
+integerTypeDef = define "integerType" $
   doc "Show an integer type as a string" $
   lambda "it" $ cases _IntegerType (var "it") Nothing [
     _IntegerType_bigint>>: constant $ string "bigint",
@@ -113,7 +113,7 @@ integerTypeDef = showCoreDefinition "integerType" $
     _IntegerType_uint64>>: constant $ string "uint64"]
 
 listDef :: TElement ((a -> String) -> [a] -> String)
-listDef = showCoreDefinition "list" $
+listDef = define "list" $
   doc "Show a list using a given function to show each element" $
   lambdas ["f", "xs"] $ lets [
     "elementStrs">: Lists.map (var "f") (var "xs")] $
@@ -123,7 +123,7 @@ listDef = showCoreDefinition "list" $
       string "]"]
 
 literalDef :: TElement (Literal -> String)
-literalDef = showCoreDefinition "literal" $
+literalDef = define "literal" $
   doc "Show a literal as a string" $
   lambda "l" $ cases _Literal (var "l") Nothing [
     _Literal_binary>>: constant $ string "[binary]",
@@ -133,7 +133,7 @@ literalDef = showCoreDefinition "literal" $
     _Literal_string>>: lambda "s" $ Literals.showString $ var "s"]
 
 literalTypeDef :: TElement (LiteralType -> String)
-literalTypeDef = showCoreDefinition "literalType" $
+literalTypeDef = define "literalType" $
   doc "Show a literal type as a string" $
   lambda "lt" $ cases _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $ string "binary",
@@ -143,7 +143,7 @@ literalTypeDef = showCoreDefinition "literalType" $
     _LiteralType_string>>: constant $ string "string"]
 
 termDef :: TElement (Term -> String)
-termDef = showCoreDefinition "term" $
+termDef = define "term" $
   doc "Show a term as a string" $
   lambda "t" $ lets [
     "showField">: lambda "field" $ lets [
@@ -336,7 +336,7 @@ termDef = showCoreDefinition "term" $
           string "}"]]
 
 typeDef :: TElement (Type -> String)
-typeDef = showCoreDefinition "type_" $
+typeDef = define "type_" $
   doc "Show a type as a string" $
   lambda "typ" $ lets [
     "showFieldType">: lambda "ft" $ lets [
@@ -433,7 +433,7 @@ typeDef = showCoreDefinition "type_" $
           string ")"]]
 
 typeSchemeDef :: TElement (TypeScheme -> String)
-typeSchemeDef = showCoreDefinition "typeScheme" $
+typeSchemeDef = define "typeScheme" $
   doc "Show a type scheme as a string" $
   lambda "ts" $ lets [
     "vars">: Core.typeSchemeVariables $ var "ts",

@@ -52,10 +52,10 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 
-adaptTermsModule :: Module
-adaptTermsModule = Module (Namespace "hydra.adapt.terms") elements
-    [ExtractCore.extractCoreModule, AdaptLiterals.adaptLiteralsModule,
-      Schemas.hydraSchemasModule, ShowCore.showCoreModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.adapt.terms") elements
+    [ExtractCore.module_, AdaptLiterals.module_,
+      Schemas.module_, ShowCore.module_]
     [KernelTypes.hydraCodersModule, KernelTypes.hydraMantleModule, KernelTypes.hydraModuleModule, KernelTypes.hydraTopologyModule,
       KernelTypes.hydraTypingModule] $
     Just "Adapter framework for types and terms"
@@ -91,11 +91,11 @@ adaptTermsModule = Module (Namespace "hydra.adapt.terms") elements
      el wrapToUnwrappedDef,
      el withGraphContextDef]
 
-adaptTermsDefinition :: String -> TTerm a -> TElement a
-adaptTermsDefinition = definitionInModule adaptTermsModule
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
 
 fieldAdapterDef :: TElement (FieldType -> Flow AdapterContext (SymmetricAdapter AdapterContext FieldType Field))
-fieldAdapterDef = adaptTermsDefinition "fieldAdapter" $
+fieldAdapterDef = define "fieldAdapter" $
   doc "Create an adapter for field types" $
   lambda "ftyp" $
     Flows.bind (ref termAdapterDef @@ (Core.fieldTypeType $ var "ftyp")) $ lambda "ad" $
@@ -110,7 +110,7 @@ fieldAdapterDef = adaptTermsDefinition "fieldAdapter" $
             ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "term"))
 
 forTypeReferenceDef :: TElement (Name -> Flow AdapterContext (SymmetricAdapter AdapterContext Type Term))
-forTypeReferenceDef = adaptTermsDefinition "forTypeReference" $
+forTypeReferenceDef = define "forTypeReference" $
   doc "This function accounts for recursive type definitions" $
   lambda "name" $
     ref Monads.withTraceDef
@@ -152,11 +152,11 @@ forTypeReferenceDef = adaptTermsDefinition "forTypeReference" $
           (Maps.lookup (var "name") (var "adapters")))
 
 functionProxyNameDef :: TElement Name
-functionProxyNameDef = adaptTermsDefinition "functionProxyName" $
+functionProxyNameDef = define "functionProxyName" $
   Core.name "hydra.core.FunctionProxy"
 
 functionProxyTypeDef :: TElement (a -> Type)
-functionProxyTypeDef = adaptTermsDefinition "functionProxyType" $
+functionProxyTypeDef = define "functionProxyType" $
   doc "Generate a function proxy type for a given domain type" $
   constant $ Core.typeUnion $ Core.rowType (ref functionProxyNameDef) $ list [
     Core.fieldType (Core.nameLift _Elimination_wrap) TTypes.string,
@@ -167,7 +167,7 @@ functionProxyTypeDef = adaptTermsDefinition "functionProxyType" $
     Core.fieldType (Core.nameLift _Term_variable) TTypes.string]
 
 functionToUnionDef :: TElement TypeAdapter
-functionToUnionDef = adaptTermsDefinition "functionToUnion" $
+functionToUnionDef = define "functionToUnion" $
   doc "Convert function types to union types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_function>>: lambda "ft" $ lets [
@@ -233,7 +233,7 @@ functionToUnionDef = adaptTermsDefinition "functionToUnion" $
       (Compute.coder (var "encode" @@ var "ad") (var "decode" @@ var "ad"))]
 
 lambdaToMonotypeDef :: TElement TypeAdapter
-lambdaToMonotypeDef = adaptTermsDefinition "lambdaToMonotype" $
+lambdaToMonotypeDef = define "lambdaToMonotype" $
   doc "Convert forall types to monotypes" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_forall>>: lambda "ft" $ lets [
@@ -246,7 +246,7 @@ lambdaToMonotypeDef = adaptTermsDefinition "lambdaToMonotype" $
           (Compute.adapterCoder $ var "ad")]
 
 listToSetDef :: TElement TypeAdapter
-listToSetDef = adaptTermsDefinition "listToSet" $
+listToSetDef = define "listToSet" $
   doc "Convert set types to list types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_set>>: lambda "st" $ lets [
@@ -265,7 +265,7 @@ listToSetDef = adaptTermsDefinition "listToSet" $
         (Compute.coder (var "encode" @@ var "ad") (var "decode" @@ var "ad"))]
 
 optionalToListDef :: TElement TypeAdapter
-optionalToListDef = adaptTermsDefinition "optionalToList" $
+optionalToListDef = define "optionalToList" $
   doc "Convert optional types to list types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_optional>>: lambda "ot" $
@@ -289,7 +289,7 @@ optionalToListDef = adaptTermsDefinition "optionalToList" $
         (Compute.coder (var "encode") (var "decode"))]
 
 passApplicationDef :: TElement TypeAdapter
-passApplicationDef = adaptTermsDefinition "passApplication" $
+passApplicationDef = define "passApplication" $
   doc "Pass through application types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_application>>: lambda "at" $ lets [
@@ -305,7 +305,7 @@ passApplicationDef = adaptTermsDefinition "passApplication" $
             (lambdas ["dir", "term"] $ ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "lhsAd") @@ var "term"))]
 
 passFunctionDef :: TElement TypeAdapter
-passFunctionDef = adaptTermsDefinition "passFunction" $
+passFunctionDef = define "passFunction" $
   doc "Pass through function types with adaptation" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_function >>: lambda "ft" $ lets [
@@ -367,7 +367,7 @@ passFunctionDef = adaptTermsDefinition "passFunction" $
          )]
 
 passForallDef :: TElement TypeAdapter
-passForallDef = adaptTermsDefinition "passForall" $
+passForallDef = define "passForall" $
   doc "Pass through forall types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_forall>>: lambda "ft" $ lets [
@@ -382,7 +382,7 @@ passForallDef = adaptTermsDefinition "passForall" $
               ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "term"))]
 
 passLiteralDef :: TElement TypeAdapter
-passLiteralDef = adaptTermsDefinition "passLiteral" $
+passLiteralDef = define "passLiteral" $
   doc "Pass through literal types with literal adaptation" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_literal>>: lambda "lt" $
@@ -397,7 +397,7 @@ passLiteralDef = adaptTermsDefinition "passLiteral" $
         (var "step")]
 
 passListDef :: TElement TypeAdapter
-passListDef = adaptTermsDefinition "passList" $
+passListDef = define "passList" $
   doc "Pass through list types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_list>>: lambda "lt" $
@@ -412,7 +412,7 @@ passListDef = adaptTermsDefinition "passList" $
             Flows.pure $ Core.termList $ var "newTerms"]))]
 
 passMapDef :: TElement TypeAdapter
-passMapDef = adaptTermsDefinition "passMap" $
+passMapDef = define "passMap" $
   doc "Pass through map types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_map>>: lambda "mt" $ lets [
@@ -437,7 +437,7 @@ passMapDef = adaptTermsDefinition "passMap" $
                 Flows.pure $ Core.termMap $ Maps.fromList $ var "newPairs"]))]
 
 passOptionalDef :: TElement TypeAdapter
-passOptionalDef = adaptTermsDefinition "passOptional" $
+passOptionalDef = define "passOptional" $
   doc "Pass through optional types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_optional>>: lambda "ot" $ lets [
@@ -453,7 +453,7 @@ passOptionalDef = adaptTermsDefinition "passOptional" $
           (ref AdaptUtils.bidirectionalDef @@ (var "mapTerm" @@ (Compute.adapterCoder $ var "adapter")))]
 
 passProductDef :: TElement TypeAdapter
-passProductDef = adaptTermsDefinition "passProduct" $
+passProductDef = define "passProduct" $
   doc "Pass through product types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_product>>: lambda "types" $
@@ -471,7 +471,7 @@ passProductDef = adaptTermsDefinition "passProduct" $
                 (var "ads")) $ Flows.pure $ Core.termProduct $ var "newTuple"]))]
 
 passRecordDef :: TElement TypeAdapter
-passRecordDef = adaptTermsDefinition "passRecord" $
+passRecordDef = define "passRecord" $
   doc "Pass through record types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_record>>: lambda "rt" $
@@ -492,7 +492,7 @@ passRecordDef = adaptTermsDefinition "passRecord" $
                 Flows.pure $ Core.termRecord $ Core.record (Core.rowTypeTypeName $ var "rt") (var "newFields")]))]
 
 passSetDef :: TElement TypeAdapter
-passSetDef = adaptTermsDefinition "passSet" $
+passSetDef = define "passSet" $
   doc "Pass through set types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_set>>: lambda "st" $
@@ -507,7 +507,7 @@ passSetDef = adaptTermsDefinition "passSet" $
               Flows.pure $ Core.termSet $ Sets.fromList $ var "newTerms"]))]
 
 passSumDef :: TElement TypeAdapter
-passSumDef = adaptTermsDefinition "passSum" $
+passSumDef = define "passSum" $
   doc "Pass through sum types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_sum>>: lambda "types" $
@@ -526,7 +526,7 @@ passSumDef = adaptTermsDefinition "passSum" $
                     Flows.pure $ Core.termSum $ Core.sum (var "i") (var "n") (var "newTerm")]))]
 
 passUnionDef :: TElement TypeAdapter
-passUnionDef = adaptTermsDefinition "passUnion" $
+passUnionDef = define "passUnion" $
   doc "Pass through union types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_union>>: lambda "rt" $ lets [
@@ -555,7 +555,7 @@ passUnionDef = adaptTermsDefinition "passUnion" $
             Flows.pure $ Core.termUnion $ Core.injection (var "tname") (var "newField")))]
 
 passUnitDef :: TElement TypeAdapter
-passUnitDef = adaptTermsDefinition "passUnit" $
+passUnitDef = define "passUnit" $
   doc "Pass through unit types" $
   constant $ Flows.pure $ Compute.adapter false Core.typeUnit Core.typeUnit $
     Compute.coder
@@ -563,7 +563,7 @@ passUnitDef = adaptTermsDefinition "passUnit" $
       (constant $ Flows.pure Core.termUnit)
 
 passWrappedDef :: TElement TypeAdapter
-passWrappedDef = adaptTermsDefinition "passWrapped" $
+passWrappedDef = define "passWrapped" $
   doc "Pass through wrapped types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_wrap>>: lambda "wt" $ lets [
@@ -581,7 +581,7 @@ passWrappedDef = adaptTermsDefinition "passWrapped" $
             (ref AdaptUtils.bidirectionalDef @@ (var "mapTerm" @@ (Compute.adapterCoder $ var "adapter")))]
 
 simplifyApplicationDef :: TElement TypeAdapter
-simplifyApplicationDef = adaptTermsDefinition "simplifyApplication" $
+simplifyApplicationDef = define "simplifyApplication" $
   doc "Simplify application types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_application>>: lambda "at" $ lets [
@@ -595,7 +595,7 @@ simplifyApplicationDef = adaptTermsDefinition "simplifyApplication" $
               ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "term"))]
 
 unitToRecordDef :: TElement TypeAdapter
-unitToRecordDef = adaptTermsDefinition "unitToRecord" $
+unitToRecordDef = define "unitToRecord" $
     doc "Convert unit terms to records" $
     constant $ Flows.pure $
       Compute.adapter false Core.typeUnit (Core.typeRecord $ Core.rowType unitName $ list []) $
@@ -606,7 +606,7 @@ unitToRecordDef = adaptTermsDefinition "unitToRecord" $
     unitName = Core.name $ string "_Unit"
 
 unionToRecordDef :: TElement TypeAdapter
-unionToRecordDef = adaptTermsDefinition "unionToRecord" $
+unionToRecordDef = define "unionToRecord" $
   doc "Convert union types to record types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_union>>: lambda "rt" $ lets [
@@ -663,7 +663,7 @@ unionToRecordDef = adaptTermsDefinition "unionToRecord" $
                   Flows.pure $ Core.termUnion $ Core.injection (var "nm") (var "resultField")]))]
 
 unionTypeToRecordTypeDef :: TElement (RowType -> RowType)
-unionTypeToRecordTypeDef = adaptTermsDefinition "unionTypeToRecordType" $
+unionTypeToRecordTypeDef = define "unionTypeToRecordType" $
   doc "Convert a union row type to a record row type" $
   lambda "rt" $ lets [
     "makeOptional">: lambda "f" $ lets [
@@ -673,7 +673,7 @@ unionTypeToRecordTypeDef = adaptTermsDefinition "unionTypeToRecordType" $
     Core.rowType (Core.rowTypeTypeName $ var "rt") $ Lists.map (var "makeOptional") (Core.rowTypeFields $ var "rt")
 
 wrapToUnwrappedDef :: TElement TypeAdapter
-wrapToUnwrappedDef = adaptTermsDefinition "wrapToUnwrapped" $
+wrapToUnwrappedDef = define "wrapToUnwrapped" $
   doc "Convert wrapped types to unwrapped types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_wrap>>: lambda "wt" $ lets [
@@ -695,7 +695,7 @@ wrapToUnwrappedDef = adaptTermsDefinition "wrapToUnwrapped" $
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings.
 termAdapterDef :: TElement TypeAdapter
-termAdapterDef = adaptTermsDefinition "termAdapter" $
+termAdapterDef = define "termAdapter" $
   doc "Create an adapter for any type" $
   lambda "typ" $ lets [
     "constraints">: lambda "cx" $ Coders.languageConstraints $ Coders.adapterContextLanguage $ var "cx",
@@ -753,7 +753,7 @@ termAdapterDef = adaptTermsDefinition "termAdapter" $
           Core.typeAnnotated $ Core.annotatedType (Compute.adapterTarget $ var "ad") (Core.annotatedTypeAnnotation $ var "at"))]
 
 withGraphContextDef :: TElement (Flow Graph a -> Flow AdapterContext a)
-withGraphContextDef = adaptTermsDefinition "withGraphContext" $
+withGraphContextDef = define "withGraphContext" $
   doc "Execute a flow with graph context" $
   lambda "f" $
     Flows.bind (ref Monads.getStateDef) $ lambda "cx" $

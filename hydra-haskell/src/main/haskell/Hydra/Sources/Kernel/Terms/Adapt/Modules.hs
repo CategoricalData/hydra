@@ -51,9 +51,9 @@ import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 
 
-adaptModulesModule :: Module
-adaptModulesModule = Module (Namespace "hydra.adapt.modules") elements
-    [Rewriting.hydraRewritingModule, AdaptTerms.adaptTermsModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.adapt.modules") elements
+    [Rewriting.module_, AdaptTerms.module_]
     [KernelTypes.hydraCodersModule, KernelTypes.hydraComputeModule, KernelTypes.hydraModuleModule, KernelTypes.hydraTopologyModule] $
     Just "Entry point for Hydra's adapter (type/term rewriting) framework"
   where
@@ -65,11 +65,11 @@ adaptModulesModule = Module (Namespace "hydra.adapt.modules") elements
      el languageAdapterDef,
      el transformModuleDef]
 
-adaptModulesDefinition :: String -> TTerm a -> TElement a
-adaptModulesDefinition = definitionInModule adaptModulesModule
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
 
 adaptAndEncodeTypeDef :: TElement (Language -> (Type -> Flow Graph t) -> Type -> Flow Graph t)
-adaptAndEncodeTypeDef = adaptModulesDefinition "adaptAndEncodeType" $
+adaptAndEncodeTypeDef = define "adaptAndEncodeType" $
   doc "Given a target language, an encoding function, and a type, adapt and encode the type" $
   lambdas ["lang", "enc", "typ"] $
     cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ")
@@ -78,14 +78,14 @@ adaptAndEncodeTypeDef = adaptModulesDefinition "adaptAndEncodeType" $
       _Type_variable>>: constant (var "enc" @@ var "typ")]
 
 adaptTypeDef :: TElement (Language -> Type -> Flow Graph Type)
-adaptTypeDef = adaptModulesDefinition "adaptType" $
+adaptTypeDef = define "adaptType" $
   doc "Given a target language and a source type, find the target type to which the latter will be adapted" $
   lambdas ["lang", "typ"] $
     withVar "adapter" (ref languageAdapterDef @@ var "lang" @@ var "typ") $
       Flows.pure $ Compute.adapterTarget $ var "adapter"
 
 constructCoderDef :: TElement (Language -> (Term -> Flow Graph c) -> Type -> Flow Graph (Coder Graph Graph Term c))
-constructCoderDef = adaptModulesDefinition "constructCoder" $
+constructCoderDef = define "constructCoder" $
   doc "Given a target language, a unidirectional last-mile encoding, and a source type, construct a unidirectional adapting coder for terms of that type" $
   lambdas ["lang", "encodeTerm", "typ"] $
     ref Monads.withTraceDef
@@ -96,7 +96,7 @@ constructCoderDef = adaptModulesDefinition "constructCoder" $
             @@ (ref AdaptUtils.unidirectionalCoderDef @@ var "encodeTerm"))
 
 languageAdapterDef :: TElement (Language -> Type -> Flow Graph (SymmetricAdapter Graph Type Term))
-languageAdapterDef = adaptModulesDefinition "languageAdapter" $
+languageAdapterDef = define "languageAdapter" $
   doc "Given a target language and a source type, produce an adapter, which rewrites the type and its terms according to the language's constraints" $
   lambdas ["lang", "typ"] $
     withVar "g" (ref Monads.getStateDef) $ lets [
@@ -115,7 +115,7 @@ languageAdapterDef = adaptModulesDefinition "languageAdapter" $
     Flows.pure $ Compute.adapterWithCoder (var "adapter") (var "ac")
 
 transformModuleDef :: TElement (Language -> (Term -> Flow Graph e) -> (Module -> M.Map Type (Coder Graph Graph Term e) -> [(Element, TypedTerm)] -> Flow Graph d) -> Module -> Flow Graph d)
-transformModuleDef = adaptModulesDefinition "transformModule" $
+transformModuleDef = define "transformModule" $
   doc "Given a target language, a unidirectional last mile encoding, and an intermediate helper function, transform a given module into a target representation" $
   lambdas ["lang", "encodeTerm", "createModule", "mod"] $
     ref Monads.withTraceDef
@@ -131,7 +131,7 @@ transformModuleDef = adaptModulesDefinition "transformModule" $
       var "createModule" @@ var "mod" @@ var "coders" @@ (Lists.zip (var "els") (var "tterms")))
 
 adaptedModuleDefinitionsDef :: TElement (Language -> Module -> Flow Graph [Definition])
-adaptedModuleDefinitionsDef = adaptModulesDefinition "adaptedModuleDefinitions" $
+adaptedModuleDefinitionsDef = define "adaptedModuleDefinitions" $
   doc "Map a Hydra module to a list of type and/or term definitions which have been adapted to the target language" $
   lambdas ["lang", "mod"] $ lets [
     "els">: Module.moduleElements $ var "mod",

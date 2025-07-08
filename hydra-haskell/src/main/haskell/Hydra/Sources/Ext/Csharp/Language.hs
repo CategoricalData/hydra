@@ -83,7 +83,7 @@ csharpLanguageDefinition = definitionInModule csharpLanguageModule
 
 csharpLanguageModule :: Module
 csharpLanguageModule = Module ns elements
-    [KernelTypes.hydraCodersModule, Lexical.hydraLexicalModule]
+    [KernelTypes.hydraCodersModule, Lexical.module_]
     [KernelTypes.hydraGraphModule, KernelTypes.hydraCodersModule] $
     Just "Language constraints and reserved words for C Sharp (C#)"
   where

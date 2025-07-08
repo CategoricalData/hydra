@@ -91,7 +91,7 @@ haskellSerdeDefinition = definitionInModule haskellSerdeModule
 
 haskellSerdeModule :: Module
 haskellSerdeModule = Module ns elements
-    [Serialization.hydraSerializationModule, Operators.haskellOperatorsModule]
+    [Serialization.module_, Operators.haskellOperatorsModule]
     [KernelTypes.hydraAstModule, HaskellAst.haskellAstModule, KernelTypes.hydraGraphModule] $
     Just ("Haskell operator precendence and associativity are drawn from:\n"
       <> "https://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\n"

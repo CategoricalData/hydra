@@ -48,13 +48,10 @@ import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 
 
-reductionDefinition :: String -> TTerm a -> TElement a
-reductionDefinition = definitionInModule hydraReductionModule
-
-hydraReductionModule :: Module
-hydraReductionModule = Module (Namespace "hydra.reduction") elements
-    [Arity.hydraArityModule, ExtractCore.extractCoreModule, Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule,
-      Schemas.hydraSchemasModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.reduction") elements
+    [Arity.module_, ExtractCore.module_, Lexical.module_, Rewriting.module_,
+      Schemas.module_]
     [KernelTypes.hydraGraphModule, KernelTypes.hydraCodersModule, KernelTypes.hydraComputeModule, KernelTypes.hydraMantleModule,
       KernelTypes.hydraModuleModule, KernelTypes.hydraTopologyModule] $
     Just ("Functions for reducing terms and types, i.e. performing computations.")
@@ -71,8 +68,11 @@ hydraReductionModule = Module (Namespace "hydra.reduction") elements
      el termIsClosedDef,
      el termIsValueDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 alphaConvertDef :: TElement (Name -> Term -> Term -> Term)
-alphaConvertDef = reductionDefinition "alphaConvert" $
+alphaConvertDef = define "alphaConvert" $
   doc "Alpha convert a variable in a term" $
   lambda "vold" $ lambda "tnew" $ lambda "term" $ lets [
     "rewrite">: lambda "recurse" $ lambda "t" $
@@ -95,7 +95,7 @@ alphaConvertDef = reductionDefinition "alphaConvert" $
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
 betaReduceTypeDef :: TElement (Type -> Flow Graph Type)
-betaReduceTypeDef = reductionDefinition "betaReduceType" $
+betaReduceTypeDef = define "betaReduceType" $
   lambda "typ" $ lets [
     "mapExpr">: lambdas ["recurse", "t"] $
       Flows.bind (var "recurse" @@ var "t") $
@@ -122,7 +122,7 @@ betaReduceTypeDef = reductionDefinition "betaReduceType" $
     $ ref Rewriting.rewriteTypeMDef @@ var "mapExpr" @@ var "typ"
 
 contractTermDef :: TElement (Term -> Term)
-contractTermDef = reductionDefinition "contractTerm" $
+contractTermDef = define "contractTerm" $
   doc ("Apply the special rules:\n"
     <> "    ((\\x.e1) e2) == e1, where x does not appear free in e1\n"
     <> "  and\n"
@@ -151,11 +151,11 @@ contractTermDef = reductionDefinition "contractTerm" $
 
 -- For demo purposes. This should be generalized to enable additional side effects of interest.
 countPrimitiveInvocationsDef :: TElement Bool
-countPrimitiveInvocationsDef = reductionDefinition "countPrimitiveInvocations" true
+countPrimitiveInvocationsDef = define "countPrimitiveInvocations" true
 
 -- Note: unused / untested
 etaReduceTermDef :: TElement (Term -> Term)
-etaReduceTermDef = reductionDefinition "etaReduceTerm" $
+etaReduceTermDef = define "etaReduceTerm" $
   lambda "term" $ lets [
     "noChange">: var "term",
     "reduceLambda">: lambda "l" $ lets [
@@ -193,7 +193,7 @@ etaReduceTermDef = reductionDefinition "etaReduceTerm" $
     @@ var "term"
 
 expandLambdasDef :: TElement (Graph -> Term -> Term)
-expandLambdasDef = reductionDefinition "expandLambdas" $
+expandLambdasDef = define "expandLambdas" $
   doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x', in which the implicit"
     <> " parameters of primitive functions and eliminations are made into explicit lambda parameters."
     <> " Variable references are not expanded."
@@ -226,7 +226,7 @@ expandLambdasDef = reductionDefinition "expandLambdas" $
     $ ref contractTermDef @@ (ref Rewriting.rewriteTermDef @@ (var "rewrite" @@ (list [])) @@ var "term")
 
 expansionArityDef :: TElement (Graph -> Term -> Int)
-expansionArityDef = reductionDefinition "expansionArity" $
+expansionArityDef = define "expansionArity" $
   doc "Calculate the arity for lambda expansion" $
   lambda "graph" $ lambda "term" $
     match _Term (Just $ int32 0) [
@@ -250,7 +250,7 @@ expansionArityDef = reductionDefinition "expansionArity" $
     @@ (ref Rewriting.deannotateTermDef @@ var "term")
 
 reduceTermDef :: TElement (Bool -> Term -> Flow Graph Term)
-reduceTermDef = reductionDefinition "reduceTerm" $
+reduceTermDef = define "reduceTerm" $
   doc "A term evaluation function which is alternatively lazy or eager" $
   lambdas ["eager", "term"] $ lets [
     "reduce">: lambda "eager" $ ref reduceTermDef @@ var "eager",
@@ -378,12 +378,12 @@ reduceTermDef = reductionDefinition "reduceTerm" $
     $ ref Rewriting.rewriteTermMDef @@ var "mapping" @@ var "term"
 
 termIsClosedDef :: TElement (Term -> Bool)
-termIsClosedDef = reductionDefinition "termIsClosed" $
+termIsClosedDef = define "termIsClosed" $
   doc "Whether a term is closed, i.e. represents a complete program" $
   lambda "term" $ Sets.null $ ref Rewriting.freeVariablesInTermDef @@ var "term"
 
 termIsValueDef :: TElement (Graph -> Term -> Bool)
-termIsValueDef = reductionDefinition "termIsValue" $
+termIsValueDef = define "termIsValue" $
   doc "Whether a term has been fully reduced to a value" $
   lambda "g" $ lambda "term" $ lets [
     "forList">: lambda "els" $ Lists.foldl (lambda "b" $ lambda "t" $ Logic.and (var "b") (ref termIsValueDef @@ var "g" @@ var "t")) true (var "els"),

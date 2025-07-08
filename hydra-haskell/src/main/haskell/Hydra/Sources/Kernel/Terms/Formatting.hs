@@ -39,11 +39,8 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
-formattingDefinition :: String -> TTerm a -> TElement a
-formattingDefinition = definitionInModule hydraFormattingModule
-
-hydraFormattingModule :: Module
-hydraFormattingModule = Module (Namespace "hydra.formatting") elements [] [KernelTypes.hydraMantleModule] $
+module_ :: Module
+module_ = Module (Namespace "hydra.formatting") elements [] [KernelTypes.hydraMantleModule] $
     Just "String formatting types and functions."
   where
     elements = [
@@ -64,13 +61,16 @@ hydraFormattingModule = Module (Namespace "hydra.formatting") elements [] [Kerne
       el withCharacterAliasesDef,
       el wrapLineDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 capitalizeDef :: TElement (String -> String)
-capitalizeDef = formattingDefinition "capitalize" $
+capitalizeDef = define "capitalize" $
   doc "Capitalize the first letter of a string" $
   ref mapFirstLetterDef @@ primitive _strings_toUpper
 
 convertCaseDef :: TElement (CaseConvention -> CaseConvention -> String -> String)
-convertCaseDef = formattingDefinition "convertCase" $
+convertCaseDef = define "convertCase" $
   doc "Convert a string from one case convention to another" $
   lambdas ["from", "to", "original"] $ lets [
     "parts">: lets [
@@ -96,45 +96,45 @@ convertCaseDef = formattingDefinition "convertCase" $
     emptyParts = list [list []]
 
 convertCaseCamelToLowerSnakeDef :: TElement (String -> String)
-convertCaseCamelToLowerSnakeDef = formattingDefinition "convertCaseCamelToLowerSnake" $
+convertCaseCamelToLowerSnakeDef = define "convertCaseCamelToLowerSnake" $
   doc "Convert a string from camel case to lower snake case" $
   ref convertCaseDef @@ Mantle.caseConventionCamel @@ Mantle.caseConventionLowerSnake
 
 convertCaseCamelToUpperSnakeDef :: TElement (String -> String)
-convertCaseCamelToUpperSnakeDef = formattingDefinition "convertCaseCamelToUpperSnake" $
+convertCaseCamelToUpperSnakeDef = define "convertCaseCamelToUpperSnake" $
   doc "Convert a string from camel case to upper snake case" $
   ref convertCaseDef @@ Mantle.caseConventionCamel @@ Mantle.caseConventionUpperSnake
 
 convertCasePascalToUpperSnakeDef :: TElement (String -> String)
-convertCasePascalToUpperSnakeDef = formattingDefinition "convertCasePascalToUpperSnake" $
+convertCasePascalToUpperSnakeDef = define "convertCasePascalToUpperSnake" $
   doc "Convert a string from pascal case to upper snake case" $
   ref convertCaseDef @@ Mantle.caseConventionPascal @@ Mantle.caseConventionUpperSnake
 
 decapitalizeDef :: TElement (String -> String)
-decapitalizeDef = formattingDefinition "decapitalize" $
+decapitalizeDef = define "decapitalize" $
   doc "Decapitalize the first letter of a string" $
   ref mapFirstLetterDef @@ primitive _strings_toLower
 
 escapeWithUnderscoreDef :: TElement (S.Set String -> String -> String)
-escapeWithUnderscoreDef = formattingDefinition "escapeWithUnderscore" $
+escapeWithUnderscoreDef = define "escapeWithUnderscore" $
   lambdas ["reserved", "s"] $
     Logic.ifElse (Sets.member (var "s") (var "reserved"))
       (var "s" ++ string "_")
       (var "s")
 
 indentLinesDef :: TElement (String -> String)
-indentLinesDef = formattingDefinition "indentLines" $
+indentLinesDef = define "indentLines" $
   lambda "s" $ lets [
     "indent">: lambda "l" $ string "    " ++ var "l"]
     $ Strings.unlines $ Lists.map (var "indent") $ Strings.lines $ var "s"
 
 javaStyleCommentDef :: TElement (String -> String)
-javaStyleCommentDef = formattingDefinition "javaStyleComment" $
+javaStyleCommentDef = define "javaStyleComment" $
   lambda "s" $ string "/**\n" ++ string " * " ++ var "s" ++ string "\n */"
 
 -- TODO: simplify this helper
 mapFirstLetterDef :: TElement ((String -> String) -> String -> String)
-mapFirstLetterDef = formattingDefinition "mapFirstLetter" $
+mapFirstLetterDef = define "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
   lambda "mapping" $ lambda "s" $ lets [
     "firstLetter">: var "mapping" @@ (Strings.fromList (Lists.pure (Lists.head $ var "list"))),
@@ -151,7 +151,7 @@ mapFirstLetterDef = formattingDefinition "mapFirstLetter" $
 
 
 nonAlnumToUnderscoresDef :: TElement (String -> String)
-nonAlnumToUnderscoresDef = formattingDefinition "nonAlnumToUnderscores" $
+nonAlnumToUnderscoresDef = define "nonAlnumToUnderscores" $
   lambda "input" $ lets [
     "isAlnum">: lambda "c" $ Logic.or
       (Logic.and (Equality.gte (var "c") (char 'A')) (Equality.lte (var "c") (char 'Z')))
@@ -170,25 +170,25 @@ nonAlnumToUnderscoresDef = formattingDefinition "nonAlnumToUnderscores" $
     $ Strings.fromList $ Lists.reverse $ first $ var "result"
 
 sanitizeWithUnderscoresDef :: TElement (S.Set String -> String -> String)
-sanitizeWithUnderscoresDef = formattingDefinition "sanitizeWithUnderscores" $
+sanitizeWithUnderscoresDef = define "sanitizeWithUnderscores" $
   lambdas ["reserved", "s"] $
     ref escapeWithUnderscoreDef @@ var "reserved" @@ (ref nonAlnumToUnderscoresDef @@ var "s")
 
 showListDef :: TElement ((a -> String) -> [a] -> String)
-showListDef = formattingDefinition "showList" $
+showListDef = define "showList" $
   lambdas ["f", "els"] $ Strings.cat $ list [
     string "[",
     Strings.intercalate (string ", ") $ Lists.map (var "f") $ var "els",
     string "]"]
 
 stripLeadingAndTrailingWhitespaceDef :: TElement (String -> String)
-stripLeadingAndTrailingWhitespaceDef = formattingDefinition "stripLeadingAndTrailingWhitespace" $
+stripLeadingAndTrailingWhitespaceDef = define "stripLeadingAndTrailingWhitespace" $
   lambda "s" $
     Strings.fromList $ Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $
     Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $ Strings.toList $ var "s"
 
 withCharacterAliasesDef :: TElement (String -> String)
-withCharacterAliasesDef = formattingDefinition "withCharacterAliases" $
+withCharacterAliasesDef = define "withCharacterAliases" $
   lambda "original" $ lets [
     -- Taken from: https://cs.stanford.edu/people/miles/iso8859.html
     "aliases">: Maps.fromList $ list [
@@ -232,7 +232,7 @@ withCharacterAliasesDef = formattingDefinition "withCharacterAliases" $
       Lists.map (var "alias") $ Strings.toList $ var "original"
 
 wrapLineDef :: TElement (Int -> String -> String)
-wrapLineDef = formattingDefinition "wrapLine" $
+wrapLineDef = define "wrapLine" $
   doc "A simple soft line wrap which is suitable for code comments" $
   lambdas ["maxlen", "input"] $ lets [
     "helper">: lambdas ["prev", "rem"] $ lets [

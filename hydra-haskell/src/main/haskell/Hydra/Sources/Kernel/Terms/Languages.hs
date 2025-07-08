@@ -43,17 +43,17 @@ import qualified Data.Maybe              as Y
 import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 
-languagesModule :: Module
-languagesModule = Module ns elements
-    [Variants.hydraVariantsModule]
+module_ :: Module
+module_ = Module ns elements
+    [Variants.module_]
     [KernelTypes.hydraCoreModule] $
     Just "Language constraints for Hydra Core"
   where
     ns = Namespace "hydra.languages"
-    elements = [el languagesDef]
+    elements = [el hydraLanguageDef]
 
-languagesDef :: TElement Language
-languagesDef = definitionInModule languagesModule "hydraLanguage" $
+hydraLanguageDef :: TElement Language
+hydraLanguageDef = definitionInModule module_ "hydraLanguage" $
   doc "Language constraints for Hydra Core, i.e. no constraints." $
   record _Language [
     _Language_name>>: wrap _LanguageName "hydra.core",
