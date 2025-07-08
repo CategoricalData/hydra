@@ -91,7 +91,8 @@ validationDefinition = definitionInModule pgValidationModule
 
 pgValidationModule :: Module
 pgValidationModule = Module (Namespace "hydra.pg.validation") elements
-    [] [pgModelModule] $
+    []
+    [pgModelModule] $
     Just "Utilities for validating property graphs against property graph schemas"
   where
    elements = [

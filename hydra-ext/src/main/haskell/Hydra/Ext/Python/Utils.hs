@@ -1,5 +1,6 @@
 module Hydra.Ext.Python.Utils where
 
+import Hydra.Kernel
 import Hydra.Formatting
 import qualified Hydra.Ext.Python.Syntax as Py
 

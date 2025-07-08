@@ -35,6 +35,9 @@ emptyTrace = Compute.Trace {
   Compute.traceMessages = [],
   Compute.traceOther = Maps.empty}
 
+exec :: (Compute.Flow t1 t0 -> t1 -> t1)
+exec f s0 = (Compute.flowStateState (Compute.unFlow f s0 emptyTrace))
+
 fail :: (String -> Compute.Flow t0 t1)
 fail msg = (Compute.Flow (\s -> \t -> Compute.FlowState {
   Compute.flowStateValue = Nothing,
@@ -47,6 +50,17 @@ flowSucceeds s f = (Optionals.isJust (Compute.flowStateValue (Compute.unFlow f s
 fromFlow :: (t1 -> t0 -> Compute.Flow t0 t1 -> t1)
 fromFlow def cx f = (Optionals.maybe def (\xmo -> xmo) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
 
+getState :: (Compute.Flow t0 t0)
+getState = (Compute.Flow (\s0 -> \t0 ->  
+  let fs1 = (Compute.unFlow (pure ()) s0 t0)
+  in ((\v -> \s -> \t -> Optionals.maybe (Compute.FlowState {
+    Compute.flowStateValue = Nothing,
+    Compute.flowStateState = s,
+    Compute.flowStateTrace = t}) (\_ -> Compute.FlowState {
+    Compute.flowStateValue = (Just s),
+    Compute.flowStateState = s,
+    Compute.flowStateTrace = t}) v) (Compute.flowStateValue fs1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))))
+
 map :: ((t0 -> t1) -> Compute.Flow t2 t0 -> Compute.Flow t2 t1)
 map f f1 = (Compute.Flow (\s0 -> \t0 ->  
   let f2 = (Compute.unFlow f1 s0 t0)
@@ -57,6 +71,9 @@ map f f1 = (Compute.Flow (\s0 -> \t0 ->
 
 map2 :: (Compute.Flow t1 t0 -> Compute.Flow t1 t2 -> (t0 -> t2 -> t3) -> Compute.Flow t1 t3)
 map2 f1 f2 f = (bind f1 (\r1 -> map (\r2 -> f r1 r2) f2))
+
+modify :: ((t0 -> t0) -> Compute.Flow t0 ())
+modify f = (bind getState (\s -> putState (f s)))
 
 mutateTrace :: ((Compute.Trace -> Mantle.Either String Compute.Trace) -> (Compute.Trace -> Compute.Trace -> Compute.Trace) -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->  
@@ -96,6 +113,37 @@ pushError msg t =
     Compute.traceStack = (Compute.traceStack t),
     Compute.traceMessages = (Lists.cons errorMsg (Compute.traceMessages t)),
     Compute.traceOther = (Compute.traceOther t)}
+
+putState :: (t0 -> Compute.Flow t0 ())
+putState cx = (Compute.Flow (\s0 -> \t0 ->  
+  let f1 = (Compute.unFlow (pure ()) s0 t0)
+  in Compute.FlowState {
+    Compute.flowStateValue = (Compute.flowStateValue f1),
+    Compute.flowStateState = cx,
+    Compute.flowStateTrace = (Compute.flowStateTrace f1)}))
+
+-- | Summarize a trace as a string
+traceSummary :: (Compute.Trace -> String)
+traceSummary t =  
+  let messageLines = (Lists.nub (Compute.traceMessages t)) 
+      keyvalLines = (Logic.ifElse (Maps.null (Compute.traceOther t)) [] (Lists.cons "key/value pairs: " (Lists.map toLine (Maps.toList (Compute.traceOther t)))))
+      toLine = (\pair -> Strings.cat [
+              Strings.cat [
+                Strings.cat [
+                  "\t",
+                  (Core.unName (fst pair))],
+                ": "],
+              (Core_.term (snd pair))])
+  in (Strings.intercalate "\n" (Lists.concat2 messageLines keyvalLines))
+
+unexpected :: (String -> String -> Compute.Flow t0 t1)
+unexpected expected actual = (fail (Strings.cat [
+  Strings.cat [
+    Strings.cat [
+      "expected ",
+      expected],
+    " but found: "],
+  actual]))
 
 warn :: (String -> Compute.Flow t1 t0 -> Compute.Flow t1 t0)
 warn msg b = (Compute.Flow (\s0 -> \t0 ->  
@@ -142,51 +190,3 @@ withTrace msg =
               Compute.traceMessages = (Compute.traceMessages t1),
               Compute.traceOther = (Compute.traceOther t1)})
   in (mutateTrace mutate restore)
-
-exec :: (Compute.Flow t1 t0 -> t1 -> t1)
-exec f s0 = (Compute.flowStateState (Compute.unFlow f s0 emptyTrace))
-
-getState :: (Compute.Flow t0 t0)
-getState = (Compute.Flow (\s0 -> \t0 ->  
-  let fs1 = (Compute.unFlow (pure ()) s0 t0)
-  in ((\v -> \s -> \t -> Optionals.maybe (Compute.FlowState {
-    Compute.flowStateValue = Nothing,
-    Compute.flowStateState = s,
-    Compute.flowStateTrace = t}) (\_ -> Compute.FlowState {
-    Compute.flowStateValue = (Just s),
-    Compute.flowStateState = s,
-    Compute.flowStateTrace = t}) v) (Compute.flowStateValue fs1) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1))))
-
-modify :: ((t0 -> t0) -> Compute.Flow t0 ())
-modify f = (bind getState (\s -> putState (f s)))
-
-putState :: (t0 -> Compute.Flow t0 ())
-putState cx = (Compute.Flow (\s0 -> \t0 ->  
-  let f1 = (Compute.unFlow (pure ()) s0 t0)
-  in Compute.FlowState {
-    Compute.flowStateValue = (Compute.flowStateValue f1),
-    Compute.flowStateState = cx,
-    Compute.flowStateTrace = (Compute.flowStateTrace f1)}))
-
--- | Summarize a trace as a string
-traceSummary :: (Compute.Trace -> String)
-traceSummary t =  
-  let messageLines = (Lists.nub (Compute.traceMessages t)) 
-      keyvalLines = (Logic.ifElse (Maps.null (Compute.traceOther t)) [] (Lists.cons "key/value pairs: " (Lists.map toLine (Maps.toList (Compute.traceOther t)))))
-      toLine = (\pair -> Strings.cat [
-              Strings.cat [
-                Strings.cat [
-                  "\t",
-                  (Core.unName (fst pair))],
-                ": "],
-              (Core_.term (snd pair))])
-  in (Strings.intercalate "\n" (Lists.concat2 messageLines keyvalLines))
-
-unexpected :: (String -> String -> Compute.Flow t0 t1)
-unexpected expected actual = (fail (Strings.cat [
-  Strings.cat [
-    Strings.cat [
-      "expected ",
-      expected],
-    " but found: "],
-  actual]))

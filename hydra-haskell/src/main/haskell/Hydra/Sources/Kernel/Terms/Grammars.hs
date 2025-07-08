@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Topology      as Topology
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
 import qualified Data.List               as L
@@ -51,7 +51,7 @@ import Hydra.Grammar as G
 module_ :: Module
 module_ = Module (Namespace "hydra.grammars") elements
     [Annotations.module_, Formatting.module_, Names.module_]
-    [KernelTypes.hydraGrammarModule, KernelTypes.hydraComputeModule, KernelTypes.hydraGraphModule, KernelTypes.hydraMantleModule, KernelTypes.hydraModuleModule] $
+    kernelTypesModules $
     Just ("A utility for converting a BNF grammar to a Hydra module.")
   where
    elements = [

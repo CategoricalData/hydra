@@ -2,6 +2,7 @@
 
 module Hydra.Ext.Cpp.Serde where
 
+import Hydra.Kernel
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
 import Hydra.Serialization
 import qualified Hydra.Ast as A
@@ -122,7 +123,7 @@ encodeTypedefDeclaration (Cpp.TypedefDeclaration name typ isUsing) =
 
 -- Class-related encoders
 encodeClassBody :: Bool -> Cpp.ClassBody -> A.Expr
-encodeClassBody commas (Cpp.ClassBody members) = curlyBlock fullBlockStyle (doubleNewlineSep $ map (encodeMemberSpecification commas) members)
+encodeClassBody commas (Cpp.ClassBody members) = curlyBlock fullBlockStyle (doubleNewlineSep $ fmap (encodeMemberSpecification commas) members)
 
 encodeClassDeclaration :: Cpp.ClassDeclaration -> A.Expr
 encodeClassDeclaration (Cpp.ClassDeclaration spec mbody) = withSemi $
@@ -349,7 +350,7 @@ encodeSwitchStatement (Cpp.SwitchStatement value cases) =
   spaceSep [
     cst "switch",
     parens $ encodeExpression value,
-    curlyBlock fullBlockStyle $ newlineSep $ map encodeCaseStatement cases]
+    curlyBlock fullBlockStyle $ newlineSep $ fmap encodeCaseStatement cases]
 
 encodeCaseStatement :: Cpp.CaseStatement -> A.Expr
 encodeCaseStatement stmt = case stmt of

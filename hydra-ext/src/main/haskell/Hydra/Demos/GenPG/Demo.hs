@@ -1,5 +1,6 @@
 module Hydra.Demos.GenPG.Demo where
 
+import Hydra.Kernel
 import Hydra.Demos.GenPG.ExampleDatabaseSchema
 import Hydra.Demos.GenPG.ExampleGraphSchema
 import Hydra.Demos.GenPG.ExampleMapping
@@ -12,7 +13,6 @@ import Hydra.Dsl.Pg.Mappings
 import Hydra.Ext.Json.Serde
 import Hydra.Ext.Pg.Graphson.Utils
 import Hydra.Ext.Pg.Printing
-import Hydra.Kernel
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Tools.Monads
 

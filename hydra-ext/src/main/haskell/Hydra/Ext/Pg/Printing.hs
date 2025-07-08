@@ -1,5 +1,6 @@
 module Hydra.Ext.Pg.Printing where
 
+import Hydra.Kernel
 import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Dsl.Pg.Mappings as PGM
 

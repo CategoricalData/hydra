@@ -87,8 +87,8 @@ import Hydra.Sources.Kernel.Types.Json
 
 jsonDecodingModule :: Module
 jsonDecodingModule = Module (Namespace "hydra.ext.org.json.decoding") elements
-    [KernelTypes.jsonModelModule, KernelTypes.hydraCoreModule]
-    [KernelTypes.jsonModelModule, KernelTypes.hydraComputeModule] $
+    []
+    KernelTypes.kernelTypesModules $
     Just "Decoding functions for JSON data"
   where
    elements = [

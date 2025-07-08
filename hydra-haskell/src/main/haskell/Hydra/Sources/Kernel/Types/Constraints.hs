@@ -2,27 +2,28 @@
 
 module Hydra.Sources.Kernel.Types.Constraints where
 
--- Standard type-level Tier-1 imports
+-- Standard type-level kernel imports
+import           Hydra.Kernel
 import           Hydra.Dsl.Annotations
 import           Hydra.Dsl.Bootstrap
-import qualified Hydra.Dsl.Terms       as Terms
-import           Hydra.Dsl.Types       as Types
-import           Hydra.Sources.Kernel.Types.Core
-import qualified Data.List             as L
-import qualified Data.Map              as M
-import qualified Data.Set              as S
-import qualified Data.Maybe            as Y
+import qualified Hydra.Dsl.Terms                 as Terms
+import           Hydra.Dsl.Types                 as Types
+import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Data.List                       as L
+import qualified Data.Map                        as M
+import qualified Data.Set                        as S
+import qualified Data.Maybe                      as Y
 
-import Hydra.Sources.Kernel.Types.Query
+import qualified Hydra.Sources.Kernel.Types.Query as Query
 
 
-hydraConstraintsModule :: Module
-hydraConstraintsModule = Module ns elements [hydraQueryModule] [hydraCoreModule] $
+module_ :: Module
+module_ = Module ns elements [Query.module_] [Core.module_] $
     Just "A model for path- and pattern-based graph constraints, which may be considered as part of the schema of a graph"
   where
     ns = Namespace "hydra.constraints"
-    core = typeref $ moduleNamespace hydraCoreModule
-    query = typeref $ moduleNamespace hydraQueryModule
+    core = typeref $ moduleNamespace Core.module_
+    query = typeref $ moduleNamespace Query.module_
     constraints = typeref ns
     def = datatype ns
 

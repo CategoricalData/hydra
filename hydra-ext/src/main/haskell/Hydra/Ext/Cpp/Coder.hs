@@ -2,6 +2,7 @@
 
 module Hydra.Ext.Cpp.Coder (moduleToCpp) where
 
+import Hydra.Kernel
 import Hydra.Dsl.ShorthandTypes
 import Hydra.Dsl.Terms
 import Hydra.Ext.Cpp.Language
@@ -12,7 +13,6 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Ext.Cpp.Serde as CppSer
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
 import qualified Hydra.Show.Core as ShowCore
-import Hydra.Kernel
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Adapt.Modules
 import Hydra.Formatting

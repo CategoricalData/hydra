@@ -2,6 +2,7 @@
 
 module Hydra.Ext.Sql.Src.Ansi where
 
+import Hydra.Kernel hiding (parens)
 import Hydra.Sources.Ext.All hiding (parens)
 import Hydra.Dsl.Grammars
 import Hydra.Grammars

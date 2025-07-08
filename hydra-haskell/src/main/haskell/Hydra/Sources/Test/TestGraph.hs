@@ -1,5 +1,6 @@
 module Hydra.Sources.Test.TestGraph where
 
+import Hydra.Kernel
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Graph         as Graph
 import qualified Hydra.Dsl.Module        as Module
@@ -31,7 +32,9 @@ testGraphDefinition :: String -> TTerm a -> TElement a
 testGraphDefinition = definitionInModule testGraphModule
 
 testGraphModule :: Module
-testGraphModule = Module (Namespace "hydra.test.testGraph") elements [] [hydraGraphModule, hydraModuleModule] $
+testGraphModule = Module (Namespace "hydra.test.testGraph") elements
+    []
+    kernelTypesModules $
     Just ("A module defining the graph used in the test suite.")
   where
     elements = [

@@ -2,14 +2,35 @@
 
 module Hydra.Ext.Tinkerpop.Src.Features where
 
+import Hydra.Kernel
 import Hydra.Sources.Ext.All
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 
+import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
+import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
+import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
+import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
+import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
+import qualified Hydra.Sources.Kernel.Types.Core        as Core
+import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
+import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
+import qualified Hydra.Sources.Kernel.Types.Json        as Json
+import qualified Hydra.Sources.Kernel.Types.Mantle      as Mantle
+import qualified Hydra.Sources.Kernel.Types.Module      as Module
+import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
+import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
+import qualified Hydra.Sources.Kernel.Types.Query       as Query
+import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
+import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
+import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
+import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
+import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
+
 
 tinkerpopFeaturesModule :: Module
-tinkerpopFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
+tinkerpopFeaturesModule = Module ns elements [Core.module_] [Core.module_] $
     Just ("A model derived from TinkerPop's Graph.Features. See\n" ++
       "  https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html\n" ++
       "\n" ++
@@ -19,7 +40,7 @@ tinkerpopFeaturesModule = Module ns elements [hydraCoreModule] [hydraCoreModule]
       "For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().")
   where
     ns = Namespace "hydra.ext.org.apache.tinkerpop.features"
-    core = typeref $ moduleNamespace hydraCoreModule
+    core = typeref $ moduleNamespace Core.module_
     features = typeref ns
     def = datatype ns
     supports name comment = ("supports" ++ capitalize name)>: doc comment boolean

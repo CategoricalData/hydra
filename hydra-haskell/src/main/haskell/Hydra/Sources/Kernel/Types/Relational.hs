@@ -2,20 +2,21 @@
 
 module Hydra.Sources.Kernel.Types.Relational where
 
--- Standard type-level Tier-1 imports
+-- Standard type-level kernel imports
+import           Hydra.Kernel
 import           Hydra.Dsl.Annotations
 import           Hydra.Dsl.Bootstrap
-import qualified Hydra.Dsl.Terms       as Terms
-import           Hydra.Dsl.Types       as Types
-import           Hydra.Sources.Kernel.Types.Core
-import qualified Data.List             as L
-import qualified Data.Map              as M
-import qualified Data.Set              as S
-import qualified Data.Maybe            as Y
+import qualified Hydra.Dsl.Terms                 as Terms
+import           Hydra.Dsl.Types                 as Types
+import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Data.List                       as L
+import qualified Data.Map                        as M
+import qualified Data.Set                        as S
+import qualified Data.Maybe                      as Y
 
 
-hydraRelationalModule :: Module
-hydraRelationalModule = Module ns elements [] [hydraCoreModule] $
+module_ :: Module
+module_ = Module ns elements [] [Core.module_] $
     Just ("An interpretation of Codd's Relational Model, " ++
       "as described in 'A Relational Model of Data for Large Shared Data Banks' (1970). " ++
       "Types ('domains') and values are parameterized so as to allow for application-specific implementations. " ++

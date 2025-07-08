@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Topology      as Topology
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
 import qualified Data.List               as L
@@ -50,9 +50,8 @@ import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 module_ :: Module
 module_ = Module (Namespace "hydra.adapt.literals") elements
-    [ExtractCore.module_, Monads.module_, DescribeCore.module_,
-      AdaptUtils.module_, ShowCore.module_, Variants.module_]
-    [KernelTypes.hydraCodersModule, KernelTypes.hydraModuleModule] $
+    [ExtractCore.module_, Monads.module_, DescribeCore.module_, AdaptUtils.module_, ShowCore.module_, Variants.module_]
+    kernelTypesModules $
     Just "Adapter framework for literal types and terms"
   where
    elements = [
