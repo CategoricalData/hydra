@@ -1,5 +1,6 @@
 module Hydra.Ext.Python.Serde where
 
+import Hydra.Kernel
 import qualified Hydra.Ext.Python.Syntax as Py
 import Hydra.Serialization
 import qualified Hydra.Ast as A

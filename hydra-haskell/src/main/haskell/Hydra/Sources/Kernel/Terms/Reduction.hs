@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Topology      as Topology
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
 import qualified Data.List               as L
@@ -52,8 +52,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.reduction") elements
     [Arity.module_, ExtractCore.module_, Lexical.module_, Rewriting.module_,
       Schemas.module_]
-    [KernelTypes.hydraGraphModule, KernelTypes.hydraCodersModule, KernelTypes.hydraComputeModule, KernelTypes.hydraMantleModule,
-      KernelTypes.hydraModuleModule, KernelTypes.hydraTopologyModule] $
+    kernelTypesModules $
     Just ("Functions for reducing terms and types, i.e. performing computations.")
   where
    elements = [

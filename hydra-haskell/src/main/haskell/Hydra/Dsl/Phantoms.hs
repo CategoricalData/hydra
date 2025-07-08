@@ -3,12 +3,11 @@
 module Hydra.Dsl.Phantoms (
   module Hydra.Dsl.Phantoms,
   module Hydra.Dsl.PhantomLiterals,
-  hydraCoreGraph,
 ) where
 
+import Hydra.Kernel
 import Hydra.Dsl.Common
 import Hydra.Dsl.PhantomLiterals
-import Hydra.Sources.Kernel.Types.Core
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms

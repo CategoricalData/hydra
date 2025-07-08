@@ -2,31 +2,32 @@
 
 module Hydra.Sources.Kernel.Types.Workflow where
 
--- Standard type-level Tier-1 imports
+-- Standard type-level kernel imports
+import           Hydra.Kernel
 import           Hydra.Dsl.Annotations
 import           Hydra.Dsl.Bootstrap
-import qualified Hydra.Dsl.Terms       as Terms
-import           Hydra.Dsl.Types       as Types
-import           Hydra.Sources.Kernel.Types.Core
-import qualified Data.List             as L
-import qualified Data.Map              as M
-import qualified Data.Set              as S
-import qualified Data.Maybe            as Y
+import qualified Hydra.Dsl.Terms                 as Terms
+import           Hydra.Dsl.Types                 as Types
+import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Data.List                       as L
+import qualified Data.Map                        as M
+import qualified Data.Set                        as S
+import qualified Data.Maybe                      as Y
 
-import Hydra.Sources.Kernel.Types.Compute
-import Hydra.Sources.Kernel.Types.Graph
-import Hydra.Sources.Kernel.Types.Module
+import qualified Hydra.Sources.Kernel.Types.Compute as Compute
+import qualified Hydra.Sources.Kernel.Types.Graph as Graph
+import qualified Hydra.Sources.Kernel.Types.Module as Module
 
 
-hydraWorkflowModule :: Module
-hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule, hydraGraphModule] [hydraCoreModule] $
+module_ :: Module
+module_ = Module ns elements [Compute.module_, Graph.module_, Module.module_] [Core.module_] $
     Just "A model for Hydra transformation workflows"
   where
     ns = Namespace "hydra.workflow"
-    mod = typeref $ moduleNamespace hydraModuleModule
-    compute = typeref $ moduleNamespace hydraComputeModule
-    core = typeref $ moduleNamespace hydraCoreModule
-    graph = typeref $ moduleNamespace hydraGraphModule
+    mod = typeref $ moduleNamespace Module.module_
+    compute = typeref $ moduleNamespace Compute.module_
+    core = typeref $ moduleNamespace Core.module_
+    graph = typeref $ moduleNamespace Graph.module_
     wf = typeref ns
     def = datatype ns
 

@@ -84,7 +84,7 @@ haskellLanguageDefinition = definitionInModule haskellLanguageModule
 haskellLanguageModule :: Module
 haskellLanguageModule = Module ns elements
     []
-    [KernelTypes.hydraCodersModule] $
+    KernelTypes.kernelTypesModules $
     Just "Language constraints and reserved words for Haskell"
   where
     ns = Namespace "hydra.ext.haskell.language"

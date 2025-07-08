@@ -2,28 +2,28 @@
 
 module Hydra.Sources.Kernel.Types.Module where
 
--- Standard type-level Tier-1 imports
+-- Standard type-level kernel imports
+import           Hydra.Kernel
 import           Hydra.Dsl.Annotations
 import           Hydra.Dsl.Bootstrap
-import qualified Hydra.Dsl.Terms       as Terms
-import           Hydra.Dsl.Types       as Types
-import           Hydra.Sources.Kernel.Types.Core
-import qualified Data.List             as L
-import qualified Data.Map              as M
-import qualified Data.Set              as S
-import qualified Data.Maybe            as Y
+import qualified Hydra.Dsl.Terms                 as Terms
+import           Hydra.Dsl.Types                 as Types
+import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Data.List                       as L
+import qualified Data.Map                        as M
+import qualified Data.Set                        as S
+import qualified Data.Maybe                      as Y
 
-import Hydra.Sources.Kernel.Types.Core
-import Hydra.Sources.Kernel.Types.Graph
+import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 
 
-hydraModuleModule :: Module
-hydraModuleModule = Module ns elements [hydraGraphModule] [hydraCoreModule] $
+module_ :: Module
+module_ = Module ns elements [Graph.module_] [Core.module_] $
     Just "A model for Hydra namespaces and modules"
   where
     ns = Namespace "hydra.module"
-    core = typeref $ moduleNamespace hydraCoreModule
-    graph = typeref $ moduleNamespace hydraGraphModule
+    core = typeref $ moduleNamespace Core.module_
+    graph = typeref $ moduleNamespace Graph.module_
     mod = typeref ns
     def = datatype ns
 

@@ -4,7 +4,8 @@ module Hydra.Sources.Kernel.Terms.All(
   module Hydra.Sources.Kernel.Terms.All,
 ) where
 
-import Hydra.Sources.Kernel.Types.All hiding (mapDef) -- hydra.decode, hydra.expect, and hydra.flows all export 'map'
+import Hydra.Kernel
+import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Literals  as AdaptLiterals
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Modules   as AdaptModules
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Terms     as AdaptTerms
@@ -42,7 +43,6 @@ import qualified Hydra.Sources.Kernel.Terms.Tarjan          as Tarjan
 import qualified Hydra.Sources.Kernel.Terms.Templates       as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
 import qualified Hydra.Sources.Kernel.Terms.Variants        as Variants
-
 
 kernelModules :: [Module]
 kernelModules = kernelTypesModules ++ kernelTermsModules

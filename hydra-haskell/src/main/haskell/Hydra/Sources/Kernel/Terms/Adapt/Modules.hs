@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Topology      as Topology
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
 import qualified Data.List               as L
@@ -54,7 +54,7 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 module_ :: Module
 module_ = Module (Namespace "hydra.adapt.modules") elements
     [Rewriting.module_, AdaptTerms.module_]
-    [KernelTypes.hydraCodersModule, KernelTypes.hydraComputeModule, KernelTypes.hydraModuleModule, KernelTypes.hydraTopologyModule] $
+    kernelTypesModules $
     Just "Entry point for Hydra's adapter (type/term rewriting) framework"
   where
    elements = [

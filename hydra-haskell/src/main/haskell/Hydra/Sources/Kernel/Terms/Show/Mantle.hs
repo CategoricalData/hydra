@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Topology      as Topology
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
+import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
 import qualified Data.List               as L
@@ -46,7 +46,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 module_ :: Module
 module_ = Module (Namespace "hydra.show.mantle") elements
     [Annotations.module_]
-    [KernelTypes.hydraComputeModule, KernelTypes.hydraGraphModule, KernelTypes.hydraMantleModule, KernelTypes.hydraTypingModule] $
+    kernelTypesModules $
     Just "String representations of hydra.mantle types"
   where
    elements = [

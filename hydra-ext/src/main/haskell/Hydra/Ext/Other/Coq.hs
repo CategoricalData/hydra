@@ -1,5 +1,6 @@
 module Hydra.Ext.Other.Coq where
 
+import Hydra.Kernel
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Annotations

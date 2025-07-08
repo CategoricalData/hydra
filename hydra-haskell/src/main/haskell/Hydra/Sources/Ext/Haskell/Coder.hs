@@ -94,9 +94,7 @@ haskellCoderModule :: Module
 haskellCoderModule = Module ns elements
     [HaskellSerde.haskellSerdeModule, HaskellUtils.haskellUtilsModule,
       AdaptModules.module_, Rewriting.module_, Serialization.module_]
-    [HaskellAst.haskellAstModule,
-      KernelTypes.hydraAstModule, KernelTypes.hydraCodersModule, KernelTypes.hydraComputeModule, KernelTypes.hydraGraphModule,
-      KernelTypes.hydraMantleModule, KernelTypes.hydraModuleModule, KernelTypes.hydraTopologyModule, KernelTypes.hydraTypingModule] $
+    (HaskellAst.haskellAstModule:KernelTypes.kernelTypesModules) $
     Just "Functions for encoding Hydra modules as Haskell modules"
   where
     ns = Namespace "hydra.ext.haskell.coder"

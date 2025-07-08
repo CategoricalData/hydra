@@ -1,5 +1,6 @@
 module Hydra.Ext.Other.IanaRelations where
 
+import Hydra.Kernel
 import Hydra.Sources.Ext.All
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Bootstrap

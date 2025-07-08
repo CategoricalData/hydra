@@ -2,6 +2,7 @@
 
 module Hydra.Ext.Other.Datalog where
 
+import Hydra.Kernel
 import Hydra.Sources.Ext.All
 import Hydra.Dsl.Grammars
 import Hydra.Grammars

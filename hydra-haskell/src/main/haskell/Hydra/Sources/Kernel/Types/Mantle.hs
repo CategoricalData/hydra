@@ -2,24 +2,25 @@
 
 module Hydra.Sources.Kernel.Types.Mantle where
 
--- Standard type-level Tier-1 imports
+-- Standard type-level kernel imports
+import           Hydra.Kernel
 import           Hydra.Dsl.Annotations
 import           Hydra.Dsl.Bootstrap
-import qualified Hydra.Dsl.Terms       as Terms
-import           Hydra.Dsl.Types       as Types
-import           Hydra.Sources.Kernel.Types.Core
-import qualified Data.List             as L
-import qualified Data.Map              as M
-import qualified Data.Set              as S
-import qualified Data.Maybe            as Y
+import qualified Hydra.Dsl.Terms                 as Terms
+import           Hydra.Dsl.Types                 as Types
+import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Data.List                       as L
+import qualified Data.Map                        as M
+import qualified Data.Set                        as S
+import qualified Data.Maybe                      as Y
 
 
-hydraMantleModule :: Module
-hydraMantleModule = Module ns elements [hydraCoreModule] [hydraCoreModule] $
+module_ :: Module
+module_ = Module ns elements [Core.module_] [Core.module_] $
     Just ("A set of types which supplement hydra.core, but are not referenced by hydra.core.")
   where
     ns = Namespace "hydra.mantle"
-    core = typeref $ moduleNamespace hydraCoreModule
+    core = typeref $ moduleNamespace Core.module_
     mantle = typeref ns
     def = datatype ns
 
