@@ -42,13 +42,9 @@ import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 
-
-substitutionDefinition :: String -> TTerm a -> TElement a
-substitutionDefinition = definitionInModule hydraSubstitutionModule
-
-hydraSubstitutionModule :: Module
-hydraSubstitutionModule = Module (Namespace "hydra.substitution") elements
-    [Rewriting.hydraRewritingModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.substitution") elements
+    [Rewriting.module_]
     [KernelTypes.hydraCodersModule, KernelTypes.hydraMantleModule, KernelTypes.hydraTypingModule] $
     Just ("Variable substitution in type and term expressions.")
   where
@@ -65,44 +61,47 @@ hydraSubstitutionModule = Module (Namespace "hydra.substitution") elements
      el substInTypeSchemeDef,
      el substTypesInTermDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 composeTypeSubstDef :: TElement (TypeSubst -> TypeSubst -> TypeSubst)
-composeTypeSubstDef = substitutionDefinition "composeTypeSubst" $
+composeTypeSubstDef = define "composeTypeSubst" $
   lambdas ["s1", "s2"] $ lets [
     "isExtra">: lambdas ["k", "v"] $ Optionals.isNothing (Maps.lookup (var "k") (Typing.unTypeSubst $ var "s1")),
     "withExtra">: Maps.filterWithKey (var "isExtra") (Typing.unTypeSubst $ var "s2")] $
     Typing.typeSubst $ Maps.union (var "withExtra") $ Maps.map (ref substInTypeDef @@ var "s2") $ Typing.unTypeSubst $ var "s1"
 
 composeTypeSubstListDef :: TElement ([TypeSubst] -> TypeSubst)
-composeTypeSubstListDef = substitutionDefinition "composeTypeSubstList" $
+composeTypeSubstListDef = define "composeTypeSubstList" $
   Phantoms.fold (ref composeTypeSubstDef) @@ ref idTypeSubstDef
 
 idTypeSubstDef :: TElement TypeSubst
-idTypeSubstDef = substitutionDefinition "idTypeSubst" $
+idTypeSubstDef = define "idTypeSubst" $
   Typing.typeSubst Maps.empty
 
 singletonTypeSubstDef :: TElement (Name -> Type -> TypeSubst)
-singletonTypeSubstDef = substitutionDefinition "singletonTypeSubst" $
+singletonTypeSubstDef = define "singletonTypeSubst" $
   lambdas ["v", "t"] $ Typing.typeSubst $ Maps.singleton (var "v") (var "t")
 
 substituteInConstraintDef :: TElement (TypeSubst -> TypeConstraint -> TypeConstraint)
-substituteInConstraintDef = substitutionDefinition "substituteInConstraint" $
+substituteInConstraintDef = define "substituteInConstraint" $
   lambdas ["subst", "c"] $ Typing.typeConstraint
     (ref substInTypeDef @@ var "subst" @@ (Typing.typeConstraintLeft $ var "c"))
     (ref substInTypeDef @@ var "subst" @@ (Typing.typeConstraintRight $ var "c"))
     (Typing.typeConstraintComment $ var "c")
 
 substituteInConstraintsDef :: TElement (TypeSubst -> [TypeConstraint] -> [TypeConstraint])
-substituteInConstraintsDef = substitutionDefinition "substituteInConstraints" $
+substituteInConstraintsDef = define "substituteInConstraints" $
   lambdas ["subst", "cs"] $ Lists.map (ref substituteInConstraintDef @@ var "subst") (var "cs")
 
 substInContextDef :: TElement (TypeSubst -> InferenceContext -> InferenceContext)
-substInContextDef = substitutionDefinition "substInContext" $
+substInContextDef = define "substInContext" $
   lambdas ["subst", "cx"] $ Typing.inferenceContextWithDataTypes
     (var "cx")
     (Maps.map (ref substInTypeSchemeDef @@ var "subst") (Typing.inferenceContextDataTypes $ var "cx"))
 
 substituteInTermDef :: TElement (TermSubst -> Term -> Term)
-substituteInTermDef = substitutionDefinition "substituteInTerm" $
+substituteInTermDef = define "substituteInTerm" $
   lambda "subst" $ lets [
     "s">: Typing.unTermSubst $ var "subst",
     "rewrite">: lambdas ["recurse", "term"] $ lets [
@@ -135,7 +134,7 @@ substituteInTermDef = substitutionDefinition "substituteInTerm" $
     ref Rewriting.rewriteTermDef @@ var "rewrite"
 
 substInTypeDef :: TElement (TypeSubst -> Type -> Type)
-substInTypeDef = substitutionDefinition "substInType" $
+substInTypeDef = define "substInType" $
   lambda "subst" $ lets [
     "rewrite">: lambdas ["recurse", "typ"] $ cases _Type (var "typ") (Just $ var "recurse" @@ var "typ") [
       _Type_forall>>: lambda "lt" $ Optionals.maybe
@@ -154,13 +153,13 @@ substInTypeDef = substitutionDefinition "substInType" $
     (ref Rewriting.rewriteTypeDef) @@ var "rewrite"
 
 substInTypeSchemeDef :: TElement (TypeSubst -> TypeScheme -> TypeScheme)
-substInTypeSchemeDef = substitutionDefinition "substInTypeScheme" $
+substInTypeSchemeDef = define "substInTypeScheme" $
   lambdas ["subst", "ts"] $ Core.typeScheme
     (Core.typeSchemeVariables $ var "ts")
     (ref substInTypeDef @@ var "subst" @@ (Core.typeSchemeType $ var "ts"))
 
 substTypesInTermDef :: TElement (TypeSubst -> Term -> Term)
-substTypesInTermDef = substitutionDefinition "substTypesInTerm" $
+substTypesInTermDef = define "substTypesInTerm" $
   lambda "subst" $ lets [
     "rewrite">: lambdas ["recurse", "term"] $ lets [
       "forElimination">: lambda "elm" $ cases _Elimination (var "elm")

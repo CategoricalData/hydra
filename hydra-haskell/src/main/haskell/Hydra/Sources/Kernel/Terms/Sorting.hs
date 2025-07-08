@@ -45,12 +45,9 @@ import qualified Hydra.Sources.Kernel.Terms.Tarjan as Tarjan
 import qualified Hydra.Topology as Topo
 
 
-sortingDefinition :: String -> TTerm a -> TElement a
-sortingDefinition = definitionInModule hydraSortingModule
-
-hydraSortingModule :: Module
-hydraSortingModule = Module (Namespace "hydra.sorting") elements
-    [Tarjan.tarjanModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.sorting") elements
+    [Tarjan.module_]
     [KernelTypes.hydraComputeModule, KernelTypes.hydraMantleModule, KernelTypes.hydraTopologyModule] $
     Just ("Utilities for sorting.")
   where
@@ -59,8 +56,11 @@ hydraSortingModule = Module (Namespace "hydra.sorting") elements
      el topologicalSortDef,
      el topologicalSortComponentsDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 createOrderingIsomorphismDef :: TElement ([a] -> [a] -> Topo.OrderingIsomorphism b)
-createOrderingIsomorphismDef = sortingDefinition "createOrderingIsomorphism" $
+createOrderingIsomorphismDef = define "createOrderingIsomorphism" $
   withOrd "t0" $
   lambdas ["sourceOrd", "targetOrd"] $ lets [
     "sourceToTargetMapping">: lambda "els" $ lets [
@@ -72,7 +72,7 @@ createOrderingIsomorphismDef = sortingDefinition "createOrderingIsomorphism" $
     $ Topology.orderingIsomorphism (var "sourceToTargetMapping") (var "targetToSourceMapping")
 
 topologicalSortDef :: TElement ([(a, [a])] -> Either [[a]] [a])
-topologicalSortDef = sortingDefinition "topologicalSort" $
+topologicalSortDef = define "topologicalSort" $
   doc "Sort a directed acyclic graph (DAG) based on an adjacency list. Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list." $
   withOrd "t0" $
   lambda "pairs" $ lets [
@@ -84,7 +84,7 @@ topologicalSortDef = sortingDefinition "topologicalSort" $
       (Mantle.eitherLeft $ var "withCycles")
 
 topologicalSortComponentsDef :: TElement ([(a, [a])] -> [[a]])
-topologicalSortComponentsDef = sortingDefinition "topologicalSortComponents" $
+topologicalSortComponentsDef = define "topologicalSortComponents" $
   doc "Find the strongly connected components (including cycles and isolated vertices) of a graph, in (reverse) topological order, i.e. dependencies before dependents" $
   withOrd "t0" $
   lambda "pairs" $ lets [

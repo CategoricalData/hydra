@@ -41,11 +41,8 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
-arityDefinition :: String -> TTerm a -> TElement a
-arityDefinition = definitionInModule hydraArityModule
-
-hydraArityModule :: Module
-hydraArityModule = Module (Namespace "hydra.arity") elements
+module_ :: Module
+module_ = Module (Namespace "hydra.arity") elements
     []
     [KernelTypes.hydraCoreModule] $
     Just ("Functions dealing with arguments and arity.")
@@ -57,8 +54,11 @@ hydraArityModule = Module (Namespace "hydra.arity") elements
       el typeArityDef,
       el uncurryTypeDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 functionArityDef :: TElement (Function -> Int)
-functionArityDef = arityDefinition "functionArity" $
+functionArityDef = define "functionArity" $
   match _Function Nothing [
     _Function_elimination>>: constant (int32 1),
     _Function_lambda>>: (lambda "i" $ Math.add (int32 1) (var "i")) <.> (ref termArityDef <.> unaryFunction Core.lambdaBody),
@@ -66,19 +66,19 @@ functionArityDef = arityDefinition "functionArity" $
       doc "TODO: This function needs to be monadic, so we can look up the primitive" (int32 42)]
 
 primitiveArityDef :: TElement (Primitive -> Int)
-primitiveArityDef = arityDefinition "primitiveArity" $
+primitiveArityDef = define "primitiveArity" $
   doc "Find the arity (expected number of arguments) of a primitive constant or function" $
   (ref typeArityDef <.> unaryFunction Core.typeSchemeType <.> unaryFunction Graph.primitiveType)
 
 termArityDef :: TElement (Term -> Int)
-termArityDef = arityDefinition "termArity" $
+termArityDef = define "termArity" $
   match _Term (Just $ int32 0) [
     _Term_application>>: (lambda "xapp" $ Math.sub (var "xapp") (int32 1)) <.> ref termArityDef <.> unaryFunction Core.applicationFunction,
     _Term_function>>: ref functionArityDef]
     -- Note: ignoring variables which might resolve to functions
 
 typeArityDef :: TElement (Type -> Int)
-typeArityDef = arityDefinition "typeArity" $
+typeArityDef = define "typeArity" $
   match _Type (Just $ int32 0) [
     _Type_annotated>>: ref typeArityDef <.> unaryFunction Core.annotatedTypeSubject,
     _Type_application>>: ref typeArityDef <.> unaryFunction Core.applicationTypeFunction,
@@ -87,7 +87,7 @@ typeArityDef = arityDefinition "typeArity" $
       Math.add (int32 1) (ref typeArityDef @@ (Core.functionTypeCodomain $ var "f"))]
 
 uncurryTypeDef :: TElement (Type -> [Type])
-uncurryTypeDef = arityDefinition "uncurryType" $
+uncurryTypeDef = define "uncurryType" $
   doc "Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)" $
   lambda "t" ((match _Type (Just $ list [var "t"]) [
     _Type_annotated>>: ref uncurryTypeDef <.> unaryFunction Core.annotatedTypeSubject,

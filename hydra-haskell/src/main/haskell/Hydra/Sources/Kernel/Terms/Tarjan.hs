@@ -46,12 +46,9 @@ import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Topology as Topo
 
 
-tarjanDefinition :: String -> TTerm a -> TElement a
-tarjanDefinition = definitionInModule tarjanModule
-
-tarjanModule :: Module
-tarjanModule = Module (Namespace "hydra.tarjan") elements
-    [Constants.hydraConstantsModule, Monads.hydraMonadsModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.tarjan") elements
+    [Constants.module_, Monads.module_]
     [KernelTypes.hydraComputeModule, KernelTypes.hydraMantleModule, KernelTypes.hydraTopologyModule] $
     Just ("This implementation of Tarjan's algorithm was originally based on GraphSCC by Iavor S. Diatchki:"
       <> " https://hackage.haskell.org/package/GraphSCC.")
@@ -63,8 +60,11 @@ tarjanModule = Module (Namespace "hydra.tarjan") elements
      el popStackUntilDef,
      el strongConnectDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 adjacencyListsToGraphDef :: TElement ([(key, [key])] -> (Topo.Graph, Topo.Vertex -> key))
-adjacencyListsToGraphDef = tarjanDefinition "adjacencyListsToGraph" $
+adjacencyListsToGraphDef = define "adjacencyListsToGraph" $
   doc ("Given a list of adjacency lists represented as (key, [key]) pairs,"
     <> " construct a graph along with a function mapping each vertex (an Int)"
     <> " back to its original key.") $
@@ -97,12 +97,12 @@ adjacencyListsToGraphDef = tarjanDefinition "adjacencyListsToGraph" $
     $ pair (var "graph") (var "vertexToKey")
 
 initialStateDef :: TElement Topo.TarjanState
-initialStateDef = tarjanDefinition "initialState" $
+initialStateDef = define "initialState" $
   doc "Initial state for Tarjan's algorithm" $
   Topology.tarjanState (int32 0) Maps.empty Maps.empty (list []) Sets.empty (list [])
 
 popStackUntilDef :: TElement (Topo.Vertex -> Flow Topo.TarjanState [Topo.Vertex])
-popStackUntilDef = tarjanDefinition "popStackUntil" $
+popStackUntilDef = define "popStackUntil" $
   doc "Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component" $
   lambda "v" $ lets [
     "go">: lambda "acc" $
@@ -124,7 +124,7 @@ popStackUntilDef = tarjanDefinition "popStackUntil" $
     $ var "go" @@ list []
 
 strongConnectDef :: TElement (Topo.Graph -> Topo.Vertex -> Flow Topo.TarjanState ())
-strongConnectDef = tarjanDefinition "strongConnect" $
+strongConnectDef = define "strongConnect" $
   doc "Visit a vertex and recursively explore its successors" $
   lambdas ["graph", "v"] $
     Flows.bind (ref Monads.getStateDef) $
@@ -178,7 +178,7 @@ strongConnectDef = tarjanDefinition "strongConnect" $
                         (Flows.pure unit)
 
 stronglyConnectedComponentsDef :: TElement (Topo.Graph -> [[Topo.Vertex]])
-stronglyConnectedComponentsDef = tarjanDefinition "stronglyConnectedComponents" $
+stronglyConnectedComponentsDef = define "stronglyConnectedComponents" $
   doc "Compute the strongly connected components of the given graph. The components are returned in reverse topological order" $
   lambda "graph" $ lets [
     "verts">: Maps.keys $ var "graph",

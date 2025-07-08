@@ -85,7 +85,7 @@ typeScriptLanguageDefinition = definitionInModule typeScriptLanguageModule
 
 typeScriptLanguageModule :: Module
 typeScriptLanguageModule = Module ns elements
-    [Rewriting.hydraRewritingModule]
+    [Rewriting.module_]
     [KernelTypes.hydraCoreModule, KernelTypes.hydraGraphModule, KernelTypes.hydraCodersModule] $
     Just "Language constraints for TypeScript"
   where

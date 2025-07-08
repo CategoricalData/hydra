@@ -41,11 +41,8 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
-variantsDefinition :: String -> TTerm a -> TElement a
-variantsDefinition = definitionInModule hydraVariantsModule
-
-hydraVariantsModule :: Module
-hydraVariantsModule = Module (Namespace "hydra.variants") elements
+module_ :: Module
+module_ = Module (Namespace "hydra.variants") elements
     []
     [KernelTypes.hydraMantleModule] $
     Just ("Functions for working with term, type, and literal type variants, as well as numeric precision.")
@@ -75,8 +72,11 @@ hydraVariantsModule = Module (Namespace "hydra.variants") elements
       el fieldMapDef,
       el fieldTypeMapDef]
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 eliminationVariantDef :: TElement (Elimination -> EliminationVariant)
-eliminationVariantDef = variantsDefinition "eliminationVariant" $
+eliminationVariantDef = define "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
   match _Elimination Nothing [
     _Elimination_product>>: constant Mantle.eliminationVariantProduct,
@@ -85,7 +85,7 @@ eliminationVariantDef = variantsDefinition "eliminationVariant" $
     _Elimination_wrap>>: constant Mantle.eliminationVariantWrap]
 
 eliminationVariantsDef :: TElement [EliminationVariant]
-eliminationVariantsDef = variantsDefinition "eliminationVariants" $
+eliminationVariantsDef = define "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
   list $ unitVariant _EliminationVariant <$> [
     _EliminationVariant_product,
@@ -94,7 +94,7 @@ eliminationVariantsDef = variantsDefinition "eliminationVariants" $
     _EliminationVariant_wrap]
 
 floatTypePrecisionDef :: TElement (FloatType -> Precision)
-floatTypePrecisionDef = variantsDefinition "floatTypePrecision" $
+floatTypePrecisionDef = define "floatTypePrecision" $
   doc "Find the precision of a given floating-point type" $
   match _FloatType Nothing [
     _FloatType_bigfloat>>: constant Mantle.precisionArbitrary,
@@ -102,7 +102,7 @@ floatTypePrecisionDef = variantsDefinition "floatTypePrecision" $
     _FloatType_float64>>: constant $ Mantle.precisionBits $ int32 64]
 
 floatTypesDef :: TElement [FloatType]
-floatTypesDef = variantsDefinition "floatTypes" $
+floatTypesDef = define "floatTypes" $
   doc "All floating-point types in a canonical order" $
   list $ unitVariant _FloatType <$> [
     _FloatType_bigfloat,
@@ -110,7 +110,7 @@ floatTypesDef = variantsDefinition "floatTypes" $
     _FloatType_float64]
 
 floatValueTypeDef :: TElement (FloatValue -> FloatType)
-floatValueTypeDef = variantsDefinition "floatValueType" $
+floatValueTypeDef = define "floatValueType" $
   doc "Find the float type for a given floating-point value" $
   match _FloatValue Nothing [
     _FloatValue_bigfloat>>: constant Core.floatTypeBigfloat,
@@ -118,7 +118,7 @@ floatValueTypeDef = variantsDefinition "floatValueType" $
     _FloatValue_float64>>: constant Core.floatTypeFloat64]
 
 functionVariantDef :: TElement (Function -> FunctionVariant)
-functionVariantDef = variantsDefinition "functionVariant" $
+functionVariantDef = define "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
   match _Function Nothing [
     _Function_elimination>>: constant Mantle.functionVariantElimination,
@@ -126,7 +126,7 @@ functionVariantDef = variantsDefinition "functionVariant" $
     _Function_primitive>>: constant Mantle.functionVariantPrimitive]
 
 functionVariantsDef :: TElement [FunctionVariant]
-functionVariantsDef = variantsDefinition "functionVariants" $
+functionVariantsDef = define "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
   list $ unitVariant _FunctionVariant <$> [
     _FunctionVariant_elimination,
@@ -134,7 +134,7 @@ functionVariantsDef = variantsDefinition "functionVariants" $
     _FunctionVariant_primitive]
 
 integerTypeIsSignedDef :: TElement (IntegerType -> Bool)
-integerTypeIsSignedDef = variantsDefinition "integerTypeIsSigned" $
+integerTypeIsSignedDef = define "integerTypeIsSigned" $
   doc "Find whether a given integer type is signed (true) or unsigned (false)" $
   match _IntegerType Nothing [
     _IntegerType_bigint>>: constant true,
@@ -148,7 +148,7 @@ integerTypeIsSignedDef = variantsDefinition "integerTypeIsSigned" $
     _IntegerType_uint64>>: constant false]
 
 integerTypePrecisionDef :: TElement (IntegerType -> Precision)
-integerTypePrecisionDef = variantsDefinition "integerTypePrecision" $
+integerTypePrecisionDef = define "integerTypePrecision" $
   doc "Find the precision of a given integer type" $
   match _IntegerType Nothing [
     _IntegerType_bigint>>: constant Mantle.precisionArbitrary,
@@ -162,7 +162,7 @@ integerTypePrecisionDef = variantsDefinition "integerTypePrecision" $
     _IntegerType_uint64>>: constant $ Mantle.precisionBits $ int32 64]
 
 integerTypesDef :: TElement [IntegerType]
-integerTypesDef = variantsDefinition "integerTypes" $
+integerTypesDef = define "integerTypes" $
   doc "All integer types, in a canonical order" $
   list $ unitVariant _IntegerType <$> [
     _IntegerType_bigint,
@@ -176,7 +176,7 @@ integerTypesDef = variantsDefinition "integerTypes" $
     _IntegerType_uint64]
 
 integerValueTypeDef :: TElement (IntegerValue -> IntegerType)
-integerValueTypeDef = variantsDefinition "integerValueType" $
+integerValueTypeDef = define "integerValueType" $
   doc "Find the integer type for a given integer value" $
   match _IntegerValue Nothing [
     _IntegerValue_bigint>>: constant Core.integerTypeBigint,
@@ -190,7 +190,7 @@ integerValueTypeDef = variantsDefinition "integerValueType" $
     _IntegerValue_uint64>>: constant Core.integerTypeUint64]
 
 literalTypeDef :: TElement (Literal -> LiteralType)
-literalTypeDef = variantsDefinition "literalType" $
+literalTypeDef = define "literalType" $
   doc "Find the literal type for a given literal value" $
   match _Literal Nothing [
     _Literal_binary>>: constant $ variant _LiteralType _LiteralType_binary unit,
@@ -200,7 +200,7 @@ literalTypeDef = variantsDefinition "literalType" $
     _Literal_string>>: constant $ variant _LiteralType _LiteralType_string unit]
 
 literalTypeVariantDef :: TElement (LiteralType -> LiteralVariant)
-literalTypeVariantDef = variantsDefinition "literalTypeVariant" $
+literalTypeVariantDef = define "literalTypeVariant" $
   doc "Find the literal type variant (constructor) for a given literal value" $
   match _LiteralType Nothing [
     _LiteralType_binary>>:  constant $ Mantle.literalVariantBinary,
@@ -210,12 +210,12 @@ literalTypeVariantDef = variantsDefinition "literalTypeVariant" $
     _LiteralType_string>>:  constant $ Mantle.literalVariantString]
 
 literalVariantDef :: TElement (Literal -> LiteralVariant)
-literalVariantDef = variantsDefinition "literalVariant" $
+literalVariantDef = define "literalVariant" $
   doc "Find the literal variant (constructor) for a given literal value" $
   ref literalTypeVariantDef <.> ref literalTypeDef
 
 literalVariantsDef :: TElement [LiteralVariant]
-literalVariantsDef = variantsDefinition "literalVariants" $
+literalVariantsDef = define "literalVariants" $
   doc "All literal variants, in a canonical order" $
   list $ unitVariant _LiteralVariant <$> [
     _LiteralVariant_binary,
@@ -225,7 +225,7 @@ literalVariantsDef = variantsDefinition "literalVariants" $
     _LiteralVariant_string]
 
 termVariantDef :: TElement (Term -> TermVariant)
-termVariantDef = variantsDefinition "termVariant" $
+termVariantDef = define "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
   match _Term Nothing [
     _Term_annotated>>: constant Mantle.termVariantAnnotated,
@@ -248,7 +248,7 @@ termVariantDef = variantsDefinition "termVariant" $
     _Term_wrap>>: constant Mantle.termVariantWrap]
 
 termVariantsDef :: TElement [TermVariant]
-termVariantsDef = variantsDefinition "termVariants" $
+termVariantsDef = define "termVariants" $
   doc "All term (expression) variants, in a canonical order" $
   list $ unitVariant _TermVariant <$> [
     _TermVariant_annotated,
@@ -270,7 +270,7 @@ termVariantsDef = variantsDefinition "termVariants" $
     _TermVariant_wrap]
 
 typeVariantDef :: TElement (Type -> TypeVariant)
-typeVariantDef = variantsDefinition "typeVariant" $
+typeVariantDef = define "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
   match _Type Nothing [
     _Type_annotated>>: constant Mantle.typeVariantAnnotated,
@@ -291,7 +291,7 @@ typeVariantDef = variantsDefinition "typeVariant" $
     _Type_wrap>>: constant Mantle.typeVariantWrap]
 
 typeVariantsDef :: TElement [TypeVariant]
-typeVariantsDef = variantsDefinition "typeVariants" $
+typeVariantsDef = define "typeVariants" $
   doc "All type variants, in a canonical order" $
   list $ unitVariant _TypeVariant <$> [
     _TypeVariant_annotated,
@@ -314,13 +314,13 @@ typeVariantsDef = variantsDefinition "typeVariants" $
 -- Additional definitions; consider moving out of hydra.variants  
 
 fieldMapDef :: TElement ([Field] -> M.Map Name Term)
-fieldMapDef = variantsDefinition "fieldMap" $
+fieldMapDef = define "fieldMap" $
   lets [
     "toPair">: lambda "f" $ pair (Core.fieldName $ var "f") (Core.fieldTerm $ var "f")]
     $ lambda "fields" $ Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
 fieldTypeMapDef :: TElement ([FieldType] -> M.Map Name Type)
-fieldTypeMapDef = variantsDefinition "fieldTypeMap" $
+fieldTypeMapDef = define "fieldTypeMap" $
   lets [
     "toPair">: lambda "f" $ pair (Core.fieldTypeName $ var "f") (Core.fieldTypeType $ var "f")]
     $ lambda "fields" $ Maps.fromList $ Lists.map (var "toPair") (var "fields")

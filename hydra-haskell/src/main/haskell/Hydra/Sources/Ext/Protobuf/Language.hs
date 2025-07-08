@@ -87,7 +87,7 @@ protobufLanguageDefinition = definitionInModule protobufLanguageModule
 
 protobufLanguageModule :: Module
 protobufLanguageModule = Module ns elements
-    [Lexical.hydraLexicalModule, Rewriting.hydraRewritingModule]
+    [Lexical.module_, Rewriting.module_]
     [KernelTypes.hydraCodersModule] $
     Just "Language constraints for Protobuf v3"
   where
