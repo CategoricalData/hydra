@@ -335,3 +335,11 @@ testTypeUnionPolymorphicRecursive = (Core.TypeForall (Core.ForallType {
 
 testTypeUnionPolymorphicRecursiveName :: Core.Name
 testTypeUnionPolymorphicRecursiveName = (Core.Name "UnionPolymorphicRecursive")
+
+testTypeUnit :: Core.Type
+testTypeUnit = (Core.TypeRecord (Core.RowType {
+  Core.rowTypeTypeName = testTypeUnitName,
+  Core.rowTypeFields = []}))
+
+testTypeUnitName :: Core.Name
+testTypeUnitName = (Core.Name "Unit")
