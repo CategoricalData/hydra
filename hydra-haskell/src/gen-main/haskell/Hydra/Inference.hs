@@ -950,7 +950,7 @@ typeSchemeToFType ts =
       body = (Core.typeSchemeType ts)
   in (Lists.foldl (\t -> \v -> Core.TypeForall (Core.ForallType {
     Core.forallTypeParameter = v,
-    Core.forallTypeBody = t})) body (Lists.reverse vars))
+    Core.forallTypeBody = t})) body vars)
 
 -- | Create an inference result
 yield :: (Core.Term -> Core.Type -> Typing_.TypeSubst -> Typing_.InferenceResult)
