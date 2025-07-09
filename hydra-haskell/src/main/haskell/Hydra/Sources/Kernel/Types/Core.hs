@@ -288,6 +288,7 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
             doc "A function term" $
             core "Function",
           "let">:
+            doc "A 'let' term, which binds variables to terms" $
             core "Let",
           "list">:
             doc "A list" $
@@ -329,6 +330,7 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
             doc "A variable reference" $
             core "Name",
           "wrap">:
+            doc "A wrapped term; an instance of a wrapper type (newtype)" $
             core "WrappedTerm"],
 
       def "TupleProjection" $
@@ -393,7 +395,7 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "object">: core "Term"],
 
       def "WrappedType" $
-        doc "A type wrapped in a type name" $
+        doc "A type wrapped in a type name; a newtype" $
         record [
           "typeName">: core "Name",
           "object">: core "Type"]]

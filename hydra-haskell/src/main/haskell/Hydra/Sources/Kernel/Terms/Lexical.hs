@@ -152,7 +152,7 @@ matchEnumDef = define "matchEnum" $
 matchRecordDef :: TElement ((M.Map Name Term -> Flow Graph b) -> Term -> Flow Graph b)
 matchRecordDef = define "matchRecord" $
   lambdas ["decode", "term"] $ lets [
-    "stripped">: ref Rewriting.deannotateTermDef @@ var "term"]
+    "stripped">: ref Rewriting.deannotateAndDetypeTermDef @@ var "term"]
     $ cases _Term (var "stripped")
         (Just $ ref Monads.unexpectedDef @@ string "record" @@ (ref ShowCore.termDef @@ var "term")) [
       _Term_record>>: lambda "record" $ var "decode" @@
@@ -163,7 +163,7 @@ matchRecordDef = define "matchRecord" $
 matchUnionDef :: TElement (Name -> [(Name, Term -> Flow Graph b)] -> Term -> Flow Graph b)
 matchUnionDef = define "matchUnion" $
   lambdas ["tname", "pairs", "term"] $ lets [
-    "stripped">: ref Rewriting.deannotateTermDef @@ var "term",
+    "stripped">: ref Rewriting.deannotateAndDetypeTermDef @@ var "term",
     "mapping">: Maps.fromList $ var "pairs"] $
     cases _Term (var "stripped")
       (Just $ ref Monads.unexpectedDef @@
@@ -247,7 +247,7 @@ schemaContextDef = define "schemaContext" $
 stripAndDereferenceTermDef :: TElement (Term -> Flow Graph Term)
 stripAndDereferenceTermDef = define "stripAndDereferenceTerm" $
   lambda "term" $ lets [
-    "stripped">: ref Rewriting.deannotateTermDef @@ var "term"]
+    "stripped">: ref Rewriting.deannotateAndDetypeTermDef @@ var "term"]
     $ cases _Term (var "stripped") (Just $ Flows.pure $ var "stripped") [
       _Term_variable>>: lambda "v" $
         Flows.bind (ref requireTermDef @@ var "v") $
