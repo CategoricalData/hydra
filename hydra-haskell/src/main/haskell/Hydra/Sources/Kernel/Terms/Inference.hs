@@ -1255,11 +1255,14 @@ typeOfDef = define "typeOf" $
           withVar "ftypes" (Flows.mapList (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types") $
             Lists.map (unaryFunction Core.fieldTerm) (var "fields")) $
           withVar "_" (Flows.sequence $ Lists.map (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "ftypes")) $
-          ref typeOfNominalDef @@ string "record typeOf" @@ var "cx" @@ var "tname" @@
-            (Core.typeRecord $ Core.rowType (var "tname") $
-              Lists.zipWith (lambdas ["n", "t"] $ Core.fieldType (var "n") (var "t"))
-                (Lists.map (unaryFunction Core.fieldName) (var "fields"))
-                (var "ftypes")),
+          ref typeOfNominalDef
+            @@ string "record typeOf"
+            @@ var "cx"
+            @@ var "tname"
+            @@ (Core.typeRecord $ Core.rowType (var "tname") $ Lists.zipWith
+              (lambdas ["n", "t"] $ Core.fieldType (var "n") (var "t"))
+              (Lists.map (unaryFunction Core.fieldName) (var "fields"))
+              (var "ftypes")),
 
         _Term_set>>: lambda "els" $
           ref typeOfCollectionDef @@ var "cx" @@ string "set" @@ (unaryFunction Core.typeSet) @@ var "vars" @@ var "types" @@

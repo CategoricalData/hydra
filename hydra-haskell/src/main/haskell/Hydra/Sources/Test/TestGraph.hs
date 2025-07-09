@@ -81,7 +81,9 @@ testGraphModule = Module (Namespace "hydra.test.testGraph") elements
       el testTypeUnionMonomorphicDef,
       el testTypeUnionMonomorphicNameDef,
       el testTypeUnionPolymorphicRecursiveDef,
-      el testTypeUnionPolymorphicRecursiveNameDef]
+      el testTypeUnionPolymorphicRecursiveNameDef,
+      el testTypeUnitDef,
+      el testTypeUnitNameDef]
 
 testGraphType :: String -> TTerm Type -> TElement Type
 testGraphType name = testGraphDefinition name . firstClassType
@@ -167,7 +169,8 @@ testNamespaceDef = testGraphDefinition "testNamespace" $ Module.namespace $ Phan
 --    def testTypeStringAliasName $ Ann.doc "An alias for the string type" testTypeStringAlias,
 --    def testTypeTimestampName testTypeTimestamp,
 --    def testTypeUnionMonomorphicName testTypeUnionMonomorphic,
---    def testTypeUnionPolymorphicRecursiveName testTypeUnionPolymorphicRecursive]
+--    def testTypeUnionPolymorphicRecursiveName testTypeUnionPolymorphicRecursive,
+--    def testTypeUnitName testTypeUnit]
 --  where
 --    def = typeElement
 
@@ -327,3 +330,11 @@ testTypeUnionPolymorphicRecursiveDef = testGraphType "testTypeUnionPolymorphicRe
 testTypeUnionPolymorphicRecursiveNameDef :: TElement Name
 testTypeUnionPolymorphicRecursiveNameDef = testGraphDefinition "testTypeUnionPolymorphicRecursiveName" $
   name "UnionPolymorphicRecursive"
+
+testTypeUnitDef :: TElement Type
+testTypeUnitDef = testGraphType "testTypeUnit" $
+  T.record (ref testTypeUnitNameDef) []
+
+testTypeUnitNameDef :: TElement Name
+testTypeUnitNameDef = testGraphDefinition "testTypeUnitName" $
+  name "Unit"

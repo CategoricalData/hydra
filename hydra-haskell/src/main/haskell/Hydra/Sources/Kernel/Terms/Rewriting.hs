@@ -51,6 +51,7 @@ module_ = Module (Namespace "hydra.rewriting") elements
     Just ("Utilities for type and term rewriting and analysis.")
   where
    elements = [
+     el deannotateAndDetypeTermDef,
      el deannotateTermDef,
      el deannotateTypeDef,
      el deannotateTypeParametersDef,
@@ -95,6 +96,14 @@ module_ = Module (Namespace "hydra.rewriting") elements
 
 define :: String -> TTerm a -> TElement a
 define = definitionInModule module_
+
+deannotateAndDetypeTermDef :: TElement (Term -> Term)
+deannotateAndDetypeTermDef = define "deannotateAndDetypeTerm" $
+  doc "Strip type annotations from the top levels of a term" $
+  lambda "t" $ cases _Term (var "t") (Just $ var "t") [
+    _Term_annotated>>: lambda "at" $ ref deannotateAndDetypeTermDef @@ (Core.annotatedTermSubject $ var "at"),
+    _Term_typeAbstraction>>: lambda "ta" $ ref deannotateAndDetypeTermDef @@ (Core.typeAbstractionBody $ var "ta"),
+    _Term_typeApplication>>: lambda "tt" $ ref deannotateAndDetypeTermDef @@ (Core.typedTermTerm $ var "tt")]
 
 deannotateTermDef :: TElement (Term -> Term)
 deannotateTermDef = define "deannotateTerm" $
