@@ -1190,13 +1190,12 @@ typeOfDef = define "typeOf" $
           "e">: Core.letEnvironment $ var "letTerm",
           "bnames">: Lists.map (unaryFunction Core.letBindingName) (var "es"),
           "bterms">: Lists.map (unaryFunction Core.letBindingTerm) (var "es"),
-          "binType">: lambda "b" $
-            Optionals.maybe
-              (Flows.fail $ Strings.cat $ list [
-                string "untyped let binding in ",
-                ref ShowCore.termDef @@ var "term"])
-              (lambda "ts" $ Flows.pure $ ref typeSchemeToFTypeDef @@ var "ts")
-              (Core.letBindingType $ var "b")] $
+          "binType">: lambda "b" $ Optionals.maybe
+            (Flows.fail $ Strings.cat $ list [
+              string "untyped let binding in ",
+              ref ShowCore.termDef @@ var "term"])
+            (lambda "ts" $ Flows.pure $ ref typeSchemeToFTypeDef @@ var "ts")
+            (Core.letBindingType $ var "b")] $
           withVar "btypes" (Flows.mapList (var "binType") (var "es")) $ lets [
             "types2">: Maps.union (Maps.fromList $ Lists.zip (var "bnames") (var "btypes")) (var "types")] $
           withVar "est" (Flows.mapList (lambda "v" $ ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types2" @@ var "v") (var "bterms")) $
@@ -1398,7 +1397,7 @@ typeSchemeToFTypeDef = define "typeSchemeToFType" $
     Lists.foldl
       (lambda "t" $ lambda "v" $ Core.typeForall $ Core.forallType (var "v") (var "t"))
       (var "body")
-      (Lists.reverse $ var "vars")
+      (var "vars")
 
 yieldDef :: TElement (Term -> Type -> TypeSubst -> InferenceResult)
 yieldDef = define "yield" $
