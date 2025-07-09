@@ -147,13 +147,18 @@ expectSuccess desc f x = case my of
       putAttr key_debugId $ Terms.string desc
       f
 
-expectTypeOfResult :: String -> S.Set Name -> M.Map Name Type -> Term -> Type -> H.Expectation
-expectTypeOfResult desc vars types term expected = do
+expectTypeOfResult :: String -> M.Map Name Type -> Term -> Type -> H.Expectation
+expectTypeOfResult desc types term expected = do
     expectSuccess desc (ShowCore.type_ <$> result) (ShowCore.type_ expected)
   where
     result = do
       cx <- graphToInferenceContext testGraph
-      typeOf cx vars types term
+
+      -- typeOf is always called on System F terms
+      (iterm, ts) <- inferTypeOf cx term
+      let vars = S.fromList $ typeSchemeVariables ts
+
+      typeOf cx vars types iterm
 
 shouldFail :: Flow Graph a -> H.Expectation
 shouldFail f = H.shouldBe True (Y.isNothing $ flowStateValue $ unFlow f testGraph emptyTrace)
