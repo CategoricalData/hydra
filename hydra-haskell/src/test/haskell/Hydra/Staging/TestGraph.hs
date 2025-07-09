@@ -40,6 +40,7 @@ testSchemaGraph = elementsToGraph hydraCoreGraph (Just hydraCoreGraph) [
     def testTypePolymorphicWrapperName testTypePolymorphicWrapper,
     def testTypeTimestampName testTypeTimestamp,
     def testTypeUnionMonomorphicName testTypeUnionMonomorphic,
-    def testTypeUnionPolymorphicRecursiveName testTypeUnionPolymorphicRecursive]
+    def testTypeUnionPolymorphicRecursiveName testTypeUnionPolymorphicRecursive,
+    def testTypeUnitName testTypeUnit]
   where
     def = typeElement
