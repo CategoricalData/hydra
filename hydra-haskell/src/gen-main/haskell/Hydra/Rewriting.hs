@@ -26,6 +26,14 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Strip type annotations from the top levels of a term
+deannotateAndDetypeTerm :: (Core.Term -> Core.Term)
+deannotateAndDetypeTerm t = ((\x -> case x of
+  Core.TermAnnotated v1 -> (deannotateAndDetypeTerm (Core.annotatedTermSubject v1))
+  Core.TermTypeAbstraction v1 -> (deannotateAndDetypeTerm (Core.typeAbstractionBody v1))
+  Core.TermTypeApplication v1 -> (deannotateAndDetypeTerm (Core.typedTermTerm v1))
+  _ -> t) t)
+
 -- | Strip all annotations from a term
 deannotateTerm :: (Core.Term -> Core.Term)
 deannotateTerm t = ((\x -> case x of

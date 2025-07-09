@@ -27,87 +27,202 @@ import qualified Data.Set as S
 spec :: H.Spec
 spec = do
   checkTypeOf
-  checkTypeOfFailsOnUntypedTerms
+  checkFailTypeOfOnUntypedTerms
 
 ----------------------------------------
 
-checkTypeOf :: H.SpecWith ()
-checkTypeOf = H.describe "typeOf" $ do
-  H.describe "Literals" $ do
-    H.describe "Integers" $ do
-      expectTypeOf "#1"
-        (Terms.int32 42)
-        Types.int32
-      expectTypeOf "#2"
-        (Terms.bigint 42)
-        Types.bigint
-    H.describe "Strings" $ do
-      expectTypeOf "#3"
-        (Terms.string "foo")
-        Types.string
-
-  H.describe "Lists" $ do
-    H.describe "Lists of literals" $ do
-      expectTypeOf "#1"
-        (Terms.list [Terms.int32 1, Terms.int32 2])
-        (Types.list Types.int32)
-    H.describe "Empty lists" $ do
-      expectTypeOf "#1"
-        (Terms.list [])
-        (Types.forAll "t0" $ Types.list $ Types.var "t0")
-      expectTypeOf "#2"
-        (Terms.pair (Terms.list []) (Terms.list []))
-        (Types.forAlls ["t1", "t0"] $ Types.pair (Types.list $ Types.var "t0") (Types.list $ Types.var "t1"))
-
-  H.describe "Algebraic types" $ do
-    H.describe "Products" $ do
-      H.describe "Monomorphic products" $ do
-        expectTypeOf "#1"
-          (Terms.tuple [])
-          (Types.product [])
-        expectTypeOf "#2"
-          (Terms.tuple [Terms.int32 42])
-          (Types.product [Types.int32])
-        expectTypeOf "#3"
-          (Terms.tuple [Terms.int32 42, Terms.string "foo"])
-          (Types.product [Types.int32, Types.string])
-      H.describe "Polymorphic products" $ do
-        expectTypeOf "#1"
-          (Terms.lambda "x" $ Terms.tuple [Terms.var "x", Terms.string "foo"])
-          (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.product [Types.var "t0", Types.string]))
-
-  H.describe "Nominally-typed terms" $ do
-    H.describe "Records" $ do
-      H.describe "Monomorphic records" $ do
-        expectTypeOf "#1"
-          (Terms.record testTypeLatLonName [
-            Terms.field "lat" (Terms.float32 19.5429),
-            Terms.field "lon" (Terms.float32 (0-155.6659))])
-          (Types.var "LatLon")
-        expectTypeOf "#2"
-          (Terms.lambda "x" (Terms.record testTypeLatLonName [
-            Terms.field "lat" (Terms.float32 19.5429),
-            Terms.field "lon" (Terms.var "x")]))
-          (Types.function Types.float32 (Types.var "LatLon"))
-      H.describe "Polymorphic records" $ do
-        expectTypeOf "#1"
-          (Terms.record testTypeLatLonPolyName [
-            Terms.field "lat" (Terms.float32 19.5429),
-            Terms.field "lon" (Terms.float32 (0-155.6659))])
-          (Types.apply (Types.var "LatLonPoly") Types.float32)
-        expectTypeOf "#2"
-          (Terms.record testTypeLatLonPolyName [
-            Terms.field "lat" (Terms.int64 195429),
-            Terms.field "lon" (Terms.int64 (0-1556659))])
-          (Types.apply (Types.var "LatLonPoly") Types.int64)
-
-checkTypeOfFailsOnUntypedTerms :: H.SpecWith ()
-checkTypeOfFailsOnUntypedTerms = H.describe "Fail on untyped terms" $ do
+checkFailTypeOfOnUntypedTerms :: H.SpecWith ()
+checkFailTypeOfOnUntypedTerms = H.describe "Fail on untyped (pre-inference) terms" $ do
   H.describe "Untyped lambdas" $ do
     withDefaults typeOfShouldFail "#1"
       (Terms.lambda "x" (Terms.record testTypeLatLonName [
         Terms.field "lat" (Terms.float32 19.5429),
         Terms.field "lon" (Terms.var "x")]))
+
+----------------------------------------
+
+checkTypeOf :: H.SpecWith ()
+checkTypeOf = H.describe "typeOf" $ do
+  checkTypeOfAnnotatedTerms
+  checkTypeOfApplications
+  checkTypeOfFunctions
+  checkTypeOfLetTerms
+  checkTypeOfLists
+  checkTypeOfLiterals
+  checkTypeOfMaps
+  checkTypeOfOptionals
+  checkTypeOfProducts
+  checkTypeOfRecords
+  checkTypeOfSets
+  checkTypeOfSums
+  checkTypeOfTypeAbstractions
+  checkTypeOfTypeApplications
+  checkTypeOfUnions
+  checkTypeOfUnit
+  checkTypeOfVariables
+  checkTypeOfWrappedTerms
+
+checkTypeOfAnnotatedTerms :: H.SpecWith ()
+checkTypeOfAnnotatedTerms = H.describe "Annotated terms" $ do
+  return ()  -- TODO: implement
+
+checkTypeOfApplications :: H.SpecWith ()
+checkTypeOfApplications = H.describe "Applications" $ do
+  return ()  -- TODO: implement
+
+checkTypeOfFunctions :: H.SpecWith ()
+checkTypeOfFunctions = H.describe "Functions" $ do
+  return ()  -- TODO: implement
+
+checkTypeOfLetTerms :: H.SpecWith ()
+checkTypeOfLetTerms = H.describe "Let terms" $ do
+  return ()  -- TODO: implement
+
+checkTypeOfLists :: H.SpecWith ()
+checkTypeOfLists = H.describe "Lists" $ do
+  H.describe "Lists of literals" $ do
+    expectTypeOf "#1"
+      (Terms.list [Terms.int32 1, Terms.int32 2])
+      (Types.list Types.int32)
+  H.describe "Empty lists" $ do
+    expectTypeOf "#1"
+      (Terms.list [])
+      (Types.forAll "t0" $ Types.list $ Types.var "t0")
+    expectTypeOf "#2"
+      (Terms.pair (Terms.list []) (Terms.list []))
+      (Types.forAlls ["t1", "t0"] $ Types.pair (Types.list $ Types.var "t0") (Types.list $ Types.var "t1"))
+
+checkTypeOfLiterals :: H.SpecWith ()
+checkTypeOfLiterals = H.describe "Literals" $ do
+  H.describe "Integers" $ do
+    expectTypeOf "#1"
+      (Terms.int32 42)
+      Types.int32
+    expectTypeOf "#2"
+      (Terms.bigint 42)
+      Types.bigint
+  H.describe "Strings" $ do
+    expectTypeOf "#3"
+      (Terms.string "foo")
+      Types.string
+
+checkTypeOfMaps :: H.SpecWith ()
+checkTypeOfMaps = H.describe "Maps" $ do
+  return ()  -- TODO: implement
+
+checkTypeOfOptionals :: H.SpecWith ()
+checkTypeOfOptionals = H.describe "Optionals" $ do
+  return ()  -- TODO: implement
+
+checkTypeOfProducts :: H.SpecWith ()
+checkTypeOfProducts = H.describe "Products" $ do
+  H.describe "Monomorphic products" $ do
+    expectTypeOf "#1"
+      (Terms.tuple [])
+      (Types.product [])
+    expectTypeOf "#2"
+      (Terms.tuple [Terms.int32 42])
+      (Types.product [Types.int32])
+    expectTypeOf "#3"
+      (Terms.tuple [Terms.int32 42, Terms.string "foo"])
+      (Types.product [Types.int32, Types.string])
+    expectTypeOf "#4"
+      (Terms.tuple [Terms.int32 1, Terms.int32 2, Terms.int32 3])
+      (Types.product [Types.int32, Types.int32, Types.int32])
+    expectTypeOf "#5"
+      (Terms.tuple [Terms.unit, Terms.string "test", Terms.bigint 100])
+      (Types.product [Types.unit, Types.string, Types.bigint])
+  H.describe "Polymorphic products" $ do
+    expectTypeOf "#1"
+      (Terms.lambda "x" $ Terms.tuple [Terms.var "x", Terms.string "foo"])
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.product [Types.var "t0", Types.string]))
+    expectTypeOf "#2"
+      (Terms.lambda "x" $ Terms.lambda "y" $ Terms.tuple [Terms.var "x", Terms.var "y"])
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t1"])))
+    expectTypeOf "#3"
+      (Terms.lambda "x" $ Terms.tuple [Terms.var "x", Terms.var "x"])
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.product [Types.var "t0", Types.var "t0"]))
+  H.describe "Nested products" $ do
+    expectTypeOf "#1"
+      (Terms.tuple [Terms.tuple [Terms.int32 1], Terms.string "foo"])
+      (Types.product [Types.product [Types.int32], Types.string])
+    expectTypeOf "#2"
+      (Terms.lambda "x" $ Terms.tuple [Terms.tuple [Terms.var "x"], Terms.tuple [Terms.string "test"]])
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.product [Types.product [Types.var "t0"], Types.product [Types.string]]))
+
+checkTypeOfRecords :: H.SpecWith ()
+checkTypeOfRecords = H.describe "Records" $ do
+  H.describe "Monomorphic records" $ do
+    expectTypeOf "#1"
+      (Terms.record testTypeLatLonName [
+        Terms.field "lat" (Terms.float32 19.5429),
+        Terms.field "lon" (Terms.float32 (0-155.6659))])
+      (Types.var "LatLon")
+    expectTypeOf "#2"
+      (Terms.lambda "x" $ Terms.record testTypeLatLonName [
+        Terms.field "lat" (Terms.float32 19.5429),
+        Terms.field "lon" (Terms.var "x")])
+      (Types.function Types.float32 (Types.var "LatLon"))
+  H.describe "Polymorphic records" $ do
+    expectTypeOf "#1"
+      (Terms.record testTypeLatLonPolyName [
+        Terms.field "lat" (Terms.float32 19.5429),
+        Terms.field "lon" (Terms.float32 (0-155.6659))])
+      (Types.apply (Types.var "LatLonPoly") Types.float32)
+    expectTypeOf "#2"
+      (Terms.record testTypeLatLonPolyName [
+        Terms.field "lat" (Terms.int64 195429),
+        Terms.field "lon" (Terms.int64 (0-1556659))])
+      (Types.apply (Types.var "LatLonPoly") Types.int64)
+    expectTypeOf "#3"
+      (Terms.lambda "x" $ Terms.record testTypeLatLonPolyName [
+        Terms.field "lat" (Terms.var "x"),
+        Terms.field "lon" (Terms.var "x")])
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "LatLonPoly") (Types.var "t0")))
+
+checkTypeOfSets :: H.SpecWith ()
+checkTypeOfSets = H.describe "Sets" $ do
+  return ()  -- TODO: implement
+
+checkTypeOfSums :: H.SpecWith ()
+checkTypeOfSums = H.describe "Sums" $ do
+  return ()  -- TODO: implement
+
+checkTypeOfTypeAbstractions :: H.SpecWith ()
+checkTypeOfTypeAbstractions = H.describe "Type abstractions" $ do
+  return ()  -- TODO: implement
+
+checkTypeOfTypeApplications :: H.SpecWith ()
+checkTypeOfTypeApplications = H.describe "Type applications" $ do
+  return ()  -- TODO: implement
+
+checkTypeOfUnions :: H.SpecWith ()
+checkTypeOfUnions = H.describe "Unions" $ do
+  return ()  -- TODO: implement
+
+checkTypeOfUnit :: H.SpecWith ()
+checkTypeOfUnit = H.describe "Unit" $ do
+  H.describe "Unit term" $ do
+    expectTypeOf "#1"
+      Terms.unit
+      Types.unit
+  H.describe "Unit term in polymorphic context" $ do
+    expectTypeOf "#1"
+      (Terms.lambda "x" Terms.unit)
+      (Types.forAll "t0" $ Types.function (Types.var "t0") Types.unit)
+    expectTypeOf "#2"
+      (Terms.tuple [Terms.unit, Terms.string "foo"])
+      (Types.product [Types.unit, Types.string])
+
+checkTypeOfVariables :: H.SpecWith ()
+checkTypeOfVariables = H.describe "Variables" $ do
+  return ()  -- TODO: implement
+  
+checkTypeOfWrappedTerms :: H.SpecWith ()
+checkTypeOfWrappedTerms = H.describe "Wrapped terms" $ do
+  return ()  -- TODO: implement
+  
+----------------------------------------
 
 expectTypeOf :: String -> Term -> Type -> H.SpecWith ()
 expectTypeOf desc term typ = H.it desc $ withDefaults expectTypeOfResult desc term typ
