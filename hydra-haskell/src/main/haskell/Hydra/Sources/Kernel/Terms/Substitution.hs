@@ -2,7 +2,7 @@
 
 module Hydra.Sources.Kernel.Terms.Substitution where
 
--- Standard Tier-2 imports
+-- Standard imports for term-level kernel modules
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Accessors     as Accessors
@@ -133,6 +133,7 @@ substituteInTermDef = define "substituteInTerm" $
           (Maps.lookup (var "name") (var "s"))]] $
     ref Rewriting.rewriteTermDef @@ var "rewrite"
 
+-- W: subst'
 substInTypeDef :: TElement (TypeSubst -> Type -> Type)
 substInTypeDef = define "substInType" $
   lambda "subst" $ lets [
