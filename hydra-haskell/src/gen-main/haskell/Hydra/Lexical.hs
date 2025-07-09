@@ -91,14 +91,14 @@ matchEnum tname pairs = (matchUnion tname (Lists.map (\pair -> matchUnitField (f
 
 matchRecord :: ((M.Map Core.Name Core.Term -> Compute.Flow t0 t1) -> Core.Term -> Compute.Flow t0 t1)
 matchRecord decode term =  
-  let stripped = (Rewriting.deannotateTerm term)
+  let stripped = (Rewriting.deannotateAndDetypeTerm term)
   in ((\x -> case x of
     Core.TermRecord v1 -> (decode (Maps.fromList (Lists.map (\field -> (Core.fieldName field, (Core.fieldTerm field))) (Core.recordFields v1))))
     _ -> (Monads.unexpected "record" (Core_.term term))) stripped)
 
 matchUnion :: (Core.Name -> [(Core.Name, (Core.Term -> Compute.Flow Graph.Graph t0))] -> Core.Term -> Compute.Flow Graph.Graph t0)
 matchUnion tname pairs term =  
-  let stripped = (Rewriting.deannotateTerm term) 
+  let stripped = (Rewriting.deannotateAndDetypeTerm term) 
       mapping = (Maps.fromList pairs)
   in ((\x -> case x of
     Core.TermVariable v1 -> (Flows.bind (requireElement v1) (\el -> matchUnion tname pairs (Graph.elementTerm el)))
@@ -165,7 +165,7 @@ schemaContext g = (Optionals.fromMaybe g (Graph.graphSchema g))
 
 stripAndDereferenceTerm :: (Core.Term -> Compute.Flow Graph.Graph Core.Term)
 stripAndDereferenceTerm term =  
-  let stripped = (Rewriting.deannotateTerm term)
+  let stripped = (Rewriting.deannotateAndDetypeTerm term)
   in ((\x -> case x of
     Core.TermVariable v1 -> (Flows.bind (requireTerm v1) (\t -> stripAndDereferenceTerm t))
     _ -> (Flows.pure stripped)) stripped)

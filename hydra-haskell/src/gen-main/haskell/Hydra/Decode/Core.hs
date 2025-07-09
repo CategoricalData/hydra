@@ -29,10 +29,10 @@ fieldType = (Lexical.matchRecord (\m -> Monads.map2 (Lexical.getField m (Core.Na
 
 fieldTypes :: (Core.Term -> Compute.Flow Graph.Graph [Core.FieldType])
 fieldTypes term =  
-  let stripped = (Rewriting.deannotateTerm term)
+  let stripped = (Rewriting.deannotateAndDetypeTerm term)
   in ((\x -> case x of
     Core.TermList v1 -> (Flows.mapList fieldType v1)
-    _ -> (Monads.unexpected "list" (Core__.term term))) stripped)
+    _ -> (Monads.unexpected "list--" (Core__.term term))) stripped)
 
 floatType :: (Core.Term -> Compute.Flow Graph.Graph Core.FloatType)
 floatType = (Lexical.matchEnum (Core.Name "hydra.core.FloatType") [
@@ -84,7 +84,7 @@ rowType = (Lexical.matchRecord (\m -> Monads.map2 (Lexical.getField m (Core.Name
   Core.rowTypeFields = fields})))
 
 string :: (Core.Term -> Compute.Flow Graph.Graph String)
-string term = (Core_.string (Rewriting.deannotateTerm term))
+string term = (Core_.string (Rewriting.deannotateAndDetypeTerm term))
 
 type_ :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)
 type_ dat = ((\x -> case x of
