@@ -163,6 +163,22 @@ checkTypeOfRecords = H.describe "Records" $ do
         Terms.field "lat" (Terms.float32 19.5429),
         Terms.field "lon" (Terms.var "x")])
       (Types.function Types.float32 (Types.var "LatLon"))
+    expectTypeOf "#3"
+      (Terms.record testTypePersonName [
+        Terms.field "firstName" (Terms.string "Alice"),
+        Terms.field "lastName" (Terms.string "Smith"),
+        Terms.field "age" (Terms.int32 30)])
+      (Types.var "Person")
+    expectTypeOf "#4"
+      (Terms.record testTypeUnitName [])
+      (Types.var "Unit")
+    expectTypeOf "#5"
+      (Terms.lambda "name" $ Terms.lambda "age" $ Terms.record testTypePersonName [
+        Terms.field "firstName" (Terms.var "name"),
+        Terms.field "lastName" (Terms.string "Doe"),
+        Terms.field "age" (Terms.var "age")])
+      (Types.function Types.string (Types.function Types.int32 (Types.var "Person")))
+
   H.describe "Polymorphic records" $ do
     expectTypeOf "#1"
       (Terms.record testTypeLatLonPolyName [
@@ -179,6 +195,47 @@ checkTypeOfRecords = H.describe "Records" $ do
         Terms.field "lat" (Terms.var "x"),
         Terms.field "lon" (Terms.var "x")])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "LatLonPoly") (Types.var "t0")))
+    expectTypeOf "#4"
+      (Terms.record testTypeBuddyListAName [
+        Terms.field "head" (Terms.string "first"),
+        Terms.field "tail" (Terms.optional Nothing)])
+      (Types.apply (Types.var "BuddyListA") Types.string)
+    expectTypeOf "#5"
+      (Terms.lambda "x" $ Terms.record testTypeBuddyListAName [
+        Terms.field "head" (Terms.var "x"),
+        Terms.field "tail" (Terms.optional Nothing)])
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "BuddyListA") (Types.var "t0")))
+
+  H.describe "Records in complex contexts" $ do
+    expectTypeOf "#1"
+      (Terms.tuple [
+        Terms.record testTypePersonName [
+          Terms.field "firstName" (Terms.string "Bob"),
+          Terms.field "lastName" (Terms.string "Jones"),
+          Terms.field "age" (Terms.int32 25)],
+        Terms.record testTypeLatLonName [
+          Terms.field "lat" (Terms.float32 1.0),
+          Terms.field "lon" (Terms.float32 2.0)]])
+      (Types.product [Types.var "Person", Types.var "LatLon"])
+    expectTypeOf "#2"
+      (Terms.tuple [
+        Terms.record testTypeLatLonPolyName [
+          Terms.field "lat" (Terms.int32 1),
+          Terms.field "lon" (Terms.int32 2)],
+        Terms.record testTypeBuddyListAName [
+          Terms.field "head" (Terms.string "test"),
+          Terms.field "tail" (Terms.optional Nothing)]])
+      (Types.product [
+        Types.apply (Types.var "LatLonPoly") Types.int32,
+        Types.apply (Types.var "BuddyListA") Types.string])
+    expectTypeOf "#3"
+      (Terms.record testTypeIntListName [
+        Terms.field "head" (Terms.int32 42),
+        Terms.field "tail" (Terms.optional $ Just $
+          Terms.record testTypeIntListName [
+            Terms.field "head" (Terms.int32 43),
+            Terms.field "tail" (Terms.optional Nothing)])])
+      (Types.var "IntList")
 
 checkTypeOfSets :: H.SpecWith ()
 checkTypeOfSets = H.describe "Sets" $ do
