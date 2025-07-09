@@ -34,7 +34,7 @@ spec = do
 checkFailTypeOfOnUntypedTerms :: H.SpecWith ()
 checkFailTypeOfOnUntypedTerms = H.describe "Fail on untyped (pre-inference) terms" $ do
   H.describe "Untyped lambdas" $ do
-    withDefaults typeOfShouldFail "#1"
+    withDefaults typeOfShouldFail "untyped var in record"
       (Terms.lambda "x" (Terms.record testTypeLatLonName [
         Terms.field "lat" (Terms.float32 19.5429),
         Terms.field "lon" (Terms.var "x")]))
@@ -81,28 +81,28 @@ checkTypeOfLetTerms = H.describe "Let terms" $ do
 checkTypeOfLists :: H.SpecWith ()
 checkTypeOfLists = H.describe "Lists" $ do
   H.describe "Lists of literals" $ do
-    expectTypeOf "#1"
+    expectTypeOf "int list"
       (Terms.list [Terms.int32 1, Terms.int32 2])
       (Types.list Types.int32)
   H.describe "Empty lists" $ do
-    expectTypeOf "#1"
+    expectTypeOf "empty list"
       (Terms.list [])
       (Types.forAll "t0" $ Types.list $ Types.var "t0")
-    expectTypeOf "#2"
+    expectTypeOf "pair of empty lists"
       (Terms.pair (Terms.list []) (Terms.list []))
       (Types.forAlls ["t1", "t0"] $ Types.pair (Types.list $ Types.var "t0") (Types.list $ Types.var "t1"))
 
 checkTypeOfLiterals :: H.SpecWith ()
 checkTypeOfLiterals = H.describe "Literals" $ do
   H.describe "Integers" $ do
-    expectTypeOf "#1"
+    expectTypeOf "int32"
       (Terms.int32 42)
       Types.int32
-    expectTypeOf "#2"
+    expectTypeOf "bigint"
       (Terms.bigint 42)
       Types.bigint
   H.describe "Strings" $ do
-    expectTypeOf "#3"
+    expectTypeOf "string"
       (Terms.string "foo")
       Types.string
 
@@ -117,62 +117,62 @@ checkTypeOfOptionals = H.describe "Optionals" $ do
 checkTypeOfProducts :: H.SpecWith ()
 checkTypeOfProducts = H.describe "Products" $ do
   H.describe "Monomorphic products" $ do
-    expectTypeOf "#1"
+    expectTypeOf "empty tuple"
       (Terms.tuple [])
       (Types.product [])
-    expectTypeOf "#2"
+    expectTypeOf "singleton tuple"
       (Terms.tuple [Terms.int32 42])
       (Types.product [Types.int32])
-    expectTypeOf "#3"
+    expectTypeOf "pair tuple"
       (Terms.tuple [Terms.int32 42, Terms.string "foo"])
       (Types.product [Types.int32, Types.string])
-    expectTypeOf "#4"
+    expectTypeOf "triple tuple"
       (Terms.tuple [Terms.int32 1, Terms.int32 2, Terms.int32 3])
       (Types.product [Types.int32, Types.int32, Types.int32])
-    expectTypeOf "#5"
+    expectTypeOf "mixed types"
       (Terms.tuple [Terms.unit, Terms.string "test", Terms.bigint 100])
       (Types.product [Types.unit, Types.string, Types.bigint])
   H.describe "Polymorphic products" $ do
-    expectTypeOf "#1"
+    expectTypeOf "lambda with var"
       (Terms.lambda "x" $ Terms.tuple [Terms.var "x", Terms.string "foo"])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.product [Types.var "t0", Types.string]))
-    expectTypeOf "#2"
+    expectTypeOf "two variables"
       (Terms.lambda "x" $ Terms.lambda "y" $ Terms.tuple [Terms.var "x", Terms.var "y"])
       (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t1"])))
-    expectTypeOf "#3"
+    expectTypeOf "repeated variable"
       (Terms.lambda "x" $ Terms.tuple [Terms.var "x", Terms.var "x"])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.product [Types.var "t0", Types.var "t0"]))
   H.describe "Nested products" $ do
-    expectTypeOf "#1"
+    expectTypeOf "tuple in tuple"
       (Terms.tuple [Terms.tuple [Terms.int32 1], Terms.string "foo"])
       (Types.product [Types.product [Types.int32], Types.string])
-    expectTypeOf "#2"
+    expectTypeOf "nested polymorphic"
       (Terms.lambda "x" $ Terms.tuple [Terms.tuple [Terms.var "x"], Terms.tuple [Terms.string "test"]])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.product [Types.product [Types.var "t0"], Types.product [Types.string]]))
 
 checkTypeOfRecords :: H.SpecWith ()
 checkTypeOfRecords = H.describe "Records" $ do
   H.describe "Monomorphic records" $ do
-    expectTypeOf "#1"
+    expectTypeOf "latlon record"
       (Terms.record testTypeLatLonName [
         Terms.field "lat" (Terms.float32 19.5429),
         Terms.field "lon" (Terms.float32 (0-155.6659))])
       (Types.var "LatLon")
-    expectTypeOf "#2"
+    expectTypeOf "latlon with variable"
       (Terms.lambda "x" $ Terms.record testTypeLatLonName [
         Terms.field "lat" (Terms.float32 19.5429),
         Terms.field "lon" (Terms.var "x")])
       (Types.function Types.float32 (Types.var "LatLon"))
-    expectTypeOf "#3"
+    expectTypeOf "person record"
       (Terms.record testTypePersonName [
         Terms.field "firstName" (Terms.string "Alice"),
         Terms.field "lastName" (Terms.string "Smith"),
         Terms.field "age" (Terms.int32 30)])
       (Types.var "Person")
-    expectTypeOf "#4"
+    expectTypeOf "empty record"
       (Terms.record testTypeUnitName [])
       (Types.var "Unit")
-    expectTypeOf "#5"
+    expectTypeOf "person with variables"
       (Terms.lambda "name" $ Terms.lambda "age" $ Terms.record testTypePersonName [
         Terms.field "firstName" (Terms.var "name"),
         Terms.field "lastName" (Terms.string "Doe"),
@@ -180,34 +180,34 @@ checkTypeOfRecords = H.describe "Records" $ do
       (Types.function Types.string (Types.function Types.int32 (Types.var "Person")))
 
   H.describe "Polymorphic records" $ do
-    expectTypeOf "#1"
+    expectTypeOf "latlon poly float"
       (Terms.record testTypeLatLonPolyName [
         Terms.field "lat" (Terms.float32 19.5429),
         Terms.field "lon" (Terms.float32 (0-155.6659))])
       (Types.apply (Types.var "LatLonPoly") Types.float32)
-    expectTypeOf "#2"
+    expectTypeOf "latlon poly int64"
       (Terms.record testTypeLatLonPolyName [
         Terms.field "lat" (Terms.int64 195429),
         Terms.field "lon" (Terms.int64 (0-1556659))])
       (Types.apply (Types.var "LatLonPoly") Types.int64)
-    expectTypeOf "#3"
+    expectTypeOf "latlon poly variable"
       (Terms.lambda "x" $ Terms.record testTypeLatLonPolyName [
         Terms.field "lat" (Terms.var "x"),
         Terms.field "lon" (Terms.var "x")])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "LatLonPoly") (Types.var "t0")))
-    expectTypeOf "#4"
+    expectTypeOf "buddylist string"
       (Terms.record testTypeBuddyListAName [
         Terms.field "head" (Terms.string "first"),
         Terms.field "tail" (Terms.optional Nothing)])
       (Types.apply (Types.var "BuddyListA") Types.string)
-    expectTypeOf "#5"
+    expectTypeOf "buddylist variable"
       (Terms.lambda "x" $ Terms.record testTypeBuddyListAName [
         Terms.field "head" (Terms.var "x"),
         Terms.field "tail" (Terms.optional Nothing)])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "BuddyListA") (Types.var "t0")))
 
   H.describe "Records in complex contexts" $ do
-    expectTypeOf "#1"
+    expectTypeOf "records in tuple"
       (Terms.tuple [
         Terms.record testTypePersonName [
           Terms.field "firstName" (Terms.string "Bob"),
@@ -217,7 +217,7 @@ checkTypeOfRecords = H.describe "Records" $ do
           Terms.field "lat" (Terms.float32 1.0),
           Terms.field "lon" (Terms.float32 2.0)]])
       (Types.product [Types.var "Person", Types.var "LatLon"])
-    expectTypeOf "#2"
+    expectTypeOf "poly records in tuple"
       (Terms.tuple [
         Terms.record testTypeLatLonPolyName [
           Terms.field "lat" (Terms.int32 1),
@@ -228,7 +228,7 @@ checkTypeOfRecords = H.describe "Records" $ do
       (Types.product [
         Types.apply (Types.var "LatLonPoly") Types.int32,
         Types.apply (Types.var "BuddyListA") Types.string])
-    expectTypeOf "#3"
+    expectTypeOf "recursive record"
       (Terms.record testTypeIntListName [
         Terms.field "head" (Terms.int32 42),
         Terms.field "tail" (Terms.optional $ Just $
@@ -260,25 +260,25 @@ checkTypeOfUnions = H.describe "Unions" $ do
 checkTypeOfUnit :: H.SpecWith ()
 checkTypeOfUnit = H.describe "Unit" $ do
   H.describe "Unit term" $ do
-    expectTypeOf "#1"
+    expectTypeOf "unit literal"
       Terms.unit
       Types.unit
   H.describe "Unit term in polymorphic context" $ do
-    expectTypeOf "#1"
+    expectTypeOf "unit from lambda"
       (Terms.lambda "x" Terms.unit)
       (Types.forAll "t0" $ Types.function (Types.var "t0") Types.unit)
-    expectTypeOf "#2"
+    expectTypeOf "unit in tuple"
       (Terms.tuple [Terms.unit, Terms.string "foo"])
       (Types.product [Types.unit, Types.string])
 
 checkTypeOfVariables :: H.SpecWith ()
 checkTypeOfVariables = H.describe "Variables" $ do
   return ()  -- TODO: implement
-  
+
 checkTypeOfWrappedTerms :: H.SpecWith ()
 checkTypeOfWrappedTerms = H.describe "Wrapped terms" $ do
   return ()  -- TODO: implement
-  
+
 ----------------------------------------
 
 expectTypeOf :: String -> Term -> Type -> H.SpecWith ()
