@@ -2,7 +2,7 @@
 
 module Hydra.Sources.Kernel.Terms.Inference where
 
--- Standard Tier-2 imports
+-- Standard imports for term-level kernel modules
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Accessors     as Accessors
@@ -114,7 +114,7 @@ module_ = Module (Namespace "hydra.inference") elements
       el inferTypeOfVariableDef,
       el inferTypeOfWrappedTermDef,
       el inferTypesOfTemporaryLetBindingsDef,
-      el instantiateFTypeDef,
+--      el instantiateFTypeDef,
       el instantiateTypeSchemeDef,
       el isUnboundDef,
       el key_vcountDef,
@@ -123,7 +123,7 @@ module_ = Module (Namespace "hydra.inference") elements
       el normalTypeVariableDef,
       el requireSchemaTypeDef,
       el showInferenceResultDef,
-      el singleTypeDef,
+      el checkSameTypeDef,
       el toFContextDef,
       el typeOfCollectionDef,
       el typeOfDef,
@@ -159,24 +159,25 @@ checkTypeDef = define "checkType" $
           ref ShowCore.typeDef @@ var "t0"]))
     (Flows.pure unit)
 
+-- W: wfTy
 checkTypeVariablesDef :: TElement (S.Set Name -> Type -> Flow s ())
 checkTypeVariablesDef = define "checkTypeVariables" $
   doc "Check that all type variables in a type are bound" $
-  lambdas ["vars", "typ"] $ cases _Type (var "typ")
+  lambdas ["tyvars", "typ"] $ cases _Type (var "typ")
     (Just $
-      withVar "result" (Flows.sequence $ Lists.map (ref checkTypeVariablesDef @@ var "vars") $
+      withVar "result" (Flows.sequence $ Lists.map (ref checkTypeVariablesDef @@ var "tyvars") $
         (ref Rewriting.subtypesDef @@ var "typ")) $
       Flows.pure unit) [
-        _Type_forall>>: lambda "ft" $ ref checkTypeVariablesDef
-          @@ (Sets.insert (Core.forallTypeParameter $ var "ft") (var "vars"))
-          @@ (Core.forallTypeBody $ var "ft"),
-        _Type_variable>>: lambda "v" $ Logic.ifElse (Sets.member (var "v") (var "vars"))
-          (Flows.pure unit)
-          (Flows.fail $ Strings.cat $ list [
-            string "unbound type variable \"",
-            Core.unName $ var "v",
-            string "\" in ",
-            ref ShowCore.typeDef @@ var "typ"])]
+    _Type_forall>>: lambda "ft" $ ref checkTypeVariablesDef
+      @@ (Sets.insert (Core.forallTypeParameter $ var "ft") (var "tyvars"))
+      @@ (Core.forallTypeBody $ var "ft"),
+    _Type_variable>>: lambda "v" $ Logic.ifElse (Sets.member (var "v") (var "tyvars"))
+      (Flows.pure unit)
+      (Flows.fail $ Strings.cat $ list [
+        string "unbound type variable \"",
+        Core.unName $ var "v",
+        string "\" in ",
+        ref ShowCore.typeDef @@ var "typ"])]
 
 debugInferenceDef :: TElement Bool
 debugInferenceDef = define "debugInference" $
@@ -250,12 +251,11 @@ fTypeToTypeSchemeDef = define "fTypeToTypeScheme" $
 gatherForallDef :: TElement ([Name] -> Type -> TypeScheme)
 gatherForallDef = define "gatherForall" $
   doc "Helper to gather forall variables" $
-  lambdas ["vars", "typ"] $
-    cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ") Nothing [
-      _Type_forall>>: lambda "ft" $ ref gatherForallDef @@
-        (Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars")) @@
-        (Core.forallTypeBody $ var "ft"),
-      _Type_variable>>: constant $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ")]
+  lambdas ["vars", "typ"] $ cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ") Nothing [
+    _Type_forall>>: lambda "ft" $ ref gatherForallDef @@
+      (Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars")) @@
+      (Core.forallTypeBody $ var "ft"),
+    _Type_variable>>: constant $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ")]
 
 generalizeDef :: TElement (InferenceContext -> Type -> TypeScheme)
 generalizeDef = define "generalize" $
@@ -470,20 +470,27 @@ inferTypeOfCollectionDef = define "inferTypeOfCollection" $
   doc "Infer the type of a collection" $
   lambdas ["cx", "typCons", "trmCons", "desc", "els"] $
     withVar "var" (ref freshNameDef) $
-    withVar "results" (ref inferManyDef @@ var "cx" @@
-      (Lists.zip (var "els") $ Lists.map (lambda "i" $ Strings.cat $ list [string "#", Literals.showInt32 $ var "i"]) $
-        Math.range (int32 1) (Math.add (Lists.length $ var "els") (int32 1)))) $ lets [
-    "terms">: first $ var "results",
-    "types">: first $ second $ var "results",
-    "subst1">: second $ second $ var "results",
-    "constraints">: Lists.map (lambda "t" $ Typing.typeConstraint (Core.typeVariable $ var "var") (var "t") (var "desc")) (var "types")] $
-    ref mapConstraintsDef @@ var "cx" @@
-      (lambda "subst2" $ lets [
-        "iterm">: var "trmCons" @@ var "terms",
-        "itype">: var "typCons" @@ (Core.typeVariable $ var "var"),
-        "isubst">: ref Substitution.composeTypeSubstDef @@ var "subst1" @@ var "subst2"] $
-        ref yieldDef @@ var "iterm" @@ var "itype" @@ var "isubst") @@
-      var "constraints"
+    Logic.ifElse (Lists.null $ var "els")
+      -- Special case: empty collection
+      (Flows.pure $ ref yieldDef
+        @@ (Core.termTypeApplication $ Core.typedTerm (var "trmCons" @@ list []) (Core.typeVariable $ var "var"))
+        @@ (var "typCons" @@ (Core.typeVariable $ var "var"))
+        @@ (ref Substitution.idTypeSubstDef)) $
+      -- General case: non-empty collection
+      withVar "results" (ref inferManyDef @@ var "cx" @@
+        (Lists.zip (var "els") $ Lists.map (lambda "i" $ Strings.cat $ list [string "#", Literals.showInt32 $ var "i"]) $
+          Math.range (int32 1) (Math.add (Lists.length $ var "els") (int32 1)))) $ lets [
+      "terms">: first $ var "results",
+      "types">: first $ second $ var "results",
+      "subst1">: second $ second $ var "results",
+      "constraints">: Lists.map (lambda "t" $ Typing.typeConstraint (Core.typeVariable $ var "var") (var "t") (var "desc")) (var "types")] $
+      ref mapConstraintsDef @@ var "cx" @@
+        (lambda "subst2" $ lets [
+          "iterm">: var "trmCons" @@ var "terms",
+          "itype">: var "typCons" @@ (Core.typeVariable $ var "var"),
+          "isubst">: ref Substitution.composeTypeSubstDef @@ var "subst1" @@ var "subst2"] $
+          ref yieldDef @@ var "iterm" @@ var "itype" @@ var "isubst") @@
+        var "constraints"
 
 inferTypeOfEliminationDef :: TElement (InferenceContext -> Elimination -> Flow s InferenceResult)
 inferTypeOfEliminationDef = define "inferTypeOfElimination" $
@@ -914,11 +921,11 @@ inferTypeOfVariableDef = define "inferTypeOfVariable" $
       (Flows.fail $ Strings.cat2 (string "Variable not bound to type: ") (Core.unName $ var "name"))
       (lambda "scheme" $
         withVar "ts" (ref instantiateTypeSchemeDef @@ var "scheme") $ lets [
-          "vars">: Core.typeSchemeVariables $ var "ts",
-          "itype">: Core.typeSchemeType $ var "ts",
-          "iterm">: Lists.foldl (lambdas ["t", "ty"] $ Core.termTypeApplication $ Core.typedTerm (var "t") (var "ty"))
-            (Core.termVariable $ var "name") (Lists.map (unaryFunction Core.typeVariable) $ var "vars")] $
-          Flows.pure $ Typing.inferenceResult (var "iterm") (var "itype") (ref Substitution.idTypeSubstDef))
+        "vars">: Core.typeSchemeVariables $ var "ts",
+        "itype">: Core.typeSchemeType $ var "ts",
+        "iterm">: Lists.foldl (lambdas ["t", "ty"] $ Core.termTypeApplication $ Core.typedTerm (var "t") (var "ty"))
+          (Core.termVariable $ var "name") (Lists.map (unaryFunction Core.typeVariable) $ var "vars")] $
+        Flows.pure $ Typing.inferenceResult (var "iterm") (var "itype") (ref Substitution.idTypeSubstDef))
       (Maps.lookup (var "name") (Typing.inferenceContextDataTypes $ var "cx"))
 
 inferTypeOfWrappedTermDef :: TElement (InferenceContext -> WrappedTerm -> Flow s InferenceResult)
@@ -981,13 +988,15 @@ inferTypesOfTemporaryLetBindingsDef = define "inferTypesOfTemporaryLetBindings" 
             (Lists.cons (ref Substitution.substInTypeDef @@ var "r" @@ var "u_prime") (var "r_prime"))
             (ref Substitution.composeTypeSubstDef @@ var "u" @@ var "r")))
 
-instantiateFTypeDef :: TElement (Type -> Flow s Type)
-instantiateFTypeDef = define "instantiateFType" $
-  doc "Instantiate a forall type with fresh variables" $
-  lambda "typ" $
-    withVar "ts" (ref instantiateTypeSchemeDef @@ (ref fTypeToTypeSchemeDef @@ var "typ")) $
-    Flows.pure $ Core.typeSchemeType $ var "ts"
+-- Removed because this pattern is suspect; it throws away the type variables
+--instantiateFTypeDef :: TElement (Type -> Flow s Type)
+--instantiateFTypeDef = define "instantiateFType" $
+--  doc "Instantiate a forall type with fresh variables" $
+--  lambda "typ" $
+--    withVar "ts" (ref instantiateTypeSchemeDef @@ (ref fTypeToTypeSchemeDef @@ var "typ")) $
+--    Flows.pure $ Core.typeSchemeType $ var "ts"
 
+-- W: inst
 instantiateTypeSchemeDef :: TElement (TypeScheme -> Flow s TypeScheme)
 instantiateTypeSchemeDef = define "instantiateTypeScheme" $
   doc "Instantiate a type scheme with fresh variables" $
@@ -1041,8 +1050,8 @@ requireSchemaTypeDef = define "requireSchemaType" $
       (lambda "ts" $ ref instantiateTypeSchemeDef @@ (ref Rewriting.deannotateTypeSchemeRecursiveDef @@ var "ts"))
       (Maps.lookup (var "tname") (Typing.inferenceContextSchemaTypes $ var "cx"))
 
-singleTypeDef :: TElement (String -> [Type] -> Flow s Type)
-singleTypeDef = define "singleType" $
+checkSameTypeDef :: TElement (String -> [Type] -> Flow s Type)
+checkSameTypeDef = define "checkSameType" $
   doc "Ensure all types in a list are equal and return the common type" $
   lambdas ["desc", "types"] $ lets [
     "h">: Lists.head $ var "types",
@@ -1080,9 +1089,10 @@ toFContextDef = define "toFContext" $
   lambda "cx" $
     Maps.map (ref typeSchemeToFTypeDef) $ Typing.inferenceContextDataTypes $ var "cx"
 
+-- W: typeOf
 typeOfDef :: TElement (InferenceContext -> S.Set Name -> M.Map Name Type -> Term -> Flow s Type)
 typeOfDef = define "typeOf" $
-  doc "Infer the type of a term given context and type environment" $
+  doc "Infer the type of a term given context, bound type variables, and type environment" $
   lambdas ["cx", "vars", "types", "term"] $
     ref Monads.withTraceDef @@
       (Strings.cat $ list [
@@ -1100,7 +1110,6 @@ typeOfDef = define "typeOf" $
         _Term_annotated>>: lambda "at" $ lets [
           "term1">: Core.annotatedTermSubject $ var "at"] $
           ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ var "term1",
-
         _Term_application>>: lambda "app" $ lets [
           "a">: Core.applicationFunction $ var "app",
           "b">: Core.applicationArgument $ var "app"] $
@@ -1108,7 +1117,12 @@ typeOfDef = define "typeOf" $
           withVar "t2" (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ var "b") $
           withVar "_" (ref checkTypeVariablesDef @@ var "vars" @@ var "t1") $
           withVar "_" (ref checkTypeVariablesDef @@ var "vars" @@ var "t2") $
-          cases _Type (var "t1") Nothing [
+          cases _Type (var "t1")
+            (Just $ Flows.fail $ Strings.cat $ list [
+              string "left hand side of application ",
+              ref ShowCore.termDef @@ var "term",
+              string " is not a function type: ",
+              ref ShowCore.typeDef @@ var "t1"]) [
             _Type_function>>: lambda "ft" $ lets [
               "p">: Core.functionTypeDomain $ var "ft",
               "q">: Core.functionTypeCodomain $ var "ft"] $
@@ -1120,13 +1134,7 @@ typeOfDef = define "typeOf" $
                   string " in ",
                   ref ShowCore.termDef @@ var "term",
                   string " but found ",
-                  ref ShowCore.typeDef @@ var "t2"]),
-            _Type_variable>>: constant $ Flows.fail $ Strings.cat $ list [
-              string "left hand side of application ",
-              ref ShowCore.termDef @@ var "term",
-              string " is not a function type: ",
-              ref ShowCore.typeDef @@ var "t1"]],
-
+                  ref ShowCore.typeDef @@ var "t2"])],
         _Term_function>>: lambda "f" $
           cases _Function (var "f") Nothing [
             _Function_elimination>>: lambda "elm" $
@@ -1201,17 +1209,13 @@ typeOfDef = define "typeOf" $
 
         _Term_list>>: lambda "els" $
           Logic.ifElse (Lists.null $ var "els")
-            ( withVar "t" (ref freshNameDef) $
-              Flows.pure $ Core.typeForall $ Core.forallType (var "t") (Core.typeList $ Core.typeVariable $ var "t"))
-            ( lets [
-              "x">: Lists.head $ var "els",
-              "xs">: Lists.tail $ var "els"] $
-              withVar "tx" (Flows.bind (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ var "x") (ref instantiateFTypeDef)) $
-              withVar "_" (Flows.sequence $ Lists.map (lambda "e" $
-                withVar "t" (Flows.bind (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ var "e") (ref instantiateFTypeDef)) $
-                ref Unification.unifyTypesDef @@ (Typing.inferenceContextSchemaTypes $ var "cx") @@ var "t" @@ var "tx" @@ string "type check over collection") (var "xs")) $
-              withVar "_" (ref checkTypeVariablesDef @@ var "vars" @@ var "tx") $
-              Flows.pure $ Core.typeList $ var "tx"),
+            (Flows.fail $ string "empty list should only occur within a type application")
+            (withVar "eltypes" (Flows.mapList
+               (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types") (var "els")) $
+             withVar "unifiedType" (ref checkSameTypeDef @@ string "list elements" @@ var "eltypes") $
+             -- Verify the unified type is well-formed in the current scope
+             withVar "_" (ref checkTypeVariablesDef @@ var "vars" @@ var "unifiedType") $
+             Flows.pure $ Core.typeList $ var "unifiedType"),
 
         _Term_literal>>: lambda "lit" $
           Flows.pure $ Core.typeLiteral $ ref Variants.literalTypeDef @@ var "lit",
@@ -1226,9 +1230,9 @@ typeOfDef = define "typeOf" $
             (lets [
               "pairs">: Maps.toList $ var "m"] $
               withVar "kt" (Flows.bind (Flows.mapList (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types") $
-                Lists.map (unaryFunction first) (var "pairs")) (ref singleTypeDef @@ string "map keys")) $
+                Lists.map (unaryFunction first) (var "pairs")) (ref checkSameTypeDef @@ string "map keys")) $
               withVar "vt" (Flows.bind (Flows.mapList (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types") $
-                Lists.map (unaryFunction second) (var "pairs")) (ref singleTypeDef @@ string "map values")) $
+                Lists.map (unaryFunction second) (var "pairs")) (ref checkSameTypeDef @@ string "map values")) $
               withVar "_" (ref checkTypeVariablesDef @@ var "vars" @@ var "kt") $
               withVar "_" (ref checkTypeVariablesDef @@ var "vars" @@ var "vt") $
               Flows.pure $ Core.typeMap $ Core.mapType (var "kt") (var "vt")),
@@ -1267,28 +1271,30 @@ typeOfDef = define "typeOf" $
           withVar "_" (ref checkTypeVariablesDef @@ (Sets.insert (var "v") (var "vars")) @@ var "t1") $
           Flows.pure $ Core.typeForall $ Core.forallType (var "v") (var "t1"),
 
-        _Term_typeApplication>>: lambda "tt" $ lets [
-          "e">: Core.typedTermTerm $ var "tt",
-          "t">: Core.typedTermType $ var "tt"] $
-          withVar "t1" (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ var "e") $
-          withVar "_" (ref checkTypeVariablesDef @@ var "vars" @@ var "t1") $
---      Flows.fail $ "type-checking type application"
---        ++ "\n\tterm: " ++ ShowCore.term e
---        ++ "\n\ttype: " ++ ShowCore.type_ t
---        ++ "\n\tvars: " ++ show (fmap unName $ S.toList vars)
---        ++ "\n\tt1: " ++ ShowCore.type_ t1
-          cases _Type (var "t1") Nothing [
-            _Type_forall>>: lambda "ft" $ lets [
-              "v">: Core.forallTypeParameter $ var "ft",
-              "t2">: Core.forallTypeBody $ var "ft"] $
-              Flows.pure $ ref Substitution.substInTypeDef @@
-                (Typing.typeSubst $ Maps.fromList $ list [pair (var "v") (var "t")]) @@
-                (var "t2"),
-            _Type_variable>>: constant $ Flows.fail $ Strings.cat $ list [
-              string "not a forall type: ",
-              ref ShowCore.typeDef @@ var "t1",
-              string " in ",
-              ref ShowCore.termDef @@ var "term"]],
+        _Term_typeApplication>>: lambda "tyapp" $ lets [
+          "e">: Core.typedTermTerm $ var "tyapp",
+          "t">: Core.typedTermType $ var "tyapp",
+          "dflt">:
+            withVar "t1" (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ var "e") $
+            withVar "_" (ref checkTypeVariablesDef @@ var "vars" @@ var "t1") $
+            cases _Type (var "t1")
+              (Just $ Flows.fail $ Strings.cat $ list [
+                string "not a forall type: ",
+                ref ShowCore.typeDef @@ var "t1",
+                string " in ",
+                ref ShowCore.termDef @@ var "term"]) [
+              _Type_forall>>: lambda "ft" $ lets [
+                "v">: Core.forallTypeParameter $ var "ft",
+                "t2">: Core.forallTypeBody $ var "ft"] $
+                Flows.pure $ ref Substitution.substInTypeDef @@
+                  (Typing.typeSubst $ Maps.singleton (var "v") (var "t")) @@
+                  (var "t2")]] $
+          cases _Term (var "e")
+            (Just $ var "dflt") [
+            _Term_list>>: lambda "els" $ Logic.ifElse (Lists.null $ var "els")
+              -- Empty lists are special
+              (Flows.pure $ Core.typeList $ var "t")
+              (var "dflt")],
 
         _Term_union>>: lambda "injection" $ lets [
           "tname">: Core.injectionTypeName $ var "injection",
@@ -1347,7 +1353,7 @@ typeOfCollectionDef = define "typeOfCollection" $
         (Core.typeScheme (list [Core.name $ string "t"]) $
           var "cons" @@ Core.typeVariable (Core.name $ string "t")))
       (withVar "etypes" (Flows.mapList (lambda "el" $ ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ var "el") (var "els")) $
-        withVar "et" (ref singleTypeDef @@ var "desc" @@ var "etypes") $
+        withVar "et" (ref checkSameTypeDef @@ var "desc" @@ var "etypes") $
         withVar "result" (ref checkTypeVariablesDef @@ var "vars" @@ var "et") $
         Flows.pure $ var "cons" @@ var "et")
 
