@@ -2,7 +2,7 @@
 
 module Hydra.Sources.Kernel.Terms.Describe.Mantle where
 
--- Standard Tier-2 imports
+-- Standard imports for term-level kernel modules
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Accessors     as Accessors
