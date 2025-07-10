@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Hydra.Sources.Ext.Gql.OpenGql where
+module Hydra.Ext.Gql.OpenGql where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
