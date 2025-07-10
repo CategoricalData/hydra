@@ -13,7 +13,6 @@ import Hydra.Sources.Ext.Csharp.Language
 import Hydra.Sources.Ext.Csharp.Syntax
 import Hydra.Sources.Ext.Cypher.Features
 import Hydra.Sources.Ext.Cypher.OpenCypher
-import Hydra.Sources.Ext.Gql.OpenGql
 import Hydra.Sources.Ext.Graphql.Syntax
 import Hydra.Sources.Ext.Haskell.Ast
 import Hydra.Sources.Ext.Haskell.Ast
@@ -69,7 +68,6 @@ tier3ExtModules = [
   jsonSchemaModule,
   openCypherModule,
   openCypherFeaturesModule,
-  openGqlModule,
   pegasusPdlModule,
   proto3Module,
   protobufAnyModule,
