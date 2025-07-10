@@ -1,8 +1,12 @@
 -- | A collection of all Hydra sources provided in hydra-ext
 
-module Hydra.Ext.Sources.All where
+module Hydra.Ext.Sources.All (
+  module Hydra.Ext.Sources.All,
+  module Hydra.Sources.All,
+) where
 
 import Hydra.Kernel
+import Hydra.Sources.All
 
 import Hydra.Ext.Sources.Avro.Schema
 import Hydra.Ext.Sources.Cpp.Language
