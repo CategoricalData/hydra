@@ -7,6 +7,9 @@ import Hydra.Codegen
 
 import Hydra.Ext.Cpp.Coder
 import Hydra.Ext.Delta.Src.Parquet
+import Hydra.Ext.Gql.OpenGql
+import Hydra.Ext.Gql.PathAlgebra.Expressions
+import Hydra.Ext.Gql.PathAlgebra.Syntax
 import Hydra.Ext.Graphql.Coder
 import Hydra.Ext.Graphviz.Src.Dot
 import Hydra.Ext.Java.Coder
@@ -18,7 +21,6 @@ import Hydra.Ext.Other.Datalog
 import Hydra.Ext.Other.GeoJson
 import Hydra.Ext.Other.IanaRelations
 import Hydra.Ext.Other.Osv
-import Hydra.Ext.Other.PathAlgebra
 import Hydra.Ext.Other.StacItems
 import Hydra.Ext.Owl.Src.Syntax
 import Hydra.Ext.Parquet.Src.Format
@@ -52,15 +54,19 @@ hydraExtModules = [
   gremlinModule,
   ianaRelationsModule,
   kqlModule,
+  openGqlModule,
   osvSchemaModule,
   owlSyntaxModule,
   parquetFormatModule,
-  pathAlgebraModule,
   shexSyntaxModule,
   sqlModule,
   stacModule,
   tinkerpopFeaturesModule,
-  xmlSchemaModule]
+  xmlSchemaModule] ++ gqlModules
+
+gqlModules = [
+  pathAlgebraExpressionsModule,
+  pathAlgebraSyntaxModule]
 
 writeCpp :: FP.FilePath -> [Module] -> IO ()
 writeCpp = generateSources moduleToCpp
@@ -82,4 +88,3 @@ writePython = generateSources moduleToPython
 
 writeScala :: FP.FilePath -> [Module] -> IO ()
 writeScala = generateSources moduleToScala
-
