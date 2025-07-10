@@ -9,7 +9,7 @@ import Hydra.Kernel
 import Hydra.Tools.Monads
 import Hydra.Staging.Json.Serde
 import Hydra.Staging.Json.Coder
-import Hydra.Codegen
+import Hydra.Generation
 import Hydra.Formatting
 import qualified Hydra.Json as Json
 import qualified Hydra.Ext.Staging.Shacl.Coder as Shacl

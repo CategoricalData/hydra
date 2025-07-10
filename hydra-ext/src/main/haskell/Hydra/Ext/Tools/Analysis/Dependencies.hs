@@ -11,7 +11,7 @@ import Hydra.Sources.Kernel.Terms.All
 import Hydra.Staging.Json.Serde
 import Hydra.Tools.Monads
 import Hydra.Ext.Tools.Analysis.Dependencies
-import Hydra.Codegen (modulesToGraph)
+import Hydra.Generation (modulesToGraph)
 import System.IO
 
 termModulesToGraphson withPrims modules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> termGraphToDependencyGraphson withPrims False (modulesToGraph modules)) >>= writeFile outFile
@@ -40,7 +40,7 @@ g.E()
 module Hydra.Ext.Tools.Analysis.Dependencies where
 
 import Hydra.Kernel
-import Hydra.Codegen
+import Hydra.Generation
 import Hydra.Sources.Kernel.Terms.All
 import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
