@@ -760,7 +760,82 @@ checkTypeOfUnit = H.describe "Unit" $ do
 
 checkTypeOfVariables :: H.SpecWith ()
 checkTypeOfVariables = H.describe "Variables" $ do
-  return ()  -- TODO: implement
+  H.describe "Simple variable lookup" $ do
+    expectTypeOf "int variable"
+      (lambda "x" $ var "x")
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
+    expectTypeOf "variable in let binding"
+      (lets ["x">: int32 42] $ var "x")
+      Types.int32
+    expectTypeOf "multiple variables"
+      (lets ["x">: string "hello",
+             "y">: int32 42] $
+            tuple [var "x", var "y"])
+      (Types.product [Types.string, Types.int32])
+
+  H.describe "Variable scoping" $ do
+    expectTypeOf "lambda parameter"
+      (lambda "x" $ lambda "y" $ var "x")
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.var "t0")))
+    expectTypeOf "let binding scope"
+      (lets ["x">: int32 1] $
+       lets ["y">: string "hello"] $
+            var "x")
+      Types.int32
+    expectTypeOf "variable shadowing"
+      (lets ["x">: int32 1] $
+       lambda "x" $ var "x")
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
+    expectTypeOf "nested scoping"
+      (lambda "x" $
+       lets ["y">: var "x"] $
+            lambda "z" $
+            tuple [var "x", var "y", var "z"])
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t0", Types.var "t1"])))
+
+  H.describe "Polymorphic variables" $ do
+    expectTypeOf "polymorphic function"
+      (lets ["id">: lambda "x" $ var "x"] $
+            var "id")
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
+    expectTypeOf "polymorphic application"
+      (lets ["id">: lambda "x" $ var "x"] $
+            tuple [var "id" @@ int32 42, var "id" @@ string "test"])
+      (Types.product [Types.int32, Types.string])
+    expectTypeOf "higher order polymorphic"
+      (lets ["apply">: lambda "f" $ lambda "x" $ var "f" @@ var "x"] $
+            var "apply")
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.function (Types.var "t0") (Types.var "t1")) (Types.function (Types.var "t0") (Types.var "t1")))
+
+  H.describe "Variables in complex contexts" $ do
+    expectTypeOf "variable in record"
+      (lambda "name" $
+       record testTypePersonName [
+         field "firstName" (var "name"),
+         field "lastName" (string "Doe"),
+         field "age" (int32 25)])
+      (Types.function Types.string (Types.var "Person"))
+    expectTypeOf "variable in list"
+      (lambda "x" $ list [var "x", var "x"])
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.list $ Types.var "t0"))
+    expectTypeOf "variable in map"
+      (lambda "key" $ lambda "value" $
+       Terms.map $ M.singleton (var "key") (var "value"))
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.map (Types.var "t0") (Types.var "t1"))))
+    expectTypeOf "variable in optional"
+      (lambda "x" $ optional $ Just $ var "x")
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.optional $ Types.var "t0"))
+
+  H.describe "Recursive variables" $ do
+    expectTypeOf "simple recursion"
+      (lets ["f">: lambda "x" $ primitive _math_add @@ var "x" @@ int32 1] $
+            var "f")
+      (Types.function Types.int32 Types.int32)
+    expectTypeOf "mutual recursion"
+      (lets ["f">: lambda "x" $ var "g" @@ var "x",
+             "g">: lambda "y" $ primitive _math_add @@ var "y" @@ int32 1] $
+            var "f")
+      (Types.function Types.int32 Types.int32)
 
 checkTypeOfWrappedTerms :: H.SpecWith ()
 checkTypeOfWrappedTerms = H.describe "Wrapped terms" $ do
