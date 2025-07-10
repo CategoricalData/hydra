@@ -1,7 +1,7 @@
-module Hydra.Ext.Yaml.Serde where
+module Hydra.Staging.Yaml.Serde where
 
 import Hydra.Kernel
-import Hydra.Ext.Yaml.Coder
+import Hydra.Staging.Yaml.Coder
 import Hydra.Tools.Bytestrings
 import qualified Hydra.Ext.Org.Yaml.Model as YM
 

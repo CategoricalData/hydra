@@ -153,7 +153,7 @@ instantiateTemplateDef = define "instantiateTemplate" $
 
 -- Example of type-to-term instantiation which creates a YAML-based template out of the OpenCypher feature model.
 
-import Hydra.Ext.Yaml.Model as Yaml
+import Hydra.Staging.Yaml.Model as Yaml
 import Hydra.Monads
 import Data.Map as M
 import Data.Maybe as Y

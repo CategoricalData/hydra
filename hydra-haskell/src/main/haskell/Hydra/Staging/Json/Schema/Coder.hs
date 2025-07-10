@@ -1,4 +1,4 @@
-module Hydra.Ext.Json.Schema.Coder (
+module Hydra.Staging.Json.Schema.Coder (
   JsonSchemaOptions(..),
   moduleToJsonSchemaFiles,
 ) where
@@ -6,8 +6,8 @@ module Hydra.Ext.Json.Schema.Coder (
 import Hydra.Kernel
 import Hydra.Adapt.Terms
 import Hydra.Adapt.Modules
-import Hydra.Ext.Json.Schema.Language
-import Hydra.Ext.Json.Schema.Serde
+import Hydra.Staging.Json.Schema.Language
+import Hydra.Staging.Json.Schema.Serde
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Ext.Org.Json.Schema as JS
 import qualified Hydra.Json as J

@@ -6,9 +6,9 @@ import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Ext.Haskell.Coder
-import Hydra.Ext.Json.Coder
-import Hydra.Ext.Json.Schema.Coder
-import Hydra.Ext.Yaml.Modules
+import Hydra.Staging.Json.Coder
+import Hydra.Staging.Json.Schema.Coder
+import Hydra.Staging.Yaml.Modules
 import Hydra.Sources.Libraries
 
 import qualified Control.Monad as CM

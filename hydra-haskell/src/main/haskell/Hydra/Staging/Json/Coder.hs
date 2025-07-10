@@ -1,4 +1,4 @@
-module Hydra.Ext.Json.Coder (jsonCoder, literalJsonCoder, untypedTermToJson) where
+module Hydra.Staging.Json.Coder (jsonCoder, literalJsonCoder, untypedTermToJson) where
 
 import Hydra.Core
 import Hydra.Compute
@@ -10,7 +10,7 @@ import Hydra.Rewriting
 import Hydra.Monads hiding (fail, pure)
 import Hydra.Adapt.Modules
 import Hydra.Adapt.Terms
-import Hydra.Ext.Json.Language
+import Hydra.Staging.Json.Language
 import Hydra.Lib.Literals
 import Hydra.Adapt.Utils
 import qualified Hydra.Json as Json
