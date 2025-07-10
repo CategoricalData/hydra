@@ -64,7 +64,51 @@ checkTypeOf = H.describe "typeOf" $ do
 
 checkTypeOfAnnotatedTerms :: H.SpecWith ()
 checkTypeOfAnnotatedTerms = H.describe "Annotated terms" $ do
-  return ()  -- TODO: implement
+  H.describe "Top-level annotations" $ do
+    expectTypeOf "annotated literal"
+      (annotated (int32 42) M.empty)
+      Types.int32
+    expectTypeOf "annotated list"
+      (annotated (list [string "a", string "b"]) M.empty)
+      (Types.list Types.string)
+    expectTypeOf "annotated record"
+      (annotated (record testTypePersonName [
+        field "firstName" (string "John"),
+        field "lastName" (string "Doe"),
+        field "age" (int32 25)]) M.empty)
+      (Types.var "Person")
+    expectTypeOf "annotated lambda"
+      (annotated (lambda "x" $ var "x") M.empty)
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
+
+  H.describe "Nested annotations" $ do
+    expectTypeOf "annotation within annotation"
+      (annotated (annotated (int32 100) M.empty) M.empty)
+      Types.int32
+    expectTypeOf "annotated terms in tuple"
+      (tuple [annotated (int32 1) M.empty,
+              annotated (string "hello") M.empty])
+      (Types.product [Types.int32, Types.string])
+    expectTypeOf "annotated term in function application"
+      (annotated (lambda "x" $ var "x") M.empty @@ annotated (int32 42) M.empty)
+      Types.int32
+
+  H.describe "Annotations in complex contexts" $ do
+    expectTypeOf "annotated let binding"
+      (lets ["x">: annotated (int32 5) M.empty,
+             "y">: annotated (string "world") M.empty] $
+            annotated (tuple [var "x", var "y"]) M.empty)
+      (Types.product [Types.int32, Types.string])
+    expectTypeOf "annotated record fields"
+      (record testTypePersonName [
+        field "firstName" (annotated (string "Alice") M.empty),
+        field "lastName" (annotated (string "Smith") M.empty),
+        field "age" (annotated (int32 30) M.empty)])
+      (Types.var "Person")
+    expectTypeOf "annotated function in application"
+      (lets ["add">: annotated (primitive _math_add) M.empty] $
+            var "add" @@ annotated (int32 10) M.empty @@ annotated (int32 20) M.empty)
+      Types.int32
 
 checkTypeOfApplications :: H.SpecWith ()
 checkTypeOfApplications = H.describe "Applications" $ do
