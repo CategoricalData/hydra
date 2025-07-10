@@ -213,6 +213,16 @@ freeVariablesInType typ =
     Core.TypeVariable v1 -> (Sets.singleton v1)
     _ -> dfltVars) typ)
 
+-- | Find the free variables in a type in deterministic left-to-right order
+freeVariablesInTypeOrdered :: (Core.Type -> [Core.Name])
+freeVariablesInTypeOrdered typ =  
+  let collectVars = (\boundVars -> \t -> (\x -> case x of
+          Core.TypeVariable v1 -> (Logic.ifElse (Sets.member v1 boundVars) [] [
+            v1])
+          Core.TypeForall v1 -> (collectVars (Sets.insert (Core.forallTypeParameter v1) boundVars) (Core.forallTypeBody v1))
+          _ -> (Lists.concat (Lists.map (collectVars boundVars) (subtypes t)))) t)
+  in (Lists.nub (collectVars Sets.empty typ))
+
 -- | Find free variables in a type scheme (simple version)
 freeVariablesInTypeSchemeSimple :: (Core.TypeScheme -> S.Set Core.Name)
 freeVariablesInTypeSchemeSimple ts =  

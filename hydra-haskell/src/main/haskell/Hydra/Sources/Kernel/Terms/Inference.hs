@@ -265,7 +265,8 @@ generalizeDef = define "generalize" $
   doc "Generalize a type to a type scheme" $
   lambdas ["cx", "typ"] $ lets [
     "vars">: Lists.nub $ Lists.filter (ref isUnboundDef @@ var "cx") $
-              Sets.toList $ ref Rewriting.freeVariablesInTypeDef @@ var "typ"] $
+--              Sets.toList $ ref Rewriting.freeVariablesInTypeDef @@ var "typ"] $
+              ref Rewriting.freeVariablesInTypeOrderedDef @@ var "typ"] $
      Core.typeScheme (var "vars") (var "typ")
 
 graphToInferenceContextDef :: TElement (Graph -> Flow s InferenceContext)
@@ -931,7 +932,7 @@ inferTypeOfVariableDef = define "inferTypeOfVariable" $
         "vars">: Core.typeSchemeVariables $ var "ts",
         "itype">: Core.typeSchemeType $ var "ts",
         "iterm">: Lists.foldl (lambdas ["t", "ty"] $ Core.termTypeApplication $ Core.typedTerm (var "t") (var "ty"))
-          (Core.termVariable $ var "name") (Lists.map (unaryFunction Core.typeVariable) $ var "vars")] $
+          (Core.termVariable $ var "name") (Lists.map (unaryFunction Core.typeVariable) $ Lists.reverse $ var "vars")] $
         Flows.pure $ Typing.inferenceResult (var "iterm") (var "itype") (ref Substitution.idTypeSubstDef))
       (Maps.lookup (var "name") (Typing.inferenceContextDataTypes $ var "cx"))
 
@@ -1146,6 +1147,7 @@ typeOfDef = define "typeOf" $
           cases _Function (var "f") Nothing [
             _Function_elimination>>: lambda "elm" $
               cases _Elimination (var "elm") Nothing [
+
                 _Elimination_product>>: lambda "tp" $ lets [
                   "index">: Core.tupleProjectionIndex $ var "tp",
                   "arity">: Core.tupleProjectionArity $ var "tp",
@@ -1159,11 +1161,41 @@ typeOfDef = define "typeOf" $
                       Flows.pure $ Core.typeFunction $ Core.functionType
                         (Core.typeProduct $ var "types")
                         (Lists.at (var "index") (var "types")))
-                    (var "mtypes")
---        EliminationRecord (Projection tname (Field fname fterm)) -> ...
---        EliminationUnion (CaseStatement tname def cases) -> ...
---        EliminationWrap tname -> ...
-              ],
+                    (var "mtypes"),
+
+                _Elimination_record>>: lambda "p" $ lets [
+                  "tname">: Core.projectionTypeName $ var "p",
+                  "fname">: Core.projectionField $ var "p"] $
+                  withVar "schemaType" (ref requireSchemaTypeDef @@ var "cx" @@ var "tname") $ lets [
+                    "svars">: Core.typeSchemeVariables $ var "schemaType",
+                    "styp">: Core.typeSchemeType $ var "schemaType"] $
+                  withVar "sfields" (ref ExtractCore.recordTypeDef @@ var "tname" @@ var "styp") $
+                  withVar "ftyp" (ref Schemas.findFieldTypeDef @@ var "fname" @@ var "sfields") $
+                  Flows.pure $ Core.typeFunction $ Core.functionType
+                    (ref nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
+                    (var "ftyp"),
+
+                _Elimination_union>>: lambda "c" $ lets [
+                  "tname">: Core.caseStatementTypeName $ var "c",
+                  "dflt">: Core.caseStatementDefault $ var "c",
+                  "cases">: Core.caseStatementCases $ var "c"] $
+                  withVar "schemaType" (ref requireSchemaTypeDef @@ var "cx" @@ var "tname") $ lets [
+                    "svars">: Core.typeSchemeVariables $ var "schemaType",
+                    "styp">: Core.typeSchemeType $ var "schemaType"] $
+                  withVar "sfields" (ref ExtractCore.unionTypeDef @@ var "tname" @@ var "styp") $
+                  withVar "resultVar" (ref freshNameDef) $ lets [
+                    "resultType">: Core.typeVariable $ var "resultVar",
+                    "domainType">: ref nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars")] $
+                  Flows.pure $ Core.typeFunction $ Core.functionType (var "domainType") (var "resultType"),
+
+                _Elimination_wrap>>: lambda "tname" $
+                  withVar "schemaType" (ref requireSchemaTypeDef @@ var "cx" @@ var "tname") $ lets [
+                    "svars">: Core.typeSchemeVariables $ var "schemaType",
+                    "styp">: Core.typeSchemeType $ var "schemaType"] $
+                  withVar "wtyp" (ref ExtractCore.wrappedTypeDef @@ var "tname" @@ var "styp") $
+                  Flows.pure $ Core.typeFunction $ Core.functionType
+                    (ref nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
+                    (var "wtyp")],
             _Function_lambda>>: lambda "l" $ lets [
               "x">: Core.lambdaParameter $ var "l",
               "mt">: Core.lambdaDomain $ var "l",

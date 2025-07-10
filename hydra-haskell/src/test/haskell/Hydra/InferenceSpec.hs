@@ -112,7 +112,83 @@ checkTypeOfAnnotatedTerms = H.describe "Annotated terms" $ do
 
 checkTypeOfApplications :: H.SpecWith ()
 checkTypeOfApplications = H.describe "Applications" $ do
-  return ()  -- TODO: implement
+  H.describe "Simple function applications" $ do
+    expectTypeOf "identity application"
+      (lambda "x" (var "x") @@ int32 42)
+      Types.int32
+    expectTypeOf "primitive application"
+      (primitive _math_add @@ int32 10 @@ int32 20)
+      Types.int32
+    expectTypeOf "string concatenation"
+      (primitive _strings_cat2 @@ string "hello" @@ string "world")
+      Types.string
+
+  H.describe "Partial applications" $ do
+    expectTypeOf "partially applied add"
+      (primitive _math_add @@ int32 5)
+      (Types.function Types.int32 Types.int32)
+    expectTypeOf "partially applied string cat"
+      (primitive _strings_cat2 @@ string "prefix")
+      (Types.function Types.string Types.string)
+
+  H.describe "Higher-order applications" $ do
+    expectTypeOf "apply function to function"
+      (lets ["apply">: lambda "f" $ lambda "x" $ var "f" @@ var "x",
+             "double">: lambda "n" $ primitive _math_mul @@ var "n" @@ int32 2] $
+            var "apply" @@ var "double" @@ int32 5)
+      Types.int32
+    expectTypeOf "function composition"
+      (lets ["compose">: lambda "f" $ lambda "g" $ lambda "x" $ var "f" @@ (var "g" @@ var "x"),
+             "add1">: lambda "n" $ primitive _math_add @@ var "n" @@ int32 1,
+             "mul2">: lambda "n" $ primitive _math_mul @@ var "n" @@ int32 2] $
+            var "compose" @@ var "add1" @@ var "mul2" @@ int32 3)
+      Types.int32
+
+  H.describe "Polymorphic applications" $ do
+    expectTypeOf "polymorphic identity"
+      (lets ["id">: lambda "x" $ var "x"] $
+            tuple [var "id" @@ int32 42, var "id" @@ string "hello"])
+      (Types.product [Types.int32, Types.string])
+    expectTypeOf "polymorphic const"
+      (lets ["const">: lambda "x" $ lambda "y" $ var "x"] $
+            var "const" @@ string "keep" @@ int32 999)
+      Types.string
+    expectTypeOf "polymorphic flip"
+      (lets ["flip">: lambda "f" $ lambda "x" $ lambda "y" $ var "f" @@ var "y" @@ var "x"] $
+            var "flip" @@ primitive _strings_cat2 @@ string "world" @@ string "hello")
+      Types.string
+
+  H.describe "Applications in complex contexts" $ do
+    expectTypeOf "application in tuple"
+      (tuple [primitive _math_add @@ int32 1 @@ int32 2,
+              primitive _strings_cat2 @@ string "a" @@ string "b"])
+      (Types.product [Types.int32, Types.string])
+    expectTypeOf "application in record"
+      (record testTypePersonName [
+        field "firstName" (primitive _strings_cat2 @@ string "John" @@ string "ny"),
+        field "lastName" (string "Doe"),
+        field "age" (primitive _math_add @@ int32 20 @@ int32 5)])
+      (Types.var "Person")
+    expectTypeOf "application in let binding"
+      (lets ["result">: primitive _math_mul @@ int32 6 @@ int32 7] $
+            var "result")
+      Types.int32
+    expectTypeOf "nested applications"
+      (primitive _math_add @@ (primitive _math_mul @@ int32 3 @@ int32 4) @@ (primitive _math_add @@ int32 1 @@ int32 2))
+      Types.int32
+
+  H.describe "Applications with complex arguments" $ do
+    expectTypeOf "application with record argument"
+      (lets ["getName">: lambda "person" $ project testTypePersonName (Name "firstName") @@ var "person"] $
+            var "getName" @@ record testTypePersonName [
+              field "firstName" (string "Alice"),
+              field "lastName" (string "Smith"),
+              field "age" (int32 25)])
+      Types.string
+    expectTypeOf "application with list argument"
+      (lets ["head">: lambda "xs" $ primitive _lists_head @@ var "xs"] $
+            var "head" @@ list [string "first", string "second"])
+      Types.string
 
 checkTypeOfFunctions :: H.SpecWith ()
 checkTypeOfFunctions = H.describe "Functions" $ do
