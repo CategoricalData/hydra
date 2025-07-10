@@ -1,17 +1,8 @@
--- | Entry point for "extension" models and coders which are not included in hydra-haskell
+-- | A collection of all Hydra sources provided in hydra-ext
 
 module Hydra.Ext.Sources.All where
 
 import Hydra.Kernel
-import Hydra.Codegen
-
-import Hydra.Ext.Staging.Cpp.Coder
-import Hydra.Ext.Staging.Graphql.Coder
-import Hydra.Ext.Staging.Java.Coder
-import Hydra.Ext.Staging.Pegasus.Coder
-import Hydra.Ext.Staging.Protobuf.Coder
-import Hydra.Ext.Staging.Python.Coder
-import Hydra.Ext.Staging.Scala.Coder
 
 import Hydra.Ext.Sources.Avro.Schema
 import Hydra.Ext.Sources.Cpp.Language
@@ -61,13 +52,6 @@ import Hydra.Ext.Sources.Tinkerpop.Gremlin
 import Hydra.Ext.Sources.TypeScript.Language
 import Hydra.Ext.Sources.TypeScript.Model
 import Hydra.Ext.Sources.Xml.Schema
-
-import qualified Control.Monad as CM
-import qualified System.FilePath as FP
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified System.Directory as SD
-import qualified Data.Maybe as Y
 
 
 hydraExtModules :: [Module]
@@ -124,24 +108,3 @@ gqlModules = [
   openGqlModule,
   pathAlgebraExpressionsModule,
   pathAlgebraSyntaxModule]
-
-writeCpp :: FP.FilePath -> [Module] -> IO ()
-writeCpp = generateSources moduleToCpp
-
-writeGraphql :: FP.FilePath -> [Module] -> IO ()
-writeGraphql = generateSources moduleToGraphql
-
-writeJava :: FP.FilePath -> [Module] -> IO ()
-writeJava = generateSources moduleToJava
-
-writePdl :: FP.FilePath -> [Module] -> IO ()
-writePdl = generateSources moduleToPdl
-
-writeProtobuf :: FP.FilePath -> [Module] -> IO ()
-writeProtobuf = generateSources moduleToProtobuf
-
-writePython :: FP.FilePath -> [Module] -> IO ()
-writePython = generateSources moduleToPython
-
-writeScala :: FP.FilePath -> [Module] -> IO ()
-writeScala = generateSources moduleToScala

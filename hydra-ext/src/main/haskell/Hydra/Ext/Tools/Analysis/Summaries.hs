@@ -7,7 +7,7 @@ import Hydra.Ext.Tools.Analysis
 import qualified Data.List as L
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Tools.Monads
-import Hydra.Codegen
+import Hydra.Generation
 import Hydra.Sources.Kernel.Types.All
 import Hydra.Sources.Kernel.Terms.All
 
@@ -17,7 +17,7 @@ flowToIo hydraCoreGraph (graphSummary True $ modulesToGraph kernelModules) >>= p
 module Hydra.Ext.Tools.Analysis.Summaries where
 
 import Hydra.Kernel
-import Hydra.Codegen
+import Hydra.Generation
 import Hydra.Sources.Kernel.Terms.All
 import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore

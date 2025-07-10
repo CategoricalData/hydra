@@ -1,6 +1,6 @@
 -- | Entry point for Hydra code generation utilities
 
-module Hydra.Codegen where
+module Hydra.Generation where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
