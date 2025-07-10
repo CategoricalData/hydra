@@ -49,6 +49,6 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         directory_path = sys.argv[1]
     else:
-        directory_path = "../../../../haskell/Hydra/Demos/GenPG"
+        directory_path = "../../../../haskell/Hydra/Ext/Demos/GenPG"
 
     process_csv_files(directory_path)

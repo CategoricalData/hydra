@@ -32,7 +32,7 @@ def run_demo_script(data_dir):
 
 def read_haskell_file(filename):
     """Read a Haskell file from the examples directory."""
-    base_path = "src/main/haskell/Hydra/Demos/GenPG"
+    base_path = "src/main/haskell/Hydra.Ext.Demos/GenPG"
     file_path = os.path.join(base_path, filename)
     
     if not os.path.exists(file_path):
@@ -78,7 +78,7 @@ I will first help you understand the framework by giving you the following:
 (4) A well-designed mapping for the Sales data, called generatedGraphMapping.
 After that, I will give you (5), a sample of the actual CSV data I need to map into the graph.
 Please give me three files: DatabaseSchema.hs, GraphSchema.hs and Mapping.hs, all in the package
-Hydra.Demos.GenPG.Generated, in the directory src/gen-main/haskell/Hydra/Demos/GenPG/Generated.
+Hydra.Ext.Demos.GenPG.Generated, in the directory src/gen-main/haskell/Hydra.Ext.Demos/GenPG/Generated.
 Feel free to ask any clarifying questions as needed before you generate the files.
 
 ################################################################################
