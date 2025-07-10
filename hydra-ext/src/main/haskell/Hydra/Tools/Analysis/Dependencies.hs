@@ -8,7 +8,7 @@ import Hydra.Kernel
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Sources.Kernel.Types.All
 import Hydra.Sources.Kernel.Terms.All
-import Hydra.Ext.Json.Serde
+import Hydra.Staging.Json.Serde
 import Hydra.Tools.Monads
 import Hydra.Tools.Analysis.Dependencies
 import Hydra.Codegen (modulesToGraph)
@@ -50,8 +50,8 @@ import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Show.Mantle as ShowMantle
 import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Json as Json
-import Hydra.Ext.Pg.Utils
-import Hydra.Ext.Pg.Graphson.Utils
+import Hydra.Staging.Pg.Utils
+import Hydra.Staging.Pg.Graphson.Utils
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

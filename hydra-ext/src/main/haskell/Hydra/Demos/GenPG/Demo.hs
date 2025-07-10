@@ -10,9 +10,9 @@ import Hydra.Demos.GenPG.Generated.Mapping
 import Hydra.Demos.GenPG.Transform
 import Hydra.Dsl.Tabular
 import Hydra.Dsl.Pg.Mappings
-import Hydra.Ext.Json.Serde
-import Hydra.Ext.Pg.Graphson.Utils
-import Hydra.Ext.Pg.Printing
+import Hydra.Staging.Json.Serde
+import Hydra.Staging.Pg.Graphson.Utils
+import Hydra.Staging.Pg.Printing
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Tools.Monads
 
