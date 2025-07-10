@@ -211,17 +211,89 @@ checkTypeOfLists = H.describe "Lists" $ do
 
 checkTypeOfLiterals :: H.SpecWith ()
 checkTypeOfLiterals = H.describe "Literals" $ do
-  H.describe "Integers" $ do
-    expectTypeOf "int32"
-      (int32 42)
-      Types.int32
+  H.describe "Boolean literals" $ do
+    expectTypeOf "true"
+      (boolean True)
+      Types.boolean
+    expectTypeOf "false"
+      (boolean False)
+      Types.boolean
+
+  H.describe "String literals" $ do
+    expectTypeOf "simple string"
+      (string "hello")
+      Types.string
+    expectTypeOf "empty string"
+      (string "")
+      Types.string
+    expectTypeOf "unicode string"
+      (string "café")
+      Types.string
+
+  H.describe "Integer literals" $ do
     expectTypeOf "bigint"
       (bigint 42)
       Types.bigint
-  H.describe "Strings" $ do
-    expectTypeOf "string"
-      (string "foo")
-      Types.string
+    expectTypeOf "int8"
+      (int8 127)
+      Types.int8
+    expectTypeOf "int16"
+      (int16 32767)
+      Types.int16
+    expectTypeOf "int32"
+      (int32 2147483647)
+      Types.int32
+    expectTypeOf "int64"
+      (int64 9223372036854775807)
+      Types.int64
+    expectTypeOf "uint8"
+      (uint8 255)
+      Types.uint8
+    expectTypeOf "uint16"
+      (uint16 65535)
+      Types.uint16
+    expectTypeOf "uint32"
+      (uint32 4294967295)
+      Types.uint32
+    expectTypeOf "uint64"
+      (uint64 18446744073709551615)
+      Types.uint64
+
+  H.describe "Float literals" $ do
+    expectTypeOf "bigfloat"
+      (bigfloat 3.14159)
+      Types.bigfloat
+    expectTypeOf "float32"
+      (float32 2.71828)
+      Types.float32
+    expectTypeOf "float64"
+      (float64 1.41421)
+      Types.float64
+
+  H.describe "Binary literals" $ do
+    expectTypeOf "binary"
+      (binary "SGVsbG8gV29ybGQ=")  -- "Hello World" in base64
+      Types.binary
+
+  H.describe "Literals in complex contexts" $ do
+    expectTypeOf "literals in tuple"
+      (tuple [boolean True, string "test", int32 42, float32 3.14])
+      (Types.product [Types.boolean, Types.string, Types.int32, Types.float32])
+    expectTypeOf "literals in list"
+      (list [string "one", string "two", string "three"])
+      (Types.list Types.string)
+    expectTypeOf "literals in record"
+      (record testTypePersonName [
+        field "firstName" (string "Alice"),
+        field "lastName" (string "Smith"),
+        field "age" (int32 30)])
+      (Types.var "Person")
+    expectTypeOf "literals in let binding"
+      (lets ["x">: int32 100,
+             "y">: string "hello",
+             "z">: boolean True] $
+            tuple [var "x", var "y", var "z"])
+      (Types.product [Types.int32, Types.string, Types.boolean])
 
 checkTypeOfMaps :: H.SpecWith ()
 checkTypeOfMaps = H.describe "Maps" $ do
