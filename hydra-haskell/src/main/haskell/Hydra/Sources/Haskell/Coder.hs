@@ -1,4 +1,4 @@
-module Hydra.Sources.Ext.Haskell.Coder where
+module Hydra.Sources.Haskell.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
@@ -79,10 +79,10 @@ import qualified Data.Maybe                                 as Y
 
 -- Additional imports
 import qualified Hydra.Ext.Haskell.Ast as H
-import qualified Hydra.Sources.Ext.Haskell.Language as HaskellLanguage
-import qualified Hydra.Sources.Ext.Haskell.Ast as HaskellAst
-import qualified Hydra.Sources.Ext.Haskell.Serde as HaskellSerde
-import qualified Hydra.Sources.Ext.Haskell.Utils as HaskellUtils
+import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
+import qualified Hydra.Sources.Haskell.Ast as HaskellAst
+import qualified Hydra.Sources.Haskell.Serde as HaskellSerde
+import qualified Hydra.Sources.Haskell.Utils as HaskellUtils
 
 
 type HaskellNamespaces = Namespaces H.ModuleName

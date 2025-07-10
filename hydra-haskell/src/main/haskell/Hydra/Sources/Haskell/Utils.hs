@@ -1,4 +1,4 @@
-module Hydra.Sources.Ext.Haskell.Utils where
+module Hydra.Sources.Haskell.Utils where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
@@ -78,8 +78,8 @@ import qualified Data.Set                                   as S
 import qualified Data.Maybe                                 as Y
 
 import qualified Hydra.Ext.Haskell.Ast as H
-import qualified Hydra.Sources.Ext.Haskell.Ast as HaskellAst
-import qualified Hydra.Sources.Ext.Haskell.Language as HaskellLanguage
+import qualified Hydra.Sources.Haskell.Ast as HaskellAst
+import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
 type HaskellNamespaces = Namespaces H.ModuleName

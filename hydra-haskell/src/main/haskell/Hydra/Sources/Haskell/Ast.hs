@@ -1,4 +1,4 @@
-module Hydra.Sources.Ext.Haskell.Ast where
+module Hydra.Sources.Haskell.Ast where
 
 import Hydra.Kernel
 import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
