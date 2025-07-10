@@ -11,7 +11,7 @@ import Hydra.Dsl.Lib.Lists as Lists
 import Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Describe.Core as DescribeCore
-import Hydra.Codegen
+import Hydra.Generation
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Lib.Strings as Strings
