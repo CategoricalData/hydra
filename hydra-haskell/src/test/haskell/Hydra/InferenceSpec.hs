@@ -225,7 +225,65 @@ checkTypeOfLiterals = H.describe "Literals" $ do
 
 checkTypeOfMaps :: H.SpecWith ()
 checkTypeOfMaps = H.describe "Maps" $ do
-  return ()  -- TODO: implement
+  H.describe "Monomorphic maps" $ do
+    expectTypeOf "empty map"
+      (Terms.map M.empty)
+      (Types.forAlls ["t1", "t0"] $ Types.map (Types.var "t0") (Types.var "t1"))
+    expectTypeOf "int to string map"
+      (Terms.map $ M.fromList [(int32 1, string "one"),
+                               (int32 2, string "two")])
+      (Types.map Types.int32 Types.string)
+    expectTypeOf "string to int map"
+      (Terms.map $ M.fromList [(string "a", int32 1),
+                               (string "b", int32 2)])
+      (Types.map Types.string Types.int32)
+    expectTypeOf "single entry map"
+      (Terms.map $ M.singleton (bigint 42) (boolean True))
+      (Types.map Types.bigint Types.boolean)
+
+  H.describe "Polymorphic maps" $ do
+    expectTypeOf "map from lambda keys"
+      (lambda "k" $ Terms.map $ M.singleton (var "k") (string "value"))
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.map (Types.var "t0") Types.string))
+    expectTypeOf "map from lambda values"
+      (lambda "v" $ Terms.map $ M.singleton (string "key") (var "v"))
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.map Types.string (Types.var "t0")))
+    expectTypeOf "map from lambda both"
+      (lambda "k" $ lambda "v" $ Terms.map $ M.singleton (var "k") (var "v"))
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.map (Types.var "t0") (Types.var "t1"))))
+    expectTypeOf "map with repeated variables"
+      (lambda "x" $ Terms.map $ M.singleton (var "x") (var "x"))
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.map (Types.var "t0") (Types.var "t0")))
+
+  H.describe "Maps in complex contexts" $ do
+    expectTypeOf "map in tuple"
+      (tuple [Terms.map $ M.singleton (int32 1) (string "one"),
+              string "context"])
+      (Types.product [Types.map Types.int32 Types.string, Types.string])
+    expectTypeOf "nested maps"
+      (Terms.map $ M.singleton (string "outer") (Terms.map $ M.singleton (int32 1) (boolean True)))
+      (Types.map Types.string (Types.map Types.int32 Types.boolean))
+    expectTypeOf "map in let binding"
+      (lets ["lookup">: Terms.map $ M.fromList [(string "key1", int32 100),
+                                                (string "key2", int32 200)]] $
+            var "lookup")
+      (Types.map Types.string Types.int32)
+
+  H.describe "Maps with complex types" $ do
+    expectTypeOf "map of records"
+      (Terms.map $ M.singleton (string "person1")
+                     (record testTypePersonName [
+                       field "firstName" (string "Alice"),
+                       field "lastName" (string "Smith"),
+                       field "age" (int32 25)]))
+      (Types.map Types.string (Types.var "Person"))
+    expectTypeOf "map of lists"
+      (Terms.map $ M.fromList [(int32 1, list [string "a", string "b"]),
+                               (int32 2, list [string "c", string "d"])])
+      (Types.map Types.int32 (Types.list Types.string))
+    expectTypeOf "map of tuples"
+      (Terms.map $ M.singleton (string "coords") (tuple [int32 10, int32 20]))
+      (Types.map Types.string (Types.product [Types.int32, Types.int32]))
 
 checkTypeOfOptionals :: H.SpecWith ()
 checkTypeOfOptionals = H.describe "Optionals" $ do
