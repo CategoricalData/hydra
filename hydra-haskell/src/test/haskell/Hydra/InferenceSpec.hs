@@ -839,7 +839,64 @@ checkTypeOfVariables = H.describe "Variables" $ do
 
 checkTypeOfWrappedTerms :: H.SpecWith ()
 checkTypeOfWrappedTerms = H.describe "Wrapped terms" $ do
-  return ()  -- TODO: implement
+  H.describe "Monomorphic wrapped terms" $ do
+    expectTypeOf "string alias"
+      (wrap testTypeStringAliasName (string "hello"))
+      (Types.var "StringTypeAlias")
+    expectTypeOf "wrapped integer"
+      (wrap testTypeStringAliasName (string "wrapped"))
+      (Types.var "StringTypeAlias")
+    expectTypeOf "wrapped in tuple"
+      (tuple [wrap testTypeStringAliasName (string "first"),
+              string "second"])
+      (Types.product [Types.var "StringTypeAlias", Types.string])
+
+  H.describe "Polymorphic wrapped terms" $ do
+    expectTypeOf "polymorphic wrapper with int"
+      (wrap testTypePolymorphicWrapperName (list [int32 1, int32 2]))
+      (Types.apply (Types.var "PolymorphicWrapper") Types.int32)
+    expectTypeOf "polymorphic wrapper with string"
+      (wrap testTypePolymorphicWrapperName (list [string "a", string "b"]))
+      (Types.apply (Types.var "PolymorphicWrapper") Types.string)
+    expectTypeOf "polymorphic wrapper from lambda"
+      (lambda "x" $ wrap testTypePolymorphicWrapperName (list [var "x"]))
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "PolymorphicWrapper") (Types.var "t0")))
+
+  H.describe "Wrapped terms in complex contexts" $ do
+    expectTypeOf "wrapped in record"
+      (record testTypePersonName [
+        field "firstName" (string "John"),
+        field "lastName" (string "Doe"),
+        field "age" (int32 30)])
+      (Types.var "Person")
+    expectTypeOf "wrapped in let binding"
+      (lets ["alias">: wrap testTypeStringAliasName (string "test")] $
+            var "alias")
+      (Types.var "StringTypeAlias")
+    expectTypeOf "wrapped in list"
+      (list [wrap testTypeStringAliasName (string "first"),
+             wrap testTypeStringAliasName (string "second")])
+      (Types.list $ Types.var "StringTypeAlias")
+
+  H.describe "Nested wrapped terms" $ do
+    expectTypeOf "wrapped tuple"
+      (wrap testTypePolymorphicWrapperName (list [tuple [int32 1, string "a"]]))
+      (Types.apply (Types.var "PolymorphicWrapper") (Types.product [Types.int32, Types.string]))
+    expectTypeOf "wrapped optional"
+      (wrap testTypePolymorphicWrapperName (list [optional $ Just $ int32 42]))
+      (Types.apply (Types.var "PolymorphicWrapper") (Types.optional Types.int32))
+    expectTypeOf "wrapped map"
+      (wrap testTypePolymorphicWrapperName (list [Terms.map $ M.singleton (string "key") (int32 42)]))
+      (Types.apply (Types.var "PolymorphicWrapper") (Types.map Types.string Types.int32))
+
+  H.describe "Multiple wrapping levels" $ do
+    expectTypeOf "wrapped in optional"
+      (optional $ Just $ wrap testTypeStringAliasName (string "wrapped"))
+      (Types.optional $ Types.var "StringTypeAlias")
+    expectTypeOf "list of wrapped polymorphic"
+      (list [wrap testTypePolymorphicWrapperName (list [int32 1]),
+             wrap testTypePolymorphicWrapperName (list [int32 2])])
+      (Types.list $ Types.apply (Types.var "PolymorphicWrapper") Types.int32)
 
 ----------------------------------------
 
