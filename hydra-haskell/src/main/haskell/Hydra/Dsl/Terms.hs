@@ -41,6 +41,11 @@ name>: term = field name term
 annot :: M.Map Name Term -> Term -> Term
 annot ann term = TermAnnotated $ AnnotatedTerm term ann
 
+-- | Attach an annotation to a term
+-- Example: annotated (var "userId") (M.fromList [(Name "comment", string "A User ID")])
+annotated :: Term -> M.Map Name Term -> Term
+annotated term ann = TermAnnotated $ AnnotatedTerm term ann
+
 -- | Apply a function term to an argument
 -- Example: apply (var "capitalize") (string "arthur")
 apply :: Term -> Term -> Term
