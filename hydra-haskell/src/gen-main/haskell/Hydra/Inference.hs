@@ -882,7 +882,7 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
     in (Flows.bind (Flows.bind (Flows.mapList (typeOf cx vars types) (Lists.map fst pairs)) (checkSameType "map keys")) (\kt -> Flows.bind (Flows.bind (Flows.mapList (typeOf cx vars types) (Lists.map snd pairs)) (checkSameType "map values")) (\vt -> Flows.bind (checkTypeVariables cx vars kt) (\_ -> Flows.bind (checkTypeVariables cx vars vt) (\_ -> Flows.pure (Core.TypeMap (Core.MapType {
       Core.mapTypeKeys = kt,
       Core.mapTypeValues = vt})))))))))
-  Core.TermOptional v1 -> (typeOfCollection cx "optional" (\x -> Core.TypeOptional x) vars types (Optionals.maybe [] Lists.singleton v1))
+  Core.TermOptional v1 -> (Optionals.maybe (Flows.fail "empty optional should only occur within a type application") (\term -> Flows.bind (typeOf cx vars types term) (\termType -> Flows.bind (checkTypeVariables cx vars termType) (\_ -> Flows.pure (Core.TypeOptional termType)))) v1)
   Core.TermProduct v1 -> (Flows.bind (Flows.mapList (typeOf cx vars types) v1) (\etypes -> Flows.bind (Flows.sequence (Lists.map (checkTypeVariables cx vars) etypes)) (\_ -> Flows.pure (Core.TypeProduct etypes))))
   Core.TermRecord v1 ->  
     let tname = (Core.recordTypeName v1) 
@@ -914,6 +914,7 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
                   (Core__.term term)]))) t1)))
     in ((\x -> case x of
       Core.TermList v2 -> (Logic.ifElse (Lists.null v2) (Flows.pure (Core.TypeList t)) dflt)
+      Core.TermOptional v2 -> (Optionals.maybe (Flows.pure (Core.TypeOptional t)) (\_ -> dflt) v2)
       Core.TermTypeApplication v2 ->  
         let e2 = (Core.typedTermTerm v2) 
             t2 = (Core.typedTermType v2)

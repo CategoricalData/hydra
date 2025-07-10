@@ -479,7 +479,74 @@ checkTypeOfMaps = H.describe "Maps" $ do
 
 checkTypeOfOptionals :: H.SpecWith ()
 checkTypeOfOptionals = H.describe "Optionals" $ do
-  return ()  -- TODO: implement
+  H.describe "Monomorphic optionals" $ do
+    expectTypeOf "nothing"
+      (optional Nothing)
+      (Types.forAll "t0" $ Types.optional $ Types.var "t0")
+    expectTypeOf "just int"
+      (optional $ Just $ int32 42)
+      (Types.optional Types.int32)
+    expectTypeOf "just string"
+      (optional $ Just $ string "hello")
+      (Types.optional Types.string)
+    expectTypeOf "just boolean"
+      (optional $ Just $ boolean True)
+      (Types.optional Types.boolean)
+
+  H.describe "Polymorphic optionals" $ do
+    expectTypeOf "optional from lambda"
+      (lambda "x" $ optional $ Just $ var "x")
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.optional $ Types.var "t0"))
+    expectTypeOf "nothing from lambda"
+      (lambda "x" $ optional Nothing)
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.optional $ Types.var "t1"))
+    expectTypeOf "conditional optional"
+      (lambda "x" $ lambda "flag" $
+        primitive _logic_ifElse @@ var "flag" @@
+          (optional $ Just $ var "x") @@
+          (optional Nothing))
+      (Types.forAlls ["t0"] $ Types.function (Types.var "t0") (Types.function Types.boolean (Types.optional $ Types.var "t0")))
+
+  H.describe "Optionals in complex contexts" $ do
+    expectTypeOf "optional in tuple"
+      (tuple [optional $ Just $ int32 100, string "context"])
+      (Types.product [Types.optional Types.int32, Types.string])
+    expectTypeOf "optional in record"
+      (record testTypeBuddyListAName [
+        field "head" (string "first"),
+        field "tail" (optional $ Just $ record testTypeBuddyListBName [
+          field "head" (string "second"),
+          field "tail" (optional Nothing)])])
+      (Types.apply (Types.var "BuddyListA") Types.string)
+    expectTypeOf "optional in let binding"
+      (lets ["maybeValue">: optional $ Just $ int32 42] $
+            var "maybeValue")
+      (Types.optional Types.int32)
+
+  H.describe "Nested optionals" $ do
+    expectTypeOf "optional of optional"
+      (optional $ Just $ optional $ Just $ string "nested")
+      (Types.optional $ Types.optional Types.string)
+    expectTypeOf "optional of list"
+      (optional $ Just $ list [int32 1, int32 2, int32 3])
+      (Types.optional $ Types.list Types.int32)
+    expectTypeOf "list of optionals"
+      (list [optional $ Just $ string "a", optional Nothing, optional $ Just $ string "b"])
+      (Types.list $ Types.optional Types.string)
+
+  H.describe "Optionals with complex types" $ do
+    expectTypeOf "optional record"
+      (optional $ Just $ record testTypePersonName [
+        field "firstName" (string "Alice"),
+        field "lastName" (string "Smith"),
+        field "age" (int32 30)])
+      (Types.optional $ Types.var "Person")
+    expectTypeOf "optional tuple"
+      (optional $ Just $ tuple [int32 10, string "test"])
+      (Types.optional $ Types.product [Types.int32, Types.string])
+    expectTypeOf "optional map"
+      (optional $ Just $ Terms.map $ M.singleton (string "key") (int32 42))
+      (Types.optional $ Types.map Types.string Types.int32)
 
 checkTypeOfProducts :: H.SpecWith ()
 checkTypeOfProducts = H.describe "Products" $ do

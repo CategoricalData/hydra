@@ -114,7 +114,6 @@ module_ = Module (Namespace "hydra.inference") elements
       el inferTypeOfVariableDef,
       el inferTypeOfWrappedTermDef,
       el inferTypesOfTemporaryLetBindingsDef,
---      el instantiateFTypeDef,
       el instantiateTypeSchemeDef,
       el isUnboundDef,
       el key_vcountDef,
@@ -996,14 +995,6 @@ inferTypesOfTemporaryLetBindingsDef = define "inferTypesOfTemporaryLetBindings" 
             (Lists.cons (ref Substitution.substInTypeDef @@ var "r" @@ var "u_prime") (var "r_prime"))
             (ref Substitution.composeTypeSubstDef @@ var "u" @@ var "r")))
 
--- Removed because this pattern is suspect; it throws away the type variables
---instantiateFTypeDef :: TElement (Type -> Flow s Type)
---instantiateFTypeDef = define "instantiateFType" $
---  doc "Instantiate a forall type with fresh variables" $
---  lambda "typ" $
---    withVar "ts" (ref instantiateTypeSchemeDef @@ (ref fTypeToTypeSchemeDef @@ var "typ")) $
---    Flows.pure $ Core.typeSchemeType $ var "ts"
-
 -- W: inst
 instantiateTypeSchemeDef :: TElement (TypeScheme -> Flow s TypeScheme)
 instantiateTypeSchemeDef = define "instantiateTypeScheme" $
@@ -1273,8 +1264,15 @@ typeOfDef = define "typeOf" $
              Flows.pure $ Core.typeMap $ Core.mapType (var "kt") (var "vt")),
 
         _Term_optional>>: lambda "mt" $
-          ref typeOfCollectionDef @@ var "cx" @@ string "optional" @@ (unaryFunction Core.typeOptional) @@ var "vars" @@ var "types" @@
-            (Optionals.maybe (list []) (unaryFunction Lists.singleton) $ var "mt"),
+          Optionals.maybe
+            -- Nothing case: should fail like empty lists
+            (Flows.fail $ string "empty optional should only occur within a type application")
+            -- Just case: infer type of the contained term
+            (lambda "term" $
+              withVar "termType" (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ var "term") $
+              withVar "_" (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "termType") $
+              Flows.pure $ Core.typeOptional $ var "termType")
+            (var "mt"),
 
         _Term_product>>: lambda "tuple" $
           withVar "etypes" (Flows.mapList (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types") (var "tuple")) $
@@ -1333,15 +1331,20 @@ typeOfDef = define "typeOf" $
               -- Empty lists are special
               (Flows.pure $ Core.typeList $ var "t")
               (var "dflt"),
-           _Term_typeApplication>>: lambda "tyapp2" $ lets [
+            _Term_optional>>: lambda "m" $ Optionals.maybe
+              -- 'Nothing' terms are special
+              (Flows.pure $ Core.typeOptional $ var "t")
+              (constant $ var "dflt")
+              (var "m"),
+            _Term_typeApplication>>: lambda "tyapp2" $ lets [
               "e2">: Core.typedTermTerm $ var "tyapp2",
               "t2">: Core.typedTermType $ var "tyapp2"] $
-            cases _Term (var "e2")
-              (Just $ var "dflt") [
-              _Term_map>>: lambda "m" $ Logic.ifElse (Maps.null $ var "m")
-                -- Empty maps are special
-                (Flows.pure $ Core.typeMap $ Core.mapType (var "t") (var "t2"))
-                (var "dflt")]],
+              cases _Term (var "e2")
+                (Just $ var "dflt") [
+                _Term_map>>: lambda "m" $ Logic.ifElse (Maps.null $ var "m")
+                  -- Empty maps are special
+                  (Flows.pure $ Core.typeMap $ Core.mapType (var "t") (var "t2"))
+                  (var "dflt")]],
 
         _Term_union>>: lambda "injection" $ lets [
           "tname">: Core.injectionTypeName $ var "injection",
@@ -1391,6 +1394,7 @@ typeOfDef = define "typeOf" $
           ref typeOfNominalDef @@ string "wrapper typeOf" @@ var "cx" @@ var "tname" @@
             (Core.typeWrap $ Core.wrappedType (var "tname") (var "innerType"))])
 
+-- TODO: deprecate/remove (or rewrite so that it can be called from all collection rules)
 typeOfCollectionDef :: TElement (InferenceContext -> String -> (Type -> Type) -> S.Set Name -> M.Map Name Type -> [Term] -> Flow s Type)
 typeOfCollectionDef = define "typeOfCollection" $
   doc "Infer the type of a collection of terms" $
