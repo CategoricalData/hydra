@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Ext.Other.PathAlgebra where
+module Hydra.Ext.Gql.PathAlgebra.Syntax where
 
 import Hydra.Kernel
 import Hydra.Sources.Kernel.Terms.All
@@ -29,11 +29,11 @@ import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
 import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
 
 
-pathAlgNs = Namespace "com.gdblab.pathalgebra"
+pathAlgNs = Namespace "com.gdblab.pathAlgebra.syntax"
 pathAlg = typeref pathAlgNs
 
-pathAlgebraModule :: Module
-pathAlgebraModule = Module pathAlgNs elements [Core.module_] [Core.module_] $
+pathAlgebraSyntaxModule :: Module
+pathAlgebraSyntaxModule = Module pathAlgNs elements [Core.module_] [Core.module_] $
     Just ("A syntax model for the path algebra grammar by Angles et al."
       ++ " See the paper \"Path-based Algebraic Foundations of Graph Query Languages\""
       ++ " and the ANTLR grammar at https://github.com/pathalgebra/AlgebraParser")
