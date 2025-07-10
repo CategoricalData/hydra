@@ -486,7 +486,11 @@ inferTypeOfLiteral _ lit = (Flows.pure (Typing_.InferenceResult {
   Typing_.inferenceResultSubst = Substitution.idTypeSubst}))
 
 inferTypeOfMap :: (Typing_.InferenceContext -> M.Map Core.Term Core.Term -> Compute.Flow t0 Typing_.InferenceResult)
-inferTypeOfMap cx m = (Flows.bind freshName (\kvar -> Flows.bind freshName (\vvar -> Logic.ifElse (Maps.null m) (Flows.pure (yield (Core.TermMap Maps.empty) (Core.TypeMap (Core.MapType {
+inferTypeOfMap cx m = (Flows.bind freshName (\kvar -> Flows.bind freshName (\vvar -> Logic.ifElse (Maps.null m) (Flows.pure (yield (Core.TermTypeApplication (Core.TypedTerm {
+  Core.typedTermTerm = (Core.TermTypeApplication (Core.TypedTerm {
+    Core.typedTermTerm = (Core.TermMap Maps.empty),
+    Core.typedTermType = (Core.TypeVariable vvar)})),
+  Core.typedTermType = (Core.TypeVariable kvar)})) (Core.TypeMap (Core.MapType {
   Core.mapTypeKeys = (Core.TypeVariable kvar),
   Core.mapTypeValues = (Core.TypeVariable vvar)})) Substitution.idTypeSubst)) (Flows.bind (inferMany cx (Lists.map (\k -> (k, "map key")) (Maps.keys m))) (\kresults ->  
   let kterms = (fst kresults) 
@@ -845,13 +849,7 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
         (Formatting.showList Core__.type_ btypes)]))))))))
   Core.TermList v1 -> (Logic.ifElse (Lists.null v1) (Flows.fail "empty list should only occur within a type application") (Flows.bind (Flows.mapList (typeOf cx vars types) v1) (\eltypes -> Flows.bind (checkSameType "list elements" eltypes) (\unifiedType -> Flows.bind (checkTypeVariables cx vars unifiedType) (\_ -> Flows.pure (Core.TypeList unifiedType))))))
   Core.TermLiteral v1 -> (Flows.pure (Core.TypeLiteral (Variants.literalType v1)))
-  Core.TermMap v1 -> (Logic.ifElse (Maps.null v1) (Flows.pure (typeSchemeToFType (Core.TypeScheme {
-    Core.typeSchemeVariables = [
-      Core.Name "k",
-      (Core.Name "v")],
-    Core.typeSchemeType = (Core.TypeMap (Core.MapType {
-      Core.mapTypeKeys = (Core.TypeVariable (Core.Name "k")),
-      Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}))) ( 
+  Core.TermMap v1 -> (Logic.ifElse (Maps.null v1) (Flows.fail "empty map should only occur within a type application") ( 
     let pairs = (Maps.toList v1)
     in (Flows.bind (Flows.bind (Flows.mapList (typeOf cx vars types) (Lists.map fst pairs)) (checkSameType "map keys")) (\kt -> Flows.bind (Flows.bind (Flows.mapList (typeOf cx vars types) (Lists.map snd pairs)) (checkSameType "map values")) (\vt -> Flows.bind (checkTypeVariables cx vars kt) (\_ -> Flows.bind (checkTypeVariables cx vars vt) (\_ -> Flows.pure (Core.TypeMap (Core.MapType {
       Core.mapTypeKeys = kt,
@@ -888,6 +886,14 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
                   (Core__.term term)]))) t1)))
     in ((\x -> case x of
       Core.TermList v2 -> (Logic.ifElse (Lists.null v2) (Flows.pure (Core.TypeList t)) dflt)
+      Core.TermTypeApplication v2 ->  
+        let e2 = (Core.typedTermTerm v2) 
+            t2 = (Core.typedTermType v2)
+        in ((\x -> case x of
+          Core.TermMap v3 -> (Logic.ifElse (Maps.null v3) (Flows.pure (Core.TypeMap (Core.MapType {
+            Core.mapTypeKeys = t,
+            Core.mapTypeValues = t2}))) dflt)
+          _ -> dflt) e2)
       _ -> dflt) e)
   Core.TermUnion v1 ->  
     let tname = (Core.injectionTypeName v1) 

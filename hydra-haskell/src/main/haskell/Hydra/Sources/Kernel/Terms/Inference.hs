@@ -682,8 +682,11 @@ inferTypeOfLetAfterNormalizationDef = define "inferTypeOfLetAfterNormalization" 
 inferTypeOfListDef :: TElement (InferenceContext -> [Term] -> Flow s InferenceResult)
 inferTypeOfListDef = define "inferTypeOfList" $
   doc "Infer the type of a list" $
-  lambda "cx" $
-    ref inferTypeOfCollectionDef @@ var "cx" @@ (unaryFunction Core.typeList) @@ (unaryFunction Core.termList) @@ string "list element"
+  lambda "cx" $ ref inferTypeOfCollectionDef
+    @@ var "cx"
+    @@ (unaryFunction Core.typeList)
+    @@ (unaryFunction Core.termList)
+    @@ string "list element"
 
 inferTypeOfLiteralDef :: TElement (InferenceContext -> Literal -> Flow s InferenceResult)
 inferTypeOfLiteralDef = define "inferTypeOfLiteral" $
@@ -701,12 +704,13 @@ inferTypeOfMapDef = define "inferTypeOfMap" $
     withVar "kvar" (ref freshNameDef) $
     withVar "vvar" (ref freshNameDef) $
     Logic.ifElse (Maps.null $ var "m")
-      -- TODO: get rid of this special case; it should follow from the general case
+      -- Special case: empty collection requires a type application term
       (Flows.pure $ ref yieldDef
-        @@ (Core.termMap Maps.empty)
+        @@ (Core.termTypeApplication $ Core.typedTerm (Core.termTypeApplication $ Core.typedTerm
+             (Core.termMap Maps.empty) (Core.typeVariable $ var "vvar")) (Core.typeVariable $ var "kvar"))
         @@ (Core.typeMap $ Core.mapType (Core.typeVariable $ var "kvar") (Core.typeVariable $ var "vvar"))
-        @@ ref Substitution.idTypeSubstDef)
-      (withVar "kresults" (ref inferManyDef @@ var "cx" @@
+        @@ ref Substitution.idTypeSubstDef) $
+      withVar "kresults" (ref inferManyDef @@ var "cx" @@
         (Lists.map (lambda "k" $ pair (var "k") (string "map key")) $ Maps.keys $ var "m")) $ lets [
           "kterms">: first $ var "kresults",
           "ktypes">: first $ second $ var "kresults",
@@ -723,7 +727,7 @@ inferTypeOfMapDef = define "inferTypeOfMap" $
               @@ (Core.termMap $ Maps.fromList $ Lists.zip (var "kterms") (var "vterms"))
               @@ (Core.typeMap $ Core.mapType (Core.typeVariable $ var "kvar") (Core.typeVariable $ var "vvar"))
               @@ (ref Substitution.composeTypeSubstListDef @@ list [var "ksubst", var "vsubst", var "subst"])) @@
-            (Lists.concat $ list [var "kcons", var "vcons"]))
+            (Lists.concat $ list [var "kcons", var "vcons"])
 
 inferTypeOfOptionalDef :: TElement (InferenceContext -> Maybe Term -> Flow s InferenceResult)
 inferTypeOfOptionalDef = define "inferTypeOfOptional" $
@@ -1213,7 +1217,8 @@ typeOfDef = define "typeOf" $
           Logic.ifElse (Lists.null $ var "els")
             (Flows.fail $ string "empty list should only occur within a type application")
             (withVar "eltypes" (Flows.mapList
-               (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types") (var "els")) $
+               (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types")
+               (var "els")) $
              withVar "unifiedType" (ref checkSameTypeDef @@ string "list elements" @@ var "eltypes") $
              -- Verify the unified type is well-formed in the current scope
              withVar "_" (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "unifiedType") $
@@ -1224,20 +1229,16 @@ typeOfDef = define "typeOf" $
 
         _Term_map>>: lambda "m" $
           Logic.ifElse (Maps.null $ var "m")
-            (Flows.pure $ ref typeSchemeToFTypeDef @@ (
-              Core.typeScheme (list [Core.name $ string "k", Core.name $ string "v"]) $
-                Core.typeMap $ Core.mapType
-                  (Core.typeVariable $ Core.name $ string "k")
-                  (Core.typeVariable $ Core.name $ string "v")))
+            (Flows.fail $ string "empty map should only occur within a type application")
             (lets [
               "pairs">: Maps.toList $ var "m"] $
-              withVar "kt" (Flows.bind (Flows.mapList (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types") $
-                Lists.map (unaryFunction first) (var "pairs")) (ref checkSameTypeDef @@ string "map keys")) $
-              withVar "vt" (Flows.bind (Flows.mapList (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types") $
-                Lists.map (unaryFunction second) (var "pairs")) (ref checkSameTypeDef @@ string "map values")) $
-              withVar "_" (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "kt") $
-              withVar "_" (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "vt") $
-              Flows.pure $ Core.typeMap $ Core.mapType (var "kt") (var "vt")),
+             withVar "kt" (Flows.bind (Flows.mapList (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types") $
+               Lists.map (unaryFunction first) (var "pairs")) (ref checkSameTypeDef @@ string "map keys")) $
+             withVar "vt" (Flows.bind (Flows.mapList (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types") $
+               Lists.map (unaryFunction second) (var "pairs")) (ref checkSameTypeDef @@ string "map values")) $
+             withVar "_" (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "kt") $
+             withVar "_" (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "vt") $
+             Flows.pure $ Core.typeMap $ Core.mapType (var "kt") (var "vt")),
 
         _Term_optional>>: lambda "mt" $
           ref typeOfCollectionDef @@ var "cx" @@ string "optional" @@ (unaryFunction Core.typeOptional) @@ var "vars" @@ var "types" @@
@@ -1299,7 +1300,16 @@ typeOfDef = define "typeOf" $
             _Term_list>>: lambda "els" $ Logic.ifElse (Lists.null $ var "els")
               -- Empty lists are special
               (Flows.pure $ Core.typeList $ var "t")
-              (var "dflt")],
+              (var "dflt"),
+           _Term_typeApplication>>: lambda "tyapp2" $ lets [
+              "e2">: Core.typedTermTerm $ var "tyapp2",
+              "t2">: Core.typedTermType $ var "tyapp2"] $
+            cases _Term (var "e2")
+              (Just $ var "dflt") [
+              _Term_map>>: lambda "m" $ Logic.ifElse (Maps.null $ var "m")
+                -- Empty maps are special
+                (Flows.pure $ Core.typeMap $ Core.mapType (var "t") (var "t2"))
+                (var "dflt")]],
 
         _Term_union>>: lambda "injection" $ lets [
           "tname">: Core.injectionTypeName $ var "injection",
