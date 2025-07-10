@@ -190,7 +190,10 @@ checkTypeOfApplications = H.describe "Applications" $ do
 
 checkTypeOfEliminations :: H.SpecWith ()
 checkTypeOfEliminations = H.describe "Eliminations" $ do
-  return ()  -- TODO: implement
+  checkTypeOfProductEliminations
+  checkTypeOfRecordEliminations
+  checkTypeOfUnionEliminations
+--  checkTypeOfWrapEliminations TODO: restore me
 
 checkTypeOfFunctions :: H.SpecWith ()
 checkTypeOfFunctions = H.describe "Functions" $ do
@@ -740,6 +743,10 @@ checkTypeOfProducts = H.describe "Products" $ do
       (lambda "x" $ tuple [tuple [var "x"], tuple [string "test"]])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.product [Types.product [Types.var "t0"], Types.product [Types.string]]))
 
+checkTypeOfProductEliminations :: H.SpecWith ()
+checkTypeOfProductEliminations = H.describe "Product eliminations" $ do
+  return ()  -- TODO: implement
+
 checkTypeOfRecords :: H.SpecWith ()
 checkTypeOfRecords = H.describe "Records" $ do
   H.describe "Monomorphic records" $ do
@@ -827,6 +834,10 @@ checkTypeOfRecords = H.describe "Records" $ do
             field "tail" (optional Nothing)])])
       (Types.var "IntList")
 
+checkTypeOfRecordEliminations :: H.SpecWith ()
+checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
+  return ()  -- TODO: implement
+
 checkTypeOfSets :: H.SpecWith ()
 checkTypeOfSets = H.describe "Sets" $ do
   H.describe "Monomorphic sets" $ do
@@ -900,6 +911,10 @@ checkTypeOfSums = H.describe "Sums" $ do
 
 checkTypeOfUnions :: H.SpecWith ()
 checkTypeOfUnions = H.describe "Unions" $ do
+  return ()  -- TODO: implement
+
+checkTypeOfUnionEliminations :: H.SpecWith ()
+checkTypeOfUnionEliminations = H.describe "Union eliminations" $ do
   return ()  -- TODO: implement
 
 checkTypeOfUnit :: H.SpecWith ()
@@ -1055,6 +1070,58 @@ checkTypeOfWrappedTerms = H.describe "Wrapped terms" $ do
       (list [wrap testTypePolymorphicWrapperName (list [int32 1]),
              wrap testTypePolymorphicWrapperName (list [int32 2])])
       (Types.list $ Types.apply (Types.var "PolymorphicWrapper") Types.int32)
+
+checkTypeOfWrapEliminations :: H.SpecWith ()
+checkTypeOfWrapEliminations = H.describe "Wrap eliminations" $ do
+  H.describe "Monomorphic unwrapping" $ do
+    expectTypeOf "unwrap string alias"
+      (unwrap testTypeStringAliasName)
+      (Types.function (Types.var "StringTypeAlias") Types.string)
+
+  H.describe "Polymorphic unwrapping" $ do
+    expectTypeOf "unwrap polymorphic wrapper"
+      (unwrap testTypePolymorphicWrapperName)
+      (Types.forAll "t0" $ Types.function (Types.apply (Types.var "PolymorphicWrapper") (Types.var "t0")) (Types.list $ Types.var "t0"))
+
+  H.describe "Unwrap eliminations in applications" $ do
+    expectTypeOf "unwrap applied to wrapped term"
+      (unwrap testTypeStringAliasName @@ wrap testTypeStringAliasName (string "hello"))
+      Types.string
+    expectTypeOf "unwrap polymorphic applied"
+      (unwrap testTypePolymorphicWrapperName @@ wrap testTypePolymorphicWrapperName (list [int32 1, int32 2]))
+      (Types.list Types.int32)
+
+  H.describe "Unwrap in complex contexts" $ do
+    expectTypeOf "unwrap in let binding"
+      (lets ["unwrapper">: unwrap testTypeStringAliasName,
+             "wrapped">: wrap testTypeStringAliasName (string "test")] $
+            var "unwrapper" @@ var "wrapped")
+      Types.string
+    expectTypeOf "unwrap in tuple"
+      (tuple [unwrap testTypeStringAliasName, string "context"])
+      (Types.product [Types.function (Types.var "StringTypeAlias") Types.string, Types.string])
+    expectTypeOf "unwrap in lambda"
+      (lambda "wrapped" $ unwrap testTypeStringAliasName @@ var "wrapped")
+      (Types.function (Types.var "StringTypeAlias") Types.string)
+
+  H.describe "Chained unwrapping" $ do
+    expectTypeOf "unwrap then process"
+      (lambda "wrapped" $
+       primitive _strings_cat2 @@ (unwrap testTypeStringAliasName @@ var "wrapped") @@ string " suffix")
+      (Types.function (Types.var "StringTypeAlias") Types.string)
+    expectTypeOf "unwrap polymorphic then map"
+      (lambda "wrappedList" $
+       primitive _lists_map @@ (primitive _math_add @@ int32 1) @@ (unwrap testTypePolymorphicWrapperName @@ var "wrappedList"))
+      (Types.function (Types.apply (Types.var "PolymorphicWrapper") Types.int32) (Types.list Types.int32))
+
+  H.describe "Multiple unwrap operations" $ do
+    expectTypeOf "unwrap different types"
+      (lambda "stringWrapped" $ lambda "listWrapped" $
+       tuple [unwrap testTypeStringAliasName @@ var "stringWrapped",
+              unwrap testTypePolymorphicWrapperName @@ var "listWrapped"])
+      (Types.forAll "t0" $ Types.function (Types.var "StringTypeAlias")
+        (Types.function (Types.apply (Types.var "PolymorphicWrapper") (Types.var "t0"))
+          (Types.product [Types.string, Types.list $ Types.var "t0"])))
 
 ----------------------------------------
 

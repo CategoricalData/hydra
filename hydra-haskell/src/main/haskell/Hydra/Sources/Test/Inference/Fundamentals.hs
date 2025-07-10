@@ -260,7 +260,7 @@ testGroupForLet = supergroup "Let terms" [
           "inst">: var "rec" @@ (lambda "x" false) @@ false,
           "rec">: lambda "f" $ lambda "b0" $ var "f" @@ (var "rec" @@ var "f" @@ var "b0")] $
           pair (var "inst") (var "rec"))
-        ["t0", "t1"] (T.pair T.boolean (T.functionMany [T.function (T.var "t1") (T.var "t1"), T.var "t0", T.var "t1"])),
+        ["t0", "t1"] (T.pair T.boolean (T.functionMany [T.function (T.var "t0") (T.var "t0"), T.var "t1", T.var "t0"])),
       expectPoly 3 [tag_disabledForMinimalInference] -- Try with GHC:    :t let inst = rec (\x -> False); rec = \f -> f (rec f) in (inst, rec)
         (lets [
           "inst">: var "rec" @@ (lambda "x" false),

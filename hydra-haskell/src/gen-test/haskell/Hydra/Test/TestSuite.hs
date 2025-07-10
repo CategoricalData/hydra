@@ -2264,11 +2264,11 @@ inferenceTests = Testing.TestGroup {
                         Core.TypeLiteral Core.LiteralTypeBoolean,
                         (Core.TypeFunction (Core.FunctionType {
                           Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
-                            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
-                            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))})),
-                          Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))])}})),
+                            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
+                          Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
+                            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}))])}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForMinimalInference"]},
