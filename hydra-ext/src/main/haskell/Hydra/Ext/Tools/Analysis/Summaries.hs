@@ -18,7 +18,7 @@ module Hydra.Ext.Tools.Analysis.Summaries where
 
 import Hydra.Kernel
 import Hydra.Generation
-import Hydra.Sources.Kernel.Terms.All
+import Hydra.Ext.Sources.All
 import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Describe.Core as DescribeCore
