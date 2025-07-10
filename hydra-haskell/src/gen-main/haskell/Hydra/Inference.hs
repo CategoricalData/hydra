@@ -644,9 +644,20 @@ inferTypeOfUnwrap :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 T
 inferTypeOfUnwrap cx tname = (Flows.bind (requireSchemaType cx tname) (\schemaType ->  
   let svars = (Core.typeSchemeVariables schemaType) 
       styp = (Core.typeSchemeType schemaType)
-  in (Flows.bind (Core_.wrappedType tname styp) (\wtyp -> Flows.pure (yield (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap tname))) (Core.TypeFunction (Core.FunctionType {
-    Core.functionTypeDomain = (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
-    Core.functionTypeCodomain = wtyp})) Substitution.idTypeSubst)))))
+  in (Flows.bind (Core_.wrappedType tname styp) (\wtyp -> Logic.ifElse (Lists.null svars) (Flows.pure (yield (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap tname))) (Core.TypeFunction (Core.FunctionType {
+    Core.functionTypeDomain = (Core.TypeVariable tname),
+    Core.functionTypeCodomain = wtyp})) Substitution.idTypeSubst)) ( 
+    let innerType = (Core.TypeFunction (Core.FunctionType {
+            Core.functionTypeDomain = (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
+            Core.functionTypeCodomain = wtyp})) 
+        polyType = (Lists.foldl (\body -> \var -> Core.TypeForall (Core.ForallType {
+                Core.forallTypeParameter = var,
+                Core.forallTypeBody = body})) innerType (Lists.reverse svars))
+        innerTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap tname)))
+        polyTerm = (Lists.foldl (\body -> \var -> Core.TermTypeAbstraction (Core.TypeAbstraction {
+                Core.typeAbstractionParameter = var,
+                Core.typeAbstractionBody = body})) innerTerm (Lists.reverse svars))
+    in (Flows.pure (yield polyTerm polyType Substitution.idTypeSubst)))))))
 
 inferTypeOfVariable :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfVariable cx name = (Optionals.maybe (Flows.fail (Strings.cat2 "Variable not bound to type: " (Core.unName name))) (\scheme -> Flows.bind (instantiateTypeScheme scheme) (\ts ->  
@@ -841,11 +852,12 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
               Core.functionTypeDomain = domainType,
               Core.functionTypeCodomain = resultType}))))))))
       Core.EliminationWrap v3 -> (Flows.bind (requireSchemaType cx v3) (\schemaType ->  
-        let svars = (Core.typeSchemeVariables schemaType) 
-            styp = (Core.typeSchemeType schemaType)
-        in (Flows.bind (Core_.wrappedType v3 styp) (\wtyp -> Flows.pure (Core.TypeFunction (Core.FunctionType {
-          Core.functionTypeDomain = (nominalApplication v3 (Lists.map (\x -> Core.TypeVariable x) svars)),
-          Core.functionTypeCodomain = wtyp}))))))) v2)
+        let svars = (Core.typeSchemeVariables schemaType)
+        in (Logic.ifElse (Lists.null svars) ( 
+          let styp = (Core.typeSchemeType schemaType)
+          in (Flows.bind (Core_.wrappedType v3 styp) (\wtyp -> Flows.pure (Core.TypeFunction (Core.FunctionType {
+            Core.functionTypeDomain = (Core.TypeVariable v3),
+            Core.functionTypeCodomain = wtyp}))))) (Flows.fail "polymorphic wrap elimination should only occur within a type application"))))) v2)
     Core.FunctionLambda v2 ->  
       let x = (Core.lambdaParameter v2) 
           mt = (Core.lambdaDomain v2)
