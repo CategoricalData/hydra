@@ -200,7 +200,76 @@ checkTypeOfFunctions = H.describe "Functions" $ do
 
 checkTypeOfLambdas :: H.SpecWith ()
 checkTypeOfLambdas = H.describe "Lambdas" $ do
-  return ()  -- TODO: implement
+  H.describe "Simple lambdas" $ do
+    expectTypeOf "identity function"
+      (lambda "x" $ var "x")
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
+    expectTypeOf "constant function"
+      (lambda "x" $ int32 42)
+      (Types.forAll "t0" $ Types.function (Types.var "t0") Types.int32)
+
+  H.describe "Multi-parameter lambdas" $ do
+    expectTypeOf "two parameters"
+      (lambda "x" $ lambda "y" $ var "x")
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.var "t0")))
+    expectTypeOf "three parameters"
+      (lambda "x" $ lambda "y" $ lambda "z" $ var "y")
+      (Types.forAlls ["t2", "t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.function (Types.var "t2") (Types.var "t1"))))
+    expectTypeOf "parameter reuse"
+      (lambda "x" $ lambda "y" $ tuple [var "x", var "x", var "y"])
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t0", Types.var "t1"])))
+
+  H.describe "Lambdas with operations" $ do
+    expectTypeOf "lambda with primitive"
+      (lambda "x" $ primitive _math_add @@ var "x" @@ int32 1)
+      (Types.function Types.int32 Types.int32)
+    expectTypeOf "lambda with application"
+      (lambda "f" $ lambda "x" $ var "f" @@ var "x")
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.function (Types.var "t0") (Types.var "t1")) (Types.function (Types.var "t0") (Types.var "t1")))
+    expectTypeOf "lambda with construction"
+      (lambda "x" $ lambda "y" $ tuple [var "x", var "y"])
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t1"])))
+
+  H.describe "Nested lambdas" $ do
+    expectTypeOf "lambda returning lambda"
+      (lambda "x" $ lambda "y" $ lambda "z" $ var "x")
+      (Types.forAlls ["t2", "t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.function (Types.var "t2") (Types.var "t0"))))
+    expectTypeOf "lambda with let binding"
+      (lambda "x" $ lets ["y">: var "x"] $ var "y")
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
+    expectTypeOf "lambda with inner lambda"
+      (lambda "outer" $ lets ["inner">: lambda "x" $ var "x"] $ var "inner" @@ var "outer")
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
+
+  H.describe "Lambdas in complex contexts" $ do
+    expectTypeOf "lambda in tuple"
+      (tuple [lambda "x" $ var "x", int32 42])
+      (Types.forAll "t0" $ Types.product [Types.function (Types.var "t0") (Types.var "t0"), Types.int32])
+    expectTypeOf "lambda in list"
+      (list [lambda "x" $ primitive _math_add @@ var "x" @@ int32 1,
+             lambda "y" $ primitive _math_mul @@ var "y" @@ int32 2])
+      (Types.list $ Types.function Types.int32 Types.int32)
+    expectTypeOf "lambda in record"
+      (lambda "name" $ record testTypePersonName [
+        field "firstName" (var "name"),
+        field "lastName" (string "Doe"),
+        field "age" (int32 30)])
+      (Types.function Types.string (Types.var "Person"))
+
+  H.describe "Higher-order lambdas" $ do
+    expectTypeOf "function composition"
+      (lambda "f" $ lambda "g" $ lambda "x" $ var "f" @@ (var "g" @@ var "x"))
+      (Types.forAlls ["t2", "t1", "t0"] $ Types.function
+        (Types.function (Types.var "t0") (Types.var "t1"))
+        (Types.function
+          (Types.function (Types.var "t2") (Types.var "t0"))
+          (Types.function (Types.var "t2") (Types.var "t1"))))
+    expectTypeOf "function application"
+      (lambda "f" $ lambda "x" $ var "f" @@ var "x")
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.function (Types.var "t0") (Types.var "t1")) (Types.function (Types.var "t0") (Types.var "t1")))
+    expectTypeOf "curried function"
+      (lambda "x" $ lambda "y" $ lambda "z" $ primitive _logic_ifElse @@ var "x" @@ var "y" @@ var "z")
+      (Types.forAll "t0" $ Types.function Types.boolean (Types.function (Types.var "t0") (Types.function (Types.var "t0") (Types.var "t0"))))
 
 checkTypeOfLetTerms :: H.SpecWith ()
 checkTypeOfLetTerms = H.describe "Let terms" $ do
