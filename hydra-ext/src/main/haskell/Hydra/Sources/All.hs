@@ -6,13 +6,28 @@ import Hydra.Kernel
 import Hydra.Codegen
 
 import Hydra.Ext.Cpp.Coder
+import Hydra.Ext.Graphql.Coder
+import Hydra.Ext.Java.Coder
+import Hydra.Ext.Pegasus.Coder
+import Hydra.Ext.Protobuf.Coder
+import Hydra.Ext.Python.Coder
+import Hydra.Ext.Scala.Coder
+
+import Hydra.Sources.Ext.Avro.Schema
+import Hydra.Sources.Ext.Cpp.Language
+import Hydra.Sources.Ext.Cpp.Syntax
+import Hydra.Sources.Ext.Csharp.Language
+import Hydra.Sources.Ext.Csharp.Syntax
+import Hydra.Sources.Ext.Cypher.Features
+import Hydra.Sources.Ext.Cypher.OpenCypher
 import Hydra.Sources.Ext.Delta.Parquet
 import Hydra.Sources.Ext.Gql.OpenGql
 import Hydra.Sources.Ext.Gql.PathAlgebra.Expressions
 import Hydra.Sources.Ext.Gql.PathAlgebra.Syntax
-import Hydra.Ext.Graphql.Coder
+import Hydra.Sources.Ext.Graphql.Syntax
 import Hydra.Sources.Ext.Graphviz.Dot
-import Hydra.Ext.Java.Coder
+import Hydra.Sources.Ext.Java.Language
+import Hydra.Sources.Ext.Java.Syntax
 import Hydra.Sources.Ext.Kusto.Kql
 import Hydra.Sources.Ext.Other.Atlas
 import Hydra.Sources.Ext.Other.AzureDtld
@@ -24,14 +39,27 @@ import Hydra.Sources.Ext.Other.Osv
 import Hydra.Sources.Ext.Other.StacItems
 import Hydra.Sources.Ext.Owl.Syntax
 import Hydra.Sources.Ext.Parquet.Format
-import Hydra.Ext.Pegasus.Coder
-import Hydra.Ext.Protobuf.Coder
-import Hydra.Ext.Python.Coder
-import Hydra.Ext.Scala.Coder
+import Hydra.Sources.Ext.Pegasus.Pdl
+import Hydra.Sources.Ext.Pg.Graphson.Syntax
+import Hydra.Sources.Ext.Pg.Mapping
+import Hydra.Sources.Ext.Pg.Model
+import Hydra.Sources.Ext.Pg.Query
+import Hydra.Sources.Ext.Pg.Validation
+import Hydra.Sources.Ext.Protobuf.Any
+import Hydra.Sources.Ext.Protobuf.Language
+import Hydra.Sources.Ext.Protobuf.Proto3
+import Hydra.Sources.Ext.Protobuf.SourceContext
+import Hydra.Sources.Ext.Python.Language
+import Hydra.Sources.Ext.Python.Syntax
+import Hydra.Sources.Ext.Rdf.Syntax
+import Hydra.Sources.Ext.Scala.Meta
+import Hydra.Sources.Ext.Shacl.Model
 import Hydra.Sources.Ext.Shex.Syntax
 import Hydra.Sources.Ext.Sql.Ansi
 import Hydra.Sources.Ext.Tinkerpop.Features
 import Hydra.Sources.Ext.Tinkerpop.Gremlin
+import Hydra.Sources.Ext.TypeScript.Language
+import Hydra.Sources.Ext.TypeScript.Model
 import Hydra.Sources.Ext.Xml.Schema
 
 import qualified Control.Monad as CM
@@ -43,28 +71,57 @@ import qualified Data.Maybe as Y
 
 
 hydraExtModules :: [Module]
-hydraExtModules = [
-  atlasModelModule,
-  coqSyntaxModule,
-  datalogSyntaxModule,
-  deltaParquetModule,
-  dotModule,
-  dtldModule,
-  geoJsonModule,
-  gremlinModule,
-  ianaRelationsModule,
-  kqlModule,
-  openGqlModule,
-  osvSchemaModule,
-  owlSyntaxModule,
-  parquetFormatModule,
-  shexSyntaxModule,
-  sqlModule,
-  stacModule,
-  tinkerpopFeaturesModule,
-  xmlSchemaModule] ++ gqlModules
+hydraExtModules = otherModules ++ gqlModules
+  where
+    otherModules = [
+      atlasModelModule,
+      avroSchemaModule,
+      coqSyntaxModule,
+      cppLanguageModule,
+      cppSyntaxModule,
+      csharpLanguageModule,
+      csharpSyntaxModule,
+      datalogSyntaxModule,
+      deltaParquetModule,
+      dotModule,
+      dtldModule,
+      geoJsonModule,
+      graphqlSyntaxModule,
+      graphsonSyntaxModule,
+      gremlinModule,
+      ianaRelationsModule,
+      javaLanguageModule,
+      javaSyntaxModule,
+      kqlModule,
+      openCypherFeaturesModule,
+      openCypherModule,
+      osvSchemaModule,
+      owlSyntaxModule,
+      parquetFormatModule,
+      pegasusPdlModule,
+      pgMappingModule,
+      pgModelModule,
+      pgQueryModule,
+      pgValidationModule,
+      proto3Module,
+      protobufAnyModule,
+      protobufLanguageModule,
+      protobufSourceContextModule,
+      pythonLanguageModule,
+      pythonSyntaxModule,
+      rdfSyntaxModule,
+      scalaMetaModule,
+      shaclModelModule,
+      shexSyntaxModule,
+      sqlModule,
+      stacModule,
+      tinkerpopFeaturesModule,
+      typeScriptLanguageModule,
+      typeScriptModelModule,
+      xmlSchemaModule]
 
 gqlModules = [
+  openGqlModule,
   pathAlgebraExpressionsModule,
   pathAlgebraSyntaxModule]
 
