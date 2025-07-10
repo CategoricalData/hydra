@@ -1,11 +1,11 @@
-module Hydra.Ext.Json.Schema.Serde(
+module Hydra.Staging.Json.Schema.Serde(
   jsonSchemaDocumentToJsonValue,
   jsonSchemaDocumentToString
 ) where
 
 import qualified Hydra.Ext.Org.Json.Schema as JS
 import qualified Hydra.Json as J
-import Hydra.Ext.Json.Serde
+import Hydra.Staging.Json.Serde
 
 import qualified Data.List as L
 import qualified Data.Map as M

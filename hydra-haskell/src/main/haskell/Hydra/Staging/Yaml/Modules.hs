@@ -1,9 +1,9 @@
-module Hydra.Ext.Yaml.Modules (moduleToYaml) where
+module Hydra.Staging.Yaml.Modules (moduleToYaml) where
 
 import Hydra.Kernel
 import Hydra.Adapt.Modules
-import Hydra.Ext.Yaml.Serde
-import Hydra.Ext.Yaml.Language
+import Hydra.Staging.Yaml.Serde
+import Hydra.Staging.Yaml.Language
 import qualified Hydra.Ext.Org.Yaml.Model as YM
 import qualified Hydra.Dsl.Types as Types
 

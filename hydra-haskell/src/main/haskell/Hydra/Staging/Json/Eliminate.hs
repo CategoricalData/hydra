@@ -1,4 +1,4 @@
-module Hydra.Ext.Json.Eliminate where
+module Hydra.Staging.Json.Eliminate where
 
 import Hydra.Kernel
 import qualified Hydra.Json as Json

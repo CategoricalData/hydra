@@ -1,8 +1,8 @@
-module Hydra.Ext.Yaml.CoderSpec where
+module Hydra.Staging.Yaml.CoderSpec where
 
 import Hydra.Kernel
 import Hydra.Dsl.Terms
-import Hydra.Ext.Yaml.Coder
+import Hydra.Staging.Yaml.Coder
 import qualified Hydra.Ext.Org.Yaml.Model as YM
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Tests

@@ -1,9 +1,9 @@
-module Hydra.Ext.Json.Serde where
+module Hydra.Staging.Json.Serde where
 
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
-import Hydra.Ext.Json.Coder
+import Hydra.Staging.Json.Coder
 import Hydra.Tools.Bytestrings
 import qualified Hydra.Json as Json
 
