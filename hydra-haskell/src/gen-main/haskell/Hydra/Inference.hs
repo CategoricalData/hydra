@@ -37,7 +37,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-bindConstraints :: (Typing_.InferenceContext -> (Typing_.TypeSubst -> Compute.Flow t1 t0) -> [Typing_.TypeConstraint] -> Compute.Flow t1 t0)
+bindConstraints :: (Typing_.InferenceContext -> (Typing_.TypeSubst -> Compute.Flow t0 t1) -> [Typing_.TypeConstraint] -> Compute.Flow t0 t1)
 bindConstraints cx f constraints = (Flows.bind (Unification.unifyTypeConstraints (Typing_.inferenceContextSchemaTypes cx) constraints) f)
 
 checkType :: (S.Set Core.Name -> Typing_.InferenceContext -> Core.Type -> Core.Term -> Compute.Flow t0 ())
@@ -114,7 +114,7 @@ gatherForall vars typ = ((\x -> case x of
 -- | Generalize a type to a type scheme
 generalize :: (Typing_.InferenceContext -> Core.Type -> Core.TypeScheme)
 generalize cx typ =  
-  let vars = (Lists.nub (Lists.filter (isUnbound cx) (Sets.toList (Rewriting.freeVariablesInType typ))))
+  let vars = (Lists.nub (Lists.filter (isUnbound cx) (Rewriting.freeVariablesInTypeOrdered typ)))
   in Core.TypeScheme {
     Core.typeSchemeVariables = vars,
     Core.typeSchemeType = typ}
@@ -654,7 +654,7 @@ inferTypeOfVariable cx name = (Optionals.maybe (Flows.fail (Strings.cat2 "Variab
       itype = (Core.typeSchemeType ts)
       iterm = (Lists.foldl (\t -> \ty -> Core.TermTypeApplication (Core.TypedTerm {
               Core.typedTermTerm = t,
-              Core.typedTermType = ty})) (Core.TermVariable name) (Lists.map (\x -> Core.TypeVariable x) vars))
+              Core.typedTermType = ty})) (Core.TermVariable name) (Lists.map (\x -> Core.TypeVariable x) (Lists.reverse vars)))
   in (Flows.pure (Typing_.InferenceResult {
     Typing_.inferenceResultTerm = iterm,
     Typing_.inferenceResultType = itype,
@@ -817,7 +817,35 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
           "untyped tuple projection: ",
           (Core__.term term)])) (\types -> Flows.bind (Flows.sequence (Lists.map (checkTypeVariables cx vars) types)) (\_ -> Flows.pure (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = (Core.TypeProduct types),
-          Core.functionTypeCodomain = (Lists.at index types)})))) mtypes)) v2)
+          Core.functionTypeCodomain = (Lists.at index types)})))) mtypes)
+      Core.EliminationRecord v3 ->  
+        let tname = (Core.projectionTypeName v3) 
+            fname = (Core.projectionField v3)
+        in (Flows.bind (requireSchemaType cx tname) (\schemaType ->  
+          let svars = (Core.typeSchemeVariables schemaType) 
+              styp = (Core.typeSchemeType schemaType)
+          in (Flows.bind (Core_.recordType tname styp) (\sfields -> Flows.bind (Schemas.findFieldType fname sfields) (\ftyp -> Flows.pure (Core.TypeFunction (Core.FunctionType {
+            Core.functionTypeDomain = (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
+            Core.functionTypeCodomain = ftyp})))))))
+      Core.EliminationUnion v3 ->  
+        let tname = (Core.caseStatementTypeName v3) 
+            dflt = (Core.caseStatementDefault v3)
+            cases = (Core.caseStatementCases v3)
+        in (Flows.bind (requireSchemaType cx tname) (\schemaType ->  
+          let svars = (Core.typeSchemeVariables schemaType) 
+              styp = (Core.typeSchemeType schemaType)
+          in (Flows.bind (Core_.unionType tname styp) (\sfields -> Flows.bind freshName (\resultVar ->  
+            let resultType = (Core.TypeVariable resultVar) 
+                domainType = (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars))
+            in (Flows.pure (Core.TypeFunction (Core.FunctionType {
+              Core.functionTypeDomain = domainType,
+              Core.functionTypeCodomain = resultType}))))))))
+      Core.EliminationWrap v3 -> (Flows.bind (requireSchemaType cx v3) (\schemaType ->  
+        let svars = (Core.typeSchemeVariables schemaType) 
+            styp = (Core.typeSchemeType schemaType)
+        in (Flows.bind (Core_.wrappedType v3 styp) (\wtyp -> Flows.pure (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (nominalApplication v3 (Lists.map (\x -> Core.TypeVariable x) svars)),
+          Core.functionTypeCodomain = wtyp}))))))) v2)
     Core.FunctionLambda v2 ->  
       let x = (Core.lambdaParameter v2) 
           mt = (Core.lambdaDomain v2)
