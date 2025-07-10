@@ -63,6 +63,7 @@ module_ = Module (Namespace "hydra.rewriting") elements
      el foldOverTypeDef,
      el freeVariablesInTermDef,
      el freeVariablesInTypeDef,
+     el freeVariablesInTypeOrderedDef,
      el freeVariablesInTypeSchemeSimpleDef,
      el freeVariablesInTypeSchemeDef,
      el freeVariablesInTypeSimpleDef,
@@ -310,6 +311,24 @@ freeVariablesInTypeDef = define "freeVariablesInType" $
       _Type_variable>>: lambda "v" (Sets.singleton $ var "v")] @@ var "typ"
   where
     recurse = ref freeVariablesInTypeDef
+
+freeVariablesInTypeOrderedDef :: TElement (Type -> [Name])
+freeVariablesInTypeOrderedDef = define "freeVariablesInTypeOrdered" $
+  doc "Find the free variables in a type in deterministic left-to-right order" $
+  lambda "typ" $ lets [
+    "collectVars">: lambdas ["boundVars", "t"] $
+      cases _Type (var "t")
+        (Just $ Lists.concat $ Lists.map (var "collectVars" @@ var "boundVars") $
+                ref subtypesDef @@ var "t") [
+        _Type_variable>>: lambda "v" $
+          Logic.ifElse (Sets.member (var "v") (var "boundVars"))
+            (list [])
+            (list [var "v"]),
+        _Type_forall>>: lambda "ft" $
+          var "collectVars" @@
+            (Sets.insert (Core.forallTypeParameter $ var "ft") (var "boundVars")) @@
+            (Core.forallTypeBody $ var "ft")]] $
+    (Lists.nub :: TTerm [Name] -> TTerm [Name]) $ var "collectVars" @@ Sets.empty @@ var "typ"
 
 freeVariablesInTypeSimpleDef :: TElement (Type -> S.Set Name)
 freeVariablesInTypeSimpleDef = define "freeVariablesInTypeSimple" $
