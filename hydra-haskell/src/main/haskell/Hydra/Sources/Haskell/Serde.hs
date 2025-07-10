@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Ext.Haskell.Serde where
+module Hydra.Sources.Haskell.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
@@ -82,8 +82,8 @@ import qualified Data.Maybe                                 as Y
 import Hydra.Ast
 
 import qualified Hydra.Ext.Haskell.Ast as H
-import qualified Hydra.Sources.Ext.Haskell.Ast as HaskellAst
-import qualified Hydra.Sources.Ext.Haskell.Operators as Operators
+import qualified Hydra.Sources.Haskell.Ast as HaskellAst
+import qualified Hydra.Sources.Haskell.Operators as Operators
 
 
 haskellSerdeDefinition :: String -> TTerm a -> TElement a

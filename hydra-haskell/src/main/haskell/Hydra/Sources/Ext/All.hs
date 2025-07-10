@@ -5,16 +5,16 @@ module Hydra.Sources.Ext.All(
 
 import Hydra.Kernel
 import Hydra.Sources.Kernel.Terms.All
-import Hydra.Sources.Ext.Haskell.Ast
-import Hydra.Sources.Ext.Haskell.Ast
-import Hydra.Sources.Ext.Haskell.Coder
-import Hydra.Sources.Ext.Haskell.Language
-import Hydra.Sources.Ext.Haskell.Operators
-import Hydra.Sources.Ext.Haskell.Serde
-import Hydra.Sources.Ext.Haskell.Utils
-import Hydra.Sources.Ext.Json.Decoding
-import Hydra.Sources.Ext.Json.Schema
-import Hydra.Sources.Ext.Yaml.Model
+import Hydra.Sources.Haskell.Ast
+import Hydra.Sources.Haskell.Ast
+import Hydra.Sources.Haskell.Coder
+import Hydra.Sources.Haskell.Language
+import Hydra.Sources.Haskell.Operators
+import Hydra.Sources.Haskell.Serde
+import Hydra.Sources.Haskell.Utils
+import Hydra.Sources.Json.Decoding
+import Hydra.Sources.Json.Schema
+import Hydra.Sources.Yaml.Model
 
 
 mainModules :: [Module]
