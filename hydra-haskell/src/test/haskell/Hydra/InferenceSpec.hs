@@ -55,8 +55,6 @@ checkTypeOf = H.describe "typeOf" $ do
   checkTypeOfRecords
   checkTypeOfSets
   checkTypeOfSums
-  checkTypeOfTypeAbstractions
-  checkTypeOfTypeApplications
   checkTypeOfUnions
   checkTypeOfUnit
   checkTypeOfVariables
@@ -673,18 +671,73 @@ checkTypeOfRecords = H.describe "Records" $ do
 
 checkTypeOfSets :: H.SpecWith ()
 checkTypeOfSets = H.describe "Sets" $ do
-  return ()  -- TODO: implement
+  H.describe "Monomorphic sets" $ do
+    expectTypeOf "empty set"
+      (Terms.set S.empty)
+      (Types.forAll "t0" $ Types.set $ Types.var "t0")
+    expectTypeOf "int set"
+      (Terms.set $ S.fromList [int32 1, int32 2, int32 3])
+      (Types.set Types.int32)
+    expectTypeOf "string set"
+      (Terms.set $ S.fromList [string "apple", string "banana", string "cherry"])
+      (Types.set Types.string)
+    expectTypeOf "single element set"
+      (Terms.set $ S.singleton $ boolean True)
+      (Types.set Types.boolean)
+
+  H.describe "Polymorphic sets" $ do
+    expectTypeOf "set from lambda"
+      (lambda "x" $ Terms.set $ S.singleton $ var "x")
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.set $ Types.var "t0"))
+    expectTypeOf "set with repeated variable"
+      (lambda "x" $ Terms.set $ S.fromList [var "x", var "x"])
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.set $ Types.var "t0"))
+    expectTypeOf "set from two variables"
+      (lambda "x" $ lambda "y" $ Terms.set $ S.fromList [var "x", var "y"])
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.function (Types.var "t0") (Types.set $ Types.var "t0")))
+
+  H.describe "Sets in complex contexts" $ do
+    expectTypeOf "set in tuple"
+      (tuple [Terms.set $ S.fromList [int32 1, int32 2], string "context"])
+      (Types.product [Types.set Types.int32, Types.string])
+    expectTypeOf "set in let binding"
+      (lets ["numbers">: Terms.set $ S.fromList [int32 10, int32 20, int32 30]] $
+            var "numbers")
+      (Types.set Types.int32)
+
+  H.describe "Nested sets" $ do
+    expectTypeOf "set of lists"
+      (Terms.set $ S.fromList [
+        list [string "a", string "b"],
+        list [string "c", string "d"]])
+      (Types.set $ Types.list Types.string)
+    expectTypeOf "set of tuples"
+      (Terms.set $ S.fromList [
+        tuple [int32 1, int32 2],
+        tuple [int32 3, int32 4]])
+      (Types.set $ Types.product [Types.int32, Types.int32])
+    expectTypeOf "set of sets"
+      (Terms.set $ S.singleton $ Terms.set $ S.fromList [string "nested"])
+      (Types.set $ Types.set Types.string)
+
+  H.describe "Sets with complex types" $ do
+    expectTypeOf "set of records"
+      (Terms.set $ S.singleton $ record testTypePersonName [
+        field "firstName" (string "Alice"),
+        field "lastName" (string "Smith"),
+        field "age" (int32 30)])
+      (Types.set $ Types.var "Person")
+    expectTypeOf "set of optionals"
+      (Terms.set $ S.fromList [
+        optional $ Just $ int32 42,
+        optional Nothing])
+      (Types.set $ Types.optional Types.int32)
+    expectTypeOf "set of maps"
+      (Terms.set $ S.singleton $ Terms.map $ M.singleton (string "key") (int32 42))
+      (Types.set $ Types.map Types.string Types.int32)
 
 checkTypeOfSums :: H.SpecWith ()
 checkTypeOfSums = H.describe "Sums" $ do
-  return ()  -- TODO: implement
-
-checkTypeOfTypeAbstractions :: H.SpecWith ()
-checkTypeOfTypeAbstractions = H.describe "Type abstractions" $ do
-  return ()  -- TODO: implement
-
-checkTypeOfTypeApplications :: H.SpecWith ()
-checkTypeOfTypeApplications = H.describe "Type applications" $ do
   return ()  -- TODO: implement
 
 checkTypeOfUnions :: H.SpecWith ()
