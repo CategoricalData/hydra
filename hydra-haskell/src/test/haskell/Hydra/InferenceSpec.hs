@@ -188,8 +188,18 @@ checkTypeOfApplications = H.describe "Applications" $ do
             var "head" @@ list [string "first", string "second"])
       Types.string
 
+checkTypeOfEliminations :: H.SpecWith ()
+checkTypeOfEliminations = H.describe "Eliminations" $ do
+  return ()  -- TODO: implement
+
 checkTypeOfFunctions :: H.SpecWith ()
 checkTypeOfFunctions = H.describe "Functions" $ do
+  checkTypeOfEliminations
+  checkTypeOfLambdas
+  checkTypeOfPrimitives
+
+checkTypeOfLambdas :: H.SpecWith ()
+checkTypeOfLambdas = H.describe "Lambdas" $ do
   return ()  -- TODO: implement
 
 checkTypeOfLetTerms :: H.SpecWith ()
@@ -545,6 +555,85 @@ checkTypeOfOptionals = H.describe "Optionals" $ do
     expectTypeOf "optional map"
       (optional $ Just $ Terms.map $ M.singleton (string "key") (int32 42))
       (Types.optional $ Types.map Types.string Types.int32)
+
+checkTypeOfPrimitives :: H.SpecWith ()
+checkTypeOfPrimitives = H.describe "Primitives" $ do
+  H.describe "Nullary primitives" $ do
+    expectTypeOf "empty map"
+      (primitive _maps_empty)
+      (Types.forAlls ["t1", "t0"] $ Types.map (Types.var "t1") (Types.var "t0"))
+    expectTypeOf "empty set"
+      (primitive _sets_empty)
+      (Types.forAll "t0" $ Types.set $ Types.var "t0")
+
+  H.describe "Unary primitives" $ do
+    expectTypeOf "lists head"
+      (primitive _lists_head)
+      (Types.forAll "t0" $ Types.function (Types.list $ Types.var "t0") (Types.var "t0"))
+    expectTypeOf "math neg"
+      (primitive _math_neg)
+      (Types.function Types.int32 Types.int32)
+    expectTypeOf "logic not"
+      (primitive _logic_not)
+      (Types.function Types.boolean Types.boolean)
+
+  H.describe "Binary primitives" $ do
+    expectTypeOf "math add"
+      (primitive _math_add)
+      (Types.function Types.int32 (Types.function Types.int32 Types.int32))
+    expectTypeOf "lists cons"
+      (primitive _lists_cons)
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.function (Types.list $ Types.var "t0") (Types.list $ Types.var "t0")))
+    expectTypeOf "maps insert"
+      (primitive _maps_insert)
+      (Types.forAlls ["t1", "t0"] $ Types.function
+        (Types.var "t1")
+        (Types.function (Types.var "t0") (Types.function (Types.map (Types.var "t1") (Types.var "t0")) (Types.map (Types.var "t1") (Types.var "t0")))))
+
+  H.describe "Ternary primitives" $ do
+    expectTypeOf "logic ifElse"
+      (primitive _logic_ifElse)
+      (Types.forAll "t0" $ Types.function Types.boolean (Types.function (Types.var "t0") (Types.function (Types.var "t0") (Types.var "t0"))))
+    expectTypeOf "lists foldl"
+      (primitive _lists_foldl)
+      (Types.forAlls ["t1", "t0"] $ Types.function
+        (Types.function (Types.var "t1") (Types.function (Types.var "t0") (Types.var "t1")))
+        (Types.function (Types.var "t1") (Types.function (Types.list $ Types.var "t0") (Types.var "t1"))))
+
+  H.describe "Monomorphic vs polymorphic" $ do
+    expectTypeOf "monomorphic math"
+      (primitive _math_add)
+      (Types.function Types.int32 (Types.function Types.int32 Types.int32))
+    expectTypeOf "polymorphic identity"
+      (primitive _equality_identity)
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
+    expectTypeOf "polymorphic map"
+      (primitive _lists_map)
+      (Types.forAlls ["t1", "t0"] $ Types.function
+        (Types.function (Types.var "t1") (Types.var "t0"))
+        (Types.function (Types.list $ Types.var "t1") (Types.list $ Types.var "t0")))
+
+  H.describe "Higher-order primitives" $ do
+    expectTypeOf "lists map function"
+      (primitive _lists_map @@ (lambda "x" $ primitive _math_add @@ var "x" @@ int32 1))
+      (Types.function (Types.list Types.int32) (Types.list Types.int32))
+    expectTypeOf "lists filter"
+      (primitive _lists_filter)
+      (Types.forAll "t0" $ Types.function (Types.function (Types.var "t0") Types.boolean) (Types.function (Types.list $ Types.var "t0") (Types.list $ Types.var "t0")))
+    expectTypeOf "optionals maybe"
+      (primitive _optionals_maybe)
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t1") (Types.function (Types.function (Types.var "t0") (Types.var "t1")) (Types.function (Types.optional $ Types.var "t0") (Types.var "t1"))))
+
+  H.describe "Primitives in complex contexts" $ do
+    expectTypeOf "primitive composition"
+      (lets ["double">: lambda "x" $ primitive _math_mul @@ var "x" @@ int32 2,
+             "increment">: lambda "x" $ primitive _math_add @@ var "x" @@ int32 1] $
+            primitive _lists_map @@ var "double" @@ (primitive _lists_map @@ var "increment" @@ list [int32 1, int32 2, int32 3]))
+      (Types.list Types.int32)
+    expectTypeOf "nested higher-order"
+      (primitive _lists_map @@ (primitive _lists_map @@ (primitive _math_add @@ int32 1)) @@
+       list [list [int32 1, int32 2], list [int32 3, int32 4]])
+      (Types.list $ Types.list Types.int32)
 
 checkTypeOfProducts :: H.SpecWith ()
 checkTypeOfProducts = H.describe "Products" $ do
