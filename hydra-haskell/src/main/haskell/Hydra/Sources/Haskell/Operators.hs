@@ -1,4 +1,4 @@
-module Hydra.Sources.Ext.Haskell.Operators where
+module Hydra.Sources.Haskell.Operators where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel

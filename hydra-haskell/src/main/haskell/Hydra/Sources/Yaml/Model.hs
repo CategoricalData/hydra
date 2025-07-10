@@ -1,4 +1,4 @@
-module Hydra.Sources.Ext.Yaml.Model where
+module Hydra.Sources.Yaml.Model where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
