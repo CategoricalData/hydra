@@ -1,12 +1,15 @@
-module Hydra.Ext.Yaml.Language where
+module Hydra.Staging.Json.Language where
 
-import Hydra.Kernel
+import Hydra.Core
+import Hydra.Coders
+import Hydra.Mantle
+import Hydra.Rewriting
 
 import qualified Data.Set as S
 
 
-yamlLanguage :: Language
-yamlLanguage = Language (LanguageName "hydra.ext.yaml") $ LanguageConstraints {
+jsonLanguage :: Language
+jsonLanguage = Language (LanguageName "hydra.ext.json") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.empty,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
@@ -14,21 +17,19 @@ yamlLanguage = Language (LanguageName "hydra.ext.yaml") $ LanguageConstraints {
   languageConstraintsFunctionVariants = S.empty,
   languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint],
   languageConstraintsTermVariants = S.fromList [
-    TermVariantLiteral,
     TermVariantList,
+    TermVariantLiteral,
     TermVariantMap,
     TermVariantOptional,
-    TermVariantRecord,
-    TermVariantUnit],
-    -- Note: TermVariantUnit is excluded because YAML null is used for optionals
+    TermVariantRecord],
+    -- Note: TermVariantUnit is excluded because JSON null is used for optionals
   languageConstraintsTypeVariants = S.fromList [
-    TypeVariantLiteral,
     TypeVariantList,
+    TypeVariantLiteral,
     TypeVariantMap,
     TypeVariantOptional,
-    TypeVariantRecord,
-    TypeVariantUnit],
-    -- Note: TypeVariantUnit is excluded because YAML null is used for optionals
+    TypeVariantRecord],
+    -- Note: TypeVariantUnit is excluded because JSON null is used for optionals
   languageConstraintsTypes = \typ -> case deannotateType typ of
     TypeOptional (TypeOptional _) -> False
     _ -> True }

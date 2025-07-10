@@ -1,4 +1,4 @@
-module Hydra.Ext.Json.Schema.Language where
+module Hydra.Staging.Json.Schema.Language where
 
 import Hydra.Core
 import Hydra.Coders
