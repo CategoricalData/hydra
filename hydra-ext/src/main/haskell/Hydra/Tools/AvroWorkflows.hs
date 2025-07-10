@@ -22,23 +22,23 @@ import Hydra.Tools.Monads
 import Hydra.Dsl.Annotations
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json as Json
-import Hydra.Ext.Json.Coder
-import Hydra.Ext.Json.Eliminate
-import Hydra.Ext.Json.Serde
-import Hydra.Ext.Avro.Coder
-import Hydra.Ext.Avro.SchemaJson
-import Hydra.Ext.Pg.Graphson.Utils
-import Hydra.Ext.Pg.Coder
-import qualified Hydra.Ext.Shacl.Coder as Shacl
+import Hydra.Staging.Json.Coder
+import Hydra.Staging.Json.Eliminate
+import Hydra.Staging.Json.Serde
+import Hydra.Staging.Avro.Coder
+import Hydra.Staging.Avro.SchemaJson
+import Hydra.Staging.Pg.Graphson.Utils
+import Hydra.Staging.Pg.Coder
+import qualified Hydra.Staging.Shacl.Coder as Shacl
 import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
-import qualified Hydra.Ext.Rdf.Utils as RdfUt
+import qualified Hydra.Staging.Rdf.Utils as RdfUt
 import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Pg.Mapping as PGM
-import Hydra.Ext.Rdf.Serde
+import Hydra.Staging.Rdf.Serde
 import Hydra.Sources.Kernel.Types.Core
-import Hydra.Ext.Pg.Graphson.Coder
+import Hydra.Staging.Pg.Graphson.Coder
 import Hydra.Pg.Graphson.Syntax as G
-import Hydra.Ext.Pg.Utils
+import Hydra.Staging.Pg.Utils
 
 import qualified Control.Monad as CM
 import qualified Data.Either as E

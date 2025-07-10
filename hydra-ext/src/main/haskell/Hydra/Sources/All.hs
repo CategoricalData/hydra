@@ -5,13 +5,13 @@ module Hydra.Sources.All where -- TODO: move to Hydra.Sources.Ext.All
 import Hydra.Kernel
 import Hydra.Codegen
 
-import Hydra.Ext.Cpp.Coder
-import Hydra.Ext.Graphql.Coder
-import Hydra.Ext.Java.Coder
-import Hydra.Ext.Pegasus.Coder
-import Hydra.Ext.Protobuf.Coder
-import Hydra.Ext.Python.Coder
-import Hydra.Ext.Scala.Coder
+import Hydra.Staging.Cpp.Coder
+import Hydra.Staging.Graphql.Coder
+import Hydra.Staging.Java.Coder
+import Hydra.Staging.Pegasus.Coder
+import Hydra.Staging.Protobuf.Coder
+import Hydra.Staging.Python.Coder
+import Hydra.Staging.Scala.Coder
 
 import Hydra.Sources.Ext.Avro.Schema
 import Hydra.Sources.Ext.Cpp.Language
