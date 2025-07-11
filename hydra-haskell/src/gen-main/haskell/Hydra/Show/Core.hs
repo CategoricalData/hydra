@@ -300,6 +300,7 @@ type_ typ =
                 in (gatherFunctionTypes (Lists.cons dom prev) cod)
               _ -> (Lists.reverse (Lists.cons t prev))) t)
   in ((\x -> case x of
+    Core.TypeAnnotated v1 -> (type_ (Core.annotatedTypeSubject v1))
     Core.TypeApplication v1 ->  
       let types = (gatherTypes [] v1) 
           typeStrs = (Lists.map type_ types)
