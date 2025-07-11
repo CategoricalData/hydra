@@ -2,18 +2,17 @@
 # Promote Staging code into the kernel
 
 I would like you to help me promote some Haskell code into a language with a Haskell-based DSL, called Hydra.
-Hydra code is translated into Haskell, Java, Python, and other languages.
-I am going to give you these things:
+Hydra code is translated into Haskell, Java, Python, and other languages. I am going to give you these three things:
 1) The "phantoms" DSL which provides the basic DSL syntax
 2) An exhaustive list (the Hydra "lexicon") of the elements (definitions) and primitive functions of Hydra
 3) A representative module which has been promoted into the DSL
-4) The corresponding generated Haskell for the representative module
-I might repeat steps (4) and (5) for additional modules, to give you additional context.
-Finally, I am going to give you one or more unpromoted ("staging") modules and ask you to rewrite them using the
-DSL. Maintain the structure and style of the original code to the fullest extent that you can, given Hydra's more
+I might repeat step (3) for additional modules, to give you additional context.
+Finally, I am going to give you one or more unpromoted ("staging") modules in Haskell and ask you to rewrite them using
+the DSL. Maintain the structure and style of the original code to the fullest extent that you can, given Hydra's more
 limited syntax (particularly around pattern matching and monadic binding). Introduce helper symbols as needed using
-Hydra's "let/lets" and "withVar" syntax. Do not hesitate to ask for clarification; I would prefer that you proceed
-cautiously, and do not produce any code whose correctness is uncertain.
+Hydra's "let/lets" and "bind/binds" syntax. Side-effects use "exec", and "produce" is the Hydra equivalent of "return".
+Do not hesitate to ask for clarification; I would prefer that you proceed cautiously, and do not produce any code whose
+correctness is uncertain.
 Notes:
 *) There are two application styles in the DSL syntax: primitive functions and DSL-based helpers (Hydra.Dsl.xxx) are
 applied using concatenation, e.g. Strings.cat2 (string "foo") (string "bar"), or Core.applicationType (var "f") (var "a"),
