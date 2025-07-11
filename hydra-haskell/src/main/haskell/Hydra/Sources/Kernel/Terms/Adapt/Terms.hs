@@ -118,13 +118,13 @@ forTypeReferenceDef = define "forTypeReference" $
         "lossy">: false,
         "placeholder">: Compute.adapter (var "lossy") (Core.typeVariable $ var "name") (Core.typeVariable $ var "name") $
           ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
-            withVar "cx" (ref Monads.getStateDef) $ lets [
+            bind "cx" (ref Monads.getStateDef) $ lets [
               "adapters">: Coders.adapterContextAdapters $ var "cx"] $
               Optionals.maybe
                 (Flows.fail $ Strings.cat2 (string "no adapter for reference type ") (unwrap _Name @@ var "name"))
                 (lambda "ad" $ ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "term")
                 (Maps.lookup (var "name") (var "adapters")))] $
-      withVar "cx" (ref Monads.getStateDef) $ lets [
+      bind "cx" (ref Monads.getStateDef) $ lets [
         "adapters">: Coders.adapterContextAdapters $ var "cx"] $
         Optionals.maybe
           (lets [
@@ -134,12 +134,12 @@ forTypeReferenceDef = define "forTypeReference" $
               (Coders.adapterContextLanguage $ var "cx")
               (var "newAdapters")] $
             Flows.bind (ref Monads.putStateDef @@ var "newCx") $ constant $
-              withVar "mt" (ref withGraphContextDef @@ (ref Schemas.resolveTypeDef @@ (Core.typeVariable $ var "name"))) $
+              bind "mt" (ref withGraphContextDef @@ (ref Schemas.resolveTypeDef @@ (Core.typeVariable $ var "name"))) $
                 Optionals.maybe
                   (Flows.pure $ Compute.adapter (var "lossy") (Core.typeVariable $ var "name") (Core.typeVariable $ var "name") $
                     ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $ Flows.pure $ var "term"))
                   (lambda "t" $
-                    withVar "actual" (ref termAdapterDef @@ var "t") $ lets [
+                    bind "actual" (ref termAdapterDef @@ var "t") $ lets [
                       "finalAdapters">: Maps.insert (var "name") (var "actual") (var "adapters"),
                       "finalCx">: Coders.adapterContext
                         (Coders.adapterContextGraph $ var "cx")
@@ -173,7 +173,7 @@ functionToUnionDef = define "functionToUnion" $
       "dom">: Core.functionTypeDomain $ var "ft",
       "cod">: Core.functionTypeCodomain $ var "ft",
       "unionType">:
-        withVar "domAd" (ref termAdapterDef @@ var "dom") $
+        bind "domAd" (ref termAdapterDef @@ var "dom") $
         Flows.pure $ Core.typeUnion $ Core.rowType (ref functionProxyNameDef) $ list [
           Core.fieldType (Core.nameLift _Elimination_wrap) TTypes.string,
           Core.fieldType (Core.nameLift _Elimination_record) TTypes.string,
@@ -200,7 +200,7 @@ functionToUnionDef = define "functionToUnion" $
             Core.termUnion $ Core.injection (ref functionProxyNameDef) $ Core.field (Core.nameLift _Term_variable) $ TTerms.stringLift $ unwrap _Name @@ var "name"]),
       "decode">: lambdas ["ad", "term"] $ lets [
         "readFromString">: lambda "term" $
-          withVar "s" (ref ExtractCore.stringDef @@ var "term") $
+          bind "s" (ref ExtractCore.stringDef @@ var "term") $
             Optionals.maybe
               (Flows.fail $ Strings.cat2 ("failed to parse term: ") (var "s"))
               (unaryFunction Flows.pure)
@@ -212,8 +212,8 @@ functionToUnionDef = define "functionToUnion" $
         "forPrimitive">: lambda "fterm" $ ref withGraphContextDef @@ (Flows.map (lambda "s" $ TTerms.primitiveLift $ Core.name $ var "s") (ref ExtractCore.stringDef @@ var "fterm")),
         "forProjection">: lambda "fterm" $ ref withGraphContextDef @@ (var "readFromString" @@ var "fterm"),
         "forVariable">: lambda "fterm" $ ref withGraphContextDef @@ (Flows.map (lambda "s" $ Core.termVariable $ Core.name $ var "s") (ref ExtractCore.stringDef @@ var "fterm"))] $
-        withVar "injTerm" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ var "term") $
-        withVar "field" (ref withGraphContextDef @@ (ref ExtractCore.injectionDef @@ (ref functionProxyNameDef) @@ var "injTerm")) $ lets [
+        bind "injTerm" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ var "term") $
+        bind "field" (ref withGraphContextDef @@ (ref ExtractCore.injectionDef @@ (ref functionProxyNameDef) @@ var "injTerm")) $ lets [
             "fname">: Core.fieldName $ var "field",
             "fterm">: Core.fieldTerm $ var "field"] $
             Optionals.fromMaybe (var "notFound" @@ var "fname") $ Maps.lookup (var "fname") $ Maps.fromList $ list [
@@ -223,8 +223,8 @@ functionToUnionDef = define "functionToUnion" $
               pair (Core.nameLift _Function_lambda) (var "forLambda" @@ var "fterm"),
               pair (Core.nameLift _Function_primitive) (var "forPrimitive" @@ var "fterm"),
               pair (Core.nameLift _Term_variable) (var "forVariable" @@ var "fterm")]] $
-    withVar "ut" (var "unionType") $
-    withVar "ad" (ref termAdapterDef @@ var "ut") $
+    bind "ut" (var "unionType") $
+    bind "ad" (ref termAdapterDef @@ var "ut") $
     Flows.pure $ Compute.adapter
       (Compute.adapterIsLossy $ var "ad")
       (var "t")
@@ -237,7 +237,7 @@ lambdaToMonotypeDef = define "lambdaToMonotype" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_forall>>: lambda "ft" $ lets [
         "body">: Core.forallTypeBody $ var "ft"] $
-        withVar "ad" (ref termAdapterDef @@ var "body") $
+        bind "ad" (ref termAdapterDef @@ var "body") $
         Flows.pure $ Compute.adapter
           (Compute.adapterIsLossy $ var "ad")
           (var "t")
@@ -253,10 +253,10 @@ listToSetDef = define "listToSet" $
         _Term_set>>: lambda "s" $ Compute.coderEncode (Compute.adapterCoder $ var "ad") @@ (Core.termList $ Sets.toList $ var "s")],
       "decode">:
         lambdas ["ad", "term"] $
-        withVar "listTerm" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ var "term") $
+        bind "listTerm" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ var "term") $
           cases _Term (var "listTerm") Nothing [
             _Term_list>>: lambda "l" $ Flows.pure $ Core.termSet $ Sets.fromList $ var "l"]] $
-      withVar "ad" (ref termAdapterDef @@ (TTypes.list $ var "st")) $
+      bind "ad" (ref termAdapterDef @@ (TTypes.list $ var "st")) $
       Flows.pure $ Compute.adapter
         (Compute.adapterIsLossy $ var "ad")
         (var "t")
@@ -268,18 +268,18 @@ optionalToListDef = define "optionalToList" $
   doc "Convert optional types to list types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_optional>>: lambda "ot" $
-      withVar "ad" (ref termAdapterDef @@ var "ot") $ lets [
+      bind "ad" (ref termAdapterDef @@ var "ot") $ lets [
         "encode">: lambda "term" $ cases _Term (var "term") Nothing [
           _Term_optional>>: lambda "m" $ Optionals.maybe
             (Flows.pure $ TTerms.list [])
             (lambda "r" $
-              withVar "encoded" (Compute.coderEncode (Compute.adapterCoder $ var "ad") @@ var "r") $
+              bind "encoded" (Compute.coderEncode (Compute.adapterCoder $ var "ad") @@ var "r") $
               Flows.pure $ Core.termList $ list [var "encoded"])
             (var "m")],
         "decode">: lambda "term" $ cases _Term (var "term") Nothing [
           _Term_list>>: lambda "l" $ Flows.map (unaryFunction Core.termOptional) $ Logic.ifElse (Lists.null $ var "l")
             (Flows.pure $ nothing)
-            (withVar "decoded" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ (Lists.head $ var "l")) $
+            (bind "decoded" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ (Lists.head $ var "l")) $
               Flows.pure $ just $ var "decoded")]] $
       Flows.pure $ Compute.adapter
         false
@@ -294,8 +294,8 @@ passApplicationDef = define "passApplication" $
     _Type_application>>: lambda "at" $ lets [
         "lhs">: Core.applicationTypeFunction $ var "at",
         "rhs">: Core.applicationTypeArgument $ var "at"] $
-        withVar "lhsAd" (ref termAdapterDef @@ var "lhs") $
-        withVar "rhsAd" (ref termAdapterDef @@ var "rhs") $
+        bind "lhsAd" (ref termAdapterDef @@ var "lhs") $
+        bind "rhsAd" (ref termAdapterDef @@ var "rhs") $
         Flows.pure $ Compute.adapter
           (Logic.or (Compute.adapterIsLossy $ var "lhsAd") (Compute.adapterIsLossy $ var "rhsAd"))
           (var "t")
@@ -310,13 +310,13 @@ passFunctionDef = define "passFunction" $
     _Type_function >>: lambda "ft" $ lets [
       "dom">: Core.functionTypeDomain $ var "ft",
       "cod">: Core.functionTypeCodomain $ var "ft"] $
-      withVar "domAd" (ref termAdapterDef @@ var "dom") $
-      withVar "codAd" (ref termAdapterDef @@ var "cod") $
-      withVar "caseAds" (cases _Type (ref Rewriting.deannotateTypeDef @@ var "dom") (Just $ Flows.pure $ Maps.empty) [
+      bind "domAd" (ref termAdapterDef @@ var "dom") $
+      bind "codAd" (ref termAdapterDef @@ var "cod") $
+      bind "caseAds" (cases _Type (ref Rewriting.deannotateTypeDef @@ var "dom") (Just $ Flows.pure $ Maps.empty) [
         _Type_union >>: lambda "rt" $
-          withVar "pairs" (Flows.mapList
+          bind "pairs" (Flows.mapList
             (lambda "f" $
-              withVar "ad" (ref fieldAdapterDef @@ Core.fieldType
+              bind "ad" (ref fieldAdapterDef @@ Core.fieldType
                 (Core.fieldTypeName $ var "f")
                 (Core.typeFunction $ Core.functionType
                   (Core.fieldTypeType $ var "f")
@@ -324,7 +324,7 @@ passFunctionDef = define "passFunction" $
               $ Flows.pure $ pair (Core.fieldTypeName $ var "f") (var "ad"))
             (Core.rowTypeFields $ var "rt")) $
           Flows.pure $ Maps.fromList $ var "pairs"]) $
-      withVar "optionAd" (cases _Type (ref Rewriting.deannotateTypeDef @@ var "dom") (Just $ Flows.pure nothing) [
+      bind "optionAd" (cases _Type (ref Rewriting.deannotateTypeDef @@ var "dom") (Just $ Flows.pure nothing) [
         _Type_optional >>: lambda "ot" $
           Flows.map (unaryFunction just) $ ref termAdapterDef @@ TTypes.function (var "ot") (var "cod")]) $ lets [
       "lossy">: Logic.or
@@ -348,10 +348,10 @@ passFunctionDef = define "passFunction" $
                           "n">: Core.caseStatementTypeName $ var "cs",
                           "def">: Core.caseStatementDefault $ var "cs",
                           "cases">: Core.caseStatementCases $ var "cs"] $
-                          withVar "rcases" (Flows.mapList
+                          bind "rcases" (Flows.mapList
                             (lambda "f" $ ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (var "getCoder" @@ Core.fieldName (var "f")) @@ var "f")
                             (var "cases")) $
-                          withVar "rdef" (Optionals.maybe
+                          bind "rdef" (Optionals.maybe
                             (Flows.pure nothing)
                             (lambda "d" $ Flows.map (unaryFunction just) $ ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ Compute.adapterCoder (var "codAd") @@ var "d")
                             (var "def")) $
@@ -360,7 +360,7 @@ passFunctionDef = define "passFunction" $
                     "var">: Core.lambdaParameter $ var "l",
                     "d" >: Core.lambdaDomain $ var "l",
                     "body">: Core.lambdaBody $ var "l"] $
-                    withVar "newBody" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ Compute.adapterCoder (var "codAd") @@ var "body") $
+                    bind "newBody" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ Compute.adapterCoder (var "codAd") @@ var "body") $
                     Flows.pure $ Core.functionLambda $ Core.lambda (var "var") (var "d") (var "newBody"),
                   _Function_primitive >>: lambda "name" $ Flows.pure $ Core.functionPrimitive $ var "name"]]
          )]
@@ -385,9 +385,9 @@ passLiteralDef = define "passLiteral" $
   doc "Pass through literal types with literal adaptation" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_literal>>: lambda "lt" $
-      withVar "ad" (ref AdaptLiterals.literalAdapterDef @@ var "lt") $ lets [
+      bind "ad" (ref AdaptLiterals.literalAdapterDef @@ var "lt") $ lets [
       "step">: ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
-        withVar "l" (ref withGraphContextDef @@ (ref ExtractCore.literalDef @@ var "term")) $
+        bind "l" (ref withGraphContextDef @@ (ref ExtractCore.literalDef @@ var "term")) $
         Flows.map (unaryFunction $ Core.termLiteral) (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "l"))] $
       Flows.pure $ Compute.adapter
         (Compute.adapterIsLossy $ var "ad")
@@ -400,14 +400,14 @@ passListDef = define "passList" $
   doc "Pass through list types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_list>>: lambda "lt" $
-      withVar "ad" (ref termAdapterDef @@ var "lt") $
+      bind "ad" (ref termAdapterDef @@ var "lt") $
       Flows.pure $ Compute.adapter
         (Compute.adapterIsLossy $ var "ad")
         (var "t")
         (TTypes.list $ Compute.adapterTarget $ var "ad")
         (ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $ cases _Term (var "term") Nothing [
           _Term_list>>: lambda "terms" $
-            withVar "newTerms" (Flows.mapList (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad")) (var "terms")) $
+            bind "newTerms" (Flows.mapList (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad")) (var "terms")) $
             Flows.pure $ Core.termList $ var "newTerms"]))]
 
 passMapDef :: TElement TypeAdapter
@@ -417,20 +417,20 @@ passMapDef = define "passMap" $
     _Type_map>>: lambda "mt" $ lets [
         "kt">: Core.mapTypeKeys $ var "mt",
         "vt">: Core.mapTypeValues $ var "mt"] $
-          withVar "kad" (ref termAdapterDef @@ var "kt") $
-          withVar "vad" (ref termAdapterDef @@ var "vt") $
+          bind "kad" (ref termAdapterDef @@ var "kt") $
+          bind "vad" (ref termAdapterDef @@ var "vt") $
           Flows.pure $ Compute.adapter
             (Logic.or (Compute.adapterIsLossy $ var "kad") (Compute.adapterIsLossy $ var "vad"))
             (var "t")
             (TTypes.map (Compute.adapterTarget $ var "kad") (Compute.adapterTarget $ var "vad"))
             (ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $ cases _Term (var "term") Nothing [
               _Term_map>>: lambda "m" $
-                withVar "newPairs" (Flows.mapList
+                bind "newPairs" (Flows.mapList
                   (lambda "pair" $ lets [
                     "k">: first $ var "pair",
                     "v">: second $ var "pair"] $
-                      withVar "newK" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "kad") @@ var "k") $
-                      withVar "newV" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "vad") @@ var "v") $
+                      bind "newK" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "kad") @@ var "k") $
+                      bind "newV" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "vad") @@ var "v") $
                       Flows.pure $ pair (var "newK") (var "newV"))
                   (Maps.toList $ var "m")) $
                 Flows.pure $ Core.termMap $ Maps.fromList $ var "newPairs"]))]
@@ -441,10 +441,10 @@ passOptionalDef = define "passOptional" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_optional>>: lambda "ot" $ lets [
       "mapTerm">: lambdas ["coder", "dir", "term"] $
-        withVar "opt" (ref withGraphContextDef @@ (ref ExtractCore.optionalDef @@ unaryFunction Flows.pure @@ var "term")) $
-        withVar "newOpt" (Flows.traverseOptional (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ var "coder") (var "opt")) $
+        bind "opt" (ref withGraphContextDef @@ (ref ExtractCore.optionalDef @@ unaryFunction Flows.pure @@ var "term")) $
+        bind "newOpt" (Flows.traverseOptional (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ var "coder") (var "opt")) $
         Flows.pure $ Core.termOptional $ var "newOpt"] $
-      withVar "adapter" (ref termAdapterDef @@ var "ot") $
+      bind "adapter" (ref termAdapterDef @@ var "ot") $
         Flows.pure $ Compute.adapter
           (Compute.adapterIsLossy $ var "adapter")
           (var "t")
@@ -464,7 +464,7 @@ passProductDef = define "passProduct" $
           (Core.typeProduct $ Lists.map (unaryFunction Compute.adapterTarget) (var "ads"))
           (ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $ cases _Term (var "term") Nothing [
             _Term_product>>: lambda "tuple" $
-              withVar "newTuple" (Flows.sequence $ Lists.zipWith
+              bind "newTuple" (Flows.sequence $ Lists.zipWith
                 (lambdas ["term", "ad"] $ ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "term")
                 (var "tuple")
                 (var "ads")) $ Flows.pure $ Core.termProduct $ var "newTuple"]))]
@@ -474,7 +474,7 @@ passRecordDef = define "passRecord" $
   doc "Pass through record types" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_record>>: lambda "rt" $
-      withVar "adapters" (Flows.mapList (ref fieldAdapterDef) (Core.rowTypeFields $ var "rt")) $ lets [
+      bind "adapters" (Flows.mapList (ref fieldAdapterDef) (Core.rowTypeFields $ var "rt")) $ lets [
         "lossy">: Logic.ors $ Lists.map (unaryFunction Compute.adapterIsLossy) (var "adapters"),
         "sfields'">: Lists.map (unaryFunction Compute.adapterTarget) (var "adapters")] $
         Flows.pure $ Compute.adapter
@@ -484,7 +484,7 @@ passRecordDef = define "passRecord" $
           (ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $ cases _Term (var "term") Nothing [
             _Term_record>>: lambda "rec" $ lets [
               "dfields">: Core.recordFields $ var "rec"] $
-              withVar "newFields" (Flows.sequence $ Lists.zipWith
+              bind "newFields" (Flows.sequence $ Lists.zipWith
                 (lambdas ["ad", "f"] $ ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "f" )
                 (var "adapters")
                 (var "dfields")) $
@@ -502,7 +502,7 @@ passSetDef = define "passSet" $
           (TTypes.set $ Compute.adapterTarget $ var "ad")
           (ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $ cases _Term (var "term") Nothing [
             _Term_set>>: lambda "terms" $
-              withVar "newTerms" (Flows.mapList (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad")) (Sets.toList $ var "terms")) $
+              bind "newTerms" (Flows.mapList (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad")) (Sets.toList $ var "terms")) $
               Flows.pure $ Core.termSet $ Sets.fromList $ var "newTerms"]))]
 
 passSumDef :: TElement TypeAdapter
@@ -521,7 +521,7 @@ passSumDef = define "passSum" $
                 "i">: Core.sumIndex $ var "s",
                 "n">: Core.sumSize $ var "s",
                 "term">: Core.sumTerm $ var "s"] $
-                  withVar "newTerm" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ Lists.at (var "i") (var "ads")) @@ var "term") $
+                  bind "newTerm" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ Lists.at (var "i") (var "ads")) @@ var "term") $
                     Flows.pure $ Core.termSum $ Core.sum (var "i") (var "n") (var "newTerm")]))]
 
 passUnionDef :: TElement TypeAdapter
@@ -536,7 +536,7 @@ passUnionDef = define "passUnion" $
           (Flows.fail $ Strings.cat2 (string "no such field: ") (unwrap _Name @@ (Core.fieldName $ var "f")))
           (unaryFunction Flows.pure)
           (Maps.lookup (Core.fieldName $ var "f") (var "adaptersMap"))] $
-      withVar "adapters" (Flows.mapList
+      bind "adapters" (Flows.mapList
           (lambda "f" $ Flows.bind (ref fieldAdapterDef @@ var "f") $ lambda "ad" $
             Flows.pure $ pair (Core.fieldTypeName $ var "f") (var "ad"))
           (var "sfields")) $ lets [
@@ -548,9 +548,9 @@ passUnionDef = define "passUnion" $
           (var "t")
           (Core.typeUnion $ Core.rowType (var "tname") (var "sfields'"))
           (ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
-            withVar "dfield" (ref withGraphContextDef @@ (ref ExtractCore.injectionDef @@ var "tname" @@ var "term")) $
-            withVar "ad" (var "getAdapter" @@ var "adaptersMap" @@ var "dfield") $
-            withVar "newField" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "dfield") $
+            bind "dfield" (ref withGraphContextDef @@ (ref ExtractCore.injectionDef @@ var "tname" @@ var "term")) $
+            bind "ad" (var "getAdapter" @@ var "adaptersMap" @@ var "dfield") $
+            bind "newField" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "dfield") $
             Flows.pure $ Core.termUnion $ Core.injection (var "tname") (var "newField")))]
 
 passUnitDef :: TElement TypeAdapter
@@ -569,10 +569,10 @@ passWrappedDef = define "passWrapped" $
         "tname">: Core.wrappedTypeTypeName $ var "wt",
         "ot">: Core.wrappedTypeObject $ var "wt",
         "mapTerm">: lambdas ["coder", "dir", "term"] $
-          withVar "unwrapped" (ref withGraphContextDef @@ (ref ExtractCore.wrapDef @@ var "tname" @@ var "term")) $
-          withVar "newTerm" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ var "coder" @@ var "unwrapped") $
+          bind "unwrapped" (ref withGraphContextDef @@ (ref ExtractCore.wrapDef @@ var "tname" @@ var "term")) $
+          bind "newTerm" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ var "coder" @@ var "unwrapped") $
           Flows.pure $ Core.termWrap $ Core.wrappedTerm (var "tname") (var "newTerm")] $
-        withVar "adapter" (ref termAdapterDef @@ var "ot") $
+        bind "adapter" (ref termAdapterDef @@ var "ot") $
           Flows.pure $ Compute.adapter
             (Compute.adapterIsLossy $ var "adapter")
             (var "t")
@@ -585,7 +585,7 @@ simplifyApplicationDef = define "simplifyApplication" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_application>>: lambda "at" $ lets [
         "lhs">: Core.applicationTypeFunction $ var "at"] $
-        withVar "ad" (ref termAdapterDef @@ var "lhs") $
+        bind "ad" (ref termAdapterDef @@ var "lhs") $
           Flows.pure $ Compute.adapter
             false
             (var "t")
@@ -636,24 +636,24 @@ unionToRecordDef = define "unionToRecord" $
             string "    and target type = ",
             ref ShowCore.typeDef @@ var "t'"])
           (Flows.pure $ Lists.head $ var "matches")] $
-      withVar "ad" (ref termAdapterDef @@ var "target") $
+      bind "ad" (ref termAdapterDef @@ var "target") $
       Flows.pure $ Compute.adapter
         (Compute.adapterIsLossy $ var "ad")
         (var "t")
         (Compute.adapterTarget $ var "ad")
         (Compute.coder
           (lambda "term'" $
-            withVar "field" (ref withGraphContextDef @@ (ref ExtractCore.injectionDef @@ (Core.rowTypeTypeName $ var "rt") @@ var "term'")) $ lets [
+            bind "field" (ref withGraphContextDef @@ (ref ExtractCore.injectionDef @@ (Core.rowTypeTypeName $ var "rt") @@ var "term'")) $ lets [
               "fn">: Core.fieldName $ var "field",
               "term">: Core.fieldTerm $ var "field"] $
             Compute.coderEncode (Compute.adapterCoder $ var "ad") @@
               (Core.termRecord $ Core.record (var "nm") $ Lists.map (var "toRecordField" @@ var "term" @@ var "fn") (var "sfields")))
           (lambda "term" $
-            withVar "recTerm" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ var "term") $
+            bind "recTerm" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ var "term") $
               cases _Term (var "recTerm") Nothing [
                 _Term_record>>: lambda "rec" $ lets [
                   "fields">: Core.recordFields $ var "rec"] $
-                  withVar "resultField"
+                  bind "resultField"
                     (var "fromRecordFields"
                       @@ var "term"
                       @@ (Core.termRecord $ Core.record (var "nm") (var "fields"))
@@ -679,12 +679,12 @@ wrapToUnwrappedDef = define "wrapToUnwrapped" $
         "tname">: Core.wrappedTypeTypeName $ var "wt",
         "typ">: Core.wrappedTypeObject $ var "wt",
         "encode">: lambda "ad" $ lambda "term" $
-          withVar "unwrapped" (ref withGraphContextDef @@ (ref ExtractCore.wrapDef @@ var "tname" @@ var "term")) $
+          bind "unwrapped" (ref withGraphContextDef @@ (ref ExtractCore.wrapDef @@ var "tname" @@ var "term")) $
           Compute.coderEncode (Compute.adapterCoder $ var "ad") @@ var "unwrapped",
         "decode">: lambda "ad" $ lambda "term" $
-          withVar "decoded" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ var "term") $
+          bind "decoded" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ var "term") $
           Flows.pure $ Core.termWrap $ Core.wrappedTerm (var "tname") (var "decoded")] $
-        withVar "ad" (ref termAdapterDef @@ var "typ") $
+        bind "ad" (ref termAdapterDef @@ var "typ") $
           Flows.pure $ Compute.adapter
             false
             (var "t")
@@ -737,7 +737,7 @@ termAdapterDef = define "termAdapter" $
         @@ (Strings.cat2 (string "adapter for ") (ref DescribeCore.typeDef @@ var "typ"))
         @@ (cases _Type (var "typ")
           (Just $
-            withVar "cx" (ref Monads.getStateDef) $
+            bind "cx" (ref Monads.getStateDef) $
             ref AdaptUtils.chooseAdapterDef
               @@ (var "alts" @@ var "cx")
               @@ (var "supported" @@ var "cx")
@@ -747,7 +747,7 @@ termAdapterDef = define "termAdapter" $
           -- Account for let-bound variables
           _Type_variable>>: lambda "name" $ ref forTypeReferenceDef @@ var "name"])) [
       _Type_annotated>>: lambda "at" $
-        withVar "ad" (ref termAdapterDef @@ Core.annotatedTypeSubject (var "at")) $
+        bind "ad" (ref termAdapterDef @@ Core.annotatedTypeSubject (var "at")) $
         Flows.pure (Compute.adapterWithTarget (var "ad") $
           Core.typeAnnotated $ Core.annotatedType (Compute.adapterTarget $ var "ad") (Core.annotatedTypeAnnotation $ var "at"))]
 

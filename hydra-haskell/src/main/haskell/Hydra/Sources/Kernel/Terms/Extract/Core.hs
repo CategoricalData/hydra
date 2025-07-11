@@ -593,8 +593,8 @@ unitVariantDef :: TElement (Name -> Term -> Flow Graph Name)
 unitVariantDef = define "unitVariant" $
   doc "Extract a unit variant (a variant with an empty record value) from a union term" $
   lambdas ["tname", "term"] $
-    withVar "field" (ref variantDef @@ var "tname" @@ var "term") $
-    withVar "ignored" (ref unitDef @@ (Core.fieldTerm $ var "field")) $
+    bind "field" (ref variantDef @@ var "tname" @@ var "term") $
+    bind "ignored" (ref unitDef @@ (Core.fieldTerm $ var "field")) $
     Flows.pure $ Core.fieldName $ var "field"
 
 variantDef :: TElement (Name -> Term -> Flow Graph Field)
