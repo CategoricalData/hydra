@@ -1,0 +1,71 @@
+################################################################################
+# Promote Staging code into the kernel
+
+I would like you to help me promote some Haskell code into a language with a Haskell-based DSL, called Hydra.
+Hydra code is translated into Haskell, Java, Python, and other languages.
+I am going to give you these things:
+1) The "phantoms" DSL which provides the basic DSL syntax
+2) An exhaustive list (the Hydra "lexicon") of the elements (definitions) and primitive functions of Hydra
+3) A representative module which has been promoted into the DSL
+4) The corresponding generated Haskell for the representative module
+I might repeat steps (4) and (5) for additional modules, to give you additional context.
+Finally, I am going to give you one or more unpromoted ("staging") modules and ask you to rewrite them using the
+DSL. Maintain the structure and style of the original code to the fullest extent that you can, given Hydra's more
+limited syntax (particularly around pattern matching and monadic binding). Introduce helper symbols as needed using
+Hydra's "let/lets" and "withVar" syntax. Do not hesitate to ask for clarification; I would prefer that you proceed
+cautiously, and do not produce any code whose correctness is uncertain.
+Notes:
+*) There are two application styles in the DSL syntax: primitive functions and DSL-based helpers (Hydra.Dsl.xxx) are
+applied using concatenation, e.g. Strings.cat2 (string "foo") (string "bar"), or Core.applicationType (var "f") (var "a"),
+while element definitions are applied using "ref" and the @@ operator, e.g. ref myAddDef @@ int32 1 @@ int32 2.
+When a primitive function or DSL-based helper is passed as an argument, use "unaryFunction" or "binaryFunction",
+e.g. Lists.foldl (binaryFunction Math.add) 0 (var "numbers").
+*) Leading underscores '_' in the code may incorrectly appear as asterisks '*'; this is an artifact of the way code is
+pasted into Claude. For example, the name constant `_Type_annotated` may appear as something like "*Type_annotated".
+All such constants are available in the Hydra kernel, which is imported by default in the DSL modules.
+*) Most of Hydra's primitive functions are based on Haskell standard libraries, and their semantics are exactly the same.
+If you feel strongly that an additional primitive would be helpful, please suggest it and confirm before you generate the code.
+*) Hydra does not have type classes, so instead of a single function "map", we have "Lists.map", "Optionals.map",
+"Flows.map", etc., and the same goes for other monadic functions.
+*) In the example DSL modules, a section with standardized imports is provided for you. Keep that section as it is,
+and add imports for Hydra.Sources.Kernel.Terms.* modules as needed.
+
+Are you ready?
+
+1) Here is the phantoms DSL:
+[hydra-haskell/src/main/haskell/Hydra/Dsl/Phantoms.hs]
+
+2) Here is the Hydra lexicon:
+[docs/hydra-lexicon.txt]
+
+3) Here is a representative kernel module in the Hydra DSL:
+[hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Annotations.hs]
+
+4) Here is the corresponding generated Haskell:
+[hydra-haskell/src/gen-main/haskell/Hydra/Annotations.hs]
+
+
+################################################################################
+# Fully qualify "raw" Haskell module, in preparation for promotion
+
+I would like you to help me eliminate unqualified imports from one or more Haskell modules in a framework called Hydra.
+First, I will provide you with a complete lexicon of the symbols ("elements") in the Hydra kernel, as well as a
+complete list of primitive functions. Second, I will give you a Haskell module with unqualified imports like
+"import Hydra.Kernel" (a collection of re-exported modules), "import Hydra.Adapters" (one of the main Hydra source
+modules), or "import Hydra.Lib.Strings" (a library of primitive functions) and I would like you to
+add the appropriate fully-qualified imports, like "import qualified Hydra.Core as Core",
+"import qualified Hydra.Adapters as Adapters", "import Hydra.Lib.Strings as Strings", etc. and modify the definitions
+of the module accordingly (e.g. "Name" goes to "Core.Name", "cat" goes to "Strings.cat", etc.). Notes:
+*) For import aliases, use the last component of the module name, e.g. "Hydra.Core" becomes "Core", or in case of
+conflict, use the last two components, e.g. "Hydra.Show.Core" and "Hydra.Encode.Core" become "ShowCore" and "EncodeCore".
+By convention, "hydra.xxx" like modules like "Hydra.Core" get short aliases like "Core", while other modules which
+would otherwise conflict with them, like "hydra.show.xxx" get the longer names, like "ShowCore".
+*) Do not group the imports; just put them in alphabetical order by module name.
+*) The lexicon uses Hydra's own case conventions, which have a straightforward mapping to Haskell's case conventions.
+For example, "hydra.core.Name" becomes "Hydra.Core.Name", "hydra.lib.lists.head" becomes "Hydra.Lib.Lists.head", etc.
+The convention for field names of record and union types is to concatenate the type name with the field name,
+in camel case, e.g. "hydra.core.ApplicationType" has a field "function", so we have "Core.applicationTypeFunction".
+Feel free to ask questions after you have the module to be converted, and before you do the conversion.
+
+Here is the lexicon:
+[docs/hydra-lexicon.txt]
