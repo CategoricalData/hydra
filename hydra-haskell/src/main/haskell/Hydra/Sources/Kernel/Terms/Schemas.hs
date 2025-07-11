@@ -102,10 +102,10 @@ definitionDependencyNamespacesDef = define "definitionDependencyNamespaces" $
 dependencyNamespacesDef :: TElement (Bool -> Bool -> Bool -> Bool -> [Element] -> Flow Graph (S.Set Namespace))
 dependencyNamespacesDef = define "dependencyNamespaces" $
   doc "Find dependency namespaces in all of a set of terms" $
-  lambdas ["withVars", "withPrims", "withNoms", "withSchema", "els"] $ lets [
+  lambdas ["binds", "withPrims", "withNoms", "withSchema", "els"] $ lets [
     "depNames">: lambda "el" $ lets [
       "term">: Graph.elementTerm $ var "el",
-      "dataNames">: ref Rewriting.termDependencyNamesDef @@ var "withVars" @@ var "withPrims" @@ var "withNoms" @@ var "term",
+      "dataNames">: ref Rewriting.termDependencyNamesDef @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "term",
       "schemaNames">: Logic.ifElse (var "withSchema")
         (Optionals.maybe Sets.empty
           (lambda "ts" $ ref Rewriting.typeDependencyNamesDef @@ true @@ Core.typeSchemeType (var "ts"))
@@ -220,8 +220,8 @@ isSerializableDef = define "isSerializable" $
 moduleDependencyNamespacesDef :: TElement (Bool -> Bool -> Bool -> Bool -> Module -> Flow Graph (S.Set Namespace))
 moduleDependencyNamespacesDef = define "moduleDependencyNamespaces" $
   doc "Find dependency namespaces in all elements of a module, excluding the module's own namespace" $
-  lambdas ["withVars", "withPrims", "withNoms", "withSchema", "mod"] $
-    Flows.bind (ref dependencyNamespacesDef @@ var "withVars" @@ var "withPrims" @@ var "withNoms" @@ var "withSchema" @@
+  lambdas ["binds", "withPrims", "withNoms", "withSchema", "mod"] $
+    Flows.bind (ref dependencyNamespacesDef @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "withSchema" @@
       Module.moduleElements (var "mod")) $
       lambda "deps" $ Flows.pure $ Sets.delete (Module.moduleNamespace $ var "mod") (var "deps")
 

@@ -1001,7 +1001,7 @@ subtypesDef = define "subtypes" $
 termDependencyNamesDef :: TElement (Bool -> Bool -> Bool -> Term -> S.Set Name)
 termDependencyNamesDef = define "termDependencyNames" $
   doc "Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that" $
-  lambdas ["withVars", "withPrims", "withNoms"] $ lets [
+  lambdas ["binds", "withPrims", "withNoms"] $ lets [
     "addNames">: lambdas ["names", "term"] $ lets [
       "nominal">: lambda "name" $ Logic.ifElse (var "withNoms")
         (Sets.insert (var "name") (var "names"))
@@ -1009,7 +1009,7 @@ termDependencyNamesDef = define "termDependencyNames" $
       "prim">: lambda "name" $ Logic.ifElse (var "withPrims")
         (Sets.insert (var "name") (var "names"))
         (var "names"),
-      "var">: lambda "name" $ Logic.ifElse (var "withVars")
+      "var">: lambda "name" $ Logic.ifElse (var "binds")
         (Sets.insert (var "name") (var "names"))
         (var "names")]
       $ cases _Term (var "term") (Just $ var "names") [

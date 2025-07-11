@@ -175,7 +175,7 @@ hsvarDef = haskellUtilsDefinition "hsvar" $
 namespacesForModuleDef :: TElement (Module -> Flow Graph HaskellNamespaces)
 namespacesForModuleDef = haskellUtilsDefinition "namespacesForModule" $
   lambda "mod" $
-    withVar "nss"
+    bind "nss"
       (ref Schemas.moduleDependencyNamespacesDef @@ true @@ true @@ true @@ true @@ var "mod") $ lets [
     "ns">: Module.moduleNamespace $ var "mod",
     "focusPair">: var "toPair" @@ var "ns",
