@@ -367,6 +367,7 @@ typeDef = define "type_" $
             "cod">: Core.functionTypeCodomain $ var "ft"] $
             var "gatherFunctionTypes" @@ (Lists.cons (var "dom") (var "prev")) @@ var "cod"]] $
     cases _Type (var "typ") Nothing [
+      _Type_annotated>>: lambda "at" $ ref typeDef @@ (Core.annotatedTypeSubject $ var "at"),
       _Type_application>>: lambda "app" $ lets [
         "types">: var "gatherTypes" @@ (list []) @@ var "app",
         "typeStrs">: Lists.map (ref typeDef) (var "types")] $
@@ -425,12 +426,7 @@ typeDef = define "type_" $
       _Type_wrap>>: lambda "wt" $ lets [
         "tname">: unwrap _Name @@ (Core.wrappedTypeTypeName $ var "wt"),
         "typ1">: Core.wrappedTypeObject $ var "wt"] $
-        Strings.cat $ list [
-          string "wrap[",
-          var "tname",
-          string "](",
-          ref typeDef @@ var "typ1",
-          string ")"]]
+        Strings.cat $ list [string "wrap[", var "tname", string "](", ref typeDef @@ var "typ1", string ")"]]
 
 typeSchemeDef :: TElement (TypeScheme -> String)
 typeSchemeDef = define "typeScheme" $
