@@ -3,13 +3,11 @@
 {-
 :m
 import Hydra.Kernel
-import Hydra.Ext.Tools.Analysis
-import qualified Data.List as L
+import Hydra.Ext.Tools.Analysis.Summaries
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Tools.Monads
 import Hydra.Generation
-import Hydra.Sources.Kernel.Types.All
-import Hydra.Sources.Kernel.Terms.All
+import Hydra.Sources.All
 
 -- Create an exhaustive list of Hydra kernel elements and primitives for code generation
 flowToIo hydraCoreGraph (graphSummary True $ modulesToGraph kernelModules) >>= putStrLn
