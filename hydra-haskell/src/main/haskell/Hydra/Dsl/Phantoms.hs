@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Show.Core as ShowCore
 
 import Prelude hiding ((++))
+import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -64,8 +65,16 @@ var v = TTerm $ Terms.var v
 bind :: String -> TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
 bind v def body = primitive2 _flows_bind def $ lambda v $ body
 
+binds :: [Field] -> TTerm (Flow s a) -> TTerm (Flow s a)
+binds fields rhs = L.foldr withField rhs fields
+  where
+    withField (Field (Name fname) fterm) b = bind fname (TTerm fterm) b
+
 exec :: TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
 exec f b = primitive2 _flows_bind f (lambda ignoredVariable b)
+
+produce :: TTerm a -> TTerm (Flow s a)
+produce = primitive1 _flows_pure
 
 -- * Functions
 

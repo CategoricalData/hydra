@@ -384,7 +384,7 @@ replaceFreeName v rep typ =
           _ -> (recurse t)) t)
   in (rewriteType mapExpr typ)
 
-rewrite :: ((t1 -> t0) -> (t0 -> t1) -> t1)
+rewrite :: ((t0 -> t1) -> (t1 -> t0) -> t0)
 rewrite fsub f =  
   let recurse = (f (fsub recurse))
   in recurse
@@ -590,7 +590,7 @@ rewriteType f =
   in (rewrite fsub f)
 
 rewriteTypeM :: (((Core.Type -> Compute.Flow t0 Core.Type) -> Core.Type -> Compute.Flow t0 Core.Type) -> Core.Type -> Compute.Flow t0 Core.Type)
-rewriteTypeM f =  
+rewriteTypeM =  
   let fsub = (\recurse -> \typ -> (\x -> case x of
           Core.TypeAnnotated v1 -> (Flows.bind (recurse (Core.annotatedTypeSubject v1)) (\t -> Flows.pure (Core.TypeAnnotated (Core.AnnotatedType {
             Core.annotatedTypeSubject = t,
@@ -636,7 +636,7 @@ rewriteTypeM f =
           Core.TypeWrap v1 -> (Flows.bind (recurse (Core.wrappedTypeObject v1)) (\t -> Flows.pure (Core.TypeWrap (Core.WrappedType {
             Core.wrappedTypeTypeName = (Core.wrappedTypeTypeName v1),
             Core.wrappedTypeObject = t}))))) typ)
-  in (rewrite fsub f)
+  in (\f -> rewrite fsub f)
 
 -- | Simplify terms by applying beta reduction where possible
 simplifyTerm :: (Core.Term -> Core.Term)
@@ -807,11 +807,11 @@ subtypes x = case x of
 
 -- | Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
 termDependencyNames :: (Bool -> Bool -> Bool -> Core.Term -> S.Set Core.Name)
-termDependencyNames withVars withPrims withNoms =  
+termDependencyNames binds withPrims withNoms =  
   let addNames = (\names -> \term ->  
           let nominal = (\name -> Logic.ifElse withNoms (Sets.insert name names) names) 
               prim = (\name -> Logic.ifElse withPrims (Sets.insert name names) names)
-              var = (\name -> Logic.ifElse withVars (Sets.insert name names) names)
+              var = (\name -> Logic.ifElse binds (Sets.insert name names) names)
           in ((\x -> case x of
             Core.TermFunction v1 -> ((\x -> case x of
               Core.FunctionPrimitive v2 -> (prim v2)
