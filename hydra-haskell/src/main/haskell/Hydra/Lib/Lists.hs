@@ -43,6 +43,9 @@ filter = L.filter
 foldl :: (b -> a -> b) -> b -> [a] -> b
 foldl = L.foldl
 
+group :: Eq a => [a] -> [[a]]
+group = L.group
+
 head :: [a] -> a
 head = L.head
 

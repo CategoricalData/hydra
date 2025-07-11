@@ -39,6 +39,9 @@ filter = primitive2 _lists_filter
 foldl :: TTerm (b -> a -> b) -> TTerm b -> TTerm [a] -> TTerm b
 foldl = primitive3 _lists_foldl
 
+group :: Eq a => TTerm [a] -> TTerm [[a]]
+group = primitive1 _lists_group
+
 head :: TTerm [a] -> TTerm a
 head = primitive1 _lists_head
 

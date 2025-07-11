@@ -7,6 +7,7 @@ import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
@@ -106,12 +107,22 @@ pure xp = (Compute.Flow (\s -> \t -> Compute.FlowState {
 -- | Push an error message
 pushError :: (String -> Compute.Trace -> Compute.Trace)
 pushError msg t =  
-  let errorMsg = (Strings.cat [
-          "Error: ",
-          msg,
-          " (",
-          Strings.intercalate " > " (Lists.reverse (Compute.traceStack t)),
-          ")"])
+  let condenseRepeats =  
+          let condenseGroup = (\xs ->  
+                  let x = (Lists.head xs) 
+                      n = (Lists.length xs)
+                  in (Logic.ifElse (Equality.equal n 1) x (Strings.cat [
+                    x,
+                    " (x",
+                    Literals.showInt32 n,
+                    ")"])))
+          in (\ys -> Lists.map condenseGroup (Lists.group ys)) 
+      errorMsg = (Strings.cat [
+              "Error: ",
+              msg,
+              " (",
+              Strings.intercalate " > " (condenseRepeats (Lists.reverse (Compute.traceStack t))),
+              ")"])
   in Compute.Trace {
     Compute.traceStack = (Compute.traceStack t),
     Compute.traceMessages = (Lists.cons errorMsg (Compute.traceMessages t)),
