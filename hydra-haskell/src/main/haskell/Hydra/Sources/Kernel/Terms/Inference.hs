@@ -913,30 +913,12 @@ inferTypeOfUnwrapDef = define "inferTypeOfUnwrap" $
     "svars">: Core.typeSchemeVariables $ var "schemaType",
     "styp">: Core.typeSchemeType $ var "schemaType"] $
     withVar "wtyp" (ref ExtractCore.wrappedTypeDef @@ var "tname" @@ var "styp") $
-    Logic.ifElse (Lists.null $ var "svars")
-      -- Monomorphic case: return unwrap function directly
-      (Flows.pure $ ref yieldDef
-        @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationWrap $ var "tname")
-        @@ (Core.typeFunction $ Core.functionType
-            (Core.typeVariable $ var "tname")  -- For monomorphic, this is correct
-            (var "wtyp"))
-        @@ ref Substitution.idTypeSubstDef)
-      -- Polymorphic case: return a polymorphic function
-      (lets [
-        "innerType">: Core.typeFunction $ Core.functionType
+    Flows.pure $ ref yieldDef
+      @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationWrap $ var "tname")
+      @@ (Core.typeFunction $ Core.functionType
           (ref nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
-          (var "wtyp"),
-        "polyType">: Lists.foldl
-          (lambdas ["body", "var"] $ Core.typeForall $ Core.forallType (var "var") (var "body"))
-          (var "innerType")
-          (Lists.reverse $ var "svars"),
-        -- Create a type-abstracted unwrap term
-        "innerTerm">: Core.termFunction $ Core.functionElimination $ Core.eliminationWrap $ var "tname",
-        "polyTerm">: Lists.foldl
-          (lambdas ["body", "var"] $ Core.termTypeAbstraction $ Core.typeAbstraction (var "var") (var "body"))
-          (var "innerTerm")
-          (Lists.reverse $ var "svars")] $
-        Flows.pure $ ref yieldDef @@ var "polyTerm" @@ var "polyType" @@ ref Substitution.idTypeSubstDef)
+          (var "wtyp"))
+      @@ ref Substitution.idTypeSubstDef
 --    Flows.fail $ Strings.cat $ list [
 --      string "schemaType: ",
 --      ref ShowCore.typeSchemeDef @@ var "schemaType",

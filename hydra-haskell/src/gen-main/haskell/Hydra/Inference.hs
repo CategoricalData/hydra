@@ -644,21 +644,10 @@ inferTypeOfUnwrap :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 T
 inferTypeOfUnwrap cx tname = (Flows.bind (requireSchemaType cx tname) (\schemaType ->  
   let svars = (Core.typeSchemeVariables schemaType) 
       styp = (Core.typeSchemeType schemaType)
-  in (Flows.bind (Core_.wrappedType tname styp) (\wtyp -> Logic.ifElse (Lists.null svars) (Flows.pure (yield (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap tname))) (Core.TypeFunction (Core.FunctionType {
-    Core.functionTypeDomain = (Core.TypeVariable tname),
-    Core.functionTypeCodomain = wtyp})) Substitution.idTypeSubst)) ( 
-    let innerType = (Core.TypeFunction (Core.FunctionType {
-            Core.functionTypeDomain = (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
-            Core.functionTypeCodomain = wtyp})) 
-        polyType = (Lists.foldl (\body -> \var -> Core.TypeForall (Core.ForallType {
-                Core.forallTypeParameter = var,
-                Core.forallTypeBody = body})) innerType (Lists.reverse svars))
-        innerTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap tname)))
-        polyTerm = (Lists.foldl (\body -> \var -> Core.TermTypeAbstraction (Core.TypeAbstraction {
-                Core.typeAbstractionParameter = var,
-                Core.typeAbstractionBody = body})) innerTerm (Lists.reverse svars))
-    in (Flows.pure (yield polyTerm polyType Substitution.idTypeSubst)))))))
-
+  in (Flows.bind (Core_.wrappedType tname styp) (\wtyp -> Flows.pure (yield (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap tname))) (Core.TypeFunction (Core.FunctionType {
+    Core.functionTypeDomain = (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
+    Core.functionTypeCodomain = wtyp})) Substitution.idTypeSubst)))))
+    
 inferTypeOfVariable :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfVariable cx name = (Optionals.maybe (Flows.fail (Strings.cat2 "Variable not bound to type: " (Core.unName name))) (\scheme -> Flows.bind (instantiateTypeScheme scheme) (\ts ->  
   let vars = (Core.typeSchemeVariables ts) 
