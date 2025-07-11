@@ -73,7 +73,7 @@ adaptAndEncodeTypeDef = define "adaptAndEncodeType" $
   doc "Given a target language, an encoding function, and a type, adapt and encode the type" $
   lambdas ["lang", "enc", "typ"] $
     cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ")
-      (Just $ withVar "adaptedType" (ref adaptTypeDef @@ var "lang" @@ var "typ") $
+      (Just $ bind "adaptedType" (ref adaptTypeDef @@ var "lang" @@ var "typ") $
         var "enc" @@ var "adaptedType") [
       _Type_variable>>: constant (var "enc" @@ var "typ")]
 
@@ -81,7 +81,7 @@ adaptTypeDef :: TElement (Language -> Type -> Flow Graph Type)
 adaptTypeDef = define "adaptType" $
   doc "Given a target language and a source type, find the target type to which the latter will be adapted" $
   lambdas ["lang", "typ"] $
-    withVar "adapter" (ref languageAdapterDef @@ var "lang" @@ var "typ") $
+    bind "adapter" (ref languageAdapterDef @@ var "lang" @@ var "typ") $
       Flows.pure $ Compute.adapterTarget $ var "adapter"
 
 constructCoderDef :: TElement (Language -> (Term -> Flow Graph c) -> Type -> Flow Graph (Coder Graph Graph Term c))
@@ -90,7 +90,7 @@ constructCoderDef = define "constructCoder" $
   lambdas ["lang", "encodeTerm", "typ"] $
     ref Monads.withTraceDef
       @@ (Strings.cat2 (string "coder for ") (ref DescribeCore.typeDef @@ var "typ"))
-      @@ (withVar "adapter" (ref languageAdapterDef @@ var "lang" @@ var "typ") $
+      @@ (bind "adapter" (ref languageAdapterDef @@ var "lang" @@ var "typ") $
           Flows.pure $ ref AdaptUtils.composeCodersDef
             @@ (Compute.adapterCoder $ var "adapter")
             @@ (ref AdaptUtils.unidirectionalCoderDef @@ var "encodeTerm"))
@@ -99,11 +99,11 @@ languageAdapterDef :: TElement (Language -> Type -> Flow Graph (SymmetricAdapter
 languageAdapterDef = define "languageAdapter" $
   doc "Given a target language and a source type, produce an adapter, which rewrites the type and its terms according to the language's constraints" $
   lambdas ["lang", "typ"] $
-    withVar "g" (ref Monads.getStateDef) $ lets [
+    bind "g" (ref Monads.getStateDef) $ lets [
       "cx0">: Coders.adapterContext (var "g") (var "lang") Maps.empty] $
-    withVar "result" (ref Monads.withStateDef @@ var "cx0" @@
-      (withVar "ad" (ref AdaptTerms.termAdapterDef @@ var "typ") $
-       withVar "cx" (ref Monads.getStateDef) $
+    bind "result" (ref Monads.withStateDef @@ var "cx0" @@
+      (bind "ad" (ref AdaptTerms.termAdapterDef @@ var "typ") $
+       bind "cx" (ref Monads.getStateDef) $
        Flows.pure $ pair (var "ad") (var "cx"))) $ lets [
       "adapter">: first $ var "result",
       "cx">: second $ var "result",
@@ -123,11 +123,11 @@ transformModuleDef = define "transformModule" $
       @@ (lets [
         "els">: Module.moduleElements $ var "mod",
         "codersFor">: lambda "types" $
-          withVar "cdrs" (Flows.mapList (ref constructCoderDef @@ var "lang" @@ var "encodeTerm") (var "types")) $
+          bind "cdrs" (Flows.mapList (ref constructCoderDef @@ var "lang" @@ var "encodeTerm") (var "types")) $
           Flows.pure $ Maps.fromList $ Lists.zip (var "types") (var "cdrs")] $
-      withVar "tterms" (ref Lexical.withSchemaContextDef @@ (Flows.mapList (ref Schemas.elementAsTypedTermDef) (var "els"))) $
+      bind "tterms" (ref Lexical.withSchemaContextDef @@ (Flows.mapList (ref Schemas.elementAsTypedTermDef) (var "els"))) $
       lets ["types">: Lists.nub $ Lists.map (unaryFunction Core.typedTermType) (var "tterms")] $
-      withVar "coders" (var "codersFor" @@ var "types") $
+      bind "coders" (var "codersFor" @@ var "types") $
       var "createModule" @@ var "mod" @@ var "coders" @@ (Lists.zip (var "els") (var "tterms")))
 
 adaptedModuleDefinitionsDef :: TElement (Language -> Module -> Flow Graph [Definition])
@@ -136,7 +136,7 @@ adaptedModuleDefinitionsDef = define "adaptedModuleDefinitions" $
   lambdas ["lang", "mod"] $ lets [
     "els">: Module.moduleElements $ var "mod",
     "adaptersFor">: lambda "types" $
-      withVar "adapters" (Flows.mapList (ref languageAdapterDef @@ var "lang") (var "types")) $
+      bind "adapters" (Flows.mapList (ref languageAdapterDef @@ var "lang") (var "types")) $
       Flows.pure $ Maps.fromList $ Lists.zip (var "types") (var "adapters"),
     "classify">: lambdas ["adapters", "pair"] $ lets [
       "el">: first $ var "pair",
@@ -145,15 +145,15 @@ adaptedModuleDefinitionsDef = define "adaptedModuleDefinitions" $
       "typ">: Core.typedTermType $ var "tt",
       "name">: Graph.elementName $ var "el"] $
       Logic.ifElse (ref Annotations.isNativeTypeDef @@ var "el")
-        (withVar "adaptedTyp" (withVar "coreTyp" (ref DecodeCore.typeDef @@ var "term") $ ref adaptTypeDef @@ var "lang" @@ var "coreTyp") $
+        (bind "adaptedTyp" (bind "coreTyp" (ref DecodeCore.typeDef @@ var "term") $ ref adaptTypeDef @@ var "lang" @@ var "coreTyp") $
          Flows.pure $ Module.definitionType $ Module.typeDefinition (var "name") (var "adaptedTyp"))
         (Optionals.maybe
           (Flows.fail $ Strings.cat2 (string "no adapter for element ") (unwrap _Name @@ var "name"))
           (lambda "adapter" $
-            withVar "adapted" (Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "term") $
+            bind "adapted" (Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "term") $
             Flows.pure $ Module.definitionTerm $ Module.termDefinition (var "name") (var "adapted") (Compute.adapterTarget $ var "adapter"))
           (Maps.lookup (var "typ") (var "adapters")))] $
-  withVar "tterms" (ref Lexical.withSchemaContextDef @@ (Flows.mapList (ref Schemas.elementAsTypedTermDef) (var "els"))) $
+  bind "tterms" (ref Lexical.withSchemaContextDef @@ (Flows.mapList (ref Schemas.elementAsTypedTermDef) (var "els"))) $
   lets ["types">: Sets.toList $ Sets.fromList $ Lists.map (ref Rewriting.deannotateTypeDef <.> unaryFunction Core.typedTermType) (var "tterms")] $
-  withVar "adapters" (var "adaptersFor" @@ var "types") $
+  bind "adapters" (var "adaptersFor" @@ var "types") $
   Flows.mapList (var "classify" @@ var "adapters") $ Lists.zip (var "els") (var "tterms")

@@ -151,12 +151,12 @@ literalAdapterDef = define "literalAdapter" $
             _Literal_string>>: lambda "s" $ Flows.pure $ Core.literalBinary $ Literals.stringToBinary $ var "s"])] $
         Flows.pure $ list [Compute.adapter false (var "t") Core.literalTypeString (var "step")],
       _LiteralType_boolean>>: constant $
-        withVar "cx" (ref Monads.getStateDef) $ lets [
+        bind "cx" (ref Monads.getStateDef) $ lets [
         "constraints">: Coders.languageConstraints $ Coders.adapterContextLanguage $ var "cx",
         "hasIntegers">: Logic.not $ Sets.null $ Coders.languageConstraintsIntegerTypes $ var "constraints",
         "hasStrings">: Sets.member Mantle.literalVariantString (Coders.languageConstraintsLiteralVariants $ var "constraints")] $
         Logic.ifElse (var "hasIntegers")
-          (withVar "adapter" (ref integerAdapterDef @@ Core.integerTypeUint8) $ lets [
+          (bind "adapter" (ref integerAdapterDef @@ Core.integerTypeUint8) $ lets [
             "step'">: Compute.adapterCoder $ var "adapter",
             "step">: Compute.coder
               (lambda "lit" $ cases _Literal (var "lit") Nothing [
@@ -172,10 +172,10 @@ literalAdapterDef = define "literalAdapter" $
           (Logic.ifElse (var "hasStrings")
             (Flows.pure $ lets [
               "encode">: lambda "lit" $
-                withVar "b" (ref ExtractCore.booleanLiteralDef @@ var "lit") $
+                bind "b" (ref ExtractCore.booleanLiteralDef @@ var "lit") $
                 Flows.pure $ Core.literalString $ Logic.ifElse (var "b") "true" "false",
               "decode">: lambda "lit" $
-                withVar "s" (ref ExtractCore.stringLiteralDef @@ var "lit") $
+                bind "s" (ref ExtractCore.stringLiteralDef @@ var "lit") $
                 Logic.ifElse (Equality.equal (var "s") (string "true"))
                   (Flows.pure $ Core.literalBoolean true)
                   (Logic.ifElse (Equality.equal (var "s") (string "false"))
