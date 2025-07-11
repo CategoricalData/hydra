@@ -192,9 +192,18 @@ pushErrorDef :: TElement (String -> Trace -> Trace)
 pushErrorDef = define "pushError" $
   doc "Push an error message" $
   lambdas ["msg", "t"] $ lets [
+    "condenseRepeats">: lets [
+      "condenseGroup">: lambda "xs" $  lets [
+        "x">: Lists.head $ var "xs",
+        "n">: Lists.length $ var "xs"] $
+        Logic.ifElse (Equality.equal (var "n") (int32 1))
+          (var "x")
+          (Strings.cat $ list [var "x", " (x", Literals.showInt32 (var "n"), ")"])] $
+      lambda "ys" $ Lists.map (var "condenseGroup") $ Lists.group (var "ys" :: TTerm [String]),
     "errorMsg">: Strings.concat [
       "Error: ", var "msg", " (",
-      Strings.intercalate " > " (Lists.reverse (Compute.traceStack $ var "t")),
+--      (Strings.intercalate " > " (Lists.reverse $ Compute.traceStack $ var "t")),
+      (Strings.intercalate " > " (var "condenseRepeats" @@ (Lists.reverse $ Compute.traceStack $ var "t"))),
       ")"]] $
     Compute.trace
       (Compute.traceStack $ var "t")

@@ -141,6 +141,7 @@ _lists_dropWhile   = qname _hydra_lib_lists "dropWhile" :: Name
 _lists_elem        = qname _hydra_lib_lists "elem" :: Name
 _lists_filter      = qname _hydra_lib_lists "filter" :: Name
 _lists_foldl       = qname _hydra_lib_lists "foldl" :: Name
+_lists_group       = qname _hydra_lib_lists "group" :: Name
 _lists_head        = qname _hydra_lib_lists "head" :: Name
 _lists_init        = qname _hydra_lib_lists "init" :: Name
 _lists_intercalate = qname _hydra_lib_lists "intercalate" :: Name
@@ -177,6 +178,7 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim2       _lists_elem        Lists.elem         ["x"] x (list x) boolean,
     prim2       _lists_filter      Lists.filter       ["x"] (function x boolean) (list x) (list x),
     prim3       _lists_foldl       Lists.foldl        ["x", "y"] (function y (function x y)) y (list x) y,
+    prim1       _lists_group       Lists.group        ["x"] (list x) (list (list x)),
     prim1       _lists_head        Lists.head         ["x"] (list x) x,
     prim1       _lists_init        Lists.init         ["x"] (list x) (list x),
     prim2       _lists_intercalate Lists.intercalate  ["x"] (list x) (list (list x)) (list x),
