@@ -64,6 +64,12 @@ var v = TTerm $ Terms.var v
 withVar :: String -> TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
 withVar v def body = primitive2 _flows_bind def $ lambda v $ body
 
+bind :: String -> TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
+bind v def body = primitive2 _flows_bind def $ lambda v $ body
+
+exec :: TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
+exec f b = primitive2 _flows_bind f (lambda ignoredVariable b)
+
 -- * Functions
 
 unaryFunction :: (TTerm a -> TTerm b) -> TTerm (a -> b)

@@ -54,9 +54,8 @@ import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 module_ :: Module
 module_ = Module (Namespace "hydra.annotations") elements
-    [Decoding.module_, DecodeCore.module_, EncodeCore.module_,
-      ExtractCore.module_, Lexical.module_,
-      ShowCore.module_, Variants.module_, Monads.module_]
+    [Decoding.module_, DecodeCore.module_, EncodeCore.module_, ExtractCore.module_, Lexical.module_, ShowCore.module_,
+      Variants.module_, Monads.module_]
     kernelTypesModules $
     Just "Utilities for reading and writing type and term annotations"
   where
@@ -108,9 +107,9 @@ aggregateAnnotationsDef = define "aggregateAnnotations" $
   doc "Aggregate annotations from nested structures" $
   lambdas ["getValue", "getX", "getAnns", "t"] $ lets [
     "toPairs">: lambdas ["rest", "t"] $ Optionals.maybe (var "rest")
-      (lambda "yy" $ var "toPairs" @@
-        Lists.cons (Maps.toList $ var "getAnns" @@ var "yy") (var "rest") @@
-        (var "getX" @@ var "yy"))
+      (lambda "yy" $ var "toPairs"
+        @@ Lists.cons (Maps.toList $ var "getAnns" @@ var "yy") (var "rest")
+        @@ (var "getX" @@ var "yy"))
       (var "getValue" @@ var "t")] $
     Maps.fromList $ Lists.concat $ var "toPairs" @@ list [] @@ var "t"
 
@@ -128,7 +127,7 @@ failOnFlagDef :: TElement (Name -> String -> Flow s ())
 failOnFlagDef = define "failOnFlag" $
   doc "Fail if the given flag is set" $
   lambdas ["flag", "msg"] $
-    withVar "val" (ref hasFlagDef @@ var "flag") $
+    bind "val" (ref hasFlagDef @@ var "flag") $
     Logic.ifElse (var "val")
       (Flows.fail $ var "msg")
       (Flows.pure unit)
@@ -152,23 +151,22 @@ getAttrWithDefaultDef = define "getAttrWithDefault" $
 getCountDef :: TElement (Name -> Flow s Int)
 getCountDef = define "getCount" $
   doc "Get a counter value" $
-  lambda "key" $ ref Lexical.withEmptyGraphDef @@
-    (Flows.bind
-      (ref getAttrWithDefaultDef @@ var "key" @@ (Core.int32 0))
-      (ref ExtractCore.int32Def))
+  lambda "key" $ ref Lexical.withEmptyGraphDef @@ (Flows.bind
+    (ref getAttrWithDefaultDef @@ var "key" @@ (Core.int32 0))
+    (ref ExtractCore.int32Def))
 
 getDebugIdDef :: TElement (Flow s (Maybe String))
 getDebugIdDef = define "getDebugId" $
   doc "Get the debug ID from flow state" $
-  ref Lexical.withEmptyGraphDef @@
-    (Flows.bind
-      (ref getAttrDef @@ ref Constants.key_debugIdDef)
-      (lambda "desc" $ Flows.traverseOptional (ref ExtractCore.stringDef) (var "desc")))
+  ref Lexical.withEmptyGraphDef @@ (Flows.bind
+    (ref getAttrDef @@ ref Constants.key_debugIdDef)
+    (lambda "desc" $ Flows.traverseOptional (ref ExtractCore.stringDef) (var "desc")))
 
 getDescriptionDef :: TElement (M.Map Name Term -> Flow Graph (Maybe String))
 getDescriptionDef = define "getDescription" $
   doc "Get description from annotations map" $
-  lambda "anns" $ Optionals.maybe (Flows.pure nothing)
+  lambda "anns" $ Optionals.maybe
+    (Flows.pure nothing)
     (lambda "term" $ Flows.map (unaryFunction just) $ ref ExtractCore.stringDef @@ var "term")
     (Maps.lookup (Core.nameLift key_description) (var "anns"))
 
@@ -185,7 +183,8 @@ getTermDescriptionDef = define "getTermDescription" $
 getTypeDef :: TElement (M.Map Name Term -> Flow Graph (Maybe Type))
 getTypeDef = define "getType" $
   doc "Get type from annotations" $
-  lambda "anns" $ Optionals.maybe (Flows.pure nothing)
+  lambda "anns" $ Optionals.maybe
+    (Flows.pure nothing)
     (lambda "dat" $ Flows.map (unaryFunction just) (ref DecodeCore.typeDef @@ var "dat"))
     (Maps.lookup (ref Constants.key_typeDef) (var "anns"))
 
@@ -202,7 +201,7 @@ getTypeClassesDef = define "getTypeClasses" $
       "byName">: Maps.fromList $ list [
         pair (Core.nameLift _TypeClass_equality) Graph.typeClassEquality,
         pair (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]] $
-      withVar "fn" (ref ExtractCore.unitVariantDef @@ Core.nameLift _TypeClass @@ var "term") $
+      bind "fn" (ref ExtractCore.unitVariantDef @@ Core.nameLift _TypeClass @@ var "term") $
       Optionals.maybe
         (ref Monads.unexpectedDef @@ string "type class" @@ (ref ShowCore.termDef @@ var "term"))
         (unaryFunction Flows.pure)
@@ -229,8 +228,7 @@ isNativeTypeDef = define "isNativeType" $
       Optionals.bind
         (ref getTermAnnotationDef @@ ref Constants.key_firstClassTypeDef @@ (Graph.elementTerm $ var "el"))
         (ref Decoding.booleanDef)] $
-    Optionals.maybe
-      false
+    Optionals.maybe false
       (lambda "ts" $ Logic.and
         (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _Type)))
         (Logic.not $ var "isFlaggedAsFirstClassType"))
@@ -244,8 +242,9 @@ hasDescriptionDef = define "hasDescription" $
 hasFlagDef :: TElement (Name -> Flow s Bool)
 hasFlagDef = define "hasFlag" $
   doc "Check if flag is set" $
-  lambda "flag" $ ref Lexical.withEmptyGraphDef @@
-    (withVar "term" (ref getAttrWithDefaultDef @@ var "flag" @@ Core.false) $ ref ExtractCore.booleanDef @@ var "term")
+  lambda "flag" $ ref Lexical.withEmptyGraphDef
+    @@ (bind "term" (ref getAttrWithDefaultDef @@ var "flag" @@ Core.false) $
+        ref ExtractCore.booleanDef @@ var "term")
 
 hasTypeDescriptionDef :: TElement (Type -> Bool)
 hasTypeDescriptionDef = define "hasTypeDescription" $
@@ -256,7 +255,7 @@ nextCountDef :: TElement (Name -> Flow s Int)
 nextCountDef = define "nextCount" $
   doc "Return a zero-indexed counter for the given key: 0, 1, 2, ..." $
   lambda "key" $
-    withVar "count" (ref getCountDef @@ var "key") $
+    bind "count" (ref getCountDef @@ var "key") $
     Flows.map
       (constant $ var "count")
       (ref putCountDef @@ var "key" @@ Math.add (var "count") (int32 1))
@@ -330,7 +329,7 @@ setTermDescriptionDef = define "setTermDescription" $
   doc "Set term description" $
   lambda "d" $ ref setTermAnnotationDef
     @@ ref Constants.key_descriptionDef
-    @@ Optionals.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
+    @@ Optionals.map (lambda "s" $ Core.termLiteral $ Core.literalString $ var "s") (var "d")
 
 setTypeDef :: TElement (Maybe Type -> M.Map Name Term -> M.Map Name Term)
 setTypeDef = define "setType" $
@@ -402,9 +401,9 @@ typeElementDef = define "typeElement" $
 whenFlagDef :: TElement (Name -> Flow s a -> Flow s a -> Flow s a)
 whenFlagDef = define "whenFlag" $
   doc "Execute different flows based on flag" $
-  lambda "flag" $ lambda "fthen" $ lambda "felse" $
-    withVar "b" (ref hasFlagDef @@ var "flag") $
-      Logic.ifElse (var "b") (var "fthen") (var "felse")
+  lambdas ["flag", "fthen", "felse"] $
+    bind "b" (ref hasFlagDef @@ var "flag") $
+    Logic.ifElse (var "b") (var "fthen") (var "felse")
 
 -- TODO: move into hydra.rewriting
 unshadowVariablesDef :: TElement (Term -> Term)
@@ -415,7 +414,7 @@ unshadowVariablesDef = define "unshadowVariables" $
       ref nextCountDef @@ Core.name (string "unshadow"),
     "rewrite">: lambdas ["recurse", "term"] $ lets [
       "handleOther">: var "recurse" @@ var "term"] $
-      withVar "state" (ref Monads.getStateDef) $ lets [
+      bind "state" (ref Monads.getStateDef) $ lets [
         "reserved">: first $ var "state",
         "subst">: second $ var "state"] $
         cases _Term (var "term") (Just $ var "handleOther") [
@@ -428,18 +427,17 @@ unshadowVariablesDef = define "unshadowVariables" $
                 "d">: Core.lambdaDomain $ var "l",
                 "body">: Core.lambdaBody $ var "l"] $
                 Logic.ifElse (Sets.member (var "v")(var "reserved"))
-                  (withVar "v'" (var "freshName") $
-                    Flows.bind (ref Monads.putStateDef @@ pair (Sets.insert (var "v'") (var "reserved")) (Maps.insert (var "v") (var "v'") (var "subst"))) $
-                      constant $
-                        Flows.bind (var "recurse" @@ var "body") $
-                          lambda "body'" $
-                            Flows.bind (ref Monads.putStateDef @@ var "state") $
-                              constant $ Flows.pure $ Core.termFunction $ Core.functionLambda $ Core.lambda (var "v'") (var "d") (var "body'"))
-                  (Flows.bind (ref Monads.putStateDef @@ pair (Sets.insert (var "v") (var "reserved")) (var "subst")) $
-                    constant $
-                      Flows.map
-                        (lambda "body'" $ Core.termFunction $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "body'"))
-                        (var "recurse" @@ var "body"))]]] $
+                  ( bind "v'" (var "freshName") $
+                    exec (ref Monads.putStateDef @@ pair
+                      (Sets.insert (var "v'") (var "reserved"))
+                      (Maps.insert (var "v") (var "v'") (var "subst"))) $
+                    bind "body'" (var "recurse" @@ var "body") $
+                    exec (ref Monads.putStateDef @@ var "state") $
+                    Flows.pure $ Core.termFunction $ Core.functionLambda $ Core.lambda (var "v'") (var "d") (var "body'"))
+                  ( exec (ref Monads.putStateDef @@ pair (Sets.insert (var "v") (var "reserved")) (var "subst")) $
+                    Flows.map
+                      (lambda "body'" $ Core.termFunction $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "body'"))
+                      (var "recurse" @@ var "body"))]]] $
     Optionals.fromJust $ Compute.flowStateValue $ Compute.unFlow
       (ref Rewriting.rewriteTermMDef @@ var "rewrite" @@ var "term")
       (pair Sets.empty Maps.empty)
@@ -452,9 +450,9 @@ withDepthDef = define "withDepth" $
     <> " E.g. a variable in an outer case/match statement might be \"v1\", whereas the variable of another case/match statement"
     <> " inside of the first one becomes \"v2\". See also nextCount.") $
   lambdas ["key", "f"] $
-    withVar "count" (ref getCountDef @@ var "key") $ lets [
+    bind "count" (ref getCountDef @@ var "key") $ lets [
     "inc">: Math.add (var "count") (int32 1)] $
-    Flows.bind (ref putCountDef @@ var "key" @@ var "inc") $ constant $
-    withVar "r" (var "f" @@ var "inc") $
-    Flows.bind (ref putCountDef @@ var "key" @@ var "count") $ constant $
+    exec (ref putCountDef @@ var "key" @@ var "inc") $
+    bind "r" (var "f" @@ var "inc") $
+    exec (ref putCountDef @@ var "key" @@ var "count") $
     Flows.pure $ var "r"

@@ -65,7 +65,7 @@ import Hydra.Constants
 import Hydra.Constraints
 import Hydra.Core
 import Hydra.Languages
-import Hydra.Monads hiding (fail, pure)
+import Hydra.Monads hiding (bind, exec, fail, pure)
 import Hydra.Formatting
 import Hydra.Graph
 import Hydra.Inference
