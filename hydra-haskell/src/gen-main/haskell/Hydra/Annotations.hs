@@ -165,7 +165,7 @@ setTermAnnotation key val term =
 
 -- | Set term description
 setTermDescription :: (Maybe String -> Core.Term -> Core.Term)
-setTermDescription d = (setTermAnnotation Constants.key_description (Optionals.map (\arg_ -> (\x -> Core.TermLiteral x) ((\x -> Core.LiteralString x) arg_)) d))
+setTermDescription d = (setTermAnnotation Constants.key_description (Optionals.map (\s -> Core.TermLiteral (Core.LiteralString s)) d))
 
 -- | Set type in annotations
 setType :: (Maybe Core.Type -> M.Map Core.Name Core.Term -> M.Map Core.Name Core.Term)
@@ -236,7 +236,7 @@ typeElement name typ =
       Core.typeSchemeVariables = [],
       Core.typeSchemeType = typ}))}
 
-whenFlag :: (Core.Name -> Compute.Flow t1 t0 -> Compute.Flow t1 t0 -> Compute.Flow t1 t0)
+whenFlag :: (Core.Name -> Compute.Flow t0 t1 -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 whenFlag flag fthen felse = (Flows.bind (hasFlag flag) (\b -> Logic.ifElse b fthen felse))
 
 -- | Unshadow variables in term
@@ -266,7 +266,7 @@ unshadowVariables term =
                   _ -> handleOther) term))))
   in (Optionals.fromJust (Compute.flowStateValue (Compute.unFlow (Rewriting.rewriteTermM rewrite term) (Sets.empty, Maps.empty) Monads.emptyTrace)))
 
-withDepth :: (Core.Name -> (Int -> Compute.Flow t1 t0) -> Compute.Flow t1 t0)
+withDepth :: (Core.Name -> (Int -> Compute.Flow t0 t1) -> Compute.Flow t0 t1)
 withDepth key f = (Flows.bind (getCount key) (\count ->  
   let inc = (Math.add count 1)
   in (Flows.bind (putCount key inc) (\_ -> Flows.bind (f inc) (\r -> Flows.bind (putCount key count) (\_ -> Flows.pure r))))))
