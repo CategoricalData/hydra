@@ -1,54 +1,56 @@
 module Hydra.Staging.Json.Eliminate where
 
-import Hydra.Kernel
+import Hydra.Tools.Monads
+import qualified Hydra.Compute as Compute
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Json as Json
 
 import qualified Data.Map as M
 
 
-expectArray :: Json.Value -> Flow s [Json.Value]
+expectArray :: Json.Value -> Compute.Flow s [Json.Value]
 expectArray value = case value of
-  Json.ValueArray els -> pure els
-  _ -> unexpected "JSON array" $ show value
+  Json.ValueArray els -> Monads.pure els
+  _ -> Monads.unexpected "JSON array" $ show value
 
-expectNumber :: Json.Value -> Flow s Double
+expectNumber :: Json.Value -> Compute.Flow s Double
 expectNumber value = case value of
-  Json.ValueNumber d -> pure d
-  _ -> unexpected "JSON number" $ show value
+  Json.ValueNumber d -> Monads.pure d
+  _ -> Monads.unexpected "JSON number" $ show value
 
-expectObject :: Json.Value -> Flow s (M.Map String Json.Value)
+expectObject :: Json.Value -> Compute.Flow s (M.Map String Json.Value)
 expectObject value = case value of
-  Json.ValueObject m -> pure m
-  _ -> unexpected "JSON object" $ show value
+  Json.ValueObject m -> Monads.pure m
+  _ -> Monads.unexpected "JSON object" $ show value
 
-expectString :: Json.Value -> Flow s String
+expectString :: Json.Value -> Compute.Flow s String
 expectString value = case value of
-  Json.ValueString s -> pure s
-  _ -> unexpected "JSON string" $ show value
+  Json.ValueString s -> Monads.pure s
+  _ -> Monads.unexpected "JSON string" $ show value
 
 opt :: String -> M.Map String Json.Value -> Maybe Json.Value
 opt = M.lookup
 
-optArray :: String -> M.Map String Json.Value -> Flow s (Maybe [Json.Value])
+optArray :: String -> M.Map String Json.Value -> Compute.Flow s (Maybe [Json.Value])
 optArray fname m = case opt fname m of
-  Nothing -> pure Nothing
+  Nothing -> Monads.pure Nothing
   Just a -> Just <$> expectArray a
 
-optString :: String -> M.Map String Json.Value -> Flow s (Maybe String)
+optString :: String -> M.Map String Json.Value -> Compute.Flow s (Maybe String)
 optString fname m = case opt fname m of
-  Nothing -> pure Nothing
+  Nothing -> Monads.pure Nothing
   Just s -> Just <$> expectString s
 
-require :: String -> M.Map String Json.Value -> Flow s Json.Value
+require :: String -> M.Map String Json.Value -> Compute.Flow s Json.Value
 require fname m = case M.lookup fname m of
-  Nothing -> fail $ "required attribute " ++ show fname ++ " not found"
-  Just value -> pure value
+  Nothing -> Monads.fail $ "required attribute " ++ show fname ++ " not found"
+  Just value -> Monads.pure value
 
-requireArray :: String -> M.Map String Json.Value -> Flow s [Json.Value]
+requireArray :: String -> M.Map String Json.Value -> Compute.Flow s [Json.Value]
 requireArray fname m = require fname m >>= expectArray
 
-requireNumber :: String -> M.Map String Json.Value -> Flow s Double
+requireNumber :: String -> M.Map String Json.Value -> Compute.Flow s Double
 requireNumber fname m = require fname m >>= expectNumber
 
-requireString :: String -> M.Map String Json.Value -> Flow s String
+requireString :: String -> M.Map String Json.Value -> Compute.Flow s String
 requireString fname m = require fname m >>= expectString
