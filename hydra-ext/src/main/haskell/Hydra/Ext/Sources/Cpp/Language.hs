@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Lib.Maps                         as Maps
 import qualified Hydra.Dsl.Lib.Math                         as Math
 import qualified Hydra.Dsl.Lib.Optionals                    as Optionals
 import qualified Hydra.Dsl.Lib.Sets                         as Sets
-import qualified Hydra.Dsl.Lib.Strings                      as Strings
+import           Hydra.Dsl.Lib.Strings                      as Strings
 import qualified Hydra.Dsl.Mantle                           as Mantle
 import qualified Hydra.Dsl.Module                           as Module
 import           Hydra.Dsl.Phantoms                         as Phantoms
@@ -74,6 +74,7 @@ import qualified Hydra.Sources.Kernel.Terms.Tarjan          as Tarjan
 import qualified Hydra.Sources.Kernel.Terms.Templates       as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
 import qualified Hydra.Sources.Kernel.Terms.Variants        as Variants
+import           Prelude hiding ((++))
 import qualified Data.Int                                   as I
 import qualified Data.List                                  as L
 import qualified Data.Map                                   as M
@@ -97,102 +98,106 @@ cppLanguageModule = Module ns elements
 
 cppLanguageDef :: TElement Language
 cppLanguageDef = cppLanguageDefinition "cppLanguage" $
-    doc "Language constraints for C++" $
-    Coders.language "hydra.ext.cpp"
-      eliminationVariants
-      literalVariants
-      floatTypes
-      functionVariants
-      integerTypes
-      termVariants
-      typeVariants
-      typePredicate
-  where
-      eliminationVariants = [
-        EliminationVariantProduct,
-        EliminationVariantRecord,
-        EliminationVariantUnion,
-        EliminationVariantWrap]
-      literalVariants = [
-        LiteralVariantBinary,  -- char arrays, std::byte arrays
-        LiteralVariantBoolean, -- bool
-        LiteralVariantFloat,   -- float, double
-        LiteralVariantInteger, -- int, long, etc.
-        LiteralVariantString]  -- std::string
-      floatTypes = [
-        FloatTypeFloat32,      -- float
-        FloatTypeFloat64]      -- double
-      functionVariants = [
-        FunctionVariantElimination,
-        FunctionVariantLambda,
-        FunctionVariantPrimitive]
-      integerTypes = [
-        IntegerTypeInt8,       -- char, int8_t
-        IntegerTypeInt16,      -- short, int16_t
-        IntegerTypeInt32,      -- int, int32_t
-        IntegerTypeInt64,      -- long, long long, int64_t
-        IntegerTypeBigint]     -- custom big integer implementation
-      termVariants = [
-        TermVariantApplication,
-        TermVariantFunction,
-        TermVariantLet,
-        TermVariantList,       -- std::vector
-        TermVariantLiteral,
-        TermVariantMap,        -- std::map
-        TermVariantOptional,   -- std::optional
-        TermVariantProduct,    -- struct with unnamed fields
-        TermVariantRecord,     -- struct with named fields
-        TermVariantSet,        -- std::set
-        TermVariantUnion,      -- std::variant or enum
-        TermVariantVariable,
-        TermVariantWrap]       -- wrapper class
-      typeVariants = [
-        TypeVariantApplication, -- template instantiation
-        TypeVariantFunction,    -- function types
-        TypeVariantForall,      -- templates
-        TypeVariantList,        -- std::vector
-        TypeVariantLiteral,     -- primitive types
-        TypeVariantMap,         -- std::map
-        TypeVariantOptional,    -- std::optional
-        TypeVariantProduct,     -- anonymous structs
-        TypeVariantRecord,      -- structs
-        TypeVariantSet,         -- std::set
-        TypeVariantUnion,       -- std::variant, enum
-        TypeVariantVariable,    -- type parameters
-        TypeVariantWrap]        -- wrapper class
-      typePredicate = constant true -- TODO: refine this with C++ specific constraints
+  doc "Language constraints for C++" $ lets [
+  "eliminationVariants">: Sets.fromList $ list [
+    Mantle.eliminationVariantProduct,
+    Mantle.eliminationVariantRecord,
+    Mantle.eliminationVariantUnion,
+    Mantle.eliminationVariantWrap],
+  "literalVariants">: Sets.fromList $ list [
+    Mantle.literalVariantBinary,  -- char arrays, std::byte arrays
+    Mantle.literalVariantBoolean, -- bool
+    Mantle.literalVariantFloat,   -- float, double
+    Mantle.literalVariantInteger, -- int, long, etc.
+    Mantle.literalVariantString], -- std::string
+  "floatTypes">: Sets.fromList $ list [
+    Core.floatTypeFloat32,      -- float
+    Core.floatTypeFloat64],     -- double
+  "functionVariants">: Sets.fromList $ list [
+    Mantle.functionVariantElimination,
+    Mantle.functionVariantLambda,
+    Mantle.functionVariantPrimitive],
+  "integerTypes">: Sets.fromList $ list [
+    Core.integerTypeInt8,       -- char, int8_t
+    Core.integerTypeInt16,      -- short, int16_t
+    Core.integerTypeInt32,      -- int, int32_t
+    Core.integerTypeInt64,      -- long, long long, int64_t
+    Core.integerTypeBigint],    -- custom big integer implementation
+  "termVariants">: Sets.fromList $ list [
+    Mantle.termVariantApplication,
+    Mantle.termVariantFunction,
+    Mantle.termVariantLet,
+    Mantle.termVariantList,       -- std::vector
+    Mantle.termVariantLiteral,
+    Mantle.termVariantMap,        -- std::map
+    Mantle.termVariantOptional,   -- std::optional
+    Mantle.termVariantProduct,    -- struct with unnamed fields
+    Mantle.termVariantRecord,     -- struct with named fields
+    Mantle.termVariantSet,        -- std::set
+    Mantle.termVariantUnion,      -- std::variant or enum
+    Mantle.termVariantVariable,
+    Mantle.termVariantWrap],      -- wrapper class
+  "typeVariants">: Sets.fromList $ list [
+    Mantle.typeVariantApplication, -- template instantiation
+    Mantle.typeVariantFunction,    -- function types
+    Mantle.typeVariantForall,      -- templates
+    Mantle.typeVariantList,        -- std::vector
+    Mantle.typeVariantLiteral,     -- primitive types
+    Mantle.typeVariantMap,         -- std::map
+    Mantle.typeVariantOptional,    -- std::optional
+    Mantle.typeVariantProduct,     -- anonymous structs
+    Mantle.typeVariantRecord,      -- structs
+    Mantle.typeVariantSet,         -- std::set
+    Mantle.typeVariantUnion,       -- std::variant, enum
+    Mantle.typeVariantVariable,    -- type parameters
+    Mantle.typeVariantWrap],       -- wrapper class
+  "typePredicate">: constant true] $ -- TODO: refine this with C++ specific constraints
+  Coders.language
+    (Coders.languageName $ string "hydra.ext.cpp")
+    (Coders.languageConstraints
+      (var "eliminationVariants")
+      (var "literalVariants")
+      (var "floatTypes")
+      (var "functionVariants")
+      (var "integerTypes")
+      (var "termVariants")
+      (var "typeVariants")
+      (var "typePredicate"))
 
 cppReservedWordsDef :: TElement (S.Set String)
 cppReservedWordsDef = cppLanguageDefinition "cppReservedWords" $
-  doc "A set of reserved words in C++" $
-  lets [
-    "cppKeywords">:
-      doc "C++ keywords, including C++11/14/17/20 additions" $
-      list [
-        -- C++ keywords
-        "alignas", "alignof", "and", "and_eq", "asm", "auto", "bitand", "bitor", "bool", "break",
-        "case", "catch", "char", "char8_t", "char16_t", "char32_t", "class", "compl", "concept", "const",
-        "consteval", "constexpr", "constinit", "const_cast", "continue", "co_await", "co_return", "co_yield",
-        "decltype", "default", "delete", "do", "double", "dynamic_cast", "else", "enum", "explicit", "export",
-        "extern", "false", "float", "for", "friend", "goto", "if", "inline", "int", "long", "mutable",
-        "namespace", "new", "noexcept", "not", "not_eq", "nullptr", "operator", "or", "or_eq", "private",
-        "protected", "public", "register", "reinterpret_cast", "requires", "return", "short", "signed",
-        "sizeof", "static", "static_assert", "static_cast", "struct", "switch", "template", "this",
-        "thread_local", "throw", "true", "try", "typedef", "typeid", "typename", "union", "unsigned", "using",
-        "virtual", "void", "volatile", "wchar_t", "while", "xor", "xor_eq"],
-    "cppPreprocessor">:
-      doc "C++ preprocessor directives" $
-      list [
-        "#define", "#elif", "#else", "#endif", "#error", "#if", "#ifdef", "#ifndef", "#include", "#line",
-        "#pragma", "#undef"],
-    "cppStlTypes">:
-      doc "Common STL types and namespaces that should be treated as reserved" $
-      list [
-        "std", "string", "vector", "map", "set", "optional", "variant", "pair", "tuple",
-        "function", "array", "deque", "forward_list", "list", "multimap", "multiset",
-        "unordered_map", "unordered_set", "unordered_multimap", "unordered_multiset",
-        "stack", "queue", "priority_queue", "shared_ptr", "unique_ptr", "weak_ptr"],
-    "hydraCppKeywords">:
-      doc "Reserved words which are specific to Hydra" $
-      list []]
-    $ Sets.fromList $ Lists.concat2 (Lists.concat2 (Lists.concat2 (var "cppKeywords") (var "cppPreprocessor")) (var "cppStlTypes")) (var "hydraCppKeywords")
+  doc "A set of reserved words in C++" $ lets [
+  "cppKeywords">:
+    doc "C++ keywords, including C++11/14/17/20 additions" $
+    list $ string <$> [
+      -- C++ keywords
+      "alignas", "alignof", "and", "and_eq", "asm", "auto", "bitand", "bitor", "bool", "break",
+      "case", "catch", "char", "char8_t", "char16_t", "char32_t", "class", "compl", "concept", "const",
+      "consteval", "constexpr", "constinit", "const_cast", "continue", "co_await", "co_return", "co_yield",
+      "decltype", "default", "delete", "do", "double", "dynamic_cast", "else", "enum", "explicit", "export",
+      "extern", "false", "float", "for", "friend", "goto", "if", "inline", "int", "long", "mutable",
+      "namespace", "new", "noexcept", "not", "not_eq", "nullptr", "operator", "or", "or_eq", "private",
+      "protected", "public", "register", "reinterpret_cast", "requires", "return", "short", "signed",
+      "sizeof", "static", "static_assert", "static_cast", "struct", "switch", "template", "this",
+      "thread_local", "throw", "true", "try", "typedef", "typeid", "typename", "union", "unsigned", "using",
+      "virtual", "void", "volatile", "wchar_t", "while", "xor", "xor_eq"],
+  "cppPreprocessor">:
+    doc "C++ preprocessor directives" $
+    list $ string <$> [
+      "#define", "#elif", "#else", "#endif", "#error", "#if", "#ifdef", "#ifndef", "#include", "#line",
+      "#pragma", "#undef"],
+  "cppStlTypes">:
+    doc "Common STL types and namespaces that should be treated as reserved" $
+    list $ string <$> [
+      "std", "string", "vector", "map", "set", "optional", "variant", "pair", "tuple",
+      "function", "array", "deque", "forward_list", "list", "multimap", "multiset",
+      "unordered_map", "unordered_set", "unordered_multimap", "unordered_multiset",
+      "stack", "queue", "priority_queue", "shared_ptr", "unique_ptr", "weak_ptr"],
+  "hydraCppKeywords">:
+    doc "Reserved words which are specific to Hydra" $
+    list $ string <$> []] $
+  Sets.fromList $ Lists.concat $ list [
+    var "cppKeywords",
+    var "cppPreprocessor",
+    var "cppStlTypes",
+    var "hydraCppKeywords"]

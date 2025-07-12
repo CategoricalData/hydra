@@ -94,64 +94,65 @@ haskellLanguageModule = Module ns elements
 
 haskellLanguageDef :: TElement Language
 haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
-    doc "Language constraints for Haskell" $
-    Coders.language "hydra.ext.haskell"
-      eliminationVariants
-      literalVariants
-      floatTypes
-      functionVariants
-      integerTypes
-      termVariants
-      typeVariants
-      typePredicate
-  where
-      literalVariants = [
-        LiteralVariantBoolean,
-        LiteralVariantFloat,
-        LiteralVariantInteger,
-        LiteralVariantString]
-      floatTypes = [
-        -- Bigfloat is excluded for now
-        FloatTypeFloat32, -- Float
-        FloatTypeFloat64] -- Double
-      integerTypes = [
-        IntegerTypeBigint, -- Integer
-        IntegerTypeInt8, -- Int8
-        IntegerTypeInt16, -- Int16
-        IntegerTypeInt32, -- Int
-        IntegerTypeInt64] -- Int64
-      termVariants = [
-        TermVariantApplication,
-        TermVariantFunction,
-        TermVariantLet,
-        TermVariantList,
-        TermVariantLiteral,
-        TermVariantMap,
-        TermVariantOptional,
-        TermVariantProduct,
-        TermVariantRecord,
-        TermVariantSet,
-        TermVariantUnion,
-        TermVariantUnit,
-        TermVariantVariable,
-        TermVariantWrap]
-      typeVariants = [
-        TypeVariantAnnotated,
-        TypeVariantApplication,
-        TypeVariantFunction,
-        TypeVariantForall,
-        TypeVariantList,
-        TypeVariantLiteral,
-        TypeVariantMap,
-        TypeVariantOptional,
-        TypeVariantProduct,
-        TypeVariantRecord,
-        TypeVariantSet,
-        TypeVariantUnion,
-        TypeVariantUnit,
-        TypeVariantVariable,
-        TypeVariantWrap]
-      typePredicate = constant true
+    doc "Language constraints for Haskell" $ lets [
+    "literalVariants">: Sets.fromList $ list [
+      Mantle.literalVariantBoolean,
+      Mantle.literalVariantFloat,
+      Mantle.literalVariantInteger,
+      Mantle.literalVariantString],
+    "floatTypes">: Sets.fromList $ list [
+      -- Bigfloat is excluded for now
+      Core.floatTypeFloat32, -- Float
+      Core.floatTypeFloat64], -- Double
+    "integerTypes">: Sets.fromList $ list [
+      Core.integerTypeBigint, -- Integer
+      Core.integerTypeInt8, -- Int8
+      Core.integerTypeInt16, -- Int16
+      Core.integerTypeInt32, -- Int
+      Core.integerTypeInt64], -- Int64
+    "termVariants">: Sets.fromList $ list [
+      Mantle.termVariantApplication,
+      Mantle.termVariantFunction,
+      Mantle.termVariantLet,
+      Mantle.termVariantList,
+      Mantle.termVariantLiteral,
+      Mantle.termVariantMap,
+      Mantle.termVariantOptional,
+      Mantle.termVariantProduct,
+      Mantle.termVariantRecord,
+      Mantle.termVariantSet,
+      Mantle.termVariantUnion,
+      Mantle.termVariantUnit,
+      Mantle.termVariantVariable,
+      Mantle.termVariantWrap],
+    "typeVariants">: Sets.fromList $ list [
+      Mantle.typeVariantAnnotated,
+      Mantle.typeVariantApplication,
+      Mantle.typeVariantFunction,
+      Mantle.typeVariantForall,
+      Mantle.typeVariantList,
+      Mantle.typeVariantLiteral,
+      Mantle.typeVariantMap,
+      Mantle.typeVariantOptional,
+      Mantle.typeVariantProduct,
+      Mantle.typeVariantRecord,
+      Mantle.typeVariantSet,
+      Mantle.typeVariantUnion,
+      Mantle.typeVariantUnit,
+      Mantle.typeVariantVariable,
+      Mantle.typeVariantWrap],
+    "typePredicate">: constant true] $
+    Coders.language
+      (Coders.languageName $ string "hydra.ext.haskell")
+      (Coders.languageConstraints
+        (var "eliminationVariants")
+        (var "literalVariants")
+        (var "floatTypes")
+        (var "functionVariants")
+        (var "integerTypes")
+        (var "termVariants")
+        (var "typeVariants")
+        (var "typePredicate"))
 
 reservedWordsDef :: TElement (S.Set String)
 reservedWordsDef = haskellLanguageDefinition "reservedWords" $

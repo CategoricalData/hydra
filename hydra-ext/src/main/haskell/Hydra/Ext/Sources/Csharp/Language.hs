@@ -23,7 +23,7 @@ import qualified Hydra.Dsl.Lib.Maps                         as Maps
 import qualified Hydra.Dsl.Lib.Math                         as Math
 import qualified Hydra.Dsl.Lib.Optionals                    as Optionals
 import qualified Hydra.Dsl.Lib.Sets                         as Sets
-import qualified Hydra.Dsl.Lib.Strings                      as Strings
+import           Hydra.Dsl.Lib.Strings                      as Strings
 import qualified Hydra.Dsl.Mantle                           as Mantle
 import qualified Hydra.Dsl.Module                           as Module
 import           Hydra.Dsl.Phantoms                         as Phantoms
@@ -72,11 +72,13 @@ import qualified Hydra.Sources.Kernel.Terms.Tarjan          as Tarjan
 import qualified Hydra.Sources.Kernel.Terms.Templates       as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
 import qualified Hydra.Sources.Kernel.Terms.Variants        as Variants
+import           Prelude hiding ((++))
 import qualified Data.Int                                   as I
 import qualified Data.List                                  as L
 import qualified Data.Map                                   as M
 import qualified Data.Set                                   as S
 import qualified Data.Maybe                                 as Y
+
 
 csharpLanguageDefinition :: String -> TTerm a -> TElement a
 csharpLanguageDefinition = definitionInModule csharpLanguageModule
@@ -94,96 +96,98 @@ csharpLanguageModule = Module ns elements
 
 csharpLanguageDef :: TElement Language
 csharpLanguageDef = csharpLanguageDefinition "csharpLanguage" $
-    doc "Language constraints for C Sharp (C#)" $
-    Coders.language "hydra.ext.csharp"
-      eliminationVariants
-      literalVariants
-      floatTypes
-      functionVariants
-      integerTypes
-      termVariants
-      typeVariants
-      typePredicate
-  where
-      eliminationVariants = [ -- TODO: verify whether all are supported
-        EliminationVariantProduct,
-        EliminationVariantRecord,
-        EliminationVariantUnion,
-        EliminationVariantWrap]
-      literalVariants = [
-        LiteralVariantBinary, -- byte[]
-        LiteralVariantBoolean, -- bool
-        LiteralVariantFloat, -- (see float types)
-        LiteralVariantInteger, -- (see integer types)
-        LiteralVariantString] -- String/string
-      -- See: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types
-      -- Note: the other C# floating point type, decimal, has no equivalent in Hydra
-      floatTypes = [
-        FloatTypeFloat32,
-        FloatTypeFloat64]
-      functionVariants = [
-        FunctionVariantElimination,
-        FunctionVariantLambda,
-        FunctionVariantPrimitive]
-      -- See https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/integral-numeric-types
-      -- Note: the other two C# integral types, nint and nuint, have no equivalents in Hydra
-      integerTypes = [
-        IntegerTypeInt8, -- sbyte
-        IntegerTypeInt16, -- short
-        IntegerTypeInt32, -- int
-        IntegerTypeInt64, -- long
-        IntegerTypeUint8, -- byte
-        IntegerTypeUint16, -- ushort
-        IntegerTypeUint32, -- uint
-        IntegerTypeUint64] -- ulong
-      termVariants = [ -- TODO: verify whether all are supported
-        TermVariantApplication,
-        TermVariantFunction,
-        TermVariantLet,
-        TermVariantList,
-        TermVariantLiteral,
-        TermVariantMap,
-        TermVariantOptional,
-        TermVariantProduct,
-        TermVariantRecord,
-        TermVariantSet,
-        TermVariantUnion,
-        TermVariantVariable,
-        TermVariantWrap]
-      typeVariants = [ -- TODO: verify whether all are supported
-        TypeVariantAnnotated,
-        TypeVariantApplication,
-        TypeVariantFunction,
-        TypeVariantForall,
-        TypeVariantList,
-        TypeVariantLiteral,
-        TypeVariantMap,
-        TypeVariantOptional,
-        TypeVariantProduct,
-        TypeVariantRecord,
-        TypeVariantSet,
-        TypeVariantUnion,
-        TypeVariantVariable,
-        TypeVariantWrap]
-      typePredicate = constant true -- TODO: verify whether all are supported
+  doc "Language constraints for C Sharp (C#)" $ lets [
+  "eliminationVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
+    Mantle.eliminationVariantProduct,
+    Mantle.eliminationVariantRecord,
+    Mantle.eliminationVariantUnion,
+    Mantle.eliminationVariantWrap],
+  "literalVariants">: Sets.fromList $ list [
+    Mantle.literalVariantBinary, -- byte[]
+    Mantle.literalVariantBoolean, -- bool
+    Mantle.literalVariantFloat, -- (see float types)
+    Mantle.literalVariantInteger, -- (see integer types)
+    Mantle.literalVariantString], -- String/string
+  "floatTypes">: Sets.fromList $ list [
+    -- See: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types
+    -- Note: the other C# floating point type, decimal, has no equivalent in Hydra
+    Core.floatTypeFloat32,
+    Core.floatTypeFloat64],
+  "functionVariants">: Sets.fromList $ list [
+    Mantle.functionVariantElimination,
+    Mantle.functionVariantLambda,
+    Mantle.functionVariantPrimitive],
+  "integerTypes">: Sets.fromList $ list [
+    -- See https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/integral-numeric-types
+    -- Note: the other two C# integral types, nint and nuint, have no equivalents in Hydra
+    Core.integerTypeInt8, -- sbyte
+    Core.integerTypeInt16, -- short
+    Core.integerTypeInt32, -- int
+    Core.integerTypeInt64, -- long
+    Core.integerTypeUint8, -- byte
+    Core.integerTypeUint16, -- ushort
+    Core.integerTypeUint32, -- uint
+    Core.integerTypeUint64], -- ulong
+  "termVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
+    Mantle.termVariantApplication,
+    Mantle.termVariantFunction,
+    Mantle.termVariantLet,
+    Mantle.termVariantList,
+    Mantle.termVariantLiteral,
+    Mantle.termVariantMap,
+    Mantle.termVariantOptional,
+    Mantle.termVariantProduct,
+    Mantle.termVariantRecord,
+    Mantle.termVariantSet,
+    Mantle.termVariantUnion,
+    Mantle.termVariantVariable,
+    Mantle.termVariantWrap],
+  "typeVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
+    Mantle.typeVariantAnnotated,
+    Mantle.typeVariantApplication,
+    Mantle.typeVariantFunction,
+    Mantle.typeVariantForall,
+    Mantle.typeVariantList,
+    Mantle.typeVariantLiteral,
+    Mantle.typeVariantMap,
+    Mantle.typeVariantOptional,
+    Mantle.typeVariantProduct,
+    Mantle.typeVariantRecord,
+    Mantle.typeVariantSet,
+    Mantle.typeVariantUnion,
+    Mantle.typeVariantVariable,
+    Mantle.typeVariantWrap],
+  "typePredicate">: constant true] $ -- TODO: verify whether all are supported
+  Coders.language
+    (Coders.languageName $ string "hydra.ext.csharp")
+    (Coders.languageConstraints
+      (var "eliminationVariants")
+      (var "literalVariants")
+      (var "floatTypes")
+      (var "functionVariants")
+      (var "integerTypes")
+      (var "termVariants")
+      (var "typeVariants")
+      (var "typePredicate"))
 
 csharpReservedWordsDef :: TElement (S.Set String)
 csharpReservedWordsDef = csharpLanguageDefinition "csharpReservedWords" $
   doc ("A set of reserved words in C#. Both the \"keywords\" and \"contextual keywords\" are drawn from"
     <> " section 6.4.4 of the C# documentation:\n"
-    <> "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure#64-tokens") $
-  lets [
-    "keywords">: list [
-        "DEFAULT", "FALSE", "NULL", "TRUE",
-        "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const",
-        "continue", "decimal", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "finally",
-        "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is",
-        "lock", "long", "namespace", "new", "object", "operator", "out", "override", "params", "private", "protected",
-        "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string",
-        "struct", "switch", "this", "throw", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using",
-        "virtual", "void", "volatile", "while"],
-    "contextualKeywords">: list [
-        "add", "alias", "ascending", "async", "await", "by", "descending", "dynamic", "equals", "from", "get", "global",
-        "group", "into", "join", "let", "nameof", "on", "orderby", "partial", "remove", "select", "set", "unmanaged",
-        "value", "var", "when", "where", "yield"]]
-    $ Sets.fromList $ Lists.concat $ list [var "keywords", var "contextualKeywords"]
+    <> "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure#64-tokens") $ lets [
+  "keywords">: list $ string <$> [
+      "DEFAULT", "FALSE", "NULL", "TRUE",
+      "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const",
+      "continue", "decimal", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "finally",
+      "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is",
+      "lock", "long", "namespace", "new", "object", "operator", "out", "override", "params", "private", "protected",
+      "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string",
+      "struct", "switch", "this", "throw", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using",
+      "virtual", "void", "volatile", "while"],
+  "contextualKeywords">: list $ string <$> [
+      "add", "alias", "ascending", "async", "await", "by", "descending", "dynamic", "equals", "from", "get", "global",
+      "group", "into", "join", "let", "nameof", "on", "orderby", "partial", "remove", "select", "set", "unmanaged",
+      "value", "var", "when", "where", "yield"]] $
+  Sets.fromList $ Lists.concat $ list [
+    var "keywords",
+    var "contextualKeywords"]
