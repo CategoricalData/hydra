@@ -125,9 +125,9 @@ jsonLanguageDef = jsonLanguageDefinition "jsonLanguage" $
       cases _Type (var "innerType")
         (Just true) [
         _Type_optional>>: constant false]]] $
-  Coders.languageNew
-    (Coders.languageNameNew "hydra.ext.json")
-    (Coders.languageConstraintsNew
+  Coders.language
+    (Coders.languageName "hydra.ext.json")
+    (Coders.languageConstraints
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

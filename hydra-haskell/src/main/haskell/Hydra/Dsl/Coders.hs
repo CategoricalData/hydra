@@ -32,47 +32,26 @@ coderDirectionEncode = unitVariant _CoderDirection _CoderDirection_encode
 coderDirectionDecode :: TTerm CoderDirection
 coderDirectionDecode = unitVariant _CoderDirection _CoderDirection_decode
 
-language
-  :: String
-  -> [EliminationVariant]
-  -> [LiteralVariant]
-  -> [FloatType]
-  -> [FunctionVariant]
-  -> [IntegerType]
-  -> [TermVariant]
-  -> [TypeVariant]
-  -> TTerm (Type -> Bool)
-  -> TTerm Language
-language name eliminationVariants literalVariants floatTypes functionVariants integerTypes termVariants typeVariants typePredicate = Phantoms.record _Language [
-  _Language_name>>: wrap _LanguageName $ string name,
-  _Language_constraints>>: Phantoms.record _LanguageConstraints [
-    _LanguageConstraints_eliminationVariants>>: Sets.fromList $ list (Mantle.eliminationVariant <$> eliminationVariants),
-    _LanguageConstraints_literalVariants>>: Sets.fromList $ list (Mantle.literalVariant <$> literalVariants),
-    _LanguageConstraints_floatTypes>>: Sets.fromList $ list (T.float <$> floatTypes),
-    _LanguageConstraints_functionVariants>>: Sets.fromList $ list (Mantle.functionVariant <$> functionVariants),
-    _LanguageConstraints_integerTypes>>: Sets.fromList $ list (T.integer <$> integerTypes),
-    _LanguageConstraints_termVariants>>: Sets.fromList $ list (Mantle.termVariant <$> termVariants),
-    _LanguageConstraints_typeVariants>>: Sets.fromList $ list (Mantle.typeVariant <$> typeVariants),
-    _LanguageConstraints_types>>: typePredicate]]
-
-languageNew :: TTerm LanguageName -> TTerm LanguageConstraints -> TTerm Language
-languageNew name constraints = record _Language [
+language :: TTerm LanguageName -> TTerm LanguageConstraints -> TTerm Language
+language name constraints = record _Language [
     _Language_name>>: name,
     _Language_constraints>>: constraints]
 
-languageNameNew :: TTerm String -> TTerm LanguageName
-languageNameNew = wrap _LanguageName
+languageName :: TTerm String -> TTerm LanguageName
+languageName = wrap _LanguageName
 
 unLanguageName :: TTerm LanguageName -> TTerm String
 unLanguageName n = unwrap _LanguageName @@ n
 
-languageName :: TTerm Language -> TTerm LanguageName
-languageName c = project _Language _Language_name @@ c
+-- TODO: resolve _Language_name/_LanguageName conflict
+languageNameProjection :: TTerm Language -> TTerm LanguageName
+languageNameProjection c = project _Language _Language_name @@ c
 
-languageConstraints :: TTerm Language -> TTerm LanguageConstraints
-languageConstraints c = project _Language _Language_constraints @@ c
+-- TODO: resolve _Language_constraints/LanguageConstraints conflict
+languageConstraintsProjection :: TTerm Language -> TTerm LanguageConstraints
+languageConstraintsProjection c = project _Language _Language_constraints @@ c
 
-languageConstraintsNew :: TTerm (S.Set EliminationVariant)
+languageConstraints :: TTerm (S.Set EliminationVariant)
                     -> TTerm (S.Set LiteralVariant)
                     -> TTerm (S.Set FloatType)
                     -> TTerm (S.Set FunctionVariant)
@@ -81,7 +60,7 @@ languageConstraintsNew :: TTerm (S.Set EliminationVariant)
                     -> TTerm (S.Set TypeVariant)
                     -> TTerm (Type -> Bool)
                     -> TTerm LanguageConstraints
-languageConstraintsNew eliminationVariants
+languageConstraints eliminationVariants
                     literalVariants
                     floatTypes
                     functionVariants
