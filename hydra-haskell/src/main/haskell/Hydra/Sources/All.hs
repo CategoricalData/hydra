@@ -17,6 +17,7 @@ import Hydra.Sources.Haskell.Utils
 import Hydra.Sources.Json.Decoding
 import Hydra.Sources.Json.Language
 import Hydra.Sources.Json.Schema
+import Hydra.Sources.Json.Schema.Language
 import Hydra.Sources.Test.TestGraph
 import Hydra.Sources.Test.TestSuite
 import Hydra.Sources.Yaml.Model
@@ -29,7 +30,8 @@ jsonModules :: [Module]
 jsonModules = [
   jsonDecodingModule,
   jsonLanguageModule,
-  jsonSchemaModule]
+  jsonSchemaModule,
+  jsonSchemaLanguageModule]
 
 otherModules :: [Module]
 otherModules = [
