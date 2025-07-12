@@ -96,66 +96,69 @@ pythonLanguageModule = Module ns elements
 
 pythonLanguageDef :: TElement Language
 pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
-    doc "Language constraints for Python 3" $
-    Coders.language "hydra.ext.python"
-      eliminationVariants
-      literalVariants
-      floatTypes
-      functionVariants
-      integerTypes
-      termVariants
-      typeVariants
-      typePredicate
-  where
-      eliminationVariants = [ -- TODO: verify whether all are supported
-        EliminationVariantProduct,
-        EliminationVariantRecord,
-        EliminationVariantUnion,
-        EliminationVariantWrap]
-      literalVariants = [
-        LiteralVariantBinary, -- bytes
-        LiteralVariantBoolean, -- bool
-        LiteralVariantFloat, -- (see float types)
-        LiteralVariantInteger, -- (see integer types)
-        LiteralVariantString] -- str
-      floatTypes = [FloatTypeFloat64] -- Python has only one floating-point type
-      functionVariants = [
-        FunctionVariantElimination,
-        FunctionVariantLambda,
-        FunctionVariantPrimitive]
-      integerTypes = [IntegerTypeBigint] -- Python has only one integer type
-      termVariants = [ -- TODO: verify whether all are supported
-        TermVariantApplication,
-        TermVariantFunction,
-        TermVariantLet,
-        TermVariantList,
-        TermVariantLiteral,
-        TermVariantMap,
-        TermVariantOptional,
-        TermVariantProduct,
-        TermVariantRecord,
-        TermVariantSet,
-        TermVariantUnion,
-        -- TODO: TermVariantUnit, mapping to Python's None
-        TermVariantVariable,
-        TermVariantWrap]
-      typeVariants = [ -- TODO: verify whether all are supported
-        TypeVariantAnnotated,
-        TypeVariantApplication,
-        TypeVariantFunction,
-        TypeVariantForall,
-        TypeVariantList,
-        TypeVariantLiteral,
-        TypeVariantMap,
-        TypeVariantOptional,
-        TypeVariantProduct,
-        TypeVariantRecord,
-        TypeVariantSet,
-        TypeVariantUnion,
-        -- TODO: TypeVariantUnit, mapping to Python's NoneType
-        TypeVariantVariable,
-        TypeVariantWrap]
-      typePredicate = constant true -- TODO: verify whether all are supported
+    doc "Language constraints for Python 3" $ lets [
+    "eliminationVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
+      Mantle.eliminationVariantProduct,
+      Mantle.eliminationVariantRecord,
+      Mantle.eliminationVariantUnion,
+      Mantle.eliminationVariantWrap],
+    "literalVariants">: Sets.fromList $ list [
+      Mantle.literalVariantBinary, -- bytes
+      Mantle.literalVariantBoolean, -- bool
+      Mantle.literalVariantFloat, -- (see float types)
+      Mantle.literalVariantInteger, -- (see integer types)
+      Mantle.literalVariantString], -- str
+    "floatTypes">: Sets.fromList $ list [
+      Core.floatTypeFloat64], -- Python has only one floating-point type
+    "functionVariants">: Sets.fromList $ list [
+      Mantle.functionVariantElimination,
+      Mantle.functionVariantLambda,
+      Mantle.functionVariantPrimitive],
+    "integerTypes">: Sets.fromList $ list [
+      Core.integerTypeBigint], -- Python has only one integer type
+    "termVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
+      Mantle.termVariantApplication,
+      Mantle.termVariantFunction,
+      Mantle.termVariantLet,
+      Mantle.termVariantList,
+      Mantle.termVariantLiteral,
+      Mantle.termVariantMap,
+      Mantle.termVariantOptional,
+      Mantle.termVariantProduct,
+      Mantle.termVariantRecord,
+      Mantle.termVariantSet,
+      Mantle.termVariantUnion,
+      -- TODO: TermVariantUnit, mapping to Python's None
+      Mantle.termVariantVariable,
+      Mantle.termVariantWrap],
+    "typeVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
+      Mantle.typeVariantAnnotated,
+      Mantle.typeVariantApplication,
+      Mantle.typeVariantFunction,
+      Mantle.typeVariantForall,
+      Mantle.typeVariantList,
+      Mantle.typeVariantLiteral,
+      Mantle.typeVariantMap,
+      Mantle.typeVariantOptional,
+      Mantle.typeVariantProduct,
+      Mantle.typeVariantRecord,
+      Mantle.typeVariantSet,
+      Mantle.typeVariantUnion,
+      -- TODO: TypeVariantUnit, mapping to Python's NoneType
+      Mantle.typeVariantVariable,
+      Mantle.typeVariantWrap],
+    "typePredicate">: constant true] $ -- TODO: verify whether all are supported
+    Coders.language
+      (Coders.languageName $ string "hydra.ext.python")
+      (Coders.languageConstraints
+        (var "eliminationVariants")
+        (var "literalVariants")
+        (var "floatTypes")
+        (var "functionVariants")
+        (var "integerTypes")
+        (var "termVariants")
+        (var "typeVariants")
+        (var "typePredicate"))
 
 pythonReservedWordsDef :: TElement (S.Set String)
 pythonReservedWordsDef = pythonLanguageDefinition "pythonReservedWords" $
@@ -163,11 +166,11 @@ pythonReservedWordsDef = pythonLanguageDefinition "pythonReservedWords" $
   lets [
     "pythonKeywords">:
       doc "Python keywords, as enumerated at https://docs.python.org/3.13/reference/lexical_analysis.html#keywords" $
-      list [
+      list $ string <$> [
         "False", "None", "True", "and", "as", "assert", "async", "await", "break", "class", "continue", "def", "del",
         "elif", "else", "except", "finally", "for", "from", "global", "if", "import", "in", "is", "lambda", "nonlocal",
         "not", "or", "pass", "raise", "return", "try", "while", "with", "yield"],
     "hydraPythonKeywords">:
       doc "Reserved words which are specific to Hydra-Python" $
-      list ["Node", "FrozenDict"]]
+      list $ string <$> ["Node", "FrozenDict"]]
     $ Sets.fromList $ Lists.concat2 (var "pythonKeywords") (var "hydraPythonKeywords")

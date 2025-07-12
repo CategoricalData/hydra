@@ -697,7 +697,7 @@ termAdapterDef :: TElement TypeAdapter
 termAdapterDef = define "termAdapter" $
   doc "Create an adapter for any type" $
   lambda "typ" $ lets [
-    "constraints">: lambda "cx" $ Coders.languageConstraints $ Coders.adapterContextLanguage $ var "cx",
+    "constraints">: lambda "cx" $ Coders.languageConstraintsProjection $ Coders.adapterContextLanguage $ var "cx",
     "supported">: lambda "cx" $ ref AdaptUtils.typeIsSupportedDef @@ (var "constraints" @@ var "cx"),
     "variantIsSupported">: lambdas ["cx", "t"] $ Sets.member (ref Variants.typeVariantDef @@ var "t") $ Coders.languageConstraintsTypeVariants $ var "constraints" @@ var "cx",
     "supportedAtTopLevel">: lambdas ["cx", "t"] $ Logic.and

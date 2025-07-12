@@ -23,7 +23,7 @@ import qualified Hydra.Dsl.Lib.Maps                         as Maps
 import qualified Hydra.Dsl.Lib.Math                         as Math
 import qualified Hydra.Dsl.Lib.Optionals                    as Optionals
 import qualified Hydra.Dsl.Lib.Sets                         as Sets
-import qualified Hydra.Dsl.Lib.Strings                      as Strings
+import           Hydra.Dsl.Lib.Strings                      as Strings
 import qualified Hydra.Dsl.Mantle                           as Mantle
 import qualified Hydra.Dsl.Module                           as Module
 import           Hydra.Dsl.Phantoms                         as Phantoms
@@ -72,6 +72,7 @@ import qualified Hydra.Sources.Kernel.Terms.Tarjan          as Tarjan
 import qualified Hydra.Sources.Kernel.Terms.Templates       as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
 import qualified Hydra.Sources.Kernel.Terms.Variants        as Variants
+import           Prelude hiding ((++))
 import qualified Data.Int                                   as I
 import qualified Data.List                                  as L
 import qualified Data.Map                                   as M
@@ -100,115 +101,121 @@ javaMaxTupleLengthDef = javaLanguageDefinition "javaMaxTupleLength" $
     <> "Note: if this constant is changed, also change Tuples.java correspondingly") $
   int32 9
 
-javaLanguageDef :: TElement (Language)
+javaLanguageDef :: TElement Language
 javaLanguageDef = javaLanguageDefinition "javaLanguage" $
-    doc "Language constraints for Java" $
-    Coders.language "hydra.ext.java"
-      eliminationVariants
-      literalVariants
-      floatTypes
-      functionVariants
-      integerTypes
-      termVariants
-      typeVariants
-      typePredicate
-  where
-      eliminationVariants = [
-        EliminationVariantProduct,
-        EliminationVariantRecord,
-        EliminationVariantUnion,
-        EliminationVariantWrap]
-      literalVariants = [
-        LiteralVariantBoolean, -- boolean
-        LiteralVariantFloat, -- (see float types)
-        LiteralVariantInteger, -- (see integer types)
-        LiteralVariantString] -- string
-      floatTypes = [
-        -- Bigfloat (e.g. as Java's BigDecimal) is excluded for now
-        FloatTypeFloat32, -- float
-        FloatTypeFloat64] -- double
-      functionVariants = [
-        FunctionVariantElimination,
-        FunctionVariantLambda,
-        FunctionVariantPrimitive]
-      integerTypes = [
-        IntegerTypeBigint, -- BigInteger
-        IntegerTypeInt8, -- byte (signed, 8-bit)
-        IntegerTypeInt16, -- short (signed, 16-bit)
-        IntegerTypeInt32, -- int (signed, 32-bit)
-        IntegerTypeInt64, -- long (signed, 64-bit)
-        IntegerTypeUint16] -- char (unsigned, 16-bit)
-      termVariants = [
-        TermVariantApplication,
-        TermVariantFunction,
-        TermVariantLet,
-        TermVariantList,
-        TermVariantLiteral,
-        TermVariantMap,
-        TermVariantOptional,
-        TermVariantProduct,
-        TermVariantRecord,
-        TermVariantSet,
-        TermVariantUnion,
-        TermVariantVariable,
-        TermVariantWrap]
-      typeVariants = [
-        TypeVariantAnnotated,
-        TypeVariantApplication,
-        TypeVariantFunction,
-        TypeVariantForall,
-        TypeVariantList,
-        TypeVariantLiteral,
-        TypeVariantMap,
-        TypeVariantOptional,
-        TypeVariantProduct,
-        TypeVariantRecord,
-        TypeVariantSet,
-        TypeVariantUnion,
-        TypeVariantVariable,
-        TypeVariantWrap]
-      typePredicate = match _Type (Just true) [
-        _Type_product>>: lambda "types" $ Equality.lt (Lists.length $ var "types") (ref javaMaxTupleLengthDef)]
+  doc "Language constraints for Java" $ lets [
+  "eliminationVariants">: Sets.fromList $ list [
+    Mantle.eliminationVariantProduct,
+    Mantle.eliminationVariantRecord,
+    Mantle.eliminationVariantUnion,
+    Mantle.eliminationVariantWrap],
+  "literalVariants">: Sets.fromList $ list [
+    Mantle.literalVariantBoolean, -- boolean
+    Mantle.literalVariantFloat, -- (see float types)
+    Mantle.literalVariantInteger, -- (see integer types)
+    Mantle.literalVariantString], -- string
+  "floatTypes">: Sets.fromList $ list [
+    -- Bigfloat (e.g. as Java's BigDecimal) is excluded for now
+    Core.floatTypeFloat32, -- float
+    Core.floatTypeFloat64], -- double
+  "functionVariants">: Sets.fromList $ list [
+    Mantle.functionVariantElimination,
+    Mantle.functionVariantLambda,
+    Mantle.functionVariantPrimitive],
+  "integerTypes">: Sets.fromList $ list [
+    Core.integerTypeBigint, -- BigInteger
+    Core.integerTypeInt8, -- byte (signed, 8-bit)
+    Core.integerTypeInt16, -- short (signed, 16-bit)
+    Core.integerTypeInt32, -- int (signed, 32-bit)
+    Core.integerTypeInt64, -- long (signed, 64-bit)
+    Core.integerTypeUint16], -- char (unsigned, 16-bit)
+  "termVariants">: Sets.fromList $ list [
+    Mantle.termVariantApplication,
+    Mantle.termVariantFunction,
+    Mantle.termVariantLet,
+    Mantle.termVariantList,
+    Mantle.termVariantLiteral,
+    Mantle.termVariantMap,
+    Mantle.termVariantOptional,
+    Mantle.termVariantProduct,
+    Mantle.termVariantRecord,
+    Mantle.termVariantSet,
+    Mantle.termVariantUnion,
+    Mantle.termVariantVariable,
+    Mantle.termVariantWrap],
+  "typeVariants">: Sets.fromList $ list [
+    Mantle.typeVariantAnnotated,
+    Mantle.typeVariantApplication,
+    Mantle.typeVariantFunction,
+    Mantle.typeVariantForall,
+    Mantle.typeVariantList,
+    Mantle.typeVariantLiteral,
+    Mantle.typeVariantMap,
+    Mantle.typeVariantOptional,
+    Mantle.typeVariantProduct,
+    Mantle.typeVariantRecord,
+    Mantle.typeVariantSet,
+    Mantle.typeVariantUnion,
+    Mantle.typeVariantVariable,
+    Mantle.typeVariantWrap],
+  "typePredicate">: lambda "typ" $ cases _Type (var "typ")
+    (Just true) [
+    _Type_product>>: lambda "types" $
+      Equality.lt (Lists.length $ var "types") (ref javaMaxTupleLengthDef)]] $
+  Coders.language
+    (Coders.languageName $ string "hydra.ext.java")
+    (Coders.languageConstraints
+      (var "eliminationVariants")
+      (var "literalVariants")
+      (var "floatTypes")
+      (var "functionVariants")
+      (var "integerTypes")
+      (var "termVariants")
+      (var "typeVariants")
+      (var "typePredicate"))
 
 reservedWordsDef :: TElement (S.Set String)
 reservedWordsDef = javaLanguageDefinition "reservedWords" $
-  doc "A set of reserved words in Java" $
-  lets [
-    "specialNames">:
-      doc "Special names reserved for use by Hydra" $
-      list ["Elements"],
-    "classNames">:
-      doc ("java.lang classes as of JDK 7\n"
-        <> "See: https://docs.oracle.com/javase/7/docs/api/java/lang/package-summary.html") $
-      list [
-        "AbstractMethodError", "Appendable", "ArithmeticException", "ArrayIndexOutOfBoundsException",
-        "ArrayStoreException", "AssertionError", "AutoCloseable", "Boolean", "BootstrapMethodError", "Byte",
-        "CharSequence", "Character", "Class", "ClassCastException", "ClassCircularityError", "ClassFormatError",
-        "ClassLoader", "ClassNotFoundException", "ClassValue", "CloneNotSupportedException", "Cloneable", "Comparable",
-        "Compiler", "Deprecated", "Double", "Enum", "EnumConstantNotPresentException", "Error", "Exception",
-        "ExceptionInInitializerError", "Float", "IllegalAccessError", "IllegalAccessException",
-        "IllegalArgumentException", "IllegalMonitorStateException", "IllegalStateException",
-        "IllegalThreadStateException", "IncompatibleClassChangeError", "IndexOutOfBoundsException",
-        "InheritableThreadLocal", "InstantiationError", "InstantiationException", "Integer", "InternalError",
-        "InterruptedException", "Iterable", "LinkageError", "Long", "Math", "NegativeArraySizeException",
-        "NoClassDefFoundError", "NoSuchFieldError", "NoSuchFieldException", "NoSuchMethodError", "NoSuchMethodException",
-        "NullPointerException", "Number", "NumberFormatException", "Object", "OutOfMemoryError", "Override", "Package",
-        "Process", "ProcessBuilder", "Readable", "ReflectiveOperationException", "Runnable", "Runtime",
-        "RuntimeException", "RuntimePermission", "SafeVarargs", "SecurityException", "SecurityManager", "Short",
-        "StackOverflowError", "StackTraceElement", "StrictMath", "String", "StringBuffer", "StringBuilder",
-        "StringIndexOutOfBoundsException", "SuppressWarnings", "System", "Thread", "ThreadDeath",
-        "ThreadGroup", "ThreadLocal", "Throwable", "TypeNotPresentException",
-        "UnknownError", "UnsatisfiedLinkError", "UnsupportedClassVersionError",
-        "UnsupportedOperationException", "VerifyError", "VirtualMachineError", "Void"],
-    "keywords">:
-      doc ("Keywords and literals are taken from Oracle's Java Tutorials on 2022-05-27; said to be complete for Java 1.8 only\n"
-          <> "See: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html") $
-      list [
-        "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue",
-        "default", "do", "double", "else", "enum", "extends", "final", "finally", "float", "for", "goto", "if",
-        "implements", "import", "instanceof", "int", "interface", "long", "native", "new", "package", "private",
-        "protected", "public", "return", "short", "static", "strictfp", "super", "switch", "synchronized", "this",
-        "throw", "throws", "transient", "try", "void", "volatile", "while"],
-    "literals">:
-      list ["false", "null", "true"]]
-    $ Sets.fromList $ Lists.concat $ list [var "specialNames", var "classNames", var "keywords", var "literals"]
+  doc "A set of reserved words in Java" $ lets [
+  "specialNames">:
+    doc "Special names reserved for use by Hydra" $
+    list $ string <$> ["Elements"],
+  "classNames">:
+    doc ("java.lang classes as of JDK 7\n"
+      <> "See: https://docs.oracle.com/javase/7/docs/api/java/lang/package-summary.html") $
+    list $ string <$> [
+      "AbstractMethodError", "Appendable", "ArithmeticException", "ArrayIndexOutOfBoundsException",
+      "ArrayStoreException", "AssertionError", "AutoCloseable", "Boolean", "BootstrapMethodError", "Byte",
+      "CharSequence", "Character", "Class", "ClassCastException", "ClassCircularityError", "ClassFormatError",
+      "ClassLoader", "ClassNotFoundException", "ClassValue", "CloneNotSupportedException", "Cloneable", "Comparable",
+      "Compiler", "Deprecated", "Double", "Enum", "EnumConstantNotPresentException", "Error", "Exception",
+      "ExceptionInInitializerError", "Float", "IllegalAccessError", "IllegalAccessException",
+      "IllegalArgumentException", "IllegalMonitorStateException", "IllegalStateException",
+      "IllegalThreadStateException", "IncompatibleClassChangeError", "IndexOutOfBoundsException",
+      "InheritableThreadLocal", "InstantiationError", "InstantiationException", "Integer", "InternalError",
+      "InterruptedException", "Iterable", "LinkageError", "Long", "Math", "NegativeArraySizeException",
+      "NoClassDefFoundError", "NoSuchFieldError", "NoSuchFieldException", "NoSuchMethodError", "NoSuchMethodException",
+      "NullPointerException", "Number", "NumberFormatException", "Object", "OutOfMemoryError", "Override", "Package",
+      "Process", "ProcessBuilder", "Readable", "ReflectiveOperationException", "Runnable", "Runtime",
+      "RuntimeException", "RuntimePermission", "SafeVarargs", "SecurityException", "SecurityManager", "Short",
+      "StackOverflowError", "StackTraceElement", "StrictMath", "String", "StringBuffer", "StringBuilder",
+      "StringIndexOutOfBoundsException", "SuppressWarnings", "System", "Thread", "ThreadDeath",
+      "ThreadGroup", "ThreadLocal", "Throwable", "TypeNotPresentException",
+      "UnknownError", "UnsatisfiedLinkError", "UnsupportedClassVersionError",
+      "UnsupportedOperationException", "VerifyError", "VirtualMachineError", "Void"],
+  "keywords">:
+    doc ("Keywords and literals are taken from Oracle's Java Tutorials on 2022-05-27; said to be complete for Java 1.8 only\n"
+        <> "See: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html") $
+    list $ string <$> [
+      "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue",
+      "default", "do", "double", "else", "enum", "extends", "final", "finally", "float", "for", "goto", "if",
+      "implements", "import", "instanceof", "int", "interface", "long", "native", "new", "package", "private",
+      "protected", "public", "return", "short", "static", "strictfp", "super", "switch", "synchronized", "this",
+      "throw", "throws", "transient", "try", "void", "volatile", "while"],
+  "literals">:
+    list $ string <$> ["false", "null", "true"]] $
+  Sets.fromList $ Lists.concat $ list [
+    var "specialNames",
+    var "classNames",
+    var "keywords",
+    var "literals"]
