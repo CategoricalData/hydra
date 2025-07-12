@@ -55,35 +55,72 @@ language name eliminationVariants literalVariants floatTypes functionVariants in
     _LanguageConstraints_typeVariants>>: Sets.fromList $ list (Mantle.typeVariant <$> typeVariants),
     _LanguageConstraints_types>>: typePredicate]]
 
+languageNew :: TTerm LanguageName -> TTerm LanguageConstraints -> TTerm Language
+languageNew name constraints = record _Language [
+    _Language_name>>: name,
+    _Language_constraints>>: constraints]
+
+languageNameNew :: TTerm String -> TTerm LanguageName
+languageNameNew = wrap _LanguageName
+
+unLanguageName :: TTerm LanguageName -> TTerm String
+unLanguageName n = unwrap _LanguageName @@ n
+
 languageName :: TTerm Language -> TTerm LanguageName
 languageName c = project _Language _Language_name @@ c
 
 languageConstraints :: TTerm Language -> TTerm LanguageConstraints
 languageConstraints c = project _Language _Language_constraints @@ c
 
+languageConstraintsNew :: TTerm (S.Set EliminationVariant)
+                    -> TTerm (S.Set LiteralVariant)
+                    -> TTerm (S.Set FloatType)
+                    -> TTerm (S.Set FunctionVariant)
+                    -> TTerm (S.Set IntegerType)
+                    -> TTerm (S.Set TermVariant)
+                    -> TTerm (S.Set TypeVariant)
+                    -> TTerm (Type -> Bool)
+                    -> TTerm LanguageConstraints
+languageConstraintsNew eliminationVariants
+                    literalVariants
+                    floatTypes
+                    functionVariants
+                    integerTypes
+                    termVariants
+                    typeVariants
+                    types = record _LanguageConstraints [
+    _LanguageConstraints_eliminationVariants>>: eliminationVariants,
+    _LanguageConstraints_literalVariants>>: literalVariants,
+    _LanguageConstraints_floatTypes>>: floatTypes,
+    _LanguageConstraints_functionVariants>>: functionVariants,
+    _LanguageConstraints_integerTypes>>: integerTypes,
+    _LanguageConstraints_termVariants>>: termVariants,
+    _LanguageConstraints_typeVariants>>: typeVariants,
+    _LanguageConstraints_types>>: types]
+
 languageConstraintsEliminationVariants :: TTerm LanguageConstraints -> TTerm (S.Set EliminationVariant)
-languageConstraintsEliminationVariants c = project _LanguageConstraints _LanguageConstraints_eliminationVariants @@ c
+languageConstraintsEliminationVariants lc = project _LanguageConstraints _LanguageConstraints_eliminationVariants @@ lc
 
 languageConstraintsLiteralVariants :: TTerm LanguageConstraints -> TTerm (S.Set LiteralVariant)
-languageConstraintsLiteralVariants c = project _LanguageConstraints _LanguageConstraints_literalVariants @@ c
+languageConstraintsLiteralVariants lc = project _LanguageConstraints _LanguageConstraints_literalVariants @@ lc
 
 languageConstraintsFloatTypes :: TTerm LanguageConstraints -> TTerm (S.Set FloatType)
-languageConstraintsFloatTypes c = project _LanguageConstraints _LanguageConstraints_floatTypes @@ c
+languageConstraintsFloatTypes lc = project _LanguageConstraints _LanguageConstraints_floatTypes @@ lc
 
 languageConstraintsFunctionVariants :: TTerm LanguageConstraints -> TTerm (S.Set FunctionVariant)
-languageConstraintsFunctionVariants c = project _LanguageConstraints _LanguageConstraints_functionVariants @@ c
+languageConstraintsFunctionVariants lc = project _LanguageConstraints _LanguageConstraints_functionVariants @@ lc
 
 languageConstraintsIntegerTypes :: TTerm LanguageConstraints -> TTerm (S.Set IntegerType)
-languageConstraintsIntegerTypes c = project _LanguageConstraints _LanguageConstraints_integerTypes @@ c
+languageConstraintsIntegerTypes lc = project _LanguageConstraints _LanguageConstraints_integerTypes @@ lc
 
 languageConstraintsTermVariants :: TTerm LanguageConstraints -> TTerm (S.Set TermVariant)
-languageConstraintsTermVariants c = project _LanguageConstraints _LanguageConstraints_termVariants @@ c
+languageConstraintsTermVariants lc = project _LanguageConstraints _LanguageConstraints_termVariants @@ lc
 
 languageConstraintsTypeVariants :: TTerm LanguageConstraints -> TTerm (S.Set TypeVariant)
-languageConstraintsTypeVariants c = project _LanguageConstraints _LanguageConstraints_typeVariants @@ c
+languageConstraintsTypeVariants lc = project _LanguageConstraints _LanguageConstraints_typeVariants @@ lc
 
 languageConstraintsTypes :: TTerm LanguageConstraints -> TTerm (Type -> Bool)
-languageConstraintsTypes c = project _LanguageConstraints _LanguageConstraints_types @@ c
+languageConstraintsTypes lc = project _LanguageConstraints _LanguageConstraints_types @@ lc
 
 traversalOrderPre = unitVariant _TraversalOrder _TraversalOrder_pre
 traversalOrderPost = unitVariant _TraversalOrder _TraversalOrder_post
