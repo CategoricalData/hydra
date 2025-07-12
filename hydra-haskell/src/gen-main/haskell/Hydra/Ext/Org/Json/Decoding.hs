@@ -14,6 +14,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+
 decodeArray :: ((Json.Value -> Compute.Flow t0 t1) -> Json.Value -> Compute.Flow t0 [t1])
 decodeArray decodeElem x = case x of
   Json.ValueArray v1 -> (Flows.mapList decodeElem v1)

@@ -84,14 +84,11 @@ jsonLanguageDefinition :: String -> TTerm a -> TElement a
 jsonLanguageDefinition = definitionInModule jsonLanguageModule
 
 jsonLanguageModule :: Module
-jsonLanguageModule = Module ns elements
-    [Rewriting.module_]
-    KernelTypes.kernelTypesModules $
-    Just "Language constraints for JSON"
-  where
-    ns = Namespace "hydra.ext.org.json.language"
-    elements = [
-      el jsonLanguageDef]
+jsonLanguageModule = Module (Namespace "hydra.ext.org.json.language")
+  [el jsonLanguageDef]
+  [Rewriting.module_]
+  KernelTypes.kernelTypesModules $
+  Just "Language constraints for JSON"
 
 jsonLanguageDef :: TElement Language
 jsonLanguageDef = jsonLanguageDefinition "jsonLanguage" $
@@ -126,7 +123,7 @@ jsonLanguageDef = jsonLanguageDefinition "jsonLanguage" $
         (Just true) [
         _Type_optional>>: constant false]]] $
   Coders.language
-    (Coders.languageName "hydra.ext.json")
+    (Coders.languageName "hydra.ext.org.json")
     (Coders.languageConstraints
       (var "eliminationVariants")
       (var "literalVariants")

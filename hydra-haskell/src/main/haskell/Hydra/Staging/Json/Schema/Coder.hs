@@ -20,7 +20,7 @@ import qualified Hydra.Monads as Monads
 import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
-import qualified Hydra.Ext.Json.Schema.Language as JsonSchemaLanguage
+import qualified Hydra.Ext.Org.Json.Schema.Language as JsonSchemaLanguage
 import qualified Hydra.Staging.Json.Schema.Serde as JsonSchemaSerde
 import qualified Hydra.Variants as Variants
 import qualified Hydra.Encode.Core as EncodeCore
