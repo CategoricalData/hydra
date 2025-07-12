@@ -12,7 +12,10 @@ jsonSchemaLanguage :: Coders.Language
 jsonSchemaLanguage = Coders.Language (Coders.LanguageName "hydra.ext.json.schema") $ Coders.LanguageConstraints {
   Coders.languageConstraintsEliminationVariants = S.empty,
   Coders.languageConstraintsLiteralVariants = S.fromList [
-    Mantle.LiteralVariantBoolean, Mantle.LiteralVariantFloat, Mantle.LiteralVariantInteger, Mantle.LiteralVariantString],
+    Mantle.LiteralVariantBoolean,
+    Mantle.LiteralVariantFloat,
+    Mantle.LiteralVariantInteger,
+    Mantle.LiteralVariantString],
   Coders.languageConstraintsFloatTypes = S.fromList [Core.FloatTypeBigfloat],
   Coders.languageConstraintsFunctionVariants = S.empty,
   Coders.languageConstraintsIntegerTypes = S.fromList [Core.IntegerTypeBigint],

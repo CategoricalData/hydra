@@ -11,7 +11,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Literals as HydraLiterals
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Staging.Json.Language as JsonLanguage
+import qualified Hydra.Ext.Org.Json.Language as JsonLanguage
 import qualified Hydra.Variants as Variants
 import qualified Hydra.Json as Json
 import qualified Hydra.Dsl.Terms as Terms
