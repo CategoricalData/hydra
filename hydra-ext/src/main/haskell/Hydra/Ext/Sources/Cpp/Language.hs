@@ -86,15 +86,11 @@ cppLanguageDefinition :: String -> TTerm a -> TElement a
 cppLanguageDefinition = definitionInModule cppLanguageModule
 
 cppLanguageModule :: Module
-cppLanguageModule = Module ns elements
-    [Lexical.module_]
-    KernelTypes.kernelTypesModules $
-    Just "Language constraints and reserved words for C++"
-  where
-    ns = Namespace "hydra.ext.cpp.language"
-    elements = [
-      el cppLanguageDef,
-      el cppReservedWordsDef]
+cppLanguageModule = Module (Namespace "hydra.ext.cpp.language")
+  [el cppLanguageDef, el cppReservedWordsDef]
+  [Lexical.module_]
+  KernelTypes.kernelTypesModules $
+  Just "Language constraints and reserved words for C++"
 
 cppLanguageDef :: TElement Language
 cppLanguageDef = cppLanguageDefinition "cppLanguage" $

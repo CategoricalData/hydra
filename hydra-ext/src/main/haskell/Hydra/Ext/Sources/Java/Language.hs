@@ -84,16 +84,11 @@ javaLanguageDefinition :: String -> TTerm a -> TElement a
 javaLanguageDefinition = definitionInModule javaLanguageModule
 
 javaLanguageModule :: Module
-javaLanguageModule = Module ns elements
-    [Lexical.module_]
-    KernelTypes.kernelTypesModules $
-    Just "Language constraints and reserved words for Java"
-  where
-    ns = Namespace "hydra.ext.java.language"
-    elements = [
-      el javaMaxTupleLengthDef,
-      el javaLanguageDef,
-      el reservedWordsDef]
+javaLanguageModule = Module (Namespace "hydra.ext.java.language")
+  [el javaMaxTupleLengthDef, el javaLanguageDef, el reservedWordsDef]
+  [Lexical.module_]
+  KernelTypes.kernelTypesModules $
+  Just "Language constraints and reserved words for Java"
 
 javaMaxTupleLengthDef :: TElement Int
 javaMaxTupleLengthDef = javaLanguageDefinition "javaMaxTupleLength" $

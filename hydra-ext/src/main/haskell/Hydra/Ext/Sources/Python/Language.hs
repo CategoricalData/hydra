@@ -84,15 +84,11 @@ pythonLanguageDefinition :: String -> TTerm a -> TElement a
 pythonLanguageDefinition = definitionInModule pythonLanguageModule
 
 pythonLanguageModule :: Module
-pythonLanguageModule = Module ns elements
-    [Lexical.module_]
-    KernelTypes.kernelTypesModules $
-    Just "Language constraints and reserved words for Python 3"
-  where
-    ns = Namespace "hydra.ext.python.language"
-    elements = [
-      el pythonLanguageDef,
-      el pythonReservedWordsDef]
+pythonLanguageModule = Module (Namespace "hydra.ext.python.language")
+  [el pythonLanguageDef, el pythonReservedWordsDef]
+  [Lexical.module_]
+  KernelTypes.kernelTypesModules $
+  Just "Language constraints and reserved words for Python 3"
 
 pythonLanguageDef :: TElement Language
 pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
