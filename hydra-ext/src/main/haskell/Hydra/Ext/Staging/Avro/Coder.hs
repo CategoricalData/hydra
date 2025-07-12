@@ -7,7 +7,7 @@ module Hydra.Ext.Staging.Avro.Coder (
 ) where
 
 import Hydra.Kernel
-import Hydra.Staging.Json.Eliminate
+import Hydra.Extract.Json
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Dsl.Types as Types

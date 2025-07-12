@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Json.Decoding where
+module Hydra.Sources.Json.Extract where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
@@ -80,65 +80,114 @@ import qualified Data.Set                                   as S
 import qualified Data.Maybe                                 as Y
 
 import Hydra.Json
-import qualified Hydra.Sources.Kernel.Types.Json as Json
+import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 
 
 module_ :: Module
-module_ = Module (Namespace "hydra.ext.org.json.decoding") elements
-    []
+module_ = Module (Namespace "hydra.extract.json") elements
+    [Monads.module_]
     KernelTypes.kernelTypesModules $
-    Just "Decoding functions for JSON data"
+    Just "Utilities for extracting values from JSON objects"
   where
-   elements = [
-     Phantoms.el decodeArrayDef,
-     Phantoms.el decodeBooleanDef,
-     Phantoms.el decodeFieldDef,
---     Phantoms.el decodeNumberDef, TODO: restore
-     Phantoms.el decodeObjectDef,
-     Phantoms.el decodeOptionalFieldDef,
-     Phantoms.el decodeStringDef]
+    elements = [
+      el expectArrayDef,
+      el expectNumberDef,
+      el expectObjectDef,
+      el expectStringDef,
+      el optDef,
+      el optArrayDef,
+      el optStringDef,
+      el requireDef,
+      el requireArrayDef,
+      el requireNumberDef,
+      el requireStringDef,
+      el showValueDef]
 
 define :: String -> TTerm a -> TElement a
-define label = definitionInModule module_ ("decode" <> label)
+define = definitionInModule module_
 
-decodeArrayDef :: TElement ((Value -> Flow s a) -> Value -> Flow s [a])
-decodeArrayDef  = define "Array" $
-  lambda "decodeElem" $ match _Value (Just $ Flows.fail "expected an array") [
-    _Value_array>>: lambda "a" $ Flows.mapList (var "decodeElem") $ var "a"]
+expectArrayDef :: TElement (Value -> Flow s [Value])
+expectArrayDef = define "expectArray" $
+  doc "Extract an array from a JSON value, failing if the value is not an array" $
+  lambda "value" $ cases _Value (var "value")
+    (Just $ ref Monads.unexpectedDef @@ string "JSON array" @@ (ref showValueDef @@ var "value")) [
+    _Value_array>>: lambda "els" $ Flows.pure $ var "els"]
 
-decodeBooleanDef :: TElement (Value -> Flow s Bool)
-decodeBooleanDef  = define "Boolean" $
-  match _Value (Just $ Flows.fail $ "expected a boolean") [
-    _Value_boolean>>: lambda "b" $ Flows.pure $ var "b"]
+expectNumberDef :: TElement (Value -> Flow s Double)
+expectNumberDef = define "expectNumber" $
+  doc "Extract a number from a JSON value, failing if the value is not a number" $
+  lambda "value" $ cases _Value (var "value")
+    (Just $ ref Monads.unexpectedDef @@ string "JSON number" @@ (ref showValueDef @@ var "value")) [
+    _Value_number>>: lambda "d" $ Flows.pure $ var "d"]
 
-decodeFieldDef :: TElement ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s a)
-decodeFieldDef  = define "Field" $
-  lambda "decodeValue" $ lambda "name" $ lambda "m" $
-    Flows.bind
-      (ref decodeOptionalFieldDef @@ var "decodeValue" @@ var "name" @@ var "m")
-      (primitive _optionals_maybe
-        @@ (Flows.fail $ Strings.cat2 "missing field: " (var "name"))
-        @@ (lambda "f" $ Flows.pure $ var "f"))
+expectObjectDef :: TElement (Value -> Flow s (M.Map String Value))
+expectObjectDef = define "expectObject" $
+  doc "Extract an object from a JSON value, failing if the value is not an object" $
+  lambda "value" $ cases _Value (var "value")
+    (Just $ ref Monads.unexpectedDef @@ string "JSON object" @@ (ref showValueDef @@ var "value")) [
+    _Value_object>>: lambda "m" $ Flows.pure $ var "m"]
 
-decodeNumberDef :: TElement (Value -> Flow s Double)
-decodeNumberDef  = define "Number" $
-  match _Value (Just $ Flows.fail "expected a number") [
-    _Value_number>>: lambda "n" $ Flows.pure $ var "n"]
-
-decodeObjectDef :: TElement (Value -> Flow s (M.Map String Value))
-decodeObjectDef  = define "Object" $
-  match _Value (Just $ Flows.fail "expected an object") [
-    _Value_object>>: lambda "o" $ Flows.pure $ var "o"]
-
-decodeOptionalFieldDef :: TElement ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s (Maybe a))
-decodeOptionalFieldDef  = define "OptionalField" $
-  lambda "decodeValue" $ lambda "name" $ lambda "m" $
-    (primitive _optionals_maybe
-        @@ (Flows.pure nothing)
-        @@ (lambda "v" (Flows.map (lambda "x" (just $ var "x")) (var "decodeValue" @@ var "v"))))
-      @@ (Maps.lookup (var "name") (var "m"))
-
-decodeStringDef :: TElement (Value -> Flow s String)
-decodeStringDef  = define "String" $
-  match _Value (Just $ Flows.fail "expected a string") [
+expectStringDef :: TElement (Value -> Flow s String)
+expectStringDef = define "expectString" $
+  doc "Extract a string from a JSON value, failing if the value is not a string" $
+  lambda "value" $ cases _Value (var "value")
+    (Just $ ref Monads.unexpectedDef @@ string "JSON string" @@ (ref showValueDef @@ var "value")) [
     _Value_string>>: lambda "s" $ Flows.pure $ var "s"]
+
+optDef :: TElement (String -> M.Map String Value -> Maybe Value)
+optDef = define "opt" $
+  doc "Look up an optional field in a JSON object" $
+  lambdas ["fname", "m"] $ Maps.lookup (var "fname") (var "m")
+
+optArrayDef :: TElement (String -> M.Map String Value -> Flow s (Maybe [Value]))
+optArrayDef = define "optArray" $
+  doc "Look up an optional array field in a JSON object" $
+  lambdas ["fname", "m"] $ Optionals.maybe
+    (Flows.pure nothing)
+    (lambda "a" $ Flows.map (unaryFunction just) $ ref expectArrayDef @@ var "a")
+    (ref optDef @@ var "fname" @@ var "m")
+
+optStringDef :: TElement (String -> M.Map String Value -> Flow s (Maybe String))
+optStringDef = define "optString" $
+  doc "Look up an optional string field in a JSON object" $
+  lambdas ["fname", "m"] $ Optionals.maybe
+    (Flows.pure nothing)
+    (lambda "s" $ Flows.map (unaryFunction just) $ ref expectStringDef @@ var "s")
+    (ref optDef @@ var "fname" @@ var "m")
+
+requireDef :: TElement (String -> M.Map String Value -> Flow s Value)
+requireDef = define "require" $
+  doc "Look up a required field in a JSON object, failing if not found" $
+  lambdas ["fname", "m"] $ Optionals.maybe
+    (Flows.fail $ Strings.cat $ list [
+      string "required attribute ",
+      ref showValueDef @@ var "fname",
+      string " not found"])
+    (lambda "value" $ Flows.pure $ var "value")
+    (Maps.lookup (var "fname") (var "m"))
+
+requireArrayDef :: TElement (String -> M.Map String Value -> Flow s [Value])
+requireArrayDef = define "requireArray" $
+  doc "Look up a required array field in a JSON object" $
+  lambdas ["fname", "m"] $ Flows.bind
+    (ref requireDef @@ var "fname" @@ var "m")
+    (ref expectArrayDef)
+
+requireNumberDef :: TElement (String -> M.Map String Value -> Flow s Double)
+requireNumberDef = define "requireNumber" $
+  doc "Look up a required number field in a JSON object" $
+  lambdas ["fname", "m"] $ Flows.bind
+    (ref requireDef @@ var "fname" @@ var "m")
+    (ref expectNumberDef)
+
+requireStringDef :: TElement (String -> M.Map String Value -> Flow s String)
+requireStringDef = define "requireString" $
+  doc "Look up a required string field in a JSON object" $
+  lambdas ["fname", "m"] $ Flows.bind
+    (ref requireDef @@ var "fname" @@ var "m")
+    (ref expectStringDef)
+
+showValueDef :: TElement (Value -> String)
+showValueDef = define "showValue" $
+  doc "Show a JSON value as a string (placeholder implementation)" $
+  lambda "value" $ string "TODO: implement showValue"
