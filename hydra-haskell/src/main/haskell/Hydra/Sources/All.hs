@@ -14,10 +14,11 @@ import Hydra.Sources.Haskell.Language
 import Hydra.Sources.Haskell.Operators
 import Hydra.Sources.Haskell.Serde
 import Hydra.Sources.Haskell.Utils
-import Hydra.Sources.Json.Decoding
-import Hydra.Sources.Json.Language
-import Hydra.Sources.Json.Schema
-import Hydra.Sources.Json.Schema.Language
+import qualified Hydra.Sources.Json.Decoding as JsonDecoding
+import qualified Hydra.Sources.Json.Extract as JsonExtract
+import qualified Hydra.Sources.Json.Language as JsonLanguage
+import qualified Hydra.Sources.Json.Schema as JsonSchema
+import qualified Hydra.Sources.Json.Schema.Language as JsonSchemaLanguage
 import Hydra.Sources.Test.TestGraph
 import Hydra.Sources.Test.TestSuite
 import Hydra.Sources.Yaml.Model
@@ -28,10 +29,11 @@ mainModules = kernelModules ++ jsonModules ++ otherModules
 
 jsonModules :: [Module]
 jsonModules = [
-  jsonDecodingModule,
-  jsonLanguageModule,
-  jsonSchemaModule,
-  jsonSchemaLanguageModule]
+  JsonDecoding.module_,
+  JsonExtract.module_,
+  JsonLanguage.module_,
+  JsonSchema.module_,
+  JsonSchemaLanguage.module_]
 
 otherModules :: [Module]
 otherModules = [

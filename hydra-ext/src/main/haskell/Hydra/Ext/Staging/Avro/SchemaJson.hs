@@ -2,7 +2,7 @@ module Hydra.Ext.Staging.Avro.SchemaJson where
 
 import Hydra.Kernel
 import Hydra.Staging.Json.Serde
-import Hydra.Staging.Json.Eliminate
+import Hydra.Extract.Json
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json as Json
 

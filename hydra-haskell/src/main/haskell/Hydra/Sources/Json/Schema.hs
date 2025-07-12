@@ -27,8 +27,8 @@ import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
 import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
 import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
 
-jsonSchemaModule :: Module
-jsonSchemaModule = Module ns elements [Json.module_] [Core.module_] $
+module_ :: Module
+module_ = Module ns elements [Json.module_] [Core.module_] $
     Just ("A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar")
   where
     ns = Namespace "hydra.ext.org.json.schema"
