@@ -15,6 +15,7 @@ import Hydra.Sources.Haskell.Operators
 import Hydra.Sources.Haskell.Serde
 import Hydra.Sources.Haskell.Utils
 import Hydra.Sources.Json.Decoding
+import Hydra.Sources.Json.Language
 import Hydra.Sources.Json.Schema
 import Hydra.Sources.Test.TestGraph
 import Hydra.Sources.Test.TestSuite
@@ -22,7 +23,13 @@ import Hydra.Sources.Yaml.Model
 
 
 mainModules :: [Module]
-mainModules = kernelModules ++ otherModules
+mainModules = kernelModules ++ jsonModules ++ otherModules
+
+jsonModules :: [Module]
+jsonModules = [
+  jsonDecodingModule,
+  jsonLanguageModule,
+  jsonSchemaModule]
 
 otherModules :: [Module]
 otherModules = [
@@ -32,8 +39,6 @@ otherModules = [
   haskellOperatorsModule,
   haskellSerdeModule,
   haskellUtilsModule,
-  jsonDecodingModule,
-  jsonSchemaModule,
   yamlModelModule]
 
 testModules :: [Module]
