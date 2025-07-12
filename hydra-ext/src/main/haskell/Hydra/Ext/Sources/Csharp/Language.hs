@@ -84,15 +84,11 @@ csharpLanguageDefinition :: String -> TTerm a -> TElement a
 csharpLanguageDefinition = definitionInModule csharpLanguageModule
 
 csharpLanguageModule :: Module
-csharpLanguageModule = Module ns elements
-    [Lexical.module_]
-    KernelTypes.kernelTypesModules $
-    Just "Language constraints and reserved words for C Sharp (C#)"
-  where
-    ns = Namespace "hydra.ext.csharp.language"
-    elements = [
-      el csharpLanguageDef,
-      el csharpReservedWordsDef]
+csharpLanguageModule = Module (Namespace "hydra.ext.csharp.language")
+  [el csharpLanguageDef, el csharpReservedWordsDef]
+  [Lexical.module_]
+  KernelTypes.kernelTypesModules $
+  Just "Language constraints and reserved words for C Sharp (C#)"
 
 csharpLanguageDef :: TElement Language
 csharpLanguageDef = csharpLanguageDefinition "csharpLanguage" $

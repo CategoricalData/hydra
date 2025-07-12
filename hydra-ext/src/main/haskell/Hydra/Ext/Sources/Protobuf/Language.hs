@@ -84,15 +84,11 @@ protobufLanguageDefinition :: String -> TTerm a -> TElement a
 protobufLanguageDefinition = definitionInModule protobufLanguageModule
 
 protobufLanguageModule :: Module
-protobufLanguageModule = Module ns elements
-    [Lexical.module_, Rewriting.module_]
-    KernelTypes.kernelTypesModules $
-    Just "Language constraints for Protobuf v3"
-  where
-    ns = Namespace "hydra.ext.protobuf.language"
-    elements = [
-      el protobufLanguageDef,
-      el protobufReservedWordsDef]
+protobufLanguageModule = Module (Namespace "hydra.ext.protobuf.language")
+  [el protobufLanguageDef, el protobufReservedWordsDef]
+  [Lexical.module_, Rewriting.module_]
+  KernelTypes.kernelTypesModules $
+  Just "Language constraints for Protobuf v3"
 
 protobufLanguageDef :: TElement Language
 protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $

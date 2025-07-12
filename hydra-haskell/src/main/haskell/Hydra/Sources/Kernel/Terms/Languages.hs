@@ -44,25 +44,31 @@ import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 
 module_ :: Module
-module_ = Module ns elements
-    [Variants.module_]
-    kernelTypesModules $
-    Just "Language constraints for Hydra Core"
-  where
-    ns = Namespace "hydra.languages"
-    elements = [el hydraLanguageDef]
+module_ = Module (Namespace "hydra.languages")
+  [el hydraLanguageDef]
+  [Variants.module_]
+  kernelTypesModules $
+  Just "Language constraints for Hydra Core"
 
 hydraLanguageDef :: TElement Language
 hydraLanguageDef = definitionInModule module_ "hydraLanguage" $
-  doc "Language constraints for Hydra Core, i.e. no constraints." $
-  record _Language [
-    _Language_name>>: wrap _LanguageName "hydra.core",
-    _Language_constraints>>: record _LanguageConstraints [
-    _LanguageConstraints_eliminationVariants>>: Sets.fromList $ ref Variants.eliminationVariantsDef,
-    _LanguageConstraints_literalVariants>>: Sets.fromList $ ref Variants.literalVariantsDef,
-    _LanguageConstraints_floatTypes>>: Sets.fromList $ ref Variants.floatTypesDef,
-    _LanguageConstraints_functionVariants>>: Sets.fromList $ ref Variants.functionVariantsDef,
-    _LanguageConstraints_integerTypes>>: Sets.fromList $ ref Variants.integerTypesDef,
-    _LanguageConstraints_termVariants>>: Sets.fromList $ ref Variants.termVariantsDef,
-    _LanguageConstraints_typeVariants>>: Sets.fromList $ ref Variants.typeVariantsDef,
-    _LanguageConstraints_types>>: constant true]]
+  doc "Language constraints for Hydra Core, i.e. no constraints." $ lets [
+  "eliminationVariants">: Sets.fromList $ ref Variants.eliminationVariantsDef,
+  "literalVariants">: Sets.fromList $ ref Variants.literalVariantsDef,
+  "floatTypes">: Sets.fromList $ ref Variants.floatTypesDef,
+  "functionVariants">: Sets.fromList $ ref Variants.functionVariantsDef,
+  "integerTypes">: Sets.fromList $ ref Variants.integerTypesDef,
+  "termVariants">: Sets.fromList $ ref Variants.termVariantsDef,
+  "typeVariants">: Sets.fromList $ ref Variants.typeVariantsDef,
+  "types">: constant true] $
+  Coders.language
+    (Coders.languageName "hydra.core")
+    (Coders.languageConstraints
+      (var "eliminationVariants")
+      (var "literalVariants")
+      (var "floatTypes")
+      (var "functionVariants")
+      (var "integerTypes")
+      (var "termVariants")
+      (var "typeVariants")
+      (var "types"))

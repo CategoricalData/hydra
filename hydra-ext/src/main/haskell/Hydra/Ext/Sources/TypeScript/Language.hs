@@ -84,65 +84,69 @@ typeScriptLanguageDefinition :: String -> TTerm a -> TElement a
 typeScriptLanguageDefinition = definitionInModule typeScriptLanguageModule
 
 typeScriptLanguageModule :: Module
-typeScriptLanguageModule = Module ns elements
-    [Rewriting.module_]
-    KernelTypes.kernelTypesModules $
-    Just "Language constraints for TypeScript"
-  where
-    ns = Namespace "hydra.ext.typeScript.language"
-    elements = [
-      el typeScriptLanguageDef,
-      el typeScriptReservedWordsDef]
+typeScriptLanguageModule = Module (Namespace "hydra.ext.typeScript.language")
+  [el typeScriptLanguageDef, el typeScriptReservedWordsDef]
+  [Rewriting.module_]
+  KernelTypes.kernelTypesModules $
+  Just "Language constraints for TypeScript"
 
 typeScriptLanguageDef :: TElement Language
 typeScriptLanguageDef = typeScriptLanguageDefinition "typeScriptLanguage" $
-  doc "Language constraints for TypeScript" $
-  record _Language [
-    _Language_name>>: wrap _LanguageName "hydra.langs.typeScript",
-    _Language_constraints>>: record _LanguageConstraints [
-      _LanguageConstraints_eliminationVariants>>: Sets.empty,
-      _LanguageConstraints_literalVariants>>: Sets.fromList $ list (unitVariant _LiteralVariant <$> [
-        _LiteralVariant_boolean,
-        _LiteralVariant_float,
-        _LiteralVariant_integer,
-        _LiteralVariant_string]),
-      _LanguageConstraints_floatTypes>>: Sets.fromList $ list (unitVariant _FloatType <$> [
-        _FloatType_float64]),
-      _LanguageConstraints_functionVariants>>: Sets.empty,
-      _LanguageConstraints_integerTypes>>: Sets.fromList $ list (unitVariant _IntegerType <$> [
-        _IntegerType_bigint]),
-      _LanguageConstraints_termVariants>>: Sets.fromList $ list (unitVariant _TermVariant <$> [
-        _TermVariant_list,
-        _TermVariant_literal,
-        _TermVariant_map,
-        _TermVariant_optional,
-        _TermVariant_record,
-        _TermVariant_union]),
-      _LanguageConstraints_typeVariants>>: Sets.fromList $ list (unitVariant _TypeVariant <$> [
-        _TypeVariant_annotated,
-        _TypeVariant_list,
-        _TypeVariant_literal,
-        _TypeVariant_map,
-        _TypeVariant_optional,
-        _TypeVariant_record,
-        _TypeVariant_union,
-        _TypeVariant_variable]),
-      _LanguageConstraints_types>>: match _Type (Just true) [
-        _Type_map>>: lambda "mt" (match _Type (Just true) [
-          _Type_optional>>: constant false] @@ (ref Rewriting.deannotateTypeDef @@ (Core.mapTypeValues $ var "mt")))]]]
+  doc "Language constraints for TypeScript" $ lets [
+  "eliminationVariants">: Sets.empty,
+  "literalVariants">: Sets.fromList $ list [
+    Mantle.literalVariantBoolean,
+    Mantle.literalVariantFloat,
+    Mantle.literalVariantInteger,
+    Mantle.literalVariantString],
+  "floatTypes">: Sets.fromList $ list [
+    Core.floatTypeFloat64],
+  "functionVariants">: Sets.empty,
+  "integerTypes">: Sets.fromList $ list [
+    Core.integerTypeBigint],
+  "termVariants">: Sets.fromList $ list [
+    Mantle.termVariantList,
+    Mantle.termVariantLiteral,
+    Mantle.termVariantMap,
+    Mantle.termVariantOptional,
+    Mantle.termVariantRecord,
+    Mantle.termVariantUnion],
+  "typeVariants">: Sets.fromList $ list [
+    Mantle.typeVariantList,
+    Mantle.typeVariantLiteral,
+    Mantle.typeVariantMap,
+    Mantle.typeVariantOptional,
+    Mantle.typeVariantRecord,
+    Mantle.typeVariantUnion],
+  "types">: match _Type
+    (Just true) [
+    _Type_map>>: lambda "mt" (cases _Type ((ref Rewriting.deannotateTypeDef @@ (Core.mapTypeValues $ var "mt")))
+      (Just true) [
+      _Type_optional>>: constant false])]] $
+  Coders.language
+    (Coders.languageName "hydra.ext.typeScript")
+    (Coders.languageConstraints
+      (var "eliminationVariants")
+      (var "literalVariants")
+      (var "floatTypes")
+      (var "functionVariants")
+      (var "integerTypes")
+      (var "termVariants")
+      (var "typeVariants")
+      (var "types"))
 
 typeScriptReservedWordsDef :: TElement (S.Set String)
 typeScriptReservedWordsDef = typeScriptLanguageDefinition "typeScriptReservedWords" $
-    doc "A set of reserved words in TypeScript. Taken directly from https://github.com/microsoft/TypeScript/issues/2536" $
-    lets [
-      "reservedWords">: list [
-        "delete", "do", "else", "enum", "export", "extends", "false", "finally", "for", "function", "if", "import",
-        "in", "instanceof", "new", "null", "return", "super", "switch", "this", "throw", "true", "try", "typeof", "var",
-        "void", "while", "with"],
-      "strictModeReservedWords">: list [
-        "as", "implements", "interface", "let", "package", "private", "protected", "public", "static", "yield"],
-      "contextuallKeywords">: list [
-        "any", "boolean", "constructor", "declare", "from", "get", "module", "number", "of", "require", "set", "string",
-        "symbol", "type"]]
-      $ Sets.fromList $ Lists.concat $
-        list [var "reservedWords", var "strictModeReservedWords", var "contextuallKeywords"]
+  doc ("A set of reserved words in TypeScript."
+    <> " Taken directly from https://github.com/microsoft/TypeScript/issues/2536") $ lets [
+  "reservedWords">: list [
+    "delete", "do", "else", "enum", "export", "extends", "false", "finally", "for", "function", "if", "import",
+    "in", "instanceof", "new", "null", "return", "super", "switch", "this", "throw", "true", "try", "typeof", "var",
+    "void", "while", "with"],
+  "strictModeReservedWords">: list [
+    "as", "implements", "interface", "let", "package", "private", "protected", "public", "static", "yield"],
+  "contextuallKeywords">: list [
+    "any", "boolean", "constructor", "declare", "from", "get", "module", "number", "of", "require", "set", "string",
+    "symbol", "type"]] $
+  Sets.fromList $ Lists.concat $
+    list [var "reservedWords", var "strictModeReservedWords", var "contextuallKeywords"]

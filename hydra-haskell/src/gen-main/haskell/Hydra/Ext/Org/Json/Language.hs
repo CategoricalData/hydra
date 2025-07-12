@@ -16,7 +16,7 @@ import qualified Data.Set as S
 -- | Language constraints for JSON
 jsonLanguage :: Coders.Language
 jsonLanguage = Coders.Language {
-  Coders.languageName = (Coders.LanguageName "hydra.ext.json"),
+  Coders.languageName = (Coders.LanguageName "hydra.ext.org.json"),
   Coders.languageConstraints = Coders.LanguageConstraints {
     Coders.languageConstraintsEliminationVariants = eliminationVariants,
     Coders.languageConstraintsLiteralVariants = literalVariants,
