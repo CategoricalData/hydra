@@ -1,10 +1,12 @@
 module Hydra.Staging.Json.Serde where
 
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Graph
-import Hydra.Staging.Json.Coder
-import Hydra.Tools.Bytestrings
+import Hydra.Tools.Monads
+import qualified Hydra.Compute as Compute
+import qualified Hydra.Core as Core
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Monads as Monads
+import qualified Hydra.Staging.Json.Coder as JsonCoder
+import qualified Hydra.Tools.Bytestrings as Bytestrings
 import qualified Hydra.Json as Json
 
 import qualified Data.ByteString.Lazy as BS
@@ -41,22 +43,22 @@ bytesToAesonValue = A.eitherDecode
 bytesToJsonValue :: BS.ByteString -> Either String Json.Value
 bytesToJsonValue bs = aesonValueToJsonValue <$> bytesToAesonValue bs
 
-jsonByteStringCoder :: Type -> Flow Graph (Coder Graph Graph Term BS.ByteString)
+jsonByteStringCoder :: Core.Type -> Compute.Flow Graph.Graph (Compute.Coder Graph.Graph Graph.Graph Core.Term BS.ByteString)
 jsonByteStringCoder typ = do
-  coder <- jsonCoder typ
-  return Coder {
-    coderEncode = fmap jsonValueToBytes . coderEncode coder,
-    coderDecode = \bs -> case bytesToJsonValue bs of
-        Left msg -> fail $ "JSON parsing failed: " ++ msg
-        Right v -> coderDecode coder v}
+  coder <- JsonCoder.jsonCoder typ
+  return Compute.Coder {
+    Compute.coderEncode = fmap jsonValueToBytes . Compute.coderEncode coder,
+    Compute.coderDecode = \bs -> case bytesToJsonValue bs of
+        Left msg -> Monads.fail $ "JSON parsing failed: " ++ msg
+        Right v -> Compute.coderDecode coder v}
 
 -- | A convenience which maps typed terms to and from pretty-printed JSON strings, as opposed to JSON objects
-jsonStringCoder :: Type -> Flow Graph (Coder Graph Graph Term String)
+jsonStringCoder :: Core.Type -> Compute.Flow Graph.Graph (Compute.Coder Graph.Graph Graph.Graph Core.Term String)
 jsonStringCoder typ = do
   serde <- jsonByteStringCoder typ
-  return Coder {
-    coderEncode = fmap bytesToString . coderEncode serde,
-    coderDecode = coderDecode serde . stringToBytes}
+  return Compute.Coder {
+    Compute.coderEncode = fmap Bytestrings.bytesToString . Compute.coderEncode serde,
+    Compute.coderDecode = Compute.coderDecode serde . Bytestrings.stringToBytes}
 
 jsonValueToAesonValue :: Json.Value -> A.Value
 jsonValueToAesonValue v = case v of
@@ -73,10 +75,10 @@ jsonValueToBytes :: Json.Value -> BS.ByteString
 jsonValueToBytes = aesonValueToBytes . jsonValueToAesonValue
 
 jsonValueToString :: Json.Value -> String
-jsonValueToString = bytesToString . jsonValueToBytes
+jsonValueToString = Bytestrings.bytesToString . jsonValueToBytes
 
 jsonValuesToString :: [Json.Value] -> String
 jsonValuesToString = L.intercalate "\n" . fmap jsonValueToString
 
 stringToJsonValue :: String -> Either String Json.Value
-stringToJsonValue = bytesToJsonValue . stringToBytes
+stringToJsonValue = bytesToJsonValue . Bytestrings.stringToBytes
