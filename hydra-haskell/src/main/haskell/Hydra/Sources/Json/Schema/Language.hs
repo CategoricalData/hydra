@@ -80,18 +80,18 @@ import qualified Data.Set                                   as S
 import qualified Data.Maybe                                 as Y
 
 
-jsonSchemaLanguageDefinition :: String -> TTerm a -> TElement a
-jsonSchemaLanguageDefinition = definitionInModule jsonSchemaLanguageModule
-
-jsonSchemaLanguageModule :: Module
-jsonSchemaLanguageModule = Module (Namespace "hydra.ext.org.json.schema.language")
+module_ :: Module
+module_ = Module (Namespace "hydra.ext.org.json.schema.language")
   [el jsonSchemaLanguageDef]
   [Variants.module_]
   KernelTypes.kernelTypesModules $
   Just "Language constraints for JSON Schema"
 
+define :: String -> TTerm a -> TElement a
+define = definitionInModule module_
+
 jsonSchemaLanguageDef :: TElement Language
-jsonSchemaLanguageDef = jsonSchemaLanguageDefinition "jsonSchemaLanguage" $
+jsonSchemaLanguageDef = define "jsonSchemaLanguage" $
   doc "Language constraints for JSON Schema" $ lets [
   "eliminationVariants">: Sets.fromList $ list [],
   "literalVariants">: Sets.fromList $ list [
