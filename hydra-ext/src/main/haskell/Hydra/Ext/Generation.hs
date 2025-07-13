@@ -12,6 +12,7 @@ import Hydra.Ext.Sources.All
 import Hydra.Ext.Staging.Cpp.Coder
 import Hydra.Ext.Staging.Graphql.Coder
 import Hydra.Ext.Staging.Java.Coder
+import Hydra.Ext.Staging.Json.Schema.Coder
 import Hydra.Ext.Staging.Pegasus.Coder
 import Hydra.Ext.Staging.Protobuf.Coder
 import Hydra.Ext.Staging.Python.Coder
@@ -28,6 +29,9 @@ writeGraphql = generateSources moduleToGraphql
 
 writeJava :: FP.FilePath -> [Module] -> IO ()
 writeJava = generateSources moduleToJava
+
+writeJsonSchema :: FP.FilePath -> [Module] -> IO ()
+writeJsonSchema = generateSources (moduleToJsonSchemaFiles (JsonSchemaOptions True))
 
 writePdl :: FP.FilePath -> [Module] -> IO ()
 writePdl = generateSources moduleToPdl

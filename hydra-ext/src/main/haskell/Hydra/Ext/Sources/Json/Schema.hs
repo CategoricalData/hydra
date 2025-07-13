@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Json.Schema where
+module Hydra.Ext.Sources.Json.Schema where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
