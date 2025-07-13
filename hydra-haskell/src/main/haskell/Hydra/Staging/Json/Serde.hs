@@ -5,7 +5,7 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Monads as Monads
-import qualified Hydra.Staging.Json.Coder as JsonCoder
+import qualified Hydra.Ext.Org.Json.Coder as JsonCoder
 import qualified Hydra.Tools.Bytestrings as Bytestrings
 import qualified Hydra.Json as Json
 

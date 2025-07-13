@@ -11,8 +11,9 @@ import qualified Hydra.Dsl.Ast                              as Ast
 import qualified Hydra.Dsl.Coders                           as Coders
 import qualified Hydra.Dsl.Compute                          as Compute
 import qualified Hydra.Dsl.Core                             as Core
-import qualified Hydra.Dsl.Graph                            as Graph
 import qualified Hydra.Dsl.Grammar                          as Grammar
+import qualified Hydra.Dsl.Graph                            as Graph
+import qualified Hydra.Dsl.Json                             as Json
 import qualified Hydra.Dsl.Lib.Chars                        as Chars
 import qualified Hydra.Dsl.Lib.Equality                     as Equality
 import qualified Hydra.Dsl.Lib.Flows                        as Flows
@@ -187,6 +188,7 @@ requireStringDef = define "requireString" $
     (ref requireDef @@ var "fname" @@ var "m")
     (ref expectStringDef)
 
+-- TODO: implement this function, and deduplicate with hydra.json.coder.showValue
 showValueDef :: TElement (Value -> String)
 showValueDef = define "showValue" $
   doc "Show a JSON value as a string (placeholder implementation)" $

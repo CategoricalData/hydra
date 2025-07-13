@@ -12,6 +12,7 @@ import qualified Hydra.Dsl.Compute       as Compute
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Grammar       as Grammar
 import qualified Hydra.Dsl.Graph         as Graph
+import qualified Hydra.Dsl.Json          as Json
 import qualified Hydra.Dsl.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Lib.Flows     as Flows
