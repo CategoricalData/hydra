@@ -23,6 +23,8 @@ import Hydra.Ext.Sources.Graphql.Syntax
 import Hydra.Ext.Sources.Graphviz.Dot
 import Hydra.Ext.Sources.Java.Language
 import Hydra.Ext.Sources.Java.Syntax
+import qualified Hydra.Ext.Sources.Json.Schema as JsonSchema
+import qualified Hydra.Ext.Sources.Json.Schema.Language as JsonSchemaLanguage
 import Hydra.Ext.Sources.Kusto.Kql
 import Hydra.Ext.Sources.Other.Atlas
 import Hydra.Ext.Sources.Other.AzureDtld
@@ -80,6 +82,8 @@ hydraExtModules = otherModules ++ gqlModules
       ianaRelationsModule,
       javaLanguageModule,
       javaSyntaxModule,
+      JsonSchema.module_,
+      JsonSchemaLanguage.module_,
       kqlModule,
       openCypherFeaturesModule,
       openCypherModule,

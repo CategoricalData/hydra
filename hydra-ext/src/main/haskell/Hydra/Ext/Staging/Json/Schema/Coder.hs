@@ -1,4 +1,4 @@
-module Hydra.Staging.Json.Schema.Coder (
+module Hydra.Ext.Staging.Json.Schema.Coder (
   JsonSchemaOptions(..),
   moduleToJsonSchemaFiles,
 ) where
@@ -21,7 +21,7 @@ import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Ext.Org.Json.Schema.Language as JsonSchemaLanguage
-import qualified Hydra.Staging.Json.Schema.Serde as JsonSchemaSerde
+import qualified Hydra.Ext.Staging.Json.Schema.Serde as JsonSchemaSerde
 import qualified Hydra.Variants as Variants
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Ext.Org.Json.Schema as JS
@@ -34,6 +34,10 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
+
+data JsonSchemaOptions = JsonSchemaOptions {
+  jsonSchemaOptionsShortNames :: Bool
+}
 
 constructModule
   :: JsonSchemaOptions
