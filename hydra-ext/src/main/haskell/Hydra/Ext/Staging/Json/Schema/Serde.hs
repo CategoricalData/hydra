@@ -1,4 +1,4 @@
-module Hydra.Staging.Json.Schema.Serde(
+module Hydra.Ext.Staging.Json.Schema.Serde(
   jsonSchemaDocumentToJsonValue,
   jsonSchemaDocumentToString
 ) where

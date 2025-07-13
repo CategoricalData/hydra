@@ -7,7 +7,6 @@ import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Ext.Haskell.Coder
 import Hydra.Ext.Org.Json.Coder
-import Hydra.Staging.Json.Schema.Coder
 import Hydra.Staging.Yaml.Modules
 import Hydra.Sources.Libraries
 
@@ -76,9 +75,6 @@ writeHaskell = generateSources moduleToHaskell
 
 -- writeJson :: FP.FilePath -> [Module] -> IO ()
 -- writeJson = generateSources Json.printModule
-
-writeJsonSchema :: FP.FilePath -> [Module] -> IO ()
-writeJsonSchema = generateSources (moduleToJsonSchemaFiles (JsonSchemaOptions True))
 
 writeYaml :: FP.FilePath -> [Module] -> IO ()
 writeYaml = generateSources moduleToYaml

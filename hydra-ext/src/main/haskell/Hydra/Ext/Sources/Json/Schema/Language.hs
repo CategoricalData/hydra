@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Json.Schema.Language where
+module Hydra.Ext.Sources.Json.Schema.Language where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
