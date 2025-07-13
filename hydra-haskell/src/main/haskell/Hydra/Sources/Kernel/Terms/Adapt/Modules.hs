@@ -12,6 +12,7 @@ import qualified Hydra.Dsl.Compute       as Compute
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Grammar       as Grammar
 import qualified Hydra.Dsl.Graph         as Graph
+import qualified Hydra.Dsl.Json          as Json
 import qualified Hydra.Dsl.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Lib.Flows     as Flows
@@ -47,13 +48,14 @@ import qualified Hydra.Sources.Kernel.Terms.Decode.Core as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Describe.Core as DescribeCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
-import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 
 
 module_ :: Module
 module_ = Module (Namespace "hydra.adapt.modules") elements
-    [Rewriting.module_, AdaptTerms.module_]
+    [AdaptTerms.module_, AdaptUtils.module_, Annotations.module_, DecodeCore.module_, DescribeCore.module_,
+      Lexical.module_, Monads.module_, Rewriting.module_, Schemas.module_]
     kernelTypesModules $
     Just "Entry point for Hydra's adapter (type/term rewriting) framework"
   where

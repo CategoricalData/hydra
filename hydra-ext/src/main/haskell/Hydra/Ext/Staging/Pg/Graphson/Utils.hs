@@ -2,7 +2,7 @@ module Hydra.Ext.Staging.Pg.Graphson.Utils where
 
 import Hydra.Kernel
 import Hydra.Ext.Staging.Pg.Graphson.Coder
-import Hydra.Staging.Json.Coder
+import Hydra.Ext.Org.Json.Coder
 import Hydra.Ext.Dsl.Pg.Mappings
 import qualified Hydra.Json as Json
 import qualified Hydra.Pg.Graphson.Syntax as G

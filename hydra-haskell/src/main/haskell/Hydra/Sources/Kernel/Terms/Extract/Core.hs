@@ -12,6 +12,7 @@ import qualified Hydra.Dsl.Compute       as Compute
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Grammar       as Grammar
 import qualified Hydra.Dsl.Graph         as Graph
+import qualified Hydra.Dsl.Json          as Json
 import qualified Hydra.Dsl.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Lib.Flows     as Flows
@@ -104,6 +105,7 @@ module_ = Module (Namespace "hydra.extract.core") elements
      el stringDef,
      el stringLiteralDef,
      el sumTypeDef,
+     el termRecordDef,
      el uint16Def,
      el uint16ValueDef,
      el uint32Def,
@@ -170,20 +172,21 @@ booleanLiteralDef = define "booleanLiteral" $
   lambda "v" $ cases _Literal (var "v") (Just $ ref Monads.unexpectedDef @@ string "boolean" @@ (ref ShowCore.literalDef @@ var "v")) [
     _Literal_boolean>>: lambda "b" $ Flows.pure $ var "b"]
 
+-- TODO: nonstandard; move me
 caseFieldDef :: TElement (Name -> String -> Term -> Flow Graph Field)
 caseFieldDef = define "caseField" $
   doc "Extract a specific case handler from a case statement term" $
   lambdas ["name", "n", "term"] $ lets [
-    "fieldName">: Core.name $ var "n"]
-    $ Flows.bind (ref casesDef @@ var "name" @@ var "term") $
-      lambda "cs" $ lets [
-        "matching">: Lists.filter
-          (lambda "f" $ Core.equalName_ (Core.fieldName $ var "f") (var "fieldName"))
-          (Core.caseStatementCases $ var "cs")]
-        $ Logic.ifElse (Lists.null $ var "matching")
-          (Flows.fail $ string "not enough cases")
-          (Flows.pure $ Lists.head $ var "matching")
+    "fieldName">: Core.name $ var "n"] $ binds [
+    "cs">: ref casesDef @@ var "name" @@ var "term"] $ lets [
+    "matching">: Lists.filter
+      (lambda "f" $ Core.equalName_ (Core.fieldName $ var "f") (var "fieldName"))
+      (Core.caseStatementCases $ var "cs")] $
+    Logic.ifElse (Lists.null $ var "matching")
+      (Flows.fail $ string "not enough cases")
+      (Flows.pure $ Lists.head $ var "matching")
 
+-- TODO: nonstandard; move me
 casesDef :: TElement (Name -> Term -> Flow Graph CaseStatement)
 casesDef = define "cases" $
   doc "Extract case statement from a term" $
@@ -196,6 +199,7 @@ casesDef = define "cases" $
               (Flows.pure $ var "cs")
               (ref Monads.unexpectedDef @@ ("case statement for type " ++ (Core.unName $ var "name")) @@ (ref ShowCore.termDef @@ var "term"))]]]
 
+-- TODO: nonstandard; move me
 fieldDef :: TElement (Name -> (Term -> Flow Graph x) -> [Field] -> Flow Graph x)
 fieldDef = define "field" $
   doc "Extract a field value from a list of fields" $
@@ -212,9 +216,10 @@ fieldDef = define "field" $
 float32Def :: TElement (Term -> Flow Graph Float)
 float32Def = define "float32" $
   doc "Extract a 32-bit floating-point value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
-    Flows.bind (ref floatLiteralDef @@ var "l") $ lambda "f" $
-      ref float32ValueDef @@ var "f"
+  lambda "t" $ binds [
+    "l">: ref literalDef @@ var "t",
+    "f">: ref floatLiteralDef @@ var "l"] $
+    ref float32ValueDef @@ var "f"
 
 float32ValueDef :: TElement (FloatValue -> Flow Graph Float)
 float32ValueDef = define "float32Value" $
@@ -254,6 +259,7 @@ functionTypeDef = define "functionType" $
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "function type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_function>>: lambda "ft" $ Flows.pure $ var "ft"]
 
+-- TODO: nonstandard; move me
 injectionDef :: TElement (Name -> Term -> Flow Graph Field)
 injectionDef = define "injection" $
   doc "Extract a field from a union term" $
@@ -340,6 +346,7 @@ lambdaDef = define "lambda" $
       _Term_function>>: lambda "function" $ cases _Function (var "function") (Just $ ref Monads.unexpectedDef @@ string "lambda" @@ (ref ShowCore.termDef @@ var "term")) [
         _Function_lambda>>: lambda "l" $ Flows.pure $ var "l"]]
 
+-- TODO: nonstandard; move me
 letBindingDef :: TElement (String -> Term -> Flow Graph Term)
 letBindingDef = define "letBinding" $
   doc "Extract a binding with the given name from a let term" $
@@ -415,6 +422,7 @@ mapTypeDef = define "mapType" $
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "map type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_map>>: lambda "mt" $ Flows.pure $ var "mt"]
 
+-- TODO: nonstandard; move me
 nArgsDef :: TElement (Name -> Int -> [Term] -> Flow s ())
 nArgsDef = define "nArgs" $
   doc "Ensure a function has the expected number of arguments" $
@@ -464,16 +472,17 @@ productTypeDef = define "productType" $
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "product type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_product>>: lambda "types" $ Flows.pure $ var "types"]
 
+-- TODO: nonstandard; move me
 recordDef :: TElement (Name -> Term -> Flow Graph [Field])
 recordDef = define "record" $
   doc "Extract a record's fields from a term" $
-  lambdas ["expected", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ string "record" @@ (ref ShowCore.termDef @@ var "term")) [
-      _Term_record>>: lambda "record" $
-        Logic.ifElse (Core.equalName_ (Core.recordTypeName $ var "record") (var "expected"))
-          (Flows.pure $ Core.recordFields $ var "record")
-          (ref Monads.unexpectedDef @@ ("record of type " ++ (Core.unName $ var "expected")) @@ (Core.unName $ Core.recordTypeName $ var "record"))]
+  lambdas ["expected", "term0"] $ binds [
+    "record">: ref termRecordDef @@ var "term0"] $
+    Logic.ifElse (Equality.equal (Core.recordTypeName $ var "record") (var "expected"))
+      (Flows.pure $ Core.recordFields $ var "record")
+      (ref Monads.unexpectedDef @@ ("record of type " ++ (Core.unName $ var "expected")) @@ (Core.unName $ Core.recordTypeName $ var "record"))
 
+-- TODO: nonstandard; move me
 recordTypeDef :: TElement (Name -> Type -> Flow s [FieldType])
 recordTypeDef = define "recordType" $
   doc "Extract the field types from a record type" $
@@ -518,6 +527,15 @@ sumTypeDef = define "sumType" $
     "stripped">: ref Rewriting.deannotateTypeDef @@ var "typ"]
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "sum type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_sum>>: lambda "types" $ Flows.pure $ var "types"]
+
+termRecordDef :: TElement (Term -> Flow Graph Record)
+termRecordDef = define "termRecord" $
+  doc "Extract a record from a term" $
+  lambdas ["term0"] $ binds [
+    "term">: ref Lexical.stripAndDereferenceTermDef @@ var "term0"] $
+    cases _Term (var "term")
+      (Just $ ref Monads.unexpectedDef @@ string "record" @@ (ref ShowCore.termDef @@ var "term")) [
+      _Term_record>>: lambda "record" $ produce $ var "record"]
 
 uint16Def :: TElement (Term -> Flow Graph Int)
 uint16Def = define "uint16" $
@@ -571,6 +589,7 @@ uint8ValueDef = define "uint8Value" $
   lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Monads.unexpectedDef @@ string "uint8" @@ (ref ShowCore.integerValueDef @@ var "v")) [
     _IntegerValue_uint8>>: lambda "i" $ Flows.pure $ var "i"]
 
+-- TODO: nonstandard; move me
 unionTypeDef :: TElement (Name -> Type -> Flow s [FieldType])
 unionTypeDef = define "unionType" $
   doc "Extract the field types from a union type" $
@@ -578,7 +597,7 @@ unionTypeDef = define "unionType" $
     "stripped">: ref Rewriting.deannotateTypeDef @@ var "typ"]
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "union type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_union>>: lambda "rowType" $
-        Logic.ifElse (Core.equalName_ (Core.rowTypeTypeName $ var "rowType") (var "ename"))
+        Logic.ifElse (Equality.equal (Core.rowTypeTypeName $ var "rowType") (var "ename"))
           (Flows.pure $ Core.rowTypeFields $ var "rowType")
           (ref Monads.unexpectedDef @@ ("union of type " ++ (Core.unName $ var "ename")) @@ ("union of type " ++ (Core.unName $ Core.rowTypeTypeName $ var "rowType")))]
 
@@ -602,6 +621,7 @@ variantDef = define "variant" $
   doc "Extract a field from a union term (alias for injection)" $
   ref injectionDef
 
+-- TODO: nonstandard; move me
 wrapDef :: TElement (Name -> Term -> Flow Graph Term)
 wrapDef = define "wrap" $
   doc "Extract the wrapped value from a wrapped term" $
@@ -612,6 +632,7 @@ wrapDef = define "wrap" $
           (Flows.pure $ Core.wrappedTermObject $ var "wrappedTerm")
           (ref Monads.unexpectedDef @@ ("wrapper of type " ++ (Core.unName $ var "expected")) @@ (Core.unName $ Core.wrappedTermTypeName $ var "wrappedTerm"))]
 
+-- TODO: nonstandard; move me
 wrappedTypeDef :: TElement (Name -> Type -> Flow s Type)
 wrappedTypeDef = define "wrappedType" $
   doc "Extract the wrapped type from a wrapper type" $

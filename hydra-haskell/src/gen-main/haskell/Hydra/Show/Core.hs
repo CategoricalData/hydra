@@ -19,6 +19,62 @@ import qualified Data.Set as S
 readTerm :: (t0 -> Maybe t1)
 readTerm _ = Nothing
 
+-- | Show an elimination as a string
+elimination :: (Core.Elimination -> String)
+elimination elm = ((\x -> case x of
+  Core.EliminationProduct v1 ->  
+    let arity = (Core.tupleProjectionArity v1) 
+        index = (Core.tupleProjectionIndex v1)
+        domain = (Core.tupleProjectionDomain v1)
+    in (Strings.cat [
+      "]",
+      Literals.showInt32 index,
+      "/",
+      Literals.showInt32 arity,
+      "]"])
+  Core.EliminationRecord v1 ->  
+    let tname = (Core.unName (Core.projectionTypeName v1)) 
+        fname = (Core.unName (Core.projectionField v1))
+    in (Strings.cat [
+      "project(",
+      tname,
+      "){",
+      fname,
+      "}"])
+  Core.EliminationUnion v1 ->  
+    let tname = (Core.unName (Core.caseStatementTypeName v1)) 
+        mdef = (Core.caseStatementDefault v1)
+        cases = (Core.caseStatementCases v1)
+        defaultField = (Optionals.maybe [] (\d -> [
+                Core.Field {
+                  Core.fieldName = (Core.Name "[default]"),
+                  Core.fieldTerm = d}]) mdef)
+        allFields = (Lists.concat [
+                cases,
+                defaultField])
+    in (Strings.cat [
+      "case(",
+      tname,
+      ")",
+      (fields allFields)])
+  Core.EliminationWrap v1 -> (Strings.cat [
+    "unwrap(",
+    Core.unName v1,
+    ")"])) elm)
+
+-- | Show a list of fields as a string
+fields :: ([Core.Field] -> String)
+fields flds =  
+  let showField = (\field ->  
+          let fname = (Core.unName (Core.fieldName field)) 
+              fterm = (Core.fieldTerm field)
+          in (Strings.cat2 fname (Strings.cat2 "=" (term fterm)))) 
+      fieldStrs = (Lists.map showField flds)
+  in (Strings.cat [
+    "{",
+    Strings.intercalate ", " fieldStrs,
+    "}"])
+
 -- | Show a float value as a string
 float :: (Core.FloatValue -> String)
 float fv = ((\x -> case x of
@@ -32,6 +88,13 @@ floatType ft = ((\x -> case x of
   Core.FloatTypeBigfloat -> "bigfloat"
   Core.FloatTypeFloat32 -> "float32"
   Core.FloatTypeFloat64 -> "float64") ft)
+
+-- | Show a function as a string
+function :: (Core.Function -> String)
+function f = ((\x -> case x of
+  Core.FunctionElimination v1 -> (elimination v1)
+  Core.FunctionLambda v1 -> (lambda v1)
+  Core.FunctionPrimitive v1 -> (Strings.cat2 (Core.unName v1) "!")) f)
 
 -- | Show an integer value as a string
 integer :: (Core.IntegerValue -> String)
@@ -58,6 +121,20 @@ integerType it = ((\x -> case x of
   Core.IntegerTypeUint16 -> "uint16"
   Core.IntegerTypeUint32 -> "uint32"
   Core.IntegerTypeUint64 -> "uint64") it)
+
+-- | Show a lambda as a string
+lambda :: (Core.Lambda -> String)
+lambda l =  
+  let v = (Core.unName (Core.lambdaParameter l)) 
+      mt = (Core.lambdaDomain l)
+      body = (Core.lambdaBody l)
+      typeStr = (Optionals.maybe "" (\t -> Strings.cat2 ":" (type_ t)) mt)
+  in (Strings.cat [
+    "\955",
+    v,
+    typeStr,
+    ".",
+    (term body)])
 
 list :: ((t0 -> String) -> [t0] -> String)
 list f xs =  
@@ -88,22 +165,12 @@ literalType lt = ((\x -> case x of
 -- | Show a term as a string
 term :: (Core.Term -> String)
 term t =  
-  let showField = (\field ->  
-          let fname = (Core.unName (Core.fieldName field)) 
-              fterm = (Core.fieldTerm field)
-          in (Strings.cat2 fname (Strings.cat2 "=" (term fterm)))) 
-      showFields = (\fields ->  
-              let fieldStrs = (Lists.map showField fields)
-              in (Strings.cat [
-                "{",
-                Strings.intercalate ", " fieldStrs,
-                "}"]))
-      gatherTerms = (\prev -> \app ->  
-              let lhs = (Core.applicationFunction app) 
-                  rhs = (Core.applicationArgument app)
-              in ((\x -> case x of
-                Core.TermApplication v1 -> (gatherTerms (Lists.cons rhs prev) v1)
-                _ -> (Lists.cons lhs (Lists.cons rhs prev))) lhs))
+  let gatherTerms = (\prev -> \app ->  
+          let lhs = (Core.applicationFunction app) 
+              rhs = (Core.applicationArgument app)
+          in ((\x -> case x of
+            Core.TermApplication v1 -> (gatherTerms (Lists.cons rhs prev) v1)
+            _ -> (Lists.cons lhs (Lists.cons rhs prev))) lhs)) 
       showBinding = (\binding ->  
               let v = (Core.unName (Core.letBindingName binding)) 
                   bindingTerm = (Core.letBindingTerm binding)
@@ -121,59 +188,7 @@ term t =
         "(",
         Strings.intercalate " @ " termStrs,
         ")"])
-    Core.TermFunction v1 -> ((\x -> case x of
-      Core.FunctionElimination v2 -> ((\x -> case x of
-        Core.EliminationProduct v3 ->  
-          let arity = (Core.tupleProjectionArity v3) 
-              index = (Core.tupleProjectionIndex v3)
-              domain = (Core.tupleProjectionDomain v3)
-          in (Strings.cat [
-            "]",
-            Literals.showInt32 index,
-            "/",
-            Literals.showInt32 arity,
-            "]"])
-        Core.EliminationRecord v3 ->  
-          let tname = (Core.unName (Core.projectionTypeName v3)) 
-              fname = (Core.unName (Core.projectionField v3))
-          in (Strings.cat [
-            "project(",
-            tname,
-            "){",
-            fname,
-            "}"])
-        Core.EliminationUnion v3 ->  
-          let tname = (Core.unName (Core.caseStatementTypeName v3)) 
-              mdef = (Core.caseStatementDefault v3)
-              cases = (Core.caseStatementCases v3)
-              defaultField = (Optionals.maybe [] (\d -> [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "[default]"),
-                        Core.fieldTerm = d}]) mdef)
-              allFields = (Lists.concat [
-                      cases,
-                      defaultField])
-          in (Strings.cat [
-            "case(",
-            tname,
-            ")",
-            (showFields allFields)])
-        Core.EliminationWrap v3 -> (Strings.cat [
-          "unwrap(",
-          Core.unName v3,
-          ")"])) v2)
-      Core.FunctionLambda v2 ->  
-        let v = (Core.unName (Core.lambdaParameter v2)) 
-            mt = (Core.lambdaDomain v2)
-            body = (Core.lambdaBody v2)
-            typeStr = (Optionals.maybe "" (\t -> Strings.cat2 ":" (type_ t)) mt)
-        in (Strings.cat [
-          "\955",
-          v,
-          typeStr,
-          ".",
-          (term body)])
-      Core.FunctionPrimitive v2 -> (Strings.cat2 (Core.unName v2) "!")) v1)
+    Core.TermFunction v1 -> (function v1)
     Core.TermLet v1 ->  
       let bindings = (Core.letBindings v1) 
           env = (Core.letEnvironment v1)
@@ -211,12 +226,12 @@ term t =
         ")"])
     Core.TermRecord v1 ->  
       let tname = (Core.unName (Core.recordTypeName v1)) 
-          fields = (Core.recordFields v1)
+          flds = (Core.recordFields v1)
       in (Strings.cat [
         "record(",
         tname,
         ")",
-        (showFields fields)])
+        (fields flds)])
     Core.TermSet v1 -> (Strings.cat [
       "{",
       Strings.intercalate ", " (Lists.map term (Sets.toList v1)),
@@ -256,7 +271,7 @@ term t =
         "inject(",
         tname,
         ")",
-        (showFields [
+        (fields [
           f])])
     Core.TermUnit -> "unit"
     Core.TermVariable v1 -> (Core.unName v1)
@@ -281,8 +296,8 @@ type_ typ =
             " = ",
             (type_ ftyp)])) 
       showRowType = (\rt ->  
-              let fields = (Core.rowTypeFields rt) 
-                  fieldStrs = (Lists.map showFieldType fields)
+              let flds = (Core.rowTypeFields rt) 
+                  fieldStrs = (Lists.map showFieldType flds)
               in (Strings.cat [
                 "{",
                 Strings.intercalate ", " fieldStrs,

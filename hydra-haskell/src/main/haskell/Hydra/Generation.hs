@@ -6,7 +6,7 @@ import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Ext.Haskell.Coder
-import Hydra.Staging.Json.Coder
+import Hydra.Ext.Org.Json.Coder
 import Hydra.Staging.Json.Schema.Coder
 import Hydra.Staging.Yaml.Modules
 import Hydra.Sources.Libraries

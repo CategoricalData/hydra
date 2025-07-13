@@ -8,19 +8,19 @@ import qualified Data.Map as M
 
 
 valueArray :: TTerm [Value] -> TTerm Value
-valueArray vs = unitVariant _Value _Value_array @@ vs
+valueArray = variant _Value _Value_array
 
 valueBoolean :: TTerm Bool -> TTerm Value
-valueBoolean b = unitVariant _Value _Value_boolean @@ b
+valueBoolean = variant _Value _Value_boolean
 
 valueNull :: TTerm Value
 valueNull = unitVariant _Value _Value_null
 
 valueNumber :: TTerm Double -> TTerm Value
-valueNumber n = unitVariant _Value _Value_number @@ n
+valueNumber = variant _Value _Value_number
 
 valueObject :: TTerm (M.Map String Value) -> TTerm Value
-valueObject m = unitVariant _Value _Value_object @@ m
+valueObject = variant _Value _Value_object
 
 valueString :: TTerm String -> TTerm Value
-valueString s = unitVariant _Value _Value_string @@ s
+valueString = variant _Value _Value_string
