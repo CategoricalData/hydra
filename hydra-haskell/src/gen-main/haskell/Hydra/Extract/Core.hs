@@ -279,11 +279,9 @@ productType typ =
 
 -- | Extract a record's fields from a term
 record :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph [Core.Field])
-record expected term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> (\x -> case x of
-  Core.TermRecord v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.recordTypeName v1)) (Core.unName expected)) (Flows.pure (Core.recordFields v1)) (Monads.unexpected (Strings.cat [
-    "record of type ",
-    (Core.unName expected)]) (Core.unName (Core.recordTypeName v1))))
-  _ -> (Monads.unexpected "record" (Core_.term term))) term))
+record expected term0 = (Flows.bind (termRecord term0) (\record -> Logic.ifElse (Equality.equal (Core.recordTypeName record) expected) (Flows.pure (Core.recordFields record)) (Monads.unexpected (Strings.cat [
+  "record of type ",
+  (Core.unName expected)]) (Core.unName (Core.recordTypeName record)))))
 
 recordType :: (Core.Name -> Core.Type -> Compute.Flow t0 [Core.FieldType])
 recordType ename typ =  
@@ -323,6 +321,12 @@ sumType typ =
   in ((\x -> case x of
     Core.TypeSum v1 -> (Flows.pure v1)
     _ -> (Monads.unexpected "sum type" (Core_.type_ typ))) stripped)
+
+-- | Extract a record from a term
+termRecord :: (Core.Term -> Compute.Flow Graph.Graph Core.Record)
+termRecord term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> (\x -> case x of
+  Core.TermRecord v1 -> (Flows.pure v1)
+  _ -> (Monads.unexpected "record" (Core_.term term))) term))
 
 -- | Extract a 16-bit unsigned integer value from a term
 uint16 :: (Core.Term -> Compute.Flow Graph.Graph Int)
@@ -364,7 +368,7 @@ unionType :: (Core.Name -> Core.Type -> Compute.Flow t0 [Core.FieldType])
 unionType ename typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeUnion v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.rowTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.rowTypeFields v1)) (Monads.unexpected (Strings.cat [
+    Core.TypeUnion v1 -> (Logic.ifElse (Equality.equal (Core.rowTypeTypeName v1) ename) (Flows.pure (Core.rowTypeFields v1)) (Monads.unexpected (Strings.cat [
       "union of type ",
       (Core.unName ename)]) (Strings.cat [
       "union of type ",

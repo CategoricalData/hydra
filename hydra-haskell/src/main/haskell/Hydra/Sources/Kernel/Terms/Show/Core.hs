@@ -12,6 +12,7 @@ import qualified Hydra.Dsl.Compute       as Compute
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Grammar       as Grammar
 import qualified Hydra.Dsl.Graph         as Graph
+import qualified Hydra.Dsl.Json          as Json
 import qualified Hydra.Dsl.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Lib.Flows     as Flows
@@ -49,10 +50,14 @@ module_ = Module (Namespace "hydra.show.core") elements
   where
    elements = [
      el readTermDef, -- TODO: move this to hydra.read.core
+     el eliminationDef,
+     el fieldsDef,
      el floatValueDef,
      el floatTypeDef,
+     el functionDef,
      el integerValueDef,
      el integerTypeDef,
+     el lambdaDef,
      el listDef,
      el literalDef,
      el literalTypeDef,
@@ -67,6 +72,62 @@ readTermDef :: TElement (String -> Maybe Term)
 readTermDef = define "readTerm" $
   doc "A placeholder for reading terms from their serialized form. Not implemented." $
   constant nothing
+
+eliminationDef :: TElement (Elimination -> String)
+eliminationDef = define "elimination" $
+  doc "Show an elimination as a string" $
+  lambda "elm" $ cases _Elimination (var "elm") Nothing [
+    _Elimination_product>>: lambda "tp" $ lets [
+      "arity">: Core.tupleProjectionArity $ var "tp",
+      "index">: Core.tupleProjectionIndex $ var "tp",
+      "domain">: Core.tupleProjectionDomain $ var "tp"] $ -- TODO: show domain if present
+      Strings.cat $ list [
+        string "]",
+        Literals.showInt32 $ var "index",
+        string "/",
+        Literals.showInt32 $ var "arity",
+        string "]"],
+    _Elimination_record>>: lambda "proj" $ lets [
+      "tname">: unwrap _Name @@ (Core.projectionTypeName $ var "proj"),
+      "fname">: unwrap _Name @@ (Core.projectionField $ var "proj")] $
+      Strings.cat $ list [
+        string "project(",
+        var "tname",
+        string "){",
+        var "fname",
+        string "}"],
+    _Elimination_union>>: lambda "cs" $ lets [
+      "tname">: unwrap _Name @@ (Core.caseStatementTypeName $ var "cs"),
+      "mdef">: Core.caseStatementDefault $ var "cs",
+      "cases">: Core.caseStatementCases $ var "cs",
+      "defaultField">: Optionals.maybe
+        (list [])
+        (lambda "d" $ list [Core.field (Core.name $ string "[default]") (var "d")])
+        (var "mdef"),
+      "allFields">: Lists.concat $ list [var "cases", var "defaultField"]] $
+      Strings.cat $ list [
+        string "case(",
+        var "tname",
+        string ")",
+        ref fieldsDef @@ var "allFields"],
+    _Elimination_wrap>>: lambda "tname" $ Strings.cat $ list [
+      string "unwrap(",
+      unwrap _Name @@ var "tname",
+      string ")"]]
+
+fieldsDef :: TElement ([Field] -> String)
+fieldsDef = define "fields" $
+  doc "Show a list of fields as a string" $
+  lambda "flds" $ lets [
+    "showField">: lambda "field" $ lets [
+      "fname">: unwrap _Name @@ (Core.fieldName $ var "field"),
+      "fterm">: Core.fieldTerm $ var "field"] $
+      Strings.cat2 (var "fname") $ Strings.cat2 (string "=") (ref termDef @@ var "fterm"),
+    "fieldStrs">: Lists.map (var "showField") (var "flds")] $
+    Strings.cat $ list [
+      string "{",
+      Strings.intercalate (string ", ") (var "fieldStrs"),
+      string "}"]
 
 floatValueDef :: TElement (FloatValue -> String)
 floatValueDef = define "float" $
@@ -83,6 +144,14 @@ floatTypeDef = define "floatType" $
     _FloatType_bigfloat>>: constant $ string "bigfloat",
     _FloatType_float32>>: constant $ string "float32",
     _FloatType_float64>>: constant $ string "float64"]
+
+functionDef :: TElement (Function -> String)
+functionDef = define "function" $
+  doc "Show a function as a string" $
+  lambda "f" $ cases _Function (var "f") Nothing [
+    _Function_elimination>>: ref eliminationDef,
+    _Function_lambda>>: ref lambdaDef,
+    _Function_primitive>>: lambda "name" $ Strings.cat2 (unwrap _Name @@ var "name") (string "!")]
 
 integerValueDef :: TElement (IntegerValue -> String)
 integerValueDef = define "integer" $
@@ -111,6 +180,24 @@ integerTypeDef = define "integerType" $
     _IntegerType_uint16>>: constant $ string "uint16",
     _IntegerType_uint32>>: constant $ string "uint32",
     _IntegerType_uint64>>: constant $ string "uint64"]
+
+lambdaDef :: TElement (Lambda -> String)
+lambdaDef = define "lambda" $
+  doc "Show a lambda as a string" $
+  lambda "l" $ lets [
+    "v">: unwrap _Name @@ (Core.lambdaParameter $ var "l"),
+    "mt">: Core.lambdaDomain $ var "l",
+    "body">: Core.lambdaBody $ var "l",
+    "typeStr">: Optionals.maybe
+      (string "")
+      (lambda "t" $ Strings.cat2 (string ":") (ref typeDef @@ var "t"))
+      (var "mt")] $
+    Strings.cat $ list [
+      string "λ",
+      var "v",
+      var "typeStr",
+      string ".",
+      ref termDef @@ var "body"]
 
 listDef :: TElement ((a -> String) -> [a] -> String)
 listDef = define "list" $
@@ -146,16 +233,6 @@ termDef :: TElement (Term -> String)
 termDef = define "term" $
   doc "Show a term as a string" $
   lambda "t" $ lets [
-    "showField">: lambda "field" $ lets [
-      "fname">: unwrap _Name @@ (Core.fieldName $ var "field"),
-      "fterm">: Core.fieldTerm $ var "field"] $
-      Strings.cat2 (var "fname") $ Strings.cat2 (string "=") (ref termDef @@ var "fterm"),
-    "showFields">: lambda "fields" $ lets [
-      "fieldStrs">: Lists.map (var "showField") (var "fields")] $
-      Strings.cat $ list [
-        string "{",
-        Strings.intercalate (string ", ") (var "fieldStrs"),
-        string "}"],
     "gatherTerms">: lambdas ["prev", "app"] $ lets [
       "lhs">: Core.applicationFunction $ var "app",
       "rhs">: Core.applicationArgument $ var "app"] $
@@ -182,60 +259,7 @@ termDef = define "term" $
           string "(",
           Strings.intercalate (string " @ ") (var "termStrs"),
           string ")"],
-      _Term_function>>: lambda "f" $ cases _Function (var "f") Nothing [
-        _Function_elimination>>: lambda "elm" $ cases _Elimination (var "elm") Nothing [
-          _Elimination_product>>: lambda "tp" $ lets [
-            "arity">: Core.tupleProjectionArity $ var "tp",
-            "index">: Core.tupleProjectionIndex $ var "tp",
-            "domain">: Core.tupleProjectionDomain $ var "tp"] $ -- TODO: show domain if present
-            Strings.cat $ list [
-              string "]",
-              Literals.showInt32 $ var "index",
-              string "/",
-              Literals.showInt32 $ var "arity",
-              string "]"],
-          _Elimination_record>>: lambda "proj" $ lets [
-            "tname">: unwrap _Name @@ (Core.projectionTypeName $ var "proj"),
-            "fname">: unwrap _Name @@ (Core.projectionField $ var "proj")] $
-            Strings.cat $ list [
-              string "project(",
-              var "tname",
-              string "){",
-              var "fname",
-              string "}"],
-          _Elimination_union>>: lambda "cs" $ lets [
-            "tname">: unwrap _Name @@ (Core.caseStatementTypeName $ var "cs"),
-            "mdef">: Core.caseStatementDefault $ var "cs",
-            "cases">: Core.caseStatementCases $ var "cs",
-            "defaultField">: Optionals.maybe
-              (list [])
-              (lambda "d" $ list [Core.field (Core.name $ string "[default]") (var "d")])
-              (var "mdef"),
-            "allFields">: Lists.concat $ list [var "cases", var "defaultField"]] $
-            Strings.cat $ list [
-              string "case(",
-              var "tname",
-              string ")",
-              var "showFields" @@ var "allFields"],
-          _Elimination_wrap>>: lambda "tname" $ Strings.cat $ list [
-            string "unwrap(",
-            unwrap _Name @@ var "tname",
-            string ")"]],
-        _Function_lambda>>: lambda "l" $ lets [
-          "v">: unwrap _Name @@ (Core.lambdaParameter $ var "l"),
-          "mt">: Core.lambdaDomain $ var "l",
-          "body">: Core.lambdaBody $ var "l",
-          "typeStr">: Optionals.maybe
-            (string "")
-            (lambda "t" $ Strings.cat2 (string ":") (ref typeDef @@ var "t"))
-            (var "mt")] $
-          Strings.cat $ list [
-            string "λ",
-            var "v",
-            var "typeStr",
-            string ".",
-            ref termDef @@ var "body"],
-        _Function_primitive>>: lambda "name" $ Strings.cat2 (unwrap _Name @@ var "name") (string "!")],
+      _Term_function>>: ref functionDef,
       _Term_let>>: lambda "l" $ lets [
         "bindings">: Core.letBindings $ var "l",
         "env">: Core.letEnvironment $ var "l",
@@ -276,12 +300,12 @@ termDef = define "term" $
           string ")"],
       _Term_record>>: lambda "rec" $ lets [
         "tname">: unwrap _Name @@ (Core.recordTypeName $ var "rec"),
-        "fields">: Core.recordFields $ var "rec"] $
+        "flds">: Core.recordFields $ var "rec"] $
         Strings.cat $ list [
           string "record(",
           var "tname",
           string ")",
-          var "showFields" @@ var "fields"],
+          ref fieldsDef @@ var "flds"],
       _Term_set>>: lambda "s" $
         Strings.cat $ list [
           string "{",
@@ -322,7 +346,7 @@ termDef = define "term" $
           string "inject(",
           var "tname",
           string ")",
-          var "showFields" @@ (list [var "f"])],
+          ref fieldsDef @@ (list [var "f"])],
       _Term_unit>>: constant $ string "unit",
       _Term_variable>>: lambda "name" $ unwrap _Name @@ var "name",
       _Term_wrap>>: lambda "wt" $ lets [
@@ -347,8 +371,8 @@ typeDef = define "type_" $
         string " = ",
         ref typeDef @@ var "ftyp"],
     "showRowType">: lambda "rt" $ lets [
-      "fields">: Core.rowTypeFields $ var "rt",
-      "fieldStrs">: Lists.map (var "showFieldType") (var "fields")] $
+      "flds">: Core.rowTypeFields $ var "rt",
+      "fieldStrs">: Lists.map (var "showFieldType") (var "flds")] $
       Strings.cat $ list [
         string "{",
         Strings.intercalate (string ", ") (var "fieldStrs"),

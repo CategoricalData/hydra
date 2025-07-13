@@ -35,10 +35,6 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-data JsonSchemaOptions = JsonSchemaOptions {
-  jsonSchemaOptionsShortNames :: Bool
-}
-
 constructModule
   :: JsonSchemaOptions
   -> Module.Module

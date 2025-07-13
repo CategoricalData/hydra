@@ -22,7 +22,7 @@ import Hydra.Tools.Monads
 import Hydra.Dsl.Annotations
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json as Json
-import Hydra.Staging.Json.Coder
+import Hydra.Ext.Org.Json.Coder
 import Hydra.Extract.Json
 import Hydra.Staging.Json.Serde
 import Hydra.Ext.Staging.Avro.Coder

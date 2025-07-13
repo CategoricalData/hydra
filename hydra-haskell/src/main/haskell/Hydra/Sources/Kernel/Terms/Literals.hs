@@ -10,6 +10,7 @@ import qualified Hydra.Dsl.Compute       as Compute
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Grammar       as Grammar
 import qualified Hydra.Dsl.Graph         as Graph
+import qualified Hydra.Dsl.Json          as Json
 import qualified Hydra.Dsl.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Lib.Flows     as Flows
@@ -56,7 +57,7 @@ floatValueToBigfloatDef :: TElement (Double -> Double)
 floatValueToBigfloatDef = define "floatValueToBigfloat" $
   doc "Convert a floating-point value of any precision to a bigfloat" $
   match _FloatValue Nothing [
-    _FloatValue_bigfloat>>: lambda "f" $ Equality.identity $ var "f",
+    _FloatValue_bigfloat>>: lambda "f" $ var "f",
     _FloatValue_float32>>: unaryFunction Literals.float32ToBigfloat,
     _FloatValue_float64>>: unaryFunction Literals.float64ToBigfloat]
 
@@ -64,7 +65,7 @@ integerValueToBigintDef :: TElement (IntegerValue -> Integer)
 integerValueToBigintDef = define "integerValueToBigint" $
   doc "Convert an integer value of any precision to a bigint" $
   match _IntegerValue Nothing [
-    _IntegerValue_bigint>>: lambda "i" $ Equality.identity $ var "i",
+    _IntegerValue_bigint>>: lambda "i" $ var "i",
     _IntegerValue_int8>>: unaryFunction Literals.int8ToBigint,
     _IntegerValue_int16>>: unaryFunction Literals.int16ToBigint,
     _IntegerValue_int32>>: unaryFunction Literals.int32ToBigint,

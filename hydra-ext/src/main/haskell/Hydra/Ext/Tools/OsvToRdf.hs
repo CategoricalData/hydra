@@ -8,7 +8,7 @@ module Hydra.Ext.Tools.OsvToRdf (
 import Hydra.Kernel
 import Hydra.Tools.Monads
 import Hydra.Staging.Json.Serde
-import Hydra.Staging.Json.Coder
+import Hydra.Ext.Org.Json.Coder
 import Hydra.Generation
 import Hydra.Formatting
 import qualified Hydra.Json as Json
