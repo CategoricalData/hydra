@@ -57,6 +57,16 @@ _EvaluationTestCase_input = (Core.Name "input")
 
 _EvaluationTestCase_output = (Core.Name "output")
 
+-- | A test case providing a term for which type inference is expected to fail
+data InferenceFailureTestCase = 
+  InferenceFailureTestCase {
+    inferenceFailureTestCaseInput :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_InferenceFailureTestCase = (Core.Name "hydra.testing.InferenceFailureTestCase")
+
+_InferenceFailureTestCase_input = (Core.Name "input")
+
 -- | A test case which performs type inference on a given term and compares the result with an expected type scheme
 data InferenceTestCase = 
   InferenceTestCase {
@@ -81,7 +91,8 @@ _Tag = (Core.Name "hydra.testing.Tag")
 data TestCase = 
   TestCaseCaseConversion CaseConversionTestCase |
   TestCaseEvaluation EvaluationTestCase |
-  TestCaseInference InferenceTestCase
+  TestCaseInference InferenceTestCase |
+  TestCaseInferenceFailure InferenceFailureTestCase
   deriving (Eq, Ord, Read, Show)
 
 _TestCase = (Core.Name "hydra.testing.TestCase")
@@ -91,6 +102,8 @@ _TestCase_caseConversion = (Core.Name "caseConversion")
 _TestCase_evaluation = (Core.Name "evaluation")
 
 _TestCase_inference = (Core.Name "inference")
+
+_TestCase_inferenceFailure = (Core.Name "inferenceFailure")
 
 -- | One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
 data TestCaseWithMetadata = 

@@ -8,6 +8,7 @@ module Hydra.TestUtils (
   checkSerdeRoundTrip,
   checkSerialization,
   eval,
+  expectInferenceFailure,
   expectInferenceResult,
   expectSuccess,
   expectTypeOfResult,
@@ -127,6 +128,21 @@ checkSerialization mkSerdeStr (TypedTerm term typ) expected = do
 
 eval :: Term -> Flow Graph Term
 eval = reduceTerm True
+
+expectFailure :: String -> Flow () a -> H.Expectation
+expectFailure desc f = case my of
+    Nothing -> return ()
+    Just v -> HL.assertFailure $ "Failure case succeeded. " ++ traceSummary trace
+  where
+    FlowState my _ trace = unFlow f2 () emptyTrace
+    f2 = do
+      putAttr key_debugId $ Terms.string desc
+      f
+
+expectInferenceFailure :: String -> Term -> H.Expectation
+expectInferenceFailure desc term = expectFailure desc $ do
+  cx <- graphToInferenceContext testGraph
+  inferTypeOf cx term
 
 expectInferenceResult :: String -> Term -> TypeScheme -> H.Expectation
 expectInferenceResult desc term expected = do

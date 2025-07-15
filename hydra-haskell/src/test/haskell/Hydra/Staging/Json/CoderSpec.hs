@@ -2,7 +2,7 @@ module Hydra.Staging.Json.CoderSpec where
 
 import Hydra.Kernel
 import Hydra.Lib.Literals
-import Hydra.Staging.Json.Coder
+import Hydra.Ext.Org.Json.Coder
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Json as Json
 import qualified Hydra.Dsl.Types as Types
