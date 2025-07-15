@@ -17,11 +17,17 @@ import qualified Data.Map as M
 tag_disabled = Tag "disabled"
 tag_disabledForMinimalInference = Tag "disabledForMinimalInference"
 
+expectFailure i tags term = infFailureTest ("#" ++ show i) tags term
+
 expectMono i tags term typ = infTest ("#" ++ show i) tags term $ T.mono typ
 
 expectPoly i tags term params typ = infTest ("#" ++ show i) tags term $ T.poly params typ
 
 groupRef = TTerms.varNamePhantom . elementName
+
+infFailureTest :: String -> [Tag] -> TTerm Term -> TTerm TestCaseWithMetadata
+infFailureTest name tags term = testCaseWithMetadata (Phantoms.string name)
+  (testCaseInferenceFailure $ inferenceFailureTestCase term) nothing (Phantoms.list $ tag . unTag <$> tags)
 
 infTest :: String -> [Tag] -> TTerm Term -> TTerm TypeScheme -> TTerm TestCaseWithMetadata
 infTest name tags term ts = testCaseWithMetadata (Phantoms.string name)
@@ -91,6 +97,10 @@ encodedTestGroupToElement ns lname group = Element name (unTTerm group)
     name = unqualifyName $ QualifiedName (Just ns) lname
     typ = TypeVariable _TestGroup
 
+inferenceFailureTestCase :: TTerm Term -> TTerm InferenceFailureTestCase
+inferenceFailureTestCase input = Phantoms.record _InferenceFailureTestCase [
+  _InferenceFailureTestCase_input>>: input]
+
 inferenceTestCase :: TTerm Term -> TTerm TypeScheme -> TTerm InferenceTestCase
 inferenceTestCase input output = Phantoms.record _InferenceTestCase [
   _InferenceTestCase_input>>: input,
@@ -98,6 +108,9 @@ inferenceTestCase input output = Phantoms.record _InferenceTestCase [
 
 testCaseInference :: TTerm InferenceTestCase -> TTerm TestCase
 testCaseInference = variant _TestCase _TestCase_inference
+
+testCaseInferenceFailure :: TTerm InferenceFailureTestCase -> TTerm TestCase
+testCaseInferenceFailure = variant _TestCase _TestCase_inferenceFailure
 
 testCaseWithMetadata :: TTerm String -> TTerm TestCase -> TTerm (Maybe String) -> TTerm [Tag] -> TTerm TestCaseWithMetadata
 testCaseWithMetadata name tcase description tags = Phantoms.record _TestCaseWithMetadata [

@@ -332,11 +332,11 @@ testGroupForPathologicalTerms = supergroup "Pathological terms" [
           "build">: lambda "x" $ primitive _lists_cons @@ var "x" @@ (var "build" @@
             (primitive _math_add @@ var "x" @@ int32 1))]
           $ var "build" @@ int32 0)
-        (T.list T.int32)]]
-  -- TODO: this term *should* fail inference, but doesn't
---    H.it "Check self-application" $ do
---      expectFailure
---        (lambda "x" $ var "x" @@ var "x")
+        (T.list T.int32)],
+
+    subgroup "Check self-application (failure)" [
+      expectFailure 1 []
+        (lambda "x" $ var "x" @@ var "x")]]
 
 testGroupForPolymorphism :: TTerm TestGroup
 testGroupForPolymorphism = supergroup "Polymorphism" [

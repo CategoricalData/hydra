@@ -37,6 +37,7 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
       (eval input)
       output
     TestCaseInference (InferenceTestCase input output) -> expectInferenceResult desc input output
+    TestCaseInferenceFailure (InferenceFailureTestCase input) -> expectInferenceFailure desc input
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
 

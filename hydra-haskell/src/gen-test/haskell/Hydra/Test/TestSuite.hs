@@ -2569,6 +2569,22 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Check self-application (failure)",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]}],
           Testing.testGroupCases = []},
         Testing.TestGroup {
