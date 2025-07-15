@@ -283,6 +283,12 @@ set els = Core.termSet $ TTerm $ TermSet $ S.fromList (unTTerm <$> els)
 
 -- * Products and tuples
 
+--first :: TTerm Term -> TTerm Term
+--first t = Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $ Core.tupleProjection 2 0 $
+
+first :: TTerm Term -> TTerm Term
+first pair = untuple 2 0 @@ pair
+
 -- | Create a term-encoded pair (2-tuple)
 -- Example: pair (string "name") (int32 42)
 pair :: TTerm Term -> TTerm Term -> TTerm Term
@@ -292,6 +298,9 @@ pair t1 t2 = tuple [t1, t2]
 ---- Example: product [string "name", int32 42, boolean True]
 --product :: [TTerm Term] -> TTerm Term
 --product terms = Core.termProduct $ TTerm $ TermList (unTTerm <$> terms)
+
+second :: TTerm Term -> TTerm Term
+second pair = untuple 2 1 @@ pair
 
 -- | Create a term-encoded tuple with multiple components
 -- Example: tuple [string "name", int32 42, boolean True]
