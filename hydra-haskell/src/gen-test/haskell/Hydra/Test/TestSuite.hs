@@ -1107,6 +1107,2176 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []},
     Testing.TestGroup {
+      Testing.testGroupName = "Expected failures",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Undefined variable",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Basic unbound variables",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermVariable (Core.Name "x"))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "y"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Unbound in let expressions",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermVariable (Core.Name "y")),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermVariable (Core.Name "y")),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "z"),
+                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "y"),
+                          Core.letBindingTerm = (Core.TermVariable (Core.Name "z")),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermProduct [
+                        Core.TermVariable (Core.Name "x"),
+                        (Core.TermVariable (Core.Name "y"))])}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Shadowing scope errors",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermLet (Core.Let {
+                        Core.letBindings = [
+                          Core.LetBinding {
+                            Core.letBindingName = (Core.Name "y"),
+                            Core.letBindingTerm = (Core.TermVariable (Core.Name "x")),
+                            Core.letBindingType = Nothing}],
+                        Core.letEnvironment = (Core.TermVariable (Core.Name "z"))}))})))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermLet (Core.Let {
+                        Core.letBindings = [
+                          Core.LetBinding {
+                            Core.letBindingName = (Core.Name "y"),
+                            Core.letBindingTerm = (Core.TermVariable (Core.Name "x")),
+                            Core.letBindingType = Nothing}],
+                        Core.letEnvironment = (Core.TermVariable (Core.Name "z"))}))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "y"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "z"))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Unification failure",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Basic type mismatches",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermList [
+                      Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
+                      (Core.TermLiteral (Core.LiteralString "foo"))])})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermList [
+                      Core.TermList [
+                        Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))],
+                      (Core.TermLiteral (Core.LiteralString "foo"))])})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermProduct [
+                        Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
+                        (Core.TermLiteral (Core.LiteralString "foo"))]),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Collection type mismatches",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.cons"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a list"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermList [
+                      Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
+                      (Core.TermList [
+                        Core.TermLiteral (Core.LiteralString "foo")])])})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermProduct [
+                        Core.TermList [
+                          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))],
+                        (Core.TermList [
+                          Core.TermLiteral (Core.LiteralString "foo")])]),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+                      Core.applicationArgument = (Core.TermList [
+                        Core.TermList [
+                          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))],
+                        (Core.TermList [
+                          Core.TermLiteral (Core.LiteralString "foo")])])}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Conditional type mismatches",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
+                        Core.applicationArgument = (Core.TermList [
+                          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))])})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
+                        Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.lambdaParameter = (Core.Name "x"),
+                          Core.lambdaDomain = Nothing,
+                          Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Polymorphic instantiation conflicts",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermList [
+                        Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
+                        (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))])}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "id"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermProduct [
+                          Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
+                          (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))]),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "cons"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.cons"))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermList [
+                        Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "cons")),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
+                        (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "cons")),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))])}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Invalid application",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Non-function application",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermLiteral (Core.LiteralString "foo")),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermLiteral (Core.LiteralBoolean True)),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 3.14))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Collection application",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermList [
+                        Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))]),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermProduct [
+                        Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
+                        (Core.TermLiteral (Core.LiteralString "foo"))]),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermList []),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermProduct [
+                        Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                        Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                        (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "index"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Primitive misapplication",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.empty"))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.empty"))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermOptional Nothing),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "value"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermList []),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Self-application",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Direct self-application",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "f"))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Indirect self-application",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "g"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "y"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "y")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "a"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "b")),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "b"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "a"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "cycle"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "f"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "cycle"))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "cycle")),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "cycle"))}))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Arity mismatch",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Too many arguments",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 999)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "y"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.cons"))),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                        Core.applicationArgument = (Core.TermList [
+                          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))])})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "extra"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Wrong argument types with extra args",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "extra"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.not"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "arg"))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Recursive type construction",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Direct recursive types",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermList [
+                            Core.TermVariable (Core.Name "x")]),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermProduct [
+                            Core.TermVariable (Core.Name "x"),
+                            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))]),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermProduct [
+                            Core.TermVariable (Core.Name "x"),
+                            (Core.TermVariable (Core.Name "x"))]),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Recursive function types",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "f"))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "y"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))})))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermList [
+                              Core.TermVariable (Core.Name "f")])}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Mutually recursive types",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermList [
+                            Core.TermVariable (Core.Name "y")]),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "y"),
+                          Core.letBindingTerm = (Core.TermProduct [
+                            Core.TermVariable (Core.Name "x"),
+                            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))]),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "a"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "b"))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "b"),
+                          Core.letBindingTerm = (Core.TermVariable (Core.Name "a")),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "a"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermList [
+                            Core.TermVariable (Core.Name "g")]),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "g"),
+                          Core.letBindingTerm = (Core.TermProduct [
+                            Core.TermVariable (Core.Name "f"),
+                            (Core.TermVariable (Core.Name "f"))]),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Occur check failures",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Function occur checks",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "g"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "h"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "g"))})),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "h"))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "g"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Mutual occur checks",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "g"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "y"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "g"))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "a"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "b")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "b"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "y"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "a")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "a"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "cycle1"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "cycle2")),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "cycle1"))})),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "cycle2"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "cycle1")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "cycle1"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Complex occur checks",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "omega"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "omega"))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "omega"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "loop"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "y"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "loop")),
+                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "loop"))}))})),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "loop"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Type constructor misuse",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "List constructor errors",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.cons"))),
+                        Core.applicationArgument = (Core.TermList [
+                          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))])})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.length"))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.head"))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a list"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.tail"))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "String constructor errors",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
+                      Core.applicationArgument = (Core.TermList [
+                        Core.TermLiteral (Core.LiteralString "foo")])}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.fromList"))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a list"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.toList"))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Math constructor errors",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                        Core.applicationArgument = (Core.TermList [
+                          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))])})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.sub"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a number"))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a number"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.div"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphism violations",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Identity function violations",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "id"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                          Core.applicationArgument = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))}))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "id"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermList [
+                        Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
+                        (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))])}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "id"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermProduct [
+                          Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
+                          (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))]),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Constrained polymorphism violations",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermList [
+                              Core.TermVariable (Core.Name "x"),
+                              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))])}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "g"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermProduct [
+                              Core.TermVariable (Core.Name "x"),
+                              (Core.TermLiteral (Core.LiteralString "constant"))])}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                          Core.applicationArgument = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+                              Core.tupleProjectionArity = 2,
+                              Core.tupleProjectionIndex = 0,
+                              Core.tupleProjectionDomain = Nothing})))),
+                            Core.applicationArgument = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))})),
+                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+                            Core.tupleProjectionArity = 2,
+                            Core.tupleProjectionIndex = 0,
+                            Core.tupleProjectionDomain = Nothing})))),
+                          Core.applicationArgument = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bad"))}))}))}))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "h"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.cons"))),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                              Core.applicationArgument = (Core.TermList [
+                                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))])}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "h")),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "incompatible"))}))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Higher-order polymorphism violations",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "f"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermProduct [
+                        Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
+                        (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))])})))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "g"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermList [
+                        Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}),
+                        (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bad"))}))])})))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "h"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                          Core.applicationArgument = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "h")),
+                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "h")),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "error"))}))}))})))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Let binding type mismatches",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Application type mismatches",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "y"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
+                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "y"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "result"))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "g"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "extra"))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "g"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "num"),
+                          Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "bad"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "num")),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "num"))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Collection type mismatches",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "list1"),
+                          Core.letBindingTerm = (Core.TermList [
+                            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))]),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "list2"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.cons"))),
+                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "list1"))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "list2"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "nums"),
+                          Core.letBindingTerm = (Core.TermList [
+                            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "mixed"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.cons"))),
+                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bad"))})),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "nums"))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "mixed"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "pair1"),
+                          Core.letBindingTerm = (Core.TermProduct [
+                            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
+                            (Core.TermLiteral (Core.LiteralString "foo"))]),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "pair2"),
+                          Core.letBindingTerm = (Core.TermProduct [
+                            Core.TermLiteral (Core.LiteralString "bar"),
+                            (Core.TermVariable (Core.Name "pair1"))]),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                          Core.applicationArgument = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+                              Core.tupleProjectionArity = 2,
+                              Core.tupleProjectionIndex = 0,
+                              Core.tupleProjectionDomain = Nothing})))),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "pair2"))}))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Function binding mismatches",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "add"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "badCall"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "add")),
+                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a number"))})),
+                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "badCall"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "y"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "g"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "bad"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
+                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Constraint solver edge cases",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Complex constraint propagation",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "complex"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "f"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "g"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "x"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                      Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
+                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                      Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))})))})))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "bad"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "complex")),
+                              Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "a"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
+                            Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "b"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))})))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Fixed point combinators",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "fix"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "f"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "bad"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "fix")),
+                            Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "x"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "y"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "f"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "x"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))),
+                              Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "x"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))}))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "bad"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "y")),
+                            Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "rec"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "n"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "rec"))}))})))})))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "omega"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "bad"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "omega")),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "omega"))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Constraint cycles",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "a"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "b")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "c"))})),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "b"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "y"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "c")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "c"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "z"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "a")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "z"))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "a")),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "circular"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "f"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "circular"))})),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "circular")),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "circular"))}))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Primitive function type errors",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Logic primitive errors",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.and"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.or"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not boolean"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Collection primitive errors",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.lookup"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a map"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.member"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                      Core.applicationArgument = (Core.TermList [
+                        Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))])}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.head"))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a list"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.optionals.fromMaybe"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not optional"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Math primitive errors",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a number"))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.div"))),
+                        Core.applicationArgument = (Core.TermList [
+                          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))])})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mod"))),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a number"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Complex constraint failures",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Multi-level constraint conflicts",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "y"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermProduct [
+                                Core.TermVariable (Core.Name "x"),
+                                (Core.TermVariable (Core.Name "y"))])})))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "g"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "a"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "h"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                            Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "z"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermVariable (Core.Name "z"))})))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "h")),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "weird"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "f"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "x"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "bad"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "weird")),
+                            Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "y"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermProduct [
+                                Core.TermVariable (Core.Name "y"),
+                                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))])})))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "nested"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "f"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "g"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "x"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                      Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                      Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                        Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))}))})))})))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "int_f"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "n"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "n"))})),
+                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "str_g"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "s"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
+                              Core.applicationArgument = (Core.TermList [
+                                Core.TermVariable (Core.Name "s"),
+                                (Core.TermLiteral (Core.LiteralString "!"))])}))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "bad"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "nested")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "int_f"))})),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "str_g"))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Function composition failures",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "triple"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "f"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "x"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))})))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "increment"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "n"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "n"))})),
+                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "stringify"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "s"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
+                              Core.applicationArgument = (Core.TermList [
+                                Core.TermVariable (Core.Name "s"),
+                                (Core.TermLiteral (Core.LiteralString "!"))])}))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "bad"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "triple")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "increment"))})),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "stringify"))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
+                    Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "compose"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "f"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "g"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "x"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "reverse_compose"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "g"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "f"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "x"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "bad"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "compose")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "reverse_compose"))})),
+                              Core.applicationArgument = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add")))})),
+                            Core.applicationArgument = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length")))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
       Testing.testGroupName = "Fundamentals",
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [
@@ -2438,7 +4608,7 @@ inferenceTests = Testing.TestGroup {
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [
             Testing.TestGroup {
-              Testing.testGroupName = "Pathological recursion",
+              Testing.testGroupName = "Recursion",
               Testing.testGroupDescription = Nothing,
               Testing.testGroupSubgroups = [],
               Testing.testGroupCases = [
@@ -2456,6 +4626,148 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
                       Core.typeSchemeType = (Core.TypeVariable (Core.Name "t0"))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "id"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "weird"),
+                          Core.letBindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "id"))})),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "id"))})),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "weird"))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#3",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                              Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#4",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "x"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "y"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0",
+                        (Core.Name "t1")],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#5",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "paradox"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "f"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                              Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "paradox")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermVariable (Core.Name "paradox"))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
+                          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
+                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#6",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "f"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                              Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))),
+                          Core.letBindingType = Nothing},
+                        Core.LetBinding {
+                          Core.letBindingName = (Core.Name "g"),
+                          Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "y"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                              Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))}))),
+                          Core.letBindingType = Nothing}],
+                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))})),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]},
             Testing.TestGroup {
@@ -2568,22 +4880,6 @@ inferenceTests = Testing.TestGroup {
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
-                  Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
-            Testing.TestGroup {
-              Testing.testGroupName = "Check self-application (failure)",
-              Testing.testGroupDescription = Nothing,
-              Testing.testGroupSubgroups = [],
-              Testing.testGroupCases = [
-                Testing.TestCaseWithMetadata {
-                  Testing.testCaseWithMetadataName = "#1",
-                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
-                    Testing.inferenceFailureTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]}],
           Testing.testGroupCases = []},

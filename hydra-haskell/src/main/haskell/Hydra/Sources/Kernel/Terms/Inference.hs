@@ -200,10 +200,9 @@ extendContextDef :: TElement ([(Name, TypeScheme)] -> InferenceContext -> Infere
 extendContextDef = define "extendContext" $
   doc "Add (term variable, type scheme) pairs to the typing environment" $
   lambdas ["pairs", "cx"] $
-    Typing.inferenceContextWithDataTypes (var "cx") $
-      Maps.union
-        (Maps.fromList $ var "pairs")
-        (Typing.inferenceContextDataTypes $ var "cx")
+    Typing.inferenceContextWithDataTypes (var "cx") $ Maps.union
+      (Maps.fromList $ var "pairs")
+      (Typing.inferenceContextDataTypes $ var "cx")
 
 forInferredTermDef :: TElement (InferenceContext -> Term -> String -> (InferenceResult -> a) -> Flow s a)
 forInferredTermDef = define "forInferredTerm" $
@@ -266,7 +265,7 @@ generalizeDef = define "generalize" $
   lambdas ["cx", "typ"] $ lets [
     "vars">: Lists.nub $ Lists.filter (ref isUnboundDef @@ var "cx") $
 --              Sets.toList $ ref Rewriting.freeVariablesInTypeDef @@ var "typ"] $
-              ref Rewriting.freeVariablesInTypeOrderedDef @@ var "typ"] $
+       ref Rewriting.freeVariablesInTypeOrderedDef @@ var "typ"] $
      Core.typeScheme (var "vars") (var "typ")
 
 graphToInferenceContextDef :: TElement (Graph -> Flow s InferenceContext)

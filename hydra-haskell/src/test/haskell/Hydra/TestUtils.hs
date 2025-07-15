@@ -129,10 +129,10 @@ checkSerialization mkSerdeStr (TypedTerm term typ) expected = do
 eval :: Term -> Flow Graph Term
 eval = reduceTerm True
 
-expectFailure :: String -> Flow () a -> H.Expectation
-expectFailure desc f = case my of
+expectFailure :: (a -> String) -> String -> Flow () a -> H.Expectation
+expectFailure print desc f = case my of
     Nothing -> return ()
-    Just v -> HL.assertFailure $ "Failure case succeeded. " ++ traceSummary trace
+    Just v -> HL.assertFailure $ "Failure case succeeded with " ++ print v ++ "\n" ++ traceSummary trace
   where
     FlowState my _ trace = unFlow f2 () emptyTrace
     f2 = do
@@ -140,7 +140,7 @@ expectFailure desc f = case my of
       f
 
 expectInferenceFailure :: String -> Term -> H.Expectation
-expectInferenceFailure desc term = expectFailure desc $ do
+expectInferenceFailure desc term = expectFailure (ShowCore.typeScheme . snd) desc $ do
   cx <- graphToInferenceContext testGraph
   inferTypeOf cx term
 

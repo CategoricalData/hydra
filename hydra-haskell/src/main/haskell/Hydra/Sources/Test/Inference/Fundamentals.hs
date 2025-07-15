@@ -2,7 +2,6 @@ module Hydra.Sources.Test.Inference.Fundamentals (fundamentalsTests) where
 
 import Hydra.Kernel
 import Hydra.Testing
-import qualified Hydra.Dsl.Phantoms as Base
 import qualified Hydra.Dsl.Core as Core
 import Hydra.Dsl.Testing as Testing
 import Hydra.Dsl.ShorthandTypes
@@ -304,12 +303,36 @@ testGroupForLiterals = subgroup "Literals" [
 testGroupForPathologicalTerms :: TTerm TestGroup
 testGroupForPathologicalTerms = supergroup "Pathological terms" [
 
-    subgroup "Pathological recursion" [
+    subgroup "Recursion" [
       expectPoly 1 []
         (lets [
           "x">: var "x"]
           $ var "x")
-        ["t0"] (T.var "t0")],
+        ["t0"] (T.var "t0"),
+      expectPoly 2 []
+        (lets ["id">: lambda "x" $ var "x",
+               "weird">: var "id" @@ var "id" @@ var "id"] $
+               var "weird")
+        ["t0"] (T.function (T.var "t0") (T.var "t0")),
+      expectPoly 3 []
+        (lets ["f">: lambda "x" $ var "f" @@ (var "f" @@ var "x")] $
+               var "f")
+        ["t0"] (T.function (T.var "t0") (T.var "t0")),
+      expectPoly 4 []
+        (lets ["x">: lambda "y" $
+                 var "x" @@ var "y"] $
+               var "x")
+        ["t0", "t1"] (T.function (T.var "t0") (T.var "t1")),
+      expectPoly 5 []
+        (lets ["paradox">: lambda "f" $ var "f" @@ (var "paradox" @@ var "f")] $
+               var "paradox")
+        ["t0"] (T.function (T.function (T.var "t0") (T.var "t0")) (T.var "t0")),
+      expectMono 6 []
+        (lets [
+          "f">: lambda "x" $ var "g" @@ (var "f" @@ var "x"),
+          "g">: lambda "y" $ var "f" @@ (var "g" @@ var "y")] $
+          var "f" @@ (var "g" @@ int32 42))
+        T.int32],
 
     subgroup "Infinite lists" [
       expectMono 1 []
@@ -332,11 +355,7 @@ testGroupForPathologicalTerms = supergroup "Pathological terms" [
           "build">: lambda "x" $ primitive _lists_cons @@ var "x" @@ (var "build" @@
             (primitive _math_add @@ var "x" @@ int32 1))]
           $ var "build" @@ int32 0)
-        (T.list T.int32)],
-
-    subgroup "Check self-application (failure)" [
-      expectFailure 1 []
-        (lambda "x" $ var "x" @@ var "x")]]
+        (T.list T.int32)]]
 
 testGroupForPolymorphism :: TTerm TestGroup
 testGroupForPolymorphism = supergroup "Polymorphism" [
