@@ -48,6 +48,11 @@ module_ = Module ns elements [Mantle.module_] [Core.module_] $
           "input">: core "Term",
           "output">: core "Term"],
 
+      def "InferenceFailureTestCase" $
+        doc "A test case providing a term for which type inference is expected to fail" $
+        record [
+          "input">: core "Term"],
+
       def "InferenceTestCase" $
         doc "A test case which performs type inference on a given term and compares the result with an expected type scheme" $
         record [
@@ -61,7 +66,8 @@ module_ = Module ns elements [Mantle.module_] [Core.module_] $
         union [
           "caseConversion">: testing "CaseConversionTestCase",
           "evaluation">: testing "EvaluationTestCase",
-          "inference">: testing "InferenceTestCase"],
+          "inference">: testing "InferenceTestCase",
+          "inferenceFailure">: testing "InferenceFailureTestCase"],
 
       def "TestCaseWithMetadata" $
         doc "One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags" $
