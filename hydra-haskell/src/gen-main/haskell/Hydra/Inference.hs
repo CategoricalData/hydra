@@ -84,12 +84,6 @@ fTypeToTypeScheme typ = (gatherForall [] typ)
 forInferredTerm :: (Typing_.InferenceContext -> Core.Term -> String -> (Typing_.InferenceResult -> t0) -> Compute.Flow t1 t0)
 forInferredTerm cx term desc f = (Flows.map f (inferTypeOfTerm cx term desc))
 
-forVar :: ((Core.Name -> t0) -> Compute.Flow t1 t0)
-forVar f = (Flows.map f freshName)
-
-forVars :: (Int -> ([Core.Name] -> t0) -> Compute.Flow t1 t0)
-forVars n f = (Flows.map f (freshNames n))
-
 -- | Get all free variables in an inference context
 freeVariablesInContext :: (Typing_.InferenceContext -> S.Set Core.Name)
 freeVariablesInContext cx = (Lists.foldl Sets.union Sets.empty (Lists.map Rewriting.freeVariablesInTypeSchemeSimple (Maps.elems (Typing_.inferenceContextDataTypes cx))))
@@ -621,18 +615,18 @@ inferTypeOfTerm cx term desc = (Monads.withTrace desc ((\x -> case x of
   Core.TermWrap v1 -> (inferTypeOfWrappedTerm cx v1)) term))
 
 inferTypeOfTupleProjection :: (t0 -> Core.TupleProjection -> Compute.Flow t1 Typing_.InferenceResult)
-inferTypeOfTupleProjection _ tp =  
+inferTypeOfTupleProjection cx tp =  
   let arity = (Core.tupleProjectionArity tp) 
       idx = (Core.tupleProjectionIndex tp)
-  in (forVars arity (\vars ->  
+  in (Flows.bind (freshNames arity) (\vars ->  
     let types = (Lists.map (\x -> Core.TypeVariable x) vars) 
         cod = (Lists.at idx types)
-    in (yield (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+    in (Flows.pure (yield (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
       Core.tupleProjectionArity = arity,
       Core.tupleProjectionIndex = idx,
       Core.tupleProjectionDomain = (Just types)})))) (Core.TypeFunction (Core.FunctionType {
       Core.functionTypeDomain = (Core.TypeProduct types),
-      Core.functionTypeCodomain = cod})) Substitution.idTypeSubst)))
+      Core.functionTypeCodomain = cod})) Substitution.idTypeSubst))))
 
 inferTypeOfTypeAbstraction :: (Typing_.InferenceContext -> Core.TypeAbstraction -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfTypeAbstraction cx ta = (inferTypeOfTerm cx (Core.typeAbstractionBody ta) "type abstraction")
@@ -647,7 +641,7 @@ inferTypeOfUnwrap cx tname = (Flows.bind (requireSchemaType cx tname) (\schemaTy
   in (Flows.bind (Core_.wrappedType tname styp) (\wtyp -> Flows.pure (yield (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap tname))) (Core.TypeFunction (Core.FunctionType {
     Core.functionTypeDomain = (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
     Core.functionTypeCodomain = wtyp})) Substitution.idTypeSubst)))))
-    
+
 inferTypeOfVariable :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfVariable cx name = (Optionals.maybe (Flows.fail (Strings.cat2 "Variable not bound to type: " (Core.unName name))) (\scheme -> Flows.bind (instantiateTypeScheme scheme) (\ts ->  
   let vars = (Core.typeSchemeVariables ts) 

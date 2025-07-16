@@ -337,7 +337,7 @@ unwrap = TermFunction . FunctionElimination . EliminationWrap
 
 -- | First element projection function for pairs
 first :: Term
-first = untuple 2 0 Nothing
+first = untuple 2 0
 
 -- | Create a pair (2-tuple)
 -- Example: pair (string "name") (int32 42)
@@ -346,7 +346,7 @@ pair a b = TermProduct [a, b]
 
 -- | Second element projection function for pairs
 second :: Term
-second = untuple 2 1 Nothing
+second = untuple 2 1
 
 -- | Create a sum term
 -- Example: sum 0 3 (int32 1) represents the first element of a 3-element sum
@@ -367,10 +367,10 @@ tuple4 a b c d = tuple [a, b, c, d]
 tuple5 :: Term -> Term -> Term -> Term -> Term -> Term
 tuple5 a b c d e = tuple [a, b, c, d, e]
 
--- | Create a tuple projection function
+-- | Create a untyped tuple projection function
 -- Example: untuple 3 1 Nothing extracts the second element of a 3-tuple
-untuple :: Int -> Int -> Maybe [Type] -> Term
-untuple arity idx mtypes = TermFunction $ FunctionElimination $ EliminationProduct $ TupleProjection arity idx mtypes
+untuple :: Int -> Int -> Term
+untuple arity idx = TermFunction $ FunctionElimination $ EliminationProduct $ TupleProjection arity idx Nothing
 
 -- | Other
 
