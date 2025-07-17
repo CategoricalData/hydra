@@ -18,21 +18,21 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 applicationType :: (Core.Term -> Compute.Flow Graph.Graph Core.ApplicationType)
-applicationType = (Lexical.matchRecord (\m -> Monads.map2 (Lexical.getField m (Core.Name "function") type_) (Lexical.getField m (Core.Name "argument") type_) (\function -> \argument -> Core.ApplicationType {
+applicationType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "function") type_) (\function -> Flows.bind (Lexical.getField m (Core.Name "argument") type_) (\argument -> Flows.pure (Core.ApplicationType {
   Core.applicationTypeFunction = function,
-  Core.applicationTypeArgument = argument})))
+  Core.applicationTypeArgument = argument})))))
 
 fieldType :: (Core.Term -> Compute.Flow Graph.Graph Core.FieldType)
-fieldType = (Lexical.matchRecord (\m -> Monads.map2 (Lexical.getField m (Core.Name "name") name) (Lexical.getField m (Core.Name "type") type_) (\name -> \typ -> Core.FieldType {
+fieldType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "name") name) (\name -> Flows.bind (Lexical.getField m (Core.Name "type") type_) (\typ -> Flows.pure (Core.FieldType {
   Core.fieldTypeName = name,
-  Core.fieldTypeType = typ})))
+  Core.fieldTypeType = typ})))))
 
 fieldTypes :: (Core.Term -> Compute.Flow Graph.Graph [Core.FieldType])
 fieldTypes term =  
   let stripped = (Rewriting.deannotateAndDetypeTerm term)
   in ((\x -> case x of
     Core.TermList v1 -> (Flows.mapList fieldType v1)
-    _ -> (Monads.unexpected "list--" (Core__.term term))) stripped)
+    _ -> (Monads.unexpected "list" (Core__.term term))) stripped)
 
 floatType :: (Core.Term -> Compute.Flow Graph.Graph Core.FloatType)
 floatType = (Lexical.matchEnum (Core.Name "hydra.core.FloatType") [
@@ -41,14 +41,14 @@ floatType = (Lexical.matchEnum (Core.Name "hydra.core.FloatType") [
   (Core.Name "float64", Core.FloatTypeFloat64)])
 
 forallType :: (Core.Term -> Compute.Flow Graph.Graph Core.ForallType)
-forallType = (Lexical.matchRecord (\m -> Monads.map2 (Lexical.getField m (Core.Name "parameter") name) (Lexical.getField m (Core.Name "body") type_) (\parameter -> \body -> Core.ForallType {
+forallType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "parameter") name) (\parameter -> Flows.bind (Lexical.getField m (Core.Name "body") type_) (\body -> Flows.pure (Core.ForallType {
   Core.forallTypeParameter = parameter,
-  Core.forallTypeBody = body})))
+  Core.forallTypeBody = body})))))
 
 functionType :: (Core.Term -> Compute.Flow Graph.Graph Core.FunctionType)
-functionType = (Lexical.matchRecord (\m -> Monads.map2 (Lexical.getField m (Core.Name "domain") type_) (Lexical.getField m (Core.Name "codomain") type_) (\domain -> \codomain -> Core.FunctionType {
+functionType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "domain") type_) (\domain -> Flows.bind (Lexical.getField m (Core.Name "codomain") type_) (\codomain -> Flows.pure (Core.FunctionType {
   Core.functionTypeDomain = domain,
-  Core.functionTypeCodomain = codomain})))
+  Core.functionTypeCodomain = codomain})))))
 
 integerType :: (Core.Term -> Compute.Flow Graph.Graph Core.IntegerType)
 integerType = (Lexical.matchEnum (Core.Name "hydra.core.IntegerType") [
@@ -71,17 +71,17 @@ literalType = (Lexical.matchUnion (Core.Name "hydra.core.LiteralType") [
   (Lexical.matchUnitField (Core.Name "string") Core.LiteralTypeString)])
 
 mapType :: (Core.Term -> Compute.Flow Graph.Graph Core.MapType)
-mapType = (Lexical.matchRecord (\m -> Monads.map2 (Lexical.getField m (Core.Name "keys") type_) (Lexical.getField m (Core.Name "values") type_) (\keys -> \values -> Core.MapType {
+mapType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "keys") type_) (\keys -> Flows.bind (Lexical.getField m (Core.Name "values") type_) (\values -> Flows.pure (Core.MapType {
   Core.mapTypeKeys = keys,
-  Core.mapTypeValues = values})))
+  Core.mapTypeValues = values})))))
 
 name :: (Core.Term -> Compute.Flow Graph.Graph Core.Name)
 name term = (Flows.map (\x -> Core.Name x) (Flows.bind (Core_.wrap (Core.Name "hydra.core.Name") term) Core_.string))
 
 rowType :: (Core.Term -> Compute.Flow Graph.Graph Core.RowType)
-rowType = (Lexical.matchRecord (\m -> Monads.map2 (Lexical.getField m (Core.Name "typeName") name) (Lexical.getField m (Core.Name "fields") fieldTypes) (\typeName -> \fields -> Core.RowType {
+rowType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "typeName") name) (\typeName -> Flows.bind (Lexical.getField m (Core.Name "fields") fieldTypes) (\fields -> Flows.pure (Core.RowType {
   Core.rowTypeTypeName = typeName,
-  Core.rowTypeFields = fields})))
+  Core.rowTypeFields = fields})))))
 
 string :: (Core.Term -> Compute.Flow Graph.Graph String)
 string term = (Core_.string (Rewriting.deannotateAndDetypeTerm term))
@@ -109,11 +109,11 @@ type_ dat = ((\x -> case x of
     (Core.Name "wrap", (\wt -> Flows.map (\x -> Core.TypeWrap x) (wrappedType wt)))] dat)) dat)
 
 typeScheme :: (Core.Term -> Compute.Flow Graph.Graph Core.TypeScheme)
-typeScheme = (Lexical.matchRecord (\m -> Monads.map2 (Lexical.getField m (Core.Name "variables") (Core_.list name)) (Lexical.getField m (Core.Name "type") type_) (\vars -> \body -> Core.TypeScheme {
+typeScheme = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "variables") (Core_.list name)) (\vars -> Flows.bind (Lexical.getField m (Core.Name "type") type_) (\body -> Flows.pure (Core.TypeScheme {
   Core.typeSchemeVariables = vars,
-  Core.typeSchemeType = body})))
+  Core.typeSchemeType = body})))))
 
 wrappedType :: (Core.Term -> Compute.Flow Graph.Graph Core.WrappedType)
-wrappedType term = (Flows.bind (Core_.record (Core.Name "hydra.core.WrappedType") term) (\fields -> Monads.map2 (Core_.field (Core.Name "typeName") name fields) (Core_.field (Core.Name "object") type_ fields) (\name -> \obj -> Core.WrappedType {
+wrappedType term = (Flows.bind (Core_.record (Core.Name "hydra.core.WrappedType") term) (\fields -> Flows.bind (Core_.field (Core.Name "typeName") name fields) (\name -> Flows.bind (Core_.field (Core.Name "object") type_ fields) (\obj -> Flows.pure (Core.WrappedType {
   Core.wrappedTypeTypeName = name,
-  Core.wrappedTypeObject = obj})))
+  Core.wrappedTypeObject = obj})))))
