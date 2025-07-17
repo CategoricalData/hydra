@@ -55,7 +55,7 @@ checkTypeVariables cx tyvars typ = ((\x -> case x of
     Core.unName v1,
     "\" in ",
     (Core__.type_ typ)]))))
-  _ -> (Flows.bind (Flows.sequence (Lists.map (checkTypeVariables cx tyvars) (Rewriting.subtypes typ))) (\result -> Flows.pure ()))) typ)
+  _ -> (Flows.bind (Flows.mapList (checkTypeVariables cx tyvars) (Rewriting.subtypes typ)) (\result -> Flows.pure ()))) typ)
 
 -- | Disable type checking by default, for better performance
 debugInference :: Bool
@@ -584,7 +584,7 @@ inferTypeOfSum cx sum =
         ityp = (Typing_.inferenceResultType result)
         isubst = (Typing_.inferenceResultSubst result)
         varOrTerm = (\t -> \j -> Logic.ifElse (Equality.equal i j) (Flows.pure (Mantle.EitherLeft t)) (Flows.map (\x -> Mantle.EitherRight x) freshName))
-    in (Flows.bind (Flows.sequence (Lists.map (varOrTerm ityp) (Math.range 0 (Math.sub s 1)))) (\vars ->  
+    in (Flows.bind (Flows.mapList (varOrTerm ityp) (Math.range 0 (Math.sub s 1))) (\vars ->  
       let toType = (\e -> (\x -> case x of
               Mantle.EitherLeft v1 -> v1
               Mantle.EitherRight v1 -> (Core.TypeVariable v1)) e)
@@ -809,7 +809,7 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
             mtypes = (Core.tupleProjectionDomain v3)
         in (Optionals.maybe (Flows.fail (Strings.cat [
           "untyped tuple projection: ",
-          (Core__.term term)])) (\types -> Flows.bind (Flows.sequence (Lists.map (checkTypeVariables cx vars) types)) (\_ -> Flows.pure (Core.TypeFunction (Core.FunctionType {
+          (Core__.term term)])) (\types -> Flows.bind (Flows.mapList (checkTypeVariables cx vars) types) (\_ -> Flows.pure (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = (Core.TypeProduct types),
           Core.functionTypeCodomain = (Lists.at index types)})))) mtypes)
       Core.EliminationRecord v3 ->  
@@ -865,7 +865,7 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
                 (Core__.term term)])) (\ts -> Flows.pure (typeSchemeToFType ts)) (Core.letBindingType b))
     in (Flows.bind (Flows.mapList binType es) (\btypes ->  
       let types2 = (Maps.union (Maps.fromList (Lists.zip bnames btypes)) types)
-      in (Flows.bind (Flows.mapList (\v -> typeOf cx vars types2 v) bterms) (\est -> Flows.bind (Flows.sequence (Lists.map (checkTypeVariables cx vars) est)) (\_ -> Flows.bind (Flows.sequence (Lists.map (checkTypeVariables cx vars) btypes)) (\_ -> Logic.ifElse (Equality.equal est btypes) (typeOf cx vars types2 e) (Flows.fail (Strings.cat [
+      in (Flows.bind (Flows.mapList (\v -> typeOf cx vars types2 v) bterms) (\est -> Flows.bind (Flows.mapList (checkTypeVariables cx vars) est) (\_ -> Flows.bind (Flows.mapList (checkTypeVariables cx vars) btypes) (\_ -> Logic.ifElse (Equality.equal est btypes) (typeOf cx vars types2 e) (Flows.fail (Strings.cat [
         "binding types disagree: ",
         Formatting.showList Core__.type_ est,
         " and ",
@@ -878,11 +878,11 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
       Core.mapTypeKeys = kt,
       Core.mapTypeValues = vt})))))))))
   Core.TermOptional v1 -> (Optionals.maybe (Flows.fail "empty optional should only occur within a type application") (\term -> Flows.bind (typeOf cx vars types term) (\termType -> Flows.bind (checkTypeVariables cx vars termType) (\_ -> Flows.pure (Core.TypeOptional termType)))) v1)
-  Core.TermProduct v1 -> (Flows.bind (Flows.mapList (typeOf cx vars types) v1) (\etypes -> Flows.bind (Flows.sequence (Lists.map (checkTypeVariables cx vars) etypes)) (\_ -> Flows.pure (Core.TypeProduct etypes))))
+  Core.TermProduct v1 -> (Flows.bind (Flows.mapList (typeOf cx vars types) v1) (\etypes -> Flows.bind (Flows.mapList (checkTypeVariables cx vars) etypes) (\_ -> Flows.pure (Core.TypeProduct etypes))))
   Core.TermRecord v1 ->  
     let tname = (Core.recordTypeName v1) 
         fields = (Core.recordFields v1)
-    in (Flows.bind (Flows.mapList (typeOf cx vars types) (Lists.map Core.fieldTerm fields)) (\ftypes -> Flows.bind (Flows.sequence (Lists.map (checkTypeVariables cx vars) ftypes)) (\_ -> typeOfNominal "record typeOf" cx tname (Core.TypeRecord (Core.RowType {
+    in (Flows.bind (Flows.mapList (typeOf cx vars types) (Lists.map Core.fieldTerm fields)) (\ftypes -> Flows.bind (Flows.mapList (checkTypeVariables cx vars) ftypes) (\_ -> typeOfNominal "record typeOf" cx tname (Core.TypeRecord (Core.RowType {
       Core.rowTypeTypeName = tname,
       Core.rowTypeFields = (Lists.zipWith (\n -> \t -> Core.FieldType {
         Core.fieldTypeName = n,
