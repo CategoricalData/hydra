@@ -82,7 +82,7 @@ eliminationDef = define "elimination" $
       "index">: Core.tupleProjectionIndex $ var "tp",
       "domain">: Core.tupleProjectionDomain $ var "tp"] $ -- TODO: show domain if present
       Strings.cat $ list [
-        string "]",
+        string "[",
         Literals.showInt32 $ var "index",
         string "/",
         Literals.showInt32 $ var "arity",
@@ -360,7 +360,7 @@ termDef = define "term" $
           string "}"]]
 
 typeDef :: TElement (Type -> String)
-typeDef = define "type_" $
+typeDef = define "type" $
   doc "Show a type as a string" $
   lambda "typ" $ lets [
     "showFieldType">: lambda "ft" $ lets [
