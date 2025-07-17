@@ -745,7 +745,107 @@ checkTypeOfProducts = H.describe "Products" $ do
 
 checkTypeOfProductEliminations :: H.SpecWith ()
 checkTypeOfProductEliminations = H.describe "Product eliminations" $ do
-  return ()  -- TODO: implement
+  H.describe "Simple tuple projections" $ do
+    expectTypeOf "projection from pair"
+      (untuple 2 0 @@ pair (int32 42) (string "hello"))
+      Types.int32
+    expectTypeOf "second projection from pair"
+      (untuple 2 1 @@ pair (int32 42) (string "hello"))
+      Types.string
+    expectTypeOf "projection from triple"
+      (untuple 3 1 @@ triple (int32 1) (string "middle") (boolean True))
+      Types.string
+    expectTypeOf "first element of triple"
+      (untuple 3 0 @@ triple (boolean False) (int32 100) (string "last"))
+      Types.boolean
+    expectTypeOf "last element of triple"
+      (untuple 3 2 @@ triple (boolean False) (int32 100) (string "last"))
+      Types.string
+
+  H.describe "Polymorphic tuple projections" $ do
+    expectTypeOf "projection function"
+      (untuple 2 0)
+      (Types.forAlls ["t1", "t0"] $ Types.function
+        (Types.product [Types.var "t0", Types.var "t1"])
+        (Types.var "t0"))
+    expectTypeOf "second projection function"
+      (untuple 2 1)
+      (Types.forAlls ["t1", "t0"] $ Types.function
+        (Types.product [Types.var "t0", Types.var "t1"])
+        (Types.var "t1"))
+    expectTypeOf "triple projection function"
+      (untuple 3 1)
+      (Types.forAlls ["t2", "t1", "t0"] $ Types.function
+        (Types.product [Types.var "t0", Types.var "t1", Types.var "t2"])
+        (Types.var "t1"))
+    expectTypeOf "projection from lambda"
+      (lambda "pair" $ untuple 2 0 @@ var "pair")
+      (Types.forAlls ["t1", "t0"] $ Types.function
+        (Types.product [Types.var "t0", Types.var "t1"])
+        (Types.var "t0"))
+
+  H.describe "Projections with variables" $ do
+    expectTypeOf "projection with variable tuple"
+      (lambda "x" $ lambda "y" $ untuple 2 0 @@ pair (var "x") (var "y"))
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0")
+        (Types.function (Types.var "t1") (Types.var "t0")))
+    expectTypeOf "projection preserves polymorphism"
+      (lambda "pair" $ pair (untuple 2 0 @@ var "pair") (untuple 2 1 @@ var "pair"))
+      (Types.forAlls ["t1", "t0"] $ Types.function
+        (Types.product [Types.var "t0", Types.var "t1"])
+        (Types.product [Types.var "t0", Types.var "t1"]))
+    expectTypeOf "nested projection"
+      (lambda "nested" $ untuple 2 0 @@ (untuple 2 1 @@ var "nested"))
+      (Types.forAlls ["t2", "t1", "t0"] $ Types.function
+        (Types.product [Types.var "t0", Types.product [Types.var "t1", Types.var "t2"]])
+        (Types.var "t1"))
+
+  H.describe "Projections in complex contexts" $ do
+    expectTypeOf "projection in let binding"
+      (lets ["pair">: pair (int32 10) (string "test")] $
+            untuple 2 0 @@ var "pair")
+      Types.int32
+    expectTypeOf "projection in tuple"
+      (pair (untuple 2 0 @@ pair (int32 1) (string "a"))
+            (untuple 2 1 @@ pair (int32 2) (string "b")))
+      (Types.product [Types.int32, Types.string])
+    expectTypeOf "projection in list"
+      (list [untuple 2 0 @@ pair (int32 1) (string "a"),
+             untuple 2 0 @@ pair (int32 2) (string "b")])
+      (Types.list Types.int32)
+
+  H.describe "Higher-order projections" $ do
+    expectTypeOf "map projection over list"
+      (primitive _lists_map @@ (untuple 2 0) @@
+       list [pair (int32 1) (string "a"), pair (int32 2) (string "b")])
+      (Types.list Types.int32)
+    expectTypeOf "projection composition"
+      (lets ["getFirst">: untuple 2 0,
+             "getSecond">: untuple 2 1] $
+            lambda "pair" $ pair (var "getFirst" @@ var "pair") (var "getSecond" @@ var "pair"))
+      (Types.forAlls ["t1", "t0"] $ Types.function
+        (Types.product [Types.var "t0", Types.var "t1"])
+        (Types.product [Types.var "t0", Types.var "t1"]))
+    expectTypeOf "partial application of projection"
+      (primitive _lists_map @@ (untuple 2 1))
+      (Types.forAlls ["t1", "t0"] $ Types.function
+        (Types.list (Types.product [Types.var "t0", Types.var "t1"]))
+        (Types.list (Types.var "t1")))
+
+  H.describe "Projections with mixed types" $ do
+    expectTypeOf "projection from mixed tuple"
+      (untuple 4 2 @@ tuple4 (int32 1) (string "test") (boolean True) (float32 3.14))
+      Types.boolean
+    expectTypeOf "projection chain"
+      (lets ["quadruple">: tuple4 (int32 1) (string "test") (boolean True) (float32 3.14)] $
+            tuple4 (untuple 4 0 @@ var "quadruple")
+                   (untuple 4 1 @@ var "quadruple")
+                   (untuple 4 2 @@ var "quadruple")
+                   (untuple 4 3 @@ var "quadruple"))
+      (Types.product [Types.int32, Types.string, Types.boolean, Types.float32])
+    expectTypeOf "projection with function result"
+      (untuple 2 1 @@ pair (int32 42) (lambda "x" $ var "x"))
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
 
 checkTypeOfRecords :: H.SpecWith ()
 checkTypeOfRecords = H.describe "Records" $ do
