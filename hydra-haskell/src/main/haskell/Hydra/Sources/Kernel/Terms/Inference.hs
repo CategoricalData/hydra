@@ -408,7 +408,7 @@ inferTypeOfApplicationDef = define "inferTypeOfApplication" $
     "v">: ref freshNameDef,
     "s2">: ref Unification.unifyTypesDef
       @@ (Typing.inferenceContextSchemaTypes $ var "cx")
-      @@ (ref Substitution.substInTypeDef @@ var "s1" @@ var "t0")
+      @@ (ref Substitution.substInTypeDef @@ (ref Substitution.composeTypeSubstDef @@ var "s0" @@ var "s1") @@ var "t0")
       @@ (Core.typeFunction $ Core.functionType (var "t1") (Core.typeVariable $ var "v"))
       @@ string "application lhs"] $ lets [
     "rExpr">: Core.termApplication $ Core.application
