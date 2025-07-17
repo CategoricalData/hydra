@@ -155,7 +155,7 @@ expectInferenceResult desc term expected = do
 
 expectSuccess :: (Eq a, Show a) => String -> Flow () a -> a -> H.Expectation
 expectSuccess desc f x = case my of
-    Nothing -> HL.assertFailure $ "Error: " ++ traceSummary trace
+    Nothing -> HL.assertFailure $ traceSummary trace
     Just y -> y `H.shouldBe` x
   where
     FlowState my _ trace = unFlow f2 () emptyTrace
