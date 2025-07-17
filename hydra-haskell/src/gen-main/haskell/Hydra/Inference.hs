@@ -202,7 +202,7 @@ inferTypeOfApplication cx app =
       let b = (Typing_.inferenceResultTerm rhsResult) 
           t1 = (Typing_.inferenceResultType rhsResult)
           s1 = (Typing_.inferenceResultSubst rhsResult)
-      in (Flows.bind freshName (\v -> Flows.bind (Unification.unifyTypes (Typing_.inferenceContextSchemaTypes cx) (Substitution.substInType s1 t0) (Core.TypeFunction (Core.FunctionType {
+      in (Flows.bind freshName (\v -> Flows.bind (Unification.unifyTypes (Typing_.inferenceContextSchemaTypes cx) (Substitution.substInType (Substitution.composeTypeSubst s0 s1) t0) (Core.TypeFunction (Core.FunctionType {
         Core.functionTypeDomain = t1,
         Core.functionTypeCodomain = (Core.TypeVariable v)})) "application lhs") (\s2 ->  
         let rExpr = (Core.TermApplication (Core.Application {

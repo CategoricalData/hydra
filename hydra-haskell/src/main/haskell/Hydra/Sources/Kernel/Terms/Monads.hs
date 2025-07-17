@@ -194,7 +194,6 @@ pushErrorDef = define "pushError" $
       lambda "ys" $ Lists.map (var "condenseGroup") $ Lists.group (var "ys" :: TTerm [String]),
     "errorMsg">: Strings.concat [
       "Error: ", var "msg", " (",
---      (Strings.intercalate " > " (Lists.reverse $ Compute.traceStack $ var "t")),
       (Strings.intercalate " > " (var "condenseRepeats" @@ (Lists.reverse $ Compute.traceStack $ var "t"))),
       ")"]] $
     Compute.trace
