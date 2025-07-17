@@ -27,7 +27,7 @@ elimination elm = ((\x -> case x of
         index = (Core.tupleProjectionIndex v1)
         domain = (Core.tupleProjectionDomain v1)
     in (Strings.cat [
-      "]",
+      "[",
       Literals.showInt32 index,
       "/",
       Literals.showInt32 arity,
