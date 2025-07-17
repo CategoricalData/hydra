@@ -164,7 +164,7 @@ checkTypeVariablesDef = define "checkTypeVariables" $
   doc "Check that all type variables in a type are bound" $
   lambdas ["cx", "tyvars", "typ"] $ cases _Type (var "typ")
     (Just $ binds [
-      "result">: Flows.sequence $ Lists.map (ref checkTypeVariablesDef @@ var "cx" @@ var "tyvars")
+      "result">: Flows.mapList (ref checkTypeVariablesDef @@ var "cx" @@ var "tyvars")
         (ref Rewriting.subtypesDef @@ var "typ")] $
       Flows.pure unit) [
     _Type_forall>>: lambda "ft" $ ref checkTypeVariablesDef
@@ -844,7 +844,7 @@ inferTypeOfSumDef = define "inferTypeOfSum" $
       Logic.ifElse (Equality.equal (var "i") (var "j"))
         (Flows.pure $ Mantle.eitherLeft $ var "t")
         (Flows.map (unaryFunction Mantle.eitherRight) $ ref freshNameDef)] $ binds [
-    "vars">: Flows.sequence $ Lists.map (var "varOrTerm" @@ var "ityp") $
+    "vars">: Flows.mapList (var "varOrTerm" @@ var "ityp") $
       Math.range (int32 0) (Math.sub (var "s") (int32 1))] $ lets [
         "toType">: lambda "e" $
           cases _Either (var "e") Nothing [
@@ -1154,7 +1154,7 @@ typeOfDef = define "typeOf" $
                       string "untyped tuple projection: ",
                       ref ShowCore.termDef @@ var "term"])
                     (lambda "types" $
-                      exec (Flows.sequence $ Lists.map (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "types")) $
+                      exec (Flows.mapList (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "types")) $
                       Flows.pure $ Core.typeFunction $ Core.functionType
                         (Core.typeProduct $ var "types")
                         (Lists.at (var "index") (var "types")))
@@ -1238,8 +1238,8 @@ typeOfDef = define "typeOf" $
           "btypes">: Flows.mapList (var "binType") (var "es")] $ lets [
           "types2">: Maps.union (Maps.fromList $ Lists.zip (var "bnames") (var "btypes")) (var "types")] $ binds [
           "est">: Flows.mapList (lambda "v" $ ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types2" @@ var "v") (var "bterms")] $
-          exec (Flows.sequence $ Lists.map (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "est")) $
-          exec (Flows.sequence $ Lists.map (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "btypes")) $
+          exec (Flows.mapList (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "est")) $
+          exec (Flows.mapList (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "btypes")) $
           Logic.ifElse (Equality.equal (var "est") (var "btypes"))
             (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types2" @@ var "e")
             (Flows.fail $ Strings.cat $ list [
@@ -1292,7 +1292,7 @@ typeOfDef = define "typeOf" $
 
         _Term_product>>: lambda "tuple" $ binds [
           "etypes">: Flows.mapList (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types") (var "tuple")] $
-          exec (Flows.sequence $ Lists.map (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "etypes")) $
+          exec (Flows.mapList (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "etypes")) $
           Flows.pure $ Core.typeProduct $ var "etypes",
 
         _Term_record>>: lambda "record" $ lets [
@@ -1300,7 +1300,7 @@ typeOfDef = define "typeOf" $
           "fields">: Core.recordFields $ var "record"] $ binds [
           "ftypes">: Flows.mapList (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types") $
             Lists.map (unaryFunction Core.fieldTerm) (var "fields")] $
-          exec (Flows.sequence $ Lists.map (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "ftypes")) $
+          exec (Flows.mapList (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "ftypes")) $
           ref typeOfNominalDef
             @@ string "record typeOf"
             @@ var "cx"
