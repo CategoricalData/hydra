@@ -73,9 +73,6 @@ map f f1 = (Compute.Flow (\s0 -> \t0 ->
     Compute.flowStateState = (Compute.flowStateState f2),
     Compute.flowStateTrace = (Compute.flowStateTrace f2)}))
 
-map2 :: (Compute.Flow t0 t1 -> Compute.Flow t0 t2 -> (t1 -> t2 -> t3) -> Compute.Flow t0 t3)
-map2 f1 f2 f = (bind f1 (\r1 -> map (\r2 -> f r1 r2) f2))
-
 modify :: ((t0 -> t0) -> Compute.Flow t0 ())
 modify f = (bind getState (\s -> putState (f s)))
 

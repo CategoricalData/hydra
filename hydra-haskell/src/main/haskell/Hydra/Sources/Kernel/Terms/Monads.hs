@@ -63,7 +63,6 @@ module_ = Module (Namespace "hydra.monads") elements
       el fromFlowDef,
       el getStateDef,
       el mapDef,
-      el map2Def,
       el modifyDef,
       el mutateTraceDef,
       el optionalToListDef,
@@ -106,8 +105,9 @@ execDef = define "exec" $
 
 failDef :: TElement (String -> Flow s a)
 failDef = define "fail" $
-  lambda "msg" $ Compute.flow $ lambdas ["s", "t"] $
-    Compute.flowState nothing (var "s") (ref pushErrorDef @@ var "msg" @@ var "t")
+  lambda "msg" $
+    Compute.flow $ lambdas ["s", "t"] $
+      Compute.flowState nothing (var "s") (ref pushErrorDef @@ var "msg" @@ var "t")
 
 flowSucceedsDef :: TElement (Flow s a -> Bool)
 flowSucceedsDef = define "flowSucceeds" $
@@ -146,15 +146,6 @@ mapDef = define "map" $
         (Optionals.map (var "f") $ Compute.flowStateValue $ var "f2")
         (Compute.flowStateState $ var "f2")
         (Compute.flowStateTrace $ var "f2")
-
-map2Def :: TElement ((Flow s a) -> (Flow s b) -> (a -> b -> c) -> Flow s c)
-map2Def = define "map2" $
-  doc "Map a function over two flows" $
-  lambdas ["f1", "f2", "f"] $ ref bindDef
-    @@ var "f1"
-    @@ (lambda "r1" $ ref mapDef
-      @@ (lambda "r2" $ var "f" @@ var "r1" @@ var "r2")
-      @@ var "f2")
 
 modifyDef :: TElement ((s -> s) -> Flow s ())
 modifyDef = define "modify" $ lambda "f" $
@@ -237,7 +228,7 @@ traceSummaryDef = define "traceSummary" $
 unexpectedDef :: TElement (String -> String -> Flow s x)
 unexpectedDef = define "unexpected" $
   doc "Fail if an actual value does not match an expected value" $
-  lambda "expected" $ lambda "actual" $ ref failDef @@ ("expected " ++ var "expected" ++ " but found: " ++ var "actual")
+  lambdas ["expected", "actual"] $ ref failDef @@ ("expected " ++ var "expected" ++ " but found: " ++ var "actual")
 
 warnDef :: TElement (String -> Flow s a -> Flow s a)
 warnDef = define "warn" $
