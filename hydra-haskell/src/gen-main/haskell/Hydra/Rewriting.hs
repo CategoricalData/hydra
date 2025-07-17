@@ -287,6 +287,16 @@ normalizeTypeVariablesInTerm term =
                   boundVars = (snd substAndBound)
                   rewrite = (\recurse -> \term -> (\x -> case x of
                           Core.TermFunction v1 -> ((\x -> case x of
+                            Core.FunctionElimination v2 -> ((\x -> case x of
+                              Core.EliminationProduct v3 ->  
+                                let arity = (Core.tupleProjectionArity v3) 
+                                    index = (Core.tupleProjectionIndex v3)
+                                    domain = (Core.tupleProjectionDomain v3)
+                                in (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+                                  Core.tupleProjectionArity = arity,
+                                  Core.tupleProjectionIndex = index,
+                                  Core.tupleProjectionDomain = (Optionals.map (\types -> Lists.map (substType subst) types) domain)}))))
+                              _ -> (recurse term)) v2)
                             Core.FunctionLambda v2 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.lambdaParameter v2),
                               Core.lambdaDomain = (Optionals.map (substType subst) (Core.lambdaDomain v2)),
