@@ -421,6 +421,18 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
         (Just $ var "recurse" @@ var "term") [
         _Term_function>>: match _Function
           (Just $ var "recurse" @@ var "term") [
+          _Function_elimination>>: match _Elimination
+            (Just $ var "recurse" @@ var "term") [
+            _Elimination_product>>: lambda "tproj" $ lets [
+              "arity">: Core.tupleProjectionArity $ var "tproj",
+              "index">: Core.tupleProjectionIndex $ var "tproj",
+              "domain">: Core.tupleProjectionDomain $ var "tproj"] $
+              Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $ Core.tupleProjection
+                (var "arity")
+                (var "index")
+                (Optionals.map
+                  (lambda "types" $ Lists.map (var "substType" @@ var "subst") (var "types"))
+                  (var "domain"))],
           _Function_lambda>>: lambda "l" $ Core.termFunction $ Core.functionLambda $ Core.lambda
             (Core.lambdaParameter $ var "l")
             (Optionals.map (var "substType" @@ var "subst") (Core.lambdaDomain $ var "l"))
