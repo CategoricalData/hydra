@@ -1,0 +1,13 @@
+doctor_id,first_name,last_name,specialization,email,phone,hire_date,department_id,license_number,is_resident,supervisor_id
+1,Gregory,House,Diagnostics,ghouse@hospital.com,555-1001,2019-05-15,2,MD12345,false,
+2,Meredith,Grey,General Surgery,mgrey@hospital.com,555-1002,2020-03-10,1,MD67890,false,
+3,Miranda,Bailey,Internal Medicine,mbailey@hospital.com,555-1003,2018-11-22,3,MD24680,false,
+4,Derek,Shepherd,Neurology,dshepherd@hospital.com,555-1004,2019-08-05,4,MD13579,false,
+5,Christina,Yang,Cardiology,cyang@hospital.com,555-1005,2020-01-17,5,MD97531,false,
+6,Alex,Karev,Pediatrics,akarev@hospital.com,555-1006,2021-04-28,6,MD86420,false,
+7,Owen,Hunt,Emergency Medicine,ohunt@hospital.com,555-1007,2019-12-03,7,MD31415,false,
+8,Callie,Torres,Orthopedics,ctorres@hospital.com,555-1008,2020-06-21,8,MD27182,false,1
+9,Arizona,Robbins,Pediatric Surgery,arobbins@hospital.com,555-1009,2021-02-14,6,MD16180,false,6
+10,Amelia,Shepherd,Neurosurgery,ashepherd@hospital.com,555-1010,2021-07-08,4,MD22360,false,4
+11,Jackson,Avery,Plastic Surgery,javery@hospital.com,555-1011,2022-01-05,9,MD14142,true,2
+12,April,Kepner,Trauma Surgery,akepner@hospital.com,555-1012,2022-03-19,7,MD17320,true,7
