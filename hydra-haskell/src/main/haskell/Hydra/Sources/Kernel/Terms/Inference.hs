@@ -251,7 +251,6 @@ generalizeDef = define "generalize" $
   doc "Generalize a type to a type scheme" $
   lambdas ["cx", "typ"] $ lets [
     "vars">: Lists.nub $ Lists.filter (ref isUnboundDef @@ var "cx") $
---              Sets.toList $ ref Rewriting.freeVariablesInTypeDef @@ var "typ"] $
        ref Rewriting.freeVariablesInTypeOrderedDef @@ var "typ"] $
      Core.typeScheme (var "vars") (var "typ")
 
@@ -408,7 +407,10 @@ inferTypeOfApplicationDef = define "inferTypeOfApplication" $
     "v">: ref freshNameDef,
     "s2">: ref Unification.unifyTypesDef
       @@ (Typing.inferenceContextSchemaTypes $ var "cx")
-      @@ (ref Substitution.substInTypeDef @@ (ref Substitution.composeTypeSubstDef @@ var "s0" @@ var "s1") @@ var "t0")
+
+      @@ (ref Substitution.substInTypeDef @@ var "s1" @@ var "t0")
+--      @@ (ref Substitution.substInTypeDef @@ (ref Substitution.composeTypeSubstDef @@ var "s0" @@ var "s1") @@ var "t0")
+
       @@ (Core.typeFunction $ Core.functionType (var "t1") (Core.typeVariable $ var "v"))
       @@ string "application lhs"] $ lets [
     "rExpr">: Core.termApplication $ Core.application

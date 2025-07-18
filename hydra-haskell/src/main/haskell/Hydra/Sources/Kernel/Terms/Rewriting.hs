@@ -454,13 +454,15 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
                   (lambda "n" $ Logic.not $ Sets.member (var "n") (var "boundVars"))
                   (var "normalVariables"),
                 "newSubst">: Maps.union (Maps.fromList $ Lists.zip (var "vars") (var "newVars")) (var "subst"),
-                "newValue">: var "rewriteWithSubst" @@ (pair (var "newSubst") (Sets.union (var "boundVars") (Sets.fromList $ var "newVars"))) @@ (Core.letBindingTerm $ var "b")]
-                $ Core.letBinding
+                "newValue">: var "rewriteWithSubst"
+                  @@ (pair (var "newSubst") (Sets.union (var "boundVars") (Sets.fromList $ var "newVars")))
+                  @@ (Core.letBindingTerm $ var "b")] $
+                Core.letBinding
                   (Core.letBindingName $ var "b")
                   (var "newValue")
                   (just $ Core.typeScheme (var "newVars") (var "substType" @@ var "newSubst" @@ var "typ")))
-              (Core.letBindingType $ var "b")]
-          $ Core.termLet $ Core.let_
+              (Core.letBindingType $ var "b")] $
+          Core.termLet $ Core.let_
             (Lists.map (var "rewriteBinding") (var "bindings"))
             (var "rewriteWithSubst" @@ (pair (var "subst") (var "boundVars")) @@ var "env"),
         _Term_typeAbstraction>>: lambda "ta" $ Core.termTypeAbstraction $ Core.typeAbstraction
