@@ -1,0 +1,15 @@
+appointment_id,patient_id,doctor_id,appointment_date,appointment_time,duration_minutes,status,room_number,appointment_type,follow_up_required,notes
+1,3,2,2023-04-10,09:30,30,Completed,A301,Consultation,true,Patient experiencing abdominal pain
+2,7,5,2023-04-10,10:00,45,Completed,A405,Check-up,false,Routine annual cardiac check-up
+3,1,3,2023-04-10,11:15,30,Completed,A204,Follow-up,true,Review of blood test results
+4,10,4,2023-04-10,14:00,60,Completed,C403,New Patient,true,Initial consultation for chronic headaches
+5,5,6,2023-04-11,09:00,30,Scheduled,D105,Follow-up,false,Post-treatment evaluation
+6,9,1,2023-04-11,10:30,45,Scheduled,B102,Diagnostic,true,Mysterious recurring symptoms
+7,2,8,2023-04-11,13:00,60,Scheduled,C205,Procedure,true,Evaluation for knee replacement
+8,11,9,2023-04-12,09:15,30,Scheduled,D107,Consultation,false,Pediatric wellness check
+9,8,7,2023-04-12,11:00,45,Scheduled,E103,Emergency,true,Follow-up from ER visit
+10,4,10,2023-04-12,14:30,60,Scheduled,A505,New Patient,true,Cancer screening initial consultation
+11,6,12,2023-04-13,09:45,30,Scheduled,E106,Follow-up,false,Trauma assessment follow-up
+12,12,11,2023-04-13,13:30,45,Scheduled,B305,Consultation,true,Consultation for reconstructive surgery
+13,3,5,2023-04-14,10:00,45,Scheduled,A407,Diagnostic,true,Cardiac evaluation
+14,1,4,2023-04-14,15:00,60,Scheduled,C402,Consultation,true,Neurological assessment

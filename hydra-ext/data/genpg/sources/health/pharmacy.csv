@@ -1,0 +1,5 @@
+pharmacy_id,pharmacy_name,address,phone,email,hours_of_operation,is_hospital_affiliated,manager_name
+1,General Hospital Pharmacy,"123 Hospital Ave, Springfield",555-2001,ghpharmacy@hospital.com,24/7,true,Janet Miller
+2,MedPlus Pharmacy,"456 Health St, Springfield",555-2002,info@medplus.com,Mon-Sat 8AM-9PM,false,Robert Chen
+3,Wellness Drugs,"789 Wellness Blvd, Springfield",555-2003,rx@wellnessdrugs.com,Mon-Sun 7AM-10PM,false,Maria Santos
+4,Care Pharmacy,"101 Care Lane, Springfield",555-2004,care@carepharmacy.com,Mon-Fri 8AM-8PM,true,David Wilson
