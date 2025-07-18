@@ -44,7 +44,7 @@ The following models are included:
 * [OSV](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Models/Osv.hs)
 * [STAC Items](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Models/StacItems.hs)
 
-These extensions are listed [here](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Extensions.hs),
+These extensions are listed [here](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/All.hs),
 and the generated Haskell APIs for all of these models can be found [here](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/gen-main/haskell).
 For the sake of space, only generated Haskell is checked in to the repository, but Java APIs can be generated from GHCi (use `stack ghci`) as follows:
 
@@ -72,11 +72,78 @@ Miscellaneous tools include:
 
 ## Demos
 
-### AvroToPropertyGraphs
-
 * **GenPG**: uses an LLM to generate Hydra schemas and mappings based on tabular data sources. There is a demo video [here](https://drive.google.com/file/d/10HCElcG7n0tprOTdtX4bSa5yWYs08nV-/view?usp=sharing).
 * **AvroToPropertyGraphs**: transforms a specific Avro schema and matching sample JSON to a property graph representation
 * **MeteredEvaluation**: demonstrates term reduction with logging, e.g. for tracking usage or estimating cost
+
+### GenPG
+
+This demo provides an example of a hands-off graph generation workflow using an LLM for schema and transform design.
+See the demo video linked above to understand how the demo works.
+To run it yourself, you will need a small tabular dataset which illustrates the structure of your data.
+You can find example datasets in
+[src/main/python/hydra/demos/genpg/sales](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/data/genpg/sales)
+and [src/main/python/hydra/demos/genpg/health](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/data/genpg/health);
+the former is a reference dataset which is built into the workflow,
+and the latter is a stand-in for your own domain-specific dataset.
+Feel free to start with the provided `health` dataset, or insert your own from the beginning.
+
+While in the hydra-ext directory, start by generating a prompt based on these two datasets:
+
+```bash
+python3 src/main/python/hydra/demos/genpg/generate_prompt.py data/genpg/sources/health > data/genpg/prompt.txt
+```
+
+Now, take this prompt (`data/genpg/prompt.txt`; note that this is checked in to the repository for visibility, but your command will have overwritten it) and
+1. Copy it into your favorite LLM chat interface
+([ChatGPT](https://chatgpt.com), [Claude](https://claude.ai), etc.; Claude was used in the video). Then,
+2. Copy the LLM-generated files to their expected locations under `src/gen-main/haskell/Hydra/Ext/Demos/GenPG/Generated`.
+Just overwrite the files which are already checked in at that location.
+Feel free to use any file system integration available in your tool, if you want to avoid the tedium of manual copy-and-paste.
+
+Finally, enter GHCi using:
+```bash
+stack ghci
+```
+You will need to have installed [Haskell Tool Stack](https://docs.haskellstack.org/en/stable) ("Stack") first,
+as is also described in the Hydra-Haskell README.
+Once in the REPL, there are two built-in demo routines you can use,
+both of which run a Hydra transform to generate graph data in [GraphSON](https://github.com/apache/tinkerpop/blob/master/docs/src/dev/io/graphson.asciidoc),
+a property graph serialization format.
+You can then load these graphs into a TinkerPop-compatible graph database,
+into [G.V()](https://gdotv.com) for visualization, etc.
+The first function generates a graph based on the built-in reference dataset:
+```haskell
+generateExampleGraphSON
+```
+You will find the result at `data/genpg/sales.json`.
+The other function generates a graph based on the `health` dataset,
+or whatever dataset you have supplied instead:
+```haskell
+generateCopilotGraphSON
+```
+The result is written to `data/genpg/copilot.json`.
+
+And that's it! What you have just done is to:
+1. Teach the LLM how to write schemas and transforms in Hydra, using a specific reference dataset as an example.
+2. Show the LLM a new dataset, and ask it to generate a schema and transform.
+This is out of Hydra's control, so hopefully the LLM did a good job!
+3. Use your shiny new Hydra schema and transform to generate a property graph. This phase of the demo is completely deterministic, fast, and scalable.
+
+If you want to visualize your generated graph(s) in G.V(),
+simply open the desktop interface and load the GraphSON files when you create a new graph playground.
+You can re-load them with Gremlin commands like:
+
+```gremlin
+g.io("/path/to/hydra/hydra-ext/data/genpg/sales.json").read().iterate()
+g.io("/path/to/hydra/hydra-ext/data/genpg/copilot.json").read().iterate()
+```
+
+Run a Gremlin query like `g.E()`, and off you go.
+
+The Haskell sources of this demo are available [here](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/main/haskell/Hydra/Ext/Demos/GenPG).
+
+### AvroToPropertyGraphs
 
 To run the `AvroToPropertyGraphs` demo, first enter `stack ghci`, then:
 
