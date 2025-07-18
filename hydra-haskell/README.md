@@ -1,18 +1,22 @@
 # Hydra-Haskell
 
-Hydra is a type-aware data transformation toolkit which aims to be highly flexible and portable.
-It has its roots in graph databases and type theory, and provides APIs in Haskell and Java.
+Hydra is a functional programming language which aims to be highly flexible and portable.
+It has its roots in graph databases and type theory, and provides APIs in Haskell, Java, and Python.
 See the main Hydra [README](https://github.com/CategoricalData/hydra) for more details.
 This Haskell package contains Hydra's Haskell API and Haskell sources specifically.
 Releases are available [on Hackage](https://hackage.haskell.org/package/hydra).
 
 ## Build
 
-Haskell is the current source-of-truth language for Hydra, which means that most of the Hydra implementation is written either in "raw" Haskell or in a Haskell-based DSL.
-You can find the DSL-based sources [here](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Impl/Haskell/Sources);
-anything written in the DSL is also mapped into the generated Java and Scala sources.
+Haskell is Hydra's bootstrapping language, which means that,
+while the entire Hydra kernel is written in the Hydra language itself,
+the sources are written in a Haskell-based domain-specific language (DSL).
+You can find the DSL-based sources [here](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources);
+anything written in the DSL is also mapped into the generated Java and Python sources.
 You can find the generated Haskell sources [here](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/gen-main/haskell).
-To build Hydra-Haskell and enter the GHCi REPL, use:
+To build Hydra-Haskell and enter the GHCi REPL,
+first install the [Haskell Tool Stack](https://docs.haskellstack.org/en/stable) ("Stack"),
+and then use:
 
 ```bash
 stack ghci
