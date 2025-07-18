@@ -191,7 +191,7 @@ checkTypeOfApplications = H.describe "Applications" $ do
 checkTypeOfEliminations :: H.SpecWith ()
 checkTypeOfEliminations = H.describe "Eliminations" $ do
   checkTypeOfProductEliminations
-  checkTypeOfRecordEliminations
+--  checkTypeOfRecordEliminations
   checkTypeOfUnionEliminations
 --  checkTypeOfWrapEliminations TODO: restore me
 
@@ -814,6 +814,27 @@ checkTypeOfProductEliminations = H.describe "Product eliminations" $ do
              untuple 2 0 @@ pair (int32 2) (string "b")])
       (Types.list Types.int32)
 
+
+
+
+
+  -- TODO: temporary
+  H.describe "Temporary" $ do
+
+    expectTypeOf "simple polymorphic primitive"
+      (primitive _lists_head @@ list [int32 1, int32 2])
+      Types.int32
+    expectTypeOf "simple two-parameter primitive"
+      (primitive _lists_cons @@ int32 1 @@ list [int32 2, int32 3])
+      (Types.list Types.int32)
+    expectTypeOf "lists.map with lambda"
+      (primitive _lists_map @@ (lambda "x" $ primitive _math_add @@ var "x" @@ int32 1) @@ list [int32 1, int32 2])
+      (Types.list Types.int32)
+    expectTypeOf "lists.map with untuple - minimal"
+      (primitive _lists_map @@ (untuple 2 0))
+      (Types.forAlls ["t1", "t0"] $ Types.function (Types.list (Types.product [Types.var "t0", Types.var "t1"])) (Types.list (Types.var "t0")))
+
+
   H.describe "Higher-order projections" $ do
     expectTypeOf "map projection over list"
       (primitive _lists_map @@ (untuple 2 0) @@
@@ -831,6 +852,12 @@ checkTypeOfProductEliminations = H.describe "Product eliminations" $ do
       (Types.forAlls ["t1", "t0"] $ Types.function
         (Types.list (Types.product [Types.var "t0", Types.var "t1"]))
         (Types.list (Types.var "t1")))
+
+
+
+
+
+
 
   H.describe "Projections with mixed types" $ do
     expectTypeOf "projection from mixed tuple"
@@ -936,7 +963,238 @@ checkTypeOfRecords = H.describe "Records" $ do
 
 checkTypeOfRecordEliminations :: H.SpecWith ()
 checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
-  return ()  -- TODO: implement
+  H.describe "Simple record projections" $ do
+    expectTypeOf "project firstName from Person"
+      (project testTypePersonName (Name "firstName"))
+      (Types.function (Types.var "Person") Types.string)
+
+    expectTypeOf "project lastName from Person"
+      (project testTypePersonName (Name "lastName"))
+      (Types.function (Types.var "Person") Types.string)
+
+    expectTypeOf "project age from Person"
+      (project testTypePersonName (Name "age"))
+      (Types.function (Types.var "Person") Types.int32)
+
+    expectTypeOf "project lat from LatLon"
+      (project testTypeLatLonName (Name "lat"))
+      (Types.function (Types.var "LatLon") Types.float32)
+
+    expectTypeOf "project lon from LatLon"
+      (project testTypeLatLonName (Name "lon"))
+      (Types.function (Types.var "LatLon") Types.float32)
+
+  H.describe "Record projections applied to records" $ do
+    expectTypeOf "project firstName applied to person record"
+      (project testTypePersonName (Name "firstName") @@
+       record testTypePersonName [
+         field "firstName" (string "Alice"),
+         field "lastName" (string "Smith"),
+         field "age" (int32 30)])
+      Types.string
+
+    expectTypeOf "project age applied to person record"
+      (project testTypePersonName (Name "age") @@
+       record testTypePersonName [
+         field "firstName" (string "Bob"),
+         field "lastName" (string "Jones"),
+         field "age" (int32 25)])
+      Types.int32
+
+    expectTypeOf "project lat applied to LatLon record"
+      (project testTypeLatLonName (Name "lat") @@
+       record testTypeLatLonName [
+         field "lat" (float32 40.7128),
+         field "lon" (float32 (-74.0060))])
+      Types.float32
+
+  H.describe "Polymorphic record projections" $ do
+    expectTypeOf "project lat from polymorphic LatLonPoly"
+      (project testTypeLatLonPolyName (Name "lat"))
+      (Types.forAll "t0" $ Types.function (Types.apply (Types.var "LatLonPoly") (Types.var "t0")) (Types.var "t0"))
+
+    expectTypeOf "project lon from polymorphic LatLonPoly"
+      (project testTypeLatLonPolyName (Name "lon"))
+      (Types.forAll "t0" $ Types.function (Types.apply (Types.var "LatLonPoly") (Types.var "t0")) (Types.var "t0"))
+
+    expectTypeOf "project head from BuddyListA"
+      (project testTypeBuddyListAName (Name "head"))
+      (Types.forAll "t0" $ Types.function (Types.apply (Types.var "BuddyListA") (Types.var "t0")) (Types.var "t0"))
+
+    expectTypeOf "project tail from BuddyListA"
+      (project testTypeBuddyListAName (Name "tail"))
+      (Types.forAll "t0" $ Types.function
+        (Types.apply (Types.var "BuddyListA") (Types.var "t0"))
+        (Types.optional (Types.apply (Types.var "BuddyListB") (Types.var "t0"))))
+
+  H.describe "Polymorphic record projections applied" $ do
+    expectTypeOf "project lat from LatLonPoly with int32"
+      (project testTypeLatLonPolyName (Name "lat") @@
+       record testTypeLatLonPolyName [
+         field "lat" (int32 40),
+         field "lon" (int32 (-74))])
+      Types.int32
+
+    expectTypeOf "project lon from LatLonPoly with float64"
+      (project testTypeLatLonPolyName (Name "lon") @@
+       record testTypeLatLonPolyName [
+         field "lat" (float64 40.7128),
+         field "lon" (float64 (-74.0060))])
+      Types.float64
+
+    expectTypeOf "project head from BuddyListA with string"
+      (project testTypeBuddyListAName (Name "head") @@
+       record testTypeBuddyListAName [
+         field "head" (string "Alice"),
+         field "tail" (optional Nothing)])
+      Types.string
+
+  H.describe "Record projections with variables" $ do
+    expectTypeOf "project from lambda parameter"
+      (lambda "person" $ project testTypePersonName (Name "firstName") @@ var "person")
+      (Types.function (Types.var "Person") Types.string)
+
+    expectTypeOf "project from polymorphic lambda parameter"
+      (lambda "coords" $ project testTypeLatLonPolyName (Name "lat") @@ var "coords")
+      (Types.forAll "t0" $ Types.function (Types.apply (Types.var "LatLonPoly") (Types.var "t0")) (Types.var "t0"))
+
+    expectTypeOf "multiple projections from same record"
+      (lambda "person" $
+       tuple [project testTypePersonName (Name "firstName") @@ var "person",
+              project testTypePersonName (Name "lastName") @@ var "person"])
+      (Types.function (Types.var "Person") (Types.product [Types.string, Types.string]))
+
+  H.describe "Record projections in complex contexts" $ do
+    expectTypeOf "projection in let binding"
+      (lets ["person">: record testTypePersonName [
+               field "firstName" (string "Charlie"),
+               field "lastName" (string "Brown"),
+               field "age" (int32 35)],
+             "getName">: project testTypePersonName (Name "firstName")] $
+            var "getName" @@ var "person")
+      Types.string
+
+    expectTypeOf "projection in tuple"
+      (tuple [project testTypePersonName (Name "firstName"),
+              project testTypePersonName (Name "age")])
+      (Types.product [Types.function (Types.var "Person") Types.string,
+                      Types.function (Types.var "Person") Types.int32])
+
+    expectTypeOf "projection in list"
+      (list [project testTypePersonName (Name "firstName"),
+             project testTypePersonName (Name "lastName")])
+      (Types.list (Types.function (Types.var "Person") Types.string))
+
+  H.describe "Higher-order record projections" $ do
+    expectTypeOf "map projection over list of records"
+      (primitive _lists_map @@ (project testTypePersonName (Name "firstName")) @@
+       list [record testTypePersonName [
+               field "firstName" (string "Alice"),
+               field "lastName" (string "Smith"),
+               field "age" (int32 30)],
+             record testTypePersonName [
+               field "firstName" (string "Bob"),
+               field "lastName" (string "Jones"),
+               field "age" (int32 25)]])
+      (Types.list Types.string)
+
+    expectTypeOf "map polymorphic projection"
+      (primitive _lists_map @@ (project testTypeLatLonPolyName (Name "lat")) @@
+       list [record testTypeLatLonPolyName [
+               field "lat" (int32 40),
+               field "lon" (int32 (-74))],
+             record testTypeLatLonPolyName [
+               field "lat" (int32 34),
+               field "lon" (int32 (-118))]])
+      (Types.list Types.int32)
+
+    expectTypeOf "filter using projection"
+      (primitive _lists_filter @@
+       (lambda "person" $
+        primitive _equality_gt @@
+        (project testTypePersonName (Name "age") @@ var "person") @@
+        int32 30) @@
+       list [record testTypePersonName [
+               field "firstName" (string "Alice"),
+               field "lastName" (string "Smith"),
+               field "age" (int32 35)],
+             record testTypePersonName [
+               field "firstName" (string "Bob"),
+               field "lastName" (string "Jones"),
+               field "age" (int32 25)]])
+      (Types.list (Types.var "Person"))
+
+  H.describe "Recursive record projections" $ do
+    expectTypeOf "project head from IntList"
+      (project testTypeIntListName (Name "head"))
+      (Types.function (Types.var "IntList") Types.int32)
+
+    expectTypeOf "project tail from IntList"
+      (project testTypeIntListName (Name "tail"))
+      (Types.function (Types.var "IntList") (Types.optional (Types.var "IntList")))
+
+    expectTypeOf "project head applied to IntList"
+      (project testTypeIntListName (Name "head") @@
+       record testTypeIntListName [
+         field "head" (int32 42),
+         field "tail" (optional Nothing)])
+      Types.int32
+
+    expectTypeOf "nested projection from recursive record"
+      (lambda "intList" $
+       primitive _optionals_maybe @@
+       int32 0 @@
+       (project testTypeIntListName (Name "head")) @@
+       (project testTypeIntListName (Name "tail") @@ var "intList"))
+      (Types.function (Types.var "IntList") Types.int32)
+
+  H.describe "Record projections with mutual recursion" $ do
+    expectTypeOf "project head from BuddyListA"
+      (project testTypeBuddyListAName (Name "head"))
+      (Types.forAll "t0" $ Types.function (Types.apply (Types.var "BuddyListA") (Types.var "t0")) (Types.var "t0"))
+
+    expectTypeOf "project tail from BuddyListB"
+      (project testTypeBuddyListBName (Name "tail"))
+      (Types.forAll "t0" $ Types.function
+        (Types.apply (Types.var "BuddyListB") (Types.var "t0"))
+        (Types.optional (Types.apply (Types.var "BuddyListA") (Types.var "t0"))))
+
+    expectTypeOf "chained projections across mutual recursion"
+      (lambda "listA" $
+       primitive _optionals_maybe @@
+       optional Nothing @@
+       (lambda "listB" $
+        primitive _optionals_maybe @@
+        optional Nothing @@
+        (project testTypeBuddyListAName (Name "tail")) @@
+        (project testTypeBuddyListBName (Name "tail") @@ var "listB")) @@
+       (project testTypeBuddyListAName (Name "tail") @@ var "listA"))
+      (Types.forAll "t0" $ Types.function
+        (Types.apply (Types.var "BuddyListA") (Types.var "t0"))
+        (Types.optional (Types.apply (Types.var "BuddyListA") (Types.var "t0"))))
+
+  H.describe "Record projection composition" $ do
+    expectTypeOf "compose projections"
+      (lambda "person" $
+       primitive _strings_cat2 @@
+       (project testTypePersonName (Name "firstName") @@ var "person") @@
+       (project testTypePersonName (Name "lastName") @@ var "person"))
+      (Types.function (Types.var "Person") Types.string)
+
+    expectTypeOf "projection with arithmetic"
+      (lambda "person" $
+       primitive _math_add @@
+       (project testTypePersonName (Name "age") @@ var "person") @@
+       int32 1)
+      (Types.function (Types.var "Person") Types.int32)
+
+    expectTypeOf "record construction using string projection"
+     (lambda "person" $
+      record testTypePersonName [
+        field "firstName" (project testTypePersonName (Name "firstName") @@ var "person"),
+        field "lastName" (project testTypePersonName (Name "lastName") @@ var "person"),
+        field "age" (int32 0)])
+     (Types.function (Types.var "Person") (Types.var "Person"))
 
 checkTypeOfSets :: H.SpecWith ()
 checkTypeOfSets = H.describe "Sets" $ do
