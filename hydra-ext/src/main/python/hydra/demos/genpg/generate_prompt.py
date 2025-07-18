@@ -32,7 +32,7 @@ def run_demo_script(data_dir):
 
 def read_haskell_file(filename):
     """Read a Haskell file from the examples directory."""
-    base_path = "src/main/haskell/Hydra.Ext.Demos/GenPG"
+    base_path = "src/main/haskell/Hydra/Ext/Demos/GenPG"
     file_path = os.path.join(base_path, filename)
     
     if not os.path.exists(file_path):
