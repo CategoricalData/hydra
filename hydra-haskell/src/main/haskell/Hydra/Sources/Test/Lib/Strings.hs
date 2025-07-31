@@ -6,10 +6,20 @@ import Hydra.Dsl.Tests
 stringPrimitiveTests :: TestGroup
 stringPrimitiveTests = TestGroup "hydra.lib.strings primitives" Nothing groups []
   where
-    groups = [stringsCat, stringsCat2, stringsCharAt, stringsFromList,
-              stringsIntercalate, stringsLength, stringsLines, stringsNull,
-              stringsSplitOn, stringsToList, stringsToLower, stringsToUpper,
-              stringsUnlines]
+    groups = [
+      stringsCat,
+      stringsCat2,
+      stringsCharAt,
+      stringsFromList,
+      stringsIntercalate,
+      stringsLength,
+      stringsLines,
+      stringsNull,
+      stringsSplitOn,
+      stringsToList,
+      stringsToLower,
+      stringsToUpper,
+      stringsUnlines]
 
 stringsCat :: TestGroup
 stringsCat = TestGroup "cat" Nothing [] [
