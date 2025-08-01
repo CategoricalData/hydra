@@ -1,21 +1,5 @@
 module Hydra.TestUtils (
-  check,
-  checkLiteralAdapter,
-  checkFieldAdapter,
-  checkFloatAdapter,
-  checkIntegerAdapter,
-  checkDataAdapter,
-  checkSerdeRoundTrip,
-  checkSerialization,
-  eval,
-  expectInferenceFailure,
-  expectInferenceResult,
-  expectSuccess,
-  expectTypeOfResult,
-  shouldFail,
-  shouldSucceedWith,
-  strip,
-  termTestContext,
+  module Hydra.TestUtils,
   module Hydra.Staging.TestGraph,
 ) where
 
@@ -172,6 +156,24 @@ expectTypeOfResult desc types term expected = do
 
       -- typeOf is always called on System F terms
       (iterm, ts) <- inferTypeOf cx term
+      let vars = S.fromList $ typeSchemeVariables ts
+
+      typeOf cx vars types iterm
+
+-- TODO: temporary
+expectTypeOfResultDebug :: String -> M.Map Name Type -> Term -> Type -> H.Expectation
+expectTypeOfResultDebug desc types term expected = do
+    expectSuccess desc (ShowCore.type_ <$> result) (ShowCore.type_ expected)
+  where
+    result = do
+      cx <- graphToInferenceContext testGraph
+
+--      fail $ "Original term: " ++ ShowCore.term term
+
+      -- typeOf is always called on System F terms
+      (iterm, ts) <- inferTypeOfDebug cx term
+--      fail $ "iterm: " ++ ShowCore.term iterm ++ "\nts: " ++ ShowCore.typeScheme ts
+
       let vars = S.fromList $ typeSchemeVariables ts
 
       typeOf cx vars types iterm
