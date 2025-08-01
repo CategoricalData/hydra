@@ -148,8 +148,8 @@ checkTypeOfApplications = H.describe "Applications" $ do
             tuple [var "id" @@ int32 42, var "id" @@ string "hello"])
       (Types.product [Types.int32, Types.string])
     expectTypeOf "polymorphic const"
-      (lets ["const">: lambda "x" $ lambda "y" $ var "x"] $
-            var "const" @@ string "keep" @@ int32 999)
+      (lets ["const">: lambdas ["x", "y"] $ var "x"] $
+             var "const" @@ string "keep" @@ int32 999)
       Types.string
     expectTypeOf "polymorphic flip"
       (lets ["flip">: lambda "f" $ lambda "x" $ lambda "y" $ var "f" @@ var "y" @@ var "x"] $
@@ -191,9 +191,9 @@ checkTypeOfApplications = H.describe "Applications" $ do
 checkTypeOfEliminations :: H.SpecWith ()
 checkTypeOfEliminations = H.describe "Eliminations" $ do
   checkTypeOfProductEliminations
---  checkTypeOfRecordEliminations
+--  checkTypeOfRecordEliminations -- TODO: restore me
   checkTypeOfUnionEliminations
---  checkTypeOfWrapEliminations TODO: restore me
+  checkTypeOfWrapEliminations
 
 checkTypeOfFunctions :: H.SpecWith ()
 checkTypeOfFunctions = H.describe "Functions" $ do
@@ -214,13 +214,13 @@ checkTypeOfLambdas = H.describe "Lambdas" $ do
   H.describe "Multi-parameter lambdas" $ do
     expectTypeOf "two parameters"
       (lambda "x" $ lambda "y" $ var "x")
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.var "t0")))
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.var "t0")))
     expectTypeOf "three parameters"
       (lambda "x" $ lambda "y" $ lambda "z" $ var "y")
-      (Types.forAlls ["t2", "t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.function (Types.var "t2") (Types.var "t1"))))
+      (Types.forAlls ["t0", "t1", "t2"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.function (Types.var "t2") (Types.var "t1"))))
     expectTypeOf "parameter reuse"
       (lambda "x" $ lambda "y" $ tuple [var "x", var "x", var "y"])
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t0", Types.var "t1"])))
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t0", Types.var "t1"])))
 
   H.describe "Lambdas with operations" $ do
     expectTypeOf "lambda with primitive"
@@ -228,15 +228,15 @@ checkTypeOfLambdas = H.describe "Lambdas" $ do
       (Types.function Types.int32 Types.int32)
     expectTypeOf "lambda with application"
       (lambda "f" $ lambda "x" $ var "f" @@ var "x")
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.function (Types.var "t0") (Types.var "t1")) (Types.function (Types.var "t0") (Types.var "t1")))
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.function (Types.var "t0") (Types.var "t1")) (Types.function (Types.var "t0") (Types.var "t1")))
     expectTypeOf "lambda with construction"
       (lambda "x" $ lambda "y" $ tuple [var "x", var "y"])
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t1"])))
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t1"])))
 
   H.describe "Nested lambdas" $ do
     expectTypeOf "lambda returning lambda"
       (lambda "x" $ lambda "y" $ lambda "z" $ var "x")
-      (Types.forAlls ["t2", "t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.function (Types.var "t2") (Types.var "t0"))))
+      (Types.forAlls ["t0", "t1", "t2"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.function (Types.var "t2") (Types.var "t0"))))
     expectTypeOf "lambda with let binding"
       (lambda "x" $ lets ["y">: var "x"] $ var "y")
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
@@ -262,14 +262,14 @@ checkTypeOfLambdas = H.describe "Lambdas" $ do
   H.describe "Higher-order lambdas" $ do
     expectTypeOf "function composition"
       (lambda "f" $ lambda "g" $ lambda "x" $ var "f" @@ (var "g" @@ var "x"))
-      (Types.forAlls ["t2", "t1", "t0"] $ Types.function
+      (Types.forAlls ["t0", "t1", "t2"] $ Types.function
         (Types.function (Types.var "t0") (Types.var "t1"))
         (Types.function
           (Types.function (Types.var "t2") (Types.var "t0"))
           (Types.function (Types.var "t2") (Types.var "t1"))))
     expectTypeOf "function application"
       (lambda "f" $ lambda "x" $ var "f" @@ var "x")
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.function (Types.var "t0") (Types.var "t1")) (Types.function (Types.var "t0") (Types.var "t1")))
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.function (Types.var "t0") (Types.var "t1")) (Types.function (Types.var "t0") (Types.var "t1")))
     expectTypeOf "curried function"
       (lambda "x" $ lambda "y" $ lambda "z" $ primitive _logic_ifElse @@ var "x" @@ var "y" @@ var "z")
       (Types.forAll "t0" $ Types.function Types.boolean (Types.function (Types.var "t0") (Types.function (Types.var "t0") (Types.var "t0"))))
@@ -378,7 +378,7 @@ checkTypeOfLists = H.describe "Lists" $ do
       (Types.forAll "t0" $ Types.list $ Types.var "t0")
     expectTypeOf "pair of empty lists"
       (pair (list []) (list []))
-      (Types.forAlls ["t1", "t0"] $ Types.pair (Types.list $ Types.var "t0") (Types.list $ Types.var "t1"))
+      (Types.forAlls ["t0", "t1"] $ Types.pair (Types.list $ Types.var "t0") (Types.list $ Types.var "t1"))
     expectTypeOf "empty list in tuple"
       (tuple [list [], string "context"])
       (Types.forAll "t0" $ Types.product [Types.list $ Types.var "t0", Types.string])
@@ -500,7 +500,7 @@ checkTypeOfMaps = H.describe "Maps" $ do
   H.describe "Monomorphic maps" $ do
     expectTypeOf "empty map"
       (Terms.map M.empty)
-      (Types.forAlls ["t1", "t0"] $ Types.map (Types.var "t0") (Types.var "t1"))
+      (Types.forAlls ["t0", "t1"] $ Types.map (Types.var "t0") (Types.var "t1"))
     expectTypeOf "int to string map"
       (Terms.map $ M.fromList [(int32 1, string "one"),
                                (int32 2, string "two")])
@@ -522,7 +522,7 @@ checkTypeOfMaps = H.describe "Maps" $ do
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.map Types.string (Types.var "t0")))
     expectTypeOf "map from lambda both"
       (lambda "k" $ lambda "v" $ Terms.map $ M.singleton (var "k") (var "v"))
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.map (Types.var "t0") (Types.var "t1"))))
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.map (Types.var "t0") (Types.var "t1"))))
     expectTypeOf "map with repeated variables"
       (lambda "x" $ Terms.map $ M.singleton (var "x") (var "x"))
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.map (Types.var "t0") (Types.var "t0")))
@@ -579,7 +579,7 @@ checkTypeOfOptionals = H.describe "Optionals" $ do
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.optional $ Types.var "t0"))
     expectTypeOf "nothing from lambda"
       (lambda "x" $ optional Nothing)
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.optional $ Types.var "t1"))
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.optional $ Types.var "t1"))
     expectTypeOf "conditional optional"
       (lambda "x" $ lambda "flag" $
         primitive _logic_ifElse @@ var "flag" @@
@@ -633,7 +633,7 @@ checkTypeOfPrimitives = H.describe "Primitives" $ do
   H.describe "Nullary primitives" $ do
     expectTypeOf "empty map"
       (primitive _maps_empty)
-      (Types.forAlls ["t1", "t0"] $ Types.map (Types.var "t1") (Types.var "t0"))
+      (Types.forAlls ["t0", "t1"] $ Types.map (Types.var "t0") (Types.var "t1"))
     expectTypeOf "empty set"
       (primitive _sets_empty)
       (Types.forAll "t0" $ Types.set $ Types.var "t0")
@@ -658,9 +658,9 @@ checkTypeOfPrimitives = H.describe "Primitives" $ do
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.function (Types.list $ Types.var "t0") (Types.list $ Types.var "t0")))
     expectTypeOf "maps insert"
       (primitive _maps_insert)
-      (Types.forAlls ["t1", "t0"] $ Types.function
-        (Types.var "t1")
-        (Types.function (Types.var "t0") (Types.function (Types.map (Types.var "t1") (Types.var "t0")) (Types.map (Types.var "t1") (Types.var "t0")))))
+      (Types.forAlls ["t0", "t1"] $ Types.function
+        (Types.var "t0")
+        (Types.function (Types.var "t1") (Types.function (Types.map (Types.var "t0") (Types.var "t1")) (Types.map (Types.var "t0") (Types.var "t1")))))
 
   H.describe "Ternary primitives" $ do
     expectTypeOf "logic ifElse"
@@ -668,9 +668,9 @@ checkTypeOfPrimitives = H.describe "Primitives" $ do
       (Types.forAll "t0" $ Types.function Types.boolean (Types.function (Types.var "t0") (Types.function (Types.var "t0") (Types.var "t0"))))
     expectTypeOf "lists foldl"
       (primitive _lists_foldl)
-      (Types.forAlls ["t1", "t0"] $ Types.function
-        (Types.function (Types.var "t1") (Types.function (Types.var "t0") (Types.var "t1")))
-        (Types.function (Types.var "t1") (Types.function (Types.list $ Types.var "t0") (Types.var "t1"))))
+      (Types.forAlls ["t0", "t1"] $ Types.function
+        (Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.var "t0")))
+        (Types.function (Types.var "t0") (Types.function (Types.list $ Types.var "t1") (Types.var "t0"))))
 
   H.describe "Monomorphic vs polymorphic" $ do
     expectTypeOf "monomorphic math"
@@ -681,9 +681,9 @@ checkTypeOfPrimitives = H.describe "Primitives" $ do
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
     expectTypeOf "polymorphic map"
       (primitive _lists_map)
-      (Types.forAlls ["t1", "t0"] $ Types.function
-        (Types.function (Types.var "t1") (Types.var "t0"))
-        (Types.function (Types.list $ Types.var "t1") (Types.list $ Types.var "t0")))
+      (Types.forAlls ["t0", "t1"] $ Types.function
+        (Types.function (Types.var "t0") (Types.var "t1"))
+        (Types.function (Types.list $ Types.var "t0") (Types.list $ Types.var "t1")))
 
   H.describe "Higher-order primitives" $ do
     expectTypeOf "lists map function"
@@ -694,7 +694,8 @@ checkTypeOfPrimitives = H.describe "Primitives" $ do
       (Types.forAll "t0" $ Types.function (Types.function (Types.var "t0") Types.boolean) (Types.function (Types.list $ Types.var "t0") (Types.list $ Types.var "t0")))
     expectTypeOf "optionals maybe"
       (primitive _optionals_maybe)
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t1") (Types.function (Types.function (Types.var "t0") (Types.var "t1")) (Types.function (Types.optional $ Types.var "t0") (Types.var "t1"))))
+      (Types.forAlls ["t0", "t1"] $
+        Types.function (Types.var "t0") (Types.function (Types.function (Types.var "t1") (Types.var "t0")) (Types.function (Types.optional $ Types.var "t1") (Types.var "t0"))))
 
   H.describe "Primitives in complex contexts" $ do
     expectTypeOf "primitive composition"
@@ -731,7 +732,7 @@ checkTypeOfProducts = H.describe "Products" $ do
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.product [Types.var "t0", Types.string]))
     expectTypeOf "two variables"
       (lambda "x" $ lambda "y" $ tuple [var "x", var "y"])
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t1"])))
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t1"])))
     expectTypeOf "repeated variable"
       (lambda "x" $ tuple [var "x", var "x"])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.product [Types.var "t0", Types.var "t0"]))
@@ -745,6 +746,7 @@ checkTypeOfProducts = H.describe "Products" $ do
 
 checkTypeOfProductEliminations :: H.SpecWith ()
 checkTypeOfProductEliminations = H.describe "Product eliminations" $ do
+
   H.describe "Simple tuple projections" $ do
     expectTypeOf "projection from pair"
       (untuple 2 0 @@ pair (int32 42) (string "hello"))
@@ -765,38 +767,38 @@ checkTypeOfProductEliminations = H.describe "Product eliminations" $ do
   H.describe "Polymorphic tuple projections" $ do
     expectTypeOf "projection function"
       (untuple 2 0)
-      (Types.forAlls ["t1", "t0"] $ Types.function
+      (Types.forAlls ["t0", "t1"] $ Types.function
         (Types.product [Types.var "t0", Types.var "t1"])
         (Types.var "t0"))
     expectTypeOf "second projection function"
       (untuple 2 1)
-      (Types.forAlls ["t1", "t0"] $ Types.function
+      (Types.forAlls ["t0", "t1"] $ Types.function
         (Types.product [Types.var "t0", Types.var "t1"])
         (Types.var "t1"))
     expectTypeOf "triple projection function"
       (untuple 3 1)
-      (Types.forAlls ["t2", "t1", "t0"] $ Types.function
+      (Types.forAlls ["t0", "t1", "t2"] $ Types.function
         (Types.product [Types.var "t0", Types.var "t1", Types.var "t2"])
         (Types.var "t1"))
     expectTypeOf "projection from lambda"
       (lambda "pair" $ untuple 2 0 @@ var "pair")
-      (Types.forAlls ["t1", "t0"] $ Types.function
+      (Types.forAlls ["t0", "t1"] $ Types.function
         (Types.product [Types.var "t0", Types.var "t1"])
         (Types.var "t0"))
 
   H.describe "Projections with variables" $ do
     expectTypeOf "projection with variable tuple"
       (lambda "x" $ lambda "y" $ untuple 2 0 @@ pair (var "x") (var "y"))
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0")
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0")
         (Types.function (Types.var "t1") (Types.var "t0")))
     expectTypeOf "projection preserves polymorphism"
       (lambda "pair" $ pair (untuple 2 0 @@ var "pair") (untuple 2 1 @@ var "pair"))
-      (Types.forAlls ["t1", "t0"] $ Types.function
+      (Types.forAlls ["t0", "t1"] $ Types.function
         (Types.product [Types.var "t0", Types.var "t1"])
         (Types.product [Types.var "t0", Types.var "t1"]))
     expectTypeOf "nested projection"
       (lambda "nested" $ untuple 2 0 @@ (untuple 2 1 @@ var "nested"))
-      (Types.forAlls ["t2", "t1", "t0"] $ Types.function
+      (Types.forAlls ["t0", "t1", "t2"] $ Types.function
         (Types.product [Types.var "t0", Types.product [Types.var "t1", Types.var "t2"]])
         (Types.var "t1"))
 
@@ -814,51 +816,6 @@ checkTypeOfProductEliminations = H.describe "Product eliminations" $ do
              untuple 2 0 @@ pair (int32 2) (string "b")])
       (Types.list Types.int32)
 
-
-
-
-
-  -- TODO: temporary
-  H.describe "Temporary" $ do
-
-    expectTypeOf "simple polymorphic primitive"
-      (primitive _lists_head @@ list [int32 1, int32 2])
-      Types.int32
-    expectTypeOf "simple two-parameter primitive"
-      (primitive _lists_cons @@ int32 1 @@ list [int32 2, int32 3])
-      (Types.list Types.int32)
-    expectTypeOf "lists.map with lambda"
-      (primitive _lists_map @@ (lambda "x" $ primitive _math_add @@ var "x" @@ int32 1) @@ list [int32 1, int32 2])
-      (Types.list Types.int32)
-    expectTypeOf "lists.map with untuple - minimal"
-      (primitive _lists_map @@ (untuple 2 0))
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.list (Types.product [Types.var "t0", Types.var "t1"])) (Types.list (Types.var "t0")))
-
-
-  H.describe "Higher-order projections" $ do
-    expectTypeOf "map projection over list"
-      (primitive _lists_map @@ (untuple 2 0) @@
-       list [pair (int32 1) (string "a"), pair (int32 2) (string "b")])
-      (Types.list Types.int32)
-    expectTypeOf "projection composition"
-      (lets ["getFirst">: untuple 2 0,
-             "getSecond">: untuple 2 1] $
-            lambda "pair" $ pair (var "getFirst" @@ var "pair") (var "getSecond" @@ var "pair"))
-      (Types.forAlls ["t1", "t0"] $ Types.function
-        (Types.product [Types.var "t0", Types.var "t1"])
-        (Types.product [Types.var "t0", Types.var "t1"]))
-    expectTypeOf "partial application of projection"
-      (primitive _lists_map @@ (untuple 2 1))
-      (Types.forAlls ["t1", "t0"] $ Types.function
-        (Types.list (Types.product [Types.var "t0", Types.var "t1"]))
-        (Types.list (Types.var "t1")))
-
-
-
-
-
-
-
   H.describe "Projections with mixed types" $ do
     expectTypeOf "projection from mixed tuple"
       (untuple 4 2 @@ tuple4 (int32 1) (string "test") (boolean True) (float32 3.14))
@@ -873,6 +830,13 @@ checkTypeOfProductEliminations = H.describe "Product eliminations" $ do
     expectTypeOf "projection with function result"
       (untuple 2 1 @@ pair (int32 42) (lambda "x" $ var "x"))
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
+
+  H.describe "Projections with primitive functions" $ do
+
+    expectTypeOf "lists.map with untuple"
+      (primitive _lists_map @@ (untuple 2 0))
+      (Types.forAlls ["t0", "t1"] $
+        Types.function (Types.list (Types.product [Types.var "t0", Types.var "t1"])) (Types.list (Types.var "t0")))
 
 checkTypeOfRecords :: H.SpecWith ()
 checkTypeOfRecords = H.describe "Records" $ do
@@ -1307,7 +1271,7 @@ checkTypeOfVariables = H.describe "Variables" $ do
   H.describe "Variable scoping" $ do
     expectTypeOf "lambda parameter"
       (lambda "x" $ lambda "y" $ var "x")
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.var "t0")))
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.var "t0")))
     expectTypeOf "let binding scope"
       (lets ["x">: int32 1] $
        lets ["y">: string "hello"] $
@@ -1322,7 +1286,7 @@ checkTypeOfVariables = H.describe "Variables" $ do
        lets ["y">: var "x"] $
             lambda "z" $
             tuple [var "x", var "y", var "z"])
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t0", Types.var "t1"])))
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t0", Types.var "t1"])))
 
   H.describe "Polymorphic variables" $ do
     expectTypeOf "polymorphic function"
@@ -1336,7 +1300,8 @@ checkTypeOfVariables = H.describe "Variables" $ do
     expectTypeOf "higher order polymorphic"
       (lets ["apply">: lambda "f" $ lambda "x" $ var "f" @@ var "x"] $
             var "apply")
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.function (Types.var "t0") (Types.var "t1")) (Types.function (Types.var "t0") (Types.var "t1")))
+      (Types.forAlls ["t0", "t1"] $
+        Types.function (Types.function (Types.var "t0") (Types.var "t1")) (Types.function (Types.var "t0") (Types.var "t1")))
 
   H.describe "Variables in complex contexts" $ do
     expectTypeOf "variable in record"
@@ -1352,7 +1317,7 @@ checkTypeOfVariables = H.describe "Variables" $ do
     expectTypeOf "variable in map"
       (lambda "key" $ lambda "value" $
        Terms.map $ M.singleton (var "key") (var "value"))
-      (Types.forAlls ["t1", "t0"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.map (Types.var "t0") (Types.var "t1"))))
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.map (Types.var "t0") (Types.var "t1"))))
     expectTypeOf "variable in optional"
       (lambda "x" $ optional $ Just $ var "x")
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.optional $ Types.var "t0"))
@@ -1485,6 +1450,9 @@ checkTypeOfWrapEliminations = H.describe "Wrap eliminations" $ do
 
 expectTypeOf :: String -> Term -> Type -> H.SpecWith ()
 expectTypeOf desc term typ = H.it desc $ withDefaults expectTypeOfResult desc term typ
+
+expectTypeOfDebug :: String -> Term -> Type -> H.SpecWith ()
+expectTypeOfDebug desc term typ = H.it desc $ withDefaults expectTypeOfResultDebug desc term typ
 
 typeOfShouldFail :: String -> M.Map Name Type -> Term -> H.SpecWith ()
 typeOfShouldFail desc types term = H.it desc $ shouldFail $ do
