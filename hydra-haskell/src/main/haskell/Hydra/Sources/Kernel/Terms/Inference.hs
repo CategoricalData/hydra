@@ -780,56 +780,51 @@ inferTypeOfMapDef = define "inferTypeOfMap" $
 inferTypeOfOptionalDef :: TElement (InferenceContext -> Maybe Term -> Flow s InferenceResult)
 inferTypeOfOptionalDef = define "inferTypeOfOptional" $
   doc "Infer the type of an optional" $
-  lambdas ["cx", "m"] $ lets [
-    "trmCons">: lambda "terms" $
-      Logic.ifElse (Lists.null $ var "terms")
-        (Core.termOptional nothing)
-        (Core.termOptional $ just $ Lists.head $ var "terms")] $
-    ref inferTypeOfCollectionDef
-      @@ var "cx"
-      @@ (unaryFunction Core.typeOptional)
-      @@ var "trmCons"
-      @@ string "optional element"
-      @@ (Optionals.maybe (list []) (unaryFunction Lists.singleton) $ var "m")
+  "cx" ~>
+  "m" ~>
+  "trmCons" <~ ("terms" ~> Logic.ifElse (Lists.null $ var "terms")
+    (Core.termOptional nothing)
+    (Core.termOptional $ just $ Lists.head $ var "terms")) $
+  ref inferTypeOfCollectionDef
+    @@ var "cx"
+    @@ (unaryFunction Core.typeOptional)
+    @@ var "trmCons"
+    @@ string "optional element"
+    @@ (Optionals.maybe (list []) (unaryFunction Lists.singleton) $ var "m")
 
 inferTypeOfPrimitiveDef :: TElement (InferenceContext -> Name -> Flow s InferenceResult)
 inferTypeOfPrimitiveDef = define "inferTypeOfPrimitive" $
   doc "Infer the type of a primitive function" $
-  lambdas ["cx", "name"] $
-    Optionals.maybe
-      (Flows.fail $ Strings.cat2 (string "No such primitive: ") (Core.unName $ var "name"))
-      (lambda "scheme" $ binds [
-        "ts">: ref instantiateTypeSchemeDef @@ var "scheme"] $ lets [
-        "vars">: Core.typeSchemeVariables $ var "ts",
-        "itype">: Core.typeSchemeType $ var "ts",
-        "iterm">: Lists.foldl
-          (lambdas ["t", "v"] $ Core.termTypeApplication $ Core.typedTerm (var "t") (Core.typeVariable $ var "v"))
-          (Core.termFunction $ Core.functionPrimitive $ var "name")
-          -- Note: the order of variables is confirmed to be correct.
-          -- E.g. ∀[k,v].map<k, v>) instantiates to (∀[t1,t2].map<t1, t2>),
-          -- and the inferred term is then hydra.lib.maps.empty!⟨t1⟩⟨t2⟩, i.e. (hydra.lib.maps.empty!⟨t1⟩)⟨t2⟩
-          (var "vars")] $
-        ref yieldCheckedDef @@ var "cx" @@ var "vars" @@ var "iterm" @@ var "itype" @@ ref Substitution.idTypeSubstDef)
---        Flows.fail $ Strings.cat $ list [
---          "scheme:",
---          ref ShowCore.typeSchemeDef @@ var "scheme",
---          ", ts: ",
---          ref ShowCore.typeSchemeDef @@ var "ts",
---          ", iterm: ",
---          ref ShowCore.termDef @@ var "iterm"])
-      (Maps.lookup (var "name") (Typing.inferenceContextPrimitiveTypes $ var "cx"))
+  "cx" ~>
+  "name" ~>
+  Optionals.maybe
+    (Flows.fail $ Strings.cat2 (string "No such primitive: ") (Core.unName $ var "name"))
+    ( "scheme" ~>
+      "ts" <<~ ref instantiateTypeSchemeDef @@ var "scheme" $
+      "vars" <~ Core.typeSchemeVariables (var "ts") $
+      "itype" <~ Core.typeSchemeType (var "ts") $
+      "iterm" <~ Lists.foldl
+        ("t" ~> "v" ~> Core.termTypeApplication $ Core.typedTerm (var "t") (Core.typeVariable $ var "v"))
+        (Core.termFunction $ Core.functionPrimitive $ var "name")
+        -- Note: the order of variables is confirmed to be correct.
+        -- E.g. ∀[k,v].map<k, v>) instantiates to (∀[t1,t2].map<t1, t2>),
+        -- and the inferred term is then hydra.lib.maps.empty!⟨t1⟩⟨t2⟩, i.e. (hydra.lib.maps.empty!⟨t1⟩)⟨t2⟩
+        (var "vars") $
+      ref yieldCheckedDef @@ var "cx" @@ var "vars" @@ var "iterm" @@ var "itype" @@ ref Substitution.idTypeSubstDef)
+    (Maps.lookup (var "name") (Typing.inferenceContextPrimitiveTypes $ var "cx"))
 
 inferTypeOfProductDef :: TElement (InferenceContext -> [Term] -> Flow s InferenceResult)
 inferTypeOfProductDef = define "inferTypeOfProduct" $
   doc "Infer the type of a product (tuple)" $
-  lambdas ["cx", "els"] $
-    Flows.map
-      (lambda "results" $ lets [
-        "iterms">: first $ var "results",
-        "itypes">: first $ second $ var "results",
-        "isubst">: second $ second $ var "results"] $
-        ref yieldDef @@ (Core.termProduct $ var "iterms") @@ (Core.typeProduct $ var "itypes") @@ var "isubst")
-      (ref inferManyDef @@ var "cx" @@ (Lists.map (lambda "e" $ pair (var "e") (string "tuple element")) $ var "els"))
+  "cx" ~>
+  "els" ~>
+  Flows.map
+    ( "results" ~>
+      "iterms" <~ first (var "results") $
+      "itypes" <~ first (second $ var "results") $
+      "isubst" <~ second (second $ var "results") $
+      ref yieldDef @@ (Core.termProduct $ var "iterms") @@ (Core.typeProduct $ var "itypes") @@ var "isubst")
+    (ref inferManyDef @@ var "cx" @@ (Lists.map ("e" ~> pair (var "e") (string "tuple element")) $ var "els"))
 
 inferTypeOfProjectionDef :: TElement (InferenceContext -> Projection -> Flow s InferenceResult)
 inferTypeOfProjectionDef = define "inferTypeOfProjection" $
@@ -855,65 +850,70 @@ inferTypeOfProjectionDef = define "inferTypeOfProjection" $
 inferTypeOfRecordDef :: TElement (InferenceContext -> Record -> Flow s InferenceResult)
 inferTypeOfRecordDef = define "inferTypeOfRecord" $
   doc "Infer the type of a record" $
-  lambdas ["cx", "record"] $ lets [
-    "tname">: Core.recordTypeName $ var "record",
-    "fields">: Core.recordFields $ var "record",
-    "fnames">: Lists.map (unaryFunction Core.fieldName) (var "fields")] $ binds [
-    "schemaType">: ref requireSchemaTypeDef @@ var "cx" @@ var "tname",
-    "results">: ref inferManyDef @@ var "cx" @@
-      Lists.map (lambda "f" $ pair (Core.fieldTerm $ var "f")
-        (Strings.cat2 (string "field ") (Core.unName $ Core.fieldName $ var "f"))) (var "fields")] $ lets [
-    "svars">: Core.typeSchemeVariables $ var "schemaType",
-    "styp">: Core.typeSchemeType $ var "schemaType",
-    "iterms">: first $ var "results",
-    "itypes">: first $ second $ var "results",
-    "isubst">: second $ second $ var "results",
-    "ityp">: Core.typeRecord $ Core.rowType (var "tname") $
-      Lists.zipWith (lambdas ["n", "t"] $ Core.fieldType (var "n") (var "t")) (var "fnames") (var "itypes")] $
-    ref mapConstraintsDef @@ var "cx" @@
-      (lambda "subst" $ ref yieldDef
-        @@ (Core.termRecord $ Core.record (var "tname") $
-            Lists.zipWith (lambdas ["n", "t"] $ Core.field (var "n") (var "t")) (var "fnames") (var "iterms"))
-        @@ (ref nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
-        @@ (ref Substitution.composeTypeSubstDef @@ var "isubst" @@ var "subst")) @@
-      list [Typing.typeConstraint (var "styp") (var "ityp") (string "schema type of record")]
+  "cx" ~>
+  "record" ~>
+  "tname" <~ Core.recordTypeName (var "record") $
+  "fields" <~ Core.recordFields (var "record") $
+  "fnames" <~ Lists.map (unaryFunction Core.fieldName) (var "fields") $
+  "schemaType" <<~ ref requireSchemaTypeDef @@ var "cx" @@ var "tname" $
+  "results" <<~ ref inferManyDef @@ var "cx" @@ Lists.map
+    ("f" ~> pair
+      (Core.fieldTerm $ var "f")
+      (Strings.cat2 (string "field ") (Core.unName $ Core.fieldName $ var "f")))
+    (var "fields") $
+  "svars" <~ Core.typeSchemeVariables (var "schemaType") $
+  "styp" <~ Core.typeSchemeType (var "schemaType") $
+  "iterms" <~ first (var "results") $
+  "itypes" <~ first (second $ var "results") $
+  "isubst" <~ second (second $ var "results") $
+  "ityp" <~ Core.typeRecord (Core.rowType (var "tname") $
+      Lists.zipWith ("n" ~> "t" ~> Core.fieldType (var "n") (var "t")) (var "fnames") (var "itypes")) $
+  ref mapConstraintsDef @@ var "cx" @@
+    ("subst" ~> ref yieldDef
+      @@ (Core.termRecord $ Core.record (var "tname") $ Lists.zipWith
+        ("n" ~> "t" ~> Core.field (var "n") (var "t"))
+        (var "fnames")
+        (var "iterms"))
+      @@ (ref nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
+      @@ (ref Substitution.composeTypeSubstDef @@ var "isubst" @@ var "subst")) @@
+    list [Typing.typeConstraint (var "styp") (var "ityp") (string "schema type of record")]
 
 inferTypeOfSetDef :: TElement (InferenceContext -> S.Set Term -> Flow s InferenceResult)
 inferTypeOfSetDef = define "inferTypeOfSet" $
   doc "Infer the type of a set" $
-  lambdas ["cx", "s"] $
-    ref inferTypeOfCollectionDef
-      @@ var "cx"
-      @@ (unaryFunction Core.typeSet)
-      @@ (lambda "terms" $ Core.termSet $ Sets.fromList $ var "terms")
-      @@ string "set element"
-      @@ (Sets.toList $ var "s")
+  "cx" ~>
+  "s" ~>
+  ref inferTypeOfCollectionDef
+    @@ var "cx"
+    @@ (unaryFunction Core.typeSet)
+    @@ (lambda "terms" $ Core.termSet $ Sets.fromList $ var "terms")
+    @@ string "set element"
+    @@ (Sets.toList $ var "s")
 
 inferTypeOfSumDef :: TElement (InferenceContext -> Sum -> Flow s InferenceResult)
 inferTypeOfSumDef = define "inferTypeOfSum" $
   doc "Infer the type of a sum type" $
-  lambdas ["cx", "sum"] $ lets [
-  "i">: Core.sumIndex $ var "sum",
-  "s">: Core.sumSize $ var "sum",
-  "term">: Core.sumTerm $ var "sum"] $ binds [
-  "result">: ref inferTypeOfTermDef @@ var "cx" @@ var "term" @@ string "sum term"] $ lets [
-  "iterm">: Typing.inferenceResultTerm $ var "result",
-  "ityp">: Typing.inferenceResultType $ var "result",
-  "isubst">: Typing.inferenceResultSubst $ var "result",
-  "varOrTerm">: lambda "t" $ lambda "j" $
+  "cx" ~>
+  "sum" ~>
+  "i" <~ Core.sumIndex (var "sum") $
+  "s" <~ Core.sumSize (var "sum") $
+  "term" <~ Core.sumTerm (var "sum") $
+  "result" <<~ ref inferTypeOfTermDef @@ var "cx" @@ var "term" @@ string "sum term" $
+  "iterm" <~ Typing.inferenceResultTerm (var "result") $
+  "ityp" <~ Typing.inferenceResultType (var "result") $
+  "isubst" <~ Typing.inferenceResultSubst (var "result") $
+  "varOrTerm" <~ ("t" ~> "j" ~>
     Logic.ifElse (Equality.equal (var "i") (var "j"))
       (Flows.pure $ Mantle.eitherLeft $ var "t")
-      (Flows.map (unaryFunction Mantle.eitherRight) $ ref freshNameDef)] $ binds [
-  "vars">: Flows.mapList (var "varOrTerm" @@ var "ityp") $
-    Math.range (int32 0) (Math.sub (var "s") (int32 1))] $ lets [
-      "toType">: lambda "e" $
-        cases _Either (var "e") Nothing [
-          _Either_left>>: lambda "t" $ var "t",
-          _Either_right>>: lambda "v" $ Core.typeVariable $ var "v"]] $
-  Flows.pure $ ref yieldDef
-    @@ (Core.termSum $ Core.sum (var "i") (var "s") (var "iterm"))
-    @@ (Core.typeSum $ Lists.map (var "toType") (var "vars"))
-    @@ var "isubst"
+      (Flows.map (unaryFunction Mantle.eitherRight) $ ref freshNameDef)) $
+  "vars" <<~ Flows.mapList (var "varOrTerm" @@ var "ityp") (Math.range (int32 0) (Math.sub (var "s") (int32 1))) $
+  "toType" <~ ("e" ~> cases _Either (var "e") Nothing [
+      _Either_left>>: "t" ~> var "t",
+      _Either_right>>: "v" ~> Core.typeVariable $ var "v"]) $
+  Flows.pure (ref yieldDef
+    @@ Core.termSum (Core.sum (var "i") (var "s") (var "iterm"))
+    @@ Core.typeSum (Lists.map (var "toType") (var "vars"))
+    @@ var "isubst")
 
 inferTypeOfTermDef :: TElement (InferenceContext -> Term -> String -> Flow s InferenceResult)
 inferTypeOfTermDef = define "inferTypeOfTerm" $

@@ -45,10 +45,25 @@ fname >>: d = Field fname (unTTerm d)
 
 -- * Fundamentals
 
+infixr 0 ~>
+(~>) :: String -> TTerm x -> TTerm (a -> b)
+name ~> body = lambda name body
+
+infixl 1 <~
+(<~) :: String -> TTerm a -> TTerm b -> TTerm b
+name <~ value = let1 name value
+
+infixl 1 <<~
+(<<~) :: String -> TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
+name <<~ def = bind name def
+
 -- | Apply a function to an argument
 -- Example: apply (var "add") (int32 1)
 apply :: TTerm (a -> b) -> TTerm a -> TTerm b
 apply (TTerm lhs) (TTerm rhs) = TTerm $ Terms.apply lhs rhs
+
+let1 :: String -> TTerm a -> TTerm b -> TTerm b
+let1 name (TTerm value) (TTerm env) = TTerm $ TermLet $ Let [LetBinding (Name name) value Nothing] env
 
 -- | Create a let expression with multiple bindings
 -- Example: lets ["x">: int32 1, "y">: int32 2] (var "add" @@ var "x" @@ var "y")
