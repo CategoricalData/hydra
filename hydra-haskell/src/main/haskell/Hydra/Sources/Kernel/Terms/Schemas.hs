@@ -175,11 +175,11 @@ fieldTypesDef = define "fieldTypes" $
       _Type_record>>: lambda "rt" $ Flows.pure $ var "toMap" @@ Core.rowTypeFields (var "rt"),
       _Type_union>>: lambda "rt" $ Flows.pure $ var "toMap" @@ Core.rowTypeFields (var "rt"),
       _Type_variable>>: lambda "name" $
-        ref Monads.withTraceDef @@ (Strings.cat2 (string "field types of ") (Core.unName $ var "name")) @@
-          (Flows.bind (ref Lexical.requireElementDef @@ var "name") $
-            lambda "el" $
-              Flows.bind (ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")) $
-                ref fieldTypesDef)]
+        trace (Strings.cat2 (string "field types of ") (Core.unName $ var "name")) $
+        Flows.bind (ref Lexical.requireElementDef @@ var "name") $
+          lambda "el" $
+            Flows.bind (ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")) $
+              ref fieldTypesDef]
     @@ (ref Rewriting.deannotateTypeDef @@ var "t")
 
 fullyStripTypeDef :: TElement (Type -> Type)
@@ -265,9 +265,9 @@ requireTypeDef :: TElement (Name -> Flow Graph Type)
 requireTypeDef = define "requireType" $
   doc "Require a type by name" $
   lambda "name" $
-    ref Monads.withTraceDef @@ (Strings.cat2 (string "require type ") (Core.unName $ var "name")) @@
-      (Flows.bind (ref Lexical.withSchemaContextDef @@ (ref Lexical.requireElementDef @@ var "name")) $
-        lambda "el" $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el"))
+  trace (Strings.cat2 (string "require type ") (Core.unName $ var "name")) $
+  Flows.bind (ref Lexical.withSchemaContextDef @@ (ref Lexical.requireElementDef @@ var "name")) $
+    lambda "el" $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")
 
 requireUnionTypeDef :: TElement (Name -> Flow Graph RowType)
 requireUnionTypeDef = define "requireUnionType" $
@@ -349,24 +349,24 @@ topologicalSortTypeDefinitionsDef = define "topologicalSortTypeDefinitions" $
 typeDependenciesDef :: TElement (Bool -> (Type -> Type) -> Name -> Flow Graph (M.Map Name Type))
 typeDependenciesDef = define "typeDependencies" $
   doc "Get all type dependencies for a given type name" $
-  lambda "withSchema" $ lambda "transform" $ lambda "name" $ lets [
-    "requireType">: lambda "name" $
-      ref Monads.withTraceDef @@ (Strings.cat2 (string "type dependencies of ") (Core.unName $ var "name")) @@
-        (Flows.bind (ref Lexical.requireElementDef @@ var "name") $
-          lambda "el" $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")),
-    "toPair">: lambda "name" $
-      Flows.bind (var "requireType" @@ var "name") $
-        lambda "typ" $ Flows.pure $ pair (var "name") (var "transform" @@ var "typ"),
-    "deps">: lambda "seeds" $ lambda "names" $
-      Logic.ifElse (Sets.null $ var "seeds")
-        (Flows.pure $ var "names")
-        (Flows.bind (Flows.mapList (var "toPair") $ Sets.toList $ var "seeds") $
-          lambda "pairs" $ lets [
-            "newNames">: Maps.union (var "names") $ Maps.fromList $ var "pairs",
-            "refs">: Lists.foldl (binaryFunction Sets.union) Sets.empty $ Lists.map
-              (lambda "pair" $ ref Rewriting.typeDependencyNamesDef @@ var "withSchema" @@ second (var "pair"))
-              (var "pairs"),
-            "visited">: Sets.fromList $ Maps.keys $ var "names",
-            "newSeeds">: Sets.difference (var "refs") (var "visited")]
-            $ var "deps" @@ var "newSeeds" @@ var "newNames")]
-    $ var "deps" @@ Sets.singleton (var "name") @@ Maps.empty
+  lambdas ["withSchema", "transform", "name"] $ lets [
+  "requireType">: lambda "name" $
+    trace (Strings.cat2 (string "type dependencies of ") (Core.unName $ var "name")) $
+    Flows.bind (ref Lexical.requireElementDef @@ var "name") $
+      lambda "el" $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el"),
+  "toPair">: lambda "name" $
+    Flows.bind (var "requireType" @@ var "name") $
+      lambda "typ" $ Flows.pure $ pair (var "name") (var "transform" @@ var "typ"),
+  "deps">: lambda "seeds" $ lambda "names" $
+    Logic.ifElse (Sets.null $ var "seeds")
+      (Flows.pure $ var "names")
+      (Flows.bind (Flows.mapList (var "toPair") $ Sets.toList $ var "seeds") $
+        lambda "pairs" $ lets [
+          "newNames">: Maps.union (var "names") $ Maps.fromList $ var "pairs",
+          "refs">: Lists.foldl (binaryFunction Sets.union) Sets.empty $ Lists.map
+            (lambda "pair" $ ref Rewriting.typeDependencyNamesDef @@ var "withSchema" @@ second (var "pair"))
+            (var "pairs"),
+          "visited">: Sets.fromList $ Maps.keys $ var "names",
+          "newSeeds">: Sets.difference (var "refs") (var "visited")]
+          $ var "deps" @@ var "newSeeds" @@ var "newNames")] $
+    var "deps" @@ Sets.singleton (var "name") @@ Maps.empty

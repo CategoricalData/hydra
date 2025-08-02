@@ -192,7 +192,7 @@ checkTypeOfApplications = H.describe "Applications" $ do
 checkTypeOfEliminations :: H.SpecWith ()
 checkTypeOfEliminations = H.describe "Eliminations" $ do
   checkTypeOfProductEliminations
-  checkTypeOfRecordEliminations -- TODO: restore me
+  checkTypeOfRecordEliminations
   checkTypeOfUnionEliminations
   checkTypeOfWrapEliminations
 
@@ -1234,7 +1234,78 @@ checkTypeOfSums = H.describe "Sums" $ do
 
 checkTypeOfUnions :: H.SpecWith ()
 checkTypeOfUnions = H.describe "Unions" $ do
-  return ()  -- TODO: implement
+  H.describe "Simple union injections" $ do
+    expectTypeOf "inject into Comparison lessThan variant"
+      (unitVariant testTypeComparisonName (Name "lessThan"))
+      (Types.var "Comparison")
+    expectTypeOf "inject into Comparison equalTo variant"
+      (unitVariant testTypeComparisonName (Name "equalTo"))
+      (Types.var "Comparison")
+    expectTypeOf "inject into Comparison greaterThan variant"
+      (unitVariant testTypeComparisonName (Name "greaterThan"))
+      (Types.var "Comparison")
+
+  H.describe "Union injections with data" $ do
+    expectTypeOf "inject into Number int variant"
+      (variant testTypeNumberName (Name "int") (int32 42))
+      (Types.var "Number")
+    expectTypeOf "inject into Number float variant"
+      (variant testTypeNumberName (Name "float") (float32 3.14))
+      (Types.var "Number")
+    expectTypeOf "inject into Timestamp unixTimeMillis variant"
+      (variant testTypeTimestampName (Name "unixTimeMillis") (uint64 1609459200000))
+      (Types.var "Timestamp")
+    expectTypeOf "inject into Timestamp date variant"
+      (variant testTypeTimestampName (Name "date") (string "2021-01-01"))
+      (Types.var "Timestamp")
+
+  H.describe "Polymorphic union injections" $ do
+    expectTypeOf "inject person into PersonOrSomething"
+      (variant testTypePersonOrSomethingName (Name "person")
+        (record testTypePersonName [
+          field "firstName" (string "Alice"),
+          field "lastName" (string "Smith"),
+          field "age" (int32 30)]))
+      (Types.apply (Types.var "PersonOrSomething") (Types.var "Person"))
+    expectTypeOf "inject string into PersonOrSomething other variant"
+      (variant testTypePersonOrSomethingName (Name "other") (string "something else"))
+      (Types.apply (Types.var "PersonOrSomething") Types.string)
+    expectTypeOf "inject int into PersonOrSomething other variant"
+      (variant testTypePersonOrSomethingName (Name "other") (int32 42))
+      (Types.apply (Types.var "PersonOrSomething") Types.int32)
+
+  H.describe "Polymorphic recursive union injections" $ do
+    expectTypeOf "inject boolean into UnionPolymorphicRecursive"
+      (variant testTypeUnionPolymorphicRecursiveName (Name "bool") (boolean True))
+      (Types.forAll "t0" $ Types.apply (Types.var "UnionPolymorphicRecursive") (Types.var "t0"))
+    expectTypeOf "inject string value into UnionPolymorphicRecursive"
+      (variant testTypeUnionPolymorphicRecursiveName (Name "value") (string "test"))
+      (Types.apply (Types.var "UnionPolymorphicRecursive") Types.string)
+    expectTypeOf "inject int value into UnionPolymorphicRecursive"
+      (variant testTypeUnionPolymorphicRecursiveName (Name "value") (int32 123))
+      (Types.apply (Types.var "UnionPolymorphicRecursive") Types.int32)
+
+  H.describe "Polymorphic unions from lambda" $ do
+    expectTypeOf "lambda creating PersonOrSomething other variant"
+      (lambda "x" $ variant testTypePersonOrSomethingName (Name "other") (var "x"))
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "PersonOrSomething") (Types.var "t0")))
+    expectTypeOf "lambda creating UnionPolymorphicRecursive value variant"
+      (lambda "x" $ variant testTypeUnionPolymorphicRecursiveName (Name "value") (var "x"))
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "UnionPolymorphicRecursive") (Types.var "t0")))
+
+  H.describe "Unions in complex contexts" $ do
+    expectTypeOf "union in tuple"
+      (tuple [variant testTypeNumberName (Name "int") (int32 42),
+              string "context"])
+      (Types.product [Types.var "Number", Types.string])
+    expectTypeOf "union in list"
+      (list [variant testTypeNumberName (Name "int") (int32 1),
+             variant testTypeNumberName (Name "float") (float32 2.5)])
+      (Types.list $ Types.var "Number")
+    expectTypeOf "polymorphic union in let binding"
+      (lets ["value">: variant testTypePersonOrSomethingName (Name "other") (string "test")] $
+            var "value")
+      (Types.apply (Types.var "PersonOrSomething") Types.string)
 
 checkTypeOfUnionEliminations :: H.SpecWith ()
 checkTypeOfUnionEliminations = H.describe "Union eliminations" $ do

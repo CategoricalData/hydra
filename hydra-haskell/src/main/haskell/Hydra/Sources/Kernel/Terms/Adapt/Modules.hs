@@ -90,12 +90,11 @@ constructCoderDef :: TElement (Language -> (Term -> Flow Graph c) -> Type -> Flo
 constructCoderDef = define "constructCoder" $
   doc "Given a target language, a unidirectional last-mile encoding, and a source type, construct a unidirectional adapting coder for terms of that type" $
   lambdas ["lang", "encodeTerm", "typ"] $
-    ref Monads.withTraceDef
-      @@ (Strings.cat2 (string "coder for ") (ref DescribeCore.typeDef @@ var "typ"))
-      @@ (bind "adapter" (ref languageAdapterDef @@ var "lang" @@ var "typ") $
-          Flows.pure $ ref AdaptUtils.composeCodersDef
-            @@ (Compute.adapterCoder $ var "adapter")
-            @@ (ref AdaptUtils.unidirectionalCoderDef @@ var "encodeTerm"))
+  trace (Strings.cat2 (string "coder for ") (ref DescribeCore.typeDef @@ var "typ")) $
+  bind "adapter" (ref languageAdapterDef @@ var "lang" @@ var "typ") $
+  Flows.pure $ ref AdaptUtils.composeCodersDef
+    @@ (Compute.adapterCoder $ var "adapter")
+    @@ (ref AdaptUtils.unidirectionalCoderDef @@ var "encodeTerm")
 
 languageAdapterDef :: TElement (Language -> Type -> Flow Graph (SymmetricAdapter Graph Type Term))
 languageAdapterDef = define "languageAdapter" $
@@ -120,17 +119,15 @@ transformModuleDef :: TElement (Language -> (Term -> Flow Graph e) -> (Module ->
 transformModuleDef = define "transformModule" $
   doc "Given a target language, a unidirectional last mile encoding, and an intermediate helper function, transform a given module into a target representation" $
   lambdas ["lang", "encodeTerm", "createModule", "mod"] $
-    ref Monads.withTraceDef
-      @@ (Strings.cat2 (string "transform module ") (unwrap _Namespace @@ (Module.moduleNamespace $ var "mod")))
-      @@ (lets [
-        "els">: Module.moduleElements $ var "mod",
-        "codersFor">: lambda "types" $
-          bind "cdrs" (Flows.mapList (ref constructCoderDef @@ var "lang" @@ var "encodeTerm") (var "types")) $
-          Flows.pure $ Maps.fromList $ Lists.zip (var "types") (var "cdrs")] $
-      bind "tterms" (ref Lexical.withSchemaContextDef @@ (Flows.mapList (ref Schemas.elementAsTypedTermDef) (var "els"))) $
-      lets ["types">: Lists.nub $ Lists.map (unaryFunction Core.typedTermType) (var "tterms")] $
-      bind "coders" (var "codersFor" @@ var "types") $
-      var "createModule" @@ var "mod" @@ var "coders" @@ (Lists.zip (var "els") (var "tterms")))
+  trace (Strings.cat2 (string "transform module ") (unwrap _Namespace @@ (Module.moduleNamespace $ var "mod"))) $ lets [
+  "els">: Module.moduleElements $ var "mod",
+  "codersFor">: lambda "types" $
+    bind "cdrs" (Flows.mapList (ref constructCoderDef @@ var "lang" @@ var "encodeTerm") (var "types")) $
+    Flows.pure $ Maps.fromList $ Lists.zip (var "types") (var "cdrs")] $
+  bind "tterms" (ref Lexical.withSchemaContextDef @@ (Flows.mapList (ref Schemas.elementAsTypedTermDef) (var "els"))) $ lets [
+  "types">: Lists.nub $ Lists.map (unaryFunction Core.typedTermType) (var "tterms")] $
+  bind "coders" (var "codersFor" @@ var "types") $
+  var "createModule" @@ var "mod" @@ var "coders" @@ (Lists.zip (var "els") (var "tterms"))
 
 adaptedModuleDefinitionsDef :: TElement (Language -> Module -> Flow Graph [Definition])
 adaptedModuleDefinitionsDef = define "adaptedModuleDefinitions" $

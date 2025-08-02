@@ -113,43 +113,41 @@ forTypeReferenceDef :: TElement (Name -> Flow AdapterContext (SymmetricAdapter A
 forTypeReferenceDef = define "forTypeReference" $
   doc "This function accounts for recursive type definitions" $
   lambda "name" $
-    ref Monads.withTraceDef
-      @@ (Strings.cat2 (string "adapt named type ") (unwrap _Name @@ var "name"))
-      @@ (lets [
-        "lossy">: false,
-        "placeholder">: Compute.adapter (var "lossy") (Core.typeVariable $ var "name") (Core.typeVariable $ var "name") $
-          ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
-            bind "cx" (ref Monads.getStateDef) $ lets [
-              "adapters">: Coders.adapterContextAdapters $ var "cx"] $
-              Optionals.maybe
-                (Flows.fail $ Strings.cat2 (string "no adapter for reference type ") (unwrap _Name @@ var "name"))
-                (lambda "ad" $ ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "term")
-                (Maps.lookup (var "name") (var "adapters")))] $
+  trace (Strings.cat2 (string "adapt named type ") (unwrap _Name @@ var "name")) $ lets [
+  "lossy">: false,
+  "placeholder">: Compute.adapter (var "lossy") (Core.typeVariable $ var "name") (Core.typeVariable $ var "name") $
+    ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
       bind "cx" (ref Monads.getStateDef) $ lets [
         "adapters">: Coders.adapterContextAdapters $ var "cx"] $
         Optionals.maybe
-          (lets [
-            "newAdapters">: Maps.insert (var "name") (var "placeholder") (var "adapters"),
-            "newCx">: Coders.adapterContext
-              (Coders.adapterContextGraph $ var "cx")
-              (Coders.adapterContextLanguage $ var "cx")
-              (var "newAdapters")] $
-            Flows.bind (ref Monads.putStateDef @@ var "newCx") $ constant $
-              bind "mt" (ref withGraphContextDef @@ (ref Schemas.resolveTypeDef @@ (Core.typeVariable $ var "name"))) $
-                Optionals.maybe
-                  (Flows.pure $ Compute.adapter (var "lossy") (Core.typeVariable $ var "name") (Core.typeVariable $ var "name") $
-                    ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $ Flows.pure $ var "term"))
-                  (lambda "t" $
-                    bind "actual" (ref termAdapterDef @@ var "t") $ lets [
-                      "finalAdapters">: Maps.insert (var "name") (var "actual") (var "adapters"),
-                      "finalCx">: Coders.adapterContext
-                        (Coders.adapterContextGraph $ var "cx")
-                        (Coders.adapterContextLanguage $ var "cx")
-                        (var "finalAdapters")] $
-                    Flows.bind (ref Monads.putStateDef @@ var "finalCx") $ constant $ Flows.pure $ var "actual")
-                  (var "mt"))
-          (unaryFunction Flows.pure)
-          (Maps.lookup (var "name") (var "adapters")))
+          (Flows.fail $ Strings.cat2 (string "no adapter for reference type ") (unwrap _Name @@ var "name"))
+          (lambda "ad" $ ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "term")
+          (Maps.lookup (var "name") (var "adapters")))] $
+  bind "cx" (ref Monads.getStateDef) $ lets [
+  "adapters">: Coders.adapterContextAdapters $ var "cx"] $
+  Optionals.maybe
+    (lets [
+      "newAdapters">: Maps.insert (var "name") (var "placeholder") (var "adapters"),
+      "newCx">: Coders.adapterContext
+        (Coders.adapterContextGraph $ var "cx")
+        (Coders.adapterContextLanguage $ var "cx")
+        (var "newAdapters")] $
+      Flows.bind (ref Monads.putStateDef @@ var "newCx") $ constant $
+        bind "mt" (ref withGraphContextDef @@ (ref Schemas.resolveTypeDef @@ (Core.typeVariable $ var "name"))) $
+          Optionals.maybe
+            (Flows.pure $ Compute.adapter (var "lossy") (Core.typeVariable $ var "name") (Core.typeVariable $ var "name") $
+              ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $ Flows.pure $ var "term"))
+            (lambda "t" $
+              bind "actual" (ref termAdapterDef @@ var "t") $ lets [
+                "finalAdapters">: Maps.insert (var "name") (var "actual") (var "adapters"),
+                "finalCx">: Coders.adapterContext
+                  (Coders.adapterContextGraph $ var "cx")
+                  (Coders.adapterContextLanguage $ var "cx")
+                  (var "finalAdapters")] $
+              Flows.bind (ref Monads.putStateDef @@ var "finalCx") $ constant $ Flows.pure $ var "actual")
+            (var "mt"))
+    (unaryFunction Flows.pure)
+    (Maps.lookup (var "name") (var "adapters"))
 
 functionProxyNameDef :: TElement Name
 functionProxyNameDef = define "functionProxyName" $
@@ -734,9 +732,9 @@ termAdapterDef = define "termAdapter" $
            (var "pass" @@ var "t")
            (var "trySubstitution" @@ var "t")] $
     cases _Type (var "typ")
-      (Just $ ref Monads.withTraceDef
-        @@ (Strings.cat2 (string "adapter for ") (ref DescribeCore.typeDef @@ var "typ"))
-        @@ (cases _Type (var "typ")
+      (Just $
+        trace (Strings.cat2 (string "adapter for ") (ref DescribeCore.typeDef @@ var "typ")) $
+        cases _Type (var "typ")
           (Just $
             bind "cx" (ref Monads.getStateDef) $
             ref AdaptUtils.chooseAdapterDef
@@ -746,7 +744,7 @@ termAdapterDef = define "termAdapter" $
               @@ (ref DescribeCore.typeDef)
               @@ (var "typ")) [
           -- Account for let-bound variables
-          _Type_variable>>: lambda "name" $ ref forTypeReferenceDef @@ var "name"])) [
+          _Type_variable>>: lambda "name" $ ref forTypeReferenceDef @@ var "name"]) [
       _Type_annotated>>: lambda "at" $
         bind "ad" (ref termAdapterDef @@ Core.annotatedTypeSubject (var "at")) $
         Flows.pure (Compute.adapterWithTarget (var "ad") $
