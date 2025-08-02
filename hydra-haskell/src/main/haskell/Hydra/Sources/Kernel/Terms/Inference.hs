@@ -93,7 +93,7 @@ module_ = Module (Namespace "hydra.inference") elements
       el inferTypeOfFunctionDef,
       el inferTypeOfInjectionDef,
       el inferTypeOfLambdaDef,
-      el inferTypeOfLetAfterNormalizationDef,
+      el inferTypeOfLetNormalizedDef,
       el inferTypeOfLetDef,
       el inferTypeOfListDef,
       el inferTypeOfLiteralDef,
@@ -162,7 +162,11 @@ checkTypeDef = define "checkType" $
 checkTypeVariablesDef :: TElement (InferenceContext -> S.Set Name -> Type -> Flow s ())
 checkTypeVariablesDef = define "checkTypeVariables" $
   doc "Check that all type variables in a type are bound" $
-  lambdas ["cx", "tyvars", "typ"] $ cases _Type (var "typ")
+  lambdas ["cx", "tyvars", "typ"] $ ref Monads.withTraceDef @@
+    (Strings.cat $ list [
+      string "checking variables of: ",
+      ref ShowCore.typeDef @@ var "typ"]) @@
+  (cases _Type (var "typ")
     (Just $ binds [
       "result">: Flows.mapList (ref checkTypeVariablesDef @@ var "cx" @@ var "tyvars")
         (ref Rewriting.subtypesDef @@ var "typ")] $
@@ -179,7 +183,7 @@ checkTypeVariablesDef = define "checkTypeVariables" $
           string "unbound type variable \"",
           Core.unName $ var "v",
           string "\" in ",
-          ref ShowCore.typeDef @@ var "typ"]))]
+          ref ShowCore.typeDef @@ var "typ"]))])
 
 debugInferenceDef :: TElement Bool
 debugInferenceDef = define "debugInference" $
@@ -655,10 +659,10 @@ inferTypeOfLetDef = define "inferTypeOfLet" $
     Flows.map (var "rewriteResult") $
       cases _Term (var "rewrittenLet")
         (Just $ ref inferTypeOfTermDef @@ var "cx" @@ var "rewrittenLet" @@ string "empty let term") [
-        _Term_let>>: lambda "l" $ ref inferTypeOfLetAfterNormalizationDef @@ var "cx" @@ var "l"]
+        _Term_let>>: lambda "l" $ ref inferTypeOfLetNormalizedDef @@ var "cx" @@ var "l"]
 
-inferTypeOfLetAfterNormalizationDef :: TElement (InferenceContext -> Let -> Flow s InferenceResult)
-inferTypeOfLetAfterNormalizationDef = define "inferTypeOfLetAfterNormalization" $
+inferTypeOfLetNormalizedDef :: TElement (InferenceContext -> Let -> Flow s InferenceResult)
+inferTypeOfLetNormalizedDef = define "inferTypeOfLetNormalized" $
   doc "Infer the type of a let (letrec) term which is already in a normal form" $
   lambdas ["cx0", "letTerm"] $ lets [
     "bins0">: Core.letBindings $ var "letTerm",
@@ -841,11 +845,13 @@ inferTypeOfProjectionDef = define "inferTypeOfProjection" $
     "sfields">: ref ExtractCore.recordTypeDef @@ var "tname" @@ var "styp",
     "ftyp">: ref Schemas.findFieldTypeDef @@ var "fname" @@ var "sfields"] $
     Flows.pure $ ref yieldDef
-      @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $
-          Core.projection (var "tname") (var "fname"))
+      @@ (Lists.foldl
+        (lambdas ["t", "v"] $ Core.termTypeApplication $ Core.typedTerm (var "t") (Core.typeVariable (var "v")))
+        (Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $ Core.projection (var "tname") (var "fname"))
+        (var "svars"))
       @@ (Core.typeFunction $ Core.functionType
-          (ref nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
-          (var "ftyp"))
+        (ref nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
+        (var "ftyp"))
       @@ ref Substitution.idTypeSubstDef
 
 inferTypeOfRecordDef :: TElement (InferenceContext -> Record -> Flow s InferenceResult)
@@ -972,20 +978,14 @@ inferTypeOfUnwrapDef = define "inferTypeOfUnwrap" $
     "styp">: Core.typeSchemeType $ var "schemaType"] $ binds [
     "wtyp">: ref ExtractCore.wrappedTypeDef @@ var "tname" @@ var "styp"] $
     Flows.pure $ ref yieldDef
---      @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationWrap $ var "tname")
       @@ (Lists.foldl
         (lambdas ["t", "v"] $ Core.termTypeApplication $ Core.typedTerm (var "t") (Core.typeVariable (var "v")))
         (Core.termFunction $ Core.functionElimination $ Core.eliminationWrap $ var "tname")
         (var "svars"))
       @@ (Core.typeFunction $ Core.functionType
-          (ref nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
-          (var "wtyp"))
+        (ref nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
+        (var "wtyp"))
       @@ ref Substitution.idTypeSubstDef
---    Flows.fail $ Strings.cat $ list [
---      string "schemaType: ",
---      ref ShowCore.typeSchemeDef @@ var "schemaType",
---      string ", wtyp: ",
---      ref ShowCore.typeDef @@ var "wtyp"]
 
 inferTypeOfVariableDef :: TElement (InferenceContext -> Name -> Flow s InferenceResult)
 inferTypeOfVariableDef = define "inferTypeOfVariable" $
@@ -1424,6 +1424,30 @@ typeOfDef = define "typeOf" $
               (Just $ var "dflt") [
               _Function_elimination>>: lambda "e" $ cases _Elimination (var "e")
                 (Just $ var "dflt") [
+                _Elimination_record>>: lambda "proj" $ lets [
+                  "tname">: Core.projectionTypeName $ var "proj",
+                  "fname">: Core.projectionField $ var "proj"] $ binds [
+                  "ts">: ref requireSchemaTypeDef @@ var "cx" @@ var "tname"] $ lets [
+                  "vars">: Core.typeSchemeVariables $ var "ts",
+                  "body">: Core.typeSchemeType $ var "ts"] $ binds [
+                  "tfields">: ref ExtractCore.recordTypeDef @@ var "tname" @@ var "body",
+                  "tfield">: lets [
+                    "matches">: Lists.filter (lambda "f" $ Equality.equal (Core.fieldTypeName $ var "f") (var "fname")) (var "tfields")] $
+                    Logic.ifElse (Lists.null $ var "matches")
+                      (Flows.fail $ Strings.cat $ list [
+                        string "field not found: ",
+                        Core.unName $ var "fname",
+                        string " in ",
+                        ref ShowCore.typeSchemeDef @@ var "ts"])
+                      (Flows.pure $ Lists.head $ var "matches")] $ lets [
+                  "subst">: Typing.typeSubst $ Maps.fromList $ Lists.zip (var "vars") (var "apptypes"),
+                  "stype">: ref Substitution.substInTypeDef @@ var "subst" @@ (Core.fieldTypeType $ var "tfield")] $
+                  produce $ TTypes.function
+                    (Lists.foldl
+                      (lambdas ["t", "at"] $ Core.typeApplication $ Core.applicationType (var "t") (var "at"))
+                      (Core.typeVariable $ var "tname")
+                      (var "apptypes"))
+                    (var "stype"),
                 _Elimination_wrap>>: lambda "tname" $ binds [
                   "ts">: ref requireSchemaTypeDef @@ var "cx" @@ var "tname"] $ lets [
                   "vars">: Core.typeSchemeVariables $ var "ts",
