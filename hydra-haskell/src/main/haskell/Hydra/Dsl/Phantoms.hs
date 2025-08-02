@@ -76,6 +76,9 @@ exec f b = primitive2 _flows_bind f (lambda ignoredVariable b)
 produce :: TTerm a -> TTerm (Flow s a)
 produce = primitive1 _flows_pure
 
+trace :: TTerm String -> TTerm (Flow s a) -> TTerm (Flow s a)
+trace msg flow = var "hydra.monads.withTrace" @@ msg @@ flow
+
 -- * Functions
 
 unaryFunction :: (TTerm a -> TTerm b) -> TTerm (a -> b)
