@@ -438,96 +438,97 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
 
 encodeTypeDef :: TElement (HaskellNamespaces -> Type -> Flow Graph H.Type)
 encodeTypeDef = haskellCoderDefinition "encodeType" $
-  lambda "namespaces" $ lambda "typ" $ lets [
-    "encode">: ref encodeTypeDef @@ var "namespaces",
-    "ref">: lambda "name" $
-      Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.elementReferenceDef @@ var "namespaces" @@ var "name",
-    "unitTuple">: inject H._Type H._Type_tuple $ list []] $
-    trace "encode type" $
-    cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ")
-      (Just $ Flows.fail $ Strings.cat2 (string "unexpected type: ") (ref ShowCore.typeDef @@ var "typ")) [
-      _Type_application>>: lambda "app" $ lets [
-        "lhs">: Core.applicationTypeFunction $ var "app",
-        "rhs">: Core.applicationTypeArgument $ var "app"] $
-        Flows.bind (var "encode" @@ var "lhs") $ lambda "hlhs" $
-          Flows.bind (var "encode" @@ var "rhs") $ lambda "hrhs" $
-            Flows.pure $ ref HaskellUtils.toTypeApplicationDef @@ list [var "hlhs", var "hrhs"],
-      _Type_function>>: lambda "funType" $ lets [
-        "dom">: Core.functionTypeDomain $ var "funType",
-        "cod">: Core.functionTypeCodomain $ var "funType"] $
-        Flows.bind (var "encode" @@ var "dom") $ lambda "hdom" $
-          Flows.bind (var "encode" @@ var "cod") $ lambda "hcod" $
-            Flows.pure $ inject H._Type H._Type_function $ record H._FunctionType [
-              H._FunctionType_domain>>: var "hdom",
-              H._FunctionType_codomain>>: var "hcod"],
-      _Type_forall>>: lambda "forallType" $ lets [
-        "v">: Core.forallTypeParameter $ var "forallType",
-        "body">: Core.forallTypeBody $ var "forallType"] $
-        var "encode" @@ var "body",
-      _Type_list>>: lambda "lt" $
-        Flows.bind (var "encode" @@ var "lt") $ lambda "hlt" $
-          Flows.pure $ inject H._Type H._Type_list $ var "hlt",
-      _Type_literal>>: lambda "lt" $
-        cases _LiteralType (var "lt")
-          (Just $ Flows.fail $ Strings.cat2 (string "unexpected literal type: ") (ref ShowCore.literalTypeDef @@ var "lt")) [
-          _LiteralType_boolean>>: constant $
-            Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Bool",
-          _LiteralType_float>>: lambda "ft" $
-            cases _FloatType (var "ft") Nothing [
-              _FloatType_float32>>: constant $
-                Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Float",
-              _FloatType_float64>>: constant $
-                Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Double",
-              _FloatType_bigfloat>>: constant $
-                Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Double"],
-          _LiteralType_integer>>: lambda "it" $
-            cases _IntegerType (var "it")
-              (Just $ Flows.fail $ Strings.cat2 (string "unexpected integer type: ") (ref ShowCore.integerTypeDef @@ var "it")) [
-              _IntegerType_bigint>>: constant $
-                Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Integer",
-              _IntegerType_int8>>: constant $
-                Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "I.Int8",
-              _IntegerType_int16>>: constant $
-                Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "I.Int16",
-              _IntegerType_int32>>: constant $
-                Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Int",
-              _IntegerType_int64>>: constant $
-                Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "I.Int64"],
-          _LiteralType_string>>: constant $
-            Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "String"],
-      _Type_map>>: lambda "mapType" $ lets [
-        "kt">: Core.mapTypeKeys $ var "mapType",
-        "vt">: Core.mapTypeValues $ var "mapType"] $
-        Flows.map
-          (ref HaskellUtils.toTypeApplicationDef)
-          (Flows.sequence $ list [
-            Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "M.Map",
-            var "encode" @@ var "kt",
-            var "encode" @@ var "vt"]),
-      _Type_optional>>: lambda "ot" $
-        Flows.map
-          (ref HaskellUtils.toTypeApplicationDef)
-          (Flows.sequence $ list [
-            Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Maybe",
-            var "encode" @@ var "ot"]),
-      _Type_product>>: lambda "types" $
-        Flows.bind (Flows.mapList (var "encode") (var "types")) $ lambda "htypes" $
-          Flows.pure $ inject H._Type H._Type_tuple $ var "htypes",
-      _Type_record>>: lambda "rt" $ var "ref" @@ (Core.rowTypeTypeName $ var "rt"),
-      _Type_set>>: lambda "st" $
-        Flows.map
-          (ref HaskellUtils.toTypeApplicationDef)
-          (Flows.sequence $ list [
-            Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "S.Set",
-            var "encode" @@ var "st"]),
-      _Type_union>>: lambda "rt" $ lets [
-        "typeName">: Core.rowTypeTypeName $ var "rt"] $
-        var "ref" @@ var "typeName",
-      _Type_unit>>: constant $ Flows.pure $ var "unitTuple",
-      _Type_variable>>: lambda "v1" $ var "ref" @@ var "v1",
-      _Type_wrap>>: lambda "wrapped" $ lets [
-        "name">: Core.wrappedTypeTypeName $ var "wrapped"] $
-        var "ref" @@ var "name"]
+  lambda "namespaces" $
+  lambda "typ" $ lets [
+  "encode">: ref encodeTypeDef @@ var "namespaces",
+  "ref">: lambda "name" $
+    Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.elementReferenceDef @@ var "namespaces" @@ var "name",
+  "unitTuple">: inject H._Type H._Type_tuple $ list []] $
+  trace "encode type" $
+  cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ")
+    (Just $ Flows.fail $ Strings.cat2 (string "unexpected type: ") (ref ShowCore.typeDef @@ var "typ")) [
+    _Type_application>>: lambda "app" $ lets [
+      "lhs">: Core.applicationTypeFunction $ var "app",
+      "rhs">: Core.applicationTypeArgument $ var "app"] $
+      Flows.bind (var "encode" @@ var "lhs") $ lambda "hlhs" $
+        Flows.bind (var "encode" @@ var "rhs") $ lambda "hrhs" $
+          Flows.pure $ ref HaskellUtils.toTypeApplicationDef @@ list [var "hlhs", var "hrhs"],
+    _Type_function>>: lambda "funType" $ lets [
+      "dom">: Core.functionTypeDomain $ var "funType",
+      "cod">: Core.functionTypeCodomain $ var "funType"] $
+      Flows.bind (var "encode" @@ var "dom") $ lambda "hdom" $
+        Flows.bind (var "encode" @@ var "cod") $ lambda "hcod" $
+          Flows.pure $ inject H._Type H._Type_function $ record H._FunctionType [
+            H._FunctionType_domain>>: var "hdom",
+            H._FunctionType_codomain>>: var "hcod"],
+    _Type_forall>>: lambda "forallType" $ lets [
+      "v">: Core.forallTypeParameter $ var "forallType",
+      "body">: Core.forallTypeBody $ var "forallType"] $
+      var "encode" @@ var "body",
+    _Type_list>>: lambda "lt" $
+      Flows.bind (var "encode" @@ var "lt") $ lambda "hlt" $
+        Flows.pure $ inject H._Type H._Type_list $ var "hlt",
+    _Type_literal>>: lambda "lt" $
+      cases _LiteralType (var "lt")
+        (Just $ Flows.fail $ Strings.cat2 (string "unexpected literal type: ") (ref ShowCore.literalTypeDef @@ var "lt")) [
+        _LiteralType_boolean>>: constant $
+          Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Bool",
+        _LiteralType_float>>: lambda "ft" $
+          cases _FloatType (var "ft") Nothing [
+            _FloatType_float32>>: constant $
+              Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Float",
+            _FloatType_float64>>: constant $
+              Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Double",
+            _FloatType_bigfloat>>: constant $
+              Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Double"],
+        _LiteralType_integer>>: lambda "it" $
+          cases _IntegerType (var "it")
+            (Just $ Flows.fail $ Strings.cat2 (string "unexpected integer type: ") (ref ShowCore.integerTypeDef @@ var "it")) [
+            _IntegerType_bigint>>: constant $
+              Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Integer",
+            _IntegerType_int8>>: constant $
+              Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "I.Int8",
+            _IntegerType_int16>>: constant $
+              Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "I.Int16",
+            _IntegerType_int32>>: constant $
+              Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Int",
+            _IntegerType_int64>>: constant $
+              Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "I.Int64"],
+        _LiteralType_string>>: constant $
+          Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "String"],
+    _Type_map>>: lambda "mapType" $ lets [
+      "kt">: Core.mapTypeKeys $ var "mapType",
+      "vt">: Core.mapTypeValues $ var "mapType"] $
+      Flows.map
+        (ref HaskellUtils.toTypeApplicationDef)
+        (Flows.sequence $ list [
+          Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "M.Map",
+          var "encode" @@ var "kt",
+          var "encode" @@ var "vt"]),
+    _Type_optional>>: lambda "ot" $
+      Flows.map
+        (ref HaskellUtils.toTypeApplicationDef)
+        (Flows.sequence $ list [
+          Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Maybe",
+          var "encode" @@ var "ot"]),
+    _Type_product>>: lambda "types" $
+      Flows.bind (Flows.mapList (var "encode") (var "types")) $ lambda "htypes" $
+        Flows.pure $ inject H._Type H._Type_tuple $ var "htypes",
+    _Type_record>>: lambda "rt" $ var "ref" @@ (Core.rowTypeTypeName $ var "rt"),
+    _Type_set>>: lambda "st" $
+      Flows.map
+        (ref HaskellUtils.toTypeApplicationDef)
+        (Flows.sequence $ list [
+          Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "S.Set",
+          var "encode" @@ var "st"]),
+    _Type_union>>: lambda "rt" $ lets [
+      "typeName">: Core.rowTypeTypeName $ var "rt"] $
+      var "ref" @@ var "typeName",
+    _Type_unit>>: constant $ Flows.pure $ var "unitTuple",
+    _Type_variable>>: lambda "v1" $ var "ref" @@ var "v1",
+    _Type_wrap>>: lambda "wrapped" $ lets [
+      "name">: Core.wrappedTypeTypeName $ var "wrapped"] $
+      var "ref" @@ var "name"]
 
 encodeTypeWithClassAssertionsDef :: TElement (HaskellNamespaces -> M.Map Name (S.Set TypeClass) -> Type -> Flow Graph H.Type)
 encodeTypeWithClassAssertionsDef = haskellCoderDefinition "encodeTypeWithClassAssertions" $
