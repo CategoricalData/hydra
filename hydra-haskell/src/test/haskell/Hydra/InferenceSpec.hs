@@ -28,6 +28,7 @@ spec :: H.Spec
 spec = do
   checkTypeOf
   checkFailTypeOfOnUntypedTerms
+--  debugTypeOf
 
 ----------------------------------------
 
@@ -191,7 +192,7 @@ checkTypeOfApplications = H.describe "Applications" $ do
 checkTypeOfEliminations :: H.SpecWith ()
 checkTypeOfEliminations = H.describe "Eliminations" $ do
   checkTypeOfProductEliminations
---  checkTypeOfRecordEliminations -- TODO: restore me
+  checkTypeOfRecordEliminations -- TODO: restore me
   checkTypeOfUnionEliminations
   checkTypeOfWrapEliminations
 
@@ -302,10 +303,10 @@ checkTypeOfLetTerms = H.describe "Let terms" $ do
     expectTypeOf "mutually recursive data"
       (lets ["listA">: record testTypeBuddyListAName [
                field "head" (int32 1),
-               field "tail" (optional $ Just $ var "listB")],
+               field "tail" (just $ var "listB")],
              "listB">: record testTypeBuddyListBName [
                field "head" (int32 2),
-               field "tail" (optional Nothing)]] $
+               field "tail" (nothing)]] $
             var "listA")
       (Types.apply (Types.var "BuddyListA") Types.int32)
     expectTypeOf "(monomorphic) mutually recursive functions"
@@ -561,71 +562,71 @@ checkTypeOfOptionals :: H.SpecWith ()
 checkTypeOfOptionals = H.describe "Optionals" $ do
   H.describe "Monomorphic optionals" $ do
     expectTypeOf "nothing"
-      (optional Nothing)
+      (nothing)
       (Types.forAll "t0" $ Types.optional $ Types.var "t0")
     expectTypeOf "just int"
-      (optional $ Just $ int32 42)
+      (just $ int32 42)
       (Types.optional Types.int32)
     expectTypeOf "just string"
-      (optional $ Just $ string "hello")
+      (just $ string "hello")
       (Types.optional Types.string)
     expectTypeOf "just boolean"
-      (optional $ Just $ boolean True)
+      (just $ boolean True)
       (Types.optional Types.boolean)
 
   H.describe "Polymorphic optionals" $ do
     expectTypeOf "optional from lambda"
-      (lambda "x" $ optional $ Just $ var "x")
+      (lambda "x" $ just $ var "x")
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.optional $ Types.var "t0"))
     expectTypeOf "nothing from lambda"
-      (lambda "x" $ optional Nothing)
+      (lambda "x" $ nothing)
       (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.optional $ Types.var "t1"))
     expectTypeOf "conditional optional"
       (lambda "x" $ lambda "flag" $
         primitive _logic_ifElse @@ var "flag" @@
-          (optional $ Just $ var "x") @@
-          (optional Nothing))
+          (just $ var "x") @@
+          (nothing))
       (Types.forAlls ["t0"] $ Types.function (Types.var "t0") (Types.function Types.boolean (Types.optional $ Types.var "t0")))
 
   H.describe "Optionals in complex contexts" $ do
     expectTypeOf "optional in tuple"
-      (tuple [optional $ Just $ int32 100, string "context"])
+      (tuple [just $ int32 100, string "context"])
       (Types.product [Types.optional Types.int32, Types.string])
     expectTypeOf "optional in record"
       (record testTypeBuddyListAName [
         field "head" (string "first"),
-        field "tail" (optional $ Just $ record testTypeBuddyListBName [
+        field "tail" (just $ record testTypeBuddyListBName [
           field "head" (string "second"),
-          field "tail" (optional Nothing)])])
+          field "tail" (nothing)])])
       (Types.apply (Types.var "BuddyListA") Types.string)
     expectTypeOf "optional in let binding"
-      (lets ["maybeValue">: optional $ Just $ int32 42] $
+      (lets ["maybeValue">: just $ int32 42] $
             var "maybeValue")
       (Types.optional Types.int32)
 
   H.describe "Nested optionals" $ do
     expectTypeOf "optional of optional"
-      (optional $ Just $ optional $ Just $ string "nested")
+      (just $ just $ string "nested")
       (Types.optional $ Types.optional Types.string)
     expectTypeOf "optional of list"
-      (optional $ Just $ list [int32 1, int32 2, int32 3])
+      (just $ list [int32 1, int32 2, int32 3])
       (Types.optional $ Types.list Types.int32)
     expectTypeOf "list of optionals"
-      (list [optional $ Just $ string "a", optional Nothing, optional $ Just $ string "b"])
+      (list [just $ string "a", nothing, just $ string "b"])
       (Types.list $ Types.optional Types.string)
 
   H.describe "Optionals with complex types" $ do
     expectTypeOf "optional record"
-      (optional $ Just $ record testTypePersonName [
+      (just $ record testTypePersonName [
         field "firstName" (string "Alice"),
         field "lastName" (string "Smith"),
         field "age" (int32 30)])
       (Types.optional $ Types.var "Person")
     expectTypeOf "optional tuple"
-      (optional $ Just $ tuple [int32 10, string "test"])
+      (just $ tuple [int32 10, string "test"])
       (Types.optional $ Types.product [Types.int32, Types.string])
     expectTypeOf "optional map"
-      (optional $ Just $ Terms.map $ M.singleton (string "key") (int32 42))
+      (just $ Terms.map $ M.singleton (string "key") (int32 42))
       (Types.optional $ Types.map Types.string Types.int32)
 
 checkTypeOfPrimitives :: H.SpecWith ()
@@ -886,12 +887,12 @@ checkTypeOfRecords = H.describe "Records" $ do
     expectTypeOf "buddylist string"
       (record testTypeBuddyListAName [
         field "head" (string "first"),
-        field "tail" (optional Nothing)])
+        field "tail" (nothing)])
       (Types.apply (Types.var "BuddyListA") Types.string)
     expectTypeOf "buddylist variable"
       (lambda "x" $ record testTypeBuddyListAName [
         field "head" (var "x"),
-        field "tail" (optional Nothing)])
+        field "tail" (nothing)])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "BuddyListA") (Types.var "t0")))
 
   H.describe "Records in complex contexts" $ do
@@ -912,17 +913,17 @@ checkTypeOfRecords = H.describe "Records" $ do
           field "lon" (int32 2)],
         record testTypeBuddyListAName [
           field "head" (string "test"),
-          field "tail" (optional Nothing)]])
+          field "tail" (nothing)]])
       (Types.product [
         Types.apply (Types.var "LatLonPoly") Types.int32,
         Types.apply (Types.var "BuddyListA") Types.string])
     expectTypeOf "recursive record"
       (record testTypeIntListName [
         field "head" (int32 42),
-        field "tail" (optional $ Just $
+        field "tail" (just $
           record testTypeIntListName [
             field "head" (int32 43),
-            field "tail" (optional Nothing)])])
+            field "tail" (nothing)])])
       (Types.var "IntList")
 
 checkTypeOfRecordEliminations :: H.SpecWith ()
@@ -1010,7 +1011,7 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
       (project testTypeBuddyListAName (Name "head") @@
        record testTypeBuddyListAName [
          field "head" (string "Alice"),
-         field "tail" (optional Nothing)])
+         field "tail" (nothing)])
       Types.string
 
   H.describe "Record projections with variables" $ do
@@ -1101,7 +1102,7 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
       (project testTypeIntListName (Name "head") @@
        record testTypeIntListName [
          field "head" (int32 42),
-         field "tail" (optional Nothing)])
+         field "tail" (nothing)])
       Types.int32
 
     expectTypeOf "nested projection from recursive record"
@@ -1125,17 +1126,17 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
 
     expectTypeOf "chained projections across mutual recursion"
       (lambda "listA" $
-       primitive _optionals_maybe @@
-       optional Nothing @@
-       (lambda "listB" $
-        primitive _optionals_maybe @@
-        optional Nothing @@
-        (project testTypeBuddyListAName (Name "tail")) @@
-        (project testTypeBuddyListBName (Name "tail") @@ var "listB")) @@
-       (project testTypeBuddyListAName (Name "tail") @@ var "listA"))
+        primitive _optionals_maybe
+          @@ nothing
+          @@ (lambda "listB" $
+            primitive _optionals_maybe
+              @@ nothing
+              @@ (project testTypeBuddyListAName (Name "tail"))
+              @@ (project testTypeBuddyListBName (Name "tail") @@ var "listB"))
+          @@ (project testTypeBuddyListAName (Name "tail") @@ var "listA"))
       (Types.forAll "t0" $ Types.function
         (Types.apply (Types.var "BuddyListA") (Types.var "t0"))
-        (Types.optional (Types.apply (Types.var "BuddyListA") (Types.var "t0"))))
+        (Types.optional (Types.apply (Types.var "BuddyListB") (Types.var "t0"))))
 
   H.describe "Record projection composition" $ do
     expectTypeOf "compose projections"
@@ -1220,8 +1221,8 @@ checkTypeOfSets = H.describe "Sets" $ do
       (Types.set $ Types.var "Person")
     expectTypeOf "set of optionals"
       (Terms.set $ S.fromList [
-        optional $ Just $ int32 42,
-        optional Nothing])
+        just $ int32 42,
+        nothing])
       (Types.set $ Types.optional Types.int32)
     expectTypeOf "set of maps"
       (Terms.set $ S.singleton $ Terms.map $ M.singleton (string "key") (int32 42))
@@ -1319,7 +1320,7 @@ checkTypeOfVariables = H.describe "Variables" $ do
        Terms.map $ M.singleton (var "key") (var "value"))
       (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.map (Types.var "t0") (Types.var "t1"))))
     expectTypeOf "variable in optional"
-      (lambda "x" $ optional $ Just $ var "x")
+      (lambda "x" $ just $ var "x")
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.optional $ Types.var "t0"))
 
   H.describe "Recursive variables" $ do
@@ -1379,7 +1380,7 @@ checkTypeOfWrappedTerms = H.describe "Wrapped terms" $ do
       (wrap testTypePolymorphicWrapperName (list [tuple [int32 1, string "a"]]))
       (Types.apply (Types.var "PolymorphicWrapper") (Types.product [Types.int32, Types.string]))
     expectTypeOf "wrapped optional"
-      (wrap testTypePolymorphicWrapperName (list [optional $ Just $ int32 42]))
+      (wrap testTypePolymorphicWrapperName (list [just $ int32 42]))
       (Types.apply (Types.var "PolymorphicWrapper") (Types.optional Types.int32))
     expectTypeOf "wrapped map"
       (wrap testTypePolymorphicWrapperName (list [Terms.map $ M.singleton (string "key") (int32 42)]))
@@ -1387,7 +1388,7 @@ checkTypeOfWrappedTerms = H.describe "Wrapped terms" $ do
 
   H.describe "Multiple wrapping levels" $ do
     expectTypeOf "wrapped in optional"
-      (optional $ Just $ wrap testTypeStringAliasName (string "wrapped"))
+      (just $ wrap testTypeStringAliasName (string "wrapped"))
       (Types.optional $ Types.var "StringTypeAlias")
     expectTypeOf "list of wrapped polymorphic"
       (list [wrap testTypePolymorphicWrapperName (list [int32 1]),
@@ -1445,6 +1446,14 @@ checkTypeOfWrapEliminations = H.describe "Wrap eliminations" $ do
       (Types.forAll "t0" $ Types.function (Types.var "StringTypeAlias")
         (Types.function (Types.apply (Types.var "PolymorphicWrapper") (Types.var "t0"))
           (Types.product [Types.string, Types.list $ Types.var "t0"])))
+
+----------------------------------------
+
+debugTypeOf :: H.SpecWith ()
+debugTypeOf = H.describe "Debugging typeOf" $ do
+    expectTypeOf "project lat from polymorphic LatLonPoly"
+      (project testTypeLatLonPolyName (Name "lat"))
+      (Types.forAll "t0" $ Types.function (Types.apply (Types.var "LatLonPoly") (Types.var "t0")) (Types.var "t0"))
 
 ----------------------------------------
 
