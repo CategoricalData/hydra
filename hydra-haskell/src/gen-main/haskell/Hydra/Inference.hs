@@ -954,15 +954,9 @@ typeOf cx vars types term = (Monads.withTrace (Strings.cat [
             in (Flows.bind (requireSchemaType cx tname) (\ts ->  
               let vars = (Core.typeSchemeVariables ts) 
                   body = (Core.typeSchemeType ts)
-              in (Flows.bind (Core_.recordType tname body) (\tfields -> Flows.bind ( 
-                let matches = (Lists.filter (\f -> Equality.equal (Core.fieldTypeName f) fname) tfields)
-                in (Logic.ifElse (Lists.null matches) (Flows.fail (Strings.cat [
-                  "field not found: ",
-                  Core.unName fname,
-                  " in ",
-                  (Core__.typeScheme ts)])) (Flows.pure (Lists.head matches)))) (\tfield ->  
+              in (Flows.bind (Core_.recordType tname body) (\tfields -> Flows.bind (Schemas.findFieldType fname tfields) (\ftype ->  
                 let subst = (Typing_.TypeSubst (Maps.fromList (Lists.zip vars apptypes))) 
-                    stype = (Substitution.substInType subst (Core.fieldTypeType tfield))
+                    stype = (Substitution.substInType subst ftype)
                 in (Flows.pure (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Lists.foldl (\t -> \at -> Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = t,
