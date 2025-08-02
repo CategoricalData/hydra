@@ -1537,7 +1537,7 @@ expectTypeOfDebug desc term typ = H.it desc $ withDefaults expectTypeOfResultDeb
 typeOfShouldFail :: String -> M.Map Name Type -> Term -> H.SpecWith ()
 typeOfShouldFail desc types term = H.it desc $ shouldFail $ do
   cx <- graphToInferenceContext testGraph
-  typeOf cx S.empty types term
+  typeOf cx S.empty types [] term
 
 withDefaults :: (String -> M.Map Name Type -> Term -> x) -> String -> Term -> x
 withDefaults f desc = f desc M.empty
