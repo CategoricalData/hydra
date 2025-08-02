@@ -21,6 +21,18 @@ import qualified Data.Set as S
 
 -- * Operators
 
+infixr 0 ~>
+(~>) :: String -> TTerm x -> TTerm (a -> b)
+name ~> body = lambda name body
+
+infixl 1 <~
+(<~) :: String -> TTerm a -> TTerm b -> TTerm b
+name <~ value = let1 name value
+
+infixl 1 <<~
+(<<~) :: String -> TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
+name <<~ def = bind name def
+
 -- | Function composition operator: f <.> g creates a function that applies g then f
 -- Example: toString <.> increment
 (<.>) :: TTerm (b -> c) -> TTerm (a -> b) -> TTerm (a -> c)
@@ -44,18 +56,6 @@ infixr 0 >>:
 fname >>: d = Field fname (unTTerm d)
 
 -- * Fundamentals
-
-infixr 0 ~>
-(~>) :: String -> TTerm x -> TTerm (a -> b)
-name ~> body = lambda name body
-
-infixl 1 <~
-(<~) :: String -> TTerm a -> TTerm b -> TTerm b
-name <~ value = let1 name value
-
-infixl 1 <<~
-(<<~) :: String -> TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
-name <<~ def = bind name def
 
 -- | Apply a function to an argument
 -- Example: apply (var "add") (int32 1)
