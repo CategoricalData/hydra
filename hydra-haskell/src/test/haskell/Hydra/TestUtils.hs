@@ -158,7 +158,7 @@ expectTypeOfResult desc types term expected = do
       (iterm, ts) <- inferTypeOf cx term
       let vars = S.fromList $ typeSchemeVariables ts
 
-      typeOf cx vars types iterm
+      typeOf cx vars types [] iterm
 
 -- TODO: temporary
 expectTypeOfResultDebug :: String -> M.Map Name Type -> Term -> Type -> H.Expectation
@@ -176,7 +176,7 @@ expectTypeOfResultDebug desc types term expected = do
 
       let vars = S.fromList $ typeSchemeVariables ts
 
-      typeOf cx vars types iterm
+      typeOf cx vars types [] iterm
 
 shouldFail :: Flow Graph a -> H.Expectation
 shouldFail f = H.shouldBe True (Y.isNothing $ flowStateValue $ unFlow f testGraph emptyTrace)
