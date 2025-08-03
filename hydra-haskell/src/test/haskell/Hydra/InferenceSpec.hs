@@ -28,7 +28,6 @@ spec :: H.Spec
 spec = do
   checkTypeOf
   checkFailTypeOfOnUntypedTerms
---  debugTypeOf
 
 ----------------------------------------
 
@@ -1230,7 +1229,8 @@ checkTypeOfSets = H.describe "Sets" $ do
 
 checkTypeOfSums :: H.SpecWith ()
 checkTypeOfSums = H.describe "Sums" $ do
-  return ()  -- TODO: implement
+  -- TODO: we probably will not bother to test sum terms; see https://github.com/CategoricalData/hydra/issues/134
+  return ()
 
 checkTypeOfUnions :: H.SpecWith ()
 checkTypeOfUnions = H.describe "Unions" $ do
@@ -1266,7 +1266,7 @@ checkTypeOfUnions = H.describe "Unions" $ do
           field "firstName" (string "Alice"),
           field "lastName" (string "Smith"),
           field "age" (int32 30)]))
-      (Types.apply (Types.var "PersonOrSomething") (Types.var "Person"))
+      (Types.forAll "t0" $ Types.apply (Types.var "PersonOrSomething") (Types.var "t0"))
     expectTypeOf "inject string into PersonOrSomething other variant"
       (variant testTypePersonOrSomethingName (Name "other") (string "something else"))
       (Types.apply (Types.var "PersonOrSomething") Types.string)
@@ -1517,14 +1517,6 @@ checkTypeOfWrapEliminations = H.describe "Wrap eliminations" $ do
       (Types.forAll "t0" $ Types.function (Types.var "StringTypeAlias")
         (Types.function (Types.apply (Types.var "PolymorphicWrapper") (Types.var "t0"))
           (Types.product [Types.string, Types.list $ Types.var "t0"])))
-
-----------------------------------------
-
-debugTypeOf :: H.SpecWith ()
-debugTypeOf = H.describe "Debugging typeOf" $ do
-    expectTypeOf "project lat from polymorphic LatLonPoly"
-      (project testTypeLatLonPolyName (Name "lat"))
-      (Types.forAll "t0" $ Types.function (Types.apply (Types.var "LatLonPoly") (Types.var "t0")) (Types.var "t0"))
 
 ----------------------------------------
 

@@ -55,6 +55,7 @@ module_ = Module (Namespace "hydra.show.core") elements
      el floatValueDef,
      el floatTypeDef,
      el functionDef,
+     el injectionDef,
      el integerValueDef,
      el integerTypeDef,
      el lambdaDef,
@@ -152,6 +153,18 @@ functionDef = define "function" $
     _Function_elimination>>: ref eliminationDef,
     _Function_lambda>>: ref lambdaDef,
     _Function_primitive>>: lambda "name" $ Strings.cat2 (unwrap _Name @@ var "name") (string "!")]
+
+injectionDef :: TElement (Injection -> String)
+injectionDef = define "injection" $
+  doc "Show an injection as a string" $
+  "inj" ~>
+  "tname" <~ Core.injectionTypeName (var "inj") $
+  "f" <~ Core.injectionField (var "inj") $
+  Strings.cat $ list [
+    string "inject(",
+    unwrap _Name @@ var "tname",
+    string ")",
+    ref fieldsDef @@ (list [var "f"])]
 
 integerValueDef :: TElement (IntegerValue -> String)
 integerValueDef = define "integer" $
@@ -339,14 +352,7 @@ termDef = define "term" $
           string "⟨",
           ref typeDef @@ var "typ",
           string "⟩"],
-      _Term_union>>: lambda "inj" $ lets [
-        "tname">: unwrap _Name @@ (Core.injectionTypeName $ var "inj"),
-        "f">: Core.injectionField $ var "inj"] $
-        Strings.cat $ list [
-          string "inject(",
-          var "tname",
-          string ")",
-          ref fieldsDef @@ (list [var "f"])],
+      _Term_union>>: ref injectionDef,
       _Term_unit>>: constant $ string "unit",
       _Term_variable>>: lambda "name" $ unwrap _Name @@ var "name",
       _Term_wrap>>: lambda "wt" $ lets [
