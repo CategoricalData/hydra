@@ -1019,17 +1019,21 @@ typeOf cx vars types apptypes term =
               let dflt = (Core.caseStatementDefault v3)
               in  
                 let cases = (Core.caseStatementCases v3)
-                in (Flows.bind (requireSchemaType cx tname) (\schemaType ->  
-                  let svars = (Core.typeSchemeVariables schemaType)
-                  in  
-                    let stype = (Core.typeSchemeType schemaType)
-                    in (Flows.bind (Core_.unionType tname stype) (\sfields -> Flows.bind freshName (\resultVar ->  
-                      let resultType = (Core.TypeVariable resultVar)
-                      in  
-                        let domainType = (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars))
-                        in (Flows.pure (Core.TypeFunction (Core.FunctionType {
-                          Core.functionTypeDomain = domainType,
-                          Core.functionTypeCodomain = resultType}))))))))
+                in  
+                  let cterms = (Lists.map Core.fieldTerm cases)
+                  in (Flows.bind (requireSchemaType cx tname) (\schemaType ->  
+                    let svars = (Core.typeSchemeVariables schemaType)
+                    in  
+                      let stype = (Core.typeSchemeType schemaType)
+                      in (Flows.bind (Core_.unionType tname stype) (\sfields -> Flows.bind (Flows.traverseOptional (\e -> typeOf cx vars types [] e) dflt) (\tdflt -> Flows.bind (Flows.mapList (\e -> typeOf cx vars types [] e) cterms) (\tcterms -> Flows.bind (Flows.mapList (\t -> Flows.map Core.functionTypeCodomain (Core_.functionType t)) tcterms) (\cods ->  
+                        let ts = (Optionals.cat (Lists.cons tdflt (Lists.map Optionals.pure cods)))
+                        in (Flows.bind (checkSameType "case branches" ts) (\cod ->  
+                          let subst = (Typing_.TypeSubst (Maps.fromList (Lists.zip svars apptypes)))
+                          in  
+                            let scod = (Substitution.substInType subst cod)
+                            in (Flows.pure (Core.TypeFunction (Core.FunctionType {
+                              Core.functionTypeDomain = (nominalApplication tname apptypes),
+                              Core.functionTypeCodomain = scod}))))))))))))
           Core.EliminationWrap v3 -> (Flows.bind (requireSchemaType cx v3) (\schemaType ->  
             let svars = (Core.typeSchemeVariables schemaType)
             in  
@@ -1113,7 +1117,17 @@ typeOf cx vars types apptypes term =
           in (typeOf cx vars types (Lists.cons t apptypes) e)
       Core.TermUnion v1 ->  
         let tname = (Core.injectionTypeName v1)
-        in (Flows.pure (nominalApplication tname apptypes))
+        in  
+          let field = (Core.injectionField v1)
+          in  
+            let fname = (Core.fieldName field)
+            in  
+              let fterm = (Core.fieldTerm field)
+              in (Flows.bind (requireSchemaType cx tname) (\schemaType ->  
+                let svars = (Core.typeSchemeVariables schemaType)
+                in  
+                  let stype = (Core.typeSchemeType schemaType)
+                  in (Flows.bind (Core_.unionType tname stype) (\sfields -> Flows.bind (Schemas.findFieldType fname sfields) (\ftyp -> Flows.pure (nominalApplication tname apptypes))))))
       Core.TermUnit -> (checkApplied (Flows.pure Core.TypeUnit))
       Core.TermVariable v1 -> (checkApplied (Optionals.maybe (Flows.fail (Strings.cat [
         "unbound variable: ",
