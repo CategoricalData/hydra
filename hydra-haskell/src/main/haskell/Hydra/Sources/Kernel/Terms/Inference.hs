@@ -1252,18 +1252,25 @@ typeOfDef = define "typeOf" $
                 (ref nominalApplicationDef @@ var "tname"  @@ var "apptypes")
                 (var "sftyp"),
 
-            _Elimination_union>>: "c" ~>
-              "tname" <~ Core.caseStatementTypeName (var "c") $
-              "dflt" <~ Core.caseStatementDefault (var "c") $
-              "cases" <~ Core.caseStatementCases (var "c") $
+            _Elimination_union>>: "cs" ~>
+              "tname" <~ Core.caseStatementTypeName (var "cs") $
+              "dflt" <~ Core.caseStatementDefault (var "cs") $
+              "cases" <~ Core.caseStatementCases (var "cs") $
+              "cterms" <~ Lists.map (unaryFunction Core.fieldTerm) (var "cases") $
               "schemaType" <<~ ref requireSchemaTypeDef @@ var "cx" @@ var "tname" $
               "svars" <~ Core.typeSchemeVariables (var "schemaType") $
               "stype" <~ Core.typeSchemeType (var "schemaType") $
               "sfields" <<~ ref ExtractCore.unionTypeDef @@ var "tname" @@ var "stype" $
-              "resultVar" <<~ ref freshNameDef $
-              "resultType" <~ Core.typeVariable (var "resultVar") $
-              "domainType" <~ ref nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars") $
-              Flows.pure $ Core.typeFunction $ Core.functionType (var "domainType") (var "resultType"),
+              "tdflt" <<~ Flows.traverseOptional ("e" ~> ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "e") (var "dflt") $
+              "tcterms" <<~ Flows.mapList ("e" ~> ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "e") (var "cterms") $
+              "cods" <<~ Flows.mapList ("t" ~> Flows.map (unaryFunction Core.functionTypeCodomain) $ ref ExtractCore.functionTypeDef @@ var "t") (var "tcterms") $
+              "ts" <~ Optionals.cat (Lists.cons (var "tdflt") $ Lists.map (unaryFunction Optionals.pure) (var "cods")) $
+              "cod" <<~ ref checkSameTypeDef @@ string "case branches" @@ var "ts" $
+              "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "apptypes")) $
+              "scod" <~ ref Substitution.substInTypeDef @@ var "subst" @@ var "cod" $
+              Flows.pure $ Core.typeFunction $ Core.functionType
+                (ref nominalApplicationDef @@ var "tname"  @@ var "apptypes")
+                (var "scod"),
 
             _Elimination_wrap>>: "tname" ~>
               "schemaType" <<~ ref requireSchemaTypeDef @@ var "cx" @@ var "tname" $
