@@ -283,12 +283,14 @@ inferTypeOfCaseStatement cx caseStmt =
                                     Core.functionTypeDomain = ftype,
                                     Core.functionTypeCodomain = cod})),
                                   Typing_.typeConstraintComment = "case type"}) (Maps.lookup fname caseMap)) fnames itypes))
-                          in (mapConstraints cx (\subst -> yield (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                          in (mapConstraints cx (\subst -> yield (Lists.foldl (\t -> \v -> Core.TermTypeApplication (Core.TypedTerm {
+                            Core.typedTermTerm = t,
+                            Core.typedTermType = (Core.TypeVariable v)})) (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                             Core.caseStatementTypeName = tname,
                             Core.caseStatementDefault = (Optionals.map Typing_.inferenceResultTerm dfltResult),
                             Core.caseStatementCases = (Lists.zipWith (\n -> \t -> Core.Field {
                               Core.fieldName = n,
-                              Core.fieldTerm = t}) fnames iterms)})))) (Core.TypeFunction (Core.FunctionType {
+                              Core.fieldTerm = t}) fnames iterms)})))) svars) (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
                             Core.functionTypeCodomain = cod})) (Substitution.composeTypeSubstList (Lists.concat [
                             Monads.optionalToList (Optionals.map Typing_.inferenceResultSubst dfltResult),
@@ -324,32 +326,6 @@ inferTypeOfCollection cx typCons trmCons desc els = (Flows.bind freshName (\var 
 
 inferTypeOf :: (Typing_.InferenceContext -> Core.Term -> Compute.Flow t0 (Core.Term, Core.TypeScheme))
 inferTypeOf cx term =  
-  let letTerm = (Core.TermLet (Core.Let {
-          Core.letBindings = [
-            Core.LetBinding {
-              Core.letBindingName = (Core.Name "ignoredVariableName"),
-              Core.letBindingTerm = term,
-              Core.letBindingType = Nothing}],
-          Core.letEnvironment = (Core.TermLiteral (Core.LiteralString "ignoredEnvironment"))}))
-  in  
-    let unifyAndSubst = (\result ->  
-            let subst = (Typing_.inferenceResultSubst result)
-            in (Flows.bind (Lexical.withEmptyGraph (Core_.letTerm (Rewriting.normalizeTypeVariablesInTerm (Typing_.inferenceResultTerm result)))) (\letResult ->  
-              let bindings = (Core.letBindings letResult)
-              in (Logic.ifElse (Equality.equal 1 (Lists.length bindings)) ( 
-                let binding = (Lists.head bindings)
-                in  
-                  let term1 = (Core.letBindingTerm binding)
-                  in  
-                    let mts = (Core.letBindingType binding)
-                    in (Optionals.maybe (Flows.fail "Expected a type scheme") (\ts -> Flows.pure (term1, ts)) mts)) (Flows.fail (Strings.cat [
-                "Expected a single binding with a type scheme, but got: ",
-                Literals.showInt32 (Lists.length bindings),
-                " bindings"]))))))
-    in (Flows.bind (inferTypeOfTerm cx letTerm "infer type of term") (\result -> unifyAndSubst result))
-
-inferTypeOfDebug :: (Typing_.InferenceContext -> Core.Term -> Compute.Flow t0 (Core.Term, Core.TypeScheme))
-inferTypeOfDebug cx term =  
   let letTerm = (Core.TermLet (Core.Let {
           Core.letBindings = [
             Core.LetBinding {
@@ -702,11 +678,13 @@ inferTypeOfRecord cx record =
                           Core.rowTypeFields = (Lists.zipWith (\n -> \t -> Core.FieldType {
                             Core.fieldTypeName = n,
                             Core.fieldTypeType = t}) fnames itypes)}))
-                  in (mapConstraints cx (\subst -> yield (Core.TermRecord (Core.Record {
+                  in (mapConstraints cx (\subst -> yield (Lists.foldl (\t -> \v -> Core.TermTypeApplication (Core.TypedTerm {
+                    Core.typedTermTerm = t,
+                    Core.typedTermType = (Core.TypeVariable v)})) (Core.TermRecord (Core.Record {
                     Core.recordTypeName = tname,
                     Core.recordFields = (Lists.zipWith (\n -> \t -> Core.Field {
                       Core.fieldName = n,
-                      Core.fieldTerm = t}) fnames iterms)})) (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
+                      Core.fieldTerm = t}) fnames iterms)})) svars) (nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
                     Typing_.TypeConstraint {
                       Typing_.typeConstraintLeft = stype,
                       Typing_.typeConstraintRight = ityp,
