@@ -88,7 +88,6 @@ module_ = Module (Namespace "hydra.inference") elements
       el inferTypeOfCaseStatementDef,
       el inferTypeOfCollectionDef,
       el inferTypeOfDef,
-      el inferTypeOfDebugDef, -- TODO: temporary
       el inferTypeOfEliminationDef,
       el inferTypeOfFunctionDef,
       el inferTypeOfInjectionDef,
@@ -367,47 +366,6 @@ inferTypeOfDef = define "inferTypeOf" $
   "result" <<~ ref inferTypeOfTermDef @@ var "cx" @@ var "letTerm" @@ string "infer type of term" $
   var "unifyAndSubst" @@ var "result"
 
-
-
-
-
--- TODO: temporary
-inferTypeOfDebugDef :: TElement (InferenceContext -> Term -> Flow s (Term, TypeScheme))
-inferTypeOfDebugDef = define "inferTypeOfDebug" $
-  doc "Infer the type of a term and return a type scheme" $
-  "cx" ~> "term" ~>
-  -- Top-level let term which allows us to easily extract an inferred type scheme
-  "letTerm" <~ Core.termLet (Core.let_
-    (list [Core.letBinding (Core.name $ string "ignoredVariableName") (var "term") nothing])
-    (TTerms.string "ignoredEnvironment")) $
-  "unifyAndSubst" <~ ("result" ~>
-    "subst" <~ Typing.inferenceResultSubst (var "result") $
-    "letResult" <<~ ref Lexical.withEmptyGraphDef @@
-      (ref ExtractCore.letTermDef @@
-        (ref Rewriting.normalizeTypeVariablesInTermDef @@
-          Typing.inferenceResultTerm (var "result"))) $
-    "bindings" <~ Core.letBindings (var "letResult") $
-    Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "bindings"))
-      ("binding" <~ Lists.head (var "bindings") $
-       "term1" <~ Core.letBindingTerm (var "binding") $
-       "mts" <~ Core.letBindingType (var "binding") $
-       Optionals.maybe
-         (Flows.fail $ string "Expected a type scheme")
-         ("ts" ~> Flows.pure $ pair (var "term1") (var "ts"))
-         (var "mts"))
-      (Flows.fail $ Strings.cat $ list [
-        string "Expected a single binding with a type scheme, but got: ",
-        Literals.showInt32 $ Lists.length $ var "bindings",
-        string " bindings"])) $
-  "result" <<~ ref inferTypeOfTermDef @@ var "cx" @@ var "letTerm" @@ string "infer type of term" $
-  var "unifyAndSubst" @@ var "result"
---    Flows.fail $ "Raw result type: " ++ (ref ShowCore.typeDef @@ (Typing.inferenceResultType $ var "result"))
---    Flows.fail $ "Raw result term: " ++ (ref ShowCore.termDef @@ (Typing.inferenceResultTerm $ var "result"))
-
-
-
-
-
 inferTypeOfAnnotatedTermDef :: TElement (InferenceContext -> AnnotatedTerm -> Flow s InferenceResult)
 inferTypeOfAnnotatedTermDef = define "inferTypeOfAnnotatedTerm" $
   doc "Infer the type of an annotated term" $
@@ -495,9 +453,12 @@ inferTypeOfCaseStatementDef = define "inferTypeOfCaseStatement" $
   ref mapConstraintsDef
     @@ var "cx"
     @@ ("subst" ~> ref yieldDef
-      @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
+      @@ (Lists.foldl
+        ("t" ~> "v" ~> Core.termTypeApplication $ Core.typedTerm (var "t") (Core.typeVariable (var "v")))
+        (Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
           Core.caseStatement (var "tname") (Optionals.map (unaryFunction Typing.inferenceResultTerm) $ var "dfltResult") $
           Lists.zipWith ("n" ~> "t" ~> Core.field (var "n") (var "t")) (var "fnames") (var "iterms"))
+        (var "svars"))
       @@ (Core.typeFunction $ Core.functionType
           (ref nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
           (var "cod"))
@@ -863,10 +824,13 @@ inferTypeOfRecordDef = define "inferTypeOfRecord" $
       Lists.zipWith ("n" ~> "t" ~> Core.fieldType (var "n") (var "t")) (var "fnames") (var "itypes")) $
   ref mapConstraintsDef @@ var "cx" @@
     ( "subst" ~> ref yieldDef
-      @@ (Core.termRecord $ Core.record (var "tname") $ Lists.zipWith
-        ("n" ~> "t" ~> Core.field (var "n") (var "t"))
-        (var "fnames")
-        (var "iterms"))
+      @@ (Lists.foldl
+        ("t" ~> "v" ~> Core.termTypeApplication $ Core.typedTerm (var "t") (Core.typeVariable (var "v")))
+        (Core.termRecord $ Core.record (var "tname") $ Lists.zipWith
+                ("n" ~> "t" ~> Core.field (var "n") (var "t"))
+                (var "fnames")
+                (var "iterms"))
+        (var "svars"))
       @@ (ref nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
       @@ (ref Substitution.composeTypeSubstDef @@ var "isubst" @@ var "subst")) @@
     list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of record")]
@@ -1149,28 +1113,26 @@ typeOfDef :: TElement (InferenceContext -> S.Set Name -> M.Map Name Type -> [Typ
 typeOfDef = define "typeOf" $
   doc "Infer the type of a term given context, bound type variables, and type environment" $
   "cx" ~> "vars" ~> "types" ~> "apptypes" ~> "term" ~>
-
---  "dflt" <~ Flows.fail "no default value" $
   "dflt" <~ ("app" <~ ("t" ~> "apptypes" ~>
-                       Logic.ifElse (Lists.null $ var "apptypes")
-                         (Flows.pure $ var "t")
-                         (cases _Type (var "t")
-                           (Just $ Flows.fail $ Strings.cat $ list [
-                             string "not a forall type: ",
-                             ref ShowCore.typeDef @@ var "t",
-                             string " in ",
-                             ref ShowCore.termDef @@ var "term"]) [
-                           _Type_forall>>: "ft" ~>
-                             "v" <~ Core.forallTypeParameter (var "ft") $
-                             "t2" <~ Core.forallTypeBody (var "ft") $
-                             var "app"
-                               @@ (ref Substitution.substInTypeDef @@
-                                 (Typing.typeSubst $ Maps.singleton (var "v") (Lists.head $ var "apptypes")) @@
-                                 (var "t2"))
-                               @@ (Lists.tail $ var "apptypes")])) $
-             "t1" <<~ ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "term" $
-             exec (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "t1") $
-             var "app" @@ var "t1" @@ var "apptypes") $
+               Logic.ifElse (Lists.null $ var "apptypes")
+                 (Flows.pure $ var "t")
+                 (cases _Type (var "t")
+                   (Just $ Flows.fail $ Strings.cat $ list [
+                     string "not a forall type: ",
+                     ref ShowCore.typeDef @@ var "t",
+                     string " in ",
+                     ref ShowCore.termDef @@ var "term"]) [
+                   _Type_forall>>: "ft" ~>
+                     "v" <~ Core.forallTypeParameter (var "ft") $
+                     "t2" <~ Core.forallTypeBody (var "ft") $
+                     var "app"
+                       @@ (ref Substitution.substInTypeDef @@
+                         (Typing.typeSubst $ Maps.singleton (var "v") (Lists.head $ var "apptypes")) @@
+                         (var "t2"))
+                       @@ (Lists.tail $ var "apptypes")])) $
+     "t1" <<~ ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "term" $
+     exec (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "t1") $
+     var "app" @@ var "t1" @@ var "apptypes") $
   "checkApplied" <~ ("e" ~>  Logic.ifElse (Lists.null $ var "apptypes")
     (var "e")
     (var "dflt")) $

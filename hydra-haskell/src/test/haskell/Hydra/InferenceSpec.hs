@@ -1352,6 +1352,132 @@ checkTypeOfUnionEliminations = H.describe "Union eliminations" $ do
        variant testTypeNumberName (Name "int") (int32 42))
       Types.int32
 
+    expectTypeOf "match Timestamp with mixed data types"
+      (match testTypeTimestampName Nothing [
+        "unixTimeMillis">: lambda "millis" (primitive _literals_showUint64 @@ var "millis"),
+        "date">: lambda "dateStr" (var "dateStr")])
+      (Types.function (Types.var "Timestamp") Types.string)
+
+  H.describe "Polymorphic union eliminations" $ do
+    expectTypeOf "match PersonOrSomething with string"
+      (match testTypePersonOrSomethingName Nothing [
+        "person">: lambda "p" (project testTypePersonName (Name "firstName") @@ var "p"),
+        "other">: lambda "x" (var "x")])
+      (Types.function (Types.apply (Types.var "PersonOrSomething") (Types.string)) (Types.string))
+
+    expectTypeOf "match PersonOrSomething instantiated with string"
+      (match testTypePersonOrSomethingName Nothing [
+        "person">: lambda "p" (project testTypePersonName (Name "firstName") @@ var "p"),
+        "other">: lambda "x" (var "x")] @@
+       variant testTypePersonOrSomethingName (Name "other") (string "test"))
+      Types.string
+
+  H.describe "Union eliminations with defaults" $ do
+    expectTypeOf "match Comparison with default case"
+      (match testTypeComparisonName (Just (string "unknown")) [
+        "lessThan">: lambda "x" (string "less"),
+        "equalTo">: lambda "x" (string "equal")])
+      (Types.function (Types.var "Comparison") Types.string)
+
+    expectTypeOf "match Number with default case"
+      (match testTypeNumberName (Just (int32 (-1))) [
+        "int">: lambda "i" (var "i")])
+      (Types.function (Types.var "Number") Types.int32)
+
+    expectTypeOf "match UnionMonomorphic with default"
+      (match testTypeUnionMonomorphicName (Just (string "fallback")) [
+        "bool">: lambda "b" (primitive _literals_showBoolean @@ var "b"),
+        "string">: lambda "s" (var "s")])
+      (Types.function (Types.var "UnionMonomorphic") Types.string)
+
+  H.describe "Nested union eliminations" $ do
+    expectTypeOf "nested match statements"
+      (match testTypePersonOrSomethingName Nothing [
+        "person">: lambda "p" (project testTypePersonName (Name "firstName") @@ var "p"),
+        "other">: lambda "x" (
+          match testTypeNumberName Nothing [
+            "int">: lambda "i" (primitive _literals_showInt32 @@ var "i"),
+            "float">: lambda "f" (primitive _literals_showFloat32 @@ var "f")] @@
+          var "x")])
+      (Types.function (Types.apply (Types.var "PersonOrSomething") (Types.var "Number")) Types.string)
+
+    expectTypeOf "match in tuple"
+      (tuple [
+        match testTypeComparisonName Nothing [
+          "lessThan">: lambda "x" (int32 1),
+          "equalTo">: lambda "x" (int32 0),
+          "greaterThan">: lambda "x" (int32 (-1))],
+        string "context"])
+      (Types.product [Types.function (Types.var "Comparison") Types.int32, Types.string])
+
+  H.describe "Union eliminations in complex contexts" $ do
+    expectTypeOf "match in let binding"
+      (lets ["matcher">: match testTypeComparisonName Nothing [
+               "lessThan">: lambda "x" (string "less"),
+               "equalTo">: lambda "x" (string "equal"),
+               "greaterThan">: lambda "x" (string "greater")]] $
+            var "matcher")
+      (Types.function (Types.var "Comparison") Types.string)
+
+    expectTypeOf "match in record"
+      (record testTypePersonName [
+        field "firstName" (match testTypePersonOrSomethingName Nothing [
+          "person">: lambda "p" (project testTypePersonName (Name "firstName") @@ var "p"),
+          "other">: lambda "x" (var "x")] @@
+         variant testTypePersonOrSomethingName (Name "other") (string "John")),
+        field "lastName" (string "Doe"),
+        field "age" (int32 30)])
+      (Types.var "Person")
+
+    expectTypeOf "match with polymorphic result in list"
+      (list [
+        match testTypePersonOrSomethingName Nothing [
+          "person">: lambda "p" (project testTypePersonName (Name "age") @@ var "p"),
+          "other">: lambda "x" (var "x")] @@
+        variant testTypePersonOrSomethingName (Name "other") (int32 25),
+        int32 30])
+      (Types.list Types.int32)
+
+  H.describe "Higher-order union eliminations" $ do
+    expectTypeOf "map match over list"
+      (primitive _lists_map @@
+       (match testTypeComparisonName Nothing [
+         "lessThan">: lambda "x" (string "less"),
+         "equalTo">: lambda "x" (string "equal"),
+         "greaterThan">: lambda "x" (string "greater")]) @@
+       list [unitVariant testTypeComparisonName (Name "lessThan"),
+             unitVariant testTypeComparisonName (Name "equalTo")])
+      (Types.list Types.string)
+
+    expectTypeOf "compose match with other functions"
+      (lambda "comp" $
+       primitive _strings_length @@
+       (match testTypeComparisonName Nothing [
+         "lessThan">: lambda "x" (string "less"),
+         "equalTo">: lambda "x" (string "equal"),
+         "greaterThan">: lambda "x" (string "greater")] @@
+        var "comp"))
+      (Types.function (Types.var "Comparison") Types.int32)
+
+    expectTypeOf "match in lambda body"
+      (lambda "unionValue" $
+       match testTypeNumberName Nothing [
+         "int">: lambda "i" (primitive _math_add @@ var "i" @@ int32 1),
+         "float">: lambda "f" (int32 0)] @@
+       var "unionValue")
+      (Types.function (Types.var "Number") Types.int32)
+
+  H.describe "Recursive union eliminations" $ do
+    expectTypeOf "match HydraType recursively"
+      (match testTypeHydraTypeName Nothing [
+        "literal">: lambda "lit" (
+          match testTypeHydraLiteralTypeName Nothing [
+            "boolean">: lambda "b" (primitive _literals_showBoolean @@ var "b"),
+            "string">: lambda "s" (var "s")] @@
+          var "lit"),
+        "list">: lambda "nested" (string "list")])
+      (Types.function (Types.var "HydraType") Types.string)
+
 checkTypeOfUnit :: H.SpecWith ()
 checkTypeOfUnit = H.describe "Unit" $ do
   H.describe "Unit term" $ do
@@ -1563,9 +1689,6 @@ checkTypeOfWrapEliminations = H.describe "Wrap eliminations" $ do
 
 expectTypeOf :: String -> Term -> Type -> H.SpecWith ()
 expectTypeOf desc term typ = H.it desc $ withDefaults expectTypeOfResult desc term typ
-
-expectTypeOfDebug :: String -> Term -> Type -> H.SpecWith ()
-expectTypeOfDebug desc term typ = H.it desc $ withDefaults expectTypeOfResultDebug desc term typ
 
 typeOfShouldFail :: String -> M.Map Name Type -> Term -> H.SpecWith ()
 typeOfShouldFail desc types term = H.it desc $ shouldFail $ do
