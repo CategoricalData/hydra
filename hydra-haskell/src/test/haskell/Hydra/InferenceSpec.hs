@@ -1309,7 +1309,48 @@ checkTypeOfUnions = H.describe "Unions" $ do
 
 checkTypeOfUnionEliminations :: H.SpecWith ()
 checkTypeOfUnionEliminations = H.describe "Union eliminations" $ do
-  return ()  -- TODO: implement
+  H.describe "Simple unit variant eliminations" $ do
+    expectTypeOf "match Comparison with all cases"
+      (match testTypeComparisonName Nothing [
+        "lessThan">: lambda "x" (string "less"),
+        "equalTo">: lambda "x" (string "equal"),
+        "greaterThan">: lambda "x" (string "greater")])
+      (Types.function (Types.var "Comparison") Types.string)
+
+    expectTypeOf "match Comparison returning int32"
+      (match testTypeComparisonName Nothing [
+        "lessThan">: lambda "x" (int32 (-1)),
+        "equalTo">: lambda "x" (int32 0),
+        "greaterThan">: lambda "x" (int32 1)])
+      (Types.function (Types.var "Comparison") Types.int32)
+
+    expectTypeOf "match applied to Comparison variant"
+      (match testTypeComparisonName Nothing [
+        "lessThan">: lambda "x" (string "less"),
+        "equalTo">: lambda "x" (string "equal"),
+        "greaterThan">: lambda "x" (string "greater")] @@
+       unitVariant testTypeComparisonName (Name "equalTo"))
+      Types.string
+
+  H.describe "Union eliminations with data" $ do
+    expectTypeOf "match Number extracting int values"
+      (match testTypeNumberName Nothing [
+        "int">: lambda "i" (var "i"),
+        "float">: lambda "f" (int32 0)])
+      (Types.function (Types.var "Number") Types.int32)
+
+    expectTypeOf "match Number converting to string"
+      (match testTypeNumberName Nothing [
+        "int">: lambda "i" (primitive _literals_showInt32 @@ var "i"),
+        "float">: lambda "f" (primitive _literals_showFloat32 @@ var "f")])
+      (Types.function (Types.var "Number") Types.string)
+
+    expectTypeOf "match Number applied to int variant"
+      (match testTypeNumberName Nothing [
+        "int">: lambda "i" (primitive _math_add @@ var "i" @@ int32 10),
+        "float">: lambda "f" (int32 0)] @@
+       variant testTypeNumberName (Name "int") (int32 42))
+      Types.int32
 
 checkTypeOfUnit :: H.SpecWith ()
 checkTypeOfUnit = H.describe "Unit" $ do
