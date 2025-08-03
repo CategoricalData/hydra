@@ -96,6 +96,19 @@ function f = ((\x -> case x of
   Core.FunctionLambda v1 -> (lambda v1)
   Core.FunctionPrimitive v1 -> (Strings.cat2 (Core.unName v1) "!")) f)
 
+-- | Show an injection as a string
+injection :: (Core.Injection -> String)
+injection inj =  
+  let tname = (Core.injectionTypeName inj)
+  in  
+    let f = (Core.injectionField inj)
+    in (Strings.cat [
+      "inject(",
+      Core.unName tname,
+      ")",
+      (fields [
+        f])])
+
 -- | Show an integer value as a string
 integer :: (Core.IntegerValue -> String)
 integer iv = ((\x -> case x of
@@ -264,15 +277,7 @@ term t =
         "\10216",
         type_ typ,
         "\10217"])
-    Core.TermUnion v1 ->  
-      let tname = (Core.unName (Core.injectionTypeName v1)) 
-          f = (Core.injectionField v1)
-      in (Strings.cat [
-        "inject(",
-        tname,
-        ")",
-        (fields [
-          f])])
+    Core.TermUnion v1 -> (injection v1)
     Core.TermUnit -> "unit"
     Core.TermVariable v1 -> (Core.unName v1)
     Core.TermWrap v1 ->  
