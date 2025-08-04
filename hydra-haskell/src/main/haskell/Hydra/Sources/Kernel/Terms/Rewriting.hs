@@ -714,6 +714,16 @@ rewriteTermMDef = define "rewriteTermM" $
           "trm">: Core.sumTerm $ var "sum"] $ binds [
           "rtrm">: var "recurse" @@ var "trm"] $
           produce $ Core.termSum $ Core.sum (var "i") (var "s") (var "rtrm"),
+        _Term_typeAbstraction>>: "ta" ~>
+          "rbody" <<~ var "recurse" @@ (Core.typeAbstractionBody $ var "ta") $
+          produce $ Core.termTypeAbstraction $ Core.typeAbstraction
+            (Core.typeAbstractionParameter $ var "ta")
+            (var "rbody"),
+        _Term_typeApplication>>: "tt" ~>
+          "rterm" <<~ var "recurse" @@ (Core.typedTermTerm $ var "tt") $
+          produce $ Core.termTypeApplication $ Core.typedTerm
+            (var "rterm")
+            (Core.typedTermType $ var "tt"),
         _Term_union>>: lambda "i" $ lets [
           "n">: Core.injectionTypeName $ var "i",
           "field">: Core.injectionField $ var "i"] $

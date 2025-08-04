@@ -542,6 +542,12 @@ rewriteTermM f =
                 Core.sumIndex = i,
                 Core.sumSize = s,
                 Core.sumTerm = rtrm}))))
+            Core.TermTypeAbstraction v1 -> (Flows.bind (recurse (Core.typeAbstractionBody v1)) (\rbody -> Flows.pure (Core.TermTypeAbstraction (Core.TypeAbstraction {
+              Core.typeAbstractionParameter = (Core.typeAbstractionParameter v1),
+              Core.typeAbstractionBody = rbody}))))
+            Core.TermTypeApplication v1 -> (Flows.bind (recurse (Core.typedTermTerm v1)) (\rterm -> Flows.pure (Core.TermTypeApplication (Core.TypedTerm {
+              Core.typedTermTerm = rterm,
+              Core.typedTermType = (Core.typedTermType v1)}))))
             Core.TermUnion v1 ->  
               let n = (Core.injectionTypeName v1) 
                   field = (Core.injectionField v1)
