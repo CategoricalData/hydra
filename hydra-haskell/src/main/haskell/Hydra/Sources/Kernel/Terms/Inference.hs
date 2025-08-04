@@ -1113,29 +1113,28 @@ typeOfDef :: TElement (InferenceContext -> S.Set Name -> M.Map Name Type -> [Typ
 typeOfDef = define "typeOf" $
   doc "Infer the type of a term given context, bound type variables, and type environment" $
   "cx" ~> "vars" ~> "types" ~> "apptypes" ~> "term" ~>
-  "dflt" <~ ("app" <~ ("t" ~> "apptypes" ~>
-               Logic.ifElse (Lists.null $ var "apptypes")
-                 (Flows.pure $ var "t")
-                 (cases _Type (var "t")
-                   (Just $ Flows.fail $ Strings.cat $ list [
-                     string "not a forall type: ",
-                     ref ShowCore.typeDef @@ var "t",
-                     string " in ",
-                     ref ShowCore.termDef @@ var "term"]) [
-                   _Type_forall>>: "ft" ~>
-                     "v" <~ Core.forallTypeParameter (var "ft") $
-                     "t2" <~ Core.forallTypeBody (var "ft") $
-                     var "app"
-                       @@ (ref Substitution.substInTypeDef @@
-                         (Typing.typeSubst $ Maps.singleton (var "v") (Lists.head $ var "apptypes")) @@
-                         (var "t2"))
-                       @@ (Lists.tail $ var "apptypes")])) $
-     "t1" <<~ ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "term" $
-     exec (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "t1") $
-     var "app" @@ var "t1" @@ var "apptypes") $
   "checkApplied" <~ ("e" ~>  Logic.ifElse (Lists.null $ var "apptypes")
     (var "e")
-    (var "dflt")) $
+    ( "app" <~ ("t" ~> "apptypes" ~>
+        Logic.ifElse (Lists.null $ var "apptypes")
+          (Flows.pure $ var "t")
+          (cases _Type (var "t")
+            (Just $ Flows.fail $ Strings.cat $ list [
+              string "not a forall type: ",
+              ref ShowCore.typeDef @@ var "t",
+              string " in ",
+              ref ShowCore.termDef @@ var "term"]) [
+            _Type_forall>>: "ft" ~>
+              "v" <~ Core.forallTypeParameter (var "ft") $
+              "t2" <~ Core.forallTypeBody (var "ft") $
+              var "app"
+                @@ (ref Substitution.substInTypeDef @@
+                  (Typing.typeSubst $ Maps.singleton (var "v") (Lists.head $ var "apptypes")) @@
+                  (var "t2"))
+                @@ (Lists.tail $ var "apptypes")])) $
+      "t1" <<~ ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "term" $
+      exec (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "t1") $
+      var "app" @@ var "t1" @@ var "apptypes")) $
 
   trace (Strings.cat $ list [
     string "checking type of: ",
