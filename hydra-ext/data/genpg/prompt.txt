@@ -6,7 +6,7 @@ I will first help you understand the framework by giving you the following:
 (4) A well-designed mapping for the Sales data, called generatedGraphMapping.
 After that, I will give you (5), a sample of the actual CSV data I need to map into the graph.
 Please give me three files: DatabaseSchema.hs, GraphSchema.hs and Mapping.hs, all in the package
-Hydra.Demos.GenPG.Generated, in the directory src/gen-main/haskell/Hydra/Demos/GenPG/Generated.
+Hydra.Ext.Demos.GenPG.Generated, in the directory src/gen-main/haskell/Hydra.Ext.Demos/GenPG/Generated.
 Feel free to ask any clarifying questions as needed before you generate the files.
 
 ################################################################################
@@ -130,9 +130,9 @@ Line 6: ['5', '3', '2', '2025-05-01', '', '0.05', '', 'Credit', '4', '']
 ################################################################################
 2. SALES DATABASE SCHEMA
 
-module Hydra.Demos.GenPG.ExampleDatabaseSchema where
+module Hydra.Ext.Demos.GenPG.ExampleDatabaseSchema where
 
-import Hydra.Dsl.Ext.Tabular (TableType, tableType, columnType)
+import Hydra.Dsl.Tabular (TableType, tableType, columnType)
 import Hydra.Dsl.Types (binary, boolean, float32, float64, int32, int64, string)
 
 employeesTableType :: TableType
@@ -245,9 +245,9 @@ salesTableSchemas = [
 ################################################################################
 3. SALES GRAPH SCHEMA
 
-module Hydra.Demos.GenPG.ExampleGraphSchema where
+module Hydra.Ext.Demos.GenPG.ExampleGraphSchema where
 
-import Hydra.Dsl.Pg.Schemas (propertyType, required, schema, simpleEdgeType, vertexType)
+import Hydra.Ext.Dsl.Pg.Schemas (propertyType, required, schema, simpleEdgeType, vertexType)
 import Hydra.Dsl.Types (binary, boolean, float32, float64, int32, int64, string)
 
 dateType = string
@@ -360,18 +360,18 @@ salesGraphSchema = schema vertexTypes edgeTypes
 ################################################################################
 4. SALES MAPPING
 
-module Hydra.Demos.GenPG.ExampleMapping where
+module Hydra.Ext.Demos.GenPG.ExampleMapping where
 
 import Hydra.Core (Term)
 import Hydra.Pg.Model (Edge, Vertex)
 import Hydra.Formatting (decapitalize)
 import Hydra.Phantoms (TTerm)
 import Hydra.Dsl.Phantoms ((@@), constant, just, lambda, nothing, string, var)
-import Hydra.Dsl.Pg.Mappings (LazyGraph, column, edge, edgeNoId, graph, property, vertex)
+import Hydra.Ext.Dsl.Pg.Mappings (LazyGraph, column, edge, edgeNoId, graph, property, vertex)
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Lib.Strings as Strings
-import Hydra.Demos.GenPG.ExampleGraphSchema
+import Hydra.Ext.Demos.GenPG.ExampleGraphSchema
 
 -- Helpers -----------------------
 
@@ -380,7 +380,7 @@ labeledIntId itype iid = lambda "r" $ Optionals.map
   (lambda "i" $ Strings.concat [
     string $ decapitalize itype,
     string "_",
-    Literals.showInt32 @@ (var "i")])
+    Literals.showInt32 $ var "i"])
   (iid @@ var "r")
 
 interactionVertex :: String -> String -> Vertex Term
@@ -488,6 +488,7 @@ salesGraph = graph
    customerEdge "emails.csv" emailInteractionType,
    employeeEdge "meetings.csv" meetingInteractionType,
    customerEdge "meetings.csv" meetingInteractionType]
+
 
 ################################################################################
 SAMPLE OF NEW DOMAIN DATA
