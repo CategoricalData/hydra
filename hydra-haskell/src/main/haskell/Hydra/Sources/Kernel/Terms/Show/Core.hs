@@ -265,6 +265,7 @@ termDef = define "term" $
         ref termDef @@ var "bindingTerm",
         var "typeStr"]] $
     cases _Term (var "t") Nothing [
+      _Term_annotated>>: lambda "at" $ ref termDef @@ (Core.annotatedTermSubject $ var "at"),
       _Term_application>>: lambda "app" $ lets [
         "terms">: var "gatherTerms" @@ (list []) @@ var "app",
         "termStrs">: Lists.map (ref termDef) (var "terms")] $

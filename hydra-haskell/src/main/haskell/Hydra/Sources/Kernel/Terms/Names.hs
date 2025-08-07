@@ -66,17 +66,16 @@ define = definitionInModule module_
 compactNameDef :: TElement (M.Map Namespace String -> Name -> String)
 compactNameDef = define "compactName" $
   doc "Given a mapping of namespaces to prefixes, convert a name to a compact string representation" $
-  lambda "namespaces" $ lambda "name" $ lets [
-    "qualName">: ref qualifyNameDef @@ var "name",
-    "mns">: Module.qualifiedNameNamespace $ var "qualName",
-    "local">: Module.qualifiedNameLocal $ var "qualName"]
-    $ Optionals.maybe
-        (Core.unName $ var "name")
-        (lambda "ns" $
-          Optionals.maybe (var "local")
-            (lambda "pre" $ Strings.cat $ list [var "pre", string ":", var "local"])
-            (Maps.lookup (var "ns") (var "namespaces")))
-        (var "mns")
+  "namespaces" ~> "name" ~>
+  "qualName" <~ ref qualifyNameDef @@ var "name" $
+  "mns" <~ Module.qualifiedNameNamespace (var "qualName") $
+  "local" <~ Module.qualifiedNameLocal (var "qualName") $
+  Optionals.maybe
+    (Core.unName $ var "name")
+    ("ns" ~> Optionals.maybe (var "local")
+      ("pre" ~> Strings.cat $ list [var "pre", string ":", var "local"])
+      (Maps.lookup (var "ns") (var "namespaces")))
+    (var "mns")
 
 localNameOfDef :: TElement (Name -> String)
 localNameOfDef = define "localNameOf" $

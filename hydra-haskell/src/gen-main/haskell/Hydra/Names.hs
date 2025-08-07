@@ -22,13 +22,15 @@ import qualified Data.Set as S
 -- | Given a mapping of namespaces to prefixes, convert a name to a compact string representation
 compactName :: (M.Map Module.Namespace String -> Core.Name -> String)
 compactName namespaces name =  
-  let qualName = (qualifyName name) 
-      mns = (Module.qualifiedNameNamespace qualName)
-      local = (Module.qualifiedNameLocal qualName)
-  in (Optionals.maybe (Core.unName name) (\ns -> Optionals.maybe local (\pre -> Strings.cat [
-    pre,
-    ":",
-    local]) (Maps.lookup ns namespaces)) mns)
+  let qualName = (qualifyName name)
+  in  
+    let mns = (Module.qualifiedNameNamespace qualName)
+    in  
+      let local = (Module.qualifiedNameLocal qualName)
+      in (Optionals.maybe (Core.unName name) (\ns -> Optionals.maybe local (\pre -> Strings.cat [
+        pre,
+        ":",
+        local]) (Maps.lookup ns namespaces)) mns)
 
 localNameOf :: (Core.Name -> String)
 localNameOf arg_ = (Module.qualifiedNameLocal (qualifyName arg_))
