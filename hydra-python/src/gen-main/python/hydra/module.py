@@ -64,7 +64,6 @@ NAMESPACE__NAME = hydra.core.Name("hydra.module.Namespace")
 class Namespaces(Generic[N]):
     """A mapping from namespaces to values of type n, with a focus on one namespace."""
     
-    focus: "type = TypeProduct [TypeVariable (Name {unName = \"hydra.module.Namespace\"}),TypeVariable (Name {unName = \"n\"})]"
     mapping: FrozenDict[Namespace, N]
 
 NAMESPACES__NAME = hydra.core.Name("hydra.module.Namespaces")
