@@ -8,6 +8,7 @@ import qualified Hydra.Ext.Python.Syntax as Py
 import Hydra.Ext.Staging.Python.Names
 import Hydra.Ext.Staging.Python.Utils
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Ext.Staging.Python.Serde as PySer
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.ShorthandTypes
@@ -33,6 +34,7 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesGeneric :: Bool,
   pythonModuleMetadataUsesName :: Bool,
   pythonModuleMetadataUsesNode :: Bool,
+  pythonModuleMetadataUsesTuple :: Bool,
   pythonModuleMetadataUsesTypeVar :: Bool}
 
 argsAndBindings :: Term -> Type -> ([Name], [LetBinding], Term, [Type], Type)
@@ -278,6 +280,7 @@ encodeModule mod = do
                 ("typing", [
                   cond "Annotated" $ pythonModuleMetadataUsesAnnotated meta,
                   cond "Generic" $ pythonModuleMetadataUsesGeneric meta,
+                  cond "Tuple" $ pythonModuleMetadataUsesTuple meta,
                   cond "TypeVar" $ pythonModuleMetadataUsesTypeVar meta])]
               where
                 cond name b = if b then Just name else Nothing
@@ -460,6 +463,7 @@ encodeType env typ = case deannotateType typ of
       return $ nameAndParams (Py.Name "FrozenDict") [pykt, pyvt]
     TypeLiteral lt -> encodeLiteralType lt
     TypeOptional et -> orNull . pyExpressionToPyPrimary <$> encode et
+    TypeProduct types -> nameAndParams (Py.Name "Tuple") <$> (CM.mapM encode types)
     TypeRecord rt -> pure $ if EncodeCore.isUnitType (TypeRecord rt)
       then pyNameToPyExpression pyNone
       else typeVariableReference env $ rowTypeTypeName rt
@@ -470,7 +474,7 @@ encodeType env typ = case deannotateType typ of
     _ -> dflt
   where
     encode = encodeType env
-    dflt = pure $ doubleQuotedString $ "type = " ++ show (deannotateType typ)
+    dflt = pure $ doubleQuotedString $ "type = " ++ ShowCore.type_ (deannotateType typ)
 
 encodeTypeAssignment :: PythonEnvironment -> Name -> Type -> Maybe String -> Flow Graph [[Py.Statement]]
 encodeTypeAssignment env name typ comment = do
@@ -580,6 +584,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataUsesGeneric = False,
       pythonModuleMetadataUsesName = False,
       pythonModuleMetadataUsesNode = False,
+      pythonModuleMetadataUsesTuple = False,
       pythonModuleMetadataUsesTypeVar = False}
     addDef meta def = case def of
       DefinitionTerm (TermDefinition _ term typ) -> foldOverTerm TraversalOrderPre extendMetaForTerm (extendMetaForType True meta typ) term
@@ -627,6 +632,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
                 t2 -> t2
           TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True}
           TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
+          TypeProduct _ -> meta {pythonModuleMetadataUsesTuple = True}
           TypeRecord (RowType _ fields) -> meta {
               pythonModuleMetadataUsesAnnotated = L.foldl checkForAnnotated (pythonModuleMetadataUsesAnnotated meta) fields,
               pythonModuleMetadataUsesDataclass = pythonModuleMetadataUsesDataclass meta || not (L.null fields)}
