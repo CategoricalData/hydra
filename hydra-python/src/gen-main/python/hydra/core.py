@@ -1,4 +1,4 @@
-"""Hydra's core data model of type and term expressions."""
+"""Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."""
 
 from __future__ import annotations
 from dataclasses import dataclass
@@ -418,7 +418,8 @@ class TermApplication(Node["Application"]):
 class TermFunction(Node["Function"]):
     """A function term."""
 
-class TermLet(Node["Let"]): ...
+class TermLet(Node["Let"]):
+    """A 'let' term, which binds variables to terms."""
 
 class TermList(Node["frozenlist[Term]"]):
     """A list."""
@@ -450,19 +451,20 @@ class TermTypeAbstraction(Node["TypeAbstraction"]):
 class TermTypeApplication(Node["TypedTerm"]):
     """A System F type application term."""
 
-class TermTyped(Node["TypedTerm"]):
-    """A term annotated with its type."""
-
 class TermUnion(Node["Injection"]):
     """An injection; an instance of a union type."""
+
+class TermUnit(Node[None]):
+    """A unit value; a term with no value."""
 
 class TermVariable(Node["Name"]):
     """A variable reference."""
 
-class TermWrap(Node["WrappedTerm"]): ...
+class TermWrap(Node["WrappedTerm"]):
+    """A wrapped term; an instance of a wrapper type (newtype)."""
 
 # A data term.
-type Term = TermAnnotated | TermApplication | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermOptional | TermProduct | TermRecord | TermSet | TermSum | TermTypeAbstraction | TermTypeApplication | TermTyped | TermUnion | TermVariable | TermWrap
+type Term = TermAnnotated | TermApplication | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermOptional | TermProduct | TermRecord | TermSet | TermSum | TermTypeAbstraction | TermTypeApplication | TermUnion | TermUnit | TermVariable | TermWrap
 
 TERM__NAME = Name("hydra.core.Term")
 TERM__ANNOTATED__NAME = Name("annotated")
@@ -479,8 +481,8 @@ TERM__SET__NAME = Name("set")
 TERM__SUM__NAME = Name("sum")
 TERM__TYPE_ABSTRACTION__NAME = Name("typeAbstraction")
 TERM__TYPE_APPLICATION__NAME = Name("typeApplication")
-TERM__TYPED__NAME = Name("typed")
 TERM__UNION__NAME = Name("union")
+TERM__UNIT__NAME = Name("unit")
 TERM__VARIABLE__NAME = Name("variable")
 TERM__WRAP__NAME = Name("wrap")
 
@@ -523,12 +525,14 @@ class TypeSum(Node["frozenlist[Type]"]): ...
 
 class TypeUnion(Node["RowType"]): ...
 
+class TypeUnit(Node[None]): ...
+
 class TypeVariable(Node["Name"]): ...
 
 class TypeWrap(Node["WrappedType"]): ...
 
 # A data type.
-type Type = TypeAnnotated | TypeApplication | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeOptional | TypeProduct | TypeRecord | TypeSet | TypeSum | TypeUnion | TypeVariable | TypeWrap
+type Type = TypeAnnotated | TypeApplication | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeOptional | TypeProduct | TypeRecord | TypeSet | TypeSum | TypeUnion | TypeUnit | TypeVariable | TypeWrap
 
 TYPE__NAME = Name("hydra.core.Type")
 TYPE__ANNOTATED__NAME = Name("annotated")
@@ -544,6 +548,7 @@ TYPE__RECORD__NAME = Name("record")
 TYPE__SET__NAME = Name("set")
 TYPE__SUM__NAME = Name("sum")
 TYPE__UNION__NAME = Name("union")
+TYPE__UNIT__NAME = Name("unit")
 TYPE__VARIABLE__NAME = Name("variable")
 TYPE__WRAP__NAME = Name("wrap")
 
@@ -559,19 +564,8 @@ TYPE_ABSTRACTION__PARAMETER__NAME = Name("parameter")
 TYPE_ABSTRACTION__BODY__NAME = Name("body")
 
 @dataclass
-class TypeScheme:
-    """A type expression together with free type variables occurring in the expression."""
-    
-    variables: frozenlist[Name]
-    type: Type
-
-TYPE_SCHEME__NAME = Name("hydra.core.TypeScheme")
-TYPE_SCHEME__VARIABLES__NAME = Name("variables")
-TYPE_SCHEME__TYPE__NAME = Name("type")
-
-@dataclass
 class TypedTerm:
-    """A term together with its type."""
+    """A term applied to a type; a type application."""
     
     term: Term
     type: Type
@@ -581,10 +575,15 @@ TYPED_TERM__TERM__NAME = Name("term")
 TYPED_TERM__TYPE__NAME = Name("type")
 
 @dataclass
-class Unit:
-    """An empty record as a canonical unit value."""
+class TypeScheme:
+    """A type expression together with free type variables occurring in the expression."""
+    
+    variables: frozenlist[Name]
+    type: Type
 
-UNIT__NAME = Name("hydra.core.Unit")
+TYPE_SCHEME__NAME = Name("hydra.core.TypeScheme")
+TYPE_SCHEME__VARIABLES__NAME = Name("variables")
+TYPE_SCHEME__TYPE__NAME = Name("type")
 
 @dataclass
 class WrappedTerm:
@@ -599,7 +598,7 @@ WRAPPED_TERM__OBJECT__NAME = Name("object")
 
 @dataclass
 class WrappedType:
-    """A type wrapped in a type name."""
+    """A type wrapped in a type name; a newtype."""
     
     type_name: Name
     object: Type

@@ -1,49 +1,13 @@
-"""A set of types which supplement hydra.core with variants and accessors. Currently contains miscellaneous additional types including CaseConvention and Either."""
+"""A set of types which supplement hydra.core, but are not referenced by hydra.core."""
 
 from __future__ import annotations
-from dataclasses import dataclass
 from enum import Enum
-from hydra.dsl.python import frozenlist, Node
+from hydra.dsl.python import Node
 from typing import TypeVar
 import hydra.core
 
 A = TypeVar("A")
 B = TypeVar("B")
-
-@dataclass
-class AccessorEdge:
-    source: AccessorNode
-    path: AccessorPath
-    target: AccessorNode
-
-ACCESSOR_EDGE__NAME = hydra.core.Name("hydra.mantle.AccessorEdge")
-ACCESSOR_EDGE__SOURCE__NAME = hydra.core.Name("source")
-ACCESSOR_EDGE__PATH__NAME = hydra.core.Name("path")
-ACCESSOR_EDGE__TARGET__NAME = hydra.core.Name("target")
-
-@dataclass
-class AccessorGraph:
-    nodes: frozenlist[AccessorNode]
-    edges: frozenlist[AccessorEdge]
-
-ACCESSOR_GRAPH__NAME = hydra.core.Name("hydra.mantle.AccessorGraph")
-ACCESSOR_GRAPH__NODES__NAME = hydra.core.Name("nodes")
-ACCESSOR_GRAPH__EDGES__NAME = hydra.core.Name("edges")
-
-@dataclass
-class AccessorNode:
-    name: hydra.core.Name
-    label: str
-    id: str
-
-ACCESSOR_NODE__NAME = hydra.core.Name("hydra.mantle.AccessorNode")
-ACCESSOR_NODE__NAME__NAME = hydra.core.Name("name")
-ACCESSOR_NODE__LABEL__NAME = hydra.core.Name("label")
-ACCESSOR_NODE__ID__NAME = hydra.core.Name("id")
-
-class AccessorPath(Node["frozenlist[TermAccessor]"]): ...
-
-ACCESSOR_PATH__NAME = hydra.core.Name("hydra.mantle.AccessorPath")
 
 class CaseConvention(Enum):
     CAMEL = "camel"
@@ -59,6 +23,20 @@ CASE_CONVENTION__CAMEL__NAME = hydra.core.Name("camel")
 CASE_CONVENTION__PASCAL__NAME = hydra.core.Name("pascal")
 CASE_CONVENTION__LOWER_SNAKE__NAME = hydra.core.Name("lowerSnake")
 CASE_CONVENTION__UPPER_SNAKE__NAME = hydra.core.Name("upperSnake")
+
+class Comparison(Enum):
+    """An equality judgement: less than, equal to, or greater than."""
+    
+    LESS_THAN = "lessThan"
+    
+    EQUAL_TO = "equalTo"
+    
+    GREATER_THAN = "greaterThan"
+
+COMPARISON__NAME = hydra.core.Name("hydra.mantle.Comparison")
+COMPARISON__LESS_THAN__NAME = hydra.core.Name("lessThan")
+COMPARISON__EQUAL_TO__NAME = hydra.core.Name("equalTo")
+COMPARISON__GREATER_THAN__NAME = hydra.core.Name("greaterThan")
 
 class EitherLeft(Node["A"]): ...
 
@@ -133,77 +111,6 @@ PRECISION__NAME = hydra.core.Name("hydra.mantle.Precision")
 PRECISION__ARBITRARY__NAME = hydra.core.Name("arbitrary")
 PRECISION__BITS__NAME = hydra.core.Name("bits")
 
-class TermAccessorAnnotatedSubject(Node[None]): ...
-
-class TermAccessorApplicationFunction(Node[None]): ...
-
-class TermAccessorApplicationArgument(Node[None]): ...
-
-class TermAccessorLambdaBody(Node[None]): ...
-
-class TermAccessorUnionCasesDefault(Node[None]): ...
-
-class TermAccessorUnionCasesBranch(Node[hydra.core.Name]):
-    """A unique identifier in some context; a string-valued key."""
-
-class TermAccessorLetEnvironment(Node[None]): ...
-
-class TermAccessorLetBinding(Node[hydra.core.Name]):
-    """A unique identifier in some context; a string-valued key."""
-
-class TermAccessorListElement(Node[int]): ...
-
-class TermAccessorMapKey(Node[int]): ...
-
-class TermAccessorMapValue(Node[int]): ...
-
-class TermAccessorOptionalTerm(Node[None]): ...
-
-class TermAccessorProductTerm(Node[int]): ...
-
-class TermAccessorRecordField(Node[hydra.core.Name]):
-    """A unique identifier in some context; a string-valued key."""
-
-class TermAccessorSetElement(Node[int]): ...
-
-class TermAccessorSumTerm(Node[None]): ...
-
-class TermAccessorTypeAbstractionBody(Node[None]): ...
-
-class TermAccessorTypeApplicationTerm(Node[None]): ...
-
-class TermAccessorTypedTerm(Node[None]): ...
-
-class TermAccessorInjectionTerm(Node[None]): ...
-
-class TermAccessorWrappedTerm(Node[None]): ...
-
-# A function which maps from a term to a particular immediate subterm.
-type TermAccessor = TermAccessorAnnotatedSubject | TermAccessorApplicationFunction | TermAccessorApplicationArgument | TermAccessorLambdaBody | TermAccessorUnionCasesDefault | TermAccessorUnionCasesBranch | TermAccessorLetEnvironment | TermAccessorLetBinding | TermAccessorListElement | TermAccessorMapKey | TermAccessorMapValue | TermAccessorOptionalTerm | TermAccessorProductTerm | TermAccessorRecordField | TermAccessorSetElement | TermAccessorSumTerm | TermAccessorTypeAbstractionBody | TermAccessorTypeApplicationTerm | TermAccessorTypedTerm | TermAccessorInjectionTerm | TermAccessorWrappedTerm
-
-TERM_ACCESSOR__NAME = hydra.core.Name("hydra.mantle.TermAccessor")
-TERM_ACCESSOR__ANNOTATED_SUBJECT__NAME = hydra.core.Name("annotatedSubject")
-TERM_ACCESSOR__APPLICATION_FUNCTION__NAME = hydra.core.Name("applicationFunction")
-TERM_ACCESSOR__APPLICATION_ARGUMENT__NAME = hydra.core.Name("applicationArgument")
-TERM_ACCESSOR__LAMBDA_BODY__NAME = hydra.core.Name("lambdaBody")
-TERM_ACCESSOR__UNION_CASES_DEFAULT__NAME = hydra.core.Name("unionCasesDefault")
-TERM_ACCESSOR__UNION_CASES_BRANCH__NAME = hydra.core.Name("unionCasesBranch")
-TERM_ACCESSOR__LET_ENVIRONMENT__NAME = hydra.core.Name("letEnvironment")
-TERM_ACCESSOR__LET_BINDING__NAME = hydra.core.Name("letBinding")
-TERM_ACCESSOR__LIST_ELEMENT__NAME = hydra.core.Name("listElement")
-TERM_ACCESSOR__MAP_KEY__NAME = hydra.core.Name("mapKey")
-TERM_ACCESSOR__MAP_VALUE__NAME = hydra.core.Name("mapValue")
-TERM_ACCESSOR__OPTIONAL_TERM__NAME = hydra.core.Name("optionalTerm")
-TERM_ACCESSOR__PRODUCT_TERM__NAME = hydra.core.Name("productTerm")
-TERM_ACCESSOR__RECORD_FIELD__NAME = hydra.core.Name("recordField")
-TERM_ACCESSOR__SET_ELEMENT__NAME = hydra.core.Name("setElement")
-TERM_ACCESSOR__SUM_TERM__NAME = hydra.core.Name("sumTerm")
-TERM_ACCESSOR__TYPE_ABSTRACTION_BODY__NAME = hydra.core.Name("typeAbstractionBody")
-TERM_ACCESSOR__TYPE_APPLICATION_TERM__NAME = hydra.core.Name("typeApplicationTerm")
-TERM_ACCESSOR__TYPED_TERM__NAME = hydra.core.Name("typedTerm")
-TERM_ACCESSOR__INJECTION_TERM__NAME = hydra.core.Name("injectionTerm")
-TERM_ACCESSOR__WRAPPED_TERM__NAME = hydra.core.Name("wrappedTerm")
-
 class TermVariant(Enum):
     """The identifier of a term expression constructor."""
     
@@ -235,9 +142,9 @@ class TermVariant(Enum):
     
     TYPE_APPLICATION = "typeApplication"
     
-    TYPED = "typed"
-    
     UNION = "union"
+    
+    UNIT = "unit"
     
     VARIABLE = "variable"
     
@@ -258,10 +165,21 @@ TERM_VARIANT__SET__NAME = hydra.core.Name("set")
 TERM_VARIANT__SUM__NAME = hydra.core.Name("sum")
 TERM_VARIANT__TYPE_ABSTRACTION__NAME = hydra.core.Name("typeAbstraction")
 TERM_VARIANT__TYPE_APPLICATION__NAME = hydra.core.Name("typeApplication")
-TERM_VARIANT__TYPED__NAME = hydra.core.Name("typed")
 TERM_VARIANT__UNION__NAME = hydra.core.Name("union")
+TERM_VARIANT__UNIT__NAME = hydra.core.Name("unit")
 TERM_VARIANT__VARIABLE__NAME = hydra.core.Name("variable")
 TERM_VARIANT__WRAP__NAME = hydra.core.Name("wrap")
+
+class TypeClass(Enum):
+    """Any of a small number of built-in type classes."""
+    
+    EQUALITY = "equality"
+    
+    ORDERING = "ordering"
+
+TYPE_CLASS__NAME = hydra.core.Name("hydra.mantle.TypeClass")
+TYPE_CLASS__EQUALITY__NAME = hydra.core.Name("equality")
+TYPE_CLASS__ORDERING__NAME = hydra.core.Name("ordering")
 
 class TypeVariant(Enum):
     """The identifier of a type constructor."""
@@ -292,6 +210,8 @@ class TypeVariant(Enum):
     
     UNION = "union"
     
+    UNIT = "unit"
+    
     VARIABLE = "variable"
     
     WRAP = "wrap"
@@ -310,5 +230,6 @@ TYPE_VARIANT__RECORD__NAME = hydra.core.Name("record")
 TYPE_VARIANT__SET__NAME = hydra.core.Name("set")
 TYPE_VARIANT__SUM__NAME = hydra.core.Name("sum")
 TYPE_VARIANT__UNION__NAME = hydra.core.Name("union")
+TYPE_VARIANT__UNIT__NAME = hydra.core.Name("unit")
 TYPE_VARIANT__VARIABLE__NAME = hydra.core.Name("variable")
 TYPE_VARIANT__WRAP__NAME = hydra.core.Name("wrap")
