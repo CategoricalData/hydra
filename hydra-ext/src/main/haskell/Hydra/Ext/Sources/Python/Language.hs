@@ -124,7 +124,7 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
       Mantle.termVariantRecord,
       Mantle.termVariantSet,
       Mantle.termVariantUnion,
-      -- TODO: TermVariantUnit, mapping to Python's None
+      Mantle.termVariantUnit,
       Mantle.termVariantVariable,
       Mantle.termVariantWrap],
     "typeVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
@@ -140,7 +140,7 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
       Mantle.typeVariantRecord,
       Mantle.typeVariantSet,
       Mantle.typeVariantUnion,
-      -- TODO: TypeVariantUnit, mapping to Python's NoneType
+      Mantle.typeVariantUnit,
       Mantle.typeVariantVariable,
       Mantle.typeVariantWrap],
     "typePredicate">: constant true] $ -- TODO: verify whether all are supported
