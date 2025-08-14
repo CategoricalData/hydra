@@ -3,7 +3,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from hydra.dsl.python import FrozenDict, frozenlist, Node
-from typing import Annotated, Generic, TypeVar
+from typing import Annotated, Generic, Tuple, TypeVar
 import hydra.core
 import hydra.graph
 
@@ -64,6 +64,7 @@ NAMESPACE__NAME = hydra.core.Name("hydra.module.Namespace")
 class Namespaces(Generic[N]):
     """A mapping from namespaces to values of type n, with a focus on one namespace."""
     
+    focus: Tuple[Namespace, N]
     mapping: FrozenDict[Namespace, N]
 
 NAMESPACES__NAME = hydra.core.Name("hydra.module.Namespaces")

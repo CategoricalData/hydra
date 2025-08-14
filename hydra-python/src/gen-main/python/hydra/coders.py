@@ -5,11 +5,15 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 from hydra.dsl.python import FrozenDict, Node
-from typing import Annotated
+from typing import Annotated, TypeVar
 import hydra.compute
 import hydra.core
 import hydra.graph
 import hydra.mantle
+
+S = TypeVar("S")
+T = TypeVar("T")
+V = TypeVar("V")
 
 @dataclass
 class AdapterContext:
@@ -74,15 +78,25 @@ class LanguageName(Node[str]):
 
 LANGUAGE_NAME__NAME = hydra.core.Name("hydra.coders.LanguageName")
 
-class TraversalOrder(Enum):
-    """Specifies either a pre-order or post-order traversal."""
-    
-    PRE = "pre"
+# A bidirectional encoder which maps between the same type and term languages on either side.
+type SymmetricAdapter[S, T, V] = hydra.compute.Adapter[S, S, T, T, V, V]
+
+SYMMETRIC_ADAPTER__NAME = hydra.core.Name("hydra.coders.SymmetricAdapter")
+
+class TraversalOrderPre(Node[None]):
     """Pre-order traversal."""
-    
-    POST = "post"
+
+class TraversalOrderPost(Node[None]):
     """Post-order traversal."""
+
+# Specifies either a pre-order or post-order traversal.
+type TraversalOrder = TraversalOrderPre | TraversalOrderPost
 
 TRAVERSAL_ORDER__NAME = hydra.core.Name("hydra.coders.TraversalOrder")
 TRAVERSAL_ORDER__PRE__NAME = hydra.core.Name("pre")
 TRAVERSAL_ORDER__POST__NAME = hydra.core.Name("post")
+
+# A function which maps a Hydra type to a symmetric adapter between types and terms.
+type TypeAdapter = Callable[[hydra.core.Type], hydra.compute.Flow[AdapterContext, SymmetricAdapter[AdapterContext, hydra.core.Type, hydra.core.Term]]]
+
+TYPE_ADAPTER__NAME = hydra.core.Name("hydra.coders.TypeAdapter")
