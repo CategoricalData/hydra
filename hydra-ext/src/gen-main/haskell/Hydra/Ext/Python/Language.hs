@@ -18,26 +18,35 @@ pythonLanguage :: Coders.Language
 pythonLanguage = Coders.Language {
   Coders.languageName = (Coders.LanguageName "hydra.ext.python"),
   Coders.languageConstraints = Coders.LanguageConstraints {
-    Coders.languageConstraintsEliminationVariants = (Sets.fromList [
+    Coders.languageConstraintsEliminationVariants = eliminationVariants,
+    Coders.languageConstraintsLiteralVariants = literalVariants,
+    Coders.languageConstraintsFloatTypes = floatTypes,
+    Coders.languageConstraintsFunctionVariants = functionVariants,
+    Coders.languageConstraintsIntegerTypes = integerTypes,
+    Coders.languageConstraintsTermVariants = termVariants,
+    Coders.languageConstraintsTypeVariants = typeVariants,
+    Coders.languageConstraintsTypes = typePredicate}} 
+  where 
+    eliminationVariants = (Sets.fromList [
       Mantle.EliminationVariantProduct,
       Mantle.EliminationVariantRecord,
       Mantle.EliminationVariantUnion,
-      Mantle.EliminationVariantWrap]),
-    Coders.languageConstraintsLiteralVariants = (Sets.fromList [
+      Mantle.EliminationVariantWrap])
+    literalVariants = (Sets.fromList [
       Mantle.LiteralVariantBinary,
       Mantle.LiteralVariantBoolean,
       Mantle.LiteralVariantFloat,
       Mantle.LiteralVariantInteger,
-      Mantle.LiteralVariantString]),
-    Coders.languageConstraintsFloatTypes = (Sets.fromList [
-      Core.FloatTypeFloat64]),
-    Coders.languageConstraintsFunctionVariants = (Sets.fromList [
+      Mantle.LiteralVariantString])
+    floatTypes = (Sets.fromList [
+      Core.FloatTypeFloat64])
+    functionVariants = (Sets.fromList [
       Mantle.FunctionVariantElimination,
       Mantle.FunctionVariantLambda,
-      Mantle.FunctionVariantPrimitive]),
-    Coders.languageConstraintsIntegerTypes = (Sets.fromList [
-      Core.IntegerTypeBigint]),
-    Coders.languageConstraintsTermVariants = (Sets.fromList [
+      Mantle.FunctionVariantPrimitive])
+    integerTypes = (Sets.fromList [
+      Core.IntegerTypeBigint])
+    termVariants = (Sets.fromList [
       Mantle.TermVariantApplication,
       Mantle.TermVariantFunction,
       Mantle.TermVariantLet,
@@ -49,9 +58,10 @@ pythonLanguage = Coders.Language {
       Mantle.TermVariantRecord,
       Mantle.TermVariantSet,
       Mantle.TermVariantUnion,
+      Mantle.TermVariantUnit,
       Mantle.TermVariantVariable,
-      Mantle.TermVariantWrap]),
-    Coders.languageConstraintsTypeVariants = (Sets.fromList [
+      Mantle.TermVariantWrap])
+    typeVariants = (Sets.fromList [
       Mantle.TypeVariantAnnotated,
       Mantle.TypeVariantApplication,
       Mantle.TypeVariantFunction,
@@ -64,9 +74,10 @@ pythonLanguage = Coders.Language {
       Mantle.TypeVariantRecord,
       Mantle.TypeVariantSet,
       Mantle.TypeVariantUnion,
+      Mantle.TypeVariantUnit,
       Mantle.TypeVariantVariable,
-      Mantle.TypeVariantWrap]),
-    Coders.languageConstraintsTypes = (\_ -> True)}}
+      Mantle.TypeVariantWrap])
+    typePredicate = (\_ -> True)
 
 -- | A set of reserved words in Python
 pythonReservedWords :: (S.Set String)

@@ -464,11 +464,10 @@ encodeType env typ = case deannotateType typ of
     TypeLiteral lt -> encodeLiteralType lt
     TypeOptional et -> orNull . pyExpressionToPyPrimary <$> encode et
     TypeProduct types -> nameAndParams (Py.Name "Tuple") <$> (CM.mapM encode types)
-    TypeRecord rt -> pure $ if EncodeCore.isUnitType (TypeRecord rt)
-      then pyNameToPyExpression pyNone
-      else typeVariableReference env $ rowTypeTypeName rt
+    TypeRecord rt -> pure $ typeVariableReference env $ rowTypeTypeName rt
     TypeSet et -> nameAndParams (Py.Name "frozenset") . L.singleton <$> encode et
     TypeUnion rt -> pure $ typeVariableReference env $ rowTypeTypeName rt
+    TypeUnit -> pure $ pyNameToPyExpression pyNone
     TypeVariable name -> pure $ typeVariableReference env name
     TypeWrap (WrappedType name _) -> pure $ typeVariableReference env name
     _ -> dflt
