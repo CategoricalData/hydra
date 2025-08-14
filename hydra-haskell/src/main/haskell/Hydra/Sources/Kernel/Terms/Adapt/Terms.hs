@@ -695,14 +695,15 @@ wrapToUnwrappedDef = define "wrapToUnwrapped" $
 termAdapterDef :: TElement TypeAdapter
 termAdapterDef = define "termAdapter" $
   doc "Create an adapter for any type" $
-  lambda "typ" $ lets [
-    "constraints">: lambda "cx" $ Coders.languageConstraintsProjection $ Coders.adapterContextLanguage $ var "cx",
-    "supported">: lambda "cx" $ ref AdaptUtils.typeIsSupportedDef @@ (var "constraints" @@ var "cx"),
-    "variantIsSupported">: lambdas ["cx", "t"] $ Sets.member (ref Variants.typeVariantDef @@ var "t") $ Coders.languageConstraintsTypeVariants $ var "constraints" @@ var "cx",
-    "supportedAtTopLevel">: lambdas ["cx", "t"] $ Logic.and
+  "typ" ~> lets [
+    "constraints">: "cx" ~> Coders.languageConstraintsProjection $ Coders.adapterContextLanguage $ var "cx",
+    "supported">: "cx" ~> ref AdaptUtils.typeIsSupportedDef @@ (var "constraints" @@ var "cx"),
+    "variantIsSupported">: "cx" ~> "t" ~>
+      Sets.member (ref Variants.typeVariantDef @@ var "t") $ Coders.languageConstraintsTypeVariants $ var "constraints" @@ var "cx",
+    "supportedAtTopLevel">: "cx" ~> "t" ~> Logic.and
       (var "variantIsSupported" @@ var "cx" @@ var "t")
       (Coders.languageConstraintsTypes (var "constraints" @@ var "cx") @@ var "t"),
-    "pass">: lambda "t" $ cases _TypeVariant (ref Variants.typeVariantDef @@ (ref Rewriting.deannotateTypeDef @@ var "t")) Nothing [
+    "pass">: "t" ~> cases _TypeVariant (ref Variants.typeVariantDef @@ (ref Rewriting.deannotateTypeDef @@ var "t")) Nothing [
       _TypeVariant_application>>: constant $ list [ref passApplicationDef],
       _TypeVariant_forall>>: constant $ list [ref passForallDef],
       _TypeVariant_function>>: constant $ list [ref passFunctionDef],
@@ -717,7 +718,8 @@ termAdapterDef = define "termAdapter" $
       _TypeVariant_union>>: constant $ list [ref passUnionDef],
       _TypeVariant_unit>>: constant $ list [ref passUnitDef],
       _TypeVariant_wrap>>: constant $ list [ref passWrappedDef]],
-    "trySubstitution">: lambda "t" $ cases _TypeVariant (ref Variants.typeVariantDef @@ var "t") Nothing [
+    "trySubstitution">: "t" ~> cases _TypeVariant (ref Variants.typeVariantDef @@ var "t")
+      Nothing [
       _TypeVariant_application>>: constant $ list [ref simplifyApplicationDef],
       _TypeVariant_function>>: constant $ list [ref functionToUnionDef],
       _TypeVariant_forall>>: constant $ list [ref lambdaToMonotypeDef],
@@ -726,11 +728,10 @@ termAdapterDef = define "termAdapter" $
       _TypeVariant_union>>: constant $ list [ref unionToRecordDef],
       _TypeVariant_unit>>: constant $ list [ref unitToRecordDef],
       _TypeVariant_wrap>>: constant $ list [ref wrapToUnwrappedDef]],
-    "alts">: lambdas ["cx", "t"] $
-       Flows.mapList (lambda "c" $ var "c" @@ var "t") $
-         Logic.ifElse (var "supportedAtTopLevel" @@ var "cx" @@ var "t")
-           (var "pass" @@ var "t")
-           (var "trySubstitution" @@ var "t")] $
+    "alts">: "cx" ~> "t" ~> Flows.mapList ("c" ~> var "c" @@ var "t") $
+       Logic.ifElse (var "supportedAtTopLevel" @@ var "cx" @@ var "t")
+         (var "pass" @@ var "t")
+         (var "trySubstitution" @@ var "t")] $
     cases _Type (var "typ")
       (Just $
         trace (Strings.cat2 (string "adapter for ") (ref DescribeCore.typeDef @@ var "typ")) $
@@ -744,8 +745,8 @@ termAdapterDef = define "termAdapter" $
               @@ (ref DescribeCore.typeDef)
               @@ (var "typ")) [
           -- Account for let-bound variables
-          _Type_variable>>: lambda "name" $ ref forTypeReferenceDef @@ var "name"]) [
-      _Type_annotated>>: lambda "at" $
+          _Type_variable>>: "name" ~> ref forTypeReferenceDef @@ var "name"]) [
+      _Type_annotated>>: "at" ~>
         bind "ad" (ref termAdapterDef @@ Core.annotatedTypeSubject (var "at")) $
         Flows.pure (Compute.adapterWithTarget (var "ad") $
           Core.typeAnnotated $ Core.annotatedType (Compute.adapterTarget $ var "ad") (Core.annotatedTypeAnnotation $ var "at"))]
@@ -753,6 +754,6 @@ termAdapterDef = define "termAdapter" $
 withGraphContextDef :: TElement (Flow Graph a -> Flow AdapterContext a)
 withGraphContextDef = define "withGraphContext" $
   doc "Execute a flow with graph context" $
-  lambda "f" $
-    Flows.bind (ref Monads.getStateDef) $ lambda "cx" $
-      ref Monads.withStateDef @@ (Coders.adapterContextGraph $ var "cx") @@ var "f"
+  "f" ~>
+  "cx" <<~ ref Monads.getStateDef $
+  ref Monads.withStateDef @@ (Coders.adapterContextGraph $ var "cx") @@ var "f"
