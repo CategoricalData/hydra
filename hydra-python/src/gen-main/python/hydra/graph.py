@@ -3,27 +3,12 @@
 from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
-from enum import Enum
 from hydra.dsl.python import FrozenDict, frozenlist
 from typing import Annotated, Generic, TypeVar
 import hydra.compute
 import hydra.core
 
 A = TypeVar("A")
-
-class Comparison(Enum):
-    """An equality judgement: less than, equal to, or greater than."""
-    
-    LESS_THAN = "lessThan"
-    
-    EQUAL_TO = "equalTo"
-    
-    GREATER_THAN = "greaterThan"
-
-COMPARISON__NAME = hydra.core.Name("hydra.graph.Comparison")
-COMPARISON__LESS_THAN__NAME = hydra.core.Name("lessThan")
-COMPARISON__EQUAL_TO__NAME = hydra.core.Name("equalTo")
-COMPARISON__GREATER_THAN__NAME = hydra.core.Name("greaterThan")
 
 @dataclass
 class Element:
@@ -80,14 +65,3 @@ class TermCoder(Generic[A]):
 TERM_CODER__NAME = hydra.core.Name("hydra.graph.TermCoder")
 TERM_CODER__TYPE__NAME = hydra.core.Name("type")
 TERM_CODER__CODER__NAME = hydra.core.Name("coder")
-
-class TypeClass(Enum):
-    """Any of a small number of built-in type classes."""
-    
-    EQUALITY = "equality"
-    
-    ORDERING = "ordering"
-
-TYPE_CLASS__NAME = hydra.core.Name("hydra.graph.TypeClass")
-TYPE_CLASS__EQUALITY__NAME = hydra.core.Name("equality")
-TYPE_CLASS__ORDERING__NAME = hydra.core.Name("ordering")

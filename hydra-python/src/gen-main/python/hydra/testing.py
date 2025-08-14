@@ -47,6 +47,15 @@ EVALUATION_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 EVALUATION_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
 
 @dataclass
+class InferenceFailureTestCase:
+    """A test case providing a term for which type inference is expected to fail."""
+    
+    input: hydra.core.Term
+
+INFERENCE_FAILURE_TEST_CASE__NAME = hydra.core.Name("hydra.testing.InferenceFailureTestCase")
+INFERENCE_FAILURE_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+
+@dataclass
 class InferenceTestCase:
     """A test case which performs type inference on a given term and compares the result with an expected type scheme."""
     
@@ -67,13 +76,16 @@ class TestCaseEvaluation(Node["EvaluationTestCase"]): ...
 
 class TestCaseInference(Node["InferenceTestCase"]): ...
 
+class TestCaseInferenceFailure(Node["InferenceFailureTestCase"]): ...
+
 # A simple test case with an input and an expected output.
-type TestCase = TestCaseCaseConversion | TestCaseEvaluation | TestCaseInference
+type TestCase = TestCaseCaseConversion | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure
 
 TEST_CASE__NAME = hydra.core.Name("hydra.testing.TestCase")
 TEST_CASE__CASE_CONVERSION__NAME = hydra.core.Name("caseConversion")
 TEST_CASE__EVALUATION__NAME = hydra.core.Name("evaluation")
 TEST_CASE__INFERENCE__NAME = hydra.core.Name("inference")
+TEST_CASE__INFERENCE_FAILURE__NAME = hydra.core.Name("inferenceFailure")
 
 @dataclass
 class TestCaseWithMetadata:
