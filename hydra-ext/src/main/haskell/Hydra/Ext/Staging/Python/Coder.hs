@@ -11,6 +11,7 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Ext.Staging.Python.Serde as PySer
 import qualified Hydra.Dsl.Types as Types
+import qualified Hydra.Lib.Literals as Literals
 import Hydra.Dsl.ShorthandTypes
 import Hydra.Formatting
 
@@ -45,6 +46,23 @@ argsAndBindings = gather [] [] []
         TypeFunction (FunctionType dom cod) -> gather (var:prevArgs) prevBindings (dom:prevDoms) body cod
       TermLet (Let bindings body) -> gather prevArgs (bindings ++ prevBindings) prevDoms body typ
       t -> (L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ)
+
+-- | Rewrite case statements in which the top-level lambda variables are re-used, e.g.
+--   cases _Type Nothing [_Type_list>>: "t" ~> ..., _Type_set>>: "t" ~> ...].
+--   Such case statements are legal in Hydra, but may lead to variable name collision in languages like Python.
+deduplicateCaseVariables :: [Field] -> [Field]
+deduplicateCaseVariables cases = snd $ L.foldr rewriteCase (M.empty, []) cases
+  where
+    rewriteCase (Field fname fterm) (countByName, done) = case fterm of
+      -- Note: does not yet take annotations into account
+      TermFunction (FunctionLambda (Lambda v mt body)) -> case M.lookup v countByName of
+        Nothing -> (M.insert v 1 countByName, (Field fname fterm):done)
+        Just count -> (M.insert v count2 countByName, (Field fname rewritten):done)
+          where
+            count2 = count + 1
+            v2 = Name (unName v ++ Literals.showInt32 count2)
+            rewritten = TermFunction $ FunctionLambda $ Lambda v2 mt (alphaConvert v v2 body)
+      _ -> (countByName, (Field fname fterm):done)
 
 encodeApplication :: PythonEnvironment -> Application -> Flow Graph Py.Expression
 encodeApplication env app = do
@@ -400,6 +418,16 @@ encodeTermAssignment env name term typ comment = if L.null args && L.null bindin
         encodeTermAssignment env name1 term1 typ1 comment
     (args, bindings, body, doms, cod) = argsAndBindings term typ
 
+
+
+
+
+
+
+
+
+
+
 encodeTopLevelTerm :: PythonEnvironment -> Term -> Flow Graph [Py.Statement]
 encodeTopLevelTerm env term = if L.length args == 1
     then withArg body (L.head args)
@@ -418,7 +446,7 @@ encodeTopLevelTerm env term = if L.length args == 1
           let isEnum = isEnumRowType rt
           let isFull = L.length cases >= L.length (rowTypeFields rt)
           pyArg <- encodeTerm env arg
-          pyCases <- CM.mapM (toCaseBlock isEnum) cases
+          pyCases <- CM.mapM (toCaseBlock isEnum) $ deduplicateCaseVariables cases
           pyDflt <- toDefault isFull dflt
           let subj = Py.SubjectExpressionSimple $ Py.NamedExpressionSimple pyArg
           return [Py.StatementCompound $ Py.CompoundStatementMatch $ Py.MatchStatement subj $ pyCases ++ pyDflt]
