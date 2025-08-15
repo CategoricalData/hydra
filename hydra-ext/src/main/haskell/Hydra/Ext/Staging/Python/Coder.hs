@@ -360,6 +360,7 @@ encodeTerm env term = case deannotateTerm term of
         else do
           parg <- encode $ fieldTerm field
           return $ functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) [parg]
+    TermUnit -> return $ pyNameToPyExpression pyNone
     TermVariable name -> do
       g <- getState
       return $ case lookupElement g name of
