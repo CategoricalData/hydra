@@ -71,26 +71,10 @@ module_ = Module (Namespace "hydra.reduction") elements
 define :: String -> TTerm a -> TElement a
 define = definitionInModule module_
 
-alphaConvertDef :: TElement (Name -> Term -> Term -> Term)
+alphaConvertDef :: TElement (Name -> Name -> Term -> Term)
 alphaConvertDef = define "alphaConvert" $
   doc "Alpha convert a variable in a term" $
-  lambda "vold" $ lambda "tnew" $ lambda "term" $ lets [
-    "rewrite">: lambda "recurse" $ lambda "t" $
-      match _Term (Just $ var "recurse" @@ var "t") [
-        _Term_function>>: lambda "f" $
-          match _Function (Just $ var "recurse" @@ var "t") [
-            _Function_lambda>>: lambda "l" $ lets [
-              "v">: Core.lambdaParameter $ var "l"]
-              $ Logic.ifElse (Equality.equal (Core.unName $ var "v") (Core.unName $ var "vold"))
-                  (var "t")
-                  (var "recurse" @@ var "t")]
-          @@ var "f",
-        _Term_variable>>: lambda "v" $
-          Logic.ifElse (Equality.equal (Core.unName $ var "v") (Core.unName $ var "vold"))
-            (var "tnew")
-            (Core.termVariable $ var "v")]
-      @@ var "t"]
-    $ ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term"
+  "vold" ~> "vnew" ~> "term" ~> ref Rewriting.replaceFreeTermVariableDef @@ var "vold" @@ (Core.termVariable $ var "vnew") @@ var "term"
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
@@ -112,7 +96,7 @@ betaReduceTypeDef = define "betaReduceType" $
             (var "rhs"))) $
             lambda "a" $ Flows.pure $ Core.typeAnnotated $ Core.annotatedType (var "a") (Core.annotatedTypeAnnotation $ var "at"),
         _Type_forall>>: lambda "ft" $
-          ref betaReduceTypeDef @@ (ref Rewriting.replaceFreeNameDef
+          ref betaReduceTypeDef @@ (ref Rewriting.replaceFreeTypeVariableDef
             @@ (Core.forallTypeParameter $ var "ft")
             @@ var "rhs"
             @@ (Core.forallTypeBody $ var "ft")),
@@ -143,7 +127,7 @@ contractTermDef = define "contractTerm" $
                   "body">: Core.lambdaBody $ var "l"]
                   $ Logic.ifElse (ref Rewriting.isFreeVariableInTermDef @@ var "v" @@ var "body")
                       (var "body")
-                      (ref alphaConvertDef @@ var "v" @@ var "rhs" @@ var "body")]
+                      (ref Rewriting.replaceFreeTermVariableDef @@ var "v" @@ var "rhs" @@ var "body")]
               @@ var "f"]
           @@ (ref Rewriting.deannotateTermDef @@ var "lhs")]
       @@ var "rec"]
@@ -272,7 +256,7 @@ reduceTermDef = define "reduceTerm" $
           (Core.termApplication $ Core.application (var "fun") (Lists.head $ var "args")) @@
           (Lists.tail $ var "args")),
 
-    "replaceFreeName">: lambdas ["toReplace", "replacement", "term"] $ lets [
+    "replaceFreeTypeVariable">: lambdas ["toReplace", "replacement", "term"] $ lets [
       "mapping">: lambdas ["recurse", "inner"] $
         match _Term (Just $ var "recurse" @@ var "inner") [
           _Term_function>>: match _Function (Just $ var "recurse" @@ var "inner") [
@@ -351,7 +335,7 @@ reduceTermDef = define "reduceTerm" $
                   "remainingArgs">: Lists.tail $ var "args"]
                   $ Flows.bind (var "reduce" @@ var "eager" @@ (ref Rewriting.deannotateTermDef @@ var "arg")) $
                     lambda "reducedArg" $
-                      Flows.bind (var "reduce" @@ var "eager" @@ (var "replaceFreeName" @@ var "param" @@ var "reducedArg" @@ var "body")) $
+                      Flows.bind (var "reduce" @@ var "eager" @@ (var "replaceFreeTypeVariable" @@ var "param" @@ var "reducedArg" @@ var "body")) $
                         lambda "reducedResult" $ var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs"),
             _Function_primitive>>: lambda "name" $
               Flows.bind (ref Lexical.requirePrimitiveDef @@ var "name") $ lambda "prim" $
