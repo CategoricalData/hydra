@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 import hydra.core
-import hydra.lib.equality
 import hydra.lib.literals
 
-def float_value_to_bigfloat(v0: hydra.core.FloatValue) -> float:
-    match v0:
+def float_value_to_bigfloat(v1: hydra.core.FloatValue) -> float:
+    match v1:
         case hydra.core.FloatValueBigfloat(f):
-            return hydra.lib.equality.identity(f)
+            return f
         
         case hydra.core.FloatValueFloat32(v1):
             return hydra.lib.literals.float32_to_bigfloat(v1)
@@ -16,12 +15,12 @@ def float_value_to_bigfloat(v0: hydra.core.FloatValue) -> float:
         case hydra.core.FloatValueFloat64(v1):
             return hydra.lib.literals.float64_to_bigfloat(v1)
 
-def integer_value_to_bigint(v0: hydra.core.IntegerValue) -> int:
+def integer_value_to_bigint(v1: hydra.core.IntegerValue) -> int:
     """Convert an integer value of any precision to a bigint."""
     
-    match v0:
+    match v1:
         case hydra.core.IntegerValueBigint(i):
-            return hydra.lib.equality.identity(i)
+            return i
         
         case hydra.core.IntegerValueInt8(v1):
             return hydra.lib.literals.int8_to_bigint(v1)
