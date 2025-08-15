@@ -248,7 +248,7 @@ flattenType :: Type -> Type
 flattenType = rewriteType f
   where
    f recurse typ = case typ of
-     TypeForall (ForallType v body) -> recurse $ replaceFreeName v Types.string body
+     TypeForall (ForallType v body) -> recurse $ replaceFreeTypeVariable v Types.string body
      TypeApplication (ApplicationType lhs _) -> recurse lhs
      _ -> recurse typ
 

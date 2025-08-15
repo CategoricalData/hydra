@@ -76,7 +76,8 @@ module_ = Module (Namespace "hydra.rewriting") elements
      el removeTermAnnotationsDef,
      el removeTypeAnnotationsDef,
      el removeTypesFromTermDef,
-     el replaceFreeNameDef,
+     el replaceFreeTermVariableDef,
+     el replaceFreeTypeVariableDef,
      el rewriteDef,
      el rewriteTermDef,
      el rewriteTermMDef,
@@ -528,8 +529,33 @@ removeTypesFromTermDef = define "removeTypesFromTerm" $
         _Term_typeApplication>>: lambda "tt" $ Core.typedTermTerm $ var "tt"]]
     $ ref rewriteTermDef @@ var "strip" @@ var "term"
 
-replaceFreeNameDef :: TElement (Name -> Type -> Type -> Type)
-replaceFreeNameDef = define "replaceFreeName" $
+replaceFreeTermVariableDef :: TElement (Name -> Term -> Term -> Term)
+replaceFreeTermVariableDef = define "replaceFreeTermVariable" $
+  doc "Replace a free variable in a term" $
+  "vold" ~> "tnew" ~> "term" ~>
+  "rewrite" <~ ("recurse" ~> "t" ~> cases _Term (var "t")
+    (Just $ var "recurse" @@ var "t") [
+    _Term_function>>: lambda "f" $
+      cases _Function (var "f")
+        (Just $ var "recurse" @@ var "t") [
+        _Function_lambda>>: "l" ~> (
+          "v" <~ Core.lambdaParameter (var "l") $
+          Logic.ifElse (Equality.equal (var "v") (var "vold"))
+            (var "t")
+            (var "recurse" @@ var "t"))],
+    _Term_variable>>: "v" ~>
+      Logic.ifElse (Equality.equal (var "v") (var "vold"))
+        (var "tnew")
+        (Core.termVariable $ var "v")]) $
+  ref rewriteTermDef @@ var "rewrite" @@ var "term"
+
+rewriteDef :: TElement (((x -> y) -> x -> y) -> ((x -> y) -> x -> y) -> x -> y)
+rewriteDef = define "rewrite" $ lambdas ["fsub", "f"] $ lets [
+  "recurse">: var "f" @@ (var "fsub" @@ var "recurse")] $
+  var "recurse"
+
+replaceFreeTypeVariableDef :: TElement (Name -> Type -> Type -> Type)
+replaceFreeTypeVariableDef = define "replaceFreeTypeVariable" $
   doc "Replace free occurrences of a name in a type" $
   lambdas ["v", "rep", "typ"] $ lets [
     "mapExpr">: lambdas ["recurse", "t"] $ cases _Type (var "t")
@@ -545,11 +571,6 @@ replaceFreeNameDef = define "replaceFreeName" $
         (var "rep")
         (var "t")]] $
     ref rewriteTypeDef @@ var "mapExpr" @@ var "typ"
-
-rewriteDef :: TElement (((x -> y) -> x -> y) -> ((x -> y) -> x -> y) -> x -> y)
-rewriteDef = define "rewrite" $ lambdas ["fsub", "f"] $ lets [
-  "recurse">: var "f" @@ (var "fsub" @@ var "recurse")] $
-  var "recurse"
 
 rewriteTermDef :: TElement (((Term -> Term) -> Term -> Term) -> Term -> Term)
 rewriteTermDef = define "rewriteTerm" $ lambda "f" $ lets [
