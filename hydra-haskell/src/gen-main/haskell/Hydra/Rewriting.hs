@@ -384,8 +384,8 @@ removeTypesFromTerm term =
   in (rewriteTerm strip term)
 
 -- | Replace free occurrences of a name in a type
-replaceFreeName :: (Core.Name -> Core.Type -> Core.Type -> Core.Type)
-replaceFreeName v rep typ =  
+replaceFreeTypeVariable :: (Core.Name -> Core.Type -> Core.Type -> Core.Type)
+replaceFreeTypeVariable v rep typ =  
   let mapExpr = (\recurse -> \t -> (\x -> case x of
           Core.TypeForall v1 -> (Logic.ifElse (Equality.equal v (Core.forallTypeParameter v1)) t (Core.TypeForall (Core.ForallType {
             Core.forallTypeParameter = (Core.forallTypeParameter v1),
@@ -393,6 +393,19 @@ replaceFreeName v rep typ =
           Core.TypeVariable v1 -> (Logic.ifElse (Equality.equal v v1) rep t)
           _ -> (recurse t)) t)
   in (rewriteType mapExpr typ)
+
+-- | Replace a free variable in a term
+replaceFreeTermVariable :: (Core.Name -> Core.Term -> Core.Term -> Core.Term)
+replaceFreeTermVariable vold tnew term =  
+  let rewrite = (\recurse -> \t -> (\x -> case x of
+          Core.TermFunction v1 -> ((\x -> case x of
+            Core.FunctionLambda v2 ->  
+              let v = (Core.lambdaParameter v2)
+              in (Logic.ifElse (Equality.equal v vold) t (recurse t))
+            _ -> (recurse t)) v1)
+          Core.TermVariable v1 -> (Logic.ifElse (Equality.equal v1 vold) tnew (Core.TermVariable v1))
+          _ -> (recurse t)) t)
+  in (rewriteTerm rewrite term)
 
 rewrite :: ((t0 -> t1) -> (t1 -> t0) -> t0)
 rewrite fsub f =  

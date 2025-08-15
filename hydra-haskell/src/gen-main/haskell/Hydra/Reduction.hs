@@ -27,17 +27,8 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Alpha convert a variable in a term
-alphaConvert :: (Core.Name -> Core.Term -> Core.Term -> Core.Term)
-alphaConvert vold tnew term =  
-  let rewrite = (\recurse -> \t -> (\x -> case x of
-          Core.TermFunction v1 -> ((\x -> case x of
-            Core.FunctionLambda v2 ->  
-              let v = (Core.lambdaParameter v2)
-              in (Logic.ifElse (Equality.equal (Core.unName v) (Core.unName vold)) t (recurse t))
-            _ -> (recurse t)) v1)
-          Core.TermVariable v1 -> (Logic.ifElse (Equality.equal (Core.unName v1) (Core.unName vold)) tnew (Core.TermVariable v1))
-          _ -> (recurse t)) t)
-  in (Rewriting.rewriteTerm rewrite term)
+alphaConvert :: (Core.Name -> Core.Name -> Core.Term -> Core.Term)
+alphaConvert vold vnew term = (Rewriting.replaceFreeTermVariable vold (Core.TermVariable vnew) term)
 
 betaReduceType :: (Core.Type -> Compute.Flow Graph.Graph Core.Type)
 betaReduceType typ =  
@@ -53,7 +44,7 @@ betaReduceType typ =
                   Core.applicationTypeArgument = rhs})) (\a -> Flows.pure (Core.TypeAnnotated (Core.AnnotatedType {
                   Core.annotatedTypeSubject = a,
                   Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))))
-                Core.TypeForall v1 -> (betaReduceType (Rewriting.replaceFreeName (Core.forallTypeParameter v1) rhs (Core.forallTypeBody v1)))
+                Core.TypeForall v1 -> (betaReduceType (Rewriting.replaceFreeTypeVariable (Core.forallTypeParameter v1) rhs (Core.forallTypeBody v1)))
                 Core.TypeVariable v1 -> (Flows.bind (Schemas.requireType v1) (\t_ -> betaReduceType (Core.TypeApplication (Core.ApplicationType {
                   Core.applicationTypeFunction = t_,
                   Core.applicationTypeArgument = rhs}))))) lhs))
@@ -77,7 +68,7 @@ contractTerm term =
                   Core.FunctionLambda v3 ->  
                     let v = (Core.lambdaParameter v3) 
                         body = (Core.lambdaBody v3)
-                    in (Logic.ifElse (Rewriting.isFreeVariableInTerm v body) body (alphaConvert v rhs body))
+                    in (Logic.ifElse (Rewriting.isFreeVariableInTerm v body) body (Rewriting.replaceFreeTermVariable v rhs body))
                   _ -> rec) v2)
                 _ -> rec) (Rewriting.deannotateTerm lhs))
             _ -> rec) rec))
@@ -170,7 +161,7 @@ reduceTerm eager term =
       applyToArguments = (\fun -> \args -> Logic.ifElse (Lists.null args) fun (applyToArguments (Core.TermApplication (Core.Application {
               Core.applicationFunction = fun,
               Core.applicationArgument = (Lists.head args)})) (Lists.tail args)))
-      replaceFreeName = (\toReplace -> \replacement -> \term ->  
+      replaceFreeTypeVariable = (\toReplace -> \replacement -> \term ->  
               let mapping = (\recurse -> \inner -> (\x -> case x of
                       Core.TermFunction v1 -> ((\x -> case x of
                         Core.FunctionLambda v2 -> (Logic.ifElse (Equality.equal (Core.lambdaParameter v2) toReplace) inner (recurse inner))
@@ -212,7 +203,7 @@ reduceTerm eager term =
                         body = (Core.lambdaBody v2)
                         arg = (Lists.head args)
                         remainingArgs = (Lists.tail args)
-                    in (Flows.bind (reduce eager (Rewriting.deannotateTerm arg)) (\reducedArg -> Flows.bind (reduce eager (replaceFreeName param reducedArg body)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))
+                    in (Flows.bind (reduce eager (Rewriting.deannotateTerm arg)) (\reducedArg -> Flows.bind (reduce eager (replaceFreeTypeVariable param reducedArg body)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))
                   Core.FunctionPrimitive v2 -> (Flows.bind (Lexical.requirePrimitive v2) (\prim ->  
                     let arity = (Arity.primitiveArity prim)
                     in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Flows.pure (applyToArguments original args)) ( 
