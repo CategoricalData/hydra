@@ -114,7 +114,7 @@ encodeClassPattern (Py.ClassPattern named mpos mkw) = noSep $ Y.catMaybes [
     Just $ encodeNameOrAttribute named,
     Just $ cst "(",
     encodePositionalPatterns <$> mpos,
-    -- TODO: keyword patterns
+    encodeKeywordPatterns <$> mkw,
     Just $ cst ")"]
 
 encodeClosedPattern :: Py.ClosedPattern -> A.Expr
@@ -241,6 +241,12 @@ encodeInversion :: Py.Inversion -> A.Expr
 encodeInversion i = case i of
   Py.InversionNot other -> spaceSep [cst "not", encodeInversion other]
   Py.InversionSimple c -> encodeComparison c
+
+encodeKeywordPattern :: Py.KeywordPattern -> A.Expr
+encodeKeywordPattern (Py.KeywordPattern name pat) = noSep [encodeName name, cst "=", encodePattern pat]
+
+encodeKeywordPatterns :: Py.KeywordPatterns -> A.Expr
+encodeKeywordPatterns (Py.KeywordPatterns pats) = commaSep inlineStyle (encodeKeywordPattern <$> pats)
 
 encodeKvpair :: Py.Kvpair -> A.Expr
 encodeKvpair (Py.Kvpair k v) = spaceSep [noSep [encodeExpression k, cst ":"], encodeExpression v]

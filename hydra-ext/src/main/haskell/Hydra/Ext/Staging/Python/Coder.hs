@@ -443,10 +443,10 @@ encodeTopLevelTerm env term = if L.length args == 1
                       encodeName True CaseConventionPascal env tname,
                       encodeEnumValue env fname]
                     else Py.ClosedPatternClass
-                      $ Py.ClassPattern pyVarName (Just $ Py.PositionalPatterns [argPattern]) Nothing
+                      $ Py.ClassPattern pyVarName Nothing (Just $ Py.KeywordPatterns [argPattern])
                   where
                     pyVarName = Py.NameOrAttribute [variantName True env tname fname]
-                    argPattern = Py.PatternOr $ Py.OrPattern [
+                    argPattern = Py.KeywordPattern (Py.Name "value") $ Py.PatternOr $ Py.OrPattern [
                       Py.ClosedPatternCapture $ Py.CapturePattern
                         $ Py.PatternCaptureTarget (encodeName False CaseConventionLowerSnake env v)]
             _ -> fail "unsupported case"
