@@ -51,9 +51,9 @@ argsAndBindings = gather [] [] []
 --   cases _Type Nothing [_Type_list>>: "t" ~> ..., _Type_set>>: "t" ~> ...].
 --   Such case statements are legal in Hydra, but may lead to variable name collision in languages like Python.
 deduplicateCaseVariables :: [Field] -> [Field]
-deduplicateCaseVariables cases = snd $ L.foldr rewriteCase (M.empty, []) cases
+deduplicateCaseVariables cases = L.reverse $ snd $ L.foldl rewriteCase (M.empty, []) cases
   where
-    rewriteCase (Field fname fterm) (countByName, done) = case fterm of
+    rewriteCase (countByName, done) (Field fname fterm) = case fterm of
       -- Note: does not yet take annotations into account
       TermFunction (FunctionLambda (Lambda v mt body)) -> case M.lookup v countByName of
         Nothing -> (M.insert v 1 countByName, (Field fname fterm):done)
@@ -418,16 +418,6 @@ encodeTermAssignment env name term typ comment = if L.null args && L.null bindin
         encodeTermAssignment env name1 term1 typ1 comment
     (args, bindings, body, doms, cod) = argsAndBindings term typ
 
-
-
-
-
-
-
-
-
-
-
 encodeTopLevelTerm :: PythonEnvironment -> Term -> Flow Graph [Py.Statement]
 encodeTopLevelTerm env term = if L.length args == 1
     then withArg body (L.head args)
@@ -470,8 +460,11 @@ encodeTopLevelTerm env term = if L.length args == 1
                     then Py.ClosedPatternValue $ Py.ValuePattern $ Py.Attribute [
                       encodeName True CaseConventionPascal env tname,
                       encodeEnumValue env fname]
-                    else Py.ClosedPatternClass
-                      $ Py.ClassPattern pyVarName Nothing (Just $ Py.KeywordPatterns [argPattern])
+                    else if isFreeVariableInTerm v body
+                    then Py.ClosedPatternClass $
+                      Py.ClassPattern pyVarName Nothing Nothing
+                    else Py.ClosedPatternClass $
+                      Py.ClassPattern pyVarName Nothing (Just $ Py.KeywordPatterns [argPattern])
                   where
                     pyVarName = Py.NameOrAttribute [variantName True env tname fname]
                     argPattern = Py.KeywordPattern (Py.Name "value") $ Py.PatternOr $ Py.OrPattern [
