@@ -342,9 +342,10 @@ encodeTerm env term = case deannotateTerm term of
     TermApplication a -> encodeApplication env a
     TermFunction f -> encodeFunction env f
     TermLet _ -> pure $ stringToPyExpression Py.QuoteStyleDouble "let terms are not supported here"
-    TermList els -> do
-      pl <- pyAtomToPyExpression . Py.AtomList . pyList <$> CM.mapM encode els
-      return $ functionCall (pyNameToPyPrimary $ Py.Name "tuple") [pl]
+    TermList terms -> do
+      pyExprs <- CM.mapM encode terms
+      return $ pyAtomToPyExpression $ Py.AtomTuple $ Py.Tuple (pyExpressionToPyStarNamedExpression <$> pyExprs)
+--      return $ functionCall (pyNameToPyPrimary $ Py.Name "tuple") [pl]
     TermLiteral lit -> encodeLiteral lit
     TermMap m -> do
         pairs <- CM.mapM encodePair $ M.toList m
@@ -651,7 +652,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
               baseType t = case deannotateType t of
                 TypeForall (ForallType _ body2) -> baseType body2
                 t2 -> t2
-          TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True}
+--          TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True} -- Note: frozenlist is currently unused at the term level
           TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
           TypeProduct _ -> meta {pythonModuleMetadataUsesTuple = True}
           TypeRecord (RowType _ fields) -> meta {
