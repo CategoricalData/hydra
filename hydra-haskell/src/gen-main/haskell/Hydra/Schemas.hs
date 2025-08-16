@@ -43,10 +43,10 @@ definitionDependencyNamespaces defs =
 
 -- | Find dependency namespaces in all of a set of terms
 dependencyNamespaces :: (Bool -> Bool -> Bool -> Bool -> [Graph.Element] -> Compute.Flow Graph.Graph (S.Set Module.Namespace))
-dependencyNamespaces withVars withPrims withNoms withSchema els =  
+dependencyNamespaces binds withPrims withNoms withSchema els =  
   let depNames = (\el ->  
           let term = (Graph.elementTerm el) 
-              dataNames = (Rewriting.termDependencyNames withVars withPrims withNoms term)
+              dataNames = (Rewriting.termDependencyNames binds withPrims withNoms term)
               schemaNames = (Logic.ifElse withSchema (Optionals.maybe Sets.empty (\ts -> Rewriting.typeDependencyNames True (Core.typeSchemeType ts)) (Graph.elementType el)) Sets.empty)
           in (Logic.ifElse (Core__.isEncodedType (Rewriting.deannotateTerm term)) (Flows.bind (Core_.type_ term) (\typ -> Flows.pure (Sets.unions [
             dataNames,
@@ -71,6 +71,16 @@ elementsWithDependencies original =
   let depNames = (\el -> Sets.toList (Rewriting.termDependencyNames True False False (Graph.elementTerm el))) 
       allDepNames = (Lists.nub (Lists.concat2 (Lists.map Graph.elementName original) (Lists.concat (Lists.map depNames original))))
   in (Flows.mapList Lexical.requireElement allDepNames)
+
+fieldMap :: ([Core.Field] -> M.Map Core.Name Core.Term)
+fieldMap fields = (Maps.fromList (Lists.map toPair fields)) 
+  where 
+    toPair = (\f -> (Core.fieldName f, (Core.fieldTerm f)))
+
+fieldTypeMap :: ([Core.FieldType] -> M.Map Core.Name Core.Type)
+fieldTypeMap fields = (Maps.fromList (Lists.map toPair fields)) 
+  where 
+    toPair = (\f -> (Core.fieldTypeName f, (Core.fieldTypeType f)))
 
 findFieldType :: (Core.Name -> [Core.FieldType] -> Compute.Flow t0 Core.Type)
 findFieldType fname fields =  
@@ -114,7 +124,7 @@ isSerializable el =
 
 -- | Find dependency namespaces in all elements of a module, excluding the module's own namespace
 moduleDependencyNamespaces :: (Bool -> Bool -> Bool -> Bool -> Module.Module -> Compute.Flow Graph.Graph (S.Set Module.Namespace))
-moduleDependencyNamespaces withVars withPrims withNoms withSchema mod = (Flows.bind (dependencyNamespaces withVars withPrims withNoms withSchema (Module.moduleElements mod)) (\deps -> Flows.pure (Sets.delete (Module.moduleNamespace mod) deps)))
+moduleDependencyNamespaces binds withPrims withNoms withSchema mod = (Flows.bind (dependencyNamespaces binds withPrims withNoms withSchema (Module.moduleElements mod)) (\deps -> Flows.pure (Sets.delete (Module.moduleNamespace mod) deps)))
 
 namespacesForDefinitions :: ((Module.Namespace -> t0) -> Module.Namespace -> [Module.Definition] -> Module.Namespaces t0)
 namespacesForDefinitions encodeNamespace focusNs defs =  

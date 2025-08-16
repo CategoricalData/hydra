@@ -60,28 +60,30 @@ module_ = Module (Namespace "hydra.schemas") elements
     kernelTypesModules $
     Just ("Various functions for dereferencing and decoding schema types.")
   where
-   elements = [
-     el definitionDependencyNamespacesDef,
-     el dependencyNamespacesDef,
-     el dereferenceTypeDef,
-     el elementAsTypedTermDef,
-     el elementsWithDependenciesDef,
-     el findFieldTypeDef,
-     el fieldTypesDef,
-     el fullyStripTypeDef,
-     el isEnumRowTypeDef,
-     el isEnumTypeDef,
-     el isSerializableDef,
-     el moduleDependencyNamespacesDef,
-     el namespacesForDefinitionsDef,
-     el requireRecordTypeDef,
-     el requireRowTypeDef,
-     el requireTypeDef,
-     el requireUnionTypeDef,
-     el resolveTypeDef,
-     el schemaGraphToTypingEnvironmentDef,
-     el topologicalSortTypeDefinitionsDef,
-     el typeDependenciesDef]
+    elements = [
+      el definitionDependencyNamespacesDef,
+      el dependencyNamespacesDef,
+      el dereferenceTypeDef,
+      el elementAsTypedTermDef,
+      el elementsWithDependenciesDef,
+      el fieldMapDef,
+      el fieldTypeMapDef,
+      el findFieldTypeDef,
+      el fieldTypesDef,
+      el fullyStripTypeDef,
+      el isEnumRowTypeDef,
+      el isEnumTypeDef,
+      el isSerializableDef,
+      el moduleDependencyNamespacesDef,
+      el namespacesForDefinitionsDef,
+      el requireRecordTypeDef,
+      el requireRowTypeDef,
+      el requireTypeDef,
+      el requireUnionTypeDef,
+      el resolveTypeDef,
+      el schemaGraphToTypingEnvironmentDef,
+      el topologicalSortTypeDefinitionsDef,
+      el typeDependenciesDef]
 
 define :: String -> TTerm a -> TElement a
 define = definitionInModule module_
@@ -150,18 +152,15 @@ elementsWithDependenciesDef = define "elementsWithDependencies" $
       (Lists.concat $ Lists.map (var "depNames") (var "original"))]
     $ Flows.mapList (ref Lexical.requireElementDef) (var "allDepNames")
 
-findFieldTypeDef :: TElement (Name -> [FieldType] -> Flow s Type)
-findFieldTypeDef = define "findFieldType" $
-  doc "Find a field type by name in a list of field types" $
-  lambda "fname" $ lambda "fields" $ lets [
-    "matchingFields">: Lists.filter
-      (lambda "ft" $ Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (Core.unName $ var "fname"))
-      (var "fields")]
-    $ Logic.ifElse (Lists.null $ var "matchingFields")
-        (Flows.fail $ Strings.cat2 (string "No such field: ") (Core.unName $ var "fname"))
-        (Logic.ifElse (Equality.equal (Lists.length $ var "matchingFields") (int32 1))
-          (Flows.pure $ Core.fieldTypeType $ Lists.head $ var "matchingFields")
-          (Flows.fail $ Strings.cat2 (string "Multiple fields named ") (Core.unName $ var "fname")))
+fieldMapDef :: TElement ([Field] -> M.Map Name Term)
+fieldMapDef = define "fieldMap" $
+  "toPair" <~ ("f" ~> pair (Core.fieldName $ var "f") (Core.fieldTerm $ var "f")) $
+  "fields" ~> Maps.fromList $ Lists.map (var "toPair") (var "fields")
+
+fieldTypeMapDef :: TElement ([FieldType] -> M.Map Name Type)
+fieldTypeMapDef = define "fieldTypeMap" $
+  "toPair" <~ ("f" ~> pair (Core.fieldTypeName $ var "f") (Core.fieldTypeType $ var "f")) $
+  "fields" ~> Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
 fieldTypesDef :: TElement (Type -> Flow Graph (M.Map Name Type))
 fieldTypesDef = define "fieldTypes" $
@@ -181,6 +180,19 @@ fieldTypesDef = define "fieldTypes" $
             Flows.bind (ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")) $
               ref fieldTypesDef]
     @@ (ref Rewriting.deannotateTypeDef @@ var "t")
+
+findFieldTypeDef :: TElement (Name -> [FieldType] -> Flow s Type)
+findFieldTypeDef = define "findFieldType" $
+  doc "Find a field type by name in a list of field types" $
+  lambda "fname" $ lambda "fields" $ lets [
+    "matchingFields">: Lists.filter
+      (lambda "ft" $ Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (Core.unName $ var "fname"))
+      (var "fields")]
+    $ Logic.ifElse (Lists.null $ var "matchingFields")
+        (Flows.fail $ Strings.cat2 (string "No such field: ") (Core.unName $ var "fname"))
+        (Logic.ifElse (Equality.equal (Lists.length $ var "matchingFields") (int32 1))
+          (Flows.pure $ Core.fieldTypeType $ Lists.head $ var "matchingFields")
+          (Flows.fail $ Strings.cat2 (string "Multiple fields named ") (Core.unName $ var "fname")))
 
 fullyStripTypeDef :: TElement (Type -> Type)
 fullyStripTypeDef = define "fullyStripType" $

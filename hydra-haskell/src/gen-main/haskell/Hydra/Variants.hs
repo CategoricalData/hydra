@@ -3,8 +3,6 @@
 module Hydra.Variants where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Mantle as Mantle
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -228,13 +226,3 @@ typeVariants = [
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantUnit,
   Mantle.TypeVariantVariable]
-
-fieldMap :: ([Core.Field] -> M.Map Core.Name Core.Term)
-fieldMap fields = (Maps.fromList (Lists.map toPair fields)) 
-  where 
-    toPair = (\f -> (Core.fieldName f, (Core.fieldTerm f)))
-
-fieldTypeMap :: ([Core.FieldType] -> M.Map Core.Name Core.Type)
-fieldTypeMap fields = (Maps.fromList (Lists.map toPair fields)) 
-  where 
-    toPair = (\f -> (Core.fieldTypeName f, (Core.fieldTypeType f)))

@@ -67,11 +67,7 @@ module_ = Module (Namespace "hydra.variants") elements
       el termVariantDef,
       el termVariantsDef,
       el typeVariantDef,
-      el typeVariantsDef,
-   
-      -- Additional definitions; consider moving out of hydra.variants  
-      el fieldMapDef,
-      el fieldTypeMapDef]
+      el typeVariantsDef]
 
 define :: String -> TTerm a -> TElement a
 define = definitionInModule module_
@@ -311,17 +307,3 @@ typeVariantsDef = define "typeVariants" $
     _TypeVariant_union,
     _TypeVariant_unit,
     _TypeVariant_variable]
-
--- Additional definitions; consider moving out of hydra.variants  
-
-fieldMapDef :: TElement ([Field] -> M.Map Name Term)
-fieldMapDef = define "fieldMap" $
-  lets [
-    "toPair">: lambda "f" $ pair (Core.fieldName $ var "f") (Core.fieldTerm $ var "f")]
-    $ lambda "fields" $ Maps.fromList $ Lists.map (var "toPair") (var "fields")
-
-fieldTypeMapDef :: TElement ([FieldType] -> M.Map Name Type)
-fieldTypeMapDef = define "fieldTypeMap" $
-  lets [
-    "toPair">: lambda "f" $ pair (Core.fieldTypeName $ var "f") (Core.fieldTypeType $ var "f")]
-    $ lambda "fields" $ Maps.fromList $ Lists.map (var "toPair") (var "fields")
