@@ -44,7 +44,7 @@ argsAndBindings = gather [] [] []
     gather prevArgs prevBindings prevDoms term typ = case deannotateTerm term of
       TermFunction (FunctionLambda (Lambda var _ body)) -> case deannotateType typ of
         TypeFunction (FunctionType dom cod) -> gather (var:prevArgs) prevBindings (dom:prevDoms) body cod
-      TermLet (Let bindings body) -> gather prevArgs (bindings ++ prevBindings) prevDoms body typ
+      TermLet (Let bindings body) -> gather prevArgs (L.reverse bindings ++ prevBindings) prevDoms body typ
       t -> (L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ)
 
 -- | Rewrite case statements in which the top-level lambda variables are re-used, e.g.
