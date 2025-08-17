@@ -167,6 +167,28 @@ testExpandLambdas g = do
           (lets ["foo">: splitOn] $ var "foo")
           (lets ["foo">: lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2"] $ var "foo")
 
+    H.describe "Check that complete applications are no-ops" $ do
+      H.it "test #1" $
+        noChange
+          (toLower @@ "FOO")
+      H.it "test #2" $
+        noChange
+          (splitOn @@ "foo" @@ "bar")
+
+    -- TODO: expansion currently causes type applications to be lost. Decide whether this should be the expected behavior.
+    H.describe "Check that type abstractions and applications do not interfere" $ do
+      H.it "test #1" $
+        noChange
+          (typeAbstraction [Name "a"] $ typeApplication (list []) [Types.string])
+      H.it "test #2" $
+        expandsTo
+          (typeApplication fromList [Types.string] @@ var "strings")
+          (fromList @@ var "strings")
+      H.it "test #3" $
+        expandsTo
+          (typeAbstraction [Name "a"] $ typeApplication fromList [Types.string] @@ var "strings")
+          (typeAbstraction [Name "a"] $ fromList @@ var "strings")
+
     H.describe "Try other subterms" $ do
       H.it "test #1" $
         expandsTo
@@ -182,9 +204,10 @@ testExpandLambdas g = do
     length = primitive $ Name "hydra.lib.strings.length"
     splitOn = primitive $ Name "hydra.lib.strings.splitOn"
     toLower = primitive $ Name "hydra.lib.strings.toLower"
+    fromList = primitive $ Name "hydra.lib.sets.fromList"
     expandsTo termBefore termAfter = do
        let result = expandLambdas g termBefore
-       H.shouldBe (show result) (show termAfter)
+       H.shouldBe (ShowCore.term result) (ShowCore.term termAfter)
     noChange term = expandsTo term term
 
 -- TODO: merge this into expandLambdas
