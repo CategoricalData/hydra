@@ -112,26 +112,25 @@ contractTermDef = define "contractTerm" $
     <> "  and\n"
     <> "     ((\\x.e1) e2) = e1[x/e2]\n"
     <> "These are both limited forms of beta reduction which help to \"clean up\" a term without fully evaluating it.") $
-  lambda "term" $ lets [
-    "rewrite">: lambda "recurse" $ lambda "t" $ lets [
-      "rec">: var "recurse" @@ var "t"]
-      $ match _Term (Just $ var "rec") [
-        _Term_application>>: lambda "app" $ lets [
+  "term" ~> lets [
+    "rewrite">: "recurse" ~> "t" ~> lets [
+      "rec">: var "recurse" @@ var "t"] $
+      cases _Term (var "rec")
+        (Just $ var "rec") [
+        _Term_application>>: "app" ~> lets [
           "lhs">: Core.applicationFunction $ var "app",
-          "rhs">: Core.applicationArgument $ var "app"]
-          $ match _Term (Just $ var "rec") [
-            _Term_function>>: lambda "f" $
-              match _Function (Just $ var "rec") [
-                _Function_lambda>>: lambda "l" $ lets [
-                  "v">: Core.lambdaParameter $ var "l",
-                  "body">: Core.lambdaBody $ var "l"]
-                  $ Logic.ifElse (ref Rewriting.isFreeVariableInTermDef @@ var "v" @@ var "body")
-                      (var "body")
-                      (ref Rewriting.replaceFreeTermVariableDef @@ var "v" @@ var "rhs" @@ var "body")]
-              @@ var "f"]
-          @@ (ref Rewriting.deannotateTermDef @@ var "lhs")]
-      @@ var "rec"]
-    $ ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term"
+          "rhs">: Core.applicationArgument $ var "app"] $
+          cases _Term (ref Rewriting.deannotateTermDef @@ var "lhs")
+            (Just $ var "rec") [
+            _Term_function>>: "f" ~> cases _Function (var "f")
+              (Just $ var "rec") [
+              _Function_lambda>>: "l" ~> lets [
+                "v">: Core.lambdaParameter $ var "l",
+                "body">: Core.lambdaBody $ var "l"] $
+                Logic.ifElse (ref Rewriting.isFreeVariableInTermDef @@ var "v" @@ var "body")
+                  (var "body")
+                  (ref Rewriting.replaceFreeTermVariableDef @@ var "v" @@ var "rhs" @@ var "body")]]]] $
+    ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term"
 
 -- For demo purposes. This should be generalized to enable additional side effects of interest.
 countPrimitiveInvocationsDef :: TElement Bool
@@ -183,55 +182,60 @@ expandLambdasDef = define "expandLambdas" $
     <> " Variable references are not expanded."
     <> " This is useful for targets like Python with weaker support for currying than Hydra or Haskell."
     <> " Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references.") $
-  lambda "graph" $ lambda "term" $ lets [
-    "expand">: lambda "args" $ lambda "arity" $ lambda "t" $ lets [
-      "apps">: Lists.foldl (lambda "lhs" $ lambda "arg" $ Core.termApplication $ Core.application (var "lhs") (var "arg")) (var "t") (var "args"),
+  "graph" ~> "term" ~> lets [
+    "expand">: "args" ~> "arity" ~> "t" ~> lets [
+      "apps">: Lists.foldl
+        ("lhs" ~> "arg" ~> Core.termApplication $ Core.application (var "lhs") (var "arg"))
+        (var "t")
+        (var "args"),
       "is">: Logic.ifElse (Equality.lte (var "arity") (Lists.length $ var "args"))
         (list [])
         (Math.range (int32 1) (Math.sub (var "arity") (Lists.length $ var "args"))),
-      "pad">: lambda "indices" $ lambda "t" $
+      "pad">: "indices" ~> "t" ~>
         Logic.ifElse (Lists.null $ var "indices")
           (var "t")
           (Core.termFunction $ Core.functionLambda $
             Core.lambda (Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ Lists.head $ var "indices")) nothing $
               var "pad" @@ Lists.tail (var "indices") @@
                 (Core.termApplication $ Core.application (var "t") $ Core.termVariable $
-                  Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ Lists.head $ var "indices")))]
-      $ var "pad" @@ var "is" @@ var "apps",
-    "rewrite">: lambda "args" $ lambda "recurse" $ lambda "t" $ lets [
-      "afterRecursion">: lambda "term" $ var "expand" @@ var "args" @@ (ref expansionArityDef @@ var "graph" @@ var "term") @@ var "term"]
-      $ match _Term (Just $ var "afterRecursion" @@ (var "recurse" @@ var "t")) [
-        _Term_application>>: lambda "app" $ lets [
+                  Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ Lists.head $ var "indices")))] $
+      var "pad" @@ var "is" @@ var "apps",
+    "rewrite">: "args" ~> "recurse" ~> "t" ~> lets [
+      "afterRecursion">: "term" ~>
+        var "expand" @@ var "args" @@ (ref expansionArityDef @@ var "graph" @@ var "term") @@ var "term"] $
+      cases _Term (var "t")
+        (Just $ var "afterRecursion" @@ (var "recurse" @@ var "t")) [
+        _Term_application>>: "app" ~> lets [
           "lhs">: Core.applicationFunction $ var "app",
           "rhs">: Core.applicationArgument $ var "app",
-          "erhs">: var "rewrite" @@ (list []) @@ var "recurse" @@ var "rhs"]
-          $ var "rewrite" @@ (Lists.cons (var "erhs") (var "args")) @@ var "recurse" @@ var "lhs"]
-      @@ var "t"]
+          "erhs">: var "rewrite" @@ (list []) @@ var "recurse" @@ var "rhs"] $
+          var "rewrite" @@ (Lists.cons (var "erhs") (var "args")) @@ var "recurse" @@ var "lhs"]]
     $ ref contractTermDef @@ (ref Rewriting.rewriteTermDef @@ (var "rewrite" @@ (list [])) @@ var "term")
 
 expansionArityDef :: TElement (Graph -> Term -> Int)
 expansionArityDef = define "expansionArity" $
   doc "Calculate the arity for lambda expansion" $
-  lambda "graph" $ lambda "term" $
-    match _Term (Just $ int32 0) [
+  "graph" ~> "term" ~>
+    cases _Term (ref Rewriting.deannotateTermDef @@ var "term")
+      (Just $ int32 0) [
       _Term_application>>: lambda "app" $
         Math.sub
           (ref expansionArityDef @@ var "graph" @@ Core.applicationFunction (var "app"))
           (int32 1),
-      _Term_function>>: lambda "f" $
-        match _Function Nothing [
-          _Function_elimination>>: constant $ int32 1,
-          _Function_lambda>>: constant $ int32 0,
-          _Function_primitive>>: lambda "name" $
-            ref Arity.primitiveArityDef @@ (Optionals.fromJust (ref Lexical.lookupPrimitiveDef @@ var "graph" @@ var "name"))]
-        @@ var "f",
-      _Term_variable>>: lambda "name" $
+      _Term_function>>: "f" ~> cases _Function (var "f")
+        Nothing [
+        _Function_elimination>>: constant $ int32 1,
+        _Function_lambda>>: constant $ int32 0,
+        _Function_primitive>>: "name" ~>
+          ref Arity.primitiveArityDef @@ (Optionals.fromJust (ref Lexical.lookupPrimitiveDef @@ var "graph" @@ var "name"))],
+      _Term_typeAbstraction>>: "ta" ~> ref expansionArityDef @@ var "graph" @@ Core.typeAbstractionBody (var "ta"),
+      _Term_typeApplication>>: "tt" ~> ref expansionArityDef @@ var "graph" @@ Core.typedTermTerm (var "tt"),
+      _Term_variable>>: "name" ~>
         Optionals.maybe (int32 0)
-          (lambda "ts" $ ref Arity.typeArityDef @@ (Core.typeSchemeType $ var "ts"))
+          ("ts" ~> ref Arity.typeArityDef @@ (Core.typeSchemeType $ var "ts"))
           (Optionals.bind
             (ref Lexical.lookupElementDef @@ var "graph" @@ var "name")
-            (lambda "el" $ Graph.elementType $ var "el"))]
-    @@ (ref Rewriting.deannotateTermDef @@ var "term")
+            ("el" ~> Graph.elementType $ var "el"))]
 
 reduceTermDef :: TElement (Bool -> Term -> Flow Graph Term)
 reduceTermDef = define "reduceTerm" $

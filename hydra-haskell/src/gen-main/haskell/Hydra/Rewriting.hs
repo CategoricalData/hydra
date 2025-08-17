@@ -34,10 +34,12 @@ deannotateAndDetypeTerm t = ((\x -> case x of
   Core.TermTypeApplication v1 -> (deannotateAndDetypeTerm (Core.typedTermTerm v1))
   _ -> t) t)
 
--- | Strip all annotations from a term
+-- | Strip all annotations (including System F type annotations) from a term
 deannotateTerm :: (Core.Term -> Core.Term)
 deannotateTerm t = ((\x -> case x of
   Core.TermAnnotated v1 -> (deannotateTerm (Core.annotatedTermSubject v1))
+  Core.TermTypeAbstraction v1 -> (deannotateTerm (Core.typeAbstractionBody v1))
+  Core.TermTypeApplication v1 -> (deannotateTerm (Core.typedTermTerm v1))
   _ -> t) t)
 
 -- | Strip all annotations from a term
@@ -383,17 +385,6 @@ removeTypesFromTerm term =
             _ -> rewritten) rewritten))
   in (rewriteTerm strip term)
 
--- | Replace free occurrences of a name in a type
-replaceFreeTypeVariable :: (Core.Name -> Core.Type -> Core.Type -> Core.Type)
-replaceFreeTypeVariable v rep typ =  
-  let mapExpr = (\recurse -> \t -> (\x -> case x of
-          Core.TypeForall v1 -> (Logic.ifElse (Equality.equal v (Core.forallTypeParameter v1)) t (Core.TypeForall (Core.ForallType {
-            Core.forallTypeParameter = (Core.forallTypeParameter v1),
-            Core.forallTypeBody = (recurse (Core.forallTypeBody v1))})))
-          Core.TypeVariable v1 -> (Logic.ifElse (Equality.equal v v1) rep t)
-          _ -> (recurse t)) t)
-  in (rewriteType mapExpr typ)
-
 -- | Replace a free variable in a term
 replaceFreeTermVariable :: (Core.Name -> Core.Term -> Core.Term -> Core.Term)
 replaceFreeTermVariable vold tnew term =  
@@ -406,6 +397,17 @@ replaceFreeTermVariable vold tnew term =
           Core.TermVariable v1 -> (Logic.ifElse (Equality.equal v1 vold) tnew (Core.TermVariable v1))
           _ -> (recurse t)) t)
   in (rewriteTerm rewrite term)
+
+-- | Replace free occurrences of a name in a type
+replaceFreeTypeVariable :: (Core.Name -> Core.Type -> Core.Type -> Core.Type)
+replaceFreeTypeVariable v rep typ =  
+  let mapExpr = (\recurse -> \t -> (\x -> case x of
+          Core.TypeForall v1 -> (Logic.ifElse (Equality.equal v (Core.forallTypeParameter v1)) t (Core.TypeForall (Core.ForallType {
+            Core.forallTypeParameter = (Core.forallTypeParameter v1),
+            Core.forallTypeBody = (recurse (Core.forallTypeBody v1))})))
+          Core.TypeVariable v1 -> (Logic.ifElse (Equality.equal v v1) rep t)
+          _ -> (recurse t)) t)
+  in (rewriteType mapExpr typ)
 
 rewrite :: ((t0 -> t1) -> (t1 -> t0) -> t0)
 rewrite fsub f =  

@@ -109,14 +109,6 @@ primitive = TermFunction . FunctionPrimitive
 
 -- * Polymorphism (System F)
 
--- | Apply type arguments to a polymorphic term
--- Example: typeApplication (var "map") [Types.int32, Types.string]
--- This instantiates a polymorphic function with concrete types.
--- For instance, if 'map' has type 'forall a b. (a -> b) -> list a -> list b',
--- the example would instantiate it to '(int32 -> string) -> list int32 -> list string'.
-typeApplication :: Term -> [Type] -> Term
-typeApplication term types = L.foldl (\t ty -> TermTypeApplication $ TypedTerm t ty) term types
-
 -- | Create a type abstraction (universal quantification)
 -- Example: typeAbstraction [Name "a", Name "b"] (lambdaTyped "f" (Types.function (Types.var "a") (Types.var "b"))
 --                                               (lambdaTyped "x" (Types.var "a") (var "f" @@ var "x")))
@@ -125,6 +117,14 @@ typeApplication term types = L.foldl (\t ty -> TermTypeApplication $ TypedTerm t
 -- which is the polymorphic apply function that works for any types a and b.
 typeAbstraction :: [Name] -> Term -> Term
 typeAbstraction vars body = L.foldl (\b v -> TermTypeAbstraction $ TypeAbstraction v b) body vars
+
+-- | Apply type arguments to a polymorphic term
+-- Example: typeApplication (var "map") [Types.int32, Types.string]
+-- This instantiates a polymorphic function with concrete types.
+-- For instance, if 'map' has type 'forall a b. (a -> b) -> list a -> list b',
+-- the example would instantiate it to '(int32 -> string) -> list int32 -> list string'.
+typeApplication :: Term -> [Type] -> Term
+typeApplication term types = L.foldl (\t ty -> TermTypeApplication $ TypedTerm t ty) term types
 
 -- * Literal values
 

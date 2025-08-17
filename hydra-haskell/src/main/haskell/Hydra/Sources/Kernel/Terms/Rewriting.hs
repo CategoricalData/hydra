@@ -111,10 +111,12 @@ deannotateAndDetypeTermDef = define "deannotateAndDetypeTerm" $
 
 deannotateTermDef :: TElement (Term -> Term)
 deannotateTermDef = define "deannotateTerm" $
-  doc "Strip all annotations from a term" $
+  doc "Strip all annotations (including System F type annotations) from a term" $
   lambda "t" $ cases _Term (var "t")
     (Just $ var "t") [
-    _Term_annotated>>: ref deannotateTermDef <.> (project _AnnotatedTerm _AnnotatedTerm_subject)]
+    _Term_annotated>>: "at" ~> ref deannotateTermDef @@ (Core.annotatedTermSubject $ var "at"),
+    _Term_typeAbstraction>>: "ta" ~> ref deannotateTermDef @@ (Core.typeAbstractionBody $ var "ta"),
+    _Term_typeApplication>>: "tt" ~> ref deannotateTermDef @@ (Core.typedTermTerm $ var "tt")]
 
 deannotateTypeDef :: TElement (Type -> Type)
 deannotateTypeDef = define "deannotateType" $
