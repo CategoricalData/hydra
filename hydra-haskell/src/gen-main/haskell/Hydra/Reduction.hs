@@ -145,6 +145,8 @@ expansionArity graph term = ((\x -> case x of
     Core.FunctionElimination _ -> 1
     Core.FunctionLambda _ -> 0
     Core.FunctionPrimitive v2 -> (Arity.primitiveArity (Optionals.fromJust (Lexical.lookupPrimitive graph v2)))) v1)
+  Core.TermTypeAbstraction v1 -> (expansionArity graph (Core.typeAbstractionBody v1))
+  Core.TermTypeApplication v1 -> (expansionArity graph (Core.typedTermTerm v1))
   Core.TermVariable v1 -> (Optionals.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Optionals.bind (Lexical.lookupElement graph v1) (\el -> Graph.elementType el)))
   _ -> 0) (Rewriting.deannotateTerm term))
 

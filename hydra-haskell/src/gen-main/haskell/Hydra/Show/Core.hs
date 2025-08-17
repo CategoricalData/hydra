@@ -194,6 +194,7 @@ term t =
                 term bindingTerm,
                 typeStr]))
   in ((\x -> case x of
+    Core.TermAnnotated v1 -> (term (Core.annotatedTermSubject v1))
     Core.TermApplication v1 ->  
       let terms = (gatherTerms [] v1) 
           termStrs = (Lists.map term terms)
