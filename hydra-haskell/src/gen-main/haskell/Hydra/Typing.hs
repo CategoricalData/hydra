@@ -1,4 +1,4 @@
--- | Types supporting type inference.
+-- | Types supporting type inference and type reconstruction.
 
 module Hydra.Typing where
 
@@ -71,6 +71,22 @@ _TypeConstraint_left = (Core.Name "left")
 _TypeConstraint_right = (Core.Name "right")
 
 _TypeConstraint_comment = (Core.Name "comment")
+
+-- | A typing environment used for type reconstruction (typeOf) over System F terms
+data TypeContext = 
+  TypeContext {
+    typeContextTypes :: (M.Map Core.Name Core.Type),
+    typeContextVariables :: (S.Set Core.Name),
+    typeContextInferenceContext :: InferenceContext}
+  deriving (Eq, Ord, Read, Show)
+
+_TypeContext = (Core.Name "hydra.typing.TypeContext")
+
+_TypeContext_types = (Core.Name "types")
+
+_TypeContext_variables = (Core.Name "variables")
+
+_TypeContext_inferenceContext = (Core.Name "inferenceContext")
 
 -- | A substitution of type variables for types
 newtype TypeSubst = 

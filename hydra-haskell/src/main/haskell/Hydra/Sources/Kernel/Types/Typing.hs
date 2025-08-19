@@ -17,7 +17,7 @@ import qualified Data.Maybe                      as Y
 
 module_ :: Module
 module_ = Module ns elements [Core.module_] [Core.module_] $
-    Just ("Types supporting type inference.")
+    Just ("Types supporting type inference and type reconstruction.")
   where
     ns = Namespace "hydra.typing"
     core = typeref $ moduleNamespace Core.module_
@@ -61,6 +61,13 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
           "comment">:
             doc "A description of the type constraint which may be used for tracing or debugging"
             string],
+
+      def "TypeContext" $
+        doc "A typing environment used for type reconstruction (typeOf) over System F terms" $
+        record [
+          "types">: Types.map (core "Name") (core "Type"),
+          "variables">: Types.set (core "Name"),
+          "inferenceContext">: typing "InferenceContext"],
 
       def "TypeSubst" $
         doc "A substitution of type variables for types" $
