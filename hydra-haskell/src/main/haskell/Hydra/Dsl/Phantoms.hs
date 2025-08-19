@@ -293,6 +293,9 @@ cases name arg dflt fields = TTerm $ Terms.apply (Terms.match name (unTTerm <$> 
 match :: Name -> Maybe (TTerm b) -> [Field] -> TTerm (a -> b)
 match name dflt fields = TTerm $ Terms.match name (unTTerm <$> dflt) fields
 
+optCases :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
+optCases arg ifNothing ifJust = primitive3 (Name "hydra.lib.optionals.maybe") ifNothing ifJust arg
+
 -- * Definitions and modules
 
 -- | Create a definition in a module
