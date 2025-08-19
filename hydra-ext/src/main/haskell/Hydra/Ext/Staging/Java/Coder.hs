@@ -28,24 +28,6 @@ import qualified Data.Maybe as Y
 import Data.String (String)
 
 
-data TypeContext = TypeContext {
-  typeContextInferenceContext :: InferenceContext,
-  typeContextTypes :: M.Map Name Type,
-  typeContextVariables :: S.Set Name}
-
-initialTypeContext g = do
-  ix <- graphToInferenceContext g
-  types <- M.fromList <$> CM.mapM toPair (M.toList $ graphElements g)
---  fail $ "elements: " ++ (L.intercalate ", " $ fmap (unName . fst) $ M.toList $ graphElements g)
-  return $ TypeContext {
-    typeContextInferenceContext = ix,
-    typeContextTypes = types,
-    typeContextVariables = S.empty}
-  where
-    toPair (name, el) = case elementType el of
-      Nothing -> fail $ "untyped element: " ++ unName name
-      Just ts -> pure (name, typeSchemeToFType ts)
-
 data JavaSymbolClass = JavaSymbolClassConstant | JavaSymbolClassNullaryFunction | JavaSymbolClassUnaryFunction | JavaSymbolLocalVariable
 
 data JavaFeatures = JavaFeatures {
@@ -59,9 +41,6 @@ java8Features = JavaFeatures {
 java11Features = JavaFeatures {
   supportsDiamondOperator = True
 }
-
-requireTermType :: TypeContext -> Term -> Flow s Type
-requireTermType tcontext term = typeOf (typeContextInferenceContext tcontext) (typeContextVariables tcontext) (typeContextTypes tcontext) [] term
 
 -- For now, the supported features are hard-coded to those of Java 11, rather than being configurable.
 javaFeatures = java11Features
@@ -94,7 +73,7 @@ classifyDataReference tcontext name = do
   case mel of
     Nothing -> return JavaSymbolLocalVariable
     Just el -> do
-      typ <- requireTermType tcontext $ elementTerm el
+      typ <- typeOf tcontext $ elementTerm el
       return $ classifyDataTerm typ $ elementTerm el
 
 classifyDataTerm :: Type -> Term -> JavaSymbolClass
@@ -483,7 +462,7 @@ encodeApplication aliases tcontext app@(Application lhs rhs) = case deannotateTe
          _ -> (lhs, (rhs:args))
 
     fallback = withTrace "fallback" $ do
-        t <- requireTermType tcontext lhs
+        t <- typeOf tcontext lhs
         (dom, cod) <- case deannotateTypeParameters $ deannotateType t of
             TypeFunction (FunctionType dom cod) -> pure (dom, cod)
             t' -> fail $ "expected a function type on function " ++ show lhs ++ ", but found " ++ show t'
@@ -679,7 +658,7 @@ encodeTerm aliases tcontext term0 = withTrace ("encode term " ++ ShowCore.term t
       TermApplication app -> withTrace "encode application" $ encodeApplication aliases tcontext app
 
       TermFunction f -> withTrace ("encode function (" ++ show (functionVariant f) ++ ")") $ do
-        t <- requireTermType tcontext term0
+        t <- typeOf tcontext term0
         withTrace "next" $
           case deannotateType t of
             TypeFunction (FunctionType dom cod) -> do
@@ -905,7 +884,7 @@ maybeLet aliases tcontext term cons = helper Nothing [] term
             then do
               -- TODO: repeated
               let value = letBindingTerm $ L.head $ L.filter (\b -> letBindingName b == name) bindings
-              typ <- requireTermType tcontext2 value
+              typ <- typeOf tcontext2 value
               jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
               let id = variableToJavaIdentifier name
 
@@ -923,7 +902,7 @@ maybeLet aliases tcontext term cons = helper Nothing [] term
           toDeclStatement name = do
             -- TODO: repeated
             let value = letBindingTerm $ L.head $ L.filter (\b -> letBindingName b == name) bindings
-            typ <- requireTermType tcontext2 value
+            typ <- typeOf tcontext2 value
             jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
             let id = variableToJavaIdentifier name
             rhs <- encodeTerm aliasesWithRecursive tcontext2 value
