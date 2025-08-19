@@ -75,6 +75,21 @@ typeConstraintRight tc = Phantoms.project _TypeConstraint _TypeConstraint_right 
 typeConstraintComment :: TTerm TypeConstraint -> TTerm String
 typeConstraintComment tc = Phantoms.project _TypeConstraint _TypeConstraint_comment @@ tc
 
+typeContext :: TTerm (M.Map Name Type) -> TTerm (S.Set Name) -> TTerm InferenceContext -> TTerm TypeContext
+typeContext types variables inferenceContext = Phantoms.record _TypeContext [
+  _TypeContext_types>>: types,
+  _TypeContext_variables>>: variables,
+  _TypeContext_inferenceContext>>: inferenceContext]
+
+typeContextTypes :: TTerm TypeContext -> TTerm (M.Map Name Type)
+typeContextTypes tc = Phantoms.project _TypeContext _TypeContext_types @@ tc
+
+typeContextVariables :: TTerm TypeContext -> TTerm (S.Set Name)
+typeContextVariables tc = Phantoms.project _TypeContext _TypeContext_variables @@ tc
+
+typeContextInferenceContext :: TTerm TypeContext -> TTerm InferenceContext
+typeContextInferenceContext tc = Phantoms.project _TypeContext _TypeContext_inferenceContext @@ tc
+
 typeSubst :: TTerm (M.Map Name Type) -> TTerm TypeSubst
 typeSubst = Phantoms.wrap _TypeSubst
 

@@ -67,6 +67,7 @@ module_ = Module (Namespace "hydra.inference") elements
   where
     elements = [
       el bindConstraintsDef,
+      el checkSameTypeDef,
       el checkTypeDef,
       el checkTypeVariablesDef,
       el debugInferenceDef,
@@ -112,6 +113,7 @@ module_ = Module (Namespace "hydra.inference") elements
       el inferTypeOfVariableDef,
       el inferTypeOfWrappedTermDef,
       el inferTypesOfTemporaryLetBindingsDef,
+      el initialTypeContextDef,
       el instantiateTypeSchemeDef,
       el isUnboundDef,
       el key_vcountDef,
@@ -120,9 +122,9 @@ module_ = Module (Namespace "hydra.inference") elements
       el normalTypeVariableDef,
       el requireSchemaTypeDef,
       el showInferenceResultDef,
-      el checkSameTypeDef,
       el toFContextDef,
       el typeOfDef,
+      el typeOfInternalDef,
       el typeOfNominalDef,
       el typeOfUnitDef,
       el typeSchemeToFTypeDef,
@@ -141,12 +143,29 @@ bindConstraintsDef = define "bindConstraints" $
   "cx" ~> "f" ~> "constraints" ~>
   Flows.bind (ref Unification.unifyTypeConstraintsDef @@ Typing.inferenceContextSchemaTypes (var "cx") @@ var "constraints") (var "f")
 
+checkSameTypeDef :: TElement (String -> [Type] -> Flow s Type)
+checkSameTypeDef = define "checkSameType" $
+  doc "Ensure all types in a list are equal and return the common type" $
+  "desc" ~> "types" ~>
+  "h" <~ Lists.head (var "types") $
+  "allEqual" <~ Lists.foldl
+    ("b" ~> "t" ~> Logic.and (var "b") (Equality.equal (var "t") (var "h")))
+    true
+    (var "types") $
+  Logic.ifElse (var "allEqual")
+    (Flows.pure $ var "h")
+    (Flows.fail $ Strings.cat $ list [
+      string "unequal types ",
+      (ref Formatting.showListDef @@ ref ShowCore.typeDef @@ var "types"),
+      string " in ",
+      var "desc"])
+
 checkTypeDef :: TElement (S.Set Name -> InferenceContext -> Type -> Term -> Flow s ())
 checkTypeDef = define "checkType" $
   doc "Check that a term has the expected type" $
   "k" ~> "g" ~> "t" ~> "e" ~>
   Logic.ifElse (ref debugInferenceDef)
-    ("t0" <<~ ref typeOfDef @@ var "g" @@ var "k" @@ (ref toFContextDef @@ var "g") @@ list [] @@ var "e" $
+    ("t0" <<~ ref typeOfInternalDef @@ var "g" @@ var "k" @@ (ref toFContextDef @@ var "g") @@ list [] @@ var "e" $
       Logic.ifElse (Equality.equal (var "t0") (var "t"))
         (Flows.pure unit)
         (Flows.fail $ Strings.cat $ list [
@@ -1016,6 +1035,22 @@ inferTypesOfTemporaryLetBindingsDef = define "inferTypesOfTemporaryLetBindings" 
       (Lists.cons (ref Substitution.substInTypeDef @@ var "r" @@ var "u_prime") (var "r_prime"))
       (ref Substitution.composeTypeSubstDef @@ var "u" @@ var "r"))
 
+initialTypeContextDef :: TElement (Graph -> Flow s TypeContext)
+initialTypeContextDef = define "initialTypeContext" $
+  doc "Create an initial type context from a graph" $
+  "g" ~>
+  "toPair" <~ ("pair" ~>
+    "name" <~ first (var "pair") $
+    "el"  <~ second (var "pair") $
+    optCases (Graph.elementType $ var "el")
+      (Flows.fail $ "untyped element: " ++ Core.unName (var "name"))
+      ("ts" ~> produce $ pair (var "name") (ref typeSchemeToFTypeDef @@ var "ts"))) $
+  "ix" <<~ ref graphToInferenceContextDef @@ var "g" $
+  "types" <<~ Flows.map
+    (unaryFunction Maps.fromList)
+    (Flows.mapList (var "toPair") (Maps.toList $ Graph.graphElements $ var "g")) $
+  produce $ Typing.typeContext (var "types") Sets.empty (var "ix")
+
 -- W: inst
 instantiateTypeSchemeDef :: TElement (TypeScheme -> Flow s TypeScheme)
 instantiateTypeSchemeDef = define "instantiateTypeScheme" $
@@ -1070,23 +1105,6 @@ requireSchemaTypeDef = define "requireSchemaType" $
     ("ts" ~> ref instantiateTypeSchemeDef @@ (ref Rewriting.deannotateTypeSchemeRecursiveDef @@ var "ts"))
     (Maps.lookup (var "tname") (Typing.inferenceContextSchemaTypes $ var "cx"))
 
-checkSameTypeDef :: TElement (String -> [Type] -> Flow s Type)
-checkSameTypeDef = define "checkSameType" $
-  doc "Ensure all types in a list are equal and return the common type" $
-  "desc" ~> "types" ~>
-  "h" <~ Lists.head (var "types") $
-  "allEqual" <~ Lists.foldl
-    ("b" ~> "t" ~> Logic.and (var "b") (Equality.equal (var "t") (var "h")))
-    true
-    (var "types") $
-  Logic.ifElse (var "allEqual")
-    (Flows.pure $ var "h")
-    (Flows.fail $ Strings.cat $ list [
-      string "unequal types ",
-      (ref Formatting.showListDef @@ ref ShowCore.typeDef @@ var "types"),
-      string " in ",
-      var "desc"])
-
 showInferenceResultDef :: TElement (InferenceResult -> String)
 showInferenceResultDef = define "showInferenceResult" $
   doc "Show an inference result for debugging" $
@@ -1108,10 +1126,21 @@ toFContextDef = define "toFContext" $
   doc "Convert inference context to type context" $
   "cx" ~> Maps.map (ref typeSchemeToFTypeDef) $ Typing.inferenceContextDataTypes $ var "cx"
 
--- W: typeOf
-typeOfDef :: TElement (InferenceContext -> S.Set Name -> M.Map Name Type -> [Type] -> Term -> Flow s Type)
+typeOfDef :: TElement (TypeContext -> Term -> Flow s Type)
 typeOfDef = define "typeOf" $
-  doc "Infer the type of a term given context, bound type variables, and type environment" $
+  doc "Given a type context, reconstruct the type of a System F term" $
+  "tcontext" ~> "term" ~>
+  ref typeOfInternalDef @@
+    Typing.typeContextInferenceContext (var "tcontext") @@
+    Typing.typeContextVariables (var "tcontext") @@
+    Typing.typeContextTypes (var "tcontext") @@
+    (list []) @@
+    var "term"
+
+-- W: typeOf
+typeOfInternalDef :: TElement (InferenceContext -> S.Set Name -> M.Map Name Type -> [Type] -> Term -> Flow s Type)
+typeOfInternalDef = define "typeOfInternal" $
+  doc "Given internal context, reconstruct the type of a System F term" $
   "cx" ~> "vars" ~> "types" ~> "apptypes" ~> "term" ~>
   "checkApplied" <~ ("e" ~>  Logic.ifElse (Lists.null $ var "apptypes")
     (var "e")
@@ -1132,7 +1161,7 @@ typeOfDef = define "typeOf" $
                   (Typing.typeSubst $ Maps.singleton (var "v") (Lists.head $ var "apptypes")) @@
                   (var "t2"))
                 @@ (Lists.tail $ var "apptypes")])) $
-      "t1" <<~ ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "term" $
+      "t1" <<~ ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "term" $
       exec (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "t1") $
       var "app" @@ var "t1" @@ var "apptypes")) $
 
@@ -1152,13 +1181,13 @@ typeOfDef = define "typeOf" $
 
     _Term_annotated>>: "at" ~> var "checkApplied" @@ (
       "term1" <~ Core.annotatedTermSubject (var "at") $
-      ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ var "apptypes" @@ var "term1"),
+      ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ var "apptypes" @@ var "term1"),
 
     _Term_application>>: "app" ~> var "checkApplied" @@ (
       "a" <~ Core.applicationFunction (var "app") $
       "b" <~ Core.applicationArgument (var "app") $
-      "t1" <<~ ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "a" $
-      "t2" <<~ ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "b" $
+      "t1" <<~ ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "a" $
+      "t2" <<~ ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "b" $
       exec (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "t1") $
       exec (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "t2") $
       cases _Type (var "t1")
@@ -1222,8 +1251,8 @@ typeOfDef = define "typeOf" $
               "svars" <~ Core.typeSchemeVariables (var "schemaType") $
               "stype" <~ Core.typeSchemeType (var "schemaType") $
               "sfields" <<~ ref ExtractCore.unionTypeDef @@ var "tname" @@ var "stype" $
-              "tdflt" <<~ Flows.traverseOptional ("e" ~> ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "e") (var "dflt") $
-              "tcterms" <<~ Flows.mapList ("e" ~> ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "e") (var "cterms") $
+              "tdflt" <<~ Flows.traverseOptional ("e" ~> ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "e") (var "dflt") $
+              "tcterms" <<~ Flows.mapList ("e" ~> ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "e") (var "cterms") $
               "cods" <<~ Flows.mapList ("t" ~> Flows.map (unaryFunction Core.functionTypeCodomain) $ ref ExtractCore.functionTypeDef @@ var "t") (var "tcterms") $
               "ts" <~ Optionals.cat (Lists.cons (var "tdflt") $ Lists.map (unaryFunction Optionals.pure) (var "cods")) $
               "cod" <<~ ref checkSameTypeDef @@ string "case branches" @@ var "ts" $
@@ -1254,7 +1283,7 @@ typeOfDef = define "typeOf" $
               ref ShowCore.termDef @@ var "term"])
             ("t" ~>
               exec (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "t") $
-              "t1" <<~ ref typeOfDef @@ var "cx" @@ var "vars" @@
+              "t1" <<~ ref typeOfInternalDef @@ var "cx" @@ var "vars" @@
                 (Maps.insert (var "x") (var "t") (var "types")) @@ list [] @@ var "e" $
               exec (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "t1") $
               Flows.pure $ Core.typeFunction $ Core.functionType (var "t") (var "t1"))
@@ -1283,11 +1312,11 @@ typeOfDef = define "typeOf" $
           (Core.letBindingType $ var "b")) $
       "btypes" <<~ Flows.mapList (var "btypeOf") (var "bs") $
       "types2" <~ Maps.union (Maps.fromList $ Lists.zip (var "bnames") (var "btypes")) (var "types") $
-      "typeofs" <<~ Flows.mapList (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types2" @@ list []) (var "bterms") $
+      "typeofs" <<~ Flows.mapList (ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types2" @@ list []) (var "bterms") $
       exec (Flows.mapList (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "btypes")) $
       exec (Flows.mapList (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "typeofs")) $
       Logic.ifElse (Equality.equal (var "typeofs") (var "btypes"))
-        (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types2" @@ list [] @@ var "env")
+        (ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types2" @@ list [] @@ var "env")
         (Flows.fail $ Strings.cat $ list [
           string "binding types disagree: ",
           ref Formatting.showListDef @@ ref ShowCore.typeDef @@ var "btypes",
@@ -1304,7 +1333,7 @@ typeOfDef = define "typeOf" $
           (Flows.fail $ "list type applied to more or less than one argument"))
         -- Nonempty list must have elements of the same type
         ( "eltypes" <<~ Flows.mapList
-           (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [])
+           (ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [])
            (var "els") $
            "unifiedType" <<~ ref checkSameTypeDef @@ string "list elements" @@ var "eltypes" $
            -- Verify the unified type is well-formed in the current scope
@@ -1326,11 +1355,11 @@ typeOfDef = define "typeOf" $
         (var "checkApplied" @@ (
           "pairs" <~ Maps.toList (var "m") $
           "kt" <<~ Flows.bind
-            (Flows.mapList (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list []) $
+            (Flows.mapList (ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list []) $
               Lists.map (unaryFunction first) (var "pairs"))
             (ref checkSameTypeDef @@ string "map keys") $
           "vt" <<~ Flows.bind
-            (Flows.mapList (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list []) $
+            (Flows.mapList (ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list []) $
               Lists.map (unaryFunction second) (var "pairs"))
             (ref checkSameTypeDef @@ string "map values") $
           exec (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "kt") $
@@ -1345,13 +1374,13 @@ typeOfDef = define "typeOf" $
           (Flows.fail $ "optional type applied to more or less than one argument"))
         -- Just case: infer type of the contained term
         ("term" ~> var "checkApplied" @@ (
-          "termType" <<~ ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "term" $
+          "termType" <<~ ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "term" $
            exec (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "termType") $
            Flows.pure $ Core.typeOptional $ var "termType"))
         (var "mt"),
 
     _Term_product>>: "tuple" ~> var "checkApplied" @@ (
-      "etypes" <<~ Flows.mapList (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list []) (var "tuple") $
+      "etypes" <<~ Flows.mapList (ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list []) (var "tuple") $
       exec (Flows.mapList (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "etypes")) $
       Flows.pure $ Core.typeProduct $ var "etypes"),
 
@@ -1359,7 +1388,7 @@ typeOfDef = define "typeOf" $
       "tname" <~ Core.recordTypeName (var "record") $
       "fields" <~ Core.recordFields (var "record") $
       "ftypes" <<~ Flows.mapList
-        (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [])
+        (ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [])
         (Lists.map (unaryFunction Core.fieldTerm) (var "fields")) $
       exec (Flows.mapList (ref checkTypeVariablesDef @@ var "cx" @@ var "vars") (var "ftypes")) $
       ref typeOfNominalDef
@@ -1381,7 +1410,7 @@ typeOfDef = define "typeOf" $
           (Flows.fail $ "set type applied to more or less than one argument"))
         -- Nonempty set must have elements of the same type
         ( "eltypes" <<~ Flows.mapList
-           (ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [])
+           (ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [])
            (Sets.toList $ var "els") $
            "unifiedType" <<~ ref checkSameTypeDef @@ string "set elements" @@ var "eltypes" $
            -- Verify the unified type is well-formed in the current scope
@@ -1393,14 +1422,14 @@ typeOfDef = define "typeOf" $
     _Term_typeAbstraction>>: "ta" ~>
       "v" <~ Core.typeAbstractionParameter (var "ta") $
       "e" <~ Core.typeAbstractionBody (var "ta") $
-      "t1" <<~ ref typeOfDef @@ var "cx" @@ (Sets.insert (var "v") (var "vars")) @@ var "types" @@ list [] @@ var "e" $
+      "t1" <<~ ref typeOfInternalDef @@ var "cx" @@ (Sets.insert (var "v") (var "vars")) @@ var "types" @@ list [] @@ var "e" $
       exec (ref checkTypeVariablesDef @@ var "cx" @@ (Sets.insert (var "v") (var "vars")) @@ var "t1") $
       Flows.pure $ Core.typeForall $ Core.forallType (var "v") (var "t1"),
 
     _Term_typeApplication>>: "tyapp" ~>
       "e" <~ Core.typedTermTerm (var "tyapp") $
       "t" <~ Core.typedTermType (var "tyapp") $
-      ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ Lists.cons (var "t") (var "apptypes") @@ var "e",
+      ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ Lists.cons (var "t") (var "apptypes") @@ var "e",
 
     _Term_union>>: "injection" ~>
       "tname" <~ Core.injectionTypeName (var "injection") $
@@ -1429,7 +1458,7 @@ typeOfDef = define "typeOf" $
     _Term_wrap>>: "wt" ~>
       "tname" <~ Core.wrappedTermTypeName (var "wt") $
       "innerTerm" <~ Core.wrappedTermObject (var "wt") $
-      "innerType" <<~ ref typeOfDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "innerTerm" $
+      "innerType" <<~ ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "innerTerm" $
       exec (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "innerType") $
       ref typeOfNominalDef @@ string "wrapper typeOf" @@ var "cx" @@ var "tname" @@
         (Core.typeWrap $ Core.wrappedType (var "tname") (var "innerType"))]
