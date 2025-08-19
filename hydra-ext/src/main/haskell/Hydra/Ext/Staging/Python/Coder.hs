@@ -618,7 +618,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
         where
           forBinding meta (LetBinding _ _ mts) = case mts of
             Nothing -> meta
-            Just ts -> extendMetaForType False meta $ typeSchemeType ts
+            Just ts -> extendMetaForType True meta $ typeSchemeType ts
       TermMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
       _ -> meta
     extendMetaForType isTermAnnot meta typ = extendFor meta3 typ
