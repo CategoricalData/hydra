@@ -211,7 +211,7 @@ getTypeClassesDef = define "getTypeClasses" $
       (produce Maps.empty)
       (lambda "term" $ ref ExtractCore.mapDef
         @@ (ref DecodeCore.nameDef)
-        @@ (ref ExtractCore.setDef @@ var "decodeClass")
+        @@ (ref ExtractCore.setOfDef @@ var "decodeClass")
         @@ (var "term"))
       (ref getTermAnnotationDef @@ ref Constants.key_classesDef @@ var "term")
 

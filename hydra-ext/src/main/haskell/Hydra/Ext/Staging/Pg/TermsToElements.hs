@@ -24,7 +24,7 @@ key_elements = Name "elements"
 expectList :: (Term -> Flow s x) -> Term -> Flow s [x]
 expectList f term = do
   s <- getState
-  withEmptyGraph $ ExtractCore.list (\t -> withState s $ f t) term
+  withEmptyGraph $ ExtractCore.listOf (\t -> withState s $ f t) term
 
 termToElementsAdapter :: Schema s t v -> Type -> Flow s (PgAdapter s v)
 termToElementsAdapter schema typ = do

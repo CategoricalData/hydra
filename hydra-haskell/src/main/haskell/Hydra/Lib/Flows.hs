@@ -6,6 +6,8 @@ import Hydra.Compute
 import qualified Hydra.Monads as Monads
 
 import qualified Control.Monad as CM
+import qualified Data.Set as S
+
 
 -- Haskell-specific helpers
 
@@ -35,6 +37,9 @@ map = Monads.map
 
 mapList :: (x -> Flow s y) -> [x] -> Flow s [y]
 mapList = CM.mapM
+
+mapSet :: Ord y => (x -> Flow s y) -> S.Set x -> Flow s (S.Set y)
+mapSet f xs = S.fromList <$> (CM.mapM f $ S.toList xs)
 
 pure :: x -> Flow s x
 pure = Monads.pure

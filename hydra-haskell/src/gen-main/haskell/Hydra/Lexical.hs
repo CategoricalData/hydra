@@ -73,7 +73,7 @@ fieldsOf t =
     Core.TypeUnion v1 -> (Core.rowTypeFields v1)
     _ -> []) stripped)
 
-getField :: (M.Map Core.Name t2 -> Core.Name -> (t2 -> Compute.Flow t0 t1) -> Compute.Flow t0 t1)
+getField :: (M.Map Core.Name t0 -> Core.Name -> (t0 -> Compute.Flow t1 t2) -> Compute.Flow t1 t2)
 getField m fname decode = (Optionals.maybe (Flows.fail (Strings.cat [
   Strings.cat [
     "expected field ",
@@ -173,7 +173,7 @@ stripAndDereferenceTerm term =
 typeOfPrimitive :: (Core.Name -> Compute.Flow Graph.Graph Core.TypeScheme)
 typeOfPrimitive name = (Flows.map Graph.primitiveType (requirePrimitive name))
 
-withEmptyGraph :: (Compute.Flow Graph.Graph t1 -> Compute.Flow t0 t1)
+withEmptyGraph :: (Compute.Flow Graph.Graph t0 -> Compute.Flow t1 t0)
 withEmptyGraph = (Monads.withState emptyGraph)
 
 withSchemaContext :: (Compute.Flow Graph.Graph t0 -> Compute.Flow Graph.Graph t0)

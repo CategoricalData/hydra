@@ -195,7 +195,7 @@ typeDef = define "type" $
         (lambda "et" $ Flows.map (unaryFunction Core.typeOptional) $ ref typeDef @@ var "et"),
       pair
         (Core.nameLift _Type_product)
-        (lambda "types" $ Flows.map (unaryFunction Core.typeProduct) $ ref ExtractCore.listDef @@ ref typeDef @@ var "types"),
+        (lambda "types" $ Flows.map (unaryFunction Core.typeProduct) $ ref ExtractCore.listOfDef @@ ref typeDef @@ var "types"),
       pair
         (Core.nameLift _Type_record)
         (lambda "rt" $ Flows.map (unaryFunction Core.typeRecord) $ ref rowTypeDef @@ var "rt"),
@@ -204,7 +204,7 @@ typeDef = define "type" $
         (lambda "et" $ Flows.map (unaryFunction Core.typeSet) $ ref typeDef @@ var "et"),
       pair
         (Core.nameLift _Type_sum)
-        (lambda "types" $ Flows.map (unaryFunction Core.typeSum) $ ref ExtractCore.listDef @@ ref typeDef @@ var "types"),
+        (lambda "types" $ Flows.map (unaryFunction Core.typeSum) $ ref ExtractCore.listOfDef @@ ref typeDef @@ var "types"),
       pair
         (Core.nameLift _Type_union)
         (lambda "rt" $ Flows.map (unaryFunction Core.typeUnion) $ ref rowTypeDef @@ var "rt"),
@@ -225,7 +225,7 @@ typeDef = define "type" $
 typeSchemeDef :: TElement (Term -> Flow Graph TypeScheme)
 typeSchemeDef = define "typeScheme" $
   ref Lexical.matchRecordDef @@ (lambda "m" $ binds [
-    "vars">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _TypeScheme_variables @@ (ref ExtractCore.listDef @@ ref nameDef),
+    "vars">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _TypeScheme_variables @@ (ref ExtractCore.listOfDef @@ ref nameDef),
     "body">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _TypeScheme_type @@ ref typeDef] $
     produce $ Core.typeScheme (var "vars") (var "body"))
 
