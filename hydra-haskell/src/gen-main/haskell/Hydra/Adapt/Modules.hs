@@ -82,7 +82,7 @@ languageAdapter lang typ = (Flows.bind Monads.getState (\g ->
       Compute.adapterTarget = (Compute.adapterTarget adapter),
       Compute.adapterCoder = ac}))))))
 
-transformModule :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> (Module.Module -> M.Map Core.Type (Compute.Coder t0 t3 Core.Term t1) -> [(Graph.Element, Core.TypedTerm)] -> Compute.Flow Graph.Graph t2) -> Module.Module -> Compute.Flow Graph.Graph t2)
+transformModule :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> (Module.Module -> M.Map Core.Type (Compute.Coder t0 t2 Core.Term t1) -> [(Graph.Element, Core.TypedTerm)] -> Compute.Flow Graph.Graph t3) -> Module.Module -> Compute.Flow Graph.Graph t3)
 transformModule lang encodeTerm createModule mod = (Monads.withTrace (Strings.cat2 "transform module " (Module.unNamespace (Module.moduleNamespace mod))) ( 
   let els = (Module.moduleElements mod) 
       codersFor = (\types -> Flows.bind (Flows.mapList (constructCoder lang encodeTerm) types) (\cdrs -> Flows.pure (Maps.fromList (Lists.zip types cdrs))))

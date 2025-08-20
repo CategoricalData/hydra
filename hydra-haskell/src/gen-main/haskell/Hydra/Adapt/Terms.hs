@@ -202,22 +202,6 @@ lambdaToMonotype t = ((\x -> case x of
       Compute.adapterTarget = (Compute.adapterTarget ad),
       Compute.adapterCoder = (Compute.adapterCoder ad)})))) t)
 
--- | Convert set types to list types
-listToSet :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
-listToSet t = ((\x -> case x of
-  Core.TypeSet v1 ->  
-    let encode = (\ad -> \term -> (\x -> case x of
-            Core.TermSet v2 -> (Compute.coderEncode (Compute.adapterCoder ad) (Core.TermList (Sets.toList v2)))) term) 
-        decode = (\ad -> \term -> Flows.bind (Compute.coderDecode (Compute.adapterCoder ad) term) (\listTerm -> (\x -> case x of
-                Core.TermList v2 -> (Flows.pure (Core.TermSet (Sets.fromList v2)))) listTerm))
-    in (Flows.bind (termAdapter (Core.TypeList v1)) (\ad -> Flows.pure (Compute.Adapter {
-      Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
-      Compute.adapterSource = t,
-      Compute.adapterTarget = (Compute.adapterTarget ad),
-      Compute.adapterCoder = Compute.Coder {
-        Compute.coderEncode = (encode ad),
-        Compute.coderDecode = (decode ad)}})))) t)
-
 -- | Convert optional types to list types
 optionalToList :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 optionalToList t = ((\x -> case x of
@@ -468,6 +452,22 @@ passWrapped t = ((\x -> case x of
         Core.wrappedTypeObject = (Compute.adapterTarget adapter)})),
       Compute.adapterCoder = (Utils.bidirectional (mapTerm (Compute.adapterCoder adapter)))})))) t)
 
+-- | Convert set types to list types
+setToList :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
+setToList t = ((\x -> case x of
+  Core.TypeSet v1 ->  
+    let encode = (\ad -> \term -> (\x -> case x of
+            Core.TermSet v2 -> (Compute.coderEncode (Compute.adapterCoder ad) (Core.TermList (Sets.toList v2)))) term) 
+        decode = (\ad -> \term -> Flows.bind (Compute.coderDecode (Compute.adapterCoder ad) term) (\listTerm -> (\x -> case x of
+                Core.TermList v2 -> (Flows.pure (Core.TermSet (Sets.fromList v2)))) listTerm))
+    in (Flows.bind (termAdapter (Core.TypeList v1)) (\ad -> Flows.pure (Compute.Adapter {
+      Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
+      Compute.adapterSource = t,
+      Compute.adapterTarget = (Compute.adapterTarget ad),
+      Compute.adapterCoder = Compute.Coder {
+        Compute.coderEncode = (encode ad),
+        Compute.coderDecode = (decode ad)}})))) t)
+
 -- | Simplify application types
 simplifyApplication :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 simplifyApplication t = ((\x -> case x of
@@ -526,7 +526,7 @@ termAdapter typ =
               Mantle.TypeVariantOptional -> [
                 optionalToList]
               Mantle.TypeVariantSet -> [
-                listToSet]
+                setToList]
               Mantle.TypeVariantUnion -> [
                 unionToRecord]
               Mantle.TypeVariantUnit -> [
