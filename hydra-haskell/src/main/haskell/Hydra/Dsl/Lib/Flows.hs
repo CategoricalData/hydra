@@ -9,6 +9,7 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.Map as M
+import qualified Data.Set as S
 
 
 apply :: TTerm (Flow s (x -> y)) -> TTerm (Flow s x) -> TTerm (Flow s y)
@@ -25,6 +26,9 @@ map = primitive2 _flows_map
 
 mapList :: TTerm (x -> Flow s y) -> TTerm [x] -> TTerm (Flow s [y])
 mapList = primitive2 _flows_mapList
+
+mapSet :: TTerm (x -> Flow s y) -> TTerm (S.Set x) -> TTerm (Flow s (S.Set y))
+mapSet = primitive2 _flows_mapSet
 
 pure :: TTerm x -> TTerm (Flow s x)
 pure = primitive1 _flows_pure

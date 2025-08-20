@@ -89,6 +89,7 @@ module_ = Module (Namespace "hydra.extract.core") elements
      el letTermDef,
      el listDef,
      el listHeadDef,
+     el listOfDef,
      el listTypeDef,
      el literalDef,
      el mapDef,
@@ -101,6 +102,7 @@ module_ = Module (Namespace "hydra.extract.core") elements
      el recordDef,
      el recordTypeDef,
      el setDef,
+     el setOfDef,
      el setTypeDef,
      el stringDef,
      el stringLiteralDef,
@@ -370,20 +372,29 @@ letTermDef = define "letTerm" $
     lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ string "let term" @@ (ref ShowCore.termDef @@ var "term")) [
       _Term_let>>: lambda "lt" $ Flows.pure $ var "lt"]
 
-listDef :: TElement ((Term -> Flow Graph x) -> Term -> Flow Graph [x])
+listDef :: TElement (Term -> Flow Graph [Term])
 listDef = define "list" $
-  doc "Extract a list of values from a term, mapping a function over each element" $
-  lambdas ["f", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ string "list" @@ (ref ShowCore.termDef @@ var "term")) [
-      _Term_list>>: lambda "l" $ Flows.mapList (var "f") (var "l")]
+  doc "Extract a list of terms from a term" $
+  "term" ~>
+  "stripped" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term" $
+   cases _Term (var "stripped")
+     (Just $ ref Monads.unexpectedDef @@ string "list" @@ (ref ShowCore.termDef @@ var "stripped")) [
+     _Term_list>>: "l" ~> produce $ var "l"]
 
 listHeadDef :: TElement (Term -> Flow Graph Term)
 listHeadDef = define "listHead" $
   doc "Extract the first element of a list term" $
-  lambda "term" $ Flows.bind (ref listDef @@ (unaryFunction Flows.pure) @@ var "term") $
+  lambda "term" $ Flows.bind (ref listDef @@ var "term") $
     lambda "l" $ Logic.ifElse (Lists.null $ var "l")
       (Flows.fail $ string "empty list")
       (Flows.pure $ Lists.head $ var "l")
+
+listOfDef :: TElement ((Term -> Flow Graph x) -> Term -> Flow Graph [x])
+listOfDef = define "listOf" $
+  doc "Extract a list of values from a term, mapping a function over each element" $
+  "f" ~> "term" ~>
+  "els" <<~ ref listDef @@ var "term" $
+  Flows.mapList (var "f") (var "els")
 
 listTypeDef :: TElement (Type -> Flow s Type)
 listTypeDef = define "listType" $
@@ -494,12 +505,21 @@ recordTypeDef = define "recordType" $
           (Flows.pure $ Core.rowTypeFields $ var "rowType")
           (ref Monads.unexpectedDef @@ ("record of type " ++ (Core.unName $ var "ename")) @@ ("record of type " ++ (Core.unName $ Core.rowTypeTypeName $ var "rowType")))]
 
-setDef :: TElement ((Term -> Flow Graph x) -> Term -> Flow Graph (S.Set x))
+setDef :: TElement (Term -> Flow Graph (S.Set Term))
 setDef = define "set" $
+  doc "Extract a set of terms from a term" $
+  "term" ~>
+  "stripped" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term" $
+  cases _Term (var "stripped")
+    (Just $ ref Monads.unexpectedDef @@ string "set" @@ (ref ShowCore.termDef @@ var "stripped")) [
+    _Term_set>>: "s" ~> produce $ var "s"]
+
+setOfDef :: TElement ((Term -> Flow Graph x) -> Term -> Flow Graph (S.Set x))
+setOfDef = define "setOf" $
   doc "Extract a set of values from a term, mapping a function over each element" $
-  lambdas ["f", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ string "set" @@ (ref ShowCore.termDef @@ var "term")) [
-      _Term_set>>: lambda "s" $ Flows.map (unaryFunction Sets.fromList) $ Flows.mapList (var "f") $ Sets.toList $ var "s"]
+  "f" ~> "term" ~>
+  "els" <<~ ref setDef @@ var "term" $
+  Flows.mapSet (var "f") (var "els")
 
 setTypeDef :: TElement (Type -> Flow s Type)
 setTypeDef = define "setType" $

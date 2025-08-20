@@ -87,7 +87,7 @@ getTypeClasses term =
                   (Core.Name "equality", Mantle.TypeClassEquality),
                   (Core.Name "ordering", Mantle.TypeClassOrdering)])
           in (Flows.bind (Core___.unitVariant (Core.Name "hydra.mantle.TypeClass") term) (\fn -> Optionals.maybe (Monads.unexpected "type class" (Core____.term term)) Flows.pure (Maps.lookup fn byName))))
-  in (Optionals.maybe (Flows.pure Maps.empty) (\term -> Core___.map Core_.name (Core___.set decodeClass) term) (getTermAnnotation Constants.key_classes term))
+  in (Optionals.maybe (Flows.pure Maps.empty) (\term -> Core___.map Core_.name (Core___.setOf decodeClass) term) (getTermAnnotation Constants.key_classes term))
 
 -- | Get type description
 getTypeDescription :: (Core.Type -> Compute.Flow Graph.Graph (Maybe String))

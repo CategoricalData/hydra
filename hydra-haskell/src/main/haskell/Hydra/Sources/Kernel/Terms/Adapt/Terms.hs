@@ -67,7 +67,6 @@ module_ = Module (Namespace "hydra.adapt.terms") elements
      el functionProxyTypeDef,
      el functionToUnionDef,
      el lambdaToMonotypeDef,
-     el listToSetDef,
      el optionalToListDef,
      el passApplicationDef,
      el passFunctionDef,
@@ -83,6 +82,7 @@ module_ = Module (Namespace "hydra.adapt.terms") elements
      el passUnionDef,
      el passUnitDef,
      el passWrappedDef,
+     el setToListDef,
      el simplifyApplicationDef,
      el termAdapterDef,
      el unionToRecordDef,
@@ -242,25 +242,6 @@ lambdaToMonotypeDef = define "lambdaToMonotype" $
           (var "t")
           (Compute.adapterTarget $ var "ad")
           (Compute.adapterCoder $ var "ad")]
-
-listToSetDef :: TElement TypeAdapter
-listToSetDef = define "listToSet" $
-  doc "Convert set types to list types" $
-  lambda "t" $ cases _Type (var "t") Nothing [
-    _Type_set>>: lambda "st" $ lets [
-      "encode">: lambda "ad" $ lambda "term" $ cases _Term (var "term") Nothing [
-        _Term_set>>: lambda "s" $ Compute.coderEncode (Compute.adapterCoder $ var "ad") @@ (Core.termList $ Sets.toList $ var "s")],
-      "decode">:
-        lambdas ["ad", "term"] $
-        bind "listTerm" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ var "term") $
-          cases _Term (var "listTerm") Nothing [
-            _Term_list>>: lambda "l" $ Flows.pure $ Core.termSet $ Sets.fromList $ var "l"]] $
-      bind "ad" (ref termAdapterDef @@ (TTypes.list $ var "st")) $
-      Flows.pure $ Compute.adapter
-        (Compute.adapterIsLossy $ var "ad")
-        (var "t")
-        (Compute.adapterTarget $ var "ad")
-        (Compute.coder (var "encode" @@ var "ad") (var "decode" @@ var "ad"))]
 
 optionalToListDef :: TElement TypeAdapter
 optionalToListDef = define "optionalToList" $
@@ -578,6 +559,25 @@ passWrappedDef = define "passWrapped" $
             (Core.typeWrap $ Core.wrappedType (var "tname") (Compute.adapterTarget $ var "adapter"))
             (ref AdaptUtils.bidirectionalDef @@ (var "mapTerm" @@ (Compute.adapterCoder $ var "adapter")))]
 
+setToListDef :: TElement TypeAdapter
+setToListDef = define "setToList" $
+  doc "Convert set types to list types" $
+  lambda "t" $ cases _Type (var "t") Nothing [
+    _Type_set>>: lambda "st" $ lets [
+      "encode">: lambda "ad" $ lambda "term" $ cases _Term (var "term") Nothing [
+        _Term_set>>: lambda "s" $ Compute.coderEncode (Compute.adapterCoder $ var "ad") @@ (Core.termList $ Sets.toList $ var "s")],
+      "decode">:
+        lambdas ["ad", "term"] $
+        bind "listTerm" (Compute.coderDecode (Compute.adapterCoder $ var "ad") @@ var "term") $
+          cases _Term (var "listTerm") Nothing [
+            _Term_list>>: lambda "l" $ Flows.pure $ Core.termSet $ Sets.fromList $ var "l"]] $
+      bind "ad" (ref termAdapterDef @@ (TTypes.list $ var "st")) $
+      Flows.pure $ Compute.adapter
+        (Compute.adapterIsLossy $ var "ad")
+        (var "t")
+        (Compute.adapterTarget $ var "ad")
+        (Compute.coder (var "encode" @@ var "ad") (var "decode" @@ var "ad"))]
+
 simplifyApplicationDef :: TElement TypeAdapter
 simplifyApplicationDef = define "simplifyApplication" $
   doc "Simplify application types" $
@@ -724,7 +724,7 @@ termAdapterDef = define "termAdapter" $
       _TypeVariant_function>>: constant $ list [ref functionToUnionDef],
       _TypeVariant_forall>>: constant $ list [ref lambdaToMonotypeDef],
       _TypeVariant_optional>>: constant $ list [ref optionalToListDef],
-      _TypeVariant_set>>: constant $ list [ref listToSetDef],
+      _TypeVariant_set>>: constant $ list [ref setToListDef],
       _TypeVariant_union>>: constant $ list [ref unionToRecordDef],
       _TypeVariant_unit>>: constant $ list [ref unitToRecordDef],
       _TypeVariant_wrap>>: constant $ list [ref wrapToUnwrappedDef]],

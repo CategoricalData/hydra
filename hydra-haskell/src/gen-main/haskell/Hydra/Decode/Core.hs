@@ -99,17 +99,17 @@ type_ dat = ((\x -> case x of
     (Core.Name "literal", (\lt -> Flows.map (\x -> Core.TypeLiteral x) (literalType lt))),
     (Core.Name "map", (\mt -> Flows.map (\x -> Core.TypeMap x) (mapType mt))),
     (Core.Name "optional", (\et -> Flows.map (\x -> Core.TypeOptional x) (type_ et))),
-    (Core.Name "product", (\types -> Flows.map (\x -> Core.TypeProduct x) (Core_.list type_ types))),
+    (Core.Name "product", (\types -> Flows.map (\x -> Core.TypeProduct x) (Core_.listOf type_ types))),
     (Core.Name "record", (\rt -> Flows.map (\x -> Core.TypeRecord x) (rowType rt))),
     (Core.Name "set", (\et -> Flows.map (\x -> Core.TypeSet x) (type_ et))),
-    (Core.Name "sum", (\types -> Flows.map (\x -> Core.TypeSum x) (Core_.list type_ types))),
+    (Core.Name "sum", (\types -> Flows.map (\x -> Core.TypeSum x) (Core_.listOf type_ types))),
     (Core.Name "union", (\rt -> Flows.map (\x -> Core.TypeUnion x) (rowType rt))),
     (Core.Name "unit", (\_ -> Flows.pure Core.TypeUnit)),
     (Core.Name "variable", (\n -> Flows.map (\x -> Core.TypeVariable x) (name n))),
     (Core.Name "wrap", (\wt -> Flows.map (\x -> Core.TypeWrap x) (wrappedType wt)))] dat)) dat)
 
 typeScheme :: (Core.Term -> Compute.Flow Graph.Graph Core.TypeScheme)
-typeScheme = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "variables") (Core_.list name)) (\vars -> Flows.bind (Lexical.getField m (Core.Name "type") type_) (\body -> Flows.pure (Core.TypeScheme {
+typeScheme = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "variables") (Core_.listOf name)) (\vars -> Flows.bind (Lexical.getField m (Core.Name "type") type_) (\body -> Flows.pure (Core.TypeScheme {
   Core.typeSchemeVariables = vars,
   Core.typeSchemeType = body})))))
 

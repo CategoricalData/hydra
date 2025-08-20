@@ -131,7 +131,7 @@ int64 = TermCoder Types.int64 $ Coder encode decode
 list :: TermCoder x -> TermCoder [x]
 list els = TermCoder (Types.list $ termCoderType els) $ Coder encode decode
   where
-    encode = ExtractCore.list (coderEncode $ termCoderCoder els)
+    encode = ExtractCore.listOf (coderEncode $ termCoderCoder els)
     decode l = Terms.list <$> mapM (coderDecode $ termCoderCoder els) l
 
 literal :: TermCoder Literal
@@ -250,7 +250,7 @@ prim3Interp name mcompute vars input1 input2 input3 output = Primitive name typ 
 set :: Ord x => TermCoder x -> TermCoder (S.Set x)
 set els = TermCoder (Types.set $ termCoderType els) $ Coder encode decode
   where
-    encode = ExtractCore.set (coderEncode $ termCoderCoder els)
+    encode = ExtractCore.setOf (coderEncode $ termCoderCoder els)
     decode s = Terms.set . S.fromList <$> mapM (coderDecode $ termCoderCoder els) (S.toList s)
 
 string :: TermCoder String

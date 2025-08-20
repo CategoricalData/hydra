@@ -34,7 +34,7 @@ deannotateAndDetypeTerm t = ((\x -> case x of
   Core.TermTypeApplication v1 -> (deannotateAndDetypeTerm (Core.typedTermTerm v1))
   _ -> t) t)
 
--- | Strip all annotations (including System F type annotations) from a term
+-- | Strip all annotations (including System F type annotations) from the top levels of a term
 deannotateTerm :: (Core.Term -> Core.Term)
 deannotateTerm t = ((\x -> case x of
   Core.TermAnnotated v1 -> (deannotateTerm (Core.annotatedTermSubject v1))
@@ -615,53 +615,53 @@ rewriteType f =
   in (rewrite fsub f)
 
 rewriteTypeM :: (((Core.Type -> Compute.Flow t0 Core.Type) -> Core.Type -> Compute.Flow t0 Core.Type) -> Core.Type -> Compute.Flow t0 Core.Type)
-rewriteTypeM =  
-  let fsub = (\recurse -> \typ -> (\x -> case x of
-          Core.TypeAnnotated v1 -> (Flows.bind (recurse (Core.annotatedTypeSubject v1)) (\t -> Flows.pure (Core.TypeAnnotated (Core.AnnotatedType {
-            Core.annotatedTypeSubject = t,
-            Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))))
-          Core.TypeApplication v1 -> (Flows.bind (recurse (Core.applicationTypeFunction v1)) (\lhs -> Flows.bind (recurse (Core.applicationTypeArgument v1)) (\rhs -> Flows.pure (Core.TypeApplication (Core.ApplicationType {
-            Core.applicationTypeFunction = lhs,
-            Core.applicationTypeArgument = rhs})))))
-          Core.TypeFunction v1 -> (Flows.bind (recurse (Core.functionTypeDomain v1)) (\dom -> Flows.bind (recurse (Core.functionTypeCodomain v1)) (\cod -> Flows.pure (Core.TypeFunction (Core.FunctionType {
-            Core.functionTypeDomain = dom,
-            Core.functionTypeCodomain = cod})))))
-          Core.TypeForall v1 -> (Flows.bind (recurse (Core.forallTypeBody v1)) (\b -> Flows.pure (Core.TypeForall (Core.ForallType {
-            Core.forallTypeParameter = (Core.forallTypeParameter v1),
-            Core.forallTypeBody = b}))))
-          Core.TypeList v1 -> (Flows.bind (recurse v1) (\rt -> Flows.pure (Core.TypeList rt)))
-          Core.TypeLiteral v1 -> (Flows.pure (Core.TypeLiteral v1))
-          Core.TypeMap v1 -> (Flows.bind (recurse (Core.mapTypeKeys v1)) (\kt -> Flows.bind (recurse (Core.mapTypeValues v1)) (\vt -> Flows.pure (Core.TypeMap (Core.MapType {
-            Core.mapTypeKeys = kt,
-            Core.mapTypeValues = vt})))))
-          Core.TypeOptional v1 -> (Flows.bind (recurse v1) (\rt -> Flows.pure (Core.TypeOptional rt)))
-          Core.TypeProduct v1 -> (Flows.bind (Flows.mapList recurse v1) (\rtypes -> Flows.pure (Core.TypeProduct rtypes)))
-          Core.TypeRecord v1 ->  
-            let name = (Core.rowTypeTypeName v1) 
-                fields = (Core.rowTypeFields v1)
-                forField = (\f -> Flows.bind (recurse (Core.fieldTypeType f)) (\t -> Flows.pure (Core.FieldType {
-                        Core.fieldTypeName = (Core.fieldTypeName f),
-                        Core.fieldTypeType = t})))
-            in (Flows.bind (Flows.mapList forField fields) (\rfields -> Flows.pure (Core.TypeRecord (Core.RowType {
-              Core.rowTypeTypeName = name,
-              Core.rowTypeFields = rfields}))))
-          Core.TypeSet v1 -> (Flows.bind (recurse v1) (\rt -> Flows.pure (Core.TypeSet rt)))
-          Core.TypeSum v1 -> (Flows.bind (Flows.mapList recurse v1) (\rtypes -> Flows.pure (Core.TypeSum rtypes)))
-          Core.TypeUnion v1 ->  
-            let name = (Core.rowTypeTypeName v1) 
-                fields = (Core.rowTypeFields v1)
-                forField = (\f -> Flows.bind (recurse (Core.fieldTypeType f)) (\t -> Flows.pure (Core.FieldType {
-                        Core.fieldTypeName = (Core.fieldTypeName f),
-                        Core.fieldTypeType = t})))
-            in (Flows.bind (Flows.mapList forField fields) (\rfields -> Flows.pure (Core.TypeUnion (Core.RowType {
-              Core.rowTypeTypeName = name,
-              Core.rowTypeFields = rfields}))))
-          Core.TypeUnit -> (Flows.pure Core.TypeUnit)
-          Core.TypeVariable v1 -> (Flows.pure (Core.TypeVariable v1))
-          Core.TypeWrap v1 -> (Flows.bind (recurse (Core.wrappedTypeObject v1)) (\t -> Flows.pure (Core.TypeWrap (Core.WrappedType {
-            Core.wrappedTypeTypeName = (Core.wrappedTypeTypeName v1),
-            Core.wrappedTypeObject = t}))))) typ)
-  in (\f -> rewrite fsub f)
+rewriteTypeM f = (rewrite fsub f) 
+  where 
+    fsub = (\recurse -> \typ -> (\x -> case x of
+      Core.TypeAnnotated v1 -> (Flows.bind (recurse (Core.annotatedTypeSubject v1)) (\t -> Flows.pure (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeSubject = t,
+        Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))))
+      Core.TypeApplication v1 -> (Flows.bind (recurse (Core.applicationTypeFunction v1)) (\lhs -> Flows.bind (recurse (Core.applicationTypeArgument v1)) (\rhs -> Flows.pure (Core.TypeApplication (Core.ApplicationType {
+        Core.applicationTypeFunction = lhs,
+        Core.applicationTypeArgument = rhs})))))
+      Core.TypeFunction v1 -> (Flows.bind (recurse (Core.functionTypeDomain v1)) (\dom -> Flows.bind (recurse (Core.functionTypeCodomain v1)) (\cod -> Flows.pure (Core.TypeFunction (Core.FunctionType {
+        Core.functionTypeDomain = dom,
+        Core.functionTypeCodomain = cod})))))
+      Core.TypeForall v1 -> (Flows.bind (recurse (Core.forallTypeBody v1)) (\b -> Flows.pure (Core.TypeForall (Core.ForallType {
+        Core.forallTypeParameter = (Core.forallTypeParameter v1),
+        Core.forallTypeBody = b}))))
+      Core.TypeList v1 -> (Flows.bind (recurse v1) (\rt -> Flows.pure (Core.TypeList rt)))
+      Core.TypeLiteral v1 -> (Flows.pure (Core.TypeLiteral v1))
+      Core.TypeMap v1 -> (Flows.bind (recurse (Core.mapTypeKeys v1)) (\kt -> Flows.bind (recurse (Core.mapTypeValues v1)) (\vt -> Flows.pure (Core.TypeMap (Core.MapType {
+        Core.mapTypeKeys = kt,
+        Core.mapTypeValues = vt})))))
+      Core.TypeOptional v1 -> (Flows.bind (recurse v1) (\rt -> Flows.pure (Core.TypeOptional rt)))
+      Core.TypeProduct v1 -> (Flows.bind (Flows.mapList recurse v1) (\rtypes -> Flows.pure (Core.TypeProduct rtypes)))
+      Core.TypeRecord v1 ->  
+        let name = (Core.rowTypeTypeName v1) 
+            fields = (Core.rowTypeFields v1)
+            forField = (\f -> Flows.bind (recurse (Core.fieldTypeType f)) (\t -> Flows.pure (Core.FieldType {
+                    Core.fieldTypeName = (Core.fieldTypeName f),
+                    Core.fieldTypeType = t})))
+        in (Flows.bind (Flows.mapList forField fields) (\rfields -> Flows.pure (Core.TypeRecord (Core.RowType {
+          Core.rowTypeTypeName = name,
+          Core.rowTypeFields = rfields}))))
+      Core.TypeSet v1 -> (Flows.bind (recurse v1) (\rt -> Flows.pure (Core.TypeSet rt)))
+      Core.TypeSum v1 -> (Flows.bind (Flows.mapList recurse v1) (\rtypes -> Flows.pure (Core.TypeSum rtypes)))
+      Core.TypeUnion v1 ->  
+        let name = (Core.rowTypeTypeName v1) 
+            fields = (Core.rowTypeFields v1)
+            forField = (\f -> Flows.bind (recurse (Core.fieldTypeType f)) (\t -> Flows.pure (Core.FieldType {
+                    Core.fieldTypeName = (Core.fieldTypeName f),
+                    Core.fieldTypeType = t})))
+        in (Flows.bind (Flows.mapList forField fields) (\rfields -> Flows.pure (Core.TypeUnion (Core.RowType {
+          Core.rowTypeTypeName = name,
+          Core.rowTypeFields = rfields}))))
+      Core.TypeUnit -> (Flows.pure Core.TypeUnit)
+      Core.TypeVariable v1 -> (Flows.pure (Core.TypeVariable v1))
+      Core.TypeWrap v1 -> (Flows.bind (recurse (Core.wrappedTypeObject v1)) (\t -> Flows.pure (Core.TypeWrap (Core.WrappedType {
+        Core.wrappedTypeTypeName = (Core.wrappedTypeTypeName v1),
+        Core.wrappedTypeObject = t}))))) typ)
 
 -- | Simplify terms by applying beta reduction where possible
 simplifyTerm :: (Core.Term -> Core.Term)

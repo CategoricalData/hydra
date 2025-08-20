@@ -483,6 +483,7 @@ data Term =
   TermApplication Application |
   -- | A function term
   TermFunction Function |
+  -- | A 'let' term, which binds variables to terms
   TermLet Let |
   -- | A list
   TermList [Term] |
@@ -510,6 +511,7 @@ data Term =
   TermUnit  |
   -- | A variable reference
   TermVariable Name |
+  -- | A wrapped term; an instance of a wrapper type (newtype)
   TermWrap WrappedTerm
   deriving (Eq, Ord, Read, Show)
 
@@ -678,7 +680,7 @@ _WrappedTerm_typeName = (Name "typeName")
 
 _WrappedTerm_object = (Name "object")
 
--- | A type wrapped in a type name
+-- | A type wrapped in a type name; a newtype
 data WrappedType = 
   WrappedType {
     wrappedTypeTypeName :: Name,

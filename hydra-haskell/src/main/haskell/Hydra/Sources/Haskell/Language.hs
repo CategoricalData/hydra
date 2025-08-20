@@ -92,6 +92,11 @@ haskellLanguageModule = Module (Namespace "hydra.ext.haskell.language")
 haskellLanguageDef :: TElement Language
 haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
   doc "Language constraints for Haskell" $ lets [
+  "eliminationVariants">: Sets.fromList $ list [
+    Mantle.eliminationVariantProduct,
+    Mantle.eliminationVariantRecord,
+    Mantle.eliminationVariantUnion,
+    Mantle.eliminationVariantWrap],
   "literalVariants">: Sets.fromList $ list [
     Mantle.literalVariantBoolean,
     Mantle.literalVariantFloat,
@@ -101,6 +106,10 @@ haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
     -- Bigfloat is excluded for now
     Core.floatTypeFloat32, -- Float
     Core.floatTypeFloat64], -- Double
+  "functionVariants">: Sets.fromList $ list [
+    Mantle.functionVariantElimination,
+    Mantle.functionVariantLambda,
+    Mantle.functionVariantPrimitive],
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeBigint, -- Integer
     Core.integerTypeInt8, -- Int8

@@ -25,12 +25,12 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-bidirectional :: ((Coders.CoderDirection -> t1 -> Compute.Flow t0 t1) -> Compute.Coder t0 t0 t1 t1)
+bidirectional :: ((Coders.CoderDirection -> t0 -> Compute.Flow t1 t0) -> Compute.Coder t1 t1 t0 t0)
 bidirectional f = Compute.Coder {
   Compute.coderEncode = (f Coders.CoderDirectionEncode),
   Compute.coderDecode = (f Coders.CoderDirectionDecode)}
 
-chooseAdapter :: ((t2 -> Compute.Flow t4 [Compute.Adapter t0 t1 t2 t2 t3 t3]) -> (t2 -> Bool) -> (t2 -> String) -> (t2 -> String) -> t2 -> Compute.Flow t4 (Compute.Adapter t0 t1 t2 t2 t3 t3))
+chooseAdapter :: ((t0 -> Compute.Flow t1 [Compute.Adapter t2 t3 t0 t0 t4 t4]) -> (t0 -> Bool) -> (t0 -> String) -> (t0 -> String) -> t0 -> Compute.Flow t1 (Compute.Adapter t2 t3 t0 t0 t4 t4))
 chooseAdapter alts supported show describe typ = (Logic.ifElse (supported typ) (Flows.pure (Compute.Adapter {
   Compute.adapterIsLossy = False,
   Compute.adapterSource = typ,
@@ -49,7 +49,7 @@ chooseAdapter alts supported show describe typ = (Logic.ifElse (supported typ) (
     ". Original type: ",
     (show typ)])) (Flows.pure (Lists.head candidates))))))
 
-composeCoders :: (Compute.Coder t2 t1 t0 t3 -> Compute.Coder t2 t1 t3 t4 -> Compute.Coder t2 t1 t0 t4)
+composeCoders :: (Compute.Coder t0 t1 t2 t3 -> Compute.Coder t0 t1 t3 t4 -> Compute.Coder t0 t1 t2 t4)
 composeCoders c1 c2 = Compute.Coder {
   Compute.coderEncode = (\a -> Flows.bind (Compute.coderEncode c1 a) (Compute.coderEncode c2)),
   Compute.coderDecode = (\c -> Flows.bind (Compute.coderDecode c2 c) (Compute.coderDecode c1))}
@@ -126,7 +126,7 @@ typeIsSupported constraints t =
     Core.TypeWrap v1 -> (typeIsSupported constraints (Core.wrappedTypeObject v1))
     Core.TypeVariable _ -> True) base)))
 
-unidirectionalCoder :: ((t3 -> Compute.Flow t0 t1) -> Compute.Coder t0 t2 t3 t1)
+unidirectionalCoder :: ((t0 -> Compute.Flow t1 t2) -> Compute.Coder t1 t3 t0 t2)
 unidirectionalCoder m = Compute.Coder {
   Compute.coderEncode = m,
   Compute.coderDecode = (\_ -> Flows.fail "inbound mapping is unsupported")}
