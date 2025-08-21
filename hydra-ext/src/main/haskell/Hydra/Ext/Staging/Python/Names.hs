@@ -18,7 +18,8 @@ _useFutureAnnotations_ = True
 
 data PythonEnvironment = PythonEnvironment {
   pythonEnvironmentNamespaces :: Namespaces Py.DottedName,
-  pythonEnvironmentBoundTypeVariables :: ([Name], M.Map Name Py.Name)}
+  pythonEnvironmentBoundTypeVariables :: ([Name], M.Map Name Py.Name),
+  pythonEnvironmentTypeContext :: TypeContext}
 
 encodeConstantForFieldName :: PythonEnvironment -> Name -> Name -> Py.Name
 encodeConstantForFieldName _ tname fname = Py.Name $

@@ -38,14 +38,21 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesTuple :: Bool,
   pythonModuleMetadataUsesTypeVar :: Bool}
 
-argsAndBindings :: Term -> Type -> ([Name], [LetBinding], Term, [Type], Type)
-argsAndBindings = gather [] [] []
+argsAndBindings :: TypeContext -> Term -> Type -> Flow s ([Name], [LetBinding], Term, [Type], Type)
+argsAndBindings tcontext term _ = gather tcontext [] [] [] term
   where
-    gather prevArgs prevBindings prevDoms term typ = case deannotateTerm term of
-      TermFunction (FunctionLambda (Lambda var _ body)) -> case deannotateType typ of
-        TypeFunction (FunctionType dom cod) -> gather (var:prevArgs) prevBindings (dom:prevDoms) body cod
-      TermLet (Let bindings body) -> gather prevArgs (L.reverse bindings ++ prevBindings) prevDoms body typ
-      t -> (L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ)
+    gather tcontext prevArgs prevBindings prevDoms term = case deannotateTerm term of
+      TermFunction (FunctionLambda (Lambda var (Just dom) body)) -> gather tcontext2 (var:prevArgs) prevBindings (dom:prevDoms) body
+        where
+          tcontext2 = tcontext {typeContextTypes = M.insert var dom (typeContextTypes tcontext)}
+      TermLet (Let bindings body) -> gather tcontext2 prevArgs (L.reverse bindings ++ prevBindings) prevDoms body
+        where
+          tcontext2 = tcontext {typeContextTypes = M.union
+            (typeContextTypes tcontext)
+            (M.fromList $ fmap (\b -> (letBindingName b, typeSchemeToFType $ Y.fromJust $ letBindingType b)) bindings)}
+      t -> do
+        typ <- typeOf tcontext t
+        return (L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ)
 
 -- | Rewrite case statements in which the top-level lambda variables are re-used, e.g.
 --   cases _Type Nothing [_Type_list>>: "t" ~> ..., _Type_set>>: "t" ~> ...].
@@ -248,10 +255,12 @@ encodeModule mod = do
     let commentStmts = case normalizeComment <$> moduleDescription mod of
                        Nothing -> []
                        Just c -> [commentStatement c]
-
+    g <- getState
+    tcontext <- initialTypeContext g
     let env = PythonEnvironment {
-              pythonEnvironmentNamespaces = namespaces,
-              pythonEnvironmentBoundTypeVariables = ([], M.empty)}
+                pythonEnvironmentNamespaces = namespaces,
+                pythonEnvironmentBoundTypeVariables = ([], M.empty),
+                pythonEnvironmentTypeContext = tcontext}
     defStmts <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
 
     let body = L.filter (not . L.null) $ [commentStmts, importStmts, tvarStmts] ++ defStmts
@@ -397,7 +406,9 @@ encodeTerm env term = case deannotateTerm term of
     encode = encodeTerm env
 
 encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Type -> Maybe String -> Flow Graph [Py.Statement]
-encodeTermAssignment env name term typ comment = if L.null args && L.null bindings
+encodeTermAssignment env name term typ comment = do
+    (args, bindings, body, doms, cod) <- argsAndBindings (pythonEnvironmentTypeContext env) term typ -- TODO: also modify TypeContext
+    if L.null args && L.null bindings
     -- If there are no arguments or let bindings, use a simple a = b assignment.
     then do
       bodyExpr <- encodeTerm env body
@@ -417,7 +428,6 @@ encodeTermAssignment env name term typ comment = if L.null args && L.null bindin
           Nothing -> fail $ "missing type for let binding " ++ unName name1 ++ " in " ++ unName name
           Just ts -> return $ typeSchemeType ts
         encodeTermAssignment env name1 term1 typ1 comment
-    (args, bindings, body, doms, cod) = argsAndBindings term typ
 
 encodeTopLevelTerm :: PythonEnvironment -> Term -> Flow Graph [Py.Statement]
 encodeTopLevelTerm env term = if L.length args == 1
@@ -678,9 +688,7 @@ genericArg tparamList = if L.null tparamList
 isUnaryFunction :: Element -> Bool
 isUnaryFunction el = case elementType el of
   Nothing -> False
-  Just ts -> L.null args && not (L.null bindings)
-    where
-      (args, bindings, _, _, _) = argsAndBindings (elementTerm el) (typeSchemeType ts)
+  Just ts -> typeArity (typeSchemeType ts) == 1
 
 moduleToPython :: Module -> Flow Graph (M.Map FilePath String)
 moduleToPython mod = do
