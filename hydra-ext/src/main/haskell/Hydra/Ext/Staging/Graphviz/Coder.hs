@@ -156,7 +156,7 @@ termLabel compact namespaces term = case term of
     TermOptional _ -> simpleLabel $ if compact then "opt" else "optional"
     TermProduct _ -> simpleLabel $ if compact then "\x2227" else "product"
     TermRecord (Record name _) -> simpleLabel $ "\x2227" ++ Names.compactName namespaces name
-    TermTypeAbstraction (TypeAbstraction v term1) -> simpleLabel "tyabs"
+    TermTypeLambda (TypeLambda v term1) -> simpleLabel "tyabs"
     TermTypeApplication (TypedTerm term _) -> simpleLabel "tyapp"
     TermUnion (Injection tname _) -> simpleLabel $ "\x22BB" ++ Names.compactName namespaces tname
     TermVariable name -> simpleLabel $ Names.compactName namespaces name

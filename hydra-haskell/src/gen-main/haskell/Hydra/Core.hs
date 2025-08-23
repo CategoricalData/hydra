@@ -502,7 +502,7 @@ data Term =
   -- | A variant tuple
   TermSum Sum |
   -- | A System F type abstraction term
-  TermTypeAbstraction TypeAbstraction |
+  TermTypeLambda TypeLambda |
   -- | A System F type application term
   TermTypeApplication TypedTerm |
   -- | An injection; an instance of a union type
@@ -541,7 +541,7 @@ _Term_set = (Name "set")
 
 _Term_sum = (Name "sum")
 
-_Term_typeAbstraction = (Name "typeAbstraction")
+_Term_typeLambda = (Name "typeLambda")
 
 _Term_typeApplication = (Name "typeApplication")
 
@@ -627,19 +627,19 @@ _Type_variable = (Name "variable")
 _Type_wrap = (Name "wrap")
 
 -- | A System F type abstraction term
-data TypeAbstraction = 
-  TypeAbstraction {
+data TypeLambda = 
+  TypeLambda {
     -- | The type variable introduced by the abstraction
-    typeAbstractionParameter :: Name,
+    typeLambdaParameter :: Name,
     -- | The body of the abstraction
-    typeAbstractionBody :: Term}
+    typeLambdaBody :: Term}
   deriving (Eq, Ord, Read, Show)
 
-_TypeAbstraction = (Name "hydra.core.TypeAbstraction")
+_TypeLambda = (Name "hydra.core.TypeLambda")
 
-_TypeAbstraction_parameter = (Name "parameter")
+_TypeLambda_parameter = (Name "parameter")
 
-_TypeAbstraction_body = (Name "body")
+_TypeLambda_body = (Name "body")
 
 -- | A term applied to a type; a type application
 data TypedTerm = 

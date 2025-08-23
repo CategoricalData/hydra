@@ -141,7 +141,7 @@ substInTypeDef = define "substInType" $
     "rewrite">: lambdas ["recurse", "typ"] $ cases _Type (var "typ") (Just $ var "recurse" @@ var "typ") [
       _Type_forall>>: lambda "lt" $ Optionals.maybe
         (var "recurse" @@ var "typ")
-        (lambda "styp" $ Core.typeLambda $ Core.forallType
+        (lambda "styp" $ Core.typeForall $ Core.forallType
           (Core.forallTypeParameter $ var "lt")
           (ref substInTypeDef
             @@ (var "removeVar" @@ (Core.forallTypeParameter $ var "lt"))
@@ -188,16 +188,16 @@ substTypesInTermDef = define "substTypesInTerm" $
         (Core.tupleProjectionArity $ var "tp")
         (Core.tupleProjectionIndex $ var "tp")
         (Optionals.map (lambda "types" $ Lists.map (ref substInTypeDef @@ var "subst") (var "types")) (Core.tupleProjectionDomain $ var "tp"))),
-      "forTypeAbstraction">: lambda "ta" $ lets [
-        "param">: Core.typeAbstractionParameter $ var "ta",
+      "forTypeLambda">: lambda "ta" $ lets [
+        "param">: Core.typeLambdaParameter $ var "ta",
         "subst2">: Typing.typeSubst $ Maps.remove (var "param") (Typing.unTypeSubst $ var "subst")] $
-        Core.termTypeAbstraction $ Core.typeAbstraction
+        Core.termTypeLambda $ Core.typeLambda
           (var "param")
-          (ref substTypesInTermDef @@ var "subst2" @@ (Core.typeAbstractionBody $ var "ta"))] $
+          (ref substTypesInTermDef @@ var "subst2" @@ (Core.typeLambdaBody $ var "ta"))] $
       cases _Term (var "term") (Just $ var "recurse" @@ var "term") [
         _Term_function>>: var "forFunction",
         _Term_let>>: var "forLet",
-        _Term_typeAbstraction>>: var "forTypeAbstraction",
+        _Term_typeLambda>>: var "forTypeLambda",
         _Term_typeApplication>>: lambda "tt" $ var "recurse" @@ (Core.termTypeApplication $ Core.typedTerm
           (Core.typedTermTerm $ var "tt")
           (ref substInTypeDef @@ var "subst" @@ (Core.typedTermType $ var "tt")))]] $

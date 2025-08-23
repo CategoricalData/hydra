@@ -337,9 +337,9 @@ termDef = define "term" $
           string "=",
           ref termDef @@ var "t2",
           string ")"],
-      _Term_typeAbstraction>>: lambda "ta" $ lets [
-        "param">: unwrap _Name @@ (Core.typeAbstractionParameter $ var "ta"),
-        "body">: Core.typeAbstractionBody $ var "ta"] $
+      _Term_typeLambda>>: lambda "ta" $ lets [
+        "param">: unwrap _Name @@ (Core.typeLambdaParameter $ var "ta"),
+        "body">: Core.typeLambdaBody $ var "ta"] $
         Strings.cat $ list [
           string "Λ",
           var "param",

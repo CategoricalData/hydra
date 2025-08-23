@@ -86,7 +86,7 @@ module_ = Module (Namespace "hydra.encode.core") elements
       el termDef,
       el tupleProjectionDef,
       el typeDef,
-      el typeAbstractionDef,
+      el typeLambdaDef,
       el typeSchemeDef,
       el typedTermDef,
       el wrappedTermDef,
@@ -402,7 +402,7 @@ termDef = define "Term" $
     ecase _Term_record (ref recordDef),
     ecase2 _Term_set $ encodedSet $ primitive _sets_map @@ (ref termDef) @@ var "v",
     ecase _Term_sum (ref sumDef),
-    ecase _Term_typeAbstraction $ ref typeAbstractionDef,
+    ecase _Term_typeLambda $ ref typeLambdaDef,
     ecase _Term_typeApplication $ ref typedTermDef,
     ecase _Term_union (ref injectionDef),
     ecase _Term_unit $ constant Core.termUnit,
@@ -446,11 +446,11 @@ typeDef = define "Type" $
     cs fname term = field fname $ lambda "v" $ encodedVariant _Type fname term
     csref fname fun = cs fname (ref fun @@ var "v")
 
-typeAbstractionDef :: TElement (TypeAbstraction -> Term)
-typeAbstractionDef = define "TypeAbstraction" $
-  lambda "l" $ encodedRecord _TypeAbstraction [
-    field _TypeAbstraction_parameter $ ref nameDef @@ (project _TypeAbstraction _TypeAbstraction_parameter @@ var "l"),
-    field _TypeAbstraction_body $ ref termDef @@ (project _TypeAbstraction _TypeAbstraction_body @@ var "l")]
+typeLambdaDef :: TElement (TypeLambda -> Term)
+typeLambdaDef = define "TypeLambda" $
+  lambda "l" $ encodedRecord _TypeLambda [
+    field _TypeLambda_parameter $ ref nameDef @@ (project _TypeLambda _TypeLambda_parameter @@ var "l"),
+    field _TypeLambda_body $ ref termDef @@ (project _TypeLambda _TypeLambda_body @@ var "l")]
 
 typeSchemeDef :: TElement (TypeScheme -> Term)
 typeSchemeDef = define "TypeScheme" $

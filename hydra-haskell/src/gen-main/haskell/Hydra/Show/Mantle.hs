@@ -24,7 +24,7 @@ termVariant x = case x of
   Mantle.TermVariantRecord -> "record"
   Mantle.TermVariantSet -> "set"
   Mantle.TermVariantSum -> "sum"
-  Mantle.TermVariantTypeAbstraction -> "typeAbstraction"
+  Mantle.TermVariantTypeLambda -> "typeLambda"
   Mantle.TermVariantTypeApplication -> "typeApplication"
   Mantle.TermVariantUnion -> "union"
   Mantle.TermVariantUnit -> "unit"

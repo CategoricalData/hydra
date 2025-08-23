@@ -76,7 +76,7 @@ data TermAccessor =
   TermAccessorRecordField Core.Name |
   TermAccessorSetElement Int |
   TermAccessorSumTerm  |
-  TermAccessorTypeAbstractionBody  |
+  TermAccessorTypeLambdaBody  |
   TermAccessorTypeApplicationTerm  |
   TermAccessorInjectionTerm  |
   TermAccessorWrappedTerm 
@@ -116,7 +116,7 @@ _TermAccessor_setElement = (Core.Name "setElement")
 
 _TermAccessor_sumTerm = (Core.Name "sumTerm")
 
-_TermAccessor_typeAbstractionBody = (Core.Name "typeAbstractionBody")
+_TermAccessor_typeLambdaBody = (Core.Name "typeLambdaBody")
 
 _TermAccessor_typeApplicationTerm = (Core.Name "typeApplicationTerm")
 

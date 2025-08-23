@@ -171,7 +171,7 @@ termVariant x = case x of
   Core.TermRecord _ -> Mantle.TermVariantRecord
   Core.TermSet _ -> Mantle.TermVariantSet
   Core.TermSum _ -> Mantle.TermVariantSum
-  Core.TermTypeAbstraction _ -> Mantle.TermVariantTypeAbstraction
+  Core.TermTypeLambda _ -> Mantle.TermVariantTypeLambda
   Core.TermTypeApplication _ -> Mantle.TermVariantTypeApplication
   Core.TermUnion _ -> Mantle.TermVariantUnion
   Core.TermUnit -> Mantle.TermVariantUnit
@@ -192,7 +192,7 @@ termVariants = [
   Mantle.TermVariantRecord,
   Mantle.TermVariantSet,
   Mantle.TermVariantSum,
-  Mantle.TermVariantTypeAbstraction,
+  Mantle.TermVariantTypeLambda,
   Mantle.TermVariantTypeApplication,
   Mantle.TermVariantUnion,
   Mantle.TermVariantUnit,

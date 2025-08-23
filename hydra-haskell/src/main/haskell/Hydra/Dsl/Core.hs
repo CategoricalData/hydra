@@ -396,8 +396,8 @@ termSet = variant _Term _Term_set
 termSum :: TTerm Sum -> TTerm Term
 termSum = variant _Term _Term_sum
 
-termTypeAbstraction :: TTerm TypeAbstraction -> TTerm Term
-termTypeAbstraction = variant _Term _Term_typeAbstraction
+termTypeLambda :: TTerm TypeLambda -> TTerm Term
+termTypeLambda = variant _Term _Term_typeLambda
 
 termTypeApplication :: TTerm TypedTerm -> TTerm Term
 termTypeApplication = variant _Term _Term_typeApplication
@@ -429,16 +429,16 @@ tupleProjectionIndex tp = Phantoms.project _TupleProjection _TupleProjection_ind
 tupleProjectionDomain :: TTerm TupleProjection -> TTerm (Maybe [Type])
 tupleProjectionDomain tp = Phantoms.project _TupleProjection _TupleProjection_domain @@ tp
 
-typeAbstraction :: TTerm Name -> TTerm Term -> TTerm TypeAbstraction
-typeAbstraction parameter body = Phantoms.record _TypeAbstraction [
-  _TypeAbstraction_parameter>>: parameter,
-  _TypeAbstraction_body>>: body]
+typeLambda :: TTerm Name -> TTerm Term -> TTerm TypeLambda
+typeLambda parameter body = Phantoms.record _TypeLambda [
+  _TypeLambda_parameter>>: parameter,
+  _TypeLambda_body>>: body]
 
-typeAbstractionParameter :: TTerm TypeAbstraction -> TTerm Name
-typeAbstractionParameter ta = Phantoms.project _TypeAbstraction _TypeAbstraction_parameter @@ ta
+typeLambdaParameter :: TTerm TypeLambda -> TTerm Name
+typeLambdaParameter ta = Phantoms.project _TypeLambda _TypeLambda_parameter @@ ta
 
-typeAbstractionBody :: TTerm TypeAbstraction -> TTerm Term
-typeAbstractionBody ta = Phantoms.project _TypeAbstraction _TypeAbstraction_body @@ ta
+typeLambdaBody :: TTerm TypeLambda -> TTerm Term
+typeLambdaBody ta = Phantoms.project _TypeLambda _TypeLambda_body @@ ta
 
 typeAnnotated :: TTerm AnnotatedType -> TTerm Type
 typeAnnotated = variant _Type _Type_annotated
@@ -451,9 +451,6 @@ typeForall = variant _Type _Type_forall
 
 typeFunction :: TTerm FunctionType -> TTerm Type
 typeFunction = variant _Type _Type_function
-
-typeLambda :: TTerm ForallType -> TTerm Type
-typeLambda = variant _Type _Type_forall
 
 typeList :: TTerm Type -> TTerm Type
 typeList = variant _Type _Type_list

@@ -133,7 +133,7 @@ data TermVariant =
   TermVariantRecord  |
   TermVariantSet  |
   TermVariantSum  |
-  TermVariantTypeAbstraction  |
+  TermVariantTypeLambda  |
   TermVariantTypeApplication  |
   TermVariantUnion  |
   TermVariantUnit  |
@@ -167,7 +167,7 @@ _TermVariant_set = (Core.Name "set")
 
 _TermVariant_sum = (Core.Name "sum")
 
-_TermVariant_typeAbstraction = (Core.Name "typeAbstraction")
+_TermVariant_typeLambda = (Core.Name "typeLambda")
 
 _TermVariant_typeApplication = (Core.Name "typeApplication")
 

@@ -43,7 +43,7 @@ field s = fieldType (name s)
 -- | Create a term-encoded universal quantification (polymorphic type)
 -- Example: forAll "a" (var "a" --> var "a")
 forAll :: String -> TTerm Type -> TTerm Type
-forAll var body = typeLambda $ forallType (name var) body
+forAll var body = typeForall $ forallType (name var) body
 
 -- | Create a term-encoded function type
 -- Example: function int32 string

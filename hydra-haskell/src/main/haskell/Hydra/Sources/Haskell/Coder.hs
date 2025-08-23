@@ -410,8 +410,8 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
         "lhs">: ref HaskellUtils.hsvarDef @@ string "S.fromList" ] $
         bind "rhs" (ref encodeTermDef @@ var "namespaces" @@ (inject _Term _Term_list $ Sets.toList $ var "s")) $
         Flows.pure $ ref HaskellUtils.hsappDef @@ var "lhs" @@ var "rhs",
-      _Term_typeAbstraction>>: lambda "abs" $ lets [
-        "term1">: Core.typeAbstractionBody $ var "abs"] $
+      _Term_typeLambda>>: lambda "abs" $ lets [
+        "term1">: Core.typeLambdaBody $ var "abs"] $
         var "encode" @@ var "term1",
       _Term_typeApplication>>: lambda "typed" $ lets [
         "term1">: Core.typedTermTerm $ var "typed"] $
