@@ -259,8 +259,8 @@ encodeTerm namespaces term =
     Core.TermSet v1 ->  
       let lhs = (Utils.hsvar "S.fromList")
       in (Flows.bind (encodeTerm namespaces (Core.TermList (Sets.toList v1))) (\rhs -> Flows.pure (Utils.hsapp lhs rhs)))
-    Core.TermTypeAbstraction v1 ->  
-      let term1 = (Core.typeAbstractionBody v1)
+    Core.TermTypeLambda v1 ->  
+      let term1 = (Core.typeLambdaBody v1)
       in (encode term1)
     Core.TermTypeApplication v1 ->  
       let term1 = (Core.typedTermTerm v1)

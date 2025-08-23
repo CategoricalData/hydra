@@ -179,15 +179,15 @@ testExpandLambdas g = do
     H.describe "Check that type abstractions and applications do not interfere" $ do
       H.it "test #1" $
         noChange
-          (typeAbstraction [Name "a"] $ typeApplication (list []) [Types.string])
+          (typeLambda [Name "a"] $ typeApplication (list []) [Types.string])
       H.it "test #2" $
         expandsTo
           (typeApplication fromList [Types.string] @@ var "strings")
           (fromList @@ var "strings")
       H.it "test #3" $
         expandsTo
-          (typeAbstraction [Name "a"] $ typeApplication fromList [Types.string] @@ var "strings")
-          (typeAbstraction [Name "a"] $ fromList @@ var "strings")
+          (typeLambda [Name "a"] $ typeApplication fromList [Types.string] @@ var "strings")
+          (typeLambda [Name "a"] $ fromList @@ var "strings")
 
     H.describe "Try other subterms" $ do
       H.it "test #1" $

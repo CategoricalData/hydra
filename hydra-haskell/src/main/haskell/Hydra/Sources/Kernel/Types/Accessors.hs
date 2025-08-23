@@ -63,7 +63,7 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
           "recordField">: core "Name",
           "setElement">: int32,
           "sumTerm">: unit,
-          "typeAbstractionBody">: unit,
+          "typeLambdaBody">: unit,
           "typeApplicationTerm">: unit,
           "injectionTerm">: unit,
           "wrappedTerm">: unit]]

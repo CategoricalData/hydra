@@ -493,9 +493,9 @@ inferTypeOfLetNormalized cx0 letTerm =
                                           in  
                                             let ts = (snd nameTsPair)
                                             in  
-                                              let typeAbstractedTerm = (Lists.foldl (\b -> \v -> Core.TermTypeAbstraction (Core.TypeAbstraction {
-                                                      Core.typeAbstractionParameter = v,
-                                                      Core.typeAbstractionBody = b})) (Substitution.substituteInTerm st1 term) (Lists.reverse (Core.typeSchemeVariables ts)))
+                                              let typeAbstractedTerm = (Lists.foldl (\b -> \v -> Core.TermTypeLambda (Core.TypeLambda {
+                                                      Core.typeLambdaParameter = v,
+                                                      Core.typeLambdaBody = b})) (Substitution.substituteInTerm st1 term) (Lists.reverse (Core.typeSchemeVariables ts)))
                                               in Core.LetBinding {
                                                 Core.letBindingName = name,
                                                 Core.letBindingTerm = (Substitution.substTypesInTerm (Substitution.composeTypeSubst senv s2) typeAbstractedTerm),
@@ -742,7 +742,7 @@ inferTypeOfTerm cx term desc = (Monads.withTrace desc ((\x -> case x of
   Core.TermRecord v1 -> (inferTypeOfRecord cx v1)
   Core.TermSet v1 -> (inferTypeOfSet cx v1)
   Core.TermSum v1 -> (inferTypeOfSum cx v1)
-  Core.TermTypeAbstraction v1 -> (inferTypeOfTypeAbstraction cx v1)
+  Core.TermTypeLambda v1 -> (inferTypeOfTypeLambda cx v1)
   Core.TermTypeApplication v1 -> (inferTypeOfTypeApplication cx v1)
   Core.TermUnion v1 -> (inferTypeOfInjection cx v1)
   Core.TermUnit -> (Flows.pure inferTypeOfUnit)
@@ -765,8 +765,8 @@ inferTypeOfTupleProjection cx tp =
           Core.functionTypeDomain = (Core.TypeProduct types),
           Core.functionTypeCodomain = cod})) Substitution.idTypeSubst))))
 
-inferTypeOfTypeAbstraction :: (Typing_.InferenceContext -> Core.TypeAbstraction -> Compute.Flow t0 Typing_.InferenceResult)
-inferTypeOfTypeAbstraction cx ta = (inferTypeOfTerm cx (Core.typeAbstractionBody ta) "type abstraction")
+inferTypeOfTypeLambda :: (Typing_.InferenceContext -> Core.TypeLambda -> Compute.Flow t0 Typing_.InferenceResult)
+inferTypeOfTypeLambda cx ta = (inferTypeOfTerm cx (Core.typeLambdaBody ta) "type abstraction")
 
 inferTypeOfTypeApplication :: (Typing_.InferenceContext -> Core.TypedTerm -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfTypeApplication cx tt = (inferTypeOfTerm cx (Core.typedTermTerm tt) "type application term")
@@ -1096,10 +1096,10 @@ typeOfInternal cx vars types apptypes term =
             Core.fieldTypeName = n,
             Core.fieldTypeType = t}) (Lists.map Core.fieldName fields) ftypes)})))))
     Core.TermSet v1 -> (Logic.ifElse (Sets.null v1) (Logic.ifElse (Equality.equal (Lists.length apptypes) 1) (Flows.pure (Core.TypeSet (Lists.head apptypes))) (Flows.fail "set type applied to more or less than one argument")) (Flows.bind (Flows.mapList (typeOfInternal cx vars types []) (Sets.toList v1)) (\eltypes -> Flows.bind (checkSameType "set elements" eltypes) (\unifiedType -> Flows.bind (checkTypeVariables cx vars unifiedType) (\_ -> Flows.pure (Core.TypeSet unifiedType))))))
-    Core.TermTypeAbstraction v1 ->  
-      let v = (Core.typeAbstractionParameter v1)
+    Core.TermTypeLambda v1 ->  
+      let v = (Core.typeLambdaParameter v1)
       in  
-        let e = (Core.typeAbstractionBody v1)
+        let e = (Core.typeLambdaBody v1)
         in (Flows.bind (typeOfInternal cx (Sets.insert v vars) types [] e) (\t1 -> Flows.bind (checkTypeVariables cx (Sets.insert v vars) t1) (\_ -> Flows.pure (Core.TypeForall (Core.ForallType {
           Core.forallTypeParameter = v,
           Core.forallTypeBody = t1})))))

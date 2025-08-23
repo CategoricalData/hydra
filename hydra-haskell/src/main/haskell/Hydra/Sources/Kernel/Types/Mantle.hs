@@ -88,7 +88,7 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
           "record",
           "set",
           "sum",
-          "typeAbstraction",
+          "typeLambda",
           "typeApplication",
           "union",
           "unit",

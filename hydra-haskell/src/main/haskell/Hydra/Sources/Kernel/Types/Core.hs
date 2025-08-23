@@ -314,9 +314,9 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "sum">:
             doc "A variant tuple" $
             core "Sum",
-          "typeAbstraction">:
+          "typeLambda">:
             doc "A System F type abstraction term" $
-            core "TypeAbstraction",
+            core "TypeLambda",
           "typeApplication">:
             doc "A System F type application term" $
             core "TypedTerm",
@@ -366,7 +366,7 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "variable">: core "Name",
           "wrap">: core "WrappedType"],
 
-      def "TypeAbstraction" $
+      def "TypeLambda" $
         doc "A System F type abstraction term" $
         record [
           "parameter">:

@@ -262,9 +262,9 @@ term t =
         "=",
         term t2,
         ")"])
-    Core.TermTypeAbstraction v1 ->  
-      let param = (Core.unName (Core.typeAbstractionParameter v1)) 
-          body = (Core.typeAbstractionBody v1)
+    Core.TermTypeLambda v1 ->  
+      let param = (Core.unName (Core.typeLambdaParameter v1)) 
+          body = (Core.typeLambdaBody v1)
       in (Strings.cat [
         "\923",
         param,

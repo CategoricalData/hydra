@@ -40,7 +40,7 @@ termAccessor accessor =
     Accessors.TermAccessorRecordField v1 -> (Just (Strings.cat2 "." (Core.unName v1)))
     Accessors.TermAccessorSetElement v1 -> (idx v1)
     Accessors.TermAccessorSumTerm -> Nothing
-    Accessors.TermAccessorTypeAbstractionBody -> Nothing
+    Accessors.TermAccessorTypeLambdaBody -> Nothing
     Accessors.TermAccessorTypeApplicationTerm -> Nothing
     Accessors.TermAccessorInjectionTerm -> Nothing
     Accessors.TermAccessorWrappedTerm -> Nothing) accessor)

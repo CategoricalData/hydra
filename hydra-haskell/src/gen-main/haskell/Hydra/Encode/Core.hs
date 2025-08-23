@@ -511,11 +511,11 @@ term x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "sum"),
       Core.fieldTerm = (sum v1)}}))
-  Core.TermTypeAbstraction v1 -> (Core.TermUnion (Core.Injection {
+  Core.TermTypeLambda v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "typeAbstraction"),
-      Core.fieldTerm = (typeAbstraction v1)}}))
+      Core.fieldName = (Core.Name "typeLambda"),
+      Core.fieldTerm = (typeLambda v1)}}))
   Core.TermTypeApplication v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
@@ -639,16 +639,16 @@ type_ x = case x of
       Core.fieldName = (Core.Name "wrap"),
       Core.fieldTerm = (wrappedType v1)}}))
 
-typeAbstraction :: (Core.TypeAbstraction -> Core.Term)
-typeAbstraction l = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.core.TypeAbstraction"),
+typeLambda :: (Core.TypeLambda -> Core.Term)
+typeLambda l = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.core.TypeLambda"),
   Core.recordFields = [
     Core.Field {
       Core.fieldName = (Core.Name "parameter"),
-      Core.fieldTerm = (name (Core.typeAbstractionParameter l))},
+      Core.fieldTerm = (name (Core.typeLambdaParameter l))},
     Core.Field {
       Core.fieldName = (Core.Name "body"),
-      Core.fieldTerm = (term (Core.typeAbstractionBody l))}]}))
+      Core.fieldTerm = (term (Core.typeLambdaBody l))}]}))
 
 typeScheme :: (Core.TypeScheme -> Core.Term)
 typeScheme ts = (Core.TermRecord (Core.Record {

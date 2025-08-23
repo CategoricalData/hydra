@@ -87,8 +87,8 @@ termAccessorSetElement = variant _TermAccessor _TermAccessor_setElement
 termAccessorSumTerm :: TTerm TermAccessor
 termAccessorSumTerm = unitVariant _TermAccessor _TermAccessor_sumTerm
 
-termAccessorTypeAbstractionBody :: TTerm TermAccessor
-termAccessorTypeAbstractionBody = unitVariant _TermAccessor _TermAccessor_typeAbstractionBody
+termAccessorTypeLambdaBody :: TTerm TermAccessor
+termAccessorTypeLambdaBody = unitVariant _TermAccessor _TermAccessor_typeLambdaBody
 
 termAccessorTypeApplicationTerm :: TTerm TermAccessor
 termAccessorTypeApplicationTerm = unitVariant _TermAccessor _TermAccessor_typeApplicationTerm
