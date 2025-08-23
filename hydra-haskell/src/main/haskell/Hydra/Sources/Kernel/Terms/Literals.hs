@@ -47,13 +47,39 @@ module_ = Module (Namespace "hydra.literals") elements
     Just "Conversion functions for literal values."
   where
    elements = [
+     el bigfloatToFloatValueDef,
+     el bigintToIntegerValueDef,
      el floatValueToBigfloatDef,
      el integerValueToBigintDef]
 
 define :: String -> TTerm a -> TElement a
 define = definitionInModule module_
 
-floatValueToBigfloatDef :: TElement (FloatValue -> Double)
+bigfloatToFloatValueDef :: TElement (FloatType -> Bigfloat -> FloatValue)
+bigfloatToFloatValueDef = define "bigfloatToFloatValue" $
+  doc "Convert a bigfloat to a floating-point value of a given type (note: lossy)" $
+  "ft" ~> "bf" ~> cases _FloatType (var "ft")
+    Nothing [
+    _FloatType_bigfloat>>: constant $ Core.floatValueBigfloat $ var "bf",
+    _FloatType_float32>>: constant $ Core.floatValueFloat32 $ Literals.bigfloatToFloat32 $ var "bf",
+    _FloatType_float64>>: constant $ Core.floatValueFloat64 $ Literals.bigfloatToFloat64 $ var "bf"]
+
+bigintToIntegerValueDef :: TElement (IntegerType -> Integer -> IntegerValue)
+bigintToIntegerValueDef = define "bigintToIntegerValue" $
+  doc "Convert a bigint to an integer value of a given type (note: lossy)" $
+  "it" ~> "bi" ~> cases _IntegerType (var "it")
+    Nothing [
+    _IntegerType_bigint>>: constant $ Core.integerValueBigint $ var "bi",
+    _IntegerType_int8>>: constant $ Core.integerValueInt8 $ Literals.bigintToInt8 $ var "bi",
+    _IntegerType_int16>>: constant $ Core.integerValueInt16 $ Literals.bigintToInt16 $ var "bi",
+    _IntegerType_int32>>: constant $ Core.integerValueInt32 $ Literals.bigintToInt32 $ var "bi",
+    _IntegerType_int64>>: constant $ Core.integerValueInt64 $ Literals.bigintToInt64 $ var "bi",
+    _IntegerType_uint8>>: constant $ Core.integerValueUint8 $ Literals.bigintToUint8 $ var "bi",
+    _IntegerType_uint16>>: constant $ Core.integerValueUint16 $ Literals.bigintToUint16 $ var "bi",
+    _IntegerType_uint32>>: constant $ Core.integerValueUint32 $ Literals.bigintToUint32 $ var "bi",
+    _IntegerType_uint64>>: constant $ Core.integerValueUint64 $ Literals.bigintToUint64 $ var "bi"]
+
+floatValueToBigfloatDef :: TElement (FloatValue -> Bigfloat)
 floatValueToBigfloatDef = define "floatValueToBigfloat" $
   doc "Convert a floating-point value of any precision to a bigfloat" $
   match _FloatValue

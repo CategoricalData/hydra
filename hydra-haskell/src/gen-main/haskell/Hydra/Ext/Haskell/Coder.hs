@@ -51,7 +51,7 @@ keyHaskellVar :: Core.Name
 keyHaskellVar = (Core.Name "haskellVar")
 
 adaptTypeToHaskellAndEncode :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Compute.Flow Graph.Graph Ast.Type)
-adaptTypeToHaskellAndEncode namespaces = (Modules.adaptAndEncodeType Language.haskellLanguage (encodeType namespaces))
+adaptTypeToHaskellAndEncode namespaces = (Modules.adaptTypeToLanguageAndEncode Language.haskellLanguage (encodeType namespaces))
 
 constantForFieldName :: (Core.Name -> Core.Name -> String)
 constantForFieldName tname fname = (Strings.cat [

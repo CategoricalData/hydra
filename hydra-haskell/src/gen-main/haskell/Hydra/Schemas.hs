@@ -104,6 +104,31 @@ fullyStripType typ = ((\x -> case x of
   Core.TypeForall v1 -> (fullyStripType (Core.forallTypeBody v1))
   _ -> typ) (Rewriting.deannotateType typ))
 
+-- | Convert a graph to a term, taking advantage of the built-in duality between graphs and terms
+graphAsTerm :: (Graph.Graph -> Core.Term)
+graphAsTerm g =  
+  let toBinding = (\el ->  
+          let name = (Graph.elementName el)
+          in  
+            let term = (Graph.elementTerm el)
+            in  
+              let mts = (Graph.elementType el)
+              in Core.LetBinding {
+                Core.letBindingName = name,
+                Core.letBindingTerm = term,
+                Core.letBindingType = mts})
+  in (Core.TermLet (Core.Let {
+    Core.letBindings = (Lists.map toBinding (Maps.elems (Graph.graphElements g))),
+    Core.letEnvironment = (Graph.graphBody g)}))
+
+-- | Decode a schema graph which encodes a set of named types
+graphAsTypes :: (Graph.Graph -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type))
+graphAsTypes sg =  
+  let els = (Maps.elems (Graph.graphElements sg))
+  in  
+    let toPair = (\el -> Flows.bind (Core_.type_ (Graph.elementTerm el)) (\typ -> Flows.pure (Graph.elementName el, typ)))
+    in (Flows.bind (Flows.mapList toPair els) (\pairs -> Flows.pure (Maps.fromList pairs)))
+
 -- | Check if a row type represents an enum (all fields are unit-typed)
 isEnumRowType :: (Core.RowType -> Bool)
 isEnumRowType rt = (Lists.foldl Logic.and True (Lists.map (\f -> Core__.isUnitType (Core.fieldTypeType f)) (Core.rowTypeFields rt)))
@@ -186,6 +211,25 @@ schemaGraphToTypingEnvironment g =
               _ -> (Flows.pure Nothing)) (Rewriting.deannotateTerm (Graph.elementTerm el))))) (Graph.elementType el)))
   in (Monads.withState g (Flows.bind (Flows.mapList toPair (Maps.elems (Graph.graphElements g))) (\mpairs -> Flows.pure (Maps.fromList (Optionals.cat mpairs)))))
 
+-- | Find the equivalent graph representation of a term
+termAsGraph :: (Core.Term -> M.Map Core.Name Graph.Element)
+termAsGraph term = ((\x -> case x of
+  Core.TermLet v1 ->  
+    let bindings = (Core.letBindings v1)
+    in  
+      let fromBinding = (\b ->  
+              let name = (Core.letBindingName b)
+              in  
+                let term = (Core.letBindingTerm b)
+                in  
+                  let ts = (Core.letBindingType b)
+                  in (name, Graph.Element {
+                    Graph.elementName = name,
+                    Graph.elementTerm = term,
+                    Graph.elementType = ts}))
+      in (Maps.fromList (Lists.map fromBinding bindings))
+  _ -> Maps.empty) (Rewriting.deannotateTerm term))
+
 -- | Topologically sort type definitions by dependencies
 topologicalSortTypeDefinitions :: ([Module.TypeDefinition] -> [[Module.TypeDefinition]])
 topologicalSortTypeDefinitions defs =  
@@ -206,3 +250,14 @@ typeDependencies withSchema transform name =
                   newSeeds = (Sets.difference refs visited)
               in (deps newSeeds newNames))))
   in (deps (Sets.singleton name) Maps.empty)
+
+-- | Encode a map of named types to a map of elements
+typesToElements :: (M.Map Core.Name Core.Type -> M.Map Core.Name Graph.Element)
+typesToElements typeMap =  
+  let toElement = (\pair ->  
+          let name = (fst pair)
+          in (name, Graph.Element {
+            Graph.elementName = name,
+            Graph.elementTerm = (Core__.type_ (snd pair)),
+            Graph.elementType = Nothing}))
+  in (Maps.fromList (Lists.map toElement (Maps.toList typeMap)))

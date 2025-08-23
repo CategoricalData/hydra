@@ -25,17 +25,15 @@ generateSources printModule basePath mods = do
       Nothing -> fail "Transformation failed"
       Just files -> mapM_ writePair files
   where
-    generateFiles = do
-      withTrace "generate files" $ do
-        withState (modulesToGraph mods) $ do
-          g <- getState
-          g1 <- inferGraphTypes g
-          withState g1 $ do
-              maps <- CM.mapM forModule $ refreshModule (graphElements g1) <$> mods
-              return $ L.concat (M.toList <$> maps)
-            where
-              refreshModule els mod = mod {
-                moduleElements = Y.catMaybes ((\e -> M.lookup (elementName e) els) <$> moduleElements mod)}
+    generateFiles = withTrace "generate files" $ withState (modulesToGraph mods) $ do
+      g <- getState
+      g1 <- inferGraphTypes g
+      withState g1 $ do
+          maps <- CM.mapM forModule $ refreshModule (graphElements g1) <$> mods
+          return $ L.concat (M.toList <$> maps)
+        where
+          refreshModule els mod = mod {
+            moduleElements = Y.catMaybes ((\e -> M.lookup (elementName e) els) <$> moduleElements mod)}
 
     writePair (path, s) = do
         let fullPath = FP.combine basePath path

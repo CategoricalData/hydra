@@ -65,7 +65,7 @@ moduleToJava mod = withTrace "encode module in Java" $ do
     forPair (name, unit) = (elementNameToFilePath name, printExpr $ parenthesize $ writeCompilationUnit unit)
 
 adaptTypeToJavaAndEncode :: Aliases -> Type -> Flow Graph Java.Type
-adaptTypeToJavaAndEncode aliases = adaptAndEncodeType javaLanguage (encodeType aliases)
+adaptTypeToJavaAndEncode aliases = adaptTypeToLanguageAndEncode javaLanguage (encodeType aliases)
 
 addComment :: Java.ClassBodyDeclaration -> FieldType -> Flow Graph Java.ClassBodyDeclarationWithComments
 addComment decl field = Java.ClassBodyDeclarationWithComments decl <$> commentsFromFieldType field
@@ -342,7 +342,7 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
 
 declarationForType :: Bool -> Aliases -> (Element, TypedTerm) -> Flow Graph Java.TypeDeclarationWithComments
 declarationForType isSer aliases (el, TypedTerm term _) = withTrace ("element " ++ unName (elementName el)) $ do
-    t <- DecodeCore.type_ term >>= adaptType javaLanguage
+    t <- DecodeCore.type_ term >>= adaptTypeToLanguage javaLanguage
     cd <- toClassDecl False isSer aliases [] (elementName el) t
     comments <- commentsFromElement el
     return $ Java.TypeDeclarationWithComments (Java.TypeDeclarationClass cd) comments
