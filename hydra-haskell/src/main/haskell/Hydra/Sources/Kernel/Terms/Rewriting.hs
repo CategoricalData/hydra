@@ -106,7 +106,7 @@ deannotateAndDetypeTermDef = define "deannotateAndDetypeTerm" $
   lambda "t" $ cases _Term (var "t")
     (Just $ var "t") [
     _Term_annotated>>: lambda "at" $ ref deannotateAndDetypeTermDef @@ (Core.annotatedTermSubject $ var "at"),
-    _Term_typeAbstraction>>: lambda "ta" $ ref deannotateAndDetypeTermDef @@ (Core.typeAbstractionBody $ var "ta"),
+    _Term_typeLambda>>: lambda "ta" $ ref deannotateAndDetypeTermDef @@ (Core.typeLambdaBody $ var "ta"),
     _Term_typeApplication>>: lambda "tt" $ ref deannotateAndDetypeTermDef @@ (Core.typedTermTerm $ var "tt")]
 
 deannotateTermDef :: TElement (Term -> Term)
@@ -115,7 +115,7 @@ deannotateTermDef = define "deannotateTerm" $
   lambda "t" $ cases _Term (var "t")
     (Just $ var "t") [
     _Term_annotated>>: "at" ~> ref deannotateTermDef @@ (Core.annotatedTermSubject $ var "at"),
-    _Term_typeAbstraction>>: "ta" ~> ref deannotateTermDef @@ (Core.typeAbstractionBody $ var "ta"),
+    _Term_typeLambda>>: "ta" ~> ref deannotateTermDef @@ (Core.typeLambdaBody $ var "ta"),
     _Term_typeApplication>>: "tt" ~> ref deannotateTermDef @@ (Core.typedTermTerm $ var "tt")]
 
 deannotateTypeDef :: TElement (Type -> Type)
@@ -468,9 +468,9 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
           Core.termLet $ Core.let_
             (Lists.map (var "rewriteBinding") (var "bindings"))
             (var "rewriteWithSubst" @@ (pair (var "subst") (var "boundVars")) @@ var "env"),
-        _Term_typeAbstraction>>: lambda "ta" $ Core.termTypeAbstraction $ Core.typeAbstraction
-          (var "replaceName" @@ var "subst" @@ (Core.typeAbstractionParameter $ var "ta"))
-          (var "rewriteWithSubst" @@ (pair (var "subst") (var "boundVars")) @@ (Core.typeAbstractionBody $ var "ta")),
+        _Term_typeLambda>>: lambda "ta" $ Core.termTypeLambda $ Core.typeLambda
+          (var "replaceName" @@ var "subst" @@ (Core.typeLambdaParameter $ var "ta"))
+          (var "rewriteWithSubst" @@ (pair (var "subst") (var "boundVars")) @@ (Core.typeLambdaBody $ var "ta")),
         _Term_typeApplication>>: lambda "tt" $ Core.termTypeApplication $ Core.typedTerm
           (var "rewriteWithSubst" @@ (pair (var "subst") (var "boundVars")) @@ (Core.typedTermTerm $ var "tt"))
           (var "substType" @@ var "subst" @@ (Core.typedTermType $ var "tt"))]] $
@@ -527,7 +527,7 @@ removeTypesFromTermDef = define "removeTypesFromTerm" $
         _Term_let>>: lambda "lt" $ Core.termLet $ Core.let_
           (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
           (Core.letEnvironment $ var "lt"),
-        _Term_typeAbstraction>>: lambda "ta" $ Core.typeAbstractionBody $ var "ta",
+        _Term_typeLambda>>: lambda "ta" $ Core.typeLambdaBody $ var "ta",
         _Term_typeApplication>>: lambda "tt" $ Core.typedTermTerm $ var "tt"]]
     $ ref rewriteTermDef @@ var "strip" @@ var "term"
 
@@ -629,9 +629,9 @@ rewriteTermDef = define "rewriteTerm" $ lambda "f" $ lets [
         (Core.sumIndex $ var "s")
         (Core.sumSize $ var "s")
         (var "recurse" @@ (Core.sumTerm $ var "s")),
-      _Term_typeAbstraction>>: lambda "ta" $ Core.termTypeAbstraction $ Core.typeAbstraction
-        (Core.typeAbstractionParameter $ var "ta")
-        (var "recurse" @@ (Core.typeAbstractionBody $ var "ta")),
+      _Term_typeLambda>>: lambda "ta" $ Core.termTypeLambda $ Core.typeLambda
+        (Core.typeLambdaParameter $ var "ta")
+        (var "recurse" @@ (Core.typeLambdaBody $ var "ta")),
       _Term_typeApplication>>: lambda "tt" $ Core.termTypeApplication $ Core.typedTerm
         (var "recurse" @@ (Core.typedTermTerm $ var "tt"))
         (Core.typedTermType $ var "tt"),
@@ -766,7 +766,7 @@ rewriteTypeDef = define "rewriteType" $ lambda "f" $ lets [
       _Type_function>>: lambda "fun" $ Core.typeFunction $ Core.functionType
         (var "recurse" @@ (Core.functionTypeDomain $ var "fun"))
         (var "recurse" @@ (Core.functionTypeCodomain $ var "fun")),
-      _Type_forall>>: lambda "lt" $ Core.typeLambda $ Core.forallType
+      _Type_forall>>: lambda "lt" $ Core.typeForall $ Core.forallType
         (Core.forallTypeParameter $ var "lt")
         (var "recurse" @@ (Core.forallTypeBody $ var "lt")),
       _Type_list>>: lambda "t" $ Core.typeList $ var "recurse" @@ var "t",
@@ -955,7 +955,7 @@ subtermsDef = define "subterms" $
     _Term_record>>: lambda "rt" (Lists.map (unaryFunction Core.fieldTerm) (Core.recordFields $ var "rt")),
     _Term_set>>: lambda "l" $ Sets.toList $ var "l",
     _Term_sum>>: lambda "st" $ list [Core.sumTerm $ var "st"],
-    _Term_typeAbstraction>>: lambda "ta" $ list [Core.typeAbstractionBody $ var "ta"],
+    _Term_typeLambda>>: lambda "ta" $ list [Core.typeLambdaBody $ var "ta"],
     _Term_typeApplication>>: lambda "ta" $ list [Core.typedTermTerm $ var "ta"],
     _Term_union>>: lambda "ut" $ list [Core.fieldTerm $ (Core.injectionField $ var "ut")],
     _Term_unit>>: constant $ list [],
@@ -1016,9 +1016,9 @@ subtermsWithAccessorsDef = define "subtermsWithAccessors" $
     _Term_sum>>: lambda "st" $
       single Mantle.termAccessorSumTerm $
       Core.sumTerm $ var "st",
-    _Term_typeAbstraction>>: lambda "ta" $
-      single Mantle.termAccessorTypeAbstractionBody $
-      Core.typeAbstractionBody $ var "ta",
+    _Term_typeLambda>>: lambda "ta" $
+      single Mantle.termAccessorTypeLambdaBody $
+      Core.typeLambdaBody $ var "ta",
     _Term_typeApplication>>: lambda "ta" $
       single Mantle.termAccessorTypeApplicationTerm $
       Core.typedTermTerm $ var "ta",

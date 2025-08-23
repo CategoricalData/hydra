@@ -30,7 +30,7 @@ import qualified Data.Set as S
 deannotateAndDetypeTerm :: (Core.Term -> Core.Term)
 deannotateAndDetypeTerm t = ((\x -> case x of
   Core.TermAnnotated v1 -> (deannotateAndDetypeTerm (Core.annotatedTermSubject v1))
-  Core.TermTypeAbstraction v1 -> (deannotateAndDetypeTerm (Core.typeAbstractionBody v1))
+  Core.TermTypeLambda v1 -> (deannotateAndDetypeTerm (Core.typeLambdaBody v1))
   Core.TermTypeApplication v1 -> (deannotateAndDetypeTerm (Core.typedTermTerm v1))
   _ -> t) t)
 
@@ -38,7 +38,7 @@ deannotateAndDetypeTerm t = ((\x -> case x of
 deannotateTerm :: (Core.Term -> Core.Term)
 deannotateTerm t = ((\x -> case x of
   Core.TermAnnotated v1 -> (deannotateTerm (Core.annotatedTermSubject v1))
-  Core.TermTypeAbstraction v1 -> (deannotateTerm (Core.typeAbstractionBody v1))
+  Core.TermTypeLambda v1 -> (deannotateTerm (Core.typeLambdaBody v1))
   Core.TermTypeApplication v1 -> (deannotateTerm (Core.typedTermTerm v1))
   _ -> t) t)
 
@@ -325,9 +325,9 @@ normalizeTypeVariablesInTerm term =
                             in (Core.TermLet (Core.Let {
                               Core.letBindings = (Lists.map rewriteBinding bindings),
                               Core.letEnvironment = (rewriteWithSubst (subst, boundVars) env)}))
-                          Core.TermTypeAbstraction v1 -> (Core.TermTypeAbstraction (Core.TypeAbstraction {
-                            Core.typeAbstractionParameter = (replaceName subst (Core.typeAbstractionParameter v1)),
-                            Core.typeAbstractionBody = (rewriteWithSubst (subst, boundVars) (Core.typeAbstractionBody v1))}))
+                          Core.TermTypeLambda v1 -> (Core.TermTypeLambda (Core.TypeLambda {
+                            Core.typeLambdaParameter = (replaceName subst (Core.typeLambdaParameter v1)),
+                            Core.typeLambdaBody = (rewriteWithSubst (subst, boundVars) (Core.typeLambdaBody v1))}))
                           Core.TermTypeApplication v1 -> (Core.TermTypeApplication (Core.TypedTerm {
                             Core.typedTermTerm = (rewriteWithSubst (subst, boundVars) (Core.typedTermTerm v1)),
                             Core.typedTermType = (substType subst (Core.typedTermType v1))}))
@@ -380,7 +380,7 @@ removeTypesFromTerm term =
             Core.TermLet v1 -> (Core.TermLet (Core.Let {
               Core.letBindings = (Lists.map stripBinding (Core.letBindings v1)),
               Core.letEnvironment = (Core.letEnvironment v1)}))
-            Core.TermTypeAbstraction v1 -> (Core.typeAbstractionBody v1)
+            Core.TermTypeLambda v1 -> (Core.typeLambdaBody v1)
             Core.TermTypeApplication v1 -> (Core.typedTermTerm v1)
             _ -> rewritten) rewritten))
   in (rewriteTerm strip term)
@@ -471,9 +471,9 @@ rewriteTerm f =
               Core.sumIndex = (Core.sumIndex v1),
               Core.sumSize = (Core.sumSize v1),
               Core.sumTerm = (recurse (Core.sumTerm v1))}))
-            Core.TermTypeAbstraction v1 -> (Core.TermTypeAbstraction (Core.TypeAbstraction {
-              Core.typeAbstractionParameter = (Core.typeAbstractionParameter v1),
-              Core.typeAbstractionBody = (recurse (Core.typeAbstractionBody v1))}))
+            Core.TermTypeLambda v1 -> (Core.TermTypeLambda (Core.TypeLambda {
+              Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
+              Core.typeLambdaBody = (recurse (Core.typeLambdaBody v1))}))
             Core.TermTypeApplication v1 -> (Core.TermTypeApplication (Core.TypedTerm {
               Core.typedTermTerm = (recurse (Core.typedTermTerm v1)),
               Core.typedTermType = (Core.typedTermType v1)}))
@@ -747,8 +747,8 @@ subterms x = case x of
   Core.TermSet v1 -> (Sets.toList v1)
   Core.TermSum v1 -> [
     Core.sumTerm v1]
-  Core.TermTypeAbstraction v1 -> [
-    Core.typeAbstractionBody v1]
+  Core.TermTypeLambda v1 -> [
+    Core.typeLambdaBody v1]
   Core.TermTypeApplication v1 -> [
     Core.typedTermTerm v1]
   Core.TermUnion v1 -> [
@@ -787,8 +787,8 @@ subtermsWithAccessors x = case x of
   Core.TermSet v1 -> (Lists.map (\e -> (Accessors.TermAccessorListElement 0, e)) (Sets.toList v1))
   Core.TermSum v1 -> [
     (Accessors.TermAccessorSumTerm, (Core.sumTerm v1))]
-  Core.TermTypeAbstraction v1 -> [
-    (Accessors.TermAccessorTypeAbstractionBody, (Core.typeAbstractionBody v1))]
+  Core.TermTypeLambda v1 -> [
+    (Accessors.TermAccessorTypeLambdaBody, (Core.typeLambdaBody v1))]
   Core.TermTypeApplication v1 -> [
     (Accessors.TermAccessorTypeApplicationTerm, (Core.typedTermTerm v1))]
   Core.TermUnion v1 -> [

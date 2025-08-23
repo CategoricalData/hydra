@@ -85,7 +85,7 @@ termAccessorDef = define "termAccessor" $
         Strings.cat2 (string ".") (Core.unName $ var "name"),
       _TermAccessor_setElement>>: lambda "i" $ var "idx" @@ var "i",
       _TermAccessor_sumTerm>>: constant nothing,
-      _TermAccessor_typeAbstractionBody>>: constant nothing,
+      _TermAccessor_typeLambdaBody>>: constant nothing,
       _TermAccessor_typeApplicationTerm>>: constant nothing,
       _TermAccessor_injectionTerm>>: constant nothing,
       _TermAccessor_wrappedTerm>>: constant nothing] @@ var "accessor"

@@ -120,16 +120,16 @@ substTypesInTerm subst =
                       Core.tupleProjectionArity = (Core.tupleProjectionArity tp),
                       Core.tupleProjectionIndex = (Core.tupleProjectionIndex tp),
                       Core.tupleProjectionDomain = (Optionals.map (\types -> Lists.map (substInType subst) types) (Core.tupleProjectionDomain tp))})))))
-              forTypeAbstraction = (\ta ->  
-                      let param = (Core.typeAbstractionParameter ta) 
+              forTypeLambda = (\ta ->  
+                      let param = (Core.typeLambdaParameter ta) 
                           subst2 = (Typing.TypeSubst (Maps.remove param (Typing.unTypeSubst subst)))
-                      in (Core.TermTypeAbstraction (Core.TypeAbstraction {
-                        Core.typeAbstractionParameter = param,
-                        Core.typeAbstractionBody = (substTypesInTerm subst2 (Core.typeAbstractionBody ta))})))
+                      in (Core.TermTypeLambda (Core.TypeLambda {
+                        Core.typeLambdaParameter = param,
+                        Core.typeLambdaBody = (substTypesInTerm subst2 (Core.typeLambdaBody ta))})))
           in ((\x -> case x of
             Core.TermFunction v1 -> (forFunction v1)
             Core.TermLet v1 -> (forLet v1)
-            Core.TermTypeAbstraction v1 -> (forTypeAbstraction v1)
+            Core.TermTypeLambda v1 -> (forTypeLambda v1)
             Core.TermTypeApplication v1 -> (recurse (Core.TermTypeApplication (Core.TypedTerm {
               Core.typedTermTerm = (Core.typedTermTerm v1),
               Core.typedTermType = (substInType subst (Core.typedTermType v1))})))

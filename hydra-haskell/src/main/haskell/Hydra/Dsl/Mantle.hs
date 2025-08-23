@@ -161,8 +161,8 @@ termAccessorSetElement = variant _TermAccessor _TermAccessor_setElement
 termAccessorSumTerm :: TTerm TermAccessor
 termAccessorSumTerm = unitVariant _TermAccessor _TermAccessor_sumTerm
 
-termAccessorTypeAbstractionBody :: TTerm TermAccessor
-termAccessorTypeAbstractionBody = unitVariant _TermAccessor _TermAccessor_typeAbstractionBody
+termAccessorTypeLambdaBody :: TTerm TermAccessor
+termAccessorTypeLambdaBody = unitVariant _TermAccessor _TermAccessor_typeLambdaBody
 
 termAccessorTypeApplicationTerm :: TTerm TermAccessor
 termAccessorTypeApplicationTerm = unitVariant _TermAccessor _TermAccessor_typeApplicationTerm
@@ -187,7 +187,7 @@ termVariant v = unitVariant _TermVariant $ case v of
   TermVariantRecord -> _TermVariant_record
   TermVariantSet -> _TermVariant_set
   TermVariantSum -> _TermVariant_sum
-  TermVariantTypeAbstraction -> _TermVariant_typeAbstraction
+  TermVariantTypeLambda -> _TermVariant_typeLambda
   TermVariantTypeApplication -> _TermVariant_typeApplication
   TermVariantUnion -> _TermVariant_union
   TermVariantUnit -> _TermVariant_unit
@@ -230,8 +230,8 @@ termVariantSet = unitVariant _TermVariant _TermVariant_set
 termVariantSum :: TTerm TermVariant
 termVariantSum = unitVariant _TermVariant _TermVariant_sum
 
-termVariantTypeAbstraction :: TTerm TermVariant
-termVariantTypeAbstraction = unitVariant _TermVariant _TermVariant_typeAbstraction
+termVariantTypeLambda :: TTerm TermVariant
+termVariantTypeLambda = unitVariant _TermVariant _TermVariant_typeLambda
 
 termVariantTypeApplication :: TTerm TermVariant
 termVariantTypeApplication = unitVariant _TermVariant _TermVariant_typeApplication

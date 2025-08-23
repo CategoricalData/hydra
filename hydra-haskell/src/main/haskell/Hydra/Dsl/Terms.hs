@@ -110,13 +110,13 @@ primitive = TermFunction . FunctionPrimitive
 -- * Polymorphism (System F)
 
 -- | Create a type abstraction (universal quantification)
--- Example: typeAbstraction [Name "a", Name "b"] (lambdaTyped "f" (Types.function (Types.var "a") (Types.var "b"))
+-- Example: typeLambda [Name "a", Name "b"] (lambdaTyped "f" (Types.function (Types.var "a") (Types.var "b"))
 --                                               (lambdaTyped "x" (Types.var "a") (var "f" @@ var "x")))
 -- This creates a polymorphic term with type variables.
 -- The example creates a higher-order function with type 'forall a b. (a -> b) -> a -> b',
 -- which is the polymorphic apply function that works for any types a and b.
-typeAbstraction :: [Name] -> Term -> Term
-typeAbstraction vars body = L.foldl (\b v -> TermTypeAbstraction $ TypeAbstraction v b) body vars
+typeLambda :: [Name] -> Term -> Term
+typeLambda vars body = L.foldl (\b v -> TermTypeLambda $ TypeLambda v b) body vars
 
 -- | Apply type arguments to a polymorphic term
 -- Example: typeApplication (var "map") [Types.int32, Types.string]

@@ -127,7 +127,7 @@ toTerm expr = case expr of
   FLetrec bindings env -> Core.TermLet $ Core.Let (fmap bindingToHydra bindings) (toTerm env)
     where
       bindingToHydra (v, ty, term) = Core.LetBinding (Core.Name v) (toTerm term) $ Just $ toTypeScheme ty
-  FTyAbs params body -> L.foldl (\t v -> Core.TermTypeAbstraction $ Core.TypeAbstraction (Core.Name v) t) (toTerm body) $ L.reverse params
+  FTyAbs params body -> L.foldl (\t v -> Core.TermTypeLambda $ Core.TypeLambda (Core.Name v) t) (toTerm body) $ L.reverse params
   FTyApp fun args -> L.foldl (\t a -> Core.TermTypeApplication $ Core.TypedTerm t a) (toTerm fun) $ L.reverse hargs
     where
       hargs = fmap (\t -> Core.typeSchemeType $ toTypeScheme t) args

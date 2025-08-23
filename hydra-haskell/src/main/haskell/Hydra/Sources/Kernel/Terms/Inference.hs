@@ -107,7 +107,7 @@ module_ = Module (Namespace "hydra.inference") elements
       el inferTypeOfSumDef,
       el inferTypeOfTermDef,
       el inferTypeOfTupleProjectionDef,
-      el inferTypeOfTypeAbstractionDef,
+      el inferTypeOfTypeLambdaDef,
       el inferTypeOfTypeApplicationDef,
       el inferTypeOfUnwrapDef,
       el inferTypeOfVariableDef,
@@ -687,7 +687,7 @@ inferTypeOfLetNormalizedDef = define "inferTypeOfLetNormalized" $
     "name" <~ first (var "nameTsPair") $
     "ts" <~ second (var "nameTsPair") $
     "typeAbstractedTerm" <~ Lists.foldl
-      ("b" ~> "v" ~> Core.termTypeAbstraction $ Core.typeAbstraction (var "v") (var "b"))
+      ("b" ~> "v" ~> Core.termTypeLambda $ Core.typeLambda (var "v") (var "b"))
       (ref Substitution.substituteInTermDef @@ var "st1" @@ var "term")
       (Lists.reverse $ Core.typeSchemeVariables $ var "ts") $
     Core.letBinding (var "name")
@@ -909,7 +909,7 @@ inferTypeOfTermDef = define "inferTypeOfTerm" $
     _Term_record>>: "r" ~> ref inferTypeOfRecordDef @@ var "cx" @@ var "r",
     _Term_set>>: "s" ~> ref inferTypeOfSetDef @@ var "cx" @@ var "s",
     _Term_sum>>: "s" ~> ref inferTypeOfSumDef @@ var "cx" @@ var "s",
-    _Term_typeAbstraction>>: "ta" ~> ref inferTypeOfTypeAbstractionDef @@ var "cx" @@ var "ta",
+    _Term_typeLambda>>: "ta" ~> ref inferTypeOfTypeLambdaDef @@ var "cx" @@ var "ta",
     _Term_typeApplication>>: "tt" ~> ref inferTypeOfTypeApplicationDef @@ var "cx" @@ var "tt",
     _Term_union>>: "i" ~> ref inferTypeOfInjectionDef @@ var "cx" @@ var "i",
     _Term_unit>>: constant $ Flows.pure $ ref typeOfUnitDef,
@@ -931,11 +931,11 @@ inferTypeOfTupleProjectionDef = define "inferTypeOfTupleProjection" $
     @@ (Core.typeFunction $ Core.functionType (Core.typeProduct $ var "types") (var "cod"))
     @@ (ref Substitution.idTypeSubstDef)
 
-inferTypeOfTypeAbstractionDef :: TElement (InferenceContext -> TypeAbstraction -> Flow s InferenceResult)
-inferTypeOfTypeAbstractionDef = define "inferTypeOfTypeAbstraction" $
+inferTypeOfTypeLambdaDef :: TElement (InferenceContext -> TypeLambda -> Flow s InferenceResult)
+inferTypeOfTypeLambdaDef = define "inferTypeOfTypeLambda" $
   doc "Infer the type of a type abstraction" $
   "cx" ~> "ta" ~>
-  ref inferTypeOfTermDef @@ var "cx" @@ (Core.typeAbstractionBody $ var "ta") @@ string "type abstraction"
+  ref inferTypeOfTermDef @@ var "cx" @@ (Core.typeLambdaBody $ var "ta") @@ string "type abstraction"
 
 inferTypeOfTypeApplicationDef :: TElement (InferenceContext -> TypedTerm -> Flow s InferenceResult)
 inferTypeOfTypeApplicationDef = define "inferTypeOfTypeApplication" $
@@ -1419,9 +1419,9 @@ typeOfInternalDef = define "typeOfInternal" $
 
     -- TermSum (Sum idx size term1) is ignored for now. See https://github.com/CategoricalData/hydra/issues/134.
 
-    _Term_typeAbstraction>>: "ta" ~>
-      "v" <~ Core.typeAbstractionParameter (var "ta") $
-      "e" <~ Core.typeAbstractionBody (var "ta") $
+    _Term_typeLambda>>: "ta" ~>
+      "v" <~ Core.typeLambdaParameter (var "ta") $
+      "e" <~ Core.typeLambdaBody (var "ta") $
       "t1" <<~ ref typeOfInternalDef @@ var "cx" @@ (Sets.insert (var "v") (var "vars")) @@ var "types" @@ list [] @@ var "e" $
       exec (ref checkTypeVariablesDef @@ var "cx" @@ (Sets.insert (var "v") (var "vars")) @@ var "t1") $
       Flows.pure $ Core.typeForall $ Core.forallType (var "v") (var "t1"),

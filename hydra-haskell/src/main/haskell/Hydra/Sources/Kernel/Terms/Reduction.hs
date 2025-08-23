@@ -228,7 +228,7 @@ expansionArityDef = define "expansionArity" $
         _Function_lambda>>: constant $ int32 0,
         _Function_primitive>>: "name" ~>
           ref Arity.primitiveArityDef @@ (Optionals.fromJust (ref Lexical.lookupPrimitiveDef @@ var "graph" @@ var "name"))],
-      _Term_typeAbstraction>>: "ta" ~> ref expansionArityDef @@ var "graph" @@ Core.typeAbstractionBody (var "ta"),
+      _Term_typeLambda>>: "ta" ~> ref expansionArityDef @@ var "graph" @@ Core.typeLambdaBody (var "ta"),
       _Term_typeApplication>>: "tt" ~> ref expansionArityDef @@ var "graph" @@ Core.typedTermTerm (var "tt"),
       _Term_variable>>: "name" ~>
         Optionals.maybe (int32 0)

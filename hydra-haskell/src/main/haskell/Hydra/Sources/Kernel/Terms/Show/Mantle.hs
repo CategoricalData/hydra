@@ -73,7 +73,7 @@ termVariantDef = define "termVariant" $
     _TermVariant_record>>: constant $ string "record",
     _TermVariant_set>>: constant $ string "set",
     _TermVariant_sum>>: constant $ string "sum",
-    _TermVariant_typeAbstraction>>: constant $ string "typeAbstraction",
+    _TermVariant_typeLambda>>: constant $ string "typeLambda",
     _TermVariant_typeApplication>>: constant $ string "typeApplication",
     _TermVariant_union>>: constant $ string "union",
     _TermVariant_unit>>: constant $ string "unit",
