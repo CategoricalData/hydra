@@ -266,7 +266,8 @@ injectionDef :: TElement (Name -> Term -> Flow Graph Field)
 injectionDef = define "injection" $
   doc "Extract a field from a union term" $
   lambdas ["expected", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ string "injection" @@ (ref ShowCore.termDef @@ var "term")) [
+    lambda "term" $ cases _Term (var "term")
+      (Just $ ref Monads.unexpectedDef @@ string "injection" @@ (ref ShowCore.termDef @@ var "term")) [
       _Term_union>>: lambda "injection" $
         Logic.ifElse (Core.equalName_ (Core.injectionTypeName $ var "injection") (var "expected"))
           (Flows.pure $ Core.injectionField $ var "injection")

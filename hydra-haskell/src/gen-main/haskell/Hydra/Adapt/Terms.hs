@@ -422,9 +422,7 @@ passUnion t = ((\x -> case x of
         Compute.adapterTarget = (Core.TypeUnion (Core.RowType {
           Core.rowTypeTypeName = tname,
           Core.rowTypeFields = sfields_})),
-        Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> Flows.bind (withGraphContext (Core__.injection tname term)) (\dfield -> Flows.bind (getAdapter adaptersMap dfield) (\ad -> Flows.bind (Utils.encodeDecode dir (Compute.adapterCoder ad) dfield) (\newField -> Flows.pure (Core.TermUnion (Core.Injection {
-          Core.injectionTypeName = tname,
-          Core.injectionField = newField})))))))}))))) t)
+        Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> Flows.pure term))}))))) t)
 
 passUnit :: (t0 -> Compute.Flow t1 (Compute.Adapter t2 t3 Core.Type Core.Type Core.Term Core.Term))
 passUnit _ = (Flows.pure (Compute.Adapter {

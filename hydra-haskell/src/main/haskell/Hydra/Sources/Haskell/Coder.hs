@@ -138,7 +138,7 @@ keyHaskellVarDef = haskellCoderDefinition "keyHaskellVar" $
 adaptTypeToHaskellAndEncodeDef :: TElement (HaskellNamespaces -> Type -> Flow Graph H.Type)
 adaptTypeToHaskellAndEncodeDef = haskellCoderDefinition "adaptTypeToHaskellAndEncode" $
   lambda "namespaces" $
-    ref AdaptModules.adaptAndEncodeTypeDef @@ (ref HaskellLanguage.haskellLanguageDef) @@ (ref encodeTypeDef @@ var "namespaces")
+    ref AdaptModules.adaptTypeToLanguageAndEncodeDef @@ (ref HaskellLanguage.haskellLanguageDef) @@ (ref encodeTypeDef @@ var "namespaces")
 
 constantForFieldNameDef :: TElement (Name -> Name -> String)
 constantForFieldNameDef = haskellCoderDefinition "constantForFieldName" $

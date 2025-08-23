@@ -62,6 +62,7 @@ module_ = Module (Namespace "hydra.variants") elements
       el integerValueTypeDef,
       el literalTypeDef,
       el literalTypeVariantDef,
+      el literalTypesDef,
       el literalVariantDef,
       el literalVariantsDef,
       el termVariantDef,
@@ -205,6 +206,18 @@ literalTypeVariantDef = define "literalTypeVariant" $
     _LiteralType_float>>:   constant $ Mantle.literalVariantFloat,
     _LiteralType_integer>>: constant $ Mantle.literalVariantInteger,
     _LiteralType_string>>:  constant $ Mantle.literalVariantString]
+
+literalTypesDef :: TElement [LiteralType]
+literalTypesDef = define "literalTypes" $
+  doc "All literal types, in a canonical order" $
+  Lists.concat $ list [
+    list [
+      Core.literalTypeBinary,
+      Core.literalTypeBoolean],
+    Lists.map (unaryFunction Core.literalTypeFloat) (ref floatTypesDef),
+    Lists.map (unaryFunction Core.literalTypeInteger) (ref integerTypesDef),
+    list [
+      Core.literalTypeString]]
 
 literalVariantDef :: TElement (Literal -> LiteralVariant)
 literalVariantDef = define "literalVariant" $
