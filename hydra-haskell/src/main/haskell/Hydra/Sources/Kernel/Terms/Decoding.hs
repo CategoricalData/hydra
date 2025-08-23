@@ -103,42 +103,42 @@ module_ = Module (Namespace "hydra.decoding") elements
       el variantDef,
       el wrapDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-bigfloatDef :: TElement (Term -> Maybe Float)
+bigfloatDef :: TBinding (Term -> Maybe Float)
 bigfloatDef = define "bigfloat" $
   compose3 (ref literalDef) (ref floatLiteralDef) (ref bigfloatValueDef)
 
-bigfloatValueDef :: TElement (FloatValue -> Maybe Float)
+bigfloatValueDef :: TBinding (FloatValue -> Maybe Float)
 bigfloatValueDef = define "bigfloatValue" $
   matchVariant _FloatValue _FloatValue_bigfloat
 
-bigintDef :: TElement (Term -> Maybe Int)
+bigintDef :: TBinding (Term -> Maybe Int)
 bigintDef = define "bigint" $
   compose3 (ref literalDef) (ref integerLiteralDef) (ref bigintValueDef)
 
-bigintValueDef :: TElement (IntegerValue -> Maybe Int)
+bigintValueDef :: TBinding (IntegerValue -> Maybe Int)
 bigintValueDef = define "bigintValue" $
   matchVariant _IntegerValue _IntegerValue_bigint
 
-binaryDef :: TElement (Term -> Maybe String)
+binaryDef :: TBinding (Term -> Maybe String)
 binaryDef = define "binary" $
   compose2 (ref literalDef) (ref binaryLiteralDef)
 
-binaryLiteralDef :: TElement (Literal -> Maybe String)
+binaryLiteralDef :: TBinding (Literal -> Maybe String)
 binaryLiteralDef = define "binaryLiteral" $
   matchVariant _Literal _Literal_binary
 
-booleanDef :: TElement (Term -> Maybe Bool)
+booleanDef :: TBinding (Term -> Maybe Bool)
 booleanDef = define "boolean" $
   compose2 (ref literalDef) (ref booleanLiteralDef)
 
-booleanLiteralDef :: TElement (Literal -> Maybe Bool)
+booleanLiteralDef :: TBinding (Literal -> Maybe Bool)
 booleanLiteralDef = define "booleanLiteral" $
   matchVariant _Literal _Literal_boolean
 
-casesDef :: TElement (Name -> Term -> Maybe [Field])
+casesDef :: TBinding (Name -> Term -> Maybe [Field])
 casesDef = define "cases" $
   lets [
     "matchFunction">: matchTermVariant _Term_function,
@@ -149,14 +149,14 @@ casesDef = define "cases" $
       @@ (unaryFunction Core.caseStatementCases)
       @@ compose3 (var "matchFunction") (var "matchElimination") (var "matchUnion")
 
-caseFieldDef :: TElement (Name -> Name -> Term -> Y.Maybe Term)
+caseFieldDef :: TBinding (Name -> Name -> Term -> Y.Maybe Term)
 caseFieldDef = define "caseField" $
  lambda "tname" $ lambda "fname" $
    compose2
      (ref casesDef @@ var "tname" )
      (ref fieldDef @@ var "fname")
 
-fieldDef :: TElement (Name -> [Field] -> Maybe Term)
+fieldDef :: TBinding (Name -> [Field] -> Maybe Term)
 fieldDef = define "field" $
   lambdas ["fname", "fields"] $ lets [
     "matches">: Lists.filter
@@ -166,87 +166,87 @@ fieldDef = define "field" $
       (just (Core.fieldTerm $ (Lists.head $ var "matches")))
       nothing
 
-float32Def :: TElement (Term -> Maybe Float)
+float32Def :: TBinding (Term -> Maybe Float)
 float32Def = define "float32" $
   compose3
     (ref literalDef)
     (ref floatLiteralDef)
     (ref float32ValueDef)
 
-float32ValueDef :: TElement (FloatValue -> Maybe Float)
+float32ValueDef :: TBinding (FloatValue -> Maybe Float)
 float32ValueDef = define "float32Value" $
   matchVariant _FloatValue _FloatValue_float32
 
-float64Def :: TElement (Term -> Maybe Float)
+float64Def :: TBinding (Term -> Maybe Float)
 float64Def = define "float64" $
   compose3
     (ref literalDef)
     (ref floatLiteralDef)
     (ref float64ValueDef)
 
-float64ValueDef :: TElement (FloatValue -> Maybe Float)
+float64ValueDef :: TBinding (FloatValue -> Maybe Float)
 float64ValueDef = define "float64Value" $
   matchVariant _FloatValue _FloatValue_float64
 
 floatLiteralDef = define "floatLiteral" $
   matchVariant _Literal _Literal_float
 
-int8Def :: TElement (Term -> Maybe Int)
+int8Def :: TBinding (Term -> Maybe Int)
 int8Def = define "int8" $
   compose3
     (ref literalDef)
     (ref integerLiteralDef)
     (ref int8ValueDef)
 
-int8ValueDef :: TElement (IntegerValue -> Maybe Int)
+int8ValueDef :: TBinding (IntegerValue -> Maybe Int)
 int8ValueDef = define "int8Value" $
   matchVariant _IntegerValue _IntegerValue_int8
 
-int16Def :: TElement (Term -> Maybe Int)
+int16Def :: TBinding (Term -> Maybe Int)
 int16Def = define "int16" $
   compose3
     (ref literalDef)
     (ref integerLiteralDef)
     (ref int16ValueDef)
 
-int16ValueDef :: TElement (IntegerValue -> Maybe Int)
+int16ValueDef :: TBinding (IntegerValue -> Maybe Int)
 int16ValueDef = define "int16Value" $
   matchVariant _IntegerValue _IntegerValue_int16
 
-int32Def :: TElement (Term -> Maybe Int)
+int32Def :: TBinding (Term -> Maybe Int)
 int32Def = define "int32" $
   compose3
     (ref literalDef)
     (ref integerLiteralDef)
     (ref int32ValueDef)
 
-int32ValueDef :: TElement (IntegerValue -> Maybe Int)
+int32ValueDef :: TBinding (IntegerValue -> Maybe Int)
 int32ValueDef = define "int32Value" $
   matchVariant _IntegerValue _IntegerValue_int32
 
-int64Def :: TElement (Term -> Maybe Int)
+int64Def :: TBinding (Term -> Maybe Int)
 int64Def = define "int64" $
   compose3
     (ref literalDef)
     (ref integerLiteralDef)
     (ref int64ValueDef)
 
-int64ValueDef :: TElement (IntegerValue -> Maybe Int)
+int64ValueDef :: TBinding (IntegerValue -> Maybe Int)
 int64ValueDef = define "int64Value" $
   matchVariant _IntegerValue _IntegerValue_int64
 
-integerLiteralDef :: TElement (Literal -> Maybe IntegerValue)
+integerLiteralDef :: TBinding (Literal -> Maybe IntegerValue)
 integerLiteralDef = define "integerLiteral" $
   matchVariant _Literal _Literal_integer
 
-lambdaDef :: TElement (Term -> Maybe Lambda)
+lambdaDef :: TBinding (Term -> Maybe Lambda)
 lambdaDef = define "lambda" $
   lets [
     "matchFunction">: matchTermVariant _Term_function,
     "matchLambda">: matchVariant _Function _Function_lambda]
     $ compose2 (var "matchFunction") (var "matchLambda")
 
-letBindingDef :: TElement (Name -> Term -> Maybe Binding)
+letBindingDef :: TBinding (Name -> Term -> Maybe Binding)
 letBindingDef = define "letBinding" $
   lambda "fname" $ lambda "term" $ Optionals.bind
     (Optionals.map
@@ -254,33 +254,33 @@ letBindingDef = define "letBinding" $
       (ref letTermDef @@ var "term"))
     (ref letBindingWithKeyDef @@ var "fname")
 
-letBindingWithKeyDef :: TElement (Name -> [Binding] -> Maybe Binding)
+letBindingWithKeyDef :: TBinding (Name -> [Binding] -> Maybe Binding)
 letBindingWithKeyDef = define "letBindingWithKey" $
   lambda "fname" $ lambda "bindings" $ lets [
     "matches">: Lists.filter
-      (lambda "b" $ Equality.equal (Core.letBindingName $ var "b") $ var "fname")
+      (lambda "b" $ Equality.equal (Core.bindingName $ var "b") $ var "fname")
       (var "bindings")]
     $ Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "matches"))
       (just (Lists.head $ var "matches"))
       nothing
 
-letTermDef :: TElement (Term -> Maybe Let)
+letTermDef :: TBinding (Term -> Maybe Let)
 letTermDef = define "letTerm" $
   matchTermVariant _Term_let
 
-listDef :: TElement (Term -> Maybe [Term])
+listDef :: TBinding (Term -> Maybe [Term])
 listDef = define "list" $
   matchTermVariant _Term_list
 
-literalDef :: TElement (Term -> Maybe Literal)
+literalDef :: TBinding (Term -> Maybe Literal)
 literalDef = define "literal" $
   matchTermVariant _Term_literal
 
-mapDef :: TElement (Term -> Maybe (M.Map Term Term))
+mapDef :: TBinding (Term -> Maybe (M.Map Term Term))
 mapDef = define "map" $
   matchTermVariant _Term_map
 
-nameDef :: TElement (Term -> Maybe Name)
+nameDef :: TBinding (Term -> Maybe Name)
 nameDef = define "name" $
   lambda "term" $ Optionals.map nm
     (Optionals.bind
@@ -290,7 +290,7 @@ nameDef = define "name" $
     nm :: TTerm (String -> Name)
     nm = TTerm $ Terms.lambda "s" $ TermWrap $ WrappedTerm _Name $ Terms.var "s"
 
-nominalDef :: TElement ((a -> Name) -> (a -> b) -> (c -> Maybe a) -> Name -> c -> Maybe b)
+nominalDef :: TBinding ((a -> Name) -> (a -> b) -> (c -> Maybe a) -> Name -> c -> Maybe b)
 nominalDef = define "nominal" $
   lambda "getName" $ lambda "getB" $ lambda "getA" $ lambda "expected" $
     lets [
@@ -301,11 +301,11 @@ nominalDef = define "nominal" $
           (just (var "getB" @@ var "a"))
           nothing)
 
-optionalDef :: TElement (Term -> Maybe (Maybe Term))
+optionalDef :: TBinding (Term -> Maybe (Maybe Term))
 optionalDef = define "optional" $
   matchTermVariant _Term_optional
 
-pairDef :: TElement (Term -> Maybe (Term, Term))
+pairDef :: TBinding (Term -> Maybe (Term, Term))
 pairDef = define "pair" $
   lets [
     "matchProduct">: matchTermVariant _Term_product]
@@ -315,78 +315,78 @@ pairDef = define "pair" $
         (just $ pair (Lists.at (int32 0) $ var "l") (Lists.at (int32 1) $ var "l"))
         nothing)
 
-recordDef :: TElement (Name -> Term -> Maybe [Field])
+recordDef :: TBinding (Name -> Term -> Maybe [Field])
 recordDef = define "record" $
   matchNominal _Term_record
     (unaryFunction Core.recordTypeName)
     (unaryFunction Core.recordFields)
 
-setDef :: TElement (Term -> Maybe (S.Set Term))
+setDef :: TBinding (Term -> Maybe (S.Set Term))
 setDef = define "set" $
   matchTermVariant _Term_set
 
-stringDef :: TElement (Term -> Maybe String)
+stringDef :: TBinding (Term -> Maybe String)
 stringDef = define "string" $
   compose2 (ref literalDef) (ref stringLiteralDef)
 
-stringLiteralDef :: TElement (Literal -> Maybe String)
+stringLiteralDef :: TBinding (Literal -> Maybe String)
 stringLiteralDef = define "stringLiteral" $
   matchVariant _Literal _Literal_string
 
-uint8Def :: TElement (Term -> Maybe Int)
+uint8Def :: TBinding (Term -> Maybe Int)
 uint8Def = define "uint8" $
   compose3 (ref literalDef) (ref integerLiteralDef) (ref uint8ValueDef)
 
-uint8ValueDef :: TElement (IntegerValue -> Maybe Int)
+uint8ValueDef :: TBinding (IntegerValue -> Maybe Int)
 uint8ValueDef = define "uint8Value" $
   matchVariant _IntegerValue _IntegerValue_uint8
 
-uint16Def :: TElement (Term -> Maybe Int)
+uint16Def :: TBinding (Term -> Maybe Int)
 uint16Def = define "uint16" $
   compose3 (ref literalDef) (ref integerLiteralDef) (ref uint16ValueDef)
 
-uint16ValueDef :: TElement (IntegerValue -> Maybe Int)
+uint16ValueDef :: TBinding (IntegerValue -> Maybe Int)
 uint16ValueDef = define "uint16Value" $
   matchVariant _IntegerValue _IntegerValue_uint16
 
-uint32Def :: TElement (Term -> Maybe Int)
+uint32Def :: TBinding (Term -> Maybe Int)
 uint32Def = define "uint32" $
   compose3 (ref literalDef) (ref integerLiteralDef) (ref uint32ValueDef)
 
-uint32ValueDef :: TElement (IntegerValue -> Maybe Int)
+uint32ValueDef :: TBinding (IntegerValue -> Maybe Int)
 uint32ValueDef = define "uint32Value" $
   matchVariant _IntegerValue _IntegerValue_uint32
 
-uint64Def :: TElement (Term -> Maybe Int)
+uint64Def :: TBinding (Term -> Maybe Int)
 uint64Def = define "uint64" $
   compose3 (ref literalDef) (ref integerLiteralDef) (ref uint64ValueDef)
 
-uint64ValueDef :: TElement (IntegerValue -> Maybe Int)
+uint64ValueDef :: TBinding (IntegerValue -> Maybe Int)
 uint64ValueDef = define "uint64Value" $
   matchVariant _IntegerValue _IntegerValue_uint64
 
-unitDef :: TElement (Term -> Maybe ())
+unitDef :: TBinding (Term -> Maybe ())
 unitDef = define "unit" $
   lambda "term" $ cases _Term (var "term") (Just nothing) [
     _Term_unit>>: constant $ just unit]
 
-unitVariantDef :: TElement (Name -> Term -> Maybe Name)
+unitVariantDef :: TBinding (Name -> Term -> Maybe Name)
 unitVariantDef = define "unitVariant" $
   lambda "tname" $ lambda "term" $ Optionals.map
     (unaryFunction Core.fieldName)
     (ref variantDef @@ var "tname" @@ var "term")
 
-variableDef :: TElement (Term -> Y.Maybe Name)
+variableDef :: TBinding (Term -> Y.Maybe Name)
 variableDef = define "variable" $
   matchTermVariant _Term_variable
 
-variantDef :: TElement (Name -> Term -> Maybe Field)
+variantDef :: TBinding (Name -> Term -> Maybe Field)
 variantDef = define "variant" $
   matchNominal _Term_union
     (unaryFunction Core.injectionTypeName)
     (unaryFunction Core.injectionField)
 
-wrapDef :: TElement (Name -> Term -> Maybe Term)
+wrapDef :: TBinding (Name -> Term -> Maybe Term)
 wrapDef = define "wrap" $
   matchNominal _Term_wrap
     (unaryFunction Core.wrappedTermTypeName)

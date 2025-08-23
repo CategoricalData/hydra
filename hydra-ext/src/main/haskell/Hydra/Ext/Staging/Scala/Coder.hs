@@ -26,7 +26,7 @@ moduleToScala mod = do
 moduleToScalaPackage :: Module -> Flow Graph Scala.Pkg
 moduleToScalaPackage = transformModule scalaLanguage encodeUntypedTerm constructModule
 
-constructModule :: Module -> M.Map Type (Coder Graph Graph Term Scala.Data) -> [(Element, TypedTerm)]
+constructModule :: Module -> M.Map Type (Coder Graph Graph Term Scala.Data) -> [(Binding, TypedTerm)]
   -> Flow Graph Scala.Pkg
 constructModule mod coders pairs = do
     defs <- CM.mapM toDef pairs
@@ -46,7 +46,7 @@ constructModule mod coders pairs = do
         toPrimImport (Namespace ns) = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
           Scala.Importer (Scala.Data_RefName $ toScalaName ns) []]
     toScalaName name = Scala.Data_Name $ Scala.PredefString $ L.intercalate "." $ Strings.splitOn "." name
-    toDef (el, TypedTerm term typ) = withTrace ("element " ++ unName (elementName el)) $ do
+    toDef (el, TypedTerm term typ) = withTrace ("element " ++ unName (bindingName el)) $ do
         let coder = Y.fromJust $ M.lookup typ coders
         rhs <- coderEncode coder term
         Scala.StatDefn <$> case rhs of
@@ -58,7 +58,7 @@ constructModule mod coders pairs = do
           Scala.DataRef _ -> toVal rhs -- TODO
           _ -> fail $ "unexpected RHS: " ++ show rhs
       where
-        lname = localNameOf $ elementName el
+        lname = localNameOf $ bindingName el
 
         freeTypeVars = S.toList $ freeVariablesInType typ
 

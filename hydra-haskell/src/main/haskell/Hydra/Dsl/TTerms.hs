@@ -44,7 +44,7 @@ field s = Core.field (name s)
 lets :: [(TTerm Name, TTerm Term)] -> TTerm Term -> TTerm Term
 lets pairs body = Core.termLet $ Core.let_ (Phantoms.list $ toBinding pairs) body
   where
-    toBinding = fmap (\(n, t) -> Core.letBinding n t Phantoms.nothing)
+    toBinding = fmap (\(n, t) -> Core.binding n t Phantoms.nothing)
 
 -- | Create a term-encoded variable reference from a string
 -- Example: var "x"

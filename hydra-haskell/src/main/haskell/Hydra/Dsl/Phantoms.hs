@@ -300,23 +300,23 @@ optCases arg ifNothing ifJust = primitive3 (Name "hydra.lib.optionals.maybe") if
 
 -- | Create a definition in a module
 -- Example: definitionInModule myModule "addInts" (lambda "x" (lambda "y" (add @@ var "x" @@ var "y")))
-definitionInModule :: Module -> String -> TTerm a -> TElement a
+definitionInModule :: Module -> String -> TTerm a -> TBinding a
 definitionInModule mod = definitionInNamespace $ moduleNamespace mod
 
 -- | Create a definition in a namespace
 -- Example: definitionInNamespace (Namespace "com.example") "addInts" myFunction
-definitionInNamespace :: Namespace -> String -> TTerm a -> TElement a
-definitionInNamespace ns lname = TElement $ unqualifyName $ QualifiedName (Just ns) lname
+definitionInNamespace :: Namespace -> String -> TTerm a -> TBinding a
+definitionInNamespace ns lname = TBinding $ unqualifyName $ QualifiedName (Just ns) lname
 
 -- | Convert a typed element to an untyped element
 -- Example: el (definitionInModule myModule "addInts" myFunction)
-el :: TElement a -> Element
-el (TElement name (TTerm term)) = Element name term Nothing
+el :: TBinding a -> Binding
+el (TBinding name (TTerm term)) = Binding name term Nothing
 
 -- | Reference a defined element
 -- Example: ref (definitionInModule myModule "addInts")
-ref :: TElement a -> TTerm a
-ref (TElement name _) = TTerm (TermVariable name)
+ref :: TBinding a -> TTerm a
+ref (TBinding name _) = TTerm (TermVariable name)
 
 -- * Metadata and annotations
 

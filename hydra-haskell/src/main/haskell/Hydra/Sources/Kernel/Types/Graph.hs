@@ -29,14 +29,6 @@ module_ = Module ns elements [Compute.module_] [Core.module_] $
 
     elements = [
 
-      -- TODO: merge with hydra.core.Binding
-      def "Element" $
-        doc "A graph element, having a name, data term (value), and schema term (type)" $
-        record [
-          "name">: core "Name",
-          "term">: core "Term",
-          "type">: optional $ core "TypeScheme"],
-
       def "Graph" $
         doc "A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph" $
         record [
@@ -44,7 +36,7 @@ module_ = Module ns elements [Compute.module_] [Core.module_] $
           -- TODO: remove this; replace it with 'environment'
           "elements">:
             doc "All of the elements in the graph" $
-            Types.map (core "Name") (graph "Element"),
+            Types.map (core "Name") (core "Binding"),
 
           "environment">:
             doc "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)" $

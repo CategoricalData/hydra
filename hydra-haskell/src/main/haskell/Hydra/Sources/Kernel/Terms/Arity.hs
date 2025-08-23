@@ -55,10 +55,10 @@ module_ = Module (Namespace "hydra.arity") elements
       el typeArityDef,
       el uncurryTypeDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-functionArityDef :: TElement (Function -> Int)
+functionArityDef :: TBinding (Function -> Int)
 functionArityDef = define "functionArity" $
   match _Function Nothing [
     _Function_elimination>>: constant (int32 1),
@@ -66,19 +66,19 @@ functionArityDef = define "functionArity" $
     _Function_primitive>>: constant $
       doc "TODO: This function needs to be monadic, so we can look up the primitive" (int32 42)]
 
-primitiveArityDef :: TElement (Primitive -> Int)
+primitiveArityDef :: TBinding (Primitive -> Int)
 primitiveArityDef = define "primitiveArity" $
   doc "Find the arity (expected number of arguments) of a primitive constant or function" $
   (ref typeArityDef <.> unaryFunction Core.typeSchemeType <.> unaryFunction Graph.primitiveType)
 
-termArityDef :: TElement (Term -> Int)
+termArityDef :: TBinding (Term -> Int)
 termArityDef = define "termArity" $
   match _Term (Just $ int32 0) [
     _Term_application>>: (lambda "xapp" $ Math.sub (var "xapp") (int32 1)) <.> ref termArityDef <.> unaryFunction Core.applicationFunction,
     _Term_function>>: ref functionArityDef]
     -- Note: ignoring variables which might resolve to functions
 
-typeArityDef :: TElement (Type -> Int)
+typeArityDef :: TBinding (Type -> Int)
 typeArityDef = define "typeArity" $
   match _Type (Just $ int32 0) [
     _Type_annotated>>: ref typeArityDef <.> unaryFunction Core.annotatedTypeSubject,
@@ -87,7 +87,7 @@ typeArityDef = define "typeArity" $
     _Type_function>>: lambda "f" $
       Math.add (int32 1) (ref typeArityDef @@ (Core.functionTypeCodomain $ var "f"))]
 
-uncurryTypeDef :: TElement (Type -> [Type])
+uncurryTypeDef :: TBinding (Type -> [Type])
 uncurryTypeDef = define "uncurryType" $
   doc "Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)" $
   lambda "t" ((match _Type (Just $ list [var "t"]) [

@@ -70,10 +70,10 @@ module_ = Module (Namespace "hydra.variants") elements
       el typeVariantDef,
       el typeVariantsDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-eliminationVariantDef :: TElement (Elimination -> EliminationVariant)
+eliminationVariantDef :: TBinding (Elimination -> EliminationVariant)
 eliminationVariantDef = define "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
   match _Elimination Nothing [
@@ -82,7 +82,7 @@ eliminationVariantDef = define "eliminationVariant" $
     _Elimination_union>>: constant Mantle.eliminationVariantUnion,
     _Elimination_wrap>>: constant Mantle.eliminationVariantWrap]
 
-eliminationVariantsDef :: TElement [EliminationVariant]
+eliminationVariantsDef :: TBinding [EliminationVariant]
 eliminationVariantsDef = define "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
   list $ unitVariant _EliminationVariant <$> [
@@ -91,7 +91,7 @@ eliminationVariantsDef = define "eliminationVariants" $
     _EliminationVariant_union,
     _EliminationVariant_wrap]
 
-floatTypePrecisionDef :: TElement (FloatType -> Precision)
+floatTypePrecisionDef :: TBinding (FloatType -> Precision)
 floatTypePrecisionDef = define "floatTypePrecision" $
   doc "Find the precision of a given floating-point type" $
   match _FloatType Nothing [
@@ -99,7 +99,7 @@ floatTypePrecisionDef = define "floatTypePrecision" $
     _FloatType_float32>>: constant $ Mantle.precisionBits $ int32 32,
     _FloatType_float64>>: constant $ Mantle.precisionBits $ int32 64]
 
-floatTypesDef :: TElement [FloatType]
+floatTypesDef :: TBinding [FloatType]
 floatTypesDef = define "floatTypes" $
   doc "All floating-point types in a canonical order" $
   list $ unitVariant _FloatType <$> [
@@ -107,7 +107,7 @@ floatTypesDef = define "floatTypes" $
     _FloatType_float32,
     _FloatType_float64]
 
-floatValueTypeDef :: TElement (FloatValue -> FloatType)
+floatValueTypeDef :: TBinding (FloatValue -> FloatType)
 floatValueTypeDef = define "floatValueType" $
   doc "Find the float type for a given floating-point value" $
   match _FloatValue Nothing [
@@ -115,7 +115,7 @@ floatValueTypeDef = define "floatValueType" $
     _FloatValue_float32>>: constant Core.floatTypeFloat32,
     _FloatValue_float64>>: constant Core.floatTypeFloat64]
 
-functionVariantDef :: TElement (Function -> FunctionVariant)
+functionVariantDef :: TBinding (Function -> FunctionVariant)
 functionVariantDef = define "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
   match _Function Nothing [
@@ -123,7 +123,7 @@ functionVariantDef = define "functionVariant" $
     _Function_lambda>>: constant Mantle.functionVariantLambda,
     _Function_primitive>>: constant Mantle.functionVariantPrimitive]
 
-functionVariantsDef :: TElement [FunctionVariant]
+functionVariantsDef :: TBinding [FunctionVariant]
 functionVariantsDef = define "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
   list $ unitVariant _FunctionVariant <$> [
@@ -131,7 +131,7 @@ functionVariantsDef = define "functionVariants" $
     _FunctionVariant_lambda,
     _FunctionVariant_primitive]
 
-integerTypeIsSignedDef :: TElement (IntegerType -> Bool)
+integerTypeIsSignedDef :: TBinding (IntegerType -> Bool)
 integerTypeIsSignedDef = define "integerTypeIsSigned" $
   doc "Find whether a given integer type is signed (true) or unsigned (false)" $
   match _IntegerType Nothing [
@@ -145,7 +145,7 @@ integerTypeIsSignedDef = define "integerTypeIsSigned" $
     _IntegerType_uint32>>: constant false,
     _IntegerType_uint64>>: constant false]
 
-integerTypePrecisionDef :: TElement (IntegerType -> Precision)
+integerTypePrecisionDef :: TBinding (IntegerType -> Precision)
 integerTypePrecisionDef = define "integerTypePrecision" $
   doc "Find the precision of a given integer type" $
   match _IntegerType Nothing [
@@ -159,7 +159,7 @@ integerTypePrecisionDef = define "integerTypePrecision" $
     _IntegerType_uint32>>: constant $ Mantle.precisionBits $ int32 32,
     _IntegerType_uint64>>: constant $ Mantle.precisionBits $ int32 64]
 
-integerTypesDef :: TElement [IntegerType]
+integerTypesDef :: TBinding [IntegerType]
 integerTypesDef = define "integerTypes" $
   doc "All integer types, in a canonical order" $
   list $ unitVariant _IntegerType <$> [
@@ -173,7 +173,7 @@ integerTypesDef = define "integerTypes" $
     _IntegerType_uint32,
     _IntegerType_uint64]
 
-integerValueTypeDef :: TElement (IntegerValue -> IntegerType)
+integerValueTypeDef :: TBinding (IntegerValue -> IntegerType)
 integerValueTypeDef = define "integerValueType" $
   doc "Find the integer type for a given integer value" $
   match _IntegerValue Nothing [
@@ -187,7 +187,7 @@ integerValueTypeDef = define "integerValueType" $
     _IntegerValue_uint32>>: constant Core.integerTypeUint32,
     _IntegerValue_uint64>>: constant Core.integerTypeUint64]
 
-literalTypeDef :: TElement (Literal -> LiteralType)
+literalTypeDef :: TBinding (Literal -> LiteralType)
 literalTypeDef = define "literalType" $
   doc "Find the literal type for a given literal value" $
   match _Literal Nothing [
@@ -197,7 +197,7 @@ literalTypeDef = define "literalType" $
     _Literal_integer>>: injectLambda _LiteralType _LiteralType_integer <.> ref integerValueTypeDef,
     _Literal_string>>: constant $ variant _LiteralType _LiteralType_string unit]
 
-literalTypeVariantDef :: TElement (LiteralType -> LiteralVariant)
+literalTypeVariantDef :: TBinding (LiteralType -> LiteralVariant)
 literalTypeVariantDef = define "literalTypeVariant" $
   doc "Find the literal type variant (constructor) for a given literal value" $
   match _LiteralType Nothing [
@@ -207,7 +207,7 @@ literalTypeVariantDef = define "literalTypeVariant" $
     _LiteralType_integer>>: constant $ Mantle.literalVariantInteger,
     _LiteralType_string>>:  constant $ Mantle.literalVariantString]
 
-literalTypesDef :: TElement [LiteralType]
+literalTypesDef :: TBinding [LiteralType]
 literalTypesDef = define "literalTypes" $
   doc "All literal types, in a canonical order" $
   Lists.concat $ list [
@@ -219,12 +219,12 @@ literalTypesDef = define "literalTypes" $
     list [
       Core.literalTypeString]]
 
-literalVariantDef :: TElement (Literal -> LiteralVariant)
+literalVariantDef :: TBinding (Literal -> LiteralVariant)
 literalVariantDef = define "literalVariant" $
   doc "Find the literal variant (constructor) for a given literal value" $
   ref literalTypeVariantDef <.> ref literalTypeDef
 
-literalVariantsDef :: TElement [LiteralVariant]
+literalVariantsDef :: TBinding [LiteralVariant]
 literalVariantsDef = define "literalVariants" $
   doc "All literal variants, in a canonical order" $
   list $ unitVariant _LiteralVariant <$> [
@@ -234,7 +234,7 @@ literalVariantsDef = define "literalVariants" $
     _LiteralVariant_integer,
     _LiteralVariant_string]
 
-termVariantDef :: TElement (Term -> TermVariant)
+termVariantDef :: TBinding (Term -> TermVariant)
 termVariantDef = define "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
   match _Term Nothing [
@@ -257,7 +257,7 @@ termVariantDef = define "termVariant" $
     _Term_variable>>: constant Mantle.termVariantVariable,
     _Term_wrap>>: constant Mantle.termVariantWrap]
 
-termVariantsDef :: TElement [TermVariant]
+termVariantsDef :: TBinding [TermVariant]
 termVariantsDef = define "termVariants" $
   doc "All term (expression) variants, in a canonical order" $
   list $ unitVariant _TermVariant <$> [
@@ -279,7 +279,7 @@ termVariantsDef = define "termVariants" $
     _TermVariant_variable,
     _TermVariant_wrap]
 
-typeVariantDef :: TElement (Type -> TypeVariant)
+typeVariantDef :: TBinding (Type -> TypeVariant)
 typeVariantDef = define "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
   match _Type Nothing [
@@ -300,7 +300,7 @@ typeVariantDef = define "typeVariant" $
     _Type_variable>>: constant Mantle.typeVariantVariable,
     _Type_wrap>>: constant Mantle.typeVariantWrap]
 
-typeVariantsDef :: TElement [TypeVariant]
+typeVariantsDef :: TBinding [TypeVariant]
 typeVariantsDef = define "typeVariants" $
   doc "All type variants, in a canonical order" $
   list $ unitVariant _TypeVariant <$> [

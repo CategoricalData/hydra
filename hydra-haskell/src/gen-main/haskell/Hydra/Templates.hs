@@ -25,7 +25,7 @@ graphToSchema g =
   let toPair = (\nameAndEl ->  
           let name = (fst nameAndEl) 
               el = (snd nameAndEl)
-          in (Flows.bind (Core_.type_ (Graph.elementTerm el)) (\t -> Flows.pure (name, t))))
+          in (Flows.bind (Core_.type_ (Core.bindingTerm el)) (\t -> Flows.pure (name, t))))
   in (Flows.bind (Flows.mapList toPair (Maps.toList (Graph.graphElements g))) (\pairs -> Flows.pure (Maps.fromList pairs)))
 
 instantiateTemplate :: (Bool -> M.Map Core.Name Core.Type -> Core.Type -> Compute.Flow t0 Core.Term)

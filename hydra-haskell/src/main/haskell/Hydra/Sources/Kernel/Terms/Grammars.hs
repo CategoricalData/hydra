@@ -67,16 +67,16 @@ module_ = Module (Namespace "hydra.grammars") elements
      el toNameDef,
      el wrapTypeDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-childNameDef :: TElement (String -> String -> String)
+childNameDef :: TBinding (String -> String -> String)
 childNameDef = define "childName" $
   doc "Generate child name" $
   lambda "lname" $ lambda "n" $
     Strings.cat $ list [var "lname", string "_", ref Formatting.capitalizeDef @@ var "n"]
 
-findNamesDef :: TElement ([G.Pattern] -> [String])
+findNamesDef :: TBinding ([G.Pattern] -> [String])
 findNamesDef = define "findNames" $
   doc "Find unique names for patterns" $
   lambda "pats" $ lets [
@@ -95,7 +95,7 @@ findNamesDef = define "findNames" $
         (Maps.insert (var "rn") (var "ni") (var "nameMap"))]
     $ Lists.reverse $ first $ Lists.foldl (var "nextName") (pair (list []) Maps.empty) (var "pats")
 
-grammarToModuleDef :: TElement (Namespace -> G.Grammar -> Maybe String -> Module)
+grammarToModuleDef :: TBinding (Namespace -> G.Grammar -> Maybe String -> Module)
 grammarToModuleDef = define "grammarToModule" $
   doc "Convert a BNF grammar to a Hydra module" $
   lambda "ns" $ lambda "grammar" $ lambda "desc" $ lets [
@@ -118,7 +118,7 @@ grammarToModuleDef = define "grammarToModule" $
       (var "elementPairs")]
     $ Module.module_ (var "ns") (var "elements") (list []) (list []) (var "desc")
 
-isComplexDef :: TElement (G.Pattern -> Bool)
+isComplexDef :: TBinding (G.Pattern -> Bool)
 isComplexDef = define "isComplex" $
   doc "Check if pattern is complex" $
   lambda "pat" $ match G._Pattern (Just false) [
@@ -127,7 +127,7 @@ isComplexDef = define "isComplex" $
     _Pattern_alternatives>>: lambda "pats" $ ref isNontrivialDef @@ false @@ var "pats"]
   @@ var "pat"
 
-isNontrivialDef :: TElement (Bool -> [G.Pattern] -> Bool)
+isNontrivialDef :: TBinding (Bool -> [G.Pattern] -> Bool)
 isNontrivialDef = define "isNontrivial" $
   doc "Check if patterns are nontrivial" $
   lambda "isRecord" $ lambda "pats" $ lets [
@@ -137,7 +137,7 @@ isNontrivialDef = define "isNontrivial" $
           _Pattern_labeled>>: constant true] @@ Lists.head (var "minPats"))
         true
 
-makeElementsDef :: TElement (Bool -> Namespace -> String -> G.Pattern -> [(String, Type)])
+makeElementsDef :: TBinding (Bool -> Namespace -> String -> G.Pattern -> [(String, Type)])
 makeElementsDef = define "makeElements" $
   doc "Create elements from pattern" $
   lambda "omitTrivial" $ lambda "ns" $ lambda "lname" $ lambda "pat" $ lets [
@@ -186,7 +186,7 @@ makeElementsDef = define "makeElements" $
     @@ var "pat"]
     $ var "forPat" @@ var "pat"
 
-rawNameDef :: TElement (G.Pattern -> String)
+rawNameDef :: TBinding (G.Pattern -> String)
 rawNameDef = define "rawName" $
   doc "Get raw name from pattern" $
   lambda "pat" $ match G._Pattern Nothing [
@@ -203,7 +203,7 @@ rawNameDef = define "rawName" $
     _Pattern_star>>: lambda "p" $ Strings.cat2 (string "listOf") (ref Formatting.capitalizeDef @@ (ref rawNameDef @@ var "p"))]
   @@ var "pat"
 
-simplifyDef :: TElement (Bool -> [G.Pattern] -> [G.Pattern])
+simplifyDef :: TBinding (Bool -> [G.Pattern] -> [G.Pattern])
 simplifyDef = define "simplify" $
   doc "Remove trivial patterns from records" $
   lambda "isRecord" $ lambda "pats" $ lets [
@@ -213,13 +213,13 @@ simplifyDef = define "simplify" $
         (Lists.filter (lambda "p" $ Logic.not $ var "isConstant" @@ var "p") (var "pats"))
         (var "pats")
 
-toNameDef :: TElement (Namespace -> String -> Name)
+toNameDef :: TBinding (Namespace -> String -> Name)
 toNameDef = define "toName" $
   doc "Convert local name to qualified name" $
   lambda "ns" $ lambda "local" $
     ref Names.unqualifyNameDef @@ (Module.qualifiedName (just $ var "ns") (var "local"))
 
-wrapTypeDef :: TElement (Type -> Type)
+wrapTypeDef :: TBinding (Type -> Type)
 wrapTypeDef = define "wrapType" $
   doc "Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type" $
   lambda "t" $ cases _Type (var "t") (Just $ Core.typeWrap $ Core.wrappedType (Core.nameLift placeholderName) $ var "t") [

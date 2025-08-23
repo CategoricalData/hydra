@@ -26,7 +26,7 @@ import qualified Data.Maybe as Y
 data AvroEnvironment = AvroEnvironment {
   avroEnvironmentNamedAdapters :: M.Map AvroQualifiedName AvroHydraAdapter,
   avroEnvironmentNamespace :: Maybe String,
-  avroEnvironmentElements :: M.Map Name Element} -- note: only used in the term coders
+  avroEnvironmentElements :: M.Map Name Binding} -- note: only used in the term coders
 type AvroHydraAdapter = Adapter AvroEnvironment AvroEnvironment Avro.Schema Type Json.Value Term
 
 data AvroQualifiedName = AvroQualifiedName (Maybe String) String deriving (Eq, Ord, Show)
@@ -136,7 +136,7 @@ avroHydraAdapter schema = case schema of
               [field] -> do
                   s <- termToString $ fieldTerm field
                   let name = constr s
-                  let el = Element name term Nothing
+                  let el = Binding name term Nothing
                   env <- getState
                   putState $ env {avroEnvironmentElements = M.insert name el (avroEnvironmentElements env)}
                   return ()

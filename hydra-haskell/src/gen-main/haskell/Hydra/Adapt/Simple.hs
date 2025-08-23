@@ -177,7 +177,7 @@ graphToDefinitions constraints doExpand graph names =
   in  
     let isTypeElement = (\el -> (\x -> case x of
             Core.TermUnion v1 -> (Equality.equal (Core.injectionTypeName v1) (Core.Name "hydra.core.Type"))
-            _ -> False) (Rewriting.deannotateTerm (Graph.elementTerm el)))
+            _ -> False) (Rewriting.deannotateTerm (Core.bindingTerm el)))
     in  
       let isSchemaGraph = (Logic.and (Logic.not (Lists.null ellist)) (isTypeElement (Lists.head ellist)))
       in (Logic.ifElse isSchemaGraph ( 
@@ -188,12 +188,12 @@ graphToDefinitions constraints doExpand graph names =
                   Module.typeDefinitionType = (snd pair)}))
           in (Flows.pure (graph, (Lists.map toDef (Lists.filter (\p -> Sets.member (fst p) names) (Maps.toList tmap1))))))))) (Flows.bind (adaptDataGraph constraints doExpand graph) (\graph1 -> Flows.bind (Inference.inferGraphTypes graph1) (\graph2 ->  
         let toDef = (\el ->  
-                let ts = (Optionals.fromJust (Graph.elementType el))
+                let ts = (Optionals.fromJust (Core.bindingType el))
                 in (Module.DefinitionTerm (Module.TermDefinition {
-                  Module.termDefinitionName = (Graph.elementName el),
-                  Module.termDefinitionTerm = (Graph.elementTerm el),
+                  Module.termDefinitionName = (Core.bindingName el),
+                  Module.termDefinitionTerm = (Core.bindingTerm el),
                   Module.termDefinitionType = (Inference.typeSchemeToFType ts)})))
-        in (Flows.pure (graph2, (Lists.map toDef (Lists.filter (\e -> Sets.member (Graph.elementName e) names) (Maps.elems (Graph.graphElements graph2))))))))))
+        in (Flows.pure (graph2, (Lists.map toDef (Lists.filter (\e -> Sets.member (Core.bindingName e) names) (Maps.elems (Graph.graphElements graph2))))))))))
 
 -- | Find a list of alternatives for a given term, if any
 termAlternatives :: (Core.Term -> Compute.Flow Graph.Graph [Core.Term])

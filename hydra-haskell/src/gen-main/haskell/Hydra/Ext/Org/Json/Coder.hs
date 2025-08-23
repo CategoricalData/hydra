@@ -233,8 +233,8 @@ untypedTermToJson term =
       let bindings = (Core.letBindings v1) 
           env = (Core.letEnvironment v1)
           fromBinding = (\b -> Core.Field {
-                  Core.fieldName = (Core.letBindingName b),
-                  Core.fieldTerm = (Core.letBindingTerm b)})
+                  Core.fieldName = (Core.bindingName b),
+                  Core.fieldTerm = (Core.bindingTerm b)})
       in (asRecord [
         Core.Field {
           Core.fieldName = (Core.Name "bindings"),

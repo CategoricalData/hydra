@@ -142,15 +142,15 @@ termGraphToDependencyPropertyGraph withPrims withTypes g = PG.Graph vertexMap ed
                     name = primitiveName prim
             els = fmap toVertex $ M.elems elements
               where
-                toVertex el = PG.Vertex vertexLabel_Term (nameToVertexId $ elementName el) $ M.fromList [
+                toVertex el = PG.Vertex vertexLabel_Term (nameToVertexId $ bindingName el) $ M.fromList [
                     (propertyKey_localName, localNameOf name),
                     (propertyKey_name, unName name),
                     (propertyKey_namespace, nameToNamespace name),
                     (propertyKey_termExpression, ShowCore.term term),
                     (propertyKey_termVariant, ShowMantle.termVariant $ termVariant term)]
                   where
-                    name = elementName el
-                    term = elementTerm el
+                    name = bindingName el
+                    term = bindingTerm el
     edgeMap = M.fromList $ fmap (\e -> (PG.edgeId e, e)) edges
       where
         edges = typeEdges ++ primEdges ++ elEdges
@@ -159,18 +159,18 @@ termGraphToDependencyPropertyGraph withPrims withTypes g = PG.Graph vertexMap ed
                 then L.concat $ fmap edgesFrom elements
                 else []
               where
-                edgesFrom el = fmap (namePairToEdge edgeLabel_hasType (elementName el)) $
-                  S.toList $ termDependencyNames False False True $ elementTerm el
+                edgesFrom el = fmap (namePairToEdge edgeLabel_hasType (bindingName el)) $
+                  S.toList $ termDependencyNames False False True $ bindingTerm el
             primEdges = if withPrims
                 then L.concat $ fmap edgesFrom elements
                 else []
               where
-                edgesFrom el = fmap (namePairToEdge edgeLabel_usesPrimitive (elementName el)) $
-                  S.toList $ termDependencyNames False True False $ elementTerm el
+                edgesFrom el = fmap (namePairToEdge edgeLabel_usesPrimitive (bindingName el)) $
+                  S.toList $ termDependencyNames False True False $ bindingTerm el
             elEdges = L.concat $ fmap edgesFrom elements
               where
-                edgesFrom el = fmap (namePairToEdge edgeLabel_subterm (elementName el)) $
-                  S.toList $ freeVariablesInTerm $ elementTerm el
+                edgesFrom el = fmap (namePairToEdge edgeLabel_subterm (bindingName el)) $
+                  S.toList $ freeVariablesInTerm $ bindingTerm el
 
 typeGraphToDependencyGraphson :: Graph -> Flow Graph [Json.Value]
 typeGraphToDependencyGraphson g = do
@@ -187,8 +187,8 @@ typeGraphToDependencyPropertyGraph g = do
       (M.fromList $ fmap (\e -> (PG.edgeId e, e)) edges)
   where
     elements = M.elems $ graphElements g
-    terms = fmap elementTerm elements
-    names = fmap elementName elements
+    terms = fmap bindingTerm elements
+    names = fmap bindingName elements
     toEdges name deps = fmap (namePairToEdge edgeLabel_subtype name) deps
     toVertex name typ = PG.Vertex vertexLabel_Type (nameToVertexId name) $
       M.fromList [

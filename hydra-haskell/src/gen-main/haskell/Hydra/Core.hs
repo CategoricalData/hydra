@@ -330,9 +330,9 @@ _Let_environment = (Name "environment")
 -- | A field with an optional type scheme, used to bind variables to terms in a 'let' expression
 data Binding = 
   Binding {
-    letBindingName :: Name,
-    letBindingTerm :: Term,
-    letBindingType :: (Maybe TypeScheme)}
+    bindingName :: Name,
+    bindingTerm :: Term,
+    bindingType :: (Maybe TypeScheme)}
   deriving (Eq, Ord, Read, Show)
 
 _Binding = (Name "hydra.core.Binding")

@@ -21,12 +21,12 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-dereferenceElement :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Graph.Element))
+dereferenceElement :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Binding))
 dereferenceElement name = (Flows.map (\g -> lookupElement g name) Monads.getState)
 
-elementsToGraph :: (Graph.Graph -> Maybe Graph.Graph -> [Graph.Element] -> Graph.Graph)
+elementsToGraph :: (Graph.Graph -> Maybe Graph.Graph -> [Core.Binding] -> Graph.Graph)
 elementsToGraph parent schema elements =  
-  let toPair = (\el -> (Graph.elementName el, el))
+  let toPair = (\el -> (Core.bindingName el, el))
   in Graph.Graph {
     Graph.graphElements = (Maps.fromList (Lists.map toPair elements)),
     Graph.graphEnvironment = (Graph.graphEnvironment parent),
@@ -49,13 +49,13 @@ extendGraphWithBindings :: ([Core.Binding] -> Graph.Graph -> Graph.Graph)
 extendGraphWithBindings bindings g =  
   let newEls = (Maps.fromList (Lists.map toEl bindings)) 
       toEl = (\binding ->  
-              let name = (Core.letBindingName binding) 
-                  term = (Core.letBindingTerm binding)
-                  mts = (Core.letBindingType binding)
-              in (name, Graph.Element {
-                Graph.elementName = name,
-                Graph.elementTerm = term,
-                Graph.elementType = mts}))
+              let name = (Core.bindingName binding) 
+                  term = (Core.bindingTerm binding)
+                  mts = (Core.bindingType binding)
+              in (name, Core.Binding {
+                Core.bindingName = name,
+                Core.bindingTerm = term,
+                Core.bindingType = mts}))
   in Graph.Graph {
     Graph.graphElements = (Maps.union newEls (Graph.graphElements g)),
     Graph.graphEnvironment = (Graph.graphEnvironment g),
@@ -80,7 +80,7 @@ getField m fname decode = (Optionals.maybe (Flows.fail (Strings.cat [
     (Core.unName fname)],
   " not found"])) decode (Maps.lookup fname m))
 
-lookupElement :: (Graph.Graph -> Core.Name -> Maybe Graph.Element)
+lookupElement :: (Graph.Graph -> Core.Name -> Maybe Core.Binding)
 lookupElement g name = (Maps.lookup name (Graph.graphElements g))
 
 lookupPrimitive :: (Graph.Graph -> Core.Name -> Maybe Graph.Primitive)
@@ -101,7 +101,7 @@ matchUnion tname pairs term =
   let stripped = (Rewriting.deannotateAndDetypeTerm term) 
       mapping = (Maps.fromList pairs)
   in ((\x -> case x of
-    Core.TermVariable v1 -> (Flows.bind (requireElement v1) (\el -> matchUnion tname pairs (Graph.elementTerm el)))
+    Core.TermVariable v1 -> (Flows.bind (requireElement v1) (\el -> matchUnion tname pairs (Core.bindingTerm el)))
     Core.TermUnion v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v1)) (Core.unName tname)) ( 
       let fname = (Core.fieldName (Core.injectionField v1)) 
           val = (Core.fieldTerm (Core.injectionField v1))
@@ -123,7 +123,7 @@ matchUnion tname pairs term =
 matchUnitField :: (t0 -> t1 -> (t0, (t2 -> Compute.Flow t3 t1)))
 matchUnitField fname x = (fname, (\ignored -> Flows.pure x))
 
-requireElement :: (Core.Name -> Compute.Flow Graph.Graph Graph.Element)
+requireElement :: (Core.Name -> Compute.Flow Graph.Graph Core.Binding)
 requireElement name =  
   let showAll = False 
       ellipsis = (\strings -> Logic.ifElse (Logic.and (Equality.gt (Lists.length strings) 3) (Logic.not showAll)) (Lists.concat2 (Lists.take 3 strings) [
@@ -135,7 +135,7 @@ requireElement name =
                     "no such element: ",
                     (Core.unName name)],
                   ". Available elements: {"],
-                (Strings.intercalate ", " (ellipsis (Lists.map (\el -> Core.unName (Graph.elementName el)) (Maps.elems (Graph.graphElements g)))))],
+                (Strings.intercalate ", " (ellipsis (Lists.map (\el -> Core.unName (Core.bindingName el)) (Maps.elems (Graph.graphElements g)))))],
               "}"]))
   in (Flows.bind (dereferenceElement name) (\mel -> Optionals.maybe (Flows.bind Monads.getState err) Flows.pure mel))
 
@@ -153,10 +153,10 @@ requireTerm name = (Flows.bind (resolveTerm name) (\mt -> Optionals.maybe (Flows
 resolveTerm :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Term))
 resolveTerm name =  
   let recurse = (\el ->  
-          let stripped = (Rewriting.deannotateTerm (Graph.elementTerm el))
+          let stripped = (Rewriting.deannotateTerm (Core.bindingTerm el))
           in ((\x -> case x of
             Core.TermVariable v1 -> (resolveTerm v1)
-            _ -> (Flows.pure (Just (Graph.elementTerm el)))) stripped))
+            _ -> (Flows.pure (Just (Core.bindingTerm el)))) stripped))
   in (Flows.bind Monads.getState (\g -> Optionals.maybe (Flows.pure Nothing) recurse (Maps.lookup name (Graph.graphElements g))))
 
 -- | Note: assuming for now that primitive functions are the same in the schema graph

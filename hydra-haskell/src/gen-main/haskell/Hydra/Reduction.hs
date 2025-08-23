@@ -147,7 +147,7 @@ expansionArity graph term = ((\x -> case x of
     Core.FunctionPrimitive v2 -> (Arity.primitiveArity (Optionals.fromJust (Lexical.lookupPrimitive graph v2)))) v1)
   Core.TermTypeLambda v1 -> (expansionArity graph (Core.typeLambdaBody v1))
   Core.TermTypeApplication v1 -> (expansionArity graph (Core.typedTermTerm v1))
-  Core.TermVariable v1 -> (Optionals.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Optionals.bind (Lexical.lookupElement graph v1) (\el -> Graph.elementType el)))
+  Core.TermVariable v1 -> (Optionals.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Optionals.bind (Lexical.lookupElement graph v1) (\el -> Core.bindingType el)))
   _ -> 0) (Rewriting.deannotateTerm term))
 
 -- | A term evaluation function which is alternatively lazy or eager

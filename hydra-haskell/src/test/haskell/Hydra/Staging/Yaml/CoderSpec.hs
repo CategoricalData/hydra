@@ -1,3 +1,8 @@
+{-
+stack ghci hydra:lib hydra:hydra-test
+
+Test.Hspec.hspec Hydra.Staging.Yaml.CoderSpec.spec
+-}
 module Hydra.Staging.Yaml.CoderSpec where
 
 import Hydra.Kernel

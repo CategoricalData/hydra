@@ -10,27 +10,11 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | A graph element, having a name, data term (value), and schema term (type)
-data Element = 
-  Element {
-    elementName :: Core.Name,
-    elementTerm :: Core.Term,
-    elementType :: (Maybe Core.TypeScheme)}
-  deriving (Eq, Ord, Read, Show)
-
-_Element = (Core.Name "hydra.graph.Element")
-
-_Element_name = (Core.Name "name")
-
-_Element_term = (Core.Name "term")
-
-_Element_type = (Core.Name "type")
-
 -- | A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph
 data Graph = 
   Graph {
     -- | All of the elements in the graph
-    graphElements :: (M.Map Core.Name Element),
+    graphElements :: (M.Map Core.Name Core.Binding),
     -- | The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)
     graphEnvironment :: (M.Map Core.Name (Maybe Core.Term)),
     -- | The typing environment of the graph

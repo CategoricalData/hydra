@@ -61,7 +61,7 @@ termToAccessorGraph namespaces term =
                 Core.TermLet v1 ->  
                   let bindings = (Core.letBindings v1) 
                       env = (Core.letEnvironment v1)
-                      bindingNames = (Lists.map Core.letBindingName bindings)
+                      bindingNames = (Lists.map Core.bindingName bindings)
                       addBindingName = (\nodesVisitedIds -> \name ->  
                               let currentNodesVisited = (fst nodesVisitedIds) 
                                   currentIds = (snd nodesVisitedIds)
@@ -84,7 +84,7 @@ termToAccessorGraph namespaces term =
                       addBindingTerm = (\currentState -> \nodeBinding ->  
                               let root = (fst nodeBinding) 
                                   binding = (snd nodeBinding)
-                                  term1 = (Core.letBindingTerm binding)
+                                  term1 = (Core.bindingTerm binding)
                               in (helper ids1 (Just root) [] currentState (dontCareAccessor, term1)))
                       nodeBindingPairs = (Lists.zip nodes1 bindings)
                       stateAfterBindings = (Lists.foldl addBindingTerm ((Lists.concat2 nodes1 nodes, edges), visited1) nodeBindingPairs)

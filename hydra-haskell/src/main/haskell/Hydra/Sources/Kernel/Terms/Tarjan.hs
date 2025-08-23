@@ -61,10 +61,10 @@ module_ = Module (Namespace "hydra.tarjan") elements
      el popStackUntilDef,
      el strongConnectDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-adjacencyListsToGraphDef :: TElement ([(key, [key])] -> (Topo.Graph, Topo.Vertex -> key))
+adjacencyListsToGraphDef :: TBinding ([(key, [key])] -> (Topo.Graph, Topo.Vertex -> key))
 adjacencyListsToGraphDef = define "adjacencyListsToGraph" $
   doc ("Given a list of adjacency lists represented as (key, [key]) pairs,"
     <> " construct a graph along with a function mapping each vertex (an Int)"
@@ -97,12 +97,12 @@ adjacencyListsToGraphDef = define "adjacencyListsToGraph" $
     "vertexToKey">: lambda "v" $ Optionals.fromJust $ Maps.lookup (var "v") (var "vertexMap")]
     $ pair (var "graph") (var "vertexToKey")
 
-initialStateDef :: TElement Topo.TarjanState
+initialStateDef :: TBinding Topo.TarjanState
 initialStateDef = define "initialState" $
   doc "Initial state for Tarjan's algorithm" $
   Topology.tarjanState (int32 0) Maps.empty Maps.empty (list []) Sets.empty (list [])
 
-popStackUntilDef :: TElement (Topo.Vertex -> Flow Topo.TarjanState [Topo.Vertex])
+popStackUntilDef :: TBinding (Topo.Vertex -> Flow Topo.TarjanState [Topo.Vertex])
 popStackUntilDef = define "popStackUntil" $
   doc "Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component" $
   lambda "v" $ lets [
@@ -124,7 +124,7 @@ popStackUntilDef = define "popStackUntil" $
                     (var "go" @@ var "acc'"))]
     $ var "go" @@ list []
 
-strongConnectDef :: TElement (Topo.Graph -> Topo.Vertex -> Flow Topo.TarjanState ())
+strongConnectDef :: TBinding (Topo.Graph -> Topo.Vertex -> Flow Topo.TarjanState ())
 strongConnectDef = define "strongConnect" $
   doc "Visit a vertex and recursively explore its successors" $
   lambdas ["graph", "v"] $
@@ -178,7 +178,7 @@ strongConnectDef = define "strongConnect" $
                               lambda "_" $ Flows.pure unit)
                         (Flows.pure unit)
 
-stronglyConnectedComponentsDef :: TElement (Topo.Graph -> [[Topo.Vertex]])
+stronglyConnectedComponentsDef :: TBinding (Topo.Graph -> [[Topo.Vertex]])
 stronglyConnectedComponentsDef = define "stronglyConnectedComponents" $
   doc "Compute the strongly connected components of the given graph. The components are returned in reverse topological order" $
   lambda "graph" $ lets [

@@ -23,7 +23,7 @@ expectMono i tags term typ = infTest ("#" ++ show i) tags term $ T.mono typ
 
 expectPoly i tags term params typ = infTest ("#" ++ show i) tags term $ T.poly params typ
 
-groupRef = TTerms.varNamePhantom . elementName
+groupRef = TTerms.varNamePhantom . bindingName
 
 infFailureTest :: String -> [Tag] -> TTerm Term -> TTerm TestCaseWithMetadata
 infFailureTest name tags term = testCaseWithMetadata (Phantoms.string name)
@@ -90,8 +90,8 @@ encodeInferenceTestCase (InferenceTestCase input output) = Terms.record _Inferen
 
 ----------------------------------------
 
-encodedTestGroupToElement :: Namespace -> String -> TTerm TestGroup -> Element
-encodedTestGroupToElement ns lname group = Element name (unTTerm group)
+encodedTestGroupToBinding :: Namespace -> String -> TTerm TestGroup -> Binding
+encodedTestGroupToBinding ns lname group = Binding name (unTTerm group)
     $ Just $ TypeScheme [] typ
   where
     name = unqualifyName $ QualifiedName (Just ns) lname
@@ -138,5 +138,5 @@ testGroup name description subgroups cases = Phantoms.record _TestGroup [
   _TestGroup_subgroups>>: subgroups,
   _TestGroup_cases>>: cases]
 
-testGroupToElement :: Namespace -> String -> TestGroup -> Element
-testGroupToElement ns lname group = encodedTestGroupToElement ns lname (TTerm $ encodeGroup group)
+testGroupToBinding :: Namespace -> String -> TestGroup -> Binding
+testGroupToBinding ns lname group = encodedTestGroupToBinding ns lname (TTerm $ encodeGroup group)

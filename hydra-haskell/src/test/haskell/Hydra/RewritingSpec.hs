@@ -593,7 +593,7 @@ testTopologicalSortBindings = do
           [["c"], ["a", "b"], ["d"]]
   where
     checkBindings bindings expectedVars = H.shouldBe
-        (topologicalSortBindings bindingMap)
+        (topologicalSortBindingMap bindingMap)
         expected
       where
         bindingMap = M.mapKeys (\k -> Name k) $ M.fromList bindings

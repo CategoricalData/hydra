@@ -25,7 +25,7 @@ import qualified Data.Set as S
 bootstrapGraph :: Graph
 bootstrapGraph = emptyGraph {graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) (L.concat (libraryPrimitives <$> standardLibraries))}
 
-datatype :: Namespace -> String -> Type -> Element
+datatype :: Namespace -> String -> Type -> Binding
 datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders typ
   where
     elName = qualify gname (Name lname)

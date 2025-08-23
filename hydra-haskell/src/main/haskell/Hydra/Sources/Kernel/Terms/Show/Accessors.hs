@@ -55,10 +55,10 @@ module_ = Module (Namespace "hydra.show.accessors") elements
      el termAccessorDef,
      el termToAccessorGraphDef] -- TODO: move out of hydra.show.accessors
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-termAccessorDef :: TElement (TermAccessor -> Maybe String)
+termAccessorDef :: TBinding (TermAccessor -> Maybe String)
 termAccessorDef = define "termAccessor" $
   doc "Convert a term accessor to a string representation" $
   lambda "accessor" $ lets [
@@ -90,7 +90,7 @@ termAccessorDef = define "termAccessor" $
       _TermAccessor_injectionTerm>>: constant nothing,
       _TermAccessor_wrappedTerm>>: constant nothing] @@ var "accessor"
 
-termToAccessorGraphDef :: TElement (M.Map Namespace String -> Term -> AccessorGraph)
+termToAccessorGraphDef :: TBinding (M.Map Namespace String -> Term -> AccessorGraph)
 termToAccessorGraphDef = define "termToAccessorGraph" $
   doc "Build an accessor graph from a term" $
   lambda "namespaces" $ lambda "term" $ lets [
@@ -111,7 +111,7 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
         _Term_let>>: lambda "letExpr" $ lets [
           "bindings">: Core.letBindings $ var "letExpr",
           "env">: Core.letEnvironment $ var "letExpr",
-          "bindingNames">: Lists.map (unaryFunction Core.letBindingName) (var "bindings"),
+          "bindingNames">: Lists.map (unaryFunction Core.bindingName) (var "bindings"),
           -- First fold: build nodes and update ids for each binding name
           "addBindingName">: lambdas ["nodesVisitedIds", "name"] $ lets [
             "currentNodesVisited">: first $ var "nodesVisitedIds",
@@ -136,7 +136,7 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
           "addBindingTerm">: lambdas ["currentState", "nodeBinding"] $ lets [
             "root">: first $ var "nodeBinding",
             "binding">: second $ var "nodeBinding",
-            "term1">: Core.letBindingTerm $ var "binding"]
+            "term1">: Core.bindingTerm $ var "binding"]
             $ var "helper" @@ var "ids1" @@ just (var "root") @@ list [] @@ var "currentState" @@
               pair (var "dontCareAccessor") (var "term1"),
           "nodeBindingPairs">: Lists.zip (var "nodes1") (var "bindings"),
