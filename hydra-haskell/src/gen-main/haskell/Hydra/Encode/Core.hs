@@ -316,9 +316,9 @@ let_ l = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "environment"),
       Core.fieldTerm = (term (Core.letEnvironment l))}]}))
 
-letBinding :: (Core.LetBinding -> Core.Term)
+letBinding :: (Core.Binding -> Core.Term)
 letBinding b = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.core.LetBinding"),
+  Core.recordTypeName = (Core.Name "hydra.core.Binding"),
   Core.recordFields = [
     Core.Field {
       Core.fieldName = (Core.Name "name"),

@@ -85,12 +85,12 @@ termToDotStmts namespaces term = fst $ encode Nothing False M.empty Nothing ([],
           where
             (stmts1, visited2) = L.foldl addBinding (selfStmts, selfVisited) bindings
               where
-                addBinding (stmts, visited) (LetBinding name trm _) = encode (Just (lab, NodeStyleElement)) True ids1 (Just selfId) (stmts, visited) (TermAccessorLetBinding name, trm)
+                addBinding (stmts, visited) (Binding name trm _) = encode (Just (lab, NodeStyleElement)) True ids1 (Just selfId) (stmts, visited) (TermAccessorLetBinding name, trm)
                   where
                     lab = Dot.unId $ Y.fromJust $ M.lookup name ids1
             (ids1, visited1) = L.foldl addBinding (ids, visited) bindings
               where
-                addBinding (ids, visited) (LetBinding name trm _) = (M.insert name (Dot.Id lab) ids, S.insert lab visited)
+                addBinding (ids, visited) (Binding name trm _) = (M.insert name (Dot.Id lab) ids, S.insert lab visited)
                   where
                     (lab, style) = labelOf visited trm
         TermVariable name -> case M.lookup name ids of

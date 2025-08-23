@@ -45,7 +45,7 @@ emptyGraph = Graph.Graph {
   Graph.graphPrimitives = Maps.empty,
   Graph.graphSchema = Nothing}
 
-extendGraphWithBindings :: ([Core.LetBinding] -> Graph.Graph -> Graph.Graph)
+extendGraphWithBindings :: ([Core.Binding] -> Graph.Graph -> Graph.Graph)
 extendGraphWithBindings bindings g =  
   let newEls = (Maps.fromList (Lists.map toEl bindings)) 
       toEl = (\binding ->  

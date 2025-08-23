@@ -112,7 +112,7 @@ module_ = Module (Namespace "hydra.inference") elements
       el inferTypeOfUnwrapDef,
       el inferTypeOfVariableDef,
       el inferTypeOfWrappedTermDef,
-      el inferTypesOfTemporaryLetBindingsDef,
+      el inferTypesOfTemporaryBindingsDef,
       el initialTypeContextDef,
       el instantiateTypeSchemeDef,
       el isUnboundDef,
@@ -647,7 +647,7 @@ inferTypeOfLetNormalizedDef = define "inferTypeOfLetNormalized" $
   "cx1" <~ (ref extendContextDef
     @@ (Lists.zip (var "bnames") $ Lists.map ("t" ~> Core.typeScheme (list []) (var "t")) (var "tbins0"))
     @@ (var "cx0")) $
-  "inferredResult" <<~ ref inferTypesOfTemporaryLetBindingsDef @@ var "cx1" @@ var "bins0" $
+  "inferredResult" <<~ ref inferTypesOfTemporaryBindingsDef @@ var "cx1" @@ var "bins0" $
   "bterms1" <~ first (var "inferredResult") $
   "tbins1" <~ first (second $ var "inferredResult") $
   "s1" <~ second (second $ var "inferredResult") $
@@ -1005,8 +1005,8 @@ inferTypeOfWrappedTermDef = define "inferTypeOfWrappedTerm" $
       (ref Substitution.composeTypeSubstDef @@ var "isubst" @@ var "subst2")) @@
     list [Typing.typeConstraint (var "stypInst") (var "expected") (string "schema type of wrapper")]
 
-inferTypesOfTemporaryLetBindingsDef :: TElement (InferenceContext -> [LetBinding] -> Flow s ([Term], ([Type], TypeSubst)))
-inferTypesOfTemporaryLetBindingsDef = define "inferTypesOfTemporaryLetBindings" $
+inferTypesOfTemporaryBindingsDef :: TElement (InferenceContext -> [Binding] -> Flow s ([Term], ([Type], TypeSubst)))
+inferTypesOfTemporaryBindingsDef = define "inferTypesOfTemporaryBindings" $
   doc "Infer types for temporary let bindings" $
   "cx" ~> "bins" ~>
   Logic.ifElse (Lists.null $ var "bins")
@@ -1023,7 +1023,7 @@ inferTypesOfTemporaryLetBindingsDef = define "inferTypesOfTemporaryLetBindings" 
   "j" <~ Typing.inferenceResultTerm (var "result1") $
   "u_prime" <~ Typing.inferenceResultType (var "result1") $
   "u" <~ Typing.inferenceResultSubst (var "result1") $
-  "result2" <<~ ref inferTypesOfTemporaryLetBindingsDef @@
+  "result2" <<~ ref inferTypesOfTemporaryBindingsDef @@
     (ref Substitution.substInContextDef @@ var "u" @@ var "cx") @@
     var "tl" $
   "h" <~ first (var "result2") $

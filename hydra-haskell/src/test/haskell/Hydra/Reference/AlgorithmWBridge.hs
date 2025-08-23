@@ -43,7 +43,7 @@ hydraTermToStlc context term = case term of
         return $ Const $ PrimTyped $ TypedPrimitive name ts
     Core.TermLet (Core.Let bindings env) -> Letrec <$> CM.mapM bindingToStlc bindings <*> toStlc env
       where
-        bindingToStlc (Core.LetBinding (Core.Name v) term _) = do
+        bindingToStlc (Core.Binding (Core.Name v) term _) = do
           s <- toStlc term
           return (v, s)
     Core.TermList els -> do
@@ -126,7 +126,7 @@ toTerm expr = case expr of
     -- Note: other prims are unsupported; they can be added here as needed
   FLetrec bindings env -> Core.TermLet $ Core.Let (fmap bindingToHydra bindings) (toTerm env)
     where
-      bindingToHydra (v, ty, term) = Core.LetBinding (Core.Name v) (toTerm term) $ Just $ toTypeScheme ty
+      bindingToHydra (v, ty, term) = Core.Binding (Core.Name v) (toTerm term) $ Just $ toTypeScheme ty
   FTyAbs params body -> L.foldl (\t v -> Core.TermTypeLambda $ Core.TypeLambda (Core.Name v) t) (toTerm body) $ L.reverse params
   FTyApp fun args -> L.foldl (\t a -> Core.TermTypeApplication $ Core.TypedTerm t a) (toTerm fun) $ L.reverse hargs
     where
@@ -174,13 +174,13 @@ sFieldName = Core.Name "tempVar"
 
 -- Wrap a term inside a let-term; the Algorithm W implementation only produces "forall" types for let-bindings.
 wrapTerm :: Core.Term -> Core.Term
-wrapTerm term = Core.TermLet $ Core.Let ([Core.LetBinding sFieldName term Nothing]) $
+wrapTerm term = Core.TermLet $ Core.Let ([Core.Binding sFieldName term Nothing]) $
   Core.TermLiteral $ Core.LiteralString "tempEnvironment"
 
 unwrapTerm :: Core.Term -> IO (Core.Term, Core.TypeScheme)
 unwrapTerm term = case term of
   Core.TermLet (Core.Let bindings _) -> case bindings of
-    [(Core.LetBinding fname t mts)] -> if fname == sFieldName
+    [(Core.Binding fname t mts)] -> if fname == sFieldName
       then case mts of
          Nothing -> fail "no type scheme in inferred let binding"
          Just ts -> pure (t, ts)
