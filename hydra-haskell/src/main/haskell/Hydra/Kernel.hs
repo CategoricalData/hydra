@@ -15,6 +15,7 @@ module Hydra.Kernel (
   module Hydra.Accessors,
   module Hydra.Adapt.Literals,
   module Hydra.Adapt.Modules,
+  module Hydra.Adapt.Simple,
   module Hydra.Adapt.Terms,
   module Hydra.Adapt.Utils,
   module Hydra.Annotations,
@@ -55,6 +56,7 @@ module Hydra.Kernel (
 import Hydra.Accessors
 import Hydra.Adapt.Literals
 import Hydra.Adapt.Modules
+import Hydra.Adapt.Simple
 import Hydra.Adapt.Terms hiding (optionalToList)
 import Hydra.Adapt.Utils
 import Hydra.Annotations

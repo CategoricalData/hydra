@@ -60,8 +60,8 @@ module_ = Module (Namespace "hydra.adapt.modules") elements
     Just "Entry point for Hydra's adapter (type/term rewriting) framework"
   where
    elements = [
-     el adaptAndEncodeTypeDef,
-     el adaptTypeDef,
+     el adaptTypeToLanguageAndEncodeDef,
+     el adaptTypeToLanguageDef,
      el adaptedModuleDefinitionsDef,
      el constructCoderDef,
      el languageAdapterDef,
@@ -70,17 +70,17 @@ module_ = Module (Namespace "hydra.adapt.modules") elements
 define :: String -> TTerm a -> TElement a
 define = definitionInModule module_
 
-adaptAndEncodeTypeDef :: TElement (Language -> (Type -> Flow Graph t) -> Type -> Flow Graph t)
-adaptAndEncodeTypeDef = define "adaptAndEncodeType" $
+adaptTypeToLanguageAndEncodeDef :: TElement (Language -> (Type -> Flow Graph t) -> Type -> Flow Graph t)
+adaptTypeToLanguageAndEncodeDef = define "adaptTypeToLanguageAndEncode" $
   doc "Given a target language, an encoding function, and a type, adapt and encode the type" $
   lambdas ["lang", "enc", "typ"] $
     cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ")
-      (Just $ bind "adaptedType" (ref adaptTypeDef @@ var "lang" @@ var "typ") $
+      (Just $ bind "adaptedType" (ref adaptTypeToLanguageDef @@ var "lang" @@ var "typ") $
         var "enc" @@ var "adaptedType") [
       _Type_variable>>: constant (var "enc" @@ var "typ")]
 
-adaptTypeDef :: TElement (Language -> Type -> Flow Graph Type)
-adaptTypeDef = define "adaptType" $
+adaptTypeToLanguageDef :: TElement (Language -> Type -> Flow Graph Type)
+adaptTypeToLanguageDef = define "adaptTypeToLanguage" $
   doc "Given a target language and a source type, find the target type to which the latter will be adapted" $
   lambdas ["lang", "typ"] $
     bind "adapter" (ref languageAdapterDef @@ var "lang" @@ var "typ") $
@@ -144,7 +144,7 @@ adaptedModuleDefinitionsDef = define "adaptedModuleDefinitions" $
       "typ">: Core.typedTermType $ var "tt",
       "name">: Graph.elementName $ var "el"] $
       Logic.ifElse (ref Annotations.isNativeTypeDef @@ var "el")
-        (bind "adaptedTyp" (bind "coreTyp" (ref DecodeCore.typeDef @@ var "term") $ ref adaptTypeDef @@ var "lang" @@ var "coreTyp") $
+        (bind "adaptedTyp" (bind "coreTyp" (ref DecodeCore.typeDef @@ var "term") $ ref adaptTypeToLanguageDef @@ var "lang" @@ var "coreTyp") $
          Flows.pure $ Module.definitionType $ Module.typeDefinition (var "name") (var "adaptedTyp"))
         (Optionals.maybe
           (Flows.fail $ Strings.cat2 (string "no adapter for element ") (unwrap _Name @@ var "name"))

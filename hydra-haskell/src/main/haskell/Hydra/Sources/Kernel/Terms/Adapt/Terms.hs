@@ -45,6 +45,7 @@ import qualified Hydra.Sources.Kernel.Terms.Adapt.Literals as AdaptLiterals
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils as AdaptUtils
 import qualified Hydra.Sources.Kernel.Terms.Describe.Core as DescribeCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
+import qualified Hydra.Sources.Kernel.Terms.Literals as Lits
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
@@ -55,41 +56,41 @@ import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 module_ :: Module
 module_ = Module (Namespace "hydra.adapt.terms") elements
-    [ExtractCore.module_, AdaptLiterals.module_,
+    [ExtractCore.module_, AdaptLiterals.module_, Lits.module_, Rewriting.module_,
       Schemas.module_, ShowCore.module_]
     kernelTypesModules $
     Just "Adapter framework for types and terms"
   where
-   elements = [
-     el fieldAdapterDef,
-     el forTypeReferenceDef,
-     el functionProxyNameDef,
-     el functionProxyTypeDef,
-     el functionToUnionDef,
-     el lambdaToMonotypeDef,
-     el optionalToListDef,
-     el passApplicationDef,
-     el passFunctionDef,
-     el passForallDef,
-     el passLiteralDef,
-     el passListDef,
-     el passMapDef,
-     el passOptionalDef,
-     el passProductDef,
-     el passRecordDef,
-     el passSetDef,
-     el passSumDef,
-     el passUnionDef,
-     el passUnitDef,
-     el passWrappedDef,
-     el setToListDef,
-     el simplifyApplicationDef,
-     el termAdapterDef,
-     el unionToRecordDef,
-     el unionTypeToRecordTypeDef,
-     el unitToRecordDef,
-     el wrapToUnwrappedDef,
-     el withGraphContextDef]
+    elements = [
+      el fieldAdapterDef,
+      el forTypeReferenceDef,
+      el functionProxyNameDef,
+      el functionProxyTypeDef,
+      el functionToUnionDef,
+      el lambdaToMonotypeDef,
+      el optionalToListDef,
+      el passApplicationDef,
+      el passFunctionDef,
+      el passForallDef,
+      el passLiteralDef,
+      el passListDef,
+      el passMapDef,
+      el passOptionalDef,
+      el passProductDef,
+      el passRecordDef,
+      el passSetDef,
+      el passSumDef,
+      el passUnionDef,
+      el passUnitDef,
+      el passWrappedDef,
+      el setToListDef,
+      el simplifyApplicationDef,
+      el termAdapterDef,
+      el unionToRecordDef,
+      el unionTypeToRecordTypeDef,
+      el unitToRecordDef,
+      el wrapToUnwrappedDef,
+      el withGraphContextDef]
 
 define :: String -> TTerm a -> TElement a
 define = definitionInModule module_
@@ -528,10 +529,14 @@ passUnionDef = define "passUnion" $
           (var "t")
           (Core.typeUnion $ Core.rowType (var "tname") (var "sfields'"))
           (ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
-            bind "dfield" (ref withGraphContextDef @@ (ref ExtractCore.injectionDef @@ var "tname" @@ var "term")) $
-            bind "ad" (var "getAdapter" @@ var "adaptersMap" @@ var "dfield") $
-            bind "newField" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "dfield") $
-            Flows.pure $ Core.termUnion $ Core.injection (var "tname") (var "newField")))]
+            -- Note: this is a shortcut, since we anticipate deprecating the current term adapter logic
+            produce $ var "term"))]
+          -- TODO: consider restoring the following
+--          (ref AdaptUtils.bidirectionalDef @@ (lambdas ["dir", "term"] $
+--            "dfield" <<~ ref withGraphContextDef @@ (ref ExtractCore.injectionDef @@ var "tname" @@ var "term") $
+--            "ad" <<~ var "getAdapter" @@ var "adaptersMap" @@ var "dfield" $
+--            "newField" <<~ ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder $ var "ad") @@ var "dfield" $
+--            produce $ Core.termUnion $ Core.injection (var "tname") (var "newField")))]
 
 passUnitDef :: TElement TypeAdapter
 passUnitDef = define "passUnit" $

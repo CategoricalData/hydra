@@ -3,6 +3,7 @@
 module Hydra.Variants where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Mantle as Mantle
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -130,6 +131,17 @@ literalTypeVariant x = case x of
   Core.LiteralTypeFloat _ -> Mantle.LiteralVariantFloat
   Core.LiteralTypeInteger _ -> Mantle.LiteralVariantInteger
   Core.LiteralTypeString -> Mantle.LiteralVariantString
+
+-- | All literal types, in a canonical order
+literalTypes :: [Core.LiteralType]
+literalTypes = (Lists.concat [
+  [
+    Core.LiteralTypeBinary,
+    Core.LiteralTypeBoolean],
+  Lists.map (\x -> Core.LiteralTypeFloat x) floatTypes,
+  Lists.map (\x -> Core.LiteralTypeInteger x) integerTypes,
+  [
+    Core.LiteralTypeString]])
 
 -- | Find the literal variant (constructor) for a given literal value
 literalVariant :: (Core.Literal -> Mantle.LiteralVariant)

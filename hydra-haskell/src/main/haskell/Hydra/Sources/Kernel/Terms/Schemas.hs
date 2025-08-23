@@ -71,6 +71,8 @@ module_ = Module (Namespace "hydra.schemas") elements
       el findFieldTypeDef,
       el fieldTypesDef,
       el fullyStripTypeDef,
+      el graphAsTermDef,
+      el graphAsTypesDef,
       el isEnumRowTypeDef,
       el isEnumTypeDef,
       el isSerializableDef,
@@ -82,8 +84,10 @@ module_ = Module (Namespace "hydra.schemas") elements
       el requireUnionTypeDef,
       el resolveTypeDef,
       el schemaGraphToTypingEnvironmentDef,
+      el termAsGraphDef,
       el topologicalSortTypeDefinitionsDef,
-      el typeDependenciesDef]
+      el typeDependenciesDef,
+      el typesToElementsDef]
 
 define :: String -> TTerm a -> TElement a
 define = definitionInModule module_
@@ -127,12 +131,11 @@ dependencyNamespacesDef = define "dependencyNamespaces" $
 dereferenceTypeDef :: TElement (Name -> Flow Graph (Maybe Type))
 dereferenceTypeDef = define "dereferenceType" $
   doc "Dereference a type name to get the actual type" $
-  lambda "name" $
-    Flows.bind (ref Lexical.dereferenceElementDef @@ var "name") $
-      lambda "mel" $
-        Optionals.maybe (Flows.pure nothing)
-          (lambda "el" $ Flows.map (unaryFunction just) $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el"))
-          (var "mel")
+  "name" ~>
+  "mel" <<~ ref Lexical.dereferenceElementDef @@ var "name" $
+  optCases (var "mel")
+    (Flows.pure nothing)
+    ("el" ~> Flows.map (unaryFunction just) $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el"))
 
 elementAsTypedTermDef :: TElement (Element -> Flow Graph TypedTerm)
 elementAsTypedTermDef = define "elementAsTypedTerm" $
@@ -201,6 +204,30 @@ fullyStripTypeDef = define "fullyStripType" $
     match _Type (Just $ var "typ") [
       _Type_forall>>: lambda "ft" $ ref fullyStripTypeDef @@ Core.forallTypeBody (var "ft")]
     @@ (ref Rewriting.deannotateTypeDef @@ var "typ")
+
+graphAsTermDef :: TElement (Graph -> Term)
+graphAsTermDef = define "graphAsTerm" $
+  doc "Convert a graph to a term, taking advantage of the built-in duality between graphs and terms" $
+  "g" ~>
+  "toBinding" <~ ("el" ~>
+    "name" <~ Graph.elementName (var "el") $
+    "term" <~ Graph.elementTerm (var "el") $
+    "mts" <~ Graph.elementType (var "el") $
+    Core.letBinding (var "name") (var "term") (var "mts")) $
+  Core.termLet $ Core.let_
+    (Lists.map (var "toBinding") (Maps.elems $ Graph.graphElements (var "g")))
+    (Graph.graphBody (var "g"))
+
+graphAsTypesDef :: TElement (Graph -> Flow s (M.Map Name Type))
+graphAsTypesDef = define "graphAsTypes" $
+  doc "Decode a schema graph which encodes a set of named types" $
+  "sg" ~>
+  "els" <~ Maps.elems (Graph.graphElements (var "sg")) $
+  "toPair" <~ ("el" ~>
+    "typ" <<~ ref DecodeCore.typeDef @@ (Graph.elementTerm $ var "el") $
+    produce $ pair (Graph.elementName $ var "el") (var "typ")) $
+  "pairs" <<~ Flows.mapList (var "toPair") (var "els") $
+  produce $ Maps.fromList $ var "pairs"
 
 isEnumRowTypeDef :: TElement (RowType -> Bool)
 isEnumRowTypeDef = define "isEnumRowType" $
@@ -344,6 +371,21 @@ schemaGraphToTypingEnvironmentDef = define "schemaGraphToTypingEnvironment" $
       (Flows.bind (Flows.mapList (var "toPair") $ Maps.elems $ Graph.graphElements $ var "g") $
         lambda "mpairs" $ Flows.pure $ Maps.fromList $ Optionals.cat $ var "mpairs")
 
+-- Note: this is lossy, as it throws away the term body
+termAsGraphDef :: TElement (Term -> (M.Map Name Term, Term))
+termAsGraphDef = define "termAsGraph" $
+  doc "Find the equivalent graph representation of a term" $
+  "term" ~> cases _Term (ref Rewriting.deannotateTermDef @@ var "term")
+    (Just Maps.empty) [
+    _Term_let>>: "lt" ~>
+      "bindings" <~ Core.letBindings (var "lt") $
+      "fromBinding" <~ ("b" ~>
+        "name" <~ Core.letBindingName (var "b") $
+        "term" <~ Core.letBindingTerm (var "b") $
+        "ts" <~ Core.letBindingType (var "b") $
+        pair (var "name") (Graph.element (var "name") (var "term") (var "ts"))) $
+      Maps.fromList $ Lists.map (var "fromBinding") (var "bindings")]
+
 topologicalSortTypeDefinitionsDef :: TElement ([TypeDefinition] -> [[TypeDefinition]])
 topologicalSortTypeDefinitionsDef = define "topologicalSortTypeDefinitions" $
   doc "Topologically sort type definitions by dependencies" $
@@ -382,3 +424,17 @@ typeDependenciesDef = define "typeDependencies" $
           "newSeeds">: Sets.difference (var "refs") (var "visited")]
           $ var "deps" @@ var "newSeeds" @@ var "newNames")] $
     var "deps" @@ Sets.singleton (var "name") @@ Maps.empty
+
+typesToElementsDef :: TElement (M.Map Name Type -> M.Map Name Element)
+typesToElementsDef = define "typesToElements" $
+  doc "Encode a map of named types to a map of elements" $
+  "typeMap" ~>
+  "toElement" <~ ("pair" ~>
+    "name" <~ first (var "pair") $
+    pair
+      (var "name")
+      (Graph.element
+        (var "name")
+        (ref EncodeCore.typeDef @@ (second $ var "pair"))
+        nothing)) $
+  Maps.fromList $ Lists.map (var "toElement") $ Maps.toList $ var "typeMap"

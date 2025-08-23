@@ -72,7 +72,7 @@ constructModule mod@(Module ns els _ _ desc) _ pairs = do
         else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (elementName el)
     toDef (el, typ) = do
       typ <- DecodeCore.type_ $ elementTerm el
-      adaptAndEncodeType protobufLanguage (encodeDefinition ns (elementName el)) $ flattenType typ
+      adaptTypeToLanguageAndEncode protobufLanguage (encodeDefinition ns (elementName el)) $ flattenType typ
     checkFields checkType checkFieldType types = L.foldl (||) False (hasMatches <$> types)
       where
         hasMatches = foldOverType TraversalOrderPre (\b t -> b || hasMatch t) False
