@@ -6,7 +6,6 @@ import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
-import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -116,9 +115,9 @@ expandTypedLambdas term =
                 _ -> (padTerm 1 doms cod term)) v1)
               Core.TermLet v1 ->  
                 let expandBinding = (\b -> Core.Binding {
-                        Core.letBindingName = (Core.letBindingName b),
-                        Core.letBindingTerm = (expandTypedLambdas (Core.letBindingTerm b)),
-                        Core.letBindingType = (Core.letBindingType b)})
+                        Core.bindingName = (Core.bindingName b),
+                        Core.bindingTerm = (expandTypedLambdas (Core.bindingTerm b)),
+                        Core.bindingType = (Core.bindingType b)})
                 in (Core.TermLet (Core.Let {
                   Core.letBindings = (Lists.map expandBinding (Core.letBindings v1)),
                   Core.letEnvironment = (expand doms cod (Core.letEnvironment v1))}))
@@ -130,47 +129,47 @@ expandTypedLambdas term =
 flattenLetTerms :: (Core.Term -> Core.Term)
 flattenLetTerms term =  
   let rewriteBinding = (\binding ->  
-          let key0 = (Core.letBindingName binding) 
-              val0 = (Core.letBindingTerm binding)
-              t = (Core.letBindingType binding)
+          let key0 = (Core.bindingName binding) 
+              val0 = (Core.bindingTerm binding)
+              t = (Core.bindingType binding)
           in ((\x -> case x of
             Core.TermAnnotated v1 ->  
               let val1 = (Core.annotatedTermSubject v1) 
                   ann = (Core.annotatedTermAnnotation v1)
                   recursive = (rewriteBinding (Core.Binding {
-                          Core.letBindingName = key0,
-                          Core.letBindingTerm = val1,
-                          Core.letBindingType = t}))
+                          Core.bindingName = key0,
+                          Core.bindingTerm = val1,
+                          Core.bindingType = t}))
                   innerBinding = (fst recursive)
                   deps = (snd recursive)
-                  val2 = (Core.letBindingTerm innerBinding)
+                  val2 = (Core.bindingTerm innerBinding)
               in (Core.Binding {
-                Core.letBindingName = key0,
-                Core.letBindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+                Core.bindingName = key0,
+                Core.bindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermSubject = val2,
                   Core.annotatedTermAnnotation = ann})),
-                Core.letBindingType = t}, deps)
+                Core.bindingType = t}, deps)
             Core.TermLet v1 ->  
               let bindings1 = (Core.letBindings v1) 
                   body1 = (Core.letEnvironment v1)
                   prefix = (Strings.cat2 (Core.unName key0) "_")
                   qualify = (\n -> Core.Name (Strings.cat2 prefix (Core.unName n)))
-                  toSubstPair = (\b -> (Core.letBindingName b, (qualify (Core.letBindingName b))))
+                  toSubstPair = (\b -> (Core.bindingName b, (qualify (Core.bindingName b))))
                   subst = (Maps.fromList (Lists.map toSubstPair bindings1))
                   replaceVars = (substituteVariables subst)
                   newBody = (replaceVars body1)
                   newBinding = (\b -> Core.Binding {
-                          Core.letBindingName = (qualify (Core.letBindingName b)),
-                          Core.letBindingTerm = (replaceVars (Core.letBindingTerm b)),
-                          Core.letBindingType = (Core.letBindingType b)})
+                          Core.bindingName = (qualify (Core.bindingName b)),
+                          Core.bindingTerm = (replaceVars (Core.bindingTerm b)),
+                          Core.bindingType = (Core.bindingType b)})
               in (Core.Binding {
-                Core.letBindingName = key0,
-                Core.letBindingTerm = newBody,
-                Core.letBindingType = t}, (Lists.map newBinding bindings1))
+                Core.bindingName = key0,
+                Core.bindingTerm = newBody,
+                Core.bindingType = t}, (Lists.map newBinding bindings1))
             _ -> (Core.Binding {
-              Core.letBindingName = key0,
-              Core.letBindingTerm = val0,
-              Core.letBindingType = t}, [])) val0)) 
+              Core.bindingName = key0,
+              Core.bindingTerm = val0,
+              Core.bindingType = t}, [])) val0)) 
       flatten = (\recurse -> \term ->  
               let rewritten = (recurse term)
               in ((\x -> case x of
@@ -315,13 +314,13 @@ normalizeTypeVariablesInTerm term =
                                             normalVariables = (Lists.map (\i -> Core.Name (Strings.cat2 "t" (Literals.showInt32 i))) (Math.range 0 (Math.add varsLen boundVarsLen)))
                                             newVars = (Lists.take (Lists.length vars) (Lists.filter (\n -> Logic.not (Sets.member n boundVars)) normalVariables))
                                             newSubst = (Maps.union (Maps.fromList (Lists.zip vars newVars)) subst)
-                                            newValue = (rewriteWithSubst (newSubst, (Sets.union boundVars (Sets.fromList newVars))) (Core.letBindingTerm b))
+                                            newValue = (rewriteWithSubst (newSubst, (Sets.union boundVars (Sets.fromList newVars))) (Core.bindingTerm b))
                                         in Core.Binding {
-                                          Core.letBindingName = (Core.letBindingName b),
-                                          Core.letBindingTerm = newValue,
-                                          Core.letBindingType = (Just (Core.TypeScheme {
+                                          Core.bindingName = (Core.bindingName b),
+                                          Core.bindingTerm = newValue,
+                                          Core.bindingType = (Just (Core.TypeScheme {
                                             Core.typeSchemeVariables = newVars,
-                                            Core.typeSchemeType = (substType newSubst typ)}))}) (Core.letBindingType b))
+                                            Core.typeSchemeType = (substType newSubst typ)}))}) (Core.bindingType b))
                             in (Core.TermLet (Core.Let {
                               Core.letBindings = (Lists.map rewriteBinding bindings),
                               Core.letEnvironment = (rewriteWithSubst (subst, boundVars) env)}))
@@ -361,9 +360,9 @@ removeTypesFromTerm term =
   let strip = (\recurse -> \term ->  
           let rewritten = (recurse term) 
               stripBinding = (\b -> Core.Binding {
-                      Core.letBindingName = (Core.letBindingName b),
-                      Core.letBindingTerm = (Core.letBindingTerm b),
-                      Core.letBindingType = Nothing})
+                      Core.bindingName = (Core.bindingName b),
+                      Core.bindingTerm = (Core.bindingTerm b),
+                      Core.bindingType = Nothing})
           in ((\x -> case x of
             Core.TermFunction v1 -> ((\x -> case x of
               Core.FunctionElimination v2 -> ((\x -> case x of
@@ -437,9 +436,9 @@ rewriteTerm f =
                       Core.FunctionPrimitive v1 -> (Core.FunctionPrimitive v1)) fun)
               forLet = (\lt ->  
                       let mapBinding = (\b -> Core.Binding {
-                              Core.letBindingName = (Core.letBindingName b),
-                              Core.letBindingTerm = (recurse (Core.letBindingTerm b)),
-                              Core.letBindingType = (Core.letBindingType b)})
+                              Core.bindingName = (Core.bindingName b),
+                              Core.bindingTerm = (recurse (Core.bindingTerm b)),
+                              Core.bindingType = (Core.bindingType b)})
                       in Core.Let {
                         Core.letBindings = (Lists.map mapBinding (Core.letBindings lt)),
                         Core.letEnvironment = (recurse (Core.letEnvironment lt))})
@@ -495,13 +494,13 @@ rewriteTermM f =
                           v = (snd kv)
                       in (Flows.bind (recurse k) (\km -> Flows.bind (recurse v) (\vm -> Flows.pure (km, vm)))))
               mapBinding = (\binding ->  
-                      let k = (Core.letBindingName binding) 
-                          v = (Core.letBindingTerm binding)
-                          t = (Core.letBindingType binding)
+                      let k = (Core.bindingName binding) 
+                          v = (Core.bindingTerm binding)
+                          t = (Core.bindingType binding)
                       in (Flows.bind (recurse v) (\v_ -> Flows.pure (Core.Binding {
-                        Core.letBindingName = k,
-                        Core.letBindingTerm = v_,
-                        Core.letBindingType = t}))))
+                        Core.bindingName = k,
+                        Core.bindingTerm = v_,
+                        Core.bindingType = t}))))
           in ((\x -> case x of
             Core.TermAnnotated v1 -> (Flows.bind (recurse (Core.annotatedTermSubject v1)) (\ex -> Flows.pure (Core.TermAnnotated (Core.AnnotatedTerm {
               Core.annotatedTermSubject = ex,
@@ -734,7 +733,7 @@ subterms x = case x of
     Core.FunctionLambda v2 -> [
       Core.lambdaBody v2]
     _ -> []) v1)
-  Core.TermLet v1 -> (Lists.cons (Core.letEnvironment v1) (Lists.map Core.letBindingTerm (Core.letBindings v1)))
+  Core.TermLet v1 -> (Lists.cons (Core.letEnvironment v1) (Lists.map Core.bindingTerm (Core.letBindings v1)))
   Core.TermList v1 -> v1
   Core.TermLiteral _ -> []
   Core.TermMap v1 -> (Lists.concat (Lists.map (\p -> [
@@ -774,7 +773,7 @@ subtermsWithAccessors x = case x of
     Core.FunctionLambda v2 -> [
       (Accessors.TermAccessorLambdaBody, (Core.lambdaBody v2))]
     _ -> []) v1)
-  Core.TermLet v1 -> (Lists.cons (Accessors.TermAccessorLetEnvironment, (Core.letEnvironment v1)) (Lists.map (\b -> (Accessors.TermAccessorLetBinding (Core.letBindingName b), (Core.letBindingTerm b))) (Core.letBindings v1)))
+  Core.TermLet v1 -> (Lists.cons (Accessors.TermAccessorLetEnvironment, (Core.letEnvironment v1)) (Lists.map (\b -> (Accessors.TermAccessorLetBinding (Core.bindingName b), (Core.bindingTerm b))) (Core.letBindings v1)))
   Core.TermList v1 -> (Lists.map (\e -> (Accessors.TermAccessorListElement 0, e)) v1)
   Core.TermLiteral _ -> []
   Core.TermMap v1 -> (Lists.concat (Lists.map (\p -> [
@@ -871,8 +870,8 @@ toShortNames original =
   in (Maps.fromList (Lists.concat (Lists.map renameGroup (Maps.toList groups))))
 
 -- | Topological sort of connected components, in terms of dependencies between variable/term binding pairs
-topologicalSortBindings :: (M.Map Core.Name Core.Term -> [[(Core.Name, Core.Term)]])
-topologicalSortBindings bindingMap =  
+topologicalSortBindingMap :: (M.Map Core.Name Core.Term -> [[(Core.Name, Core.Term)]])
+topologicalSortBindingMap bindingMap =  
   let bindings = (Maps.toList bindingMap) 
       keys = (Sets.fromList (Lists.map fst bindings))
       hasTypeAnnotation = (\term -> (\x -> case x of
@@ -886,9 +885,9 @@ topologicalSortBindings bindingMap =
   in (Lists.map (Lists.map toPair) (Sorting.topologicalSortComponents (Lists.map depsOf bindings)))
 
 -- | Topological sort of elements based on their dependencies
-topologicalSortElements :: ([Graph.Element] -> Mantle.Either [[Core.Name]] [Core.Name])
-topologicalSortElements els =  
-  let adjlist = (\e -> (Graph.elementName e, (Sets.toList (termDependencyNames False True True (Graph.elementTerm e)))))
+topologicalSortBindings :: ([Core.Binding] -> Mantle.Either [[Core.Name]] [Core.Name])
+topologicalSortBindings els =  
+  let adjlist = (\e -> (Core.bindingName e, (Sets.toList (termDependencyNames False True True (Core.bindingTerm e)))))
   in (Sorting.topologicalSort (Lists.map adjlist els))
 
 typeDependencyNames :: (Bool -> Core.Type -> S.Set Core.Name)

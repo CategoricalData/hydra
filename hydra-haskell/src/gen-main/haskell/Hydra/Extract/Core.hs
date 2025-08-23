@@ -194,10 +194,10 @@ letBinding :: (String -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 letBinding n term =  
   let name = (Core.Name n)
   in (Flows.bind (letTerm term) (\letExpr ->  
-    let matchingBindings = (Lists.filter (\b -> Equality.equal (Core.unName (Core.letBindingName b)) (Core.unName name)) (Core.letBindings letExpr))
+    let matchingBindings = (Lists.filter (\b -> Equality.equal (Core.unName (Core.bindingName b)) (Core.unName name)) (Core.letBindings letExpr))
     in (Logic.ifElse (Lists.null matchingBindings) (Flows.fail (Strings.cat [
       "no such binding: ",
-      n])) (Logic.ifElse (Equality.equal (Lists.length matchingBindings) 1) (Flows.pure (Core.letBindingTerm (Lists.head matchingBindings))) (Flows.fail (Strings.cat [
+      n])) (Logic.ifElse (Equality.equal (Lists.length matchingBindings) 1) (Flows.pure (Core.bindingTerm (Lists.head matchingBindings))) (Flows.fail (Strings.cat [
       "multiple bindings named ",
       n]))))))
 

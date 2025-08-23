@@ -32,7 +32,7 @@ moduleToGraphqlSchemas mod = transformModule graphqlLanguage encodeTerm construc
 
 constructModule :: Module
   -> M.Map Type (Coder Graph Graph Term ())
-  -> [(Element, TypedTerm)]
+  -> [(Binding, TypedTerm)]
   -> Flow Graph (M.Map FilePath G.Document)
 constructModule mod coders pairs = do
     -- Gather all dependencies because GraphQL does not support imports (in a standard way)
@@ -47,15 +47,15 @@ constructModule mod coders pairs = do
     filePath = namespaceToFilePath CaseConventionCamel (FileExtension "graphql") (moduleNamespace mod)
     findPrefixes els = M.fromList $ toPair <$> namespaces
       where
-        namespaces = L.nub $ (Y.fromJust . namespaceOf . elementName) <$> els
+        namespaces = L.nub $ (Y.fromJust . namespaceOf . bindingName) <$> els
         toPair ns = (ns, if ns == moduleNamespace mod then "" else (sanitizeWithUnderscores S.empty (unNamespace ns)) ++ "_")
     toTypeDef prefixes el = do
       typ <- requireTermType term
       if isNativeType el
-        then DecodeCore.type_ (elementTerm el) >>= encodeNamedType prefixes el
-        else fail $ "mapping of non-type elements to GraphQL is not yet supported: " ++ unName (elementName el)
+        then DecodeCore.type_ (bindingTerm el) >>= encodeNamedType prefixes el
+        else fail $ "mapping of non-type elements to GraphQL is not yet supported: " ++ unName (bindingName el)
      where
-       term = elementTerm el
+       term = bindingTerm el
 
 descriptionFromType :: Type -> Flow Graph (Maybe G.Description)
 descriptionFromType typ = do
@@ -99,7 +99,7 @@ encodeLiteralType lt = G.NamedType . G.Name <$> case lt of
   LiteralTypeString -> pure "String"
   _ -> unexpected "GraphQL-compatible literal type" $ show lt
 
-encodeNamedType :: Prefixes -> Element -> Type -> Flow Graph G.TypeDefinition
+encodeNamedType :: Prefixes -> Binding -> Type -> Flow Graph G.TypeDefinition
 encodeNamedType prefixes el typ = do
     g <- getState
     let cx = AdapterContext g graphqlLanguage M.empty
@@ -110,7 +110,7 @@ encodeNamedType prefixes el typ = do
         desc <- descriptionFromType typ
         return $ G.TypeDefinitionObject $ G.ObjectTypeDefinition {
           G.objectTypeDefinitionDescription = desc,
-          G.objectTypeDefinitionName = encodeTypeName prefixes $ elementName el,
+          G.objectTypeDefinitionName = encodeTypeName prefixes $ bindingName el,
           G.objectTypeDefinitionImplementsInterfaces = Nothing,
           G.objectTypeDefinitionDirectives = Nothing,
           G.objectTypeDefinitionFieldsDefinition = Just $ G.FieldsDefinition gfields}
@@ -119,7 +119,7 @@ encodeNamedType prefixes el typ = do
         desc <- descriptionFromType typ
         return $ G.TypeDefinitionEnum $ G.EnumTypeDefinition {
           G.enumTypeDefinitionDescription = desc,
-          G.enumTypeDefinitionName = encodeTypeName prefixes $ elementName el,
+          G.enumTypeDefinitionName = encodeTypeName prefixes $ bindingName el,
           G.enumTypeDefinitionDirectives = Nothing,
           G.enumTypeDefinitionEnumValuesDefinition = Just $ G.EnumValuesDefinition values}
       TypeList _ -> wrapAsRecord
@@ -127,7 +127,7 @@ encodeNamedType prefixes el typ = do
       TypeVariable _ -> wrapAsRecord
       t -> unexpected "record or union type" $ show t
   where
-    wrapAsRecord = encodeNamedType prefixes el $ TypeRecord $ RowType (elementName el) [
+    wrapAsRecord = encodeNamedType prefixes el $ TypeRecord $ RowType (bindingName el) [
       FieldType (Name "value") typ]
 
 encodeTerm :: Term -> Flow Graph ()

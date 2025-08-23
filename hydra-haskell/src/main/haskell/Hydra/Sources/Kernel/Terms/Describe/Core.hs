@@ -57,21 +57,21 @@ module_ = Module (Namespace "hydra.describe.core") elements
      el literalTypeDef,
      el typeDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-floatTypeDef :: TElement (FloatType -> String)
+floatTypeDef :: TBinding (FloatType -> String)
 floatTypeDef = define "floatType" $
   doc "Display a floating-point type as a string" $
   lambda "t" $ (ref DescribeMantle.precisionDef <.> ref Variants.floatTypePrecisionDef @@ var "t") ++ string " floating-point number"
 
-integerTypeDef :: TElement (IntegerType -> String)
+integerTypeDef :: TBinding (IntegerType -> String)
 integerTypeDef = define "integerType" $
   doc "Display an integer type as a string" $
   lambda "t" $ (ref DescribeMantle.precisionDef <.> ref Variants.integerTypePrecisionDef @@ var "t")
     ++ string " integer"
 
-literalTypeDef :: TElement (LiteralType -> String)
+literalTypeDef :: TBinding (LiteralType -> String)
 literalTypeDef = define "literalType" $
   doc "Display a literal type as a string" $
   match _LiteralType Nothing [
@@ -81,7 +81,7 @@ literalTypeDef = define "literalType" $
     _LiteralType_integer>>: ref integerTypeDef,
     _LiteralType_string>>: constant $ string "character string"]
 
-typeDef :: TElement (Type -> String)
+typeDef :: TBinding (Type -> String)
 typeDef = define "type" $
   doc "Display a type as a string" $
   match _Type Nothing [

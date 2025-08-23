@@ -105,10 +105,10 @@ module_ = Module (Namespace "hydra.ext.org.json.coder") elements
       el readStringStubDef,
       el showValueDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-jsonCoderDef :: TElement (Type -> Flow Graph (Coder Graph Graph Term Value))
+jsonCoderDef :: TBinding (Type -> Flow Graph (Coder Graph Graph Term Value))
 jsonCoderDef = define "jsonCoder" $
   doc "Create a JSON coder for a given type" $
   lambda "typ" $ binds [
@@ -116,7 +116,7 @@ jsonCoderDef = define "jsonCoder" $
     "coder">: ref termCoderDef @@ (Compute.adapterTarget $ var "adapter")] $
     produce $ ref AdaptUtils.composeCodersDef @@ (Compute.adapterCoder $ var "adapter") @@ var "coder"
 
-literalJsonCoderDef :: TElement (LiteralType -> Flow Graph (Coder Graph Graph Literal Value))
+literalJsonCoderDef :: TBinding (LiteralType -> Flow Graph (Coder Graph Graph Literal Value))
 literalJsonCoderDef = define "literalJsonCoder" $
   doc "Create a JSON coder for literal types" $
   lambda "lt" $ produce $ cases _LiteralType (var "lt") Nothing [
@@ -153,7 +153,7 @@ literalJsonCoderDef = define "literalJsonCoder" $
         (Just $ ref Monads.unexpectedDef @@ string "string" @@ (ref showValueDef @@ var "s")) [
         _Value_string>>: lambda "s'" $ produce $ Core.literalString $ var "s'"])]
 
-recordCoderDef :: TElement (RowType -> Flow Graph (Coder Graph Graph Term Value))
+recordCoderDef :: TBinding (RowType -> Flow Graph (Coder Graph Graph Term Value))
 recordCoderDef = define "recordCoder" $
   doc "Create a JSON coder for record types" $
   lambda "rt" $ lets [
@@ -164,7 +164,7 @@ recordCoderDef = define "recordCoder" $
     "coders">: Flows.mapList (var "getCoder") (var "fields")] $
     produce $ Compute.coder (ref encodeRecordDef @@ var "coders") (ref decodeRecordDef @@ var "rt" @@ var "coders")
 
-encodeRecordDef :: TElement ([(FieldType, Coder Graph Graph Term Value)] -> Term -> Flow Graph Value)
+encodeRecordDef :: TBinding ([(FieldType, Coder Graph Graph Term Value)] -> Term -> Flow Graph Value)
 encodeRecordDef = define "encodeRecord" $
   doc "Encode a record term to JSON" $
   lambdas ["coders", "term"] $ lets [
@@ -195,7 +195,7 @@ encodeRecordDef = define "encodeRecord" $
     "maybeFields">: Flows.mapList (var "encodeField") (Lists.zip (var "coders") (var "fields"))] $
     produce $ Json.valueObject $ Maps.fromList $ Optionals.cat $ var "maybeFields"
 
-decodeRecordDef :: TElement (RowType -> [(FieldType, Coder Graph Graph Term Value)] -> Value -> Flow Graph Term)
+decodeRecordDef :: TBinding (RowType -> [(FieldType, Coder Graph Graph Term Value)] -> Value -> Flow Graph Term)
 decodeRecordDef = define "decodeRecord" $
   doc "Decode a JSON value to a record term" $
   lambdas ["rt", "coders", "n"] $ cases _Value (var "n")
@@ -212,7 +212,7 @@ decodeRecordDef = define "decodeRecord" $
       "fields">: Flows.mapList (var "decodeField") (var "coders")] $
       produce $ Core.termRecord $ Core.record (Core.rowTypeTypeName $ var "rt") (var "fields")]
 
-termCoderDef :: TElement (Type -> Flow Graph (Coder Graph Graph Term Value))
+termCoderDef :: TBinding (Type -> Flow Graph (Coder Graph Graph Term Value))
 termCoderDef = define "termCoder" $
   doc "Create a JSON coder for term types" $
   lambda "typ" $ lets [
@@ -310,7 +310,7 @@ termCoderDef = define "termCoder" $
           Core.unName $ var "name",
           string " does not support decoding"])]
 
-unitCoderDef :: TElement (Coder Graph Graph Term Value)
+unitCoderDef :: TBinding (Coder Graph Graph Term Value)
 unitCoderDef = define "unitCoder" $
   doc "JSON coder for unit values" $
   Compute.coder
@@ -321,7 +321,7 @@ unitCoderDef = define "unitCoder" $
       (Just $ ref Monads.unexpectedDef @@ string "null" @@ (ref showValueDef @@ var "n")) [
       _Value_null>>: constant $ produce Core.termUnit])
 
-untypedTermToJsonDef :: TElement (Term -> Flow s Value)
+untypedTermToJsonDef :: TBinding (Term -> Flow s Value)
 untypedTermToJsonDef = define "untypedTermToJson" $
   doc "A simplistic, unidirectional encoding for terms as JSON values. Not type-aware; best used for human consumption." $
   lambda "term" $ lets [
@@ -377,8 +377,8 @@ untypedTermToJsonDef = define "untypedTermToJson" $
         "bindings">: Core.letBindings $ var "lt",
         "env">: Core.letEnvironment $ var "lt",
         "fromBinding">: lambda "b" $ Core.field
-          (Core.letBindingName $ var "b")
-          (Core.letBindingTerm $ var "b")] $
+          (Core.bindingName $ var "b")
+          (Core.bindingTerm $ var "b")] $
         var "asRecord" @@ list [
           Core.field (Core.name $ string "bindings") (Core.termRecord $ Core.record
             (Core.name $ string "")
@@ -431,13 +431,13 @@ untypedTermToJsonDef = define "untypedTermToJson" $
       _Term_variable>>: lambda "v" $ produce $ Json.valueString $ Core.unName $ var "v",
       _Term_wrap>>: lambda "wt" $ ref untypedTermToJsonDef @@ (Core.wrappedTermObject $ var "wt")]
 
-readStringStubDef :: TElement (String -> Term)
+readStringStubDef :: TBinding (String -> Term)
 readStringStubDef = define "readStringStub" $
   doc "Placeholder for reading a string into a term (to be implemented)" $
   lambda "s" $ Core.termLiteral $ Core.literalString $ Strings.cat2 (string "TODO: read ") (var "s")
 
 -- TODO: implement this function, and deduplicate with hydra.json.coder.showValue
-showValueDef :: TElement (Value -> String)
+showValueDef :: TBinding (Value -> String)
 showValueDef = define "showValue" $
   doc "Show a JSON value as a string (placeholder implementation)" $
   lambda "value" $ string "TODO: implement showValue"

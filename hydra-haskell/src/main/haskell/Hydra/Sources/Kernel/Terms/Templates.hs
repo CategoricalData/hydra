@@ -55,22 +55,22 @@ module_ = Module (Namespace "hydra.templates") elements
      el graphToSchemaDef,
      el instantiateTemplateDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-graphToSchemaDef :: TElement (Graph -> Flow Graph (M.Map Name Type))
+graphToSchemaDef :: TBinding (Graph -> Flow Graph (M.Map Name Type))
 graphToSchemaDef = define "graphToSchema" $
   doc "Create a graph schema from a graph which contains nothing but encoded type definitions" $
   lambda "g" $ lets [
     "toPair">: lambda "nameAndEl" $ lets [
       "name">: first $ var "nameAndEl",
       "el">: second $ var "nameAndEl"]
-      $ Flows.bind (ref DecodeCore.typeDef @@ (Graph.elementTerm $ var "el")) $
+      $ Flows.bind (ref DecodeCore.typeDef @@ (Core.bindingTerm $ var "el")) $
         lambda "t" $ Flows.pure $ pair (var "name") (var "t")]
     $ Flows.bind (Flows.mapList (var "toPair") $ Maps.toList $ Graph.graphElements $ var "g") $
       lambda "pairs" $ Flows.pure $ Maps.fromList $ var "pairs"
 
-instantiateTemplateDef :: TElement (Bool -> M.Map Name Type -> Type -> Flow s Term)
+instantiateTemplateDef :: TBinding (Bool -> M.Map Name Type -> Type -> Flow s Term)
 instantiateTemplateDef = define "instantiateTemplate" $
   doc ("Given a graph schema and a nonrecursive type, instantiate it with default values."
     <> " If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm"

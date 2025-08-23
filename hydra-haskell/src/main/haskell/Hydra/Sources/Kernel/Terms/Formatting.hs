@@ -64,15 +64,15 @@ module_ = Module (Namespace "hydra.formatting") elements
       el withCharacterAliasesDef,
       el wrapLineDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-capitalizeDef :: TElement (String -> String)
+capitalizeDef :: TBinding (String -> String)
 capitalizeDef = define "capitalize" $
   doc "Capitalize the first letter of a string" $
   ref mapFirstLetterDef @@ primitive _strings_toUpper
 
-convertCaseDef :: TElement (CaseConvention -> CaseConvention -> String -> String)
+convertCaseDef :: TBinding (CaseConvention -> CaseConvention -> String -> String)
 convertCaseDef = define "convertCase" $
   doc "Convert a string from one case convention to another" $
   lambdas ["from", "to", "original"] $ lets [
@@ -98,45 +98,45 @@ convertCaseDef = define "convertCase" $
   where
     emptyParts = list [list []]
 
-convertCaseCamelToLowerSnakeDef :: TElement (String -> String)
+convertCaseCamelToLowerSnakeDef :: TBinding (String -> String)
 convertCaseCamelToLowerSnakeDef = define "convertCaseCamelToLowerSnake" $
   doc "Convert a string from camel case to lower snake case" $
   ref convertCaseDef @@ Mantle.caseConventionCamel @@ Mantle.caseConventionLowerSnake
 
-convertCaseCamelToUpperSnakeDef :: TElement (String -> String)
+convertCaseCamelToUpperSnakeDef :: TBinding (String -> String)
 convertCaseCamelToUpperSnakeDef = define "convertCaseCamelToUpperSnake" $
   doc "Convert a string from camel case to upper snake case" $
   ref convertCaseDef @@ Mantle.caseConventionCamel @@ Mantle.caseConventionUpperSnake
 
-convertCasePascalToUpperSnakeDef :: TElement (String -> String)
+convertCasePascalToUpperSnakeDef :: TBinding (String -> String)
 convertCasePascalToUpperSnakeDef = define "convertCasePascalToUpperSnake" $
   doc "Convert a string from pascal case to upper snake case" $
   ref convertCaseDef @@ Mantle.caseConventionPascal @@ Mantle.caseConventionUpperSnake
 
-decapitalizeDef :: TElement (String -> String)
+decapitalizeDef :: TBinding (String -> String)
 decapitalizeDef = define "decapitalize" $
   doc "Decapitalize the first letter of a string" $
   ref mapFirstLetterDef @@ primitive _strings_toLower
 
-escapeWithUnderscoreDef :: TElement (S.Set String -> String -> String)
+escapeWithUnderscoreDef :: TBinding (S.Set String -> String -> String)
 escapeWithUnderscoreDef = define "escapeWithUnderscore" $
   lambdas ["reserved", "s"] $
     Logic.ifElse (Sets.member (var "s") (var "reserved"))
       (var "s" ++ string "_")
       (var "s")
 
-indentLinesDef :: TElement (String -> String)
+indentLinesDef :: TBinding (String -> String)
 indentLinesDef = define "indentLines" $
   lambda "s" $ lets [
     "indent">: lambda "l" $ string "    " ++ var "l"]
     $ Strings.unlines $ Lists.map (var "indent") $ Strings.lines $ var "s"
 
-javaStyleCommentDef :: TElement (String -> String)
+javaStyleCommentDef :: TBinding (String -> String)
 javaStyleCommentDef = define "javaStyleComment" $
   lambda "s" $ string "/**\n" ++ string " * " ++ var "s" ++ string "\n */"
 
 -- TODO: simplify this helper
-mapFirstLetterDef :: TElement ((String -> String) -> String -> String)
+mapFirstLetterDef :: TBinding ((String -> String) -> String -> String)
 mapFirstLetterDef = define "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
   lambda "mapping" $ lambda "s" $ lets [
@@ -153,7 +153,7 @@ mapFirstLetterDef = define "mapFirstLetter" $
 
 
 
-nonAlnumToUnderscoresDef :: TElement (String -> String)
+nonAlnumToUnderscoresDef :: TBinding (String -> String)
 nonAlnumToUnderscoresDef = define "nonAlnumToUnderscores" $
   lambda "input" $ lets [
     "isAlnum">: lambda "c" $ Logic.or
@@ -172,25 +172,25 @@ nonAlnumToUnderscoresDef = define "nonAlnumToUnderscores" $
     "result">: Lists.foldl (var "replace") (pair (list []) (boolean False)) (Strings.toList $ var "input")]
     $ Strings.fromList $ Lists.reverse $ first $ var "result"
 
-sanitizeWithUnderscoresDef :: TElement (S.Set String -> String -> String)
+sanitizeWithUnderscoresDef :: TBinding (S.Set String -> String -> String)
 sanitizeWithUnderscoresDef = define "sanitizeWithUnderscores" $
   lambdas ["reserved", "s"] $
     ref escapeWithUnderscoreDef @@ var "reserved" @@ (ref nonAlnumToUnderscoresDef @@ var "s")
 
-showListDef :: TElement ((a -> String) -> [a] -> String)
+showListDef :: TBinding ((a -> String) -> [a] -> String)
 showListDef = define "showList" $
   lambdas ["f", "els"] $ Strings.cat $ list [
     string "[",
     Strings.intercalate (string ", ") $ Lists.map (var "f") $ var "els",
     string "]"]
 
-stripLeadingAndTrailingWhitespaceDef :: TElement (String -> String)
+stripLeadingAndTrailingWhitespaceDef :: TBinding (String -> String)
 stripLeadingAndTrailingWhitespaceDef = define "stripLeadingAndTrailingWhitespace" $
   lambda "s" $
     Strings.fromList $ Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $
     Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $ Strings.toList $ var "s"
 
-withCharacterAliasesDef :: TElement (String -> String)
+withCharacterAliasesDef :: TBinding (String -> String)
 withCharacterAliasesDef = define "withCharacterAliases" $
   lambda "original" $ lets [
     -- Taken from: https://cs.stanford.edu/people/miles/iso8859.html
@@ -234,7 +234,7 @@ withCharacterAliasesDef = define "withCharacterAliases" $
     $ Strings.fromList $ Lists.filter (unaryFunction Chars.isAlphaNum) $ Lists.concat $
       Lists.map (var "alias") $ Strings.toList $ var "original"
 
-wrapLineDef :: TElement (Int -> String -> String)
+wrapLineDef :: TBinding (Int -> String -> String)
 wrapLineDef = define "wrapLine" $
   doc "A simple soft line wrap which is suitable for code comments" $
   lambdas ["maxlen", "input"] $ lets [

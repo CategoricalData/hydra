@@ -63,7 +63,7 @@ constantForFieldName tname fname = (Strings.cat [
 constantForTypeName :: (Core.Name -> String)
 constantForTypeName tname = (Strings.cat2 "_" (Names.localNameOf tname))
 
-constructModule :: (Module.Namespaces Ast.ModuleName -> Module.Module -> M.Map Core.Type (Compute.Coder Graph.Graph t0 Core.Term Ast.Expression) -> [(Graph.Element, Core.TypedTerm)] -> Compute.Flow Graph.Graph Ast.Module)
+constructModule :: (Module.Namespaces Ast.ModuleName -> Module.Module -> M.Map Core.Type (Compute.Coder Graph.Graph t0 Core.Term Ast.Expression) -> [(Core.Binding, Core.TypedTerm)] -> Compute.Flow Graph.Graph Ast.Module)
 constructModule namespaces mod coders pairs =  
   let h = (\namespace -> Module.unNamespace namespace) 
       createDeclarations = (\g -> \pair ->  
@@ -220,8 +220,8 @@ encodeTerm namespaces term =
       let bindings = (Core.letBindings v1) 
           env = (Core.letEnvironment v1)
           encodeBinding = (\binding ->  
-                  let name = (Core.letBindingName binding) 
-                      term_ = (Core.letBindingTerm binding)
+                  let name = (Core.bindingName binding) 
+                      term_ = (Core.bindingTerm binding)
                       hname = (Utils.simpleName (Core.unName name))
                   in (Flows.bind (encode term_) (\hexpr -> Flows.pure (Ast.LocalBindingValue (Utils.simpleValueBinding hname hexpr Nothing)))))
       in (Flows.bind (Flows.mapList encodeBinding bindings) (\hbindings -> Flows.bind (encode env) (\hinner -> Flows.pure (Ast.ExpressionLet (Ast.LetExpression {
@@ -430,14 +430,14 @@ nameDecls g namespaces name typ =
               in (constantForFieldName name fname, (Core.unName fname)))
   in (Logic.ifElse useCoreImport (Lists.cons (toDecl (Core.Name "hydra.core.Name") nameDecl) (Lists.map (toDecl (Core.Name "hydra.core.Name")) fieldDecls)) [])
 
-toDataDeclaration :: (M.Map Core.Type (Compute.Coder Graph.Graph t0 Core.Term Ast.Expression) -> Module.Namespaces Ast.ModuleName -> (Graph.Element, Core.TypedTerm) -> Compute.Flow Graph.Graph Ast.DeclarationWithComments)
+toDataDeclaration :: (M.Map Core.Type (Compute.Coder Graph.Graph t0 Core.Term Ast.Expression) -> Module.Namespaces Ast.ModuleName -> (Core.Binding, Core.TypedTerm) -> Compute.Flow Graph.Graph Ast.DeclarationWithComments)
 toDataDeclaration coders namespaces pair =  
   let el = (fst pair) 
       tt = (snd pair)
       term = (Core.typedTermTerm tt)
       typ = (Core.typedTermType tt)
       coder = (Optionals.fromJust (Maps.lookup typ coders))
-      hname = (Utils.simpleName (Names.localNameOf (Graph.elementName el)))
+      hname = (Utils.simpleName (Names.localNameOf (Core.bindingName el)))
       rewriteValueBinding = (\vb -> (\x -> case x of
               Ast.ValueBindingSimple v1 ->  
                 let pattern_ = (Ast.simpleValueBindingPattern v1) 
@@ -465,16 +465,16 @@ toDataDeclaration coders namespaces pair =
                 let lbindings = (Core.letBindings v1) 
                     env = (Core.letEnvironment v1)
                     toBinding = (\hname_ -> \hterm_ -> Ast.LocalBindingValue (Utils.simpleValueBinding hname_ hterm_ Nothing))
-                    ts = (Lists.map (\binding -> Core.typeSchemeType (Optionals.fromJust (Core.letBindingType binding))) lbindings)
+                    ts = (Lists.map (\binding -> Core.typeSchemeType (Optionals.fromJust (Core.bindingType binding))) lbindings)
                 in (Flows.bind (Flows.mapList (\t -> Modules.constructCoder Language.haskellLanguage (encodeTerm namespaces) t) ts) (\coders_ ->  
-                  let hnames = (Lists.map (\binding -> Utils.simpleName (Core.unName (Core.letBindingName binding))) lbindings) 
-                      terms = (Lists.map Core.letBindingTerm lbindings)
+                  let hnames = (Lists.map (\binding -> Utils.simpleName (Core.unName (Core.bindingName binding))) lbindings) 
+                      terms = (Lists.map Core.bindingTerm lbindings)
                   in (Flows.bind (Flows.sequence (Lists.zipWith (\e -> \t -> Compute.coderEncode e t) coders_ terms)) (\hterms ->  
                     let hbindings = (Lists.zipWith toBinding hnames hterms)
                     in (toDecl comments hname_ env coder_ (Just (Ast.LocalBindings hbindings)))))))
               _ -> (Flows.bind (Compute.coderEncode coder_ term_) (\hterm ->  
                 let vb = (Utils.simpleValueBinding hname_ hterm bindings)
-                in (Flows.bind (Annotations.getTypeClasses (Rewriting.removeTypesFromTerm (Graph.elementTerm el))) (\explicitClasses -> Flows.bind (encodeTypeWithClassAssertions namespaces explicitClasses typ) (\htype ->  
+                in (Flows.bind (Annotations.getTypeClasses (Rewriting.removeTypesFromTerm (Core.bindingTerm el))) (\explicitClasses -> Flows.bind (encodeTypeWithClassAssertions namespaces explicitClasses typ) (\htype ->  
                   let decl = (Ast.DeclarationTypedBinding (Ast.TypedBinding {
                           Ast.typedBindingTypeSignature = Ast.TypeSignature {
                             Ast.typeSignatureName = hname_,
@@ -485,9 +485,9 @@ toDataDeclaration coders namespaces pair =
                     Ast.declarationWithCommentsComments = comments})))))))) (Rewriting.deannotateTerm term_))
   in (Flows.bind (Annotations.getTermDescription term) (\comments -> toDecl comments hname term coder Nothing))
 
-toTypeDeclarations :: (Module.Namespaces Ast.ModuleName -> Graph.Element -> Core.Term -> Compute.Flow Graph.Graph [Ast.DeclarationWithComments])
+toTypeDeclarations :: (Module.Namespaces Ast.ModuleName -> Core.Binding -> Core.Term -> Compute.Flow Graph.Graph [Ast.DeclarationWithComments])
 toTypeDeclarations namespaces el term =  
-  let elementName = (Graph.elementName el) 
+  let elementName = (Core.bindingName el) 
       lname = (Names.localNameOf elementName)
       hname = (Utils.simpleName lname)
       declHead = (\name -> \vars_ -> Logic.ifElse (Lists.null vars_) (Ast.DeclarationHeadSimple name) ( 
@@ -498,14 +498,14 @@ toTypeDeclarations namespaces el term =
                 Ast.applicationDeclarationHeadFunction = (declHead name rest),
                 Ast.applicationDeclarationHeadOperand = hvar}))))
       newtypeCons = (\el_ -> \typ_ ->  
-              let hname = (Utils.simpleName (Utils.newtypeAccessorName (Graph.elementName el_)))
+              let hname = (Utils.simpleName (Utils.newtypeAccessorName (Core.bindingName el_)))
               in (Flows.bind (adaptTypeToHaskellAndEncode namespaces typ_) (\htype ->  
                 let hfield = Ast.FieldWithComments {
                         Ast.fieldWithCommentsField = Ast.Field {
                           Ast.fieldName = hname,
                           Ast.fieldType = htype},
                         Ast.fieldWithCommentsComments = Nothing} 
-                    constructorName = (Utils.simpleName (Names.localNameOf (Graph.elementName el_)))
+                    constructorName = (Utils.simpleName (Names.localNameOf (Core.bindingName el_)))
                 in (Flows.pure (Ast.ConstructorWithComments {
                   Ast.constructorWithCommentsBody = (Ast.ConstructorRecord (Ast.RecordConstructor {
                     Ast.recordConstructorName = constructorName,

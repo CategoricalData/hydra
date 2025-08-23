@@ -75,19 +75,19 @@ module_ = Module (Namespace "hydra.lexical") elements
       el withEmptyGraphDef,
       el withSchemaContextDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-dereferenceElementDef :: TElement (Name -> Flow Graph (Maybe Element))
+dereferenceElementDef :: TBinding (Name -> Flow Graph (Maybe Binding))
 dereferenceElementDef = define "dereferenceElement" $
   lambda "name" $ Flows.map
     (lambda "g" $ ref lookupElementDef @@ var "g" @@ var "name")
     (ref Monads.getStateDef)
 
-elementsToGraphDef :: TElement (Graph -> Maybe Graph -> [Element] -> Graph)
+elementsToGraphDef :: TBinding (Graph -> Maybe Graph -> [Binding] -> Graph)
 elementsToGraphDef = define "elementsToGraph" $
   lambda "parent" $ lambda "schema" $ lambda "elements" $ lets [
-    "toPair" >: lambda "el" $ pair (Graph.elementName $ var "el") (var "el")]
+    "toPair" >: lambda "el" $ pair (Core.bindingName $ var "el") (var "el")]
     $ Graph.graph
       (Maps.fromList (Lists.map (var "toPair") $ var "elements"))
       (Graph.graphEnvironment $ var "parent")
@@ -96,7 +96,7 @@ elementsToGraphDef = define "elementsToGraph" $
       (Graph.graphPrimitives $ var "parent")
       (var "schema")
 
-emptyGraphDef :: TElement Graph
+emptyGraphDef :: TBinding Graph
 emptyGraphDef = define "emptyGraph" $
   doc "An empty graph; no elements, no primitives, no schema, and an arbitrary body." $
   Graph.graph
@@ -107,18 +107,18 @@ emptyGraphDef = define "emptyGraph" $
     Maps.empty
     nothing
 
-extendGraphWithBindingsDef :: TElement ([Binding] -> Graph -> Graph)
+extendGraphWithBindingsDef :: TBinding ([Binding] -> Graph -> Graph)
 extendGraphWithBindingsDef = define "extendGraphWithBindings" $
   lambdas ["bindings", "g"] $ lets [
     "newEls">: Maps.fromList $ Lists.map (var "toEl") (var "bindings"),
     "toEl">: lambda "binding" $ lets [
-      "name">: Core.letBindingName $ var "binding",
-      "term">: Core.letBindingTerm $ var "binding",
-      "mts">: Core.letBindingType $ var "binding"]
-      $ pair (var "name") (Graph.element (var "name") (var "term") (var "mts"))]
+      "name">: Core.bindingName $ var "binding",
+      "term">: Core.bindingTerm $ var "binding",
+      "mts">: Core.bindingType $ var "binding"]
+      $ pair (var "name") (Core.binding (var "name") (var "term") (var "mts"))]
     $ Graph.graphWithElements (var "g") (Maps.union (var "newEls") (Graph.graphElements $ var "g"))
 
-fieldsOfDef :: TElement (Type -> [FieldType])
+fieldsOfDef :: TBinding (Type -> [FieldType])
 fieldsOfDef = define "fieldsOf" $
   lambda "t" $ lets [
     "stripped">: ref Rewriting.deannotateTypeDef @@ var "t"]
@@ -127,7 +127,7 @@ fieldsOfDef = define "fieldsOf" $
       _Type_record>>: lambda "rt" $ Core.rowTypeFields $ var "rt",
       _Type_union>>: lambda "rt" $ Core.rowTypeFields $ var "rt"]
 
-getFieldDef :: TElement (M.Map Name Term -> Name -> (Term -> Flow Graph b) -> Flow Graph b)
+getFieldDef :: TBinding (M.Map Name Term -> Name -> (Term -> Flow Graph b) -> Flow Graph b)
 getFieldDef = define "getField" $
   lambdas ["m", "fname", "decode"] $
     Optionals.maybe
@@ -135,22 +135,22 @@ getFieldDef = define "getField" $
       (var "decode")
       (Maps.lookup (var "fname") (var "m"))
 
-lookupElementDef :: TElement (Graph -> Name -> Maybe Element)
+lookupElementDef :: TBinding (Graph -> Name -> Maybe Binding)
 lookupElementDef = define "lookupElement" $
   lambdas ["g", "name"] $ Maps.lookup (var "name") (Graph.graphElements $ var "g")
 
-lookupPrimitiveDef :: TElement (Graph -> Name -> Maybe Primitive)
+lookupPrimitiveDef :: TBinding (Graph -> Name -> Maybe Primitive)
 lookupPrimitiveDef = define "lookupPrimitive" $
   lambda "g" $ lambda "name" $
     Maps.lookup (var "name") (Graph.graphPrimitives $ var "g")
 
-matchEnumDef :: TElement (Name -> [(Name, b)] -> Term -> Flow Graph b)
+matchEnumDef :: TBinding (Name -> [(Name, b)] -> Term -> Flow Graph b)
 matchEnumDef = define "matchEnum" $
   lambdas ["tname", "pairs"] $
     ref matchUnionDef @@ var "tname" @@ (Lists.map (lambda "pair" $
       ref matchUnitFieldDef @@ (first $ var "pair") @@ (second $ var "pair")) $ var "pairs")
 
-matchRecordDef :: TElement ((M.Map Name Term -> Flow Graph b) -> Term -> Flow Graph b)
+matchRecordDef :: TBinding ((M.Map Name Term -> Flow Graph b) -> Term -> Flow Graph b)
 matchRecordDef = define "matchRecord" $
   lambdas ["decode", "term"] $ lets [
     "stripped">: ref Rewriting.deannotateAndDetypeTermDef @@ var "term"]
@@ -161,7 +161,7 @@ matchRecordDef = define "matchRecord" $
           (lambda "field" $ pair (Core.fieldName $ var "field") (Core.fieldTerm $ var "field"))
           (Core.recordFields $ var "record"))]
 
-matchUnionDef :: TElement (Name -> [(Name, Term -> Flow Graph b)] -> Term -> Flow Graph b)
+matchUnionDef :: TBinding (Name -> [(Name, Term -> Flow Graph b)] -> Term -> Flow Graph b)
 matchUnionDef = define "matchUnion" $
   lambdas ["tname", "pairs", "term"] $ lets [
     "stripped">: ref Rewriting.deannotateAndDetypeTermDef @@ var "term",
@@ -172,7 +172,7 @@ matchUnionDef = define "matchUnion" $
         (ref ShowCore.termDef @@ var "stripped")) [
       _Term_variable>>: lambda "name" $
         Flows.bind (ref requireElementDef @@ var "name") $
-        lambda "el" $ ref matchUnionDef @@ var "tname" @@ var "pairs" @@ (Graph.elementTerm $ var "el"),
+        lambda "el" $ ref matchUnionDef @@ var "tname" @@ var "pairs" @@ (Core.bindingTerm $ var "el"),
       _Term_union>>: lambda "injection" $
         Logic.ifElse (Core.equalName_ (Core.injectionTypeName $ var "injection") (var "tname"))
           (lets [
@@ -185,11 +185,11 @@ matchUnionDef = define "matchUnion" $
               (Maps.lookup (var "fname") (var "mapping")))
           (ref Monads.unexpectedDef @@ ("injection for type " ++ (Core.unName $ var "tname")) @@ (ref ShowCore.termDef @@ var "term"))]
 
-matchUnitFieldDef :: TElement (Name -> y -> (Name, x -> Flow Graph y))
+matchUnitFieldDef :: TBinding (Name -> y -> (Name, x -> Flow Graph y))
 matchUnitFieldDef = define "matchUnitField" $
   lambdas ["fname", "x"] $ pair (var "fname") (lambda "ignored" $ Flows.pure $ var "x")
 
-requireElementDef :: TElement (Name -> Flow Graph Element)
+requireElementDef :: TBinding (Name -> Flow Graph Binding)
 requireElementDef = define "requireElement" $
   lambda "name" $ lets [
     "showAll">: false,
@@ -200,7 +200,7 @@ requireElementDef = define "requireElement" $
     "err">: lambda "g" $ Flows.fail $
       "no such element: " ++ (Core.unName $ var "name") ++
       ". Available elements: {" ++
-      (Strings.intercalate ", " $ var "ellipsis" @@ (Lists.map (lambda "el" $ Core.unName $ Graph.elementName $ var "el") $ Maps.elems $ Graph.graphElements $ var "g")) ++
+      (Strings.intercalate ", " $ var "ellipsis" @@ (Lists.map (lambda "el" $ Core.unName $ Core.bindingName $ var "el") $ Maps.elems $ Graph.graphElements $ var "g")) ++
       "}"]
     $ Flows.bind (ref dereferenceElementDef @@ var "name") $
       lambda "mel" $ Optionals.maybe
@@ -208,7 +208,7 @@ requireElementDef = define "requireElement" $
         (unaryFunction Flows.pure)
         (var "mel")
 
-requirePrimitiveDef :: TElement (Name -> Flow Graph Primitive)
+requirePrimitiveDef :: TBinding (Name -> Flow Graph Primitive)
 requirePrimitiveDef = define "requirePrimitive" $
   lambda "name" $
     Flows.bind (ref Monads.getStateDef) $
@@ -217,7 +217,7 @@ requirePrimitiveDef = define "requirePrimitive" $
       (unaryFunction Flows.pure)
       (ref lookupPrimitiveDef @@ var "g" @@ var "name")
 
-requireTermDef :: TElement (Name -> Flow Graph Term)
+requireTermDef :: TBinding (Name -> Flow Graph Term)
 requireTermDef = define "requireTerm" $
   lambda "name" $
     Flows.bind (ref resolveTermDef @@ var "name") $
@@ -226,13 +226,13 @@ requireTermDef = define "requireTerm" $
       (unaryFunction Flows.pure)
       (var "mt")
 
-resolveTermDef :: TElement (Name -> Flow Graph (Maybe Term))
+resolveTermDef :: TBinding (Name -> Flow Graph (Maybe Term))
 resolveTermDef = define "resolveTerm" $
   doc "TODO: distinguish between lambda-bound and let-bound variables" $
   lambda "name" $ lets [
     "recurse">: lambda "el" $ lets [
-      "stripped">: ref Rewriting.deannotateTermDef @@ (Graph.elementTerm $ var "el")]
-      $ cases _Term (var "stripped") (Just $ Flows.pure $ just $ Graph.elementTerm $ var "el") [
+      "stripped">: ref Rewriting.deannotateTermDef @@ (Core.bindingTerm $ var "el")]
+      $ cases _Term (var "stripped") (Just $ Flows.pure $ just $ Core.bindingTerm $ var "el") [
         _Term_variable>>: lambda "name'" $ ref resolveTermDef @@ var "name'"]]
     $ Flows.bind (ref Monads.getStateDef) $
       lambda "g" $ Optionals.maybe
@@ -240,12 +240,12 @@ resolveTermDef = define "resolveTerm" $
         (var "recurse")
         (Maps.lookup (var "name") (Graph.graphElements $ var "g"))
 
-schemaContextDef :: TElement (Graph -> Graph)
+schemaContextDef :: TBinding (Graph -> Graph)
 schemaContextDef = define "schemaContext" $
   doc "Note: assuming for now that primitive functions are the same in the schema graph" $
   lambda "g" $ Optionals.fromMaybe (var "g") (Graph.graphSchema $ var "g")
 
-stripAndDereferenceTermDef :: TElement (Term -> Flow Graph Term)
+stripAndDereferenceTermDef :: TBinding (Term -> Flow Graph Term)
 stripAndDereferenceTermDef = define "stripAndDereferenceTerm" $
   lambda "term" $ lets [
     "stripped">: ref Rewriting.deannotateAndDetypeTermDef @@ var "term"]
@@ -254,17 +254,17 @@ stripAndDereferenceTermDef = define "stripAndDereferenceTerm" $
         Flows.bind (ref requireTermDef @@ var "v") $
         lambda "t" $ ref stripAndDereferenceTermDef @@ var "t"]
 
-typeOfPrimitiveDef :: TElement (Name -> Flow Graph TypeScheme)
+typeOfPrimitiveDef :: TBinding (Name -> Flow Graph TypeScheme)
 typeOfPrimitiveDef = define "typeOfPrimitive" $
   lambda "name" $ Flows.map (unaryFunction Graph.primitiveType) $ ref requirePrimitiveDef @@ var "name"
 
 -- TODO: move into hydra.lexical
-withEmptyGraphDef :: TElement (Flow Graph a -> Flow s a)
+withEmptyGraphDef :: TBinding (Flow Graph a -> Flow s a)
 withEmptyGraphDef = define "withEmptyGraph" $
   doc "Execute flow with empty graph" $
   ref Monads.withStateDef @@ ref emptyGraphDef
 
-withSchemaContextDef :: TElement (Flow Graph x -> Flow Graph x)
+withSchemaContextDef :: TBinding (Flow Graph x -> Flow Graph x)
 withSchemaContextDef = define "withSchemaContext" $
   lambda "f" $
     Flows.bind (ref Monads.getStateDef) $

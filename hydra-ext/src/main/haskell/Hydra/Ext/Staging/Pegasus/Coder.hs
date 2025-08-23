@@ -27,10 +27,10 @@ constructModule ::
   M.Map Namespace String
   -> Module
   -> M.Map Type (Coder Graph Graph Term ())
-  -> [(Element, TypedTerm)]
+  -> [(Binding, TypedTerm)]
   -> Flow Graph (M.Map FilePath PDL.SchemaFile)
 constructModule aliases mod coders pairs = do
-    sortedPairs <- case (topologicalSortElements $ fst <$> pairs) of
+    sortedPairs <- case (topologicalSortBindings $ fst <$> pairs) of
       EitherLeft comps -> fail $ "types form a cycle (unsupported in PDL): " ++ show (L.head comps)
       EitherRight sorted -> pure $ Y.catMaybes $ fmap (\n -> M.lookup n pairByName) sorted
     schemas <- CM.mapM toSchema sortedPairs
@@ -43,25 +43,25 @@ constructModule aliases mod coders pairs = do
         path = namespaceToFilePath CaseConventionCamel (FileExtension "pdl") (Namespace $ (unNamespace $ moduleNamespace mod) ++ "/" ++ local)
         local = PDL.unName $ PDL.qualifiedNameName $ PDL.namedSchemaQualifiedName schema
 
-    pairByName = L.foldl (\m p -> M.insert (elementName $ fst p) p m) M.empty pairs
+    pairByName = L.foldl (\m p -> M.insert (bindingName $ fst p) p m) M.empty pairs
     toSchema (el, tt@(TypedTerm term typ)) = do
       if isNativeType el
         then DecodeCore.type_ term >>= typeToSchema el
-        else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (elementName el)
+        else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (bindingName el)
     typeToSchema el typ = do
         res <- encodeAdaptedType aliases typ
         let ptype = case res of
               Left schema -> PDL.NamedSchemaTypeTyperef schema
               Right t -> t
-        r <- getTermDescription $ elementTerm el
+        r <- getTermDescription $ bindingTerm el
         let anns = doc r
         return (PDL.NamedSchema qname ptype anns, imports)
       where
-        qname = pdlNameForElement aliases False $ elementName el
+        qname = pdlNameForElement aliases False $ bindingName el
         imports = []
 --        imports = L.filter isExternal (pdlNameForElement aliases True <$> deps)
 --          where
---            deps = S.toList $ termDependencyNames False False False $ elementTerm el
+--            deps = S.toList $ termDependencyNames False False False $ bindingTerm el
 --            isExternal qn = PDL.qualifiedNameNamespace qn /= PDL.qualifiedNameNamespace qname
 
 moduleToPegasusSchemas :: Module -> Flow Graph (M.Map FilePath PDL.SchemaFile)

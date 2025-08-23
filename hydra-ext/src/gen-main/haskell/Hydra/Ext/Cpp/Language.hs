@@ -18,31 +18,40 @@ cppLanguage :: Coders.Language
 cppLanguage = Coders.Language {
   Coders.languageName = (Coders.LanguageName "hydra.ext.cpp"),
   Coders.languageConstraints = Coders.LanguageConstraints {
-    Coders.languageConstraintsEliminationVariants = (Sets.fromList [
+    Coders.languageConstraintsEliminationVariants = eliminationVariants,
+    Coders.languageConstraintsLiteralVariants = literalVariants,
+    Coders.languageConstraintsFloatTypes = floatTypes,
+    Coders.languageConstraintsFunctionVariants = functionVariants,
+    Coders.languageConstraintsIntegerTypes = integerTypes,
+    Coders.languageConstraintsTermVariants = termVariants,
+    Coders.languageConstraintsTypeVariants = typeVariants,
+    Coders.languageConstraintsTypes = typePredicate}} 
+  where 
+    eliminationVariants = (Sets.fromList [
       Mantle.EliminationVariantProduct,
       Mantle.EliminationVariantRecord,
       Mantle.EliminationVariantUnion,
-      Mantle.EliminationVariantWrap]),
-    Coders.languageConstraintsLiteralVariants = (Sets.fromList [
+      Mantle.EliminationVariantWrap])
+    literalVariants = (Sets.fromList [
       Mantle.LiteralVariantBinary,
       Mantle.LiteralVariantBoolean,
       Mantle.LiteralVariantFloat,
       Mantle.LiteralVariantInteger,
-      Mantle.LiteralVariantString]),
-    Coders.languageConstraintsFloatTypes = (Sets.fromList [
+      Mantle.LiteralVariantString])
+    floatTypes = (Sets.fromList [
       Core.FloatTypeFloat32,
-      Core.FloatTypeFloat64]),
-    Coders.languageConstraintsFunctionVariants = (Sets.fromList [
+      Core.FloatTypeFloat64])
+    functionVariants = (Sets.fromList [
       Mantle.FunctionVariantElimination,
       Mantle.FunctionVariantLambda,
-      Mantle.FunctionVariantPrimitive]),
-    Coders.languageConstraintsIntegerTypes = (Sets.fromList [
+      Mantle.FunctionVariantPrimitive])
+    integerTypes = (Sets.fromList [
       Core.IntegerTypeInt8,
       Core.IntegerTypeInt16,
       Core.IntegerTypeInt32,
       Core.IntegerTypeInt64,
-      Core.IntegerTypeBigint]),
-    Coders.languageConstraintsTermVariants = (Sets.fromList [
+      Core.IntegerTypeBigint])
+    termVariants = (Sets.fromList [
       Mantle.TermVariantApplication,
       Mantle.TermVariantFunction,
       Mantle.TermVariantLet,
@@ -55,8 +64,8 @@ cppLanguage = Coders.Language {
       Mantle.TermVariantSet,
       Mantle.TermVariantUnion,
       Mantle.TermVariantVariable,
-      Mantle.TermVariantWrap]),
-    Coders.languageConstraintsTypeVariants = (Sets.fromList [
+      Mantle.TermVariantWrap])
+    typeVariants = (Sets.fromList [
       Mantle.TypeVariantApplication,
       Mantle.TypeVariantFunction,
       Mantle.TypeVariantForall,
@@ -69,12 +78,16 @@ cppLanguage = Coders.Language {
       Mantle.TypeVariantSet,
       Mantle.TypeVariantUnion,
       Mantle.TypeVariantVariable,
-      Mantle.TypeVariantWrap]),
-    Coders.languageConstraintsTypes = (\_ -> True)}}
+      Mantle.TypeVariantWrap])
+    typePredicate = (\_ -> True)
 
 -- | A set of reserved words in C++
 cppReservedWords :: (S.Set String)
-cppReservedWords = (Sets.fromList (Lists.concat2 (Lists.concat2 (Lists.concat2 cppKeywords cppPreprocessor) cppStlTypes) hydraCppKeywords)) 
+cppReservedWords = (Sets.fromList (Lists.concat [
+  cppKeywords,
+  cppPreprocessor,
+  cppStlTypes,
+  hydraCppKeywords])) 
   where 
     cppKeywords = [
       "alignas",

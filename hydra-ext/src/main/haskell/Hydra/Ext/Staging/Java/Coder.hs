@@ -47,7 +47,7 @@ getTermType :: Term -> Maybe Type
 getTermType term = Nothing
 
 -- TODO
-requireElementType :: Element -> Flow Graph Type
+requireElementType :: Binding -> Flow Graph Type
 requireElementType el = fail $ "update me: types are derived using typeOf now, rather than from explicitly typed terms"
 
 -- TODO
@@ -62,7 +62,7 @@ moduleToJava mod = withTrace "encode module in Java" $ do
     units <- moduleToJavaCompilationUnit mod
     return $ M.fromList $ forPair <$> M.toList units
   where
-    forPair (name, unit) = (elementNameToFilePath name, printExpr $ parenthesize $ writeCompilationUnit unit)
+    forPair (name, unit) = (bindingNameToFilePath name, printExpr $ parenthesize $ writeCompilationUnit unit)
 
 adaptTypeToJavaAndEncode :: Aliases -> Type -> Flow Graph Java.Type
 adaptTypeToJavaAndEncode aliases = adaptTypeToLanguageAndEncode javaLanguage (encodeType aliases)
@@ -86,7 +86,7 @@ classifyDataReference name = do
     Nothing -> return JavaSymbolLocalVariable
     Just el -> do
       typ <- requireElementType el
-      return $ classifyDataTerm typ $ elementTerm el
+      return $ classifyDataTerm typ $ bindingTerm el
 
 classifyDataTerm :: Type -> Term -> JavaSymbolClass
 classifyDataTerm typ term = if isLambda term
@@ -100,8 +100,8 @@ classifyDataTerm typ term = if isLambda term
       TermLet _ -> True
       _ -> False
 
-commentsFromElement :: Element -> Flow Graph (Maybe String)
-commentsFromElement = getTermDescription . elementTerm
+commentsFromElement :: Binding -> Flow Graph (Maybe String)
+commentsFromElement = getTermDescription . bindingTerm
 
 commentsFromFieldType :: FieldType -> Flow Graph (Maybe String)
 commentsFromFieldType = getTypeDescription . fieldTypeType
@@ -141,7 +141,7 @@ constructElementsInterface mod members = (elName, cu)
 
 constructModule :: Module
   -> M.Map Type (Coder Graph Graph Term Java.Expression)
-  -> [(Element, TypedTerm)]
+  -> [(Binding, TypedTerm)]
   -> Flow Graph (M.Map Name Java.CompilationUnit)
 constructModule mod coders pairs = do
     let isTypePair = isNativeType . fst
@@ -160,7 +160,7 @@ constructModule mod coders pairs = do
                     then [Java.ImportDeclarationSingleType $ Java.SingleTypeImportDeclaration $ javaTypeName $ Java.Identifier "java.io.Serializable"]
                     else []
       decl <- declarationForType isSer aliases pair
-      return (elementName el,
+      return (bindingName el,
         Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports [decl])
 
     -- Lambdas cannot (in general) be turned into top-level constants, as there is no way of declaring type parameters for constants
@@ -168,7 +168,7 @@ constructModule mod coders pairs = do
     -- * Plain lambdas such as \x y -> x + y + 42
     -- * Lambdas with nested let terms, such as \x y -> let z = x + y in z + 42
     -- * Let terms with nested lambdas, such as let z = 42 in \x y -> x + y + z
-    termToInterfaceMember coders pair = withTrace ("element " ++ unName (elementName el)) $ do
+    termToInterfaceMember coders pair = withTrace ("element " ++ unName (bindingName el)) $ do
         let expanded = contractTerm $ unshadowVariables $ expandTypedLambdas $ typedTermTerm $ snd pair
         case classifyDataTerm typ expanded of
           JavaSymbolClassConstant -> termToConstant coders el expanded
@@ -178,13 +178,13 @@ constructModule mod coders pairs = do
         el = fst pair
         typ = typedTermType $ snd pair
         tparams = javaTypeParametersForType typ
-        mname = sanitizeJavaName $ decapitalize $ localNameOf $ elementName el
+        mname = sanitizeJavaName $ decapitalize $ localNameOf $ bindingName el
 
         termToConstant coders el term = do
           jtype <- Java.UnannType <$> adaptTypeToJavaAndEncode aliases typ
           jterm <- coderEncode (Y.fromJust $ M.lookup typ coders) term
           let mods = []
-          let var = javaVariableDeclarator (javaVariableName $ elementName el) $ Just $ Java.VariableInitializerExpression jterm
+          let var = javaVariableDeclarator (javaVariableName $ bindingName el) $ Just $ Java.VariableInitializerExpression jterm
           return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
 
         termToNullaryMethod coders el term0 = maybeLet aliases term0 forInnerTerm
@@ -340,10 +340,10 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
               where
                 first20Primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
 
-declarationForType :: Bool -> Aliases -> (Element, TypedTerm) -> Flow Graph Java.TypeDeclarationWithComments
-declarationForType isSer aliases (el, TypedTerm term _) = withTrace ("element " ++ unName (elementName el)) $ do
+declarationForType :: Bool -> Aliases -> (Binding, TypedTerm) -> Flow Graph Java.TypeDeclarationWithComments
+declarationForType isSer aliases (el, TypedTerm term _) = withTrace ("element " ++ unName (bindingName el)) $ do
     t <- DecodeCore.type_ term >>= adaptTypeToLanguage javaLanguage
-    cd <- toClassDecl False isSer aliases [] (elementName el) t
+    cd <- toClassDecl False isSer aliases [] (bindingName el) t
     comments <- commentsFromElement el
     return $ Java.TypeDeclarationWithComments (Java.TypeDeclarationClass cd) comments
 
@@ -438,8 +438,8 @@ elementJavaIdentifier isPrim isMethod aliases name = Java.Identifier $ if isPrim
     qualify s = Java.unIdentifier $ nameToJavaName aliases $ unqualifyName $ QualifiedName ns s
     QualifiedName ns local = qualifyName name
 
-elementNameToFilePath :: Name -> FilePath
-elementNameToFilePath name = nameToFilePath CaseConventionCamel CaseConventionPascal (FileExtension "java")
+bindingNameToFilePath :: Name -> FilePath
+bindingNameToFilePath name = nameToFilePath CaseConventionCamel CaseConventionPascal (FileExtension "java")
     $ unqualifyName $ QualifiedName ns (sanitizeJavaName local)
   where
     QualifiedName ns local = qualifyName name
@@ -890,7 +890,7 @@ maybeLet aliases term cons = helper Nothing [] term
           toDeclInit name = if S.member name recursiveVars
             then do
               -- TODO: repeated
-              let value = letBindingTerm $ L.head $ L.filter (\b -> letBindingName b == name) bindings
+              let value = bindingTerm $ L.head $ L.filter (\b -> bindingName b == name) bindings
               typ <- requireTermType value
               jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
               let id = variableToJavaIdentifier name
@@ -908,7 +908,7 @@ maybeLet aliases term cons = helper Nothing [] term
 
           toDeclStatement name = do
             -- TODO: repeated
-            let value = letBindingTerm $ L.head $ L.filter (\b -> letBindingName b == name) bindings
+            let value = bindingTerm $ L.head $ L.filter (\b -> bindingName b == name) bindings
             typ <- requireTermType value
             jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
             let id = variableToJavaIdentifier name
@@ -917,7 +917,7 @@ maybeLet aliases term cons = helper Nothing [] term
               then Java.BlockStatementStatement $ javaMethodInvocationToJavaStatement $
                 methodInvocation (Just $ Left $ Java.ExpressionName Nothing id) (Java.Identifier setMethodName) [rhs]
               else variableDeclarationStatement aliasesWithRecursive jtype id rhs
-          bindingVars = S.fromList (letBindingName <$> bindings)
+          bindingVars = S.fromList (bindingName <$> bindings)
           recursiveVars = S.fromList $ L.concat (ifRec <$> sorted)
             where
               ifRec names = case names of

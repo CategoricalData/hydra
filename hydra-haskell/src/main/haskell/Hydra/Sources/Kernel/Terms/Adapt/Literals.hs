@@ -64,10 +64,10 @@ module_ = Module (Namespace "hydra.adapt.literals") elements
      el floatAdapterDef,
      el integerAdapterDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-comparePrecisionDef :: TElement (Precision -> Precision -> Comparison)
+comparePrecisionDef :: TBinding (Precision -> Precision -> Comparison)
 comparePrecisionDef = define "comparePrecision" $
   doc "Compare two precision values" $
   lambdas ["p1", "p2"] $
@@ -84,7 +84,7 @@ comparePrecisionDef = define "comparePrecision" $
               Graph.comparisonLessThan
               Graph.comparisonGreaterThan]]
 
-convertFloatValueDef :: TElement (FloatType -> FloatValue -> FloatValue)
+convertFloatValueDef :: TBinding (FloatType -> FloatValue -> FloatValue)
 convertFloatValueDef = define "convertFloatValue" $
   doc "Convert a float value to a different float type" $
   lambdas ["target", "fv"] $ lets [
@@ -100,7 +100,7 @@ convertFloatValueDef = define "convertFloatValue" $
         _FloatType_float64>>: constant $ Core.floatValueFloat64 $ Literals.bigfloatToFloat64 $ var "d"]]
     $ var "encoder" @@ (var "decoder" @@ var "fv")
 
-convertIntegerValueDef :: TElement (IntegerType -> IntegerValue -> IntegerValue)
+convertIntegerValueDef :: TBinding (IntegerType -> IntegerValue -> IntegerValue)
 convertIntegerValueDef = define "convertIntegerValue" $
   doc "Convert an integer value to a different integer type" $
   lambdas ["target", "iv"] $ lets [
@@ -128,7 +128,7 @@ convertIntegerValueDef = define "convertIntegerValue" $
         _IntegerType_uint64>>: constant $ Core.integerValueUint64 $ Literals.bigintToUint64 $ var "d"]]
     $ var "encoder" @@ (var "decoder" @@ var "iv")
 
-disclaimerDef :: TElement (Bool -> String -> String -> String)
+disclaimerDef :: TBinding (Bool -> String -> String -> String)
 disclaimerDef = define "disclaimer" $
   doc "Generate a disclaimer message for type conversions" $
   lambdas ["lossy", "source", "target"] $
@@ -139,7 +139,7 @@ disclaimerDef = define "disclaimer" $
       var "target",
       Logic.ifElse (var "lossy") (string " (lossy)") (string "")]
 
-literalAdapterDef :: TElement (LiteralType -> Flow AdapterContext (SymmetricAdapter s LiteralType Literal))
+literalAdapterDef :: TBinding (LiteralType -> Flow AdapterContext (SymmetricAdapter s LiteralType Literal))
 literalAdapterDef = define "literalAdapter" $
   doc "Create an adapter for literal types" $
   lambda "lt" $ lets [
@@ -218,7 +218,7 @@ literalAdapterDef = define "literalAdapter" $
     @@ ref DescribeCore.literalTypeDef
     @@ var "lt"
 
-floatAdapterDef :: TElement (FloatType -> Flow AdapterContext (SymmetricAdapter s FloatType FloatValue))
+floatAdapterDef :: TBinding (FloatType -> Flow AdapterContext (SymmetricAdapter s FloatType FloatValue))
 floatAdapterDef = define "floatAdapter" $
   doc "Create an adapter for float types" $
   lambda "ft" $ lets [
@@ -253,7 +253,7 @@ floatAdapterDef = define "floatAdapter" $
         @@ ref DescribeCore.floatTypeDef
         @@ var "ft"
 
-integerAdapterDef :: TElement (IntegerType -> Flow AdapterContext (SymmetricAdapter s IntegerType IntegerValue))
+integerAdapterDef :: TBinding (IntegerType -> Flow AdapterContext (SymmetricAdapter s IntegerType IntegerValue))
 integerAdapterDef = define "integerAdapter" $
   doc "Create an adapter for integer types" $
   lambda "it" $ lets [

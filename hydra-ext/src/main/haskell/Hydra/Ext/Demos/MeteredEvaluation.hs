@@ -30,7 +30,7 @@ testNs = Namespace "hydra.demos.meteredEvaluation"
 testModule :: Module
 testModule = Module testNs elements [] [] Nothing
   where
-    test local tterm = TElement (unqualifyName $ QualifiedName (Just testNs) local) tterm
+    test local tterm = TBinding (unqualifyName $ QualifiedName (Just testNs) local) tterm
     elements = [
         el $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 $ int32 42)),
         el $ test "describeType" $ ref DescribeCore.typeDef @@ (TTerm $ EncodeCore.type_ $ Types.list $ Types.int32)]
@@ -44,6 +44,6 @@ demoMeteredEvaluation = do
   where
     context = modulesToGraph [testModule]
     evaluateSelectedTerm = do
-      original <- elementTerm <$> (requireElement $ unqualifyName $ QualifiedName (Just testNs) "catStrings")
+      original <- bindingTerm <$> (requireElement $ unqualifyName $ QualifiedName (Just testNs) "catStrings")
       reduced <- reduceTerm False original
       return reduced

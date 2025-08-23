@@ -55,10 +55,10 @@ module_ = Module (Namespace "hydra.show.typing") elements
      el typeConstraintDef,
      el typeSubstDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-typeConstraintDef :: TElement (TypeConstraint -> String)
+typeConstraintDef :: TBinding (TypeConstraint -> String)
 typeConstraintDef = define "typeConstraint" $
   doc "Show a type constraint as a string" $
   lambda "tc" $ lets [
@@ -69,7 +69,7 @@ typeConstraintDef = define "typeConstraint" $
       string "≡",
       ref ShowCore.typeDef @@ var "rtyp"]
 
-typeSubstDef :: TElement (TypeSubst -> String)
+typeSubstDef :: TBinding (TypeSubst -> String)
 typeSubstDef = define "typeSubst" $
   doc "Show a type substitution as a string" $
   lambda "ts" $ lets [

@@ -140,7 +140,7 @@ letBinding fname term = (Optionals.bind (Optionals.map Core.letBindings (letTerm
 
 letBindingWithKey :: (Core.Name -> [Core.Binding] -> Maybe Core.Binding)
 letBindingWithKey fname bindings =  
-  let matches = (Lists.filter (\b -> Equality.equal (Core.letBindingName b) fname) bindings)
+  let matches = (Lists.filter (\b -> Equality.equal (Core.bindingName b) fname) bindings)
   in (Logic.ifElse (Equality.equal 1 (Lists.length matches)) (Just (Lists.head matches)) Nothing)
 
 letTerm :: (Core.Term -> Maybe Core.Let)

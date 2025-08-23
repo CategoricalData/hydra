@@ -54,7 +54,7 @@ data Module =
     -- | A common prefix for all element names in the module
     moduleNamespace :: Namespace,
     -- | The elements defined in this module
-    moduleElements :: [Graph.Element],
+    moduleElements :: [Core.Binding],
     -- | Any modules which the term expressions of this module directly depend upon
     moduleTermDependencies :: [Module],
     -- | Any modules which the type expressions of this module directly depend upon

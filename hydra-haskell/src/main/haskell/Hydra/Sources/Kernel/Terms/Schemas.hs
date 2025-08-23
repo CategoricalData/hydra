@@ -89,10 +89,10 @@ module_ = Module (Namespace "hydra.schemas") elements
       el typeDependenciesDef,
       el typesToElementsDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-definitionDependencyNamespacesDef :: TElement ([Definition] -> S.Set Namespace)
+definitionDependencyNamespacesDef :: TBinding ([Definition] -> S.Set Namespace)
 definitionDependencyNamespacesDef = define "definitionDependencyNamespaces" $
   doc "Get dependency namespaces from definitions" $
   lambdas ["defs"] $ lets [
@@ -106,17 +106,17 @@ definitionDependencyNamespacesDef = define "definitionDependencyNamespaces" $
     "allNames">: Sets.unions $ Lists.map (var "defNames") (var "defs")]
     $ Sets.fromList $ Optionals.cat $ Lists.map (ref Names.namespaceOfDef) (Sets.toList $ var "allNames")
 
-dependencyNamespacesDef :: TElement (Bool -> Bool -> Bool -> Bool -> [Element] -> Flow Graph (S.Set Namespace))
+dependencyNamespacesDef :: TBinding (Bool -> Bool -> Bool -> Bool -> [Binding] -> Flow Graph (S.Set Namespace))
 dependencyNamespacesDef = define "dependencyNamespaces" $
   doc "Find dependency namespaces in all of a set of terms" $
   lambdas ["binds", "withPrims", "withNoms", "withSchema", "els"] $ lets [
     "depNames">: lambda "el" $ lets [
-      "term">: Graph.elementTerm $ var "el",
+      "term">: Core.bindingTerm $ var "el",
       "dataNames">: ref Rewriting.termDependencyNamesDef @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "term",
       "schemaNames">: Logic.ifElse (var "withSchema")
         (Optionals.maybe Sets.empty
           (lambda "ts" $ ref Rewriting.typeDependencyNamesDef @@ true @@ Core.typeSchemeType (var "ts"))
-          (Graph.elementType $ var "el"))
+          (Core.bindingType $ var "el"))
         Sets.empty]
       $ Logic.ifElse (ref EncodeCore.isEncodedTypeDef @@ (ref Rewriting.deannotateTermDef @@ var "term"))
           (Flows.bind (ref DecodeCore.typeDef @@ var "term") $
@@ -128,44 +128,44 @@ dependencyNamespacesDef = define "dependencyNamespaces" $
       lambda "namesList" $ Flows.pure $ Sets.fromList $ Optionals.cat $ Lists.map (ref Names.namespaceOfDef) $
         Sets.toList $ Sets.delete (ref Constants.placeholderNameDef) $ Sets.unions $ var "namesList"
 
-dereferenceTypeDef :: TElement (Name -> Flow Graph (Maybe Type))
+dereferenceTypeDef :: TBinding (Name -> Flow Graph (Maybe Type))
 dereferenceTypeDef = define "dereferenceType" $
   doc "Dereference a type name to get the actual type" $
   "name" ~>
   "mel" <<~ ref Lexical.dereferenceElementDef @@ var "name" $
   optCases (var "mel")
     (Flows.pure nothing)
-    ("el" ~> Flows.map (unaryFunction just) $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el"))
+    ("el" ~> Flows.map (unaryFunction just) $ ref DecodeCore.typeDef @@ Core.bindingTerm (var "el"))
 
-elementAsTypedTermDef :: TElement (Element -> Flow Graph TypedTerm)
+elementAsTypedTermDef :: TBinding (Binding -> Flow Graph TypedTerm)
 elementAsTypedTermDef = define "elementAsTypedTerm" $
   doc "Convert an element to a typed term" $
   lambda "el" $
     Optionals.maybe (Flows.fail $ string "missing element type")
-      (lambda "ts" $ Flows.pure $ Core.typedTerm (Graph.elementTerm $ var "el") (Core.typeSchemeType $ var "ts"))
-      (Graph.elementType $ var "el")
+      (lambda "ts" $ Flows.pure $ Core.typedTerm (Core.bindingTerm $ var "el") (Core.typeSchemeType $ var "ts"))
+      (Core.bindingType $ var "el")
 
-elementsWithDependenciesDef :: TElement ([Element] -> Flow Graph [Element])
+elementsWithDependenciesDef :: TBinding ([Binding] -> Flow Graph [Binding])
 elementsWithDependenciesDef = define "elementsWithDependencies" $
   doc "Get elements with their dependencies" $
   lambda "original" $ lets [
-    "depNames">: lambda "el" $ Sets.toList $ ref Rewriting.termDependencyNamesDef @@ true @@ false @@ false @@ (Graph.elementTerm $ var "el"),
+    "depNames">: lambda "el" $ Sets.toList $ ref Rewriting.termDependencyNamesDef @@ true @@ false @@ false @@ (Core.bindingTerm $ var "el"),
     "allDepNames">: Lists.nub $ Lists.concat2
-      (Lists.map (unaryFunction Graph.elementName) (var "original"))
+      (Lists.map (unaryFunction Core.bindingName) (var "original"))
       (Lists.concat $ Lists.map (var "depNames") (var "original"))]
     $ Flows.mapList (ref Lexical.requireElementDef) (var "allDepNames")
 
-fieldMapDef :: TElement ([Field] -> M.Map Name Term)
+fieldMapDef :: TBinding ([Field] -> M.Map Name Term)
 fieldMapDef = define "fieldMap" $
   "toPair" <~ ("f" ~> pair (Core.fieldName $ var "f") (Core.fieldTerm $ var "f")) $
   "fields" ~> Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
-fieldTypeMapDef :: TElement ([FieldType] -> M.Map Name Type)
+fieldTypeMapDef :: TBinding ([FieldType] -> M.Map Name Type)
 fieldTypeMapDef = define "fieldTypeMap" $
   "toPair" <~ ("f" ~> pair (Core.fieldTypeName $ var "f") (Core.fieldTypeType $ var "f")) $
   "fields" ~> Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
-fieldTypesDef :: TElement (Type -> Flow Graph (M.Map Name Type))
+fieldTypesDef :: TBinding (Type -> Flow Graph (M.Map Name Type))
 fieldTypesDef = define "fieldTypes" $
   doc "Get field types from a record or union type" $
   lambda "t" $ lets [
@@ -180,11 +180,11 @@ fieldTypesDef = define "fieldTypes" $
         trace (Strings.cat2 (string "field types of ") (Core.unName $ var "name")) $
         Flows.bind (ref Lexical.requireElementDef @@ var "name") $
           lambda "el" $
-            Flows.bind (ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")) $
+            Flows.bind (ref DecodeCore.typeDef @@ Core.bindingTerm (var "el")) $
               ref fieldTypesDef]
     @@ (ref Rewriting.deannotateTypeDef @@ var "t")
 
-findFieldTypeDef :: TElement (Name -> [FieldType] -> Flow s Type)
+findFieldTypeDef :: TBinding (Name -> [FieldType] -> Flow s Type)
 findFieldTypeDef = define "findFieldType" $
   doc "Find a field type by name in a list of field types" $
   lambda "fname" $ lambda "fields" $ lets [
@@ -197,7 +197,7 @@ findFieldTypeDef = define "findFieldType" $
           (Flows.pure $ Core.fieldTypeType $ Lists.head $ var "matchingFields")
           (Flows.fail $ Strings.cat2 (string "Multiple fields named ") (Core.unName $ var "fname")))
 
-fullyStripTypeDef :: TElement (Type -> Type)
+fullyStripTypeDef :: TBinding (Type -> Type)
 fullyStripTypeDef = define "fullyStripType" $
   doc "Fully strip a type of forall quantifiers" $
   lambda "typ" $
@@ -205,38 +205,38 @@ fullyStripTypeDef = define "fullyStripType" $
       _Type_forall>>: lambda "ft" $ ref fullyStripTypeDef @@ Core.forallTypeBody (var "ft")]
     @@ (ref Rewriting.deannotateTypeDef @@ var "typ")
 
-graphAsTermDef :: TElement (Graph -> Term)
+graphAsTermDef :: TBinding (Graph -> Term)
 graphAsTermDef = define "graphAsTerm" $
   doc "Convert a graph to a term, taking advantage of the built-in duality between graphs and terms" $
   "g" ~>
   "toBinding" <~ ("el" ~>
-    "name" <~ Graph.elementName (var "el") $
-    "term" <~ Graph.elementTerm (var "el") $
-    "mts" <~ Graph.elementType (var "el") $
-    Core.letBinding (var "name") (var "term") (var "mts")) $
+    "name" <~ Core.bindingName (var "el") $
+    "term" <~ Core.bindingTerm (var "el") $
+    "mts" <~ Core.bindingType (var "el") $
+    Core.binding (var "name") (var "term") (var "mts")) $
   Core.termLet $ Core.let_
     (Lists.map (var "toBinding") (Maps.elems $ Graph.graphElements (var "g")))
     (Graph.graphBody (var "g"))
 
-graphAsTypesDef :: TElement (Graph -> Flow s (M.Map Name Type))
+graphAsTypesDef :: TBinding (Graph -> Flow s (M.Map Name Type))
 graphAsTypesDef = define "graphAsTypes" $
   doc "Decode a schema graph which encodes a set of named types" $
   "sg" ~>
   "els" <~ Maps.elems (Graph.graphElements (var "sg")) $
   "toPair" <~ ("el" ~>
-    "typ" <<~ ref DecodeCore.typeDef @@ (Graph.elementTerm $ var "el") $
-    produce $ pair (Graph.elementName $ var "el") (var "typ")) $
+    "typ" <<~ ref DecodeCore.typeDef @@ (Core.bindingTerm $ var "el") $
+    produce $ pair (Core.bindingName $ var "el") (var "typ")) $
   "pairs" <<~ Flows.mapList (var "toPair") (var "els") $
   produce $ Maps.fromList $ var "pairs"
 
-isEnumRowTypeDef :: TElement (RowType -> Bool)
+isEnumRowTypeDef :: TBinding (RowType -> Bool)
 isEnumRowTypeDef = define "isEnumRowType" $
   doc "Check if a row type represents an enum (all fields are unit-typed)" $
   lambda "rt" $ Lists.foldl (binaryFunction Logic.and) true $
     Lists.map (lambda "f" $ ref EncodeCore.isUnitTypeDef @@ (Core.fieldTypeType $ var "f")) $
       Core.rowTypeFields $ var "rt"
 
-isEnumTypeDef :: TElement (Type -> Bool)
+isEnumTypeDef :: TBinding (Type -> Bool)
 isEnumTypeDef = define "isEnumType" $
   doc "Check if a type is an enum type" $
   lambda "typ" $
@@ -244,7 +244,7 @@ isEnumTypeDef = define "isEnumType" $
       _Type_union>>: lambda "rt" $ ref isEnumRowTypeDef @@ var "rt"]
     @@ (ref Rewriting.deannotateTypeDef @@ var "typ")
 
-isSerializableDef :: TElement (Element -> Flow Graph Bool)
+isSerializableDef :: TBinding (Binding -> Flow Graph Bool)
 isSerializableDef = define "isSerializable" $
   doc "Check if an element is serializable (no function types in dependencies)" $
   lambda "el" $ lets [
@@ -255,9 +255,9 @@ isSerializableDef = define "isSerializable" $
       (lambda "deps" $ lets [
         "allVariants">: Sets.fromList $ Lists.concat $ Lists.map (var "variants") $ Maps.elems $ var "deps"]
         $ Logic.not $ Sets.member Mantle.typeVariantFunction $ var "allVariants")
-      (ref typeDependenciesDef @@ false @@ (unaryFunction Equality.identity) @@ Graph.elementName (var "el"))
+      (ref typeDependenciesDef @@ false @@ (unaryFunction Equality.identity) @@ Core.bindingName (var "el"))
 
-moduleDependencyNamespacesDef :: TElement (Bool -> Bool -> Bool -> Bool -> Module -> Flow Graph (S.Set Namespace))
+moduleDependencyNamespacesDef :: TBinding (Bool -> Bool -> Bool -> Bool -> Module -> Flow Graph (S.Set Namespace))
 moduleDependencyNamespacesDef = define "moduleDependencyNamespaces" $
   doc "Find dependency namespaces in all elements of a module, excluding the module's own namespace" $
   lambdas ["binds", "withPrims", "withNoms", "withSchema", "mod"] $
@@ -265,7 +265,7 @@ moduleDependencyNamespacesDef = define "moduleDependencyNamespaces" $
       Module.moduleElements (var "mod")) $
       lambda "deps" $ Flows.pure $ Sets.delete (Module.moduleNamespace $ var "mod") (var "deps")
 
-namespacesForDefinitionsDef :: TElement ((Namespace -> a) -> Namespace -> [Definition] -> Namespaces a)
+namespacesForDefinitionsDef :: TBinding ((Namespace -> a) -> Namespace -> [Definition] -> Namespaces a)
 namespacesForDefinitionsDef = define "namespacesForDefinitions" $
   doc "Create namespaces mapping for definitions" $
   lambdas ["encodeNamespace", "focusNs", "defs"] $ lets [
@@ -273,7 +273,7 @@ namespacesForDefinitionsDef = define "namespacesForDefinitions" $
     "toPair">: lambda "ns" $ pair (var "ns") (var "encodeNamespace" @@ var "ns")]
     $ Module.namespaces (var "toPair" @@ var "focusNs") $ Maps.fromList $ Lists.map (var "toPair") $ Sets.toList $ var "nss"
 
-requireRecordTypeDef :: TElement (Name -> Flow Graph RowType)
+requireRecordTypeDef :: TBinding (Name -> Flow Graph RowType)
 requireRecordTypeDef = define "requireRecordType" $
   doc "Require a name to resolve to a record type" $
   ref requireRowTypeDef @@ string "record type" @@
@@ -281,7 +281,7 @@ requireRecordTypeDef = define "requireRecordType" $
       cases _Type (var "t") (Just nothing) [
         _Type_record>>: lambda "rt" $ just $ var "rt"])
 
-requireRowTypeDef :: TElement (String -> (Type -> Maybe RowType) -> Name -> Flow Graph RowType)
+requireRowTypeDef :: TBinding (String -> (Type -> Maybe RowType) -> Name -> Flow Graph RowType)
 requireRowTypeDef = define "requireRowType" $
   doc "Require a name to resolve to a row type" $
   lambdas ["label", "getter", "name"] $ lets [
@@ -300,15 +300,15 @@ requireRowTypeDef = define "requireRowType" $
           (unaryFunction Flows.pure)
           (var "getter" @@ (var "rawType" @@ var "t"))
 
-requireTypeDef :: TElement (Name -> Flow Graph Type)
+requireTypeDef :: TBinding (Name -> Flow Graph Type)
 requireTypeDef = define "requireType" $
   doc "Require a type by name" $
   lambda "name" $
   trace (Strings.cat2 (string "require type ") (Core.unName $ var "name")) $
   Flows.bind (ref Lexical.withSchemaContextDef @@ (ref Lexical.requireElementDef @@ var "name")) $
-    lambda "el" $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")
+    lambda "el" $ ref DecodeCore.typeDef @@ Core.bindingTerm (var "el")
 
-requireUnionTypeDef :: TElement (Name -> Flow Graph RowType)
+requireUnionTypeDef :: TBinding (Name -> Flow Graph RowType)
 requireUnionTypeDef = define "requireUnionType" $
   doc "Require a name to resolve to a union type" $
   ref requireRowTypeDef @@ string "union" @@
@@ -317,7 +317,7 @@ requireUnionTypeDef = define "requireUnionType" $
         _Type_union>>: lambda "rt" $ just $ var "rt"]
       @@ var "t")
 
-resolveTypeDef :: TElement (Type -> Flow Graph (Maybe Type))
+resolveTypeDef :: TBinding (Type -> Flow Graph (Maybe Type))
 resolveTypeDef = define "resolveType" $
   doc "Resolve a type, dereferencing type variables" $
   lambda "typ" $
@@ -331,7 +331,7 @@ resolveTypeDef = define "resolveType" $
                 (var "mterm"))]
     @@ (ref Rewriting.deannotateTypeDef @@ var "typ")
 
-schemaGraphToTypingEnvironmentDef :: TElement (Graph -> Flow s (M.Map Name TypeScheme))
+schemaGraphToTypingEnvironmentDef :: TBinding (Graph -> Flow s (M.Map Name TypeScheme))
 schemaGraphToTypingEnvironmentDef = define "schemaGraphToTypingEnvironment" $
   doc "Convert a schema graph to a typing environment" $
   lambda "g" $ lets [
@@ -342,37 +342,37 @@ schemaGraphToTypingEnvironmentDef = define "schemaGraphToTypingEnvironment" $
       @@ (ref Rewriting.deannotateTypeDef @@ var "typ"),
     "toPair">: lambda "el" $
       Flows.map
-        (lambda "mts" $ Optionals.map (lambda "ts" $ pair (Graph.elementName $ var "el") (var "ts")) (var "mts"))
+        (lambda "mts" $ Optionals.map (lambda "ts" $ pair (Core.bindingName $ var "el") (var "ts")) (var "mts"))
         (Optionals.maybe
           (Flows.pure nothing)
           (lambda "ts" $
             Logic.ifElse
               (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _TypeScheme)))
-              (Flows.map (unaryFunction just) $ ref DecodeCore.typeSchemeDef @@ Graph.elementTerm (var "el"))
+              (Flows.map (unaryFunction just) $ ref DecodeCore.typeSchemeDef @@ Core.bindingTerm (var "el"))
               (Logic.ifElse
                 (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _Type)))
-                (Flows.map (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded") $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el"))
-                (cases _Term (ref Rewriting.deannotateTermDef @@ (Graph.elementTerm $ var "el")) (Just $ Flows.pure nothing) [
+                (Flows.map (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded") $ ref DecodeCore.typeDef @@ Core.bindingTerm (var "el"))
+                (cases _Term (ref Rewriting.deannotateTermDef @@ (Core.bindingTerm $ var "el")) (Just $ Flows.pure nothing) [
                   _Term_record>>: lambda "r" $
                     Logic.ifElse
                       (Equality.equal (Core.recordTypeName $ var "r") (Core.nameLift _TypeScheme))
                       (Flows.map
                         (unaryFunction just)
-                        (ref DecodeCore.typeSchemeDef @@ Graph.elementTerm (var "el")))
+                        (ref DecodeCore.typeSchemeDef @@ Core.bindingTerm (var "el")))
                       (Flows.pure nothing),
                   _Term_union>>: lambda "i" $
                     Logic.ifElse (Equality.equal (Core.injectionTypeName $ var "i") (Core.nameLift _Type))
                       (Flows.map
                         (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded")
-                        (ref DecodeCore.typeDef @@ Graph.elementTerm (var "el")))
+                        (ref DecodeCore.typeDef @@ Core.bindingTerm (var "el")))
                       (Flows.pure nothing)])))
-          (Graph.elementType $ var "el"))]
+          (Core.bindingType $ var "el"))]
     $ ref Monads.withStateDef @@ var "g" @@
       (Flows.bind (Flows.mapList (var "toPair") $ Maps.elems $ Graph.graphElements $ var "g") $
         lambda "mpairs" $ Flows.pure $ Maps.fromList $ Optionals.cat $ var "mpairs")
 
 -- Note: this is lossy, as it throws away the term body
-termAsGraphDef :: TElement (Term -> (M.Map Name Term, Term))
+termAsGraphDef :: TBinding (Term -> (M.Map Name Term, Term))
 termAsGraphDef = define "termAsGraph" $
   doc "Find the equivalent graph representation of a term" $
   "term" ~> cases _Term (ref Rewriting.deannotateTermDef @@ var "term")
@@ -380,13 +380,13 @@ termAsGraphDef = define "termAsGraph" $
     _Term_let>>: "lt" ~>
       "bindings" <~ Core.letBindings (var "lt") $
       "fromBinding" <~ ("b" ~>
-        "name" <~ Core.letBindingName (var "b") $
-        "term" <~ Core.letBindingTerm (var "b") $
-        "ts" <~ Core.letBindingType (var "b") $
-        pair (var "name") (Graph.element (var "name") (var "term") (var "ts"))) $
+        "name" <~ Core.bindingName (var "b") $
+        "term" <~ Core.bindingTerm (var "b") $
+        "ts" <~ Core.bindingType (var "b") $
+        pair (var "name") (Core.binding (var "name") (var "term") (var "ts"))) $
       Maps.fromList $ Lists.map (var "fromBinding") (var "bindings")]
 
-topologicalSortTypeDefinitionsDef :: TElement ([TypeDefinition] -> [[TypeDefinition]])
+topologicalSortTypeDefinitionsDef :: TBinding ([TypeDefinition] -> [[TypeDefinition]])
 topologicalSortTypeDefinitionsDef = define "topologicalSortTypeDefinitions" $
   doc "Topologically sort type definitions by dependencies" $
   lambda "defs" $ lets [
@@ -400,14 +400,14 @@ topologicalSortTypeDefinitionsDef = define "topologicalSortTypeDefinitions" $
     $ Lists.map (lambda "names" $ Optionals.cat $ Lists.map (lambda "n" $ Maps.lookup (var "n") (var "nameToDef")) (var "names")) $
       var "sorted"
 
-typeDependenciesDef :: TElement (Bool -> (Type -> Type) -> Name -> Flow Graph (M.Map Name Type))
+typeDependenciesDef :: TBinding (Bool -> (Type -> Type) -> Name -> Flow Graph (M.Map Name Type))
 typeDependenciesDef = define "typeDependencies" $
   doc "Get all type dependencies for a given type name" $
   lambdas ["withSchema", "transform", "name"] $ lets [
   "requireType">: lambda "name" $
     trace (Strings.cat2 (string "type dependencies of ") (Core.unName $ var "name")) $
     Flows.bind (ref Lexical.requireElementDef @@ var "name") $
-      lambda "el" $ ref DecodeCore.typeDef @@ Graph.elementTerm (var "el"),
+      lambda "el" $ ref DecodeCore.typeDef @@ Core.bindingTerm (var "el"),
   "toPair">: lambda "name" $
     Flows.bind (var "requireType" @@ var "name") $
       lambda "typ" $ Flows.pure $ pair (var "name") (var "transform" @@ var "typ"),
@@ -425,7 +425,7 @@ typeDependenciesDef = define "typeDependencies" $
           $ var "deps" @@ var "newSeeds" @@ var "newNames")] $
     var "deps" @@ Sets.singleton (var "name") @@ Maps.empty
 
-typesToElementsDef :: TElement (M.Map Name Type -> M.Map Name Element)
+typesToElementsDef :: TBinding (M.Map Name Type -> M.Map Name Binding)
 typesToElementsDef = define "typesToElements" $
   doc "Encode a map of named types to a map of elements" $
   "typeMap" ~>
@@ -433,7 +433,7 @@ typesToElementsDef = define "typesToElements" $
     "name" <~ first (var "pair") $
     pair
       (var "name")
-      (Graph.element
+      (Core.binding
         (var "name")
         (ref EncodeCore.typeDef @@ (second $ var "pair"))
         nothing)) $

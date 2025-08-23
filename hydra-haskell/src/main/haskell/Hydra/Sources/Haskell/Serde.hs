@@ -87,7 +87,7 @@ import qualified Hydra.Sources.Haskell.Ast as HaskellAst
 import qualified Hydra.Sources.Haskell.Operators as Operators
 
 
-haskellSerdeDefinition :: String -> TTerm a -> TElement a
+haskellSerdeDefinition :: String -> TTerm a -> TBinding a
 haskellSerdeDefinition = definitionInModule haskellSerdeModule
 
 haskellSerdeModule :: Module
@@ -138,28 +138,28 @@ haskellSerdeModule = Module ns elements
       el toHaskellCommentsDef,
       el writeQualifiedNameDef]
 
-alternativeToExprDef :: TElement (H.Alternative -> Expr)
+alternativeToExprDef :: TBinding (H.Alternative -> Expr)
 alternativeToExprDef = haskellSerdeDefinition "alternativeToExpr" $
   lambda "alt" $ 
     ref Serialization.ifxDef @@ ref Operators.caseOpDef @@
       (ref patternToExprDef @@ (project H._Alternative H._Alternative_pattern @@ var "alt")) @@
       (ref caseRhsToExprDef @@ (project H._Alternative H._Alternative_rhs @@ var "alt"))
 
-applicationExpressionToExprDef :: TElement (H.ApplicationExpression -> Expr)
+applicationExpressionToExprDef :: TBinding (H.ApplicationExpression -> Expr)
 applicationExpressionToExprDef = haskellSerdeDefinition "applicationExpressionToExpr" $
   lambda "app" $
     ref Serialization.ifxDef @@ ref Operators.appOpDef @@
       (ref expressionToExprDef @@ (project H._ApplicationExpression H._ApplicationExpression_function @@ var "app")) @@
       (ref expressionToExprDef @@ (project H._ApplicationExpression H._ApplicationExpression_argument @@ var "app"))
 
-applicationPatternToExprDef :: TElement (H.ApplicationPattern -> Expr)
+applicationPatternToExprDef :: TBinding (H.ApplicationPattern -> Expr)
 applicationPatternToExprDef = haskellSerdeDefinition "applicationPatternToExpr" $
   lambda "appPat" $ lets [
             "name">: project H._ApplicationPattern H._ApplicationPattern_name @@ var "appPat",
     "pats">: project H._ApplicationPattern H._ApplicationPattern_args @@ var "appPat"] $
     ref Serialization.spaceSepDef @@ (Lists.cons (ref nameToExprDef @@ var "name") (Lists.map (ref patternToExprDef) (var "pats")))
 
-assertionToExprDef :: TElement (H.Assertion -> Expr)
+assertionToExprDef :: TBinding (H.Assertion -> Expr)
 assertionToExprDef = haskellSerdeDefinition "assertionToExpr" $
   lambda "sert" $
     cases H._Assertion (var "sert") Nothing [
@@ -167,7 +167,7 @@ assertionToExprDef = haskellSerdeDefinition "assertionToExpr" $
       H._Assertion_tuple>>: lambda "serts" $
         ref Serialization.parenListDef @@ false @@ (Lists.map (ref assertionToExprDef) (var "serts"))]
 
-caseExpressionToExprDef :: TElement (H.CaseExpression -> Expr)
+caseExpressionToExprDef :: TBinding (H.CaseExpression -> Expr)
 caseExpressionToExprDef = haskellSerdeDefinition "caseExpressionToExpr" $
   lambda "caseExpr" $ lets [
     "cs">: project H._CaseExpression H._CaseExpression_case @@ var "caseExpr",
@@ -181,11 +181,11 @@ caseExpressionToExprDef = haskellSerdeDefinition "caseExpressionToExpr" $
     "rhs">: ref Serialization.newlineSepDef @@ (Lists.map (ref alternativeToExprDef) (var "alts"))] $
     ref Serialization.ifxDef @@ var "ofOp" @@ var "lhs" @@ var "rhs"
 
-caseRhsToExprDef :: TElement (H.CaseRhs -> Expr)
+caseRhsToExprDef :: TBinding (H.CaseRhs -> Expr)
 caseRhsToExprDef = haskellSerdeDefinition "caseRhsToExpr" $
   lambda "rhs" $ ref expressionToExprDef @@ (unwrap H._CaseRhs @@ var "rhs")
 
-classAssertionToExprDef :: TElement (H.ClassAssertion -> Expr)
+classAssertionToExprDef :: TBinding (H.ClassAssertion -> Expr)
 classAssertionToExprDef = haskellSerdeDefinition "classAssertionToExpr" $
   lambda "clsAsrt" $ lets [
     "name">: project H._ClassAssertion H._ClassAssertion_name @@ var "clsAsrt",
@@ -194,7 +194,7 @@ classAssertionToExprDef = haskellSerdeDefinition "classAssertionToExpr" $
       ref nameToExprDef @@ var "name",
       ref Serialization.commaSepDef @@ ref Serialization.halfBlockStyleDef @@ (Lists.map (ref typeToExprDef) (var "types"))]
 
-constructorToExprDef :: TElement (H.Constructor -> Expr)
+constructorToExprDef :: TBinding (H.Constructor -> Expr)
 constructorToExprDef = haskellSerdeDefinition "constructorToExpr" $
   lambda "cons" $
     cases H._Constructor (var "cons") Nothing [
@@ -209,7 +209,7 @@ constructorToExprDef = haskellSerdeDefinition "constructorToExpr" $
           ref nameToExprDef @@ var "name",
           ref Serialization.curlyBracesListDef @@ nothing @@ ref Serialization.halfBlockStyleDef @@ (Lists.map (ref fieldWithCommentsToExprDef) (var "fields"))]]
 
-constructorWithCommentsToExprDef :: TElement (H.ConstructorWithComments -> Expr)
+constructorWithCommentsToExprDef :: TBinding (H.ConstructorWithComments -> Expr)
 constructorWithCommentsToExprDef = haskellSerdeDefinition "constructorWithCommentsToExpr" $
   lambda "consWithComments" $ lets [
     "body">: project H._ConstructorWithComments H._ConstructorWithComments_body @@ var "consWithComments",
@@ -221,14 +221,14 @@ constructorWithCommentsToExprDef = haskellSerdeDefinition "constructorWithCommen
         ref constructorToExprDef @@ var "body"])
       (var "mc")
 
-dataOrNewtypeToExprDef :: TElement (H.DataOrNewtype -> Expr)
+dataOrNewtypeToExprDef :: TBinding (H.DataOrNewtype -> Expr)
 dataOrNewtypeToExprDef = haskellSerdeDefinition "dataOrNewtypeToExpr" $
   lambda "kw" $
     cases H._DataOrNewtype (var "kw") Nothing [
       H._DataOrNewtype_data>>: constant $ ref Serialization.cstDef @@ string "data",
       H._DataOrNewtype_newtype>>: constant $ ref Serialization.cstDef @@ string "newtype"]
 
-declarationHeadToExprDef :: TElement (H.DeclarationHead -> Expr)
+declarationHeadToExprDef :: TBinding (H.DeclarationHead -> Expr)
 declarationHeadToExprDef = haskellSerdeDefinition "declarationHeadToExpr" $
   lambda "hd" $
     cases H._DeclarationHead (var "hd") Nothing [
@@ -238,7 +238,7 @@ declarationHeadToExprDef = haskellSerdeDefinition "declarationHeadToExpr" $
         ref Serialization.spaceSepDef @@ list [ref declarationHeadToExprDef @@ var "fun", ref variableToExprDef @@ var "op"],
       H._DeclarationHead_simple>>: lambda "name" $ ref nameToExprDef @@ var "name"]
 
-declarationToExprDef :: TElement (H.Declaration -> Expr)
+declarationToExprDef :: TBinding (H.Declaration -> Expr)
 declarationToExprDef = haskellSerdeDefinition "declarationToExpr" $
   lambda "decl" $
     cases H._Declaration (var "decl") Nothing [
@@ -276,7 +276,7 @@ declarationToExprDef = haskellSerdeDefinition "declarationToExpr" $
           ref Serialization.ifxDef @@ ref Operators.typeOpDef @@ (ref nameToExprDef @@ var "name") @@ (ref typeToExprDef @@ var "htype"),
           ref valueBindingToExprDef @@ var "vb"]]
 
-declarationWithCommentsToExprDef :: TElement (H.DeclarationWithComments -> Expr)
+declarationWithCommentsToExprDef :: TBinding (H.DeclarationWithComments -> Expr)
 declarationWithCommentsToExprDef = haskellSerdeDefinition "declarationWithCommentsToExpr" $
   lambda "declWithComments" $ lets [
     "body">: project H._DeclarationWithComments H._DeclarationWithComments_body @@ var "declWithComments",
@@ -288,7 +288,7 @@ declarationWithCommentsToExprDef = haskellSerdeDefinition "declarationWithCommen
         ref declarationToExprDef @@ var "body"])
       (var "mc")
 
-expressionToExprDef :: TElement (H.Expression -> Expr)
+expressionToExprDef :: TBinding (H.Expression -> Expr)
 expressionToExprDef = haskellSerdeDefinition "expressionToExpr" $
   lambda "expr" $
     cases H._Expression (var "expr") Nothing [
@@ -316,7 +316,7 @@ expressionToExprDef = haskellSerdeDefinition "expressionToExpr" $
         ref Serialization.parenListDef @@ false @@ (Lists.map (ref expressionToExprDef) (var "exprs")),
       H._Expression_variable>>: lambda "name" $ ref nameToExprDef @@ var "name"]
 
-constructRecordExpressionToExprDef :: TElement (H.ConstructRecordExpression -> Expr)
+constructRecordExpressionToExprDef :: TBinding (H.ConstructRecordExpression -> Expr)
 constructRecordExpressionToExprDef = haskellSerdeDefinition "constructRecordExpressionToExpr" $
   lambda "constructRecord" $ lets [
     "name">: project H._ConstructRecordExpression H._ConstructRecordExpression_name @@ var "constructRecord",
@@ -330,14 +330,14 @@ constructRecordExpressionToExprDef = haskellSerdeDefinition "constructRecordExpr
       ref nameToExprDef @@ var "name",
       ref Serialization.bracketsDef @@ ref Serialization.curlyBracesDef @@ ref Serialization.halfBlockStyleDef @@ var "body"]
 
-fieldToExprDef :: TElement (H.Field -> Expr)
+fieldToExprDef :: TBinding (H.Field -> Expr)
 fieldToExprDef = haskellSerdeDefinition "fieldToExpr" $
   lambda "field" $ lets [
     "name">: project H._Field H._Field_name @@ var "field",
     "typ">: project H._Field H._Field_type @@ var "field"] $
     ref Serialization.spaceSepDef @@ list [ref nameToExprDef @@ var "name", ref Serialization.cstDef @@ string "::", ref typeToExprDef @@ var "typ"]
 
-fieldWithCommentsToExprDef :: TElement (H.FieldWithComments -> Expr)
+fieldWithCommentsToExprDef :: TBinding (H.FieldWithComments -> Expr)
 fieldWithCommentsToExprDef = haskellSerdeDefinition "fieldWithCommentsToExpr" $
   lambda "fieldWithComments" $ lets [
     "field">: project H._FieldWithComments H._FieldWithComments_field @@ var "fieldWithComments",
@@ -349,7 +349,7 @@ fieldWithCommentsToExprDef = haskellSerdeDefinition "fieldWithCommentsToExpr" $
         ref fieldToExprDef @@ var "field"])
       (var "mc")
 
-ifExpressionToExprDef :: TElement (H.IfExpression -> Expr)
+ifExpressionToExprDef :: TBinding (H.IfExpression -> Expr)
 ifExpressionToExprDef = haskellSerdeDefinition "ifExpressionToExpr" $
   lambda "ifExpr" $ lets [
     "eif">: project H._IfExpression H._IfExpression_condition @@ var "ifExpr",
@@ -367,11 +367,11 @@ ifExpressionToExprDef = haskellSerdeDefinition "ifExpressionToExpr" $
       (ref Serialization.spaceSepDef @@ list [ref Serialization.cstDef @@ string "if", ref expressionToExprDef @@ var "eif"]) @@
       var "body"
 
-importExportSpecToExprDef :: TElement (H.ImportExportSpec -> Expr)
+importExportSpecToExprDef :: TBinding (H.ImportExportSpec -> Expr)
 importExportSpecToExprDef = haskellSerdeDefinition "importExportSpecToExpr" $
   lambda "spec" $ ref nameToExprDef @@ (project H._ImportExportSpec H._ImportExportSpec_name @@ var "spec")
 
-importToExprDef :: TElement (H.Import -> Expr)
+importToExprDef :: TBinding (H.Import -> Expr)
 importToExprDef = haskellSerdeDefinition "importToExpr" $
   lambda "import" $ lets [
     "qual">: project H._Import H._Import_qualified @@ var "import",
@@ -394,7 +394,7 @@ importToExprDef = haskellSerdeDefinition "importToExpr" $
       Optionals.map (var "hidingSec") (var "mspec")]] $
     ref Serialization.spaceSepDef @@ var "parts"
 
-lambdaExpressionToExprDef :: TElement (H.LambdaExpression -> Expr)
+lambdaExpressionToExprDef :: TBinding (H.LambdaExpression -> Expr)
 lambdaExpressionToExprDef = haskellSerdeDefinition "lambdaExpressionToExpr" $
   lambda "lambdaExpr" $ lets [
     "bindings">: project H._LambdaExpression H._LambdaExpression_bindings @@ var "lambdaExpr",
@@ -405,7 +405,7 @@ lambdaExpressionToExprDef = haskellSerdeDefinition "lambdaExpressionToExpr" $
       (ref Serialization.prefixDef @@ string "\\" @@ var "head") @@
       var "body"
 
-literalToExprDef :: TElement (H.Literal -> Expr)
+literalToExprDef :: TBinding (H.Literal -> Expr)
 literalToExprDef = haskellSerdeDefinition "literalToExpr" $
   lambda "lit" $
     ref Serialization.cstDef @@
@@ -426,14 +426,14 @@ literalToExprDef = haskellSerdeDefinition "literalToExpr" $
         H._Literal_integer>>: lambda "i" $ Literals.showBigint $ var "i",
         H._Literal_string>>: lambda "s" $ Literals.showString $ var "s"]
 
-localBindingToExprDef :: TElement (H.LocalBinding -> Expr)
+localBindingToExprDef :: TBinding (H.LocalBinding -> Expr)
 localBindingToExprDef = haskellSerdeDefinition "localBindingToExpr" $
   lambda "binding" $
     cases H._LocalBinding (var "binding") Nothing [
       H._LocalBinding_signature>>: lambda "ts" $ ref typeSignatureToExprDef @@ var "ts",
       H._LocalBinding_value>>: lambda "vb" $ ref valueBindingToExprDef @@ var "vb"]
 
-moduleHeadToExprDef :: TElement (H.ModuleHead -> Expr)
+moduleHeadToExprDef :: TBinding (H.ModuleHead -> Expr)
 moduleHeadToExprDef = haskellSerdeDefinition "moduleHeadToExpr" $
   lambda "moduleHead" $ lets [
     "mc">: project H._ModuleHead H._ModuleHead_comments @@ var "moduleHead",
@@ -451,7 +451,7 @@ moduleHeadToExprDef = haskellSerdeDefinition "moduleHeadToExpr" $
         var "head"])
       (var "mc")
 
-moduleToExprDef :: TElement (H.Module -> Expr)
+moduleToExprDef :: TBinding (H.Module -> Expr)
 moduleToExprDef = haskellSerdeDefinition "moduleToExpr" $
   lambda "module" $ lets [
     "mh">: project H._Module H._Module_head @@ var "module",
@@ -464,7 +464,7 @@ moduleToExprDef = haskellSerdeDefinition "moduleToExpr" $
       (list [ref Serialization.newlineSepDef @@ (Lists.map (ref importToExprDef) (var "imports"))])] $
     ref Serialization.doubleNewlineSepDef @@ (Lists.concat $ list [var "headerLine", var "importLines", var "declLines"])
 
-nameToExprDef :: TElement (H.Name -> Expr)
+nameToExprDef :: TBinding (H.Name -> Expr)
 nameToExprDef = haskellSerdeDefinition "nameToExpr" $
   lambda "name" $
     ref Serialization.cstDef @@
@@ -473,7 +473,7 @@ nameToExprDef = haskellSerdeDefinition "nameToExpr" $
         H._Name_normal>>: lambda "qn" $ ref writeQualifiedNameDef @@ var "qn",
         H._Name_parens>>: lambda "qn" $ Strings.cat $ list [string "(", ref writeQualifiedNameDef @@ var "qn", string ")"]]
 
-patternToExprDef :: TElement (H.Pattern -> Expr)
+patternToExprDef :: TBinding (H.Pattern -> Expr)
 patternToExprDef = haskellSerdeDefinition "patternToExpr" $
   lambda "pat" $
     cases H._Pattern (var "pat") Nothing [
@@ -487,22 +487,22 @@ patternToExprDef = haskellSerdeDefinition "patternToExpr" $
         ref Serialization.parenListDef @@ false @@ (Lists.map (ref patternToExprDef) (var "pats")),
       H._Pattern_wildcard>>: constant $ ref Serialization.cstDef @@ string "_"]
 
-rightHandSideToExprDef :: TElement (H.RightHandSide -> Expr)
+rightHandSideToExprDef :: TBinding (H.RightHandSide -> Expr)
 rightHandSideToExprDef = haskellSerdeDefinition "rightHandSideToExpr" $
   lambda "rhs" $ ref expressionToExprDef @@ (unwrap H._RightHandSide @@ var "rhs")
 
-statementToExprDef :: TElement (H.Statement -> Expr)
+statementToExprDef :: TBinding (H.Statement -> Expr)
 statementToExprDef = haskellSerdeDefinition "statementToExpr" $
   lambda "stmt" $ ref expressionToExprDef @@ (unwrap H._Statement @@ var "stmt")
 
-typeSignatureToExprDef :: TElement (H.TypeSignature -> Expr)
+typeSignatureToExprDef :: TBinding (H.TypeSignature -> Expr)
 typeSignatureToExprDef = haskellSerdeDefinition "typeSignatureToExpr" $
   lambda "typeSig" $ lets [
     "name">: project H._TypeSignature H._TypeSignature_name @@ var "typeSig",
     "typ">: project H._TypeSignature H._TypeSignature_type @@ var "typeSig"] $
     ref Serialization.spaceSepDef @@ list [ref nameToExprDef @@ var "name", ref Serialization.cstDef @@ string "::", ref typeToExprDef @@ var "typ"]
 
-typeToExprDef :: TElement (H.Type -> Expr)
+typeToExprDef :: TBinding (H.Type -> Expr)
 typeToExprDef = haskellSerdeDefinition "typeToExpr" $
   lambda "htype" $
     cases H._Type (var "htype") Nothing [
@@ -524,7 +524,7 @@ typeToExprDef = haskellSerdeDefinition "typeToExpr" $
         ref Serialization.parenListDef @@ false @@ (Lists.map (ref typeToExprDef) (var "types")),
       H._Type_variable>>: lambda "name" $ ref nameToExprDef @@ var "name"]
 
-valueBindingToExprDef :: TElement (H.ValueBinding -> Expr)
+valueBindingToExprDef :: TBinding (H.ValueBinding -> Expr)
 valueBindingToExprDef = haskellSerdeDefinition "valueBindingToExpr" $
   lambda "vb" $
     cases H._ValueBinding (var "vb") Nothing [
@@ -542,15 +542,15 @@ valueBindingToExprDef = haskellSerdeDefinition "valueBindingToExpr" $
               ref Serialization.indentBlockDef @@ Lists.cons (ref Serialization.cstDef @@ string "where") (Lists.map (ref localBindingToExprDef) (var "bindings"))])
           (var "local")]
 
-variableToExprDef :: TElement (H.Variable -> Expr)
+variableToExprDef :: TBinding (H.Variable -> Expr)
 variableToExprDef = haskellSerdeDefinition "variableToExpr" $
   lambda "variable" $ ref nameToExprDef @@ (unwrap H._Variable @@ var "variable")
 
-toHaskellCommentsDef :: TElement (String -> String)
+toHaskellCommentsDef :: TBinding (String -> String)
 toHaskellCommentsDef = haskellSerdeDefinition "toHaskellComments" $
   lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "-- | ") (var "s")) (Strings.lines $ var "c")
 
-writeQualifiedNameDef :: TElement (H.QualifiedName -> String)
+writeQualifiedNameDef :: TBinding (H.QualifiedName -> String)
 writeQualifiedNameDef = haskellSerdeDefinition "writeQualifiedName" $
   lambda "qname" $ lets [
     "qualifiers">: project H._QualifiedName H._QualifiedName_qualifiers @@ var "qname",

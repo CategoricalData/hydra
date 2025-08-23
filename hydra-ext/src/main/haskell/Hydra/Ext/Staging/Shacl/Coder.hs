@@ -28,7 +28,7 @@ shaclCoder mod = do
     return (sg, termFlow)
   where
     toShape el = do
-      typ <- DecodeCore.type_ $ elementTerm el
+      typ <- DecodeCore.type_ $ bindingTerm el
       common <- encodeType typ
       return $ Shacl.Definition (elementIri el) $ Shacl.ShapeNode $ Shacl.NodeShape common
 
@@ -47,8 +47,8 @@ defaultCommonProperties = Shacl.CommonProperties {
   Shacl.commonPropertiesTargetObjectsOf = S.empty,
   Shacl.commonPropertiesTargetSubjectsOf = S.empty}
 
-elementIri :: Element -> Rdf.Iri
-elementIri = nameToIri . elementName
+elementIri :: Binding -> Rdf.Iri
+elementIri = nameToIri . bindingName
 
 encodeField :: Name -> Rdf.Resource -> Field -> Flow Graph [Rdf.Triple]
 encodeField rname subject field = do

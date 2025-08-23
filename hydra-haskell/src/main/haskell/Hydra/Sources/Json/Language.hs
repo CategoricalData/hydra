@@ -88,10 +88,10 @@ module_ = Module (Namespace "hydra.ext.org.json.language")
   KernelTypes.kernelTypesModules $
   Just "Language constraints for JSON"
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-jsonLanguageDef :: TElement Language
+jsonLanguageDef :: TBinding Language
 jsonLanguageDef = define "jsonLanguage" $
   doc "Language constraints for JSON" $ lets [
   "eliminationVariants">: Sets.empty,

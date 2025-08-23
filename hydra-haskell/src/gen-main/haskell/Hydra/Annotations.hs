@@ -94,12 +94,12 @@ getTypeDescription :: (Core.Type -> Compute.Flow Graph.Graph (Maybe String))
 getTypeDescription typ = (getDescription (typeAnnotationInternal typ))
 
 -- | For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression.
-isNativeType :: (Graph.Element -> Bool)
+isNativeType :: (Core.Binding -> Bool)
 isNativeType el =  
-  let isFlaggedAsFirstClassType = (Optionals.fromMaybe False (Optionals.bind (getTermAnnotation Constants.key_firstClassType (Graph.elementTerm el)) Decoding.boolean))
+  let isFlaggedAsFirstClassType = (Optionals.fromMaybe False (Optionals.bind (getTermAnnotation Constants.key_firstClassType (Core.bindingTerm el)) Decoding.boolean))
   in (Optionals.maybe False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
     Core.typeSchemeVariables = [],
-    Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type"))})) (Logic.not isFlaggedAsFirstClassType)) (Graph.elementType el))
+    Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type"))})) (Logic.not isFlaggedAsFirstClassType)) (Core.bindingType el))
 
 hasDescription :: (M.Map Core.Name t0 -> Bool)
 hasDescription anns = (Optionals.isJust (Maps.lookup Constants.key_description anns))
@@ -222,17 +222,17 @@ typeAnnotationInternal = (aggregateAnnotations getAnn Core.annotatedTypeSubject 
       _ -> Nothing) t)
 
 -- | Create a type element with proper annotations
-typeElement :: (Core.Name -> Core.Type -> Graph.Element)
+typeElement :: (Core.Name -> Core.Type -> Core.Binding)
 typeElement name typ =  
   let schemaTerm = (Core.TermVariable (Core.Name "hydra.core.Type")) 
       dataTerm = (normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
               Core.annotatedTermSubject = (Core__.type_ typ),
               Core.annotatedTermAnnotation = (Maps.fromList [
                 (Constants.key_type, schemaTerm)])})))
-  in Graph.Element {
-    Graph.elementName = name,
-    Graph.elementTerm = dataTerm,
-    Graph.elementType = (Just (Core.TypeScheme {
+  in Core.Binding {
+    Core.bindingName = name,
+    Core.bindingTerm = dataTerm,
+    Core.bindingType = (Just (Core.TypeScheme {
       Core.typeSchemeVariables = [],
       Core.typeSchemeType = typ}))}
 

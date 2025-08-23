@@ -82,7 +82,7 @@ import qualified Data.Set                                   as S
 import qualified Data.Maybe                                 as Y
 
 
-cppLanguageDefinition :: String -> TTerm a -> TElement a
+cppLanguageDefinition :: String -> TTerm a -> TBinding a
 cppLanguageDefinition = definitionInModule cppLanguageModule
 
 cppLanguageModule :: Module
@@ -92,7 +92,7 @@ cppLanguageModule = Module (Namespace "hydra.ext.cpp.language")
   KernelTypes.kernelTypesModules $
   Just "Language constraints and reserved words for C++"
 
-cppLanguageDef :: TElement Language
+cppLanguageDef :: TBinding Language
 cppLanguageDef = cppLanguageDefinition "cppLanguage" $
   doc "Language constraints for C++" $ lets [
   "eliminationVariants">: Sets.fromList $ list [
@@ -160,7 +160,7 @@ cppLanguageDef = cppLanguageDefinition "cppLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-cppReservedWordsDef :: TElement (S.Set String)
+cppReservedWordsDef :: TBinding (S.Set String)
 cppReservedWordsDef = cppLanguageDefinition "cppReservedWords" $
   doc "A set of reserved words in C++" $ lets [
   "cppKeywords">:

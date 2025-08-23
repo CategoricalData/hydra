@@ -311,24 +311,24 @@ let_ l = (Core.TermRecord (Core.Record {
   Core.recordFields = [
     Core.Field {
       Core.fieldName = (Core.Name "bindings"),
-      Core.fieldTerm = (Core.TermList (Lists.map letBinding (Core.letBindings l)))},
+      Core.fieldTerm = (Core.TermList (Lists.map binding (Core.letBindings l)))},
     Core.Field {
       Core.fieldName = (Core.Name "environment"),
       Core.fieldTerm = (term (Core.letEnvironment l))}]}))
 
-letBinding :: (Core.Binding -> Core.Term)
-letBinding b = (Core.TermRecord (Core.Record {
+binding :: (Core.Binding -> Core.Term)
+binding b = (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.core.Binding"),
   Core.recordFields = [
     Core.Field {
       Core.fieldName = (Core.Name "name"),
-      Core.fieldTerm = (name (Core.letBindingName b))},
+      Core.fieldTerm = (name (Core.bindingName b))},
     Core.Field {
       Core.fieldName = (Core.Name "term"),
-      Core.fieldTerm = (term (Core.letBindingTerm b))},
+      Core.fieldTerm = (term (Core.bindingTerm b))},
     Core.Field {
       Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (Core.TermOptional (Optionals.map typeScheme (Core.letBindingType b)))}]}))
+      Core.fieldTerm = (Core.TermOptional (Optionals.map typeScheme (Core.bindingType b)))}]}))
 
 literal :: (Core.Literal -> Core.Term)
 literal x = case x of

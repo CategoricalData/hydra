@@ -68,17 +68,17 @@ module_ = Module (Namespace "hydra.reduction") elements
      el termIsClosedDef,
      el termIsValueDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-alphaConvertDef :: TElement (Name -> Name -> Term -> Term)
+alphaConvertDef :: TBinding (Name -> Name -> Term -> Term)
 alphaConvertDef = define "alphaConvert" $
   doc "Alpha convert a variable in a term" $
   "vold" ~> "vnew" ~> "term" ~> ref Rewriting.replaceFreeTermVariableDef @@ var "vold" @@ (Core.termVariable $ var "vnew") @@ var "term"
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceTypeDef :: TElement (Type -> Flow Graph Type)
+betaReduceTypeDef :: TBinding (Type -> Flow Graph Type)
 betaReduceTypeDef = define "betaReduceType" $
   lambda "typ" $ lets [
     "mapExpr">: lambdas ["recurse", "t"] $
@@ -105,7 +105,7 @@ betaReduceTypeDef = define "betaReduceType" $
             lambda "t'" $ ref betaReduceTypeDef @@ (Core.typeApplication $ Core.applicationType (var "t'") (var "rhs"))] @@ var "lhs"]
     $ ref Rewriting.rewriteTypeMDef @@ var "mapExpr" @@ var "typ"
 
-contractTermDef :: TElement (Term -> Term)
+contractTermDef :: TBinding (Term -> Term)
 contractTermDef = define "contractTerm" $
   doc ("Apply the special rules:\n"
     <> "    ((\\x.e1) e2) == e1, where x does not appear free in e1\n"
@@ -133,11 +133,11 @@ contractTermDef = define "contractTerm" $
     ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term"
 
 -- For demo purposes. This should be generalized to enable additional side effects of interest.
-countPrimitiveInvocationsDef :: TElement Bool
+countPrimitiveInvocationsDef :: TBinding Bool
 countPrimitiveInvocationsDef = define "countPrimitiveInvocations" true
 
 -- Note: unused / untested
-etaReduceTermDef :: TElement (Term -> Term)
+etaReduceTermDef :: TBinding (Term -> Term)
 etaReduceTermDef = define "etaReduceTerm" $
   lambda "term" $ lets [
     "noChange">: var "term",
@@ -175,7 +175,7 @@ etaReduceTermDef = define "etaReduceTerm" $
         @@ var "f"]
     @@ var "term"
 
-expandLambdasDef :: TElement (Graph -> Term -> Term)
+expandLambdasDef :: TBinding (Graph -> Term -> Term)
 expandLambdasDef = define "expandLambdas" $
   doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x', in which the implicit"
     <> " parameters of primitive functions and eliminations are made into explicit lambda parameters."
@@ -212,7 +212,7 @@ expandLambdasDef = define "expandLambdas" $
           var "rewrite" @@ (Lists.cons (var "erhs") (var "args")) @@ var "recurse" @@ var "lhs"]]
     $ ref contractTermDef @@ (ref Rewriting.rewriteTermDef @@ (var "rewrite" @@ (list [])) @@ var "term")
 
-expansionArityDef :: TElement (Graph -> Term -> Int)
+expansionArityDef :: TBinding (Graph -> Term -> Int)
 expansionArityDef = define "expansionArity" $
   doc "Calculate the arity for lambda expansion" $
   "graph" ~> "term" ~>
@@ -235,9 +235,9 @@ expansionArityDef = define "expansionArity" $
           ("ts" ~> ref Arity.typeArityDef @@ (Core.typeSchemeType $ var "ts"))
           (Optionals.bind
             (ref Lexical.lookupElementDef @@ var "graph" @@ var "name")
-            ("el" ~> Graph.elementType $ var "el"))]
+            ("el" ~> Core.bindingType $ var "el"))]
 
-reduceTermDef :: TElement (Bool -> Term -> Flow Graph Term)
+reduceTermDef :: TBinding (Bool -> Term -> Flow Graph Term)
 reduceTermDef = define "reduceTerm" $
   doc "A term evaluation function which is alternatively lazy or eager" $
   lambdas ["eager", "term"] $ lets [
@@ -365,12 +365,12 @@ reduceTermDef = define "reduceTerm" $
         lambda "inner" $ var "applyIfNullary" @@ var "eager" @@ var "inner" @@ (list [])]
     $ ref Rewriting.rewriteTermMDef @@ var "mapping" @@ var "term"
 
-termIsClosedDef :: TElement (Term -> Bool)
+termIsClosedDef :: TBinding (Term -> Bool)
 termIsClosedDef = define "termIsClosed" $
   doc "Whether a term is closed, i.e. represents a complete program" $
   lambda "term" $ Sets.null $ ref Rewriting.freeVariablesInTermDef @@ var "term"
 
-termIsValueDef :: TElement (Graph -> Term -> Bool)
+termIsValueDef :: TBinding (Graph -> Term -> Bool)
 termIsValueDef = define "termIsValue" $
   doc "Whether a term has been fully reduced to a value" $
   lambda "g" $ lambda "term" $ lets [

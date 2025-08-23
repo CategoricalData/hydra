@@ -309,7 +309,7 @@ testGroupForPathologicalTerms = supergroup "Pathological terms" [
           "x">: var "x"]
           $ var "x")
         ["t0"] (T.var "t0"),
-      expectPoly 2 []
+      expectPoly 2 [tag_disabledForMinimalInference]
         (lets ["id">: lambda "x" $ var "x",
                "weird">: var "id" @@ var "id" @@ var "id"] $
                var "weird")

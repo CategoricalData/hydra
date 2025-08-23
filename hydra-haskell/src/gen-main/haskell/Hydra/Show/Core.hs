@@ -19,6 +19,18 @@ import qualified Data.Set as S
 readTerm :: (t0 -> Maybe t1)
 readTerm _ = Nothing
 
+-- | Show a binding as a string
+binding :: (Core.Binding -> String)
+binding el =  
+  let name = (Core.unName (Core.bindingName el)) 
+      t = (Core.bindingTerm el)
+      typeStr = (Optionals.maybe "" (\ts -> Strings.cat2 " : " (typeScheme ts)) (Core.bindingType el))
+  in (Strings.cat [
+    name,
+    " = ",
+    term t,
+    typeStr])
+
 -- | Show an elimination as a string
 elimination :: (Core.Elimination -> String)
 elimination elm = ((\x -> case x of
@@ -183,16 +195,7 @@ term t =
               rhs = (Core.applicationArgument app)
           in ((\x -> case x of
             Core.TermApplication v1 -> (gatherTerms (Lists.cons rhs prev) v1)
-            _ -> (Lists.cons lhs (Lists.cons rhs prev))) lhs)) 
-      showBinding = (\binding ->  
-              let v = (Core.unName (Core.letBindingName binding)) 
-                  bindingTerm = (Core.letBindingTerm binding)
-                  typeStr = (Optionals.maybe "" (\ts -> Strings.cat2 ":" (typeScheme ts)) (Core.letBindingType binding))
-              in (Strings.cat [
-                v,
-                "=",
-                term bindingTerm,
-                typeStr]))
+            _ -> (Lists.cons lhs (Lists.cons rhs prev))) lhs))
   in ((\x -> case x of
     Core.TermAnnotated v1 -> (term (Core.annotatedTermSubject v1))
     Core.TermApplication v1 ->  
@@ -206,7 +209,7 @@ term t =
     Core.TermLet v1 ->  
       let bindings = (Core.letBindings v1) 
           env = (Core.letEnvironment v1)
-          bindingStrs = (Lists.map showBinding bindings)
+          bindingStrs = (Lists.map binding bindings)
       in (Strings.cat [
         "let ",
         Strings.intercalate ", " bindingStrs,

@@ -144,10 +144,7 @@ inferGraphTypes g0 =
           in  
             let env = (Core.letEnvironment l)
             in  
-              let fromBinding = (\b -> (Core.letBindingName b, Graph.Element {
-                      Graph.elementName = (Core.letBindingName b),
-                      Graph.elementTerm = (Core.letBindingTerm b),
-                      Graph.elementType = (Core.letBindingType b)}))
+              let fromBinding = (\b -> (Core.bindingName b, b))
               in Graph.Graph {
                 Graph.graphElements = (Maps.fromList (Lists.map fromBinding bindings)),
                 Graph.graphEnvironment = Maps.empty,
@@ -158,9 +155,9 @@ inferGraphTypes g0 =
   in  
     let toLetTerm = (\g ->  
             let toBinding = (\el -> Core.Binding {
-                    Core.letBindingName = (Graph.elementName el),
-                    Core.letBindingTerm = (Graph.elementTerm el),
-                    Core.letBindingType = Nothing})
+                    Core.bindingName = (Core.bindingName el),
+                    Core.bindingTerm = (Core.bindingTerm el),
+                    Core.bindingType = Nothing})
             in (Core.TermLet (Core.Let {
               Core.letBindings = (Lists.map toBinding (Maps.elems (Graph.graphElements g))),
               Core.letEnvironment = (Graph.graphBody g)})))
@@ -340,9 +337,9 @@ inferTypeOf cx term =
   let letTerm = (Core.TermLet (Core.Let {
           Core.letBindings = [
             Core.Binding {
-              Core.letBindingName = (Core.Name "ignoredVariableName"),
-              Core.letBindingTerm = term,
-              Core.letBindingType = Nothing}],
+              Core.bindingName = (Core.Name "ignoredVariableName"),
+              Core.bindingTerm = term,
+              Core.bindingType = Nothing}],
           Core.letEnvironment = (Core.TermLiteral (Core.LiteralString "ignoredEnvironment"))}))
   in  
     let unifyAndSubst = (\result ->  
@@ -352,9 +349,9 @@ inferTypeOf cx term =
               in (Logic.ifElse (Equality.equal 1 (Lists.length bindings)) ( 
                 let binding = (Lists.head bindings)
                 in  
-                  let term1 = (Core.letBindingTerm binding)
+                  let term1 = (Core.bindingTerm binding)
                   in  
-                    let mts = (Core.letBindingType binding)
+                    let mts = (Core.bindingType binding)
                     in (Optionals.maybe (Flows.fail "Expected a type scheme") (\ts -> Flows.pure (term1, ts)) mts)) (Flows.fail (Strings.cat [
                 "Expected a single binding with a type scheme, but got: ",
                 Literals.showInt32 (Lists.length bindings),
@@ -452,7 +449,7 @@ inferTypeOfLetNormalized cx0 letTerm =
   in  
     let env0 = (Core.letEnvironment letTerm)
     in  
-      let bnames = (Lists.map Core.letBindingName bins0)
+      let bnames = (Lists.map Core.bindingName bins0)
       in (Flows.bind (freshNames (Lists.length bins0)) (\bvars ->  
         let tbins0 = (Lists.map (\x -> Core.TypeVariable x) bvars)
         in  
@@ -497,9 +494,9 @@ inferTypeOfLetNormalized cx0 letTerm =
                                                       Core.typeLambdaParameter = v,
                                                       Core.typeLambdaBody = b})) (Substitution.substituteInTerm st1 term) (Lists.reverse (Core.typeSchemeVariables ts)))
                                               in Core.Binding {
-                                                Core.letBindingName = name,
-                                                Core.letBindingTerm = (Substitution.substTypesInTerm (Substitution.composeTypeSubst senv s2) typeAbstractedTerm),
-                                                Core.letBindingType = (Just (Substitution.substInTypeScheme senv ts))})
+                                                Core.bindingName = name,
+                                                Core.bindingTerm = (Substitution.substTypesInTerm (Substitution.composeTypeSubst senv s2) typeAbstractedTerm),
+                                                Core.bindingType = (Just (Substitution.substInTypeScheme senv ts))})
                               in  
                                 let bins1 = (Lists.map createBinding (Lists.zip tsbins1 bterms1))
                                 in  
@@ -520,14 +517,14 @@ inferTypeOfLet cx let0 =
   in  
     let env0 = (Core.letEnvironment let0)
     in  
-      let names = (Lists.map Core.letBindingName bindings0)
+      let names = (Lists.map Core.bindingName bindings0)
       in  
         let nameSet = (Sets.fromList names)
         in  
           let toPair = (\binding ->  
-                  let name = (Core.letBindingName binding)
+                  let name = (Core.bindingName binding)
                   in  
-                    let term = (Core.letBindingTerm binding)
+                    let term = (Core.bindingTerm binding)
                     in (name, (Lists.filter (\n -> Sets.member n nameSet) (Sets.toList (Rewriting.freeVariablesInTerm term)))))
           in  
             let adjList = (Lists.map toPair bindings0)
@@ -558,7 +555,7 @@ inferTypeOfLet cx let0 =
                                   in  
                                     let e = (snd result)
                                     in  
-                                      let bindingMap2 = (Maps.fromList (Lists.map (\b -> (Core.letBindingName b, b)) bindingList))
+                                      let bindingMap2 = (Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) bindingList))
                                       in (Core.TermLet (Core.Let {
                                         Core.letBindings = (Optionals.cat (Lists.map (\n -> Maps.lookup n bindingMap2) names)),
                                         Core.letEnvironment = e})))
@@ -838,9 +835,9 @@ inferTypesOfTemporaryBindings :: (Typing_.InferenceContext -> [Core.Binding] -> 
 inferTypesOfTemporaryBindings cx bins = (Logic.ifElse (Lists.null bins) (Flows.pure ([], ([], Substitution.idTypeSubst))) ( 
   let binding = (Lists.head bins)
   in  
-    let k = (Core.letBindingName binding)
+    let k = (Core.bindingName binding)
     in  
-      let v = (Core.letBindingTerm binding)
+      let v = (Core.bindingTerm binding)
       in  
         let tl = (Lists.tail bins)
         in (Flows.bind (inferTypeOfTerm cx v (Strings.cat [
@@ -868,7 +865,7 @@ initialTypeContext g =
             let el = (snd pair)
             in (Optionals.maybe (Flows.fail (Strings.cat [
               "untyped element: ",
-              (Core.unName name)])) (\ts -> Flows.pure (name, (typeSchemeToFType ts))) (Graph.elementType el)))
+              (Core.unName name)])) (\ts -> Flows.pure (name, (typeSchemeToFType ts))) (Core.bindingType el)))
   in (Flows.bind (graphToInferenceContext g) (\ix -> Flows.bind (Flows.map Maps.fromList (Flows.mapList toPair (Maps.toList (Graph.graphElements g)))) (\types -> Flows.pure (Typing_.TypeContext {
     Typing_.typeContextTypes = types,
     Typing_.typeContextVariables = Sets.empty,
@@ -1059,13 +1056,13 @@ typeOfInternal cx vars types apptypes term =
       in  
         let env = (Core.letEnvironment v1)
         in  
-          let bnames = (Lists.map Core.letBindingName bs)
+          let bnames = (Lists.map Core.bindingName bs)
           in  
-            let bterms = (Lists.map Core.letBindingTerm bs)
+            let bterms = (Lists.map Core.bindingTerm bs)
             in  
               let btypeOf = (\b -> Optionals.maybe (Flows.fail (Strings.cat [
                       "untyped let binding in ",
-                      (Core__.term term)])) (\ts -> Flows.pure (typeSchemeToFType ts)) (Core.letBindingType b))
+                      (Core__.term term)])) (\ts -> Flows.pure (typeSchemeToFType ts)) (Core.bindingType b))
               in (Flows.bind (Flows.mapList btypeOf bs) (\btypes ->  
                 let types2 = (Maps.union (Maps.fromList (Lists.zip bnames btypes)) types)
                 in (Flows.bind (Flows.mapList (typeOfInternal cx vars types2 []) bterms) (\typeofs -> Flows.bind (Flows.mapList (checkTypeVariables cx vars) btypes) (\_ -> Flows.bind (Flows.mapList (checkTypeVariables cx vars) typeofs) (\_ -> Logic.ifElse (Equality.equal typeofs btypes) (typeOfInternal cx vars types2 [] env) (Flows.fail (Strings.cat [

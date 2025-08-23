@@ -54,10 +54,10 @@ module_ = Module (Namespace "hydra.extract.mantle") elements
    elements = [
      el comparisonDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-comparisonDef :: TElement (Term -> Flow Graph Comparison)
+comparisonDef :: TBinding (Term -> Flow Graph Comparison)
 comparisonDef = define "comparison" $
   doc "Extract a comparison from a term" $
   lambda "term" $

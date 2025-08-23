@@ -10,17 +10,17 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | An association of a named term (element) with a phantom type
-data TElement a = 
-  TElement {
-    tElementName :: Core.Name,
-    tElementTerm :: (TTerm a)}
+data TBinding a = 
+  TBinding {
+    tBindingName :: Core.Name,
+    tBindingTerm :: (TTerm a)}
   deriving (Eq, Ord, Read, Show)
 
-_TElement = (Core.Name "hydra.phantoms.TElement")
+_TBinding = (Core.Name "hydra.phantoms.TBinding")
 
-_TElement_name = (Core.Name "name")
+_TBinding_name = (Core.Name "name")
 
-_TElement_term = (Core.Name "term")
+_TBinding_term = (Core.Name "term")
 
 -- | An association of a term with a phantom type
 newtype TTerm a = 

@@ -60,7 +60,7 @@ module_ = Module ns elements [Graph.module_] [Core.module_] $
             mod "Namespace",
           "elements">:
             doc "The elements defined in this module" $
-            list $ graph "Element",
+            list $ core "Binding",
           "termDependencies">:
             doc "Any modules which the term expressions of this module directly depend upon" $
             list $ mod "Module",

@@ -52,10 +52,10 @@ module_ = Module (Namespace "hydra.literals") elements
      el floatValueToBigfloatDef,
      el integerValueToBigintDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-bigfloatToFloatValueDef :: TElement (FloatType -> Bigfloat -> FloatValue)
+bigfloatToFloatValueDef :: TBinding (FloatType -> Bigfloat -> FloatValue)
 bigfloatToFloatValueDef = define "bigfloatToFloatValue" $
   doc "Convert a bigfloat to a floating-point value of a given type (note: lossy)" $
   "ft" ~> "bf" ~> cases _FloatType (var "ft")
@@ -64,7 +64,7 @@ bigfloatToFloatValueDef = define "bigfloatToFloatValue" $
     _FloatType_float32>>: constant $ Core.floatValueFloat32 $ Literals.bigfloatToFloat32 $ var "bf",
     _FloatType_float64>>: constant $ Core.floatValueFloat64 $ Literals.bigfloatToFloat64 $ var "bf"]
 
-bigintToIntegerValueDef :: TElement (IntegerType -> Integer -> IntegerValue)
+bigintToIntegerValueDef :: TBinding (IntegerType -> Integer -> IntegerValue)
 bigintToIntegerValueDef = define "bigintToIntegerValue" $
   doc "Convert a bigint to an integer value of a given type (note: lossy)" $
   "it" ~> "bi" ~> cases _IntegerType (var "it")
@@ -79,7 +79,7 @@ bigintToIntegerValueDef = define "bigintToIntegerValue" $
     _IntegerType_uint32>>: constant $ Core.integerValueUint32 $ Literals.bigintToUint32 $ var "bi",
     _IntegerType_uint64>>: constant $ Core.integerValueUint64 $ Literals.bigintToUint64 $ var "bi"]
 
-floatValueToBigfloatDef :: TElement (FloatValue -> Bigfloat)
+floatValueToBigfloatDef :: TBinding (FloatValue -> Bigfloat)
 floatValueToBigfloatDef = define "floatValueToBigfloat" $
   doc "Convert a floating-point value of any precision to a bigfloat" $
   match _FloatValue
@@ -88,7 +88,7 @@ floatValueToBigfloatDef = define "floatValueToBigfloat" $
     _FloatValue_float32>>: "f32" ~> Literals.float32ToBigfloat $ var "f32",
     _FloatValue_float64>>: "f64" ~> Literals.float64ToBigfloat $ var "f64"]
 
-integerValueToBigintDef :: TElement (IntegerValue -> Integer)
+integerValueToBigintDef :: TBinding (IntegerValue -> Integer)
 integerValueToBigintDef = define "integerValueToBigint" $
   doc "Convert an integer value of any precision to a bigint" $
   match _IntegerValue

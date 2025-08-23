@@ -99,20 +99,20 @@ module_ = Module (Namespace "hydra.ext.org.json.decoding") elements
      Phantoms.el decodeOptionalFieldDef,
      Phantoms.el decodeStringDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define label = definitionInModule module_ ("decode" <> label)
 
-decodeArrayDef :: TElement ((Value -> Flow s a) -> Value -> Flow s [a])
+decodeArrayDef :: TBinding ((Value -> Flow s a) -> Value -> Flow s [a])
 decodeArrayDef  = define "Array" $
   lambda "decodeElem" $ match _Value (Just $ Flows.fail "expected an array") [
     _Value_array>>: lambda "a" $ Flows.mapList (var "decodeElem") $ var "a"]
 
-decodeBooleanDef :: TElement (Value -> Flow s Bool)
+decodeBooleanDef :: TBinding (Value -> Flow s Bool)
 decodeBooleanDef  = define "Boolean" $
   match _Value (Just $ Flows.fail $ "expected a boolean") [
     _Value_boolean>>: lambda "b" $ Flows.pure $ var "b"]
 
-decodeFieldDef :: TElement ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s a)
+decodeFieldDef :: TBinding ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s a)
 decodeFieldDef  = define "Field" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     Flows.bind
@@ -121,17 +121,17 @@ decodeFieldDef  = define "Field" $
         @@ (Flows.fail $ Strings.cat2 "missing field: " (var "name"))
         @@ (lambda "f" $ Flows.pure $ var "f"))
 
-decodeNumberDef :: TElement (Value -> Flow s Double)
+decodeNumberDef :: TBinding (Value -> Flow s Double)
 decodeNumberDef  = define "Number" $
   match _Value (Just $ Flows.fail "expected a number") [
     _Value_number>>: lambda "n" $ Flows.pure $ var "n"]
 
-decodeObjectDef :: TElement (Value -> Flow s (M.Map String Value))
+decodeObjectDef :: TBinding (Value -> Flow s (M.Map String Value))
 decodeObjectDef  = define "Object" $
   match _Value (Just $ Flows.fail "expected an object") [
     _Value_object>>: lambda "o" $ Flows.pure $ var "o"]
 
-decodeOptionalFieldDef :: TElement ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s (Maybe a))
+decodeOptionalFieldDef :: TBinding ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s (Maybe a))
 decodeOptionalFieldDef  = define "OptionalField" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     (primitive _optionals_maybe
@@ -139,7 +139,7 @@ decodeOptionalFieldDef  = define "OptionalField" $
         @@ (lambda "v" (Flows.map (lambda "x" (just $ var "x")) (var "decodeValue" @@ var "v"))))
       @@ (Maps.lookup (var "name") (var "m"))
 
-decodeStringDef :: TElement (Value -> Flow s String)
+decodeStringDef :: TBinding (Value -> Flow s String)
 decodeStringDef  = define "String" $
   match _Value (Just $ Flows.fail "expected a string") [
     _Value_string>>: lambda "s" $ Flows.pure $ var "s"]
