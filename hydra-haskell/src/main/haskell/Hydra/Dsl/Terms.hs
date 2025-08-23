@@ -59,7 +59,7 @@ applyAll fun args = foldl apply fun args
 lets :: [Field] -> Term -> Term
 lets bindings env = TermLet $ Let (toBinding <$> bindings) env
   where
-    toBinding (Field name value) = LetBinding name value Nothing
+    toBinding (Field name value) = Binding name value Nothing
 
 -- | Create a variable reference
 -- Example: var "x"

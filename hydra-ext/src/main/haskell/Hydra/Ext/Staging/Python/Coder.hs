@@ -38,7 +38,7 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesTuple :: Bool,
   pythonModuleMetadataUsesTypeVar :: Bool}
 
-argsAndBindings :: TypeContext -> Term -> Type -> Flow s ([Name], [LetBinding], Term, [Type], Type)
+argsAndBindings :: TypeContext -> Term -> Type -> Flow s ([Name], [Binding], Term, [Type], Type)
 argsAndBindings tcontext term _ = gather tcontext [] [] [] term
   where
     gather tcontext prevArgs prevBindings prevDoms term = case deannotateTerm term of
@@ -422,7 +422,7 @@ encodeTermAssignment env name term typ comment = do
           bodyStmt <- encodeFunctionDefinition env name args body doms cod comment bindingStmts
           return [bodyStmt]
   where
-    encodeBinding (LetBinding name1 term1 mts) = do
+    encodeBinding (Binding name1 term1 mts) = do
         comment <- fmap normalizeComment <$> getTermDescription term1
         typ1 <- case mts of
           Nothing -> fail $ "missing type for let binding " ++ unName name1 ++ " in " ++ unName name
@@ -626,7 +626,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
     extendMetaForTerm meta t = case t of
       TermLet (Let bindings _) -> L.foldl forBinding meta bindings
         where
-          forBinding meta (LetBinding _ _ mts) = case mts of
+          forBinding meta (Binding _ _ mts) = case mts of
             Nothing -> meta
             Just ts -> extendMetaForType True meta $ typeSchemeType ts
       TermMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}

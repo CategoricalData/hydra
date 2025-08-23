@@ -115,7 +115,7 @@ expandTypedLambdas term =
                   Core.lambdaBody = (expand (Lists.tail doms) cod (Core.lambdaBody v2))})))
                 _ -> (padTerm 1 doms cod term)) v1)
               Core.TermLet v1 ->  
-                let expandBinding = (\b -> Core.LetBinding {
+                let expandBinding = (\b -> Core.Binding {
                         Core.letBindingName = (Core.letBindingName b),
                         Core.letBindingTerm = (expandTypedLambdas (Core.letBindingTerm b)),
                         Core.letBindingType = (Core.letBindingType b)})
@@ -137,14 +137,14 @@ flattenLetTerms term =
             Core.TermAnnotated v1 ->  
               let val1 = (Core.annotatedTermSubject v1) 
                   ann = (Core.annotatedTermAnnotation v1)
-                  recursive = (rewriteBinding (Core.LetBinding {
+                  recursive = (rewriteBinding (Core.Binding {
                           Core.letBindingName = key0,
                           Core.letBindingTerm = val1,
                           Core.letBindingType = t}))
                   innerBinding = (fst recursive)
                   deps = (snd recursive)
                   val2 = (Core.letBindingTerm innerBinding)
-              in (Core.LetBinding {
+              in (Core.Binding {
                 Core.letBindingName = key0,
                 Core.letBindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermSubject = val2,
@@ -159,15 +159,15 @@ flattenLetTerms term =
                   subst = (Maps.fromList (Lists.map toSubstPair bindings1))
                   replaceVars = (substituteVariables subst)
                   newBody = (replaceVars body1)
-                  newBinding = (\b -> Core.LetBinding {
+                  newBinding = (\b -> Core.Binding {
                           Core.letBindingName = (qualify (Core.letBindingName b)),
                           Core.letBindingTerm = (replaceVars (Core.letBindingTerm b)),
                           Core.letBindingType = (Core.letBindingType b)})
-              in (Core.LetBinding {
+              in (Core.Binding {
                 Core.letBindingName = key0,
                 Core.letBindingTerm = newBody,
                 Core.letBindingType = t}, (Lists.map newBinding bindings1))
-            _ -> (Core.LetBinding {
+            _ -> (Core.Binding {
               Core.letBindingName = key0,
               Core.letBindingTerm = val0,
               Core.letBindingType = t}, [])) val0)) 
@@ -316,7 +316,7 @@ normalizeTypeVariablesInTerm term =
                                             newVars = (Lists.take (Lists.length vars) (Lists.filter (\n -> Logic.not (Sets.member n boundVars)) normalVariables))
                                             newSubst = (Maps.union (Maps.fromList (Lists.zip vars newVars)) subst)
                                             newValue = (rewriteWithSubst (newSubst, (Sets.union boundVars (Sets.fromList newVars))) (Core.letBindingTerm b))
-                                        in Core.LetBinding {
+                                        in Core.Binding {
                                           Core.letBindingName = (Core.letBindingName b),
                                           Core.letBindingTerm = newValue,
                                           Core.letBindingType = (Just (Core.TypeScheme {
@@ -360,7 +360,7 @@ removeTypesFromTerm :: (Core.Term -> Core.Term)
 removeTypesFromTerm term =  
   let strip = (\recurse -> \term ->  
           let rewritten = (recurse term) 
-              stripBinding = (\b -> Core.LetBinding {
+              stripBinding = (\b -> Core.Binding {
                       Core.letBindingName = (Core.letBindingName b),
                       Core.letBindingTerm = (Core.letBindingTerm b),
                       Core.letBindingType = Nothing})
@@ -436,7 +436,7 @@ rewriteTerm f =
                         Core.lambdaBody = (recurse (Core.lambdaBody v1))}))
                       Core.FunctionPrimitive v1 -> (Core.FunctionPrimitive v1)) fun)
               forLet = (\lt ->  
-                      let mapBinding = (\b -> Core.LetBinding {
+                      let mapBinding = (\b -> Core.Binding {
                               Core.letBindingName = (Core.letBindingName b),
                               Core.letBindingTerm = (recurse (Core.letBindingTerm b)),
                               Core.letBindingType = (Core.letBindingType b)})
@@ -498,7 +498,7 @@ rewriteTermM f =
                       let k = (Core.letBindingName binding) 
                           v = (Core.letBindingTerm binding)
                           t = (Core.letBindingType binding)
-                      in (Flows.bind (recurse v) (\v_ -> Flows.pure (Core.LetBinding {
+                      in (Flows.bind (recurse v) (\v_ -> Flows.pure (Core.Binding {
                         Core.letBindingName = k,
                         Core.letBindingTerm = v_,
                         Core.letBindingType = t}))))

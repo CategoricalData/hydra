@@ -246,7 +246,7 @@ lambdaDef = define "lambda" $
     "matchLambda">: matchVariant _Function _Function_lambda]
     $ compose2 (var "matchFunction") (var "matchLambda")
 
-letBindingDef :: TElement (Name -> Term -> Maybe LetBinding)
+letBindingDef :: TElement (Name -> Term -> Maybe Binding)
 letBindingDef = define "letBinding" $
   lambda "fname" $ lambda "term" $ Optionals.bind
     (Optionals.map
@@ -254,7 +254,7 @@ letBindingDef = define "letBinding" $
       (ref letTermDef @@ var "term"))
     (ref letBindingWithKeyDef @@ var "fname")
 
-letBindingWithKeyDef :: TElement (Name -> [LetBinding] -> Maybe LetBinding)
+letBindingWithKeyDef :: TElement (Name -> [Binding] -> Maybe Binding)
 letBindingWithKeyDef = define "letBindingWithKey" $
   lambda "fname" $ lambda "bindings" $ lets [
     "matches">: Lists.filter

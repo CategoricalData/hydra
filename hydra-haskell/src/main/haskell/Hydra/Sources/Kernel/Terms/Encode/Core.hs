@@ -322,12 +322,12 @@ letDef = define "Let" $
     field _Let_bindings $ encodedList (primitive _lists_map @@ ref letBindingDef @@ (Core.letBindings $ var "l")),
     field _Let_environment $ ref termDef @@ (Core.letEnvironment $ var "l")]
 
-letBindingDef :: TElement (LetBinding -> Term)
-letBindingDef = define "LetBinding" $
-  lambda "b" $ encodedRecord _LetBinding [
-    field _LetBinding_name $ ref nameDef @@ (Core.letBindingName $ var "b"),
-    field _LetBinding_term $ ref termDef @@ (Core.letBindingTerm $ var "b"),
-    field _LetBinding_type $ encodedOptional $ primitive _optionals_map @@ ref typeSchemeDef @@ (Core.letBindingType $ var "b")]
+letBindingDef :: TElement (Binding -> Term)
+letBindingDef = define "Binding" $
+  lambda "b" $ encodedRecord _Binding [
+    field _Binding_name $ ref nameDef @@ (Core.letBindingName $ var "b"),
+    field _Binding_term $ ref termDef @@ (Core.letBindingTerm $ var "b"),
+    field _Binding_type $ encodedOptional $ primitive _optionals_map @@ ref typeSchemeDef @@ (Core.letBindingType $ var "b")]
 
 literalDef :: TElement (Literal -> Term)
 literalDef = define "Literal" $
