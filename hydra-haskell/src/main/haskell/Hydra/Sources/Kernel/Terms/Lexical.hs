@@ -107,7 +107,7 @@ emptyGraphDef = define "emptyGraph" $
     Maps.empty
     nothing
 
-extendGraphWithBindingsDef :: TElement ([LetBinding] -> Graph -> Graph)
+extendGraphWithBindingsDef :: TElement ([Binding] -> Graph -> Graph)
 extendGraphWithBindingsDef = define "extendGraphWithBindings" $
   lambdas ["bindings", "g"] $ lets [
     "newEls">: Maps.fromList $ Lists.map (var "toEl") (var "bindings"),

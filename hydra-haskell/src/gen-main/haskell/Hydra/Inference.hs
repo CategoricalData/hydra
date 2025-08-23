@@ -157,7 +157,7 @@ inferGraphTypes g0 =
                 Graph.graphSchema = (Graph.graphSchema g0)})
   in  
     let toLetTerm = (\g ->  
-            let toBinding = (\el -> Core.LetBinding {
+            let toBinding = (\el -> Core.Binding {
                     Core.letBindingName = (Graph.elementName el),
                     Core.letBindingTerm = (Graph.elementTerm el),
                     Core.letBindingType = Nothing})
@@ -339,7 +339,7 @@ inferTypeOf :: (Typing_.InferenceContext -> Core.Term -> Compute.Flow t0 (Core.T
 inferTypeOf cx term =  
   let letTerm = (Core.TermLet (Core.Let {
           Core.letBindings = [
-            Core.LetBinding {
+            Core.Binding {
               Core.letBindingName = (Core.Name "ignoredVariableName"),
               Core.letBindingTerm = term,
               Core.letBindingType = Nothing}],
@@ -459,7 +459,7 @@ inferTypeOfLetNormalized cx0 letTerm =
           let cx1 = (extendContext (Lists.zip bnames (Lists.map (\t -> Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = t}) tbins0)) cx0)
-          in (Flows.bind (inferTypesOfTemporaryLetBindings cx1 bins0) (\inferredResult ->  
+          in (Flows.bind (inferTypesOfTemporaryBindings cx1 bins0) (\inferredResult ->  
             let bterms1 = (fst inferredResult)
             in  
               let tbins1 = (fst (snd inferredResult))
@@ -496,7 +496,7 @@ inferTypeOfLetNormalized cx0 letTerm =
                                               let typeAbstractedTerm = (Lists.foldl (\b -> \v -> Core.TermTypeLambda (Core.TypeLambda {
                                                       Core.typeLambdaParameter = v,
                                                       Core.typeLambdaBody = b})) (Substitution.substituteInTerm st1 term) (Lists.reverse (Core.typeSchemeVariables ts)))
-                                              in Core.LetBinding {
+                                              in Core.Binding {
                                                 Core.letBindingName = name,
                                                 Core.letBindingTerm = (Substitution.substTypesInTerm (Substitution.composeTypeSubst senv s2) typeAbstractedTerm),
                                                 Core.letBindingType = (Just (Substitution.substInTypeScheme senv ts))})
@@ -834,8 +834,8 @@ inferTypeOfWrappedTerm cx wt =
                             Typing_.typeConstraintRight = expected,
                             Typing_.typeConstraintComment = "schema type of wrapper"}]))))))
 
-inferTypesOfTemporaryLetBindings :: (Typing_.InferenceContext -> [Core.LetBinding] -> Compute.Flow t0 ([Core.Term], ([Core.Type], Typing_.TypeSubst)))
-inferTypesOfTemporaryLetBindings cx bins = (Logic.ifElse (Lists.null bins) (Flows.pure ([], ([], Substitution.idTypeSubst))) ( 
+inferTypesOfTemporaryBindings :: (Typing_.InferenceContext -> [Core.Binding] -> Compute.Flow t0 ([Core.Term], ([Core.Type], Typing_.TypeSubst)))
+inferTypesOfTemporaryBindings cx bins = (Logic.ifElse (Lists.null bins) (Flows.pure ([], ([], Substitution.idTypeSubst))) ( 
   let binding = (Lists.head bins)
   in  
     let k = (Core.letBindingName binding)
@@ -852,7 +852,7 @@ inferTypesOfTemporaryLetBindings cx bins = (Logic.ifElse (Lists.null bins) (Flow
             let u_prime = (Typing_.inferenceResultType result1)
             in  
               let u = (Typing_.inferenceResultSubst result1)
-              in (Flows.bind (inferTypesOfTemporaryLetBindings (Substitution.substInContext u cx) tl) (\result2 ->  
+              in (Flows.bind (inferTypesOfTemporaryBindings (Substitution.substInContext u cx) tl) (\result2 ->  
                 let h = (fst result2)
                 in  
                   let r_prime = (fst (snd result2))

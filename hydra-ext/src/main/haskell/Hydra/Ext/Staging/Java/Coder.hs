@@ -929,7 +929,7 @@ maybeLet aliases term cons = helper Nothing [] term
                 _ -> names
           allDeps = M.fromList (toDeps <$> bindings)
             where
-              toDeps (LetBinding key value _) = (key, S.filter (\n -> S.member n bindingVars) $ freeVariablesInTerm value)
+              toDeps (Binding key value _) = (key, S.filter (\n -> S.member n bindingVars) $ freeVariablesInTerm value)
           sorted = topologicalSortComponents (toDeps <$> M.toList allDeps)
             where
               toDeps (key, deps) = (key, S.toList deps)

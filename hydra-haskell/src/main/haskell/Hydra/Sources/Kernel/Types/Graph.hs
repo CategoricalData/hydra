@@ -29,7 +29,7 @@ module_ = Module ns elements [Compute.module_] [Core.module_] $
 
     elements = [
 
-      -- TODO: merge with hydra.core.LetBinding
+      -- TODO: merge with hydra.core.Binding
       def "Element" $
         doc "A graph element, having a name, data term (value), and schema term (type)" $
         record [

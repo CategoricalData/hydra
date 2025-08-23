@@ -592,7 +592,7 @@ gatherMetadata defs = L.foldl addDef start defs
     extendMetaForTerm meta t = case t of
       TermLet (Let bindings _) -> L.foldl forBinding meta bindings
         where
-          forBinding m (LetBinding _ _ mts) = case mts of
+          forBinding m (Binding _ _ mts) = case mts of
             Nothing -> m
             Just ts -> extendMetaForType m $ typeSchemeType ts
       TermMap _ -> meta {cppModuleMetadataUsesMap = True}

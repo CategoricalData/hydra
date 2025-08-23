@@ -135,10 +135,10 @@ lambda = (Optionals.compose matchFunction matchLambda)
       Core.FunctionLambda v1 -> (Optionals.pure v1)
       _ -> Nothing)
 
-letBinding :: (Core.Name -> Core.Term -> Maybe Core.LetBinding)
+letBinding :: (Core.Name -> Core.Term -> Maybe Core.Binding)
 letBinding fname term = (Optionals.bind (Optionals.map Core.letBindings (letTerm term)) (letBindingWithKey fname))
 
-letBindingWithKey :: (Core.Name -> [Core.LetBinding] -> Maybe Core.LetBinding)
+letBindingWithKey :: (Core.Name -> [Core.Binding] -> Maybe Core.Binding)
 letBindingWithKey fname bindings =  
   let matches = (Lists.filter (\b -> Equality.equal (Core.letBindingName b) fname) bindings)
   in (Logic.ifElse (Equality.equal 1 (Lists.length matches)) (Just (Lists.head matches)) Nothing)

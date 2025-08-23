@@ -191,10 +191,10 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
       def "Let" $
         doc "A set of (possibly recursive) 'let' bindings together with an environment in which they are bound" $
         record [
-          "bindings">: list $ core "LetBinding",
+          "bindings">: list $ core "Binding",
           "environment">: core "Term"],
 
-      def "LetBinding" $
+      def "Binding" $
         doc "A field with an optional type scheme, used to bind variables to terms in a 'let' expression" $
         record [
           "name">: core "Name",

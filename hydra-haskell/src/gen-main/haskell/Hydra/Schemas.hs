@@ -113,7 +113,7 @@ graphAsTerm g =
             let term = (Graph.elementTerm el)
             in  
               let mts = (Graph.elementType el)
-              in Core.LetBinding {
+              in Core.Binding {
                 Core.letBindingName = name,
                 Core.letBindingTerm = term,
                 Core.letBindingType = mts})

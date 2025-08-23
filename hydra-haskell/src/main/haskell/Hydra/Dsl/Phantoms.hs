@@ -63,14 +63,14 @@ apply :: TTerm (a -> b) -> TTerm a -> TTerm b
 apply (TTerm lhs) (TTerm rhs) = TTerm $ Terms.apply lhs rhs
 
 let1 :: String -> TTerm a -> TTerm b -> TTerm b
-let1 name (TTerm value) (TTerm env) = TTerm $ TermLet $ Let [LetBinding (Name name) value Nothing] env
+let1 name (TTerm value) (TTerm env) = TTerm $ TermLet $ Let [Binding (Name name) value Nothing] env
 
 -- | Create a let expression with multiple bindings
 -- Example: lets ["x">: int32 1, "y">: int32 2] (var "add" @@ var "x" @@ var "y")
 lets :: [Field] -> TTerm a -> TTerm a
 lets fields (TTerm env) = TTerm $ TermLet $ Let (toBinding <$> fields) env
   where
-     toBinding (Field name value) = LetBinding name value Nothing
+     toBinding (Field name value) = Binding name value Nothing
 
 -- | Create a variable reference
 -- Example: var "x"

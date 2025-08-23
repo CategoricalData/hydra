@@ -720,7 +720,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                 Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                   Core.letBindings = [
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "foo"),
                       Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
@@ -738,7 +738,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                 Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                   Core.letBindings = [
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "f"),
                       Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
@@ -758,7 +758,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                 Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                   Core.letBindings = [
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "f"),
                       Core.letBindingTerm = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -778,7 +778,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                 Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                   Core.letBindings = [
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "sng"),
                       Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
@@ -800,7 +800,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                 Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                   Core.letBindings = [
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "sng"),
                       Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
@@ -827,7 +827,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                 Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                   Core.letBindings = [
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "+"),
                       Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
@@ -866,7 +866,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                 Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                   Core.letBindings = [
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "f"),
                       Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
@@ -896,7 +896,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                 Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                   Core.letBindings = [
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "f"),
                       Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
@@ -910,7 +910,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))}))),
                       Core.letBindingType = Nothing},
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "g"),
                       Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "xx"),
@@ -949,7 +949,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                 Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                   Core.letBindings = [
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "f"),
                       Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
@@ -963,7 +963,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))}))),
                       Core.letBindingType = Nothing},
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "g"),
                       Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "u"),
@@ -1004,7 +1004,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                 Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                   Core.letBindings = [
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "f"),
                       Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
@@ -1018,7 +1018,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))}))),
                       Core.letBindingType = Nothing},
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "g"),
                       Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "u"),
@@ -1057,7 +1057,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                 Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                   Core.letBindings = [
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "f"),
                       Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
@@ -1071,7 +1071,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))}))),
                       Core.letBindingType = Nothing},
-                    Core.LetBinding {
+                    Core.Binding {
                       Core.letBindingName = (Core.Name "g"),
                       Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "u"),
@@ -1139,7 +1139,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.letBindingType = Nothing}],
@@ -1156,7 +1156,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermVariable (Core.Name "y")),
                           Core.letBindingType = Nothing}],
@@ -1168,11 +1168,11 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermVariable (Core.Name "y")),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "z"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.letBindingType = Nothing}],
@@ -1184,11 +1184,11 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "y"),
                           Core.letBindingTerm = (Core.TermVariable (Core.Name "z")),
                           Core.letBindingType = Nothing}],
@@ -1210,7 +1210,7 @@ inferenceTests = Testing.TestGroup {
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermLet (Core.Let {
                         Core.letBindings = [
-                          Core.LetBinding {
+                          Core.Binding {
                             Core.letBindingName = (Core.Name "y"),
                             Core.letBindingTerm = (Core.TermVariable (Core.Name "x")),
                             Core.letBindingType = Nothing}],
@@ -1222,13 +1222,13 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.letBindingType = Nothing}],
                       Core.letEnvironment = (Core.TermLet (Core.Let {
                         Core.letBindings = [
-                          Core.LetBinding {
+                          Core.Binding {
                             Core.letBindingName = (Core.Name "y"),
                             Core.letBindingTerm = (Core.TermVariable (Core.Name "x")),
                             Core.letBindingType = Nothing}],
@@ -1240,7 +1240,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "y"),
@@ -1400,7 +1400,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -1421,7 +1421,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -1444,7 +1444,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "cons"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.cons"))),
                           Core.letBindingType = Nothing}],
@@ -1605,7 +1605,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
@@ -1624,7 +1624,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -1633,7 +1633,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "y"),
@@ -1650,13 +1650,13 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "a"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "b")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "b"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -1673,7 +1673,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "cycle"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "f"),
@@ -1795,7 +1795,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermList [
                             Core.TermVariable (Core.Name "x")]),
@@ -1808,7 +1808,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermProduct [
                             Core.TermVariable (Core.Name "x"),
@@ -1822,7 +1822,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermProduct [
                             Core.TermVariable (Core.Name "x"),
@@ -1841,7 +1841,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -1856,7 +1856,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -1876,7 +1876,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -1897,12 +1897,12 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermList [
                             Core.TermVariable (Core.Name "y")]),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "y"),
                           Core.letBindingTerm = (Core.TermProduct [
                             Core.TermVariable (Core.Name "x"),
@@ -1916,14 +1916,14 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "a"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "b"))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "b"),
                           Core.letBindingTerm = (Core.TermVariable (Core.Name "a")),
                           Core.letBindingType = Nothing}],
@@ -1935,12 +1935,12 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermList [
                             Core.TermVariable (Core.Name "g")]),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermProduct [
                             Core.TermVariable (Core.Name "f"),
@@ -1964,7 +1964,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "h"),
@@ -1988,7 +1988,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -1997,7 +1997,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "y"),
@@ -2014,7 +2014,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "a"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -2025,7 +2025,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "b"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "y"),
@@ -2042,13 +2042,13 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "cycle1"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "cycle2")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "cycle1"))})),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "cycle2"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -2070,7 +2070,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "omega"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -2089,7 +2089,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "loop"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -2252,7 +2252,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -2275,7 +2275,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -2296,7 +2296,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -2324,7 +2324,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -2343,7 +2343,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -2378,7 +2378,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "h"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -2462,11 +2462,11 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "y"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
@@ -2480,14 +2480,14 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "result"))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -2503,11 +2503,11 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "num"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "bad"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "num")),
@@ -2526,12 +2526,12 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "list1"),
                           Core.letBindingTerm = (Core.TermList [
                             Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))]),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "list2"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -2547,13 +2547,13 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "nums"),
                           Core.letBindingTerm = (Core.TermList [
                             Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                             (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "mixed"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -2569,13 +2569,13 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "pair1"),
                           Core.letBindingTerm = (Core.TermProduct [
                             Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
                             (Core.TermLiteral (Core.LiteralString "foo"))]),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "pair2"),
                           Core.letBindingTerm = (Core.TermProduct [
                             Core.TermLiteral (Core.LiteralString "bar"),
@@ -2603,11 +2603,11 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "add"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "badCall"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -2623,7 +2623,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -2633,13 +2633,13 @@ inferenceTests = Testing.TestGroup {
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "bad"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -2665,7 +2665,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "complex"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "f"),
@@ -2688,7 +2688,7 @@ inferenceTests = Testing.TestGroup {
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))})))})))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "bad"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -2715,7 +2715,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "fix"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "f"),
@@ -2724,7 +2724,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "bad"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "fix")),
@@ -2743,7 +2743,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "y"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "f"),
@@ -2766,7 +2766,7 @@ inferenceTests = Testing.TestGroup {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))}))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "bad"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "y")),
@@ -2788,7 +2788,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "omega"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -2797,7 +2797,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "bad"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "omega")),
@@ -2816,7 +2816,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "a"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -2827,7 +2827,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "c"))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "b"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "y"),
@@ -2838,7 +2838,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "c"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "z"),
@@ -2859,7 +2859,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "circular"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "f"),
@@ -3034,7 +3034,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -3046,7 +3046,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.TermVariable (Core.Name "x"),
                                 (Core.TermVariable (Core.Name "y"))])})))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "a"),
@@ -3057,7 +3057,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "h"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
@@ -3076,7 +3076,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "weird"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "f"),
@@ -3090,7 +3090,7 @@ inferenceTests = Testing.TestGroup {
                                   Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "bad"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "weird")),
@@ -3109,7 +3109,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "nested"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "f"),
@@ -3130,7 +3130,7 @@ inferenceTests = Testing.TestGroup {
                                         Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))}))})))})))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "int_f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "n"),
@@ -3141,7 +3141,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "n"))})),
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "str_g"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "s"),
@@ -3152,7 +3152,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.TermVariable (Core.Name "s"),
                                 (Core.TermLiteral (Core.LiteralString "!"))])}))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "bad"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -3173,7 +3173,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "triple"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "f"),
@@ -3189,7 +3189,7 @@ inferenceTests = Testing.TestGroup {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))})))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "increment"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "n"),
@@ -3200,7 +3200,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "n"))})),
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "stringify"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "s"),
@@ -3211,7 +3211,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.TermVariable (Core.Name "s"),
                                 (Core.TermLiteral (Core.LiteralString "!"))])}))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "bad"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -3227,7 +3227,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "compose"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "f"),
@@ -3244,7 +3244,7 @@ inferenceTests = Testing.TestGroup {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "reverse_compose"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "g"),
@@ -3261,7 +3261,7 @@ inferenceTests = Testing.TestGroup {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "bad"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -3415,7 +3415,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 42.0))),
                           Core.letBindingType = Nothing}],
@@ -3480,7 +3480,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "foo"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.letBindingType = Nothing}],
@@ -3500,11 +3500,11 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "foo"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "bar"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
                           Core.letBindingType = Nothing}],
@@ -3527,13 +3527,13 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "foo"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.letBindingType = Nothing}],
                       Core.letEnvironment = (Core.TermLet (Core.Let {
                         Core.letBindings = [
-                          Core.LetBinding {
+                          Core.Binding {
                             Core.letBindingName = (Core.Name "bar"),
                             Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
                             Core.letBindingType = Nothing}],
@@ -3550,13 +3550,13 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "foo"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.letBindingType = Nothing}],
                       Core.letEnvironment = (Core.TermLet (Core.Let {
                         Core.letBindings = [
-                          Core.LetBinding {
+                          Core.Binding {
                             Core.letBindingName = (Core.Name "bar"),
                             Core.letBindingTerm = (Core.TermProduct [
                               Core.TermVariable (Core.Name "foo"),
@@ -3575,7 +3575,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "sng"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -3585,19 +3585,19 @@ inferenceTests = Testing.TestGroup {
                           Core.letBindingType = Nothing}],
                       Core.letEnvironment = (Core.TermLet (Core.Let {
                         Core.letBindings = [
-                          Core.LetBinding {
+                          Core.Binding {
                             Core.letBindingName = (Core.Name "foo"),
                             Core.letBindingTerm = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                             Core.letBindingType = Nothing},
-                          Core.LetBinding {
+                          Core.Binding {
                             Core.letBindingName = (Core.Name "bar"),
                             Core.letBindingTerm = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))})),
                             Core.letBindingType = Nothing},
-                          Core.LetBinding {
+                          Core.Binding {
                             Core.letBindingName = (Core.Name "quux"),
                             Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "x"),
@@ -3633,13 +3633,13 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "foo"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
                           Core.letBindingType = Nothing}],
                       Core.letEnvironment = (Core.TermLet (Core.Let {
                         Core.letBindings = [
-                          Core.LetBinding {
+                          Core.Binding {
                             Core.letBindingName = (Core.Name "foo"),
                             Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
                             Core.letBindingType = Nothing}],
@@ -3654,17 +3654,17 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "foo"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "bar"),
                           Core.letBindingTerm = (Core.TermVariable (Core.Name "foo")),
                           Core.letBindingType = Nothing}],
                       Core.letEnvironment = (Core.TermLet (Core.Let {
                         Core.letBindings = [
-                          Core.LetBinding {
+                          Core.Binding {
                             Core.letBindingName = (Core.Name "foo"),
                             Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
                             Core.letBindingType = Nothing}],
@@ -3688,7 +3688,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -3716,7 +3716,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -3739,7 +3739,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -3768,7 +3768,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -3794,7 +3794,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "list"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -3821,7 +3821,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "singleton"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -3829,7 +3829,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaBody = (Core.TermList [
                               Core.TermVariable (Core.Name "x")])}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -3853,7 +3853,7 @@ inferenceTests = Testing.TestGroup {
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -3882,20 +3882,20 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "fortytwo"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "foo"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
@@ -3917,20 +3917,20 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "fortytwo"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "foo"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
@@ -3957,7 +3957,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -3987,11 +3987,11 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermVariable (Core.Name "y")),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "y"),
                           Core.letBindingTerm = (Core.TermVariable (Core.Name "x")),
                           Core.letBindingType = Nothing}],
@@ -4012,7 +4012,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -4026,7 +4026,7 @@ inferenceTests = Testing.TestGroup {
                                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "u"),
@@ -4066,7 +4066,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "plus"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -4105,14 +4105,14 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "z"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "z"))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "p0"),
@@ -4136,14 +4136,14 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "y"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "z"),
                           Core.letBindingTerm = (Core.TermVariable (Core.Name "x")),
                           Core.letBindingType = Nothing}],
@@ -4168,18 +4168,18 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "y"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "z"),
                           Core.letBindingTerm = (Core.TermVariable (Core.Name "x")),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "w"),
                           Core.letBindingTerm = (Core.TermVariable (Core.Name "z")),
                           Core.letBindingType = Nothing}],
@@ -4216,20 +4216,20 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "g"))})),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.fromList"))),
@@ -4251,14 +4251,14 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
@@ -4266,7 +4266,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "g"))}))})),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
@@ -4291,7 +4291,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
@@ -4299,14 +4299,14 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length"))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "g"))}))})),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
@@ -4336,7 +4336,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "b"),
@@ -4358,7 +4358,7 @@ inferenceTests = Testing.TestGroup {
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "b"),
@@ -4396,7 +4396,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "inst"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -4407,7 +4407,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))})))})),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))})),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "rec"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "f"),
@@ -4447,7 +4447,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "inst"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
@@ -4456,7 +4456,7 @@ inferenceTests = Testing.TestGroup {
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))})))})),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "rec"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "f"),
@@ -4488,7 +4488,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "inst1"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
@@ -4497,7 +4497,7 @@ inferenceTests = Testing.TestGroup {
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))})))})),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "inst2"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
@@ -4506,7 +4506,7 @@ inferenceTests = Testing.TestGroup {
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "rec"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "f"),
@@ -4540,11 +4540,11 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "foo"),
                           Core.letBindingTerm = (Core.TermVariable (Core.Name "bar")),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "bar"),
                           Core.letBindingTerm = (Core.TermVariable (Core.Name "foo")),
                           Core.letBindingType = Nothing}],
@@ -4617,7 +4617,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermVariable (Core.Name "x")),
                           Core.letBindingType = Nothing}],
@@ -4633,14 +4633,14 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "id"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "weird"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -4662,7 +4662,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -4687,7 +4687,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "y"),
@@ -4711,7 +4711,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "paradox"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "f"),
@@ -4738,7 +4738,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "f"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -4749,7 +4749,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))),
                           Core.letBindingType = Nothing},
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "g"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "y"),
@@ -4780,7 +4780,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "self"),
                           Core.letBindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -4802,7 +4802,7 @@ inferenceTests = Testing.TestGroup {
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermLet (Core.Let {
                         Core.letBindings = [
-                          Core.LetBinding {
+                          Core.Binding {
                             Core.letBindingName = (Core.Name "self"),
                             Core.letBindingTerm = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -4824,7 +4824,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "self"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "e"),
@@ -4857,7 +4857,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "build"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
@@ -5357,7 +5357,7 @@ inferenceTests = Testing.TestGroup {
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermLet (Core.Let {
                           Core.letBindings = [
-                            Core.LetBinding {
+                            Core.Binding {
                               Core.letBindingName = (Core.Name "firstLetter"),
                               Core.letBindingTerm = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "mapping")),
@@ -5369,7 +5369,7 @@ inferenceTests = Testing.TestGroup {
                                       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.head"))),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "list"))}))}))}))})),
                               Core.letBindingType = Nothing},
-                            Core.LetBinding {
+                            Core.Binding {
                               Core.letBindingName = (Core.Name "list"),
                               Core.letBindingTerm = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.toList"))),
@@ -5917,7 +5917,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "other"),
                           Core.letBindingTerm = (Core.TermUnion (Core.Injection {
                             Core.injectionTypeName = TestGraph.testTypeUnionPolymorphicRecursiveName,
@@ -6391,7 +6391,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "x"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 42.0))),
                           Core.letBindingType = Nothing}],
@@ -6418,7 +6418,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "square"),
                           Core.letBindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "z"),
@@ -6648,7 +6648,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [
-                        Core.LetBinding {
+                        Core.Binding {
                           Core.letBindingName = (Core.Name "foo"),
                           Core.letBindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.letBindingType = Nothing}],
