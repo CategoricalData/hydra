@@ -45,7 +45,7 @@ checkIsStringType typ = case simplifyType typ of
 
 constructModule :: Module
   -> M.Map Type (Coder Graph Graph Term ())
-  -> [(Element, TypedTerm)]
+  -> [(Binding, TypedTerm)]
   -> Flow Graph (M.Map FilePath P3.ProtoFile)
 constructModule mod@(Module ns els _ _ desc) _ pairs = do
     schemaImports <- (fmap namespaceToFileReference . S.toList) <$> moduleDependencyNamespaces True False False False mod
@@ -69,10 +69,10 @@ constructModule mod@(Module ns els _ _ desc) _ pairs = do
         then do
           t <- DecodeCore.type_ term
           return (el, t)
-        else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (elementName el)
+        else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (bindingName el)
     toDef (el, typ) = do
-      typ <- DecodeCore.type_ $ elementTerm el
-      adaptTypeToLanguageAndEncode protobufLanguage (encodeDefinition ns (elementName el)) $ flattenType typ
+      typ <- DecodeCore.type_ $ bindingTerm el
+      adaptTypeToLanguageAndEncode protobufLanguage (encodeDefinition ns (bindingName el)) $ flattenType typ
     checkFields checkType checkFieldType types = L.foldl (||) False (hasMatches <$> types)
       where
         hasMatches = foldOverType TraversalOrderPre (\b t -> b || hasMatch t) False
@@ -181,7 +181,7 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
         TypeVariable name -> if noms
           then forNominal name
           else do
-            typ <- (elementTerm <$> requireElement name) >>= DecodeCore.type_
+            typ <- (bindingTerm <$> requireElement name) >>= DecodeCore.type_
             encodeSimpleType noms typ
         t -> unexpected "simple type" $ show $ removeTypeAnnotations t
       where
@@ -271,7 +271,7 @@ isEnumDefinition typ = case simplifyType typ of
   _ -> False
 
 isEnumDefinitionReference :: Name -> Flow Graph Bool
-isEnumDefinitionReference name = isEnumDefinition <$> ((elementTerm <$> requireElement name) >>= DecodeCore.type_)
+isEnumDefinitionReference name = isEnumDefinition <$> ((bindingTerm <$> requireElement name) >>= DecodeCore.type_)
 
 namespaceToFileReference :: Namespace -> P3.FileReference
 namespaceToFileReference (Namespace ns) = P3.FileReference $ pns ++ ".proto"

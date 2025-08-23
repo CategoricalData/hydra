@@ -132,18 +132,18 @@ module_ = Module (Namespace "hydra.inference") elements
       el yieldCheckedDef,
       el yieldDebugDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
 --
 
-bindConstraintsDef :: TElement (InferenceContext -> (TypeSubst -> Flow s a) -> [TypeConstraint] -> Flow s a)
+bindConstraintsDef :: TBinding (InferenceContext -> (TypeSubst -> Flow s a) -> [TypeConstraint] -> Flow s a)
 bindConstraintsDef = define "bindConstraints" $
   doc "Bind type constraints and continue with substitution" $
   "cx" ~> "f" ~> "constraints" ~>
   Flows.bind (ref Unification.unifyTypeConstraintsDef @@ Typing.inferenceContextSchemaTypes (var "cx") @@ var "constraints") (var "f")
 
-checkSameTypeDef :: TElement (String -> [Type] -> Flow s Type)
+checkSameTypeDef :: TBinding (String -> [Type] -> Flow s Type)
 checkSameTypeDef = define "checkSameType" $
   doc "Ensure all types in a list are equal and return the common type" $
   "desc" ~> "types" ~>
@@ -160,7 +160,7 @@ checkSameTypeDef = define "checkSameType" $
       string " in ",
       var "desc"])
 
-checkTypeDef :: TElement (S.Set Name -> InferenceContext -> Type -> Term -> Flow s ())
+checkTypeDef :: TBinding (S.Set Name -> InferenceContext -> Type -> Term -> Flow s ())
 checkTypeDef = define "checkType" $
   doc "Check that a term has the expected type" $
   "k" ~> "g" ~> "t" ~> "e" ~>
@@ -176,7 +176,7 @@ checkTypeDef = define "checkType" $
     (Flows.pure unit)
 
 -- W: wfTy
-checkTypeVariablesDef :: TElement (InferenceContext -> S.Set Name -> Type -> Flow s ())
+checkTypeVariablesDef :: TBinding (InferenceContext -> S.Set Name -> Type -> Flow s ())
 checkTypeVariablesDef = define "checkTypeVariables" $
   doc "Check that all type variables in a type are bound" $
   "cx" ~> "tyvars" ~> "typ" ~>
@@ -202,12 +202,12 @@ checkTypeVariablesDef = define "checkTypeVariables" $
           string "\" in ",
           ref ShowCore.typeDef @@ var "typ"]))]
 
-debugInferenceDef :: TElement Bool
+debugInferenceDef :: TBinding Bool
 debugInferenceDef = define "debugInference" $
   doc "Disable type checking by default, for better performance" $
   true
 
-emptyInferenceContextDef :: TElement InferenceContext
+emptyInferenceContextDef :: TBinding InferenceContext
 emptyInferenceContextDef = define "emptyInferenceContext" $
   doc "An empty inference context" $
   Typing.inferenceContext
@@ -216,7 +216,7 @@ emptyInferenceContextDef = define "emptyInferenceContext" $
     (Phantoms.map M.empty)
     false
 
-extendContextDef :: TElement ([(Name, TypeScheme)] -> InferenceContext -> InferenceContext)
+extendContextDef :: TBinding ([(Name, TypeScheme)] -> InferenceContext -> InferenceContext)
 extendContextDef = define "extendContext" $
   doc "Add (term variable, type scheme) pairs to the typing environment" $
   "pairs" ~> "cx" ~>
@@ -224,13 +224,13 @@ extendContextDef = define "extendContext" $
     (Maps.fromList $ var "pairs")
     (Typing.inferenceContextDataTypes $ var "cx")
 
-forInferredTermDef :: TElement (InferenceContext -> Term -> String -> (InferenceResult -> a) -> Flow s a)
+forInferredTermDef :: TBinding (InferenceContext -> Term -> String -> (InferenceResult -> a) -> Flow s a)
 forInferredTermDef = define "forInferredTerm" $
   doc "Infer a term's type and map over the result" $
   "cx" ~> "term" ~> "desc" ~> "f" ~>
   Flows.map (var "f") $ ref inferTypeOfTermDef @@ var "cx" @@ var "term" @@ var "desc"
 
-freeVariablesInContextDef :: TElement (InferenceContext -> S.Set Name)
+freeVariablesInContextDef :: TBinding (InferenceContext -> S.Set Name)
 freeVariablesInContextDef = define "freeVariablesInContext" $
   doc "Get all free variables in an inference context" $
   "cx" ~>
@@ -238,22 +238,22 @@ freeVariablesInContextDef = define "freeVariablesInContext" $
       Lists.map (ref Rewriting.freeVariablesInTypeSchemeSimpleDef) $
         Maps.elems $ Typing.inferenceContextDataTypes $ var "cx"
 
-freshNameDef :: TElement (Flow s Name)
+freshNameDef :: TBinding (Flow s Name)
 freshNameDef = define "freshName" $
   doc "Generate a fresh type variable name" $
   Flows.map (ref normalTypeVariableDef) (ref Annotations.nextCountDef @@ ref key_vcountDef)
 
-freshNamesDef :: TElement (Int -> Flow s [Name])
+freshNamesDef :: TBinding (Int -> Flow s [Name])
 freshNamesDef = define "freshNames" $
   doc "Generate multiple fresh type variable names" $
   "n" ~> Flows.sequence $ Lists.replicate (var "n") (ref freshNameDef)
 
-freshVariableTypeDef :: TElement (Flow s Type)
+freshVariableTypeDef :: TBinding (Flow s Type)
 freshVariableTypeDef = define "freshVariableType" $
   doc "Generate a fresh type variable" $
   Flows.map (unaryFunction Core.typeVariable) (ref freshNameDef)
 
-fTypeToTypeSchemeDef :: TElement (Type -> TypeScheme)
+fTypeToTypeSchemeDef :: TBinding (Type -> TypeScheme)
 fTypeToTypeSchemeDef = define "fTypeToTypeScheme" $
   doc "Convert a forall type to a type scheme" $
   "gatherForall" <~ ("vars" ~> "typ" ~> cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ")
@@ -263,7 +263,7 @@ fTypeToTypeSchemeDef = define "fTypeToTypeScheme" $
        (Core.forallTypeBody $ var "ft")]) $
   "typ" ~> var "gatherForall" @@ list [] @@ var "typ"
 
-generalizeDef :: TElement (InferenceContext -> Type -> TypeScheme)
+generalizeDef :: TBinding (InferenceContext -> Type -> TypeScheme)
 generalizeDef = define "generalize" $
   doc "Generalize a type to a type scheme" $
   "cx" ~> "typ" ~>
@@ -271,7 +271,7 @@ generalizeDef = define "generalize" $
      ref Rewriting.freeVariablesInTypeOrderedDef @@ var "typ") $
    Core.typeScheme (var "vars") (var "typ")
 
-graphToInferenceContextDef :: TElement (Graph -> Flow s InferenceContext)
+graphToInferenceContextDef :: TBinding (Graph -> Flow s InferenceContext)
 graphToInferenceContextDef = define "graphToInferenceContext" $
   doc "Convert a graph to an inference context" $
   "g0" ~>
@@ -283,7 +283,7 @@ graphToInferenceContextDef = define "graphToInferenceContext" $
   "schemaTypes" <<~ ref Schemas.schemaGraphToTypingEnvironmentDef @@ var "schema" $
   produce $ Typing.inferenceContext (var "schemaTypes") (var "primTypes") (var "varTypes") false
 
-inferGraphTypesDef :: TElement (Graph -> Flow s Graph)
+inferGraphTypesDef :: TBinding (Graph -> Flow s Graph)
 inferGraphTypesDef = define "inferGraphTypes" $
   doc "Infer types for all elements in a graph" $
   "g0" ~>
@@ -291,11 +291,8 @@ inferGraphTypesDef = define "inferGraphTypes" $
     "bindings" <~ Core.letBindings (var "l") $
     "env" <~ Core.letEnvironment (var "l") $
     "fromBinding" <~ ("b" ~> pair
-      (Core.letBindingName $ var "b")
-      (Graph.element
-        (Core.letBindingName $ var "b")
-        (Core.letBindingTerm $ var "b")
-        (Core.letBindingType $ var "b"))) $
+      (Core.bindingName $ var "b")
+      (var "b")) $
     Graph.graph
       (Maps.fromList $ Lists.map (var "fromBinding") (var "bindings"))
       (Maps.empty)
@@ -304,9 +301,9 @@ inferGraphTypesDef = define "inferGraphTypes" $
       (Graph.graphPrimitives $ var "g0")
       (Graph.graphSchema $ var "g0")) $
   "toLetTerm" <~ ("g" ~>
-    "toBinding" <~ ("el" ~> Core.letBinding
-      (Graph.elementName $ var "el")
-      (Graph.elementTerm $ var "el")
+    "toBinding" <~ ("el" ~> Core.binding
+      (Core.bindingName $ var "el")
+      (Core.bindingTerm $ var "el")
       nothing) $
     Core.termLet $ Core.let_
       (Lists.map (var "toBinding") $ Maps.elems $ Graph.graphElements $ var "g")
@@ -324,7 +321,7 @@ inferGraphTypesDef = define "inferGraphTypes" $
     (var "withResult")
 
 -- Note: this operation is expensive, as it creates a new typing environment for each individual term
-inferInGraphContextDef :: TElement (Term -> Flow Graph InferenceResult)
+inferInGraphContextDef :: TBinding (Term -> Flow Graph InferenceResult)
 inferInGraphContextDef = define "inferInGraphContext" $
   doc "Infer the type of a term in graph context" $
   "term" ~>
@@ -332,7 +329,7 @@ inferInGraphContextDef = define "inferInGraphContext" $
   "cx" <<~ ref graphToInferenceContextDef @@ var "g" $
   ref inferTypeOfTermDef @@ var "cx" @@ var "term" @@ string "single term"
 
-inferManyDef :: TElement (InferenceContext -> [(Term, String)] -> Flow s ([Term], [Type], TypeSubst))
+inferManyDef :: TBinding (InferenceContext -> [(Term, String)] -> Flow s ([Term], [Type], TypeSubst))
 inferManyDef = define "inferMany" $
   doc "Infer types for multiple terms" $
   "cx" ~> "pairs" ~>
@@ -355,13 +352,13 @@ inferManyDef = define "inferMany" $
          (Lists.cons (ref Substitution.substInTypeDef @@ var "s2" @@ var "t1") (var "t2"))
          (ref Substitution.composeTypeSubstDef @@ var "s1" @@ var "s2")))
 
-inferTypeOfDef :: TElement (InferenceContext -> Term -> Flow s (Term, TypeScheme))
+inferTypeOfDef :: TBinding (InferenceContext -> Term -> Flow s (Term, TypeScheme))
 inferTypeOfDef = define "inferTypeOf" $
   doc "Infer the type of a term and return a type scheme" $
   "cx" ~> "term" ~>
   -- Top-level let term which allows us to easily extract an inferred type scheme
   "letTerm" <~ Core.termLet (Core.let_
-    (list [Core.letBinding (Core.name $ string "ignoredVariableName") (var "term") nothing])
+    (list [Core.binding (Core.name $ string "ignoredVariableName") (var "term") nothing])
     (TTerms.string "ignoredEnvironment")) $
   "unifyAndSubst" <~ ("result" ~>
     "subst" <~ Typing.inferenceResultSubst (var "result") $
@@ -372,8 +369,8 @@ inferTypeOfDef = define "inferTypeOf" $
     "bindings" <~ Core.letBindings (var "letResult") $
     Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "bindings"))
       ("binding" <~ Lists.head (var "bindings") $
-       "term1" <~ Core.letBindingTerm (var "binding") $
-       "mts" <~ Core.letBindingType (var "binding") $
+       "term1" <~ Core.bindingTerm (var "binding") $
+       "mts" <~ Core.bindingType (var "binding") $
        Optionals.maybe
          (Flows.fail $ string "Expected a type scheme")
          ("ts" ~> Flows.pure $ pair (var "term1") (var "ts"))
@@ -385,7 +382,7 @@ inferTypeOfDef = define "inferTypeOf" $
   "result" <<~ ref inferTypeOfTermDef @@ var "cx" @@ var "letTerm" @@ string "infer type of term" $
   var "unifyAndSubst" @@ var "result"
 
-inferTypeOfAnnotatedTermDef :: TElement (InferenceContext -> AnnotatedTerm -> Flow s InferenceResult)
+inferTypeOfAnnotatedTermDef :: TBinding (InferenceContext -> AnnotatedTerm -> Flow s InferenceResult)
 inferTypeOfAnnotatedTermDef = define "inferTypeOfAnnotatedTerm" $
   doc "Infer the type of an annotated term" $
   "cx" ~> "at" ~>
@@ -402,7 +399,7 @@ inferTypeOfAnnotatedTermDef = define "inferTypeOfAnnotatedTerm" $
         (var "isubst"))
     (ref inferTypeOfTermDef @@ var "cx" @@ var "term" @@ string "annotated term")
 
-inferTypeOfApplicationDef :: TElement (InferenceContext -> Application -> Flow s InferenceResult)
+inferTypeOfApplicationDef :: TBinding (InferenceContext -> Application -> Flow s InferenceResult)
 inferTypeOfApplicationDef = define "inferTypeOfApplication" $
   doc "Infer the type of a function application" $
   "cx" ~> "app" ~>
@@ -432,7 +429,7 @@ inferTypeOfApplicationDef = define "inferTypeOfApplication" $
   "rSubst" <~ ref Substitution.composeTypeSubstListDef @@ list [var "s0", var "s1", var "s2"] $
   produce $ Typing.inferenceResult (var "rExpr") (var "rType") (var "rSubst")
 
-inferTypeOfCaseStatementDef :: TElement (InferenceContext -> CaseStatement -> Flow s InferenceResult)
+inferTypeOfCaseStatementDef :: TBinding (InferenceContext -> CaseStatement -> Flow s InferenceResult)
 inferTypeOfCaseStatementDef = define "inferTypeOfCaseStatement" $
   doc "Infer the type of a case statement" $
   "cx" ~> "caseStmt" ~>
@@ -487,7 +484,7 @@ inferTypeOfCaseStatementDef = define "inferTypeOfCaseStatement" $
           list [var "isubst", var "subst"]])))
     @@ (Lists.concat $ list [var "dfltConstraints", var "caseConstraints"])
 
-inferTypeOfCollectionDef :: TElement (InferenceContext -> (Type -> Type) -> ([Term] -> Term) -> String -> [Term] -> Flow s InferenceResult)
+inferTypeOfCollectionDef :: TBinding (InferenceContext -> (Type -> Type) -> ([Term] -> Term) -> String -> [Term] -> Flow s InferenceResult)
 inferTypeOfCollectionDef = define "inferTypeOfCollection" $
   doc "Infer the type of a collection" $
   "cx" ~> "typCons" ~> "trmCons" ~> "desc" ~> "els" ~>
@@ -514,7 +511,7 @@ inferTypeOfCollectionDef = define "inferTypeOfCollection" $
       ref yieldDef @@ var "iterm" @@ var "itype" @@ var "isubst") @@
     var "constraints"
 
-inferTypeOfEliminationDef :: TElement (InferenceContext -> Elimination -> Flow s InferenceResult)
+inferTypeOfEliminationDef :: TBinding (InferenceContext -> Elimination -> Flow s InferenceResult)
 inferTypeOfEliminationDef = define "inferTypeOfElimination" $
   doc "Infer the type of an elimination" $
   "cx" ~> "elm" ~>
@@ -524,7 +521,7 @@ inferTypeOfEliminationDef = define "inferTypeOfElimination" $
     _Elimination_union>>: "c" ~> ref inferTypeOfCaseStatementDef @@ var "cx" @@ var "c",
     _Elimination_wrap>>: "tname" ~> ref inferTypeOfUnwrapDef @@ var "cx" @@ var "tname"]
 
-inferTypeOfFunctionDef :: TElement (InferenceContext -> Function -> Flow s InferenceResult)
+inferTypeOfFunctionDef :: TBinding (InferenceContext -> Function -> Flow s InferenceResult)
 inferTypeOfFunctionDef = define "inferTypeOfFunction" $
   doc "Infer the type of a function" $
   "cx" ~> "f" ~>
@@ -533,7 +530,7 @@ inferTypeOfFunctionDef = define "inferTypeOfFunction" $
     _Function_lambda>>: "l" ~> ref inferTypeOfLambdaDef @@ var "cx" @@ var "l",
     _Function_primitive>>: "name" ~> ref inferTypeOfPrimitiveDef @@ var "cx" @@ var "name"]
 
-inferTypeOfInjectionDef :: TElement (InferenceContext -> Injection -> Flow s InferenceResult)
+inferTypeOfInjectionDef :: TBinding (InferenceContext -> Injection -> Flow s InferenceResult)
 inferTypeOfInjectionDef = define "inferTypeOfInjection" $
   doc "Infer the type of a union injection" $
   "cx" ~> "injection" ~>
@@ -560,7 +557,7 @@ inferTypeOfInjectionDef = define "inferTypeOfInjection" $
       @@ (ref Substitution.composeTypeSubstDef @@ var "isubst" @@ var "subst")) @@
     list [Typing.typeConstraint (var "ftyp") (var "ityp") (string "schema type of injected field")]
 
-inferTypeOfLambdaDef :: TElement (InferenceContext -> Lambda -> Flow s InferenceResult)
+inferTypeOfLambdaDef :: TBinding (InferenceContext -> Lambda -> Flow s InferenceResult)
 inferTypeOfLambdaDef = define "inferTypeOfLambda" $
   doc "Infer the type of a lambda function" $
   "cx" ~> "lambda" ~>
@@ -584,17 +581,17 @@ inferTypeOfLambdaDef = define "inferTypeOfLambda" $
   produce $ Typing.inferenceResult (var "rterm") (var "rtype") (var "isubst")
 
 -- | Normalize a let term before inferring its type.
-inferTypeOfLetDef :: TElement (InferenceContext -> Let -> Flow s InferenceResult)
+inferTypeOfLetDef :: TBinding (InferenceContext -> Let -> Flow s InferenceResult)
 inferTypeOfLetDef = define "inferTypeOfLet" $
   doc "Normalize a let term before inferring its type" $
   "cx" ~> "let0" ~>
   "bindings0" <~ Core.letBindings (var "let0") $
   "env0" <~ Core.letEnvironment (var "let0") $
-  "names" <~ Lists.map (unaryFunction Core.letBindingName) (var "bindings0") $
+  "names" <~ Lists.map (unaryFunction Core.bindingName) (var "bindings0") $
   "nameSet" <~ Sets.fromList (var "names") $
   "toPair" <~ ("binding" ~>
-    "name" <~ Core.letBindingName (var "binding") $
-    "term" <~ Core.letBindingTerm (var "binding") $
+    "name" <~ Core.bindingName (var "binding") $
+    "term" <~ Core.bindingTerm (var "binding") $
     pair (var "name") $ Lists.filter ("n" ~> Sets.member (var "n") (var "nameSet")) $
       Sets.toList $ ref Rewriting.freeVariablesInTermDef @@ var "term") $
   "adjList" <~ Lists.map (var "toPair") (var "bindings0") $
@@ -621,7 +618,7 @@ inferTypeOfLetDef = define "inferTypeOfLet" $
     "result" <~ var "helper" @@ (Lists.length $ var "groups") @@ list [] @@ var "iterm" $
     "bindingList" <~ first (var "result") $
     "e" <~ second (var "result") $
-    "bindingMap2" <~ Maps.fromList (Lists.map ("b" ~> pair (Core.letBindingName $ var "b") (var "b")) (var "bindingList")) $
+    "bindingMap2" <~ Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName $ var "b") (var "b")) (var "bindingList")) $
     Core.termLet $ Core.let_
       (Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "bindingMap2")) (var "names"))
       (var "e")) $
@@ -635,13 +632,13 @@ inferTypeOfLetDef = define "inferTypeOfLet" $
       (Just $ ref inferTypeOfTermDef @@ var "cx" @@ var "rewrittenLet" @@ string "empty let term") [
       _Term_let>>: "l" ~> ref inferTypeOfLetNormalizedDef @@ var "cx" @@ var "l"]
 
-inferTypeOfLetNormalizedDef :: TElement (InferenceContext -> Let -> Flow s InferenceResult)
+inferTypeOfLetNormalizedDef :: TBinding (InferenceContext -> Let -> Flow s InferenceResult)
 inferTypeOfLetNormalizedDef = define "inferTypeOfLetNormalized" $
   doc "Infer the type of a let (letrec) term which is already in a normal form" $
   "cx0" ~> "letTerm" ~>
   "bins0" <~ Core.letBindings (var "letTerm") $
   "env0" <~ Core.letEnvironment (var "letTerm") $
-  "bnames" <~ Lists.map (unaryFunction Core.letBindingName) (var "bins0") $
+  "bnames" <~ Lists.map (unaryFunction Core.bindingName) (var "bins0") $
   "bvars" <<~ ref freshNamesDef @@ (Lists.length $ var "bins0") $
   "tbins0" <~ Lists.map (unaryFunction Core.typeVariable) (var "bvars") $
   "cx1" <~ (ref extendContextDef
@@ -690,7 +687,7 @@ inferTypeOfLetNormalizedDef = define "inferTypeOfLetNormalized" $
       ("b" ~> "v" ~> Core.termTypeLambda $ Core.typeLambda (var "v") (var "b"))
       (ref Substitution.substituteInTermDef @@ var "st1" @@ var "term")
       (Lists.reverse $ Core.typeSchemeVariables $ var "ts") $
-    Core.letBinding (var "name")
+    Core.binding (var "name")
       (ref Substitution.substTypesInTermDef @@
         (ref Substitution.composeTypeSubstDef @@ var "senv" @@ var "s2") @@
         (var "typeAbstractedTerm"))
@@ -703,7 +700,7 @@ inferTypeOfLetNormalizedDef = define "inferTypeOfLetNormalized" $
     (ref Substitution.composeTypeSubstListDef @@ list [var "s1", var "s2", var "senv"])) $
   produce $ var "ret"
 
-inferTypeOfListDef :: TElement (InferenceContext -> [Term] -> Flow s InferenceResult)
+inferTypeOfListDef :: TBinding (InferenceContext -> [Term] -> Flow s InferenceResult)
 inferTypeOfListDef = define "inferTypeOfList" $
   doc "Infer the type of a list" $
   "cx" ~> ref inferTypeOfCollectionDef
@@ -712,7 +709,7 @@ inferTypeOfListDef = define "inferTypeOfList" $
     @@ (unaryFunction Core.termList)
     @@ string "list element"
 
-inferTypeOfLiteralDef :: TElement (InferenceContext -> Literal -> Flow s InferenceResult)
+inferTypeOfLiteralDef :: TBinding (InferenceContext -> Literal -> Flow s InferenceResult)
 inferTypeOfLiteralDef = define "inferTypeOfLiteral" $
   doc "Infer the type of a literal" $
   "_" ~> "lit" ~>
@@ -721,7 +718,7 @@ inferTypeOfLiteralDef = define "inferTypeOfLiteral" $
     (Core.typeLiteral $ ref Variants.literalTypeDef @@ var "lit")
     (ref Substitution.idTypeSubstDef)
 
-inferTypeOfMapDef :: TElement (InferenceContext -> M.Map Term Term -> Flow s InferenceResult)
+inferTypeOfMapDef :: TBinding (InferenceContext -> M.Map Term Term -> Flow s InferenceResult)
 inferTypeOfMapDef = define "inferTypeOfMap" $
   doc "Infer the type of a map" $
   "cx" ~> "m" ~>
@@ -754,7 +751,7 @@ inferTypeOfMapDef = define "inferTypeOfMap" $
         @@ (ref Substitution.composeTypeSubstListDef @@ list [var "ksubst", var "vsubst", var "subst"])) @@
       (Lists.concat $ list [var "kcons", var "vcons"])
 
-inferTypeOfOptionalDef :: TElement (InferenceContext -> Maybe Term -> Flow s InferenceResult)
+inferTypeOfOptionalDef :: TBinding (InferenceContext -> Maybe Term -> Flow s InferenceResult)
 inferTypeOfOptionalDef = define "inferTypeOfOptional" $
   doc "Infer the type of an optional" $
   "cx" ~> "m" ~>
@@ -768,7 +765,7 @@ inferTypeOfOptionalDef = define "inferTypeOfOptional" $
     @@ string "optional element"
     @@ (Optionals.maybe (list []) (unaryFunction Lists.singleton) $ var "m")
 
-inferTypeOfPrimitiveDef :: TElement (InferenceContext -> Name -> Flow s InferenceResult)
+inferTypeOfPrimitiveDef :: TBinding (InferenceContext -> Name -> Flow s InferenceResult)
 inferTypeOfPrimitiveDef = define "inferTypeOfPrimitive" $
   doc "Infer the type of a primitive function" $
   "cx" ~> "name" ~>
@@ -788,7 +785,7 @@ inferTypeOfPrimitiveDef = define "inferTypeOfPrimitive" $
       ref yieldCheckedDef @@ var "cx" @@ var "vars" @@ var "iterm" @@ var "itype" @@ ref Substitution.idTypeSubstDef)
     (Maps.lookup (var "name") (Typing.inferenceContextPrimitiveTypes $ var "cx"))
 
-inferTypeOfProductDef :: TElement (InferenceContext -> [Term] -> Flow s InferenceResult)
+inferTypeOfProductDef :: TBinding (InferenceContext -> [Term] -> Flow s InferenceResult)
 inferTypeOfProductDef = define "inferTypeOfProduct" $
   doc "Infer the type of a product (tuple)" $
   "cx" ~> "els" ~>
@@ -800,7 +797,7 @@ inferTypeOfProductDef = define "inferTypeOfProduct" $
       ref yieldDef @@ (Core.termProduct $ var "iterms") @@ (Core.typeProduct $ var "itypes") @@ var "isubst")
     (ref inferManyDef @@ var "cx" @@ (Lists.map ("e" ~> pair (var "e") (string "tuple element")) $ var "els"))
 
-inferTypeOfProjectionDef :: TElement (InferenceContext -> Projection -> Flow s InferenceResult)
+inferTypeOfProjectionDef :: TBinding (InferenceContext -> Projection -> Flow s InferenceResult)
 inferTypeOfProjectionDef = define "inferTypeOfProjection" $
   doc "Infer the type of a record projection" $
   "cx" ~> "proj" ~>
@@ -821,7 +818,7 @@ inferTypeOfProjectionDef = define "inferTypeOfProjection" $
       (var "ftyp"))
     @@ ref Substitution.idTypeSubstDef
 
-inferTypeOfRecordDef :: TElement (InferenceContext -> Record -> Flow s InferenceResult)
+inferTypeOfRecordDef :: TBinding (InferenceContext -> Record -> Flow s InferenceResult)
 inferTypeOfRecordDef = define "inferTypeOfRecord" $
   doc "Infer the type of a record" $
   "cx" ~> "record" ~>
@@ -854,7 +851,7 @@ inferTypeOfRecordDef = define "inferTypeOfRecord" $
       @@ (ref Substitution.composeTypeSubstDef @@ var "isubst" @@ var "subst")) @@
     list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of record")]
 
-inferTypeOfSetDef :: TElement (InferenceContext -> S.Set Term -> Flow s InferenceResult)
+inferTypeOfSetDef :: TBinding (InferenceContext -> S.Set Term -> Flow s InferenceResult)
 inferTypeOfSetDef = define "inferTypeOfSet" $
   doc "Infer the type of a set" $
   "cx" ~>
@@ -866,7 +863,7 @@ inferTypeOfSetDef = define "inferTypeOfSet" $
     @@ string "set element"
     @@ (Sets.toList $ var "s")
 
-inferTypeOfSumDef :: TElement (InferenceContext -> Sum -> Flow s InferenceResult)
+inferTypeOfSumDef :: TBinding (InferenceContext -> Sum -> Flow s InferenceResult)
 inferTypeOfSumDef = define "inferTypeOfSum" $
   doc "Infer the type of a sum type" $
   "cx" ~>
@@ -891,7 +888,7 @@ inferTypeOfSumDef = define "inferTypeOfSum" $
     @@ Core.typeSum (Lists.map (var "toType") (var "vars"))
     @@ var "isubst"
 
-inferTypeOfTermDef :: TElement (InferenceContext -> Term -> String -> Flow s InferenceResult)
+inferTypeOfTermDef :: TBinding (InferenceContext -> Term -> String -> Flow s InferenceResult)
 inferTypeOfTermDef = define "inferTypeOfTerm" $
   doc "Infer the type of a given term" $
   "cx" ~> "term" ~> "desc" ~>
@@ -916,7 +913,7 @@ inferTypeOfTermDef = define "inferTypeOfTerm" $
     _Term_variable>>: "name" ~> ref inferTypeOfVariableDef @@ var "cx" @@ var "name",
     _Term_wrap>>: "w" ~> ref inferTypeOfWrappedTermDef @@ var "cx" @@ var "w"]
 
-inferTypeOfTupleProjectionDef :: TElement (InferenceContext -> TupleProjection -> Flow s InferenceResult)
+inferTypeOfTupleProjectionDef :: TBinding (InferenceContext -> TupleProjection -> Flow s InferenceResult)
 inferTypeOfTupleProjectionDef = define "inferTypeOfTupleProjection" $
   doc "Infer the type of a tuple projection" $
   "cx" ~> "tp" ~>
@@ -931,19 +928,19 @@ inferTypeOfTupleProjectionDef = define "inferTypeOfTupleProjection" $
     @@ (Core.typeFunction $ Core.functionType (Core.typeProduct $ var "types") (var "cod"))
     @@ (ref Substitution.idTypeSubstDef)
 
-inferTypeOfTypeLambdaDef :: TElement (InferenceContext -> TypeLambda -> Flow s InferenceResult)
+inferTypeOfTypeLambdaDef :: TBinding (InferenceContext -> TypeLambda -> Flow s InferenceResult)
 inferTypeOfTypeLambdaDef = define "inferTypeOfTypeLambda" $
   doc "Infer the type of a type abstraction" $
   "cx" ~> "ta" ~>
   ref inferTypeOfTermDef @@ var "cx" @@ (Core.typeLambdaBody $ var "ta") @@ string "type abstraction"
 
-inferTypeOfTypeApplicationDef :: TElement (InferenceContext -> TypedTerm -> Flow s InferenceResult)
+inferTypeOfTypeApplicationDef :: TBinding (InferenceContext -> TypedTerm -> Flow s InferenceResult)
 inferTypeOfTypeApplicationDef = define "inferTypeOfTypeApplication" $
   doc "Infer the type of a type application" $
   "cx" ~> "tt" ~>
   ref inferTypeOfTermDef @@ var "cx" @@ (Core.typedTermTerm $ var "tt") @@ string "type application term"
 
-inferTypeOfUnwrapDef :: TElement (InferenceContext -> Name -> Flow s InferenceResult)
+inferTypeOfUnwrapDef :: TBinding (InferenceContext -> Name -> Flow s InferenceResult)
 inferTypeOfUnwrapDef = define "inferTypeOfUnwrap" $
   doc "Infer the type of an unwrap operation" $
   "cx" ~> "tname" ~>
@@ -961,7 +958,7 @@ inferTypeOfUnwrapDef = define "inferTypeOfUnwrap" $
       (var "wtyp"))
     @@ ref Substitution.idTypeSubstDef
 
-inferTypeOfVariableDef :: TElement (InferenceContext -> Name -> Flow s InferenceResult)
+inferTypeOfVariableDef :: TBinding (InferenceContext -> Name -> Flow s InferenceResult)
 inferTypeOfVariableDef = define "inferTypeOfVariable" $
   doc "Infer the type of a variable" $
   "cx" ~> "name" ~>
@@ -976,7 +973,7 @@ inferTypeOfVariableDef = define "inferTypeOfVariable" $
       produce $ Typing.inferenceResult (var "iterm") (var "itype") (ref Substitution.idTypeSubstDef))
     (Maps.lookup (var "name") (Typing.inferenceContextDataTypes $ var "cx"))
 
-inferTypeOfWrappedTermDef :: TElement (InferenceContext -> WrappedTerm -> Flow s InferenceResult)
+inferTypeOfWrappedTermDef :: TBinding (InferenceContext -> WrappedTerm -> Flow s InferenceResult)
 inferTypeOfWrappedTermDef = define "inferTypeOfWrappedTerm" $
   doc "Infer the type of a wrapped term" $
   "cx" ~> "wt" ~>
@@ -1005,15 +1002,15 @@ inferTypeOfWrappedTermDef = define "inferTypeOfWrappedTerm" $
       (ref Substitution.composeTypeSubstDef @@ var "isubst" @@ var "subst2")) @@
     list [Typing.typeConstraint (var "stypInst") (var "expected") (string "schema type of wrapper")]
 
-inferTypesOfTemporaryBindingsDef :: TElement (InferenceContext -> [Binding] -> Flow s ([Term], ([Type], TypeSubst)))
+inferTypesOfTemporaryBindingsDef :: TBinding (InferenceContext -> [Binding] -> Flow s ([Term], ([Type], TypeSubst)))
 inferTypesOfTemporaryBindingsDef = define "inferTypesOfTemporaryBindings" $
   doc "Infer types for temporary let bindings" $
   "cx" ~> "bins" ~>
   Logic.ifElse (Lists.null $ var "bins")
     (Flows.pure $ pair (list []) (pair (list []) (ref Substitution.idTypeSubstDef))) $
   "binding" <~ Lists.head (var "bins") $
-  "k" <~ Core.letBindingName (var "binding") $
-  "v" <~ Core.letBindingTerm (var "binding") $
+  "k" <~ Core.bindingName (var "binding") $
+  "v" <~ Core.bindingTerm (var "binding") $
   "tl" <~ Lists.tail (var "bins") $
   "result1" <<~ ref inferTypeOfTermDef @@ var "cx" @@ var "v" @@
     (Strings.cat $ list [
@@ -1035,14 +1032,14 @@ inferTypesOfTemporaryBindingsDef = define "inferTypesOfTemporaryBindings" $
       (Lists.cons (ref Substitution.substInTypeDef @@ var "r" @@ var "u_prime") (var "r_prime"))
       (ref Substitution.composeTypeSubstDef @@ var "u" @@ var "r"))
 
-initialTypeContextDef :: TElement (Graph -> Flow s TypeContext)
+initialTypeContextDef :: TBinding (Graph -> Flow s TypeContext)
 initialTypeContextDef = define "initialTypeContext" $
   doc "Create an initial type context from a graph" $
   "g" ~>
   "toPair" <~ ("pair" ~>
     "name" <~ first (var "pair") $
     "el"  <~ second (var "pair") $
-    optCases (Graph.elementType $ var "el")
+    optCases (Core.bindingType $ var "el")
       (Flows.fail $ "untyped element: " ++ Core.unName (var "name"))
       ("ts" ~> produce $ pair (var "name") (ref typeSchemeToFTypeDef @@ var "ts"))) $
   "ix" <<~ ref graphToInferenceContextDef @@ var "g" $
@@ -1052,7 +1049,7 @@ initialTypeContextDef = define "initialTypeContext" $
   produce $ Typing.typeContext (var "types") Sets.empty (var "ix")
 
 -- W: inst
-instantiateTypeSchemeDef :: TElement (TypeScheme -> Flow s TypeScheme)
+instantiateTypeSchemeDef :: TBinding (TypeScheme -> Flow s TypeScheme)
 instantiateTypeSchemeDef = define "instantiateTypeScheme" $
   doc "Instantiate a type scheme with fresh variables" $
   "scheme" ~>
@@ -1062,7 +1059,7 @@ instantiateTypeSchemeDef = define "instantiateTypeScheme" $
   produce $ Core.typeScheme (var "newVars") $
     ref Substitution.substInTypeDef @@ var "subst" @@ Core.typeSchemeType (var "scheme")
 
-isUnboundDef :: TElement (InferenceContext -> Name -> Bool)
+isUnboundDef :: TBinding (InferenceContext -> Name -> Bool)
 isUnboundDef = define "isUnbound" $
   doc "Check if a variable is unbound in context" $
   "cx" ~> "v" ~>
@@ -1070,19 +1067,19 @@ isUnboundDef = define "isUnbound" $
     (Logic.not $ Sets.member (var "v") $ ref freeVariablesInContextDef @@ var "cx")
     (Logic.not $ Maps.member (var "v") $ Typing.inferenceContextSchemaTypes $ var "cx")
 
-key_vcountDef :: TElement Name
+key_vcountDef :: TBinding Name
 key_vcountDef = define "key_vcount" $
   doc "Key for inference type variable count" $
   Core.name $ string "inferenceTypeVariableCount"
 
-mapConstraintsDef :: TElement (InferenceContext -> (TypeSubst -> a) -> [TypeConstraint] -> Flow s a)
+mapConstraintsDef :: TBinding (InferenceContext -> (TypeSubst -> a) -> [TypeConstraint] -> Flow s a)
 mapConstraintsDef = define "mapConstraints" $
   doc "Map over type constraints after unification" $
   "cx" ~> "f" ~> "constraints" ~>
   Flows.map (var "f") $
     ref Unification.unifyTypeConstraintsDef @@ (Typing.inferenceContextSchemaTypes $ var "cx") @@ var "constraints"
 
-nominalApplicationDef :: TElement (Name -> [Type] -> Type)
+nominalApplicationDef :: TBinding (Name -> [Type] -> Type)
 nominalApplicationDef = define "nominalApplication" $
   doc "Apply type arguments to a nominal type" $
   "tname" ~> "args" ~>
@@ -1091,12 +1088,12 @@ nominalApplicationDef = define "nominalApplication" $
     (Core.typeVariable $ var "tname")
     (var "args")
 
-normalTypeVariableDef :: TElement (Int -> Name)
+normalTypeVariableDef :: TBinding (Int -> Name)
 normalTypeVariableDef = define "normalTypeVariable" $
   doc "Type variable naming convention follows Haskell: t0, t1, etc." $
   "i" ~> Core.name (Strings.cat2 (string "t") (Literals.showInt32 $ var "i"))
 
-requireSchemaTypeDef :: TElement (InferenceContext -> Name -> Flow s TypeScheme)
+requireSchemaTypeDef :: TBinding (InferenceContext -> Name -> Flow s TypeScheme)
 requireSchemaTypeDef = define "requireSchemaType" $
   doc "Require a schema type from the context" $
   "cx" ~> "tname" ~>
@@ -1105,7 +1102,7 @@ requireSchemaTypeDef = define "requireSchemaType" $
     ("ts" ~> ref instantiateTypeSchemeDef @@ (ref Rewriting.deannotateTypeSchemeRecursiveDef @@ var "ts"))
     (Maps.lookup (var "tname") (Typing.inferenceContextSchemaTypes $ var "cx"))
 
-showInferenceResultDef :: TElement (InferenceResult -> String)
+showInferenceResultDef :: TBinding (InferenceResult -> String)
 showInferenceResultDef = define "showInferenceResult" $
   doc "Show an inference result for debugging" $
   "result" ~>
@@ -1121,12 +1118,12 @@ showInferenceResultDef = define "showInferenceResult" $
     ref ShowTyping.typeSubstDef @@ var "subst",
     string "}"]
 
-toFContextDef :: TElement (InferenceContext -> M.Map Name Type)
+toFContextDef :: TBinding (InferenceContext -> M.Map Name Type)
 toFContextDef = define "toFContext" $
   doc "Convert inference context to type context" $
   "cx" ~> Maps.map (ref typeSchemeToFTypeDef) $ Typing.inferenceContextDataTypes $ var "cx"
 
-typeOfDef :: TElement (TypeContext -> Term -> Flow s Type)
+typeOfDef :: TBinding (TypeContext -> Term -> Flow s Type)
 typeOfDef = define "typeOf" $
   doc "Given a type context, reconstruct the type of a System F term" $
   "tcontext" ~> "term" ~>
@@ -1138,7 +1135,7 @@ typeOfDef = define "typeOf" $
     var "term"
 
 -- W: typeOf
-typeOfInternalDef :: TElement (InferenceContext -> S.Set Name -> M.Map Name Type -> [Type] -> Term -> Flow s Type)
+typeOfInternalDef :: TBinding (InferenceContext -> S.Set Name -> M.Map Name Type -> [Type] -> Term -> Flow s Type)
 typeOfInternalDef = define "typeOfInternal" $
   doc "Given internal context, reconstruct the type of a System F term" $
   "cx" ~> "vars" ~> "types" ~> "apptypes" ~> "term" ~>
@@ -1301,15 +1298,15 @@ typeOfInternalDef = define "typeOfInternal" $
     _Term_let>>: "letTerm" ~> var "checkApplied" @@ (
       "bs" <~ Core.letBindings (var "letTerm") $
       "env" <~ Core.letEnvironment (var "letTerm") $
-      "bnames" <~ Lists.map (unaryFunction Core.letBindingName) (var "bs") $
-      "bterms" <~ Lists.map (unaryFunction Core.letBindingTerm) (var "bs") $
+      "bnames" <~ Lists.map (unaryFunction Core.bindingName) (var "bs") $
+      "bterms" <~ Lists.map (unaryFunction Core.bindingTerm) (var "bs") $
       "btypeOf" <~ ("b" ~>
         Optionals.maybe
           (Flows.fail $ Strings.cat $ list [
             string "untyped let binding in ",
             ref ShowCore.termDef @@ var "term"])
           ("ts" ~> Flows.pure $ ref typeSchemeToFTypeDef @@ var "ts")
-          (Core.letBindingType $ var "b")) $
+          (Core.bindingType $ var "b")) $
       "btypes" <<~ Flows.mapList (var "btypeOf") (var "bs") $
       "types2" <~ Maps.union (Maps.fromList $ Lists.zip (var "bnames") (var "btypes")) (var "types") $
       "typeofs" <<~ Flows.mapList (ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types2" @@ list []) (var "bterms") $
@@ -1463,7 +1460,7 @@ typeOfInternalDef = define "typeOfInternal" $
       ref typeOfNominalDef @@ string "wrapper typeOf" @@ var "cx" @@ var "tname" @@
         (Core.typeWrap $ Core.wrappedType (var "tname") (var "innerType"))]
 
-typeOfNominalDef :: TElement (String -> InferenceContext -> Name -> Type -> Flow s Type)
+typeOfNominalDef :: TBinding (String -> InferenceContext -> Name -> Type -> Flow s Type)
 typeOfNominalDef = define "typeOfNominal" $
   doc "Infer the type of a nominal type" $
   "desc" ~> "cx" ~> "tname" ~> "expected" ~>
@@ -1481,7 +1478,7 @@ typeOfNominalDef = define "typeOfNominal" $
   "tparams" <~ Lists.map (var "resolveType" @@ var "subst") (var "svars") $
   Flows.pure $ ref nominalApplicationDef @@ var "tname" @@ var "tparams"
 
-typeOfUnitDef :: TElement InferenceResult
+typeOfUnitDef :: TBinding InferenceResult
 typeOfUnitDef = define "inferTypeOfUnit" $
   doc "The trivial inference result for the unit term" $
   Typing.inferenceResult
@@ -1489,7 +1486,7 @@ typeOfUnitDef = define "inferTypeOfUnit" $
     (Core.typeUnit)
     (ref Substitution.idTypeSubstDef)
 
-typeSchemeToFTypeDef :: TElement (TypeScheme -> Type)
+typeSchemeToFTypeDef :: TBinding (TypeScheme -> Type)
 typeSchemeToFTypeDef = define "typeSchemeToFType" $
   doc "Convert a type scheme to a forall type" $
   "ts" ~>
@@ -1501,7 +1498,7 @@ typeSchemeToFTypeDef = define "typeSchemeToFType" $
     -- Put the variables in the same order in which they are introduced by the type scheme.
     (Lists.reverse $ var "vars")
 
-yieldDef :: TElement (Term -> Type -> TypeSubst -> InferenceResult)
+yieldDef :: TBinding (Term -> Type -> TypeSubst -> InferenceResult)
 yieldDef = define "yield" $
   doc "Create an inference result" $
   "term" ~> "typ" ~> "subst" ~>
@@ -1510,7 +1507,7 @@ yieldDef = define "yield" $
     (ref Substitution.substInTypeDef @@ var "subst" @@ var "typ")
     (var "subst")
 
-yieldCheckedDef :: TElement (InferenceContext -> [Name] -> Term -> Type -> TypeSubst -> Flow s InferenceResult)
+yieldCheckedDef :: TBinding (InferenceContext -> [Name] -> Term -> Type -> TypeSubst -> Flow s InferenceResult)
 yieldCheckedDef = define "yieldChecked" $
   doc "Create a checked inference result" $
   "cx" ~> "vars" ~> "term" ~> "typ" ~> "subst" ~>
@@ -1518,7 +1515,7 @@ yieldCheckedDef = define "yieldChecked" $
   "itype" <~ ref Substitution.substInTypeDef @@ var "subst" @@ var "typ" $
   produce $ Typing.inferenceResult (var "iterm") (var "itype") (var "subst")
 
-yieldDebugDef :: TElement (InferenceContext -> String -> Term -> Type -> TypeSubst -> Flow s InferenceResult)
+yieldDebugDef :: TBinding (InferenceContext -> String -> Term -> Type -> TypeSubst -> Flow s InferenceResult)
 yieldDebugDef = define "yieldDebug" $
   doc "Create an inference result with debug output" $
   "cx" ~> "debugId" ~> "term" ~> "typ" ~> "subst" ~>

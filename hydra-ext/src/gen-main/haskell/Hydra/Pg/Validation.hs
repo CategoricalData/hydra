@@ -42,7 +42,7 @@ validateElement checkValue showValue labelForVertexId typ el = ((\x -> case x of
     Model.ElementVertex v2 -> (Just (prepend "Vertex instead of edge" (showValue (Model.vertexId v2))))
     Model.ElementEdge v2 -> (validateEdge checkValue showValue labelForVertexId v1 v2)) el)) typ)
 
-validateGraph :: (Ord t0) => ((t1 -> t0 -> Maybe String) -> (t0 -> String) -> Model.GraphSchema t1 -> Model.Graph t0 -> Maybe String)
+validateGraph :: (Ord t0, Ord t1) => ((t0 -> t1 -> Maybe String) -> (t1 -> String) -> Model.GraphSchema t0 -> Model.Graph t1 -> Maybe String)
 validateGraph checkValue showValue schema graph =  
   let checkVertices =  
           let checkVertex = (\el -> Optionals.maybe (Just (vertexError showValue el (prepend "Unexpected label" (Model.unVertexLabel (Model.vertexLabel el))))) (\t -> validateVertex checkValue showValue t el) (Maps.lookup (Model.vertexLabel el) (Model.graphSchemaVertices schema)))
@@ -55,7 +55,7 @@ validateGraph checkValue showValue schema graph =
     checkVertices,
     checkEdges])
 
-validateProperties :: ((t1 -> t0 -> Maybe String) -> [Model.PropertyType t1] -> M.Map Model.PropertyKey t0 -> Maybe String)
+validateProperties :: ((t0 -> t1 -> Maybe String) -> [Model.PropertyType t0] -> M.Map Model.PropertyKey t1 -> Maybe String)
 validateProperties checkValue types props =  
   let checkTypes = (checkAll (Lists.map checkType types)) 
       checkType = (\t -> Logic.ifElse (Model.propertyTypeRequired t) (Optionals.maybe (Just (prepend "Missing value for " (Model.unPropertyKey (Model.propertyTypeKey t)))) (\_ -> Nothing) (Maps.lookup (Model.propertyTypeKey t) props)) Nothing)

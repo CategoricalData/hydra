@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.TTypes as T
 import           Hydra.Dsl.TTerms as TTerms
 
 
-testGraphDefinition :: String -> TTerm a -> TElement a
+testGraphDefinition :: String -> TTerm a -> TBinding a
 testGraphDefinition = definitionInModule testGraphModule
 
 testGraphModule :: Module
@@ -85,61 +85,61 @@ testGraphModule = Module (Namespace "hydra.test.testGraph") elements
       el testTypeUnitDef,
       el testTypeUnitNameDef]
 
-testGraphType :: String -> TTerm Type -> TElement Type
+testGraphType :: String -> TTerm Type -> TBinding Type
 testGraphType name = testGraphDefinition name . firstClassType
 
-testTypeLatLonNameDef :: TElement Name
+testTypeLatLonNameDef :: TBinding Name
 testTypeLatLonNameDef = testGraphDefinition "testTypeLatLonName" $
   name "LatLon"
 
-testTypeLatLonPolyNameDef :: TElement Name
+testTypeLatLonPolyNameDef :: TBinding Name
 testTypeLatLonPolyNameDef = testGraphDefinition "testTypeLatLonPolyName" $
   name "LatLonPoly"
 
-latlonRecordDef :: TElement (Float -> Float -> Term)
+latlonRecordDef :: TBinding (Float -> Float -> Term)
 latlonRecordDef = testGraphDefinition "latlonRecord" $
   Phantoms.lambdas ["lat", "lon"] $ record (ref testTypeLatLonNameDef) [
     "lat">: float32Lift $ varPhantom "lat",
     "lon">: float32Lift $ varPhantom "lon"]
 
-testTypeLatLonDef :: TElement Type
+testTypeLatLonDef :: TBinding Type
 testTypeLatLonDef = testGraphType "testTypeLatLon" $
   T.record (ref testTypeLatLonNameDef) [
     "lat">: T.float32,
     "lon">: T.float32]
 
-testTypeLatLonPolyDef :: TElement Type
+testTypeLatLonPolyDef :: TBinding Type
 testTypeLatLonPolyDef = testGraphType "testTypeLatLonPoly" $
   T.forAll "a" $ T.record (ref testTypeLatLonPolyNameDef) [
     "lat">: T.var "a",
     "lon">: T.var "a"]
 
-testTypeStringAliasDef :: TElement Type
+testTypeStringAliasDef :: TBinding Type
 testTypeStringAliasDef = testGraphType "testTypeStringAlias" $
   Core.typeWrap $ Core.wrappedType (ref testTypeStringAliasNameDef) T.string
 
-testTypeStringAliasNameDef :: TElement Name
+testTypeStringAliasNameDef :: TBinding Name
 testTypeStringAliasNameDef = testGraphDefinition "testTypeStringAliasName" $
   name "StringTypeAlias"
 
-testTypePolymorphicWrapperDef :: TElement Type
+testTypePolymorphicWrapperDef :: TBinding Type
 testTypePolymorphicWrapperDef = testGraphType "testTypePolymorphicWrapper" $
   T.forAll "a" $ Core.typeWrap $ Core.wrappedType (ref testTypePolymorphicWrapperNameDef) (T.list $ T.var "a")
 
-testTypePolymorphicWrapperNameDef :: TElement Name
+testTypePolymorphicWrapperNameDef :: TBinding Name
 testTypePolymorphicWrapperNameDef = testGraphDefinition "testTypePolymorphicWrapperName" $
   name "PolymorphicWrapper"
 
-testElementArthurDef :: TElement Element
+testElementArthurDef :: TBinding Binding
 testElementArthurDef = testGraphDefinition "testElementArthur" $
-  Graph.element
+  Core.binding
     (name "firstName")
     (ref testDataArthurDef)
     (Phantoms.just $ Core.typeScheme (Phantoms.list []) (Core.typeVariable $ ref testTypePersonNameDef))
 
-testElementFirstNameDef :: TElement Element
+testElementFirstNameDef :: TBinding Binding
 testElementFirstNameDef = testGraphDefinition "testElementFirstName" $
-  Graph.element
+  Core.binding
     (name "firstName")
     (project (ref testTypePersonNameDef) (name "firstName"))
     (Phantoms.just $ Core.typeScheme (Phantoms.list [])
@@ -148,7 +148,7 @@ testElementFirstNameDef = testGraphDefinition "testElementFirstName" $
 --testGraph :: Graph
 --testGraph = elementsToGraph hydraCoreGraph (Just testSchemaGraph) [testElementArthur, testElementFirstName]
 
-testNamespaceDef :: TElement Namespace
+testNamespaceDef :: TBinding Namespace
 testNamespaceDef = testGraphDefinition "testNamespace" $ Module.namespace $ Phantoms.string "testGraph"
 
 --testSchemaGraph :: Graph
@@ -174,167 +174,167 @@ testNamespaceDef = testGraphDefinition "testNamespace" $ Module.namespace $ Phan
 --  where
 --    def = typeElement
 
-testSchemaNamespaceDef :: TElement Namespace
+testSchemaNamespaceDef :: TBinding Namespace
 testSchemaNamespaceDef = testGraphDefinition "testSchemaNamespace" $ Module.namespace $ Phantoms.string "testSchemaGraph"
 
-testDataArthurDef :: TElement Term
+testDataArthurDef :: TBinding Term
 testDataArthurDef = testGraphDefinition "testDataArthur" $
   record (ref testTypePersonNameDef) [
     "firstName">: string "Arthur",
     "lastName">: string "Dent",
     "age">: int32 42]
 
-testTypeBuddyListADef :: TElement Type
+testTypeBuddyListADef :: TBinding Type
 testTypeBuddyListADef = testGraphType "testTypeBuddyListA" $
   T.forAll "a" $ T.record (ref testTypeBuddyListANameDef) [
     "head">: T.var "a",
     "tail">: T.optional $
       T.apply (Core.typeVariable $ ref testTypeBuddyListBNameDef) (T.var "a")]
 
-testTypeBuddyListANameDef :: TElement Name
+testTypeBuddyListANameDef :: TBinding Name
 testTypeBuddyListANameDef = testGraphDefinition "testTypeBuddyListAName" $
   name "BuddyListA"
 
-testTypeBuddyListBDef :: TElement Type
+testTypeBuddyListBDef :: TBinding Type
 testTypeBuddyListBDef = testGraphType "testTypeBuddyListB" $
   T.forAll "a" $ T.record (ref testTypeBuddyListBNameDef) [
     "head">: T.var "a",
     "tail">: T.optional $
       T.apply (Core.typeVariable $ ref testTypeBuddyListANameDef) (T.var "a")]
 
-testTypeBuddyListBNameDef :: TElement Name
+testTypeBuddyListBNameDef :: TBinding Name
 testTypeBuddyListBNameDef = testGraphDefinition "testTypeBuddyListBName" $
   name "BuddyListB"
 
-testTypeComparisonDef :: TElement Type
+testTypeComparisonDef :: TBinding Type
 testTypeComparisonDef = testGraphType "testTypeComparison" $
   T.union (ref testTypeComparisonNameDef) [
     "lessThan">: T.unit,
     "equalTo">: T.unit,
     "greaterThan">: T.unit]
 
-testTypeComparisonNameDef :: TElement Name
+testTypeComparisonNameDef :: TBinding Name
 testTypeComparisonNameDef = testGraphDefinition "testTypeComparisonName" $
   name "Comparison"
 
-testTypeIntListDef :: TElement Type
+testTypeIntListDef :: TBinding Type
 testTypeIntListDef = testGraphType "testTypeIntList" $
   T.record (ref testTypeIntListNameDef) [
     "head">: T.int32,
     "tail">: T.optional $ Core.typeVariable (ref testTypeIntListNameDef)]
 
-testTypeIntListNameDef :: TElement Name
+testTypeIntListNameDef :: TBinding Name
 testTypeIntListNameDef = testGraphDefinition "testTypeIntListName" $
   name "IntList"
 
-testTypeHydraLiteralTypeDef :: TElement Type
+testTypeHydraLiteralTypeDef :: TBinding Type
 testTypeHydraLiteralTypeDef = testGraphType "testTypeHydraLiteralType" $
   T.union (ref testTypeHydraLiteralTypeNameDef) [
     "boolean">: T.boolean,
     "string">: T.string]
 
-testTypeHydraLiteralTypeNameDef :: TElement Name
+testTypeHydraLiteralTypeNameDef :: TBinding Name
 testTypeHydraLiteralTypeNameDef = testGraphDefinition "testTypeHydraLiteralTypeName" $
   name "HydraLiteralType"
 
-testTypeHydraTypeDef :: TElement Type
+testTypeHydraTypeDef :: TBinding Type
 testTypeHydraTypeDef = testGraphType "testTypeHydraType" $
   T.union (ref testTypeHydraTypeNameDef) [
     "literal">: Core.typeVariable $ ref testTypeHydraLiteralTypeNameDef,
     "list">: Core.typeVariable $ ref testTypeHydraTypeNameDef]
 
-testTypeHydraTypeNameDef :: TElement Name
+testTypeHydraTypeNameDef :: TBinding Name
 testTypeHydraTypeNameDef = testGraphDefinition "testTypeHydraTypeName" $
   name "HydraType"
 
-testTypeListDef :: TElement Type
+testTypeListDef :: TBinding Type
 testTypeListDef = testGraphType "testTypeList" $
   T.forAll "a" $ T.record (ref testTypeListNameDef) [
     "head">: T.var "a",
     "tail">: T.optional $
       T.apply (Core.typeVariable $ ref testTypeListNameDef) (T.var "a")]
 
-testTypeListNameDef :: TElement Name
+testTypeListNameDef :: TBinding Name
 testTypeListNameDef = testGraphDefinition "testTypeListName" $
   name "List"
 
-testTypeNumberDef :: TElement Type
+testTypeNumberDef :: TBinding Type
 testTypeNumberDef = testGraphType "testTypeNumber" $
   T.union (ref testTypeNumberNameDef) [
     "int">: T.int32,
     "float">: T.float32]
 
-testTypeNumberNameDef :: TElement Name
+testTypeNumberNameDef :: TBinding Name
 testTypeNumberNameDef = testGraphDefinition "testTypeNumberName" $
   name "Number"
 
-testTypePersonDef :: TElement Type
+testTypePersonDef :: TBinding Type
 testTypePersonDef = testGraphType "testTypePerson" $
   T.record (ref testTypePersonNameDef) [
     "firstName">: T.string,
     "lastName">: T.string,
     "age">: T.int32]
 
-testTypePersonNameDef :: TElement Name
+testTypePersonNameDef :: TBinding Name
 testTypePersonNameDef = testGraphDefinition "testTypePersonName" $
   name "Person"
 
-testTypePersonOrSomethingDef :: TElement Type
+testTypePersonOrSomethingDef :: TBinding Type
 testTypePersonOrSomethingDef = testGraphType "testTypePersonOrSomething" $
   T.forAll "a" $ T.union (ref testTypePersonOrSomethingNameDef) [
     "person">: Core.typeVariable $ ref testTypePersonNameDef,
     "other">: T.var "a"]
 
-testTypePersonOrSomethingNameDef :: TElement Name
+testTypePersonOrSomethingNameDef :: TBinding Name
 testTypePersonOrSomethingNameDef = testGraphDefinition "testTypePersonOrSomethingName" $
   name "PersonOrSomething"
 
-testTypeSimpleNumberDef :: TElement Type
+testTypeSimpleNumberDef :: TBinding Type
 testTypeSimpleNumberDef = testGraphType "testTypeSimpleNumber" $
   T.union (ref testTypeSimpleNumberNameDef) [
     "int">: T.int32,
     "float">: T.float32]
 
-testTypeSimpleNumberNameDef :: TElement Name
+testTypeSimpleNumberNameDef :: TBinding Name
 testTypeSimpleNumberNameDef = testGraphDefinition "testTypeSimpleNumberName" $
   name "SimpleNumber"
 
-testTypeTimestampDef :: TElement Type
+testTypeTimestampDef :: TBinding Type
 testTypeTimestampDef = testGraphType "testTypeTimestamp" $
   T.union (ref testTypeTimestampNameDef) [
     "unixTimeMillis">: T.uint64,
     "date">: T.string]
 
-testTypeTimestampNameDef :: TElement Name
+testTypeTimestampNameDef :: TBinding Name
 testTypeTimestampNameDef = testGraphDefinition "testTypeTimestampName" $
   name "Timestamp"
 
-testTypeUnionMonomorphicDef :: TElement Type
+testTypeUnionMonomorphicDef :: TBinding Type
 testTypeUnionMonomorphicDef = testGraphType "testTypeUnionMonomorphic" $
   T.union (ref testTypeUnionMonomorphicNameDef) [
     "bool">: T.boolean,
     "string">: T.string,
     "unit">: T.unit]
 
-testTypeUnionMonomorphicNameDef :: TElement Name
+testTypeUnionMonomorphicNameDef :: TBinding Name
 testTypeUnionMonomorphicNameDef = testGraphDefinition "testTypeUnionMonomorphicName" $
   name "UnionMonomorphic"
 
-testTypeUnionPolymorphicRecursiveDef :: TElement Type
+testTypeUnionPolymorphicRecursiveDef :: TBinding Type
 testTypeUnionPolymorphicRecursiveDef = testGraphType "testTypeUnionPolymorphicRecursive" $
   T.forAll "a" $ T.union (ref testTypeUnionPolymorphicRecursiveNameDef) [
     "bool">: T.boolean,
     "value">: T.var "a",
     "other">: T.apply (Core.typeVariable $ ref testTypeUnionPolymorphicRecursiveNameDef) (T.var "a")]
 
-testTypeUnionPolymorphicRecursiveNameDef :: TElement Name
+testTypeUnionPolymorphicRecursiveNameDef :: TBinding Name
 testTypeUnionPolymorphicRecursiveNameDef = testGraphDefinition "testTypeUnionPolymorphicRecursiveName" $
   name "UnionPolymorphicRecursive"
 
-testTypeUnitDef :: TElement Type
+testTypeUnitDef :: TBinding Type
 testTypeUnitDef = testGraphType "testTypeUnit" $
   T.record (ref testTypeUnitNameDef) []
 
-testTypeUnitNameDef :: TElement Name
+testTypeUnitNameDef :: TBinding Name
 testTypeUnitNameDef = testGraphDefinition "testTypeUnitName" $
   name "Unit"

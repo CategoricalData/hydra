@@ -37,26 +37,26 @@ testSuiteModule = Module testSuiteNs elements
       primitiveTestsEl,
       stringPrimitiveTestsEl]
 
-allTestsEl :: Element
-allTestsEl = encodedTestGroupToElement testSuiteNs "allTests" $ tgroup "All tests" Nothing subgroups []
+allTestsEl :: Binding
+allTestsEl = encodedTestGroupToBinding testSuiteNs "allTests" $ tgroup "All tests" Nothing subgroups []
   where
     subgroups = fmap groupRef [
       formattingTestsEl,
       inferenceTestsEl,
       primitiveTestsEl]
 
-formattingTestsEl = testGroupToElement testSuiteNs "formattingTests" formattingTests
+formattingTestsEl = testGroupToBinding testSuiteNs "formattingTests" formattingTests
 
-inferenceTestsEl = encodedTestGroupToElement testSuiteNs "inferenceTests" inferenceTests
+inferenceTestsEl = encodedTestGroupToBinding testSuiteNs "inferenceTests" inferenceTests
 
-listPrimitiveTestsEl = testGroupToElement testSuiteNs "listPrimitiveTests" listPrimitiveTests
+listPrimitiveTestsEl = testGroupToBinding testSuiteNs "listPrimitiveTests" listPrimitiveTests
 
-primitiveTestsEl = encodedTestGroupToElement testSuiteNs "primitiveTests" $
+primitiveTestsEl = encodedTestGroupToBinding testSuiteNs "primitiveTests" $
     tgroup "Primitive functions" (Just "Test cases for primitive functions") primGroups []
   where
     primGroups = fmap groupRef [
       listPrimitiveTestsEl,
       stringPrimitiveTestsEl]
 
-stringPrimitiveTestsEl = testGroupToElement testSuiteNs "stringPrimitiveTests" stringPrimitiveTests
+stringPrimitiveTestsEl = testGroupToBinding testSuiteNs "stringPrimitiveTests" stringPrimitiveTests
 

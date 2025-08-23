@@ -52,34 +52,17 @@ module_ = Module (Namespace "hydra.show.graph") elements
     Just "String representations of hydra.graph types"
   where
    elements = [
-     el elementDef,
      el graphDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-elementDef :: TElement (Element -> String)
-elementDef = define "element" $
-  doc "Show an element as a string" $
-  lambda "el" $ lets [
-    "name">: unwrap _Name @@ (Graph.elementName $ var "el"),
-    "t">: Graph.elementTerm $ var "el",
-    "typeStr">: Optionals.maybe
-      (string "")
-      (lambda "ts" $ Strings.cat2 (string " : ") (ref ShowCore.typeSchemeDef @@ var "ts"))
-      (Graph.elementType $ var "el")] $
-    Strings.cat $ list [
-      var "name",
-      string " = ",
-      ref ShowCore.termDef @@ var "t",
-      var "typeStr"]
-
-graphDef :: TElement (Graph -> String)
+graphDef :: TBinding (Graph -> String)
 graphDef = define "graph" $
   doc "Show a graph as a string" $
   lambda "graph" $ lets [
     "elements">: Maps.elems $ Graph.graphElements $ var "graph",
-    "elementStrs">: Lists.map (ref elementDef) (var "elements")] $
+    "elementStrs">: Lists.map (ref ShowCore.bindingDef) (var "elements")] $
     Strings.cat $ list [
       string "{",
       Strings.intercalate (string ", ") (var "elementStrs"),

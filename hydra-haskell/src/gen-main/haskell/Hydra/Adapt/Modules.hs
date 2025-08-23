@@ -48,7 +48,7 @@ adaptedModuleDefinitions lang mod =
                   tt = (snd pair)
                   term = (Core.typedTermTerm tt)
                   typ = (Core.typedTermType tt)
-                  name = (Graph.elementName el)
+                  name = (Core.bindingName el)
               in (Logic.ifElse (Annotations.isNativeType el) (Flows.bind (Flows.bind (Core_.type_ term) (\coreTyp -> adaptTypeToLanguage lang coreTyp)) (\adaptedTyp -> Flows.pure (Module.DefinitionType (Module.TypeDefinition {
                 Module.typeDefinitionName = name,
                 Module.typeDefinitionType = adaptedTyp})))) (Optionals.maybe (Flows.fail (Strings.cat2 "no adapter for element " (Core.unName name))) (\adapter -> Flows.bind (Compute.coderEncode (Compute.adapterCoder adapter) term) (\adapted -> Flows.pure (Module.DefinitionTerm (Module.TermDefinition {
@@ -82,7 +82,7 @@ languageAdapter lang typ = (Flows.bind Monads.getState (\g ->
       Compute.adapterTarget = (Compute.adapterTarget adapter),
       Compute.adapterCoder = ac}))))))
 
-transformModule :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> (Module.Module -> M.Map Core.Type (Compute.Coder t0 t2 Core.Term t1) -> [(Graph.Element, Core.TypedTerm)] -> Compute.Flow Graph.Graph t3) -> Module.Module -> Compute.Flow Graph.Graph t3)
+transformModule :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> (Module.Module -> M.Map Core.Type (Compute.Coder t0 t2 Core.Term t1) -> [(Core.Binding, Core.TypedTerm)] -> Compute.Flow Graph.Graph t3) -> Module.Module -> Compute.Flow Graph.Graph t3)
 transformModule lang encodeTerm createModule mod = (Monads.withTrace (Strings.cat2 "transform module " (Module.unNamespace (Module.moduleNamespace mod))) ( 
   let els = (Module.moduleElements mod) 
       codersFor = (\types -> Flows.bind (Flows.mapList (constructCoder lang encodeTerm) types) (\cdrs -> Flows.pure (Maps.fromList (Lists.zip types cdrs))))

@@ -32,25 +32,25 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-elementSummary :: Bool -> Element -> Flow Graph String
+elementSummary :: Bool -> Binding -> Flow Graph String
 elementSummary withTypes el = do
     mt <- findTypeInfo
-    return $ (unName $ elementName el) ++ Y.fromMaybe "" mt
+    return $ (unName $ bindingName el) ++ Y.fromMaybe "" mt
   where
     findTypeInfo = if withTypes
-      then case elementType el of
+      then case bindingType el of
         Nothing -> return Nothing
         Just ts -> Just <$> if EncodeCore.isType (deannotateType $ typeSchemeType ts)
           then do
-            typ <- deannotateType <$> (DecodeCore.type_ $ elementTerm el)
+            typ <- deannotateType <$> (DecodeCore.type_ $ bindingTerm el)
             return $ " = " ++ ShowCore.type_ typ
           else pure $ " : " ++ ShowCore.typeScheme ts
       else pure Nothing
 
-elementsInModules :: [Module] -> [Element]
-elementsInModules mods = L.sortBy (O.comparing elementName) $ L.concat $ fmap moduleElements mods
+elementsInModules :: [Module] -> [Binding]
+elementsInModules mods = L.sortBy (O.comparing bindingName) $ L.concat $ fmap moduleElements mods
 
-elementsInKernelModules :: [Element]
+elementsInKernelModules :: [Binding]
 elementsInKernelModules = elementsInModules kernelModules
 
 fieldSummary :: Field -> String
@@ -62,7 +62,7 @@ fieldTypeSummary (FieldType fname ftype) = unName fname ++ " : " ++ ShowCore.typ
 graphSummary :: Bool -> Graph -> Flow Graph String
 graphSummary withTypes g = do
   gi <- if withTypes then inferGraphTypes g else pure g
-  let els = L.sortBy (O.comparing elementName) $ M.elems $ graphElements gi
+  let els = L.sortBy (O.comparing bindingName) $ M.elems $ graphElements gi
   let prims = L.sortBy (O.comparing primitiveName) $ M.elems $ graphPrimitives gi
   elSummaries <- CM.mapM (elementSummary withTypes) els
   let primSummaries = fmap (primitiveSummary withTypes) prims
@@ -101,8 +101,8 @@ termGraphToDependencyPropertyGraph withPrimitives g = PG.Graph vertexMap edgeMap
                   M.singleton namespaceKey (nameToNamespace $ primitiveName prim)
             els = fmap toVertex $ M.elems elements
               where
-                toVertex el = PG.Vertex elLabel (nameToId $ elementName el) $
-                  M.singleton namespaceKey (nameToNamespace $ elementName el)
+                toVertex el = PG.Vertex elLabel (nameToId $ bindingName el) $
+                  M.singleton namespaceKey (nameToNamespace $ bindingName el)
     edgeMap = M.fromList $ fmap (\e -> (PG.edgeId e, e)) edges
       where
         edges = primEdges ++ elEdges
@@ -111,12 +111,12 @@ termGraphToDependencyPropertyGraph withPrimitives g = PG.Graph vertexMap edgeMap
                 then L.concat $ fmap edgesFrom elements
                 else []
               where
-                edgesFrom el = fmap (toEdge dependsOnPrimitiveLabel (elementName el)) $
-                  S.toList $ termDependencyNames False True False $ elementTerm el
+                edgesFrom el = fmap (toEdge dependsOnPrimitiveLabel (bindingName el)) $
+                  S.toList $ termDependencyNames False True False $ bindingTerm el
             elEdges = L.concat $ fmap edgesFrom elements
               where
-                edgesFrom el = fmap (toEdge dependsOnElementLabel (elementName el)) $
-                  S.toList $ freeVariablesInTerm $ elementTerm el
+                edgesFrom el = fmap (toEdge dependsOnElementLabel (bindingName el)) $
+                  S.toList $ freeVariablesInTerm $ bindingTerm el
 
 primitiveSummary :: Bool -> Primitive -> String
 primitiveSummary withType prim = unName (primitiveName prim)

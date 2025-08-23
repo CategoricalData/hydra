@@ -86,7 +86,7 @@ import Hydra.Pg.Model as PG
 import Hydra.Ext.Sources.Pg.Model
 
 
-validationDefinition :: String -> TTerm a -> TElement a
+validationDefinition :: String -> TTerm a -> TBinding a
 validationDefinition = definitionInModule pgValidationModule
 
 pgValidationModule :: Module
@@ -110,7 +110,7 @@ pgValidationModule = Module (Namespace "hydra.pg.validation") elements
      el vertexErrorDef,
      el vertexLabelMismatchDef]
 
-validateEdgeDef :: TElement (
+validateEdgeDef :: TBinding (
      (t -> v -> Maybe String)
   -> (v -> String)
   -> Y.Maybe (v -> Y.Maybe PG.VertexLabel)
@@ -162,7 +162,7 @@ validateEdgeDef = validationDefinition "validateEdge" $
         (var "labelForVertexId")]
       $ ref checkAllDef @@ list [var "checkLabel", var "checkId", var "checkProperties", var "checkOut", var "checkIn"]
 
-validateElementDef :: TElement (
+validateElementDef :: TBinding (
      (t -> v -> Maybe String)
   -> (v -> String)
   -> Y.Maybe (v -> Y.Maybe PG.VertexLabel)
@@ -189,7 +189,7 @@ validateElementDef = validationDefinition "validateElement" $
               @@ var "et"
               @@ var "edge"]) @@ var "el"]) @@ var "typ"
 
-validateGraphDef :: TElement (
+validateGraphDef :: TBinding (
      (t -> v -> Maybe String)
   -> (v -> String)
   -> PG.GraphSchema t
@@ -231,7 +231,7 @@ validateGraphDef = validationDefinition "validateGraph" $
           @@ (Lists.map (var "checkEdge") $ Maps.elems $ project _Graph _Graph_edges @@ var "graph")]
     $ ref checkAllDef @@ list [var "checkVertices", var "checkEdges"]
 
-validatePropertiesDef :: TElement (
+validatePropertiesDef :: TBinding (
      (t -> v -> Maybe String)
   -> [PG.PropertyType t]
   -> M.Map PG.PropertyKey v
@@ -264,7 +264,7 @@ validatePropertiesDef = validationDefinition "validateProperties" $
       $ ref checkAllDef @@ (Lists.map (var "checkPair") (Maps.toList $ var "props"))]
     $ ref checkAllDef @@ list [var "checkTypes", var "checkValues"]
 
-validateVertexDef :: TElement (
+validateVertexDef :: TBinding (
      (t -> v -> Maybe String)
   -> (v -> String)
   -> PG.VertexType t
@@ -294,40 +294,40 @@ validateVertexDef = validationDefinition "validateVertex" $
 
 ----
 
-checkAllDef :: TElement ([Y.Maybe a] -> Y.Maybe a)
+checkAllDef :: TBinding ([Y.Maybe a] -> Y.Maybe a)
 checkAllDef = validationDefinition "checkAll" $
   lambda "checks" $ lets [
     "errors">: Optionals.cat $ var "checks"]
     $ Lists.safeHead $ var "errors"
 
-edgeErrorDef :: TElement ((v -> String) -> PG.Edge v -> String -> String)
+edgeErrorDef :: TBinding ((v -> String) -> PG.Edge v -> String -> String)
 edgeErrorDef = validationDefinition "edgeError" $
   lambda "showValue" $ lambda "e" $
     ref prependDef @@ ("Invalid edge with id " ++ (var "showValue" @@ (project _Edge _Edge_id @@ var "e")))
 
-edgeLabelMismatchDef :: TElement (PG.EdgeLabel -> PG.EdgeLabel -> String)
+edgeLabelMismatchDef :: TBinding (PG.EdgeLabel -> PG.EdgeLabel -> String)
 edgeLabelMismatchDef = validationDefinition "edgeLabelMismatch" $
   lambda "expected" $ lambda "actual" $
     "expected " ++ (unwrap _EdgeLabel @@ var "expected") ++ ", found " ++ (unwrap _EdgeLabel @@ var "actual")
 
-prependDef :: TElement (String -> String -> String)
+prependDef :: TBinding (String -> String -> String)
 prependDef = validationDefinition "prepend" $
   lambda "prefix" $ lambda "msg" $
     (var "prefix") ++ ": " ++ (var "msg")
 
-verifyDef :: TElement (Bool -> String -> Maybe String)
+verifyDef :: TBinding (Bool -> String -> Maybe String)
 verifyDef = validationDefinition "verify" $
   lambda "b" $ lambda "err" $
     Logic.ifElse (var "b")
       nothing
       (just $ var "err")
 
-vertexErrorDef :: TElement ((v -> String) -> PG.Vertex v -> String -> String)
+vertexErrorDef :: TBinding ((v -> String) -> PG.Vertex v -> String -> String)
 vertexErrorDef = validationDefinition "vertexError" $
   lambda "showValue" $ lambda "v" $
     ref prependDef @@ ("Invalid vertex with id " ++ (var "showValue" @@ (project _Vertex _Vertex_id @@ var "v")))
 
-vertexLabelMismatchDef :: TElement (PG.VertexLabel -> PG.VertexLabel -> String)
+vertexLabelMismatchDef :: TBinding (PG.VertexLabel -> PG.VertexLabel -> String)
 vertexLabelMismatchDef = validationDefinition "vertexLabelMismatch" $
   lambda "expected" $ lambda "actual" $
     "expected " ++ (unwrap _VertexLabel @@ var "expected") ++ ", found " ++ (unwrap _VertexLabel @@ var "actual")

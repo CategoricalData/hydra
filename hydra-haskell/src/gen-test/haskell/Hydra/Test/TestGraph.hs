@@ -3,7 +3,6 @@
 module Hydra.Test.TestGraph where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Graph as Graph
 import qualified Hydra.Module as Module
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -70,21 +69,21 @@ testTypePolymorphicWrapper = (Core.TypeForall (Core.ForallType {
 testTypePolymorphicWrapperName :: Core.Name
 testTypePolymorphicWrapperName = (Core.Name "PolymorphicWrapper")
 
-testElementArthur :: Graph.Element
-testElementArthur = Graph.Element {
-  Graph.elementName = (Core.Name "firstName"),
-  Graph.elementTerm = testDataArthur,
-  Graph.elementType = (Just (Core.TypeScheme {
+testElementArthur :: Core.Binding
+testElementArthur = Core.Binding {
+  Core.bindingName = (Core.Name "firstName"),
+  Core.bindingTerm = testDataArthur,
+  Core.bindingType = (Just (Core.TypeScheme {
     Core.typeSchemeVariables = [],
     Core.typeSchemeType = (Core.TypeVariable testTypePersonName)}))}
 
-testElementFirstName :: Graph.Element
-testElementFirstName = Graph.Element {
-  Graph.elementName = (Core.Name "firstName"),
-  Graph.elementTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+testElementFirstName :: Core.Binding
+testElementFirstName = Core.Binding {
+  Core.bindingName = (Core.Name "firstName"),
+  Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = testTypePersonName,
     Core.projectionField = (Core.Name "firstName")})))),
-  Graph.elementType = (Just (Core.TypeScheme {
+  Core.bindingType = (Just (Core.TypeScheme {
     Core.typeSchemeVariables = [],
     Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
       Core.functionTypeDomain = (Core.TypeVariable testTypePersonName),

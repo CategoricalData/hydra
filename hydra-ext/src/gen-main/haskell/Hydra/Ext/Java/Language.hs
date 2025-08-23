@@ -23,31 +23,40 @@ javaLanguage :: Coders.Language
 javaLanguage = Coders.Language {
   Coders.languageName = (Coders.LanguageName "hydra.ext.java"),
   Coders.languageConstraints = Coders.LanguageConstraints {
-    Coders.languageConstraintsEliminationVariants = (Sets.fromList [
+    Coders.languageConstraintsEliminationVariants = eliminationVariants,
+    Coders.languageConstraintsLiteralVariants = literalVariants,
+    Coders.languageConstraintsFloatTypes = floatTypes,
+    Coders.languageConstraintsFunctionVariants = functionVariants,
+    Coders.languageConstraintsIntegerTypes = integerTypes,
+    Coders.languageConstraintsTermVariants = termVariants,
+    Coders.languageConstraintsTypeVariants = typeVariants,
+    Coders.languageConstraintsTypes = typePredicate}} 
+  where 
+    eliminationVariants = (Sets.fromList [
       Mantle.EliminationVariantProduct,
       Mantle.EliminationVariantRecord,
       Mantle.EliminationVariantUnion,
-      Mantle.EliminationVariantWrap]),
-    Coders.languageConstraintsLiteralVariants = (Sets.fromList [
+      Mantle.EliminationVariantWrap])
+    literalVariants = (Sets.fromList [
       Mantle.LiteralVariantBoolean,
       Mantle.LiteralVariantFloat,
       Mantle.LiteralVariantInteger,
-      Mantle.LiteralVariantString]),
-    Coders.languageConstraintsFloatTypes = (Sets.fromList [
+      Mantle.LiteralVariantString])
+    floatTypes = (Sets.fromList [
       Core.FloatTypeFloat32,
-      Core.FloatTypeFloat64]),
-    Coders.languageConstraintsFunctionVariants = (Sets.fromList [
+      Core.FloatTypeFloat64])
+    functionVariants = (Sets.fromList [
       Mantle.FunctionVariantElimination,
       Mantle.FunctionVariantLambda,
-      Mantle.FunctionVariantPrimitive]),
-    Coders.languageConstraintsIntegerTypes = (Sets.fromList [
+      Mantle.FunctionVariantPrimitive])
+    integerTypes = (Sets.fromList [
       Core.IntegerTypeBigint,
       Core.IntegerTypeInt8,
       Core.IntegerTypeInt16,
       Core.IntegerTypeInt32,
       Core.IntegerTypeInt64,
-      Core.IntegerTypeUint16]),
-    Coders.languageConstraintsTermVariants = (Sets.fromList [
+      Core.IntegerTypeUint16])
+    termVariants = (Sets.fromList [
       Mantle.TermVariantApplication,
       Mantle.TermVariantFunction,
       Mantle.TermVariantLet,
@@ -60,8 +69,8 @@ javaLanguage = Coders.Language {
       Mantle.TermVariantSet,
       Mantle.TermVariantUnion,
       Mantle.TermVariantVariable,
-      Mantle.TermVariantWrap]),
-    Coders.languageConstraintsTypeVariants = (Sets.fromList [
+      Mantle.TermVariantWrap])
+    typeVariants = (Sets.fromList [
       Mantle.TypeVariantAnnotated,
       Mantle.TypeVariantApplication,
       Mantle.TypeVariantFunction,
@@ -75,10 +84,10 @@ javaLanguage = Coders.Language {
       Mantle.TypeVariantSet,
       Mantle.TypeVariantUnion,
       Mantle.TypeVariantVariable,
-      Mantle.TypeVariantWrap]),
-    Coders.languageConstraintsTypes = (\x -> case x of
+      Mantle.TypeVariantWrap])
+    typePredicate = (\typ -> (\x -> case x of
       Core.TypeProduct v1 -> (Equality.lt (Lists.length v1) javaMaxTupleLength)
-      _ -> True)}}
+      _ -> True) typ)
 
 -- | A set of reserved words in Java
 reservedWords :: (S.Set String)

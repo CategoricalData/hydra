@@ -51,10 +51,10 @@ module_ = Module (Namespace "hydra.describe.mantle") elements
    elements = [
      el precisionDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-precisionDef :: TElement (Precision -> String)
+precisionDef :: TBinding (Precision -> String)
 precisionDef = define "precision" $
   doc "Display numeric precision as a string" $
   match _Precision Nothing [

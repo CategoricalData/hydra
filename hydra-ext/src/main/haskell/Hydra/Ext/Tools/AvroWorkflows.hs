@@ -91,14 +91,14 @@ typedTermToShaclRdf _ = pure encode
         return $ L.concat (termDescs:elDescs)
       where
         encodeElement el = do
-          let subject = Rdf.ResourceIri $ RdfUt.nameToIri $ elementName el
-          Shacl.encodeTerm subject $ listsToSets $ elementTerm el
+          let subject = Rdf.ResourceIri $ RdfUt.nameToIri $ bindingName el
+          Shacl.encodeTerm subject $ listsToSets $ bindingTerm el
         encodeBlankTerm = if notInGraph
           then do
             subject <- RdfUt.nextBlankNode
             Shacl.encodeTerm subject $ listsToSets term
           else pure []
-        notInGraph = L.null $ L.filter (\e -> elementTerm e == term) $ M.elems $ graphElements graph
+        notInGraph = L.null $ L.filter (\e -> bindingTerm e == term) $ M.elems $ graphElements graph
 
 transformAvroJson :: JsonPayloadFormat -> AvroHydraAdapter -> LastMile Graph x -> FilePath -> FilePath -> IO ()
 transformAvroJson format adapter lastMile inFile outFile = do

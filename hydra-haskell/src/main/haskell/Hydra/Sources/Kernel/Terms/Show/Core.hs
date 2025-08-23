@@ -50,6 +50,7 @@ module_ = Module (Namespace "hydra.show.core") elements
   where
    elements = [
      el readTermDef, -- TODO: move this to hydra.read.core
+     el bindingDef,
      el eliminationDef,
      el fieldsDef,
      el floatValueDef,
@@ -66,15 +67,31 @@ module_ = Module (Namespace "hydra.show.core") elements
      el typeDef,
      el typeSchemeDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-readTermDef :: TElement (String -> Maybe Term)
+readTermDef :: TBinding (String -> Maybe Term)
 readTermDef = define "readTerm" $
   doc "A placeholder for reading terms from their serialized form. Not implemented." $
   constant nothing
 
-eliminationDef :: TElement (Elimination -> String)
+bindingDef :: TBinding (Binding -> String)
+bindingDef = define "binding" $
+  doc "Show a binding as a string" $
+  lambda "el" $ lets [
+    "name">: unwrap _Name @@ (Core.bindingName $ var "el"),
+    "t">: Core.bindingTerm $ var "el",
+    "typeStr">: Optionals.maybe
+      (string "")
+      (lambda "ts" $ Strings.cat2 (string " : ") (ref typeSchemeDef @@ var "ts"))
+      (Core.bindingType $ var "el")] $
+    Strings.cat $ list [
+      var "name",
+      string " = ",
+      ref termDef @@ var "t",
+      var "typeStr"]
+      
+eliminationDef :: TBinding (Elimination -> String)
 eliminationDef = define "elimination" $
   doc "Show an elimination as a string" $
   lambda "elm" $ cases _Elimination (var "elm") Nothing [
@@ -116,7 +133,7 @@ eliminationDef = define "elimination" $
       unwrap _Name @@ var "tname",
       string ")"]]
 
-fieldsDef :: TElement ([Field] -> String)
+fieldsDef :: TBinding ([Field] -> String)
 fieldsDef = define "fields" $
   doc "Show a list of fields as a string" $
   lambda "flds" $ lets [
@@ -130,7 +147,7 @@ fieldsDef = define "fields" $
       Strings.intercalate (string ", ") (var "fieldStrs"),
       string "}"]
 
-floatValueDef :: TElement (FloatValue -> String)
+floatValueDef :: TBinding (FloatValue -> String)
 floatValueDef = define "float" $
   doc "Show a float value as a string" $
   lambda "fv" $ cases _FloatValue (var "fv") Nothing [
@@ -138,7 +155,7 @@ floatValueDef = define "float" $
     _FloatValue_float32>>: lambda "v" $ Literals.showFloat32 $ var "v",
     _FloatValue_float64>>: lambda "v" $ Literals.showFloat64 $ var "v"]
 
-floatTypeDef :: TElement (FloatType -> String)
+floatTypeDef :: TBinding (FloatType -> String)
 floatTypeDef = define "floatType" $
   doc "Show a float type as a string" $
   lambda "ft" $ cases _FloatType (var "ft") Nothing [
@@ -146,7 +163,7 @@ floatTypeDef = define "floatType" $
     _FloatType_float32>>: constant $ string "float32",
     _FloatType_float64>>: constant $ string "float64"]
 
-functionDef :: TElement (Function -> String)
+functionDef :: TBinding (Function -> String)
 functionDef = define "function" $
   doc "Show a function as a string" $
   lambda "f" $ cases _Function (var "f") Nothing [
@@ -154,7 +171,7 @@ functionDef = define "function" $
     _Function_lambda>>: ref lambdaDef,
     _Function_primitive>>: lambda "name" $ Strings.cat2 (unwrap _Name @@ var "name") (string "!")]
 
-injectionDef :: TElement (Injection -> String)
+injectionDef :: TBinding (Injection -> String)
 injectionDef = define "injection" $
   doc "Show an injection as a string" $
   "inj" ~>
@@ -166,7 +183,7 @@ injectionDef = define "injection" $
     string ")",
     ref fieldsDef @@ (list [var "f"])]
 
-integerValueDef :: TElement (IntegerValue -> String)
+integerValueDef :: TBinding (IntegerValue -> String)
 integerValueDef = define "integer" $
   doc "Show an integer value as a string" $
   lambda "iv" $ cases _IntegerValue (var "iv") Nothing [
@@ -180,7 +197,7 @@ integerValueDef = define "integer" $
     _IntegerValue_uint32>>: lambda "v" $ Literals.showUint32 $ var "v",
     _IntegerValue_uint64>>: lambda "v" $ Literals.showUint64 $ var "v"]
 
-integerTypeDef :: TElement (IntegerType -> String)
+integerTypeDef :: TBinding (IntegerType -> String)
 integerTypeDef = define "integerType" $
   doc "Show an integer type as a string" $
   lambda "it" $ cases _IntegerType (var "it") Nothing [
@@ -194,7 +211,7 @@ integerTypeDef = define "integerType" $
     _IntegerType_uint32>>: constant $ string "uint32",
     _IntegerType_uint64>>: constant $ string "uint64"]
 
-lambdaDef :: TElement (Lambda -> String)
+lambdaDef :: TBinding (Lambda -> String)
 lambdaDef = define "lambda" $
   doc "Show a lambda as a string" $
   lambda "l" $ lets [
@@ -212,7 +229,7 @@ lambdaDef = define "lambda" $
       string ".",
       ref termDef @@ var "body"]
 
-listDef :: TElement ((a -> String) -> [a] -> String)
+listDef :: TBinding ((a -> String) -> [a] -> String)
 listDef = define "list" $
   doc "Show a list using a given function to show each element" $
   lambdas ["f", "xs"] $ lets [
@@ -222,7 +239,7 @@ listDef = define "list" $
       Strings.intercalate (string ", ") (var "elementStrs"),
       string "]"]
 
-literalDef :: TElement (Literal -> String)
+literalDef :: TBinding (Literal -> String)
 literalDef = define "literal" $
   doc "Show a literal as a string" $
   lambda "l" $ cases _Literal (var "l") Nothing [
@@ -232,7 +249,7 @@ literalDef = define "literal" $
     _Literal_integer>>: lambda "iv" $ ref integerValueDef @@ var "iv",
     _Literal_string>>: lambda "s" $ Literals.showString $ var "s"]
 
-literalTypeDef :: TElement (LiteralType -> String)
+literalTypeDef :: TBinding (LiteralType -> String)
 literalTypeDef = define "literalType" $
   doc "Show a literal type as a string" $
   lambda "lt" $ cases _LiteralType (var "lt") Nothing [
@@ -242,7 +259,7 @@ literalTypeDef = define "literalType" $
     _LiteralType_integer>>: lambda "it" $ ref integerTypeDef @@ var "it",
     _LiteralType_string>>: constant $ string "string"]
 
-termDef :: TElement (Term -> String)
+termDef :: TBinding (Term -> String)
 termDef = define "term" $
   doc "Show a term as a string" $
   lambda "t" $ lets [
@@ -251,19 +268,7 @@ termDef = define "term" $
       "rhs">: Core.applicationArgument $ var "app"] $
       cases _Term (var "lhs")
         (Just $ Lists.cons (var "lhs") (Lists.cons (var "rhs") (var "prev"))) [
-        _Term_application>>: lambda "app2" $ var "gatherTerms" @@ (Lists.cons (var "rhs") (var "prev")) @@ var "app2"],
-    "showBinding">: lambda "binding" $ lets [
-      "v">: unwrap _Name @@ (Core.letBindingName $ var "binding"),
-      "bindingTerm">: Core.letBindingTerm $ var "binding",
-      "typeStr">: Optionals.maybe
-        (string "")
-        (lambda "ts" $ Strings.cat2 (string ":") (ref typeSchemeDef @@ var "ts"))
-        (Core.letBindingType $ var "binding")] $
-      Strings.cat $ list [
-        var "v",
-        string "=",
-        ref termDef @@ var "bindingTerm",
-        var "typeStr"]] $
+        _Term_application>>: lambda "app2" $ var "gatherTerms" @@ (Lists.cons (var "rhs") (var "prev")) @@ var "app2"]] $
     cases _Term (var "t") Nothing [
       _Term_annotated>>: lambda "at" $ ref termDef @@ (Core.annotatedTermSubject $ var "at"),
       _Term_application>>: lambda "app" $ lets [
@@ -277,7 +282,7 @@ termDef = define "term" $
       _Term_let>>: lambda "l" $ lets [
         "bindings">: Core.letBindings $ var "l",
         "env">: Core.letEnvironment $ var "l",
-        "bindingStrs">: Lists.map (var "showBinding") (var "bindings")] $
+        "bindingStrs">: Lists.map (ref bindingDef) (var "bindings")] $
         Strings.cat $ list [
           string "let ",
           Strings.intercalate (string ", ") (var "bindingStrs"),
@@ -366,7 +371,7 @@ termDef = define "term" $
           ref termDef @@ var "term1",
           string "}"]]
 
-typeDef :: TElement (Type -> String)
+typeDef :: TBinding (Type -> String)
 typeDef = define "type" $
   doc "Show a type as a string" $
   lambda "typ" $ lets [
@@ -459,7 +464,7 @@ typeDef = define "type" $
         "typ1">: Core.wrappedTypeObject $ var "wt"] $
         Strings.cat $ list [string "wrap[", var "tname", string "](", ref typeDef @@ var "typ1", string ")"]]
 
-typeSchemeDef :: TElement (TypeScheme -> String)
+typeSchemeDef :: TBinding (TypeScheme -> String)
 typeSchemeDef = define "typeScheme" $
   doc "Show a type scheme as a string" $
   lambda "ts" $ lets [

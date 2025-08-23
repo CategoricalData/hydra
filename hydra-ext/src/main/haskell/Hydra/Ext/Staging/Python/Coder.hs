@@ -49,7 +49,7 @@ argsAndBindings tcontext term _ = gather tcontext [] [] [] term
         where
           tcontext2 = tcontext {typeContextTypes = M.union
             (typeContextTypes tcontext)
-            (M.fromList $ fmap (\b -> (letBindingName b, typeSchemeToFType $ Y.fromJust $ letBindingType b)) bindings)}
+            (M.fromList $ fmap (\b -> (bindingName b, typeSchemeToFType $ Y.fromJust $ bindingType b)) bindings)}
       t -> do
         typ <- typeOf tcontext t
         return (L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ)
@@ -685,8 +685,8 @@ genericArg tparamList = if L.null tparamList
   else Just $ pyPrimaryToPyExpression $ primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Generic")
     (pyNameToPyExpression . encodeTypeVariable <$> tparamList)
 
-isUnaryFunction :: Element -> Bool
-isUnaryFunction el = case elementType el of
+isUnaryFunction :: Binding -> Bool
+isUnaryFunction el = case bindingType el of
   Nothing -> False
   Just ts -> typeArity (typeSchemeType ts) == 1
 

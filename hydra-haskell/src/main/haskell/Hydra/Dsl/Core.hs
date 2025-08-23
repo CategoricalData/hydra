@@ -244,8 +244,8 @@ let_ bindings environment = Phantoms.record _Let [
   _Let_bindings>>: bindings,
   _Let_environment>>: environment]
 
-letBinding :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm Binding
-letBinding name term mtype = Phantoms.record _Binding [
+binding :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm Binding
+binding name term mtype = Phantoms.record _Binding [
   _Binding_name>>: name,
   _Binding_term>>: term,
   _Binding_type>>: mtype]
@@ -253,14 +253,14 @@ letBinding name term mtype = Phantoms.record _Binding [
 letBindings :: TTerm Let -> TTerm [Binding]
 letBindings l = Phantoms.project _Let _Let_bindings @@ l
 
-letBindingName :: TTerm Binding -> TTerm Name
-letBindingName lb = Phantoms.project _Binding _Binding_name @@ lb
+bindingName :: TTerm Binding -> TTerm Name
+bindingName lb = Phantoms.project _Binding _Binding_name @@ lb
 
-letBindingTerm :: TTerm Binding -> TTerm Term
-letBindingTerm lb = Phantoms.project _Binding _Binding_term @@ lb
+bindingTerm :: TTerm Binding -> TTerm Term
+bindingTerm lb = Phantoms.project _Binding _Binding_term @@ lb
 
-letBindingType :: TTerm Binding -> TTerm (Y.Maybe TypeScheme)
-letBindingType lb = Phantoms.project _Binding _Binding_type @@ lb
+bindingType :: TTerm Binding -> TTerm (Y.Maybe TypeScheme)
+bindingType lb = Phantoms.project _Binding _Binding_type @@ lb
 
 letEnvironment :: TTerm Let -> TTerm Term
 letEnvironment l = Phantoms.project _Let _Let_environment @@ l

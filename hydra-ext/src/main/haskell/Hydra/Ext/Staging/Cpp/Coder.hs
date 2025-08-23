@@ -267,7 +267,7 @@ encodeType env typ = case deannotateType typ of
     TypeRecord rt -> typeref typ (rowTypeTypeName rt)
     TypeSet et -> toConstType <$> (createTemplateType "std::set" <$> ((:[]) <$> encode et))
     TypeUnion rt -> typeref typ (rowTypeTypeName rt)
-    TypeVariable name -> (elementTerm <$> requireElement name) >>= DecodeCore.type_ >>= \t -> typeref t name
+    TypeVariable name -> (bindingTerm <$> requireElement name) >>= DecodeCore.type_ >>= \t -> typeref t name
     TypeWrap (WrappedType name _) -> typeref typ name
     _ -> fail $ "Unsupported type: " ++ show (deannotateType typ)
   where
@@ -540,8 +540,8 @@ createVisitorInterface env tname variants = Cpp.DeclarationTemplate $
         []
         Cpp.FunctionBodyDefault
 
-elementNameToFilePath :: Name -> FilePath
-elementNameToFilePath = nameToFilePath CaseConventionLowerSnake CaseConventionLowerSnake (FileExtension "h")
+bindingNameToFilePath :: Name -> FilePath
+bindingNameToFilePath = nameToFilePath CaseConventionLowerSnake CaseConventionLowerSnake (FileExtension "h")
 
 findIncludes :: Bool -> Namespace -> [TypeDefinition] -> [Cpp.IncludeDirective]
 findIncludes withFwd ns defs = systemIncludes ++ domainIncludes
@@ -561,7 +561,7 @@ findIncludes withFwd ns defs = systemIncludes ++ domainIncludes
     domainIncludes = typeIncludes ++ dslIncludes ++ fwdIncludes
       where
         typeIncludes = toInclude <$> importDeps
-        toInclude name = Cpp.IncludeDirective (elementNameToFilePath name) False
+        toInclude name = Cpp.IncludeDirective (bindingNameToFilePath name) False
         dslIncludes = [] -- These will be needed if/when DSL functions are used.for type construction.
         fwdIncludes = if withFwd then [toInclude $ fwdHeaderName ns] else []
     importDeps = findTypeDependencies ns defs
@@ -656,5 +656,5 @@ parameterType env typ = do
 
 serializeHeaderFile :: Name -> [Cpp.IncludeDirective] -> [Cpp.Declaration] -> (FilePath, String)
 serializeHeaderFile name includes decls = (
-  elementNameToFilePath name,
+  bindingNameToFilePath name,
   printExpr $ parenthesize $ CppSer.encodeProgram $ createHeaderFile includes decls)

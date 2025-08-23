@@ -60,10 +60,10 @@ module_ = Module (Namespace "hydra.names") elements
      el uniqueLabelDef,
      el unqualifyNameDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-compactNameDef :: TElement (M.Map Namespace String -> Name -> String)
+compactNameDef :: TBinding (M.Map Namespace String -> Name -> String)
 compactNameDef = define "compactName" $
   doc "Given a mapping of namespaces to prefixes, convert a name to a compact string representation" $
   lambda "namespaces" $ lambda "name" $ lets [
@@ -78,15 +78,15 @@ compactNameDef = define "compactName" $
             (Maps.lookup (var "ns") (var "namespaces")))
         (var "mns")
 
-localNameOfDef :: TElement (Name -> String)
+localNameOfDef :: TBinding (Name -> String)
 localNameOfDef = define "localNameOf" $
   unaryFunction Module.qualifiedNameLocal <.> ref qualifyNameDef
 
-namespaceOfDef :: TElement (Name -> Maybe Namespace)
+namespaceOfDef :: TBinding (Name -> Maybe Namespace)
 namespaceOfDef = define "namespaceOf" $
   unaryFunction Module.qualifiedNameNamespace <.> ref qualifyNameDef
 
-namespaceToFilePathDef :: TElement (CaseConvention -> FileExtension -> Namespace -> String)
+namespaceToFilePathDef :: TBinding (CaseConvention -> FileExtension -> Namespace -> String)
 namespaceToFilePathDef = define "namespaceToFilePath" $
   lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
     "parts">: Lists.map
@@ -94,7 +94,7 @@ namespaceToFilePathDef = define "namespaceToFilePath" $
       (Strings.splitOn "." (Core.unNamespace $ var "ns"))]
     $ (Strings.intercalate "/" $ var "parts") ++ "." ++ (Module.unFileExtension $ var "ext")
 
-qnameDef :: TElement (Namespace -> String -> Name)
+qnameDef :: TBinding (Namespace -> String -> Name)
 qnameDef = define "qname" $
   doc "Construct a qualified (dot-separated) name" $
   lambda "ns" $ lambda "name" $
@@ -102,7 +102,7 @@ qnameDef = define "qname" $
       Strings.cat $
         list [apply (unwrap _Namespace) (var "ns"), string ".", var "name"]
 
-qualifyNameDef :: TElement (Name -> QualifiedName)
+qualifyNameDef :: TBinding (Name -> QualifiedName)
 qualifyNameDef = define "qualifyName" $
   lambda "name" $ lets [
     "parts">: Lists.reverse (Strings.splitOn "." (Core.unName $ var "name"))]
@@ -113,7 +113,7 @@ qualifyNameDef = define "qualifyName" $
         (just $ wrap _Namespace (Strings.intercalate "." (Lists.reverse (Lists.tail $ var "parts"))))
         (Lists.head $ var "parts"))
 
-uniqueLabelDef :: TElement (S.Set String -> String -> String)
+uniqueLabelDef :: TBinding (S.Set String -> String -> String)
 uniqueLabelDef = define "uniqueLabel" $
   doc "Generate a unique label by appending a suffix if the label is already in use" $
   lambda "visited" $ lambda "l" $
@@ -121,7 +121,7 @@ uniqueLabelDef = define "uniqueLabel" $
     (ref uniqueLabelDef @@ var "visited" @@ Strings.cat2 (var "l") (string "'"))
     (var "l")
 
-unqualifyNameDef :: TElement (QualifiedName -> Name)
+unqualifyNameDef :: TBinding (QualifiedName -> Name)
 unqualifyNameDef = define "unqualifyName" $
   doc "Convert a qualified name to a dot-separated name" $
   lambda "qname" $ lets [

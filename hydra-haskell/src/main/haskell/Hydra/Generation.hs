@@ -33,7 +33,7 @@ generateSources printModule basePath mods = do
           return $ L.concat (M.toList <$> maps)
         where
           refreshModule els mod = mod {
-            moduleElements = Y.catMaybes ((\e -> M.lookup (elementName e) els) <$> moduleElements mod)}
+            moduleElements = Y.catMaybes ((\e -> M.lookup (bindingName e) els) <$> moduleElements mod)}
 
     writePair (path, s) = do
         let fullPath = FP.combine basePath path

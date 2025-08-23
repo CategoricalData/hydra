@@ -12,7 +12,7 @@ definitionTerm = variant _Definition _Definition_term
 definitionType :: TTerm TypeDefinition -> TTerm Definition
 definitionType = variant _Definition _Definition_type
 
-module_ :: TTerm Namespace -> TTerm [Element] -> TTerm [Module] -> TTerm [Module] -> TTerm (Maybe String) -> TTerm Module
+module_ :: TTerm Namespace -> TTerm [Binding] -> TTerm [Module] -> TTerm [Module] -> TTerm (Maybe String) -> TTerm Module
 module_ ns elems termDeps typeDeps desc = record _Module [
   _Module_namespace>>: ns,
   _Module_elements>>: elems,
@@ -23,7 +23,7 @@ module_ ns elems termDeps typeDeps desc = record _Module [
 moduleNamespace :: TTerm Module -> TTerm Namespace
 moduleNamespace m = project _Module _Module_namespace @@ m
 
-moduleElements :: TTerm Module -> TTerm [Element]
+moduleElements :: TTerm Module -> TTerm [Binding]
 moduleElements m = project _Module _Module_elements @@ m
 
 moduleTermDependencies :: TTerm Module -> TTerm [Module]

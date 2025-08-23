@@ -54,10 +54,10 @@ module_ = Module (Namespace "hydra.show.mantle") elements
      el termVariantDef,
      el typeVariantDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-termVariantDef :: TElement (TermVariant -> String)
+termVariantDef :: TBinding (TermVariant -> String)
 termVariantDef = define "termVariant" $
   doc "Show a term variant as a string" $
   match _TermVariant Nothing [
@@ -80,7 +80,7 @@ termVariantDef = define "termVariant" $
     _TermVariant_variable>>: constant $ string "variable",
     _TermVariant_wrap>>: constant $ string "wrap"]
 
-typeVariantDef :: TElement (TypeVariant -> String)
+typeVariantDef :: TBinding (TypeVariant -> String)
 typeVariantDef = define "typeVariant" $
   doc "Show a type variant as a string" $
   match _TypeVariant Nothing [

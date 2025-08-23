@@ -73,10 +73,10 @@ module_ = Module (Namespace "hydra.adapt.simple") elements
       el termAlternativesDef,
       el typeAlternativesDef]
 
-define :: String -> TTerm a -> TElement a
+define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-adaptFloatTypeDef :: TElement (LanguageConstraints -> FloatType -> Maybe FloatType)
+adaptFloatTypeDef :: TBinding (LanguageConstraints -> FloatType -> Maybe FloatType)
 adaptFloatTypeDef = define "adaptFloatType" $
   doc "Attempt to adapt a floating-point type using the given language constraints" $
   "constraints" ~> "ft" ~>
@@ -90,7 +90,7 @@ adaptFloatTypeDef = define "adaptFloatType" $
       _FloatType_float32>>: constant $ var "alt" @@ Core.floatTypeFloat64,
       _FloatType_float64>>: constant $ var "alt" @@ Core.floatTypeBigfloat])
 
-adaptDataGraphDef :: TElement (LanguageConstraints -> Bool -> Graph -> Flow s Graph)
+adaptDataGraphDef :: TBinding (LanguageConstraints -> Bool -> Graph -> Flow s Graph)
 adaptDataGraphDef = define "adaptDataGraph" $
   doc "Adapt a graph and its schema to the given language constraints, prior to inference" $
   "constraints" ~> "doExpand" ~> "graph0" ~>
@@ -121,7 +121,7 @@ adaptDataGraphDef = define "adaptDataGraph" $
     (var "prims0")
     (var "schema1")
 
-adaptGraphSchemaDef :: TElement (LanguageConstraints -> M.Map LiteralType LiteralType -> M.Map Name Type -> Flow s (M.Map Name Type))
+adaptGraphSchemaDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> M.Map Name Type -> Flow s (M.Map Name Type))
 adaptGraphSchemaDef = define "adaptGraphSchema" $
   doc "Adapt a schema graph to the given language constraints" $
   "constraints" ~> "litmap" ~> "types0" ~>
@@ -133,7 +133,7 @@ adaptGraphSchemaDef = define "adaptGraphSchema" $
   "pairs" <<~ Flows.mapList (var "mapPair") (Maps.toList $ var "types0") $
   produce $ Maps.fromList (var "pairs")
 
-adaptIntegerTypeDef :: TElement (LanguageConstraints -> IntegerType -> Maybe IntegerType)
+adaptIntegerTypeDef :: TBinding (LanguageConstraints -> IntegerType -> Maybe IntegerType)
 adaptIntegerTypeDef = define "adaptIntegerType" $
   doc "Attempt to adapt an integer type using the given language constraints" $
   "constraints" ~> "it" ~>
@@ -153,7 +153,7 @@ adaptIntegerTypeDef = define "adaptIntegerType" $
       _IntegerType_uint32>>: constant $ var "alt" @@ Core.integerTypeInt64,
       _IntegerType_uint64>>: constant $ var "alt" @@ Core.integerTypeBigint])
 
-adaptLiteralDef :: TElement (LiteralType -> Literal -> Literal)
+adaptLiteralDef :: TBinding (LiteralType -> Literal -> Literal)
 adaptLiteralDef = define "adaptLiteral" $
   doc "Convert a literal to a different type" $
   "lt" ~> "l" ~>
@@ -175,7 +175,7 @@ adaptLiteralDef = define "adaptLiteral" $
       _LiteralType_integer>>: "it" ~> Core.literalInteger $
         ref Lits.bigintToIntegerValueDef @@ var "it" @@ (ref Lits.integerValueToBigintDef @@ var "i")]]
 
-adaptLiteralTypeDef :: TElement (LanguageConstraints -> LiteralType -> Maybe LiteralType)
+adaptLiteralTypeDef :: TBinding (LanguageConstraints -> LiteralType -> Maybe LiteralType)
 adaptLiteralTypeDef = define "adaptLiteralType" $
   doc "Attempt to adapt a literal type using the given language constraints" $
   "constraints" ~> "lt" ~>
@@ -196,7 +196,7 @@ adaptLiteralTypeDef = define "adaptLiteralType" $
         ref adaptIntegerTypeDef @@ var "constraints" @@ var "it",
       _LiteralType_string>>: constant nothing])
 
-adaptLiteralTypesMapDef :: TElement (LanguageConstraints -> M.Map LiteralType LiteralType)
+adaptLiteralTypesMapDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType)
 adaptLiteralTypesMapDef = define "adaptLiteralTypesMap" $
   doc "Derive a map of adapted literal types for the given language constraints" $
   "constraints" ~>
@@ -205,7 +205,7 @@ adaptLiteralTypesMapDef = define "adaptLiteralTypesMap" $
     ("lt2" ~> just $ pair (var "lt") (var "lt2"))) $
   Maps.fromList $ Optionals.cat $ Lists.map (var "tryType") (ref Variants.literalTypesDef)
 
-adaptLiteralValueDef :: TElement (M.Map LiteralType LiteralType -> Literal -> Literal)
+adaptLiteralValueDef :: TBinding (M.Map LiteralType LiteralType -> Literal -> Literal)
 adaptLiteralValueDef = define "adaptLiteralValue" $
   doc "Adapt a literal value using the given language constraints" $
   "mapping" ~> "l" ~>
@@ -216,7 +216,7 @@ adaptLiteralValueDef = define "adaptLiteralValue" $
 
 -- Note: this function could be made more efficient through precomputation of alternatives,
 --       similar to what is done for literals.
-adaptTermDef :: TElement (LanguageConstraints -> M.Map LiteralType LiteralType -> Term -> Flow Graph Term)
+adaptTermDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Term -> Flow Graph Term)
 adaptTermDef = define "adaptTerm" $
   doc "Adapt a term using the given language constraints" $
   "constraints" ~> "mapping" ~> "term0" ~>
@@ -245,7 +245,7 @@ adaptTermDef = define "adaptTerm" $
       ("term2" ~> produce $ var "term2")) $
   ref Rewriting.rewriteTermMDef @@ var "rewrite" @@ var "term0"
 
-adaptTypeDef :: TElement (LanguageConstraints -> M.Map LiteralType LiteralType -> Type -> Flow s Type)
+adaptTypeDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Type -> Flow s Type)
 adaptTypeDef = define "adaptType" $
   doc "Adapt a type using the given language constraints" $
   "constraints" ~> "litmap" ~> "type0" ~>
@@ -273,13 +273,13 @@ adaptTypeDef = define "adaptType" $
       ("type2" ~> produce $ var "type2")) $
   ref Rewriting.rewriteTypeMDef @@ var "rewrite" @@ var "type0"
 
-graphToDefinitionsDef :: TElement (LanguageConstraints -> Bool -> Graph -> S.Set Name -> Flow s (Graph, [Definition]))
+graphToDefinitionsDef :: TBinding (LanguageConstraints -> Bool -> Graph -> S.Set Name -> Flow s (Graph, [Definition]))
 graphToDefinitionsDef = define "graphToDefinitions" $
   doc ("Convert a graph to a list of type or term definitions, while adapting them to the given language constraints"
     <> " and performing type inference") $
   "constraints" ~> "doExpand" ~> "graph" ~> "names" ~>
   "ellist" <~ Maps.elems (Graph.graphElements $ var "graph") $
-  "isTypeElement" <~ ("el" ~> cases _Term (ref Rewriting.deannotateTermDef @@ (Graph.elementTerm $ var "el"))
+  "isTypeElement" <~ ("el" ~> cases _Term (ref Rewriting.deannotateTermDef @@ (Core.bindingTerm $ var "el"))
     (Just false) [
     _Term_union>>: "inj" ~> Equality.equal (Core.injectionTypeName $ var "inj") (Core.nameLift _Type)]) $
   "isSchemaGraph" <~ Logic.and (Logic.not $ Lists.null $ var "ellist") (var "isTypeElement" @@ (Lists.head $ var "ellist")) $
@@ -294,16 +294,16 @@ graphToDefinitionsDef = define "graphToDefinitions" $
     ( "graph1" <<~ ref adaptDataGraphDef @@ var "constraints" @@ var "doExpand" @@ var "graph" $
       "graph2" <<~ ref Inference.inferGraphTypesDef @@ var "graph1" $
       "toDef" <~ ("el" ~>
-        "ts" <~ Optionals.fromJust (Graph.elementType $ var "el") $
+        "ts" <~ Optionals.fromJust (Core.bindingType $ var "el") $
         Module.definitionTerm $ Module.termDefinition
-          (Graph.elementName $ var "el")
-          (Graph.elementTerm $ var "el")
+          (Core.bindingName $ var "el")
+          (Core.bindingTerm $ var "el")
           (ref Inference.typeSchemeToFTypeDef @@ var "ts")) $
       produce $ pair (var "graph2") (Lists.map (var "toDef") $
-        Lists.filter ("e" ~> Sets.member (Graph.elementName $ var "e") (var "names")) $
+        Lists.filter ("e" ~> Sets.member (Core.bindingName $ var "e") (var "names")) $
         Maps.elems $ Graph.graphElements $ var "graph2"))
 
-termAlternativesDef :: TElement (Term -> Flow Graph [Term])
+termAlternativesDef :: TBinding (Term -> Flow Graph [Term])
 termAlternativesDef = define "termAlternatives" $
   doc "Find a list of alternatives for a given term, if any" $
   "term" ~> cases _Term (var "term")
@@ -338,7 +338,7 @@ termAlternativesDef = define "termAlternatives" $
       produce $ list [
          var "term2"]]
 
-typeAlternativesDef :: TElement (Type -> [Type])
+typeAlternativesDef :: TBinding (Type -> [Type])
 typeAlternativesDef = define "typeAlternatives" $
   doc "Find a list of alternatives for a given type, if any" $
   "type" ~> cases _Type (var "type")

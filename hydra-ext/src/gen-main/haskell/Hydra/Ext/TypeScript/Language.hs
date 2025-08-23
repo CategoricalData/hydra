@@ -17,40 +17,47 @@ import qualified Data.Set as S
 -- | Language constraints for TypeScript
 typeScriptLanguage :: Coders.Language
 typeScriptLanguage = Coders.Language {
-  Coders.languageName = (Coders.LanguageName "hydra.langs.typeScript"),
+  Coders.languageName = (Coders.LanguageName "hydra.ext.typeScript"),
   Coders.languageConstraints = Coders.LanguageConstraints {
-    Coders.languageConstraintsEliminationVariants = Sets.empty,
-    Coders.languageConstraintsLiteralVariants = (Sets.fromList [
+    Coders.languageConstraintsEliminationVariants = eliminationVariants,
+    Coders.languageConstraintsLiteralVariants = literalVariants,
+    Coders.languageConstraintsFloatTypes = floatTypes,
+    Coders.languageConstraintsFunctionVariants = functionVariants,
+    Coders.languageConstraintsIntegerTypes = integerTypes,
+    Coders.languageConstraintsTermVariants = termVariants,
+    Coders.languageConstraintsTypeVariants = typeVariants,
+    Coders.languageConstraintsTypes = types}} 
+  where 
+    eliminationVariants = Sets.empty
+    literalVariants = (Sets.fromList [
       Mantle.LiteralVariantBoolean,
       Mantle.LiteralVariantFloat,
       Mantle.LiteralVariantInteger,
-      Mantle.LiteralVariantString]),
-    Coders.languageConstraintsFloatTypes = (Sets.fromList [
-      Core.FloatTypeFloat64]),
-    Coders.languageConstraintsFunctionVariants = Sets.empty,
-    Coders.languageConstraintsIntegerTypes = (Sets.fromList [
-      Core.IntegerTypeBigint]),
-    Coders.languageConstraintsTermVariants = (Sets.fromList [
+      Mantle.LiteralVariantString])
+    floatTypes = (Sets.fromList [
+      Core.FloatTypeFloat64])
+    functionVariants = Sets.empty
+    integerTypes = (Sets.fromList [
+      Core.IntegerTypeBigint])
+    termVariants = (Sets.fromList [
       Mantle.TermVariantList,
       Mantle.TermVariantLiteral,
       Mantle.TermVariantMap,
       Mantle.TermVariantOptional,
       Mantle.TermVariantRecord,
-      Mantle.TermVariantUnion]),
-    Coders.languageConstraintsTypeVariants = (Sets.fromList [
-      Mantle.TypeVariantAnnotated,
+      Mantle.TermVariantUnion])
+    typeVariants = (Sets.fromList [
       Mantle.TypeVariantList,
       Mantle.TypeVariantLiteral,
       Mantle.TypeVariantMap,
       Mantle.TypeVariantOptional,
       Mantle.TypeVariantRecord,
-      Mantle.TypeVariantUnion,
-      Mantle.TypeVariantVariable]),
-    Coders.languageConstraintsTypes = (\x -> case x of
+      Mantle.TypeVariantUnion])
+    types = (\x -> case x of
       Core.TypeMap v1 -> ((\x -> case x of
         Core.TypeOptional _ -> False
         _ -> True) (Rewriting.deannotateType (Core.mapTypeValues v1)))
-      _ -> True)}}
+      _ -> True)
 
 -- | A set of reserved words in TypeScript. Taken directly from https://github.com/microsoft/TypeScript/issues/2536
 typeScriptReservedWords :: (S.Set String)
