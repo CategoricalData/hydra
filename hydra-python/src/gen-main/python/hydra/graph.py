@@ -11,23 +11,10 @@ import hydra.core
 A = TypeVar("A")
 
 @dataclass
-class Element:
-    """A graph element, having a name, data term (value), and schema term (type)."""
-    
-    name: hydra.core.Name
-    term: hydra.core.Term
-    type: hydra.core.TypeScheme | None
-
-ELEMENT__NAME = hydra.core.Name("hydra.graph.Element")
-ELEMENT__NAME__NAME = hydra.core.Name("name")
-ELEMENT__TERM__NAME = hydra.core.Name("term")
-ELEMENT__TYPE__NAME = hydra.core.Name("type")
-
-@dataclass
 class Graph:
     """A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph."""
     
-    elements: Annotated[FrozenDict[hydra.core.Name, Element], "All of the elements in the graph"]
+    elements: Annotated[FrozenDict[hydra.core.Name, hydra.core.Binding], "All of the elements in the graph"]
     environment: Annotated[FrozenDict[hydra.core.Name, hydra.core.Term | None], "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)"]
     types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "The typing environment of the graph"]
     body: Annotated[hydra.core.Term, "The body of the term which generated this context"]

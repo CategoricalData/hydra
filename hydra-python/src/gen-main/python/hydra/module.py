@@ -43,7 +43,7 @@ class Module:
     """A logical collection of elements in the same namespace, having dependencies on zero or more other modules."""
     
     namespace: Annotated[Namespace, "A common prefix for all element names in the module"]
-    elements: Annotated[frozenlist[hydra.graph.Element], "The elements defined in this module"]
+    elements: Annotated[frozenlist[hydra.core.Binding], "The elements defined in this module"]
     term_dependencies: Annotated[frozenlist[Module], "Any modules which the term expressions of this module directly depend upon"]
     type_dependencies: Annotated[frozenlist[Module], "Any modules which the type expressions of this module directly depend upon"]
     description: Annotated[str | None, "An optional human-readable description of the module"]

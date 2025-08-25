@@ -190,7 +190,7 @@ def lam[T](v: str, body: TTerm[T]) -> TTerm[T]:
 # lets :: [Field] -> TTerm a -> TTerm a
 # lets fields (TTerm env) = TTerm $ TermLet $ Let (toBinding <$> fields) env
 #   where
-#      toBinding (Field name value) = LetBinding name value Nothing
+#      toBinding (Field name value) = Binding name value Nothing
 
 # list :: [TTerm a] -> TTerm [a]
 # list els = TTerm $ Terms.list (unTTerm <$> els)

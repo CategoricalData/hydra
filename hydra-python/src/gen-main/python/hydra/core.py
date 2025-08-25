@@ -282,7 +282,7 @@ LAMBDA__BODY__NAME = Name("body")
 class Let:
     """A set of (possibly recursive) 'let' bindings together with an environment in which they are bound."""
     
-    bindings: frozenlist[LetBinding]
+    bindings: frozenlist[Binding]
     environment: Term
 
 LET__NAME = Name("hydra.core.Let")
@@ -290,17 +290,17 @@ LET__BINDINGS__NAME = Name("bindings")
 LET__ENVIRONMENT__NAME = Name("environment")
 
 @dataclass
-class LetBinding:
+class Binding:
     """A field with an optional type scheme, used to bind variables to terms in a 'let' expression."""
     
     name: Name
     term: Term
     type: TypeScheme | None
 
-LET_BINDING__NAME = Name("hydra.core.LetBinding")
-LET_BINDING__NAME__NAME = Name("name")
-LET_BINDING__TERM__NAME = Name("term")
-LET_BINDING__TYPE__NAME = Name("type")
+BINDING__NAME = Name("hydra.core.Binding")
+BINDING__NAME__NAME = Name("name")
+BINDING__TERM__NAME = Name("term")
+BINDING__TYPE__NAME = Name("type")
 
 class LiteralBinary(Node[bytes]):
     """A binary literal."""
@@ -445,7 +445,7 @@ class TermSet(Node["frozenset[Term]"]):
 class TermSum(Node["Sum"]):
     """A variant tuple."""
 
-class TermTypeAbstraction(Node["TypeAbstraction"]):
+class TermTypeLambda(Node["TypeLambda"]):
     """A System F type abstraction term."""
 
 class TermTypeApplication(Node["TypedTerm"]):
@@ -464,7 +464,7 @@ class TermWrap(Node["WrappedTerm"]):
     """A wrapped term; an instance of a wrapper type (newtype)."""
 
 # A data term.
-type Term = TermAnnotated | TermApplication | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermOptional | TermProduct | TermRecord | TermSet | TermSum | TermTypeAbstraction | TermTypeApplication | TermUnion | TermUnit | TermVariable | TermWrap
+type Term = TermAnnotated | TermApplication | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermOptional | TermProduct | TermRecord | TermSet | TermSum | TermTypeLambda | TermTypeApplication | TermUnion | TermUnit | TermVariable | TermWrap
 
 TERM__NAME = Name("hydra.core.Term")
 TERM__ANNOTATED__NAME = Name("annotated")
@@ -479,7 +479,7 @@ TERM__PRODUCT__NAME = Name("product")
 TERM__RECORD__NAME = Name("record")
 TERM__SET__NAME = Name("set")
 TERM__SUM__NAME = Name("sum")
-TERM__TYPE_ABSTRACTION__NAME = Name("typeAbstraction")
+TERM__TYPE_LAMBDA__NAME = Name("typeLambda")
 TERM__TYPE_APPLICATION__NAME = Name("typeApplication")
 TERM__UNION__NAME = Name("union")
 TERM__UNIT__NAME = Name("unit")
@@ -553,15 +553,15 @@ TYPE__VARIABLE__NAME = Name("variable")
 TYPE__WRAP__NAME = Name("wrap")
 
 @dataclass
-class TypeAbstraction:
+class TypeLambda:
     """A System F type abstraction term."""
     
     parameter: Annotated[Name, "The type variable introduced by the abstraction"]
     body: Annotated[Term, "The body of the abstraction"]
 
-TYPE_ABSTRACTION__NAME = Name("hydra.core.TypeAbstraction")
-TYPE_ABSTRACTION__PARAMETER__NAME = Name("parameter")
-TYPE_ABSTRACTION__BODY__NAME = Name("body")
+TYPE_LAMBDA__NAME = Name("hydra.core.TypeLambda")
+TYPE_LAMBDA__PARAMETER__NAME = Name("parameter")
+TYPE_LAMBDA__BODY__NAME = Name("body")
 
 @dataclass
 class TypedTerm:
