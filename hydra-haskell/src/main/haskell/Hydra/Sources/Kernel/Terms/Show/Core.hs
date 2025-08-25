@@ -380,7 +380,7 @@ typeDef = define "type" $
       "ftyp">: Core.fieldTypeType $ var "ft"] $
       Strings.cat $ list [
         var "fname",
-        string " = ",
+        string ":",
         ref typeDef @@ var "ftyp"],
     "showRowType">: lambda "rt" $ lets [
       "flds">: Core.rowTypeFields $ var "rt",
