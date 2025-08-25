@@ -662,7 +662,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
               baseType t = case deannotateType t of
                 TypeForall (ForallType _ body2) -> baseType body2
                 t2 -> t2
---          TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True} -- Note: frozenlist is currently unused at the term level
+          TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True}
           TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
           TypeProduct _ -> meta {pythonModuleMetadataUsesTuple = True}
           TypeRecord (RowType _ fields) -> meta {

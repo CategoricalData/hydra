@@ -1,4 +1,4 @@
-"""Types supporting type inference."""
+"""Types supporting type inference and type reconstruction."""
 
 from __future__ import annotations
 from dataclasses import dataclass
@@ -51,6 +51,19 @@ TYPE_CONSTRAINT__NAME = hydra.core.Name("hydra.typing.TypeConstraint")
 TYPE_CONSTRAINT__LEFT__NAME = hydra.core.Name("left")
 TYPE_CONSTRAINT__RIGHT__NAME = hydra.core.Name("right")
 TYPE_CONSTRAINT__COMMENT__NAME = hydra.core.Name("comment")
+
+@dataclass
+class TypeContext:
+    """A typing environment used for type reconstruction (typeOf) over System F terms."""
+    
+    types: FrozenDict[hydra.core.Name, hydra.core.Type]
+    variables: frozenset[hydra.core.Name]
+    inference_context: InferenceContext
+
+TYPE_CONTEXT__NAME = hydra.core.Name("hydra.typing.TypeContext")
+TYPE_CONTEXT__TYPES__NAME = hydra.core.Name("types")
+TYPE_CONTEXT__VARIABLES__NAME = hydra.core.Name("variables")
+TYPE_CONTEXT__INFERENCE_CONTEXT__NAME = hydra.core.Name("inferenceContext")
 
 class TypeSubst(Node["FrozenDict[hydra.core.Name, hydra.core.Type]"]):
     """A substitution of type variables for types."""
