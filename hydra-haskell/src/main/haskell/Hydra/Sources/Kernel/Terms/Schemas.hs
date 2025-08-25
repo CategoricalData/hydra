@@ -70,6 +70,7 @@ module_ = Module (Namespace "hydra.schemas") elements
       el fieldTypeMapDef,
       el findFieldTypeDef,
       el fieldTypesDef,
+      el fTypeToTypeSchemeDef,
       el fullyStripTypeDef,
       el graphAsTermDef,
       el graphAsTypesDef,
@@ -87,6 +88,7 @@ module_ = Module (Namespace "hydra.schemas") elements
       el termAsGraphDef,
       el topologicalSortTypeDefinitionsDef,
       el typeDependenciesDef,
+      el typeSchemeToFTypeDef,
       el typesToElementsDef]
 
 define :: String -> TTerm a -> TBinding a
@@ -196,6 +198,16 @@ findFieldTypeDef = define "findFieldType" $
         (Logic.ifElse (Equality.equal (Lists.length $ var "matchingFields") (int32 1))
           (Flows.pure $ Core.fieldTypeType $ Lists.head $ var "matchingFields")
           (Flows.fail $ Strings.cat2 (string "Multiple fields named ") (Core.unName $ var "fname")))
+
+fTypeToTypeSchemeDef :: TBinding (Type -> TypeScheme)
+fTypeToTypeSchemeDef = define "fTypeToTypeScheme" $
+  doc "Convert a forall type to a type scheme" $
+  "gatherForall" <~ ("vars" ~> "typ" ~> cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ")
+     (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ")) [
+     _Type_forall>>: "ft" ~> var "gatherForall" @@
+       (Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars")) @@
+       (Core.forallTypeBody $ var "ft")]) $
+  "typ" ~> var "gatherForall" @@ list [] @@ var "typ"
 
 fullyStripTypeDef :: TBinding (Type -> Type)
 fullyStripTypeDef = define "fullyStripType" $
@@ -334,42 +346,43 @@ resolveTypeDef = define "resolveType" $
 schemaGraphToTypingEnvironmentDef :: TBinding (Graph -> Flow s (M.Map Name TypeScheme))
 schemaGraphToTypingEnvironmentDef = define "schemaGraphToTypingEnvironment" $
   doc "Convert a schema graph to a typing environment" $
-  lambda "g" $ lets [
-    "toTypeScheme">: lambda "vars" $ lambda "typ" $
-      match _Type (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ")) [
-        _Type_forall>>: lambda "ft" $
-          var "toTypeScheme" @@ Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars") @@ Core.forallTypeBody (var "ft")]
-      @@ (ref Rewriting.deannotateTypeDef @@ var "typ"),
-    "toPair">: lambda "el" $
-      Flows.map
-        (lambda "mts" $ Optionals.map (lambda "ts" $ pair (Core.bindingName $ var "el") (var "ts")) (var "mts"))
-        (Optionals.maybe
-          (Flows.pure nothing)
-          (lambda "ts" $
-            Logic.ifElse
-              (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _TypeScheme)))
-              (Flows.map (unaryFunction just) $ ref DecodeCore.typeSchemeDef @@ Core.bindingTerm (var "el"))
-              (Logic.ifElse
-                (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _Type)))
-                (Flows.map (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded") $ ref DecodeCore.typeDef @@ Core.bindingTerm (var "el"))
-                (cases _Term (ref Rewriting.deannotateTermDef @@ (Core.bindingTerm $ var "el")) (Just $ Flows.pure nothing) [
-                  _Term_record>>: lambda "r" $
-                    Logic.ifElse
-                      (Equality.equal (Core.recordTypeName $ var "r") (Core.nameLift _TypeScheme))
-                      (Flows.map
-                        (unaryFunction just)
-                        (ref DecodeCore.typeSchemeDef @@ Core.bindingTerm (var "el")))
-                      (Flows.pure nothing),
-                  _Term_union>>: lambda "i" $
-                    Logic.ifElse (Equality.equal (Core.injectionTypeName $ var "i") (Core.nameLift _Type))
-                      (Flows.map
-                        (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded")
-                        (ref DecodeCore.typeDef @@ Core.bindingTerm (var "el")))
-                      (Flows.pure nothing)])))
-          (Core.bindingType $ var "el"))]
-    $ ref Monads.withStateDef @@ var "g" @@
-      (Flows.bind (Flows.mapList (var "toPair") $ Maps.elems $ Graph.graphElements $ var "g") $
-        lambda "mpairs" $ Flows.pure $ Maps.fromList $ Optionals.cat $ var "mpairs")
+  "g" ~>
+  "toTypeScheme" <~ ("vars" ~> "typ" ~> cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ")
+    (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ")) [
+    _Type_forall>>: "ft" ~> var "toTypeScheme"
+      @@ Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars")
+      @@ Core.forallTypeBody (var "ft")]) $
+  "toPair" <~ ("el" ~> Flows.map
+    ("mts" ~> Optionals.map ("ts" ~> pair (Core.bindingName $ var "el") (var "ts")) (var "mts"))
+    (optCases (Core.bindingType $ var "el")
+--      (Flows.pure nothing)
+      ( "typ" <<~ ref DecodeCore.typeDef @@ (Core.bindingTerm $ var "el") $
+        "ts" <~ ref fTypeToTypeSchemeDef @@ var "typ" $
+        produce $ just $ var "ts")
+      -- TODO: the following is a legacy solution; type schemes are encoded as types now, and do not need System F annotations
+      ("ts" ~> Logic.ifElse
+          (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _TypeScheme)))
+          (Flows.map (unaryFunction just) $ ref DecodeCore.typeSchemeDef @@ Core.bindingTerm (var "el"))
+          (Logic.ifElse
+            (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _Type)))
+            (Flows.map (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded") $ ref DecodeCore.typeDef @@ Core.bindingTerm (var "el"))
+            (cases _Term (ref Rewriting.deannotateTermDef @@ (Core.bindingTerm $ var "el")) (Just $ Flows.pure nothing) [
+              _Term_record>>: lambda "r" $
+                Logic.ifElse
+                  (Equality.equal (Core.recordTypeName $ var "r") (Core.nameLift _TypeScheme))
+                  (Flows.map
+                    (unaryFunction just)
+                    (ref DecodeCore.typeSchemeDef @@ Core.bindingTerm (var "el")))
+                  (Flows.pure nothing),
+              _Term_union>>: lambda "i" $
+                Logic.ifElse (Equality.equal (Core.injectionTypeName $ var "i") (Core.nameLift _Type))
+                  (Flows.map
+                    (lambda "decoded" $ just $ var "toTypeScheme" @@ list [] @@ var "decoded")
+                    (ref DecodeCore.typeDef @@ Core.bindingTerm (var "el")))
+                  (Flows.pure nothing)]))))) $
+  ref Monads.withStateDef @@ var "g" @@
+    (Flows.bind (Flows.mapList (var "toPair") $ Maps.elems $ Graph.graphElements $ var "g") $
+      lambda "mpairs" $ Flows.pure $ Maps.fromList $ Optionals.cat $ var "mpairs")
 
 -- Note: this is lossy, as it throws away the term body
 termAsGraphDef :: TBinding (Term -> (M.Map Name Term, Term))
@@ -424,6 +437,18 @@ typeDependenciesDef = define "typeDependencies" $
           "newSeeds">: Sets.difference (var "refs") (var "visited")]
           $ var "deps" @@ var "newSeeds" @@ var "newNames")] $
     var "deps" @@ Sets.singleton (var "name") @@ Maps.empty
+
+typeSchemeToFTypeDef :: TBinding (TypeScheme -> Type)
+typeSchemeToFTypeDef = define "typeSchemeToFType" $
+  doc "Convert a type scheme to a forall type" $
+  "ts" ~>
+  "vars" <~ Core.typeSchemeVariables (var "ts") $
+  "body" <~ Core.typeSchemeType (var "ts") $
+  Lists.foldl
+    ("t" ~> "v" ~> Core.typeForall $ Core.forallType (var "v") (var "t"))
+    (var "body")
+    -- Put the variables in the same order in which they are introduced by the type scheme.
+    (Lists.reverse $ var "vars")
 
 typesToElementsDef :: TBinding (M.Map Name Type -> M.Map Name Binding)
 typesToElementsDef = define "typesToElements" $

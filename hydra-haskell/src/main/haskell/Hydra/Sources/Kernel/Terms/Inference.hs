@@ -49,6 +49,7 @@ import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Graph as ShowGraph
 import qualified Hydra.Sources.Kernel.Terms.Show.Mantle as ShowMantle
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
@@ -61,7 +62,7 @@ import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 module_ :: Module
 module_ = Module (Namespace "hydra.inference") elements
     [Annotations.module_, Lexical.module_, Schemas.module_, Unification.module_,
-      ShowCore.module_, ShowMantle.module_, ShowTyping.module_]
+      ShowCore.module_, ShowGraph.module_, ShowMantle.module_, ShowTyping.module_]
     kernelTypesModules $
     Just "Type inference following Algorithm W, extended for nominal terms and types"
   where
@@ -73,7 +74,6 @@ module_ = Module (Namespace "hydra.inference") elements
       el debugInferenceDef,
       el emptyInferenceContextDef,
       el extendContextDef,
-      el fTypeToTypeSchemeDef,
       el forInferredTermDef,
       el freeVariablesInContextDef,
       el freshNameDef,
@@ -127,7 +127,6 @@ module_ = Module (Namespace "hydra.inference") elements
       el typeOfInternalDef,
       el typeOfNominalDef,
       el typeOfUnitDef,
-      el typeSchemeToFTypeDef,
       el yieldDef,
       el yieldCheckedDef,
       el yieldDebugDef]
@@ -253,16 +252,6 @@ freshVariableTypeDef = define "freshVariableType" $
   doc "Generate a fresh type variable" $
   Flows.map (unaryFunction Core.typeVariable) (ref freshNameDef)
 
-fTypeToTypeSchemeDef :: TBinding (Type -> TypeScheme)
-fTypeToTypeSchemeDef = define "fTypeToTypeScheme" $
-  doc "Convert a forall type to a type scheme" $
-  "gatherForall" <~ ("vars" ~> "typ" ~> cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ")
-     (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ")) [
-     _Type_forall>>: "ft" ~> var "gatherForall" @@
-       (Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars")) @@
-       (Core.forallTypeBody $ var "ft")]) $
-  "typ" ~> var "gatherForall" @@ list [] @@ var "typ"
-
 generalizeDef :: TBinding (InferenceContext -> Type -> TypeScheme)
 generalizeDef = define "generalize" $
   doc "Generalize a type to a type scheme" $
@@ -282,6 +271,8 @@ graphToInferenceContextDef = define "graphToInferenceContext" $
   "varTypes" <~ Maps.empty $
   "schemaTypes" <<~ ref Schemas.schemaGraphToTypingEnvironmentDef @@ var "schema" $
   produce $ Typing.inferenceContext (var "schemaTypes") (var "primTypes") (var "varTypes") false
+--  Flows.fail ("schema types: " ++ (Strings.intercalate ", " $ Lists.map (unaryFunction Core.unName) $ Maps.keys $ var "schemaTypes")
+--    ++ (", schema: " ++ (ref ShowGraph.graphDef @@ var "schema")))
 
 inferGraphTypesDef :: TBinding (Graph -> Flow s Graph)
 inferGraphTypesDef = define "inferGraphTypes" $
@@ -1041,7 +1032,7 @@ initialTypeContextDef = define "initialTypeContext" $
     "el"  <~ second (var "pair") $
     optCases (Core.bindingType $ var "el")
       (Flows.fail $ "untyped element: " ++ Core.unName (var "name"))
-      ("ts" ~> produce $ pair (var "name") (ref typeSchemeToFTypeDef @@ var "ts"))) $
+      ("ts" ~> produce $ pair (var "name") (ref Schemas.typeSchemeToFTypeDef @@ var "ts"))) $
   "ix" <<~ ref graphToInferenceContextDef @@ var "g" $
   "types" <<~ Flows.map
     (unaryFunction Maps.fromList)
@@ -1121,7 +1112,7 @@ showInferenceResultDef = define "showInferenceResult" $
 toFContextDef :: TBinding (InferenceContext -> M.Map Name Type)
 toFContextDef = define "toFContext" $
   doc "Convert inference context to type context" $
-  "cx" ~> Maps.map (ref typeSchemeToFTypeDef) $ Typing.inferenceContextDataTypes $ var "cx"
+  "cx" ~> Maps.map (ref Schemas.typeSchemeToFTypeDef) $ Typing.inferenceContextDataTypes $ var "cx"
 
 typeOfDef :: TBinding (TypeContext -> Term -> Flow s Type)
 typeOfDef = define "typeOf" $
@@ -1293,7 +1284,7 @@ typeOfInternalDef = define "typeOfInternal" $
               Core.unName $ var "name"])
             (unaryFunction Flows.pure)
             (Maps.lookup (var "name") (Typing.inferenceContextPrimitiveTypes $ var "cx")) $
-          Flows.map (ref typeSchemeToFTypeDef) (var "ts"))],
+          Flows.map (ref Schemas.typeSchemeToFTypeDef) (var "ts"))],
 
     _Term_let>>: "letTerm" ~> var "checkApplied" @@ (
       "bs" <~ Core.letBindings (var "letTerm") $
@@ -1305,7 +1296,7 @@ typeOfInternalDef = define "typeOfInternal" $
           (Flows.fail $ Strings.cat $ list [
             string "untyped let binding in ",
             ref ShowCore.termDef @@ var "term"])
-          ("ts" ~> Flows.pure $ ref typeSchemeToFTypeDef @@ var "ts")
+          ("ts" ~> Flows.pure $ ref Schemas.typeSchemeToFTypeDef @@ var "ts")
           (Core.bindingType $ var "b")) $
       "btypes" <<~ Flows.mapList (var "btypeOf") (var "bs") $
       "types2" <~ Maps.union (Maps.fromList $ Lists.zip (var "bnames") (var "btypes")) (var "types") $
@@ -1485,18 +1476,6 @@ typeOfUnitDef = define "inferTypeOfUnit" $
     (Core.termUnit)
     (Core.typeUnit)
     (ref Substitution.idTypeSubstDef)
-
-typeSchemeToFTypeDef :: TBinding (TypeScheme -> Type)
-typeSchemeToFTypeDef = define "typeSchemeToFType" $
-  doc "Convert a type scheme to a forall type" $
-  "ts" ~>
-  "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "body" <~ Core.typeSchemeType (var "ts") $
-  Lists.foldl
-    ("t" ~> "v" ~> Core.typeForall $ Core.forallType (var "v") (var "t"))
-    (var "body")
-    -- Put the variables in the same order in which they are introduced by the type scheme.
-    (Lists.reverse $ var "vars")
 
 yieldDef :: TBinding (Term -> Type -> TypeSubst -> InferenceResult)
 yieldDef = define "yield" $
