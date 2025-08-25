@@ -117,7 +117,10 @@ adaptLiteral lt l = ((\x -> case x of
 -- | Attempt to adapt a literal type using the given language constraints
 adaptLiteralType :: (Coders.LanguageConstraints -> Core.LiteralType -> Maybe Core.LiteralType)
 adaptLiteralType constraints lt =  
-  let supported = (Sets.member (Variants.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints))
+  let supported = (Logic.and (Sets.member (Variants.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) ((\x -> case x of
+          Core.LiteralTypeFloat v1 -> (Sets.member v1 (Coders.languageConstraintsFloatTypes constraints))
+          Core.LiteralTypeInteger v1 -> (Sets.member v1 (Coders.languageConstraintsIntegerTypes constraints))
+          _ -> True) lt))
   in (Logic.ifElse supported (Just lt) ((\x -> case x of
     Core.LiteralTypeBinary -> (adaptLiteralType constraints Core.LiteralTypeString)
     Core.LiteralTypeBoolean -> (Optionals.map (\x -> Core.LiteralTypeInteger x) (adaptIntegerType constraints Core.IntegerTypeInt8))
@@ -170,30 +173,26 @@ adaptType constraints litmap type0 =
             (Core_.type_ type_)])) (\type2 -> Flows.pure type2) (tryType type1))))
   in (Rewriting.rewriteTypeM rewrite type0)
 
--- | Convert a graph to a list of type or term definitions, while adapting them to the given language constraints and performing type inference
-graphToDefinitions :: (Coders.LanguageConstraints -> Bool -> Graph.Graph -> S.Set Core.Name -> Compute.Flow Graph.Graph (Graph.Graph, [Module.Definition]))
-graphToDefinitions constraints doExpand graph names =  
-  let ellist = (Maps.elems (Graph.graphElements graph))
-  in  
-    let isTypeElement = (\el -> (\x -> case x of
-            Core.TermUnion v1 -> (Equality.equal (Core.injectionTypeName v1) (Core.Name "hydra.core.Type"))
-            _ -> False) (Rewriting.deannotateTerm (Core.bindingTerm el)))
-    in  
-      let isSchemaGraph = (Logic.and (Logic.not (Lists.null ellist)) (isTypeElement (Lists.head ellist)))
-      in (Logic.ifElse isSchemaGraph ( 
-        let litmap = (adaptLiteralTypesMap constraints)
-        in (Flows.bind (Schemas.graphAsTypes graph) (\tmap0 -> Flows.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->  
-          let toDef = (\pair -> Module.DefinitionType (Module.TypeDefinition {
-                  Module.typeDefinitionName = (fst pair),
-                  Module.typeDefinitionType = (snd pair)}))
-          in (Flows.pure (graph, (Lists.map toDef (Lists.filter (\p -> Sets.member (fst p) names) (Maps.toList tmap1))))))))) (Flows.bind (adaptDataGraph constraints doExpand graph) (\graph1 -> Flows.bind (Inference.inferGraphTypes graph1) (\graph2 ->  
-        let toDef = (\el ->  
-                let ts = (Optionals.fromJust (Core.bindingType el))
-                in (Module.DefinitionTerm (Module.TermDefinition {
-                  Module.termDefinitionName = (Core.bindingName el),
-                  Module.termDefinitionTerm = (Core.bindingTerm el),
-                  Module.termDefinitionType = (Inference.typeSchemeToFType ts)})))
-        in (Flows.pure (graph2, (Lists.map toDef (Lists.filter (\e -> Sets.member (Core.bindingName e) names) (Maps.elems (Graph.graphElements graph2))))))))))
+-- | Given a data graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, perform inference, then return a corresponding term definition for each element name.
+dataGraphToDefinitions :: (Coders.LanguageConstraints -> Bool -> Graph.Graph -> [[Core.Name]] -> Compute.Flow Graph.Graph (Graph.Graph, [[Module.TermDefinition]]))
+dataGraphToDefinitions constraints doExpand graph nameLists = (Flows.bind (adaptDataGraph constraints doExpand graph) (\graph1 -> Flows.bind (Inference.inferGraphTypes graph1) (\graph2 ->  
+  let toDef = (\el ->  
+          let ts = (Optionals.fromJust (Core.bindingType el))
+          in Module.TermDefinition {
+            Module.termDefinitionName = (Core.bindingName el),
+            Module.termDefinitionTerm = (Core.bindingTerm el),
+            Module.termDefinitionType = (Schemas.typeSchemeToFType ts)})
+  in (Flows.pure (graph2, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> Optionals.fromJust (Maps.lookup n (Graph.graphElements graph2))) names)) nameLists))))))
+
+-- | Given a schema graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, then return a corresponding type definition for each element name.
+schemaGraphToDefinitions :: (Coders.LanguageConstraints -> Graph.Graph -> [[Core.Name]] -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type, [[Module.TypeDefinition]]))
+schemaGraphToDefinitions constraints graph nameLists =  
+  let litmap = (adaptLiteralTypesMap constraints)
+  in (Flows.bind (Schemas.graphAsTypes graph) (\tmap0 -> Flows.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->  
+    let toDef = (\pair -> Module.TypeDefinition {
+            Module.typeDefinitionName = (fst pair),
+            Module.typeDefinitionType = (snd pair)})
+    in (Flows.pure (tmap1, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> (n, (Optionals.fromJust (Maps.lookup n tmap1)))) names)) nameLists))))))
 
 -- | Find a list of alternatives for a given term, if any
 termAlternatives :: (Core.Term -> Compute.Flow Graph.Graph [Core.Term])

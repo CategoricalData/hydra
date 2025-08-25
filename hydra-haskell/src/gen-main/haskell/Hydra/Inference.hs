@@ -90,16 +90,6 @@ extendContext pairs cx = Typing_.InferenceContext {
   Typing_.inferenceContextDataTypes = (Maps.union (Maps.fromList pairs) (Typing_.inferenceContextDataTypes cx)),
   Typing_.inferenceContextDebug = (Typing_.inferenceContextDebug cx)}
 
--- | Convert a forall type to a type scheme
-fTypeToTypeScheme :: (Core.Type -> Core.TypeScheme)
-fTypeToTypeScheme typ = (gatherForall [] typ) 
-  where 
-    gatherForall = (\vars -> \typ -> (\x -> case x of
-      Core.TypeForall v1 -> (gatherForall (Lists.cons (Core.forallTypeParameter v1) vars) (Core.forallTypeBody v1))
-      _ -> Core.TypeScheme {
-        Core.typeSchemeVariables = (Lists.reverse vars),
-        Core.typeSchemeType = typ}) (Rewriting.deannotateType typ))
-
 forInferredTerm :: (Typing_.InferenceContext -> Core.Term -> String -> (Typing_.InferenceResult -> t0) -> Compute.Flow t1 t0)
 forInferredTerm cx term desc f = (Flows.map f (inferTypeOfTerm cx term desc))
 
@@ -865,7 +855,7 @@ initialTypeContext g =
             let el = (snd pair)
             in (Optionals.maybe (Flows.fail (Strings.cat [
               "untyped element: ",
-              (Core.unName name)])) (\ts -> Flows.pure (name, (typeSchemeToFType ts))) (Core.bindingType el)))
+              (Core.unName name)])) (\ts -> Flows.pure (name, (Schemas.typeSchemeToFType ts))) (Core.bindingType el)))
   in (Flows.bind (graphToInferenceContext g) (\ix -> Flows.bind (Flows.map Maps.fromList (Flows.mapList toPair (Maps.toList (Graph.graphElements g)))) (\types -> Flows.pure (Typing_.TypeContext {
     Typing_.typeContextTypes = types,
     Typing_.typeContextVariables = Sets.empty,
@@ -923,7 +913,7 @@ showInferenceResult result =
 
 -- | Convert inference context to type context
 toFContext :: (Typing_.InferenceContext -> M.Map Core.Name Core.Type)
-toFContext cx = (Maps.map typeSchemeToFType (Typing_.inferenceContextDataTypes cx))
+toFContext cx = (Maps.map Schemas.typeSchemeToFType (Typing_.inferenceContextDataTypes cx))
 
 typeOf :: (Typing_.TypeContext -> Core.Term -> Compute.Flow t0 Core.Type)
 typeOf tcontext term = (typeOfInternal (Typing_.typeContextInferenceContext tcontext) (Typing_.typeContextVariables tcontext) (Typing_.typeContextTypes tcontext) [] term)
@@ -1050,7 +1040,7 @@ typeOfInternal cx vars types apptypes term =
         let ts = (Optionals.maybe (Flows.fail (Strings.cat [
                 "no such primitive: ",
                 (Core.unName v2)])) Flows.pure (Maps.lookup v2 (Typing_.inferenceContextPrimitiveTypes cx)))
-        in (Flows.map typeSchemeToFType ts)))) v1)
+        in (Flows.map Schemas.typeSchemeToFType ts)))) v1)
     Core.TermLet v1 -> (checkApplied ( 
       let bs = (Core.letBindings v1)
       in  
@@ -1062,7 +1052,7 @@ typeOfInternal cx vars types apptypes term =
             in  
               let btypeOf = (\b -> Optionals.maybe (Flows.fail (Strings.cat [
                       "untyped let binding in ",
-                      (Core__.term term)])) (\ts -> Flows.pure (typeSchemeToFType ts)) (Core.bindingType b))
+                      (Core__.term term)])) (\ts -> Flows.pure (Schemas.typeSchemeToFType ts)) (Core.bindingType b))
               in (Flows.bind (Flows.mapList btypeOf bs) (\btypes ->  
                 let types2 = (Maps.union (Maps.fromList (Lists.zip bnames btypes)) types)
                 in (Flows.bind (Flows.mapList (typeOfInternal cx vars types2 []) bterms) (\typeofs -> Flows.bind (Flows.mapList (checkTypeVariables cx vars) btypes) (\_ -> Flows.bind (Flows.mapList (checkTypeVariables cx vars) typeofs) (\_ -> Logic.ifElse (Equality.equal typeofs btypes) (typeOfInternal cx vars types2 [] env) (Flows.fail (Strings.cat [
@@ -1152,16 +1142,6 @@ inferTypeOfUnit = Typing_.InferenceResult {
   Typing_.inferenceResultTerm = Core.TermUnit,
   Typing_.inferenceResultType = Core.TypeUnit,
   Typing_.inferenceResultSubst = Substitution.idTypeSubst}
-
--- | Convert a type scheme to a forall type
-typeSchemeToFType :: (Core.TypeScheme -> Core.Type)
-typeSchemeToFType ts =  
-  let vars = (Core.typeSchemeVariables ts)
-  in  
-    let body = (Core.typeSchemeType ts)
-    in (Lists.foldl (\t -> \v -> Core.TypeForall (Core.ForallType {
-      Core.forallTypeParameter = v,
-      Core.forallTypeBody = t})) body (Lists.reverse vars))
 
 -- | Create an inference result
 yield :: (Core.Term -> Core.Type -> Typing_.TypeSubst -> Typing_.InferenceResult)
