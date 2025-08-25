@@ -302,7 +302,7 @@ type_ typ =
               ftyp = (Core.fieldTypeType ft)
           in (Strings.cat [
             fname,
-            " = ",
+            ":",
             (type_ ftyp)])) 
       showRowType = (\rt ->  
               let flds = (Core.rowTypeFields rt) 
