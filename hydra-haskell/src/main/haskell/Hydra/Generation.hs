@@ -18,6 +18,7 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
+-- TODO: deprecated
 generateSources :: (Module -> Flow Graph (M.Map FilePath String)) -> FilePath -> [Module] -> IO ()
 generateSources printModule basePath mods = do
     mfiles <- runFlow bootstrapGraph generateFiles
@@ -43,6 +44,55 @@ generateSources printModule basePath mods = do
         withNewline = if L.isSuffixOf "\n" s then s else s ++ "\n"
 
     forModule mod = withTrace ("module " ++ unNamespace (moduleNamespace mod)) $ printModule mod
+
+generateSourcesSimple :: (Module -> [Definition] -> Flow Graph (M.Map FilePath String)) -> Language -> Bool
+                      -> FilePath -> [Module] -> IO ()
+generateSourcesSimple printDefinitions lang doExpand basePath mods = do
+    mschemaFiles <- runFlow bootstrapGraph generateSchemaFiles
+    case mschemaFiles of
+      Nothing -> fail "Failed to generate schema files"
+      Just files -> mapM_ writePair files
+    mdataFiles <- runFlow bootstrapGraph generateDataFiles
+    case mdataFiles of
+      Nothing -> fail "Failed to generate data files"
+      Just files -> mapM_ writePair files
+  where
+    constraints = languageConstraints lang
+    isTypeElement el = case deannotateTerm (bindingTerm el) of
+      TermUnion inj -> injectionTypeName inj == _Type
+      _ -> False
+    -- Note: we assume that no module contains both type-level and term-level elements
+    isSchemaModule mod = not $ L.null $ L.filter isTypeElement $ moduleElements mod
+    (schemaModules, dataModules) = L.partition isSchemaModule mods
+
+    generateSchemaFiles = withTrace "generate schema files" $ do
+        (tmap, defLists) <- schemaGraphToDefinitions constraints g0 nameLists
+        withState g0 $ do
+          maps <- CM.zipWithM forEachModule schemaModules defLists
+          return $ L.concat (M.toList <$> maps)
+      where
+        g0 = modulesToGraph schemaModules
+        nameLists = fmap (fmap bindingName . moduleElements) schemaModules
+        forEachModule mod defs = withTrace ("schema module " ++ unNamespace (moduleNamespace mod)) $
+          printDefinitions mod (fmap DefinitionType defs)
+
+    generateDataFiles = withTrace "generate data files" $ do
+        (g1, defLists) <- dataGraphToDefinitions constraints doExpand g0 nameLists
+        withState g1 $ do
+          maps <- CM.zipWithM forEachModule dataModules defLists
+          return $ L.concat (M.toList <$> maps)
+      where
+        g0 = modulesToGraph dataModules
+        nameLists = fmap (fmap bindingName . moduleElements) dataModules
+        forEachModule mod defs = withTrace ("data module " ++ unNamespace (moduleNamespace mod)) $
+          printDefinitions mod (fmap DefinitionTerm defs)
+
+    writePair (path, s) = do
+        let fullPath = FP.combine basePath path
+        SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
+        writeFile fullPath withNewline
+      where
+        withNewline = if L.isSuffixOf "\n" s then s else s ++ "\n"
 
 -- TODO: move into the kernel
 modulesToGraph :: [Module] -> Graph

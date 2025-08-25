@@ -44,17 +44,19 @@ import qualified Data.Maybe              as Y
 import qualified Hydra.Sources.Kernel.Terms.Decode.Core as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Inference as Inference
 import qualified Hydra.Sources.Kernel.Terms.Literals as Lits
+import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Reduction as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Graph as ShowGraph
 import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 
 module_ :: Module
 module_ = Module (Namespace "hydra.adapt.simple") elements
-    [DecodeCore.module_, Inference.module_, Lits.module_, Reduction.module_, Rewriting.module_, Schemas.module_,
-      ShowCore.module_, Variants.module_]
+    [DecodeCore.module_, Inference.module_, Lits.module_, Monads.module_, Reduction.module_, Rewriting.module_, Schemas.module_,
+      ShowCore.module_, ShowGraph.module_, Variants.module_]
     kernelTypesModules $
     Just "Simple, one-way adapters for types and terms"
   where
@@ -69,7 +71,8 @@ module_ = Module (Namespace "hydra.adapt.simple") elements
       el adaptLiteralValueDef,
       el adaptTermDef,
       el adaptTypeDef,
-      el graphToDefinitionsDef,
+      el dataGraphToDefinitionsDef,
+      el schemaGraphToDefinitionsDef,
       el termAlternativesDef,
       el typeAlternativesDef]
 
@@ -102,6 +105,7 @@ adaptDataGraphDef = define "adaptDataGraph" $
   "schema0" <~ Graph.graphSchema (var "graph0") $
   "schema1" <<~ optCases (var "schema0")
     (produce nothing)
+--    ("sg" ~> Flows.fail $ "schema graph: " ++ (ref ShowGraph.graphDef @@ var "sg")) $
     ( "sg" ~>
       "tmap0" <<~ ref Schemas.graphAsTypesDef @@ var "sg" $
       "tmap1" <<~ ref adaptGraphSchemaDef @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
@@ -113,6 +117,9 @@ adaptDataGraphDef = define "adaptDataGraph" $
     (var "gterm0") $
   "gterm2" <<~ ref adaptTermDef @@ var "constraints" @@ var "litmap" @@ var "gterm1" $
   "els1" <~ ref Schemas.termAsGraphDef @@ var "gterm1" $
+--  Flows.fail $ "schema graph: " ++ (optCases (var "schema1")
+--    ("none")
+--    ("sg" ~> ref ShowGraph.graphDef @@ var "sg"))
   produce $ Graph.graph
     (var "els1")
     (var "env0")
@@ -179,9 +186,14 @@ adaptLiteralTypeDef :: TBinding (LanguageConstraints -> LiteralType -> Maybe Lit
 adaptLiteralTypeDef = define "adaptLiteralType" $
   doc "Attempt to adapt a literal type using the given language constraints" $
   "constraints" ~> "lt" ~>
-  "supported" <~ Sets.member
-    (ref Variants.literalTypeVariantDef @@ var "lt")
-    (Coders.languageConstraintsLiteralVariants $ var "constraints") $
+  "supported" <~ Logic.and
+    (Sets.member
+      (ref Variants.literalTypeVariantDef @@ var "lt")
+      (Coders.languageConstraintsLiteralVariants $ var "constraints"))
+    (cases _LiteralType (var "lt")
+      (Just true) [
+        _LiteralType_float>>: "ft" ~> Sets.member (var "ft") (Coders.languageConstraintsFloatTypes $ var "constraints"),
+        _LiteralType_integer>>: "it" ~> Sets.member (var "it") (Coders.languageConstraintsIntegerTypes $ var "constraints")]) $
   Logic.ifElse (var "supported")
     (just $ var "lt")
     (cases _LiteralType (var "lt")
@@ -273,35 +285,43 @@ adaptTypeDef = define "adaptType" $
       ("type2" ~> produce $ var "type2")) $
   ref Rewriting.rewriteTypeMDef @@ var "rewrite" @@ var "type0"
 
-graphToDefinitionsDef :: TBinding (LanguageConstraints -> Bool -> Graph -> S.Set Name -> Flow s (Graph, [Definition]))
-graphToDefinitionsDef = define "graphToDefinitions" $
-  doc ("Convert a graph to a list of type or term definitions, while adapting them to the given language constraints"
-    <> " and performing type inference") $
-  "constraints" ~> "doExpand" ~> "graph" ~> "names" ~>
-  "ellist" <~ Maps.elems (Graph.graphElements $ var "graph") $
-  "isTypeElement" <~ ("el" ~> cases _Term (ref Rewriting.deannotateTermDef @@ (Core.bindingTerm $ var "el"))
-    (Just false) [
-    _Term_union>>: "inj" ~> Equality.equal (Core.injectionTypeName $ var "inj") (Core.nameLift _Type)]) $
-  "isSchemaGraph" <~ Logic.and (Logic.not $ Lists.null $ var "ellist") (var "isTypeElement" @@ (Lists.head $ var "ellist")) $
-  Logic.ifElse (var "isSchemaGraph")
-    ( "litmap" <~ ref adaptLiteralTypesMapDef @@ var "constraints" $
-      "tmap0" <<~ ref Schemas.graphAsTypesDef @@ var "graph" $
-      "tmap1" <<~ ref adaptGraphSchemaDef @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
-      "toDef" <~ ("pair" ~> Module.definitionType $ Module.typeDefinition (first $ var "pair") (second $ var "pair")) $
-      produce $ pair (var "graph") (Lists.map (var "toDef") $
-        Lists.filter ("p" ~> Sets.member (first $ var "p") (var "names")) $
-        Maps.toList $ var "tmap1"))
-    ( "graph1" <<~ ref adaptDataGraphDef @@ var "constraints" @@ var "doExpand" @@ var "graph" $
-      "graph2" <<~ ref Inference.inferGraphTypesDef @@ var "graph1" $
-      "toDef" <~ ("el" ~>
-        "ts" <~ Optionals.fromJust (Core.bindingType $ var "el") $
-        Module.definitionTerm $ Module.termDefinition
-          (Core.bindingName $ var "el")
-          (Core.bindingTerm $ var "el")
-          (ref Inference.typeSchemeToFTypeDef @@ var "ts")) $
-      produce $ pair (var "graph2") (Lists.map (var "toDef") $
-        Lists.filter ("e" ~> Sets.member (Core.bindingName $ var "e") (var "names")) $
-        Maps.elems $ Graph.graphElements $ var "graph2"))
+dataGraphToDefinitionsDef :: TBinding (LanguageConstraints -> Bool -> Graph -> [[Name]] -> Flow s (Graph, [[TermDefinition]]))
+dataGraphToDefinitionsDef = define "dataGraphToDefinitions" $
+  doc ("Given a data graph along with language constraints and a designated list of element names,"
+    <> " adapt the graph to the language constraints, perform inference,"
+    <> " then return a corresponding term definition for each element name.") $
+  "constraints" ~> "doExpand" ~> "graph" ~> "nameLists" ~>
+  "graph1" <<~ ref adaptDataGraphDef @@ var "constraints" @@ var "doExpand" @@ var "graph" $
+  "graph2" <<~ ref Inference.inferGraphTypesDef @@ var "graph1" $
+  "toDef" <~ ("el" ~>
+    "ts" <~ Optionals.fromJust (Core.bindingType $ var "el") $
+    Module.termDefinition
+      (Core.bindingName $ var "el")
+      (Core.bindingTerm $ var "el")
+      (ref Schemas.typeSchemeToFTypeDef @@ var "ts")) $
+  produce $ pair
+    (var "graph2")
+    (Lists.map
+      ("names" ~> Lists.map (var "toDef") $
+        Lists.map ("n" ~> Optionals.fromJust $ Maps.lookup (var"n") (Graph.graphElements $ var "graph2")) (var "names"))
+      (var "nameLists"))
+
+schemaGraphToDefinitionsDef :: TBinding (LanguageConstraints -> Graph -> [[Name]] -> Flow s (M.Map Name Type, [[TypeDefinition]]))
+schemaGraphToDefinitionsDef = define "schemaGraphToDefinitions" $
+  doc ("Given a schema graph along with language constraints and a designated list of element names,"
+    <> " adapt the graph to the language constraints,"
+    <> " then return a corresponding type definition for each element name.") $
+  "constraints" ~> "graph" ~> "nameLists" ~>
+  "litmap" <~ ref adaptLiteralTypesMapDef @@ var "constraints" $
+  "tmap0" <<~ ref Schemas.graphAsTypesDef @@ var "graph" $
+  "tmap1" <<~ ref adaptGraphSchemaDef @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
+  "toDef" <~ ("pair" ~> Module.typeDefinition (first $ var "pair") (second $ var "pair")) $
+  produce $ pair
+    (var "tmap1")
+    (Lists.map
+      ("names" ~> Lists.map (var "toDef") $
+        Lists.map ("n" ~> pair (var "n") (Optionals.fromJust $ Maps.lookup (var "n") (var "tmap1"))) (var "names"))
+      (var "nameLists"))
 
 termAlternativesDef :: TBinding (Term -> Flow Graph [Term])
 termAlternativesDef = define "termAlternatives" $
