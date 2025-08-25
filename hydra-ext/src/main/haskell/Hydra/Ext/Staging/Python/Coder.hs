@@ -1,7 +1,6 @@
 module Hydra.Ext.Staging.Python.Coder (moduleToPython) where
 
 import Hydra.Kernel
-import Hydra.Adapt.Modules
 import Hydra.Ext.Python.Language
 import Hydra.Dsl.Terms
 import qualified Hydra.Ext.Python.Syntax as Py
@@ -124,9 +123,10 @@ encodeDefinition env def = case def of
   DefinitionTerm (TermDefinition name term typ) -> withTrace ("data element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTermDescription term
     g <- getState
-    stmts <- encodeTermAssignment env name (deannotateTerm $ expandLambdas g term) typ comment
+    stmts <- encodeTermAssignment env name term typ comment
     return [stmts]
   DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name) $ do
+--  DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name ++ ": " ++ ShowCore.type_ typ) $ do
     comment <- fmap normalizeComment <$> getTypeDescription typ
     encodeTypeAssignment env name typ comment
 
@@ -239,13 +239,12 @@ encodeLiteralType lt = do
         _ -> fail $ "unsupported floating-point type: " ++ show ft
       LiteralTypeInteger it -> case it of
         IntegerTypeBigint -> pure "int"
---        _ -> fail $ "unsupported integer type: " ++ show it
-        _ -> pure "int" -- TODO: restore the failure behavior; the fact that the int32 type is appearing here is a bug
+        _ -> fail $ "unsupported integer type: " ++ show it
       LiteralTypeString -> pure "str"
 
-encodeModule :: Module -> Flow Graph Py.Module
-encodeModule mod = do
-    defs <- reorderDefs <$> adaptedModuleDefinitions pythonLanguage mod
+encodeModule :: Module -> [Definition] -> Flow Graph Py.Module
+encodeModule mod defs0 = do
+    let defs = reorderDefs defs0
     let meta = gatherMetadata defs
     let namespaces = findNamespaces defs meta
     let tvars = pythonModuleMetadataTypeVariables meta
@@ -486,6 +485,7 @@ encodeTopLevelTerm env term = if L.length args == 1
 
 encodeType :: PythonEnvironment -> Type -> Flow Graph Py.Expression
 encodeType env typ = case deannotateType typ of
+--encodeType env typ = withTrace ("encode type: " <> ShowCore.type_ typ) $ case deannotateType typ of
     TypeApplication at -> encodeApplicationType env at
     TypeFunction ft -> encodeFunctionType env ft
     TypeForall lt -> encodeForallType env lt
@@ -690,9 +690,9 @@ isUnaryFunction el = case bindingType el of
   Nothing -> False
   Just ts -> typeArity (typeSchemeType ts) == 1
 
-moduleToPython :: Module -> Flow Graph (M.Map FilePath String)
-moduleToPython mod = do
-  file <- encodeModule mod
+moduleToPython :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
+moduleToPython mod defs = do
+  file <- encodeModule mod defs
   let s = printExpr $ parenthesize $ PySer.encodeModule file
   let path = namespaceToFilePath CaseConventionLowerSnake (FileExtension "py") $ moduleNamespace mod
   return $ M.fromList [(path, s)]
