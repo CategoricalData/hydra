@@ -9,6 +9,8 @@ import Hydra.Kernel
 import Hydra.Generation
 import Hydra.Ext.Sources.All
 
+import Hydra.Ext.Python.Language
+
 import Hydra.Ext.Staging.Cpp.Coder
 import Hydra.Ext.Staging.Graphql.Coder
 import Hydra.Ext.Staging.Java.Coder
@@ -40,7 +42,7 @@ writeProtobuf :: FP.FilePath -> [Module] -> IO ()
 writeProtobuf = generateSources moduleToProtobuf
 
 writePython :: FP.FilePath -> [Module] -> IO ()
-writePython = generateSources moduleToPython
+writePython = generateSourcesSimple moduleToPython pythonLanguage True
 
 writeScala :: FP.FilePath -> [Module] -> IO ()
 writeScala = generateSources moduleToScala
