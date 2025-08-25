@@ -21,7 +21,7 @@ from hydra.core import (
     IntegerValue,
     Lambda,
     Let,
-    LetBinding,
+    Binding,
     Literal,
     Name,
     Projection,
@@ -185,7 +185,7 @@ def let_multi(bindings: Sequence[tuple[str, Term]], body: Term) -> Term:
     """Construct a 'let' term with multiple bindings."""
     return TermLet(
         Let(
-            tuple([LetBinding(Name(name), term, None) for name, term in bindings]),
+            tuple([Binding(Name(name), term, None) for name, term in bindings]),
             body,
         )
     )
@@ -193,7 +193,7 @@ def let_multi(bindings: Sequence[tuple[str, Term]], body: Term) -> Term:
 
 def let_term(v: Name, t1: Term, t2: Term) -> Term:
     """Construct a 'let' term with a single binding."""
-    return TermLet(Let(tuple([LetBinding(v, t1, None)]), t2))
+    return TermLet(Let(tuple([Binding(v, t1, None)]), t2))
 
 
 def list_(terms: Sequence[Term]) -> Term:
@@ -355,8 +355,8 @@ def variant(tname: Name, fname: Name, term: Term) -> Term:
 def with_(env: Term, bindings: Sequence[Field]) -> Term:
     """Construct a with variant term."""
 
-    def to_binding(field: Field) -> LetBinding:
-        return LetBinding(field.name, field.term, None)
+    def to_binding(field: Field) -> Binding:
+        return Binding(field.name, field.term, None)
 
     return TermLet(Let(tuple([to_binding(field) for field in bindings]), env))
 

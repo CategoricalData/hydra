@@ -30,9 +30,9 @@ test_type_polymorphic_wrapper = hydra.core.TypeForall(hydra.core.ForallType(hydr
 
 test_type_polymorphic_wrapper_name = hydra.core.Name("PolymorphicWrapper")
 
-test_element_arthur = hydra.graph.Element(hydra.core.Name("firstName"), "test_data_arthur", hydra.core.TypeScheme(tuple([]), hydra.core.TypeVariable("test_type_person_name")))
+test_element_arthur = hydra.core.Binding(hydra.core.Name("firstName"), "test_data_arthur", hydra.core.TypeScheme(tuple([]), hydra.core.TypeVariable("test_type_person_name")))
 
-test_element_first_name = hydra.graph.Element(hydra.core.Name("firstName"), hydra.core.TermFunction(hydra.core.FunctionElimination(hydra.core.EliminationRecord(hydra.core.Projection("test_type_person_name", hydra.core.Name("firstName"))))), hydra.core.TypeScheme(tuple([]), hydra.core.TypeFunction(hydra.core.FunctionType(hydra.core.TypeVariable("test_type_person_name"), hydra.core.TypeLiteral(hydra.core.LiteralTypeString(None))))))
+test_element_first_name = hydra.core.Binding(hydra.core.Name("firstName"), hydra.core.TermFunction(hydra.core.FunctionElimination(hydra.core.EliminationRecord(hydra.core.Projection("test_type_person_name", hydra.core.Name("firstName"))))), hydra.core.TypeScheme(tuple([]), hydra.core.TypeFunction(hydra.core.FunctionType(hydra.core.TypeVariable("test_type_person_name"), hydra.core.TypeLiteral(hydra.core.LiteralTypeString(None))))))
 
 test_namespace = hydra.module.Namespace("testGraph")
 

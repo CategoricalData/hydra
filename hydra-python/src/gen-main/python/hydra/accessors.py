@@ -75,7 +75,7 @@ class TermAccessorSetElement(Node[int]): ...
 
 class TermAccessorSumTerm(Node[None]): ...
 
-class TermAccessorTypeAbstractionBody(Node[None]): ...
+class TermAccessorTypeLambdaBody(Node[None]): ...
 
 class TermAccessorTypeApplicationTerm(Node[None]): ...
 
@@ -84,7 +84,7 @@ class TermAccessorInjectionTerm(Node[None]): ...
 class TermAccessorWrappedTerm(Node[None]): ...
 
 # A function which maps from a term to a particular immediate subterm.
-type TermAccessor = TermAccessorAnnotatedSubject | TermAccessorApplicationFunction | TermAccessorApplicationArgument | TermAccessorLambdaBody | TermAccessorUnionCasesDefault | TermAccessorUnionCasesBranch | TermAccessorLetEnvironment | TermAccessorLetBinding | TermAccessorListElement | TermAccessorMapKey | TermAccessorMapValue | TermAccessorOptionalTerm | TermAccessorProductTerm | TermAccessorRecordField | TermAccessorSetElement | TermAccessorSumTerm | TermAccessorTypeAbstractionBody | TermAccessorTypeApplicationTerm | TermAccessorInjectionTerm | TermAccessorWrappedTerm
+type TermAccessor = TermAccessorAnnotatedSubject | TermAccessorApplicationFunction | TermAccessorApplicationArgument | TermAccessorLambdaBody | TermAccessorUnionCasesDefault | TermAccessorUnionCasesBranch | TermAccessorLetEnvironment | TermAccessorLetBinding | TermAccessorListElement | TermAccessorMapKey | TermAccessorMapValue | TermAccessorOptionalTerm | TermAccessorProductTerm | TermAccessorRecordField | TermAccessorSetElement | TermAccessorSumTerm | TermAccessorTypeLambdaBody | TermAccessorTypeApplicationTerm | TermAccessorInjectionTerm | TermAccessorWrappedTerm
 
 TERM_ACCESSOR__NAME = hydra.core.Name("hydra.accessors.TermAccessor")
 TERM_ACCESSOR__ANNOTATED_SUBJECT__NAME = hydra.core.Name("annotatedSubject")
@@ -103,7 +103,7 @@ TERM_ACCESSOR__PRODUCT_TERM__NAME = hydra.core.Name("productTerm")
 TERM_ACCESSOR__RECORD_FIELD__NAME = hydra.core.Name("recordField")
 TERM_ACCESSOR__SET_ELEMENT__NAME = hydra.core.Name("setElement")
 TERM_ACCESSOR__SUM_TERM__NAME = hydra.core.Name("sumTerm")
-TERM_ACCESSOR__TYPE_ABSTRACTION_BODY__NAME = hydra.core.Name("typeAbstractionBody")
+TERM_ACCESSOR__TYPE_LAMBDA_BODY__NAME = hydra.core.Name("typeLambdaBody")
 TERM_ACCESSOR__TYPE_APPLICATION_TERM__NAME = hydra.core.Name("typeApplicationTerm")
 TERM_ACCESSOR__INJECTION_TERM__NAME = hydra.core.Name("injectionTerm")
 TERM_ACCESSOR__WRAPPED_TERM__NAME = hydra.core.Name("wrappedTerm")

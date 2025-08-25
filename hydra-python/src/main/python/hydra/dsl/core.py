@@ -200,28 +200,28 @@
 # lambdaDomain :: TTerm (Lambda -> Maybe Type)
 # lambdaDomain = Base.project _Lambda _Lambda_domain
 
-# letBinding :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm LetBinding
-# letBinding name term mtype = Base.record _LetBinding [
-#   _LetBinding_name>>: name,
-#   _LetBinding_term>>: term,
-#   _LetBinding_type>>: mtype]
+# letBinding :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm Binding
+# letBinding name term mtype = Base.record _Binding [
+#   _Binding_name>>: name,
+#   _Binding_term>>: term,
+#   _Binding_type>>: mtype]
 
-# letExpression :: TTerm [LetBinding] -> TTerm Term -> TTerm Let
+# letExpression :: TTerm [Binding] -> TTerm Term -> TTerm Let
 # letExpression bindings environment = Base.record _Let [
 #   _Let_bindings>>: bindings,
 #   _Let_environment>>: environment]
 
-# letBindings :: TTerm (Let -> [LetBinding])
+# letBindings :: TTerm (Let -> [Binding])
 # letBindings = Base.project _Let _Let_bindings
 
-# letBindingName :: TTerm (LetBinding -> Name)
-# letBindingName = Base.project _LetBinding _LetBinding_name
+# letBindingName :: TTerm (Binding -> Name)
+# letBindingName = Base.project _Binding _Binding_name
 
-# letBindingTerm :: TTerm (LetBinding -> Term)
-# letBindingTerm = Base.project _LetBinding _LetBinding_term
+# letBindingTerm :: TTerm (Binding -> Term)
+# letBindingTerm = Base.project _Binding _Binding_term
 
-# letBindingType :: TTerm (LetBinding -> Y.Maybe TypeScheme)
-# letBindingType = Base.project _LetBinding _LetBinding_type
+# letBindingType :: TTerm (Binding -> Y.Maybe TypeScheme)
+# letBindingType = Base.project _Binding _Binding_type
 
 # letEnvironment :: TTerm (Let -> Term)
 # letEnvironment = Base.project _Let _Let_environment
