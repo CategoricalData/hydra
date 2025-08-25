@@ -125,7 +125,7 @@ FLOAT_TYPE__BIGFLOAT__NAME = Name("bigfloat")
 FLOAT_TYPE__FLOAT32__NAME = Name("float32")
 FLOAT_TYPE__FLOAT64__NAME = Name("float64")
 
-class FloatValueBigfloat(Node[float]):
+class FloatValueBigfloat(Node[str]):
     """An arbitrary-precision floating-point value."""
 
 class FloatValueFloat32(Node[float]):
@@ -402,7 +402,7 @@ class Sum:
     
     index: int
     size: int
-    term: Annotated[Term, "A data term"]
+    term: Term
 
 SUM__NAME = Name("hydra.core.Sum")
 SUM__INDEX__NAME = Name("index")
