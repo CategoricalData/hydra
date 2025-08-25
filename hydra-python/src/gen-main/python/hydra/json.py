@@ -13,7 +13,7 @@ class ValueBoolean(Node[bool]):
 class ValueNull(Node[None]):
     """JSON's null value."""
 
-class ValueNumber(Node[float]):
+class ValueNumber(Node[str]):
     """A numeric value."""
 
 class ValueObject(Node["FrozenDict[str, Value]"]):
