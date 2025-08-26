@@ -165,20 +165,18 @@ encodeFunctionDefinition env name args body doms cod comment prefixes = do
     let params = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters pyArgs [] Nothing
     stmts <- encodeTopLevelTerm env body
     let block = indentedBlock comment [prefixes ++ stmts]
-    returnType <- tryType cod
+    returnType <- getType cod
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing
-      $ Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) [] (Just params) returnType Nothing block
+      $ Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) [] (Just params) (Just returnType) Nothing block
   where
     toParam name typ = do
-      pyTyp <- tryType typ
-      return $ Py.ParamNoDefault (Py.Param (encodeName False CaseConventionLowerSnake env name) $ fmap Py.Annotation pyTyp) Nothing
-    -- TODO: this is a workaround for unresolved type variables from type inference. This function should reduce to "encodeType env" once that issue is fixed.
-    tryType typ = if isTemporaryTypeVariable typ
-      then pure Nothing
-      else Just <$> encodeType env typ
-    isTemporaryTypeVariable typ = case deannotateType typ of
-      TypeVariable (Name v) -> L.head v == 't' && Y.isJust (TR.readMaybe (L.tail v) :: Maybe Int)
-      _ -> False
+      pyTyp <- getType typ
+      return $ Py.ParamNoDefault (Py.Param (encodeName False CaseConventionLowerSnake env name) $ Just $ Py.Annotation pyTyp) Nothing -- TODO
+    getType typ = case deannotateType typ of
+      TypeVariable v -> case M.lookup v (typeContextTypes $ pythonEnvironmentTypeContext env) of
+        Nothing -> encodeType env $ TypeVariable v
+        Just t -> encodeType env t
+      t -> encodeType env t
 
 encodeFunctionType :: PythonEnvironment -> FunctionType -> Flow Graph Py.Expression
 encodeFunctionType env ft = do
