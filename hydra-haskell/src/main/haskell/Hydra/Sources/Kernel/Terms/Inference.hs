@@ -299,17 +299,15 @@ inferGraphTypesDef = define "inferGraphTypes" $
     Core.termLet $ Core.let_
       (Lists.map (var "toBinding") $ Maps.elems $ Graph.graphElements $ var "g")
       (Graph.graphBody $ var "g")) $
-  "withResult" <~ ("result" ~>
-    "term" <~ Typing.inferenceResultTerm (var "result") $
-    "ts" <~ Typing.inferenceResultType (var "result") $
-    cases _Term (ref Rewriting.normalizeTypeVariablesInTermDef @@ var "term") Nothing [
-      _Term_let>>: "l" ~> Flows.pure $ var "fromLetTerm" @@ var "l",
-      _Term_variable>>: constant $ Flows.fail $ string "Expected inferred graph as let term"]) $
   trace "graph inference" $
   "cx" <<~ ref graphToInferenceContextDef @@ var "g0" $
-  Flows.bind
-    (ref inferTypeOfTermDef @@ var "cx" @@ (var "toLetTerm" @@ var "g0") @@ string "graph term")
-    (var "withResult")
+  "result" <<~ ref inferTypeOfTermDef @@ var "cx" @@ (var "toLetTerm" @@ var "g0") @@ string "graph term" $
+  "term" <~ Typing.inferenceResultTerm (var "result") $
+  "ts" <~ Typing.inferenceResultType (var "result") $
+  cases _Term (ref Rewriting.normalizeTypeVariablesInTermDef @@ var "term")
+    Nothing [
+    _Term_let>>: "l" ~> Flows.pure $ var "fromLetTerm" @@ var "l",
+    _Term_variable>>: constant $ Flows.fail $ string "Expected inferred graph as let term"]
 
 -- Note: this operation is expensive, as it creates a new typing environment for each individual term
 inferInGraphContextDef :: TBinding (Term -> Flow Graph InferenceResult)
@@ -337,7 +335,7 @@ inferManyDef = define "inferMany" $
      "e2" <~ first (var "result2") $
      "t2" <~ first (second $ var "result2") $
      "s2" <~ second (second $ var "result2") $
-     Flows.pure $ pair
+     produce $ pair
        (Lists.cons (ref Substitution.substTypesInTermDef @@ var "s2" @@ var "e1") (var "e2"))
        (pair
          (Lists.cons (ref Substitution.substInTypeDef @@ var "s2" @@ var "t1") (var "t2"))
@@ -379,16 +377,14 @@ inferTypeOfAnnotatedTermDef = define "inferTypeOfAnnotatedTerm" $
   "cx" ~> "at" ~>
   "term" <~ Core.annotatedTermSubject (var "at") $
   "ann" <~ Core.annotatedTermAnnotation (var "at") $
-  Flows.map
-    ("result" ~>
-      "iterm" <~ Typing.inferenceResultTerm (var "result") $
-      "itype" <~ Typing.inferenceResultType (var "result") $
-      "isubst" <~ Typing.inferenceResultSubst (var "result") $
-      Typing.inferenceResult
-        (Core.termAnnotated $ Core.annotatedTerm (var "iterm") (var "ann"))
-        (var "itype")
-        (var "isubst"))
-    (ref inferTypeOfTermDef @@ var "cx" @@ var "term" @@ string "annotated term")
+  "result" <<~ ref inferTypeOfTermDef @@ var "cx" @@ var "term" @@ string "annotated term" $
+  "iterm" <~ Typing.inferenceResultTerm (var "result") $
+  "itype" <~ Typing.inferenceResultType (var "result") $
+  "isubst" <~ Typing.inferenceResultSubst (var "result") $
+  produce $ Typing.inferenceResult
+    (Core.termAnnotated $ Core.annotatedTerm (var "iterm") (var "ann"))
+    (var "itype")
+    (var "isubst")
 
 inferTypeOfApplicationDef :: TBinding (InferenceContext -> Application -> Flow s InferenceResult)
 inferTypeOfApplicationDef = define "inferTypeOfApplication" $
