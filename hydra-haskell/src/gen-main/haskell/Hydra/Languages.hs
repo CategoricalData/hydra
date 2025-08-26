@@ -3,6 +3,7 @@
 module Hydra.Languages where
 
 import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -32,4 +33,5 @@ hydraLanguage = Coders.Language {
     integerTypes = (Sets.fromList Variants.integerTypes)
     termVariants = (Sets.fromList Variants.termVariants)
     typeVariants = (Sets.fromList Variants.typeVariants)
-    types = (\_ -> True)
+    types = (\t -> (\x -> case x of
+      _ -> True) t)

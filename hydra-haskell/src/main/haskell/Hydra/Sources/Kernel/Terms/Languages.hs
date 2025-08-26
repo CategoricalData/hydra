@@ -61,7 +61,7 @@ hydraLanguageDef = definitionInModule module_ "hydraLanguage" $
   "integerTypes">: Sets.fromList $ ref Variants.integerTypesDef,
   "termVariants">: Sets.fromList $ ref Variants.termVariantsDef,
   "typeVariants">: Sets.fromList $ ref Variants.typeVariantsDef,
-  "types">: constant true] $
+  "types">: "t" ~> cases _Type (var "t") (Just true) []] $
   Coders.language
     (Coders.languageName "hydra.core")
     (Coders.languageConstraints
