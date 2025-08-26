@@ -151,15 +151,13 @@ inferGraphTypes g0 =
             in (Core.TermLet (Core.Let {
               Core.letBindings = (Lists.map toBinding (Maps.elems (Graph.graphElements g))),
               Core.letEnvironment = (Graph.graphBody g)})))
-    in  
-      let withResult = (\result ->  
-              let term = (Typing_.inferenceResultTerm result)
-              in  
-                let ts = (Typing_.inferenceResultType result)
-                in ((\x -> case x of
-                  Core.TermLet v1 -> (Flows.pure (fromLetTerm v1))
-                  Core.TermVariable _ -> (Flows.fail "Expected inferred graph as let term")) (Rewriting.normalizeTypeVariablesInTerm term)))
-      in (Monads.withTrace "graph inference" (Flows.bind (graphToInferenceContext g0) (\cx -> Flows.bind (inferTypeOfTerm cx (toLetTerm g0) "graph term") withResult)))
+    in (Monads.withTrace "graph inference" (Flows.bind (graphToInferenceContext g0) (\cx -> Flows.bind (inferTypeOfTerm cx (toLetTerm g0) "graph term") (\result ->  
+      let term = (Typing_.inferenceResultTerm result)
+      in  
+        let ts = (Typing_.inferenceResultType result)
+        in ((\x -> case x of
+          Core.TermLet v1 -> (Flows.pure (fromLetTerm v1))
+          Core.TermVariable _ -> (Flows.fail "Expected inferred graph as let term")) (Rewriting.normalizeTypeVariablesInTerm term))))))
 
 -- | Infer the type of a term in graph context
 inferInGraphContext :: (Core.Term -> Compute.Flow Graph.Graph Typing_.InferenceResult)
@@ -191,18 +189,18 @@ inferTypeOfAnnotatedTerm cx at =
   let term = (Core.annotatedTermSubject at)
   in  
     let ann = (Core.annotatedTermAnnotation at)
-    in (Flows.map (\result ->  
+    in (Flows.bind (inferTypeOfTerm cx term "annotated term") (\result ->  
       let iterm = (Typing_.inferenceResultTerm result)
       in  
         let itype = (Typing_.inferenceResultType result)
         in  
           let isubst = (Typing_.inferenceResultSubst result)
-          in Typing_.InferenceResult {
+          in (Flows.pure (Typing_.InferenceResult {
             Typing_.inferenceResultTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
               Core.annotatedTermSubject = iterm,
               Core.annotatedTermAnnotation = ann})),
             Typing_.inferenceResultType = itype,
-            Typing_.inferenceResultSubst = isubst}) (inferTypeOfTerm cx term "annotated term"))
+            Typing_.inferenceResultSubst = isubst}))))
 
 inferTypeOfApplication :: (Typing_.InferenceContext -> Core.Application -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfApplication cx app =  
