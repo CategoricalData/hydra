@@ -151,9 +151,9 @@ floatValueDef :: TBinding (FloatValue -> String)
 floatValueDef = define "float" $
   doc "Show a float value as a string" $
   lambda "fv" $ cases _FloatValue (var "fv") Nothing [
-    _FloatValue_bigfloat>>: lambda "v" $ Literals.showBigfloat $ var "v",
-    _FloatValue_float32>>: lambda "v" $ Literals.showFloat32 $ var "v",
-    _FloatValue_float64>>: lambda "v" $ Literals.showFloat64 $ var "v"]
+    _FloatValue_bigfloat>>: "v" ~> Literals.showBigfloat (var "v") ++ ":bigfloat",
+    _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v") ++ ":float32",
+    _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v") ++ ":float64"]
 
 floatTypeDef :: TBinding (FloatType -> String)
 floatTypeDef = define "floatType" $
@@ -187,15 +187,15 @@ integerValueDef :: TBinding (IntegerValue -> String)
 integerValueDef = define "integer" $
   doc "Show an integer value as a string" $
   lambda "iv" $ cases _IntegerValue (var "iv") Nothing [
-    _IntegerValue_bigint>>: lambda "v" $ Literals.showBigint $ var "v",
-    _IntegerValue_int8>>: lambda "v" $ Literals.showInt8 $ var "v",
-    _IntegerValue_int16>>: lambda "v" $ Literals.showInt16 $ var "v",
-    _IntegerValue_int32>>: lambda "v" $ Literals.showInt32 $ var "v",
-    _IntegerValue_int64>>: lambda "v" $ Literals.showInt64 $ var "v",
-    _IntegerValue_uint8>>: lambda "v" $ Literals.showUint8 $ var "v",
-    _IntegerValue_uint16>>: lambda "v" $ Literals.showUint16 $ var "v",
-    _IntegerValue_uint32>>: lambda "v" $ Literals.showUint32 $ var "v",
-    _IntegerValue_uint64>>: lambda "v" $ Literals.showUint64 $ var "v"]
+    _IntegerValue_bigint>>: "v" ~> Literals.showBigint (var "v") ++ ":bigint",
+    _IntegerValue_int8>>: "v" ~> Literals.showInt8 (var "v") ++ ":int8",
+    _IntegerValue_int16>>: "v" ~> Literals.showInt16 (var "v") ++ ":int16",
+    _IntegerValue_int32>>: "v" ~> Literals.showInt32 (var "v") ++ ":int32",
+    _IntegerValue_int64>>: "v" ~> Literals.showInt64 (var "v") ++ ":int64",
+    _IntegerValue_uint8>>: "v" ~> Literals.showUint8 (var "v") ++ ":uint8",
+    _IntegerValue_uint16>>: "v" ~> Literals.showUint16 (var "v") ++ ":uint16",
+    _IntegerValue_uint32>>: "v" ~> Literals.showUint32 (var "v") ++ ":uint32",
+    _IntegerValue_uint64>>: "v" ~> Literals.showUint64 (var "v") ++ ":uint64"]
 
 integerTypeDef :: TBinding (IntegerType -> String)
 integerTypeDef = define "integerType" $
