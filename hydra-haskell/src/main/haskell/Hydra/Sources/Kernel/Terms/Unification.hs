@@ -71,7 +71,7 @@ joinTypesDef = define "joinTypes" $
     "sleft">: ref Rewriting.deannotateTypeDef @@ var  "left",
     "sright">: ref Rewriting.deannotateTypeDef @@ var "right",
     "joinOne">: lambdas ["l", "r"] $ Typing.typeConstraint (var "l") (var "r") ("join types; " ++ var "comment"),
-    "cannotUnify">: Flows.fail ("Cannot unify " ++ (ref ShowCore.typeDef @@ var "sleft") ++ " with " ++ (ref ShowCore.typeDef @@ var "sright")),
+    "cannotUnify">: Flows.fail ("cannot unify " ++ (ref ShowCore.typeDef @@ var "sleft") ++ " with " ++ (ref ShowCore.typeDef @@ var "sright")),
     "assertEqual">: Logic.ifElse
       (Equality.equal (var "sleft") (var "sright"))
       (Flows.pure $ list [])

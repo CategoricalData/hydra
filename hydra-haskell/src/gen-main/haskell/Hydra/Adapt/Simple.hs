@@ -67,7 +67,7 @@ adaptDataGraph constraints doExpand graph0 =
               in  
                 let gterm1 = (Logic.ifElse doExpand (Reduction.expandLambdas graph0 gterm0) gterm0)
                 in (Flows.bind (adaptTerm constraints litmap gterm1) (\gterm2 ->  
-                  let els1 = (Schemas.termAsGraph gterm1)
+                  let els1 = (Schemas.termAsGraph gterm2)
                   in (Flows.pure (Graph.Graph {
                     Graph.graphElements = els1,
                     Graph.graphEnvironment = env0,
@@ -116,17 +116,12 @@ adaptLiteral lt l = ((\x -> case x of
 
 -- | Attempt to adapt a literal type using the given language constraints
 adaptLiteralType :: (Coders.LanguageConstraints -> Core.LiteralType -> Maybe Core.LiteralType)
-adaptLiteralType constraints lt =  
-  let supported = (Logic.and (Sets.member (Variants.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) ((\x -> case x of
-          Core.LiteralTypeFloat v1 -> (Sets.member v1 (Coders.languageConstraintsFloatTypes constraints))
-          Core.LiteralTypeInteger v1 -> (Sets.member v1 (Coders.languageConstraintsIntegerTypes constraints))
-          _ -> True) lt))
-  in (Logic.ifElse supported (Just lt) ((\x -> case x of
-    Core.LiteralTypeBinary -> (adaptLiteralType constraints Core.LiteralTypeString)
-    Core.LiteralTypeBoolean -> (Optionals.map (\x -> Core.LiteralTypeInteger x) (adaptIntegerType constraints Core.IntegerTypeInt8))
-    Core.LiteralTypeFloat v1 -> (Optionals.map (\x -> Core.LiteralTypeFloat x) (adaptFloatType constraints v1))
-    Core.LiteralTypeInteger v1 -> (Optionals.map (\x -> Core.LiteralTypeInteger x) (adaptIntegerType constraints v1))
-    Core.LiteralTypeString -> Nothing) lt))
+adaptLiteralType constraints lt = (Logic.ifElse (literalTypeSupported constraints lt) Nothing ((\x -> case x of
+  Core.LiteralTypeBinary -> (Just Core.LiteralTypeString)
+  Core.LiteralTypeBoolean -> (Optionals.map (\x -> Core.LiteralTypeInteger x) (adaptIntegerType constraints Core.IntegerTypeInt8))
+  Core.LiteralTypeFloat v1 -> (Optionals.map (\x -> Core.LiteralTypeFloat x) (adaptFloatType constraints v1))
+  Core.LiteralTypeInteger v1 -> (Optionals.map (\x -> Core.LiteralTypeInteger x) (adaptIntegerType constraints v1))
+  _ -> Nothing) lt))
 
 -- | Derive a map of adapted literal types for the given language constraints
 adaptLiteralTypesMap :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType)
@@ -134,43 +129,42 @@ adaptLiteralTypesMap constraints =
   let tryType = (\lt -> Optionals.maybe Nothing (\lt2 -> Just (lt, lt2)) (adaptLiteralType constraints lt))
   in (Maps.fromList (Optionals.cat (Lists.map tryType Variants.literalTypes)))
 
--- | Adapt a literal value using the given language constraints
-adaptLiteralValue :: (M.Map Core.LiteralType Core.LiteralType -> Core.Literal -> Core.Literal)
-adaptLiteralValue mapping l =  
-  let lt = (Variants.literalType l)
-  in (Optionals.maybe (Core.LiteralString (Core_.literal l)) (\lt2 -> adaptLiteral lt2 l) (Maps.lookup lt mapping))
+adaptLiteralValue :: (Ord t0) => (M.Map t0 Core.LiteralType -> t0 -> Core.Literal -> Core.Literal)
+adaptLiteralValue litmap lt l = (Optionals.maybe (Core.LiteralString (Core_.literal l)) (\lt2 -> adaptLiteral lt2 l) (Maps.lookup lt litmap))
 
 -- | Adapt a term using the given language constraints
 adaptTerm :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
-adaptTerm constraints mapping term0 =  
-  let rewrite = (\recurse -> \term -> Flows.bind (recurse term) (\term1 ->  
+adaptTerm constraints litmap term0 =  
+  let rewrite = (\recurse -> \term0 -> Flows.bind (recurse term0) (\term1 ->  
           let tryTerm = (\term ->  
                   let supportedVariant = (Sets.member (Variants.termVariant term) (Coders.languageConstraintsTermVariants constraints))
                   in (Logic.ifElse supportedVariant ((\x -> case x of
-                    Core.TermLiteral v1 -> (Flows.pure (Just (Core.TermLiteral (adaptLiteralValue mapping v1))))
+                    Core.TermLiteral v1 ->  
+                      let lt = (Variants.literalType v1)
+                      in (Flows.pure (Just (Logic.ifElse (literalTypeSupported constraints lt) term (Core.TermLiteral (adaptLiteralValue litmap lt v1)))))
                     _ -> (Flows.pure (Just term))) term) ( 
                     let tryAlts = (\alts -> Logic.ifElse (Lists.null alts) (Flows.pure Nothing) (Flows.bind (tryTerm (Lists.head alts)) (\mterm -> Optionals.maybe (tryAlts (Lists.tail alts)) (\t -> Flows.pure (Just t)) mterm)))
                     in (Flows.bind (termAlternatives term1) (\alts -> tryAlts alts)))))
           in (Flows.bind (tryTerm term1) (\mterm -> Optionals.maybe (Flows.fail (Strings.cat [
             "no alternatives for term: ",
-            (Core_.term term)])) (\term2 -> Flows.pure term2) mterm))))
+            (Core_.term term1)])) (\term2 -> Flows.pure term2) mterm))))
   in (Rewriting.rewriteTermM rewrite term0)
 
 adaptType :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.Type -> Compute.Flow t0 Core.Type)
 adaptType constraints litmap type0 =  
-  let rewrite = (\recurse -> \type_ -> Flows.bind (recurse type_) (\type1 ->  
-          let tryType = (\type_ ->  
-                  let supportedVariant = (Sets.member (Variants.typeVariant type_) (Coders.languageConstraintsTypeVariants constraints))
+  let rewrite = (\recurse -> \typ -> Flows.bind (recurse typ) (\type1 ->  
+          let tryType = (\typ ->  
+                  let supportedVariant = (Sets.member (Variants.typeVariant typ) (Coders.languageConstraintsTypeVariants constraints))
                   in (Logic.ifElse supportedVariant ((\x -> case x of
-                    Core.TypeLiteral v1 -> (Optionals.maybe (Just (Core.TypeLiteral Core.LiteralTypeString)) (\lt2 -> Just (Core.TypeLiteral lt2)) (Maps.lookup v1 litmap))
-                    _ -> (Just type_)) type_) ( 
+                    Core.TypeLiteral v1 -> (Logic.ifElse (literalTypeSupported constraints v1) (Just typ) (Optionals.maybe (Just (Core.TypeLiteral Core.LiteralTypeString)) (\lt2 -> Just (Core.TypeLiteral lt2)) (Maps.lookup v1 litmap)))
+                    _ -> (Just typ)) typ) ( 
                     let tryAlts = (\alts -> Logic.ifElse (Lists.null alts) Nothing (Optionals.maybe (tryAlts (Lists.tail alts)) (\t -> Just t) (tryType (Lists.head alts))))
                     in  
                       let alts = (typeAlternatives type1)
                       in (tryAlts alts))))
           in (Optionals.maybe (Flows.fail (Strings.cat [
             "no alternatives for type: ",
-            (Core_.type_ type_)])) (\type2 -> Flows.pure type2) (tryType type1))))
+            (Core_.type_ typ)])) (\type2 -> Flows.pure type2) (tryType type1))))
   in (Rewriting.rewriteTypeM rewrite type0)
 
 -- | Given a data graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, perform inference, then return a corresponding term definition for each element name.
@@ -183,6 +177,13 @@ dataGraphToDefinitions constraints doExpand graph nameLists = (Flows.bind (adapt
             Module.termDefinitionTerm = (Core.bindingTerm el),
             Module.termDefinitionType = (Schemas.typeSchemeToFType ts)})
   in (Flows.pure (graph2, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> Optionals.fromJust (Maps.lookup n (Graph.graphElements graph2))) names)) nameLists))))))
+
+-- | Check if a literal type is supported by the given language constraints
+literalTypeSupported :: (Coders.LanguageConstraints -> Core.LiteralType -> Bool)
+literalTypeSupported constraints lt = (Logic.ifElse (Sets.member (Variants.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) ((\x -> case x of
+  Core.LiteralTypeFloat v1 -> (Sets.member v1 (Coders.languageConstraintsFloatTypes constraints))
+  Core.LiteralTypeInteger v1 -> (Sets.member v1 (Coders.languageConstraintsIntegerTypes constraints))
+  _ -> True) lt) False)
 
 -- | Given a schema graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, then return a corresponding type definition for each element name.
 schemaGraphToDefinitions :: (Coders.LanguageConstraints -> Graph.Graph -> [[Core.Name]] -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type, [[Module.TypeDefinition]]))
