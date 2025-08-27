@@ -69,8 +69,10 @@ module_ = Module (Namespace "hydra.adapt.simple") elements
       el adaptLiteralTypeDef,
       el adaptLiteralTypesMapDef,
       el adaptLiteralValueDef,
+      el adaptPrimitiveDef,
       el adaptTermDef,
       el adaptTypeDef,
+      el adaptTypeSchemeDef,
       el dataGraphToDefinitionsDef,
       el literalTypeSupportedDef,
       el schemaGraphToDefinitionsDef,
@@ -118,6 +120,7 @@ adaptDataGraphDef = define "adaptDataGraph" $
     (var "gterm0") $
   "gterm2" <<~ ref adaptTermDef @@ var "constraints" @@ var "litmap" @@ var "gterm1" $
   "els1" <~ ref Schemas.termAsGraphDef @@ var "gterm2" $
+  "prims1" <<~ Flows.mapElems (ref adaptPrimitiveDef @@ var "constraints" @@ var "litmap") (var "prims0") $
 --  Flows.fail $ "adapted data graph: " ++ (ref ShowCore.termDef @@ var "gterm2")
 --  Flows.fail $ "schema graph: " ++ (optCases (var "schema1")
 --    ("none")
@@ -127,7 +130,7 @@ adaptDataGraphDef = define "adaptDataGraph" $
     (var "env0")
     Maps.empty
     Core.termUnit
-    (var "prims0")
+    (var "prims1")
     (var "schema1")
 
 adaptGraphSchemaDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> M.Map Name Type -> Flow s (M.Map Name Type))
@@ -216,6 +219,14 @@ adaptLiteralValueDef = define "adaptLiteralValue" $
     (Core.literalString $ ref ShowCore.literalDef @@ var "l")
     ("lt2" ~> ref adaptLiteralDef @@ var "lt2" @@ var "l")
 
+adaptPrimitiveDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Primitive -> Flow s Primitive)
+adaptPrimitiveDef = define "adaptPrimitive" $
+  doc "Adapt a primitive to the given language constraints, prior to inference" $
+  "constraints" ~> "litmap" ~> "prim0" ~>
+  "ts0" <~ Graph.primitiveType (var "prim0") $
+  "ts1" <<~ ref adaptTypeSchemeDef @@ var "constraints" @@ var "litmap" @@ var "ts0" $
+  produce $ Graph.primitiveWithType (var "prim0") (var "ts1")
+
 -- Note: this function could be made more efficient through precomputation of alternatives,
 --       similar to what is done for literals.
 adaptTermDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Term -> Flow Graph Term)
@@ -279,6 +290,15 @@ adaptTypeDef = define "adaptType" $
       (Flows.fail $ "no alternatives for type: " ++ (ref ShowCore.typeDef @@ var "typ"))
       ("type2" ~> produce $ var "type2")) $
   ref Rewriting.rewriteTypeMDef @@ var "rewrite" @@ var "type0"
+
+adaptTypeSchemeDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> TypeScheme -> Flow s TypeScheme)
+adaptTypeSchemeDef = define "adaptTypeScheme" $
+  doc "Adapt a type scheme to the given language constraints, prior to inference" $
+  "constraints" ~> "litmap" ~> "ts0" ~>
+  "vars0" <~ Core.typeSchemeVariables (var "ts0") $
+  "t0" <~ Core.typeSchemeType (var "ts0") $
+  "t1" <<~ ref adaptTypeDef @@ var "constraints" @@ var "litmap" @@ var "t0" $
+  produce $ Core.typeScheme (var "vars0") (var "t1")
 
 dataGraphToDefinitionsDef :: TBinding (LanguageConstraints -> Bool -> Graph -> [[Name]] -> Flow s (Graph, [[TermDefinition]]))
 dataGraphToDefinitionsDef = define "dataGraphToDefinitions" $
