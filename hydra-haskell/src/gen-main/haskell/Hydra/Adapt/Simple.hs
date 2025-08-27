@@ -68,13 +68,13 @@ adaptDataGraph constraints doExpand graph0 =
                 let gterm1 = (Logic.ifElse doExpand (Reduction.expandLambdas graph0 gterm0) gterm0)
                 in (Flows.bind (adaptTerm constraints litmap gterm1) (\gterm2 ->  
                   let els1 = (Schemas.termAsGraph gterm2)
-                  in (Flows.pure (Graph.Graph {
+                  in (Flows.bind (Flows.mapElems (adaptPrimitive constraints litmap) prims0) (\prims1 -> Flows.pure (Graph.Graph {
                     Graph.graphElements = els1,
                     Graph.graphEnvironment = env0,
                     Graph.graphTypes = Maps.empty,
                     Graph.graphBody = Core.TermUnit,
-                    Graph.graphPrimitives = prims0,
-                    Graph.graphSchema = schema1}))))))
+                    Graph.graphPrimitives = prims1,
+                    Graph.graphSchema = schema1})))))))
 
 adaptGraphSchema :: (Ord t0) => (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> M.Map t0 Core.Type -> Compute.Flow t1 (M.Map t0 Core.Type))
 adaptGraphSchema constraints litmap types0 =  
@@ -132,6 +132,14 @@ adaptLiteralTypesMap constraints =
 adaptLiteralValue :: (Ord t0) => (M.Map t0 Core.LiteralType -> t0 -> Core.Literal -> Core.Literal)
 adaptLiteralValue litmap lt l = (Optionals.maybe (Core.LiteralString (Core_.literal l)) (\lt2 -> adaptLiteral lt2 l) (Maps.lookup lt litmap))
 
+adaptPrimitive :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Graph.Primitive -> Compute.Flow t0 Graph.Primitive)
+adaptPrimitive constraints litmap prim0 =  
+  let ts0 = (Graph.primitiveType prim0)
+  in (Flows.bind (adaptTypeScheme constraints litmap ts0) (\ts1 -> Flows.pure (Graph.Primitive {
+    Graph.primitiveName = (Graph.primitiveName prim0),
+    Graph.primitiveType = ts1,
+    Graph.primitiveImplementation = (Graph.primitiveImplementation prim0)})))
+
 -- | Adapt a term using the given language constraints
 adaptTerm :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 adaptTerm constraints litmap term0 =  
@@ -166,6 +174,15 @@ adaptType constraints litmap type0 =
             "no alternatives for type: ",
             (Core_.type_ typ)])) (\type2 -> Flows.pure type2) (tryType type1))))
   in (Rewriting.rewriteTypeM rewrite type0)
+
+adaptTypeScheme :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.TypeScheme -> Compute.Flow t0 Core.TypeScheme)
+adaptTypeScheme constraints litmap ts0 =  
+  let vars0 = (Core.typeSchemeVariables ts0)
+  in  
+    let t0 = (Core.typeSchemeType ts0)
+    in (Flows.bind (adaptType constraints litmap t0) (\t1 -> Flows.pure (Core.TypeScheme {
+      Core.typeSchemeVariables = vars0,
+      Core.typeSchemeType = t1})))
 
 -- | Given a data graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, perform inference, then return a corresponding term definition for each element name.
 dataGraphToDefinitions :: (Coders.LanguageConstraints -> Bool -> Graph.Graph -> [[Core.Name]] -> Compute.Flow Graph.Graph (Graph.Graph, [[Module.TermDefinition]]))
