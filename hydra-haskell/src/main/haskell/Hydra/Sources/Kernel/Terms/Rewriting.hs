@@ -114,9 +114,7 @@ deannotateTermDef = define "deannotateTerm" $
   doc "Strip all annotations (including System F type annotations) from the top levels of a term" $
   lambda "t" $ cases _Term (var "t")
     (Just $ var "t") [
-    _Term_annotated>>: "at" ~> ref deannotateTermDef @@ (Core.annotatedTermSubject $ var "at"),
-    _Term_typeApplication>>: "tt" ~> ref deannotateTermDef @@ (Core.typedTermTerm $ var "tt"),
-    _Term_typeLambda>>: "ta" ~> ref deannotateTermDef @@ (Core.typeLambdaBody $ var "ta")]
+    _Term_annotated>>: "at" ~> ref deannotateTermDef @@ (Core.annotatedTermSubject $ var "at")]
 
 deannotateTypeDef :: TBinding (Type -> Type)
 deannotateTypeDef = define "deannotateType" $
