@@ -392,7 +392,7 @@ encodeTerm env term = case deannotateTerm term of
         -- Lambda-bound variables
         Nothing -> termVariableReference env name
         -- Let-bound variables
-        Just el -> if isUnaryFunction el
+        Just el -> if isNullaryFunction el
           then functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) []
           else termVariableReference env name
     TermWrap (WrappedTerm tname term1) -> do
@@ -683,10 +683,8 @@ genericArg tparamList = if L.null tparamList
   else Just $ pyPrimaryToPyExpression $ primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Generic")
     (pyNameToPyExpression . encodeTypeVariable <$> tparamList)
 
-isUnaryFunction :: Binding -> Bool
-isUnaryFunction el = case bindingType el of
-  Nothing -> False
-  Just ts -> typeArity (typeSchemeType ts) == 1
+isNullaryFunction :: Binding -> Bool
+isNullaryFunction el = False -- TODO: determine whether distinguishing between "nullary functions" and constants is actually necessary
 
 moduleToPython :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
 moduleToPython mod defs = do
