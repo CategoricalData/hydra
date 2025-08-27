@@ -39,6 +39,7 @@ pythonLanguage = Coders.Language {
       Mantle.LiteralVariantInteger,
       Mantle.LiteralVariantString])
     floatTypes = (Sets.fromList [
+      Core.FloatTypeBigfloat,
       Core.FloatTypeFloat64])
     functionVariants = (Sets.fromList [
       Mantle.FunctionVariantElimination,

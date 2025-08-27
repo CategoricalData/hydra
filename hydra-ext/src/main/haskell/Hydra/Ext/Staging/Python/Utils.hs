@@ -215,6 +215,9 @@ raiseTypeError msg = pySimpleStatementToPyStatement $ Py.SimpleStatementRaise
 returnSingle :: Py.Expression -> Py.Statement
 returnSingle expr = pySimpleStatementToPyStatement $ Py.SimpleStatementReturn $ Py.ReturnStatement [Py.StarExpressionSimple expr]
 
+singleQuotedString :: String -> Py.Expression
+singleQuotedString = stringToPyExpression Py.QuoteStyleSingle
+
 stringToPyExpression :: Py.QuoteStyle -> String -> Py.Expression
 stringToPyExpression style s = pyAtomToPyExpression $ Py.AtomString $ Py.String_ s style
 
