@@ -133,8 +133,8 @@ data TermVariant =
   TermVariantRecord  |
   TermVariantSet  |
   TermVariantSum  |
-  TermVariantTypeLambda  |
   TermVariantTypeApplication  |
+  TermVariantTypeLambda  |
   TermVariantUnion  |
   TermVariantUnit  |
   TermVariantVariable  |
@@ -167,9 +167,9 @@ _TermVariant_set = (Core.Name "set")
 
 _TermVariant_sum = (Core.Name "sum")
 
-_TermVariant_typeLambda = (Core.Name "typeLambda")
-
 _TermVariant_typeApplication = (Core.Name "typeApplication")
+
+_TermVariant_typeLambda = (Core.Name "typeLambda")
 
 _TermVariant_union = (Core.Name "union")
 
