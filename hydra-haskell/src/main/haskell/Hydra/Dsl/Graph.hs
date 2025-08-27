@@ -102,6 +102,15 @@ graphWithSchema g newSchema = graph
     (Hydra.Dsl.Graph.graphPrimitives g)
     newSchema
 
+primitive :: TTerm Name
+    -> TTerm TypeScheme
+    -> TTerm ([Term] -> Flow Graph Term)
+    -> TTerm Primitive
+primitive name typ implementation = record _Primitive [
+    _Primitive_name>>: name,
+    _Primitive_type>>: typ,
+    _Primitive_implementation>>: implementation]
+
 primitiveName :: TTerm Primitive -> TTerm Name
 primitiveName p = project _Primitive _Primitive_name @@ p
 
@@ -110,6 +119,12 @@ primitiveType p = project _Primitive _Primitive_type @@ p
 
 primitiveImplementation :: TTerm Primitive -> TTerm ([Term] -> Flow Graph Term)
 primitiveImplementation p = project _Primitive _Primitive_implementation @@ p
+
+primitiveWithType :: TTerm Primitive -> TTerm TypeScheme -> TTerm Primitive
+primitiveWithType p newType = Hydra.Dsl.Graph.primitive
+    (Hydra.Dsl.Graph.primitiveName p)
+    newType
+    (Hydra.Dsl.Graph.primitiveImplementation p)
 
 typeClassEquality :: TTerm TypeClass
 typeClassEquality = unitVariant _TypeClass _TypeClass_equality
