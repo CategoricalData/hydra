@@ -113,6 +113,7 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
     "integerTypes">: Sets.fromList $ list [
       Core.integerTypeBigint], -- Python has only one integer type
     "termVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
+      Mantle.termVariantAnnotated,
       Mantle.termVariantApplication,
       Mantle.termVariantFunction,
       Mantle.termVariantLet,
