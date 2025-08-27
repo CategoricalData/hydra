@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from dataclasses import dataclass
+from decimal import Decimal
 from enum import Enum
 from hydra.dsl.python import FrozenDict, frozenlist, Node
 from typing import Annotated
@@ -125,7 +126,7 @@ FLOAT_TYPE__BIGFLOAT__NAME = Name("bigfloat")
 FLOAT_TYPE__FLOAT32__NAME = Name("float32")
 FLOAT_TYPE__FLOAT64__NAME = Name("float64")
 
-class FloatValueBigfloat(Node[str]):
+class FloatValueBigfloat(Node[Decimal]):
     """An arbitrary-precision floating-point value."""
 
 class FloatValueFloat32(Node[float]):
