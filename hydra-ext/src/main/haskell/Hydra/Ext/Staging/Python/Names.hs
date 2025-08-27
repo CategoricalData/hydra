@@ -71,7 +71,7 @@ sanitizePythonName :: String -> String
 sanitizePythonName = sanitizeWithUnderscores pythonReservedWords
 
 termVariableReference :: PythonEnvironment -> Name -> Py.Expression
-termVariableReference = variableReference CaseConventionLowerSnake True
+termVariableReference = variableReference CaseConventionLowerSnake False
 
 typeVariableReference :: PythonEnvironment -> Name -> Py.Expression
 typeVariableReference = variableReference CaseConventionPascal False
