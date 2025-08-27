@@ -125,6 +125,8 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
       Mantle.termVariantProduct,
       Mantle.termVariantRecord,
       Mantle.termVariantSet,
+      Mantle.termVariantTypeApplication,
+      Mantle.termVariantTypeLambda,
       Mantle.termVariantUnion,
       Mantle.termVariantUnit,
       Mantle.termVariantVariable,
