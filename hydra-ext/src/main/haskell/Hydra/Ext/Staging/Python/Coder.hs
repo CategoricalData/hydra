@@ -38,21 +38,19 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesTuple :: Bool,
   pythonModuleMetadataUsesTypeVar :: Bool}
 
-argsAndBindings :: TypeContext -> Term -> Type -> Flow s ([Name], [Binding], Term, [Type], Type)
-argsAndBindings tcontext term _ = gather tcontext [] [] [] term
+argsAndBindings :: PythonEnvironment -> Term -> Type -> Flow s ([Name], [Binding], Term, [Type], Type, PythonEnvironment)
+argsAndBindings env term _ = gather env [] [] [] term
   where
-    gather tcontext prevArgs prevBindings prevDoms term = case deannotateTerm term of
-      TermFunction (FunctionLambda (Lambda var (Just dom) body)) -> gather tcontext2 (var:prevArgs) prevBindings (dom:prevDoms) body
+    gather env prevArgs prevBindings prevDoms term = case deannotateTerm term of
+      TermFunction (FunctionLambda (Lambda var (Just dom) body)) -> gather env2 (var:prevArgs) prevBindings (dom:prevDoms) body
         where
-          tcontext2 = tcontext {typeContextTypes = M.insert var dom (typeContextTypes tcontext)}
-      TermLet (Let bindings body) -> gather tcontext2 prevArgs (L.reverse bindings ++ prevBindings) prevDoms body
+          env2 = extendEnvironmentForLambda env var dom
+      TermLet lt@(Let bindings body) -> gather env2 prevArgs (L.reverse bindings ++ prevBindings) prevDoms body
         where
-          tcontext2 = tcontext {typeContextTypes = M.union
-            (typeContextTypes tcontext)
-            (M.fromList $ fmap (\b -> (bindingName b, typeSchemeToFType $ Y.fromJust $ bindingType b)) bindings)}
+          env2 = extendEnvironmentForLet env lt
       t -> do
-        typ <- typeOf tcontext t
-        return (L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ)
+        typ <- typeOf (pythonEnvironmentTypeContext env) t
+        return (L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ, env)
 
 -- | Rewrite case statements in which the top-level lambda variables are re-used, e.g.
 --   cases _Type Nothing [_Type_list>>: "t" ~> ..., _Type_set>>: "t" ~> ...].
@@ -62,13 +60,13 @@ deduplicateCaseVariables cases = L.reverse $ snd $ L.foldl rewriteCase (M.empty,
   where
     rewriteCase (countByName, done) (Field fname fterm) = case fterm of
       -- Note: does not yet take annotations into account
-      TermFunction (FunctionLambda (Lambda v mt body)) -> case M.lookup v countByName of
+      TermFunction (FunctionLambda (Lambda v (Just dom) body)) -> case M.lookup v countByName of
         Nothing -> (M.insert v 1 countByName, (Field fname fterm):done)
         Just count -> (M.insert v count2 countByName, (Field fname rewritten):done)
           where
             count2 = count + 1
             v2 = Name (unName v ++ Literals.showInt32 count2)
-            rewritten = TermFunction $ FunctionLambda $ Lambda v2 mt (alphaConvert v v2 body)
+            rewritten = TermFunction $ FunctionLambda $ Lambda v2 (Just dom) (alphaConvert v v2 body)
       _ -> (countByName, (Field fname fterm):done)
 
 encodeApplication :: PythonEnvironment -> Application -> Flow Graph Py.Expression
@@ -88,14 +86,15 @@ encodeApplication env app = do
     applyArgs hargs = case fun of
         TermFunction f -> case f of
           FunctionElimination elm -> case elm of
-    --        EliminationProduct ...
+            EliminationProduct (TupleProjection arity idx _) -> do
+              pyIdx <- encodeIntegerValue $ IntegerValueInt32 idx
+              return $ pyPrimaryToPyExpression $ primaryWithExpressionSlices (pyExpressionToPyPrimary parg) [pyIdx]
             EliminationRecord (Projection _ fname) -> do
               return $ projectFromExpression parg $ encodeFieldName env fname
             EliminationUnion (CaseStatement tname mdef cases) -> do
               return $ stringToPyExpression Py.QuoteStyleDouble "inline match expressions are unsupported"
             EliminationWrap _ -> do
               return $ projectFromExpression parg $ Py.Name "value"
-            _ -> fail $ "elimination variant is not yet supported in applications: " ++ show (eliminationVariant elm)
           FunctionPrimitive name -> do
             return $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) hargs
           _ -> def
@@ -151,10 +150,12 @@ encodeFloatValue fv = case fv of
 
 encodeFunction :: PythonEnvironment -> Function -> Flow Graph Py.Expression
 encodeFunction env f = case f of
-  FunctionLambda (Lambda var _ body) -> do
-    pbody <- encodeTerm env body
-    return $ Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] $
-      Just $ Py.LambdaStarEtcParamNoDefault $ Py.LambdaParamNoDefault $ encodeNameQualified env var) pbody
+  FunctionLambda (Lambda var (Just dom) body) -> do
+      pbody <- encodeTerm env2 body
+      return $ Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] $
+        Just $ Py.LambdaStarEtcParamNoDefault $ Py.LambdaParamNoDefault $ encodeNameQualified env2 var) pbody
+    where
+      env2 = extendEnvironmentForLambda env var dom
   FunctionPrimitive name -> pure $ pyNameToPyExpression $ encodeName True CaseConventionLowerSnake env name -- Only nullary primitives should appear here.
   _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
@@ -377,7 +378,9 @@ encodeTerm env term = case deannotateTerm term of
       pyEls <- CM.mapM encode $ S.toList s
       return $ functionCall (pyNameToPyPrimary $ Py.Name "frozenset")
         [pyAtomToPyExpression $ Py.AtomSet $ Py.Set (pyExpressionToPyStarNamedExpression <$> pyEls)]
-    TermTypeLambda (TypeLambda _ term1) -> encode term1
+    TermTypeLambda tl@(TypeLambda _ term1) -> encodeTerm env2 term1
+      where
+        env2 = extendEnvironmentForTypeLambda env tl
     TermTypeApplication (TypedTerm term1 _) -> encode term1
     TermUnion (Injection tname field) -> do
       rt <- requireUnionType tname
@@ -406,22 +409,22 @@ encodeTerm env term = case deannotateTerm term of
 
 encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Type -> Maybe String -> Flow Graph [Py.Statement]
 encodeTermAssignment env name term typ comment = do
-    (args, bindings, body, doms, cod) <- argsAndBindings (pythonEnvironmentTypeContext env) term typ -- TODO: also modify TypeContext
+    (args, bindings, body, doms, cod, env2) <- argsAndBindings env term typ
     if L.null args && L.null bindings
     -- If there are no arguments or let bindings, use a simple a = b assignment.
     then do
-      bodyExpr <- encodeTerm env body
-      return [annotatedStatement comment $ assignmentStatement (encodeName False CaseConventionLowerSnake env name) bodyExpr]
+      bodyExpr <- encodeTerm env2 body
+      return [annotatedStatement comment $ assignmentStatement (encodeName False CaseConventionLowerSnake env2 name) bodyExpr]
     -- If there are either arguments or let bindings, then only a function definition will work.
     else do
         -- TODO: topological sort of bindings
-        bindingStmts <- L.concat <$> CM.mapM encodeBinding bindings
+        bindingStmts <- L.concat <$> CM.mapM (encodeBinding env2) bindings
         g <- getState
         withState (extendGraphWithBindings bindings g) $ do
           bodyStmt <- encodeFunctionDefinition env name args body doms cod comment bindingStmts
           return [bodyStmt]
   where
-    encodeBinding (Binding name1 term1 mts) = do
+    encodeBinding env (Binding name1 term1 mts) = do
         comment <- fmap normalizeComment <$> getTermDescription term1
         typ1 <- case mts of
           Nothing -> fail $ "missing type for let binding " ++ unName name1 ++ " in " ++ unName name
@@ -461,25 +464,26 @@ encodeTopLevelTerm env term = if L.length args == 1
               let body = indentedBlock Nothing [[stmt]]
               return [Py.CaseBlock patterns Nothing body]
           toCaseBlock isEnum (Field fname fterm) = case deannotateTerm fterm of
-            TermFunction (FunctionLambda (Lambda v _ body)) -> do
-                pyReturn <- encodeTerm env body
+            TermFunction (FunctionLambda (Lambda v (Just dom) body)) -> do
+                pyReturn <- encodeTerm env2 body
                 let body = indentedBlock Nothing [[returnSingle pyReturn]]
                 return $ Py.CaseBlock (pyClosedPatternToPyPatterns pattern) Nothing body
               where
+                env2 = extendEnvironmentForLambda env v dom
                 pattern = if isEnum
                     then Py.ClosedPatternValue $ Py.ValuePattern $ Py.Attribute [
                       encodeName True CaseConventionPascal env tname,
-                      encodeEnumValue env fname]
+                      encodeEnumValue env2 fname]
                     else if isFreeVariableInTerm v body
                     then Py.ClosedPatternClass $
                       Py.ClassPattern pyVarName Nothing Nothing
                     else Py.ClosedPatternClass $
                       Py.ClassPattern pyVarName Nothing (Just $ Py.KeywordPatterns [argPattern])
                   where
-                    pyVarName = Py.NameOrAttribute [variantName True env tname fname]
+                    pyVarName = Py.NameOrAttribute [variantName True env2 tname fname]
                     argPattern = Py.KeywordPattern (Py.Name "value") $ Py.PatternOr $ Py.OrPattern [
                       Py.ClosedPatternCapture $ Py.CapturePattern
-                        $ Py.PatternCaptureTarget (encodeName False CaseConventionLowerSnake env v)]
+                        $ Py.PatternCaptureTarget (encodeName False CaseConventionLowerSnake env2 v)]
             _ -> fail "unsupported case"
       _ -> dflt
 
@@ -595,6 +599,26 @@ encodeWrappedType env name typ comment = do
 
 environmentTypeParameters :: PythonEnvironment -> [Py.TypeParameter]
 environmentTypeParameters env = pyNameToPyTypeParameter . encodeTypeVariable <$> (fst $ pythonEnvironmentBoundTypeVariables env)
+
+extendEnvironmentForLambda :: PythonEnvironment -> Name -> Type -> PythonEnvironment
+extendEnvironmentForLambda env var dom = env {pythonEnvironmentTypeContext = tcontext2}
+  where
+    tcontext = pythonEnvironmentTypeContext env
+    tcontext2 = tcontext {typeContextTypes = M.insert var dom $ typeContextTypes tcontext}
+
+extendEnvironmentForLet :: PythonEnvironment -> Let -> PythonEnvironment
+extendEnvironmentForLet env (Let bindings _) = env {pythonEnvironmentTypeContext = tcontext2}
+  where
+    tcontext = pythonEnvironmentTypeContext env
+    tcontext2 = tcontext {typeContextTypes = M.union
+      (typeContextTypes tcontext)
+      (M.fromList $ fmap (\b -> (bindingName b, typeSchemeToFType $ Y.fromJust $ bindingType b)) bindings)}
+
+extendEnvironmentForTypeLambda :: PythonEnvironment -> TypeLambda -> PythonEnvironment
+extendEnvironmentForTypeLambda env (TypeLambda name _) = env {pythonEnvironmentTypeContext = tcontext2}
+  where
+    tcontext = pythonEnvironmentTypeContext env
+    tcontext2 = tcontext {typeContextVariables = S.insert name $ typeContextVariables tcontext}
 
 findTypeParams :: PythonEnvironment -> Type -> [Name]
 findTypeParams env typ = L.filter isBound $ S.toList $ freeVariablesInType typ

@@ -59,6 +59,8 @@ pythonLanguage = Coders.Language {
       Mantle.TermVariantProduct,
       Mantle.TermVariantRecord,
       Mantle.TermVariantSet,
+      Mantle.TermVariantTypeApplication,
+      Mantle.TermVariantTypeLambda,
       Mantle.TermVariantUnion,
       Mantle.TermVariantUnit,
       Mantle.TermVariantVariable,
