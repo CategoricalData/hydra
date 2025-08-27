@@ -501,10 +501,10 @@ data Term =
   TermSet (S.Set Term) |
   -- | A variant tuple
   TermSum Sum |
-  -- | A System F type abstraction term
-  TermTypeLambda TypeLambda |
   -- | A System F type application term
   TermTypeApplication TypedTerm |
+  -- | A System F type abstraction term
+  TermTypeLambda TypeLambda |
   -- | An injection; an instance of a union type
   TermUnion Injection |
   -- | A unit value; a term with no value
@@ -541,9 +541,9 @@ _Term_set = (Name "set")
 
 _Term_sum = (Name "sum")
 
-_Term_typeLambda = (Name "typeLambda")
-
 _Term_typeApplication = (Name "typeApplication")
+
+_Term_typeLambda = (Name "typeLambda")
 
 _Term_union = (Name "union")
 

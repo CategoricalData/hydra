@@ -171,8 +171,8 @@ termVariant x = case x of
   Core.TermRecord _ -> Mantle.TermVariantRecord
   Core.TermSet _ -> Mantle.TermVariantSet
   Core.TermSum _ -> Mantle.TermVariantSum
-  Core.TermTypeLambda _ -> Mantle.TermVariantTypeLambda
   Core.TermTypeApplication _ -> Mantle.TermVariantTypeApplication
+  Core.TermTypeLambda _ -> Mantle.TermVariantTypeLambda
   Core.TermUnion _ -> Mantle.TermVariantUnion
   Core.TermUnit -> Mantle.TermVariantUnit
   Core.TermVariable _ -> Mantle.TermVariantVariable

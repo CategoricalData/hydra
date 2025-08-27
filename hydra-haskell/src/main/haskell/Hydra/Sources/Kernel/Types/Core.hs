@@ -314,12 +314,12 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "sum">:
             doc "A variant tuple" $
             core "Sum",
-          "typeLambda">:
-            doc "A System F type abstraction term" $
-            core "TypeLambda",
           "typeApplication">:
             doc "A System F type application term" $
             core "TypedTerm",
+          "typeLambda">:
+            doc "A System F type abstraction term" $
+            core "TypeLambda",
           "union">:
             doc "An injection; an instance of a union type" $
             core "Injection",
