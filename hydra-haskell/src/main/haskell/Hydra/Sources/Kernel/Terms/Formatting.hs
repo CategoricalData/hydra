@@ -139,55 +139,47 @@ javaStyleCommentDef = define "javaStyleComment" $
 mapFirstLetterDef :: TBinding ((String -> String) -> String -> String)
 mapFirstLetterDef = define "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
-  lambda "mapping" $ lambda "s" $ lets [
-    "firstLetter">: var "mapping" @@ (Strings.fromList (Lists.pure (Lists.head $ var "list"))),
-    "list">: Strings.toList $ var "s"]
-    $ Logic.ifElse
-        (Strings.null $ var "s")
-        (var "s")
-        (Strings.cat2 (var "firstLetter") (Strings.fromList (Lists.tail $ var "list")))
-
-
-
-
-
-
+  "mapping" ~> "s" ~>
+  "list" <~ Strings.toList (var "s") $
+  "firstLetter" <~ var "mapping" @@ (Strings.fromList (Lists.pure (Lists.head $ var "list"))) $
+  Logic.ifElse
+    (Strings.null $ var "s")
+    (var "s")
+    (Strings.cat2 (var "firstLetter") (Strings.fromList (Lists.tail $ var "list")))
 
 nonAlnumToUnderscoresDef :: TBinding (String -> String)
 nonAlnumToUnderscoresDef = define "nonAlnumToUnderscores" $
-  lambda "input" $ lets [
-    "isAlnum">: lambda "c" $ Logic.or
-      (Logic.and (Equality.gte (var "c") (char 'A')) (Equality.lte (var "c") (char 'Z')))
-      (Logic.or
-        (Logic.and (Equality.gte (var "c") (char 'a')) (Equality.lte (var "c") (char 'z')))
-        (Logic.and (Equality.gte (var "c") (char '0')) (Equality.lte (var "c") (char '9')))),
-    "replace">: lambdas ["p", "c"] $ lets [
-      "s">: first $ var "p",
-      "b">: second $ var "p"]
-      $ Logic.ifElse (var "isAlnum" @@ var "c")
-        (pair (Lists.cons (var "c") (var "s")) (boolean False))
-        (Logic.ifElse (var "b")
-          (pair (var "s") (boolean True))
-          (pair (Lists.cons (char '_') (var "s")) (boolean True))),
-    "result">: Lists.foldl (var "replace") (pair (list []) (boolean False)) (Strings.toList $ var "input")]
-    $ Strings.fromList $ Lists.reverse $ first $ var "result"
+  "input" ~>
+  "isAlnum" <~ ("c" ~> Logic.or
+    (Logic.and (Equality.gte (var "c") (char 'A')) (Equality.lte (var "c") (char 'Z')))
+    (Logic.or
+      (Logic.and (Equality.gte (var "c") (char 'a')) (Equality.lte (var "c") (char 'z')))
+      (Logic.and (Equality.gte (var "c") (char '0')) (Equality.lte (var "c") (char '9'))))) $
+  "replace" <~ ("p" ~> "c" ~>
+    "s" <~ first (var "p") $
+    "b" <~ second (var "p") $
+    Logic.ifElse (var "isAlnum" @@ var "c")
+      (pair (Lists.cons (var "c") (var "s")) (boolean False))
+      (Logic.ifElse (var "b")
+        (pair (var "s") (boolean True))
+        (pair (Lists.cons (char '_') (var "s")) (boolean True)))) $
+  "result" <~ Lists.foldl (var "replace") (pair (list []) (boolean False)) (Strings.toList $ var "input") $
+  Strings.fromList $ Lists.reverse $ first $ var "result"
 
 sanitizeWithUnderscoresDef :: TBinding (S.Set String -> String -> String)
 sanitizeWithUnderscoresDef = define "sanitizeWithUnderscores" $
-  lambdas ["reserved", "s"] $
-    ref escapeWithUnderscoreDef @@ var "reserved" @@ (ref nonAlnumToUnderscoresDef @@ var "s")
+  "reserved" ~> "s" ~> ref escapeWithUnderscoreDef @@ var "reserved" @@ (ref nonAlnumToUnderscoresDef @@ var "s")
 
 showListDef :: TBinding ((a -> String) -> [a] -> String)
 showListDef = define "showList" $
-  lambdas ["f", "els"] $ Strings.cat $ list [
+  "f" ~> "els" ~> Strings.cat $ list [
     string "[",
     Strings.intercalate (string ", ") $ Lists.map (var "f") $ var "els",
     string "]"]
 
 stripLeadingAndTrailingWhitespaceDef :: TBinding (String -> String)
 stripLeadingAndTrailingWhitespaceDef = define "stripLeadingAndTrailingWhitespace" $
-  lambda "s" $
-    Strings.fromList $ Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $
+  "s" ~> Strings.fromList $ Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $
     Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $ Strings.toList $ var "s"
 
 withCharacterAliasesDef :: TBinding (String -> String)
