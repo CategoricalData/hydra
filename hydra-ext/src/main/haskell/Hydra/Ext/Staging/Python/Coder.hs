@@ -620,7 +620,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataUsesTuple = False,
       pythonModuleMetadataUsesTypeVar = False}
     addDef meta def = case def of
-      DefinitionTerm (TermDefinition _ term typ) -> foldOverTerm TraversalOrderPre extendMetaForTerm (extendMetaForType True meta typ) term
+      DefinitionTerm (TermDefinition _ term typ) -> foldOverTerm TraversalOrderPre extendMetaForTerm meta term
       DefinitionType (TypeDefinition _ typ) -> foldOverType TraversalOrderPre (extendMetaForType False) meta2 typ
         where
           meta2 = meta {pythonModuleMetadataUsesName = True}
