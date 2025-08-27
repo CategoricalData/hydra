@@ -494,7 +494,9 @@ encodeTargetWithStarAtom t = case t of
   _ -> unsupportedVariant "target with star atom" $ show t
 
 encodeTuple :: Py.Tuple -> A.Expr
-encodeTuple (Py.Tuple es) = parenList False (encodeStarNamedExpression <$> es)
+encodeTuple (Py.Tuple es) = if L.length es == 1
+  then parens $ noSep [encodeStarNamedExpression (L.head es), cst ","]
+  else parenList False (encodeStarNamedExpression <$> es)
 
 encodeTypeAlias :: Py.TypeAlias -> A.Expr
 encodeTypeAlias (Py.TypeAlias name tparams body) = spaceSep [cst "type", alias, cst "=", encodeExpression body]
