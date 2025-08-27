@@ -28,6 +28,7 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesAnnotated :: Bool,
   pythonModuleMetadataUsesCallable :: Bool,
   pythonModuleMetadataUsesDataclass :: Bool,
+  pythonModuleMetadataUsesDecimal :: Bool,
   pythonModuleMetadataUsesEnum :: Bool,
   pythonModuleMetadataUsesFrozenDict :: Bool,
   pythonModuleMetadataUsesFrozenList :: Bool,
@@ -144,11 +145,9 @@ encodeFieldType env (FieldType fname ftype) = do
 
 encodeFloatValue :: FloatValue -> Flow s Py.Expression
 encodeFloatValue fv = case fv of
-  FloatValueBigfloat f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat f
-  -- TODO: remove these variants; the fact that the float32 type is appearing here is a bug
-  FloatValueFloat32 f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat $ realToFrac f
+  FloatValueBigfloat f -> pure $ functionCall (pyNameToPyPrimary $ Py.Name "Decimal") [singleQuotedString $ show f]
   FloatValueFloat64 f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat $ realToFrac f
---  _ -> fail $ "unsupported floating point type: " ++ show (floatValueType fv)
+  _ -> fail $ "unsupported floating point type: " ++ show (floatValueType fv)
 
 encodeFunction :: PythonEnvironment -> Function -> Flow Graph Py.Expression
 encodeFunction env f = case f of
@@ -233,6 +232,7 @@ encodeLiteralType lt = do
       LiteralTypeBinary -> pure "bytes"
       LiteralTypeBoolean -> pure "bool"
       LiteralTypeFloat ft -> case ft of
+        FloatTypeBigfloat -> pure "Decimal"
         FloatTypeFloat64 -> pure "float"
         _ -> fail $ "unsupported floating-point type: " ++ show ft
       LiteralTypeInteger it -> case it of
@@ -295,6 +295,8 @@ encodeModule mod defs0 = do
                   cond "Callable" $ pythonModuleMetadataUsesCallable meta]),
                 ("dataclasses", [
                   cond "dataclass" $ pythonModuleMetadataUsesDataclass meta]),
+                ("decimal", [
+                  cond "Decimal" $ pythonModuleMetadataUsesDecimal meta]),
                 ("enum", [
                   cond "Enum" $ pythonModuleMetadataUsesEnum meta]),
                 ("hydra.dsl.python", [
@@ -608,6 +610,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataUsesAnnotated = False,
       pythonModuleMetadataUsesCallable = False,
       pythonModuleMetadataUsesDataclass = False,
+      pythonModuleMetadataUsesDecimal = False,
       pythonModuleMetadataUsesEnum = False,
       pythonModuleMetadataUsesFrozenDict = False,
       pythonModuleMetadataUsesFrozenList = False,
@@ -627,6 +630,11 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
           forBinding meta (Binding _ _ mts) = case mts of
             Nothing -> meta
             Just ts -> extendMetaForType True meta $ typeSchemeType ts
+      TermLiteral l -> case l of
+        LiteralFloat fv -> case fv of
+          FloatValueBigfloat _ -> meta {pythonModuleMetadataUsesDecimal = True}
+          _ -> meta
+        _ -> meta
       TermMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
       _ -> meta
     extendMetaForType isTermAnnot meta typ = extendFor meta3 typ
@@ -661,6 +669,11 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
                 TypeForall (ForallType _ body2) -> baseType body2
                 t2 -> t2
           TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True}
+          TypeLiteral lt -> case lt of
+            LiteralTypeFloat ft -> case ft of
+              FloatTypeBigfloat -> meta {pythonModuleMetadataUsesDecimal = True}
+              _ -> meta
+            _ -> meta
           TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
           TypeProduct _ -> meta {pythonModuleMetadataUsesTuple = True}
           TypeRecord (RowType _ fields) -> meta {
