@@ -37,8 +37,6 @@ deannotateAndDetypeTerm t = ((\x -> case x of
 deannotateTerm :: (Core.Term -> Core.Term)
 deannotateTerm t = ((\x -> case x of
   Core.TermAnnotated v1 -> (deannotateTerm (Core.annotatedTermSubject v1))
-  Core.TermTypeApplication v1 -> (deannotateTerm (Core.typedTermTerm v1))
-  Core.TermTypeLambda v1 -> (deannotateTerm (Core.typeLambdaBody v1))
   _ -> t) t)
 
 -- | Strip all annotations from a term
