@@ -105,13 +105,14 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
       Mantle.literalVariantInteger, -- (see integer types)
       Mantle.literalVariantString], -- str
     "floatTypes">: Sets.fromList $ list [
-      Core.floatTypeFloat64], -- Python has only one floating-point type
+      Core.floatTypeBigfloat, -- Decimal. mpmath's mpf type would be another option.
+      Core.floatTypeFloat64], -- float
     "functionVariants">: Sets.fromList $ list [
       Mantle.functionVariantElimination,
       Mantle.functionVariantLambda,
       Mantle.functionVariantPrimitive],
     "integerTypes">: Sets.fromList $ list [
-      Core.integerTypeBigint], -- Python has only one integer type
+      Core.integerTypeBigint], -- Python has only one built-in integer type
     "termVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
       Mantle.termVariantAnnotated,
       Mantle.termVariantApplication,
