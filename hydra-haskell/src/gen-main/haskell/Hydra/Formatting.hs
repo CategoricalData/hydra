@@ -82,19 +82,23 @@ javaStyleComment s = (Strings.cat [
 -- | A helper which maps the first letter of a string to another string
 mapFirstLetter :: ((String -> String) -> String -> String)
 mapFirstLetter mapping s =  
-  let firstLetter = (mapping (Strings.fromList (Lists.pure (Lists.head list)))) 
-      list = (Strings.toList s)
-  in (Logic.ifElse (Strings.null s) s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))))
+  let list = (Strings.toList s)
+  in  
+    let firstLetter = (mapping (Strings.fromList (Lists.pure (Lists.head list))))
+    in (Logic.ifElse (Strings.null s) s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))))
 
 nonAlnumToUnderscores :: (String -> String)
 nonAlnumToUnderscores input =  
-  let isAlnum = (\c -> Logic.or (Logic.and (Equality.gte c 65) (Equality.lte c 90)) (Logic.or (Logic.and (Equality.gte c 97) (Equality.lte c 122)) (Logic.and (Equality.gte c 48) (Equality.lte c 57)))) 
-      replace = (\p -> \c ->  
-              let s = (fst p) 
-                  b = (snd p)
+  let isAlnum = (\c -> Logic.or (Logic.and (Equality.gte c 65) (Equality.lte c 90)) (Logic.or (Logic.and (Equality.gte c 97) (Equality.lte c 122)) (Logic.and (Equality.gte c 48) (Equality.lte c 57))))
+  in  
+    let replace = (\p -> \c ->  
+            let s = (fst p)
+            in  
+              let b = (snd p)
               in (Logic.ifElse (isAlnum c) (Lists.cons c s, False) (Logic.ifElse b (s, True) (Lists.cons 95 s, True))))
-      result = (Lists.foldl replace ([], False) (Strings.toList input))
-  in (Strings.fromList (Lists.reverse (fst result)))
+    in  
+      let result = (Lists.foldl replace ([], False) (Strings.toList input))
+      in (Strings.fromList (Lists.reverse (fst result)))
 
 sanitizeWithUnderscores :: (S.Set String -> String -> String)
 sanitizeWithUnderscores reserved s = (escapeWithUnderscore reserved (nonAlnumToUnderscores s))
