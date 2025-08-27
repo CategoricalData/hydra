@@ -47,6 +47,7 @@ pythonLanguage = Coders.Language {
     integerTypes = (Sets.fromList [
       Core.IntegerTypeBigint])
     termVariants = (Sets.fromList [
+      Mantle.TermVariantAnnotated,
       Mantle.TermVariantApplication,
       Mantle.TermVariantFunction,
       Mantle.TermVariantLet,
