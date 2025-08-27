@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 import hydra.core
+import hydra.lib.lists
 import hydra.mantle
 
 def elimination_variant(v1: hydra.core.Elimination) -> hydra.mantle.EliminationVariant:
@@ -201,6 +202,9 @@ def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.mantle.LiteralVari
         
         case hydra.core.LiteralTypeString():
             return hydra.mantle.LiteralVariant.STRING
+
+# All literal types, in a canonical order.
+literal_types = hydra.lib.lists.concat(((hydra.core.LiteralTypeBinary(None), hydra.core.LiteralTypeBoolean(None)), hydra.lib.lists.map(lambda x: hydra.core.LiteralTypeFloat(x), float_types), hydra.lib.lists.map(lambda x: hydra.core.LiteralTypeInteger(x), integer_types), (hydra.core.LiteralTypeString(None),)))
 
 def literal_variant(arg_: hydra.core.Literal) -> hydra.mantle.LiteralVariant:
     """Find the literal variant (constructor) for a given literal value."""
