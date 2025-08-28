@@ -715,7 +715,7 @@ rewriteTermMDef = define "rewriteTermM" $
           "pairs">: Flows.mapList (var "forPair") $ Maps.toList $ var "m"] $
           produce $ Core.termMap $ Maps.fromList $ var "pairs",
         _Term_optional>>: lambda "m" $ binds [
-          "rm">: Flows.traverseOptional (var "recurse") (var "m")] $
+          "rm">: Flows.mapOptional (var "recurse") (var "m")] $
           produce $ Core.termOptional $ var "rm",
         _Term_product>>: lambda "tuple" $ Flows.map
             (lambda "rtuple" $ Core.termProduct $ var "rtuple")

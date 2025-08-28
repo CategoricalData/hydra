@@ -161,7 +161,7 @@ getDebugIdDef = define "getDebugId" $
   doc "Get the debug ID from flow state" $
   ref Lexical.withEmptyGraphDef @@ (Flows.bind
     (ref getAttrDef @@ ref Constants.key_debugIdDef)
-    (lambda "desc" $ Flows.traverseOptional (ref ExtractCore.stringDef) (var "desc")))
+    (lambda "desc" $ Flows.mapOptional (ref ExtractCore.stringDef) (var "desc")))
 
 getDescriptionDef :: TBinding (M.Map Name Term -> Flow Graph (Maybe String))
 getDescriptionDef = define "getDescription" $

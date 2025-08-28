@@ -33,6 +33,9 @@ mapKeys = primitive2 _flows_mapKeys
 mapList :: TTerm (x -> Flow s y) -> TTerm [x] -> TTerm (Flow s [y])
 mapList = primitive2 _flows_mapList
 
+mapOptional :: TTerm (x -> Flow s y) -> TTerm (Maybe x) -> TTerm (Flow s (Maybe y))
+mapOptional = primitive2 _flows_mapOptional
+
 mapSet :: TTerm (x -> Flow s y) -> TTerm (S.Set x) -> TTerm (Flow s (S.Set y))
 mapSet = primitive2 _flows_mapSet
 
@@ -41,6 +44,3 @@ pure = primitive1 _flows_pure
 
 sequence :: TTerm [Flow s a] -> TTerm (Flow s [a])
 sequence = primitive1 _flows_sequence
-
-traverseOptional :: TTerm (x -> Flow s y) -> TTerm (Maybe x) -> TTerm (Flow s (Maybe y))
-traverseOptional = primitive2 _flows_traverseOptional

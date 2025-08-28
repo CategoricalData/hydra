@@ -423,7 +423,7 @@ passOptionalDef = define "passOptional" $
     _Type_optional>>: lambda "ot" $ lets [
       "mapTerm">: lambdas ["coder", "dir", "term"] $
         bind "opt" (ref withGraphContextDef @@ (ref ExtractCore.optionalDef @@ unaryFunction Flows.pure @@ var "term")) $
-        bind "newOpt" (Flows.traverseOptional (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ var "coder") (var "opt")) $
+        bind "newOpt" (Flows.mapOptional (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ var "coder") (var "opt")) $
         Flows.pure $ Core.termOptional $ var "newOpt"] $
       bind "adapter" (ref termAdapterDef @@ var "ot") $
         Flows.pure $ Compute.adapter
