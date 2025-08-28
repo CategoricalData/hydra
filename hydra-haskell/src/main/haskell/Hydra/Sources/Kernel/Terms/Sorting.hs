@@ -55,7 +55,8 @@ module_ = Module (Namespace "hydra.sorting") elements
    elements = [
      el createOrderingIsomorphismDef,
      el topologicalSortDef,
-     el topologicalSortComponentsDef]
+     el topologicalSortComponentsDef,
+     el topologicalSortNodesDef]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -65,10 +66,10 @@ createOrderingIsomorphismDef = define "createOrderingIsomorphism" $
   withOrd "t0" $ "sourceOrd" ~> "targetOrd" ~>
   "sourceToTargetMapping" <~ ("els" ~>
     "mp" <~ Maps.fromList (Lists.zip (var "sourceOrd") (var "els")) $
-    Optionals.cat $ Lists.map (lambda "n" $ Maps.lookup (var "n") (var "mp")) (var "targetOrd")) $
+    Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "mp")) (var "targetOrd")) $
   "targetToSourceMapping" <~ ("els" ~>
     "mp" <~ Maps.fromList (Lists.zip (var "targetOrd") (var "els")) $
-    Optionals.cat $ Lists.map (lambda "n" $ Maps.lookup (var "n") (var "mp")) (var "sourceOrd")) $
+    Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "mp")) (var "sourceOrd")) $
   Topology.orderingIsomorphism (var "sourceToTargetMapping") (var "targetToSourceMapping")
 
 topologicalSortDef :: TBinding ([(a, [a])] -> Either [[a]] [a])
@@ -93,3 +94,14 @@ topologicalSortComponentsDef = define "topologicalSortComponents" $
   "getKey" <~ second (var "graphResult") $
   Lists.map ("comp" ~> Lists.map (var "getKey") (var "comp")) $
     ref Tarjan.stronglyConnectedComponentsDef @@ var "g"
+
+topologicalSortNodesDef :: TBinding ((x -> a) -> (x -> [a]) -> [x] -> [[x]])
+topologicalSortNodesDef = define "topologicalSortNodes" $
+  doc ("Sort a directed acyclic graph (DAG) of nodes using two helper functions:"
+    <> " one for node keys, and one for the adjacency list of connected node keys."
+    <> " The result is a list of strongly-connected components (cycles), in which singleton lists represent acyclic nodes.") $
+  withOrd "t1" $ "getKey" ~> "getAdj" ~> "nodes" ~>
+  "nodesByKey" <~ Maps.fromList (Lists.map ("n" ~> pair (var "getKey" @@ var "n") (var "n")) (var "nodes")) $
+  "pairs" <~ Lists.map ("n" ~> pair (var "getKey" @@ var "n") (var "getAdj" @@ var "n")) (var "nodes") $
+  "comps" <~ ref topologicalSortComponentsDef @@ var "pairs" $
+  Lists.map ("c" ~> Optionals.cat $ Lists.map ("k" ~> Maps.lookup (var "k") (var "nodesByKey")) (var "c")) (var "comps")

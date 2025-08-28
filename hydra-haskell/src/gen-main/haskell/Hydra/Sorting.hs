@@ -45,3 +45,12 @@ topologicalSortComponents pairs =
     in  
       let getKey = (snd graphResult)
       in (Lists.map (\comp -> Lists.map getKey comp) (Tarjan.stronglyConnectedComponents g))
+
+topologicalSortNodes :: (Ord t1) => ((t0 -> t1) -> (t0 -> [t1]) -> [t0] -> [[t0]])
+topologicalSortNodes getKey getAdj nodes =  
+  let nodesByKey = (Maps.fromList (Lists.map (\n -> (getKey n, n)) nodes))
+  in  
+    let pairs = (Lists.map (\n -> (getKey n, (getAdj n))) nodes)
+    in  
+      let comps = (topologicalSortComponents pairs)
+      in (Lists.map (\c -> Optionals.cat (Lists.map (\k -> Maps.lookup k nodesByKey) c)) comps)
