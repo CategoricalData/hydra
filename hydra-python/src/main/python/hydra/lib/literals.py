@@ -1,123 +1,249 @@
 """Python implementations of hydra.lib.literals primitives."""
 
-import struct
+from decimal import Decimal
+from typing import Optional
 
 
-def bigfloat_to_bigint(x: float) -> int:
-    """Convert a logical bigfloat to a logical bigint."""
+def bigfloat_to_bigint(x: Decimal) -> int:
+    """Convert a Decimal to an int."""
     return round(x)
 
 
-def bigfloat_to_float32(x: float) -> float:
-    """Convert a logical bigfloat to a logical float32."""
-    return struct.unpack("f", struct.pack("f", x))[0]
-
-
-def bigfloat_to_float64(x: float) -> float:
-    """Convert a logical bigfloat to a logical float64."""
-    return x
-
-
-def bigint_to_bigfloat(x: int) -> float:
-    """Convert a logical bigint to a logical bigfloat."""
+def bigfloat_to_float32(x: Decimal) -> float:
+    """Convert a Decimal to a float."""
     return float(x)
 
 
+def bigfloat_to_float64(x: Decimal) -> float:
+    """Convert a Decimal to a float."""
+    return float(x)
+
+
+def bigint_to_bigfloat(x: int) -> Decimal:
+    """Convert an int to a Decimal."""
+    return Decimal(x)
+
+
 def bigint_to_int8(x: int) -> int:
-    """Convert a logical bigint to a logical int8."""
-    return struct.unpack("b", struct.pack("b", x))[0]
+    """Convert an int to int8 (identity in Python)."""
+    return x
 
 
 def bigint_to_int16(x: int) -> int:
-    """Convert a logical bigint to a logical int16."""
-    return struct.unpack("h", struct.pack("h", x))[0]
+    """Convert an int to int16 (identity in Python)."""
+    return x
 
 
 def bigint_to_int32(x: int) -> int:
-    """Convert a logical bigint to a logical int32."""
-    return struct.unpack("i", struct.pack("i", x))[0]
+    """Convert an int to int32 (identity in Python)."""
+    return x
 
 
 def bigint_to_int64(x: int) -> int:
-    """Convert a logical bigint to a logical int64."""
-    return struct.unpack("q", struct.pack("q", x))[0]
+    """Convert an int to int64 (identity in Python)."""
+    return x
 
 
 def bigint_to_uint8(x: int) -> int:
-    """Convert a logical bigint to a logical uint8."""
-    return struct.unpack("B", struct.pack("B", x))[0]
+    """Convert an int to uint8 (identity in Python)."""
+    return x
 
 
 def bigint_to_uint16(x: int) -> int:
-    """Convert a logical bigint to a logical uint16."""
-    return struct.unpack("H", struct.pack("H", x))[0]
+    """Convert an int to uint16 (identity in Python)."""
+    return x
 
 
 def bigint_to_uint32(x: int) -> int:
-    """Convert a logical bigint to a logical uint32."""
-    return struct.unpack("I", struct.pack("I", x))[0]
+    """Convert an int to uint32 (identity in Python)."""
+    return x
 
 
 def bigint_to_uint64(x: int) -> int:
-    """Convert a logical bigint to a logical uint64."""
-    return struct.unpack("Q", struct.pack("Q", x))[0]
-
-
-def float32_to_bigfloat(x: float) -> float:
-    """Convert a logical float32 to a logical bigfloat."""
+    """Convert an int to uint64 (identity in Python)."""
     return x
 
 
-def float64_to_bigfloat(x: float) -> float:
-    """Convert a logical float64 to a logical bigfloat."""
-    return x
+def binary_to_string(s: str) -> str:
+    """Convert binary to string (identity in Python)."""
+    return s
+
+
+def float32_to_bigfloat(x: float) -> Decimal:
+    """Convert a float to a Decimal."""
+    return Decimal(str(x))
+
+
+def float64_to_bigfloat(x: float) -> Decimal:
+    """Convert a float to a Decimal."""
+    return Decimal(str(x))
 
 
 def int8_to_bigint(x: int) -> int:
-    """Convert a logical int8 to a logical bigint."""
+    """Convert int8 to int (identity in Python)."""
     return x
 
 
 def int16_to_bigint(x: int) -> int:
-    """Convert a logical int16 to a logical bigint."""
+    """Convert int16 to int (identity in Python)."""
     return x
 
 
 def int32_to_bigint(x: int) -> int:
-    """Convert a logical int32 to a logical bigint."""
+    """Convert int32 to int (identity in Python)."""
     return x
 
 
 def int64_to_bigint(x: int) -> int:
-    """Convert a logical int64 to a logical bigint."""
+    """Convert int64 to int (identity in Python)."""
     return x
 
 
-def show_int32(x: int) -> str:
-    """Convert a logical int32 to a printable string."""
+def read_bigfloat(s: str) -> Optional[Decimal]:
+    """Parse a string to a Decimal."""
+    try:
+        return Decimal(s)
+    except:
+        return None
+
+
+def read_boolean(s: str) -> Optional[bool]:
+    """Parse a string to a boolean."""
+    if s == "true":
+        return True
+    elif s == "false":
+        return False
+    else:
+        return None
+
+
+def read_float32(s: str) -> Optional[float]:
+    """Parse a string to a float."""
+    try:
+        return float(s)
+    except:
+        return None
+
+
+def read_float64(s: str) -> Optional[float]:
+    """Parse a string to a float."""
+    try:
+        return float(s)
+    except:
+        return None
+
+
+def read_int32(s: str) -> Optional[int]:
+    """Parse a string to an int."""
+    try:
+        return int(s)
+    except:
+        return None
+
+
+def read_int64(s: str) -> Optional[int]:
+    """Parse a string to an int."""
+    try:
+        return int(s)
+    except:
+        return None
+
+
+def read_string(s: str) -> Optional[str]:
+    """Parse a string (always succeeds)."""
+    return s
+
+
+def show_bigfloat(x: Decimal) -> str:
+    """Convert a Decimal to string."""
     return str(x)
 
 
-def show_string(x: str) -> str:
-    """Convert a string to a quoted string."""
-    return x
+def show_bigint(x: int) -> str:
+    """Convert an int to string."""
+    return str(x)
+
+
+def show_boolean(b: bool) -> str:
+    """Convert a boolean to string."""
+    return "true" if b else "false"
+
+
+def show_float32(x: float) -> str:
+    """Convert a float to string."""
+    return str(x)
+
+
+def show_float64(x: float) -> str:
+    """Convert a float to string."""
+    return str(x)
+
+
+def show_int8(x: int) -> str:
+    """Convert an int to string."""
+    return str(x)
+
+
+def show_int16(x: int) -> str:
+    """Convert an int to string."""
+    return str(x)
+
+
+def show_int32(x: int) -> str:
+    """Convert an int to string."""
+    return str(x)
+
+
+def show_int64(x: int) -> str:
+    """Convert an int to string."""
+    return str(x)
+
+
+def show_uint8(x: int) -> str:
+    """Convert an int to string."""
+    return str(x)
+
+
+def show_uint16(x: int) -> str:
+    """Convert an int to string."""
+    return str(x)
+
+
+def show_uint32(x: int) -> str:
+    """Convert an int to string."""
+    return str(x)
+
+
+def show_uint64(x: int) -> str:
+    """Convert an int to string."""
+    return str(x)
+
+
+def show_string(s: str) -> str:
+    """Convert a string to a quoted string representation."""
+    return repr(s)
+
+
+def string_to_binary(s: str) -> str:
+    """Convert string to binary (identity in Python)."""
+    return s
 
 
 def uint8_to_bigint(x: int) -> int:
-    """Convert a logical uint8 to a logical bigint."""
+    """Convert uint8 to int (identity in Python)."""
     return x
 
 
 def uint16_to_bigint(x: int) -> int:
-    """Convert a logical uint16 to a logical bigint."""
+    """Convert uint16 to int (identity in Python)."""
     return x
 
 
 def uint32_to_bigint(x: int) -> int:
-    """Convert a logical uint32 to a logical bigint."""
+    """Convert uint32 to int (identity in Python)."""
     return x
 
 
 def uint64_to_bigint(x: int) -> int:
-    """Convert a logical uint64 to a logical bigint."""
+    """Convert uint64 to int (identity in Python)."""
     return x

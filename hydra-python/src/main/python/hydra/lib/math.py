@@ -1,5 +1,7 @@
 """Python implementations of hydra.lib.math primitives."""
 
+from hydra.dsl.python import frozenlist
+
 
 def neg(x: int) -> int:
     """Negate an integer."""
@@ -11,18 +13,8 @@ def add(x: int, y: int) -> int:
     return x + y
 
 
-def sub(x: int, y: int) -> int:
-    """Subtract two integers."""
-    return x - y
-
-
-def mul(x: int, y: int) -> int:
-    """Multiply two integers."""
-    return x * y
-
-
 def div(x: int, y: int) -> int:
-    """Divide two integers."""
+    """Divide two integers using integer division."""
     return x // y
 
 
@@ -31,6 +23,21 @@ def mod(a: int, b: int) -> int:
     return a % b
 
 
+def mul(x: int, y: int) -> int:
+    """Multiply two integers."""
+    return x * y
+
+
+def range(start: int, end: int) -> frozenlist[int]:
+    """Generate a range of integers from start to end (inclusive)."""
+    return tuple(range(start, end + 1))
+
+
 def rem(a: int, b: int) -> int:
     """Integer remainder with result having same sign as dividend."""
-    return a - (b * (a // b))
+    return a % b
+
+
+def sub(x: int, y: int) -> int:
+    """Subtract two integers."""
+    return x - y
