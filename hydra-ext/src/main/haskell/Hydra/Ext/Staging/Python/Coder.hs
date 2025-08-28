@@ -11,6 +11,8 @@ import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Ext.Staging.Python.Serde as PySer
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Lib.Literals as Literals
+import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Sorting as Sorting
 import Hydra.Dsl.ShorthandTypes
 import Hydra.Formatting
 
@@ -272,10 +274,18 @@ encodeModule mod defs0 = do
         namespaces = namespacesForDefinitions encodeNamespace (moduleNamespace mod) defs
     reorderDefs defs = fst p ++ snd p
       where
-        p = L.partition isNameDef defs
+        p = L.partition isNameDef sortedDefs
         isNameDef d = case d of
           DefinitionType (TypeDefinition name _) -> name == _Name
           _ -> False
+        sortedDefs = L.concat $ Sorting.topologicalSortNodes getKey getAdj defs
+          where
+            getKey def = case def of
+              DefinitionTerm (TermDefinition name _ _) -> name
+              DefinitionType (TypeDefinition name _) -> name
+            getAdj def = case def of
+              DefinitionTerm (TermDefinition _ term _) -> S.toList $ Rewriting.freeVariablesInTerm term
+              DefinitionType (TypeDefinition _ typ) -> S.toList $ Rewriting.freeVariablesInType typ
 
     tvarStmt name = assignmentStatement name $ functionCall (pyNameToPyPrimary $ Py.Name "TypeVar")
       [doubleQuotedString $ Py.unName name]
