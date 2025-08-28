@@ -2,9 +2,11 @@
 
 from collections.abc import Callable, Sequence
 from functools import reduce
-from typing import Any
+from typing import Any, TypeVar
 
 from hydra.dsl.python import frozenlist
+
+A = TypeVar('A')
 
 
 def apply[A, B](f: Callable[[A], B], x: A) -> B:
@@ -37,6 +39,19 @@ def cons[A](value: A, values: Sequence[A]) -> frozenlist[A]:
     return (value, *values)
 
 
+def drop(n: int, values: Sequence[A]) -> frozenlist[A]:
+    """Drop the first n elements from a list."""
+    return tuple(values[n:])
+
+
+def drop_while(predicate: Callable[[A], bool], values: Sequence[A]) -> frozenlist[A]:
+    """Drop elements from the beginning of a list while predicate is true."""
+    for i, value in enumerate(values):
+        if not predicate(value):
+            return tuple(values[i:])
+    return ()
+
+
 def filter[A](f: Callable[[A], bool], values: Sequence[A]) -> frozenlist[A]:
     """Filter a list based on a predicate."""
     return tuple(v for v in values if f(v))
@@ -45,6 +60,11 @@ def filter[A](f: Callable[[A], bool], values: Sequence[A]) -> frozenlist[A]:
 def foldl[A, B](f: Callable[[B, A], B], initial: B, values: Sequence[A]) -> B:
     """Fold a list from the left."""
     return reduce(f, values, initial)
+
+
+def init(values: Sequence[A]) -> frozenlist[A]:
+    """Return all elements except the last one."""
+    return tuple(values[:-1])
 
 
 def head[A](values: Sequence[A]) -> A:
@@ -109,6 +129,19 @@ def safe_head[A](values: Sequence[A]) -> A | None:
     return values[0] if len(values) > 0 else None
 
 
+def span(predicate: Callable[[A], bool], values: Sequence[A]) -> tuple[frozenlist[A], frozenlist[A]]:
+    """Split a list at the first element where predicate fails."""
+    for i, value in enumerate(values):
+        if not predicate(value):
+            return (tuple(values[:i]), tuple(values[i:]))
+    return (tuple(values), ())
+
+
 def tail[A](values: Sequence[A]) -> Sequence[A]:
     """Get all elements of a list except the first."""
     return values[1:]
+
+
+def take(n: int, values: Sequence[A]) -> frozenlist[A]:
+    """Take the first n elements from a list."""
+    return tuple(values[:n])

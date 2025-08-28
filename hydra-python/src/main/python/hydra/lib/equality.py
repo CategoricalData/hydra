@@ -1,8 +1,19 @@
 """Python implementations of hydra.lib.equality primitives."""
 
-from typing import Any
+from typing import Any, TypeVar
+import hydra.mantle
 
-from hydra.core import Term, Type
+A = TypeVar('A')
+
+
+def compare(x: Any, y: Any) -> hydra.mantle.Comparison:
+    """Compare two values and return a Comparison."""
+    if x < y:
+        return hydra.mantle.Comparison.LESS_THAN
+    elif x > y:
+        return hydra.mantle.Comparison.GREATER_THAN
+    else:
+        return hydra.mantle.Comparison.EQUAL_TO
 
 
 def equal(a: Any, b: Any) -> bool:
@@ -10,106 +21,36 @@ def equal(a: Any, b: Any) -> bool:
     return a == b
 
 
-def equal_binary(a: str, b: str) -> bool:
-    """Check if two strings are equal."""
-    return a == b
-
-
-def equal_boolean(a: bool, b: bool) -> bool:
-    """Check if two booleans are equal."""
-    return a == b
-
-
-def equal_bigfloat(a: float, b: float) -> bool:
-    """Check if two floats are equal."""
-    return a == b
-
-
-def equal_float32(a: float, b: float) -> bool:
-    """Check if two floats are equal."""
-    return a == b
-
-
-def equal_float64(a: float, b: float) -> bool:
-    """Check if two floats are equal."""
-    return a == b
-
-
-def equal_bigint(a: int, b: int) -> bool:
-    """Check if two integers are equal."""
-    return a == b
-
-
-def equal_int8(a: int, b: int) -> bool:
-    """Check if two integers are equal."""
-    return a == b
-
-
-def equal_int16(a: int, b: int) -> bool:
-    """Check if two integers are equal."""
-    return a == b
-
-
-def equal_int32(a: int, b: int) -> bool:
-    """Check if two integers are equal."""
-    return a == b
-
-
-def equal_int64(a: int, b: int) -> bool:
-    """Check if two integers are equal."""
-    return a == b
-
-
-def equal_uint8(a: int, b: int) -> bool:
-    """Check if two integers are equal."""
-    return a == b
-
-
-def equal_uint32(a: int, b: int) -> bool:
-    """Check if two integers are equal."""
-    return a == b
-
-
-def equal_uint64(a: int, b: int) -> bool:
-    """Check if two integers are equal."""
-    return a == b
-
-
-def equal_string(a: str, b: str) -> bool:
-    """Check if two strings are equal."""
-    return a == b
-
-
-def equal_term(a: Term, b: Term) -> bool:
-    """Check if two terms are equal."""
-    return a == b
-
-
-def equal_type(a: Type, b: Type) -> bool:
-    """Check if two types are equal."""
-    return a == b
-
-
-def gt_int32(a: int, b: int) -> bool:
-    """Check if one integer is greater than another."""
+def gt(a: Any, b: Any) -> bool:
+    """Check if first value is greater than second."""
     return a > b
 
 
-def gte_int32(a: int, b: int) -> bool:
-    """Check if one integer is greater than or equal to another."""
+def gte(a: Any, b: Any) -> bool:
+    """Check if first value is greater than or equal to second."""
     return a >= b
 
 
-def identity(a: Any) -> Any:
+def identity(a: A) -> A:
     """Return the identity of a value."""
     return a
 
 
-def lt_int32(a: int, b: int) -> bool:
-    """Check if one integer is less than another."""
+def lt(a: Any, b: Any) -> bool:
+    """Check if first value is less than second."""
     return a < b
 
 
-def lte_int32(a: int, b: int) -> bool:
-    """Check if one integer is less than or equal to another."""
+def lte(a: Any, b: Any) -> bool:
+    """Check if first value is less than or equal to second."""
     return a <= b
+
+
+def max(a: Any, b: Any) -> Any:
+    """Return the maximum of two values."""
+    return a if a > b else b
+
+
+def min(a: Any, b: Any) -> Any:
+    """Return the minimum of two values."""
+    return a if a < b else b

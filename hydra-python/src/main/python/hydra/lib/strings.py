@@ -35,6 +35,16 @@ def length(s: str) -> int:
     return len(s)
 
 
+def lines(s: str) -> frozenlist[str]:
+    """Split a string into lines."""
+    return tuple(s.splitlines())
+
+
+def null(s: str) -> bool:
+    """Check if a string is null/empty."""
+    return len(s) == 0
+
+
 def split_on(delimiter: str, x: str) -> frozenlist[str]:
     """Split a string on a delimiter."""
     return tuple(x.split(delimiter))
@@ -53,3 +63,8 @@ def to_lower(s: str) -> str:
 def to_upper(s: str) -> str:
     """Convert a string to uppercase."""
     return s.upper()
+
+
+def unlines(xs: Sequence[str]) -> str:
+    """Join strings with newlines."""
+    return '\n'.join(xs)
