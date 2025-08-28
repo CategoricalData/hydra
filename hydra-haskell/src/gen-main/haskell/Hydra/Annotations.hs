@@ -45,7 +45,7 @@ failOnFlag :: (Core.Name -> String -> Compute.Flow t0 ())
 failOnFlag flag msg = (Flows.bind (hasFlag flag) (\val -> Logic.ifElse val (Flows.fail msg) (Flows.pure ())))
 
 getDebugId :: (Compute.Flow t0 (Maybe String))
-getDebugId = (Lexical.withEmptyGraph (Flows.bind (getAttr Constants.key_debugId) (\desc -> Flows.traverseOptional Core___.string desc)))
+getDebugId = (Lexical.withEmptyGraph (Flows.bind (getAttr Constants.key_debugId) (\desc -> Flows.mapOptional Core___.string desc)))
 
 getAttr :: (Core.Name -> Compute.Flow t0 (Maybe Core.Term))
 getAttr key = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
