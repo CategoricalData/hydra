@@ -2,17 +2,17 @@
 
 import hydra.dsl.terms as terms
 import hydra.graph
-from hydra.core import Field, Name, Term, TypeScheme
+from hydra.core import Binding, Field, Name, Term, TypeScheme
 from hydra.dsl.python import FrozenDict
-from hydra.graph import Element, Graph, Primitive
+from hydra.graph import Graph, Primitive
 from hydra.phantoms import TTerm
 
 
 def element(
     name: TTerm[Name], term: TTerm[Term], mtyp: TTerm[TypeScheme | None]
-) -> TTerm[Element]:
+) -> TTerm[Binding]:
     """Create an element from a name, term, and optional type scheme."""
-    return TTerm[Element](
+    return TTerm[Binding](
         terms.record(
             hydra.graph.ELEMENT__NAME,
             [
@@ -32,7 +32,7 @@ def element_name() -> TTerm[Name]:
 
 
 def graph(
-    elements: TTerm[dict[Name, Element]],
+    elements: TTerm[dict[Name, Binding]],
     environment: TTerm[dict[Name, Term | None]],
     types: TTerm[dict[Name, TypeScheme]],
     body: TTerm[Term],
@@ -43,7 +43,7 @@ def graph(
 
     Parameters
     ----------
-    elements : TTerm[dict[Name, Element]]
+    elements : TTerm[dict[Name, Binding]]
         A map of name/element bindings.
     environment : TTerm[dict[Name, Term | None]]
         A map of name/term bindings.
@@ -76,9 +76,9 @@ def graph(
     )
 
 
-def graph_elements() -> TTerm[FrozenDict[Name, Element]]:
+def graph_elements() -> TTerm[FrozenDict[Name, Binding]]:
     """Get the elements of a graph."""
-    return TTerm[FrozenDict[Name, Element]](
+    return TTerm[FrozenDict[Name, Binding]](
         terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__ELEMENTS__NAME)
     )
 
