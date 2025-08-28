@@ -44,9 +44,9 @@ argsAndBindings :: PythonEnvironment -> Term -> Type -> Flow s ([Name], [Binding
 argsAndBindings env term _ = gather env [] [] [] term
   where
     gather env prevArgs prevBindings prevDoms term = case deannotateTerm term of
-      TermFunction (FunctionLambda (Lambda var (Just dom) body)) -> gather env2 (var:prevArgs) prevBindings (dom:prevDoms) body
+      TermFunction (FunctionLambda lam@(Lambda var (Just dom) body)) -> gather env2 (var:prevArgs) prevBindings (dom:prevDoms) body
         where
-          env2 = extendEnvironmentForLambda env var dom
+          env2 = extendEnvironmentForLambda env lam
       TermLet lt@(Let bindings body) -> gather env2 prevArgs (L.reverse bindings ++ prevBindings) prevDoms body
         where
           env2 = extendEnvironmentForLet env lt
@@ -154,12 +154,12 @@ encodeFloatValue fv = case fv of
 
 encodeFunction :: PythonEnvironment -> Function -> Flow Graph Py.Expression
 encodeFunction env f = case f of
-  FunctionLambda (Lambda var (Just dom) body) -> do
+  FunctionLambda lam@(Lambda var (Just dom) body) -> do
       pbody <- encodeTerm env2 body
       return $ Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] $
         Just $ Py.LambdaStarEtcParamNoDefault $ Py.LambdaParamNoDefault $ encodeNameQualified env2 var) pbody
     where
-      env2 = extendEnvironmentForLambda env var dom
+      env2 = extendEnvironmentForLambda env lam
   FunctionPrimitive name -> pure $ pyNameToPyExpression $ encodeName True CaseConventionLowerSnake env name -- Only nullary primitives should appear here.
   _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
@@ -476,12 +476,12 @@ encodeTopLevelTerm env term = if L.length args == 1
               let body = indentedBlock Nothing [[stmt]]
               return [Py.CaseBlock patterns Nothing body]
           toCaseBlock isEnum (Field fname fterm) = case deannotateTerm fterm of
-            TermFunction (FunctionLambda (Lambda v (Just dom) body)) -> do
+            TermFunction (FunctionLambda lam@(Lambda v (Just dom) body)) -> do
                 pyReturn <- encodeTerm env2 body
                 let body = indentedBlock Nothing [[returnSingle pyReturn]]
                 return $ Py.CaseBlock (pyClosedPatternToPyPatterns pattern) Nothing body
               where
-                env2 = extendEnvironmentForLambda env v dom
+                env2 = extendEnvironmentForLambda env lam
                 pattern = if isEnum
                     then Py.ClosedPatternValue $ Py.ValuePattern $ Py.Attribute [
                       encodeName True CaseConventionPascal env tname,
@@ -612,25 +612,17 @@ encodeWrappedType env name typ comment = do
 environmentTypeParameters :: PythonEnvironment -> [Py.TypeParameter]
 environmentTypeParameters env = pyNameToPyTypeParameter . encodeTypeVariable <$> (fst $ pythonEnvironmentBoundTypeVariables env)
 
-extendEnvironmentForLambda :: PythonEnvironment -> Name -> Type -> PythonEnvironment
-extendEnvironmentForLambda env var dom = env {pythonEnvironmentTypeContext = tcontext2}
-  where
-    tcontext = pythonEnvironmentTypeContext env
-    tcontext2 = tcontext {typeContextTypes = M.insert var dom $ typeContextTypes tcontext}
+extendEnvironmentForLambda :: PythonEnvironment -> Lambda -> PythonEnvironment
+extendEnvironmentForLambda env lam = env {
+  pythonEnvironmentTypeContext = extendTypeContextForLambda (pythonEnvironmentTypeContext env) lam}
 
 extendEnvironmentForLet :: PythonEnvironment -> Let -> PythonEnvironment
-extendEnvironmentForLet env (Let bindings _) = env {pythonEnvironmentTypeContext = tcontext2}
-  where
-    tcontext = pythonEnvironmentTypeContext env
-    tcontext2 = tcontext {typeContextTypes = M.union
-      (typeContextTypes tcontext)
-      (M.fromList $ fmap (\b -> (bindingName b, typeSchemeToFType $ Y.fromJust $ bindingType b)) bindings)}
+extendEnvironmentForLet env letrec = env {
+  pythonEnvironmentTypeContext = extendTypeContextForLet (pythonEnvironmentTypeContext env) letrec}
 
 extendEnvironmentForTypeLambda :: PythonEnvironment -> TypeLambda -> PythonEnvironment
-extendEnvironmentForTypeLambda env (TypeLambda name _) = env {pythonEnvironmentTypeContext = tcontext2}
-  where
-    tcontext = pythonEnvironmentTypeContext env
-    tcontext2 = tcontext {typeContextVariables = S.insert name $ typeContextVariables tcontext}
+extendEnvironmentForTypeLambda env tlam = env {
+  pythonEnvironmentTypeContext = extendTypeContextForTypeLambda (pythonEnvironmentTypeContext env) tlam}
 
 findTypeParams :: PythonEnvironment -> Type -> [Name]
 findTypeParams env typ = L.filter isBound $ S.toList $ freeVariablesInType typ
@@ -656,23 +648,31 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataUsesTuple = False,
       pythonModuleMetadataUsesTypeVar = False}
     addDef meta def = case def of
-      DefinitionTerm (TermDefinition _ term typ) -> foldOverTerm TraversalOrderPre extendMetaForTerm meta term
+      DefinitionTerm (TermDefinition _ term _) -> extendMetaForTerm True meta term
       DefinitionType (TypeDefinition _ typ) -> foldOverType TraversalOrderPre (extendMetaForType False) meta2 typ
         where
           meta2 = meta {pythonModuleMetadataUsesName = True}
-    extendMetaForTerm meta t = case t of
-      TermLet (Let bindings _) -> L.foldl forBinding meta bindings
-        where
-          forBinding meta (Binding _ _ mts) = case mts of
-            Nothing -> meta
-            Just ts -> extendMetaForType True meta $ typeSchemeType ts
-      TermLiteral l -> case l of
-        LiteralFloat fv -> case fv of
-          FloatValueBigfloat _ -> meta {pythonModuleMetadataUsesDecimal = True}
+    extendMetaForTerm topLevel meta t = case t of
+        TermFunction f -> case f of
+          FunctionLambda (Lambda _ (Just dom) body) -> if topLevel
+              then extendMetaForType False meta2 dom
+              else meta2
+            where
+              meta2 = extendMetaForTerm topLevel meta body
           _ -> meta
-        _ -> meta
-      TermMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
-      _ -> meta
+        TermLet (Let bindings body) -> L.foldl forBinding (extendMetaForTerm False meta body) bindings
+          where
+            forBinding meta (Binding _ term1 (Just ts)) = extendMetaForType True (extendMetaForTerm True meta term1) $
+              typeSchemeType ts
+        TermLiteral l -> case l of
+          LiteralFloat fv -> case fv of
+            FloatValueBigfloat _ -> meta {pythonModuleMetadataUsesDecimal = True}
+            _ -> meta
+          _ -> meta
+        TermMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
+        _ -> meta2
+      where
+        meta2 = L.foldl (extendMetaForTerm False) meta $ subterms t
     extendMetaForType isTermAnnot meta typ = extendFor meta3 typ
       where
         tvars = pythonModuleMetadataTypeVariables meta
