@@ -62,35 +62,34 @@ define = definitionInModule module_
 
 createOrderingIsomorphismDef :: TBinding ([a] -> [a] -> Topo.OrderingIsomorphism b)
 createOrderingIsomorphismDef = define "createOrderingIsomorphism" $
-  withOrd "t0" $
-  lambdas ["sourceOrd", "targetOrd"] $ lets [
-    "sourceToTargetMapping">: lambda "els" $ lets [
-      "mp">: Maps.fromList $ Lists.zip (var "sourceOrd") (var "els")]
-      $ Optionals.cat $ Lists.map (lambda "n" $ Maps.lookup (var "n") (var "mp")) (var "targetOrd"),
-    "targetToSourceMapping">: lambda "els" $ lets [
-      "mp">: Maps.fromList $ Lists.zip (var "targetOrd") (var "els")]
-      $ Optionals.cat $ Lists.map (lambda "n" $ Maps.lookup (var "n") (var "mp")) (var "sourceOrd")]
-    $ Topology.orderingIsomorphism (var "sourceToTargetMapping") (var "targetToSourceMapping")
+  withOrd "t0" $ "sourceOrd" ~> "targetOrd" ~>
+  "sourceToTargetMapping" <~ ("els" ~>
+    "mp" <~ Maps.fromList (Lists.zip (var "sourceOrd") (var "els")) $
+    Optionals.cat $ Lists.map (lambda "n" $ Maps.lookup (var "n") (var "mp")) (var "targetOrd")) $
+  "targetToSourceMapping" <~ ("els" ~>
+    "mp" <~ Maps.fromList (Lists.zip (var "targetOrd") (var "els")) $
+    Optionals.cat $ Lists.map (lambda "n" $ Maps.lookup (var "n") (var "mp")) (var "sourceOrd")) $
+  Topology.orderingIsomorphism (var "sourceToTargetMapping") (var "targetToSourceMapping")
 
 topologicalSortDef :: TBinding ([(a, [a])] -> Either [[a]] [a])
 topologicalSortDef = define "topologicalSort" $
-  doc "Sort a directed acyclic graph (DAG) based on an adjacency list. Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list." $
-  withOrd "t0" $
-  lambda "pairs" $ lets [
-    "sccs">: ref topologicalSortComponentsDef @@ var "pairs",
-    "isCycle">: lambda "scc" $ Logic.not $ Lists.null $ Lists.tail $ var "scc",
-    "withCycles">: Lists.filter (var "isCycle") (var "sccs")]
-    $ Logic.ifElse (Lists.null $ var "withCycles")
-      (Mantle.eitherRight $ Lists.concat $ var "sccs")
-      (Mantle.eitherLeft $ var "withCycles")
+  doc ("Sort a directed acyclic graph (DAG) based on an adjacency list."
+    <> " Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list.") $
+  withOrd "t0" $ "pairs" ~>
+  "sccs" <~ ref topologicalSortComponentsDef @@ var "pairs" $
+  "isCycle" <~ ("scc" ~> Logic.not $ Lists.null $ Lists.tail $ var "scc") $
+  "withCycles" <~ Lists.filter (var "isCycle") (var "sccs") $
+  Logic.ifElse (Lists.null $ var "withCycles")
+    (Mantle.eitherRight $ Lists.concat $ var "sccs")
+    (Mantle.eitherLeft $ var "withCycles")
 
 topologicalSortComponentsDef :: TBinding ([(a, [a])] -> [[a]])
 topologicalSortComponentsDef = define "topologicalSortComponents" $
-  doc "Find the strongly connected components (including cycles and isolated vertices) of a graph, in (reverse) topological order, i.e. dependencies before dependents" $
-  withOrd "t0" $
-  lambda "pairs" $ lets [
-    "graphResult">: ref Tarjan.adjacencyListsToGraphDef @@ var "pairs",
-    "g">: first $ var "graphResult",
-    "getKey">: second $ var "graphResult"]
-    $ Lists.map (lambda "component" $ Lists.map (var "getKey") (var "component")) $
-      ref Tarjan.stronglyConnectedComponentsDef @@ var "g"
+  doc ("Find the strongly connected components (including cycles and isolated vertices) of a graph,"
+    <> " in (reverse) topological order, i.e. dependencies before dependents") $
+  withOrd "t0" $ "pairs" ~>
+  "graphResult" <~ ref Tarjan.adjacencyListsToGraphDef @@ var "pairs" $
+  "g" <~ first (var "graphResult") $
+  "getKey" <~ second (var "graphResult") $
+  Lists.map ("comp" ~> Lists.map (var "getKey") (var "comp")) $
+    ref Tarjan.stronglyConnectedComponentsDef @@ var "g"
