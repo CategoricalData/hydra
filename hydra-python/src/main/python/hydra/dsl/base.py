@@ -1,9 +1,8 @@
 """Base DSL which makes use of phantom types. Use this DSL for defining programs as opposed to data type definitions."""
 
 import hydra.dsl.terms as terms
-from hydra.core import Field, Name, TermVariable
-from hydra.graph import Element
-from hydra.phantoms import TCase, TElement, TField, TTerm
+from hydra.core import Binding, Field, Name, TermVariable
+from hydra.phantoms import TCase, TBinding, TField, TTerm
 
 # module Hydra.Dsl.Base (
 #   module Hydra.Dsl.Base,
@@ -99,11 +98,11 @@ def constant[T](term: TTerm[T]) -> TTerm[T]:
     return TTerm[T](terms.constant(term.value))
 
 
-# definitionInModule :: Module -> String -> TTerm a -> TElement a
+# definitionInModule :: Module -> String -> TTerm a -> TBinding a
 # definitionInModule mod = definitionInNamespace $ moduleNamespace mod
 
-# definitionInNamespace :: Namespace -> String -> TTerm a -> TElement a
-# definitionInNamespace ns lname = TElement $ unqualifyName $ QualifiedName (Just ns) lname
+# definitionInNamespace :: Namespace -> String -> TTerm a -> TBinding a
+# definitionInNamespace ns lname = TBinding $ unqualifyName $ QualifiedName (Just ns) lname
 
 # doc :: String -> TTerm a -> TTerm a
 # doc s (TTerm term) = TTerm $ setTermDescription (Just s) term
@@ -115,9 +114,9 @@ def constant[T](term: TTerm[T]) -> TTerm[T]:
 # doc80 = doc . wrapLine 80
 
 
-def el[T](element: TElement[T]) -> Element:
-    """Element."""
-    return Element(element.name, element.term.value, None)
+def el[T](element: TBinding[T]) -> Binding:
+    """Binding."""
+    return Binding(element.name, element.term.value, None)
 
 
 def field[T](fname: Name, val: TTerm[T]) -> Field:
@@ -278,7 +277,7 @@ def record[T](name: Name, fields: list[Field]):
     return TTerm[T](terms.record(name, fields))
 
 
-def ref[T](name: TElement[T]):
+def ref[T](name: TBinding[T]):
     """Construct a reference."""
     return TTerm[T](TermVariable(name.name))
 
