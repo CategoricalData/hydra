@@ -100,8 +100,10 @@ encodeApplication env app = do
           FunctionPrimitive name -> do
             return $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) hargs
           _ -> def
-        TermVariable name -> do -- Special-casing variables prevents quoting; forward references are allowed for function calls
-          return $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) hargs
+        -- Special-casing variables prevents quoting; forward references are allowed for function calls
+        TermVariable name -> return $ if L.null hargs
+          then termVariableReference env name
+          else functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) hargs
         _ -> def
       where
         parg = L.head hargs
