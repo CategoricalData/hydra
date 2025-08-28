@@ -29,10 +29,10 @@ key_type = hydra.core.Name("type")
 # The maximum value of a 32-bit integer.
 max_int32 = 9223372036854775807
 
-# A placeholder name for row types as they are being constructed.
-placeholder_name = hydra.core.Name("Placeholder")
-
 # A maximum depth for nested flows. Currently, this is set very high because deep flows are common in type inference over the Hydra kernel.
 max_trace_depth = 4000
+
+# A placeholder name for row types as they are being constructed.
+placeholder_name = hydra.core.Name("Placeholder")
 
 warning_auto_generated_file = "Note: this is an automatically generated file. Do not edit."

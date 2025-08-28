@@ -254,11 +254,11 @@ def term_variant(v1: hydra.core.Term) -> hydra.mantle.TermVariant:
         case hydra.core.TermSum():
             return hydra.mantle.TermVariant.SUM
         
-        case hydra.core.TermTypeLambda():
-            return hydra.mantle.TermVariant.TYPE_LAMBDA
-        
         case hydra.core.TermTypeApplication():
             return hydra.mantle.TermVariant.TYPE_APPLICATION
+        
+        case hydra.core.TermTypeLambda():
+            return hydra.mantle.TermVariant.TYPE_LAMBDA
         
         case hydra.core.TermUnion():
             return hydra.mantle.TermVariant.UNION
