@@ -90,6 +90,18 @@ typeContextVariables tc = Phantoms.project _TypeContext _TypeContext_variables @
 typeContextInferenceContext :: TTerm TypeContext -> TTerm InferenceContext
 typeContextInferenceContext tc = Phantoms.project _TypeContext _TypeContext_inferenceContext @@ tc
 
+typeContextWithTypes :: TTerm TypeContext -> TTerm (M.Map Name Type) -> TTerm TypeContext
+typeContextWithTypes ctx types = typeContext
+  types
+  (Hydra.Dsl.Typing.typeContextVariables ctx)
+  (Hydra.Dsl.Typing.typeContextInferenceContext ctx)
+
+typeContextWithVariables :: TTerm TypeContext -> TTerm (S.Set Name) -> TTerm TypeContext
+typeContextWithVariables ctx variables = typeContext
+  (Hydra.Dsl.Typing.typeContextTypes ctx)
+  variables
+  (Hydra.Dsl.Typing.typeContextInferenceContext ctx)
+
 typeSubst :: TTerm (M.Map Name Type) -> TTerm TypeSubst
 typeSubst = Phantoms.wrap _TypeSubst
 

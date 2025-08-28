@@ -66,6 +66,9 @@ module_ = Module (Namespace "hydra.schemas") elements
       el dereferenceTypeDef,
       el elementAsTypedTermDef,
       el elementsWithDependenciesDef,
+      el extendTypeContextForLambdaDef,
+      el extendTypeContextForLetDef,
+      el extendTypeContextForTypeLambdaDef,
       el fieldMapDef,
       el fieldTypeMapDef,
       el findFieldTypeDef,
@@ -156,6 +159,40 @@ elementsWithDependenciesDef = define "elementsWithDependencies" $
       (Lists.map (unaryFunction Core.bindingName) (var "original"))
       (Lists.concat $ Lists.map (var "depNames") (var "original"))]
     $ Flows.mapList (ref Lexical.requireElementDef) (var "allDepNames")
+
+extendTypeContextForLambdaDef :: TBinding (TypeContext -> Lambda -> TypeContext)
+extendTypeContextForLambdaDef = define "extendTypeContextForLambda" $
+  doc "Extend a type context by descending into a System F lambda body" $
+  "tcontext" ~> "lam" ~>
+  "var" <~ Core.lambdaParameter (var "lam") $
+  "dom" <~ Optionals.fromJust (Core.lambdaDomain (var "lam")) $
+  Typing.typeContextWithTypes
+    (var "tcontext")
+    (Maps.insert (var "var") (var "dom") (Typing.typeContextTypes (var "tcontext")))
+
+extendTypeContextForLetDef :: TBinding (TypeContext -> Let -> TypeContext)
+extendTypeContextForLetDef = define "extendTypeContextForLet" $
+  doc "Extend a type context by descending into a let body" $
+  "tcontext" ~> "letrec" ~>
+  "bindings" <~ Core.letBindings (var "letrec") $
+  Typing.typeContextWithTypes
+    (var "tcontext")
+    (Maps.union
+      (Typing.typeContextTypes (var "tcontext"))
+      (Maps.fromList $ Lists.map
+        ("b" ~> pair
+          (Core.bindingName $ var "b")
+          (ref typeSchemeToFTypeDef @@ (Optionals.fromJust $ Core.bindingType $ var "b")))
+        (var "bindings")))
+
+extendTypeContextForTypeLambdaDef :: TBinding (TypeContext -> TypeLambda -> TypeContext)
+extendTypeContextForTypeLambdaDef = define "extendTypeContextForTypeLambda" $
+  doc "Extend a type context by descending into a System F type lambda body" $
+  "tcontext" ~> "tlam" ~>
+  "name" <~ Core.typeLambdaParameter (var "tlam") $
+  Typing.typeContextWithVariables
+    (var "tcontext")
+    (Sets.insert (var "name") (Typing.typeContextVariables (var "tcontext")))
 
 fieldMapDef :: TBinding ([Field] -> M.Map Name Term)
 fieldMapDef = define "fieldMap" $
