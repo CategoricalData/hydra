@@ -537,7 +537,7 @@ rewriteTermM f =
             Core.TermList v1 -> (Flows.bind (Flows.mapList recurse v1) (\rels -> Flows.pure (Core.TermList rels)))
             Core.TermLiteral v1 -> (Flows.pure (Core.TermLiteral v1))
             Core.TermMap v1 -> (Flows.bind (Flows.mapList forPair (Maps.toList v1)) (\pairs -> Flows.pure (Core.TermMap (Maps.fromList pairs))))
-            Core.TermOptional v1 -> (Flows.bind (Flows.traverseOptional recurse v1) (\rm -> Flows.pure (Core.TermOptional rm)))
+            Core.TermOptional v1 -> (Flows.bind (Flows.mapOptional recurse v1) (\rm -> Flows.pure (Core.TermOptional rm)))
             Core.TermProduct v1 -> (Flows.map (\rtuple -> Core.TermProduct rtuple) (Flows.mapList recurse v1))
             Core.TermRecord v1 ->  
               let n = (Core.recordTypeName v1) 

@@ -338,7 +338,7 @@ passMap t = ((\x -> case x of
 passOptional :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passOptional t = ((\x -> case x of
   Core.TypeOptional v1 ->  
-    let mapTerm = (\coder -> \dir -> \term -> Flows.bind (withGraphContext (Core__.optional Flows.pure term)) (\opt -> Flows.bind (Flows.traverseOptional (Utils.encodeDecode dir coder) opt) (\newOpt -> Flows.pure (Core.TermOptional newOpt))))
+    let mapTerm = (\coder -> \dir -> \term -> Flows.bind (withGraphContext (Core__.optional Flows.pure term)) (\opt -> Flows.bind (Flows.mapOptional (Utils.encodeDecode dir coder) opt) (\newOpt -> Flows.pure (Core.TermOptional newOpt))))
     in (Flows.bind (termAdapter v1) (\adapter -> Flows.pure (Compute.Adapter {
       Compute.adapterIsLossy = (Compute.adapterIsLossy adapter),
       Compute.adapterSource = t,

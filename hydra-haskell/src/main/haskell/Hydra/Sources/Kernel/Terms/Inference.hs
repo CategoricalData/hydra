@@ -428,7 +428,7 @@ inferTypeOfCaseStatementDef = define "inferTypeOfCaseStatement" $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "stype" <~ Core.typeSchemeType (var "schemaType") $
   "sfields" <<~ ref ExtractCore.unionTypeDef @@ var "tname" @@ var "stype" $
-  "dfltResult" <<~ Flows.traverseOptional ("t" ~> ref inferTypeOfTermDef @@ var "cx" @@ var "t" @@
+  "dfltResult" <<~ Flows.mapOptional ("t" ~> ref inferTypeOfTermDef @@ var "cx" @@ var "t" @@
     (Strings.cat $ list [string "case ", Core.unName $ var "tname", string ".<default>"])) (var "dflt") $
   "caseResults" <<~ ref inferManyDef @@ var "cx" @@ Lists.map
     ("f" ~> pair (Core.fieldTerm $ var "f")
@@ -1235,7 +1235,7 @@ typeOfInternalDef = define "typeOfInternal" $
               "svars" <~ Core.typeSchemeVariables (var "schemaType") $
               "stype" <~ Core.typeSchemeType (var "schemaType") $
               "sfields" <<~ ref ExtractCore.unionTypeDef @@ var "tname" @@ var "stype" $
-              "tdflt" <<~ Flows.traverseOptional ("e" ~> ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "e") (var "dflt") $
+              "tdflt" <<~ Flows.mapOptional ("e" ~> ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "e") (var "dflt") $
               "tcterms" <<~ Flows.mapList ("e" ~> ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "e") (var "cterms") $
               "cods" <<~ Flows.mapList ("t" ~> Flows.map (unaryFunction Core.functionTypeCodomain) $ ref ExtractCore.functionTypeDef @@ var "t") (var "tcterms") $
               "ts" <~ Optionals.cat (Lists.cons (var "tdflt") $ Lists.map (unaryFunction Optionals.pure) (var "cods")) $

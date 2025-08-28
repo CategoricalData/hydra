@@ -250,7 +250,7 @@ inferTypeOfCaseStatement cx caseStmt =
           let svars = (Core.typeSchemeVariables schemaType)
           in  
             let stype = (Core.typeSchemeType schemaType)
-            in (Flows.bind (Core_.unionType tname stype) (\sfields -> Flows.bind (Flows.traverseOptional (\t -> inferTypeOfTerm cx t (Strings.cat [
+            in (Flows.bind (Core_.unionType tname stype) (\sfields -> Flows.bind (Flows.mapOptional (\t -> inferTypeOfTerm cx t (Strings.cat [
               "case ",
               Core.unName tname,
               ".<default>"])) dflt) (\dfltResult -> Flows.bind (inferMany cx (Lists.map (\f -> (Core.fieldTerm f, (Strings.cat [
@@ -1003,7 +1003,7 @@ typeOfInternal cx vars types apptypes term =
                   let svars = (Core.typeSchemeVariables schemaType)
                   in  
                     let stype = (Core.typeSchemeType schemaType)
-                    in (Flows.bind (Core_.unionType tname stype) (\sfields -> Flows.bind (Flows.traverseOptional (\e -> typeOfInternal cx vars types [] e) dflt) (\tdflt -> Flows.bind (Flows.mapList (\e -> typeOfInternal cx vars types [] e) cterms) (\tcterms -> Flows.bind (Flows.mapList (\t -> Flows.map Core.functionTypeCodomain (Core_.functionType t)) tcterms) (\cods ->  
+                    in (Flows.bind (Core_.unionType tname stype) (\sfields -> Flows.bind (Flows.mapOptional (\e -> typeOfInternal cx vars types [] e) dflt) (\tdflt -> Flows.bind (Flows.mapList (\e -> typeOfInternal cx vars types [] e) cterms) (\tcterms -> Flows.bind (Flows.mapList (\t -> Flows.map Core.functionTypeCodomain (Core_.functionType t)) tcterms) (\cods ->  
                       let ts = (Optionals.cat (Lists.cons tdflt (Lists.map Optionals.pure cods)))
                       in (Flows.bind (checkSameType "case branches" ts) (\cod ->  
                         let subst = (Typing_.TypeSubst (Maps.fromList (Lists.zip svars apptypes)))
