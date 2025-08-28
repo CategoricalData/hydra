@@ -721,7 +721,11 @@ genericArg tparamList = if L.null tparamList
     (pyNameToPyExpression . encodeTypeVariable <$> tparamList)
 
 isNullaryFunction :: Binding -> Bool
-isNullaryFunction el = False -- TODO: determine whether distinguishing between "nullary functions" and constants is actually necessary
+isNullaryFunction (Binding _ term (Just ts)) = typeArity (typeSchemeType ts) == 0 && isLet
+  where
+    isLet = case deannotateAndDetypeTerm term of
+      TermLet _ -> True
+      _ -> False
 
 moduleToPython :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
 moduleToPython mod defs = do
