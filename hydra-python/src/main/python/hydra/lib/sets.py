@@ -16,9 +16,9 @@ def difference[A](s1: frozenset[A], s2: frozenset[A]) -> frozenset[A]:
     return s1 - s2
 
 
-def empty[A]():
+def empty() -> frozenset[Any]:
     """Create an empty set."""
-    return frozenset[A]()
+    return frozenset()
 
 
 def from_list[A](xs: Sequence[A]) -> frozenset[A]:
@@ -36,11 +36,6 @@ def intersection[A](s1: frozenset[A], s2: frozenset[A]) -> frozenset[A]:
     return s1 & s2
 
 
-def is_empty(s: frozenset[Any]) -> bool:
-    """Check if a set is empty."""
-    return len(s) == 0
-
-
 def map[A, B](f: Callable[[A], B], s: frozenset[A]) -> frozenset[B]:
     """Map a function over a set."""
     return frozenset(f(x) for x in s)
@@ -51,9 +46,14 @@ def member[A](x: A, s: frozenset[A]) -> bool:
     return x in s
 
 
+def null(s: frozenset[Any]) -> bool:
+    """Check if a set is empty."""
+    return len(s) == 0
+
+
 def singleton[A](x: A) -> frozenset[A]:
     """Create a singleton set."""
-    return frozenset[A]({x})
+    return frozenset({x})
 
 
 def size(s: frozenset[Any]) -> int:
@@ -69,3 +69,12 @@ def to_list[A](s: frozenset[A]) -> frozenlist[A]:
 def union[A](s1: frozenset[A], s2: frozenset[A]) -> frozenset[A]:
     """Compute the union of two sets."""
     return s1 | s2
+
+
+def unions[A](sets: Sequence[frozenset[A]]) -> frozenset[A]:
+    """Compute the union of multiple sets."""
+    result = frozenset[A]()
+    for s in sets:
+        result = result | s
+    return result
+

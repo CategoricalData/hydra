@@ -1,7 +1,8 @@
 """Python implementations of hydra.lib.optionals primitives."""
 
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from typing import Any
+from hydra.dsl.python import frozenlist
 
 
 def apply[A, B](f: Callable[[A], B] | None, x: A | None) -> B | None:
@@ -18,9 +19,14 @@ def bind[A, B](x: A | None, f: Callable[[A], B | None]) -> B | None:
     return f(x)
 
 
-def cat[A](xs: list[A | None]) -> list[A]:
+def cases[A, B](m: A | None, n: B, j: Callable[[A], B]) -> B:
+    """Handle an optional value with different parameter order than maybe."""
+    return n if m is None else j(m)
+
+
+def cat[A](xs: Sequence[A | None]) -> frozenlist[A]:
     """Filter out None values from a list."""
-    return [x for x in xs if x is not None]
+    return tuple(x for x in xs if x is not None)
 
 
 def compose[A, B, C](
@@ -30,9 +36,16 @@ def compose[A, B, C](
     return lambda x: bind(f(x), g)
 
 
-def from_maybe[A](x: A, y: A | None) -> A:
+def from_just[A](x: A | None) -> A:
+    """Extract value from Maybe, assuming it's not None (unsafe)."""
+    if x is None:
+        raise ValueError("from_just: None")
+    return x
+
+
+def from_maybe[A](default: A, x: A | None) -> A:
     """Get a value from an optional value, or return a default value."""
-    return y if y is not None else x
+    return x if x is not None else default
 
 
 def is_just(x: Any | None) -> bool:
@@ -50,11 +63,22 @@ def map[A, B](f: Callable[[A], B], x: A | None) -> B | None:
     return f(x) if x is not None else None
 
 
-def maybe[A, B](x: B, f: Callable[[A], B], y: A | None) -> B:
+def map_maybe[A, B](f: Callable[[A], B | None], xs: Sequence[A]) -> frozenlist[B]:
+    """Map a function over a list and collect non-None results."""
+    result: list[B] = []
+    for x in xs:
+        y = f(x)
+        if y is not None:
+            result.append(y)
+    return tuple(result)
+
+
+def maybe[A, B](default: B, f: Callable[[A], B], x: A | None) -> B:
     """Handle an optional value, with transformation."""
-    return x if y is None else f(y)
+    return default if x is None else f(x)
 
 
 def pure[A](x: A) -> A | None:
     """Lift a value into the Maybe type."""
     return x
+
