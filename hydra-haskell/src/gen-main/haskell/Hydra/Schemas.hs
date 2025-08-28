@@ -25,6 +25,7 @@ import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core___
 import qualified Hydra.Sorting as Sorting
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -71,6 +72,35 @@ elementsWithDependencies original =
   let depNames = (\el -> Sets.toList (Rewriting.termDependencyNames True False False (Core.bindingTerm el))) 
       allDepNames = (Lists.nub (Lists.concat2 (Lists.map Core.bindingName original) (Lists.concat (Lists.map depNames original))))
   in (Flows.mapList Lexical.requireElement allDepNames)
+
+-- | Extend a type context by descending into a System F lambda body
+extendTypeContextForLambda :: (Typing.TypeContext -> Core.Lambda -> Typing.TypeContext)
+extendTypeContextForLambda tcontext lam =  
+  let var = (Core.lambdaParameter lam)
+  in  
+    let dom = (Optionals.fromJust (Core.lambdaDomain lam))
+    in Typing.TypeContext {
+      Typing.typeContextTypes = (Maps.insert var dom (Typing.typeContextTypes tcontext)),
+      Typing.typeContextVariables = (Typing.typeContextVariables tcontext),
+      Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tcontext)}
+
+-- | Extend a type context by descending into a let body
+extendTypeContextForLet :: (Typing.TypeContext -> Core.Let -> Typing.TypeContext)
+extendTypeContextForLet tcontext let_ =  
+  let bindings = (Core.letBindings let_)
+  in Typing.TypeContext {
+    Typing.typeContextTypes = (Maps.union (Typing.typeContextTypes tcontext) (Maps.fromList (Lists.map (\b -> (Core.bindingName b, (typeSchemeToFType (Optionals.fromJust (Core.bindingType b))))) bindings))),
+    Typing.typeContextVariables = (Typing.typeContextVariables tcontext),
+    Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tcontext)}
+
+-- | Extend a type context by descending into a System F type lambda body
+extendTypeContextForTypeLambda :: (Typing.TypeContext -> Core.TypeLambda -> Typing.TypeContext)
+extendTypeContextForTypeLambda tcontext tlam =  
+  let name = (Core.typeLambdaParameter tlam)
+  in Typing.TypeContext {
+    Typing.typeContextTypes = (Typing.typeContextTypes tcontext),
+    Typing.typeContextVariables = (Sets.insert name (Typing.typeContextVariables tcontext)),
+    Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tcontext)}
 
 fieldMap :: ([Core.Field] -> M.Map Core.Name Core.Term)
 fieldMap fields = (Maps.fromList (Lists.map toPair fields)) 
