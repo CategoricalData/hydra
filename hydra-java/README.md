@@ -10,7 +10,7 @@ and releases can be found on Maven Central [here](https://central.sonatype.com/a
 ## Build
 
 Build the Java project with `./gradlew build`, or publish the resulting JAR to your local Maven repository with `./gradlew publishToMavenLocal`.
-This project requires Java 11, so you may need to set the `JAVA_HOME` environment variable accordingly: `JAVA_HOME=/path/to/java11/installation ./gradlew build`.
+This project requires at least Java 11, so you may need to set the `JAVA_HOME` environment variable accordingly: `JAVA_HOME=/path/to/java11/installation ./gradlew build`.
 
 To run the tests, use `./gradlew test`.
 
@@ -18,7 +18,7 @@ To run the tests, use `./gradlew test`.
 
 ### Algebraic data types
 
-The Hydra coder which generates everything in `src/gen-main` and `src/gen-test` can be found [here](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Langs/Java).
+The Hydra coder which generates everything in `src/gen-main` and `src/gen-test` can be found [here](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/main/haskell/Hydra/Ext/Staging/Java).
 A variety of techniques are used in order to materialize Hydra's core language in Java,
 including a [pattern](https://garciat.com/posts/java-adt) for representing algebraic data types which was originally proposed by Gabriel Garcia, and used in [Dragon](https://eng.uber.com/dragon-schema-integration-at-uber-scale).
 For example, the generated `Vertex` class represents a property graph vertex, and corresponds to a record type:
@@ -50,11 +50,11 @@ public class Vertex<V, P> {
 }
 ```
 
-See [Vertex.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/langs/tinkerpop/propertyGraph/Vertex.java) for the complete class,
-as well as the `Vertex` type in [PropertyGraph.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Langs/Tinkerpop/PropertyGraph.hs) for comparison.
-Both files were generated from the property graph model defined [here](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Langs/Tinkerpop/PropertyGraph.hs).
+See [Vertex.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/pg/model/Vertex.java) for the complete class,
+as well as the `Vertex` type in [Pg/Model.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/gen-main/haskell/Hydra/Pg/Model.hs) for comparison.
+Both files were generated from the property graph model defined [here](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Pg/Model.hs).
 In each instantiation of the model, a vertex is an object with a label, an id, and a key/value map of properties.
-The `Edge` type is defined similarly (see [Edge.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/langs/tinkerpop/propertyGraph/Edge.java)).
+The `Edge` type is defined similarly (see [Edge.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/pg/model/Edge.java)).
 Now compare this with the generated `Element` class, which is a tagged union of `Vertex` and `Edge`:
 
 ```java
@@ -132,7 +132,7 @@ public abstract class Element<V, E, P> {
 }
 ```
 
-See [Element.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/langs/tinkerpop/propertyGraph/Element.java) for the complete class.
+See [Element.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/pg/model/Element.java) for the complete class.
 Notice that we have defined two inner classes, `Element.Vertex` and `Element.Edge`, for each alternative of the union,
 as well as a pair of "visitor" classes: `Element.Visitor` and `Element.PartialVisitor`.
 The first two classes are used instantiate an `Element` either as the first alternative (a vertex) or the second (an edge).
