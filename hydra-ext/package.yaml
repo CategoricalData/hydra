@@ -13,18 +13,17 @@ extra-source-files:
 
 dependencies: # copied from ../hydra-haskell
   - HsYAML                        >= 0.2.1 && < 0.3
-  - aeson                         >= 2.0.0 && < 2.2
+  - aeson                         >= 2.2.0 && < 2.3
   - aeson-pretty                  >= 0.8.9 && < 0.9
-  - base                          >= 4.18.0 && < 4.19
-  - bytestring                    >= 0.11.3 && < 0.12
-  - containers                    >= 0.6.5 && < 0.7
+  - base                          >= 4.20.0 && < 4.21
+  - bytestring                    >= 0.12.0 && < 0.13
+  - containers                    >= 0.7 && < 0.8
   - directory                     >= 1.3.6 && < 1.4
-  - filepath                      >= 1.4.2 && < 1.5
+  - filepath                      >= 1.5.0 && < 1.6
   - scientific                    >= 0.3.7 && < 0.4
   - split                         >= 0.2.3 && < 0.3
-  - text                          >= 2.0.2 && < 2.1
+  - text                          >= 2.1.0 && < 2.2
   - vector                        >= 0.12.0 && < 0.14
-  - mtl # Temporary, for the Algorithm W implementation
 
 library:
   source-dirs:
