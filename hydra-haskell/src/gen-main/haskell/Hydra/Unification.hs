@@ -35,7 +35,7 @@ joinTypes left right comment =
       cannotUnify = (Flows.fail (Strings.cat [
               Strings.cat [
                 Strings.cat [
-                  "Cannot unify ",
+                  "cannot unify ",
                   (Core_.type_ sleft)],
                 " with "],
               (Core_.type_ sright)]))

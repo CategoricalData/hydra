@@ -46,14 +46,14 @@ Now in the REPL, you can access test resources,
 or run individual Hspec test cases.
 
 ```haskell
-hspec Hydra.TermAdaptersSpec.termsAreAdaptedRecursively
+Test.Hspec.hspec Hydra.TestSuiteSpec.spec
 ```
 
 ## Code generation
 
 Hydra is a self-hosting compiler in Haskell, which means that it can generate
 all of its own Haskell source code, with the exception of a few built-in
-artifacts including Haskell-specific implementations of Hydra's primitive
+artifacts such as Haskell-specific implementations of Hydra's primitive
 functions.
 
 We are currently working on "closing the loop" in Java and Python, as well,
@@ -65,17 +65,23 @@ Protobuf, C++, Scala, and others.
 You can generate Hydra's Haskell sources by first entering the GHCi REPL as above, then:
 
 ```haskell
-import Hydra.Codegen
+import Hydra.Generation
 
 writeHaskell "src/gen-main/haskell" mainModules
 ```
 
 The first argument to `writeHaskell` is the base directory to which the generated files are to be written,
 and the second is the list of modules you want to generate (in this case, a special list containing all built-in modules).
+To generate only the Hydra kernel, use:
+
+```haskell
+writeHaskell "src/gen-main/haskell" kernelModules
+```
+
 For individual modules, use list syntax, e.g.
 
 ```haskell
-writeHaskell "src/gen-main/haskell" [rdfSyntaxModule, shaclModelModule]
+writeHaskell "src/gen-main/haskell" [haskellLanguageModule, haskellCoderModule]
 ```
 
 To generate test modules, use:

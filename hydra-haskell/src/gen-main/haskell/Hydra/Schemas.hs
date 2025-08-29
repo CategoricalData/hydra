@@ -86,8 +86,8 @@ extendTypeContextForLambda tcontext lam =
 
 -- | Extend a type context by descending into a let body
 extendTypeContextForLet :: (Typing.TypeContext -> Core.Let -> Typing.TypeContext)
-extendTypeContextForLet tcontext let_ =  
-  let bindings = (Core.letBindings let_)
+extendTypeContextForLet tcontext letrec =  
+  let bindings = (Core.letBindings letrec)
   in Typing.TypeContext {
     Typing.typeContextTypes = (Maps.union (Typing.typeContextTypes tcontext) (Maps.fromList (Lists.map (\b -> (Core.bindingName b, (typeSchemeToFType (Optionals.fromJust (Core.bindingType b))))) bindings))),
     Typing.typeContextVariables = (Typing.typeContextVariables tcontext),
