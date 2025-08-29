@@ -9,9 +9,10 @@ description:  >
   Hydra is an implementation of the LambdaGraph data model, which takes advantage of an isomorphism
   between labeled hypergraphs and typed lambda calculus:
   in Hydra, "graphs are programs, and programs are graphs".
-  The language is designed to be embedded in other programming languages, transforming data, schemas,
-  and functional programs into multiple other languages in a way which maintains type safety,
-  Hydra is self-hosting in Haskell, i.e. it generates its own executable source code from Hydra sources.
+  The language is designed to be embedded in other programming languages -- currently Haskell, Java, and Python.
+  Hydra transforms data, schemas, and functional programs into multiple other languages in a way which maintains type safety.
+  It is self-hosting in Haskell -- it generates its own executable source code from Hydra sources -- and it is
+  designed to become self-hosting in its other implementation languages, as well.
 github:       CategoricalData/hydra
 
 extra-source-files:
