@@ -4,11 +4,14 @@ author:       Joshua Shinavier <josh@fortytwo.net>
 license:      Apache-2.0
 license-file: LICENSE
 category:     Data
-synopsis:     Type-aware transformations for data and programs
+synopsis:     Graph programming language
 description:  >
-  Hydra is a domain-specific language for data models and data transformations.
-  It is based on a typed lambda calculus, and transforms data and schemas between languages in a way which maintains type conformance.
-  Hydra will even transform functional programs between selected languages, including much of its own source code.
+  Hydra is an implementation of the LambdaGraph data model, which takes advantage of an isomorphism
+  between labeled hypergraphs and typed lambda calculus:
+  in Hydra, "graphs are programs, and programs are graphs".
+  The language is designed to be embedded in other programming languages, transforming data, schemas,
+  and functional programs into multiple other languages in a way which maintains type safety,
+  Hydra is self-hosting in Haskell, i.e. it generates its own executable source code from Hydra sources.
 github:       CategoricalData/hydra
 
 extra-source-files:
@@ -19,16 +22,16 @@ extra-source-files:
 
 dependencies:
   - HsYAML                        >= 0.2.1 && < 0.3
-  - aeson                         >= 2.0.0 && < 2.2
+  - aeson                         >= 2.2.0 && < 2.3
   - aeson-pretty                  >= 0.8.9 && < 0.9
-  - base                          >= 4.18.0 && < 4.19
-  - bytestring                    >= 0.11.3 && < 0.12
-  - containers                    >= 0.6.5 && < 0.7
+  - base                          >= 4.20.0 && < 4.21
+  - bytestring                    >= 0.12.0 && < 0.13
+  - containers                    >= 0.7 && < 0.8
   - directory                     >= 1.3.6 && < 1.4
-  - filepath                      >= 1.4.2 && < 1.5
+  - filepath                      >= 1.5.0 && < 1.6
   - scientific                    >= 0.3.7 && < 0.4
   - split                         >= 0.2.3 && < 0.3
-  - text                          >= 2.0.2 && < 2.1
+  - text                          >= 2.1.0 && < 2.2
   - vector                        >= 0.12.0 && < 0.14
 
 library:
