@@ -79,7 +79,6 @@ module_ = Module (Namespace "hydra.rewriting") elements
      el replaceFreeTermVariableDef,
      el replaceFreeTypeVariableDef,
      el rewriteDef,
-     el rewriteAndFoldDef,
      el rewriteAndFoldTermDef,
      el rewriteTermDef,
      el rewriteTermMDef,
@@ -556,11 +555,6 @@ rewriteDef = define "rewrite" $ "fsub" ~>"f" ~>
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse"
 
-rewriteAndFoldDef :: TBinding (((a -> x -> (a, x)) -> a -> x -> (a, x)) -> ((a -> x -> (a, x)) -> a -> x -> (a, x)) -> a -> x -> (a, x))
-rewriteAndFoldDef = define "rewriteAndFold" $ "fsub" ~> "f" ~>
-  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
-  var "recurse"
-
 replaceFreeTypeVariableDef :: TBinding (Name -> Type -> Type -> Type)
 replaceFreeTypeVariableDef = define "replaceFreeTypeVariable" $
   doc "Replace free occurrences of a name in a type" $
@@ -717,7 +711,7 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
         @@ ("t" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTermTypeName $ var "wt") (var "t"))
         @@ var "val0"
         @@ (Core.wrappedTermObject $ var "wt")]) $
-  ref rewriteAndFoldDef @@ var "fsub" @@ var "f"
+  ref rewriteDef @@ var "fsub" @@ var "f"
 
 rewriteTermDef :: TBinding (((Term -> Term) -> Term -> Term) -> Term -> Term)
 rewriteTermDef = define "rewriteTerm" $ lambda "f" $ lets [
