@@ -411,11 +411,6 @@ rewrite fsub f =
   let recurse = (f (fsub recurse))
   in recurse
 
-rewriteAndFold :: ((t0 -> t1) -> (t1 -> t0) -> t0)
-rewriteAndFold fsub f =  
-  let recurse = (f (fsub recurse))
-  in recurse
-
 rewriteAndFoldTerm :: (((t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term))
 rewriteAndFoldTerm f =  
   let fsub = (\recurse -> \val0 -> \term0 ->  
@@ -522,7 +517,7 @@ rewriteAndFoldTerm f =
                               Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
                               Core.wrappedTermObject = t})) val0 (Core.wrappedTermObject v1))
                             _ -> dflt) term0))
-  in (rewriteAndFold fsub f)
+  in (rewrite fsub f)
 
 rewriteTerm :: (((Core.Term -> Core.Term) -> Core.Term -> Core.Term) -> Core.Term -> Core.Term)
 rewriteTerm f =  
