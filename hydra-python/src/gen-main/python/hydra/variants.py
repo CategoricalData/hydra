@@ -1,3 +1,5 @@
+# Note: this is an automatically generated file. Do not edit.
+
 """Functions for working with term, type, and literal type variants, as well as numeric precision."""
 
 from __future__ import annotations
