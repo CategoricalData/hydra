@@ -446,11 +446,11 @@ class TermSet(Node["frozenset[Term]"]):
 class TermSum(Node["Sum"]):
     """A variant tuple."""
 
-class TermTypeLambda(Node["TypeLambda"]):
-    """A System F type abstraction term."""
-
 class TermTypeApplication(Node["TypedTerm"]):
     """A System F type application term."""
+
+class TermTypeLambda(Node["TypeLambda"]):
+    """A System F type abstraction term."""
 
 class TermUnion(Node["Injection"]):
     """An injection; an instance of a union type."""
@@ -465,7 +465,7 @@ class TermWrap(Node["WrappedTerm"]):
     """A wrapped term; an instance of a wrapper type (newtype)."""
 
 # A data term.
-type Term = TermAnnotated | TermApplication | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermOptional | TermProduct | TermRecord | TermSet | TermSum | TermTypeLambda | TermTypeApplication | TermUnion | TermUnit | TermVariable | TermWrap
+type Term = TermAnnotated | TermApplication | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermOptional | TermProduct | TermRecord | TermSet | TermSum | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap
 
 TERM__NAME = Name("hydra.core.Term")
 TERM__ANNOTATED__NAME = Name("annotated")
@@ -480,8 +480,8 @@ TERM__PRODUCT__NAME = Name("product")
 TERM__RECORD__NAME = Name("record")
 TERM__SET__NAME = Name("set")
 TERM__SUM__NAME = Name("sum")
-TERM__TYPE_LAMBDA__NAME = Name("typeLambda")
 TERM__TYPE_APPLICATION__NAME = Name("typeApplication")
+TERM__TYPE_LAMBDA__NAME = Name("typeLambda")
 TERM__UNION__NAME = Name("union")
 TERM__UNIT__NAME = Name("unit")
 TERM__VARIABLE__NAME = Name("variable")

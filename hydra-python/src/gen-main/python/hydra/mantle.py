@@ -138,9 +138,9 @@ class TermVariant(Enum):
     
     SUM = "sum"
     
-    TYPE_LAMBDA = "typeLambda"
-    
     TYPE_APPLICATION = "typeApplication"
+    
+    TYPE_LAMBDA = "typeLambda"
     
     UNION = "union"
     
@@ -163,8 +163,8 @@ TERM_VARIANT__PRODUCT__NAME = hydra.core.Name("product")
 TERM_VARIANT__RECORD__NAME = hydra.core.Name("record")
 TERM_VARIANT__SET__NAME = hydra.core.Name("set")
 TERM_VARIANT__SUM__NAME = hydra.core.Name("sum")
-TERM_VARIANT__TYPE_LAMBDA__NAME = hydra.core.Name("typeLambda")
 TERM_VARIANT__TYPE_APPLICATION__NAME = hydra.core.Name("typeApplication")
+TERM_VARIANT__TYPE_LAMBDA__NAME = hydra.core.Name("typeLambda")
 TERM_VARIANT__UNION__NAME = hydra.core.Name("union")
 TERM_VARIANT__UNIT__NAME = hydra.core.Name("unit")
 TERM_VARIANT__VARIABLE__NAME = hydra.core.Name("variable")
