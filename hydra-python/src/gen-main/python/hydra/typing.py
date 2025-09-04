@@ -1,3 +1,5 @@
+# Note: this is an automatically generated file. Do not edit.
+
 """Types supporting type inference and type reconstruction."""
 
 from __future__ import annotations

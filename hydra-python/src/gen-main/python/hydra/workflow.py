@@ -1,3 +1,5 @@
+# Note: this is an automatically generated file. Do not edit.
+
 """A model for Hydra transformation workflows."""
 
 from __future__ import annotations

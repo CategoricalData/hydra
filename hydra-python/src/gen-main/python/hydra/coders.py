@@ -1,3 +1,5 @@
+# Note: this is an automatically generated file. Do not edit.
+
 """Abstractions for paired transformations between languages."""
 
 from __future__ import annotations
