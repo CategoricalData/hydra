@@ -1,3 +1,5 @@
+# Note: this is an automatically generated file. Do not edit.
+
 """A set of types which supplement hydra.core, but are not referenced by hydra.core."""
 
 from __future__ import annotations

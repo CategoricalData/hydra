@@ -1,3 +1,5 @@
+# Note: this is an automatically generated file. Do not edit.
+
 """A common API for BNF-based grammars, specifying context-free languages."""
 
 from __future__ import annotations

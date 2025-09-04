@@ -1,3 +1,5 @@
+# Note: this is an automatically generated file. Do not edit.
+
 """Phantom types for use with Hydra DSLs."""
 
 from __future__ import annotations
