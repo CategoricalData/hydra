@@ -1,3 +1,5 @@
+# Note: this is an automatically generated file. Do not edit.
+
 """A simple, untyped tabular data model, suitable for CSVs and TSVs."""
 
 from __future__ import annotations

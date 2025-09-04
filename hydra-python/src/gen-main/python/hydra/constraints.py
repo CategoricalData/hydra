@@ -1,3 +1,5 @@
+# Note: this is an automatically generated file. Do not edit.
+
 """A model for path- and pattern-based graph constraints, which may be considered as part of the schema of a graph."""
 
 from __future__ import annotations

@@ -1,3 +1,5 @@
+# Note: this is an automatically generated file. Do not edit.
+
 """A model for Hydra namespaces and modules."""
 
 from __future__ import annotations

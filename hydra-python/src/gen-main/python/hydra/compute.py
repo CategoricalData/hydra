@@ -1,3 +1,5 @@
+# Note: this is an automatically generated file. Do not edit.
+
 """Abstractions for single- and bidirectional transformations."""
 
 from __future__ import annotations

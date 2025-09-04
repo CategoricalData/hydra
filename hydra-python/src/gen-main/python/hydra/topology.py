@@ -1,3 +1,5 @@
+# Note: this is an automatically generated file. Do not edit.
+
 """A model for simple graphs as adjacency lists."""
 
 from __future__ import annotations
