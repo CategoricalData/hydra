@@ -59,6 +59,19 @@ APPLICATION_TYPE__FUNCTION__NAME = Name("function")
 APPLICATION_TYPE__ARGUMENT__NAME = Name("argument")
 
 @dataclass
+class Binding:
+    """A field with an optional type scheme, used to bind variables to terms in a 'let' expression."""
+    
+    name: Name
+    term: Term
+    type: TypeScheme | None
+
+BINDING__NAME = Name("hydra.core.Binding")
+BINDING__NAME__NAME = Name("name")
+BINDING__TERM__NAME = Name("term")
+BINDING__TYPE__NAME = Name("type")
+
+@dataclass
 class CaseStatement:
     """A union elimination; a case statement."""
     
@@ -291,19 +304,6 @@ class Let:
 LET__NAME = Name("hydra.core.Let")
 LET__BINDINGS__NAME = Name("bindings")
 LET__ENVIRONMENT__NAME = Name("environment")
-
-@dataclass
-class Binding:
-    """A field with an optional type scheme, used to bind variables to terms in a 'let' expression."""
-    
-    name: Name
-    term: Term
-    type: TypeScheme | None
-
-BINDING__NAME = Name("hydra.core.Binding")
-BINDING__NAME__NAME = Name("name")
-BINDING__TERM__NAME = Name("term")
-BINDING__TYPE__NAME = Name("type")
 
 class LiteralBinary(Node[bytes]):
     """A binary literal."""
