@@ -175,20 +175,19 @@ curlyBracesListDef = define "curlyBracesList" $
 
 customIndentBlockDef :: TBinding (String -> [Expr] -> Expr)
 customIndentBlockDef = define "customIndentBlock" $
-  lambdas ["idt", "els"] $
+  "idt" ~> "els" ~>
+    "head" <~ Lists.head (var "els") $
+    "rest" <~ Lists.tail (var "els") $
+    "idtOp" <~ (Ast.op
+      (ref symDef @@ string "")
+      (Ast.padding Ast.wsSpace (Ast.wsBreakAndIndent $ var "idt"))
+      (Ast.precedence $ int32 0)
+      Ast.associativityNone) $
     Logic.ifElse (Lists.null $ var "els")
       (ref cstDef @@ string "")
       (Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
         (Lists.head $ var "els")
-        (lets [
-          "head">: Lists.head $ var "els",
-          "rest">: Lists.tail $ var "els",
-          "idtOp">: Ast.op
-            (ref symDef @@ string "")
-            (Ast.padding Ast.wsSpace (Ast.wsBreakAndIndent $ var "idt"))
-            (Ast.precedence $ int32 0)
-            Ast.associativityNone]
-          $ ref ifxDef @@ var "idtOp" @@ var "head" @@ (ref newlineSepDef @@ var "rest")))
+        (ref ifxDef @@ var "idtOp" @@ var "head" @@ (ref newlineSepDef @@ var "rest")))
 
 customIndentDef :: TBinding (String -> String -> String)
 customIndentDef = define "customIndent" $
@@ -353,27 +352,25 @@ orOpDef = define "orOp" $
 
 orSepDef :: TBinding (BlockStyle -> [Expr] -> Expr)
 orSepDef = define "orSep" $
-  lambdas ["style", "l"] $
+  "style" ~> "l" ~>
+    "h" <~ Lists.head (var "l") $
+    "r" <~ Lists.tail (var "l") $
+    "newlines" <~ Ast.blockStyleNewlineBeforeContent (var "style") $
     Logic.ifElse (Lists.null $ var "l")
       (ref cstDef @@ string "")
       (Logic.ifElse (Equality.equal (Lists.length $ var "l") (int32 1))
         (Lists.head $ var "l")
-        (lets [
-          "h">: Lists.head $ var "l",
-          "r">: Lists.tail $ var "l",
-          "newlines">: Ast.blockStyleNewlineBeforeContent $ var "style"]
-          $ ref ifxDef @@ (ref orOpDef @@ var "newlines") @@ var "h" @@ (ref orSepDef @@ var "style" @@ var "r")))
+        (ref ifxDef @@ (ref orOpDef @@ var "newlines") @@ var "h" @@ (ref orSepDef @@ var "style" @@ var "r")))
 
 parenListDef :: TBinding (Bool -> [Expr] -> Expr)
 parenListDef = define "parenList" $
-  lambdas ["newlines", "els"] $
+  "newlines" ~> "els" ~>
+    "style" <~ (Logic.ifElse (Logic.and (var "newlines") (Equality.gt (Lists.length $ var "els") (int32 1)))
+      (ref halfBlockStyleDef)
+      (ref inlineStyleDef)) $
     Logic.ifElse (Lists.null $ var "els")
       (ref cstDef @@ string "()")
-      (lets [
-        "style">: Logic.ifElse (Logic.and (var "newlines") (Equality.gt (Lists.length $ var "els") (int32 1)))
-          (ref halfBlockStyleDef)
-          (ref inlineStyleDef)]
-        $ ref bracketsDef @@ ref parenthesesDef @@ var "style" @@ (ref commaSepDef @@ var "style" @@ var "els"))
+      (ref bracketsDef @@ ref parenthesesDef @@ var "style" @@ (ref commaSepDef @@ var "style" @@ var "els"))
 
 parensDef :: TBinding (Expr -> Expr)
 parensDef = define "parens" $
@@ -385,12 +382,14 @@ parenthesesDef = define "parentheses" $
 
 parenthesizeDef :: TBinding (Expr -> Expr)
 parenthesizeDef = define "parenthesize" $
-  lambda "exp" $ lets [
-    "assocLeft">: lambda "a" $ cases _Associativity (var "a") (Just true) [
-      _Associativity_right>>: constant false],
-    "assocRight">: lambda "a" $ cases _Associativity (var "a") (Just true) [
-      _Associativity_left>>: constant false]]
-    $ cases _Expr (var "exp") Nothing [
+  "exp" ~>
+    "assocLeft" <~ ("a" ~> cases _Associativity (var "a")
+      (Just true) [
+      _Associativity_right>>: constant false]) $
+    "assocRight" <~ ("a" ~> cases _Associativity (var "a")
+      (Just true) [
+      _Associativity_left>>: constant false]) $
+    cases _Expr (var "exp") Nothing [
       _Expr_brackets>>: lambda "bracketExpr" $
         Ast.exprBrackets $ Ast.bracketExpr
           (Ast.bracketExprBrackets $ var "bracketExpr")
@@ -502,15 +501,14 @@ semicolonSepDef = define "semicolonSep" $
 
 sepDef :: TBinding (Op -> [Expr] -> Expr)
 sepDef = define "sep" $
-  lambdas ["op", "els"] $
+  "op" ~> "els" ~>
+    "h" <~ Lists.head (var "els") $
+    "r" <~ Lists.tail (var "els") $
     Logic.ifElse (Lists.null $ var "els")
       (ref cstDef @@ string "")
       (Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
         (Lists.head $ var "els")
-        (lets [
-          "h">: Lists.head $ var "els",
-          "r">: Lists.tail $ var "els"]
-          $ ref ifxDef @@ var "op" @@ var "h" @@ (ref sepDef @@ var "op" @@ var "r")))
+        (ref ifxDef @@ var "op" @@ var "h" @@ (ref sepDef @@ var "op" @@ var "r")))
 
 spaceSepDef :: TBinding ([Expr] -> Expr)
 spaceSepDef = define "spaceSep" $
@@ -526,32 +524,31 @@ squareBracketsDef = define "squareBrackets" $
 
 symDef :: TBinding (String -> Symbol)
 symDef = define "sym" $
-  lambda "s" $ Ast.symbol $ var "s"
+  "s" ~> Ast.symbol (var "s")
 
 symbolSepDef :: TBinding (String -> BlockStyle -> [Expr] -> Expr)
 symbolSepDef = define "symbolSep" $
-  lambdas ["symb", "style", "l"] $
+  "symb" ~> "style" ~> "l" ~>
+    "h" <~  Lists.head (var "l") $
+    "r" <~ Lists.tail (var "l") $
+    "breakCount" <~ (Lists.length $ Lists.filter identity $ list [
+      Ast.blockStyleNewlineBeforeContent $ var "style",
+      Ast.blockStyleNewlineAfterContent $ var "style"]) $
+    "break" <~ (Logic.ifElse (Equality.equal (var "breakCount") (int32 0))
+      Ast.wsSpace
+      (Logic.ifElse (Equality.equal (var "breakCount") (int32 1))
+        Ast.wsBreak
+        Ast.wsDoubleBreak)) $
+    "commaOp" <~ (Ast.op
+      (ref symDef @@ var "symb")
+      (Ast.padding Ast.wsNone (var "break"))
+      (Ast.precedence $ int32 0)
+      Ast.associativityNone) $
     Logic.ifElse (Lists.null $ var "l")
       (ref cstDef @@ string "")
       (Logic.ifElse (Equality.equal (Lists.length $ var "l") (int32 1))
         (Lists.head $ var "l")
-        (lets [
-          "h">: Lists.head $ var "l",
-          "r">: Lists.tail $ var "l",
-          "breakCount">: Lists.length $ Lists.filter identity $ list [
-            Ast.blockStyleNewlineBeforeContent $ var "style",
-            Ast.blockStyleNewlineAfterContent $ var "style"],
-          "break">: Logic.ifElse (Equality.equal (var "breakCount") (int32 0))
-            Ast.wsSpace
-            (Logic.ifElse (Equality.equal (var "breakCount") (int32 1))
-              Ast.wsBreak
-              Ast.wsDoubleBreak),
-          "commaOp">: Ast.op
-            (ref symDef @@ var "symb")
-            (Ast.padding Ast.wsNone (var "break"))
-            (Ast.precedence $ int32 0)
-            Ast.associativityNone]
-          $ ref ifxDef @@ var "commaOp" @@ var "h" @@ (ref symbolSepDef @@ var "symb" @@ var "style" @@ var "r")))
+        (ref ifxDef @@ var "commaOp" @@ var "h" @@ (ref symbolSepDef @@ var "symb" @@ var "style" @@ var "r")))
 
 tabIndentDef :: TBinding (Expr -> Expr)
 tabIndentDef = define "tabIndent" $
