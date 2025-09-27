@@ -40,20 +40,6 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesTuple :: Bool,
   pythonModuleMetadataUsesTypeVar :: Bool}
 
-argsAndBindings :: PythonEnvironment -> Term -> Flow s ([Name], [Binding], Term, [Type], Type, PythonEnvironment)
-argsAndBindings env term = gather env [] [] [] term
-  where
-    gather env prevArgs prevBindings prevDoms term = case deannotateTerm term of
-      TermFunction (FunctionLambda lam@(Lambda var (Just dom) body)) -> gather env2 (var:prevArgs) prevBindings (dom:prevDoms) body
-        where
-          env2 = extendEnvironmentForLambda env lam
-      TermLet lt@(Let bindings body) -> gather env2 prevArgs (L.reverse bindings ++ prevBindings) prevDoms body
-        where
-          env2 = extendEnvironmentForLet env lt
-      t -> do
-        typ <- typeOf (pythonEnvironmentTypeContext env) t
-        return (L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ, env)
-
 -- | Rewrite case statements in which the top-level lambda variables are re-used, e.g.
 --   cases _Type Nothing [_Type_list>>: "t" ~> ..., _Type_set>>: "t" ~> ...].
 --   Such case statements are legal in Hydra, but may lead to variable name collision in languages like Python.
@@ -82,9 +68,6 @@ encodeApplication env app = do
     return $ L.foldl (\t a -> functionCall (pyExpressionToPyPrimary t) [a]) lhs rargs
   where
     (fun, args) = gatherArgs (TermApplication app) []
-    gatherArgs term args = case deannotateTerm term of
-      TermApplication (Application lhs rhs) -> gatherArgs lhs (rhs:args)
-      _ -> (term, args)
     applyArgs hargs = case fun of
         TermFunction f -> case f of
           FunctionElimination elm -> case elm of
@@ -373,18 +356,24 @@ encodeRecordType env name (RowType _ tfields) comment = do
 
 encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> Flow Graph Py.Statement
 encodeTermAssignment env name term comment = do
-    (args, bindings, body, doms, cod, env2) <- argsAndBindings env term
-    if L.null args && L.null bindings
-    -- If there are no arguments or let bindings, use a simple a = b assignment.
-    then do
-      bodyExpr <- encodeTermInline env2 body
+    (params, bindings, body0, doms, cod, env2) <- gatherBindingsAndParams env term
+    let (body1, args) = gatherArgs body0 []
+
+    -- If there are no arguments or let bindings, and if we are not dealing with a case statement,
+    -- we can use a simple a = b assignment.
+    if L.null params && L.null bindings && not (isCaseStatement body1) then do
+      bodyExpr <- encodeTermInline env2 body0
       return $ annotatedStatement comment $ assignmentStatement (encodeName False CaseConventionLowerSnake env2 name) bodyExpr
-    -- If there are either arguments or let bindings, then only a function definition will work.
+    -- Otherwise, only a function definition will work.
     else do
       bindingStmts <- encodeBindings env2 bindings
       g <- getState
       withState (extendGraphWithBindings bindings g) $ do
-        encodeFunctionDefinition env2 name args body doms cod comment bindingStmts
+        encodeFunctionDefinition env2 name params body0 doms cod comment bindingStmts
+  where
+    isCaseStatement term = case deannotateAndDetypeTerm term of
+      TermFunction (FunctionElimination (EliminationUnion _)) -> True
+      _ -> False
 
 -- | Encode a term to an inline Python expression
 encodeTermInline :: PythonEnvironment -> Term -> Flow Graph Py.Expression
@@ -459,8 +448,8 @@ encodeTermMultiline env term = if L.length args == 1
       TermApplication (Application l r) -> gatherArgs (r:rest) l
       t -> (rest, t)
     dflt = do
-      (args, bindings, body, doms, cod, env2) <- argsAndBindings env term
-      if (L.length args > 0)
+      (params, bindings, body, doms, cod, env2) <- gatherBindingsAndParams env term
+      if (L.length params > 0)
         then fail "Functions currently unsupported in this context"
         else pure ()
       if (L.null bindings) then do
@@ -652,6 +641,25 @@ findTypeParams env typ = L.filter isBound $ S.toList $ freeVariablesInType typ
   where
     isBound v = Y.isJust $ M.lookup v $ snd $ pythonEnvironmentBoundTypeVariables env
 
+gatherArgs :: Term -> [Term] -> (Term, [Term])
+gatherArgs term args = case deannotateTerm term of
+  TermApplication (Application lhs rhs) -> gatherArgs lhs (rhs:args)
+  _ -> (term, args)
+
+gatherBindingsAndParams :: PythonEnvironment -> Term -> Flow s ([Name], [Binding], Term, [Type], Type, PythonEnvironment)
+gatherBindingsAndParams env term = gather env [] [] [] term
+  where
+    gather env prevArgs prevBindings prevDoms term = case deannotateTerm term of
+      TermFunction (FunctionLambda lam@(Lambda var (Just dom) body)) -> gather env2 (var:prevArgs) prevBindings (dom:prevDoms) body
+        where
+          env2 = extendEnvironmentForLambda env lam
+      TermLet lt@(Let bindings body) -> gather env2 prevArgs (L.reverse bindings ++ prevBindings) prevDoms body
+        where
+          env2 = extendEnvironmentForLet env lt
+      t -> do
+        typ <- typeOf (pythonEnvironmentTypeContext env) t
+        return (L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ, env)
+
 gatherMetadata :: [Definition] -> PythonModuleMetadata
 gatherMetadata defs = checkTvars $ L.foldl addDef start defs
   where
@@ -756,10 +764,14 @@ genericArg tparamList = if L.null tparamList
     (pyNameToPyExpression . encodeTypeVariable <$> tparamList)
 
 isNullaryFunction :: Binding -> Bool
-isNullaryFunction (Binding _ term (Just ts)) = typeArity (typeSchemeType ts) == 0 && isLet
+isNullaryFunction (Binding _ term (Just ts)) = isCaseStatement || (typeArity (typeSchemeType ts) == 0 && isLet)
   where
-    isLet = case deannotateAndDetypeTerm term of
+    term1 = deannotateAndDetypeTerm term
+    isLet = case term1 of
       TermLet _ -> True
+      _ -> False
+    isCaseStatement = case fst (gatherArgs term1 []) of
+      TermFunction (FunctionElimination (EliminationUnion _)) -> True
       _ -> False
 
 moduleToPython :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)

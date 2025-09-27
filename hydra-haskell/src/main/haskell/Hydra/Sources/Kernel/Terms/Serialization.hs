@@ -408,7 +408,8 @@ parenthesizeDef = define "parenthesize" $
         "rhs">: Ast.opExprRhs $ var "opExpr",
         "lhs'">: ref parenthesizeDef @@ var "lhs",
         "rhs'">: ref parenthesizeDef @@ var "rhs",
-        "lhs2">: cases _Expr (var "lhs'") (Just $ var "lhs'") [
+        "lhs2">: cases _Expr (var "lhs'")
+          (Just $ var "lhs'") [
           _Expr_op>>: lambda "lopExpr" $ lets [
             "lop">: Ast.opExprOp $ var "lopExpr",
             "lprec">: Ast.unPrecedence $ Ast.opPrecedence $ var "lop",
