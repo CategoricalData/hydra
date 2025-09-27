@@ -53,6 +53,13 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
             doc "The right-hand side of the application" $
             core "Type"],
 
+      def "Binding" $
+        doc "A field with an optional type scheme, used to bind variables to terms in a 'let' expression" $
+        record [
+          "name">: core "Name",
+          "term">: core "Term",
+          "type">: optional $ core "TypeScheme"],
+
       def "CaseStatement" $
         doc "A union elimination; a case statement" $
         record [
@@ -193,13 +200,6 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
         record [
           "bindings">: list $ core "Binding",
           "environment">: core "Term"],
-
-      def "Binding" $
-        doc "A field with an optional type scheme, used to bind variables to terms in a 'let' expression" $
-        record [
-          "name">: core "Name",
-          "term">: core "Term",
-          "type">: optional $ core "TypeScheme"],
 
       def "Literal" $
         doc "A term constant; an instance of a literal type" $
