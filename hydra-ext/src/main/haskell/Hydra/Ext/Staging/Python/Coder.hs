@@ -40,8 +40,8 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesTuple :: Bool,
   pythonModuleMetadataUsesTypeVar :: Bool}
 
-argsAndBindings :: PythonEnvironment -> Term -> Type -> Flow s ([Name], [Binding], Term, [Type], Type, PythonEnvironment)
-argsAndBindings env term _ = gather env [] [] [] term
+argsAndBindings :: PythonEnvironment -> Term -> Flow s ([Name], [Binding], Term, [Type], Type, PythonEnvironment)
+argsAndBindings env term = gather env [] [] [] term
   where
     gather env prevArgs prevBindings prevDoms term = case deannotateTerm term of
       TermFunction (FunctionLambda lam@(Lambda var (Just dom) body)) -> gather env2 (var:prevArgs) prevBindings (dom:prevDoms) body
@@ -75,7 +75,7 @@ encodeApplication :: PythonEnvironment -> Application -> Flow Graph Py.Expressio
 encodeApplication env app = do
     g <- getState
     let arity = expansionArity g fun
-    pargs <- CM.mapM (encodeTerm env) args
+    pargs <- CM.mapM (encodeTermInline env) args
     let hargs = L.take arity pargs
     let rargs = L.drop arity pargs
     lhs <- applyArgs hargs
@@ -108,7 +108,7 @@ encodeApplication env app = do
       where
         parg = L.head hargs
         def = do
-          pfun <- encodeTerm env fun
+          pfun <- encodeTermInline env fun
           return $ functionCall (pyExpressionToPyPrimary pfun) hargs
 
 encodeApplicationType :: PythonEnvironment -> ApplicationType -> Flow Graph Py.Expression
@@ -122,13 +122,22 @@ encodeApplicationType env at = do
       TypeApplication (ApplicationType lhs rhs) -> gatherParams lhs (rhs:ps)
       _ -> (t, ps)
 
+encodeBinding :: PythonEnvironment -> Binding -> Flow Graph Py.Statement
+encodeBinding env (Binding name1 term1 mts) = do
+  comment <- fmap normalizeComment <$> getTermDescription term1
+  encodeTermAssignment env name1 term1 comment
+
+-- TODO: topological sort of bindings
+encodeBindings :: PythonEnvironment -> [Binding] -> Flow Graph [Py.Statement]
+encodeBindings env bindings = CM.mapM (encodeBinding env) bindings
+
 encodeDefinition :: PythonEnvironment -> Definition -> Flow Graph [[Py.Statement]]
 encodeDefinition env def = case def of
-  DefinitionTerm (TermDefinition name term typ) -> withTrace ("data element " ++ unName name) $ do
+  DefinitionTerm (TermDefinition name term _) -> withTrace ("data element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> getTermDescription term
     g <- getState
-    stmts <- encodeTermAssignment env name term typ comment
-    return [stmts]
+    stmt <- encodeTermAssignment env name term comment
+    return [[stmt]]
   DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name) $ do
 --  DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name ++ ": " ++ ShowCore.type_ typ) $ do
     comment <- fmap normalizeComment <$> getTypeDescription typ
@@ -136,7 +145,7 @@ encodeDefinition env def = case def of
 
 encodeField :: PythonEnvironment -> Field -> Flow Graph (Py.Name, Py.Expression)
 encodeField env (Field fname fterm) = do
-  pterm <- encodeTerm env fterm
+  pterm <- encodeTermInline env fterm
   return (encodeFieldName env fname, pterm)
 
 encodeFieldType :: PythonEnvironment -> FieldType -> Flow Graph Py.Statement
@@ -155,7 +164,7 @@ encodeFloatValue fv = case fv of
 encodeFunction :: PythonEnvironment -> Function -> Flow Graph Py.Expression
 encodeFunction env f = case f of
   FunctionLambda lam@(Lambda var (Just dom) body) -> do
-      pbody <- encodeTerm env2 body
+      pbody <- encodeTermInline env2 body
       return $ Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] $
         Just $ Py.LambdaStarEtcParamNoDefault $ Py.LambdaParamNoDefault $ encodeNameQualified env2 var) pbody
     where
@@ -167,7 +176,7 @@ encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> Term -> [Type
 encodeFunctionDefinition env name args body doms cod comment prefixes = do
     pyArgs <- CM.zipWithM toParam args doms
     let params = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters pyArgs [] Nothing
-    stmts <- encodeTopLevelTerm env body
+    stmts <- encodeTermMultiline env body
     let block = indentedBlock comment [prefixes ++ stmts]
     returnType <- getType cod
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing
@@ -340,11 +349,8 @@ encodeNameConstants :: PythonEnvironment -> Name -> Type -> [Py.Statement]
 encodeNameConstants env name typ = toStmt <$> (namePair:(fieldPairs typ))
   where
     toStmt (pname, hname) = assignmentStatement pname $
---      doubleQuotedString $ unName hname -- TODO
-
       functionCall (pyNameToPyPrimary $ encodeName True CaseConventionPascal env _Name)
         [doubleQuotedString $ unName hname]
-
 
     namePair = (encodeConstantForTypeName env name, name)
     fieldPair field = (encodeConstantForFieldName env name $ fieldTypeName field, fieldTypeName field)
@@ -365,8 +371,24 @@ encodeRecordType env name (RowType _ tfields) comment = do
     args = fmap (\a -> pyExpressionsToPyArgs [a]) $ genericArg tparamList
     decs = Py.Decorators [pyNameToPyNamedExpression $ Py.Name "dataclass"]
 
-encodeTerm :: PythonEnvironment -> Term -> Flow Graph Py.Expression
-encodeTerm env term = case deannotateTerm term of
+encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> Flow Graph Py.Statement
+encodeTermAssignment env name term comment = do
+    (args, bindings, body, doms, cod, env2) <- argsAndBindings env term
+    if L.null args && L.null bindings
+    -- If there are no arguments or let bindings, use a simple a = b assignment.
+    then do
+      bodyExpr <- encodeTermInline env2 body
+      return $ annotatedStatement comment $ assignmentStatement (encodeName False CaseConventionLowerSnake env2 name) bodyExpr
+    -- If there are either arguments or let bindings, then only a function definition will work.
+    else do
+      bindingStmts <- encodeBindings env2 bindings
+      g <- getState
+      withState (extendGraphWithBindings bindings g) $ do
+        encodeFunctionDefinition env2 name args body doms cod comment bindingStmts
+
+-- | Encode a term to an inline Python expression
+encodeTermInline :: PythonEnvironment -> Term -> Flow Graph Py.Expression
+encodeTermInline env term = case deannotateTerm term of
     TermApplication a -> encodeApplication env a
     TermFunction f -> encodeFunction env f
     TermLet _ -> pure $ stringToPyExpression Py.QuoteStyleDouble "let terms are not supported here"
@@ -397,7 +419,7 @@ encodeTerm env term = case deannotateTerm term of
       pyEls <- CM.mapM encode $ S.toList s
       return $ functionCall (pyNameToPyPrimary $ Py.Name "frozenset")
         [pyAtomToPyExpression $ Py.AtomSet $ Py.Set (pyExpressionToPyStarNamedExpression <$> pyEls)]
-    TermTypeLambda tl@(TypeLambda _ term1) -> encodeTerm env2 term1
+    TermTypeLambda tl@(TypeLambda _ term1) -> encodeTermInline env2 term1
       where
         env2 = extendEnvironmentForTypeLambda env tl
     TermTypeApplication (TypedTerm term1 _) -> encode term1
@@ -424,34 +446,11 @@ encodeTerm env term = case deannotateTerm term of
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) [parg]
     t -> fail $ "unsupported term variant: " ++ show (termVariant t) ++ " in " ++ show term
   where
-    encode = encodeTerm env
+    encode = encodeTermInline env
 
-encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Type -> Maybe String -> Flow Graph [Py.Statement]
-encodeTermAssignment env name term typ comment = do
-    (args, bindings, body, doms, cod, env2) <- argsAndBindings env term typ
-    if L.null args && L.null bindings
-    -- If there are no arguments or let bindings, use a simple a = b assignment.
-    then do
-      bodyExpr <- encodeTerm env2 body
-      return [annotatedStatement comment $ assignmentStatement (encodeName False CaseConventionLowerSnake env2 name) bodyExpr]
-    -- If there are either arguments or let bindings, then only a function definition will work.
-    else do
-        -- TODO: topological sort of bindings
-        bindingStmts <- L.concat <$> CM.mapM (encodeBinding env2) bindings
-        g <- getState
-        withState (extendGraphWithBindings bindings g) $ do
-          bodyStmt <- encodeFunctionDefinition env name args body doms cod comment bindingStmts
-          return [bodyStmt]
-  where
-    encodeBinding env (Binding name1 term1 mts) = do
-        comment <- fmap normalizeComment <$> getTermDescription term1
-        typ1 <- case mts of
-          Nothing -> fail $ "missing type for let binding " ++ unName name1 ++ " in " ++ unName name
-          Just ts -> return $ typeSchemeType ts
-        encodeTermAssignment env name1 term1 typ1 comment
-
-encodeTopLevelTerm :: PythonEnvironment -> Term -> Flow Graph [Py.Statement]
-encodeTopLevelTerm env term = if L.length args == 1
+-- | Encode a term to a list of statements, with the last statement as the return value.
+encodeTermMultiline :: PythonEnvironment -> Term -> Flow Graph [Py.Statement]
+encodeTermMultiline env term = if L.length args == 1
     then withArg body (L.head args)
     else dflt
   where
@@ -460,14 +459,26 @@ encodeTopLevelTerm env term = if L.length args == 1
       TermApplication (Application l r) -> gatherArgs (r:rest) l
       t -> (rest, t)
     dflt = do
-      expr <- encodeTerm env term
-      return [returnSingle expr]
+      (args, bindings, body, doms, cod, env2) <- argsAndBindings env term
+      if (L.length args > 0)
+        then fail "Functions currently unsupported in this context"
+        else pure ()
+      if (L.null bindings) then do
+        expr <- encodeTermInline env term
+        return [returnSingle expr]
+      else do
+        bindingStmts <- encodeBindings env2 bindings
+        g <- getState
+        withState (extendGraphWithBindings bindings g) $ do
+          stmts <- encodeTermMultiline env2 body
+          return $ bindingStmts ++ stmts
     withArg body arg = case deannotateTerm body of
+      -- Case statements are special.
       TermFunction (FunctionElimination (EliminationUnion (CaseStatement tname dflt cases))) -> do
           rt <- requireUnionType tname
           let isEnum = isEnumRowType rt
           let isFull = L.length cases >= L.length (rowTypeFields rt)
-          pyArg <- encodeTerm env arg
+          pyArg <- encodeTermInline env arg
           pyCases <- CM.mapM (toCaseBlock isEnum) $ deduplicateCaseVariables cases
           pyDflt <- toDefault isFull dflt
           let subj = Py.SubjectExpressionSimple $ Py.NamedExpressionSimple pyArg
@@ -478,15 +489,20 @@ encodeTopLevelTerm env term = if L.length args == 1
             else do
               stmt <- case dflt of
                 Nothing -> pure $ raiseTypeError $ "Unsupported " ++ localNameOf tname
-                Just d -> returnSingle <$> encodeTerm env d
+                Just d -> returnSingle <$> encodeTermInline env d
               let patterns = pyClosedPatternToPyPatterns Py.ClosedPatternWildcard
               let body = indentedBlock Nothing [[stmt]]
               return [Py.CaseBlock patterns Nothing body]
           toCaseBlock isEnum (Field fname fterm) = case deannotateTerm fterm of
-            TermFunction (FunctionLambda lam@(Lambda v (Just dom) body)) -> do
-                pyReturn <- encodeTerm env2 body
-                let body = indentedBlock Nothing [[returnSingle pyReturn]]
-                return $ Py.CaseBlock (pyClosedPatternToPyPatterns pattern) Nothing body
+            TermFunction (FunctionLambda lam@(Lambda v _ body)) -> do
+
+                stmts <- encodeTermMultiline env2 body
+                let pyBody = indentedBlock Nothing [stmts]
+
+--                pyReturn <- encodeTermInline env2 body
+--                let pyBody = indentedBlock Nothing [[returnSingle pyReturn]]
+
+                return $ Py.CaseBlock (pyClosedPatternToPyPatterns pattern) Nothing pyBody
               where
                 env2 = extendEnvironmentForLambda env lam
                 pattern = if isEnum
