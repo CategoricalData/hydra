@@ -137,6 +137,7 @@ contractTermDef = define "contractTerm" $
 countPrimitiveInvocationsDef :: TBinding Bool
 countPrimitiveInvocationsDef = define "countPrimitiveInvocations" true
 
+-- TODO: see notes on etaExpansionArity
 etaExpandTermDef :: TBinding (Graph -> Term -> Term)
 etaExpandTermDef = define "etaExpandTerm" $
   doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x', in which the implicit"
@@ -165,8 +166,9 @@ etaExpandTermDef = define "etaExpandTerm" $
   "rewrite" <~ ("args" ~> "recurse" ~> "t" ~>
     "afterRecursion" <~ ("term" ~>
       var "expand" @@ var "args" @@ (ref etaExpansionArityDef @@ var "graph" @@ var "term") @@ var "term") $
-    cases _Term (ref Rewriting.deannotateAndDetypeTermDef @@ var "t")
-      (Just $ var "afterRecursion" @@ (var "recurse" @@ var "t")) [
+    "t2" <~ ref Rewriting.deannotateAndDetypeTermDef @@ var "t" $
+    cases _Term (var "t2")
+      (Just $ var "afterRecursion" @@ (var "recurse" @@ var "t2")) [
       _Term_application>>: "app" ~>
         "lhs" <~ Core.applicationFunction (var "app") $
         "rhs" <~ Core.applicationArgument (var "app") $
@@ -174,6 +176,10 @@ etaExpandTermDef = define "etaExpandTerm" $
         var "rewrite" @@ (Lists.cons (var "erhs") (var "args")) @@ var "recurse" @@ var "lhs"]) $
   ref contractTermDef @@ (ref Rewriting.rewriteTermDef @@ (var "rewrite" @@ list []) @@ var "term")
 
+-- TODO: this function probably needs to be replaced with a function which takes not only a Graph, but a TypeContext.
+--       etaExpansionArity won't give the correct answer unless it has access to the full lexical environment
+--       of each subterm in which it is applied, including lambda-bound variables as well as nested let-bound variables.
+--       The new function need not be monadic, because we don't need to call typeOf; it just needs accurate type lookups.
 etaExpansionArityDef :: TBinding (Graph -> Term -> Int)
 etaExpansionArityDef = define "etaExpansionArity" $
   doc ("Calculate the arity for eta expansion"
