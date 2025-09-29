@@ -140,7 +140,7 @@ etaExpandTerm graph term =
     let rewrite = (\args -> \recurse -> \t ->  
             let afterRecursion = (\term -> expand args (etaExpansionArity graph term) term)
             in  
-              let t2 = (Rewriting.deannotateAndDetypeTerm t)
+              let t2 = (Rewriting.detypeTerm t)
               in ((\x -> case x of
                 Core.TermApplication v1 ->  
                   let lhs = (Core.applicationFunction v1)
