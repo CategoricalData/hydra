@@ -306,7 +306,17 @@ dataGraphToDefinitionsDef = define "dataGraphToDefinitions" $
     <> " adapt the graph to the language constraints, perform inference,"
     <> " then return a corresponding term definition for each element name.") $
   "constraints" ~> "doExpand" ~> "graph" ~> "nameLists" ~>
-  "graph1" <<~ ref adaptDataGraphDef @@ var "constraints" @@ var "doExpand" @@ var "graph" $
+
+  -- This extra, early inference step is necessary so that elements are annotated with correct types,
+  -- as needed for lambda expansion.
+  "graphi" <<~ Logic.ifElse (var "doExpand")
+    (ref Inference.inferGraphTypesDef @@ var "graph")
+    (produce $ var "graph") $
+--  "graphi" <~ var "graph" $
+
+  "graph1" <<~ ref adaptDataGraphDef @@ var "constraints" @@ var "doExpand" @@ var "graphi" $
+--  "graph1" <<~ ref adaptDataGraphDef @@ var "constraints" @@ false @@ var "graphi" $
+
 --  Flows.fail ("adapted graph: " ++ (ref ShowGraph.graphDef @@ var "graph1"))
   "graph2" <<~ ref Inference.inferGraphTypesDef @@ var "graph1" $
   "toDef" <~ ("el" ~>
