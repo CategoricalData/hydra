@@ -21,6 +21,9 @@ bind = primitive2 _flows_bind
 fail :: TTerm String -> TTerm (Flow s x)
 fail = primitive1 _flows_fail
 
+foldl :: TTerm (x -> y -> Flow s x) -> TTerm x -> TTerm [y] -> TTerm (Flow s x)
+foldl = primitive3 _flows_foldl
+
 map :: TTerm (x -> y) -> TTerm (Flow s x) -> TTerm (Flow s y)
 map = primitive2 _flows_map
 
