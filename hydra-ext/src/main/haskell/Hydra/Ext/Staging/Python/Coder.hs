@@ -674,13 +674,13 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataUsesTypeVar = False}
     addDef meta def = case def of
       DefinitionTerm (TermDefinition _ term _) -> extendMetaForTerm True meta term
-      DefinitionType (TypeDefinition _ typ) -> foldOverType TraversalOrderPre (extendMetaForType False) meta2 typ
+      DefinitionType (TypeDefinition _ typ) -> foldOverType TraversalOrderPre (extendMetaForType True False) meta2 typ
         where
           meta2 = meta {pythonModuleMetadataUsesName = True}
     extendMetaForTerm topLevel meta t = case t of
         TermFunction f -> case f of
           FunctionLambda (Lambda _ (Just dom) body) -> if topLevel
-              then extendMetaForType False meta2 dom
+              then extendMetaForType True False meta2 dom
               else meta2
             where
               meta2 = extendMetaForTerm topLevel meta body
@@ -689,7 +689,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
           where
             forBinding meta (Binding _ term1 (Just ts)) = if isSimpleAssignment term1
               then meta
-              else extendMetaForType True (extendMetaForTerm True meta term1) $ typeSchemeType ts
+              else extendMetaForType True True (extendMetaForTerm True meta term1) $ typeSchemeType ts
         TermLiteral l -> case l of
           LiteralFloat fv -> case fv of
             FloatValueBigfloat _ -> meta {pythonModuleMetadataUsesDecimal = True}
@@ -699,7 +699,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
         _ -> meta2
       where
         meta2 = L.foldl (extendMetaForTerm False) meta $ subterms t
-    extendMetaForType isTermAnnot meta typ = extendFor meta3 typ
+    extendMetaForType topLevel isTermAnnot meta typ = extendFor meta3 typ
       where
         tvars = pythonModuleMetadataTypeVariables meta
         meta3 = digForWrap typ
@@ -718,11 +718,14 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
               TypeForall (ForallType v body) -> newTvars (S.insert v s) body
               _ -> s
         extendFor meta t = case t of
-          TypeFunction _ -> if isTermAnnot
-            -- If a particular term has a function type, don't import Callable; Python has special "def" syntax for functions.
-            then meta
-            -- If this is a type-level definition, or an *argument* to a function is a function, then we need Callable.
-            else meta {pythonModuleMetadataUsesCallable = True}
+          TypeFunction (FunctionType dom cod) -> if isTermAnnot && topLevel
+              -- If a particular term has a function type, don't import Callable; Python has special "def" syntax for functions.
+              then meta3
+              -- If this is a type-level definition, or an *argument* to a function is a function, then we need Callable.
+              else meta3 {pythonModuleMetadataUsesCallable = True}
+            where
+              meta2 = extendMetaForType topLevel isTermAnnot meta cod
+              meta3 = extendMetaForType False isTermAnnot meta2 dom
           TypeForall (ForallType _ body) -> case baseType body of
               TypeRecord _ -> meta {pythonModuleMetadataUsesGeneric = True}
               _ -> meta
@@ -750,7 +753,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
             where
               checkForLiteral b (FieldType _ ft) = b || EncodeCore.isUnitType (deannotateType ft)
               checkForNewType b (FieldType _ ft) = b || not (EncodeCore.isUnitType (deannotateType ft))
-          _ -> meta
+          t -> L.foldl (extendMetaForType False isTermAnnot) meta $ subtypes t
 
 genericArg :: [Name] -> Y.Maybe Py.Expression
 genericArg tparamList = if L.null tparamList
@@ -773,8 +776,9 @@ isSimpleAssignment :: Term -> Bool
 isSimpleAssignment term = case deannotateAndDetypeTerm term of
   TermFunction (FunctionLambda _) -> False
   TermLet _ -> False
-  TermFunction (FunctionElimination (EliminationUnion _)) -> False
-  _ -> True
+  t -> case (fst (gatherArgs t [])) of
+    TermFunction (FunctionElimination (EliminationUnion _)) -> False
+    _ -> True
 
 moduleToPython :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
 moduleToPython mod defs = do
