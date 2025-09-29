@@ -119,7 +119,7 @@ def pure[A](value: A) -> frozenlist[A]:
     return (value,)
 
 
-def reverse[A](values: Sequence[A]) -> Sequence[A]:
+def reverse[A](values: Sequence[A]) -> frozenlist[A]:
     """Reverse a list."""
     return values[::-1]
 
@@ -137,7 +137,7 @@ def span(predicate: Callable[[A], bool], values: Sequence[A]) -> tuple[frozenlis
     return (tuple(values), ())
 
 
-def tail[A](values: Sequence[A]) -> Sequence[A]:
+def tail[A](values: Sequence[A]) -> frozenlist[A]:
     """Get all elements of a list except the first."""
     return values[1:]
 
