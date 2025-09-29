@@ -33,6 +33,9 @@ bind = Monads.bind
 fail :: String -> Flow s x
 fail = Monads.fail
 
+foldl :: (a -> b -> Flow s a) -> a -> [b] -> Flow s a
+foldl = CM.foldM
+
 map :: (x -> y) -> Flow s x -> Flow s y
 map = Monads.map
 
