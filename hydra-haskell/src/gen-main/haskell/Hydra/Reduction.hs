@@ -134,12 +134,13 @@ expandLambdas graph term =
                       rhs = (Core.applicationArgument v1)
                       erhs = (rewrite [] recurse rhs)
                   in (rewrite (Lists.cons erhs args) recurse lhs)
-                _ -> (afterRecursion (recurse t))) t))
+                _ -> (afterRecursion (recurse t))) (Rewriting.deannotateAndDetypeTerm t)))
   in (contractTerm (Rewriting.rewriteTerm (rewrite []) term))
 
 -- | Calculate the arity for lambda expansion
 expansionArity :: (Graph.Graph -> Core.Term -> Int)
 expansionArity graph term = ((\x -> case x of
+  Core.TermAnnotated v1 -> (expansionArity graph (Core.annotatedTermSubject v1))
   Core.TermApplication v1 -> (Math.sub (expansionArity graph (Core.applicationFunction v1)) 1)
   Core.TermFunction v1 -> ((\x -> case x of
     Core.FunctionElimination _ -> 1
@@ -147,8 +148,8 @@ expansionArity graph term = ((\x -> case x of
     Core.FunctionPrimitive v2 -> (Arity.primitiveArity (Optionals.fromJust (Lexical.lookupPrimitive graph v2)))) v1)
   Core.TermTypeLambda v1 -> (expansionArity graph (Core.typeLambdaBody v1))
   Core.TermTypeApplication v1 -> (expansionArity graph (Core.typedTermTerm v1))
-  Core.TermVariable v1 -> (Optionals.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Optionals.bind (Lexical.lookupElement graph v1) (\el -> Core.bindingType el)))
-  _ -> 0) (Rewriting.deannotateTerm term))
+  Core.TermVariable v1 -> (Optionals.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Optionals.bind (Lexical.lookupElement graph v1) (\b -> Core.bindingType b)))
+  _ -> 0) term)
 
 -- | A term evaluation function which is alternatively lazy or eager
 reduceTerm :: (Bool -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
