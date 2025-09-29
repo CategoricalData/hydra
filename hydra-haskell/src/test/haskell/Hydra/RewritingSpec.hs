@@ -183,8 +183,8 @@ testExpandLambdas g = do
 
     H.it "Check that lambda expansion is idempotent" $ do
       QC.property $ \term -> do
-        let once = expandLambdas g term
-        let twice = expandLambdas g once
+        let once = etaExpandTerm g term
+        let twice = etaExpandTerm g once
         H.shouldBe once twice
   where
     length = primitive $ Name "hydra.lib.strings.length"
@@ -192,11 +192,11 @@ testExpandLambdas g = do
     toLower = primitive $ Name "hydra.lib.strings.toLower"
     fromList = primitive $ Name "hydra.lib.sets.fromList"
     expandsTo termBefore termAfter = do
-       let result = expandLambdas g termBefore
+       let result = etaExpandTerm g termBefore
        H.shouldBe (ShowCore.term result) (ShowCore.term termAfter)
     noChange term = expandsTo term term
 
--- TODO: merge this into expandLambdas
+-- TODO: merge this into etaExpandTerm
 testExpandTypedLambdas :: H.SpecWith ()
 testExpandTypedLambdas = do
   H.describe "Test expanding to typed lambda terms" $ do
@@ -249,8 +249,8 @@ testExpandTypedLambdas = do
 
     H.it "Check that lambda expansion is idempotent" $ do
       QC.property $ \term -> do
-        let once = expandTypedLambdas term
-        let twice = expandTypedLambdas once
+        let once = etaExpandTypedTerm term
+        let twice = etaExpandTypedTerm once
         H.shouldBe once twice
 
   where
@@ -258,10 +258,10 @@ testExpandTypedLambdas = do
     splitOn = primitive $ Name "hydra.lib.strings.splitOn"
     toLower = primitive $ Name "hydra.lib.strings.toLower"
     expandsTo termBefore termAfter = do
---      result <- flowToIo testGraph $ expandLambdas termBefore
+--      result <- flowToIo testGraph $ etaExpandTerm termBefore
 --      H.shouldBe result termAfter
        inf <- flowToIo testGraph (inferenceResultTerm <$> inferInGraphContext termBefore)
-       let result = expandTypedLambdas inf
+       let result = etaExpandTypedTerm inf
        H.shouldBe (ShowCore.term (removeTermAnnotations result)) (ShowCore.term termAfter)
     noChange term = expandsTo term term
 

@@ -116,7 +116,7 @@ adaptDataGraphDef = define "adaptDataGraph" $
       produce $ just $ Graph.graphWithElements (var "sg") (var "emap")) $
   "gterm0" <~ ref Schemas.graphAsTermDef @@ var "graph0" $
   "gterm1" <~ Logic.ifElse (var "doExpand")
-    (ref Reduction.expandLambdasDef @@ var "graph0" @@ var "gterm0")
+    (ref Reduction.etaExpandTermDef @@ var "graph0" @@ var "gterm0")
     (var "gterm0") $
   "gterm2" <<~ ref adaptTermDef @@ var "constraints" @@ var "litmap" @@ var "gterm1" $
   "els1" <~ ref Schemas.termAsGraphDef @@ var "gterm2" $
