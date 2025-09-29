@@ -62,8 +62,8 @@ module_ = Module (Namespace "hydra.reduction") elements
      el contractTermDef,
      el countPrimitiveInvocationsDef,
      el etaReduceTermDef,
-     el expandLambdasDef,
-     el expansionArityDef,
+     el etaExpandTermDef,
+     el etaExpansionArityDef,
      el reduceTermDef,
      el termIsClosedDef,
      el termIsValueDef]
@@ -137,6 +137,70 @@ contractTermDef = define "contractTerm" $
 countPrimitiveInvocationsDef :: TBinding Bool
 countPrimitiveInvocationsDef = define "countPrimitiveInvocations" true
 
+etaExpandTermDef :: TBinding (Graph -> Term -> Term)
+etaExpandTermDef = define "etaExpandTerm" $
+  doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x', in which the implicit"
+    <> " parameters of primitive functions and eliminations are made into explicit lambda parameters."
+    <> " Variable references are not expanded."
+    <> " This is useful for targets like Python with weaker support for currying than Hydra or Haskell."
+    <> " Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references.") $
+  "graph" ~> "term" ~>
+  "expand" <~ ("args" ~> "arity" ~> "t" ~>
+    "apps" <~ Lists.foldl
+      ("lhs" ~> "arg" ~> Core.termApplication $ Core.application (var "lhs") (var "arg"))
+      (var "t")
+      (var "args") $
+    "is" <~ Logic.ifElse (Equality.lte (var "arity") (Lists.length $ var "args"))
+      (list [])
+      (Math.range (int32 1) (Math.sub (var "arity") (Lists.length $ var "args"))) $
+    "pad" <~ ("indices" ~> "t" ~>
+      Logic.ifElse (Lists.null $ var "indices")
+        (var "t")
+        (Core.termFunction $ Core.functionLambda $
+          Core.lambda (Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ Lists.head $ var "indices")) nothing $
+            var "pad" @@ Lists.tail (var "indices") @@
+              (Core.termApplication $ Core.application (var "t") $ Core.termVariable $
+                Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ Lists.head $ var "indices")))) $
+    var "pad" @@ var "is" @@ var "apps") $
+  "rewrite" <~ ("args" ~> "recurse" ~> "t" ~>
+    "afterRecursion" <~ ("term" ~>
+      var "expand" @@ var "args" @@ (ref etaExpansionArityDef @@ var "graph" @@ var "term") @@ var "term") $
+    cases _Term (ref Rewriting.deannotateAndDetypeTermDef @@ var "t")
+      (Just $ var "afterRecursion" @@ (var "recurse" @@ var "t")) [
+      _Term_application>>: "app" ~>
+        "lhs" <~ Core.applicationFunction (var "app") $
+        "rhs" <~ Core.applicationArgument (var "app") $
+        "erhs" <~ var "rewrite" @@ (list []) @@ var "recurse" @@ var "rhs" $
+        var "rewrite" @@ (Lists.cons (var "erhs") (var "args")) @@ var "recurse" @@ var "lhs"]) $
+  ref contractTermDef @@ (ref Rewriting.rewriteTermDef @@ (var "rewrite" @@ list []) @@ var "term")
+
+etaExpansionArityDef :: TBinding (Graph -> Term -> Int)
+etaExpansionArityDef = define "etaExpansionArity" $
+  doc ("Calculate the arity for eta expansion"
+    <> " Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references.") $
+  "graph" ~> "term" ~> cases _Term (var "term")
+    (Just $ int32 0) [
+    _Term_annotated>>: "at" ~>
+      ref etaExpansionArityDef @@ var "graph" @@ Core.annotatedTermSubject (var "at"),
+    _Term_application>>: "app" ~> Math.sub
+      (ref etaExpansionArityDef @@ var "graph" @@ Core.applicationFunction (var "app"))
+      (int32 1),
+    _Term_function>>: "f" ~> cases _Function (var "f")
+      Nothing [
+      _Function_elimination>>: constant $ int32 1,
+      _Function_lambda>>: constant $ int32 0,
+      _Function_primitive>>: "name" ~> ref Arity.primitiveArityDef
+        @@ (Optionals.fromJust (ref Lexical.lookupPrimitiveDef @@ var "graph" @@ var "name"))],
+    _Term_typeLambda>>: "ta" ~> ref etaExpansionArityDef @@ var "graph" @@ Core.typeLambdaBody (var "ta"),
+    _Term_typeApplication>>: "tt" ~> ref etaExpansionArityDef @@ var "graph" @@ Core.typedTermTerm (var "tt"),
+    _Term_variable>>: "name" ~>
+      -- Note: we assume that the graph is fully typed.
+      Optionals.maybe (int32 0)
+        ("ts" ~> ref Arity.typeArityDef @@ (Core.typeSchemeType $ var "ts"))
+        (Optionals.bind
+          (ref Lexical.lookupElementDef @@ var "graph" @@ var "name")
+          ("b" ~> Core.bindingType $ var "b"))]
+
 -- Note: unused / untested
 etaReduceTermDef :: TBinding (Term -> Term)
 etaReduceTermDef = define "etaReduceTerm" $
@@ -175,69 +239,6 @@ etaReduceTermDef = define "etaReduceTerm" $
       cases _Function (var "f")
         (Just $ var "noChange") [
         _Function_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]]
-
-expandLambdasDef :: TBinding (Graph -> Term -> Term)
-expandLambdasDef = define "expandLambdas" $
-  doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x', in which the implicit"
-    <> " parameters of primitive functions and eliminations are made into explicit lambda parameters."
-    <> " Variable references are not expanded."
-    <> " This is useful for targets like Python with weaker support for currying than Hydra or Haskell."
-    <> " Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references.") $
-  "graph" ~> "term" ~>
-  "expand" <~ ("args" ~> "arity" ~> "t" ~>
-    "apps" <~ Lists.foldl
-      ("lhs" ~> "arg" ~> Core.termApplication $ Core.application (var "lhs") (var "arg"))
-      (var "t")
-      (var "args") $
-    "is" <~ Logic.ifElse (Equality.lte (var "arity") (Lists.length $ var "args"))
-      (list [])
-      (Math.range (int32 1) (Math.sub (var "arity") (Lists.length $ var "args"))) $
-    "pad" <~ ("indices" ~> "t" ~>
-      Logic.ifElse (Lists.null $ var "indices")
-        (var "t")
-        (Core.termFunction $ Core.functionLambda $
-          Core.lambda (Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ Lists.head $ var "indices")) nothing $
-            var "pad" @@ Lists.tail (var "indices") @@
-              (Core.termApplication $ Core.application (var "t") $ Core.termVariable $
-                Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ Lists.head $ var "indices")))) $
-    var "pad" @@ var "is" @@ var "apps") $
-  "rewrite" <~ ("args" ~> "recurse" ~> "t" ~>
-    "afterRecursion" <~ ("term" ~>
-      var "expand" @@ var "args" @@ (ref expansionArityDef @@ var "graph" @@ var "term") @@ var "term") $
-    cases _Term (ref Rewriting.deannotateAndDetypeTermDef @@ var "t")
-      (Just $ var "afterRecursion" @@ (var "recurse" @@ var "t")) [
-      _Term_application>>: "app" ~>
-        "lhs" <~ Core.applicationFunction (var "app") $
-        "rhs" <~ Core.applicationArgument (var "app") $
-        "erhs" <~ var "rewrite" @@ (list []) @@ var "recurse" @@ var "rhs" $
-        var "rewrite" @@ (Lists.cons (var "erhs") (var "args")) @@ var "recurse" @@ var "lhs"]) $
-  ref contractTermDef @@ (ref Rewriting.rewriteTermDef @@ (var "rewrite" @@ list []) @@ var "term")
-
-expansionArityDef :: TBinding (Graph -> Term -> Int)
-expansionArityDef = define "expansionArity" $
-  doc "Calculate the arity for lambda expansion" $
-  "graph" ~> "term" ~> cases _Term (var "term")
-    (Just $ int32 0) [
-    _Term_annotated>>: "at" ~>
-      ref expansionArityDef @@ var "graph" @@ Core.annotatedTermSubject (var "at"),
-    _Term_application>>: "app" ~> Math.sub
-      (ref expansionArityDef @@ var "graph" @@ Core.applicationFunction (var "app"))
-      (int32 1),
-    _Term_function>>: "f" ~> cases _Function (var "f")
-      Nothing [
-      _Function_elimination>>: constant $ int32 1,
-      _Function_lambda>>: constant $ int32 0,
-      _Function_primitive>>: "name" ~> ref Arity.primitiveArityDef
-        @@ (Optionals.fromJust (ref Lexical.lookupPrimitiveDef @@ var "graph" @@ var "name"))],
-    _Term_typeLambda>>: "ta" ~> ref expansionArityDef @@ var "graph" @@ Core.typeLambdaBody (var "ta"),
-    _Term_typeApplication>>: "tt" ~> ref expansionArityDef @@ var "graph" @@ Core.typedTermTerm (var "tt"),
-    _Term_variable>>: "name" ~>
-      -- Note: we assume that the graph is well-formed, i.e. no dangling references, and also fully typed.
-      Optionals.maybe (int32 0)
-        ("ts" ~> ref Arity.typeArityDef @@ (Core.typeSchemeType $ var "ts"))
-        (Optionals.bind
-          (ref Lexical.lookupElementDef @@ var "graph" @@ var "name")
-          ("b" ~> Core.bindingType $ var "b"))]
 
 reduceTermDef :: TBinding (Bool -> Term -> Flow Graph Term)
 reduceTermDef = define "reduceTerm" $
