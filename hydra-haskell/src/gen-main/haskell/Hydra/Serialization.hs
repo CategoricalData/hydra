@@ -70,17 +70,19 @@ customIndent idt s = (Strings.cat (Lists.intersperse "\n" (Lists.map (\line -> S
   line]) (Strings.lines s))))
 
 customIndentBlock :: (String -> [Ast.Expr] -> Ast.Expr)
-customIndentBlock idt els = (Logic.ifElse (Lists.null els) (cst "") (Logic.ifElse (Equality.equal (Lists.length els) 1) (Lists.head els) ( 
-  let head = (Lists.head els) 
-      rest = (Lists.tail els)
-      idtOp = Ast.Op {
+customIndentBlock idt els =  
+  let head = (Lists.head els)
+  in  
+    let rest = (Lists.tail els)
+    in  
+      let idtOp = Ast.Op {
               Ast.opSymbol = (sym ""),
               Ast.opPadding = Ast.Padding {
                 Ast.paddingLeft = Ast.WsSpace,
                 Ast.paddingRight = (Ast.WsBreakAndIndent idt)},
               Ast.opPrecedence = (Ast.Precedence 0),
               Ast.opAssociativity = Ast.AssociativityNone}
-  in (ifx idtOp head (newlineSep rest)))))
+      in (Logic.ifElse (Lists.null els) (cst "") (Logic.ifElse (Equality.equal (Lists.length els) 1) (Lists.head els) (ifx idtOp head (newlineSep rest))))
 
 dotSep :: ([Ast.Expr] -> Ast.Expr)
 dotSep = (sep (Ast.Op {
@@ -106,42 +108,57 @@ doubleSpace = "  "
 -- | Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it.
 expressionLength :: (Ast.Expr -> Int)
 expressionLength e =  
-  let symbolLength = (\s -> Strings.length (Ast.unSymbol s)) 
-      wsLength = (\ws -> (\x -> case x of
-              Ast.WsNone -> 0
-              Ast.WsSpace -> 1
-              Ast.WsBreak -> 1
-              Ast.WsBreakAndIndent v1 -> (Math.add 1 (Strings.length v1))
-              Ast.WsDoubleBreak -> 2) ws)
-      blockStyleLength = (\style ->  
-              let mindentLen = (Optionals.maybe 0 Strings.length (Ast.blockStyleIndent style)) 
-                  nlBeforeLen = (Logic.ifElse (Ast.blockStyleNewlineBeforeContent style) 1 0)
-                  nlAfterLen = (Logic.ifElse (Ast.blockStyleNewlineAfterContent style) 1 0)
-              in (Math.add mindentLen (Math.add nlBeforeLen nlAfterLen)))
-      bracketsLength = (\brackets -> Math.add (symbolLength (Ast.bracketsOpen brackets)) (symbolLength (Ast.bracketsClose brackets)))
-      bracketExprLength = (\be -> Math.add (bracketsLength (Ast.bracketExprBrackets be)) (Math.add (expressionLength (Ast.bracketExprEnclosed be)) (blockStyleLength (Ast.bracketExprStyle be))))
-      indentedExpressionLength = (\ie ->  
-              let baseLen = (expressionLength (Ast.indentedExpressionExpr ie)) 
-                  indentLen = ((\x -> case x of
-                          Ast.IndentStyleAllLines v1 -> (Strings.length v1)
-                          Ast.IndentStyleSubsequentLines v1 -> (Strings.length v1)) (Ast.indentedExpressionStyle ie))
-              in (Math.add baseLen indentLen))
-      opLength = (\op ->  
-              let symLen = (symbolLength (Ast.opSymbol op)) 
-                  padding = (Ast.opPadding op)
-                  leftLen = (wsLength (Ast.paddingLeft padding))
-                  rightLen = (wsLength (Ast.paddingRight padding))
-              in (Math.add symLen (Math.add leftLen rightLen)))
-      opExprLength = (\oe ->  
-              let opLen = (opLength (Ast.opExprOp oe)) 
-                  leftLen = (expressionLength (Ast.opExprLhs oe))
-                  rightLen = (expressionLength (Ast.opExprRhs oe))
-              in (Math.add opLen (Math.add leftLen rightLen)))
-  in ((\x -> case x of
-    Ast.ExprConst v1 -> (symbolLength v1)
-    Ast.ExprIndent v1 -> (indentedExpressionLength v1)
-    Ast.ExprOp v1 -> (opExprLength v1)
-    Ast.ExprBrackets v1 -> (bracketExprLength v1)) e)
+  let symbolLength = (\s -> Strings.length (Ast.unSymbol s))
+  in  
+    let wsLength = (\ws -> (\x -> case x of
+            Ast.WsNone -> 0
+            Ast.WsSpace -> 1
+            Ast.WsBreak -> 1
+            Ast.WsBreakAndIndent v1 -> (Math.add 1 (Strings.length v1))
+            Ast.WsDoubleBreak -> 2) ws)
+    in  
+      let blockStyleLength = (\style ->  
+              let mindentLen = (Optionals.maybe 0 Strings.length (Ast.blockStyleIndent style))
+              in  
+                let nlBeforeLen = (Logic.ifElse (Ast.blockStyleNewlineBeforeContent style) 1 0)
+                in  
+                  let nlAfterLen = (Logic.ifElse (Ast.blockStyleNewlineAfterContent style) 1 0)
+                  in (Math.add mindentLen (Math.add nlBeforeLen nlAfterLen)))
+      in  
+        let bracketsLength = (\brackets -> Math.add (symbolLength (Ast.bracketsOpen brackets)) (symbolLength (Ast.bracketsClose brackets)))
+        in  
+          let bracketExprLength = (\be -> Math.add (bracketsLength (Ast.bracketExprBrackets be)) (Math.add (expressionLength (Ast.bracketExprEnclosed be)) (blockStyleLength (Ast.bracketExprStyle be))))
+          in  
+            let indentedExpressionLength = (\ie ->  
+                    let baseLen = (expressionLength (Ast.indentedExpressionExpr ie))
+                    in  
+                      let indentLen = ((\x -> case x of
+                              Ast.IndentStyleAllLines v1 -> (Strings.length v1)
+                              Ast.IndentStyleSubsequentLines v1 -> (Strings.length v1)) (Ast.indentedExpressionStyle ie))
+                      in (Math.add baseLen indentLen))
+            in  
+              let opLength = (\op ->  
+                      let symLen = (symbolLength (Ast.opSymbol op))
+                      in  
+                        let padding = (Ast.opPadding op)
+                        in  
+                          let leftLen = (wsLength (Ast.paddingLeft padding))
+                          in  
+                            let rightLen = (wsLength (Ast.paddingRight padding))
+                            in (Math.add symLen (Math.add leftLen rightLen)))
+              in  
+                let opExprLength = (\oe ->  
+                        let opLen = (opLength (Ast.opExprOp oe))
+                        in  
+                          let leftLen = (expressionLength (Ast.opExprLhs oe))
+                          in  
+                            let rightLen = (expressionLength (Ast.opExprRhs oe))
+                            in (Math.add opLen (Math.add leftLen rightLen)))
+                in ((\x -> case x of
+                  Ast.ExprConst v1 -> (symbolLength v1)
+                  Ast.ExprIndent v1 -> (indentedExpressionLength v1)
+                  Ast.ExprOp v1 -> (opExprLength v1)
+                  Ast.ExprBrackets v1 -> (bracketExprLength v1)) e)
 
 fullBlockStyle :: Ast.BlockStyle
 fullBlockStyle = Ast.BlockStyle {
@@ -180,10 +197,11 @@ infixWs op l r = (spaceSep [
 
 infixWsList :: (String -> [Ast.Expr] -> Ast.Expr)
 infixWsList op opers =  
-  let opExpr = (cst op) 
-      foldFun = (\e -> \r -> Logic.ifElse (Lists.null e) [
-              r] (Lists.cons r (Lists.cons opExpr e)))
-  in (spaceSep (Lists.foldl foldFun [] (Lists.reverse opers)))
+  let opExpr = (cst op)
+  in  
+    let foldFun = (\e -> \r -> Logic.ifElse (Lists.null e) [
+            r] (Lists.cons r (Lists.cons opExpr e)))
+    in (spaceSep (Lists.foldl foldFun [] (Lists.reverse opers)))
 
 inlineStyle :: Ast.BlockStyle
 inlineStyle = Ast.BlockStyle {
@@ -236,16 +254,18 @@ orOp newlines = Ast.Op {
   Ast.opAssociativity = Ast.AssociativityNone}
 
 orSep :: (Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr)
-orSep style l = (Logic.ifElse (Lists.null l) (cst "") (Logic.ifElse (Equality.equal (Lists.length l) 1) (Lists.head l) ( 
-  let h = (Lists.head l) 
-      r = (Lists.tail l)
-      newlines = (Ast.blockStyleNewlineBeforeContent style)
-  in (ifx (orOp newlines) h (orSep style r)))))
+orSep style l =  
+  let h = (Lists.head l)
+  in  
+    let r = (Lists.tail l)
+    in  
+      let newlines = (Ast.blockStyleNewlineBeforeContent style)
+      in (Logic.ifElse (Lists.null l) (cst "") (Logic.ifElse (Equality.equal (Lists.length l) 1) (Lists.head l) (ifx (orOp newlines) h (orSep style r))))
 
 parenList :: (Bool -> [Ast.Expr] -> Ast.Expr)
-parenList newlines els = (Logic.ifElse (Lists.null els) (cst "()") ( 
+parenList newlines els =  
   let style = (Logic.ifElse (Logic.and newlines (Equality.gt (Lists.length els) 1)) halfBlockStyle inlineStyle)
-  in (brackets parentheses style (commaSep style els))))
+  in (Logic.ifElse (Lists.null els) (cst "()") (brackets parentheses style (commaSep style els)))
 
 parens :: (Ast.Expr -> Ast.Expr)
 parens = (brackets parentheses inlineStyle)
@@ -259,53 +279,68 @@ parenthesize :: (Ast.Expr -> Ast.Expr)
 parenthesize exp =  
   let assocLeft = (\a -> (\x -> case x of
           Ast.AssociativityRight -> False
-          _ -> True) a) 
-      assocRight = (\a -> (\x -> case x of
-              Ast.AssociativityLeft -> False
-              _ -> True) a)
-  in ((\x -> case x of
-    Ast.ExprBrackets v1 -> (Ast.ExprBrackets (Ast.BracketExpr {
-      Ast.bracketExprBrackets = (Ast.bracketExprBrackets v1),
-      Ast.bracketExprEnclosed = (parenthesize (Ast.bracketExprEnclosed v1)),
-      Ast.bracketExprStyle = (Ast.bracketExprStyle v1)}))
-    Ast.ExprConst _ -> exp
-    Ast.ExprIndent v1 -> (Ast.ExprIndent (Ast.IndentedExpression {
-      Ast.indentedExpressionStyle = (Ast.indentedExpressionStyle v1),
-      Ast.indentedExpressionExpr = (parenthesize (Ast.indentedExpressionExpr v1))}))
-    Ast.ExprOp v1 ->  
-      let op = (Ast.opExprOp v1) 
-          prec = (Ast.unPrecedence (Ast.opPrecedence op))
-          assoc = (Ast.opAssociativity op)
-          lhs = (Ast.opExprLhs v1)
-          rhs = (Ast.opExprRhs v1)
-          lhs_ = (parenthesize lhs)
-          rhs_ = (parenthesize rhs)
-          lhs2 = ((\x -> case x of
-                  Ast.ExprOp v2 ->  
-                    let lop = (Ast.opExprOp v2) 
-                        lprec = (Ast.unPrecedence (Ast.opPrecedence lop))
-                        lassoc = (Ast.opAssociativity lop)
-                        comparison = (Equality.compare prec lprec)
-                    in ((\x -> case x of
-                      Mantle.ComparisonLessThan -> lhs_
-                      Mantle.ComparisonGreaterThan -> (parens lhs_)
-                      Mantle.ComparisonEqualTo -> (Logic.ifElse (Logic.and (assocLeft assoc) (assocLeft lassoc)) lhs_ (parens lhs_))) comparison)
-                  _ -> lhs_) lhs_)
-          rhs2 = ((\x -> case x of
-                  Ast.ExprOp v2 ->  
-                    let rop = (Ast.opExprOp v2) 
-                        rprec = (Ast.unPrecedence (Ast.opPrecedence rop))
-                        rassoc = (Ast.opAssociativity rop)
-                        comparison = (Equality.compare prec rprec)
-                    in ((\x -> case x of
-                      Mantle.ComparisonLessThan -> rhs_
-                      Mantle.ComparisonGreaterThan -> (parens rhs_)
-                      Mantle.ComparisonEqualTo -> (Logic.ifElse (Logic.and (assocRight assoc) (assocRight rassoc)) rhs_ (parens rhs_))) comparison)
-                  _ -> rhs_) rhs_)
-      in (Ast.ExprOp (Ast.OpExpr {
-        Ast.opExprOp = op,
-        Ast.opExprLhs = lhs2,
-        Ast.opExprRhs = rhs2}))) exp)
+          _ -> True) a)
+  in  
+    let assocRight = (\a -> (\x -> case x of
+            Ast.AssociativityLeft -> False
+            _ -> True) a)
+    in ((\x -> case x of
+      Ast.ExprBrackets v1 -> (Ast.ExprBrackets (Ast.BracketExpr {
+        Ast.bracketExprBrackets = (Ast.bracketExprBrackets v1),
+        Ast.bracketExprEnclosed = (parenthesize (Ast.bracketExprEnclosed v1)),
+        Ast.bracketExprStyle = (Ast.bracketExprStyle v1)}))
+      Ast.ExprConst _ -> exp
+      Ast.ExprIndent v1 -> (Ast.ExprIndent (Ast.IndentedExpression {
+        Ast.indentedExpressionStyle = (Ast.indentedExpressionStyle v1),
+        Ast.indentedExpressionExpr = (parenthesize (Ast.indentedExpressionExpr v1))}))
+      Ast.ExprOp v1 ->  
+        let op = (Ast.opExprOp v1)
+        in  
+          let prec = (Ast.unPrecedence (Ast.opPrecedence op))
+          in  
+            let assoc = (Ast.opAssociativity op)
+            in  
+              let lhs = (Ast.opExprLhs v1)
+              in  
+                let rhs = (Ast.opExprRhs v1)
+                in  
+                  let lhs_ = (parenthesize lhs)
+                  in  
+                    let rhs_ = (parenthesize rhs)
+                    in  
+                      let lhs2 = ((\x -> case x of
+                              Ast.ExprOp v2 ->  
+                                let lop = (Ast.opExprOp v2)
+                                in  
+                                  let lprec = (Ast.unPrecedence (Ast.opPrecedence lop))
+                                  in  
+                                    let lassoc = (Ast.opAssociativity lop)
+                                    in  
+                                      let comparison = (Equality.compare prec lprec)
+                                      in ((\x -> case x of
+                                        Mantle.ComparisonLessThan -> lhs_
+                                        Mantle.ComparisonGreaterThan -> (parens lhs_)
+                                        Mantle.ComparisonEqualTo -> (Logic.ifElse (Logic.and (assocLeft assoc) (assocLeft lassoc)) lhs_ (parens lhs_))) comparison)
+                              _ -> lhs_) lhs_)
+                      in  
+                        let rhs2 = ((\x -> case x of
+                                Ast.ExprOp v2 ->  
+                                  let rop = (Ast.opExprOp v2)
+                                  in  
+                                    let rprec = (Ast.unPrecedence (Ast.opPrecedence rop))
+                                    in  
+                                      let rassoc = (Ast.opAssociativity rop)
+                                      in  
+                                        let comparison = (Equality.compare prec rprec)
+                                        in ((\x -> case x of
+                                          Mantle.ComparisonLessThan -> rhs_
+                                          Mantle.ComparisonGreaterThan -> (parens rhs_)
+                                          Mantle.ComparisonEqualTo -> (Logic.ifElse (Logic.and (assocRight assoc) (assocRight rassoc)) rhs_ (parens rhs_))) comparison)
+                                _ -> rhs_) rhs_)
+                        in (Ast.ExprOp (Ast.OpExpr {
+                          Ast.opExprOp = op,
+                          Ast.opExprLhs = lhs2,
+                          Ast.opExprRhs = rhs2}))) exp)
 
 prefix :: (String -> Ast.Expr -> Ast.Expr)
 prefix p expr =  
@@ -325,73 +360,96 @@ printExpr e =
           Ast.WsSpace -> " "
           Ast.WsBreak -> "\n"
           Ast.WsBreakAndIndent _ -> "\n"
-          Ast.WsDoubleBreak -> "\n\n") ws) 
-      idt = (\ws -> \s -> (\x -> case x of
-              Ast.WsBreakAndIndent v1 -> (customIndent v1 s)
-              _ -> s) ws)
-  in ((\x -> case x of
-    Ast.ExprConst v1 -> (Ast.unSymbol v1)
-    Ast.ExprIndent v1 ->  
-      let style = (Ast.indentedExpressionStyle v1) 
-          expr = (Ast.indentedExpressionExpr v1)
-          lns = (Strings.lines (printExpr expr))
-      in (Strings.intercalate "\n" ((\x -> case x of
-        Ast.IndentStyleAllLines v2 -> (Lists.map (\line -> Strings.cat [
-          v2,
-          line]) lns)
-        Ast.IndentStyleSubsequentLines v2 -> (Logic.ifElse (Equality.equal (Lists.length lns) 1) lns (Lists.cons (Lists.head lns) (Lists.map (\line -> Strings.cat [
-          v2,
-          line]) (Lists.tail lns))))) style))
-    Ast.ExprOp v1 ->  
-      let op = (Ast.opExprOp v1) 
-          sym = (Ast.unSymbol (Ast.opSymbol op))
-          padding = (Ast.opPadding op)
-          padl = (Ast.paddingLeft padding)
-          padr = (Ast.paddingRight padding)
-          l = (Ast.opExprLhs v1)
-          r = (Ast.opExprRhs v1)
-          lhs = (idt padl (printExpr l))
-          rhs = (idt padr (printExpr r))
-      in (Strings.cat [
-        Strings.cat [
-          Strings.cat [
-            Strings.cat [
-              lhs,
-              (pad padl)],
-            sym],
-          (pad padr)],
-        rhs])
-    Ast.ExprBrackets v1 ->  
-      let brackets = (Ast.bracketExprBrackets v1) 
-          l = (Ast.unSymbol (Ast.bracketsOpen brackets))
-          r = (Ast.unSymbol (Ast.bracketsClose brackets))
-          e = (Ast.bracketExprEnclosed v1)
-          style = (Ast.bracketExprStyle v1)
-          body = (printExpr e)
-          doIndent = (Ast.blockStyleIndent style)
-          nlBefore = (Ast.blockStyleNewlineBeforeContent style)
-          nlAfter = (Ast.blockStyleNewlineAfterContent style)
-          ibody = (Optionals.maybe body (\idt -> customIndent idt body) doIndent)
-          pre = (Logic.ifElse nlBefore "\n" "")
-          suf = (Logic.ifElse nlAfter "\n" "")
-      in (Strings.cat [
-        Strings.cat [
-          Strings.cat [
-            Strings.cat [
-              l,
-              pre],
-            ibody],
-          suf],
-        r])) e)
+          Ast.WsDoubleBreak -> "\n\n") ws)
+  in  
+    let idt = (\ws -> \s -> (\x -> case x of
+            Ast.WsBreakAndIndent v1 -> (customIndent v1 s)
+            _ -> s) ws)
+    in ((\x -> case x of
+      Ast.ExprConst v1 -> (Ast.unSymbol v1)
+      Ast.ExprIndent v1 ->  
+        let style = (Ast.indentedExpressionStyle v1)
+        in  
+          let expr = (Ast.indentedExpressionExpr v1)
+          in  
+            let lns = (Strings.lines (printExpr expr))
+            in (Strings.intercalate "\n" ((\x -> case x of
+              Ast.IndentStyleAllLines v2 -> (Lists.map (\line -> Strings.cat [
+                v2,
+                line]) lns)
+              Ast.IndentStyleSubsequentLines v2 -> (Logic.ifElse (Equality.equal (Lists.length lns) 1) lns (Lists.cons (Lists.head lns) (Lists.map (\line -> Strings.cat [
+                v2,
+                line]) (Lists.tail lns))))) style))
+      Ast.ExprOp v1 ->  
+        let op = (Ast.opExprOp v1)
+        in  
+          let sym = (Ast.unSymbol (Ast.opSymbol op))
+          in  
+            let padding = (Ast.opPadding op)
+            in  
+              let padl = (Ast.paddingLeft padding)
+              in  
+                let padr = (Ast.paddingRight padding)
+                in  
+                  let l = (Ast.opExprLhs v1)
+                  in  
+                    let r = (Ast.opExprRhs v1)
+                    in  
+                      let lhs = (idt padl (printExpr l))
+                      in  
+                        let rhs = (idt padr (printExpr r))
+                        in (Strings.cat [
+                          Strings.cat [
+                            Strings.cat [
+                              Strings.cat [
+                                lhs,
+                                (pad padl)],
+                              sym],
+                            (pad padr)],
+                          rhs])
+      Ast.ExprBrackets v1 ->  
+        let brackets = (Ast.bracketExprBrackets v1)
+        in  
+          let l = (Ast.unSymbol (Ast.bracketsOpen brackets))
+          in  
+            let r = (Ast.unSymbol (Ast.bracketsClose brackets))
+            in  
+              let e = (Ast.bracketExprEnclosed v1)
+              in  
+                let style = (Ast.bracketExprStyle v1)
+                in  
+                  let body = (printExpr e)
+                  in  
+                    let doIndent = (Ast.blockStyleIndent style)
+                    in  
+                      let nlBefore = (Ast.blockStyleNewlineBeforeContent style)
+                      in  
+                        let nlAfter = (Ast.blockStyleNewlineAfterContent style)
+                        in  
+                          let ibody = (Optionals.maybe body (\idt -> customIndent idt body) doIndent)
+                          in  
+                            let pre = (Logic.ifElse nlBefore "\n" "")
+                            in  
+                              let suf = (Logic.ifElse nlAfter "\n" "")
+                              in (Strings.cat [
+                                Strings.cat [
+                                  Strings.cat [
+                                    Strings.cat [
+                                      l,
+                                      pre],
+                                    ibody],
+                                  suf],
+                                r])) e)
 
 semicolonSep :: ([Ast.Expr] -> Ast.Expr)
 semicolonSep = (symbolSep ";" inlineStyle)
 
 sep :: (Ast.Op -> [Ast.Expr] -> Ast.Expr)
-sep op els = (Logic.ifElse (Lists.null els) (cst "") (Logic.ifElse (Equality.equal (Lists.length els) 1) (Lists.head els) ( 
-  let h = (Lists.head els) 
-      r = (Lists.tail els)
-  in (ifx op h (sep op r)))))
+sep op els =  
+  let h = (Lists.head els)
+  in  
+    let r = (Lists.tail els)
+    in (Logic.ifElse (Lists.null els) (cst "") (Logic.ifElse (Equality.equal (Lists.length els) 1) (Lists.head els) (ifx op h (sep op r))))
 
 spaceSep :: ([Ast.Expr] -> Ast.Expr)
 spaceSep = (sep (Ast.Op {
@@ -411,21 +469,25 @@ sym :: (String -> Ast.Symbol)
 sym s = (Ast.Symbol s)
 
 symbolSep :: (String -> Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr)
-symbolSep symb style l = (Logic.ifElse (Lists.null l) (cst "") (Logic.ifElse (Equality.equal (Lists.length l) 1) (Lists.head l) ( 
-  let h = (Lists.head l) 
-      r = (Lists.tail l)
-      breakCount = (Lists.length (Lists.filter (\x_ -> x_) [
+symbolSep symb style l =  
+  let h = (Lists.head l)
+  in  
+    let r = (Lists.tail l)
+    in  
+      let breakCount = (Lists.length (Lists.filter (\x_ -> x_) [
               Ast.blockStyleNewlineBeforeContent style,
               (Ast.blockStyleNewlineAfterContent style)]))
-      break = (Logic.ifElse (Equality.equal breakCount 0) Ast.WsSpace (Logic.ifElse (Equality.equal breakCount 1) Ast.WsBreak Ast.WsDoubleBreak))
-      commaOp = Ast.Op {
-              Ast.opSymbol = (sym symb),
-              Ast.opPadding = Ast.Padding {
-                Ast.paddingLeft = Ast.WsNone,
-                Ast.paddingRight = break},
-              Ast.opPrecedence = (Ast.Precedence 0),
-              Ast.opAssociativity = Ast.AssociativityNone}
-  in (ifx commaOp h (symbolSep symb style r)))))
+      in  
+        let break = (Logic.ifElse (Equality.equal breakCount 0) Ast.WsSpace (Logic.ifElse (Equality.equal breakCount 1) Ast.WsBreak Ast.WsDoubleBreak))
+        in  
+          let commaOp = Ast.Op {
+                  Ast.opSymbol = (sym symb),
+                  Ast.opPadding = Ast.Padding {
+                    Ast.paddingLeft = Ast.WsNone,
+                    Ast.paddingRight = break},
+                  Ast.opPrecedence = (Ast.Precedence 0),
+                  Ast.opAssociativity = Ast.AssociativityNone}
+          in (Logic.ifElse (Lists.null l) (cst "") (Logic.ifElse (Equality.equal (Lists.length l) 1) (Lists.head l) (ifx commaOp h (symbolSep symb style r))))
 
 tabIndent :: (Ast.Expr -> Ast.Expr)
 tabIndent e = (Ast.ExprIndent (Ast.IndentedExpression {
