@@ -947,13 +947,13 @@ inferTypeOfTupleProjectionDef = define "inferTypeOfTupleProjection" $
 
 inferTypeOfTypeLambdaDef :: TBinding (InferenceContext -> TypeLambda -> Flow s InferenceResult)
 inferTypeOfTypeLambdaDef = define "inferTypeOfTypeLambda" $
-  doc "Infer the type of a type abstraction" $
+  doc "Infer the type of a type abstraction; just pass through to the lambda body." $
   "cx" ~> "ta" ~>
   ref inferTypeOfTermDef @@ var "cx" @@ (Core.typeLambdaBody $ var "ta") @@ string "type abstraction"
 
 inferTypeOfTypeApplicationDef :: TBinding (InferenceContext -> TypedTerm -> Flow s InferenceResult)
 inferTypeOfTypeApplicationDef = define "inferTypeOfTypeApplication" $
-  doc "Infer the type of a type application" $
+  doc "Infer the type of a type application; just pass through to the inner term." $
   "cx" ~> "tt" ~>
   ref inferTypeOfTermDef @@ var "cx" @@ (Core.typedTermTerm $ var "tt") @@ string "type application term"
 
