@@ -60,7 +60,7 @@ deduplicateCaseVariables cases = L.reverse $ snd $ L.foldl rewriteCase (M.empty,
 encodeApplication :: PythonEnvironment -> Application -> Flow Graph Py.Expression
 encodeApplication env app = do
     g <- getState
-    let arity = expansionArity g fun
+    let arity = etaExpansionArity g fun
     pargs <- CM.mapM (encodeTermInline env) args
     let hargs = L.take arity pargs
     let rargs = L.drop arity pargs
@@ -384,7 +384,6 @@ encodeTermInline env term = case deannotateTerm term of
     TermList terms -> do
       pyExprs <- CM.mapM encode terms
       return $ pyAtomToPyExpression $ Py.AtomTuple $ Py.Tuple (pyExpressionToPyStarNamedExpression <$> pyExprs)
---      return $ functionCall (pyNameToPyPrimary $ Py.Name "tuple") [pl]
     TermLiteral lit -> encodeLiteral lit
     TermMap m -> do
         pairs <- CM.mapM encodePair $ M.toList m
