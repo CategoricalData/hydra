@@ -160,7 +160,7 @@ detypeTermDef = define "detypeTerm" $
     _Term_annotated>>: "at" ~>
        "subj" <~ Core.annotatedTermSubject (var "at") $
        "ann" <~ Core.annotatedTermAnnotation (var "at") $
-       Core.termAnnotated $ Core.annotatedTerm (ref deannotateAndDetypeTermDef @@ var "subj") (var "ann"),
+       Core.termAnnotated $ Core.annotatedTerm (ref detypeTermDef @@ var "subj") (var "ann"),
     _Term_typeApplication>>: "tt" ~> ref deannotateAndDetypeTermDef @@ (Core.typedTermTerm $ var "tt"),
     _Term_typeLambda>>: "ta" ~> ref deannotateAndDetypeTermDef @@ (Core.typeLambdaBody $ var "ta")]
 

@@ -79,7 +79,7 @@ detypeTerm t = ((\x -> case x of
     in  
       let ann = (Core.annotatedTermAnnotation v1)
       in (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermSubject = (deannotateAndDetypeTerm subj),
+        Core.annotatedTermSubject = (detypeTerm subj),
         Core.annotatedTermAnnotation = ann}))
   Core.TermTypeApplication v1 -> (deannotateAndDetypeTerm (Core.typedTermTerm v1))
   Core.TermTypeLambda v1 -> (deannotateAndDetypeTerm (Core.typeLambdaBody v1))

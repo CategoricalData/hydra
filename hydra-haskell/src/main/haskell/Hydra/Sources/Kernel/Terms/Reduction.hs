@@ -166,7 +166,7 @@ etaExpandTermDef = define "etaExpandTerm" $
   "rewrite" <~ ("args" ~> "recurse" ~> "t" ~>
     "afterRecursion" <~ ("term" ~>
       var "expand" @@ var "args" @@ (ref etaExpansionArityDef @@ var "graph" @@ var "term") @@ var "term") $
-    "t2" <~ ref Rewriting.deannotateAndDetypeTermDef @@ var "t" $
+    "t2" <~ ref Rewriting.detypeTermDef @@ var "t" $
     cases _Term (var "t2")
       (Just $ var "afterRecursion" @@ (var "recurse" @@ var "t2")) [
       _Term_application>>: "app" ~>

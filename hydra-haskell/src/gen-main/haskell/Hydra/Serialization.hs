@@ -373,13 +373,15 @@ printExpr e =
           let expr = (Ast.indentedExpressionExpr v1)
           in  
             let lns = (Strings.lines (printExpr expr))
-            in (Strings.intercalate "\n" ((\x -> case x of
-              Ast.IndentStyleAllLines v2 -> (Lists.map (\line -> Strings.cat [
-                v2,
-                line]) lns)
-              Ast.IndentStyleSubsequentLines v2 -> (Logic.ifElse (Equality.equal (Lists.length lns) 1) lns (Lists.cons (Lists.head lns) (Lists.map (\line -> Strings.cat [
-                v2,
-                line]) (Lists.tail lns))))) style))
+            in  
+              let ilns = ((\x -> case x of
+                      Ast.IndentStyleAllLines v2 -> (Lists.map (\line -> Strings.cat [
+                        v2,
+                        line]) lns)
+                      Ast.IndentStyleSubsequentLines v2 -> (Logic.ifElse (Equality.equal (Lists.length lns) 1) lns (Lists.cons (Lists.head lns) (Lists.map (\line -> Strings.cat [
+                        v2,
+                        line]) (Lists.tail lns))))) style)
+              in (Strings.intercalate "\n" ilns)
       Ast.ExprOp v1 ->  
         let op = (Ast.opExprOp v1)
         in  
