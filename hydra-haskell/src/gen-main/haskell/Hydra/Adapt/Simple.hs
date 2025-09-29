@@ -186,14 +186,14 @@ adaptTypeScheme constraints litmap ts0 =
 
 -- | Given a data graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, perform inference, then return a corresponding term definition for each element name.
 dataGraphToDefinitions :: (Coders.LanguageConstraints -> Bool -> Graph.Graph -> [[Core.Name]] -> Compute.Flow Graph.Graph (Graph.Graph, [[Module.TermDefinition]]))
-dataGraphToDefinitions constraints doExpand graph nameLists = (Flows.bind (adaptDataGraph constraints doExpand graph) (\graph1 -> Flows.bind (Inference.inferGraphTypes graph1) (\graph2 ->  
+dataGraphToDefinitions constraints doExpand graph nameLists = (Flows.bind (Logic.ifElse doExpand (Inference.inferGraphTypes graph) (Flows.pure graph)) (\graphi -> Flows.bind (adaptDataGraph constraints doExpand graphi) (\graph1 -> Flows.bind (Inference.inferGraphTypes graph1) (\graph2 ->  
   let toDef = (\el ->  
           let ts = (Optionals.fromJust (Core.bindingType el))
           in Module.TermDefinition {
             Module.termDefinitionName = (Core.bindingName el),
             Module.termDefinitionTerm = (Core.bindingTerm el),
             Module.termDefinitionType = (Schemas.typeSchemeToFType ts)})
-  in (Flows.pure (graph2, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> Optionals.fromJust (Maps.lookup n (Graph.graphElements graph2))) names)) nameLists))))))
+  in (Flows.pure (graph2, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> Optionals.fromJust (Maps.lookup n (Graph.graphElements graph2))) names)) nameLists)))))))
 
 -- | Check if a literal type is supported by the given language constraints
 literalTypeSupported :: (Coders.LanguageConstraints -> Core.LiteralType -> Bool)
