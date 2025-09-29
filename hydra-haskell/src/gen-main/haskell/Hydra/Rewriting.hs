@@ -64,11 +64,26 @@ deannotateTypeRecursive typ =
 -- | Recursively strip all annotations from a type scheme
 deannotateTypeSchemeRecursive :: (Core.TypeScheme -> Core.TypeScheme)
 deannotateTypeSchemeRecursive ts =  
-  let vars = (Core.typeSchemeVariables ts) 
-      typ = (Core.typeSchemeType ts)
-  in Core.TypeScheme {
-    Core.typeSchemeVariables = vars,
-    Core.typeSchemeType = (deannotateTypeRecursive typ)}
+  let vars = (Core.typeSchemeVariables ts)
+  in  
+    let typ = (Core.typeSchemeType ts)
+    in Core.TypeScheme {
+      Core.typeSchemeVariables = vars,
+      Core.typeSchemeType = (deannotateTypeRecursive typ)}
+
+-- | Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact
+detypeTerm :: (Core.Term -> Core.Term)
+detypeTerm t = ((\x -> case x of
+  Core.TermAnnotated v1 ->  
+    let subj = (Core.annotatedTermSubject v1)
+    in  
+      let ann = (Core.annotatedTermAnnotation v1)
+      in (Core.TermAnnotated (Core.AnnotatedTerm {
+        Core.annotatedTermSubject = (deannotateAndDetypeTerm subj),
+        Core.annotatedTermAnnotation = ann}))
+  Core.TermTypeApplication v1 -> (deannotateAndDetypeTerm (Core.typedTermTerm v1))
+  Core.TermTypeLambda v1 -> (deannotateAndDetypeTerm (Core.typeLambdaBody v1))
+  _ -> t) t)
 
 -- | A variation of expandLambdas which also attaches type annotations when padding function terms
 expandTypedLambdas :: (Core.Term -> Core.Term)
@@ -76,35 +91,45 @@ expandTypedLambdas term =
   let toNaryFunType = (\typ ->  
           let helper = (\t -> (\x -> case x of
                   Core.TypeFunction v1 ->  
-                    let dom0 = (Core.functionTypeDomain v1) 
-                        cod0 = (Core.functionTypeCodomain v1)
-                        recursive = (helper cod0)
-                        doms = (fst recursive)
-                        cod1 = (snd recursive)
-                    in (Lists.cons dom0 doms, cod1)
+                    let dom0 = (Core.functionTypeDomain v1)
+                    in  
+                      let cod0 = (Core.functionTypeCodomain v1)
+                      in  
+                        let recursive = (helper cod0)
+                        in  
+                          let doms = (fst recursive)
+                          in  
+                            let cod1 = (snd recursive)
+                            in (Lists.cons dom0 doms, cod1)
                   _ -> ([], t)) t)
-          in (helper (deannotateType typ))) 
-      padTerm = (\i -> \doms -> \cod -> \term -> Logic.ifElse (Lists.null doms) term ( 
-              let dom = (Lists.head doms) 
-                  var = (Core.Name (Strings.cat2 "v" (Literals.showInt32 i)))
-                  tailDoms = (Lists.tail doms)
-                  toFunctionType = (\doms -> \cod -> Lists.foldl (\c -> \d -> Core.TypeFunction (Core.FunctionType {
+          in (helper (deannotateType typ)))
+  in  
+    let padTerm = (\i -> \doms -> \cod -> \term -> Logic.ifElse (Lists.null doms) term ( 
+            let dom = (Lists.head doms)
+            in  
+              let var = (Core.Name (Strings.cat2 "v" (Literals.showInt32 i)))
+              in  
+                let tailDoms = (Lists.tail doms)
+                in  
+                  let toFunctionType = (\doms -> \cod -> Lists.foldl (\c -> \d -> Core.TypeFunction (Core.FunctionType {
                           Core.functionTypeDomain = d,
                           Core.functionTypeCodomain = c})) cod doms)
-              in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                Core.lambdaParameter = var,
-                Core.lambdaDomain = (Just dom),
-                Core.lambdaBody = (padTerm (Math.add i 1) tailDoms cod (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = term,
-                  Core.applicationArgument = (Core.TermVariable var)})))})))))
-      expand = (\doms -> \cod -> \term -> (\x -> case x of
+                  in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = var,
+                    Core.lambdaDomain = (Just dom),
+                    Core.lambdaBody = (padTerm (Math.add i 1) tailDoms cod (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = term,
+                      Core.applicationArgument = (Core.TermVariable var)})))})))))
+    in  
+      let expand = (\doms -> \cod -> \term -> (\x -> case x of
               Core.TermAnnotated v1 -> (Core.TermAnnotated (Core.AnnotatedTerm {
                 Core.annotatedTermSubject = (expand doms cod (Core.annotatedTermSubject v1)),
                 Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))
               Core.TermApplication v1 ->  
-                let lhs = (Core.applicationFunction v1) 
-                    rhs = (Core.applicationArgument v1)
-                in (rewriteTerm rewrite term)
+                let lhs = (Core.applicationFunction v1)
+                in  
+                  let rhs = (Core.applicationArgument v1)
+                  in (rewriteTerm rewrite term)
               Core.TermFunction v1 -> ((\x -> case x of
                 Core.FunctionLambda v2 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.lambdaParameter v2),
@@ -119,68 +144,87 @@ expandTypedLambdas term =
                 in (Core.TermLet (Core.Let {
                   Core.letBindings = (Lists.map expandBinding (Core.letBindings v1)),
                   Core.letEnvironment = (expand doms cod (Core.letEnvironment v1))}))
-              _ -> (rewriteTerm rewrite term)) term)
-      rewrite = (\recurse -> \term -> recurse term)
-  in (rewriteTerm rewrite term)
+              _ -> (rewriteTerm rewrite term)) term) 
+          rewrite = (\recurse -> \term -> recurse term)
+      in (rewriteTerm rewrite term)
 
 -- | Flatten nested let expressions
 flattenLetTerms :: (Core.Term -> Core.Term)
 flattenLetTerms term =  
   let rewriteBinding = (\binding ->  
-          let key0 = (Core.bindingName binding) 
-              val0 = (Core.bindingTerm binding)
-              t = (Core.bindingType binding)
-          in ((\x -> case x of
-            Core.TermAnnotated v1 ->  
-              let val1 = (Core.annotatedTermSubject v1) 
-                  ann = (Core.annotatedTermAnnotation v1)
-                  recursive = (rewriteBinding (Core.Binding {
-                          Core.bindingName = key0,
-                          Core.bindingTerm = val1,
-                          Core.bindingType = t}))
-                  innerBinding = (fst recursive)
-                  deps = (snd recursive)
-                  val2 = (Core.bindingTerm innerBinding)
-              in (Core.Binding {
-                Core.bindingName = key0,
-                Core.bindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
-                  Core.annotatedTermSubject = val2,
-                  Core.annotatedTermAnnotation = ann})),
-                Core.bindingType = t}, deps)
-            Core.TermLet v1 ->  
-              let bindings1 = (Core.letBindings v1) 
-                  body1 = (Core.letEnvironment v1)
-                  prefix = (Strings.cat2 (Core.unName key0) "_")
-                  qualify = (\n -> Core.Name (Strings.cat2 prefix (Core.unName n)))
-                  toSubstPair = (\b -> (Core.bindingName b, (qualify (Core.bindingName b))))
-                  subst = (Maps.fromList (Lists.map toSubstPair bindings1))
-                  replaceVars = (substituteVariables subst)
-                  newBody = (replaceVars body1)
-                  newBinding = (\b -> Core.Binding {
-                          Core.bindingName = (qualify (Core.bindingName b)),
-                          Core.bindingTerm = (replaceVars (Core.bindingTerm b)),
-                          Core.bindingType = (Core.bindingType b)})
-              in (Core.Binding {
-                Core.bindingName = key0,
-                Core.bindingTerm = newBody,
-                Core.bindingType = t}, (Lists.map newBinding bindings1))
-            _ -> (Core.Binding {
-              Core.bindingName = key0,
-              Core.bindingTerm = val0,
-              Core.bindingType = t}, [])) val0)) 
-      flatten = (\recurse -> \term ->  
-              let rewritten = (recurse term)
+          let key0 = (Core.bindingName binding)
+          in  
+            let val0 = (Core.bindingTerm binding)
+            in  
+              let t = (Core.bindingType binding)
               in ((\x -> case x of
+                Core.TermAnnotated v1 ->  
+                  let val1 = (Core.annotatedTermSubject v1)
+                  in  
+                    let ann = (Core.annotatedTermAnnotation v1)
+                    in  
+                      let recursive = (rewriteBinding (Core.Binding {
+                              Core.bindingName = key0,
+                              Core.bindingTerm = val1,
+                              Core.bindingType = t}))
+                      in  
+                        let innerBinding = (fst recursive)
+                        in  
+                          let deps = (snd recursive)
+                          in  
+                            let val2 = (Core.bindingTerm innerBinding)
+                            in (Core.Binding {
+                              Core.bindingName = key0,
+                              Core.bindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+                                Core.annotatedTermSubject = val2,
+                                Core.annotatedTermAnnotation = ann})),
+                              Core.bindingType = t}, deps)
                 Core.TermLet v1 ->  
-                  let bindings = (Core.letBindings v1) 
-                      body = (Core.letEnvironment v1)
-                      forResult = (\hr -> Lists.cons (fst hr) (snd hr))
-                      newBindings = (Lists.concat (Lists.map (\arg_ -> forResult (rewriteBinding arg_)) bindings))
-                  in (Core.TermLet (Core.Let {
-                    Core.letBindings = newBindings,
-                    Core.letEnvironment = body}))
-                _ -> rewritten) rewritten))
-  in (rewriteTerm flatten term)
+                  let bindings1 = (Core.letBindings v1)
+                  in  
+                    let body1 = (Core.letEnvironment v1)
+                    in  
+                      let prefix = (Strings.cat2 (Core.unName key0) "_")
+                      in  
+                        let qualify = (\n -> Core.Name (Strings.cat2 prefix (Core.unName n)))
+                        in  
+                          let toSubstPair = (\b -> (Core.bindingName b, (qualify (Core.bindingName b))))
+                          in  
+                            let subst = (Maps.fromList (Lists.map toSubstPair bindings1))
+                            in  
+                              let replaceVars = (substituteVariables subst)
+                              in  
+                                let newBody = (replaceVars body1)
+                                in  
+                                  let newBinding = (\b -> Core.Binding {
+                                          Core.bindingName = (qualify (Core.bindingName b)),
+                                          Core.bindingTerm = (replaceVars (Core.bindingTerm b)),
+                                          Core.bindingType = (Core.bindingType b)})
+                                  in (Core.Binding {
+                                    Core.bindingName = key0,
+                                    Core.bindingTerm = newBody,
+                                    Core.bindingType = t}, (Lists.map newBinding bindings1))
+                _ -> (Core.Binding {
+                  Core.bindingName = key0,
+                  Core.bindingTerm = val0,
+                  Core.bindingType = t}, [])) val0))
+  in  
+    let flatten = (\recurse -> \term ->  
+            let rewritten = (recurse term)
+            in ((\x -> case x of
+              Core.TermLet v1 ->  
+                let bindings = (Core.letBindings v1)
+                in  
+                  let body = (Core.letEnvironment v1)
+                  in  
+                    let forResult = (\hr -> Lists.cons (fst hr) (snd hr))
+                    in  
+                      let newBindings = (Lists.concat (Lists.map (\arg_ -> forResult (rewriteBinding arg_)) bindings))
+                      in (Core.TermLet (Core.Let {
+                        Core.letBindings = newBindings,
+                        Core.letEnvironment = body}))
+              _ -> rewritten) rewritten))
+    in (rewriteTerm flatten term)
 
 foldOverTerm :: (Coders.TraversalOrder -> (t0 -> Core.Term -> t0) -> t0 -> Core.Term -> t0)
 foldOverTerm order fld b0 term = ((\x -> case x of
@@ -200,6 +244,7 @@ freeVariablesInTerm term =
     Core.TermFunction v1 -> ((\x -> case x of
       Core.FunctionLambda v2 -> (Sets.delete (Core.lambdaParameter v2) (freeVariablesInTerm (Core.lambdaBody v2)))
       _ -> dfltVars) v1)
+    Core.TermLet v1 -> (Sets.difference dfltVars (Sets.fromList (Lists.map Core.bindingName (Core.letBindings v1))))
     Core.TermVariable v1 -> (Sets.singleton v1)
     _ -> dfltVars) term)
 
@@ -225,16 +270,18 @@ freeVariablesInTypeOrdered typ =
 -- | Find free variables in a type scheme (simple version)
 freeVariablesInTypeSchemeSimple :: (Core.TypeScheme -> S.Set Core.Name)
 freeVariablesInTypeSchemeSimple ts =  
-  let vars = (Core.typeSchemeVariables ts) 
-      t = (Core.typeSchemeType ts)
-  in (Sets.difference (freeVariablesInTypeSimple t) (Sets.fromList vars))
+  let vars = (Core.typeSchemeVariables ts)
+  in  
+    let t = (Core.typeSchemeType ts)
+    in (Sets.difference (freeVariablesInTypeSimple t) (Sets.fromList vars))
 
 -- | Find free variables in a type scheme
 freeVariablesInTypeScheme :: (Core.TypeScheme -> S.Set Core.Name)
 freeVariablesInTypeScheme ts =  
-  let vars = (Core.typeSchemeVariables ts) 
-      t = (Core.typeSchemeType ts)
-  in (Sets.difference (freeVariablesInType t) (Sets.fromList vars))
+  let vars = (Core.typeSchemeVariables ts)
+  in  
+    let t = (Core.typeSchemeType ts)
+    in (Sets.difference (freeVariablesInType t) (Sets.fromList vars))
 
 -- | Same as freeVariablesInType, but ignores the binding action of lambda types
 freeVariablesInTypeSimple :: (Core.Type -> S.Set Core.Name)
@@ -275,26 +322,32 @@ mapBeneathTypeAnnotations f t = ((\x -> case x of
 -- | Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ...
 normalizeTypeVariablesInTerm :: (Core.Term -> Core.Term)
 normalizeTypeVariablesInTerm term =  
-  let substType = (\subst -> \typ ->  
-          let rewrite = (\recurse -> \typ -> (\x -> case x of
-                  Core.TypeVariable v1 -> (Core.TypeVariable (replaceName subst v1))
-                  _ -> (recurse typ)) typ)
-          in (rewriteType rewrite typ)) 
-      replaceName = (\subst -> \v -> Optionals.fromMaybe v (Maps.lookup v subst))
-      rewriteWithSubst = (\substAndBound ->  
-              let subst = (fst substAndBound) 
-                  boundVars = (snd substAndBound)
-                  rewrite = (\recurse -> \term -> (\x -> case x of
+  let replaceName = (\subst -> \v -> Optionals.fromMaybe v (Maps.lookup v subst))
+  in  
+    let substType = (\subst -> \typ ->  
+            let rewrite = (\recurse -> \typ -> (\x -> case x of
+                    Core.TypeVariable v1 -> (Core.TypeVariable (replaceName subst v1))
+                    _ -> (recurse typ)) typ)
+            in (rewriteType rewrite typ))
+    in  
+      let rewriteWithSubst = (\substAndBound ->  
+              let subst = (fst substAndBound)
+              in  
+                let boundVars = (snd substAndBound)
+                in  
+                  let rewrite = (\recurse -> \term -> (\x -> case x of
                           Core.TermFunction v1 -> ((\x -> case x of
                             Core.FunctionElimination v2 -> ((\x -> case x of
                               Core.EliminationProduct v3 ->  
-                                let arity = (Core.tupleProjectionArity v3) 
-                                    index = (Core.tupleProjectionIndex v3)
-                                    domain = (Core.tupleProjectionDomain v3)
-                                in (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
-                                  Core.tupleProjectionArity = arity,
-                                  Core.tupleProjectionIndex = index,
-                                  Core.tupleProjectionDomain = (Optionals.map (\types -> Lists.map (substType subst) types) domain)}))))
+                                let arity = (Core.tupleProjectionArity v3)
+                                in  
+                                  let index = (Core.tupleProjectionIndex v3)
+                                  in  
+                                    let domain = (Core.tupleProjectionDomain v3)
+                                    in (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+                                      Core.tupleProjectionArity = arity,
+                                      Core.tupleProjectionIndex = index,
+                                      Core.tupleProjectionDomain = (Optionals.map (\types -> Lists.map (substType subst) types) domain)}))))
                               _ -> (recurse term)) v2)
                             Core.FunctionLambda v2 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.lambdaParameter v2),
@@ -302,26 +355,35 @@ normalizeTypeVariablesInTerm term =
                               Core.lambdaBody = (rewriteWithSubst (subst, boundVars) (Core.lambdaBody v2))})))
                             _ -> (recurse term)) v1)
                           Core.TermLet v1 ->  
-                            let bindings = (Core.letBindings v1) 
-                                env = (Core.letEnvironment v1)
-                                rewriteBinding = (\b -> Optionals.maybe b (\ts ->  
-                                        let vars = (Core.typeSchemeVariables ts) 
-                                            typ = (Core.typeSchemeType ts)
-                                            varsLen = (Lists.length vars)
-                                            boundVarsLen = (Sets.size boundVars)
-                                            normalVariables = (Lists.map (\i -> Core.Name (Strings.cat2 "t" (Literals.showInt32 i))) (Math.range 0 (Math.add varsLen boundVarsLen)))
-                                            newVars = (Lists.take (Lists.length vars) (Lists.filter (\n -> Logic.not (Sets.member n boundVars)) normalVariables))
-                                            newSubst = (Maps.union (Maps.fromList (Lists.zip vars newVars)) subst)
-                                            newValue = (rewriteWithSubst (newSubst, (Sets.union boundVars (Sets.fromList newVars))) (Core.bindingTerm b))
-                                        in Core.Binding {
-                                          Core.bindingName = (Core.bindingName b),
-                                          Core.bindingTerm = newValue,
-                                          Core.bindingType = (Just (Core.TypeScheme {
-                                            Core.typeSchemeVariables = newVars,
-                                            Core.typeSchemeType = (substType newSubst typ)}))}) (Core.bindingType b))
-                            in (Core.TermLet (Core.Let {
-                              Core.letBindings = (Lists.map rewriteBinding bindings),
-                              Core.letEnvironment = (rewriteWithSubst (subst, boundVars) env)}))
+                            let bindings = (Core.letBindings v1)
+                            in  
+                              let env = (Core.letEnvironment v1)
+                              in  
+                                let rewriteBinding = (\b -> Optionals.maybe b (\ts ->  
+                                        let vars = (Core.typeSchemeVariables ts)
+                                        in  
+                                          let typ = (Core.typeSchemeType ts)
+                                          in  
+                                            let varsLen = (Lists.length vars)
+                                            in  
+                                              let boundVarsLen = (Sets.size boundVars)
+                                              in  
+                                                let normalVariables = (Lists.map (\i -> Core.Name (Strings.cat2 "t" (Literals.showInt32 i))) (Math.range 0 (Math.add varsLen boundVarsLen)))
+                                                in  
+                                                  let newVars = (Lists.take (Lists.length vars) (Lists.filter (\n -> Logic.not (Sets.member n boundVars)) normalVariables))
+                                                  in  
+                                                    let newSubst = (Maps.union (Maps.fromList (Lists.zip vars newVars)) subst)
+                                                    in  
+                                                      let newValue = (rewriteWithSubst (newSubst, (Sets.union boundVars (Sets.fromList newVars))) (Core.bindingTerm b))
+                                                      in Core.Binding {
+                                                        Core.bindingName = (Core.bindingName b),
+                                                        Core.bindingTerm = newValue,
+                                                        Core.bindingType = (Just (Core.TypeScheme {
+                                                          Core.typeSchemeVariables = newVars,
+                                                          Core.typeSchemeType = (substType newSubst typ)}))}) (Core.bindingType b))
+                                in (Core.TermLet (Core.Let {
+                                  Core.letBindings = (Lists.map rewriteBinding bindings),
+                                  Core.letEnvironment = (rewriteWithSubst (subst, boundVars) env)}))
                           Core.TermTypeApplication v1 -> (Core.TermTypeApplication (Core.TypedTerm {
                             Core.typedTermTerm = (rewriteWithSubst (subst, boundVars) (Core.typedTermTerm v1)),
                             Core.typedTermType = (substType subst (Core.typedTermType v1))}))
@@ -329,8 +391,8 @@ normalizeTypeVariablesInTerm term =
                             Core.typeLambdaParameter = (replaceName subst (Core.typeLambdaParameter v1)),
                             Core.typeLambdaBody = (rewriteWithSubst (subst, boundVars) (Core.typeLambdaBody v1))}))
                           _ -> (recurse term)) term)
-              in (rewriteTerm rewrite))
-  in (rewriteWithSubst (Maps.empty, Sets.empty) term)
+                  in (rewriteTerm rewrite))
+      in (rewriteWithSubst (Maps.empty, Sets.empty) term)
 
 -- | Recursively remove term annotations, including within subterms
 removeTermAnnotations :: (Core.Term -> Core.Term)
@@ -356,30 +418,31 @@ removeTypeAnnotations typ =
 removeTypesFromTerm :: (Core.Term -> Core.Term)
 removeTypesFromTerm term =  
   let strip = (\recurse -> \term ->  
-          let rewritten = (recurse term) 
-              stripBinding = (\b -> Core.Binding {
-                      Core.bindingName = (Core.bindingName b),
-                      Core.bindingTerm = (Core.bindingTerm b),
-                      Core.bindingType = Nothing})
-          in ((\x -> case x of
-            Core.TermFunction v1 -> ((\x -> case x of
-              Core.FunctionElimination v2 -> ((\x -> case x of
-                Core.EliminationProduct v3 -> (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
-                  Core.tupleProjectionArity = (Core.tupleProjectionIndex v3),
-                  Core.tupleProjectionIndex = (Core.tupleProjectionArity v3),
-                  Core.tupleProjectionDomain = Nothing}))))
-                _ -> (Core.TermFunction (Core.FunctionElimination v2))) v2)
-              Core.FunctionLambda v2 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.lambdaParameter v2),
-                Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.lambdaBody v2)})))
-              _ -> (Core.TermFunction v1)) v1)
-            Core.TermLet v1 -> (Core.TermLet (Core.Let {
-              Core.letBindings = (Lists.map stripBinding (Core.letBindings v1)),
-              Core.letEnvironment = (Core.letEnvironment v1)}))
-            Core.TermTypeApplication v1 -> (Core.typedTermTerm v1)
-            Core.TermTypeLambda v1 -> (Core.typeLambdaBody v1)
-            _ -> rewritten) rewritten))
+          let rewritten = (recurse term)
+          in  
+            let stripBinding = (\b -> Core.Binding {
+                    Core.bindingName = (Core.bindingName b),
+                    Core.bindingTerm = (Core.bindingTerm b),
+                    Core.bindingType = Nothing})
+            in ((\x -> case x of
+              Core.TermFunction v1 -> ((\x -> case x of
+                Core.FunctionElimination v2 -> ((\x -> case x of
+                  Core.EliminationProduct v3 -> (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+                    Core.tupleProjectionArity = (Core.tupleProjectionIndex v3),
+                    Core.tupleProjectionIndex = (Core.tupleProjectionArity v3),
+                    Core.tupleProjectionDomain = Nothing}))))
+                  _ -> (Core.TermFunction (Core.FunctionElimination v2))) v2)
+                Core.FunctionLambda v2 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.lambdaParameter v2),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.lambdaBody v2)})))
+                _ -> (Core.TermFunction v1)) v1)
+              Core.TermLet v1 -> (Core.TermLet (Core.Let {
+                Core.letBindings = (Lists.map stripBinding (Core.letBindings v1)),
+                Core.letEnvironment = (Core.letEnvironment v1)}))
+              Core.TermTypeApplication v1 -> (Core.typedTermTerm v1)
+              Core.TermTypeLambda v1 -> (Core.typeLambdaBody v1)
+              _ -> rewritten) rewritten))
   in (rewriteTerm strip term)
 
 -- | Replace a free variable in a term
@@ -519,172 +582,260 @@ rewriteAndFoldTerm f =
                             _ -> dflt) term0))
   in (rewrite fsub f)
 
+rewriteAndFoldTermM :: (((t0 -> Core.Term -> Compute.Flow t1 (t0, Core.Term)) -> t0 -> Core.Term -> Compute.Flow t1 (t0, Core.Term)) -> t0 -> Core.Term -> Compute.Flow t1 (t0, Core.Term))
+rewriteAndFoldTermM f =  
+  let fsub = (\recurse -> \val0 -> \term0 ->  
+          let forSingle = (\rec -> \cons -> \val -> \term -> Flows.bind (rec val term) (\r -> Flows.pure (fst r, (cons (snd r)))))
+          in  
+            let forMany = (\rec -> \cons -> \val -> \els -> Flows.bind (Flows.foldl (\r -> \el -> Flows.bind (rec (fst r) el) (\r2 -> Flows.pure (fst r2, (Lists.cons (snd r2) (snd r))))) (val, []) els) (\rr -> Flows.pure (fst rr, (cons (Lists.reverse (snd rr))))))
+            in  
+              let forField = (\val -> \field -> Flows.bind (recurse val (Core.fieldTerm field)) (\r -> Flows.pure (fst r, Core.Field {
+                      Core.fieldName = (Core.fieldName field),
+                      Core.fieldTerm = (snd r)})))
+              in  
+                let forFields = (forMany forField (\x -> x))
+                in  
+                  let forPair = (\val -> \kv -> Flows.bind (recurse val (fst kv)) (\rk -> Flows.bind (recurse (fst rk) (snd kv)) (\rv -> Flows.pure (fst rv, (snd rk, (snd rv))))))
+                  in  
+                    let forBinding = (\val -> \binding -> Flows.bind (recurse val (Core.bindingTerm binding)) (\r -> Flows.pure (fst r, Core.Binding {
+                            Core.bindingName = (Core.bindingName binding),
+                            Core.bindingTerm = (snd r),
+                            Core.bindingType = (Core.bindingType binding)})))
+                    in  
+                      let forElimination = (\val -> \elm -> Flows.bind ((\x -> case x of
+                              Core.EliminationUnion v1 -> (Flows.bind (Optionals.maybe (Flows.pure Nothing) (\def -> Flows.map Optionals.pure (recurse val def)) (Core.caseStatementDefault v1)) (\rmd ->  
+                                let val1 = (Optionals.maybe val fst rmd)
+                                in (Flows.bind (forFields val1 (Core.caseStatementCases v1)) (\rcases -> Flows.pure (fst rcases, (Core.EliminationUnion (Core.CaseStatement {
+                                  Core.caseStatementTypeName = (Core.caseStatementTypeName v1),
+                                  Core.caseStatementDefault = (Optionals.map snd rmd),
+                                  Core.caseStatementCases = (snd rcases)})))))))
+                              _ -> (Flows.pure (val, elm))) elm) (\r -> Flows.pure (fst r, (snd r))))
+                      in  
+                        let forFunction = (\val -> \fun -> (\x -> case x of
+                                Core.FunctionElimination v1 -> (Flows.bind (forElimination val v1) (\r -> Flows.pure (fst r, (Core.FunctionElimination (snd r)))))
+                                Core.FunctionLambda v1 -> (Flows.bind (recurse val (Core.lambdaBody v1)) (\r -> Flows.pure (fst r, (Core.FunctionLambda (Core.Lambda {
+                                  Core.lambdaParameter = (Core.lambdaParameter v1),
+                                  Core.lambdaDomain = (Core.lambdaDomain v1),
+                                  Core.lambdaBody = (snd r)})))))
+                                _ -> (Flows.pure (val, fun))) fun)
+                        in  
+                          let dflt = (Flows.pure (val0, term0))
+                          in ((\x -> case x of
+                            Core.TermAnnotated v1 -> (forSingle recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
+                              Core.annotatedTermSubject = t,
+                              Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)})) val0 (Core.annotatedTermSubject v1))
+                            Core.TermApplication v1 -> (Flows.bind (recurse val0 (Core.applicationFunction v1)) (\rlhs -> Flows.bind (recurse (fst rlhs) (Core.applicationArgument v1)) (\rrhs -> Flows.pure (fst rrhs, (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (snd rlhs),
+                              Core.applicationArgument = (snd rrhs)}))))))
+                            Core.TermFunction v1 -> (forSingle forFunction (\f -> Core.TermFunction f) val0 v1)
+                            Core.TermLet v1 -> (Flows.bind (recurse val0 (Core.letEnvironment v1)) (\renv -> forMany forBinding (\bins -> Core.TermLet (Core.Let {
+                              Core.letBindings = bins,
+                              Core.letEnvironment = (snd renv)})) (fst renv) (Core.letBindings v1)))
+                            Core.TermList v1 -> (forMany recurse (\x -> Core.TermList x) val0 v1)
+                            Core.TermMap v1 -> (forMany forPair (\pairs -> Core.TermMap (Maps.fromList pairs)) val0 (Maps.toList v1))
+                            Core.TermOptional v1 -> (Optionals.maybe dflt (\t -> forSingle recurse (\t1 -> Core.TermOptional (Just t1)) val0 t) v1)
+                            Core.TermProduct v1 -> (forMany recurse (\x -> Core.TermProduct x) val0 v1)
+                            Core.TermRecord v1 -> (forMany forField (\fields -> Core.TermRecord (Core.Record {
+                              Core.recordTypeName = (Core.recordTypeName v1),
+                              Core.recordFields = fields})) val0 (Core.recordFields v1))
+                            Core.TermSet v1 -> (forMany recurse (\e -> Core.TermSet (Sets.fromList e)) val0 (Sets.toList v1))
+                            Core.TermSum v1 -> (forSingle recurse (\t -> Core.TermSum (Core.Sum {
+                              Core.sumIndex = (Core.sumIndex v1),
+                              Core.sumSize = (Core.sumSize v1),
+                              Core.sumTerm = t})) val0 (Core.sumTerm v1))
+                            Core.TermTypeApplication v1 -> (forSingle recurse (\t -> Core.TermTypeApplication (Core.TypedTerm {
+                              Core.typedTermTerm = t,
+                              Core.typedTermType = (Core.typedTermType v1)})) val0 (Core.typedTermTerm v1))
+                            Core.TermTypeLambda v1 -> (forSingle recurse (\t -> Core.TermTypeLambda (Core.TypeLambda {
+                              Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
+                              Core.typeLambdaBody = t})) val0 (Core.typeLambdaBody v1))
+                            Core.TermUnion v1 -> (forSingle recurse (\t -> Core.TermUnion (Core.Injection {
+                              Core.injectionTypeName = (Core.injectionTypeName v1),
+                              Core.injectionField = Core.Field {
+                                Core.fieldName = (Core.fieldName (Core.injectionField v1)),
+                                Core.fieldTerm = t}})) val0 (Core.fieldTerm (Core.injectionField v1)))
+                            Core.TermWrap v1 -> (forSingle recurse (\t -> Core.TermWrap (Core.WrappedTerm {
+                              Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
+                              Core.wrappedTermObject = t})) val0 (Core.wrappedTermObject v1))
+                            _ -> dflt) term0))
+  in (rewrite fsub f)
+
 rewriteTerm :: (((Core.Term -> Core.Term) -> Core.Term -> Core.Term) -> Core.Term -> Core.Term)
 rewriteTerm f =  
   let fsub = (\recurse -> \term ->  
-          let forElimination = (\elm -> (\x -> case x of
-                  Core.EliminationProduct v1 -> (Core.EliminationProduct v1)
-                  Core.EliminationRecord v1 -> (Core.EliminationRecord v1)
-                  Core.EliminationUnion v1 -> (Core.EliminationUnion (Core.CaseStatement {
-                    Core.caseStatementTypeName = (Core.caseStatementTypeName v1),
-                    Core.caseStatementDefault = (Optionals.map recurse (Core.caseStatementDefault v1)),
-                    Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v1))}))
-                  Core.EliminationWrap v1 -> (Core.EliminationWrap v1)) elm) 
-              forField = (\f -> Core.Field {
-                      Core.fieldName = (Core.fieldName f),
-                      Core.fieldTerm = (recurse (Core.fieldTerm f))})
-              forFunction = (\fun -> (\x -> case x of
+          let forField = (\f -> Core.Field {
+                  Core.fieldName = (Core.fieldName f),
+                  Core.fieldTerm = (recurse (Core.fieldTerm f))})
+          in  
+            let forElimination = (\elm -> (\x -> case x of
+                    Core.EliminationProduct v1 -> (Core.EliminationProduct v1)
+                    Core.EliminationRecord v1 -> (Core.EliminationRecord v1)
+                    Core.EliminationUnion v1 -> (Core.EliminationUnion (Core.CaseStatement {
+                      Core.caseStatementTypeName = (Core.caseStatementTypeName v1),
+                      Core.caseStatementDefault = (Optionals.map recurse (Core.caseStatementDefault v1)),
+                      Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v1))}))
+                    Core.EliminationWrap v1 -> (Core.EliminationWrap v1)) elm)
+            in  
+              let forFunction = (\fun -> (\x -> case x of
                       Core.FunctionElimination v1 -> (Core.FunctionElimination (forElimination v1))
                       Core.FunctionLambda v1 -> (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.lambdaParameter v1),
                         Core.lambdaDomain = (Core.lambdaDomain v1),
                         Core.lambdaBody = (recurse (Core.lambdaBody v1))}))
                       Core.FunctionPrimitive v1 -> (Core.FunctionPrimitive v1)) fun)
-              forLet = (\lt ->  
-                      let mapBinding = (\b -> Core.Binding {
-                              Core.bindingName = (Core.bindingName b),
-                              Core.bindingTerm = (recurse (Core.bindingTerm b)),
-                              Core.bindingType = (Core.bindingType b)})
-                      in Core.Let {
-                        Core.letBindings = (Lists.map mapBinding (Core.letBindings lt)),
-                        Core.letEnvironment = (recurse (Core.letEnvironment lt))})
-              forMap = (\m ->  
-                      let forPair = (\p -> (recurse (fst p), (recurse (snd p))))
-                      in (Maps.fromList (Lists.map forPair (Maps.toList m))))
-          in ((\x -> case x of
-            Core.TermAnnotated v1 -> (Core.TermAnnotated (Core.AnnotatedTerm {
-              Core.annotatedTermSubject = (recurse (Core.annotatedTermSubject v1)),
-              Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))
-            Core.TermApplication v1 -> (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (recurse (Core.applicationFunction v1)),
-              Core.applicationArgument = (recurse (Core.applicationArgument v1))}))
-            Core.TermFunction v1 -> (Core.TermFunction (forFunction v1))
-            Core.TermLet v1 -> (Core.TermLet (forLet v1))
-            Core.TermList v1 -> (Core.TermList (Lists.map recurse v1))
-            Core.TermLiteral v1 -> (Core.TermLiteral v1)
-            Core.TermMap v1 -> (Core.TermMap (forMap v1))
-            Core.TermOptional v1 -> (Core.TermOptional (Optionals.map recurse v1))
-            Core.TermProduct v1 -> (Core.TermProduct (Lists.map recurse v1))
-            Core.TermRecord v1 -> (Core.TermRecord (Core.Record {
-              Core.recordTypeName = (Core.recordTypeName v1),
-              Core.recordFields = (Lists.map forField (Core.recordFields v1))}))
-            Core.TermSet v1 -> (Core.TermSet (Sets.fromList (Lists.map recurse (Sets.toList v1))))
-            Core.TermSum v1 -> (Core.TermSum (Core.Sum {
-              Core.sumIndex = (Core.sumIndex v1),
-              Core.sumSize = (Core.sumSize v1),
-              Core.sumTerm = (recurse (Core.sumTerm v1))}))
-            Core.TermTypeApplication v1 -> (Core.TermTypeApplication (Core.TypedTerm {
-              Core.typedTermTerm = (recurse (Core.typedTermTerm v1)),
-              Core.typedTermType = (Core.typedTermType v1)}))
-            Core.TermTypeLambda v1 -> (Core.TermTypeLambda (Core.TypeLambda {
-              Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
-              Core.typeLambdaBody = (recurse (Core.typeLambdaBody v1))}))
-            Core.TermUnion v1 -> (Core.TermUnion (Core.Injection {
-              Core.injectionTypeName = (Core.injectionTypeName v1),
-              Core.injectionField = (forField (Core.injectionField v1))}))
-            Core.TermUnit -> Core.TermUnit
-            Core.TermVariable v1 -> (Core.TermVariable v1)
-            Core.TermWrap v1 -> (Core.TermWrap (Core.WrappedTerm {
-              Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
-              Core.wrappedTermObject = (recurse (Core.wrappedTermObject v1))}))) term))
+              in  
+                let forLet = (\lt ->  
+                        let mapBinding = (\b -> Core.Binding {
+                                Core.bindingName = (Core.bindingName b),
+                                Core.bindingTerm = (recurse (Core.bindingTerm b)),
+                                Core.bindingType = (Core.bindingType b)})
+                        in Core.Let {
+                          Core.letBindings = (Lists.map mapBinding (Core.letBindings lt)),
+                          Core.letEnvironment = (recurse (Core.letEnvironment lt))})
+                in  
+                  let forMap = (\m ->  
+                          let forPair = (\p -> (recurse (fst p), (recurse (snd p))))
+                          in (Maps.fromList (Lists.map forPair (Maps.toList m))))
+                  in ((\x -> case x of
+                    Core.TermAnnotated v1 -> (Core.TermAnnotated (Core.AnnotatedTerm {
+                      Core.annotatedTermSubject = (recurse (Core.annotatedTermSubject v1)),
+                      Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))
+                    Core.TermApplication v1 -> (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (recurse (Core.applicationFunction v1)),
+                      Core.applicationArgument = (recurse (Core.applicationArgument v1))}))
+                    Core.TermFunction v1 -> (Core.TermFunction (forFunction v1))
+                    Core.TermLet v1 -> (Core.TermLet (forLet v1))
+                    Core.TermList v1 -> (Core.TermList (Lists.map recurse v1))
+                    Core.TermLiteral v1 -> (Core.TermLiteral v1)
+                    Core.TermMap v1 -> (Core.TermMap (forMap v1))
+                    Core.TermOptional v1 -> (Core.TermOptional (Optionals.map recurse v1))
+                    Core.TermProduct v1 -> (Core.TermProduct (Lists.map recurse v1))
+                    Core.TermRecord v1 -> (Core.TermRecord (Core.Record {
+                      Core.recordTypeName = (Core.recordTypeName v1),
+                      Core.recordFields = (Lists.map forField (Core.recordFields v1))}))
+                    Core.TermSet v1 -> (Core.TermSet (Sets.fromList (Lists.map recurse (Sets.toList v1))))
+                    Core.TermSum v1 -> (Core.TermSum (Core.Sum {
+                      Core.sumIndex = (Core.sumIndex v1),
+                      Core.sumSize = (Core.sumSize v1),
+                      Core.sumTerm = (recurse (Core.sumTerm v1))}))
+                    Core.TermTypeApplication v1 -> (Core.TermTypeApplication (Core.TypedTerm {
+                      Core.typedTermTerm = (recurse (Core.typedTermTerm v1)),
+                      Core.typedTermType = (Core.typedTermType v1)}))
+                    Core.TermTypeLambda v1 -> (Core.TermTypeLambda (Core.TypeLambda {
+                      Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
+                      Core.typeLambdaBody = (recurse (Core.typeLambdaBody v1))}))
+                    Core.TermUnion v1 -> (Core.TermUnion (Core.Injection {
+                      Core.injectionTypeName = (Core.injectionTypeName v1),
+                      Core.injectionField = (forField (Core.injectionField v1))}))
+                    Core.TermUnit -> Core.TermUnit
+                    Core.TermVariable v1 -> (Core.TermVariable v1)
+                    Core.TermWrap v1 -> (Core.TermWrap (Core.WrappedTerm {
+                      Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
+                      Core.wrappedTermObject = (recurse (Core.wrappedTermObject v1))}))) term))
   in (rewrite fsub f)
 
 rewriteTermM :: (((Core.Term -> Compute.Flow t0 Core.Term) -> Core.Term -> Compute.Flow t0 Core.Term) -> Core.Term -> Compute.Flow t0 Core.Term)
 rewriteTermM f =  
   let fsub = (\recurse -> \term ->  
-          let forField = (\field -> Flows.map (\t -> Core.Field {
+          let forField = (\field -> Flows.bind (recurse (Core.fieldTerm field)) (\t -> Flows.pure (Core.Field {
                   Core.fieldName = (Core.fieldName field),
-                  Core.fieldTerm = t}) (recurse (Core.fieldTerm field))) 
-              forPair = (\kv ->  
-                      let k = (fst kv) 
-                          v = (snd kv)
-                      in (Flows.bind (recurse k) (\km -> Flows.bind (recurse v) (\vm -> Flows.pure (km, vm)))))
-              mapBinding = (\binding ->  
-                      let k = (Core.bindingName binding) 
-                          v = (Core.bindingTerm binding)
-                          t = (Core.bindingType binding)
-                      in (Flows.bind (recurse v) (\v_ -> Flows.pure (Core.Binding {
-                        Core.bindingName = k,
-                        Core.bindingTerm = v_,
-                        Core.bindingType = t}))))
-          in ((\x -> case x of
-            Core.TermAnnotated v1 -> (Flows.bind (recurse (Core.annotatedTermSubject v1)) (\ex -> Flows.pure (Core.TermAnnotated (Core.AnnotatedTerm {
-              Core.annotatedTermSubject = ex,
-              Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))))
-            Core.TermApplication v1 -> (Flows.bind (recurse (Core.applicationFunction v1)) (\lhs -> Flows.bind (recurse (Core.applicationArgument v1)) (\rhs -> Flows.pure (Core.TermApplication (Core.Application {
-              Core.applicationFunction = lhs,
-              Core.applicationArgument = rhs})))))
-            Core.TermFunction v1 -> (Flows.bind ((\x -> case x of
-              Core.FunctionElimination v2 -> ((\x -> case x of
-                Core.EliminationProduct v3 -> (Flows.pure (Core.FunctionElimination (Core.EliminationProduct v3)))
-                Core.EliminationRecord v3 -> (Flows.pure (Core.FunctionElimination (Core.EliminationRecord v3)))
-                Core.EliminationUnion v3 ->  
-                  let n = (Core.caseStatementTypeName v3) 
-                      def = (Core.caseStatementDefault v3)
-                      cases = (Core.caseStatementCases v3)
-                  in (Flows.bind (Optionals.maybe (Flows.pure Nothing) (\t -> Flows.map Optionals.pure (recurse t)) def) (\rdef -> Flows.map (\rcases -> Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
-                    Core.caseStatementTypeName = n,
-                    Core.caseStatementDefault = rdef,
-                    Core.caseStatementCases = rcases}))) (Flows.mapList forField cases)))
-                Core.EliminationWrap v3 -> (Flows.pure (Core.FunctionElimination (Core.EliminationWrap v3)))) v2)
-              Core.FunctionLambda v2 ->  
-                let v = (Core.lambdaParameter v2) 
-                    d = (Core.lambdaDomain v2)
-                    body = (Core.lambdaBody v2)
-                in (Flows.bind (recurse body) (\rbody -> Flows.pure (Core.FunctionLambda (Core.Lambda {
-                  Core.lambdaParameter = v,
-                  Core.lambdaDomain = d,
-                  Core.lambdaBody = rbody}))))
-              Core.FunctionPrimitive v2 -> (Flows.pure (Core.FunctionPrimitive v2))) v1) (\rfun -> Flows.pure (Core.TermFunction rfun)))
-            Core.TermLet v1 ->  
-              let bindings = (Core.letBindings v1) 
-                  env = (Core.letEnvironment v1)
-              in (Flows.bind (Flows.mapList mapBinding bindings) (\rbindings -> Flows.bind (recurse env) (\renv -> Flows.pure (Core.TermLet (Core.Let {
-                Core.letBindings = rbindings,
-                Core.letEnvironment = renv})))))
-            Core.TermList v1 -> (Flows.bind (Flows.mapList recurse v1) (\rels -> Flows.pure (Core.TermList rels)))
-            Core.TermLiteral v1 -> (Flows.pure (Core.TermLiteral v1))
-            Core.TermMap v1 -> (Flows.bind (Flows.mapList forPair (Maps.toList v1)) (\pairs -> Flows.pure (Core.TermMap (Maps.fromList pairs))))
-            Core.TermOptional v1 -> (Flows.bind (Flows.mapOptional recurse v1) (\rm -> Flows.pure (Core.TermOptional rm)))
-            Core.TermProduct v1 -> (Flows.map (\rtuple -> Core.TermProduct rtuple) (Flows.mapList recurse v1))
-            Core.TermRecord v1 ->  
-              let n = (Core.recordTypeName v1) 
-                  fields = (Core.recordFields v1)
-              in (Flows.map (\rfields -> Core.TermRecord (Core.Record {
-                Core.recordTypeName = n,
-                Core.recordFields = rfields})) (Flows.mapList forField fields))
-            Core.TermSet v1 -> (Flows.bind (Flows.mapList recurse (Sets.toList v1)) (\rlist -> Flows.pure (Core.TermSet (Sets.fromList rlist))))
-            Core.TermSum v1 ->  
-              let i = (Core.sumIndex v1) 
-                  s = (Core.sumSize v1)
-                  trm = (Core.sumTerm v1)
-              in (Flows.bind (recurse trm) (\rtrm -> Flows.pure (Core.TermSum (Core.Sum {
-                Core.sumIndex = i,
-                Core.sumSize = s,
-                Core.sumTerm = rtrm}))))
-            Core.TermTypeApplication v1 -> (Flows.bind (recurse (Core.typedTermTerm v1)) (\t -> Flows.pure (Core.TermTypeApplication (Core.TypedTerm {
-              Core.typedTermTerm = t,
-              Core.typedTermType = (Core.typedTermType v1)}))))
-            Core.TermTypeLambda v1 ->  
-              let v = (Core.typeLambdaParameter v1) 
-                  body = (Core.typeLambdaBody v1)
-              in (Flows.bind (recurse body) (\rbody -> Flows.pure (Core.TermTypeLambda (Core.TypeLambda {
-                Core.typeLambdaParameter = v,
-                Core.typeLambdaBody = rbody}))))
-            Core.TermUnion v1 ->  
-              let n = (Core.injectionTypeName v1) 
-                  field = (Core.injectionField v1)
-              in (Flows.map (\rfield -> Core.TermUnion (Core.Injection {
-                Core.injectionTypeName = n,
-                Core.injectionField = rfield})) (forField field))
-            Core.TermUnit -> (Flows.pure Core.TermUnit)
-            Core.TermVariable v1 -> (Flows.pure (Core.TermVariable v1))
-            Core.TermWrap v1 ->  
-              let name = (Core.wrappedTermTypeName v1) 
-                  t = (Core.wrappedTermObject v1)
-              in (Flows.bind (recurse t) (\rt -> Flows.pure (Core.TermWrap (Core.WrappedTerm {
-                Core.wrappedTermTypeName = name,
-                Core.wrappedTermObject = rt}))))) term))
+                  Core.fieldTerm = t})))
+          in  
+            let forPair = (\kv -> Flows.bind (recurse (fst kv)) (\k -> Flows.bind (recurse (snd kv)) (\v -> Flows.pure (k, v))))
+            in  
+              let mapBinding = (\b -> Flows.bind (recurse (Core.bindingTerm b)) (\v -> Flows.pure (Core.Binding {
+                      Core.bindingName = (Core.bindingName b),
+                      Core.bindingTerm = v,
+                      Core.bindingType = (Core.bindingType b)})))
+              in ((\x -> case x of
+                Core.TermAnnotated v1 -> (Flows.bind (recurse (Core.annotatedTermSubject v1)) (\ex -> Flows.pure (Core.TermAnnotated (Core.AnnotatedTerm {
+                  Core.annotatedTermSubject = ex,
+                  Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))))
+                Core.TermApplication v1 -> (Flows.bind (recurse (Core.applicationFunction v1)) (\lhs -> Flows.bind (recurse (Core.applicationArgument v1)) (\rhs -> Flows.pure (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = lhs,
+                  Core.applicationArgument = rhs})))))
+                Core.TermFunction v1 -> (Flows.bind ((\x -> case x of
+                  Core.FunctionElimination v2 -> ((\x -> case x of
+                    Core.EliminationProduct v3 -> (Flows.pure (Core.FunctionElimination (Core.EliminationProduct v3)))
+                    Core.EliminationRecord v3 -> (Flows.pure (Core.FunctionElimination (Core.EliminationRecord v3)))
+                    Core.EliminationUnion v3 ->  
+                      let n = (Core.caseStatementTypeName v3)
+                      in  
+                        let def = (Core.caseStatementDefault v3)
+                        in  
+                          let cases = (Core.caseStatementCases v3)
+                          in (Flows.bind (Optionals.maybe (Flows.pure Nothing) (\t -> Flows.map Optionals.pure (recurse t)) def) (\rdef -> Flows.map (\rcases -> Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                            Core.caseStatementTypeName = n,
+                            Core.caseStatementDefault = rdef,
+                            Core.caseStatementCases = rcases}))) (Flows.mapList forField cases)))
+                    Core.EliminationWrap v3 -> (Flows.pure (Core.FunctionElimination (Core.EliminationWrap v3)))) v2)
+                  Core.FunctionLambda v2 ->  
+                    let v = (Core.lambdaParameter v2)
+                    in  
+                      let d = (Core.lambdaDomain v2)
+                      in  
+                        let body = (Core.lambdaBody v2)
+                        in (Flows.bind (recurse body) (\rbody -> Flows.pure (Core.FunctionLambda (Core.Lambda {
+                          Core.lambdaParameter = v,
+                          Core.lambdaDomain = d,
+                          Core.lambdaBody = rbody}))))
+                  Core.FunctionPrimitive v2 -> (Flows.pure (Core.FunctionPrimitive v2))) v1) (\rfun -> Flows.pure (Core.TermFunction rfun)))
+                Core.TermLet v1 ->  
+                  let bindings = (Core.letBindings v1)
+                  in  
+                    let env = (Core.letEnvironment v1)
+                    in (Flows.bind (Flows.mapList mapBinding bindings) (\rbindings -> Flows.bind (recurse env) (\renv -> Flows.pure (Core.TermLet (Core.Let {
+                      Core.letBindings = rbindings,
+                      Core.letEnvironment = renv})))))
+                Core.TermList v1 -> (Flows.bind (Flows.mapList recurse v1) (\rels -> Flows.pure (Core.TermList rels)))
+                Core.TermLiteral v1 -> (Flows.pure (Core.TermLiteral v1))
+                Core.TermMap v1 -> (Flows.bind (Flows.mapList forPair (Maps.toList v1)) (\pairs -> Flows.pure (Core.TermMap (Maps.fromList pairs))))
+                Core.TermOptional v1 -> (Flows.bind (Flows.mapOptional recurse v1) (\rm -> Flows.pure (Core.TermOptional rm)))
+                Core.TermProduct v1 -> (Flows.map (\rtuple -> Core.TermProduct rtuple) (Flows.mapList recurse v1))
+                Core.TermRecord v1 ->  
+                  let n = (Core.recordTypeName v1)
+                  in  
+                    let fields = (Core.recordFields v1)
+                    in (Flows.map (\rfields -> Core.TermRecord (Core.Record {
+                      Core.recordTypeName = n,
+                      Core.recordFields = rfields})) (Flows.mapList forField fields))
+                Core.TermSet v1 -> (Flows.bind (Flows.mapList recurse (Sets.toList v1)) (\rlist -> Flows.pure (Core.TermSet (Sets.fromList rlist))))
+                Core.TermSum v1 ->  
+                  let i = (Core.sumIndex v1)
+                  in  
+                    let s = (Core.sumSize v1)
+                    in  
+                      let trm = (Core.sumTerm v1)
+                      in (Flows.bind (recurse trm) (\rtrm -> Flows.pure (Core.TermSum (Core.Sum {
+                        Core.sumIndex = i,
+                        Core.sumSize = s,
+                        Core.sumTerm = rtrm}))))
+                Core.TermTypeApplication v1 -> (Flows.bind (recurse (Core.typedTermTerm v1)) (\t -> Flows.pure (Core.TermTypeApplication (Core.TypedTerm {
+                  Core.typedTermTerm = t,
+                  Core.typedTermType = (Core.typedTermType v1)}))))
+                Core.TermTypeLambda v1 ->  
+                  let v = (Core.typeLambdaParameter v1)
+                  in  
+                    let body = (Core.typeLambdaBody v1)
+                    in (Flows.bind (recurse body) (\rbody -> Flows.pure (Core.TermTypeLambda (Core.TypeLambda {
+                      Core.typeLambdaParameter = v,
+                      Core.typeLambdaBody = rbody}))))
+                Core.TermUnion v1 ->  
+                  let n = (Core.injectionTypeName v1)
+                  in  
+                    let field = (Core.injectionField v1)
+                    in (Flows.map (\rfield -> Core.TermUnion (Core.Injection {
+                      Core.injectionTypeName = n,
+                      Core.injectionField = rfield})) (forField field))
+                Core.TermUnit -> (Flows.pure Core.TermUnit)
+                Core.TermVariable v1 -> (Flows.pure (Core.TermVariable v1))
+                Core.TermWrap v1 ->  
+                  let name = (Core.wrappedTermTypeName v1)
+                  in  
+                    let t = (Core.wrappedTermObject v1)
+                    in (Flows.bind (recurse t) (\rt -> Flows.pure (Core.TermWrap (Core.WrappedTerm {
+                      Core.wrappedTermTypeName = name,
+                      Core.wrappedTermObject = rt}))))) term))
   in (rewrite fsub f)
 
 rewriteType :: (((Core.Type -> Core.Type) -> Core.Type -> Core.Type) -> Core.Type -> Core.Type)
@@ -729,7 +880,7 @@ rewriteType f =
   in (rewrite fsub f)
 
 rewriteTypeM :: (((Core.Type -> Compute.Flow t0 Core.Type) -> Core.Type -> Compute.Flow t0 Core.Type) -> Core.Type -> Compute.Flow t0 Core.Type)
-rewriteTypeM =  
+rewriteTypeM f =  
   let fsub = (\recurse -> \typ -> (\x -> case x of
           Core.TypeAnnotated v1 -> (Flows.bind (recurse (Core.annotatedTypeSubject v1)) (\t -> Flows.pure (Core.TypeAnnotated (Core.AnnotatedType {
             Core.annotatedTypeSubject = t,
@@ -751,31 +902,35 @@ rewriteTypeM =
           Core.TypeOptional v1 -> (Flows.bind (recurse v1) (\rt -> Flows.pure (Core.TypeOptional rt)))
           Core.TypeProduct v1 -> (Flows.bind (Flows.mapList recurse v1) (\rtypes -> Flows.pure (Core.TypeProduct rtypes)))
           Core.TypeRecord v1 ->  
-            let name = (Core.rowTypeTypeName v1) 
-                fields = (Core.rowTypeFields v1)
-                forField = (\f -> Flows.bind (recurse (Core.fieldTypeType f)) (\t -> Flows.pure (Core.FieldType {
+            let name = (Core.rowTypeTypeName v1)
+            in  
+              let fields = (Core.rowTypeFields v1)
+              in  
+                let forField = (\f -> Flows.bind (recurse (Core.fieldTypeType f)) (\t -> Flows.pure (Core.FieldType {
                         Core.fieldTypeName = (Core.fieldTypeName f),
                         Core.fieldTypeType = t})))
-            in (Flows.bind (Flows.mapList forField fields) (\rfields -> Flows.pure (Core.TypeRecord (Core.RowType {
-              Core.rowTypeTypeName = name,
-              Core.rowTypeFields = rfields}))))
+                in (Flows.bind (Flows.mapList forField fields) (\rfields -> Flows.pure (Core.TypeRecord (Core.RowType {
+                  Core.rowTypeTypeName = name,
+                  Core.rowTypeFields = rfields}))))
           Core.TypeSet v1 -> (Flows.bind (recurse v1) (\rt -> Flows.pure (Core.TypeSet rt)))
           Core.TypeSum v1 -> (Flows.bind (Flows.mapList recurse v1) (\rtypes -> Flows.pure (Core.TypeSum rtypes)))
           Core.TypeUnion v1 ->  
-            let name = (Core.rowTypeTypeName v1) 
-                fields = (Core.rowTypeFields v1)
-                forField = (\f -> Flows.bind (recurse (Core.fieldTypeType f)) (\t -> Flows.pure (Core.FieldType {
+            let name = (Core.rowTypeTypeName v1)
+            in  
+              let fields = (Core.rowTypeFields v1)
+              in  
+                let forField = (\f -> Flows.bind (recurse (Core.fieldTypeType f)) (\t -> Flows.pure (Core.FieldType {
                         Core.fieldTypeName = (Core.fieldTypeName f),
                         Core.fieldTypeType = t})))
-            in (Flows.bind (Flows.mapList forField fields) (\rfields -> Flows.pure (Core.TypeUnion (Core.RowType {
-              Core.rowTypeTypeName = name,
-              Core.rowTypeFields = rfields}))))
+                in (Flows.bind (Flows.mapList forField fields) (\rfields -> Flows.pure (Core.TypeUnion (Core.RowType {
+                  Core.rowTypeTypeName = name,
+                  Core.rowTypeFields = rfields}))))
           Core.TypeUnit -> (Flows.pure Core.TypeUnit)
           Core.TypeVariable v1 -> (Flows.pure (Core.TypeVariable v1))
           Core.TypeWrap v1 -> (Flows.bind (recurse (Core.wrappedTypeObject v1)) (\t -> Flows.pure (Core.TypeWrap (Core.WrappedType {
             Core.wrappedTypeTypeName = (Core.wrappedTypeTypeName v1),
             Core.wrappedTypeObject = t}))))) typ)
-  in (\f -> rewrite fsub f)
+  in (rewrite fsub f)
 
 -- | Simplify terms by applying beta reduction where possible
 simplifyTerm :: (Core.Term -> Core.Term)
@@ -784,21 +939,24 @@ simplifyTerm term =
           let stripped = (deannotateTerm term)
           in (recurse ((\x -> case x of
             Core.TermApplication v1 ->  
-              let lhs = (Core.applicationFunction v1) 
-                  rhs = (Core.applicationArgument v1)
-                  strippedLhs = (deannotateTerm lhs)
-              in ((\x -> case x of
-                Core.TermFunction v2 -> ((\x -> case x of
-                  Core.FunctionLambda v3 ->  
-                    let var = (Core.lambdaParameter v3) 
-                        body = (Core.lambdaBody v3)
-                    in (Logic.ifElse (Sets.member var (freeVariablesInTerm body)) ( 
-                      let strippedRhs = (deannotateTerm rhs)
-                      in ((\x -> case x of
-                        Core.TermVariable v4 -> (simplifyTerm (substituteVariable var v4 body))
-                        _ -> term) strippedRhs)) (simplifyTerm body))
-                  _ -> term) v2)
-                _ -> term) strippedLhs)
+              let lhs = (Core.applicationFunction v1)
+              in  
+                let rhs = (Core.applicationArgument v1)
+                in  
+                  let strippedLhs = (deannotateTerm lhs)
+                  in ((\x -> case x of
+                    Core.TermFunction v2 -> ((\x -> case x of
+                      Core.FunctionLambda v3 ->  
+                        let var = (Core.lambdaParameter v3)
+                        in  
+                          let body = (Core.lambdaBody v3)
+                          in (Logic.ifElse (Sets.member var (freeVariablesInTerm body)) ( 
+                            let strippedRhs = (deannotateTerm rhs)
+                            in ((\x -> case x of
+                              Core.TermVariable v4 -> (simplifyTerm (substituteVariable var v4 body))
+                              _ -> term) strippedRhs)) (simplifyTerm body))
+                      _ -> term) v2)
+                    _ -> term) strippedLhs)
             _ -> term) stripped)))
   in (rewriteTerm simplify term)
 
@@ -948,56 +1106,70 @@ subtypes x = case x of
 termDependencyNames :: (Bool -> Bool -> Bool -> Core.Term -> S.Set Core.Name)
 termDependencyNames binds withPrims withNoms =  
   let addNames = (\names -> \term ->  
-          let nominal = (\name -> Logic.ifElse withNoms (Sets.insert name names) names) 
-              prim = (\name -> Logic.ifElse withPrims (Sets.insert name names) names)
-              var = (\name -> Logic.ifElse binds (Sets.insert name names) names)
-          in ((\x -> case x of
-            Core.TermFunction v1 -> ((\x -> case x of
-              Core.FunctionPrimitive v2 -> (prim v2)
-              Core.FunctionElimination v2 -> ((\x -> case x of
-                Core.EliminationRecord v3 -> (nominal (Core.projectionTypeName v3))
-                Core.EliminationUnion v3 -> (nominal (Core.caseStatementTypeName v3))
-                Core.EliminationWrap v3 -> (nominal v3)
-                _ -> names) v2)
-              _ -> names) v1)
-            Core.TermRecord v1 -> (nominal (Core.recordTypeName v1))
-            Core.TermUnion v1 -> (nominal (Core.injectionTypeName v1))
-            Core.TermVariable v1 -> (var v1)
-            Core.TermWrap v1 -> (nominal (Core.wrappedTermTypeName v1))
-            _ -> names) term))
+          let nominal = (\name -> Logic.ifElse withNoms (Sets.insert name names) names)
+          in  
+            let prim = (\name -> Logic.ifElse withPrims (Sets.insert name names) names)
+            in  
+              let var = (\name -> Logic.ifElse binds (Sets.insert name names) names)
+              in ((\x -> case x of
+                Core.TermFunction v1 -> ((\x -> case x of
+                  Core.FunctionPrimitive v2 -> (prim v2)
+                  Core.FunctionElimination v2 -> ((\x -> case x of
+                    Core.EliminationRecord v3 -> (nominal (Core.projectionTypeName v3))
+                    Core.EliminationUnion v3 -> (nominal (Core.caseStatementTypeName v3))
+                    Core.EliminationWrap v3 -> (nominal v3)
+                    _ -> names) v2)
+                  _ -> names) v1)
+                Core.TermRecord v1 -> (nominal (Core.recordTypeName v1))
+                Core.TermUnion v1 -> (nominal (Core.injectionTypeName v1))
+                Core.TermVariable v1 -> (var v1)
+                Core.TermWrap v1 -> (nominal (Core.wrappedTermTypeName v1))
+                _ -> names) term))
   in (foldOverTerm Coders.TraversalOrderPre addNames Sets.empty)
 
 -- | Generate short names from a list of fully qualified names
 toShortNames :: ([Core.Name] -> M.Map Core.Name Core.Name)
 toShortNames original =  
-  let groupNamesByLocal = (\names -> Lists.foldl addName Maps.empty names) 
-      addName = (\acc -> \name ->  
-              let local = (Names.localNameOf name) 
-                  group = (Optionals.fromMaybe Sets.empty (Maps.lookup local acc))
-              in (Maps.insert local (Sets.insert name group) acc))
-      groups = (groupNamesByLocal original)
-      renameGroup = (\localNames ->  
-              let local = (fst localNames) 
-                  names = (snd localNames)
-                  rangeFrom = (\start -> Lists.cons start (rangeFrom (Math.add start 1)))
-                  rename = (\name -> \i -> (name, (Core.Name (Logic.ifElse (Equality.gt i 1) (Strings.cat2 local (Literals.showInt32 i)) local))))
-              in (Lists.zipWith rename (Sets.toList names) (rangeFrom 1)))
-  in (Maps.fromList (Lists.concat (Lists.map renameGroup (Maps.toList groups))))
+  let addName = (\acc -> \name ->  
+          let local = (Names.localNameOf name)
+          in  
+            let group = (Optionals.fromMaybe Sets.empty (Maps.lookup local acc))
+            in (Maps.insert local (Sets.insert name group) acc))
+  in  
+    let groupNamesByLocal = (\names -> Lists.foldl addName Maps.empty names)
+    in  
+      let groups = (groupNamesByLocal original)
+      in  
+        let renameGroup = (\localNames ->  
+                let local = (fst localNames)
+                in  
+                  let names = (snd localNames)
+                  in  
+                    let rangeFrom = (\start -> Lists.cons start (rangeFrom (Math.add start 1)))
+                    in  
+                      let rename = (\name -> \i -> (name, (Core.Name (Logic.ifElse (Equality.gt i 1) (Strings.cat2 local (Literals.showInt32 i)) local))))
+                      in (Lists.zipWith rename (Sets.toList names) (rangeFrom 1)))
+        in (Maps.fromList (Lists.concat (Lists.map renameGroup (Maps.toList groups))))
 
 -- | Topological sort of connected components, in terms of dependencies between variable/term binding pairs
 topologicalSortBindingMap :: (M.Map Core.Name Core.Term -> [[(Core.Name, Core.Term)]])
 topologicalSortBindingMap bindingMap =  
-  let bindings = (Maps.toList bindingMap) 
-      keys = (Sets.fromList (Lists.map fst bindings))
-      hasTypeAnnotation = (\term -> (\x -> case x of
+  let bindings = (Maps.toList bindingMap)
+  in  
+    let keys = (Sets.fromList (Lists.map fst bindings))
+    in  
+      let hasTypeAnnotation = (\term -> (\x -> case x of
               Core.TermAnnotated v1 -> (hasTypeAnnotation (Core.annotatedTermSubject v1))
               _ -> False) term)
-      depsOf = (\nameAndTerm ->  
-              let name = (fst nameAndTerm) 
-                  term = (snd nameAndTerm)
-              in (name, (Logic.ifElse (hasTypeAnnotation term) [] (Sets.toList (Sets.intersection keys (freeVariablesInTerm term))))))
-      toPair = (\name -> (name, (Optionals.fromMaybe (Core.TermLiteral (Core.LiteralString "Impossible!")) (Maps.lookup name bindingMap))))
-  in (Lists.map (Lists.map toPair) (Sorting.topologicalSortComponents (Lists.map depsOf bindings)))
+      in  
+        let depsOf = (\nameAndTerm ->  
+                let name = (fst nameAndTerm)
+                in  
+                  let term = (snd nameAndTerm)
+                  in (name, (Logic.ifElse (hasTypeAnnotation term) [] (Sets.toList (Sets.intersection keys (freeVariablesInTerm term))))))
+        in  
+          let toPair = (\name -> (name, (Optionals.fromMaybe (Core.TermLiteral (Core.LiteralString "Impossible!")) (Maps.lookup name bindingMap))))
+          in (Lists.map (Lists.map toPair) (Sorting.topologicalSortComponents (Lists.map depsOf bindings)))
 
 -- | Topological sort of elements based on their dependencies
 topologicalSortBindings :: ([Core.Binding] -> Mantle.Either [[Core.Name]] [Core.Name])
