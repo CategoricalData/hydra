@@ -104,6 +104,7 @@ _hydra_lib_flows = Namespace "hydra.lib.flows"
 _flows_apply       = qname _hydra_lib_flows "apply" :: Name
 _flows_bind        = qname _hydra_lib_flows "bind" :: Name
 _flows_fail        = qname _hydra_lib_flows "fail" :: Name
+_flows_foldl       = qname _hydra_lib_flows "foldl" :: Name
 _flows_map         = qname _hydra_lib_flows "map" :: Name
 _flows_mapElems    = qname _hydra_lib_flows "mapElems" :: Name
 _flows_mapKeys     = qname _hydra_lib_flows "mapKeys" :: Name
@@ -118,6 +119,7 @@ hydraLibFlows = standardLibrary _hydra_lib_flows [
     prim2 _flows_apply       Flows.apply    ["s", "x", "y"]        (flow s (function x y)) (flow s x) (flow s y),
     prim2 _flows_bind        Flows.bind     ["s", "x", "y"]        (flow s x) (function x (flow s y)) (flow s y),
     prim1 _flows_fail        Flows.fail     ["s", "x"]             string (flow s x),
+    prim3 _flows_foldl       Flows.foldl    ["s", "x", "y"]        (function y (function x (flow s y))) y (list x) (flow s y),
     prim2 _flows_map         Flows.map      ["s", "x", "y"]        (function x y) (flow s x) (flow s y),
     prim2 _flows_mapElems    Flows.mapElems ["s", "k", "v1", "v2"] (function v1 (flow s v2)) (Prims.map k v1) (flow s (Prims.map k v2)),
     prim2 _flows_mapKeys     Flows.mapKeys  ["s", "k1", "k2", "v"] (function k1 (flow s k2)) (Prims.map k1 v) (flow s (Prims.map k2 v)),
