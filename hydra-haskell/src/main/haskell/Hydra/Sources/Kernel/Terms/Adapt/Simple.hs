@@ -411,7 +411,6 @@ typeAlternativesDef = define "typeAlternatives" $
     _Type_union>>: "rt" ~>
       "tname" <~ Core.rowTypeTypeName (var "rt") $
       "fields" <~ Core.rowTypeFields (var "rt") $
-      list [
-        Core.typeRecord $ Core.rowType (var "tname") (var "fields")],
+      list [Core.typeRecord $ Core.rowType (var "tname") (var "fields")],
     _Type_unit>>: constant $ list [
       Core.typeLiteral $ Core.literalTypeBoolean]]

@@ -570,8 +570,8 @@ unsupportedTypeDef = define "unsupportedType" $
 
 unsupportedVariantDef :: TBinding (String -> a -> Expr)
 unsupportedVariantDef = define "unsupportedVariant" $
-  "label" ~> "obj" ~> ref cstDef @@
-    ("[unsupported " ++ var "label" ++ ": " ++ (Literals.showString $ var "obj") ++ "]")
+  "label" ~> "obj" ~>
+    ref cstDef @@ ("[unsupported " ++ var "label" ++ ": " ++ (Literals.showString $ var "obj") ++ "]")
 
 withCommaDef :: TBinding (Expr -> Expr)
 withCommaDef = define "withComma" $
