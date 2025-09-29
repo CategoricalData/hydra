@@ -120,8 +120,8 @@ etaReduceTerm term =
       _ -> noChange) term)
 
 -- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', in which the implicit parameters of primitive functions and eliminations are made into explicit lambda parameters. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
-expandLambdas :: (Graph.Graph -> Core.Term -> Core.Term)
-expandLambdas graph term =  
+etaExpandTerm :: (Graph.Graph -> Core.Term -> Core.Term)
+etaExpandTerm graph term =  
   let expand = (\args -> \arity -> \t ->  
           let apps = (Lists.foldl (\lhs -> \arg -> Core.TermApplication (Core.Application {
                   Core.applicationFunction = lhs,
@@ -138,7 +138,7 @@ expandLambdas graph term =
               in (pad is apps))
   in  
     let rewrite = (\args -> \recurse -> \t ->  
-            let afterRecursion = (\term -> expand args (expansionArity graph term) term)
+            let afterRecursion = (\term -> expand args (etaExpansionArity graph term) term)
             in ((\x -> case x of
               Core.TermApplication v1 ->  
                 let lhs = (Core.applicationFunction v1)
@@ -150,17 +150,17 @@ expandLambdas graph term =
               _ -> (afterRecursion (recurse t))) (Rewriting.deannotateAndDetypeTerm t)))
     in (contractTerm (Rewriting.rewriteTerm (rewrite []) term))
 
--- | Calculate the arity for lambda expansion
-expansionArity :: (Graph.Graph -> Core.Term -> Int)
-expansionArity graph term = ((\x -> case x of
-  Core.TermAnnotated v1 -> (expansionArity graph (Core.annotatedTermSubject v1))
-  Core.TermApplication v1 -> (Math.sub (expansionArity graph (Core.applicationFunction v1)) 1)
+-- | Calculate the arity for eta expansion Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
+etaExpansionArity :: (Graph.Graph -> Core.Term -> Int)
+etaExpansionArity graph term = ((\x -> case x of
+  Core.TermAnnotated v1 -> (etaExpansionArity graph (Core.annotatedTermSubject v1))
+  Core.TermApplication v1 -> (Math.sub (etaExpansionArity graph (Core.applicationFunction v1)) 1)
   Core.TermFunction v1 -> ((\x -> case x of
     Core.FunctionElimination _ -> 1
     Core.FunctionLambda _ -> 0
     Core.FunctionPrimitive v2 -> (Arity.primitiveArity (Optionals.fromJust (Lexical.lookupPrimitive graph v2)))) v1)
-  Core.TermTypeLambda v1 -> (expansionArity graph (Core.typeLambdaBody v1))
-  Core.TermTypeApplication v1 -> (expansionArity graph (Core.typedTermTerm v1))
+  Core.TermTypeLambda v1 -> (etaExpansionArity graph (Core.typeLambdaBody v1))
+  Core.TermTypeApplication v1 -> (etaExpansionArity graph (Core.typedTermTerm v1))
   Core.TermVariable v1 -> (Optionals.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Optionals.bind (Lexical.lookupElement graph v1) (\b -> Core.bindingType b)))
   _ -> 0) term)
 

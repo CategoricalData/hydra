@@ -85,9 +85,9 @@ detypeTerm t = ((\x -> case x of
   Core.TermTypeLambda v1 -> (deannotateAndDetypeTerm (Core.typeLambdaBody v1))
   _ -> t) t)
 
--- | A variation of expandLambdas which also attaches type annotations when padding function terms
-expandTypedLambdas :: (Core.Term -> Core.Term)
-expandTypedLambdas term =  
+-- | A variation of etaExpandTerm which also attaches type annotations when padding function terms
+etaExpandTypedTerm :: (Core.Term -> Core.Term)
+etaExpandTypedTerm term =  
   let toNaryFunType = (\typ ->  
           let helper = (\t -> (\x -> case x of
                   Core.TypeFunction v1 ->  
@@ -139,7 +139,7 @@ expandTypedLambdas term =
               Core.TermLet v1 ->  
                 let expandBinding = (\b -> Core.Binding {
                         Core.bindingName = (Core.bindingName b),
-                        Core.bindingTerm = (expandTypedLambdas (Core.bindingTerm b)),
+                        Core.bindingTerm = (etaExpandTypedTerm (Core.bindingTerm b)),
                         Core.bindingType = (Core.bindingType b)})
                 in (Core.TermLet (Core.Let {
                   Core.letBindings = (Lists.map expandBinding (Core.letBindings v1)),

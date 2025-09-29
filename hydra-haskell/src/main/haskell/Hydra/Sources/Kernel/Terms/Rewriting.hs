@@ -59,7 +59,7 @@ module_ = Module (Namespace "hydra.rewriting") elements
      el deannotateTypeRecursiveDef,
      el deannotateTypeSchemeRecursiveDef,
      el detypeTermDef,
-     el expandTypedLambdasDef,
+     el etaExpandTypedTermDef,
      el flattenLetTermsDef,
      el foldOverTermDef,
      el foldOverTypeDef,
@@ -164,9 +164,9 @@ detypeTermDef = define "detypeTerm" $
     _Term_typeApplication>>: "tt" ~> ref deannotateAndDetypeTermDef @@ (Core.typedTermTerm $ var "tt"),
     _Term_typeLambda>>: "ta" ~> ref deannotateAndDetypeTermDef @@ (Core.typeLambdaBody $ var "ta")]
 
-expandTypedLambdasDef :: TBinding (Term -> Term)
-expandTypedLambdasDef = define "expandTypedLambdas" $
-  doc "A variation of expandLambdas which also attaches type annotations when padding function terms" $
+etaExpandTypedTermDef :: TBinding (Term -> Term)
+etaExpandTypedTermDef = define "etaExpandTypedTerm" $
+  doc "A variation of etaExpandTerm which also attaches type annotations when padding function terms" $
   "term" ~>
   "toNaryFunType" <~ ("typ" ~>
     "helper" <~ ("t" ~>
@@ -219,7 +219,7 @@ expandTypedLambdasDef = define "expandTypedLambdas" $
         _Term_let>>: "lt" ~>
           "expandBinding" <~ ("b" ~> Core.binding
             (Core.bindingName $ var "b")
-            (ref expandTypedLambdasDef @@ (Core.bindingTerm $ var "b"))
+            (ref etaExpandTypedTermDef @@ (Core.bindingTerm $ var "b"))
             (Core.bindingType $ var "b")) $
           Core.termLet $ Core.let_
             (Lists.map (var "expandBinding") (Core.letBindings $ var "lt"))
