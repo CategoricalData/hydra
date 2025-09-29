@@ -356,24 +356,19 @@ encodeRecordType env name (RowType _ tfields) comment = do
 
 encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> Flow Graph Py.Statement
 encodeTermAssignment env name term comment = do
-    (params, bindings, body0, doms, cod, env2) <- gatherBindingsAndParams env term
-    let (body1, args) = gatherArgs body0 []
+  (params, bindings, body, doms, cod, env2) <- gatherBindingsAndParams env term
 
-    -- If there are no arguments or let bindings, and if we are not dealing with a case statement,
-    -- we can use a simple a = b assignment.
-    if L.null params && L.null bindings && not (isCaseStatement body1) then do
-      bodyExpr <- encodeTermInline env2 body0
-      return $ annotatedStatement comment $ assignmentStatement (encodeName False CaseConventionLowerSnake env2 name) bodyExpr
-    -- Otherwise, only a function definition will work.
-    else do
-      bindingStmts <- encodeBindings env2 bindings
-      g <- getState
-      withState (extendGraphWithBindings bindings g) $ do
-        encodeFunctionDefinition env2 name params body0 doms cod comment bindingStmts
-  where
-    isCaseStatement term = case deannotateAndDetypeTerm term of
-      TermFunction (FunctionElimination (EliminationUnion _)) -> True
-      _ -> False
+  -- If there are no arguments or let bindings, and if we are not dealing with a case statement,
+  -- we can use a simple a = b assignment.
+  if isSimpleAssignment term then do
+    bodyExpr <- encodeTermInline env2 body
+    return $ annotatedStatement comment $ assignmentStatement (encodeName False CaseConventionLowerSnake env2 name) bodyExpr
+  -- Otherwise, only a function definition will work.
+  else do
+    bindingStmts <- encodeBindings env2 bindings
+    g <- getState
+    withState (extendGraphWithBindings bindings g) $ do
+      encodeFunctionDefinition env2 name params body doms cod comment bindingStmts
 
 -- | Encode a term to an inline Python expression
 encodeTermInline :: PythonEnvironment -> Term -> Flow Graph Py.Expression
@@ -692,8 +687,9 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
           _ -> meta
         TermLet (Let bindings body) -> L.foldl forBinding (extendMetaForTerm False meta body) bindings
           where
-            forBinding meta (Binding _ term1 (Just ts)) = extendMetaForType True (extendMetaForTerm True meta term1) $
-              typeSchemeType ts
+            forBinding meta (Binding _ term1 (Just ts)) = if isSimpleAssignment term1
+              then meta
+              else extendMetaForType True (extendMetaForTerm True meta term1) $ typeSchemeType ts
         TermLiteral l -> case l of
           LiteralFloat fv -> case fv of
             FloatValueBigfloat _ -> meta {pythonModuleMetadataUsesDecimal = True}
@@ -772,6 +768,13 @@ isNullaryFunction (Binding _ term (Just ts)) = isCaseStatement || (typeArity (ty
     isCaseStatement = case fst (gatherArgs term1 []) of
       TermFunction (FunctionElimination (EliminationUnion _)) -> True
       _ -> False
+
+isSimpleAssignment :: Term -> Bool
+isSimpleAssignment term = case deannotateAndDetypeTerm term of
+  TermFunction (FunctionLambda _) -> False
+  TermLet _ -> False
+  TermFunction (FunctionElimination (EliminationUnion _)) -> False
+  _ -> True
 
 moduleToPython :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
 moduleToPython mod defs = do
