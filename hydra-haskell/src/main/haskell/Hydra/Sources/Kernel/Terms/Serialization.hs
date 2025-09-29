@@ -463,12 +463,13 @@ printExprDef = define "printExpr" $
       "style" <~ Ast.indentedExpressionStyle (var "indentExpr") $
       "expr" <~ Ast.indentedExpressionExpr (var "indentExpr") $
       "lns" <~ Strings.lines (ref printExprDef @@ var "expr") $
-      Strings.intercalate (string "\n") $ cases _IndentStyle (var "style") Nothing [
+      "ilns" <~ cases _IndentStyle (var "style") Nothing [
         _IndentStyle_allLines>>: "idt" ~> Lists.map ("line" ~> var "idt" ++ var "line") (var "lns"),
         _IndentStyle_subsequentLines>>: "idt" ~>
           Logic.ifElse (Equality.equal (Lists.length $ var "lns") (int32 1))
             (var "lns")
-            (Lists.cons (Lists.head $ var "lns") $ Lists.map ("line" ~> var "idt" ++ var "line") $ Lists.tail $ var "lns")],
+            (Lists.cons (Lists.head $ var "lns") $ Lists.map ("line" ~> var "idt" ++ var "line") $ Lists.tail $ var "lns")] $
+      Strings.intercalate (string "\n") (var "ilns"),
     _Expr_op>>: "opExpr" ~>
       "op" <~ Ast.opExprOp (var "opExpr") $
       "sym" <~ Ast.unSymbol (Ast.opSymbol $ var "op") $
