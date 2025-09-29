@@ -139,15 +139,17 @@ etaExpandTerm graph term =
   in  
     let rewrite = (\args -> \recurse -> \t ->  
             let afterRecursion = (\term -> expand args (etaExpansionArity graph term) term)
-            in ((\x -> case x of
-              Core.TermApplication v1 ->  
-                let lhs = (Core.applicationFunction v1)
-                in  
-                  let rhs = (Core.applicationArgument v1)
+            in  
+              let t2 = (Rewriting.deannotateAndDetypeTerm t)
+              in ((\x -> case x of
+                Core.TermApplication v1 ->  
+                  let lhs = (Core.applicationFunction v1)
                   in  
-                    let erhs = (rewrite [] recurse rhs)
-                    in (rewrite (Lists.cons erhs args) recurse lhs)
-              _ -> (afterRecursion (recurse t))) (Rewriting.deannotateAndDetypeTerm t)))
+                    let rhs = (Core.applicationArgument v1)
+                    in  
+                      let erhs = (rewrite [] recurse rhs)
+                      in (rewrite (Lists.cons erhs args) recurse lhs)
+                _ -> (afterRecursion (recurse t2))) t2))
     in (contractTerm (Rewriting.rewriteTerm (rewrite []) term))
 
 -- | Calculate the arity for eta expansion Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
