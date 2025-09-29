@@ -85,7 +85,7 @@ betaReduceTypeDef = define "betaReduceType" $
   "reduceApp" <~ ("app" ~>
     "lhs" <~ Core.applicationTypeFunction (var "app") $
     "rhs" <~ Core.applicationTypeArgument (var "app") $
-    match _Type Nothing [
+    cases _Type (var "lhs") Nothing [
       _Type_annotated>>: "at" ~>
         "a" <<~ var "reduceApp" @@ (Core.applicationType
           (Core.annotatedTypeSubject $ var "at")
@@ -98,11 +98,12 @@ betaReduceTypeDef = define "betaReduceType" $
           @@ (Core.forallTypeBody $ var "ft")),
       _Type_variable>>: "name" ~>
         "t'" <<~ ref Schemas.requireTypeDef @@ var "name" $
-        ref betaReduceTypeDef @@ (Core.typeApplication $ Core.applicationType (var "t'") (var "rhs"))] @@ var "lhs") $
+        ref betaReduceTypeDef @@ (Core.typeApplication $ Core.applicationType (var "t'") (var "rhs"))]) $
   "mapExpr" <~ ("recurse" ~> "t" ~>
     "r" <<~ var "recurse" @@ var "t" $
-    match _Type (Just $ Flows.pure $ var "r") [
-      _Type_application>>: "a" ~> var "reduceApp" @@ var "a"] @@ var "r") $
+    cases _Type (var "r")
+      (Just $ Flows.pure $ var "r") [
+      _Type_application>>: "a" ~> var "reduceApp" @@ var "a"]) $
   ref Rewriting.rewriteTypeMDef @@ var "mapExpr" @@ var "typ"
 
 contractTermDef :: TBinding (Term -> Term)
@@ -145,13 +146,15 @@ etaReduceTermDef = define "etaReduceTerm" $
     "v" <~ Core.lambdaParameter (var "l") $
     "d" <~ Core.lambdaDomain (var "l") $
     "body" <~ Core.lambdaBody (var "l") $
-    match _Term (Just $ var "noChange") [
+    cases _Term (ref etaReduceTermDef @@ var "body")
+      (Just $ var "noChange") [
       _Term_annotated>>: "at" ~>
         var "reduceLambda" @@ (Core.lambda (var "v") (var "d") (Core.annotatedTermSubject $ var "at")),
       _Term_application>>: "app" ~>
         "lhs" <~ Core.applicationFunction (var "app") $
         "rhs" <~ Core.applicationArgument (var "app") $
-        match _Term (Just $ var "noChange") [
+        cases _Term (ref etaReduceTermDef @@ var "rhs")
+          (Just $ var "noChange") [
           _Term_annotated>>: "at" ~>
             var "reduceLambda" @@ (Core.lambda (var "v") (var "d") $
               Core.termApplication $ Core.application (var "lhs") (Core.annotatedTermSubject $ var "at")),
@@ -161,19 +164,17 @@ etaReduceTermDef = define "etaReduceTerm" $
                 (Equality.equal (Core.unName $ var "v") (Core.unName $ var "v1"))
                 (Logic.not $ ref Rewriting.isFreeVariableInTermDef @@ var "v" @@ var "lhs"))
               (ref etaReduceTermDef @@ var "lhs")
-              (var "noChange")]
-        @@ (ref etaReduceTermDef @@ var "rhs")]
-    @@ (ref etaReduceTermDef @@ var "body")) $
-  match _Term (Just $ var "noChange") [
+              (var "noChange")]]) $
+  cases _Term (var "term")
+    (Just $ var "noChange") [
     _Term_annotated>>: "at" ~>
       Core.termAnnotated $ Core.annotatedTerm
         (ref etaReduceTermDef @@ (Core.annotatedTermSubject $ var "at"))
         (Core.annotatedTermAnnotation $ var "at"),
     _Term_function>>: "f" ~>
-      match _Function (Just $ var "noChange") [
-        _Function_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]
-      @@ var "f"]
-  @@ var "term"
+      cases _Function (var "f")
+        (Just $ var "noChange") [
+        _Function_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]]
 
 expandLambdasDef :: TBinding (Graph -> Term -> Term)
 expandLambdasDef = define "expandLambdas" $
@@ -259,7 +260,8 @@ reduceTermDef = define "reduceTerm" $
         (Lists.tail $ var "args"))) $
   "replaceFreeTypeVariable" <~ ("toReplace" ~> "replacement" ~> "term" ~>
     "mapping" <~ ("recurse" ~> "inner" ~>
-      match _Term (Just $ var "recurse" @@ var "inner") [
+      cases _Term (var "inner")
+        (Just $ var "recurse" @@ var "inner") [
         _Term_function>>: match _Function (Just $ var "recurse" @@ var "inner") [
           _Function_lambda>>: "l" ~> Logic.ifElse
             (Equality.equal (Core.lambdaParameter $ var "l") (var "toReplace"))
@@ -268,10 +270,10 @@ reduceTermDef = define "reduceTerm" $
         _Term_variable>>: "name" ~> Logic.ifElse
           (Equality.equal (var "name") (var "toReplace"))
           (var "replacement")
-          (var "inner")] @@ var "inner") $
+          (var "inner")]) $
     ref Rewriting.rewriteTermDef @@ var "mapping" @@ var "term") $
   "applyElimination" <~ ("elm" ~> "reducedArg" ~>
-    match _Elimination Nothing [
+    cases _Elimination (var "elm") Nothing [
       _Elimination_record>>: "proj" ~>
         "fields" <<~ ref ExtractCore.recordDef @@ (Core.projectionTypeName $ var "proj") @@ (ref Rewriting.deannotateTermDef @@ var "reducedArg") $
         "matchingFields" <~ Lists.filter
@@ -304,7 +306,7 @@ reduceTermDef = define "reduceTerm" $
           (Flows.pure $ Core.termApplication $ Core.application
             (Core.fieldTerm $ Lists.head $ var "matchingFields")
             (Core.fieldTerm $ var "field")),
-      _Elimination_wrap>>: "name" ~> ref ExtractCore.wrapDef @@ var "name" @@ var "reducedArg"] @@ var "elm") $
+      _Elimination_wrap>>: "name" ~> ref ExtractCore.wrapDef @@ var "name" @@ var "reducedArg"]) $
   "applyIfNullary" <~ ("eager" ~> "original" ~> "args" ~>
     "stripped" <~ ref Rewriting.deannotateTermDef @@ var "original" $
     cases _Term (var "stripped") (Just $ Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args") [
@@ -362,20 +364,18 @@ termIsValueDef = define "termIsValue" $
   "forList" <~ ("els" ~> Lists.foldl ("b" ~> "t" ~> Logic.and (var "b") (ref termIsValueDef @@ var "g" @@ var "t")) true (var "els")) $
   "checkField" <~ ("f" ~> ref termIsValueDef @@ var "g" @@ Core.fieldTerm (var "f")) $
   "checkFields" <~ ("fields" ~> Lists.foldl ("b" ~> "f" ~> Logic.and (var "b") (var "checkField" @@ var "f")) true (var "fields")) $
-  "functionIsValue" <~ ("f" ~>
-    match _Function Nothing [
-      _Function_elimination>>: "e" ~>
-        match _Elimination Nothing [
-          _Elimination_wrap>>: constant true,
-          _Elimination_record>>: constant true,
-          _Elimination_union>>: "cs" ~>
-            Logic.and (var "checkFields" @@ Core.caseStatementCases (var "cs"))
-              (Optionals.maybe true (ref termIsValueDef @@ var "g") (Core.caseStatementDefault $ var "cs"))]
-        @@ var "e",
-      _Function_lambda>>: "l" ~> ref termIsValueDef @@ var "g" @@ Core.lambdaBody (var "l"),
-      _Function_primitive>>: constant true]
-    @@ var "f") $
-  match _Term (Just false) [
+  "functionIsValue" <~ ("f" ~> cases _Function (var "f") Nothing [
+    _Function_elimination>>: "e" ~>
+      cases _Elimination (var "e") Nothing [
+        _Elimination_wrap>>: constant true,
+        _Elimination_record>>: constant true,
+        _Elimination_union>>: "cs" ~>
+          Logic.and (var "checkFields" @@ Core.caseStatementCases (var "cs"))
+            (Optionals.maybe true (ref termIsValueDef @@ var "g") (Core.caseStatementDefault $ var "cs"))],
+    _Function_lambda>>: "l" ~> ref termIsValueDef @@ var "g" @@ Core.lambdaBody (var "l"),
+    _Function_primitive>>: constant true]) $
+  cases _Term (ref Rewriting.deannotateTermDef @@ var "term")
+    (Just false) [
     _Term_application>>: constant false,
     _Term_literal>>: constant true,
     _Term_function>>: "f" ~> var "functionIsValue" @@ var "f",
@@ -393,4 +393,3 @@ termIsValueDef = define "termIsValue" $
     _Term_union>>: "i" ~> var "checkField" @@ Core.injectionField (var "i"),
     _Term_unit>>: constant true,
     _Term_variable>>: constant false]
-  @@ (ref Rewriting.deannotateTermDef @@ var "term")
