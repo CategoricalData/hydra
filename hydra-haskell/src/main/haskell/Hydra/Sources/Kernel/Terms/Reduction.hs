@@ -203,39 +203,40 @@ expandLambdasDef = define "expandLambdas" $
     "rewrite">: "args" ~> "recurse" ~> "t" ~> lets [
       "afterRecursion">: "term" ~>
         var "expand" @@ var "args" @@ (ref expansionArityDef @@ var "graph" @@ var "term") @@ var "term"] $
-      cases _Term (var "t")
+      cases _Term (ref Rewriting.deannotateAndDetypeTermDef @@ var "t")
         (Just $ var "afterRecursion" @@ (var "recurse" @@ var "t")) [
         _Term_application>>: "app" ~> lets [
           "lhs">: Core.applicationFunction $ var "app",
           "rhs">: Core.applicationArgument $ var "app",
           "erhs">: var "rewrite" @@ (list []) @@ var "recurse" @@ var "rhs"] $
-          var "rewrite" @@ (Lists.cons (var "erhs") (var "args")) @@ var "recurse" @@ var "lhs"]]
-    $ ref contractTermDef @@ (ref Rewriting.rewriteTermDef @@ (var "rewrite" @@ (list [])) @@ var "term")
+          var "rewrite" @@ (Lists.cons (var "erhs") (var "args")) @@ var "recurse" @@ var "lhs"]] $
+    ref contractTermDef @@ (ref Rewriting.rewriteTermDef @@ (var "rewrite" @@ list []) @@ var "term")
 
 expansionArityDef :: TBinding (Graph -> Term -> Int)
 expansionArityDef = define "expansionArity" $
   doc "Calculate the arity for lambda expansion" $
-  "graph" ~> "term" ~>
-    cases _Term (ref Rewriting.deannotateTermDef @@ var "term")
-      (Just $ int32 0) [
-      _Term_application>>: lambda "app" $
-        Math.sub
-          (ref expansionArityDef @@ var "graph" @@ Core.applicationFunction (var "app"))
-          (int32 1),
-      _Term_function>>: "f" ~> cases _Function (var "f")
-        Nothing [
-        _Function_elimination>>: constant $ int32 1,
-        _Function_lambda>>: constant $ int32 0,
-        _Function_primitive>>: "name" ~>
-          ref Arity.primitiveArityDef @@ (Optionals.fromJust (ref Lexical.lookupPrimitiveDef @@ var "graph" @@ var "name"))],
-      _Term_typeLambda>>: "ta" ~> ref expansionArityDef @@ var "graph" @@ Core.typeLambdaBody (var "ta"),
-      _Term_typeApplication>>: "tt" ~> ref expansionArityDef @@ var "graph" @@ Core.typedTermTerm (var "tt"),
-      _Term_variable>>: "name" ~>
-        Optionals.maybe (int32 0)
-          ("ts" ~> ref Arity.typeArityDef @@ (Core.typeSchemeType $ var "ts"))
-          (Optionals.bind
-            (ref Lexical.lookupElementDef @@ var "graph" @@ var "name")
-            ("el" ~> Core.bindingType $ var "el"))]
+  "graph" ~> "term" ~> cases _Term (var "term")
+    (Just $ int32 0) [
+    _Term_annotated>>: "at" ~>
+      ref expansionArityDef @@ var "graph" @@ Core.annotatedTermSubject (var "at"),
+    _Term_application>>: "app" ~> Math.sub
+      (ref expansionArityDef @@ var "graph" @@ Core.applicationFunction (var "app"))
+      (int32 1),
+    _Term_function>>: "f" ~> cases _Function (var "f")
+      Nothing [
+      _Function_elimination>>: constant $ int32 1,
+      _Function_lambda>>: constant $ int32 0,
+      _Function_primitive>>: "name" ~> ref Arity.primitiveArityDef
+        @@ (Optionals.fromJust (ref Lexical.lookupPrimitiveDef @@ var "graph" @@ var "name"))],
+    _Term_typeLambda>>: "ta" ~> ref expansionArityDef @@ var "graph" @@ Core.typeLambdaBody (var "ta"),
+    _Term_typeApplication>>: "tt" ~> ref expansionArityDef @@ var "graph" @@ Core.typedTermTerm (var "tt"),
+    _Term_variable>>: "name" ~>
+      -- Note: we assume that the graph is well-formed, i.e. no dangling references, and also fully typed.
+      Optionals.maybe (int32 0)
+        ("ts" ~> ref Arity.typeArityDef @@ (Core.typeSchemeType $ var "ts"))
+        (Optionals.bind
+          (ref Lexical.lookupElementDef @@ var "graph" @@ var "name")
+          ("b" ~> Core.bindingType $ var "b"))]
 
 reduceTermDef :: TBinding (Bool -> Term -> Flow Graph Term)
 reduceTermDef = define "reduceTerm" $
