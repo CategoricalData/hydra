@@ -187,7 +187,7 @@ encodeFunctionDefRaw (Py.FunctionDefRaw async name tparams params retType ftc bl
         Just $ spaceSep $ Y.catMaybes [
         Just $ noSep $ Y.catMaybes[
           Just $ encodeName name,
-          Nothing, -- TODO: tparams
+          if L.null tparams then Nothing else Just (bracketList inlineStyle (encodeTypeParameter <$> tparams)),
           Just $ cst "(",
           encodeParameters <$> params,
           Just $ cst ")"],
