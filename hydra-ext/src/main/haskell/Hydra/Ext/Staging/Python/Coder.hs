@@ -65,7 +65,7 @@ deduplicateCaseVariables cases = L.reverse $ snd $ L.foldl rewriteCase (M.empty,
 encodeApplication :: PythonEnvironment -> Application -> Flow PyGraph Py.Expression
 encodeApplication env app = do
     PyGraph g _ <- getState
-    let arity = etaExpansionArity g fun
+    arity <- typeArity <$> (typeOf (pythonEnvironmentTypeContext env) fun)
     let term = TermApplication app
     typ <- typeOf (pythonEnvironmentTypeContext env) term
     pargs <- CM.mapM (encodeTermInline env) args
@@ -739,6 +739,8 @@ findTypeParams env typ = L.filter isBound $ S.toList $ freeVariablesInType typ
 gatherArgs :: Term -> [Term] -> (Term, [Term])
 gatherArgs term args = case deannotateTerm term of
   TermApplication (Application lhs rhs) -> gatherArgs lhs (rhs:args)
+  TermTypeLambda (TypeLambda _ body) -> gatherArgs body args
+  TermTypeApplication (TypedTerm t _) -> gatherArgs t args
   _ -> (term, args)
 
 gatherBindingsAndParams :: PythonEnvironment -> Term -> Flow s ([Name], [Name], [Binding], Term, [Type], Type, PythonEnvironment)
