@@ -61,12 +61,24 @@ encodeApplication :: PythonEnvironment -> Application -> Flow Graph Py.Expressio
 encodeApplication env app = do
     g <- getState
     let arity = etaExpansionArity g fun
+    let term = TermApplication app
+    typ <- typeOf (pythonEnvironmentTypeContext env) term
     pargs <- CM.mapM (encodeTermInline env) args
     let hargs = L.take arity pargs
     let rargs = L.drop arity pargs
     lhs <- applyArgs hargs
-    return $ L.foldl (\t a -> functionCall (pyExpressionToPyPrimary t) [a]) lhs rargs
+    let pyapp = L.foldl (\t a -> functionCall (pyExpressionToPyPrimary t) [a]) lhs rargs
+    if needsCast term typ then do
+      pytyp <- encodeType env typ
+      return $ functionCall (pyNameToPyPrimary $ Py.Name "cast") [pytyp, pyapp]
+    else
+      return pyapp
   where
+    needsCast term typ = case typ of
+      TypeMap _ -> case deannotateAndDetypeTerm term of
+        TermMap _ -> False
+        _ -> True
+      _ -> False
     (fun, args) = gatherArgs (TermApplication app) []
     applyArgs hargs = case fun of
         TermFunction f -> case f of
@@ -164,30 +176,8 @@ encodeFunctionDefinition env name tparams args body doms cod comment prefixes = 
     returnType <- getType cod
     let pyTparams = fmap (pyNameToPyTypeParameter . encodeTypeVariable) tparams
 
-
-
-
-
-
-
---    if name == Name "hydra.formatting.showList" then
---      fail $ "args: "
---        ++ show args
---        ++ "\nbody: " ++ ShowCore.term body
---        ++ "\ndoms: " ++ (L.intercalate "," (ShowCore.type_ <$> doms))
---        ++ "\ncod: " ++ ShowCore.type_ cod
---        ++ "\ntparams: " ++ (L.intercalate ", " (unName <$> tparams))
---    else
---      pure ()
-
-
-
-
-
-
-
-    return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing
-      $ Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) pyTparams (Just params) (Just returnType) Nothing block
+    return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing $
+      Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) pyTparams (Just params) (Just returnType) Nothing block
   where
     toParam name typ = do
       pyTyp <- getType typ
