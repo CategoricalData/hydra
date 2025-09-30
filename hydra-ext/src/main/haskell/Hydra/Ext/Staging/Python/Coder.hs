@@ -29,6 +29,7 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataTypeVariables :: S.Set Name,
   pythonModuleMetadataUsesAnnotated :: Bool,
   pythonModuleMetadataUsesCallable :: Bool,
+  pythonModuleMetadataUsesCast :: Bool,
   pythonModuleMetadataUsesDataclass :: Bool,
   pythonModuleMetadataUsesDecimal :: Bool,
   pythonModuleMetadataUsesEnum :: Bool,
@@ -39,6 +40,10 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesNode :: Bool,
   pythonModuleMetadataUsesTuple :: Bool,
   pythonModuleMetadataUsesTypeVar :: Bool}
+
+data PyGraph = PyGraph {
+  pyGraphGraph :: Graph,
+  pyGraphMetadata :: PythonModuleMetadata}
 
 -- | Rewrite case statements in which the top-level lambda variables are re-used, e.g.
 --   cases _Type Nothing [_Type_list>>: "t" ~> ..., _Type_set>>: "t" ~> ...].
@@ -57,9 +62,9 @@ deduplicateCaseVariables cases = L.reverse $ snd $ L.foldl rewriteCase (M.empty,
             rewritten = TermFunction $ FunctionLambda $ Lambda v2 (Just dom) (alphaConvert v v2 body)
       _ -> (countByName, (Field fname fterm):done)
 
-encodeApplication :: PythonEnvironment -> Application -> Flow Graph Py.Expression
+encodeApplication :: PythonEnvironment -> Application -> Flow PyGraph Py.Expression
 encodeApplication env app = do
-    g <- getState
+    PyGraph g _ <- getState
     let arity = etaExpansionArity g fun
     let term = TermApplication app
     typ <- typeOf (pythonEnvironmentTypeContext env) term
@@ -69,6 +74,9 @@ encodeApplication env app = do
     lhs <- applyArgs hargs
     let pyapp = L.foldl (\t a -> functionCall (pyExpressionToPyPrimary t) [a]) lhs rargs
     if needsCast term typ then do
+      PyGraph g meta <- getState
+      let meta2 = extendMetaForType True True meta typ
+      putState (PyGraph g $ meta2 { pythonModuleMetadataUsesCast = True })
       pytyp <- encodeType env typ
       return $ functionCall (pyNameToPyPrimary $ Py.Name "cast") [pytyp, pyapp]
     else
@@ -106,7 +114,7 @@ encodeApplication env app = do
           pfun <- encodeTermInline env fun
           return $ functionCall (pyExpressionToPyPrimary pfun) hargs
 
-encodeApplicationType :: PythonEnvironment -> ApplicationType -> Flow Graph Py.Expression
+encodeApplicationType :: PythonEnvironment -> ApplicationType -> Flow PyGraph Py.Expression
 encodeApplicationType env at = do
     pyBody <- encodeType env body
     pyArgs <- CM.mapM (encodeType env) args
@@ -117,35 +125,35 @@ encodeApplicationType env at = do
       TypeApplication (ApplicationType lhs rhs) -> gatherParams lhs (rhs:ps)
       _ -> (t, ps)
 
-encodeBinding :: PythonEnvironment -> Binding -> Flow Graph Py.Statement
+encodeBinding :: PythonEnvironment -> Binding -> Flow PyGraph Py.Statement
 encodeBinding env (Binding name1 term1 mts) = do
-  comment <- fmap normalizeComment <$> getTermDescription term1
+  comment <- fmap normalizeComment <$> (inGraphContext $ getTermDescription term1)
   encodeTermAssignment env name1 term1 comment
 
 -- TODO: topological sort of bindings
-encodeBindings :: PythonEnvironment -> [Binding] -> Flow Graph [Py.Statement]
+encodeBindings :: PythonEnvironment -> [Binding] -> Flow PyGraph [Py.Statement]
 encodeBindings env bindings = CM.mapM (encodeBinding env) bindings
 
-encodeDefinition :: PythonEnvironment -> Definition -> Flow Graph [[Py.Statement]]
+encodeDefinition :: PythonEnvironment -> Definition -> Flow PyGraph [[Py.Statement]]
 encodeDefinition env def = case def of
   DefinitionTerm (TermDefinition name term _) -> withTrace ("data element " ++ unName name) $ do
-    comment <- fmap normalizeComment <$> getTermDescription term
-    g <- getState
+    comment <- fmap normalizeComment <$> (inGraphContext $ getTermDescription term)
+    PyGraph g _ <- getState
     stmt <- encodeTermAssignment env name term comment
     return [[stmt]]
   DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name) $ do
 --  DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name ++ ": " ++ ShowCore.type_ typ) $ do
-    comment <- fmap normalizeComment <$> getTypeDescription typ
+    comment <- fmap normalizeComment <$> (inGraphContext $ getTypeDescription typ)
     encodeTypeAssignment env name typ comment
 
-encodeField :: PythonEnvironment -> Field -> Flow Graph (Py.Name, Py.Expression)
+encodeField :: PythonEnvironment -> Field -> Flow PyGraph (Py.Name, Py.Expression)
 encodeField env (Field fname fterm) = do
   pterm <- encodeTermInline env fterm
   return (encodeFieldName env fname, pterm)
 
-encodeFieldType :: PythonEnvironment -> FieldType -> Flow Graph Py.Statement
+encodeFieldType :: PythonEnvironment -> FieldType -> Flow PyGraph Py.Statement
 encodeFieldType env (FieldType fname ftype) = do
-  comment <- getTypeDescription ftype
+  comment <- inGraphContext $ getTypeDescription ftype
   let pyName = Py.SingleTargetName $ encodeFieldName env fname
   pyType <- annotatedExpression comment <$> encodeType env ftype
   return $ pyAssignmentToPyStatement $ Py.AssignmentTyped $ Py.TypedAssignment pyName pyType Nothing
@@ -156,7 +164,7 @@ encodeFloatValue fv = case fv of
   FloatValueFloat64 f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat $ realToFrac f
   _ -> fail $ "unsupported floating point type: " ++ show (floatValueType fv)
 
-encodeFunction :: PythonEnvironment -> Function -> Flow Graph Py.Expression
+encodeFunction :: PythonEnvironment -> Function -> Flow PyGraph Py.Expression
 encodeFunction env f = case f of
   FunctionLambda lam@(Lambda var (Just dom) body) -> do
       pbody <- encodeTermInline env2 body
@@ -167,7 +175,7 @@ encodeFunction env f = case f of
   FunctionPrimitive name -> pure $ pyNameToPyExpression $ encodeName True CaseConventionLowerSnake env name -- Only nullary primitives should appear here.
   _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
-encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> [Name] -> Term -> [Type] -> Type -> Maybe String -> [Py.Statement] -> Flow Graph Py.Statement
+encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> [Name] -> Term -> [Type] -> Type -> Maybe String -> [Py.Statement] -> Flow PyGraph Py.Statement
 encodeFunctionDefinition env name tparams args body doms cod comment prefixes = do
     pyArgs <- CM.zipWithM toParam args doms
     let params = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters pyArgs [] Nothing
@@ -188,7 +196,7 @@ encodeFunctionDefinition env name tparams args body doms cod comment prefixes = 
         Just t -> encodeType env t
       t -> encodeType env t
 
-encodeFunctionType :: PythonEnvironment -> FunctionType -> Flow Graph Py.Expression
+encodeFunctionType :: PythonEnvironment -> FunctionType -> Flow PyGraph Py.Expression
 encodeFunctionType env ft = do
     pydoms <- CM.mapM encode doms
     pycod <- encode cod
@@ -216,7 +224,7 @@ encodeIntegerValue iv = case iv of
   IntegerValueUint64 i -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $ fromIntegral i
 --  _ -> fail $ "unsupported integer type: " ++ show (integerValueType iv)
 
-encodeForallType :: PythonEnvironment -> ForallType -> Flow Graph Py.Expression
+encodeForallType :: PythonEnvironment -> ForallType -> Flow PyGraph Py.Expression
 encodeForallType env lt = do
     pyBody <- encodeType env body
     return $ primaryAndParams (pyExpressionToPyPrimary pyBody) (pyNameToPyExpression . Py.Name . unName <$> params)
@@ -234,7 +242,7 @@ encodeLiteral lit = case lit of
   LiteralString s -> pure $ stringToPyExpression Py.QuoteStyleDouble s
   _ -> fail $ "unsupported literal variant: " ++ show (literalVariant lit)
 
-encodeLiteralType :: LiteralType -> Flow Graph Py.Expression
+encodeLiteralType :: LiteralType -> Flow PyGraph Py.Expression
 encodeLiteralType lt = do
     name <- Py.Name <$> findName
     return $ pyNameToPyExpression name
@@ -254,25 +262,27 @@ encodeLiteralType lt = do
 encodeModule :: Module -> [Definition] -> Flow Graph Py.Module
 encodeModule mod defs0 = do
     let defs = reorderDefs defs0
-    let meta = gatherMetadata defs
-    let namespaces = findNamespaces defs meta
-    let tvars = pythonModuleMetadataTypeVariables meta
-    let importStmts = imports namespaces meta
-    let tvarStmts = tvarStmt . encodeTypeVariable <$> S.toList tvars
-    let mc = tripleQuotedString . normalizeComment <$> moduleDescription mod
-    let commentStmts = case normalizeComment <$> moduleDescription mod of
-                       Nothing -> []
-                       Just c -> [commentStatement c]
+    let meta0 = gatherMetadata defs
     g <- getState
-    tcontext <- initialTypeContext g
-    let env = PythonEnvironment {
-                pythonEnvironmentNamespaces = namespaces,
-                pythonEnvironmentBoundTypeVariables = ([], M.empty),
-                pythonEnvironmentTypeContext = tcontext}
-    defStmts <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
+    withState (PyGraph g meta0) $ do
+      let namespaces = findNamespaces defs meta0
+      let mc = tripleQuotedString . normalizeComment <$> moduleDescription mod
+      tcontext <- initialTypeContext g
+      let env = PythonEnvironment {
+                  pythonEnvironmentNamespaces = namespaces,
+                  pythonEnvironmentBoundTypeVariables = ([], M.empty),
+                  pythonEnvironmentTypeContext = tcontext}
+      defStmts <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
+      PyGraph _ meta <- getState -- get metadata after definitions, which may have altered it
 
-    let body = L.filter (not . L.null) $ [commentStmts, importStmts, tvarStmts] ++ defStmts
-    return $ Py.Module body
+      let commentStmts = case normalizeComment <$> moduleDescription mod of
+                         Nothing -> []
+                         Just c -> [commentStatement c]
+      let importStmts = imports namespaces meta
+      let tvars = pythonModuleMetadataTypeVariables meta
+      let tvarStmts = tvarStmt . encodeTypeVariable <$> S.toList tvars
+      let body = L.filter (not . L.null) $ [commentStmts, importStmts, tvarStmts] ++ defStmts
+      return $ Py.Module body
   where
     findNamespaces defs meta = if fst (namespacesFocus namespaces) == coreNs
         then namespaces
@@ -333,7 +343,8 @@ encodeModule mod defs0 = do
                   cond "Annotated" $ pythonModuleMetadataUsesAnnotated meta,
                   cond "Generic" $ pythonModuleMetadataUsesGeneric meta,
                   cond "Tuple" $ pythonModuleMetadataUsesTuple meta,
-                  cond "TypeVar" $ pythonModuleMetadataUsesTypeVar meta])]
+                  cond "TypeVar" $ pythonModuleMetadataUsesTypeVar meta,
+                  cond "cast" $ pythonModuleMetadataUsesCast meta])]
               where
                 cond name b = if b then Just name else Nothing
             toImport (modName, symbols) = Py.ImportStatementFrom $
@@ -357,7 +368,7 @@ encodeNameConstants env name typ = toStmt <$> (namePair:(fieldPairs typ))
       TypeUnion rt -> fieldPair <$> rowTypeFields rt
       _ -> []
 
-encodeRecordType :: PythonEnvironment -> Name -> RowType -> Maybe String -> Flow Graph Py.Statement
+encodeRecordType :: PythonEnvironment -> Name -> RowType -> Maybe String -> Flow PyGraph Py.Statement
 encodeRecordType env name (RowType _ tfields) comment = do
     pyFields <- CM.mapM (encodeFieldType env) tfields
     let body = indentedBlock comment [pyFields]
@@ -368,7 +379,7 @@ encodeRecordType env name (RowType _ tfields) comment = do
     args = fmap (\a -> pyExpressionsToPyArgs [a]) $ genericArg tparamList
     decs = Py.Decorators [pyNameToPyNamedExpression $ Py.Name "dataclass"]
 
-encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> Flow Graph Py.Statement
+encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> Flow PyGraph Py.Statement
 encodeTermAssignment env name term comment = do
   (tparams, params, bindings, body, doms, cod, env2) <- gatherBindingsAndParams env term
 
@@ -380,12 +391,12 @@ encodeTermAssignment env name term comment = do
   -- Otherwise, only a function definition will work.
   else do
     bindingStmts <- encodeBindings env2 bindings
-    g <- getState
-    withState (extendGraphWithBindings bindings g) $ do
-      encodeFunctionDefinition env2 name tparams params body doms cod comment bindingStmts
+    PyGraph g meta <- getState
+    putState (PyGraph (extendGraphWithBindings bindings g) meta)
+    encodeFunctionDefinition env2 name tparams params body doms cod comment bindingStmts
 
 -- | Encode a term to an inline Python expression
-encodeTermInline :: PythonEnvironment -> Term -> Flow Graph Py.Expression
+encodeTermInline :: PythonEnvironment -> Term -> Flow PyGraph Py.Expression
 encodeTermInline env term = case deannotateTerm term of
     TermApplication a -> encodeApplication env a
     TermFunction f -> encodeFunction env f
@@ -421,7 +432,7 @@ encodeTermInline env term = case deannotateTerm term of
         env2 = extendEnvironmentForTypeLambda env tl
     TermTypeApplication (TypedTerm term1 _) -> encode term1
     TermUnion (Injection tname field) -> do
-      rt <- requireUnionType tname
+      rt <- inGraphContext $ requireUnionType tname
       if isEnumRowType rt
         then return $ projectFromExpression (pyNameToPyExpression $ encodeNameQualified env tname)
           $ encodeEnumValue env $ fieldName field
@@ -430,7 +441,7 @@ encodeTermInline env term = case deannotateTerm term of
           return $ functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) [parg]
     TermUnit -> return $ pyNameToPyExpression pyNone
     TermVariable name -> do
-      g <- getState
+      PyGraph g _ <- getState
       return $ case lookupElement g name of
         -- Lambda-bound variables
         Nothing -> termVariableReference env name
@@ -446,7 +457,7 @@ encodeTermInline env term = case deannotateTerm term of
     encode = encodeTermInline env
 
 -- | Encode a term to a list of statements, with the last statement as the return value.
-encodeTermMultiline :: PythonEnvironment -> Term -> Flow Graph [Py.Statement]
+encodeTermMultiline :: PythonEnvironment -> Term -> Flow PyGraph [Py.Statement]
 encodeTermMultiline env term = if L.length args == 1
     then withArg body (L.head args)
     else dflt
@@ -465,14 +476,14 @@ encodeTermMultiline env term = if L.length args == 1
         return [returnSingle expr]
       else do
         bindingStmts <- encodeBindings env2 bindings
-        g <- getState
-        withState (extendGraphWithBindings bindings g) $ do
-          stmts <- encodeTermMultiline env2 body
-          return $ bindingStmts ++ stmts
+        PyGraph g meta <- getState
+        putState (PyGraph (extendGraphWithBindings bindings g) meta)
+        stmts <- encodeTermMultiline env2 body
+        return $ bindingStmts ++ stmts
     withArg body arg = case deannotateTerm body of
       -- Case statements are special.
       TermFunction (FunctionElimination (EliminationUnion (CaseStatement tname dflt cases))) -> do
-          rt <- requireUnionType tname
+          rt <- inGraphContext $ requireUnionType tname
           let isEnum = isEnumRowType rt
           let isFull = L.length cases >= L.length (rowTypeFields rt)
           pyArg <- encodeTermInline env arg
@@ -514,7 +525,7 @@ encodeTermMultiline env term = if L.length args == 1
             _ -> fail "unsupported case"
       _ -> dflt
 
-encodeType :: PythonEnvironment -> Type -> Flow Graph Py.Expression
+encodeType :: PythonEnvironment -> Type -> Flow PyGraph Py.Expression
 encodeType env typ = case deannotateType typ of
 --encodeType env typ = withTrace ("encode type: " <> ShowCore.type_ typ) $ case deannotateType typ of
     TypeApplication at -> encodeApplicationType env at
@@ -539,7 +550,7 @@ encodeType env typ = case deannotateType typ of
     encode = encodeType env
     dflt = pure $ doubleQuotedString $ "type = " ++ ShowCore.type_ (deannotateType typ)
 
-encodeTypeAssignment :: PythonEnvironment -> Name -> Type -> Maybe String -> Flow Graph [[Py.Statement]]
+encodeTypeAssignment :: PythonEnvironment -> Name -> Type -> Maybe String -> Flow PyGraph [[Py.Statement]]
 encodeTypeAssignment env name typ comment = do
     defStmts <- encode env typ
     let constStmts = encodeNameConstants env name typ
@@ -559,14 +570,14 @@ encodeTypeAssignment env name typ comment = do
       where
         tparams = environmentTypeParameters env
 
-encodeTypeQuoted :: PythonEnvironment -> Type -> Flow Graph Py.Expression
+encodeTypeQuoted :: PythonEnvironment -> Type -> Flow PyGraph Py.Expression
 encodeTypeQuoted env typ = do
   pytype <- encodeType env typ
   return $ if S.null (freeVariablesInType typ)
     then pytype
     else doubleQuotedString $ printExpr $ PySer.encodeExpression pytype
 
-encodeUnionType :: PythonEnvironment -> Name -> RowType -> Maybe String -> Flow Graph [Py.Statement]
+encodeUnionType :: PythonEnvironment -> Name -> RowType -> Maybe String -> Flow PyGraph [Py.Statement]
 encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumRowType rt then asEnum else asUnion
   where
     asEnum = do
@@ -576,7 +587,7 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumRowType rt th
       where
         args = Just $ pyExpressionsToPyArgs [pyNameToPyExpression $ Py.Name "Enum"]
         toVal (FieldType fname ftype) = do
-          fcomment <- fmap normalizeComment <$> getTypeDescription ftype
+          fcomment <- fmap normalizeComment <$> (inGraphContext $ getTypeDescription ftype)
           return $ Y.catMaybes [
             Just $ assignmentStatement (encodeEnumValue env fname) (doubleQuotedString $ unName fname),
             pyExpressionToPyStatement . tripleQuotedString <$> fcomment]
@@ -585,7 +596,7 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumRowType rt th
       return $ fieldStmts ++ [unionStmt]
       where
         toFieldStmt (FieldType fname ftype) = do
-            comment <- fmap normalizeComment <$> getTypeDescription ftype
+            comment <- fmap normalizeComment <$> (inGraphContext $ getTypeDescription ftype)
             ptypeQuoted <- encodeTypeQuoted env ftype
             let body = indentedBlock comment []
             return $ pyClassDefinitionToPyStatement $
@@ -610,7 +621,7 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumRowType rt th
                 namePrim = pyNameToPyPrimary $ variantName False env name fname
         fieldParams ftype = encodeTypeVariable <$> findTypeParams env ftype
 
-encodeWrappedType :: PythonEnvironment -> Name -> Type -> Maybe String -> Flow Graph Py.Statement
+encodeWrappedType :: PythonEnvironment -> Name -> Type -> Maybe String -> Flow PyGraph Py.Statement
 encodeWrappedType env name typ comment = do
     ptypeQuoted <- encodeTypeQuoted env typ
     let body = indentedBlock comment []
@@ -638,6 +649,87 @@ extendEnvironmentForLet env letrec = env {
 extendEnvironmentForTypeLambda :: PythonEnvironment -> TypeLambda -> PythonEnvironment
 extendEnvironmentForTypeLambda env tlam = env {
   pythonEnvironmentTypeContext = extendTypeContextForTypeLambda (pythonEnvironmentTypeContext env) tlam}
+
+extendMetaForTerm :: Bool -> PythonModuleMetadata -> Term -> PythonModuleMetadata
+extendMetaForTerm topLevel meta t = case t of
+    TermFunction f -> case f of
+      FunctionLambda (Lambda _ (Just dom) body) -> if topLevel
+          then extendMetaForType True False meta2 dom
+          else meta2
+        where
+          meta2 = extendMetaForTerm topLevel meta body
+      _ -> meta
+    TermLet (Let bindings body) -> L.foldl forBinding (extendMetaForTerm False meta body) bindings
+      where
+        forBinding meta (Binding _ term1 (Just ts)) = if isSimpleAssignment term1
+          then meta
+          else extendMetaForType True True (extendMetaForTerm True meta term1) $ typeSchemeType ts
+    TermLiteral l -> case l of
+      LiteralFloat fv -> case fv of
+        FloatValueBigfloat _ -> meta {pythonModuleMetadataUsesDecimal = True}
+        _ -> meta
+      _ -> meta
+    TermMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
+    _ -> meta2
+  where
+    meta2 = L.foldl (extendMetaForTerm False) meta $ subterms t
+
+extendMetaForType :: Bool -> Bool -> PythonModuleMetadata -> Type -> PythonModuleMetadata
+extendMetaForType topLevel isTermAnnot meta typ = extendFor meta3 typ
+  where
+    tvars = pythonModuleMetadataTypeVariables meta
+    meta3 = digForWrap typ
+      where
+        digForWrap typ = case deannotateType typ of
+          TypeForall (ForallType _ body) -> digForWrap body
+          TypeWrap _ -> if isTermAnnot
+            -- No need to import Node for instantiations of a Node type, e.g.
+            --   placeholder_name = hydra.core.Name("Placeholder")
+            then meta2
+            else meta2 {pythonModuleMetadataUsesNode = True}
+          _ -> meta2
+    meta2 = meta {pythonModuleMetadataTypeVariables = newTvars tvars typ}
+      where
+        newTvars s t = case deannotateType t of
+          TypeForall (ForallType v body) -> newTvars (S.insert v s) body
+          _ -> s
+    extendFor meta t = case t of
+      TypeFunction (FunctionType dom cod) -> if isTermAnnot && topLevel
+          -- If a particular term has a function type, don't import Callable; Python has special "def" syntax for functions.
+          then meta3
+          -- If this is a type-level definition, or an *argument* to a function is a function, then we need Callable.
+          else meta3 {pythonModuleMetadataUsesCallable = True}
+        where
+          meta2 = extendMetaForType topLevel isTermAnnot meta cod
+          meta3 = extendMetaForType False isTermAnnot meta2 dom
+      TypeForall (ForallType _ body) -> case baseType body of
+          TypeRecord _ -> meta {pythonModuleMetadataUsesGeneric = True}
+          _ -> meta
+        where
+          baseType t = case deannotateType t of
+            TypeForall (ForallType _ body2) -> baseType body2
+            t2 -> t2
+      TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True}
+      TypeLiteral lt -> case lt of
+        LiteralTypeFloat ft -> case ft of
+          FloatTypeBigfloat -> meta {pythonModuleMetadataUsesDecimal = True}
+          _ -> meta
+        _ -> meta
+      TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
+      TypeProduct _ -> meta {pythonModuleMetadataUsesTuple = True}
+      TypeRecord (RowType _ fields) -> meta {
+          pythonModuleMetadataUsesAnnotated = L.foldl checkForAnnotated (pythonModuleMetadataUsesAnnotated meta) fields,
+          pythonModuleMetadataUsesDataclass = pythonModuleMetadataUsesDataclass meta || not (L.null fields)}
+        where
+          checkForAnnotated b (FieldType _ ft) = b || hasTypeDescription ft
+      TypeUnion rt@(RowType _ fields) -> if isEnumRowType rt
+          then meta {pythonModuleMetadataUsesEnum = True}
+          else meta {
+            pythonModuleMetadataUsesNode = pythonModuleMetadataUsesNode meta || (not $ L.null fields)}
+        where
+          checkForLiteral b (FieldType _ ft) = b || EncodeCore.isUnitType (deannotateType ft)
+          checkForNewType b (FieldType _ ft) = b || not (EncodeCore.isUnitType (deannotateType ft))
+      t -> L.foldl (extendMetaForType False isTermAnnot) meta $ subtypes t
 
 findTypeParams :: PythonEnvironment -> Type -> [Name]
 findTypeParams env typ = L.filter isBound $ S.toList $ freeVariablesInType typ
@@ -675,6 +767,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataTypeVariables = S.empty,
       pythonModuleMetadataUsesAnnotated = False,
       pythonModuleMetadataUsesCallable = False,
+      pythonModuleMetadataUsesCast = False,
       pythonModuleMetadataUsesDataclass = False,
       pythonModuleMetadataUsesDecimal = False,
       pythonModuleMetadataUsesEnum = False,
@@ -692,83 +785,6 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
       DefinitionType (TypeDefinition _ typ) -> foldOverType TraversalOrderPre (extendMetaForType True False) meta2 typ
         where
           meta2 = meta {pythonModuleMetadataUsesName = True}
-    extendMetaForTerm topLevel meta t = case t of
-        TermFunction f -> case f of
-          FunctionLambda (Lambda _ (Just dom) body) -> if topLevel
-              then extendMetaForType True False meta2 dom
-              else meta2
-            where
-              meta2 = extendMetaForTerm topLevel meta body
-          _ -> meta
-        TermLet (Let bindings body) -> L.foldl forBinding (extendMetaForTerm False meta body) bindings
-          where
-            forBinding meta (Binding _ term1 (Just ts)) = if isSimpleAssignment term1
-              then meta
-              else extendMetaForType True True (extendMetaForTerm True meta term1) $ typeSchemeType ts
-        TermLiteral l -> case l of
-          LiteralFloat fv -> case fv of
-            FloatValueBigfloat _ -> meta {pythonModuleMetadataUsesDecimal = True}
-            _ -> meta
-          _ -> meta
-        TermMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
-        _ -> meta2
-      where
-        meta2 = L.foldl (extendMetaForTerm False) meta $ subterms t
-    extendMetaForType topLevel isTermAnnot meta typ = extendFor meta3 typ
-      where
-        tvars = pythonModuleMetadataTypeVariables meta
-        meta3 = digForWrap typ
-          where
-            digForWrap typ = case deannotateType typ of
-              TypeForall (ForallType _ body) -> digForWrap body
-              TypeWrap _ -> if isTermAnnot
-                -- No need to import Node for instantiations of a Node type, e.g.
-                --   placeholder_name = hydra.core.Name("Placeholder")
-                then meta2
-                else meta2 {pythonModuleMetadataUsesNode = True}
-              _ -> meta2
-        meta2 = meta {pythonModuleMetadataTypeVariables = newTvars tvars typ}
-          where
-            newTvars s t = case deannotateType t of
-              TypeForall (ForallType v body) -> newTvars (S.insert v s) body
-              _ -> s
-        extendFor meta t = case t of
-          TypeFunction (FunctionType dom cod) -> if isTermAnnot && topLevel
-              -- If a particular term has a function type, don't import Callable; Python has special "def" syntax for functions.
-              then meta3
-              -- If this is a type-level definition, or an *argument* to a function is a function, then we need Callable.
-              else meta3 {pythonModuleMetadataUsesCallable = True}
-            where
-              meta2 = extendMetaForType topLevel isTermAnnot meta cod
-              meta3 = extendMetaForType False isTermAnnot meta2 dom
-          TypeForall (ForallType _ body) -> case baseType body of
-              TypeRecord _ -> meta {pythonModuleMetadataUsesGeneric = True}
-              _ -> meta
-            where
-              baseType t = case deannotateType t of
-                TypeForall (ForallType _ body2) -> baseType body2
-                t2 -> t2
-          TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True}
-          TypeLiteral lt -> case lt of
-            LiteralTypeFloat ft -> case ft of
-              FloatTypeBigfloat -> meta {pythonModuleMetadataUsesDecimal = True}
-              _ -> meta
-            _ -> meta
-          TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
-          TypeProduct _ -> meta {pythonModuleMetadataUsesTuple = True}
-          TypeRecord (RowType _ fields) -> meta {
-              pythonModuleMetadataUsesAnnotated = L.foldl checkForAnnotated (pythonModuleMetadataUsesAnnotated meta) fields,
-              pythonModuleMetadataUsesDataclass = pythonModuleMetadataUsesDataclass meta || not (L.null fields)}
-            where
-              checkForAnnotated b (FieldType _ ft) = b || hasTypeDescription ft
-          TypeUnion rt@(RowType _ fields) -> if isEnumRowType rt
-              then meta {pythonModuleMetadataUsesEnum = True}
-              else meta {
-                pythonModuleMetadataUsesNode = pythonModuleMetadataUsesNode meta || (not $ L.null fields)}
-            where
-              checkForLiteral b (FieldType _ ft) = b || EncodeCore.isUnitType (deannotateType ft)
-              checkForNewType b (FieldType _ ft) = b || not (EncodeCore.isUnitType (deannotateType ft))
-          t -> L.foldl (extendMetaForType False isTermAnnot) meta $ subtypes t
 
 genericArg :: [Name] -> Y.Maybe Py.Expression
 genericArg tparamList = if L.null tparamList
@@ -807,3 +823,13 @@ variantArgs ptype tparams = pyExpressionsToPyArgs $ Y.catMaybes [
     Just $ pyPrimaryToPyExpression $
       primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Node") [ptype],
     genericArg tparams]
+
+inGraphContext :: Flow Graph a -> Flow PyGraph a
+inGraphContext f = do
+  (PyGraph g meta) <- getState
+  (ret, g2) <- withState g $ do
+    ret <- f
+    g2 <- getState
+    return (ret, g2)
+  putState $ PyGraph g2 meta
+  return ret
