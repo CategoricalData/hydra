@@ -156,15 +156,22 @@ encodeFunction env f = case f of
   _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
 encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> Term -> [Type] -> Type -> Maybe String -> [Py.Statement] -> Flow Graph Py.Statement
-encodeFunctionDefinition env name args body doms cod comment prefixes = do
+encodeFunctionDefinition env name args body doms cod0 comment prefixes = do
     pyArgs <- CM.zipWithM toParam args doms
     let params = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters pyArgs [] Nothing
     stmts <- encodeTermMultiline env body
     let block = indentedBlock comment [prefixes ++ stmts]
     returnType <- getType cod
+    let pyTparams = fmap (pyNameToPyTypeParameter . encodeTypeVariable) tparams
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing
-      $ Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) [] (Just params) (Just returnType) Nothing block
+      $ Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) pyTparams (Just params) (Just returnType) Nothing block
   where
+    (tparams, cod) = gatherTypeParameters cod0
+    gatherTypeParameters t = case t of
+      TypeForall (ForallType var tbody) -> (var : params, tbody1)
+        where
+          (params, tbody1) = gatherTypeParameters tbody
+      _ -> ([], t)
     toParam name typ = do
       pyTyp <- getType typ
       return $ Py.ParamNoDefault (Py.Param (encodeName False CaseConventionLowerSnake env name) $ Just $ Py.Annotation pyTyp) Nothing -- TODO
@@ -478,13 +485,8 @@ encodeTermMultiline env term = if L.length args == 1
               return [Py.CaseBlock patterns Nothing body]
           toCaseBlock isEnum (Field fname fterm) = case deannotateTerm fterm of
             TermFunction (FunctionLambda lam@(Lambda v _ body)) -> do
-
                 stmts <- encodeTermMultiline env2 body
                 let pyBody = indentedBlock Nothing [stmts]
-
---                pyReturn <- encodeTermInline env2 body
---                let pyBody = indentedBlock Nothing [[returnSingle pyReturn]]
-
                 return $ Py.CaseBlock (pyClosedPatternToPyPatterns pattern) Nothing pyBody
               where
                 env2 = extendEnvironmentForLambda env lam
