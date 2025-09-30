@@ -155,23 +155,40 @@ encodeFunction env f = case f of
   FunctionPrimitive name -> pure $ pyNameToPyExpression $ encodeName True CaseConventionLowerSnake env name -- Only nullary primitives should appear here.
   _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
-encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> Term -> [Type] -> Type -> Maybe String -> [Py.Statement] -> Flow Graph Py.Statement
-encodeFunctionDefinition env name args body doms cod0 comment prefixes = do
+encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> [Name] -> Term -> [Type] -> Type -> Maybe String -> [Py.Statement] -> Flow Graph Py.Statement
+encodeFunctionDefinition env name tparams args body doms cod comment prefixes = do
     pyArgs <- CM.zipWithM toParam args doms
     let params = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters pyArgs [] Nothing
     stmts <- encodeTermMultiline env body
     let block = indentedBlock comment [prefixes ++ stmts]
     returnType <- getType cod
     let pyTparams = fmap (pyNameToPyTypeParameter . encodeTypeVariable) tparams
+
+
+
+
+
+
+
+--    if name == Name "hydra.formatting.showList" then
+--      fail $ "args: "
+--        ++ show args
+--        ++ "\nbody: " ++ ShowCore.term body
+--        ++ "\ndoms: " ++ (L.intercalate "," (ShowCore.type_ <$> doms))
+--        ++ "\ncod: " ++ ShowCore.type_ cod
+--        ++ "\ntparams: " ++ (L.intercalate ", " (unName <$> tparams))
+--    else
+--      pure ()
+
+
+
+
+
+
+
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing
       $ Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) pyTparams (Just params) (Just returnType) Nothing block
   where
-    (tparams, cod) = gatherTypeParameters cod0
-    gatherTypeParameters t = case t of
-      TypeForall (ForallType var tbody) -> (var : params, tbody1)
-        where
-          (params, tbody1) = gatherTypeParameters tbody
-      _ -> ([], t)
     toParam name typ = do
       pyTyp <- getType typ
       return $ Py.ParamNoDefault (Py.Param (encodeName False CaseConventionLowerSnake env name) $ Just $ Py.Annotation pyTyp) Nothing -- TODO
@@ -363,7 +380,7 @@ encodeRecordType env name (RowType _ tfields) comment = do
 
 encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> Flow Graph Py.Statement
 encodeTermAssignment env name term comment = do
-  (params, bindings, body, doms, cod, env2) <- gatherBindingsAndParams env term
+  (tparams, params, bindings, body, doms, cod, env2) <- gatherBindingsAndParams env term
 
   -- If there are no arguments or let bindings, and if we are not dealing with a case statement,
   -- we can use a simple a = b assignment.
@@ -375,7 +392,7 @@ encodeTermAssignment env name term comment = do
     bindingStmts <- encodeBindings env2 bindings
     g <- getState
     withState (extendGraphWithBindings bindings g) $ do
-      encodeFunctionDefinition env2 name params body doms cod comment bindingStmts
+      encodeFunctionDefinition env2 name tparams params body doms cod comment bindingStmts
 
 -- | Encode a term to an inline Python expression
 encodeTermInline :: PythonEnvironment -> Term -> Flow Graph Py.Expression
@@ -449,7 +466,7 @@ encodeTermMultiline env term = if L.length args == 1
       TermApplication (Application l r) -> gatherArgs (r:rest) l
       t -> (rest, t)
     dflt = do
-      (params, bindings, body, doms, cod, env2) <- gatherBindingsAndParams env term
+      (tparams, params, bindings, body, doms, cod, env2) <- gatherBindingsAndParams env term
       if (L.length params > 0)
         then fail "Functions currently unsupported in this context"
         else pure ()
@@ -642,19 +659,23 @@ gatherArgs term args = case deannotateTerm term of
   TermApplication (Application lhs rhs) -> gatherArgs lhs (rhs:args)
   _ -> (term, args)
 
-gatherBindingsAndParams :: PythonEnvironment -> Term -> Flow s ([Name], [Binding], Term, [Type], Type, PythonEnvironment)
-gatherBindingsAndParams env term = gather env [] [] [] term
+gatherBindingsAndParams :: PythonEnvironment -> Term -> Flow s ([Name], [Name], [Binding], Term, [Type], Type, PythonEnvironment)
+gatherBindingsAndParams env term = gather env [] [] [] [] term
   where
-    gather env prevArgs prevBindings prevDoms term = case deannotateTerm term of
-      TermFunction (FunctionLambda lam@(Lambda var (Just dom) body)) -> gather env2 (var:prevArgs) prevBindings (dom:prevDoms) body
+    gather env prevTparams prevArgs prevBindings prevDoms term = case deannotateTerm term of
+      TermFunction (FunctionLambda lam@(Lambda var (Just dom) body)) -> gather env2 prevTparams (var:prevArgs) prevBindings (dom:prevDoms) body
         where
           env2 = extendEnvironmentForLambda env lam
-      TermLet lt@(Let bindings body) -> gather env2 prevArgs (L.reverse bindings ++ prevBindings) prevDoms body
+      TermLet lt@(Let bindings body) -> gather env2 prevTparams prevArgs (L.reverse bindings ++ prevBindings) prevDoms body
         where
           env2 = extendEnvironmentForLet env lt
+      TermTypeApplication (TypedTerm t _) -> gather env prevTparams prevArgs prevBindings prevDoms t
+      TermTypeLambda tlam@(TypeLambda tvar body) -> gather env2 (tvar:prevTparams) prevArgs prevBindings prevDoms body
+        where
+          env2 = extendEnvironmentForTypeLambda env tlam
       t -> do
         typ <- typeOf (pythonEnvironmentTypeContext env) t
-        return (L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ, env)
+        return (L.reverse prevTparams, L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ, env)
 
 gatherMetadata :: [Definition] -> PythonModuleMetadata
 gatherMetadata defs = checkTvars $ L.foldl addDef start defs
@@ -675,7 +696,9 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataUsesTuple = False,
       pythonModuleMetadataUsesTypeVar = False}
     addDef meta def = case def of
-      DefinitionTerm (TermDefinition _ term _) -> extendMetaForTerm True meta term
+      DefinitionTerm (TermDefinition _ term typ) -> extendMetaForTerm True meta2 term
+        where
+          meta2 = extendMetaForType True True meta typ
       DefinitionType (TypeDefinition _ typ) -> foldOverType TraversalOrderPre (extendMetaForType True False) meta2 typ
         where
           meta2 = meta {pythonModuleMetadataUsesName = True}
