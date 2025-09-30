@@ -381,7 +381,7 @@ encodeRecordType env name (RowType _ tfields) comment = do
 
 encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> Flow PyGraph Py.Statement
 encodeTermAssignment env name term comment = do
-  (tparams, params, bindings, body, doms, cod, env2) <- gatherBindingsAndParams env term
+  (tparams, params, bindings, body, doms, cod, env2) <- withTrace "there" $ gatherBindingsAndParams env term
 
   -- If there are no arguments or let bindings, and if we are not dealing with a case statement,
   -- we can use a simple a = b assignment.
@@ -458,7 +458,7 @@ encodeTermInline env term = case deannotateTerm term of
 
 -- | Encode a term to a list of statements, with the last statement as the return value.
 encodeTermMultiline :: PythonEnvironment -> Term -> Flow PyGraph [Py.Statement]
-encodeTermMultiline env term = if L.length args == 1
+encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.term term) $ if L.length args == 1
     then withArg body (L.head args)
     else dflt
   where
@@ -467,7 +467,7 @@ encodeTermMultiline env term = if L.length args == 1
       TermApplication (Application l r) -> gatherArgs (r:rest) l
       t -> (rest, t)
     dflt = do
-      (tparams, params, bindings, body, doms, cod, env2) <- gatherBindingsAndParams env term
+      (tparams, params, bindings, body, doms, cod, env2) <- withTrace "here" $ gatherBindingsAndParams env term
       if (L.length params > 0)
         then fail "Functions currently unsupported in this context"
         else pure ()
@@ -744,22 +744,23 @@ gatherArgs term args = case deannotateTerm term of
   _ -> (term, args)
 
 gatherBindingsAndParams :: PythonEnvironment -> Term -> Flow s ([Name], [Name], [Binding], Term, [Type], Type, PythonEnvironment)
-gatherBindingsAndParams env term = gather env [] [] [] [] term
+gatherBindingsAndParams env term = withTrace ("gather for " ++ ShowCore.term term) $ gather env [] [] [] [] [] term
   where
-    gather env prevTparams prevArgs prevBindings prevDoms term = case deannotateTerm term of
-      TermFunction (FunctionLambda lam@(Lambda var (Just dom) body)) -> gather env2 prevTparams (var:prevArgs) prevBindings (dom:prevDoms) body
+    gather env tparams args bindings doms tapps term = case deannotateTerm term of
+      TermFunction (FunctionLambda lam@(Lambda var (Just dom) body)) -> gather env2 tparams (var:args) bindings (dom:doms) tapps body
         where
           env2 = extendEnvironmentForLambda env lam
-      TermLet lt@(Let bindings body) -> gather env2 prevTparams prevArgs (L.reverse bindings ++ prevBindings) prevDoms body
+      TermLet lt@(Let bindings body) -> gather env2 tparams args (L.reverse bindings ++ bindings) doms tapps body
         where
           env2 = extendEnvironmentForLet env lt
-      TermTypeApplication (TypedTerm t _) -> gather env prevTparams prevArgs prevBindings prevDoms t
-      TermTypeLambda tlam@(TypeLambda tvar body) -> gather env2 (tvar:prevTparams) prevArgs prevBindings prevDoms body
+      TermTypeApplication (TypedTerm e t) -> gather env tparams args bindings doms (t:tapps) e
+      TermTypeLambda tlam@(TypeLambda tvar body) -> gather env2 (tvar:tparams) args bindings doms tapps body
         where
           env2 = extendEnvironmentForTypeLambda env tlam
       t -> do
-        typ <- typeOf (pythonEnvironmentTypeContext env) t
-        return (L.reverse prevTparams, L.reverse prevArgs, L.reverse prevBindings, t, L.reverse prevDoms, typ, env)
+        let t2 = L.foldl (\trm typ -> TermTypeApplication $ TypedTerm trm typ) t tapps
+        typ <- typeOf (pythonEnvironmentTypeContext env) t2
+        return (L.reverse tparams, L.reverse args, L.reverse bindings, t2, L.reverse doms, typ, env)
 
 gatherMetadata :: [Definition] -> PythonModuleMetadata
 gatherMetadata defs = checkTvars $ L.foldl addDef start defs
