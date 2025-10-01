@@ -189,13 +189,15 @@ encodeFunctionDefinition env name tparams args body doms cod comment prefixes = 
     returnType <- getType cod
     let pyTparams = fmap (pyNameToPyTypeParameter . encodeTypeVariable) tparams
 
---    if name == Name "hydra.show.core.fields"
+--    if name == Name "hydra.show.core.list"
 --    then fail $ "body: " ++ ShowCore.term body
 --      ++ "\ntparams: " ++ L.intercalate ", " (fmap unName tparams)
 --      ++ "\nargs: " ++ L.intercalate ", " (fmap unName args)
 --      ++ "\ndoms: " ++ L.intercalate ", " (fmap ShowCore.type_ doms)
 --      ++ "\ncod: " ++ ShowCore.type_ cod
 --    else return ()
+
+    updateMeta $ extendMetaForTypes (cod:doms)
 
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing $
       Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) pyTparams (Just params) (Just returnType) Nothing block
@@ -756,6 +758,9 @@ extendMetaForType topLevel isTermAnnot meta typ = extendFor meta3 typ
           checkForNewType b (FieldType _ ft) = b || not (EncodeCore.isUnitType (deannotateType ft))
       t -> L.foldl (extendMetaForType False isTermAnnot) meta $ subtypes t
 
+extendMetaForTypes :: [Type] -> PythonModuleMetadata -> PythonModuleMetadata
+extendMetaForTypes types meta = L.foldl (extendMetaForType True False) meta types
+
 findTypeParams :: PythonEnvironment -> Type -> [Name]
 findTypeParams env typ = L.filter isBound $ S.toList $ freeVariablesInType typ
   where
@@ -850,6 +855,11 @@ moduleToPython mod defs = do
   let s = printExpr $ parenthesize $ PySer.encodeModule file
   let path = namespaceToFilePath CaseConventionLowerSnake (FileExtension "py") $ moduleNamespace mod
   return $ M.fromList [(path, s)]
+
+updateMeta :: (PythonModuleMetadata -> PythonModuleMetadata) -> Flow PyGraph ()
+updateMeta f = do
+  (PyGraph g meta) <- getState
+  putState $ PyGraph g (f meta)
 
 variantArgs :: Py.Expression -> [Name] -> Py.Args
 variantArgs ptype tparams = pyExpressionsToPyArgs $ Y.catMaybes [
