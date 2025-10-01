@@ -137,6 +137,11 @@ encodeBindings env bindings = CM.mapM (encodeBinding env) bindings
 encodeDefinition :: PythonEnvironment -> Definition -> Flow PyGraph [[Py.Statement]]
 encodeDefinition env def = case def of
   DefinitionTerm (TermDefinition name term _) -> withTrace ("data element " ++ unName name) $ do
+
+--    if name == Name "hydra.show.core.fields"
+--    then fail $ "fields: " ++ ShowCore.term term
+--    else return ()
+
     comment <- fmap normalizeComment <$> (inGraphContext $ getTermDescription term)
     PyGraph g _ <- getState
     stmt <- encodeTermAssignment env name term comment
@@ -183,6 +188,14 @@ encodeFunctionDefinition env name tparams args body doms cod comment prefixes = 
     let block = indentedBlock comment [prefixes ++ stmts]
     returnType <- getType cod
     let pyTparams = fmap (pyNameToPyTypeParameter . encodeTypeVariable) tparams
+
+--    if name == Name "hydra.show.core.fields"
+--    then fail $ "body: " ++ ShowCore.term body
+--      ++ "\ntparams: " ++ L.intercalate ", " (fmap unName tparams)
+--      ++ "\nargs: " ++ L.intercalate ", " (fmap unName args)
+--      ++ "\ndoms: " ++ L.intercalate ", " (fmap ShowCore.type_ doms)
+--      ++ "\ncod: " ++ ShowCore.type_ cod
+--    else return ()
 
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing $
       Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) pyTparams (Just params) (Just returnType) Nothing block
@@ -390,6 +403,18 @@ encodeTermAssignment env name term comment = do
     return $ annotatedStatement comment $ assignmentStatement (encodeName False CaseConventionLowerSnake env2 name) bodyExpr
   -- Otherwise, only a function definition will work.
   else do
+
+--    if name == Name "hydra.show.core.fields"
+--    then fail $ "term: " ++ ShowCore.term term
+--      ++ "\nterm (raw): " ++ show term
+--      ++ "\ntparams: " ++ L.intercalate ", " (fmap unName tparams)
+--      ++ "\nparams: " ++ L.intercalate ", " (fmap unName params)
+--      ++ "\nbindings: " ++ L.intercalate ", " (fmap ShowCore.binding bindings)
+--      ++ "\nbody: " ++ ShowCore.term body
+--      ++ "\ndoms: " ++ L.intercalate ", " (fmap ShowCore.type_ doms)
+--      ++ "\ncod: " ++ ShowCore.type_ cod
+--    else return ()
+
     bindingStmts <- encodeBindings env2 bindings
     PyGraph g meta <- getState
     putState (PyGraph (extendGraphWithBindings bindings g) meta)
@@ -744,23 +769,28 @@ gatherArgs term args = case deannotateTerm term of
   _ -> (term, args)
 
 gatherBindingsAndParams :: PythonEnvironment -> Term -> Flow s ([Name], [Name], [Binding], Term, [Type], Type, PythonEnvironment)
-gatherBindingsAndParams env term = withTrace ("gather for " ++ ShowCore.term term) $ gather env [] [] [] [] [] term
+gatherBindingsAndParams env term = withTrace ("gather for " ++ ShowCore.term term) $ gather True env [] [] [] [] [] term
   where
-    gather env tparams args bindings doms tapps term = case deannotateTerm term of
-      TermFunction (FunctionLambda lam@(Lambda var (Just dom) body)) -> gather env2 tparams (var:args) bindings (dom:doms) tapps body
-        where
-          env2 = extendEnvironmentForLambda env lam
-      TermLet lt@(Let bindings body) -> gather env2 tparams args (L.reverse bindings ++ bindings) doms tapps body
-        where
-          env2 = extendEnvironmentForLet env lt
-      TermTypeApplication (TypedTerm e t) -> gather env tparams args bindings doms (t:tapps) e
-      TermTypeLambda tlam@(TypeLambda tvar body) -> gather env2 (tvar:tparams) args bindings doms tapps body
-        where
-          env2 = extendEnvironmentForTypeLambda env tlam
-      t -> do
-        let t2 = L.foldl (\trm typ -> TermTypeApplication $ TypedTerm trm typ) t tapps
-        typ <- typeOf (pythonEnvironmentTypeContext env) t2
-        return (L.reverse tparams, L.reverse args, L.reverse bindings, t2, L.reverse doms, typ, env)
+    gather argMode env tparams args bindings doms tapps term = case deannotateTerm term of
+        TermFunction (FunctionLambda lam@(Lambda var (Just dom) body)) -> if argMode
+            then gather argMode env2 tparams (var:args) bindings (dom:doms) tapps body
+            else finish term
+          where
+            env2 = extendEnvironmentForLambda env lam
+        TermLet lt@(Let bindings2 body) -> gather False env2 tparams args (bindings ++ bindings2) doms tapps body
+          where
+            env2 = extendEnvironmentForLet env lt
+        TermTypeApplication (TypedTerm e t) -> gather argMode env tparams args bindings doms (t:tapps) e
+        TermTypeLambda tlam@(TypeLambda tvar body) -> gather argMode env2 (tvar:tparams) args bindings doms tapps body
+          where
+            env2 = extendEnvironmentForTypeLambda env tlam
+        t -> finish t
+      where
+        finish t = do
+            typ <- typeOf (pythonEnvironmentTypeContext env) t2
+            return (L.reverse tparams, L.reverse args, bindings, t2, L.reverse doms, typ, env)
+          where
+            t2 = L.foldl (\trm typ -> TermTypeApplication $ TypedTerm trm typ) t tapps
 
 gatherMetadata :: [Definition] -> PythonModuleMetadata
 gatherMetadata defs = checkTvars $ L.foldl addDef start defs
