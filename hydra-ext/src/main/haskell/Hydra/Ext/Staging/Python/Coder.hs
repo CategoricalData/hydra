@@ -15,6 +15,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Sorting as Sorting
 import Hydra.Dsl.ShorthandTypes
 import Hydra.Formatting
+import Hydra.Sources.Libraries
 
 import qualified Control.Monad as CM
 import qualified Data.List  as L
@@ -82,10 +83,13 @@ encodeApplication env app = do
     else
       return pyapp
   where
+    -- Note: this extreme special case is to be expanded as needed
     needsCast term typ = case typ of
       TypeMap _ -> case deannotateAndDetypeTerm term of
         TermMap _ -> False
-        _ -> True
+        t -> t == TermFunction (FunctionPrimitive _maps_fromList)
+          where
+            f = fst $ gatherArgs t []
       _ -> False
     (fun, args) = gatherArgs (TermApplication app) []
     applyArgs hargs = case fun of
