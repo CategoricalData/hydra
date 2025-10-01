@@ -78,57 +78,57 @@ readTermDef = define "readTerm" $
 bindingDef :: TBinding (Binding -> String)
 bindingDef = define "binding" $
   doc "Show a binding as a string" $
-  lambda "el" $ lets [
-    "name">: unwrap _Name @@ (Core.bindingName $ var "el"),
-    "t">: Core.bindingTerm $ var "el",
-    "typeStr">: Optionals.maybe
-      (string "")
-      (lambda "ts" $ Strings.cat2 (string " : ") (ref typeSchemeDef @@ var "ts"))
-      (Core.bindingType $ var "el")] $
-    Strings.cat $ list [
-      var "name",
-      string " = ",
-      ref termDef @@ var "t",
-      var "typeStr"]
+  "el" ~>
+  "name" <~ unwrap _Name @@ (Core.bindingName $ var "el") $
+  "t" <~ Core.bindingTerm (var "el") $
+  "typeStr" <~ Optionals.maybe
+    (string "")
+    ("ts" ~> Strings.cat2 (string " : ") (ref typeSchemeDef @@ var "ts"))
+    (Core.bindingType $ var "el") $
+  Strings.cat $ list [
+    var "name",
+    string " = ",
+    ref termDef @@ var "t",
+    var "typeStr"]
       
 eliminationDef :: TBinding (Elimination -> String)
 eliminationDef = define "elimination" $
   doc "Show an elimination as a string" $
-  lambda "elm" $ cases _Elimination (var "elm") Nothing [
-    _Elimination_product>>: lambda "tp" $ lets [
-      "arity">: Core.tupleProjectionArity $ var "tp",
-      "index">: Core.tupleProjectionIndex $ var "tp",
-      "domain">: Core.tupleProjectionDomain $ var "tp"] $ -- TODO: show domain if present
+  "elm" ~> cases _Elimination (var "elm") Nothing [
+    _Elimination_product>>: "tp" ~>
+      "arity" <~ Core.tupleProjectionArity (var "tp") $
+      "index" <~ Core.tupleProjectionIndex (var "tp") $
+      "domain" <~ Core.tupleProjectionDomain (var "tp") $ -- TODO: show domain if present
       Strings.cat $ list [
         string "[",
         Literals.showInt32 $ var "index",
         string "/",
         Literals.showInt32 $ var "arity",
         string "]"],
-    _Elimination_record>>: lambda "proj" $ lets [
-      "tname">: unwrap _Name @@ (Core.projectionTypeName $ var "proj"),
-      "fname">: unwrap _Name @@ (Core.projectionField $ var "proj")] $
+    _Elimination_record>>: "proj" ~>
+      "tname" <~ unwrap _Name @@ (Core.projectionTypeName $ var "proj") $
+      "fname" <~ unwrap _Name @@ (Core.projectionField $ var "proj") $
       Strings.cat $ list [
         string "project(",
         var "tname",
         string "){",
         var "fname",
         string "}"],
-    _Elimination_union>>: lambda "cs" $ lets [
-      "tname">: unwrap _Name @@ (Core.caseStatementTypeName $ var "cs"),
-      "mdef">: Core.caseStatementDefault $ var "cs",
-      "cases">: Core.caseStatementCases $ var "cs",
-      "defaultField">: Optionals.maybe
+    _Elimination_union>>: "cs" ~>
+      "tname" <~ unwrap _Name @@ (Core.caseStatementTypeName $ var "cs") $
+      "mdef" <~ Core.caseStatementDefault (var "cs") $
+      "cases" <~ Core.caseStatementCases (var "cs") $
+      "defaultField" <~ Optionals.maybe
         (list [])
-        (lambda "d" $ list [Core.field (Core.name $ string "[default]") (var "d")])
-        (var "mdef"),
-      "allFields">: Lists.concat $ list [var "cases", var "defaultField"]] $
+        ("d" ~> list [Core.field (Core.name $ string "[default]") (var "d")])
+        (var "mdef") $
+      "allFields" <~ Lists.concat (list [var "cases", var "defaultField"]) $
       Strings.cat $ list [
         string "case(",
         var "tname",
         string ")",
         ref fieldsDef @@ var "allFields"],
-    _Elimination_wrap>>: lambda "tname" $ Strings.cat $ list [
+    _Elimination_wrap>>: "tname" ~> Strings.cat $ list [
       string "unwrap(",
       unwrap _Name @@ var "tname",
       string ")"]]
@@ -136,21 +136,21 @@ eliminationDef = define "elimination" $
 fieldsDef :: TBinding ([Field] -> String)
 fieldsDef = define "fields" $
   doc "Show a list of fields as a string" $
-  lambda "flds" $ lets [
-    "showField">: lambda "field" $ lets [
-      "fname">: unwrap _Name @@ (Core.fieldName $ var "field"),
-      "fterm">: Core.fieldTerm $ var "field"] $
-      Strings.cat2 (var "fname") $ Strings.cat2 (string "=") (ref termDef @@ var "fterm"),
-    "fieldStrs">: Lists.map (var "showField") (var "flds")] $
-    Strings.cat $ list [
-      string "{",
-      Strings.intercalate (string ", ") (var "fieldStrs"),
-      string "}"]
+  "flds" ~>
+  "showField" <~ ("field" ~>
+    "fname" <~ unwrap _Name @@ (Core.fieldName $ var "field") $
+    "fterm" <~ Core.fieldTerm (var "field") $
+    Strings.cat2 (var "fname") $ Strings.cat2 (string "=") (ref termDef @@ var "fterm")) $
+  "fieldStrs" <~ Lists.map (var "showField") (var "flds") $
+  Strings.cat $ list [
+    string "{",
+    Strings.intercalate (string ", ") (var "fieldStrs"),
+    string "}"]
 
 floatValueDef :: TBinding (FloatValue -> String)
 floatValueDef = define "float" $
   doc "Show a float value as a string" $
-  lambda "fv" $ cases _FloatValue (var "fv") Nothing [
+  "fv" ~> cases _FloatValue (var "fv") Nothing [
     _FloatValue_bigfloat>>: "v" ~> Literals.showBigfloat (var "v") ++ ":bigfloat",
     _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v") ++ ":float32",
     _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v") ++ ":float64"]
@@ -158,7 +158,7 @@ floatValueDef = define "float" $
 floatTypeDef :: TBinding (FloatType -> String)
 floatTypeDef = define "floatType" $
   doc "Show a float type as a string" $
-  lambda "ft" $ cases _FloatType (var "ft") Nothing [
+  "ft" ~> cases _FloatType (var "ft") Nothing [
     _FloatType_bigfloat>>: constant $ string "bigfloat",
     _FloatType_float32>>: constant $ string "float32",
     _FloatType_float64>>: constant $ string "float64"]
@@ -166,10 +166,10 @@ floatTypeDef = define "floatType" $
 functionDef :: TBinding (Function -> String)
 functionDef = define "function" $
   doc "Show a function as a string" $
-  lambda "f" $ cases _Function (var "f") Nothing [
+  "f" ~> cases _Function (var "f") Nothing [
     _Function_elimination>>: ref eliminationDef,
     _Function_lambda>>: ref lambdaDef,
-    _Function_primitive>>: lambda "name" $ Strings.cat2 (unwrap _Name @@ var "name") (string "!")]
+    _Function_primitive>>: "name" ~> Strings.cat2 (unwrap _Name @@ var "name") (string "!")]
 
 injectionDef :: TBinding (Injection -> String)
 injectionDef = define "injection" $
@@ -186,7 +186,7 @@ injectionDef = define "injection" $
 integerValueDef :: TBinding (IntegerValue -> String)
 integerValueDef = define "integer" $
   doc "Show an integer value as a string" $
-  lambda "iv" $ cases _IntegerValue (var "iv") Nothing [
+  "iv" ~> cases _IntegerValue (var "iv") Nothing [
     _IntegerValue_bigint>>: "v" ~> Literals.showBigint (var "v") ++ ":bigint",
     _IntegerValue_int8>>: "v" ~> Literals.showInt8 (var "v") ++ ":int8",
     _IntegerValue_int16>>: "v" ~> Literals.showInt16 (var "v") ++ ":int16",
@@ -200,7 +200,7 @@ integerValueDef = define "integer" $
 integerTypeDef :: TBinding (IntegerType -> String)
 integerTypeDef = define "integerType" $
   doc "Show an integer type as a string" $
-  lambda "it" $ cases _IntegerType (var "it") Nothing [
+  "it" ~> cases _IntegerType (var "it") Nothing [
     _IntegerType_bigint>>: constant $ string "bigint",
     _IntegerType_int8>>: constant $ string "int8",
     _IntegerType_int16>>: constant $ string "int16",
@@ -214,271 +214,271 @@ integerTypeDef = define "integerType" $
 lambdaDef :: TBinding (Lambda -> String)
 lambdaDef = define "lambda" $
   doc "Show a lambda as a string" $
-  lambda "l" $ lets [
-    "v">: unwrap _Name @@ (Core.lambdaParameter $ var "l"),
-    "mt">: Core.lambdaDomain $ var "l",
-    "body">: Core.lambdaBody $ var "l",
-    "typeStr">: Optionals.maybe
-      (string "")
-      (lambda "t" $ Strings.cat2 (string ":") (ref typeDef @@ var "t"))
-      (var "mt")] $
-    Strings.cat $ list [
-      string "λ",
-      var "v",
-      var "typeStr",
-      string ".",
-      ref termDef @@ var "body"]
+  "l" ~>
+  "v" <~ unwrap _Name @@ (Core.lambdaParameter $ var "l") $
+  "mt" <~ Core.lambdaDomain (var "l") $
+  "body" <~ Core.lambdaBody (var "l") $
+  "typeStr" <~ Optionals.maybe
+    (string "")
+    ("t" ~> Strings.cat2 (string ":") (ref typeDef @@ var "t"))
+    (var "mt") $
+  Strings.cat $ list [
+    string "λ",
+    var "v",
+    var "typeStr",
+    string ".",
+    ref termDef @@ var "body"]
 
 listDef :: TBinding ((a -> String) -> [a] -> String)
 listDef = define "list" $
   doc "Show a list using a given function to show each element" $
-  lambdas ["f", "xs"] $ lets [
-    "elementStrs">: Lists.map (var "f") (var "xs")] $
-    Strings.cat $ list [
-      string "[",
-      Strings.intercalate (string ", ") (var "elementStrs"),
-      string "]"]
+  "f" ~> "xs" ~>
+  "elementStrs" <~ Lists.map (var "f") (var "xs") $
+  Strings.cat $ list [
+    string "[",
+    Strings.intercalate (string ", ") (var "elementStrs"),
+    string "]"]
 
 literalDef :: TBinding (Literal -> String)
 literalDef = define "literal" $
   doc "Show a literal as a string" $
-  lambda "l" $ cases _Literal (var "l") Nothing [
+  "l" ~> cases _Literal (var "l") Nothing [
     _Literal_binary>>: constant $ string "[binary]",
-    _Literal_boolean>>: lambda "b" $ Logic.ifElse (var "b") (string "true") (string "false"),
-    _Literal_float>>: lambda "fv" $ ref floatValueDef @@ var "fv",
-    _Literal_integer>>: lambda "iv" $ ref integerValueDef @@ var "iv",
-    _Literal_string>>: lambda "s" $ Literals.showString $ var "s"]
+    _Literal_boolean>>: "b" ~> Logic.ifElse (var "b") (string "true") (string "false"),
+    _Literal_float>>: "fv" ~> ref floatValueDef @@ var "fv",
+    _Literal_integer>>: "iv" ~> ref integerValueDef @@ var "iv",
+    _Literal_string>>: "s" ~> Literals.showString $ var "s"]
 
 literalTypeDef :: TBinding (LiteralType -> String)
 literalTypeDef = define "literalType" $
   doc "Show a literal type as a string" $
-  lambda "lt" $ cases _LiteralType (var "lt") Nothing [
+  "lt" ~> cases _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $ string "binary",
     _LiteralType_boolean>>: constant $ string "boolean",
-    _LiteralType_float>>: lambda "ft" $ ref floatTypeDef @@ var "ft",
-    _LiteralType_integer>>: lambda "it" $ ref integerTypeDef @@ var "it",
+    _LiteralType_float>>: "ft" ~> ref floatTypeDef @@ var "ft",
+    _LiteralType_integer>>: "it" ~> ref integerTypeDef @@ var "it",
     _LiteralType_string>>: constant $ string "string"]
 
 termDef :: TBinding (Term -> String)
 termDef = define "term" $
   doc "Show a term as a string" $
-  lambda "t" $ lets [
-    "gatherTerms">: lambdas ["prev", "app"] $ lets [
-      "lhs">: Core.applicationFunction $ var "app",
-      "rhs">: Core.applicationArgument $ var "app"] $
-      cases _Term (var "lhs")
-        (Just $ Lists.cons (var "lhs") (Lists.cons (var "rhs") (var "prev"))) [
-        _Term_application>>: lambda "app2" $ var "gatherTerms" @@ (Lists.cons (var "rhs") (var "prev")) @@ var "app2"]] $
-    cases _Term (var "t") Nothing [
-      _Term_annotated>>: lambda "at" $ ref termDef @@ (Core.annotatedTermSubject $ var "at"),
-      _Term_application>>: lambda "app" $ lets [
-        "terms">: var "gatherTerms" @@ (list []) @@ var "app",
-        "termStrs">: Lists.map (ref termDef) (var "terms")] $
-        Strings.cat $ list [
-          string "(",
-          Strings.intercalate (string " @ ") (var "termStrs"),
-          string ")"],
-      _Term_function>>: ref functionDef,
-      _Term_let>>: lambda "l" $ lets [
-        "bindings">: Core.letBindings $ var "l",
-        "env">: Core.letEnvironment $ var "l",
-        "bindingStrs">: Lists.map (ref bindingDef) (var "bindings")] $
-        Strings.cat $ list [
-          string "let ",
-          Strings.intercalate (string ", ") (var "bindingStrs"),
-          string " in ",
-          ref termDef @@ var "env"],
-      _Term_list>>: lambda "els" $ lets [
-        "termStrs">: Lists.map (ref termDef) (var "els")] $
-        Strings.cat $ list [
-          string "[",
-          Strings.intercalate (string ", ") (var "termStrs"),
-          string "]"],
-      _Term_literal>>: lambda "lit" $ ref literalDef @@ var "lit",
-      _Term_map>>: lambda "m" $ lets [
-        "entry">: lambda "p" $ Strings.cat $ list [
-          ref termDef @@ (first $ var "p"),
-          string "=",
-          ref termDef @@ (second $ var "p")]] $
-        Strings.cat $ list [
-          string "{",
-          Strings.intercalate (string ", ") $ Lists.map (var "entry") $ Maps.toList $ var "m",
-          string "}"],
-      _Term_optional>>: lambda "mt" $ Optionals.maybe
-        (string "nothing")
-        (lambda "t" $ Strings.cat $ list [
-          string "just(",
-          ref termDef @@ var "t",
-          string ")"])
-        (var "mt"),
-      _Term_product>>: lambda "els" $ lets [
-        "termStrs">: Lists.map (ref termDef) (var "els")] $
-        Strings.cat $ list [
-          string "(",
-          Strings.intercalate (string ", ") (var "termStrs"),
-          string ")"],
-      _Term_record>>: lambda "rec" $ lets [
-        "tname">: unwrap _Name @@ (Core.recordTypeName $ var "rec"),
-        "flds">: Core.recordFields $ var "rec"] $
-        Strings.cat $ list [
-          string "record(",
-          var "tname",
-          string ")",
-          ref fieldsDef @@ var "flds"],
-      _Term_set>>: lambda "s" $
-        Strings.cat $ list [
-          string "{",
-          Strings.intercalate (string ", ") (Lists.map (ref termDef) $ Sets.toList $ var "s"),
-          string "}"],
-      _Term_sum>>: lambda "s" $ lets [
-        "index">: Core.sumIndex $ var "s",
-        "size">: Core.sumSize $ var "s",
-        "t2">: Core.sumTerm $ var "s"] $
-        Strings.cat $ list [
-          string "(",
-          Literals.showInt32 $ var "index",
-          string "/",
-          Literals.showInt32 $ var "size",
-          string "=",
-          ref termDef @@ var "t2",
-          string ")"],
-      _Term_typeLambda>>: lambda "ta" $ lets [
-        "param">: unwrap _Name @@ (Core.typeLambdaParameter $ var "ta"),
-        "body">: Core.typeLambdaBody $ var "ta"] $
-        Strings.cat $ list [
-          string "Λ",
-          var "param",
-          string ".",
-          ref termDef @@ var "body"],
-      _Term_typeApplication>>: lambda "tt" $ lets [
-        "t2">: Core.typedTermTerm $ var "tt",
-        "typ">: Core.typedTermType $ var "tt"] $
-        Strings.cat $ list [
-          ref termDef @@ var "t2",
-          string "⟨",
-          ref typeDef @@ var "typ",
-          string "⟩"],
-      _Term_union>>: ref injectionDef,
-      _Term_unit>>: constant $ string "unit",
-      _Term_variable>>: lambda "name" $ unwrap _Name @@ var "name",
-      _Term_wrap>>: lambda "wt" $ lets [
-        "tname">: unwrap _Name @@ (Core.wrappedTermTypeName $ var "wt"),
-        "term1">: Core.wrappedTermObject $ var "wt"] $
-        Strings.cat $ list [
-          string "wrap(",
-          var "tname",
-          string "){",
-          ref termDef @@ var "term1",
-          string "}"]]
+  "t" ~>
+  "gatherTerms" <~ ("prev" ~> "app" ~>
+    "lhs" <~ Core.applicationFunction (var "app") $
+    "rhs" <~ Core.applicationArgument (var "app") $
+    cases _Term (var "lhs")
+      (Just $ Lists.cons (var "lhs") (Lists.cons (var "rhs") (var "prev"))) [
+      _Term_application>>: "app2" ~> var "gatherTerms" @@ (Lists.cons (var "rhs") (var "prev")) @@ var "app2"]) $
+  cases _Term (var "t") Nothing [
+    _Term_annotated>>: "at" ~> ref termDef @@ (Core.annotatedTermSubject $ var "at"),
+    _Term_application>>: "app" ~>
+      "terms" <~ var "gatherTerms" @@ (list []) @@ var "app" $
+      "termStrs" <~ Lists.map (ref termDef) (var "terms") $
+      Strings.cat $ list [
+        string "(",
+        Strings.intercalate (string " @ ") (var "termStrs"),
+        string ")"],
+    _Term_function>>: ref functionDef,
+    _Term_let>>: "l" ~>
+      "bindings" <~ Core.letBindings (var "l") $
+      "env" <~ Core.letEnvironment (var "l") $
+      "bindingStrs" <~ Lists.map (ref bindingDef) (var "bindings") $
+      Strings.cat $ list [
+        string "let ",
+        Strings.intercalate (string ", ") (var "bindingStrs"),
+        string " in ",
+        ref termDef @@ var "env"],
+    _Term_list>>: "els" ~>
+      "termStrs" <~ Lists.map (ref termDef) (var "els") $
+      Strings.cat $ list [
+        string "[",
+        Strings.intercalate (string ", ") (var "termStrs"),
+        string "]"],
+    _Term_literal>>: "lit" ~> ref literalDef @@ var "lit",
+    _Term_map>>: "m" ~>
+      "entry" <~ ("p" ~> Strings.cat $ list [
+        ref termDef @@ (first $ var "p"),
+        string "=",
+        ref termDef @@ (second $ var "p")]) $
+      Strings.cat $ list [
+        string "{",
+        Strings.intercalate (string ", ") $ Lists.map (var "entry") $ Maps.toList $ var "m",
+        string "}"],
+    _Term_optional>>: "mt" ~> Optionals.maybe
+      (string "nothing")
+      ("t" ~> Strings.cat $ list [
+        string "just(",
+        ref termDef @@ var "t",
+        string ")"])
+      (var "mt"),
+    _Term_product>>: "els" ~>
+      "termStrs" <~ Lists.map (ref termDef) (var "els") $
+      Strings.cat $ list [
+        string "(",
+        Strings.intercalate (string ", ") (var "termStrs"),
+        string ")"],
+    _Term_record>>: "rec" ~>
+      "tname" <~ unwrap _Name @@ (Core.recordTypeName $ var "rec") $
+      "flds" <~ Core.recordFields (var "rec") $
+      Strings.cat $ list [
+        string "record(",
+        var "tname",
+        string ")",
+        ref fieldsDef @@ var "flds"],
+    _Term_set>>: "s" ~>
+      Strings.cat $ list [
+        string "{",
+        Strings.intercalate (string ", ") (Lists.map (ref termDef) $ Sets.toList $ var "s"),
+        string "}"],
+    _Term_sum>>: "s" ~>
+      "index" <~ Core.sumIndex (var "s") $
+      "size" <~ Core.sumSize (var "s") $
+      "t2" <~ Core.sumTerm (var "s") $
+      Strings.cat $ list [
+        string "(",
+        Literals.showInt32 $ var "index",
+        string "/",
+        Literals.showInt32 $ var "size",
+        string "=",
+        ref termDef @@ var "t2",
+        string ")"],
+    _Term_typeLambda>>: "ta" ~>
+      "param" <~ unwrap _Name @@ (Core.typeLambdaParameter $ var "ta") $
+      "body" <~ Core.typeLambdaBody (var "ta") $
+      Strings.cat $ list [
+        string "Λ",
+        var "param",
+        string ".",
+        ref termDef @@ var "body"],
+    _Term_typeApplication>>: "tt" ~>
+      "t2" <~ Core.typedTermTerm (var "tt") $
+      "typ" <~ Core.typedTermType (var "tt") $
+      Strings.cat $ list [
+        ref termDef @@ var "t2",
+        string "⟨",
+        ref typeDef @@ var "typ",
+        string "⟩"],
+    _Term_union>>: ref injectionDef,
+    _Term_unit>>: constant $ string "unit",
+    _Term_variable>>: "name" ~> unwrap _Name @@ var "name",
+    _Term_wrap>>: "wt" ~>
+      "tname" <~ unwrap _Name @@ (Core.wrappedTermTypeName $ var "wt") $
+      "term1" <~ Core.wrappedTermObject (var "wt") $
+      Strings.cat $ list [
+        string "wrap(",
+        var "tname",
+        string "){",
+        ref termDef @@ var "term1",
+        string "}"]]
 
 typeDef :: TBinding (Type -> String)
 typeDef = define "type" $
   doc "Show a type as a string" $
-  lambda "typ" $ lets [
-    "showFieldType">: lambda "ft" $ lets [
-      "fname">: unwrap _Name @@ (Core.fieldTypeName $ var "ft"),
-      "ftyp">: Core.fieldTypeType $ var "ft"] $
+  "typ" ~>
+  "showFieldType" <~ ("ft" ~>
+    "fname" <~ unwrap _Name @@ (Core.fieldTypeName $ var "ft") $
+    "ftyp" <~ Core.fieldTypeType (var "ft") $
+    Strings.cat $ list [
+      var "fname",
+      string ":",
+      ref typeDef @@ var "ftyp"]) $
+  "showRowType" <~ ("rt" ~>
+    "flds" <~ Core.rowTypeFields (var "rt") $
+    "fieldStrs" <~ Lists.map (var "showFieldType") (var "flds") $
+    Strings.cat $ list [
+      string "{",
+      Strings.intercalate (string ", ") (var "fieldStrs"),
+      string "}"]) $
+  "gatherTypes" <~ ("prev" ~> "app" ~>
+    "lhs" <~ Core.applicationTypeFunction (var "app") $
+    "rhs" <~ Core.applicationTypeArgument (var "app") $
+    cases _Type (var "lhs")
+      (Just $ Lists.cons (var "lhs") (Lists.cons (var "rhs") (var "prev"))) [
+      _Type_application>>: "app2" ~> var "gatherTypes" @@ (Lists.cons (var "rhs") (var "prev")) @@ var "app2"]) $
+  "gatherFunctionTypes" <~ ("prev" ~> "t" ~>
+    cases _Type (var "t")
+      (Just $ Lists.reverse $ Lists.cons (var "t") (var "prev")) [
+        _Type_function>>: "ft" ~>
+          "dom" <~ Core.functionTypeDomain (var "ft") $
+          "cod" <~ Core.functionTypeCodomain (var "ft") $
+          var "gatherFunctionTypes" @@ (Lists.cons (var "dom") (var "prev")) @@ var "cod"]) $
+  cases _Type (var "typ") Nothing [
+    _Type_annotated>>: "at" ~> ref typeDef @@ (Core.annotatedTypeSubject $ var "at"),
+    _Type_application>>: "app" ~>
+      "types" <~ var "gatherTypes" @@ (list []) @@ var "app" $
+      "typeStrs" <~ Lists.map (ref typeDef) (var "types") $
       Strings.cat $ list [
-        var "fname",
-        string ":",
-        ref typeDef @@ var "ftyp"],
-    "showRowType">: lambda "rt" $ lets [
-      "flds">: Core.rowTypeFields $ var "rt",
-      "fieldStrs">: Lists.map (var "showFieldType") (var "flds")] $
+        string "(",
+        Strings.intercalate (string " @ ") (var "typeStrs"),
+        string ")"],
+    _Type_forall>>: "ft" ~>
+      "var" <~ unwrap _Name @@ (Core.forallTypeParameter $ var "ft") $
+      "body" <~ Core.forallTypeBody (var "ft") $
       Strings.cat $ list [
-        string "{",
-        Strings.intercalate (string ", ") (var "fieldStrs"),
-        string "}"],
-    "gatherTypes">: lambdas ["prev", "app"] $ lets [
-      "lhs">: Core.applicationTypeFunction $ var "app",
-      "rhs">: Core.applicationTypeArgument $ var "app"] $
-      cases _Type (var "lhs")
-        (Just $ Lists.cons (var "lhs") (Lists.cons (var "rhs") (var "prev"))) [
-        _Type_application>>: lambda "app2" $ var "gatherTypes" @@ (Lists.cons (var "rhs") (var "prev")) @@ var "app2"],
-    "gatherFunctionTypes">: lambdas ["prev", "t"] $
-      cases _Type (var "t")
-        (Just $ Lists.reverse $ Lists.cons (var "t") (var "prev")) [
-          _Type_function>>: lambda "ft" $ lets [
-            "dom">: Core.functionTypeDomain $ var "ft",
-            "cod">: Core.functionTypeCodomain $ var "ft"] $
-            var "gatherFunctionTypes" @@ (Lists.cons (var "dom") (var "prev")) @@ var "cod"]] $
-    cases _Type (var "typ") Nothing [
-      _Type_annotated>>: lambda "at" $ ref typeDef @@ (Core.annotatedTypeSubject $ var "at"),
-      _Type_application>>: lambda "app" $ lets [
-        "types">: var "gatherTypes" @@ (list []) @@ var "app",
-        "typeStrs">: Lists.map (ref typeDef) (var "types")] $
-        Strings.cat $ list [
-          string "(",
-          Strings.intercalate (string " @ ") (var "typeStrs"),
-          string ")"],
-      _Type_forall>>: lambda "ft" $ lets [
-        "var">: unwrap _Name @@ (Core.forallTypeParameter $ var "ft"),
-        "body">: Core.forallTypeBody $ var "ft"] $
-        Strings.cat $ list [
-          string "(∀",
-          var "var",
-          string ".",
-          ref typeDef @@ var "body",
-          string ")"],
-      _Type_function>>: lambda "ft" $ lets [
-        "types">: var "gatherFunctionTypes" @@ (list []) @@ var "typ",
-        "typeStrs">: Lists.map (ref typeDef) (var "types")] $
-        Strings.cat $ list [
-          string "(",
-          Strings.intercalate (string " → ") (var "typeStrs"),
-          string ")"],
-      _Type_list>>: lambda "etyp" $ Strings.cat $ list [
-        string "list<",
-        ref typeDef @@ var "etyp",
+        string "(∀",
+        var "var",
+        string ".",
+        ref typeDef @@ var "body",
+        string ")"],
+    _Type_function>>: "ft" ~>
+      "types" <~ var "gatherFunctionTypes" @@ (list []) @@ var "typ" $
+      "typeStrs" <~ Lists.map (ref typeDef) (var "types") $
+      Strings.cat $ list [
+        string "(",
+        Strings.intercalate (string " → ") (var "typeStrs"),
+        string ")"],
+    _Type_list>>: "etyp" ~> Strings.cat $ list [
+      string "list<",
+      ref typeDef @@ var "etyp",
+      string ">"],
+    _Type_literal>>: "lt" ~> ref literalTypeDef @@ var "lt",
+    _Type_map>>: "mt" ~>
+      "keyTyp" <~ Core.mapTypeKeys (var "mt") $
+      "valTyp" <~ Core.mapTypeValues (var "mt") $
+      Strings.cat $ list [
+        string "map<",
+        ref typeDef @@ var "keyTyp",
+        string ", ",
+        ref typeDef @@ var "valTyp",
         string ">"],
-      _Type_literal>>: lambda "lt" $ ref literalTypeDef @@ var "lt",
-      _Type_map>>: lambda "mt" $ lets [
-        "keyTyp">: Core.mapTypeKeys $ var "mt",
-        "valTyp">: Core.mapTypeValues $ var "mt"] $
-        Strings.cat $ list [
-          string "map<",
-          ref typeDef @@ var "keyTyp",
-          string ", ",
-          ref typeDef @@ var "valTyp",
-          string ">"],
-      _Type_optional>>: lambda "etyp" $ Strings.cat $ list [
-        string "optional<",
-        ref typeDef @@ var "etyp",
-        string ">"],
-      _Type_product>>: lambda "types" $ lets [
-        "typeStrs">: Lists.map (ref typeDef) (var "types")] $
-        Strings.intercalate (string "×") (var "typeStrs"),
-      _Type_record>>: lambda "rt" $ Strings.cat2 (string "record") (var "showRowType" @@ var "rt"),
-      _Type_set>>: lambda "etyp" $ Strings.cat $ list [
-        string "set<",
-        ref typeDef @@ var "etyp",
-        string ">"],
-      _Type_sum>>: lambda "types" $ lets [
-        "typeStrs">: Lists.map (ref typeDef) (var "types")] $
-        Strings.intercalate (string "+") (var "typeStrs"),
-      _Type_union>>: lambda "rt" $ Strings.cat2 (string "union") (var "showRowType" @@ var "rt"),
-      _Type_unit>>: constant $ string "unit",
-      _Type_variable>>: lambda "name" $ unwrap _Name @@ var "name",
-      _Type_wrap>>: lambda "wt" $ lets [
-        "tname">: unwrap _Name @@ (Core.wrappedTypeTypeName $ var "wt"),
-        "typ1">: Core.wrappedTypeObject $ var "wt"] $
-        Strings.cat $ list [string "wrap[", var "tname", string "](", ref typeDef @@ var "typ1", string ")"]]
+    _Type_optional>>: "etyp" ~> Strings.cat $ list [
+      string "optional<",
+      ref typeDef @@ var "etyp",
+      string ">"],
+    _Type_product>>: "types" ~>
+      "typeStrs" <~ Lists.map (ref typeDef) (var "types") $
+      Strings.intercalate (string "×") (var "typeStrs"),
+    _Type_record>>: "rt" ~> Strings.cat2 (string "record") (var "showRowType" @@ var "rt"),
+    _Type_set>>: "etyp" ~> Strings.cat $ list [
+      string "set<",
+      ref typeDef @@ var "etyp",
+      string ">"],
+    _Type_sum>>: "types" ~>
+      "typeStrs" <~ Lists.map (ref typeDef) (var "types") $
+      Strings.intercalate (string "+") (var "typeStrs"),
+    _Type_union>>: "rt" ~> Strings.cat2 (string "union") (var "showRowType" @@ var "rt"),
+    _Type_unit>>: constant $ string "unit",
+    _Type_variable>>: "name" ~> unwrap _Name @@ var "name",
+    _Type_wrap>>: "wt" ~>
+      "tname" <~ unwrap _Name @@ (Core.wrappedTypeTypeName $ var "wt") $
+      "typ1" <~ Core.wrappedTypeObject (var "wt") $
+      Strings.cat $ list [string "wrap[", var "tname", string "](", ref typeDef @@ var "typ1", string ")"]]
 
 typeSchemeDef :: TBinding (TypeScheme -> String)
 typeSchemeDef = define "typeScheme" $
   doc "Show a type scheme as a string" $
-  lambda "ts" $ lets [
-    "vars">: Core.typeSchemeVariables $ var "ts",
-    "body">: Core.typeSchemeType $ var "ts",
-    "varNames">: Lists.map (unwrap _Name) (var "vars"),
-    "fa">: Logic.ifElse (Lists.null $ var "vars")
-      (string "")
-      (Strings.cat $ list [
-        string "∀[",
-        Strings.intercalate (string ",") (var "varNames"),
-        string "]."])] $
-    Strings.cat $ list [
-      string "(",
-      var "fa",
-      ref typeDef @@ var "body",
-      string ")"]
+  "ts" ~>
+  "vars" <~ Core.typeSchemeVariables (var "ts") $
+  "body" <~ Core.typeSchemeType (var "ts") $
+  "varNames" <~ Lists.map (unwrap _Name) (var "vars") $
+  "fa" <~ Logic.ifElse (Lists.null $ var "vars")
+    (string "")
+    (Strings.cat $ list [
+      string "∀[",
+      Strings.intercalate (string ",") (var "varNames"),
+      string "]."]) $
+  Strings.cat $ list [
+    string "(",
+    var "fa",
+    ref typeDef @@ var "body",
+    string ")"]
