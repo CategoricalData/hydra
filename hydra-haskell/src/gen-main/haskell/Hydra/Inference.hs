@@ -965,6 +965,8 @@ typeOfInternal cx vars types apptypes term =
     Core__.term term,
     " (vars: ",
     Formatting.showList Core.unName (Sets.toList vars),
+    ", apptypes: ",
+    Formatting.showList Core__.type_ apptypes,
     ", types: ",
     Formatting.showList Core.unName (Maps.keys types),
     ")"]) ((\x -> case x of
@@ -1098,7 +1100,13 @@ typeOfInternal cx vars types apptypes term =
       in (Flows.bind (Flows.bind (Flows.mapList (typeOfInternal cx vars types []) (Lists.map fst pairs)) (checkSameType "map keys")) (\kt -> Flows.bind (Flows.bind (Flows.mapList (typeOfInternal cx vars types []) (Lists.map snd pairs)) (checkSameType "map values")) (\vt -> Flows.bind (checkTypeVariables cx vars kt) (\_ -> Flows.bind (checkTypeVariables cx vars vt) (\_ -> Flows.pure (Core.TypeMap (Core.MapType {
         Core.mapTypeKeys = kt,
         Core.mapTypeValues = vt}))))))))))
-    Core.TermOptional v1 -> (Optionals.maybe (Logic.ifElse (Equality.equal (Lists.length apptypes) 1) (Flows.pure (Core.TypeOptional (Lists.head apptypes))) (Flows.fail "optional type applied to more or less than one argument")) (\term -> checkApplied (Flows.bind (typeOfInternal cx vars types [] term) (\termType -> Flows.bind (checkTypeVariables cx vars termType) (\_ -> Flows.pure (Core.TypeOptional termType))))) v1)
+    Core.TermOptional v1 -> (Optionals.maybe ( 
+      let n = (Lists.length apptypes)
+      in (Logic.ifElse (Equality.equal n 1) (Flows.pure (Core.TypeOptional (Lists.head apptypes))) (Flows.fail (Strings.cat [
+        Strings.cat [
+          "optional type applied to ",
+          (Literals.showInt32 n)],
+        " argument(s). Expected 1."])))) (\term -> checkApplied (Flows.bind (typeOfInternal cx vars types [] term) (\termType -> Flows.bind (checkTypeVariables cx vars termType) (\_ -> Flows.pure (Core.TypeOptional termType))))) v1)
     Core.TermProduct v1 -> (checkApplied (Flows.bind (Flows.mapList (typeOfInternal cx vars types []) v1) (\etypes -> Flows.bind (Flows.mapList (checkTypeVariables cx vars) etypes) (\_ -> Flows.pure (Core.TypeProduct etypes)))))
     Core.TermRecord v1 ->  
       let tname = (Core.recordTypeName v1)

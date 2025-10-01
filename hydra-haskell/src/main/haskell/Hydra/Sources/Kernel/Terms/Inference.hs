@@ -1185,6 +1185,8 @@ typeOfInternalDef = define "typeOfInternal" $
     ref ShowCore.termDef @@ var "term",
     string " (vars: ",
     ref Formatting.showListDef @@ unaryFunction Core.unName @@ (Sets.toList $ var "vars"),
+    string ", apptypes: ",
+    ref Formatting.showListDef @@ ref ShowCore.typeDef @@ var "apptypes",
     string ", types: ",
     ref Formatting.showListDef @@ unaryFunction Core.unName @@ (Maps.keys $ var "types"),
     string ")"]) $
@@ -1384,9 +1386,10 @@ typeOfInternalDef = define "typeOfInternal" $
     _Term_optional>>: "mt" ~>
       Optionals.maybe
         -- Nothing case is polymorphic
-        (Logic.ifElse (Equality.equal (Lists.length $ var "apptypes") (int32 1))
-          (Flows.pure $ Core.typeOptional $ Lists.head $ var "apptypes")
-          (Flows.fail $ "optional type applied to more or less than one argument"))
+        ("n" <~ Lists.length (var "apptypes") $
+          Logic.ifElse (Equality.equal (var "n") (int32 1))
+            (Flows.pure $ Core.typeOptional $ Lists.head $ var "apptypes")
+            (Flows.fail $ "optional type applied to " ++ Literals.showInt32 (var "n") ++ " argument(s). Expected 1."))
         -- Just case: infer type of the contained term
         ("term" ~> var "checkApplied" @@ (
           "termType" <<~ ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "term" $
