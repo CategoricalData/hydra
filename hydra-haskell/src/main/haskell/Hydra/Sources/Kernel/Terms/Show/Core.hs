@@ -73,7 +73,7 @@ define = definitionInModule module_
 readTermDef :: TBinding (String -> Maybe Term)
 readTermDef = define "readTerm" $
   doc "A placeholder for reading terms from their serialized form. Not implemented." $
-  constant nothing
+  "s" ~> just $ Core.termLiteral $ Core.literalString $ var "s"
 
 bindingDef :: TBinding (Binding -> String)
 bindingDef = define "binding" $
@@ -98,7 +98,7 @@ eliminationDef = define "elimination" $
     _Elimination_product>>: "tp" ~>
       "arity" <~ Core.tupleProjectionArity (var "tp") $
       "index" <~ Core.tupleProjectionIndex (var "tp") $
-      "domain" <~ Core.tupleProjectionDomain (var "tp") $ -- TODO: show domain if present
+--      "domain" <~ Core.tupleProjectionDomain (var "tp") $ -- TODO: show domain if present
       Strings.cat $ list [
         string "[",
         Literals.showInt32 $ var "index",
