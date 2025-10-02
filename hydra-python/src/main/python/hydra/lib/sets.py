@@ -64,7 +64,7 @@ def size(s: frozenset[Any]) -> int:
 # TODO: ensure that Hydra's native comparison primitives are used for sorting
 def to_list[A](s: frozenset[A]) -> frozenlist[A]:
     """Convert a set to a sorted list."""
-    return tuple(sorted(s))
+    return tuple(sorted(s))  # type: ignore[type-var]
 
 
 def union[A](s1: frozenset[A], s2: frozenset[A]) -> frozenset[A]:
