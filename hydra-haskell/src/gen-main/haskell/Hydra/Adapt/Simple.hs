@@ -65,7 +65,7 @@ adaptDataGraph constraints doExpand graph0 =
                 Graph.graphSchema = (Graph.graphSchema sg)})))))) schema0) (\schema1 ->  
               let gterm0 = (Schemas.graphAsTerm graph0)
               in  
-                let gterm1 = (Logic.ifElse doExpand (Reduction.etaExpandTerm graph0 gterm0) gterm0)
+                let gterm1 = (Logic.ifElse doExpand (Rewriting.unshadowVariables (Reduction.etaExpandTerm graph0 gterm0)) gterm0)
                 in (Flows.bind (adaptTerm constraints litmap gterm1) (\gterm2 ->  
                   let els1 = (Schemas.termAsGraph gterm2)
                   in (Flows.bind (Flows.mapElems (adaptPrimitive constraints litmap) prims0) (\prims1 -> Flows.pure (Graph.Graph {

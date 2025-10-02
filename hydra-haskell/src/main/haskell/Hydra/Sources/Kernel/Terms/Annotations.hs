@@ -97,7 +97,6 @@ module_ = Module (Namespace "hydra.annotations") elements
      el typeAnnotationInternalDef,
      el typeElementDef,
      el whenFlagDef,
-     el unshadowVariablesDef,
      el withDepthDef]
 
 define :: String -> TTerm a -> TBinding a
@@ -406,46 +405,6 @@ whenFlagDef = define "whenFlag" $
   lambdas ["flag", "fthen", "felse"] $ binds [
     "b">: ref hasFlagDef @@ var "flag"] $
     Logic.ifElse (var "b") (var "fthen") (var "felse")
-
--- TODO: move into hydra.rewriting
-unshadowVariablesDef :: TBinding (Term -> Term)
-unshadowVariablesDef = define "unshadowVariables" $
-  doc "Unshadow variables in term" $
-  lambda "term" $ lets [
-    "freshName">: Flows.map (lambda "n" $ Core.name $ Strings.cat2 (string "s") (Literals.showInt32 $ var "n")) $
-      ref nextCountDef @@ Core.name (string "unshadow"),
-    "rewrite">: lambdas ["recurse", "term"] $ lets [
-      "handleOther">: var "recurse" @@ var "term"] $ binds [
-      "state">: ref Monads.getStateDef] $ lets [
-      "reserved">: first $ var "state",
-      "subst">: second $ var "state"] $
-      cases _Term (var "term")
-        (Just $ var "handleOther") [
-        _Term_variable>>: lambda "v" $ produce $ Core.termVariable $
-          Optionals.fromMaybe (var "v") (Maps.lookup (var "v") (var "subst")),
-        _Term_function>>: lambda "f" $
-          cases _Function (var "f")
-            (Just $ var "handleOther") [
-            _Function_lambda>>: lambda "l" $ lets [
-              "v">: Core.lambdaParameter $ var "l",
-              "d">: Core.lambdaDomain $ var "l",
-              "body">: Core.lambdaBody $ var "l"] $
-              Logic.ifElse (Sets.member (var "v")(var "reserved"))
-                ( bind "v'" (var "freshName") $
-                  exec (ref Monads.putStateDef @@ pair
-                    (Sets.insert (var "v'") (var "reserved"))
-                    (Maps.insert (var "v") (var "v'") (var "subst"))) $
-                  bind "body'" (var "recurse" @@ var "body") $
-                  exec (ref Monads.putStateDef @@ var "state") $
-                  produce $ Core.termFunction $ Core.functionLambda $ Core.lambda (var "v'") (var "d") (var "body'"))
-                ( exec (ref Monads.putStateDef @@ pair (Sets.insert (var "v") (var "reserved")) (var "subst")) $
-                  Flows.map
-                    (lambda "body'" $ Core.termFunction $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "body'"))
-                    (var "recurse" @@ var "body"))]]] $
-    Optionals.fromJust $ Compute.flowStateValue $ Compute.unFlow
-      (ref Rewriting.rewriteTermMDef @@ var "rewrite" @@ var "term")
-      (pair Sets.empty Maps.empty)
-      (ref Monads.emptyTraceDef)
 
 withDepthDef :: TBinding (Name -> (Int -> Flow s a) -> Flow s a)
 withDepthDef = define "withDepth" $

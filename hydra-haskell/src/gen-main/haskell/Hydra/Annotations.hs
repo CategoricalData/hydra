@@ -14,13 +14,11 @@ import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
@@ -238,33 +236,6 @@ typeElement name typ =
 
 whenFlag :: (Core.Name -> Compute.Flow t0 t1 -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 whenFlag flag fthen felse = (Flows.bind (hasFlag flag) (\b -> Logic.ifElse b fthen felse))
-
--- | Unshadow variables in term
-unshadowVariables :: (Core.Term -> Core.Term)
-unshadowVariables term =  
-  let freshName = (Flows.map (\n -> Core.Name (Strings.cat2 "s" (Literals.showInt32 n))) (nextCount (Core.Name "unshadow"))) 
-      rewrite = (\recurse -> \term ->  
-              let handleOther = (recurse term)
-              in (Flows.bind Monads.getState (\state ->  
-                let reserved = (fst state) 
-                    subst = (snd state)
-                in ((\x -> case x of
-                  Core.TermVariable v1 -> (Flows.pure (Core.TermVariable (Optionals.fromMaybe v1 (Maps.lookup v1 subst))))
-                  Core.TermFunction v1 -> ((\x -> case x of
-                    Core.FunctionLambda v2 ->  
-                      let v = (Core.lambdaParameter v2) 
-                          d = (Core.lambdaDomain v2)
-                          body = (Core.lambdaBody v2)
-                      in (Logic.ifElse (Sets.member v reserved) (Flows.bind freshName (\v_ -> Flows.bind (Monads.putState (Sets.insert v_ reserved, (Maps.insert v v_ subst))) (\_ -> Flows.bind (recurse body) (\body_ -> Flows.bind (Monads.putState state) (\_ -> Flows.pure (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = v_,
-                        Core.lambdaDomain = d,
-                        Core.lambdaBody = body_})))))))) (Flows.bind (Monads.putState (Sets.insert v reserved, subst)) (\_ -> Flows.map (\body_ -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = v,
-                        Core.lambdaDomain = d,
-                        Core.lambdaBody = body_}))) (recurse body))))
-                    _ -> handleOther) v1)
-                  _ -> handleOther) term))))
-  in (Optionals.fromJust (Compute.flowStateValue (Compute.unFlow (Rewriting.rewriteTermM rewrite term) (Sets.empty, Maps.empty) Monads.emptyTrace)))
 
 withDepth :: (Core.Name -> (Int -> Compute.Flow t0 t1) -> Compute.Flow t0 t1)
 withDepth key f = (Flows.bind (getCount key) (\count ->  
