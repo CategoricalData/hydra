@@ -118,6 +118,5 @@ def to_list[K, V](mapping: Mapping[K, V]) -> frozenlist[tuple[K, V]]:
 
 
 def union[K, V](map1: Mapping[K, V], map2: Mapping[K, V]) -> FrozenDict[K, V]:
-    """Union two maps, with the second taking precedence."""
-    return FrozenDict({**map1, **map2})
-
+    """Union two maps, with the first taking precedence."""
+    return FrozenDict({**map2, **map1})
