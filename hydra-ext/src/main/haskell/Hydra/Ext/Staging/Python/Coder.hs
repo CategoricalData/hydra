@@ -500,7 +500,7 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
     dflt = do
       (tparams, params, bindings, body, doms, cod, env2) <- withTrace "here" $ gatherBindingsAndParams env term
       if (L.length params > 0)
-        then fail "Functions currently unsupported in this context"
+        then fail $ "Functions currently unsupported in this context: " ++ ShowCore.term term
         else pure ()
       if (L.null bindings) then do
         expr <- encodeTermInline env term
