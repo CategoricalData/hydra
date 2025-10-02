@@ -1,3 +1,5 @@
+--| Phantom-typed term DSL for the hydra.lib.optionals library
+
 module Hydra.Dsl.Lib.Optionals where
 
 import Hydra.Phantoms
