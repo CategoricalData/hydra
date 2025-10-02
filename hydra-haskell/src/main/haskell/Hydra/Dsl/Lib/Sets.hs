@@ -1,3 +1,5 @@
+--| Phantom-typed term DSL for the hydra.lib.sets library
+
 module Hydra.Dsl.Lib.Sets where
 
 import Hydra.Phantoms

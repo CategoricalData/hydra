@@ -1,3 +1,5 @@
+--| Phantom-typed term DSL for the hydra.lib.math library
+
 module Hydra.Dsl.Lib.Math where
 
 import Hydra.Phantoms

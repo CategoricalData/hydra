@@ -1,3 +1,5 @@
+--| Phantom-typed term DSL for the hydra.lib.equality library
+
 module Hydra.Dsl.Lib.Equality where
 
 import Hydra.Core

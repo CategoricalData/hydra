@@ -1,3 +1,5 @@
+--| Phantom-typed term DSL for the hydra.lib.lists library
+
 module Hydra.Dsl.Lib.Lists where
 
 import Hydra.Phantoms
