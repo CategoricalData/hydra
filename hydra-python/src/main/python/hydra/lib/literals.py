@@ -150,8 +150,13 @@ def read_int64(s: str) -> Optional[int]:
 
 
 def read_string(s: str) -> Optional[str]:
-    """Parse a string (always succeeds)."""
-    return s
+    """Parse a string literal."""
+    try:
+        import ast
+        result = ast.literal_eval(s)
+        return result if isinstance(result, str) else None
+    except:
+        return None
 
 
 def show_bigfloat(x: Decimal) -> str:
