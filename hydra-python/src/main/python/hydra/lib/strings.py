@@ -25,11 +25,6 @@ def intercalate(separator: str, values: Sequence[str]) -> str:
     return separator.join(values)
 
 
-def is_empty(s: str) -> bool:
-    """Check if a string is empty."""
-    return len(s) == 0
-
-
 def length(s: str) -> int:
     """Return the length of a string."""
     return len(s)
@@ -37,7 +32,13 @@ def length(s: str) -> int:
 
 def lines(s: str) -> frozenlist[str]:
     """Split a string into lines."""
-    return tuple(s.splitlines())
+    if not s:
+        return ()
+    result = s.split('\n')
+    # Remove trailing empty string if the string ends with newline
+    if result and result[-1] == '':
+        result = result[:-1]
+    return tuple(result)
 
 
 def null(s: str) -> bool:
