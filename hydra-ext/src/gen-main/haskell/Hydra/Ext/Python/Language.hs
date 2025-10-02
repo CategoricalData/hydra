@@ -85,7 +85,10 @@ pythonLanguage = Coders.Language {
 
 -- | A set of reserved words in Python
 pythonReservedWords :: (S.Set String)
-pythonReservedWords = (Sets.fromList (Lists.concat2 pythonKeywords hydraPythonKeywords)) 
+pythonReservedWords = (Sets.fromList (Lists.concat [
+  pythonKeywords,
+  pythonBuiltInFunctions,
+  hydraPythonKeywords])) 
   where 
     pythonKeywords = [
       "False",
@@ -123,6 +126,8 @@ pythonReservedWords = (Sets.fromList (Lists.concat2 pythonKeywords hydraPythonKe
       "while",
       "with",
       "yield"]
+    pythonBuiltInFunctions = [
+      "range"]
     hydraPythonKeywords = [
       "Node",
       "FrozenDict"]

@@ -1,4 +1,4 @@
---| Phantom-typed term DSL for the hydra.lib.logic library
+-- | Phantom-typed term DSL for the hydra.lib.logic library
 
 module Hydra.Dsl.Lib.Logic where
 
