@@ -1194,3 +1194,34 @@ typeNamesInType = (foldOverType Coders.TraversalOrderPre addNames Sets.empty)
         let tname = (Core.wrappedTypeTypeName v1)
         in (Sets.insert tname names)
       _ -> names) typ)
+
+-- | Unshadow lambda-bound variables in a term
+unshadowVariables :: (Core.Term -> Core.Term)
+unshadowVariables term =  
+  let rewrite = (\recurse -> \m -> \term ->  
+          let dflt = (recurse m term)
+          in ((\x -> case x of
+            Core.TermFunction v1 -> ((\x -> case x of
+              Core.FunctionLambda v2 ->  
+                let v = (Core.lambdaParameter v2)
+                in  
+                  let domain = (Core.lambdaDomain v2)
+                  in  
+                    let body = (Core.lambdaBody v2)
+                    in (m, (Optionals.maybe (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = v,
+                      Core.lambdaDomain = domain,
+                      Core.lambdaBody = (snd (rewrite recurse (Maps.insert v 1 m) body))}))) (\i ->  
+                      let i2 = (Math.add i 1)
+                      in  
+                        let v2 = (Core.Name (Strings.cat2 (Core.unName v) (Literals.showInt32 i2)))
+                        in  
+                          let m2 = (Maps.insert v i2 m)
+                          in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = v2,
+                            Core.lambdaDomain = domain,
+                            Core.lambdaBody = (snd (rewrite recurse m2 body))})))) (Maps.lookup v m)))
+              _ -> dflt) v1)
+            Core.TermVariable v1 -> (m, (Core.TermVariable (Optionals.maybe v1 (\i -> Logic.ifElse (Equality.equal i 1) v1 (Core.Name (Strings.cat2 (Core.unName v1) (Literals.showInt32 i)))) (Maps.lookup v1 m))))
+            _ -> dflt) term))
+  in (snd (rewriteAndFoldTerm rewrite Maps.empty term))

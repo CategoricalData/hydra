@@ -98,7 +98,8 @@ module_ = Module (Namespace "hydra.rewriting") elements
      el topologicalSortBindingMapDef,
      el topologicalSortBindingsDef,
      el typeDependencyNamesDef,
-     el typeNamesInTypeDef]
+     el typeNamesInTypeDef,
+     el unshadowVariablesDef]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -1455,3 +1456,36 @@ typeNamesInTypeDef = define "typeNamesInType" $
       "tname" <~ Core.wrappedTypeTypeName (var "wrappedType") $
       Sets.insert (var "tname") (var "names")]) $
   ref foldOverTypeDef @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty
+
+unshadowVariablesDef :: TBinding (Term -> Term)
+unshadowVariablesDef = define "unshadowVariables" $
+  doc "Unshadow lambda-bound variables in a term" $
+  "term" ~>
+    "rewrite" <~ ("recurse" ~> "m" ~> "term"~>
+      "dflt" <~ var "recurse" @@ var "m" @@ var "term" $
+      cases _Term (var "term")
+        (Just $ var "dflt") [
+        _Term_function>>: "f" ~> cases _Function (var "f")
+          (Just $ var "dflt") [
+          _Function_lambda>>: "l" ~>
+            "v" <~ Core.lambdaParameter (var "l") $
+            "domain" <~ Core.lambdaDomain (var "l") $
+            "body" <~ Core.lambdaBody (var "l") $
+            pair (var "m") $ optCases (Maps.lookup (var "v") (var "m"))
+              (Core.termFunction $ Core.functionLambda $ Core.lambda (var "v") (var "domain")
+                (second $ var "rewrite"
+                  @@ var "recurse"
+                  @@ (Maps.insert (var "v") (int32 1) (var "m"))
+                  @@ (var "body")))
+              ("i" ~>
+                "i2" <~ Math.add (var "i") (int32 1) $
+                "v2" <~ Core.name (Strings.cat2 (Core.unName $ var "v") (Literals.showInt32 $ var "i2")) $
+                "m2" <~ Maps.insert (var "v") (var "i2") (var "m") $
+                Core.termFunction $ Core.functionLambda $ Core.lambda (var "v2") (var "domain")
+                  (second $ var "rewrite" @@ var "recurse" @@ var "m2" @@ var "body"))],
+        _Term_variable>>: "v" ~> pair (var "m") $ Core.termVariable $ optCases (Maps.lookup (var "v") (var "m"))
+          (var "v")
+          ("i" ~> Logic.ifElse (Equality.equal (var "i") (int32 1))
+            (var "v")
+            (Core.name $ Strings.cat2 (Core.unName $ var "v") (Literals.showInt32 $ var "i")))]) $
+    second (ref rewriteAndFoldTermDef @@ var "rewrite" @@ Maps.empty @@ var "term")
