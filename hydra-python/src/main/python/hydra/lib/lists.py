@@ -9,9 +9,9 @@ from hydra.dsl.python import frozenlist
 A = TypeVar('A')
 
 
-def apply[A, B](f: Callable[[A], B], x: A) -> B:
-    """Apply a function to an argument."""
-    return f(x)
+def apply[A, B](fs: Sequence[Callable[[A], B]], values: Sequence[A]) -> frozenlist[B]:
+    """Apply a list of functions to a list of values (applicative style)."""
+    return tuple(f(v) for f in fs for v in values)
 
 
 def at[A](i: int, values: Sequence[A]) -> A:
