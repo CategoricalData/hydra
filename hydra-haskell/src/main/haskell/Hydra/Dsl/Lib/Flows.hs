@@ -1,3 +1,5 @@
+--| Phantom-typed term DSL for the hydra.lib.flows library
+
 module Hydra.Dsl.Lib.Flows where
 
 import Hydra.Dsl.Phantoms

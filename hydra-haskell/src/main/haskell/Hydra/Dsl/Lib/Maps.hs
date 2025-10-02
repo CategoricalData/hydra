@@ -1,3 +1,5 @@
+--| Phantom-typed term DSL for the hydra.lib.maps library
+
 module Hydra.Dsl.Lib.Maps where
 
 import Hydra.Phantoms
