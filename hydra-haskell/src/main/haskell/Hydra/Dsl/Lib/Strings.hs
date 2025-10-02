@@ -1,4 +1,4 @@
---| Phantom-typed term DSL for the hydra.lib.strings library
+-- | Phantom-typed term DSL for the hydra.lib.strings library
 
 module Hydra.Dsl.Lib.Strings where
 

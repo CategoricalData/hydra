@@ -1,4 +1,4 @@
---| Phantom-typed term DSL for the hydra.lib.equality library
+-- | Phantom-typed term DSL for the hydra.lib.equality library
 
 module Hydra.Dsl.Lib.Equality where
 

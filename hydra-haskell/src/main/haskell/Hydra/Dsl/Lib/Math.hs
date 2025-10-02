@@ -1,4 +1,4 @@
---| Phantom-typed term DSL for the hydra.lib.math library
+-- | Phantom-typed term DSL for the hydra.lib.math library
 
 module Hydra.Dsl.Lib.Math where
 
