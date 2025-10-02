@@ -15,6 +15,11 @@ def cat2(s1: str, s2: str) -> str:
     return s1 + s2
 
 
+def char_at(i: int, s: str) -> int:
+    """Get the character code at a specific index in a string."""
+    return ord(s[i])
+
+
 def from_list(values: Sequence[int]) -> str:
     """Convert a list of integers to a string."""
     return "".join(chr(v) for v in values)
