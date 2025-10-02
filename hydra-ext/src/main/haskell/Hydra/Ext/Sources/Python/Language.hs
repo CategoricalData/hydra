@@ -170,7 +170,10 @@ pythonReservedWordsDef = pythonLanguageDefinition "pythonReservedWords" $
         "False", "None", "True", "and", "as", "assert", "async", "await", "break", "class", "continue", "def", "del",
         "elif", "else", "except", "finally", "for", "from", "global", "if", "import", "in", "is", "lambda", "nonlocal",
         "not", "or", "pass", "raise", "return", "try", "while", "with", "yield"],
+    "pythonBuiltInFunctions">:
+      doc "Some additional keywords we reserve in order to avoid collision with built-in functions" $
+      list $ string <$> ["range"],
     "hydraPythonKeywords">:
       doc "Reserved words which are specific to Hydra-Python" $
-      list $ string <$> ["Node", "FrozenDict"]]
-    $ Sets.fromList $ Lists.concat2 (var "pythonKeywords") (var "hydraPythonKeywords")
+      list $ string <$> ["Node", "FrozenDict"]] $
+    Sets.fromList $ Lists.concat $ list [var "pythonKeywords", var "pythonBuiltInFunctions", var "hydraPythonKeywords"]

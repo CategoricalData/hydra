@@ -28,14 +28,14 @@ def mul(x: int, y: int) -> int:
     return x * y
 
 
-def range(start: int, end: int) -> frozenlist[int]:
+def range_(start: int, end: int) -> frozenlist[int]:
     """Generate a range of integers from start to end (inclusive)."""
-    return tuple(range(start, end + 1))
+    return tuple(range_(start, end + 1))
 
 
 def rem(a: int, b: int) -> int:
     """Integer remainder with result having same sign as dividend."""
-    return a % b
+    return a - (a // b) * b
 
 
 def sub(x: int, y: int) -> int:
