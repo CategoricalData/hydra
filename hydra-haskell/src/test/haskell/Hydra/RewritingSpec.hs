@@ -248,7 +248,7 @@ testExpandTypedLambdas = do
           (list [lambda "x" $ list ["foo"], lambda "v1" $ splitOn @@ "bar" @@ var "v1"])
 
     H.it "Check that lambda expansion is idempotent" $ do
-      QC.property $ \term -> do
+      QC.property $ \(term :: Term) -> do
         let once = etaExpandTypedTerm term
         let twice = etaExpandTypedTerm once
         H.shouldBe once twice
@@ -399,7 +399,7 @@ testNormalizeTypeVariablesInTerm = do
         (withIdBefore id42)
         (withIdAfter id42)
 
-    H.describe "Rewriting of bindings does not affect environment" $ do
+    H.describe "Rewriting of bindings does not affect body" $ do
       H.it "test #1" $ changesTo
         (withIdBefore const42) -- Free variable "a" coincides with bound variable "a", but in a different branch.
         (withIdAfter const42)
@@ -432,9 +432,9 @@ testNormalizeTypeVariablesInTerm = do
             tlet (var "fun2" @@ var "x") [
               ("fun2", Just (Types.poly ["t2"] $ tFun t2 $ tPair t2 t1), lambdaTyped "z" t2 $ pair (var "z") (var "y"))])])
   where
+    normalize = normalizeTypeVariablesInTerm
     changesTo term1 term2 = H.shouldBe (normalize term1) term2
     noChange term = H.shouldBe (normalize term) term
-    normalize = normalizeTypeVariablesInTerm
     tlet env triples = TermLet $ Let (toBinding <$> triples) env
       where
         toBinding (key, mts, value) = Binding (Name key) value mts
