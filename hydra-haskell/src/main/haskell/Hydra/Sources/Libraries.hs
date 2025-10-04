@@ -208,7 +208,7 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim1       _lists_safeHead    Lists.safeHead     ["x"] (list x) (optional x),
     prim1       _lists_singleton   Lists.singleton    ["x"] x (list x),
     prim2Interp _lists_sortOn      Nothing            ["x", "y"] (function x y) (list x) (list x),
-    prim2Interp _lists_span        Nothing            ["x", "y"] (function x boolean) (list x) (pair (list x) (list x)),
+    prim2Interp _lists_span        Nothing            ["x"] (function x boolean) (list x) (pair (list x) (list x)),
     prim1       _lists_sort        Lists.sort         ["x"] (list x) (list x),
     prim1       _lists_tail        Lists.tail         ["x"] (list x) (list x),
     prim2       _lists_take        Lists.take         ["x"] int32 (list x) (list x),
