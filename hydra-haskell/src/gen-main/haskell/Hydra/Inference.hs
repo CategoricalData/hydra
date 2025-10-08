@@ -1053,23 +1053,26 @@ typeOfInternal cx vars types apptypes term =
       let a = (Core.applicationFunction v1)
       in  
         let b = (Core.applicationArgument v1)
-        in (Flows.bind (typeOfInternal cx vars types [] a) (\t1 -> Flows.bind (typeOfInternal cx vars types [] b) (\t2 -> Flows.bind (checkTypeVariables cx vars t1) (\_ -> Flows.bind (checkTypeVariables cx vars t2) (\_ -> (\x -> case x of
-          Core.TypeFunction v2 ->  
-            let p = (Core.functionTypeDomain v2)
-            in  
-              let q = (Core.functionTypeCodomain v2)
-              in (Logic.ifElse (Equality.equal p t2) (Flows.pure q) (Flows.fail (Strings.cat [
-                "expected ",
-                Core__.type_ p,
-                " in ",
-                Core__.term term,
-                " but found ",
-                (Core__.type_ t2)])))
-          _ -> (Flows.fail (Strings.cat [
-            "left hand side of application ",
-            Core__.term term,
-            " is not a function type: ",
-            (Core__.type_ t1)]))) t1)))))))
+        in (Flows.bind (typeOfInternal cx vars types [] a) (\t1 -> Flows.bind (typeOfInternal cx vars types [] b) (\t2 -> Flows.bind (checkTypeVariables cx vars t1) (\_ -> Flows.bind (checkTypeVariables cx vars t2) (\_ ->  
+          let tryType = (\t -> (\x -> case x of
+                  Core.TypeForall v2 -> (tryType (Core.forallTypeBody v2))
+                  Core.TypeFunction v2 ->  
+                    let p = (Core.functionTypeDomain v2)
+                    in  
+                      let q = (Core.functionTypeCodomain v2)
+                      in (Logic.ifElse (Equality.equal p t2) (Flows.pure q) (Flows.fail (Strings.cat [
+                        "expected ",
+                        Core__.type_ p,
+                        " in ",
+                        Core__.term term,
+                        " but found ",
+                        (Core__.type_ t2)])))
+                  _ -> (Flows.fail (Strings.cat [
+                    "left hand side of application ",
+                    Core__.term term,
+                    " is not a function type: ",
+                    (Core__.type_ t)]))) t)
+          in (tryType t1))))))))
     Core.TermFunction v1 -> ((\x -> case x of
       Core.FunctionElimination v2 -> ((\x -> case x of
         Core.EliminationProduct v3 -> (checkApplied ( 

@@ -156,8 +156,8 @@ unifyTypes schemaTypes l r comment = (unifyTypeConstraints schemaTypes [
 
 -- | Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables.
 variableOccursInType :: (Core.Name -> Core.Type -> Bool)
-variableOccursInType var =  
+variableOccursInType var typ0 =  
   let tryType = (\b -> \typ -> (\x -> case x of
           Core.TypeVariable v1 -> (Logic.or b (Equality.equal (Core.unName v1) (Core.unName var)))
           _ -> b) typ)
-  in (Rewriting.foldOverType Coders.TraversalOrderPre tryType False)
+  in (Rewriting.foldOverType Coders.TraversalOrderPre tryType False typ0)
