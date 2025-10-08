@@ -70,6 +70,7 @@ module_ = Module (Namespace "hydra.inference") elements
       el bindConstraintsDef,
       el checkSameTypeDef,
       el checkTypeDef,
+      el checkTypeSubstDef,
       el checkTypeVariablesDef,
       el debugInferenceDef,
       el emptyInferenceContextDef,
@@ -140,7 +141,9 @@ bindConstraintsDef :: TBinding (InferenceContext -> (TypeSubst -> Flow s a) -> [
 bindConstraintsDef = define "bindConstraints" $
   doc "Bind type constraints and continue with substitution" $
   "cx" ~> "f" ~> "constraints" ~>
-  Flows.bind (ref Unification.unifyTypeConstraintsDef @@ Typing.inferenceContextSchemaTypes (var "cx") @@ var "constraints") (var "f")
+  "s" <<~ ref Unification.unifyTypeConstraintsDef @@ Typing.inferenceContextSchemaTypes (var "cx") @@ var "constraints" $
+  exec (ref checkTypeSubstDef @@ var "cx" @@ var "s") $
+  var "f" @@ var "s"
 
 checkSameTypeDef :: TBinding (String -> [Type] -> Flow s Type)
 checkSameTypeDef = define "checkSameType" $
@@ -173,6 +176,31 @@ checkTypeDef = define "checkType" $
           string " but found ",
           ref ShowCore.typeDef @@ var "t0"]))
     (Flows.pure unit)
+
+checkTypeSubstDef :: TBinding (InferenceContext -> TypeSubst -> Flow s TypeSubst)
+checkTypeSubstDef = define "checkTypeSubst" $
+  doc ("Sanity-check a type substitution arising from unification. Specifically, check that schema types have not been"
+    <> " inappropriately unified with type variables inferred from terms.") $
+  "cx" ~> "subst" ~>
+  "s" <~ Typing.unTypeSubst (var "subst") $
+  "vars" <~ Sets.fromList (Maps.keys $ var "s") $
+  "suspectVars" <~ Sets.intersection (var "vars") (Sets.fromList $ Maps.keys $ Typing.inferenceContextSchemaTypes $ var "cx") $
+  "isTypeAlias" <~ ("ts" ~> cases _Type (ref Rewriting.deannotateTypeDef @@ (Core.typeSchemeType $ var "ts"))
+    (Just true) [
+    _Type_record>>: constant true,
+    _Type_union>>: constant true,
+    _Type_wrap>>: constant true]) $
+  "badVars" <~ Sets.fromList (Lists.filter
+    ("v" ~> Optionals.maybe false ("t" ~> Logic.not (var "isTypeAlias" @@ var "t")) $
+      ref Lexical.dereferenceSchemaTypeDef @@ var "v" @@ (Typing.inferenceContextSchemaTypes $ var "cx"))
+    (Sets.toList $ var "suspectVars")) $
+  "badPairs" <~ Lists.filter ("p" ~> Sets.member (first $ var "p") (var "badVars")) (Maps.toList $ var "s") $
+  "printPair" <~ ("p" ~> (Core.unName $ first $ var "p") ++ " --> " ++ (ref ShowCore.typeDef @@ second (var "p"))) $
+  Logic.ifElse (Sets.null $ var "badVars")
+    (produce $ var "subst")
+    (Flows.fail $ "Schema type(s) incorrectly unified: {"
+      ++ (Strings.intercalate ", " (Lists.map (var "printPair") (var "badPairs")))
+      ++ "}")
 
 -- W: wfTy
 checkTypeVariablesDef :: TBinding (InferenceContext -> S.Set Name -> Type -> Flow s ())
@@ -409,6 +437,7 @@ inferTypeOfApplicationDef = define "inferTypeOfApplication" $
     @@ (ref Substitution.substInTypeDef @@ var "s1" @@ var "t0")
     @@ (Core.typeFunction $ Core.functionType (var "t1") (Core.typeVariable $ var "v"))
     @@ string "application lhs" $
+  exec (ref checkTypeSubstDef @@ var "cx" @@ var "s2") $
   "rExpr" <~ Core.termApplication (Core.application
     (ref Substitution.substTypesInTermDef @@ (ref Substitution.composeTypeSubstDef @@ var "s1" @@ var "s2") @@ var "a")
     (ref Substitution.substTypesInTermDef @@ var "s2" @@ var "b")) $
@@ -640,6 +669,7 @@ inferTypeOfLetNormalizedDef = define "inferTypeOfLetNormalized" $
     (Lists.map (ref Substitution.substInTypeDef @@ var "s1") (var "tbins0")) @@
     (var "tbins1") @@
     (string "temporary type bindings") $
+  exec (ref checkTypeSubstDef @@ var "cx0" @@ var "s2") $
   "g2" <~ (ref Substitution.substInContextDef @@
     (ref Substitution.composeTypeSubstDef @@ var "s1" @@ var "s2") @@
     (var "cx0")) $
@@ -1063,8 +1093,9 @@ mapConstraintsDef :: TBinding (InferenceContext -> (TypeSubst -> a) -> [TypeCons
 mapConstraintsDef = define "mapConstraints" $
   doc "Map over type constraints after unification" $
   "cx" ~> "f" ~> "constraints" ~>
-  Flows.map (var "f") $
-    ref Unification.unifyTypeConstraintsDef @@ (Typing.inferenceContextSchemaTypes $ var "cx") @@ var "constraints"
+  "s" <<~ ref Unification.unifyTypeConstraintsDef @@ (Typing.inferenceContextSchemaTypes $ var "cx") @@ var "constraints" $
+  exec (ref checkTypeSubstDef @@ var "cx" @@ var "s") $
+  produce (var "f" @@ var "s")
 
 nominalApplicationDef :: TBinding (Name -> [Type] -> Type)
 nominalApplicationDef = define "nominalApplication" $
@@ -1461,6 +1492,7 @@ typeOfNominalDef = define "typeOfNominal" $
     var "stype" @@
     var "expected" @@
     var "desc" $
+  exec (ref checkTypeSubstDef @@ var "cx" @@ var "substWrapper") $
   "subst" <~ Typing.unTypeSubst (var "substWrapper") $
   "tparams" <~ Lists.map (var "resolveType" @@ var "subst") (var "svars") $
   Flows.pure $ ref nominalApplicationDef @@ var "tname" @@ var "tparams"
