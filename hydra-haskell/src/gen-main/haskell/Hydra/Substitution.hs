@@ -48,7 +48,7 @@ substInContext subst cx = Typing.InferenceContext {
   Typing.inferenceContextDebug = (Typing.inferenceContextDebug cx)}
 
 substituteInTerm :: (Typing.TermSubst -> Core.Term -> Core.Term)
-substituteInTerm subst =  
+substituteInTerm subst term0 =  
   let s = (Typing.unTermSubst subst) 
       rewrite = (\recurse -> \term ->  
               let withLambda = (\l ->  
@@ -76,10 +76,10 @@ substituteInTerm subst =
                 Core.TermLet v1 -> (withLet v1)
                 Core.TermVariable v1 -> (Optionals.maybe (recurse term) (\sterm -> sterm) (Maps.lookup v1 s))
                 _ -> (recurse term)) term))
-  in (Rewriting.rewriteTerm rewrite)
+  in (Rewriting.rewriteTerm rewrite term0)
 
 substInType :: (Typing.TypeSubst -> Core.Type -> Core.Type)
-substInType subst =  
+substInType subst typ0 =  
   let rewrite = (\recurse -> \typ -> (\x -> case x of
           Core.TypeForall v1 -> (Optionals.maybe (recurse typ) (\styp -> Core.TypeForall (Core.ForallType {
             Core.forallTypeParameter = (Core.forallTypeParameter v1),
@@ -87,7 +87,7 @@ substInType subst =
           Core.TypeVariable v1 -> (Optionals.maybe typ (\styp -> styp) (Maps.lookup v1 (Typing.unTypeSubst subst)))
           _ -> (recurse typ)) typ) 
       removeVar = (\v -> Typing.TypeSubst (Maps.remove v (Typing.unTypeSubst subst)))
-  in (Rewriting.rewriteType rewrite)
+  in (Rewriting.rewriteType rewrite typ0)
 
 substInTypeScheme :: (Typing.TypeSubst -> Core.TypeScheme -> Core.TypeScheme)
 substInTypeScheme subst ts = Core.TypeScheme {
@@ -95,7 +95,7 @@ substInTypeScheme subst ts = Core.TypeScheme {
   Core.typeSchemeType = (substInType subst (Core.typeSchemeType ts))}
 
 substTypesInTerm :: (Typing.TypeSubst -> Core.Term -> Core.Term)
-substTypesInTerm subst =  
+substTypesInTerm subst term0 =  
   let rewrite = (\recurse -> \term ->  
           let dflt = (recurse term) 
               forElimination = (\elm -> (\x -> case x of
@@ -136,4 +136,4 @@ substTypesInTerm subst =
             Core.TermTypeApplication v1 -> (forTypeApplication v1)
             Core.TermTypeLambda v1 -> (forTypeLambda v1)
             _ -> dflt) term))
-  in (Rewriting.rewriteTerm rewrite)
+  in (Rewriting.rewriteTerm rewrite term0)
