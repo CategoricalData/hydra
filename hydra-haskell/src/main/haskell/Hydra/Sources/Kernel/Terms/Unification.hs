@@ -191,8 +191,8 @@ variableOccursInTypeDef :: TBinding (Name -> Type -> Bool)
 variableOccursInTypeDef = define "variableOccursInType" $
   doc ("Determine whether a type variable appears within a type expression."
     <> "No distinction is made between free and bound type variables.") $
-  lambda "var" $ lets [
+  "var" ~> "typ0" ~> lets [
     "tryType">: lambdas ["b", "typ"] $ match _Type (Just $ var "b") [
       _Type_variable>>: lambda "v" $ Logic.or (var "b") (Core.equalName_ (var "v") (var "var"))]
       @@ var "typ"] $
-    ref Rewriting.foldOverTypeDef @@ Coders.traversalOrderPre @@ var "tryType" @@ false
+    ref Rewriting.foldOverTypeDef @@ Coders.traversalOrderPre @@ var "tryType" @@ false @@ var "typ0"
