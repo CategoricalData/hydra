@@ -24,6 +24,22 @@ import qualified Data.Set as S
 dereferenceElement :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Binding))
 dereferenceElement name = (Flows.map (\g -> lookupElement g name) Monads.getState)
 
+-- | Resolve a schema type through a chain of zero or more typedefs
+dereferenceSchemaType :: (Core.Name -> M.Map Core.Name Core.TypeScheme -> Maybe Core.TypeScheme)
+dereferenceSchemaType name types =  
+  let forType = (\t -> (\x -> case x of
+          Core.TypeAnnotated v1 -> (forType (Core.annotatedTypeSubject v1))
+          Core.TypeForall v1 -> (Optionals.map (\ts -> Core.TypeScheme {
+            Core.typeSchemeVariables = (Lists.cons (Core.forallTypeParameter v1) (Core.typeSchemeVariables ts)),
+            Core.typeSchemeType = (Core.typeSchemeType ts)}) (forType (Core.forallTypeBody v1)))
+          Core.TypeVariable v1 -> (dereferenceSchemaType v1 types)
+          _ -> (Just (Core.TypeScheme {
+            Core.typeSchemeVariables = [],
+            Core.typeSchemeType = t}))) t)
+  in (Optionals.bind (Maps.lookup name types) (\ts -> Optionals.map (\ts2 -> Core.TypeScheme {
+    Core.typeSchemeVariables = (Lists.concat2 (Core.typeSchemeVariables ts) (Core.typeSchemeVariables ts2)),
+    Core.typeSchemeType = (Core.typeSchemeType ts2)}) (forType (Core.typeSchemeType ts))))
+
 elementsToGraph :: (Graph.Graph -> Maybe Graph.Graph -> [Core.Binding] -> Graph.Graph)
 elementsToGraph parent schema elements =  
   let toPair = (\el -> (Core.bindingName el, el))
