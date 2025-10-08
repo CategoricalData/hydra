@@ -197,73 +197,73 @@ testExpandLambdas g = do
     noChange term = expandsTo term term
 
 -- TODO: merge this into etaExpandTerm
-testExpandTypedLambdas :: H.SpecWith ()
-testExpandTypedLambdas = do
-  H.describe "Test expanding to typed lambda terms" $ do
-
-    H.describe "Try some terms which do not expand" $ do
-      H.it "test #1" $
-        noChange (int32 42)
-      H.it "test #2" $
-        noChange (list ["foo", "bar"])
-      H.it "test #3" $
-        noChange (splitOn @@ "foo" @@ "bar")
-      H.it "test #4" $
-        noChange (lambda "x" $ int32 42)
-
-    H.describe "Expand bare function terms" $ do
-      H.it "test #1" $
-        expandsTo
-          toLower
-          (lambda "v1" $ toLower @@ var "v1")
-      H.it "test #2" $
-        expandsTo
-          splitOn
-          (lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2")
-      H.it "test #3" $
-        expandsTo
-          (primitive _optionals_maybe @@ (int32 42) @@ length)
-          -- Note two levels of lambda expansion
-          (lambda "v1" $ (primitive _optionals_maybe @@ (int32 42) @@ (lambda "v1" $ length @@ var "v1")) @@ var "v1")
-      H.it "test #4" $
-        expandsTo
-          (project (Name "Person") (Name "firstName"))
-          (lambda "v1" $ ((project (Name "Person") (Name "firstName") @@ var "v2")))
-      -- TODO: case statement
-
-    H.describe "Expand subterms within applications" $ do
-      H.it "test #1" $
-        expandsTo
-          (splitOn @@ "bar")
-          (lambda "v1" $ splitOn @@ "bar" @@ var "v1")
-      H.it "test #2" $
-        expandsTo
-          ((lambda "x" $ var "x") @@ length)
-          ((lambda "x" $ var "x") @@ (lambda "v1" $ length @@ var "v1"))
-
-    H.describe "Expand arbitrary subterms" $ do
-      H.it "test #1" $
-        expandsTo
-          (list [lambda "x" $ list ["foo"], splitOn @@ "bar"])
-          (list [lambda "x" $ list ["foo"], lambda "v1" $ splitOn @@ "bar" @@ var "v1"])
-
-    H.it "Check that lambda expansion is idempotent" $ do
-      QC.property $ \(term :: Term) -> do
-        let once = etaExpandTypedTerm term
-        let twice = etaExpandTypedTerm once
-        H.shouldBe once twice
-
-  where
-    length = primitive $ Name "hydra.lib.strings.length"
-    splitOn = primitive $ Name "hydra.lib.strings.splitOn"
-    toLower = primitive $ Name "hydra.lib.strings.toLower"
-    expandsTo termBefore termAfter = do
---      result <- flowToIo testGraph $ etaExpandTerm termBefore
---      H.shouldBe result termAfter
-       inf <- flowToIo testGraph (inferenceResultTerm <$> inferInGraphContext termBefore)
-       let result = etaExpandTypedTerm inf
-       H.shouldBe (ShowCore.term (removeTermAnnotations result)) (ShowCore.term termAfter)
-    noChange term = expandsTo term term
+--testExpandTypedLambdas :: H.SpecWith ()
+--testExpandTypedLambdas = do
+--  H.describe "Test expanding to typed lambda terms" $ do
+--
+--    H.describe "Try some terms which do not expand" $ do
+--      H.it "test #1" $
+--        noChange (int32 42)
+--      H.it "test #2" $
+--        noChange (list ["foo", "bar"])
+--      H.it "test #3" $
+--        noChange (splitOn @@ "foo" @@ "bar")
+--      H.it "test #4" $
+--        noChange (lambda "x" $ int32 42)
+--
+--    H.describe "Expand bare function terms" $ do
+--      H.it "test #1" $
+--        expandsTo
+--          toLower
+--          (lambda "v1" $ toLower @@ var "v1")
+--      H.it "test #2" $
+--        expandsTo
+--          splitOn
+--          (lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2")
+--      H.it "test #3" $
+--        expandsTo
+--          (primitive _optionals_maybe @@ (int32 42) @@ length)
+--          -- Note two levels of lambda expansion
+--          (lambda "v1" $ (primitive _optionals_maybe @@ (int32 42) @@ (lambda "v1" $ length @@ var "v1")) @@ var "v1")
+--      H.it "test #4" $
+--        expandsTo
+--          (project (Name "Person") (Name "firstName"))
+--          (lambda "v1" $ ((project (Name "Person") (Name "firstName") @@ var "v2")))
+--      -- TODO: case statement
+--
+--    H.describe "Expand subterms within applications" $ do
+--      H.it "test #1" $
+--        expandsTo
+--          (splitOn @@ "bar")
+--          (lambda "v1" $ splitOn @@ "bar" @@ var "v1")
+--      H.it "test #2" $
+--        expandsTo
+--          ((lambda "x" $ var "x") @@ length)
+--          ((lambda "x" $ var "x") @@ (lambda "v1" $ length @@ var "v1"))
+--
+--    H.describe "Expand arbitrary subterms" $ do
+--      H.it "test #1" $
+--        expandsTo
+--          (list [lambda "x" $ list ["foo"], splitOn @@ "bar"])
+--          (list [lambda "x" $ list ["foo"], lambda "v1" $ splitOn @@ "bar" @@ var "v1"])
+--
+--    H.it "Check that lambda expansion is idempotent" $ do
+--      QC.property $ \(term :: Term) -> do
+--        let once = etaExpandTypedTerm term
+--        let twice = etaExpandTypedTerm once
+--        H.shouldBe once twice
+--
+--  where
+--    length = primitive $ Name "hydra.lib.strings.length"
+--    splitOn = primitive $ Name "hydra.lib.strings.splitOn"
+--    toLower = primitive $ Name "hydra.lib.strings.toLower"
+--    expandsTo termBefore termAfter = do
+----      result <- flowToIo testGraph $ etaExpandTerm termBefore
+----      H.shouldBe result termAfter
+--       inf <- flowToIo testGraph (inferenceResultTerm <$> inferInGraphContext termBefore)
+--       let result = etaExpandTypedTerm inf
+--       H.shouldBe (ShowCore.term (removeTermAnnotations result)) (ShowCore.term termAfter)
+--    noChange term = expandsTo term term
 
 testFoldOverTerm :: H.SpecWith ()
 testFoldOverTerm = do

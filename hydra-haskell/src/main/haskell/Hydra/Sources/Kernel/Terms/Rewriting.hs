@@ -59,7 +59,6 @@ module_ = Module (Namespace "hydra.rewriting") elements
      el deannotateTypeRecursiveDef,
      el deannotateTypeSchemeRecursiveDef,
      el detypeTermDef,
-     el etaExpandTypedTermDef,
      el flattenLetTermsDef,
      el foldOverTermDef,
      el foldOverTypeDef,
@@ -165,139 +164,6 @@ detypeTermDef = define "detypeTerm" $
        Core.termAnnotated $ Core.annotatedTerm (ref detypeTermDef @@ var "subj") (var "ann"),
     _Term_typeApplication>>: "tt" ~> ref deannotateAndDetypeTermDef @@ (Core.typedTermTerm $ var "tt"),
     _Term_typeLambda>>: "ta" ~> ref deannotateAndDetypeTermDef @@ (Core.typeLambdaBody $ var "ta")]
-
-
-
-etaExpandTypedTermDef :: TBinding (Term -> Term)
-etaExpandTypedTermDef = define "etaExpandTypedTerm" $
-  doc "A variation of etaExpandTerm which also attaches type annotations when padding function terms" $
-  "term" ~> var "term"
---  "toNaryFunType" <~ ("typ" ~>
---    "helper" <~ ("t" ~>
---      cases _Type (var "t")
---        (Just $ pair (list []) (var "t")) [
---        _Type_function>>: "ft" ~>
---          "dom0" <~ Core.functionTypeDomain (var "ft") $
---          "cod0" <~ Core.functionTypeCodomain (var "ft") $
---          "recursive" <~ var "helper" @@ var "cod0" $
---          "doms" <~ first (var "recursive") $
---          "cod1" <~ second (var "recursive") $
---          pair (Lists.cons (var "dom0") (var "doms")) (var "cod1")]) $
---    var "helper" @@ (ref deannotateTypeDef @@ var "typ")) $
---  "padTerm" <~ ("i" ~> "doms" ~> "cod" ~> "term" ~>
---    Logic.ifElse (Lists.null $ var "doms")
---      (var "term")
---      ("dom" <~ Lists.head (var "doms") $
---       "var" <~ Core.name (Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
---       "tailDoms" <~ Lists.tail (var "doms") $
---       Core.termFunction $ Core.functionLambda $ Core.lambda (var "var") (just $ var "dom") $
---         var "padTerm"
---           @@ (Math.add (var "i") (int32 1))
---           @@ (var "tailDoms")
---           @@ (var "cod")
---           @@ (Core.termApplication $ Core.application
---                 (var "term")
---                 (Core.termVariable $ var "var")))) $
---  lets [
---    "expand">: "doms" ~> "cod" ~> "term" ~>
---      cases _Term (var "term")
---        (Just $ ref rewriteTermDef @@ var "rewrite" @@ var "term") [
---        _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
---          (var "expand" @@ var "doms" @@ var "cod" @@ (Core.annotatedTermSubject $ var "at"))
---          (Core.annotatedTermAnnotation $ var "at"),
---        _Term_application>>: "app" ~>
---          "lhs" <~ Core.applicationFunction (var "app") $
---          "rhs" <~ Core.applicationArgument (var "app") $
---          ref rewriteTermDef @@ var "rewrite" @@ var "term",
---        _Term_function>>: "f" ~> cases _Function (var "f")
---          (Just $ var "padTerm" @@ int32 1 @@ var "doms" @@ var "cod" @@ var "term") [
---          _Function_lambda>>: "l" ~> Core.termFunction $ Core.functionLambda $ Core.lambda
---            (Core.lambdaParameter $ var "l")
---            (Core.lambdaDomain $ var "l")
---            (var "expand" @@ (Lists.tail $ var "doms") @@ var "cod" @@ (Core.lambdaBody $ var "l"))],
---        _Term_let>>: "lt" ~>
---          "expandBinding" <~ ("b" ~> Core.binding
---            (Core.bindingName $ var "b")
---            (ref etaExpandTypedTermDef @@ (Core.bindingTerm $ var "b"))
---            (Core.bindingType $ var "b")) $
---          Core.termLet $ Core.let_
---            (Lists.map (var "expandBinding") (Core.letBindings $ var "lt"))
---            (var "expand" @@ var "doms" @@ var "cod" @@ (Core.letEnvironment $ var "lt"))],
---    "rewrite">: "recurse" ~> "term" ~> var "recurse" @@ var "term"] $
---  ref rewriteTermDef @@ var "rewrite" @@ var "term"
-
-
--- original, with dead code
---etaExpandTypedTermDef :: TBinding (Term -> Term)
---etaExpandTypedTermDef = define "etaExpandTypedTerm" $
---  doc "A variation of etaExpandTerm which also attaches type annotations when padding function terms" $
---  "term" ~>
---  "toNaryFunType" <~ ("typ" ~>
---    "helper" <~ ("t" ~>
---      cases _Type (var "t")
---        (Just $ pair (list []) (var "t")) [
---        _Type_function>>: "ft" ~>
---          "dom0" <~ Core.functionTypeDomain (var "ft") $
---          "cod0" <~ Core.functionTypeCodomain (var "ft") $
---          "recursive" <~ var "helper" @@ var "cod0" $
---          "doms" <~ first (var "recursive") $
---          "cod1" <~ second (var "recursive") $
---          pair (Lists.cons (var "dom0") (var "doms")) (var "cod1")]) $
---    var "helper" @@ (ref deannotateTypeDef @@ var "typ")) $
---  "padTerm" <~ ("i" ~> "doms" ~> "cod" ~> "term" ~>
---    Logic.ifElse (Lists.null $ var "doms")
---      (var "term")
---      ("dom" <~ Lists.head (var "doms") $
---       "var" <~ Core.name (Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
---       "tailDoms" <~ Lists.tail (var "doms") $
---       "toFunctionType" <~ ("doms" ~> "cod" ~>
---         Lists.foldl
---           ("c" ~> "d" ~> Core.typeFunction $ Core.functionType (var "d") (var "c"))
---           (var "cod")
---           (var "doms")) $
---       Core.termFunction $ Core.functionLambda $ Core.lambda (var "var") (just $ var "dom") $
---         var "padTerm"
---           @@ (Math.add (var "i") (int32 1))
---           @@ (var "tailDoms")
---           @@ (var "cod")
---           @@ (Core.termApplication $ Core.application
---                 (var "term")
---                 (Core.termVariable $ var "var")))) $
---  lets [
---    "expand">: "doms" ~> "cod" ~> "term" ~>
---      cases _Term (var "term")
---        (Just $ ref rewriteTermDef @@ var "rewrite" @@ var "term") [
---        _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
---          (var "expand" @@ var "doms" @@ var "cod" @@ (Core.annotatedTermSubject $ var "at"))
---          (Core.annotatedTermAnnotation $ var "at"),
---        _Term_application>>: "app" ~>
---          "lhs" <~ Core.applicationFunction (var "app") $
---          "rhs" <~ Core.applicationArgument (var "app") $
---          ref rewriteTermDef @@ var "rewrite" @@ var "term",
---        _Term_function>>: match _Function
---          (Just $ var "padTerm" @@ int32 1 @@ var "doms" @@ var "cod" @@ var "term") [
---          _Function_lambda>>: "l" ~> Core.termFunction $ Core.functionLambda $ Core.lambda
---            (Core.lambdaParameter $ var "l")
---            (Core.lambdaDomain $ var "l")
---            (var "expand" @@ (Lists.tail $ var "doms") @@ var "cod" @@ (Core.lambdaBody $ var "l"))],
---
-----          _Function_lambda>>: "l" ~>
-----            "tailDoms" <~ Lists.tail (var "doms") $
-----            Core.termFunction $ Core.functionLambda $ Core.lambda
-----              (Core.lambdaParameter $ var "l")
-----              (Core.lambdaDomain $ var "l")
-----              (var "expand" @@ var "tailDoms" @@ var "cod" @@ (Core.lambdaBody $ var "l"))],
---
---        _Term_let>>: "lt" ~>
---          "expandBinding" <~ ("b" ~> Core.binding
---            (Core.bindingName $ var "b")
---            (ref etaExpandTypedTermDef @@ (Core.bindingTerm $ var "b"))
---            (Core.bindingType $ var "b")) $
---          Core.termLet $ Core.let_
---            (Lists.map (var "expandBinding") (Core.letBindings $ var "lt"))
---            (var "expand" @@ var "doms" @@ var "cod" @@ (Core.letEnvironment $ var "lt"))],
---    "rewrite">: "recurse" ~> "term" ~> var "recurse" @@ var "term"] $
---  ref rewriteTermDef @@ var "rewrite" @@ var "term"
 
 flattenLetTermsDef :: TBinding (Term -> Term)
 flattenLetTermsDef = define "flattenLetTerms" $
@@ -562,7 +428,7 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
       _Type_variable>>: "v" ~> Core.typeVariable $ var "replaceName" @@ var "subst" @@ var "v"]) $
     ref rewriteTypeDef @@ var "rewrite" @@ var "typ") $
   -- Thread a triple: ((subst, boundVars), next)
-  "rewriteWithSubst" <~ ("state" ~>
+  "rewriteWithSubst" <~ ("state" ~> "term0" ~>
     "sb"   <~ first  (var "state") $
     "next" <~ second (var "state") $
     "subst"     <~ first  (var "sb") $
@@ -641,7 +507,7 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
       _Term_typeLambda>>: "ta" ~> Core.termTypeLambda $ Core.typeLambda
         (var "replaceName" @@ var "subst" @@ (Core.typeLambdaParameter $ var "ta"))
         (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.typeLambdaBody $ var "ta"))]) $
-    ref rewriteTermDef @@ var "rewrite") $
+    ref rewriteTermDef @@ var "rewrite" @@ var "term0") $
   -- initial state: ((emptySubst, emptyBound), next=0)
   var "rewriteWithSubst" @@ (pair (pair Maps.empty Sets.empty) (int32 0)) @@ var "term"
 
@@ -719,11 +585,6 @@ replaceFreeTermVariableDef = define "replaceFreeTermVariable" $
         (Core.termVariable $ var "v")]) $
   ref rewriteTermDef @@ var "rewrite" @@ var "term"
 
-rewriteDef :: TBinding (((x -> y) -> x -> y) -> ((x -> y) -> x -> y) -> x -> y)
-rewriteDef = define "rewrite" $ "fsub" ~> "f" ~>
-  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
-  var "recurse"
-
 replaceFreeTypeVariableDef :: TBinding (Name -> Type -> Type -> Type)
 replaceFreeTypeVariableDef = define "replaceFreeTypeVariable" $
   doc "Replace free occurrences of a name in a type" $
@@ -741,6 +602,13 @@ replaceFreeTypeVariableDef = define "replaceFreeTypeVariable" $
       (var "rep")
       (var "t")]) $
   ref rewriteTypeDef @@ var "mapExpr" @@ var "typ"
+
+-- TODO: this is a fixpoint combinator, but its type is sometimes incorrectly inferred based on how it is used.
+--       For now, we generally define local "rewrite"/"recurse" helper functions rather than using this global one.
+rewriteDef :: TBinding (((x -> y) -> x -> y) -> ((x -> y) -> x -> y) -> x -> y)
+rewriteDef = define "rewrite" $ "fsub" ~> "f" ~>
+  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
+  var "recurse"
 
 rewriteAndFoldTermDef :: TBinding (((a -> Term -> (a, Term)) -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
 rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
@@ -880,7 +748,9 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
         @@ ("t" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTermTypeName $ var "wt") (var "t"))
         @@ var "val0"
         @@ (Core.wrappedTermObject $ var "wt")]) $
-  ref rewriteDef @@ var "fsub" @@ var "f"
+--  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
+  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
+  var "recurse"
 
 rewriteAndFoldTermMDef :: TBinding (((a -> Term -> Flow s (a, Term)) -> a -> Term -> Flow s (a, Term)) -> a -> Term -> Flow s (a, Term))
 rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
@@ -1021,7 +891,9 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
         @@ ("t" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTermTypeName $ var "wt") (var "t"))
         @@ var "val0"
         @@ (Core.wrappedTermObject $ var "wt")]) $
-  ref rewriteDef @@ var "fsub" @@ var "f"
+--  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
+  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
+  var "recurse"
 
 rewriteTermDef :: TBinding (((Term -> Term) -> Term -> Term) -> Term -> Term)
 rewriteTermDef = define "rewriteTerm" $ "f" ~>
@@ -1089,7 +961,9 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~>
       _Term_wrap>>: "wt" ~> Core.termWrap $ Core.wrappedTerm
         (Core.wrappedTermTypeName $ var "wt")
         (var "recurse" @@ (Core.wrappedTermObject $ var "wt"))]) $
-  ref rewriteDef @@ var "fsub" @@ var "f"
+--  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
+  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
+  var "recurse"
 
 rewriteTermMDef :: TBinding (((Term -> Flow s Term) -> Term -> Flow s Term) -> Term -> Flow s Term)
 rewriteTermMDef = define "rewriteTermM" $
@@ -1195,7 +1069,9 @@ rewriteTermMDef = define "rewriteTermM" $
         "t" <~ Core.wrappedTermObject (var "wt") $
         "rt" <<~ var "recurse" @@ var "t" $
         produce $ Core.termWrap $ Core.wrappedTerm (var "name") (var "rt")]) $
-  ref rewriteDef @@ var "fsub" @@ var "f"
+--  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
+  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
+  var "recurse"
 
 rewriteTypeDef :: TBinding (((Type -> Type) -> Type -> Type) -> Type -> Type)
 rewriteTypeDef = define "rewriteType" $ "f" ~>
@@ -1234,7 +1110,9 @@ rewriteTypeDef = define "rewriteType" $ "f" ~>
       _Type_wrap>>: "wt" ~> Core.typeWrap $ Core.wrappedType
         (Core.wrappedTypeTypeName $ var "wt")
         (var "recurse" @@ (Core.wrappedTypeObject $ var "wt"))]) $
-  ref rewriteDef @@ var "fsub" @@ var "f"
+--  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
+  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
+  var "recurse"
 
 rewriteTypeMDef :: TBinding (((Type -> Flow s Type) -> Type -> Flow s Type) -> Type -> Flow s Type)
 rewriteTypeMDef = define "rewriteTypeM" $
@@ -1296,7 +1174,9 @@ rewriteTypeMDef = define "rewriteTypeM" $
     _Type_wrap>>: "wt" ~>
       "t" <<~ var "recurse" @@ (Core.wrappedTypeObject $ var "wt") $
       produce $ Core.typeWrap $ Core.wrappedType (Core.wrappedTypeTypeName $ var "wt") (var "t")]) $
-  ref rewriteDef @@ var "fsub" @@ var "f"
+--  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
+  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
+  var "recurse"
 
 simplifyTermDef :: TBinding (Term -> Term)
 simplifyTermDef = define "simplifyTerm" $
@@ -1509,7 +1389,7 @@ subtypesDef = define "subtypes" $
 termDependencyNamesDef :: TBinding (Bool -> Bool -> Bool -> Term -> S.Set Name)
 termDependencyNamesDef = define "termDependencyNames" $
   doc "Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that" $
-  "binds" ~> "withPrims" ~> "withNoms" ~>
+  "binds" ~> "withPrims" ~> "withNoms" ~> "term0" ~>
   "addNames" <~ ("names" ~> "term" ~>
     "nominal" <~ ("name" ~> Logic.ifElse (var "withNoms")
       (Sets.insert (var "name") (var "names"))
@@ -1534,7 +1414,7 @@ termDependencyNamesDef = define "termDependencyNames" $
       _Term_union>>: "injection" ~> var "nominal" @@ (Core.injectionTypeName $ var "injection"),
       _Term_variable>>: "name" ~> var "var" @@ var "name",
       _Term_wrap>>: "wrappedTerm" ~> var "nominal" @@ (Core.wrappedTermTypeName $ var "wrappedTerm")]) $
-  ref foldOverTermDef @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty
+  ref foldOverTermDef @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "term0"
 
 toShortNamesDef :: TBinding ([Name] -> M.Map Name Name)
 toShortNamesDef = define "toShortNames" $
@@ -1599,6 +1479,7 @@ typeDependencyNamesDef = define "typeDependencyNames" $
 
 typeNamesInTypeDef :: TBinding (Type -> S.Set Name)
 typeNamesInTypeDef = define "typeNamesInType" $
+  "typ0" ~>
   "addNames" <~ ("names" ~> "typ" ~> cases _Type (var "typ")
     (Just $ var "names") [
     _Type_record>>: "rowType" ~>
@@ -1610,7 +1491,7 @@ typeNamesInTypeDef = define "typeNamesInType" $
     _Type_wrap>>: "wrappedType" ~>
       "tname" <~ Core.wrappedTypeTypeName (var "wrappedType") $
       Sets.insert (var "tname") (var "names")]) $
-  ref foldOverTypeDef @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty
+  ref foldOverTypeDef @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "typ0"
 
 unshadowVariablesDef :: TBinding (Term -> Term)
 unshadowVariablesDef = define "unshadowVariables" $
