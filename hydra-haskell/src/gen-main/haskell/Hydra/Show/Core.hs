@@ -16,8 +16,9 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-readTerm :: (t0 -> Maybe t1)
-readTerm _ = Nothing
+-- | A placeholder for reading terms from their serialized form. Not implemented.
+readTerm :: (String -> Maybe Core.Term)
+readTerm s = (Just (Core.TermLiteral (Core.LiteralString s)))
 
 -- | Show a binding as a string
 binding :: (Core.Binding -> String)
@@ -40,14 +41,12 @@ elimination elm = ((\x -> case x of
     let arity = (Core.tupleProjectionArity v1)
     in  
       let index = (Core.tupleProjectionIndex v1)
-      in  
-        let domain = (Core.tupleProjectionDomain v1)
-        in (Strings.cat [
-          "[",
-          Literals.showInt32 index,
-          "/",
-          Literals.showInt32 arity,
-          "]"])
+      in (Strings.cat [
+        "[",
+        Literals.showInt32 index,
+        "/",
+        Literals.showInt32 arity,
+        "]"])
   Core.EliminationRecord v1 ->  
     let tname = (Core.unName (Core.projectionTypeName v1))
     in  

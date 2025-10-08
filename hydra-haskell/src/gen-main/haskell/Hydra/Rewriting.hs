@@ -176,14 +176,35 @@ foldOverType order fld b0 typ = ((\x -> case x of
   Coders.TraversalOrderPre -> (Lists.foldl (foldOverType order fld) (fld b0 typ) (subtypes typ))
   Coders.TraversalOrderPost -> (fld (Lists.foldl (foldOverType order fld) b0 (subtypes typ)) typ)) order)
 
--- | Find free type variables introduced by type applications within a term.
+-- | Get the set of free type variables in a term (including schema names, where they appear in type annotations). In this context, only the type schemes of let bindings can bind type variables; type lambdas do not.
 freeTypeVariablesInTerm :: (Core.Term -> S.Set Core.Name)
-freeTypeVariablesInTerm term = ((\x -> case x of
-  Core.TermTypeApplication v1 -> (Sets.union (freeVariablesInType (Core.typedTermType v1)) (freeTypeVariablesInTerm (Core.typedTermTerm v1)))
-  Core.TermTypeLambda v1 ->  
-    let tmp = (freeTypeVariablesInTerm (Core.typeLambdaBody v1))
-    in (Sets.delete (Core.typeLambdaParameter v1) tmp)
-  _ -> (Lists.foldl Sets.union Sets.empty (Lists.map freeTypeVariablesInTerm (subterms term)))) term)
+freeTypeVariablesInTerm term0 =  
+  let allOf = (\sets -> Lists.foldl Sets.union Sets.empty sets)
+  in  
+    let tryType = (\tvars -> \typ -> Sets.difference (freeVariablesInType typ) tvars)
+    in  
+      let getAll = (\vars -> \term ->  
+              let recurse = (getAll vars)
+              in  
+                let dflt = (allOf (Lists.map recurse (subterms term)))
+                in ((\x -> case x of
+                  Core.TermFunction v1 -> ((\x -> case x of
+                    Core.FunctionElimination v2 -> ((\x -> case x of
+                      Core.EliminationProduct v3 -> (Optionals.maybe Sets.empty (\typs -> allOf (Lists.map (tryType vars) typs)) (Core.tupleProjectionDomain v3))
+                      _ -> dflt) v2)
+                    Core.FunctionLambda v2 ->  
+                      let domt = (Optionals.maybe Sets.empty (tryType vars) (Core.lambdaDomain v2))
+                      in (Sets.union domt (recurse (Core.lambdaBody v2)))
+                    _ -> dflt) v1)
+                  Core.TermLet v1 ->  
+                    let forBinding = (\b ->  
+                            let newVars = (Optionals.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingType b))
+                            in (Sets.union (getAll newVars (Core.bindingTerm b)) (Optionals.maybe Sets.empty (\ts -> tryType newVars (Core.typeSchemeType ts)) (Core.bindingType b))))
+                    in (Sets.union (allOf (Lists.map forBinding (Core.letBindings v1))) (recurse (Core.letEnvironment v1)))
+                  Core.TermTypeApplication v1 -> (Sets.union (tryType vars (Core.typedTermType v1)) (recurse (Core.typedTermTerm v1)))
+                  Core.TermTypeLambda v1 -> (Sets.union (tryType vars (Core.TypeVariable (Core.typeLambdaParameter v1))) (recurse (Core.typeLambdaBody v1)))
+                  _ -> dflt) term))
+      in (getAll Sets.empty term0)
 
 -- | Find the free variables (i.e. variables not bound by a lambda or let) in a term
 freeVariablesInTerm :: (Core.Term -> S.Set Core.Name)
