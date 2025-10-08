@@ -132,7 +132,6 @@ module_ = Module (Namespace "hydra.inference") elements
       el typeOfInternalDef,
       el typeOfNominalDef,
       el typeOfUnitDef,
-      el unboundTypeVariablesInTermDef,
       el yieldDef,
       el yieldCheckedDef,
       el yieldDebugDef]
@@ -167,6 +166,7 @@ bindUnboundTypeVariablesDef = define "bindUnboundTypeVariables" $
     <> " This process attempts to capture type variables which have escaped unification, e.g. due to unused code."
     <> " However, unbound type variables not appearing beneath any typed let binding remain unbound.") $
   "cx" ~> "term0" ~>
+  "svars" <~ Sets.fromList (Maps.keys $ Typing.inferenceContextSchemaTypes $ var "cx") $
   "rewrite" <~ ("recurse" ~> "term" ~> cases _Term (var "term")
     (Just $ var "recurse" @@ var "term") [
     _Term_let>>: "l" ~>
@@ -178,8 +178,10 @@ bindUnboundTypeVariablesDef = define "bindUnboundTypeVariables" $
           ("ts" ~>
             "bvars" <~ Sets.fromList (Core.typeSchemeVariables $ var "ts") $
             "unboundInType" <~ ref Rewriting.freeVariablesInTypeDef @@ (Core.typeSchemeType $ var "ts") $
-            "unboundInTerm" <~ ref unboundTypeVariablesInTermDef @@ var "cx" @@ var "bterm" $
-            "unbound" <~ Sets.difference (Sets.union (var "unboundInType") (var "unboundInTerm")) (var "bvars") $
+            "unboundInTerm" <~ ref Rewriting.freeTypeVariablesInTermDef @@ var "bterm" $
+            "unbound" <~ Sets.difference
+              (Sets.union (var "unboundInType") (var "unboundInTerm"))
+              (Sets.union (var "svars") (var "bvars")) $
             "ts2" <~ Core.typeScheme
               (Lists.concat2
                 (Core.typeSchemeVariables $ var "ts")
@@ -291,13 +293,13 @@ checkTypeSubstDef = define "checkTypeSubst" $
   "s" <~ Typing.unTypeSubst (var "subst") $
   "vars" <~ Sets.fromList (Maps.keys $ var "s") $
   "suspectVars" <~ Sets.intersection (var "vars") (Sets.fromList $ Maps.keys $ Typing.inferenceContextSchemaTypes $ var "cx") $
-  "isTypeAlias" <~ ("ts" ~> cases _Type (ref Rewriting.deannotateTypeDef @@ (Core.typeSchemeType $ var "ts"))
-    (Just true) [
+  "isNominal" <~ ("ts" ~> cases _Type (ref Rewriting.deannotateTypeDef @@ (Core.typeSchemeType $ var "ts"))
+    (Just false) [
     _Type_record>>: constant true,
     _Type_union>>: constant true,
     _Type_wrap>>: constant true]) $
   "badVars" <~ Sets.fromList (Lists.filter
-    ("v" ~> Optionals.maybe false ("t" ~> Logic.not (var "isTypeAlias" @@ var "t")) $
+    ("v" ~> Optionals.maybe false (var "isNominal") $
       ref Lexical.dereferenceSchemaTypeDef @@ var "v" @@ (Typing.inferenceContextSchemaTypes $ var "cx"))
     (Sets.toList $ var "suspectVars")) $
   "badPairs" <~ Lists.filter ("p" ~> Sets.member (first $ var "p") (var "badVars")) (Maps.toList $ var "s") $
@@ -361,10 +363,8 @@ finalizeInferredTermDef :: TBinding (InferenceContext -> Term -> Flow s Term)
 finalizeInferredTermDef = define "finalizeInferredTerm" $
   doc "Finalize an inferred term by checking for unbound type variables, then normalizing type variables" $
   "cx" ~> "term" ~>
-  -- TODO: restore
---  "term2" <~ ref bindUnboundTypeVariablesDef @@ var "cx" @@ var "term" $
---  exec (ref checkForUnboundTypeVariablesDef @@ var "cx" @@ var "term2") $
-  "term2" <~ "term" $
+  "term2" <~ ref bindUnboundTypeVariablesDef @@ var "cx" @@ var "term" $
+  exec (ref checkForUnboundTypeVariablesDef @@ var "cx" @@ var "term2") $
   produce $ ref Rewriting.normalizeTypeVariablesInTermDef @@ var "term2"
 
 forInferredTermDef :: TBinding (InferenceContext -> Term -> String -> (InferenceResult -> a) -> Flow s a)
@@ -1648,54 +1648,6 @@ typeOfUnitDef = define "inferTypeOfUnit" $
     (Core.termUnit)
     (Core.typeUnit)
     (ref Substitution.idTypeSubstDef)
-
-unboundTypeVariablesInTermDef :: TBinding (InferenceContext -> Term -> S.Set Name)
-unboundTypeVariablesInTermDef = define "unboundTypeVariablesInTerm" $
-  doc ("Get the set of unbound type variables in a term."
-    <> " In this context, only the type schemes of let bindings can bind type variables; type lambdas do not.") $
-  "cx" ~> "term0" ~>
-  "allOf" <~ ("sets" ~> Lists.foldl (binaryFunction Sets.union) Sets.empty $ var "sets") $
-  "tryType" <~ ("tvars" ~> "typ" ~> Sets.difference (ref Rewriting.freeVariablesInTypeDef @@ var "typ") (var "tvars")) $
-  "getAll" <~ ("vars" ~> "term" ~>
-    "recurse" <~ var "getAll" @@ var "vars" $
-    "dflt" <~ (var "allOf" @@ Lists.map (var "recurse") (ref Rewriting.subtermsDef @@ var "term")) $
-    cases _Term (var "term")
-      (Just $ var "dflt") [
-      _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ var "dflt") [
-        _Function_elimination>>: "e" ~> cases _Elimination (var "e")
-          (Just $ var "dflt") [
-          _Elimination_product>>: "tp" ~> optCases (Core.tupleProjectionDomain $ var "tp")
-            (Sets.empty)
-            ("typs" ~> var "allOf" @@ (Lists.map (var "tryType" @@ var "vars") $ var "typs"))],
-        _Function_lambda>>: "l" ~>
-          "domt" <~ optCases (Core.lambdaDomain $ var "l") (Sets.empty) (var "tryType" @@ var "vars") $
-          Sets.union (var "domt") (var "recurse" @@ (Core.lambdaBody $ var "l"))],
-      _Term_let>>: "l" ~>
-        "forBinding" <~ ("b" ~>
-          "newVars" <~ optCases (Core.bindingType $ var "b")
-             (var "vars")
-             ("ts" ~> Sets.union (var "vars") (Sets.fromList $ Core.typeSchemeVariables $ var "ts")) $
-          Sets.union
-            (var "getAll" @@ var "newVars" @@ (Core.bindingTerm $ var "b"))
-            (optCases (Core.bindingType $ var "b")
-              Sets.empty
-              ("ts" ~> var "tryType" @@ var "newVars" @@ (Core.typeSchemeType $ var "ts")))) $
-        Sets.union
-          (var "allOf" @@ Lists.map (var "forBinding") (Core.letBindings $ var "l"))
-          (var "recurse" @@ (Core.letEnvironment $ var "l")),
-      _Term_typeApplication>>: "tt" ~>
-        Sets.union
-          (var "tryType" @@ var "vars" @@ (Core.typedTermType $ var "tt"))
-          (var "recurse" @@ (Core.typedTermTerm $ var "tt")),
-      _Term_typeLambda>>: "tl" ~>
-        Sets.union
-          -- The type variable introduced by a type lambda is considered unbound unless it is also introduced in an
-          -- enclosing let binding, as all type lambda terms are in Hydra.
-          (var "tryType" @@ var "vars" @@ (Core.typeVariable $ Core.typeLambdaParameter $ var "tl"))
-          (var "recurse" @@ (Core.typeLambdaBody $ var "tl"))]) $
-  "svars" <~ Sets.fromList (Maps.keys $ Typing.inferenceContextSchemaTypes $ var "cx") $
-  var "getAll" @@ var "svars" @@ var "term0"
 
 yieldDef :: TBinding (Term -> Type -> TypeSubst -> InferenceResult)
 yieldDef = define "yield" $

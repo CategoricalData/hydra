@@ -373,18 +373,65 @@ foldOverTypeDef = define "foldOverType" $
         @@ (ref subtypesDef @@ var "typ"))
       @@ var "typ")]
 
+--freeTypeVariablesInTermDef :: TBinding (Term -> S.Set Name)
+--freeTypeVariablesInTermDef = define "freeTypeVariablesInTerm" $
+--  doc "Find free type variables introduced by type applications within a term." $
+--  "term" ~> cases _Term (var "term")
+--    (Just $ Lists.foldl (binaryFunction Sets.union) Sets.empty $
+--      Lists.map (ref freeTypeVariablesInTermDef) (ref subtermsDef @@ var "term")) [
+--    _Term_typeApplication>>: "tt" ~> Sets.union
+--      (ref freeVariablesInTypeDef @@ (Core.typedTermType $ var "tt"))
+--      (ref freeTypeVariablesInTermDef @@ (Core.typedTermTerm $ var "tt")),
+--    _Term_typeLambda>>: "tl" ~>
+--      "tmp" <~ ref freeTypeVariablesInTermDef @@ (Core.typeLambdaBody $ var "tl") $
+--      Sets.delete (Core.typeLambdaParameter $ var "tl") (var "tmp")]
+
 freeTypeVariablesInTermDef :: TBinding (Term -> S.Set Name)
 freeTypeVariablesInTermDef = define "freeTypeVariablesInTerm" $
-  doc "Find free type variables introduced by type applications within a term." $
-  "term" ~> cases _Term (var "term")
-    (Just $ Lists.foldl (binaryFunction Sets.union) Sets.empty $
-      Lists.map (ref freeTypeVariablesInTermDef) (ref subtermsDef @@ var "term")) [
-    _Term_typeApplication>>: "tt" ~> Sets.union
-      (ref freeVariablesInTypeDef @@ (Core.typedTermType $ var "tt"))
-      (ref freeTypeVariablesInTermDef @@ (Core.typedTermTerm $ var "tt")),
-    _Term_typeLambda>>: "tl" ~>
-      "tmp" <~ ref freeTypeVariablesInTermDef @@ (Core.typeLambdaBody $ var "tl") $
-      Sets.delete (Core.typeLambdaParameter $ var "tl") (var "tmp")]
+  doc ("Get the set of free type variables in a term (including schema names, where they appear in type annotations)."
+    <> " In this context, only the type schemes of let bindings can bind type variables; type lambdas do not.") $
+  "term0" ~>
+  "allOf" <~ ("sets" ~> Lists.foldl (binaryFunction Sets.union) Sets.empty $ var "sets") $
+  "tryType" <~ ("tvars" ~> "typ" ~> Sets.difference (ref freeVariablesInTypeDef @@ var "typ") (var "tvars")) $
+  "getAll" <~ ("vars" ~> "term" ~>
+    "recurse" <~ var "getAll" @@ var "vars" $
+    "dflt" <~ (var "allOf" @@ Lists.map (var "recurse") (ref subtermsDef @@ var "term")) $
+    cases _Term (var "term")
+      (Just $ var "dflt") [
+      _Term_function>>: "f" ~> cases _Function (var "f")
+        (Just $ var "dflt") [
+        _Function_elimination>>: "e" ~> cases _Elimination (var "e")
+          (Just $ var "dflt") [
+          _Elimination_product>>: "tp" ~> optCases (Core.tupleProjectionDomain $ var "tp")
+            (Sets.empty)
+            ("typs" ~> var "allOf" @@ (Lists.map (var "tryType" @@ var "vars") $ var "typs"))],
+        _Function_lambda>>: "l" ~>
+          "domt" <~ optCases (Core.lambdaDomain $ var "l") (Sets.empty) (var "tryType" @@ var "vars") $
+          Sets.union (var "domt") (var "recurse" @@ (Core.lambdaBody $ var "l"))],
+      _Term_let>>: "l" ~>
+        "forBinding" <~ ("b" ~>
+          "newVars" <~ optCases (Core.bindingType $ var "b")
+             (var "vars")
+             ("ts" ~> Sets.union (var "vars") (Sets.fromList $ Core.typeSchemeVariables $ var "ts")) $
+          Sets.union
+            (var "getAll" @@ var "newVars" @@ (Core.bindingTerm $ var "b"))
+            (optCases (Core.bindingType $ var "b")
+              Sets.empty
+              ("ts" ~> var "tryType" @@ var "newVars" @@ (Core.typeSchemeType $ var "ts")))) $
+        Sets.union
+          (var "allOf" @@ Lists.map (var "forBinding") (Core.letBindings $ var "l"))
+          (var "recurse" @@ (Core.letEnvironment $ var "l")),
+      _Term_typeApplication>>: "tt" ~>
+        Sets.union
+          (var "tryType" @@ var "vars" @@ (Core.typedTermType $ var "tt"))
+          (var "recurse" @@ (Core.typedTermTerm $ var "tt")),
+      _Term_typeLambda>>: "tl" ~>
+        Sets.union
+          -- The type variable introduced by a type lambda is considered unbound unless it is also introduced in an
+          -- enclosing let binding, as all type lambda terms are in Hydra.
+          (var "tryType" @@ var "vars" @@ (Core.typeVariable $ Core.typeLambdaParameter $ var "tl"))
+          (var "recurse" @@ (Core.typeLambdaBody $ var "tl"))]) $
+  var "getAll" @@ Sets.empty @@ var "term0"
 
 freeVariablesInTermDef :: TBinding (Term -> S.Set Name)
 freeVariablesInTermDef = define "freeVariablesInTerm" $
