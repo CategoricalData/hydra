@@ -322,8 +322,9 @@ putAvroHydraAdapter :: AvroQualifiedName -> AvroHydraAdapter -> AvroEnvironment 
 putAvroHydraAdapter qname ad env = env {avroEnvironmentNamedAdapters = M.insert qname ad $ avroEnvironmentNamedAdapters env}
 
 rewriteAvroSchemaM :: ((Avro.Schema -> Flow s Avro.Schema) -> Avro.Schema -> Flow s Avro.Schema) -> Avro.Schema -> Flow s Avro.Schema
-rewriteAvroSchemaM f = rewrite fsub f
+rewriteAvroSchemaM f = recurse
   where
+    recurse = f (fsub recurse) -- TODO: restore global Rewriting.rewrite/fix instead of the local definition
     fsub recurse schema = case schema of
         Avro.SchemaArray (Avro.Array els) -> Avro.SchemaArray <$> (Avro.Array <$> recurse els)
         Avro.SchemaMap (Avro.Map vschema) -> Avro.SchemaMap <$> (Avro.Map <$> recurse vschema)
