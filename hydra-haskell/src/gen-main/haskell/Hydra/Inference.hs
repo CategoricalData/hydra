@@ -38,7 +38,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 bindConstraints :: (Typing_.InferenceContext -> (Typing_.TypeSubst -> Compute.Flow t0 t1) -> [Typing_.TypeConstraint] -> Compute.Flow t0 t1)
-bindConstraints cx f constraints = (Flows.bind (Unification.unifyTypeConstraints (Typing_.inferenceContextSchemaTypes cx) constraints) f)
+bindConstraints cx f constraints = (Flows.bind (Unification.unifyTypeConstraints (Typing_.inferenceContextSchemaTypes cx) constraints) (\s -> Flows.bind (checkTypeSubst cx s) (\_ -> f s)))
 
 checkSameType :: (String -> [Core.Type] -> Compute.Flow t0 Core.Type)
 checkSameType desc types =  
@@ -57,6 +57,35 @@ checkType k g t e = (Logic.ifElse debugInference (Flows.bind (typeOfInternal g k
   Core__.type_ t,
   " but found ",
   (Core__.type_ t0)])))) (Flows.pure ()))
+
+checkTypeSubst :: (Typing_.InferenceContext -> Typing_.TypeSubst -> Compute.Flow t0 Typing_.TypeSubst)
+checkTypeSubst cx subst =  
+  let s = (Typing_.unTypeSubst subst)
+  in  
+    let vars = (Sets.fromList (Maps.keys s))
+    in  
+      let suspectVars = (Sets.intersection vars (Sets.fromList (Maps.keys (Typing_.inferenceContextSchemaTypes cx))))
+      in  
+        let isTypeAlias = (\ts -> (\x -> case x of
+                Core.TypeRecord _ -> True
+                Core.TypeUnion _ -> True
+                Core.TypeWrap _ -> True
+                _ -> True) (Rewriting.deannotateType (Core.typeSchemeType ts)))
+        in  
+          let badVars = (Sets.fromList (Lists.filter (\v -> Optionals.maybe False (\t -> Logic.not (isTypeAlias t)) (Lexical.dereferenceSchemaType v (Typing_.inferenceContextSchemaTypes cx))) (Sets.toList suspectVars)))
+          in  
+            let badPairs = (Lists.filter (\p -> Sets.member (fst p) badVars) (Maps.toList s))
+            in  
+              let printPair = (\p -> Strings.cat [
+                      Strings.cat [
+                        Core.unName (fst p),
+                        " --> "],
+                      (Core__.type_ (snd p))])
+              in (Logic.ifElse (Sets.null badVars) (Flows.pure subst) (Flows.fail (Strings.cat [
+                Strings.cat [
+                  "Schema type(s) incorrectly unified: {",
+                  (Strings.intercalate ", " (Lists.map printPair badPairs))],
+                "}"])))
 
 checkTypeVariables :: (Typing_.InferenceContext -> S.Set Core.Name -> Core.Type -> Compute.Flow t0 ())
 checkTypeVariables cx tyvars typ = (Monads.withTrace (Strings.cat [
@@ -221,7 +250,7 @@ inferTypeOfApplication cx app =
                 let s1 = (Typing_.inferenceResultSubst rhsResult)
                 in (Flows.bind freshName (\v -> Flows.bind (Unification.unifyTypes (Typing_.inferenceContextSchemaTypes cx) (Substitution.substInType s1 t0) (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = t1,
-                  Core.functionTypeCodomain = (Core.TypeVariable v)})) "application lhs") (\s2 ->  
+                  Core.functionTypeCodomain = (Core.TypeVariable v)})) "application lhs") (\s2 -> Flows.bind (checkTypeSubst cx s2) (\_ ->  
                   let rExpr = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Substitution.substTypesInTerm (Substitution.composeTypeSubst s1 s2) a),
                           Core.applicationArgument = (Substitution.substTypesInTerm s2 b)}))
@@ -235,7 +264,7 @@ inferTypeOfApplication cx app =
                       in (Flows.pure (Typing_.InferenceResult {
                         Typing_.inferenceResultTerm = rExpr,
                         Typing_.inferenceResultType = rType,
-                        Typing_.inferenceResultSubst = rSubst})))))))))
+                        Typing_.inferenceResultSubst = rSubst}))))))))))
 
 inferTypeOfCaseStatement :: (Typing_.InferenceContext -> Core.CaseStatement -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfCaseStatement cx caseStmt =  
@@ -450,7 +479,7 @@ inferTypeOfLetNormalized cx0 letTerm =
               let tbins1 = (fst (snd inferredResult))
               in  
                 let s1 = (snd (snd inferredResult))
-                in (Flows.bind (Unification.unifyTypeLists (Typing_.inferenceContextSchemaTypes cx0) (Lists.map (Substitution.substInType s1) tbins0) tbins1 "temporary type bindings") (\s2 ->  
+                in (Flows.bind (Unification.unifyTypeLists (Typing_.inferenceContextSchemaTypes cx0) (Lists.map (Substitution.substInType s1) tbins0) tbins1 "temporary type bindings") (\s2 -> Flows.bind (checkTypeSubst cx0 s2) (\_ ->  
                   let g2 = (Substitution.substInContext (Substitution.composeTypeSubst s1 s2) cx0)
                   in  
                     let tsbins1 = (Lists.zip bnames (Lists.map (\t -> generalize g2 (Substitution.substInType s2 t)) tbins1))
@@ -497,7 +526,7 @@ inferTypeOfLetNormalized cx0 letTerm =
                                             s1,
                                             s2,
                                             senv])}
-                                  in (Flows.pure ret)))))))))
+                                  in (Flows.pure ret))))))))))
 
 inferTypeOfLet :: (Typing_.InferenceContext -> Core.Let -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfLet cx let0 =  
@@ -877,7 +906,7 @@ key_vcount :: Core.Name
 key_vcount = (Core.Name "inferenceTypeVariableCount")
 
 mapConstraints :: (Typing_.InferenceContext -> (Typing_.TypeSubst -> t0) -> [Typing_.TypeConstraint] -> Compute.Flow t1 t0)
-mapConstraints cx f constraints = (Flows.map f (Unification.unifyTypeConstraints (Typing_.inferenceContextSchemaTypes cx) constraints))
+mapConstraints cx f constraints = (Flows.bind (Unification.unifyTypeConstraints (Typing_.inferenceContextSchemaTypes cx) constraints) (\s -> Flows.bind (checkTypeSubst cx s) (\_ -> Flows.pure (f s))))
 
 -- | Apply type arguments to a nominal type
 nominalApplication :: (Core.Name -> [Core.Type] -> Core.Type)
@@ -1128,11 +1157,11 @@ typeOfNominal desc cx tname expected =
     let svars = (Core.typeSchemeVariables schemaType)
     in  
       let stype = (Core.typeSchemeType schemaType)
-      in (Flows.bind (Unification.unifyTypes (Typing_.inferenceContextSchemaTypes cx) stype expected desc) (\substWrapper ->  
+      in (Flows.bind (Unification.unifyTypes (Typing_.inferenceContextSchemaTypes cx) stype expected desc) (\substWrapper -> Flows.bind (checkTypeSubst cx substWrapper) (\_ ->  
         let subst = (Typing_.unTypeSubst substWrapper)
         in  
           let tparams = (Lists.map (resolveType subst) svars)
-          in (Flows.pure (nominalApplication tname tparams))))))
+          in (Flows.pure (nominalApplication tname tparams)))))))
 
 -- | The trivial inference result for the unit term
 inferTypeOfUnit :: Typing_.InferenceResult
