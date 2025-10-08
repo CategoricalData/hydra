@@ -85,9 +85,6 @@ detypeTerm t = ((\x -> case x of
   Core.TermTypeLambda v1 -> (deannotateAndDetypeTerm (Core.typeLambdaBody v1))
   _ -> t) t)
 
-etaExpandTypedTerm :: (t0 -> t0)
-etaExpandTypedTerm term = term
-
 -- | Flatten nested let expressions
 flattenLetTerms :: (Core.Term -> Core.Term)
 flattenLetTerms term =  
@@ -300,7 +297,7 @@ normalizeTypeVariablesInTerm term =
                     _ -> (recurse typ)) typ)
             in (rewriteType rewrite typ))
     in  
-      let rewriteWithSubst = (\state ->  
+      let rewriteWithSubst = (\state -> \term0 ->  
               let sb = (fst state)
               in  
                 let next = (snd state)
@@ -380,7 +377,7 @@ normalizeTypeVariablesInTerm term =
                                 Core.typeLambdaParameter = (replaceName subst (Core.typeLambdaParameter v1)),
                                 Core.typeLambdaBody = (rewriteWithSubst ((subst, boundVars), next) (Core.typeLambdaBody v1))}))
                               _ -> (recurse term)) term)
-                      in (rewriteTerm rewrite))
+                      in (rewriteTerm rewrite term0))
       in (rewriteWithSubst ((Maps.empty, Sets.empty), 0) term)
 
 -- | Recursively remove term annotations, including within subterms
@@ -569,7 +566,9 @@ rewriteAndFoldTerm f =
                               Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
                               Core.wrappedTermObject = t})) val0 (Core.wrappedTermObject v1))
                             _ -> dflt) term0))
-  in (rewrite fsub f)
+  in  
+    let recurse = (f (fsub recurse))
+    in recurse
 
 rewriteAndFoldTermM :: (((t0 -> Core.Term -> Compute.Flow t1 (t0, Core.Term)) -> t0 -> Core.Term -> Compute.Flow t1 (t0, Core.Term)) -> t0 -> Core.Term -> Compute.Flow t1 (t0, Core.Term))
 rewriteAndFoldTermM f =  
@@ -647,7 +646,9 @@ rewriteAndFoldTermM f =
                               Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
                               Core.wrappedTermObject = t})) val0 (Core.wrappedTermObject v1))
                             _ -> dflt) term0))
-  in (rewrite fsub f)
+  in  
+    let recurse = (f (fsub recurse))
+    in recurse
 
 rewriteTerm :: (((Core.Term -> Core.Term) -> Core.Term -> Core.Term) -> Core.Term -> Core.Term)
 rewriteTerm f =  
@@ -721,7 +722,9 @@ rewriteTerm f =
                     Core.TermWrap v1 -> (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
                       Core.wrappedTermObject = (recurse (Core.wrappedTermObject v1))}))) term))
-  in (rewrite fsub f)
+  in  
+    let recurse = (f (fsub recurse))
+    in recurse
 
 rewriteTermM :: (((Core.Term -> Compute.Flow t0 Core.Term) -> Core.Term -> Compute.Flow t0 Core.Term) -> Core.Term -> Compute.Flow t0 Core.Term)
 rewriteTermM f =  
@@ -825,7 +828,9 @@ rewriteTermM f =
                     in (Flows.bind (recurse t) (\rt -> Flows.pure (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = name,
                       Core.wrappedTermObject = rt}))))) term))
-  in (rewrite fsub f)
+  in  
+    let recurse = (f (fsub recurse))
+    in recurse
 
 rewriteType :: (((Core.Type -> Core.Type) -> Core.Type -> Core.Type) -> Core.Type -> Core.Type)
 rewriteType f =  
@@ -866,7 +871,9 @@ rewriteType f =
             Core.TypeWrap v1 -> (Core.TypeWrap (Core.WrappedType {
               Core.wrappedTypeTypeName = (Core.wrappedTypeTypeName v1),
               Core.wrappedTypeObject = (recurse (Core.wrappedTypeObject v1))}))) typ))
-  in (rewrite fsub f)
+  in  
+    let recurse = (f (fsub recurse))
+    in recurse
 
 rewriteTypeM :: (((Core.Type -> Compute.Flow t0 Core.Type) -> Core.Type -> Compute.Flow t0 Core.Type) -> Core.Type -> Compute.Flow t0 Core.Type)
 rewriteTypeM f =  
@@ -919,7 +926,9 @@ rewriteTypeM f =
           Core.TypeWrap v1 -> (Flows.bind (recurse (Core.wrappedTypeObject v1)) (\t -> Flows.pure (Core.TypeWrap (Core.WrappedType {
             Core.wrappedTypeTypeName = (Core.wrappedTypeTypeName v1),
             Core.wrappedTypeObject = t}))))) typ)
-  in (rewrite fsub f)
+  in  
+    let recurse = (f (fsub recurse))
+    in recurse
 
 -- | Simplify terms by applying beta reduction where possible
 simplifyTerm :: (Core.Term -> Core.Term)
@@ -1093,7 +1102,7 @@ subtypes x = case x of
 
 -- | Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
 termDependencyNames :: (Bool -> Bool -> Bool -> Core.Term -> S.Set Core.Name)
-termDependencyNames binds withPrims withNoms =  
+termDependencyNames binds withPrims withNoms term0 =  
   let addNames = (\names -> \term ->  
           let nominal = (\name -> Logic.ifElse withNoms (Sets.insert name names) names)
           in  
@@ -1114,7 +1123,7 @@ termDependencyNames binds withPrims withNoms =
                 Core.TermVariable v1 -> (var v1)
                 Core.TermWrap v1 -> (nominal (Core.wrappedTermTypeName v1))
                 _ -> names) term))
-  in (foldOverTerm Coders.TraversalOrderPre addNames Sets.empty)
+  in (foldOverTerm Coders.TraversalOrderPre addNames Sets.empty term0)
 
 -- | Generate short names from a list of fully qualified names
 toShortNames :: ([Core.Name] -> M.Map Core.Name Core.Name)
@@ -1170,19 +1179,19 @@ typeDependencyNames :: (Bool -> Core.Type -> S.Set Core.Name)
 typeDependencyNames withSchema typ = (Logic.ifElse withSchema (Sets.union (freeVariablesInType typ) (typeNamesInType typ)) (freeVariablesInType typ))
 
 typeNamesInType :: (Core.Type -> S.Set Core.Name)
-typeNamesInType = (foldOverType Coders.TraversalOrderPre addNames Sets.empty) 
-  where 
-    addNames = (\names -> \typ -> (\x -> case x of
-      Core.TypeRecord v1 ->  
-        let tname = (Core.rowTypeTypeName v1)
-        in (Sets.insert tname names)
-      Core.TypeUnion v1 ->  
-        let tname = (Core.rowTypeTypeName v1)
-        in (Sets.insert tname names)
-      Core.TypeWrap v1 ->  
-        let tname = (Core.wrappedTypeTypeName v1)
-        in (Sets.insert tname names)
-      _ -> names) typ)
+typeNamesInType typ0 =  
+  let addNames = (\names -> \typ -> (\x -> case x of
+          Core.TypeRecord v1 ->  
+            let tname = (Core.rowTypeTypeName v1)
+            in (Sets.insert tname names)
+          Core.TypeUnion v1 ->  
+            let tname = (Core.rowTypeTypeName v1)
+            in (Sets.insert tname names)
+          Core.TypeWrap v1 ->  
+            let tname = (Core.wrappedTypeTypeName v1)
+            in (Sets.insert tname names)
+          _ -> names) typ)
+  in (foldOverType Coders.TraversalOrderPre addNames Sets.empty typ0)
 
 -- | Unshadow lambda-bound variables in a term
 unshadowVariables :: (Core.Term -> Core.Term)
