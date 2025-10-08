@@ -64,6 +64,22 @@ _ApplicationType_function = (Name "function")
 
 _ApplicationType_argument = (Name "argument")
 
+-- | A field with an optional type scheme, used to bind variables to terms in a 'let' expression
+data Binding = 
+  Binding {
+    bindingName :: Name,
+    bindingTerm :: Term,
+    bindingType :: (Maybe TypeScheme)}
+  deriving (Eq, Ord, Read, Show)
+
+_Binding = (Name "hydra.core.Binding")
+
+_Binding_name = (Name "name")
+
+_Binding_term = (Name "term")
+
+_Binding_type = (Name "type")
+
 -- | A union elimination; a case statement
 data CaseStatement = 
   CaseStatement {
@@ -326,22 +342,6 @@ _Let = (Name "hydra.core.Let")
 _Let_bindings = (Name "bindings")
 
 _Let_environment = (Name "environment")
-
--- | A field with an optional type scheme, used to bind variables to terms in a 'let' expression
-data Binding = 
-  Binding {
-    bindingName :: Name,
-    bindingTerm :: Term,
-    bindingType :: (Maybe TypeScheme)}
-  deriving (Eq, Ord, Read, Show)
-
-_Binding = (Name "hydra.core.Binding")
-
-_Binding_name = (Name "name")
-
-_Binding_term = (Name "term")
-
-_Binding_type = (Name "type")
 
 -- | A term constant; an instance of a literal type
 data Literal = 
