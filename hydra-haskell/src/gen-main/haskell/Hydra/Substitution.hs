@@ -97,29 +97,33 @@ substInTypeScheme subst ts = Core.TypeScheme {
 substTypesInTerm :: (Typing.TypeSubst -> Core.Term -> Core.Term)
 substTypesInTerm subst =  
   let rewrite = (\recurse -> \term ->  
-          let forElimination = (\elm -> (\x -> case x of
-                  Core.EliminationProduct v1 -> (forTupleProjection v1)
-                  _ -> (recurse term)) elm) 
+          let dflt = (recurse term) 
+              forElimination = (\elm -> (\x -> case x of
+                      Core.EliminationProduct v1 -> (forTupleProjection v1)
+                      _ -> dflt) elm)
               forFunction = (\f -> (\x -> case x of
                       Core.FunctionElimination v1 -> (forElimination v1)
                       Core.FunctionLambda v1 -> (forLambda v1)
-                      _ -> (recurse term)) f)
-              forLambda = (\l -> recurse (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      _ -> dflt) f)
+              forLambda = (\l -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.lambdaParameter l),
                       Core.lambdaDomain = (Optionals.map (substInType subst) (Core.lambdaDomain l)),
-                      Core.lambdaBody = (Core.lambdaBody l)}))))
+                      Core.lambdaBody = (substTypesInTerm subst (Core.lambdaBody l))})))
               forLet = (\l ->  
                       let rewriteBinding = (\b -> Core.Binding {
                               Core.bindingName = (Core.bindingName b),
-                              Core.bindingTerm = (Core.bindingTerm b),
+                              Core.bindingTerm = (substTypesInTerm subst (Core.bindingTerm b)),
                               Core.bindingType = (Optionals.map (substInTypeScheme subst) (Core.bindingType b))})
-                      in (recurse (Core.TermLet (Core.Let {
+                      in (Core.TermLet (Core.Let {
                         Core.letBindings = (Lists.map rewriteBinding (Core.letBindings l)),
-                        Core.letEnvironment = (Core.letEnvironment l)}))))
-              forTupleProjection = (\tp -> recurse (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+                        Core.letEnvironment = (substTypesInTerm subst (Core.letEnvironment l))})))
+              forTupleProjection = (\tp -> Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
                       Core.tupleProjectionArity = (Core.tupleProjectionArity tp),
                       Core.tupleProjectionIndex = (Core.tupleProjectionIndex tp),
-                      Core.tupleProjectionDomain = (Optionals.map (\types -> Lists.map (substInType subst) types) (Core.tupleProjectionDomain tp))})))))
+                      Core.tupleProjectionDomain = (Optionals.map (\types -> Lists.map (substInType subst) types) (Core.tupleProjectionDomain tp))}))))
+              forTypeApplication = (\tt -> Core.TermTypeApplication (Core.TypedTerm {
+                      Core.typedTermTerm = (substTypesInTerm subst (Core.typedTermTerm tt)),
+                      Core.typedTermType = (substInType subst (Core.typedTermType tt))}))
               forTypeLambda = (\ta ->  
                       let param = (Core.typeLambdaParameter ta) 
                           subst2 = (Typing.TypeSubst (Maps.remove param (Typing.unTypeSubst subst)))
@@ -129,9 +133,7 @@ substTypesInTerm subst =
           in ((\x -> case x of
             Core.TermFunction v1 -> (forFunction v1)
             Core.TermLet v1 -> (forLet v1)
+            Core.TermTypeApplication v1 -> (forTypeApplication v1)
             Core.TermTypeLambda v1 -> (forTypeLambda v1)
-            Core.TermTypeApplication v1 -> (recurse (Core.TermTypeApplication (Core.TypedTerm {
-              Core.typedTermTerm = (Core.typedTermTerm v1),
-              Core.typedTermType = (substInType subst (Core.typedTermType v1))})))
-            _ -> (recurse term)) term))
+            _ -> dflt) term))
   in (Rewriting.rewriteTerm rewrite)

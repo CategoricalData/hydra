@@ -164,41 +164,45 @@ substTypesInTermDef :: TBinding (TypeSubst -> Term -> Term)
 substTypesInTermDef = define "substTypesInTerm" $
   lambda "subst" $ lets [
     "rewrite">: lambdas ["recurse", "term"] $ lets [
+      "dflt">: var "recurse" @@ var "term",
       "forElimination">: lambda "elm" $ cases _Elimination (var "elm")
-        (Just $ var "recurse" @@ var "term") [
+        (Just $ var "dflt") [
         _Elimination_product>>: var "forTupleProjection"],
       "forFunction">: lambda "f" $ cases _Function (var "f")
-        -- TODO: injections and case statements need a domain field as well, similar to lambdas
-        (Just $ var "recurse" @@ var "term") [
+        (Just $ var "dflt") [
         _Function_elimination>>: var "forElimination",
         _Function_lambda>>: var "forLambda"],
-      "forLambda">: lambda "l" $ var "recurse" @@ (Core.termFunction $ Core.functionLambda $ Core.lambda
+      "forLambda">: lambda "l" $ Core.termFunction $ Core.functionLambda $ Core.lambda
         (Core.lambdaParameter $ var "l")
         (Optionals.map (ref substInTypeDef @@ var "subst") $ Core.lambdaDomain $ var "l")
-        (Core.lambdaBody $ var "l")),
+        (ref substTypesInTermDef @@ var "subst" @@ (Core.lambdaBody $ var "l")),
       "forLet">: lambda "l" $ lets [
         "rewriteBinding">: lambda "b" $ Core.binding
           (Core.bindingName $ var "b")
-          (Core.bindingTerm $ var "b")
+          (ref substTypesInTermDef @@ var "subst" @@ (Core.bindingTerm $ var "b"))
           (Optionals.map (ref substInTypeSchemeDef @@ var "subst") (Core.bindingType $ var "b"))] $
-        var "recurse" @@ (Core.termLet $ Core.let_
+        Core.termLet $ Core.let_
           (Lists.map (var "rewriteBinding") (Core.letBindings $ var "l"))
-          (Core.letEnvironment $ var "l")),
-      "forTupleProjection">: lambda "tp" $ var "recurse" @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $ Core.tupleProjection
-        (Core.tupleProjectionArity $ var "tp")
-        (Core.tupleProjectionIndex $ var "tp")
-        (Optionals.map (lambda "types" $ Lists.map (ref substInTypeDef @@ var "subst") (var "types")) (Core.tupleProjectionDomain $ var "tp"))),
+          (ref substTypesInTermDef @@ var "subst" @@ (Core.letEnvironment $ var "l")),
+      "forTupleProjection">: lambda "tp" $
+        Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $ Core.tupleProjection
+          (Core.tupleProjectionArity $ var "tp")
+          (Core.tupleProjectionIndex $ var "tp")
+          (Optionals.map (lambda "types" $ Lists.map (ref substInTypeDef @@ var "subst") (var "types")) (Core.tupleProjectionDomain $ var "tp")),
+      "forTypeApplication">: lambda "tt" $
+         Core.termTypeApplication $ Core.typedTerm
+           (ref substTypesInTermDef @@ var "subst" @@ (Core.typedTermTerm $ var "tt"))
+           (ref substInTypeDef @@ var "subst" @@ (Core.typedTermType $ var "tt")),
       "forTypeLambda">: lambda "ta" $ lets [
         "param">: Core.typeLambdaParameter $ var "ta",
         "subst2">: Typing.typeSubst $ Maps.remove (var "param") (Typing.unTypeSubst $ var "subst")] $
         Core.termTypeLambda $ Core.typeLambda
           (var "param")
           (ref substTypesInTermDef @@ var "subst2" @@ (Core.typeLambdaBody $ var "ta"))] $
-      cases _Term (var "term") (Just $ var "recurse" @@ var "term") [
+      cases _Term (var "term")
+        (Just $ var "dflt") [
         _Term_function>>: var "forFunction",
         _Term_let>>: var "forLet",
-        _Term_typeLambda>>: var "forTypeLambda",
-        _Term_typeApplication>>: lambda "tt" $ var "recurse" @@ (Core.termTypeApplication $ Core.typedTerm
-          (Core.typedTermTerm $ var "tt")
-          (ref substInTypeDef @@ var "subst" @@ (Core.typedTermType $ var "tt")))]] $
+        _Term_typeApplication>>: var "forTypeApplication",
+        _Term_typeLambda>>: var "forTypeLambda"]] $
     ref Rewriting.rewriteTermDef @@ var "rewrite"
