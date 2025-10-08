@@ -1348,12 +1348,14 @@ typeOfInternalDef = define "typeOfInternal" $
       "t2" <<~ ref typeOfInternalDef @@ var "cx" @@ var "vars" @@ var "types" @@ list [] @@ var "b" $
       exec (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "t1") $
       exec (ref checkTypeVariablesDef @@ var "cx" @@ var "vars" @@ var "t2") $
-      cases _Type (var "t1")
+      "tryType" <~ ("t" ~> cases _Type (var "t")
         (Just $ Flows.fail $ Strings.cat $ list [
           "left hand side of application ",
           ref ShowCore.termDef @@ var "term",
           " is not a function type: ",
-          ref ShowCore.typeDef @@ var "t1"]) [
+          ref ShowCore.typeDef @@ var "t"]) [
+        -- These forall types can arise from bindUnboundTypeVariables
+        _Type_forall>>: "ft" ~> var "tryType" @@ (Core.forallTypeBody (var "ft")),
         _Type_function>>: "ft" ~>
           "p" <~ Core.functionTypeDomain (var "ft") $
           "q" <~ Core.functionTypeCodomain (var "ft") $
@@ -1365,7 +1367,8 @@ typeOfInternalDef = define "typeOfInternal" $
               " in ",
               ref ShowCore.termDef @@ var "term",
               " but found ",
-              ref ShowCore.typeDef @@ var "t2"])]),
+              ref ShowCore.typeDef @@ var "t2"])]) $
+        var "tryType" @@ var "t1"),
 
     _Term_function>>: "f" ~>
       cases _Function (var "f") Nothing [

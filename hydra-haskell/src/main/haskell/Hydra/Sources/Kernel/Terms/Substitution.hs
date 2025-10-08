@@ -103,7 +103,7 @@ substInContextDef = define "substInContext" $
 
 substituteInTermDef :: TBinding (TermSubst -> Term -> Term)
 substituteInTermDef = define "substituteInTerm" $
-  lambda "subst" $ lets [
+  "subst" ~> "term0" ~> lets [
     "s">: Typing.unTermSubst $ var "subst",
     "rewrite">: lambdas ["recurse", "term"] $ lets [
       "withLambda">: lambda "l" $ lets [
@@ -126,18 +126,18 @@ substituteInTermDef = define "substituteInTerm" $
         (Just $ var "recurse" @@ var "term") [
         _Term_function>>: lambda "fun" $ cases _Function (var "fun")
           (Just $ var "recurse" @@ var "term") [
-          _Function_lambda>>: var "withLambda"],
-        _Term_let>>: var "withLet",
+          _Function_lambda>>: "l" ~> var "withLambda" @@ var "l"],
+        _Term_let>>: "l" ~> var "withLet" @@ var "l",
         _Term_variable>>: lambda "name" $ Optionals.maybe
           (var "recurse" @@ var "term")
           (lambda "sterm" $ var "sterm")
           (Maps.lookup (var "name") (var "s"))]] $
-    ref Rewriting.rewriteTermDef @@ var "rewrite"
+    ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term0"
 
 -- W: subst'
 substInTypeDef :: TBinding (TypeSubst -> Type -> Type)
 substInTypeDef = define "substInType" $
-  lambda "subst" $ lets [
+  "subst" ~> "typ0" ~> lets [
     "rewrite">: lambdas ["recurse", "typ"] $ cases _Type (var "typ") (Just $ var "recurse" @@ var "typ") [
       _Type_forall>>: lambda "lt" $ Optionals.maybe
         (var "recurse" @@ var "typ")
@@ -152,7 +152,7 @@ substInTypeDef = define "substInType" $
         (lambda "styp" $ var "styp")
         (Maps.lookup (var "v") (Typing.unTypeSubst $ var "subst"))],
     "removeVar">: lambdas ["v"] $ Typing.typeSubst $ Maps.remove (var "v") (Typing.unTypeSubst $ var "subst")] $
-    (ref Rewriting.rewriteTypeDef) @@ var "rewrite"
+    (ref Rewriting.rewriteTypeDef) @@ var "rewrite" @@ var "typ0"
 
 substInTypeSchemeDef :: TBinding (TypeSubst -> TypeScheme -> TypeScheme)
 substInTypeSchemeDef = define "substInTypeScheme" $
@@ -162,16 +162,16 @@ substInTypeSchemeDef = define "substInTypeScheme" $
 
 substTypesInTermDef :: TBinding (TypeSubst -> Term -> Term)
 substTypesInTermDef = define "substTypesInTerm" $
-  lambda "subst" $ lets [
+  "subst" ~> "term0" ~> lets [
     "rewrite">: lambdas ["recurse", "term"] $ lets [
       "dflt">: var "recurse" @@ var "term",
       "forElimination">: lambda "elm" $ cases _Elimination (var "elm")
         (Just $ var "dflt") [
-        _Elimination_product>>: var "forTupleProjection"],
+        _Elimination_product>>: "tp" ~> var "forTupleProjection" @@ var "tp"],
       "forFunction">: lambda "f" $ cases _Function (var "f")
         (Just $ var "dflt") [
-        _Function_elimination>>: var "forElimination",
-        _Function_lambda>>: var "forLambda"],
+        _Function_elimination>>: "e" ~> var "forElimination" @@ var "e",
+        _Function_lambda>>: "l" ~> var "forLambda" @@ var "l"],
       "forLambda">: lambda "l" $ Core.termFunction $ Core.functionLambda $ Core.lambda
         (Core.lambdaParameter $ var "l")
         (Optionals.map (ref substInTypeDef @@ var "subst") $ Core.lambdaDomain $ var "l")
@@ -201,8 +201,8 @@ substTypesInTermDef = define "substTypesInTerm" $
           (ref substTypesInTermDef @@ var "subst2" @@ (Core.typeLambdaBody $ var "ta"))] $
       cases _Term (var "term")
         (Just $ var "dflt") [
-        _Term_function>>: var "forFunction",
-        _Term_let>>: var "forLet",
-        _Term_typeApplication>>: var "forTypeApplication",
-        _Term_typeLambda>>: var "forTypeLambda"]] $
-    ref Rewriting.rewriteTermDef @@ var "rewrite"
+        _Term_function>>: "f" ~> var "forFunction" @@ var "f",
+        _Term_let>>: "l" ~> var "forLet" @@ var "l",
+        _Term_typeApplication>>: "ta" ~> var "forTypeApplication" @@ var "ta",
+        _Term_typeLambda>>: "tl" ~> var "forTypeLambda" @@ var "tl"]] $
+    ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term0"
