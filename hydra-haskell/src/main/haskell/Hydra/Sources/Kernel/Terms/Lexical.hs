@@ -54,6 +54,7 @@ module_ = Module (Namespace "hydra.lexical") elements
   where
     elements = [
       el dereferenceElementDef,
+      el dereferenceSchemaTypeDef,
       el elementsToGraphDef,
       el emptyGraphDef,
       el extendGraphWithBindingsDef,
@@ -83,6 +84,29 @@ dereferenceElementDef = define "dereferenceElement" $
   lambda "name" $ Flows.map
     (lambda "g" $ ref lookupElementDef @@ var "g" @@ var "name")
     (ref Monads.getStateDef)
+
+dereferenceSchemaTypeDef :: TBinding (Name -> M.Map Name TypeScheme -> Maybe TypeScheme)
+dereferenceSchemaTypeDef = define "dereferenceSchemaType" $
+  doc "Resolve a schema type through a chain of zero or more typedefs" $
+  "name" ~> "types" ~>
+  "forType" <~ ("t" ~> cases _Type (var "t")
+    (Just $ just $ Core.typeScheme (list []) (var "t")) [
+    _Type_annotated>>: "at" ~> var "forType" @@ (Core.annotatedTypeSubject $ var "at"),
+    _Type_forall>>: "ft" ~> Optionals.map
+      ("ts" ~> Core.typeScheme
+        -- Note: no alpha-renaming of type variables
+        (Lists.cons (Core.forallTypeParameter $ var "ft") (Core.typeSchemeVariables $ var "ts"))
+        (Core.typeSchemeType $ var "ts"))
+      (var "forType" @@ (Core.forallTypeBody $ var "ft")),
+    _Type_variable>>: "v" ~> ref dereferenceSchemaTypeDef @@ var "v" @@ var "types"]) $
+  Optionals.bind
+    (Maps.lookup (var "name") (var "types"))
+    ("ts" ~> Optionals.map
+      ("ts2" ~> Core.typeScheme
+        -- Note: no alpha-renaming of type variables
+        (Lists.concat2 (Core.typeSchemeVariables $ var "ts") (Core.typeSchemeVariables $ var "ts2"))
+        (Core.typeSchemeType $ var "ts2"))
+      (var "forType" @@ (Core.typeSchemeType $ var "ts")))
 
 elementsToGraphDef :: TBinding (Graph -> Maybe Graph -> [Binding] -> Graph)
 elementsToGraphDef = define "elementsToGraph" $
