@@ -169,7 +169,8 @@ constructModule mod coders pairs = do
     -- * Lambdas with nested let terms, such as \x y -> let z = x + y in z + 42
     -- * Let terms with nested lambdas, such as let z = 42 in \x y -> x + y + z
     termToInterfaceMember coders pair = withTrace ("element " ++ unName (bindingName el)) $ do
-        let expanded = contractTerm $ unshadowVariables $ etaExpandTypedTerm $ typedTermTerm $ snd pair
+        g <- getState
+        let expanded = contractTerm $ unshadowVariables $ etaExpandTerm g $ typedTermTerm $ snd pair
         case classifyDataTerm typ expanded of
           JavaSymbolClassConstant -> termToConstant coders el expanded
           JavaSymbolClassNullaryFunction -> termToNullaryMethod coders el expanded
