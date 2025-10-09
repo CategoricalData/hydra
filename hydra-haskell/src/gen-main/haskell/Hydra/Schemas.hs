@@ -2,6 +2,7 @@
 
 module Hydra.Schemas where
 
+import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
@@ -13,6 +14,7 @@ import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Optionals as Optionals
@@ -25,6 +27,7 @@ import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core___
 import qualified Hydra.Sorting as Sorting
+import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -138,6 +141,12 @@ fTypeToTypeScheme typ = (gatherForall [] typ)
         Core.typeSchemeVariables = (Lists.reverse vars),
         Core.typeSchemeType = typ}) (Rewriting.deannotateType typ))
 
+freshName :: (Compute.Flow t0 Core.Name)
+freshName = (Flows.map normalTypeVariable (Annotations.nextCount Constants.key_freshTypeVariableCount))
+
+freshNames :: (Int -> Compute.Flow t0 [Core.Name])
+freshNames n = (Flows.sequence (Lists.replicate n freshName))
+
 -- | Fully strip a type of forall quantifiers
 fullyStripType :: (Core.Type -> Core.Type)
 fullyStripType typ = ((\x -> case x of
@@ -169,6 +178,15 @@ graphAsTypes sg =
     let toPair = (\el -> Flows.bind (Core_.type_ (Core.bindingTerm el)) (\typ -> Flows.pure (Core.bindingName el, typ)))
     in (Flows.bind (Flows.mapList toPair els) (\pairs -> Flows.pure (Maps.fromList pairs)))
 
+instantiateTypeScheme :: (Core.TypeScheme -> Compute.Flow t0 Core.TypeScheme)
+instantiateTypeScheme scheme =  
+  let oldVars = (Core.typeSchemeVariables scheme)
+  in (Flows.bind (freshNames (Lists.length oldVars)) (\newVars ->  
+    let subst = (Typing.TypeSubst (Maps.fromList (Lists.zip oldVars (Lists.map (\x -> Core.TypeVariable x) newVars))))
+    in (Flows.pure (Core.TypeScheme {
+      Core.typeSchemeVariables = newVars,
+      Core.typeSchemeType = (Substitution.substInType subst (Core.typeSchemeType scheme))}))))
+
 -- | Check if a row type represents an enum (all fields are unit-typed)
 isEnumRowType :: (Core.RowType -> Bool)
 isEnumRowType rt = (Lists.foldl Logic.and True (Lists.map (\f -> Core__.isUnitType (Core.fieldTypeType f)) (Core.rowTypeFields rt)))
@@ -199,6 +217,16 @@ namespacesForDefinitions encodeNamespace focusNs defs =
     Module.namespacesFocus = (toPair focusNs),
     Module.namespacesMapping = (Maps.fromList (Lists.map toPair (Sets.toList nss)))}
 
+-- | Apply type arguments to a nominal type
+nominalApplication :: (Core.Name -> [Core.Type] -> Core.Type)
+nominalApplication tname args = (Lists.foldl (\t -> \a -> Core.TypeApplication (Core.ApplicationType {
+  Core.applicationTypeFunction = t,
+  Core.applicationTypeArgument = a})) (Core.TypeVariable tname) args)
+
+-- | Type variable naming convention follows Haskell: t0, t1, etc.
+normalTypeVariable :: (Int -> Core.Name)
+normalTypeVariable i = (Core.Name (Strings.cat2 "t" (Literals.showInt32 i)))
+
 -- | Require a name to resolve to a record type
 requireRecordType :: (Core.Name -> Compute.Flow Graph.Graph Core.RowType)
 requireRecordType = (requireRowType "record type" (\t -> (\x -> case x of
@@ -217,6 +245,9 @@ requireRowType label getter name =
     label,
     " type: ",
     (Core___.type_ t)])) Flows.pure (getter (rawType t))))
+
+requireSchemaType :: (Typing.InferenceContext -> Core.Name -> Compute.Flow t0 Core.TypeScheme)
+requireSchemaType cx tname = (Optionals.maybe (Flows.fail (Strings.cat2 "No such schema type: " (Core.unName tname))) (\ts -> instantiateTypeScheme (Rewriting.deannotateTypeSchemeRecursive ts)) (Maps.lookup tname (Typing.inferenceContextSchemaTypes cx)))
 
 -- | Require a type by name
 requireType :: (Core.Name -> Compute.Flow Graph.Graph Core.Type)

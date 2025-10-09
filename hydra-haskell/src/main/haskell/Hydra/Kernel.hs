@@ -20,6 +20,7 @@ module Hydra.Kernel (
   module Hydra.Adapt.Utils,
   module Hydra.Annotations,
   module Hydra.Arity,
+  module Hydra.Checking,
   module Hydra.Coders,
   module Hydra.Compute,
   module Hydra.Constants,
@@ -61,6 +62,7 @@ import Hydra.Adapt.Terms hiding (optionalToList)
 import Hydra.Adapt.Utils
 import Hydra.Annotations
 import Hydra.Arity
+import Hydra.Checking
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Constants
