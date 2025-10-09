@@ -9,6 +9,10 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Disable type checking by default, for better performance
+debugInference :: Bool
+debugInference = True
+
 ignoredVariable :: String
 ignoredVariable = "_"
 
@@ -42,6 +46,10 @@ key_preserveFieldName = (Core.Name "preserveFieldName")
 
 key_type :: Core.Name
 key_type = (Core.Name "type")
+
+-- | A counter for generating fresh type variable names
+key_freshTypeVariableCount :: Core.Name
+key_freshTypeVariableCount = (Core.Name "freshTypeVariableCount")
 
 -- | The maximum value of a 32-bit integer
 maxInt32 :: Int

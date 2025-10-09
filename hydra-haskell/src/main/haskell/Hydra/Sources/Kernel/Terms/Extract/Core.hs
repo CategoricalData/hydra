@@ -435,7 +435,7 @@ mapTypeDef = define "mapType" $
       _Type_map>>: lambda "mt" $ Flows.pure $ var "mt"]
 
 -- TODO: nonstandard; move me
-nArgsDef :: TBinding (Name -> Int -> [Term] -> Flow s ())
+nArgsDef :: TBinding (Name -> Int -> [a] -> Flow s ())
 nArgsDef = define "nArgs" $
   doc "Ensure a function has the expected number of arguments" $
   lambdas ["name", "n", "args"] $

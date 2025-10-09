@@ -41,6 +41,7 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decode.Core as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Encode.Core as EncodeCore
@@ -50,13 +51,14 @@ import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
+import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 
 module_ :: Module
 module_ = Module (Namespace "hydra.schemas") elements
-    [DecodeCore.module_, EncodeCore.module_, Names.module_, Rewriting.module_,
-      ShowCore.module_, Sorting.module_, Variants.module_]
+    [Annotations.module_, Constants.module_, DecodeCore.module_, EncodeCore.module_, Names.module_, Rewriting.module_,
+      ShowCore.module_, Sorting.module_, Substitution.module_, Variants.module_]
     kernelTypesModules $
     Just ("Various functions for dereferencing and decoding schema types.")
   where
@@ -74,16 +76,22 @@ module_ = Module (Namespace "hydra.schemas") elements
       el findFieldTypeDef,
       el fieldTypesDef,
       el fTypeToTypeSchemeDef,
+      el freshNameDef,
+      el freshNamesDef,
       el fullyStripTypeDef,
       el graphAsTermDef,
       el graphAsTypesDef,
+      el instantiateTypeSchemeDef,
       el isEnumRowTypeDef,
       el isEnumTypeDef,
       el isSerializableDef,
       el moduleDependencyNamespacesDef,
       el namespacesForDefinitionsDef,
+      el nominalApplicationDef,
+      el normalTypeVariableDef,
       el requireRecordTypeDef,
       el requireRowTypeDef,
+      el requireSchemaTypeDef,
       el requireTypeDef,
       el requireUnionTypeDef,
       el resolveTypeDef,
@@ -246,6 +254,16 @@ fTypeToTypeSchemeDef = define "fTypeToTypeScheme" $
        (Core.forallTypeBody $ var "ft")]) $
   "typ" ~> var "gatherForall" @@ list [] @@ var "typ"
 
+freshNameDef :: TBinding (Flow s Name)
+freshNameDef = define "freshName" $
+  doc "Generate a fresh type variable name" $
+  Flows.map (ref normalTypeVariableDef) (ref Annotations.nextCountDef @@ ref Constants.key_freshTypeVariableCountDef)
+
+freshNamesDef :: TBinding (Int -> Flow s [Name])
+freshNamesDef = define "freshNames" $
+  doc "Generate multiple fresh type variable names" $
+  "n" ~> Flows.sequence $ Lists.replicate (var "n") (ref freshNameDef)
+
 fullyStripTypeDef :: TBinding (Type -> Type)
 fullyStripTypeDef = define "fullyStripType" $
   doc "Fully strip a type of forall quantifiers" $
@@ -277,6 +295,16 @@ graphAsTypesDef = define "graphAsTypes" $
     produce $ pair (Core.bindingName $ var "el") (var "typ")) $
   "pairs" <<~ Flows.mapList (var "toPair") (var "els") $
   produce $ Maps.fromList $ var "pairs"
+
+instantiateTypeSchemeDef :: TBinding (TypeScheme -> Flow s TypeScheme)
+instantiateTypeSchemeDef = define "instantiateTypeScheme" $
+  doc "Instantiate a type scheme with fresh variables" $
+  "scheme" ~>
+  "oldVars" <~ Core.typeSchemeVariables (var "scheme") $
+  "newVars" <<~ ref freshNamesDef @@ Lists.length (var "oldVars") $
+  "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "oldVars") (Lists.map (unaryFunction Core.typeVariable) $ var "newVars")) $
+  produce $ Core.typeScheme (var "newVars") $
+    ref Substitution.substInTypeDef @@ var "subst" @@ Core.typeSchemeType (var "scheme")
 
 isEnumRowTypeDef :: TBinding (RowType -> Bool)
 isEnumRowTypeDef = define "isEnumRowType" $
@@ -322,6 +350,20 @@ namespacesForDefinitionsDef = define "namespacesForDefinitions" $
     "toPair">: lambda "ns" $ pair (var "ns") (var "encodeNamespace" @@ var "ns")]
     $ Module.namespaces (var "toPair" @@ var "focusNs") $ Maps.fromList $ Lists.map (var "toPair") $ Sets.toList $ var "nss"
 
+nominalApplicationDef :: TBinding (Name -> [Type] -> Type)
+nominalApplicationDef = define "nominalApplication" $
+  doc "Apply type arguments to a nominal type" $
+  "tname" ~> "args" ~>
+  Lists.foldl
+    ("t" ~> "a" ~> Core.typeApplication $ Core.applicationType (var "t") (var "a"))
+    (Core.typeVariable $ var "tname")
+    (var "args")
+
+normalTypeVariableDef :: TBinding (Int -> Name)
+normalTypeVariableDef = define "normalTypeVariable" $
+  doc "Type variable naming convention follows Haskell: t0, t1, etc." $
+  "i" ~> Core.name (Strings.cat2 (string "t") (Literals.showInt32 $ var "i"))
+
 requireRecordTypeDef :: TBinding (Name -> Flow Graph RowType)
 requireRecordTypeDef = define "requireRecordType" $
   doc "Require a name to resolve to a record type" $
@@ -348,6 +390,16 @@ requireRowTypeDef = define "requireRowType" $
             ref ShowCore.typeDef @@ var "t"])
           (unaryFunction Flows.pure)
           (var "getter" @@ (var "rawType" @@ var "t"))
+
+requireSchemaTypeDef :: TBinding (InferenceContext -> Name -> Flow s TypeScheme)
+requireSchemaTypeDef = define "requireSchemaType" $
+  doc "Look up a schema type in the context and instantiate it" $
+  "cx" ~> "tname" ~>
+  Optionals.maybe
+    (Flows.fail $ Strings.cat2 (string "No such schema type: ") (Core.unName $ var "tname"))
+    -- TODO: the deannotation is probably superfluous
+    ("ts" ~> ref instantiateTypeSchemeDef @@ (ref Rewriting.deannotateTypeSchemeRecursiveDef @@ var "ts"))
+    (Maps.lookup (var "tname") (Typing.inferenceContextSchemaTypes $ var "cx"))
 
 requireTypeDef :: TBinding (Name -> Flow Graph Type)
 requireTypeDef = define "requireType" $
