@@ -10,6 +10,7 @@ import qualified Hydra.Sources.Kernel.Terms.Adapt.Terms     as AdaptTerms
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils     as AdaptUtils
 import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
+import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decode.Core     as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Decoding        as Decoding
@@ -52,6 +53,7 @@ kernelTermsModules = [
   AdaptUtils.module_,
   Annotations.module_,
   Arity.module_,
+  Checking.module_,
   Constants.module_,
   DecodeCore.module_,
   Decoding.module_,

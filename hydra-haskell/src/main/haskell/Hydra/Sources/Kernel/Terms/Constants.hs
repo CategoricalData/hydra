@@ -47,6 +47,7 @@ module_ = Module (Namespace "hydra.constants") elements
     Just ("A module for tier-0 constants.")
   where
    elements = [
+     el debugInferenceDef,
      el ignoredVariableDef,
      el key_classesDef,
      el key_debugIdDef,
@@ -58,6 +59,7 @@ module_ = Module (Namespace "hydra.constants") elements
      el key_minLengthDef,
      el key_preserveFieldNameDef,
      el key_typeDef,
+     el key_freshTypeVariableCountDef,
      el maxInt32Def,
      el placeholderNameDef,
      el maxTraceDepthDef,
@@ -66,28 +68,37 @@ module_ = Module (Namespace "hydra.constants") elements
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-annotationKeyDef :: String -> Maybe String -> TBinding Name
-annotationKeyDef name mdesc = define ("key_" <> name) $ case mdesc of
+defineAnnotationKey :: String -> Maybe String -> TBinding Name
+defineAnnotationKey name mdesc = define ("key_" <> name) $ case mdesc of
     Nothing -> def
     Just comment -> doc comment def
   where
     def = wrap _Name $ string name
 
+-- 
+
+debugInferenceDef :: TBinding Bool
+debugInferenceDef = define "debugInference" $
+  doc "Disable type checking by default, for better performance" $
+  true
+  
 ignoredVariableDef :: TBinding String
 ignoredVariableDef = define "ignoredVariable" $
   string "_"
 
-key_classesDef = annotationKeyDef "classes" Nothing
-key_debugIdDef = annotationKeyDef "debugId" Nothing
-key_deprecatedDef = annotationKeyDef "deprecated" Nothing
-key_descriptionDef = annotationKeyDef "description" Nothing
-key_excludeDef = annotationKeyDef "exclude" Nothing
-key_firstClassTypeDef = annotationKeyDef "firstClassType"
-  $ Just "A flag which tells the language coders to encode a given encoded type as a term rather than a native type"
-key_maxLengthDef = annotationKeyDef "maxLength" Nothing
-key_minLengthDef = annotationKeyDef "minLength" Nothing
-key_preserveFieldNameDef = annotationKeyDef "preserveFieldName" Nothing
-key_typeDef = annotationKeyDef "type" Nothing
+key_classesDef = defineAnnotationKey "classes" Nothing
+key_debugIdDef = defineAnnotationKey "debugId" Nothing
+key_deprecatedDef = defineAnnotationKey "deprecated" Nothing
+key_descriptionDef = defineAnnotationKey "description" Nothing
+key_excludeDef = defineAnnotationKey "exclude" Nothing
+key_firstClassTypeDef = defineAnnotationKey "firstClassType" $
+  Just "A flag which tells the language coders to encode a given encoded type as a term rather than a native type"
+key_maxLengthDef = defineAnnotationKey "maxLength" Nothing
+key_minLengthDef = defineAnnotationKey "minLength" Nothing
+key_preserveFieldNameDef = defineAnnotationKey "preserveFieldName" Nothing
+key_typeDef = defineAnnotationKey "type" Nothing
+key_freshTypeVariableCountDef = defineAnnotationKey "freshTypeVariableCount" $
+  Just "A counter for generating fresh type variable names"
 
 maxInt32Def :: TBinding Int
 maxInt32Def = define "maxInt32" $

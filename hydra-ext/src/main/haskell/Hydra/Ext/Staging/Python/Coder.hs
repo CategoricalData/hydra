@@ -553,7 +553,7 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
                     argPattern = Py.KeywordPattern (Py.Name "value") $ Py.PatternOr $ Py.OrPattern [
                       Py.ClosedPatternCapture $ Py.CapturePattern
                         $ Py.PatternCaptureTarget (encodeName False CaseConventionLowerSnake env2 v)]
-            _ -> fail "unsupported case"
+            _ -> fail $ "unsupported case: " ++ ShowCore.term fterm
       _ -> dflt
 
 encodeType :: PythonEnvironment -> Type -> Flow PyGraph Py.Expression
