@@ -1,3 +1,9 @@
+{-
+stack ghci hydra:lib hydra:hydra-test
+
+Test.Hspec.hspec Hydra.AnnotationsSpec.spec
+-}
+
 module Hydra.AnnotationsSpec where
 
 import Hydra.Kernel
