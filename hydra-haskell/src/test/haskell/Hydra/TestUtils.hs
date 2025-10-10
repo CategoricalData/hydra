@@ -157,8 +157,8 @@ fromTestFlow desc flow = case my of
       putAttr key_debugId $ Terms.string desc
       flow
 
-expectTypeOfResult :: String -> M.Map Name Type -> Term -> Type -> H.SpecWith ()
-expectTypeOfResult desc types term expected = do
+expectTypeOfResult :: String -> M.Map Name Type -> Term -> Maybe Term -> Type -> H.SpecWith ()
+expectTypeOfResult desc types term mterm expected = do
   (iterm, itype, rtype) <- H.runIO $ fromTestFlow desc $ do
     cx <- graphToInferenceContext testGraph
 
@@ -171,6 +171,11 @@ expectTypeOfResult desc types term expected = do
     let tx = TypeContext types vars cx
     rtype <- typeOf tx [] iterm
     return (iterm, itype, rtype)
+
+  case mterm of
+    Nothing -> pure ()
+    Just eterm -> H.it "inferred term" $
+      H.shouldBe (ShowCore.term iterm) (ShowCore.term eterm)
 
   H.it "inferred type" $
     H.shouldBe (ShowCore.type_ itype) (ShowCore.type_ expected)

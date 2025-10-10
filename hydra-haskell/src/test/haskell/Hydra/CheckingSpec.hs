@@ -1636,51 +1636,69 @@ checkTypeOfWrappedTerms = H.describe "Wrapped terms" $ do
 checkTypeOfWrapEliminations :: H.SpecWith ()
 checkTypeOfWrapEliminations = H.describe "Wrap eliminations" $ do
   H.describe "Monomorphic unwrapping" $ do
-    expectTypeOf "unwrap string alias"
+    expectSameTermWithType "unwrap string alias"
       (unwrap testTypeStringAliasName)
       (Types.function (Types.var "StringTypeAlias") Types.string)
 
   H.describe "Polymorphic unwrapping" $ do
-    expectTypeOf "unwrap polymorphic wrapper"
+    expectTermWithType "unwrap polymorphic wrapper"
       (unwrap testTypePolymorphicWrapperName)
+      (tylam "t0" $ tyapp (unwrap testTypePolymorphicWrapperName) $ Types.var "t0")
       (Types.forAll "t0" $ Types.function (Types.apply (Types.var "PolymorphicWrapper") (Types.var "t0")) (Types.list $ Types.var "t0"))
 
   H.describe "Unwrap eliminations in applications" $ do
-    expectTypeOf "unwrap applied to wrapped term"
+    expectSameTermWithType "unwrap applied to wrapped term"
       (unwrap testTypeStringAliasName @@ wrap testTypeStringAliasName (string "hello"))
       Types.string
-    expectTypeOf "unwrap polymorphic applied"
+    expectTermWithType "unwrap polymorphic applied"
       (unwrap testTypePolymorphicWrapperName @@ wrap testTypePolymorphicWrapperName (list [int32 1, int32 2]))
+      (tyapp (unwrap testTypePolymorphicWrapperName) (Types.int32) @@ wrap testTypePolymorphicWrapperName (list [int32 1, int32 2]))
       (Types.list Types.int32)
 
   H.describe "Unwrap in complex contexts" $ do
-    expectTypeOf "unwrap in let binding"
+    expectTermWithType "unwrap in let binding"
       (lets ["unwrapper">: unwrap testTypeStringAliasName,
              "wrapped">: wrap testTypeStringAliasName (string "test")] $
             var "unwrapper" @@ var "wrapped")
+      (letsTyped [
+        ("unwrapper", unwrap testTypeStringAliasName, Types.mono $ Types.function (Types.var "StringTypeAlias") Types.string),
+        ("wrapped", wrap testTypeStringAliasName (string "test"), Types.mono $ Types.var "StringTypeAlias")] $
+        var "unwrapper" @@ var "wrapped")
       Types.string
-    expectTypeOf "unwrap in tuple"
+    expectSameTermWithType "unwrap in tuple"
       (tuple [unwrap testTypeStringAliasName, string "context"])
       (Types.product [Types.function (Types.var "StringTypeAlias") Types.string, Types.string])
-    expectTypeOf "unwrap in lambda"
+    expectTermWithType "unwrap in lambda"
       (lambda "wrapped" $ unwrap testTypeStringAliasName @@ var "wrapped")
+      (lambdaTyped "wrapped" (Types.var "StringTypeAlias") $ unwrap testTypeStringAliasName @@ var "wrapped")
       (Types.function (Types.var "StringTypeAlias") Types.string)
 
   H.describe "Chained unwrapping" $ do
-    expectTypeOf "unwrap then process"
+    expectTermWithType "unwrap then process"
       (lambda "wrapped" $
-       primitive _strings_cat2 @@ (unwrap testTypeStringAliasName @@ var "wrapped") @@ string " suffix")
+        primitive _strings_cat2 @@ (unwrap testTypeStringAliasName @@ var "wrapped") @@ string " suffix")
+      (lambdaTyped "wrapped" (Types.var "StringTypeAlias") $
+        primitive _strings_cat2 @@ (unwrap testTypeStringAliasName @@ var "wrapped") @@ string " suffix")
       (Types.function (Types.var "StringTypeAlias") Types.string)
-    expectTypeOf "unwrap polymorphic then map"
+    expectTermWithType "unwrap polymorphic then map"
       (lambda "wrappedList" $
-       primitive _lists_map @@ (primitive _math_add @@ int32 1) @@ (unwrap testTypePolymorphicWrapperName @@ var "wrappedList"))
+        primitive _lists_map @@ (primitive _math_add @@ int32 1) @@ (unwrap testTypePolymorphicWrapperName @@ var "wrappedList"))
+      (lambdaTyped "wrappedList" (Types.apply (Types.var "PolymorphicWrapper") Types.int32) $
+        (tyapps (primitive _lists_map) [Types.int32, Types.int32]) @@ (primitive _math_add @@ int32 1) @@ (tyapp (unwrap testTypePolymorphicWrapperName) Types.int32 @@ var "wrappedList"))
       (Types.function (Types.apply (Types.var "PolymorphicWrapper") Types.int32) (Types.list Types.int32))
 
   H.describe "Multiple unwrap operations" $ do
-    expectTypeOf "unwrap different types"
-      (lambda "stringWrapped" $ lambda "listWrapped" $
-       tuple [unwrap testTypeStringAliasName @@ var "stringWrapped",
-              unwrap testTypePolymorphicWrapperName @@ var "listWrapped"])
+    expectTermWithType "unwrap different types"
+      (lambda "stringWrapped" $
+        lambda "listWrapped" $
+          tuple [
+            unwrap testTypeStringAliasName @@ var "stringWrapped",
+            unwrap testTypePolymorphicWrapperName @@ var "listWrapped"])
+      (tylam "t0" $ lambdaTyped "stringWrapped" (Types.var "StringTypeAlias") $
+        lambdaTyped "listWrapped" (Types.apply (Types.var "PolymorphicWrapper") (Types.var "t0")) $
+          tuple [
+            unwrap testTypeStringAliasName @@ var "stringWrapped",
+            tyapp (unwrap testTypePolymorphicWrapperName) (Types.var "t0") @@ var "listWrapped"])
       (Types.forAll "t0" $ Types.function (Types.var "StringTypeAlias")
         (Types.function (Types.apply (Types.var "PolymorphicWrapper") (Types.var "t0"))
           (Types.product [Types.string, Types.list $ Types.var "t0"])))
@@ -1689,7 +1707,14 @@ checkTypeOfWrapEliminations = H.describe "Wrap eliminations" $ do
 
 expectTypeOf :: String -> Term -> Type -> H.SpecWith ()
 expectTypeOf desc term typ = H.describe desc $
-  withDefaults expectTypeOfResult desc term typ
+  withDefaults expectTypeOfResult desc term Nothing typ
+
+expectTermWithType :: String -> Term -> Term -> Type -> H.SpecWith ()
+expectTermWithType desc term eterm typ = H.describe desc $
+  withDefaults expectTypeOfResult desc term (Just eterm) typ
+
+expectSameTermWithType :: String -> Term -> Type -> H.SpecWith ()
+expectSameTermWithType desc term typ = expectTermWithType desc term term typ
 
 typeOfShouldFail :: String -> M.Map Name Type -> Term -> H.SpecWith ()
 typeOfShouldFail desc types term = H.it desc $ shouldFail $ do

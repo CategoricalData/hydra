@@ -777,31 +777,20 @@ inferTypeOfWrappedTerm cx wt =
         in  
           let iterm = (Typing_.inferenceResultTerm result)
           in  
-            let ityp = (Typing_.inferenceResultType result)
+            let itype = (Typing_.inferenceResultType result)
             in  
               let isubst = (Typing_.inferenceResultSubst result)
-              in (Flows.bind (Schemas.freshNames (Lists.length svars)) (\freshVars ->  
-                let subst = (Typing_.TypeSubst (Maps.fromList (Lists.zip svars (Lists.map (\x -> Core.TypeVariable x) freshVars))))
-                in  
-                  let stypInst = (Substitution.substInType subst stype)
-                  in  
-                    let nominalInst = (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) freshVars))
-                    in  
-                      let expected = (Core.TypeWrap (Core.WrappedType {
-                              Core.wrappedTypeTypeName = tname,
-                              Core.wrappedTypeObject = ityp}))
-                      in  
-                        let freeVars = (Sets.toList (Sets.unions [
-                                Rewriting.freeVariablesInType ityp,
-                                Rewriting.freeVariablesInTerm iterm,
-                                (Sets.fromList freshVars)]))
-                        in (bindConstraints cx (\subst2 -> yieldChecked (Core.TermWrap (Core.WrappedTerm {
-                          Core.wrappedTermTypeName = tname,
-                          Core.wrappedTermObject = iterm})) nominalInst (Substitution.composeTypeSubst isubst subst2)) [
-                          Typing_.TypeConstraint {
-                            Typing_.typeConstraintLeft = stypInst,
-                            Typing_.typeConstraintRight = expected,
-                            Typing_.typeConstraintComment = "schema type of wrapper"}]))))))
+              in  
+                let ityp = (Core.TypeWrap (Core.WrappedType {
+                        Core.wrappedTypeTypeName = tname,
+                        Core.wrappedTypeObject = itype}))
+                in (mapConstraints cx (\subst -> yield (Core.TermWrap (Core.WrappedTerm {
+                  Core.wrappedTermTypeName = tname,
+                  Core.wrappedTermObject = iterm})) (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
+                  Typing_.TypeConstraint {
+                    Typing_.typeConstraintLeft = stype,
+                    Typing_.typeConstraintRight = ityp,
+                    Typing_.typeConstraintComment = "schema type of wrapper"}]))))
 
 inferTypesOfTemporaryBindings :: (Typing_.InferenceContext -> [Core.Binding] -> Compute.Flow t0 ([Core.Term], ([Core.Type], Typing_.TypeSubst)))
 inferTypesOfTemporaryBindings cx bins = (Logic.ifElse (Lists.null bins) (Flows.pure ([], ([], Substitution.idTypeSubst))) ( 
