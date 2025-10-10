@@ -400,6 +400,12 @@ encodeRecordType env name (RowType _ tfields) comment = do
 
 encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> Flow PyGraph Py.Statement
 encodeTermAssignment env name term comment = do
+
+--  if name == Name "hydra.extract.coreDebug.nArgs"
+----  if name == Name "hydra.extract.coreDebug.unexpected"
+--  then fail $ "term: " ++ ShowCore.term term
+--  else pure ()
+
   (tparams, params, bindings, body, doms, cod, env2) <- withTrace "there" $ gatherBindingsAndParams env term
 
   -- If there are no arguments or let bindings, and if we are not dealing with a case statement,
