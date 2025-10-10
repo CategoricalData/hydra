@@ -72,7 +72,6 @@ module_ = Module (Namespace "hydra.lexical") elements
       el resolveTermDef,
       el schemaContextDef,
       el stripAndDereferenceTermDef,
-      el typeOfPrimitiveDef,
       el withEmptyGraphDef,
       el withSchemaContextDef]
 
@@ -277,10 +276,6 @@ stripAndDereferenceTermDef = define "stripAndDereferenceTerm" $
       _Term_variable>>: lambda "v" $
         Flows.bind (ref requireTermDef @@ var "v") $
         lambda "t" $ ref stripAndDereferenceTermDef @@ var "t"]
-
-typeOfPrimitiveDef :: TBinding (Name -> Flow Graph TypeScheme)
-typeOfPrimitiveDef = define "typeOfPrimitive" $
-  lambda "name" $ Flows.map (unaryFunction Graph.primitiveType) $ ref requirePrimitiveDef @@ var "name"
 
 -- TODO: move into hydra.lexical
 withEmptyGraphDef :: TBinding (Flow Graph a -> Flow s a)
