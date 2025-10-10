@@ -118,6 +118,9 @@ primitive = TermFunction . FunctionPrimitive
 typeLambda :: [Name] -> Term -> Term
 typeLambda vars body = L.foldl (\b v -> TermTypeLambda $ TypeLambda v b) body vars
 
+tylam :: String -> Term -> Term
+tylam var body = TermTypeLambda $ TypeLambda (Name var) body
+
 -- | Apply type arguments to a polymorphic term
 -- Example: typeApplication (var "map") [Types.int32, Types.string]
 -- This instantiates a polymorphic function with concrete types.
@@ -125,6 +128,9 @@ typeLambda vars body = L.foldl (\b v -> TermTypeLambda $ TypeLambda v b) body va
 -- the example would instantiate it to '(int32 -> string) -> list int32 -> list string'.
 typeApplication :: Term -> [Type] -> Term
 typeApplication term types = L.foldl (\t ty -> TermTypeApplication $ TypedTerm t ty) term types
+
+tyapp :: Term -> Type -> Term
+tyapp term typ = TermTypeApplication $ TypedTerm term typ
 
 -- * Literal values
 
