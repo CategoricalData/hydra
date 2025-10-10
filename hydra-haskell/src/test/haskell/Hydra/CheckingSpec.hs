@@ -1688,7 +1688,8 @@ checkTypeOfWrapEliminations = H.describe "Wrap eliminations" $ do
 ----------------------------------------
 
 expectTypeOf :: String -> Term -> Type -> H.SpecWith ()
-expectTypeOf desc term typ = H.it desc $ withDefaults expectTypeOfResult desc term typ
+expectTypeOf desc term typ = H.describe desc $
+  withDefaults expectTypeOfResult desc term typ
 
 typeOfShouldFail :: String -> M.Map Name Type -> Term -> H.SpecWith ()
 typeOfShouldFail desc types term = H.it desc $ shouldFail $ do

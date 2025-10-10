@@ -138,28 +138,44 @@ expectInferenceResult desc term expected = do
       inferTypeOf cx term
 
 expectSuccess :: (Eq a, Show a) => String -> Flow () a -> a -> H.Expectation
-expectSuccess desc f x = case my of
+expectSuccess desc flow x = case my of
     Nothing -> HL.assertFailure $ traceSummary trace
     Just y -> y `H.shouldBe` x
   where
-    FlowState my _ trace = unFlow f2 () emptyTrace
-    f2 = do
+    FlowState my _ trace = unFlow flow2 () emptyTrace
+    flow2 = do
       putAttr key_debugId $ Terms.string desc
-      f
+      flow
 
-expectTypeOfResult :: String -> M.Map Name Type -> Term -> Type -> H.Expectation
-expectTypeOfResult desc types term expected = do
-    expectSuccess desc (ShowCore.type_ <$> result) (ShowCore.type_ expected)
+fromTestFlow :: String -> Flow () a -> IO a
+fromTestFlow desc flow = case my of
+    Nothing -> fail $ traceSummary trace
+    Just y -> return y
   where
-    result = do
-      cx <- graphToInferenceContext testGraph
+    FlowState my _ trace = unFlow flow2 () emptyTrace
+    flow2 = do
+      putAttr key_debugId $ Terms.string desc
+      flow
 
-      -- typeOf is always called on System F terms
-      (iterm, ts) <- inferTypeOf cx term
-      let vars = S.fromList $ typeSchemeVariables ts
+expectTypeOfResult :: String -> M.Map Name Type -> Term -> Type -> H.SpecWith ()
+expectTypeOfResult desc types term expected = do
+  (iterm, itype, rtype) <- H.runIO $ fromTestFlow desc $ do
+    cx <- graphToInferenceContext testGraph
 
-      let tx = TypeContext types vars cx
-      typeOf tx [] iterm
+    -- typeOf is always called on System F terms
+    (iterm, ts) <- inferTypeOf cx term
+    let itype = typeSchemeToFType ts
+
+    let vars = S.fromList $ typeSchemeVariables ts
+
+    let tx = TypeContext types vars cx
+    rtype <- typeOf tx [] iterm
+    return (iterm, itype, rtype)
+
+  H.it "inferred type" $
+    H.shouldBe (ShowCore.type_ itype) (ShowCore.type_ expected)
+  H.it "reconstructed type" $
+    H.shouldBe (ShowCore.type_ rtype) (ShowCore.type_ expected)
 
 shouldFail :: Flow Graph a -> H.Expectation
 shouldFail f = H.shouldBe True (Y.isNothing $ flowStateValue $ unFlow f testGraph emptyTrace)
