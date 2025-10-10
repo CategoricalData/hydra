@@ -1,3 +1,9 @@
+{-
+stack ghci hydra:lib hydra:hydra-test
+
+Test.Hspec.hspec Hydra.SerializationSpec.spec
+-}
+
 module Hydra.SerializationSpec where
 
 import qualified Test.Hspec as H

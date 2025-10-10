@@ -1,3 +1,9 @@
+{-
+stack ghci hydra:lib hydra:hydra-test
+
+Test.Hspec.hspec Hydra.MonadsSpec.spec
+-}
+
 module Hydra.MonadsSpec where
 
 import Hydra.Kernel
