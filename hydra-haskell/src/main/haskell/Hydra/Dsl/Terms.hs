@@ -61,6 +61,11 @@ lets bindings env = TermLet $ Let (toBinding <$> bindings) env
   where
     toBinding (Field name value) = Binding name value Nothing
 
+letsTyped :: [(String, Term, TypeScheme)] -> Term -> Term
+letsTyped bindings env = TermLet $ Let (toBinding <$> bindings) env
+  where
+    toBinding (name, value, ts) = Binding (Name name) value (Just ts)
+
 -- | Create a variable reference
 -- Example: var "x"
 var :: String -> Term
@@ -128,6 +133,8 @@ tylam var body = TermTypeLambda $ TypeLambda (Name var) body
 -- the example would instantiate it to '(int32 -> string) -> list int32 -> list string'.
 typeApplication :: Term -> [Type] -> Term
 typeApplication term types = L.foldl (\t ty -> TermTypeApplication $ TypedTerm t ty) term types
+
+tyapps = typeApplication
 
 tyapp :: Term -> Type -> Term
 tyapp term typ = TermTypeApplication $ TypedTerm term typ
