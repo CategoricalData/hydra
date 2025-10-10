@@ -186,9 +186,6 @@ stripAndDereferenceTerm term =
     Core.TermVariable v1 -> (Flows.bind (requireTerm v1) (\t -> stripAndDereferenceTerm t))
     _ -> (Flows.pure stripped)) stripped)
 
-typeOfPrimitive :: (Core.Name -> Compute.Flow Graph.Graph Core.TypeScheme)
-typeOfPrimitive name = (Flows.map Graph.primitiveType (requirePrimitive name))
-
 withEmptyGraph :: (Compute.Flow Graph.Graph t0 -> Compute.Flow t1 t0)
 withEmptyGraph = (Monads.withState emptyGraph)
 
