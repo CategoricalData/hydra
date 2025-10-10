@@ -1,12 +1,12 @@
--- Additional inference tests, adding to those in the generated test suite
+-- TODO: add these type checking test cases to the generated test suite
 
 {-
 stack ghci hydra:lib hydra:hydra-test
 
-Test.Hspec.hspec Hydra.InferenceSpec.spec
+Test.Hspec.hspec Hydra.CheckingSpec.spec
 -}
 
-module Hydra.InferenceSpec where
+module Hydra.CheckingSpec where
 
 import Hydra.Kernel
 import Hydra.TestUtils
@@ -1693,7 +1693,8 @@ expectTypeOf desc term typ = H.it desc $ withDefaults expectTypeOfResult desc te
 typeOfShouldFail :: String -> M.Map Name Type -> Term -> H.SpecWith ()
 typeOfShouldFail desc types term = H.it desc $ shouldFail $ do
   cx <- graphToInferenceContext testGraph
-  typeOfInternal cx S.empty types [] term
+  let tx = TypeContext types S.empty cx
+  typeOf tx [] term
 
 withDefaults :: (String -> M.Map Name Type -> Term -> x) -> String -> Term -> x
 withDefaults f desc = f desc M.empty

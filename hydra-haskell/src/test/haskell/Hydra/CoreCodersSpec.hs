@@ -1,3 +1,9 @@
+{-
+stack ghci hydra:lib hydra:hydra-test
+
+Test.Hspec.hspec Hydra.CoreCodersSpec.spec
+-}
+
 module Hydra.CoreCodersSpec where
 
 import Hydra.Kernel
