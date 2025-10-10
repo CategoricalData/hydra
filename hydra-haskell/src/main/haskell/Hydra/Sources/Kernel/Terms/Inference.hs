@@ -986,23 +986,15 @@ inferTypeOfWrappedTermDef = define "inferTypeOfWrappedTerm" $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "stype" <~ Core.typeSchemeType (var "schemaType") $
   "iterm" <~ Typing.inferenceResultTerm (var "result") $
-  "ityp" <~ Typing.inferenceResultType (var "result") $
+  "itype" <~ Typing.inferenceResultType (var "result") $
   "isubst" <~ Typing.inferenceResultSubst (var "result") $
-  "freshVars" <<~ ref Schemas.freshNamesDef @@ Lists.length (var "svars") $
-  "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (Lists.map (unaryFunction Core.typeVariable) $ var "freshVars")) $
-  "stypInst" <~ ref Substitution.substInTypeDef @@ var "subst" @@ var "stype" $
-  "nominalInst" <~ ref Schemas.nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "freshVars") $
-  "expected" <~ Core.typeWrap (Core.wrappedType (var "tname") (var "ityp")) $
-  "freeVars" <~ Sets.toList (Sets.unions $ list [
-    ref Rewriting.freeVariablesInTypeDef @@ var "ityp",
-    ref Rewriting.freeVariablesInTermDef @@ var "iterm",
-    Sets.fromList (var "freshVars")]) $
-  ref bindConstraintsDef @@ var "cx" @@
-    ("subst2" ~> ref yieldCheckedDef @@
-      (Core.termWrap $ Core.wrappedTerm (var "tname") (var "iterm")) @@
-      var "nominalInst" @@
-      (ref Substitution.composeTypeSubstDef @@ var "isubst" @@ var "subst2")) @@
-    list [Typing.typeConstraint (var "stypInst") (var "expected") (string "schema type of wrapper")]
+  "ityp" <~ Core.typeWrap (Core.wrappedType (var "tname") (var "itype")) $
+  ref mapConstraintsDef @@ var "cx"
+    @@ ("subst" ~> ref yieldDef
+      @@ (Core.termWrap $ Core.wrappedTerm (var "tname") (var "iterm"))
+      @@ (ref Schemas.nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
+      @@ (ref Substitution.composeTypeSubstDef @@ var "isubst" @@ var "subst"))
+    @@ list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of wrapper")]
 
 inferTypesOfTemporaryBindingsDef :: TBinding (InferenceContext -> [Binding] -> Flow s ([Term], ([Type], TypeSubst)))
 inferTypesOfTemporaryBindingsDef = define "inferTypesOfTemporaryBindings" $
