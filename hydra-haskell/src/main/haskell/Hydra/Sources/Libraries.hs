@@ -116,18 +116,18 @@ _flows_sequence    = qname _hydra_lib_flows "sequence" :: Name
 
 hydraLibFlows :: Library
 hydraLibFlows = standardLibrary _hydra_lib_flows [
-    prim2 _flows_apply       Flows.apply    ["s", "x", "y"]        (flow s (function x y)) (flow s x) (flow s y),
-    prim2 _flows_bind        Flows.bind     ["s", "x", "y"]        (flow s x) (function x (flow s y)) (flow s y),
-    prim1 _flows_fail        Flows.fail     ["s", "x"]             string (flow s x),
-    prim3 _flows_foldl       Flows.foldl    ["s", "x", "y"]        (function y (function x (flow s y))) y (list x) (flow s y),
-    prim2 _flows_map         Flows.map      ["s", "x", "y"]        (function x y) (flow s x) (flow s y),
-    prim2 _flows_mapElems    Flows.mapElems ["s", "k", "v1", "v2"] (function v1 (flow s v2)) (Prims.map k v1) (flow s (Prims.map k v2)),
-    prim2 _flows_mapKeys     Flows.mapKeys  ["s", "k1", "k2", "v"] (function k1 (flow s k2)) (Prims.map k1 v) (flow s (Prims.map k2 v)),
-    prim2 _flows_mapList     Flows.mapList  ["s", "x", "y"]        (function x (flow s y)) (list x) (flow s (list y)),
-    prim2 _flows_mapOptional Flows.mapOptional ["s", "x", "y"]     (function x $ flow s y) (optional x) (flow s $ optional y),
-    prim2 _flows_mapSet      Flows.mapSet   ["s", "x", "y"]        (function x (flow s y)) (set x) (flow s (set y)),
-    prim1 _flows_pure        Flows.pure     ["s", "x"]             x (flow s x),
-    prim1 _flows_sequence    Flows.sequence ["s", "x"]             (list (flow s x)) (flow s (list x))]
+    prim2 _flows_apply       Flows.apply       ["s", "x", "y"]        (flow s (function x y)) (flow s x) (flow s y),
+    prim2 _flows_bind        Flows.bind        ["s", "x", "y"]        (flow s x) (function x (flow s y)) (flow s y),
+    prim1 _flows_fail        Flows.fail        ["s", "x"]             string (flow s x),
+    prim3 _flows_foldl       Flows.foldl       ["y", "x", "s"]        (function y (function x (flow s y))) y (list x) (flow s y),
+    prim2 _flows_map         Flows.map         ["x", "y", "s"]        (function x y) (flow s x) (flow s y),
+    prim2 _flows_mapElems    Flows.mapElems    ["v1", "s", "v2", "k"] (function v1 (flow s v2)) (Prims.map k v1) (flow s (Prims.map k v2)),
+    prim2 _flows_mapKeys     Flows.mapKeys     ["k1", "s", "k2", "v"] (function k1 (flow s k2)) (Prims.map k1 v) (flow s (Prims.map k2 v)),
+    prim2 _flows_mapList     Flows.mapList     ["x", "s", "y"]        (function x (flow s y)) (list x) (flow s (list y)),
+    prim2 _flows_mapOptional Flows.mapOptional ["x", "s", "y"]        (function x $ flow s y) (optional x) (flow s $ optional y),
+    prim2 _flows_mapSet      Flows.mapSet      ["x", "s", "y"]        (function x (flow s y)) (set x) (flow s (set y)),
+    prim1 _flows_pure        Flows.pure        ["x", "s"]             x (flow s x),
+    prim1 _flows_sequence    Flows.sequence    ["s", "x"]             (list (flow s x)) (flow s (list x))]
   where
     s = variable "s"
     k = variable "k"
@@ -388,27 +388,27 @@ _maps_values          = qname _hydra_lib_maps "values" :: Name
 
 hydraLibMaps :: Library
 hydraLibMaps = standardLibrary _hydra_lib_maps [
-    prim3Interp _maps_alter     Nothing        ["k", "v"]               (function (optional v) (optional v)) k mapKv mapKv,
-    prim3 _maps_bimap           Maps.bimap     ["k1", "k2", "v1", "v2"] (function k1 k2) (function v1 v2) (Prims.map k1 v1) (Prims.map k2 v2),
-    prim1 _maps_elems           Maps.elems     ["k", "v"]               mapKv (list v),
-    prim0 _maps_empty           Maps.empty     ["k", "v"]               mapKv,
-    prim2 _maps_filter          Maps.filter    ["k", "v"]               (function v boolean) mapKv mapKv,
-    prim2 _maps_filterWithKey   Maps.filterWithKey ["k", "v"]           (function k (function v boolean)) mapKv mapKv,
-    prim3 _maps_findWithDefault Maps.findWithDefault ["k", "v"]         v k mapKv v,
-    prim1 _maps_fromList        Maps.fromList  ["k", "v"]               (list $ pair k v) mapKv,
-    prim3 _maps_insert          Maps.insert    ["k", "v"]               k v mapKv mapKv,
-    prim1 _maps_keys            Maps.keys      ["k", "v"]               mapKv (list k),
-    prim2 _maps_lookup          Maps.lookup    ["k", "v"]               k mapKv (optional v),
-    prim2 _maps_map             Maps.map       ["k", "v1", "v2"]        (function v1 v2) (Prims.map k v1) (Prims.map k v2),
-    prim2 _maps_mapKeys         Maps.mapKeys   ["k1", "k2", "v"]        (function k1 k2) (Prims.map k1 v) (Prims.map k2 v),
-    prim2 _maps_member          Maps.member    ["k", "v"]               k mapKv boolean,
-    prim1 _maps_null            Maps.null      ["k", "v"]               mapKv boolean,
-    prim1 _maps_size            Maps.size      ["k", "v"]               mapKv int32,
-    prim2 _maps_remove          Maps.remove    ["k", "v"]               k mapKv mapKv,
-    prim2 _maps_singleton       Maps.singleton ["k", "v"]               k v mapKv,
-    prim1 _maps_size            Maps.size      ["k", "v"]               mapKv int32,
-    prim1 _maps_toList          Maps.toList    ["k", "v"]               mapKv (list $ pair k v),
-    prim2 _maps_union           Maps.union     ["k", "v"]               mapKv mapKv mapKv]
+    prim3Interp _maps_alter     Nothing              ["v", "k"]               (function (optional v) (optional v)) k mapKv mapKv,
+    prim3 _maps_bimap           Maps.bimap           ["k1", "k2", "v1", "v2"] (function k1 k2) (function v1 v2) (Prims.map k1 v1) (Prims.map k2 v2),
+    prim1 _maps_elems           Maps.elems           ["k", "v"]               mapKv (list v),
+    prim0 _maps_empty           Maps.empty           ["k", "v"]               mapKv,
+    prim2 _maps_filter          Maps.filter          ["v", "k"]               (function v boolean) mapKv mapKv,
+    prim2 _maps_filterWithKey   Maps.filterWithKey   ["k", "v"]               (function k (function v boolean)) mapKv mapKv,
+    prim3 _maps_findWithDefault Maps.findWithDefault ["v", "k"]               v k mapKv v,
+    prim1 _maps_fromList        Maps.fromList        ["k", "v"]               (list $ pair k v) mapKv,
+    prim3 _maps_insert          Maps.insert          ["k", "v"]               k v mapKv mapKv,
+    prim1 _maps_keys            Maps.keys            ["k", "v"]               mapKv (list k),
+    prim2 _maps_lookup          Maps.lookup          ["k", "v"]               k mapKv (optional v),
+    prim2 _maps_map             Maps.map             ["v1", "v2", "k"]        (function v1 v2) (Prims.map k v1) (Prims.map k v2),
+    prim2 _maps_mapKeys         Maps.mapKeys         ["k1", "k2", "v"]        (function k1 k2) (Prims.map k1 v) (Prims.map k2 v),
+    prim2 _maps_member          Maps.member          ["k", "v"]               k mapKv boolean,
+    prim1 _maps_null            Maps.null            ["k", "v"]               mapKv boolean,
+    prim1 _maps_size            Maps.size            ["k", "v"]               mapKv int32,
+    prim2 _maps_remove          Maps.remove          ["k", "v"]               k mapKv mapKv,
+    prim2 _maps_singleton       Maps.singleton       ["k", "v"]               k v mapKv,
+    prim1 _maps_size            Maps.size            ["k", "v"]               mapKv int32,
+    prim1 _maps_toList          Maps.toList          ["k", "v"]               mapKv (list $ pair k v),
+    prim2 _maps_union           Maps.union           ["k", "v"]               mapKv mapKv mapKv]
   where
     k = variable "k"
     k1 = variable "k1"
