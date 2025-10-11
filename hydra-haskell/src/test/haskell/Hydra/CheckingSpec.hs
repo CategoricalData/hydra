@@ -63,49 +63,56 @@ checkTypeOf = H.describe "typeOf" $ do
 checkTypeOfAnnotatedTerms :: H.SpecWith ()
 checkTypeOfAnnotatedTerms = H.describe "Annotated terms" $ do
   H.describe "Top-level annotations" $ do
-    expectTypeOf "annotated literal"
+    expectSameTermWithType "annotated literal"
       (annotated (int32 42) M.empty)
       Types.int32
-    expectTypeOf "annotated list"
+    expectSameTermWithType "annotated list"
       (annotated (list [string "a", string "b"]) M.empty)
       (Types.list Types.string)
-    expectTypeOf "annotated record"
+    expectSameTermWithType "annotated record"
       (annotated (record testTypePersonName [
         field "firstName" (string "John"),
         field "lastName" (string "Doe"),
         field "age" (int32 25)]) M.empty)
       (Types.var "Person")
-    expectTypeOf "annotated lambda"
+    expectTermWithType "annotated lambda"
       (annotated (lambda "x" $ var "x") M.empty)
+      (annotated (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ var "x") M.empty)
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
 
   H.describe "Nested annotations" $ do
-    expectTypeOf "annotation within annotation"
+    expectSameTermWithType "annotation within annotation"
       (annotated (annotated (int32 100) M.empty) M.empty)
       Types.int32
-    expectTypeOf "annotated terms in tuple"
+    expectSameTermWithType "annotated terms in tuple"
       (tuple [annotated (int32 1) M.empty,
               annotated (string "hello") M.empty])
       (Types.product [Types.int32, Types.string])
-    expectTypeOf "annotated term in function application"
-      (annotated (lambda "x" $ var "x") M.empty @@ annotated (int32 42) M.empty)
-      Types.int32
+    expectTermWithType "annotated term in function application"
+        (annotated (lambda "x" $ var "x") M.empty @@ annotated (int32 42) M.empty)
+        (annotated (lambdaTyped "x" Types.int32 $ var "x") M.empty @@ annotated (int32 42) M.empty)
+        Types.int32
 
   H.describe "Annotations in complex contexts" $ do
-    expectTypeOf "annotated let binding"
+    expectTermWithType "annotated let binding"
       (lets ["x">: annotated (int32 5) M.empty,
              "y">: annotated (string "world") M.empty] $
             annotated (tuple [var "x", var "y"]) M.empty)
+      (letsTyped [("x", annotated (int32 5) M.empty, Types.mono Types.int32),
+                  ("y", annotated (string "world") M.empty, Types.mono Types.string)] $
+        annotated (tuple [var "x", var "y"]) M.empty)
       (Types.product [Types.int32, Types.string])
-    expectTypeOf "annotated record fields"
+    expectSameTermWithType "annotated record fields"
       (record testTypePersonName [
         field "firstName" (annotated (string "Alice") M.empty),
         field "lastName" (annotated (string "Smith") M.empty),
         field "age" (annotated (int32 30) M.empty)])
       (Types.var "Person")
-    expectTypeOf "annotated function in application"
+    expectTermWithType "annotated function in application"
       (lets ["add">: annotated (primitive _math_add) M.empty] $
             var "add" @@ annotated (int32 10) M.empty @@ annotated (int32 20) M.empty)
+      (letsTyped [("add", annotated (primitive _math_add) M.empty, Types.mono $ Types.function Types.int32 (Types.function Types.int32 Types.int32))] $
+        var "add" @@ annotated (int32 10) M.empty @@ annotated (int32 20) M.empty)
       Types.int32
 
 checkTypeOfApplications :: H.SpecWith ()
@@ -148,7 +155,7 @@ checkTypeOfApplications = H.describe "Applications" $ do
              "mul2">: lambda "n" $ primitive _math_mul @@ var "n" @@ int32 2] $
             var "compose" @@ var "add1" @@ var "mul2" @@ int32 3)
       (letsTyped [
-        ("compose", tylams ["t0", "t1"] $ tylam "t2" $ lambdaTyped "f" (Types.function (Types.var "t0") (Types.var "t1")) $ lambdaTyped "g" (Types.function (Types.var "t2") (Types.var "t0")) $ lambdaTyped "x" (Types.var "t2") $ var "f" @@ (var "g" @@ var "x"),
+        ("compose", tylams ["t0", "t1", "t2"] $ lambdaTyped "f" (Types.function (Types.var "t0") (Types.var "t1")) $ lambdaTyped "g" (Types.function (Types.var "t2") (Types.var "t0")) $ lambdaTyped "x" (Types.var "t2") $ var "f" @@ (var "g" @@ var "x"),
           Types.poly ["t0", "t1", "t2"] $ Types.function (Types.function (Types.var "t0") (Types.var "t1")) (Types.function (Types.function (Types.var "t2") (Types.var "t0")) (Types.function (Types.var "t2") (Types.var "t1")))),
         ("add1", lambdaTyped "n" Types.int32 $ primitive _math_add @@ var "n" @@ int32 1,
           Types.mono $ Types.function Types.int32 Types.int32),
@@ -178,7 +185,7 @@ checkTypeOfApplications = H.describe "Applications" $ do
       (lets ["flip">: lambda "f" $ lambda "x" $ lambda "y" $ var "f" @@ var "y" @@ var "x"] $
             var "flip" @@ primitive _strings_cat2 @@ string "world" @@ string "hello")
       (letsTyped [
-        ("flip", tylams ["t0", "t1"] $ tylam "t2" $ lambdaTyped "f" (Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.var "t2"))) $ lambdaTyped "x" (Types.var "t1") $ lambdaTyped "y" (Types.var "t0") $ var "f" @@ var "y" @@ var "x",
+        ("flip", tylams ["t0", "t1", "t2"] $ lambdaTyped "f" (Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.var "t2"))) $ lambdaTyped "x" (Types.var "t1") $ lambdaTyped "y" (Types.var "t0") $ var "f" @@ var "y" @@ var "x",
           Types.poly ["t0", "t1", "t2"] $ Types.function (Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.var "t2"))) (Types.function (Types.var "t1") (Types.function (Types.var "t0") (Types.var "t2"))))] $
         tyapps (var "flip") [Types.string, Types.string, Types.string] @@ primitive _strings_cat2 @@ string "world" @@ string "hello")
       Types.string
@@ -262,7 +269,7 @@ checkTypeOfLambdas = H.describe "Lambdas" $ do
       (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.var "t0")))
     expectTermWithType "three parameters"
       (lambda "x" $ lambda "y" $ lambda "z" $ var "y")
-      (tylams ["t0", "t1"] $ tylam "t2" $ lambdaTyped "x" (Types.var "t0") $ lambdaTyped "y" (Types.var "t1") $ lambdaTyped "z" (Types.var "t2") $ var "y")
+      (tylams ["t0", "t1", "t2"] $ lambdaTyped "x" (Types.var "t0") $ lambdaTyped "y" (Types.var "t1") $ lambdaTyped "z" (Types.var "t2") $ var "y")
       (Types.forAlls ["t0", "t1", "t2"] $ Types.function
         (Types.var "t0")
         (Types.function (Types.var "t1") (Types.function (Types.var "t2") (Types.var "t1"))))
@@ -290,7 +297,7 @@ checkTypeOfLambdas = H.describe "Lambdas" $ do
   H.describe "Nested lambdas" $ do
     expectTermWithType "lambda returning lambda"
       (lambda "x" $ lambda "y" $ lambda "z" $ var "x")
-      (tylams ["t0", "t1"] $ tylam "t2" $ lambdaTyped "x" (Types.var "t0") $ lambdaTyped "y" (Types.var "t1") $ lambdaTyped "z" (Types.var "t2") $ var "x")
+      (tylams ["t0", "t1", "t2"] $ lambdaTyped "x" (Types.var "t0") $ lambdaTyped "y" (Types.var "t1") $ lambdaTyped "z" (Types.var "t2") $ var "x")
       (Types.forAlls ["t0", "t1", "t2"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.function (Types.var "t2") (Types.var "t0"))))
     expectTermWithType "lambda with let binding"
       (lambda "x" $ lets ["y">: var "x"] $ var "y")
@@ -326,7 +333,7 @@ checkTypeOfLambdas = H.describe "Lambdas" $ do
   H.describe "Higher-order lambdas" $ do
     expectTermWithType "function composition"
       (lambda "f" $ lambda "g" $ lambda "x" $ var "f" @@ (var "g" @@ var "x"))
-      (tylams ["t0", "t1"] $ tylam "t2" $ lambdaTyped "f" (Types.function (Types.var "t0") (Types.var "t1")) $ lambdaTyped "g" (Types.function (Types.var "t2") (Types.var "t0")) $ lambdaTyped "x" (Types.var "t2") $ var "f" @@ (var "g" @@ var "x"))
+      (tylams ["t0", "t1", "t2"] $ lambdaTyped "f" (Types.function (Types.var "t0") (Types.var "t1")) $ lambdaTyped "g" (Types.function (Types.var "t2") (Types.var "t0")) $ lambdaTyped "x" (Types.var "t2") $ var "f" @@ (var "g" @@ var "x"))
       (Types.forAlls ["t0", "t1", "t2"] $ Types.function
         (Types.function (Types.var "t0") (Types.var "t1"))
         (Types.function
@@ -385,13 +392,13 @@ checkTypeOfLetTerms = H.describe "Let terms" $ do
                field "head" (int32 2),
                field "tail" (nothing)]] $
             var "listA")
-      (letsTyped [("listA", record testTypeBuddyListAName [
+      (letsTyped [("listA", tyapp (record testTypeBuddyListAName [
                      field "head" (int32 1),
-                     field "tail" (just $ var "listB")],
+                     field "tail" (just $ var "listB")]) Types.int32,
                    Types.mono $ Types.apply (Types.var "BuddyListA") Types.int32),
-                  ("listB", record testTypeBuddyListBName [
+                  ("listB", tyapp (record testTypeBuddyListBName [
                      field "head" (int32 2),
-                     field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListA") Types.int32))],
+                     field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListA") Types.int32))]) Types.int32,
                    Types.mono $ Types.apply (Types.var "BuddyListB") Types.int32)] $
         var "listA")
       (Types.apply (Types.var "BuddyListA") Types.int32)
@@ -473,12 +480,20 @@ checkTypeOfLetTerms = H.describe "Let terms" $ do
              "add1">: lambda "n" $ primitive _math_add @@ var "n" @@ int32 1,
              "double">: lambda "n" $ primitive _math_mul @@ var "n" @@ int32 2] $
             (var "compose" @@ var "add1" @@ var "double") @@ int32 5)
-      (letsTyped [("compose", tylams ["t0", "t1"] $ tylam "t2" $ lambdaTyped "f" (Types.function (Types.var "t0") (Types.var "t1")) $ lambdaTyped "g" (Types.function (Types.var "t2") (Types.var "t0")) $ lambdaTyped "x" (Types.var "t2") $ var "f" @@ (var "g" @@ var "x"),
-                   Types.poly ["t0", "t1", "t2"] $ Types.function (Types.function (Types.var "t0") (Types.var "t1")) (Types.function (Types.function (Types.var "t2") (Types.var "t0")) (Types.function (Types.var "t2") (Types.var "t1")))),
-                  ("add1", lambdaTyped "n" Types.int32 $ primitive _math_add @@ var "n" @@ int32 1,
-                   Types.mono $ Types.function Types.int32 Types.int32),
-                  ("double", lambdaTyped "n" Types.int32 $ primitive _math_mul @@ var "n" @@ int32 2,
-                   Types.mono $ Types.function Types.int32 Types.int32)] $
+      (letsTyped [
+        ("compose", tylams ["t0", "t1", "t2"] $
+          lambdaTyped "f" (Types.function (Types.var "t0") (Types.var "t1")) $
+            lambdaTyped "g" (Types.function (Types.var "t2") (Types.var "t0")) $
+              lambdaTyped "x" (Types.var "t2") $ var "f" @@ (var "g" @@ var "x"),
+          Types.poly ["t0", "t1", "t2"] $
+            Types.function
+              (Types.function (Types.var "t0") (Types.var "t1"))
+              (Types.function (Types.function (Types.var "t2") (Types.var "t0"))
+                (Types.function (Types.var "t2") (Types.var "t1")))),
+        ("add1", lambdaTyped "n" Types.int32 $ primitive _math_add @@ var "n" @@ int32 1,
+         Types.mono $ Types.function Types.int32 Types.int32),
+        ("double", lambdaTyped "n" Types.int32 $ primitive _math_mul @@ var "n" @@ int32 2,
+         Types.mono $ Types.function Types.int32 Types.int32)] $
         (tyapps (var "compose") [Types.int32, Types.int32, Types.int32] @@ var "add1" @@ var "double") @@ int32 5)
       Types.int32
 
@@ -497,6 +512,7 @@ checkTypeOfLists = H.describe "Lists" $ do
     expectSameTermWithType "mixed numeric types"
       (list [float32 1.0, float32 2.5, float32 3.14])
       (Types.list Types.float32)
+
   H.describe "Empty lists" $ do
     expectTermWithType "empty list"
       (list [])
@@ -510,6 +526,7 @@ checkTypeOfLists = H.describe "Lists" $ do
       (tuple [list [], string "context"])
       (tylam "t0" $ tuple [tyapp (list []) (Types.var "t0"), string "context"])
       (Types.forAll "t0" $ Types.product [Types.list $ Types.var "t0", Types.string])
+
   H.describe "Polymorphic lists" $ do
     expectTermWithType "list from lambda"
       (lambda "x" $ list [var "x"])
@@ -523,6 +540,7 @@ checkTypeOfLists = H.describe "Lists" $ do
       (lambda "x" $ lambda "y" $ list [var "x", var "y"])
       (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ lambdaTyped "y" (Types.var "t0") $ list [var "x", var "y"])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.function (Types.var "t0") (Types.list $ Types.var "t0")))
+
   H.describe "Nested lists" $ do
     expectSameTermWithType "list of lists"
       (list [list [int32 1], list [int32 2, int32 3]])
@@ -535,6 +553,7 @@ checkTypeOfLists = H.describe "Lists" $ do
       (lambda "x" $ list [list [var "x"]])
       (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ list [list [var "x"]])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.list $ Types.list $ Types.var "t0"))
+
   H.describe "Lists in complex contexts" $ do
     expectSameTermWithType "multiple lists in tuple"
       (tuple [
@@ -750,11 +769,11 @@ checkTypeOfOptionals = H.describe "Optionals" $ do
         field "tail" (just $ record testTypeBuddyListBName [
           field "head" (string "second"),
           field "tail" (nothing)])])
-      (record testTypeBuddyListAName [
+      (tyapp (record testTypeBuddyListAName [
         field "head" (string "first"),
-        field "tail" (just $ record testTypeBuddyListBName [
+        field "tail" (just $ tyapp (record testTypeBuddyListBName [
           field "head" (string "second"),
-          field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListA") Types.string))])])
+          field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListA") Types.string))]) Types.string)]) Types.string)
       (Types.apply (Types.var "BuddyListA") Types.string)
     expectTermWithType "optional in let binding"
       (lets ["maybeValue">: just $ int32 42] $
@@ -906,6 +925,7 @@ checkTypeOfProducts = H.describe "Products" $ do
     expectSameTermWithType "mixed types"
       (tuple [unit, string "test", bigint 100])
       (Types.product [Types.unit, Types.string, Types.bigint])
+
   H.describe "Polymorphic products" $ do
     expectTermWithType "lambda with var"
       (lambda "x" $ tuple [var "x", string "foo"])
@@ -919,6 +939,7 @@ checkTypeOfProducts = H.describe "Products" $ do
       (lambda "x" $ tuple [var "x", var "x"])
       (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ tuple [var "x", var "x"])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.product [Types.var "t0", Types.var "t0"]))
+
   H.describe "Nested products" $ do
     expectSameTermWithType "tuple in tuple"
       (tuple [tuple [int32 1], string "foo"])
@@ -930,7 +951,6 @@ checkTypeOfProducts = H.describe "Products" $ do
 
 checkTypeOfProductEliminations :: H.SpecWith ()
 checkTypeOfProductEliminations = H.describe "Product eliminations" $ do
-
   H.describe "Simple tuple projections" $ do
     expectSameTermWithType "projection from pair"
       (untuple 2 0 @@ pair (int32 42) (string "hello"))
@@ -1075,39 +1095,45 @@ checkTypeOfRecords = H.describe "Records" $ do
       (Types.function Types.string (Types.function Types.int32 (Types.var "Person")))
 
   H.describe "Polymorphic records" $ do
-    expectSameTermWithType "latlon poly float"
+    expectTermWithType "latlon poly float"
       (record testTypeLatLonPolyName [
         field "lat" (float32 19.5429),
         field "lon" (float32 (0-155.6659))])
+      (tyapp (record testTypeLatLonPolyName [
+        field "lat" (float32 19.5429),
+        field "lon" (float32 (0-155.6659))]) Types.float32)
       (Types.apply (Types.var "LatLonPoly") Types.float32)
-    expectSameTermWithType "latlon poly int64"
+    expectTermWithType "latlon poly int64"
       (record testTypeLatLonPolyName [
         field "lat" (int64 195429),
         field "lon" (int64 (0-1556659))])
+      (tyapp (record testTypeLatLonPolyName [
+        field "lat" (int64 195429),
+        field "lon" (int64 (0-1556659))]) Types.int64)
       (Types.apply (Types.var "LatLonPoly") Types.int64)
     expectTermWithType "latlon poly variable"
       (lambda "x" $ record testTypeLatLonPolyName [
         field "lat" (var "x"),
         field "lon" (var "x")])
-      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ record testTypeLatLonPolyName [
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ tyapp (record testTypeLatLonPolyName [
         field "lat" (var "x"),
-        field "lon" (var "x")])
+        field "lon" (var "x")]) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "LatLonPoly") (Types.var "t0")))
     expectTermWithType "buddylist string"
       (record testTypeBuddyListAName [
         field "head" (string "first"),
         field "tail" (nothing)])
-      (record testTypeBuddyListAName [
+      (tyapp (record testTypeBuddyListAName [
         field "head" (string "first"),
-        field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListB") Types.string))])
+        field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListB") Types.string))]) Types.string)
       (Types.apply (Types.var "BuddyListA") Types.string)
     expectTermWithType "buddylist variable"
       (lambda "x" $ record testTypeBuddyListAName [
         field "head" (var "x"),
         field "tail" (nothing)])
-      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ record testTypeBuddyListAName [
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ tyapp (record testTypeBuddyListAName [
         field "head" (var "x"),
-        field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListB") (Types.var "t0")))])
+        field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListB") (Types.var "t0")))]) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "BuddyListA") (Types.var "t0")))
 
   H.describe "Records in complex contexts" $ do
@@ -1130,12 +1156,12 @@ checkTypeOfRecords = H.describe "Records" $ do
           field "head" (string "test"),
           field "tail" (nothing)]])
       (tuple [
-        record testTypeLatLonPolyName [
+        tyapp (record testTypeLatLonPolyName [
           field "lat" (int32 1),
-          field "lon" (int32 2)],
-        record testTypeBuddyListAName [
+          field "lon" (int32 2)]) Types.int32,
+        tyapp (record testTypeBuddyListAName [
           field "head" (string "test"),
-          field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListB") Types.string))]])
+          field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListB") Types.string))]) Types.string])
       (Types.product [
         Types.apply (Types.var "LatLonPoly") Types.int32,
         Types.apply (Types.var "BuddyListA") Types.string])
@@ -1222,9 +1248,9 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
          field "lat" (int32 40),
          field "lon" (int32 (-74))])
       (tyapp (project testTypeLatLonPolyName (Name "lat")) Types.int32 @@
-       record testTypeLatLonPolyName [
+       tyapp (record testTypeLatLonPolyName [
          field "lat" (int32 40),
-         field "lon" (int32 (-74))])
+         field "lon" (int32 (-74))]) Types.int32)
       Types.int32
     expectTermWithType "project lon from LatLonPoly with float64"
       (project testTypeLatLonPolyName (Name "lon") @@
@@ -1232,9 +1258,9 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
          field "lat" (float64 40.7128),
          field "lon" (float64 (-74.0060))])
       (tyapp (project testTypeLatLonPolyName (Name "lon")) Types.float64 @@
-       record testTypeLatLonPolyName [
+       tyapp (record testTypeLatLonPolyName [
          field "lat" (float64 40.7128),
-         field "lon" (float64 (-74.0060))])
+         field "lon" (float64 (-74.0060))]) Types.float64)
       Types.float64
     expectTermWithType "project head from BuddyListA with string"
       (project testTypeBuddyListAName (Name "head") @@
@@ -1242,9 +1268,9 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
          field "head" (string "Alice"),
          field "tail" (nothing)])
       (tyapp (project testTypeBuddyListAName (Name "head")) Types.string @@
-       record testTypeBuddyListAName [
+       tyapp (record testTypeBuddyListAName [
          field "head" (string "Alice"),
-         field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListB") Types.string))])
+         field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListB") Types.string))]) Types.string)
       Types.string
 
   H.describe "Record projections with variables" $ do
@@ -1293,7 +1319,7 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
       (Types.list (Types.function (Types.var "Person") Types.string))
 
   H.describe "Higher-order record projections" $ do
-    expectTypeOf "map projection over list of records"
+    expectTermWithType "map projection over list of records"
       (primitive _lists_map @@ (project testTypePersonName (Name "firstName")) @@
        list [record testTypePersonName [
                field "firstName" (string "Alice"),
@@ -1303,8 +1329,17 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
                field "firstName" (string "Bob"),
                field "lastName" (string "Jones"),
                field "age" (int32 25)]])
+      (tyapps (primitive _lists_map) [Types.var "Person", Types.string] @@ (project testTypePersonName (Name "firstName")) @@
+       list [record testTypePersonName [
+               field "firstName" (string "Alice"),
+               field "lastName" (string "Smith"),
+               field "age" (int32 30)],
+             record testTypePersonName [
+               field "firstName" (string "Bob"),
+               field "lastName" (string "Jones"),
+               field "age" (int32 25)]])
       (Types.list Types.string)
-    expectTypeOf "map polymorphic projection"
+    expectTermWithType "map polymorphic projection"
       (primitive _lists_map @@ (project testTypeLatLonPolyName (Name "lat")) @@
        list [record testTypeLatLonPolyName [
                field "lat" (int32 40),
@@ -1312,159 +1347,216 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
              record testTypeLatLonPolyName [
                field "lat" (int32 34),
                field "lon" (int32 (-118))]])
+      (tyapps (primitive _lists_map) [Types.apply (Types.var "LatLonPoly") Types.int32, Types.int32]
+        @@ (tyapp (project testTypeLatLonPolyName (Name "lat")) Types.int32) @@
+       list [tyapp (record testTypeLatLonPolyName [
+               field "lat" (int32 40),
+               field "lon" (int32 (-74))]) Types.int32,
+             tyapp (record testTypeLatLonPolyName [
+               field "lat" (int32 34),
+               field "lon" (int32 (-118))]) Types.int32])
       (Types.list Types.int32)
-    expectTypeOf "filter using projection"
-      (primitive _lists_filter @@
-       (lambda "person" $
-        primitive _equality_gt @@
-        (project testTypePersonName (Name "age") @@ var "person") @@
-        int32 30) @@
-       list [record testTypePersonName [
-               field "firstName" (string "Alice"),
-               field "lastName" (string "Smith"),
-               field "age" (int32 35)],
-             record testTypePersonName [
-               field "firstName" (string "Bob"),
-               field "lastName" (string "Jones"),
-               field "age" (int32 25)]])
-      (Types.list (Types.var "Person"))
+    expectTermWithType "filter using projection"
+        (primitive _lists_filter @@
+         (lambda "person" $
+          primitive _equality_gt @@
+          (project testTypePersonName (Name "age") @@ var "person") @@
+          int32 30) @@
+         list [record testTypePersonName [
+                 field "firstName" (string "Alice"),
+                 field "lastName" (string "Smith"),
+                 field "age" (int32 35)],
+               record testTypePersonName [
+                 field "firstName" (string "Bob"),
+                 field "lastName" (string "Jones"),
+                 field "age" (int32 25)]])
+        (tyapp (primitive _lists_filter) (Types.var "Person") @@
+         (lambdaTyped "person" (Types.var "Person") $
+          tyapp (primitive _equality_gt) Types.int32 @@
+          (project testTypePersonName (Name "age") @@ var "person") @@
+          int32 30) @@
+         list [record testTypePersonName [
+                 field "firstName" (string "Alice"),
+                 field "lastName" (string "Smith"),
+                 field "age" (int32 35)],
+               record testTypePersonName [
+                 field "firstName" (string "Bob"),
+                 field "lastName" (string "Jones"),
+                 field "age" (int32 25)]])
+        (Types.list (Types.var "Person"))
 
   H.describe "Recursive record projections" $ do
-    expectTypeOf "project head from IntList"
+    expectSameTermWithType "project head from IntList"
       (project testTypeIntListName (Name "head"))
       (Types.function (Types.var "IntList") Types.int32)
-
-    expectTypeOf "project tail from IntList"
+    expectSameTermWithType "project tail from IntList"
       (project testTypeIntListName (Name "tail"))
       (Types.function (Types.var "IntList") (Types.optional (Types.var "IntList")))
-
-    expectTypeOf "project head applied to IntList"
+    expectTermWithType "project head applied to IntList"
       (project testTypeIntListName (Name "head") @@
        record testTypeIntListName [
          field "head" (int32 42),
          field "tail" (nothing)])
+      (project testTypeIntListName (Name "head") @@
+       record testTypeIntListName [
+         field "head" (int32 42),
+         field "tail" (tyapp nothing (Types.var "IntList"))])
       Types.int32
-
-    expectTypeOf "nested projection from recursive record"
+    expectTermWithType "nested projection from recursive record"
       (lambda "intList" $
        primitive _optionals_maybe @@
+       int32 0 @@
+       (project testTypeIntListName (Name "head")) @@
+       (project testTypeIntListName (Name "tail") @@ var "intList"))
+      (lambdaTyped "intList" (Types.var "IntList") $
+       tyapps (primitive _optionals_maybe) [Types.int32, Types.var "IntList"] @@
        int32 0 @@
        (project testTypeIntListName (Name "head")) @@
        (project testTypeIntListName (Name "tail") @@ var "intList"))
       (Types.function (Types.var "IntList") Types.int32)
 
   H.describe "Record projections with mutual recursion" $ do
-    expectTypeOf "project head from BuddyListA"
+    expectTermWithType "project head from BuddyListA"
       (project testTypeBuddyListAName (Name "head"))
+      (tylam "t0" $ tyapp (project testTypeBuddyListAName (Name "head")) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.apply (Types.var "BuddyListA") (Types.var "t0")) (Types.var "t0"))
-
-    expectTypeOf "project tail from BuddyListB"
+    expectTermWithType "project tail from BuddyListB"
       (project testTypeBuddyListBName (Name "tail"))
+      (tylam "t0" $ tyapp (project testTypeBuddyListBName (Name "tail")) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function
         (Types.apply (Types.var "BuddyListB") (Types.var "t0"))
         (Types.optional (Types.apply (Types.var "BuddyListA") (Types.var "t0"))))
+    expectTermWithType "chained projections across mutual recursion"
+        (lambda "listA" $
+          primitive _optionals_maybe
+            @@ nothing
+            @@ (lambda "listB" $
+              primitive _optionals_maybe
+                @@ nothing
+                @@ (project testTypeBuddyListAName (Name "tail"))
+                @@ (project testTypeBuddyListBName (Name "tail") @@ var "listB"))
+            @@ (project testTypeBuddyListAName (Name "tail") @@ var "listA"))
+        (tylam "t0" $ lambdaTyped "listA" (Types.apply (Types.var "BuddyListA") (Types.var "t0")) $
+          tyapps (primitive _optionals_maybe) [Types.optional (Types.apply (Types.var "BuddyListB") (Types.var "t0")), Types.apply (Types.var "BuddyListB") (Types.var "t0")] @@
+            tyapp nothing (Types.apply (Types.var "BuddyListB") (Types.var "t0")) @@
+            (lambdaTyped "listB" (Types.apply (Types.var "BuddyListB") (Types.var "t0")) $
+              tyapps (primitive _optionals_maybe) [Types.optional (Types.apply (Types.var "BuddyListB") (Types.var "t0")), Types.apply (Types.var "BuddyListA") (Types.var "t0")] @@
+                tyapp nothing (Types.apply (Types.var "BuddyListB") (Types.var "t0")) @@
+                (tyapp (project testTypeBuddyListAName (Name "tail")) (Types.var "t0")) @@
+                (tyapp (project testTypeBuddyListBName (Name "tail")) (Types.var "t0") @@ var "listB")) @@
+            (tyapp (project testTypeBuddyListAName (Name "tail")) (Types.var "t0") @@ var "listA"))
+        (Types.forAll "t0" $ Types.function
+          (Types.apply (Types.var "BuddyListA") (Types.var "t0"))
+          (Types.optional (Types.apply (Types.var "BuddyListB") (Types.var "t0"))))
 
-    expectTypeOf "chained projections across mutual recursion"
-      (lambda "listA" $
-        primitive _optionals_maybe
-          @@ nothing
-          @@ (lambda "listB" $
-            primitive _optionals_maybe
-              @@ nothing
-              @@ (project testTypeBuddyListAName (Name "tail"))
-              @@ (project testTypeBuddyListBName (Name "tail") @@ var "listB"))
-          @@ (project testTypeBuddyListAName (Name "tail") @@ var "listA"))
-      (Types.forAll "t0" $ Types.function
-        (Types.apply (Types.var "BuddyListA") (Types.var "t0"))
-        (Types.optional (Types.apply (Types.var "BuddyListB") (Types.var "t0"))))
-
-  H.describe "Record projection composition" $ do
-    expectTypeOf "compose projections"
-      (lambda "person" $
-       primitive _strings_cat2 @@
-       (project testTypePersonName (Name "firstName") @@ var "person") @@
-       (project testTypePersonName (Name "lastName") @@ var "person"))
-      (Types.function (Types.var "Person") Types.string)
-
-    expectTypeOf "projection with arithmetic"
-      (lambda "person" $
-       primitive _math_add @@
-       (project testTypePersonName (Name "age") @@ var "person") @@
-       int32 1)
-      (Types.function (Types.var "Person") Types.int32)
-
-    expectTypeOf "record construction using string projection"
-     (lambda "person" $
-      record testTypePersonName [
-        field "firstName" (project testTypePersonName (Name "firstName") @@ var "person"),
-        field "lastName" (project testTypePersonName (Name "lastName") @@ var "person"),
-        field "age" (int32 0)])
-     (Types.function (Types.var "Person") (Types.var "Person"))
+    H.describe "Record projection composition" $ do
+      expectTermWithType "compose projections"
+        (lambda "person" $
+         primitive _strings_cat2 @@
+         (project testTypePersonName (Name "firstName") @@ var "person") @@
+         (project testTypePersonName (Name "lastName") @@ var "person"))
+        (lambdaTyped "person" (Types.var "Person") $
+         primitive _strings_cat2 @@
+         (project testTypePersonName (Name "firstName") @@ var "person") @@
+         (project testTypePersonName (Name "lastName") @@ var "person"))
+        (Types.function (Types.var "Person") Types.string)
+      expectTermWithType "projection with arithmetic"
+        (lambda "person" $
+         primitive _math_add @@
+         (project testTypePersonName (Name "age") @@ var "person") @@
+         int32 1)
+        (lambdaTyped "person" (Types.var "Person") $
+         primitive _math_add @@
+         (project testTypePersonName (Name "age") @@ var "person") @@
+         int32 1)
+        (Types.function (Types.var "Person") Types.int32)
+      expectTermWithType "record construction using string projection"
+       (lambda "person" $
+        record testTypePersonName [
+          field "firstName" (project testTypePersonName (Name "firstName") @@ var "person"),
+          field "lastName" (project testTypePersonName (Name "lastName") @@ var "person"),
+          field "age" (int32 0)])
+       (lambdaTyped "person" (Types.var "Person") $
+        record testTypePersonName [
+          field "firstName" (project testTypePersonName (Name "firstName") @@ var "person"),
+          field "lastName" (project testTypePersonName (Name "lastName") @@ var "person"),
+          field "age" (int32 0)])
+       (Types.function (Types.var "Person") (Types.var "Person"))
 
 checkTypeOfSets :: H.SpecWith ()
 checkTypeOfSets = H.describe "Sets" $ do
   H.describe "Monomorphic sets" $ do
-    expectTypeOf "empty set"
+    expectTermWithType "empty set"
       (Terms.set S.empty)
+      (tylam "t0" $ tyapp (Terms.set S.empty) (Types.var "t0"))
       (Types.forAll "t0" $ Types.set $ Types.var "t0")
-    expectTypeOf "int set"
+    expectSameTermWithType "int set"
       (Terms.set $ S.fromList [int32 1, int32 2, int32 3])
       (Types.set Types.int32)
-    expectTypeOf "string set"
+    expectSameTermWithType "string set"
       (Terms.set $ S.fromList [string "apple", string "banana", string "cherry"])
       (Types.set Types.string)
-    expectTypeOf "single element set"
+    expectSameTermWithType "single element set"
       (Terms.set $ S.singleton $ boolean True)
       (Types.set Types.boolean)
 
   H.describe "Polymorphic sets" $ do
-    expectTypeOf "set from lambda"
+    expectTermWithType "set from lambda"
       (lambda "x" $ Terms.set $ S.singleton $ var "x")
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ Terms.set $ S.singleton $ var "x")
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.set $ Types.var "t0"))
-    expectTypeOf "set with repeated variable"
+    expectTermWithType "set with repeated variable"
       (lambda "x" $ Terms.set $ S.fromList [var "x", var "x"])
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ Terms.set $ S.fromList [var "x", var "x"])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.set $ Types.var "t0"))
-    expectTypeOf "set from two variables"
+    expectTermWithType "set from two variables"
       (lambda "x" $ lambda "y" $ Terms.set $ S.fromList [var "x", var "y"])
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ lambdaTyped "y" (Types.var "t0") $ Terms.set $ S.fromList [var "x", var "y"])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.function (Types.var "t0") (Types.set $ Types.var "t0")))
 
   H.describe "Sets in complex contexts" $ do
-    expectTypeOf "set in tuple"
+    expectSameTermWithType "set in tuple"
       (tuple [Terms.set $ S.fromList [int32 1, int32 2], string "context"])
       (Types.product [Types.set Types.int32, Types.string])
-    expectTypeOf "set in let binding"
+    expectTermWithType "set in let binding"
       (lets ["numbers">: Terms.set $ S.fromList [int32 10, int32 20, int32 30]] $
             var "numbers")
+      (letsTyped [("numbers", Terms.set $ S.fromList [int32 10, int32 20, int32 30],
+                   Types.mono $ Types.set Types.int32)] $
+        var "numbers")
       (Types.set Types.int32)
 
   H.describe "Nested sets" $ do
-    expectTypeOf "set of lists"
+    expectSameTermWithType "set of lists"
       (Terms.set $ S.fromList [
         list [string "a", string "b"],
         list [string "c", string "d"]])
       (Types.set $ Types.list Types.string)
-    expectTypeOf "set of tuples"
+    expectSameTermWithType "set of tuples"
       (Terms.set $ S.fromList [
         tuple [int32 1, int32 2],
         tuple [int32 3, int32 4]])
       (Types.set $ Types.product [Types.int32, Types.int32])
-    expectTypeOf "set of sets"
+    expectSameTermWithType "set of sets"
       (Terms.set $ S.singleton $ Terms.set $ S.fromList [string "nested"])
       (Types.set $ Types.set Types.string)
 
   H.describe "Sets with complex types" $ do
-    expectTypeOf "set of records"
+    expectSameTermWithType "set of records"
       (Terms.set $ S.singleton $ record testTypePersonName [
         field "firstName" (string "Alice"),
         field "lastName" (string "Smith"),
         field "age" (int32 30)])
       (Types.set $ Types.var "Person")
-    expectTypeOf "set of optionals"
+    expectTermWithType "set of optionals"
       (Terms.set $ S.fromList [
         just $ int32 42,
         nothing])
+      (Terms.set $ S.fromList [
+        just $ int32 42,
+        tyapp nothing Types.int32])
       (Types.set $ Types.optional Types.int32)
-    expectTypeOf "set of maps"
+    expectSameTermWithType "set of maps"
       (Terms.set $ S.singleton $ Terms.map $ M.singleton (string "key") (int32 42))
       (Types.set $ Types.map Types.string Types.int32)
 
@@ -1476,163 +1568,211 @@ checkTypeOfSums = H.describe "Sums" $ do
 checkTypeOfUnions :: H.SpecWith ()
 checkTypeOfUnions = H.describe "Unions" $ do
   H.describe "Simple union injections" $ do
-    expectTypeOf "inject into Comparison lessThan variant"
+    expectSameTermWithType "inject into Comparison lessThan variant"
       (unitVariant testTypeComparisonName (Name "lessThan"))
       (Types.var "Comparison")
-    expectTypeOf "inject into Comparison equalTo variant"
+    expectSameTermWithType "inject into Comparison equalTo variant"
       (unitVariant testTypeComparisonName (Name "equalTo"))
       (Types.var "Comparison")
-    expectTypeOf "inject into Comparison greaterThan variant"
+    expectSameTermWithType "inject into Comparison greaterThan variant"
       (unitVariant testTypeComparisonName (Name "greaterThan"))
       (Types.var "Comparison")
 
   H.describe "Union injections with data" $ do
-    expectTypeOf "inject into Number int variant"
+    expectSameTermWithType "inject into Number int variant"
       (variant testTypeNumberName (Name "int") (int32 42))
       (Types.var "Number")
-    expectTypeOf "inject into Number float variant"
+    expectSameTermWithType "inject into Number float variant"
       (variant testTypeNumberName (Name "float") (float32 3.14))
       (Types.var "Number")
-    expectTypeOf "inject into Timestamp unixTimeMillis variant"
+    expectSameTermWithType "inject into Timestamp unixTimeMillis variant"
       (variant testTypeTimestampName (Name "unixTimeMillis") (uint64 1609459200000))
       (Types.var "Timestamp")
-    expectTypeOf "inject into Timestamp date variant"
+    expectSameTermWithType "inject into Timestamp date variant"
       (variant testTypeTimestampName (Name "date") (string "2021-01-01"))
       (Types.var "Timestamp")
 
   H.describe "Polymorphic union injections" $ do
-    expectTypeOf "inject person into PersonOrSomething"
+    expectTermWithType "inject person into PersonOrSomething"
       (variant testTypePersonOrSomethingName (Name "person")
         (record testTypePersonName [
           field "firstName" (string "Alice"),
           field "lastName" (string "Smith"),
           field "age" (int32 30)]))
+      (tylam "t0" $ tyapp (variant testTypePersonOrSomethingName (Name "person")
+        (record testTypePersonName [
+          field "firstName" (string "Alice"),
+          field "lastName" (string "Smith"),
+          field "age" (int32 30)])) (Types.var "t0"))
       (Types.forAll "t0" $ Types.apply (Types.var "PersonOrSomething") (Types.var "t0"))
-    expectTypeOf "inject string into PersonOrSomething other variant"
+    expectTermWithType "inject string into PersonOrSomething other variant"
       (variant testTypePersonOrSomethingName (Name "other") (string "something else"))
+      (tyapp (variant testTypePersonOrSomethingName (Name "other") (string "something else")) Types.string)
       (Types.apply (Types.var "PersonOrSomething") Types.string)
-    expectTypeOf "inject int into PersonOrSomething other variant"
+    expectTermWithType "inject int into PersonOrSomething other variant"
       (variant testTypePersonOrSomethingName (Name "other") (int32 42))
+      (tyapp (variant testTypePersonOrSomethingName (Name "other") (int32 42)) Types.int32)
       (Types.apply (Types.var "PersonOrSomething") Types.int32)
 
   H.describe "Polymorphic recursive union injections" $ do
-    expectTypeOf "inject boolean into UnionPolymorphicRecursive"
+    expectTermWithType "inject boolean into UnionPolymorphicRecursive"
       (variant testTypeUnionPolymorphicRecursiveName (Name "bool") (boolean True))
+      (tylam "t0" $ tyapp (variant testTypeUnionPolymorphicRecursiveName (Name "bool") (boolean True)) (Types.var "t0"))
       (Types.forAll "t0" $ Types.apply (Types.var "UnionPolymorphicRecursive") (Types.var "t0"))
-    expectTypeOf "inject string value into UnionPolymorphicRecursive"
+    expectTermWithType "inject string value into UnionPolymorphicRecursive"
       (variant testTypeUnionPolymorphicRecursiveName (Name "value") (string "test"))
+      (tyapp (variant testTypeUnionPolymorphicRecursiveName (Name "value") (string "test")) Types.string)
       (Types.apply (Types.var "UnionPolymorphicRecursive") Types.string)
-    expectTypeOf "inject int value into UnionPolymorphicRecursive"
+    expectTermWithType "inject int value into UnionPolymorphicRecursive"
       (variant testTypeUnionPolymorphicRecursiveName (Name "value") (int32 123))
+      (tyapp (variant testTypeUnionPolymorphicRecursiveName (Name "value") (int32 123)) Types.int32)
       (Types.apply (Types.var "UnionPolymorphicRecursive") Types.int32)
 
   H.describe "Polymorphic unions from lambda" $ do
-    expectTypeOf "lambda creating PersonOrSomething other variant"
+    expectTermWithType "lambda creating PersonOrSomething other variant"
       (lambda "x" $ variant testTypePersonOrSomethingName (Name "other") (var "x"))
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ tyapp (variant testTypePersonOrSomethingName (Name "other") (var "x")) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "PersonOrSomething") (Types.var "t0")))
-    expectTypeOf "lambda creating UnionPolymorphicRecursive value variant"
+    expectTermWithType "lambda creating UnionPolymorphicRecursive value variant"
       (lambda "x" $ variant testTypeUnionPolymorphicRecursiveName (Name "value") (var "x"))
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ tyapp (variant testTypeUnionPolymorphicRecursiveName (Name "value") (var "x")) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "UnionPolymorphicRecursive") (Types.var "t0")))
 
   H.describe "Unions in complex contexts" $ do
-    expectTypeOf "union in tuple"
+    expectSameTermWithType "union in tuple"
       (tuple [variant testTypeNumberName (Name "int") (int32 42),
               string "context"])
       (Types.product [Types.var "Number", Types.string])
-    expectTypeOf "union in list"
+    expectSameTermWithType "union in list"
       (list [variant testTypeNumberName (Name "int") (int32 1),
              variant testTypeNumberName (Name "float") (float32 2.5)])
       (Types.list $ Types.var "Number")
-    expectTypeOf "polymorphic union in let binding"
+    expectTermWithType "polymorphic union in let binding"
       (lets ["value">: variant testTypePersonOrSomethingName (Name "other") (string "test")] $
             var "value")
+      (letsTyped [("value", tyapp (variant testTypePersonOrSomethingName (Name "other") (string "test")) Types.string,
+                   Types.mono $ Types.apply (Types.var "PersonOrSomething") Types.string)] $
+        var "value")
       (Types.apply (Types.var "PersonOrSomething") Types.string)
 
 checkTypeOfUnionEliminations :: H.SpecWith ()
 checkTypeOfUnionEliminations = H.describe "Union eliminations" $ do
   H.describe "Simple unit variant eliminations" $ do
-    expectTypeOf "match Comparison with all cases"
+    expectTermWithType "match Comparison with all cases"
       (match testTypeComparisonName Nothing [
         "lessThan">: lambda "x" (string "less"),
         "equalTo">: lambda "x" (string "equal"),
         "greaterThan">: lambda "x" (string "greater")])
+      (match testTypeComparisonName Nothing [
+        "lessThan">: lambdaTyped "x" Types.unit (string "less"),
+        "equalTo">: lambdaTyped "x" Types.unit (string "equal"),
+        "greaterThan">: lambdaTyped "x" Types.unit (string "greater")])
       (Types.function (Types.var "Comparison") Types.string)
-
-    expectTypeOf "match Comparison returning int32"
+    expectTermWithType "match Comparison returning int32"
       (match testTypeComparisonName Nothing [
         "lessThan">: lambda "x" (int32 (-1)),
         "equalTo">: lambda "x" (int32 0),
         "greaterThan">: lambda "x" (int32 1)])
+      (match testTypeComparisonName Nothing [
+        "lessThan">: lambdaTyped "x" Types.unit (int32 (-1)),
+        "equalTo">: lambdaTyped "x" Types.unit (int32 0),
+        "greaterThan">: lambdaTyped "x" Types.unit (int32 1)])
       (Types.function (Types.var "Comparison") Types.int32)
-
-    expectTypeOf "match applied to Comparison variant"
+    expectTermWithType "match applied to Comparison variant"
       (match testTypeComparisonName Nothing [
         "lessThan">: lambda "x" (string "less"),
         "equalTo">: lambda "x" (string "equal"),
         "greaterThan">: lambda "x" (string "greater")] @@
        unitVariant testTypeComparisonName (Name "equalTo"))
+      (match testTypeComparisonName Nothing [
+        "lessThan">: lambdaTyped "x" Types.unit (string "less"),
+        "equalTo">: lambdaTyped "x" Types.unit (string "equal"),
+        "greaterThan">: lambdaTyped "x" Types.unit (string "greater")] @@
+       unitVariant testTypeComparisonName (Name "equalTo"))
       Types.string
 
   H.describe "Union eliminations with data" $ do
-    expectTypeOf "match Number extracting int values"
+    expectTermWithType "match Number extracting int values"
       (match testTypeNumberName Nothing [
         "int">: lambda "i" (var "i"),
         "float">: lambda "f" (int32 0)])
+      (match testTypeNumberName Nothing [
+        "int">: lambdaTyped "i" Types.int32 (var "i"),
+        "float">: lambdaTyped "f" Types.float32 (int32 0)])
       (Types.function (Types.var "Number") Types.int32)
-
-    expectTypeOf "match Number converting to string"
+    expectTermWithType "match Number converting to string"
       (match testTypeNumberName Nothing [
         "int">: lambda "i" (primitive _literals_showInt32 @@ var "i"),
         "float">: lambda "f" (primitive _literals_showFloat32 @@ var "f")])
+      (match testTypeNumberName Nothing [
+        "int">: lambdaTyped "i" Types.int32 (primitive _literals_showInt32 @@ var "i"),
+        "float">: lambdaTyped "f" Types.float32 (primitive _literals_showFloat32 @@ var "f")])
       (Types.function (Types.var "Number") Types.string)
-
-    expectTypeOf "match Number applied to int variant"
+    expectTermWithType "match Number applied to int variant"
       (match testTypeNumberName Nothing [
         "int">: lambda "i" (primitive _math_add @@ var "i" @@ int32 10),
         "float">: lambda "f" (int32 0)] @@
        variant testTypeNumberName (Name "int") (int32 42))
+      (match testTypeNumberName Nothing [
+        "int">: lambdaTyped "i" Types.int32 (primitive _math_add @@ var "i" @@ int32 10),
+        "float">: lambdaTyped "f" Types.float32 (int32 0)] @@
+       variant testTypeNumberName (Name "int") (int32 42))
       Types.int32
-
-    expectTypeOf "match Timestamp with mixed data types"
-      (match testTypeTimestampName Nothing [
-        "unixTimeMillis">: lambda "millis" (primitive _literals_showUint64 @@ var "millis"),
-        "date">: lambda "dateStr" (var "dateStr")])
-      (Types.function (Types.var "Timestamp") Types.string)
+    expectTermWithType "match Timestamp with mixed data types"
+        (match testTypeTimestampName Nothing [
+          "unixTimeMillis">: lambda "millis" (primitive _literals_showUint64 @@ var "millis"),
+          "date">: lambda "dateStr" (var "dateStr")])
+        (match testTypeTimestampName Nothing [
+          "unixTimeMillis">: lambdaTyped "millis" Types.uint64 (primitive _literals_showUint64 @@ var "millis"),
+          "date">: lambdaTyped "dateStr" Types.string (var "dateStr")])
+        (Types.function (Types.var "Timestamp") Types.string)
 
   H.describe "Polymorphic union eliminations" $ do
-    expectTypeOf "match PersonOrSomething with string"
+    expectTermWithType "match PersonOrSomething with string"
       (match testTypePersonOrSomethingName Nothing [
         "person">: lambda "p" (project testTypePersonName (Name "firstName") @@ var "p"),
         "other">: lambda "x" (var "x")])
+      (tyapp (match testTypePersonOrSomethingName Nothing [
+        "person">: lambdaTyped "p" (Types.var "Person") (project testTypePersonName (Name "firstName") @@ var "p"),
+        "other">: lambdaTyped "x" Types.string (var "x")]) Types.string)
       (Types.function (Types.apply (Types.var "PersonOrSomething") (Types.string)) (Types.string))
-
-    expectTypeOf "match PersonOrSomething instantiated with string"
+    expectTermWithType "match PersonOrSomething instantiated with string"
       (match testTypePersonOrSomethingName Nothing [
         "person">: lambda "p" (project testTypePersonName (Name "firstName") @@ var "p"),
         "other">: lambda "x" (var "x")] @@
        variant testTypePersonOrSomethingName (Name "other") (string "test"))
+      (tyapp (match testTypePersonOrSomethingName Nothing [
+        "person">: lambdaTyped "p" (Types.var "Person") (project testTypePersonName (Name "firstName") @@ var "p"),
+        "other">: lambdaTyped "x" Types.string (var "x")]) Types.string @@
+       tyapp (variant testTypePersonOrSomethingName (Name "other") (string "test")) Types.string)
       Types.string
 
   H.describe "Union eliminations with defaults" $ do
-    expectTypeOf "match Comparison with default case"
+    expectTermWithType "match Comparison with default case"
       (match testTypeComparisonName (Just (string "unknown")) [
         "lessThan">: lambda "x" (string "less"),
         "equalTo">: lambda "x" (string "equal")])
+      (match testTypeComparisonName (Just (string "unknown")) [
+        "lessThan">: lambdaTyped "x" Types.unit (string "less"),
+        "equalTo">: lambdaTyped "x" Types.unit (string "equal")])
       (Types.function (Types.var "Comparison") Types.string)
-
-    expectTypeOf "match Number with default case"
+    expectTermWithType "match Number with default case"
       (match testTypeNumberName (Just (int32 (-1))) [
         "int">: lambda "i" (var "i")])
+      (match testTypeNumberName (Just (int32 (-1))) [
+        "int">: lambdaTyped "i" Types.int32 (var "i")])
       (Types.function (Types.var "Number") Types.int32)
-
-    expectTypeOf "match UnionMonomorphic with default"
+    expectTermWithType "match UnionMonomorphic with default"
       (match testTypeUnionMonomorphicName (Just (string "fallback")) [
         "bool">: lambda "b" (primitive _literals_showBoolean @@ var "b"),
         "string">: lambda "s" (var "s")])
+      (match testTypeUnionMonomorphicName (Just (string "fallback")) [
+        "bool">: lambdaTyped "b" Types.boolean (primitive _literals_showBoolean @@ var "b"),
+        "string">: lambdaTyped "s" Types.string (var "s")])
       (Types.function (Types.var "UnionMonomorphic") Types.string)
 
   H.describe "Nested union eliminations" $ do
-    expectTypeOf "nested match statements"
+    expectTermWithType "nested match statements"
       (match testTypePersonOrSomethingName Nothing [
         "person">: lambda "p" (project testTypePersonName (Name "firstName") @@ var "p"),
         "other">: lambda "x" (
@@ -1640,27 +1780,44 @@ checkTypeOfUnionEliminations = H.describe "Union eliminations" $ do
             "int">: lambda "i" (primitive _literals_showInt32 @@ var "i"),
             "float">: lambda "f" (primitive _literals_showFloat32 @@ var "f")] @@
           var "x")])
+      (tyapp (match testTypePersonOrSomethingName Nothing [
+        "person">: lambdaTyped "p" (Types.var "Person") (project testTypePersonName (Name "firstName") @@ var "p"),
+        "other">: lambdaTyped "x" (Types.var "Number") (
+          match testTypeNumberName Nothing [
+            "int">: lambdaTyped "i" Types.int32 (primitive _literals_showInt32 @@ var "i"),
+            "float">: lambdaTyped "f" Types.float32 (primitive _literals_showFloat32 @@ var "f")] @@
+          var "x")]) (Types.var "Number"))
       (Types.function (Types.apply (Types.var "PersonOrSomething") (Types.var "Number")) Types.string)
-
-    expectTypeOf "match in tuple"
+    expectTermWithType "match in tuple"
       (tuple [
         match testTypeComparisonName Nothing [
           "lessThan">: lambda "x" (int32 1),
           "equalTo">: lambda "x" (int32 0),
           "greaterThan">: lambda "x" (int32 (-1))],
         string "context"])
+      (tuple [
+        match testTypeComparisonName Nothing [
+          "lessThan">: lambdaTyped "x" Types.unit (int32 1),
+          "equalTo">: lambdaTyped "x" Types.unit (int32 0),
+          "greaterThan">: lambdaTyped "x" Types.unit (int32 (-1))],
+        string "context"])
       (Types.product [Types.function (Types.var "Comparison") Types.int32, Types.string])
 
   H.describe "Union eliminations in complex contexts" $ do
-    expectTypeOf "match in let binding"
+    expectTermWithType "match in let binding"
       (lets ["matcher">: match testTypeComparisonName Nothing [
                "lessThan">: lambda "x" (string "less"),
                "equalTo">: lambda "x" (string "equal"),
                "greaterThan">: lambda "x" (string "greater")]] $
             var "matcher")
+      (letsTyped [("matcher", match testTypeComparisonName Nothing [
+                     "lessThan">: lambdaTyped "x" Types.unit (string "less"),
+                     "equalTo">: lambdaTyped "x" Types.unit (string "equal"),
+                     "greaterThan">: lambdaTyped "x" Types.unit (string "greater")],
+                   Types.mono $ Types.function (Types.var "Comparison") Types.string)] $
+        var "matcher")
       (Types.function (Types.var "Comparison") Types.string)
-
-    expectTypeOf "match in record"
+    expectTermWithType "match in record"
       (record testTypePersonName [
         field "firstName" (match testTypePersonOrSomethingName Nothing [
           "person">: lambda "p" (project testTypePersonName (Name "firstName") @@ var "p"),
@@ -1668,19 +1825,31 @@ checkTypeOfUnionEliminations = H.describe "Union eliminations" $ do
          variant testTypePersonOrSomethingName (Name "other") (string "John")),
         field "lastName" (string "Doe"),
         field "age" (int32 30)])
+      (record testTypePersonName [
+        field "firstName" (tyapp (match testTypePersonOrSomethingName Nothing [
+          "person">: lambdaTyped "p" (Types.var "Person") (project testTypePersonName (Name "firstName") @@ var "p"),
+          "other">: lambdaTyped "x" Types.string (var "x")]) Types.string @@
+         tyapp (variant testTypePersonOrSomethingName (Name "other") (string "John")) Types.string),
+        field "lastName" (string "Doe"),
+        field "age" (int32 30)])
       (Types.var "Person")
-
-    expectTypeOf "match with polymorphic result in list"
+    expectTermWithType "match with polymorphic result in list"
       (list [
         match testTypePersonOrSomethingName Nothing [
           "person">: lambda "p" (project testTypePersonName (Name "age") @@ var "p"),
           "other">: lambda "x" (var "x")] @@
         variant testTypePersonOrSomethingName (Name "other") (int32 25),
         int32 30])
+      (list [
+        tyapp (match testTypePersonOrSomethingName Nothing [
+          "person">: lambdaTyped "p" (Types.var "Person") (project testTypePersonName (Name "age") @@ var "p"),
+          "other">: lambdaTyped "x" Types.int32 (var "x")]) Types.int32 @@
+        tyapp (variant testTypePersonOrSomethingName (Name "other") (int32 25)) Types.int32,
+        int32 30])
       (Types.list Types.int32)
 
   H.describe "Higher-order union eliminations" $ do
-    expectTypeOf "map match over list"
+    expectTermWithType "map match over list"
       (primitive _lists_map @@
        (match testTypeComparisonName Nothing [
          "lessThan">: lambda "x" (string "less"),
@@ -1688,9 +1857,16 @@ checkTypeOfUnionEliminations = H.describe "Union eliminations" $ do
          "greaterThan">: lambda "x" (string "greater")]) @@
        list [unitVariant testTypeComparisonName (Name "lessThan"),
              unitVariant testTypeComparisonName (Name "equalTo")])
+      (tyapps (primitive _lists_map) [Types.var "Comparison", Types.string] @@
+       (match testTypeComparisonName Nothing [
+         "lessThan">: lambdaTyped "x" Types.unit (string "less"),
+         "equalTo">: lambdaTyped "x" Types.unit (string "equal"),
+         "greaterThan">: lambdaTyped "x" Types.unit (string "greater")]) @@
+       list [unitVariant testTypeComparisonName (Name "lessThan"),
+             unitVariant testTypeComparisonName (Name "equalTo")])
       (Types.list Types.string)
 
-    expectTypeOf "compose match with other functions"
+    expectTermWithType "compose match with other functions"
       (lambda "comp" $
        primitive _strings_length @@
        (match testTypeComparisonName Nothing [
@@ -1698,18 +1874,30 @@ checkTypeOfUnionEliminations = H.describe "Union eliminations" $ do
          "equalTo">: lambda "x" (string "equal"),
          "greaterThan">: lambda "x" (string "greater")] @@
         var "comp"))
+      (lambdaTyped "comp" (Types.var "Comparison") $
+       primitive _strings_length @@
+       (match testTypeComparisonName Nothing [
+         "lessThan">: lambdaTyped "x" Types.unit (string "less"),
+         "equalTo">: lambdaTyped "x" Types.unit (string "equal"),
+         "greaterThan">: lambdaTyped "x" Types.unit (string "greater")] @@
+        var "comp"))
       (Types.function (Types.var "Comparison") Types.int32)
 
-    expectTypeOf "match in lambda body"
+    expectTermWithType "match in lambda body"
       (lambda "unionValue" $
        match testTypeNumberName Nothing [
          "int">: lambda "i" (primitive _math_add @@ var "i" @@ int32 1),
          "float">: lambda "f" (int32 0)] @@
        var "unionValue")
+      (lambdaTyped "unionValue" (Types.var "Number") $
+       match testTypeNumberName Nothing [
+         "int">: lambdaTyped "i" Types.int32 (primitive _math_add @@ var "i" @@ int32 1),
+         "float">: lambdaTyped "f" Types.float32 (int32 0)] @@
+       var "unionValue")
       (Types.function (Types.var "Number") Types.int32)
 
   H.describe "Recursive union eliminations" $ do
-    expectTypeOf "match HydraType recursively"
+    expectTermWithType "match HydraType recursively"
       (match testTypeHydraTypeName Nothing [
         "literal">: lambda "lit" (
           match testTypeHydraLiteralTypeName Nothing [
@@ -1717,161 +1905,221 @@ checkTypeOfUnionEliminations = H.describe "Union eliminations" $ do
             "string">: lambda "s" (var "s")] @@
           var "lit"),
         "list">: lambda "nested" (string "list")])
+      (match testTypeHydraTypeName Nothing [
+        "literal">: lambdaTyped "lit" (Types.var "HydraLiteralType") (
+          match testTypeHydraLiteralTypeName Nothing [
+            "boolean">: lambdaTyped "b" Types.boolean (primitive _literals_showBoolean @@ var "b"),
+            "string">: lambdaTyped "s" Types.string (var "s")] @@
+          var "lit"),
+        "list">: lambdaTyped "nested" (Types.var "HydraType") (string "list")])
       (Types.function (Types.var "HydraType") Types.string)
 
 checkTypeOfUnit :: H.SpecWith ()
 checkTypeOfUnit = H.describe "Unit" $ do
   H.describe "Unit term" $ do
-    expectTypeOf "unit literal"
+    expectSameTermWithType "unit literal"
       unit
       Types.unit
   H.describe "Unit term in polymorphic context" $ do
-    expectTypeOf "unit from lambda"
+    expectTermWithType "unit from lambda"
       (lambda "x" unit)
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") unit)
       (Types.forAll "t0" $ Types.function (Types.var "t0") Types.unit)
-    expectTypeOf "unit in tuple"
+    expectSameTermWithType "unit in tuple"
       (tuple [unit, string "foo"])
       (Types.product [Types.unit, Types.string])
 
 checkTypeOfVariables :: H.SpecWith ()
 checkTypeOfVariables = H.describe "Variables" $ do
   H.describe "Simple variable lookup" $ do
-    expectTypeOf "int variable"
+    expectTermWithType "int variable"
       (lambda "x" $ var "x")
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ var "x")
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
-    expectTypeOf "variable in let binding"
+    expectTermWithType "variable in let binding"
       (lets ["x">: int32 42] $ var "x")
+      (letsTyped [("x", int32 42, Types.mono Types.int32)] $ var "x")
       Types.int32
-    expectTypeOf "multiple variables"
+    expectTermWithType "multiple variables"
       (lets ["x">: string "hello",
              "y">: int32 42] $
             tuple [var "x", var "y"])
+      (letsTyped [("x", string "hello", Types.mono Types.string),
+                  ("y", int32 42, Types.mono Types.int32)] $
+        tuple [var "x", var "y"])
       (Types.product [Types.string, Types.int32])
 
   H.describe "Variable scoping" $ do
-    expectTypeOf "lambda parameter"
+    expectTermWithType "lambda parameter"
       (lambda "x" $ lambda "y" $ var "x")
+      (tylams ["t0", "t1"] $ lambdaTyped "x" (Types.var "t0") $ lambdaTyped "y" (Types.var "t1") $ var "x")
       (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.var "t0")))
-    expectTypeOf "let binding scope"
+    expectTermWithType "let binding scope"
       (lets ["x">: int32 1] $
        lets ["y">: string "hello"] $
             var "x")
+      (letsTyped [("x", int32 1, Types.mono Types.int32)] $
+       letsTyped [("y", string "hello", Types.mono Types.string)] $
+        var "x")
       Types.int32
-    expectTypeOf "variable shadowing"
+    expectTermWithType "variable shadowing"
       (lets ["x">: int32 1] $
        lambda "x" $ var "x")
+      (tylam "t0" $ letsTyped [("x", int32 1, Types.mono Types.int32)] $
+        lambdaTyped "x" (Types.var "t0") $ var "x")
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
-    expectTypeOf "nested scoping"
+    expectTermWithType "nested scoping"
       (lambda "x" $
        lets ["y">: var "x"] $
             lambda "z" $
             tuple [var "x", var "y", var "z"])
+      (tylams ["t0", "t1"] $ lambdaTyped "x" (Types.var "t0") $
+       letsTyped [("y", var "x", Types.mono (Types.var "t0"))] $
+        lambdaTyped "z" (Types.var "t1") $
+        tuple [var "x", var "y", var "z"])
       (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t0", Types.var "t1"])))
 
   H.describe "Polymorphic variables" $ do
-    expectTypeOf "polymorphic function"
+    expectTermWithType "polymorphic function"
       (lets ["id">: lambda "x" $ var "x"] $
             var "id")
+      (tylam "t0" $ letsTyped [("id", tylam "t1" $ lambdaTyped "x" (Types.var "t1") $ var "x",
+                                Types.poly ["t1"] $ Types.function (Types.var "t1") (Types.var "t1"))] $
+        tyapp (var "id") (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
-    expectTypeOf "polymorphic application"
+    expectTermWithType "polymorphic application"
       (lets ["id">: lambda "x" $ var "x"] $
             tuple [var "id" @@ int32 42, var "id" @@ string "test"])
+      (letsTyped [("id", tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ var "x",
+                   Types.poly ["t0"] $ Types.function (Types.var "t0") (Types.var "t0"))] $
+        tuple [tyapp (var "id") Types.int32 @@ int32 42, tyapp (var "id") Types.string @@ string "test"])
       (Types.product [Types.int32, Types.string])
-    expectTypeOf "higher order polymorphic"
+    expectTermWithType "higher order polymorphic"
       (lets ["apply">: lambda "f" $ lambda "x" $ var "f" @@ var "x"] $
             var "apply")
+      (tylams ["t0", "t1"] $ letsTyped [("apply", tylams ["t2", "t3"] $ lambdaTyped "f" (Types.function (Types.var "t2") (Types.var "t3")) $ lambdaTyped "x" (Types.var "t2") $ var "f" @@ var "x",
+                                         Types.poly ["t2", "t3"] $ Types.function (Types.function (Types.var "t2") (Types.var "t3")) (Types.function (Types.var "t2") (Types.var "t3")))] $
+        tyapps (var "apply") [Types.var "t0", Types.var "t1"])
       (Types.forAlls ["t0", "t1"] $
         Types.function (Types.function (Types.var "t0") (Types.var "t1")) (Types.function (Types.var "t0") (Types.var "t1")))
 
   H.describe "Variables in complex contexts" $ do
-    expectTypeOf "variable in record"
+    expectTermWithType "variable in record"
       (lambda "name" $
        record testTypePersonName [
          field "firstName" (var "name"),
          field "lastName" (string "Doe"),
          field "age" (int32 25)])
+      (lambdaTyped "name" Types.string $
+       record testTypePersonName [
+         field "firstName" (var "name"),
+         field "lastName" (string "Doe"),
+         field "age" (int32 25)])
       (Types.function Types.string (Types.var "Person"))
-    expectTypeOf "variable in list"
+    expectTermWithType "variable in list"
       (lambda "x" $ list [var "x", var "x"])
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ list [var "x", var "x"])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.list $ Types.var "t0"))
-    expectTypeOf "variable in map"
+    expectTermWithType "variable in map"
       (lambda "key" $ lambda "value" $
        Terms.map $ M.singleton (var "key") (var "value"))
+      (tylams ["t0", "t1"] $ lambdaTyped "key" (Types.var "t0") $ lambdaTyped "value" (Types.var "t1") $
+       Terms.map $ M.singleton (var "key") (var "value"))
       (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.map (Types.var "t0") (Types.var "t1"))))
-    expectTypeOf "variable in optional"
+    expectTermWithType "variable in optional"
       (lambda "x" $ just $ var "x")
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ just $ var "x")
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.optional $ Types.var "t0"))
 
   H.describe "Recursive variables" $ do
-    expectTypeOf "simple recursion"
+    expectTermWithType "simple recursion"
       (lets ["f">: lambda "x" $ primitive _math_add @@ var "x" @@ int32 1] $
             var "f")
+      (letsTyped [("f", lambdaTyped "x" Types.int32 $ primitive _math_add @@ var "x" @@ int32 1,
+                   Types.mono $ Types.function Types.int32 Types.int32)] $
+        var "f")
       (Types.function Types.int32 Types.int32)
-    expectTypeOf "mutual recursion"
+    expectTermWithType "mutual recursion"
       (lets ["f">: lambda "x" $ var "g" @@ var "x",
              "g">: lambda "y" $ primitive _math_add @@ var "y" @@ int32 1] $
             var "f")
+      (letsTyped [("f", lambdaTyped "x" Types.int32 $ var "g" @@ var "x",
+                   Types.mono $ Types.function Types.int32 Types.int32),
+                  ("g", lambdaTyped "y" Types.int32 $ primitive _math_add @@ var "y" @@ int32 1,
+                   Types.mono $ Types.function Types.int32 Types.int32)] $
+        var "f")
       (Types.function Types.int32 Types.int32)
 
 checkTypeOfWrappedTerms :: H.SpecWith ()
 checkTypeOfWrappedTerms = H.describe "Wrapped terms" $ do
   H.describe "Monomorphic wrapped terms" $ do
-    expectTypeOf "string alias"
+    expectSameTermWithType "string alias"
       (wrap testTypeStringAliasName (string "hello"))
       (Types.var "StringTypeAlias")
-    expectTypeOf "wrapped integer"
+    expectSameTermWithType "wrapped integer"
       (wrap testTypeStringAliasName (string "wrapped"))
       (Types.var "StringTypeAlias")
-    expectTypeOf "wrapped in tuple"
+    expectSameTermWithType "wrapped in tuple"
       (tuple [wrap testTypeStringAliasName (string "first"),
               string "second"])
       (Types.product [Types.var "StringTypeAlias", Types.string])
 
   H.describe "Polymorphic wrapped terms" $ do
-    expectTypeOf "polymorphic wrapper with int"
+    expectTermWithType "polymorphic wrapper with int"
       (wrap testTypePolymorphicWrapperName (list [int32 1, int32 2]))
+      (tyapp (wrap testTypePolymorphicWrapperName (list [int32 1, int32 2])) Types.int32)
       (Types.apply (Types.var "PolymorphicWrapper") Types.int32)
-    expectTypeOf "polymorphic wrapper with string"
+    expectTermWithType "polymorphic wrapper with string"
       (wrap testTypePolymorphicWrapperName (list [string "a", string "b"]))
+      (tyapp (wrap testTypePolymorphicWrapperName (list [string "a", string "b"])) Types.string)
       (Types.apply (Types.var "PolymorphicWrapper") Types.string)
-    expectTypeOf "polymorphic wrapper from lambda"
+    expectTermWithType "polymorphic wrapper from lambda"
       (lambda "x" $ wrap testTypePolymorphicWrapperName (list [var "x"]))
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ tyapp (wrap testTypePolymorphicWrapperName (list [var "x"])) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "PolymorphicWrapper") (Types.var "t0")))
 
   H.describe "Wrapped terms in complex contexts" $ do
-    expectTypeOf "wrapped in record"
+    expectSameTermWithType "wrapped in record"
       (record testTypePersonName [
         field "firstName" (string "John"),
         field "lastName" (string "Doe"),
         field "age" (int32 30)])
       (Types.var "Person")
-    expectTypeOf "wrapped in let binding"
+    expectTermWithType "wrapped in let binding"
       (lets ["alias">: wrap testTypeStringAliasName (string "test")] $
             var "alias")
+      (letsTyped [("alias", wrap testTypeStringAliasName (string "test"),
+                   Types.mono $ Types.var "StringTypeAlias")] $
+        var "alias")
       (Types.var "StringTypeAlias")
-    expectTypeOf "wrapped in list"
+    expectSameTermWithType "wrapped in list"
       (list [wrap testTypeStringAliasName (string "first"),
              wrap testTypeStringAliasName (string "second")])
       (Types.list $ Types.var "StringTypeAlias")
 
   H.describe "Nested wrapped terms" $ do
-    expectTypeOf "wrapped tuple"
+    expectTermWithType "wrapped tuple"
       (wrap testTypePolymorphicWrapperName (list [tuple [int32 1, string "a"]]))
+      (tyapp (wrap testTypePolymorphicWrapperName (list [tuple [int32 1, string "a"]])) (Types.product [Types.int32, Types.string]))
       (Types.apply (Types.var "PolymorphicWrapper") (Types.product [Types.int32, Types.string]))
-    expectTypeOf "wrapped optional"
+    expectTermWithType "wrapped optional"
       (wrap testTypePolymorphicWrapperName (list [just $ int32 42]))
+      (tyapp (wrap testTypePolymorphicWrapperName (list [just $ int32 42])) (Types.optional Types.int32))
       (Types.apply (Types.var "PolymorphicWrapper") (Types.optional Types.int32))
-    expectTypeOf "wrapped map"
+    expectTermWithType "wrapped map"
       (wrap testTypePolymorphicWrapperName (list [Terms.map $ M.singleton (string "key") (int32 42)]))
+      (tyapp (wrap testTypePolymorphicWrapperName (list [Terms.map $ M.singleton (string "key") (int32 42)])) (Types.map Types.string Types.int32))
       (Types.apply (Types.var "PolymorphicWrapper") (Types.map Types.string Types.int32))
 
   H.describe "Multiple wrapping levels" $ do
-    expectTypeOf "wrapped in optional"
+    expectSameTermWithType "wrapped in optional"
       (just $ wrap testTypeStringAliasName (string "wrapped"))
       (Types.optional $ Types.var "StringTypeAlias")
-    expectTypeOf "list of wrapped polymorphic"
+    expectTermWithType "list of wrapped polymorphic"
       (list [wrap testTypePolymorphicWrapperName (list [int32 1]),
              wrap testTypePolymorphicWrapperName (list [int32 2])])
+      (list [tyapp (wrap testTypePolymorphicWrapperName (list [int32 1])) Types.int32,
+             tyapp (wrap testTypePolymorphicWrapperName (list [int32 2])) Types.int32])
       (Types.list $ Types.apply (Types.var "PolymorphicWrapper") Types.int32)
 
 checkTypeOfWrapEliminations :: H.SpecWith ()
@@ -1893,7 +2141,7 @@ checkTypeOfWrapEliminations = H.describe "Wrap eliminations" $ do
       Types.string
     expectTermWithType "unwrap polymorphic applied"
       (unwrap testTypePolymorphicWrapperName @@ wrap testTypePolymorphicWrapperName (list [int32 1, int32 2]))
-      (tyapp (unwrap testTypePolymorphicWrapperName) (Types.int32) @@ wrap testTypePolymorphicWrapperName (list [int32 1, int32 2]))
+      (tyapp (unwrap testTypePolymorphicWrapperName) Types.int32 @@ tyapp (wrap testTypePolymorphicWrapperName (list [int32 1, int32 2])) Types.int32)
       (Types.list Types.int32)
 
   H.describe "Unwrap in complex contexts" $ do

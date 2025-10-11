@@ -6,6 +6,12 @@
 -- Lightweight adaptation to Hydra by Joshua Shinavier.
 -- License: Apache 2.0 https://www.apache.org/licenses/LICENSE-2.0 
 
+{-
+  Usage:
+    testOne test1
+    testOne test2
+    etc.
+-}
 module Hydra.Reference.AlgorithmW where
 
 import Prelude
@@ -515,7 +521,7 @@ tests = [testJ, testM, testJ, testB'', testB' , testB, test4, testC, testA, test
 
 
 testOne t = do { putStrLn $ "Untyped input: "
-               ; putStrLn $ "\t" ++  show t
+               ; putStrLn $ "\t" ++  showExpr t
                ; let out = fst $ runState (runExceptT (w [] t)) 0
                ; case out of
                    Left  e -> putStrLn $ "\t" ++ "err: " ++ e
@@ -523,11 +529,11 @@ testOne t = do { putStrLn $ "Untyped input: "
                                             ; putStrLn $ "\nType inferred by Hindley-Milner: "
                                             ; putStrLn $ "\t" ++ show ty
                                             ; putStrLn "\nSystem F translation: "
-                                            ; putStrLn $ "\t" ++ show f
+                                            ; putStrLn $ "\t" ++ showFExpr f
                                             ; putStrLn "\nSystem F type: "
                                             ; case (typeOf (vars ty) [] f) of
                                                Left err -> putStrLn $ "\t" ++  "err: " ++ err
-                                               Right tt -> do { putStrLn $ " \t" ++ show tt
+                                               Right tt -> do { putStrLn $ " \t" ++ showFTy tt
                                                               ; if tt == mTyToFTy ty then return () else putStrLn "**** !!! NO MATCH" } }
                ; putStrLn ""
                ; putStrLn "------------------------"
@@ -650,9 +656,16 @@ test5 = Letrec [("f", f), ("g", g)] b
        f = Abs "x" $ Abs "y" $ App (App (Var "g") (nat 0)) (nat 0)
        g = Abs "u" $ Abs "v" $ App (App (Var "f") (Var "v")) (nat 0)
 
-
 test6 :: Expr
 test6 = Letrec [("f", f), ("g", g)] b
  where b = App (App (Const Pair) (Var "f")) (Var "g")
        f = Abs "x" $ Abs "y" $ App (App (Var "g") (nat 0)) (Var "x")
        g = Abs "u" $ Abs "v" $ App (App (Var "f") (nat 0)) (nat 0)
+
+
+
+
+-- For Hydra debugging
+
+test7 :: Expr
+test7 = letrec' "foo" (letrec' "id" (Abs "x" (Var "x")) (Var "id")) (str "whatever")

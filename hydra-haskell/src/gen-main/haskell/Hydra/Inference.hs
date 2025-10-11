@@ -663,11 +663,11 @@ inferTypeOfRecord cx record =
                           Core.rowTypeFields = (Lists.zipWith (\n -> \t -> Core.FieldType {
                             Core.fieldTypeName = n,
                             Core.fieldTypeType = t}) fnames itypes)}))
-                  in (mapConstraints cx (\subst -> yield (Core.TermRecord (Core.Record {
+                  in (mapConstraints cx (\subst -> yield (buildTypeApplicationTerm svars (Core.TermRecord (Core.Record {
                     Core.recordTypeName = tname,
                     Core.recordFields = (Lists.zipWith (\n -> \t -> Core.Field {
                       Core.fieldName = n,
-                      Core.fieldTerm = t}) fnames iterms)})) (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
+                      Core.fieldTerm = t}) fnames iterms)}))) (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
                     Typing_.TypeConstraint {
                       Typing_.typeConstraintLeft = stype,
                       Typing_.typeConstraintRight = ityp,
@@ -784,9 +784,9 @@ inferTypeOfWrappedTerm cx wt =
                 let ityp = (Core.TypeWrap (Core.WrappedType {
                         Core.wrappedTypeTypeName = tname,
                         Core.wrappedTypeObject = itype}))
-                in (mapConstraints cx (\subst -> yield (Core.TermWrap (Core.WrappedTerm {
+                in (mapConstraints cx (\subst -> yield (buildTypeApplicationTerm svars (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = tname,
-                  Core.wrappedTermObject = iterm})) (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
+                  Core.wrappedTermObject = iterm}))) (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
                   Typing_.TypeConstraint {
                     Typing_.typeConstraintLeft = stype,
                     Typing_.typeConstraintRight = ityp,
