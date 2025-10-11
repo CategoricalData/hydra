@@ -667,14 +667,14 @@ inferTypeOfLetNormalizedDef = define "inferTypeOfLetNormalized" $
             @@ (Core.typeSchemeVariables $ var "ts")
             @@ (Core.termVariable $ var "name")))
       (var "tsbins1"))) $
-  
+
   -- Phase 7: Create the final bindings with type lambdas
   "createBinding" <~ ("bindingPair" ~>
     "nameTsPair" <~ first (var "bindingPair") $
     "term" <~ second (var "bindingPair") $
     "name" <~ first (var "nameTsPair") $
     "ts" <~ second (var "nameTsPair") $
-    
+
     -- First, substitute polymorphic references in the term
     -- Then wrap in type lambdas for each variable in the type scheme.
     -- Note: this is the only place -- at the top level of bound terms -- where inference creates type lambda terms.
@@ -682,7 +682,7 @@ inferTypeOfLetNormalizedDef = define "inferTypeOfLetNormalized" $
       ("b" ~> "v" ~> Core.termTypeLambda $ Core.typeLambda (var "v") (var "b"))
       (ref Substitution.substituteInTermDef @@ var "st1" @@ var "term")
       (Lists.reverse $ Core.typeSchemeVariables $ var "ts") $
-    
+
     -- Apply remaining substitutions (senv and s2) to the wrapped term
     Core.binding (var "name")
       (ref Substitution.substTypesInTermDef @@
@@ -692,7 +692,7 @@ inferTypeOfLetNormalizedDef = define "inferTypeOfLetNormalized" $
   
   "bins1" <~ (Lists.map (var "createBinding") $
     Lists.zip (var "tsbins1") (var "bterms1Subst")) $
-  
+
   -- Return the final let term with properly typed bindings
   "ret" <~ (Typing.inferenceResult
     (Core.termLet $ Core.let_ (var "bins1") (var "body1"))
@@ -836,10 +836,11 @@ inferTypeOfRecordDef = define "inferTypeOfRecord" $
       Lists.zipWith ("n" ~> "t" ~> Core.fieldType (var "n") (var "t")) (var "fnames") (var "itypes")) $
   ref mapConstraintsDef @@ var "cx" @@
     ("subst" ~> ref yieldDef
-      @@ (Core.termRecord $ Core.record (var "tname") $ Lists.zipWith
-              ("n" ~> "t" ~> Core.field (var "n") (var "t"))
-              (var "fnames")
-              (var "iterms"))
+      @@ (ref buildTypeApplicationTermDef @@ var "svars" @@
+        (Core.termRecord $ Core.record (var "tname") $ Lists.zipWith
+          ("n" ~> "t" ~> Core.field (var "n") (var "t"))
+          (var "fnames")
+          (var "iterms")))
       @@ (ref Schemas.nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
       @@ (ref Substitution.composeTypeSubstDef @@ var "isubst" @@ var "subst")) @@
     list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of record")]
@@ -989,7 +990,7 @@ inferTypeOfWrappedTermDef = define "inferTypeOfWrappedTerm" $
   "ityp" <~ Core.typeWrap (Core.wrappedType (var "tname") (var "itype")) $
   ref mapConstraintsDef @@ var "cx"
     @@ ("subst" ~> ref yieldDef
-      @@ (Core.termWrap $ Core.wrappedTerm (var "tname") (var "iterm"))
+      @@ (ref buildTypeApplicationTermDef @@ var "svars" @@ (Core.termWrap $ Core.wrappedTerm (var "tname") (var "iterm")))
       @@ (ref Schemas.nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
       @@ (ref Substitution.composeTypeSubstDef @@ var "isubst" @@ var "subst"))
     @@ list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of wrapper")]
