@@ -191,7 +191,7 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim2Interp _lists_dropWhile   Nothing            ["x"] (function x boolean) (list x) (list x),
     prim2       _lists_elem        Lists.elem         ["x"] x (list x) boolean,
     prim2       _lists_filter      Lists.filter       ["x"] (function x boolean) (list x) (list x),
-    prim3       _lists_foldl       Lists.foldl        ["x", "y"] (function y (function x y)) y (list x) y,
+    prim3       _lists_foldl       Lists.foldl        ["y", "x"] (function y (function x y)) y (list x) y,
     prim1       _lists_group       Lists.group        ["x"] (list x) (list (list x)),
     prim1       _lists_head        Lists.head         ["x"] (list x) x,
     prim1       _lists_init        Lists.init         ["x"] (list x) (list x),
@@ -476,7 +476,7 @@ hydraLibOptionals = standardLibrary _hydra_lib_optionals [
     prim1       _optionals_isNothing Optionals.isNothing       ["x"]           (optional x) boolean,
     prim2Interp _optionals_map       (Just optionalsMapInterp) ["x", "y"]      (function x y) (optional x) (optional y),
     prim2Interp _optionals_mapMaybe  Nothing                   ["x", "y"]      (function x $ optional y) (list x) (list y),
-    prim3Interp _optionals_maybe     (Just maybeInterp)        ["x", "y"]      y (function x y) (optional x) y,
+    prim3Interp _optionals_maybe     (Just maybeInterp)        ["y", "x"]      y (function x y) (optional x) y,
     prim1       _optionals_pure      Optionals.pure            ["x"]           x (optional x)]
   where
     x = variable "x"

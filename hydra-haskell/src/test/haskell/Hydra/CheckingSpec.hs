@@ -706,151 +706,185 @@ checkTypeOfMaps = H.describe "Maps" $ do
 checkTypeOfOptionals :: H.SpecWith ()
 checkTypeOfOptionals = H.describe "Optionals" $ do
   H.describe "Monomorphic optionals" $ do
-    expectTypeOf "nothing"
+    expectTermWithType "nothing"
       (nothing)
+      (tylam "t0" $ tyapp nothing (Types.var "t0"))
       (Types.forAll "t0" $ Types.optional $ Types.var "t0")
-    expectTypeOf "just int"
+    expectSameTermWithType "just int"
       (just $ int32 42)
       (Types.optional Types.int32)
-    expectTypeOf "just string"
+    expectSameTermWithType "just string"
       (just $ string "hello")
       (Types.optional Types.string)
-    expectTypeOf "just boolean"
+    expectSameTermWithType "just boolean"
       (just $ boolean True)
       (Types.optional Types.boolean)
 
   H.describe "Polymorphic optionals" $ do
-    expectTypeOf "optional from lambda"
+    expectTermWithType "optional from lambda"
       (lambda "x" $ just $ var "x")
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ just $ var "x")
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.optional $ Types.var "t0"))
-    expectTypeOf "nothing from lambda"
+    expectTermWithType "nothing from lambda"
       (lambda "x" $ nothing)
+      (tylams ["t0", "t1"] $ lambdaTyped "x" (Types.var "t0") $ tyapp nothing (Types.var "t1"))
       (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.optional $ Types.var "t1"))
-    expectTypeOf "conditional optional"
+    expectTermWithType "conditional optional"
       (lambda "x" $ lambda "flag" $
         primitive _logic_ifElse @@ var "flag" @@
           (just $ var "x") @@
           (nothing))
+      (tylams ["t0"] $ lambdaTyped "x" (Types.var "t0") $ lambdaTyped "flag" Types.boolean $
+        tyapp (primitive _logic_ifElse) (Types.optional $ Types.var "t0") @@ var "flag" @@
+          (just $ var "x") @@
+          (tyapp nothing (Types.var "t0")))
       (Types.forAlls ["t0"] $ Types.function (Types.var "t0") (Types.function Types.boolean (Types.optional $ Types.var "t0")))
 
   H.describe "Optionals in complex contexts" $ do
-    expectTypeOf "optional in tuple"
+    expectSameTermWithType "optional in tuple"
       (tuple [just $ int32 100, string "context"])
       (Types.product [Types.optional Types.int32, Types.string])
-    expectTypeOf "optional in record"
+    expectTermWithType "optional in record"
       (record testTypeBuddyListAName [
         field "head" (string "first"),
         field "tail" (just $ record testTypeBuddyListBName [
           field "head" (string "second"),
           field "tail" (nothing)])])
+      (record testTypeBuddyListAName [
+        field "head" (string "first"),
+        field "tail" (just $ record testTypeBuddyListBName [
+          field "head" (string "second"),
+          field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListA") Types.string))])])
       (Types.apply (Types.var "BuddyListA") Types.string)
-    expectTypeOf "optional in let binding"
+    expectTermWithType "optional in let binding"
       (lets ["maybeValue">: just $ int32 42] $
             var "maybeValue")
+      (letsTyped [("maybeValue", just $ int32 42, Types.mono $ Types.optional Types.int32)] $
+        var "maybeValue")
       (Types.optional Types.int32)
 
   H.describe "Nested optionals" $ do
-    expectTypeOf "optional of optional"
+    expectSameTermWithType "optional of optional"
       (just $ just $ string "nested")
       (Types.optional $ Types.optional Types.string)
-    expectTypeOf "optional of list"
+    expectSameTermWithType "optional of list"
       (just $ list [int32 1, int32 2, int32 3])
       (Types.optional $ Types.list Types.int32)
-    expectTypeOf "list of optionals"
+    expectTermWithType "list of optionals"
       (list [just $ string "a", nothing, just $ string "b"])
+      (list [just $ string "a", tyapp nothing Types.string, just $ string "b"])
       (Types.list $ Types.optional Types.string)
 
   H.describe "Optionals with complex types" $ do
-    expectTypeOf "optional record"
+    expectSameTermWithType "optional record"
       (just $ record testTypePersonName [
         field "firstName" (string "Alice"),
         field "lastName" (string "Smith"),
         field "age" (int32 30)])
       (Types.optional $ Types.var "Person")
-    expectTypeOf "optional tuple"
+    expectSameTermWithType "optional tuple"
       (just $ tuple [int32 10, string "test"])
       (Types.optional $ Types.product [Types.int32, Types.string])
-    expectTypeOf "optional map"
+    expectSameTermWithType "optional map"
       (just $ Terms.map $ M.singleton (string "key") (int32 42))
       (Types.optional $ Types.map Types.string Types.int32)
 
 checkTypeOfPrimitives :: H.SpecWith ()
 checkTypeOfPrimitives = H.describe "Primitives" $ do
   H.describe "Nullary primitives" $ do
-    expectTypeOf "empty map"
+    expectTermWithType "empty map"
       (primitive _maps_empty)
+      (tylams ["t0", "t1"] $ tyapps (primitive _maps_empty) [Types.var "t0", Types.var "t1"])
       (Types.forAlls ["t0", "t1"] $ Types.map (Types.var "t0") (Types.var "t1"))
-    expectTypeOf "empty set"
+    expectTermWithType "empty set"
       (primitive _sets_empty)
+      (tylam "t0" $ tyapp (primitive _sets_empty) (Types.var "t0"))
       (Types.forAll "t0" $ Types.set $ Types.var "t0")
 
   H.describe "Unary primitives" $ do
-    expectTypeOf "lists head"
+    expectTermWithType "lists head"
       (primitive _lists_head)
+      (tylam "t0" $ tyapp (primitive _lists_head) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.list $ Types.var "t0") (Types.var "t0"))
-    expectTypeOf "math neg"
+    expectSameTermWithType "math neg"
       (primitive _math_neg)
       (Types.function Types.int32 Types.int32)
-    expectTypeOf "logic not"
+    expectSameTermWithType "logic not"
       (primitive _logic_not)
       (Types.function Types.boolean Types.boolean)
 
   H.describe "Binary primitives" $ do
-    expectTypeOf "math add"
+    expectSameTermWithType "math add"
       (primitive _math_add)
       (Types.function Types.int32 (Types.function Types.int32 Types.int32))
-    expectTypeOf "lists cons"
+    expectTermWithType "lists cons"
       (primitive _lists_cons)
+      (tylam "t0" $ tyapp (primitive _lists_cons) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.function (Types.list $ Types.var "t0") (Types.list $ Types.var "t0")))
-    expectTypeOf "maps insert"
+    expectTermWithType "maps insert"
       (primitive _maps_insert)
+      (tylams ["t0", "t1"] $ tyapps (primitive _maps_insert) [Types.var "t0", Types.var "t1"])
       (Types.forAlls ["t0", "t1"] $ Types.function
         (Types.var "t0")
         (Types.function (Types.var "t1") (Types.function (Types.map (Types.var "t0") (Types.var "t1")) (Types.map (Types.var "t0") (Types.var "t1")))))
 
   H.describe "Ternary primitives" $ do
-    expectTypeOf "logic ifElse"
+    expectTermWithType "logic ifElse"
       (primitive _logic_ifElse)
+      (tylam "t0" $ tyapp (primitive _logic_ifElse) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function Types.boolean (Types.function (Types.var "t0") (Types.function (Types.var "t0") (Types.var "t0"))))
-    expectTypeOf "lists foldl"
+    expectTermWithType "lists foldl"
       (primitive _lists_foldl)
+      (tylams ["t0", "t1"] $ tyapps (primitive _lists_foldl) [Types.var "t0", Types.var "t1"])
       (Types.forAlls ["t0", "t1"] $ Types.function
         (Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.var "t0")))
         (Types.function (Types.var "t0") (Types.function (Types.list $ Types.var "t1") (Types.var "t0"))))
 
   H.describe "Monomorphic vs polymorphic" $ do
-    expectTypeOf "monomorphic math"
+    expectSameTermWithType "monomorphic math"
       (primitive _math_add)
       (Types.function Types.int32 (Types.function Types.int32 Types.int32))
-    expectTypeOf "polymorphic identity"
+    expectTermWithType "polymorphic identity"
       (primitive _equality_identity)
+      (tylam "t0" $ tyapp (primitive _equality_identity) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
-    expectTypeOf "polymorphic map"
+    expectTermWithType "polymorphic map"
       (primitive _lists_map)
+      (tylams ["t0", "t1"] $ tyapps (primitive _lists_map) [Types.var "t0", Types.var "t1"])
       (Types.forAlls ["t0", "t1"] $ Types.function
         (Types.function (Types.var "t0") (Types.var "t1"))
         (Types.function (Types.list $ Types.var "t0") (Types.list $ Types.var "t1")))
 
   H.describe "Higher-order primitives" $ do
-    expectTypeOf "lists map function"
+    expectTermWithType "lists map function"
       (primitive _lists_map @@ (lambda "x" $ primitive _math_add @@ var "x" @@ int32 1))
+      (tyapps (primitive _lists_map) [Types.int32, Types.int32] @@ (lambdaTyped "x" Types.int32 $ primitive _math_add @@ var "x" @@ int32 1))
       (Types.function (Types.list Types.int32) (Types.list Types.int32))
-    expectTypeOf "lists filter"
+    expectTermWithType "lists filter"
       (primitive _lists_filter)
+      (tylam "t0" $ tyapp (primitive _lists_filter) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.function (Types.var "t0") Types.boolean) (Types.function (Types.list $ Types.var "t0") (Types.list $ Types.var "t0")))
-    expectTypeOf "optionals maybe"
+    expectTermWithType "optionals maybe"
       (primitive _optionals_maybe)
+      (tylams ["t0", "t1"] $ tyapps (primitive _optionals_maybe) [Types.var "t0", Types.var "t1"])
       (Types.forAlls ["t0", "t1"] $
         Types.function (Types.var "t0") (Types.function (Types.function (Types.var "t1") (Types.var "t0")) (Types.function (Types.optional $ Types.var "t1") (Types.var "t0"))))
 
   H.describe "Primitives in complex contexts" $ do
-    expectTypeOf "primitive composition"
+    expectTermWithType "primitive composition"
       (lets ["double">: lambda "x" $ primitive _math_mul @@ var "x" @@ int32 2,
              "increment">: lambda "x" $ primitive _math_add @@ var "x" @@ int32 1] $
             primitive _lists_map @@ var "double" @@ (primitive _lists_map @@ var "increment" @@ list [int32 1, int32 2, int32 3]))
+      (letsTyped [("double", lambdaTyped "x" Types.int32 $ primitive _math_mul @@ var "x" @@ int32 2,
+                   Types.mono $ Types.function Types.int32 Types.int32),
+                  ("increment", lambdaTyped "x" Types.int32 $ primitive _math_add @@ var "x" @@ int32 1,
+                   Types.mono $ Types.function Types.int32 Types.int32)] $
+        tyapps (primitive _lists_map) [Types.int32, Types.int32] @@ var "double" @@ (tyapps (primitive _lists_map) [Types.int32, Types.int32] @@ var "increment" @@ list [int32 1, int32 2, int32 3]))
       (Types.list Types.int32)
-    expectTypeOf "nested higher-order"
+    expectTermWithType "nested higher-order"
       (primitive _lists_map @@ (primitive _lists_map @@ (primitive _math_add @@ int32 1)) @@
+       list [list [int32 1, int32 2], list [int32 3, int32 4]])
+      (tyapps (primitive _lists_map) [Types.list Types.int32, Types.list Types.int32] @@ (tyapps (primitive _lists_map) [Types.int32, Types.int32] @@ (primitive _math_add @@ int32 1)) @@
        list [list [int32 1, int32 2], list [int32 3, int32 4]])
       (Types.list $ Types.list Types.int32)
 
