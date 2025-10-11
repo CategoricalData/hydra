@@ -891,191 +891,227 @@ checkTypeOfPrimitives = H.describe "Primitives" $ do
 checkTypeOfProducts :: H.SpecWith ()
 checkTypeOfProducts = H.describe "Products" $ do
   H.describe "Monomorphic products" $ do
-    expectTypeOf "empty tuple"
+    expectSameTermWithType "empty tuple"
       (tuple [])
       (Types.product [])
-    expectTypeOf "singleton tuple"
+    expectSameTermWithType "singleton tuple"
       (tuple [int32 42])
       (Types.product [Types.int32])
-    expectTypeOf "pair tuple"
+    expectSameTermWithType "pair tuple"
       (tuple [int32 42, string "foo"])
       (Types.product [Types.int32, Types.string])
-    expectTypeOf "triple tuple"
+    expectSameTermWithType "triple tuple"
       (tuple [int32 1, int32 2, int32 3])
       (Types.product [Types.int32, Types.int32, Types.int32])
-    expectTypeOf "mixed types"
+    expectSameTermWithType "mixed types"
       (tuple [unit, string "test", bigint 100])
       (Types.product [Types.unit, Types.string, Types.bigint])
   H.describe "Polymorphic products" $ do
-    expectTypeOf "lambda with var"
+    expectTermWithType "lambda with var"
       (lambda "x" $ tuple [var "x", string "foo"])
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ tuple [var "x", string "foo"])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.product [Types.var "t0", Types.string]))
-    expectTypeOf "two variables"
+    expectTermWithType "two variables"
       (lambda "x" $ lambda "y" $ tuple [var "x", var "y"])
+      (tylams ["t0", "t1"] $ lambdaTyped "x" (Types.var "t0") $ lambdaTyped "y" (Types.var "t1") $ tuple [var "x", var "y"])
       (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.product [Types.var "t0", Types.var "t1"])))
-    expectTypeOf "repeated variable"
+    expectTermWithType "repeated variable"
       (lambda "x" $ tuple [var "x", var "x"])
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ tuple [var "x", var "x"])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.product [Types.var "t0", Types.var "t0"]))
   H.describe "Nested products" $ do
-    expectTypeOf "tuple in tuple"
+    expectSameTermWithType "tuple in tuple"
       (tuple [tuple [int32 1], string "foo"])
       (Types.product [Types.product [Types.int32], Types.string])
-    expectTypeOf "nested polymorphic"
+    expectTermWithType "nested polymorphic"
       (lambda "x" $ tuple [tuple [var "x"], tuple [string "test"]])
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ tuple [tuple [var "x"], tuple [string "test"]])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.product [Types.product [Types.var "t0"], Types.product [Types.string]]))
 
 checkTypeOfProductEliminations :: H.SpecWith ()
 checkTypeOfProductEliminations = H.describe "Product eliminations" $ do
 
   H.describe "Simple tuple projections" $ do
-    expectTypeOf "projection from pair"
+    expectSameTermWithType "projection from pair"
       (untuple 2 0 @@ pair (int32 42) (string "hello"))
       Types.int32
-    expectTypeOf "second projection from pair"
+    expectSameTermWithType "second projection from pair"
       (untuple 2 1 @@ pair (int32 42) (string "hello"))
       Types.string
-    expectTypeOf "projection from triple"
+    expectSameTermWithType "projection from triple"
       (untuple 3 1 @@ triple (int32 1) (string "middle") (boolean True))
       Types.string
-    expectTypeOf "first element of triple"
+    expectSameTermWithType "first element of triple"
       (untuple 3 0 @@ triple (boolean False) (int32 100) (string "last"))
       Types.boolean
-    expectTypeOf "last element of triple"
+    expectSameTermWithType "last element of triple"
       (untuple 3 2 @@ triple (boolean False) (int32 100) (string "last"))
       Types.string
 
   H.describe "Polymorphic tuple projections" $ do
-    expectTypeOf "projection function"
+    expectTermWithType "projection function"
       (untuple 2 0)
+      (tylams ["t0", "t1"] $ untuple 2 0)
       (Types.forAlls ["t0", "t1"] $ Types.function
         (Types.product [Types.var "t0", Types.var "t1"])
         (Types.var "t0"))
-    expectTypeOf "second projection function"
+    expectTermWithType "second projection function"
       (untuple 2 1)
+      (tylams ["t0", "t1"] $ untuple 2 1)
       (Types.forAlls ["t0", "t1"] $ Types.function
         (Types.product [Types.var "t0", Types.var "t1"])
         (Types.var "t1"))
-    expectTypeOf "triple projection function"
+    expectTermWithType "triple projection function"
       (untuple 3 1)
+      (tylams ["t0", "t1", "t2"] $ untuple 3 1)
       (Types.forAlls ["t0", "t1", "t2"] $ Types.function
         (Types.product [Types.var "t0", Types.var "t1", Types.var "t2"])
         (Types.var "t1"))
-    expectTypeOf "projection from lambda"
+    expectTermWithType "projection from lambda"
       (lambda "pair" $ untuple 2 0 @@ var "pair")
+      (tylams ["t0", "t1"] $ lambdaTyped "pair" (Types.product [Types.var "t0", Types.var "t1"]) $ untuple 2 0 @@ var "pair")
       (Types.forAlls ["t0", "t1"] $ Types.function
         (Types.product [Types.var "t0", Types.var "t1"])
         (Types.var "t0"))
 
   H.describe "Projections with variables" $ do
-    expectTypeOf "projection with variable tuple"
+    expectTermWithType "projection with variable tuple"
       (lambda "x" $ lambda "y" $ untuple 2 0 @@ pair (var "x") (var "y"))
+      (tylams ["t0", "t1"] $ lambdaTyped "x" (Types.var "t0") $ lambdaTyped "y" (Types.var "t1") $ untuple 2 0 @@ pair (var "x") (var "y"))
       (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0")
         (Types.function (Types.var "t1") (Types.var "t0")))
-    expectTypeOf "projection preserves polymorphism"
+    expectTermWithType "projection preserves polymorphism"
       (lambda "pair" $ pair (untuple 2 0 @@ var "pair") (untuple 2 1 @@ var "pair"))
+      (tylams ["t0", "t1"] $ lambdaTyped "pair" (Types.product [Types.var "t0", Types.var "t1"]) $ pair (untuple 2 0 @@ var "pair") (untuple 2 1 @@ var "pair"))
       (Types.forAlls ["t0", "t1"] $ Types.function
         (Types.product [Types.var "t0", Types.var "t1"])
         (Types.product [Types.var "t0", Types.var "t1"]))
-    expectTypeOf "nested projection"
+    expectTermWithType "nested projection"
       (lambda "nested" $ untuple 2 0 @@ (untuple 2 1 @@ var "nested"))
+      (tylams ["t0", "t1", "t2"] $ lambdaTyped "nested" (Types.product [Types.var "t0", Types.product [Types.var "t1", Types.var "t2"]]) $ untuple 2 0 @@ (untuple 2 1 @@ var "nested"))
       (Types.forAlls ["t0", "t1", "t2"] $ Types.function
         (Types.product [Types.var "t0", Types.product [Types.var "t1", Types.var "t2"]])
         (Types.var "t1"))
 
   H.describe "Projections in complex contexts" $ do
-    expectTypeOf "projection in let binding"
+    expectTermWithType "projection in let binding"
       (lets ["pair">: pair (int32 10) (string "test")] $
             untuple 2 0 @@ var "pair")
+      (letsTyped [("pair", pair (int32 10) (string "test"), Types.mono $ Types.product [Types.int32, Types.string])] $
+        untuple 2 0 @@ var "pair")
       Types.int32
-    expectTypeOf "projection in tuple"
+    expectSameTermWithType "projection in tuple"
       (pair (untuple 2 0 @@ pair (int32 1) (string "a"))
             (untuple 2 1 @@ pair (int32 2) (string "b")))
       (Types.product [Types.int32, Types.string])
-    expectTypeOf "projection in list"
+    expectSameTermWithType "projection in list"
       (list [untuple 2 0 @@ pair (int32 1) (string "a"),
              untuple 2 0 @@ pair (int32 2) (string "b")])
       (Types.list Types.int32)
 
   H.describe "Projections with mixed types" $ do
-    expectTypeOf "projection from mixed tuple"
+    expectSameTermWithType "projection from mixed tuple"
       (untuple 4 2 @@ tuple4 (int32 1) (string "test") (boolean True) (float32 3.14))
       Types.boolean
-    expectTypeOf "projection chain"
+    expectTermWithType "projection chain"
       (lets ["quadruple">: tuple4 (int32 1) (string "test") (boolean True) (float32 3.14)] $
             tuple4 (untuple 4 0 @@ var "quadruple")
                    (untuple 4 1 @@ var "quadruple")
                    (untuple 4 2 @@ var "quadruple")
                    (untuple 4 3 @@ var "quadruple"))
+      (letsTyped [("quadruple", tuple4 (int32 1) (string "test") (boolean True) (float32 3.14),
+                   Types.mono $ Types.product [Types.int32, Types.string, Types.boolean, Types.float32])] $
+        tuple4 (untuple 4 0 @@ var "quadruple")
+               (untuple 4 1 @@ var "quadruple")
+               (untuple 4 2 @@ var "quadruple")
+               (untuple 4 3 @@ var "quadruple"))
       (Types.product [Types.int32, Types.string, Types.boolean, Types.float32])
-    expectTypeOf "projection with function result"
+    expectTermWithType "projection with function result"
       (untuple 2 1 @@ pair (int32 42) (lambda "x" $ var "x"))
+      (tylam "t0" $ untuple 2 1 @@ pair (int32 42) (lambdaTyped "x" (Types.var "t0") $ var "x"))
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
 
   H.describe "Projections with primitive functions" $ do
-
-    expectTypeOf "lists.map with untuple"
+    expectTermWithType "lists.map with untuple"
       (primitive _lists_map @@ (untuple 2 0))
+      (tylams ["t0", "t1"] $ tyapps (primitive _lists_map) [Types.product [Types.var "t0", Types.var "t1"], Types.var "t0"] @@ (untuple 2 0))
       (Types.forAlls ["t0", "t1"] $
         Types.function (Types.list (Types.product [Types.var "t0", Types.var "t1"])) (Types.list (Types.var "t0")))
 
 checkTypeOfRecords :: H.SpecWith ()
 checkTypeOfRecords = H.describe "Records" $ do
   H.describe "Monomorphic records" $ do
-    expectTypeOf "latlon record"
+    expectSameTermWithType "latlon record"
       (record testTypeLatLonName [
         field "lat" (float32 19.5429),
         field "lon" (float32 (0-155.6659))])
       (Types.var "LatLon")
-    expectTypeOf "latlon with variable"
+    expectTermWithType "latlon with variable"
       (lambda "x" $ record testTypeLatLonName [
         field "lat" (float32 19.5429),
         field "lon" (var "x")])
+      (lambdaTyped "x" Types.float32 $ record testTypeLatLonName [
+        field "lat" (float32 19.5429),
+        field "lon" (var "x")])
       (Types.function Types.float32 (Types.var "LatLon"))
-    expectTypeOf "person record"
+    expectSameTermWithType "person record"
       (record testTypePersonName [
         field "firstName" (string "Alice"),
         field "lastName" (string "Smith"),
         field "age" (int32 30)])
       (Types.var "Person")
-    expectTypeOf "empty record"
+    expectSameTermWithType "empty record"
       (record testTypeUnitName [])
       (Types.var "Unit")
-    expectTypeOf "person with variables"
+    expectTermWithType "person with variables"
       (lambda "name" $ lambda "age" $ record testTypePersonName [
+        field "firstName" (var "name"),
+        field "lastName" (string "Doe"),
+        field "age" (var "age")])
+      (lambdaTyped "name" Types.string $ lambdaTyped "age" Types.int32 $ record testTypePersonName [
         field "firstName" (var "name"),
         field "lastName" (string "Doe"),
         field "age" (var "age")])
       (Types.function Types.string (Types.function Types.int32 (Types.var "Person")))
 
   H.describe "Polymorphic records" $ do
-    expectTypeOf "latlon poly float"
+    expectSameTermWithType "latlon poly float"
       (record testTypeLatLonPolyName [
         field "lat" (float32 19.5429),
         field "lon" (float32 (0-155.6659))])
       (Types.apply (Types.var "LatLonPoly") Types.float32)
-    expectTypeOf "latlon poly int64"
+    expectSameTermWithType "latlon poly int64"
       (record testTypeLatLonPolyName [
         field "lat" (int64 195429),
         field "lon" (int64 (0-1556659))])
       (Types.apply (Types.var "LatLonPoly") Types.int64)
-    expectTypeOf "latlon poly variable"
+    expectTermWithType "latlon poly variable"
       (lambda "x" $ record testTypeLatLonPolyName [
         field "lat" (var "x"),
         field "lon" (var "x")])
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ record testTypeLatLonPolyName [
+        field "lat" (var "x"),
+        field "lon" (var "x")])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "LatLonPoly") (Types.var "t0")))
-    expectTypeOf "buddylist string"
+    expectTermWithType "buddylist string"
       (record testTypeBuddyListAName [
         field "head" (string "first"),
         field "tail" (nothing)])
+      (record testTypeBuddyListAName [
+        field "head" (string "first"),
+        field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListB") Types.string))])
       (Types.apply (Types.var "BuddyListA") Types.string)
-    expectTypeOf "buddylist variable"
+    expectTermWithType "buddylist variable"
       (lambda "x" $ record testTypeBuddyListAName [
         field "head" (var "x"),
         field "tail" (nothing)])
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ record testTypeBuddyListAName [
+        field "head" (var "x"),
+        field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListB") (Types.var "t0")))])
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.apply (Types.var "BuddyListA") (Types.var "t0")))
 
   H.describe "Records in complex contexts" $ do
-    expectTypeOf "records in tuple"
+    expectSameTermWithType "records in tuple"
       (tuple [
         record testTypePersonName [
           field "firstName" (string "Bob"),
@@ -1085,7 +1121,7 @@ checkTypeOfRecords = H.describe "Records" $ do
           field "lat" (float32 1.0),
           field "lon" (float32 2.0)]])
       (Types.product [Types.var "Person", Types.var "LatLon"])
-    expectTypeOf "poly records in tuple"
+    expectTermWithType "poly records in tuple"
       (tuple [
         record testTypeLatLonPolyName [
           field "lat" (int32 1),
@@ -1093,59 +1129,66 @@ checkTypeOfRecords = H.describe "Records" $ do
         record testTypeBuddyListAName [
           field "head" (string "test"),
           field "tail" (nothing)]])
+      (tuple [
+        record testTypeLatLonPolyName [
+          field "lat" (int32 1),
+          field "lon" (int32 2)],
+        record testTypeBuddyListAName [
+          field "head" (string "test"),
+          field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListB") Types.string))]])
       (Types.product [
         Types.apply (Types.var "LatLonPoly") Types.int32,
         Types.apply (Types.var "BuddyListA") Types.string])
-    expectTypeOf "recursive record"
+    expectTermWithType "recursive record"
       (record testTypeIntListName [
         field "head" (int32 42),
         field "tail" (just $
           record testTypeIntListName [
             field "head" (int32 43),
             field "tail" (nothing)])])
+      (record testTypeIntListName [
+        field "head" (int32 42),
+        field "tail" (just $
+          record testTypeIntListName [
+            field "head" (int32 43),
+            field "tail" (tyapp nothing (Types.var "IntList"))])])
       (Types.var "IntList")
 
 checkTypeOfRecordEliminations :: H.SpecWith ()
 checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
   H.describe "Simple record projections" $ do
-    expectTypeOf "project firstName from Person"
+    expectSameTermWithType "project firstName from Person"
       (project testTypePersonName (Name "firstName"))
       (Types.function (Types.var "Person") Types.string)
-
-    expectTypeOf "project lastName from Person"
+    expectSameTermWithType "project lastName from Person"
       (project testTypePersonName (Name "lastName"))
       (Types.function (Types.var "Person") Types.string)
-
-    expectTypeOf "project age from Person"
+    expectSameTermWithType "project age from Person"
       (project testTypePersonName (Name "age"))
       (Types.function (Types.var "Person") Types.int32)
-
-    expectTypeOf "project lat from LatLon"
+    expectSameTermWithType "project lat from LatLon"
       (project testTypeLatLonName (Name "lat"))
       (Types.function (Types.var "LatLon") Types.float32)
-
-    expectTypeOf "project lon from LatLon"
+    expectSameTermWithType "project lon from LatLon"
       (project testTypeLatLonName (Name "lon"))
       (Types.function (Types.var "LatLon") Types.float32)
 
   H.describe "Record projections applied to records" $ do
-    expectTypeOf "project firstName applied to person record"
+    expectSameTermWithType "project firstName applied to person record"
       (project testTypePersonName (Name "firstName") @@
        record testTypePersonName [
          field "firstName" (string "Alice"),
          field "lastName" (string "Smith"),
          field "age" (int32 30)])
       Types.string
-
-    expectTypeOf "project age applied to person record"
+    expectSameTermWithType "project age applied to person record"
       (project testTypePersonName (Name "age") @@
        record testTypePersonName [
          field "firstName" (string "Bob"),
          field "lastName" (string "Jones"),
          field "age" (int32 25)])
       Types.int32
-
-    expectTypeOf "project lat applied to LatLon record"
+    expectSameTermWithType "project lat applied to LatLon record"
       (project testTypeLatLonName (Name "lat") @@
        record testTypeLatLonName [
          field "lat" (float32 40.7128),
@@ -1153,78 +1196,98 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
       Types.float32
 
   H.describe "Polymorphic record projections" $ do
-    expectTypeOf "project lat from polymorphic LatLonPoly"
+    expectTermWithType "project lat from polymorphic LatLonPoly"
       (project testTypeLatLonPolyName (Name "lat"))
+      (tylam "t0" $ tyapp (project testTypeLatLonPolyName (Name "lat")) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.apply (Types.var "LatLonPoly") (Types.var "t0")) (Types.var "t0"))
-
-    expectTypeOf "project lon from polymorphic LatLonPoly"
+    expectTermWithType "project lon from polymorphic LatLonPoly"
       (project testTypeLatLonPolyName (Name "lon"))
+      (tylam "t0" $ tyapp (project testTypeLatLonPolyName (Name "lon")) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.apply (Types.var "LatLonPoly") (Types.var "t0")) (Types.var "t0"))
-
-    expectTypeOf "project head from BuddyListA"
+    expectTermWithType "project head from BuddyListA"
       (project testTypeBuddyListAName (Name "head"))
+      (tylam "t0" $ tyapp (project testTypeBuddyListAName (Name "head")) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.apply (Types.var "BuddyListA") (Types.var "t0")) (Types.var "t0"))
-
-    expectTypeOf "project tail from BuddyListA"
+    expectTermWithType "project tail from BuddyListA"
       (project testTypeBuddyListAName (Name "tail"))
+      (tylam "t0" $ tyapp (project testTypeBuddyListAName (Name "tail")) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function
         (Types.apply (Types.var "BuddyListA") (Types.var "t0"))
         (Types.optional (Types.apply (Types.var "BuddyListB") (Types.var "t0"))))
 
   H.describe "Polymorphic record projections applied" $ do
-    expectTypeOf "project lat from LatLonPoly with int32"
+    expectTermWithType "project lat from LatLonPoly with int32"
       (project testTypeLatLonPolyName (Name "lat") @@
        record testTypeLatLonPolyName [
          field "lat" (int32 40),
          field "lon" (int32 (-74))])
+      (tyapp (project testTypeLatLonPolyName (Name "lat")) Types.int32 @@
+       record testTypeLatLonPolyName [
+         field "lat" (int32 40),
+         field "lon" (int32 (-74))])
       Types.int32
-
-    expectTypeOf "project lon from LatLonPoly with float64"
+    expectTermWithType "project lon from LatLonPoly with float64"
       (project testTypeLatLonPolyName (Name "lon") @@
        record testTypeLatLonPolyName [
          field "lat" (float64 40.7128),
          field "lon" (float64 (-74.0060))])
+      (tyapp (project testTypeLatLonPolyName (Name "lon")) Types.float64 @@
+       record testTypeLatLonPolyName [
+         field "lat" (float64 40.7128),
+         field "lon" (float64 (-74.0060))])
       Types.float64
-
-    expectTypeOf "project head from BuddyListA with string"
+    expectTermWithType "project head from BuddyListA with string"
       (project testTypeBuddyListAName (Name "head") @@
        record testTypeBuddyListAName [
          field "head" (string "Alice"),
          field "tail" (nothing)])
+      (tyapp (project testTypeBuddyListAName (Name "head")) Types.string @@
+       record testTypeBuddyListAName [
+         field "head" (string "Alice"),
+         field "tail" (tyapp nothing (Types.apply (Types.var "BuddyListB") Types.string))])
       Types.string
 
   H.describe "Record projections with variables" $ do
-    expectTypeOf "project from lambda parameter"
+    expectTermWithType "project from lambda parameter"
       (lambda "person" $ project testTypePersonName (Name "firstName") @@ var "person")
+      (lambdaTyped "person" (Types.var "Person") $ project testTypePersonName (Name "firstName") @@ var "person")
       (Types.function (Types.var "Person") Types.string)
-
-    expectTypeOf "project from polymorphic lambda parameter"
+    expectTermWithType "project from polymorphic lambda parameter"
       (lambda "coords" $ project testTypeLatLonPolyName (Name "lat") @@ var "coords")
+      (tylam "t0" $ lambdaTyped "coords" (Types.apply (Types.var "LatLonPoly") (Types.var "t0")) $ tyapp (project testTypeLatLonPolyName (Name "lat")) (Types.var "t0") @@ var "coords")
       (Types.forAll "t0" $ Types.function (Types.apply (Types.var "LatLonPoly") (Types.var "t0")) (Types.var "t0"))
-
-    expectTypeOf "multiple projections from same record"
+    expectTermWithType "multiple projections from same record"
       (lambda "person" $
+       tuple [project testTypePersonName (Name "firstName") @@ var "person",
+              project testTypePersonName (Name "lastName") @@ var "person"])
+      (lambdaTyped "person" (Types.var "Person") $
        tuple [project testTypePersonName (Name "firstName") @@ var "person",
               project testTypePersonName (Name "lastName") @@ var "person"])
       (Types.function (Types.var "Person") (Types.product [Types.string, Types.string]))
 
   H.describe "Record projections in complex contexts" $ do
-    expectTypeOf "projection in let binding"
+    expectTermWithType "projection in let binding"
       (lets ["person">: record testTypePersonName [
                field "firstName" (string "Charlie"),
                field "lastName" (string "Brown"),
                field "age" (int32 35)],
              "getName">: project testTypePersonName (Name "firstName")] $
             var "getName" @@ var "person")
+      (letsTyped [("person", record testTypePersonName [
+                     field "firstName" (string "Charlie"),
+                     field "lastName" (string "Brown"),
+                     field "age" (int32 35)],
+                   Types.mono $ Types.var "Person"),
+                  ("getName", project testTypePersonName (Name "firstName"),
+                   Types.mono $ Types.function (Types.var "Person") Types.string)] $
+        var "getName" @@ var "person")
       Types.string
-
-    expectTypeOf "projection in tuple"
+    expectSameTermWithType "projection in tuple"
       (tuple [project testTypePersonName (Name "firstName"),
               project testTypePersonName (Name "age")])
       (Types.product [Types.function (Types.var "Person") Types.string,
                       Types.function (Types.var "Person") Types.int32])
-
-    expectTypeOf "projection in list"
+    expectSameTermWithType "projection in list"
       (list [project testTypePersonName (Name "firstName"),
              project testTypePersonName (Name "lastName")])
       (Types.list (Types.function (Types.var "Person") Types.string))
@@ -1241,7 +1304,6 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
                field "lastName" (string "Jones"),
                field "age" (int32 25)]])
       (Types.list Types.string)
-
     expectTypeOf "map polymorphic projection"
       (primitive _lists_map @@ (project testTypeLatLonPolyName (Name "lat")) @@
        list [record testTypeLatLonPolyName [
@@ -1251,7 +1313,6 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
                field "lat" (int32 34),
                field "lon" (int32 (-118))]])
       (Types.list Types.int32)
-
     expectTypeOf "filter using projection"
       (primitive _lists_filter @@
        (lambda "person" $
