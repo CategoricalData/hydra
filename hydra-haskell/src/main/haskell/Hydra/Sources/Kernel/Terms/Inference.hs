@@ -676,7 +676,8 @@ inferTypeOfLetNormalizedDef = define "inferTypeOfLetNormalized" $
     "ts" <~ second (var "nameTsPair") $
     
     -- First, substitute polymorphic references in the term
-    -- Then wrap in type lambdas for each variable in the type scheme
+    -- Then wrap in type lambdas for each variable in the type scheme.
+    -- Note: this is the only place -- at the top level of bound terms -- where inference creates type lambda terms.
     "typeLambdaTerm" <~ Lists.foldl
       ("b" ~> "v" ~> Core.termTypeLambda $ Core.typeLambda (var "v") (var "b"))
       (ref Substitution.substituteInTermDef @@ var "st1" @@ var "term")
@@ -726,12 +727,9 @@ inferTypeOfMapDef = define "inferTypeOfMap" $
   Logic.ifElse (Maps.null $ var "m")
     -- Empty map: add type applications for both key and value type variables
     (Flows.pure $ ref yieldDef
-
-      -- Note reverse order of type application in this case
       @@ (ref buildTypeApplicationTermDef
-        @@ (Lists.reverse $ list [var "kvar", var "vvar"])
+        @@ list [var "kvar", var "vvar"]
         @@ (Core.termMap Maps.empty))
-
       @@ (Core.typeMap $ Core.mapType (Core.typeVariable $ var "kvar") (Core.typeVariable $ var "vvar"))
       @@ ref Substitution.idTypeSubstDef)
     -- Non-empty map: infer and unify key and value types

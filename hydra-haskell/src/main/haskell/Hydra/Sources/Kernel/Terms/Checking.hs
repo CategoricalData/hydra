@@ -104,7 +104,6 @@ define = definitionInModule module_
 applyForallTypesDef :: TBinding (TypeContext -> [Type] -> Type -> Flow s Type)
 applyForallTypesDef = define "applyForallTypes" $
   "tx" ~> "typeArgs0" ~> "t" ~>
---  "typeArgs" <~ Lists.reverse (var "typeArgs0") $
   "typeArgs" <~ var "typeArgs0" $
   exec (ref checkTypeVariablesDef @@ var "tx" @@ var "t") $
   Logic.ifElse (Lists.null $ var "typeArgs")
@@ -145,10 +144,7 @@ checkForUnboundTypeVariablesDef = define "checkForUnboundTypeVariables" $
             ("none")
             ("binding" ~>
                  ". bound term = " ++ (ref ShowCore.termDef @@ (Core.bindingTerm $ var "binding"))
-              ++ ". bound type = " ++ (optCases (Core.bindingType $ var "binding") ("none") (ref ShowCore.typeSchemeDef))))
---          ++ ". full term = " ++ (ref ShowCore.termDef @@ var "term0")
---          ++ ". vars = {" ++ (Strings.intercalate ", " (Lists.map (unaryFunction Core.unName) $ Sets.toList $ var "vars")) ++ "}"
-          )) $
+              ++ ". bound type = " ++ (optCases (Core.bindingType $ var "binding") ("none") (ref ShowCore.typeSchemeDef)))))) $
     "checkOptional" <~ ("m" ~>
       exec (Flows.mapOptional (var "check") (var "m")) $
       produce unit) $
@@ -483,8 +479,8 @@ typeOfMapDef = define "typeOfMap" $
     -- Empty map is polymorphic
     (Logic.ifElse (Equality.equal (Lists.length $ var "typeArgs") (int32 2))
       (Flows.pure $ Core.typeMap $ Core.mapType
-        (Lists.at (int32 1) $ var "typeArgs")
-        (Lists.at (int32 0) $ var "typeArgs"))
+        (Lists.at (int32 0) $ var "typeArgs")
+        (Lists.at (int32 1) $ var "typeArgs"))
       (Flows.fail $ "map type applied to more or less than two arguments"))
     -- Nonempty map must have keys and values of the same type
     ( "t" <<~ (

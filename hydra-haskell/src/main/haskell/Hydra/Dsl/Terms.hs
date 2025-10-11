@@ -126,6 +126,9 @@ typeLambda vars body = L.foldl (\b v -> TermTypeLambda $ TypeLambda v b) body va
 tylam :: String -> Term -> Term
 tylam var body = TermTypeLambda $ TypeLambda (Name var) body
 
+tylams :: [String] -> Term -> Term
+tylams vars body = L.foldl (\b v -> TermTypeLambda $ TypeLambda (Name v) b) body $ L.reverse vars
+
 -- | Apply type arguments to a polymorphic term
 -- Example: typeApplication (var "map") [Types.int32, Types.string]
 -- This instantiates a polymorphic function with concrete types.

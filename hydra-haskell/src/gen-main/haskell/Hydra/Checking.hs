@@ -337,8 +337,8 @@ typeOfLiteral tx typeArgs lit =
 
 typeOfMap :: (Typing.TypeContext -> [Core.Type] -> M.Map Core.Term Core.Term -> Compute.Flow t0 Core.Type)
 typeOfMap tx typeArgs m = (Logic.ifElse (Maps.null m) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 2) (Flows.pure (Core.TypeMap (Core.MapType {
-  Core.mapTypeKeys = (Lists.at 1 typeArgs),
-  Core.mapTypeValues = (Lists.at 0 typeArgs)}))) (Flows.fail "map type applied to more or less than two arguments")) (Flows.bind ( 
+  Core.mapTypeKeys = (Lists.at 0 typeArgs),
+  Core.mapTypeValues = (Lists.at 1 typeArgs)}))) (Flows.fail "map type applied to more or less than two arguments")) (Flows.bind ( 
   let pairs = (Maps.toList m)
   in (Flows.bind (Flows.bind (Flows.mapList (typeOf tx []) (Lists.map fst pairs)) (checkSameType "map keys")) (\kt -> Flows.bind (Flows.bind (Flows.mapList (typeOf tx []) (Lists.map snd pairs)) (checkSameType "map values")) (\vt -> Flows.bind (checkTypeVariables tx kt) (\_ -> Flows.bind (checkTypeVariables tx vt) (\_ -> Flows.pure (Core.TypeMap (Core.MapType {
     Core.mapTypeKeys = kt,

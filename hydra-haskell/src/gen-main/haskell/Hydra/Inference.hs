@@ -573,9 +573,9 @@ inferTypeOfLiteral _ lit = (Flows.pure (Typing_.InferenceResult {
   Typing_.inferenceResultSubst = Substitution.idTypeSubst}))
 
 inferTypeOfMap :: (Typing_.InferenceContext -> M.Map Core.Term Core.Term -> Compute.Flow t0 Typing_.InferenceResult)
-inferTypeOfMap cx m = (Flows.bind Schemas.freshName (\kvar -> Flows.bind Schemas.freshName (\vvar -> Logic.ifElse (Maps.null m) (Flows.pure (yield (buildTypeApplicationTerm (Lists.reverse [
+inferTypeOfMap cx m = (Flows.bind Schemas.freshName (\kvar -> Flows.bind Schemas.freshName (\vvar -> Logic.ifElse (Maps.null m) (Flows.pure (yield (buildTypeApplicationTerm [
   kvar,
-  vvar]) (Core.TermMap Maps.empty)) (Core.TypeMap (Core.MapType {
+  vvar] (Core.TermMap Maps.empty)) (Core.TypeMap (Core.MapType {
   Core.mapTypeKeys = (Core.TypeVariable kvar),
   Core.mapTypeValues = (Core.TypeVariable vvar)})) Substitution.idTypeSubst)) (Flows.bind (inferMany cx (Lists.map (\k -> (k, "map key")) (Maps.keys m))) (\kresults ->  
   let kterms = (fst kresults)
