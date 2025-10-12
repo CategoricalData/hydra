@@ -41,6 +41,9 @@ annot ann typ = TypeAnnotated $ AnnotatedType typ ann
 apply :: Type -> Type -> Type
 apply lhs rhs = TypeApplication (ApplicationType lhs rhs)
 
+applys :: Type -> [Type] -> Type
+applys t ts = L.foldl apply t ts
+
 -- | Apply a type to multiple type arguments
 -- Example: applyMany [var "Either", string, int32]
 applyMany :: [Type] -> Type
