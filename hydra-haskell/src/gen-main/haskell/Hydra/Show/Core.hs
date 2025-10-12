@@ -27,12 +27,15 @@ binding el =
   in  
     let t = (Core.bindingTerm el)
     in  
-      let typeStr = (Optionals.maybe "" (\ts -> Strings.cat2 " : " (typeScheme ts)) (Core.bindingType el))
+      let typeStr = (Optionals.maybe "" (\ts -> Strings.cat [
+              ":(",
+              typeScheme ts,
+              ")"]) (Core.bindingType el))
       in (Strings.cat [
         name,
+        typeStr,
         " = ",
-        term t,
-        typeStr])
+        (term t)])
 
 -- | Show an elimination as a string
 elimination :: (Core.Elimination -> String)

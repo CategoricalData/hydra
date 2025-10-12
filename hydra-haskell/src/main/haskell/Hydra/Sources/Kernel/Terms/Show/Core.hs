@@ -83,13 +83,13 @@ bindingDef = define "binding" $
   "t" <~ Core.bindingTerm (var "el") $
   "typeStr" <~ Optionals.maybe
     (string "")
-    ("ts" ~> Strings.cat2 (string " : ") (ref typeSchemeDef @@ var "ts"))
+    ("ts" ~> Strings.concat [string ":(", ref typeSchemeDef @@ var "ts", string ")"])
     (Core.bindingType $ var "el") $
   Strings.cat $ list [
     var "name",
+    var "typeStr",
     string " = ",
-    ref termDef @@ var "t",
-    var "typeStr"]
+    ref termDef @@ var "t"]
       
 eliminationDef :: TBinding (Elimination -> String)
 eliminationDef = define "elimination" $
