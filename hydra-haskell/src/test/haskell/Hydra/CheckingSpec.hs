@@ -45,6 +45,7 @@ checkTypeOf :: H.SpecWith ()
 checkTypeOf = H.describe "typeOf" $ do
   checkTypeOfAnnotatedTerms
   checkTypeOfApplications
+  checkTypeOfFlows
   checkTypeOfFunctions
   checkTypeOfLetTerms
   checkTypeOfLists
@@ -243,6 +244,45 @@ checkTypeOfEliminations = H.describe "Eliminations" $ do
   checkTypeOfRecordEliminations
   checkTypeOfUnionEliminations
   checkTypeOfWrapEliminations
+
+-- Note: Flow is not part of Hydra Core, but it is essential to Hydra
+checkTypeOfFlows :: H.SpecWith ()
+checkTypeOfFlows = H.describe "Flows" $ do
+  H.describe "Flows with failure across let bindings" $ do
+    expectTermWithType "mutually referential failure functions with Flow monad"
+      (lets ["conditionalUnexpected">: lambda "s" $ lambda "b" $ lambda "ignored" $
+               primitive _logic_ifElse @@ var "b" @@
+                 (var "unexpected" @@ string "oops") @@
+                 (var "unexpected" @@ var "s"),
+             "unexpected">: lambda "s" $ primitive _flows_fail @@ var "s"] $
+        var "conditionalUnexpected")
+      (letsTyped [
+        ("conditionalUnexpected",
+         tylams ["t0", "t1", "t2"] $
+         lambdaTyped "s" Types.string $
+         lambdaTyped "b" Types.boolean $
+         lambdaTyped "ignored" (Types.var "t0") $
+         tyapp (primitive _logic_ifElse) (Types.applys (Types.var "Flow") [Types.var "t1", Types.var "t2"]) @@ var "b" @@
+           (tyapps (var "unexpected") [Types.var "t1", Types.var "t2"] @@ string "oops") @@
+           (tyapps (var "unexpected") [Types.var "t1", Types.var "t2"] @@ var "s"),
+         Types.poly ["t0", "t1", "t2"] $
+           Types.function Types.string $
+           Types.function Types.boolean $
+           Types.function (Types.var "t0") $
+           Types.applys (Types.var "Flow") [Types.var "t1", Types.var "t2"]),
+        ("unexpected",
+         tylams ["t3", "t4"] $
+         lambdaTyped "s" Types.string $
+           tyapps (primitive _flows_fail) [Types.var "t3", Types.var "t4"] @@ var "s",
+         Types.poly ["t3", "t4"] $
+           Types.function Types.string $
+           Types.applys (Types.var "Flow") [Types.var "t3", Types.var "t4"])] $
+        var "conditionalUnexpected")
+      (Types.forAlls ["t0", "t1", "t2"] $
+        Types.function Types.string $
+        Types.function Types.boolean $
+        Types.function (Types.var "t0") $
+        Types.applys (Types.var "Flow") [Types.var "t1", Types.var "t2"])
 
 checkTypeOfFunctions :: H.SpecWith ()
 checkTypeOfFunctions = H.describe "Functions" $ do
