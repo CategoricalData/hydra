@@ -43,10 +43,10 @@ testGraphModule = Module (Namespace "hydra.test.testGraph") elements
       el latlonRecordDef,
       el testTypeLatLonDef,
       el testTypeLatLonPolyDef,
-      el testTypeStringAliasDef,
-      el testTypeStringAliasNameDef,
       el testTypePolymorphicWrapperDef,
       el testTypePolymorphicWrapperNameDef,
+      el testTypeStringAliasDef,
+      el testTypeStringAliasNameDef,
       el testElementArthurDef,
       el testElementFirstNameDef,
 --      el testGraphDef, -- TODO
@@ -60,6 +60,8 @@ testGraphModule = Module (Namespace "hydra.test.testGraph") elements
       el testTypeBuddyListBNameDef,
       el testTypeComparisonDef,
       el testTypeComparisonNameDef,
+      el testTypeEitherDef,
+      el testTypeEitherNameDef,
       el testTypeIntListDef,
       el testTypeIntListNameDef,
       el testTypeHydraLiteralTypeDef,
@@ -76,8 +78,12 @@ testGraphModule = Module (Namespace "hydra.test.testGraph") elements
       el testTypePersonOrSomethingNameDef,
       el testTypeSimpleNumberDef,
       el testTypeSimpleNumberNameDef,
+      el testTypeSymmetricTripleDef,
+      el testTypeSymmetricTripleNameDef,
       el testTypeTimestampDef,
       el testTypeTimestampNameDef,
+      el testTypeTripleDef,
+      el testTypeTripleNameDef,
       el testTypeUnionMonomorphicDef,
       el testTypeUnionMonomorphicNameDef,
       el testTypeUnionPolymorphicRecursiveDef,
@@ -114,14 +120,6 @@ testTypeLatLonPolyDef = testGraphType "testTypeLatLonPoly" $
     "lat">: T.var "a",
     "lon">: T.var "a"]
 
-testTypeStringAliasDef :: TBinding Type
-testTypeStringAliasDef = testGraphType "testTypeStringAlias" $
-  Core.typeWrap $ Core.wrappedType (ref testTypeStringAliasNameDef) T.string
-
-testTypeStringAliasNameDef :: TBinding Name
-testTypeStringAliasNameDef = testGraphDefinition "testTypeStringAliasName" $
-  name "StringTypeAlias"
-
 testTypePolymorphicWrapperDef :: TBinding Type
 testTypePolymorphicWrapperDef = testGraphType "testTypePolymorphicWrapper" $
   T.forAll "a" $ Core.typeWrap $ Core.wrappedType (ref testTypePolymorphicWrapperNameDef) (T.list $ T.var "a")
@@ -129,6 +127,14 @@ testTypePolymorphicWrapperDef = testGraphType "testTypePolymorphicWrapper" $
 testTypePolymorphicWrapperNameDef :: TBinding Name
 testTypePolymorphicWrapperNameDef = testGraphDefinition "testTypePolymorphicWrapperName" $
   name "PolymorphicWrapper"
+
+testTypeStringAliasDef :: TBinding Type
+testTypeStringAliasDef = testGraphType "testTypeStringAlias" $
+  Core.typeWrap $ Core.wrappedType (ref testTypeStringAliasNameDef) T.string
+
+testTypeStringAliasNameDef :: TBinding Name
+testTypeStringAliasNameDef = testGraphDefinition "testTypeStringAliasName" $
+  name "StringTypeAlias"
 
 testElementArthurDef :: TBinding Binding
 testElementArthurDef = testGraphDefinition "testElementArthur" $
@@ -217,6 +223,16 @@ testTypeComparisonNameDef :: TBinding Name
 testTypeComparisonNameDef = testGraphDefinition "testTypeComparisonName" $
   name "Comparison"
 
+testTypeEitherDef :: TBinding Type
+testTypeEitherDef = testGraphType "testTypeEither" $
+  T.forAlls ["a", "b"] $ T.union (ref testTypeEitherNameDef) [
+    "left">: T.var "a",
+    "right">: T.var "b"]
+
+testTypeEitherNameDef :: TBinding Name
+testTypeEitherNameDef = testGraphDefinition "testTypeEitherName" $
+  name "Either"
+
 testTypeIntListDef :: TBinding Type
 testTypeIntListDef = testGraphType "testTypeIntList" $
   T.record (ref testTypeIntListNameDef) [
@@ -299,6 +315,15 @@ testTypeSimpleNumberNameDef :: TBinding Name
 testTypeSimpleNumberNameDef = testGraphDefinition "testTypeSimpleNumberName" $
   name "SimpleNumber"
 
+testTypeSymmetricTripleDef :: TBinding Type
+testTypeSymmetricTripleDef = testGraphType "testTypeSymmetricTriple" $
+  T.forAlls ["v", "e"] $ T.wrap (ref testTypeSymmetricTripleNameDef) $
+    T.applys (Core.typeVariable $ ref testTypeTripleNameDef) [T.var "v", T.var "e", T.var "v"]
+
+testTypeSymmetricTripleNameDef :: TBinding Name
+testTypeSymmetricTripleNameDef = testGraphDefinition "testTypeSymmetricTripleName" $
+  name "SymmetricTriple"
+
 testTypeTimestampDef :: TBinding Type
 testTypeTimestampDef = testGraphType "testTypeTimestamp" $
   T.union (ref testTypeTimestampNameDef) [
@@ -308,6 +333,17 @@ testTypeTimestampDef = testGraphType "testTypeTimestamp" $
 testTypeTimestampNameDef :: TBinding Name
 testTypeTimestampNameDef = testGraphDefinition "testTypeTimestampName" $
   name "Timestamp"
+
+testTypeTripleDef :: TBinding Type
+testTypeTripleDef = testGraphType "testTypeTriple" $
+  T.forAlls ["a", "b", "c"] $ T.record (ref testTypeTripleNameDef) [
+    "first">: T.var "a",
+    "second">: T.var "b",
+    "third">: T.var "c"]
+
+testTypeTripleNameDef :: TBinding Name
+testTypeTripleNameDef = testGraphDefinition "testTypeTripleName" $
+  name "Triple"
 
 testTypeUnionMonomorphicDef :: TBinding Type
 testTypeUnionMonomorphicDef = testGraphType "testTypeUnionMonomorphic" $

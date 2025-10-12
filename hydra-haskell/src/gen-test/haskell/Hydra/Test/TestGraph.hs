@@ -51,14 +51,6 @@ testTypeLatLonPoly = (Core.TypeForall (Core.ForallType {
         Core.fieldTypeName = (Core.Name "lon"),
         Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))}]}))}))
 
-testTypeStringAlias :: Core.Type
-testTypeStringAlias = (Core.TypeWrap (Core.WrappedType {
-  Core.wrappedTypeTypeName = testTypeStringAliasName,
-  Core.wrappedTypeObject = (Core.TypeLiteral Core.LiteralTypeString)}))
-
-testTypeStringAliasName :: Core.Name
-testTypeStringAliasName = (Core.Name "StringTypeAlias")
-
 testTypePolymorphicWrapper :: Core.Type
 testTypePolymorphicWrapper = (Core.TypeForall (Core.ForallType {
   Core.forallTypeParameter = (Core.Name "a"),
@@ -68,6 +60,14 @@ testTypePolymorphicWrapper = (Core.TypeForall (Core.ForallType {
 
 testTypePolymorphicWrapperName :: Core.Name
 testTypePolymorphicWrapperName = (Core.Name "PolymorphicWrapper")
+
+testTypeStringAlias :: Core.Type
+testTypeStringAlias = (Core.TypeWrap (Core.WrappedType {
+  Core.wrappedTypeTypeName = testTypeStringAliasName,
+  Core.wrappedTypeObject = (Core.TypeLiteral Core.LiteralTypeString)}))
+
+testTypeStringAliasName :: Core.Name
+testTypeStringAliasName = (Core.Name "StringTypeAlias")
 
 testElementArthur :: Core.Binding
 testElementArthur = Core.Binding {
@@ -161,6 +161,24 @@ testTypeComparison = (Core.TypeUnion (Core.RowType {
 
 testTypeComparisonName :: Core.Name
 testTypeComparisonName = (Core.Name "Comparison")
+
+testTypeEither :: Core.Type
+testTypeEither = (Core.TypeForall (Core.ForallType {
+  Core.forallTypeParameter = (Core.Name "a"),
+  Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
+    Core.forallTypeParameter = (Core.Name "b"),
+    Core.forallTypeBody = (Core.TypeUnion (Core.RowType {
+      Core.rowTypeTypeName = testTypeEitherName,
+      Core.rowTypeFields = [
+        Core.FieldType {
+          Core.fieldTypeName = (Core.Name "left"),
+          Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))},
+        Core.FieldType {
+          Core.fieldTypeName = (Core.Name "right"),
+          Core.fieldTypeType = (Core.TypeVariable (Core.Name "b"))}]}))}))}))
+
+testTypeEitherName :: Core.Name
+testTypeEitherName = (Core.Name "Either")
 
 testTypeIntList :: Core.Type
 testTypeIntList = (Core.TypeRecord (Core.RowType {
@@ -283,6 +301,24 @@ testTypeSimpleNumber = (Core.TypeUnion (Core.RowType {
 testTypeSimpleNumberName :: Core.Name
 testTypeSimpleNumberName = (Core.Name "SimpleNumber")
 
+testTypeSymmetricTriple :: Core.Type
+testTypeSymmetricTriple = (Core.TypeForall (Core.ForallType {
+  Core.forallTypeParameter = (Core.Name "v"),
+  Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
+    Core.forallTypeParameter = (Core.Name "e"),
+    Core.forallTypeBody = (Core.TypeWrap (Core.WrappedType {
+      Core.wrappedTypeTypeName = testTypeSymmetricTripleName,
+      Core.wrappedTypeObject = (Core.TypeApplication (Core.ApplicationType {
+        Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
+          Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
+            Core.applicationTypeFunction = (Core.TypeVariable testTypeTripleName),
+            Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})),
+          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "e"))})),
+        Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))}))}))}))}))
+
+testTypeSymmetricTripleName :: Core.Name
+testTypeSymmetricTripleName = (Core.Name "SymmetricTriple")
+
 testTypeTimestamp :: Core.Type
 testTypeTimestamp = (Core.TypeUnion (Core.RowType {
   Core.rowTypeTypeName = testTypeTimestampName,
@@ -296,6 +332,29 @@ testTypeTimestamp = (Core.TypeUnion (Core.RowType {
 
 testTypeTimestampName :: Core.Name
 testTypeTimestampName = (Core.Name "Timestamp")
+
+testTypeTriple :: Core.Type
+testTypeTriple = (Core.TypeForall (Core.ForallType {
+  Core.forallTypeParameter = (Core.Name "a"),
+  Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
+    Core.forallTypeParameter = (Core.Name "b"),
+    Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
+      Core.forallTypeParameter = (Core.Name "c"),
+      Core.forallTypeBody = (Core.TypeRecord (Core.RowType {
+        Core.rowTypeTypeName = testTypeTripleName,
+        Core.rowTypeFields = [
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "first"),
+            Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "second"),
+            Core.fieldTypeType = (Core.TypeVariable (Core.Name "b"))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "third"),
+            Core.fieldTypeType = (Core.TypeVariable (Core.Name "c"))}]}))}))}))}))
+
+testTypeTripleName :: Core.Name
+testTypeTripleName = (Core.Name "Triple")
 
 testTypeUnionMonomorphic :: Core.Type
 testTypeUnionMonomorphic = (Core.TypeUnion (Core.RowType {
