@@ -11,6 +11,7 @@ import qualified Hydra.Dsl.Phantoms as Phantoms
 import Hydra.Dsl.Core as Core hiding (name, unName)
 import Hydra.Dsl.TBase
 
+import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 import Prelude hiding (map, product, sum)
@@ -35,6 +36,9 @@ import Prelude hiding (map, product, sum)
 apply :: TTerm Type -> TTerm Type -> TTerm Type
 apply l r = typeApplication $ applicationType l r
 
+applys :: TTerm Type -> [TTerm Type] -> TTerm Type
+applys t ts = L.foldl apply t ts
+
 -- | Create a term-encoded field with the given name and type
 -- Example: field "age" int32
 field :: String -> TTerm Type -> TTerm FieldType
@@ -44,6 +48,9 @@ field s = fieldType (name s)
 -- Example: forAll "a" (var "a" --> var "a")
 forAll :: String -> TTerm Type -> TTerm Type
 forAll var body = typeForall $ forallType (name var) body
+
+forAlls :: [String] -> TTerm Type -> TTerm Type
+forAlls vs body = L.foldr forAll body vs
 
 -- | Create a term-encoded function type
 -- Example: function int32 string
@@ -182,6 +189,9 @@ union name pairs = typeUnion $ rowType name $ Phantoms.list (toField <$> pairs)
 -- Example: unit
 unit :: TTerm Type
 unit = typeUnit
+
+wrap :: TTerm Name -> TTerm Type -> TTerm Type
+wrap name t = typeWrap $ wrappedType name t
 
 -- * Products and sums
 
