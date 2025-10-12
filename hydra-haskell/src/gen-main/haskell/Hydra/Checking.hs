@@ -24,7 +24,6 @@ import qualified Hydra.Show.Core as Core__
 import qualified Hydra.Show.Mantle as Mantle
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
-import qualified Hydra.Unification as Unification
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -178,47 +177,43 @@ toFContext :: (Typing.InferenceContext -> M.Map Core.Name Core.Type)
 toFContext cx = (Maps.map Schemas.typeSchemeToFType (Typing.inferenceContextDataTypes cx))
 
 typeOf :: (Typing.TypeContext -> [Core.Type] -> Core.Term -> Compute.Flow t0 Core.Type)
-typeOf tx typeArgs term =  
-  let vars = (Typing.typeContextVariables tx)
-  in  
-    let types = (Typing.typeContextTypes tx)
-    in (Monads.withTrace (Strings.cat [
-      "checking type of: ",
-      Core__.term term,
-      " (vars: ",
-      Formatting.showList Core.unName (Sets.toList vars),
-      ", apptypes: ",
-      Formatting.showList Core__.type_ typeArgs,
-      ", types: ",
-      Formatting.showList Core.unName (Maps.keys types),
-      ")"]) ((\x -> case x of
-      Core.TermAnnotated v1 -> (typeOfAnnotatedTerm tx typeArgs v1)
-      Core.TermApplication v1 -> (typeOfApplication tx typeArgs v1)
-      Core.TermFunction v1 -> ((\x -> case x of
-        Core.FunctionElimination v2 -> ((\x -> case x of
-          Core.EliminationProduct v3 -> (typeOfTupleProjection tx typeArgs v3)
-          Core.EliminationRecord v3 -> (typeOfProjection tx typeArgs v3)
-          Core.EliminationUnion v3 -> (typeOfCaseStatement tx typeArgs v3)
-          Core.EliminationWrap v3 -> (typeOfUnwrap tx typeArgs v3)) v2)
-        Core.FunctionLambda v2 -> (typeOfLambda tx typeArgs v2)
-        Core.FunctionPrimitive v2 -> (typeOfPrimitive tx typeArgs v2)) v1)
-      Core.TermLet v1 -> (typeOfLet tx typeArgs v1)
-      Core.TermList v1 -> (typeOfList tx typeArgs v1)
-      Core.TermLiteral v1 -> (typeOfLiteral tx typeArgs v1)
-      Core.TermMap v1 -> (typeOfMap tx typeArgs v1)
-      Core.TermOptional v1 -> (typeOfOptional tx typeArgs v1)
-      Core.TermProduct v1 -> (typeOfTuple tx typeArgs v1)
-      Core.TermRecord v1 -> (typeOfRecord tx typeArgs v1)
-      Core.TermSet v1 -> (typeOfSet tx typeArgs v1)
-      Core.TermTypeApplication v1 -> (typeOfTypeApplication tx typeArgs v1)
-      Core.TermTypeLambda v1 -> (typeOfTypeLambda tx typeArgs v1)
-      Core.TermUnion v1 -> (typeOfInjection tx typeArgs v1)
-      Core.TermUnit -> (typeOfUnit tx typeArgs)
-      Core.TermVariable v1 -> (typeOfVariable tx typeArgs v1)
-      Core.TermWrap v1 -> (typeOfWrappedTerm tx typeArgs v1)
-      _ -> (Flows.fail (Strings.cat [
-        "unsupported term variant in typeOf: ",
-        (Mantle.termVariant (Variants.termVariant term))]))) term))
+typeOf tx typeArgs term = (Monads.withTrace (Strings.cat [
+  "checking type of: ",
+  Core__.term term,
+  " (vars: ",
+  Formatting.showList Core.unName (Sets.toList (Typing.typeContextVariables tx)),
+  ", apptypes: ",
+  Formatting.showList Core__.type_ typeArgs,
+  ", types: ",
+  Formatting.showList Core.unName (Maps.keys (Typing.typeContextTypes tx)),
+  ")"]) ((\x -> case x of
+  Core.TermAnnotated v1 -> (typeOfAnnotatedTerm tx typeArgs v1)
+  Core.TermApplication v1 -> (typeOfApplication tx typeArgs v1)
+  Core.TermFunction v1 -> ((\x -> case x of
+    Core.FunctionElimination v2 -> ((\x -> case x of
+      Core.EliminationProduct v3 -> (typeOfTupleProjection tx typeArgs v3)
+      Core.EliminationRecord v3 -> (typeOfProjection tx typeArgs v3)
+      Core.EliminationUnion v3 -> (typeOfCaseStatement tx typeArgs v3)
+      Core.EliminationWrap v3 -> (typeOfUnwrap tx typeArgs v3)) v2)
+    Core.FunctionLambda v2 -> (typeOfLambda tx typeArgs v2)
+    Core.FunctionPrimitive v2 -> (typeOfPrimitive tx typeArgs v2)) v1)
+  Core.TermLet v1 -> (typeOfLet tx typeArgs v1)
+  Core.TermList v1 -> (typeOfList tx typeArgs v1)
+  Core.TermLiteral v1 -> (typeOfLiteral tx typeArgs v1)
+  Core.TermMap v1 -> (typeOfMap tx typeArgs v1)
+  Core.TermOptional v1 -> (typeOfOptional tx typeArgs v1)
+  Core.TermProduct v1 -> (typeOfTuple tx typeArgs v1)
+  Core.TermRecord v1 -> (typeOfRecord tx typeArgs v1)
+  Core.TermSet v1 -> (typeOfSet tx typeArgs v1)
+  Core.TermTypeApplication v1 -> (typeOfTypeApplication tx typeArgs v1)
+  Core.TermTypeLambda v1 -> (typeOfTypeLambda tx typeArgs v1)
+  Core.TermUnion v1 -> (typeOfInjection tx typeArgs v1)
+  Core.TermUnit -> (typeOfUnit tx typeArgs)
+  Core.TermVariable v1 -> (typeOfVariable tx typeArgs v1)
+  Core.TermWrap v1 -> (typeOfWrappedTerm tx typeArgs v1)
+  _ -> (Flows.fail (Strings.cat [
+    "unsupported term variant in typeOf: ",
+    (Mantle.termVariant (Variants.termVariant term))]))) term))
 
 typeOfAnnotatedTerm :: (Typing.TypeContext -> [Core.Type] -> Core.AnnotatedTerm -> Compute.Flow t0 Core.Type)
 typeOfAnnotatedTerm tx typeArgs at = (Flows.bind (typeOf tx typeArgs (Core.annotatedTermSubject at)) (\t -> applyForallTypes tx typeArgs t))
@@ -302,7 +297,7 @@ typeOfLambda tx typeArgs l = (Flows.bind (
           Core.functionTypeCodomain = t1}))))))) mt)) (\t -> applyForallTypes tx typeArgs t))
 
 typeOfLet :: (Typing.TypeContext -> [Core.Type] -> Core.Let -> Compute.Flow t0 Core.Type)
-typeOfLet tx typeArgs letTerm = (Flows.bind ( 
+typeOfLet tx typeArgs letTerm =  
   let bs = (Core.letBindings letTerm)
   in  
     let body = (Core.letEnvironment letTerm)
@@ -311,21 +306,21 @@ typeOfLet tx typeArgs letTerm = (Flows.bind (
       in  
         let bterms = (Lists.map Core.bindingTerm bs)
         in  
-          let btypeOf = (\b -> Optionals.maybe (Flows.fail (Strings.cat [
+          let bindingType = (\b -> Optionals.maybe (Flows.fail (Strings.cat [
                   "untyped let binding: ",
                   (Core__.binding b)])) (\ts -> Flows.pure (Schemas.typeSchemeToFType ts)) (Core.bindingType b))
-          in (Flows.bind (Flows.mapList btypeOf bs) (\btypes ->  
+          in (Flows.bind (Flows.mapList bindingType bs) (\btypes ->  
             let tx2 = Typing.TypeContext {
                     Typing.typeContextTypes = (Maps.union (Maps.fromList (Lists.zip bnames btypes)) (Typing.typeContextTypes tx)),
                     Typing.typeContextVariables = (Typing.typeContextVariables tx),
                     Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tx)}
-            in (Flows.bind (Flows.mapList (typeOf tx2 []) bterms) (\typeofs -> Flows.bind (Flows.mapList (checkTypeVariables tx) btypes) (\_ -> Flows.bind (Flows.mapList (checkTypeVariables tx) typeofs) (\_ -> Logic.ifElse (Equality.equal typeofs btypes) (typeOf tx2 [] body) (Flows.fail (Strings.cat [
+            in (Flows.bind (Flows.mapList (typeOf tx2 []) bterms) (\typeofs -> Flows.bind (Flows.mapList (checkTypeVariables tx) btypes) (\_ -> Flows.bind (Flows.mapList (checkTypeVariables tx) typeofs) (\_ -> Flows.bind (Logic.ifElse (Equality.equal typeofs btypes) (typeOf tx2 [] body) (Flows.fail (Strings.cat [
               "binding types disagree: ",
               Formatting.showList Core__.type_ btypes,
               " and ",
               Formatting.showList Core__.type_ typeofs,
               " from terms: ",
-              (Formatting.showList Core__.term bterms)]))))))))) (\t -> applyForallTypes tx typeArgs t))
+              (Formatting.showList Core__.term bterms)]))) (\t -> applyForallTypes tx typeArgs t)))))))
 
 typeOfList :: (Typing.TypeContext -> [Core.Type] -> [Core.Term] -> Compute.Flow t0 Core.Type)
 typeOfList tx typeArgs els = (Logic.ifElse (Lists.null els) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 1) (Flows.pure (Core.TypeList (Lists.head typeArgs))) (Flows.fail "list type applied to more or less than one argument")) (Flows.bind (Flows.mapList (typeOf tx []) els) (\eltypes -> Flows.bind (checkSameType "list elements" eltypes) (\unifiedType -> Flows.bind (checkTypeVariables tx unifiedType) (\_ -> Flows.pure (Core.TypeList unifiedType))))))
@@ -343,19 +338,6 @@ typeOfMap tx typeArgs m = (Logic.ifElse (Maps.null m) (Logic.ifElse (Equality.eq
   in (Flows.bind (Flows.bind (Flows.mapList (typeOf tx []) (Lists.map fst pairs)) (checkSameType "map keys")) (\kt -> Flows.bind (Flows.bind (Flows.mapList (typeOf tx []) (Lists.map snd pairs)) (checkSameType "map values")) (\vt -> Flows.bind (checkTypeVariables tx kt) (\_ -> Flows.bind (checkTypeVariables tx vt) (\_ -> Flows.pure (Core.TypeMap (Core.MapType {
     Core.mapTypeKeys = kt,
     Core.mapTypeValues = vt})))))))) (\t -> applyForallTypes tx typeArgs t)))
-
-typeOfNominal :: (String -> Typing.InferenceContext -> Core.Name -> Core.Type -> Compute.Flow t0 Core.Type)
-typeOfNominal desc cx tname expected =  
-  let resolveType = (\subst -> \v -> Optionals.fromMaybe (Core.TypeVariable v) (Maps.lookup v subst))
-  in (Flows.bind (Schemas.requireSchemaType cx tname) (\schemaType ->  
-    let svars = (Core.typeSchemeVariables schemaType)
-    in  
-      let stype = (Core.typeSchemeType schemaType)
-      in (Flows.bind (Unification.unifyTypes (Typing.inferenceContextSchemaTypes cx) stype expected desc) (\substWrapper -> Flows.bind (checkTypeSubst cx substWrapper) (\_ ->  
-        let subst = (Typing.unTypeSubst substWrapper)
-        in  
-          let tparams = (Lists.map (resolveType subst) svars)
-          in (Flows.pure (Schemas.nominalApplication tname tparams)))))))
 
 typeOfOptional :: (Typing.TypeContext -> [Core.Type] -> Maybe Core.Term -> Compute.Flow t0 Core.Type)
 typeOfOptional tx typeArgs mt = (Optionals.maybe ( 
@@ -395,11 +377,7 @@ typeOfRecord tx typeArgs record =
   let tname = (Core.recordTypeName record)
   in  
     let fields = (Core.recordFields record)
-    in (Flows.bind (Flows.mapList (typeOf tx []) (Lists.map Core.fieldTerm fields)) (\ftypes -> Flows.bind (Flows.mapList (checkTypeVariables tx) ftypes) (\_ -> typeOfNominal "record typeOf" (Typing.typeContextInferenceContext tx) tname (Core.TypeRecord (Core.RowType {
-      Core.rowTypeTypeName = tname,
-      Core.rowTypeFields = (Lists.zipWith (\n -> \t -> Core.FieldType {
-        Core.fieldTypeName = n,
-        Core.fieldTypeType = t}) (Lists.map Core.fieldName fields) ftypes)})))))
+    in (Flows.bind (Flows.mapList (typeOf tx []) (Lists.map Core.fieldTerm fields)) (\ftypes -> Flows.bind (Flows.mapList (checkTypeVariables tx) ftypes) (\_ -> Flows.pure (Schemas.nominalApplication tname typeArgs))))
 
 typeOfSet :: (Typing.TypeContext -> [Core.Type] -> S.Set Core.Term -> Compute.Flow t0 Core.Type)
 typeOfSet tx typeArgs els = (Logic.ifElse (Sets.null els) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 1) (Flows.pure (Core.TypeSet (Lists.head typeArgs))) (Flows.fail "set type applied to more or less than one argument")) (Flows.bind (Flows.mapList (typeOf tx []) (Sets.toList els)) (\eltypes -> Flows.bind (checkSameType "set elements" eltypes) (\unifiedType -> Flows.bind (checkTypeVariables tx unifiedType) (\_ -> Flows.pure (Core.TypeSet unifiedType))))))
@@ -472,6 +450,4 @@ typeOfWrappedTerm tx typeArgs wt =
   let tname = (Core.wrappedTermTypeName wt)
   in  
     let innerTerm = (Core.wrappedTermObject wt)
-    in (Flows.bind (typeOf tx [] innerTerm) (\innerType -> Flows.bind (checkTypeVariables tx innerType) (\_ -> typeOfNominal "wrapper typeOf" (Typing.typeContextInferenceContext tx) tname (Core.TypeWrap (Core.WrappedType {
-      Core.wrappedTypeTypeName = tname,
-      Core.wrappedTypeObject = innerType})))))
+    in (Flows.bind (typeOf tx [] innerTerm) (\innerType -> Flows.bind (checkTypeVariables tx innerType) (\_ -> Flows.pure (Schemas.nominalApplication tname typeArgs))))
