@@ -44,6 +44,10 @@ testSchemaGraph = elementsToGraph hydraCoreGraph (Just hydraCoreGraph) [
     def testTypeTripleName testTypeTriple,
     def testTypeUnionMonomorphicName testTypeUnionMonomorphic,
     def testTypeUnionPolymorphicRecursiveName testTypeUnionPolymorphicRecursive,
-    def testTypeUnitName testTypeUnit]
+    def testTypeUnitName testTypeUnit,
+    -- Simplified hydra.compute types
+    def testTypeFlowName testTypeFlow,
+    def testTypeFlowStateName testTypeFlowState,
+    def testTypeTraceName testTypeTrace]
   where
     def = typeElement
