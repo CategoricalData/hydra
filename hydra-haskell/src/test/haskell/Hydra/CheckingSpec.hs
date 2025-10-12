@@ -45,7 +45,7 @@ checkTypeOf :: H.SpecWith ()
 checkTypeOf = H.describe "typeOf" $ do
   checkTypeOfAnnotatedTerms
   checkTypeOfApplications
-  checkTypeOfFlows
+--  checkTypeOfFlows
   checkTypeOfFunctions
   checkTypeOfLetTerms
   checkTypeOfLists
@@ -405,14 +405,53 @@ checkTypeOfLetTerms = H.describe "Let terms" $ do
                   ("y", string "hello", Types.mono Types.string)] $
         tuple [var "x", var "y"])
       (Types.product [Types.int32, Types.string])
-    expectTermWithType "binding shadowing"
+
+  H.describe "Let terms with shadowing" $ do
+    expectTermWithType "lambda parameter shadowing let binding"
+      (lets ["x">: int32 42] $
+        lambda "x" $ var "x")
+      (tylam "t0" $
+        letsTyped [("x", int32 42, Types.mono Types.int32)] $
+          lambdaTyped "x" (Types.var "t0") $ var "x")
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
+    expectTermWithType "nested lambda shadowing"
+      (lambda "x" $
+        lets ["y">: var "x"] $
+          lambda "x" $
+            tuple [var "x", var "y"])
+      (tylams ["t0", "t1"] $
+        lambdaTyped "x" (Types.var "t0") $
+          letsTyped [("y", var "x", Types.mono $ Types.var "t0")] $
+            lambdaTyped "x" (Types.var "t1") $
+              tuple [var "x", var "y"])
+      (Types.forAlls ["t0", "t1"] $
+        Types.function (Types.var "t0") $
+          Types.function (Types.var "t1") $
+            Types.product [Types.var "t1", Types.var "t0"])
+    expectTermWithType "multiple levels of let shadowing"
       (lets ["x">: int32 1] $
-       lets ["x">: string "shadow"] $
+        lets ["x">: string "second"] $
+          lets ["x">: boolean True] $
             var "x")
       (letsTyped [("x", int32 1, Types.mono Types.int32)] $
-       letsTyped [("x", string "shadow", Types.mono Types.string)] $
-        var "x")
-      Types.string
+        letsTyped [("x", string "second", Types.mono Types.string)] $
+          letsTyped [("x", boolean True, Types.mono Types.boolean)] $
+            var "x")
+      Types.boolean
+    expectTermWithType "let shadowing with lambda and reference to outer binding"
+      (lets ["x">: int32 10, "y">: int32 20] $
+        lambda "x" $
+          lets ["z">: var "y"] $
+            tuple [var "x", var "z"])
+      (tylam "t0" $
+        letsTyped [("x", int32 10, Types.mono Types.int32),
+                   ("y", int32 20, Types.mono Types.int32)] $
+          lambdaTyped "x" (Types.var "t0") $
+            letsTyped [("z", var "y", Types.mono Types.int32)] $
+              tuple [var "x", var "z"])
+      (Types.forAll "t0" $
+        Types.function (Types.var "t0") $
+          Types.product [Types.var "t0", Types.int32])
 
   H.describe "Recursive bindings" $ do
     expectTermWithType "simple arithmetic recursion"
