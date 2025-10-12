@@ -89,7 +89,14 @@ testGraphModule = Module (Namespace "hydra.test.testGraph") elements
       el testTypeUnionPolymorphicRecursiveDef,
       el testTypeUnionPolymorphicRecursiveNameDef,
       el testTypeUnitDef,
-      el testTypeUnitNameDef]
+      el testTypeUnitNameDef,
+      -- Simplified hydra.compute types
+      el testTypeFlowDef,
+      el testTypeFlowNameDef,
+      el testTypeFlowStateDef,
+      el testTypeFlowStateNameDef,
+      el testTypeTraceDef,
+      el testTypeTraceNameDef]
 
 testGraphType :: String -> TTerm Type -> TBinding Type
 testGraphType name = testGraphDefinition name . firstClassType
@@ -374,3 +381,37 @@ testTypeUnitDef = testGraphType "testTypeUnit" $
 testTypeUnitNameDef :: TBinding Name
 testTypeUnitNameDef = testGraphDefinition "testTypeUnitName" $
   name "Unit"
+
+-- Simplified hydra.compute types
+
+testTypeFlowDef :: TBinding Type
+testTypeFlowDef = testGraphType "testTypeFlow" $
+  T.forAlls ["s", "v"] $ T.wrap (ref testTypeFlowNameDef) $
+    T.function (T.var "s") $ T.function (T.var "hydra.compute.Trace") $
+      T.applys (Core.typeVariable $ ref testTypeFlowStateNameDef) [T.var "s", T.var "v"]
+
+testTypeFlowNameDef :: TBinding Name
+testTypeFlowNameDef = testGraphDefinition "testTypeFlowName" $
+  name "hydra.compute.Flow"
+
+testTypeFlowStateDef :: TBinding Type
+testTypeFlowStateDef = testGraphType "testTypeFlowState" $
+  T.forAlls ["s", "v"] $ T.record (ref testTypeFlowStateNameDef) [
+    "value">: T.optional (T.var "v"),
+    "state">: T.var "s",
+    "trace">: Core.typeVariable $ ref testTypeTraceNameDef]
+
+testTypeFlowStateNameDef :: TBinding Name
+testTypeFlowStateNameDef = testGraphDefinition "testTypeFlowStateName" $
+  name "hydra.compute.FlowState"
+
+testTypeTraceDef :: TBinding Type
+testTypeTraceDef = testGraphType "testTypeTrace" $
+  T.record (ref testTypeTraceNameDef) [
+    "stack">: T.list T.string,
+    "messages">: T.list T.string,
+    "other">: T.map T.string T.string] -- Note: this departs from the actual Trace type, for simplicity.
+
+testTypeTraceNameDef :: TBinding Name
+testTypeTraceNameDef = testGraphDefinition "testTypeTraceName" $
+  name "hydra.compute.Trace"
