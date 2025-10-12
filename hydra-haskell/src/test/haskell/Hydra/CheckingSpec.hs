@@ -1180,6 +1180,44 @@ checkTypeOfRecords = H.describe "Records" $ do
             field "tail" (tyapp nothing (Types.var "IntList"))])])
       (Types.var "IntList")
 
+  H.describe "Multi-parameter polymorphic records" $ do
+    expectTermWithType "triple with three monomorphic types"
+      (record testTypeTripleName [
+        field "first" (int32 1),
+        field "second" (string "middle"),
+        field "third" (boolean True)])
+      (tyapps (record testTypeTripleName [
+        field "first" (int32 1),
+        field "second" (string "middle"),
+        field "third" (boolean True)]) [Types.int32, Types.string, Types.boolean])
+      (Types.applys (Types.var "Triple") [Types.int32, Types.string, Types.boolean])
+
+    expectTermWithType "triple with PersonOrSomething containing map"
+      (lambda "k" $ lambda "v" $
+        record testTypeTripleName [
+          field "first" (string "prefix"),
+          field "second" (variant testTypePersonOrSomethingName (Name "other")
+            (Terms.map $ M.singleton (var "k") (var "v"))),
+          field "third" (int32 999)])
+      (tylams ["t0", "t1"] $
+        lambdaTyped "k" (Types.var "t0") $
+        lambdaTyped "v" (Types.var "t1") $
+        tyapps (record testTypeTripleName [
+          field "first" (string "prefix"),
+          field "second" (tyapp (variant testTypePersonOrSomethingName (Name "other")
+            (Terms.map $ M.singleton (var "k") (var "v"))) (Types.map (Types.var "t0") (Types.var "t1"))),
+          field "third" (int32 999)])
+          [Types.string,
+           Types.apply (Types.var "PersonOrSomething") (Types.map (Types.var "t0") (Types.var "t1")),
+           Types.int32])
+      (Types.forAlls ["t0", "t1"] $
+        Types.function (Types.var "t0") $
+        Types.function (Types.var "t1") $
+        Types.applys (Types.var "Triple")
+          [Types.string,
+           Types.apply (Types.var "PersonOrSomething") (Types.map (Types.var "t0") (Types.var "t1")),
+           Types.int32])
+
 checkTypeOfRecordEliminations :: H.SpecWith ()
 checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
   H.describe "Simple record projections" $ do
@@ -1317,6 +1355,56 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
       (list [project testTypePersonName (Name "firstName"),
              project testTypePersonName (Name "lastName")])
       (Types.list (Types.function (Types.var "Person") Types.string))
+
+  H.describe "Multi-parameter polymorphic projections" $ do
+    expectTermWithType "project first from Triple"
+      (project testTypeTripleName (Name "first"))
+      (tylams ["t0", "t1", "t2"] $ tyapps (project testTypeTripleName (Name "first")) [Types.var "t0", Types.var "t1", Types.var "t2"])
+      (Types.forAlls ["t0", "t1", "t2"] $
+        Types.function
+          (Types.applys (Types.var "Triple") [Types.var "t0", Types.var "t1", Types.var "t2"])
+          (Types.var "t0"))
+    expectTermWithType "project second from Triple applied"
+      (project testTypeTripleName (Name "second") @@
+        record testTypeTripleName [
+          field "first" (int32 1),
+          field "second" (string "middle"),
+          field "third" (boolean True)])
+      (tyapps (project testTypeTripleName (Name "second")) [Types.int32, Types.string, Types.boolean] @@
+        tyapps (record testTypeTripleName [
+          field "first" (int32 1),
+          field "second" (string "middle"),
+          field "third" (boolean True)]) [Types.int32, Types.string, Types.boolean])
+      Types.string
+    expectTermWithType "project from Triple and use second field, which is another polymorphic record"
+        (lambda "triple" $ lambda "key" $
+          match testTypePersonOrSomethingName Nothing [
+            "person">: lambda "p" $ nothing,
+            "other">: lambda "m" $
+              primitive _maps_lookup @@ var "key" @@ var "m"] @@
+          (project testTypeTripleName (Name "second") @@ var "triple"))
+        (tylams ["t0", "t1", "t2", "t3"] $
+          lambdaTyped "triple"
+            (Types.applys (Types.var "Triple")
+              [Types.var "t0",
+               Types.apply (Types.var "PersonOrSomething") (Types.map (Types.var "t1") (Types.var "t2")),
+               Types.var "t3"]) $
+          lambdaTyped "key" (Types.var "t1") $
+          tyapp (match testTypePersonOrSomethingName Nothing [
+            "person">: lambdaTyped "p" (Types.var "Person") (tyapp nothing (Types.var "t2")),
+            "other">: lambdaTyped "m" (Types.map (Types.var "t1") (Types.var "t2")) $
+              tyapps (primitive _maps_lookup) [Types.var "t1", Types.var "t2"] @@ var "key" @@ var "m"]) (Types.map (Types.var "t1") (Types.var "t2")) @@
+          (tyapps (project testTypeTripleName (Name "second"))
+            [Types.var "t0",
+             Types.apply (Types.var "PersonOrSomething") (Types.map (Types.var "t1") (Types.var "t2")),
+             Types.var "t3"] @@ var "triple"))
+        (Types.forAlls ["t0", "t1", "t2", "t3"] $
+          Types.function
+            (Types.applys (Types.var "Triple")
+              [Types.var "t0",
+               Types.apply (Types.var "PersonOrSomething") (Types.map (Types.var "t1") (Types.var "t2")),
+               Types.var "t3"])
+            (Types.function (Types.var "t1") (Types.optional (Types.var "t2"))))
 
   H.describe "Higher-order record projections" $ do
     expectTermWithType "map projection over list of records"
@@ -1655,6 +1743,55 @@ checkTypeOfUnions = H.describe "Unions" $ do
         var "value")
       (Types.apply (Types.var "PersonOrSomething") Types.string)
 
+  H.describe "Multi-parameter polymorphic injections" $ do
+    expectTermWithType "either left with int"
+      (variant testTypeEitherName (Name "left") (int32 42))
+      (tylam "t0" $ tyapps (variant testTypeEitherName (Name "left") (int32 42)) [Types.int32, Types.var "t0"])
+      (Types.forAll "t0" $ Types.applys (Types.var "Either") [Types.int32, Types.var "t0"])
+    expectTermWithType "either right with string"
+      (variant testTypeEitherName (Name "right") (string "hello"))
+      (tylam "t0" $ tyapps (variant testTypeEitherName (Name "right") (string "hello")) [Types.var "t0", Types.string])
+      (Types.forAll "t0" $ Types.applys (Types.var "Either") [Types.var "t0", Types.string])
+    expectTermWithType "either containing LatLonPoly in list"
+      (variant testTypeEitherName (Name "right")
+        (list [record testTypeLatLonPolyName [
+          field "lat" (int32 40),
+          field "lon" (int32 (-74))]]))
+      (tylam "t0" $ tyapps (variant testTypeEitherName (Name "right")
+        (list [tyapp (record testTypeLatLonPolyName [
+          field "lat" (int32 40),
+          field "lon" (int32 (-74))]) Types.int32]))
+        [Types.var "t0", Types.list (Types.apply (Types.var "LatLonPoly") Types.int32)])
+      (Types.forAll "t0" $ Types.applys (Types.var "Either") [Types.var "t0", Types.list (Types.apply (Types.var "LatLonPoly") Types.int32)])
+    expectTermWithType "either in triple in map with shared type variables"
+      (lambda "x0" $ lambda "x1" $ lambda "x2" $
+        Terms.map $ M.singleton (string "key") $
+          record testTypeTripleName [
+            field "first" (variant testTypeEitherName (Name "left") (var "x0")),
+            field "second" (variant testTypeEitherName (Name "left") (var "x0")),
+            field "third" (variant testTypeEitherName (Name "right") (var "x1"))])
+      (tylams ["t0", "t1", "t2", "t3", "t4", "t5"] $
+        lambdaTyped "x0" (Types.var "t0") $
+        lambdaTyped "x1" (Types.var "t1") $
+        lambdaTyped "x2" (Types.var "t2") $
+        Terms.map $ M.singleton (string "key") $
+          tyapps (record testTypeTripleName [
+            field "first" (tyapps (variant testTypeEitherName (Name "left") (var "x0")) [Types.var "t0", Types.var "t3"]),
+            field "second" (tyapps (variant testTypeEitherName (Name "left") (var "x0")) [Types.var "t0", Types.var "t4"]),
+            field "third" (tyapps (variant testTypeEitherName (Name "right") (var "x1")) [Types.var "t5", Types.var "t1"])])
+          [Types.applys (Types.var "Either") [Types.var "t0", Types.var "t3"],
+           Types.applys (Types.var "Either") [Types.var "t0", Types.var "t4"],
+           Types.applys (Types.var "Either") [Types.var "t5", Types.var "t1"]])
+      (Types.forAlls ["t0", "t1", "t2", "t3", "t4", "t5"] $
+        Types.function (Types.var "t0") $
+        Types.function (Types.var "t1") $
+        Types.function (Types.var "t2") $
+        Types.map Types.string $
+          Types.applys (Types.var "Triple")
+            [Types.applys (Types.var "Either") [Types.var "t0", Types.var "t3"],
+             Types.applys (Types.var "Either") [Types.var "t0", Types.var "t4"],
+             Types.applys (Types.var "Either") [Types.var "t5", Types.var "t1"]])
+
 checkTypeOfUnionEliminations :: H.SpecWith ()
 checkTypeOfUnionEliminations = H.describe "Union eliminations" $ do
   H.describe "Simple unit variant eliminations" $ do
@@ -1847,6 +1984,84 @@ checkTypeOfUnionEliminations = H.describe "Union eliminations" $ do
         tyapp (variant testTypePersonOrSomethingName (Name "other") (int32 25)) Types.int32,
         int32 30])
       (Types.list Types.int32)
+
+  H.describe "Multi-parameter polymorphic case statements" $ do
+    expectTermWithType "case Either converting both to string"
+      (match testTypeEitherName Nothing [
+        "left">: lambda "x" $ primitive _literals_showInt32 @@ var "x",
+        "right">: lambda "y" $ primitive _literals_showFloat32 @@ var "y"])
+      (tyapps (match testTypeEitherName Nothing [
+        "left">: lambdaTyped "x" Types.int32 (primitive _literals_showInt32 @@ var "x"),
+        "right">: lambdaTyped "y" Types.float32 (primitive _literals_showFloat32 @@ var "y")]) [Types.int32, Types.float32])
+      (Types.function
+        (Types.applys (Types.var "Either") [Types.int32, Types.float32])
+        Types.string)
+    expectTermWithType "case Either applied to injection"
+      (match testTypeEitherName Nothing [
+        "left">: lambda "n" $ primitive _math_add @@ var "n" @@ int32 1,
+        "right">: lambda "s" $ primitive _strings_length @@ var "s"] @@
+       variant testTypeEitherName (Name "left") (int32 42))
+      (tyapps (match testTypeEitherName Nothing [
+        "left">: lambdaTyped "n" Types.int32 (primitive _math_add @@ var "n" @@ int32 1),
+        "right">: lambdaTyped "s" Types.string (primitive _strings_length @@ var "s")]) [Types.int32, Types.string] @@
+       tyapps (variant testTypeEitherName (Name "left") (int32 42)) [Types.int32, Types.string])
+      Types.int32
+    expectTermWithType "case Either with Triple and nested projections"
+        (lambda "triple" $
+          match testTypeEitherName Nothing [
+            "left">: lambda "coords" $
+              project testTypeLatLonPolyName (Name "lat") @@ var "coords",
+            "right">: lambda "t" $
+              project testTypeTripleName (Name "first") @@ var "t"] @@
+          (project testTypeTripleName (Name "second") @@ var "triple"))
+        (tylams ["t0", "t1", "t2", "t3", "t4"] $
+          lambdaTyped "triple"
+            (Types.applys (Types.var "Triple")
+              [Types.var "t0",
+               Types.applys (Types.var "Either")
+                 [Types.apply (Types.var "LatLonPoly") (Types.var "t1"),
+                  Types.applys (Types.var "Triple") [Types.var "t1", Types.var "t2", Types.var "t3"]],
+               Types.var "t4"]) $
+          tyapps (match testTypeEitherName Nothing [
+            "left">: lambdaTyped "coords" (Types.apply (Types.var "LatLonPoly") (Types.var "t1")) $
+              tyapp (project testTypeLatLonPolyName (Name "lat")) (Types.var "t1") @@ var "coords",
+            "right">: lambdaTyped "t" (Types.applys (Types.var "Triple") [Types.var "t1", Types.var "t2", Types.var "t3"]) $
+              tyapps (project testTypeTripleName (Name "first")) [Types.var "t1", Types.var "t2", Types.var "t3"] @@ var "t"])
+            [Types.apply (Types.var "LatLonPoly") (Types.var "t1"),
+             Types.applys (Types.var "Triple") [Types.var "t1", Types.var "t2", Types.var "t3"]] @@
+          (tyapps (project testTypeTripleName (Name "second"))
+            [Types.var "t0",
+             Types.applys (Types.var "Either")
+               [Types.apply (Types.var "LatLonPoly") (Types.var "t1"),
+                Types.applys (Types.var "Triple") [Types.var "t1", Types.var "t2", Types.var "t3"]],
+             Types.var "t4"] @@ var "triple"))
+        (Types.forAlls ["t0", "t1", "t2", "t3", "t4"] $
+          Types.function
+            (Types.applys (Types.var "Triple")
+              [Types.var "t0",
+               Types.applys (Types.var "Either")
+                 [Types.apply (Types.var "LatLonPoly") (Types.var "t1"),
+                  Types.applys (Types.var "Triple") [Types.var "t1", Types.var "t2", Types.var "t3"]],
+               Types.var "t4"])
+            (Types.var "t1"))
+    expectTermWithType "case Either with polymorphic let bindings"
+        (lets ["makeLeft">: lambda "x" $ variant testTypeEitherName (Name "left") (var "x"),
+               "makeRight">: lambda "y" $ variant testTypeEitherName (Name "right") (var "y")] $
+          lambda "flag" $
+            match testTypeEitherName Nothing [
+              "left">: lambda "n" $ var "makeRight" @@ (primitive _math_add @@ var "n" @@ int32 10),
+              "right">: lambda "s" $ var "makeLeft" @@ (primitive _strings_length @@ var "s")] @@
+            var "flag")
+        (letsTyped [("makeLeft", tylams ["t0", "t1"] $ lambdaTyped "x" (Types.var "t0") $ tyapps (variant testTypeEitherName (Name "left") (var "x")) [Types.var "t0", Types.var "t1"],
+                     Types.poly ["t0", "t1"] $ Types.function (Types.var "t0") (Types.applys (Types.var "Either") [Types.var "t0", Types.var "t1"])),
+                    ("makeRight", tylams ["t0", "t1"] $ lambdaTyped "y" (Types.var "t0") $ tyapps (variant testTypeEitherName (Name "right") (var "y")) [Types.var "t1", Types.var "t0"],
+                     Types.poly ["t0", "t1"] $ Types.function (Types.var "t0") (Types.applys (Types.var "Either") [Types.var "t1", Types.var "t0"]))] $
+          lambdaTyped "flag" (Types.applys (Types.var "Either") [Types.int32, Types.string]) $
+            tyapps (match testTypeEitherName Nothing [
+              "left">: lambdaTyped "n" Types.int32 $ tyapps (var "makeRight") [Types.int32, Types.int32] @@ (primitive _math_add @@ var "n" @@ int32 10),
+              "right">: lambdaTyped "s" Types.string $ tyapps (var "makeLeft") [Types.int32, Types.int32] @@ (primitive _strings_length @@ var "s")]) [Types.int32, Types.string] @@
+            var "flag")
+        (Types.function (Types.applys (Types.var "Either") [Types.int32, Types.string]) (Types.applys (Types.var "Either") [Types.int32, Types.int32]))
 
   H.describe "Higher-order union eliminations" $ do
     expectTermWithType "map match over list"
@@ -2122,6 +2337,76 @@ checkTypeOfWrappedTerms = H.describe "Wrapped terms" $ do
              tyapp (wrap testTypePolymorphicWrapperName (list [int32 2])) Types.int32])
       (Types.list $ Types.apply (Types.var "PolymorphicWrapper") Types.int32)
 
+  H.describe "Multi-parameter polymorphic wrappers" $ do
+    expectTermWithType "symmetric triple wrapping simple types"
+      (wrap testTypeSymmetricTripleName $
+        record testTypeTripleName [
+          field "first" (int32 1),
+          field "second" (string "edge"),
+          field "third" (int32 2)])
+      (tyapps (wrap testTypeSymmetricTripleName $
+        tyapps (record testTypeTripleName [
+          field "first" (int32 1),
+          field "second" (string "edge"),
+          field "third" (int32 2)]) [Types.int32, Types.string, Types.int32])
+        [Types.int32, Types.string])
+      (Types.applys (Types.var "SymmetricTriple") [Types.int32, Types.string])
+
+    expectTermWithType "symmetric triple from lambda"
+      (lambda "v1" $ lambda "e" $ lambda "v2" $
+        wrap testTypeSymmetricTripleName $
+          record testTypeTripleName [
+            field "first" (var "v1"),
+            field "second" (var "e"),
+            field "third" (var "v2")])
+      (tylams ["t0", "t1"] $
+        lambdaTyped "v1" (Types.var "t0") $
+        lambdaTyped "e" (Types.var "t1") $
+        lambdaTyped "v2" (Types.var "t0") $
+        tyapps (wrap testTypeSymmetricTripleName $
+          tyapps (record testTypeTripleName [
+            field "first" (var "v1"),
+            field "second" (var "e"),
+            field "third" (var "v2")]) [Types.var "t0", Types.var "t1", Types.var "t0"])
+          [Types.var "t0", Types.var "t1"])
+      (Types.forAlls ["t0", "t1"] $
+        Types.function (Types.var "t0") $
+        Types.function (Types.var "t1") $
+        Types.function (Types.var "t0") $
+        Types.applys (Types.var "SymmetricTriple") [Types.var "t0", Types.var "t1"])
+
+    expectTermWithType "symmetric triple with nested polymorphic types and foldl"
+      (lets ["sumList">: lambda "lst" $
+              primitive _lists_foldl @@
+              (lambda "acc" $ lambda "x" $ primitive _math_add @@ var "acc" @@ var "x") @@
+              int32 0 @@
+              var "lst"] $
+        lambda "nums1" $ lambda "nums2" $
+          wrap testTypeSymmetricTripleName $
+            record testTypeTripleName [
+              field "first" (var "sumList" @@ var "nums1"),
+              field "second" (list [var "nums1", var "nums2"]),
+              field "third" (var "sumList" @@ var "nums2")])
+      (letsTyped [("sumList",
+                   lambdaTyped "lst" (Types.list Types.int32) $
+                     tyapps (primitive _lists_foldl) [Types.int32, Types.int32] @@
+                     (lambdaTyped "acc" Types.int32 $ lambdaTyped "x" Types.int32 $ primitive _math_add @@ var "acc" @@ var "x") @@
+                     int32 0 @@
+                     var "lst",
+                   Types.mono $ Types.function (Types.list Types.int32) Types.int32)] $
+        lambdaTyped "nums1" (Types.list Types.int32) $
+        lambdaTyped "nums2" (Types.list Types.int32) $
+          tyapps (wrap testTypeSymmetricTripleName $
+            tyapps (record testTypeTripleName [
+              field "first" (var "sumList" @@ var "nums1"),
+              field "second" (list [var "nums1", var "nums2"]),
+              field "third" (var "sumList" @@ var "nums2")])
+              [Types.int32, Types.list (Types.list Types.int32), Types.int32])
+            [Types.int32, Types.list (Types.list Types.int32)])
+      (Types.function (Types.list Types.int32) $
+        Types.function (Types.list Types.int32) $
+        Types.applys (Types.var "SymmetricTriple") [Types.int32, Types.list (Types.list Types.int32)])
+
 checkTypeOfWrapEliminations :: H.SpecWith ()
 checkTypeOfWrapEliminations = H.describe "Wrap eliminations" $ do
   H.describe "Monomorphic unwrapping" $ do
@@ -2161,6 +2446,68 @@ checkTypeOfWrapEliminations = H.describe "Wrap eliminations" $ do
       (lambda "wrapped" $ unwrap testTypeStringAliasName @@ var "wrapped")
       (lambdaTyped "wrapped" (Types.var "StringTypeAlias") $ unwrap testTypeStringAliasName @@ var "wrapped")
       (Types.function (Types.var "StringTypeAlias") Types.string)
+
+  H.describe "Multi-parameter polymorphic unwrappers" $ do
+    expectTermWithType "unwrap symmetric triple to tuple"
+      (lambda "st" $
+        tuple [
+          project testTypeTripleName (Name "first") @@ (unwrap testTypeSymmetricTripleName @@ var "st"),
+          project testTypeTripleName (Name "third") @@ (unwrap testTypeSymmetricTripleName @@ var "st")])
+      (tylams ["t0", "t1"] $
+        lambdaTyped "st" (Types.applys (Types.var "SymmetricTriple") [Types.var "t0", Types.var "t1"]) $
+        tuple [
+          tyapps (project testTypeTripleName (Name "first")) [Types.var "t0", Types.var "t1", Types.var "t0"] @@
+            (tyapps (unwrap testTypeSymmetricTripleName) [Types.var "t0", Types.var "t1"] @@ var "st"),
+          tyapps (project testTypeTripleName (Name "third")) [Types.var "t0", Types.var "t1", Types.var "t0"] @@
+            (tyapps (unwrap testTypeSymmetricTripleName) [Types.var "t0", Types.var "t1"] @@ var "st")])
+      (Types.forAlls ["t0", "t1"] $
+        Types.function
+          (Types.applys (Types.var "SymmetricTriple") [Types.var "t0", Types.var "t1"])
+          (Types.product [Types.var "t0", Types.var "t0"]))
+    expectTermWithType "unwrap and collect edges in set"
+        (lets ["getEdge">: lambda "st" $
+                project testTypeTripleName (Name "second") @@ (unwrap testTypeSymmetricTripleName @@ var "st")] $
+          lambda "triples" $
+            primitive _sets_map @@ var "getEdge" @@ var "triples")
+        (tylams ["t0", "t1"] $
+          letsTyped [("getEdge",
+                     tylams ["t2", "t3"] $
+                     lambdaTyped "st" (Types.applys (Types.var "SymmetricTriple") [Types.var "t2", Types.var "t3"]) $
+                       tyapps (project testTypeTripleName (Name "second")) [Types.var "t2", Types.var "t3", Types.var "t2"] @@
+                       (tyapps (unwrap testTypeSymmetricTripleName) [Types.var "t2", Types.var "t3"] @@ var "st"),
+                     Types.poly ["t2", "t3"] $ Types.function
+                       (Types.applys (Types.var "SymmetricTriple") [Types.var "t2", Types.var "t3"])
+                       (Types.var "t3"))] $
+          lambdaTyped "triples" (Types.set $ Types.applys (Types.var "SymmetricTriple") [Types.var "t0", Types.var "t1"]) $
+            tyapps (primitive _sets_map) [Types.applys (Types.var "SymmetricTriple") [Types.var "t0", Types.var "t1"], Types.var "t1"] @@
+            (tyapps (var "getEdge") [Types.var "t0", Types.var "t1"]) @@
+            var "triples")
+        (Types.forAlls ["t0", "t1"] $
+          Types.function
+            (Types.set $ Types.applys (Types.var "SymmetricTriple") [Types.var "t0", Types.var "t1"])
+            (Types.set $ Types.var "t1"))
+    expectTermWithType "unwrap with maybe to handle optional symmetric triple"
+        (lambda "mst" $
+          primitive _optionals_maybe @@
+          nothing @@
+          (lambda "st" $
+            just $ project testTypeTripleName (Name "second") @@ (unwrap testTypeSymmetricTripleName @@ var "st")) @@
+          var "mst")
+        (tylams ["t0", "t1"] $
+          lambdaTyped "mst" (Types.optional $ Types.applys (Types.var "SymmetricTriple") [Types.var "t0", Types.var "t1"]) $
+          tyapps (primitive _optionals_maybe)
+            [Types.optional (Types.var "t1"),
+             Types.applys (Types.var "SymmetricTriple") [Types.var "t0", Types.var "t1"]] @@
+          tyapp nothing (Types.var "t1") @@
+          (lambdaTyped "st" (Types.applys (Types.var "SymmetricTriple") [Types.var "t0", Types.var "t1"]) $
+            just $
+            (tyapps (project testTypeTripleName (Name "second")) [Types.var "t0", Types.var "t1", Types.var "t0"] @@
+             (tyapps (unwrap testTypeSymmetricTripleName) [Types.var "t0", Types.var "t1"] @@ var "st"))) @@
+          var "mst")
+        (Types.forAlls ["t0", "t1"] $
+          Types.function
+            (Types.optional $ Types.applys (Types.var "SymmetricTriple") [Types.var "t0", Types.var "t1"])
+            (Types.optional $ Types.var "t1"))
 
   H.describe "Chained unwrapping" $ do
     expectTermWithType "unwrap then process"
