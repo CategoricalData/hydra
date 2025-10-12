@@ -632,12 +632,6 @@ inferTypeOfLetNormalizedDef = define "inferTypeOfLetNormalized" $
   "bterms1Subst" <~ Lists.map (ref Substitution.substTypesInTermDef @@ var "s2") (var "bterms1") $
 
   -- Phase 4: Generalize the inferred types into type schemes
---  "tsbins1" <~ (Lists.zip (var "bnames") $
---    Lists.zipWith
---      ("term" ~> "t" ~> ref generalizeDef @@ var "g2" @@ var "term" @@
---        (ref Substitution.substInTypeDef @@ var "s2" @@ var "t"))
---      (var "bterms1Subst")
---      (var "tbins1")) $
   "tsbins1" <~ (Lists.zip (var "bnames") $
     Lists.map ("t" ~> ref generalizeDef @@ var "g2" @@
       (ref Substitution.substInTypeDef @@ var "s2" @@ var "t")) (var "tbins1")) $
