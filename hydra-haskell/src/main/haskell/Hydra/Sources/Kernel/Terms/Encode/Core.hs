@@ -320,7 +320,7 @@ letDef :: TBinding (Let -> Term)
 letDef = define "Let" $
   lambda "l" $ encodedRecord _Let [
     field _Let_bindings $ encodedList (primitive _lists_map @@ ref letBindingDef @@ (Core.letBindings $ var "l")),
-    field _Let_environment $ ref termDef @@ (Core.letEnvironment $ var "l")]
+    field _Let_body $ ref termDef @@ (Core.letBody $ var "l")]
 
 letBindingDef :: TBinding (Binding -> Term)
 letBindingDef = define "Binding" $

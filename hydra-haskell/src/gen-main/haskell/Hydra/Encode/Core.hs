@@ -313,8 +313,8 @@ let_ l = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "bindings"),
       Core.fieldTerm = (Core.TermList (Lists.map binding (Core.letBindings l)))},
     Core.Field {
-      Core.fieldName = (Core.Name "environment"),
-      Core.fieldTerm = (term (Core.letEnvironment l))}]}))
+      Core.fieldName = (Core.Name "body"),
+      Core.fieldTerm = (term (Core.letBody l))}]}))
 
 binding :: (Core.Binding -> Core.Term)
 binding b = (Core.TermRecord (Core.Record {

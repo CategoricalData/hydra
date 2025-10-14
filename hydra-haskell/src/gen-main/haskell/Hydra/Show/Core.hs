@@ -251,7 +251,7 @@ term t =
     Core.TermLet v1 ->  
       let bindings = (Core.letBindings v1)
       in  
-        let env = (Core.letEnvironment v1)
+        let env = (Core.letBody v1)
         in  
           let bindingStrs = (Lists.map binding bindings)
           in (Strings.cat [

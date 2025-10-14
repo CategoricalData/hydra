@@ -231,7 +231,7 @@ untypedTermToJson term =
       Core.FunctionPrimitive v2 -> (Flows.pure (Json.ValueString (Core.unName v2)))) v1)
     Core.TermLet v1 ->  
       let bindings = (Core.letBindings v1) 
-          env = (Core.letEnvironment v1)
+          env = (Core.letBody v1)
           fromBinding = (\b -> Core.Field {
                   Core.fieldName = (Core.bindingName b),
                   Core.fieldTerm = (Core.bindingTerm b)})

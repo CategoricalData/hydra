@@ -95,7 +95,7 @@ checkForUnboundTypeVariables cx term0 =
                                   in  
                                     let newTrace = (Lists.cons (Core.unName (Core.bindingName b)) trace)
                                     in (checkRecursive newVars newTrace (Just b) bterm))
-                        in (Flows.bind (Flows.mapList forBinding (Core.letBindings v1)) (\_ -> recurse (Core.letEnvironment v1)))
+                        in (Flows.bind (Flows.mapList forBinding (Core.letBindings v1)) (\_ -> recurse (Core.letBody v1)))
                       Core.TermTypeApplication v1 -> (Flows.bind (check (Core.typedTermType v1)) (\_ -> recurse (Core.typedTermTerm v1)))
                       Core.TermTypeLambda v1 -> (Flows.bind (check (Core.TypeVariable (Core.typeLambdaParameter v1))) (\_ -> recurse (Core.typeLambdaBody v1)))
                       _ -> dflt) term))
@@ -300,7 +300,7 @@ typeOfLet :: (Typing.TypeContext -> [Core.Type] -> Core.Let -> Compute.Flow t0 C
 typeOfLet tx typeArgs letTerm =  
   let bs = (Core.letBindings letTerm)
   in  
-    let body = (Core.letEnvironment letTerm)
+    let body = (Core.letBody letTerm)
     in  
       let bnames = (Lists.map Core.bindingName bs)
       in  

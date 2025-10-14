@@ -132,7 +132,7 @@ termAccessorUnionCasesBranch :: TTerm Name -> TTerm TermAccessor
 termAccessorUnionCasesBranch = variant _TermAccessor _TermAccessor_unionCasesBranch
 
 termAccessorLetEnvironment :: TTerm TermAccessor
-termAccessorLetEnvironment = unitVariant _TermAccessor _TermAccessor_letEnvironment
+termAccessorLetEnvironment = unitVariant _TermAccessor _TermAccessor_letBody
 
 termAccessorLetBinding :: TTerm Name -> TTerm TermAccessor
 termAccessorLetBinding = variant _TermAccessor _TermAccessor_letBinding

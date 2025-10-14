@@ -240,9 +240,9 @@ lambdaDomain :: TTerm Lambda -> TTerm (Maybe Type)
 lambdaDomain l = Phantoms.project _Lambda _Lambda_domain @@ l
 
 let_ :: TTerm [Binding] -> TTerm Term -> TTerm Let
-let_ bindings environment = Phantoms.record _Let [
+let_ bindings body = Phantoms.record _Let [
   _Let_bindings>>: bindings,
-  _Let_environment>>: environment]
+  _Let_body>>: body]
 
 binding :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm Binding
 binding name term mtype = Phantoms.record _Binding [
@@ -262,8 +262,8 @@ bindingTerm lb = Phantoms.project _Binding _Binding_term @@ lb
 bindingType :: TTerm Binding -> TTerm (Y.Maybe TypeScheme)
 bindingType lb = Phantoms.project _Binding _Binding_type @@ lb
 
-letEnvironment :: TTerm Let -> TTerm Term
-letEnvironment l = Phantoms.project _Let _Let_environment @@ l
+letBody :: TTerm Let -> TTerm Term
+letBody l = Phantoms.project _Let _Let_body @@ l
 
 literalBinary :: TTerm String -> TTerm Literal
 literalBinary = variant _Literal _Literal_binary

@@ -53,7 +53,7 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
           "lambdaBody">: unit,
           "unionCasesDefault">: unit,
           "unionCasesBranch">: core "Name",
-          "letEnvironment">: unit,
+          "letBody">: unit,
           "letBinding">: core "Name",
           "listElement">: int32,
           "mapKey">: int32,
