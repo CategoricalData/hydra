@@ -238,7 +238,7 @@ term t =
               Core.TermApplication v1 -> (gatherTerms (Lists.cons rhs prev) v1)
               _ -> (Lists.cons lhs (Lists.cons rhs prev))) lhs))
   in ((\x -> case x of
-    Core.TermAnnotated v1 -> (term (Core.annotatedTermSubject v1))
+    Core.TermAnnotated v1 -> (term (Core.annotatedTermBody v1))
     Core.TermApplication v1 ->  
       let terms = (gatherTerms [] v1)
       in  
@@ -336,7 +336,7 @@ term t =
     Core.TermWrap v1 ->  
       let tname = (Core.unName (Core.wrappedTermTypeName v1))
       in  
-        let term1 = (Core.wrappedTermObject v1)
+        let term1 = (Core.wrappedTermBody v1)
         in (Strings.cat [
           "wrap(",
           tname,
@@ -381,7 +381,7 @@ type_ typ =
                     in (gatherFunctionTypes (Lists.cons dom prev) cod)
                 _ -> (Lists.reverse (Lists.cons t prev))) t)
         in ((\x -> case x of
-          Core.TypeAnnotated v1 -> (type_ (Core.annotatedTypeSubject v1))
+          Core.TypeAnnotated v1 -> (type_ (Core.annotatedTypeBody v1))
           Core.TypeApplication v1 ->  
             let types = (gatherTypes [] v1)
             in  
@@ -444,7 +444,7 @@ type_ typ =
           Core.TypeWrap v1 ->  
             let tname = (Core.unName (Core.wrappedTypeTypeName v1))
             in  
-              let typ1 = (Core.wrappedTypeObject v1)
+              let typ1 = (Core.wrappedTypeBody v1)
               in (Strings.cat [
                 "wrap[",
                 tname,

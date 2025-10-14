@@ -345,7 +345,7 @@ untypedTermToJsonDef = define "untypedTermToJson" $
         string "unsupported term variant: ",
         ref ShowCore.termDef @@ var "term"])) [
       _Term_annotated>>: lambda "at" $ lets [
-        "term1">: Core.annotatedTermSubject $ var "at",
+        "term1">: Core.annotatedTermBody $ var "at",
         "ann">: Core.annotatedTermAnnotation $ var "at",
         "encodePair">: lambda "kv" $ lets [
           "k">: Core.unName $ first $ var "kv",
@@ -429,7 +429,7 @@ untypedTermToJsonDef = define "untypedTermToJson" $
               (lambda "keyval" $ list [var "keyval"])
               (var "mkeyval")),
       _Term_variable>>: lambda "v" $ produce $ Json.valueString $ Core.unName $ var "v",
-      _Term_wrap>>: lambda "wt" $ ref untypedTermToJsonDef @@ (Core.wrappedTermObject $ var "wt")]
+      _Term_wrap>>: lambda "wt" $ ref untypedTermToJsonDef @@ (Core.wrappedTermBody $ var "wt")]
 
 readStringStubDef :: TBinding (String -> Term)
 readStringStubDef = define "readStringStub" $

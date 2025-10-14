@@ -118,7 +118,7 @@ normalizeTermAnnotations term =
   let anns = (termAnnotationInternal term) 
       stripped = (Rewriting.deannotateTerm term)
   in (Logic.ifElse (Maps.null anns) stripped (Core.TermAnnotated (Core.AnnotatedTerm {
-    Core.annotatedTermSubject = stripped,
+    Core.annotatedTermBody = stripped,
     Core.annotatedTermAnnotation = anns})))
 
 -- | Normalize type annotations
@@ -127,7 +127,7 @@ normalizeTypeAnnotations typ =
   let anns = (typeAnnotationInternal typ) 
       stripped = (Rewriting.deannotateType typ)
   in (Logic.ifElse (Maps.null anns) stripped (Core.TypeAnnotated (Core.AnnotatedType {
-    Core.annotatedTypeSubject = stripped,
+    Core.annotatedTypeBody = stripped,
     Core.annotatedTypeAnnotation = anns})))
 
 putAttr :: (Core.Name -> Core.Term -> Compute.Flow t0 ())
@@ -158,7 +158,7 @@ setTermAnnotation key val term =
   let term_ = (Rewriting.deannotateTerm term) 
       anns = (setAnnotation key val (termAnnotationInternal term))
   in (Logic.ifElse (Maps.null anns) term_ (Core.TermAnnotated (Core.AnnotatedTerm {
-    Core.annotatedTermSubject = term_,
+    Core.annotatedTermBody = term_,
     Core.annotatedTermAnnotation = anns})))
 
 -- | Set term description
@@ -175,7 +175,7 @@ setTypeAnnotation key val typ =
   let typ_ = (Rewriting.deannotateType typ) 
       anns = (setAnnotation key val (typeAnnotationInternal typ))
   in (Logic.ifElse (Maps.null anns) typ_ (Core.TypeAnnotated (Core.AnnotatedType {
-    Core.annotatedTypeSubject = typ_,
+    Core.annotatedTypeBody = typ_,
     Core.annotatedTypeAnnotation = anns})))
 
 -- | Set type classes on term
@@ -205,7 +205,7 @@ setTypeDescription d = (setTypeAnnotation Constants.key_description (Optionals.m
 
 -- | Get internal term annotations
 termAnnotationInternal :: (Core.Term -> M.Map Core.Name Core.Term)
-termAnnotationInternal = (aggregateAnnotations getAnn Core.annotatedTermSubject Core.annotatedTermAnnotation) 
+termAnnotationInternal = (aggregateAnnotations getAnn Core.annotatedTermBody Core.annotatedTermAnnotation) 
   where 
     getAnn = (\t -> (\x -> case x of
       Core.TermAnnotated v1 -> (Just v1)
@@ -213,7 +213,7 @@ termAnnotationInternal = (aggregateAnnotations getAnn Core.annotatedTermSubject 
 
 -- | Get internal type annotations
 typeAnnotationInternal :: (Core.Type -> M.Map Core.Name Core.Term)
-typeAnnotationInternal = (aggregateAnnotations getAnn Core.annotatedTypeSubject Core.annotatedTypeAnnotation) 
+typeAnnotationInternal = (aggregateAnnotations getAnn Core.annotatedTypeBody Core.annotatedTypeAnnotation) 
   where 
     getAnn = (\t -> (\x -> case x of
       Core.TypeAnnotated v1 -> (Just v1)
@@ -224,7 +224,7 @@ typeElement :: (Core.Name -> Core.Type -> Core.Binding)
 typeElement name typ =  
   let schemaTerm = (Core.TermVariable (Core.Name "hydra.core.Type")) 
       dataTerm = (normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
-              Core.annotatedTermSubject = (Core__.type_ typ),
+              Core.annotatedTermBody = (Core__.type_ typ),
               Core.annotatedTermAnnotation = (Maps.fromList [
                 (Constants.key_type, schemaTerm)])})))
   in Core.Binding {

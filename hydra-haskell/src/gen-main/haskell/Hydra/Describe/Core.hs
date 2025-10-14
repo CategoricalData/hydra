@@ -38,7 +38,7 @@ type_ :: (Core.Type -> String)
 type_ x = case x of
   Core.TypeAnnotated v1 -> (Strings.cat [
     "annotated ",
-    (type_ (Core.annotatedTypeSubject v1))])
+    (type_ (Core.annotatedTypeBody v1))])
   Core.TypeApplication v1 -> (Strings.cat [
     type_ (Core.applicationTypeFunction v1),
     " applied to ",
@@ -76,4 +76,4 @@ type_ x = case x of
   Core.TypeVariable _ -> "instance of a named type"
   Core.TypeWrap v1 -> (Strings.cat [
     "wrapper for ",
-    (type_ (Core.wrappedTypeObject v1))])
+    (type_ (Core.wrappedTypeBody v1))])

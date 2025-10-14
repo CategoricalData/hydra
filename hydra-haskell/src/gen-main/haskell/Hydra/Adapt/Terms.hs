@@ -438,16 +438,16 @@ passWrapped :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter
 passWrapped t = ((\x -> case x of
   Core.TypeWrap v1 ->  
     let tname = (Core.wrappedTypeTypeName v1) 
-        ot = (Core.wrappedTypeObject v1)
+        ot = (Core.wrappedTypeBody v1)
         mapTerm = (\coder -> \dir -> \term -> Flows.bind (withGraphContext (Core__.wrap tname term)) (\unwrapped -> Flows.bind (Utils.encodeDecode dir coder unwrapped) (\newTerm -> Flows.pure (Core.TermWrap (Core.WrappedTerm {
                 Core.wrappedTermTypeName = tname,
-                Core.wrappedTermObject = newTerm})))))
+                Core.wrappedTermBody = newTerm})))))
     in (Flows.bind (termAdapter ot) (\adapter -> Flows.pure (Compute.Adapter {
       Compute.adapterIsLossy = (Compute.adapterIsLossy adapter),
       Compute.adapterSource = t,
       Compute.adapterTarget = (Core.TypeWrap (Core.WrappedType {
         Core.wrappedTypeTypeName = tname,
-        Core.wrappedTypeObject = (Compute.adapterTarget adapter)})),
+        Core.wrappedTypeBody = (Compute.adapterTarget adapter)})),
       Compute.adapterCoder = (Utils.bidirectional (mapTerm (Compute.adapterCoder adapter)))})))) t)
 
 -- | Convert set types to list types
@@ -533,11 +533,11 @@ termAdapter typ =
                 wrapToUnwrapped]) (Variants.typeVariant t))
       alts = (\cx -> \t -> Flows.mapList (\c -> c t) (Logic.ifElse (supportedAtTopLevel cx t) (pass t) (trySubstitution t)))
   in ((\x -> case x of
-    Core.TypeAnnotated v1 -> (Flows.bind (termAdapter (Core.annotatedTypeSubject v1)) (\ad -> Flows.pure (Compute.Adapter {
+    Core.TypeAnnotated v1 -> (Flows.bind (termAdapter (Core.annotatedTypeBody v1)) (\ad -> Flows.pure (Compute.Adapter {
       Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
       Compute.adapterSource = (Compute.adapterSource ad),
       Compute.adapterTarget = (Core.TypeAnnotated (Core.AnnotatedType {
-        Core.annotatedTypeSubject = (Compute.adapterTarget ad),
+        Core.annotatedTypeBody = (Compute.adapterTarget ad),
         Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)})),
       Compute.adapterCoder = (Compute.adapterCoder ad)})))
     _ -> (Monads.withTrace (Strings.cat2 "adapter for " (Core_.type_ typ)) ((\x -> case x of
@@ -622,11 +622,11 @@ wrapToUnwrapped :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Ada
 wrapToUnwrapped t = ((\x -> case x of
   Core.TypeWrap v1 ->  
     let tname = (Core.wrappedTypeTypeName v1) 
-        typ = (Core.wrappedTypeObject v1)
+        typ = (Core.wrappedTypeBody v1)
         encode = (\ad -> \term -> Flows.bind (withGraphContext (Core__.wrap tname term)) (\unwrapped -> Compute.coderEncode (Compute.adapterCoder ad) unwrapped))
         decode = (\ad -> \term -> Flows.bind (Compute.coderDecode (Compute.adapterCoder ad) term) (\decoded -> Flows.pure (Core.TermWrap (Core.WrappedTerm {
                 Core.wrappedTermTypeName = tname,
-                Core.wrappedTermObject = decoded}))))
+                Core.wrappedTermBody = decoded}))))
     in (Flows.bind (termAdapter typ) (\ad -> Flows.pure (Compute.Adapter {
       Compute.adapterIsLossy = False,
       Compute.adapterSource = t,

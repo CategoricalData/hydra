@@ -90,7 +90,7 @@ dereferenceSchemaTypeDef = define "dereferenceSchemaType" $
   "name" ~> "types" ~>
   "forType" <~ ("t" ~> cases _Type (var "t")
     (Just $ just $ Core.typeScheme (list []) (var "t")) [
-    _Type_annotated>>: "at" ~> var "forType" @@ (Core.annotatedTypeSubject $ var "at"),
+    _Type_annotated>>: "at" ~> var "forType" @@ (Core.annotatedTypeBody $ var "at"),
     _Type_forall>>: "ft" ~> Optionals.map
       ("ts" ~> Core.typeScheme
         -- Note: no alpha-renaming of type variables

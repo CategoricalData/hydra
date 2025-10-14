@@ -216,7 +216,7 @@ typeOf tx typeArgs term = (Monads.withTrace (Strings.cat [
     (Mantle.termVariant (Variants.termVariant term))]))) term))
 
 typeOfAnnotatedTerm :: (Typing.TypeContext -> [Core.Type] -> Core.AnnotatedTerm -> Compute.Flow t0 Core.Type)
-typeOfAnnotatedTerm tx typeArgs at = (Flows.bind (typeOf tx typeArgs (Core.annotatedTermSubject at)) (\t -> applyForallTypes tx typeArgs t))
+typeOfAnnotatedTerm tx typeArgs at = (Flows.bind (typeOf tx typeArgs (Core.annotatedTermBody at)) (\t -> applyForallTypes tx typeArgs t))
 
 typeOfApplication :: (Typing.TypeContext -> [Core.Type] -> Core.Application -> Compute.Flow t0 Core.Type)
 typeOfApplication tx typeArgs app = (Flows.bind ( 
@@ -449,5 +449,5 @@ typeOfWrappedTerm :: (Typing.TypeContext -> [Core.Type] -> Core.WrappedTerm -> C
 typeOfWrappedTerm tx typeArgs wt =  
   let tname = (Core.wrappedTermTypeName wt)
   in  
-    let innerTerm = (Core.wrappedTermObject wt)
+    let innerTerm = (Core.wrappedTermBody wt)
     in (Flows.bind (typeOf tx [] innerTerm) (\innerType -> Flows.bind (checkTypeVariables tx innerType) (\_ -> Flows.pure (Schemas.nominalApplication tname typeArgs))))

@@ -377,7 +377,7 @@ requireRowTypeDef = define "requireRowType" $
   doc "Require a name to resolve to a row type" $
   lambdas ["label", "getter", "name"] $ lets [
     "rawType">: lambda "t" $ cases _Type (var "t") (Just $ var "t") [
-      _Type_annotated>>: lambda "at" $ var "rawType" @@ Core.annotatedTypeSubject (var "at"),
+      _Type_annotated>>: lambda "at" $ var "rawType" @@ Core.annotatedTypeBody (var "at"),
       _Type_forall>>: lambda "ft" $ var "rawType" @@ Core.forallTypeBody (var "ft")]]
     $ Flows.bind (ref requireTypeDef @@ var "name") $
       lambda "t" $

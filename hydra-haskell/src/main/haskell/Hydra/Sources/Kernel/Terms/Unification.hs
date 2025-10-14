@@ -127,7 +127,7 @@ joinTypesDef = define "joinTypes" $
         _Type_wrap>>: lambda "r" $ Logic.ifElse
           (Core.equalName_ (Core.wrappedTypeTypeName $ var "l") (Core.wrappedTypeTypeName $ var "r"))
           (Flows.pure $ list [
-            var "joinOne" @@ (Core.wrappedTypeObject $ var "l") @@ (Core.wrappedTypeObject $ var "r")])
+            var "joinOne" @@ (Core.wrappedTypeBody $ var "l") @@ (Core.wrappedTypeBody $ var "r")])
           (var "cannotUnify")]]
 
 unifyTypeConstraintsDef :: TBinding (M.Map Name TypeScheme -> [TypeConstraint] -> Flow s TypeSubst)

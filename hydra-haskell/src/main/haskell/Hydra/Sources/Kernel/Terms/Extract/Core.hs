@@ -650,7 +650,7 @@ wrapDef = define "wrap" $
     lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ ("wrap(" ++ (Core.unName $ var "expected") ++ ")") @@ (ref ShowCore.termDef @@ var "term")) [
       _Term_wrap>>: lambda "wrappedTerm" $
         Logic.ifElse (Core.equalName_ (Core.wrappedTermTypeName $ var "wrappedTerm") (var "expected"))
-          (Flows.pure $ Core.wrappedTermObject $ var "wrappedTerm")
+          (Flows.pure $ Core.wrappedTermBody $ var "wrappedTerm")
           (ref Monads.unexpectedDef @@ ("wrapper of type " ++ (Core.unName $ var "expected")) @@ (Core.unName $ Core.wrappedTermTypeName $ var "wrappedTerm"))]
 
 -- TODO: nonstandard; move me
@@ -662,5 +662,5 @@ wrappedTypeDef = define "wrappedType" $
     $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "wrapped type" @@ (ref ShowCore.typeDef @@ var "typ")) [
       _Type_wrap>>: lambda "wrappedType" $
         Logic.ifElse (Core.equalName_ (Core.wrappedTypeTypeName $ var "wrappedType") (var "ename"))
-          (Flows.pure $ Core.wrappedTypeObject $ var "wrappedType")
+          (Flows.pure $ Core.wrappedTypeBody $ var "wrappedType")
           (ref Monads.unexpectedDef @@ ("wrapped type " ++ (Core.unName $ var "ename")) @@ ("wrapped type " ++ (Core.unName $ Core.wrappedTypeTypeName $ var "wrappedType")))]

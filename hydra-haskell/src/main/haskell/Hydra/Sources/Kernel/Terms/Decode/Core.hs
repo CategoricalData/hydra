@@ -220,7 +220,7 @@ typeDef = define "type" $
     _Term_annotated>>: lambda "annotatedTerm" $
       Flows.map
         (lambda "t" $ Core.typeAnnotated $ Core.annotatedType (var "t") (Core.annotatedTermAnnotation $ var "annotatedTerm"))
-        (ref typeDef @@ (Core.annotatedTermSubject $ var "annotatedTerm"))]
+        (ref typeDef @@ (Core.annotatedTermBody $ var "annotatedTerm"))]
 
 typeSchemeDef :: TBinding (Term -> Flow Graph TypeScheme)
 typeSchemeDef = define "typeScheme" $
@@ -234,5 +234,5 @@ wrappedTypeDef = define "wrappedType" $
   lambda "term" $ binds [
     "fields">: ref ExtractCore.recordDef @@ Core.nameLift _WrappedType @@ var "term",
     "name">: ref ExtractCore.fieldDef @@ Core.nameLift _WrappedType_typeName @@ ref nameDef @@ var "fields",
-    "obj">: ref ExtractCore.fieldDef @@ Core.nameLift _WrappedType_object @@ ref typeDef @@ var "fields"] $
+    "obj">: ref ExtractCore.fieldDef @@ Core.nameLift _WrappedType_body @@ ref typeDef @@ var "fields"] $
     produce $ Core.wrappedType (var "name") (var "obj")

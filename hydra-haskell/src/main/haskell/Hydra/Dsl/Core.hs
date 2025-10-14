@@ -19,22 +19,22 @@ import Prelude hiding (map, product, sum)
 
 annotatedTerm :: TTerm Term -> TTerm (M.Map Name Term) -> TTerm AnnotatedTerm
 annotatedTerm subject annotation = Phantoms.record _AnnotatedTerm [
-  _AnnotatedTerm_subject>>: subject,
+  _AnnotatedTerm_body>>: subject,
   _AnnotatedTerm_annotation>>: annotation]
 
-annotatedTermSubject :: TTerm AnnotatedTerm -> TTerm Term
-annotatedTermSubject at = Phantoms.project _AnnotatedTerm _AnnotatedTerm_subject @@ at
+annotatedTermBody :: TTerm AnnotatedTerm -> TTerm Term
+annotatedTermBody at = Phantoms.project _AnnotatedTerm _AnnotatedTerm_body @@ at
 
 annotatedTermAnnotation :: TTerm AnnotatedTerm -> TTerm (M.Map Name Term)
 annotatedTermAnnotation at = Phantoms.project _AnnotatedTerm _AnnotatedTerm_annotation @@ at
 
 annotatedType :: TTerm Type -> TTerm (M.Map Name Term) -> TTerm AnnotatedType
 annotatedType subject annotation = Phantoms.record _AnnotatedType [
-  _AnnotatedType_subject>>: subject,
+  _AnnotatedType_body>>: subject,
   _AnnotatedType_annotation>>: annotation]
 
-annotatedTypeSubject :: TTerm AnnotatedType -> TTerm Type
-annotatedTypeSubject at = Phantoms.project _AnnotatedType _AnnotatedType_subject @@ at
+annotatedTypeBody :: TTerm AnnotatedType -> TTerm Type
+annotatedTypeBody at = Phantoms.project _AnnotatedType _AnnotatedType_body @@ at
 
 annotatedTypeAnnotation :: TTerm AnnotatedType -> TTerm (M.Map Name Term)
 annotatedTypeAnnotation at = Phantoms.project _AnnotatedType _AnnotatedType_annotation @@ at
@@ -519,24 +519,24 @@ unNamespace ns = unwrap _Namespace @@ ns
 wrappedTerm :: TTerm Name -> TTerm Term -> TTerm WrappedTerm
 wrappedTerm typeName object = Phantoms.record _WrappedTerm [
   _WrappedTerm_typeName>>: typeName,
-  _WrappedTerm_object>>: object]
+  _WrappedTerm_body>>: object]
 
 wrappedTermTypeName :: TTerm WrappedTerm -> TTerm Name
 wrappedTermTypeName wt = Phantoms.project _WrappedTerm _WrappedTerm_typeName @@ wt
 
-wrappedTermObject :: TTerm WrappedTerm -> TTerm Term
-wrappedTermObject wt = Phantoms.project _WrappedTerm _WrappedTerm_object @@ wt
+wrappedTermBody :: TTerm WrappedTerm -> TTerm Term
+wrappedTermBody wt = Phantoms.project _WrappedTerm _WrappedTerm_body @@ wt
 
 wrappedType :: TTerm Name -> TTerm Type -> TTerm WrappedType
 wrappedType typeName object = Phantoms.record _WrappedType [
   _WrappedType_typeName>>: typeName,
-  _WrappedType_object>>: object]
+  _WrappedType_body>>: object]
 
 wrappedTypeTypeName :: TTerm WrappedType -> TTerm Name
 wrappedTypeTypeName wt = Phantoms.project _WrappedType _WrappedType_typeName @@ wt
 
-wrappedTypeObject :: TTerm WrappedType -> TTerm Type
-wrappedTypeObject wt = Phantoms.project _WrappedType _WrappedType_object @@ wt
+wrappedTypeBody :: TTerm WrappedType -> TTerm Type
+wrappedTypeBody wt = Phantoms.project _WrappedType _WrappedType_body @@ wt
 
 ----------------------------------------
 -- Non-schema helpers

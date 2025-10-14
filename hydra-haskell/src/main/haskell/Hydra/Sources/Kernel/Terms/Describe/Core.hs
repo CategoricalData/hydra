@@ -86,7 +86,7 @@ typeDef = define "type" $
   doc "Display a type as a string" $
   match _Type Nothing [
     _Type_annotated>>: lambda "a" $ string "annotated " ++ (ref typeDef @@
-      (project _AnnotatedType _AnnotatedType_subject @@ var "a")),
+      (project _AnnotatedType _AnnotatedType_body @@ var "a")),
     _Type_application>>: lambda "at" $ Strings.cat $ list [
       ref typeDef @@ (Core.applicationTypeFunction $ var "at"),
       string " applied to ",
@@ -111,4 +111,4 @@ typeDef = define "type" $
     _Type_unit>>: constant $ string "unit",
     _Type_variable>>: constant $ string "instance of a named type",
     _Type_wrap>>: lambda "n" $ string "wrapper for "
-      ++ (ref typeDef @@ (project _WrappedType _WrappedType_object @@ var "n"))]
+      ++ (ref typeDef @@ (project _WrappedType _WrappedType_body @@ var "n"))]

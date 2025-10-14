@@ -398,7 +398,7 @@ variant = injection
 -- | Extract the wrapped value from a wrapped term
 wrap :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 wrap expected term0 = (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> (\x -> case x of
-  Core.TermWrap v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTermTypeName v1)) (Core.unName expected)) (Flows.pure (Core.wrappedTermObject v1)) (Monads.unexpected (Strings.cat [
+  Core.TermWrap v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTermTypeName v1)) (Core.unName expected)) (Flows.pure (Core.wrappedTermBody v1)) (Monads.unexpected (Strings.cat [
     "wrapper of type ",
     (Core.unName expected)]) (Core.unName (Core.wrappedTermTypeName v1))))
   _ -> (Monads.unexpected (Strings.cat [
@@ -411,7 +411,7 @@ wrappedType :: (Core.Name -> Core.Type -> Compute.Flow t0 Core.Type)
 wrappedType ename typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeWrap v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.wrappedTypeObject v1)) (Monads.unexpected (Strings.cat [
+    Core.TypeWrap v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.wrappedTypeBody v1)) (Monads.unexpected (Strings.cat [
       "wrapped type ",
       (Core.unName ename)]) (Strings.cat [
       "wrapped type ",

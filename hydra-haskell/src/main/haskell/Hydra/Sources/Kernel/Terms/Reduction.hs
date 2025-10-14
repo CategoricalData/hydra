@@ -88,7 +88,7 @@ betaReduceTypeDef = define "betaReduceType" $
     cases _Type (var "lhs") Nothing [
       _Type_annotated>>: "at" ~>
         "a" <<~ var "reduceApp" @@ (Core.applicationType
-          (Core.annotatedTypeSubject $ var "at")
+          (Core.annotatedTypeBody $ var "at")
           (var "rhs")) $
         Flows.pure $ Core.typeAnnotated $ Core.annotatedType (var "a") (Core.annotatedTypeAnnotation $ var "at"),
       _Type_forall>>: "ft" ~>
@@ -187,7 +187,7 @@ etaExpansionArityDef = define "etaExpansionArity" $
   "graph" ~> "term" ~> cases _Term (var "term")
     (Just $ int32 0) [
     _Term_annotated>>: "at" ~>
-      ref etaExpansionArityDef @@ var "graph" @@ Core.annotatedTermSubject (var "at"),
+      ref etaExpansionArityDef @@ var "graph" @@ Core.annotatedTermBody (var "at"),
     _Term_application>>: "app" ~> Math.sub
       (ref etaExpansionArityDef @@ var "graph" @@ Core.applicationFunction (var "app"))
       (int32 1),
@@ -219,7 +219,7 @@ etaReduceTermDef = define "etaReduceTerm" $
     cases _Term (ref etaReduceTermDef @@ var "body")
       (Just $ var "noChange") [
       _Term_annotated>>: "at" ~>
-        var "reduceLambda" @@ (Core.lambda (var "v") (var "d") (Core.annotatedTermSubject $ var "at")),
+        var "reduceLambda" @@ (Core.lambda (var "v") (var "d") (Core.annotatedTermBody $ var "at")),
       _Term_application>>: "app" ~>
         "lhs" <~ Core.applicationFunction (var "app") $
         "rhs" <~ Core.applicationArgument (var "app") $
@@ -227,7 +227,7 @@ etaReduceTermDef = define "etaReduceTerm" $
           (Just $ var "noChange") [
           _Term_annotated>>: "at" ~>
             var "reduceLambda" @@ (Core.lambda (var "v") (var "d") $
-              Core.termApplication $ Core.application (var "lhs") (Core.annotatedTermSubject $ var "at")),
+              Core.termApplication $ Core.application (var "lhs") (Core.annotatedTermBody $ var "at")),
           _Term_variable>>: "v1" ~>
             Logic.ifElse
               (Logic.and
@@ -239,7 +239,7 @@ etaReduceTermDef = define "etaReduceTerm" $
     (Just $ var "noChange") [
     _Term_annotated>>: "at" ~>
       Core.termAnnotated $ Core.annotatedTerm
-        (ref etaReduceTermDef @@ (Core.annotatedTermSubject $ var "at"))
+        (ref etaReduceTermDef @@ (Core.annotatedTermBody $ var "at"))
         (Core.annotatedTermAnnotation $ var "at"),
     _Term_function>>: "f" ~>
       cases _Function (var "f")

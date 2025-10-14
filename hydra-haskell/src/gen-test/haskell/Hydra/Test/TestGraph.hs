@@ -57,7 +57,7 @@ testTypePolymorphicWrapper = (Core.TypeForall (Core.ForallType {
   Core.forallTypeParameter = (Core.Name "a"),
   Core.forallTypeBody = (Core.TypeWrap (Core.WrappedType {
     Core.wrappedTypeTypeName = testTypePolymorphicWrapperName,
-    Core.wrappedTypeObject = (Core.TypeList (Core.TypeVariable (Core.Name "a")))}))}))
+    Core.wrappedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "a")))}))}))
 
 testTypePolymorphicWrapperName :: Core.Name
 testTypePolymorphicWrapperName = (Core.Name "PolymorphicWrapper")
@@ -65,7 +65,7 @@ testTypePolymorphicWrapperName = (Core.Name "PolymorphicWrapper")
 testTypeStringAlias :: Core.Type
 testTypeStringAlias = (Core.TypeWrap (Core.WrappedType {
   Core.wrappedTypeTypeName = testTypeStringAliasName,
-  Core.wrappedTypeObject = (Core.TypeLiteral Core.LiteralTypeString)}))
+  Core.wrappedTypeBody = (Core.TypeLiteral Core.LiteralTypeString)}))
 
 testTypeStringAliasName :: Core.Name
 testTypeStringAliasName = (Core.Name "StringTypeAlias")
@@ -309,7 +309,7 @@ testTypeSymmetricTriple = (Core.TypeForall (Core.ForallType {
     Core.forallTypeParameter = (Core.Name "e"),
     Core.forallTypeBody = (Core.TypeWrap (Core.WrappedType {
       Core.wrappedTypeTypeName = testTypeSymmetricTripleName,
-      Core.wrappedTypeObject = (Core.TypeApplication (Core.ApplicationType {
+      Core.wrappedTypeBody = (Core.TypeApplication (Core.ApplicationType {
         Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
           Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
             Core.applicationTypeFunction = (Core.TypeVariable testTypeTripleName),
@@ -410,7 +410,7 @@ testTypeFlow = (Core.TypeForall (Core.ForallType {
     Core.forallTypeParameter = (Core.Name "v"),
     Core.forallTypeBody = (Core.TypeWrap (Core.WrappedType {
       Core.wrappedTypeTypeName = testTypeFlowName,
-      Core.wrappedTypeObject = (Core.TypeFunction (Core.FunctionType {
+      Core.wrappedTypeBody = (Core.TypeFunction (Core.FunctionType {
         Core.functionTypeDomain = (Core.TypeVariable (Core.Name "s")),
         Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.compute.Trace")),

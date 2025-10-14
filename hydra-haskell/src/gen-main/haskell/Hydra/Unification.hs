@@ -88,7 +88,7 @@ joinTypes left right comment =
       _ -> cannotUnify) sright)
     Core.TypeWrap v1 -> ((\x -> case x of
       Core.TypeWrap v2 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTypeTypeName v1)) (Core.unName (Core.wrappedTypeTypeName v2))) (Flows.pure [
-        joinOne (Core.wrappedTypeObject v1) (Core.wrappedTypeObject v2)]) cannotUnify)
+        joinOne (Core.wrappedTypeBody v1) (Core.wrappedTypeBody v2)]) cannotUnify)
       _ -> cannotUnify) sright)
     _ -> cannotUnify) sleft)
 

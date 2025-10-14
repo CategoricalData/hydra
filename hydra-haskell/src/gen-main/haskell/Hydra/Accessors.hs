@@ -60,7 +60,7 @@ _AccessorPath = (Core.Name "hydra.accessors.AccessorPath")
 
 -- | A function which maps from a term to a particular immediate subterm
 data TermAccessor = 
-  TermAccessorAnnotatedSubject  |
+  TermAccessorAnnotatedBody  |
   TermAccessorApplicationFunction  |
   TermAccessorApplicationArgument  |
   TermAccessorLambdaBody  |
@@ -84,7 +84,7 @@ data TermAccessor =
 
 _TermAccessor = (Core.Name "hydra.accessors.TermAccessor")
 
-_TermAccessor_annotatedSubject = (Core.Name "annotatedSubject")
+_TermAccessor_annotatedBody = (Core.Name "annotatedBody")
 
 _TermAccessor_applicationFunction = (Core.Name "applicationFunction")
 

@@ -216,7 +216,7 @@ schemaGraphToDefinitions constraints graph nameLists =
 termAlternatives :: (Core.Term -> Compute.Flow Graph.Graph [Core.Term])
 termAlternatives term = ((\x -> case x of
   Core.TermAnnotated v1 ->  
-    let term2 = (Core.annotatedTermSubject v1)
+    let term2 = (Core.annotatedTermBody v1)
     in (Flows.pure [
       term2])
   Core.TermOptional v1 -> (Flows.pure [
@@ -245,7 +245,7 @@ termAlternatives term = ((\x -> case x of
   Core.TermUnit -> (Flows.pure [
     Core.TermLiteral (Core.LiteralBoolean True)])
   Core.TermWrap v1 ->  
-    let term2 = (Core.wrappedTermObject v1)
+    let term2 = (Core.wrappedTermBody v1)
     in (Flows.pure [
       term2])
   _ -> (Flows.pure [])) term)
@@ -254,7 +254,7 @@ termAlternatives term = ((\x -> case x of
 typeAlternatives :: (Core.Type -> [Core.Type])
 typeAlternatives type_ = ((\x -> case x of
   Core.TypeAnnotated v1 ->  
-    let type2 = (Core.annotatedTypeSubject v1)
+    let type2 = (Core.annotatedTypeBody v1)
     in [
       type2]
   Core.TypeOptional v1 -> [
