@@ -178,6 +178,9 @@ graphAsTypes sg =
     let toPair = (\el -> Flows.bind (Core_.type_ (Core.bindingTerm el)) (\typ -> Flows.pure (Core.bindingName el, typ)))
     in (Flows.bind (Flows.mapList toPair els) (\pairs -> Flows.pure (Maps.fromList pairs)))
 
+instantiateType :: (Core.Type -> Compute.Flow t0 Core.Type)
+instantiateType typ = (Flows.bind (instantiateTypeScheme (typeToTypeScheme typ)) (\ts -> Flows.pure (typeSchemeToFType ts)))
+
 instantiateTypeScheme :: (Core.TypeScheme -> Compute.Flow t0 Core.TypeScheme)
 instantiateTypeScheme scheme =  
   let oldVars = (Core.typeSchemeVariables scheme)
@@ -334,6 +337,16 @@ typeSchemeToFType ts =
     in (Lists.foldl (\t -> \v -> Core.TypeForall (Core.ForallType {
       Core.forallTypeParameter = v,
       Core.forallTypeBody = t})) body (Lists.reverse vars))
+
+-- | Convert a (System F -style) type to a type scheme
+typeToTypeScheme :: (Core.Type -> Core.TypeScheme)
+typeToTypeScheme t0 =  
+  let helper = (\vars -> \t -> (\x -> case x of
+          Core.TypeForall v1 -> (helper (Lists.cons (Core.forallTypeParameter v1) vars) (Core.forallTypeBody v1))
+          _ -> Core.TypeScheme {
+            Core.typeSchemeVariables = (Lists.reverse vars),
+            Core.typeSchemeType = t}) (Rewriting.deannotateType t))
+  in (helper [] t0)
 
 -- | Encode a map of named types to a map of elements
 typesToElements :: (M.Map Core.Name Core.Type -> M.Map Core.Name Core.Binding)
