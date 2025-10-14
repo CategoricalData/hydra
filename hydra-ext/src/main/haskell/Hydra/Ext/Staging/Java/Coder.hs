@@ -141,7 +141,7 @@ constructElementsInterface mod members = (elName, cu)
 
 constructModule :: Module
   -> M.Map Type (Coder Graph Graph Term Java.Expression)
-  -> [(Binding, TypedTerm)]
+  -> [(Binding, TypeApplicationTerm)]
   -> Flow Graph (M.Map Name Java.CompilationUnit)
 constructModule mod coders pairs = do
     let isTypePair = isNativeType . fst
@@ -170,14 +170,14 @@ constructModule mod coders pairs = do
     -- * Let terms with nested lambdas, such as let z = 42 in \x y -> x + y + z
     termToInterfaceMember coders pair = withTrace ("element " ++ unName (bindingName el)) $ do
         g <- getState
-        let expanded = contractTerm $ unshadowVariables $ etaExpandTerm g $ typedTermTerm $ snd pair
+        let expanded = contractTerm $ unshadowVariables $ etaExpandTerm g $ typeApplicationTermBody $ snd pair
         case classifyDataTerm typ expanded of
           JavaSymbolClassConstant -> termToConstant coders el expanded
           JavaSymbolClassNullaryFunction -> termToNullaryMethod coders el expanded
           JavaSymbolClassUnaryFunction -> termToUnaryMethod coders el expanded
       where
         el = fst pair
-        typ = typedTermType $ snd pair
+        typ = typeApplicationTermType $ snd pair
         tparams = javaTypeParametersForType typ
         mname = sanitizeJavaName $ decapitalize $ localNameOf $ bindingName el
 
@@ -341,8 +341,8 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
               where
                 first20Primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
 
-declarationForType :: Bool -> Aliases -> (Binding, TypedTerm) -> Flow Graph Java.TypeDeclarationWithComments
-declarationForType isSer aliases (el, TypedTerm term _) = withTrace ("element " ++ unName (bindingName el)) $ do
+declarationForType :: Bool -> Aliases -> (Binding, TypeApplicationTerm) -> Flow Graph Java.TypeDeclarationWithComments
+declarationForType isSer aliases (el, TypeApplicationTerm term _) = withTrace ("element " ++ unName (bindingName el)) $ do
     t <- DecodeCore.type_ term >>= adaptTypeToLanguage javaLanguage
     cd <- toClassDecl False isSer aliases [] (bindingName el) t
     comments <- commentsFromElement el
@@ -965,8 +965,8 @@ toClassDecl isInner isSer aliases tparams elName t = case deannotateType t of
   where
     wrap t' = declarationForRecordType isInner isSer aliases tparams elName [Types.field valueFieldName $ deannotateType t']
 
-toDataDeclaration :: Aliases -> (a, TypedTerm) -> Flow Graph a
-toDataDeclaration aliases (el, TypedTerm term typ) = do
+toDataDeclaration :: Aliases -> (a, TypeApplicationTerm) -> Flow Graph a
+toDataDeclaration aliases (el, TypeApplicationTerm term typ) = do
   fail "not implemented" -- TODO
 
 typeArgsOrDiamond :: [Java.TypeArgument] -> Java.TypeArgumentsOrDiamond

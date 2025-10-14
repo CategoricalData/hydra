@@ -53,8 +53,8 @@ propertyGraphElements :: PG.Graph v -> [PG.Element v]
 propertyGraphElements g = fmap PG.ElementVertex (M.elems $ PG.graphVertices g)
   ++ fmap PG.ElementEdge (M.elems $ PG.graphEdges g)
 
-typedTermToPropertyGraph :: (Show t, Show v) => PGM.Schema Graph t v -> Type -> t -> t -> Flow Graph (Term -> Graph -> Flow Graph [PG.Element v])
-typedTermToPropertyGraph schema typ vidType eidType = do
+typeApplicationTermToPropertyGraph :: (Show t, Show v) => PGM.Schema Graph t v -> Type -> t -> t -> Flow Graph (Term -> Graph -> Flow Graph [PG.Element v])
+typeApplicationTermToPropertyGraph schema typ vidType eidType = do
     adapter <- elementCoder Nothing schema typ vidType eidType
     return $ \term graph -> flattenTree <$> coderEncode (adapterCoder adapter) term
   where

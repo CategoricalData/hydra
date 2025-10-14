@@ -322,9 +322,9 @@ term t =
           ".",
           (term body)])
     Core.TermTypeApplication v1 ->  
-      let t2 = (Core.typedTermTerm v1)
+      let t2 = (Core.typeApplicationTermBody v1)
       in  
-        let typ = (Core.typedTermType v1)
+        let typ = (Core.typeApplicationTermType v1)
         in (Strings.cat [
           term t2,
           "\10216",

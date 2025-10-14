@@ -520,7 +520,7 @@ term x = case x of
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "typeApplication"),
-      Core.fieldTerm = (typedTerm v1)}}))
+      Core.fieldTerm = (typeApplicationTerm v1)}}))
   Core.TermUnion v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
@@ -661,16 +661,16 @@ typeScheme ts = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "type"),
       Core.fieldTerm = (type_ (Core.typeSchemeType ts))}]}))
 
-typedTerm :: (Core.TypedTerm -> Core.Term)
-typedTerm tt = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.core.TypedTerm"),
+typeApplicationTerm :: (Core.TypeApplicationTerm -> Core.Term)
+typeApplicationTerm tt = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.core.TypeApplicationTerm"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "term"),
-      Core.fieldTerm = (term (Core.typedTermTerm tt))},
+      Core.fieldName = (Core.Name "body"),
+      Core.fieldTerm = (term (Core.typeApplicationTermBody tt))},
     Core.Field {
       Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (type_ (Core.typedTermType tt))}]}))
+      Core.fieldTerm = (type_ (Core.typeApplicationTermType tt))}]}))
 
 wrappedTerm :: (Core.WrappedTerm -> Core.Term)
 wrappedTerm n = (Core.TermRecord (Core.Record {

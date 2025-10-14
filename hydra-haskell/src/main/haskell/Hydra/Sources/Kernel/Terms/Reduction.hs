@@ -198,7 +198,7 @@ etaExpansionArityDef = define "etaExpansionArity" $
       _Function_primitive>>: "name" ~> ref Arity.primitiveArityDef
         @@ (Optionals.fromJust (ref Lexical.lookupPrimitiveDef @@ var "graph" @@ var "name"))],
     _Term_typeLambda>>: "ta" ~> ref etaExpansionArityDef @@ var "graph" @@ Core.typeLambdaBody (var "ta"),
-    _Term_typeApplication>>: "tt" ~> ref etaExpansionArityDef @@ var "graph" @@ Core.typedTermTerm (var "tt"),
+    _Term_typeApplication>>: "tt" ~> ref etaExpansionArityDef @@ var "graph" @@ Core.typeApplicationTermBody (var "tt"),
     _Term_variable>>: "name" ~>
       -- Note: we assume that the graph is fully typed.
       Optionals.maybe (int32 0)

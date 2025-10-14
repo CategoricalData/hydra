@@ -502,7 +502,7 @@ data Term =
   -- | A variant tuple
   TermSum Sum |
   -- | A System F type application term
-  TermTypeApplication TypedTerm |
+  TermTypeApplication TypeApplicationTerm |
   -- | A System F type abstraction term
   TermTypeLambda TypeLambda |
   -- | An injection; an instance of a union type
@@ -626,6 +626,19 @@ _Type_variable = (Name "variable")
 
 _Type_wrap = (Name "wrap")
 
+-- | A term applied to a type; a type application
+data TypeApplicationTerm = 
+  TypeApplicationTerm {
+    typeApplicationTermBody :: Term,
+    typeApplicationTermType :: Type}
+  deriving (Eq, Ord, Read, Show)
+
+_TypeApplicationTerm = (Name "hydra.core.TypeApplicationTerm")
+
+_TypeApplicationTerm_body = (Name "body")
+
+_TypeApplicationTerm_type = (Name "type")
+
 -- | A System F type abstraction term
 data TypeLambda = 
   TypeLambda {
@@ -640,19 +653,6 @@ _TypeLambda = (Name "hydra.core.TypeLambda")
 _TypeLambda_parameter = (Name "parameter")
 
 _TypeLambda_body = (Name "body")
-
--- | A term applied to a type; a type application
-data TypedTerm = 
-  TypedTerm {
-    typedTermTerm :: Term,
-    typedTermType :: Type}
-  deriving (Eq, Ord, Read, Show)
-
-_TypedTerm = (Name "hydra.core.TypedTerm")
-
-_TypedTerm_term = (Name "term")
-
-_TypedTerm_type = (Name "type")
 
 -- | A type expression together with free type variables occurring in the expression
 data TypeScheme = 

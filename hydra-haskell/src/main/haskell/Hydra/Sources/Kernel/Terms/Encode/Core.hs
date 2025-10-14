@@ -88,7 +88,7 @@ module_ = Module (Namespace "hydra.encode.core") elements
       el typeDef,
       el typeLambdaDef,
       el typeSchemeDef,
-      el typedTermDef,
+      el typeApplicationTermDef,
       el wrappedTermDef,
       el wrappedTypeDef]
     -- TODO: move these into another module
@@ -403,7 +403,7 @@ termDef = define "Term" $
     ecase2 _Term_set $ encodedSet $ primitive _sets_map @@ (ref termDef) @@ var "v",
     ecase _Term_sum (ref sumDef),
     ecase _Term_typeLambda $ ref typeLambdaDef,
-    ecase _Term_typeApplication $ ref typedTermDef,
+    ecase _Term_typeApplication $ ref typeApplicationTermDef,
     ecase _Term_union (ref injectionDef),
     ecase _Term_unit $ constant Core.termUnit,
     ecase _Term_variable $ ref nameDef,
@@ -458,11 +458,11 @@ typeSchemeDef = define "TypeScheme" $
     field _TypeScheme_variables $ encodedList (primitive _lists_map @@ ref nameDef @@ (Core.typeSchemeVariables $ var "ts")),
     field _TypeScheme_type $ ref typeDef @@ (Core.typeSchemeType $ var "ts")]
 
-typedTermDef :: TBinding (TypedTerm -> Term)
-typedTermDef = define "TypedTerm" $
-  lambda "tt" $ encodedRecord _TypedTerm [
-    field _TypedTerm_term $ ref termDef @@ (project _TypedTerm _TypedTerm_term @@ var "tt"),
-    field _TypedTerm_type $ ref typeDef @@ (project _TypedTerm _TypedTerm_type @@ var "tt")]
+typeApplicationTermDef :: TBinding (TypeApplicationTerm -> Term)
+typeApplicationTermDef = define "TypeApplicationTerm" $
+  lambda "tt" $ encodedRecord _TypeApplicationTerm [
+    field _TypeApplicationTerm_body $ ref termDef @@ (project _TypeApplicationTerm _TypeApplicationTerm_body @@ var "tt"),
+    field _TypeApplicationTerm_type $ ref typeDef @@ (project _TypeApplicationTerm _TypeApplicationTerm_type @@ var "tt")]
 
 wrappedTermDef :: TBinding (WrappedTerm -> Term)
 wrappedTermDef = define "WrappedTerm" $

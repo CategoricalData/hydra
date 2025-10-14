@@ -128,7 +128,7 @@ toTerm expr = case expr of
     where
       bindingToHydra (v, ty, term) = Core.Binding (Core.Name v) (toTerm term) $ Just $ toTypeScheme ty
   FTyAbs params body -> L.foldl (\t v -> Core.TermTypeLambda $ Core.TypeLambda (Core.Name v) t) (toTerm body) $ L.reverse params
-  FTyApp fun args -> L.foldl (\t a -> Core.TermTypeApplication $ Core.TypedTerm t a) (toTerm fun) $ L.reverse hargs
+  FTyApp fun args -> L.foldl (\t a -> Core.TermTypeApplication $ Core.TypeApplicationTerm t a) (toTerm fun) $ L.reverse hargs
     where
       hargs = fmap (\t -> Core.typeSchemeType $ toTypeScheme t) args
   FVar v -> Core.TermVariable $ Core.Name v

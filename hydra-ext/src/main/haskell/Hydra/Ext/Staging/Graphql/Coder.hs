@@ -32,7 +32,7 @@ moduleToGraphqlSchemas mod = transformModule graphqlLanguage encodeTerm construc
 
 constructModule :: Module
   -> M.Map Type (Coder Graph Graph Term ())
-  -> [(Binding, TypedTerm)]
+  -> [(Binding, TypeApplicationTerm)]
   -> Flow Graph (M.Map FilePath G.Document)
 constructModule mod coders pairs = do
     -- Gather all dependencies because GraphQL does not support imports (in a standard way)

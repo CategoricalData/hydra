@@ -29,7 +29,7 @@ import qualified Data.Set as S
 deannotateAndDetypeTerm :: (Core.Term -> Core.Term)
 deannotateAndDetypeTerm t = ((\x -> case x of
   Core.TermAnnotated v1 -> (deannotateAndDetypeTerm (Core.annotatedTermBody v1))
-  Core.TermTypeApplication v1 -> (deannotateAndDetypeTerm (Core.typedTermTerm v1))
+  Core.TermTypeApplication v1 -> (deannotateAndDetypeTerm (Core.typeApplicationTermBody v1))
   Core.TermTypeLambda v1 -> (deannotateAndDetypeTerm (Core.typeLambdaBody v1))
   _ -> t) t)
 
@@ -81,7 +81,7 @@ detypeTerm t = ((\x -> case x of
       in (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (detypeTerm subj),
         Core.annotatedTermAnnotation = ann}))
-  Core.TermTypeApplication v1 -> (deannotateAndDetypeTerm (Core.typedTermTerm v1))
+  Core.TermTypeApplication v1 -> (deannotateAndDetypeTerm (Core.typeApplicationTermBody v1))
   Core.TermTypeLambda v1 -> (deannotateAndDetypeTerm (Core.typeLambdaBody v1))
   _ -> t) t)
 
@@ -198,7 +198,7 @@ freeTypeVariablesInTerm term0 =
                             let newVars = (Optionals.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingType b))
                             in (Sets.union (getAll newVars (Core.bindingTerm b)) (Optionals.maybe Sets.empty (\ts -> tryType newVars (Core.typeSchemeType ts)) (Core.bindingType b))))
                     in (Sets.union (allOf (Lists.map forBinding (Core.letBindings v1))) (recurse (Core.letBody v1)))
-                  Core.TermTypeApplication v1 -> (Sets.union (tryType vars (Core.typedTermType v1)) (recurse (Core.typedTermTerm v1)))
+                  Core.TermTypeApplication v1 -> (Sets.union (tryType vars (Core.typeApplicationTermType v1)) (recurse (Core.typeApplicationTermBody v1)))
                   Core.TermTypeLambda v1 -> (Sets.union (tryType vars (Core.TypeVariable (Core.typeLambdaParameter v1))) (recurse (Core.typeLambdaBody v1)))
                   _ -> dflt) term))
       in (getAll Sets.empty term0)
@@ -370,9 +370,9 @@ normalizeTypeVariablesInTerm term =
                                       in (Core.TermLet (Core.Let {
                                         Core.letBindings = bindings1,
                                         Core.letBody = (rewriteWithSubst ((subst, boundVars), next) body0)}))
-                              Core.TermTypeApplication v1 -> (Core.TermTypeApplication (Core.TypedTerm {
-                                Core.typedTermTerm = (rewriteWithSubst ((subst, boundVars), next) (Core.typedTermTerm v1)),
-                                Core.typedTermType = (substType subst (Core.typedTermType v1))}))
+                              Core.TermTypeApplication v1 -> (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                                Core.typeApplicationTermBody = (rewriteWithSubst ((subst, boundVars), next) (Core.typeApplicationTermBody v1)),
+                                Core.typeApplicationTermType = (substType subst (Core.typeApplicationTermType v1))}))
                               Core.TermTypeLambda v1 -> (Core.TermTypeLambda (Core.TypeLambda {
                                 Core.typeLambdaParameter = (replaceName subst (Core.typeLambdaParameter v1)),
                                 Core.typeLambdaBody = (rewriteWithSubst ((subst, boundVars), next) (Core.typeLambdaBody v1))}))
@@ -426,7 +426,7 @@ removeTypesFromTerm term =
               Core.TermLet v1 -> (Core.TermLet (Core.Let {
                 Core.letBindings = (Lists.map stripBinding (Core.letBindings v1)),
                 Core.letBody = (Core.letBody v1)}))
-              Core.TermTypeApplication v1 -> (Core.typedTermTerm v1)
+              Core.TermTypeApplication v1 -> (Core.typeApplicationTermBody v1)
               Core.TermTypeLambda v1 -> (Core.typeLambdaBody v1)
               _ -> rewritten) rewritten))
   in (rewriteTerm strip term)
@@ -551,9 +551,9 @@ rewriteAndFoldTerm f =
                               Core.sumIndex = (Core.sumIndex v1),
                               Core.sumSize = (Core.sumSize v1),
                               Core.sumTerm = t})) val0 (Core.sumTerm v1))
-                            Core.TermTypeApplication v1 -> (forSingle recurse (\t -> Core.TermTypeApplication (Core.TypedTerm {
-                              Core.typedTermTerm = t,
-                              Core.typedTermType = (Core.typedTermType v1)})) val0 (Core.typedTermTerm v1))
+                            Core.TermTypeApplication v1 -> (forSingle recurse (\t -> Core.TermTypeApplication (Core.TypeApplicationTerm {
+                              Core.typeApplicationTermBody = t,
+                              Core.typeApplicationTermType = (Core.typeApplicationTermType v1)})) val0 (Core.typeApplicationTermBody v1))
                             Core.TermTypeLambda v1 -> (forSingle recurse (\t -> Core.TermTypeLambda (Core.TypeLambda {
                               Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
                               Core.typeLambdaBody = t})) val0 (Core.typeLambdaBody v1))
@@ -631,9 +631,9 @@ rewriteAndFoldTermM f =
                               Core.sumIndex = (Core.sumIndex v1),
                               Core.sumSize = (Core.sumSize v1),
                               Core.sumTerm = t})) val0 (Core.sumTerm v1))
-                            Core.TermTypeApplication v1 -> (forSingle recurse (\t -> Core.TermTypeApplication (Core.TypedTerm {
-                              Core.typedTermTerm = t,
-                              Core.typedTermType = (Core.typedTermType v1)})) val0 (Core.typedTermTerm v1))
+                            Core.TermTypeApplication v1 -> (forSingle recurse (\t -> Core.TermTypeApplication (Core.TypeApplicationTerm {
+                              Core.typeApplicationTermBody = t,
+                              Core.typeApplicationTermType = (Core.typeApplicationTermType v1)})) val0 (Core.typeApplicationTermBody v1))
                             Core.TermTypeLambda v1 -> (forSingle recurse (\t -> Core.TermTypeLambda (Core.TypeLambda {
                               Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
                               Core.typeLambdaBody = t})) val0 (Core.typeLambdaBody v1))
@@ -708,9 +708,9 @@ rewriteTerm f =
                       Core.sumIndex = (Core.sumIndex v1),
                       Core.sumSize = (Core.sumSize v1),
                       Core.sumTerm = (recurse (Core.sumTerm v1))}))
-                    Core.TermTypeApplication v1 -> (Core.TermTypeApplication (Core.TypedTerm {
-                      Core.typedTermTerm = (recurse (Core.typedTermTerm v1)),
-                      Core.typedTermType = (Core.typedTermType v1)}))
+                    Core.TermTypeApplication v1 -> (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                      Core.typeApplicationTermBody = (recurse (Core.typeApplicationTermBody v1)),
+                      Core.typeApplicationTermType = (Core.typeApplicationTermType v1)}))
                     Core.TermTypeLambda v1 -> (Core.TermTypeLambda (Core.TypeLambda {
                       Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
                       Core.typeLambdaBody = (recurse (Core.typeLambdaBody v1))}))
@@ -802,9 +802,9 @@ rewriteTermM f =
                         Core.sumIndex = i,
                         Core.sumSize = s,
                         Core.sumTerm = rtrm}))))
-                Core.TermTypeApplication v1 -> (Flows.bind (recurse (Core.typedTermTerm v1)) (\t -> Flows.pure (Core.TermTypeApplication (Core.TypedTerm {
-                  Core.typedTermTerm = t,
-                  Core.typedTermType = (Core.typedTermType v1)}))))
+                Core.TermTypeApplication v1 -> (Flows.bind (recurse (Core.typeApplicationTermBody v1)) (\t -> Flows.pure (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = t,
+                  Core.typeApplicationTermType = (Core.typeApplicationTermType v1)}))))
                 Core.TermTypeLambda v1 ->  
                   let v = (Core.typeLambdaParameter v1)
                   in  
@@ -1018,7 +1018,7 @@ subterms x = case x of
   Core.TermSum v1 -> [
     Core.sumTerm v1]
   Core.TermTypeApplication v1 -> [
-    Core.typedTermTerm v1]
+    Core.typeApplicationTermBody v1]
   Core.TermTypeLambda v1 -> [
     Core.typeLambdaBody v1]
   Core.TermUnion v1 -> [
@@ -1058,7 +1058,7 @@ subtermsWithAccessors x = case x of
   Core.TermSum v1 -> [
     (Accessors.TermAccessorSumTerm, (Core.sumTerm v1))]
   Core.TermTypeApplication v1 -> [
-    (Accessors.TermAccessorTypeApplicationTerm, (Core.typedTermTerm v1))]
+    (Accessors.TermAccessorTypeApplicationTerm, (Core.typeApplicationTermBody v1))]
   Core.TermTypeLambda v1 -> [
     (Accessors.TermAccessorTypeLambdaBody, (Core.typeLambdaBody v1))]
   Core.TermUnion v1 -> [

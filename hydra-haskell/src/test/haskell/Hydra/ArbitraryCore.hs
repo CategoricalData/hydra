@@ -73,7 +73,7 @@ instance QC.Arbitrary IntegerValue
       IntegerValueUint64 <$> QC.arbitrary]
 
 instance QC.Arbitrary Term where
-  arbitrary = (\(TypedTerm term _) -> term) <$> QC.sized arbitraryTypedTerm
+  arbitrary = (\(TypeApplicationTerm term _) -> term) <$> QC.sized arbitraryTypeApplicationTerm
 
 instance QC.Arbitrary Name
   where
@@ -89,9 +89,9 @@ instance QC.Arbitrary Type where
       _ -> []
     _ -> [] -- TODO
 
-instance QC.Arbitrary TypedTerm where
-  arbitrary = QC.sized arbitraryTypedTerm
-  shrink (TypedTerm term typ) = L.concat ((\(t, m) -> TypedTerm <$> m term <*> pure t) <$> shrinkers typ)
+instance QC.Arbitrary TypeApplicationTerm where
+  arbitrary = QC.sized arbitraryTypeApplicationTerm
+  shrink (TypeApplicationTerm term typ) = L.concat ((\(t, m) -> TypeApplicationTerm <$> m term <*> pure t) <$> shrinkers typ)
 
 arbitraryLiteral :: LiteralType -> QC.Gen Literal
 arbitraryLiteral at = case at of
@@ -211,11 +211,11 @@ arbitraryType n = if n == 0 then pure Types.unit else QC.oneof [
 --    TypeUnion <$> arbitraryList True arbitraryFieldType n'] -- TODO: avoid duplicate field names
   where n' = decr n
 
-arbitraryTypedTerm :: Int -> QC.Gen TypedTerm
-arbitraryTypedTerm n = do
+arbitraryTypeApplicationTerm :: Int -> QC.Gen TypeApplicationTerm
+arbitraryTypeApplicationTerm n = do
     typ <- arbitraryType n'
     term <- arbitraryTerm typ n'
-    return $ TypedTerm term typ
+    return $ TypeApplicationTerm term typ
   where
     n' = div n 2 -- TODO: a term is usually bigger than its type
 

@@ -170,8 +170,8 @@ checkForUnboundTypeVariablesDef = define "checkForUnboundTypeVariables" $
         exec (Flows.mapList (var "forBinding") $ Core.letBindings $ var "l") $
         var "recurse" @@ (Core.letBody $ var "l"),
       _Term_typeApplication>>: "tt" ~>
-        exec (var "check" @@ (Core.typedTermType $ var "tt")) $
-        var "recurse" @@ (Core.typedTermTerm $ var "tt"),
+        exec (var "check" @@ (Core.typeApplicationTermType $ var "tt")) $
+        var "recurse" @@ (Core.typeApplicationTermBody $ var "tt"),
       _Term_typeLambda>>: "tl" ~>
         exec (var "check" @@ (Core.typeVariable $ Core.typeLambdaParameter $ var "tl")) $
         var "recurse" @@ (Core.typeLambdaBody $ var "tl")]) $
@@ -597,11 +597,11 @@ typeOfTupleProjectionDef = define "typeOfTupleProjection" $
       (var "mtypes")) $
   ref applyForallTypesDef @@ var "tx" @@ var "typeArgs" @@ var "t"
 
-typeOfTypeApplicationDef :: TBinding (TypeContext -> [Type] -> TypedTerm -> Flow s Type)
+typeOfTypeApplicationDef :: TBinding (TypeContext -> [Type] -> TypeApplicationTerm -> Flow s Type)
 typeOfTypeApplicationDef = define "typeOfTypeApplication" $
   "tx" ~> "typeArgs" ~> "tyapp" ~>
-  "e" <~ Core.typedTermTerm (var "tyapp") $
-  "t" <~ Core.typedTermType (var "tyapp") $
+  "e" <~ Core.typeApplicationTermBody (var "tyapp") $
+  "t" <~ Core.typeApplicationTermType (var "tyapp") $
   ref typeOfDef @@ var "tx" @@ Lists.cons (var "t") (var "typeArgs") @@ var "e"
 
 typeOfTypeLambdaDef :: TBinding (TypeContext -> [Type] -> TypeLambda -> Flow s Type)
