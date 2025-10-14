@@ -552,7 +552,7 @@ passWrappedDef = define "passWrapped" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_wrap>>: lambda "wt" $ lets [
         "tname">: Core.wrappedTypeTypeName $ var "wt",
-        "ot">: Core.wrappedTypeObject $ var "wt",
+        "ot">: Core.wrappedTypeBody $ var "wt",
         "mapTerm">: lambdas ["coder", "dir", "term"] $
           bind "unwrapped" (ref withGraphContextDef @@ (ref ExtractCore.wrapDef @@ var "tname" @@ var "term")) $
           bind "newTerm" (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ var "coder" @@ var "unwrapped") $
@@ -681,7 +681,7 @@ wrapToUnwrappedDef = define "wrapToUnwrapped" $
   lambda "t" $ cases _Type (var "t") Nothing [
     _Type_wrap>>: lambda "wt" $ lets [
         "tname">: Core.wrappedTypeTypeName $ var "wt",
-        "typ">: Core.wrappedTypeObject $ var "wt",
+        "typ">: Core.wrappedTypeBody $ var "wt",
         "encode">: lambda "ad" $ lambda "term" $
           bind "unwrapped" (ref withGraphContextDef @@ (ref ExtractCore.wrapDef @@ var "tname" @@ var "term")) $
           Compute.coderEncode (Compute.adapterCoder $ var "ad") @@ var "unwrapped",
@@ -752,7 +752,7 @@ termAdapterDef = define "termAdapter" $
           -- Account for let-bound variables
           _Type_variable>>: "name" ~> ref forTypeReferenceDef @@ var "name"]) [
       _Type_annotated>>: "at" ~>
-        bind "ad" (ref termAdapterDef @@ Core.annotatedTypeSubject (var "at")) $
+        bind "ad" (ref termAdapterDef @@ Core.annotatedTypeBody (var "at")) $
         Flows.pure (Compute.adapterWithTarget (var "ad") $
           Core.typeAnnotated $ Core.annotatedType (Compute.adapterTarget $ var "ad") (Core.annotatedTypeAnnotation $ var "at"))]
 

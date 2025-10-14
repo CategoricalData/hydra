@@ -252,6 +252,6 @@ variant = (nominal Core.injectionTypeName Core.injectionField (\arg_ -> (\x -> c
   _ -> Nothing) (Rewriting.deannotateTerm arg_)))
 
 wrap :: (Core.Name -> Core.Term -> Maybe Core.Term)
-wrap = (nominal Core.wrappedTermTypeName Core.wrappedTermObject (\arg_ -> (\x -> case x of
+wrap = (nominal Core.wrappedTermTypeName Core.wrappedTermBody (\arg_ -> (\x -> case x of
   Core.TermWrap v1 -> (Optionals.pure v1)
   _ -> Nothing) (Rewriting.deannotateTerm arg_)))

@@ -66,7 +66,7 @@ termAccessorDef = define "termAccessor" $
     "idxSuff">: lambda "suffix" $ lambda "i" $
       Optionals.map (lambda "s" $ Strings.cat2 (var "s") (var "suffix")) (var "idx" @@ var "i")]
     $ match _TermAccessor Nothing [
-      _TermAccessor_annotatedSubject>>: constant nothing,
+      _TermAccessor_annotatedBody>>: constant nothing,
       _TermAccessor_applicationFunction>>: constant $ just $ string "fun",
       _TermAccessor_applicationArgument>>: constant $ just $ string "arg",
       _TermAccessor_lambdaBody>>: constant $ just $ string "body",
@@ -94,7 +94,7 @@ termToAccessorGraphDef :: TBinding (M.Map Namespace String -> Term -> AccessorGr
 termToAccessorGraphDef = define "termToAccessorGraph" $
   doc "Build an accessor graph from a term" $
   lambda "namespaces" $ lambda "term" $ lets [
-    "dontCareAccessor">: Mantle.termAccessorAnnotatedSubject,
+    "dontCareAccessor">: Mantle.termAccessorAnnotatedBody,
     "helper">: lambdas ["ids", "mroot", "path", "state", "accessorTerm"] $ lets [
       "accessor">: first $ var "accessorTerm",
       "currentTerm">: second $ var "accessorTerm",

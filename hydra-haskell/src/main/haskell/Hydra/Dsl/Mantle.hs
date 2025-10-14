@@ -113,8 +113,8 @@ precisionArbitrary = unitVariant _Precision _Precision_arbitrary
 precisionBits :: TTerm Int -> TTerm Precision
 precisionBits = variant _Precision _Precision_bits
 
-termAccessorAnnotatedSubject :: TTerm TermAccessor
-termAccessorAnnotatedSubject = unitVariant _TermAccessor _TermAccessor_annotatedSubject
+termAccessorAnnotatedBody :: TTerm TermAccessor
+termAccessorAnnotatedBody = unitVariant _TermAccessor _TermAccessor_annotatedBody
 
 termAccessorApplicationFunction :: TTerm TermAccessor
 termAccessorApplicationFunction = unitVariant _TermAccessor _TermAccessor_applicationFunction

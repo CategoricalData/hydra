@@ -24,13 +24,13 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
       def "AnnotatedTerm" $
         doc "A term together with an annotation" $
         record [
-          "subject">: core "Term",
+          "body">: core "Term",
           "annotation">: Types.map (core "Name") $ core "Term"],
 
       def "AnnotatedType" $
         doc "A type together with an annotation" $
         record [
-          "subject">: core "Type",
+          "body">: core "Type",
           "annotation">: Types.map (core "Name") $ core "Term"],
 
       def "Application" $
@@ -392,10 +392,10 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
         doc "A term wrapped in a type name" $
         record [
           "typeName">: core "Name",
-          "object">: core "Term"],
+          "body">: core "Term"],
 
       def "WrappedType" $
         doc "A type wrapped in a type name; a newtype" $
         record [
           "typeName">: core "Name",
-          "object">: core "Type"]]
+          "body">: core "Type"]]

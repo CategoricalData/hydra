@@ -47,7 +47,7 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
       def "TermAccessor" $
         doc "A function which maps from a term to a particular immediate subterm" $
         union [
-          "annotatedSubject">: unit,
+          "annotatedBody">: unit,
           "applicationFunction">: unit,
           "applicationArgument">: unit,
           "lambdaBody">: unit,

@@ -369,7 +369,7 @@ termAlternativesDef = define "termAlternatives" $
   "term" ~> cases _Term (var "term")
     (Just $ produce $ list []) [
     _Term_annotated>>: "at" ~>
-      "term2" <~ Core.annotatedTermSubject (var "at") $
+      "term2" <~ Core.annotatedTermBody (var "at") $
       produce $ list [
         var "term2"], -- TODO: lossy
     _Term_optional>>: "ot" ~> produce $ list [
@@ -394,7 +394,7 @@ termAlternativesDef = define "termAlternatives" $
     _Term_unit>>: constant $ produce $ list [
       Core.termLiteral $ Core.literalBoolean true],
     _Term_wrap>>: "wt" ~>
-      "term2" <~ Core.wrappedTermObject (var "wt") $
+      "term2" <~ Core.wrappedTermBody (var "wt") $
       produce $ list [
          var "term2"]]
 
@@ -404,7 +404,7 @@ typeAlternativesDef = define "typeAlternatives" $
   "type" ~> cases _Type (var "type")
     (Just $ list []) [
     _Type_annotated>>: "at" ~>
-      "type2" <~ Core.annotatedTypeSubject (var "at") $
+      "type2" <~ Core.annotatedTypeBody (var "at") $
        list [var "type2"], -- TODO: lossy
     _Type_optional>>: "ot" ~> list [
       Core.typeList $ var "ot"],

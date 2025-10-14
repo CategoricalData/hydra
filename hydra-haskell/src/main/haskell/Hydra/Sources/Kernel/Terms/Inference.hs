@@ -340,7 +340,7 @@ inferTypeOfAnnotatedTermDef :: TBinding (InferenceContext -> AnnotatedTerm -> Fl
 inferTypeOfAnnotatedTermDef = define "inferTypeOfAnnotatedTerm" $
   doc "Infer the type of an annotated term" $
   "cx" ~> "at" ~>
-  "term" <~ Core.annotatedTermSubject (var "at") $
+  "term" <~ Core.annotatedTermBody (var "at") $
   "ann" <~ Core.annotatedTermAnnotation (var "at") $
   "result" <<~ ref inferTypeOfTermDef @@ var "cx" @@ var "term" @@ string "annotated term" $
   "iterm" <~ Typing.inferenceResultTerm (var "result") $
@@ -973,7 +973,7 @@ inferTypeOfWrappedTermDef = define "inferTypeOfWrappedTerm" $
   doc "Infer the type of a wrapped term" $
   "cx" ~> "wt" ~>
   "tname" <~ Core.wrappedTermTypeName (var "wt") $
-  "term" <~ Core.wrappedTermObject (var "wt") $
+  "term" <~ Core.wrappedTermBody (var "wt") $
   "schemaType" <<~ ref Schemas.requireSchemaTypeDef @@ var "cx" @@ var "tname" $
   "result" <<~ ref inferTypeOfTermDef @@ var "cx" @@ var "term" @@ string "wrapped term" $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $

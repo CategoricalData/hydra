@@ -89,8 +89,8 @@ string term = (Core_.string (Rewriting.deannotateAndDetypeTerm term))
 type_ :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)
 type_ dat = ((\x -> case x of
   Core.TermAnnotated v1 -> (Flows.map (\t -> Core.TypeAnnotated (Core.AnnotatedType {
-    Core.annotatedTypeSubject = t,
-    Core.annotatedTypeAnnotation = (Core.annotatedTermAnnotation v1)})) (type_ (Core.annotatedTermSubject v1)))
+    Core.annotatedTypeBody = t,
+    Core.annotatedTypeAnnotation = (Core.annotatedTermAnnotation v1)})) (type_ (Core.annotatedTermBody v1)))
   _ -> (Lexical.matchUnion (Core.Name "hydra.core.Type") [
     (Core.Name "application", (\at -> Flows.map (\x -> Core.TypeApplication x) (applicationType at))),
     (Core.Name "forall", (\ft -> Flows.map (\x -> Core.TypeForall x) (forallType ft))),
@@ -114,6 +114,6 @@ typeScheme = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Na
   Core.typeSchemeType = body})))))
 
 wrappedType :: (Core.Term -> Compute.Flow Graph.Graph Core.WrappedType)
-wrappedType term = (Flows.bind (Core_.record (Core.Name "hydra.core.WrappedType") term) (\fields -> Flows.bind (Core_.field (Core.Name "typeName") name fields) (\name -> Flows.bind (Core_.field (Core.Name "object") type_ fields) (\obj -> Flows.pure (Core.WrappedType {
+wrappedType term = (Flows.bind (Core_.record (Core.Name "hydra.core.WrappedType") term) (\fields -> Flows.bind (Core_.field (Core.Name "typeName") name fields) (\name -> Flows.bind (Core_.field (Core.Name "body") type_ fields) (\obj -> Flows.pure (Core.WrappedType {
   Core.wrappedTypeTypeName = name,
-  Core.wrappedTypeObject = obj})))))
+  Core.wrappedTypeBody = obj})))))

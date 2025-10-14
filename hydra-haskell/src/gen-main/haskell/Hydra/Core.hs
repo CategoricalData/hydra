@@ -11,26 +11,26 @@ import qualified Data.Set as S
 -- | A term together with an annotation
 data AnnotatedTerm = 
   AnnotatedTerm {
-    annotatedTermSubject :: Term,
+    annotatedTermBody :: Term,
     annotatedTermAnnotation :: (M.Map Name Term)}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotatedTerm = (Name "hydra.core.AnnotatedTerm")
 
-_AnnotatedTerm_subject = (Name "subject")
+_AnnotatedTerm_body = (Name "body")
 
 _AnnotatedTerm_annotation = (Name "annotation")
 
 -- | A type together with an annotation
 data AnnotatedType = 
   AnnotatedType {
-    annotatedTypeSubject :: Type,
+    annotatedTypeBody :: Type,
     annotatedTypeAnnotation :: (M.Map Name Term)}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotatedType = (Name "hydra.core.AnnotatedType")
 
-_AnnotatedType_subject = (Name "subject")
+_AnnotatedType_body = (Name "body")
 
 _AnnotatedType_annotation = (Name "annotation")
 
@@ -671,24 +671,24 @@ _TypeScheme_type = (Name "type")
 data WrappedTerm = 
   WrappedTerm {
     wrappedTermTypeName :: Name,
-    wrappedTermObject :: Term}
+    wrappedTermBody :: Term}
   deriving (Eq, Ord, Read, Show)
 
 _WrappedTerm = (Name "hydra.core.WrappedTerm")
 
 _WrappedTerm_typeName = (Name "typeName")
 
-_WrappedTerm_object = (Name "object")
+_WrappedTerm_body = (Name "body")
 
 -- | A type wrapped in a type name; a newtype
 data WrappedType = 
   WrappedType {
     wrappedTypeTypeName :: Name,
-    wrappedTypeObject :: Type}
+    wrappedTypeBody :: Type}
   deriving (Eq, Ord, Read, Show)
 
 _WrappedType = (Name "hydra.core.WrappedType")
 
 _WrappedType_typeName = (Name "typeName")
 
-_WrappedType_object = (Name "object")
+_WrappedType_body = (Name "body")

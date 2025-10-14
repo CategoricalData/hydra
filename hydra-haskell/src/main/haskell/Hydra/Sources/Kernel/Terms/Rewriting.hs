@@ -109,7 +109,7 @@ deannotateAndDetypeTermDef = define "deannotateAndDetypeTerm" $
   doc "Strip type annotations from the top levels of a term" $
   "t" ~> cases _Term (var "t")
     (Just $ var "t") [
-    _Term_annotated>>: "at" ~> ref deannotateAndDetypeTermDef @@ (Core.annotatedTermSubject $ var "at"),
+    _Term_annotated>>: "at" ~> ref deannotateAndDetypeTermDef @@ (Core.annotatedTermBody $ var "at"),
     _Term_typeApplication>>: "tt" ~> ref deannotateAndDetypeTermDef @@ (Core.typedTermTerm $ var "tt"),
     _Term_typeLambda>>: "ta" ~> ref deannotateAndDetypeTermDef @@ (Core.typeLambdaBody $ var "ta")]
 
@@ -118,14 +118,14 @@ deannotateTermDef = define "deannotateTerm" $
   doc "Strip all annotations (including System F type annotations) from the top levels of a term" $
   "t" ~> cases _Term (var "t")
     (Just $ var "t") [
-    _Term_annotated>>: "at" ~> ref deannotateTermDef @@ (Core.annotatedTermSubject $ var "at")]
+    _Term_annotated>>: "at" ~> ref deannotateTermDef @@ (Core.annotatedTermBody $ var "at")]
 
 deannotateTypeDef :: TBinding (Type -> Type)
 deannotateTypeDef = define "deannotateType" $
   doc "Strip all annotations from a term" $
   "t" ~> cases _Type (var "t")
     (Just $ var "t") [
-    _Type_annotated>>: ref deannotateTypeDef <.> (project _AnnotatedType _AnnotatedType_subject)]
+    _Type_annotated>>: ref deannotateTypeDef <.> (project _AnnotatedType _AnnotatedType_body)]
 
 deannotateTypeParametersDef :: TBinding (Type -> Type)
 deannotateTypeParametersDef = define "deannotateTypeParameters" $
@@ -142,7 +142,7 @@ deannotateTypeRecursiveDef = define "deannotateTypeRecursive" $
     "rewritten" <~ var "recurse" @@ var "typ" $
     cases _Type (var "rewritten")
       (Just $ var "rewritten") [
-      _Type_annotated>>: "at" ~> Core.annotatedTypeSubject $ var "at"]) $
+      _Type_annotated>>: "at" ~> Core.annotatedTypeBody $ var "at"]) $
   ref rewriteTypeDef @@ var "strip" @@ var "typ"
 
 deannotateTypeSchemeRecursiveDef :: TBinding (TypeScheme -> TypeScheme)
@@ -159,7 +159,7 @@ detypeTermDef = define "detypeTerm" $
   "t" ~> cases _Term (var "t")
     (Just $ var "t") [
     _Term_annotated>>: "at" ~>
-       "subj" <~ Core.annotatedTermSubject (var "at") $
+       "subj" <~ Core.annotatedTermBody (var "at") $
        "ann" <~ Core.annotatedTermAnnotation (var "at") $
        Core.termAnnotated $ Core.annotatedTerm (ref detypeTermDef @@ var "subj") (var "ann"),
     _Term_typeApplication>>: "tt" ~> ref deannotateAndDetypeTermDef @@ (Core.typedTermTerm $ var "tt"),
@@ -176,7 +176,7 @@ flattenLetTermsDef = define "flattenLetTerms" $
     cases _Term (var "val0")
       (Just $ pair (Core.binding (var "key0") (var "val0") (var "t")) (list [])) [
       _Term_annotated>>: "at" ~>
-        "val1" <~ Core.annotatedTermSubject (var "at") $
+        "val1" <~ Core.annotatedTermBody (var "at") $
         "ann" <~ Core.annotatedTermAnnotation (var "at") $
         "recursive" <~ var "rewriteBinding" @@ (Core.binding (var "key0") (var "val1") (var "t")) $
         "innerBinding" <~ first (var "recursive") $
@@ -414,7 +414,7 @@ mapBeneathTypeAnnotationsDef = define "mapBeneathTypeAnnotations" $
   "f" ~> "t" ~> cases _Type (var "t")
     (Just $ var "f" @@ var "t") [
     _Type_annotated>>: "at" ~> Core.typeAnnotated $ Core.annotatedType
-      (ref mapBeneathTypeAnnotationsDef @@ var "f" @@ (Core.annotatedTypeSubject $ var "at"))
+      (ref mapBeneathTypeAnnotationsDef @@ var "f" @@ (Core.annotatedTypeBody $ var "at"))
       (Core.annotatedTypeAnnotation $ var "at")]
 
 normalizeTypeVariablesInTermDef :: TBinding (Term -> Term)
@@ -519,7 +519,7 @@ removeTermAnnotationsDef = define "removeTermAnnotations" $
     "rewritten" <~ var "recurse" @@ var "term" $
     cases _Term (var "term")
       (Just $ var "rewritten") [
-      _Term_annotated>>: "at" ~> Core.annotatedTermSubject $ var "at"]) $
+      _Term_annotated>>: "at" ~> Core.annotatedTermBody $ var "at"]) $
   ref rewriteTermDef @@ var "remove" @@ var "term"
 
 removeTypeAnnotationsDef :: TBinding (Type -> Type)
@@ -530,7 +530,7 @@ removeTypeAnnotationsDef = define "removeTypeAnnotations" $
     "rewritten" <~ var "recurse" @@ var "typ" $
     cases _Type (var "rewritten")
       (Just $ var "rewritten") [
-      _Type_annotated>>: "at" ~> Core.annotatedTypeSubject $ var "at"]) $
+      _Type_annotated>>: "at" ~> Core.annotatedTypeBody $ var "at"]) $
   ref rewriteTypeDef @@ var "remove" @@ var "typ"
 
 removeTypesFromTermDef :: TBinding (Term -> Term)
@@ -680,7 +680,7 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
         @@ var "recurse"
         @@ ("t" ~> Core.termAnnotated $ Core.annotatedTerm (var "t") (Core.annotatedTermAnnotation $ var "at"))
         @@ var "val0"
-        @@ (Core.annotatedTermSubject $ var "at"),
+        @@ (Core.annotatedTermBody $ var "at"),
       _Term_application>>: "a" ~>
         "rlhs" <~ var "recurse" @@ var "val0" @@ (Core.applicationFunction $ var "a") $
         "rrhs" <~ var "recurse" @@ (first $ var "rlhs") @@ (Core.applicationArgument $ var "a") $
@@ -747,7 +747,7 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
         @@ var "recurse"
         @@ ("t" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTermTypeName $ var "wt") (var "t"))
         @@ var "val0"
-        @@ (Core.wrappedTermObject $ var "wt")]) $
+        @@ (Core.wrappedTermBody $ var "wt")]) $
 --  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse"
@@ -822,7 +822,7 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
         @@ var "recurse"
         @@ ("t" ~> Core.termAnnotated $ Core.annotatedTerm (var "t") (Core.annotatedTermAnnotation $ var "at"))
         @@ var "val0"
-        @@ (Core.annotatedTermSubject $ var "at"),
+        @@ (Core.annotatedTermBody $ var "at"),
       _Term_application>>: "a" ~>
         "rlhs" <<~ var "recurse" @@ var "val0" @@ (Core.applicationFunction $ var "a") $
         "rrhs" <<~ var "recurse" @@ (first $ var "rlhs") @@ (Core.applicationArgument $ var "a") $
@@ -890,7 +890,7 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
         @@ var "recurse"
         @@ ("t" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTermTypeName $ var "wt") (var "t"))
         @@ var "val0"
-        @@ (Core.wrappedTermObject $ var "wt")]) $
+        @@ (Core.wrappedTermBody $ var "wt")]) $
 --  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse"
@@ -927,7 +927,7 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~>
       Maps.fromList $ Lists.map (var "forPair") $ Maps.toList $ var "m") $
     cases _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
-        (var "recurse" @@ (Core.annotatedTermSubject $ var "at"))
+        (var "recurse" @@ (Core.annotatedTermBody $ var "at"))
         (Core.annotatedTermAnnotation $ var "at"),
       _Term_application>>: "a" ~> Core.termApplication $ Core.application
         (var "recurse" @@ (Core.applicationFunction $ var "a"))
@@ -960,7 +960,7 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~>
       _Term_variable>>: "v" ~> Core.termVariable $ var "v",
       _Term_wrap>>: "wt" ~> Core.termWrap $ Core.wrappedTerm
         (Core.wrappedTermTypeName $ var "wt")
-        (var "recurse" @@ (Core.wrappedTermObject $ var "wt"))]) $
+        (var "recurse" @@ (Core.wrappedTermBody $ var "wt"))]) $
 --  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse"
@@ -982,7 +982,7 @@ rewriteTermMDef = define "rewriteTermM" $
       produce $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingType $ var "b")) $
     cases _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~>
-        "ex" <<~ var "recurse" @@ Core.annotatedTermSubject (var "at") $
+        "ex" <<~ var "recurse" @@ Core.annotatedTermBody (var "at") $
         produce $ Core.termAnnotated $ Core.annotatedTerm (var "ex") (Core.annotatedTermAnnotation $ var "at"),
       _Term_application>>: "app" ~>
         "lhs" <<~ var "recurse" @@ Core.applicationFunction (var "app") $
@@ -1066,7 +1066,7 @@ rewriteTermMDef = define "rewriteTermM" $
       _Term_variable>>: "v" ~> produce $ Core.termVariable $ var "v",
       _Term_wrap>>: "wt" ~>
         "name" <~ Core.wrappedTermTypeName (var "wt") $
-        "t" <~ Core.wrappedTermObject (var "wt") $
+        "t" <~ Core.wrappedTermBody (var "wt") $
         "rt" <<~ var "recurse" @@ var "t" $
         produce $ Core.termWrap $ Core.wrappedTerm (var "name") (var "rt")]) $
 --  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
@@ -1079,7 +1079,7 @@ rewriteTypeDef = define "rewriteType" $ "f" ~>
     "forField" <~ ("field" ~> Core.fieldTypeWithType (var "field") (var "recurse" @@ (Core.fieldTypeType $ var "field"))) $
     cases _Type (var "typ") Nothing [
       _Type_annotated>>: "at" ~> Core.typeAnnotated $ Core.annotatedType
-        (var "recurse" @@ (Core.annotatedTypeSubject $ var "at"))
+        (var "recurse" @@ (Core.annotatedTypeBody $ var "at"))
         (Core.annotatedTypeAnnotation $ var "at"),
       _Type_application>>: "app" ~> Core.typeApplication $ Core.applicationType
         (var "recurse" @@ (Core.applicationTypeFunction $ var "app"))
@@ -1109,7 +1109,7 @@ rewriteTypeDef = define "rewriteType" $ "f" ~>
       _Type_variable>>: "v" ~> Core.typeVariable $ var "v",
       _Type_wrap>>: "wt" ~> Core.typeWrap $ Core.wrappedType
         (Core.wrappedTypeTypeName $ var "wt")
-        (var "recurse" @@ (Core.wrappedTypeObject $ var "wt"))]) $
+        (var "recurse" @@ (Core.wrappedTypeBody $ var "wt"))]) $
 --  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse"
@@ -1120,7 +1120,7 @@ rewriteTypeMDef = define "rewriteTypeM" $
   "f" ~>
   "fsub" <~ ("recurse" ~> "typ" ~> cases _Type (var "typ") Nothing [
     _Type_annotated>>: "at" ~>
-      "t" <<~ var "recurse" @@ (Core.annotatedTypeSubject $ var "at") $
+      "t" <<~ var "recurse" @@ (Core.annotatedTypeBody $ var "at") $
       produce $ Core.typeAnnotated $ Core.annotatedType (var "t") (Core.annotatedTypeAnnotation $ var "at"),
     _Type_application>>: "at" ~>
       "lhs" <<~ var "recurse" @@ (Core.applicationTypeFunction $ var "at") $
@@ -1172,7 +1172,7 @@ rewriteTypeMDef = define "rewriteTypeM" $
     _Type_unit>>: constant $ produce Core.typeUnit,
     _Type_variable>>: "v" ~> produce $ Core.typeVariable $ var "v",
     _Type_wrap>>: "wt" ~>
-      "t" <<~ var "recurse" @@ (Core.wrappedTypeObject $ var "wt") $
+      "t" <<~ var "recurse" @@ (Core.wrappedTypeBody $ var "wt") $
       produce $ Core.typeWrap $ Core.wrappedType (Core.wrappedTypeTypeName $ var "wt") (var "t")]) $
 --  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
@@ -1255,7 +1255,7 @@ subtermsDef :: TBinding (Term -> [Term])
 subtermsDef = define "subterms" $
   doc "Find the children of a given term" $
   match _Term Nothing [
-    _Term_annotated>>: "at" ~> list [Core.annotatedTermSubject $ var "at"],
+    _Term_annotated>>: "at" ~> list [Core.annotatedTermBody $ var "at"],
     _Term_application>>: "p" ~> list [
       Core.applicationFunction $ var "p",
       Core.applicationArgument $ var "p"],
@@ -1285,13 +1285,13 @@ subtermsDef = define "subterms" $
     _Term_union>>: "ut" ~> list [Core.fieldTerm $ (Core.injectionField $ var "ut")],
     _Term_unit>>: constant $ list [],
     _Term_variable>>: constant $ list [],
-    _Term_wrap>>: "n" ~> list [Core.wrappedTermObject $ var "n"]]
+    _Term_wrap>>: "n" ~> list [Core.wrappedTermBody $ var "n"]]
 
 subtermsWithAccessorsDef :: TBinding (Term -> [(TermAccessor, Term)])
 subtermsWithAccessorsDef = define "subtermsWithAccessors" $
   doc "Find the children of a given term" $
   match _Term Nothing [
-    _Term_annotated>>: "at" ~> single Mantle.termAccessorAnnotatedSubject $ Core.annotatedTermSubject $ var "at",
+    _Term_annotated>>: "at" ~> single Mantle.termAccessorAnnotatedBody $ Core.annotatedTermBody $ var "at",
     _Term_application>>: "p" ~> list [
       result Mantle.termAccessorApplicationFunction $ Core.applicationFunction $ var "p",
       result Mantle.termAccessorApplicationArgument $ Core.applicationArgument $ var "p"],
@@ -1352,18 +1352,18 @@ subtermsWithAccessorsDef = define "subtermsWithAccessors" $
       Core.fieldTerm $ (Core.injectionField $ var "ut"),
     _Term_unit>>: constant none,
     _Term_variable>>: constant none,
-    _Term_wrap>>: "n" ~> single Mantle.termAccessorWrappedTerm $ Core.wrappedTermObject $ var "n"]
+    _Term_wrap>>: "n" ~> single Mantle.termAccessorWrappedTerm $ Core.wrappedTermBody $ var "n"]
   where
     none = list []
     single accessor term = list [result accessor term]
     result accessor term = pair accessor term
-    simple term = result Mantle.termAccessorAnnotatedSubject term
+    simple term = result Mantle.termAccessorAnnotatedBody term
 
 subtypesDef :: TBinding (Type -> [Type])
 subtypesDef = define "subtypes" $
   doc "Find the children of a given type expression" $
   match _Type Nothing [
-    _Type_annotated>>: "at" ~> list [Core.annotatedTypeSubject $ var "at"],
+    _Type_annotated>>: "at" ~> list [Core.annotatedTypeBody $ var "at"],
     _Type_application>>: "at" ~> list [
       Core.applicationTypeFunction $ var "at",
       Core.applicationTypeArgument $ var "at"],
@@ -1384,7 +1384,7 @@ subtypesDef = define "subtypes" $
     _Type_union>>: "rt" ~> Lists.map (unaryFunction Core.fieldTypeType) (Core.rowTypeFields $ var "rt"),
     _Type_unit>>: constant $ list [],
     _Type_variable>>: constant $ list [],
-    _Type_wrap>>: "nt" ~> list [Core.wrappedTypeObject $ var "nt"]]
+    _Type_wrap>>: "nt" ~> list [Core.wrappedTypeBody $ var "nt"]]
 
 termDependencyNamesDef :: TBinding (Bool -> Bool -> Bool -> Term -> S.Set Name)
 termDependencyNamesDef = define "termDependencyNames" $
@@ -1447,7 +1447,7 @@ topologicalSortBindingMapDef = define "topologicalSortBindingMap" $
   "hasTypeAnnotation" <~ ("term" ~>
     cases _Term (var "term")
       (Just false) [
-      _Term_annotated>>: "at" ~> var "hasTypeAnnotation" @@ (Core.annotatedTermSubject $ var "at")]) $
+      _Term_annotated>>: "at" ~> var "hasTypeAnnotation" @@ (Core.annotatedTermBody $ var "at")]) $
   "depsOf" <~ ("nameAndTerm" ~>
     "name" <~ first (var "nameAndTerm") $
     "term" <~ second (var "nameAndTerm") $

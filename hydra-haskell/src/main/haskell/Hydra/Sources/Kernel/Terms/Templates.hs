@@ -79,7 +79,7 @@ instantiateTemplateDef = define "instantiateTemplate" $
     "inst">: ref instantiateTemplateDef @@ var "minimal" @@ var "schema",
     "noPoly">: Flows.fail $ string "Polymorphic and function types are not currently supported"]
     $ match _Type Nothing [
-      _Type_annotated>>: lambda "at" $ var "inst" @@ (Core.annotatedTypeSubject $ var "at"),
+      _Type_annotated>>: lambda "at" $ var "inst" @@ (Core.annotatedTypeBody $ var "at"),
       _Type_application>>: constant $ var "noPoly",
       _Type_function>>: constant $ var "noPoly",
       _Type_forall>>: constant $ var "noPoly",
@@ -146,7 +146,7 @@ instantiateTemplateDef = define "instantiateTemplate" $
           (Maps.lookup (var "tname") (var "schema")),
       _Type_wrap>>: lambda "wt" $ lets [
         "tname">: Core.wrappedTypeTypeName $ var "wt",
-        "t'">: Core.wrappedTypeObject $ var "wt"]
+        "t'">: Core.wrappedTypeBody $ var "wt"]
         $ Flows.bind (var "inst" @@ var "t'") $
           lambda "e" $ Flows.pure $ Core.termWrap $ Core.wrappedTerm (var "tname") (var "e")] @@ var "t"
 

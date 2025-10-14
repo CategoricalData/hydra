@@ -28,7 +28,7 @@ import qualified Data.Set as S
 -- | Strip type annotations from the top levels of a term
 deannotateAndDetypeTerm :: (Core.Term -> Core.Term)
 deannotateAndDetypeTerm t = ((\x -> case x of
-  Core.TermAnnotated v1 -> (deannotateAndDetypeTerm (Core.annotatedTermSubject v1))
+  Core.TermAnnotated v1 -> (deannotateAndDetypeTerm (Core.annotatedTermBody v1))
   Core.TermTypeApplication v1 -> (deannotateAndDetypeTerm (Core.typedTermTerm v1))
   Core.TermTypeLambda v1 -> (deannotateAndDetypeTerm (Core.typeLambdaBody v1))
   _ -> t) t)
@@ -36,13 +36,13 @@ deannotateAndDetypeTerm t = ((\x -> case x of
 -- | Strip all annotations (including System F type annotations) from the top levels of a term
 deannotateTerm :: (Core.Term -> Core.Term)
 deannotateTerm t = ((\x -> case x of
-  Core.TermAnnotated v1 -> (deannotateTerm (Core.annotatedTermSubject v1))
+  Core.TermAnnotated v1 -> (deannotateTerm (Core.annotatedTermBody v1))
   _ -> t) t)
 
 -- | Strip all annotations from a term
 deannotateType :: (Core.Type -> Core.Type)
 deannotateType t = ((\x -> case x of
-  Core.TypeAnnotated v1 -> (deannotateType (Core.annotatedTypeSubject v1))
+  Core.TypeAnnotated v1 -> (deannotateType (Core.annotatedTypeBody v1))
   _ -> t) t)
 
 -- | Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
@@ -57,7 +57,7 @@ deannotateTypeRecursive typ =
   let strip = (\recurse -> \typ ->  
           let rewritten = (recurse typ)
           in ((\x -> case x of
-            Core.TypeAnnotated v1 -> (Core.annotatedTypeSubject v1)
+            Core.TypeAnnotated v1 -> (Core.annotatedTypeBody v1)
             _ -> rewritten) rewritten))
   in (rewriteType strip typ)
 
@@ -75,11 +75,11 @@ deannotateTypeSchemeRecursive ts =
 detypeTerm :: (Core.Term -> Core.Term)
 detypeTerm t = ((\x -> case x of
   Core.TermAnnotated v1 ->  
-    let subj = (Core.annotatedTermSubject v1)
+    let subj = (Core.annotatedTermBody v1)
     in  
       let ann = (Core.annotatedTermAnnotation v1)
       in (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermSubject = (detypeTerm subj),
+        Core.annotatedTermBody = (detypeTerm subj),
         Core.annotatedTermAnnotation = ann}))
   Core.TermTypeApplication v1 -> (deannotateAndDetypeTerm (Core.typedTermTerm v1))
   Core.TermTypeLambda v1 -> (deannotateAndDetypeTerm (Core.typeLambdaBody v1))
@@ -96,7 +96,7 @@ flattenLetTerms term =
               let t = (Core.bindingType binding)
               in ((\x -> case x of
                 Core.TermAnnotated v1 ->  
-                  let val1 = (Core.annotatedTermSubject v1)
+                  let val1 = (Core.annotatedTermBody v1)
                   in  
                     let ann = (Core.annotatedTermAnnotation v1)
                     in  
@@ -113,7 +113,7 @@ flattenLetTerms term =
                             in (Core.Binding {
                               Core.bindingName = key0,
                               Core.bindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
-                                Core.annotatedTermSubject = val2,
+                                Core.annotatedTermBody = val2,
                                 Core.annotatedTermAnnotation = ann})),
                               Core.bindingType = t}, deps)
                 Core.TermLet v1 ->  
@@ -282,7 +282,7 @@ isLambda term = ((\x -> case x of
 mapBeneathTypeAnnotations :: ((Core.Type -> Core.Type) -> Core.Type -> Core.Type)
 mapBeneathTypeAnnotations f t = ((\x -> case x of
   Core.TypeAnnotated v1 -> (Core.TypeAnnotated (Core.AnnotatedType {
-    Core.annotatedTypeSubject = (mapBeneathTypeAnnotations f (Core.annotatedTypeSubject v1)),
+    Core.annotatedTypeBody = (mapBeneathTypeAnnotations f (Core.annotatedTypeBody v1)),
     Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))
   _ -> (f t)) t)
 
@@ -386,7 +386,7 @@ removeTermAnnotations term =
   let remove = (\recurse -> \term ->  
           let rewritten = (recurse term)
           in ((\x -> case x of
-            Core.TermAnnotated v1 -> (Core.annotatedTermSubject v1)
+            Core.TermAnnotated v1 -> (Core.annotatedTermBody v1)
             _ -> rewritten) term))
   in (rewriteTerm remove term)
 
@@ -396,7 +396,7 @@ removeTypeAnnotations typ =
   let remove = (\recurse -> \typ ->  
           let rewritten = (recurse typ)
           in ((\x -> case x of
-            Core.TypeAnnotated v1 -> (Core.annotatedTypeSubject v1)
+            Core.TypeAnnotated v1 -> (Core.annotatedTypeBody v1)
             _ -> rewritten) rewritten))
   in (rewriteType remove typ)
 
@@ -524,8 +524,8 @@ rewriteAndFoldTerm f =
                           let dflt = (val0, term0)
                           in ((\x -> case x of
                             Core.TermAnnotated v1 -> (forSingle recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
-                              Core.annotatedTermSubject = t,
-                              Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)})) val0 (Core.annotatedTermSubject v1))
+                              Core.annotatedTermBody = t,
+                              Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)})) val0 (Core.annotatedTermBody v1))
                             Core.TermApplication v1 ->  
                               let rlhs = (recurse val0 (Core.applicationFunction v1))
                               in  
@@ -564,7 +564,7 @@ rewriteAndFoldTerm f =
                                 Core.fieldTerm = t}})) val0 (Core.fieldTerm (Core.injectionField v1)))
                             Core.TermWrap v1 -> (forSingle recurse (\t -> Core.TermWrap (Core.WrappedTerm {
                               Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
-                              Core.wrappedTermObject = t})) val0 (Core.wrappedTermObject v1))
+                              Core.wrappedTermBody = t})) val0 (Core.wrappedTermBody v1))
                             _ -> dflt) term0))
   in  
     let recurse = (f (fsub recurse))
@@ -610,8 +610,8 @@ rewriteAndFoldTermM f =
                           let dflt = (Flows.pure (val0, term0))
                           in ((\x -> case x of
                             Core.TermAnnotated v1 -> (forSingle recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
-                              Core.annotatedTermSubject = t,
-                              Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)})) val0 (Core.annotatedTermSubject v1))
+                              Core.annotatedTermBody = t,
+                              Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)})) val0 (Core.annotatedTermBody v1))
                             Core.TermApplication v1 -> (Flows.bind (recurse val0 (Core.applicationFunction v1)) (\rlhs -> Flows.bind (recurse (fst rlhs) (Core.applicationArgument v1)) (\rrhs -> Flows.pure (fst rrhs, (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (snd rlhs),
                               Core.applicationArgument = (snd rrhs)}))))))
@@ -644,7 +644,7 @@ rewriteAndFoldTermM f =
                                 Core.fieldTerm = t}})) val0 (Core.fieldTerm (Core.injectionField v1)))
                             Core.TermWrap v1 -> (forSingle recurse (\t -> Core.TermWrap (Core.WrappedTerm {
                               Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
-                              Core.wrappedTermObject = t})) val0 (Core.wrappedTermObject v1))
+                              Core.wrappedTermBody = t})) val0 (Core.wrappedTermBody v1))
                             _ -> dflt) term0))
   in  
     let recurse = (f (fsub recurse))
@@ -688,7 +688,7 @@ rewriteTerm f =
                           in (Maps.fromList (Lists.map forPair (Maps.toList m))))
                   in ((\x -> case x of
                     Core.TermAnnotated v1 -> (Core.TermAnnotated (Core.AnnotatedTerm {
-                      Core.annotatedTermSubject = (recurse (Core.annotatedTermSubject v1)),
+                      Core.annotatedTermBody = (recurse (Core.annotatedTermBody v1)),
                       Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))
                     Core.TermApplication v1 -> (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (recurse (Core.applicationFunction v1)),
@@ -721,7 +721,7 @@ rewriteTerm f =
                     Core.TermVariable v1 -> (Core.TermVariable v1)
                     Core.TermWrap v1 -> (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
-                      Core.wrappedTermObject = (recurse (Core.wrappedTermObject v1))}))) term))
+                      Core.wrappedTermBody = (recurse (Core.wrappedTermBody v1))}))) term))
   in  
     let recurse = (f (fsub recurse))
     in recurse
@@ -740,8 +740,8 @@ rewriteTermM f =
                       Core.bindingTerm = v,
                       Core.bindingType = (Core.bindingType b)})))
               in ((\x -> case x of
-                Core.TermAnnotated v1 -> (Flows.bind (recurse (Core.annotatedTermSubject v1)) (\ex -> Flows.pure (Core.TermAnnotated (Core.AnnotatedTerm {
-                  Core.annotatedTermSubject = ex,
+                Core.TermAnnotated v1 -> (Flows.bind (recurse (Core.annotatedTermBody v1)) (\ex -> Flows.pure (Core.TermAnnotated (Core.AnnotatedTerm {
+                  Core.annotatedTermBody = ex,
                   Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))))
                 Core.TermApplication v1 -> (Flows.bind (recurse (Core.applicationFunction v1)) (\lhs -> Flows.bind (recurse (Core.applicationArgument v1)) (\rhs -> Flows.pure (Core.TermApplication (Core.Application {
                   Core.applicationFunction = lhs,
@@ -824,10 +824,10 @@ rewriteTermM f =
                 Core.TermWrap v1 ->  
                   let name = (Core.wrappedTermTypeName v1)
                   in  
-                    let t = (Core.wrappedTermObject v1)
+                    let t = (Core.wrappedTermBody v1)
                     in (Flows.bind (recurse t) (\rt -> Flows.pure (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = name,
-                      Core.wrappedTermObject = rt}))))) term))
+                      Core.wrappedTermBody = rt}))))) term))
   in  
     let recurse = (f (fsub recurse))
     in recurse
@@ -840,7 +840,7 @@ rewriteType f =
                   Core.fieldTypeType = (recurse (Core.fieldTypeType field))})
           in ((\x -> case x of
             Core.TypeAnnotated v1 -> (Core.TypeAnnotated (Core.AnnotatedType {
-              Core.annotatedTypeSubject = (recurse (Core.annotatedTypeSubject v1)),
+              Core.annotatedTypeBody = (recurse (Core.annotatedTypeBody v1)),
               Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))
             Core.TypeApplication v1 -> (Core.TypeApplication (Core.ApplicationType {
               Core.applicationTypeFunction = (recurse (Core.applicationTypeFunction v1)),
@@ -870,7 +870,7 @@ rewriteType f =
             Core.TypeVariable v1 -> (Core.TypeVariable v1)
             Core.TypeWrap v1 -> (Core.TypeWrap (Core.WrappedType {
               Core.wrappedTypeTypeName = (Core.wrappedTypeTypeName v1),
-              Core.wrappedTypeObject = (recurse (Core.wrappedTypeObject v1))}))) typ))
+              Core.wrappedTypeBody = (recurse (Core.wrappedTypeBody v1))}))) typ))
   in  
     let recurse = (f (fsub recurse))
     in recurse
@@ -878,8 +878,8 @@ rewriteType f =
 rewriteTypeM :: (((Core.Type -> Compute.Flow t0 Core.Type) -> Core.Type -> Compute.Flow t0 Core.Type) -> Core.Type -> Compute.Flow t0 Core.Type)
 rewriteTypeM f =  
   let fsub = (\recurse -> \typ -> (\x -> case x of
-          Core.TypeAnnotated v1 -> (Flows.bind (recurse (Core.annotatedTypeSubject v1)) (\t -> Flows.pure (Core.TypeAnnotated (Core.AnnotatedType {
-            Core.annotatedTypeSubject = t,
+          Core.TypeAnnotated v1 -> (Flows.bind (recurse (Core.annotatedTypeBody v1)) (\t -> Flows.pure (Core.TypeAnnotated (Core.AnnotatedType {
+            Core.annotatedTypeBody = t,
             Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))))
           Core.TypeApplication v1 -> (Flows.bind (recurse (Core.applicationTypeFunction v1)) (\lhs -> Flows.bind (recurse (Core.applicationTypeArgument v1)) (\rhs -> Flows.pure (Core.TypeApplication (Core.ApplicationType {
             Core.applicationTypeFunction = lhs,
@@ -923,9 +923,9 @@ rewriteTypeM f =
                   Core.rowTypeFields = rfields}))))
           Core.TypeUnit -> (Flows.pure Core.TypeUnit)
           Core.TypeVariable v1 -> (Flows.pure (Core.TypeVariable v1))
-          Core.TypeWrap v1 -> (Flows.bind (recurse (Core.wrappedTypeObject v1)) (\t -> Flows.pure (Core.TypeWrap (Core.WrappedType {
+          Core.TypeWrap v1 -> (Flows.bind (recurse (Core.wrappedTypeBody v1)) (\t -> Flows.pure (Core.TypeWrap (Core.WrappedType {
             Core.wrappedTypeTypeName = (Core.wrappedTypeTypeName v1),
-            Core.wrappedTypeObject = t}))))) typ)
+            Core.wrappedTypeBody = t}))))) typ)
   in  
     let recurse = (f (fsub recurse))
     in recurse
@@ -992,7 +992,7 @@ substituteVariables subst term =
 subterms :: (Core.Term -> [Core.Term])
 subterms x = case x of
   Core.TermAnnotated v1 -> [
-    Core.annotatedTermSubject v1]
+    Core.annotatedTermBody v1]
   Core.TermApplication v1 -> [
     Core.applicationFunction v1,
     (Core.applicationArgument v1)]
@@ -1026,13 +1026,13 @@ subterms x = case x of
   Core.TermUnit -> []
   Core.TermVariable _ -> []
   Core.TermWrap v1 -> [
-    Core.wrappedTermObject v1]
+    Core.wrappedTermBody v1]
 
 -- | Find the children of a given term
 subtermsWithAccessors :: (Core.Term -> [(Accessors.TermAccessor, Core.Term)])
 subtermsWithAccessors x = case x of
   Core.TermAnnotated v1 -> [
-    (Accessors.TermAccessorAnnotatedSubject, (Core.annotatedTermSubject v1))]
+    (Accessors.TermAccessorAnnotatedBody, (Core.annotatedTermBody v1))]
   Core.TermApplication v1 -> [
     (Accessors.TermAccessorApplicationFunction, (Core.applicationFunction v1)),
     (Accessors.TermAccessorApplicationArgument, (Core.applicationArgument v1))]
@@ -1066,13 +1066,13 @@ subtermsWithAccessors x = case x of
   Core.TermUnit -> []
   Core.TermVariable _ -> []
   Core.TermWrap v1 -> [
-    (Accessors.TermAccessorWrappedTerm, (Core.wrappedTermObject v1))]
+    (Accessors.TermAccessorWrappedTerm, (Core.wrappedTermBody v1))]
 
 -- | Find the children of a given type expression
 subtypes :: (Core.Type -> [Core.Type])
 subtypes x = case x of
   Core.TypeAnnotated v1 -> [
-    Core.annotatedTypeSubject v1]
+    Core.annotatedTypeBody v1]
   Core.TypeApplication v1 -> [
     Core.applicationTypeFunction v1,
     (Core.applicationTypeArgument v1)]
@@ -1098,7 +1098,7 @@ subtypes x = case x of
   Core.TypeUnit -> []
   Core.TypeVariable _ -> []
   Core.TypeWrap v1 -> [
-    Core.wrappedTypeObject v1]
+    Core.wrappedTypeBody v1]
 
 -- | Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
 termDependencyNames :: (Bool -> Bool -> Bool -> Core.Term -> S.Set Core.Name)
@@ -1157,7 +1157,7 @@ topologicalSortBindingMap bindingMap =
     let keys = (Sets.fromList (Lists.map fst bindings))
     in  
       let hasTypeAnnotation = (\term -> (\x -> case x of
-              Core.TermAnnotated v1 -> (hasTypeAnnotation (Core.annotatedTermSubject v1))
+              Core.TermAnnotated v1 -> (hasTypeAnnotation (Core.annotatedTermBody v1))
               _ -> False) term)
       in  
         let depsOf = (\nameAndTerm ->  

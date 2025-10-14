@@ -378,7 +378,7 @@ termAnnotationInternalDef = define "termAnnotationInternal" $
     "getAnn">: lambda "t" $ cases _Term (var "t")
       (Just nothing) [
       _Term_annotated>>: lambda "a" $ just $ var "a"]] $
-    ref aggregateAnnotationsDef @@ var "getAnn" @@ (unaryFunction Core.annotatedTermSubject) @@ (unaryFunction Core.annotatedTermAnnotation)
+    ref aggregateAnnotationsDef @@ var "getAnn" @@ (unaryFunction Core.annotatedTermBody) @@ (unaryFunction Core.annotatedTermAnnotation)
 
 typeAnnotationInternalDef :: TBinding (Type -> M.Map Name Term)
 typeAnnotationInternalDef = define "typeAnnotationInternal" $
@@ -386,7 +386,7 @@ typeAnnotationInternalDef = define "typeAnnotationInternal" $
     "getAnn">: lambda "t" $ cases _Type (var "t")
       (Just nothing) [
       _Type_annotated>>: lambda "a" $ just $ var "a"]] $
-    ref aggregateAnnotationsDef @@ var "getAnn" @@ (unaryFunction Core.annotatedTypeSubject) @@ (unaryFunction Core.annotatedTypeAnnotation)
+    ref aggregateAnnotationsDef @@ var "getAnn" @@ (unaryFunction Core.annotatedTypeBody) @@ (unaryFunction Core.annotatedTypeAnnotation)
 
 -- TODO: deprecate
 typeElementDef :: TBinding (Name -> Type -> Binding)

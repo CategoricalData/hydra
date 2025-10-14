@@ -109,7 +109,7 @@ typeIsSupported constraints t =
               Mantle.TypeVariantVariable -> True
               _ -> False) v) (Sets.member v (Coders.languageConstraintsTypeVariants constraints)))
   in (Logic.and (Coders.languageConstraintsTypes constraints base) (Logic.and (isSupportedVariant (Variants.typeVariant base)) ((\x -> case x of
-    Core.TypeAnnotated v1 -> (typeIsSupported constraints (Core.annotatedTypeSubject v1))
+    Core.TypeAnnotated v1 -> (typeIsSupported constraints (Core.annotatedTypeBody v1))
     Core.TypeApplication v1 -> (Logic.and (typeIsSupported constraints (Core.applicationTypeFunction v1)) (typeIsSupported constraints (Core.applicationTypeArgument v1)))
     Core.TypeForall v1 -> (typeIsSupported constraints (Core.forallTypeBody v1))
     Core.TypeFunction v1 -> (Logic.and (typeIsSupported constraints (Core.functionTypeDomain v1)) (typeIsSupported constraints (Core.functionTypeCodomain v1)))
@@ -123,7 +123,7 @@ typeIsSupported constraints t =
     Core.TypeSum v1 -> (Lists.foldl Logic.and True (Lists.map (typeIsSupported constraints) v1))
     Core.TypeUnion v1 -> (Lists.foldl Logic.and True (Lists.map (\field -> typeIsSupported constraints (Core.fieldTypeType field)) (Core.rowTypeFields v1)))
     Core.TypeUnit -> True
-    Core.TypeWrap v1 -> (typeIsSupported constraints (Core.wrappedTypeObject v1))
+    Core.TypeWrap v1 -> (typeIsSupported constraints (Core.wrappedTypeBody v1))
     Core.TypeVariable _ -> True) base)))
 
 unidirectionalCoder :: ((t0 -> Compute.Flow t1 t2) -> Compute.Coder t1 t3 t0 t2)

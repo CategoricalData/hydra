@@ -182,7 +182,7 @@ typeIsSupportedDef = define "typeIsSupported" $
         (Logic.and
           (var "isSupportedVariant" @@ (ref Variants.typeVariantDef @@ var "base"))
           (match _Type Nothing [
-            _Type_annotated>>: lambda "at" $ ref typeIsSupportedDef @@ var "constraints" @@ Core.annotatedTypeSubject (var "at"),
+            _Type_annotated>>: lambda "at" $ ref typeIsSupportedDef @@ var "constraints" @@ Core.annotatedTypeBody (var "at"),
             _Type_application>>: lambda "app" $
               Logic.and
                 (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeFunction (var "app"))
@@ -213,7 +213,7 @@ typeIsSupportedDef = define "typeIsSupported" $
                 (lambda "field" $ ref typeIsSupportedDef @@ var "constraints" @@ Core.fieldTypeType (var "field"))
                 (Core.rowTypeFields $ var "rt"),
             _Type_unit>>: constant true,
-            _Type_wrap>>: lambda "wt" $ ref typeIsSupportedDef @@ var "constraints" @@ Core.wrappedTypeObject (var "wt"),
+            _Type_wrap>>: lambda "wt" $ ref typeIsSupportedDef @@ var "constraints" @@ Core.wrappedTypeBody (var "wt"),
             _Type_variable>>: constant true]
           @@ var "base"))
   where
