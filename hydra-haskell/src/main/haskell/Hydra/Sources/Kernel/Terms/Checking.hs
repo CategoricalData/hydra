@@ -168,7 +168,7 @@ checkForUnboundTypeVariablesDef = define "checkForUnboundTypeVariables" $
           "newTrace" <~ Lists.cons (Core.unName $ Core.bindingName $ var "b") (var "trace") $
           var "checkRecursive" @@ var "newVars" @@ var "newTrace" @@ (just $ var "b") @@ var "bterm") $
         exec (Flows.mapList (var "forBinding") $ Core.letBindings $ var "l") $
-        var "recurse" @@ (Core.letEnvironment $ var "l"),
+        var "recurse" @@ (Core.letBody $ var "l"),
       _Term_typeApplication>>: "tt" ~>
         exec (var "check" @@ (Core.typedTermType $ var "tt")) $
         var "recurse" @@ (Core.typedTermTerm $ var "tt"),
@@ -417,7 +417,7 @@ typeOfLetDef :: TBinding (TypeContext -> [Type] -> Let -> Flow s Type)
 typeOfLetDef = define "typeOfLet" $
   "tx" ~> "typeArgs" ~> "letTerm" ~>
   "bs" <~ Core.letBindings (var "letTerm") $
-  "body" <~ Core.letEnvironment (var "letTerm") $
+  "body" <~ Core.letBody (var "letTerm") $
   "bnames" <~ Lists.map (unaryFunction Core.bindingName) (var "bs") $
   "bterms" <~ Lists.map (unaryFunction Core.bindingTerm) (var "bs") $
   "bindingType" <~ ("b" ~>

@@ -68,7 +68,7 @@ substituteInTerm subst term0 =
                                       Core.bindingType = (Core.bindingType b)})
                           in (Core.TermLet (Core.Let {
                             Core.letBindings = (Lists.map rewriteBinding bindings),
-                            Core.letEnvironment = (substituteInTerm subst2 (Core.letEnvironment lt))})))
+                            Core.letBody = (substituteInTerm subst2 (Core.letBody lt))})))
               in ((\x -> case x of
                 Core.TermFunction v1 -> ((\x -> case x of
                   Core.FunctionLambda v2 -> (withLambda v2)
@@ -116,7 +116,7 @@ substTypesInTerm subst term0 =
                               Core.bindingType = (Optionals.map (substInTypeScheme subst) (Core.bindingType b))})
                       in (Core.TermLet (Core.Let {
                         Core.letBindings = (Lists.map rewriteBinding (Core.letBindings l)),
-                        Core.letEnvironment = (substTypesInTerm subst (Core.letEnvironment l))})))
+                        Core.letBody = (substTypesInTerm subst (Core.letBody l))})))
               forTupleProjection = (\tp -> Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
                       Core.tupleProjectionArity = (Core.tupleProjectionArity tp),
                       Core.tupleProjectionIndex = (Core.tupleProjectionIndex tp),

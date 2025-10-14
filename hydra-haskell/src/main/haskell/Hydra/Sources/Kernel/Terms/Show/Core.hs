@@ -281,7 +281,7 @@ termDef = define "term" $
     _Term_function>>: ref functionDef,
     _Term_let>>: "l" ~>
       "bindings" <~ Core.letBindings (var "l") $
-      "env" <~ Core.letEnvironment (var "l") $
+      "env" <~ Core.letBody (var "l") $
       "bindingStrs" <~ Lists.map (ref bindingDef) (var "bindings") $
       Strings.cat $ list [
         string "let ",

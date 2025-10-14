@@ -168,7 +168,7 @@ graphAsTerm g =
                 Core.bindingType = mts})
   in (Core.TermLet (Core.Let {
     Core.letBindings = (Lists.map toBinding (Maps.elems (Graph.graphElements g))),
-    Core.letEnvironment = (Graph.graphBody g)}))
+    Core.letBody = (Graph.graphBody g)}))
 
 -- | Decode a schema graph which encodes a set of named types
 graphAsTypes :: (Graph.Graph -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type))

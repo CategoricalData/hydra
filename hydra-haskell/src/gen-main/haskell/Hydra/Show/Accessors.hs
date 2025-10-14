@@ -30,7 +30,7 @@ termAccessor accessor =
     Accessors.TermAccessorLambdaBody -> (Just "body")
     Accessors.TermAccessorUnionCasesDefault -> (Just "default")
     Accessors.TermAccessorUnionCasesBranch v1 -> (Just (Strings.cat2 "." (Core.unName v1)))
-    Accessors.TermAccessorLetEnvironment -> (Just "in")
+    Accessors.TermAccessorLetBody -> (Just "in")
     Accessors.TermAccessorLetBinding v1 -> (Just (Strings.cat2 (Core.unName v1) "="))
     Accessors.TermAccessorListElement v1 -> (idx v1)
     Accessors.TermAccessorMapKey v1 -> (idxSuff ".key" v1)
@@ -60,7 +60,7 @@ termToAccessorGraph namespaces term =
               in ((\x -> case x of
                 Core.TermLet v1 ->  
                   let bindings = (Core.letBindings v1) 
-                      env = (Core.letEnvironment v1)
+                      env = (Core.letBody v1)
                       bindingNames = (Lists.map Core.bindingName bindings)
                       addBindingName = (\nodesVisitedIds -> \name ->  
                               let currentNodesVisited = (fst nodesVisitedIds) 
@@ -88,7 +88,7 @@ termToAccessorGraph namespaces term =
                               in (helper ids1 (Just root) [] currentState (dontCareAccessor, term1)))
                       nodeBindingPairs = (Lists.zip nodes1 bindings)
                       stateAfterBindings = (Lists.foldl addBindingTerm ((Lists.concat2 nodes1 nodes, edges), visited1) nodeBindingPairs)
-                  in (helper ids1 mroot nextPath stateAfterBindings (Accessors.TermAccessorLetEnvironment, env))
+                  in (helper ids1 mroot nextPath stateAfterBindings (Accessors.TermAccessorLetBody, env))
                 Core.TermVariable v1 -> (Optionals.maybe state (\root -> Optionals.maybe state (\node ->  
                   let edge = Accessors.AccessorEdge {
                           Accessors.accessorEdgeSource = root,

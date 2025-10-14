@@ -350,7 +350,7 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
         ref encodeFunctionDef @@ var "namespaces" @@ var "f",
       _Term_let>>: lambda "letTerm" $ lets [
         "bindings">: Core.letBindings $ var "letTerm",
-        "env">: Core.letEnvironment $ var "letTerm",
+        "env">: Core.letBody $ var "letTerm",
         "encodeBinding">: lambda "binding" $ lets [
           "name">: Core.bindingName $ var "binding",
           "term'">: Core.bindingTerm $ var "binding",
@@ -685,7 +685,7 @@ toDataDeclarationDef = haskellCoderDefinition "toDataDeclaration" $
           -- A "let" constant cannot be predicted in advance, so we construct a coder on the fly.
           -- This makes program code with "let" terms more expensive to transform than simple data.
           "lbindings">: Core.letBindings $ var "letTerm",
-          "env">: Core.letEnvironment $ var "letTerm",
+          "env">: Core.letBody $ var "letTerm",
           "toBinding">: lambda "hname''" $ lambda "hterm'" $
             inject H._LocalBinding H._LocalBinding_value $ ref HaskellUtils.simpleValueBindingDef @@ var "hname''" @@ var "hterm'" @@ nothing,
           "ts">: Lists.map (lambda "binding" $ Core.typeSchemeType $ Optionals.fromJust $ Core.bindingType $ var "binding") (var "lbindings")] $

@@ -71,7 +71,7 @@ bindUnboundTypeVariables cx term0 =
                                     Core.bindingType = (Just ts2)}) (Core.bindingType b)))
               in (Core.TermLet (Core.Let {
                 Core.letBindings = (Lists.map forBinding (Core.letBindings v1)),
-                Core.letEnvironment = (bindUnboundTypeVariables cx (Core.letEnvironment v1))}))
+                Core.letBody = (bindUnboundTypeVariables cx (Core.letBody v1))}))
             _ -> (recurse term)) term)
     in (Rewriting.rewriteTerm rewrite term0)
 
@@ -138,7 +138,7 @@ inferGraphTypes g0 =
   let fromLetTerm = (\l ->  
           let bindings = (Core.letBindings l)
           in  
-            let body = (Core.letEnvironment l)
+            let body = (Core.letBody l)
             in  
               let fromBinding = (\b -> (Core.bindingName b, b))
               in Graph.Graph {
@@ -156,7 +156,7 @@ inferGraphTypes g0 =
                     Core.bindingType = Nothing})
             in (Core.TermLet (Core.Let {
               Core.letBindings = (Lists.map toBinding (Maps.elems (Graph.graphElements g))),
-              Core.letEnvironment = (Graph.graphBody g)})))
+              Core.letBody = (Graph.graphBody g)})))
     in (Monads.withTrace "graph inference" (Flows.bind (graphToInferenceContext g0) (\cx -> Flows.bind (inferTypeOfTerm cx (toLetTerm g0) "graph term") (\result ->  
       let term = (Typing_.inferenceResultTerm result)
       in  
@@ -331,7 +331,7 @@ inferTypeOf cx term =
               Core.bindingName = (Core.Name "ignoredVariableName"),
               Core.bindingTerm = term,
               Core.bindingType = Nothing}],
-          Core.letEnvironment = (Core.TermLiteral (Core.LiteralString "ignoredBody"))}))
+          Core.letBody = (Core.TermLiteral (Core.LiteralString "ignoredBody"))}))
   in  
     let unifyAndSubst = (\result ->  
             let subst = (Typing_.inferenceResultSubst result)
@@ -436,7 +436,7 @@ inferTypeOfLetNormalized :: (Typing_.InferenceContext -> Core.Let -> Compute.Flo
 inferTypeOfLetNormalized cx0 letTerm =  
   let bins0 = (Core.letBindings letTerm)
   in  
-    let body0 = (Core.letEnvironment letTerm)
+    let body0 = (Core.letBody letTerm)
     in  
       let bnames = (Lists.map Core.bindingName bins0)
       in (Flows.bind (Schemas.freshNames (Lists.length bins0)) (\bvars ->  
@@ -492,7 +492,7 @@ inferTypeOfLetNormalized cx0 letTerm =
                                     let ret = Typing_.InferenceResult {
                                             Typing_.inferenceResultTerm = (Core.TermLet (Core.Let {
                                               Core.letBindings = bins1,
-                                              Core.letEnvironment = body1})),
+                                              Core.letBody = body1})),
                                             Typing_.inferenceResultType = tbody,
                                             Typing_.inferenceResultSubst = (Substitution.composeTypeSubstList [
                                               s1,
@@ -504,7 +504,7 @@ inferTypeOfLet :: (Typing_.InferenceContext -> Core.Let -> Compute.Flow t0 Typin
 inferTypeOfLet cx let0 =  
   let bindings0 = (Core.letBindings let0)
   in  
-    let body0 = (Core.letEnvironment let0)
+    let body0 = (Core.letBody let0)
     in  
       let names = (Lists.map Core.bindingName bindings0)
       in  
@@ -524,7 +524,7 @@ inferTypeOfLet cx let0 =
                 in  
                   let createLet = (\e -> \group -> Core.TermLet (Core.Let {
                           Core.letBindings = (Optionals.cat (Lists.map (\n -> Maps.lookup n bindingMap) group)),
-                          Core.letEnvironment = e}))
+                          Core.letBody = e}))
                   in  
                     let rewrittenLet = (Lists.foldl createLet body0 (Lists.reverse groups))
                     in  
@@ -533,7 +533,7 @@ inferTypeOfLet cx let0 =
                                       Core.TermLet v1 ->  
                                         let bs = (Core.letBindings v1)
                                         in  
-                                          let e = (Core.letEnvironment v1)
+                                          let e = (Core.letBody v1)
                                           in (helper (Math.sub level 1) (Lists.concat [
                                             bs,
                                             bins]) e)) term))
@@ -547,7 +547,7 @@ inferTypeOfLet cx let0 =
                                       let bindingMap2 = (Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) bindingList))
                                       in (Core.TermLet (Core.Let {
                                         Core.letBindings = (Optionals.cat (Lists.map (\n -> Maps.lookup n bindingMap2) names)),
-                                        Core.letEnvironment = e})))
+                                        Core.letBody = e})))
                       in  
                         let rewriteResult = (\result ->  
                                 let iterm = (Typing_.inferenceResultTerm result)

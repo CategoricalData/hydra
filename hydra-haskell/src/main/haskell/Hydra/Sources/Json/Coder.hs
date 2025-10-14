@@ -375,7 +375,7 @@ untypedTermToJsonDef = define "untypedTermToJson" $
         _Function_primitive>>: lambda "name" $ produce $ Json.valueString $ Core.unName $ var "name"],
       _Term_let>>: lambda "lt" $ lets [
         "bindings">: Core.letBindings $ var "lt",
-        "env">: Core.letEnvironment $ var "lt",
+        "env">: Core.letBody $ var "lt",
         "fromBinding">: lambda "b" $ Core.field
           (Core.bindingName $ var "b")
           (Core.bindingTerm $ var "b")] $
