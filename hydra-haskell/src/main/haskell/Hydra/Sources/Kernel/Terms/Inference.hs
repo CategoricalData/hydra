@@ -163,7 +163,7 @@ bindUnboundTypeVariablesDef = define "bindUnboundTypeVariables" $
             Core.binding (var "bname") (var "bterm") (just $ var "ts2"))) $
       Core.termLet $ Core.let_
         (Lists.map (var "forBinding") (Core.letBindings $ var "l"))
-        (ref bindUnboundTypeVariablesDef @@ var "cx" @@ (Core.letEnvironment $ var "l"))]) $
+        (ref bindUnboundTypeVariablesDef @@ var "cx" @@ (Core.letBody $ var "l"))]) $
   ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term0"
 
 buildTypeApplicationTermDef :: TBinding ([Name] -> Term -> Term)
@@ -246,7 +246,7 @@ inferGraphTypesDef = define "inferGraphTypes" $
   "g0" ~>
   "fromLetTerm" <~ ("l" ~>
     "bindings" <~ Core.letBindings (var "l") $
-    "body" <~ Core.letEnvironment (var "l") $
+    "body" <~ Core.letBody (var "l") $
     "fromBinding" <~ ("b" ~> pair
       (Core.bindingName $ var "b")
       (var "b")) $
@@ -537,7 +537,7 @@ inferTypeOfLetDef = define "inferTypeOfLet" $
   doc "Normalize a let term before inferring its type" $
   "cx" ~> "let0" ~>
   "bindings0" <~ Core.letBindings (var "let0") $
-  "body0" <~ Core.letEnvironment (var "let0") $
+  "body0" <~ Core.letBody (var "let0") $
   "names" <~ Lists.map (unaryFunction Core.bindingName) (var "bindings0") $
   "nameSet" <~ Sets.fromList (var "names") $
   "toPair" <~ ("binding" ~>
@@ -561,7 +561,7 @@ inferTypeOfLetDef = define "inferTypeOfLet" $
         (cases _Term (var "term") Nothing [
           _Term_let>>: "l" ~>
             "bs" <~ Core.letBindings (var "l") $
-            "e" <~ Core.letEnvironment (var "l") $
+            "e" <~ Core.letBody (var "l") $
             var "helper" @@
               (Math.sub (var "level") (int32 1)) @@
               (Lists.concat $ list [var "bs", var "bins"]) @@
@@ -590,7 +590,7 @@ inferTypeOfLetNormalizedDef = define "inferTypeOfLetNormalized" $
   
   -- Extract the bindings and body from the let term
   "bins0" <~ Core.letBindings (var "letTerm") $
-  "body0" <~ Core.letEnvironment (var "letTerm") $
+  "body0" <~ Core.letBody (var "letTerm") $
   "bnames" <~ Lists.map (unaryFunction Core.bindingName) (var "bins0") $
   
   -- Phase 1: Create fresh temporary type variables for each binding

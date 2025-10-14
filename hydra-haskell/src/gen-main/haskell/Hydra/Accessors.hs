@@ -66,7 +66,7 @@ data TermAccessor =
   TermAccessorLambdaBody  |
   TermAccessorUnionCasesDefault  |
   TermAccessorUnionCasesBranch Core.Name |
-  TermAccessorLetEnvironment  |
+  TermAccessorLetBody  |
   TermAccessorLetBinding Core.Name |
   TermAccessorListElement Int |
   TermAccessorMapKey Int |
@@ -96,7 +96,7 @@ _TermAccessor_unionCasesDefault = (Core.Name "unionCasesDefault")
 
 _TermAccessor_unionCasesBranch = (Core.Name "unionCasesBranch")
 
-_TermAccessor_letEnvironment = (Core.Name "letEnvironment")
+_TermAccessor_letBody = (Core.Name "letBody")
 
 _TermAccessor_letBinding = (Core.Name "letBinding")
 

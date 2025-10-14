@@ -218,7 +218,7 @@ encodeTerm namespaces term =
     Core.TermFunction v1 -> (encodeFunction namespaces v1)
     Core.TermLet v1 ->  
       let bindings = (Core.letBindings v1) 
-          env = (Core.letEnvironment v1)
+          env = (Core.letBody v1)
           encodeBinding = (\binding ->  
                   let name = (Core.bindingName binding) 
                       term_ = (Core.bindingTerm binding)
@@ -463,7 +463,7 @@ toDataDeclaration coders namespaces pair =
       toDecl = (\comments -> \hname_ -> \term_ -> \coder_ -> \bindings -> (\x -> case x of
               Core.TermLet v1 ->  
                 let lbindings = (Core.letBindings v1) 
-                    env = (Core.letEnvironment v1)
+                    env = (Core.letBody v1)
                     toBinding = (\hname_ -> \hterm_ -> Ast.LocalBindingValue (Utils.simpleValueBinding hname_ hterm_ Nothing))
                     ts = (Lists.map (\binding -> Core.typeSchemeType (Optionals.fromJust (Core.bindingType binding))) lbindings)
                 in (Flows.bind (Flows.mapList (\t -> Modules.constructCoder Language.haskellLanguage (encodeTerm namespaces) t) ts) (\coders_ ->  

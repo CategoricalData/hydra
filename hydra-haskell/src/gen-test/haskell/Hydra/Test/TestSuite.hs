@@ -727,7 +727,7 @@ inferenceTests = Testing.TestGroup {
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                       Core.bindingType = Nothing}],
-                  Core.letEnvironment = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                  Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                 Testing.inferenceTestCaseOutput = Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
@@ -745,7 +745,7 @@ inferenceTests = Testing.TestGroup {
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                       Core.bindingType = Nothing}],
-                  Core.letEnvironment = (Core.TermApplication (Core.Application {
+                  Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})),
                 Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -767,7 +767,7 @@ inferenceTests = Testing.TestGroup {
                           Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                       Core.bindingType = Nothing}],
-                  Core.letEnvironment = (Core.TermVariable (Core.Name "f"))})),
+                  Core.letBody = (Core.TermVariable (Core.Name "f"))})),
                 Testing.inferenceTestCaseOutput = Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
@@ -786,7 +786,7 @@ inferenceTests = Testing.TestGroup {
                         Core.lambdaBody = (Core.TermList [
                           Core.TermVariable (Core.Name "x")])}))),
                       Core.bindingType = Nothing}],
-                  Core.letEnvironment = (Core.TermVariable (Core.Name "sng"))})),
+                  Core.letBody = (Core.TermVariable (Core.Name "sng"))})),
                 Testing.inferenceTestCaseOutput = Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -808,7 +808,7 @@ inferenceTests = Testing.TestGroup {
                         Core.lambdaBody = (Core.TermList [
                           Core.TermVariable (Core.Name "x")])}))),
                       Core.bindingType = Nothing}],
-                  Core.letEnvironment = (Core.TermProduct [
+                  Core.letBody = (Core.TermProduct [
                     Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}),
@@ -845,7 +845,7 @@ inferenceTests = Testing.TestGroup {
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})))}))),
                       Core.bindingType = Nothing}],
-                  Core.letEnvironment = (Core.TermApplication (Core.Application {
+                  Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "+")),
                       Core.applicationArgument = (Core.TermApplication (Core.Application {
@@ -880,7 +880,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))}))),
                       Core.bindingType = Nothing}],
-                  Core.letEnvironment = (Core.TermVariable (Core.Name "f"))})),
+                  Core.letBody = (Core.TermVariable (Core.Name "f"))})),
                 Testing.inferenceTestCaseOutput = Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -924,7 +924,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "xx"))}))})))}))),
                       Core.bindingType = Nothing}],
-                  Core.letEnvironment = (Core.TermProduct [
+                  Core.letBody = (Core.TermProduct [
                     Core.TermVariable (Core.Name "f"),
                     (Core.TermVariable (Core.Name "g"))])})),
                 Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -977,7 +977,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))}))),
                       Core.bindingType = Nothing}],
-                  Core.letEnvironment = (Core.TermProduct [
+                  Core.letBody = (Core.TermProduct [
                     Core.TermVariable (Core.Name "f"),
                     (Core.TermVariable (Core.Name "g"))])})),
                 Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -1032,7 +1032,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))}))),
                       Core.bindingType = Nothing}],
-                  Core.letEnvironment = (Core.TermProduct [
+                  Core.letBody = (Core.TermProduct [
                     Core.TermVariable (Core.Name "f"),
                     (Core.TermVariable (Core.Name "g"))])})),
                 Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -1085,7 +1085,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))}))),
                       Core.bindingType = Nothing}],
-                  Core.letEnvironment = (Core.TermProduct [
+                  Core.letBody = (Core.TermProduct [
                     Core.TermVariable (Core.Name "f"),
                     (Core.TermVariable (Core.Name "g"))])})),
                 Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -1143,7 +1143,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "y"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "y"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]},
             Testing.TestGroup {
@@ -1160,7 +1160,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermVariable (Core.Name "y")),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -1176,7 +1176,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -1192,7 +1192,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "y"),
                           Core.bindingTerm = (Core.TermVariable (Core.Name "z")),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermVariable (Core.Name "x"),
                         (Core.TermVariable (Core.Name "y"))])}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
@@ -1214,7 +1214,7 @@ inferenceTests = Testing.TestGroup {
                             Core.bindingName = (Core.Name "y"),
                             Core.bindingTerm = (Core.TermVariable (Core.Name "x")),
                             Core.bindingType = Nothing}],
-                        Core.letEnvironment = (Core.TermVariable (Core.Name "z"))}))})))})),
+                        Core.letBody = (Core.TermVariable (Core.Name "z"))}))})))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -1226,13 +1226,13 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermLet (Core.Let {
+                      Core.letBody = (Core.TermLet (Core.Let {
                         Core.letBindings = [
                           Core.Binding {
                             Core.bindingName = (Core.Name "y"),
                             Core.bindingTerm = (Core.TermVariable (Core.Name "x")),
                             Core.bindingType = Nothing}],
-                        Core.letEnvironment = (Core.TermVariable (Core.Name "z"))}))}))})),
+                        Core.letBody = (Core.TermVariable (Core.Name "z"))}))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -1247,7 +1247,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "z"))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]}],
           Testing.testGroupCases = []},
@@ -1407,7 +1407,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermList [
+                      Core.letBody = (Core.TermList [
                         Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
@@ -1428,7 +1428,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermProduct [
                           Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
@@ -1448,7 +1448,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "cons"),
                           Core.bindingTerm = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.cons"))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermList [
+                      Core.letBody = (Core.TermList [
                         Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "cons")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
@@ -1611,7 +1611,7 @@ inferenceTests = Testing.TestGroup {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "f"))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]},
             Testing.TestGroup {
@@ -1642,7 +1642,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "y")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -1665,7 +1665,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "a"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "a"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -1682,7 +1682,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "cycle"))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "cycle")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "cycle"))}))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
@@ -1800,7 +1800,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingTerm = (Core.TermList [
                             Core.TermVariable (Core.Name "x")]),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -1814,7 +1814,7 @@ inferenceTests = Testing.TestGroup {
                             Core.TermVariable (Core.Name "x"),
                             (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))]),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -1828,7 +1828,7 @@ inferenceTests = Testing.TestGroup {
                             Core.TermVariable (Core.Name "x"),
                             (Core.TermVariable (Core.Name "x"))]),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]},
             Testing.TestGroup {
@@ -1848,7 +1848,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "f"))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -1868,7 +1868,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))})))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -1884,7 +1884,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaBody = (Core.TermList [
                               Core.TermVariable (Core.Name "f")])}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]},
             Testing.TestGroup {
@@ -1908,7 +1908,7 @@ inferenceTests = Testing.TestGroup {
                             Core.TermVariable (Core.Name "x"),
                             (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))]),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -1927,7 +1927,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "b"),
                           Core.bindingTerm = (Core.TermVariable (Core.Name "a")),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "a"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "a"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -1946,7 +1946,7 @@ inferenceTests = Testing.TestGroup {
                             Core.TermVariable (Core.Name "f"),
                             (Core.TermVariable (Core.Name "f"))]),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]}],
           Testing.testGroupCases = []},
@@ -1975,7 +1975,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "g"))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "h"))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "g"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "g"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]},
             Testing.TestGroup {
@@ -2006,7 +2006,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "g"))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -2034,7 +2034,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "a")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "a"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "a"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -2057,7 +2057,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "cycle1")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "cycle1"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "cycle1"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]},
             Testing.TestGroup {
@@ -2081,7 +2081,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "omega"))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "omega"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "omega"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -2105,7 +2105,7 @@ inferenceTests = Testing.TestGroup {
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "loop"))}))})),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "loop"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "loop"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]}],
           Testing.testGroupCases = []},
@@ -2259,7 +2259,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
@@ -2282,7 +2282,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermList [
+                      Core.letBody = (Core.TermList [
                         Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
@@ -2303,7 +2303,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermProduct [
                           Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
@@ -2333,7 +2333,7 @@ inferenceTests = Testing.TestGroup {
                               Core.TermVariable (Core.Name "x"),
                               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))])}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
@@ -2352,7 +2352,7 @@ inferenceTests = Testing.TestGroup {
                               Core.TermVariable (Core.Name "x"),
                               (Core.TermLiteral (Core.LiteralString "constant"))])}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
@@ -2390,7 +2390,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermList [
                                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))])}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "h")),
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "incompatible"))}))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
@@ -2472,7 +2472,7 @@ inferenceTests = Testing.TestGroup {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "y"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "y"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -2495,7 +2495,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "extra"))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "g"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "g"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -2513,7 +2513,7 @@ inferenceTests = Testing.TestGroup {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "num")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "num"))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "bad"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]},
             Testing.TestGroup {
@@ -2539,7 +2539,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "list1"))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "list2"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "list2"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -2561,7 +2561,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bad"))})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "nums"))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "mixed"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "mixed"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -2581,7 +2581,7 @@ inferenceTests = Testing.TestGroup {
                             Core.TermLiteral (Core.LiteralString "bar"),
                             (Core.TermVariable (Core.Name "pair1"))]),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
@@ -2615,7 +2615,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a number"))})),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "badCall"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "badCall"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -2647,7 +2647,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "bad"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]}],
           Testing.testGroupCases = []},
@@ -2702,7 +2702,7 @@ inferenceTests = Testing.TestGroup {
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))})))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "bad"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]},
             Testing.TestGroup {
@@ -2735,7 +2735,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "bad"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -2780,7 +2780,7 @@ inferenceTests = Testing.TestGroup {
                                   Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "rec"))}))})))})))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "bad"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -2803,7 +2803,7 @@ inferenceTests = Testing.TestGroup {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "omega")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "omega"))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "bad"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]},
             Testing.TestGroup {
@@ -2849,7 +2849,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "z"))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "a")),
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
@@ -2870,7 +2870,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "circular"))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "circular")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "circular"))}))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
@@ -3066,7 +3066,7 @@ inferenceTests = Testing.TestGroup {
                               Core.lambdaDomain = Nothing,
                               Core.lambdaBody = (Core.TermVariable (Core.Name "z"))})))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "h")),
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
@@ -3101,7 +3101,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.TermVariable (Core.Name "y"),
                                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))])})))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "bad"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -3160,7 +3160,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermVariable (Core.Name "int_f"))})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "str_g"))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "bad"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]},
             Testing.TestGroup {
@@ -3219,7 +3219,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermVariable (Core.Name "increment"))})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "stringify"))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "bad"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {
@@ -3271,7 +3271,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add")))})),
                             Core.applicationArgument = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.length")))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "bad"))}))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "bad"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []}]}],
           Testing.testGroupCases = []}],
@@ -3419,7 +3419,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 42.0))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "y"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -3447,7 +3447,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [],
-                      Core.letEnvironment = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                      Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
@@ -3458,7 +3458,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [],
-                      Core.letEnvironment = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
@@ -3484,7 +3484,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "foo"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "foo"))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "foo"))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
@@ -3508,7 +3508,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "bar"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermList [
+                      Core.letBody = (Core.TermList [
                         Core.TermVariable (Core.Name "foo"),
                         Core.TermVariable (Core.Name "bar"),
                         (Core.TermVariable (Core.Name "foo"))])})),
@@ -3531,13 +3531,13 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "foo"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermLet (Core.Let {
+                      Core.letBody = (Core.TermLet (Core.Let {
                         Core.letBindings = [
                           Core.Binding {
                             Core.bindingName = (Core.Name "bar"),
                             Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
                             Core.bindingType = Nothing}],
-                        Core.letEnvironment = (Core.TermList [
+                        Core.letBody = (Core.TermList [
                           Core.TermVariable (Core.Name "foo"),
                           (Core.TermVariable (Core.Name "bar"))])}))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -3554,7 +3554,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "foo"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermLet (Core.Let {
+                      Core.letBody = (Core.TermLet (Core.Let {
                         Core.letBindings = [
                           Core.Binding {
                             Core.bindingName = (Core.Name "bar"),
@@ -3562,7 +3562,7 @@ inferenceTests = Testing.TestGroup {
                               Core.TermVariable (Core.Name "foo"),
                               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))]),
                             Core.bindingType = Nothing}],
-                        Core.letEnvironment = (Core.TermVariable (Core.Name "bar"))}))})),
+                        Core.letBody = (Core.TermVariable (Core.Name "bar"))}))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeProduct [
@@ -3583,7 +3583,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaBody = (Core.TermList [
                               Core.TermVariable (Core.Name "x")])}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermLet (Core.Let {
+                      Core.letBody = (Core.TermLet (Core.Let {
                         Core.letBindings = [
                           Core.Binding {
                             Core.bindingName = (Core.Name "foo"),
@@ -3606,7 +3606,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
                             Core.bindingType = Nothing}],
-                        Core.letEnvironment = (Core.TermProduct [
+                        Core.letBody = (Core.TermProduct [
                           Core.TermVariable (Core.Name "foo"),
                           (Core.TermProduct [
                             Core.TermVariable (Core.Name "bar"),
@@ -3637,13 +3637,13 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "foo"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermLet (Core.Let {
+                      Core.letBody = (Core.TermLet (Core.Let {
                         Core.letBindings = [
                           Core.Binding {
                             Core.bindingName = (Core.Name "foo"),
                             Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
                             Core.bindingType = Nothing}],
-                        Core.letEnvironment = (Core.TermVariable (Core.Name "foo"))}))})),
+                        Core.letBody = (Core.TermVariable (Core.Name "foo"))}))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
@@ -3662,13 +3662,13 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "bar"),
                           Core.bindingTerm = (Core.TermVariable (Core.Name "foo")),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermLet (Core.Let {
+                      Core.letBody = (Core.TermLet (Core.Let {
                         Core.letBindings = [
                           Core.Binding {
                             Core.bindingName = (Core.Name "foo"),
                             Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
                             Core.bindingType = Nothing}],
-                        Core.letEnvironment = (Core.TermProduct [
+                        Core.letBody = (Core.TermProduct [
                           Core.TermVariable (Core.Name "bar"),
                           (Core.TermVariable (Core.Name "foo"))])}))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -3695,7 +3695,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -3723,7 +3723,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
                         Core.applicationArgument = (Core.TermList [
                           Core.TermApplication (Core.Application {
@@ -3746,7 +3746,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -3775,7 +3775,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
@@ -3802,7 +3802,7 @@ inferenceTests = Testing.TestGroup {
                             Core.lambdaBody = (Core.TermList [
                               Core.TermVariable (Core.Name "x")])}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "list")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
@@ -3867,7 +3867,7 @@ inferenceTests = Testing.TestGroup {
                                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "f"))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
@@ -3901,7 +3901,7 @@ inferenceTests = Testing.TestGroup {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermVariable (Core.Name "fortytwo"),
                         (Core.TermVariable (Core.Name "foo"))])})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -3936,7 +3936,7 @@ inferenceTests = Testing.TestGroup {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermVariable (Core.Name "fortytwo"),
                         (Core.TermVariable (Core.Name "foo"))])})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -3971,7 +3971,7 @@ inferenceTests = Testing.TestGroup {
                                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "f"))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
@@ -3995,7 +3995,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "y"),
                           Core.bindingTerm = (Core.TermVariable (Core.Name "x")),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermVariable (Core.Name "x"),
                         (Core.TermVariable (Core.Name "y"))])})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -4040,7 +4040,7 @@ inferenceTests = Testing.TestGroup {
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})),
                                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermVariable (Core.Name "f"),
                         (Core.TermVariable (Core.Name "g"))])})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -4084,7 +4084,7 @@ inferenceTests = Testing.TestGroup {
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "plus")),
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
@@ -4125,7 +4125,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "p0"))}))])}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
+                      Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
@@ -4147,7 +4147,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "z"),
                           Core.bindingTerm = (Core.TermVariable (Core.Name "x")),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermVariable (Core.Name "x"),
                         (Core.TermVariable (Core.Name "z"))])})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -4183,7 +4183,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "w"),
                           Core.bindingTerm = (Core.TermVariable (Core.Name "z")),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermVariable (Core.Name "x"),
                         (Core.TermProduct [
                           Core.TermVariable (Core.Name "w"),
@@ -4236,7 +4236,7 @@ inferenceTests = Testing.TestGroup {
                             Core.applicationArgument = (Core.TermList [
                               Core.TermVariable (Core.Name "f")])})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermVariable (Core.Name "f"),
                         (Core.TermVariable (Core.Name "g"))])})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -4275,7 +4275,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermList [
                                 Core.TermVariable (Core.Name "f")])}))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermVariable (Core.Name "f"),
                         (Core.TermVariable (Core.Name "g"))])})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -4315,7 +4315,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermList [
                                 Core.TermVariable (Core.Name "f")])}))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermVariable (Core.Name "f"),
                         (Core.TermVariable (Core.Name "g"))])})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -4380,7 +4380,7 @@ inferenceTests = Testing.TestGroup {
                                   Core.TermList [
                                     Core.TermVariable (Core.Name "x")]])}))})))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "f"))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
@@ -4423,7 +4423,7 @@ inferenceTests = Testing.TestGroup {
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "f"))})),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "b0"))}))}))})))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermVariable (Core.Name "inst"),
                         (Core.TermVariable (Core.Name "rec"))])})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -4467,7 +4467,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermVariable (Core.Name "inst"),
                         (Core.TermVariable (Core.Name "rec"))])})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -4517,7 +4517,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermVariable (Core.Name "inst1"),
                         Core.TermVariable (Core.Name "inst2"),
                         (Core.TermVariable (Core.Name "rec"))])})),
@@ -4548,7 +4548,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "bar"),
                           Core.bindingTerm = (Core.TermVariable (Core.Name "foo")),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermProduct [
+                      Core.letBody = (Core.TermProduct [
                         Core.TermVariable (Core.Name "foo"),
                         (Core.TermVariable (Core.Name "bar"))])})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -4621,7 +4621,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermVariable (Core.Name "x")),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "x"))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
@@ -4648,7 +4648,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermVariable (Core.Name "id"))})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "id"))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "weird"))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "weird"))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
@@ -4674,7 +4674,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "f"))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "f"))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
@@ -4697,7 +4697,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "x"))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "x"))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0",
@@ -4723,7 +4723,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "paradox")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "paradox"))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "paradox"))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
@@ -4761,7 +4761,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
@@ -4789,7 +4789,7 @@ inferenceTests = Testing.TestGroup {
                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "self"))})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "self"))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "self"))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
@@ -4811,7 +4811,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "self"))})),
                             Core.bindingType = Nothing}],
-                        Core.letEnvironment = (Core.TermVariable (Core.Name "self"))}))}))),
+                        Core.letBody = (Core.TermVariable (Core.Name "self"))}))}))),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
@@ -4838,7 +4838,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "self")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -4875,7 +4875,7 @@ inferenceTests = Testing.TestGroup {
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermApplication (Core.Application {
+                      Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "build")),
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -5376,7 +5376,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.toList"))),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "s"))})),
                               Core.bindingType = Nothing}],
-                          Core.letEnvironment = (Core.TermApplication (Core.Application {
+                          Core.letBody = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
@@ -5926,7 +5926,7 @@ inferenceTests = Testing.TestGroup {
                               Core.fieldName = (Core.Name "value"),
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}})),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermUnion (Core.Injection {
+                      Core.letBody = (Core.TermUnion (Core.Injection {
                         Core.injectionTypeName = TestGraph.testTypeUnionPolymorphicRecursiveName,
                         Core.injectionField = Core.Field {
                           Core.fieldName = (Core.Name "other"),
@@ -6396,7 +6396,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "x"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 42.0))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "y"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -6430,7 +6430,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "z"))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "z"))}))}))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "f"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -6633,7 +6633,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermLet (Core.Let {
                       Core.letBindings = [],
-                      Core.letEnvironment = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+                      Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
@@ -6653,7 +6653,7 @@ inferenceTests = Testing.TestGroup {
                           Core.bindingName = (Core.Name "foo"),
                           Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                           Core.bindingType = Nothing}],
-                      Core.letEnvironment = (Core.TermVariable (Core.Name "foo"))})),
+                      Core.letBody = (Core.TermVariable (Core.Name "foo"))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
@@ -7730,144 +7730,6 @@ listPrimitiveTests = Testing.TestGroup {
                 Core.TermLiteral (Core.LiteralString "world"),
                 (Core.TermLiteral (Core.LiteralString "hello"))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralBoolean False))})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []}]},
-    Testing.TestGroup {
-      Testing.testGroupName = "filter",
-      Testing.testGroupDescription = Nothing,
-      Testing.testGroupSubgroups = [],
-      Testing.testGroupCases = [
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "filter positive numbers",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.filter"))),
-                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "x"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "arg_"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "arg_"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.gt"))),
-                          Core.applicationArgument = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "arg_"))}))}))}))),
-                      Core.applicationArgument = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "arg_"))}))}))})))})))})),
-              Core.applicationArgument = (Core.TermList [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-1))),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-3))),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
-                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))])})),
-            Testing.evaluationTestCaseOutput = (Core.TermList [
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
-              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))])})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []},
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "filter all elements",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.filter"))),
-                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "x"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "arg_"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "arg_"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.lt"))),
-                          Core.applicationArgument = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "arg_"))}))}))}))),
-                      Core.applicationArgument = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10))),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "arg_"))}))}))})))})))})),
-              Core.applicationArgument = (Core.TermList [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
-            Testing.evaluationTestCaseOutput = (Core.TermList [
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []},
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "filter no elements",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.filter"))),
-                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "x"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "arg_"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "arg_"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.gt"))),
-                          Core.applicationArgument = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "arg_"))}))}))}))),
-                      Core.applicationArgument = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10))),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "arg_"))}))}))})))})))})),
-              Core.applicationArgument = (Core.TermList [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
-            Testing.evaluationTestCaseOutput = (Core.TermList [])})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []},
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "empty list",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.filter"))),
-                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "x"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "arg_"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "arg_"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.gt"))),
-                          Core.applicationArgument = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "arg_"))}))}))}))),
-                      Core.applicationArgument = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "arg_"))}))}))})))})))})),
-              Core.applicationArgument = (Core.TermList [])})),
-            Testing.evaluationTestCaseOutput = (Core.TermList [])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {

@@ -121,7 +121,7 @@ substituteInTermDef = define "substituteInTerm" $
           (Core.bindingType $ var "b")] $
         Core.termLet $ Core.let_
           (Lists.map (var "rewriteBinding") (var "bindings"))
-          (ref substituteInTermDef @@ var "subst2" @@ (Core.letEnvironment $ var "lt"))] $
+          (ref substituteInTermDef @@ var "subst2" @@ (Core.letBody $ var "lt"))] $
       cases _Term (var "term")
         (Just $ var "recurse" @@ var "term") [
         _Term_function>>: lambda "fun" $ cases _Function (var "fun")
@@ -183,7 +183,7 @@ substTypesInTermDef = define "substTypesInTerm" $
           (Optionals.map (ref substInTypeSchemeDef @@ var "subst") (Core.bindingType $ var "b"))] $
         Core.termLet $ Core.let_
           (Lists.map (var "rewriteBinding") (Core.letBindings $ var "l"))
-          (ref substTypesInTermDef @@ var "subst" @@ (Core.letEnvironment $ var "l")),
+          (ref substTypesInTermDef @@ var "subst" @@ (Core.letBody $ var "l")),
       "forTupleProjection">: lambda "tp" $
         Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $ Core.tupleProjection
           (Core.tupleProjectionArity $ var "tp")

@@ -187,7 +187,7 @@ flattenLetTermsDef = define "flattenLetTerms" $
           (var "deps"),
       _Term_let>>: "innerLet" ~>
         "bindings1" <~ Core.letBindings (var "innerLet") $
-        "body1" <~ Core.letEnvironment (var "innerLet") $
+        "body1" <~ Core.letBody (var "innerLet") $
         "prefix" <~ Strings.cat2 (unwrap _Name @@ var "key0") (string "_") $
         "qualify" <~ ("n" ~> Core.name $ Strings.cat2 (var "prefix") (unwrap _Name @@ var "n")) $
         "toSubstPair" <~ ("b" ~> pair (Core.bindingName $ var "b") (var "qualify" @@ (Core.bindingName $ var "b"))) $
@@ -207,7 +207,7 @@ flattenLetTermsDef = define "flattenLetTerms" $
       (Just $ var "rewritten") [
       _Term_let>>: "lt" ~>
         "bindings" <~ Core.letBindings (var "lt") $
-        "body" <~ Core.letEnvironment (var "lt") $
+        "body" <~ Core.letBody (var "lt") $
         "forResult" <~ ("hr" ~> Lists.cons (first $ var "hr") (second $ var "hr")) $
         "newBindings" <~ Lists.concat (Lists.map (var "forResult" <.> var "rewriteBinding") (var "bindings")) $
         Core.termLet $ Core.let_ (var "newBindings") (var "body")]) $
@@ -286,7 +286,7 @@ freeTypeVariablesInTermDef = define "freeTypeVariablesInTerm" $
               ("ts" ~> var "tryType" @@ var "newVars" @@ (Core.typeSchemeType $ var "ts")))) $
         Sets.union
           (var "allOf" @@ Lists.map (var "forBinding") (Core.letBindings $ var "l"))
-          (var "recurse" @@ (Core.letEnvironment $ var "l")),
+          (var "recurse" @@ (Core.letBody $ var "l")),
       _Term_typeApplication>>: "tt" ~>
         Sets.union
           (var "tryType" @@ var "vars" @@ (Core.typedTermType $ var "tt"))
@@ -406,7 +406,7 @@ isLambdaDef = define "isLambda" $
     _Term_function>>: match _Function
       (Just false) [
       _Function_lambda>>: constant true],
-    _Term_let>>: "lt" ~> ref isLambdaDef @@ (project _Let _Let_environment @@ var "lt")]
+    _Term_let>>: "lt" ~> ref isLambdaDef @@ (project _Let _Let_body @@ var "lt")]
 
 mapBeneathTypeAnnotationsDef :: TBinding ((Type -> Type) -> Type -> Type)
 mapBeneathTypeAnnotationsDef = define "mapBeneathTypeAnnotations" $
@@ -457,7 +457,7 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
       -- Let bindings each have a type which needs to be rewritten
       _Term_let>>: "lt" ~>
         "bindings0" <~ Core.letBindings (var "lt") $
-        "body0"     <~ Core.letEnvironment (var "lt") $
+        "body0"     <~ Core.letBody (var "lt") $
         -- Sequentially rewrite bindings without advancing 'next' across siblings
         "step" <~ ("acc" ~> "bs" ~>
           Logic.ifElse (Lists.null (var "bs"))
@@ -560,7 +560,7 @@ removeTypesFromTermDef = define "removeTypesFromTerm" $
           (Core.lambdaBody $ var "l")],
       _Term_let>>: "lt" ~> Core.termLet $ Core.let_
         (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
-        (Core.letEnvironment $ var "lt"),
+        (Core.letBody $ var "lt"),
       _Term_typeApplication>>: "tt" ~> Core.typedTermTerm $ var "tt",
       _Term_typeLambda>>: "ta" ~> Core.typeLambdaBody $ var "ta"]) $
   ref rewriteTermDef @@ var "strip" @@ var "term"
@@ -695,7 +695,7 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
         @@ var "val0"
         @@ var "f",
       _Term_let>>: "l" ~>
-        "renv" <~ var "recurse" @@ var "val0" @@ (Core.letEnvironment $ var "l") $
+        "renv" <~ var "recurse" @@ var "val0" @@ (Core.letBody $ var "l") $
         var "forMany" @@ var "forBinding"
           @@ ("bins" ~> Core.termLet $ Core.let_ (var "bins") (second $ var "renv"))
           @@ first (var "renv") @@ (Core.letBindings $ var "l"),
@@ -837,7 +837,7 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
         @@ var "val0"
         @@ var "f",
       _Term_let>>: "l" ~>
-        "renv" <<~ var "recurse" @@ var "val0" @@ (Core.letEnvironment $ var "l") $
+        "renv" <<~ var "recurse" @@ var "val0" @@ (Core.letBody $ var "l") $
         var "forMany" @@ var "forBinding"
           @@ ("bins" ~> Core.termLet $ Core.let_ (var "bins") (second $ var "renv"))
           @@ first (var "renv") @@ (Core.letBindings $ var "l"),
@@ -921,7 +921,7 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~>
         (Core.bindingType $ var "b")) $
       Core.let_
         (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
-        (var "recurse" @@ (Core.letEnvironment $ var "lt"))) $
+        (var "recurse" @@ (Core.letBody $ var "lt"))) $
     "forMap" <~ ("m" ~>
       "forPair" <~ ("p" ~> pair (var "recurse" @@ (untuple 2 0 @@ var "p")) (var "recurse" @@ (untuple 2 1 @@ var "p"))) $
       Maps.fromList $ Lists.map (var "forPair") $ Maps.toList $ var "m") $
@@ -1016,7 +1016,7 @@ rewriteTermMDef = define "rewriteTermM" $
         produce $ Core.termFunction $ var "rfun",
       _Term_let>>: "lt" ~>
         "bindings" <~ Core.letBindings (var "lt") $
-        "env" <~ Core.letEnvironment (var "lt") $
+        "env" <~ Core.letBody (var "lt") $
         "rbindings" <<~ Flows.mapList (var "mapBinding") (var "bindings") $
         "renv" <<~ var "recurse" @@ var "env" $
         produce $ Core.termLet $ Core.let_ (var "rbindings") (var "renv"),
@@ -1268,7 +1268,7 @@ subtermsDef = define "subterms" $
           (Lists.map (unaryFunction Core.fieldTerm) (Core.caseStatementCases $ var "cs"))],
       _Function_lambda>>: "l" ~> list [Core.lambdaBody $ var "l"]],
     _Term_let>>: "lt" ~> Lists.cons
-      (Core.letEnvironment $ var "lt")
+      (Core.letBody $ var "lt")
       (Lists.map (unaryFunction Core.bindingTerm) (Core.letBindings $ var "lt")),
     _Term_list>>: "l" ~> var "l",
     _Term_literal>>: constant $ list [],
@@ -1308,7 +1308,7 @@ subtermsWithAccessorsDef = define "subtermsWithAccessors" $
             (Core.caseStatementCases $ var "cs"))],
       _Function_lambda>>: "l" ~> single Mantle.termAccessorLambdaBody $ Core.lambdaBody $ var "l"],
     _Term_let>>: "lt" ~> Lists.cons
-      (result Mantle.termAccessorLetEnvironment $ Core.letEnvironment $ var "lt")
+      (result Mantle.termAccessorLetEnvironment $ Core.letBody $ var "lt")
       (Lists.map
         ("b" ~> result (Mantle.termAccessorLetBinding $ Core.bindingName $ var "b") $ Core.bindingTerm $ var "b")
         (Core.letBindings $ var "lt")),

@@ -73,7 +73,7 @@ termAccessorDef = define "termAccessor" $
       _TermAccessor_unionCasesDefault>>: constant $ just $ string "default",
       _TermAccessor_unionCasesBranch>>: lambda "name" $ just $
         Strings.cat2 (string ".") (Core.unName $ var "name"),
-      _TermAccessor_letEnvironment>>: constant $ just $ string "in",
+      _TermAccessor_letBody>>: constant $ just $ string "in",
       _TermAccessor_letBinding>>: lambda "name" $ just $
         Strings.cat2 (Core.unName $ var "name") (string "="),
       _TermAccessor_listElement>>: lambda "i" $ var "idx" @@ var "i",
@@ -110,7 +110,7 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
             (ref Rewriting.subtermsWithAccessorsDef @@ var "currentTerm")) [
         _Term_let>>: lambda "letExpr" $ lets [
           "bindings">: Core.letBindings $ var "letExpr",
-          "env">: Core.letEnvironment $ var "letExpr",
+          "env">: Core.letBody $ var "letExpr",
           "bindingNames">: Lists.map (unaryFunction Core.bindingName) (var "bindings"),
           -- First fold: build nodes and update ids for each binding name
           "addBindingName">: lambdas ["nodesVisitedIds", "name"] $ lets [

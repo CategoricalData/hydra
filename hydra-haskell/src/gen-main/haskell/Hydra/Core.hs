@@ -330,18 +330,18 @@ _Lambda_domain = (Name "domain")
 
 _Lambda_body = (Name "body")
 
--- | A set of (possibly recursive) 'let' bindings together with an environment in which they are bound
+-- | A set of (possibly recursive) 'let' bindings together with a body in which they are bound
 data Let = 
   Let {
     letBindings :: [Binding],
-    letEnvironment :: Term}
+    letBody :: Term}
   deriving (Eq, Ord, Read, Show)
 
 _Let = (Name "hydra.core.Let")
 
 _Let_bindings = (Name "bindings")
 
-_Let_environment = (Name "environment")
+_Let_body = (Name "body")
 
 -- | A term constant; an instance of a literal type
 data Literal = 
