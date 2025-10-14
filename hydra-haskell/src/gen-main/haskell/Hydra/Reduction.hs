@@ -38,9 +38,9 @@ betaReduceType typ =
             let rhs = (Core.applicationTypeArgument app)
             in ((\x -> case x of
               Core.TypeAnnotated v1 -> (Flows.bind (reduceApp (Core.ApplicationType {
-                Core.applicationTypeFunction = (Core.annotatedTypeSubject v1),
+                Core.applicationTypeFunction = (Core.annotatedTypeBody v1),
                 Core.applicationTypeArgument = rhs})) (\a -> Flows.pure (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeSubject = a,
+                Core.annotatedTypeBody = a,
                 Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))))
               Core.TypeForall v1 -> (betaReduceType (Rewriting.replaceFreeTypeVariable (Core.forallTypeParameter v1) rhs (Core.forallTypeBody v1)))
               Core.TypeVariable v1 -> (Flows.bind (Schemas.requireType v1) (\t_ -> betaReduceType (Core.TypeApplication (Core.ApplicationType {
@@ -95,7 +95,7 @@ etaReduceTerm term =
                   Core.TermAnnotated v1 -> (reduceLambda (Core.Lambda {
                     Core.lambdaParameter = v,
                     Core.lambdaDomain = d,
-                    Core.lambdaBody = (Core.annotatedTermSubject v1)}))
+                    Core.lambdaBody = (Core.annotatedTermBody v1)}))
                   Core.TermApplication v1 ->  
                     let lhs = (Core.applicationFunction v1)
                     in  
@@ -106,13 +106,13 @@ etaReduceTerm term =
                           Core.lambdaDomain = d,
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = lhs,
-                            Core.applicationArgument = (Core.annotatedTermSubject v2)}))}))
+                            Core.applicationArgument = (Core.annotatedTermBody v2)}))}))
                         Core.TermVariable v2 -> (Logic.ifElse (Logic.and (Equality.equal (Core.unName v) (Core.unName v2)) (Logic.not (Rewriting.isFreeVariableInTerm v lhs))) (etaReduceTerm lhs) noChange)
                         _ -> noChange) (etaReduceTerm rhs))
                   _ -> noChange) (etaReduceTerm body)))
     in ((\x -> case x of
       Core.TermAnnotated v1 -> (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermSubject = (etaReduceTerm (Core.annotatedTermSubject v1)),
+        Core.annotatedTermBody = (etaReduceTerm (Core.annotatedTermBody v1)),
         Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))
       Core.TermFunction v1 -> ((\x -> case x of
         Core.FunctionLambda v2 -> (reduceLambda v2)
@@ -155,7 +155,7 @@ etaExpandTerm graph term =
 -- | Calculate the arity for eta expansion Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
 etaExpansionArity :: (Graph.Graph -> Core.Term -> Int)
 etaExpansionArity graph term = ((\x -> case x of
-  Core.TermAnnotated v1 -> (etaExpansionArity graph (Core.annotatedTermSubject v1))
+  Core.TermAnnotated v1 -> (etaExpansionArity graph (Core.annotatedTermBody v1))
   Core.TermApplication v1 -> (Math.sub (etaExpansionArity graph (Core.applicationFunction v1)) 1)
   Core.TermFunction v1 -> ((\x -> case x of
     Core.FunctionElimination _ -> 1

@@ -322,7 +322,7 @@ typeOfDef = define "typeOf" $
 typeOfAnnotatedTermDef :: TBinding (TypeContext -> [Type] -> AnnotatedTerm -> Flow s Type)
 typeOfAnnotatedTermDef = define "typeOfAnnotatedTerm" $
   "tx" ~> "typeArgs" ~> "at" ~>
-  "t" <<~ ref typeOfDef @@ var "tx" @@ var "typeArgs" @@ Core.annotatedTermSubject (var "at") $
+  "t" <<~ ref typeOfDef @@ var "tx" @@ var "typeArgs" @@ Core.annotatedTermBody (var "at") $
   ref applyForallTypesDef @@ var "tx" @@ var "typeArgs" @@ var "t"
 
 typeOfApplicationDef :: TBinding (TypeContext -> [Type] -> Application -> Flow s Type)
@@ -648,7 +648,7 @@ typeOfWrappedTermDef :: TBinding (TypeContext -> [Type] -> WrappedTerm -> Flow s
 typeOfWrappedTermDef = define "typeOfWrappedTerm" $
   "tx" ~> "typeArgs" ~> "wt" ~>
   "tname" <~ Core.wrappedTermTypeName (var "wt") $
-  "innerTerm" <~ Core.wrappedTermObject (var "wt") $
+  "innerTerm" <~ Core.wrappedTermBody (var "wt") $
   "innerType" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "innerTerm" $
   exec (ref checkTypeVariablesDef @@ var "tx" @@ var "innerType") $
   produce $ ref Schemas.nominalApplicationDef @@ var "tname" @@ var "typeArgs"

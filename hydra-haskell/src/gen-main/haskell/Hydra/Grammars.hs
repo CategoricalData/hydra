@@ -154,4 +154,4 @@ wrapType t = ((\x -> case x of
   Core.TypeWrap _ -> t
   _ -> (Core.TypeWrap (Core.WrappedType {
     Core.wrappedTypeTypeName = (Core.Name "Placeholder"),
-    Core.wrappedTypeObject = t}))) t)
+    Core.wrappedTypeBody = t}))) t)

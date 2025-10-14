@@ -33,7 +33,7 @@ instantiateTemplate minimal schema t =
   let inst = (instantiateTemplate minimal schema) 
       noPoly = (Flows.fail "Polymorphic and function types are not currently supported")
   in ((\x -> case x of
-    Core.TypeAnnotated v1 -> (inst (Core.annotatedTypeSubject v1))
+    Core.TypeAnnotated v1 -> (inst (Core.annotatedTypeBody v1))
     Core.TypeApplication _ -> noPoly
     Core.TypeFunction _ -> noPoly
     Core.TypeForall _ -> noPoly
@@ -77,7 +77,7 @@ instantiateTemplate minimal schema t =
     Core.TypeVariable v1 -> (Optionals.maybe (Flows.fail (Strings.cat2 "Type variable " (Strings.cat2 (Core__.term (Core.TermVariable v1)) " not found in schema"))) inst (Maps.lookup v1 schema))
     Core.TypeWrap v1 ->  
       let tname = (Core.wrappedTypeTypeName v1) 
-          t_ = (Core.wrappedTypeObject v1)
+          t_ = (Core.wrappedTypeBody v1)
       in (Flows.bind (inst t_) (\e -> Flows.pure (Core.TermWrap (Core.WrappedTerm {
         Core.wrappedTermTypeName = tname,
-        Core.wrappedTermObject = e}))))) t)
+        Core.wrappedTermBody = e}))))) t)

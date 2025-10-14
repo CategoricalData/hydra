@@ -192,7 +192,7 @@ inferMany cx pairs = (Logic.ifElse (Lists.null pairs) (Flows.pure ([], ([], Subs
 
 inferTypeOfAnnotatedTerm :: (Typing_.InferenceContext -> Core.AnnotatedTerm -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfAnnotatedTerm cx at =  
-  let term = (Core.annotatedTermSubject at)
+  let term = (Core.annotatedTermBody at)
   in  
     let ann = (Core.annotatedTermAnnotation at)
     in (Flows.bind (inferTypeOfTerm cx term "annotated term") (\result ->  
@@ -203,7 +203,7 @@ inferTypeOfAnnotatedTerm cx at =
           let isubst = (Typing_.inferenceResultSubst result)
           in (Flows.pure (Typing_.InferenceResult {
             Typing_.inferenceResultTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
-              Core.annotatedTermSubject = iterm,
+              Core.annotatedTermBody = iterm,
               Core.annotatedTermAnnotation = ann})),
             Typing_.inferenceResultType = itype,
             Typing_.inferenceResultSubst = isubst}))))
@@ -769,7 +769,7 @@ inferTypeOfWrappedTerm :: (Typing_.InferenceContext -> Core.WrappedTerm -> Compu
 inferTypeOfWrappedTerm cx wt =  
   let tname = (Core.wrappedTermTypeName wt)
   in  
-    let term = (Core.wrappedTermObject wt)
+    let term = (Core.wrappedTermBody wt)
     in (Flows.bind (Schemas.requireSchemaType cx tname) (\schemaType -> Flows.bind (inferTypeOfTerm cx term "wrapped term") (\result ->  
       let svars = (Core.typeSchemeVariables schemaType)
       in  
@@ -783,10 +783,10 @@ inferTypeOfWrappedTerm cx wt =
               in  
                 let ityp = (Core.TypeWrap (Core.WrappedType {
                         Core.wrappedTypeTypeName = tname,
-                        Core.wrappedTypeObject = itype}))
+                        Core.wrappedTypeBody = itype}))
                 in (mapConstraints cx (\subst -> yield (buildTypeApplicationTerm svars (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = tname,
-                  Core.wrappedTermObject = iterm}))) (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
+                  Core.wrappedTermBody = iterm}))) (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [
                   Typing_.TypeConstraint {
                     Typing_.typeConstraintLeft = stype,
                     Typing_.typeConstraintRight = ityp,

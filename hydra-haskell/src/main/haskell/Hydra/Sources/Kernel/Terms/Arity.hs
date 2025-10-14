@@ -81,7 +81,7 @@ termArityDef = define "termArity" $
 typeArityDef :: TBinding (Type -> Int)
 typeArityDef = define "typeArity" $
   match _Type (Just $ int32 0) [
-    _Type_annotated>>: ref typeArityDef <.> unaryFunction Core.annotatedTypeSubject,
+    _Type_annotated>>: ref typeArityDef <.> unaryFunction Core.annotatedTypeBody,
     _Type_application>>: ref typeArityDef <.> unaryFunction Core.applicationTypeFunction,
     _Type_forall>>: ref typeArityDef <.> unaryFunction Core.forallTypeBody,
     _Type_function>>: lambda "f" $
@@ -91,7 +91,7 @@ uncurryTypeDef :: TBinding (Type -> [Type])
 uncurryTypeDef = define "uncurryType" $
   doc "Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)" $
   lambda "t" ((match _Type (Just $ list [var "t"]) [
-    _Type_annotated>>: ref uncurryTypeDef <.> unaryFunction Core.annotatedTypeSubject,
+    _Type_annotated>>: ref uncurryTypeDef <.> unaryFunction Core.annotatedTypeBody,
     _Type_application>>: ref uncurryTypeDef <.> unaryFunction Core.applicationTypeFunction,
     _Type_forall>>: ref uncurryTypeDef <.> unaryFunction Core.forallTypeBody,
     _Type_function>>: lambda "ft" $ Lists.cons

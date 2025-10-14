@@ -39,8 +39,8 @@ accessorNodeId = unitVariant _AccessorNode _AccessorNode_id
 accessorPath :: TTerm [TermAccessor] -> TTerm AccessorPath
 accessorPath path = wrap _AccessorPath path
 
-termAccessorAnnotatedSubject :: TTerm TermAccessor
-termAccessorAnnotatedSubject = unitVariant _TermAccessor _TermAccessor_annotatedSubject
+termAccessorAnnotatedBody :: TTerm TermAccessor
+termAccessorAnnotatedBody = unitVariant _TermAccessor _TermAccessor_annotatedBody
 
 termAccessorApplicationFunction :: TTerm TermAccessor
 termAccessorApplicationFunction = unitVariant _TermAccessor _TermAccessor_applicationFunction

@@ -270,7 +270,7 @@ termDef = define "term" $
       (Just $ Lists.cons (var "lhs") (Lists.cons (var "rhs") (var "prev"))) [
       _Term_application>>: "app2" ~> var "gatherTerms" @@ (Lists.cons (var "rhs") (var "prev")) @@ var "app2"]) $
   cases _Term (var "t") Nothing [
-    _Term_annotated>>: "at" ~> ref termDef @@ (Core.annotatedTermSubject $ var "at"),
+    _Term_annotated>>: "at" ~> ref termDef @@ (Core.annotatedTermBody $ var "at"),
     _Term_application>>: "app" ~>
       "terms" <~ var "gatherTerms" @@ (list []) @@ var "app" $
       "termStrs" <~ Lists.map (ref termDef) (var "terms") $
@@ -363,7 +363,7 @@ termDef = define "term" $
     _Term_variable>>: "name" ~> unwrap _Name @@ var "name",
     _Term_wrap>>: "wt" ~>
       "tname" <~ unwrap _Name @@ (Core.wrappedTermTypeName $ var "wt") $
-      "term1" <~ Core.wrappedTermObject (var "wt") $
+      "term1" <~ Core.wrappedTermBody (var "wt") $
       Strings.cat $ list [
         string "wrap(",
         var "tname",
@@ -403,7 +403,7 @@ typeDef = define "type" $
           "cod" <~ Core.functionTypeCodomain (var "ft") $
           var "gatherFunctionTypes" @@ (Lists.cons (var "dom") (var "prev")) @@ var "cod"]) $
   cases _Type (var "typ") Nothing [
-    _Type_annotated>>: "at" ~> ref typeDef @@ (Core.annotatedTypeSubject $ var "at"),
+    _Type_annotated>>: "at" ~> ref typeDef @@ (Core.annotatedTypeBody $ var "at"),
     _Type_application>>: "app" ~>
       "types" <~ var "gatherTypes" @@ (list []) @@ var "app" $
       "typeStrs" <~ Lists.map (ref typeDef) (var "types") $
@@ -461,7 +461,7 @@ typeDef = define "type" $
     _Type_variable>>: "name" ~> unwrap _Name @@ var "name",
     _Type_wrap>>: "wt" ~>
       "tname" <~ unwrap _Name @@ (Core.wrappedTypeTypeName $ var "wt") $
-      "typ1" <~ Core.wrappedTypeObject (var "wt") $
+      "typ1" <~ Core.wrappedTypeBody (var "wt") $
       Strings.cat $ list [string "wrap[", var "tname", string "](", ref typeDef @@ var "typ1", string ")"]]
 
 typeSchemeDef :: TBinding (TypeScheme -> String)

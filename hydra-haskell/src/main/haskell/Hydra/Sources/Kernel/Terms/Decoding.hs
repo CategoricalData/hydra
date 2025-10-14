@@ -390,7 +390,7 @@ wrapDef :: TBinding (Name -> Term -> Maybe Term)
 wrapDef = define "wrap" $
   matchNominal _Term_wrap
     (unaryFunction Core.wrappedTermTypeName)
-    (unaryFunction Core.wrappedTermObject)
+    (unaryFunction Core.wrappedTermBody)
 
 --
 

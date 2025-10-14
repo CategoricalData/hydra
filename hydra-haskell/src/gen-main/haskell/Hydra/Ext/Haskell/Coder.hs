@@ -279,7 +279,7 @@ encodeTerm namespaces term =
     Core.TermVariable v1 -> (Flows.pure (Ast.ExpressionVariable (Utils.elementReference namespaces v1)))
     Core.TermWrap v1 ->  
       let tname = (Core.wrappedTermTypeName v1) 
-          term_ = (Core.wrappedTermObject v1)
+          term_ = (Core.wrappedTermBody v1)
           lhs = (Ast.ExpressionVariable (Utils.elementReference namespaces tname))
       in (Flows.bind (encode term_) (\rhs -> Flows.pure (Utils.hsapp lhs rhs)))
     _ -> (Flows.fail (Strings.cat2 "unexpected term: " (Core___.term term)))) (Rewriting.deannotateTerm term))
@@ -571,7 +571,7 @@ toTypeDeclarations namespaces el term =
           deriv]}))))
       Core.TypeWrap v1 ->  
         let tname = (Core.wrappedTypeTypeName v1) 
-            wt = (Core.wrappedTypeObject v1)
+            wt = (Core.wrappedTypeBody v1)
         in (Flows.bind (newtypeCons el wt) (\cons -> Flows.pure (Ast.DeclarationData (Ast.DataDeclaration {
           Ast.dataDeclarationKeyword = Ast.DataOrNewtypeNewtype,
           Ast.dataDeclarationContext = [],

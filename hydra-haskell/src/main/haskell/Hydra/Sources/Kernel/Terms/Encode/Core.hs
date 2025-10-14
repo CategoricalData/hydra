@@ -153,7 +153,7 @@ encodedWrappedTerm name = encodedWrappedTermRaw (encodedName name)
 encodedWrappedTermRaw :: TTerm Name -> TTerm Term -> TTerm Term
 encodedWrappedTermRaw (TTerm name) (TTerm term) = TTerm $ Terms.variant _Term _Term_wrap $ Terms.record _WrappedTerm [
   Field _WrappedTerm_typeName name,
-  Field _WrappedTerm_object term]
+  Field _WrappedTerm_body term]
 
 encodedOptional :: TTerm (Maybe a) -> TTerm Term
 encodedOptional = variant _Term _Term_optional
@@ -180,13 +180,13 @@ encodedVariant tname fname term = encodedUnion $ encodedInjection tname fname te
 annotatedTermDef :: TBinding (AnnotatedTerm -> Term)
 annotatedTermDef = define "AnnotatedTerm" $
   lambda "a" $ variant _Term _Term_annotated $ record _AnnotatedTerm [
-    field _AnnotatedTerm_subject $ ref termDef @@ (Core.annotatedTermSubject $ var "a"),
+    field _AnnotatedTerm_body $ ref termDef @@ (Core.annotatedTermBody $ var "a"),
     field _AnnotatedTerm_annotation $ Core.annotatedTermAnnotation $ var "a"]
 
 annotatedTypeDef :: TBinding (AnnotatedType -> Term)
 annotatedTypeDef = define "AnnotatedType" $
   lambda "at" $ variant _Term _Term_annotated $ record _AnnotatedTerm [
-    field _AnnotatedTerm_subject $ ref typeDef @@ (Core.annotatedTypeSubject $ var "at"),
+    field _AnnotatedTerm_body $ ref typeDef @@ (Core.annotatedTypeBody $ var "at"),
     field _AnnotatedTerm_annotation $ Core.annotatedTypeAnnotation $ var "at"]
 
 applicationDef :: TBinding (Application -> Term)
@@ -425,7 +425,7 @@ typeDef :: TBinding (Type -> Term)
 typeDef = define "Type" $
   match _Type Nothing [
     field _Type_annotated $ lambda "v" $ variant _Term _Term_annotated $ record _AnnotatedTerm [
-      field _AnnotatedTerm_subject $ ref typeDef @@ (Core.annotatedTypeSubject $ var "v"),
+      field _AnnotatedTerm_body $ ref typeDef @@ (Core.annotatedTypeBody $ var "v"),
       field _AnnotatedTerm_annotation $ Core.annotatedTypeAnnotation $ var "v"],
     csref _Type_application applicationTypeDef,
     csref _Type_function functionTypeDef,
@@ -468,13 +468,13 @@ wrappedTermDef :: TBinding (WrappedTerm -> Term)
 wrappedTermDef = define "WrappedTerm" $
   lambda "n" $ encodedRecord _WrappedTerm [
     field _WrappedTerm_typeName $ ref nameDef @@ (Core.wrappedTermTypeName $ var "n"),
-    field _WrappedTerm_object $ ref termDef @@ (Core.wrappedTermObject $ var "n")]
+    field _WrappedTerm_body $ ref termDef @@ (Core.wrappedTermBody $ var "n")]
 
 wrappedTypeDef :: TBinding (WrappedType -> Term)
 wrappedTypeDef = define "WrappedType" $
   lambda "nt" $ encodedRecord _WrappedType [
     field _WrappedType_typeName $ ref nameDef @@ (Core.wrappedTypeTypeName $ var "nt"),
-    field _WrappedType_object $ ref typeDef @@ (Core.wrappedTypeObject $ var "nt")]
+    field _WrappedType_body $ ref typeDef @@ (Core.wrappedTypeBody $ var "nt")]
 
 -- TODO: move these into another module
 

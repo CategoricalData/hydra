@@ -28,7 +28,7 @@ dereferenceElement name = (Flows.map (\g -> lookupElement g name) Monads.getStat
 dereferenceSchemaType :: (Core.Name -> M.Map Core.Name Core.TypeScheme -> Maybe Core.TypeScheme)
 dereferenceSchemaType name types =  
   let forType = (\t -> (\x -> case x of
-          Core.TypeAnnotated v1 -> (forType (Core.annotatedTypeSubject v1))
+          Core.TypeAnnotated v1 -> (forType (Core.annotatedTypeBody v1))
           Core.TypeForall v1 -> (Optionals.map (\ts -> Core.TypeScheme {
             Core.typeSchemeVariables = (Lists.cons (Core.forallTypeParameter v1) (Core.typeSchemeVariables ts)),
             Core.typeSchemeType = (Core.typeSchemeType ts)}) (forType (Core.forallTypeBody v1)))

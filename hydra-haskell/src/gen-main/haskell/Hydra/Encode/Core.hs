@@ -17,12 +17,12 @@ import qualified Data.Set as S
 
 annotatedTerm :: (Core.AnnotatedTerm -> Core.Term)
 annotatedTerm a = (Core.TermAnnotated (Core.AnnotatedTerm {
-  Core.annotatedTermSubject = (term (Core.annotatedTermSubject a)),
+  Core.annotatedTermBody = (term (Core.annotatedTermBody a)),
   Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation a)}))
 
 annotatedType :: (Core.AnnotatedType -> Core.Term)
 annotatedType at = (Core.TermAnnotated (Core.AnnotatedTerm {
-  Core.annotatedTermSubject = (type_ (Core.annotatedTypeSubject at)),
+  Core.annotatedTermBody = (type_ (Core.annotatedTypeBody at)),
   Core.annotatedTermAnnotation = (Core.annotatedTypeAnnotation at)}))
 
 application :: (Core.Application -> Core.Term)
@@ -92,7 +92,7 @@ field f = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "name"),
       Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
         Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-        Core.wrappedTermObject = (Core.TermLiteral (Core.LiteralString (Core.unName (Core.fieldName f))))}))},
+        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName (Core.fieldName f))))}))},
     Core.Field {
       Core.fieldName = (Core.Name "term"),
       Core.fieldTerm = (term (Core.fieldTerm f))}]}))
@@ -400,7 +400,7 @@ mapType mt = (Core.TermRecord (Core.Record {
 name :: (Core.Name -> Core.Term)
 name fn = (Core.TermWrap (Core.WrappedTerm {
   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-  Core.wrappedTermObject = (Core.TermLiteral (Core.LiteralString (Core.unName fn)))}))
+  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName fn)))}))
 
 projection :: (Core.Projection -> Core.Term)
 projection p = (Core.TermRecord (Core.Record {
@@ -561,7 +561,7 @@ tupleProjection tp = (Core.TermRecord (Core.Record {
 type_ :: (Core.Type -> Core.Term)
 type_ x = case x of
   Core.TypeAnnotated v1 -> (Core.TermAnnotated (Core.AnnotatedTerm {
-    Core.annotatedTermSubject = (type_ (Core.annotatedTypeSubject v1)),
+    Core.annotatedTermBody = (type_ (Core.annotatedTypeBody v1)),
     Core.annotatedTermAnnotation = (Core.annotatedTypeAnnotation v1)}))
   Core.TypeApplication v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Type"),
@@ -680,8 +680,8 @@ wrappedTerm n = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "typeName"),
       Core.fieldTerm = (name (Core.wrappedTermTypeName n))},
     Core.Field {
-      Core.fieldName = (Core.Name "object"),
-      Core.fieldTerm = (term (Core.wrappedTermObject n))}]}))
+      Core.fieldName = (Core.Name "body"),
+      Core.fieldTerm = (term (Core.wrappedTermBody n))}]}))
 
 wrappedType :: (Core.WrappedType -> Core.Term)
 wrappedType nt = (Core.TermRecord (Core.Record {
@@ -691,8 +691,8 @@ wrappedType nt = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "typeName"),
       Core.fieldTerm = (name (Core.wrappedTypeTypeName nt))},
     Core.Field {
-      Core.fieldName = (Core.Name "object"),
-      Core.fieldTerm = (type_ (Core.wrappedTypeObject nt))}]}))
+      Core.fieldName = (Core.Name "body"),
+      Core.fieldTerm = (type_ (Core.wrappedTypeBody nt))}]}))
 
 -- | Determines whether a given term is an encoded type
 isEncodedType :: (Core.Term -> Bool)

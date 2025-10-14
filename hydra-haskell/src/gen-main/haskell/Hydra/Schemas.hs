@@ -236,7 +236,7 @@ requireRecordType = (requireRowType "record type" (\t -> (\x -> case x of
 requireRowType :: (String -> (Core.Type -> Maybe t0) -> Core.Name -> Compute.Flow Graph.Graph t0)
 requireRowType label getter name =  
   let rawType = (\t -> (\x -> case x of
-          Core.TypeAnnotated v1 -> (rawType (Core.annotatedTypeSubject v1))
+          Core.TypeAnnotated v1 -> (rawType (Core.annotatedTypeBody v1))
           Core.TypeForall v1 -> (rawType (Core.forallTypeBody v1))
           _ -> t) t)
   in (Flows.bind (requireType name) (\t -> Optionals.maybe (Flows.fail (Strings.cat [

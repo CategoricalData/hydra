@@ -24,7 +24,7 @@ termAccessor accessor =
   let idx = (\i -> Nothing) 
       idxSuff = (\suffix -> \i -> Optionals.map (\s -> Strings.cat2 s suffix) (idx i))
   in ((\x -> case x of
-    Accessors.TermAccessorAnnotatedSubject -> Nothing
+    Accessors.TermAccessorAnnotatedBody -> Nothing
     Accessors.TermAccessorApplicationFunction -> (Just "fun")
     Accessors.TermAccessorApplicationArgument -> (Just "arg")
     Accessors.TermAccessorLambdaBody -> (Just "body")
@@ -48,7 +48,7 @@ termAccessor accessor =
 -- | Build an accessor graph from a term
 termToAccessorGraph :: (M.Map Module.Namespace String -> Core.Term -> Accessors.AccessorGraph)
 termToAccessorGraph namespaces term =  
-  let dontCareAccessor = Accessors.TermAccessorAnnotatedSubject 
+  let dontCareAccessor = Accessors.TermAccessorAnnotatedBody 
       helper = (\ids -> \mroot -> \path -> \state -> \accessorTerm ->  
               let accessor = (fst accessorTerm) 
                   currentTerm = (snd accessorTerm)

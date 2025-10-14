@@ -30,7 +30,7 @@ termArity x = case x of
 
 typeArity :: (Core.Type -> Int)
 typeArity x = case x of
-  Core.TypeAnnotated v1 -> (typeArity (Core.annotatedTypeSubject v1))
+  Core.TypeAnnotated v1 -> (typeArity (Core.annotatedTypeBody v1))
   Core.TypeApplication v1 -> (typeArity (Core.applicationTypeFunction v1))
   Core.TypeForall v1 -> (typeArity (Core.forallTypeBody v1))
   Core.TypeFunction v1 -> (Math.add 1 (typeArity (Core.functionTypeCodomain v1)))
@@ -39,7 +39,7 @@ typeArity x = case x of
 -- | Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)
 uncurryType :: (Core.Type -> [Core.Type])
 uncurryType t = ((\x -> case x of
-  Core.TypeAnnotated v1 -> (uncurryType (Core.annotatedTypeSubject v1))
+  Core.TypeAnnotated v1 -> (uncurryType (Core.annotatedTypeBody v1))
   Core.TypeApplication v1 -> (uncurryType (Core.applicationTypeFunction v1))
   Core.TypeForall v1 -> (uncurryType (Core.forallTypeBody v1))
   Core.TypeFunction v1 -> (Lists.cons (Core.functionTypeDomain v1) (uncurryType (Core.functionTypeCodomain v1)))

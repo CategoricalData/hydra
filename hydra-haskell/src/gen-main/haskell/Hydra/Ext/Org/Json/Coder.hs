@@ -196,7 +196,7 @@ untypedTermToJson term =
               in (Flows.bind (forTerm (Core.fieldTerm f)) (\mjson -> Flows.pure (Optionals.map (\j -> (Core.unName (Core.fieldName f), j)) mjson))))
   in ((\x -> case x of
     Core.TermAnnotated v1 ->  
-      let term1 = (Core.annotatedTermSubject v1) 
+      let term1 = (Core.annotatedTermBody v1) 
           ann = (Core.annotatedTermAnnotation v1)
           encodePair = (\kv ->  
                   let k = (Core.unName (fst kv)) 
@@ -289,7 +289,7 @@ untypedTermToJson term =
       in (Logic.ifElse (Equality.equal (Core.fieldTerm field) Core.TermUnit) (Flows.pure (Json.ValueString (Core.unName (Core.fieldName field)))) (Flows.bind (fieldToKeyval field) (\mkeyval -> Flows.pure (Json.ValueObject (Maps.fromList (Optionals.maybe [] (\keyval -> [
         keyval]) mkeyval))))))
     Core.TermVariable v1 -> (Flows.pure (Json.ValueString (Core.unName v1)))
-    Core.TermWrap v1 -> (untypedTermToJson (Core.wrappedTermObject v1))
+    Core.TermWrap v1 -> (untypedTermToJson (Core.wrappedTermBody v1))
     _ -> (unexp (Strings.cat [
       "unsupported term variant: ",
       (Core___.term term)]))) term)

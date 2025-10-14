@@ -431,7 +431,7 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
         Flows.pure $ inject H._Expression H._Expression_variable $ ref HaskellUtils.elementReferenceDef @@ var "namespaces" @@ var "name",
       _Term_wrap>>: lambda "wrapped" $ lets [
         "tname">: Core.wrappedTermTypeName $ var "wrapped",
-        "term'">: Core.wrappedTermObject $ var "wrapped",
+        "term'">: Core.wrappedTermBody $ var "wrapped",
         "lhs">: inject H._Expression H._Expression_variable $ ref HaskellUtils.elementReferenceDef @@ var "namespaces" @@ var "tname"] $
         bind "rhs" (var "encode" @@ var "term'") $
         Flows.pure $ ref HaskellUtils.hsappDef @@ var "lhs" @@ var "rhs"]
@@ -802,7 +802,7 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
             H._DataDeclaration_deriving>>: list [var "deriv"]],
         _Type_wrap>>: lambda "wrapped" $ lets [
           "tname">: Core.wrappedTypeTypeName $ var "wrapped",
-          "wt">: Core.wrappedTypeObject $ var "wrapped"] $
+          "wt">: Core.wrappedTypeBody $ var "wrapped"] $
           bind "cons" (var "newtypeCons" @@ var "el" @@ var "wt") $
             Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
               H._DataDeclaration_keyword>>: unitVariant H._DataOrNewtype H._DataOrNewtype_newtype,
