@@ -161,14 +161,12 @@ expectTypeOfResult :: String -> M.Map Name Type -> Term -> Maybe Term -> Type ->
 expectTypeOfResult desc types term mterm expected = do
   (iterm, itype, rtype) <- H.runIO $ fromTestFlow desc $ do
     cx <- graphToInferenceContext testGraph
+    let tx = TypeContext types S.empty cx
 
     -- typeOf is always called on System F terms
     (iterm, ts) <- inferTypeOf cx term
     let itype = typeSchemeToFType ts
 
-    let vars = S.fromList $ typeSchemeVariables ts
-
-    let tx = TypeContext types vars cx
     rtype <- typeOf tx [] iterm
     return (iterm, itype, rtype)
 
