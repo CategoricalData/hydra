@@ -467,7 +467,7 @@ encodeTermInline env term = case deannotateTerm term of
     TermTypeLambda tl@(TypeLambda _ term1) -> encodeTermInline env2 term1
       where
         env2 = extendEnvironmentForTypeLambda env tl
-    TermTypeApplication (TypedTerm term1 _) -> encode term1
+    TermTypeApplication (TypeApplicationTerm term1 _) -> encode term1
     TermUnion (Injection tname field) -> do
       rt <- inGraphContext $ requireUnionType tname
       if isEnumRowType rt
@@ -780,7 +780,7 @@ gatherArgs :: Term -> [Term] -> (Term, [Term])
 gatherArgs term args = case deannotateTerm term of
   TermApplication (Application lhs rhs) -> gatherArgs lhs (rhs:args)
   TermTypeLambda (TypeLambda _ body) -> gatherArgs body args
-  TermTypeApplication (TypedTerm t _) -> gatherArgs t args
+  TermTypeApplication (TypeApplicationTerm t _) -> gatherArgs t args
   _ -> (term, args)
 
 gatherBindingsAndParams :: PythonEnvironment -> Term -> Flow s ([Name], [Name], [Binding], Term, [Type], Type, PythonEnvironment)
@@ -795,7 +795,7 @@ gatherBindingsAndParams env term = withTrace ("gather for " ++ ShowCore.term ter
         TermLet lt@(Let bindings2 body) -> gather False env2 tparams args (bindings ++ bindings2) doms tapps body
           where
             env2 = extendEnvironmentForLet env lt
-        TermTypeApplication (TypedTerm e t) -> gather argMode env tparams args bindings doms (t:tapps) e
+        TermTypeApplication (TypeApplicationTerm e t) -> gather argMode env tparams args bindings doms (t:tapps) e
         TermTypeLambda tlam@(TypeLambda tvar body) -> gather argMode env2 (tvar:tparams) args bindings doms tapps body
           where
             env2 = extendEnvironmentForTypeLambda env tlam
@@ -805,7 +805,7 @@ gatherBindingsAndParams env term = withTrace ("gather for " ++ ShowCore.term ter
             typ <- typeOf (pythonEnvironmentTypeContext env) [] t2
             return (L.reverse tparams, L.reverse args, bindings, t2, L.reverse doms, typ, env)
           where
-            t2 = L.foldl (\trm typ -> TermTypeApplication $ TypedTerm trm typ) t tapps
+            t2 = L.foldl (\trm typ -> TermTypeApplication $ TypeApplicationTerm trm typ) t tapps
 
 gatherMetadata :: [Definition] -> PythonModuleMetadata
 gatherMetadata defs = checkTvars $ L.foldl addDef start defs

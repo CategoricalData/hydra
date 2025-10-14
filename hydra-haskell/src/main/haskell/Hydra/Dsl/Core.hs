@@ -399,7 +399,7 @@ termSum = variant _Term _Term_sum
 termTypeLambda :: TTerm TypeLambda -> TTerm Term
 termTypeLambda = variant _Term _Term_typeLambda
 
-termTypeApplication :: TTerm TypedTerm -> TTerm Term
+termTypeApplication :: TTerm TypeApplicationTerm -> TTerm Term
 termTypeApplication = variant _Term _Term_typeApplication
 
 termUnion :: TTerm Injection -> TTerm Term
@@ -499,16 +499,16 @@ typeVariable = variant _Type _Type_variable
 typeWrap :: TTerm WrappedType -> TTerm Type
 typeWrap = variant _Type _Type_wrap
 
-typedTerm :: TTerm Term -> TTerm Type -> TTerm TypedTerm
-typedTerm term type_ = Phantoms.record _TypedTerm [
-  _TypedTerm_term>>: term,
-  _TypedTerm_type>>: type_]
+typeApplicationTerm :: TTerm Term -> TTerm Type -> TTerm TypeApplicationTerm
+typeApplicationTerm body type_ = Phantoms.record _TypeApplicationTerm [
+  _TypeApplicationTerm_body>>: body,
+  _TypeApplicationTerm_type>>: type_]
 
-typedTermTerm :: TTerm TypedTerm -> TTerm Term
-typedTermTerm tt = Phantoms.project _TypedTerm _TypedTerm_term @@ tt
+typeApplicationTermBody :: TTerm TypeApplicationTerm -> TTerm Term
+typeApplicationTermBody tt = Phantoms.project _TypeApplicationTerm _TypeApplicationTerm_body @@ tt
 
-typedTermType :: TTerm TypedTerm -> TTerm Type
-typedTermType tt = Phantoms.project _TypedTerm _TypedTerm_type @@ tt
+typeApplicationTermType :: TTerm TypeApplicationTerm -> TTerm Type
+typeApplicationTermType tt = Phantoms.project _TypeApplicationTerm _TypeApplicationTerm_type @@ tt
 
 unName :: TTerm Name -> TTerm String
 unName n = unwrap _Name @@ n

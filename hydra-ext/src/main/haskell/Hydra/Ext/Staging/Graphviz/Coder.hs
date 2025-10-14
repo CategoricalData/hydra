@@ -66,7 +66,7 @@ termToAccessorDotStmts namespaces term = (nodeStmt <$> nodes) ++ (edgeStmt <$> e
     showPath path = L.intercalate "/" $ Y.catMaybes (ShowAccessors.termAccessor <$> path)
 
 termToDotStmts :: M.Map Namespace String -> Term -> [Dot.Stmt]
-termToDotStmts namespaces term = fst $ encode Nothing False M.empty Nothing ([], S.empty) (TermAccessorAnnotatedSubject, term)
+termToDotStmts namespaces term = fst $ encode Nothing False M.empty Nothing ([], S.empty) (TermAccessorAnnotatedBody, term)
   where
     encode mlabstyle isElement ids mparent (stmts, visited) (accessor, term) = case term of
         TermFunction (FunctionLambda (Lambda v _ body)) ->
@@ -81,7 +81,7 @@ termToDotStmts namespaces term = fst $ encode Nothing False M.empty Nothing ([],
               Dot.nodeStmtAttributes = Just $ labelAttrs NodeStyleVariable $ unName v}
             varEdgeStmt = Dot.StmtEdge $ Dot.EdgeStmt (toNodeOrSubgraph selfId) [toNodeOrSubgraph varId] $
               Just $ edgeAttrs "var"
-        TermLet (Let bindings env) -> encode Nothing False ids1 (Just selfId) (stmts1, visited2) (TermAccessorLetEnvironment, env)
+        TermLet (Let bindings env) -> encode Nothing False ids1 (Just selfId) (stmts1, visited2) (TermAccessorLetBody, env)
           where
             (stmts1, visited2) = L.foldl addBinding (selfStmts, selfVisited) bindings
               where
@@ -157,7 +157,7 @@ termLabel compact namespaces term = case term of
     TermProduct _ -> simpleLabel $ if compact then "\x2227" else "product"
     TermRecord (Record name _) -> simpleLabel $ "\x2227" ++ Names.compactName namespaces name
     TermTypeLambda (TypeLambda v term1) -> simpleLabel "tyabs"
-    TermTypeApplication (TypedTerm term _) -> simpleLabel "tyapp"
+    TermTypeApplication (TypeApplicationTerm term _) -> simpleLabel "tyapp"
     TermUnion (Injection tname _) -> simpleLabel $ "\x22BB" ++ Names.compactName namespaces tname
     TermVariable name -> simpleLabel $ Names.compactName namespaces name
     TermWrap (WrappedTerm name term1) -> simpleLabel $ "(" ++ Names.compactName namespaces name ++ ")"

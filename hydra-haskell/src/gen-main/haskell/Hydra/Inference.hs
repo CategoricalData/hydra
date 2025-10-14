@@ -77,9 +77,9 @@ bindUnboundTypeVariables cx term0 =
 
 -- | Fold a list of type variables over a term to build a type application term
 buildTypeApplicationTerm :: ([Core.Name] -> Core.Term -> Core.Term)
-buildTypeApplicationTerm tvars body = (Lists.foldl (\t -> \v -> Core.TermTypeApplication (Core.TypedTerm {
-  Core.typedTermTerm = t,
-  Core.typedTermType = (Core.TypeVariable v)})) body tvars)
+buildTypeApplicationTerm tvars body = (Lists.foldl (\t -> \v -> Core.TermTypeApplication (Core.TypeApplicationTerm {
+  Core.typeApplicationTermBody = t,
+  Core.typeApplicationTermType = (Core.TypeVariable v)})) body tvars)
 
 -- | An empty inference context
 emptyInferenceContext :: Typing_.InferenceContext
@@ -740,8 +740,8 @@ inferTypeOfTupleProjection cx tp =
 inferTypeOfTypeLambda :: (Typing_.InferenceContext -> Core.TypeLambda -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfTypeLambda cx ta = (inferTypeOfTerm cx (Core.typeLambdaBody ta) "type abstraction")
 
-inferTypeOfTypeApplication :: (Typing_.InferenceContext -> Core.TypedTerm -> Compute.Flow t0 Typing_.InferenceResult)
-inferTypeOfTypeApplication cx tt = (inferTypeOfTerm cx (Core.typedTermTerm tt) "type application term")
+inferTypeOfTypeApplication :: (Typing_.InferenceContext -> Core.TypeApplicationTerm -> Compute.Flow t0 Typing_.InferenceResult)
+inferTypeOfTypeApplication cx tt = (inferTypeOfTerm cx (Core.typeApplicationTermBody tt) "type application term")
 
 -- | The trivial inference rule for the unit term
 inferTypeOfUnit :: Typing_.InferenceResult

@@ -351,8 +351,8 @@ termDef = define "term" $
         string ".",
         ref termDef @@ var "body"],
     _Term_typeApplication>>: "tt" ~>
-      "t2" <~ Core.typedTermTerm (var "tt") $
-      "typ" <~ Core.typedTermType (var "tt") $
+      "t2" <~ Core.typeApplicationTermBody (var "tt") $
+      "typ" <~ Core.typeApplicationTermType (var "tt") $
       Strings.cat $ list [
         ref termDef @@ var "t2",
         string "⟨",

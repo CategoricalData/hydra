@@ -46,8 +46,8 @@ adaptedModuleDefinitions lang mod =
       classify = (\adapters -> \pair ->  
               let el = (fst pair) 
                   tt = (snd pair)
-                  term = (Core.typedTermTerm tt)
-                  typ = (Core.typedTermType tt)
+                  term = (Core.typeApplicationTermBody tt)
+                  typ = (Core.typeApplicationTermType tt)
                   name = (Core.bindingName el)
               in (Logic.ifElse (Annotations.isNativeType el) (Flows.bind (Flows.bind (Core_.type_ term) (\coreTyp -> adaptTypeToLanguage lang coreTyp)) (\adaptedTyp -> Flows.pure (Module.DefinitionType (Module.TypeDefinition {
                 Module.typeDefinitionName = name,
@@ -55,8 +55,8 @@ adaptedModuleDefinitions lang mod =
                 Module.termDefinitionName = name,
                 Module.termDefinitionTerm = adapted,
                 Module.termDefinitionType = (Compute.adapterTarget adapter)})))) (Maps.lookup typ adapters))))
-  in (Flows.bind (Lexical.withSchemaContext (Flows.mapList Schemas.elementAsTypedTerm els)) (\tterms ->  
-    let types = (Sets.toList (Sets.fromList (Lists.map (\arg_ -> Rewriting.deannotateType (Core.typedTermType arg_)) tterms)))
+  in (Flows.bind (Lexical.withSchemaContext (Flows.mapList Schemas.elementAsTypeApplicationTerm els)) (\tterms ->  
+    let types = (Sets.toList (Sets.fromList (Lists.map (\arg_ -> Rewriting.deannotateType (Core.typeApplicationTermType arg_)) tterms)))
     in (Flows.bind (adaptersFor types) (\adapters -> Flows.mapList (classify adapters) (Lists.zip els tterms)))))
 
 constructCoder :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> Core.Type -> Compute.Flow Graph.Graph (Compute.Coder t0 t2 Core.Term t1))
@@ -82,10 +82,10 @@ languageAdapter lang typ = (Flows.bind Monads.getState (\g ->
       Compute.adapterTarget = (Compute.adapterTarget adapter),
       Compute.adapterCoder = ac}))))))
 
-transformModule :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> (Module.Module -> M.Map Core.Type (Compute.Coder t0 t2 Core.Term t1) -> [(Core.Binding, Core.TypedTerm)] -> Compute.Flow Graph.Graph t3) -> Module.Module -> Compute.Flow Graph.Graph t3)
+transformModule :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> (Module.Module -> M.Map Core.Type (Compute.Coder t0 t2 Core.Term t1) -> [(Core.Binding, Core.TypeApplicationTerm)] -> Compute.Flow Graph.Graph t3) -> Module.Module -> Compute.Flow Graph.Graph t3)
 transformModule lang encodeTerm createModule mod = (Monads.withTrace (Strings.cat2 "transform module " (Module.unNamespace (Module.moduleNamespace mod))) ( 
   let els = (Module.moduleElements mod) 
       codersFor = (\types -> Flows.bind (Flows.mapList (constructCoder lang encodeTerm) types) (\cdrs -> Flows.pure (Maps.fromList (Lists.zip types cdrs))))
-  in (Flows.bind (Lexical.withSchemaContext (Flows.mapList Schemas.elementAsTypedTerm els)) (\tterms ->  
-    let types = (Lists.nub (Lists.map Core.typedTermType tterms))
+  in (Flows.bind (Lexical.withSchemaContext (Flows.mapList Schemas.elementAsTypeApplicationTerm els)) (\tterms ->  
+    let types = (Lists.nub (Lists.map Core.typeApplicationTermType tterms))
     in (Flows.bind (codersFor types) (\coders -> createModule mod coders (Lists.zip els tterms)))))))

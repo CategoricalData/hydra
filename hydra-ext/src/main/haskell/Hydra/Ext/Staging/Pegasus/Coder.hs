@@ -27,7 +27,7 @@ constructModule ::
   M.Map Namespace String
   -> Module
   -> M.Map Type (Coder Graph Graph Term ())
-  -> [(Binding, TypedTerm)]
+  -> [(Binding, TypeApplicationTerm)]
   -> Flow Graph (M.Map FilePath PDL.SchemaFile)
 constructModule aliases mod coders pairs = do
     sortedPairs <- case (topologicalSortBindings $ fst <$> pairs) of
@@ -44,7 +44,7 @@ constructModule aliases mod coders pairs = do
         local = PDL.unName $ PDL.qualifiedNameName $ PDL.namedSchemaQualifiedName schema
 
     pairByName = L.foldl (\m p -> M.insert (bindingName $ fst p) p m) M.empty pairs
-    toSchema (el, tt@(TypedTerm term typ)) = do
+    toSchema (el, tt@(TypeApplicationTerm term typ)) = do
       if isNativeType el
         then DecodeCore.type_ term >>= typeToSchema el
         else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (bindingName el)

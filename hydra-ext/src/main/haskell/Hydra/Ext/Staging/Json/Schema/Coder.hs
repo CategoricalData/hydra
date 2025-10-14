@@ -43,11 +43,11 @@ constructModule
   :: JsonSchemaOptions
   -> Module.Module
   -> M.Map Core.Type (Compute.Coder Graph.Graph Graph.Graph Core.Term ())
-  -> [(Core.Binding, Core.TypedTerm)]
+  -> [(Core.Binding, Core.TypeApplicationTerm)]
   -> Compute.Flow Graph.Graph (M.Map FilePath JS.Document)
 constructModule opts mod coders pairs = M.fromList <$> CM.mapM toDocument pairs
   where
-    toDocument (el, tt@(Core.TypedTerm term typ)) = if Annotations.isNativeType el
+    toDocument (el, tt@(Core.TypeApplicationTerm term typ)) = if Annotations.isNativeType el
       then typeTermToDocument (Core.bindingName el)
       else Monads.fail $ "mapping of non-type elements to JSON Schema is not yet supported: " ++ Core.unName (Core.bindingName el)
 

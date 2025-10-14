@@ -24,9 +24,9 @@ moduleToScala mod = do
   return $ M.fromList [(namespaceToFilePath CaseConventionCamel (FileExtension "scala") $ moduleNamespace mod, s)]
 
 moduleToScalaPackage :: Module -> Flow Graph Scala.Pkg
-moduleToScalaPackage = transformModule scalaLanguage encodeUntypedTerm constructModule
+moduleToScalaPackage = transformModule scalaLanguage encodeUntypeApplicationTerm constructModule
 
-constructModule :: Module -> M.Map Type (Coder Graph Graph Term Scala.Data) -> [(Binding, TypedTerm)]
+constructModule :: Module -> M.Map Type (Coder Graph Graph Term Scala.Data) -> [(Binding, TypeApplicationTerm)]
   -> Flow Graph Scala.Pkg
 constructModule mod coders pairs = do
     defs <- CM.mapM toDef pairs
@@ -46,7 +46,7 @@ constructModule mod coders pairs = do
         toPrimImport (Namespace ns) = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
           Scala.Importer (Scala.Data_RefName $ toScalaName ns) []]
     toScalaName name = Scala.Data_Name $ Scala.PredefString $ L.intercalate "." $ Strings.splitOn "." name
-    toDef (el, TypedTerm term typ) = withTrace ("element " ++ unName (bindingName el)) $ do
+    toDef (el, TypeApplicationTerm term typ) = withTrace ("element " ++ unName (bindingName el)) $ do
         let coder = Y.fromJust $ M.lookup typ coders
         rhs <- coderEncode coder term
         Scala.StatDefn <$> case rhs of
@@ -220,5 +220,5 @@ encodeType t = case deannotateType t of
   TypeVariable (Name v) -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
   _ -> fail $ "can't encode unsupported type in Scala: " ++ show t
 
-encodeUntypedTerm :: Term -> Flow Graph Scala.Data
-encodeUntypedTerm term = (inferenceResultTerm <$> inferInGraphContext term) >>= encodeTerm
+encodeUntypeApplicationTerm :: Term -> Flow Graph Scala.Data
+encodeUntypeApplicationTerm term = (inferenceResultTerm <$> inferInGraphContext term) >>= encodeTerm

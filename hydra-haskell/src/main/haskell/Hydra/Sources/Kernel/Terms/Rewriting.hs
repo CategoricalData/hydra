@@ -110,7 +110,7 @@ deannotateAndDetypeTermDef = define "deannotateAndDetypeTerm" $
   "t" ~> cases _Term (var "t")
     (Just $ var "t") [
     _Term_annotated>>: "at" ~> ref deannotateAndDetypeTermDef @@ (Core.annotatedTermBody $ var "at"),
-    _Term_typeApplication>>: "tt" ~> ref deannotateAndDetypeTermDef @@ (Core.typedTermTerm $ var "tt"),
+    _Term_typeApplication>>: "tt" ~> ref deannotateAndDetypeTermDef @@ (Core.typeApplicationTermBody $ var "tt"),
     _Term_typeLambda>>: "ta" ~> ref deannotateAndDetypeTermDef @@ (Core.typeLambdaBody $ var "ta")]
 
 deannotateTermDef :: TBinding (Term -> Term)
@@ -162,7 +162,7 @@ detypeTermDef = define "detypeTerm" $
        "subj" <~ Core.annotatedTermBody (var "at") $
        "ann" <~ Core.annotatedTermAnnotation (var "at") $
        Core.termAnnotated $ Core.annotatedTerm (ref detypeTermDef @@ var "subj") (var "ann"),
-    _Term_typeApplication>>: "tt" ~> ref deannotateAndDetypeTermDef @@ (Core.typedTermTerm $ var "tt"),
+    _Term_typeApplication>>: "tt" ~> ref deannotateAndDetypeTermDef @@ (Core.typeApplicationTermBody $ var "tt"),
     _Term_typeLambda>>: "ta" ~> ref deannotateAndDetypeTermDef @@ (Core.typeLambdaBody $ var "ta")]
 
 flattenLetTermsDef :: TBinding (Term -> Term)
@@ -246,8 +246,8 @@ foldOverTypeDef = define "foldOverType" $
 --    (Just $ Lists.foldl (binaryFunction Sets.union) Sets.empty $
 --      Lists.map (ref freeTypeVariablesInTermDef) (ref subtermsDef @@ var "term")) [
 --    _Term_typeApplication>>: "tt" ~> Sets.union
---      (ref freeVariablesInTypeDef @@ (Core.typedTermType $ var "tt"))
---      (ref freeTypeVariablesInTermDef @@ (Core.typedTermTerm $ var "tt")),
+--      (ref freeVariablesInTypeDef @@ (Core.typeApplicationTermType $ var "tt"))
+--      (ref freeTypeVariablesInTermDef @@ (Core.typeApplicationTermBody $ var "tt")),
 --    _Term_typeLambda>>: "tl" ~>
 --      "tmp" <~ ref freeTypeVariablesInTermDef @@ (Core.typeLambdaBody $ var "tl") $
 --      Sets.delete (Core.typeLambdaParameter $ var "tl") (var "tmp")]
@@ -289,8 +289,8 @@ freeTypeVariablesInTermDef = define "freeTypeVariablesInTerm" $
           (var "recurse" @@ (Core.letBody $ var "l")),
       _Term_typeApplication>>: "tt" ~>
         Sets.union
-          (var "tryType" @@ var "vars" @@ (Core.typedTermType $ var "tt"))
-          (var "recurse" @@ (Core.typedTermTerm $ var "tt")),
+          (var "tryType" @@ var "vars" @@ (Core.typeApplicationTermType $ var "tt"))
+          (var "recurse" @@ (Core.typeApplicationTermBody $ var "tt")),
       _Term_typeLambda>>: "tl" ~>
         Sets.union
           -- The type variable introduced by a type lambda is considered unbound unless it is also introduced in an
@@ -497,9 +497,9 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
           -- Body sees the original 'next' (binding lambdas don't bind in the body)
           (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ var "body0"),
       -- Type application terms have a type which needs to be rewritten, and we also recurse into the body term.
-      _Term_typeApplication>>: "tt" ~> Core.termTypeApplication $ Core.typedTerm
-        (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.typedTermTerm $ var "tt"))
-        (var "substType" @@ var "subst" @@ (Core.typedTermType $ var "tt")),
+      _Term_typeApplication>>: "tt" ~> Core.termTypeApplication $ Core.typeApplicationTerm
+        (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.typeApplicationTermBody $ var "tt"))
+        (var "substType" @@ var "subst" @@ (Core.typeApplicationTermType $ var "tt")),
       -- Type lambdas introduce a type variable which needs to be replaced, and we also recurse into the body term.
       -- Note: in Hydra currently, type lambdas are exclusively created during type inference in combination with
       -- polymorphic let bindings, so the type variable should already be present in the substitution.
@@ -561,7 +561,7 @@ removeTypesFromTermDef = define "removeTypesFromTerm" $
       _Term_let>>: "lt" ~> Core.termLet $ Core.let_
         (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
         (Core.letBody $ var "lt"),
-      _Term_typeApplication>>: "tt" ~> Core.typedTermTerm $ var "tt",
+      _Term_typeApplication>>: "tt" ~> Core.typeApplicationTermBody $ var "tt",
       _Term_typeLambda>>: "ta" ~> Core.typeLambdaBody $ var "ta"]) $
   ref rewriteTermDef @@ var "strip" @@ var "term"
 
@@ -728,9 +728,9 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
         @@ Core.sumTerm (var "s"),
       _Term_typeApplication>>: "ta" ~> var "forSingle"
         @@ var "recurse"
-        @@ ("t" ~> Core.termTypeApplication $ Core.typedTerm (var "t") (Core.typedTermType $ var "ta"))
+        @@ ("t" ~> Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType $ var "ta"))
         @@ var "val0"
-        @@ (Core.typedTermTerm $ var "ta"),
+        @@ (Core.typeApplicationTermBody $ var "ta"),
       _Term_typeLambda>>: "tl" ~> var "forSingle"
         @@ var "recurse"
         @@ ("t" ~> Core.termTypeLambda $ Core.typeLambda (Core.typeLambdaParameter $ var "tl") (var "t"))
@@ -871,9 +871,9 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
         @@ Core.sumTerm (var "s"),
       _Term_typeApplication>>: "ta" ~> var "forSingle"
         @@ var "recurse"
-        @@ ("t" ~> Core.termTypeApplication $ Core.typedTerm (var "t") (Core.typedTermType $ var "ta"))
+        @@ ("t" ~> Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType $ var "ta"))
         @@ var "val0"
-        @@ (Core.typedTermTerm $ var "ta"),
+        @@ (Core.typeApplicationTermBody $ var "ta"),
       _Term_typeLambda>>: "tl" ~> var "forSingle"
         @@ var "recurse"
         @@ ("t" ~> Core.termTypeLambda $ Core.typeLambda (Core.typeLambdaParameter $ var "tl") (var "t"))
@@ -947,9 +947,9 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~>
         (Core.sumIndex $ var "s")
         (Core.sumSize $ var "s")
         (var "recurse" @@ (Core.sumTerm $ var "s")),
-      _Term_typeApplication>>: "tt" ~> Core.termTypeApplication $ Core.typedTerm
-        (var "recurse" @@ (Core.typedTermTerm $ var "tt"))
-        (Core.typedTermType $ var "tt"),
+      _Term_typeApplication>>: "tt" ~> Core.termTypeApplication $ Core.typeApplicationTerm
+        (var "recurse" @@ (Core.typeApplicationTermBody $ var "tt"))
+        (Core.typeApplicationTermType $ var "tt"),
       _Term_typeLambda>>: "ta" ~> Core.termTypeLambda $ Core.typeLambda
         (Core.typeLambdaParameter $ var "ta")
         (var "recurse" @@ (Core.typeLambdaBody $ var "ta")),
@@ -1049,8 +1049,8 @@ rewriteTermMDef = define "rewriteTermM" $
         "rtrm" <<~ var "recurse" @@ var "trm" $
         produce $ Core.termSum $ Core.sum (var "i") (var "s") (var "rtrm"),
       _Term_typeApplication>>: "tt" ~>
-        "t" <<~ var "recurse" @@ Core.typedTermTerm (var "tt") $
-        produce $ Core.termTypeApplication $ Core.typedTerm (var "t") (Core.typedTermType (var "tt")),
+        "t" <<~ var "recurse" @@ Core.typeApplicationTermBody (var "tt") $
+        produce $ Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType (var "tt")),
       _Term_typeLambda>>: "tl" ~>
         "v" <~ Core.typeLambdaParameter (var "tl") $
         "body" <~ Core.typeLambdaBody (var "tl") $
@@ -1280,7 +1280,7 @@ subtermsDef = define "subterms" $
     _Term_record>>: "rt" ~> Lists.map (unaryFunction Core.fieldTerm) (Core.recordFields $ var "rt"),
     _Term_set>>: "l" ~> Sets.toList $ var "l",
     _Term_sum>>: "st" ~> list [Core.sumTerm $ var "st"],
-    _Term_typeApplication>>: "ta" ~> list [Core.typedTermTerm $ var "ta"],
+    _Term_typeApplication>>: "ta" ~> list [Core.typeApplicationTermBody $ var "ta"],
     _Term_typeLambda>>: "ta" ~> list [Core.typeLambdaBody $ var "ta"],
     _Term_union>>: "ut" ~> list [Core.fieldTerm $ (Core.injectionField $ var "ut")],
     _Term_unit>>: constant $ list [],
@@ -1343,7 +1343,7 @@ subtermsWithAccessorsDef = define "subtermsWithAccessors" $
       Core.sumTerm $ var "st",
     _Term_typeApplication>>: "ta" ~>
       single Mantle.termAccessorTypeApplicationTerm $
-      Core.typedTermTerm $ var "ta",
+      Core.typeApplicationTermBody $ var "ta",
     _Term_typeLambda>>: "ta" ~>
       single Mantle.termAccessorTypeLambdaBody $
       Core.typeLambdaBody $ var "ta",

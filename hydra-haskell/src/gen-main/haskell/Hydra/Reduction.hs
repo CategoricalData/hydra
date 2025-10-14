@@ -162,7 +162,7 @@ etaExpansionArity graph term = ((\x -> case x of
     Core.FunctionLambda _ -> 0
     Core.FunctionPrimitive v2 -> (Arity.primitiveArity (Optionals.fromJust (Lexical.lookupPrimitive graph v2)))) v1)
   Core.TermTypeLambda v1 -> (etaExpansionArity graph (Core.typeLambdaBody v1))
-  Core.TermTypeApplication v1 -> (etaExpansionArity graph (Core.typedTermTerm v1))
+  Core.TermTypeApplication v1 -> (etaExpansionArity graph (Core.typeApplicationTermBody v1))
   Core.TermVariable v1 -> (Optionals.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Optionals.bind (Lexical.lookupElement graph v1) (\b -> Core.bindingType b)))
   _ -> 0) term)
 

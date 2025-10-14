@@ -64,10 +64,10 @@ dependencyNamespaces binds withPrims withNoms withSchema els =
 dereferenceType :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Type))
 dereferenceType name = (Flows.bind (Lexical.dereferenceElement name) (\mel -> Optionals.maybe (Flows.pure Nothing) (\el -> Flows.map Optionals.pure (Core_.type_ (Core.bindingTerm el))) mel))
 
-elementAsTypedTerm :: (Core.Binding -> Compute.Flow t0 Core.TypedTerm)
-elementAsTypedTerm el = (Optionals.maybe (Flows.fail "missing element type") (\ts -> Flows.pure (Core.TypedTerm {
-  Core.typedTermTerm = (Core.bindingTerm el),
-  Core.typedTermType = (Core.typeSchemeType ts)})) (Core.bindingType el))
+elementAsTypeApplicationTerm :: (Core.Binding -> Compute.Flow t0 Core.TypeApplicationTerm)
+elementAsTypeApplicationTerm el = (Optionals.maybe (Flows.fail "missing element type") (\ts -> Flows.pure (Core.TypeApplicationTerm {
+  Core.typeApplicationTermBody = (Core.bindingTerm el),
+  Core.typeApplicationTermType = (Core.typeSchemeType ts)})) (Core.bindingType el))
 
 -- | Get elements with their dependencies
 elementsWithDependencies :: ([Core.Binding] -> Compute.Flow Graph.Graph [Core.Binding])

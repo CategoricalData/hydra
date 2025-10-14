@@ -170,7 +170,7 @@ buildTypeApplicationTermDef :: TBinding ([Name] -> Term -> Term)
 buildTypeApplicationTermDef = define "buildTypeApplicationTerm" $
   doc "Fold a list of type variables over a term to build a type application term" $
   "tvars" ~> "body" ~> Lists.foldl
-    ("t" ~> "v" ~> Core.termTypeApplication $ Core.typedTerm (var "t") (Core.typeVariable (var "v")))
+    ("t" ~> "v" ~> Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeVariable (var "v")))
     (var "body")
     (var "tvars")
 
@@ -922,11 +922,11 @@ inferTypeOfTypeLambdaDef = define "inferTypeOfTypeLambda" $
   "cx" ~> "ta" ~>
   ref inferTypeOfTermDef @@ var "cx" @@ (Core.typeLambdaBody $ var "ta") @@ string "type abstraction"
 
-inferTypeOfTypeApplicationDef :: TBinding (InferenceContext -> TypedTerm -> Flow s InferenceResult)
+inferTypeOfTypeApplicationDef :: TBinding (InferenceContext -> TypeApplicationTerm -> Flow s InferenceResult)
 inferTypeOfTypeApplicationDef = define "inferTypeOfTypeApplication" $
   doc "Infer the type of a type application; just pass through to the inner term." $
   "cx" ~> "tt" ~>
-  ref inferTypeOfTermDef @@ var "cx" @@ (Core.typedTermTerm $ var "tt") @@ string "type application term"
+  ref inferTypeOfTermDef @@ var "cx" @@ (Core.typeApplicationTermBody $ var "tt") @@ string "type application term"
 
 inferTypeOfUnitDef :: TBinding InferenceResult
 inferTypeOfUnitDef = define "inferTypeOfUnit" $

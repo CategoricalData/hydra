@@ -416,8 +416,8 @@ untypedTermToJsonDef = define "untypedTermToJson" $
         Core.field (Core.name $ string "parameter") (Core.termVariable $ Core.typeLambdaParameter $ var "ta"),
         Core.field (Core.name $ string "body") (Core.typeLambdaBody $ var "ta")],
       _Term_typeApplication>>: lambda "tt" $ var "asRecord" @@ list [
-        Core.field (Core.name $ string "term") (Core.typedTermTerm $ var "tt"),
-        Core.field (Core.name $ string "type") (ref EncodeCore.typeDef @@ (Core.typedTermType $ var "tt"))],
+        Core.field (Core.name $ string "term") (Core.typeApplicationTermBody $ var "tt"),
+        Core.field (Core.name $ string "type") (ref EncodeCore.typeDef @@ (Core.typeApplicationTermType $ var "tt"))],
       _Term_union>>: lambda "i" $ lets [
         "field">: Core.injectionField $ var "i"] $
         Logic.ifElse (Equality.equal (Core.fieldTerm $ var "field") Core.termUnit)

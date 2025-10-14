@@ -23,22 +23,22 @@ checkLiterals = H.describe "Test literal values" $ do
 
   H.it "Booleans become 'true' and 'false' (not 'y' and 'n')" $ do
     QC.property $ \b -> checkSerialization yamlStringCoder
-      (TypedTerm (boolean b) Types.boolean)
+      (TypeApplicationTerm (boolean b) Types.boolean)
       (if b then "true" else "false")
 
   H.it "int32's become ints, and are serialized in the obvious way" $ do
     QC.property $ \i -> checkSerialization yamlStringCoder
-      (TypedTerm (int32 i) Types.int32)
+      (TypeApplicationTerm (int32 i) Types.int32)
       (show i)
 
   H.it "uint8's and other finite integer types become ints, and are serialized in the obvious way" $ do
     QC.property $ \i -> checkSerialization yamlStringCoder
-      (TypedTerm (uint8 i) Types.uint8)
+      (TypeApplicationTerm (uint8 i) Types.uint8)
       (show i)
 
   H.it "bigints become ints" $ do
     QC.property $ \i -> checkSerialization yamlStringCoder
-      (TypedTerm (bigint i) Types.bigint)
+      (TypeApplicationTerm (bigint i) Types.bigint)
       (show i)
 
   -- TODO: examine quirks around floating-point serialization more closely. These could affect portability of the serialized YAML.
@@ -50,21 +50,21 @@ checkOptionals = H.describe "Test and document serialization of optionals" $ do
 
   H.it "A 'nothing' becomes 'null' (except when it appears as a field)" $
     QC.property $ \mi -> checkSerialization yamlStringCoder
-      (TypedTerm
+      (TypeApplicationTerm
         (optional $ (Just . int32) =<< mi)
         (Types.optional Types.int32))
       (Y.maybe "null" show mi)
 
   H.it "Nested optionals case #1: just x? :: optional<optional<int32>>" $
     QC.property $ \mi -> checkSerialization yamlStringCoder
-      (TypedTerm
+      (TypeApplicationTerm
         (optional $ Just $ optional $ (Just . int32) =<< mi)
         (Types.optional $ Types.optional Types.int32))
       ("- " ++ Y.maybe "null" show mi)
 
   H.it "Nested optionals case #2: nothing :: optional<optional<int32>>" $
     QC.property $ \() -> checkSerialization yamlStringCoder
-      (TypedTerm
+      (TypeApplicationTerm
         (optional Nothing)
         (Types.optional $ Types.optional Types.int32))
       "[]"
@@ -74,24 +74,24 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
 
   H.it "Empty records become empty objects" $
     QC.property $ \() -> checkSerialization yamlStringCoder
-      (TypedTerm unit Types.unit)
+      (TypeApplicationTerm unit Types.unit)
       "null"
 
   H.it "Simple records become simple objects" $
     QC.property $ \() -> checkSerialization yamlStringCoder
-      (TypedTerm (latlonRecord 37.0 (negate 122.0)) testTypeLatLon)
+      (TypeApplicationTerm (latlonRecord 37.0 (negate 122.0)) testTypeLatLon)
       "lat: 37.0\nlon: -122.0"
 
   H.it "Optionals are omitted from record objects if 'nothing'" $
     QC.property $ \() -> checkSerialization yamlStringCoder
-      (TypedTerm
+      (TypeApplicationTerm
         (record testTypeName [Field (Name "one") $ optional $ Just $ string "test", Field (Name "two") $ optional Nothing])
         (TypeRecord $ RowType testTypeName [Types.field "one" $ Types.optional Types.string, Types.field "two" $ Types.optional Types.int32]))
       "one: test"
 
   H.it "Simple unions become simple objects, via records" $
     QC.property $ \() -> checkSerialization yamlStringCoder
-      (TypedTerm
+      (TypeApplicationTerm
         (inject testTypeName $ Field (Name "left") $ string "test")
         (TypeUnion $ RowType testTypeName [Types.field "left" Types.string, Types.field "right" Types.int32]))
       "left: test\n"
