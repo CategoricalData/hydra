@@ -101,8 +101,7 @@ define = definitionInModule module_
 
 applyForallTypesDef :: TBinding (TypeContext -> [Type] -> Type -> Flow s Type)
 applyForallTypesDef = define "applyForallTypes" $
-  "tx" ~> "typeArgs0" ~> "t" ~>
-  "typeArgs" <~ var "typeArgs0" $
+  "tx" ~> "typeArgs" ~> "t" ~>
   exec (ref checkTypeVariablesDef @@ var "tx" @@ var "t") $
   Logic.ifElse (Lists.null $ var "typeArgs")
     (produce $ var "t")
@@ -281,10 +280,11 @@ typeOfDef = define "typeOf" $
     ref ShowCore.termDef @@ var "term",
     string " (vars: ",
     ref Formatting.showListDef @@ unaryFunction Core.unName @@ (Sets.toList $ Typing.typeContextVariables $ var "tx"),
-    string ", apptypes: ",
+    string ", typeArgs: ",
     ref Formatting.showListDef @@ ref ShowCore.typeDef @@ var "typeArgs",
     string ", types: ",
-    ref Formatting.showListDef @@ unaryFunction Core.unName @@ (Maps.keys $ Typing.typeContextTypes $ var "tx"),
+--    ref Formatting.showListDef @@ unaryFunction Core.unName @@ (Maps.keys $ Typing.typeContextTypes $ var "tx"),
+    ref Formatting.showListDef @@ ("p" ~> Core.unName (first $ var "p") ++ ": " ++ (ref ShowCore.typeDef @@ (second $ var "p"))) @@ (Maps.toList $ Typing.typeContextTypes $ var "tx"),
     string ")"]) $
 
   cases _Term (var "term")
@@ -322,38 +322,36 @@ typeOfDef = define "typeOf" $
 typeOfAnnotatedTermDef :: TBinding (TypeContext -> [Type] -> AnnotatedTerm -> Flow s Type)
 typeOfAnnotatedTermDef = define "typeOfAnnotatedTerm" $
   "tx" ~> "typeArgs" ~> "at" ~>
-  "t" <<~ ref typeOfDef @@ var "tx" @@ var "typeArgs" @@ Core.annotatedTermBody (var "at") $
-  ref applyForallTypesDef @@ var "tx" @@ var "typeArgs" @@ var "t"
+  ref typeOfDef @@ var "tx" @@ var "typeArgs" @@ Core.annotatedTermBody (var "at")
 
 typeOfApplicationDef :: TBinding (TypeContext -> [Type] -> Application -> Flow s Type)
 typeOfApplicationDef = define "typeOfApplication" $
   "tx" ~> "typeArgs" ~> "app" ~>
-  "t" <<~ (
-    "fun" <~ Core.applicationFunction (var "app") $
-    "arg" <~ Core.applicationArgument (var "app") $
-    "tfun" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "fun" $
-    "targ" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "arg" $
-    exec (ref checkTypeVariablesDef @@ var "tx" @@ var "tfun") $
-    exec (ref checkTypeVariablesDef @@ var "tx" @@ var "targ") $
-    "tryType" <~ ("t" ~> cases _Type (var "t")
-      (Just $ Flows.fail $ Strings.cat $ list [
-        "left hand side of application ",
-        ref ShowCore.termDef @@ var "fun",
-        " is not a function type: ",
-        ref ShowCore.typeDef @@ var "t"]) [
-      -- These forall types can arise from bindUnboundTypeVariables
-      _Type_forall>>: "ft" ~> var "tryType" @@ (Core.forallTypeBody (var "ft")),
-      _Type_function>>: "ft" ~>
-        "dom" <~ Core.functionTypeDomain (var "ft") $
-        "cod" <~ Core.functionTypeCodomain (var "ft") $
-        Logic.ifElse (Equality.equal (var "dom") (var "targ"))
-          (Flows.pure $ var "cod")
-          (Flows.fail $ Strings.cat $ list [
-            "expected ",
-            ref ShowCore.typeDef @@ var "dom",
-            " but found ",
-            ref ShowCore.typeDef @@ var "targ"])]) $
-      var "tryType" @@ var "tfun") $
+  "fun" <~ Core.applicationFunction (var "app") $
+  "arg" <~ Core.applicationArgument (var "app") $
+  "tfun" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "fun" $
+  "targ" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "arg" $
+  exec (ref checkTypeVariablesDef @@ var "tx" @@ var "tfun") $
+  exec (ref checkTypeVariablesDef @@ var "tx" @@ var "targ") $
+  "tryType" <~ ("t" ~> cases _Type (var "t")
+    (Just $ Flows.fail $ Strings.cat $ list [
+      "left hand side of application ",
+      ref ShowCore.termDef @@ var "fun",
+      " is not a function type: ",
+      ref ShowCore.typeDef @@ var "t"]) [
+    -- These forall types can arise from bindUnboundTypeVariables
+    _Type_forall>>: "ft" ~> var "tryType" @@ (Core.forallTypeBody (var "ft")),
+    _Type_function>>: "ft" ~>
+      "dom" <~ Core.functionTypeDomain (var "ft") $
+      "cod" <~ Core.functionTypeCodomain (var "ft") $
+      Logic.ifElse (Equality.equal (var "dom") (var "targ"))
+        (Flows.pure $ var "cod")
+        (Flows.fail $ Strings.cat $ list [
+          "expected ",
+          ref ShowCore.typeDef @@ var "dom",
+          " but found ",
+          ref ShowCore.typeDef @@ var "targ"])]) $
+  "t" <<~ var "tryType" @@ var "tfun" $
   ref applyForallTypesDef @@ var "tx" @@ var "typeArgs" @@ var "t"
 
 typeOfCaseStatementDef :: TBinding (TypeContext -> [Type] -> CaseStatement -> Flow s Type)
@@ -372,7 +370,7 @@ typeOfCaseStatementDef = define "typeOfCaseStatement" $
   "cods" <<~ Flows.mapList ("t" ~> Flows.map (unaryFunction Core.functionTypeCodomain) $ ref ExtractCore.functionTypeDef @@ var "t") (var "tcterms") $
   "ts" <~ Optionals.cat (Lists.cons (var "tdflt") $ Lists.map (unaryFunction Optionals.pure) (var "cods")) $
   "cod" <<~ ref checkSameTypeDef @@ string "case branches" @@ var "ts" $
-  "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
+  "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $ -- TODO: doubly-consumed typeArgs
   "scod" <~ ref Substitution.substInTypeDef @@ var "subst" @@ var "cod" $
   produce $ Core.typeFunction $ Core.functionType
     (ref Schemas.nominalApplicationDef @@ var "tname"  @@ var "typeArgs")
@@ -398,20 +396,18 @@ typeOfInjectionDef = define "typeOfInjection" $
 typeOfLambdaDef :: TBinding (TypeContext -> [Type] -> Lambda -> Flow s Type)
 typeOfLambdaDef = define "typeOfLambda" $
   "tx" ~> "typeArgs" ~> "l" ~>
-  "t" <<~ (
-    "x" <~ Core.lambdaParameter (var "l") $
-    "mt" <~ Core.lambdaDomain (var "l") $
-    "e" <~ Core.lambdaBody (var "l") $
-    Optionals.maybe
-      (Flows.fail "untyped lambda")
-      ("t" ~>
-        exec (ref checkTypeVariablesDef @@ var "tx" @@ var "t") $
-        "types2" <~ Maps.insert (var "x") (var "t") (Typing.typeContextTypes $ var "tx") $
-        "t1" <<~ ref typeOfDef @@ (Typing.typeContextWithTypes (var "tx") $ var "types2") @@ list [] @@ var "e" $
-        exec (ref checkTypeVariablesDef @@ var "tx" @@ var "t1") $
-        Flows.pure $ Core.typeFunction $ Core.functionType (var "t") (var "t1"))
-      (var "mt")) $
-  ref applyForallTypesDef @@ var "tx" @@ var "typeArgs" @@ var "t"
+  "v" <~ Core.lambdaParameter (var "l") $
+  "mdom" <~ Core.lambdaDomain (var "l") $
+  "body" <~ Core.lambdaBody (var "l") $
+  "tbody" <<~ optCases (var "mdom")
+    (Flows.fail "untyped lambda")
+    ("dom" ~>
+      exec (ref checkTypeVariablesDef @@ var "tx" @@ var "dom") $
+      "types2" <~ Maps.insert (var "v") (var "dom") (Typing.typeContextTypes $ var "tx") $
+      "cod" <<~ ref typeOfDef @@ (Typing.typeContextWithTypes (var "tx") $ var "types2") @@ list [] @@ var "body" $
+      exec (ref checkTypeVariablesDef @@ var "tx" @@ var "cod") $
+      Flows.pure $ Core.typeFunction $ Core.functionType (var "dom") (var "cod")) $
+  ref applyForallTypesDef @@ var "tx" @@ var "typeArgs" @@ var "tbody"
 
 typeOfLetDef :: TBinding (TypeContext -> [Type] -> Let -> Flow s Type)
 typeOfLetDef = define "typeOfLet" $
@@ -518,15 +514,13 @@ typeOfOptionalDef = define "typeOfOptional" $
 typeOfPrimitiveDef :: TBinding (TypeContext -> [Type] -> Name -> Flow s Type)
 typeOfPrimitiveDef = define "typeOfPrimitive" $
   "tx" ~> "typeArgs" ~> "name" ~>
-  "t" <<~ (
-    -- Note: no instantiation
-    "ts" <~ Optionals.maybe
-      (Flows.fail $ Strings.cat $ list [
-        string "no such primitive: ",
-        Core.unName $ var "name"])
-      (unaryFunction Flows.pure)
-      (Maps.lookup (var "name") (Typing.inferenceContextPrimitiveTypes $ Typing.typeContextInferenceContext $ var "tx")) $
-    Flows.map (ref Schemas.typeSchemeToFTypeDef) (var "ts")) $
+  "ts" <<~ optCases
+    (Maps.lookup (var "name") (Typing.inferenceContextPrimitiveTypes $ Typing.typeContextInferenceContext $ var "tx"))
+    (Flows.fail $ Strings.cat $ list [
+      string "no such primitive: ",
+      Core.unName $ var "name"])
+    (ref Schemas.instantiateTypeSchemeDef) $
+  "t" <~ ref Schemas.typeSchemeToFTypeDef @@ var "ts" $
   ref applyForallTypesDef @@ var "tx" @@ var "typeArgs" @@ var "t"
 
 typeOfProjectionDef :: TBinding (TypeContext -> [Type] -> Projection -> Flow s Type)
@@ -539,7 +533,7 @@ typeOfProjectionDef = define "typeOfProjection" $
   "stype" <~ Core.typeSchemeType (var "schemaType") $
   "sfields" <<~ ref ExtractCore.recordTypeDef @@ var "tname" @@ var "stype" $
   "ftyp" <<~ ref Schemas.findFieldTypeDef @@ var "fname" @@ var "sfields" $
-  "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
+  "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $ -- TODO: doubly-consumed typeArgs
   "sftyp" <~ ref Substitution.substInTypeDef @@ var "subst" @@ var "ftyp" $
   produce $ Core.typeFunction $ Core.functionType
     (ref Schemas.nominalApplicationDef @@ var "tname" @@ var "typeArgs")
@@ -571,14 +565,14 @@ typeOfSetDef = define "typeOfSet" $
        "unifiedType" <<~ ref checkSameTypeDef @@ string "set elements" @@ var "eltypes" $
        -- Verify the unified type is well-formed in the current scope
        exec (ref checkTypeVariablesDef @@ var "tx" @@ var "unifiedType") $
-       produce $ Core.typeSet $ var "unifiedType")
+       produce $ Core.typeSet $ var "unifiedType")  -- TODO: no typeArgs (inconsistent with list/map/optional rules)
 
 typeOfTupleDef :: TBinding (TypeContext -> [Type] -> [Term] -> Flow s Type)
 typeOfTupleDef = define "typeOfTuple" $
-  "tx" ~> "typeArgs" ~> "tuple" ~>
+  "tx" ~> "typeArgs" ~> "tuple" ~> -- TODO: typeArgs are unused
   "etypes" <<~ Flows.mapList (ref typeOfDef @@ var "tx" @@ list []) (var "tuple") $
   exec (Flows.mapList (ref checkTypeVariablesDef @@ var "tx") (var "etypes")) $
-  produce $ Core.typeProduct $ var "etypes" -- TODO: what about apptypes?
+  produce $ Core.typeProduct $ var "etypes"
 
 typeOfTupleProjectionDef :: TBinding (TypeContext -> [Type] -> TupleProjection -> Flow s Type)
 typeOfTupleProjectionDef = define "typeOfTupleProjection" $
@@ -600,20 +594,19 @@ typeOfTupleProjectionDef = define "typeOfTupleProjection" $
 typeOfTypeApplicationDef :: TBinding (TypeContext -> [Type] -> TypeApplicationTerm -> Flow s Type)
 typeOfTypeApplicationDef = define "typeOfTypeApplication" $
   "tx" ~> "typeArgs" ~> "tyapp" ~>
-  "e" <~ Core.typeApplicationTermBody (var "tyapp") $
+  "body" <~ Core.typeApplicationTermBody (var "tyapp") $
   "t" <~ Core.typeApplicationTermType (var "tyapp") $
-  ref typeOfDef @@ var "tx" @@ Lists.cons (var "t") (var "typeArgs") @@ var "e"
+  ref typeOfDef @@ var "tx" @@ Lists.cons (var "t") (var "typeArgs") @@ var "body"
 
 typeOfTypeLambdaDef :: TBinding (TypeContext -> [Type] -> TypeLambda -> Flow s Type)
 typeOfTypeLambdaDef = define "typeOfTypeLambda" $
-  "tx" ~> "typeArgs" ~> "tl" ~>
+  "tx" ~> "typeArgs" ~> "tl" ~> -- TODO: typeArgs are unused
   "v" <~ Core.typeLambdaParameter (var "tl") $
-  "e" <~ Core.typeLambdaBody (var "tl") $
+  "body" <~ Core.typeLambdaBody (var "tl") $
   "vars" <~ Typing.typeContextVariables (var "tx") $
   "tx2" <~ Typing.typeContextWithVariables (var "tx") (Sets.insert (var "v") (var "vars")) $
-  "t1" <<~ ref typeOfDef @@ var "tx2" @@ list [] @@ var "e" $
-  "tx2" <~ Typing.typeContextWithVariables (var "tx") (Sets.insert (var "v") (var "vars")) $
-  exec (ref checkTypeVariablesDef @@ var "tx2" @@ var "t1") $
+  "t1" <<~ ref typeOfDef @@ var "tx2" @@ list [] @@ var "body" $
+  exec (ref checkTypeVariablesDef @@ var "tx2" @@ var "t1") $ -- TODO: use of checkTypeVariablesDef is a little haphazard
   Flows.pure $ Core.typeForall $ Core.forallType (var "v") (var "t1")
 
 typeOfUnitDef :: TBinding (TypeContext -> [Type] -> Flow s Type)
@@ -628,7 +621,7 @@ typeOfUnwrapDef = define "typeOfUnwrap" $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "stype" <~ Core.typeSchemeType (var "schemaType") $
   "wrapped" <<~ ref ExtractCore.wrappedTypeDef @@ var "tname" @@ var "stype" $
-  "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
+  "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $ -- TODO: doubly-consumed typeArgs
   "swrapped" <~ ref Substitution.substInTypeDef @@ var "subst" @@ var "wrapped" $
   produce $ TTypes.function
     (ref Schemas.nominalApplicationDef @@ var "tname" @@ var "typeArgs")
@@ -641,7 +634,7 @@ typeOfVariableDef = define "typeOfVariable" $
     (Flows.fail $ Strings.cat $ list [
       string "unbound variable: ",
       Core.unName $ var "name"])
-    (unaryFunction Flows.pure) $
+    (ref Schemas.instantiateTypeDef) $
   ref applyForallTypesDef @@ var "tx" @@ var "typeArgs" @@ var "t"
 
 typeOfWrappedTermDef :: TBinding (TypeContext -> [Type] -> WrappedTerm -> Flow s Type)
