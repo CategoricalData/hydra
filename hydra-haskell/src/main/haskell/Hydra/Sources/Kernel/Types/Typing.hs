@@ -65,9 +65,15 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
       def "TypeContext" $
         doc "A typing environment used for type reconstruction (typeOf) over System F terms" $
         record [
-          "types">: Types.map (core "Name") (core "Type"),
-          "variables">: Types.set (core "Name"),
-          "inferenceContext">: typing "InferenceContext"],
+          "types">:
+            doc "A mapping of lambda- and let-bound variables to their types" $
+            Types.map (core "Name") (core "Type"),
+          "variables">:
+            doc "The set of type variables introduced by enclosing type lambdas" $
+            Types.set (core "Name"),
+          "inferenceContext">:
+            doc "The schema types, primitive types, and data types of the graph" $
+            typing "InferenceContext"],
 
       def "TypeSubst" $
         doc "A substitution of type variables for types" $

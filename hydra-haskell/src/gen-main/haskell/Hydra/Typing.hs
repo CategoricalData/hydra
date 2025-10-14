@@ -75,8 +75,11 @@ _TypeConstraint_comment = (Core.Name "comment")
 -- | A typing environment used for type reconstruction (typeOf) over System F terms
 data TypeContext = 
   TypeContext {
+    -- | A mapping of lambda- and let-bound variables to their types
     typeContextTypes :: (M.Map Core.Name Core.Type),
+    -- | The set of type variables introduced by enclosing type lambdas
     typeContextVariables :: (S.Set Core.Name),
+    -- | The schema types, primitive types, and data types of the graph
     typeContextInferenceContext :: InferenceContext}
   deriving (Eq, Ord, Read, Show)
 
