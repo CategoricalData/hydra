@@ -63,14 +63,14 @@ constantForFieldName tname fname = (Strings.cat [
 constantForTypeName :: (Core.Name -> String)
 constantForTypeName tname = (Strings.cat2 "_" (Names.localNameOf tname))
 
-constructModule :: (Module.Namespaces Ast.ModuleName -> Module.Module -> M.Map Core.Type (Compute.Coder Graph.Graph t0 Core.Term Ast.Expression) -> [(Core.Binding, Core.TypedTerm)] -> Compute.Flow Graph.Graph Ast.Module)
+constructModule :: (Module.Namespaces Ast.ModuleName -> Module.Module -> M.Map Core.Type (Compute.Coder Graph.Graph t0 Core.Term Ast.Expression) -> [(Core.Binding, Core.TypeApplicationTerm)] -> Compute.Flow Graph.Graph Ast.Module)
 constructModule namespaces mod coders pairs =  
   let h = (\namespace -> Module.unNamespace namespace) 
       createDeclarations = (\g -> \pair ->  
               let el = (fst pair) 
                   tt = (snd pair)
-                  term = (Core.typedTermTerm tt)
-                  typ = (Core.typedTermType tt)
+                  term = (Core.typeApplicationTermBody tt)
+                  typ = (Core.typeApplicationTermType tt)
               in (Logic.ifElse (Annotations.isNativeType el) (toTypeDeclarations namespaces el term) (Flows.bind (toDataDeclaration coders namespaces pair) (\d -> Flows.pure [
                 d]))))
       importName = (\name -> Ast.ModuleName (Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." name))))
@@ -263,7 +263,7 @@ encodeTerm namespaces term =
       let term1 = (Core.typeLambdaBody v1)
       in (encode term1)
     Core.TermTypeApplication v1 ->  
-      let term1 = (Core.typedTermTerm v1)
+      let term1 = (Core.typeApplicationTermBody v1)
       in (encode term1)
     Core.TermUnion v1 ->  
       let sname = (Core.injectionTypeName v1) 
@@ -430,12 +430,12 @@ nameDecls g namespaces name typ =
               in (constantForFieldName name fname, (Core.unName fname)))
   in (Logic.ifElse useCoreImport (Lists.cons (toDecl (Core.Name "hydra.core.Name") nameDecl) (Lists.map (toDecl (Core.Name "hydra.core.Name")) fieldDecls)) [])
 
-toDataDeclaration :: (M.Map Core.Type (Compute.Coder Graph.Graph t0 Core.Term Ast.Expression) -> Module.Namespaces Ast.ModuleName -> (Core.Binding, Core.TypedTerm) -> Compute.Flow Graph.Graph Ast.DeclarationWithComments)
+toDataDeclaration :: (M.Map Core.Type (Compute.Coder Graph.Graph t0 Core.Term Ast.Expression) -> Module.Namespaces Ast.ModuleName -> (Core.Binding, Core.TypeApplicationTerm) -> Compute.Flow Graph.Graph Ast.DeclarationWithComments)
 toDataDeclaration coders namespaces pair =  
   let el = (fst pair) 
       tt = (snd pair)
-      term = (Core.typedTermTerm tt)
-      typ = (Core.typedTermType tt)
+      term = (Core.typeApplicationTermBody tt)
+      typ = (Core.typeApplicationTermType tt)
       coder = (Optionals.fromJust (Maps.lookup typ coders))
       hname = (Utils.simpleName (Names.localNameOf (Core.bindingName el)))
       rewriteValueBinding = (\vb -> (\x -> case x of

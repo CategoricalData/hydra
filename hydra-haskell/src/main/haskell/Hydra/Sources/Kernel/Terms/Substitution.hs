@@ -190,9 +190,9 @@ substTypesInTermDef = define "substTypesInTerm" $
           (Core.tupleProjectionIndex $ var "tp")
           (Optionals.map (lambda "types" $ Lists.map (ref substInTypeDef @@ var "subst") (var "types")) (Core.tupleProjectionDomain $ var "tp")),
       "forTypeApplication">: lambda "tt" $
-         Core.termTypeApplication $ Core.typedTerm
-           (ref substTypesInTermDef @@ var "subst" @@ (Core.typedTermTerm $ var "tt"))
-           (ref substInTypeDef @@ var "subst" @@ (Core.typedTermType $ var "tt")),
+         Core.termTypeApplication $ Core.typeApplicationTerm
+           (ref substTypesInTermDef @@ var "subst" @@ (Core.typeApplicationTermBody $ var "tt"))
+           (ref substInTypeDef @@ var "subst" @@ (Core.typeApplicationTermType $ var "tt")),
       "forTypeLambda">: lambda "ta" $ lets [
         "param">: Core.typeLambdaParameter $ var "ta",
         "subst2">: Typing.typeSubst $ Maps.remove (var "param") (Typing.unTypeSubst $ var "subst")] $

@@ -27,12 +27,12 @@ import qualified Data.Set as S
 spec :: H.Spec
 spec = do
   checkTypeOf
-  checkFailTypeOfOnUntypedTerms
+  checkFailTypeOfOnUntypeApplicationTerms
 
 ----------------------------------------
 
-checkFailTypeOfOnUntypedTerms :: H.SpecWith ()
-checkFailTypeOfOnUntypedTerms = H.describe "Fail on untyped (pre-inference) terms" $ do
+checkFailTypeOfOnUntypeApplicationTerms :: H.SpecWith ()
+checkFailTypeOfOnUntypeApplicationTerms = H.describe "Fail on untyped (pre-inference) terms" $ do
   H.describe "Untyped lambdas" $ do
     withDefaults typeOfShouldFail "untyped var in record"
       (lambda "x" (record testTypeLatLonName [

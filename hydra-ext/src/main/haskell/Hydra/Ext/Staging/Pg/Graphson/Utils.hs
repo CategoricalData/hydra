@@ -100,11 +100,11 @@ pgElementsToJson schema els = Json.ValueArray <$> CM.mapM (pgElementToJson schem
 
 propertyGraphGraphsonLastMile :: (Ord v, Show t, Show v) => GraphsonContext Graph v -> PGM.Schema Graph t v -> t -> t -> LastMile Graph (PG.Element v)
 propertyGraphGraphsonLastMile ctx schema vidType eidType =
-  LastMile (\typ -> typedTermToPropertyGraph schema typ vidType eidType) (\els -> jsonValuesToString <$> pgElementsToGraphson ctx els) "jsonl"
+  LastMile (\typ -> typeApplicationTermToPropertyGraph schema typ vidType eidType) (\els -> jsonValuesToString <$> pgElementsToGraphson ctx els) "jsonl"
 
 propertyGraphJsonLastMile :: (Show t, Show v) => PGM.Schema Graph t v -> t -> t -> LastMile Graph (PG.Element v)
 propertyGraphJsonLastMile schema vidType eidType =
-  LastMile (\typ -> typedTermToPropertyGraph schema typ vidType eidType) (\els -> jsonValueToString <$> pgElementsToJson schema els) "json"
+  LastMile (\typ -> typeApplicationTermToPropertyGraph schema typ vidType eidType) (\els -> jsonValueToString <$> pgElementsToJson schema els) "json"
 
 stringGraphsonContext :: GraphsonContext s String
 stringGraphsonContext = GraphsonContext $ Coder encodeString decodeString

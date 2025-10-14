@@ -96,7 +96,7 @@ checkForUnboundTypeVariables cx term0 =
                                     let newTrace = (Lists.cons (Core.unName (Core.bindingName b)) trace)
                                     in (checkRecursive newVars newTrace (Just b) bterm))
                         in (Flows.bind (Flows.mapList forBinding (Core.letBindings v1)) (\_ -> recurse (Core.letBody v1)))
-                      Core.TermTypeApplication v1 -> (Flows.bind (check (Core.typedTermType v1)) (\_ -> recurse (Core.typedTermTerm v1)))
+                      Core.TermTypeApplication v1 -> (Flows.bind (check (Core.typeApplicationTermType v1)) (\_ -> recurse (Core.typeApplicationTermBody v1)))
                       Core.TermTypeLambda v1 -> (Flows.bind (check (Core.TypeVariable (Core.typeLambdaParameter v1))) (\_ -> recurse (Core.typeLambdaBody v1)))
                       _ -> dflt) term))
     in (checkRecursive Sets.empty [
@@ -396,11 +396,11 @@ typeOfTupleProjection tx typeArgs tp = (Flows.bind (
         Core.functionTypeDomain = (Core.TypeProduct types),
         Core.functionTypeCodomain = (Lists.at index types)})))) mtypes)) (\t -> applyForallTypes tx typeArgs t))
 
-typeOfTypeApplication :: (Typing.TypeContext -> [Core.Type] -> Core.TypedTerm -> Compute.Flow t0 Core.Type)
+typeOfTypeApplication :: (Typing.TypeContext -> [Core.Type] -> Core.TypeApplicationTerm -> Compute.Flow t0 Core.Type)
 typeOfTypeApplication tx typeArgs tyapp =  
-  let e = (Core.typedTermTerm tyapp)
+  let e = (Core.typeApplicationTermBody tyapp)
   in  
-    let t = (Core.typedTermType tyapp)
+    let t = (Core.typeApplicationTermType tyapp)
     in (typeOf tx (Lists.cons t typeArgs) e)
 
 typeOfTypeLambda :: (Typing.TypeContext -> [Core.Type] -> Core.TypeLambda -> Compute.Flow t0 Core.Type)

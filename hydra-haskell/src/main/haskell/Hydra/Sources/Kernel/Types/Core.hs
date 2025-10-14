@@ -316,7 +316,7 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
             core "Sum",
           "typeApplication">:
             doc "A System F type application term" $
-            core "TypedTerm",
+            core "TypeApplicationTerm",
           "typeLambda">:
             doc "A System F type abstraction term" $
             core "TypeLambda",
@@ -366,6 +366,12 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "variable">: core "Name",
           "wrap">: core "WrappedType"],
 
+      def "TypeApplicationTerm" $
+        doc "A term applied to a type; a type application" $
+        record [
+          "body">: core "Term",
+          "type">: core "Type"],
+
       def "TypeLambda" $
         doc "A System F type abstraction term" $
         record [
@@ -375,12 +381,6 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "body">:
             doc "The body of the abstraction" $
             core "Term"],
-
-      def "TypedTerm" $
-        doc "A term applied to a type; a type application" $
-        record [
-          "term">: core "Term",
-          "type">: core "Type"],
 
       def "TypeScheme" $
         doc "A type expression together with free type variables occurring in the expression" $

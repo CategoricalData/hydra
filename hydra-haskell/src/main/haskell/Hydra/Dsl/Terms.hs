@@ -135,12 +135,12 @@ tylams vars body = L.foldl (\b v -> TermTypeLambda $ TypeLambda (Name v) b) body
 -- For instance, if 'map' has type 'forall a b. (a -> b) -> list a -> list b',
 -- the example would instantiate it to '(int32 -> string) -> list int32 -> list string'.
 typeApplication :: Term -> [Type] -> Term
-typeApplication term types = L.foldl (\t ty -> TermTypeApplication $ TypedTerm t ty) term types
+typeApplication term types = L.foldl (\t ty -> TermTypeApplication $ TypeApplicationTerm t ty) term types
 
 tyapps = typeApplication
 
 tyapp :: Term -> Type -> Term
-tyapp term typ = TermTypeApplication $ TypedTerm term typ
+tyapp term typ = TermTypeApplication $ TypeApplicationTerm term typ
 
 -- * Literal values
 

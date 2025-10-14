@@ -66,7 +66,7 @@ module_ = Module (Namespace "hydra.schemas") elements
       el definitionDependencyNamespacesDef,
       el dependencyNamespacesDef,
       el dereferenceTypeDef,
-      el elementAsTypedTermDef,
+      el elementAsTypeApplicationTermDef,
       el elementsWithDependenciesDef,
       el extendTypeContextForLambdaDef,
       el extendTypeContextForLetDef,
@@ -150,12 +150,12 @@ dereferenceTypeDef = define "dereferenceType" $
     (Flows.pure nothing)
     ("el" ~> Flows.map (unaryFunction just) $ ref DecodeCore.typeDef @@ Core.bindingTerm (var "el"))
 
-elementAsTypedTermDef :: TBinding (Binding -> Flow Graph TypedTerm)
-elementAsTypedTermDef = define "elementAsTypedTerm" $
+elementAsTypeApplicationTermDef :: TBinding (Binding -> Flow Graph TypeApplicationTerm)
+elementAsTypeApplicationTermDef = define "elementAsTypeApplicationTerm" $
   doc "Convert an element to a typed term" $
   lambda "el" $
     Optionals.maybe (Flows.fail $ string "missing element type")
-      (lambda "ts" $ Flows.pure $ Core.typedTerm (Core.bindingTerm $ var "el") (Core.typeSchemeType $ var "ts"))
+      (lambda "ts" $ Flows.pure $ Core.typeApplicationTerm (Core.bindingTerm $ var "el") (Core.typeSchemeType $ var "ts"))
       (Core.bindingType $ var "el")
 
 elementsWithDependenciesDef :: TBinding ([Binding] -> Flow Graph [Binding])

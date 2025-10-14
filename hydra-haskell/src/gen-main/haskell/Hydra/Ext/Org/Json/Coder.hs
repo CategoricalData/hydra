@@ -280,10 +280,10 @@ untypedTermToJson term =
     Core.TermTypeApplication v1 -> (asRecord [
       Core.Field {
         Core.fieldName = (Core.Name "term"),
-        Core.fieldTerm = (Core.typedTermTerm v1)},
+        Core.fieldTerm = (Core.typeApplicationTermBody v1)},
       Core.Field {
         Core.fieldName = (Core.Name "type"),
-        Core.fieldTerm = (Core_.type_ (Core.typedTermType v1))}])
+        Core.fieldTerm = (Core_.type_ (Core.typeApplicationTermType v1))}])
     Core.TermUnion v1 ->  
       let field = (Core.injectionField v1)
       in (Logic.ifElse (Equality.equal (Core.fieldTerm field) Core.TermUnit) (Flows.pure (Json.ValueString (Core.unName (Core.fieldName field)))) (Flows.bind (fieldToKeyval field) (\mkeyval -> Flows.pure (Json.ValueObject (Maps.fromList (Optionals.maybe [] (\keyval -> [

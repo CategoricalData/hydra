@@ -13,7 +13,7 @@ module Hydra.Ext.Tools.AvroWorkflows (
   propertyGraphJsonLastMile,
   rdfDescriptionsToNtriples,
   shaclRdfLastMile,
-  typedTermToShaclRdf,
+  typeApplicationTermToShaclRdf,
   transformAvroJsonDirectory,
 ) where
 
@@ -80,10 +80,10 @@ rdfDescriptionsToNtriples :: [Rdf.Description] -> String
 rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
 
 shaclRdfLastMile :: LastMile Graph Rdf.Description
-shaclRdfLastMile = LastMile typedTermToShaclRdf (pure . rdfDescriptionsToNtriples) "nt"
+shaclRdfLastMile = LastMile typeApplicationTermToShaclRdf (pure . rdfDescriptionsToNtriples) "nt"
 
-typedTermToShaclRdf :: Type -> Flow Graph (Term -> Graph -> Flow Graph [Rdf.Description])
-typedTermToShaclRdf _ = pure encode
+typeApplicationTermToShaclRdf :: Type -> Flow Graph (Term -> Graph -> Flow Graph [Rdf.Description])
+typeApplicationTermToShaclRdf _ = pure encode
   where
     encode term graph = do
         elDescs <- CM.mapM encodeElement $ M.elems $ graphElements graph

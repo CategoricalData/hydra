@@ -154,15 +154,15 @@ constantForTypeNameDef = haskellCoderDefinition "constantForTypeName" $
   lambda "tname" $
     Strings.cat2 (string "_") (ref Names.localNameOfDef @@ var "tname")
 
-constructModuleDef :: TBinding (HaskellNamespaces -> Module -> M.Map Type (Coder Graph Graph Term H.Expression) -> [(Binding, TypedTerm)] -> Flow Graph H.Module)
+constructModuleDef :: TBinding (HaskellNamespaces -> Module -> M.Map Type (Coder Graph Graph Term H.Expression) -> [(Binding, TypeApplicationTerm)] -> Flow Graph H.Module)
 constructModuleDef = haskellCoderDefinition "constructModule" $ lambdas ["namespaces", "mod", "coders", "pairs"] $ lets [
   "h">: lambda "namespace" $
     unwrap _Namespace @@ var "namespace",
   "createDeclarations">: lambda "g" $ lambda "pair" $ lets [
     "el">: first $ var "pair",
     "tt">: second $ var "pair",
-    "term">: Core.typedTermTerm $ var "tt",
-    "typ">: Core.typedTermType $ var "tt"] $
+    "term">: Core.typeApplicationTermBody $ var "tt",
+    "typ">: Core.typeApplicationTermType $ var "tt"] $
     Logic.ifElse (ref Annotations.isNativeTypeDef @@ var "el")
       (ref toTypeDeclarationsDef @@ var "namespaces" @@ var "el" @@ var "term")
       (bind "d" (ref toDataDeclarationDef @@ var "coders" @@ var "namespaces" @@ var "pair") $
@@ -414,7 +414,7 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
         "term1">: Core.typeLambdaBody $ var "abs"] $
         var "encode" @@ var "term1",
       _Term_typeApplication>>: lambda "typed" $ lets [
-        "term1">: Core.typedTermTerm $ var "typed"] $
+        "term1">: Core.typeApplicationTermBody $ var "typed"] $
         var "encode" @@ var "term1",
       _Term_union>>: lambda "injection" $ lets [
         "sname">: Core.injectionTypeName $ var "injection",
@@ -634,13 +634,13 @@ nameDeclsDef = haskellCoderDefinition "nameDecls" $
       (Lists.cons (var "toDecl" @@ Core.nameLift _Name @@ var "nameDecl") (Lists.map (var "toDecl" @@ Core.nameLift _Name) (var "fieldDecls")))
       (list [])
 
-toDataDeclarationDef :: TBinding (M.Map Type (Coder Graph Graph Term H.Expression) -> HaskellNamespaces -> (Binding, TypedTerm) -> Flow Graph H.DeclarationWithComments)
+toDataDeclarationDef :: TBinding (M.Map Type (Coder Graph Graph Term H.Expression) -> HaskellNamespaces -> (Binding, TypeApplicationTerm) -> Flow Graph H.DeclarationWithComments)
 toDataDeclarationDef = haskellCoderDefinition "toDataDeclaration" $
   lambdas ["coders", "namespaces", "pair"] $ lets [
     "el">: first $ var "pair",
     "tt">: second $ var "pair",
-    "term">: Core.typedTermTerm $ var "tt",
-    "typ">: Core.typedTermType $ var "tt",
+    "term">: Core.typeApplicationTermBody $ var "tt",
+    "typ">: Core.typeApplicationTermType $ var "tt",
     "coder">: Optionals.fromJust $ Maps.lookup (var "typ") (var "coders"),
     "hname">: ref HaskellUtils.simpleNameDef @@ (ref Names.localNameOfDef @@ (Core.bindingName $ var "el")),
     "rewriteValueBinding">: lambda "vb" $
