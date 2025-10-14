@@ -81,6 +81,7 @@ module_ = Module (Namespace "hydra.schemas") elements
       el fullyStripTypeDef,
       el graphAsTermDef,
       el graphAsTypesDef,
+      el instantiateTypeDef,
       el instantiateTypeSchemeDef,
       el isEnumRowTypeDef,
       el isEnumTypeDef,
@@ -100,6 +101,7 @@ module_ = Module (Namespace "hydra.schemas") elements
       el topologicalSortTypeDefinitionsDef,
       el typeDependenciesDef,
       el typeSchemeToFTypeDef,
+      el typeToTypeSchemeDef,
       el typesToElementsDef]
 
 define :: String -> TTerm a -> TBinding a
@@ -295,6 +297,13 @@ graphAsTypesDef = define "graphAsTypes" $
     produce $ pair (Core.bindingName $ var "el") (var "typ")) $
   "pairs" <<~ Flows.mapList (var "toPair") (var "els") $
   produce $ Maps.fromList $ var "pairs"
+
+instantiateTypeDef :: TBinding (Type -> Flow s Type)
+instantiateTypeDef = define "instantiateType" $
+  doc "Instantiate a type by replacing all forall-bound type variables with fresh variables" $
+  "typ" ~>
+  "ts" <<~ ref instantiateTypeSchemeDef @@ (ref typeToTypeSchemeDef @@ var "typ") $
+  produce $ ref typeSchemeToFTypeDef @@ var "ts"
 
 instantiateTypeSchemeDef :: TBinding (TypeScheme -> Flow s TypeScheme)
 instantiateTypeSchemeDef = define "instantiateTypeScheme" $
@@ -538,6 +547,17 @@ typeSchemeToFTypeDef = define "typeSchemeToFType" $
     (var "body")
     -- Put the variables in the same order in which they are introduced by the type scheme.
     (Lists.reverse $ var "vars")
+
+typeToTypeSchemeDef :: TBinding (Type -> TypeScheme)
+typeToTypeSchemeDef = define "typeToTypeScheme" $
+  doc "Convert a (System F -style) type to a type scheme" $
+  "t0" ~>
+  "helper" <~ ("vars" ~> "t" ~> cases _Type (ref Rewriting.deannotateTypeDef @@ var "t")
+    (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "t")) [
+    _Type_forall>>: "ft" ~> var "helper"
+      @@ (Lists.cons (Core.forallTypeParameter $ var "ft") $ var "vars")
+      @@ (Core.forallTypeBody $ var "ft")]) $
+  var "helper" @@ list [] @@ var "t0"
 
 typesToElementsDef :: TBinding (M.Map Name Type -> M.Map Name Binding)
 typesToElementsDef = define "typesToElements" $
