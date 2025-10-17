@@ -183,67 +183,58 @@ reduceTerm eager term =
                 Core.applicationFunction = fun,
                 Core.applicationArgument = (Lists.head args)})) (Lists.tail args)))
         in  
-          let replaceFreeTypeVariable = (\toReplace -> \replacement -> \term ->  
-                  let mapping = (\recurse -> \inner -> (\x -> case x of
-                          Core.TermFunction v1 -> ((\x -> case x of
-                            Core.FunctionLambda v2 -> (Logic.ifElse (Equality.equal (Core.lambdaParameter v2) toReplace) inner (recurse inner))
-                            _ -> (recurse inner)) v1)
-                          Core.TermVariable v1 -> (Logic.ifElse (Equality.equal v1 toReplace) replacement inner)
-                          _ -> (recurse inner)) inner)
-                  in (Rewriting.rewriteTerm mapping term))
+          let applyElimination = (\elm -> \reducedArg -> (\x -> case x of
+                  Core.EliminationRecord v1 -> (Flows.bind (Core_.record (Core.projectionTypeName v1) (Rewriting.deannotateTerm reducedArg)) (\fields ->  
+                    let matchingFields = (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField v1)) fields)
+                    in (Logic.ifElse (Lists.null matchingFields) (Flows.fail (Strings.cat [
+                      "no such field: ",
+                      Core.unName (Core.projectionField v1),
+                      " in ",
+                      Core.unName (Core.projectionTypeName v1),
+                      " record"])) (Flows.pure (Core.fieldTerm (Lists.head matchingFields))))))
+                  Core.EliminationUnion v1 -> (Flows.bind (Core_.injection (Core.caseStatementTypeName v1) reducedArg) (\field ->  
+                    let matchingFields = (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases v1))
+                    in (Logic.ifElse (Lists.null matchingFields) (Optionals.maybe (Flows.fail (Strings.cat [
+                      "no such field ",
+                      Core.unName (Core.fieldName field),
+                      " in ",
+                      Core.unName (Core.caseStatementTypeName v1),
+                      " case statement"])) Flows.pure (Core.caseStatementDefault v1)) (Flows.pure (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.fieldTerm (Lists.head matchingFields)),
+                      Core.applicationArgument = (Core.fieldTerm field)}))))))
+                  Core.EliminationWrap v1 -> (Core_.wrap v1 reducedArg)) elm)
           in  
-            let applyElimination = (\elm -> \reducedArg -> (\x -> case x of
-                    Core.EliminationRecord v1 -> (Flows.bind (Core_.record (Core.projectionTypeName v1) (Rewriting.deannotateTerm reducedArg)) (\fields ->  
-                      let matchingFields = (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField v1)) fields)
-                      in (Logic.ifElse (Lists.null matchingFields) (Flows.fail (Strings.cat [
-                        "no such field: ",
-                        Core.unName (Core.projectionField v1),
-                        " in ",
-                        Core.unName (Core.projectionTypeName v1),
-                        " record"])) (Flows.pure (Core.fieldTerm (Lists.head matchingFields))))))
-                    Core.EliminationUnion v1 -> (Flows.bind (Core_.injection (Core.caseStatementTypeName v1) reducedArg) (\field ->  
-                      let matchingFields = (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases v1))
-                      in (Logic.ifElse (Lists.null matchingFields) (Optionals.maybe (Flows.fail (Strings.cat [
-                        "no such field ",
-                        Core.unName (Core.fieldName field),
-                        " in ",
-                        Core.unName (Core.caseStatementTypeName v1),
-                        " case statement"])) Flows.pure (Core.caseStatementDefault v1)) (Flows.pure (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.fieldTerm (Lists.head matchingFields)),
-                        Core.applicationArgument = (Core.fieldTerm field)}))))))
-                    Core.EliminationWrap v1 -> (Core_.wrap v1 reducedArg)) elm)
+            let applyIfNullary = (\eager -> \original -> \args ->  
+                    let stripped = (Rewriting.deannotateTerm original)
+                    in ((\x -> case x of
+                      Core.TermApplication v1 -> (applyIfNullary eager (Core.applicationFunction v1) (Lists.cons (Core.applicationArgument v1) args))
+                      Core.TermFunction v1 -> ((\x -> case x of
+                        Core.FunctionElimination v2 -> (Logic.ifElse (Lists.null args) (Flows.pure original) ( 
+                          let arg = (Lists.head args)
+                          in  
+                            let remainingArgs = (Lists.tail args)
+                            in (Flows.bind (reduceArg eager (Rewriting.deannotateTerm arg)) (\reducedArg -> Flows.bind (Flows.bind (applyElimination v2 reducedArg) (reduce eager)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))
+                        Core.FunctionLambda v2 -> (Logic.ifElse (Lists.null args) (Flows.pure original) ( 
+                          let param = (Core.lambdaParameter v2)
+                          in  
+                            let body = (Core.lambdaBody v2)
+                            in  
+                              let arg = (Lists.head args)
+                              in  
+                                let remainingArgs = (Lists.tail args)
+                                in (Flows.bind (reduce eager (Rewriting.deannotateTerm arg)) (\reducedArg -> Flows.bind (reduce eager (Rewriting.replaceFreeTermVariable param reducedArg body)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))
+                        Core.FunctionPrimitive v2 -> (Flows.bind (Lexical.requirePrimitive v2) (\prim ->  
+                          let arity = (Arity.primitiveArity prim)
+                          in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Flows.pure (applyToArguments original args)) ( 
+                            let argList = (Lists.take arity args)
+                            in  
+                              let remainingArgs = (Lists.drop arity args)
+                              in (Flows.bind (Flows.mapList (reduceArg eager) argList) (\reducedArgs -> Flows.bind (Flows.bind (Graph.primitiveImplementation prim reducedArgs) (reduce eager)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))))) v1)
+                      Core.TermVariable _ -> (Flows.pure (applyToArguments original args))
+                      _ -> (Flows.pure (applyToArguments original args))) stripped))
             in  
-              let applyIfNullary = (\eager -> \original -> \args ->  
-                      let stripped = (Rewriting.deannotateTerm original)
-                      in ((\x -> case x of
-                        Core.TermApplication v1 -> (applyIfNullary eager (Core.applicationFunction v1) (Lists.cons (Core.applicationArgument v1) args))
-                        Core.TermFunction v1 -> ((\x -> case x of
-                          Core.FunctionElimination v2 -> (Logic.ifElse (Lists.null args) (Flows.pure original) ( 
-                            let arg = (Lists.head args)
-                            in  
-                              let remainingArgs = (Lists.tail args)
-                              in (Flows.bind (reduceArg eager (Rewriting.deannotateTerm arg)) (\reducedArg -> Flows.bind (Flows.bind (applyElimination v2 reducedArg) (reduce eager)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))
-                          Core.FunctionLambda v2 -> (Logic.ifElse (Lists.null args) (Flows.pure original) ( 
-                            let param = (Core.lambdaParameter v2)
-                            in  
-                              let body = (Core.lambdaBody v2)
-                              in  
-                                let arg = (Lists.head args)
-                                in  
-                                  let remainingArgs = (Lists.tail args)
-                                  in (Flows.bind (reduce eager (Rewriting.deannotateTerm arg)) (\reducedArg -> Flows.bind (reduce eager (replaceFreeTypeVariable param reducedArg body)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))
-                          Core.FunctionPrimitive v2 -> (Flows.bind (Lexical.requirePrimitive v2) (\prim ->  
-                            let arity = (Arity.primitiveArity prim)
-                            in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Flows.pure (applyToArguments original args)) ( 
-                              let argList = (Lists.take arity args)
-                              in  
-                                let remainingArgs = (Lists.drop arity args)
-                                in (Flows.bind (Flows.mapList (reduceArg eager) argList) (\reducedArgs -> Flows.bind (Flows.bind (Graph.primitiveImplementation prim reducedArgs) (reduce eager)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))))) v1)
-                        Core.TermVariable _ -> (Flows.pure (applyToArguments original args))
-                        _ -> (Flows.pure (applyToArguments original args))) stripped))
-              in  
-                let mapping = (\recurse -> \mid -> Flows.bind (Logic.ifElse (doRecurse eager mid) (recurse mid) (Flows.pure mid)) (\inner -> applyIfNullary eager inner []))
-                in (Rewriting.rewriteTermM mapping term)
+              let mapping = (\recurse -> \mid -> Flows.bind (Logic.ifElse (doRecurse eager mid) (recurse mid) (Flows.pure mid)) (\inner -> applyIfNullary eager inner []))
+              in (Rewriting.rewriteTermM mapping term)
 
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: (Core.Term -> Bool)
