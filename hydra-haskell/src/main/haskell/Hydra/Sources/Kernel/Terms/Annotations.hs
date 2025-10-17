@@ -374,11 +374,10 @@ setTypeDescriptionDef = define "setTypeDescription" $
 termAnnotationInternalDef :: TBinding (Term -> M.Map Name Term)
 termAnnotationInternalDef = define "termAnnotationInternal" $
   doc "Get internal term annotations" $
-  lets [
-    "getAnn">: lambda "t" $ cases _Term (var "t")
-      (Just nothing) [
-      _Term_annotated>>: lambda "a" $ just $ var "a"]] $
-    ref aggregateAnnotationsDef @@ var "getAnn" @@ (unaryFunction Core.annotatedTermBody) @@ (unaryFunction Core.annotatedTermAnnotation)
+  "getAnn" <~ ("t" ~> cases _Term (var "t")
+    (Just nothing) [
+    _Term_annotated>>: "a" ~> just $ var "a"]) $
+  ref aggregateAnnotationsDef @@ var "getAnn" @@ (unaryFunction Core.annotatedTermBody) @@ (unaryFunction Core.annotatedTermAnnotation)
 
 typeAnnotationInternalDef :: TBinding (Type -> M.Map Name Term)
 typeAnnotationInternalDef = define "typeAnnotationInternal" $
