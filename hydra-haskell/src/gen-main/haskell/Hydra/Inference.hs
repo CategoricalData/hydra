@@ -60,15 +60,19 @@ bindUnboundTypeVariables cx term0 =
                             in  
                               let unboundInTerm = (Rewriting.freeTypeVariablesInTerm bterm)
                               in  
-                                let unbound = (Sets.difference (Sets.union unboundInType unboundInTerm) (Sets.union svars bvars))
+                                let unbound = (Sets.toList (Sets.difference (Sets.union unboundInType unboundInTerm) (Sets.union svars bvars)))
                                 in  
                                   let ts2 = Core.TypeScheme {
-                                          Core.typeSchemeVariables = (Lists.concat2 (Core.typeSchemeVariables ts) (Sets.toList unbound)),
+                                          Core.typeSchemeVariables = (Lists.concat2 (Core.typeSchemeVariables ts) unbound),
                                           Core.typeSchemeType = (Core.typeSchemeType ts)}
-                                  in Core.Binding {
-                                    Core.bindingName = bname,
-                                    Core.bindingTerm = bterm,
-                                    Core.bindingType = (Just ts2)}) (Core.bindingType b)))
+                                  in  
+                                    let bterm2 = (Lists.foldl (\t -> \v -> Core.TermTypeLambda (Core.TypeLambda {
+                                            Core.typeLambdaParameter = v,
+                                            Core.typeLambdaBody = t})) bterm unbound)
+                                    in Core.Binding {
+                                      Core.bindingName = bname,
+                                      Core.bindingTerm = bterm2,
+                                      Core.bindingType = (Just ts2)}) (Core.bindingType b)))
               in (Core.TermLet (Core.Let {
                 Core.letBindings = (Lists.map forBinding (Core.letBindings v1)),
                 Core.letBody = (bindUnboundTypeVariables cx (Core.letBody v1))}))

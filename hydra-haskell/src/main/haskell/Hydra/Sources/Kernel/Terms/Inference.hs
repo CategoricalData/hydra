@@ -152,15 +152,20 @@ bindUnboundTypeVariablesDef = define "bindUnboundTypeVariables" $
             "bvars" <~ Sets.fromList (Core.typeSchemeVariables $ var "ts") $
             "unboundInType" <~ ref Rewriting.freeVariablesInTypeDef @@ (Core.typeSchemeType $ var "ts") $
             "unboundInTerm" <~ ref Rewriting.freeTypeVariablesInTermDef @@ var "bterm" $
-            "unbound" <~ Sets.difference
+            "unbound" <~ Sets.toList (Sets.difference
               (Sets.union (var "unboundInType") (var "unboundInTerm"))
-              (Sets.union (var "svars") (var "bvars")) $
+              (Sets.union (var "svars") (var "bvars"))) $
             "ts2" <~ Core.typeScheme
               (Lists.concat2
                 (Core.typeSchemeVariables $ var "ts")
-                (Sets.toList $ var "unbound"))
+                (var "unbound"))
               (Core.typeSchemeType $ var "ts") $
-            Core.binding (var "bname") (var "bterm") (just $ var "ts2"))) $
+            "bterm2" <~ Lists.foldl
+              ("t" ~> "v" ~> Core.termTypeLambda
+                (Core.typeLambda (var "v") (var "t")))
+              (var "bterm")
+              (var "unbound") $
+            Core.binding (var "bname") (var "bterm2") (just $ var "ts2"))) $
       Core.termLet $ Core.let_
         (Lists.map (var "forBinding") (Core.letBindings $ var "l"))
         (ref bindUnboundTypeVariablesDef @@ var "cx" @@ (Core.letBody $ var "l"))]) $
