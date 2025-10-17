@@ -97,10 +97,10 @@ extendContext pairs cx = Typing_.InferenceContext {
   Typing_.inferenceContextDataTypes = (Maps.union (Maps.fromList pairs) (Typing_.inferenceContextDataTypes cx)),
   Typing_.inferenceContextDebug = (Typing_.inferenceContextDebug cx)}
 
-finalizeInferredTerm :: (t0 -> Core.Term -> Compute.Flow t1 Core.Term)
+finalizeInferredTerm :: (Typing_.InferenceContext -> Core.Term -> Compute.Flow t0 Core.Term)
 finalizeInferredTerm cx term =  
-  let term2 = term
-  in (Flows.pure (Rewriting.normalizeTypeVariablesInTerm term2))
+  let term2 = (bindUnboundTypeVariables cx term)
+  in (Flows.bind (Checking.checkForUnboundTypeVariables cx term2) (\_ -> Flows.pure (Rewriting.normalizeTypeVariablesInTerm term2)))
 
 forInferredTerm :: (Typing_.InferenceContext -> Core.Term -> String -> (Typing_.InferenceResult -> t0) -> Compute.Flow t1 t0)
 forInferredTerm cx term desc f = (Flows.map f (inferTypeOfTerm cx term desc))

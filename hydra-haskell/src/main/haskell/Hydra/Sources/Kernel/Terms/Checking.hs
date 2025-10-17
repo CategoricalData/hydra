@@ -307,8 +307,8 @@ typeOfDef = define "typeOf" $
     string ", typeArgs: ",
     ref Formatting.showListDef @@ ref ShowCore.typeDef @@ var "typeArgs",
     string ", types: ",
---    ref Formatting.showListDef @@ unaryFunction Core.unName @@ (Maps.keys $ Typing.typeContextTypes $ var "tx"),
-    ref Formatting.showListDef @@ ("p" ~> Core.unName (first $ var "p") ++ ": " ++ (ref ShowCore.typeDef @@ (second $ var "p"))) @@ (Maps.toList $ Typing.typeContextTypes $ var "tx"),
+    ref Formatting.showListDef @@ unaryFunction Core.unName @@ (Maps.keys $ Typing.typeContextTypes $ var "tx"),
+--    ref Formatting.showListDef @@ ("p" ~> Core.unName (first $ var "p") ++ ": " ++ (ref ShowCore.typeDef @@ (second $ var "p"))) @@ (Maps.toList $ Typing.typeContextTypes $ var "tx"),
     string ")"]) $
 
   cases _Term (var "term")

@@ -196,9 +196,9 @@ finalizeInferredTermDef = define "finalizeInferredTerm" $
   doc "Finalize an inferred term by checking for unbound type variables, then normalizing type variables" $
   "cx" ~> "term" ~>
   -- TODO: restore these (but make sure type checking tests pass)
---  "term2" <~ ref bindUnboundTypeVariablesDef @@ var "cx" @@ var "term" $
---  exec (ref Checking.checkForUnboundTypeVariablesDef @@ var "cx" @@ var "term2") $
-  "term2" <~ var "term" $
+  "term2" <~ ref bindUnboundTypeVariablesDef @@ var "cx" @@ var "term" $
+  exec (ref Checking.checkForUnboundTypeVariablesDef @@ var "cx" @@ var "term2") $
+--  "term2" <~ var "term" $
   produce $ ref Rewriting.normalizeTypeVariablesInTermDef @@ var "term2"
 
 forInferredTermDef :: TBinding (InferenceContext -> Term -> String -> (InferenceResult -> a) -> Flow s a)
