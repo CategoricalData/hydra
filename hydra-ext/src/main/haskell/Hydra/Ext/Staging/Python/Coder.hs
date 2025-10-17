@@ -429,8 +429,8 @@ encodeTermAssignment env name term comment = do
 
     bindingStmts <- encodeBindings env2 bindings
     PyGraph g meta <- getState
-    putState (PyGraph (extendGraphWithBindings bindings g) meta)
-    encodeFunctionDefinition env2 name tparams params body doms cod comment bindingStmts
+    withState (PyGraph (extendGraphWithBindings bindings g) meta) $
+      encodeFunctionDefinition env2 name tparams params body doms cod comment bindingStmts
 
 -- | Encode a term to an inline Python expression
 encodeTermInline :: PythonEnvironment -> Term -> Flow PyGraph Py.Expression
