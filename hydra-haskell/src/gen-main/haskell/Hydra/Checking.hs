@@ -210,11 +210,7 @@ typeOf tx typeArgs term = (Monads.withTrace (Strings.cat [
   ", typeArgs: ",
   Formatting.showList Core__.type_ typeArgs,
   ", types: ",
-  Formatting.showList (\p -> Strings.cat [
-    Strings.cat [
-      Core.unName (fst p),
-      ": "],
-    (Core__.type_ (snd p))]) (Maps.toList (Typing.typeContextTypes tx)),
+  Formatting.showList Core.unName (Maps.keys (Typing.typeContextTypes tx)),
   ")"]) ((\x -> case x of
   Core.TermAnnotated v1 -> (typeOfAnnotatedTerm tx typeArgs v1)
   Core.TermApplication v1 -> (typeOfApplication tx typeArgs v1)
