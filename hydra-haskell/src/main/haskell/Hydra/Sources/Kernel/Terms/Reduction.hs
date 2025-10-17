@@ -265,20 +265,6 @@ reduceTermDef = define "reduceTerm" $
       (var "applyToArguments" @@
         (Core.termApplication $ Core.application (var "fun") (Lists.head $ var "args")) @@
         (Lists.tail $ var "args"))) $
-  "replaceFreeTypeVariable" <~ ("toReplace" ~> "replacement" ~> "term" ~>
-    "mapping" <~ ("recurse" ~> "inner" ~>
-      cases _Term (var "inner")
-        (Just $ var "recurse" @@ var "inner") [
-        _Term_function>>: match _Function (Just $ var "recurse" @@ var "inner") [
-          _Function_lambda>>: "l" ~> Logic.ifElse
-            (Equality.equal (Core.lambdaParameter $ var "l") (var "toReplace"))
-            (var "inner")
-            (var "recurse" @@ var "inner")],
-        _Term_variable>>: "name" ~> Logic.ifElse
-          (Equality.equal (var "name") (var "toReplace"))
-          (var "replacement")
-          (var "inner")]) $
-    ref Rewriting.rewriteTermDef @@ var "mapping" @@ var "term") $
   "applyElimination" <~ ("elm" ~> "reducedArg" ~>
     cases _Elimination (var "elm") Nothing [
       _Elimination_record>>: "proj" ~>
@@ -337,7 +323,8 @@ reduceTermDef = define "reduceTerm" $
                "arg" <~ Lists.head (var "args") $
                "remainingArgs" <~ Lists.tail (var "args") $
                "reducedArg" <<~ var "reduce" @@ var "eager" @@ (ref Rewriting.deannotateTermDef @@ var "arg") $
-               "reducedResult" <<~ var "reduce" @@ var "eager" @@ (var "replaceFreeTypeVariable" @@ var "param" @@ var "reducedArg" @@ var "body") $
+               "reducedResult" <<~ var "reduce" @@ var "eager"
+                 @@ (ref Rewriting.replaceFreeTermVariableDef @@ var "param" @@ var "reducedArg" @@ var "body") $
                var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs"),
           _Function_primitive>>: "name" ~>
             "prim" <<~ ref Lexical.requirePrimitiveDef @@ var "name" $
