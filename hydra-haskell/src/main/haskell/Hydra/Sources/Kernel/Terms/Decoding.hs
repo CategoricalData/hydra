@@ -124,7 +124,7 @@ bigintValueDef = define "bigintValue" $
 
 binaryDef :: TBinding (Term -> Maybe String)
 binaryDef = define "binary" $
-  compose2 (ref literalDef) (ref binaryLiteralDef)
+  Optionals.compose (ref literalDef) (ref binaryLiteralDef)
 
 binaryLiteralDef :: TBinding (Literal -> Maybe String)
 binaryLiteralDef = define "binaryLiteral" $
@@ -132,7 +132,7 @@ binaryLiteralDef = define "binaryLiteral" $
 
 booleanDef :: TBinding (Term -> Maybe Bool)
 booleanDef = define "boolean" $
-  compose2 (ref literalDef) (ref booleanLiteralDef)
+  Optionals.compose (ref literalDef) (ref booleanLiteralDef)
 
 booleanLiteralDef :: TBinding (Literal -> Maybe Bool)
 booleanLiteralDef = define "booleanLiteral" $
@@ -140,31 +140,33 @@ booleanLiteralDef = define "booleanLiteral" $
 
 casesDef :: TBinding (Name -> Term -> Maybe [Field])
 casesDef = define "cases" $
-  lets [
-    "matchFunction">: matchTermVariant _Term_function,
-    "matchElimination">: matchVariant _Function _Function_elimination,
-    "matchUnion">: matchVariant _Elimination _Elimination_union]
-    $ ref nominalDef
-      @@ (unaryFunction Core.caseStatementTypeName)
-      @@ (unaryFunction Core.caseStatementCases)
-      @@ compose3 (var "matchFunction") (var "matchElimination") (var "matchUnion")
+  "name" ~> "term" ~>
+  "matchFunction" <~ matchTermVariant _Term_function $
+  "matchElimination" <~ matchVariant _Function _Function_elimination $
+  "matchUnion" <~ matchVariant _Elimination _Elimination_union $
+  ref nominalDef
+    @@ (unaryFunction Core.caseStatementTypeName)
+    @@ (unaryFunction Core.caseStatementCases)
+    @@ compose3 (var "matchFunction") (var "matchElimination") (var "matchUnion")
+    @@ var "name"
+    @@ var "term"
 
 caseFieldDef :: TBinding (Name -> Name -> Term -> Y.Maybe Term)
 caseFieldDef = define "caseField" $
- lambda "tname" $ lambda "fname" $
-   compose2
-     (ref casesDef @@ var "tname" )
-     (ref fieldDef @@ var "fname")
+  "tname" ~> "fname" ~>
+  Optionals.compose
+    (ref casesDef @@ var "tname")
+    (ref fieldDef @@ var "fname")
 
 fieldDef :: TBinding (Name -> [Field] -> Maybe Term)
 fieldDef = define "field" $
-  lambdas ["fname", "fields"] $ lets [
-    "matches">: Lists.filter
-      (lambda "f" $ Equality.equal (Core.fieldName $ var "f") $ var "fname")
-      (var "fields")]
-    $ Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "matches"))
-      (just (Core.fieldTerm $ (Lists.head $ var "matches")))
-      nothing
+  "fname" ~> "fields" ~>
+  "matches" <~ Lists.filter
+    ("f" ~> Equality.equal (Core.fieldName (var "f")) (var "fname"))
+    (var "fields") $
+  Logic.ifElse (Equality.equal (int32 1) (Lists.length (var "matches")))
+    (just (Core.fieldTerm (Lists.head (var "matches"))))
+    nothing
 
 float32Def :: TBinding (Term -> Maybe Float)
 float32Def = define "float32" $
@@ -241,14 +243,14 @@ integerLiteralDef = define "integerLiteral" $
 
 lambdaDef :: TBinding (Term -> Maybe Lambda)
 lambdaDef = define "lambda" $
-  lets [
-    "matchFunction">: matchTermVariant _Term_function,
-    "matchLambda">: matchVariant _Function _Function_lambda]
-    $ compose2 (var "matchFunction") (var "matchLambda")
+  "term" ~>
+  "matchFunction" <~ matchTermVariant _Term_function $
+  "matchLambda" <~ matchVariant _Function _Function_lambda $
+  Optionals.compose (var "matchFunction") (var "matchLambda") @@ var "term"
 
 letBindingDef :: TBinding (Name -> Term -> Maybe Binding)
 letBindingDef = define "letBinding" $
-  lambda "fname" $ lambda "term" $ Optionals.bind
+  "fname" ~> "term" ~> Optionals.bind
     (Optionals.map
       (unaryFunction Core.letBindings)
       (ref letTermDef @@ var "term"))
@@ -256,13 +258,13 @@ letBindingDef = define "letBinding" $
 
 letBindingWithKeyDef :: TBinding (Name -> [Binding] -> Maybe Binding)
 letBindingWithKeyDef = define "letBindingWithKey" $
-  lambda "fname" $ lambda "bindings" $ lets [
-    "matches">: Lists.filter
-      (lambda "b" $ Equality.equal (Core.bindingName $ var "b") $ var "fname")
-      (var "bindings")]
-    $ Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "matches"))
-      (just (Lists.head $ var "matches"))
-      nothing
+  "fname" ~> "bindings" ~>
+  "matches" <~ Lists.filter
+    ("b" ~> Equality.equal (Core.bindingName (var "b")) (var "fname"))
+    (var "bindings") $
+  Logic.ifElse (Equality.equal (int32 1) (Lists.length (var "matches")))
+    (just (Lists.head (var "matches")))
+    nothing
 
 letTermDef :: TBinding (Term -> Maybe Let)
 letTermDef = define "letTerm" $
@@ -282,7 +284,7 @@ mapDef = define "map" $
 
 nameDef :: TBinding (Term -> Maybe Name)
 nameDef = define "name" $
-  lambda "term" $ Optionals.map nm
+  "term" ~> Optionals.map nm
     (Optionals.bind
       (ref wrapDef @@ Core.nameLift _Name @@ var "term")
       (ref stringDef))
@@ -292,14 +294,12 @@ nameDef = define "name" $
 
 nominalDef :: TBinding ((a -> Name) -> (a -> b) -> (c -> Maybe a) -> Name -> c -> Maybe b)
 nominalDef = define "nominal" $
-  lambda "getName" $ lambda "getB" $ lambda "getA" $ lambda "expected" $
-    lets [
-      "namesEqual">: lambda "n1" $ lambda "n2" $ Equality.equal (Core.unName $ var "n1") (Core.unName $ var "n2")] $
-      compose2
-        (var "getA")
-        (lambda "a" $ (Logic.ifElse (var "namesEqual" @@ (var "getName" @@ var "a") @@ (var "expected")))
-          (just (var "getB" @@ var "a"))
-          nothing)
+  "getName" ~> "getB" ~> "getA" ~> "expected" ~>
+  Optionals.compose
+    (var "getA")
+    ("a" ~> Logic.ifElse (Equality.equal (var "getName" @@ var "a") (var "expected"))
+      (just (var "getB" @@ var "a"))
+      nothing)
 
 optionalDef :: TBinding (Term -> Maybe (Maybe Term))
 optionalDef = define "optional" $
@@ -307,13 +307,11 @@ optionalDef = define "optional" $
 
 pairDef :: TBinding (Term -> Maybe (Term, Term))
 pairDef = define "pair" $
-  lets [
-    "matchProduct">: matchTermVariant _Term_product]
-    $ compose2
-      (var "matchProduct")
-      (lambda "l" $ Logic.ifElse (Equality.equal (int32 2) (Lists.length $ var "l"))
-        (just $ pair (Lists.at (int32 0) $ var "l") (Lists.at (int32 1) $ var "l"))
-        nothing)
+  Optionals.compose
+    (matchTermVariant _Term_product)
+    ("l" ~> Logic.ifElse (Equality.equal (int32 2) (Lists.length (var "l")))
+      (just (pair (Lists.at (int32 0) (var "l")) (Lists.at (int32 1) (var "l"))))
+      nothing)
 
 recordDef :: TBinding (Name -> Term -> Maybe [Field])
 recordDef = define "record" $
@@ -327,7 +325,7 @@ setDef = define "set" $
 
 stringDef :: TBinding (Term -> Maybe String)
 stringDef = define "string" $
-  compose2 (ref literalDef) (ref stringLiteralDef)
+  Optionals.compose (ref literalDef) (ref stringLiteralDef)
 
 stringLiteralDef :: TBinding (Literal -> Maybe String)
 stringLiteralDef = define "stringLiteral" $
@@ -367,12 +365,12 @@ uint64ValueDef = define "uint64Value" $
 
 unitDef :: TBinding (Term -> Maybe ())
 unitDef = define "unit" $
-  lambda "term" $ cases _Term (var "term") (Just nothing) [
-    _Term_unit>>: constant $ just unit]
+  "term" ~> cases _Term (var "term") (Just nothing) [
+    _Term_unit>>: constant (just unit)]
 
 unitVariantDef :: TBinding (Name -> Term -> Maybe Name)
 unitVariantDef = define "unitVariant" $
-  lambda "tname" $ lambda "term" $ Optionals.map
+  "tname" ~> "term" ~> Optionals.map
     (unaryFunction Core.fieldName)
     (ref variantDef @@ var "tname" @@ var "term")
 
