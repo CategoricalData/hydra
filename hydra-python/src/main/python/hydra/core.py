@@ -18,22 +18,22 @@ NAME__NAME = Name("hydra.core.Name")
 class AnnotatedTerm:
     """A term together with an annotation."""
     
-    subject: Term
+    body: Term
     annotation: FrozenDict[Name, Term]
 
 ANNOTATED_TERM__NAME = Name("hydra.core.AnnotatedTerm")
-ANNOTATED_TERM__SUBJECT__NAME = Name("subject")
+ANNOTATED_TERM__BODY__NAME = Name("body")
 ANNOTATED_TERM__ANNOTATION__NAME = Name("annotation")
 
 @dataclass
 class AnnotatedType:
     """A type together with an annotation."""
     
-    subject: Type
+    body: Type
     annotation: FrozenDict[Name, Term]
 
 ANNOTATED_TYPE__NAME = Name("hydra.core.AnnotatedType")
-ANNOTATED_TYPE__SUBJECT__NAME = Name("subject")
+ANNOTATED_TYPE__BODY__NAME = Name("body")
 ANNOTATED_TYPE__ANNOTATION__NAME = Name("annotation")
 
 @dataclass
@@ -296,14 +296,14 @@ LAMBDA__BODY__NAME = Name("body")
 
 @dataclass
 class Let:
-    """A set of (possibly recursive) 'let' bindings together with an environment in which they are bound."""
+    """A set of (possibly recursive) 'let' bindings together with a body in which they are bound."""
     
     bindings: frozenlist[Binding]
-    environment: Term
+    body: Term
 
 LET__NAME = Name("hydra.core.Let")
 LET__BINDINGS__NAME = Name("bindings")
-LET__ENVIRONMENT__NAME = Name("environment")
+LET__BODY__NAME = Name("body")
 
 class LiteralBinary(Node[bytes]):
     """A binary literal."""
@@ -448,7 +448,7 @@ class TermSet(Node["frozenset[Term]"]):
 class TermSum(Node["Sum"]):
     """A variant tuple."""
 
-class TermTypeApplication(Node["TypedTerm"]):
+class TermTypeApplication(Node["TypeApplicationTerm"]):
     """A System F type application term."""
 
 class TermTypeLambda(Node["TypeLambda"]):
@@ -556,6 +556,17 @@ TYPE__VARIABLE__NAME = Name("variable")
 TYPE__WRAP__NAME = Name("wrap")
 
 @dataclass
+class TypeApplicationTerm:
+    """A term applied to a type; a type application."""
+    
+    body: Term
+    type: Type
+
+TYPE_APPLICATION_TERM__NAME = Name("hydra.core.TypeApplicationTerm")
+TYPE_APPLICATION_TERM__BODY__NAME = Name("body")
+TYPE_APPLICATION_TERM__TYPE__NAME = Name("type")
+
+@dataclass
 class TypeLambda:
     """A System F type abstraction term."""
     
@@ -565,17 +576,6 @@ class TypeLambda:
 TYPE_LAMBDA__NAME = Name("hydra.core.TypeLambda")
 TYPE_LAMBDA__PARAMETER__NAME = Name("parameter")
 TYPE_LAMBDA__BODY__NAME = Name("body")
-
-@dataclass
-class TypedTerm:
-    """A term applied to a type; a type application."""
-    
-    term: Term
-    type: Type
-
-TYPED_TERM__NAME = Name("hydra.core.TypedTerm")
-TYPED_TERM__TERM__NAME = Name("term")
-TYPED_TERM__TYPE__NAME = Name("type")
 
 @dataclass
 class TypeScheme:
@@ -593,19 +593,19 @@ class WrappedTerm:
     """A term wrapped in a type name."""
     
     type_name: Name
-    object: Term
+    body: Term
 
 WRAPPED_TERM__NAME = Name("hydra.core.WrappedTerm")
 WRAPPED_TERM__TYPE_NAME__NAME = Name("typeName")
-WRAPPED_TERM__OBJECT__NAME = Name("object")
+WRAPPED_TERM__BODY__NAME = Name("body")
 
 @dataclass
 class WrappedType:
     """A type wrapped in a type name; a newtype."""
     
     type_name: Name
-    object: Type
+    body: Type
 
 WRAPPED_TYPE__NAME = Name("hydra.core.WrappedType")
 WRAPPED_TYPE__TYPE_NAME__NAME = Name("typeName")
-WRAPPED_TYPE__OBJECT__NAME = Name("object")
+WRAPPED_TYPE__BODY__NAME = Name("body")
