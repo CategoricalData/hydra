@@ -141,13 +141,14 @@ encodeBindings env bindings = CM.mapM (encodeBinding env) bindings
 encodeDefinition :: PythonEnvironment -> Definition -> Flow PyGraph [[Py.Statement]]
 encodeDefinition env def = case def of
   DefinitionTerm (TermDefinition name term _) -> withTrace ("data element " ++ unName name) $ do
+--  DefinitionTerm (TermDefinition name term _) -> withTrace ("data element " ++ unName name
+--    ++ ": " ++ ShowCore.term term) $ do
 
 --    if name == Name "hydra.show.core.fields"
 --    then fail $ "fields: " ++ ShowCore.term term
 --    else return ()
 
     comment <- fmap normalizeComment <$> (inGraphContext $ getTermDescription term)
-    PyGraph g _ <- getState
     stmt <- encodeTermAssignment env name term comment
     return [[stmt]]
   DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name) $ do

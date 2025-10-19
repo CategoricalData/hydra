@@ -42,7 +42,7 @@ class AccessorPath(Node["frozenlist[TermAccessor]"]): ...
 
 ACCESSOR_PATH__NAME = hydra.core.Name("hydra.accessors.AccessorPath")
 
-class TermAccessorAnnotatedSubject(Node[None]): ...
+class TermAccessorAnnotatedBody(Node[None]): ...
 
 class TermAccessorApplicationFunction(Node[None]): ...
 
@@ -54,7 +54,7 @@ class TermAccessorUnionCasesDefault(Node[None]): ...
 
 class TermAccessorUnionCasesBranch(Node["hydra.core.Name"]): ...
 
-class TermAccessorLetEnvironment(Node[None]): ...
+class TermAccessorLetBody(Node[None]): ...
 
 class TermAccessorLetBinding(Node["hydra.core.Name"]): ...
 
@@ -83,16 +83,16 @@ class TermAccessorInjectionTerm(Node[None]): ...
 class TermAccessorWrappedTerm(Node[None]): ...
 
 # A function which maps from a term to a particular immediate subterm.
-type TermAccessor = TermAccessorAnnotatedSubject | TermAccessorApplicationFunction | TermAccessorApplicationArgument | TermAccessorLambdaBody | TermAccessorUnionCasesDefault | TermAccessorUnionCasesBranch | TermAccessorLetEnvironment | TermAccessorLetBinding | TermAccessorListElement | TermAccessorMapKey | TermAccessorMapValue | TermAccessorOptionalTerm | TermAccessorProductTerm | TermAccessorRecordField | TermAccessorSetElement | TermAccessorSumTerm | TermAccessorTypeLambdaBody | TermAccessorTypeApplicationTerm | TermAccessorInjectionTerm | TermAccessorWrappedTerm
+type TermAccessor = TermAccessorAnnotatedBody | TermAccessorApplicationFunction | TermAccessorApplicationArgument | TermAccessorLambdaBody | TermAccessorUnionCasesDefault | TermAccessorUnionCasesBranch | TermAccessorLetBody | TermAccessorLetBinding | TermAccessorListElement | TermAccessorMapKey | TermAccessorMapValue | TermAccessorOptionalTerm | TermAccessorProductTerm | TermAccessorRecordField | TermAccessorSetElement | TermAccessorSumTerm | TermAccessorTypeLambdaBody | TermAccessorTypeApplicationTerm | TermAccessorInjectionTerm | TermAccessorWrappedTerm
 
 TERM_ACCESSOR__NAME = hydra.core.Name("hydra.accessors.TermAccessor")
-TERM_ACCESSOR__ANNOTATED_SUBJECT__NAME = hydra.core.Name("annotatedSubject")
+TERM_ACCESSOR__ANNOTATED_BODY__NAME = hydra.core.Name("annotatedBody")
 TERM_ACCESSOR__APPLICATION_FUNCTION__NAME = hydra.core.Name("applicationFunction")
 TERM_ACCESSOR__APPLICATION_ARGUMENT__NAME = hydra.core.Name("applicationArgument")
 TERM_ACCESSOR__LAMBDA_BODY__NAME = hydra.core.Name("lambdaBody")
 TERM_ACCESSOR__UNION_CASES_DEFAULT__NAME = hydra.core.Name("unionCasesDefault")
 TERM_ACCESSOR__UNION_CASES_BRANCH__NAME = hydra.core.Name("unionCasesBranch")
-TERM_ACCESSOR__LET_ENVIRONMENT__NAME = hydra.core.Name("letEnvironment")
+TERM_ACCESSOR__LET_BODY__NAME = hydra.core.Name("letBody")
 TERM_ACCESSOR__LET_BINDING__NAME = hydra.core.Name("letBinding")
 TERM_ACCESSOR__LIST_ELEMENT__NAME = hydra.core.Name("listElement")
 TERM_ACCESSOR__MAP_KEY__NAME = hydra.core.Name("mapKey")
