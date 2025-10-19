@@ -58,9 +58,9 @@ TYPE_CONSTRAINT__COMMENT__NAME = hydra.core.Name("comment")
 class TypeContext:
     """A typing environment used for type reconstruction (typeOf) over System F terms."""
     
-    types: FrozenDict[hydra.core.Name, hydra.core.Type]
-    variables: frozenset[hydra.core.Name]
-    inference_context: InferenceContext
+    types: Annotated[FrozenDict[hydra.core.Name, hydra.core.Type], "A mapping of lambda- and let-bound variables to their types"]
+    variables: Annotated[frozenset[hydra.core.Name], "The set of type variables introduced by enclosing type lambdas"]
+    inference_context: Annotated[InferenceContext, "The schema types, primitive types, and data types of the graph"]
 
 TYPE_CONTEXT__NAME = hydra.core.Name("hydra.typing.TypeContext")
 TYPE_CONTEXT__TYPES__NAME = hydra.core.Name("types")
