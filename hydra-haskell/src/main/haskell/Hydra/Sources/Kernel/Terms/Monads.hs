@@ -100,52 +100,55 @@ emptyTraceDef = define "emptyTrace" $ Compute.trace (list []) (list []) Maps.emp
 
 execDef :: TBinding (Flow s a -> s -> s)
 execDef = define "exec" $
-  lambdas ["f", "s0"] $
-    Compute.flowStateState $ Compute.unFlow (var "f") (var "s0") (ref emptyTraceDef)
+  "f" ~> "s0" ~>
+  Compute.flowStateState (Compute.unFlow (var "f") (var "s0") (ref emptyTraceDef))
 
 failDef :: TBinding (String -> Flow s a)
 failDef = define "fail" $
-  lambda "msg" $
-    Compute.flow $ lambdas ["s", "t"] $
-      Compute.flowState nothing (var "s") (ref pushErrorDef @@ var "msg" @@ var "t")
+  "msg" ~>
+  Compute.flow (
+    "s" ~> "t" ~>
+    Compute.flowState nothing (var "s") (ref pushErrorDef @@ var "msg" @@ var "t"))
 
 flowSucceedsDef :: TBinding (Flow s a -> Bool)
 flowSucceedsDef = define "flowSucceeds" $
   doc "Check whether a flow succeeds" $
-  lambdas ["s", "f"] $
-    Optionals.isJust (Compute.flowStateValue $ (Compute.unFlow (var "f") (var "s") (ref emptyTraceDef)))
+  "s" ~> "f" ~>
+  Optionals.isJust (Compute.flowStateValue (Compute.unFlow (var "f") (var "s") (ref emptyTraceDef)))
 
 fromFlowDef :: TBinding (a -> s -> Flow s a -> a)
 fromFlowDef = define "fromFlow" $
   doc "Get the value of a flow, or a default value if the flow fails" $
-  lambdas ["def", "cx", "f"] $ Optionals.maybe
+  "def" ~> "cx" ~> "f" ~> Optionals.maybe
     (var "def")
-    (lambda "xmo" $ var "xmo")
-    (Compute.flowStateValue $ (Compute.unFlow (var "f") (var "cx") (ref emptyTraceDef)))
+    ("xmo" ~> var "xmo")
+    (Compute.flowStateValue (Compute.unFlow (var "f") (var "cx") (ref emptyTraceDef)))
 
 getStateDef :: TBinding (Flow s s)
 getStateDef = define "getState" $
   doc "Get the state of the current flow" $
-  Compute.flow $ lambdas ["s0", "t0"] $ lets [
-    "fs1">: Compute.unFlow (ref pureDef @@ unit) (var "s0") (var "t0"),
-    "v">: Compute.flowStateValue (var "fs1"),
-    "s">: Compute.flowStateState (var "fs1"),
-    "t">: Compute.flowStateTrace (var "fs1")] $
+  Compute.flow (
+    "s0" ~> "t0" ~>
+    "fs1" <~ Compute.unFlow (ref pureDef @@ unit) (var "s0") (var "t0") $
+    "v" <~ Compute.flowStateValue (var "fs1") $
+    "s" <~ Compute.flowStateState (var "fs1") $
+    "t" <~ Compute.flowStateTrace (var "fs1") $
     Optionals.maybe
       (Compute.flowState nothing (var "s") (var "t"))
-      (constant (Compute.flowState (just $ var "s") (var "s") (var "t")))
-      (var "v")
+      (constant (Compute.flowState (just (var "s")) (var "s") (var "t")))
+      (var "v"))
 
 mapDef :: TBinding ((a -> b) -> Flow s a -> Flow s b)
 mapDef = define "map" $
   doc "Map a function over a flow" $
-  lambdas ["f", "f1"] $
-    Compute.flow $ lambdas ["s0", "t0"] $ lets [
-      "f2">: Compute.unFlow (var "f1") (var "s0") (var "t0")] $
-      Compute.flowState
-        (Optionals.map (var "f") $ Compute.flowStateValue $ var "f2")
-        (Compute.flowStateState $ var "f2")
-        (Compute.flowStateTrace $ var "f2")
+  "f" ~> "f1" ~>
+  Compute.flow (
+    "s0" ~> "t0" ~>
+    "f2" <~ Compute.unFlow (var "f1") (var "s0") (var "t0") $
+    Compute.flowState
+      (Optionals.map (var "f") (Compute.flowStateValue (var "f2")))
+      (Compute.flowStateState (var "f2"))
+      (Compute.flowStateTrace (var "f2")))
 
 modifyDef :: TBinding ((s -> s) -> Flow s ())
 modifyDef = define "modify" $ lambda "f" $
@@ -155,133 +158,136 @@ modifyDef = define "modify" $ lambda "f" $
 
 mutateTraceDef :: TBinding ((Trace -> Hydra.Mantle.Either String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a)
 mutateTraceDef = define "mutateTrace" $
-  lambdas ["mutate", "restore", "f"] $
-    Compute.flow $ lambdas ["s0", "t0"] $ lets [
-      "forLeft">: lambda "msg" $
-        Compute.flowState nothing (var "s0") (ref pushErrorDef @@ var "msg" @@ var "t0"),
-      -- Retain the updated state, but reset the trace after execution
-      "forRight">: lambda "t1" $ lets [
-        -- Execute the internal flow after augmenting the trace
-        "f2">: Compute.unFlow (var "f") (var "s0") (var "t1")] $
-        Compute.flowState
-          (Compute.flowStateValue $ var "f2")
-          (Compute.flowStateState $ var "f2")
-          (var "restore" @@ var "t0" @@ (Compute.flowStateTrace $ var "f2"))] $
-      cases _Either (var "mutate" @@ var "t0") Nothing [
-        _Either_left>>: var "forLeft",
-        _Either_right>>: var "forRight"]
+  "mutate" ~> "restore" ~> "f" ~>
+  Compute.flow (
+    "s0" ~> "t0" ~>
+    "forLeft" <~ ("msg" ~>
+      Compute.flowState nothing (var "s0") (ref pushErrorDef @@ var "msg" @@ var "t0")) $
+    "forRight" <~ ("t1" ~>
+      "f2" <~ Compute.unFlow (var "f") (var "s0") (var "t1") $
+      Compute.flowState
+        (Compute.flowStateValue (var "f2"))
+        (Compute.flowStateState (var "f2"))
+        (var "restore" @@ var "t0" @@ (Compute.flowStateTrace (var "f2")))) $
+    cases _Either (var "mutate" @@ var "t0") Nothing [
+      _Either_left>>: var "forLeft",
+      _Either_right>>: var "forRight"])
 
 optionalToListDef :: TBinding (Maybe a -> [a])
 optionalToListDef = define "optionalToList" $
   doc "Converts an optional value either to an empty list (if nothing) or a singleton list (if just)." $
-  lambda "mx" $ Optionals.maybe (list []) (unaryFunction Lists.pure) (var "mx")
+  "mx" ~> Optionals.maybe (list []) (unaryFunction Lists.pure) (var "mx")
 
 pureDef :: TBinding (a -> Flow s a)
-pureDef = define "pure" $ lambda "xp" $
-  Compute.flow $ lambdas ["s", "t"] $ Compute.flowState (just $ var "xp") (var "s") (var "t")
+pureDef = define "pure" $
+  "xp" ~>
+  Compute.flow (
+    "s" ~> "t" ~> Compute.flowState (just (var "xp")) (var "s") (var "t"))
 
 pushErrorDef :: TBinding (String -> Trace -> Trace)
 pushErrorDef = define "pushError" $
   doc "Push an error message" $
-  lambdas ["msg", "t"] $ lets [
-    "condenseRepeats">: lets [
-      "condenseGroup">: lambda "xs" $  lets [
-        "x">: Lists.head $ var "xs",
-        "n">: Lists.length $ var "xs"] $
-        Logic.ifElse (Equality.equal (var "n") (int32 1))
-          (var "x")
-          (Strings.cat $ list [var "x", " (x", Literals.showInt32 (var "n"), ")"])] $
-      lambda "ys" $ Lists.map (var "condenseGroup") $ Lists.group (var "ys" :: TTerm [String]),
-    "errorMsg">: Strings.concat [
-      "Error: ", var "msg", " (",
-      (Strings.intercalate " > " (var "condenseRepeats" @@ (Lists.reverse $ Compute.traceStack $ var "t"))),
-      ")"]] $
-    Compute.trace
-      (Compute.traceStack $ var "t")
-      (Lists.cons (var "errorMsg") (Compute.traceMessages $ var "t"))
-      (Compute.traceOther $ var "t")
+  "msg" ~> "t" ~>
+  "condenseRepeats" <~ (
+    "ys" ~>
+    "condenseGroup" <~ ("xs" ~>
+      "x" <~ Lists.head (var "xs") $
+      "n" <~ Lists.length (var "xs") $
+      Logic.ifElse (Equality.equal (var "n") (int32 1))
+        (var "x")
+        (Strings.cat (list [var "x", " (x", Literals.showInt32 (var "n"), ")"]))) $
+    Lists.map (var "condenseGroup") (Lists.group (var "ys" :: TTerm [String]))) $
+  "errorMsg" <~ Strings.concat [
+    "Error: ", var "msg", " (",
+    (Strings.intercalate " > " (var "condenseRepeats" @@ (Lists.reverse (Compute.traceStack (var "t"))))),
+    ")"] $
+  Compute.trace
+    (Compute.traceStack (var "t"))
+    (Lists.cons (var "errorMsg") (Compute.traceMessages (var "t")))
+    (Compute.traceOther (var "t"))
 
 putStateDef :: TBinding (s -> Flow s ())
 putStateDef = define "putState" $
   doc "Set the state of a flow" $
-  lambda "cx" $ Compute.flow $ lambdas ["s0", "t0"] $ lets [
-    "f1">: Compute.unFlow (ref pureDef @@ unit) (var "s0") (var "t0")] $
+  "cx" ~> Compute.flow (
+    "s0" ~> "t0" ~>
+    "f1" <~ Compute.unFlow (ref pureDef @@ unit) (var "s0") (var "t0") $
     Compute.flowState
-      (Compute.flowStateValue $ var "f1")
+      (Compute.flowStateValue (var "f1"))
       (var "cx")
-      (Compute.flowStateTrace $ var "f1")
+      (Compute.flowStateTrace (var "f1")))
 
 traceSummaryDef :: TBinding (Trace -> String)
 traceSummaryDef = define "traceSummary" $
   doc "Summarize a trace as a string" $
-  lambda "t" $ lets [
-    "messageLines">: (Lists.nub (Compute.traceMessages $ var "t")),
-    "keyvalLines">: Logic.ifElse (Maps.null (Compute.traceOther $ var "t"))
-      (list [])
-      (Lists.cons ("key/value pairs: ")
-        (Lists.map (var "toLine") (Maps.toList (Compute.traceOther $ var "t")))),
-    "toLine">:
-      lambda "pair" $ "\t" ++ (Core.unName $ (first $ var "pair")) ++ ": " ++ (ref ShowCore.termDef @@ (second $ var "pair"))] $
-    Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines"))
+  "t" ~>
+  "messageLines" <~ (Lists.nub (Compute.traceMessages $ var "t")) $
+  "toLine" <~ ("pair" ~>
+    "\t" ++ (Core.unName $ (first $ var "pair")) ++ ": " ++ (ref ShowCore.termDef @@ (second $ var "pair"))) $
+  "keyvalLines" <~ Logic.ifElse (Maps.null (Compute.traceOther $ var "t"))
+    (list [])
+    (Lists.cons ("key/value pairs: ")
+      (Lists.map (var "toLine") (Maps.toList (Compute.traceOther $ var "t")))) $
+  Strings.intercalate "\n" (Lists.concat2 (var "messageLines") (var "keyvalLines"))
 
 unexpectedDef :: TBinding (String -> String -> Flow s x)
 unexpectedDef = define "unexpected" $
   doc "Fail if an actual value does not match an expected value" $
-  lambdas ["expected", "actual"] $ ref failDef @@ ("expected " ++ var "expected" ++ " but found: " ++ var "actual")
+  "expected" ~> "actual" ~> ref failDef @@ ("expected " ++ var "expected" ++ " but found: " ++ var "actual")
 
 warnDef :: TBinding (String -> Flow s a -> Flow s a)
 warnDef = define "warn" $
   doc "Continue the current flow after adding a warning message" $
-  lambdas ["msg", "b"] $ Compute.flow $ lambdas ["s0", "t0"] $ lets [
-    "f1">: Compute.unFlow (var "b") (var "s0") (var "t0"),
-    "addMessage">: lambda "t" $ Compute.trace
-      (Compute.traceStack $ var "t")
-      (Lists.cons ("Warning: " ++ var "msg") (Compute.traceMessages $ var "t"))
-      (Compute.traceOther $ var "t")] $
+  "msg" ~> "b" ~> Compute.flow (
+    "s0" ~> "t0" ~>
+    "f1" <~ Compute.unFlow (var "b") (var "s0") (var "t0") $
+    "addMessage" <~ ("t" ~> Compute.trace
+      (Compute.traceStack (var "t"))
+      (Lists.cons ("Warning: " ++ var "msg") (Compute.traceMessages (var "t")))
+      (Compute.traceOther (var "t"))) $
     Compute.flowState
-      (Compute.flowStateValue $ var "f1")
-      (Compute.flowStateState $ var "f1")
-      (var "addMessage" @@ (Compute.flowStateTrace $ var "f1"))
+      (Compute.flowStateValue (var "f1"))
+      (Compute.flowStateState (var "f1"))
+      (var "addMessage" @@ (Compute.flowStateTrace (var "f1"))))
 
 withFlagDef :: TBinding (String -> Flow s a -> Flow s a)
 withFlagDef = define "withFlag" $
   doc "Continue the current flow after setting a flag" $
-  lambda "flag" $ lets [
-    "mutate">: lambda "t" $ Mantle.eitherRight $ (Compute.trace
-      (Compute.traceStack $ var "t")
-      (Compute.traceMessages $ var "t")
-      (Maps.insert (var "flag") (Core.termLiteral $ Core.literalBoolean $ boolean True) (Compute.traceOther $ var "t"))),
-    "restore">: lambda "ignored" $ lambda "t1" $ Compute.trace
-      (Compute.traceStack $ var "t1")
-      (Compute.traceMessages $ var "t1")
-      (Maps.remove (var "flag") (Compute.traceOther $ var "t1"))] $
-    ref mutateTraceDef @@ var "mutate" @@ var "restore"
+  "flag" ~> "f" ~>
+  "mutate" <~ ("t" ~> Mantle.eitherRight (Compute.trace
+    (Compute.traceStack (var "t"))
+    (Compute.traceMessages (var "t"))
+    (Maps.insert (var "flag") (Core.termLiteral (Core.literalBoolean (boolean True))) (Compute.traceOther (var "t"))))) $
+  "restore" <~ ("ignored" ~> "t1" ~> Compute.trace
+    (Compute.traceStack (var "t1"))
+    (Compute.traceMessages (var "t1"))
+    (Maps.remove (var "flag") (Compute.traceOther (var "t1")))) $
+  ref mutateTraceDef @@ var "mutate" @@ var "restore" @@ var "f"
 
 withStateDef :: TBinding (s1 -> Flow s1 a -> Flow s2 a)
 withStateDef = define "withState" $
   doc "Continue a flow using a given state" $
-  lambdas ["cx0", "f"] $
-    Compute.flow $ lambdas ["cx1", "t1"] $ lets [
-      "f1">: Compute.unFlow (var "f") (var "cx0") (var "t1")] $
-      Compute.flowState
-        (Compute.flowStateValue $ var "f1")
-        (var "cx1")
-        (Compute.flowStateTrace $ var "f1")
+  "cx0" ~> "f" ~>
+  Compute.flow (
+    "cx1" ~> "t1" ~>
+    "f1" <~ Compute.unFlow (var "f") (var "cx0") (var "t1") $
+    Compute.flowState
+      (Compute.flowStateValue (var "f1"))
+      (var "cx1")
+      (Compute.flowStateTrace (var "f1")))
 
 withTraceDef :: TBinding (String -> Flow s a -> Flow s a)
 withTraceDef = define "withTrace" $
   doc "Continue the current flow after augmenting the trace" $
-  lambda "msg" $ lets [
-    -- augment the trace
-    "mutate">: lambda "t" $ Logic.ifElse (Equality.gte (Lists.length (Compute.traceStack $ var "t")) $ ref Constants.maxTraceDepthDef)
-      (Mantle.eitherLeft $ string "maximum trace depth exceeded. This may indicate an infinite loop")
-      (Mantle.eitherRight $ Compute.trace
-        (Lists.cons (var "msg") (Compute.traceStack $ var "t"))
-        (Compute.traceMessages $ var "t")
-        (Compute.traceOther $ var "t")),
-    -- reset the trace stack after execution
-    "restore">: lambda "t0" $ lambda "t1" $ Compute.trace
-      (Compute.traceStack $ var "t0")
-      (Compute.traceMessages $ var "t1")
-      (Compute.traceOther $ var "t1")] $
-    ref mutateTraceDef @@ var "mutate" @@ var "restore"
+  "msg" ~> "f" ~>
+  "mutate" <~ ("t" ~> Logic.ifElse (Equality.gte (Lists.length (Compute.traceStack (var "t"))) (ref Constants.maxTraceDepthDef))
+    (Mantle.eitherLeft (string "maximum trace depth exceeded. This may indicate an infinite loop"))
+    (Mantle.eitherRight (Compute.trace
+      (Lists.cons (var "msg") (Compute.traceStack (var "t")))
+      (Compute.traceMessages (var "t"))
+      (Compute.traceOther (var "t"))))) $
+  "restore" <~ ("t0" ~> "t1" ~> Compute.trace
+    (Compute.traceStack (var "t0"))
+    (Compute.traceMessages (var "t1"))
+    (Compute.traceOther (var "t1"))) $
+  ref mutateTraceDef @@ var "mutate" @@ var "restore" @@ var "f"

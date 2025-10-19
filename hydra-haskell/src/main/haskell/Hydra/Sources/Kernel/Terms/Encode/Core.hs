@@ -497,7 +497,7 @@ isTypeDef = coreEncodingExtrasDefinition "isType" $
     _Type_union>>: "rt" ~>
       Equality.equal (string (unName _Type)) (Core.unName (Core.rowTypeTypeName (var "rt"))),
     _Type_variable>>: "v" ~> Equality.equal (var "v") (Core.nameLift _Type)]
-    
+
 isUnitTermDef :: TBinding (Term -> Bool)
 isUnitTermDef = coreEncodingExtrasDefinition "isUnitTerm" $
   match _Term (Just false) [_Term_unit>>: constant true]
