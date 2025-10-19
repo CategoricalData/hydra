@@ -115,20 +115,22 @@ nextCount key = (Flows.bind (getCount key) (\count -> Flows.map (\_ -> count) (p
 -- | Normalize term annotations
 normalizeTermAnnotations :: (Core.Term -> Core.Term)
 normalizeTermAnnotations term =  
-  let anns = (termAnnotationInternal term) 
-      stripped = (Rewriting.deannotateTerm term)
-  in (Logic.ifElse (Maps.null anns) stripped (Core.TermAnnotated (Core.AnnotatedTerm {
-    Core.annotatedTermBody = stripped,
-    Core.annotatedTermAnnotation = anns})))
+  let anns = (termAnnotationInternal term)
+  in  
+    let stripped = (Rewriting.deannotateTerm term)
+    in (Logic.ifElse (Maps.null anns) stripped (Core.TermAnnotated (Core.AnnotatedTerm {
+      Core.annotatedTermBody = stripped,
+      Core.annotatedTermAnnotation = anns})))
 
 -- | Normalize type annotations
 normalizeTypeAnnotations :: (Core.Type -> Core.Type)
 normalizeTypeAnnotations typ =  
-  let anns = (typeAnnotationInternal typ) 
-      stripped = (Rewriting.deannotateType typ)
-  in (Logic.ifElse (Maps.null anns) stripped (Core.TypeAnnotated (Core.AnnotatedType {
-    Core.annotatedTypeBody = stripped,
-    Core.annotatedTypeAnnotation = anns})))
+  let anns = (typeAnnotationInternal typ)
+  in  
+    let stripped = (Rewriting.deannotateType typ)
+    in (Logic.ifElse (Maps.null anns) stripped (Core.TypeAnnotated (Core.AnnotatedType {
+      Core.annotatedTypeBody = stripped,
+      Core.annotatedTypeAnnotation = anns})))
 
 putAttr :: (Core.Name -> Core.Term -> Compute.Flow t0 ())
 putAttr key val = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
@@ -155,11 +157,12 @@ setDescription d = (setAnnotation Constants.key_description (Optionals.map (\arg
 -- | Set term annotation
 setTermAnnotation :: (Core.Name -> Maybe Core.Term -> Core.Term -> Core.Term)
 setTermAnnotation key val term =  
-  let term_ = (Rewriting.deannotateTerm term) 
-      anns = (setAnnotation key val (termAnnotationInternal term))
-  in (Logic.ifElse (Maps.null anns) term_ (Core.TermAnnotated (Core.AnnotatedTerm {
-    Core.annotatedTermBody = term_,
-    Core.annotatedTermAnnotation = anns})))
+  let term_ = (Rewriting.deannotateTerm term)
+  in  
+    let anns = (setAnnotation key val (termAnnotationInternal term))
+    in (Logic.ifElse (Maps.null anns) term_ (Core.TermAnnotated (Core.AnnotatedTerm {
+      Core.annotatedTermBody = term_,
+      Core.annotatedTermAnnotation = anns})))
 
 -- | Set term description
 setTermDescription :: (Maybe String -> Core.Term -> Core.Term)
@@ -172,15 +175,16 @@ setType mt = (setAnnotation Constants.key_type (Optionals.map Core__.type_ mt))
 -- | Set type annotation
 setTypeAnnotation :: (Core.Name -> Maybe Core.Term -> Core.Type -> Core.Type)
 setTypeAnnotation key val typ =  
-  let typ_ = (Rewriting.deannotateType typ) 
-      anns = (setAnnotation key val (typeAnnotationInternal typ))
-  in (Logic.ifElse (Maps.null anns) typ_ (Core.TypeAnnotated (Core.AnnotatedType {
-    Core.annotatedTypeBody = typ_,
-    Core.annotatedTypeAnnotation = anns})))
+  let typ_ = (Rewriting.deannotateType typ)
+  in  
+    let anns = (setAnnotation key val (typeAnnotationInternal typ))
+    in (Logic.ifElse (Maps.null anns) typ_ (Core.TypeAnnotated (Core.AnnotatedType {
+      Core.annotatedTypeBody = typ_,
+      Core.annotatedTypeAnnotation = anns})))
 
 -- | Set type classes on term
 setTypeClasses :: (M.Map Core.Name (S.Set Mantle.TypeClass) -> Core.Term -> Core.Term)
-setTypeClasses m =  
+setTypeClasses m term =  
   let encodeClass = (\tc -> (\x -> case x of
           Mantle.TypeClassEquality -> (Core.TermUnion (Core.Injection {
             Core.injectionTypeName = (Core.Name "hydra.mantle.TypeClass"),
@@ -191,13 +195,16 @@ setTypeClasses m =
             Core.injectionTypeName = (Core.Name "hydra.mantle.TypeClass"),
             Core.injectionField = Core.Field {
               Core.fieldName = (Core.Name "ordering"),
-              Core.fieldTerm = Core.TermUnit}}))) tc) 
-      encodePair = (\nameClasses ->  
-              let name = (fst nameClasses) 
-                  classes = (snd nameClasses)
+              Core.fieldTerm = Core.TermUnit}}))) tc)
+  in  
+    let encodePair = (\nameClasses ->  
+            let name = (fst nameClasses)
+            in  
+              let classes = (snd nameClasses)
               in (Core__.name name, (Core.TermSet (Sets.fromList (Lists.map encodeClass (Sets.toList classes))))))
-      encoded = (Logic.ifElse (Maps.null m) Nothing (Just (Core.TermMap (Maps.fromList (Lists.map encodePair (Maps.toList m))))))
-  in (setTermAnnotation Constants.key_classes encoded)
+    in  
+      let encoded = (Logic.ifElse (Maps.null m) Nothing (Just (Core.TermMap (Maps.fromList (Lists.map encodePair (Maps.toList m))))))
+      in (setTermAnnotation Constants.key_classes encoded term)
 
 -- | Set type description
 setTypeDescription :: (Maybe String -> Core.Type -> Core.Type)
@@ -205,34 +212,35 @@ setTypeDescription d = (setTypeAnnotation Constants.key_description (Optionals.m
 
 -- | Get internal term annotations
 termAnnotationInternal :: (Core.Term -> M.Map Core.Name Core.Term)
-termAnnotationInternal = (aggregateAnnotations getAnn Core.annotatedTermBody Core.annotatedTermAnnotation) 
-  where 
-    getAnn = (\t -> (\x -> case x of
-      Core.TermAnnotated v1 -> (Just v1)
-      _ -> Nothing) t)
+termAnnotationInternal term =  
+  let getAnn = (\t -> (\x -> case x of
+          Core.TermAnnotated v1 -> (Just v1)
+          _ -> Nothing) t)
+  in (aggregateAnnotations getAnn (\at -> Core.annotatedTermBody at) (\at -> Core.annotatedTermAnnotation at) term)
 
 -- | Get internal type annotations
 typeAnnotationInternal :: (Core.Type -> M.Map Core.Name Core.Term)
-typeAnnotationInternal = (aggregateAnnotations getAnn Core.annotatedTypeBody Core.annotatedTypeAnnotation) 
-  where 
-    getAnn = (\t -> (\x -> case x of
-      Core.TypeAnnotated v1 -> (Just v1)
-      _ -> Nothing) t)
+typeAnnotationInternal typ =  
+  let getAnn = (\t -> (\x -> case x of
+          Core.TypeAnnotated v1 -> (Just v1)
+          _ -> Nothing) t)
+  in (aggregateAnnotations getAnn (\at -> Core.annotatedTypeBody at) (\at -> Core.annotatedTypeAnnotation at) typ)
 
 -- | Create a type element with proper annotations
 typeElement :: (Core.Name -> Core.Type -> Core.Binding)
 typeElement name typ =  
-  let schemaTerm = (Core.TermVariable (Core.Name "hydra.core.Type")) 
-      dataTerm = (normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
-              Core.annotatedTermBody = (Core__.type_ typ),
-              Core.annotatedTermAnnotation = (Maps.fromList [
-                (Constants.key_type, schemaTerm)])})))
-  in Core.Binding {
-    Core.bindingName = name,
-    Core.bindingTerm = dataTerm,
-    Core.bindingType = (Just (Core.TypeScheme {
-      Core.typeSchemeVariables = [],
-      Core.typeSchemeType = typ}))}
+  let schemaTerm = (Core.TermVariable (Core.Name "hydra.core.Type"))
+  in  
+    let dataTerm = (normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
+            Core.annotatedTermBody = (Core__.type_ typ),
+            Core.annotatedTermAnnotation = (Maps.fromList [
+              (Constants.key_type, schemaTerm)])})))
+    in Core.Binding {
+      Core.bindingName = name,
+      Core.bindingTerm = dataTerm,
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [],
+        Core.typeSchemeType = typ}))}
 
 whenFlag :: (Core.Name -> Compute.Flow t0 t1 -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 whenFlag flag fthen felse = (Flows.bind (hasFlag flag) (\b -> Logic.ifElse b fthen felse))

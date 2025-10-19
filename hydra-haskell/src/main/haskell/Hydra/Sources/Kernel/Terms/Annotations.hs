@@ -105,53 +105,53 @@ define = definitionInModule module_
 aggregateAnnotationsDef :: TBinding ((x -> Maybe y) -> (y -> x) -> (y -> M.Map Name Term) -> x -> M.Map Name Term)
 aggregateAnnotationsDef = define "aggregateAnnotations" $
   doc "Aggregate annotations from nested structures" $
-  lambdas ["getValue", "getX", "getAnns", "t"] $ lets [
-    "toPairs">: lambdas ["rest", "t"] $ Optionals.maybe (var "rest")
-      (lambda "yy" $ var "toPairs"
-        @@ Lists.cons (Maps.toList $ var "getAnns" @@ var "yy") (var "rest")
-        @@ (var "getX" @@ var "yy"))
-      (var "getValue" @@ var "t")] $
-    Maps.fromList $ Lists.concat $ var "toPairs" @@ list [] @@ var "t"
+  "getValue" ~> "getX" ~> "getAnns" ~> "t" ~>
+  "toPairs" <~ ("rest" ~> "t" ~> Optionals.maybe (var "rest")
+    (lambda "yy" (var "toPairs"
+      @@ Lists.cons (Maps.toList (var "getAnns" @@ var "yy")) (var "rest")
+      @@ (var "getX" @@ var "yy")))
+    (var "getValue" @@ var "t")) $
+  Maps.fromList (Lists.concat (var "toPairs" @@ list [] @@ var "t"))
 
 debugIfDef :: TBinding (String -> String -> Flow s ())
 debugIfDef = define "debugIf" $
   doc "Debug if the debug ID matches" $
-  lambdas ["debugId", "message"] $ lets [
-    "checkAndFail">: lambda "desc" $ Logic.ifElse
-      (Equality.equal (var "desc") (just $ string "debugId"))
-      (Flows.fail $ var "message")
-      (produce unit)] $
-    Flows.bind (ref getDebugIdDef) (var "checkAndFail")
+  "debugId" ~> "message" ~>
+  "checkAndFail" <~ ("desc" ~> Logic.ifElse
+    (Equality.equal (var "desc") (just $ string "debugId"))
+    (Flows.fail (var "message"))
+    (produce unit)) $
+  Flows.bind (ref getDebugIdDef) (var "checkAndFail")
 
 failOnFlagDef :: TBinding (Name -> String -> Flow s ())
 failOnFlagDef = define "failOnFlag" $
   doc "Fail if the given flag is set" $
-  lambdas ["flag", "msg"] $ binds [
-    "val">: ref hasFlagDef @@ var "flag"] $
-    Logic.ifElse (var "val")
-      (Flows.fail $ var "msg")
-      (produce unit)
+  "flag" ~> "msg" ~>
+  "val" <<~ ref hasFlagDef @@ var "flag" $
+  Logic.ifElse (var "val")
+    (Flows.fail (var "msg"))
+    (produce unit)
 
 getAttrDef :: TBinding (Name -> Flow s (Maybe Term))
 getAttrDef = define "getAttr" $
   doc "Get an attribute from the trace" $
-  lambda "key" $ Compute.flow $
-    lambdas ["s0", "t0"] $ Compute.flowState
-      (just $ Maps.lookup (var "key") (Compute.traceOther $ var "t0"))
+  "key" ~> Compute.flow (
+    "s0" ~> "t0" ~> Compute.flowState
+      (just (Maps.lookup (var "key") (Compute.traceOther (var "t0"))))
       (var "s0")
-      (var "t0")
+      (var "t0"))
 
 getAttrWithDefaultDef :: TBinding (Name -> Term -> Flow s Term)
 getAttrWithDefaultDef = define "getAttrWithDefault" $
   doc "Get an attribute with a default value" $
-  lambdas ["key", "def"] $ Flows.map
-    (lambda "mval" $ Optionals.fromMaybe (var "def") (var "mval"))
+  "key" ~> "def" ~> Flows.map
+    ("mval" ~> Optionals.fromMaybe (var "def") (var "mval"))
     (ref getAttrDef @@ var "key")
 
 getCountDef :: TBinding (Name -> Flow s Int)
 getCountDef = define "getCount" $
   doc "Get a counter value" $
-  lambda "key" $ ref Lexical.withEmptyGraphDef @@ (Flows.bind
+  "key" ~> ref Lexical.withEmptyGraphDef @@ (Flows.bind
     (ref getAttrWithDefaultDef @@ var "key" @@ (Core.int32 0))
     (ref ExtractCore.int32Def))
 
@@ -160,250 +160,260 @@ getDebugIdDef = define "getDebugId" $
   doc "Get the debug ID from flow state" $
   ref Lexical.withEmptyGraphDef @@ (Flows.bind
     (ref getAttrDef @@ ref Constants.key_debugIdDef)
-    (lambda "desc" $ Flows.mapOptional (ref ExtractCore.stringDef) (var "desc")))
+    ("desc" ~> Flows.mapOptional (ref ExtractCore.stringDef) (var "desc")))
 
 getDescriptionDef :: TBinding (M.Map Name Term -> Flow Graph (Maybe String))
 getDescriptionDef = define "getDescription" $
   doc "Get description from annotations map" $
-  lambda "anns" $ Optionals.maybe
+  "anns" ~> Optionals.maybe
     (produce nothing)
-    (lambda "term" $ Flows.map (unaryFunction just) $ ref ExtractCore.stringDef @@ var "term")
+    ("term" ~> Flows.map (unaryFunction just) (ref ExtractCore.stringDef @@ var "term"))
     (Maps.lookup (Core.nameLift key_description) (var "anns"))
 
 getTermAnnotationDef :: TBinding (Name -> Term -> Maybe Term)
 getTermAnnotationDef = define "getTermAnnotation" $
   doc "Get a term annotation" $
-  lambdas ["key", "term"] $ Maps.lookup (var "key") (ref termAnnotationInternalDef @@ var "term")
+  "key" ~> "term" ~> Maps.lookup (var "key") (ref termAnnotationInternalDef @@ var "term")
 
 getTermDescriptionDef :: TBinding (Term -> Flow Graph (Maybe String))
 getTermDescriptionDef = define "getTermDescription" $
   doc "Get term description" $
-  lambda "term" $ ref getDescriptionDef @@ (ref termAnnotationInternalDef @@ var "term")
+  "term" ~> ref getDescriptionDef @@ (ref termAnnotationInternalDef @@ var "term")
 
 getTypeDef :: TBinding (M.Map Name Term -> Flow Graph (Maybe Type))
 getTypeDef = define "getType" $
   doc "Get type from annotations" $
-  lambda "anns" $ Optionals.maybe
+  "anns" ~> Optionals.maybe
     (produce nothing)
-    (lambda "dat" $ Flows.map (unaryFunction just) (ref DecodeCore.typeDef @@ var "dat"))
+    ("dat" ~> Flows.map (unaryFunction just) (ref DecodeCore.typeDef @@ var "dat"))
     (Maps.lookup (ref Constants.key_typeDef) (var "anns"))
 
 getTypeAnnotationDef :: TBinding (Name -> Type -> Maybe Term)
 getTypeAnnotationDef = define "getTypeAnnotation" $
   doc "Get a type annotation" $
-  lambdas ["key", "typ"] $ Maps.lookup (var "key") (ref typeAnnotationInternalDef @@ var "typ")
+  "key" ~> "typ" ~> Maps.lookup (var "key") (ref typeAnnotationInternalDef @@ var "typ")
 
 getTypeClassesDef :: TBinding (Term -> Flow Graph (M.Map Name (S.Set TypeClass)))
 getTypeClassesDef = define "getTypeClasses" $
   doc "Get type classes from term" $
-  lambda "term" $ lets [
-    "decodeClass">: lambda "term" $ lets [
-      "byName">: Maps.fromList $ list [
-        pair (Core.nameLift _TypeClass_equality) Graph.typeClassEquality,
-        pair (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]] $ binds [
-      "fn">: ref ExtractCore.unitVariantDef @@ Core.nameLift _TypeClass @@ var "term"] $
-      Optionals.maybe
-        (ref Monads.unexpectedDef @@ string "type class" @@ (ref ShowCore.termDef @@ var "term"))
-        (unaryFunction produce)
-        (Maps.lookup (var "fn") (var "byName"))] $
+  "term" ~>
+  "decodeClass" <~ ("term" ~>
+    "byName" <~ Maps.fromList (list [
+      pair (Core.nameLift _TypeClass_equality) Graph.typeClassEquality,
+      pair (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]) $
+    "fn" <<~ ref ExtractCore.unitVariantDef @@ Core.nameLift _TypeClass @@ var "term" $
     Optionals.maybe
-      (produce Maps.empty)
-      (lambda "term" $ ref ExtractCore.mapDef
-        @@ (ref DecodeCore.nameDef)
-        @@ (ref ExtractCore.setOfDef @@ var "decodeClass")
-        @@ (var "term"))
-      (ref getTermAnnotationDef @@ ref Constants.key_classesDef @@ var "term")
+      (ref Monads.unexpectedDef @@ string "type class" @@ (ref ShowCore.termDef @@ var "term"))
+      (unaryFunction produce)
+      (Maps.lookup (var "fn") (var "byName"))) $
+  Optionals.maybe
+    (produce Maps.empty)
+    ("term" ~> ref ExtractCore.mapDef
+      @@ (ref DecodeCore.nameDef)
+      @@ (ref ExtractCore.setOfDef @@ var "decodeClass")
+      @@ (var "term"))
+    (ref getTermAnnotationDef @@ ref Constants.key_classesDef @@ var "term")
 
 getTypeDescriptionDef :: TBinding (Type -> Flow Graph (Maybe String))
 getTypeDescriptionDef = define "getTypeDescription" $
   doc "Get type description" $
-  lambda "typ" $ ref getDescriptionDef @@ (ref typeAnnotationInternalDef @@ var "typ")
+  "typ" ~> ref getDescriptionDef @@ (ref typeAnnotationInternalDef @@ var "typ")
 
 isNativeTypeDef :: TBinding (Binding -> Bool)
 isNativeTypeDef = define "isNativeType" $
   doc ("For a typed term, decide whether a coder should encode it as a native type expression,"
     <> " or as a Hydra type expression.") $
-  lambda "el" $ lets [
-    "isFlaggedAsFirstClassType">: Optionals.fromMaybe false $
-      Optionals.bind
-        (ref getTermAnnotationDef @@ ref Constants.key_firstClassTypeDef @@ (Core.bindingTerm $ var "el"))
-        (ref Decoding.booleanDef)] $
-    Optionals.maybe false
-      (lambda "ts" $ Logic.and
-        (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _Type)))
-        (Logic.not $ var "isFlaggedAsFirstClassType"))
-      (Core.bindingType $ var "el")
+  "el" ~>
+  "isFlaggedAsFirstClassType" <~ Optionals.fromMaybe false (
+    Optionals.bind
+      (ref getTermAnnotationDef @@ ref Constants.key_firstClassTypeDef @@ (Core.bindingTerm (var "el")))
+      (ref Decoding.booleanDef)) $
+  Optionals.maybe false
+    ("ts" ~> Logic.and
+      (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable (Core.nameLift _Type))))
+      (Logic.not (var "isFlaggedAsFirstClassType")))
+    (Core.bindingType (var "el"))
 
 hasDescriptionDef :: TBinding (M.Map Name Term -> Bool)
 hasDescriptionDef = define "hasDescription" $
   doc "Check if annotations contain description" $
-  lambda "anns" $ Optionals.isJust $ Maps.lookup (ref Constants.key_descriptionDef) (var "anns")
+  "anns" ~> Optionals.isJust (Maps.lookup (ref Constants.key_descriptionDef) (var "anns"))
 
 hasFlagDef :: TBinding (Name -> Flow s Bool)
 hasFlagDef = define "hasFlag" $
   doc "Check if flag is set" $
-  lambda "flag" $ ref Lexical.withEmptyGraphDef
-    @@ (bind "term" (ref getAttrWithDefaultDef @@ var "flag" @@ Core.false) $
+  "flag" ~> ref Lexical.withEmptyGraphDef
+    @@ ("term" <<~ ref getAttrWithDefaultDef @@ var "flag" @@ Core.false $
         ref ExtractCore.booleanDef @@ var "term")
 
 hasTypeDescriptionDef :: TBinding (Type -> Bool)
 hasTypeDescriptionDef = define "hasTypeDescription" $
   doc "Check if type has description" $
-  lambda "typ" $ ref hasDescriptionDef @@ (ref typeAnnotationInternalDef @@ var "typ")
+  "typ" ~> ref hasDescriptionDef @@ (ref typeAnnotationInternalDef @@ var "typ")
 
 nextCountDef :: TBinding (Name -> Flow s Int)
 nextCountDef = define "nextCount" $
   doc "Return a zero-indexed counter for the given key: 0, 1, 2, ..." $
-  lambda "key" $ binds [
-    "count">: ref getCountDef @@ var "key"] $
-    Flows.map
-      (constant $ var "count")
-      (ref putCountDef @@ var "key" @@ Math.add (var "count") (int32 1))
+  "key" ~>
+  "count" <<~ ref getCountDef @@ var "key" $
+  Flows.map
+    (constant (var "count"))
+    (ref putCountDef @@ var "key" @@ Math.add (var "count") (int32 1))
 
--- TODO: move into hydra.rewriting
 normalizeTermAnnotationsDef :: TBinding (Term -> Term)
 normalizeTermAnnotationsDef = define "normalizeTermAnnotations" $
   doc "Normalize term annotations" $
-  lambda "term" $ lets [
-    "anns">: ref termAnnotationInternalDef @@ var "term",
-    "stripped">: ref Rewriting.deannotateTermDef @@ var "term"] $
-    Logic.ifElse (Maps.null $ var "anns")
-      (var "stripped")
-      (Core.termAnnotated $ Core.annotatedTerm (var "stripped") (var "anns"))
+  "term" ~>
+  "anns" <~ ref termAnnotationInternalDef @@ var "term" $
+  "stripped" <~ ref Rewriting.deannotateTermDef @@ var "term" $
+  Logic.ifElse (Maps.null (var "anns"))
+    (var "stripped")
+    (Core.termAnnotated (Core.annotatedTerm (var "stripped") (var "anns")))
 
--- TODO: move into hydra.rewriting
 normalizeTypeAnnotationsDef :: TBinding (Type -> Type)
 normalizeTypeAnnotationsDef = define "normalizeTypeAnnotations" $
   doc "Normalize type annotations" $
-  lambda "typ" $ lets [
-    "anns">: ref typeAnnotationInternalDef @@ var "typ",
-    "stripped">: ref Rewriting.deannotateTypeDef @@ var "typ"] $
-    Logic.ifElse (Maps.null $ var "anns")
-      (var "stripped")
-      (Core.typeAnnotated $ Core.annotatedType (var "stripped") (var "anns"))
+  "typ" ~>
+  "anns" <~ ref typeAnnotationInternalDef @@ var "typ" $
+  "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
+  Logic.ifElse (Maps.null (var "anns"))
+    (var "stripped")
+    (Core.typeAnnotated (Core.annotatedType (var "stripped") (var "anns")))
 
 putAttrDef :: TBinding (Name -> Term -> Flow s ())
 putAttrDef = define "putAttr" $
   doc "Set an attribute in the trace" $
-  lambdas ["key", "val"] $ Compute.flow $ lambdas ["s0", "t0"] $
+  "key" ~> "val" ~> Compute.flow (
+    "s0" ~> "t0" ~>
     Compute.flowState
       (just unit)
       (var "s0")
-      (Compute.traceWithOther (var "t0") (Maps.insert (var "key") (var "val") (Compute.traceOther $ var "t0")))
+      (Compute.traceWithOther (var "t0") (Maps.insert (var "key") (var "val") (Compute.traceOther (var "t0")))))
 
 putCountDef :: TBinding (Name -> Int -> Flow s ())
 putCountDef = define "putCount" $
   doc "Set counter value" $
-  lambdas ["key", "count"] $
-    ref putAttrDef @@ var "key" @@ (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ var "count")
+  "key" ~> "count" ~>
+  ref putAttrDef @@ var "key" @@ (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (var "count"))))
 
 resetCountDef :: TBinding (Name -> Flow s ())
 resetCountDef = define "resetCount" $
   doc "Reset counter to zero" $
-  lambda "key" $ ref putAttrDef @@ var "key" @@ TTerms.int32 0
+  "key" ~> ref putAttrDef @@ var "key" @@ TTerms.int32 0
 
 setAnnotationDef :: TBinding (Name -> Maybe Term -> M.Map Name Term -> M.Map Name Term)
 setAnnotationDef = define "setAnnotation" $
   doc "Set annotation in map" $
-  lambdas ["key", "val", "m"] $ Maps.alter (constant $ var "val") (var "key") (var "m")
+  "key" ~> "val" ~> "m" ~> Maps.alter (constant (var "val")) (var "key") (var "m")
 
 setDescriptionDef :: TBinding (Maybe String -> M.Map Name Term -> M.Map Name Term)
 setDescriptionDef = define "setDescription" $
   doc "Set description in annotations" $
-  lambda "d" $ ref setAnnotationDef
+  "d" ~> ref setAnnotationDef
     @@ ref Constants.key_descriptionDef
     @@ Optionals.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
 
 setTermAnnotationDef :: TBinding (Name -> Maybe Term -> Term -> Term)
 setTermAnnotationDef = define "setTermAnnotation" $
   doc "Set term annotation" $
-  lambdas ["key", "val", "term"] $ lets [
-    "term'">: ref Rewriting.deannotateTermDef @@ var "term",
-    "anns">: ref setAnnotationDef @@ var "key" @@ var "val" @@ (ref termAnnotationInternalDef @@ var "term")] $
-    Logic.ifElse (Maps.null $ var "anns")
-      (var "term'")
-      (Core.termAnnotated $ Core.annotatedTerm (var "term'") (var "anns"))
+  "key" ~> "val" ~> "term" ~>
+  "term'" <~ ref Rewriting.deannotateTermDef @@ var "term" $
+  "anns" <~ ref setAnnotationDef @@ var "key" @@ var "val" @@ (ref termAnnotationInternalDef @@ var "term") $
+  Logic.ifElse (Maps.null (var "anns"))
+    (var "term'")
+    (Core.termAnnotated (Core.annotatedTerm (var "term'") (var "anns")))
 
 setTermDescriptionDef :: TBinding (Maybe String -> Term -> Term)
 setTermDescriptionDef = define "setTermDescription" $
   doc "Set term description" $
-  lambda "d" $ ref setTermAnnotationDef
+  "d" ~> ref setTermAnnotationDef
     @@ ref Constants.key_descriptionDef
-    @@ Optionals.map (lambda "s" $ Core.termLiteral $ Core.literalString $ var "s") (var "d")
+    @@ Optionals.map ("s" ~> Core.termLiteral (Core.literalString (var "s"))) (var "d")
 
 setTypeDef :: TBinding (Maybe Type -> M.Map Name Term -> M.Map Name Term)
 setTypeDef = define "setType" $
   doc "Set type in annotations" $
-  lambda "mt" $ ref setAnnotationDef @@ ref Constants.key_typeDef @@ Optionals.map (ref EncodeCore.typeDef) (var "mt")
+  "mt" ~> ref setAnnotationDef @@ ref Constants.key_typeDef @@ Optionals.map (ref EncodeCore.typeDef) (var "mt")
 
 setTypeAnnotationDef :: TBinding (Name -> Maybe Term -> Type -> Type)
 setTypeAnnotationDef = define "setTypeAnnotation" $
   doc "Set type annotation" $
-  lambdas ["key", "val", "typ"] $ lets [
-    "typ'">: ref Rewriting.deannotateTypeDef @@ var "typ",
-    "anns">: ref setAnnotationDef @@ var "key" @@ var "val" @@ (ref typeAnnotationInternalDef @@ var "typ")] $
-    Logic.ifElse (Maps.null (var "anns"))
-      (var "typ'")
-      (Core.typeAnnotated $ Core.annotatedType (var "typ'") (var "anns"))
+  "key" ~> "val" ~> "typ" ~>
+  "typ'" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
+  "anns" <~ ref setAnnotationDef @@ var "key" @@ var "val" @@ (ref typeAnnotationInternalDef @@ var "typ") $
+  Logic.ifElse (Maps.null (var "anns"))
+    (var "typ'")
+    (Core.typeAnnotated (Core.annotatedType (var "typ'") (var "anns")))
 
 setTypeClassesDef :: TBinding (M.Map Name (S.Set TypeClass) -> Term -> Term)
 setTypeClassesDef = define "setTypeClasses" $
   doc "Set type classes on term" $
-  lambda "m" $ lets [
-    "encodeClass">: lambda "tc" $ cases _TypeClass (var "tc") Nothing [
-      _TypeClass_equality>>: constant $ TTerms.unitVariantPhantom _TypeClass _TypeClass_equality,
-      _TypeClass_ordering>>: constant $ TTerms.unitVariantPhantom _TypeClass _TypeClass_ordering],
-    "encodePair">: lambda "nameClasses" $ lets [
-      "name">: first $ var "nameClasses",
-      "classes">: second $ var "nameClasses"] $
-      pair
-        (ref EncodeCore.nameDef @@ var "name")
-        (Core.termSet $ Sets.fromList $ Lists.map (var "encodeClass") $ Sets.toList $ var "classes"),
-    "encoded">: Logic.ifElse (Maps.null $ var "m")
-        nothing
-        (just $ Core.termMap $ Maps.fromList $ Lists.map (var "encodePair") $ Maps.toList $ var "m")]
-    $ ref setTermAnnotationDef @@ ref Constants.key_classesDef @@ var "encoded"
+  "m" ~> "term" ~>
+  "encodeClass" <~ ("tc" ~> cases _TypeClass (var "tc")
+    Nothing [
+    _TypeClass_equality>>: constant (TTerms.unitVariantPhantom _TypeClass _TypeClass_equality),
+    _TypeClass_ordering>>: constant (TTerms.unitVariantPhantom _TypeClass _TypeClass_ordering)]) $
+  "encodePair" <~ ("nameClasses" ~>
+    "name" <~ first (var "nameClasses") $
+    "classes" <~ second (var "nameClasses") $
+    pair
+      (ref EncodeCore.nameDef @@ var "name")
+      (Core.termSet (Sets.fromList (Lists.map (var "encodeClass") (Sets.toList (var "classes")))))) $
+  "encoded" <~ Logic.ifElse (Maps.null (var "m"))
+    nothing
+    (just (Core.termMap (Maps.fromList (Lists.map (var "encodePair") (Maps.toList (var "m")))))) $
+  ref setTermAnnotationDef @@ ref Constants.key_classesDef @@ var "encoded" @@ var "term"
 
 setTypeDescriptionDef :: TBinding (Maybe String -> Type -> Type)
 setTypeDescriptionDef = define "setTypeDescription" $
   doc "Set type description" $
-  lambda "d" $ ref setTypeAnnotationDef
+  "d" ~> ref setTypeAnnotationDef
     @@ ref Constants.key_descriptionDef
     @@ Optionals.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
 
 termAnnotationInternalDef :: TBinding (Term -> M.Map Name Term)
 termAnnotationInternalDef = define "termAnnotationInternal" $
   doc "Get internal term annotations" $
+  "term" ~>
   "getAnn" <~ ("t" ~> cases _Term (var "t")
     (Just nothing) [
     _Term_annotated>>: "a" ~> just $ var "a"]) $
-  ref aggregateAnnotationsDef @@ var "getAnn" @@ (unaryFunction Core.annotatedTermBody) @@ (unaryFunction Core.annotatedTermAnnotation)
+  ref aggregateAnnotationsDef
+    @@ var "getAnn"
+    @@ ("at" ~> Core.annotatedTermBody $ var "at")
+    @@ ("at" ~> Core.annotatedTermAnnotation $ var "at")
+    @@ var "term"
 
 typeAnnotationInternalDef :: TBinding (Type -> M.Map Name Term)
 typeAnnotationInternalDef = define "typeAnnotationInternal" $
-  doc "Get internal type annotations" $ lets [
-    "getAnn">: lambda "t" $ cases _Type (var "t")
-      (Just nothing) [
-      _Type_annotated>>: lambda "a" $ just $ var "a"]] $
-    ref aggregateAnnotationsDef @@ var "getAnn" @@ (unaryFunction Core.annotatedTypeBody) @@ (unaryFunction Core.annotatedTypeAnnotation)
+  doc "Get internal type annotations" $
+  "typ" ~>
+  "getAnn" <~ lambda "t" (cases _Type (var "t")
+    (Just nothing) [
+    _Type_annotated>>: lambda "a" (just $ var "a")]) $
+  ref aggregateAnnotationsDef
+    @@ var "getAnn"
+    @@ ("at" ~> Core.annotatedTypeBody $ var "at")
+    @@ ("at" ~> Core.annotatedTypeAnnotation $ var "at")
+    @@ var "typ"
 
 -- TODO: deprecate
 typeElementDef :: TBinding (Name -> Type -> Binding)
 typeElementDef = define "typeElement" $
   doc "Create a type element with proper annotations" $
-  lambdas ["name", "typ"] $ lets [
-    "schemaTerm">: Core.termVariable (Core.nameLift _Type),
-    "dataTerm">: ref normalizeTermAnnotationsDef @@ (Core.termAnnotated $ Core.annotatedTerm
-      (ref EncodeCore.typeDef @@ var "typ")
-      (Maps.fromList $ list [pair (ref Constants.key_typeDef) (var "schemaTerm")]))] $
-    Core.binding (var "name") (var "dataTerm") (just $ Core.typeScheme (list []) (var "typ"))
+  "name" ~> "typ" ~>
+  "schemaTerm" <~ Core.termVariable (Core.nameLift _Type) $
+  "dataTerm" <~ ref normalizeTermAnnotationsDef @@ (Core.termAnnotated (Core.annotatedTerm
+    (ref EncodeCore.typeDef @@ var "typ")
+    (Maps.fromList (list [pair (ref Constants.key_typeDef) (var "schemaTerm")])))) $
+  Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list []) (var "typ")))
 
 whenFlagDef :: TBinding (Name -> Flow s a -> Flow s a -> Flow s a)
 whenFlagDef = define "whenFlag" $
   doc "Execute different flows based on flag" $
-  lambdas ["flag", "fthen", "felse"] $ binds [
-    "b">: ref hasFlagDef @@ var "flag"] $
-    Logic.ifElse (var "b") (var "fthen") (var "felse")
+  "flag" ~> "fthen" ~> "felse" ~>
+  "b" <<~ ref hasFlagDef @@ var "flag" $
+  Logic.ifElse (var "b") (var "fthen") (var "felse")
 
 withDepthDef :: TBinding (Name -> (Int -> Flow s a) -> Flow s a)
 withDepthDef = define "withDepth" $
@@ -411,10 +421,10 @@ withDepthDef = define "withDepth" $
     <> " This is useful for generating variable names while avoiding conflicts between the variables of parents and children."
     <> " E.g. a variable in an outer case/match statement might be \"v1\", whereas the variable of another case/match statement"
     <> " inside of the first one becomes \"v2\". See also nextCount.") $
-  lambdas ["key", "f"] $ binds [
-    "count">: ref getCountDef @@ var "key"] $ lets [
-    "inc">: Math.add (var "count") (int32 1)] $
-    exec (ref putCountDef @@ var "key" @@ var "inc") $ binds [
-    "r">: var "f" @@ var "inc"] $
-    exec (ref putCountDef @@ var "key" @@ var "count") $
-    produce $ var "r"
+  "key" ~> "f" ~>
+  "count" <<~ ref getCountDef @@ var "key" $
+  "inc" <~ Math.add (var "count") (int32 1) $
+  exec (ref putCountDef @@ var "key" @@ var "inc") $
+  "r" <<~ var "f" @@ var "inc" $
+  exec (ref putCountDef @@ var "key" @@ var "count") $
+  produce (var "r")
