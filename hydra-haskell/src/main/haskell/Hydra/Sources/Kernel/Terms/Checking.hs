@@ -71,6 +71,7 @@ module_ = Module (Namespace "hydra.checking") elements
     Just "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference"
   where
     elements = [
+      el allEqualDef,
       el applyTypeArgumentsToTypeDef,
       el checkForUnboundTypeVariablesDef,
       el checkNominalApplicationDef,
@@ -79,6 +80,7 @@ module_ = Module (Namespace "hydra.checking") elements
       el checkTypeSubstDef,
       el checkTypeVariablesDef,
       el toFContextDef,
+      el typeListsEffectivelyEqualDef,
       el typeOfDef,
       el typeOfAnnotatedTermDef,
       el typeOfApplicationDef,
@@ -101,12 +103,26 @@ module_ = Module (Namespace "hydra.checking") elements
       el typeOfUnitDef,
       el typeOfUnwrapDef,
       el typeOfVariableDef,
-      el typeOfWrappedTermDef]
+      el typeOfWrappedTermDef,
+      el typesAllEffectivelyEqualDef,
+      el typesEffectivelyEqualDef]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
 --
+
+-- TODO: move this
+allEqualDef :: TBinding ([a] -> Bool)
+allEqualDef = define "allEqual" $
+  withEq "t0" $ "els" ~>
+  Logic.ifElse (Lists.null $ var "els")
+    true
+    ("h" <~ Lists.head (var "els") $
+     Lists.foldl
+       ("b" ~> "t" ~> Logic.and (var "b") (Equality.equal (var "t") (var "h")))
+       true
+       (Lists.tail $ var "els"))
 
 applyTypeArgumentsToTypeDef :: TBinding (TypeContext -> [Type] -> Type -> Flow s Type)
 applyTypeArgumentsToTypeDef = define "applyTypeArgumentsToType" $
@@ -202,17 +218,12 @@ checkNominalApplicationDef = define "checkNominalApplication" $
       ++ Literals.showInt32 (var "argslen") ++ "): "
       ++ (ref Formatting.showListDef @@ (ref ShowCore.typeDef) @@ (var "typeArgs")))
 
-checkSameTypeDef :: TBinding (String -> [Type] -> Flow s Type)
+checkSameTypeDef :: TBinding (TypeContext -> String -> [Type] -> Flow s Type)
 checkSameTypeDef = define "checkSameType" $
   doc "Ensure all types in a list are equal and return the common type" $
-  "desc" ~> "types" ~>
-  "h" <~ Lists.head (var "types") $
-  "allEqual" <~ Lists.foldl
-    ("b" ~> "t" ~> Logic.and (var "b") (Equality.equal (var "t") (var "h")))
-    true
-    (var "types") $
-  Logic.ifElse (var "allEqual")
-    (Flows.pure $ var "h")
+  "tx" ~> "desc" ~> "types" ~>
+  Logic.ifElse (ref typesAllEffectivelyEqualDef @@ var "tx" @@ var "types")
+    (Flows.pure $ Lists.head $ var "types")
     (Flows.fail $ Strings.cat $ list [
       string "unequal types ",
       (ref Formatting.showListDef @@ ref ShowCore.typeDef @@ var "types"),
@@ -228,7 +239,7 @@ checkTypeDef = define "checkType" $
   "vars" <~ Typing.typeContextVariables (var "tx") $
   Logic.ifElse (ref Constants.debugInferenceDef)
     ("t0" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "term" $
-      Logic.ifElse (Equality.equal (var "t0") (var "typ"))
+      Logic.ifElse (ref typesEffectivelyEqualDef @@ var "tx" @@ var "t0" @@ var "typ")
         (Flows.pure unit)
         (Flows.fail $ Strings.cat $ list [
           string "type checking failed: expected ",
@@ -296,6 +307,15 @@ toFContextDef = define "toFContext" $
   doc "Convert an inference context to a type environment by converting type schemes to System F types" $
   "cx" ~> Maps.map (ref Schemas.typeSchemeToFTypeDef) $ Typing.inferenceContextDataTypes $ var "cx"
 
+typeListsEffectivelyEqualDef :: TBinding (TypeContext -> [Type] -> [Type] -> Bool)
+typeListsEffectivelyEqualDef = define "typeListsEffectivelyEqual" $
+  doc "Check whether two lists of types are effectively equal, disregarding type aliases" $
+  "tx" ~> "tlist1" ~> "tlist2" ~>
+  Logic.ifElse (Equality.equal (Lists.length (var "tlist1")) (Lists.length (var "tlist2")))
+    (Lists.foldl (binaryFunction Logic.and) true $
+      Lists.zipWith (ref typesEffectivelyEqualDef @@ var "tx") (var "tlist1") (var "tlist2"))
+    false
+
 typeOfDef :: TBinding (TypeContext -> [Type] -> Term -> Flow s Type)
 typeOfDef = define "typeOf" $
   doc "Given a type context, reconstruct the type of a System F term" $
@@ -353,13 +373,13 @@ typeOfAnnotatedTermDef = define "typeOfAnnotatedTerm" $
 
 typeOfApplicationDef :: TBinding (TypeContext -> [Type] -> Application -> Flow s Type)
 typeOfApplicationDef = define "typeOfApplication" $
-  doc "Reconstruct the type of a function application" $
+  doc "Reconstruct the type of an application term" $
   "tx" ~> "typeArgs" ~> "app" ~>
   "fun" <~ Core.applicationFunction (var "app") $
   "arg" <~ Core.applicationArgument (var "app") $
   "tfun" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "fun" $
-  "targ" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "arg" $
   exec (ref checkTypeVariablesDef @@ var "tx" @@ var "tfun") $
+  "targ" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "arg" $
   exec (ref checkTypeVariablesDef @@ var "tx" @@ var "targ") $
   "tryType" <~ ("t" ~> cases _Type (var "t")
     (Just $ Flows.fail $ Strings.cat $ list [
@@ -372,7 +392,7 @@ typeOfApplicationDef = define "typeOfApplication" $
     _Type_function>>: "ft" ~>
       "dom" <~ Core.functionTypeDomain (var "ft") $
       "cod" <~ Core.functionTypeCodomain (var "ft") $
-      Logic.ifElse (Equality.equal (var "dom") (var "targ"))
+      Logic.ifElse (ref typesEffectivelyEqualDef @@ var "tx" @@ var "dom" @@ var "targ")
         (Flows.pure $ var "cod")
         (Flows.fail $ Strings.cat $ list [
           "in application, expected ",
@@ -395,7 +415,7 @@ typeOfCaseStatementDef = define "typeOfCaseStatement" $
   "tcterms" <<~ Flows.mapList ("e" ~> ref typeOfDef @@ var "tx" @@ list [] @@ var "e") (var "cterms") $
   "fcods" <<~ Flows.mapList ("t" ~> Flows.map (unaryFunction Core.functionTypeCodomain) $ ref ExtractCore.functionTypeDef @@ var "t") (var "tcterms") $
   "cods" <~ Optionals.cat (Lists.cons (var "tdflt") $ Lists.map (unaryFunction Optionals.pure) (var "fcods")) $
-  "cod" <<~ ref checkSameTypeDef @@ string "case branches" @@ var "cods" $
+  "cod" <<~ ref checkSameTypeDef @@ var "tx" @@ string "case branches" @@ var "cods" $
 --  "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
 --  "scod" <~ ref Substitution.substInTypeDef @@ var "subst" @@ var "cod" $
 
@@ -464,7 +484,7 @@ typeOfLetDef = define "typeOfLet" $
   "typeofs" <<~ Flows.mapList (ref typeOfDef @@ var "tx2" @@ list []) (var "bterms") $
   exec (Flows.mapList (ref checkTypeVariablesDef @@ var "tx") (var "btypes")) $
   exec (Flows.mapList (ref checkTypeVariablesDef @@ var "tx") (var "typeofs")) $
-  "t" <<~ Logic.ifElse (Equality.equal (var "typeofs") (var "btypes"))
+  "t" <<~ Logic.ifElse (ref typeListsEffectivelyEqualDef @@ var "tx" @@ var "typeofs" @@ var "btypes")
     (ref typeOfDef @@ var "tx2" @@ list [] @@ var "body")
     (Flows.fail $ Strings.cat $ list [
       string "binding types disagree: ",
@@ -488,7 +508,7 @@ typeOfListDef = define "typeOfList" $
     ( "eltypes" <<~ Flows.mapList
        (ref typeOfDef @@ var "tx" @@ list [])
        (var "els") $
-       "unifiedType" <<~ ref checkSameTypeDef @@ string "list elements" @@ var "eltypes" $
+       "unifiedType" <<~ ref checkSameTypeDef @@ var "tx" @@ string "list elements" @@ var "eltypes" $
        -- Verify the unified type is well-formed in the current scope
        exec (ref checkTypeVariablesDef @@ var "tx" @@ var "unifiedType") $
        Flows.pure $ Core.typeList $ var "unifiedType")
@@ -517,11 +537,11 @@ typeOfMapDef = define "typeOfMap" $
         "kt" <<~ Flows.bind
           (Flows.mapList (ref typeOfDef @@ var "tx" @@ list []) $
             Lists.map (unaryFunction first) (var "pairs"))
-          (ref checkSameTypeDef @@ string "map keys") $
+          (ref checkSameTypeDef @@ var "tx" @@ string "map keys") $
         "vt" <<~ Flows.bind
           (Flows.mapList (ref typeOfDef @@ var "tx" @@ list []) $
             Lists.map (unaryFunction second) (var "pairs"))
-          (ref checkSameTypeDef @@ string "map values") $
+          (ref checkSameTypeDef @@ var "tx" @@ string "map values") $
         exec (ref checkTypeVariablesDef @@ var "tx" @@ var "kt") $
         exec (ref checkTypeVariablesDef @@ var "tx" @@ var "vt") $
         Flows.pure $ Core.typeMap $ Core.mapType (var "kt") (var "vt")) $
@@ -603,7 +623,7 @@ typeOfSetDef = define "typeOfSet" $
     ( "eltypes" <<~ Flows.mapList
        (ref typeOfDef @@ var "tx" @@ list [])
        (Sets.toList $ var "els") $
-       "unifiedType" <<~ ref checkSameTypeDef @@ string "set elements" @@ var "eltypes" $
+       "unifiedType" <<~ ref checkSameTypeDef @@ var "tx" @@ string "set elements" @@ var "eltypes" $
        -- Verify the unified type is well-formed in the current scope
        exec (ref checkTypeVariablesDef @@ var "tx" @@ var "unifiedType") $
        produce $ Core.typeSet $ var "unifiedType")
@@ -698,3 +718,16 @@ typeOfWrappedTermDef = define "typeOfWrappedTerm" $
   exec (ref checkTypeVariablesDef @@ var "tx" @@ var "btype") $
 
   produce $ ref Schemas.nominalApplicationDef @@ var "tname" @@ var "typeArgs"
+
+typesAllEffectivelyEqualDef :: TBinding (TypeContext -> [Type] -> Bool)
+typesAllEffectivelyEqualDef = define "typesAllEffectivelyEqual" $
+  doc "Check whether a list of types are effectively equal, disregarding type aliases" $
+  "tx" ~> "tlist" ~>
+  "types" <~ Typing.inferenceContextSchemaTypes (Typing.typeContextInferenceContext $ var "tx") $
+  ref allEqualDef @@ (Lists.map (ref Rewriting.replaceTypedefsDef @@ var "types") (var "tlist"))
+
+typesEffectivelyEqualDef :: TBinding (TypeContext -> Type -> Type -> Bool)
+typesEffectivelyEqualDef = define "typesEffectivelyEqual" $
+  doc "Check whether two types are effectively equal, disregarding type aliases" $
+  "tx" ~> "t1" ~> "t2" ~>
+  ref typesAllEffectivelyEqualDef @@ var "tx" @@ list [var "t1", var "t2"]
