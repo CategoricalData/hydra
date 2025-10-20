@@ -110,14 +110,14 @@ extendTypeContextForTypeLambda tcontext tlam =
     Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tcontext)}
 
 fieldMap :: ([Core.Field] -> M.Map Core.Name Core.Term)
-fieldMap fields = (Maps.fromList (Lists.map toPair fields)) 
-  where 
-    toPair = (\f -> (Core.fieldName f, (Core.fieldTerm f)))
+fieldMap fields =  
+  let toPair = (\f -> (Core.fieldName f, (Core.fieldTerm f)))
+  in (Maps.fromList (Lists.map toPair fields))
 
 fieldTypeMap :: ([Core.FieldType] -> M.Map Core.Name Core.Type)
-fieldTypeMap fields = (Maps.fromList (Lists.map toPair fields)) 
-  where 
-    toPair = (\f -> (Core.fieldTypeName f, (Core.fieldTypeType f)))
+fieldTypeMap fields =  
+  let toPair = (\f -> (Core.fieldTypeName f, (Core.fieldTypeType f)))
+  in (Maps.fromList (Lists.map toPair fields))
 
 findFieldType :: (Core.Name -> [Core.FieldType] -> Compute.Flow t0 Core.Type)
 findFieldType fname fields =  
