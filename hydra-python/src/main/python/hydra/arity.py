@@ -34,7 +34,7 @@ def term_arity(v1: hydra.core.Term) -> int:
 def type_arity(v1: hydra.core.Type) -> int:
     match v1:
         case hydra.core.TypeAnnotated(value=arg_):
-            return type_arity(arg_.subject)
+            return type_arity(arg_.body)
         
         case hydra.core.TypeApplication(value=arg_2):
             return type_arity(arg_2.function)
@@ -58,7 +58,7 @@ def uncurry_type(t: hydra.core.Type) -> frozenlist[hydra.core.Type]:
     
     match t:
         case hydra.core.TypeAnnotated(value=arg_):
-            return uncurry_type(arg_.subject)
+            return uncurry_type(arg_.body)
         
         case hydra.core.TypeApplication(value=arg_2):
             return uncurry_type(arg_2.function)
