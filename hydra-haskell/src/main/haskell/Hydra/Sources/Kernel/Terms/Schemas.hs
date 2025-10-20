@@ -212,7 +212,7 @@ fieldMapDef = define "fieldMap" $
 
 fieldTypeMapDef :: TBinding ([FieldType] -> M.Map Name Type)
 fieldTypeMapDef = define "fieldTypeMap" $
-  "fields" ~> 
+  "fields" ~>
   "toPair" <~ ("f" ~> pair (Core.fieldTypeName $ var "f") (Core.fieldTypeType $ var "f")) $
   Maps.fromList $ Lists.map (var "toPair") (var "fields")
 

@@ -110,6 +110,7 @@ define = definitionInModule module_
 
 applyTypeArgumentsToTypeDef :: TBinding (TypeContext -> [Type] -> Type -> Flow s Type)
 applyTypeArgumentsToTypeDef = define "applyTypeArgumentsToType" $
+  doc "Apply type arguments to a type, substituting forall-bound variables" $
   "tx" ~> "typeArgs" ~> "t" ~>
   exec (ref checkTypeVariablesDef @@ var "tx" @@ var "t") $
   Logic.ifElse (Lists.null $ var "typeArgs")
@@ -187,6 +188,7 @@ checkForUnboundTypeVariablesDef = define "checkForUnboundTypeVariables" $
 
 checkNominalApplicationDef ::  TBinding (TypeContext -> Name -> [Type] -> Flow s ())
 checkNominalApplicationDef = define "checkNominalApplication" $
+  doc "Check that a nominal type is applied to the correct number of type arguments" $
   "tx" ~> "tname" ~> "typeArgs" ~>
   "schemaType" <<~ ref Schemas.requireSchemaTypeDef @@ Typing.typeContextInferenceContext (var "tx") @@ var "tname" $
   "vars" <~ Core.typeSchemeVariables (var "schemaType") $
@@ -291,7 +293,7 @@ checkTypeVariablesDef = define "checkTypeVariables" $
 -- TODO: unused (?). This function can be used to construct Typing.typeContextTypes from Typing.typeContextInferenceContext
 toFContextDef :: TBinding (InferenceContext -> M.Map Name Type)
 toFContextDef = define "toFContext" $
-  doc "Convert inference context to type context" $
+  doc "Convert an inference context to a type environment by converting type schemes to System F types" $
   "cx" ~> Maps.map (ref Schemas.typeSchemeToFTypeDef) $ Typing.inferenceContextDataTypes $ var "cx"
 
 typeOfDef :: TBinding (TypeContext -> [Type] -> Term -> Flow s Type)
@@ -345,11 +347,13 @@ typeOfDef = define "typeOf" $
 
 typeOfAnnotatedTermDef :: TBinding (TypeContext -> [Type] -> AnnotatedTerm -> Flow s Type)
 typeOfAnnotatedTermDef = define "typeOfAnnotatedTerm" $
+  doc "Reconstruct the type of an annotated term" $
   "tx" ~> "typeArgs" ~> "at" ~>
   ref typeOfDef @@ var "tx" @@ var "typeArgs" @@ Core.annotatedTermBody (var "at")
 
 typeOfApplicationDef :: TBinding (TypeContext -> [Type] -> Application -> Flow s Type)
 typeOfApplicationDef = define "typeOfApplication" $
+  doc "Reconstruct the type of a function application" $
   "tx" ~> "typeArgs" ~> "app" ~>
   "fun" <~ Core.applicationFunction (var "app") $
   "arg" <~ Core.applicationArgument (var "app") $
@@ -380,6 +384,7 @@ typeOfApplicationDef = define "typeOfApplication" $
 
 typeOfCaseStatementDef :: TBinding (TypeContext -> [Type] -> CaseStatement -> Flow s Type)
 typeOfCaseStatementDef = define "typeOfCaseStatement" $
+  doc "Reconstruct the type of a case statement" $
   "tx" ~> "typeArgs" ~> "cs" ~>
   "tname" <~ Core.caseStatementTypeName (var "cs") $
 
@@ -400,6 +405,7 @@ typeOfCaseStatementDef = define "typeOfCaseStatement" $
 
 typeOfInjectionDef :: TBinding (TypeContext -> [Type] -> Injection -> Flow s Type)
 typeOfInjectionDef = define "typeOfInjection" $
+  doc "Reconstruct the type of a union injection" $
   "tx" ~> "typeArgs" ~> "injection" ~>
   "tname" <~ Core.injectionTypeName (var "injection") $
 
@@ -417,6 +423,7 @@ typeOfInjectionDef = define "typeOfInjection" $
 
 typeOfLambdaDef :: TBinding (TypeContext -> [Type] -> Lambda -> Flow s Type)
 typeOfLambdaDef = define "typeOfLambda" $
+  doc "Reconstruct the type of a lambda function" $
   "tx" ~> "typeArgs" ~> "l" ~>
   "v" <~ Core.lambdaParameter (var "l") $
   "mdom" <~ Core.lambdaDomain (var "l") $
@@ -433,6 +440,7 @@ typeOfLambdaDef = define "typeOfLambda" $
 
 typeOfLetDef :: TBinding (TypeContext -> [Type] -> Let -> Flow s Type)
 typeOfLetDef = define "typeOfLet" $
+  doc "Reconstruct the type of a let binding" $
   "tx" ~> "typeArgs" ~> "letTerm" ~>
   "bs" <~ Core.letBindings (var "letTerm") $
   "body" <~ Core.letBody (var "letTerm") $
@@ -469,6 +477,7 @@ typeOfLetDef = define "typeOfLet" $
 
 typeOfListDef :: TBinding (TypeContext -> [Type] -> [Term] -> Flow s Type)
 typeOfListDef = define "typeOfList" $
+  doc "Reconstruct the type of a list" $
   "tx" ~> "typeArgs" ~> "els" ~>
   Logic.ifElse (Lists.null $ var "els")
     -- Empty list is polymorphic
@@ -486,12 +495,14 @@ typeOfListDef = define "typeOfList" $
 
 typeOfLiteralDef :: TBinding (TypeContext -> [Type] -> Literal -> Flow s Type)
 typeOfLiteralDef = define "typeOfLiteral" $
+  doc "Reconstruct the type of a literal" $
   "tx" ~> "typeArgs" ~> "lit" ~>
   "t" <~ Core.typeLiteral (ref Variants.literalTypeDef @@ var "lit") $
   ref applyTypeArgumentsToTypeDef @@ var "tx" @@ var "typeArgs" @@ var "t"
 
 typeOfMapDef :: TBinding (TypeContext -> [Type] -> M.Map Term Term -> Flow s Type)
 typeOfMapDef = define "typeOfMap" $
+  doc "Reconstruct the type of a map" $
   "tx" ~> "typeArgs" ~> "m" ~>
   Logic.ifElse (Maps.null $ var "m")
     -- Empty map is polymorphic
@@ -518,6 +529,7 @@ typeOfMapDef = define "typeOfMap" $
 
 typeOfOptionalDef :: TBinding (TypeContext -> [Type] -> Maybe Term -> Flow s Type)
 typeOfOptionalDef = define "typeOfOptional" $
+  doc "Reconstruct the type of an optional value" $
   "tx" ~> "typeArgs" ~> "mt" ~>
   optCases (var "mt")
     -- Nothing case is polymorphic
@@ -535,6 +547,7 @@ typeOfOptionalDef = define "typeOfOptional" $
 
 typeOfPrimitiveDef :: TBinding (TypeContext -> [Type] -> Name -> Flow s Type)
 typeOfPrimitiveDef = define "typeOfPrimitive" $
+  doc "Reconstruct the type of a primitive function" $
   "tx" ~> "typeArgs" ~> "name" ~>
   "ts" <<~ optCases
     (Maps.lookup (var "name") (Typing.inferenceContextPrimitiveTypes $ Typing.typeContextInferenceContext $ var "tx"))
@@ -547,6 +560,7 @@ typeOfPrimitiveDef = define "typeOfPrimitive" $
 
 typeOfProjectionDef :: TBinding (TypeContext -> [Type] -> Projection -> Flow s Type)
 typeOfProjectionDef = define "typeOfProjection" $
+  doc "Reconstruct the type of a record projection" $
   "tx" ~> "typeArgs" ~> "p" ~>
   "tname" <~ Core.projectionTypeName (var "p") $
   "fname" <~ Core.projectionField (var "p") $
@@ -563,6 +577,7 @@ typeOfProjectionDef = define "typeOfProjection" $
 
 typeOfRecordDef :: TBinding (TypeContext -> [Type] -> Record -> Flow s Type)
 typeOfRecordDef = define "typeOfRecord" $
+  doc "Reconstruct the type of a record" $
   "tx" ~> "typeArgs" ~> "record" ~>
   "tname" <~ Core.recordTypeName (var "record") $
 
@@ -577,6 +592,7 @@ typeOfRecordDef = define "typeOfRecord" $
 
 typeOfSetDef :: TBinding (TypeContext -> [Type] -> S.Set Term -> Flow s Type)
 typeOfSetDef = define "typeOfSet" $
+  doc "Reconstruct the type of a set" $
   "tx" ~> "typeArgs" ~> "els" ~>
   Logic.ifElse (Sets.null $ var "els")
     -- Empty set is polymorphic
@@ -594,6 +610,7 @@ typeOfSetDef = define "typeOfSet" $
 
 typeOfTupleDef :: TBinding (TypeContext -> [Type] -> [Term] -> Flow s Type)
 typeOfTupleDef = define "typeOfTuple" $
+  doc "Reconstruct the type of a tuple (product term)" $
   "tx" ~> "typeArgs" ~> "tuple" ~>
   "etypes" <<~ Flows.mapList (ref typeOfDef @@ var "tx" @@ list []) (var "tuple") $
   exec (Flows.mapList (ref checkTypeVariablesDef @@ var "tx") (var "etypes")) $
@@ -601,6 +618,7 @@ typeOfTupleDef = define "typeOfTuple" $
 
 typeOfTupleProjectionDef :: TBinding (TypeContext -> [Type] -> TupleProjection -> Flow s Type)
 typeOfTupleProjectionDef = define "typeOfTupleProjection" $
+  doc "Reconstruct the type of a tuple projection" $
   "tx" ~> "typeArgs" ~> "tp" ~>
   "t" <<~ (
     "index" <~ Core.tupleProjectionIndex (var "tp") $
@@ -618,6 +636,7 @@ typeOfTupleProjectionDef = define "typeOfTupleProjection" $
 
 typeOfTypeApplicationDef :: TBinding (TypeContext -> [Type] -> TypeApplicationTerm -> Flow s Type)
 typeOfTypeApplicationDef = define "typeOfTypeApplication" $
+  doc "Reconstruct the type of a type application term" $
   "tx" ~> "typeArgs" ~> "tyapp" ~>
   "body" <~ Core.typeApplicationTermBody (var "tyapp") $
   "t" <~ Core.typeApplicationTermType (var "tyapp") $
@@ -625,6 +644,7 @@ typeOfTypeApplicationDef = define "typeOfTypeApplication" $
 
 typeOfTypeLambdaDef :: TBinding (TypeContext -> [Type] -> TypeLambda -> Flow s Type)
 typeOfTypeLambdaDef = define "typeOfTypeLambda" $
+  doc "Reconstruct the type of a type lambda (type abstraction) term" $
   "tx" ~> "typeArgs" ~> "tl" ~>
   "v" <~ Core.typeLambdaParameter (var "tl") $
   "body" <~ Core.typeLambdaBody (var "tl") $
@@ -637,11 +657,13 @@ typeOfTypeLambdaDef = define "typeOfTypeLambda" $
 
 typeOfUnitDef :: TBinding (TypeContext -> [Type] -> Flow s Type)
 typeOfUnitDef = define "typeOfUnit" $
+  doc "Reconstruct the type of the unit term" $
   "tx" ~> "typeArgs" ~>
   ref applyTypeArgumentsToTypeDef @@ var "tx" @@ var "typeArgs" @@ Core.typeUnit
 
 typeOfUnwrapDef :: TBinding (TypeContext -> [Type] -> Name -> Flow s Type)
 typeOfUnwrapDef = define "typeOfUnwrap" $
+  doc "Reconstruct the type of an unwrap operation" $
   "tx" ~> "typeArgs" ~> "tname" ~>
   "schemaType" <<~ ref Schemas.requireSchemaTypeDef @@ Typing.typeContextInferenceContext (var "tx") @@ var "tname" $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
@@ -655,6 +677,7 @@ typeOfUnwrapDef = define "typeOfUnwrap" $
 
 typeOfVariableDef :: TBinding (TypeContext -> [Type] -> Name -> Flow s Type)
 typeOfVariableDef = define "typeOfVariable" $
+  doc "Reconstruct the type of a variable" $
   "tx" ~> "typeArgs" ~> "name" ~>
   "t" <<~ optCases (Maps.lookup (var "name") (Typing.typeContextTypes $ var "tx"))
     (Flows.fail $ Strings.cat $ list [
@@ -665,6 +688,7 @@ typeOfVariableDef = define "typeOfVariable" $
 
 typeOfWrappedTermDef :: TBinding (TypeContext -> [Type] -> WrappedTerm -> Flow s Type)
 typeOfWrappedTermDef = define "typeOfWrappedTerm" $
+  doc "Reconstruct the type of a wrapped term" $
   "tx" ~> "typeArgs" ~> "wt" ~>
   "tname" <~ Core.wrappedTermTypeName (var "wt") $
 
