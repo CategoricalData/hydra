@@ -455,6 +455,26 @@ replaceFreeTypeVariable v rep typ =
           _ -> (recurse t)) t)
   in (rewriteType mapExpr typ)
 
+-- | Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively
+replaceTypedefs :: (M.Map Core.Name Core.TypeScheme -> Core.Type -> Core.Type)
+replaceTypedefs types typ0 =  
+  let rewrite = (\recurse -> \typ ->  
+          let dflt = (recurse typ)
+          in ((\x -> case x of
+            Core.TypeAnnotated v1 -> (rewrite recurse (Core.annotatedTypeBody v1))
+            Core.TypeRecord _ -> typ
+            Core.TypeUnion _ -> typ
+            Core.TypeVariable v1 -> (Optionals.maybe dflt (\ts -> Logic.ifElse (Lists.null (Core.typeSchemeVariables ts)) ( 
+              let t = (Core.typeSchemeType ts)
+              in ((\x -> case x of
+                Core.TypeRecord _ -> dflt
+                Core.TypeUnion _ -> dflt
+                Core.TypeWrap _ -> dflt
+                _ -> (rewrite recurse t)) (Core.typeSchemeType ts))) dflt) (Maps.lookup v1 types))
+            Core.TypeWrap _ -> typ
+            _ -> dflt) typ))
+  in (rewriteType rewrite typ0)
+
 rewrite :: ((t0 -> t1) -> (t1 -> t0) -> t0)
 rewrite fsub f =  
   let recurse = (f (fsub recurse))
