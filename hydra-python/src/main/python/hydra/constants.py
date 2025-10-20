@@ -5,6 +5,9 @@
 from __future__ import annotations
 import hydra.core
 
+# Disable type checking by default, for better performance.
+debug_inference = True
+
 ignored_variable = "_"
 
 key_classes = hydra.core.Name("classes")
@@ -19,6 +22,9 @@ key_exclude = hydra.core.Name("exclude")
 
 # A flag which tells the language coders to encode a given encoded type as a term rather than a native type.
 key_first_class_type = hydra.core.Name("firstClassType")
+
+# A counter for generating fresh type variable names.
+key_fresh_type_variable_count = hydra.core.Name("freshTypeVariableCount")
 
 key_max_length = hydra.core.Name("maxLength")
 
