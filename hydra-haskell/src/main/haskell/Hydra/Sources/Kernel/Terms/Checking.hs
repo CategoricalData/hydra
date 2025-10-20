@@ -371,7 +371,7 @@ typeOfApplicationDef = define "typeOfApplication" $
       Logic.ifElse (Equality.equal (var "dom") (var "targ"))
         (Flows.pure $ var "cod")
         (Flows.fail $ Strings.cat $ list [
-          "expected ",
+          "in application, expected ",
           ref ShowCore.typeDef @@ var "dom",
           " but found ",
           ref ShowCore.typeDef @@ var "targ"])]) $
