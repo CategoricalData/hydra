@@ -197,7 +197,7 @@ checkTypeVariables tx typ =
         (Core__.type_ typ)]))))
       _ -> (Flows.bind (Flows.mapList (checkTypeVariables tx) (Rewriting.subtypes typ)) (\result -> Flows.pure ()))) typ))
 
--- | Convert inference context to type context
+-- | Convert an inference context to a type environment by converting type schemes to System F types
 toFContext :: (Typing.InferenceContext -> M.Map Core.Name Core.Type)
 toFContext cx = (Maps.map Schemas.typeSchemeToFType (Typing.inferenceContextDataTypes cx))
 
@@ -256,7 +256,7 @@ typeOfApplication tx typeArgs app =
                 in  
                   let cod = (Core.functionTypeCodomain v1)
                   in (Logic.ifElse (Equality.equal dom targ) (Flows.pure cod) (Flows.fail (Strings.cat [
-                    "expected ",
+                    "in application, expected ",
                     Core__.type_ dom,
                     " but found ",
                     (Core__.type_ targ)])))
