@@ -79,6 +79,7 @@ module_ = Module (Namespace "hydra.rewriting") elements
      el removeTypesFromTermDef,
      el replaceFreeTermVariableDef,
      el replaceFreeTypeVariableDef,
+     el replaceTypedefsDef,
      el rewriteDef,
      el rewriteAndFoldTermDef,
      el rewriteAndFoldTermMDef,
@@ -602,6 +603,31 @@ replaceFreeTypeVariableDef = define "replaceFreeTypeVariable" $
       (var "rep")
       (var "t")]) $
   ref rewriteTypeDef @@ var "mapExpr" @@ var "typ"
+
+replaceTypedefsDef :: TBinding (M.Map Name TypeScheme -> Type -> Type)
+replaceTypedefsDef = define "replaceTypedefs" $
+  doc "Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively" $
+  "types" ~> "typ0" ~>
+  "rewrite" <~ ("recurse" ~> "typ" ~>
+    "dflt" <~ (var "recurse" @@ var "typ") $
+    cases _Type (var "typ")
+      (Just $ var "dflt") [
+--      _Type_forall>>: "ft" ~> ... -- TODO: shadowing via forall-bound variables
+      _Type_annotated>>: "at" ~> var "rewrite" @@ var "recurse" @@ (Core.annotatedTypeBody $ var "at"),
+      _Type_record>>: constant $ var "typ",
+      _Type_union>>: constant $ var "typ",
+      _Type_variable>>: "v" ~> optCases (Maps.lookup (var "v") (var "types"))
+        (var "dflt")
+        ("ts" ~> Logic.ifElse (Lists.null $ Core.typeSchemeVariables $ var "ts")
+          ("t" <~ Core.typeSchemeType (var "ts") $
+           cases _Type (Core.typeSchemeType $ var "ts")
+             (Just $ var "rewrite" @@ var "recurse" @@ var "t") [
+             _Type_record>>: constant $ var "dflt",
+             _Type_union>>: constant $ var "dflt",
+             _Type_wrap>>: constant $ var "dflt"])
+          (var "dflt")), -- TODO: this may be too simple
+      _Type_wrap>>: constant $ var "typ"]) $
+  ref rewriteTypeDef @@ var "rewrite" @@ var "typ0"
 
 -- TODO: this is a fixpoint combinator, but its type is sometimes incorrectly inferred based on how it is used.
 --       For now, we generally define local "rewrite"/"recurse" helper functions rather than using this global one.

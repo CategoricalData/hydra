@@ -105,24 +105,21 @@ initialStateDef = define "initialState" $
 popStackUntilDef :: TBinding (Topo.Vertex -> Flow Topo.TarjanState [Topo.Vertex])
 popStackUntilDef = define "popStackUntil" $
   doc "Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component" $
-  lambda "v" $ lets [
-    "go">: lambda "acc" $
-      Flows.bind (ref Monads.getStateDef) $
-        lambda "st" $
-          Logic.ifElse (Lists.null $ Topology.tarjanStateStack $ var "st")
-            (Flows.fail $ string "popStackUntil: empty stack")
-            (lets [
-              "x">: Lists.head $ Topology.tarjanStateStack $ var "st",
-              "xs">: Lists.tail $ Topology.tarjanStateStack $ var "st",
-              "newSt">: Topology.tarjanStateWithStack (var "st") (var "xs"),
-              "newSt2">: Topology.tarjanStateWithOnStack (var "newSt") (Sets.delete (var "x") (Topology.tarjanStateOnStack $ var "st")),
-              "acc'">: Lists.cons (var "x") (var "acc")]
-              $ Flows.bind (ref Monads.putStateDef @@ var "newSt2") $
-                lambda "_" $
-                  Logic.ifElse (Equality.equal (var "x") (var "v"))
-                    (Flows.pure $ Lists.reverse $ var "acc'")
-                    (var "go" @@ var "acc'"))]
-    $ var "go" @@ list []
+  "v" ~>
+  "go" <~ ("acc" ~>
+    "st" <<~ ref Monads.getStateDef $
+    Logic.ifElse (Lists.null (Topology.tarjanStateStack (var "st")))
+      (Flows.fail (string "popStackUntil: empty stack"))
+      ("x" <~ Lists.head (Topology.tarjanStateStack (var "st")) $
+       "xs" <~ Lists.tail (Topology.tarjanStateStack (var "st")) $
+       "newSt" <~ Topology.tarjanStateWithStack (var "st") (var "xs") $
+       "newSt2" <~ Topology.tarjanStateWithOnStack (var "newSt") (Sets.delete (var "x") (Topology.tarjanStateOnStack (var "st"))) $
+       "acc'" <~ Lists.cons (var "x") (var "acc") $
+       exec (ref Monads.putStateDef @@ var "newSt2") $
+       Logic.ifElse (Equality.equal (var "x") (var "v"))
+         (produce $ Lists.reverse $ var "acc'")
+         (var "go" @@ var "acc'"))) $
+  var "go" @@ list []
 
 strongConnectDef :: TBinding (Topo.Graph -> Topo.Vertex -> Flow Topo.TarjanState ())
 strongConnectDef = define "strongConnect" $
