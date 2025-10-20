@@ -75,9 +75,7 @@ encodeApplication env app = do
     lhs <- applyArgs hargs
     let pyapp = L.foldl (\t a -> functionCall (pyExpressionToPyPrimary t) [a]) lhs rargs
     if needsCast term typ then do
-      PyGraph g meta <- getState
-      let meta2 = extendMetaForType True True meta typ
-      putState (PyGraph g $ meta2 { pythonModuleMetadataUsesCast = True })
+      updateMeta $ \m -> extendMetaForType True True typ $ m { pythonModuleMetadataUsesCast = True }
       pytyp <- encodeType env typ
       return $ functionCall (pyNameToPyPrimary $ Py.Name "cast") [pytyp, pyapp]
     else
@@ -194,15 +192,17 @@ encodeFunctionDefinition env name tparams args body doms cod comment prefixes = 
     returnType <- getType cod
     let pyTparams = fmap (pyNameToPyTypeParameter . encodeTypeVariable) tparams
 
---    if name == Name "hydra.show.core.list"
+    updateMeta $ extendMetaForTypes (cod:doms)
+
+--    (PyGraph _ metax) <- getState
+--    if name == Name "hydra.annotations.aggregateAnnotations"
 --    then fail $ "body: " ++ ShowCore.term body
 --      ++ "\ntparams: " ++ L.intercalate ", " (fmap unName tparams)
 --      ++ "\nargs: " ++ L.intercalate ", " (fmap unName args)
 --      ++ "\ndoms: " ++ L.intercalate ", " (fmap ShowCore.type_ doms)
 --      ++ "\ncod: " ++ ShowCore.type_ cod
+--      ++ "\nuses callable: " ++ show (pythonModuleMetadataUsesCallable metax)
 --    else return ()
-
-    updateMeta $ extendMetaForTypes (cod:doms)
 
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing $
       Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) pyTparams (Just params) (Just returnType) Nothing block
@@ -294,6 +294,7 @@ encodeModule mod defs0 = do
                   pythonEnvironmentTypeContext = tcontext}
       defStmts <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
       PyGraph _ meta <- getState -- get metadata after definitions, which may have altered it
+--      fail $ "uses callable: " ++ show (pythonModuleMetadataUsesCallable meta)
 
       let commentStmts = case normalizeComment <$> moduleDescription mod of
                          Nothing -> []
@@ -407,7 +408,8 @@ encodeTermAssignment env name term comment = do
 --  then fail $ "term: " ++ ShowCore.term term
 --  else pure ()
 
-  (tparams, params, bindings, body, doms, cod, env2) <- withTrace "there" $ gatherBindingsAndParams env term
+  (tparams, params, bindings, body, doms, cod, env2) <- withTrace "gather for term assignment" $
+    gatherBindingsAndParams env term
 
   -- If there are no arguments or let bindings, and if we are not dealing with a case statement,
   -- we can use a simple a = b assignment.
@@ -417,7 +419,7 @@ encodeTermAssignment env name term comment = do
   -- Otherwise, only a function definition will work.
   else do
 
---    if name == Name "hydra.show.core.fields"
+--    if name == Name "hydra.annotations.aggregateAnnotations"
 --    then fail $ "term: " ++ ShowCore.term term
 --      ++ "\nterm (raw): " ++ show term
 --      ++ "\ntparams: " ++ L.intercalate ", " (fmap unName tparams)
@@ -428,9 +430,10 @@ encodeTermAssignment env name term comment = do
 --      ++ "\ncod: " ++ ShowCore.type_ cod
 --    else return ()
 
+    -- TODO: consider moving this into the updated environment, along with the body
     bindingStmts <- encodeBindings env2 bindings
-    PyGraph g meta <- getState
-    withState (PyGraph (extendGraphWithBindings bindings g) meta) $
+
+    withBindings bindings $
       encodeFunctionDefinition env2 name tparams params body doms cod comment bindingStmts
 
 -- | Encode a term to an inline Python expression
@@ -505,7 +508,8 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
       TermApplication (Application l r) -> gatherArgs (r:rest) l
       t -> (rest, t)
     dflt = do
-      (tparams, params, bindings, body, doms, cod, env2) <- withTrace "here" $ gatherBindingsAndParams env term
+      (tparams, params, bindings, body, doms, cod, env2) <- withTrace "gather for multiline" $
+        gatherBindingsAndParams env term
       if (L.length params > 0)
         then fail $ "Functions currently unsupported in this context: " ++ ShowCore.term term
         else pure ()
@@ -513,11 +517,12 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
         expr <- encodeTermInline env term
         return [returnSingle expr]
       else do
+        -- TODO: consider putting this inside of the updated environment, along with the body
         bindingStmts <- encodeBindings env2 bindings
-        PyGraph g meta <- getState
-        putState (PyGraph (extendGraphWithBindings bindings g) meta)
-        stmts <- encodeTermMultiline env2 body
-        return $ bindingStmts ++ stmts
+
+        withBindings bindings $ do
+          stmts <- encodeTermMultiline env2 body
+          return $ bindingStmts ++ stmts
     withArg body arg = case deannotateTerm body of
       -- Case statements are special.
       TermFunction (FunctionElimination (EliminationUnion (CaseStatement tname dflt cases))) -> do
@@ -692,7 +697,7 @@ extendMetaForTerm :: Bool -> PythonModuleMetadata -> Term -> PythonModuleMetadat
 extendMetaForTerm topLevel meta t = case t of
     TermFunction f -> case f of
       FunctionLambda (Lambda _ (Just dom) body) -> if topLevel
-          then extendMetaForType True False meta2 dom
+          then extendMetaForType True False dom meta2
           else meta2
         where
           meta2 = extendMetaForTerm topLevel meta body
@@ -701,7 +706,7 @@ extendMetaForTerm topLevel meta t = case t of
       where
         forBinding meta (Binding _ term1 (Just ts)) = if isSimpleAssignment term1
           then meta
-          else extendMetaForType True True (extendMetaForTerm True meta term1) $ typeSchemeType ts
+          else extendMetaForType True True (typeSchemeType ts) (extendMetaForTerm True meta term1)
     TermLiteral l -> case l of
       LiteralFloat fv -> case fv of
         FloatValueBigfloat _ -> meta {pythonModuleMetadataUsesDecimal = True}
@@ -712,9 +717,19 @@ extendMetaForTerm topLevel meta t = case t of
   where
     meta2 = L.foldl (extendMetaForTerm False) meta $ subterms t
 
-extendMetaForType :: Bool -> Bool -> PythonModuleMetadata -> Type -> PythonModuleMetadata
-extendMetaForType topLevel isTermAnnot meta typ = extendFor meta3 typ
+extendMetaForType :: Bool -> Bool -> Type -> PythonModuleMetadata -> PythonModuleMetadata
+--extendMetaForType foo bar typ meta = extendFor meta typ
+--extendMetaForType topLevel isTermAnnot typ meta = extendFor meta typ
+--extendMetaForType topLevel isTermAnnot typ meta = case typ of
+--  TypeFunction (FunctionType _ _) -> meta {pythonModuleMetadataUsesCallable = True}
+--  _ -> meta
+
+extendMetaForType topLevel isTermAnnot typ meta = extendFor meta3 typ
+--extendMetaForType foo bar typ meta = extendFor meta3 typ
   where
+--    topLevel = True
+--    isTermAnnot = False
+
     tvars = pythonModuleMetadataTypeVariables meta
     meta3 = digForWrap typ
       where
@@ -738,8 +753,8 @@ extendMetaForType topLevel isTermAnnot meta typ = extendFor meta3 typ
           -- If this is a type-level definition, or an *argument* to a function is a function, then we need Callable.
           else meta3 {pythonModuleMetadataUsesCallable = True}
         where
-          meta2 = extendMetaForType topLevel isTermAnnot meta cod
-          meta3 = extendMetaForType False isTermAnnot meta2 dom
+          meta2 = extendMetaForType topLevel isTermAnnot cod meta
+          meta3 = extendMetaForType False isTermAnnot dom meta2
       TypeForall (ForallType _ body) -> case baseType body of
           TypeRecord _ -> meta {pythonModuleMetadataUsesGeneric = True}
           _ -> meta
@@ -767,10 +782,10 @@ extendMetaForType topLevel isTermAnnot meta typ = extendFor meta3 typ
         where
           checkForLiteral b (FieldType _ ft) = b || EncodeCore.isUnitType (deannotateType ft)
           checkForNewType b (FieldType _ ft) = b || not (EncodeCore.isUnitType (deannotateType ft))
-      t -> L.foldl (extendMetaForType False isTermAnnot) meta $ subtypes t
+      t -> L.foldl (\m t -> extendMetaForType False isTermAnnot t m) meta $ subtypes t
 
 extendMetaForTypes :: [Type] -> PythonModuleMetadata -> PythonModuleMetadata
-extendMetaForTypes types meta = L.foldl (extendMetaForType True False) meta types
+extendMetaForTypes types meta = L.foldl (\m t -> extendMetaForType True False t m) meta types
 
 findTypeParams :: PythonEnvironment -> Type -> [Name]
 findTypeParams env typ = L.filter isBound $ S.toList $ freeVariablesInType typ
@@ -830,8 +845,8 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
     addDef meta def = case def of
       DefinitionTerm (TermDefinition _ term typ) -> extendMetaForTerm True meta2 term
         where
-          meta2 = extendMetaForType True True meta typ
-      DefinitionType (TypeDefinition _ typ) -> foldOverType TraversalOrderPre (extendMetaForType True False) meta2 typ
+          meta2 = extendMetaForType True True typ meta
+      DefinitionType (TypeDefinition _ typ) -> foldOverType TraversalOrderPre (\m t -> extendMetaForType True False t m) meta2 typ
         where
           meta2 = meta {pythonModuleMetadataUsesName = True}
 
@@ -867,9 +882,14 @@ moduleToPython mod defs = do
   let path = namespaceToFilePath CaseConventionLowerSnake (FileExtension "py") $ moduleNamespace mod
   return $ M.fromList [(path, s)]
 
+--updateGraph :: (Graph -> Graph) -> Flow PyGraph ()
+--updateGraph f = do
+--  PyGraph g meta <- getState
+--  putState (PyGraph (f g) meta)
+
 updateMeta :: (PythonModuleMetadata -> PythonModuleMetadata) -> Flow PyGraph ()
 updateMeta f = do
-  (PyGraph g meta) <- getState
+  PyGraph g meta <- getState
   putState $ PyGraph g (f meta)
 
 variantArgs :: Py.Expression -> [Name] -> Py.Args
@@ -877,6 +897,20 @@ variantArgs ptype tparams = pyExpressionsToPyArgs $ Y.catMaybes [
     Just $ pyPrimaryToPyExpression $
       primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Node") [ptype],
     genericArg tparams]
+
+withBindings :: [Binding] -> Flow PyGraph a -> Flow PyGraph a
+withBindings bindings = withUpdatedGraph (extendGraphWithBindings bindings)
+
+-- Note: this does not use withState, as we want the rest of the environment (including metadata) to be
+--       mutable throughout the flow, even though we update the graph temporarily.
+withUpdatedGraph :: (Graph -> Graph) -> Flow PyGraph a -> Flow PyGraph a
+withUpdatedGraph f flow = do
+  PyGraph g meta <- getState
+  putState $ PyGraph (f g) meta
+  r <- flow
+  PyGraph _ meta2 <- getState
+  putState $ PyGraph g meta2
+  return r
 
 inGraphContext :: Flow Graph a -> Flow PyGraph a
 inGraphContext f = do
