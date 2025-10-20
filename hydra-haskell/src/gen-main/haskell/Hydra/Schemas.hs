@@ -41,23 +41,26 @@ definitionDependencyNamespaces :: ([Module.Definition] -> S.Set Module.Namespace
 definitionDependencyNamespaces defs =  
   let defNames = (\def -> (\x -> case x of
           Module.DefinitionType v1 -> (Rewriting.typeDependencyNames True (Module.typeDefinitionType v1))
-          Module.DefinitionTerm v1 -> (Rewriting.termDependencyNames True True True (Module.termDefinitionTerm v1))) def) 
-      allNames = (Sets.unions (Lists.map defNames defs))
-  in (Sets.fromList (Optionals.cat (Lists.map Names.namespaceOf (Sets.toList allNames))))
+          Module.DefinitionTerm v1 -> (Rewriting.termDependencyNames True True True (Module.termDefinitionTerm v1))) def)
+  in  
+    let allNames = (Sets.unions (Lists.map defNames defs))
+    in (Sets.fromList (Optionals.cat (Lists.map Names.namespaceOf (Sets.toList allNames))))
 
 -- | Find dependency namespaces in all of a set of terms
 dependencyNamespaces :: (Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Compute.Flow Graph.Graph (S.Set Module.Namespace))
 dependencyNamespaces binds withPrims withNoms withSchema els =  
   let depNames = (\el ->  
-          let term = (Core.bindingTerm el) 
-              dataNames = (Rewriting.termDependencyNames binds withPrims withNoms term)
-              schemaNames = (Logic.ifElse withSchema (Optionals.maybe Sets.empty (\ts -> Rewriting.typeDependencyNames True (Core.typeSchemeType ts)) (Core.bindingType el)) Sets.empty)
-          in (Logic.ifElse (Core__.isEncodedType (Rewriting.deannotateTerm term)) (Flows.bind (Core_.type_ term) (\typ -> Flows.pure (Sets.unions [
-            dataNames,
-            schemaNames,
-            (Rewriting.typeDependencyNames True typ)]))) (Flows.pure (Sets.unions [
-            dataNames,
-            schemaNames]))))
+          let term = (Core.bindingTerm el)
+          in  
+            let dataNames = (Rewriting.termDependencyNames binds withPrims withNoms term)
+            in  
+              let schemaNames = (Logic.ifElse withSchema (Optionals.maybe Sets.empty (\ts -> Rewriting.typeDependencyNames True (Core.typeSchemeType ts)) (Core.bindingType el)) Sets.empty)
+              in (Logic.ifElse (Core__.isEncodedType (Rewriting.deannotateTerm term)) (Flows.bind (Core_.type_ term) (\typ -> Flows.pure (Sets.unions [
+                dataNames,
+                schemaNames,
+                (Rewriting.typeDependencyNames True typ)]))) (Flows.pure (Sets.unions [
+                dataNames,
+                schemaNames]))))
   in (Flows.bind (Flows.mapList depNames els) (\namesList -> Flows.pure (Sets.fromList (Optionals.cat (Lists.map Names.namespaceOf (Sets.toList (Sets.delete Constants.placeholderName (Sets.unions namesList))))))))
 
 -- | Dereference a type name to get the actual type
@@ -72,9 +75,10 @@ elementAsTypeApplicationTerm el = (Optionals.maybe (Flows.fail "missing element 
 -- | Get elements with their dependencies
 elementsWithDependencies :: ([Core.Binding] -> Compute.Flow Graph.Graph [Core.Binding])
 elementsWithDependencies original =  
-  let depNames = (\el -> Sets.toList (Rewriting.termDependencyNames True False False (Core.bindingTerm el))) 
-      allDepNames = (Lists.nub (Lists.concat2 (Lists.map Core.bindingName original) (Lists.concat (Lists.map depNames original))))
-  in (Flows.mapList Lexical.requireElement allDepNames)
+  let depNames = (\el -> Sets.toList (Rewriting.termDependencyNames True False False (Core.bindingTerm el)))
+  in  
+    let allDepNames = (Lists.nub (Lists.concat2 (Lists.map Core.bindingName original) (Lists.concat (Lists.map depNames original))))
+    in (Flows.mapList Lexical.requireElement allDepNames)
 
 -- | Extend a type context by descending into a System F lambda body
 extendTypeContextForLambda :: (Typing.TypeContext -> Core.Lambda -> Typing.TypeContext)
@@ -133,13 +137,13 @@ fieldTypes t =
 
 -- | Convert a forall type to a type scheme
 fTypeToTypeScheme :: (Core.Type -> Core.TypeScheme)
-fTypeToTypeScheme typ = (gatherForall [] typ) 
-  where 
-    gatherForall = (\vars -> \typ -> (\x -> case x of
-      Core.TypeForall v1 -> (gatherForall (Lists.cons (Core.forallTypeParameter v1) vars) (Core.forallTypeBody v1))
-      _ -> Core.TypeScheme {
-        Core.typeSchemeVariables = (Lists.reverse vars),
-        Core.typeSchemeType = typ}) (Rewriting.deannotateType typ))
+fTypeToTypeScheme typ =  
+  let gatherForall = (\vars -> \typ -> (\x -> case x of
+          Core.TypeForall v1 -> (gatherForall (Lists.cons (Core.forallTypeParameter v1) vars) (Core.forallTypeBody v1))
+          _ -> Core.TypeScheme {
+            Core.typeSchemeVariables = (Lists.reverse vars),
+            Core.typeSchemeType = typ}) (Rewriting.deannotateType typ))
+  in (gatherForall [] typ)
 
 freshName :: (Compute.Flow t0 Core.Name)
 freshName = (Flows.map normalTypeVariable (Annotations.nextCount Constants.key_freshTypeVariableCount))
@@ -214,11 +218,12 @@ moduleDependencyNamespaces binds withPrims withNoms withSchema mod = (Flows.bind
 
 namespacesForDefinitions :: ((Module.Namespace -> t0) -> Module.Namespace -> [Module.Definition] -> Module.Namespaces t0)
 namespacesForDefinitions encodeNamespace focusNs defs =  
-  let nss = (Sets.delete focusNs (definitionDependencyNamespaces defs)) 
-      toPair = (\ns -> (ns, (encodeNamespace ns)))
-  in Module.Namespaces {
-    Module.namespacesFocus = (toPair focusNs),
-    Module.namespacesMapping = (Maps.fromList (Lists.map toPair (Sets.toList nss)))}
+  let nss = (Sets.delete focusNs (definitionDependencyNamespaces defs))
+  in  
+    let toPair = (\ns -> (ns, (encodeNamespace ns)))
+    in Module.Namespaces {
+      Module.namespacesFocus = (toPair focusNs),
+      Module.namespacesMapping = (Maps.fromList (Lists.map toPair (Sets.toList nss)))}
 
 -- | Apply type arguments to a nominal type
 nominalApplication :: (Core.Name -> [Core.Type] -> Core.Type)
@@ -310,23 +315,30 @@ termAsGraph term = ((\x -> case x of
 -- | Topologically sort type definitions by dependencies
 topologicalSortTypeDefinitions :: ([Module.TypeDefinition] -> [[Module.TypeDefinition]])
 topologicalSortTypeDefinitions defs =  
-  let toPair = (\def -> (Module.typeDefinitionName def, (Sets.toList (Rewriting.typeDependencyNames False (Module.typeDefinitionType def))))) 
-      nameToDef = (Maps.fromList (Lists.map (\d -> (Module.typeDefinitionName d, d)) defs))
-      sorted = (Sorting.topologicalSortComponents (Lists.map toPair defs))
-  in (Lists.map (\names -> Optionals.cat (Lists.map (\n -> Maps.lookup n nameToDef) names)) sorted)
+  let toPair = (\def -> (Module.typeDefinitionName def, (Sets.toList (Rewriting.typeDependencyNames False (Module.typeDefinitionType def)))))
+  in  
+    let nameToDef = (Maps.fromList (Lists.map (\d -> (Module.typeDefinitionName d, d)) defs))
+    in  
+      let sorted = (Sorting.topologicalSortComponents (Lists.map toPair defs))
+      in (Lists.map (\names -> Optionals.cat (Lists.map (\n -> Maps.lookup n nameToDef) names)) sorted)
 
 -- | Get all type dependencies for a given type name
 typeDependencies :: (Bool -> (Core.Type -> Core.Type) -> Core.Name -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type))
 typeDependencies withSchema transform name =  
-  let requireType = (\name -> Monads.withTrace (Strings.cat2 "type dependencies of " (Core.unName name)) (Flows.bind (Lexical.requireElement name) (\el -> Core_.type_ (Core.bindingTerm el)))) 
-      toPair = (\name -> Flows.bind (requireType name) (\typ -> Flows.pure (name, (transform typ))))
-      deps = (\seeds -> \names -> Logic.ifElse (Sets.null seeds) (Flows.pure names) (Flows.bind (Flows.mapList toPair (Sets.toList seeds)) (\pairs ->  
-              let newNames = (Maps.union names (Maps.fromList pairs)) 
-                  refs = (Lists.foldl Sets.union Sets.empty (Lists.map (\pair -> Rewriting.typeDependencyNames withSchema (snd pair)) pairs))
-                  visited = (Sets.fromList (Maps.keys names))
-                  newSeeds = (Sets.difference refs visited)
-              in (deps newSeeds newNames))))
-  in (deps (Sets.singleton name) Maps.empty)
+  let requireType = (\name -> Monads.withTrace (Strings.cat2 "type dependencies of " (Core.unName name)) (Flows.bind (Lexical.requireElement name) (\el -> Core_.type_ (Core.bindingTerm el))))
+  in  
+    let toPair = (\name -> Flows.bind (requireType name) (\typ -> Flows.pure (name, (transform typ))))
+    in  
+      let deps = (\seeds -> \names -> Logic.ifElse (Sets.null seeds) (Flows.pure names) (Flows.bind (Flows.mapList toPair (Sets.toList seeds)) (\pairs ->  
+              let newNames = (Maps.union names (Maps.fromList pairs))
+              in  
+                let refs = (Lists.foldl Sets.union Sets.empty (Lists.map (\pair -> Rewriting.typeDependencyNames withSchema (snd pair)) pairs))
+                in  
+                  let visited = (Sets.fromList (Maps.keys names))
+                  in  
+                    let newSeeds = (Sets.difference refs visited)
+                    in (deps newSeeds newNames))))
+      in (deps (Sets.singleton name) Maps.empty)
 
 -- | Convert a type scheme to a forall type
 typeSchemeToFType :: (Core.TypeScheme -> Core.Type)
