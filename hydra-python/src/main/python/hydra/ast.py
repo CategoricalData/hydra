@@ -5,7 +5,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
-from hydra.dsl.python import Node
+from hydra.dsl.python import Maybe, Node
 import hydra.core
 
 class Associativity(Enum):
@@ -29,7 +29,7 @@ ASSOCIATIVITY__BOTH__NAME = hydra.core.Name("both")
 class BlockStyle:
     """Formatting option for code blocks."""
     
-    indent: str | None
+    indent: Maybe[str]
     newline_before_content: bool
     newline_after_content: bool
 

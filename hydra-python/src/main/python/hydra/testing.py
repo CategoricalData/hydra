@@ -5,7 +5,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
-from hydra.dsl.python import frozenlist, Node
+from hydra.dsl.python import frozenlist, Maybe, Node
 import hydra.core
 import hydra.mantle
 
@@ -95,7 +95,7 @@ class TestCaseWithMetadata:
     
     name: str
     case: TestCase
-    description: str | None
+    description: Maybe[str]
     tags: frozenlist[Tag]
 
 TEST_CASE_WITH_METADATA__NAME = hydra.core.Name("hydra.testing.TestCaseWithMetadata")
@@ -109,7 +109,7 @@ class TestGroup:
     """A collection of test cases with a name and optional description."""
     
     name: str
-    description: str | None
+    description: Maybe[str]
     subgroups: frozenlist[TestGroup]
     cases: frozenlist[TestCaseWithMetadata]
 
