@@ -25,6 +25,7 @@ class Nothing:
     def __repr__(self) -> str:
         return "Nothing"
 
+# Note: unused
 NOTHING = Nothing()
 
 type Maybe[T] = Just[T] | Nothing

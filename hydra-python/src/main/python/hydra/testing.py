@@ -5,7 +5,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
-from hydra.dsl.python import frozenlist, Maybe, Node
+from hydra.dsl.python import Maybe, Node, frozenlist
 import hydra.core
 import hydra.mantle
 

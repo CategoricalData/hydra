@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from decimal import Decimal
 from enum import Enum
-from hydra.dsl.python import FrozenDict, frozenlist, Maybe, Node
+from hydra.dsl.python import FrozenDict, Maybe, Node, frozenlist
 from typing import Annotated
 
 class Name(Node[str]):

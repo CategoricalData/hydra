@@ -42,7 +42,7 @@ def type(v1: hydra.core.Type) -> str:
     
     match v1:
         case hydra.core.TypeAnnotated(value=a):
-            return hydra.lib.strings.cat(("annotated ", type(a.subject)))
+            return hydra.lib.strings.cat(("annotated ", type(a.body)))
         
         case hydra.core.TypeApplication(value=at):
             return hydra.lib.strings.cat((type(at.function), " applied to ", type(at.argument)))
@@ -87,4 +87,4 @@ def type(v1: hydra.core.Type) -> str:
             return "instance of a named type"
         
         case hydra.core.TypeWrap(value=n):
-            return hydra.lib.strings.cat(("wrapper for ", type(n.object)))
+            return hydra.lib.strings.cat(("wrapper for ", type(n.body)))

@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 from dataclasses import dataclass
-from hydra.dsl.python import FrozenDict, frozenlist, Node
+from hydra.dsl.python import FrozenDict, Node, frozenlist
 from typing import Annotated, Generic, TypeVar
 import hydra.core
 
