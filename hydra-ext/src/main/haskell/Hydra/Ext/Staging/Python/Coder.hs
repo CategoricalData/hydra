@@ -245,13 +245,13 @@ encodeFunctionDefinition env name tparams args body doms cod comment prefixes = 
 
     updateMeta $ extendMetaForTypes (cod:doms)
 
---    if name == Name "q"
+--    if name == Name "choose"
 --    then fail $ "body: " ++ ShowCore.term body
 --      ++ "\ntparams: " ++ L.intercalate ", " (fmap unName tparams)
 --      ++ "\nargs: " ++ L.intercalate ", " (fmap unName args)
 --      ++ "\ndoms: " ++ L.intercalate ", " (fmap ShowCore.type_ doms)
 --      ++ "\ncod: " ++ ShowCore.type_ cod
---      ++ "\npyParams: " ++ show pyParams
+--      -- ++ "\npyParams: " ++ show pyParams
 --    else return ()
 
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing $
@@ -590,7 +590,7 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
         withBindings bindings $ do
           stmts <- encodeTermMultiline env2 body
           return $ bindingStmts ++ stmts
-    withArg body arg = case deannotateTerm body of
+    withArg body arg = case deannotateAndDetypeTerm body of
       -- Case statements are special.
       TermFunction (FunctionElimination (EliminationUnion (CaseStatement tname dflt cases))) -> do
           rt <- inGraphContext $ requireUnionType tname
