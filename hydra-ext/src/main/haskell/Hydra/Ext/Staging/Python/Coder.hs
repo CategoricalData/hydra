@@ -188,22 +188,88 @@ encodeFloatValue fv = case fv of
   FloatValueFloat64 f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat $ realToFrac f
   _ -> fail $ "unsupported floating point type: " ++ show (floatValueType fv)
 
+
+
+
+
+--encodeBindingExpr :: PythonEnvironment -> Binding -> Flow PyGraph Py.Expression
+--encodeBindingExpr env (Binding name term _) = do
+--  pterm <- encodeTermInline env term
+--  let pyName = encodeName False CaseConventionLowerSnake env name
+--  -- Create: name := expr
+--  return $ Py.ExpressionNamed $ Py.NamedExpression
+--    (Py.Name pyName)
+--    pterm
+
+encodeBindingToWalrus :: PythonEnvironment -> Binding -> Flow PyGraph Py.NamedExpression
+encodeBindingToWalrus env (Binding name term _) = do
+  pterm <- encodeTermInline env term
+  let pyName = encodeName False CaseConventionLowerSnake env name
+  return $ Py.NamedExpressionAssignment $ Py.AssignmentExpression pyName pterm
+
+
+
+
+
 encodeFunction :: PythonEnvironment -> Function -> Flow PyGraph Py.Expression
 encodeFunction env f = case f of
-  FunctionLambda lam@(Lambda var _ body) -> do
-      pbody <- encodeTermInline innerEnv innerBody
-      let pparams = fmap (encodeNameQualified env) params
-      return $ Py.ExpressionLambda $ Py.Lambda
-        (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
-        pbody
-    where
-      (params, innerBody, innerEnv) = gatherLambdaParams env lam []
-      gatherLambdaParams env lam@(Lambda var _ body) params = case deannotateTerm body of
-          TermFunction (FunctionLambda lam2) -> gatherLambdaParams env2 lam2 params2
-          _ -> (L.reverse params2, body, env2)
-        where
-          env2 = extendEnvironmentForLambda env lam
-          params2 = var:params
+  FunctionLambda lam -> do
+    (_, params, bindings, innerBody, _, _, innerEnv) <- withTrace "gather for lambda" $
+      gatherBindingsAndParams env (TermFunction $ FunctionLambda lam)
+    pbody <- encodeTermInline innerEnv innerBody
+    let pparams = fmap (encodeNameQualified env) params
+    if (not $ L.null bindings)
+      then do
+
+        -- TODO: handle bindings and body
+
+
+        -- Create walrus operator expressions for each binding
+        pbindingExprs <- CM.mapM (encodeBindingToWalrus innerEnv) bindings
+
+        -- Convert NamedExpressions to StarNamedExpressions for the tuple
+        let pbindingStarExprs = fmap Py.StarNamedExpressionSimple pbindingExprs
+        let pbodyStarExpr = pyExpressionToPyStarNamedExpression pbody
+
+        -- Create tuple: (binding1 := expr1, binding2 := expr2, ..., body)
+        let tupleElements = pbindingStarExprs ++ [pbodyStarExpr]
+        let tupleExpr = pyAtomToPyExpression $ Py.AtomTuple $ Py.Tuple tupleElements
+
+        -- Index into the tuple: (...)[N] where N = number of bindings
+        let indexValue = pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $
+                           fromIntegral $ L.length bindings
+        let indexedExpr = primaryWithExpressionSlices
+                            (pyExpressionToPyPrimary tupleExpr)
+                            [indexValue]
+
+        return $ Py.ExpressionLambda $ Py.Lambda
+          (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
+          (pyPrimaryToPyExpression indexedExpr)
+
+
+
+
+--        fail $ "bindings within lambdas not yet supported"
+      else do
+        return $ Py.ExpressionLambda $ Py.Lambda
+          (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
+          pbody
+
+--  FunctionLambda lam@(Lambda var _ body) -> do
+--      pbody <- encodeTermInline innerEnv innerBody
+--      let pparams = fmap (encodeNameQualified env) params
+--      return $ Py.ExpressionLambda $ Py.Lambda
+--        (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
+--        pbody
+--    where
+--      (params, innerBody, innerEnv) = gatherLambdaParams env lam []
+--      gatherLambdaParams env lam@(Lambda var _ body) params = case deannotateTerm body of
+--          TermFunction (FunctionLambda lam2) -> gatherLambdaParams env2 lam2 params2
+--          _ -> (L.reverse params2, body, env2)
+--        where
+--          env2 = extendEnvironmentForLambda env lam
+--          params2 = var:params
+
 --  FunctionLambda lam@(Lambda var _ body) -> do
 --      pbody <- encodeTermInline env2 body
 --      return $ Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] $

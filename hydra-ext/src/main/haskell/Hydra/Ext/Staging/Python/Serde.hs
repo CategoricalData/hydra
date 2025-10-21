@@ -307,7 +307,7 @@ encodeName (Py.Name n) = cst n
 encodeNamedExpression :: Py.NamedExpression -> A.Expr
 encodeNamedExpression ne = case ne of
   Py.NamedExpressionSimple e -> encodeExpression e
-  _ -> unsupportedVariant "named expression" $ show ne
+  Py.NamedExpressionAssignment ae -> encodeAssignmentExpression ae
 
 encodeNameOrAttribute :: Py.NameOrAttribute -> A.Expr
 encodeNameOrAttribute (Py.NameOrAttribute names) = dotSep (encodeName <$> names)
