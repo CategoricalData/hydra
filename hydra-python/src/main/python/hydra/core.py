@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from decimal import Decimal
 from enum import Enum
-from hydra.dsl.python import FrozenDict, frozenlist, Node
+from hydra.dsl.python import FrozenDict, frozenlist, Maybe, Node
 from typing import Annotated
 
 class Name(Node[str]):
@@ -64,7 +64,7 @@ class Binding:
     
     name: Name
     term: Term
-    type: TypeScheme | None
+    type: Maybe[TypeScheme]
 
 BINDING__NAME = Name("hydra.core.Binding")
 BINDING__NAME__NAME = Name("name")
@@ -76,7 +76,7 @@ class CaseStatement:
     """A union elimination; a case statement."""
     
     type_name: Name
-    default: Term | None
+    default: Maybe[Term]
     cases: frozenlist[Field]
 
 CASE_STATEMENT__NAME = Name("hydra.core.CaseStatement")
@@ -286,7 +286,7 @@ class Lambda:
     """A function abstraction (lambda)."""
     
     parameter: Annotated[Name, "The parameter of the lambda"]
-    domain: Annotated[Type | None, "An optional domain type for the lambda"]
+    domain: Annotated[Maybe[Type], "An optional domain type for the lambda"]
     body: Annotated[Term, "The body of the lambda"]
 
 LAMBDA__NAME = Name("hydra.core.Lambda")
@@ -433,7 +433,7 @@ class TermLiteral(Node["Literal"]):
 class TermMap(Node["FrozenDict[Term, Term]"]):
     """A map of keys to values."""
 
-class TermOptional(Node["Term | None"]):
+class TermOptional(Node["Maybe[Term]"]):
     """An optional value."""
 
 class TermProduct(Node["frozenlist[Term]"]):
@@ -495,7 +495,7 @@ class TupleProjection:
     
     arity: Annotated[int, "The arity of the tuple"]
     index: Annotated[int, "The 0-indexed offset from the beginning of the tuple"]
-    domain: Annotated[frozenlist[Type] | None, "An optional domain for the projection; this is a list of component types"]
+    domain: Annotated[Maybe[frozenlist[Type]], "An optional domain for the projection; this is a list of component types"]
 
 TUPLE_PROJECTION__NAME = Name("hydra.core.TupleProjection")
 TUPLE_PROJECTION__ARITY__NAME = Name("arity")
