@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 from dataclasses import dataclass
-from hydra.dsl.python import frozenlist, Node
+from hydra.dsl.python import Node, frozenlist
 import hydra.core
 
 class Constant(Node[str]):

@@ -3,7 +3,7 @@
 """Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation."""
 
 from __future__ import annotations
-from hydra.dsl.python import frozenlist
+from hydra.dsl.python import Just, Maybe, Nothing, frozenlist
 import hydra.ast
 import hydra.core
 import hydra.lib.equality
@@ -45,7 +45,7 @@ def angle_braces_list(style: hydra.ast.BlockStyle, els: frozenlist[hydra.ast.Exp
 
 curly_braces = hydra.ast.Brackets(sym("{"), sym("}"))
 
-def curly_braces_list(msymb: str | None, style: hydra.ast.BlockStyle, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
+def curly_braces_list(msymb: Maybe[str], style: hydra.ast.BlockStyle, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), cst("{}"), brackets(curly_braces, style, symbol_sep(hydra.lib.optionals.from_maybe(",", msymb), style, els)))
 
 def expression_length(e: hydra.ast.Expr) -> int:
@@ -114,15 +114,15 @@ def expression_length(e: hydra.ast.Expr) -> int:
 
 double_space = "  "
 
-half_block_style = hydra.ast.BlockStyle(double_space, True, False)
+half_block_style = hydra.ast.BlockStyle(Just(double_space), True, False)
 
-inline_style = hydra.ast.BlockStyle(None, False, False)
+inline_style = hydra.ast.BlockStyle(Nothing(), False, False)
 
 def braces_list_adaptive(els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     """Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."""
     
-    inline_list = curly_braces_list(None, inline_style, els)
-    return hydra.lib.logic.if_else(hydra.lib.equality.gt(expression_length(inline_list), 70), curly_braces_list(None, half_block_style, els), inline_list)
+    inline_list = curly_braces_list(Nothing(), inline_style, els)
+    return hydra.lib.logic.if_else(hydra.lib.equality.gt(expression_length(inline_list), 70), curly_braces_list(Nothing(), half_block_style, els), inline_list)
 
 square_brackets = hydra.ast.Brackets(sym("["), sym("]"))
 
@@ -136,7 +136,7 @@ def bracket_list_adaptive(els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return hydra.lib.logic.if_else(hydra.lib.equality.gt(expression_length(inline_list), 70), bracket_list(half_block_style, els), inline_list)
 
 def curly_block(style: hydra.ast.BlockStyle, e: hydra.ast.Expr) -> hydra.ast.Expr:
-    return curly_braces_list(None, style, (e,))
+    return curly_braces_list(Nothing(), style, (e,))
 
 def custom_indent(idt: str, s: str) -> str:
     return hydra.lib.strings.cat(hydra.lib.lists.intersperse("\n", hydra.lib.lists.map(lambda line: hydra.lib.strings.cat((idt, line)), hydra.lib.strings.lines(s))))
@@ -161,7 +161,7 @@ def dot_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
 def double_newline_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return sep(hydra.ast.Op(sym(""), hydra.ast.Padding(hydra.ast.WsBreak(None), hydra.ast.WsBreak(None)), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
 
-full_block_style = hydra.ast.BlockStyle(double_space, True, True)
+full_block_style = hydra.ast.BlockStyle(Just(double_space), True, True)
 
 def indent(v1: str) -> str:
     return custom_indent(double_space, v1)

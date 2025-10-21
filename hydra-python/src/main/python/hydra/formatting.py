@@ -4,8 +4,8 @@
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import FrozenDict, frozenlist
-from typing import Tuple, TypeVar, cast
+from hydra.dsl.python import frozenlist
+from typing import Tuple
 import hydra.core
 import hydra.lib.chars
 import hydra.lib.equality
@@ -17,8 +17,6 @@ import hydra.lib.sets
 import hydra.lib.strings
 import hydra.mantle
 
-T0 = TypeVar("T0")
-
 def map_first_letter(mapping: Callable[[str], str], s: str) -> str:
     """A helper which maps the first letter of a string to another string."""
     
@@ -29,12 +27,12 @@ def map_first_letter(mapping: Callable[[str], str], s: str) -> str:
 def capitalize(v1: str) -> str:
     """Capitalize the first letter of a string."""
     
-    return map_first_letter(lambda v1: hydra.lib.strings.to_upper(v1), v1)
+    return map_first_letter(lambda v12: hydra.lib.strings.to_upper(v12), v1)
 
 def decapitalize(v1: str) -> str:
     """Decapitalize the first letter of a string."""
     
-    return map_first_letter(lambda v1: hydra.lib.strings.to_lower(v1), v1)
+    return map_first_letter(lambda v12: hydra.lib.strings.to_lower(v12), v1)
 
 def convert_case(from_: hydra.mantle.CaseConvention, to: hydra.mantle.CaseConvention, original: str) -> str:
     """Convert a string from one case convention to another."""
@@ -116,7 +114,7 @@ def strip_leading_and_trailing_whitespace(s: str) -> str:
     return hydra.lib.strings.from_list(hydra.lib.lists.drop_while(lambda v1: hydra.lib.chars.is_space(v1), hydra.lib.lists.reverse(hydra.lib.lists.drop_while(lambda v1: hydra.lib.chars.is_space(v1), hydra.lib.lists.reverse(hydra.lib.strings.to_list(s))))))
 
 def with_character_aliases(original: str) -> str:
-    aliases = cast(FrozenDict[int, str], hydra.lib.maps.from_list(((32, "sp"), (33, "excl"), (34, "quot"), (35, "num"), (36, "dollar"), (37, "percnt"), (38, "amp"), (39, "apos"), (40, "lpar"), (41, "rpar"), (42, "ast"), (43, "plus"), (44, "comma"), (45, "minus"), (46, "period"), (47, "sol"), (58, "colon"), (59, "semi"), (60, "lt"), (61, "equals"), (62, "gt"), (63, "quest"), (64, "commat"), (91, "lsqb"), (92, "bsol"), (93, "rsqb"), (94, "circ"), (95, "lowbar"), (96, "grave"), (123, "lcub"), (124, "verbar"), (125, "rcub"), (126, "tilde"))))
+    aliases = hydra.lib.maps.from_list(((32, "sp"), (33, "excl"), (34, "quot"), (35, "num"), (36, "dollar"), (37, "percnt"), (38, "amp"), (39, "apos"), (40, "lpar"), (41, "rpar"), (42, "ast"), (43, "plus"), (44, "comma"), (45, "minus"), (46, "period"), (47, "sol"), (58, "colon"), (59, "semi"), (60, "lt"), (61, "equals"), (62, "gt"), (63, "quest"), (64, "commat"), (91, "lsqb"), (92, "bsol"), (93, "rsqb"), (94, "circ"), (95, "lowbar"), (96, "grave"), (123, "lcub"), (124, "verbar"), (125, "rcub"), (126, "tilde")))
     def alias(c: int) -> frozenlist[int]:
         return hydra.lib.optionals.from_maybe(hydra.lib.lists.pure(c), hydra.lib.optionals.map(lambda v1: hydra.lib.strings.to_list(v1), hydra.lib.maps.lookup(c, aliases)))
     return hydra.lib.strings.from_list(hydra.lib.lists.filter(lambda v1: hydra.lib.chars.is_alpha_num(v1), hydra.lib.lists.concat(hydra.lib.lists.map(alias, hydra.lib.strings.to_list(original)))))

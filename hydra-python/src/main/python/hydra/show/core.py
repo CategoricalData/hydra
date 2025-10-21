@@ -4,8 +4,8 @@
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import frozenlist
-from typing import Tuple, TypeVar
+from hydra.dsl.python import Just, Maybe, frozenlist
+from typing import Tuple
 import hydra.core
 import hydra.lib.lists
 import hydra.lib.literals
@@ -14,8 +14,6 @@ import hydra.lib.maps
 import hydra.lib.optionals
 import hydra.lib.sets
 import hydra.lib.strings
-
-T0 = TypeVar("T0")
 
 def float_type(ft: hydra.core.FloatType) -> str:
     """Show a float type as a string."""
@@ -111,7 +109,7 @@ def type(typ: hydra.core.Type) -> str:
                 return hydra.lib.lists.reverse(hydra.lib.lists.cons(t, prev))
     match typ:
         case hydra.core.TypeAnnotated(value=at):
-            return type(at.subject)
+            return type(at.body)
         
         case hydra.core.TypeApplication(value=app):
             types = gather_types((), app)
@@ -167,7 +165,7 @@ def type(typ: hydra.core.Type) -> str:
         
         case hydra.core.TypeWrap(value=wt):
             tname = wt.type_name.value
-            typ1 = wt.object
+            typ1 = wt.body
             return hydra.lib.strings.cat(("wrap[", tname, "](", type(typ1), ")"))
 
 def float(fv: hydra.core.FloatValue) -> str:
@@ -247,8 +245,8 @@ def binding(el: hydra.core.Binding) -> str:
     
     name = el.name.value
     t = el.term
-    type_str = hydra.lib.optionals.maybe("", lambda ts: hydra.lib.strings.cat2(" : ", type_scheme(ts)), el.type)
-    return hydra.lib.strings.cat((name, " = ", term(t), type_str))
+    type_str = hydra.lib.optionals.maybe("", lambda ts: hydra.lib.strings.cat((":(", type_scheme(ts), ")")), el.type)
+    return hydra.lib.strings.cat((name, type_str, " = ", term(t)))
 
 def elimination(elm: hydra.core.Elimination) -> str:
     """Show an elimination as a string."""
@@ -328,7 +326,7 @@ def term(t: hydra.core.Term) -> str:
                 return hydra.lib.lists.cons(lhs, hydra.lib.lists.cons(rhs, prev))
     match t:
         case hydra.core.TermAnnotated(value=at):
-            return term(at.subject)
+            return term(at.body)
         
         case hydra.core.TermApplication(value=app):
             terms = gather_terms((), app)
@@ -340,7 +338,7 @@ def term(t: hydra.core.Term) -> str:
         
         case hydra.core.TermLet(value=l):
             bindings = l.bindings
-            env = l.environment
+            env = l.body
             binding_strs = hydra.lib.lists.map(lambda v1: binding(v1), bindings)
             return hydra.lib.strings.cat(("let ", hydra.lib.strings.intercalate(", ", binding_strs), " in ", term(env)))
         
@@ -357,7 +355,7 @@ def term(t: hydra.core.Term) -> str:
             return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map(entry, hydra.lib.maps.to_list(m))), "}"))
         
         case hydra.core.TermOptional(value=mt):
-            return hydra.lib.optionals.maybe("nothing", lambda t: hydra.lib.strings.cat(("just(", term(t), ")")), mt)
+            return hydra.lib.optionals.maybe("nothing", lambda t2: hydra.lib.strings.cat(("just(", term(t2), ")")), mt)
         
         case hydra.core.TermProduct(value=els2):
             term_strs = hydra.lib.lists.map(lambda v1: term(v1), els2)
@@ -383,7 +381,7 @@ def term(t: hydra.core.Term) -> str:
             return hydra.lib.strings.cat(("Λ", param, ".", term(body)))
         
         case hydra.core.TermTypeApplication(value=tt):
-            t2 = tt.term
+            t2 = tt.body
             typ = tt.type
             return hydra.lib.strings.cat((term(t2), "⟨", type(typ), "⟩"))
         
@@ -398,14 +396,14 @@ def term(t: hydra.core.Term) -> str:
         
         case hydra.core.TermWrap(value=wt):
             tname = wt.type_name.value
-            term1 = wt.object
+            term1 = wt.body
             return hydra.lib.strings.cat(("wrap(", tname, "){", term(term1), "}"))
 
 def list[T0](f: Callable[[T0], str], xs: frozenlist[T0]) -> str:
     element_strs = hydra.lib.lists.map(f, xs)
     return hydra.lib.strings.cat(("[", hydra.lib.strings.intercalate(", ", element_strs), "]"))
 
-def read_term(s: str) -> hydra.core.Term | None:
+def read_term(s: str) -> Maybe[hydra.core.Term]:
     """A placeholder for reading terms from their serialized form. Not implemented."""
     
-    return hydra.core.TermLiteral(hydra.core.LiteralString(s))
+    return Just(hydra.core.TermLiteral(hydra.core.LiteralString(s)))

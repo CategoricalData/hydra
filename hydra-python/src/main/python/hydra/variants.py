@@ -3,6 +3,7 @@
 """Functions for working with term, type, and literal type variants, as well as numeric precision."""
 
 from __future__ import annotations
+from hydra.dsl.python import frozenlist
 import hydra.core
 import hydra.lib.lists
 import hydra.mantle
