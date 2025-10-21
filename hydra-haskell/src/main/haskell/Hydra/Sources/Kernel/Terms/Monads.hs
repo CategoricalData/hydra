@@ -80,19 +80,20 @@ define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
 bindDef :: TBinding (Flow s a -> (a -> Flow s b) -> Flow s b)
-bindDef = define "bind" $ lambdas ["l", "r"] $ lets [
-  "q">: lambdas ["s0", "t0"] $ lets [
-    "fs1">: Compute.unFlow (var "l") (var "s0") (var "t0")] $
+bindDef = define "bind" $
+  "l" ~> "r" ~>
+  "q" <~ ("s0" ~> "t0" ~>
+    "fs1" <~ Compute.unFlow (var "l") (var "s0") (var "t0") $
     Optionals.maybe
       (Compute.flowState
         nothing
         (Compute.flowStateState $ var "fs1")
         (Compute.flowStateTrace $ var "fs1"))
-      (lambda "v" $ Compute.unFlow
+      ("v" ~> Compute.unFlow
         (var "r" @@ var "v")
         (Compute.flowStateState $ var "fs1")
         (Compute.flowStateTrace $ var "fs1"))
-      (Compute.flowStateValue $ var "fs1")] $
+      (Compute.flowStateValue $ var "fs1")) $
   Compute.flow $ var "q"
 
 emptyTraceDef :: TBinding Trace
