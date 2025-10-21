@@ -211,7 +211,8 @@ encodeFunction env f = case f of
 --    where
 --      env2 = extendEnvironmentForLambda env lam
 
-  FunctionPrimitive name -> pure $ pyNameToPyExpression $ encodeName True CaseConventionLowerSnake env name -- Only nullary primitives should appear here.
+  -- Only nullary primitives should appear here.
+  FunctionPrimitive name -> pure $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) []
   _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
 encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> [Name] -> Term -> [Type] -> Type -> Maybe String -> [Py.Statement] -> Flow PyGraph Py.Statement
