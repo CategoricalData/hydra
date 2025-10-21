@@ -3,7 +3,7 @@
 """Functions for working with qualified names."""
 
 from __future__ import annotations
-from hydra.dsl.python import FrozenDict
+from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing
 import hydra.core
 import hydra.formatting
 import hydra.lib.equality
@@ -18,7 +18,7 @@ import hydra.module
 
 def qualify_name(name: hydra.core.Name) -> hydra.module.QualifiedName:
     parts = hydra.lib.lists.reverse(hydra.lib.strings.split_on(".", name.value))
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(parts)), hydra.module.QualifiedName(None, name.value), hydra.module.QualifiedName(hydra.module.Namespace(hydra.lib.strings.intercalate(".", hydra.lib.lists.reverse(hydra.lib.lists.tail(parts)))), hydra.lib.lists.head(parts)))
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(parts)), hydra.module.QualifiedName(Nothing(), name.value), hydra.module.QualifiedName(Just(hydra.module.Namespace(hydra.lib.strings.intercalate(".", hydra.lib.lists.reverse(hydra.lib.lists.tail(parts))))), hydra.lib.lists.head(parts)))
 
 def compact_name(namespaces: FrozenDict[hydra.module.Namespace, str], name: hydra.core.Name) -> str:
     """Given a mapping of namespaces to prefixes, convert a name to a compact string representation."""
@@ -31,7 +31,7 @@ def compact_name(namespaces: FrozenDict[hydra.module.Namespace, str], name: hydr
 def local_name_of(arg_: hydra.core.Name) -> str:
     return qualify_name(arg_).local
 
-def namespace_of(arg_: hydra.core.Name) -> hydra.module.Namespace | None:
+def namespace_of(arg_: hydra.core.Name) -> Maybe[hydra.module.Namespace]:
     return qualify_name(arg_).namespace
 
 def namespace_to_file_path(case_conv: hydra.mantle.CaseConvention, ext: hydra.module.FileExtension, ns: hydra.module.Namespace) -> str:

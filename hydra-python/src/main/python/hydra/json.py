@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 from decimal import Decimal
-from hydra.dsl.python import FrozenDict, frozenlist, Node
+from hydra.dsl.python import FrozenDict, Node, frozenlist
 import hydra.core
 
 class ValueArray(Node["frozenlist[Value]"]):
