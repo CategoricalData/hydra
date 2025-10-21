@@ -37,6 +37,7 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesFrozenDict :: Bool,
   pythonModuleMetadataUsesFrozenList :: Bool,
   pythonModuleMetadataUsesGeneric :: Bool,
+  pythonModuleMetadataUsesMaybe :: Bool,
   pythonModuleMetadataUsesName :: Bool,
   pythonModuleMetadataUsesNode :: Bool,
   pythonModuleMetadataUsesTuple :: Bool,
@@ -387,6 +388,7 @@ encodeModule mod defs0 = do
                 ("hydra.dsl.python", [
                   cond "FrozenDict" $ pythonModuleMetadataUsesFrozenDict meta,
                   cond "frozenlist" $ pythonModuleMetadataUsesFrozenList meta,
+                  cond "Maybe" $ pythonModuleMetadataUsesMaybe meta,
                   cond "Node" $ pythonModuleMetadataUsesNode meta]),
                 ("typing", [
                   cond "Annotated" $ pythonModuleMetadataUsesAnnotated meta,
@@ -484,8 +486,10 @@ encodeTermInline env term = case deannotateTerm term of
           pyV <- encode v
           return $ Py.DoubleStarredKvpairPair $ Py.Kvpair pyK pyV
     TermOptional mt -> case mt of
-      Nothing -> pure $ pyNameToPyExpression pyNone
-      Just term1 -> encode term1
+      Nothing -> pure $ pyNameToPyExpression $ Py.Name "NOTHING"
+      Just term1 -> do
+        pyex <- encode term1
+        return $ functionCall (pyNameToPyPrimary $ Py.Name "Just") [pyex]
     TermProduct terms -> do
       pyExprs <- CM.mapM encode terms
       return $ pyAtomToPyExpression $ Py.AtomTuple $ Py.Tuple (pyExpressionToPyStarNamedExpression <$> pyExprs)
@@ -608,7 +612,10 @@ encodeType env typ = case deannotateType typ of
       pyvt <- encode vt
       return $ nameAndParams (Py.Name "FrozenDict") [pykt, pyvt]
     TypeLiteral lt -> encodeLiteralType lt
-    TypeOptional et -> orNull . pyExpressionToPyPrimary <$> encode et
+    TypeOptional et -> do
+      ptype <- encode et
+      return $ pyPrimaryToPyExpression $
+        primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Maybe") [ptype]
     TypeProduct types -> nameAndParams (Py.Name "Tuple") <$> (CM.mapM encode types)
     TypeRecord rt -> pure $ typeVariableReference env $ rowTypeTypeName rt
     TypeSet et -> nameAndParams (Py.Name "frozenset") . L.singleton <$> encode et
@@ -787,6 +794,7 @@ extendMetaForType topLevel isTermAnnot typ meta = extendFor meta3 typ
           _ -> meta
         _ -> meta
       TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
+      TypeOptional _ -> meta {pythonModuleMetadataUsesMaybe = True}
       TypeProduct _ -> meta {pythonModuleMetadataUsesTuple = True}
       TypeRecord (RowType _ fields) -> meta {
           pythonModuleMetadataUsesAnnotated = L.foldl checkForAnnotated (pythonModuleMetadataUsesAnnotated meta) fields,
@@ -856,6 +864,7 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataUsesFrozenDict = False,
       pythonModuleMetadataUsesFrozenList = False,
       pythonModuleMetadataUsesGeneric = False,
+      pythonModuleMetadataUsesMaybe = False,
       pythonModuleMetadataUsesName = False,
       pythonModuleMetadataUsesNode = False,
       pythonModuleMetadataUsesTuple = False,
@@ -912,9 +921,9 @@ updateMeta f = do
 
 variantArgs :: Py.Expression -> [Name] -> Py.Args
 variantArgs ptype tparams = pyExpressionsToPyArgs $ Y.catMaybes [
-    Just $ pyPrimaryToPyExpression $
-      primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Node") [ptype],
-    genericArg tparams]
+  Just $ pyPrimaryToPyExpression $
+    primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Node") [ptype],
+  genericArg tparams]
 
 withBindings :: [Binding] -> Flow PyGraph a -> Flow PyGraph a
 withBindings bindings = withUpdatedGraph (extendGraphWithBindings bindings)

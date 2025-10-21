@@ -187,9 +187,6 @@ orExpression prims = pyBitwiseOrToPyExpression $ build Nothing prims
       where
         cur = Py.BitwiseOr prev $ pyPrimaryToPyBitwiseXor $ L.head prims
 
-orNull :: Py.Primary -> Py.Expression
-orNull lhs = orExpression [lhs, pyNameToPyPrimary $ Py.Name "None"]
-
 primaryWithRhs :: Py.Primary -> Py.PrimaryRhs -> Py.Primary
 primaryWithRhs prim rhs = Py.PrimaryCompound $ Py.PrimaryWithRhs prim rhs
 
