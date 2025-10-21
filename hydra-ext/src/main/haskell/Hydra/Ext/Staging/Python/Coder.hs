@@ -99,26 +99,35 @@ encodeApplication env app = do
     (fun, args) = gatherArgs (TermApplication app) []
     applyArgs hargs = case fun of
         TermFunction f -> case f of
-          FunctionElimination elm -> case elm of
-            EliminationProduct (TupleProjection arity idx _) -> do
-              pyIdx <- encodeIntegerValue $ IntegerValueInt32 idx
-              return $ pyPrimaryToPyExpression $ primaryWithExpressionSlices (pyExpressionToPyPrimary parg) [pyIdx]
-            EliminationRecord (Projection _ fname) -> do
-              return $ projectFromExpression parg $ encodeFieldName env fname
-            EliminationUnion (CaseStatement tname mdef cases) -> do
-              return $ stringToPyExpression Py.QuoteStyleDouble "inline match expressions are unsupported"
-            EliminationWrap _ -> do
-              return $ projectFromExpression parg $ Py.Name "value"
-          FunctionPrimitive name -> do
-            return $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) hargs
-          _ -> def
+            FunctionElimination elm -> case elm of
+              EliminationProduct (TupleProjection arity idx _) -> do
+                pyIdx <- encodeIntegerValue $ IntegerValueInt32 idx
+                return $ withRest $
+                  pyPrimaryToPyExpression $ primaryWithExpressionSlices (pyExpressionToPyPrimary firstArg) [pyIdx]
+              EliminationRecord (Projection _ fname) -> do
+                return $ withRest $
+                  projectFromExpression firstArg $ encodeFieldName env fname
+              EliminationUnion (CaseStatement tname mdef cases) -> do
+                return $ stringToPyExpression Py.QuoteStyleDouble "inline match expressions are unsupported"
+              EliminationWrap _ -> do
+                -- Note: additional arguments here would be an error
+                return $ withRest $
+                  projectFromExpression firstArg $ Py.Name "value"
+            FunctionPrimitive name -> do
+              return $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) hargs
+            _ -> def
+          where
+            withRest e = if L.null restArgs
+              then e
+              else functionCall (pyExpressionToPyPrimary e) restArgs
         -- Special-casing variables prevents quoting; forward references are allowed for function calls
         TermVariable name -> return $ if L.null hargs
           then termVariableReference env name
           else functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) hargs
         _ -> def
       where
-        parg = L.head hargs
+        firstArg = L.head hargs
+        restArgs = L.tail hargs
         def = do
           pfun <- encodeTermInline env fun
           return $ functionCall (pyExpressionToPyPrimary pfun) hargs
