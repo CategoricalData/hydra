@@ -1,27 +1,21 @@
 """Python implementations of hydra.lib.maps primitives."""
 
 from collections.abc import Callable, Mapping, Sequence
-from typing import Any, Optional, TypeVar
+from typing import Any
 
-from hydra.dsl.python import FrozenDict, frozenlist
-
-K = TypeVar('K')
-V = TypeVar('V')
-K1 = TypeVar('K1')
-K2 = TypeVar('K2')
-V1 = TypeVar('V1')
-V2 = TypeVar('V2')
+from hydra.dsl.python import FrozenDict, frozenlist, Maybe, Just, Nothing, NOTHING
 
 
 def alter[K, V](
-    f: Callable[[Optional[V]], Optional[V]], key: K, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
+    f: Callable[[Maybe[V]], Maybe[V]], key: K, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
     """Alter a value at a key using a function."""
-    current_value = mapping.get(key)
+    current_value = lookup(key, mapping)
     new_value = f(current_value)
-    if new_value is None:
-        return remove(key, mapping)
-    else:
-        return insert(key, new_value, mapping)
+    match new_value:
+        case Nothing():
+            return remove(key, mapping)
+        case Just(v):
+            return insert(key, v, mapping)
 
 
 def bimap[K1, K2, V1, V2](
@@ -71,9 +65,10 @@ def keys[K](mapping: Mapping[K, Any]) -> frozenlist[K]:
     return tuple(mapping.keys())
 
 
-def lookup[K, V](key: K, mapping: Mapping[K, V]) -> Optional[V]:
+def lookup[K, V](key: K, mapping: Mapping[K, V]) -> Maybe[V]:
     """Lookup a value in a map."""
-    return mapping.get(key)
+    result = mapping.get(key)
+    return Just(result) if result is not None else NOTHING
 
 
 def map[K, V1, V2](f: Callable[[V1], V2], mapping: Mapping[K, V1]) -> FrozenDict[K, V2]:
