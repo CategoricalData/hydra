@@ -46,6 +46,10 @@ data PyGraph = PyGraph {
   pyGraphGraph :: Graph,
   pyGraphMetadata :: PythonModuleMetadata}
 
+-- Supported as of Python 3.12
+useInlineTypeParams :: Bool
+useInlineTypeParams = True
+
 -- | Rewrite case statements in which the top-level lambda variables are re-used, e.g.
 --   cases _Type Nothing [_Type_list>>: "t" ~> ..., _Type_set>>: "t" ~> ...].
 --   Such case statements are legal in Hydra, but may lead to variable name collision in languages like Python.
@@ -174,12 +178,27 @@ encodeFloatValue fv = case fv of
 
 encodeFunction :: PythonEnvironment -> Function -> Flow PyGraph Py.Expression
 encodeFunction env f = case f of
-  FunctionLambda lam@(Lambda var (Just dom) body) -> do
-      pbody <- encodeTermInline env2 body
-      return $ Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] $
-        Just $ Py.LambdaStarEtcParamNoDefault $ Py.LambdaParamNoDefault $ encodeNameQualified env2 var) pbody
+  FunctionLambda lam@(Lambda var _ body) -> do
+      pbody <- encodeTermInline innerEnv innerBody
+      let pparams = fmap (encodeNameQualified env) params
+      return $ Py.ExpressionLambda $ Py.Lambda
+        (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
+        pbody
     where
-      env2 = extendEnvironmentForLambda env lam
+      (params, innerBody, innerEnv) = gatherLambdaParams env lam []
+      gatherLambdaParams env lam@(Lambda var _ body) params = case deannotateTerm body of
+          TermFunction (FunctionLambda lam2) -> gatherLambdaParams env2 lam2 params2
+          _ -> (L.reverse params2, body, env2)
+        where
+          env2 = extendEnvironmentForLambda env lam
+          params2 = var:params
+--  FunctionLambda lam@(Lambda var _ body) -> do
+--      pbody <- encodeTermInline env2 body
+--      return $ Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] $
+--        Just $ Py.LambdaStarEtcParamNoDefault $ Py.LambdaParamNoDefault $ encodeNameQualified env2 var) pbody
+--    where
+--      env2 = extendEnvironmentForLambda env lam
+
   FunctionPrimitive name -> pure $ pyNameToPyExpression $ encodeName True CaseConventionLowerSnake env name -- Only nullary primitives should appear here.
   _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
@@ -190,7 +209,9 @@ encodeFunctionDefinition env name tparams args body doms cod comment prefixes = 
     stmts <- encodeTermMultiline env body
     let block = indentedBlock comment [prefixes ++ stmts]
     returnType <- getType cod
-    let pyTparams = fmap (pyNameToPyTypeParameter . encodeTypeVariable) tparams
+    let pyTparams = if useInlineTypeParams
+                    then fmap (pyNameToPyTypeParameter . encodeTypeVariable) tparams
+                    else []
 
     updateMeta $ extendMetaForTypes (cod:doms)
 
@@ -293,18 +314,25 @@ encodeModule mod defs0 = do
                   pythonEnvironmentBoundTypeVariables = ([], M.empty),
                   pythonEnvironmentTypeContext = tcontext}
       defStmts <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
-      PyGraph _ meta <- getState -- get metadata after definitions, which may have altered it
---      fail $ "uses callable: " ++ show (pythonModuleMetadataUsesCallable meta)
+      PyGraph _ meta1 <- getState -- get metadata after definitions, which may have altered it
+      let meta = if not isTypeModule && useInlineTypeParams
+                 then meta1 {pythonModuleMetadataUsesTypeVar = False}
+                 else meta1
 
       let commentStmts = case normalizeComment <$> moduleDescription mod of
                          Nothing -> []
                          Just c -> [commentStatement c]
       let importStmts = imports namespaces meta
-      let tvars = pythonModuleMetadataTypeVariables meta
+      let tvars = if isTypeModule || not useInlineTypeParams
+                  then pythonModuleMetadataTypeVariables meta
+                  else S.empty
       let tvarStmts = tvarStmt . encodeTypeVariable <$> S.toList tvars
       let body = L.filter (not . L.null) $ [commentStmts, importStmts, tvarStmts] ++ defStmts
       return $ Py.Module body
   where
+    isTypeModule = not $ L.null $ L.filter (\d -> case d of
+      DefinitionType _ -> True
+      _ -> False) defs0
     findNamespaces defs meta = if fst (namespacesFocus namespaces) == coreNs
         then namespaces
         else namespaces {namespacesMapping = M.insert coreNs (encodeNamespace coreNs) $ namespacesMapping namespaces}
@@ -718,18 +746,8 @@ extendMetaForTerm topLevel meta t = case t of
     meta2 = L.foldl (extendMetaForTerm False) meta $ subterms t
 
 extendMetaForType :: Bool -> Bool -> Type -> PythonModuleMetadata -> PythonModuleMetadata
---extendMetaForType foo bar typ meta = extendFor meta typ
---extendMetaForType topLevel isTermAnnot typ meta = extendFor meta typ
---extendMetaForType topLevel isTermAnnot typ meta = case typ of
---  TypeFunction (FunctionType _ _) -> meta {pythonModuleMetadataUsesCallable = True}
---  _ -> meta
-
 extendMetaForType topLevel isTermAnnot typ meta = extendFor meta3 typ
---extendMetaForType foo bar typ meta = extendFor meta3 typ
   where
---    topLevel = True
---    isTermAnnot = False
-
     tvars = pythonModuleMetadataTypeVariables meta
     meta3 = digForWrap typ
       where
