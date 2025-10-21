@@ -149,8 +149,8 @@ encodeDefinition env def = case def of
 --  DefinitionTerm (TermDefinition name term _) -> withTrace ("data element " ++ unName name
 --    ++ ": " ++ ShowCore.term term) $ do
 
---    if name == Name "hydra.show.core.fields"
---    then fail $ "fields: " ++ ShowCore.term term
+--    if name == Name "hydra.monads.bind"
+--    then fail $ "term: " ++ ShowCore.term term
 --    else return ()
 
     comment <- fmap normalizeComment <$> (inGraphContext $ getTermDescription term)
@@ -208,7 +208,7 @@ encodeFunction env f = case f of
 encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> [Name] -> Term -> [Type] -> Type -> Maybe String -> [Py.Statement] -> Flow PyGraph Py.Statement
 encodeFunctionDefinition env name tparams args body doms cod comment prefixes = do
     pyArgs <- CM.zipWithM toParam args doms
-    let params = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters pyArgs [] Nothing
+    let pyParams = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters pyArgs [] Nothing
     stmts <- encodeTermMultiline env body
     let block = indentedBlock comment [prefixes ++ stmts]
     returnType <- getType cod
@@ -218,21 +218,25 @@ encodeFunctionDefinition env name tparams args body doms cod comment prefixes = 
 
     updateMeta $ extendMetaForTypes (cod:doms)
 
---    (PyGraph _ metax) <- getState
---    if name == Name "hydra.annotations.aggregateAnnotations"
+--    if name == Name "q"
 --    then fail $ "body: " ++ ShowCore.term body
 --      ++ "\ntparams: " ++ L.intercalate ", " (fmap unName tparams)
 --      ++ "\nargs: " ++ L.intercalate ", " (fmap unName args)
 --      ++ "\ndoms: " ++ L.intercalate ", " (fmap ShowCore.type_ doms)
 --      ++ "\ncod: " ++ ShowCore.type_ cod
---      ++ "\nuses callable: " ++ show (pythonModuleMetadataUsesCallable metax)
+--      ++ "\npyParams: " ++ show pyParams
 --    else return ()
 
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing $
-      Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) pyTparams (Just params) (Just returnType) Nothing block
+      Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) pyTparams (Just pyParams) (Just returnType) Nothing block
   where
     toParam name typ = do
-      pyTyp <- getType typ
+      pyTyp <- encodeType env typ
+
+--      fail $ "toParam: " ++ unName name ++ ", " ++ ShowCore.type_ typ ++ ", " ++ show pyTyp
+--       ++ "types: " ++ L.intercalate "\n\t"
+--         (fmap (\(k, v) -> unName k ++ ": " ++ ShowCore.type_ v) $ M.toList $ typeContextTypes $ pythonEnvironmentTypeContext env)
+
       return $ Py.ParamNoDefault (Py.Param (encodeName False CaseConventionLowerSnake env name) $ Just $ Py.Annotation pyTyp) Nothing -- TODO
     getType typ = case deannotateType typ of
       TypeVariable v -> case M.lookup v (typeContextTypes $ pythonEnvironmentTypeContext env) of
