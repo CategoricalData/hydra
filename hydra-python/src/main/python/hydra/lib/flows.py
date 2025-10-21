@@ -170,6 +170,7 @@ def map_list[S, X, Y](f: Callable[[X], Flow[S, Y]], xs: Sequence[X]) -> Flow[S, 
 
 
 # TODO: map_optional highlights an incompatibility between X|None in Python, and Hydra's optional<x>.
+#       In Hydra, you can have optional<optional<x>>, but in Python, (X|None)|None does not work.
 # def map_optional[S, X, Y](f: Callable[[X], Flow[S, Y]], mx: X | None) -> Flow[S, Y | None]:
 #     """Map a monadic function over an optional value."""
 #     def run(state: S, trace: Trace) -> FlowState[S, Y | None]:
