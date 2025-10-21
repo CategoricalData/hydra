@@ -160,6 +160,9 @@ modifyDef = define "modify" $ lambda "f" $
 mutateTraceDef :: TBinding ((Trace -> Hydra.Mantle.Either String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a)
 mutateTraceDef = define "mutateTrace" $
   "mutate" ~> "restore" ~> "f" ~>
+  "choose" <~ ("forLeft" ~> "forRight" ~> "e" ~> cases _Either (var "e") Nothing [
+    _Either_left>>: "e" ~> var "forLeft" @@ var "e",
+    _Either_right>>: "e" ~> var "forRight" @@ var "e"]) $
   Compute.flow (
     "s0" ~> "t0" ~>
     "forLeft" <~ ("msg" ~>
@@ -170,9 +173,7 @@ mutateTraceDef = define "mutateTrace" $
         (Compute.flowStateValue (var "f2"))
         (Compute.flowStateState (var "f2"))
         (var "restore" @@ var "t0" @@ (Compute.flowStateTrace (var "f2")))) $
-    cases _Either (var "mutate" @@ var "t0") Nothing [
-      _Either_left>>: var "forLeft",
-      _Either_right>>: var "forRight"])
+    var "choose" @@ var "forLeft" @@ var "forRight" @@ (var "mutate" @@ var "t0"))
 
 optionalToListDef :: TBinding (Maybe a -> [a])
 optionalToListDef = define "optionalToList" $
@@ -251,14 +252,30 @@ warnDef = define "warn" $
       (Compute.flowStateState (var "f1"))
       (var "addMessage" @@ (Compute.flowStateTrace (var "f1"))))
 
-withFlagDef :: TBinding (String -> Flow s a -> Flow s a)
+--withFlagDef :: TBinding (Name -> Flow s a -> Flow s a)
+--withFlagDef = define "withFlag" $
+--  doc "Continue the current flow after setting a flag" $
+--  "flag" ~> "f" ~>
+--  "mutate" <~ ("t" ~> Mantle.eitherRight (Compute.trace
+--    (Compute.traceStack (var "t"))
+--    (Compute.traceMessages (var "t"))
+--    (Maps.insert (var "flag") (Core.termLiteral (Core.literalBoolean (boolean True))) (Compute.traceOther (var "t"))))) $
+--  "restore" <~ ("ignored" ~> "t1" ~> Compute.trace
+--    (Compute.traceStack (var "t1"))
+--    (Compute.traceMessages (var "t1"))
+--    (Maps.remove (var "flag") (Compute.traceOther (var "t1")))) $
+--  ref mutateTraceDef @@ var "mutate" @@ var "restore" @@ var "f"
+
 withFlagDef = define "withFlag" $
   doc "Continue the current flow after setting a flag" $
   "flag" ~> "f" ~>
-  "mutate" <~ ("t" ~> Mantle.eitherRight (Compute.trace
-    (Compute.traceStack (var "t"))
-    (Compute.traceMessages (var "t"))
-    (Maps.insert (var "flag") (Core.termLiteral (Core.literalBoolean (boolean True))) (Compute.traceOther (var "t"))))) $
+  "mutate" <~ ("t" ~> Logic.ifElse
+    (boolean False)
+    (Mantle.eitherLeft (string "never happens"))  -- Forces the left type to String
+    (Mantle.eitherRight (Compute.trace
+      (Compute.traceStack (var "t"))
+      (Compute.traceMessages (var "t"))
+      (Maps.insert (var "flag") (Core.termLiteral (Core.literalBoolean (boolean True))) (Compute.traceOther (var "t")))))) $
   "restore" <~ ("ignored" ~> "t1" ~> Compute.trace
     (Compute.traceStack (var "t1"))
     (Compute.traceMessages (var "t1"))
