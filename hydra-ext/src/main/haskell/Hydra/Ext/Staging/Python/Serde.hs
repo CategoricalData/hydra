@@ -276,7 +276,9 @@ encodeLambdaParameters :: Py.LambdaParameters -> A.Expr
 encodeLambdaParameters (Py.LambdaParameters slashNoDefault paramNoDefault paramWithDefault starEtc) =
   commaSep inlineStyle $ Y.catMaybes [
     Nothing, -- TODO: slashNoDefault
-    Nothing, -- TODO: paramNoDefault
+    if L.null paramNoDefault
+      then Nothing
+      else Just $ commaSep inlineStyle (encodeLambdaParamNoDefault <$> paramNoDefault),
     Nothing, -- TODO: paramWithDefault
     encodeLambdaStarEtc <$> starEtc]
 
