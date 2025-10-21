@@ -5,7 +5,7 @@
 from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
-from hydra.dsl.python import FrozenDict, frozenlist
+from hydra.dsl.python import FrozenDict, frozenlist, Maybe
 from typing import Annotated, Generic, TypeVar
 import hydra.compute
 import hydra.core
@@ -17,11 +17,11 @@ class Graph:
     """A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph."""
     
     elements: Annotated[FrozenDict[hydra.core.Name, hydra.core.Binding], "All of the elements in the graph"]
-    environment: Annotated[FrozenDict[hydra.core.Name, hydra.core.Term | None], "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)"]
+    environment: Annotated[FrozenDict[hydra.core.Name, Maybe[hydra.core.Term]], "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)"]
     types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "The typing environment of the graph"]
     body: Annotated[hydra.core.Term, "The body of the term which generated this context"]
     primitives: Annotated[FrozenDict[hydra.core.Name, Primitive], "All supported primitive constants and functions, by name"]
-    schema: Annotated[Graph | None, "The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph."]
+    schema: Annotated[Maybe[Graph], "The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph."]
 
 GRAPH__NAME = hydra.core.Name("hydra.graph.Graph")
 GRAPH__ELEMENTS__NAME = hydra.core.Name("elements")

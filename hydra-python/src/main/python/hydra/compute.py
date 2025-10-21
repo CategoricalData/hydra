@@ -5,7 +5,7 @@
 from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
-from hydra.dsl.python import FrozenDict, frozenlist, Node
+from hydra.dsl.python import FrozenDict, frozenlist, Maybe, Node
 from typing import Annotated, Generic, TypeVar
 import hydra.core
 
@@ -64,7 +64,7 @@ FLOW__NAME = hydra.core.Name("hydra.compute.Flow")
 class FlowState(Generic[S, V]):
     """The result of evaluating a Flow."""
     
-    value: V | None
+    value: Maybe[V]
     state: S
     trace: Trace
 

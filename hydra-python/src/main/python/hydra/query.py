@@ -5,7 +5,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
-from hydra.dsl.python import frozenlist, Node
+from hydra.dsl.python import frozenlist, Maybe, Node
 from typing import Annotated
 import hydra.core
 
@@ -37,8 +37,8 @@ class Edge:
     """An abstract edge based on a record type."""
     
     type: Annotated[hydra.core.Name, "The name of a record type, for which the edge also specifies an out- and an in- projection"]
-    out: Annotated[hydra.core.Name | None, "The field representing the out-projection of the edge. Defaults to 'out'."]
-    in_: Annotated[hydra.core.Name | None, "The field representing the in-projection of the edge. Defaults to 'in'."]
+    out: Annotated[Maybe[hydra.core.Name], "The field representing the out-projection of the edge. Defaults to 'out'."]
+    in_: Annotated[Maybe[hydra.core.Name], "The field representing the in-projection of the edge. Defaults to 'in'."]
 
 EDGE__NAME = hydra.core.Name("hydra.query.Edge")
 EDGE__TYPE__NAME = hydra.core.Name("type")

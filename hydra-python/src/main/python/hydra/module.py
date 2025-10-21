@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 from dataclasses import dataclass
-from hydra.dsl.python import FrozenDict, frozenlist, Node
+from hydra.dsl.python import FrozenDict, frozenlist, Maybe, Node
 from typing import Annotated, Generic, Tuple, TypeVar
 import hydra.core
 import hydra.graph
@@ -48,7 +48,7 @@ class Module:
     elements: Annotated[frozenlist[hydra.core.Binding], "The elements defined in this module"]
     term_dependencies: Annotated[frozenlist[Module], "Any modules which the term expressions of this module directly depend upon"]
     type_dependencies: Annotated[frozenlist[Module], "Any modules which the type expressions of this module directly depend upon"]
-    description: Annotated[str | None, "An optional human-readable description of the module"]
+    description: Annotated[Maybe[str], "An optional human-readable description of the module"]
 
 MODULE__NAME = hydra.core.Name("hydra.module.Module")
 MODULE__NAMESPACE__NAME = hydra.core.Name("namespace")
@@ -77,7 +77,7 @@ NAMESPACES__MAPPING__NAME = hydra.core.Name("mapping")
 class QualifiedName:
     """A qualified name consisting of an optional namespace together with a mandatory local name."""
     
-    namespace: Namespace | None
+    namespace: Maybe[Namespace]
     local: str
 
 QUALIFIED_NAME__NAME = hydra.core.Name("hydra.module.QualifiedName")
