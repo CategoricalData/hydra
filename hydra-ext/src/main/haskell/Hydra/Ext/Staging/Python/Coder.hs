@@ -143,14 +143,20 @@ encodeApplicationType env at = do
       TypeApplication (ApplicationType lhs rhs) -> gatherParams lhs (rhs:ps)
       _ -> (t, ps)
 
-encodeBinding :: PythonEnvironment -> Binding -> Flow PyGraph Py.Statement
-encodeBinding env (Binding name1 term1 mts) = do
+encodeBindingAsAssignment :: PythonEnvironment -> Binding -> Flow PyGraph Py.NamedExpression
+encodeBindingAsAssignment env (Binding name term _) = do
+  pterm <- encodeTermInline env term
+  let pyName = encodeName False CaseConventionLowerSnake env name
+  return $ Py.NamedExpressionAssignment $ Py.AssignmentExpression pyName pterm
+
+encodeBindingAsDef :: PythonEnvironment -> Binding -> Flow PyGraph Py.Statement
+encodeBindingAsDef env (Binding name1 term1 mts) = do
   comment <- fmap normalizeComment <$> (inGraphContext $ getTermDescription term1)
   encodeTermAssignment env name1 term1 comment
 
 -- TODO: topological sort of bindings
-encodeBindings :: PythonEnvironment -> [Binding] -> Flow PyGraph [Py.Statement]
-encodeBindings env bindings = CM.mapM (encodeBinding env) bindings
+encodeBindingsAsDefs :: PythonEnvironment -> [Binding] -> Flow PyGraph [Py.Statement]
+encodeBindingsAsDefs env bindings = CM.mapM (encodeBindingAsDef env) bindings
 
 encodeDefinition :: PythonEnvironment -> Definition -> Flow PyGraph [[Py.Statement]]
 encodeDefinition env def = case def of
@@ -188,29 +194,6 @@ encodeFloatValue fv = case fv of
   FloatValueFloat64 f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat $ realToFrac f
   _ -> fail $ "unsupported floating point type: " ++ show (floatValueType fv)
 
-
-
-
-
---encodeBindingExpr :: PythonEnvironment -> Binding -> Flow PyGraph Py.Expression
---encodeBindingExpr env (Binding name term _) = do
---  pterm <- encodeTermInline env term
---  let pyName = encodeName False CaseConventionLowerSnake env name
---  -- Create: name := expr
---  return $ Py.ExpressionNamed $ Py.NamedExpression
---    (Py.Name pyName)
---    pterm
-
-encodeBindingToWalrus :: PythonEnvironment -> Binding -> Flow PyGraph Py.NamedExpression
-encodeBindingToWalrus env (Binding name term _) = do
-  pterm <- encodeTermInline env term
-  let pyName = encodeName False CaseConventionLowerSnake env name
-  return $ Py.NamedExpressionAssignment $ Py.AssignmentExpression pyName pterm
-
-
-
-
-
 encodeFunction :: PythonEnvironment -> Function -> Flow PyGraph Py.Expression
 encodeFunction env f = case f of
   FunctionLambda lam -> do
@@ -218,14 +201,13 @@ encodeFunction env f = case f of
       gatherBindingsAndParams env (TermFunction $ FunctionLambda lam)
     pbody <- encodeTermInline innerEnv innerBody
     let pparams = fmap (encodeNameQualified env) params
-    if (not $ L.null bindings)
-      then do
-
-        -- TODO: handle bindings and body
-
-
+    if (L.null bindings)
+      then return $ Py.ExpressionLambda $ Py.Lambda
+        (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
+        pbody
+      else do
         -- Create walrus operator expressions for each binding
-        pbindingExprs <- CM.mapM (encodeBindingToWalrus innerEnv) bindings
+        pbindingExprs <- CM.mapM (encodeBindingAsAssignment innerEnv) bindings
 
         -- Convert NamedExpressions to StarNamedExpressions for the tuple
         let pbindingStarExprs = fmap Py.StarNamedExpressionSimple pbindingExprs
@@ -245,37 +227,6 @@ encodeFunction env f = case f of
         return $ Py.ExpressionLambda $ Py.Lambda
           (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
           (pyPrimaryToPyExpression indexedExpr)
-
-
-
-
---        fail $ "bindings within lambdas not yet supported"
-      else do
-        return $ Py.ExpressionLambda $ Py.Lambda
-          (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
-          pbody
-
---  FunctionLambda lam@(Lambda var _ body) -> do
---      pbody <- encodeTermInline innerEnv innerBody
---      let pparams = fmap (encodeNameQualified env) params
---      return $ Py.ExpressionLambda $ Py.Lambda
---        (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
---        pbody
---    where
---      (params, innerBody, innerEnv) = gatherLambdaParams env lam []
---      gatherLambdaParams env lam@(Lambda var _ body) params = case deannotateTerm body of
---          TermFunction (FunctionLambda lam2) -> gatherLambdaParams env2 lam2 params2
---          _ -> (L.reverse params2, body, env2)
---        where
---          env2 = extendEnvironmentForLambda env lam
---          params2 = var:params
-
---  FunctionLambda lam@(Lambda var _ body) -> do
---      pbody <- encodeTermInline env2 body
---      return $ Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] $
---        Just $ Py.LambdaStarEtcParamNoDefault $ Py.LambdaParamNoDefault $ encodeNameQualified env2 var) pbody
---    where
---      env2 = extendEnvironmentForLambda env lam
 
   -- Only nullary primitives should appear here.
   FunctionPrimitive name -> pure $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) []
@@ -545,7 +496,7 @@ encodeTermAssignment env name term comment = do
 --    else return ()
 
     -- TODO: consider moving this into the updated environment, along with the body
-    bindingStmts <- encodeBindings env2 bindings
+    bindingStmts <- encodeBindingsAsDefs env2 bindings
 
     withBindings bindings $
       encodeFunctionDefinition env2 name tparams params body doms cod comment bindingStmts
@@ -634,7 +585,7 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
         return [returnSingle expr]
       else do
         -- TODO: consider putting this inside of the updated environment, along with the body
-        bindingStmts <- encodeBindings env2 bindings
+        bindingStmts <- encodeBindingsAsDefs env2 bindings
 
         withBindings bindings $ do
           stmts <- encodeTermMultiline env2 body
