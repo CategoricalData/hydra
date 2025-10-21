@@ -37,9 +37,11 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesFrozenDict :: Bool,
   pythonModuleMetadataUsesFrozenList :: Bool,
   pythonModuleMetadataUsesGeneric :: Bool,
+  pythonModuleMetadataUsesJust :: Bool,
   pythonModuleMetadataUsesMaybe :: Bool,
   pythonModuleMetadataUsesName :: Bool,
   pythonModuleMetadataUsesNode :: Bool,
+  pythonModuleMetadataUsesNothing :: Bool,
   pythonModuleMetadataUsesTuple :: Bool,
   pythonModuleMetadataUsesTypeVar :: Bool}
 
@@ -387,9 +389,11 @@ encodeModule mod defs0 = do
                   cond "Enum" $ pythonModuleMetadataUsesEnum meta]),
                 ("hydra.dsl.python", [
                   cond "FrozenDict" $ pythonModuleMetadataUsesFrozenDict meta,
-                  cond "frozenlist" $ pythonModuleMetadataUsesFrozenList meta,
+                  cond "Just" $ pythonModuleMetadataUsesJust meta,
                   cond "Maybe" $ pythonModuleMetadataUsesMaybe meta,
-                  cond "Node" $ pythonModuleMetadataUsesNode meta]),
+                  cond "Node" $ pythonModuleMetadataUsesNode meta,
+                  cond "Nothing" $ pythonModuleMetadataUsesNothing meta,
+                  cond "frozenlist" $ pythonModuleMetadataUsesFrozenList meta]),
                 ("typing", [
                   cond "Annotated" $ pythonModuleMetadataUsesAnnotated meta,
                   cond "Generic" $ pythonModuleMetadataUsesGeneric meta,
@@ -486,7 +490,7 @@ encodeTermInline env term = case deannotateTerm term of
           pyV <- encode v
           return $ Py.DoubleStarredKvpairPair $ Py.Kvpair pyK pyV
     TermOptional mt -> case mt of
-      Nothing -> pure $ pyNameToPyExpression $ Py.Name "NOTHING"
+      Nothing -> pure $ functionCall (pyNameToPyPrimary $ Py.Name "Nothing") []
       Just term1 -> do
         pyex <- encode term1
         return $ functionCall (pyNameToPyPrimary $ Py.Name "Just") [pyex]
@@ -729,13 +733,11 @@ extendEnvironmentForTypeLambda env tlam = env {
   pythonEnvironmentTypeContext = extendTypeContextForTypeLambda (pythonEnvironmentTypeContext env) tlam}
 
 extendMetaForTerm :: Bool -> PythonModuleMetadata -> Term -> PythonModuleMetadata
-extendMetaForTerm topLevel meta t = case t of
+extendMetaForTerm topLevel meta0 t = case t of
     TermFunction f -> case f of
       FunctionLambda (Lambda _ (Just dom) body) -> if topLevel
-          then extendMetaForType True False dom meta2
-          else meta2
-        where
-          meta2 = extendMetaForTerm topLevel meta body
+          then extendMetaForType True False dom meta
+          else meta
       _ -> meta
     TermLet (Let bindings body) -> L.foldl forBinding (extendMetaForTerm False meta body) bindings
       where
@@ -748,9 +750,12 @@ extendMetaForTerm topLevel meta t = case t of
         _ -> meta
       _ -> meta
     TermMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
-    _ -> meta2
+    TermOptional m -> case m of
+      Nothing -> meta {pythonModuleMetadataUsesNothing = True}
+      Just _ -> meta {pythonModuleMetadataUsesJust = True}
+    _ -> meta
   where
-    meta2 = L.foldl (extendMetaForTerm False) meta $ subterms t
+    meta = L.foldl (extendMetaForTerm False) meta0 $ subterms t
 
 extendMetaForType :: Bool -> Bool -> Type -> PythonModuleMetadata -> PythonModuleMetadata
 extendMetaForType topLevel isTermAnnot typ meta = extendFor meta3 typ
@@ -864,9 +869,11 @@ gatherMetadata defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataUsesFrozenDict = False,
       pythonModuleMetadataUsesFrozenList = False,
       pythonModuleMetadataUsesGeneric = False,
+      pythonModuleMetadataUsesJust = False,
       pythonModuleMetadataUsesMaybe = False,
       pythonModuleMetadataUsesName = False,
       pythonModuleMetadataUsesNode = False,
+      pythonModuleMetadataUsesNothing = False,
       pythonModuleMetadataUsesTuple = False,
       pythonModuleMetadataUsesTypeVar = False}
     addDef meta def = case def of
@@ -908,11 +915,6 @@ moduleToPython mod defs = do
   let s = printExpr $ parenthesize $ PySer.encodeModule file
   let path = namespaceToFilePath CaseConventionLowerSnake (FileExtension "py") $ moduleNamespace mod
   return $ M.fromList [(path, s)]
-
---updateGraph :: (Graph -> Graph) -> Flow PyGraph ()
---updateGraph f = do
---  PyGraph g meta <- getState
---  putState (PyGraph (f g) meta)
 
 updateMeta :: (PythonModuleMetadata -> PythonModuleMetadata) -> Flow PyGraph ()
 updateMeta f = do
