@@ -27,6 +27,7 @@ import qualified Text.Read  as TR
 
 -- | Temporary metadata which is used to create the header section of a Python file
 data PythonModuleMetadata = PythonModuleMetadata {
+  pythonModuleMetadataNamespaces :: Namespaces Py.DottedName,
   pythonModuleMetadataTypeVariables :: S.Set Name,
   pythonModuleMetadataUsesAnnotated :: Bool,
   pythonModuleMetadataUsesCallable :: Bool,
@@ -164,7 +165,7 @@ encodeDefinition env def = case def of
 --  DefinitionTerm (TermDefinition name term _) -> withTrace ("data element " ++ unName name
 --    ++ ": " ++ ShowCore.term term) $ do
 
---    if name == Name "hydra.monads.bind"
+--    if name == Name "hydra.monads.withFlag"
 --    then fail $ "term: " ++ ShowCore.term term
 --    else return ()
 
@@ -193,6 +194,16 @@ encodeFloatValue fv = case fv of
   FloatValueBigfloat f -> pure $ functionCall (pyNameToPyPrimary $ Py.Name "Decimal") [singleQuotedString $ show f]
   FloatValueFloat64 f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat $ realToFrac f
   _ -> fail $ "unsupported floating point type: " ++ show (floatValueType fv)
+
+encodeForallType :: PythonEnvironment -> ForallType -> Flow PyGraph Py.Expression
+encodeForallType env lt = do
+    pyBody <- encodeType env body
+    return $ primaryAndParams (pyExpressionToPyPrimary pyBody) (pyNameToPyExpression . Py.Name . unName <$> params)
+  where
+    (body, params) = gatherParams (TypeForall lt) []
+    gatherParams t ps = case deannotateType t of
+      TypeForall (ForallType name body) -> gatherParams body (name:ps)
+      _ -> (t, L.reverse ps)
 
 encodeFunction :: PythonEnvironment -> Function -> Flow PyGraph Py.Expression
 encodeFunction env f = case f of
@@ -299,16 +310,6 @@ encodeIntegerValue iv = case iv of
   IntegerValueUint64 i -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $ fromIntegral i
 --  _ -> fail $ "unsupported integer type: " ++ show (integerValueType iv)
 
-encodeForallType :: PythonEnvironment -> ForallType -> Flow PyGraph Py.Expression
-encodeForallType env lt = do
-    pyBody <- encodeType env body
-    return $ primaryAndParams (pyExpressionToPyPrimary pyBody) (pyNameToPyExpression . Py.Name . unName <$> params)
-  where
-    (body, params) = gatherParams (TypeForall lt) []
-    gatherParams t ps = case deannotateType t of
-      TypeForall (ForallType name body) -> gatherParams body (name:ps)
-      _ -> (t, L.reverse ps)
-
 encodeLiteral :: Literal -> Flow s Py.Expression
 encodeLiteral lit = case lit of
   LiteralBoolean b -> pure $ pyAtomToPyExpression $ if b then Py.AtomTrue else Py.AtomFalse
@@ -337,14 +338,14 @@ encodeLiteralType lt = do
 encodeModule :: Module -> [Definition] -> Flow Graph Py.Module
 encodeModule mod defs0 = do
     let defs = reorderDefs defs0
-    let meta0 = gatherMetadata defs
+    let meta0 = gatherMetadata (moduleNamespace mod) defs
     g <- getState
     withState (PyGraph g meta0) $ do
-      let namespaces = findNamespaces defs meta0
+      let namespaces0 = pythonModuleMetadataNamespaces meta0
       let mc = tripleQuotedString . normalizeComment <$> moduleDescription mod
       tcontext <- initialTypeContext g
       let env = PythonEnvironment {
-                  pythonEnvironmentNamespaces = namespaces,
+                  pythonEnvironmentNamespaces = namespaces0,
                   pythonEnvironmentBoundTypeVariables = ([], M.empty),
                   pythonEnvironmentTypeContext = tcontext}
       defStmts <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
@@ -352,6 +353,7 @@ encodeModule mod defs0 = do
       let meta = if not isTypeModule && useInlineTypeParams
                  then meta1 {pythonModuleMetadataUsesTypeVar = False}
                  else meta1
+      let namespaces = pythonModuleMetadataNamespaces meta1
 
       let commentStmts = case normalizeComment <$> moduleDescription mod of
                          Nothing -> []
@@ -367,12 +369,6 @@ encodeModule mod defs0 = do
     isTypeModule = not $ L.null $ L.filter (\d -> case d of
       DefinitionType _ -> True
       _ -> False) defs0
-    findNamespaces defs meta = if fst (namespacesFocus namespaces) == coreNs
-        then namespaces
-        else namespaces {namespacesMapping = M.insert coreNs (encodeNamespace coreNs) $ namespacesMapping namespaces}
-      where
-        coreNs = Namespace "hydra.core"
-        namespaces = namespacesForDefinitions encodeNamespace (moduleNamespace mod) defs
     reorderDefs defs = sortedTypeDefs ++ sortedTermDefs
       where
         p1 = L.partition isTypeDef defs
@@ -847,7 +843,11 @@ extendMetaForType topLevel isTermAnnot typ meta = extendFor meta3 typ
       t -> L.foldl (\m t -> extendMetaForType False isTermAnnot t m) meta $ subtypes t
 
 extendMetaForTypes :: [Type] -> PythonModuleMetadata -> PythonModuleMetadata
-extendMetaForTypes types meta = L.foldl (\m t -> extendMetaForType True False t m) meta types
+extendMetaForTypes types meta = L.foldl (\m t -> extendMetaForType True False t m) meta1 types
+  where
+    names = S.unions $ fmap (typeDependencyNames False) types
+    meta1 = meta {pythonModuleMetadataNamespaces
+      = addNamesToNamespaces encodeNamespace names $ pythonModuleMetadataNamespaces meta}
 
 findTypeParams :: PythonEnvironment -> Type -> [Name]
 findTypeParams env typ = L.filter isBound $ S.toList $ freeVariablesInType typ
@@ -885,11 +885,12 @@ gatherBindingsAndParams env term = withTrace ("gather for " ++ ShowCore.term ter
           where
             t2 = L.foldl (\trm typ -> TermTypeApplication $ TypeApplicationTerm trm typ) t tapps
 
-gatherMetadata :: [Definition] -> PythonModuleMetadata
-gatherMetadata defs = checkTvars $ L.foldl addDef start defs
+gatherMetadata :: Namespace -> [Definition] -> PythonModuleMetadata
+gatherMetadata focusNs defs = checkTvars $ L.foldl addDef start defs
   where
     checkTvars meta = meta {pythonModuleMetadataUsesTypeVar = not $ S.null $ pythonModuleMetadataTypeVariables meta}
     start = PythonModuleMetadata {
+      pythonModuleMetadataNamespaces = findNamespaces focusNs defs,
       pythonModuleMetadataTypeVariables = S.empty,
       pythonModuleMetadataUsesAnnotated = False,
       pythonModuleMetadataUsesCallable = False,
@@ -951,6 +952,11 @@ updateMeta :: (PythonModuleMetadata -> PythonModuleMetadata) -> Flow PyGraph ()
 updateMeta f = do
   PyGraph g meta <- getState
   putState $ PyGraph g (f meta)
+
+--updateMetaWithNames :: S.Set -> Flow PyGraph ()
+--updateMetaWithNames names = updateMeta addNames
+--  where
+--    addNames meta = meta {}
 
 variantArgs :: Py.Expression -> [Name] -> Py.Args
 variantArgs ptype tparams = pyExpressionsToPyArgs $ Y.catMaybes [

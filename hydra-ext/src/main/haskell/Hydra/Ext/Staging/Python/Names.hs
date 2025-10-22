@@ -67,6 +67,14 @@ encodeNamespace ns = Py.DottedName (Py.Name . (convertCase CaseConventionCamel C
 encodeTypeVariable :: Name -> Py.Name
 encodeTypeVariable = Py.Name . capitalize . unName
 
+findNamespaces :: Namespace -> [Definition] -> Namespaces Py.DottedName
+findNamespaces focusNs defs = if fst (namespacesFocus namespaces) == coreNs
+    then namespaces
+    else namespaces {namespacesMapping = M.insert coreNs (encodeNamespace coreNs) $ namespacesMapping namespaces}
+  where
+    coreNs = Namespace "hydra.core"
+    namespaces = namespacesForDefinitions encodeNamespace focusNs defs
+
 sanitizePythonName :: String -> String
 sanitizePythonName = sanitizeWithUnderscores pythonReservedWords
 
