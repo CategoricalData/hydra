@@ -36,6 +36,15 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+addNamesToNamespaces :: ((Module.Namespace -> t0) -> S.Set Core.Name -> Module.Namespaces t0 -> Module.Namespaces t0)
+addNamesToNamespaces encodeNamespace names ns0 =  
+  let nss = (Sets.fromList (Optionals.cat (Lists.map Names.namespaceOf (Sets.toList names))))
+  in  
+    let toPair = (\ns -> (ns, (encodeNamespace ns)))
+    in Module.Namespaces {
+      Module.namespacesFocus = (Module.namespacesFocus ns0),
+      Module.namespacesMapping = (Maps.union (Module.namespacesMapping ns0) (Maps.fromList (Lists.map toPair (Sets.toList nss))))}
+
 -- | Get dependency namespaces from definitions
 definitionDependencyNamespaces :: ([Module.Definition] -> S.Set Module.Namespace)
 definitionDependencyNamespaces defs =  
