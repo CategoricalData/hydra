@@ -63,6 +63,7 @@ module_ = Module (Namespace "hydra.schemas") elements
     Just ("Various functions for dereferencing and decoding schema types.")
   where
     elements = [
+      el addNamesToNamespacesDef,
       el definitionDependencyNamespacesDef,
       el dependencyNamespacesDef,
       el dereferenceTypeDef,
@@ -106,6 +107,17 @@ module_ = Module (Namespace "hydra.schemas") elements
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
+
+addNamesToNamespacesDef :: TBinding ((Namespace -> a) -> S.Set Name -> Namespaces a -> Namespaces a)
+addNamesToNamespacesDef = define "addNamesToNamespaces" $
+  doc "Add names to existing namespaces mapping" $
+  "encodeNamespace" ~> "names" ~> "ns0" ~>
+--  "nss" <~ Sets.empty $
+  "nss" <~ Sets.fromList (Optionals.cat $ Lists.map (ref Names.namespaceOfDef) $ Sets.toList $ var "names") $
+  "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeNamespace" @@ var "ns")) $
+  Module.namespacesWithMapping (var "ns0") $ Maps.union
+    (Module.namespacesMapping $ var "ns0")
+    (Maps.fromList $ Lists.map (var "toPair") $ Sets.toList $ var "nss")
 
 definitionDependencyNamespacesDef :: TBinding ([Definition] -> S.Set Namespace)
 definitionDependencyNamespacesDef = define "definitionDependencyNamespaces" $
