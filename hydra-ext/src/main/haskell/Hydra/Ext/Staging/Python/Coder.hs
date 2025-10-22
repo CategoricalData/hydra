@@ -355,6 +355,9 @@ encodeModule mod defs0 = do
                  else meta1
       let namespaces = pythonModuleMetadataNamespaces meta1
 
+--      fail $ "isTypeModule: " ++ show isTypeModule ++ ", meta0.usesCallable: " ++ show (pythonModuleMetadataUsesCallable meta0)
+--           ++ ", meta.usesCallable: " ++ show (pythonModuleMetadataUsesCallable meta)
+
       let commentStmts = case normalizeComment <$> moduleDescription mod of
                          Nothing -> []
                          Just c -> [commentStatement c]
@@ -823,12 +826,13 @@ extendMetaForType topLevel isTermAnnot typ meta = extendFor meta3 typ
             -- If this is a type-level definition, or an *argument* to a function is a function, then we need Callable.
             else meta3 {pythonModuleMetadataUsesCallable = True}
           where
-            meta2 = extendMetaForType topLevel isTermAnnot cod meta
+            meta2 = extendMetaForType topLevel isTermAnnot cod meta0
             meta3 = extendMetaForType False isTermAnnot dom meta2
-        TypeForall (ForallType _ body) -> case baseType body of
-            TypeRecord _ -> meta {pythonModuleMetadataUsesGeneric = True}
-            _ -> meta
+        TypeForall (ForallType _ body) -> extendFor meta1 body
           where
+            meta1 = case baseType body of
+              TypeRecord _ -> meta0 {pythonModuleMetadataUsesGeneric = True}
+              _ -> meta0
             baseType t = case deannotateType t of
               TypeForall (ForallType _ body2) -> baseType body2
               t2 -> t2
