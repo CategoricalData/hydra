@@ -209,7 +209,9 @@ encodeFunction env f = case f of
     (_, params, bindings, innerBody, _, _, innerEnv) <- withTrace "gather for lambda" $
       gatherBindingsAndParams env (TermFunction $ FunctionLambda lam)
     pbody <- encodeTermInline innerEnv innerBody
-    let pparams = fmap (encodeNameQualified env) params
+--    let pparams = fmap (encodeNameQualified env) params
+    let pparams = fmap (encodeName False CaseConventionLowerSnake innerEnv) params
+--    let pparams = fmap (termVariableReference env) params
     if (L.null bindings)
       then return $ Py.ExpressionLambda $ Py.Lambda
         (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
