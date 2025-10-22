@@ -154,7 +154,6 @@ strongConnectDef = define "strongConnect" $
          Topology.tarjanStateWithLowLinks (var "s")
            (Maps.insert (var "v") (Equality.min (var "low_v") (var "low_w")) (Topology.tarjanStateLowLinks (var "s"))))) $
        produce unit)
---      (produce unit)) $
       (Logic.ifElse (Sets.member (var "w") (Topology.tarjanStateOnStack (var "st'")))
         (var "lowLink" @@ var "st'")
         (produce unit))) $
