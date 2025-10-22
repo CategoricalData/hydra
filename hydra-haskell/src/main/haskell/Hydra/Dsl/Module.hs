@@ -49,6 +49,12 @@ namespacesFocus ns = project _Namespaces _Namespaces_focus @@ ns
 namespacesMapping :: TTerm (Namespaces n) -> TTerm (M.Map Namespace n)
 namespacesMapping ns = project _Namespaces _Namespaces_mapping @@ ns
 
+namespacesWithFocus :: TTerm (Namespaces n) -> TTerm (Namespace, n) -> TTerm (Namespaces n)
+namespacesWithFocus ns focus = namespaces focus (Hydra.Dsl.Module.namespacesMapping ns)
+
+namespacesWithMapping :: TTerm (Namespaces n) -> TTerm (M.Map Namespace n) -> TTerm (Namespaces n)
+namespacesWithMapping ns mapping = namespaces (Hydra.Dsl.Module.namespacesFocus ns) mapping
+
 qualifiedName :: TTerm (Maybe Namespace) -> TTerm String -> TTerm QualifiedName
 qualifiedName ns local = record _QualifiedName [
   _QualifiedName_namespace>>: ns,
