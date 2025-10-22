@@ -122,9 +122,7 @@ encodeApplication env app = do
               then e
               else functionCall (pyExpressionToPyPrimary e) restArgs
         -- Special-casing variables prevents quoting; forward references are allowed for function calls
-        TermVariable name -> return $ if L.null hargs
-          then termVariableReference env name
-          else functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) hargs
+        TermVariable name -> encodeVariable env name hargs
         _ -> def
       where
         firstArg = L.head hargs
@@ -491,10 +489,8 @@ encodeTermAssignment env name term comment = do
 --      ++ "\ncod: " ++ ShowCore.type_ cod
 --    else return ()
 
-    -- TODO: consider moving this into the updated environment, along with the body
-    bindingStmts <- encodeBindingsAsDefs env2 bindings
-
-    withBindings bindings $
+    withBindings bindings $ do
+      bindingStmts <- encodeBindingsAsDefs env2 bindings
       encodeFunctionDefinition env2 name tparams params body doms cod comment bindingStmts
 
 -- | Encode a term to an inline Python expression
@@ -544,15 +540,7 @@ encodeTermInline env term = case deannotateTerm term of
           parg <- encode $ fieldTerm field
           return $ functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) [parg]
     TermUnit -> return $ pyNameToPyExpression pyNone
-    TermVariable name -> do
-      PyGraph g _ <- getState
-      return $ case lookupElement g name of
-        -- Lambda-bound variables
-        Nothing -> termVariableReference env name
-        -- Let-bound variables
-        Just el -> if isNullaryFunction el
-          then functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) []
-          else termVariableReference env name
+    TermVariable name -> encodeVariable env name []
     TermWrap (WrappedTerm tname term1) -> do
       parg <- encode term1
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) [parg]
@@ -729,6 +717,29 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumRowType rt th
                 tparams = fieldParams ftype
                 namePrim = pyNameToPyPrimary $ variantName False env name fname
         fieldParams ftype = encodeTypeVariable <$> findTypeParams env ftype
+
+encodeVariable :: PythonEnvironment -> Name -> [Py.Expression] -> Flow PyGraph Py.Expression
+encodeVariable env name args = do
+  PyGraph g _ <- getState
+
+--  if name == Name "noVars"
+--    then fail $ "args = " ++ show args
+--      ++ "\n\tel = " ++ show (lookupElement g name)
+--    else pure ()
+
+  return $ if L.null args
+    then case lookupElement g name of
+      -- Lambda-bound variables
+      Nothing -> asVariable
+      -- Let-bound variables
+      Just el -> if isFunctionCall el
+--      Just el -> if isNullaryFunction el
+        then asFunctionCall
+        else asVariable
+     else asFunctionCall
+  where
+    asVariable = termVariableReference env name
+    asFunctionCall = functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) args
 
 encodeWrappedType :: PythonEnvironment -> Name -> Type -> Maybe String -> Flow PyGraph Py.Statement
 encodeWrappedType env name typ comment = do
@@ -922,8 +933,8 @@ genericArg tparamList = if L.null tparamList
   else Just $ pyPrimaryToPyExpression $ primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Generic")
     (pyNameToPyExpression . encodeTypeVariable <$> tparamList)
 
-isNullaryFunction :: Binding -> Bool
-isNullaryFunction (Binding _ term (Just ts)) = isCaseStatement || (typeArity (typeSchemeType ts) == 0 && isLet)
+isFunctionCall :: Binding -> Bool
+isFunctionCall (Binding _ term (Just ts)) = isCaseStatement || isLet -- || typeArity (typeSchemeType ts) > 0
   where
     term1 = deannotateAndDetypeTerm term
     isLet = case term1 of
