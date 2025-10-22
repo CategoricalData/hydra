@@ -814,44 +814,46 @@ extendMetaForType topLevel isTermAnnot typ meta = extendFor meta3 typ
         newTvars s t = case deannotateType t of
           TypeForall (ForallType v body) -> newTvars (S.insert v s) body
           _ -> s
-    extendFor meta t = case t of
-      TypeFunction (FunctionType dom cod) -> if isTermAnnot && topLevel
-          -- If a particular term has a function type, don't import Callable; Python has special "def" syntax for functions.
-          then meta3
-          -- If this is a type-level definition, or an *argument* to a function is a function, then we need Callable.
-          else meta3 {pythonModuleMetadataUsesCallable = True}
-        where
-          meta2 = extendMetaForType topLevel isTermAnnot cod meta
-          meta3 = extendMetaForType False isTermAnnot dom meta2
-      TypeForall (ForallType _ body) -> case baseType body of
-          TypeRecord _ -> meta {pythonModuleMetadataUsesGeneric = True}
+    extendFor meta0 t = case t of
+        TypeFunction (FunctionType dom cod) -> if isTermAnnot && topLevel
+            -- If a particular term has a function type, don't import Callable; Python has special "def" syntax for functions.
+            then meta3
+            -- If this is a type-level definition, or an *argument* to a function is a function, then we need Callable.
+            else meta3 {pythonModuleMetadataUsesCallable = True}
+          where
+            meta2 = extendMetaForType topLevel isTermAnnot cod meta
+            meta3 = extendMetaForType False isTermAnnot dom meta2
+        TypeForall (ForallType _ body) -> case baseType body of
+            TypeRecord _ -> meta {pythonModuleMetadataUsesGeneric = True}
+            _ -> meta
+          where
+            baseType t = case deannotateType t of
+              TypeForall (ForallType _ body2) -> baseType body2
+              t2 -> t2
+        TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True}
+        TypeLiteral lt -> case lt of
+          LiteralTypeFloat ft -> case ft of
+            FloatTypeBigfloat -> meta {pythonModuleMetadataUsesDecimal = True}
+            _ -> meta
           _ -> meta
-        where
-          baseType t = case deannotateType t of
-            TypeForall (ForallType _ body2) -> baseType body2
-            t2 -> t2
-      TypeList _ -> meta {pythonModuleMetadataUsesFrozenList = True}
-      TypeLiteral lt -> case lt of
-        LiteralTypeFloat ft -> case ft of
-          FloatTypeBigfloat -> meta {pythonModuleMetadataUsesDecimal = True}
-          _ -> meta
+        TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
+        TypeOptional _ -> meta {pythonModuleMetadataUsesMaybe = True}
+        TypeProduct _ -> meta {pythonModuleMetadataUsesTuple = True}
+        TypeRecord (RowType _ fields) -> meta {
+            pythonModuleMetadataUsesAnnotated = L.foldl checkForAnnotated (pythonModuleMetadataUsesAnnotated meta) fields,
+            pythonModuleMetadataUsesDataclass = pythonModuleMetadataUsesDataclass meta || not (L.null fields)}
+          where
+            checkForAnnotated b (FieldType _ ft) = b || hasTypeDescription ft
+        TypeUnion rt@(RowType _ fields) -> if isEnumRowType rt
+            then meta {pythonModuleMetadataUsesEnum = True}
+            else meta {
+              pythonModuleMetadataUsesNode = pythonModuleMetadataUsesNode meta || (not $ L.null fields)}
+          where
+            checkForLiteral b (FieldType _ ft) = b || EncodeCore.isUnitType (deannotateType ft)
+            checkForNewType b (FieldType _ ft) = b || not (EncodeCore.isUnitType (deannotateType ft))
         _ -> meta
-      TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
-      TypeOptional _ -> meta {pythonModuleMetadataUsesMaybe = True}
-      TypeProduct _ -> meta {pythonModuleMetadataUsesTuple = True}
-      TypeRecord (RowType _ fields) -> meta {
-          pythonModuleMetadataUsesAnnotated = L.foldl checkForAnnotated (pythonModuleMetadataUsesAnnotated meta) fields,
-          pythonModuleMetadataUsesDataclass = pythonModuleMetadataUsesDataclass meta || not (L.null fields)}
-        where
-          checkForAnnotated b (FieldType _ ft) = b || hasTypeDescription ft
-      TypeUnion rt@(RowType _ fields) -> if isEnumRowType rt
-          then meta {pythonModuleMetadataUsesEnum = True}
-          else meta {
-            pythonModuleMetadataUsesNode = pythonModuleMetadataUsesNode meta || (not $ L.null fields)}
-        where
-          checkForLiteral b (FieldType _ ft) = b || EncodeCore.isUnitType (deannotateType ft)
-          checkForNewType b (FieldType _ ft) = b || not (EncodeCore.isUnitType (deannotateType ft))
-      t -> L.foldl (\m t -> extendMetaForType False isTermAnnot t m) meta $ subtypes t
+      where
+        meta = L.foldl (\m t -> extendMetaForType False isTermAnnot t m) meta0 $ subtypes t
 
 extendMetaForTypes :: [Type] -> PythonModuleMetadata -> PythonModuleMetadata
 extendMetaForTypes types meta = L.foldl (\m t -> extendMetaForType True False t m) meta1 types
