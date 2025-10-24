@@ -43,30 +43,30 @@ adaptFloatType constraints ft =
 -- | Adapt a graph and its schema to the given language constraints, prior to inference
 adaptDataGraph :: (Coders.LanguageConstraints -> Bool -> Graph.Graph -> Compute.Flow Graph.Graph Graph.Graph)
 adaptDataGraph constraints doExpand graph0 =  
-  let litmap = (adaptLiteralTypesMap constraints)
+  let expand = (\graph -> \gterm -> Flows.pure (Rewriting.unshadowVariables (Reduction.etaExpandTerm graph gterm)))
   in  
-    let els0 = (Graph.graphElements graph0)
+    let litmap = (adaptLiteralTypesMap constraints)
     in  
-      let env0 = (Graph.graphEnvironment graph0)
+      let els0 = (Graph.graphElements graph0)
       in  
-        let body0 = (Graph.graphBody graph0)
+        let env0 = (Graph.graphEnvironment graph0)
         in  
-          let prims0 = (Graph.graphPrimitives graph0)
+          let body0 = (Graph.graphBody graph0)
           in  
-            let schema0 = (Graph.graphSchema graph0)
-            in (Flows.bind (Optionals.maybe (Flows.pure Nothing) (\sg -> Flows.bind (Schemas.graphAsTypes sg) (\tmap0 -> Flows.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->  
-              let emap = (Schemas.typesToElements tmap1)
-              in (Flows.pure (Just (Graph.Graph {
-                Graph.graphElements = emap,
-                Graph.graphEnvironment = (Graph.graphEnvironment sg),
-                Graph.graphTypes = (Graph.graphTypes sg),
-                Graph.graphBody = (Graph.graphBody sg),
-                Graph.graphPrimitives = (Graph.graphPrimitives sg),
-                Graph.graphSchema = (Graph.graphSchema sg)})))))) schema0) (\schema1 ->  
-              let gterm0 = (Schemas.graphAsTerm graph0)
-              in  
-                let gterm1 = (Logic.ifElse doExpand (Rewriting.unshadowVariables (Reduction.etaExpandTerm graph0 gterm0)) gterm0)
-                in (Flows.bind (adaptTerm constraints litmap gterm1) (\gterm2 ->  
+            let prims0 = (Graph.graphPrimitives graph0)
+            in  
+              let schema0 = (Graph.graphSchema graph0)
+              in (Flows.bind (Optionals.maybe (Flows.pure Nothing) (\sg -> Flows.bind (Schemas.graphAsTypes sg) (\tmap0 -> Flows.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->  
+                let emap = (Schemas.typesToElements tmap1)
+                in (Flows.pure (Just (Graph.Graph {
+                  Graph.graphElements = emap,
+                  Graph.graphEnvironment = (Graph.graphEnvironment sg),
+                  Graph.graphTypes = (Graph.graphTypes sg),
+                  Graph.graphBody = (Graph.graphBody sg),
+                  Graph.graphPrimitives = (Graph.graphPrimitives sg),
+                  Graph.graphSchema = (Graph.graphSchema sg)})))))) schema0) (\schema1 ->  
+                let gterm0 = (Schemas.graphAsTerm graph0)
+                in (Flows.bind (Logic.ifElse doExpand (expand graph0 gterm0) (Flows.pure gterm0)) (\gterm1 -> Flows.bind (adaptTerm constraints litmap gterm1) (\gterm2 ->  
                   let els1 = (Schemas.termAsGraph gterm2)
                   in (Flows.bind (Flows.mapElems (adaptPrimitive constraints litmap) prims0) (\prims1 -> Flows.pure (Graph.Graph {
                     Graph.graphElements = els1,
@@ -74,7 +74,7 @@ adaptDataGraph constraints doExpand graph0 =
                     Graph.graphTypes = Maps.empty,
                     Graph.graphBody = Core.TermUnit,
                     Graph.graphPrimitives = prims1,
-                    Graph.graphSchema = schema1})))))))
+                    Graph.graphSchema = schema1}))))))))
 
 adaptGraphSchema :: (Ord t0) => (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> M.Map t0 Core.Type -> Compute.Flow t1 (M.Map t0 Core.Type))
 adaptGraphSchema constraints litmap types0 =  
