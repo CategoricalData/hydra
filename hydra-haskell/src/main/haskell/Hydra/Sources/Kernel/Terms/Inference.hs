@@ -76,7 +76,6 @@ module_ = Module (Namespace "hydra.inference") elements
       el freeVariablesInContextDef,
       el freshVariableTypeDef,
       el generalizeDef,
-      el graphToInferenceContextDef,
       el inferGraphTypesDef,
       el inferInGraphContextDef,
       el inferManyDef,
@@ -233,18 +232,6 @@ generalizeDef = define "generalize" $
      ref Rewriting.freeVariablesInTypeOrderedDef @@ var "typ") $
   Core.typeScheme (var "vars") (var "typ")
 
-graphToInferenceContextDef :: TBinding (Graph -> Flow s InferenceContext)
-graphToInferenceContextDef = define "graphToInferenceContext" $
-  doc "Convert a graph to an inference context" $
-  "g0" ~>
-  "schema" <~ Optionals.fromMaybe (var "g0") (Graph.graphSchema $ var "g0") $
-  "primTypes" <~ Maps.fromList (Lists.map
-    ("p" ~> pair (Graph.primitiveName $ var "p") (Graph.primitiveType $ var "p"))
-    (Maps.elems $ Graph.graphPrimitives $ var "g0")) $
-  "varTypes" <~ Maps.empty $
-  "schemaTypes" <<~ ref Schemas.schemaGraphToTypingEnvironmentDef @@ var "schema" $
-  produce $ Typing.inferenceContext (var "schemaTypes") (var "primTypes") (var "varTypes") false
-
 inferGraphTypesDef :: TBinding (Graph -> Flow s Graph)
 inferGraphTypesDef = define "inferGraphTypes" $
   doc "Infer types for all elements in a graph" $
@@ -271,7 +258,7 @@ inferGraphTypesDef = define "inferGraphTypes" $
       (Lists.map (var "toBinding") $ Maps.elems $ Graph.graphElements $ var "g")
       (Graph.graphBody $ var "g")) $
   trace "graph inference" $
-  "cx" <<~ ref graphToInferenceContextDef @@ var "g0" $
+  "cx" <<~ ref Schemas.graphToInferenceContextDef @@ var "g0" $
   "result" <<~ ref inferTypeOfTermDef @@ var "cx" @@ (var "toLetTerm" @@ var "g0") @@ string "graph term" $
   "term" <~ Typing.inferenceResultTerm (var "result") $
   "ts" <~ Typing.inferenceResultType (var "result") $
@@ -287,7 +274,7 @@ inferInGraphContextDef = define "inferInGraphContext" $
   doc "Infer the type of a term in graph context" $
   "term" ~>
   "g" <<~ ref Monads.getStateDef $
-  "cx" <<~ ref graphToInferenceContextDef @@ var "g" $
+  "cx" <<~ ref Schemas.graphToInferenceContextDef @@ var "g" $
   ref inferTypeOfTermDef @@ var "cx" @@ var "term" @@ string "single term"
 
 inferManyDef :: TBinding (InferenceContext -> [(Term, String)] -> Flow s ([Term], [Type], TypeSubst))
@@ -1034,7 +1021,7 @@ initialTypeContextDef = define "initialTypeContext" $
     optCases (Core.bindingType $ var "el")
       (Flows.fail $ "untyped element: " ++ Core.unName (var "name"))
       ("ts" ~> produce $ pair (var "name") (ref Schemas.typeSchemeToFTypeDef @@ var "ts"))) $
-  "ix" <<~ ref graphToInferenceContextDef @@ var "g" $
+  "ix" <<~ ref Schemas.graphToInferenceContextDef @@ var "g" $
   "types" <<~ Flows.map
     (unaryFunction Maps.fromList)
     (Flows.mapList (var "toPair") (Maps.toList $ Graph.graphElements $ var "g")) $

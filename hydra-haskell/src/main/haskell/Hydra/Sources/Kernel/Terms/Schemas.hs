@@ -82,6 +82,8 @@ module_ = Module (Namespace "hydra.schemas") elements
       el fullyStripTypeDef,
       el graphAsTermDef,
       el graphAsTypesDef,
+      el graphToInferenceContextDef,
+      el graphToTypeContextDef,
       el instantiateTypeDef,
       el instantiateTypeSchemeDef,
       el isEnumRowTypeDef,
@@ -312,6 +314,25 @@ graphAsTypesDef = define "graphAsTypes" $
     produce $ pair (Core.bindingName $ var "el") (var "typ")) $
   "pairs" <<~ Flows.mapList (var "toPair") (var "els") $
   produce $ Maps.fromList $ var "pairs"
+
+graphToInferenceContextDef :: TBinding (Graph -> Flow s InferenceContext)
+graphToInferenceContextDef = define "graphToInferenceContext" $
+  doc "Convert a graph to an inference context" $
+  "graph" ~>
+  "schema" <~ Optionals.fromMaybe (var "graph") (Graph.graphSchema $ var "graph") $
+  "primTypes" <~ Maps.fromList (Lists.map
+    ("p" ~> pair (Graph.primitiveName $ var "p") (Graph.primitiveType $ var "p"))
+    (Maps.elems $ Graph.graphPrimitives $ var "graph")) $
+  "varTypes" <~ Maps.empty $
+  "schemaTypes" <<~ ref schemaGraphToTypingEnvironmentDef @@ var "schema" $
+  produce $ Typing.inferenceContext (var "schemaTypes") (var "primTypes") (var "varTypes") false
+
+graphToTypeContextDef :: TBinding (Graph -> Flow s TypeContext)
+graphToTypeContextDef = define "graphToTypeContext" $
+  doc "Convert a graph to a top-level type context (outside of the bindings of the graph)" $
+  "graph" ~>
+  "ix" <<~ ref graphToInferenceContextDef @@ var "graph" $
+  produce $ Typing.typeContext Maps.empty Sets.empty (var "ix")
 
 instantiateTypeDef :: TBinding (Type -> Flow s Type)
 instantiateTypeDef = define "instantiateType" $

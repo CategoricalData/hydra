@@ -191,6 +191,25 @@ graphAsTypes sg =
     let toPair = (\el -> Flows.bind (Core_.type_ (Core.bindingTerm el)) (\typ -> Flows.pure (Core.bindingName el, typ)))
     in (Flows.bind (Flows.mapList toPair els) (\pairs -> Flows.pure (Maps.fromList pairs)))
 
+graphToInferenceContext :: (Graph.Graph -> Compute.Flow t0 Typing.InferenceContext)
+graphToInferenceContext graph =  
+  let schema = (Optionals.fromMaybe graph (Graph.graphSchema graph))
+  in  
+    let primTypes = (Maps.fromList (Lists.map (\p -> (Graph.primitiveName p, (Graph.primitiveType p))) (Maps.elems (Graph.graphPrimitives graph))))
+    in  
+      let varTypes = Maps.empty
+      in (Flows.bind (schemaGraphToTypingEnvironment schema) (\schemaTypes -> Flows.pure (Typing.InferenceContext {
+        Typing.inferenceContextSchemaTypes = schemaTypes,
+        Typing.inferenceContextPrimitiveTypes = primTypes,
+        Typing.inferenceContextDataTypes = varTypes,
+        Typing.inferenceContextDebug = False})))
+
+graphToTypeContext :: (Graph.Graph -> Compute.Flow t0 Typing.TypeContext)
+graphToTypeContext graph = (Flows.bind (graphToInferenceContext graph) (\ix -> Flows.pure (Typing.TypeContext {
+  Typing.typeContextTypes = Maps.empty,
+  Typing.typeContextVariables = Sets.empty,
+  Typing.typeContextInferenceContext = ix})))
+
 instantiateType :: (Core.Type -> Compute.Flow t0 Core.Type)
 instantiateType typ = (Flows.bind (instantiateTypeScheme (typeToTypeScheme typ)) (\ts -> Flows.pure (typeSchemeToFType ts)))
 
