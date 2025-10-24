@@ -157,6 +157,18 @@ fromTestFlow desc flow = case my of
       putAttr key_debugId $ Terms.string desc
       flow
 
+expectEtaExpansionResult :: String -> Term -> Term -> H.SpecWith ()
+expectEtaExpansionResult desc interm expected = do
+  (outterm, stripped) <- H.runIO $ fromTestFlow desc $ do
+    tx <- graphToTypeContext testGraph
+    (iterm, _) <- inferTypeOf (typeContextInferenceContext tx) interm
+    outterm <- etaExpandTypedTerm tx iterm
+    let stripped = removeTypesFromTerm outterm
+    return (outterm, stripped)
+
+  H.it desc $
+    H.shouldBe (ShowCore.term stripped) (ShowCore.term expected)
+
 expectTypeOfResult :: String -> M.Map Name Type -> Term -> Maybe Term -> Type -> H.SpecWith ()
 expectTypeOfResult desc types term mterm expected = do
   (iterm, itype, rtype) <- H.runIO $ fromTestFlow desc $ do
