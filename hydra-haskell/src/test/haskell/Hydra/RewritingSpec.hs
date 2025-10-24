@@ -96,9 +96,93 @@ checkStripType = do
         TypeAnnotated _ -> True
         _ -> deannotateType (Types.annot M.empty (Types.annot M.empty typ)) == typ
 
-testExpandLambdas :: Graph -> H.SpecWith ()
-testExpandLambdas g = do
-  H.describe "Test expanding to (untyped) lambda terms" $ do
+testEtaExpandTypedTerms :: Graph -> H.SpecWith ()
+testEtaExpandTypedTerms g = do
+  H.describe "Test eta expansion of typed terms" $ do
+
+    H.describe "Try terms which do not expand" $ do
+      noChange "test #1"
+        (int32 42)
+      noChange "test #2"
+        (list ["foo", "bar"])
+      noChange "test #3"
+        (splitOn @@ "foo" @@ "bar")
+      noChange "test #4"
+        (lambda "x" $ lambda "y" $ splitOn @@ var "x" @@ var "y")
+      noChange "test #5"
+        (lambda "x" $ int32 42)
+
+    H.describe "Try bare function terms" $ do
+      noChange "test #1"
+        toLower
+--      expandsTo "test #1"
+--        toLower
+--        (lambda "v1" $ toLower @@ var "v1")
+      noChange "test #2"
+         splitOn
+--      expandsTo "test #2"
+--        splitOn
+--        (lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2")
+      expandsTo "test #3"
+        (splitOn @@ string "foo")
+        (lambda "v1" $ splitOn @@ string "foo" @@ var "v1")
+      noChange "test #4"
+        (splitOn @@ string "foo" @@ string "bar")
+      expandsTo "test #5"
+        (primitive _optionals_maybe @@ (int32 42) @@ length)
+        (lambda "v1" $ primitive _optionals_maybe @@ (int32 42) @@ length @@ var "v1")
+--        (lambda "v1" $ (primitive _optionals_maybe @@ (int32 42) @@ (lambda "v1" $ length @@ var "v1")) @@ var "v1")
+      expandsTo "test #6"
+        (project (Name "Person") (Name "firstName"))
+        (lambda "v1" $ ((project (Name "Person") (Name "firstName") @@ var "v1")))
+      -- TODO: case statement
+
+    H.describe "Try subterms within applications" $ do
+      expandsTo "test #1"
+        (splitOn @@ "bar")
+        (lambda "v1" $ splitOn @@ "bar" @@ var "v1")
+      expandsTo "test #2"
+        (lambda "x" $ splitOn @@ var "x")
+        (lambda "x" $ lambda "v1" $ splitOn @@ var "x" @@ var "v1")
+      expandsTo "test #3"
+        ((lambda "x" $ var "x") @@ length)
+        (lambda "v1" $ ((lambda "x" $ var "x") @@ length) @@ var "v1")
+--      noChange "test #3"
+--        ((lambda "x" $ var "x") @@ length)
+--      expandsTo "test #3"
+--        ((lambda "x" $ var "x") @@ length)
+--        (lambda "v1" $ length @@ var "v1")
+
+    H.describe "Try let terms" $ do
+      noChange "test #1"
+        (lets ["foo">: int32 137] $ int32 42)
+      noChange "test #2"
+        (lets ["foo">: splitOn] $ var "foo")
+--      expandsTo "test #2"
+--        (lets ["foo">: splitOn] $ var "foo")
+--        (lets ["foo">: lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2"] $ var "foo")
+
+    H.describe "Check that complete applications are no-ops" $ do
+      noChange "test #1"
+        (toLower @@ "FOO")
+      noChange "test #2"
+        (splitOn @@ "foo" @@ "bar")
+
+    H.describe "Try other subterms" $ do
+      expandsTo "test #1"
+        (list [lambda "x" $ list ["foo"], splitOn @@ "bar"])
+        (list [lambda "x" $ list ["foo"], lambda "v1" $ splitOn @@ "bar" @@ var "v1"])
+  where
+    length = primitive $ Name "hydra.lib.strings.length"
+    splitOn = primitive $ Name "hydra.lib.strings.splitOn"
+    toLower = primitive $ Name "hydra.lib.strings.toLower"
+    fromList = primitive $ Name "hydra.lib.sets.fromList"
+    expandsTo desc termBefore termAfter = expectEtaExpansionResult desc termBefore termAfter
+    noChange desc term = expandsTo desc term term
+
+testEtaExpandUntypedTerms :: Graph -> H.SpecWith ()
+testEtaExpandUntypedTerms g = do
+  H.describe "Test eta expansion of untyped terms" $ do
 
     H.describe "Try terms which do not expand" $ do
       H.it "test #1" $
@@ -195,75 +279,6 @@ testExpandLambdas g = do
        let result = etaExpandTerm g termBefore
        H.shouldBe (ShowCore.term result) (ShowCore.term termAfter)
     noChange term = expandsTo term term
-
--- TODO: merge this into etaExpandTerm
---testExpandTypedLambdas :: H.SpecWith ()
---testExpandTypedLambdas = do
---  H.describe "Test expanding to typed lambda terms" $ do
---
---    H.describe "Try some terms which do not expand" $ do
---      H.it "test #1" $
---        noChange (int32 42)
---      H.it "test #2" $
---        noChange (list ["foo", "bar"])
---      H.it "test #3" $
---        noChange (splitOn @@ "foo" @@ "bar")
---      H.it "test #4" $
---        noChange (lambda "x" $ int32 42)
---
---    H.describe "Expand bare function terms" $ do
---      H.it "test #1" $
---        expandsTo
---          toLower
---          (lambda "v1" $ toLower @@ var "v1")
---      H.it "test #2" $
---        expandsTo
---          splitOn
---          (lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2")
---      H.it "test #3" $
---        expandsTo
---          (primitive _optionals_maybe @@ (int32 42) @@ length)
---          -- Note two levels of lambda expansion
---          (lambda "v1" $ (primitive _optionals_maybe @@ (int32 42) @@ (lambda "v1" $ length @@ var "v1")) @@ var "v1")
---      H.it "test #4" $
---        expandsTo
---          (project (Name "Person") (Name "firstName"))
---          (lambda "v1" $ ((project (Name "Person") (Name "firstName") @@ var "v2")))
---      -- TODO: case statement
---
---    H.describe "Expand subterms within applications" $ do
---      H.it "test #1" $
---        expandsTo
---          (splitOn @@ "bar")
---          (lambda "v1" $ splitOn @@ "bar" @@ var "v1")
---      H.it "test #2" $
---        expandsTo
---          ((lambda "x" $ var "x") @@ length)
---          ((lambda "x" $ var "x") @@ (lambda "v1" $ length @@ var "v1"))
---
---    H.describe "Expand arbitrary subterms" $ do
---      H.it "test #1" $
---        expandsTo
---          (list [lambda "x" $ list ["foo"], splitOn @@ "bar"])
---          (list [lambda "x" $ list ["foo"], lambda "v1" $ splitOn @@ "bar" @@ var "v1"])
---
---    H.it "Check that lambda expansion is idempotent" $ do
---      QC.property $ \(term :: Term) -> do
---        let once = etaExpandTypeApplicationTerm term
---        let twice = etaExpandTypeApplicationTerm once
---        H.shouldBe once twice
---
---  where
---    length = primitive $ Name "hydra.lib.strings.length"
---    splitOn = primitive $ Name "hydra.lib.strings.splitOn"
---    toLower = primitive $ Name "hydra.lib.strings.toLower"
---    expandsTo termBefore termAfter = do
-----      result <- flowToIo testGraph $ etaExpandTerm termBefore
-----      H.shouldBe result termAfter
---       inf <- flowToIo testGraph (inferenceResultTerm <$> inferInGraphContext termBefore)
---       let result = etaExpandTypeApplicationTerm inf
---       H.shouldBe (ShowCore.term (removeTermAnnotations result)) (ShowCore.term termAfter)
---    noChange term = expandsTo term term
 
 testFoldOverTerm :: H.SpecWith ()
 testFoldOverTerm = do
@@ -519,9 +534,227 @@ testRewriteExampleType = do
     quux1 = QuuxPair QuuxUnit (QuuxPair (QuuxValue "abc") (QuuxValue "12345"))
     quux2 = QuuxPair QuuxUnit (QuuxPair QuuxUnit (QuuxValue 5))
 
+testRewriteTermReachesSubterms :: H.SpecWith ()
+testRewriteTermReachesSubterms = H.describe "Test that rewriteTerm reaches all subterms" $ do
+  H.describe "Simple terms" $ do
+    checkRewrite "string literal"
+      foo
+      bar
+
+    checkRewrite "string in variable (should not change)"
+      (var "x")
+      (var "x")
+
+  H.describe "Collections" $ do
+    checkRewrite "string in list"
+      (list [foo, baz])
+      (list [bar, baz])
+
+    checkRewrite "multiple strings in list"
+      (list [foo, foo, baz])
+      (list [bar, bar, baz])
+
+    checkRewrite "string in optional (Just)"
+      (just foo)
+      (just bar)
+
+    checkRewrite "string in set"
+      (set $ S.fromList [foo, baz])
+      (set $ S.fromList [bar, baz])
+
+  H.describe "Applications and functions" $ do
+    checkRewrite "string in function application"
+      (var "print" @@ foo)
+      (var "print" @@ bar)
+
+    checkRewrite "string in lambda body"
+      (lambda "x" foo)
+      (lambda "x" bar)
+
+    checkRewrite "string in nested applications"
+      (var "f" @@ (var "g" @@ foo))
+      (var "f" @@ (var "g" @@ bar))
+
+  H.describe "Records and products" $ do
+    checkRewrite "string in record field"
+      (record (Name "Person") ["name">: foo])
+      (record (Name "Person") ["name">: bar])
+
+    checkRewrite "strings in multiple record fields"
+      (record (Name "Data") ["a">: foo, "b">: baz, "c">: foo])
+      (record (Name "Data") ["a">: bar, "b">: baz, "c">: bar])
+
+    checkRewrite "string in tuple"
+      (pair foo (int32 42))
+      (pair bar (int32 42))
+
+  H.describe "Let bindings" $ do
+    checkRewrite "string in let binding value"
+      (lets ["x">: foo] (var "x"))
+      (lets ["x">: bar] (var "x"))
+
+    checkRewrite "string in let body"
+      (lets ["x">: int32 1] foo)
+      (lets ["x">: int32 1] bar)
+
+  H.describe "Case statements" $ do
+    checkRewrite "string in first case branch"
+      (match (Name "Result") Nothing
+        ["success">: foo,
+         "error">: baz])
+      (match (Name "Result") Nothing
+        ["success">: bar,
+         "error">: baz])
+
+    checkRewrite "string in second case branch"
+      (match (Name "Result") Nothing
+        ["success">: baz,
+         "error">: foo])
+      (match (Name "Result") Nothing
+        ["success">: baz,
+         "error">: bar])
+
+    checkRewrite "string in multiple case branches"
+      (match (Name "Result") Nothing
+        ["success">: foo,
+         "error">: foo,
+         "pending">: baz])
+      (match (Name "Result") Nothing
+        ["success">: bar,
+         "error">: bar,
+         "pending">: baz])
+
+    checkRewrite "string in default branch"
+      (match (Name "Result") (Just foo)
+        ["success">: baz,
+         "error">: baz])
+      (match (Name "Result") (Just bar)
+        ["success">: baz,
+         "error">: baz])
+
+    checkRewrite "string in both case branch and default"
+      (match (Name "Result") (Just foo)
+        ["success">: foo,
+         "error">: baz])
+      (match (Name "Result") (Just bar)
+        ["success">: bar,
+         "error">: baz])
+
+    checkRewrite "string in nested lambda in case branch"
+      (match (Name "Result") Nothing
+        ["success">: lambda "x" foo,
+         "error">: lambda "y" baz])
+      (match (Name "Result") Nothing
+        ["success">: lambda "x" bar,
+         "error">: lambda "y" baz])
+
+  H.describe "Deeply nested terms" $ do
+    checkRewrite "string deeply nested in record in list in application"
+      (var "process" @@ list [record (Name "Item") ["value">: foo]])
+      (var "process" @@ list [record (Name "Item") ["value">: bar]])
+
+  H.describe "Maps" $ do
+    checkRewrite "string in map keys"
+      (Terms.map $ M.fromList [(foo, baz), (baz, baz)])
+      (Terms.map $ M.fromList [(bar, baz), (baz, baz)])
+
+    checkRewrite "string in map values"
+      (Terms.map $ M.fromList [(baz, foo), (baz, baz)])
+      (Terms.map $ M.fromList [(baz, bar), (baz, baz)])
+
+    checkRewrite "string in both map keys and values"
+      (Terms.map $ M.fromList [(foo, foo), (baz, baz)])
+      (Terms.map $ M.fromList [(bar, bar), (baz, baz)])
+
+  H.describe "Unions and injections" $ do
+    checkRewrite "string in union variant value"
+      (variant (Name "Result") (Name "success") foo)
+      (variant (Name "Result") (Name "success") bar)
+
+  H.describe "Sums" $ do
+    checkRewrite "string in sum term"
+      (Terms.sum 0 3 foo)
+      (Terms.sum 0 3 bar)
+
+  H.describe "Wrapped terms" $ do
+    checkRewrite "string in wrapped term"
+      (wrap (Name "Email") foo)
+      (wrap (Name "Email") bar)
+
+  H.describe "Annotated terms" $ do
+    checkRewrite "string in annotated term body"
+      (annotated foo (M.fromList [(Name "comment", baz)]))
+      (annotated bar (M.fromList [(Name "comment", baz)]))
+
+    checkRewrite "string in annotation value is NOT replaced"
+      (annotated baz (M.fromList [(Name "comment", foo)]))
+      (annotated baz (M.fromList [(Name "comment", foo)]))
+
+  H.describe "System F polymorphism" $ do
+    checkRewrite "string in type lambda body"
+      (tylam "a" foo)
+      (tylam "a" bar)
+
+    checkRewrite "string in type application body"
+      (tyapp foo (Types.string))
+      (tyapp bar (Types.string))
+
+    checkRewrite "string in nested type lambdas"
+      (tylams ["a", "b"] foo)
+      (tylams ["a", "b"] bar)
+
+  H.describe "Function eliminations" $ do
+    checkRewrite "string after record projection"
+      (apply (project (Name "Person") (Name "name")) foo)
+      (apply (project (Name "Person") (Name "name")) bar)
+
+    checkRewrite "string after tuple projection"
+      (apply first foo)
+      (apply first bar)
+
+    checkRewrite "string after unwrap"
+      (apply (unwrap (Name "Email")) foo)
+      (apply (unwrap (Name "Email")) bar)
+
+  H.describe "Multiple bindings in let" $ do
+    checkRewrite "string in first of multiple let bindings"
+      (lets ["x">: foo, "y">: baz] (var "x"))
+      (lets ["x">: bar, "y">: baz] (var "x"))
+
+    checkRewrite "string in second of multiple let bindings"
+      (lets ["x">: baz, "y">: foo] (var "y"))
+      (lets ["x">: baz, "y">: bar] (var "y"))
+
+    checkRewrite "string in all let bindings and body"
+      (lets ["x">: foo, "y">: foo] foo)
+      (lets ["x">: bar, "y">: bar] bar)
+
+  H.describe "Complex nested structures" $ do
+    checkRewrite "string in case branch within let binding"
+      (lets ["handler">: match (Name "Result") Nothing ["ok">: foo, "err">: baz]] (var "handler"))
+      (lets ["handler">: match (Name "Result") Nothing ["ok">: bar, "err">: baz]] (var "handler"))
+
+    checkRewrite "string in annotated wrapped record field"
+      (annotated (wrap (Name "User") (record (Name "UserData") ["name">: foo])) (M.fromList []))
+      (annotated (wrap (Name "User") (record (Name "UserData") ["name">: bar])) (M.fromList []))
+  where
+    foo = string "foo"
+    bar = string "bar"
+    baz = string "baz"
+
+    checkRewrite :: String -> Term -> Term -> H.SpecWith ()
+    checkRewrite desc start expected = H.it desc $ do
+      let rewritten = rewriteTerm replaceFooWithBar start
+      rewritten `H.shouldBe` expected
+
+    replaceFooWithBar :: (Term -> Term) -> Term -> Term
+    replaceFooWithBar recurse term = case term of
+      TermLiteral (LiteralString "foo") -> bar
+      _ -> recurse term
+
 testSimplifyTerm :: H.SpecWith ()
 testSimplifyTerm = do
-  H.describe "Test term simplifation (optimization)" $ do
+  H.describe "Test term simplification (optimization)" $ do
 
     H.it "Check that 'const' applications are simplified" $ do
       H.shouldBe
@@ -593,13 +826,14 @@ spec = do
 
   testFoldOverTerm
 
-  testExpandLambdas testGraph
---  testExpandTypedLambdas -- TODO: restore me / merge with testExpandLambdas
+  testEtaExpandTypedTerms testGraph
+  testEtaExpandUntypedTerms testGraph
   testFlattenLetTerms
   testFreeVariablesInTerm
   testNormalizeTypeVariablesInTerm
   testReplaceTerm
   testRewriteExampleType
+  testRewriteTermReachesSubterms
   testSimplifyTerm
 --  testStripAnnotations -- TODO: restore me
   testTopologicalSortBindings
