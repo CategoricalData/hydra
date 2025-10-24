@@ -3,6 +3,7 @@
 module Hydra.Reduction where
 
 import qualified Hydra.Arity as Arity
+import qualified Hydra.Checking as Checking
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Extract.Core as Core_
@@ -20,6 +21,7 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -165,6 +167,59 @@ etaExpansionArity graph term = ((\x -> case x of
   Core.TermTypeApplication v1 -> (etaExpansionArity graph (Core.typeApplicationTermBody v1))
   Core.TermVariable v1 -> (Optionals.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Optionals.bind (Lexical.lookupElement graph v1) (\b -> Core.bindingType b)))
   _ -> 0) term)
+
+etaExpandTypedTerm :: (Typing.TypeContext -> Core.Term -> Compute.Flow t0 Core.Term)
+etaExpandTypedTerm tx0 term0 =  
+  let rewrite = (\topLevel -> \recurse -> \tx -> \term ->  
+          let dflt = (recurse tx term)
+          in  
+            let rewriteSpine = (\term -> (\x -> case x of
+                    Core.TermAnnotated v1 -> (Flows.bind (rewriteSpine (Core.annotatedTermBody v1)) (\body ->  
+                      let ann = (Core.annotatedTermAnnotation v1)
+                      in (Flows.pure (Core.TermAnnotated (Core.AnnotatedTerm {
+                        Core.annotatedTermBody = body,
+                        Core.annotatedTermAnnotation = ann})))))
+                    Core.TermApplication v1 -> (Flows.bind (rewriteSpine (Core.applicationFunction v1)) (\lhs -> Flows.bind (rewrite True recurse tx (Core.applicationArgument v1)) (\rhs -> Flows.pure (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = lhs,
+                      Core.applicationArgument = rhs})))))
+                    _ -> (rewrite False recurse tx term)) term)
+            in  
+              let extraVariables = (\n -> Lists.map (\i -> Core.Name (Strings.cat2 "v" (Literals.showInt32 i))) (Math.range 1 n))
+              in  
+                let pad = (\vars -> \body -> Logic.ifElse (Lists.null vars) body (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Lists.head vars),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (pad (Lists.tail vars) (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = body,
+                          Core.applicationArgument = (Core.TermVariable (Lists.head vars))})))}))))
+                in  
+                  let padn = (\n -> \body -> pad (extraVariables n) body)
+                  in ((\x -> case x of
+                    Core.TermApplication v1 ->  
+                      let lhs = (Core.applicationFunction v1)
+                      in  
+                        let rhs = (Core.applicationArgument v1)
+                        in (Flows.bind (rewrite True recurse tx rhs) (\rhs2 -> Flows.bind (Checking.typeOf tx [] lhs) (\lhstype ->  
+                          let lhsarity = (Arity.typeArity lhstype)
+                          in (Flows.bind (rewriteSpine lhs) (\lhs2 ->  
+                            let a2 = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = lhs2,
+                                    Core.applicationArgument = rhs2}))
+                            in (Flows.pure (Logic.ifElse (Equality.gt lhsarity 1) (padn (Math.sub lhsarity 1) a2) a2)))))))
+                    Core.TermFunction v1 -> ((\x -> case x of
+                      Core.FunctionElimination _ -> (Logic.ifElse topLevel (Flows.map (padn 1) (recurse tx term)) dflt)
+                      Core.FunctionLambda v2 ->  
+                        let tx2 = (Schemas.extendTypeContextForLambda tx v2)
+                        in (recurse tx2 term)
+                      _ -> dflt) v1)
+                    Core.TermLet v1 ->  
+                      let tx2 = (Schemas.extendTypeContextForLet tx v1)
+                      in (recurse tx2 term)
+                    Core.TermTypeLambda v1 ->  
+                      let tx2 = (Schemas.extendTypeContextForTypeLambda tx v1)
+                      in (recurse tx2 term)
+                    _ -> dflt) term))
+  in (Rewriting.rewriteTermWithContextM (rewrite True) tx0 term0)
 
 -- | A term evaluation function which is alternatively lazy or eager
 reduceTerm :: (Bool -> Core.Term -> Compute.Flow Graph.Graph Core.Term)

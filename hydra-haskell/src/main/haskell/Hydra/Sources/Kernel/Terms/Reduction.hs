@@ -42,6 +42,7 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Arity as Arity
+import qualified Hydra.Sources.Kernel.Terms.Checking as Checking
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
@@ -51,7 +52,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 
 module_ :: Module
 module_ = Module (Namespace "hydra.reduction") elements
-    [Arity.module_, ExtractCore.module_, Lexical.module_, Rewriting.module_,
+    [Arity.module_, Checking.module_, ExtractCore.module_, Lexical.module_, Rewriting.module_,
       Schemas.module_]
     kernelTypesModules $
     Just ("Functions for reducing terms and types, i.e. performing computations.")
@@ -64,6 +65,7 @@ module_ = Module (Namespace "hydra.reduction") elements
      el etaReduceTermDef,
      el etaExpandTermDef,
      el etaExpansionArityDef,
+     el etaExpandTypedTermDef,
      el reduceTermDef,
      el termIsClosedDef,
      el termIsValueDef]
@@ -206,6 +208,74 @@ etaExpansionArityDef = define "etaExpansionArity" $
         (Optionals.bind
           (ref Lexical.lookupElementDef @@ var "graph" @@ var "name")
           ("b" ~> Core.bindingType $ var "b"))]
+
+-- TODO: add lambda domains as part of the rewriting process, so inference does not need to be performed again.
+etaExpandTypedTermDef :: TBinding (TypeContext -> Term -> Flow s Term)
+etaExpandTypedTermDef = define "etaExpandTypedTerm" $
+  doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x',"
+    <> " eliminating partial application. Variable references are not expanded."
+    <> " This is useful for targets like Python with weaker support for currying than Hydra or Haskell."
+    <> " Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references."
+    <> " It also assumes that type inference has already been performed."
+    <> " After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added."
+    ) $
+  "tx0" ~> "term0" ~>
+  "rewrite" <~ ("topLevel" ~> "recurse" ~> "tx" ~> "term" ~>
+
+    "dflt" <~ (
+      doc "For terms which are obviously nullary, we just expand the subterms" $
+      var "recurse" @@ var "tx" @@ var "term") $
+
+    "rewriteSpine" <~ ("term" ~> cases _Term (var "term")
+      (Just $ var "rewrite" @@ false @@ var "recurse" @@ var "tx" @@ var "term") [
+      _Term_annotated>>: "at" ~>
+        "body" <<~ var "rewriteSpine" @@ Core.annotatedTermBody (var "at") $
+        "ann" <~ Core.annotatedTermAnnotation (var "at") $
+        produce (Core.termAnnotated $ Core.annotatedTerm (var "body") (var "ann")),
+      _Term_application>>: "a" ~>
+        "lhs" <<~ var "rewriteSpine" @@ Core.applicationFunction (var "a") $
+        "rhs" <<~ var "rewrite" @@ true @@ var "recurse" @@ var "tx" @@ Core.applicationArgument (var "a") $
+        produce (Core.termApplication $ Core.application (var "lhs") (var "rhs"))]) $
+
+    "extraVariables" <~ ("n" ~> Lists.map ("i" ~> Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
+      Math.range (int32 1) (var "n")) $
+    "pad" <~ ("vars" ~> "body" ~>
+      Logic.ifElse (Lists.null $ var "vars")
+        (var "body")
+        (Core.termFunction $ Core.functionLambda $ Core.lambda (Lists.head $ var "vars") nothing $ var "pad"
+          @@ Lists.tail (var "vars")
+          @@ (Core.termApplication $ Core.application (var "body") $ Core.termVariable $ Lists.head $ var "vars"))) $
+    "padn" <~ ("n" ~> "body" ~> var "pad" @@ (var "extraVariables" @@ var "n") @@ var "body") $
+
+    cases _Term (var "term")
+      (Just $ var "dflt") [
+      _Term_application>>: "a" ~>
+        "lhs" <~ Core.applicationFunction (var "a") $
+        "rhs" <~ Core.applicationArgument (var "a") $
+        "rhs2" <<~ var "rewrite" @@ true @@ var "recurse" @@ var "tx" @@ var "rhs" $
+        "lhstype" <<~ ref Checking.typeOfDef @@ var "tx" @@ list [] @@ var "lhs" $
+        "lhsarity" <~ ref Arity.typeArityDef @@ var "lhstype" $
+        "lhs2" <<~ var "rewriteSpine" @@ var "lhs" $
+        "a2" <~ Core.termApplication (Core.application (var "lhs2") (var "rhs2")) $
+        produce $ Logic.ifElse (Equality.gt (var "lhsarity") (int32 1))
+          (var "padn" @@ (Math.sub (var "lhsarity") (int32 1)) @@ var "a2")
+          (var "a2"),
+      _Term_function>>: "f" ~> cases _Function (var "f")
+        (Just $ var "dflt") [
+        _Function_elimination>>: "e" ~> Logic.ifElse (var "topLevel")
+          (Flows.map (var "padn" @@ int32 1) $ var "recurse" @@ var "tx" @@ var "term")
+          (var "dflt"),
+        _Function_lambda>>: "l" ~>
+          "tx2" <~ ref Schemas.extendTypeContextForLambdaDef @@ var "tx" @@ var "l" $
+           var "recurse" @@ var "tx2" @@ var "term"],
+      _Term_let>>: "l" ~>
+        "tx2" <~ ref Schemas.extendTypeContextForLetDef @@ var "tx" @@ var "l" $
+        var "recurse" @@ var "tx2" @@ var "term",
+--    _Term_typeApplication>>: "ta" ~> ...
+      _Term_typeLambda>>: "tl" ~>
+        "tx2" <~ ref Schemas.extendTypeContextForTypeLambdaDef @@ var "tx" @@ var "tl" $
+        var "recurse" @@ var "tx2" @@ var "term"]) $
+  ref Rewriting.rewriteTermWithContextMDef @@ (var "rewrite" @@ true) @@ var "tx0" @@ var "term0"
 
 -- Note: unused / untested
 etaReduceTermDef :: TBinding (Term -> Term)
