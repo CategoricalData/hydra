@@ -124,19 +124,6 @@ generalize cx typ =
     Core.typeSchemeVariables = vars,
     Core.typeSchemeType = typ}
 
-graphToInferenceContext :: (Graph.Graph -> Compute.Flow t0 Typing_.InferenceContext)
-graphToInferenceContext g0 =  
-  let schema = (Optionals.fromMaybe g0 (Graph.graphSchema g0))
-  in  
-    let primTypes = (Maps.fromList (Lists.map (\p -> (Graph.primitiveName p, (Graph.primitiveType p))) (Maps.elems (Graph.graphPrimitives g0))))
-    in  
-      let varTypes = Maps.empty
-      in (Flows.bind (Schemas.schemaGraphToTypingEnvironment schema) (\schemaTypes -> Flows.pure (Typing_.InferenceContext {
-        Typing_.inferenceContextSchemaTypes = schemaTypes,
-        Typing_.inferenceContextPrimitiveTypes = primTypes,
-        Typing_.inferenceContextDataTypes = varTypes,
-        Typing_.inferenceContextDebug = False})))
-
 inferGraphTypes :: (Graph.Graph -> Compute.Flow t0 Graph.Graph)
 inferGraphTypes g0 =  
   let fromLetTerm = (\l ->  
@@ -161,7 +148,7 @@ inferGraphTypes g0 =
             in (Core.TermLet (Core.Let {
               Core.letBindings = (Lists.map toBinding (Maps.elems (Graph.graphElements g))),
               Core.letBody = (Graph.graphBody g)})))
-    in (Monads.withTrace "graph inference" (Flows.bind (graphToInferenceContext g0) (\cx -> Flows.bind (inferTypeOfTerm cx (toLetTerm g0) "graph term") (\result ->  
+    in (Monads.withTrace "graph inference" (Flows.bind (Schemas.graphToInferenceContext g0) (\cx -> Flows.bind (inferTypeOfTerm cx (toLetTerm g0) "graph term") (\result ->  
       let term = (Typing_.inferenceResultTerm result)
       in  
         let ts = (Typing_.inferenceResultType result)
@@ -171,7 +158,7 @@ inferGraphTypes g0 =
 
 -- | Infer the type of a term in graph context
 inferInGraphContext :: (Core.Term -> Compute.Flow Graph.Graph Typing_.InferenceResult)
-inferInGraphContext term = (Flows.bind Monads.getState (\g -> Flows.bind (graphToInferenceContext g) (\cx -> inferTypeOfTerm cx term "single term")))
+inferInGraphContext term = (Flows.bind Monads.getState (\g -> Flows.bind (Schemas.graphToInferenceContext g) (\cx -> inferTypeOfTerm cx term "single term")))
 
 inferMany :: (Typing_.InferenceContext -> [(Core.Term, String)] -> Compute.Flow t0 ([Core.Term], ([Core.Type], Typing_.TypeSubst)))
 inferMany cx pairs = (Logic.ifElse (Lists.null pairs) (Flows.pure ([], ([], Substitution.idTypeSubst))) ( 
@@ -831,7 +818,7 @@ initialTypeContext g =
             in (Optionals.maybe (Flows.fail (Strings.cat [
               "untyped element: ",
               (Core.unName name)])) (\ts -> Flows.pure (name, (Schemas.typeSchemeToFType ts))) (Core.bindingType el)))
-  in (Flows.bind (graphToInferenceContext g) (\ix -> Flows.bind (Flows.map Maps.fromList (Flows.mapList toPair (Maps.toList (Graph.graphElements g)))) (\types -> Flows.pure (Typing_.TypeContext {
+  in (Flows.bind (Schemas.graphToInferenceContext g) (\ix -> Flows.bind (Flows.map Maps.fromList (Flows.mapList toPair (Maps.toList (Graph.graphElements g)))) (\types -> Flows.pure (Typing_.TypeContext {
     Typing_.typeContextTypes = types,
     Typing_.typeContextVariables = Sets.empty,
     Typing_.typeContextInferenceContext = ix}))))
