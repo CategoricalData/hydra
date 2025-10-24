@@ -100,6 +100,12 @@ adaptDataGraphDef :: TBinding (LanguageConstraints -> Bool -> Graph -> Flow s Gr
 adaptDataGraphDef = define "adaptDataGraph" $
   doc "Adapt a graph and its schema to the given language constraints, prior to inference" $
   "constraints" ~> "doExpand" ~> "graph0" ~>
+  "expand" <~ ("graph" ~> "gterm" ~>
+--    -- TODO: replace with typed eta expansion (below)
+--    produce $ ref Rewriting.unshadowVariablesDef @@ (ref Reduction.etaExpandTermDef @@ var "graph" @@ var "gterm")) $
+    "tx" <<~ ref Schemas.graphToTypeContextDef @@ var "graph" $
+    "gterm1" <<~ ref Reduction.etaExpandTypedTermDef @@ var "tx" @@ var "gterm" $
+    produce $ ref Rewriting.unshadowVariablesDef @@ var "gterm1") $
   "litmap" <~ ref adaptLiteralTypesMapDef @@ var "constraints" $
   "els0" <~ Graph.graphElements (var "graph0") $
   "env0" <~ Graph.graphEnvironment (var "graph0") $
@@ -115,9 +121,9 @@ adaptDataGraphDef = define "adaptDataGraph" $
       "emap" <~ ref Schemas.typesToElementsDef @@ var "tmap1" $
       produce $ just $ Graph.graphWithElements (var "sg") (var "emap")) $
   "gterm0" <~ ref Schemas.graphAsTermDef @@ var "graph0" $
-  "gterm1" <~ Logic.ifElse (var "doExpand")
-    (ref Rewriting.unshadowVariablesDef @@ (ref Reduction.etaExpandTermDef @@ var "graph0" @@ var "gterm0"))
-    (var "gterm0") $
+  "gterm1" <<~ Logic.ifElse (var "doExpand")
+    (var "expand" @@ var "graph0" @@ var "gterm0")
+    (produce $ var "gterm0") $
   "gterm2" <<~ ref adaptTermDef @@ var "constraints" @@ var "litmap" @@ var "gterm1" $
   "els1" <~ ref Schemas.termAsGraphDef @@ var "gterm2" $
   "prims1" <<~ Flows.mapElems (ref adaptPrimitiveDef @@ var "constraints" @@ var "litmap") (var "prims0") $
@@ -308,7 +314,7 @@ dataGraphToDefinitionsDef = define "dataGraphToDefinitions" $
   "constraints" ~> "doExpand" ~> "graph" ~> "nameLists" ~>
 
   -- This extra, early inference step is necessary so that elements are annotated with correct types,
-  -- as needed for lambda expansion.
+  -- as needed for eta expansion.
   "graphi" <<~ Logic.ifElse (var "doExpand")
     (ref Inference.inferGraphTypesDef @@ var "graph")
     (produce $ var "graph") $
@@ -318,13 +324,18 @@ dataGraphToDefinitionsDef = define "dataGraphToDefinitions" $
 --  "graph1" <<~ ref adaptDataGraphDef @@ var "constraints" @@ false @@ var "graphi" $
 
 --  Flows.fail ("adapted graph: " ++ (ref ShowGraph.graphDef @@ var "graph1"))
+
+  -- Perform inference on the adapted graph
   "graph2" <<~ ref Inference.inferGraphTypesDef @@ var "graph1" $
+
+  -- Construct term definitions
   "toDef" <~ ("el" ~>
     "ts" <~ Optionals.fromJust (Core.bindingType $ var "el") $
     Module.termDefinition
       (Core.bindingName $ var "el")
       (Core.bindingTerm $ var "el")
       (ref Schemas.typeSchemeToFTypeDef @@ var "ts")) $
+
   produce $ pair
     (var "graph2")
     (Lists.map
