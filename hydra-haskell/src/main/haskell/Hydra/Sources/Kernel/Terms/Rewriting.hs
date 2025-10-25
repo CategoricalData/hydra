@@ -1284,10 +1284,6 @@ rewriteTermWithContextMDef = define "rewriteTermWithContextM" $
   "rewrite" <~ ("cx" ~> "term" ~> var "f" @@ (var "forSubterms" @@ var "rewrite") @@ var "cx" @@ var "term") $
   var "rewrite" @@ var "cx0" @@ var "term0"
 
-
-
-
-
 rewriteTypeDef :: TBinding (((Type -> Type) -> Type -> Type) -> Type -> Type)
 rewriteTypeDef = define "rewriteType" $ "f" ~>
   "fsub" <~ ("recurse" ~> "typ" ~>

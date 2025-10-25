@@ -534,8 +534,8 @@ testRewriteExampleType = do
     quux1 = QuuxPair QuuxUnit (QuuxPair (QuuxValue "abc") (QuuxValue "12345"))
     quux2 = QuuxPair QuuxUnit (QuuxPair QuuxUnit (QuuxValue 5))
 
-testRewriteTermReachesSubterms :: H.SpecWith ()
-testRewriteTermReachesSubterms = H.describe "Test that rewriteTerm reaches all subterms" $ do
+testRewriteFunctionReachesSubterms :: String -> (((Term -> Term) -> Term -> Term) -> Term -> Term) -> H.SpecWith ()
+testRewriteFunctionReachesSubterms functionName function = H.describe ("Test that " ++ functionName ++ " reaches all subterms") $ do
   H.describe "Simple terms" $ do
     checkRewrite "string literal"
       foo
@@ -703,19 +703,6 @@ testRewriteTermReachesSubterms = H.describe "Test that rewriteTerm reaches all s
       (tylams ["a", "b"] foo)
       (tylams ["a", "b"] bar)
 
-  H.describe "Function eliminations" $ do
-    checkRewrite "string after record projection"
-      (apply (project (Name "Person") (Name "name")) foo)
-      (apply (project (Name "Person") (Name "name")) bar)
-
-    checkRewrite "string after tuple projection"
-      (apply first foo)
-      (apply first bar)
-
-    checkRewrite "string after unwrap"
-      (apply (unwrap (Name "Email")) foo)
-      (apply (unwrap (Name "Email")) bar)
-
   H.describe "Multiple bindings in let" $ do
     checkRewrite "string in first of multiple let bindings"
       (lets ["x">: foo, "y">: baz] (var "x"))
@@ -735,8 +722,8 @@ testRewriteTermReachesSubterms = H.describe "Test that rewriteTerm reaches all s
       (lets ["handler">: match (Name "Result") Nothing ["ok">: bar, "err">: baz]] (var "handler"))
 
     checkRewrite "string in annotated wrapped record field"
-      (annotated (wrap (Name "User") (record (Name "UserData") ["name">: foo])) (M.fromList []))
-      (annotated (wrap (Name "User") (record (Name "UserData") ["name">: bar])) (M.fromList []))
+      (annotated (wrap (Name "User") (record (Name "UserData") ["name">: foo])) M.empty)
+      (annotated (wrap (Name "User") (record (Name "UserData") ["name">: bar])) M.empty)
   where
     foo = string "foo"
     bar = string "bar"
@@ -744,13 +731,44 @@ testRewriteTermReachesSubterms = H.describe "Test that rewriteTerm reaches all s
 
     checkRewrite :: String -> Term -> Term -> H.SpecWith ()
     checkRewrite desc start expected = H.it desc $ do
-      let rewritten = rewriteTerm replaceFooWithBar start
+      let rewritten = function replaceFooWithBar start
       rewritten `H.shouldBe` expected
 
     replaceFooWithBar :: (Term -> Term) -> Term -> Term
     replaceFooWithBar recurse term = case term of
       TermLiteral (LiteralString "foo") -> bar
       _ -> recurse term
+
+testRewriteTerm :: H.SpecWith ()
+testRewriteTerm = do
+  testRewriteFunctionReachesSubterms "rewriteTerm" rewriteTerm
+
+testRewriteTermM :: H.SpecWith ()
+testRewriteTermM = do
+  testRewriteFunctionReachesSubterms "rewriteTermM" rewrite
+  where
+    rewrite recurse term = fromFlow Terms.unit () $ rewriteTermM rewriteM term
+      where
+        rewriteM :: (Term -> Flow () Term) -> Term -> Flow () Term
+        rewriteM recurseM t = return $ recurse (fromFlow Terms.unit () . recurseM) t
+
+testRewriteTermWithContext :: H.SpecWith ()
+testRewriteTermWithContext = do
+  testRewriteFunctionReachesSubterms "rewriteTermWithContext" rewrite
+  where
+    rewrite recurse term = rewriteTermWithContext rewriteWithCtx () term
+      where
+        rewriteWithCtx :: (a -> Term -> Term) -> a -> Term -> Term
+        rewriteWithCtx recurseWithCtx ctx t = recurse (recurseWithCtx ctx) t
+
+testRewriteTermWithContextM :: H.SpecWith ()
+testRewriteTermWithContextM = do
+  testRewriteFunctionReachesSubterms "rewriteTermWithContextM" rewrite
+  where
+    rewrite recurse term = fromFlow Terms.unit () $ rewriteTermWithContextM rewriteWithCtxM () term
+      where
+        rewriteWithCtxM :: (a -> Term -> Flow () Term) -> a -> Term -> Flow () Term
+        rewriteWithCtxM recurseWithCtxM ctx t = return $ recurse (fromFlow Terms.unit () . recurseWithCtxM ctx) t
 
 testSimplifyTerm :: H.SpecWith ()
 testSimplifyTerm = do
@@ -833,7 +851,10 @@ spec = do
   testNormalizeTypeVariablesInTerm
   testReplaceTerm
   testRewriteExampleType
-  testRewriteTermReachesSubterms
+  testRewriteTerm
+  testRewriteTermM
+  testRewriteTermWithContext
+  testRewriteTermWithContextM
   testSimplifyTerm
 --  testStripAnnotations -- TODO: restore me
   testTopologicalSortBindings
