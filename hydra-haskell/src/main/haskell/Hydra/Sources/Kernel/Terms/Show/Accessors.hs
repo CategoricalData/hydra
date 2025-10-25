@@ -61,34 +61,32 @@ define = definitionInModule module_
 termAccessorDef :: TBinding (TermAccessor -> Maybe String)
 termAccessorDef = define "termAccessor" $
   doc "Convert a term accessor to a string representation" $
-  lambda "accessor" $ lets [
-    "idx">: lambda "i" nothing,  -- TODO: restore index functionality
-    "idxSuff">: lambda "suffix" $ lambda "i" $
-      Optionals.map (lambda "s" $ Strings.cat2 (var "s") (var "suffix")) (var "idx" @@ var "i")]
-    $ match _TermAccessor Nothing [
-      _TermAccessor_annotatedBody>>: constant nothing,
-      _TermAccessor_applicationFunction>>: constant $ just $ string "fun",
-      _TermAccessor_applicationArgument>>: constant $ just $ string "arg",
-      _TermAccessor_lambdaBody>>: constant $ just $ string "body",
-      _TermAccessor_unionCasesDefault>>: constant $ just $ string "default",
-      _TermAccessor_unionCasesBranch>>: lambda "name" $ just $
-        Strings.cat2 (string ".") (Core.unName $ var "name"),
-      _TermAccessor_letBody>>: constant $ just $ string "in",
-      _TermAccessor_letBinding>>: lambda "name" $ just $
-        Strings.cat2 (Core.unName $ var "name") (string "="),
-      _TermAccessor_listElement>>: lambda "i" $ var "idx" @@ var "i",
-      _TermAccessor_mapKey>>: lambda "i" $ var "idxSuff" @@ string ".key" @@ var "i",
-      _TermAccessor_mapValue>>: lambda "i" $ var "idxSuff" @@ string ".value" @@ var "i",
-      _TermAccessor_optionalTerm>>: constant $ just $ string "just",
-      _TermAccessor_productTerm>>: lambda "i" $ var "idx" @@ var "i",
-      _TermAccessor_recordField>>: lambda "name" $ just $
-        Strings.cat2 (string ".") (Core.unName $ var "name"),
-      _TermAccessor_setElement>>: lambda "i" $ var "idx" @@ var "i",
-      _TermAccessor_sumTerm>>: constant nothing,
-      _TermAccessor_typeLambdaBody>>: constant nothing,
-      _TermAccessor_typeApplicationTerm>>: constant nothing,
-      _TermAccessor_injectionTerm>>: constant nothing,
-      _TermAccessor_wrappedTerm>>: constant nothing] @@ var "accessor"
+  "accessor" ~>
+  "idx" <~ ("i" ~> nothing) $  -- TODO: restore index functionality
+  "idxSuff" <~ ("suffix" ~> "i" ~>
+    Optionals.map ("s" ~> Strings.cat2 (var "s") (var "suffix")) (var "idx" @@ var "i")) $
+  cases _TermAccessor (var "accessor")
+    Nothing [
+    _TermAccessor_annotatedBody>>: constant nothing,
+    _TermAccessor_applicationFunction>>: constant (just "fun"),
+    _TermAccessor_applicationArgument>>: constant (just "arg"),
+    _TermAccessor_lambdaBody>>: constant (just "body"),
+    _TermAccessor_unionCasesDefault>>: constant (just "default"),
+    _TermAccessor_unionCasesBranch>>: "name" ~> just (Strings.cat2 "." (Core.unName (var "name"))),
+    _TermAccessor_letBody>>: constant (just "in"),
+    _TermAccessor_letBinding>>: "name" ~> just (Strings.cat2 (Core.unName (var "name")) "="),
+    _TermAccessor_listElement>>: "i" ~> var "idx" @@ var "i",
+    _TermAccessor_mapKey>>: "i" ~> var "idxSuff" @@ ".key" @@ var "i",
+    _TermAccessor_mapValue>>: "i" ~> var "idxSuff" @@ ".value" @@ var "i",
+    _TermAccessor_optionalTerm>>: constant (just "just"),
+    _TermAccessor_productTerm>>: "i" ~> var "idx" @@ var "i",
+    _TermAccessor_recordField>>: "name" ~> just (Strings.cat2 "." (Core.unName (var "name"))),
+    _TermAccessor_setElement>>: "i" ~> var "idx" @@ var "i",
+    _TermAccessor_sumTerm>>: constant nothing,
+    _TermAccessor_typeLambdaBody>>: constant nothing,
+    _TermAccessor_typeApplicationTerm>>: constant nothing,
+    _TermAccessor_injectionTerm>>: constant nothing,
+    _TermAccessor_wrappedTerm>>: constant nothing]
 
 termToAccessorGraphDef :: TBinding (M.Map Namespace String -> Term -> AccessorGraph)
 termToAccessorGraphDef = define "termToAccessorGraph" $
@@ -163,5 +161,5 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
       pair (var "dontCareAccessor") (var "term"),
     "finalNodesEdges">: first $ var "result",
     "finalNodes">: first $ var "finalNodesEdges",
-    "finalEdges">: second $ var "finalNodesEdges"]
-    $ Accessors.accessorGraph (var "finalNodes") (var "finalEdges")
+    "finalEdges">: second $ var "finalNodesEdges"] $
+    Accessors.accessorGraph (var "finalNodes") (var "finalEdges")
