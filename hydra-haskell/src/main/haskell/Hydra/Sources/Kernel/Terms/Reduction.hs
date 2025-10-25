@@ -52,7 +52,8 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 
 module_ :: Module
 module_ = Module (Namespace "hydra.reduction") elements
-    [Arity.module_, Checking.module_, ExtractCore.module_, Lexical.module_, Rewriting.module_,
+    [Arity.module_, Checking.module_, ExtractCore.module_, Lexical.module_,
+      Rewriting.module_,
       Schemas.module_]
     kernelTypesModules $
     Just ("Functions for reducing terms and types, i.e. performing computations.")
