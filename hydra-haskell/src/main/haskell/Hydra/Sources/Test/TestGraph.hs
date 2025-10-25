@@ -105,10 +105,6 @@ testTypeLatLonNameDef :: TBinding Name
 testTypeLatLonNameDef = testGraphDefinition "testTypeLatLonName" $
   name "LatLon"
 
-testTypeLatLonPolyNameDef :: TBinding Name
-testTypeLatLonPolyNameDef = testGraphDefinition "testTypeLatLonPolyName" $
-  name "LatLonPoly"
-
 latlonRecordDef :: TBinding (Float -> Float -> Term)
 latlonRecordDef = testGraphDefinition "latlonRecord" $
   Phantoms.lambdas ["lat", "lon"] $ record (ref testTypeLatLonNameDef) [
@@ -126,6 +122,10 @@ testTypeLatLonPolyDef = testGraphType "testTypeLatLonPoly" $
   T.forAll "a" $ T.record (ref testTypeLatLonPolyNameDef) [
     "lat">: T.var "a",
     "lon">: T.var "a"]
+
+testTypeLatLonPolyNameDef :: TBinding Name
+testTypeLatLonPolyNameDef = testGraphDefinition "testTypeLatLonPolyName" $
+  name "LatLonPoly"
 
 testTypePolymorphicWrapperDef :: TBinding Type
 testTypePolymorphicWrapperDef = testGraphType "testTypePolymorphicWrapper" $
