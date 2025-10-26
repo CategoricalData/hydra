@@ -1227,10 +1227,10 @@ rewriteTermWithContextMDef = define "rewriteTermWithContextM" $
         produce $ Core.termFunction $ var "rfun",
       _Term_let>>: "lt" ~>
         "bindings" <~ Core.letBindings (var "lt") $
-        "env" <~ Core.letBody (var "lt") $
+        "body" <~ Core.letBody (var "lt") $
         "rbindings" <<~ Flows.mapList (var "mapBinding") (var "bindings") $
-        "renv" <<~ var "recurse" @@ var "env" $
-        produce $ Core.termLet $ Core.let_ (var "rbindings") (var "renv"),
+        "rbody" <<~ var "recurse" @@ var "body" $
+        produce $ Core.termLet $ Core.let_ (var "rbindings") (var "rbody"),
       _Term_list>>: "els" ~>
         "rels" <<~ Flows.mapList (var "recurse") (var "els") $
         produce $ Core.termList $ var "rels",
