@@ -72,6 +72,7 @@ module_ = Module (Namespace "hydra.rewriting") elements
      el inlineTypeDef,
      el isFreeVariableInTermDef,
      el isLambdaDef,
+     el liftLambdaAboveLetDef,
      el mapBeneathTypeAnnotationsDef,
      el normalizeTypeVariablesInTermDef,
      el removeTermAnnotationsDef,
@@ -410,6 +411,36 @@ isLambdaDef = define "isLambda" $
       (Just false) [
       _Function_lambda>>: constant true],
     _Term_let>>: "lt" ~> ref isLambdaDef @@ (project _Let _Let_body @@ var "lt")]
+
+-- TODO: account for shadowing among let- and lambda-bound variables
+liftLambdaAboveLetDef :: TBinding (Term -> Term)
+liftLambdaAboveLetDef = define "liftLambdaAboveLet" $
+  doc ("Rewrite terms like `let foo = bar in λx.baz` to `λx.let foo = bar in baz`, lifting lambda-bound variables"
+    <> " above let-bound variables, recursively. This is helpful for targets such as Python.") $
+  "term0" ~>
+  "rewrite" <~ ("recurse" ~> "term" ~>
+    "digForLambdas" <~ ("original" ~> "cons" ~> "term" ~> cases _Term (var"term")
+      (Just $ var "original") [
+      _Term_annotated>>: "at" ~> var "digForLambdas"
+        @@ var "original"
+        @@ ("t" ~> Core.termAnnotated $ Core.annotatedTermWithBody (var "at") (var "cons" @@ var "t"))
+        @@ (Core.annotatedTermBody $ var "at"),
+      _Term_function>>: "f" ~> cases _Function (var "f")
+        (Just $ var "original") [
+        _Function_lambda>>: "l" ~> Core.termFunction $ Core.functionLambda $ Core.lambdaWithBody (var "l") $
+          var "digForLambdas"
+            @@ (var "cons" @@ (Core.lambdaBody $ var "l"))
+            @@ ("t" ~> var "cons" @@ var "t")
+            @@ (Core.lambdaBody $ var "l")]]) $
+    -- TODO: for better efficiency, match *before* recursing
+    "term1" <~ var "recurse" @@ var "term" $
+    cases _Term (var "term1")
+      (Just $ var "term1") [
+      _Term_let>>: "l" ~> var "digForLambdas"
+        @@ var "term1"
+        @@ ("t" ~> Core.termLet $ Core.letWithBody (var "l") (var "t"))
+        @@ Core.letBody (var "l")]) $
+  ref rewriteTermDef @@ var "rewrite" @@ var "term0"
 
 mapBeneathTypeAnnotationsDef :: TBinding ((Type -> Type) -> Type -> Type)
 mapBeneathTypeAnnotationsDef = define "mapBeneathTypeAnnotations" $
