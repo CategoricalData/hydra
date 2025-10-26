@@ -109,7 +109,7 @@ adaptDataGraphDef = define "adaptDataGraph" $
 --    Flows.fail ("gterm1: " ++ (ref ShowCore.termDef @@ var "gterm1"))) $
 --    Flows.fail ("gterm1 (unshadowed): " ++ (ref ShowCore.termDef @@ (ref Rewriting.unshadowVariablesDef @@ var "gterm1")))) $
 
-    produce $ ref Rewriting.unshadowVariablesDef @@ var "gterm1") $
+    produce $ ref Rewriting.liftLambdaAboveLetDef @@ (ref Rewriting.unshadowVariablesDef @@ var "gterm1")) $
   "litmap" <~ ref adaptLiteralTypesMapDef @@ var "constraints" $
   "els0" <~ Graph.graphElements (var "graph0") $
   "env0" <~ Graph.graphEnvironment (var "graph0") $
