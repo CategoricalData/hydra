@@ -43,7 +43,7 @@ adaptFloatType constraints ft =
 -- | Adapt a graph and its schema to the given language constraints, prior to inference
 adaptDataGraph :: (Coders.LanguageConstraints -> Bool -> Graph.Graph -> Compute.Flow Graph.Graph Graph.Graph)
 adaptDataGraph constraints doExpand graph0 =  
-  let expand = (\graph -> \gterm -> Flows.bind (Schemas.graphToTypeContext graph) (\tx -> Flows.bind (Reduction.etaExpandTypedTerm tx gterm) (\gterm1 -> Flows.pure (Rewriting.unshadowVariables gterm1))))
+  let expand = (\graph -> \gterm -> Flows.bind (Schemas.graphToTypeContext graph) (\tx -> Flows.bind (Reduction.etaExpandTypedTerm tx gterm) (\gterm1 -> Flows.pure (Rewriting.liftLambdaAboveLet (Rewriting.unshadowVariables gterm1)))))
   in  
     let litmap = (adaptLiteralTypesMap constraints)
     in  
