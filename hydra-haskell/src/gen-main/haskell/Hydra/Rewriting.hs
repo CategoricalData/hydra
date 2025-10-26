@@ -278,6 +278,30 @@ isLambda term = ((\x -> case x of
   Core.TermLet v1 -> (isLambda (Core.letBody v1))
   _ -> False) (deannotateTerm term))
 
+-- | Rewrite terms like `let foo = bar in λx.baz` to `λx.let foo = bar in baz`, lifting lambda-bound variables above let-bound variables, recursively. This is helpful for targets such as Python.
+liftLambdaAboveLet :: (Core.Term -> Core.Term)
+liftLambdaAboveLet term0 =  
+  let rewrite = (\recurse -> \term ->  
+          let digForLambdas = (\original -> \cons -> \term -> (\x -> case x of
+                  Core.TermAnnotated v1 -> (digForLambdas original (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
+                    Core.annotatedTermBody = (cons t),
+                    Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)})) (Core.annotatedTermBody v1))
+                  Core.TermFunction v1 -> ((\x -> case x of
+                    Core.FunctionLambda v2 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.lambdaParameter v2),
+                      Core.lambdaDomain = (Core.lambdaDomain v2),
+                      Core.lambdaBody = (digForLambdas (cons (Core.lambdaBody v2)) (\t -> cons t) (Core.lambdaBody v2))})))
+                    _ -> original) v1)
+                  _ -> original) term)
+          in  
+            let term1 = (recurse term)
+            in ((\x -> case x of
+              Core.TermLet v1 -> (digForLambdas term1 (\t -> Core.TermLet (Core.Let {
+                Core.letBindings = (Core.letBindings v1),
+                Core.letBody = t})) (Core.letBody v1))
+              _ -> term1) term1))
+  in (rewriteTerm rewrite term0)
+
 -- | Apply a transformation to the first type beneath a chain of annotations
 mapBeneathTypeAnnotations :: ((Core.Type -> Core.Type) -> Core.Type -> Core.Type)
 mapBeneathTypeAnnotations f t = ((\x -> case x of
@@ -981,10 +1005,10 @@ rewriteTermWithContextM f cx0 term0 =
                   Core.TermLet v1 ->  
                     let bindings = (Core.letBindings v1)
                     in  
-                      let env = (Core.letBody v1)
-                      in (Flows.bind (Flows.mapList mapBinding bindings) (\rbindings -> Flows.bind (recurse env) (\renv -> Flows.pure (Core.TermLet (Core.Let {
+                      let body = (Core.letBody v1)
+                      in (Flows.bind (Flows.mapList mapBinding bindings) (\rbindings -> Flows.bind (recurse body) (\rbody -> Flows.pure (Core.TermLet (Core.Let {
                         Core.letBindings = rbindings,
-                        Core.letBody = renv})))))
+                        Core.letBody = rbody})))))
                   Core.TermList v1 -> (Flows.bind (Flows.mapList recurse v1) (\rels -> Flows.pure (Core.TermList rels)))
                   Core.TermLiteral v1 -> (Flows.pure (Core.TermLiteral v1))
                   Core.TermMap v1 -> (Flows.bind (Flows.mapList forPair (Maps.toList v1)) (\pairs -> Flows.pure (Core.TermMap (Maps.fromList pairs))))
