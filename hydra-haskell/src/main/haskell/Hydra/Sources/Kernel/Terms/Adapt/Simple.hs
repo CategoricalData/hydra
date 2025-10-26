@@ -105,6 +105,10 @@ adaptDataGraphDef = define "adaptDataGraph" $
 --    produce $ ref Rewriting.unshadowVariablesDef @@ (ref Reduction.etaExpandTermDef @@ var "graph" @@ var "gterm")) $
     "tx" <<~ ref Schemas.graphToTypeContextDef @@ var "graph" $
     "gterm1" <<~ ref Reduction.etaExpandTypedTermDef @@ var "tx" @@ var "gterm" $
+
+--    Flows.fail ("gterm1: " ++ (ref ShowCore.termDef @@ var "gterm1"))) $
+--    Flows.fail ("gterm1 (unshadowed): " ++ (ref ShowCore.termDef @@ (ref Rewriting.unshadowVariablesDef @@ var "gterm1")))) $
+
     produce $ ref Rewriting.unshadowVariablesDef @@ var "gterm1") $
   "litmap" <~ ref adaptLiteralTypesMapDef @@ var "constraints" $
   "els0" <~ Graph.graphElements (var "graph0") $
@@ -127,10 +131,21 @@ adaptDataGraphDef = define "adaptDataGraph" $
   "gterm2" <<~ ref adaptTermDef @@ var "constraints" @@ var "litmap" @@ var "gterm1" $
   "els1" <~ ref Schemas.termAsGraphDef @@ var "gterm2" $
   "prims1" <<~ Flows.mapElems (ref adaptPrimitiveDef @@ var "constraints" @@ var "litmap") (var "prims0") $
+
 --  Flows.fail $ "adapted data graph: " ++ (ref ShowCore.termDef @@ var "gterm2")
+--  Flows.fail $ "adapted elements: " ++ (Strings.intercalate "," $ Lists.map (ref ShowCore.bindingDef) (Maps.elems $ var "els1"))
 --  Flows.fail $ "schema graph: " ++ (optCases (var "schema1")
 --    ("none")
 --    ("sg" ~> ref ShowGraph.graphDef @@ var "sg"))
+--  "gfinal" <~ Graph.graph
+--    (var "els1")
+--    (var "env0")
+--    Maps.empty
+--    Core.termUnit
+--    (var "prims1")
+--    (var "schema1") $
+--  Flows.fail $ "final graph: " ++ (ref ShowGraph.graphDef @@ var "gfinal")
+
   produce $ Graph.graph
     (var "els1")
     (var "env0")
