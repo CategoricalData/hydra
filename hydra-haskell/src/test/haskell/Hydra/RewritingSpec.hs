@@ -387,6 +387,198 @@ testFreeVariablesInTerm = do
         (freeVariablesInTerm (list [var "x", (lambda "y" $ var "y") @@ var "y"]))
         (S.fromList [Name "x", Name "y"])
 
+testLiftLambdaAboveLet :: H.SpecWith ()
+testLiftLambdaAboveLet = H.describe "liftLambdaAboveLet" $ do
+    H.describe "Basic lambda lifting" $ do
+      liftsTo "simple let with lambda in body"
+        (lets ["x">: int32 42] (lambda "y" $ var "x"))
+        (lambda "y" $ lets ["x">: int32 42] (var "x"))
+
+      liftsTo "let with lambda using both let-bound and lambda-bound variables"
+        (lets ["x">: int32 42] $ lambda "y" $ add @@ var "x" @@ var "y")
+        (lambda "y" $ lets ["x">: int32 42] $ add @@ var "x" @@ var "y")
+
+    H.describe "No transformation needed" $ do
+      noChange "bare lambda"
+        (lambda "x" $ var "x")
+
+      noChange "bare let"
+        (lets ["x">: int32 42] (var "x"))
+
+      noChange "let without lambda in body"
+        (lets ["x">: int32 42, "y">: string "hello"] (pair (var "x") (var "y")))
+
+      noChange "lambda with let in body"
+        (lambda "y" $ lets ["x">: int32 42] (var "x"))
+
+    H.describe "Multiple lambdas and multiple lets" $ do
+        liftsTo "let with two nested lambdas"
+          (lets ["x">: int32 42] $ lambda "y" $ lambda "z" $ add @@ var "x" @@ var "y")
+          (lambda "y" $ lambda "z" $ lets ["x">: int32 42] $ add @@ var "x" @@ var "y")
+
+        liftsTo "multiple let bindings with lambda"
+          (lets ["x">: int32 42, "y">: string "hello"] $ lambda "z" $ var "x")
+          (lambda "z" $ lets ["x">: int32 42, "y">: string "hello"] $ var "x")
+
+        liftsTo "nested lets with lambda at innermost level"
+          (lets ["x">: int32 42] $ lets ["y">: string "hello"] $ lambda "z" $ var "x")
+          (lambda "z" $ lets ["x">: int32 42] $ lets ["y">: string "hello"] $ var "x")
+
+        liftsTo "lambda between two lets"
+          (lets ["x">: int32 42] $ lambda "y" $ lets ["z">: string "hello"] $ var "x")
+          (lambda "y" $ lets ["x">: int32 42] $ lets ["z">: string "hello"] $ var "x")
+
+        liftsTo "multiple lambdas between nested lets"
+          (lets ["a">: int32 1] $ lambda "x" $ lambda "y" $ lets ["b">: int32 2] $ var "a")
+          (lambda "x" $ lambda "y" $ lets ["a">: int32 1] $ lets ["b">: int32 2] $ var "a")
+
+        noChange "multiple lambdas already above let"
+          (lambda "x" $ lambda "y" $ lets ["z">: int32 42] $ var "z")
+
+    H.describe "Annotations" $ do
+        liftsTo "annotation above let containing lambda"
+          (annot (M.fromList [(Name "comment", string "outer")]) $
+            lets ["x">: int32 42] $ lambda "y" $ var "x")
+          (annot (M.fromList [(Name "comment", string "outer")]) $
+            lambda "y" $ lets ["x">: int32 42] $ var "x")
+
+        liftsTo "annotation above lambda in let body"
+          (lets ["x">: int32 42] $
+            annot (M.fromList [(Name "comment", string "inner")]) $
+            lambda "y" $ var "x")
+          (annot (M.fromList [(Name "comment", string "inner")]) $
+            lambda "y" $ lets ["x">: int32 42] $ var "x")
+
+        liftsTo "annotation between two lambdas"
+          (lets ["x">: int32 42] $ lambda "y" $
+            annot (M.fromList [(Name "comment", string "between")]) $
+            lambda "z" $ var "x")
+          (lambda "y" $
+            annot (M.fromList [(Name "comment", string "between")]) $
+            lambda "z" $ lets ["x">: int32 42] $ var "x")
+
+        liftsTo "multiple annotations with lambda and let"
+          (annot (M.fromList [(Name "outer", string "1")]) $
+            lets ["x">: int32 42] $
+            annot (M.fromList [(Name "inner", string "2")]) $
+            lambda "y" $ var "x")
+          (annot (M.fromList [(Name "outer", string "1")]) $
+            annot (M.fromList [(Name "inner", string "2")]) $
+            lambda "y" $ lets ["x">: int32 42] $ var "x")
+
+        liftsTo "annotation on the body of lambda in let"
+          (lets ["x">: int32 42] $ lambda "y" $
+            annot (M.fromList [(Name "comment", string "body")]) $
+            var "x")
+          (lambda "y" $ lets ["x">: int32 42] $
+            annot (M.fromList [(Name "comment", string "body")]) $
+            var "x")
+
+        liftsTo "annotation between nested lets"
+          (lets ["x">: int32 42] $
+            annot (M.fromList [(Name "middle", string "annotation")]) $
+            lets ["y">: string "hello"] $
+            lambda "z" $ var "x")
+          (lambda "z" $ lets ["x">: int32 42] $
+            annot (M.fromList [(Name "middle", string "annotation")]) $
+            lets ["y">: string "hello"] $ var "x")
+
+        noChange "annotation on lambda already above let"
+          (annot (M.fromList [(Name "comment", string "correct")]) $
+            lambda "y" $ lets ["x">: int32 42] $ var "x")
+
+        liftsTo "nested annotations around lambda in let"
+          (lets ["x">: int32 42] $
+            annot (M.fromList [(Name "outer", string "1")]) $
+            annot (M.fromList [(Name "inner", string "2")]) $
+            lambda "y" $ var "x")
+          (annot (M.fromList [(Name "outer", string "1")]) $
+            annot (M.fromList [(Name "inner", string "2")]) $
+            lambda "y" $ lets ["x">: int32 42] $ var "x")
+
+    H.describe "Recursive lifting in nested structures" $ do
+        liftsTo "let-lambda inside a list"
+          (list [
+            int32 1,
+            lets ["x">: int32 42] $ lambda "y" $ var "x",
+            int32 2])
+          (list [
+            int32 1,
+            lambda "y" $ lets ["x">: int32 42] $ var "x",
+            int32 2])
+
+        liftsTo "let-lambda in multiple list elements"
+          (list [
+            lets ["x">: int32 1] $ lambda "y" $ var "x",
+            lets ["z">: int32 2] $ lambda "w" $ var "z"])
+          (list [
+            lambda "y" $ lets ["x">: int32 1] $ var "x",
+            lambda "w" $ lets ["z">: int32 2] $ var "z"])
+
+        liftsTo "let-lambda in a let binding value"
+          (lets ["f">: (lets ["x">: int32 42] $ lambda "y" $ var "x")] $
+            var "f")
+          (lets ["f">: (lambda "y" $ lets ["x">: int32 42] $ var "x")] $
+            var "f")
+
+        liftsTo "let-lambda in multiple let binding values"
+          (lets [
+            "f">: (lets ["x">: int32 1] $ lambda "y" $ var "x"),
+            "g">: (lets ["z">: int32 2] $ lambda "w" $ var "w")] $
+            var "f")
+          (lets [
+            "f">: (lambda "y" $ lets ["x">: int32 1] $ var "x"),
+            "g">: (lambda "w" $ lets ["z">: int32 2] $ var "w")] $
+            var "f")
+
+        liftsTo "let-lambda inside a pair"
+          (pair
+            (lets ["x">: int32 42] $ lambda "y" $ var "x")
+            (string "test"))
+          (pair
+            (lambda "y" $ lets ["x">: int32 42] $ var "x")
+            (string "test"))
+
+        liftsTo "let-lambda in both elements of a pair"
+          (pair
+            (lets ["x">: int32 1] $ lambda "y" $ var "x")
+            (lets ["z">: int32 2] $ lambda "w" $ var "z"))
+          (pair
+            (lambda "y" $ lets ["x">: int32 1] $ var "x")
+            (lambda "w" $ lets ["z">: int32 2] $ var "z"))
+
+        liftsTo "let-lambda inside a record field"
+          (record (Name "MyRecord") [
+            "field1">: int32 42,
+            "field2">: (lets ["x">: string "hello"] $ lambda "y" $ var "x")])
+          (record (Name "MyRecord") [
+            "field1">: int32 42,
+            "field2">: (lambda "y" $ lets ["x">: string "hello"] $ var "x")])
+
+        liftsTo "let-lambda inside lambda body"
+          (lambda "outer" $
+            lets ["x">: int32 42] $ lambda "inner" $ var "x")
+          (lambda "outer" $ lambda "inner" $
+            lets ["x">: int32 42] $ var "x")
+
+        liftsTo "deeply nested let-lambda in let binding in list"
+          (lets ["items">: list [
+            lets ["x">: int32 1] $ lambda "y" $ var "x"]] $
+            var "items")
+          (lets ["items">: list [
+            lambda "y" $ lets ["x">: int32 1] $ var "x"]] $
+            var "items")
+  where
+    liftsTo desc termBefore termAfter = H.it desc $ do
+      let result = liftLambdaAboveLet termBefore
+      H.shouldBe (ShowCore.term result) (ShowCore.term termAfter)
+    noChange desc term = liftsTo desc term term
+    add = primitive _math_add
+
+
+
+
+
 testNormalizeTypeVariablesInTerm :: H.SpecWith ()
 testNormalizeTypeVariablesInTerm = do
     H.describe "No type variables" $ do
@@ -848,6 +1040,7 @@ spec = do
   testEtaExpandUntypedTerms testGraph
   testFlattenLetTerms
   testFreeVariablesInTerm
+  testLiftLambdaAboveLet
   testNormalizeTypeVariablesInTerm
   testReplaceTerm
   testRewriteExampleType

@@ -18,8 +18,8 @@ import Prelude hiding (map, product, sum)
 
 
 annotatedTerm :: TTerm Term -> TTerm (M.Map Name Term) -> TTerm AnnotatedTerm
-annotatedTerm subject annotation = Phantoms.record _AnnotatedTerm [
-  _AnnotatedTerm_body>>: subject,
+annotatedTerm body annotation = Phantoms.record _AnnotatedTerm [
+  _AnnotatedTerm_body>>: body,
   _AnnotatedTerm_annotation>>: annotation]
 
 annotatedTermBody :: TTerm AnnotatedTerm -> TTerm Term
@@ -28,9 +28,12 @@ annotatedTermBody at = Phantoms.project _AnnotatedTerm _AnnotatedTerm_body @@ at
 annotatedTermAnnotation :: TTerm AnnotatedTerm -> TTerm (M.Map Name Term)
 annotatedTermAnnotation at = Phantoms.project _AnnotatedTerm _AnnotatedTerm_annotation @@ at
 
+annotatedTermWithBody :: TTerm AnnotatedTerm -> TTerm Term -> TTerm AnnotatedTerm
+annotatedTermWithBody at body = annotatedTerm body (Hydra.Dsl.Core.annotatedTermAnnotation at)
+
 annotatedType :: TTerm Type -> TTerm (M.Map Name Term) -> TTerm AnnotatedType
-annotatedType subject annotation = Phantoms.record _AnnotatedType [
-  _AnnotatedType_body>>: subject,
+annotatedType body annotation = Phantoms.record _AnnotatedType [
+  _AnnotatedType_body>>: body,
   _AnnotatedType_annotation>>: annotation]
 
 annotatedTypeBody :: TTerm AnnotatedType -> TTerm Type
@@ -60,6 +63,21 @@ applicationTypeFunction app = Phantoms.project _ApplicationType _ApplicationType
 
 applicationTypeArgument :: TTerm ApplicationType -> TTerm Type
 applicationTypeArgument app = Phantoms.project _ApplicationType _ApplicationType_argument @@ app
+
+binding :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm Binding
+binding name term mtype = Phantoms.record _Binding [
+  _Binding_name>>: name,
+  _Binding_term>>: term,
+  _Binding_type>>: mtype]
+
+bindingName :: TTerm Binding -> TTerm Name
+bindingName lb = Phantoms.project _Binding _Binding_name @@ lb
+
+bindingTerm :: TTerm Binding -> TTerm Term
+bindingTerm lb = Phantoms.project _Binding _Binding_term @@ lb
+
+bindingType :: TTerm Binding -> TTerm (Y.Maybe TypeScheme)
+bindingType lb = Phantoms.project _Binding _Binding_type @@ lb
 
 caseStatement :: TTerm Name -> TTerm (Maybe Term) -> TTerm [Field] -> TTerm CaseStatement
 caseStatement typeName defaultTerm cases = Phantoms.record _CaseStatement [
@@ -239,31 +257,22 @@ lambdaBody l = Phantoms.project _Lambda _Lambda_body @@ l
 lambdaDomain :: TTerm Lambda -> TTerm (Maybe Type)
 lambdaDomain l = Phantoms.project _Lambda _Lambda_domain @@ l
 
+lambdaWithBody :: TTerm Lambda -> TTerm Term -> TTerm Lambda
+lambdaWithBody l body = Hydra.Dsl.Core.lambda (Hydra.Dsl.Core.lambdaParameter l) (Hydra.Dsl.Core.lambdaDomain l) body
+
 let_ :: TTerm [Binding] -> TTerm Term -> TTerm Let
 let_ bindings body = Phantoms.record _Let [
   _Let_bindings>>: bindings,
   _Let_body>>: body]
 
-binding :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm Binding
-binding name term mtype = Phantoms.record _Binding [
-  _Binding_name>>: name,
-  _Binding_term>>: term,
-  _Binding_type>>: mtype]
-
 letBindings :: TTerm Let -> TTerm [Binding]
 letBindings l = Phantoms.project _Let _Let_bindings @@ l
 
-bindingName :: TTerm Binding -> TTerm Name
-bindingName lb = Phantoms.project _Binding _Binding_name @@ lb
-
-bindingTerm :: TTerm Binding -> TTerm Term
-bindingTerm lb = Phantoms.project _Binding _Binding_term @@ lb
-
-bindingType :: TTerm Binding -> TTerm (Y.Maybe TypeScheme)
-bindingType lb = Phantoms.project _Binding _Binding_type @@ lb
-
 letBody :: TTerm Let -> TTerm Term
 letBody l = Phantoms.project _Let _Let_body @@ l
+
+letWithBody :: TTerm Let -> TTerm Term -> TTerm Let
+letWithBody l body = let_ (Hydra.Dsl.Core.letBindings l) body
 
 literalBinary :: TTerm String -> TTerm Literal
 literalBinary = variant _Literal _Literal_binary
