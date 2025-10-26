@@ -228,25 +228,62 @@ testEtaExpansion = H.describe "etaExpandTypedTerms" $ do
           (lambda "x" $ lambda "y" $ lambda "z" $ lambda "v1" $ splitOn @@ var "x" @@ var "v1")
 
     H.describe "Let terms" $ do
-      expandsTo "partial application of let-bound function in a fold"
-        (letsTyped
-          [("helper",
-            lambda "arg1" $ lambda "arg2" $ lambda "arg3" $
-              cat @@ list [var "arg1", var "arg2", var "arg3"],
-            Types.mono $ Types.functionMany [Types.string, Types.string, Types.string, Types.string])] $
-          (tyapps foldl [Types.string, Types.string])
-            @@ (var "helper" @@ "foo")
-            @@ ""
-            @@ list ["bar", "baz"])
-        (letsTyped
-          [("helper",
-            lambda "arg1" $ lambda "arg2" $ lambda "arg3" $
-              cat @@ list [var "arg1", var "arg2", var "arg3"],
-            Types.mono $ Types.functionMany [Types.string, Types.string, Types.string, Types.string])] $
-          (tyapps foldl [Types.string, Types.string])
-            @@ (lambda "v1" $ lambda "v2" $ var "helper" @@ "foo" @@ var "v1" @@ var "v2")
-            @@ ""
-            @@ list ["bar", "baz"])
+      H.describe "partial application of a let-bound function" $ do
+        expandsTo "simple"
+          (letsTyped
+            [("helper",
+              lambda "arg1" $ lambda "arg2" $ lambda "arg3" $
+                cat @@ list [var "arg1", var "arg2", var "arg3"],
+              Types.mono $ Types.functionMany [Types.string, Types.string, Types.string, Types.string])] $
+            var "helper" @@ "foo")
+          (letsTyped
+            [("helper",
+              lambda "arg1" $ lambda "arg2" $ lambda "arg3" $
+                cat @@ list [var "arg1", var "arg2", var "arg3"],
+              Types.mono $ Types.functionMany [Types.string, Types.string, Types.string, Types.string])] $
+            lambda "v1" $ lambda "v2" $ var "helper" @@ "foo" @@ var "v1" @@ var "v2")
+
+        expandsTo "in a fold"
+          (letsTyped
+            [("helper",
+              lambda "arg1" $ lambda "arg2" $ lambda "arg3" $
+                cat @@ list [var "arg1", var "arg2", var "arg3"],
+              Types.mono $ Types.functionMany [Types.string, Types.string, Types.string, Types.string])] $
+            (tyapps foldl [Types.string, Types.string])
+              @@ (var "helper" @@ "foo")
+              @@ ""
+              @@ list ["bar", "baz"])
+          (letsTyped
+            [("helper",
+              lambda "arg1" $ lambda "arg2" $ lambda "arg3" $
+                cat @@ list [var "arg1", var "arg2", var "arg3"],
+              Types.mono $ Types.functionMany [Types.string, Types.string, Types.string, Types.string])] $
+            (tyapps foldl [Types.string, Types.string])
+              @@ (lambda "v1" $ lambda "v2" $ var "helper" @@ "foo" @@ var "v1" @@ var "v2")
+              @@ ""
+              @@ list ["bar", "baz"])
+
+        expandsTo "within another let binding"
+          (letsTyped
+            [("tryme",
+              (letsTyped
+                [("helper",
+                  lambda "arg1" $ lambda "arg2" $ lambda "arg3" $
+                    cat @@ list [var "arg1", var "arg2", var "arg3"],
+                  Types.mono $ Types.functionMany [Types.string, Types.string, Types.string, Types.string])] $
+                var "helper" @@ "foo"),
+              Types.mono $ Types.functionMany [Types.string, Types.string, Types.string])] $
+            unit)
+          (letsTyped
+            [("tryme",
+              (letsTyped
+                [("helper",
+                  lambda "arg1" $ lambda "arg2" $ lambda "arg3" $
+                    cat @@ list [var "arg1", var "arg2", var "arg3"],
+                  Types.mono $ Types.functionMany [Types.string, Types.string, Types.string, Types.string])] $
+                lambda "v1" $ lambda "v2" $ var "helper" @@ "foo" @@ var "v1" @@ var "v2"),
+              Types.mono $ Types.functionMany [Types.string, Types.string, Types.string])] $
+            unit)
 
   where
     cat = primitive $ Name "hydra.lib.strings.cat"
