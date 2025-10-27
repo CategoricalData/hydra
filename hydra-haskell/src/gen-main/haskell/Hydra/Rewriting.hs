@@ -282,24 +282,32 @@ isLambda term = ((\x -> case x of
 liftLambdaAboveLet :: (Core.Term -> Core.Term)
 liftLambdaAboveLet term0 =  
   let rewrite = (\recurse -> \term ->  
-          let digForLambdas = (\original -> \cons -> \term -> (\x -> case x of
-                  Core.TermAnnotated v1 -> (digForLambdas original (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
-                    Core.annotatedTermBody = (cons t),
-                    Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)})) (Core.annotatedTermBody v1))
-                  Core.TermFunction v1 -> ((\x -> case x of
-                    Core.FunctionLambda v2 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.lambdaParameter v2),
-                      Core.lambdaDomain = (Core.lambdaDomain v2),
-                      Core.lambdaBody = (digForLambdas (cons (Core.lambdaBody v2)) (\t -> cons t) (Core.lambdaBody v2))})))
-                    _ -> original) v1)
-                  _ -> original) term)
+          let rewriteBinding = (\b -> Core.Binding {
+                  Core.bindingName = (Core.bindingName b),
+                  Core.bindingTerm = (rewrite recurse (Core.bindingTerm b)),
+                  Core.bindingType = (Core.bindingType b)})
           in  
-            let term1 = (recurse term)
-            in ((\x -> case x of
-              Core.TermLet v1 -> (digForLambdas term1 (\t -> Core.TermLet (Core.Let {
-                Core.letBindings = (Core.letBindings v1),
-                Core.letBody = t})) (Core.letBody v1))
-              _ -> term1) term1))
+            let rewriteBindings = (\bs -> Lists.map rewriteBinding bs)
+            in  
+              let digForLambdas = (\original -> \cons -> \term -> (\x -> case x of
+                      Core.TermAnnotated v1 -> (digForLambdas original (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
+                        Core.annotatedTermBody = (cons t),
+                        Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)})) (Core.annotatedTermBody v1))
+                      Core.TermFunction v1 -> ((\x -> case x of
+                        Core.FunctionLambda v2 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.lambdaParameter = (Core.lambdaParameter v2),
+                          Core.lambdaDomain = (Core.lambdaDomain v2),
+                          Core.lambdaBody = (digForLambdas (cons (Core.lambdaBody v2)) (\t -> cons t) (Core.lambdaBody v2))})))
+                        _ -> (recurse original)) v1)
+                      Core.TermLet v1 -> (digForLambdas original (\t -> cons (Core.TermLet (Core.Let {
+                        Core.letBindings = (rewriteBindings (Core.letBindings v1)),
+                        Core.letBody = t}))) (Core.letBody v1))
+                      _ -> (recurse original)) term)
+              in ((\x -> case x of
+                Core.TermLet v1 -> (digForLambdas term (\t -> Core.TermLet (Core.Let {
+                  Core.letBindings = (rewriteBindings (Core.letBindings v1)),
+                  Core.letBody = t})) (Core.letBody v1))
+                _ -> (recurse term)) term))
   in (rewriteTerm rewrite term0)
 
 -- | Apply a transformation to the first type beneath a chain of annotations
