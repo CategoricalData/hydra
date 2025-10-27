@@ -114,8 +114,7 @@ encodeApplication env app = do
                 -- Note: additional arguments here would be an error
                 return $ withRest $
                   projectFromExpression firstArg $ Py.Name "value"
-            FunctionPrimitive name -> do
-              return $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) hargs
+            FunctionPrimitive name -> encodeVariable env name hargs
             _ -> def
           where
             withRest e = if L.null restArgs
@@ -236,9 +235,8 @@ encodeFunction env f = case f of
         return $ Py.ExpressionLambda $ Py.Lambda
           (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
           (pyPrimaryToPyExpression indexedExpr)
-
   -- Only nullary primitives should appear here.
-  FunctionPrimitive name -> pure $ functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) []
+  FunctionPrimitive name -> encodeVariable env name []
   _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
 encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> [Name] -> Term -> [Type] -> Type -> Maybe String -> [Py.Statement] -> Flow PyGraph Py.Statement
@@ -725,15 +723,19 @@ encodeVariable :: PythonEnvironment -> Name -> [Py.Expression] -> Flow PyGraph P
 encodeVariable env name args = do
   PyGraph g _ <- getState
 
---  if name == Name "noVars"
+--  if name == Name "hydra.lib.maps.fromList"
 --    then fail $ "args = " ++ show args
 --      ++ "\n\tel = " ++ show (lookupElement g name)
 --    else pure ()
 
   return $ if L.null args
     then case lookupElement g name of
-      -- Lambda-bound variables
-      Nothing -> asVariable
+      -- Lambda-bound variables, as well as primitive functions
+      Nothing -> case (lookupPrimitive g name) of
+        Nothing -> asVariable
+        Just prim -> if primitiveArity prim == 0
+          then asFunctionCall
+          else asVariable
       -- Let-bound variables
       Just el -> if isFunctionCall el
 --      Just el -> if isNullaryFunction el
@@ -969,11 +971,6 @@ updateMeta :: (PythonModuleMetadata -> PythonModuleMetadata) -> Flow PyGraph ()
 updateMeta f = do
   PyGraph g meta <- getState
   putState $ PyGraph g (f meta)
-
---updateMetaWithNames :: S.Set -> Flow PyGraph ()
---updateMetaWithNames names = updateMeta addNames
---  where
---    addNames meta = meta {}
 
 variantArgs :: Py.Expression -> [Name] -> Py.Args
 variantArgs ptype tparams = pyExpressionsToPyArgs $ Y.catMaybes [
