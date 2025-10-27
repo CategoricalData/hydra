@@ -265,7 +265,7 @@ encodeKwargOrStarred k = case k of
   Py.KwargOrStarredStarred se -> encodeStarredExpression se
 
 encodeLambda :: Py.Lambda -> A.Expr
-encodeLambda (Py.Lambda params body) = spaceSep [cst "lambda", paramSec, encodeExpression body]
+encodeLambda (Py.Lambda params body) = parens $ spaceSep [cst "lambda", paramSec, encodeExpression body]
   where
     paramSec = noSep [encodeLambdaParameters params, cst ":"]
 
