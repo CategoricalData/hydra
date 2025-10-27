@@ -79,6 +79,9 @@ bindingTerm lb = Phantoms.project _Binding _Binding_term @@ lb
 bindingType :: TTerm Binding -> TTerm (Y.Maybe TypeScheme)
 bindingType lb = Phantoms.project _Binding _Binding_type @@ lb
 
+bindingWithTerm :: TTerm Binding -> TTerm Term -> TTerm Binding
+bindingWithTerm b term = binding (Hydra.Dsl.Core.bindingName b) term (Hydra.Dsl.Core.bindingType b)
+
 caseStatement :: TTerm Name -> TTerm (Maybe Term) -> TTerm [Field] -> TTerm CaseStatement
 caseStatement typeName defaultTerm cases = Phantoms.record _CaseStatement [
   _CaseStatement_typeName>>: typeName,
