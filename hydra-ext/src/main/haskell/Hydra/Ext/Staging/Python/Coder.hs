@@ -160,18 +160,16 @@ encodeBindingsAsDefs env bindings = CM.mapM (encodeBindingAsDef env) bindings
 encodeDefinition :: PythonEnvironment -> Definition -> Flow PyGraph [[Py.Statement]]
 encodeDefinition env def = case def of
   DefinitionTerm (TermDefinition name term _) -> withTrace ("data element " ++ unName name) $ do
---  DefinitionTerm (TermDefinition name term _) -> withTrace ("data element " ++ unName name
---    ++ ": " ++ ShowCore.term term) $ do
 
---    if name == Name "hydra.monads.withFlag"
+--    if name == Name "hydra.show.accessorsDebug.anotherOne"
 --    then fail $ "term: " ++ ShowCore.term term
 --    else return ()
 
     comment <- fmap normalizeComment <$> (inGraphContext $ getTermDescription term)
     stmt <- encodeTermAssignment env name term comment
     return [[stmt]]
+
   DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name) $ do
---  DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name ++ ": " ++ ShowCore.type_ typ) $ do
     comment <- fmap normalizeComment <$> (inGraphContext $ getTypeDescription typ)
     encodeTypeAssignment env name typ comment
 
