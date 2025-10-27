@@ -419,26 +419,31 @@ liftLambdaAboveLetDef = define "liftLambdaAboveLet" $
     <> " above let-bound variables, recursively. This is helpful for targets such as Python.") $
   "term0" ~>
   "rewrite" <~ ("recurse" ~> "term" ~>
+    "rewriteBinding" <~ ("b" ~> Core.bindingWithTerm (var "b") $ var "rewrite" @@ var "recurse" @@ Core.bindingTerm (var "b")) $
+    "rewriteBindings" <~ ("bs" ~> Lists.map (var "rewriteBinding") (var "bs")) $
     "digForLambdas" <~ ("original" ~> "cons" ~> "term" ~> cases _Term (var"term")
-      (Just $ var "original") [
+      (Just $ var "recurse" @@ var "original") [
       _Term_annotated>>: "at" ~> var "digForLambdas"
         @@ var "original"
         @@ ("t" ~> Core.termAnnotated $ Core.annotatedTermWithBody (var "at") (var "cons" @@ var "t"))
         @@ (Core.annotatedTermBody $ var "at"),
       _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ var "original") [
+        (Just $ var "recurse" @@ var "original") [
         _Function_lambda>>: "l" ~> Core.termFunction $ Core.functionLambda $ Core.lambdaWithBody (var "l") $
           var "digForLambdas"
             @@ (var "cons" @@ (Core.lambdaBody $ var "l"))
             @@ ("t" ~> var "cons" @@ var "t")
-            @@ (Core.lambdaBody $ var "l")]]) $
-    -- TODO: for better efficiency, match *before* recursing
-    "term1" <~ var "recurse" @@ var "term" $
-    cases _Term (var "term1")
-      (Just $ var "term1") [
+            @@ (Core.lambdaBody $ var "l")],
       _Term_let>>: "l" ~> var "digForLambdas"
-        @@ var "term1"
-        @@ ("t" ~> Core.termLet $ Core.letWithBody (var "l") (var "t"))
+        @@ var "original"
+        @@ ("t" ~> var "cons" @@ (Core.termLet $ Core.let_ (var "rewriteBindings" @@ (Core.letBindings $ var "l")) (var "t")))
+        @@ Core.letBody (var "l")]) $
+    -- Note: we match *before* recursing for the sake of efficiency.
+    cases _Term (var "term")
+      (Just $ var "recurse" @@ var "term") [
+      _Term_let>>: "l" ~> var "digForLambdas"
+        @@ var "term"
+        @@ ("t" ~> Core.termLet $ Core.let_ (var "rewriteBindings" @@ (Core.letBindings $ var "l")) (var "t"))
         @@ Core.letBody (var "l")]) $
   ref rewriteTermDef @@ var "rewrite" @@ var "term0"
 
