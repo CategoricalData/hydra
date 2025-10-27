@@ -129,266 +129,356 @@ define = definitionInModule module_
 bigfloatDef :: TBinding (Term -> Flow Graph Double)
 bigfloatDef = define "bigfloat" $
   doc "Extract an arbitrary-precision floating-point value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
-    Flows.bind (ref floatLiteralDef @@ var "l") $ lambda "f" $
-      ref bigfloatValueDef @@ var "f"
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  "f" <<~ ref floatLiteralDef @@ var "l" $
+  ref bigfloatValueDef @@ var "f"
 
 bigfloatValueDef :: TBinding (FloatValue -> Flow Graph Double)
 bigfloatValueDef = define "bigfloatValue" $
   doc "Extract a bigfloat value from a FloatValue" $
-  lambda "v" $ cases _FloatValue (var "v") (Just $ ref Monads.unexpectedDef @@ string "bigfloat" @@ (ref ShowCore.floatValueDef @@ var "v")) [
-    _FloatValue_bigfloat>>: lambda "f" $ Flows.pure $ var "f"]
+  "v" ~> cases _FloatValue (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "bigfloat"
+      @@ (ref ShowCore.floatValueDef @@ var "v"))) [
+    _FloatValue_bigfloat>>: "f" ~> Flows.pure (var "f")]
 
 bigintDef :: TBinding (Term -> Flow Graph Integer)
 bigintDef = define "bigint" $
   doc "Extract an arbitrary-precision integer value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
-    Flows.bind (ref integerLiteralDef @@ var "l") $ lambda "i" $
-      ref bigintValueDef @@ var "i"
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  "i" <<~ ref integerLiteralDef @@ var "l" $
+  ref bigintValueDef @@ var "i"
 
 bigintValueDef :: TBinding (IntegerValue -> Flow Graph Integer)
 bigintValueDef = define "bigintValue" $
   doc "Extract a bigint value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Monads.unexpectedDef @@ string "bigint" @@ (ref ShowCore.integerValueDef @@ var "v")) [
-    _IntegerValue_bigint>>: lambda "i" $ Flows.pure $ var "i"]
+  "v" ~> cases _IntegerValue (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "bigint"
+      @@ (ref ShowCore.integerValueDef @@ var "v"))) [
+    _IntegerValue_bigint>>: "i" ~> Flows.pure (var "i")]
 
 binaryDef :: TBinding (Term -> Flow Graph String)
 binaryDef = define "binary" $
   doc "Extract a binary data value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ ref binaryLiteralDef
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  ref binaryLiteralDef @@ var "l"
 
 binaryLiteralDef :: TBinding (Literal -> Flow Graph String)
 binaryLiteralDef = define "binaryLiteral" $
   doc "Extract a binary literal from a Literal value" $
-  lambda "v" $ cases _Literal (var "v") (Just $ ref Monads.unexpectedDef @@ string "binary" @@ (ref ShowCore.literalDef @@ var "v")) [
-    _Literal_binary>>: lambda "b" $ Flows.pure $ var "b"]
+  "v" ~> cases _Literal (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "binary"
+      @@ (ref ShowCore.literalDef @@ var "v"))) [
+    _Literal_binary>>: "b" ~> Flows.pure (var "b")]
 
 booleanDef :: TBinding (Term -> Flow Graph Bool)
 booleanDef = define "boolean" $
   doc "Extract a boolean value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ ref booleanLiteralDef
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  ref booleanLiteralDef @@ var "l"
 
 booleanLiteralDef :: TBinding (Literal -> Flow Graph Bool)
 booleanLiteralDef = define "booleanLiteral" $
   doc "Extract a boolean literal from a Literal value" $
-  lambda "v" $ cases _Literal (var "v") (Just $ ref Monads.unexpectedDef @@ string "boolean" @@ (ref ShowCore.literalDef @@ var "v")) [
-    _Literal_boolean>>: lambda "b" $ Flows.pure $ var "b"]
+  "v" ~> cases _Literal (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "boolean"
+      @@ (ref ShowCore.literalDef @@ var "v"))) [
+    _Literal_boolean>>: "b" ~> Flows.pure (var "b")]
 
 -- TODO: nonstandard; move me
 caseFieldDef :: TBinding (Name -> String -> Term -> Flow Graph Field)
 caseFieldDef = define "caseField" $
   doc "Extract a specific case handler from a case statement term" $
-  lambdas ["name", "n", "term"] $ lets [
-    "fieldName">: Core.name $ var "n"] $ binds [
-    "cs">: ref casesDef @@ var "name" @@ var "term"] $ lets [
-    "matching">: Lists.filter
-      (lambda "f" $ Core.equalName_ (Core.fieldName $ var "f") (var "fieldName"))
-      (Core.caseStatementCases $ var "cs")] $
-    Logic.ifElse (Lists.null $ var "matching")
-      (Flows.fail $ string "not enough cases")
-      (Flows.pure $ Lists.head $ var "matching")
+  "name" ~> "n" ~> "term" ~>
+  "fieldName" <~ Core.name (var "n") $
+  "cs" <<~ ref casesDef @@ var "name" @@ var "term" $
+  "matching" <~ Lists.filter
+    ("f" ~> Core.equalName_ (Core.fieldName (var "f")) (var "fieldName"))
+    (Core.caseStatementCases (var "cs")) $
+  Logic.ifElse (Lists.null (var "matching"))
+    (Flows.fail "not enough cases")
+    (Flows.pure (Lists.head (var "matching")))
 
 -- TODO: nonstandard; move me
 casesDef :: TBinding (Name -> Term -> Flow Graph CaseStatement)
 casesDef = define "cases" $
   doc "Extract case statement from a term" $
-  lambdas ["name", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ string "case statement" @@ (ref ShowCore.termDef @@ var "term")) [
-      _Term_function>>: lambda "function" $ cases _Function (var "function") (Just $ ref Monads.unexpectedDef @@ string "case statement" @@ (ref ShowCore.termDef @@ var "term")) [
-        _Function_elimination>>: lambda "elimination" $ cases _Elimination (var "elimination") (Just $ ref Monads.unexpectedDef @@ string "case statement" @@ (ref ShowCore.termDef @@ var "term")) [
-          _Elimination_union>>: lambda "cs" $
-            Logic.ifElse (Core.equalName_ (Core.caseStatementTypeName $ var "cs") (var "name"))
-              (Flows.pure $ var "cs")
-              (ref Monads.unexpectedDef @@ ("case statement for type " ++ (Core.unName $ var "name")) @@ (ref ShowCore.termDef @@ var "term"))]]]
+  "name" ~> "term0" ~>
+  "extract" <~ ("term" ~> cases _Term (var "term")
+    (Just (ref Monads.unexpectedDef
+      @@ "case statement"
+      @@ (ref ShowCore.termDef @@ var "term"))) [
+    _Term_function>>: "function" ~> cases _Function (var "function")
+      (Just (ref Monads.unexpectedDef
+        @@ "case statement"
+        @@ (ref ShowCore.termDef @@ var "term"))) [
+      _Function_elimination>>: "elimination" ~> cases _Elimination (var "elimination")
+        (Just (ref Monads.unexpectedDef
+          @@ "case statement"
+          @@ (ref ShowCore.termDef @@ var "term"))) [
+        _Elimination_union>>: "cs" ~>
+          Logic.ifElse (Core.equalName_ (Core.caseStatementTypeName (var "cs")) (var "name"))
+            (Flows.pure (var "cs"))
+            (ref Monads.unexpectedDef
+              @@ ("case statement for type " ++ (Core.unName (var "name")))
+              @@ (ref ShowCore.termDef @@ var "term"))]]]) $
+  "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
+  var "extract" @@ var "term"
 
 -- TODO: nonstandard; move me
 fieldDef :: TBinding (Name -> (Term -> Flow Graph x) -> [Field] -> Flow Graph x)
 fieldDef = define "field" $
   doc "Extract a field value from a list of fields" $
-  lambdas ["fname", "mapping", "fields"] $ lets [
-    "matchingFields">: Lists.filter
-      (lambda "f" $ Core.equalName_ (Core.fieldName $ var "f") (var "fname"))
-      (var "fields")]
-    $ Logic.ifElse (Lists.null $ var "matchingFields")
-      (Flows.fail $ "field " ++ (Core.unName $ var "fname") ++ " not found")
-      (Logic.ifElse (Equality.equal (Lists.length $ var "matchingFields") $ int32 1)
-        (Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ (Core.fieldTerm $ Lists.head $ var "matchingFields")) $ var "mapping")
-        (Flows.fail $ "multiple fields named " ++ (Core.unName $ var "fname")))
+  "fname" ~> "mapping" ~> "fields" ~>
+  "matchingFields" <~ Lists.filter
+    ("f" ~> Core.equalName_ (Core.fieldName (var "f")) (var "fname"))
+    (var "fields") $
+  Logic.ifElse (Lists.null (var "matchingFields"))
+    (Flows.fail ("field " ++ (Core.unName (var "fname")) ++ " not found"))
+    (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) (int32 1))
+      ("stripped" <<~ ref Lexical.stripAndDereferenceTermDef @@ (Core.fieldTerm (Lists.head (var "matchingFields"))) $
+       var "mapping" @@ var "stripped")
+      (Flows.fail ("multiple fields named " ++ (Core.unName (var "fname")))))
 
 float32Def :: TBinding (Term -> Flow Graph Float)
 float32Def = define "float32" $
   doc "Extract a 32-bit floating-point value from a term" $
-  lambda "t" $ binds [
-    "l">: ref literalDef @@ var "t",
-    "f">: ref floatLiteralDef @@ var "l"] $
-    ref float32ValueDef @@ var "f"
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  "f" <<~ ref floatLiteralDef @@ var "l" $
+  ref float32ValueDef @@ var "f"
 
 float32ValueDef :: TBinding (FloatValue -> Flow Graph Float)
 float32ValueDef = define "float32Value" $
   doc "Extract a float32 value from a FloatValue" $
-  lambda "v" $ cases _FloatValue (var "v") (Just $ ref Monads.unexpectedDef @@ string "float32" @@ (ref ShowCore.floatValueDef @@ var "v")) [
-    _FloatValue_float32>>: lambda "f" $ Flows.pure $ var "f"]
+  "v" ~> cases _FloatValue (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "float32"
+      @@ (ref ShowCore.floatValueDef @@ var "v"))) [
+    _FloatValue_float32>>: "f" ~> Flows.pure (var "f")]
 
 float64Def :: TBinding (Term -> Flow Graph Double)
 float64Def = define "float64" $
   doc "Extract a 64-bit floating-point value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
-    Flows.bind (ref floatLiteralDef @@ var "l") $ lambda "f" $
-      ref float64ValueDef @@ var "f"
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  "f" <<~ ref floatLiteralDef @@ var "l" $
+  ref float64ValueDef @@ var "f"
 
 float64ValueDef :: TBinding (FloatValue -> Flow Graph Double)
 float64ValueDef = define "float64Value" $
   doc "Extract a float64 value from a FloatValue" $
-  lambda "v" $ cases _FloatValue (var "v") (Just $ ref Monads.unexpectedDef @@ string "float64" @@ (ref ShowCore.floatValueDef @@ var "v")) [
-    _FloatValue_float64>>: lambda "f" $ Flows.pure $ var "f"]
+  "v" ~> cases _FloatValue (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "float64"
+      @@ (ref ShowCore.floatValueDef @@ var "v"))) [
+    _FloatValue_float64>>: "f" ~> Flows.pure (var "f")]
 
 floatLiteralDef :: TBinding (Literal -> Flow Graph FloatValue)
 floatLiteralDef = define "floatLiteral" $
   doc "Extract a floating-point literal from a Literal value" $
-  lambda "lit" $ cases _Literal (var "lit") (Just $ ref Monads.unexpectedDef @@ string "floating-point value" @@ (ref ShowCore.literalDef @@ var "lit")) [
-    _Literal_float>>: lambda "v" $ Flows.pure $ var "v"]
+  "lit" ~> cases _Literal (var "lit")
+    (Just (ref Monads.unexpectedDef
+      @@ "floating-point value"
+      @@ (ref ShowCore.literalDef @@ var "lit"))) [
+    _Literal_float>>: "v" ~> Flows.pure (var "v")]
 
 floatValueDef :: TBinding (Term -> Flow Graph FloatValue)
 floatValueDef = define "floatValue" $
   doc "Extract a float value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") (ref floatLiteralDef)
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  ref floatLiteralDef @@ var "l"
 
 functionTypeDef :: TBinding (Type -> Flow s FunctionType)
 functionTypeDef = define "functionType" $
   doc "Extract a function type from a type" $
-  lambda "typ" $ lets [
-    "stripped">: ref Rewriting.deannotateTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "function type" @@ (ref ShowCore.typeDef @@ var "typ")) [
-      _Type_function>>: lambda "ft" $ Flows.pure $ var "ft"]
+  "typ" ~>
+  "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
+  cases _Type (var "stripped")
+    (Just (ref Monads.unexpectedDef
+      @@ "function type"
+      @@ (ref ShowCore.typeDef @@ var "typ"))) [
+    _Type_function>>: "ft" ~> Flows.pure (var "ft")]
 
 -- TODO: nonstandard; move me
 injectionDef :: TBinding (Name -> Term -> Flow Graph Field)
 injectionDef = define "injection" $
   doc "Extract a field from a union term" $
-  lambdas ["expected", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term")
-      (Just $ ref Monads.unexpectedDef @@ string "injection" @@ (ref ShowCore.termDef @@ var "term")) [
-      _Term_union>>: lambda "injection" $
-        Logic.ifElse (Core.equalName_ (Core.injectionTypeName $ var "injection") (var "expected"))
-          (Flows.pure $ Core.injectionField $ var "injection")
-          (ref Monads.unexpectedDef @@ ("injection of type " ++ (Core.unName $ var "expected")) @@ (Core.unName $ Core.injectionTypeName $ var "injection"))]
+  "expected" ~> "term0" ~>
+  "extract" <~ ("term" ~> cases _Term (var "term")
+    (Just (ref Monads.unexpectedDef
+      @@ "injection"
+      @@ (ref ShowCore.termDef @@ var "term"))) [
+    _Term_union>>: "injection" ~>
+      Logic.ifElse (Core.equalName_ (Core.injectionTypeName (var "injection")) (var "expected"))
+        (Flows.pure (Core.injectionField (var "injection")))
+        (ref Monads.unexpectedDef
+          @@ ("injection of type " ++ (Core.unName (var "expected")))
+          @@ (Core.unName (Core.injectionTypeName (var "injection"))))]) $
+  "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
+  var "extract" @@ var "term"
 
 int16Def :: TBinding (Term -> Flow Graph I.Int16)
 int16Def = define "int16" $
   doc "Extract a 16-bit signed integer value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
-    Flows.bind (ref integerLiteralDef @@ var "l") $ lambda "i" $
-      ref int16ValueDef @@ var "i"
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  "i" <<~ ref integerLiteralDef @@ var "l" $
+  ref int16ValueDef @@ var "i"
 
 int16ValueDef :: TBinding (IntegerValue -> Flow Graph I.Int16)
 int16ValueDef = define "int16Value" $
   doc "Extract an int16 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Monads.unexpectedDef @@ string "int16" @@ (ref ShowCore.integerValueDef @@ var "v")) [
-    _IntegerValue_int16>>: lambda "i" $ Flows.pure $ var "i"]
+  "v" ~> cases _IntegerValue (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "int16"
+      @@ (ref ShowCore.integerValueDef @@ var "v"))) [
+    _IntegerValue_int16>>: "i" ~> Flows.pure (var "i")]
 
 int32Def :: TBinding (Term -> Flow Graph Int)
 int32Def = define "int32" $
   doc "Extract a 32-bit signed integer value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
-    Flows.bind (ref integerLiteralDef @@ var "l") $ lambda "i" $
-      ref int32ValueDef @@ var "i"
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  "i" <<~ ref integerLiteralDef @@ var "l" $
+  ref int32ValueDef @@ var "i"
 
 int32ValueDef :: TBinding (IntegerValue -> Flow Graph Int)
 int32ValueDef = define "int32Value" $
   doc "Extract an int32 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Monads.unexpectedDef @@ string "int32" @@ (ref ShowCore.integerValueDef @@ var "v")) [
-    _IntegerValue_int32>>: lambda "i" $ Flows.pure $ var "i"]
+  "v" ~> cases _IntegerValue (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "int32"
+      @@ (ref ShowCore.integerValueDef @@ var "v"))) [
+    _IntegerValue_int32>>: "i" ~> Flows.pure (var "i")]
 
 int64Def :: TBinding (Term -> Flow Graph I.Int64)
 int64Def = define "int64" $
   doc "Extract a 64-bit signed integer value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
-    Flows.bind (ref integerLiteralDef @@ var "l") $ lambda "i" $
-      ref int64ValueDef @@ var "i"
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  "i" <<~ ref integerLiteralDef @@ var "l" $
+  ref int64ValueDef @@ var "i"
 
 int64ValueDef :: TBinding (IntegerValue -> Flow Graph I.Int64)
 int64ValueDef = define "int64Value" $
   doc "Extract an int64 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Monads.unexpectedDef @@ string "int64" @@ (ref ShowCore.integerValueDef @@ var "v")) [
-    _IntegerValue_int64>>: lambda "i" $ Flows.pure $ var "i"]
+  "v" ~> cases _IntegerValue (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "int64"
+      @@ (ref ShowCore.integerValueDef @@ var "v"))) [
+    _IntegerValue_int64>>: "i" ~> Flows.pure (var "i")]
 
 int8Def :: TBinding (Term -> Flow Graph I.Int8)
 int8Def = define "int8" $
   doc "Extract an 8-bit signed integer value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
-    Flows.bind (ref integerLiteralDef @@ var "l") $ lambda "i" $
-      ref int8ValueDef @@ var "i"
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  "i" <<~ ref integerLiteralDef @@ var "l" $
+  ref int8ValueDef @@ var "i"
 
 int8ValueDef :: TBinding (IntegerValue -> Flow Graph I.Int8)
 int8ValueDef = define "int8Value" $
   doc "Extract an int8 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Monads.unexpectedDef @@ string "int8" @@ (ref ShowCore.integerValueDef @@ var "v")) [
-    _IntegerValue_int8>>: lambda "i" $ Flows.pure $ var "i"]
+  "v" ~> cases _IntegerValue (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "int8"
+      @@ (ref ShowCore.integerValueDef @@ var "v"))) [
+    _IntegerValue_int8>>: "i" ~> Flows.pure (var "i")]
 
 integerLiteralDef :: TBinding (Literal -> Flow Graph IntegerValue)
 integerLiteralDef = define "integerLiteral" $
   doc "Extract an integer literal from a Literal value" $
-  lambda "lit" $ cases _Literal (var "lit") (Just $ ref Monads.unexpectedDef @@ string "integer value" @@ (ref ShowCore.literalDef @@ var "lit")) [
-    _Literal_integer>>: lambda "v" $ Flows.pure $ var "v"]
+  "lit" ~> cases _Literal (var "lit")
+    (Just (ref Monads.unexpectedDef
+      @@ "integer value"
+      @@ (ref ShowCore.literalDef @@ var "lit"))) [
+    _Literal_integer>>: "v" ~> Flows.pure (var "v")]
 
 integerValueDef :: TBinding (Term -> Flow Graph IntegerValue)
 integerValueDef = define "integerValue" $
   doc "Extract an integer value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") (ref integerLiteralDef)
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  ref integerLiteralDef @@ var "l"
 
 lambdaBodyDef :: TBinding (Term -> Flow Graph Term)
 lambdaBodyDef = define "lambdaBody" $
   doc "Extract the body of a lambda term" $
-  lambda "term" $ Flows.map (unaryFunction Core.lambdaBody) $ ref lambdaDef @@ var "term"
+  "term" ~> Flows.map (unaryFunction Core.lambdaBody) (ref lambdaDef @@ var "term")
 
 lambdaDef :: TBinding (Term -> Flow Graph Lambda)
 lambdaDef = define "lambda" $
   doc "Extract a lambda from a term" $
-  lambda "term0" $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ string "lambda" @@ (ref ShowCore.termDef @@ var "term")) [
-      _Term_function>>: lambda "function" $ cases _Function (var "function") (Just $ ref Monads.unexpectedDef @@ string "lambda" @@ (ref ShowCore.termDef @@ var "term")) [
-        _Function_lambda>>: lambda "l" $ Flows.pure $ var "l"]]
+  "term0" ~>
+  "extract" <~ ("term" ~> cases _Term (var "term")
+    (Just (ref Monads.unexpectedDef
+      @@ "lambda"
+      @@ (ref ShowCore.termDef @@ var "term"))) [
+    _Term_function>>: "function" ~> cases _Function (var "function")
+      (Just (ref Monads.unexpectedDef
+        @@ "lambda"
+        @@ (ref ShowCore.termDef @@ var "term"))) [
+      _Function_lambda>>: "l" ~> Flows.pure (var "l")]]) $
+  "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
+  var "extract" @@ var "term"
 
 -- TODO: nonstandard; move me
 letBindingDef :: TBinding (String -> Term -> Flow Graph Term)
 letBindingDef = define "letBinding" $
   doc "Extract a binding with the given name from a let term" $
-  lambdas ["n", "term"] $ lets [
-    "name">: Core.name $ var "n"]
-    $ Flows.bind (ref letTermDef @@ var "term") $
-      lambda "letExpr" $ lets [
-        "matchingBindings">: Lists.filter
-          (lambda "b" $ Core.equalName_ (Core.bindingName $ var "b") (var "name"))
-          (Core.letBindings $ var "letExpr")]
-        $ Logic.ifElse (Lists.null $ var "matchingBindings")
-          (Flows.fail $ "no such binding: " ++ var "n")
-          (Logic.ifElse (Equality.equal (Lists.length $ var "matchingBindings") $ int32 1)
-            (Flows.pure $ Core.bindingTerm $ Lists.head $ var "matchingBindings")
-            (Flows.fail $ "multiple bindings named " ++ var "n"))
+  "n" ~> "term" ~>
+  "name" <~ Core.name (var "n") $
+  "letExpr" <<~ ref letTermDef @@ var "term" $
+  "matchingBindings" <~ Lists.filter
+    ("b" ~> Core.equalName_ (Core.bindingName (var "b")) (var "name"))
+    (Core.letBindings (var "letExpr")) $
+  Logic.ifElse (Lists.null (var "matchingBindings"))
+    (Flows.fail ("no such binding: " ++ var "n"))
+    (Logic.ifElse (Equality.equal (Lists.length (var "matchingBindings")) (int32 1))
+      (Flows.pure (Core.bindingTerm (Lists.head (var "matchingBindings"))))
+      (Flows.fail ("multiple bindings named " ++ var "n")))
 
 letTermDef :: TBinding (Term -> Flow Graph Let)
 letTermDef = define "letTerm" $
   doc "Extract a let expression from a term" $
-  lambda "term0" $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ string "let term" @@ (ref ShowCore.termDef @@ var "term")) [
-      _Term_let>>: lambda "lt" $ Flows.pure $ var "lt"]
+  "term0" ~>
+  "extract" <~ ("term" ~> cases _Term (var "term")
+    (Just (ref Monads.unexpectedDef
+      @@ "let term"
+      @@ (ref ShowCore.termDef @@ var "term"))) [
+    _Term_let>>: "lt" ~> Flows.pure (var "lt")]) $
+  "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
+  var "extract" @@ var "term"
 
 listDef :: TBinding (Term -> Flow Graph [Term])
 listDef = define "list" $
   doc "Extract a list of terms from a term" $
   "term" ~>
+  "extract" <~ ("stripped" ~> cases _Term (var "stripped")
+    (Just (ref Monads.unexpectedDef
+      @@ "list"
+      @@ (ref ShowCore.termDef @@ var "stripped"))) [
+    _Term_list>>: "l" ~> produce (var "l")]) $
   "stripped" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term" $
-   cases _Term (var "stripped")
-     (Just $ ref Monads.unexpectedDef @@ string "list" @@ (ref ShowCore.termDef @@ var "stripped")) [
-     _Term_list>>: "l" ~> produce $ var "l"]
+  var "extract" @@ var "stripped"
 
 listHeadDef :: TBinding (Term -> Flow Graph Term)
 listHeadDef = define "listHead" $
   doc "Extract the first element of a list term" $
-  lambda "term" $ Flows.bind (ref listDef @@ var "term") $
-    lambda "l" $ Logic.ifElse (Lists.null $ var "l")
-      (Flows.fail $ string "empty list")
-      (Flows.pure $ Lists.head $ var "l")
+  "term" ~>
+  "l" <<~ ref listDef @@ var "term" $
+  Logic.ifElse (Lists.null (var "l"))
+    (Flows.fail "empty list")
+    (Flows.pure (Lists.head (var "l")))
 
 listOfDef :: TBinding ((Term -> Flow Graph x) -> Term -> Flow Graph [x])
 listOfDef = define "listOf" $
@@ -400,120 +490,163 @@ listOfDef = define "listOf" $
 listTypeDef :: TBinding (Type -> Flow s Type)
 listTypeDef = define "listType" $
   doc "Extract the element type from a list type" $
-  lambda "typ" $ lets [
-    "stripped">: ref Rewriting.deannotateTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "list type" @@ (ref ShowCore.typeDef @@ var "typ")) [
-      _Type_list>>: lambda "t" $ Flows.pure $ var "t"]
+  "typ" ~>
+  "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
+  cases _Type (var "stripped")
+    (Just (ref Monads.unexpectedDef
+      @@ "list type"
+      @@ (ref ShowCore.typeDef @@ var "typ"))) [
+    _Type_list>>: "t" ~> Flows.pure (var "t")]
 
 literalDef :: TBinding (Term -> Flow Graph Literal)
 literalDef = define "literal" $
   doc "Extract a literal value from a term" $
-  lambda "term0" $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ string "literal" @@ (ref ShowCore.termDef @@ var "term")) [
-      _Term_literal>>: lambda "lit" $ Flows.pure $ var "lit"]
+  "term0" ~>
+  "extract" <~ ("term" ~> cases _Term (var "term")
+    (Just (ref Monads.unexpectedDef
+      @@ "literal"
+      @@ (ref ShowCore.termDef @@ var "term"))) [
+    _Term_literal>>: "lit" ~> Flows.pure (var "lit")]) $
+  "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
+  var "extract" @@ var "term"
 
 mapDef :: TBinding ((Term -> Flow Graph k) -> (Term -> Flow Graph v) -> Term -> Flow Graph (M.Map k v))
 mapDef = define "map" $
   doc "Extract a map of key-value pairs from a term, mapping functions over each key and value" $
-  lambdas ["fk", "fv", "term0"] $ lets [
-    "pair">: lambda "kvPair" $ lets [
-      "kterm">: first $ var "kvPair",
-      "vterm">: second $ var "kvPair"]
-      $ Flows.bind (var "fk" @@ var "kterm") $
-        lambda "kval" $ Flows.bind (var "fv" @@ var "vterm") $
-          lambda "vval" $ Flows.pure $ pair (var "kval") (var "vval")]
-    $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
-      lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ string "map" @@ (ref ShowCore.termDef @@ var "term")) [
-        _Term_map>>: lambda "m" $ Flows.map (unaryFunction Maps.fromList) $ Flows.mapList (var "pair") $ Maps.toList $ var "m"]
+  "fk" ~> "fv" ~> "term0" ~>
+  "pair" <~ ("kvPair" ~>
+    "kterm" <~ first (var "kvPair") $
+    "vterm" <~ second (var "kvPair") $
+    "kval" <<~ var "fk" @@ var "kterm" $
+    "vval" <<~ var "fv" @@ var "vterm" $
+    produce (pair (var "kval") (var "vval"))) $
+  "extract" <~ ("term" ~> cases _Term (var "term")
+    (Just (ref Monads.unexpectedDef
+      @@ "map"
+      @@ (ref ShowCore.termDef @@ var "term"))) [
+    _Term_map>>: "m" ~> Flows.map (unaryFunction Maps.fromList) (Flows.mapList (var "pair") (Maps.toList (var "m")))]) $
+  "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
+  var "extract" @@ var "term"
 
 mapTypeDef :: TBinding (Type -> Flow s MapType)
 mapTypeDef = define "mapType" $
   doc "Extract the key and value types from a map type" $
-  lambda "typ" $ lets [
-    "stripped">: ref Rewriting.deannotateTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "map type" @@ (ref ShowCore.typeDef @@ var "typ")) [
-      _Type_map>>: lambda "mt" $ Flows.pure $ var "mt"]
+  "typ" ~>
+  "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
+  cases _Type (var "stripped")
+    (Just (ref Monads.unexpectedDef
+      @@ "map type"
+      @@ (ref ShowCore.typeDef @@ var "typ"))) [
+    _Type_map>>: "mt" ~> Flows.pure (var "mt")]
 
 -- TODO: nonstandard; move me
 nArgsDef :: TBinding (Name -> Int -> [a] -> Flow s ())
 nArgsDef = define "nArgs" $
   doc "Ensure a function has the expected number of arguments" $
-  lambdas ["name", "n", "args"] $
-    Logic.ifElse (Equality.equal (Lists.length $ var "args") (var "n"))
-      (Flows.pure unit)
-      (ref Monads.unexpectedDef @@ (Strings.concat [
-        Literals.showInt32 $ var "n",
-        " arguments to primitive ",
-        Literals.showString (Core.unName $ var "name")]) @@ (Literals.showInt32 (Lists.length $ var "args")))
+  "name" ~> "n" ~> "args" ~>
+  Logic.ifElse (Equality.equal (Lists.length (var "args")) (var "n"))
+    (produce unit)
+    (ref Monads.unexpectedDef @@ (Strings.concat [
+      Literals.showInt32 (var "n"),
+      " arguments to primitive ",
+      Literals.showString (Core.unName (var "name"))]) @@ (Literals.showInt32 (Lists.length (var "args"))))
 
 optionalDef :: TBinding ((Term -> Flow Graph x) -> Term -> Flow Graph (Maybe x))
 optionalDef = define "optional" $
   doc "Extract an optional value from a term, applying a function to the value if present" $
-  lambdas ["f", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ string "optional value" @@ (ref ShowCore.termDef @@ var "term")) [
-      _Term_optional>>: lambda "mt" $ Optionals.maybe
-        (Flows.pure nothing)
-        (lambda "t" $ Flows.map (unaryFunction just) $ var "f" @@ var "t")
-        (var "mt")]
+  "f" ~> "term0" ~>
+  "extract" <~ ("term" ~> cases _Term (var "term")
+    (Just (ref Monads.unexpectedDef
+      @@ "optional value"
+      @@ (ref ShowCore.termDef @@ var "term"))) [
+    _Term_optional>>: "mt" ~> Optionals.maybe
+      (produce nothing)
+      ("t" ~> Flows.map (unaryFunction just) (var "f" @@ var "t"))
+      (var "mt")]) $
+  "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
+  var "extract" @@ var "term"
 
 optionalTypeDef :: TBinding (Type -> Flow s Type)
 optionalTypeDef = define "optionalType" $
   doc "Extract the base type from an optional type" $
-  lambda "typ" $ lets [
-    "stripped">: ref Rewriting.deannotateTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "optional type" @@ (ref ShowCore.typeDef @@ var "typ")) [
-      _Type_optional>>: lambda "t" $ Flows.pure $ var "t"]
+  "typ" ~>
+  "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
+  cases _Type (var "stripped")
+    (Just (ref Monads.unexpectedDef
+      @@ "optional type"
+      @@ (ref ShowCore.typeDef @@ var "typ"))) [
+    _Type_optional>>: "t" ~> Flows.pure (var "t")]
 
 pairDef :: TBinding ((Term -> Flow Graph k) -> (Term -> Flow Graph v) -> Term -> Flow Graph (k, v))
 pairDef = define "pair" $
   doc "Extract a pair of values from a term, applying functions to each component" $
-  lambdas ["kf", "vf", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ string "product" @@ (ref ShowCore.termDef @@ var "term")) [
-      _Term_product>>: lambda "terms" $
-        Logic.ifElse (Equality.equal (Lists.length $ var "terms") $ int32 2)
-          (Flows.bind (var "kf" @@ (Lists.head $ var "terms")) $
-            lambda "kVal" $ Flows.bind (var "vf" @@ (Lists.head $ Lists.tail $ var "terms")) $
-              lambda "vVal" $ Flows.pure $ pair (var "kVal") (var "vVal"))
-          (ref Monads.unexpectedDef @@ string "pair" @@ (ref ShowCore.termDef @@ var "term"))]
+  "kf" ~> "vf" ~> "term0" ~>
+  "extract" <~ ("term" ~> cases _Term (var "term")
+    (Just (ref Monads.unexpectedDef
+      @@ "product"
+      @@ (ref ShowCore.termDef @@ var "term"))) [
+    _Term_product>>: "terms" ~>
+      Logic.ifElse (Equality.equal (Lists.length (var "terms")) (int32 2))
+        ("kVal" <<~ var "kf" @@ (Lists.head (var "terms")) $
+         "vVal" <<~ var "vf" @@ (Lists.head (Lists.tail (var "terms"))) $
+         produce (pair (var "kVal") (var "vVal")))
+        (ref Monads.unexpectedDef
+          @@ "pair"
+          @@ (ref ShowCore.termDef @@ var "term"))]) $
+  "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
+  var "extract" @@ var "term"
 
 productTypeDef :: TBinding (Type -> Flow s [Type])
 productTypeDef = define "productType" $
   doc "Extract the component types from a product type" $
-  lambda "typ" $ lets [
-    "stripped">: ref Rewriting.deannotateTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "product type" @@ (ref ShowCore.typeDef @@ var "typ")) [
-      _Type_product>>: lambda "types" $ Flows.pure $ var "types"]
+  "typ" ~>
+  "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
+  cases _Type (var "stripped")
+    (Just (ref Monads.unexpectedDef
+      @@ "product type"
+      @@ (ref ShowCore.typeDef @@ var "typ"))) [
+    _Type_product>>: "types" ~> Flows.pure (var "types")]
 
 -- TODO: nonstandard; move me
 recordDef :: TBinding (Name -> Term -> Flow Graph [Field])
 recordDef = define "record" $
   doc "Extract a record's fields from a term" $
-  lambdas ["expected", "term0"] $ binds [
-    "record">: ref termRecordDef @@ var "term0"] $
-    Logic.ifElse (Equality.equal (Core.recordTypeName $ var "record") (var "expected"))
-      (Flows.pure $ Core.recordFields $ var "record")
-      (ref Monads.unexpectedDef @@ ("record of type " ++ (Core.unName $ var "expected")) @@ (Core.unName $ Core.recordTypeName $ var "record"))
+  "expected" ~> "term0" ~>
+  "record" <<~ ref termRecordDef @@ var "term0" $
+  Logic.ifElse (Equality.equal (Core.recordTypeName (var "record")) (var "expected"))
+    (Flows.pure (Core.recordFields (var "record")))
+    (ref Monads.unexpectedDef
+      @@ ("record of type " ++ (Core.unName (var "expected")))
+      @@ (Core.unName (Core.recordTypeName (var "record"))))
 
 -- TODO: nonstandard; move me
 recordTypeDef :: TBinding (Name -> Type -> Flow s [FieldType])
 recordTypeDef = define "recordType" $
   doc "Extract the field types from a record type" $
-  lambdas ["ename", "typ"] $ lets [
-    "stripped">: ref Rewriting.deannotateTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "record type" @@ (ref ShowCore.typeDef @@ var "typ")) [
-      _Type_record>>: lambda "rowType" $
-        Logic.ifElse (Core.equalName_ (Core.rowTypeTypeName $ var "rowType") (var "ename"))
-          (Flows.pure $ Core.rowTypeFields $ var "rowType")
-          (ref Monads.unexpectedDef @@ ("record of type " ++ (Core.unName $ var "ename")) @@ ("record of type " ++ (Core.unName $ Core.rowTypeTypeName $ var "rowType")))]
+  "ename" ~> "typ" ~>
+  "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
+  cases _Type (var "stripped")
+    (Just (ref Monads.unexpectedDef
+      @@ "record type"
+      @@ (ref ShowCore.typeDef @@ var "typ"))) [
+    _Type_record>>: "rowType" ~>
+      Logic.ifElse (Core.equalName_ (Core.rowTypeTypeName (var "rowType")) (var "ename"))
+        (Flows.pure (Core.rowTypeFields (var "rowType")))
+        (ref Monads.unexpectedDef
+          @@ ("record of type " ++ (Core.unName (var "ename")))
+          @@ ("record of type " ++ (Core.unName (Core.rowTypeTypeName (var "rowType")))))]
 
 setDef :: TBinding (Term -> Flow Graph (S.Set Term))
 setDef = define "set" $
   doc "Extract a set of terms from a term" $
   "term" ~>
+  "extract" <~ ("stripped" ~> cases _Term (var "stripped")
+    (Just $ ref Monads.unexpectedDef
+      @@ string "set"
+      @@ (ref ShowCore.termDef @@ var "stripped")) [
+    _Term_set>>: "s" ~> produce $ var "s"]) $
   "stripped" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term" $
-  cases _Term (var "stripped")
-    (Just $ ref Monads.unexpectedDef @@ string "set" @@ (ref ShowCore.termDef @@ var "stripped")) [
-    _Term_set>>: "s" ~> produce $ var "s"]
+  var "extract" @@ var "stripped"
 
 setOfDef :: TBinding ((Term -> Flow Graph x) -> Term -> Flow Graph (S.Set x))
 setOfDef = define "setOf" $
@@ -525,117 +658,154 @@ setOfDef = define "setOf" $
 setTypeDef :: TBinding (Type -> Flow s Type)
 setTypeDef = define "setType" $
   doc "Extract the element type from a set type" $
-  lambda "typ" $ lets [
-    "stripped">: ref Rewriting.deannotateTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "set type" @@ (ref ShowCore.typeDef @@ var "typ")) [
-      _Type_set>>: lambda "t" $ Flows.pure $ var "t"]
+  "typ" ~>
+  "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
+  cases _Type (var "stripped")
+    (Just (ref Monads.unexpectedDef
+      @@ "set type"
+      @@ (ref ShowCore.typeDef @@ var "typ"))) [
+    _Type_set>>: "t" ~> Flows.pure (var "t")]
 
 stringDef :: TBinding (Term -> Flow Graph String)
 stringDef = define "string" $
   doc "Extract a string value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ ref stringLiteralDef
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  ref stringLiteralDef @@ var "l"
 
 stringLiteralDef :: TBinding (Literal -> Flow Graph String)
 stringLiteralDef = define "stringLiteral" $
   doc "Extract a string literal from a Literal value" $
-  lambda "v" $ cases _Literal (var "v") (Just $ ref Monads.unexpectedDef @@ string "string" @@ (ref ShowCore.literalDef @@ var "v")) [
-    _Literal_string>>: lambda "s" $ Flows.pure $ var "s"]
+  "v" ~> cases _Literal (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "string"
+      @@ (ref ShowCore.literalDef @@ var "v"))) [
+    _Literal_string>>: "s" ~> Flows.pure (var "s")]
 
 sumTypeDef :: TBinding (Type -> Flow s [Type])
 sumTypeDef = define "sumType" $
   doc "Extract the component types from a sum type" $
-  lambda "typ" $ lets [
-    "stripped">: ref Rewriting.deannotateTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "sum type" @@ (ref ShowCore.typeDef @@ var "typ")) [
-      _Type_sum>>: lambda "types" $ Flows.pure $ var "types"]
+  "typ" ~>
+  "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
+  cases _Type (var "stripped")
+    (Just (ref Monads.unexpectedDef
+      @@ "sum type"
+      @@ (ref ShowCore.typeDef @@ var "typ"))) [
+    _Type_sum>>: "types" ~> Flows.pure (var "types")]
 
 termRecordDef :: TBinding (Term -> Flow Graph Record)
 termRecordDef = define "termRecord" $
   doc "Extract a record from a term" $
-  lambdas ["term0"] $ binds [
-    "term">: ref Lexical.stripAndDereferenceTermDef @@ var "term0"] $
-    cases _Term (var "term")
-      (Just $ ref Monads.unexpectedDef @@ string "record" @@ (ref ShowCore.termDef @@ var "term")) [
-      _Term_record>>: lambda "record" $ produce $ var "record"]
+  "term0" ~>
+  "extract" <~ ("term" ~> cases _Term (var "term")
+    (Just (ref Monads.unexpectedDef
+      @@ "record"
+      @@ (ref ShowCore.termDef @@ var "term"))) [
+    _Term_record>>: "record" ~> produce (var "record")]) $
+  "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
+  var "extract" @@ var "term"
 
 uint16Def :: TBinding (Term -> Flow Graph Int)
 uint16Def = define "uint16" $
   doc "Extract a 16-bit unsigned integer value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
-    Flows.bind (ref integerLiteralDef @@ var "l") $ lambda "i" $
-      ref uint16ValueDef @@ var "i"
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  "i" <<~ ref integerLiteralDef @@ var "l" $
+  ref uint16ValueDef @@ var "i"
 
 uint16ValueDef :: TBinding (IntegerValue -> Flow Graph Int)
 uint16ValueDef = define "uint16Value" $
   doc "Extract a uint16 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Monads.unexpectedDef @@ string "uint16" @@ (ref ShowCore.integerValueDef @@ var "v")) [
-    _IntegerValue_uint16>>: lambda "i" $ Flows.pure $ var "i"]
+  "v" ~> cases _IntegerValue (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "uint16"
+      @@ (ref ShowCore.integerValueDef @@ var "v"))) [
+    _IntegerValue_uint16>>: "i" ~> Flows.pure (var "i")]
 
 uint32Def :: TBinding (Term -> Flow Graph I.Int64)
 uint32Def = define "uint32" $
   doc "Extract a 32-bit unsigned integer value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
-    Flows.bind (ref integerLiteralDef @@ var "l") $ lambda "i" $
-      ref uint32ValueDef @@ var "i"
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  "i" <<~ ref integerLiteralDef @@ var "l" $
+  ref uint32ValueDef @@ var "i"
 
 uint32ValueDef :: TBinding (IntegerValue -> Flow Graph I.Int64)
 uint32ValueDef = define "uint32Value" $
   doc "Extract a uint32 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Monads.unexpectedDef @@ string "uint32" @@ (ref ShowCore.integerValueDef @@ var "v")) [
-    _IntegerValue_uint32>>: lambda "i" $ Flows.pure $ var "i"]
+  "v" ~> cases _IntegerValue (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "uint32"
+      @@ (ref ShowCore.integerValueDef @@ var "v"))) [
+    _IntegerValue_uint32>>: "i" ~> Flows.pure (var "i")]
 
 uint64Def :: TBinding (Term -> Flow Graph Integer)
 uint64Def = define "uint64" $
   doc "Extract a 64-bit unsigned integer value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
-    Flows.bind (ref integerLiteralDef @@ var "l") $ lambda "i" $
-      ref uint64ValueDef @@ var "i"
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  "i" <<~ ref integerLiteralDef @@ var "l" $
+  ref uint64ValueDef @@ var "i"
 
 uint64ValueDef :: TBinding (IntegerValue -> Flow Graph Integer)
 uint64ValueDef = define "uint64Value" $
   doc "Extract a uint64 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Monads.unexpectedDef @@ string "uint64" @@ (ref ShowCore.integerValueDef @@ var "v")) [
-    _IntegerValue_uint64>>: lambda "i" $ Flows.pure $ var "i"]
+  "v" ~> cases _IntegerValue (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "uint64"
+      @@ (ref ShowCore.integerValueDef @@ var "v"))) [
+    _IntegerValue_uint64>>: "i" ~> Flows.pure (var "i")]
 
 uint8Def :: TBinding (Term -> Flow Graph I.Int16)
 uint8Def = define "uint8" $
   doc "Extract an 8-bit unsigned integer value from a term" $
-  lambda "t" $ Flows.bind (ref literalDef @@ var "t") $ lambda "l" $
-    Flows.bind (ref integerLiteralDef @@ var "l") $ lambda "i" $
-      ref uint8ValueDef @@ var "i"
+  "t" ~>
+  "l" <<~ ref literalDef @@ var "t" $
+  "i" <<~ ref integerLiteralDef @@ var "l" $
+  ref uint8ValueDef @@ var "i"
 
 uint8ValueDef :: TBinding (IntegerValue -> Flow Graph I.Int16)
 uint8ValueDef = define "uint8Value" $
   doc "Extract a uint8 value from an IntegerValue" $
-  lambda "v" $ cases _IntegerValue (var "v") (Just $ ref Monads.unexpectedDef @@ string "uint8" @@ (ref ShowCore.integerValueDef @@ var "v")) [
-    _IntegerValue_uint8>>: lambda "i" $ Flows.pure $ var "i"]
+  "v" ~> cases _IntegerValue (var "v")
+    (Just (ref Monads.unexpectedDef
+      @@ "uint8"
+      @@ (ref ShowCore.integerValueDef @@ var "v"))) [
+    _IntegerValue_uint8>>: "i" ~> Flows.pure (var "i")]
 
 -- TODO: nonstandard; move me
 unionTypeDef :: TBinding (Name -> Type -> Flow s [FieldType])
 unionTypeDef = define "unionType" $
   doc "Extract the field types from a union type" $
-  lambdas ["ename", "typ"] $ lets [
-    "stripped">: ref Rewriting.deannotateTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "union type" @@ (ref ShowCore.typeDef @@ var "typ")) [
-      _Type_union>>: lambda "rowType" $
-        Logic.ifElse (Equality.equal (Core.rowTypeTypeName $ var "rowType") (var "ename"))
-          (Flows.pure $ Core.rowTypeFields $ var "rowType")
-          (ref Monads.unexpectedDef @@ ("union of type " ++ (Core.unName $ var "ename")) @@ ("union of type " ++ (Core.unName $ Core.rowTypeTypeName $ var "rowType")))]
+  "ename" ~> "typ" ~>
+  "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
+  cases _Type (var "stripped")
+    (Just (ref Monads.unexpectedDef
+      @@ "union type"
+      @@ (ref ShowCore.typeDef @@ var "typ"))) [
+    _Type_union>>: "rowType" ~>
+      Logic.ifElse (Equality.equal (Core.rowTypeTypeName (var "rowType")) (var "ename"))
+        (Flows.pure (Core.rowTypeFields (var "rowType")))
+        (ref Monads.unexpectedDef
+          @@ ("union of type " ++ (Core.unName (var "ename")))
+          @@ ("union of type " ++ (Core.unName (Core.rowTypeTypeName (var "rowType")))))]
 
 unitDef :: TBinding (Term -> Flow Graph ())
 unitDef = define "unit" $
   doc "Extract a unit value from a term" $
-  lambda "term" $ cases _Term (var "term")
-    (Just $ ref Monads.unexpectedDef @@ string "unit" @@ (ref ShowCore.termDef @@ var "term")) [
-    _Term_unit>>: constant $ Flows.pure unit]
+  "term" ~> cases _Term (var "term")
+    (Just (ref Monads.unexpectedDef
+      @@ "unit"
+      @@ (ref ShowCore.termDef @@ var "term"))) [
+    _Term_unit>>: constant (Flows.pure unit)]
 
 unitVariantDef :: TBinding (Name -> Term -> Flow Graph Name)
 unitVariantDef = define "unitVariant" $
   doc "Extract a unit variant (a variant with an empty record value) from a union term" $
-  lambdas ["tname", "term"] $
-    bind "field" (ref variantDef @@ var "tname" @@ var "term") $
-    bind "ignored" (ref unitDef @@ (Core.fieldTerm $ var "field")) $
-    Flows.pure $ Core.fieldName $ var "field"
+  "tname" ~> "term" ~>
+  "field" <<~ ref variantDef @@ var "tname" @@ var "term" $
+  "ignored" <<~ ref unitDef @@ (Core.fieldTerm (var "field")) $
+  produce (Core.fieldName (var "field"))
 
 variantDef :: TBinding (Name -> Term -> Flow Graph Field)
 variantDef = define "variant" $
@@ -646,21 +816,33 @@ variantDef = define "variant" $
 wrapDef :: TBinding (Name -> Term -> Flow Graph Term)
 wrapDef = define "wrap" $
   doc "Extract the wrapped value from a wrapped term" $
-  lambdas ["expected", "term0"] $ Flows.bind (ref Lexical.stripAndDereferenceTermDef @@ var "term0") $
-    lambda "term" $ cases _Term (var "term") (Just $ ref Monads.unexpectedDef @@ ("wrap(" ++ (Core.unName $ var "expected") ++ ")") @@ (ref ShowCore.termDef @@ var "term")) [
-      _Term_wrap>>: lambda "wrappedTerm" $
-        Logic.ifElse (Core.equalName_ (Core.wrappedTermTypeName $ var "wrappedTerm") (var "expected"))
-          (Flows.pure $ Core.wrappedTermBody $ var "wrappedTerm")
-          (ref Monads.unexpectedDef @@ ("wrapper of type " ++ (Core.unName $ var "expected")) @@ (Core.unName $ Core.wrappedTermTypeName $ var "wrappedTerm"))]
+  "expected" ~> "term0" ~>
+  "extract" <~ ("term" ~> cases _Term (var "term")
+    (Just (ref Monads.unexpectedDef
+      @@ ("wrap(" ++ (Core.unName (var "expected")) ++ ")")
+      @@ (ref ShowCore.termDef @@ var "term"))) [
+    _Term_wrap>>: "wrappedTerm" ~>
+      Logic.ifElse (Core.equalName_ (Core.wrappedTermTypeName (var "wrappedTerm")) (var "expected"))
+        (Flows.pure (Core.wrappedTermBody (var "wrappedTerm")))
+        (ref Monads.unexpectedDef
+          @@ ("wrapper of type " ++ (Core.unName (var "expected")))
+          @@ (Core.unName (Core.wrappedTermTypeName (var "wrappedTerm"))))]) $
+  "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
+  var "extract" @@ var "term"
 
 -- TODO: nonstandard; move me
 wrappedTypeDef :: TBinding (Name -> Type -> Flow s Type)
 wrappedTypeDef = define "wrappedType" $
   doc "Extract the wrapped type from a wrapper type" $
-  lambdas ["ename", "typ"] $ lets [
-    "stripped">: ref Rewriting.deannotateTypeDef @@ var "typ"]
-    $ cases _Type (var "stripped") (Just $ ref Monads.unexpectedDef @@ string "wrapped type" @@ (ref ShowCore.typeDef @@ var "typ")) [
-      _Type_wrap>>: lambda "wrappedType" $
-        Logic.ifElse (Core.equalName_ (Core.wrappedTypeTypeName $ var "wrappedType") (var "ename"))
-          (Flows.pure $ Core.wrappedTypeBody $ var "wrappedType")
-          (ref Monads.unexpectedDef @@ ("wrapped type " ++ (Core.unName $ var "ename")) @@ ("wrapped type " ++ (Core.unName $ Core.wrappedTypeTypeName $ var "wrappedType")))]
+  "ename" ~> "typ" ~>
+  "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
+  cases _Type (var "stripped")
+    (Just (ref Monads.unexpectedDef
+      @@ "wrapped type"
+      @@ (ref ShowCore.typeDef @@ var "typ"))) [
+    _Type_wrap>>: "wrappedType" ~>
+      Logic.ifElse (Core.equalName_ (Core.wrappedTypeTypeName (var "wrappedType")) (var "ename"))
+        (Flows.pure (Core.wrappedTypeBody (var "wrappedType")))
+        (ref Monads.unexpectedDef
+          @@ ("wrapped type " ++ (Core.unName (var "ename")))
+          @@ ("wrapped type " ++ (Core.unName (Core.wrappedTypeTypeName (var "wrappedType")))))]
