@@ -85,7 +85,7 @@ encodeApplication env app = do
     if needsCast term typ then do
       updateMeta $ \m -> extendMetaForType True True typ $ m { pythonModuleMetadataUsesCast = True }
       pytyp <- encodeType env typ
-      return $ functionCall (pyNameToPyPrimary $ Py.Name "cast") [pytyp, pyapp]
+      return $ castTo pytyp pyapp
     else
       return pyapp
   where
@@ -539,7 +539,12 @@ encodeTermInline env term = case deannotateTerm term of
           $ encodeEnumValue env $ fieldName field
         else do
           parg <- encode $ fieldTerm field
-          return $ functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) [parg]
+
+          -- Explicitly casting to the union type avoids occasional Python type errors in which the narrower,
+          -- variant type is assumed (e.g. hydra.core.EliminationUnion instead of hydra.core.Elimination).
+          updateMeta $ \m -> m { pythonModuleMetadataUsesCast = True }
+          return $ castTo (typeVariableReference env tname) $
+            functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) [parg]
     TermUnit -> return $ pyNameToPyExpression pyNone
     TermVariable name -> encodeVariable env name []
     TermWrap (WrappedTerm tname term1) -> do

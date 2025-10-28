@@ -26,6 +26,9 @@ assignment name rhs = pyAssignmentToPyStatement $ Py.AssignmentUntyped
 assignmentStatement :: Py.Name -> Py.Expression -> Py.Statement
 assignmentStatement name expr = assignment name $ pyExpressionToPyAnnotatedRhs expr
 
+castTo :: Py.Expression -> Py.Expression -> Py.Expression
+castTo pytype pyexpr = functionCall (pyNameToPyPrimary $ Py.Name "cast") [pytype, pyexpr]
+
 commentStatement :: String -> Py.Statement
 commentStatement = pyExpressionToPyStatement . tripleQuotedString
 
