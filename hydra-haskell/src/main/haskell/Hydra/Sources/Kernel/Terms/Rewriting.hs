@@ -81,7 +81,7 @@ module_ = Module (Namespace "hydra.rewriting") elements
      el replaceFreeTermVariableDef,
      el replaceFreeTypeVariableDef,
      el replaceTypedefsDef,
-     el rewriteDef,
+--     el rewriteDef,
      el rewriteAndFoldTermDef,
      el rewriteAndFoldTermMDef,
      el rewriteTermDef,
@@ -386,14 +386,15 @@ inlineTypeDef = define "inlineType" $
   doc "Inline all type variables in a type using the provided schema. Note: this function is only appropriate for nonrecursive type definitions" $
   "schema" ~> "typ" ~>
   "f" <~ ("recurse" ~> "typ" ~>
-    "tr" <<~ var "recurse" @@ var "typ" $
-    cases _Type (var "tr")
+    "afterRecurse" <~ ("tr" ~> cases _Type (var "tr")
       (Just $ produce $ var "tr") [
       _Type_variable>>: "v" ~>
         Optionals.maybe
           (Flows.fail $ Strings.cat2 (string "No such type in schema: ") (unwrap _Name @@ var "v"))
           (ref inlineTypeDef @@ var "schema")
           (Maps.lookup (var "v") (var "schema"))]) $
+    "tr" <<~ var "recurse" @@ var "typ" $
+    var "afterRecurse" @@ var "tr") $
   ref rewriteTypeMDef @@ var "f" @@ var "typ"
 
 isFreeVariableInTermDef :: TBinding (Name -> Term -> Bool)
@@ -499,37 +500,42 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
         "body0"     <~ Core.letBody (var "lt") $
         -- Sequentially rewrite bindings without advancing 'next' across siblings
         "step" <~ ("acc" ~> "bs" ~>
+          "b"  <~ Lists.head (var "bs") $
+          "tl" <~ Lists.tail (var "bs") $
+          "noType" <~ (
+            "newVal" <~ var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.bindingTerm $ var "b") $
+            "b1"     <~ Core.binding (Core.bindingName $ var "b") (var "newVal") nothing $
+            var "step" @@ (Lists.cons (var "b1") (var "acc")) @@ var "tl") $
+          "withType" <~ ("ts" ~>
+            "vars" <~ Core.typeSchemeVariables (var "ts") $
+            "typ"  <~ Core.typeSchemeType (var "ts") $
+            "k"    <~ Lists.length (var "vars") $
+            -- Build exactly k fresh names t{next}, t{next+1}, ...
+            "gen"  <~ ("i" ~> "rem" ~> "acc2" ~>
+              "ti" <~ Core.name (Strings.cat2 (string "t") (Literals.showInt32 (Math.add (var "next") (var "i")))) $
+              Logic.ifElse (Equality.equal (var "rem") (int32 0))
+                (Lists.reverse (var "acc2"))
+                (var "gen"
+                  @@ (Math.add (var "i") (int32 1))
+                  @@ (Math.sub (var "rem") (int32 1))
+                  @@ (Lists.cons (var "ti") (var "acc2")))) $
+            "newVars"  <~ var "gen" @@ (int32 0) @@ (var "k") @@ (list []) $
+            "newSubst" <~ Maps.union (Maps.fromList $ Lists.zip (var "vars") (var "newVars")) (var "subst") $
+            "newBound" <~ Sets.union (var "boundVars") (Sets.fromList (var "newVars")) $
+            "newVal"   <~ var "rewriteWithSubst" @@ (pair (pair (var "newSubst") (var "newBound")) (Math.add (var "next") (var "k"))) @@ (Core.bindingTerm $ var "b") $
+            "b1"       <~ Core.binding
+              (Core.bindingName $ var "b")
+              (var "newVal")
+              (just $ Core.typeScheme (var "newVars") (var "substType" @@ var "newSubst" @@ var "typ")) $
+            -- Note: do not advance 'next' for the next sibling; keep current 'next'
+            var "step" @@ (Lists.cons (var "b1") (var "acc")) @@ var "tl") $
           Logic.ifElse (Lists.null (var "bs"))
             (Lists.reverse (var "acc"))
-            ("b"  <~ Lists.head (var "bs") $
-             "tl" <~ Lists.tail (var "bs") $
-             Optionals.maybe
+            (optCases (Core.bindingType $ var "b")
                -- Untyped binding: rewrite its term with current state; 'next' unchanged for siblings
-               ("newVal" <~ var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.bindingTerm $ var "b") $
-                "b1"     <~ Core.binding (Core.bindingName $ var "b") (var "newVal") nothing $
-                var "step" @@ (Lists.cons (var "b1") (var "acc")) @@ var "tl")
+               (var "noType")
                -- Typed binding: allocate |vars| fresh t{next+i}; bump 'next' only for the binding's TERM
-               ("ts" ~>
-                 "vars" <~ Core.typeSchemeVariables (var "ts") $
-                 "typ"  <~ Core.typeSchemeType (var "ts") $
-                 "k"    <~ Lists.length (var "vars") $
-                 -- Build exactly k fresh names t{next}, t{next+1}, ...
-                 "gen"  <~ ("i" ~> "rem" ~> "acc2" ~>
-                   Logic.ifElse (Equality.equal (var "rem") (int32 0))
-                     (Lists.reverse (var "acc2"))
-                     ("ti" <~ Core.name (Strings.cat2 (string "t") (Literals.showInt32 (Math.add (var "next") (var "i")))) $
-                      var "gen" @@ (Math.add (var "i") (int32 1)) @@ (Math.sub (var "rem") (int32 1)) @@ (Lists.cons (var "ti") (var "acc2")))) $
-                 "newVars"  <~ var "gen" @@ (int32 0) @@ (var "k") @@ (list []) $
-                 "newSubst" <~ Maps.union (Maps.fromList $ Lists.zip (var "vars") (var "newVars")) (var "subst") $
-                 "newBound" <~ Sets.union (var "boundVars") (Sets.fromList (var "newVars")) $
-                 "newVal"   <~ var "rewriteWithSubst" @@ (pair (pair (var "newSubst") (var "newBound")) (Math.add (var "next") (var "k"))) @@ (Core.bindingTerm $ var "b") $
-                 "b1"       <~ Core.binding
-                   (Core.bindingName $ var "b")
-                   (var "newVal")
-                   (just $ Core.typeScheme (var "newVars") (var "substType" @@ var "newSubst" @@ var "typ")) $
-                 -- Note: do not advance 'next' for the next sibling; keep current 'next'
-                 var "step" @@ (Lists.cons (var "b1") (var "acc")) @@ var "tl")
-               (Core.bindingType $ var "b"))) $
+               ("ts" ~> var "withType" @@ var "ts"))) $
         "bindings1" <~ var "step" @@ (list []) @@ (var "bindings0") $
         Core.termLet $ Core.let_
           (var "bindings1")
@@ -654,30 +660,34 @@ replaceTypedefsDef = define "replaceTypedefs" $
       _Type_annotated>>: "at" ~> var "rewrite" @@ var "recurse" @@ (Core.annotatedTypeBody $ var "at"),
       _Type_record>>: constant $ var "typ",
       _Type_union>>: constant $ var "typ",
-      _Type_variable>>: "v" ~> optCases (Maps.lookup (var "v") (var "types"))
+      _Type_variable>>: "v" ~>
+        "forMono" <~ ("t" ~> cases _Type (var "t")
+          (Just $ var "rewrite" @@ var "recurse" @@ var "t") [
+          _Type_record>>: constant $ var "dflt",
+          _Type_union>>: constant $ var "dflt",
+          _Type_wrap>>: constant $ var "dflt"]) $
+        "forTypeScheme" <~ ("ts" ~>
+          "t" <~ Core.typeSchemeType (var "ts") $
+          Logic.ifElse (Lists.null $ Core.typeSchemeVariables $ var "ts")
+            (var "forMono" @@ var "t")
+            (var "dflt")) $ -- TODO: this may be too simple
+        optCases (Maps.lookup (var "v") (var "types"))
         (var "dflt")
-        ("ts" ~> Logic.ifElse (Lists.null $ Core.typeSchemeVariables $ var "ts")
-          ("t" <~ Core.typeSchemeType (var "ts") $
-           cases _Type (Core.typeSchemeType $ var "ts")
-             (Just $ var "rewrite" @@ var "recurse" @@ var "t") [
-             _Type_record>>: constant $ var "dflt",
-             _Type_union>>: constant $ var "dflt",
-             _Type_wrap>>: constant $ var "dflt"])
-          (var "dflt")), -- TODO: this may be too simple
+        ("ts" ~> var "forTypeScheme" @@ var "ts"),
       _Type_wrap>>: constant $ var "typ"]) $
   ref rewriteTypeDef @@ var "rewrite" @@ var "typ0"
 
 -- TODO: this is a fixpoint combinator, but its type is sometimes incorrectly inferred based on how it is used.
 --       For now, we generally define local "rewrite"/"recurse" helper functions rather than using this global one.
-rewriteDef :: TBinding (((x -> y) -> x -> y) -> ((x -> y) -> x -> y) -> x -> y)
-rewriteDef = define "rewrite" $ "fsub" ~> "f" ~>
-  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
-  var "recurse"
+--rewriteDef :: TBinding (((x -> y) -> x -> y) -> ((x -> y) -> x -> y) -> x -> y)
+--rewriteDef = define "rewrite" $ "fsub" ~> "f" ~>
+--  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
+--  var "recurse"
 
 rewriteAndFoldTermDef :: TBinding (((a -> Term -> (a, Term)) -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
 rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
   doc "Rewrite a term, and at the same time, fold a function over it, accumulating a value" $
-  "f" ~>
+  "f" ~> "term0" ~>
   "fsub" <~ ("recurse" ~> "val0" ~> "term0" ~>
     "forSingle" <~ ("rec" ~> "cons" ~> "val" ~> "term" ~>
       "r" <~ var "rec" @@ var "val" @@ var "term" $
@@ -715,7 +725,7 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
           "rmd" <~ Optionals.map (var "recurse" @@ var "val") (Core.caseStatementDefault $ var "cs") $
           "val1" <~ optCases (var "rmd")
             (var "val")
-            ("r" ~> first $ var "r") $
+            (unaryFunction first) $
           "rcases" <~ var "forFields" @@ var "val1" @@ (Core.caseStatementCases $ var "cs") $
           pair
             (first $ var "rcases")
@@ -814,12 +824,12 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
         @@ (Core.wrappedTermBody $ var "wt")]) $
 --  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
-  var "recurse"
+  var "recurse" @@ var "term0"
 
 rewriteAndFoldTermMDef :: TBinding (((a -> Term -> Flow s (a, Term)) -> a -> Term -> Flow s (a, Term)) -> a -> Term -> Flow s (a, Term))
 rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
   doc "Monadic version: rewrite a term and fold a function over it, accumulating a value" $
-  "f" ~>
+  "f" ~> "term0" ~>
   "fsub" <~ ("recurse" ~> "val0" ~> "term0" ~>
     "forSingle" <~ ("rec" ~> "cons" ~> "val" ~> "term" ~>
       "r" <<~ var "rec" @@ var "val" @@ var "term" $
@@ -851,7 +861,7 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
           (second $ var "r")
           (Core.bindingType $ var "binding"))) $
     "forElimination" <~ ("val" ~> "elm" ~>
-      "r" <<~ cases _Elimination (var "elm")
+      "rw" <~ ("elm" ~> cases _Elimination (var "elm")
         (Just $ produce $ pair (var "val") (var "elm")) [
         _Elimination_union>>: "cs" ~>
           "rmd" <<~ Optionals.maybe (produce nothing)
@@ -864,7 +874,8 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
             (Core.eliminationUnion $ Core.caseStatement
               (Core.caseStatementTypeName $ var "cs")
               (Optionals.map (unaryFunction second) (var "rmd"))
-              (second $ var "rcases"))] $
+              (second $ var "rcases"))]) $
+      "r" <<~ var "rw" @@ var "elm" $
       produce $ pair (first $ var "r") (second $ var "r")) $
     "forFunction" <~ ("val" ~> "fun" ~> cases _Function (var "fun")
       (Just $ produce $ pair (var "val") (var "fun")) [
@@ -957,10 +968,10 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
         @@ (Core.wrappedTermBody $ var "wt")]) $
 --  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
-  var "recurse"
+  var "recurse" @@ var "term0"
 
 rewriteTermDef :: TBinding (((Term -> Term) -> Term -> Term) -> Term -> Term)
-rewriteTermDef = define "rewriteTerm" $ "f" ~>
+rewriteTermDef = define "rewriteTerm" $ "f" ~> "term0" ~>
   "fsub" <~ ("recurse" ~> "term" ~>
     "forField" <~ ("f" ~> Core.fieldWithTerm (var "recurse" @@ (Core.fieldTerm $ var "f")) (var "f")) $
     "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
@@ -1027,12 +1038,12 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~>
         (var "recurse" @@ (Core.wrappedTermBody $ var "wt"))]) $
 --  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
-  var "recurse"
+  var "recurse" @@ var "term0"
 
 rewriteTermMDef :: TBinding (((Term -> Flow s Term) -> Term -> Flow s Term) -> Term -> Flow s Term)
 rewriteTermMDef = define "rewriteTermM" $
   doc "Monadic term rewriting with custom transformation function" $
-  "f" ~>
+  "f" ~> "term0" ~>
   "fsub" <~ ("recurse" ~> "term" ~>
     "forField" <~ ("field" ~>
       "t" <<~ var "recurse" @@ Core.fieldTerm (var "field") $
@@ -1053,30 +1064,31 @@ rewriteTermMDef = define "rewriteTermM" $
         "rhs" <<~ var "recurse" @@ Core.applicationArgument (var "app") $
         produce $ Core.termApplication $ Core.application (var "lhs") (var "rhs"),
       _Term_function>>: "fun" ~>
-        "rfun" <<~ cases _Function (var "fun") Nothing [
-          _Function_elimination>>: "e" ~>
-            cases _Elimination (var "e") Nothing [
-              _Elimination_product>>: "tp" ~> produce $ Core.functionElimination $ Core.eliminationProduct $ var "tp",
-              _Elimination_record>>: "p" ~> produce $ Core.functionElimination $ Core.eliminationRecord $ var "p",
-              _Elimination_union>>: "cs" ~>
-                "n" <~ Core.caseStatementTypeName (var "cs") $
-                "def" <~ Core.caseStatementDefault (var "cs") $
-                "cases" <~ Core.caseStatementCases (var "cs") $
-                "rdef" <<~ Optionals.maybe (produce nothing)
-                  ("t" ~> Flows.map (unaryFunction just) $ var "recurse" @@ var "t")
-                  (var "def") $
-                Flows.map
-                  ("rcases" ~> Core.functionElimination $ Core.eliminationUnion $
-                    Core.caseStatement (var "n") (var "rdef") (var "rcases"))
-                  (Flows.mapList (var "forField") (var "cases")),
-              _Elimination_wrap>>: "name" ~> produce $ Core.functionElimination $ Core.eliminationWrap $ var "name"],
+        "forElm" <~ ("e" ~> cases _Elimination (var "e") Nothing [
+          _Elimination_product>>: "tp" ~> produce $ Core.functionElimination $ Core.eliminationProduct $ var "tp",
+          _Elimination_record>>: "p" ~> produce $ Core.functionElimination $ Core.eliminationRecord $ var "p",
+          _Elimination_union>>: "cs" ~>
+            "n" <~ Core.caseStatementTypeName (var "cs") $
+            "def" <~ Core.caseStatementDefault (var "cs") $
+            "cases" <~ Core.caseStatementCases (var "cs") $
+            "rdef" <<~ Optionals.maybe (produce nothing)
+              ("t" ~> Flows.map (unaryFunction just) $ var "recurse" @@ var "t")
+              (var "def") $
+            Flows.map
+              ("rcases" ~> Core.functionElimination $ Core.eliminationUnion $
+                Core.caseStatement (var "n") (var "rdef") (var "rcases"))
+              (Flows.mapList (var "forField") (var "cases")),
+          _Elimination_wrap>>: "name" ~> produce $ Core.functionElimination $ Core.eliminationWrap $ var "name"]) $
+        "forFun" <~ ("fun" ~> cases _Function (var "fun") Nothing [
+          _Function_elimination>>: "e" ~> var "forElm" @@ var "e",
           _Function_lambda>>: "l" ~>
             "v" <~ Core.lambdaParameter (var "l") $
             "d" <~ Core.lambdaDomain (var "l") $
             "body" <~ Core.lambdaBody (var "l") $
             "rbody" <<~ var "recurse" @@ var "body" $
             produce $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "rbody"),
-          _Function_primitive>>: "name" ~> produce $ Core.functionPrimitive $ var "name"] $
+          _Function_primitive>>: "name" ~> produce $ Core.functionPrimitive $ var "name"]) $
+        "rfun" <<~ var "forFun" @@ var "fun" $
         produce $ Core.termFunction $ var "rfun",
       _Term_let>>: "lt" ~>
         "bindings" <~ Core.letBindings (var "lt") $
@@ -1135,7 +1147,7 @@ rewriteTermMDef = define "rewriteTermM" $
         produce $ Core.termWrap $ Core.wrappedTerm (var "name") (var "rt")]) $
 --  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
-  var "recurse"
+  var "recurse" @@ var "term0"
 
 rewriteTermWithContextDef :: TBinding (((a -> Term -> Term) -> a -> Term -> Term) -> a -> Term -> Term)
 rewriteTermWithContextDef = define "rewriteTermWithContext" $
@@ -1224,6 +1236,30 @@ rewriteTermWithContextMDef = define "rewriteTermWithContextM" $
       "k" <<~ var "recurse" @@ (first $ var "kv") $
       "v" <<~ var "recurse" @@ (second $ var "kv") $
       produce $ pair (var "k") (var "v")) $
+    "forElimination" <~ ("e" ~> cases _Elimination (var "e") Nothing [
+      _Elimination_product>>: "tp" ~> produce $ Core.functionElimination $ Core.eliminationProduct $ var "tp",
+      _Elimination_record>>: "p" ~> produce $ Core.functionElimination $ Core.eliminationRecord $ var "p",
+      _Elimination_union>>: "cs" ~>
+        "n" <~ Core.caseStatementTypeName (var "cs") $
+        "def" <~ Core.caseStatementDefault (var "cs") $
+        "cases" <~ Core.caseStatementCases (var "cs") $
+        "rdef" <<~ Optionals.maybe (produce nothing)
+          ("t" ~> Flows.map (unaryFunction just) $ var "recurse" @@ var "t")
+          (var "def") $
+        Flows.map
+          ("rcases" ~> Core.functionElimination $ Core.eliminationUnion $
+            Core.caseStatement (var "n") (var "rdef") (var "rcases"))
+          (Flows.mapList (var "forField") (var "cases")),
+      _Elimination_wrap>>: "name" ~> produce $ Core.functionElimination $ Core.eliminationWrap $ var "name"]) $
+    "forFunction" <~ ("fun" ~> cases _Function (var "fun") Nothing [
+      _Function_elimination>>: "e" ~> var "forElimination" @@ var "e",
+      _Function_lambda>>: "l" ~>
+        "v" <~ Core.lambdaParameter (var "l") $
+        "d" <~ Core.lambdaDomain (var "l") $
+        "body" <~ Core.lambdaBody (var "l") $
+        "rbody" <<~ var "recurse" @@ var "body" $
+        produce $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "rbody"),
+      _Function_primitive>>: "name" ~> produce $ Core.functionPrimitive $ var "name"]) $
     "mapBinding" <~ ("b" ~>
       "v" <<~ var "recurse" @@ (Core.bindingTerm $ var "b") $
       produce $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingType $ var "b")) $
@@ -1236,30 +1272,7 @@ rewriteTermWithContextMDef = define "rewriteTermWithContextM" $
         "rhs" <<~ var "recurse" @@ Core.applicationArgument (var "app") $
         produce $ Core.termApplication $ Core.application (var "lhs") (var "rhs"),
       _Term_function>>: "fun" ~>
-        "rfun" <<~ cases _Function (var "fun") Nothing [
-          _Function_elimination>>: "e" ~>
-            cases _Elimination (var "e") Nothing [
-              _Elimination_product>>: "tp" ~> produce $ Core.functionElimination $ Core.eliminationProduct $ var "tp",
-              _Elimination_record>>: "p" ~> produce $ Core.functionElimination $ Core.eliminationRecord $ var "p",
-              _Elimination_union>>: "cs" ~>
-                "n" <~ Core.caseStatementTypeName (var "cs") $
-                "def" <~ Core.caseStatementDefault (var "cs") $
-                "cases" <~ Core.caseStatementCases (var "cs") $
-                "rdef" <<~ Optionals.maybe (produce nothing)
-                  ("t" ~> Flows.map (unaryFunction just) $ var "recurse" @@ var "t")
-                  (var "def") $
-                Flows.map
-                  ("rcases" ~> Core.functionElimination $ Core.eliminationUnion $
-                    Core.caseStatement (var "n") (var "rdef") (var "rcases"))
-                  (Flows.mapList (var "forField") (var "cases")),
-              _Elimination_wrap>>: "name" ~> produce $ Core.functionElimination $ Core.eliminationWrap $ var "name"],
-          _Function_lambda>>: "l" ~>
-            "v" <~ Core.lambdaParameter (var "l") $
-            "d" <~ Core.lambdaDomain (var "l") $
-            "body" <~ Core.lambdaBody (var "l") $
-            "rbody" <<~ var "recurse" @@ var "body" $
-            produce $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "rbody"),
-          _Function_primitive>>: "name" ~> produce $ Core.functionPrimitive $ var "name"] $
+        "rfun" <<~ var "forFunction" @@ var "fun" $
         produce $ Core.termFunction $ var "rfun",
       _Term_let>>: "lt" ~>
         "bindings" <~ Core.letBindings (var "lt") $
@@ -1321,7 +1334,7 @@ rewriteTermWithContextMDef = define "rewriteTermWithContextM" $
   var "rewrite" @@ var "cx0" @@ var "term0"
 
 rewriteTypeDef :: TBinding (((Type -> Type) -> Type -> Type) -> Type -> Type)
-rewriteTypeDef = define "rewriteType" $ "f" ~>
+rewriteTypeDef = define "rewriteType" $ "f" ~> "typ0" ~>
   "fsub" <~ ("recurse" ~> "typ" ~>
     "forField" <~ ("field" ~> Core.fieldTypeWithType (var "field") (var "recurse" @@ (Core.fieldTypeType $ var "field"))) $
     cases _Type (var "typ") Nothing [
@@ -1359,12 +1372,12 @@ rewriteTypeDef = define "rewriteType" $ "f" ~>
         (var "recurse" @@ (Core.wrappedTypeBody $ var "wt"))]) $
 --  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
-  var "recurse"
+  var "recurse" @@ var "typ0"
 
 rewriteTypeMDef :: TBinding (((Type -> Flow s Type) -> Type -> Flow s Type) -> Type -> Flow s Type)
 rewriteTypeMDef = define "rewriteTypeM" $
   doc "Monadic type rewriting" $
-  "f" ~>
+  "f" ~> "typ0" ~>
   "fsub" <~ ("recurse" ~> "typ" ~> cases _Type (var "typ") Nothing [
     _Type_annotated>>: "at" ~>
       "t" <<~ var "recurse" @@ (Core.annotatedTypeBody $ var "at") $
@@ -1423,34 +1436,37 @@ rewriteTypeMDef = define "rewriteTypeM" $
       produce $ Core.typeWrap $ Core.wrappedType (Core.wrappedTypeTypeName $ var "wt") (var "t")]) $
 --  ref rewriteDef @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
-  var "recurse"
+  var "recurse" @@ var "typ0"
 
 simplifyTermDef :: TBinding (Term -> Term)
 simplifyTermDef = define "simplifyTerm" $
   doc "Simplify terms by applying beta reduction where possible" $
   "term" ~>
   "simplify" <~ ("recurse" ~> "term" ~>
-    "stripped" <~ ref deannotateTermDef @@ var "term" $
-    var "recurse" @@ (cases _Term (var "stripped")
+    "forRhs" <~ ("rhs" ~> "var" ~> "body" ~> cases _Term (ref deannotateTermDef @@ var "rhs")
+      (Just $ var "term") [
+      _Term_variable>>: "v" ~>
+        ref simplifyTermDef @@ (ref substituteVariableDef @@ var "var" @@ var "v" @@ var "body")]) $
+    "forLhs" <~ ("lhs" ~> "rhs" ~>
+      "forFun" <~ ("fun" ~> cases _Function (var "fun")
+        (Just $ var "term") [
+        _Function_lambda>>: "l" ~>
+          "var" <~ Core.lambdaParameter (var "l") $
+          "body" <~ Core.lambdaBody (var "l") $
+          Logic.ifElse (Sets.member (var "var") (ref freeVariablesInTermDef @@ var "body"))
+            (var "forRhs" @@ var "rhs" @@ var "var" @@ var "body")
+            (ref simplifyTermDef @@ var "body")]) $
+      cases _Term (ref deannotateTermDef @@ var "lhs")
+        (Just $ var "term") [
+        _Term_function>>: "fun" ~> var "forFun" @@ var "fun"]) $
+    "forTerm" <~ ("stripped" ~> cases _Term (var "stripped")
       (Just $ var "term") [
       _Term_application>>: "app" ~>
         "lhs" <~ Core.applicationFunction (var "app") $
         "rhs" <~ Core.applicationArgument (var "app") $
-        "strippedLhs" <~ ref deannotateTermDef @@ var "lhs" $
-        cases _Term (var "strippedLhs")
-          (Just $ var "term") [
-          _Term_function>>: match _Function
-            (Just $ var "term") [
-            _Function_lambda>>: "l" ~>
-              "var" <~ Core.lambdaParameter (var "l") $
-              "body" <~ Core.lambdaBody (var "l") $
-              Logic.ifElse (Sets.member (var "var") (ref freeVariablesInTermDef @@ var "body"))
-                ("strippedRhs" <~ ref deannotateTermDef @@ var "rhs" $
-                  cases _Term (var "strippedRhs")
-                    (Just $ var "term") [
-                    _Term_variable>>: "v" ~>
-                      ref simplifyTermDef @@ (ref substituteVariableDef @@ var "var" @@ var "v" @@ var "body")])
-                (ref simplifyTermDef @@ var "body")]]])) $
+        var "forLhs" @@ var "lhs" @@ var "rhs"]) $
+    "stripped" <~ ref deannotateTermDef @@ var "term" $
+    var "recurse" @@ (var "forTerm" @@ var "stripped")) $
   ref rewriteTermDef @@ var "simplify" @@ var "term"
 
 substituteTypeVariablesDef :: TBinding (M.Map Name Name -> Type -> Type)

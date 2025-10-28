@@ -74,60 +74,60 @@ define = definitionInModule module_
 bidirectionalDef :: TBinding ((CoderDirection -> b -> Flow s b) -> Coder s s b b)
 bidirectionalDef = define "bidirectional" $
   doc "Create a bidirectional coder from a direction-aware function" $
-  lambda "f" $ Compute.coder (var "f" @@ Coders.coderDirectionEncode) (var "f" @@ Coders.coderDirectionDecode)
+  "f" ~> Compute.coder (var "f" @@ Coders.coderDirectionEncode) (var "f" @@ Coders.coderDirectionDecode)
 
 chooseAdapterDef :: TBinding ((t -> Flow so [SymmetricAdapter si t v]) -> (t -> Bool) -> (t -> String ) -> (t -> String) -> t -> Flow so (SymmetricAdapter si t v))
 chooseAdapterDef = define "chooseAdapter" $
   doc "Choose an appropriate adapter for a type" $
-  lambdas ["alts", "supported", "show", "describe", "typ"] $
-    Logic.ifElse (var "supported" @@ var "typ")
-      (Flows.pure $ Compute.adapter false (var "typ") (var "typ") (ref idCoderDef))
-      (Flows.bind (var "alts" @@ var "typ") $
-        lambda "raw" $ lets [
-          "candidates">: Lists.filter (lambda "adapter" $ var "supported" @@ Compute.adapterTarget (var "adapter")) (var "raw")]
-          $ Logic.ifElse (Lists.null $ var "candidates")
-              (Flows.fail $ Strings.cat $ list [
-                string "no adapters found for ",
-                var "describe" @@ var "typ",
-                Logic.ifElse (Lists.null $ var "raw")
-                  (string "")
-                  (Strings.cat $ list [
-                    string " (discarded ",
-                    Literals.showInt32 $ Lists.length $ var "raw",
-                    string " unsupported candidate types: ",
-                    ref ShowCore.listDef @@ var "show" @@ (Lists.map (unaryFunction Compute.adapterTarget) (var "raw")),
-                    string ")"]),
-                string ". Original type: ",
-                var "show" @@ var "typ"])
-              (Flows.pure $ Lists.head $ var "candidates"))
+  "alts" ~> "supported" ~> "show" ~> "describe" ~> "typ" ~>
+  Logic.ifElse (var "supported" @@ var "typ")
+    (produce (Compute.adapter false (var "typ") (var "typ") (ref idCoderDef)))
+    ("raw" <<~ var "alts" @@ var "typ" $
+     "candidates" <~ Lists.filter ("adapter" ~> var "supported" @@ Compute.adapterTarget (var "adapter")) (var "raw") $
+     Logic.ifElse (Lists.null (var "candidates"))
+       (Flows.fail (Strings.cat (list [
+         "no adapters found for ",
+         var "describe" @@ var "typ",
+         Logic.ifElse (Lists.null (var "raw"))
+           ""
+           (Strings.cat (list [
+             " (discarded ",
+             Literals.showInt32 (Lists.length (var "raw")),
+             " unsupported candidate types: ",
+             ref ShowCore.listDef @@ var "show" @@ (Lists.map (unaryFunction Compute.adapterTarget) (var "raw")),
+             ")"])),
+         ". Original type: ",
+         var "show" @@ var "typ"])))
+       (produce (Lists.head (var "candidates"))))
 
 composeCodersDef :: TBinding (Coder s s a b -> Coder s s b c -> Coder s s a c)
 composeCodersDef = define "composeCoders" $
   doc "Compose two coders" $
-  lambda "c1" $ lambda "c2" $
-    Compute.coder
-      (lambda "a" $ Flows.bind (Compute.coderEncode (var "c1") @@ var "a") (Compute.coderEncode (var "c2")))
-      (lambda "c" $ Flows.bind (Compute.coderDecode (var "c2") @@ var "c") (Compute.coderDecode (var "c1")))
+  "c1" ~> "c2" ~>
+  Compute.coder
+    ("a" ~> "b1" <<~ Compute.coderEncode (var "c1") @@ var "a" $ Compute.coderEncode (var "c2") @@ var "b1")
+    ("c" ~> "b2" <<~ Compute.coderDecode (var "c2") @@ var "c" $ Compute.coderDecode (var "c1") @@ var "b2")
 
 encodeDecodeDef :: TBinding (CoderDirection -> Coder s s x x -> x -> Flow s x)
 encodeDecodeDef = define "encodeDecode" $
   doc "Apply coder in the specified direction" $
-  lambda "dir" $ lambda "coder" $
-    match _CoderDirection Nothing [
-      _CoderDirection_encode>>: constant $ Compute.coderEncode (var "coder"),
-      _CoderDirection_decode>>: constant $ Compute.coderDecode (var "coder")]
-    @@ var "dir"
+  "dir" ~> "coder" ~>
+  match _CoderDirection
+    Nothing [
+    _CoderDirection_encode>>: constant (Compute.coderEncode (var "coder")),
+    _CoderDirection_decode>>: constant (Compute.coderDecode (var "coder"))]
+  @@ var "dir"
 
 floatTypeIsSupportedDef :: TBinding (LanguageConstraints -> FloatType -> Bool)
 floatTypeIsSupportedDef = define "floatTypeIsSupported" $
   doc "Check if float type is supported by language constraints" $
-  lambda "constraints" $ lambda "ft" $
-    Sets.member (var "ft") (Coders.languageConstraintsFloatTypes $ var "constraints")
+  "constraints" ~> "ft" ~>
+  Sets.member (var "ft") (Coders.languageConstraintsFloatTypes (var "constraints"))
 
 idAdapterDef :: TBinding (t -> SymmetricAdapter s t v)
 idAdapterDef = define "idAdapter" $
   doc "Identity adapter" $
-  lambda "t" $ Compute.adapter false (var "t") (var "t") (ref idCoderDef)
+  "t" ~> Compute.adapter false (var "t") (var "t") (ref idCoderDef)
 
 idCoderDef :: TBinding (Coder s s a a)
 idCoderDef = define "idCoder" $
@@ -137,92 +137,96 @@ idCoderDef = define "idCoder" $
 integerTypeIsSupportedDef :: TBinding (LanguageConstraints -> IntegerType -> Bool)
 integerTypeIsSupportedDef = define "integerTypeIsSupported" $
   doc "Check if integer type is supported by language constraints" $
-  lambda "constraints" $ lambda "it" $
-    Sets.member (var "it") (Coders.languageConstraintsIntegerTypes $ var "constraints")
+  "constraints" ~> "it" ~>
+  Sets.member (var "it") (Coders.languageConstraintsIntegerTypes (var "constraints"))
 
 literalTypeIsSupportedDef :: TBinding (LanguageConstraints -> LiteralType -> Bool)
 literalTypeIsSupportedDef = define "literalTypeIsSupported" $
   doc "Check if literal type is supported by language constraints" $
-  lambda "constraints" $ lambda "lt" $
-    Logic.and
-      (Sets.member (ref Variants.literalTypeVariantDef @@ var "lt") (Coders.languageConstraintsLiteralVariants $ var "constraints"))
-      (match _LiteralType (Just true) [
-        _LiteralType_float>>: lambda "ft" $ ref floatTypeIsSupportedDef @@ var "constraints" @@ var "ft",
-        _LiteralType_integer>>: lambda "it" $ ref integerTypeIsSupportedDef @@ var "constraints" @@ var "it"]
-      @@ var "lt")
+  "constraints" ~> "lt" ~>
+  Logic.and
+    (Sets.member (ref Variants.literalTypeVariantDef @@ var "lt") (Coders.languageConstraintsLiteralVariants (var "constraints")))
+    (match _LiteralType
+      (Just true) [
+      _LiteralType_float>>: "ft" ~> ref floatTypeIsSupportedDef @@ var "constraints" @@ var "ft",
+      _LiteralType_integer>>: "it" ~> ref integerTypeIsSupportedDef @@ var "constraints" @@ var "it"]
+    @@ var "lt")
 
 nameToFilePathDef :: TBinding (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
 nameToFilePathDef = define "nameToFilePath" $
   doc "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator" $
-  lambda "nsConv" $ lambda "localConv" $ lambda "ext" $ lambda "name" $ lets [
-    "qualName">: ref Names.qualifyNameDef @@ var "name",
-    "ns">: Module.qualifiedNameNamespace $ var "qualName",
-    "local">: Module.qualifiedNameLocal $ var "qualName",
-    "nsToFilePath">: lambda "ns" $
-      Strings.intercalate (string "/") $ Lists.map
-        (lambda "part" $ ref Formatting.convertCaseDef @@ Mantle.caseConventionCamel @@ var "nsConv" @@ var "part")
-        (Strings.splitOn (string ".") $ Module.unNamespace $ var "ns"),
-    "prefix">: Optionals.maybe (string "")
-      (lambda "n" $ Strings.cat2 (var "nsToFilePath" @@ var "n") (string "/"))
-      (var "ns"),
-    "suffix">: ref Formatting.convertCaseDef @@ Mantle.caseConventionPascal @@ var "localConv" @@ var "local"]
-    $ Strings.cat $ list [var "prefix", var "suffix", string ".", Module.unFileExtension $ var "ext"]
+  "nsConv" ~> "localConv" ~> "ext" ~> "name" ~>
+  "qualName" <~ ref Names.qualifyNameDef @@ var "name" $
+  "ns" <~ Module.qualifiedNameNamespace (var "qualName") $
+  "local" <~ Module.qualifiedNameLocal (var "qualName") $
+  "nsToFilePath" <~ ("ns" ~>
+    Strings.intercalate "/" (Lists.map
+      ("part" ~> ref Formatting.convertCaseDef @@ Mantle.caseConventionCamel @@ var "nsConv" @@ var "part")
+      (Strings.splitOn "." (Module.unNamespace (var "ns"))))) $
+  "prefix" <~ Optionals.maybe ""
+    ("n" ~> Strings.cat2 (var "nsToFilePath" @@ var "n") "/")
+    (var "ns") $
+  "suffix" <~ ref Formatting.convertCaseDef @@ Mantle.caseConventionPascal @@ var "localConv" @@ var "local" $
+  Strings.cat (list [var "prefix", var "suffix", ".", Module.unFileExtension (var "ext")])
 
 typeIsSupportedDef :: TBinding (LanguageConstraints -> Type -> Bool)
 typeIsSupportedDef = define "typeIsSupported" $
   doc "Check if type is supported by language constraints" $
-  lambda "constraints" $ lambda "t" $ lets [
-    "base">: ref Rewriting.deannotateTypeDef @@ var "t",
-    "isSupportedVariant">: lambda "v" $
-      Logic.or
-        (cases _TypeVariant (var "v") (Just false) [_TypeVariant_variable>>: constant true])
-        (Sets.member (var "v") (Coders.languageConstraintsTypeVariants $ var "constraints"))]
-    $ Logic.and
-        (Coders.languageConstraintsTypes (var "constraints") @@ var "base")
-        (Logic.and
-          (var "isSupportedVariant" @@ (ref Variants.typeVariantDef @@ var "base"))
-          (match _Type Nothing [
-            _Type_annotated>>: lambda "at" $ ref typeIsSupportedDef @@ var "constraints" @@ Core.annotatedTypeBody (var "at"),
-            _Type_application>>: lambda "app" $
-              Logic.and
-                (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeFunction (var "app"))
-                (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeArgument (var "app")),
-            _Type_forall>>: lambda "ft" $ ref typeIsSupportedDef @@ var "constraints" @@ Core.forallTypeBody (var "ft"),
-            _Type_function>>: lambda "ft" $
-              Logic.and
-                (ref typeIsSupportedDef @@ var "constraints" @@ Core.functionTypeDomain (var "ft"))
-                (ref typeIsSupportedDef @@ var "constraints" @@ Core.functionTypeCodomain (var "ft")),
-            _Type_list>>: lambda "lt" $ ref typeIsSupportedDef @@ var "constraints" @@ var "lt",
-            _Type_literal>>: lambda "at" $ ref literalTypeIsSupportedDef @@ var "constraints" @@ var "at",
-            _Type_map>>: lambda "mt" $
-              Logic.and
-                (ref typeIsSupportedDef @@ var "constraints" @@ Core.mapTypeKeys (var "mt"))
-                (ref typeIsSupportedDef @@ var "constraints" @@ Core.mapTypeValues (var "mt")),
-            _Type_optional>>: lambda "ot" $ ref typeIsSupportedDef @@ var "constraints" @@ var "ot",
-            _Type_product>>: lambda "types" $
-              andAll $ Lists.map (ref typeIsSupportedDef @@ var "constraints") (var "types"),
-            _Type_record>>: lambda "rt" $
-              andAll $ Lists.map
-                (lambda "field" $ ref typeIsSupportedDef @@ var "constraints" @@ Core.fieldTypeType (var "field"))
-                (Core.rowTypeFields $ var "rt"),
-            _Type_set>>: lambda "st" $ ref typeIsSupportedDef @@ var "constraints" @@ var "st",
-            _Type_sum>>: lambda "types" $
-              andAll $ Lists.map (ref typeIsSupportedDef @@ var "constraints") (var "types"),
-            _Type_union>>: lambda "rt" $
-              andAll $ Lists.map
-                (lambda "field" $ ref typeIsSupportedDef @@ var "constraints" @@ Core.fieldTypeType (var "field"))
-                (Core.rowTypeFields $ var "rt"),
-            _Type_unit>>: constant true,
-            _Type_wrap>>: lambda "wt" $ ref typeIsSupportedDef @@ var "constraints" @@ Core.wrappedTypeBody (var "wt"),
-            _Type_variable>>: constant true]
-          @@ var "base"))
+  "constraints" ~> "t" ~>
+  "base" <~ ref Rewriting.deannotateTypeDef @@ var "t" $
+  "isSupportedVariant" <~ ("v" ~>
+    Logic.or
+      (cases _TypeVariant (var "v")
+        (Just false) [
+        _TypeVariant_variable>>: constant true])
+      (Sets.member (var "v") (Coders.languageConstraintsTypeVariants (var "constraints")))) $
+  Logic.and
+    (Coders.languageConstraintsTypes (var "constraints") @@ var "base")
+    (Logic.and
+      (var "isSupportedVariant" @@ (ref Variants.typeVariantDef @@ var "base"))
+      (match _Type
+        Nothing [
+        _Type_annotated>>: "at" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.annotatedTypeBody (var "at"),
+        _Type_application>>: "app" ~>
+          Logic.and
+            (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeFunction (var "app"))
+            (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeArgument (var "app")),
+        _Type_forall>>: "ft" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.forallTypeBody (var "ft"),
+        _Type_function>>: "ft" ~>
+          Logic.and
+            (ref typeIsSupportedDef @@ var "constraints" @@ Core.functionTypeDomain (var "ft"))
+            (ref typeIsSupportedDef @@ var "constraints" @@ Core.functionTypeCodomain (var "ft")),
+        _Type_list>>: "lt" ~> ref typeIsSupportedDef @@ var "constraints" @@ var "lt",
+        _Type_literal>>: "at" ~> ref literalTypeIsSupportedDef @@ var "constraints" @@ var "at",
+        _Type_map>>: "mt" ~>
+          Logic.and
+            (ref typeIsSupportedDef @@ var "constraints" @@ Core.mapTypeKeys (var "mt"))
+            (ref typeIsSupportedDef @@ var "constraints" @@ Core.mapTypeValues (var "mt")),
+        _Type_optional>>: "ot" ~> ref typeIsSupportedDef @@ var "constraints" @@ var "ot",
+        _Type_product>>: "types" ~>
+          andAll (Lists.map (ref typeIsSupportedDef @@ var "constraints") (var "types")),
+        _Type_record>>: "rt" ~>
+          andAll (Lists.map
+            ("field" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.fieldTypeType (var "field"))
+            (Core.rowTypeFields (var "rt"))),
+        _Type_set>>: "st" ~> ref typeIsSupportedDef @@ var "constraints" @@ var "st",
+        _Type_sum>>: "types" ~>
+          andAll (Lists.map (ref typeIsSupportedDef @@ var "constraints") (var "types")),
+        _Type_union>>: "rt" ~>
+          andAll (Lists.map
+            ("field" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.fieldTypeType (var "field"))
+            (Core.rowTypeFields (var "rt"))),
+        _Type_unit>>: constant true,
+        _Type_wrap>>: "wt" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.wrappedTypeBody (var "wt"),
+        _Type_variable>>: constant true]
+      @@ var "base"))
   where
     andAll = Lists.foldl (binaryFunction Logic.and) true
 
 unidirectionalCoderDef :: TBinding ((a -> Flow s b) -> Coder s s a b)
 unidirectionalCoderDef = define "unidirectionalCoder" $
   doc "Create a unidirectional coder" $
-  lambda "m" $
-    Compute.coder
-      (var "m")
-      (constant $ Flows.fail $ string "inbound mapping is unsupported")
+  "m" ~>
+  Compute.coder
+    (var "m")
+    (constant (Flows.fail "inbound mapping is unsupported"))

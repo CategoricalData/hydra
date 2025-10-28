@@ -51,8 +51,8 @@ chooseAdapter alts supported show describe typ = (Logic.ifElse (supported typ) (
 
 composeCoders :: (Compute.Coder t0 t1 t2 t3 -> Compute.Coder t0 t1 t3 t4 -> Compute.Coder t0 t1 t2 t4)
 composeCoders c1 c2 = Compute.Coder {
-  Compute.coderEncode = (\a -> Flows.bind (Compute.coderEncode c1 a) (Compute.coderEncode c2)),
-  Compute.coderDecode = (\c -> Flows.bind (Compute.coderDecode c2 c) (Compute.coderDecode c1))}
+  Compute.coderEncode = (\a -> Flows.bind (Compute.coderEncode c1 a) (\b1 -> Compute.coderEncode c2 b1)),
+  Compute.coderDecode = (\c -> Flows.bind (Compute.coderDecode c2 c) (\b2 -> Compute.coderDecode c1 b2))}
 
 encodeDecode :: (Coders.CoderDirection -> Compute.Coder t0 t0 t1 t1 -> t1 -> Compute.Flow t0 t1)
 encodeDecode dir coder = ((\x -> case x of
@@ -89,42 +89,48 @@ literalTypeIsSupported constraints lt = (Logic.and (Sets.member (Variants.litera
 -- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
 nameToFilePath :: (Mantle.CaseConvention -> Mantle.CaseConvention -> Module.FileExtension -> Core.Name -> String)
 nameToFilePath nsConv localConv ext name =  
-  let qualName = (Names.qualifyName name) 
-      ns = (Module.qualifiedNameNamespace qualName)
-      local = (Module.qualifiedNameLocal qualName)
-      nsToFilePath = (\ns -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Mantle.CaseConventionCamel nsConv part) (Strings.splitOn "." (Module.unNamespace ns))))
-      prefix = (Optionals.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns)
-      suffix = (Formatting.convertCase Mantle.CaseConventionPascal localConv local)
-  in (Strings.cat [
-    prefix,
-    suffix,
-    ".",
-    (Module.unFileExtension ext)])
+  let qualName = (Names.qualifyName name)
+  in  
+    let ns = (Module.qualifiedNameNamespace qualName)
+    in  
+      let local = (Module.qualifiedNameLocal qualName)
+      in  
+        let nsToFilePath = (\ns -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Mantle.CaseConventionCamel nsConv part) (Strings.splitOn "." (Module.unNamespace ns))))
+        in  
+          let prefix = (Optionals.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns)
+          in  
+            let suffix = (Formatting.convertCase Mantle.CaseConventionPascal localConv local)
+            in (Strings.cat [
+              prefix,
+              suffix,
+              ".",
+              (Module.unFileExtension ext)])
 
 -- | Check if type is supported by language constraints
 typeIsSupported :: (Coders.LanguageConstraints -> Core.Type -> Bool)
 typeIsSupported constraints t =  
-  let base = (Rewriting.deannotateType t) 
-      isSupportedVariant = (\v -> Logic.or ((\x -> case x of
-              Mantle.TypeVariantVariable -> True
-              _ -> False) v) (Sets.member v (Coders.languageConstraintsTypeVariants constraints)))
-  in (Logic.and (Coders.languageConstraintsTypes constraints base) (Logic.and (isSupportedVariant (Variants.typeVariant base)) ((\x -> case x of
-    Core.TypeAnnotated v1 -> (typeIsSupported constraints (Core.annotatedTypeBody v1))
-    Core.TypeApplication v1 -> (Logic.and (typeIsSupported constraints (Core.applicationTypeFunction v1)) (typeIsSupported constraints (Core.applicationTypeArgument v1)))
-    Core.TypeForall v1 -> (typeIsSupported constraints (Core.forallTypeBody v1))
-    Core.TypeFunction v1 -> (Logic.and (typeIsSupported constraints (Core.functionTypeDomain v1)) (typeIsSupported constraints (Core.functionTypeCodomain v1)))
-    Core.TypeList v1 -> (typeIsSupported constraints v1)
-    Core.TypeLiteral v1 -> (literalTypeIsSupported constraints v1)
-    Core.TypeMap v1 -> (Logic.and (typeIsSupported constraints (Core.mapTypeKeys v1)) (typeIsSupported constraints (Core.mapTypeValues v1)))
-    Core.TypeOptional v1 -> (typeIsSupported constraints v1)
-    Core.TypeProduct v1 -> (Lists.foldl Logic.and True (Lists.map (typeIsSupported constraints) v1))
-    Core.TypeRecord v1 -> (Lists.foldl Logic.and True (Lists.map (\field -> typeIsSupported constraints (Core.fieldTypeType field)) (Core.rowTypeFields v1)))
-    Core.TypeSet v1 -> (typeIsSupported constraints v1)
-    Core.TypeSum v1 -> (Lists.foldl Logic.and True (Lists.map (typeIsSupported constraints) v1))
-    Core.TypeUnion v1 -> (Lists.foldl Logic.and True (Lists.map (\field -> typeIsSupported constraints (Core.fieldTypeType field)) (Core.rowTypeFields v1)))
-    Core.TypeUnit -> True
-    Core.TypeWrap v1 -> (typeIsSupported constraints (Core.wrappedTypeBody v1))
-    Core.TypeVariable _ -> True) base)))
+  let base = (Rewriting.deannotateType t)
+  in  
+    let isSupportedVariant = (\v -> Logic.or ((\x -> case x of
+            Mantle.TypeVariantVariable -> True
+            _ -> False) v) (Sets.member v (Coders.languageConstraintsTypeVariants constraints)))
+    in (Logic.and (Coders.languageConstraintsTypes constraints base) (Logic.and (isSupportedVariant (Variants.typeVariant base)) ((\x -> case x of
+      Core.TypeAnnotated v1 -> (typeIsSupported constraints (Core.annotatedTypeBody v1))
+      Core.TypeApplication v1 -> (Logic.and (typeIsSupported constraints (Core.applicationTypeFunction v1)) (typeIsSupported constraints (Core.applicationTypeArgument v1)))
+      Core.TypeForall v1 -> (typeIsSupported constraints (Core.forallTypeBody v1))
+      Core.TypeFunction v1 -> (Logic.and (typeIsSupported constraints (Core.functionTypeDomain v1)) (typeIsSupported constraints (Core.functionTypeCodomain v1)))
+      Core.TypeList v1 -> (typeIsSupported constraints v1)
+      Core.TypeLiteral v1 -> (literalTypeIsSupported constraints v1)
+      Core.TypeMap v1 -> (Logic.and (typeIsSupported constraints (Core.mapTypeKeys v1)) (typeIsSupported constraints (Core.mapTypeValues v1)))
+      Core.TypeOptional v1 -> (typeIsSupported constraints v1)
+      Core.TypeProduct v1 -> (Lists.foldl Logic.and True (Lists.map (typeIsSupported constraints) v1))
+      Core.TypeRecord v1 -> (Lists.foldl Logic.and True (Lists.map (\field -> typeIsSupported constraints (Core.fieldTypeType field)) (Core.rowTypeFields v1)))
+      Core.TypeSet v1 -> (typeIsSupported constraints v1)
+      Core.TypeSum v1 -> (Lists.foldl Logic.and True (Lists.map (typeIsSupported constraints) v1))
+      Core.TypeUnion v1 -> (Lists.foldl Logic.and True (Lists.map (\field -> typeIsSupported constraints (Core.fieldTypeType field)) (Core.rowTypeFields v1)))
+      Core.TypeUnit -> True
+      Core.TypeWrap v1 -> (typeIsSupported constraints (Core.wrappedTypeBody v1))
+      Core.TypeVariable _ -> True) base)))
 
 unidirectionalCoder :: ((t0 -> Compute.Flow t1 t2) -> Compute.Coder t1 t3 t0 t2)
 unidirectionalCoder m = Compute.Coder {
