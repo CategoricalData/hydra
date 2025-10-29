@@ -496,7 +496,7 @@ encodeTermAssignment env name term comment = do
 
 -- | Encode a term to an inline Python expression
 encodeTermInline :: PythonEnvironment -> Term -> Flow PyGraph Py.Expression
-encodeTermInline env term = case deannotateTerm term of
+encodeTermInline env term = case deannotateAndDeTypeApplyTerm term of
     TermApplication a -> encodeApplication env a
     TermFunction f -> encodeFunction env f
     TermLet _ -> pure $ stringToPyExpression Py.QuoteStyleDouble "let terms are not supported here"
@@ -513,11 +513,17 @@ encodeTermInline env term = case deannotateTerm term of
           pyK <- encode k
           pyV <- encode v
           return $ Py.DoubleStarredKvpairPair $ Py.Kvpair pyK pyV
-    TermOptional mt -> case mt of
-      Nothing -> pure $ functionCall (pyNameToPyPrimary $ Py.Name "Nothing") []
-      Just term1 -> do
-        pyex <- encode term1
-        return $ functionCall (pyNameToPyPrimary $ Py.Name "Just") [pyex]
+    TermOptional mt -> do
+      typ <- typeOf (pythonEnvironmentTypeContext env) [] term
+      pytyp <- encodeType env typ
+      updateMeta $ \m -> m { pythonModuleMetadataUsesCast = True, pythonModuleMetadataUsesMaybe = True }
+      case mt of
+        Nothing -> return $ castTo pytyp $
+          functionCall (pyNameToPyPrimary $ Py.Name "Nothing") []
+        Just term1 -> do
+          pyex <- encode term1
+          return $ castTo pytyp $
+            functionCall (pyNameToPyPrimary $ Py.Name "Just") [pyex]
     TermProduct terms -> do
       pyExprs <- CM.mapM encode terms
       return $ pyAtomToPyExpression $ Py.AtomTuple $ Py.Tuple (pyExpressionToPyStarNamedExpression <$> pyExprs)
@@ -531,7 +537,6 @@ encodeTermInline env term = case deannotateTerm term of
     TermTypeLambda tl@(TypeLambda _ term1) -> encodeTermInline env2 term1
       where
         env2 = extendEnvironmentForTypeLambda env tl
-    TermTypeApplication (TypeApplicationTerm term1 _) -> encode term1
     TermUnion (Injection tname field) -> do
       rt <- inGraphContext $ requireUnionType tname
       if isEnumRowType rt
@@ -552,6 +557,10 @@ encodeTermInline env term = case deannotateTerm term of
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) [parg]
     t -> fail $ "unsupported term variant: " ++ show (termVariant t) ++ " in " ++ show term
   where
+    deannotateAndDeTypeApplyTerm term = case term of
+      TermAnnotated at -> deannotateAndDeTypeApplyTerm (annotatedTermBody at)
+      TermTypeApplication tat -> deannotateAndDeTypeApplyTerm (typeApplicationTermBody tat)
+      _ -> term
     encode = encodeTermInline env
 
 -- | Encode a term to a list of statements, with the last statement as the return value.
