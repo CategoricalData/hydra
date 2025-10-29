@@ -82,7 +82,7 @@ encodeApplication env app = do
     let rargs = L.drop arity pargs
     lhs <- applyArgs hargs
     let pyapp = L.foldl (\t a -> functionCall (pyExpressionToPyPrimary t) [a]) lhs rargs
-    if needsCast term typ then do
+    if needsCast (applicationFunction app) typ then do
       updateMeta $ \m -> extendMetaForType True True typ $ m { pythonModuleMetadataUsesCast = True }
       pytyp <- encodeType env typ
       return $ castTo pytyp pyapp

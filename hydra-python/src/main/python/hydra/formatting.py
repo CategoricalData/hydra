@@ -4,8 +4,8 @@ r"""String formatting types and functions."""
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import frozenlist
-from typing import Tuple
+from hydra.dsl.python import FrozenDict, frozenlist
+from typing import Tuple, cast
 import hydra.core
 import hydra.lib.chars
 import hydra.lib.equality
@@ -114,7 +114,7 @@ def strip_leading_and_trailing_whitespace(s: str) -> str:
     return hydra.lib.strings.from_list(hydra.lib.lists.drop_while(hydra.lib.chars.is_space, hydra.lib.lists.reverse(hydra.lib.lists.drop_while(hydra.lib.chars.is_space, hydra.lib.lists.reverse(hydra.lib.strings.to_list(s))))))
 
 def with_character_aliases(original: str) -> str:
-    aliases = hydra.lib.maps.from_list(((32, "sp"), (33, "excl"), (34, "quot"), (35, "num"), (36, "dollar"), (37, "percnt"), (38, "amp"), (39, "apos"), (40, "lpar"), (41, "rpar"), (42, "ast"), (43, "plus"), (44, "comma"), (45, "minus"), (46, "period"), (47, "sol"), (58, "colon"), (59, "semi"), (60, "lt"), (61, "equals"), (62, "gt"), (63, "quest"), (64, "commat"), (91, "lsqb"), (92, "bsol"), (93, "rsqb"), (94, "circ"), (95, "lowbar"), (96, "grave"), (123, "lcub"), (124, "verbar"), (125, "rcub"), (126, "tilde")))
+    aliases = cast(FrozenDict[int, str], hydra.lib.maps.from_list(((32, "sp"), (33, "excl"), (34, "quot"), (35, "num"), (36, "dollar"), (37, "percnt"), (38, "amp"), (39, "apos"), (40, "lpar"), (41, "rpar"), (42, "ast"), (43, "plus"), (44, "comma"), (45, "minus"), (46, "period"), (47, "sol"), (58, "colon"), (59, "semi"), (60, "lt"), (61, "equals"), (62, "gt"), (63, "quest"), (64, "commat"), (91, "lsqb"), (92, "bsol"), (93, "rsqb"), (94, "circ"), (95, "lowbar"), (96, "grave"), (123, "lcub"), (124, "verbar"), (125, "rcub"), (126, "tilde"))))
     def alias(c: int) -> frozenlist[int]:
         return hydra.lib.optionals.from_maybe(hydra.lib.lists.pure(c), hydra.lib.optionals.map(hydra.lib.strings.to_list, hydra.lib.maps.lookup(c, aliases)))
     return hydra.lib.strings.from_list(hydra.lib.lists.filter(hydra.lib.chars.is_alpha_num, hydra.lib.lists.concat(hydra.lib.lists.map(alias, hydra.lib.strings.to_list(original)))))
