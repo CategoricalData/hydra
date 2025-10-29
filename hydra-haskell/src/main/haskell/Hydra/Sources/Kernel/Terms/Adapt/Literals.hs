@@ -146,97 +146,6 @@ disclaimerDef = define "disclaimer" $
     var "target",
     Logic.ifElse (var "lossy") " (lossy)" ""])
 
-literalAdapterDef :: TBinding (LiteralType -> Flow AdapterContext (SymmetricAdapter s LiteralType Literal))
-literalAdapterDef = define "literalAdapter" $
-  doc "Create an adapter for literal types" $
-  "lt" ~>
-  "alts" <~ ("t" ~> cases _LiteralType (var "t")
-    Nothing [
-    _LiteralType_binary>>: constant (
-      "step" <~ Compute.coder
-        ("lit" ~> cases _Literal (var "lit")
-          Nothing [
-          _Literal_binary>>: "b" ~> Flows.pure (Core.literalString (Literals.binaryToString (var "b")))])
-        ("lit" ~> cases _Literal (var "lit")
-          Nothing [
-          _Literal_string>>: "s" ~> Flows.pure (Core.literalBinary (Literals.stringToBinary (var "s")))]) $
-      produce (list [Compute.adapter false (var "t") Core.literalTypeString (var "step")])),
-    _LiteralType_boolean>>: constant (
-      "cx" <<~ ref Monads.getStateDef $
-      "constraints" <~ Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx")) $
-      "hasIntegers" <~ Logic.not (Sets.null (Coders.languageConstraintsIntegerTypes (var "constraints"))) $
-      "hasStrings" <~ Sets.member Mantle.literalVariantString (Coders.languageConstraintsLiteralVariants (var "constraints")) $
-      Logic.ifElse (var "hasIntegers")
-        ("adapter" <<~ ref integerAdapterDef @@ Core.integerTypeUint8 $
-         "step'" <~ Compute.adapterCoder (var "adapter") $
-         "step" <~ Compute.coder
-           ("lit" ~> cases _Literal (var "lit")
-             Nothing [
-             _Literal_boolean>>: "bv" ~>
-               "iv" <<~ Compute.coderEncode (var "step'") @@ (Core.integerValueUint8 (Logic.ifElse (var "bv") (uint8 1) (uint8 0))) $
-               produce (Core.literalInteger (var "iv"))])
-           ("lit" ~> cases _Literal (var "lit")
-             Nothing [
-             _Literal_integer>>: "iv" ~>
-               "val" <<~ Compute.coderDecode (var "step'") @@ var "iv" $
-               cases _IntegerValue (var "val")
-                 Nothing [
-                 _IntegerValue_uint8>>: "v" ~> Flows.pure (Core.literalBoolean (Equality.equal (var "v") (uint8 1)))]]) $
-         produce (list [Compute.adapter false (var "t") (Core.literalTypeInteger (Compute.adapterTarget (var "adapter"))) (var "step")]))
-        (Logic.ifElse (var "hasStrings")
-          (produce (
-            "encode" <~ ("lit" ~>
-              "b" <<~ ref ExtractCore.booleanLiteralDef @@ var "lit" $
-              produce (Core.literalString (Logic.ifElse (var "b") "true" "false"))) $
-            "decode" <~ ("lit" ~>
-              "s" <<~ ref ExtractCore.stringLiteralDef @@ var "lit" $
-              Logic.ifElse (Equality.equal (var "s") "true")
-                (produce (Core.literalBoolean true))
-                (Logic.ifElse (Equality.equal (var "s") "false")
-                  (produce (Core.literalBoolean false))
-                  (ref Monads.unexpectedDef @@ "boolean literal" @@ var "s"))) $
-            list [Compute.adapter false (var "t") Core.literalTypeString (Compute.coder (var "encode") (var "decode"))]))
-          (Flows.fail "no alternatives available for boolean encoding"))),
-    _LiteralType_float>>: "ft" ~>
-      "cx" <<~ ref Monads.getStateDef $
-      "constraints" <~ Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx")) $
-      "hasFloats" <~ Logic.not (Sets.null (Coders.languageConstraintsFloatTypes (var "constraints"))) $
-      Logic.ifElse (var "hasFloats")
-        ("adapter" <<~ ref floatAdapterDef @@ var "ft" $
-         "step" <~ ref AdaptUtils.bidirectionalDef @@ ("dir" ~> "l" ~>
-           cases _Literal (var "l")
-             (Just (ref Monads.unexpectedDef
-               @@ "floating-point literal"
-               @@ (ref ShowCore.literalDef @@ var "l"))) [
-             _Literal_float>>: "fv" ~> Flows.map (unaryFunction Core.literalFloat) (
-               ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder (var "adapter")) @@ var "fv")]) $
-         produce (list [Compute.adapter (Compute.adapterIsLossy (var "adapter")) (var "t") (Core.literalTypeFloat (Compute.adapterTarget (var "adapter"))) (var "step")]))
-        (Flows.fail "no float types available"),
-    _LiteralType_integer>>: "it" ~>
-      "cx" <<~ ref Monads.getStateDef $
-      "constraints" <~ Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx")) $
-      "hasIntegers" <~ Logic.not (Sets.null (Coders.languageConstraintsIntegerTypes (var "constraints"))) $
-      Logic.ifElse (var "hasIntegers")
-        ("adapter" <<~ ref integerAdapterDef @@ var "it" $
-         "step" <~ ref AdaptUtils.bidirectionalDef @@ ("dir" ~> "lit" ~>
-           cases _Literal (var "lit")
-             (Just (ref Monads.unexpectedDef
-               @@ "integer literal"
-               @@ (ref ShowCore.literalDef @@ var "lit"))) [
-             _Literal_integer>>: "iv" ~> Flows.map (unaryFunction Core.literalInteger) (
-               ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder (var "adapter")) @@ var "iv")]) $
-         produce (list [Compute.adapter (Compute.adapterIsLossy (var "adapter")) (var "t") (Core.literalTypeInteger (Compute.adapterTarget (var "adapter"))) (var "step")]))
-        (Flows.fail "no integer types available"),
-    _LiteralType_string>>: constant (Flows.fail "no substitute for the literal string type")]) $
-  "cx" <<~ ref Monads.getStateDef $
-  "supported" <~ ref AdaptUtils.literalTypeIsSupportedDef @@ (Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx"))) $
-  ref AdaptUtils.chooseAdapterDef
-    @@ var "alts"
-    @@ var "supported"
-    @@ ref ShowCore.literalTypeDef
-    @@ ref DescribeCore.literalTypeDef
-    @@ var "lt"
-
 floatAdapterDef :: TBinding (FloatType -> Flow AdapterContext (SymmetricAdapter s FloatType FloatValue))
 floatAdapterDef = define "floatAdapter" $
   doc "Create an adapter for float types" $
@@ -257,11 +166,12 @@ floatAdapterDef = define "floatAdapter" $
     ref Monads.warnDef
       @@ var "msg"
       @@ (produce (Compute.adapter (var "lossy") (var "source") (var "target") (var "step")))) $
-  "alts" <~ ("t" ~> Flows.mapList (var "makeAdapter" @@ var "t") (cases _FloatType (var "t")
+  "altTypes" <~ ("t" ~> cases _FloatType (var "t")
     Nothing [
     _FloatType_bigfloat>>: constant (list [Core.floatTypeFloat64, Core.floatTypeFloat32]),
     _FloatType_float32>>: constant (list [Core.floatTypeFloat64, Core.floatTypeBigfloat]),
-    _FloatType_float64>>: constant (list [Core.floatTypeBigfloat, Core.floatTypeFloat32])])) $
+    _FloatType_float64>>: constant (list [Core.floatTypeBigfloat, Core.floatTypeFloat32])]) $
+  "alts" <~ ("t" ~> Flows.mapList (var "makeAdapter" @@ var "t") (var "altTypes" @@ var "t")) $
   "cx" <<~ ref Monads.getStateDef $
   "supported" <~ ref AdaptUtils.floatTypeIsSupportedDef
     @@ (Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx"))) $
@@ -315,7 +225,7 @@ integerAdapterDef = define "integerAdapter" $
     ref Monads.warnDef
       @@ var "msg"
       @@ (produce (Compute.adapter (var "lossy") (var "source") (var "target") (var "step")))) $
-  "alts" <~ ("t" ~> Flows.mapList (var "makeAdapter" @@ var "t") (cases _IntegerType (var "t")
+  "altTypes" <~ ("t" ~> cases _IntegerType (var "t")
     Nothing [
     _IntegerType_bigint>>: constant (Lists.reverse (var "unsignedPref")),
     _IntegerType_int8>>: constant (var "signed" @@ int32 1),
@@ -325,7 +235,8 @@ integerAdapterDef = define "integerAdapter" $
     _IntegerType_uint8>>: constant (var "unsigned" @@ int32 1),
     _IntegerType_uint16>>: constant (var "unsigned" @@ int32 2),
     _IntegerType_uint32>>: constant (var "unsigned" @@ int32 3),
-    _IntegerType_uint64>>: constant (var "unsigned" @@ int32 4)])) $
+    _IntegerType_uint64>>: constant (var "unsigned" @@ int32 4)]) $
+  "alts" <~ ("t" ~> Flows.mapList (var "makeAdapter" @@ var "t") (var "altTypes" @@ var "t")) $
   "cx" <<~ ref Monads.getStateDef $
   "supported" <~ ref AdaptUtils.integerTypeIsSupportedDef
     @@ (Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx"))) $
@@ -335,3 +246,105 @@ integerAdapterDef = define "integerAdapter" $
     @@ ref ShowCore.integerTypeDef
     @@ ref DescribeCore.integerTypeDef
     @@ var "it"
+
+literalAdapterDef :: TBinding (LiteralType -> Flow AdapterContext (SymmetricAdapter s LiteralType Literal))
+literalAdapterDef = define "literalAdapter" $
+  doc "Create an adapter for literal types" $
+  "lt" ~>
+  "forBinary" <~ ("t" ~>
+    "matchBinary" <~ ("lit" ~> cases _Literal (var "lit")
+      Nothing [
+      _Literal_binary>>: "b" ~> Flows.pure (Core.literalString (Literals.binaryToString (var "b")))]) $
+    "matchString" <~ ("lit" ~> cases _Literal (var "lit")
+      Nothing [
+      _Literal_string>>: "s" ~> Flows.pure (Core.literalBinary (Literals.stringToBinary (var "s")))]) $
+    "step" <~ Compute.coder (var "matchBinary") (var "matchString") $
+    produce (list [Compute.adapter false (var "t") Core.literalTypeString (var "step")])) $
+  "forBoolean" <~ ("t" ~>
+    "matchBoolean" <~ ("step'" ~> "lit" ~> cases _Literal (var "lit")
+      Nothing [
+      _Literal_boolean>>: "bv" ~>
+        "iv" <<~ Compute.coderEncode (var "step'") @@ (Core.integerValueUint8 (Logic.ifElse (var "bv") (uint8 1) (uint8 0))) $
+        produce (Core.literalInteger (var "iv"))]) $
+    "matchInteger" <~ ("step'" ~> "lit" ~> cases _Literal (var "lit")
+      Nothing [
+      _Literal_integer>>: "iv" ~>
+        "val" <<~ Compute.coderDecode (var "step'") @@ var "iv" $
+        cases _IntegerValue (var "val")
+          Nothing [
+          _IntegerValue_uint8>>: "v" ~> Flows.pure (Core.literalBoolean (Equality.equal (var "v") (uint8 1)))]]) $
+    "cx" <<~ ref Monads.getStateDef $
+    "constraints" <~ Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx")) $
+    "hasIntegers" <~ Logic.not (Sets.null (Coders.languageConstraintsIntegerTypes (var "constraints"))) $
+    "hasStrings" <~ Sets.member Mantle.literalVariantString (Coders.languageConstraintsLiteralVariants (var "constraints")) $
+    "withIntegers" <~ (
+      "adapter" <<~ ref integerAdapterDef @@ Core.integerTypeUint8 $
+      "step'" <~ Compute.adapterCoder (var "adapter") $
+      "step" <~ Compute.coder (var "matchBoolean" @@ var "step'") (var "matchInteger" @@ var "step'") $
+      produce (list [Compute.adapter false (var "t") (Core.literalTypeInteger (Compute.adapterTarget (var "adapter"))) (var "step")])) $
+    "withStrings" <~ (
+      "encode" <~ ("lit" ~>
+        "b" <<~ ref ExtractCore.booleanLiteralDef @@ var "lit" $
+        produce (Core.literalString (Logic.ifElse (var "b") "true" "false"))) $
+      "decode" <~ ("lit" ~>
+        "s" <<~ ref ExtractCore.stringLiteralDef @@ var "lit" $
+        Logic.ifElse (Equality.equal (var "s") "true")
+          (produce (Core.literalBoolean true))
+          (Logic.ifElse (Equality.equal (var "s") "false")
+            (produce (Core.literalBoolean false))
+            (ref Monads.unexpectedDef @@ "boolean literal" @@ var "s"))) $
+      list [Compute.adapter false (var "t") Core.literalTypeString (Compute.coder (var "encode") (var "decode"))]) $
+    Logic.ifElse (var "hasIntegers")
+      (var "withIntegers")
+      (Logic.ifElse (var "hasStrings")
+        (produce $ var "withStrings")
+        (Flows.fail "no alternatives available for boolean encoding"))) $
+  "forFloat" <~ ("t" ~> "ft" ~>
+      "withFloats" <~ (
+        "adapt" <~ ("adapter" ~> "dir" ~> "l" ~> cases _Literal (var "l")
+          (Just (ref Monads.unexpectedDef
+            @@ "floating-point literal"
+            @@ (ref ShowCore.literalDef @@ var "l"))) [
+          _Literal_float>>: "fv" ~> Flows.map (unaryFunction Core.literalFloat) (
+            ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder (var "adapter")) @@ var "fv")]) $
+        "adapter" <<~ ref floatAdapterDef @@ var "ft" $
+        "step" <~ ref AdaptUtils.bidirectionalDef @@ (var "adapt" @@ var "adapter") $
+        produce (list [Compute.adapter (Compute.adapterIsLossy (var "adapter")) (var "t") (Core.literalTypeFloat (Compute.adapterTarget (var "adapter"))) (var "step")])) $
+      "cx" <<~ ref Monads.getStateDef $
+      "constraints" <~ Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx")) $
+      "hasFloats" <~ Logic.not (Sets.null (Coders.languageConstraintsFloatTypes (var "constraints"))) $
+      Logic.ifElse (var "hasFloats")
+        (var "withFloats")
+        (Flows.fail "no float types available")) $
+  "forInteger" <~ ("t" ~> "it" ~>
+      "withIntegers" <~ (
+        "adapt" <~ ("adapter" ~> "dir" ~> "lit" ~> cases _Literal (var "lit")
+          (Just (ref Monads.unexpectedDef
+            @@ "integer literal"
+            @@ (ref ShowCore.literalDef @@ var "lit"))) [
+          _Literal_integer>>: "iv" ~> Flows.map (unaryFunction Core.literalInteger) (
+            ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder (var "adapter")) @@ var "iv")]) $
+        "adapter" <<~ ref integerAdapterDef @@ var "it" $
+        "step" <~ ref AdaptUtils.bidirectionalDef @@ (var "adapt" @@ var "adapter") $
+        produce (list [Compute.adapter (Compute.adapterIsLossy (var "adapter")) (var "t") (Core.literalTypeInteger (Compute.adapterTarget (var "adapter"))) (var "step")])) $
+      "cx" <<~ ref Monads.getStateDef $
+      "constraints" <~ Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx")) $
+      "hasIntegers" <~ Logic.not (Sets.null (Coders.languageConstraintsIntegerTypes (var "constraints"))) $
+      Logic.ifElse (var "hasIntegers")
+        (var "withIntegers")
+        (Flows.fail "no integer types available")) $
+  "alts" <~ ("t" ~> cases _LiteralType (var "t")
+    Nothing [
+    _LiteralType_binary>>: constant $ var "forBinary" @@ var "t",
+    _LiteralType_boolean>>: constant $ var "forBoolean" @@ var "t",
+    _LiteralType_float>>: "ft" ~> var "forFloat" @@ var "t" @@ var "ft",
+    _LiteralType_integer>>: "it" ~> var "forInteger" @@ var "t" @@ var "it",
+    _LiteralType_string>>: constant (Flows.fail "no substitute for the literal string type")]) $
+  "cx" <<~ ref Monads.getStateDef $
+  "supported" <~ ref AdaptUtils.literalTypeIsSupportedDef @@ (Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx"))) $
+  ref AdaptUtils.chooseAdapterDef
+    @@ var "alts"
+    @@ var "supported"
+    @@ ref ShowCore.literalTypeDef
+    @@ ref DescribeCore.literalTypeDef
+    @@ var "lt"
