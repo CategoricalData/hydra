@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Types supporting type inference and type reconstruction."""
+r"""Types supporting type inference and type reconstruction."""
 
 from __future__ import annotations
 from dataclasses import dataclass
@@ -10,7 +10,7 @@ import hydra.core
 
 @dataclass
 class InferenceContext:
-    """The context provided to type inference, including various typing enviroments."""
+    r"""The context provided to type inference, including various typing enviroments."""
     
     schema_types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "A fixed typing environment which is derived from the schema of the graph."]
     primitive_types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "A fixed typing environment which is derived from the set of primitives in the graph."]
@@ -25,7 +25,7 @@ INFERENCE_CONTEXT__DEBUG__NAME = hydra.core.Name("debug")
 
 @dataclass
 class InferenceResult:
-    """The result of applying inference rules to a term."""
+    r"""The result of applying inference rules to a term."""
     
     term: hydra.core.Term
     type: hydra.core.Type
@@ -37,13 +37,13 @@ INFERENCE_RESULT__TYPE__NAME = hydra.core.Name("type")
 INFERENCE_RESULT__SUBST__NAME = hydra.core.Name("subst")
 
 class TermSubst(Node["FrozenDict[hydra.core.Name, hydra.core.Term]"]):
-    """A substitution of term variables for terms."""
+    r"""A substitution of term variables for terms."""
 
 TERM_SUBST__NAME = hydra.core.Name("hydra.typing.TermSubst")
 
 @dataclass
 class TypeConstraint:
-    """An assertion that two types can be unified into a single type."""
+    r"""An assertion that two types can be unified into a single type."""
     
     left: hydra.core.Type
     right: hydra.core.Type
@@ -56,7 +56,7 @@ TYPE_CONSTRAINT__COMMENT__NAME = hydra.core.Name("comment")
 
 @dataclass
 class TypeContext:
-    """A typing environment used for type reconstruction (typeOf) over System F terms."""
+    r"""A typing environment used for type reconstruction (typeOf) over System F terms."""
     
     types: Annotated[FrozenDict[hydra.core.Name, hydra.core.Type], "A mapping of lambda- and let-bound variables to their types"]
     variables: Annotated[frozenset[hydra.core.Name], "The set of type variables introduced by enclosing type lambdas"]
@@ -68,6 +68,6 @@ TYPE_CONTEXT__VARIABLES__NAME = hydra.core.Name("variables")
 TYPE_CONTEXT__INFERENCE_CONTEXT__NAME = hydra.core.Name("inferenceContext")
 
 class TypeSubst(Node["FrozenDict[hydra.core.Name, hydra.core.Type]"]):
-    """A substitution of type variables for types."""
+    r"""A substitution of type variables for types."""
 
 TYPE_SUBST__NAME = hydra.core.Name("hydra.typing.TypeSubst")

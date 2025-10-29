@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Mapping of hydra.core constructs in a host language like Haskell or Java  to their native Hydra counterparts as terms.  This includes an implementation of LambdaGraph's epsilon encoding (types to terms)."""
+r"""Mapping of hydra.core constructs in a host language like Haskell or Java  to their native Hydra counterparts as terms.  This includes an implementation of LambdaGraph's epsilon encoding (types to terms)."""
 
 from __future__ import annotations
 from hydra.dsl.python import frozenlist
@@ -336,7 +336,7 @@ def annotated_type(at: hydra.core.AnnotatedType) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(type(at.body), at.annotation)))
 
 def is_encoded_type(t: hydra.core.Term) -> bool:
-    """Determines whether a given term is an encoded type."""
+    r"""Determines whether a given term is an encoded type."""
     
     match hydra.rewriting.deannotate_term(t):
         case hydra.core.TermApplication(value=a):

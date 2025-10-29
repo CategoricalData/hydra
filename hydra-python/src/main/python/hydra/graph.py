@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""The extension to graphs of Hydra's core type system (hydra.core)."""
+r"""The extension to graphs of Hydra's core type system (hydra.core)."""
 
 from __future__ import annotations
 from collections.abc import Callable
@@ -14,7 +14,7 @@ A = TypeVar("A")
 
 @dataclass
 class Graph:
-    """A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph."""
+    r"""A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph."""
     
     elements: Annotated[FrozenDict[hydra.core.Name, hydra.core.Binding], "All of the elements in the graph"]
     environment: Annotated[FrozenDict[hydra.core.Name, Maybe[hydra.core.Term]], "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)"]
@@ -33,7 +33,7 @@ GRAPH__SCHEMA__NAME = hydra.core.Name("schema")
 
 @dataclass
 class Primitive:
-    """A built-in function."""
+    r"""A built-in function."""
     
     name: Annotated[hydra.core.Name, "The unique name of the primitive function"]
     type: Annotated[hydra.core.TypeScheme, "The type signature of the primitive function"]
@@ -46,7 +46,7 @@ PRIMITIVE__IMPLEMENTATION__NAME = hydra.core.Name("implementation")
 
 @dataclass
 class TermCoder(Generic[A]):
-    """A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms."""
+    r"""A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms."""
     
     type: hydra.core.Type
     coder: hydra.compute.Coder[Graph, Graph, hydra.core.Term, A]

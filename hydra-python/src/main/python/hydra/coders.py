@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Abstractions for paired transformations between languages."""
+r"""Abstractions for paired transformations between languages."""
 
 from __future__ import annotations
 from collections.abc import Callable
@@ -19,7 +19,7 @@ V = TypeVar("V")
 
 @dataclass
 class AdapterContext:
-    """An evaluation context together with a source language and a target language."""
+    r"""An evaluation context together with a source language and a target language."""
     
     graph: hydra.graph.Graph
     language: Language
@@ -31,7 +31,7 @@ ADAPTER_CONTEXT__LANGUAGE__NAME = hydra.core.Name("language")
 ADAPTER_CONTEXT__ADAPTERS__NAME = hydra.core.Name("adapters")
 
 class CoderDirection(Enum):
-    """Indicates either the 'out' or the 'in' direction of a coder."""
+    r"""Indicates either the 'out' or the 'in' direction of a coder."""
     
     ENCODE = "encode"
     
@@ -43,7 +43,7 @@ CODER_DIRECTION__DECODE__NAME = hydra.core.Name("decode")
 
 @dataclass
 class Language:
-    """A named language together with language-specific constraints."""
+    r"""A named language together with language-specific constraints."""
     
     name: LanguageName
     constraints: LanguageConstraints
@@ -54,7 +54,7 @@ LANGUAGE__CONSTRAINTS__NAME = hydra.core.Name("constraints")
 
 @dataclass
 class LanguageConstraints:
-    """A set of constraints on valid type and term expressions, characterizing a language."""
+    r"""A set of constraints on valid type and term expressions, characterizing a language."""
     
     elimination_variants: Annotated[frozenset[hydra.mantle.EliminationVariant], "All supported elimination variants"]
     literal_variants: Annotated[frozenset[hydra.mantle.LiteralVariant], "All supported literal variants"]
@@ -76,7 +76,7 @@ LANGUAGE_CONSTRAINTS__TYPE_VARIANTS__NAME = hydra.core.Name("typeVariants")
 LANGUAGE_CONSTRAINTS__TYPES__NAME = hydra.core.Name("types")
 
 class LanguageName(Node[str]):
-    """The unique name of a language."""
+    r"""The unique name of a language."""
 
 LANGUAGE_NAME__NAME = hydra.core.Name("hydra.coders.LanguageName")
 
@@ -86,10 +86,10 @@ type SymmetricAdapter[S, T, V] = hydra.compute.Adapter[S, S, T, T, V, V]
 SYMMETRIC_ADAPTER__NAME = hydra.core.Name("hydra.coders.SymmetricAdapter")
 
 class TraversalOrderPre(Node[None]):
-    """Pre-order traversal."""
+    r"""Pre-order traversal."""
 
 class TraversalOrderPost(Node[None]):
-    """Post-order traversal."""
+    r"""Post-order traversal."""
 
 # Specifies either a pre-order or post-order traversal.
 type TraversalOrder = TraversalOrderPre | TraversalOrderPost

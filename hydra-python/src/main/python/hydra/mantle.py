@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""A set of types which supplement hydra.core, but are not referenced by hydra.core."""
+r"""A set of types which supplement hydra.core, but are not referenced by hydra.core."""
 
 from __future__ import annotations
 from enum import Enum
@@ -27,7 +27,7 @@ CASE_CONVENTION__LOWER_SNAKE__NAME = hydra.core.Name("lowerSnake")
 CASE_CONVENTION__UPPER_SNAKE__NAME = hydra.core.Name("upperSnake")
 
 class Comparison(Enum):
-    """An equality judgement: less than, equal to, or greater than."""
+    r"""An equality judgement: less than, equal to, or greater than."""
     
     LESS_THAN = "lessThan"
     
@@ -52,7 +52,7 @@ EITHER__LEFT__NAME = hydra.core.Name("left")
 EITHER__RIGHT__NAME = hydra.core.Name("right")
 
 class EliminationVariant(Enum):
-    """The identifier of an elimination constructor."""
+    r"""The identifier of an elimination constructor."""
     
     PRODUCT = "product"
     
@@ -69,7 +69,7 @@ ELIMINATION_VARIANT__UNION__NAME = hydra.core.Name("union")
 ELIMINATION_VARIANT__WRAP__NAME = hydra.core.Name("wrap")
 
 class FunctionVariant(Enum):
-    """The identifier of a function constructor."""
+    r"""The identifier of a function constructor."""
     
     ELIMINATION = "elimination"
     
@@ -83,7 +83,7 @@ FUNCTION_VARIANT__LAMBDA__NAME = hydra.core.Name("lambda")
 FUNCTION_VARIANT__PRIMITIVE__NAME = hydra.core.Name("primitive")
 
 class LiteralVariant(Enum):
-    """The identifier of a literal constructor."""
+    r"""The identifier of a literal constructor."""
     
     BINARY = "binary"
     
@@ -114,7 +114,7 @@ PRECISION__ARBITRARY__NAME = hydra.core.Name("arbitrary")
 PRECISION__BITS__NAME = hydra.core.Name("bits")
 
 class TermVariant(Enum):
-    """The identifier of a term expression constructor."""
+    r"""The identifier of a term expression constructor."""
     
     ANNOTATED = "annotated"
     
@@ -173,7 +173,7 @@ TERM_VARIANT__VARIABLE__NAME = hydra.core.Name("variable")
 TERM_VARIANT__WRAP__NAME = hydra.core.Name("wrap")
 
 class TypeClass(Enum):
-    """Any of a small number of built-in type classes."""
+    r"""Any of a small number of built-in type classes."""
     
     EQUALITY = "equality"
     
@@ -184,7 +184,7 @@ TYPE_CLASS__EQUALITY__NAME = hydra.core.Name("equality")
 TYPE_CLASS__ORDERING__NAME = hydra.core.Name("ordering")
 
 class TypeVariant(Enum):
-    """The identifier of a type constructor."""
+    r"""The identifier of a type constructor."""
     
     ANNOTATED = "annotated"
     

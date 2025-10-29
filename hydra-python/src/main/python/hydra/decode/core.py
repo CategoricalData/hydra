@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Decode hydra.core types from the hydra.core.Term type."""
+r"""Decode hydra.core types from the hydra.core.Term type."""
 
 from __future__ import annotations
 from hydra.dsl.python import frozenlist

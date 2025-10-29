@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""A utility for converting a BNF grammar to a Hydra module."""
+r"""A utility for converting a BNF grammar to a Hydra module."""
 
 from __future__ import annotations
 from collections.abc import Callable
@@ -23,12 +23,12 @@ import hydra.module
 import hydra.names
 
 def child_name(lname: str, n: str) -> str:
-    """Generate child name."""
+    r"""Generate child name."""
     
     return hydra.lib.strings.cat((lname, "_", hydra.formatting.capitalize(n)))
 
 def raw_name(pat: hydra.grammar.Pattern) -> str:
-    """Get raw name from pattern."""
+    r"""Get raw name from pattern."""
     
     match pat:
         case hydra.grammar.PatternAlternatives():
@@ -65,7 +65,7 @@ def raw_name(pat: hydra.grammar.Pattern) -> str:
             return hydra.lib.strings.cat2("listOf", hydra.formatting.capitalize(raw_name(p3)))
 
 def find_names(pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[str]:
-    """Find unique names for patterns."""
+    r"""Find unique names for patterns."""
     
     def next_name(acc: Tuple[frozenlist[str], FrozenDict[str, int]], pat: hydra.grammar.Pattern) -> Tuple[frozenlist[str], FrozenDict[str, int]]:
         names = acc[0]
@@ -78,7 +78,7 @@ def find_names(pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[str]:
     return hydra.lib.lists.reverse(hydra.lib.lists.foldl(next_name, ((), hydra.lib.maps.empty()), pats)[0])
 
 def simplify(is_record: bool, pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[hydra.grammar.Pattern]:
-    """Remove trivial patterns from records."""
+    r"""Remove trivial patterns from records."""
     
     def is_constant(p: hydra.grammar.Pattern) -> bool:
         match p:
@@ -90,7 +90,7 @@ def simplify(is_record: bool, pats: frozenlist[hydra.grammar.Pattern]) -> frozen
     return hydra.lib.logic.if_else(is_record, hydra.lib.lists.filter((lambda p: hydra.lib.logic.not_(is_constant(p))), pats), pats)
 
 def is_nontrivial(is_record: bool, pats: frozenlist[hydra.grammar.Pattern]) -> bool:
-    """Check if patterns are nontrivial."""
+    r"""Check if patterns are nontrivial."""
     
     min_pats = simplify(is_record, pats)
     def is_labeled(p: hydra.grammar.Pattern) -> bool:
@@ -103,7 +103,7 @@ def is_nontrivial(is_record: bool, pats: frozenlist[hydra.grammar.Pattern]) -> b
     return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(min_pats), 1), is_labeled(hydra.lib.lists.head(min_pats)), True)
 
 def is_complex(pat: hydra.grammar.Pattern) -> bool:
-    """Check if pattern is complex."""
+    r"""Check if pattern is complex."""
     
     match pat:
         case hydra.grammar.PatternLabeled(value=lp):
@@ -119,12 +119,12 @@ def is_complex(pat: hydra.grammar.Pattern) -> bool:
             return False
 
 def to_name(ns: hydra.module.Namespace, local: str) -> hydra.core.Name:
-    """Convert local name to qualified name."""
+    r"""Convert local name to qualified name."""
     
     return hydra.names.unqualify_name(hydra.module.QualifiedName(Just(ns), local))
 
 def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pat: hydra.grammar.Pattern) -> frozenlist[Tuple[str, hydra.core.Type]]:
-    """Create elements from pattern."""
+    r"""Create elements from pattern."""
     
     trivial = hydra.lib.logic.if_else(omit_trivial, (), ((lname, cast(hydra.core.Type, hydra.core.TypeUnit(None))),))
     def descend[T0](n: str, f: Callable[[frozenlist[Tuple[str, hydra.core.Type]]], T0], p: hydra.grammar.Pattern) -> T0:
@@ -178,7 +178,7 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
     return for_pat(pat)
 
 def wrap_type(t: hydra.core.Type) -> hydra.core.Type:
-    """Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type."""
+    r"""Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type."""
     
     match t:
         case hydra.core.TypeRecord():
@@ -194,7 +194,7 @@ def wrap_type(t: hydra.core.Type) -> hydra.core.Type:
             return cast(hydra.core.Type, hydra.core.TypeWrap(hydra.core.WrappedType(hydra.core.Name("Placeholder"), t)))
 
 def grammar_to_module(ns: hydra.module.Namespace, grammar: hydra.grammar.Grammar, desc: Maybe[str]) -> hydra.module.Module:
-    """Convert a BNF grammar to a Hydra module."""
+    r"""Convert a BNF grammar to a Hydra module."""
     
     prod_pairs = hydra.lib.lists.map((lambda prod: (prod.symbol.value, prod.pattern)), grammar.value)
     capitalized_names = hydra.lib.lists.map((lambda pair: hydra.formatting.capitalize(pair[0])), prod_pairs)

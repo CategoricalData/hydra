@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""A JSON syntax model. See the BNF at https://www.json.org."""
+r"""A JSON syntax model. See the BNF at https://www.json.org."""
 
 from __future__ import annotations
 from decimal import Decimal
@@ -8,22 +8,22 @@ from hydra.dsl.python import FrozenDict, Node, frozenlist
 import hydra.core
 
 class ValueArray(Node["frozenlist[Value]"]):
-    """A JSON array."""
+    r"""A JSON array."""
 
 class ValueBoolean(Node[bool]):
-    """A boolean value."""
+    r"""A boolean value."""
 
 class ValueNull(Node[None]):
-    """JSON's null value."""
+    r"""JSON's null value."""
 
 class ValueNumber(Node[Decimal]):
-    """A numeric value."""
+    r"""A numeric value."""
 
 class ValueObject(Node["FrozenDict[str, Value]"]):
-    """A JSON object as a set of key/value pairs."""
+    r"""A JSON object as a set of key/value pairs."""
 
 class ValueString(Node[str]):
-    """A string value."""
+    r"""A string value."""
 
 # A JSON value.
 type Value = ValueArray | ValueBoolean | ValueNull | ValueNumber | ValueObject | ValueString

@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""A common API for BNF-based grammars, specifying context-free languages."""
+r"""A common API for BNF-based grammars, specifying context-free languages."""
 
 from __future__ import annotations
 from dataclasses import dataclass
@@ -8,23 +8,23 @@ from hydra.dsl.python import Node, frozenlist
 import hydra.core
 
 class Constant(Node[str]):
-    """A constant pattern."""
+    r"""A constant pattern."""
 
 CONSTANT__NAME = hydra.core.Name("hydra.grammar.Constant")
 
 class Grammar(Node["frozenlist[Production]"]):
-    """An enhanced Backus-Naur form (BNF) grammar."""
+    r"""An enhanced Backus-Naur form (BNF) grammar."""
 
 GRAMMAR__NAME = hydra.core.Name("hydra.grammar.Grammar")
 
 class Label(Node[str]):
-    """A name for a pattern."""
+    r"""A name for a pattern."""
 
 LABEL__NAME = hydra.core.Name("hydra.grammar.Label")
 
 @dataclass
 class LabeledPattern:
-    """A pattern together with a name (label)."""
+    r"""A pattern together with a name (label)."""
     
     label: Label
     pattern: Pattern
@@ -73,7 +73,7 @@ PATTERN__STAR__NAME = hydra.core.Name("star")
 
 @dataclass
 class Production:
-    """A BNF production."""
+    r"""A BNF production."""
     
     symbol: Symbol
     pattern: Pattern
@@ -83,11 +83,11 @@ PRODUCTION__SYMBOL__NAME = hydra.core.Name("symbol")
 PRODUCTION__PATTERN__NAME = hydra.core.Name("pattern")
 
 class Regex(Node[str]):
-    """A regular expression."""
+    r"""A regular expression."""
 
 REGEX__NAME = hydra.core.Name("hydra.grammar.Regex")
 
 class Symbol(Node[str]):
-    """A nonterminal symbol."""
+    r"""A nonterminal symbol."""
 
 SYMBOL__NAME = hydra.core.Name("hydra.grammar.Symbol")

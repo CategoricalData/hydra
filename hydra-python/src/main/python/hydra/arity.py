@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Functions dealing with arguments and arity."""
+r"""Functions dealing with arguments and arity."""
 
 from __future__ import annotations
 from hydra.dsl.python import frozenlist
@@ -49,12 +49,12 @@ def type_arity(v1: hydra.core.Type) -> int:
             return 0
 
 def primitive_arity(arg_: hydra.graph.Primitive) -> int:
-    """Find the arity (expected number of arguments) of a primitive constant or function."""
+    r"""Find the arity (expected number of arguments) of a primitive constant or function."""
     
     return (lambda arg_2: type_arity(arg_2.type))(arg_.type)
 
 def uncurry_type(t: hydra.core.Type) -> frozenlist[hydra.core.Type]:
-    """Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)."""
+    r"""Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)."""
     
     match t:
         case hydra.core.TypeAnnotated(value=arg_):

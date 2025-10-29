@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""A model for language-agnostic graph pattern queries."""
+r"""A model for language-agnostic graph pattern queries."""
 
 from __future__ import annotations
 from dataclasses import dataclass
@@ -10,7 +10,7 @@ from typing import Annotated
 import hydra.core
 
 class ComparisonConstraint(Enum):
-    """One of several comparison operators."""
+    r"""One of several comparison operators."""
     
     EQUAL = "equal"
     
@@ -34,7 +34,7 @@ COMPARISON_CONSTRAINT__GREATER_THAN_OR_EQUAL__NAME = hydra.core.Name("greaterTha
 
 @dataclass
 class Edge:
-    """An abstract edge based on a record type."""
+    r"""An abstract edge based on a record type."""
     
     type: Annotated[hydra.core.Name, "The name of a record type, for which the edge also specifies an out- and an in- projection"]
     out: Annotated[Maybe[hydra.core.Name], "The field representing the out-projection of the edge. Defaults to 'out'."]
@@ -47,7 +47,7 @@ EDGE__IN__NAME = hydra.core.Name("in")
 
 @dataclass
 class GraphPattern:
-    """A query pattern which matches within a designated component subgraph."""
+    r"""A query pattern which matches within a designated component subgraph."""
     
     graph: Annotated[hydra.core.Name, "The name of the component graph"]
     patterns: Annotated[frozenlist[Pattern], "The patterns to match within the subgraph"]
@@ -57,13 +57,13 @@ GRAPH_PATTERN__GRAPH__NAME = hydra.core.Name("graph")
 GRAPH_PATTERN__PATTERNS__NAME = hydra.core.Name("patterns")
 
 class NodeTerm(Node["hydra.core.Term"]):
-    """A graph term; an expression which is valid in the graph being matched."""
+    r"""A graph term; an expression which is valid in the graph being matched."""
 
 class NodeVariable(Node["Variable"]):
-    """A query variable, not to be confused with a variable term."""
+    r"""A query variable, not to be confused with a variable term."""
 
 class NodeWildcard(Node[None]):
-    """An anonymous variable which we do not care to join across patterns."""
+    r"""An anonymous variable which we do not care to join across patterns."""
 
 # A node in a query expression; it may be a term, a variable, or a wildcard.
 type Node_ = NodeTerm | NodeVariable | NodeWildcard
@@ -74,13 +74,13 @@ NODE__VARIABLE__NAME = hydra.core.Name("variable")
 NODE__WILDCARD__NAME = hydra.core.Name("wildcard")
 
 class PathStep(Node["Step"]):
-    """A path given by a single step."""
+    r"""A path given by a single step."""
 
 class PathRegex(Node["RegexSequence"]):
-    """A path given by a regular expression quantifier applied to another path."""
+    r"""A path given by a regular expression quantifier applied to another path."""
 
 class PathInverse(Node["Path"]):
-    """A path given by the inverse of another path."""
+    r"""A path given by the inverse of another path."""
 
 # A query path.
 type Path = PathStep | PathRegex | PathInverse
@@ -91,19 +91,19 @@ PATH__REGEX__NAME = hydra.core.Name("regex")
 PATH__INVERSE__NAME = hydra.core.Name("inverse")
 
 class PatternTriple(Node["TriplePattern"]):
-    """A subject/predicate/object pattern."""
+    r"""A subject/predicate/object pattern."""
 
 class PatternNegation(Node["Pattern"]):
-    """The negation of another pattern."""
+    r"""The negation of another pattern."""
 
 class PatternConjunction(Node["frozenlist[Pattern]"]):
-    """The conjunction ('and') of several other patterns."""
+    r"""The conjunction ('and') of several other patterns."""
 
 class PatternDisjunction(Node["frozenlist[Pattern]"]):
-    """The disjunction (inclusive 'or') of several other patterns."""
+    r"""The disjunction (inclusive 'or') of several other patterns."""
 
 class PatternGraph(Node["GraphPattern"]):
-    """A pattern which matches within a named subgraph."""
+    r"""A pattern which matches within a named subgraph."""
 
 # A query pattern.
 type Pattern = PatternTriple | PatternNegation | PatternConjunction | PatternDisjunction | PatternGraph
@@ -117,7 +117,7 @@ PATTERN__GRAPH__NAME = hydra.core.Name("graph")
 
 @dataclass
 class Query:
-    """A SELECT-style graph pattern matching query."""
+    r"""A SELECT-style graph pattern matching query."""
     
     variables: Annotated[frozenlist[Variable], "The variables selected by the query"]
     patterns: Annotated[frozenlist[Pattern], "The patterns to be matched"]
@@ -128,7 +128,7 @@ QUERY__PATTERNS__NAME = hydra.core.Name("patterns")
 
 @dataclass
 class Range:
-    """A range from min to max, inclusive."""
+    r"""A range from min to max, inclusive."""
     
     min: int
     max: int
@@ -138,25 +138,25 @@ RANGE__MIN__NAME = hydra.core.Name("min")
 RANGE__MAX__NAME = hydra.core.Name("max")
 
 class RegexQuantifierOne(Node[None]):
-    """No quantifier; matches a single occurrence."""
+    r"""No quantifier; matches a single occurrence."""
 
 class RegexQuantifierZeroOrOne(Node[None]):
-    """The ? quanifier; matches zero or one occurrence."""
+    r"""The ? quanifier; matches zero or one occurrence."""
 
 class RegexQuantifierZeroOrMore(Node[None]):
-    """The * quantifier; matches any number of occurrences."""
+    r"""The * quantifier; matches any number of occurrences."""
 
 class RegexQuantifierOneOrMore(Node[None]):
-    """The + quantifier; matches one or more occurrences."""
+    r"""The + quantifier; matches one or more occurrences."""
 
 class RegexQuantifierExactly(Node[int]):
-    """The {n} quantifier; matches exactly n occurrences."""
+    r"""The {n} quantifier; matches exactly n occurrences."""
 
 class RegexQuantifierAtLeast(Node[int]):
-    """The {n,} quantifier; matches at least n occurrences."""
+    r"""The {n,} quantifier; matches at least n occurrences."""
 
 class RegexQuantifierRange(Node["Range"]):
-    """The {n, m} quantifier; matches between n and m (inclusive) occurrences."""
+    r"""The {n, m} quantifier; matches between n and m (inclusive) occurrences."""
 
 # A regular expression quantifier.
 type RegexQuantifier = RegexQuantifierOne | RegexQuantifierZeroOrOne | RegexQuantifierZeroOrMore | RegexQuantifierOneOrMore | RegexQuantifierExactly | RegexQuantifierAtLeast | RegexQuantifierRange
@@ -172,7 +172,7 @@ REGEX_QUANTIFIER__RANGE__NAME = hydra.core.Name("range")
 
 @dataclass
 class RegexSequence:
-    """A path with a regex quantifier."""
+    r"""A path with a regex quantifier."""
     
     path: Path
     quantifier: RegexQuantifier
@@ -182,13 +182,13 @@ REGEX_SEQUENCE__PATH__NAME = hydra.core.Name("path")
 REGEX_SEQUENCE__QUANTIFIER__NAME = hydra.core.Name("quantifier")
 
 class StepEdge(Node["Edge"]):
-    """An out-to-in traversal of an abstract edge."""
+    r"""An out-to-in traversal of an abstract edge."""
 
 class StepProject(Node["hydra.core.Projection"]):
-    """A projection from a record through one of its fields."""
+    r"""A projection from a record through one of its fields."""
 
 class StepCompare(Node["ComparisonConstraint"]):
-    """A comparison of two terms."""
+    r"""A comparison of two terms."""
 
 # An atomic function as part of a query. When applied to a graph, steps are typed by function types.
 type Step = StepEdge | StepProject | StepCompare
@@ -200,7 +200,7 @@ STEP__COMPARE__NAME = hydra.core.Name("compare")
 
 @dataclass
 class TriplePattern:
-    """A subject/predicate/object pattern."""
+    r"""A subject/predicate/object pattern."""
     
     subject: Node_
     predicate: Path
@@ -212,6 +212,6 @@ TRIPLE_PATTERN__PREDICATE__NAME = hydra.core.Name("predicate")
 TRIPLE_PATTERN__OBJECT__NAME = hydra.core.Name("object")
 
 class Variable(Node[str]):
-    """A query variable."""
+    r"""A query variable."""
 
 VARIABLE__NAME = hydra.core.Name("hydra.query.Variable")

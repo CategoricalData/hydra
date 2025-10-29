@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""A model for term access patterns."""
+r"""A model for term access patterns."""
 
 from __future__ import annotations
 from dataclasses import dataclass

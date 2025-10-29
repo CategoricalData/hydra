@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Functions for working with Hydra's 'flow' and other monads."""
+r"""Functions for working with Hydra's 'flow' and other monads."""
 
 from __future__ import annotations
 from collections.abc import Callable
@@ -31,7 +31,7 @@ def exec[T0, T1](f: hydra.compute.Flow[T0, T1], s0: T0) -> T0:
     return (lambda v1: v1.state)((lambda v1: v1.value)(f, s0, empty_trace))
 
 def push_error(msg: str, t: hydra.compute.Trace) -> hydra.compute.Trace:
-    """Push an error message."""
+    r"""Push an error message."""
     
     def condense_repeats(ys: frozenlist[str]) -> frozenlist[str]:
         def condense_group(xs: frozenlist[str]) -> str:
@@ -74,7 +74,7 @@ def optional_to_list[T0](mx: Maybe[T0]) -> frozenlist[T0]:
     return hydra.lib.optionals.maybe((), hydra.lib.lists.pure, mx)
 
 def trace_summary(t: hydra.compute.Trace) -> str:
-    """Summarize a trace as a string."""
+    r"""Summarize a trace as a string."""
     
     message_lines = hydra.lib.lists.nub(t.messages)
     def to_line(pair: Tuple[hydra.core.Name, hydra.core.Term]) -> str:
