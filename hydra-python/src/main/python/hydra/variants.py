@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from hydra.dsl.python import frozenlist
+from typing import cast
 import hydra.core
 import hydra.lib.lists
 import hydra.mantle
@@ -32,13 +33,13 @@ def float_type_precision(v1: hydra.core.FloatType) -> hydra.mantle.Precision:
     
     match v1:
         case hydra.core.FloatType.BIGFLOAT:
-            return hydra.mantle.PrecisionArbitrary(None)
+            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionArbitrary(None))
         
         case hydra.core.FloatType.FLOAT32:
-            return hydra.mantle.PrecisionBits(32)
+            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(32))
         
         case hydra.core.FloatType.FLOAT64:
-            return hydra.mantle.PrecisionBits(64)
+            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(64))
 
 # All floating-point types in a canonical order.
 float_types = (hydra.core.FloatType.BIGFLOAT, hydra.core.FloatType.FLOAT32, hydra.core.FloatType.FLOAT64)
@@ -108,31 +109,31 @@ def integer_type_precision(v1: hydra.core.IntegerType) -> hydra.mantle.Precision
     
     match v1:
         case hydra.core.IntegerType.BIGINT:
-            return hydra.mantle.PrecisionArbitrary(None)
+            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionArbitrary(None))
         
         case hydra.core.IntegerType.INT8:
-            return hydra.mantle.PrecisionBits(8)
+            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(8))
         
         case hydra.core.IntegerType.INT16:
-            return hydra.mantle.PrecisionBits(16)
+            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(16))
         
         case hydra.core.IntegerType.INT32:
-            return hydra.mantle.PrecisionBits(32)
+            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(32))
         
         case hydra.core.IntegerType.INT64:
-            return hydra.mantle.PrecisionBits(64)
+            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(64))
         
         case hydra.core.IntegerType.UINT8:
-            return hydra.mantle.PrecisionBits(8)
+            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(8))
         
         case hydra.core.IntegerType.UINT16:
-            return hydra.mantle.PrecisionBits(16)
+            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(16))
         
         case hydra.core.IntegerType.UINT32:
-            return hydra.mantle.PrecisionBits(32)
+            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(32))
         
         case hydra.core.IntegerType.UINT64:
-            return hydra.mantle.PrecisionBits(64)
+            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(64))
 
 # All integer types, in a canonical order.
 integer_types = (hydra.core.IntegerType.BIGINT, hydra.core.IntegerType.INT8, hydra.core.IntegerType.INT16, hydra.core.IntegerType.INT32, hydra.core.IntegerType.INT64, hydra.core.IntegerType.UINT8, hydra.core.IntegerType.UINT16, hydra.core.IntegerType.UINT32, hydra.core.IntegerType.UINT64)
@@ -173,19 +174,19 @@ def literal_type(v1: hydra.core.Literal) -> hydra.core.LiteralType:
     
     match v1:
         case hydra.core.LiteralBinary():
-            return hydra.core.LiteralTypeBinary(None)
+            return cast(hydra.core.LiteralType, hydra.core.LiteralTypeBinary(None))
         
         case hydra.core.LiteralBoolean():
-            return hydra.core.LiteralTypeBoolean(None)
+            return cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean(None))
         
         case hydra.core.LiteralFloat(value=arg_):
-            return hydra.core.LiteralTypeFloat(float_value_type(arg_))
+            return (lambda injected_: cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(injected_)))(float_value_type(arg_))
         
         case hydra.core.LiteralInteger(value=arg_2):
-            return hydra.core.LiteralTypeInteger(integer_value_type(arg_2))
+            return (lambda injected_: cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(injected_)))(integer_value_type(arg_2))
         
         case hydra.core.LiteralString():
-            return hydra.core.LiteralTypeString(None)
+            return cast(hydra.core.LiteralType, hydra.core.LiteralTypeString(None))
 
 def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.mantle.LiteralVariant:
     """Find the literal type variant (constructor) for a given literal value."""
@@ -207,7 +208,7 @@ def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.mantle.LiteralVari
             return hydra.mantle.LiteralVariant.STRING
 
 # All literal types, in a canonical order.
-literal_types = hydra.lib.lists.concat(((hydra.core.LiteralTypeBinary(None), hydra.core.LiteralTypeBoolean(None)), hydra.lib.lists.map(lambda x: hydra.core.LiteralTypeFloat(x), float_types), hydra.lib.lists.map(lambda x: hydra.core.LiteralTypeInteger(x), integer_types), (hydra.core.LiteralTypeString(None),)))
+literal_types = hydra.lib.lists.concat(((cast(hydra.core.LiteralType, hydra.core.LiteralTypeBinary(None)), cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean(None))), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(x))), float_types), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(x))), integer_types), (cast(hydra.core.LiteralType, hydra.core.LiteralTypeString(None)),)))
 
 def literal_variant(arg_: hydra.core.Literal) -> hydra.mantle.LiteralVariant:
     """Find the literal variant (constructor) for a given literal value."""

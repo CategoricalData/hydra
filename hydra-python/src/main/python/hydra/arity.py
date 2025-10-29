@@ -15,7 +15,7 @@ def function_arity(v1: hydra.core.Function) -> int:
             return 1
         
         case hydra.core.FunctionLambda(value=arg_):
-            return hydra.lib.math.add(1, term_arity(arg_.body))
+            return (lambda i: hydra.lib.math.add(1, i))((lambda arg_2: term_arity(arg_2.body))(arg_))
         
         case hydra.core.FunctionPrimitive():
             return 42
@@ -23,7 +23,7 @@ def function_arity(v1: hydra.core.Function) -> int:
 def term_arity(v1: hydra.core.Term) -> int:
     match v1:
         case hydra.core.TermApplication(value=arg_):
-            return hydra.lib.math.sub(term_arity(arg_.function), 1)
+            return (lambda arg_2: (lambda xapp: hydra.lib.math.sub(xapp, 1))(term_arity(arg_2)))(arg_.function)
         
         case hydra.core.TermFunction(value=v12):
             return function_arity(v12)
@@ -51,7 +51,7 @@ def type_arity(v1: hydra.core.Type) -> int:
 def primitive_arity(arg_: hydra.graph.Primitive) -> int:
     """Find the arity (expected number of arguments) of a primitive constant or function."""
     
-    return type_arity(arg_.type.type)
+    return (lambda arg_2: type_arity(arg_2.type))(arg_.type)
 
 def uncurry_type(t: hydra.core.Type) -> frozenlist[hydra.core.Type]:
     """Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)."""

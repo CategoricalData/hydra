@@ -11,12 +11,12 @@ import hydra.variants
 def float_type(t: hydra.core.FloatType) -> str:
     """Display a floating-point type as a string."""
     
-    return hydra.lib.strings.cat((hydra.describe.mantle.precision(hydra.variants.float_type_precision(t)), " floating-point number"))
+    return hydra.lib.strings.cat(((lambda arg_: hydra.describe.mantle.precision(hydra.variants.float_type_precision(arg_)))(t), " floating-point number"))
 
 def integer_type(t: hydra.core.IntegerType) -> str:
     """Display an integer type as a string."""
     
-    return hydra.lib.strings.cat((hydra.describe.mantle.precision(hydra.variants.integer_type_precision(t)), " integer"))
+    return hydra.lib.strings.cat(((lambda arg_: hydra.describe.mantle.precision(hydra.variants.integer_type_precision(arg_)))(t), " integer"))
 
 def literal_type(v1: hydra.core.LiteralType) -> str:
     """Display a literal type as a string."""

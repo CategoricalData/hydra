@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from hydra.dsl.python import Just, Maybe, Nothing, frozenlist
+from typing import cast
 import hydra.ast
 import hydra.core
 import hydra.lib.equality
@@ -21,20 +22,20 @@ def sym(s: str) -> hydra.ast.Symbol:
 angle_braces = hydra.ast.Brackets(sym("<"), sym(">"))
 
 def brackets(br: hydra.ast.Brackets, style: hydra.ast.BlockStyle, e: hydra.ast.Expr) -> hydra.ast.Expr:
-    return hydra.ast.ExprBrackets(hydra.ast.BracketExpr(br, e, style))
+    return cast(hydra.ast.Expr, hydra.ast.ExprBrackets(hydra.ast.BracketExpr(br, e, style)))
 
 def cst(s: str) -> hydra.ast.Expr:
-    return hydra.ast.ExprConst(sym(s))
+    return cast(hydra.ast.Expr, hydra.ast.ExprConst(sym(s)))
 
 def ifx(op: hydra.ast.Op, lhs: hydra.ast.Expr, rhs: hydra.ast.Expr) -> hydra.ast.Expr:
-    return hydra.ast.ExprOp(hydra.ast.OpExpr(op, lhs, rhs))
+    return cast(hydra.ast.Expr, hydra.ast.ExprOp(hydra.ast.OpExpr(op, lhs, rhs)))
 
 def symbol_sep(symb: str, style: hydra.ast.BlockStyle, l: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     h = hydra.lib.lists.head(l)
     r = hydra.lib.lists.tail(l)
-    break_count = hydra.lib.lists.length(hydra.lib.lists.filter(lambda x_: x_, (style.newline_before_content, style.newline_after_content)))
-    break_ = hydra.lib.logic.if_else(hydra.lib.equality.equal(break_count, 0), hydra.ast.WsSpace(None), hydra.lib.logic.if_else(hydra.lib.equality.equal(break_count, 1), hydra.ast.WsBreak(None), hydra.ast.WsDoubleBreak(None)))
-    comma_op = hydra.ast.Op(sym(symb), hydra.ast.Padding(hydra.ast.WsNone(None), break_), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
+    break_count = hydra.lib.lists.length(hydra.lib.lists.filter((lambda x_: x_), (style.newline_before_content, style.newline_after_content)))
+    break_ = hydra.lib.logic.if_else(hydra.lib.equality.equal(break_count, 0), cast(hydra.ast.Ws, hydra.ast.WsSpace(None)), hydra.lib.logic.if_else(hydra.lib.equality.equal(break_count, 1), cast(hydra.ast.Ws, hydra.ast.WsBreak(None)), cast(hydra.ast.Ws, hydra.ast.WsDoubleBreak(None))))
+    comma_op = hydra.ast.Op(sym(symb), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone(None)), break_), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
     return hydra.lib.logic.if_else(hydra.lib.lists.null(l), cst(""), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(l), 1), hydra.lib.lists.head(l), ifx(comma_op, h, symbol_sep(symb, style, r))))
 
 def comma_sep(v1: hydra.ast.BlockStyle, v2: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
@@ -70,7 +71,7 @@ def expression_length(e: hydra.ast.Expr) -> int:
             case hydra.ast.WsDoubleBreak():
                 return 2
     def block_style_length(style: hydra.ast.BlockStyle) -> int:
-        mindent_len = hydra.lib.optionals.maybe(0, lambda v1: hydra.lib.strings.length(v1), style.indent)
+        mindent_len = hydra.lib.optionals.maybe(0, hydra.lib.strings.length, style.indent)
         nl_before_len = hydra.lib.logic.if_else(style.newline_before_content, 1, 0)
         nl_after_len = hydra.lib.logic.if_else(style.newline_after_content, 1, 0)
         return hydra.lib.math.add(mindent_len, hydra.lib.math.add(nl_before_len, nl_after_len))
@@ -139,7 +140,7 @@ def curly_block(style: hydra.ast.BlockStyle, e: hydra.ast.Expr) -> hydra.ast.Exp
     return curly_braces_list(Nothing(), style, (e,))
 
 def custom_indent(idt: str, s: str) -> str:
-    return hydra.lib.strings.cat(hydra.lib.lists.intersperse("\n", hydra.lib.lists.map(lambda line: hydra.lib.strings.cat((idt, line)), hydra.lib.strings.lines(s))))
+    return hydra.lib.strings.cat(hydra.lib.lists.intersperse("\n", hydra.lib.lists.map((lambda line: hydra.lib.strings.cat((idt, line))), hydra.lib.strings.lines(s))))
 
 def sep(op: hydra.ast.Op, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     h = hydra.lib.lists.head(els)
@@ -147,19 +148,19 @@ def sep(op: hydra.ast.Op, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), cst(""), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(els), 1), hydra.lib.lists.head(els), ifx(op, h, sep(op, r))))
 
 def newline_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
-    return sep(hydra.ast.Op(sym(""), hydra.ast.Padding(hydra.ast.WsNone(None), hydra.ast.WsBreak(None)), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
+    return sep(hydra.ast.Op(sym(""), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone(None)), cast(hydra.ast.Ws, hydra.ast.WsBreak(None))), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
 
 def custom_indent_block(idt: str, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     head = hydra.lib.lists.head(els)
     rest = hydra.lib.lists.tail(els)
-    idt_op = hydra.ast.Op(sym(""), hydra.ast.Padding(hydra.ast.WsSpace(None), hydra.ast.WsBreakAndIndent(idt)), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
+    idt_op = hydra.ast.Op(sym(""), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsSpace(None)), cast(hydra.ast.Ws, hydra.ast.WsBreakAndIndent(idt))), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), cst(""), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(els), 1), hydra.lib.lists.head(els), ifx(idt_op, head, newline_sep(rest))))
 
 def dot_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
-    return sep(hydra.ast.Op(sym("."), hydra.ast.Padding(hydra.ast.WsNone(None), hydra.ast.WsNone(None)), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
+    return sep(hydra.ast.Op(sym("."), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone(None)), cast(hydra.ast.Ws, hydra.ast.WsNone(None))), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
 
 def double_newline_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
-    return sep(hydra.ast.Op(sym(""), hydra.ast.Padding(hydra.ast.WsBreak(None), hydra.ast.WsBreak(None)), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
+    return sep(hydra.ast.Op(sym(""), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsBreak(None)), cast(hydra.ast.Ws, hydra.ast.WsBreak(None))), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
 
 full_block_style = hydra.ast.BlockStyle(Just(double_space), True, True)
 
@@ -170,10 +171,10 @@ def indent_block(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return custom_indent_block(double_space, v1)
 
 def indent_subsequent_lines(idt: str, e: hydra.ast.Expr) -> hydra.ast.Expr:
-    return hydra.ast.ExprIndent(hydra.ast.IndentedExpression(hydra.ast.IndentStyleSubsequentLines(idt), e))
+    return cast(hydra.ast.Expr, hydra.ast.ExprIndent(hydra.ast.IndentedExpression(cast(hydra.ast.IndentStyle, hydra.ast.IndentStyleSubsequentLines(idt)), e)))
 
 def space_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
-    return sep(hydra.ast.Op(sym(""), hydra.ast.Padding(hydra.ast.WsSpace(None), hydra.ast.WsNone(None)), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
+    return sep(hydra.ast.Op(sym(""), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsSpace(None)), cast(hydra.ast.Ws, hydra.ast.WsNone(None))), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
 
 def infix_ws(op: str, l: hydra.ast.Expr, r: hydra.ast.Expr) -> hydra.ast.Expr:
     return space_sep((l, cst(op), r))
@@ -184,19 +185,19 @@ def infix_ws_list(op: str, opers: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
         return hydra.lib.logic.if_else(hydra.lib.lists.null(e), (r,), hydra.lib.lists.cons(r, hydra.lib.lists.cons(op_expr, e)))
     return space_sep(hydra.lib.lists.foldl(fold_fun, (), hydra.lib.lists.reverse(opers)))
 
-no_padding = hydra.ast.Padding(hydra.ast.WsNone(None), hydra.ast.WsNone(None))
+no_padding = hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone(None)), cast(hydra.ast.Ws, hydra.ast.WsNone(None)))
 
 def no_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
-    return sep(hydra.ast.Op(sym(""), hydra.ast.Padding(hydra.ast.WsNone(None), hydra.ast.WsNone(None)), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
+    return sep(hydra.ast.Op(sym(""), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone(None)), cast(hydra.ast.Ws, hydra.ast.WsNone(None))), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
 
 def num(i: int) -> hydra.ast.Expr:
     return cst(hydra.lib.literals.show_int32(i))
 
 def op(s: str, p: int, assoc: hydra.ast.Associativity) -> hydra.ast.Op:
-    return hydra.ast.Op(sym(s), hydra.ast.Padding(hydra.ast.WsSpace(None), hydra.ast.WsSpace(None)), hydra.ast.Precedence(p), assoc)
+    return hydra.ast.Op(sym(s), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsSpace(None)), cast(hydra.ast.Ws, hydra.ast.WsSpace(None))), hydra.ast.Precedence(p), assoc)
 
 def or_op(newlines: bool) -> hydra.ast.Op:
-    return hydra.ast.Op(sym("|"), hydra.ast.Padding(hydra.ast.WsSpace(None), hydra.lib.logic.if_else(newlines, hydra.ast.WsBreak(None), hydra.ast.WsSpace(None))), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
+    return hydra.ast.Op(sym("|"), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsSpace(None)), hydra.lib.logic.if_else(newlines, cast(hydra.ast.Ws, hydra.ast.WsBreak(None)), cast(hydra.ast.Ws, hydra.ast.WsSpace(None)))), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
 
 def or_sep(style: hydra.ast.BlockStyle, l: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     h = hydra.lib.lists.head(l)
@@ -230,13 +231,13 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.ast.Expr:
                 return True
     match exp:
         case hydra.ast.ExprBrackets(value=bracket_expr):
-            return hydra.ast.ExprBrackets(hydra.ast.BracketExpr(bracket_expr.brackets, parenthesize(bracket_expr.enclosed), bracket_expr.style))
+            return cast(hydra.ast.Expr, hydra.ast.ExprBrackets(hydra.ast.BracketExpr(bracket_expr.brackets, parenthesize(bracket_expr.enclosed), bracket_expr.style)))
         
         case hydra.ast.ExprConst():
             return exp
         
         case hydra.ast.ExprIndent(value=indent_expr):
-            return hydra.ast.ExprIndent(hydra.ast.IndentedExpression(indent_expr.style, parenthesize(indent_expr.expr)))
+            return cast(hydra.ast.Expr, hydra.ast.ExprIndent(hydra.ast.IndentedExpression(indent_expr.style, parenthesize(indent_expr.expr))))
         
         case hydra.ast.ExprOp(value=op_expr):
             op = op_expr.op
@@ -284,10 +285,10 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.ast.Expr:
                     
                     case _:
                         return rhs_
-            return hydra.ast.ExprOp(hydra.ast.OpExpr(op, lhs2(), rhs2()))
+            return cast(hydra.ast.Expr, hydra.ast.ExprOp(hydra.ast.OpExpr(op, lhs2(), rhs2())))
 
 def prefix(p: str, expr: hydra.ast.Expr) -> hydra.ast.Expr:
-    pre_op = hydra.ast.Op(sym(p), hydra.ast.Padding(hydra.ast.WsNone(None), hydra.ast.WsNone(None)), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
+    pre_op = hydra.ast.Op(sym(p), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone(None)), cast(hydra.ast.Ws, hydra.ast.WsNone(None))), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
     return ifx(pre_op, cst(""), expr)
 
 def print_expr(e: hydra.ast.Expr) -> str:
@@ -325,10 +326,10 @@ def print_expr(e: hydra.ast.Expr) -> str:
             def ilns() -> frozenlist[str]:
                 match style:
                     case hydra.ast.IndentStyleAllLines(value=idt):
-                        return hydra.lib.lists.map(lambda line: hydra.lib.strings.cat((idt, line)), lns)
+                        return hydra.lib.lists.map((lambda line: hydra.lib.strings.cat((idt, line))), lns)
                     
                     case hydra.ast.IndentStyleSubsequentLines(value=idt2):
-                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(lns), 1), lns, hydra.lib.lists.cons(hydra.lib.lists.head(lns), hydra.lib.lists.map(lambda line: hydra.lib.strings.cat((idt2, line)), hydra.lib.lists.tail(lns))))
+                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(lns), 1), lns, hydra.lib.lists.cons(hydra.lib.lists.head(lns), hydra.lib.lists.map((lambda line: hydra.lib.strings.cat((idt2, line))), hydra.lib.lists.tail(lns))))
             return hydra.lib.strings.intercalate("\n", ilns())
         
         case hydra.ast.ExprOp(value=op_expr):
@@ -353,7 +354,7 @@ def print_expr(e: hydra.ast.Expr) -> str:
             do_indent = style.indent
             nl_before = style.newline_before_content
             nl_after = style.newline_after_content
-            ibody = hydra.lib.optionals.maybe(body, lambda idt: custom_indent(idt, body), do_indent)
+            ibody = hydra.lib.optionals.maybe(body, (lambda idt: custom_indent(idt, body)), do_indent)
             pre = hydra.lib.logic.if_else(nl_before, "\n", "")
             suf = hydra.lib.logic.if_else(nl_after, "\n", "")
             return hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((l, pre)), ibody)), suf)), r))
@@ -362,7 +363,7 @@ def semicolon_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return symbol_sep(";", inline_style, v1)
 
 def tab_indent(e: hydra.ast.Expr) -> hydra.ast.Expr:
-    return hydra.ast.ExprIndent(hydra.ast.IndentedExpression(hydra.ast.IndentStyleAllLines("    "), e))
+    return cast(hydra.ast.Expr, hydra.ast.ExprIndent(hydra.ast.IndentedExpression(cast(hydra.ast.IndentStyle, hydra.ast.IndentStyleAllLines("    ")), e)))
 
 def tab_indent_double_space(exprs: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return tab_indent(double_newline_sep(exprs))
