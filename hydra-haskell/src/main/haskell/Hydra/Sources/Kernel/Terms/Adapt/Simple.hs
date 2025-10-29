@@ -88,13 +88,14 @@ adaptFloatTypeDef = define "adaptFloatType" $
   "constraints" ~> "ft" ~>
   "supported" <~ Sets.member (var "ft") (Coders.languageConstraintsFloatTypes $ var "constraints") $
   "alt" <~ (ref adaptFloatTypeDef @@ var "constraints") $
+  "forUnsupported" <~ ("ft" ~> cases _FloatType (var "ft")
+    Nothing [
+    _FloatType_bigfloat>>: constant nothing,
+    _FloatType_float32>>: constant $ var "alt" @@ Core.floatTypeFloat64,
+    _FloatType_float64>>: constant $ var "alt" @@ Core.floatTypeBigfloat]) $
   Logic.ifElse (var "supported")
     (just $ var "ft")
-    (cases _FloatType (var "ft")
-      Nothing [
-      _FloatType_bigfloat>>: constant nothing,
-      _FloatType_float32>>: constant $ var "alt" @@ Core.floatTypeFloat64,
-      _FloatType_float64>>: constant $ var "alt" @@ Core.floatTypeBigfloat])
+    (var "forUnsupported" @@ var "ft")
 
 adaptDataGraphDef :: TBinding (LanguageConstraints -> Bool -> Graph -> Flow s Graph)
 adaptDataGraphDef = define "adaptDataGraph" $
@@ -172,19 +173,20 @@ adaptIntegerTypeDef = define "adaptIntegerType" $
   "constraints" ~> "it" ~>
   "supported" <~ Sets.member (var "it") (Coders.languageConstraintsIntegerTypes $ var "constraints") $
   "alt" <~ (ref adaptIntegerTypeDef @@ var "constraints") $
+  "forUnsupported" <~ ("it" ~> cases _IntegerType (var "it")
+    Nothing [
+    _IntegerType_bigint>>: constant nothing,
+    _IntegerType_int8>>: constant $ var "alt" @@ Core.integerTypeUint16,
+    _IntegerType_int16>>: constant $ var "alt" @@ Core.integerTypeUint32,
+    _IntegerType_int32>>: constant $ var "alt" @@ Core.integerTypeUint64,
+    _IntegerType_int64>>: constant $ var "alt" @@ Core.integerTypeBigint,
+    _IntegerType_uint8>>: constant $ var "alt" @@ Core.integerTypeInt16,
+    _IntegerType_uint16>>: constant $ var "alt" @@ Core.integerTypeInt32,
+    _IntegerType_uint32>>: constant $ var "alt" @@ Core.integerTypeInt64,
+    _IntegerType_uint64>>: constant $ var "alt" @@ Core.integerTypeBigint]) $
   Logic.ifElse (var "supported")
     (just $ var "it")
-    (cases _IntegerType (var "it")
-      Nothing [
-      _IntegerType_bigint>>: constant nothing,
-      _IntegerType_int8>>: constant $ var "alt" @@ Core.integerTypeUint16,
-      _IntegerType_int16>>: constant $ var "alt" @@ Core.integerTypeUint32,
-      _IntegerType_int32>>: constant $ var "alt" @@ Core.integerTypeUint64,
-      _IntegerType_int64>>: constant $ var "alt" @@ Core.integerTypeBigint,
-      _IntegerType_uint8>>: constant $ var "alt" @@ Core.integerTypeInt16,
-      _IntegerType_uint16>>: constant $ var "alt" @@ Core.integerTypeInt32,
-      _IntegerType_uint32>>: constant $ var "alt" @@ Core.integerTypeInt64,
-      _IntegerType_uint64>>: constant $ var "alt" @@ Core.integerTypeBigint])
+    (var "forUnsupported" @@ var "it")
 
 adaptLiteralDef :: TBinding (LiteralType -> Literal -> Literal)
 adaptLiteralDef = define "adaptLiteral" $
@@ -212,17 +214,18 @@ adaptLiteralTypeDef :: TBinding (LanguageConstraints -> LiteralType -> Maybe Lit
 adaptLiteralTypeDef = define "adaptLiteralType" $
   doc "Attempt to adapt a literal type using the given language constraints" $
   "constraints" ~> "lt" ~>
+  "forUnsupported" <~ ("lt" ~> cases _LiteralType (var "lt")
+    (Just nothing) [
+    _LiteralType_binary>>: constant $ just Core.literalTypeString,
+    _LiteralType_boolean>>: constant $ Optionals.map (unaryFunction Core.literalTypeInteger) $
+      ref adaptIntegerTypeDef @@ var "constraints" @@ Core.integerTypeInt8,
+    _LiteralType_float>>: "ft" ~> Optionals.map (unaryFunction Core.literalTypeFloat) $
+      ref adaptFloatTypeDef @@ var "constraints" @@ var "ft",
+    _LiteralType_integer>>: "it" ~> Optionals.map (unaryFunction Core.literalTypeInteger) $
+      ref adaptIntegerTypeDef @@ var "constraints" @@ var "it"]) $
   Logic.ifElse (ref literalTypeSupportedDef @@ var "constraints" @@ var "lt")
     nothing
-    (cases _LiteralType (var "lt")
-      (Just nothing) [
-      _LiteralType_binary>>: constant $ just Core.literalTypeString,
-      _LiteralType_boolean>>: constant $ Optionals.map (unaryFunction Core.literalTypeInteger) $
-          ref adaptIntegerTypeDef @@ var "constraints" @@ Core.integerTypeInt8,
-      _LiteralType_float>>: "ft" ~> Optionals.map (unaryFunction Core.literalTypeFloat) $
-        ref adaptFloatTypeDef @@ var "constraints" @@ var "ft",
-      _LiteralType_integer>>: "it" ~> Optionals.map (unaryFunction Core.literalTypeInteger) $
-        ref adaptIntegerTypeDef @@ var "constraints" @@ var "it"])
+    (var "forUnsupported" @@ var "lt")
 
 adaptLiteralTypesMapDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType)
 adaptLiteralTypesMapDef = define "adaptLiteralTypesMap" $
@@ -260,14 +263,15 @@ adaptTermDef = define "adaptTerm" $
       "supportedVariant" <~ Sets.member
         (ref Variants.termVariantDef @@ var "term")
         (Coders.languageConstraintsTermVariants $ var "constraints") $
+      "forSupported" <~ ("term" ~> cases _Term (var "term")
+        (Just $ produce $ just $ var "term") [
+        _Term_literal>>: "l" ~>
+          "lt" <~ ref Variants.literalTypeDef @@ var "l" $
+          produce $ just $ Logic.ifElse (ref literalTypeSupportedDef @@ var "constraints" @@ var "lt")
+            (var "term")
+            (Core.termLiteral $ ref adaptLiteralValueDef @@ var "litmap" @@ var "lt" @@ var "l")]) $
       Logic.ifElse (var "supportedVariant")
-        (cases _Term (var "term")
-          (Just $ produce $ just $ var "term") [
-          _Term_literal>>: "l" ~>
-            "lt" <~ ref Variants.literalTypeDef @@ var "l" $
-            produce $ just $ Logic.ifElse (ref literalTypeSupportedDef @@ var "constraints" @@ var "lt")
-              (var "term")
-              (Core.termLiteral $ ref adaptLiteralValueDef @@ var "litmap" @@ var "lt" @@ var "l")])
+        (var "forSupported" @@ var "term")
         ("tryAlts" <~ ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
           (produce nothing)
           ( "mterm" <<~ var "tryTerm" @@ Lists.head (var "alts") $
@@ -286,27 +290,28 @@ adaptTypeDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -
 adaptTypeDef = define "adaptType" $
   doc "Adapt a type using the given language constraints" $
   "constraints" ~> "litmap" ~> "type0" ~>
+  "forSupported" <~ ("typ" ~> cases _Type (var "typ")
+    (Just $ just $ var "typ") [
+    _Type_literal>>: "lt" ~> Logic.ifElse (ref literalTypeSupportedDef @@ var "constraints" @@ var "lt")
+      (just $ var "typ")
+      (optCases (Maps.lookup (var "lt") (var "litmap"))
+        (just $ Core.typeLiteral Core.literalTypeString)
+        ("lt2" ~> just $ Core.typeLiteral $ var "lt2"))]) $
+  "tryType" <~ ("typ" ~>
+    "supportedVariant" <~ Sets.member
+      (ref Variants.typeVariantDef @@ var "typ")
+      (Coders.languageConstraintsTypeVariants $ var "constraints") $
+    Logic.ifElse (var "supportedVariant")
+      (var "forSupported" @@ var "typ")
+      ("tryAlts" <~ ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
+        nothing
+        ( optCases (var "tryType" @@ Lists.head (var "alts"))
+            (var "tryAlts" @@ Lists.tail (var "alts"))
+            ("t" ~> just $ var "t"))) $
+         "alts" <~ ref typeAlternativesDef @@ var "typ" $
+         var "tryAlts" @@ var "alts")) $
   "rewrite" <~ ("recurse" ~> "typ" ~>
     "type1" <<~ var "recurse" @@ var "typ" $
-    "tryType" <~ ("typ" ~>
-      "supportedVariant" <~ Sets.member
-        (ref Variants.typeVariantDef @@ var "typ")
-        (Coders.languageConstraintsTypeVariants $ var "constraints") $
-      Logic.ifElse (var "supportedVariant")
-        (cases _Type (var "typ")
-          (Just $ just $ var "typ") [
-          _Type_literal>>: "lt" ~> Logic.ifElse (ref literalTypeSupportedDef @@ var "constraints" @@ var "lt")
-            (just $ var "typ")
-            (optCases (Maps.lookup (var "lt") (var "litmap"))
-              (just $ Core.typeLiteral Core.literalTypeString)
-              ("lt2" ~> just $ Core.typeLiteral $ var "lt2"))])
-        ("tryAlts" <~ ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
-          nothing
-          ( optCases (var "tryType" @@ Lists.head (var "alts"))
-              (var "tryAlts" @@ Lists.tail (var "alts"))
-              ("t" ~> just $ var "t"))) $
-           "alts" <~ ref typeAlternativesDef @@ var "type1" $
-           var "tryAlts" @@ var "alts")) $
     optCases (var "tryType" @@ var "type1")
       (Flows.fail $ "no alternatives for type: " ++ (ref ShowCore.typeDef @@ var "typ"))
       ("type2" ~> produce $ var "type2")) $
@@ -362,14 +367,15 @@ literalTypeSupportedDef :: TBinding (LanguageConstraints -> LiteralType -> Bool)
 literalTypeSupportedDef = define "literalTypeSupported" $
   doc "Check if a literal type is supported by the given language constraints" $
   "constraints" ~> "lt" ~>
+  "forType" <~ ("lt" ~> cases _LiteralType (var "lt")
+    (Just true) [
+      _LiteralType_float>>: "ft" ~> Sets.member (var "ft") (Coders.languageConstraintsFloatTypes $ var "constraints"),
+      _LiteralType_integer>>: "it" ~> Sets.member (var "it") (Coders.languageConstraintsIntegerTypes $ var "constraints")]) $
   Logic.ifElse
     (Sets.member
       (ref Variants.literalTypeVariantDef @@ var "lt")
       (Coders.languageConstraintsLiteralVariants $ var "constraints"))
-    (cases _LiteralType (var "lt")
-      (Just true) [
-        _LiteralType_float>>: "ft" ~> Sets.member (var "ft") (Coders.languageConstraintsFloatTypes $ var "constraints"),
-        _LiteralType_integer>>: "it" ~> Sets.member (var "it") (Coders.languageConstraintsIntegerTypes $ var "constraints")])
+    (var "forType" @@ var "lt")
     false
 
 schemaGraphToDefinitionsDef :: TBinding (LanguageConstraints -> Graph -> [[Name]] -> Flow s (M.Map Name Type, [[TypeDefinition]]))
@@ -408,15 +414,14 @@ termAlternativesDef = define "termAlternatives" $
       "field" <~ Core.injectionField (var "inj") $
       "fname" <~ Core.fieldName (var "field") $
       "fterm" <~ Core.fieldTerm (var "field") $
+      "forFieldType" <~ ("ft" ~>
+        "ftname" <~ Core.fieldTypeName (var "ft") $
+        Core.field (var "fname") $ Core.termOptional $ Logic.ifElse (Equality.equal (var "ftname") (var "fname"))
+          (just $ var "fterm")
+          (nothing)) $
       "rt" <<~ ref Schemas.requireUnionTypeDef @@ var "tname" $
       produce $ list [
-        "forFieldType" <~ ("ft" ~>
-          "ftname" <~ Core.fieldTypeName (var "ft") $
-          Core.field (var "fname") $ Core.termOptional $ Logic.ifElse (Equality.equal (var "ftname") (var "fname"))
-            (just $ var "fterm")
-            (nothing)) $
-        "fields" <~ Lists.map (var "forFieldType") (Core.rowTypeFields $ var "rt") $
-        Core.termRecord $ Core.record (var "tname") (var "fields")],
+        Core.termRecord $ Core.record (var "tname") (Lists.map (var "forFieldType") (Core.rowTypeFields $ var "rt"))],
     _Term_unit>>: constant $ produce $ list [
       Core.termLiteral $ Core.literalBoolean true],
     _Term_wrap>>: "wt" ~>

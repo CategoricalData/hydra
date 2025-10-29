@@ -11,7 +11,7 @@ extra-source-files:
   - README.md
   - stack.yaml
 
-dependencies: # copied from ../hydra-haskell
+dependencies: # copied from ../hydra-haskell/package.yaml
   - HsYAML                        >= 0.2.1 && < 0.3
   - aeson                         >= 2.2.0 && < 2.3
   - aeson-pretty                  >= 0.8.9 && < 0.9
@@ -31,3 +31,16 @@ library:
     - src/gen-main/haskell
     - ../hydra-haskell/src/main/haskell
     - ../hydra-haskell/src/gen-main/haskell
+  # TODO: temporary, for debugging
+  ghc-options: [-rtsopts]
+  ghc-prof-options: [-fprof-auto, -fprof-auto-calls]
+
+executables:
+  hydra-ext-debug:
+    source-dirs: debug
+    main: Main.hs
+    ghc-options: [-rtsopts]
+    ghc-prof-options: [-fprof-auto, -fprof-auto-calls]
+    dependencies:
+      - base
+      - hydra-ext
