@@ -96,7 +96,7 @@ def check_for_unbound_type_variables[T0](cx: hydra.typing.InferenceContext, term
                     bterm = b.term
                     new_vars = hydra.lib.optionals.maybe(vars, (lambda ts: hydra.lib.sets.union(vars, hydra.lib.sets.from_list(ts.variables))), b.type)
                     new_trace = hydra.lib.lists.cons(b.name.value, trace)
-                    return check_recursive(new_vars, new_trace, Just(b), bterm)
+                    return check_recursive(new_vars, new_trace, cast(Maybe[hydra.core.Binding], Just(b)), bterm)
                 return hydra.lib.flows.bind(hydra.lib.flows.map_list(for_binding, l.bindings), (lambda _: recurse(l.body)))
             
             case hydra.core.TermTypeApplication(value=tt):
@@ -107,7 +107,7 @@ def check_for_unbound_type_variables[T0](cx: hydra.typing.InferenceContext, term
             
             case _:
                 return dflt
-    return check_recursive(hydra.lib.sets.empty(), ("top level",), Nothing(), term0)
+    return check_recursive(hydra.lib.sets.empty(), ("top level",), cast(Maybe[hydra.core.Binding], Nothing()), term0)
 
 def check_nominal_application[T0](tx: hydra.typing.TypeContext, tname: hydra.core.Name, type_args: frozenlist[hydra.core.Type]) -> hydra.compute.Flow[T0, None]:
     return hydra.lib.flows.bind(hydra.schemas.require_schema_type(tx.inference_context, tname), (lambda schema_type: (vars := schema_type.variables, body := schema_type.type, varslen := hydra.lib.lists.length(vars), argslen := hydra.lib.lists.length(type_args), hydra.lib.logic.if_else(hydra.lib.equality.equal(varslen, argslen), hydra.lib.flows.pure(None), hydra.lib.flows.fail(hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("nominal type ", tname.value)), " applied to the wrong number of type arguments: ")), "(expected ")), hydra.lib.literals.show_int32(varslen))), " arguments, got ")), hydra.lib.literals.show_int32(argslen))), "): ")), hydra.formatting.show_list(hydra.show.core.type, type_args))))))[4]))

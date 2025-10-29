@@ -41,7 +41,7 @@ def dereference_schema_type(name: hydra.core.Name, types: FrozenDict[hydra.core.
                 return dereference_schema_type(v, types)
             
             case _:
-                return Just(hydra.core.TypeScheme((), t))
+                return cast(Maybe[hydra.core.TypeScheme], Just(hydra.core.TypeScheme((), t)))
     return hydra.lib.optionals.bind(hydra.lib.maps.lookup(name, types), (lambda ts: hydra.lib.optionals.map((lambda ts2: hydra.core.TypeScheme(hydra.lib.lists.concat2(ts.variables, ts2.variables), ts2.type)), for_type(ts.type))))
 
 def elements_to_graph(parent: hydra.graph.Graph, schema: Maybe[hydra.graph.Graph], elements: frozenlist[hydra.core.Binding]) -> hydra.graph.Graph:
@@ -50,7 +50,7 @@ def elements_to_graph(parent: hydra.graph.Graph, schema: Maybe[hydra.graph.Graph
     return hydra.graph.Graph(hydra.lib.maps.from_list(hydra.lib.lists.map(to_pair, elements)), parent.environment, parent.types, parent.body, parent.primitives, schema)
 
 # An empty graph; no elements, no primitives, no schema, and an arbitrary body.
-empty_graph = hydra.graph.Graph(hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("empty graph")))), hydra.lib.maps.empty(), Nothing())
+empty_graph = hydra.graph.Graph(hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("empty graph")))), hydra.lib.maps.empty(), cast(Maybe[hydra.graph.Graph], Nothing()))
 
 def extend_graph_with_bindings(bindings: frozenlist[hydra.core.Binding], g: hydra.graph.Graph) -> hydra.graph.Graph:
     def to_el(binding: hydra.core.Binding) -> Tuple[hydra.core.Name, hydra.core.Binding]:
@@ -135,8 +135,8 @@ def resolve_term(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph,
                 return resolve_term(name_)
             
             case _:
-                return hydra.lib.flows.pure(Just(el.term))
-    return hydra.lib.flows.bind(hydra.monads.get_state, (lambda g: hydra.lib.optionals.maybe(hydra.lib.flows.pure(Nothing()), recurse, hydra.lib.maps.lookup(name, g.elements))))
+                return hydra.lib.flows.pure(cast(Maybe[hydra.core.Term], Just(el.term)))
+    return hydra.lib.flows.bind(hydra.monads.get_state, (lambda g: hydra.lib.optionals.maybe(hydra.lib.flows.pure(cast(Maybe[hydra.core.Term], Nothing())), recurse, hydra.lib.maps.lookup(name, g.elements))))
 
 def require_term(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
     return hydra.lib.flows.bind(resolve_term(name), (lambda mt: hydra.lib.optionals.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("no such element: ", name.value))), hydra.lib.flows.pure, mt)))

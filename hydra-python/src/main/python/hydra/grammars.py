@@ -121,7 +121,7 @@ def is_complex(pat: hydra.grammar.Pattern) -> bool:
 def to_name(ns: hydra.module.Namespace, local: str) -> hydra.core.Name:
     r"""Convert local name to qualified name."""
     
-    return hydra.names.unqualify_name(hydra.module.QualifiedName(Just(ns), local))
+    return hydra.names.unqualify_name(hydra.module.QualifiedName(cast(Maybe[hydra.module.Namespace], Just(ns)), local))
 
 def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pat: hydra.grammar.Pattern) -> frozenlist[Tuple[str, hydra.core.Type]]:
     r"""Create elements from pattern."""
