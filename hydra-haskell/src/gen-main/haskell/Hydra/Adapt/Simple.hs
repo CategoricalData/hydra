@@ -149,19 +149,20 @@ adaptPrimitive constraints litmap prim0 =
 -- | Adapt a term using the given language constraints
 adaptTerm :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 adaptTerm constraints litmap term0 =  
-  let rewrite = (\recurse -> \term0 -> Flows.bind (recurse term0) (\term1 ->  
-          let tryTerm = (\term ->  
-                  let supportedVariant = (Sets.member (Variants.termVariant term) (Coders.languageConstraintsTermVariants constraints))
-                  in  
-                    let forSupported = (\term -> (\x -> case x of
-                            Core.TermLiteral v1 ->  
-                              let lt = (Variants.literalType v1)
-                              in (Flows.pure (Just (Logic.ifElse (literalTypeSupported constraints lt) term (Core.TermLiteral (adaptLiteralValue litmap lt v1)))))
-                            _ -> (Flows.pure (Just term))) term)
-                    in (Logic.ifElse supportedVariant (forSupported term) ( 
-                      let tryAlts = (\alts -> Logic.ifElse (Lists.null alts) (Flows.pure Nothing) (Flows.bind (tryTerm (Lists.head alts)) (\mterm -> Optionals.maybe (tryAlts (Lists.tail alts)) (\t -> Flows.pure (Just t)) mterm)))
-                      in (Flows.bind (termAlternatives term1) (\alts -> tryAlts alts)))))
-          in (Flows.bind (tryTerm term1) (\mterm -> Optionals.maybe (Flows.fail (Strings.cat [
+  let rewrite = (\recurse -> \term0 ->  
+          let forSupported = (\term -> (\x -> case x of
+                  Core.TermLiteral v1 ->  
+                    let lt = (Variants.literalType v1)
+                    in (Flows.pure (Just (Logic.ifElse (literalTypeSupported constraints lt) term (Core.TermLiteral (adaptLiteralValue litmap lt v1)))))
+                  _ -> (Flows.pure (Just term))) term) 
+              forUnsupported = (\term ->  
+                      let forNonNull = (\alts -> Flows.bind (tryTerm (Lists.head alts)) (\mterm -> Optionals.maybe (tryAlts (Lists.tail alts)) (\t -> Flows.pure (Just t)) mterm)) 
+                          tryAlts = (\alts -> Logic.ifElse (Lists.null alts) (Flows.pure Nothing) (forNonNull alts))
+                      in (Flows.bind (termAlternatives term) (\alts -> tryAlts alts)))
+              tryTerm = (\term ->  
+                      let supportedVariant = (Sets.member (Variants.termVariant term) (Coders.languageConstraintsTermVariants constraints))
+                      in (Logic.ifElse supportedVariant (forSupported term) (forUnsupported term)))
+          in (Flows.bind (recurse term0) (\term1 -> Flows.bind (tryTerm term1) (\mterm -> Optionals.maybe (Flows.fail (Strings.cat [
             "no alternatives for term: ",
             (Core_.term term1)])) (\term2 -> Flows.pure term2) mterm))))
   in (Rewriting.rewriteTermM rewrite term0)
@@ -170,20 +171,20 @@ adaptType :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralT
 adaptType constraints litmap type0 =  
   let forSupported = (\typ -> (\x -> case x of
           Core.TypeLiteral v1 -> (Logic.ifElse (literalTypeSupported constraints v1) (Just typ) (Optionals.maybe (Just (Core.TypeLiteral Core.LiteralTypeString)) (\lt2 -> Just (Core.TypeLiteral lt2)) (Maps.lookup v1 litmap)))
-          _ -> (Just typ)) typ)
-  in  
-    let tryType = (\typ ->  
-            let supportedVariant = (Sets.member (Variants.typeVariant typ) (Coders.languageConstraintsTypeVariants constraints))
-            in (Logic.ifElse supportedVariant (forSupported typ) ( 
+          _ -> (Just typ)) typ) 
+      forUnsupported = (\typ ->  
               let tryAlts = (\alts -> Logic.ifElse (Lists.null alts) Nothing (Optionals.maybe (tryAlts (Lists.tail alts)) (\t -> Just t) (tryType (Lists.head alts))))
               in  
                 let alts = (typeAlternatives typ)
-                in (tryAlts alts))))
-    in  
-      let rewrite = (\recurse -> \typ -> Flows.bind (recurse typ) (\type1 -> Optionals.maybe (Flows.fail (Strings.cat [
-              "no alternatives for type: ",
-              (Core_.type_ typ)])) (\type2 -> Flows.pure type2) (tryType type1)))
-      in (Rewriting.rewriteTypeM rewrite type0)
+                in (tryAlts alts))
+      tryType = (\typ ->  
+              let supportedVariant = (Sets.member (Variants.typeVariant typ) (Coders.languageConstraintsTypeVariants constraints))
+              in (Logic.ifElse supportedVariant (forSupported typ) (forUnsupported typ)))
+  in  
+    let rewrite = (\recurse -> \typ -> Flows.bind (recurse typ) (\type1 -> Optionals.maybe (Flows.fail (Strings.cat [
+            "no alternatives for type: ",
+            (Core_.type_ typ)])) (\type2 -> Flows.pure type2) (tryType type1)))
+    in (Rewriting.rewriteTypeM rewrite type0)
 
 adaptTypeScheme :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.TypeScheme -> Compute.Flow t0 Core.TypeScheme)
 adaptTypeScheme constraints litmap ts0 =  
