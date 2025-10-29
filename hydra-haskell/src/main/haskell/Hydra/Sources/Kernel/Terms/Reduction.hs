@@ -221,21 +221,17 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
     <> " After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added."
     ) $
   "tx0" ~> "term0" ~>
-  "rewrite" <~ ("topLevel" ~> "recurse" ~> "tx" ~> "term" ~>
-
-    "dflt" <~ (
-      doc "For terms which are obviously nullary, we just expand the subterms" $
-      var "recurse" @@ var "tx" @@ var "term") $
+  "rewrite" <~ ("topLevel" ~> "forced" ~> "recurse" ~> "tx" ~> "term" ~>
 
     "rewriteSpine" <~ ("term" ~> cases _Term (var "term")
-      (Just $ var "rewrite" @@ false @@ var "recurse" @@ var "tx" @@ var "term") [
+      (Just $ var "rewrite" @@ false @@ false @@ var "recurse" @@ var "tx" @@ var "term") [
       _Term_annotated>>: "at" ~>
         "body" <<~ var "rewriteSpine" @@ Core.annotatedTermBody (var "at") $
         "ann" <~ Core.annotatedTermAnnotation (var "at") $
         produce (Core.termAnnotated $ Core.annotatedTerm (var "body") (var "ann")),
       _Term_application>>: "a" ~>
         "lhs" <<~ var "rewriteSpine" @@ Core.applicationFunction (var "a") $
-        "rhs" <<~ var "rewrite" @@ true @@ var "recurse" @@ var "tx" @@ Core.applicationArgument (var "a") $
+        "rhs" <<~ var "rewrite" @@ true @@ false @@ var "recurse" @@ var "tx" @@ Core.applicationArgument (var "a") $
         produce (Core.termApplication $ Core.application (var "lhs") (var "rhs"))]) $
 
     "extraVariables" <~ ("n" ~> Lists.map ("i" ~> Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
@@ -248,12 +244,46 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
           @@ (Core.termApplication $ Core.application (var "body") $ Core.termVariable $ Lists.head $ var "vars"))) $
     "padn" <~ ("n" ~> "body" ~> var "pad" @@ (var "extraVariables" @@ var "n") @@ var "body") $
 
+    "forceExpansion" <~ ("t" ~>
+      "typ" <<~ ref Checking.typeOfDef @@ var "tx" @@ list [] @@ var "t" $
+      "arity" <~ ref Arity.typeArityDef @@ var "typ" $
+      produce $ var "padn" @@ var "arity" @@ var "t") $
+
+    "recurseOrForce" <~ ("term" ~> Logic.ifElse (var "forced")
+      (var "forceExpansion" @@ var "term")
+      (var "recurse" @@ var "tx" @@ var "term")) $
+
+    "forCase" <~ ("f" ~>
+      "r" <<~ var "rewrite" @@ false @@ true @@ var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f") $
+      produce $ Core.fieldWithTerm (var "r") (var "f")) $
+
+    -- Forcing case statement branches is intended for Python, where we cannot accept a branch which is simply
+    -- a variable or a primitive reference; we need to expand these to lambdas.
+    -- TODO: make this behavior configurable
+    "forCaseStatement" <~ ("cs" ~>
+      "tname" <~ Core.caseStatementTypeName (var "cs") $
+      "dflt" <~ Core.caseStatementDefault (var "cs") $
+      "cases" <~ Core.caseStatementCases (var "cs") $
+      "rdflt" <<~ Flows.mapOptional (var "rewrite" @@ false @@ false @@ var "recurse" @@ var "tx") (var "dflt") $
+      "rcases" <<~ Flows.mapList (var "forCase") (var "cases") $
+      produce $ Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
+        Core.caseStatement (var "tname") (var "rdflt") (var "rcases")) $
+
+    "forElimination" <~ ("elm" ~>
+      "checkBase" <~ ("elm" ~> cases _Elimination (var "elm")
+        (Just $ var "recurse" @@ var "tx" @@ var "term") [
+        _Elimination_union>>: "cs" ~> var "forCaseStatement" @@ var "cs"]) $
+      "base" <<~ var "checkBase" @@ var "elm" $
+      produce $ Logic.ifElse (Logic.or (var "topLevel") (var "forced"))
+        (var "padn" @@ int32 1 @@ var "base")
+        (var "base")) $
+
     cases _Term (var "term")
-      (Just $ var "dflt") [
+      (Just $ var "recurseOrForce" @@ var "term") [
       _Term_application>>: "a" ~>
         "lhs" <~ Core.applicationFunction (var "a") $
         "rhs" <~ Core.applicationArgument (var "a") $
-        "rhs2" <<~ var "rewrite" @@ true @@ var "recurse" @@ var "tx" @@ var "rhs" $
+        "rhs2" <<~ var "rewrite" @@ true @@ false @@ var "recurse" @@ var "tx" @@ var "rhs" $
         "lhstype" <<~ ref Checking.typeOfDef @@ var "tx" @@ list [] @@ var "lhs" $
         "lhsarity" <~ ref Arity.typeArityDef @@ var "lhstype" $
         "lhs2" <<~ var "rewriteSpine" @@ var "lhs" $
@@ -262,21 +292,18 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
           (var "padn" @@ (Math.sub (var "lhsarity") (int32 1)) @@ var "a2")
           (var "a2"),
       _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ var "dflt") [
-        _Function_elimination>>: "e" ~> Logic.ifElse (var "topLevel")
-          (Flows.map (var "padn" @@ int32 1) $ var "recurse" @@ var "tx" @@ var "term")
-          (var "dflt"),
+        (Just $ var "recurseOrForce" @@ var "term") [
+        _Function_elimination>>: "elm" ~> var "forElimination" @@ var "elm",
         _Function_lambda>>: "l" ~>
           "tx2" <~ ref Schemas.extendTypeContextForLambdaDef @@ var "tx" @@ var "l" $
            var "recurse" @@ var "tx2" @@ var "term"],
       _Term_let>>: "l" ~>
         "tx2" <~ ref Schemas.extendTypeContextForLetDef @@ var "tx" @@ var "l" $
         var "recurse" @@ var "tx2" @@ var "term",
---    _Term_typeApplication>>: "ta" ~> ...
       _Term_typeLambda>>: "tl" ~>
         "tx2" <~ ref Schemas.extendTypeContextForTypeLambdaDef @@ var "tx" @@ var "tl" $
         var "recurse" @@ var "tx2" @@ var "term"]) $
-  ref Rewriting.rewriteTermWithContextMDef @@ (var "rewrite" @@ true) @@ var "tx0" @@ var "term0"
+  ref Rewriting.rewriteTermWithContextMDef @@ (var "rewrite" @@ true @@ false) @@ var "tx0" @@ var "term0"
 
 -- Note: unused / untested
 etaReduceTermDef :: TBinding (Term -> Term)
