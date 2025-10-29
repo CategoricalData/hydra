@@ -64,9 +64,9 @@ def bigint_to_uint64(x: int) -> int:
     return x
 
 
-def binary_to_string(s: str) -> str:
-    """Convert binary to string (identity in Python)."""
-    return s
+def binary_to_string(s: bytes) -> str:
+    """Convert binary to string by decoding bytes to UTF-8."""
+    return s.decode('utf-8', errors='replace')
 
 
 def float32_to_bigfloat(x: float) -> Decimal:

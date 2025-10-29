@@ -22,6 +22,8 @@ import Hydra.Ext.Staging.Scala.Coder
 
 import qualified System.FilePath as FP
 
+import GHC.Stack (HasCallStack) -- TODO: temporary
+
 
 writeCpp :: FP.FilePath -> [Module] -> IO ()
 writeCpp = generateSources moduleToCpp
@@ -41,7 +43,8 @@ writePdl = generateSources moduleToPdl
 writeProtobuf :: FP.FilePath -> [Module] -> IO ()
 writeProtobuf = generateSources moduleToProtobuf
 
-writePython :: FP.FilePath -> [Module] -> IO ()
+--writePython :: FP.FilePath -> [Module] -> IO ()
+writePython :: HasCallStack => FP.FilePath -> [Module] -> IO () -- TODO: temporary
 writePython = generateSourcesSimple moduleToPython pythonLanguage True
 
 writeScala :: FP.FilePath -> [Module] -> IO ()
