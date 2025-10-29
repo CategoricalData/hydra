@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from decimal import Decimal
+from typing import cast
 import hydra.core
 import hydra.lib.literals
 
@@ -12,44 +13,44 @@ def bigfloat_to_float_value(ft: hydra.core.FloatType, bf: Decimal) -> hydra.core
     
     match ft:
         case hydra.core.FloatType.BIGFLOAT:
-            return hydra.core.FloatValueBigfloat(bf)
+            return cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(bf))
         
         case hydra.core.FloatType.FLOAT32:
-            return hydra.core.FloatValueFloat32(hydra.lib.literals.bigfloat_to_float32(bf))
+            return cast(hydra.core.FloatValue, hydra.core.FloatValueFloat32(hydra.lib.literals.bigfloat_to_float32(bf)))
         
         case hydra.core.FloatType.FLOAT64:
-            return hydra.core.FloatValueFloat64(hydra.lib.literals.bigfloat_to_float64(bf))
+            return cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(hydra.lib.literals.bigfloat_to_float64(bf)))
 
 def bigint_to_integer_value(it: hydra.core.IntegerType, bi: int) -> hydra.core.IntegerValue:
     """Convert a bigint to an integer value of a given type (note: lossy)."""
     
     match it:
         case hydra.core.IntegerType.BIGINT:
-            return hydra.core.IntegerValueBigint(bi)
+            return cast(hydra.core.IntegerValue, hydra.core.IntegerValueBigint(bi))
         
         case hydra.core.IntegerType.INT8:
-            return hydra.core.IntegerValueInt8(hydra.lib.literals.bigint_to_int8(bi))
+            return cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt8(hydra.lib.literals.bigint_to_int8(bi)))
         
         case hydra.core.IntegerType.INT16:
-            return hydra.core.IntegerValueInt16(hydra.lib.literals.bigint_to_int16(bi))
+            return cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt16(hydra.lib.literals.bigint_to_int16(bi)))
         
         case hydra.core.IntegerType.INT32:
-            return hydra.core.IntegerValueInt32(hydra.lib.literals.bigint_to_int32(bi))
+            return cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(hydra.lib.literals.bigint_to_int32(bi)))
         
         case hydra.core.IntegerType.INT64:
-            return hydra.core.IntegerValueInt64(hydra.lib.literals.bigint_to_int64(bi))
+            return cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt64(hydra.lib.literals.bigint_to_int64(bi)))
         
         case hydra.core.IntegerType.UINT8:
-            return hydra.core.IntegerValueUint8(hydra.lib.literals.bigint_to_uint8(bi))
+            return cast(hydra.core.IntegerValue, hydra.core.IntegerValueUint8(hydra.lib.literals.bigint_to_uint8(bi)))
         
         case hydra.core.IntegerType.UINT16:
-            return hydra.core.IntegerValueUint16(hydra.lib.literals.bigint_to_uint16(bi))
+            return cast(hydra.core.IntegerValue, hydra.core.IntegerValueUint16(hydra.lib.literals.bigint_to_uint16(bi)))
         
         case hydra.core.IntegerType.UINT32:
-            return hydra.core.IntegerValueUint32(hydra.lib.literals.bigint_to_uint32(bi))
+            return cast(hydra.core.IntegerValue, hydra.core.IntegerValueUint32(hydra.lib.literals.bigint_to_uint32(bi)))
         
         case hydra.core.IntegerType.UINT64:
-            return hydra.core.IntegerValueUint64(hydra.lib.literals.bigint_to_uint64(bi))
+            return cast(hydra.core.IntegerValue, hydra.core.IntegerValueUint64(hydra.lib.literals.bigint_to_uint64(bi)))
 
 def float_value_to_bigfloat(v1: hydra.core.FloatValue) -> Decimal:
     """Convert a floating-point value of any precision to a bigfloat."""
