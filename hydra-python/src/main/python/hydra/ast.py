@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""A model which provides a common syntax tree for Hydra serializers."""
+r"""A model which provides a common syntax tree for Hydra serializers."""
 
 from __future__ import annotations
 from dataclasses import dataclass
@@ -9,7 +9,7 @@ from hydra.dsl.python import Maybe, Node
 import hydra.core
 
 class Associativity(Enum):
-    """Operator associativity."""
+    r"""Operator associativity."""
     
     NONE = "none"
     
@@ -27,7 +27,7 @@ ASSOCIATIVITY__BOTH__NAME = hydra.core.Name("both")
 
 @dataclass
 class BlockStyle:
-    """Formatting option for code blocks."""
+    r"""Formatting option for code blocks."""
     
     indent: Maybe[str]
     newline_before_content: bool
@@ -40,7 +40,7 @@ BLOCK_STYLE__NEWLINE_AFTER_CONTENT__NAME = hydra.core.Name("newlineAfterContent"
 
 @dataclass
 class BracketExpr:
-    """An expression enclosed by brackets."""
+    r"""An expression enclosed by brackets."""
     
     brackets: Brackets
     enclosed: Expr
@@ -53,7 +53,7 @@ BRACKET_EXPR__STYLE__NAME = hydra.core.Name("style")
 
 @dataclass
 class Brackets:
-    """Matching open and close bracket symbols."""
+    r"""Matching open and close bracket symbols."""
     
     open: Symbol
     close: Symbol
@@ -81,7 +81,7 @@ EXPR__BRACKETS__NAME = hydra.core.Name("brackets")
 
 @dataclass
 class IndentedExpression:
-    """An expression indented in a certain style."""
+    r"""An expression indented in a certain style."""
     
     style: IndentStyle
     expr: Expr
@@ -103,7 +103,7 @@ INDENT_STYLE__SUBSEQUENT_LINES__NAME = hydra.core.Name("subsequentLines")
 
 @dataclass
 class Op:
-    """An operator symbol."""
+    r"""An operator symbol."""
     
     symbol: Symbol
     padding: Padding
@@ -118,7 +118,7 @@ OP__ASSOCIATIVITY__NAME = hydra.core.Name("associativity")
 
 @dataclass
 class OpExpr:
-    """An operator expression."""
+    r"""An operator expression."""
     
     op: Op
     lhs: Expr
@@ -131,7 +131,7 @@ OP_EXPR__RHS__NAME = hydra.core.Name("rhs")
 
 @dataclass
 class Padding:
-    """Left and right padding for an operator."""
+    r"""Left and right padding for an operator."""
     
     left: Ws
     right: Ws
@@ -141,12 +141,12 @@ PADDING__LEFT__NAME = hydra.core.Name("left")
 PADDING__RIGHT__NAME = hydra.core.Name("right")
 
 class Precedence(Node[int]):
-    """Operator precedence."""
+    r"""Operator precedence."""
 
 PRECEDENCE__NAME = hydra.core.Name("hydra.ast.Precedence")
 
 class Symbol(Node[str]):
-    """Any symbol."""
+    r"""Any symbol."""
 
 SYMBOL__NAME = hydra.core.Name("hydra.ast.Symbol")
 

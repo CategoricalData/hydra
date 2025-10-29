@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Natural-language descriptions for hydra.core types."""
+r"""Natural-language descriptions for hydra.core types."""
 
 from __future__ import annotations
 import hydra.core
@@ -9,17 +9,17 @@ import hydra.lib.strings
 import hydra.variants
 
 def float_type(t: hydra.core.FloatType) -> str:
-    """Display a floating-point type as a string."""
+    r"""Display a floating-point type as a string."""
     
     return hydra.lib.strings.cat(((lambda arg_: hydra.describe.mantle.precision(hydra.variants.float_type_precision(arg_)))(t), " floating-point number"))
 
 def integer_type(t: hydra.core.IntegerType) -> str:
-    """Display an integer type as a string."""
+    r"""Display an integer type as a string."""
     
     return hydra.lib.strings.cat(((lambda arg_: hydra.describe.mantle.precision(hydra.variants.integer_type_precision(arg_)))(t), " integer"))
 
 def literal_type(v1: hydra.core.LiteralType) -> str:
-    """Display a literal type as a string."""
+    r"""Display a literal type as a string."""
     
     match v1:
         case hydra.core.LiteralTypeBinary():
@@ -38,7 +38,7 @@ def literal_type(v1: hydra.core.LiteralType) -> str:
             return "character string"
 
 def type(v1: hydra.core.Type) -> str:
-    """Display a type as a string."""
+    r"""Display a type as a string."""
     
     match v1:
         case hydra.core.TypeAnnotated(value=a):

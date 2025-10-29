@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""A utility which instantiates a nonrecursive type with default values."""
+r"""A utility which instantiates a nonrecursive type with default values."""
 
 from __future__ import annotations
 from decimal import Decimal
@@ -19,7 +19,7 @@ import hydra.lib.strings
 import hydra.show.core
 
 def graph_to_schema(g: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, hydra.core.Type]]:
-    """Create a graph schema from a graph which contains nothing but encoded type definitions."""
+    r"""Create a graph schema from a graph which contains nothing but encoded type definitions."""
     
     def to_pair[T0](name_and_el: Tuple[T0, hydra.core.Binding]) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, hydra.core.Type]]:
         name = name_and_el[0]

@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""A model for path- and pattern-based graph constraints, which may be considered as part of the schema of a graph."""
+r"""A model for path- and pattern-based graph constraints, which may be considered as part of the schema of a graph."""
 
 from __future__ import annotations
 from dataclasses import dataclass
@@ -9,7 +9,7 @@ import hydra.query
 
 @dataclass
 class PathEquation:
-    """A declared equivalence between two abstract paths in a graph."""
+    r"""A declared equivalence between two abstract paths in a graph."""
     
     left: hydra.query.Path
     right: hydra.query.Path
@@ -20,7 +20,7 @@ PATH_EQUATION__RIGHT__NAME = hydra.core.Name("right")
 
 @dataclass
 class PatternImplication:
-    """A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns."""
+    r"""A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns."""
     
     antecedent: hydra.query.Pattern
     consequent: hydra.query.Pattern

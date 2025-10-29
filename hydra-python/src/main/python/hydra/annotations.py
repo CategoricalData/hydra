@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Utilities for reading and writing type and term annotations."""
+r"""Utilities for reading and writing type and term annotations."""
 
 from __future__ import annotations
 from collections.abc import Callable
@@ -56,12 +56,12 @@ def get_count[T0](key: hydra.core.Name) -> hydra.compute.Flow[T0, int]:
     return hydra.lexical.with_empty_graph(hydra.lib.flows.bind(get_attr_with_default(key, cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(0))))))), hydra.extract.core.int32))
 
 def get_description(anns: FrozenDict[hydra.core.Name, hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[str]]:
-    """Get description from annotations map."""
+    r"""Get description from annotations map."""
     
     return hydra.lib.optionals.maybe(hydra.lib.flows.pure(Nothing()), (lambda term: hydra.lib.flows.map(hydra.lib.optionals.pure, hydra.extract.core.string(term))), hydra.lib.maps.lookup(hydra.core.Name("description"), anns))
 
 def term_annotation_internal(term: hydra.core.Term) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-    """Get internal term annotations."""
+    r"""Get internal term annotations."""
     
     def get_ann(t: hydra.core.Term) -> Maybe[hydra.core.AnnotatedTerm]:
         match t:
@@ -73,22 +73,22 @@ def term_annotation_internal(term: hydra.core.Term) -> FrozenDict[hydra.core.Nam
     return aggregate_annotations(get_ann, (lambda at: at.body), (lambda at: at.annotation), term)
 
 def get_term_annotation(key: hydra.core.Name, term: hydra.core.Term) -> Maybe[hydra.core.Term]:
-    """Get a term annotation."""
+    r"""Get a term annotation."""
     
     return hydra.lib.maps.lookup(key, term_annotation_internal(term))
 
 def get_term_description(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[str]]:
-    """Get term description."""
+    r"""Get term description."""
     
     return get_description(term_annotation_internal(term))
 
 def get_type(anns: FrozenDict[hydra.core.Name, hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Type]]:
-    """Get type from annotations."""
+    r"""Get type from annotations."""
     
     return hydra.lib.optionals.maybe(hydra.lib.flows.pure(Nothing()), (lambda dat: hydra.lib.flows.map(hydra.lib.optionals.pure, hydra.decode.core.type(dat))), hydra.lib.maps.lookup(hydra.constants.key_type, anns))
 
 def type_annotation_internal(typ: hydra.core.Type) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-    """Get internal type annotations."""
+    r"""Get internal type annotations."""
     
     def get_ann(t: hydra.core.Type) -> Maybe[hydra.core.AnnotatedType]:
         match t:
@@ -100,12 +100,12 @@ def type_annotation_internal(typ: hydra.core.Type) -> FrozenDict[hydra.core.Name
     return aggregate_annotations(get_ann, (lambda at: at.body), (lambda at: at.annotation), typ)
 
 def get_type_annotation(key: hydra.core.Name, typ: hydra.core.Type) -> Maybe[hydra.core.Term]:
-    """Get a type annotation."""
+    r"""Get a type annotation."""
     
     return hydra.lib.maps.lookup(key, type_annotation_internal(typ))
 
 def get_type_classes(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, frozenset[hydra.mantle.TypeClass]]]:
-    """Get type classes from term."""
+    r"""Get type classes from term."""
     
     def decode_class(term2: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.mantle.TypeClass]:
         by_name = hydra.lib.maps.from_list(((hydra.core.Name("equality"), hydra.mantle.TypeClass.EQUALITY), (hydra.core.Name("ordering"), hydra.mantle.TypeClass.ORDERING)))
@@ -113,7 +113,7 @@ def get_type_classes(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Gr
     return hydra.lib.optionals.maybe(hydra.lib.flows.pure(hydra.lib.maps.empty()), (lambda term2: hydra.extract.core.map(hydra.decode.core.name, (lambda v1: hydra.extract.core.set_of(decode_class, v1)), term2)), get_term_annotation(hydra.constants.key_classes, term))
 
 def get_type_description(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[str]]:
-    """Get type description."""
+    r"""Get type description."""
     
     return get_description(type_annotation_internal(typ))
 
@@ -121,12 +121,12 @@ def has_description[T0](anns: FrozenDict[hydra.core.Name, T0]) -> bool:
     return hydra.lib.optionals.is_just(hydra.lib.maps.lookup(hydra.constants.key_description, anns))
 
 def has_type_description(typ: hydra.core.Type) -> bool:
-    """Check if type has description."""
+    r"""Check if type has description."""
     
     return has_description(type_annotation_internal(typ))
 
 def is_native_type(el: hydra.core.Binding) -> bool:
-    """For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression."""
+    r"""For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression."""
     
     is_flagged_as_first_class_type = hydra.lib.optionals.from_maybe(False, hydra.lib.optionals.bind(get_term_annotation(hydra.constants.key_first_class_type, el.term), hydra.decoding.boolean))
     return hydra.lib.optionals.maybe(False, (lambda ts: hydra.lib.logic.and_(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))))), hydra.lib.logic.not_(is_flagged_as_first_class_type))), el.type)
@@ -141,14 +141,14 @@ def next_count[T0](key: hydra.core.Name) -> hydra.compute.Flow[T0, int]:
     return hydra.lib.flows.bind(get_count(key), (lambda count: hydra.lib.flows.map((lambda _: count), put_count(key, hydra.lib.math.add(count, 1)))))
 
 def normalize_term_annotations(term: hydra.core.Term) -> hydra.core.Term:
-    """Normalize term annotations."""
+    r"""Normalize term annotations."""
     
     anns = term_annotation_internal(term)
     stripped = hydra.rewriting.deannotate_term(term)
     return hydra.lib.logic.if_else(hydra.lib.maps.null(anns), stripped, cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(stripped, anns))))
 
 def normalize_type_annotations(typ: hydra.core.Type) -> hydra.core.Type:
-    """Normalize type annotations."""
+    r"""Normalize type annotations."""
     
     anns = type_annotation_internal(typ)
     stripped = hydra.rewriting.deannotate_type(typ)
@@ -161,36 +161,36 @@ def set_annotation[T0, T1](key: T0, val: Maybe[T1], m: FrozenDict[T0, T1]) -> Fr
     return hydra.lib.maps.alter((lambda _: val), key, m)
 
 def set_description(d: Maybe[str], v1: FrozenDict[hydra.core.Name, hydra.core.Term]) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-    """Set description in annotations."""
+    r"""Set description in annotations."""
     
     return set_annotation(hydra.constants.key_description, hydra.lib.optionals.map((lambda arg_: (lambda x: cast(hydra.core.Term, hydra.core.TermLiteral(x)))((lambda x: cast(hydra.core.Literal, hydra.core.LiteralString(x)))(arg_))), d), v1)
 
 def set_term_annotation(key: hydra.core.Name, val: Maybe[hydra.core.Term], term: hydra.core.Term) -> hydra.core.Term:
-    """Set term annotation."""
+    r"""Set term annotation."""
     
     term_ = hydra.rewriting.deannotate_term(term)
     anns = set_annotation(key, val, term_annotation_internal(term))
     return hydra.lib.logic.if_else(hydra.lib.maps.null(anns), term_, cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(term_, anns))))
 
 def set_term_description(d: Maybe[str], v1: hydra.core.Term) -> hydra.core.Term:
-    """Set term description."""
+    r"""Set term description."""
     
     return set_term_annotation(hydra.constants.key_description, hydra.lib.optionals.map((lambda s: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s))))), d), v1)
 
 def set_type(mt: Maybe[hydra.core.Type], v1: FrozenDict[hydra.core.Name, hydra.core.Term]) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-    """Set type in annotations."""
+    r"""Set type in annotations."""
     
     return set_annotation(hydra.constants.key_type, hydra.lib.optionals.map(hydra.encode.core.type, mt), v1)
 
 def set_type_annotation(key: hydra.core.Name, val: Maybe[hydra.core.Term], typ: hydra.core.Type) -> hydra.core.Type:
-    """Set type annotation."""
+    r"""Set type annotation."""
     
     typ_ = hydra.rewriting.deannotate_type(typ)
     anns = set_annotation(key, val, type_annotation_internal(typ))
     return hydra.lib.logic.if_else(hydra.lib.maps.null(anns), typ_, cast(hydra.core.Type, hydra.core.TypeAnnotated(hydra.core.AnnotatedType(typ_, anns))))
 
 def set_type_classes(m: FrozenDict[hydra.core.Name, frozenset[hydra.mantle.TypeClass]], term: hydra.core.Term) -> hydra.core.Term:
-    """Set type classes on term."""
+    r"""Set type classes on term."""
     
     def encode_class(tc: hydra.mantle.TypeClass) -> hydra.core.Term:
         match tc:
@@ -207,12 +207,12 @@ def set_type_classes(m: FrozenDict[hydra.core.Name, frozenset[hydra.mantle.TypeC
     return set_term_annotation(hydra.constants.key_classes, encoded, term)
 
 def set_type_description(d: Maybe[str], v1: hydra.core.Type) -> hydra.core.Type:
-    """Set type description."""
+    r"""Set type description."""
     
     return set_type_annotation(hydra.constants.key_description, hydra.lib.optionals.map((lambda arg_: (lambda x: cast(hydra.core.Term, hydra.core.TermLiteral(x)))((lambda x: cast(hydra.core.Literal, hydra.core.LiteralString(x)))(arg_))), d), v1)
 
 def type_element(name: hydra.core.Name, typ: hydra.core.Type) -> hydra.core.Binding:
-    """Create a type element with proper annotations."""
+    r"""Create a type element with proper annotations."""
     
     schema_term = cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.core.Type")))
     data_term = normalize_term_annotations(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(hydra.encode.core.type(typ), hydra.lib.maps.from_list(((hydra.constants.key_type, schema_term),))))))

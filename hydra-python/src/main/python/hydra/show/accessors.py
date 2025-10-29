@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Utilities for working with term accessors."""
+r"""Utilities for working with term accessors."""
 
 from __future__ import annotations
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
@@ -17,7 +17,7 @@ import hydra.names
 import hydra.rewriting
 
 def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
-    """Convert a term accessor to a string representation."""
+    r"""Convert a term accessor to a string representation."""
     
     def idx[T0, T1](i: T0) -> Maybe[T1]:
         return Nothing()
@@ -85,7 +85,7 @@ def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
             return Nothing()
 
 def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], term: hydra.core.Term) -> hydra.accessors.AccessorGraph:
-    """Build an accessor graph from a term."""
+    r"""Build an accessor graph from a term."""
     
     dont_care_accessor = cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorAnnotatedBody(None))
     def helper(ids: FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode], mroot: Maybe[hydra.accessors.AccessorNode], path: frozenlist[hydra.accessors.TermAccessor], state: Tuple[Tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]], accessor_term: Tuple[hydra.accessors.TermAccessor, hydra.core.Term]) -> Tuple[Tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]]:

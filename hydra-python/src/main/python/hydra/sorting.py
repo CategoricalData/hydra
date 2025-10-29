@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Utilities for sorting."""
+r"""Utilities for sorting."""
 
 from __future__ import annotations
 from collections.abc import Callable

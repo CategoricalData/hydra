@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""A model for Hydra namespaces and modules."""
+r"""A model for Hydra namespaces and modules."""
 
 from __future__ import annotations
 from dataclasses import dataclass
@@ -23,13 +23,13 @@ DEFINITION__TERM__NAME = hydra.core.Name("term")
 DEFINITION__TYPE__NAME = hydra.core.Name("type")
 
 class FileExtension(Node[str]):
-    """A file extension (without the dot), e.g. "json" or "py"."""
+    r"""A file extension (without the dot), e.g. "json" or "py"."""
 
 FILE_EXTENSION__NAME = hydra.core.Name("hydra.module.FileExtension")
 
 @dataclass
 class Library:
-    """A library of primitive functions."""
+    r"""A library of primitive functions."""
     
     namespace: Annotated[Namespace, "A common prefix for all primitive function names in the library"]
     prefix: Annotated[str, "A preferred namespace prefix for function names in the library"]
@@ -42,7 +42,7 @@ LIBRARY__PRIMITIVES__NAME = hydra.core.Name("primitives")
 
 @dataclass
 class Module:
-    """A logical collection of elements in the same namespace, having dependencies on zero or more other modules."""
+    r"""A logical collection of elements in the same namespace, having dependencies on zero or more other modules."""
     
     namespace: Annotated[Namespace, "A common prefix for all element names in the module"]
     elements: Annotated[frozenlist[hydra.core.Binding], "The elements defined in this module"]
@@ -58,13 +58,13 @@ MODULE__TYPE_DEPENDENCIES__NAME = hydra.core.Name("typeDependencies")
 MODULE__DESCRIPTION__NAME = hydra.core.Name("description")
 
 class Namespace(Node[str]):
-    """A prefix for element names."""
+    r"""A prefix for element names."""
 
 NAMESPACE__NAME = hydra.core.Name("hydra.module.Namespace")
 
 @dataclass
 class Namespaces(Generic[N]):
-    """A mapping from namespaces to values of type n, with a focus on one namespace."""
+    r"""A mapping from namespaces to values of type n, with a focus on one namespace."""
     
     focus: Tuple[Namespace, N]
     mapping: FrozenDict[Namespace, N]
@@ -75,7 +75,7 @@ NAMESPACES__MAPPING__NAME = hydra.core.Name("mapping")
 
 @dataclass
 class QualifiedName:
-    """A qualified name consisting of an optional namespace together with a mandatory local name."""
+    r"""A qualified name consisting of an optional namespace together with a mandatory local name."""
     
     namespace: Maybe[Namespace]
     local: str
@@ -86,7 +86,7 @@ QUALIFIED_NAME__LOCAL__NAME = hydra.core.Name("local")
 
 @dataclass
 class TermDefinition:
-    """A term-level definition, including a name, a term, and the type of the term."""
+    r"""A term-level definition, including a name, a term, and the type of the term."""
     
     name: hydra.core.Name
     term: hydra.core.Term
@@ -99,7 +99,7 @@ TERM_DEFINITION__TYPE__NAME = hydra.core.Name("type")
 
 @dataclass
 class TypeDefinition:
-    """A type-level definition, including a name and the type."""
+    r"""A type-level definition, including a name and the type."""
     
     name: hydra.core.Name
     type: hydra.core.Type

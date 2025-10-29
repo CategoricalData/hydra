@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Utilities for type unification."""
+r"""Utilities for type unification."""
 
 from __future__ import annotations
 from hydra.dsl.python import FrozenDict, frozenlist
@@ -135,7 +135,7 @@ def join_types[T0](left: hydra.core.Type, right: hydra.core.Type, comment: str) 
             return cannot_unify
 
 def variable_occurs_in_type(var: hydra.core.Name, typ0: hydra.core.Type) -> bool:
-    """Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables."""
+    r"""Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables."""
     
     def try_type(b: bool, typ: hydra.core.Type) -> bool:
         match typ:

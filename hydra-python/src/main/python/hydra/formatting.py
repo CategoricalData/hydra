@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""String formatting types and functions."""
+r"""String formatting types and functions."""
 
 from __future__ import annotations
 from collections.abc import Callable
@@ -18,24 +18,24 @@ import hydra.lib.strings
 import hydra.mantle
 
 def map_first_letter(mapping: Callable[[str], str], s: str) -> str:
-    """A helper which maps the first letter of a string to another string."""
+    r"""A helper which maps the first letter of a string to another string."""
     
     list = hydra.lib.strings.to_list(s)
     first_letter = mapping(hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.lists.head(list))))
     return hydra.lib.logic.if_else(hydra.lib.strings.null(s), s, hydra.lib.strings.cat2(first_letter, hydra.lib.strings.from_list(hydra.lib.lists.tail(list))))
 
 def capitalize(v1: str) -> str:
-    """Capitalize the first letter of a string."""
+    r"""Capitalize the first letter of a string."""
     
     return map_first_letter(hydra.lib.strings.to_upper, v1)
 
 def decapitalize(v1: str) -> str:
-    """Decapitalize the first letter of a string."""
+    r"""Decapitalize the first letter of a string."""
     
     return map_first_letter(hydra.lib.strings.to_lower, v1)
 
 def convert_case(from_: hydra.mantle.CaseConvention, to: hydra.mantle.CaseConvention, original: str) -> str:
-    """Convert a string from one case convention to another."""
+    r"""Convert a string from one case convention to another."""
     
     def parts() -> frozenlist[str]:
         def by_caps() -> frozenlist[str]:
@@ -69,17 +69,17 @@ def convert_case(from_: hydra.mantle.CaseConvention, to: hydra.mantle.CaseConven
             return hydra.lib.strings.intercalate("_", hydra.lib.lists.map(hydra.lib.strings.to_upper, parts()))
 
 def convert_case_camel_to_lower_snake(v1: str) -> str:
-    """Convert a string from camel case to lower snake case."""
+    r"""Convert a string from camel case to lower snake case."""
     
     return convert_case(hydra.mantle.CaseConvention.CAMEL, hydra.mantle.CaseConvention.LOWER_SNAKE, v1)
 
 def convert_case_camel_to_upper_snake(v1: str) -> str:
-    """Convert a string from camel case to upper snake case."""
+    r"""Convert a string from camel case to upper snake case."""
     
     return convert_case(hydra.mantle.CaseConvention.CAMEL, hydra.mantle.CaseConvention.UPPER_SNAKE, v1)
 
 def convert_case_pascal_to_upper_snake(v1: str) -> str:
-    """Convert a string from pascal case to upper snake case."""
+    r"""Convert a string from pascal case to upper snake case."""
     
     return convert_case(hydra.mantle.CaseConvention.PASCAL, hydra.mantle.CaseConvention.UPPER_SNAKE, v1)
 
@@ -120,7 +120,7 @@ def with_character_aliases(original: str) -> str:
     return hydra.lib.strings.from_list(hydra.lib.lists.filter(hydra.lib.chars.is_alpha_num, hydra.lib.lists.concat(hydra.lib.lists.map(alias, hydra.lib.strings.to_list(original)))))
 
 def wrap_line(maxlen: int, input: str) -> str:
-    """A simple soft line wrap which is suitable for code comments."""
+    r"""A simple soft line wrap which is suitable for code comments."""
     
     def helper(prev: frozenlist[frozenlist[int]], rem: frozenlist[int]) -> frozenlist[frozenlist[int]]:
         trunc = hydra.lib.lists.take(maxlen, rem)

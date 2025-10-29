@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Variable substitution in type and term expressions."""
+r"""Variable substitution in type and term expressions."""
 
 from __future__ import annotations
 from collections.abc import Callable

@@ -1,13 +1,13 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""String representations of hydra.mantle types."""
+r"""String representations of hydra.mantle types."""
 
 from __future__ import annotations
 import hydra.core
 import hydra.mantle
 
 def term_variant(v1: hydra.mantle.TermVariant) -> str:
-    """Show a term variant as a string."""
+    r"""Show a term variant as a string."""
     
     match v1:
         case hydra.mantle.TermVariant.ANNOTATED:
@@ -65,7 +65,7 @@ def term_variant(v1: hydra.mantle.TermVariant) -> str:
             return "wrap"
 
 def type_variant(v1: hydra.mantle.TypeVariant) -> str:
-    """Show a type variant as a string."""
+    r"""Show a type variant as a string."""
     
     match v1:
         case hydra.mantle.TypeVariant.ANNOTATED:
