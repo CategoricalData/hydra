@@ -406,4 +406,4 @@ def list[T0](f: Callable[[T0], str], xs: frozenlist[T0]) -> str:
 def read_term(s: str) -> Maybe[hydra.core.Term]:
     r"""A placeholder for reading terms from their serialized form. Not implemented."""
     
-    return Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s)))))
+    return cast(Maybe[hydra.core.Term], Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s))))))

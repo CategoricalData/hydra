@@ -4,6 +4,7 @@ r"""Functions for working with qualified names."""
 
 from __future__ import annotations
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing
+from typing import cast
 import hydra.core
 import hydra.formatting
 import hydra.lib.equality
@@ -18,7 +19,7 @@ import hydra.module
 
 def qualify_name(name: hydra.core.Name) -> hydra.module.QualifiedName:
     parts = hydra.lib.lists.reverse(hydra.lib.strings.split_on(".", name.value))
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(parts)), hydra.module.QualifiedName(Nothing(), name.value), hydra.module.QualifiedName(Just(hydra.module.Namespace(hydra.lib.strings.intercalate(".", hydra.lib.lists.reverse(hydra.lib.lists.tail(parts))))), hydra.lib.lists.head(parts)))
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(parts)), hydra.module.QualifiedName(cast(Maybe[hydra.module.Namespace], Nothing()), name.value), hydra.module.QualifiedName(cast(Maybe[hydra.module.Namespace], Just(hydra.module.Namespace(hydra.lib.strings.intercalate(".", hydra.lib.lists.reverse(hydra.lib.lists.tail(parts)))))), hydra.lib.lists.head(parts)))
 
 def compact_name(namespaces: FrozenDict[hydra.module.Namespace, str], name: hydra.core.Name) -> str:
     r"""Given a mapping of namespaces to prefixes, convert a name to a compact string representation."""

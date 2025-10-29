@@ -22,7 +22,7 @@ import hydra.show.core
 def bind[T0, T1, T2](l: hydra.compute.Flow[T0, T1], r: Callable[[T1], hydra.compute.Flow[T0, T2]]) -> hydra.compute.Flow[T0, T2]:
     def q(s0: T0, t0: hydra.compute.Trace) -> hydra.compute.FlowState[T0, T2]:
         fs1 = (lambda v1: v1.value)(l, s0, t0)
-        return hydra.lib.optionals.maybe(hydra.compute.FlowState(Nothing(), (lambda v1: v1.state)(fs1), (lambda v1: v1.trace)(fs1)), (lambda v: (lambda v1: v1.value)(r(v), (lambda v1: v1.state)(fs1), (lambda v1: v1.trace)(fs1))), (lambda v1: v1.value)(fs1))
+        return hydra.lib.optionals.maybe(hydra.compute.FlowState(cast(Maybe[T2], Nothing()), (lambda v1: v1.state)(fs1), (lambda v1: v1.trace)(fs1)), (lambda v: (lambda v1: v1.value)(r(v), (lambda v1: v1.state)(fs1), (lambda v1: v1.trace)(fs1))), (lambda v1: v1.value)(fs1))
     return hydra.compute.Flow(q)
 
 empty_trace = hydra.compute.Trace((), (), hydra.lib.maps.empty())
@@ -43,7 +43,7 @@ def push_error(msg: str, t: hydra.compute.Trace) -> hydra.compute.Trace:
     return hydra.compute.Trace(t.stack, hydra.lib.lists.cons(error_msg, t.messages), t.other)
 
 def fail[T0, T1](msg: str) -> hydra.compute.Flow[T0, T1]:
-    return hydra.compute.Flow((lambda s, t: hydra.compute.FlowState(Nothing(), s, push_error(msg, t))))
+    return hydra.compute.Flow((lambda s, t: hydra.compute.FlowState(cast(Maybe[T1], Nothing()), s, push_error(msg, t))))
 
 def flow_succeeds[T0, T1](s: T0, f: hydra.compute.Flow[T0, T1]) -> bool:
     return hydra.lib.optionals.is_just((lambda v1: v1.value)((lambda v1: v1.value)(f, s, empty_trace)))
@@ -52,9 +52,9 @@ def from_flow[T0, T1](def_: T0, cx: T1, f: hydra.compute.Flow[T1, T0]) -> T0:
     return hydra.lib.optionals.maybe(def_, (lambda xmo: xmo), (lambda v1: v1.value)((lambda v1: v1.value)(f, cx, empty_trace)))
 
 def pure[T0, T1](xp: T0) -> hydra.compute.Flow[T1, T0]:
-    return hydra.compute.Flow((lambda s, t: hydra.compute.FlowState(Just(xp), s, t)))
+    return hydra.compute.Flow((lambda s, t: hydra.compute.FlowState(cast(Maybe[T0], Just(xp)), s, t)))
 
-get_state = hydra.compute.Flow((lambda s0, t0: (fs1 := (lambda v1: v1.value)(pure(None), s0, t0), v := (lambda v1: v1.value)(fs1), s := (lambda v1: v1.state)(fs1), t := (lambda v1: v1.trace)(fs1), hydra.lib.optionals.maybe(hydra.compute.FlowState(Nothing(), s, t), (lambda _: hydra.compute.FlowState(Just(s), s, t)), v))[4]))
+get_state = hydra.compute.Flow((lambda s0, t0: (fs1 := (lambda v1: v1.value)(pure(None), s0, t0), v := (lambda v1: v1.value)(fs1), s := (lambda v1: v1.state)(fs1), t := (lambda v1: v1.trace)(fs1), hydra.lib.optionals.maybe(hydra.compute.FlowState(cast(Maybe[T0], Nothing()), s, t), (lambda _: hydra.compute.FlowState(cast(Maybe[T0], Just(s)), s, t)), v))[4]))
 
 def map[T0, T1, T2](f: Callable[[T0], T1], f1: hydra.compute.Flow[T2, T0]) -> hydra.compute.Flow[T2, T1]:
     return hydra.compute.Flow((lambda s0, t0: (f2 := (lambda v1: v1.value)(f1, s0, t0), hydra.compute.FlowState(hydra.lib.optionals.map(f, (lambda v1: v1.value)(f2)), (lambda v1: v1.state)(f2), (lambda v1: v1.trace)(f2)))[1]))
@@ -68,7 +68,7 @@ def modify[T0](f: Callable[[T0], T0]) -> hydra.compute.Flow[T0, None]:
 def mutate_trace[T0, T1](mutate: Callable[[hydra.compute.Trace], hydra.mantle.Either[str, hydra.compute.Trace]], restore: Callable[[hydra.compute.Trace, hydra.compute.Trace], hydra.compute.Trace], f: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:
     def choose[T2, T3, T4](for_left: Callable[[T2], T3], for_right: Callable[[T4], T3], e: hydra.mantle.Either[T2, T4]) -> T3:
         return (lambda v1: "inline match expressions are unsupported")(e)
-    return hydra.compute.Flow((lambda s0, t0: (for_left := (lambda msg: hydra.compute.FlowState(Nothing(), s0, push_error(msg, t0))), for_right := (lambda t1: (f2 := (lambda v1: v1.value)(f, s0, t1), hydra.compute.FlowState((lambda v1: v1.value)(f2), (lambda v1: v1.state)(f2), restore(t0, (lambda v1: v1.trace)(f2))))[1]), choose(for_left, for_right, mutate(t0)))[2]))
+    return hydra.compute.Flow((lambda s0, t0: (for_left := (lambda msg: hydra.compute.FlowState(cast(Maybe[T2], Nothing()), s0, push_error(msg, t0))), for_right := (lambda t1: (f2 := (lambda v1: v1.value)(f, s0, t1), hydra.compute.FlowState((lambda v1: v1.value)(f2), (lambda v1: v1.state)(f2), restore(t0, (lambda v1: v1.trace)(f2))))[1]), choose(for_left, for_right, mutate(t0)))[2]))
 
 def optional_to_list[T0](mx: Maybe[T0]) -> frozenlist[T0]:
     return hydra.lib.optionals.maybe((), hydra.lib.lists.pure, mx)

@@ -20,33 +20,33 @@ def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
     r"""Convert a term accessor to a string representation."""
     
     def idx[T0, T1](i: T0) -> Maybe[T1]:
-        return Nothing()
+        return cast(Maybe[T1], Nothing())
     def idx_suff[T0](suffix: str, i: T0) -> Maybe[str]:
         return hydra.lib.optionals.map((lambda s: hydra.lib.strings.cat2(s, suffix)), idx(i))
     match accessor:
         case hydra.accessors.TermAccessorAnnotatedBody():
-            return Nothing()
+            return cast(Maybe[str], Nothing())
         
         case hydra.accessors.TermAccessorApplicationFunction():
-            return Just("fun")
+            return cast(Maybe[str], Just("fun"))
         
         case hydra.accessors.TermAccessorApplicationArgument():
-            return Just("arg")
+            return cast(Maybe[str], Just("arg"))
         
         case hydra.accessors.TermAccessorLambdaBody():
-            return Just("body")
+            return cast(Maybe[str], Just("body"))
         
         case hydra.accessors.TermAccessorUnionCasesDefault():
-            return Just("default")
+            return cast(Maybe[str], Just("default"))
         
         case hydra.accessors.TermAccessorUnionCasesBranch(value=name):
-            return Just(hydra.lib.strings.cat2(".", name.value))
+            return cast(Maybe[str], Just(hydra.lib.strings.cat2(".", name.value)))
         
         case hydra.accessors.TermAccessorLetBody():
-            return Just("in")
+            return cast(Maybe[str], Just("in"))
         
         case hydra.accessors.TermAccessorLetBinding(value=name2):
-            return Just(hydra.lib.strings.cat2(name2.value, "="))
+            return cast(Maybe[str], Just(hydra.lib.strings.cat2(name2.value, "=")))
         
         case hydra.accessors.TermAccessorListElement(value=i):
             return idx(i)
@@ -58,31 +58,31 @@ def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
             return idx_suff(".value", i3)
         
         case hydra.accessors.TermAccessorOptionalTerm():
-            return Just("just")
+            return cast(Maybe[str], Just("just"))
         
         case hydra.accessors.TermAccessorProductTerm(value=i4):
             return idx(i4)
         
         case hydra.accessors.TermAccessorRecordField(value=name3):
-            return Just(hydra.lib.strings.cat2(".", name3.value))
+            return cast(Maybe[str], Just(hydra.lib.strings.cat2(".", name3.value)))
         
         case hydra.accessors.TermAccessorSetElement(value=i5):
             return idx(i5)
         
         case hydra.accessors.TermAccessorSumTerm():
-            return Nothing()
+            return cast(Maybe[str], Nothing())
         
         case hydra.accessors.TermAccessorTypeLambdaBody():
-            return Nothing()
+            return cast(Maybe[str], Nothing())
         
         case hydra.accessors.TermAccessorTypeApplicationTerm():
-            return Nothing()
+            return cast(Maybe[str], Nothing())
         
         case hydra.accessors.TermAccessorInjectionTerm():
-            return Nothing()
+            return cast(Maybe[str], Nothing())
         
         case hydra.accessors.TermAccessorWrappedTerm():
-            return Nothing()
+            return cast(Maybe[str], Nothing())
 
 def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], term: hydra.core.Term) -> hydra.accessors.AccessorGraph:
     r"""Build an accessor graph from a term."""
@@ -121,7 +121,7 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                     root = node_binding[0]
                     binding = node_binding[1]
                     term1 = binding.term
-                    return helper(ids1, Just(root), (), current_state, (dont_care_accessor, term1))
+                    return helper(ids1, cast(Maybe[hydra.accessors.AccessorNode], Just(root)), (), current_state, (dont_care_accessor, term1))
                 node_binding_pairs = hydra.lib.lists.zip(nodes1, bindings)
                 state_after_bindings = hydra.lib.lists.foldl(add_binding_term, ((hydra.lib.lists.concat2(nodes1, nodes), edges), visited1), node_binding_pairs)
                 return helper(ids1, mroot, next_path, state_after_bindings, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody(None)), env))
@@ -132,7 +132,7 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
             case _:
                 return hydra.lib.lists.foldl((lambda v1, v2: helper(ids, mroot, next_path, v1, v2)), state, hydra.rewriting.subterms_with_accessors(current_term))
     initial_state = (((), ()), hydra.lib.sets.empty())
-    result = helper(hydra.lib.maps.empty(), Nothing(), (), initial_state, (dont_care_accessor, term))
+    result = helper(hydra.lib.maps.empty(), cast(Maybe[hydra.accessors.AccessorNode], Nothing()), (), initial_state, (dont_care_accessor, term))
     final_nodes_edges = result[0]
     final_nodes = final_nodes_edges[0]
     final_edges = final_nodes_edges[1]

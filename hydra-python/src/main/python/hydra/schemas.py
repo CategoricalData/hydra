@@ -67,7 +67,7 @@ def dependency_namespaces(binds: bool, with_prims: bool, with_noms: bool, with_s
 def dereference_type(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Type]]:
     r"""Dereference a type name to get the actual type."""
     
-    return hydra.lib.flows.bind(hydra.lexical.dereference_element(name), (lambda mel: hydra.lib.optionals.maybe(hydra.lib.flows.pure(Nothing()), (lambda el: hydra.lib.flows.map(hydra.lib.optionals.pure, hydra.decode.core.type(el.term))), mel)))
+    return hydra.lib.flows.bind(hydra.lexical.dereference_element(name), (lambda mel: hydra.lib.optionals.maybe(hydra.lib.flows.pure(cast(Maybe[hydra.core.Type], Nothing())), (lambda el: hydra.lib.flows.map(hydra.lib.optionals.pure, hydra.decode.core.type(el.term))), mel)))
 
 def element_as_type_application_term[T0](el: hydra.core.Binding) -> hydra.compute.Flow[T0, hydra.core.TypeApplicationTerm]:
     return hydra.lib.optionals.maybe(hydra.lib.flows.fail("missing element type"), (lambda ts: hydra.lib.flows.pure(hydra.core.TypeApplicationTerm(el.term, ts.type))), el.type)
@@ -203,14 +203,14 @@ def schema_graph_to_typing_environment[T0](g: hydra.graph.Graph) -> hydra.comput
         def for_term(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.TypeScheme]]:
             match term:
                 case hydra.core.TermRecord(value=r):
-                    return hydra.lib.logic.if_else(hydra.lib.equality.equal(r.type_name, hydra.core.Name("hydra.core.TypeScheme")), hydra.lib.flows.map(hydra.lib.optionals.pure, hydra.decode.core.type_scheme(el.term)), hydra.lib.flows.pure(Nothing()))
+                    return hydra.lib.logic.if_else(hydra.lib.equality.equal(r.type_name, hydra.core.Name("hydra.core.TypeScheme")), hydra.lib.flows.map(hydra.lib.optionals.pure, hydra.decode.core.type_scheme(el.term)), hydra.lib.flows.pure(cast(Maybe[hydra.core.TypeScheme], Nothing())))
                 
                 case hydra.core.TermUnion(value=i):
-                    return hydra.lib.logic.if_else(hydra.lib.equality.equal(i.type_name, hydra.core.Name("hydra.core.Type")), hydra.lib.flows.map((lambda decoded: Just(to_type_scheme((), decoded))), hydra.decode.core.type(el.term)), hydra.lib.flows.pure(Nothing()))
+                    return hydra.lib.logic.if_else(hydra.lib.equality.equal(i.type_name, hydra.core.Name("hydra.core.Type")), hydra.lib.flows.map((lambda decoded: cast(Maybe[hydra.core.TypeScheme], Just(to_type_scheme((), decoded)))), hydra.decode.core.type(el.term)), hydra.lib.flows.pure(cast(Maybe[hydra.core.TypeScheme], Nothing())))
                 
                 case _:
-                    return hydra.lib.flows.pure(Nothing())
-        return hydra.lib.flows.bind(hydra.lib.optionals.maybe(hydra.lib.flows.map((lambda typ: Just(f_type_to_type_scheme(typ))), hydra.decode.core.type(el.term)), (lambda ts: hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.TypeScheme"))))), hydra.lib.flows.map(hydra.lib.optionals.pure, hydra.decode.core.type_scheme(el.term)), hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))))), hydra.lib.flows.map((lambda decoded: Just(to_type_scheme((), decoded))), hydra.decode.core.type(el.term)), for_term(hydra.rewriting.deannotate_term(el.term))))), el.type), (lambda mts: hydra.lib.flows.pure(hydra.lib.optionals.map((lambda ts: (el.name, ts)), mts))))
+                    return hydra.lib.flows.pure(cast(Maybe[hydra.core.TypeScheme], Nothing()))
+        return hydra.lib.flows.bind(hydra.lib.optionals.maybe(hydra.lib.flows.map((lambda typ: cast(Maybe[hydra.core.TypeScheme], Just(f_type_to_type_scheme(typ)))), hydra.decode.core.type(el.term)), (lambda ts: hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.TypeScheme"))))), hydra.lib.flows.map(hydra.lib.optionals.pure, hydra.decode.core.type_scheme(el.term)), hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))))), hydra.lib.flows.map((lambda decoded: cast(Maybe[hydra.core.TypeScheme], Just(to_type_scheme((), decoded)))), hydra.decode.core.type(el.term)), for_term(hydra.rewriting.deannotate_term(el.term))))), el.type), (lambda mts: hydra.lib.flows.pure(hydra.lib.optionals.map((lambda ts: (el.name, ts)), mts))))
     return hydra.monads.with_state(g, hydra.lib.flows.bind(hydra.lib.flows.map_list(to_pair, hydra.lib.maps.elems(g.elements)), (lambda mpairs: hydra.lib.flows.pure(hydra.lib.maps.from_list(hydra.lib.optionals.cat(mpairs))))))
 
 def graph_to_inference_context[T0](graph: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.typing.InferenceContext]:
@@ -314,10 +314,10 @@ def require_record_type(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph
     def to_record(t: hydra.core.Type) -> Maybe[hydra.core.RowType]:
         match t:
             case hydra.core.TypeRecord(value=rt):
-                return Just(rt)
+                return cast(Maybe[hydra.core.RowType], Just(rt))
             
             case _:
-                return Nothing()
+                return cast(Maybe[hydra.core.RowType], Nothing())
     return require_row_type("record type", to_record, name)
 
 def require_schema_type[T0](cx: hydra.typing.InferenceContext, tname: hydra.core.Name) -> hydra.compute.Flow[T0, hydra.core.TypeScheme]:
@@ -329,10 +329,10 @@ def require_union_type(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.
     def to_union(t: hydra.core.Type) -> Maybe[hydra.core.RowType]:
         match t:
             case hydra.core.TypeUnion(value=rt):
-                return Just(rt)
+                return cast(Maybe[hydra.core.RowType], Just(rt))
             
             case _:
-                return Nothing()
+                return cast(Maybe[hydra.core.RowType], Nothing())
     return require_row_type("union", to_union, name)
 
 def resolve_type(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Type]]:
@@ -340,10 +340,10 @@ def resolve_type(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, 
     
     match hydra.rewriting.deannotate_type(typ):
         case hydra.core.TypeVariable(value=name):
-            return hydra.lexical.with_schema_context(hydra.lib.flows.bind(hydra.lexical.resolve_term(name), (lambda mterm: hydra.lib.optionals.maybe(hydra.lib.flows.pure(Nothing()), (lambda t: hydra.lib.flows.map(hydra.lib.optionals.pure, hydra.decode.core.type(t))), mterm))))
+            return hydra.lexical.with_schema_context(hydra.lib.flows.bind(hydra.lexical.resolve_term(name), (lambda mterm: hydra.lib.optionals.maybe(hydra.lib.flows.pure(cast(Maybe[hydra.core.Type], Nothing())), (lambda t: hydra.lib.flows.map(hydra.lib.optionals.pure, hydra.decode.core.type(t))), mterm))))
         
         case _:
-            return hydra.lib.flows.pure(Just(typ))
+            return hydra.lib.flows.pure(cast(Maybe[hydra.core.Type], Just(typ)))
 
 def term_as_graph(term: hydra.core.Term) -> FrozenDict[hydra.core.Name, hydra.core.Binding]:
     r"""Find the equivalent graph representation of a term."""
@@ -375,5 +375,5 @@ def types_to_elements(type_map: FrozenDict[hydra.core.Name, hydra.core.Type]) ->
     
     def to_element(pair: Tuple[hydra.core.Name, hydra.core.Type]) -> Tuple[hydra.core.Name, hydra.core.Binding]:
         name = pair[0]
-        return (name, hydra.core.Binding(name, hydra.encode.core.type(pair[1]), Nothing()))
+        return (name, hydra.core.Binding(name, hydra.encode.core.type(pair[1]), cast(Maybe[hydra.core.TypeScheme], Nothing())))
     return hydra.lib.maps.from_list(hydra.lib.lists.map(to_element, hydra.lib.maps.to_list(type_map)))

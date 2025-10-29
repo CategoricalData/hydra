@@ -4,7 +4,7 @@ r"""Utilities for type and term rewriting and analysis."""
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import FrozenDict, Just, Nothing, frozenlist
+from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
 from typing import Tuple, cast
 import hydra.accessors
 import hydra.coders
@@ -778,7 +778,7 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
                         tl = hydra.lib.lists.tail(bs)
                         def no_type() -> frozenlist[hydra.core.Binding]:
                             new_val = rewrite_with_subst(((subst, bound_vars), next), b.term)
-                            b1 = hydra.core.Binding(b.name, new_val, Nothing())
+                            b1 = hydra.core.Binding(b.name, new_val, cast(Maybe[hydra.core.TypeScheme], Nothing()))
                             return step(hydra.lib.lists.cons(b1, acc), tl)
                         def with_type(ts: hydra.core.TypeScheme) -> frozenlist[hydra.core.Binding]:
                             vars = ts.variables
@@ -791,7 +791,7 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
                             new_subst = hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.lists.zip(vars, new_vars)), subst)
                             new_bound = hydra.lib.sets.union(bound_vars, hydra.lib.sets.from_list(new_vars))
                             new_val = rewrite_with_subst(((new_subst, new_bound), hydra.lib.math.add(next, k)), b.term)
-                            b1 = hydra.core.Binding(b.name, new_val, Just(hydra.core.TypeScheme(new_vars, subst_type(new_subst, typ))))
+                            b1 = hydra.core.Binding(b.name, new_val, cast(Maybe[hydra.core.TypeScheme], Just(hydra.core.TypeScheme(new_vars, subst_type(new_subst, typ)))))
                             return step(hydra.lib.lists.cons(b1, acc), tl)
                         return hydra.lib.logic.if_else(hydra.lib.lists.null(bs), hydra.lib.lists.reverse(acc), hydra.lib.optionals.maybe(no_type(), (lambda ts: with_type(ts)), b.type))
                     bindings1 = step((), bindings0)
@@ -840,20 +840,20 @@ def remove_types_from_term(term: hydra.core.Term) -> hydra.core.Term:
     def strip[T0](recurse: Callable[[T0], hydra.core.Term], term2: T0) -> hydra.core.Term:
         rewritten = recurse(term2)
         def strip_binding(b: hydra.core.Binding) -> hydra.core.Binding:
-            return hydra.core.Binding(b.name, b.term, Nothing())
+            return hydra.core.Binding(b.name, b.term, cast(Maybe[hydra.core.TypeScheme], Nothing()))
         match rewritten:
             case hydra.core.TermFunction(value=f):
                 match f:
                     case hydra.core.FunctionElimination(value=e):
                         match e:
                             case hydra.core.EliminationProduct(value=tp):
-                                return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationProduct(hydra.core.TupleProjection(tp.index, tp.arity, Nothing())))))))
+                                return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationProduct(hydra.core.TupleProjection(tp.index, tp.arity, cast(Maybe[frozenlist[hydra.core.Type]], Nothing()))))))))
                             
                             case _:
                                 return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(e))))
                     
                     case hydra.core.FunctionLambda(value=l):
-                        return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, Nothing(), l.body)))))
+                        return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, cast(Maybe[hydra.core.Type], Nothing()), l.body)))))
                     
                     case _:
                         return cast(hydra.core.Term, hydra.core.TermFunction(f))
@@ -1019,7 +1019,7 @@ def rewrite_and_fold_term[T0](f: Callable[[
                 return for_many(for_pair, (lambda pairs: cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.from_list(pairs)))), val0, hydra.lib.maps.to_list(m))
             
             case hydra.core.TermOptional(value=mt):
-                return hydra.lib.optionals.maybe(dflt, (lambda t: for_single(recurse, (lambda t1: cast(hydra.core.Term, hydra.core.TermOptional(Just(t1)))), val0, t)), mt)
+                return hydra.lib.optionals.maybe(dflt, (lambda t: for_single(recurse, (lambda t1: cast(hydra.core.Term, hydra.core.TermOptional(cast(Maybe[hydra.core.Term], Just(t1))))), val0, t)), mt)
             
             case hydra.core.TermProduct(value=terms):
                 return for_many(recurse, (lambda x: cast(hydra.core.Term, hydra.core.TermProduct(x))), val0, terms)
@@ -1072,7 +1072,7 @@ def rewrite_and_fold_term_m[T0, T1](f: Callable[[
             def rw(elm2: hydra.core.Elimination) -> hydra.compute.Flow[T3, Tuple[T2, hydra.core.Elimination]]:
                 match elm2:
                     case hydra.core.EliminationUnion(value=cs):
-                        return hydra.lib.flows.bind(hydra.lib.optionals.maybe(hydra.lib.flows.pure(Nothing()), (lambda def_: hydra.lib.flows.map(hydra.lib.optionals.pure, recurse(val, def_))), cs.default), (lambda rmd: (val1 := hydra.lib.optionals.maybe(val, (lambda v1: v1[0]), rmd), hydra.lib.flows.bind(for_fields(val1, cs.cases), (lambda rcases: hydra.lib.flows.pure((rcases[0], cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(cs.type_name, hydra.lib.optionals.map((lambda v1: v1[1]), rmd), rcases[1]))))))))[1]))
+                        return hydra.lib.flows.bind(hydra.lib.optionals.maybe(hydra.lib.flows.pure(cast(Maybe[Tuple[T2, hydra.core.Term]], Nothing())), (lambda def_: hydra.lib.flows.map(hydra.lib.optionals.pure, recurse(val, def_))), cs.default), (lambda rmd: (val1 := hydra.lib.optionals.maybe(val, (lambda v1: v1[0]), rmd), hydra.lib.flows.bind(for_fields(val1, cs.cases), (lambda rcases: hydra.lib.flows.pure((rcases[0], cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(cs.type_name, hydra.lib.optionals.map((lambda v1: v1[1]), rmd), rcases[1]))))))))[1]))
                     
                     case _:
                         return hydra.lib.flows.pure((val, elm2))
@@ -1108,7 +1108,7 @@ def rewrite_and_fold_term_m[T0, T1](f: Callable[[
                 return for_many(for_pair, (lambda pairs: cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.from_list(pairs)))), val0, hydra.lib.maps.to_list(m))
             
             case hydra.core.TermOptional(value=mt):
-                return hydra.lib.optionals.maybe(dflt, (lambda t: for_single(recurse, (lambda t1: cast(hydra.core.Term, hydra.core.TermOptional(Just(t1)))), val0, t)), mt)
+                return hydra.lib.optionals.maybe(dflt, (lambda t: for_single(recurse, (lambda t1: cast(hydra.core.Term, hydra.core.TermOptional(cast(Maybe[hydra.core.Term], Just(t1))))), val0, t)), mt)
             
             case hydra.core.TermProduct(value=terms):
                 return for_many(recurse, (lambda x: cast(hydra.core.Term, hydra.core.TermProduct(x))), val0, terms)
@@ -1170,7 +1170,7 @@ def rewrite_term_m[T0](f: Callable[[
                             n = cs.type_name
                             def_ = cs.default
                             cases = cs.cases
-                            return hydra.lib.flows.bind(hydra.lib.optionals.maybe(hydra.lib.flows.pure(Nothing()), (lambda t: hydra.lib.flows.map(hydra.lib.optionals.pure, recurse(t))), def_), (lambda rdef: hydra.lib.flows.map((lambda rcases: cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(n, rdef, rcases)))))), hydra.lib.flows.map_list(for_field, cases))))
+                            return hydra.lib.flows.bind(hydra.lib.optionals.maybe(hydra.lib.flows.pure(cast(Maybe[hydra.core.Term], Nothing())), (lambda t: hydra.lib.flows.map(hydra.lib.optionals.pure, recurse(t))), def_), (lambda rdef: hydra.lib.flows.map((lambda rcases: cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(n, rdef, rcases)))))), hydra.lib.flows.map_list(for_field, cases))))
                         
                         case hydra.core.EliminationWrap(value=name):
                             return hydra.lib.flows.pure(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(name)))))
@@ -1371,7 +1371,7 @@ def rewrite_term_with_context_m[T0, T1](f: Callable[[
                     n = cs.type_name
                     def_ = cs.default
                     cases = cs.cases
-                    return hydra.lib.flows.bind(hydra.lib.optionals.maybe(hydra.lib.flows.pure(Nothing()), (lambda t: hydra.lib.flows.map(hydra.lib.optionals.pure, recurse(t))), def_), (lambda rdef: hydra.lib.flows.map((lambda rcases: cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(n, rdef, rcases)))))), hydra.lib.flows.map_list(for_field, cases))))
+                    return hydra.lib.flows.bind(hydra.lib.optionals.maybe(hydra.lib.flows.pure(cast(Maybe[hydra.core.Term], Nothing())), (lambda t: hydra.lib.flows.map(hydra.lib.optionals.pure, recurse(t))), def_), (lambda rdef: hydra.lib.flows.map((lambda rcases: cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(n, rdef, rcases)))))), hydra.lib.flows.map_list(for_field, cases))))
                 
                 case hydra.core.EliminationWrap(value=name):
                     return hydra.lib.flows.pure(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(name)))))
