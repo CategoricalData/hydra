@@ -63,22 +63,25 @@ emptyGraph = Graph.Graph {
 
 extendGraphWithBindings :: ([Core.Binding] -> Graph.Graph -> Graph.Graph)
 extendGraphWithBindings bindings g =  
-  let newEls = (Maps.fromList (Lists.map toEl bindings)) 
-      toEl = (\binding ->  
-              let name = (Core.bindingName binding) 
-                  term = (Core.bindingTerm binding)
-                  mts = (Core.bindingType binding)
+  let toEl = (\binding ->  
+          let name = (Core.bindingName binding)
+          in  
+            let term = (Core.bindingTerm binding)
+            in  
+              let mts = (Core.bindingType binding)
               in (name, Core.Binding {
                 Core.bindingName = name,
                 Core.bindingTerm = term,
                 Core.bindingType = mts}))
-  in Graph.Graph {
-    Graph.graphElements = (Maps.union newEls (Graph.graphElements g)),
-    Graph.graphEnvironment = (Graph.graphEnvironment g),
-    Graph.graphTypes = (Graph.graphTypes g),
-    Graph.graphBody = (Graph.graphBody g),
-    Graph.graphPrimitives = (Graph.graphPrimitives g),
-    Graph.graphSchema = (Graph.graphSchema g)}
+  in  
+    let newEls = (Maps.fromList (Lists.map toEl bindings))
+    in Graph.Graph {
+      Graph.graphElements = (Maps.union newEls (Graph.graphElements g)),
+      Graph.graphEnvironment = (Graph.graphEnvironment g),
+      Graph.graphTypes = (Graph.graphTypes g),
+      Graph.graphBody = (Graph.graphBody g),
+      Graph.graphPrimitives = (Graph.graphPrimitives g),
+      Graph.graphSchema = (Graph.graphSchema g)}
 
 fieldsOf :: (Core.Type -> [Core.FieldType])
 fieldsOf t =  
@@ -114,37 +117,43 @@ matchRecord decode term =
 
 matchUnion :: (Core.Name -> [(Core.Name, (Core.Term -> Compute.Flow Graph.Graph t0))] -> Core.Term -> Compute.Flow Graph.Graph t0)
 matchUnion tname pairs term =  
-  let stripped = (Rewriting.deannotateAndDetypeTerm term) 
-      mapping = (Maps.fromList pairs)
-  in ((\x -> case x of
-    Core.TermVariable v1 -> (Flows.bind (requireElement v1) (\el -> matchUnion tname pairs (Core.bindingTerm el)))
-    Core.TermUnion v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v1)) (Core.unName tname)) ( 
-      let fname = (Core.fieldName (Core.injectionField v1)) 
-          val = (Core.fieldTerm (Core.injectionField v1))
-      in (Optionals.maybe (Flows.fail (Strings.cat [
+  let stripped = (Rewriting.deannotateAndDetypeTerm term)
+  in  
+    let mapping = (Maps.fromList pairs)
+    in ((\x -> case x of
+      Core.TermVariable v1 -> (Flows.bind (requireElement v1) (\el -> matchUnion tname pairs (Core.bindingTerm el)))
+      Core.TermUnion v1 ->  
+        let exp =  
+                let fname = (Core.fieldName (Core.injectionField v1))
+                in  
+                  let val = (Core.fieldTerm (Core.injectionField v1))
+                  in (Optionals.maybe (Flows.fail (Strings.cat [
+                    Strings.cat [
+                      Strings.cat [
+                        "no matching case for field ",
+                        (Core.unName fname)],
+                      " in union type "],
+                    (Core.unName tname)])) (\f -> f val) (Maps.lookup fname mapping))
+        in (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v1)) (Core.unName tname)) exp (Monads.unexpected (Strings.cat [
+          "injection for type ",
+          (Core.unName tname)]) (Core_.term term)))
+      _ -> (Monads.unexpected (Strings.cat [
         Strings.cat [
-          Strings.cat [
-            "no matching case for field ",
-            (Core.unName fname)],
-          " in union type "],
-        (Core.unName tname)])) (\f -> f val) (Maps.lookup fname mapping))) (Monads.unexpected (Strings.cat [
-      "injection for type ",
-      (Core.unName tname)]) (Core_.term term)))
-    _ -> (Monads.unexpected (Strings.cat [
-      Strings.cat [
-        "union with one of {",
-        (Strings.intercalate ", " (Lists.map (\pair -> Core.unName (fst pair)) pairs))],
-      "}"]) (Core_.term stripped))) stripped)
+          "union with one of {",
+          (Strings.intercalate ", " (Lists.map (\pair -> Core.unName (fst pair)) pairs))],
+        "}"]) (Core_.term stripped))) stripped)
 
 matchUnitField :: (t0 -> t1 -> (t0, (t2 -> Compute.Flow t3 t1)))
 matchUnitField fname x = (fname, (\ignored -> Flows.pure x))
 
 requireElement :: (Core.Name -> Compute.Flow Graph.Graph Core.Binding)
 requireElement name =  
-  let showAll = False 
-      ellipsis = (\strings -> Logic.ifElse (Logic.and (Equality.gt (Lists.length strings) 3) (Logic.not showAll)) (Lists.concat2 (Lists.take 3 strings) [
-              "..."]) strings)
-      err = (\g -> Flows.fail (Strings.cat [
+  let showAll = False
+  in  
+    let ellipsis = (\strings -> Logic.ifElse (Logic.and (Equality.gt (Lists.length strings) 3) (Logic.not showAll)) (Lists.concat2 (Lists.take 3 strings) [
+            "..."]) strings)
+    in  
+      let err = (\g -> Flows.fail (Strings.cat [
               Strings.cat [
                 Strings.cat [
                   Strings.cat [
@@ -153,7 +162,7 @@ requireElement name =
                   ". Available elements: {"],
                 (Strings.intercalate ", " (ellipsis (Lists.map (\el -> Core.unName (Core.bindingName el)) (Maps.elems (Graph.graphElements g)))))],
               "}"]))
-  in (Flows.bind (dereferenceElement name) (\mel -> Optionals.maybe (Flows.bind Monads.getState err) Flows.pure mel))
+      in (Flows.bind (dereferenceElement name) (\mel -> Optionals.maybe (Flows.bind Monads.getState (\g -> err g)) Flows.pure mel))
 
 requirePrimitive :: (Core.Name -> Compute.Flow Graph.Graph Graph.Primitive)
 requirePrimitive name = (Flows.bind Monads.getState (\g -> Optionals.maybe (Flows.fail (Strings.cat [
