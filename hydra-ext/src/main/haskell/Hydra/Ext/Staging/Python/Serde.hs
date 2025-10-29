@@ -472,7 +472,7 @@ encodeString :: Py.String_ -> A.Expr
 encodeString (Py.String_ s style) = case style of
   Py.QuoteStyleSingle -> cst $ escapePythonString False s
   Py.QuoteStyleDouble -> cst $ escapePythonString True s
-  Py.QuoteStyleTriple -> tripleQuotes s
+  Py.QuoteStyleTriple -> tripleQuotesRaw s
 
 encodeSubjectExpression :: Py.SubjectExpression -> A.Expr
 encodeSubjectExpression s = case s of
@@ -550,5 +550,6 @@ escapePythonString doubleQuoted str = encChar : L.concatMap escapeChar str ++ [e
 toPythonComments :: String -> String
 toPythonComments c = L.intercalate "\n" $ ("# " ++) <$> L.lines c
 
-tripleQuotes :: String -> A.Expr
-tripleQuotes s = cst $ "\"\"\"" ++ s ++ "\"\"\"" -- TODO: escaping
+-- Note: we use raw strings for triple-quoted strings to avoid escaping issues.
+tripleQuotesRaw :: String -> A.Expr
+tripleQuotesRaw s = cst $ "r\"\"\"" ++ s ++ "\"\"\"" -- TODO: escaping
