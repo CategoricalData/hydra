@@ -103,10 +103,11 @@ betaReduceTypeDef = define "betaReduceType" $
         "t'" <<~ ref Schemas.requireTypeDef @@ var "name" $
         ref betaReduceTypeDef @@ (Core.typeApplication $ Core.applicationType (var "t'") (var "rhs"))]) $
   "mapExpr" <~ ("recurse" ~> "t" ~>
-    "r" <<~ var "recurse" @@ var "t" $
-    cases _Type (var "r")
+    "findApp" <~ ("r" ~> cases _Type (var "r")
       (Just $ Flows.pure $ var "r") [
       _Type_application>>: "a" ~> var "reduceApp" @@ var "a"]) $
+    "r" <<~ var "recurse" @@ var "t" $
+    var "findApp" @@ var "r") $
   ref Rewriting.rewriteTypeMDef @@ var "mapExpr" @@ var "typ"
 
 contractTermDef :: TBinding (Term -> Term)
@@ -350,9 +351,13 @@ reduceTermDef = define "reduceTerm" $
   "eager" ~> "term" ~>
   "reduce" <~ ("eager" ~> ref reduceTermDef @@ var "eager") $
   "doRecurse" <~ ("eager" ~> "term" ~>
-    Logic.and (var "eager") $ cases _Term (var "term") (Just true) [
-      _Term_function>>: match _Function (Just true) [
-        _Function_lambda>>: constant false]]) $
+    "isNonLambda" <~ ("f" ~> cases _Function (var "f")
+      (Just true) [
+      _Function_lambda>>: constant false]) $
+    "isNonLambdaTerm" <~ cases _Term (var "term")
+      (Just true) [
+      _Term_function>>: "f" ~> var "isNonLambda" @@ var "f"] $
+    Logic.and (var "eager") (var "isNonLambdaTerm")) $
   "reduceArg" <~ ("eager" ~> "arg" ~>
     Logic.ifElse (var "eager")
       (Flows.pure $ var "arg")
@@ -400,7 +405,31 @@ reduceTermDef = define "reduceTerm" $
       _Elimination_wrap>>: "name" ~> ref ExtractCore.wrapDef @@ var "name" @@ var "reducedArg"]) $
   "applyIfNullary" <~ ("eager" ~> "original" ~> "args" ~>
     "stripped" <~ ref Rewriting.deannotateTermDef @@ var "original" $
-    cases _Term (var "stripped") (Just $ Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args") [
+    "forElimination" <~ ("elm" ~> "args" ~>
+      "arg" <~ Lists.head (var "args") $
+      "remainingArgs" <~ Lists.tail (var "args") $
+      "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (ref Rewriting.deannotateTermDef @@ var "arg") $
+      "reducedResult" <<~ Flows.bind (var "applyElimination" @@ var "elm" @@ var "reducedArg") (var "reduce" @@ var "eager") $
+      var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
+    "forLambda" <~ ("l" ~> "args" ~>
+      "param" <~ Core.lambdaParameter (var "l") $
+      "body" <~ Core.lambdaBody (var "l") $
+      "arg" <~ Lists.head (var "args") $
+      "remainingArgs" <~ Lists.tail (var "args") $
+      "reducedArg" <<~ var "reduce" @@ var "eager" @@ (ref Rewriting.deannotateTermDef @@ var "arg") $
+      "reducedResult" <<~ var "reduce" @@ var "eager"
+        @@ (ref Rewriting.replaceFreeTermVariableDef @@ var "param" @@ var "reducedArg" @@ var "body") $
+      var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
+    "forPrimitive" <~ ("prim" ~> "arity" ~> "args" ~>
+      "argList" <~ Lists.take (var "arity") (var "args") $
+      "remainingArgs" <~ Lists.drop (var "arity") (var "args") $
+      "reducedArgs" <<~ Flows.mapList (var "reduceArg" @@ var "eager") (var "argList") $
+      "reducedResult" <<~ Flows.bind
+        (Graph.primitiveImplementation (var "prim") @@ var "reducedArgs")
+        (var "reduce" @@ var "eager") $
+      var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
+    cases _Term (var "stripped")
+      (Just $ Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args") [
       _Term_application>>: "app" ~> var "applyIfNullary" @@ var "eager" @@
         (Core.applicationFunction $ var "app") @@
         (Lists.cons (Core.applicationArgument $ var "app") (var "args")),
@@ -408,34 +437,17 @@ reduceTermDef = define "reduceTerm" $
           _Function_elimination>>: "elm" ~>
             Logic.ifElse (Lists.null $ var "args")
               (Flows.pure $ var "original")
-              ("arg" <~ Lists.head (var "args") $
-               "remainingArgs" <~ Lists.tail (var "args") $
-               "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (ref Rewriting.deannotateTermDef @@ var "arg") $
-               "reducedResult" <<~ Flows.bind (var "applyElimination" @@ var "elm" @@ var "reducedArg") (var "reduce" @@ var "eager") $
-               var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs"),
+              (var "forElimination" @@ var "elm" @@ var "args"),
           _Function_lambda>>: "l" ~>
             Logic.ifElse (Lists.null $ var "args")
               (Flows.pure $ var "original")
-              ("param" <~ Core.lambdaParameter (var "l") $
-               "body" <~ Core.lambdaBody (var "l") $
-               "arg" <~ Lists.head (var "args") $
-               "remainingArgs" <~ Lists.tail (var "args") $
-               "reducedArg" <<~ var "reduce" @@ var "eager" @@ (ref Rewriting.deannotateTermDef @@ var "arg") $
-               "reducedResult" <<~ var "reduce" @@ var "eager"
-                 @@ (ref Rewriting.replaceFreeTermVariableDef @@ var "param" @@ var "reducedArg" @@ var "body") $
-               var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs"),
+              (var "forLambda" @@ var "l" @@ var "args"),
           _Function_primitive>>: "name" ~>
             "prim" <<~ ref Lexical.requirePrimitiveDef @@ var "name" $
             "arity" <~ ref Arity.primitiveArityDef @@ var "prim" $
             Logic.ifElse (Equality.gt (var "arity") (Lists.length $ var "args"))
               (Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args")
-              ("argList" <~ Lists.take (var "arity") (var "args") $
-               "remainingArgs" <~ Lists.drop (var "arity") (var "args") $
-               "reducedArgs" <<~ Flows.mapList (var "reduceArg" @@ var "eager") (var "argList") $
-               "reducedResult" <<~ Flows.bind
-                 (Graph.primitiveImplementation (var "prim") @@ var "reducedArgs")
-                 (var "reduce" @@ var "eager") $
-               var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs")],
+              (var "forPrimitive" @@ var "prim" @@ var "arity" @@ var "args")],
       _Term_variable>>: "v" ~> Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args"]) $
   "mapping" <~ ("recurse" ~> "mid" ~>
     "inner" <<~ Logic.ifElse (var "doRecurse" @@ var "eager" @@ var "mid")
