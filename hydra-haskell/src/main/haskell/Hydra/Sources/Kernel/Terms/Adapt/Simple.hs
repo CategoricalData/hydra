@@ -257,29 +257,33 @@ adaptTermDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -
 adaptTermDef = define "adaptTerm" $
   doc "Adapt a term using the given language constraints" $
   "constraints" ~> "litmap" ~> "term0" ~>
-  "rewrite" <~ ("recurse" ~> "term0" ~>
-    "term1" <<~ var "recurse" @@ var "term0" $
-    "tryTerm" <~ ("term" ~>
+  "rewrite" <~ ("recurse" ~> "term0" ~> lets [
+    "forSupported">: ("term" ~> cases _Term (var "term")
+      (Just $ produce $ just $ var "term") [
+      _Term_literal>>: "l" ~>
+        "lt" <~ ref Variants.literalTypeDef @@ var "l" $
+        produce $ just $ Logic.ifElse (ref literalTypeSupportedDef @@ var "constraints" @@ var "lt")
+          (var "term")
+          (Core.termLiteral $ ref adaptLiteralValueDef @@ var "litmap" @@ var "lt" @@ var "l")]),
+    "forUnsupported">: ("term" ~> lets [
+      "forNonNull">: ("alts" ~>
+        "mterm" <<~ var "tryTerm" @@ Lists.head (var "alts") $
+        optCases (var "mterm")
+          (var "tryAlts" @@ Lists.tail (var "alts"))
+          ("t" ~> produce $ just $ var "t")),
+      "tryAlts">: ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
+        (produce nothing)
+        (var "forNonNull" @@ var "alts"))] $
+      "alts" <<~ ref termAlternativesDef @@ var "term" $
+      var "tryAlts" @@ var "alts"),
+    "tryTerm">: ("term" ~>
       "supportedVariant" <~ Sets.member
         (ref Variants.termVariantDef @@ var "term")
         (Coders.languageConstraintsTermVariants $ var "constraints") $
-      "forSupported" <~ ("term" ~> cases _Term (var "term")
-        (Just $ produce $ just $ var "term") [
-        _Term_literal>>: "l" ~>
-          "lt" <~ ref Variants.literalTypeDef @@ var "l" $
-          produce $ just $ Logic.ifElse (ref literalTypeSupportedDef @@ var "constraints" @@ var "lt")
-            (var "term")
-            (Core.termLiteral $ ref adaptLiteralValueDef @@ var "litmap" @@ var "lt" @@ var "l")]) $
       Logic.ifElse (var "supportedVariant")
         (var "forSupported" @@ var "term")
-        ("tryAlts" <~ ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
-          (produce nothing)
-          ( "mterm" <<~ var "tryTerm" @@ Lists.head (var "alts") $
-            optCases (var "mterm")
-              (var "tryAlts" @@ Lists.tail (var "alts"))
-              ("t" ~> produce $ just $ var "t"))) $
-           "alts" <<~ ref termAlternativesDef @@ var "term1" $
-           var "tryAlts" @@ var "alts")) $
+        (var "forUnsupported" @@ var "term"))] $
+    "term1" <<~ var "recurse" @@ var "term0" $
     "mterm" <<~ var "tryTerm" @@ var "term1" $
     optCases (var "mterm")
       (Flows.fail $ "no alternatives for term: " ++ (ref ShowCore.termDef @@ var "term1"))
@@ -290,26 +294,29 @@ adaptTypeDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -
 adaptTypeDef = define "adaptType" $
   doc "Adapt a type using the given language constraints" $
   "constraints" ~> "litmap" ~> "type0" ~>
-  "forSupported" <~ ("typ" ~> cases _Type (var "typ")
+  lets [
+  "forSupported">: ("typ" ~> cases _Type (var "typ")
     (Just $ just $ var "typ") [
     _Type_literal>>: "lt" ~> Logic.ifElse (ref literalTypeSupportedDef @@ var "constraints" @@ var "lt")
       (just $ var "typ")
       (optCases (Maps.lookup (var "lt") (var "litmap"))
         (just $ Core.typeLiteral Core.literalTypeString)
-        ("lt2" ~> just $ Core.typeLiteral $ var "lt2"))]) $
-  "tryType" <~ ("typ" ~>
+        ("lt2" ~> just $ Core.typeLiteral $ var "lt2"))]),
+  "forUnsupported">: ("typ" ~>
+    "tryAlts" <~ ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
+      nothing
+      (optCases (var "tryType" @@ Lists.head (var "alts"))
+        (var "tryAlts" @@ Lists.tail (var "alts"))
+        ("t" ~> just $ var "t"))) $
+    "alts" <~ ref typeAlternativesDef @@ var "typ" $
+    var "tryAlts" @@ var "alts"),
+  "tryType">: ("typ" ~>
     "supportedVariant" <~ Sets.member
       (ref Variants.typeVariantDef @@ var "typ")
       (Coders.languageConstraintsTypeVariants $ var "constraints") $
     Logic.ifElse (var "supportedVariant")
       (var "forSupported" @@ var "typ")
-      ("tryAlts" <~ ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
-        nothing
-        ( optCases (var "tryType" @@ Lists.head (var "alts"))
-            (var "tryAlts" @@ Lists.tail (var "alts"))
-            ("t" ~> just $ var "t"))) $
-         "alts" <~ ref typeAlternativesDef @@ var "typ" $
-         var "tryAlts" @@ var "alts")) $
+      (var "forUnsupported" @@ var "typ"))] $
   "rewrite" <~ ("recurse" ~> "typ" ~>
     "type1" <<~ var "recurse" @@ var "typ" $
     optCases (var "tryType" @@ var "type1")
