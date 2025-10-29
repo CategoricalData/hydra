@@ -285,6 +285,35 @@ testEtaExpansion = H.describe "etaExpandTypedTerms" $ do
               Types.mono $ Types.functionMany [Types.string, Types.string, Types.string])] $
             unit)
 
+    H.describe "Forced expansion in case statement branches" $ do
+      expandsTo "variable reference in case branch is expanded"
+        (letsTyped [("handler", toLower, Types.mono (Types.function Types.string Types.string))] $
+          match (Name "UnionMonomorphic") Nothing
+            ["bool">: lambda "ignored" $ string "boolean value",
+             "string">: var "handler",
+             "unit">: lambda "ignored" $ string "unit value"])
+        (letsTyped [("handler", toLower, Types.mono (Types.function Types.string Types.string))] $
+          lambda "v1" $ match (Name "UnionMonomorphic") Nothing
+            ["bool">: lambda "ignored" $ string "boolean value",
+             "string">: lambda "v1" $ var "handler" @@ var "v1",
+             "unit">: lambda "ignored" $ string "unit value"] @@ var "v1")
+
+      expandsTo "bare primitive in case branch is expanded"
+        (match (Name "UnionMonomorphic") Nothing
+          ["bool">: lambda "ignored" "boolean value",
+           "string">: toLower,
+           "unit">: lambda "ignored" "unit value"])
+        (lambda "v1" $ match (Name "UnionMonomorphic") Nothing
+          ["bool">: lambda "ignored" "boolean value",
+           "string">: lambda "v1" $ toLower @@ var "v1",
+           "unit">: lambda "ignored" "unit value"] @@ var "v1")
+
+      noChange "variable reference outside case branch is not expanded"
+        (lets ["handler">: toLower] $ var "handler")
+
+      noChange "bare primitive outside case branch is not expanded"
+        toLower
+
   where
     cat = primitive $ Name "hydra.lib.strings.cat"
     empty = primitive $ Name "hydra.lib.maps.empty"
