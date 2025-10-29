@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""A module for tier-0 constants."""
+r"""A module for tier-0 constants."""
 
 from __future__ import annotations
 import hydra.core

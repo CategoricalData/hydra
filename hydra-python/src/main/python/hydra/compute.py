@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Abstractions for single- and bidirectional transformations."""
+r"""Abstractions for single- and bidirectional transformations."""
 
 from __future__ import annotations
 from collections.abc import Callable
@@ -20,7 +20,7 @@ V2 = TypeVar("V2")
 
 @dataclass
 class Adapter(Generic[S1, S2, T1, T2, V1, V2]):
-    """A two-level bidirectional encoder which adapts types to types and terms to terms."""
+    r"""A two-level bidirectional encoder which adapts types to types and terms to terms."""
     
     is_lossy: bool
     source: T1
@@ -35,7 +35,7 @@ ADAPTER__CODER__NAME = hydra.core.Name("coder")
 
 @dataclass
 class Bicoder(Generic[S1, S2, T1, T2, V1, V2]):
-    """A two-level encoder and decoder, operating both at a type level and an instance (data) level."""
+    r"""A two-level encoder and decoder, operating both at a type level and an instance (data) level."""
     
     encode: Callable[[T1], Adapter[S1, S2, T1, T2, V1, V2]]
     decode: Callable[[T2], Adapter[S2, S1, T2, T1, V2, V1]]
@@ -46,7 +46,7 @@ BICODER__DECODE__NAME = hydra.core.Name("decode")
 
 @dataclass
 class Coder(Generic[S1, S2, V1, V2]):
-    """An encoder and decoder; a bidirectional flow between two types."""
+    r"""An encoder and decoder; a bidirectional flow between two types."""
     
     encode: Callable[[V1], Flow[S1, V2]]
     decode: Callable[[V2], Flow[S2, V1]]
@@ -56,13 +56,13 @@ CODER__ENCODE__NAME = hydra.core.Name("encode")
 CODER__DECODE__NAME = hydra.core.Name("decode")
 
 class Flow(Node["Callable[[S, Trace], FlowState[S, V]]"], Generic[S, V]):
-    """A variant of the State monad with built-in logging and error handling."""
+    r"""A variant of the State monad with built-in logging and error handling."""
 
 FLOW__NAME = hydra.core.Name("hydra.compute.Flow")
 
 @dataclass
 class FlowState(Generic[S, V]):
-    """The result of evaluating a Flow."""
+    r"""The result of evaluating a Flow."""
     
     value: Maybe[V]
     state: S
@@ -75,7 +75,7 @@ FLOW_STATE__TRACE__NAME = hydra.core.Name("trace")
 
 @dataclass
 class Trace:
-    """A container for logging and error information."""
+    r"""A container for logging and error information."""
     
     stack: frozenlist[str]
     messages: frozenlist[str]

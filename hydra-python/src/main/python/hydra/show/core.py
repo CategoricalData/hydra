@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""String representations of hydra.core types."""
+r"""String representations of hydra.core types."""
 
 from __future__ import annotations
 from collections.abc import Callable
@@ -16,7 +16,7 @@ import hydra.lib.sets
 import hydra.lib.strings
 
 def float_type(ft: hydra.core.FloatType) -> str:
-    """Show a float type as a string."""
+    r"""Show a float type as a string."""
     
     match ft:
         case hydra.core.FloatType.BIGFLOAT:
@@ -29,7 +29,7 @@ def float_type(ft: hydra.core.FloatType) -> str:
             return "float64"
 
 def integer_type(it: hydra.core.IntegerType) -> str:
-    """Show an integer type as a string."""
+    r"""Show an integer type as a string."""
     
     match it:
         case hydra.core.IntegerType.BIGINT:
@@ -60,7 +60,7 @@ def integer_type(it: hydra.core.IntegerType) -> str:
             return "uint64"
 
 def literal_type(lt: hydra.core.LiteralType) -> str:
-    """Show a literal type as a string."""
+    r"""Show a literal type as a string."""
     
     match lt:
         case hydra.core.LiteralTypeBinary():
@@ -79,7 +79,7 @@ def literal_type(lt: hydra.core.LiteralType) -> str:
             return "string"
 
 def type(typ: hydra.core.Type) -> str:
-    """Show a type as a string."""
+    r"""Show a type as a string."""
     
     def show_field_type(ft: hydra.core.FieldType) -> str:
         fname = ft.name.value
@@ -169,7 +169,7 @@ def type(typ: hydra.core.Type) -> str:
             return hydra.lib.strings.cat(("wrap[", tname, "](", type(typ1), ")"))
 
 def float(fv: hydra.core.FloatValue) -> str:
-    """Show a float value as a string."""
+    r"""Show a float value as a string."""
     
     match fv:
         case hydra.core.FloatValueBigfloat(value=v):
@@ -182,7 +182,7 @@ def float(fv: hydra.core.FloatValue) -> str:
             return hydra.lib.strings.cat((hydra.lib.literals.show_float64(v3), ":float64"))
 
 def integer(iv: hydra.core.IntegerValue) -> str:
-    """Show an integer value as a string."""
+    r"""Show an integer value as a string."""
     
     match iv:
         case hydra.core.IntegerValueBigint(value=v):
@@ -213,7 +213,7 @@ def integer(iv: hydra.core.IntegerValue) -> str:
             return hydra.lib.strings.cat((hydra.lib.literals.show_uint64(v9), ":uint64"))
 
 def literal(l: hydra.core.Literal) -> str:
-    """Show a literal as a string."""
+    r"""Show a literal as a string."""
     
     match l:
         case hydra.core.LiteralBinary():
@@ -232,7 +232,7 @@ def literal(l: hydra.core.Literal) -> str:
             return hydra.lib.literals.show_string(s)
 
 def type_scheme(ts: hydra.core.TypeScheme) -> str:
-    """Show a type scheme as a string."""
+    r"""Show a type scheme as a string."""
     
     vars = ts.variables
     body = ts.type
@@ -241,7 +241,7 @@ def type_scheme(ts: hydra.core.TypeScheme) -> str:
     return hydra.lib.strings.cat(("(", fa, type(body), ")"))
 
 def binding(el: hydra.core.Binding) -> str:
-    """Show a binding as a string."""
+    r"""Show a binding as a string."""
     
     name = el.name.value
     t = el.term
@@ -249,7 +249,7 @@ def binding(el: hydra.core.Binding) -> str:
     return hydra.lib.strings.cat((name, type_str, " = ", term(t)))
 
 def elimination(elm: hydra.core.Elimination) -> str:
-    """Show an elimination as a string."""
+    r"""Show an elimination as a string."""
     
     match elm:
         case hydra.core.EliminationProduct(value=tp):
@@ -274,7 +274,7 @@ def elimination(elm: hydra.core.Elimination) -> str:
             return hydra.lib.strings.cat(("unwrap(", tname.value, ")"))
 
 def fields(flds: frozenlist[hydra.core.Field]) -> str:
-    """Show a list of fields as a string."""
+    r"""Show a list of fields as a string."""
     
     def show_field(field: hydra.core.Field) -> str:
         fname = field.name.value
@@ -284,7 +284,7 @@ def fields(flds: frozenlist[hydra.core.Field]) -> str:
     return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", field_strs), "}"))
 
 def function(f: hydra.core.Function) -> str:
-    """Show a function as a string."""
+    r"""Show a function as a string."""
     
     match f:
         case hydra.core.FunctionElimination(value=v1):
@@ -297,14 +297,14 @@ def function(f: hydra.core.Function) -> str:
             return hydra.lib.strings.cat2(name.value, "!")
 
 def injection(inj: hydra.core.Injection) -> str:
-    """Show an injection as a string."""
+    r"""Show an injection as a string."""
     
     tname = inj.type_name
     f = inj.field
     return hydra.lib.strings.cat(("inject(", tname.value, ")", fields((f,))))
 
 def lambda_(l: hydra.core.Lambda) -> str:
-    """Show a lambda as a string."""
+    r"""Show a lambda as a string."""
     
     v = l.parameter.value
     mt = l.domain
@@ -313,7 +313,7 @@ def lambda_(l: hydra.core.Lambda) -> str:
     return hydra.lib.strings.cat(("λ", v, type_str, ".", term(body)))
 
 def term(t: hydra.core.Term) -> str:
-    """Show a term as a string."""
+    r"""Show a term as a string."""
     
     def gather_terms(prev: frozenlist[hydra.core.Term], app: hydra.core.Application) -> frozenlist[hydra.core.Term]:
         lhs = app.function
@@ -404,6 +404,6 @@ def list[T0](f: Callable[[T0], str], xs: frozenlist[T0]) -> str:
     return hydra.lib.strings.cat(("[", hydra.lib.strings.intercalate(", ", element_strs), "]"))
 
 def read_term(s: str) -> Maybe[hydra.core.Term]:
-    """A placeholder for reading terms from their serialized form. Not implemented."""
+    r"""A placeholder for reading terms from their serialized form. Not implemented."""
     
     return Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s)))))

@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Natural-language descriptions for hydra.mantle types."""
+r"""Natural-language descriptions for hydra.mantle types."""
 
 from __future__ import annotations
 import hydra.core
@@ -9,7 +9,7 @@ import hydra.lib.strings
 import hydra.mantle
 
 def precision(v1: hydra.mantle.Precision) -> str:
-    """Display numeric precision as a string."""
+    r"""Display numeric precision as a string."""
     
     match v1:
         case hydra.mantle.PrecisionArbitrary():

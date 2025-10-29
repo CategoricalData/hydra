@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""String representations of hydra.typing types."""
+r"""String representations of hydra.typing types."""
 
 from __future__ import annotations
 from typing import Tuple
@@ -12,14 +12,14 @@ import hydra.show.core
 import hydra.typing
 
 def type_constraint(tc: hydra.typing.TypeConstraint) -> str:
-    """Show a type constraint as a string."""
+    r"""Show a type constraint as a string."""
     
     ltyp = tc.left
     rtyp = tc.right
     return hydra.lib.strings.cat((hydra.show.core.type(ltyp), "≡", hydra.show.core.type(rtyp)))
 
 def type_subst(ts: hydra.typing.TypeSubst) -> str:
-    """Show a type substitution as a string."""
+    r"""Show a type substitution as a string."""
     
     subst = ts.value
     pairs = hydra.lib.maps.to_list(subst)

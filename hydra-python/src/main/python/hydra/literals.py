@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Conversion functions for literal values."""
+r"""Conversion functions for literal values."""
 
 from __future__ import annotations
 from decimal import Decimal
@@ -9,7 +9,7 @@ import hydra.core
 import hydra.lib.literals
 
 def bigfloat_to_float_value(ft: hydra.core.FloatType, bf: Decimal) -> hydra.core.FloatValue:
-    """Convert a bigfloat to a floating-point value of a given type (note: lossy)."""
+    r"""Convert a bigfloat to a floating-point value of a given type (note: lossy)."""
     
     match ft:
         case hydra.core.FloatType.BIGFLOAT:
@@ -22,7 +22,7 @@ def bigfloat_to_float_value(ft: hydra.core.FloatType, bf: Decimal) -> hydra.core
             return cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(hydra.lib.literals.bigfloat_to_float64(bf)))
 
 def bigint_to_integer_value(it: hydra.core.IntegerType, bi: int) -> hydra.core.IntegerValue:
-    """Convert a bigint to an integer value of a given type (note: lossy)."""
+    r"""Convert a bigint to an integer value of a given type (note: lossy)."""
     
     match it:
         case hydra.core.IntegerType.BIGINT:
@@ -53,7 +53,7 @@ def bigint_to_integer_value(it: hydra.core.IntegerType, bi: int) -> hydra.core.I
             return cast(hydra.core.IntegerValue, hydra.core.IntegerValueUint64(hydra.lib.literals.bigint_to_uint64(bi)))
 
 def float_value_to_bigfloat(v1: hydra.core.FloatValue) -> Decimal:
-    """Convert a floating-point value of any precision to a bigfloat."""
+    r"""Convert a floating-point value of any precision to a bigfloat."""
     
     match v1:
         case hydra.core.FloatValueBigfloat(value=bf):
@@ -66,7 +66,7 @@ def float_value_to_bigfloat(v1: hydra.core.FloatValue) -> Decimal:
             return hydra.lib.literals.float64_to_bigfloat(f64)
 
 def integer_value_to_bigint(v1: hydra.core.IntegerValue) -> int:
-    """Convert an integer value of any precision to a bigint."""
+    r"""Convert an integer value of any precision to a bigint."""
     
     match v1:
         case hydra.core.IntegerValueBigint(value=bi):

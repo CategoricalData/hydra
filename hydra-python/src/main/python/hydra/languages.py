@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Language constraints for Hydra Core."""
+r"""Language constraints for Hydra Core."""
 
 from __future__ import annotations
 import hydra.coders
@@ -9,7 +9,7 @@ import hydra.lib.sets
 import hydra.variants
 
 def hydra_language() -> hydra.coders.Language:
-    """Language constraints for Hydra Core, i.e. no constraints."""
+    r"""Language constraints for Hydra Core, i.e. no constraints."""
     
     elimination_variants = hydra.lib.sets.from_list(hydra.variants.elimination_variants)
     literal_variants = hydra.lib.sets.from_list(hydra.variants.literal_variants)

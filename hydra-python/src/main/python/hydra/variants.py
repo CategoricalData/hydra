@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Functions for working with term, type, and literal type variants, as well as numeric precision."""
+r"""Functions for working with term, type, and literal type variants, as well as numeric precision."""
 
 from __future__ import annotations
 from hydra.dsl.python import frozenlist
@@ -10,7 +10,7 @@ import hydra.lib.lists
 import hydra.mantle
 
 def elimination_variant(v1: hydra.core.Elimination) -> hydra.mantle.EliminationVariant:
-    """Find the elimination variant (constructor) for a given elimination term."""
+    r"""Find the elimination variant (constructor) for a given elimination term."""
     
     match v1:
         case hydra.core.EliminationProduct():
@@ -29,7 +29,7 @@ def elimination_variant(v1: hydra.core.Elimination) -> hydra.mantle.EliminationV
 elimination_variants = (hydra.mantle.EliminationVariant.PRODUCT, hydra.mantle.EliminationVariant.RECORD, hydra.mantle.EliminationVariant.UNION, hydra.mantle.EliminationVariant.WRAP)
 
 def float_type_precision(v1: hydra.core.FloatType) -> hydra.mantle.Precision:
-    """Find the precision of a given floating-point type."""
+    r"""Find the precision of a given floating-point type."""
     
     match v1:
         case hydra.core.FloatType.BIGFLOAT:
@@ -45,7 +45,7 @@ def float_type_precision(v1: hydra.core.FloatType) -> hydra.mantle.Precision:
 float_types = (hydra.core.FloatType.BIGFLOAT, hydra.core.FloatType.FLOAT32, hydra.core.FloatType.FLOAT64)
 
 def float_value_type(v1: hydra.core.FloatValue) -> hydra.core.FloatType:
-    """Find the float type for a given floating-point value."""
+    r"""Find the float type for a given floating-point value."""
     
     match v1:
         case hydra.core.FloatValueBigfloat():
@@ -58,7 +58,7 @@ def float_value_type(v1: hydra.core.FloatValue) -> hydra.core.FloatType:
             return hydra.core.FloatType.FLOAT64
 
 def function_variant(v1: hydra.core.Function) -> hydra.mantle.FunctionVariant:
-    """Find the function variant (constructor) for a given function."""
+    r"""Find the function variant (constructor) for a given function."""
     
     match v1:
         case hydra.core.FunctionElimination():
@@ -74,7 +74,7 @@ def function_variant(v1: hydra.core.Function) -> hydra.mantle.FunctionVariant:
 function_variants = (hydra.mantle.FunctionVariant.ELIMINATION, hydra.mantle.FunctionVariant.LAMBDA, hydra.mantle.FunctionVariant.PRIMITIVE)
 
 def integer_type_is_signed(v1: hydra.core.IntegerType) -> bool:
-    """Find whether a given integer type is signed (true) or unsigned (false)."""
+    r"""Find whether a given integer type is signed (true) or unsigned (false)."""
     
     match v1:
         case hydra.core.IntegerType.BIGINT:
@@ -105,7 +105,7 @@ def integer_type_is_signed(v1: hydra.core.IntegerType) -> bool:
             return False
 
 def integer_type_precision(v1: hydra.core.IntegerType) -> hydra.mantle.Precision:
-    """Find the precision of a given integer type."""
+    r"""Find the precision of a given integer type."""
     
     match v1:
         case hydra.core.IntegerType.BIGINT:
@@ -139,7 +139,7 @@ def integer_type_precision(v1: hydra.core.IntegerType) -> hydra.mantle.Precision
 integer_types = (hydra.core.IntegerType.BIGINT, hydra.core.IntegerType.INT8, hydra.core.IntegerType.INT16, hydra.core.IntegerType.INT32, hydra.core.IntegerType.INT64, hydra.core.IntegerType.UINT8, hydra.core.IntegerType.UINT16, hydra.core.IntegerType.UINT32, hydra.core.IntegerType.UINT64)
 
 def integer_value_type(v1: hydra.core.IntegerValue) -> hydra.core.IntegerType:
-    """Find the integer type for a given integer value."""
+    r"""Find the integer type for a given integer value."""
     
     match v1:
         case hydra.core.IntegerValueBigint():
@@ -170,7 +170,7 @@ def integer_value_type(v1: hydra.core.IntegerValue) -> hydra.core.IntegerType:
             return hydra.core.IntegerType.UINT64
 
 def literal_type(v1: hydra.core.Literal) -> hydra.core.LiteralType:
-    """Find the literal type for a given literal value."""
+    r"""Find the literal type for a given literal value."""
     
     match v1:
         case hydra.core.LiteralBinary():
@@ -189,7 +189,7 @@ def literal_type(v1: hydra.core.Literal) -> hydra.core.LiteralType:
             return cast(hydra.core.LiteralType, hydra.core.LiteralTypeString(None))
 
 def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.mantle.LiteralVariant:
-    """Find the literal type variant (constructor) for a given literal value."""
+    r"""Find the literal type variant (constructor) for a given literal value."""
     
     match v1:
         case hydra.core.LiteralTypeBinary():
@@ -211,7 +211,7 @@ def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.mantle.LiteralVari
 literal_types = hydra.lib.lists.concat(((cast(hydra.core.LiteralType, hydra.core.LiteralTypeBinary(None)), cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean(None))), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(x))), float_types), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(x))), integer_types), (cast(hydra.core.LiteralType, hydra.core.LiteralTypeString(None)),)))
 
 def literal_variant(arg_: hydra.core.Literal) -> hydra.mantle.LiteralVariant:
-    """Find the literal variant (constructor) for a given literal value."""
+    r"""Find the literal variant (constructor) for a given literal value."""
     
     return literal_type_variant(literal_type(arg_))
 
@@ -219,7 +219,7 @@ def literal_variant(arg_: hydra.core.Literal) -> hydra.mantle.LiteralVariant:
 literal_variants = (hydra.mantle.LiteralVariant.BINARY, hydra.mantle.LiteralVariant.BOOLEAN, hydra.mantle.LiteralVariant.FLOAT, hydra.mantle.LiteralVariant.INTEGER, hydra.mantle.LiteralVariant.STRING)
 
 def term_variant(v1: hydra.core.Term) -> hydra.mantle.TermVariant:
-    """Find the term variant (constructor) for a given term."""
+    r"""Find the term variant (constructor) for a given term."""
     
     match v1:
         case hydra.core.TermAnnotated():
@@ -280,7 +280,7 @@ def term_variant(v1: hydra.core.Term) -> hydra.mantle.TermVariant:
 term_variants = (hydra.mantle.TermVariant.ANNOTATED, hydra.mantle.TermVariant.APPLICATION, hydra.mantle.TermVariant.LITERAL, hydra.mantle.TermVariant.FUNCTION, hydra.mantle.TermVariant.LIST, hydra.mantle.TermVariant.MAP, hydra.mantle.TermVariant.OPTIONAL, hydra.mantle.TermVariant.PRODUCT, hydra.mantle.TermVariant.RECORD, hydra.mantle.TermVariant.SET, hydra.mantle.TermVariant.SUM, hydra.mantle.TermVariant.TYPE_LAMBDA, hydra.mantle.TermVariant.TYPE_APPLICATION, hydra.mantle.TermVariant.UNION, hydra.mantle.TermVariant.UNIT, hydra.mantle.TermVariant.VARIABLE, hydra.mantle.TermVariant.WRAP)
 
 def type_variant(v1: hydra.core.Type) -> hydra.mantle.TypeVariant:
-    """Find the type variant (constructor) for a given type."""
+    r"""Find the type variant (constructor) for a given type."""
     
     match v1:
         case hydra.core.TypeAnnotated():

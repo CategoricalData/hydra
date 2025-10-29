@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""This implementation of Tarjan's algorithm was originally based on GraphSCC by Iavor S. Diatchki: https://hackage.haskell.org/package/GraphSCC."""
+r"""This implementation of Tarjan's algorithm was originally based on GraphSCC by Iavor S. Diatchki: https://hackage.haskell.org/package/GraphSCC."""
 
 from __future__ import annotations
 from collections.abc import Callable
@@ -34,7 +34,7 @@ def adjacency_lists_to_graph[T0](edges0: frozenlist[Tuple[T0, frozenlist[T0]]]) 
 initial_state = hydra.topology.TarjanState(0, hydra.lib.maps.empty(), hydra.lib.maps.empty(), (), hydra.lib.sets.empty(), ())
 
 def pop_stack_until(v: int) -> hydra.compute.Flow[hydra.topology.TarjanState, frozenlist[int]]:
-    """Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component."""
+    r"""Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component."""
     
     def go(acc: frozenlist[int]) -> hydra.compute.Flow[hydra.topology.TarjanState, frozenlist[int]]:
         def succeed(st: hydra.topology.TarjanState) -> hydra.compute.Flow[hydra.topology.TarjanState, frozenlist[int]]:
@@ -48,12 +48,12 @@ def pop_stack_until(v: int) -> hydra.compute.Flow[hydra.topology.TarjanState, fr
     return go(())
 
 def strong_connect(graph: FrozenDict[int, frozenlist[int]], v: int) -> hydra.compute.Flow[hydra.topology.TarjanState, None]:
-    """Visit a vertex and recursively explore its successors."""
+    r"""Visit a vertex and recursively explore its successors."""
     
     return hydra.lib.flows.bind(hydra.monads.get_state, (lambda st: (i := st.counter, new_st := hydra.topology.TarjanState(hydra.lib.math.add(i, 1), hydra.lib.maps.insert(v, i, st.indices), hydra.lib.maps.insert(v, i, st.low_links), hydra.lib.lists.cons(v, st.stack), hydra.lib.sets.insert(v, st.on_stack), st.sccs), neighbors := hydra.lib.maps.find_with_default((), v, graph), process_neighbor := (lambda w: (low_link := (lambda st_: (low_v := hydra.lib.maps.find_with_default(hydra.constants.max_int32, v, st_.low_links), idx_w := hydra.lib.maps.find_with_default(hydra.constants.max_int32, w, st_.indices), hydra.lib.flows.bind(hydra.monads.modify((lambda s: hydra.topology.TarjanState(s.counter, s.indices, hydra.lib.maps.insert(v, hydra.lib.equality.min(low_v, idx_w), s.low_links), s.stack, s.on_stack, s.sccs))), (lambda _: hydra.lib.flows.pure(None))))[2]), hydra.lib.flows.bind(hydra.monads.get_state, (lambda st_: hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.maps.member(w, st_.indices)), hydra.lib.flows.bind(strong_connect(graph, w), (lambda _: hydra.lib.flows.bind(hydra.monads.get_state, (lambda st_after: (low_v := hydra.lib.maps.find_with_default(hydra.constants.max_int32, v, st_after.low_links), low_w := hydra.lib.maps.find_with_default(hydra.constants.max_int32, w, st_after.low_links), hydra.lib.flows.bind(hydra.monads.modify((lambda s: hydra.topology.TarjanState(s.counter, s.indices, hydra.lib.maps.insert(v, hydra.lib.equality.min(low_v, low_w), s.low_links), s.stack, s.on_stack, s.sccs))), (lambda _2: hydra.lib.flows.pure(None))))[2])))), hydra.lib.logic.if_else(hydra.lib.sets.member(w, st_.on_stack), low_link(st_), hydra.lib.flows.pure(None))))))[1]), hydra.lib.flows.bind(hydra.monads.put_state(new_st), (lambda _: hydra.lib.flows.bind(hydra.lib.flows.map_list(process_neighbor, neighbors), (lambda _2: hydra.lib.flows.bind(hydra.monads.get_state, (lambda st_final: (low_v := hydra.lib.maps.find_with_default(hydra.constants.max_int32, v, st_final.low_links), idx_v := hydra.lib.maps.find_with_default(hydra.constants.max_int32, v, st_final.indices), hydra.lib.logic.if_else(hydra.lib.equality.equal(low_v, idx_v), hydra.lib.flows.bind(pop_stack_until(v), (lambda comp: hydra.lib.flows.bind(hydra.monads.modify((lambda s: hydra.topology.TarjanState(s.counter, s.indices, s.low_links, s.stack, s.on_stack, hydra.lib.lists.cons(comp, s.sccs)))), (lambda _3: hydra.lib.flows.pure(None))))), hydra.lib.flows.pure(None)))[2])))))))[4]))
 
 def strongly_connected_components(graph: FrozenDict[int, frozenlist[int]]) -> frozenlist[frozenlist[int]]:
-    """Compute the strongly connected components of the given graph. The components are returned in reverse topological order."""
+    r"""Compute the strongly connected components of the given graph. The components are returned in reverse topological order."""
     
     verts = hydra.lib.maps.keys(graph)
     def process_vertex(v: int) -> hydra.compute.Flow[hydra.topology.TarjanState, None]:

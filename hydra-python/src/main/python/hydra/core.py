@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."""
+r"""Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."""
 
 from __future__ import annotations
 from dataclasses import dataclass
@@ -10,13 +10,13 @@ from hydra.dsl.python import FrozenDict, Maybe, Node, frozenlist
 from typing import Annotated
 
 class Name(Node[str]):
-    """A unique identifier in some context; a string-valued key."""
+    r"""A unique identifier in some context; a string-valued key."""
 
 NAME__NAME = Name("hydra.core.Name")
 
 @dataclass
 class AnnotatedTerm:
-    """A term together with an annotation."""
+    r"""A term together with an annotation."""
     
     body: Term
     annotation: FrozenDict[Name, Term]
@@ -27,7 +27,7 @@ ANNOTATED_TERM__ANNOTATION__NAME = Name("annotation")
 
 @dataclass
 class AnnotatedType:
-    """A type together with an annotation."""
+    r"""A type together with an annotation."""
     
     body: Type
     annotation: FrozenDict[Name, Term]
@@ -38,7 +38,7 @@ ANNOTATED_TYPE__ANNOTATION__NAME = Name("annotation")
 
 @dataclass
 class Application:
-    """A term which applies a function to an argument."""
+    r"""A term which applies a function to an argument."""
     
     function: Annotated[Term, "The left-hand side of the application"]
     argument: Annotated[Term, "The right-hand side of the application"]
@@ -49,7 +49,7 @@ APPLICATION__ARGUMENT__NAME = Name("argument")
 
 @dataclass
 class ApplicationType:
-    """The type-level analog of an application term."""
+    r"""The type-level analog of an application term."""
     
     function: Annotated[Type, "The left-hand side of the application"]
     argument: Annotated[Type, "The right-hand side of the application"]
@@ -60,7 +60,7 @@ APPLICATION_TYPE__ARGUMENT__NAME = Name("argument")
 
 @dataclass
 class Binding:
-    """A field with an optional type scheme, used to bind variables to terms in a 'let' expression."""
+    r"""A field with an optional type scheme, used to bind variables to terms in a 'let' expression."""
     
     name: Name
     term: Term
@@ -73,7 +73,7 @@ BINDING__TYPE__NAME = Name("type")
 
 @dataclass
 class CaseStatement:
-    """A union elimination; a case statement."""
+    r"""A union elimination; a case statement."""
     
     type_name: Name
     default: Maybe[Term]
@@ -85,16 +85,16 @@ CASE_STATEMENT__DEFAULT__NAME = Name("default")
 CASE_STATEMENT__CASES__NAME = Name("cases")
 
 class EliminationProduct(Node["TupleProjection"]):
-    """Eliminates a tuple by projecting the component at a given 0-indexed offset."""
+    r"""Eliminates a tuple by projecting the component at a given 0-indexed offset."""
 
 class EliminationRecord(Node["Projection"]):
-    """Eliminates a record by projecting a given field."""
+    r"""Eliminates a record by projecting a given field."""
 
 class EliminationUnion(Node["CaseStatement"]):
-    """Eliminates a union term by matching over the fields of the union. This is a case statement."""
+    r"""Eliminates a union term by matching over the fields of the union. This is a case statement."""
 
 class EliminationWrap(Node["Name"]):
-    """Unwrap a wrapped term."""
+    r"""Unwrap a wrapped term."""
 
 # A corresponding elimination for an introduction term.
 type Elimination = EliminationProduct | EliminationRecord | EliminationUnion | EliminationWrap
@@ -107,7 +107,7 @@ ELIMINATION__WRAP__NAME = Name("wrap")
 
 @dataclass
 class Field:
-    """A name/term pair."""
+    r"""A name/term pair."""
     
     name: Name
     term: Term
@@ -118,7 +118,7 @@ FIELD__TERM__NAME = Name("term")
 
 @dataclass
 class FieldType:
-    """A name/type pair."""
+    r"""A name/type pair."""
     
     name: Name
     type: Type
@@ -128,7 +128,7 @@ FIELD_TYPE__NAME__NAME = Name("name")
 FIELD_TYPE__TYPE__NAME = Name("type")
 
 class FloatType(Enum):
-    """A floating-point type."""
+    r"""A floating-point type."""
     
     BIGFLOAT = "bigfloat"
     
@@ -142,13 +142,13 @@ FLOAT_TYPE__FLOAT32__NAME = Name("float32")
 FLOAT_TYPE__FLOAT64__NAME = Name("float64")
 
 class FloatValueBigfloat(Node[Decimal]):
-    """An arbitrary-precision floating-point value."""
+    r"""An arbitrary-precision floating-point value."""
 
 class FloatValueFloat32(Node[float]):
-    """A 32-bit floating-point value."""
+    r"""A 32-bit floating-point value."""
 
 class FloatValueFloat64(Node[float]):
-    """A 64-bit floating-point value."""
+    r"""A 64-bit floating-point value."""
 
 # A floating-point literal value.
 type FloatValue = FloatValueBigfloat | FloatValueFloat32 | FloatValueFloat64
@@ -160,7 +160,7 @@ FLOAT_VALUE__FLOAT64__NAME = Name("float64")
 
 @dataclass
 class ForallType:
-    """A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term."""
+    r"""A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term."""
     
     parameter: Annotated[Name, "The variable which is bound by the lambda"]
     body: Annotated[Type, "The body of the lambda"]
@@ -170,13 +170,13 @@ FORALL_TYPE__PARAMETER__NAME = Name("parameter")
 FORALL_TYPE__BODY__NAME = Name("body")
 
 class FunctionElimination(Node["Elimination"]):
-    """An elimination for any of a few term variants."""
+    r"""An elimination for any of a few term variants."""
 
 class FunctionLambda(Node["Lambda"]):
-    """A function abstraction (lambda)."""
+    r"""A function abstraction (lambda)."""
 
 class FunctionPrimitive(Node["Name"]):
-    """A reference to a built-in (primitive) function."""
+    r"""A reference to a built-in (primitive) function."""
 
 # A function.
 type Function = FunctionElimination | FunctionLambda | FunctionPrimitive
@@ -188,7 +188,7 @@ FUNCTION__PRIMITIVE__NAME = Name("primitive")
 
 @dataclass
 class FunctionType:
-    """A function type, also known as an arrow type."""
+    r"""A function type, also known as an arrow type."""
     
     domain: Type
     codomain: Type
@@ -199,7 +199,7 @@ FUNCTION_TYPE__CODOMAIN__NAME = Name("codomain")
 
 @dataclass
 class Injection:
-    """An instance of a union type; i.e. a string-indexed generalization of inl() or inr()."""
+    r"""An instance of a union type; i.e. a string-indexed generalization of inl() or inr()."""
     
     type_name: Name
     field: Field
@@ -209,7 +209,7 @@ INJECTION__TYPE_NAME__NAME = Name("typeName")
 INJECTION__FIELD__NAME = Name("field")
 
 class IntegerType(Enum):
-    """An integer type."""
+    r"""An integer type."""
     
     BIGINT = "bigint"
     
@@ -241,31 +241,31 @@ INTEGER_TYPE__UINT32__NAME = Name("uint32")
 INTEGER_TYPE__UINT64__NAME = Name("uint64")
 
 class IntegerValueBigint(Node[int]):
-    """An arbitrary-precision integer value."""
+    r"""An arbitrary-precision integer value."""
 
 class IntegerValueInt8(Node[int]):
-    """An 8-bit signed integer value."""
+    r"""An 8-bit signed integer value."""
 
 class IntegerValueInt16(Node[int]):
-    """A 16-bit signed integer value (short value)."""
+    r"""A 16-bit signed integer value (short value)."""
 
 class IntegerValueInt32(Node[int]):
-    """A 32-bit signed integer value (int value)."""
+    r"""A 32-bit signed integer value (int value)."""
 
 class IntegerValueInt64(Node[int]):
-    """A 64-bit signed integer value (long value)."""
+    r"""A 64-bit signed integer value (long value)."""
 
 class IntegerValueUint8(Node[int]):
-    """An 8-bit unsigned integer value (byte)."""
+    r"""An 8-bit unsigned integer value (byte)."""
 
 class IntegerValueUint16(Node[int]):
-    """A 16-bit unsigned integer value."""
+    r"""A 16-bit unsigned integer value."""
 
 class IntegerValueUint32(Node[int]):
-    """A 32-bit unsigned integer value (unsigned int)."""
+    r"""A 32-bit unsigned integer value (unsigned int)."""
 
 class IntegerValueUint64(Node[int]):
-    """A 64-bit unsigned integer value (unsigned long)."""
+    r"""A 64-bit unsigned integer value (unsigned long)."""
 
 # An integer literal value.
 type IntegerValue = IntegerValueBigint | IntegerValueInt8 | IntegerValueInt16 | IntegerValueInt32 | IntegerValueInt64 | IntegerValueUint8 | IntegerValueUint16 | IntegerValueUint32 | IntegerValueUint64
@@ -283,7 +283,7 @@ INTEGER_VALUE__UINT64__NAME = Name("uint64")
 
 @dataclass
 class Lambda:
-    """A function abstraction (lambda)."""
+    r"""A function abstraction (lambda)."""
     
     parameter: Annotated[Name, "The parameter of the lambda"]
     domain: Annotated[Maybe[Type], "An optional domain type for the lambda"]
@@ -296,7 +296,7 @@ LAMBDA__BODY__NAME = Name("body")
 
 @dataclass
 class Let:
-    """A set of (possibly recursive) 'let' bindings together with a body in which they are bound."""
+    r"""A set of (possibly recursive) 'let' bindings together with a body in which they are bound."""
     
     bindings: frozenlist[Binding]
     body: Term
@@ -306,19 +306,19 @@ LET__BINDINGS__NAME = Name("bindings")
 LET__BODY__NAME = Name("body")
 
 class LiteralBinary(Node[bytes]):
-    """A binary literal."""
+    r"""A binary literal."""
 
 class LiteralBoolean(Node[bool]):
-    """A boolean literal."""
+    r"""A boolean literal."""
 
 class LiteralFloat(Node["FloatValue"]):
-    """A floating-point literal."""
+    r"""A floating-point literal."""
 
 class LiteralInteger(Node["IntegerValue"]):
-    """An integer literal."""
+    r"""An integer literal."""
 
 class LiteralString(Node[str]):
-    """A string literal."""
+    r"""A string literal."""
 
 # A term constant; an instance of a literal type.
 type Literal = LiteralBinary | LiteralBoolean | LiteralFloat | LiteralInteger | LiteralString
@@ -331,19 +331,19 @@ LITERAL__INTEGER__NAME = Name("integer")
 LITERAL__STRING__NAME = Name("string")
 
 class LiteralTypeBinary(Node[None]):
-    """The type of a binary (byte string) value."""
+    r"""The type of a binary (byte string) value."""
 
 class LiteralTypeBoolean(Node[None]):
-    """The type of a boolean (true/false) value."""
+    r"""The type of a boolean (true/false) value."""
 
 class LiteralTypeFloat(Node["FloatType"]):
-    """The type of a floating-point value."""
+    r"""The type of a floating-point value."""
 
 class LiteralTypeInteger(Node["IntegerType"]):
-    """The type of an integer value."""
+    r"""The type of an integer value."""
 
 class LiteralTypeString(Node[None]):
-    """The type of a string value."""
+    r"""The type of a string value."""
 
 # Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants.
 type LiteralType = LiteralTypeBinary | LiteralTypeBoolean | LiteralTypeFloat | LiteralTypeInteger | LiteralTypeString
@@ -357,7 +357,7 @@ LITERAL_TYPE__STRING__NAME = Name("string")
 
 @dataclass
 class MapType:
-    """A map type."""
+    r"""A map type."""
     
     keys: Type
     values: Type
@@ -368,7 +368,7 @@ MAP_TYPE__VALUES__NAME = Name("values")
 
 @dataclass
 class Projection:
-    """A record elimination; a projection."""
+    r"""A record elimination; a projection."""
     
     type_name: Annotated[Name, "The name of the record type"]
     field: Annotated[Name, "The name of the projected field"]
@@ -379,7 +379,7 @@ PROJECTION__FIELD__NAME = Name("field")
 
 @dataclass
 class Record:
-    """A record, or labeled tuple; a map of field names to terms."""
+    r"""A record, or labeled tuple; a map of field names to terms."""
     
     type_name: Name
     fields: frozenlist[Field]
@@ -390,7 +390,7 @@ RECORD__FIELDS__NAME = Name("fields")
 
 @dataclass
 class RowType:
-    """A labeled record or union type."""
+    r"""A labeled record or union type."""
     
     type_name: Annotated[Name, "The name of the row type, which must correspond to the name of a Type element"]
     fields: Annotated[frozenlist[FieldType], "The fields of this row type, excluding any inherited fields"]
@@ -401,7 +401,7 @@ ROW_TYPE__FIELDS__NAME = Name("fields")
 
 @dataclass
 class Sum:
-    """The unlabeled equivalent of an Injection term."""
+    r"""The unlabeled equivalent of an Injection term."""
     
     index: int
     size: int
@@ -413,58 +413,58 @@ SUM__SIZE__NAME = Name("size")
 SUM__TERM__NAME = Name("term")
 
 class TermAnnotated(Node["AnnotatedTerm"]):
-    """A term annotated with metadata."""
+    r"""A term annotated with metadata."""
 
 class TermApplication(Node["Application"]):
-    """A function application."""
+    r"""A function application."""
 
 class TermFunction(Node["Function"]):
-    """A function term."""
+    r"""A function term."""
 
 class TermLet(Node["Let"]):
-    """A 'let' term, which binds variables to terms."""
+    r"""A 'let' term, which binds variables to terms."""
 
 class TermList(Node["frozenlist[Term]"]):
-    """A list."""
+    r"""A list."""
 
 class TermLiteral(Node["Literal"]):
-    """A literal value."""
+    r"""A literal value."""
 
 class TermMap(Node["FrozenDict[Term, Term]"]):
-    """A map of keys to values."""
+    r"""A map of keys to values."""
 
 class TermOptional(Node["Maybe[Term]"]):
-    """An optional value."""
+    r"""An optional value."""
 
 class TermProduct(Node["frozenlist[Term]"]):
-    """A tuple."""
+    r"""A tuple."""
 
 class TermRecord(Node["Record"]):
-    """A record term."""
+    r"""A record term."""
 
 class TermSet(Node["frozenset[Term]"]):
-    """A set of values."""
+    r"""A set of values."""
 
 class TermSum(Node["Sum"]):
-    """A variant tuple."""
+    r"""A variant tuple."""
 
 class TermTypeApplication(Node["TypeApplicationTerm"]):
-    """A System F type application term."""
+    r"""A System F type application term."""
 
 class TermTypeLambda(Node["TypeLambda"]):
-    """A System F type abstraction term."""
+    r"""A System F type abstraction term."""
 
 class TermUnion(Node["Injection"]):
-    """An injection; an instance of a union type."""
+    r"""An injection; an instance of a union type."""
 
 class TermUnit(Node[None]):
-    """A unit value; a term with no value."""
+    r"""A unit value; a term with no value."""
 
 class TermVariable(Node["Name"]):
-    """A variable reference."""
+    r"""A variable reference."""
 
 class TermWrap(Node["WrappedTerm"]):
-    """A wrapped term; an instance of a wrapper type (newtype)."""
+    r"""A wrapped term; an instance of a wrapper type (newtype)."""
 
 # A data term.
 type Term = TermAnnotated | TermApplication | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermOptional | TermProduct | TermRecord | TermSet | TermSum | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap
@@ -491,7 +491,7 @@ TERM__WRAP__NAME = Name("wrap")
 
 @dataclass
 class TupleProjection:
-    """A tuple elimination; a projection from an integer-indexed product."""
+    r"""A tuple elimination; a projection from an integer-indexed product."""
     
     arity: Annotated[int, "The arity of the tuple"]
     index: Annotated[int, "The 0-indexed offset from the beginning of the tuple"]
@@ -557,7 +557,7 @@ TYPE__WRAP__NAME = Name("wrap")
 
 @dataclass
 class TypeApplicationTerm:
-    """A term applied to a type; a type application."""
+    r"""A term applied to a type; a type application."""
     
     body: Term
     type: Type
@@ -568,7 +568,7 @@ TYPE_APPLICATION_TERM__TYPE__NAME = Name("type")
 
 @dataclass
 class TypeLambda:
-    """A System F type abstraction term."""
+    r"""A System F type abstraction term."""
     
     parameter: Annotated[Name, "The type variable introduced by the abstraction"]
     body: Annotated[Term, "The body of the abstraction"]
@@ -579,7 +579,7 @@ TYPE_LAMBDA__BODY__NAME = Name("body")
 
 @dataclass
 class TypeScheme:
-    """A type expression together with free type variables occurring in the expression."""
+    r"""A type expression together with free type variables occurring in the expression."""
     
     variables: frozenlist[Name]
     type: Type
@@ -590,7 +590,7 @@ TYPE_SCHEME__TYPE__NAME = Name("type")
 
 @dataclass
 class WrappedTerm:
-    """A term wrapped in a type name."""
+    r"""A term wrapped in a type name."""
     
     type_name: Name
     body: Term
@@ -601,7 +601,7 @@ WRAPPED_TERM__BODY__NAME = Name("body")
 
 @dataclass
 class WrappedType:
-    """A type wrapped in a type name; a newtype."""
+    r"""A type wrapped in a type name; a newtype."""
     
     type_name: Name
     body: Type

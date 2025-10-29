@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""A model for unit testing."""
+r"""A model for unit testing."""
 
 from __future__ import annotations
 from dataclasses import dataclass
@@ -10,7 +10,7 @@ import hydra.core
 import hydra.mantle
 
 class EvaluationStyle(Enum):
-    """One of two evaluation styles: eager or lazy."""
+    r"""One of two evaluation styles: eager or lazy."""
     
     EAGER = "eager"
     
@@ -22,7 +22,7 @@ EVALUATION_STYLE__LAZY__NAME = hydra.core.Name("lazy")
 
 @dataclass
 class CaseConversionTestCase:
-    """A test case which checks that strings are converted between different case conventions correctly."""
+    r"""A test case which checks that strings are converted between different case conventions correctly."""
     
     from_convention: hydra.mantle.CaseConvention
     to_convention: hydra.mantle.CaseConvention
@@ -37,7 +37,7 @@ CASE_CONVERSION_TEST_CASE__TO_STRING__NAME = hydra.core.Name("toString")
 
 @dataclass
 class EvaluationTestCase:
-    """A test case which evaluates (reduces) a given term and compares it with the expected result."""
+    r"""A test case which evaluates (reduces) a given term and compares it with the expected result."""
     
     evaluation_style: EvaluationStyle
     input: hydra.core.Term
@@ -50,7 +50,7 @@ EVALUATION_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
 
 @dataclass
 class InferenceFailureTestCase:
-    """A test case providing a term for which type inference is expected to fail."""
+    r"""A test case providing a term for which type inference is expected to fail."""
     
     input: hydra.core.Term
 
@@ -59,7 +59,7 @@ INFERENCE_FAILURE_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 
 @dataclass
 class InferenceTestCase:
-    """A test case which performs type inference on a given term and compares the result with an expected type scheme."""
+    r"""A test case which performs type inference on a given term and compares the result with an expected type scheme."""
     
     input: hydra.core.Term
     output: hydra.core.TypeScheme
@@ -91,7 +91,7 @@ TEST_CASE__INFERENCE_FAILURE__NAME = hydra.core.Name("inferenceFailure")
 
 @dataclass
 class TestCaseWithMetadata:
-    """One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags."""
+    r"""One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags."""
     
     name: str
     case: TestCase
@@ -106,7 +106,7 @@ TEST_CASE_WITH_METADATA__TAGS__NAME = hydra.core.Name("tags")
 
 @dataclass
 class TestGroup:
-    """A collection of test cases with a name and optional description."""
+    r"""A collection of test cases with a name and optional description."""
     
     name: str
     description: Maybe[str]

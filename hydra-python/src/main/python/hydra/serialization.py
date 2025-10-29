@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-"""Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation."""
+r"""Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation."""
 
 from __future__ import annotations
 from hydra.dsl.python import Just, Maybe, Nothing, frozenlist
@@ -50,7 +50,7 @@ def curly_braces_list(msymb: Maybe[str], style: hydra.ast.BlockStyle, els: froze
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), cst("{}"), brackets(curly_braces, style, symbol_sep(hydra.lib.optionals.from_maybe(",", msymb), style, els)))
 
 def expression_length(e: hydra.ast.Expr) -> int:
-    """Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it."""
+    r"""Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it."""
     
     def symbol_length(s: hydra.ast.Symbol) -> int:
         return hydra.lib.strings.length(s.value)
@@ -120,7 +120,7 @@ half_block_style = hydra.ast.BlockStyle(Just(double_space), True, False)
 inline_style = hydra.ast.BlockStyle(Nothing(), False, False)
 
 def braces_list_adaptive(els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
-    """Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."""
+    r"""Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."""
     
     inline_list = curly_braces_list(Nothing(), inline_style, els)
     return hydra.lib.logic.if_else(hydra.lib.equality.gt(expression_length(inline_list), 70), curly_braces_list(Nothing(), half_block_style, els), inline_list)
@@ -131,7 +131,7 @@ def bracket_list(style: hydra.ast.BlockStyle, els: frozenlist[hydra.ast.Expr]) -
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), cst("[]"), brackets(square_brackets, style, comma_sep(style, els)))
 
 def bracket_list_adaptive(els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
-    """Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."""
+    r"""Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."""
     
     inline_list = bracket_list(inline_style, els)
     return hydra.lib.logic.if_else(hydra.lib.equality.gt(expression_length(inline_list), 70), bracket_list(half_block_style, els), inline_list)
