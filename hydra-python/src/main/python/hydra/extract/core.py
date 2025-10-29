@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import FrozenDict, Maybe, Nothing, frozenlist
-from typing import Tuple
+from typing import Tuple, cast
 import hydra.compute
 import hydra.core
 import hydra.graph
@@ -343,7 +343,7 @@ def optional[T0](f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.G
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[T0]]:
         match term:
             case hydra.core.TermOptional(value=mt):
-                return hydra.lib.optionals.maybe(hydra.lib.flows.pure(Nothing()), (lambda t: hydra.lib.flows.map(hydra.lib.optionals.pure, f(t))), mt)
+                return hydra.lib.optionals.maybe(hydra.lib.flows.pure(cast(Maybe[T0], Nothing())), (lambda t: hydra.lib.flows.map(hydra.lib.optionals.pure, f(t))), mt)
             
             case _:
                 return hydra.monads.unexpected("optional value", hydra.show.core.term(term))

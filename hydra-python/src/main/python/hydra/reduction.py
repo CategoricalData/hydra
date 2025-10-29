@@ -4,7 +4,7 @@ r"""Functions for reducing terms and types, i.e. performing computations."""
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import Nothing, frozenlist
+from hydra.dsl.python import Maybe, Nothing, frozenlist
 from typing import cast
 import hydra.arity
 import hydra.checking
@@ -132,7 +132,7 @@ def eta_expand_term(graph: hydra.graph.Graph, term: hydra.core.Term) -> hydra.co
         apps = hydra.lib.lists.foldl((lambda lhs, arg: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs, arg)))), t, args)
         is_ = hydra.lib.logic.if_else(hydra.lib.equality.lte(arity, hydra.lib.lists.length(args)), (), hydra.lib.math.range_(1, hydra.lib.math.sub(arity, hydra.lib.lists.length(args))))
         def pad(indices: frozenlist[int], t2: hydra.core.Term) -> hydra.core.Term:
-            return hydra.lib.logic.if_else(hydra.lib.lists.null(indices), t2, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(hydra.lib.lists.head(indices)))), Nothing(), pad(hydra.lib.lists.tail(indices), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(t2, cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(hydra.lib.lists.head(indices))))))))))))))))
+            return hydra.lib.logic.if_else(hydra.lib.lists.null(indices), t2, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(hydra.lib.lists.head(indices)))), cast(Maybe[hydra.core.Type], Nothing()), pad(hydra.lib.lists.tail(indices), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(t2, cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(hydra.lib.lists.head(indices))))))))))))))))
         return pad(is_, apps)
     def rewrite(args: frozenlist[hydra.core.Term], recurse: Callable[[hydra.core.Term], hydra.core.Term], t: hydra.core.Term) -> hydra.core.Term:
         def after_recursion(term2: hydra.core.Term) -> hydra.core.Term:
@@ -164,7 +164,7 @@ def eta_expand_typed_term[T0](tx0: hydra.typing.TypeContext, term0: hydra.core.T
         def extra_variables(n: int) -> frozenlist[hydra.core.Name]:
             return hydra.lib.lists.map((lambda i: hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(i)))), hydra.lib.math.range_(1, n))
         def pad(vars: frozenlist[hydra.core.Name], body: hydra.core.Term) -> hydra.core.Term:
-            return hydra.lib.logic.if_else(hydra.lib.lists.null(vars), body, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.lib.lists.head(vars), Nothing(), pad(hydra.lib.lists.tail(vars), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(body, cast(hydra.core.Term, hydra.core.TermVariable(hydra.lib.lists.head(vars)))))))))))))
+            return hydra.lib.logic.if_else(hydra.lib.lists.null(vars), body, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.lib.lists.head(vars), cast(Maybe[hydra.core.Type], Nothing()), pad(hydra.lib.lists.tail(vars), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(body, cast(hydra.core.Term, hydra.core.TermVariable(hydra.lib.lists.head(vars)))))))))))))
         def padn(n: int, body: hydra.core.Term) -> hydra.core.Term:
             return pad(extra_variables(n), body)
         def force_expansion[T2](t: hydra.core.Term) -> hydra.compute.Flow[T2, hydra.core.Term]:
