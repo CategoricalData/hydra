@@ -412,10 +412,10 @@ normalTypeVariableDef = define "normalTypeVariable" $
 requireRecordTypeDef :: TBinding (Name -> Flow Graph RowType)
 requireRecordTypeDef = define "requireRecordType" $
   doc "Require a name to resolve to a record type" $
-  ref requireRowTypeDef @@ string "record type" @@
-    ("t" ~>
-      cases _Type (var "t") (Just nothing) [
-        _Type_record>>: "rt" ~> just (var "rt")])
+  "name" ~>
+  "toRecord" <~ ("t" ~> cases _Type (var "t") (Just nothing) [
+    _Type_record>>: "rt" ~> just (var "rt")]) $
+  ref requireRowTypeDef @@ string "record type" @@ var "toRecord" @@ var "name"
 
 requireRowTypeDef :: TBinding (String -> (Type -> Maybe RowType) -> Name -> Flow Graph RowType)
 requireRowTypeDef = define "requireRowType" $
@@ -457,11 +457,11 @@ requireTypeDef = define "requireType" $
 requireUnionTypeDef :: TBinding (Name -> Flow Graph RowType)
 requireUnionTypeDef = define "requireUnionType" $
   doc "Require a name to resolve to a union type" $
-  ref requireRowTypeDef @@ string "union" @@
-    ("t" ~>
-      match _Type (Just nothing) [
-        _Type_union>>: "rt" ~> just (var "rt")]
-      @@ var "t")
+  "name" ~>
+  "toUnion" <~ ("t" ~> cases _Type (var "t")
+    (Just nothing) [
+    _Type_union>>: "rt" ~> just (var "rt")]) $
+  ref requireRowTypeDef @@ string "union" @@ var "toUnion" @@ var "name"
 
 resolveTypeDef :: TBinding (Type -> Flow Graph (Maybe Type))
 resolveTypeDef = define "resolveType" $
@@ -486,32 +486,31 @@ schemaGraphToTypingEnvironmentDef = define "schemaGraphToTypingEnvironment" $
     _Type_forall>>: "ft" ~> var "toTypeScheme"
       @@ Lists.cons (Core.forallTypeParameter (var "ft")) (var "vars")
       @@ Core.forallTypeBody (var "ft")]) $
-  "toPair" <~ ("el" ~> Flows.map
-    ("mts" ~> Optionals.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts"))
-    (optCases (Core.bindingType (var "el"))
-      ("typ" <<~ ref DecodeCore.typeDef @@ (Core.bindingTerm (var "el")) $
-       "ts" <~ ref fTypeToTypeSchemeDef @@ var "typ" $
-       produce (just (var "ts")))
+  "toPair" <~ ("el" ~>
+    "forTerm" <~ ("term" ~> cases _Term (var "term") (Just (Flows.pure nothing)) [
+      _Term_record>>: "r" ~>
+        Logic.ifElse
+          (Equality.equal (Core.recordTypeName (var "r")) (Core.nameLift _TypeScheme))
+          (Flows.map
+            (unaryFunction just)
+            (ref DecodeCore.typeSchemeDef @@ Core.bindingTerm (var "el")))
+          (Flows.pure nothing),
+      _Term_union>>: "i" ~>
+        Logic.ifElse (Equality.equal (Core.injectionTypeName (var "i")) (Core.nameLift _Type))
+          (Flows.map
+            ("decoded" ~> just (var "toTypeScheme" @@ list [] @@ var "decoded"))
+            (ref DecodeCore.typeDef @@ Core.bindingTerm (var "el")))
+          (Flows.pure nothing)]) $
+    "mts" <<~ optCases (Core.bindingType (var "el"))
+      (Flows.map ("typ" ~> just $ ref fTypeToTypeSchemeDef @@ var "typ") $ ref DecodeCore.typeDef @@ (Core.bindingTerm (var "el")))
       ("ts" ~> Logic.ifElse
         (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable (Core.nameLift _TypeScheme))))
         (Flows.map (unaryFunction just) (ref DecodeCore.typeSchemeDef @@ Core.bindingTerm (var "el")))
         (Logic.ifElse
           (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable (Core.nameLift _Type))))
           (Flows.map ("decoded" ~> just (var "toTypeScheme" @@ list [] @@ var "decoded")) (ref DecodeCore.typeDef @@ Core.bindingTerm (var "el")))
-          (cases _Term (ref Rewriting.deannotateTermDef @@ (Core.bindingTerm (var "el"))) (Just (Flows.pure nothing)) [
-            _Term_record>>: "r" ~>
-              Logic.ifElse
-                (Equality.equal (Core.recordTypeName (var "r")) (Core.nameLift _TypeScheme))
-                (Flows.map
-                  (unaryFunction just)
-                  (ref DecodeCore.typeSchemeDef @@ Core.bindingTerm (var "el")))
-                (Flows.pure nothing),
-            _Term_union>>: "i" ~>
-              Logic.ifElse (Equality.equal (Core.injectionTypeName (var "i")) (Core.nameLift _Type))
-                (Flows.map
-                  ("decoded" ~> just (var "toTypeScheme" @@ list [] @@ var "decoded"))
-                  (ref DecodeCore.typeDef @@ Core.bindingTerm (var "el")))
-                (Flows.pure nothing)]))))) $
+          (var "forTerm" @@ (ref Rewriting.deannotateTermDef @@ (Core.bindingTerm (var "el")))))) $
+    produce $ Optionals.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts")) $
   ref Monads.withStateDef @@ var "g" @@
     (Flows.bind (Flows.mapList (var "toPair") (Maps.elems (Graph.graphElements (var "g")))) (
       "mpairs" ~> Flows.pure (Maps.fromList (Optionals.cat (var "mpairs")))))
