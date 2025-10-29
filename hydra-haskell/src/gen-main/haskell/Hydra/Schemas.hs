@@ -265,9 +265,11 @@ normalTypeVariable i = (Core.Name (Strings.cat2 "t" (Literals.showInt32 i)))
 
 -- | Require a name to resolve to a record type
 requireRecordType :: (Core.Name -> Compute.Flow Graph.Graph Core.RowType)
-requireRecordType = (requireRowType "record type" (\t -> (\x -> case x of
-  Core.TypeRecord v1 -> (Just v1)
-  _ -> Nothing) t))
+requireRecordType name =  
+  let toRecord = (\t -> (\x -> case x of
+          Core.TypeRecord v1 -> (Just v1)
+          _ -> Nothing) t)
+  in (requireRowType "record type" toRecord name)
 
 requireRowType :: (String -> (Core.Type -> Maybe t0) -> Core.Name -> Compute.Flow Graph.Graph t0)
 requireRowType label getter name =  
@@ -291,9 +293,11 @@ requireType name = (Monads.withTrace (Strings.cat2 "require type " (Core.unName 
 
 -- | Require a name to resolve to a union type
 requireUnionType :: (Core.Name -> Compute.Flow Graph.Graph Core.RowType)
-requireUnionType = (requireRowType "union" (\t -> (\x -> case x of
-  Core.TypeUnion v1 -> (Just v1)
-  _ -> Nothing) t))
+requireUnionType name =  
+  let toUnion = (\t -> (\x -> case x of
+          Core.TypeUnion v1 -> (Just v1)
+          _ -> Nothing) t)
+  in (requireRowType "union" toUnion name)
 
 -- | Resolve a type, dereferencing type variables
 resolveType :: (Core.Type -> Compute.Flow Graph.Graph (Maybe Core.Type))
@@ -309,16 +313,16 @@ schemaGraphToTypingEnvironment g =
             Core.typeSchemeVariables = (Lists.reverse vars),
             Core.typeSchemeType = typ}) (Rewriting.deannotateType typ))
   in  
-    let toPair = (\el -> Flows.map (\mts -> Optionals.map (\ts -> (Core.bindingName el, ts)) mts) (Optionals.maybe (Flows.bind (Core_.type_ (Core.bindingTerm el)) (\typ ->  
-            let ts = (fTypeToTypeScheme typ)
-            in (Flows.pure (Just ts)))) (\ts -> Logic.ifElse (Equality.equal ts (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.TypeScheme"))})) (Flows.map Optionals.pure (Core_.typeScheme (Core.bindingTerm el))) (Logic.ifElse (Equality.equal ts (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type"))})) (Flows.map (\decoded -> Just (toTypeScheme [] decoded)) (Core_.type_ (Core.bindingTerm el))) ((\x -> case x of
-            Core.TermRecord v1 -> (Logic.ifElse (Equality.equal (Core.recordTypeName v1) (Core.Name "hydra.core.TypeScheme")) (Flows.map Optionals.pure (Core_.typeScheme (Core.bindingTerm el))) (Flows.pure Nothing))
-            Core.TermUnion v1 -> (Logic.ifElse (Equality.equal (Core.injectionTypeName v1) (Core.Name "hydra.core.Type")) (Flows.map (\decoded -> Just (toTypeScheme [] decoded)) (Core_.type_ (Core.bindingTerm el))) (Flows.pure Nothing))
-            _ -> (Flows.pure Nothing)) (Rewriting.deannotateTerm (Core.bindingTerm el))))) (Core.bindingType el)))
+    let toPair = (\el ->  
+            let forTerm = (\term -> (\x -> case x of
+                    Core.TermRecord v1 -> (Logic.ifElse (Equality.equal (Core.recordTypeName v1) (Core.Name "hydra.core.TypeScheme")) (Flows.map Optionals.pure (Core_.typeScheme (Core.bindingTerm el))) (Flows.pure Nothing))
+                    Core.TermUnion v1 -> (Logic.ifElse (Equality.equal (Core.injectionTypeName v1) (Core.Name "hydra.core.Type")) (Flows.map (\decoded -> Just (toTypeScheme [] decoded)) (Core_.type_ (Core.bindingTerm el))) (Flows.pure Nothing))
+                    _ -> (Flows.pure Nothing)) term)
+            in (Flows.bind (Optionals.maybe (Flows.map (\typ -> Just (fTypeToTypeScheme typ)) (Core_.type_ (Core.bindingTerm el))) (\ts -> Logic.ifElse (Equality.equal ts (Core.TypeScheme {
+              Core.typeSchemeVariables = [],
+              Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.TypeScheme"))})) (Flows.map Optionals.pure (Core_.typeScheme (Core.bindingTerm el))) (Logic.ifElse (Equality.equal ts (Core.TypeScheme {
+              Core.typeSchemeVariables = [],
+              Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type"))})) (Flows.map (\decoded -> Just (toTypeScheme [] decoded)) (Core_.type_ (Core.bindingTerm el))) (forTerm (Rewriting.deannotateTerm (Core.bindingTerm el))))) (Core.bindingType el)) (\mts -> Flows.pure (Optionals.map (\ts -> (Core.bindingName el, ts)) mts))))
     in (Monads.withState g (Flows.bind (Flows.mapList toPair (Maps.elems (Graph.graphElements g))) (\mpairs -> Flows.pure (Maps.fromList (Optionals.cat mpairs)))))
 
 -- | Find the equivalent graph representation of a term
