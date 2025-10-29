@@ -252,7 +252,7 @@ encodeFunctionDefinition env name tparams args body doms cod comment prefixes = 
 
     updateMeta $ extendMetaForTypes (cod:doms)
 
---    if name == Name "choose"
+--    if name == Name "toType"
 --    then fail $ "body: " ++ ShowCore.term body
 --      ++ "\ntparams: " ++ L.intercalate ", " (fmap unName tparams)
 --      ++ "\nargs: " ++ L.intercalate ", " (fmap unName args)
