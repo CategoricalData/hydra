@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 from hydra.dsl.python import FrozenDict, frozenlist
+from typing import cast
 import hydra.coders
 import hydra.compute
 import hydra.core
@@ -29,7 +30,7 @@ def join_types[T0](left: hydra.core.Type, right: hydra.core.Type, comment: str) 
     def join_list[T1](lefts: frozenlist[hydra.core.Type], rights: frozenlist[hydra.core.Type]) -> hydra.compute.Flow[T1, frozenlist[hydra.typing.TypeConstraint]]:
         return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(lefts), hydra.lib.lists.length(rights)), hydra.lib.flows.pure(hydra.lib.lists.zip_with(join_one, lefts, rights)), cannot_unify)
     def join_row_types[T1](left2: hydra.core.RowType, right2: hydra.core.RowType) -> hydra.compute.Flow[T1, frozenlist[hydra.typing.TypeConstraint]]:
-        return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(left2.type_name.value, right2.type_name.value), hydra.lib.logic.and_(hydra.lib.equality.equal(hydra.lib.lists.length(hydra.lib.lists.map(lambda v1: v1.name, left2.fields)), hydra.lib.lists.length(hydra.lib.lists.map(lambda v1: v1.name, right2.fields))), hydra.lib.lists.foldl(lambda v1, v2: hydra.lib.logic.and_(v1, v2), True, hydra.lib.lists.zip_with(lambda left3, right3: hydra.lib.equality.equal(left3.value, right3.value), hydra.lib.lists.map(lambda v1: v1.name, left2.fields), hydra.lib.lists.map(lambda v1: v1.name, right2.fields))))), join_list(hydra.lib.lists.map(lambda v1: v1.type, left2.fields), hydra.lib.lists.map(lambda v1: v1.type, right2.fields)), cannot_unify)
+        return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(left2.type_name.value, right2.type_name.value), hydra.lib.logic.and_(hydra.lib.equality.equal(hydra.lib.lists.length(hydra.lib.lists.map((lambda v1: v1.name), left2.fields)), hydra.lib.lists.length(hydra.lib.lists.map((lambda v1: v1.name), right2.fields))), hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.zip_with((lambda left3, right3: hydra.lib.equality.equal(left3.value, right3.value)), hydra.lib.lists.map((lambda v1: v1.name), left2.fields), hydra.lib.lists.map((lambda v1: v1.name), right2.fields))))), join_list(hydra.lib.lists.map((lambda v1: v1.type), left2.fields), hydra.lib.lists.map((lambda v1: v1.type), right2.fields)), cannot_unify)
     match sleft:
         case hydra.core.TypeApplication(value=l):
             match sright:
@@ -143,7 +144,7 @@ def variable_occurs_in_type(var: hydra.core.Name, typ0: hydra.core.Type) -> bool
             
             case _:
                 return b
-    return hydra.rewriting.fold_over_type(hydra.coders.TraversalOrderPre(None), try_type, False, typ0)
+    return hydra.rewriting.fold_over_type(cast(hydra.coders.TraversalOrder, hydra.coders.TraversalOrderPre(None)), try_type, False, typ0)
 
 def unify_type_constraints[T0, T1](schema_types: FrozenDict[hydra.core.Name, T0], constraints: frozenlist[hydra.typing.TypeConstraint]) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
     def with_constraint(c: hydra.typing.TypeConstraint, rest: frozenlist[hydra.typing.TypeConstraint]) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:

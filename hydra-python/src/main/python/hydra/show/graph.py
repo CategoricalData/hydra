@@ -14,5 +14,5 @@ def graph(graph: hydra.graph.Graph) -> str:
     """Show a graph as a string."""
     
     elements = hydra.lib.maps.elems(graph.elements)
-    element_strs = hydra.lib.lists.map(lambda v1: hydra.show.core.binding(v1), elements)
+    element_strs = hydra.lib.lists.map(hydra.show.core.binding, elements)
     return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", element_strs), "}"))
