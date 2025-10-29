@@ -383,9 +383,9 @@ normalizeTypeVariablesInTerm term =
                                                             in  
                                                               let k = (Lists.length vars)
                                                               in  
-                                                                let gen = (\i -> \rem -> \acc2 -> Logic.ifElse (Equality.equal rem 0) (Lists.reverse acc2) ( 
+                                                                let gen = (\i -> \rem -> \acc2 ->  
                                                                         let ti = (Core.Name (Strings.cat2 "t" (Literals.showInt32 (Math.add next i))))
-                                                                        in (gen (Math.add i 1) (Math.sub rem 1) (Lists.cons ti acc2))))
+                                                                        in (Logic.ifElse (Equality.equal rem 0) (Lists.reverse acc2) (gen (Math.add i 1) (Math.sub rem 1) (Lists.cons ti acc2))))
                                                                 in  
                                                                   let newVars = (gen 0 k [])
                                                                   in  
@@ -503,22 +503,19 @@ replaceTypedefs types typ0 =
             Core.TypeRecord _ -> typ
             Core.TypeUnion _ -> typ
             Core.TypeVariable v1 ->  
-              let forTypeScheme = (\ts ->  
-                      let t = (Core.typeSchemeType ts)
-                      in (Logic.ifElse (Lists.null (Core.typeSchemeVariables ts)) ((\x -> case x of
-                        Core.TypeRecord _ -> dflt
-                        Core.TypeUnion _ -> dflt
-                        Core.TypeWrap _ -> dflt
-                        _ -> (rewrite recurse t)) (Core.typeSchemeType ts)) dflt))
-              in (Optionals.maybe dflt (\ts -> forTypeScheme ts) (Maps.lookup v1 types))
+              let forMono = (\t -> (\x -> case x of
+                      Core.TypeRecord _ -> dflt
+                      Core.TypeUnion _ -> dflt
+                      Core.TypeWrap _ -> dflt
+                      _ -> (rewrite recurse t)) t)
+              in  
+                let forTypeScheme = (\ts ->  
+                        let t = (Core.typeSchemeType ts)
+                        in (Logic.ifElse (Lists.null (Core.typeSchemeVariables ts)) (forMono t) dflt))
+                in (Optionals.maybe dflt (\ts -> forTypeScheme ts) (Maps.lookup v1 types))
             Core.TypeWrap _ -> typ
             _ -> dflt) typ))
   in (rewriteType rewrite typ0)
-
-rewrite :: ((t0 -> t1) -> (t1 -> t0) -> t0)
-rewrite fsub f =  
-  let recurse = (f (fsub recurse))
-  in recurse
 
 rewriteAndFoldTerm :: (((t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term))
 rewriteAndFoldTerm f term0 =  
@@ -559,7 +556,7 @@ rewriteAndFoldTerm f term0 =
                                       Core.EliminationUnion v1 ->  
                                         let rmd = (Optionals.map (recurse val) (Core.caseStatementDefault v1))
                                         in  
-                                          let val1 = (Optionals.maybe val (\r -> fst r) rmd)
+                                          let val1 = (Optionals.maybe val fst rmd)
                                           in  
                                             let rcases = (forFields val1 (Core.caseStatementCases v1))
                                             in (fst rcases, (Core.EliminationUnion (Core.CaseStatement {

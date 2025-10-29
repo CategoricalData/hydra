@@ -33,13 +33,13 @@ fsubQuux mf recurse q = case q of
   QuuxValue x -> QuuxValue $ mf x
   QuuxPair left right -> QuuxPair (recurse left) (recurse right)
 
-rewriteQuux :: (a -> b) -> ((Quux a -> Quux b) -> Quux a -> Quux b) -> Quux a -> Quux b
-rewriteQuux mf f = rewrite (fsubQuux mf) f
+--rewriteQuux :: (a -> b) -> ((Quux a -> Quux b) -> Quux a -> Quux b) -> Quux a -> Quux b
+--rewriteQuux mf f = rewrite (fsubQuux mf) f
 
-myQuuxRewriter :: Quux String -> Quux Int
-myQuuxRewriter = rewriteQuux L.length $ \fsub q -> fsub $ case q of
-  QuuxPair left right -> QuuxPair QuuxUnit right
-  _ -> q
+--myQuuxRewriter :: Quux String -> Quux Int
+--myQuuxRewriter = rewriteQuux L.length $ \fsub q -> fsub $ case q of
+--  QuuxPair left right -> QuuxPair QuuxUnit right
+--  _ -> q
 
 checkFoldOverTerm :: H.SpecWith ()
 checkFoldOverTerm = do
@@ -714,17 +714,17 @@ testReplaceTerm = do
 
     replaceKv i = show i
 
-testRewriteExampleType :: H.SpecWith ()
-testRewriteExampleType = do
-    H.describe "Test rewriting of a made-up recursive type" $ do
-
-      H.it "Rewrite a hand-picked expression" $ do
-        H.shouldBe
-          quux2
-          (myQuuxRewriter quux1)
-  where
-    quux1 = QuuxPair QuuxUnit (QuuxPair (QuuxValue "abc") (QuuxValue "12345"))
-    quux2 = QuuxPair QuuxUnit (QuuxPair QuuxUnit (QuuxValue 5))
+--testRewriteExampleType :: H.SpecWith ()
+--testRewriteExampleType = do
+--    H.describe "Test rewriting of a made-up recursive type" $ do
+--
+--      H.it "Rewrite a hand-picked expression" $ do
+--        H.shouldBe
+--          quux2
+--          (myQuuxRewriter quux1)
+--  where
+--    quux1 = QuuxPair QuuxUnit (QuuxPair (QuuxValue "abc") (QuuxValue "12345"))
+--    quux2 = QuuxPair QuuxUnit (QuuxPair QuuxUnit (QuuxValue 5))
 
 testRewriteFunctionReachesSubterms :: String -> (((Term -> Term) -> Term -> Term) -> Term -> Term) -> H.SpecWith ()
 testRewriteFunctionReachesSubterms functionName function = H.describe ("Test that " ++ functionName ++ " reaches all subterms") $ do
@@ -1043,7 +1043,7 @@ spec = do
   testLiftLambdaAboveLet
   testNormalizeTypeVariablesInTerm
   testReplaceTerm
-  testRewriteExampleType
+--  testRewriteExampleType
   testRewriteTerm
   testRewriteTermM
   testRewriteTermWithContext
