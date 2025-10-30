@@ -40,8 +40,8 @@ def convert_case(from_: hydra.mantle.CaseConvention, to: hydra.mantle.CaseConven
     def parts() -> frozenlist[str]:
         def by_caps() -> frozenlist[str]:
             def split_on_uppercase(acc: frozenlist[frozenlist[int]], c: int) -> frozenlist[frozenlist[int]]:
-                return hydra.lib.lists.concat2(hydra.lib.logic.if_else(hydra.lib.chars.is_upper(c), ((),), ()), hydra.lib.lists.cons(hydra.lib.lists.cons(c, hydra.lib.lists.head(acc)), hydra.lib.lists.tail(acc)))
-            return hydra.lib.lists.map(hydra.lib.strings.from_list, hydra.lib.lists.foldl(split_on_uppercase, ((),), hydra.lib.lists.reverse(hydra.lib.strings.to_list(decapitalize(original)))))
+                return hydra.lib.lists.concat2(hydra.lib.logic.if_else(hydra.lib.chars.is_upper(c), (cast(frozenlist[int], ()),), cast(frozenlist[frozenlist[int]], ())), hydra.lib.lists.cons(hydra.lib.lists.cons(c, hydra.lib.lists.head(acc)), hydra.lib.lists.tail(acc)))
+            return hydra.lib.lists.map(hydra.lib.strings.from_list, hydra.lib.lists.foldl(split_on_uppercase, (cast(frozenlist[int], ()),), hydra.lib.lists.reverse(hydra.lib.strings.to_list(decapitalize(original)))))
         by_underscores = hydra.lib.strings.split_on("_", original)
         match from_:
             case hydra.mantle.CaseConvention.CAMEL:
@@ -101,7 +101,7 @@ def non_alnum_to_underscores(input: str) -> str:
         s = p[0]
         b = p[1]
         return hydra.lib.logic.if_else(is_alnum(c), (hydra.lib.lists.cons(c, s), False), hydra.lib.logic.if_else(b, (s, True), (hydra.lib.lists.cons(95, s), True)))
-    result = hydra.lib.lists.foldl(replace, ((), False), hydra.lib.strings.to_list(input))
+    result = hydra.lib.lists.foldl(replace, (cast(frozenlist[int], ()), False), hydra.lib.strings.to_list(input))
     return hydra.lib.strings.from_list(hydra.lib.lists.reverse(result[0]))
 
 def sanitize_with_underscores(reserved: frozenset[str], s: str) -> str:
@@ -128,4 +128,4 @@ def wrap_line(maxlen: int, input: str) -> str:
         prefix = hydra.lib.lists.reverse(span_result[1])
         suffix = hydra.lib.lists.reverse(span_result[0])
         return hydra.lib.logic.if_else(hydra.lib.equality.lte(hydra.lib.lists.length(rem), maxlen), hydra.lib.lists.reverse(hydra.lib.lists.cons(rem, prev)), hydra.lib.logic.if_else(hydra.lib.lists.null(prefix), helper(hydra.lib.lists.cons(trunc, prev), hydra.lib.lists.drop(maxlen, rem)), helper(hydra.lib.lists.cons(hydra.lib.lists.init(prefix), prev), hydra.lib.lists.concat2(suffix, hydra.lib.lists.drop(maxlen, rem)))))
-    return hydra.lib.strings.from_list(hydra.lib.lists.intercalate((10,), helper((), hydra.lib.strings.to_list(input))))
+    return hydra.lib.strings.from_list(hydra.lib.lists.intercalate((10,), helper(cast(frozenlist[frozenlist[int]], ()), hydra.lib.strings.to_list(input))))

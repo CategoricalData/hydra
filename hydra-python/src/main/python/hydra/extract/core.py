@@ -321,7 +321,7 @@ def map[T0, T1](fk: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.G
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[T0, T1]]:
         match term:
             case hydra.core.TermMap(value=m):
-                return hydra.lib.flows.map(hydra.lib.maps.from_list, hydra.lib.flows.map_list(pair, hydra.lib.maps.to_list(m)))
+                return hydra.lib.flows.map(cast(Callable[[frozenlist[Tuple[T0, T1]]], FrozenDict[T0, T1]], hydra.lib.maps.from_list), hydra.lib.flows.map_list(pair, hydra.lib.maps.to_list(m)))
             
             case _:
                 return hydra.monads.unexpected("map", hydra.show.core.term(term))
@@ -343,7 +343,7 @@ def optional[T0](f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.G
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[T0]]:
         match term:
             case hydra.core.TermOptional(value=mt):
-                return hydra.lib.optionals.maybe(hydra.lib.flows.pure(cast(Maybe[T0], Nothing())), (lambda t: hydra.lib.flows.map(hydra.lib.optionals.pure, f(t))), mt)
+                return hydra.lib.optionals.maybe(hydra.lib.flows.pure(cast(Maybe[T0], Nothing())), (lambda t: hydra.lib.flows.map(cast(Callable[[T0], Maybe[T0]], hydra.lib.optionals.pure), f(t))), mt)
             
             case _:
                 return hydra.monads.unexpected("optional value", hydra.show.core.term(term))

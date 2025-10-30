@@ -183,7 +183,7 @@ def infix_ws_list(op: str, opers: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     op_expr = cst(op)
     def fold_fun(e: frozenlist[hydra.ast.Expr], r: hydra.ast.Expr) -> frozenlist[hydra.ast.Expr]:
         return hydra.lib.logic.if_else(hydra.lib.lists.null(e), (r,), hydra.lib.lists.cons(r, hydra.lib.lists.cons(op_expr, e)))
-    return space_sep(hydra.lib.lists.foldl(fold_fun, (), hydra.lib.lists.reverse(opers)))
+    return space_sep(hydra.lib.lists.foldl(fold_fun, cast(frozenlist[hydra.ast.Expr], ()), hydra.lib.lists.reverse(opers)))
 
 no_padding = hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone(None)), cast(hydra.ast.Ws, hydra.ast.WsNone(None)))
 
