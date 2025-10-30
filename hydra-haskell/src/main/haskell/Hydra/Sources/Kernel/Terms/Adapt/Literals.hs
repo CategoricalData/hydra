@@ -280,10 +280,12 @@ literalAdapterDef = define "literalAdapter" $
     "hasIntegers" <~ Logic.not (Sets.null (Coders.languageConstraintsIntegerTypes (var "constraints"))) $
     "hasStrings" <~ Sets.member Mantle.literalVariantString (Coders.languageConstraintsLiteralVariants (var "constraints")) $
     "withIntegers" <~ (
+      "withAdapter" <~ ("adapter" ~>
+        "step'" <~ Compute.adapterCoder (var "adapter") $
+        "step" <~ Compute.coder (var "matchBoolean" @@ var "step'") (var "matchInteger" @@ var "step'") $
+        produce (list [Compute.adapter false (var "t") (Core.literalTypeInteger (Compute.adapterTarget (var "adapter"))) (var "step")])) $
       "adapter" <<~ ref integerAdapterDef @@ Core.integerTypeUint8 $
-      "step'" <~ Compute.adapterCoder (var "adapter") $
-      "step" <~ Compute.coder (var "matchBoolean" @@ var "step'") (var "matchInteger" @@ var "step'") $
-      produce (list [Compute.adapter false (var "t") (Core.literalTypeInteger (Compute.adapterTarget (var "adapter"))) (var "step")])) $
+      var "withAdapter" @@ var "adapter") $
     "withStrings" <~ (
       "encode" <~ ("lit" ~>
         "b" <<~ ref ExtractCore.booleanLiteralDef @@ var "lit" $
