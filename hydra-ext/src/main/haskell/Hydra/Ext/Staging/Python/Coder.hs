@@ -89,7 +89,8 @@ encodeApplication env app = do
     else
       return pyapp
   where
-    -- Note: this extreme special case is to be expanded as needed
+    -- Note: this extreme special case is to be expanded as needed. This cast is necessary *in addition to*
+    -- the casts for type application terms.
     needsCast term typ = case typ of
       TypeMap _ -> case deannotateAndDetypeTerm term of
         TermMap _ -> False
@@ -463,8 +464,7 @@ encodeRecordType env name (RowType _ tfields) comment = do
 encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> Flow PyGraph Py.Statement
 encodeTermAssignment env name term comment = do
 
---  if name == Name "hydra.extract.coreDebug.nArgs"
-----  if name == Name "hydra.extract.coreDebug.unexpected"
+--  if name == Name "initialState"
 --  then fail $ "term: " ++ ShowCore.term term
 --  else pure ()
 
@@ -496,7 +496,7 @@ encodeTermAssignment env name term comment = do
 
 -- | Encode a term to an inline Python expression
 encodeTermInline :: PythonEnvironment -> Term -> Flow PyGraph Py.Expression
-encodeTermInline env term = case deannotateAndDeTypeApplyTerm term of
+encodeTermInline env term = case deannotateTerm term of
     TermApplication a -> encodeApplication env a
     TermFunction f -> encodeFunction env f
     TermLet _ -> pure $ stringToPyExpression Py.QuoteStyleDouble "let terms are not supported here"
@@ -513,17 +513,14 @@ encodeTermInline env term = case deannotateAndDeTypeApplyTerm term of
           pyK <- encode k
           pyV <- encode v
           return $ Py.DoubleStarredKvpairPair $ Py.Kvpair pyK pyV
-    TermOptional mt -> do
-      typ <- typeOf (pythonEnvironmentTypeContext env) [] term
-      pytyp <- encodeType env typ
-      updateMeta $ \m -> m { pythonModuleMetadataUsesCast = True, pythonModuleMetadataUsesMaybe = True }
-      case mt of
-        Nothing -> return $ castTo pytyp $
-          functionCall (pyNameToPyPrimary $ Py.Name "Nothing") []
+    TermOptional mt -> case mt of
+        Nothing -> return $ functionCall (pyNameToPyPrimary $ Py.Name "Nothing") []
         Just term1 -> do
-          pyex <- encode term1
-          return $ castTo pytyp $
-            functionCall (pyNameToPyPrimary $ Py.Name "Just") [pyex]
+          pyexp <- encode term1
+          -- This "extra" cast is necessary for the same reason we require casts on injections.
+          -- Note that an extra cast on Nothing() is not necessary, since Hydra's nothing is always wrapped in
+          -- a type application term (which generates a cast).
+          withCast term $ functionCall (pyNameToPyPrimary $ Py.Name "Just") [pyexp]
     TermProduct terms -> do
       pyExprs <- CM.mapM encode terms
       return $ pyAtomToPyExpression $ Py.AtomTuple $ Py.Tuple (pyExpressionToPyStarNamedExpression <$> pyExprs)
@@ -534,7 +531,10 @@ encodeTermInline env term = case deannotateAndDeTypeApplyTerm term of
       pyEls <- CM.mapM encode $ S.toList s
       return $ functionCall (pyNameToPyPrimary $ Py.Name "frozenset")
         [pyAtomToPyExpression $ Py.AtomSet $ Py.Set (pyExpressionToPyStarNamedExpression <$> pyEls)]
-    TermTypeLambda tl@(TypeLambda _ term1) -> encodeTermInline env2 term1
+    TermTypeApplication (TypeApplicationTerm body _) -> do
+      pybase <- encode $ deannotateAndDeTypeApplyTerm body
+      withCast term pybase
+    TermTypeLambda tl@(TypeLambda _ body) -> encodeTermInline env2 body
       where
         env2 = extendEnvironmentForTypeLambda env tl
     TermUnion (Injection tname field) -> do
@@ -546,7 +546,8 @@ encodeTermInline env term = case deannotateAndDeTypeApplyTerm term of
           parg <- encode $ fieldTerm field
 
           -- Explicitly casting to the union type avoids occasional Python type errors in which the narrower,
-          -- variant type is assumed (e.g. hydra.core.EliminationUnion instead of hydra.core.Elimination).
+          -- variant type is assumed (e.g. hydra.core.TermList instead of hydra.core.Term).
+          -- This is in addition to the cast expressions we create for type application terms.
           updateMeta $ \m -> m { pythonModuleMetadataUsesCast = True }
           return $ castTo (typeVariableReference env tname) $
             functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) [parg]
@@ -557,6 +558,11 @@ encodeTermInline env term = case deannotateAndDeTypeApplyTerm term of
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) [parg]
     t -> fail $ "unsupported term variant: " ++ show (termVariant t) ++ " in " ++ show term
   where
+    withCast term pyexp = do
+      typ <- typeOf (pythonEnvironmentTypeContext env) [] term
+      pytyp <- encodeType env typ
+      updateMeta $ \m -> extendMetaForType True False typ $ m { pythonModuleMetadataUsesCast = True }
+      return $ castTo pytyp pyexp
     deannotateAndDeTypeApplyTerm term = case term of
       TermAnnotated at -> deannotateAndDeTypeApplyTerm (annotatedTermBody at)
       TermTypeApplication tat -> deannotateAndDeTypeApplyTerm (typeApplicationTermBody tat)
@@ -967,9 +973,14 @@ isFunctionCall (Binding _ term (Just ts)) = isCaseStatement || isLet -- || typeA
       _ -> False
 
 isSimpleAssignment :: Term -> Bool
-isSimpleAssignment term = case deannotateAndDetypeTerm term of
+isSimpleAssignment term = case term of
+  TermAnnotated (AnnotatedTerm body _) -> isSimpleAssignment body
   TermFunction (FunctionLambda _) -> False
   TermLet _ -> False
+  TermTypeLambda _ -> False
+  -- Polymorphic terms should not use simple assignment; they need a type signature for the sake of introducing
+  -- type variables which may be used in cast expressions.
+  TermTypeApplication (TypeApplicationTerm body _) -> isSimpleAssignment body
   t -> case (fst (gatherArgs t [])) of
     TermFunction (FunctionElimination (EliminationUnion _)) -> False
     _ -> True
