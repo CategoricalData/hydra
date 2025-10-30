@@ -163,8 +163,7 @@ mutateTraceDef = define "mutateTrace" $
   "choose" <~ ("forLeft" ~> "forRight" ~> "e" ~> cases _Either (var "e") Nothing [
     _Either_left>>: "e" ~> var "forLeft" @@ var "e",
     _Either_right>>: "e" ~> var "forRight" @@ var "e"]) $
-  Compute.flow (
-    "s0" ~> "t0" ~>
+  "flowFun" <~ ("s0" ~> "t0" ~>
     "forLeft" <~ ("msg" ~>
       Compute.flowState nothing (var "s0") (ref pushErrorDef @@ var "msg" @@ var "t0")) $
     "forRight" <~ ("t1" ~>
@@ -173,7 +172,8 @@ mutateTraceDef = define "mutateTrace" $
         (Compute.flowStateValue (var "f2"))
         (Compute.flowStateState (var "f2"))
         (var "restore" @@ var "t0" @@ (Compute.flowStateTrace (var "f2")))) $
-    var "choose" @@ var "forLeft" @@ var "forRight" @@ (var "mutate" @@ var "t0"))
+    var "choose" @@ var "forLeft" @@ var "forRight" @@ (var "mutate" @@ var "t0")) $
+  Compute.flow $ var "flowFun"
 
 optionalToListDef :: TBinding (Maybe a -> [a])
 optionalToListDef = define "optionalToList" $
