@@ -229,9 +229,9 @@ def show_string(s: str) -> str:
     return repr(s)
 
 
-def string_to_binary(s: str) -> str:
-    """Convert string to binary (identity in Python)."""
-    return s
+def string_to_binary(s: str) -> bytes:
+    """Convert string to binary by encoding string to UTF-8 bytes."""
+    return s.encode('utf-8', errors='replace')
 
 
 def uint8_to_bigint(x: int) -> int:
