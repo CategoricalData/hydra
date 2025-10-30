@@ -48,9 +48,7 @@ def cat[A](xs: Sequence[Maybe[A]]) -> frozenlist[A]:
     return tuple(result)
 
 
-def compose[A, B, C](
-    f: Callable[[A], Maybe[B]], g: Callable[[B], Maybe[C]]
-) -> Callable[[A], Maybe[C]]:
+def compose[A, B, C](f: Callable[[A], Maybe[B]], g: Callable[[B], Maybe[C]]) -> Callable[[A], Maybe[C]]:
     """Compose two functions."""
     return lambda x: bind(f(x), g)
 

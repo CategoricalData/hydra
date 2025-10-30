@@ -39,7 +39,7 @@ def add_names_to_namespaces[T0](encode_namespace: Callable[[hydra.module.Namespa
     nss = hydra.lib.sets.from_list(hydra.lib.optionals.cat(hydra.lib.lists.map(hydra.names.namespace_of, hydra.lib.sets.to_list(names))))
     def to_pair(ns: hydra.module.Namespace) -> Tuple[hydra.module.Namespace, T0]:
         return (ns, encode_namespace(ns))
-    return cast(hydra.module.Namespaces[T0], hydra.module.Namespaces((lambda v1: v1.focus)(ns0), hydra.lib.maps.union((lambda v1: v1.mapping)(ns0), cast(FrozenDict[hydra.module.Namespace, T0], hydra.lib.maps.from_list(hydra.lib.lists.map(to_pair, hydra.lib.sets.to_list(nss)))))))
+    return cast(hydra.module.Namespaces[T0], hydra.module.Namespaces(ns0.focus, hydra.lib.maps.union(ns0.mapping, cast(FrozenDict[hydra.module.Namespace, T0], hydra.lib.maps.from_list(hydra.lib.lists.map(to_pair, hydra.lib.sets.to_list(nss)))))))
 
 def definition_dependency_namespaces(defs: frozenlist[hydra.module.Definition]) -> frozenset[hydra.module.Namespace]:
     r"""Get dependency namespaces from definitions."""
