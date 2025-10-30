@@ -266,13 +266,15 @@ literalAdapterDef = define "literalAdapter" $
       _Literal_boolean>>: "bv" ~>
         "iv" <<~ Compute.coderEncode (var "step'") @@ (Core.integerValueUint8 (Logic.ifElse (var "bv") (uint8 1) (uint8 0))) $
         produce (Core.literalInteger (var "iv"))]) $
-    "matchInteger" <~ ("step'" ~> "lit" ~> cases _Literal (var "lit")
-      Nothing [
-      _Literal_integer>>: "iv" ~>
-        "val" <<~ Compute.coderDecode (var "step'") @@ var "iv" $
-        cases _IntegerValue (var "val")
-          Nothing [
-          _IntegerValue_uint8>>: "v" ~> Flows.pure (Core.literalBoolean (Equality.equal (var "v") (uint8 1)))]]) $
+    "matchInteger" <~ ("step'" ~> "lit" ~>
+      "forValue" <~ ("val" ~> cases _IntegerValue (var "val")
+        Nothing [
+        _IntegerValue_uint8>>: "v" ~> Core.literalBoolean (Equality.equal (var "v") (uint8 1))]) $
+      cases _Literal (var "lit")
+        Nothing [
+        _Literal_integer>>: "iv" ~>
+          "val" <<~ Compute.coderDecode (var "step'") @@ var "iv" $
+          produce $ var "forValue" @@ var "val"]) $
     "cx" <<~ ref Monads.getStateDef $
     "constraints" <~ Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx")) $
     "hasIntegers" <~ Logic.not (Sets.null (Coders.languageConstraintsIntegerTypes (var "constraints"))) $

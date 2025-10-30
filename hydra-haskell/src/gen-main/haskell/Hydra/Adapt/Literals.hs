@@ -108,9 +108,11 @@ literalAdapter lt =
             let matchBoolean = (\step_ -> \lit -> (\x -> case x of
                     Core.LiteralBoolean v1 -> (Flows.bind (Compute.coderEncode step_ (Core.IntegerValueUint8 (Logic.ifElse v1 1 0))) (\iv -> Flows.pure (Core.LiteralInteger iv)))) lit)
             in  
-              let matchInteger = (\step_ -> \lit -> (\x -> case x of
-                      Core.LiteralInteger v1 -> (Flows.bind (Compute.coderDecode step_ v1) (\val -> (\x -> case x of
-                        Core.IntegerValueUint8 v2 -> (Flows.pure (Core.LiteralBoolean (Equality.equal v2 1)))) val))) lit)
+              let matchInteger = (\step_ -> \lit ->  
+                      let forValue = (\val -> (\x -> case x of
+                              Core.IntegerValueUint8 v1 -> (Core.LiteralBoolean (Equality.equal v1 1))) val)
+                      in ((\x -> case x of
+                        Core.LiteralInteger v1 -> (Flows.bind (Compute.coderDecode step_ v1) (\val -> Flows.pure (forValue val)))) lit))
               in (Flows.bind Monads.getState (\cx ->  
                 let constraints = (Coders.languageConstraints (Coders.adapterContextLanguage cx))
                 in  
