@@ -112,7 +112,7 @@ def type(typ: hydra.core.Type) -> str:
             return type(at.body)
         
         case hydra.core.TypeApplication(value=app):
-            types = gather_types((), app)
+            types = gather_types(cast(frozenlist[hydra.core.Type], ()), app)
             type_strs = hydra.lib.lists.map(type, types)
             return hydra.lib.strings.cat(("(", hydra.lib.strings.intercalate(" @ ", type_strs), ")"))
         
@@ -122,7 +122,7 @@ def type(typ: hydra.core.Type) -> str:
             return hydra.lib.strings.cat(("(∀", var, ".", type(body), ")"))
         
         case hydra.core.TypeFunction():
-            types = gather_function_types((), typ)
+            types = gather_function_types(cast(frozenlist[hydra.core.Type], ()), typ)
             type_strs = hydra.lib.lists.map(type, types)
             return hydra.lib.strings.cat(("(", hydra.lib.strings.intercalate(" → ", type_strs), ")"))
         
@@ -266,7 +266,7 @@ def elimination(elm: hydra.core.Elimination) -> str:
             tname = cs.type_name.value
             mdef = cs.default
             cases = cs.cases
-            default_field = hydra.lib.optionals.maybe((), (lambda d: (hydra.core.Field(hydra.core.Name("[default]"), d),)), mdef)
+            default_field = hydra.lib.optionals.maybe(cast(frozenlist[hydra.core.Field], ()), (lambda d: (hydra.core.Field(hydra.core.Name("[default]"), d),)), mdef)
             all_fields = hydra.lib.lists.concat((cases, default_field))
             return hydra.lib.strings.cat(("case(", tname, ")", fields(all_fields)))
         
@@ -329,7 +329,7 @@ def term(t: hydra.core.Term) -> str:
             return term(at.body)
         
         case hydra.core.TermApplication(value=app):
-            terms = gather_terms((), app)
+            terms = gather_terms(cast(frozenlist[hydra.core.Term], ()), app)
             term_strs = hydra.lib.lists.map(term, terms)
             return hydra.lib.strings.cat(("(", hydra.lib.strings.intercalate(" @ ", term_strs), ")"))
         
