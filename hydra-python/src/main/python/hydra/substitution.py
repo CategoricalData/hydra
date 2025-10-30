@@ -4,7 +4,7 @@ r"""Variable substitution in type and term expressions."""
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import frozenlist
+from hydra.dsl.python import FrozenDict, frozenlist
 from typing import cast
 import hydra.core
 import hydra.lib.lists
@@ -33,10 +33,10 @@ def subst_in_type(subst: hydra.typing.TypeSubst, typ0: hydra.core.Type) -> hydra
 def compose_type_subst(s1: hydra.typing.TypeSubst, s2: hydra.typing.TypeSubst) -> hydra.typing.TypeSubst:
     def is_extra[T0](k: hydra.core.Name, v: T0) -> bool:
         return hydra.lib.optionals.is_nothing(hydra.lib.maps.lookup(k, s1.value))
-    with_extra = hydra.lib.maps.filter_with_key(is_extra, s2.value)
+    with_extra = hydra.lib.maps.filter_with_key(cast(Callable[[hydra.core.Name, hydra.core.Type], bool], is_extra), s2.value)
     return hydra.typing.TypeSubst(hydra.lib.maps.union(with_extra, hydra.lib.maps.map((lambda v1: subst_in_type(s2, v1)), s1.value)))
 
-id_type_subst = hydra.typing.TypeSubst(hydra.lib.maps.empty())
+id_type_subst = hydra.typing.TypeSubst(cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.empty()))
 
 def compose_type_subst_list(v1: frozenlist[hydra.typing.TypeSubst]) -> hydra.typing.TypeSubst:
     return hydra.lib.lists.foldl(compose_type_subst, id_type_subst, v1)
