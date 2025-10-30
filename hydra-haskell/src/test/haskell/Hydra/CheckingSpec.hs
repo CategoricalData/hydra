@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 -- TODO: add these type checking test cases to the generated test suite
 
 {-
@@ -1980,6 +1982,72 @@ checkTypeOfUnionEliminations = H.describe "Union eliminations" $ do
         "other">: lambdaTyped "x" Types.string (var "x")]) Types.string @@
        tyapp (variant testTypePersonOrSomethingName (Name "other") (string "test")) Types.string)
       Types.string
+
+    H.describe "using UnionPolymorphicRecursive" $ do
+      expectTermWithType "non-applied UnionPolymorphicRecursive"
+        (lets [
+          "test">: (match (Name "UnionPolymorphicRecursive")
+            (Just "other") [
+            "value">: lambda "i" $ primitive _literals_showInt32 @@ var "i"])] $
+          var "test")
+        (letsTyped [
+            ("test",
+             tyapp (match (Name "UnionPolymorphicRecursive")
+               (Just "other") [
+               "value">: lambdaTyped "i" Types.int32 $ primitive _literals_showInt32 @@ var "i"]) Types.int32,
+             Types.mono $ Types.function (Types.apply (Types.var "UnionPolymorphicRecursive") Types.int32) Types.string)] $
+          var "test")
+        (Types.function (Types.apply (Types.var "UnionPolymorphicRecursive") Types.int32) Types.string)
+      expectTermWithType "applied UnionPolymorphicRecursive with int32"
+        (lets [
+          "test">: (match (Name "UnionPolymorphicRecursive")
+              (Just "other") [
+              "value">: lambda "i" $ primitive _literals_showInt32 @@ var "i"])
+            @@ (inject (Name "UnionPolymorphicRecursive") $ Field (Name "value") $ int32 42)] $
+          var "test")
+        (letsTyped [
+          ("test",
+           tyapp (match (Name "UnionPolymorphicRecursive")
+               (Just "other") [
+               "value">: lambdaTyped "i" Types.int32 $ primitive _literals_showInt32 @@ var "i"]) Types.int32
+             @@ tyapp (inject (Name "UnionPolymorphicRecursive") $ Field (Name "value") $ int32 42) Types.int32,
+           Types.mono $ Types.string)] $
+          var "test")
+        Types.string
+      expectTermWithType "applied UnionPolymorphicRecursive with int32 in lambda"
+        (lets [
+          "test">: lambda "x" $ match (Name "UnionPolymorphicRecursive")
+              (Just "other") [
+              "value">: lambda "i" $ primitive _literals_showInt32 @@ var "i"]
+            @@ var "x"] $
+          var "test")
+        (letsTyped [
+          ("test",
+           lambdaTyped "x" (Types.apply (Types.var "UnionPolymorphicRecursive") Types.int32) $
+             tyapp (match (Name "UnionPolymorphicRecursive")
+                 (Just "other") [
+                 "value">: lambdaTyped "i" Types.int32 $ primitive _literals_showInt32 @@ var "i"]) Types.int32
+               @@ var "x",
+           Types.mono $ Types.function (Types.apply (Types.var "UnionPolymorphicRecursive") Types.int32) Types.string)] $
+          var "test")
+        (Types.function (Types.apply (Types.var "UnionPolymorphicRecursive") Types.int32) Types.string)
+      expectTermWithType "applied generic UnionPolymorphicRecursive in lambda"
+        (lets [
+          "test">: lambda "x" $ match (Name "UnionPolymorphicRecursive")
+              (Just "other") [
+              "value">: lambda "ignored" "foo"]
+            @@ var "x"] $
+          var "test")
+        (tylam "t0" $ letsTyped [
+          ("test",
+           tylam "t1" $ lambdaTyped "x" (Types.apply (Types.var "UnionPolymorphicRecursive") (Types.var "t1")) $
+             tyapp (match (Name "UnionPolymorphicRecursive")
+                 (Just "other") [
+                 "value">: lambdaTyped "ignored" (Types.var "t1") $ "foo"]) (Types.var "t1")
+               @@ var "x",
+           Types.poly ["t1"] $ Types.function (Types.apply (Types.var "UnionPolymorphicRecursive") (Types.var "t1")) Types.string)] $
+          tyapp (var "test") $ Types.var "t0")
+        (Types.forAll "t0" $ Types.function (Types.apply (Types.var "UnionPolymorphicRecursive") (Types.var "t0")) Types.string)
 
   H.describe "Union eliminations with defaults" $ do
     expectTermWithType "match Comparison with default case"
