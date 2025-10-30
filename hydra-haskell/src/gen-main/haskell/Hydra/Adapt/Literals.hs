@@ -120,18 +120,20 @@ literalAdapter lt =
                   in  
                     let hasStrings = (Sets.member Mantle.LiteralVariantString (Coders.languageConstraintsLiteralVariants constraints))
                     in  
-                      let withIntegers = (Flows.bind (integerAdapter Core.IntegerTypeUint8) (\adapter ->  
-                              let step_ = (Compute.adapterCoder adapter)
-                              in  
-                                let step = Compute.Coder {
-                                        Compute.coderEncode = (matchBoolean step_),
-                                        Compute.coderDecode = (matchInteger step_)}
-                                in (Flows.pure [
-                                  Compute.Adapter {
-                                    Compute.adapterIsLossy = False,
-                                    Compute.adapterSource = t,
-                                    Compute.adapterTarget = (Core.LiteralTypeInteger (Compute.adapterTarget adapter)),
-                                    Compute.adapterCoder = step}])))
+                      let withIntegers =  
+                              let withAdapter = (\adapter ->  
+                                      let step_ = (Compute.adapterCoder adapter)
+                                      in  
+                                        let step = Compute.Coder {
+                                                Compute.coderEncode = (matchBoolean step_),
+                                                Compute.coderDecode = (matchInteger step_)}
+                                        in (Flows.pure [
+                                          Compute.Adapter {
+                                            Compute.adapterIsLossy = False,
+                                            Compute.adapterSource = t,
+                                            Compute.adapterTarget = (Core.LiteralTypeInteger (Compute.adapterTarget adapter)),
+                                            Compute.adapterCoder = step}]))
+                              in (Flows.bind (integerAdapter Core.IntegerTypeUint8) (\adapter -> withAdapter adapter))
                       in  
                         let withStrings =  
                                 let encode = (\lit -> Flows.bind (Core__.booleanLiteral lit) (\b -> Flows.pure (Core.LiteralString (Logic.ifElse b "true" "false"))))
