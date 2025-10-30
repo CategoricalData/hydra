@@ -1654,6 +1654,20 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
           field "age" (int32 0)])
        (Types.function (Types.var "Person") (Types.var "Person"))
 
+    H.describe "Polymorphic function-valued projection" $ do
+      expectTermWithType "applied to an argument"
+        (project (Name "Triple") (Name "first")
+          @@ record (Name "Triple") ["first">: primitive _strings_toLower, "second">: string "middle", "third">: string "last"]
+          @@ string "DATA")
+        (tyapps
+            (project (Name "Triple") (Name "first"))
+            [Types.function Types.string Types.string, Types.string, Types.string]
+          @@ tyapps
+            (record (Name "Triple") ["first">: primitive _strings_toLower, "second">: string "middle", "third">: string "last"])
+            [Types.function Types.string Types.string, Types.string, Types.string]
+          @@ string "DATA")
+        Types.string
+
 checkTypeOfSets :: H.SpecWith ()
 checkTypeOfSets = H.describe "Sets" $ do
   H.describe "Monomorphic sets" $ do

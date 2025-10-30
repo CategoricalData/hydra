@@ -151,6 +151,21 @@ testEtaExpansion = H.describe "etaExpandTypedTerms" $ do
           (lambda "x" $ project (Name "Person") (Name "firstName"))
           (lambda "x" $ lambda "v1" $ project (Name "Person") (Name "firstName") @@ var "v1")
 
+      H.describe "Function-valued projections" $ do
+        noChange "projection of function-valued field applied to arguments should not be expanded"
+          (tyapps
+              (project (Name "Triple") (Name "first"))
+              [Types.function Types.string Types.string, Types.string, Types.string]
+            @@ tyapps
+              (record (Name "Triple") ["first">: primitive _strings_toLower, "second">: string "middle", "third">: string "last"])
+              [Types.function Types.string Types.string, Types.string, Types.string]
+            @@ string "DATA")
+
+
+
+
+
+
     H.describe "Polymorphic terms (System F)" $ do
       H.describe "Type lambdas in let bindings" $ do
         noChange "polymorphic identity function"
@@ -313,6 +328,9 @@ testEtaExpansion = H.describe "etaExpandTypedTerms" $ do
 
       noChange "bare primitive outside case branch is not expanded"
         toLower
+
+
+
 
   where
     cat = primitive $ Name "hydra.lib.strings.cat"
