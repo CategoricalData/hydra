@@ -688,14 +688,14 @@ inferTypeOfSum cx sum =
         let toType = (\x -> case x of
                 Mantle.EitherLeft v1 -> v1
                 Mantle.EitherRight v1 -> (Core.TypeVariable v1))
-        in (Flows.bind (inferTypeOfTerm cx term "sum term") (\result ->  
-          let iterm = (Typing_.inferenceResultTerm result)
-          in  
-            let ityp = (Typing_.inferenceResultType result)
+        in  
+          let varOrTerm = (\t -> \j -> Logic.ifElse (Equality.equal i j) (Flows.pure (Mantle.EitherLeft t)) (Flows.map (\x -> Mantle.EitherRight x) Schemas.freshName))
+          in (Flows.bind (inferTypeOfTerm cx term "sum term") (\result ->  
+            let iterm = (Typing_.inferenceResultTerm result)
             in  
-              let isubst = (Typing_.inferenceResultSubst result)
+              let ityp = (Typing_.inferenceResultType result)
               in  
-                let varOrTerm = (\t -> \j -> Logic.ifElse (Equality.equal i j) (Flows.pure (Mantle.EitherLeft t)) (Flows.map (\x -> Mantle.EitherRight x) Schemas.freshName))
+                let isubst = (Typing_.inferenceResultSubst result)
                 in (Flows.bind (Flows.mapList (varOrTerm ityp) (Math.range 0 (Math.sub s 1))) (\vars -> Flows.pure (yield (Core.TermSum (Core.Sum {
                   Core.sumIndex = i,
                   Core.sumSize = s,
