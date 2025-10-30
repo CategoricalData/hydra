@@ -860,13 +860,13 @@ inferTypeOfSumDef = define "inferTypeOfSum" $
     Nothing [
     _Either_left>>: "t" ~> var "t",
     _Either_right>>: "v" ~> Core.typeVariable $ var "v"]) $
+  "varOrTerm" <~ ("t" ~> "j" ~> Logic.ifElse (Equality.equal (var "i") (var "j"))
+    (Flows.pure $ Mantle.eitherLeft $ var "t")
+    (Flows.map (unaryFunction Mantle.eitherRight) $ ref Schemas.freshNameDef)) $
   "result" <<~ ref inferTypeOfTermDef @@ var "cx" @@ var "term" @@ string "sum term" $
   "iterm" <~ Typing.inferenceResultTerm (var "result") $
   "ityp" <~ Typing.inferenceResultType (var "result") $
   "isubst" <~ Typing.inferenceResultSubst (var "result") $
-  "varOrTerm" <~ ("t" ~> "j" ~> Logic.ifElse (Equality.equal (var "i") (var "j"))
-    (Flows.pure $ Mantle.eitherLeft $ var "t")
-    (Flows.map (unaryFunction Mantle.eitherRight) $ ref Schemas.freshNameDef)) $
   "vars" <<~ Flows.mapList (var "varOrTerm" @@ var "ityp") (Math.range (int32 0) (Math.sub (var "s") (int32 1))) $
   produce $ ref yieldDef
     @@ Core.termSum (Core.sum (var "i") (var "s") (var "iterm"))
