@@ -80,21 +80,25 @@ modify :: ((t0 -> t0) -> Compute.Flow t0 ())
 modify f = (bind getState (\s -> putState (f s)))
 
 mutateTrace :: ((Compute.Trace -> Mantle.Either String Compute.Trace) -> (Compute.Trace -> Compute.Trace -> Compute.Trace) -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
-mutateTrace mutate restore f = (Compute.Flow (\s0 -> \t0 ->  
-  let forLeft = (\msg -> Compute.FlowState {
-          Compute.flowStateValue = Nothing,
-          Compute.flowStateState = s0,
-          Compute.flowStateTrace = (pushError msg t0)})
+mutateTrace mutate restore f =  
+  let choose = (\forLeft -> \forRight -> \e -> (\x -> case x of
+          Mantle.EitherLeft v1 -> (forLeft v1)
+          Mantle.EitherRight v1 -> (forRight v1)) e)
   in  
-    let forRight = (\t1 ->  
-            let f2 = (Compute.unFlow f s0 t1)
-            in Compute.FlowState {
-              Compute.flowStateValue = (Compute.flowStateValue f2),
-              Compute.flowStateState = (Compute.flowStateState f2),
-              Compute.flowStateTrace = (restore t0 (Compute.flowStateTrace f2))})
-    in ((\x -> case x of
-      Mantle.EitherLeft v1 -> (forLeft v1)
-      Mantle.EitherRight v1 -> (forRight v1)) (mutate t0))))
+    let flowFun = (\s0 -> \t0 ->  
+            let forLeft = (\msg -> Compute.FlowState {
+                    Compute.flowStateValue = Nothing,
+                    Compute.flowStateState = s0,
+                    Compute.flowStateTrace = (pushError msg t0)})
+            in  
+              let forRight = (\t1 ->  
+                      let f2 = (Compute.unFlow f s0 t1)
+                      in Compute.FlowState {
+                        Compute.flowStateValue = (Compute.flowStateValue f2),
+                        Compute.flowStateState = (Compute.flowStateState f2),
+                        Compute.flowStateTrace = (restore t0 (Compute.flowStateTrace f2))})
+              in (choose forLeft forRight (mutate t0)))
+    in (Compute.Flow flowFun)
 
 optionalToList :: (Maybe t0 -> [t0])
 optionalToList mx = (Optionals.maybe [] Lists.pure mx)
@@ -181,10 +185,10 @@ warn msg b = (Compute.Flow (\s0 -> \t0 ->
 
 withFlag :: (Core.Name -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 withFlag flag f =  
-  let mutate = (\t -> Mantle.EitherRight (Compute.Trace {
+  let mutate = (\t -> Logic.ifElse False (Mantle.EitherLeft "never happens") (Mantle.EitherRight (Compute.Trace {
           Compute.traceStack = (Compute.traceStack t),
           Compute.traceMessages = (Compute.traceMessages t),
-          Compute.traceOther = (Maps.insert flag (Core.TermLiteral (Core.LiteralBoolean True)) (Compute.traceOther t))}))
+          Compute.traceOther = (Maps.insert flag (Core.TermLiteral (Core.LiteralBoolean True)) (Compute.traceOther t))})))
   in  
     let restore = (\ignored -> \t1 -> Compute.Trace {
             Compute.traceStack = (Compute.traceStack t1),
