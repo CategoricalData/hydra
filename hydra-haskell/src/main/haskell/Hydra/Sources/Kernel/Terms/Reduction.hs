@@ -233,7 +233,11 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
       _Term_application>>: "a" ~>
         "lhs" <<~ var "rewriteSpine" @@ Core.applicationFunction (var "a") $
         "rhs" <<~ var "rewrite" @@ true @@ false @@ var "recurse" @@ var "tx" @@ Core.applicationArgument (var "a") $
-        produce (Core.termApplication $ Core.application (var "lhs") (var "rhs"))]) $
+        produce (Core.termApplication $ Core.application (var "lhs") (var "rhs")),
+      _Term_typeApplication>>: "tat" ~>
+        "body" <<~ var "rewriteSpine" @@ Core.typeApplicationTermBody (var "tat") $
+        "typ" <~ Core.typeApplicationTermType (var "tat") $
+        produce (Core.termTypeApplication $ Core.typeApplicationTerm (var "body") (var "typ"))]) $
 
     "extraVariables" <~ ("n" ~> Lists.map ("i" ~> Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
       Math.range (int32 1) (var "n")) $

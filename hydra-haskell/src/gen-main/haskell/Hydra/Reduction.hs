@@ -182,6 +182,11 @@ etaExpandTypedTerm tx0 term0 =
                   Core.TermApplication v1 -> (Flows.bind (rewriteSpine (Core.applicationFunction v1)) (\lhs -> Flows.bind (rewrite True False recurse tx (Core.applicationArgument v1)) (\rhs -> Flows.pure (Core.TermApplication (Core.Application {
                     Core.applicationFunction = lhs,
                     Core.applicationArgument = rhs})))))
+                  Core.TermTypeApplication v1 -> (Flows.bind (rewriteSpine (Core.typeApplicationTermBody v1)) (\body ->  
+                    let typ = (Core.typeApplicationTermType v1)
+                    in (Flows.pure (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                      Core.typeApplicationTermBody = body,
+                      Core.typeApplicationTermType = typ})))))
                   _ -> (rewrite False False recurse tx term)) term)
           in  
             let extraVariables = (\n -> Lists.map (\i -> Core.Name (Strings.cat2 "v" (Literals.showInt32 i))) (Math.range 1 n))
