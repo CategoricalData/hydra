@@ -111,11 +111,11 @@ composeCodersDef = define "composeCoders" $
 encodeDecodeDef :: TBinding (CoderDirection -> Coder s s x x -> x -> Flow s x)
 encodeDecodeDef = define "encodeDecode" $
   doc "Apply coder in the specified direction" $
-  "dir" ~> "coder" ~>
+  "dir" ~> "coder" ~> "term" ~>
   cases _CoderDirection (var "dir")
     Nothing [
-    _CoderDirection_encode>>: constant (Compute.coderEncode (var "coder")),
-    _CoderDirection_decode>>: constant (Compute.coderDecode (var "coder"))]
+    _CoderDirection_encode>>: constant (Compute.coderEncode (var "coder") @@ var "term"),
+    _CoderDirection_decode>>: constant (Compute.coderDecode (var "coder") @@ var "term")]
 
 floatTypeIsSupportedDef :: TBinding (LanguageConstraints -> FloatType -> Bool)
 floatTypeIsSupportedDef = define "floatTypeIsSupported" $
