@@ -2049,6 +2049,42 @@ checkTypeOfUnionEliminations = H.describe "Union eliminations" $ do
           tyapp (var "test") $ Types.var "t0")
         (Types.forAll "t0" $ Types.function (Types.apply (Types.var "UnionPolymorphicRecursive") (Types.var "t0")) Types.string)
 
+    H.describe "Using kernel types" $ do
+      expectTermWithType "case statement on CoderDirection applied to argument"
+        (lambda "dir" $
+          lambda "coder" $
+            match (Name "hydra.coders.CoderDirection")
+              Nothing [
+              "encode">: lambda "_" $
+                lambda "v12" $
+                  project (Name "hydra.compute.Coder") (Name "encode")
+                    @@ var "coder" @@ var "v12",
+              "decode">: lambda "_" $
+                lambda "v12" $
+                  project (Name "hydra.compute.Coder") (Name "decode")
+                    @@ var "coder" @@ var "v12"]
+              @@ var "dir")
+        (tylams ["t0", "t1"] $
+          lambdaTyped "dir" (Types.var "hydra.coders.CoderDirection") $
+            lambdaTyped "coder" (Types.applys (Types.var "hydra.compute.Coder") (Types.var <$> ["t0", "t0", "t1", "t1"])) $
+              match (Name "hydra.coders.CoderDirection")
+                Nothing [
+                "encode">: lambdaTyped "_" Types.unit $
+                  lambdaTyped "v12" (Types.var "t1") $
+                    tyapps (project (Name "hydra.compute.Coder") (Name "encode")) (Types.var <$> ["t0", "t0", "t1", "t1"])
+                      @@ var "coder" @@ var "v12",
+                "decode">: lambdaTyped "_" Types.unit $
+                  lambdaTyped "v12" (Types.var "t1") $
+                    tyapps (project (Name "hydra.compute.Coder") (Name "decode")) (Types.var <$> ["t0", "t0", "t1", "t1"])
+                      @@ var "coder" @@ var "v12"]
+              @@ var "dir")
+        (Types.forAlls ["t0", "t1"] $
+          Types.functionMany [
+            Types.var "hydra.coders.CoderDirection",
+            Types.applys (Types.var "hydra.compute.Coder") (Types.var <$> ["t0", "t0", "t1", "t1"]),
+            Types.var "t1",
+            Types.applys (Types.var "hydra.compute.Flow") [Types.var "t0", Types.var "t1"]])
+
   H.describe "Union eliminations with defaults" $ do
     expectTermWithType "match Comparison with default case"
       (match testTypeComparisonName (Just (string "unknown")) [
