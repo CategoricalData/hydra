@@ -161,7 +161,7 @@ encodeDefinition :: PythonEnvironment -> Definition -> Flow PyGraph [[Py.Stateme
 encodeDefinition env def = case def of
   DefinitionTerm (TermDefinition name term _) -> withTrace ("data element " ++ unName name) $ do
 
---    if name == Name "hydra.show.accessorsDebug.anotherOne"
+--    if name == Name "hydra.adapt.utils.encodeDecode"
 --    then fail $ "term: " ++ ShowCore.term term
 --    else return ()
 
