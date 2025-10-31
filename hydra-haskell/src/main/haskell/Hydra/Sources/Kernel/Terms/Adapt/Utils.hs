@@ -143,13 +143,13 @@ literalTypeIsSupportedDef :: TBinding (LanguageConstraints -> LiteralType -> Boo
 literalTypeIsSupportedDef = define "literalTypeIsSupported" $
   doc "Check if literal type is supported by language constraints" $
   "constraints" ~> "lt" ~>
+  "isSupported" <~ ("lt" ~> cases _LiteralType (var "lt")
+    (Just true) [
+    _LiteralType_float>>: "ft" ~> ref floatTypeIsSupportedDef @@ var "constraints" @@ var "ft",
+    _LiteralType_integer>>: "it" ~> ref integerTypeIsSupportedDef @@ var "constraints" @@ var "it"]) $
   Logic.and
     (Sets.member (ref Variants.literalTypeVariantDef @@ var "lt") (Coders.languageConstraintsLiteralVariants (var "constraints")))
-    (match _LiteralType
-      (Just true) [
-      _LiteralType_float>>: "ft" ~> ref floatTypeIsSupportedDef @@ var "constraints" @@ var "ft",
-      _LiteralType_integer>>: "it" ~> ref integerTypeIsSupportedDef @@ var "constraints" @@ var "it"]
-    @@ var "lt")
+    (var "isSupported" @@ var "lt")
 
 nameToFilePathDef :: TBinding (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
 nameToFilePathDef = define "nameToFilePath" $
@@ -173,52 +173,53 @@ typeIsSupportedDef = define "typeIsSupported" $
   doc "Check if type is supported by language constraints" $
   "constraints" ~> "t" ~>
   "base" <~ ref Rewriting.deannotateTypeDef @@ var "t" $
+  "isVariable" <~ ("v" ~> cases _TypeVariant (var "v")
+    (Just false) [
+    _TypeVariant_variable>>: constant true]) $
   "isSupportedVariant" <~ ("v" ~>
     Logic.or
-      (cases _TypeVariant (var "v")
-        (Just false) [
-        _TypeVariant_variable>>: constant true])
+      (var "isVariable" @@ var "v")
       (Sets.member (var "v") (Coders.languageConstraintsTypeVariants (var "constraints")))) $
+  "isSupported" <~ ("base" ~> cases _Type (var "base")
+    Nothing [
+    _Type_annotated>>: "at" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.annotatedTypeBody (var "at"),
+    _Type_application>>: "app" ~>
+      Logic.and
+        (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeFunction (var "app"))
+        (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeArgument (var "app")),
+    _Type_forall>>: "ft" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.forallTypeBody (var "ft"),
+    _Type_function>>: "ft" ~>
+      Logic.and
+        (ref typeIsSupportedDef @@ var "constraints" @@ Core.functionTypeDomain (var "ft"))
+        (ref typeIsSupportedDef @@ var "constraints" @@ Core.functionTypeCodomain (var "ft")),
+    _Type_list>>: "lt" ~> ref typeIsSupportedDef @@ var "constraints" @@ var "lt",
+    _Type_literal>>: "at" ~> ref literalTypeIsSupportedDef @@ var "constraints" @@ var "at",
+    _Type_map>>: "mt" ~>
+      Logic.and
+        (ref typeIsSupportedDef @@ var "constraints" @@ Core.mapTypeKeys (var "mt"))
+        (ref typeIsSupportedDef @@ var "constraints" @@ Core.mapTypeValues (var "mt")),
+    _Type_optional>>: "ot" ~> ref typeIsSupportedDef @@ var "constraints" @@ var "ot",
+    _Type_product>>: "types" ~>
+      andAll (Lists.map (ref typeIsSupportedDef @@ var "constraints") (var "types")),
+    _Type_record>>: "rt" ~>
+      andAll (Lists.map
+        ("field" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.fieldTypeType (var "field"))
+        (Core.rowTypeFields (var "rt"))),
+    _Type_set>>: "st" ~> ref typeIsSupportedDef @@ var "constraints" @@ var "st",
+    _Type_sum>>: "types" ~>
+      andAll (Lists.map (ref typeIsSupportedDef @@ var "constraints") (var "types")),
+    _Type_union>>: "rt" ~>
+      andAll (Lists.map
+        ("field" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.fieldTypeType (var "field"))
+        (Core.rowTypeFields (var "rt"))),
+    _Type_unit>>: constant true,
+    _Type_wrap>>: "wt" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.wrappedTypeBody (var "wt"),
+    _Type_variable>>: constant true]) $
   Logic.and
     (Coders.languageConstraintsTypes (var "constraints") @@ var "base")
     (Logic.and
       (var "isSupportedVariant" @@ (ref Variants.typeVariantDef @@ var "base"))
-      (match _Type
-        Nothing [
-        _Type_annotated>>: "at" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.annotatedTypeBody (var "at"),
-        _Type_application>>: "app" ~>
-          Logic.and
-            (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeFunction (var "app"))
-            (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeArgument (var "app")),
-        _Type_forall>>: "ft" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.forallTypeBody (var "ft"),
-        _Type_function>>: "ft" ~>
-          Logic.and
-            (ref typeIsSupportedDef @@ var "constraints" @@ Core.functionTypeDomain (var "ft"))
-            (ref typeIsSupportedDef @@ var "constraints" @@ Core.functionTypeCodomain (var "ft")),
-        _Type_list>>: "lt" ~> ref typeIsSupportedDef @@ var "constraints" @@ var "lt",
-        _Type_literal>>: "at" ~> ref literalTypeIsSupportedDef @@ var "constraints" @@ var "at",
-        _Type_map>>: "mt" ~>
-          Logic.and
-            (ref typeIsSupportedDef @@ var "constraints" @@ Core.mapTypeKeys (var "mt"))
-            (ref typeIsSupportedDef @@ var "constraints" @@ Core.mapTypeValues (var "mt")),
-        _Type_optional>>: "ot" ~> ref typeIsSupportedDef @@ var "constraints" @@ var "ot",
-        _Type_product>>: "types" ~>
-          andAll (Lists.map (ref typeIsSupportedDef @@ var "constraints") (var "types")),
-        _Type_record>>: "rt" ~>
-          andAll (Lists.map
-            ("field" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.fieldTypeType (var "field"))
-            (Core.rowTypeFields (var "rt"))),
-        _Type_set>>: "st" ~> ref typeIsSupportedDef @@ var "constraints" @@ var "st",
-        _Type_sum>>: "types" ~>
-          andAll (Lists.map (ref typeIsSupportedDef @@ var "constraints") (var "types")),
-        _Type_union>>: "rt" ~>
-          andAll (Lists.map
-            ("field" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.fieldTypeType (var "field"))
-            (Core.rowTypeFields (var "rt"))),
-        _Type_unit>>: constant true,
-        _Type_wrap>>: "wt" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.wrappedTypeBody (var "wt"),
-        _Type_variable>>: constant true]
-      @@ var "base"))
+      (var "isSupported" @@ var "base"))
   where
     andAll = Lists.foldl (binaryFunction Logic.and) true
 

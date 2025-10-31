@@ -451,7 +451,6 @@ testEtaExpansion = H.describe "etaExpandTypedTerms" $ do
             "first">: int32 42,
             "second">: int32 137,
             "third">: lambda "s" $ toLower @@ var "s"])))
-
   where
     cat = primitive $ Name "hydra.lib.strings.cat"
     empty = primitive $ Name "hydra.lib.maps.empty"
