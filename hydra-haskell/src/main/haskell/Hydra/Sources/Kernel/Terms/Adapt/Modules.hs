@@ -101,34 +101,34 @@ languageAdapterDef :: TBinding (Language -> Type -> Flow Graph (SymmetricAdapter
 languageAdapterDef = define "languageAdapter" $
   doc "Given a target language and a source type, produce an adapter, which rewrites the type and its terms according to the language's constraints" $
   "lang" ~> "typ" ~>
+  "getPair" <~ ("typ" ~>
+    "ad" <<~ ref AdaptTerms.termAdapterDef @@ var "typ" $
+    "cx" <<~ ref Monads.getStateDef $
+    produce $ pair (var "ad") (var "cx")) $
   "g" <<~ ref Monads.getStateDef $
   "cx0" <~ Coders.adapterContext (var "g") (var "lang") Maps.empty $
-  "result" <<~ ref Monads.withStateDef @@ var "cx0" @@
-    ("ad" <<~ ref AdaptTerms.termAdapterDef @@ var "typ" $
-     "cx" <<~ ref Monads.getStateDef $
-     produce $ pair (var "ad") (var "cx")) $
+  "result" <<~ ref Monads.withStateDef @@ var "cx0" @@ (var "getPair" @@ var "typ") $
   "adapter" <~ first (var "result") $
   "cx" <~ second (var "result") $
-  "encode" <~ lambda "term" (ref Monads.withStateDef @@ var "cx" @@
+  "encode" <~ ("term" ~> ref Monads.withStateDef @@ var "cx" @@
     (Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "term")) $
-  "decode" <~ lambda "term" (ref Monads.withStateDef @@ var "cx" @@
+  "decode" <~ ("term" ~> ref Monads.withStateDef @@ var "cx" @@
     (Compute.coderDecode (Compute.adapterCoder $ var "adapter") @@ var "term")) $
-  "ac" <~ Compute.coder (var "encode") (var "decode") $
-  produce $ Compute.adapterWithCoder (var "adapter") (var "ac")
+  produce $ Compute.adapterWithCoder (var "adapter") (Compute.coder (var "encode") (var "decode"))
 
 transformModuleDef :: TBinding (Language -> (Term -> Flow Graph e) -> (Module -> M.Map Type (Coder Graph Graph Term e) -> [(Binding, TypeApplicationTerm)] -> Flow Graph d) -> Module -> Flow Graph d)
 transformModuleDef = define "transformModule" $
   doc "Given a target language, a unidirectional last mile encoding, and an intermediate helper function, transform a given module into a target representation" $
   "lang" ~> "encodeTerm" ~> "createModule" ~> "mod" ~>
-  trace (Strings.cat2 (string "transform module ") (unwrap _Namespace @@ (Module.moduleNamespace $ var "mod"))) $
   "els" <~ Module.moduleElements (var "mod") $
-  "codersFor" <~ lambda "types" (
+  "transform" <~ (
+    "tterms" <<~ ref Lexical.withSchemaContextDef @@ (Flows.mapList (ref Schemas.elementAsTypeApplicationTermDef) (var "els")) $
+    "types" <~ Lists.nub (Lists.map (unaryFunction Core.typeApplicationTermType) (var "tterms")) $
     "cdrs" <<~ Flows.mapList (ref constructCoderDef @@ var "lang" @@ var "encodeTerm") (var "types") $
-    produce $ Maps.fromList $ Lists.zip (var "types") (var "cdrs")) $
-  "tterms" <<~ ref Lexical.withSchemaContextDef @@ (Flows.mapList (ref Schemas.elementAsTypeApplicationTermDef) (var "els")) $
-  "types" <~ Lists.nub (Lists.map (unaryFunction Core.typeApplicationTermType) (var "tterms")) $
-  "coders" <<~ var "codersFor" @@ var "types" $
-  var "createModule" @@ var "mod" @@ var "coders" @@ (Lists.zip (var "els") (var "tterms"))
+    "coders" <~ Maps.fromList (Lists.zip (var "types") (var "cdrs")) $
+    var "createModule" @@ var "mod" @@ var "coders" @@ (Lists.zip (var "els") (var "tterms"))) $
+  trace (Strings.cat2 (string "transform module ") (unwrap _Namespace @@ (Module.moduleNamespace $ var "mod"))) $
+  var "transform"
 
 adaptedModuleDefinitionsDef :: TBinding (Language -> Module -> Flow Graph [Definition])
 adaptedModuleDefinitionsDef = define "adaptedModuleDefinitions" $

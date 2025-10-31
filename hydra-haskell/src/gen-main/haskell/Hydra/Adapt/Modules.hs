@@ -34,58 +34,69 @@ adaptTypeToLanguageAndEncode lang enc typ = ((\x -> case x of
   Core.TypeVariable _ -> (enc typ)
   _ -> (Flows.bind (adaptTypeToLanguage lang typ) (\adaptedType -> enc adaptedType))) (Rewriting.deannotateType typ))
 
--- | Given a target language and a source type, find the target type to which the latter will be adapted
 adaptTypeToLanguage :: (Coders.Language -> Core.Type -> Compute.Flow Graph.Graph Core.Type)
 adaptTypeToLanguage lang typ = (Flows.bind (languageAdapter lang typ) (\adapter -> Flows.pure (Compute.adapterTarget adapter)))
 
--- | Map a Hydra module to a list of type and/or term definitions which have been adapted to the target language
 adaptedModuleDefinitions :: (Coders.Language -> Module.Module -> Compute.Flow Graph.Graph [Module.Definition])
 adaptedModuleDefinitions lang mod =  
-  let els = (Module.moduleElements mod) 
-      adaptersFor = (\types -> Flows.bind (Flows.mapList (languageAdapter lang) types) (\adapters -> Flows.pure (Maps.fromList (Lists.zip types adapters))))
-      classify = (\adapters -> \pair ->  
-              let el = (fst pair) 
-                  tt = (snd pair)
-                  term = (Core.typeApplicationTermBody tt)
-                  typ = (Core.typeApplicationTermType tt)
-                  name = (Core.bindingName el)
-              in (Logic.ifElse (Annotations.isNativeType el) (Flows.bind (Flows.bind (Core_.type_ term) (\coreTyp -> adaptTypeToLanguage lang coreTyp)) (\adaptedTyp -> Flows.pure (Module.DefinitionType (Module.TypeDefinition {
-                Module.typeDefinitionName = name,
-                Module.typeDefinitionType = adaptedTyp})))) (Optionals.maybe (Flows.fail (Strings.cat2 "no adapter for element " (Core.unName name))) (\adapter -> Flows.bind (Compute.coderEncode (Compute.adapterCoder adapter) term) (\adapted -> Flows.pure (Module.DefinitionTerm (Module.TermDefinition {
-                Module.termDefinitionName = name,
-                Module.termDefinitionTerm = adapted,
-                Module.termDefinitionType = (Compute.adapterTarget adapter)})))) (Maps.lookup typ adapters))))
-  in (Flows.bind (Lexical.withSchemaContext (Flows.mapList Schemas.elementAsTypeApplicationTerm els)) (\tterms ->  
-    let types = (Sets.toList (Sets.fromList (Lists.map (\arg_ -> Rewriting.deannotateType (Core.typeApplicationTermType arg_)) tterms)))
-    in (Flows.bind (adaptersFor types) (\adapters -> Flows.mapList (classify adapters) (Lists.zip els tterms)))))
+  let els = (Module.moduleElements mod)
+  in  
+    let adaptersFor = (\types -> Flows.bind (Flows.mapList (languageAdapter lang) types) (\adapters -> Flows.pure (Maps.fromList (Lists.zip types adapters))))
+    in  
+      let classify = (\adapters -> \pair ->  
+              let el = (fst pair)
+              in  
+                let tt = (snd pair)
+                in  
+                  let term = (Core.typeApplicationTermBody tt)
+                  in  
+                    let typ = (Core.typeApplicationTermType tt)
+                    in  
+                      let name = (Core.bindingName el)
+                      in (Logic.ifElse (Annotations.isNativeType el) (Flows.bind (Flows.bind (Core_.type_ term) (\coreTyp -> adaptTypeToLanguage lang coreTyp)) (\adaptedTyp -> Flows.pure (Module.DefinitionType (Module.TypeDefinition {
+                        Module.typeDefinitionName = name,
+                        Module.typeDefinitionType = adaptedTyp})))) (Optionals.maybe (Flows.fail (Strings.cat2 "no adapter for element " (Core.unName name))) (\adapter -> Flows.bind (Compute.coderEncode (Compute.adapterCoder adapter) term) (\adapted -> Flows.pure (Module.DefinitionTerm (Module.TermDefinition {
+                        Module.termDefinitionName = name,
+                        Module.termDefinitionTerm = adapted,
+                        Module.termDefinitionType = (Compute.adapterTarget adapter)})))) (Maps.lookup typ adapters))))
+      in (Flows.bind (Lexical.withSchemaContext (Flows.mapList Schemas.elementAsTypeApplicationTerm els)) (\tterms ->  
+        let types = (Sets.toList (Sets.fromList (Lists.map (\arg_ -> Rewriting.deannotateType (Core.typeApplicationTermType arg_)) tterms)))
+        in (Flows.bind (adaptersFor types) (\adapters -> Flows.mapList (classify adapters) (Lists.zip els tterms)))))
 
 constructCoder :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> Core.Type -> Compute.Flow Graph.Graph (Compute.Coder t0 t2 Core.Term t1))
 constructCoder lang encodeTerm typ = (Monads.withTrace (Strings.cat2 "coder for " (Core__.type_ typ)) (Flows.bind (languageAdapter lang typ) (\adapter -> Flows.pure (Utils.composeCoders (Compute.adapterCoder adapter) (Utils.unidirectionalCoder encodeTerm)))))
 
 languageAdapter :: (Coders.Language -> Core.Type -> Compute.Flow Graph.Graph (Compute.Adapter t0 t1 Core.Type Core.Type Core.Term Core.Term))
-languageAdapter lang typ = (Flows.bind Monads.getState (\g ->  
-  let cx0 = Coders.AdapterContext {
-          Coders.adapterContextGraph = g,
-          Coders.adapterContextLanguage = lang,
-          Coders.adapterContextAdapters = Maps.empty}
-  in (Flows.bind (Monads.withState cx0 (Flows.bind (Terms.termAdapter typ) (\ad -> Flows.bind Monads.getState (\cx -> Flows.pure (ad, cx))))) (\result ->  
-    let adapter = (fst result) 
-        cx = (snd result)
-        encode = (\term -> Monads.withState cx (Compute.coderEncode (Compute.adapterCoder adapter) term))
-        decode = (\term -> Monads.withState cx (Compute.coderDecode (Compute.adapterCoder adapter) term))
-        ac = Compute.Coder {
+languageAdapter lang typ =  
+  let getPair = (\typ -> Flows.bind (Terms.termAdapter typ) (\ad -> Flows.bind Monads.getState (\cx -> Flows.pure (ad, cx))))
+  in (Flows.bind Monads.getState (\g ->  
+    let cx0 = Coders.AdapterContext {
+            Coders.adapterContextGraph = g,
+            Coders.adapterContextLanguage = lang,
+            Coders.adapterContextAdapters = Maps.empty}
+    in (Flows.bind (Monads.withState cx0 (getPair typ)) (\result ->  
+      let adapter = (fst result)
+      in  
+        let cx = (snd result)
+        in  
+          let encode = (\term -> Monads.withState cx (Compute.coderEncode (Compute.adapterCoder adapter) term))
+          in  
+            let decode = (\term -> Monads.withState cx (Compute.coderDecode (Compute.adapterCoder adapter) term))
+            in (Flows.pure (Compute.Adapter {
+              Compute.adapterIsLossy = (Compute.adapterIsLossy adapter),
+              Compute.adapterSource = (Compute.adapterSource adapter),
+              Compute.adapterTarget = (Compute.adapterTarget adapter),
+              Compute.adapterCoder = Compute.Coder {
                 Compute.coderEncode = encode,
-                Compute.coderDecode = decode}
-    in (Flows.pure (Compute.Adapter {
-      Compute.adapterIsLossy = (Compute.adapterIsLossy adapter),
-      Compute.adapterSource = (Compute.adapterSource adapter),
-      Compute.adapterTarget = (Compute.adapterTarget adapter),
-      Compute.adapterCoder = ac}))))))
+                Compute.coderDecode = decode}}))))))
 
 transformModule :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> (Module.Module -> M.Map Core.Type (Compute.Coder t0 t2 Core.Term t1) -> [(Core.Binding, Core.TypeApplicationTerm)] -> Compute.Flow Graph.Graph t3) -> Module.Module -> Compute.Flow Graph.Graph t3)
-transformModule lang encodeTerm createModule mod = (Monads.withTrace (Strings.cat2 "transform module " (Module.unNamespace (Module.moduleNamespace mod))) ( 
-  let els = (Module.moduleElements mod) 
-      codersFor = (\types -> Flows.bind (Flows.mapList (constructCoder lang encodeTerm) types) (\cdrs -> Flows.pure (Maps.fromList (Lists.zip types cdrs))))
-  in (Flows.bind (Lexical.withSchemaContext (Flows.mapList Schemas.elementAsTypeApplicationTerm els)) (\tterms ->  
-    let types = (Lists.nub (Lists.map Core.typeApplicationTermType tterms))
-    in (Flows.bind (codersFor types) (\coders -> createModule mod coders (Lists.zip els tterms)))))))
+transformModule lang encodeTerm createModule mod =  
+  let els = (Module.moduleElements mod)
+  in  
+    let transform = (Flows.bind (Lexical.withSchemaContext (Flows.mapList Schemas.elementAsTypeApplicationTerm els)) (\tterms ->  
+            let types = (Lists.nub (Lists.map Core.typeApplicationTermType tterms))
+            in (Flows.bind (Flows.mapList (constructCoder lang encodeTerm) types) (\cdrs ->  
+              let coders = (Maps.fromList (Lists.zip types cdrs))
+              in (createModule mod coders (Lists.zip els tterms))))))
+    in (Monads.withTrace (Strings.cat2 "transform module " (Module.unNamespace (Module.moduleNamespace mod))) transform)
