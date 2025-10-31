@@ -161,11 +161,6 @@ testEtaExpansion = H.describe "etaExpandTypedTerms" $ do
               [Types.function Types.string Types.string, Types.string, Types.string]
             @@ string "DATA")
 
-
-
-
-
-
     H.describe "Polymorphic terms (System F)" $ do
       H.describe "Type lambdas in let bindings" $ do
         noChange "polymorphic identity function"
@@ -300,38 +295,156 @@ testEtaExpansion = H.describe "etaExpandTypedTerms" $ do
               Types.mono $ Types.functionMany [Types.string, Types.string, Types.string])] $
             unit)
 
-    H.describe "Forced expansion in case statement branches" $ do
-      expandsTo "variable reference in case branch is expanded"
-        (letsTyped [("handler", toLower, Types.mono (Types.function Types.string Types.string))] $
-          match (Name "UnionMonomorphic") Nothing
-            ["bool">: lambda "ignored" $ string "boolean value",
-             "string">: var "handler",
-             "unit">: lambda "ignored" $ string "unit value"])
-        (letsTyped [("handler", toLower, Types.mono (Types.function Types.string Types.string))] $
-          lambda "v1" $ match (Name "UnionMonomorphic") Nothing
-            ["bool">: lambda "ignored" $ string "boolean value",
-             "string">: lambda "v1" $ var "handler" @@ var "v1",
-             "unit">: lambda "ignored" $ string "unit value"] @@ var "v1")
+    H.describe "Case statements" $ do
+      H.describe "monomorphic at top level" $ do
+        expandsTo "non-applied case statement"
+         (match (Name "UnionMonomorphic")
+           (Just "other") [
+           "string">: lambda "s" $ var "s"])
+         (lambda "v1" $ (match (Name "UnionMonomorphic")
+             (Just "other") [
+             "string">: lambda "s" $ var "s"])
+           @@ var "v1")
+        noChange "applied case statement"
+         ((match (Name "UnionMonomorphic")
+             (Just "other") [
+             "string">: lambdaTyped "s" Types.string $ var "s"])
+           @@ (inject (Name "UnionMonomorphic") $ Field (Name "string") "foo"))
+        noChange "applied case statement in lambda"
+         (lambdaTyped "x" (Types.var "UnionMonomorphic") $ (match (Name "UnionMonomorphic")
+             (Just "other") [
+             "string">: lambdaTyped "s" Types.string $ var "s"])
+           @@ var "x")
 
-      expandsTo "bare primitive in case branch is expanded"
-        (match (Name "UnionMonomorphic") Nothing
-          ["bool">: lambda "ignored" "boolean value",
-           "string">: toLower,
-           "unit">: lambda "ignored" "unit value"])
-        (lambda "v1" $ match (Name "UnionMonomorphic") Nothing
-          ["bool">: lambda "ignored" "boolean value",
-           "string">: lambda "v1" $ toLower @@ var "v1",
-           "unit">: lambda "ignored" "unit value"] @@ var "v1")
+      H.describe "monomorphic in let binding" $ do
+        expandsTo "non-applied case statement"
+          (letsTyped [
+              ("test",
+               match (Name "UnionMonomorphic")
+                 (Just "other") [
+                 "string">: lambda "s" $ var "s"],
+               Types.mono $ Types.function (Types.var "UnionMonomorphic") Types.string)]
+            "ignored")
+          (letsTyped [
+              ("test",
+               lambda "v1" $ match (Name "UnionMonomorphic")
+                 (Just "other") [
+                 "string">: lambda "s" $ var "s"] @@ var "v1",
+               Types.mono $ Types.function (Types.var "UnionMonomorphic") Types.string)]
+            "ignored")
+        noChange "applied case statement"
+          (letsTyped [
+              ("test",
+               (match (Name "UnionMonomorphic")
+                   (Just "other") [
+                   "string">: lambdaTyped "s" Types.string $ var "s"])
+                 @@ (inject (Name "UnionMonomorphic") $ Field (Name "string") "foo"),
+               Types.mono $ Types.string)]
+            "ignored")
+        noChange "applied case statement in lambda"
+          (letsTyped [
+              ("test",
+               lambdaTyped "x" (Types.var "UnionMonomorphic") $ (match (Name "UnionMonomorphic")
+                   (Just "other") [
+                   "string">: lambdaTyped "s" Types.string $ var "s"])
+                 @@ var "x",
+               Types.mono $ Types.function Types.string Types.string)]
+            "ignored")
 
-      noChange "variable reference outside case branch is not expanded"
-        (lets ["handler">: toLower] $ var "handler")
+      H.describe "polymorphic in let binding" $ do
+        expandsTo "non-applied UnionPolymorphicRecursive"
+          (letsTyped [
+              ("test",
+               tyapp (match (Name "UnionPolymorphicRecursive")
+                 (Just "other") [
+                 "value">: lambdaTyped "i" Types.int32 $ primitive _literals_showInt32 @@ var "i"]) Types.int32,
+               Types.mono $ Types.function (Types.apply (Types.var "UnionPolymorphicRecursive") Types.int32) Types.string)] $
+            var "test")
+          (letsTyped [
+              ("test",
+               lambda "v1" $ tyapp (match (Name "UnionPolymorphicRecursive")
+                   (Just "other") [
+                   "value">: lambdaTyped "i" Types.int32 $ primitive _literals_showInt32 @@ var "i"]) Types.int32
+                 @@ var "v1",
+               Types.mono $ Types.function (Types.apply (Types.var "UnionPolymorphicRecursive") Types.int32) Types.string)] $
+            var "test")
+        noChange "applied UnionPolymorphicRecursive with int32"
+          (letsTyped [
+            ("test",
+             tyapp (match (Name "UnionPolymorphicRecursive")
+                 (Just "other") [
+                 "value">: lambdaTyped "i" Types.int32 $ primitive _literals_showInt32 @@ var "i"]) Types.int32
+               @@ tyapp (inject (Name "UnionPolymorphicRecursive") $ Field (Name "value") $ int32 42) Types.int32,
+             Types.mono $ Types.string)] $
+            var "test")
+        noChange "applied UnionPolymorphicRecursive with int32 in lambda"
+          (letsTyped [
+            ("test",
+             lambdaTyped "x" (Types.apply (Types.var "UnionPolymorphicRecursive") Types.int32) $
+               tyapp (match (Name "UnionPolymorphicRecursive")
+                   (Just "other") [
+                   "value">: lambdaTyped "i" Types.int32 $ primitive _literals_showInt32 @@ var "i"]) Types.int32
+                 @@ var "x",
+             Types.mono $ Types.function (Types.apply (Types.var "UnionPolymorphicRecursive") Types.int32) Types.string)] $
+            var "test")
+        noChange "applied generic UnionPolymorphicRecursive in lambda"
+          (tylam "t0" $ letsTyped [
+            ("test",
+             tylam "t1" $ lambdaTyped "x" (Types.apply (Types.var "UnionPolymorphicRecursive") (Types.var "t1")) $
+               tyapp (match (Name "UnionPolymorphicRecursive")
+                   (Just "other") [
+                   "value">: lambdaTyped "ignored" (Types.var "t1") $ "foo"]) (Types.var "t1")
+                 @@ var "x",
+             Types.poly ["t1"] $ Types.function (Types.apply (Types.var "UnionPolymorphicRecursive") (Types.var "t1")) Types.string)] $
+            tyapp (var "test") $ Types.var "t0")
 
-      noChange "bare primitive outside case branch is not expanded"
-        toLower
+      H.describe "polymorphic using Hydra kernel types (regression test)" $ do
+        -- This expands because the case statements, after consuming a direction, produces a function.
+        -- Eta expansion creates a lambda to make the function argument explicit.
+        noChange "case statement on CoderDirection applied to argument, producing a function"
+          (tylams ["t0", "t1"] $
+            lambdaTyped "dir" (Types.var "hydra.coders.CoderDirection") $
+              lambdaTyped "coder" (Types.applys (Types.var "hydra.compute.Coder") (Types.var <$> ["t0", "t0", "t1", "t1"])) $
+                match (Name "hydra.coders.CoderDirection")
+                  Nothing [
+                  "encode">: lambdaTyped "_" Types.unit $
+                    lambdaTyped "v12" (Types.var "t1") $
+                      tyapps (project (Name "hydra.compute.Coder") (Name "encode")) (Types.var <$> ["t0", "t0", "t1", "t1"])
+                        @@ var "coder" @@ var "v12",
+                  "decode">: lambdaTyped "_" Types.unit $
+                    lambdaTyped "v12" (Types.var "t1") $
+                      tyapps (project (Name "hydra.compute.Coder") (Name "decode")) (Types.var <$> ["t0", "t0", "t1", "t1"])
+                        @@ var "coder" @@ var "v12"]
+                @@ var "dir")
 
+      H.describe "Forced expansion in case statement branches" $ do
+        expandsTo "variable reference in case branch is expanded"
+          (letsTyped [("handler", toLower, Types.mono (Types.function Types.string Types.string))] $
+            match (Name "UnionMonomorphic") Nothing
+              ["bool">: lambda "ignored" $ string "boolean value",
+               "string">: var "handler",
+               "unit">: lambda "ignored" $ string "unit value"])
+          (letsTyped [("handler", toLower, Types.mono (Types.function Types.string Types.string))] $
+            lambda "v1" $ match (Name "UnionMonomorphic") Nothing
+              ["bool">: lambda "ignored" $ string "boolean value",
+               "string">: lambda "v1" $ var "handler" @@ var "v1",
+               "unit">: lambda "ignored" $ string "unit value"] @@ var "v1")
 
+        expandsTo "bare primitive in case branch is expanded"
+          (match (Name "UnionMonomorphic") Nothing
+            ["bool">: lambda "ignored" "boolean value",
+             "string">: toLower,
+             "unit">: lambda "ignored" "unit value"])
+          (lambda "v1" $ match (Name "UnionMonomorphic") Nothing
+            ["bool">: lambda "ignored" "boolean value",
+             "string">: lambda "v1" $ toLower @@ var "v1",
+             "unit">: lambda "ignored" "unit value"] @@ var "v1")
 
+        noChange "variable reference outside case branch is not expanded"
+          (lets ["handler">: toLower] $ var "handler")
 
+        noChange "bare primitive outside case branch is not expanded"
+          toLower
   where
     cat = primitive $ Name "hydra.lib.strings.cat"
     empty = primitive $ Name "hydra.lib.maps.empty"
