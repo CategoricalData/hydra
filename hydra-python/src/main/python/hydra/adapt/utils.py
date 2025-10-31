@@ -36,13 +36,13 @@ def choose_adapter[T0, T1, T2, T3, T4](alts: Callable[[T0], hydra.compute.Flow[T
 def compose_coders[T0, T1, T2, T3, T4](c1: hydra.compute.Coder[T0, T1, T2, T3], c2: hydra.compute.Coder[T0, T1, T3, T4]) -> hydra.compute.Coder[T0, T1, T2, T4]:
     return cast(hydra.compute.Coder[T0, T1, T2, T4], hydra.compute.Coder((lambda a: hydra.lib.flows.bind(c1.encode(a), (lambda b1: c2.encode(b1)))), (lambda c: hydra.lib.flows.bind(c2.decode(c), (lambda b2: c1.decode(b2))))))
 
-def encode_decode[T0, T1](dir: hydra.coders.CoderDirection, coder: hydra.compute.Coder[T0, T0, T1, T1]) -> Callable[[T1], hydra.compute.Flow[T0, T1]]:
+def encode_decode[T0, T1](dir: hydra.coders.CoderDirection, coder: hydra.compute.Coder[T0, T0, T1, T1], term: T1) -> hydra.compute.Flow[T0, T1]:
     match dir:
         case hydra.coders.CoderDirection.ENCODE:
-            return coder.encode
+            return coder.encode(term)
         
         case hydra.coders.CoderDirection.DECODE:
-            return coder.decode
+            return coder.decode(term)
 
 def float_type_is_supported(constraints: hydra.coders.LanguageConstraints, ft: hydra.core.FloatType) -> bool:
     r"""Check if float type is supported by language constraints."""
