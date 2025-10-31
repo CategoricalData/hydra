@@ -112,11 +112,10 @@ encodeDecodeDef :: TBinding (CoderDirection -> Coder s s x x -> x -> Flow s x)
 encodeDecodeDef = define "encodeDecode" $
   doc "Apply coder in the specified direction" $
   "dir" ~> "coder" ~>
-  match _CoderDirection
+  cases _CoderDirection (var "dir")
     Nothing [
     _CoderDirection_encode>>: constant (Compute.coderEncode (var "coder")),
     _CoderDirection_decode>>: constant (Compute.coderDecode (var "coder"))]
-  @@ var "dir"
 
 floatTypeIsSupportedDef :: TBinding (LanguageConstraints -> FloatType -> Bool)
 floatTypeIsSupportedDef = define "floatTypeIsSupported" $
