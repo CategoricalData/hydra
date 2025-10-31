@@ -245,6 +245,7 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
       "dflt" <~ Flows.map (ref Arity.typeArityDef) (ref Checking.typeOfDef @@ var "tx" @@ list [] @@ var "term") $
       "forElimination" <~ ("e" ~> cases _Elimination (var "e")
         (Just $ var "dflt") [
+        _Elimination_record>>: constant $ produce $ int32 1,
         _Elimination_union>>: constant $ produce $ int32 1]) $
       "forFunction" <~ ("f" ~> cases _Function (var "f")
         (Just $ var "dflt") [

@@ -193,6 +193,7 @@ etaExpandTypedTerm tx0 term0 =
                     let dflt = (Flows.map Arity.typeArity (Checking.typeOf tx [] term))
                     in  
                       let forElimination = (\e -> (\x -> case x of
+                              Core.EliminationRecord _ -> (Flows.pure 1)
                               Core.EliminationUnion _ -> (Flows.pure 1)
                               _ -> dflt) e)
                       in  

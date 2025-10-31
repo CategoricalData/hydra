@@ -398,25 +398,6 @@ testEtaExpansion = H.describe "etaExpandTypedTerms" $ do
              Types.poly ["t1"] $ Types.function (Types.apply (Types.var "UnionPolymorphicRecursive") (Types.var "t1")) Types.string)] $
             tyapp (var "test") $ Types.var "t0")
 
-      H.describe "polymorphic using Hydra kernel types (regression test)" $ do
-        -- This expands because the case statements, after consuming a direction, produces a function.
-        -- Eta expansion creates a lambda to make the function argument explicit.
-        noChange "case statement on CoderDirection applied to argument, producing a function"
-          (tylams ["t0", "t1"] $
-            lambdaTyped "dir" (Types.var "hydra.coders.CoderDirection") $
-              lambdaTyped "coder" (Types.applys (Types.var "hydra.compute.Coder") (Types.var <$> ["t0", "t0", "t1", "t1"])) $
-                match (Name "hydra.coders.CoderDirection")
-                  Nothing [
-                  "encode">: lambdaTyped "_" Types.unit $
-                    lambdaTyped "v12" (Types.var "t1") $
-                      tyapps (project (Name "hydra.compute.Coder") (Name "encode")) (Types.var <$> ["t0", "t0", "t1", "t1"])
-                        @@ var "coder" @@ var "v12",
-                  "decode">: lambdaTyped "_" Types.unit $
-                    lambdaTyped "v12" (Types.var "t1") $
-                      tyapps (project (Name "hydra.compute.Coder") (Name "decode")) (Types.var <$> ["t0", "t0", "t1", "t1"])
-                        @@ var "coder" @@ var "v12"]
-                @@ var "dir")
-
       H.describe "Forced expansion in case statement branches" $ do
         expandsTo "variable reference in case branch is expanded"
           (letsTyped [("handler", toLower, Types.mono (Types.function Types.string Types.string))] $
@@ -445,6 +426,32 @@ testEtaExpansion = H.describe "etaExpandTypedTerms" $ do
 
         noChange "bare primitive outside case branch is not expanded"
           toLower
+
+    H.describe "Non-expansion of eliminations which produce functions" $ do
+        -- This expands because the case statements, after consuming a direction, produces a function.
+        -- Eta expansion creates a lambda to make the function argument explicit.
+        noChange "applied case statement"
+          (tylams ["t0", "t1"] $
+            lambdaTyped "dir" (Types.var "hydra.coders.CoderDirection") $
+              lambdaTyped "coder" (Types.applys (Types.var "hydra.compute.Coder") (Types.var <$> ["t0", "t0", "t1", "t1"])) $
+                match (Name "hydra.coders.CoderDirection")
+                  Nothing [
+                  "encode">: lambdaTyped "_" Types.unit $
+                    lambdaTyped "v12" (Types.var "t1") $
+                      tyapps (project (Name "hydra.compute.Coder") (Name "encode")) (Types.var <$> ["t0", "t0", "t1", "t1"])
+                        @@ var "coder" @@ var "v12",
+                  "decode">: lambdaTyped "_" Types.unit $
+                    lambdaTyped "v12" (Types.var "t1") $
+                      tyapps (project (Name "hydra.compute.Coder") (Name "decode")) (Types.var <$> ["t0", "t0", "t1", "t1"])
+                        @@ var "coder" @@ var "v12"]
+                @@ var "dir")
+        noChange "applied projection" (
+          (tyapps (project (Name "Triple") (Name "third")) [Types.int32, Types.int32, Types.function Types.string Types.string]
+          @@ (record (Name "Triple") [
+            "first">: int32 42,
+            "second">: int32 137,
+            "third">: lambda "s" $ toLower @@ var "s"])))
+
   where
     cat = primitive $ Name "hydra.lib.strings.cat"
     empty = primitive $ Name "hydra.lib.maps.empty"
