@@ -102,15 +102,10 @@ adaptDataGraphDef = define "adaptDataGraph" $
   doc "Adapt a graph and its schema to the given language constraints, prior to inference" $
   "constraints" ~> "doExpand" ~> "graph0" ~>
   "expand" <~ ("graph" ~> "gterm" ~>
---    -- TODO: replace with typed eta expansion (below)
---    produce $ ref Rewriting.unshadowVariablesDef @@ (ref Reduction.etaExpandTermDef @@ var "graph" @@ var "gterm")) $
     "tx" <<~ ref Schemas.graphToTypeContextDef @@ var "graph" $
     "gterm1" <<~ ref Reduction.etaExpandTypedTermDef @@ var "tx" @@ var "gterm" $
-
---    Flows.fail ("gterm1: " ++ (ref ShowCore.termDef @@ var "gterm1"))) $
---    Flows.fail ("gterm1 (unshadowed): " ++ (ref ShowCore.termDef @@ (ref Rewriting.unshadowVariablesDef @@ var "gterm1")))) $
-
-    produce $ ref Rewriting.liftLambdaAboveLetDef @@ (ref Rewriting.unshadowVariablesDef @@ var "gterm1")) $
+    produce $ ref Rewriting.liftLambdaAboveLetDef
+      @@ (ref Rewriting.unshadowVariablesDef @@ (ref Rewriting.removeTypesFromTermDef @@ var "gterm1"))) $
   "litmap" <~ ref adaptLiteralTypesMapDef @@ var "constraints" $
   "els0" <~ Graph.graphElements (var "graph0") $
   "env0" <~ Graph.graphEnvironment (var "graph0") $
