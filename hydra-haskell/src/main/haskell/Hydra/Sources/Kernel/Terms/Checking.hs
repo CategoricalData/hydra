@@ -376,12 +376,12 @@ typeOfApplicationDef = define "typeOfApplication" $
   "tx" ~> "typeArgs" ~> "app" ~>
   "fun" <~ Core.applicationFunction (var "app") $
   "arg" <~ Core.applicationArgument (var "app") $
-  "tryType" <~ ("targ" ~> "t" ~> cases _Type (var "t")
+  "tryType" <~ ("tfun" ~> "targ" ~> cases _Type (var "tfun")
     (Just $ Flows.fail $ Strings.cat $ list [
       "left hand side of application ",
       ref ShowCore.termDef @@ var "fun",
       " is not a function type: ",
-      ref ShowCore.typeDef @@ var "t"]) [
+      ref ShowCore.typeDef @@ var "tfun"]) [
     -- These forall types can arise from bindUnboundTypeVariables
     _Type_forall>>: "ft" ~> var "tryType" @@ var "targ" @@ (Core.forallTypeBody (var "ft")),
     _Type_function>>: "ft" ~>
@@ -398,7 +398,7 @@ typeOfApplicationDef = define "typeOfApplication" $
   exec (ref checkTypeVariablesDef @@ var "tx" @@ var "tfun") $
   "targ" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "arg" $
   exec (ref checkTypeVariablesDef @@ var "tx" @@ var "targ") $
-  "t" <<~ var "tryType" @@ var "targ" @@ var "tfun" $
+  "t" <<~ var "tryType" @@ var "tfun" @@ var "targ" $
   ref applyTypeArgumentsToTypeDef @@ var "tx" @@ var "typeArgs" @@ var "t"
 
 typeOfCaseStatementDef :: TBinding (TypeContext -> [Type] -> CaseStatement -> Flow s Type)

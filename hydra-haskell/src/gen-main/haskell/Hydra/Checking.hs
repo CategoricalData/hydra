@@ -258,7 +258,7 @@ typeOfApplication tx typeArgs app =
   in  
     let arg = (Core.applicationArgument app)
     in  
-      let tryType = (\targ -> \t -> (\x -> case x of
+      let tryType = (\tfun -> \targ -> (\x -> case x of
               Core.TypeForall v1 -> (tryType targ (Core.forallTypeBody v1))
               Core.TypeFunction v1 ->  
                 let dom = (Core.functionTypeDomain v1)
@@ -273,8 +273,8 @@ typeOfApplication tx typeArgs app =
                 "left hand side of application ",
                 Core__.term fun,
                 " is not a function type: ",
-                (Core__.type_ t)]))) t)
-      in (Flows.bind (typeOf tx [] fun) (\tfun -> Flows.bind (checkTypeVariables tx tfun) (\_ -> Flows.bind (typeOf tx [] arg) (\targ -> Flows.bind (checkTypeVariables tx targ) (\_ -> Flows.bind (tryType targ tfun) (\t -> applyTypeArgumentsToType tx typeArgs t))))))
+                (Core__.type_ tfun)]))) tfun)
+      in (Flows.bind (typeOf tx [] fun) (\tfun -> Flows.bind (checkTypeVariables tx tfun) (\_ -> Flows.bind (typeOf tx [] arg) (\targ -> Flows.bind (checkTypeVariables tx targ) (\_ -> Flows.bind (tryType tfun targ) (\t -> applyTypeArgumentsToType tx typeArgs t))))))
 
 typeOfCaseStatement :: (Typing.TypeContext -> [Core.Type] -> Core.CaseStatement -> Compute.Flow t0 Core.Type)
 typeOfCaseStatement tx typeArgs cs =  

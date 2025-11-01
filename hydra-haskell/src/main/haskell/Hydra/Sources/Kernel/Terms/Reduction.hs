@@ -231,8 +231,9 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
         "ann" <~ Core.annotatedTermAnnotation (var "at") $
         produce (Core.termAnnotated $ Core.annotatedTerm (var "body") (var "ann")),
       _Term_application>>: "a" ~>
+        "l" <~ Logic.ifElse false (list [Core.typeLiteral Core.literalTypeString]) (list []) $ -- TODO: hack for type checking
         "lhs" <<~ var "rewriteSpine" @@ Core.applicationFunction (var "a") $
-        "rhs" <<~ var "rewrite" @@ true @@ false @@ list [] @@ var "recurse" @@ var "tx" @@ Core.applicationArgument (var "a") $
+        "rhs" <<~ var "rewrite" @@ true @@ false @@ var "l" @@ var "recurse" @@ var "tx" @@ Core.applicationArgument (var "a") $
         produce (Core.termApplication $ Core.application (var "lhs") (var "rhs")),
       _Term_typeApplication>>: "tat" ~>
         "body" <<~ var "rewriteSpine" @@ Core.typeApplicationTermBody (var "tat") $
@@ -243,16 +244,23 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
     -- targets including Python. Remove the special cases and see which regression tests fail.
     "arityOf" <~ ("term" ~>
       "dflt" <~ Flows.map (ref Arity.typeArityDef) (ref Checking.typeOfDef @@ var "tx" @@ list [] @@ var "term") $
-      "forElimination" <~ ("e" ~> cases _Elimination (var "e")
-        (Just $ var "dflt") [
-        _Elimination_record>>: constant $ produce $ int32 1,
-        _Elimination_union>>: constant $ produce $ int32 1]) $
       "forFunction" <~ ("f" ~> cases _Function (var "f")
         (Just $ var "dflt") [
-        _Function_elimination>>: "e" ~> var "forElimination" @@ var "e"]) $
-      cases _Term (ref Rewriting.deannotateAndDetypeTermDef @@ var "term")
+        _Function_elimination>>: constant $ produce $ int32 1,
+        --_Function_lambda>>: "l" ~> ...
+        _Function_primitive>>: "name" ~> Flows.map
+          (ref Arity.typeSchemeArityDef)
+          (ref Lexical.requirePrimitiveTypeDef @@ var "tx" @@ var "name")]) $
+      cases _Term (var "term")
         (Just $ var "dflt") [
-        _Term_function>>: "f" ~> var "forFunction" @@ var "f"]) $
+        _Term_annotated>>: "at" ~> var "arityOf" @@ Core.annotatedTermBody (var "at"),
+        --_Term_application>>: ...
+        _Term_function>>: "f" ~> var "forFunction" @@ var "f",
+        _Term_let>>: "l" ~> var "arityOf" @@ Core.letBody (var "l"),
+        _Term_typeApplication>>: "tat" ~> var "arityOf" @@ Core.typeApplicationTermBody (var "tat"),
+        _Term_typeLambda>>: "tl" ~> var "arityOf" @@ Core.typeLambdaBody (var "tl")
+        --_Term_variable>>: ...
+        ]) $
 
 --    "arityOf" <~ ("term" ~> Flows.map
 --      (ref Arity.typeArityDef)

@@ -15,6 +15,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -168,6 +169,13 @@ requirePrimitive :: (Core.Name -> Compute.Flow Graph.Graph Graph.Primitive)
 requirePrimitive name = (Flows.bind Monads.getState (\g -> Optionals.maybe (Flows.fail (Strings.cat [
   "no such primitive function: ",
   (Core.unName name)])) Flows.pure (lookupPrimitive g name)))
+
+requirePrimitiveType :: (Typing.TypeContext -> Core.Name -> Compute.Flow t0 Core.TypeScheme)
+requirePrimitiveType tx name =  
+  let mts = (Maps.lookup name (Typing.inferenceContextPrimitiveTypes (Typing.typeContextInferenceContext tx)))
+  in (Optionals.maybe (Flows.fail (Strings.cat [
+    "no such primitive function: ",
+    (Core.unName name)])) (\ts -> Flows.pure ts) mts)
 
 requireTerm :: (Core.Name -> Compute.Flow Graph.Graph Core.Term)
 requireTerm name = (Flows.bind (resolveTerm name) (\mt -> Optionals.maybe (Flows.fail (Strings.cat [
