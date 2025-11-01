@@ -30,9 +30,11 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 adaptTypeToLanguageAndEncode :: (Coders.Language -> (Core.Type -> Compute.Flow Graph.Graph t0) -> Core.Type -> Compute.Flow Graph.Graph t0)
-adaptTypeToLanguageAndEncode lang enc typ = ((\x -> case x of
-  Core.TypeVariable _ -> (enc typ)
-  _ -> (Flows.bind (adaptTypeToLanguage lang typ) (\adaptedType -> enc adaptedType))) (Rewriting.deannotateType typ))
+adaptTypeToLanguageAndEncode lang enc typ =  
+  let dflt = (Flows.bind (adaptTypeToLanguage lang typ) (\adaptedType -> enc adaptedType))
+  in ((\x -> case x of
+    Core.TypeVariable _ -> (enc typ)
+    _ -> dflt) (Rewriting.deannotateType typ))
 
 adaptTypeToLanguage :: (Coders.Language -> Core.Type -> Compute.Flow Graph.Graph Core.Type)
 adaptTypeToLanguage lang typ = (Flows.bind (languageAdapter lang typ) (\adapter -> Flows.pure (Compute.adapterTarget adapter)))
