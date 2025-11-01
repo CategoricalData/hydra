@@ -74,10 +74,12 @@ define = definitionInModule module_
 adaptTypeToLanguageAndEncodeDef :: TBinding (Language -> (Type -> Flow Graph t) -> Type -> Flow Graph t)
 adaptTypeToLanguageAndEncodeDef = define "adaptTypeToLanguageAndEncode" $
   doc "Given a target language, an encoding function, and a type, adapt and encode the type" $
-  "lang" ~> "enc" ~> "typ" ~> cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ")
-    (Just $
-      "adaptedType" <<~ ref adaptTypeToLanguageDef @@ var "lang" @@ var "typ" $
-      var "enc" @@ var "adaptedType") [
+  "lang" ~> "enc" ~> "typ" ~>
+  "dflt" <~ (
+    "adaptedType" <<~ ref adaptTypeToLanguageDef @@ var "lang" @@ var "typ" $
+    var "enc" @@ var "adaptedType") $
+  cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ")
+    (Just $ var "dflt") [
     _Type_variable>>: constant (var "enc" @@ var "typ")]
 
 adaptTypeToLanguageDef :: TBinding (Language -> Type -> Flow Graph Type)
