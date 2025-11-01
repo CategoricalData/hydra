@@ -19,6 +19,7 @@ import hydra.lib.strings
 import hydra.monads
 import hydra.rewriting
 import hydra.show.core
+import hydra.typing
 
 def lookup_element(g: hydra.graph.Graph, name: hydra.core.Name) -> Maybe[hydra.core.Binding]:
     return hydra.lib.maps.lookup(name, g.elements)
@@ -124,6 +125,10 @@ def match_record[T0, T1](decode: Callable[[FrozenDict[hydra.core.Name, hydra.cor
 
 def require_primitive(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, hydra.graph.Primitive]:
     return hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.graph.Graph, hydra.graph.Graph], hydra.monads.get_state), (lambda g: hydra.lib.optionals.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("no such primitive function: ", name.value))), cast(Callable[[hydra.graph.Primitive], hydra.compute.Flow[hydra.graph.Graph, hydra.graph.Primitive]], hydra.lib.flows.pure), lookup_primitive(g, name))))
+
+def require_primitive_type[T0](tx: hydra.typing.TypeContext, name: hydra.core.Name) -> hydra.compute.Flow[T0, hydra.core.TypeScheme]:
+    mts = hydra.lib.maps.lookup(name, tx.inference_context.primitive_types)
+    return hydra.lib.optionals.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("no such primitive function: ", name.value))), (lambda ts: hydra.lib.flows.pure(ts)), mts)
 
 def resolve_term(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Term]]:
     r"""TODO: distinguish between lambda-bound and let-bound variables."""

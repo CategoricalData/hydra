@@ -184,17 +184,15 @@ testEtaExpansion = H.describe "etaExpandTypedTerms" $ do
           (letsTyped [("id", tylam "a" (lambda "x" $ var "x"), Types.poly ["a"] (Types.function (Types.var "a") (Types.var "a")))]
             (var "id" `tyapp` Types.string))
 
-        expandsTo "type application of identity applied to binary function with no arguments"
+        noChange "type application of identity applied to binary function with no arguments"
           (letsTyped [("id", tylam "a" (lambda "x" $ var "x"), Types.poly ["a"] (Types.function (Types.var "a") (Types.var "a")))]
             ((var "id" `tyapp` (Types.function Types.string (Types.function Types.string (Types.list Types.string)))) @@ splitOn))
-          (letsTyped [("id", tylam "a" (lambda "x" $ var "x"), Types.poly ["a"] (Types.function (Types.var "a") (Types.var "a")))]
-            (lambda "v1" $ lambda "v2" $ ((var "id" `tyapp` (Types.function Types.string (Types.function Types.string (Types.list Types.string)))) @@ splitOn) @@ var "v1" @@ var "v2"))
 
         expandsTo "type application of identity applied to partially applied binary function"
           (letsTyped [("id", tylam "a" (lambda "x" $ var "x"), Types.poly ["a"] (Types.function (Types.var "a") (Types.var "a")))]
             ((var "id" `tyapp` (Types.function Types.string (Types.list Types.string))) @@ (splitOn @@ string ",")))
-          (letsTyped [("id", tylam "a" (lambda "x" $ var "x"), Types.poly ["a"] (Types.function (Types.var "a") (Types.var "a")))]
-            (lambda "v1" $ ((var "id" `tyapp` (Types.function Types.string (Types.list Types.string))) @@ (lambda "v1" $ splitOn @@ string "," @@ var "v1")) @@ var "v1"))
+          (letsTyped [("id", tylam "a" (lambda "x" $ var "x"), Types.poly ["a"] (Types.function (Types.var "a") (Types.var "a")))] $
+            (var "id" `tyapp` (Types.function Types.string (Types.list Types.string))) @@ (lambda "v1" $ splitOn @@ string "," @@ var "v1"))
 
         noChange "type application of identity applied to fully applied binary function"
           (letsTyped [("id", tylam "a" (lambda "x" $ var "x"), Types.poly ["a"] (Types.function (Types.var "a") (Types.var "a")))]

@@ -36,6 +36,9 @@ typeArity x = case x of
   Core.TypeFunction v1 -> (Math.add 1 (typeArity (Core.functionTypeCodomain v1)))
   _ -> 0
 
+typeSchemeArity :: (Core.TypeScheme -> Int)
+typeSchemeArity ts = (typeArity (Core.typeSchemeType ts))
+
 -- | Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)
 uncurryType :: (Core.Type -> [Core.Type])
 uncurryType t = ((\x -> case x of

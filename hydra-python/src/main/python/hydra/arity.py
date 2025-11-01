@@ -53,6 +53,9 @@ def primitive_arity(arg_: hydra.graph.Primitive) -> int:
     
     return (lambda arg_2: type_arity(arg_2.type))(arg_.type)
 
+def type_scheme_arity(ts: hydra.core.TypeScheme) -> int:
+    return type_arity(ts.type)
+
 def uncurry_type(t: hydra.core.Type) -> frozenlist[hydra.core.Type]:
     r"""Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)."""
     
