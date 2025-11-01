@@ -179,9 +179,12 @@ etaExpandTypedTerm tx0 term0 =
                     in (Flows.pure (Core.TermAnnotated (Core.AnnotatedTerm {
                       Core.annotatedTermBody = body,
                       Core.annotatedTermAnnotation = ann})))))
-                  Core.TermApplication v1 -> (Flows.bind (rewriteSpine (Core.applicationFunction v1)) (\lhs -> Flows.bind (rewrite True False [] recurse tx (Core.applicationArgument v1)) (\rhs -> Flows.pure (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = lhs,
-                    Core.applicationArgument = rhs})))))
+                  Core.TermApplication v1 ->  
+                    let l = (Logic.ifElse False [
+                            Core.TypeLiteral Core.LiteralTypeString] [])
+                    in (Flows.bind (rewriteSpine (Core.applicationFunction v1)) (\lhs -> Flows.bind (rewrite True False l recurse tx (Core.applicationArgument v1)) (\rhs -> Flows.pure (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = lhs,
+                      Core.applicationArgument = rhs})))))
                   Core.TermTypeApplication v1 -> (Flows.bind (rewriteSpine (Core.typeApplicationTermBody v1)) (\body ->  
                     let typ = (Core.typeApplicationTermType v1)
                     in (Flows.pure (Core.TermTypeApplication (Core.TypeApplicationTerm {
@@ -192,17 +195,17 @@ etaExpandTypedTerm tx0 term0 =
             let arityOf = (\term ->  
                     let dflt = (Flows.map Arity.typeArity (Checking.typeOf tx [] term))
                     in  
-                      let forElimination = (\e -> (\x -> case x of
-                              Core.EliminationRecord _ -> (Flows.pure 1)
-                              Core.EliminationUnion _ -> (Flows.pure 1)
-                              _ -> dflt) e)
-                      in  
-                        let forFunction = (\f -> (\x -> case x of
-                                Core.FunctionElimination v1 -> (forElimination v1)
-                                _ -> dflt) f)
-                        in ((\x -> case x of
-                          Core.TermFunction v1 -> (forFunction v1)
-                          _ -> dflt) (Rewriting.deannotateAndDetypeTerm term)))
+                      let forFunction = (\f -> (\x -> case x of
+                              Core.FunctionElimination _ -> (Flows.pure 1)
+                              Core.FunctionPrimitive v1 -> (Flows.map Arity.typeSchemeArity (Lexical.requirePrimitiveType tx v1))
+                              _ -> dflt) f)
+                      in ((\x -> case x of
+                        Core.TermAnnotated v1 -> (arityOf (Core.annotatedTermBody v1))
+                        Core.TermFunction v1 -> (forFunction v1)
+                        Core.TermLet v1 -> (arityOf (Core.letBody v1))
+                        Core.TermTypeApplication v1 -> (arityOf (Core.typeApplicationTermBody v1))
+                        Core.TermTypeLambda v1 -> (arityOf (Core.typeLambdaBody v1))
+                        _ -> dflt) term))
             in  
               let extraVariables = (\n -> Lists.map (\i -> Core.Name (Strings.cat2 "v" (Literals.showInt32 i))) (Math.range 1 n))
               in  

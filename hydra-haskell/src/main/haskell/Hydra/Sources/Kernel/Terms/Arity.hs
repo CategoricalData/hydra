@@ -53,6 +53,7 @@ module_ = Module (Namespace "hydra.arity") elements
       el primitiveArityDef,
       el termArityDef,
       el typeArityDef,
+      el typeSchemeArityDef,
       el uncurryTypeDef]
 
 define :: String -> TTerm a -> TBinding a
@@ -86,6 +87,10 @@ typeArityDef = define "typeArity" $
     _Type_forall>>: ref typeArityDef <.> unaryFunction Core.forallTypeBody,
     _Type_function>>: lambda "f" $
       Math.add (int32 1) (ref typeArityDef @@ (Core.functionTypeCodomain $ var "f"))]
+
+typeSchemeArityDef :: TBinding (TypeScheme -> Int)
+typeSchemeArityDef = define "typeSchemeArity" $
+  "ts" ~> ref typeArityDef @@ (Core.typeSchemeType $ var "ts")
 
 uncurryTypeDef :: TBinding (Type -> [Type])
 uncurryTypeDef = define "uncurryType" $

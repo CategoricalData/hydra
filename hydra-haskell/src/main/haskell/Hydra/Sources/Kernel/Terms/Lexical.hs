@@ -68,6 +68,7 @@ module_ = Module (Namespace "hydra.lexical") elements
       el matchUnitFieldDef,
       el requireElementDef,
       el requirePrimitiveDef,
+      el requirePrimitiveTypeDef,
       el requireTermDef,
       el resolveTermDef,
       el schemaContextDef,
@@ -241,6 +242,16 @@ requirePrimitiveDef = define "requirePrimitive" $
     (Flows.fail ("no such primitive function: " ++ (Core.unName (var "name"))))
     (unaryFunction Flows.pure)
     (ref lookupPrimitiveDef @@ var "g" @@ var "name")
+
+requirePrimitiveTypeDef :: TBinding (TypeContext -> Name -> Flow s TypeScheme)
+requirePrimitiveTypeDef = define "requirePrimitiveType" $
+  "tx" ~> "name" ~>
+  "mts" <~ Maps.lookup
+    (var "name" )
+    (Typing.inferenceContextPrimitiveTypes $ Typing.typeContextInferenceContext $ var "tx") $
+  optCases (var "mts")
+    (Flows.fail ("no such primitive function: " ++ (Core.unName (var "name"))))
+    ("ts" ~> produce $ var "ts")
 
 requireTermDef :: TBinding (Name -> Flow Graph Term)
 requireTermDef = define "requireTerm" $
