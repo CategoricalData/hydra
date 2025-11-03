@@ -7,7 +7,7 @@ from typing import Any, TypeVar, cast, get_type_hints, overload
 
 from hydra.core import Name
 from hydra.dsl.phantoms import primitive1
-from hydra.dsl.prims import int32_coder, prim1, string_coder
+from hydra.dsl.prims import int32, prim1, string
 from hydra.graph import TermCoder
 from hydra.phantoms import TTerm
 
@@ -16,8 +16,8 @@ B = TypeVar("B")
 
 # Type mappings from Python types to TermCoder factories
 TYPE_CODERS: dict[type, Callable[[], TermCoder[Any]]] = {
-    str: string_coder,
-    int: int32_coder,
+    str: string,
+    int: int32,
 }
 
 
