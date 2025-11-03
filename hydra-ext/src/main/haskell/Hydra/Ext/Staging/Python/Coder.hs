@@ -159,7 +159,9 @@ encodeBindingsAsDefs env bindings = CM.mapM (encodeBindingAsDef env) bindings
 
 encodeDefinition :: PythonEnvironment -> Definition -> Flow PyGraph [[Py.Statement]]
 encodeDefinition env def = case def of
-  DefinitionTerm (TermDefinition name term _) -> withTrace ("data element " ++ unName name) $ do
+--  DefinitionTerm (TermDefinition name term _) -> withTrace ("data element " ++ unName name) $ do
+  DefinitionTerm (TermDefinition name term _) ->
+    withTrace ("data element " ++ unName name ++ ": " ++ ShowCore.term term) $ do
 
 --    if name == Name "hydra.adapt.utils.encodeDecode"
 --    then fail $ "term: " ++ ShowCore.term term

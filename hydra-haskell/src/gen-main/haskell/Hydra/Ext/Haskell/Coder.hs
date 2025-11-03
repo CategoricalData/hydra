@@ -9,7 +9,6 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Encode.Core as Core__
 import qualified Hydra.Ext.Haskell.Ast as Ast
 import qualified Hydra.Ext.Haskell.Language as Language
@@ -603,13 +602,23 @@ typeDecl namespaces name typ =
               "_type_"])
       rawTerm = (Core__.type_ typ)
       rewrite = (\recurse -> \term ->  
-              let variantResult = (Decoding.variant (Core.Name "hydra.core.Type") term) 
+              let variantResult = ((\x -> case x of
+                      Core.TermUnion v1 -> (Logic.ifElse (Equality.equal (Core.injectionTypeName v1) (Core.Name "hydra.core.Type")) (Just (Core.injectionField v1)) Nothing)
+                      _ -> Nothing) (Rewriting.deannotateTerm term)) 
+                  decodeString = (\term -> (\x -> case x of
+                          Core.TermLiteral v1 -> ((\x -> case x of
+                            Core.LiteralString v2 -> (Just v2)
+                            _ -> Nothing) v1)
+                          _ -> Nothing) (Rewriting.deannotateTerm term))
+                  decodeName = (\term -> (\x -> case x of
+                          Core.TermWrap v1 -> (Logic.ifElse (Equality.equal (Core.wrappedTermTypeName v1) (Core.Name "hydra.core.Name")) (Optionals.map (\x -> Core.Name x) (decodeString (Core.wrappedTermBody v1))) Nothing)
+                          _ -> Nothing) (Rewriting.deannotateTerm term))
                   forType = (\field ->  
                           let fname = (Core.fieldName field) 
                               fterm = (Core.fieldTerm field)
-                          in (Logic.ifElse (Equality.equal fname (Core.Name "record")) Nothing (Logic.ifElse (Equality.equal fname (Core.Name "variable")) (Optionals.bind (Decoding.name fterm) forVariableType) Nothing)))
-                  forVariableType = (\name_ ->  
-                          let qname = (Names.qualifyName name_) 
+                          in (Logic.ifElse (Equality.equal fname (Core.Name "record")) Nothing (Logic.ifElse (Equality.equal fname (Core.Name "variable")) (Optionals.bind (decodeName fterm) forVariableType) Nothing)))
+                  forVariableType = (\vname ->  
+                          let qname = (Names.qualifyName vname) 
                               mns = (Module.qualifiedNameNamespace qname)
                               local = (Module.qualifiedNameLocal qname)
                           in (Optionals.map (\ns -> Core.TermVariable (Names.qname ns (Strings.cat [
