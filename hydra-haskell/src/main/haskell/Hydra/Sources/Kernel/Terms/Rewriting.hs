@@ -596,8 +596,8 @@ removeTypesFromTermDef = define "removeTypesFromTerm" $
           (Just $ Core.termFunction $ Core.functionElimination $ var "e") [
           _Elimination_product>>: "tp" ~> Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $
             Core.tupleProjection
-              (Core.tupleProjectionIndex $ var "tp")
               (Core.tupleProjectionArity $ var "tp")
+              (Core.tupleProjectionIndex $ var "tp")
               nothing],
         _Function_lambda>>: "l" ~> Core.termFunction $ Core.functionLambda $ Core.lambda
           (Core.lambdaParameter $ var "l")
