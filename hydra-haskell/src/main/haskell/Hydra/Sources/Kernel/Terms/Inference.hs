@@ -907,11 +907,15 @@ inferTypeOfTupleProjectionDef = define "inferTypeOfTupleProjection" $
   "vars" <<~ ref Schemas.freshNamesDef @@ var "arity" $
   "types" <~ Lists.map (unaryFunction Core.typeVariable) (var "vars") $
   "cod" <~ Lists.at (var "idx") (var "types") $
-  Flows.pure $ ref yieldDef
-    @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $
-        Core.tupleProjection (var "arity") (var "idx") (just $ var "types"))
-    @@ (Core.typeFunction $ Core.functionType (Core.typeProduct $ var "types") (var "cod"))
-    @@ (ref Substitution.idTypeSubstDef)
+  Logic.ifElse (Equality.gte (var "idx") (var "arity"))
+    (Flows.fail $ Strings.cat $ list [
+      "tuple projection index ", Literals.showInt32 (var "idx"),
+      " is out of bounds for arity ", Literals.showInt32 (var "arity"), "."])
+    (produce $ ref yieldDef
+      @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $
+          Core.tupleProjection (var "arity") (var "idx") (just $ var "types"))
+      @@ (Core.typeFunction $ Core.functionType (Core.typeProduct $ var "types") (var "cod"))
+      @@ (ref Substitution.idTypeSubstDef))
 
 inferTypeOfTypeLambdaDef :: TBinding (InferenceContext -> TypeLambda -> Flow s InferenceResult)
 inferTypeOfTypeLambdaDef = define "inferTypeOfTypeLambda" $
