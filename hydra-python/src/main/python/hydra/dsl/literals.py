@@ -23,6 +23,8 @@ from hydra.core import (
     IntegerValueUint8,
 )
 
+from decimal import Decimal
+
 
 def binary(value: bytes) -> Literal:
     """Construct a binary literal."""
@@ -56,7 +58,7 @@ def float64(value: float) -> Literal:
 
 def bigfloat(value: float) -> Literal:
     """Construct a bigfloat literal."""
-    return float_(FloatValueBigfloat(value))
+    return float_(FloatValueBigfloat(Decimal(value)))
 
 
 def integer(value: IntegerValue) -> Literal:
