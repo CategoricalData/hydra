@@ -50,7 +50,7 @@ def prim0(
         return output.coder.decode(value)
 
     return Primitive(
-        name=name, type=types.scheme(variables, output.type), implementation=impl
+        name=name, type=types.poly(variables, output.type), implementation=impl
     )
 
 
@@ -75,7 +75,7 @@ def prim1(
 
     return Primitive(
         name=name,
-        type=types.scheme(variables, types.function(input1.type, output.type)),
+        type=types.poly(variables, types.function(input1.type, output.type)),
         implementation=impl,
     )
 
@@ -110,7 +110,7 @@ def prim2(
 
     return Primitive(
         name=name,
-        type=types.scheme(
+        type=types.poly(
             variables,
             types.function(input1.type, types.function(input2.type, output.type)),
         ),
@@ -154,7 +154,7 @@ def prim3(
 
     return Primitive(
         name=name,
-        type=types.scheme(
+        type=types.poly(
             variables,
             types.function(
                 input1.type,
