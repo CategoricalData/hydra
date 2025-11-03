@@ -44,7 +44,6 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decode.Core     as DecodeCore
-import qualified Hydra.Sources.Kernel.Terms.Decoding        as Decoding
 import qualified Hydra.Sources.Kernel.Terms.Describe.Core   as DescribeCore
 import qualified Hydra.Sources.Kernel.Terms.Describe.Mantle as DescribeMantle
 import qualified Hydra.Sources.Kernel.Terms.Encode.Core     as EncodeCore
@@ -830,17 +829,31 @@ typeDeclDef = haskellCoderDefinition "typeDecl" $
       Strings.cat $ list [string "_", ref Names.localNameOfDef @@ var "name'", string "_type_"],
     "rawTerm">: ref EncodeCore.typeDef @@ var "typ",
     "rewrite">: lambda "recurse" $ lambda "term" $ lets [
-      "variantResult">: ref Decoding.variantDef @@ Core.nameLift _Type @@ var "term",
+      "variantResult">: cases _Term (ref Rewriting.deannotateTermDef @@ var "term")
+        (Just nothing) [
+        _Term_union>>: "inj" ~> Logic.ifElse (Equality.equal (Core.injectionTypeName $ var "inj") (Core.nameLift _Type))
+          (just $ Core.injectionField $ var "inj")
+          nothing],
+      "decodeString">: lambda "term" (cases _Term (ref Rewriting.deannotateTermDef @@ var "term")
+        (Just nothing) [
+        _Term_literal>>: "lit" ~> cases _Literal (var "lit")
+          (Just nothing) [
+          _Literal_string>>: "s" ~> just (var "s")]]),
+      "decodeName">: lambda "term" (cases _Term (ref Rewriting.deannotateTermDef @@ var "term")
+        (Just nothing) [
+        _Term_wrap>>: "wt" ~> Logic.ifElse (Equality.equal (Core.wrappedTermTypeName $ var "wt") (Core.nameLift _Name))
+          (Optionals.map (unaryFunction Core.name) $ var "decodeString" @@ (Core.wrappedTermBody $ var "wt"))
+          nothing]),
       "forType">: lambda "field" $ lets [
         "fname">: Core.fieldName $ var "field",
         "fterm">: Core.fieldTerm $ var "field"] $
         Logic.ifElse (Equality.equal (var "fname") $ Core.nameLift _Type_record)
           nothing
           (Logic.ifElse (Equality.equal (var "fname") $ Core.nameLift _Type_variable)
-            (Optionals.bind (ref Decoding.nameDef @@ var "fterm") (var "forVariableType"))
+            (Optionals.bind (var "decodeName" @@ var "fterm") (var "forVariableType"))
             nothing),
-      "forVariableType">: lambda "name''" $ lets [
-        "qname">: ref Names.qualifyNameDef @@ var "name''",
+      "forVariableType">: lambda "vname" $ lets [
+        "qname">: ref Names.qualifyNameDef @@ var "vname",
         "mns">: Module.qualifiedNameNamespace $ var "qname",
         "local">: Module.qualifiedNameLocal $ var "qname"] $
         Optionals.map (lambda "ns" $ Core.termVariable $ ref Names.qnameDef @@ var "ns" @@ (Strings.cat $ list [string "_", var "local", string "_type_"])) (var "mns")] $

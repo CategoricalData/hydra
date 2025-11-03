@@ -47,6 +47,7 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 
 
@@ -54,7 +55,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.reduction") elements
     [Arity.module_, Checking.module_, ExtractCore.module_, Lexical.module_,
       Rewriting.module_,
-      Schemas.module_]
+      Schemas.module_, ShowCore.module_]
     kernelTypesModules $
     Just ("Functions for reducing terms and types, i.e. performing computations.")
   where
@@ -242,9 +243,12 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
 
     -- Arity as provided by type checking, but with exceptions which give us the desired behavior for
     -- targets including Python. Remove the special cases and see which regression tests fail.
-    "arityOf" <~ ("term" ~>
+    -- TODO: this function is moving toward "syntactic" arity which does not require type checking; only
+    --       type lookups.
+    "arityOf" <~ ("tx" ~> "term" ~>
+      trace ("arityOf(" ++ (ref ShowCore.termDef @@ var "term") ++ ")") $
       "dflt" <~ Flows.map (ref Arity.typeArityDef) (ref Checking.typeOfDef @@ var "tx" @@ list [] @@ var "term") $
-      "forFunction" <~ ("f" ~> cases _Function (var "f")
+      "forFunction" <~ ("tx" ~> "f" ~> cases _Function (var "f")
         (Just $ var "dflt") [
         _Function_elimination>>: constant $ produce $ int32 1,
         --_Function_lambda>>: "l" ~> ...
@@ -253,12 +257,16 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
           (ref Lexical.requirePrimitiveTypeDef @@ var "tx" @@ var "name")]) $
       cases _Term (var "term")
         (Just $ var "dflt") [
-        _Term_annotated>>: "at" ~> var "arityOf" @@ Core.annotatedTermBody (var "at"),
+        _Term_annotated>>: "at" ~> var "arityOf" @@ var "tx" @@ Core.annotatedTermBody (var "at"),
         --_Term_application>>: ...
-        _Term_function>>: "f" ~> var "forFunction" @@ var "f",
-        _Term_let>>: "l" ~> var "arityOf" @@ Core.letBody (var "l"),
-        _Term_typeApplication>>: "tat" ~> var "arityOf" @@ Core.typeApplicationTermBody (var "tat"),
-        _Term_typeLambda>>: "tl" ~> var "arityOf" @@ Core.typeLambdaBody (var "tl")
+        _Term_function>>: "f" ~> var "forFunction" @@ var "tx" @@ var "f",
+        _Term_let>>: "l" ~>
+          "tx2" <~ ref Schemas.extendTypeContextForLetDef @@ var "tx" @@ var "l" $
+          var "arityOf" @@ var "tx2" @@ Core.letBody (var "l"),
+        _Term_typeApplication>>: "tat" ~> var "arityOf" @@ var "tx" @@ Core.typeApplicationTermBody (var "tat"),
+        _Term_typeLambda>>: "tl" ~>
+          "tx2" <~ ref Schemas.extendTypeContextForTypeLambdaDef @@ var "tx" @@ var "tl" $
+          var "arityOf" @@ var "tx2" @@ Core.typeLambdaBody (var "tl")
         --_Term_variable>>: ...
         ]) $
 
@@ -320,7 +328,7 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
         "lhs" <~ Core.applicationFunction (var "a") $
         "rhs" <~ Core.applicationArgument (var "a") $
         "rhs2" <<~ var "rewrite" @@ true @@ false @@ list [] @@ var "recurse" @@ var "tx" @@ var "rhs" $
-        "lhsarity" <<~ var "arityOf" @@ var "lhs" $
+        "lhsarity" <<~ var "arityOf" @@ var "tx" @@ var "lhs" $
         "lhs2" <<~ var "rewriteSpine" @@ var "lhs" $
         "a2" <~ Core.termApplication (Core.application (var "lhs2") (var "rhs2")) $
         produce $ Logic.ifElse (Equality.gt (var "lhsarity") (int32 1))
@@ -342,6 +350,7 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
       _Term_typeLambda>>: "tl" ~>
         "tx2" <~ ref Schemas.extendTypeContextForTypeLambdaDef @@ var "tx" @@ var "tl" $
         var "recurse" @@ var "tx2" @@ var "term"]) $
+--  trace ("term0: " ++ (ref ShowCore.termDef @@ var "term0")) $
   ref Rewriting.rewriteTermWithContextMDef @@ (var "rewrite" @@ true @@ false @@ list []) @@ var "tx0" @@ var "term0"
 
 -- Note: unused / untested

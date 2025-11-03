@@ -19,8 +19,10 @@ import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Show.Core as Core__
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -192,20 +194,28 @@ etaExpandTypedTerm tx0 term0 =
                       Core.typeApplicationTermType = typ})))))
                   _ -> (rewrite False False [] recurse tx term)) term)
           in  
-            let arityOf = (\term ->  
+            let arityOf = (\tx -> \term -> Monads.withTrace (Strings.cat [
+                    Strings.cat [
+                      "arityOf(",
+                      (Core__.term term)],
+                    ")"]) ( 
                     let dflt = (Flows.map Arity.typeArity (Checking.typeOf tx [] term))
                     in  
-                      let forFunction = (\f -> (\x -> case x of
+                      let forFunction = (\tx -> \f -> (\x -> case x of
                               Core.FunctionElimination _ -> (Flows.pure 1)
                               Core.FunctionPrimitive v1 -> (Flows.map Arity.typeSchemeArity (Lexical.requirePrimitiveType tx v1))
                               _ -> dflt) f)
                       in ((\x -> case x of
-                        Core.TermAnnotated v1 -> (arityOf (Core.annotatedTermBody v1))
-                        Core.TermFunction v1 -> (forFunction v1)
-                        Core.TermLet v1 -> (arityOf (Core.letBody v1))
-                        Core.TermTypeApplication v1 -> (arityOf (Core.typeApplicationTermBody v1))
-                        Core.TermTypeLambda v1 -> (arityOf (Core.typeLambdaBody v1))
-                        _ -> dflt) term))
+                        Core.TermAnnotated v1 -> (arityOf tx (Core.annotatedTermBody v1))
+                        Core.TermFunction v1 -> (forFunction tx v1)
+                        Core.TermLet v1 ->  
+                          let tx2 = (Schemas.extendTypeContextForLet tx v1)
+                          in (arityOf tx2 (Core.letBody v1))
+                        Core.TermTypeApplication v1 -> (arityOf tx (Core.typeApplicationTermBody v1))
+                        Core.TermTypeLambda v1 ->  
+                          let tx2 = (Schemas.extendTypeContextForTypeLambda tx v1)
+                          in (arityOf tx2 (Core.typeLambdaBody v1))
+                        _ -> dflt) term)))
             in  
               let extraVariables = (\n -> Lists.map (\i -> Core.Name (Strings.cat2 "v" (Literals.showInt32 i))) (Math.range 1 n))
               in  
@@ -253,7 +263,7 @@ etaExpandTypedTerm tx0 term0 =
                                   let lhs = (Core.applicationFunction v1)
                                   in  
                                     let rhs = (Core.applicationArgument v1)
-                                    in (Flows.bind (rewrite True False [] recurse tx rhs) (\rhs2 -> Flows.bind (arityOf lhs) (\lhsarity -> Flows.bind (rewriteSpine lhs) (\lhs2 ->  
+                                    in (Flows.bind (rewrite True False [] recurse tx rhs) (\rhs2 -> Flows.bind (arityOf tx lhs) (\lhsarity -> Flows.bind (rewriteSpine lhs) (\lhs2 ->  
                                       let a2 = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = lhs2,
                                               Core.applicationArgument = rhs2}))

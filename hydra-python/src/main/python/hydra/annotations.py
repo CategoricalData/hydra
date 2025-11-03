@@ -10,7 +10,6 @@ import hydra.compute
 import hydra.constants
 import hydra.core
 import hydra.decode.core
-import hydra.decoding
 import hydra.encode.core
 import hydra.extract.core
 import hydra.graph
@@ -129,7 +128,7 @@ def has_type_description(typ: hydra.core.Type) -> bool:
 def is_native_type(el: hydra.core.Binding) -> bool:
     r"""For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression."""
     
-    is_flagged_as_first_class_type = hydra.lib.optionals.from_maybe(False, hydra.lib.optionals.bind(get_term_annotation(hydra.constants.key_first_class_type, el.term), hydra.decoding.boolean))
+    is_flagged_as_first_class_type = hydra.lib.optionals.from_maybe(False, hydra.lib.optionals.map((lambda _: True), get_term_annotation(hydra.constants.key_first_class_type, el.term)))
     return hydra.lib.optionals.maybe(False, (lambda ts: hydra.lib.logic.and_(hydra.lib.equality.equal(ts, hydra.core.TypeScheme(cast(frozenlist[hydra.core.Name], ()), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))))), hydra.lib.logic.not_(is_flagged_as_first_class_type))), el.type)
 
 def put_attr[T0](key: hydra.core.Name, val: hydra.core.Term) -> hydra.compute.Flow[T0, None]:
