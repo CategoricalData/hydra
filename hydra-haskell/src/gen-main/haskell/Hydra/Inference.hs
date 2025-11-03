@@ -733,12 +733,17 @@ inferTypeOfTupleProjection cx tp =
       let types = (Lists.map (\x -> Core.TypeVariable x) vars)
       in  
         let cod = (Lists.at idx types)
-        in (Flows.pure (yield (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
+        in (Logic.ifElse (Equality.gte idx arity) (Flows.fail (Strings.cat [
+          "tuple projection index ",
+          Literals.showInt32 idx,
+          " is out of bounds for arity ",
+          Literals.showInt32 arity,
+          "."])) (Flows.pure (yield (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
           Core.tupleProjectionArity = arity,
           Core.tupleProjectionIndex = idx,
           Core.tupleProjectionDomain = (Just types)})))) (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = (Core.TypeProduct types),
-          Core.functionTypeCodomain = cod})) Substitution.idTypeSubst))))
+          Core.functionTypeCodomain = cod})) Substitution.idTypeSubst)))))
 
 inferTypeOfTypeLambda :: (Typing_.InferenceContext -> Core.TypeLambda -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfTypeLambda cx ta = (inferTypeOfTerm cx (Core.typeLambdaBody ta) "type abstraction")
