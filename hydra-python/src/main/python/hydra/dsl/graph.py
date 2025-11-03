@@ -1,43 +1,20 @@
-"""Python implementations of hydra.dsl.graph primitives."""
+"""Python DSL for the hydra.graph module."""
 
 import hydra.dsl.terms as terms
 import hydra.graph
 from hydra.core import Binding, Field, Name, Term, TypeScheme
-from hydra.dsl.python import FrozenDict
+from hydra.dsl.python import FrozenDict, Maybe
 from hydra.graph import Graph, Primitive
 from hydra.phantoms import TTerm
 
 
-def element(
-    name: TTerm[Name], term: TTerm[Term], mtyp: TTerm[TypeScheme | None]
-) -> TTerm[Binding]:
-    """Create an element from a name, term, and optional type scheme."""
-    return TTerm[Binding](
-        terms.record(
-            hydra.graph.ELEMENT__NAME,
-            [
-                Field(hydra.graph.ELEMENT__NAME__NAME, name.value),
-                Field(hydra.graph.ELEMENT__TERM__NAME, term.value),
-                Field(hydra.graph.ELEMENT__TYPE__NAME, mtyp.value),
-            ],
-        )
-    )
-
-
-def element_name() -> TTerm[Name]:
-    """Get the name of an element."""
-    return TTerm[Name](
-        terms.project(hydra.graph.ELEMENT__NAME, hydra.graph.ELEMENT__NAME__NAME)
-    )
-
-
 def graph(
-    elements: TTerm[dict[Name, Binding]],
-    environment: TTerm[dict[Name, Term | None]],
-    types: TTerm[dict[Name, TypeScheme]],
-    body: TTerm[Term],
-    primitives: TTerm[dict[Name, Primitive]],
-    schema: TTerm[Graph | None],
+        elements: TTerm[dict[Name, Binding]],
+        environment: TTerm[dict[Name, Maybe[Term]]],
+        types: TTerm[dict[Name, TypeScheme]],
+        body: TTerm[Term],
+        primitives: TTerm[dict[Name, Primitive]],
+        schema: TTerm[Maybe[Graph]],
 ) -> TTerm[Graph]:
     """Create a graph from a map of name/element bindings, a map of name/term bindings, a map of name/type scheme bindings, a body term, a map of name/primitive bindings, and an optional schema graph.
 
@@ -45,7 +22,7 @@ def graph(
     ----------
     elements : TTerm[dict[Name, Binding]]
         A map of name/element bindings.
-    environment : TTerm[dict[Name, Term | None]]
+    environment : TTerm[dict[Name, Maybe[Term]]]
         A map of name/term bindings.
     types : TTerm[dict[Name, TypeScheme]]
         A map of name/type scheme bindings.
@@ -53,7 +30,7 @@ def graph(
         The body term.
     primitives : TTerm[dict[Name, Primitive]]
         A map of name/primitive bindings.
-    schema : TTerm[Graph | None]
+    schema : TTerm[Maybe[Graph]]
         An optional schema graph.
 
     Returns
@@ -76,45 +53,63 @@ def graph(
     )
 
 
-def graph_elements() -> TTerm[FrozenDict[Name, Binding]]:
+def graph_elements(g: TTerm[Graph]) -> TTerm[FrozenDict[Name, Binding]]:
     """Get the elements of a graph."""
     return TTerm[FrozenDict[Name, Binding]](
-        terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__ELEMENTS__NAME)
+        terms.apply(
+            terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__ELEMENTS__NAME),
+            g.value
+        )
     )
 
 
-def graph_environment() -> TTerm[FrozenDict[Name, Term | None]]:
+def graph_environment(g: TTerm[Graph]) -> TTerm[FrozenDict[Name, Maybe[Term]]]:
     """Get the environment of a graph."""
-    return TTerm[FrozenDict[Name, Term | None]](
-        terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__ENVIRONMENT__NAME)
+    return TTerm[FrozenDict[Name, Maybe[Term]]](
+        terms.apply(
+            terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__ENVIRONMENT__NAME),
+            g.value
+        )
     )
 
 
-def graph_types() -> TTerm[FrozenDict[Name, TypeScheme]]:
+def graph_types(g: TTerm[Graph]) -> TTerm[FrozenDict[Name, TypeScheme]]:
     """Get the types of a graph."""
     return TTerm[FrozenDict[Name, TypeScheme]](
-        terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__TYPES__NAME)
+        terms.apply(
+            terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__TYPES__NAME),
+            g.value
+        )
     )
 
 
-def graph_body() -> TTerm[Term]:
+def graph_body(g: TTerm[Graph]) -> TTerm[Term]:
     """Get the body of a graph."""
     return TTerm[Term](
-        terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__BODY__NAME)
+        terms.apply(
+            terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__BODY__NAME),
+            g.value
+        )
     )
 
 
-def graph_primitives() -> TTerm[FrozenDict[Name, Primitive]]:
+def graph_primitives(g: TTerm[Graph]) -> TTerm[FrozenDict[Name, Primitive]]:
     """Get the primitives of a graph."""
     return TTerm[FrozenDict[Name, Primitive]](
-        terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__PRIMITIVES__NAME)
+        terms.apply(
+            terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__PRIMITIVES__NAME),
+            g.value
+        )
     )
 
 
-def graph_schema() -> TTerm[Graph | None]:
+def graph_schema(g: TTerm[Graph]) -> TTerm[Maybe[Graph]]:
     """Get the schema of a graph."""
-    return TTerm[Graph | None](
-        terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__SCHEMA__NAME)
+    return TTerm[Maybe[Graph]](
+        terms.apply(
+            terms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__SCHEMA__NAME),
+            g.value
+        )
     )
 
 
