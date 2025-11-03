@@ -452,8 +452,8 @@ removeTypesFromTerm term =
               Core.TermFunction v1 -> ((\x -> case x of
                 Core.FunctionElimination v2 -> ((\x -> case x of
                   Core.EliminationProduct v3 -> (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
-                    Core.tupleProjectionArity = (Core.tupleProjectionIndex v3),
-                    Core.tupleProjectionIndex = (Core.tupleProjectionArity v3),
+                    Core.tupleProjectionArity = (Core.tupleProjectionArity v3),
+                    Core.tupleProjectionIndex = (Core.tupleProjectionIndex v3),
                     Core.tupleProjectionDomain = Nothing}))))
                   _ -> (Core.TermFunction (Core.FunctionElimination v2))) v2)
                 Core.FunctionLambda v2 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
