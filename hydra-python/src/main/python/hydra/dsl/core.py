@@ -1,4 +1,4 @@
-"""Core Hydra DSL."""
+"""Python DSL for the hydra.core module."""
 
 # module Hydra.Dsl.Core where
 
