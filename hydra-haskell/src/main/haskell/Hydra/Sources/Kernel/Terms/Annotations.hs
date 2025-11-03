@@ -43,7 +43,6 @@ import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decode.Core as DecodeCore
-import qualified Hydra.Sources.Kernel.Terms.Decoding as Decoding
 import qualified Hydra.Sources.Kernel.Terms.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
@@ -55,7 +54,7 @@ import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 module_ :: Module
 module_ = Module (Namespace "hydra.annotations") elements
-    [Decoding.module_, DecodeCore.module_, EncodeCore.module_, ExtractCore.module_, Lexical.module_, ShowCore.module_,
+    [DecodeCore.module_, EncodeCore.module_, ExtractCore.module_, Lexical.module_, ShowCore.module_,
       Variants.module_, Monads.module_]
     kernelTypesModules $
     Just "Utilities for reading and writing type and term annotations"
@@ -225,9 +224,9 @@ isNativeTypeDef = define "isNativeType" $
     <> " or as a Hydra type expression.") $
   "el" ~>
   "isFlaggedAsFirstClassType" <~ Optionals.fromMaybe false (
-    Optionals.bind
-      (ref getTermAnnotationDef @@ ref Constants.key_firstClassTypeDef @@ (Core.bindingTerm (var "el")))
-      (ref Decoding.booleanDef)) $
+    Optionals.map
+      (constant true)
+      (ref getTermAnnotationDef @@ ref Constants.key_firstClassTypeDef @@ (Core.bindingTerm (var "el")))) $
   Optionals.maybe false
     ("ts" ~> Logic.and
       (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable (Core.nameLift _Type))))
