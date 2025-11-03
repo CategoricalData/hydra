@@ -1,8 +1,11 @@
 """A DSL for constructing Hydra terms in Python."""
 
 from collections.abc import Mapping, Sequence
+from functools import reduce
 
+import hydra.constants
 import hydra.dsl.literals as lt
+import hydra.mantle
 from hydra.core import (
     AnnotatedTerm,
     Application,
@@ -40,16 +43,25 @@ from hydra.core import (
     TermRecord,
     TermSet,
     TermSum,
-    TermTyped,
+    TermTypeApplication,
+    TermTypeLambda,
     TermUnion,
     TermVariable,
     TermWrap,
     TupleProjection,
     Type,
-    TypedTerm,
+    TypeApplicationTerm,
+    TypeLambda,
+    TypeScheme,
     WrappedTerm,
 )
-from hydra.dsl.python import FrozenDict
+from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing
+
+
+# Operators - TODO: find Python equivalents for these special syntax forms
+# (<.>) :: Term -> Term -> Term  -- function composition operator
+# (@@) :: Term -> Term -> Term   -- term application operator
+# (>:) :: String -> Term -> Field  -- field definition operator
 
 
 def annot(ann: Mapping[str, Term], t: Term) -> Term:
@@ -59,9 +71,19 @@ def annot(ann: Mapping[str, Term], t: Term) -> Term:
     )
 
 
+def annotated(t: Term, ann: Mapping[str, Term]) -> Term:
+    """Annotate a term with a map of names to terms (alternative argument order)."""
+    return annot(ann, t)
+
+
 def apply(func: Term, arg: Term) -> Term:
     """Apply a function to an argument."""
     return TermApplication(Application(func, arg))
+
+
+def apply_all(func: Term, args: Sequence[Term]) -> Term:
+    """Apply a function to multiple arguments."""
+    return reduce(apply, args, func)
 
 
 def bigfloat(value: float) -> Term:
@@ -84,16 +106,41 @@ def boolean(value: bool) -> Term:
     return literal(lt.boolean(value))
 
 
+def char(value: str) -> Term:
+    """Construct a character term as an int32."""
+    return int32(ord(value))
+
+
+def comparison(comp: hydra.mantle.Comparison) -> Term:
+    """Construct a comparison term."""
+    match comp:
+        case hydra.mantle.Comparison.EQUAL_TO:
+            return unit_variant(
+                hydra.mantle.COMPARISON__NAME,
+                hydra.mantle.COMPARISON__EQUAL_TO__NAME
+            )
+        case hydra.mantle.Comparison.LESS_THAN:
+            return unit_variant(
+                hydra.mantle.COMPARISON__NAME,
+                hydra.mantle.COMPARISON__LESS_THAN__NAME
+            )
+        case hydra.mantle.Comparison.GREATER_THAN:
+            return unit_variant(
+                hydra.mantle.COMPARISON__NAME,
+                hydra.mantle.COMPARISON__GREATER_THAN__NAME
+            )
+
+
 def compose(f: Term, g: Term) -> Term:
     """Compose two terms."""
     return TermFunction(
-        FunctionLambda(Lambda(Name("x"), None, apply(f, apply(g, var("x")))))
+        FunctionLambda(Lambda(Name("arg_"), Nothing(), apply(f, apply(g, var("arg_")))))
     )
 
 
 def constant(term: Term) -> Term:
     """Construct a constant term."""
-    return lam("_", term)
+    return lambda_(hydra.constants.ignored_variable, term)
 
 
 def elimination(elim: Elimination) -> Term:
@@ -118,7 +165,7 @@ def fields_to_map(fields: Sequence[Field]) -> FrozenDict[Name, Term]:
 
 def first() -> Term:
     """Construct a first term."""
-    return untuple(2, 0, None)
+    return untuple(2, 0, Nothing())
 
 
 def float32(value: float) -> Term:
@@ -138,7 +185,7 @@ def float_(value: FloatValue) -> Term:
 
 def identity() -> Term:
     """Construct an identity term."""
-    return lam("x", var("x"))
+    return lambda_("x_", var("x_"))
 
 
 def inject(tname: Name, field: Field) -> Term:
@@ -173,19 +220,31 @@ def integer(value: IntegerValue) -> Term:
 
 def just(term: Term) -> Term:
     """Construct a just term."""
-    return optional(term)
+    return optional(Just(term))
 
 
-def lam(param: str, body: Term) -> Term:
+def lambda_(param: str, body: Term) -> Term:
     """Construct a lambda term."""
-    return TermFunction(FunctionLambda(Lambda(Name(param), None, body)))
+    return TermFunction(FunctionLambda(Lambda(Name(param), Nothing(), body)))
+
+
+def lambdas(params: Sequence[str], body: Term) -> Term:
+    """Construct a multi-parameter lambda function (curried)."""
+    if not params:
+        return body
+    return lambda_(params[0], lambdas(params[1:], body))
+
+
+def lambda_typed(param: str, dom: Type, body: Term) -> Term:
+    """Construct a lambda term with explicit domain type."""
+    return TermFunction(FunctionLambda(Lambda(Name(param), Just(dom), body)))
 
 
 def let_multi(bindings: Sequence[tuple[str, Term]], body: Term) -> Term:
     """Construct a 'let' term with multiple bindings."""
     return TermLet(
         Let(
-            tuple([Binding(Name(name), term, None) for name, term in bindings]),
+            tuple([Binding(Name(name), term, Nothing()) for name, term in bindings]),
             body,
         )
     )
@@ -193,7 +252,24 @@ def let_multi(bindings: Sequence[tuple[str, Term]], body: Term) -> Term:
 
 def let_term(v: Name, t1: Term, t2: Term) -> Term:
     """Construct a 'let' term with a single binding."""
-    return TermLet(Let(tuple([Binding(v, t1, None)]), t2))
+    return TermLet(Let(tuple([Binding(v, t1, Nothing())]), t2))
+
+
+def lets(bindings: Sequence[Field], env: Term) -> Term:
+    """Construct a 'let' term with any number of bindings."""
+    def to_binding(f: Field) -> Binding:
+        return Binding(f.name, f.term, Nothing())
+
+    return TermLet(Let(tuple([to_binding(f) for f in bindings]), env))
+
+
+def lets_typed(bindings: Sequence[tuple[str, Term, TypeScheme]], env: Term) -> Term:
+    """Construct a 'let' term with typed bindings."""
+    def to_binding(b: tuple[str, Term, TypeScheme]) -> Binding:
+        name, term, ts = b
+        return Binding(Name(name), term, Just(ts))
+
+    return TermLet(Let(tuple([to_binding(b) for b in bindings]), env))
 
 
 def list_(terms: Sequence[Term]) -> Term:
@@ -216,7 +292,7 @@ def map_term(terms: Mapping[Term, Term]) -> Term:
     return TermMap(FrozenDict(terms))
 
 
-def match(tname: Name, def_: Term | None, fields: Sequence[Field]) -> Term:
+def match(tname: Name, def_: Maybe[Term], fields: Sequence[Field]) -> Term:
     """Construct a match term."""
     return TermFunction(
         FunctionElimination(EliminationUnion(CaseStatement(tname, def_, tuple(fields))))
@@ -224,7 +300,7 @@ def match(tname: Name, def_: Term | None, fields: Sequence[Field]) -> Term:
 
 
 def match_with_variants(
-    tname: Name, def_: Term | None, pairs: Sequence[tuple[Name, Name]]
+        tname: Name, def_: Maybe[Term], pairs: Sequence[tuple[Name, Name]]
 ) -> Term:
     """Construct a match term with variants."""
     return match(
@@ -236,10 +312,10 @@ def match_with_variants(
 
 def nothing() -> Term:
     """Construct a nothing term."""
-    return optional(None)
+    return optional(Nothing())
 
 
-def optional(term: Term | None) -> Term:
+def optional(term: Maybe[Term]) -> Term:
     """Construct an optional term."""
     return TermOptional(term)
 
@@ -273,10 +349,10 @@ def record(tname: Name, fields: Sequence[Field]) -> Term:
 
 def second() -> Term:
     """Construct a second term."""
-    return untuple(2, 1, None)
+    return untuple(2, 1, Nothing())
 
 
-def set(s: set[Term]) -> Term:
+def set_(s: set[Term]) -> Term:
     """Construct a set term."""
     return TermSet(frozenset(s))
 
@@ -286,9 +362,14 @@ def string(value: str) -> Term:
     return literal(lt.string(value))
 
 
-def sum(i: int, s: int, term: Term) -> Term:
+def sum_(i: int, s: int, term: Term) -> Term:
     """Construct a sum term."""
     return TermSum(Sum(i, s, term))
+
+
+def triple(a: Term, b: Term, c: Term) -> Term:
+    """Construct a triple term."""
+    return tuple_([a, b, c])
 
 
 def true() -> Term:
@@ -296,9 +377,61 @@ def true() -> Term:
     return boolean(True)
 
 
-def typed(typ: Type, term: Term) -> Term:
-    """Construct a typed term."""
-    return TermTyped(TypedTerm(term, typ))
+def tuple_(terms: Sequence[Term]) -> Term:
+    """Construct a tuple term."""
+    return TermProduct(tuple(terms))
+
+
+def tuple4(a: Term, b: Term, c: Term, d: Term) -> Term:
+    """Construct a 4-tuple term."""
+    return tuple_([a, b, c, d])
+
+
+def tuple5(a: Term, b: Term, c: Term, d: Term, e: Term) -> Term:
+    """Construct a 5-tuple term."""
+    return tuple_([a, b, c, d, e])
+
+
+def type_application(term: Term, types: Sequence[Type]) -> Term:
+    """Apply type arguments to a polymorphic term."""
+    return reduce(
+        lambda t, ty: TermTypeApplication(TypeApplicationTerm(t, ty)),
+        types,
+        term
+    )
+
+
+def type_lambda(vars: Sequence[Name], body: Term) -> Term:
+    """Create a type abstraction (universal quantification)."""
+    return reduce(
+        lambda b, v: TermTypeLambda(TypeLambda(v, b)),
+        vars,
+        body
+    )
+
+
+def tyapp(term: Term, typ: Type) -> Term:
+    """Apply a type argument to a polymorphic term."""
+    return TermTypeApplication(TypeApplicationTerm(term, typ))
+
+
+def tyapps(term: Term, types: Sequence[Type]) -> Term:
+    """Apply type arguments to a polymorphic term."""
+    return type_application(term, types)
+
+
+def tylam(var: str, body: Term) -> Term:
+    """Create a type abstraction with a single variable."""
+    return TermTypeLambda(TypeLambda(Name(var), body))
+
+
+def tylams(vars: Sequence[str], body: Term) -> Term:
+    """Create a type abstraction with multiple variables."""
+    return reduce(
+        lambda b, v: TermTypeLambda(TypeLambda(Name(v), b)),
+        reversed(vars),
+        body
+    )
 
 
 def uint16(value: int) -> Term:
@@ -316,6 +449,11 @@ def uint64(value: int) -> Term:
     return literal(lt.uint64(value))
 
 
+def uint8(value: int) -> Term:
+    """Construct a uint8 term."""
+    return literal(lt.uint8(value))
+
+
 def unit() -> Term:
     """Construct a unit term."""
     return record(Name("_Unit"), [])
@@ -326,12 +464,18 @@ def unit_variant(tname: Name, fname: Name) -> Term:
     return variant(tname, fname, unit())
 
 
-def untuple(arity: int, idx: int, mtypes: Sequence[Type] | None) -> Term:
+def untuple(arity: int, idx: int, mtypes: Maybe[Sequence[Type]]) -> Term:
     """Construct a tuple projection term."""
+    match mtypes:
+        case Just(types):
+            domain = Just(tuple(types))
+        case Nothing():
+            domain = Nothing()
+
     return TermFunction(
         FunctionElimination(
             EliminationProduct(
-                TupleProjection(arity, idx, tuple(mtypes) if mtypes else None)
+                TupleProjection(arity, idx, domain)
             )
         )
     )
@@ -352,13 +496,9 @@ def variant(tname: Name, fname: Name, term: Term) -> Term:
     return TermUnion(Injection(tname, Field(fname, term)))
 
 
-def with_(env: Term, bindings: Sequence[Field]) -> Term:
-    """Construct a with variant term."""
-
-    def to_binding(field: Field) -> Binding:
-        return Binding(field.name, field.term, None)
-
-    return TermLet(Let(tuple([to_binding(field) for field in bindings]), env))
+def with_variant(tname: Name, fname: Name) -> Term:
+    """Create a constant function that produces a unit variant."""
+    return constant(unit_variant(tname, fname))
 
 
 def wrap(name: Name, term: Term) -> Term:
