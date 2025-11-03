@@ -1,48 +1,463 @@
 """Python implementations of primitive construction utilities following the Haskell pattern."""
 
 from collections.abc import Callable
-from typing import TypeVar
+from decimal import Decimal
+from typing import TypeVar, cast
 
-import hydra.dsl.flows as flows
+import hydra.lib.flows as flows
 import hydra.dsl.terms as terms
 import hydra.dsl.types as types
+import hydra.extract.core as extract
 from hydra.compute import Coder, Flow
-from hydra.core import Name, Term
-from hydra.dsl.expect import Expect
-from hydra.dsl.python import frozenlist
+from hydra.core import (
+    FloatType,
+    FloatValue,
+    IntegerType,
+    IntegerValue,
+    Literal,
+    LiteralType,
+    Name,
+    Term,
+    Type,
+)
+from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing, frozenlist
 from hydra.graph import Graph, Primitive, TermCoder
+from hydra.mantle import Comparison
 
 A = TypeVar("A")
 B = TypeVar("B")
 C = TypeVar("C")
 D = TypeVar("D")
+S = TypeVar("S")
+X = TypeVar("X")
+Y = TypeVar("Y")
 
 
-def string_coder() -> TermCoder[str]:
+# Basic numeric types
+
+def bigfloat() -> TermCoder[Decimal]:
+    """TermCoder for arbitrary-precision floating-point."""
+    return TermCoder(
+        type=types.bigfloat(),
+        coder=Coder(
+            encode=extract.bigfloat,
+            decode=lambda v: flows.pure(terms.bigfloat(float(v)))
+        ),
+    )
+
+
+def bigint() -> TermCoder[int]:
+    """TermCoder for arbitrary-precision integers."""
+    return TermCoder(
+        type=types.bigint(),
+        coder=Coder(
+            encode=extract.bigint,
+            decode=lambda v: flows.pure(terms.bigint(v))
+        ),
+    )
+
+
+def binary() -> TermCoder[bytes]:
+    """TermCoder for binary data."""
+    return TermCoder(
+        type=types.binary(),
+        coder=Coder(
+            encode=extract.binary,
+            decode=lambda v: flows.pure(terms.binary(v))
+        ),
+    )
+
+
+def boolean() -> TermCoder[bool]:
+    """TermCoder for booleans."""
+    return TermCoder(
+        type=types.boolean(),
+        coder=Coder(
+            encode=extract.boolean,
+            decode=lambda v: flows.pure(terms.boolean(v))
+        ),
+    )
+
+
+def float32() -> TermCoder[float]:
+    """TermCoder for 32-bit floating-point."""
+    return TermCoder(
+        type=types.float32(),
+        coder=Coder(
+            encode=extract.float32,
+            decode=lambda v: flows.pure(terms.float32(v))
+        ),
+    )
+
+
+def float64() -> TermCoder[float]:
+    """TermCoder for 64-bit floating-point."""
+    return TermCoder(
+        type=types.float64(),
+        coder=Coder(
+            encode=extract.float64,
+            decode=lambda v: flows.pure(terms.float64(v))
+        ),
+    )
+
+
+def int8() -> TermCoder[int]:
+    """TermCoder for 8-bit signed integers."""
+    return TermCoder(
+        type=types.int8(),
+        coder=Coder(
+            encode=extract.int8,
+            decode=lambda v: flows.pure(terms.int8(v))
+        ),
+    )
+
+
+def int16() -> TermCoder[int]:
+    """TermCoder for 16-bit signed integers."""
+    return TermCoder(
+        type=types.int16(),
+        coder=Coder(
+            encode=extract.int16,
+            decode=lambda v: flows.pure(terms.int16(v))
+        ),
+    )
+
+
+def int32() -> TermCoder[int]:
+    """TermCoder for 32-bit signed integers."""
+    return TermCoder(
+        type=types.int32(),
+        coder=Coder(
+            encode=extract.int32,
+            decode=lambda v: flows.pure(terms.int32(v))
+        ),
+    )
+
+
+def int64() -> TermCoder[int]:
+    """TermCoder for 64-bit signed integers."""
+    return TermCoder(
+        type=types.int64(),
+        coder=Coder(
+            encode=extract.int64,
+            decode=lambda v: flows.pure(terms.int64(v))
+        ),
+    )
+
+
+def uint8() -> TermCoder[int]:
+    """TermCoder for 8-bit unsigned integers."""
+    return TermCoder(
+        type=types.uint8(),
+        coder=Coder(
+            encode=extract.uint8,
+            decode=lambda v: flows.pure(terms.uint8(v))
+        ),
+    )
+
+
+def uint16() -> TermCoder[int]:
+    """TermCoder for 16-bit unsigned integers."""
+    return TermCoder(
+        type=types.uint16(),
+        coder=Coder(
+            encode=extract.uint16,
+            decode=lambda v: flows.pure(terms.uint16(v))
+        ),
+    )
+
+
+def uint32() -> TermCoder[int]:
+    """TermCoder for 32-bit unsigned integers."""
+    return TermCoder(
+        type=types.uint32(),
+        coder=Coder(
+            encode=extract.uint32,
+            decode=lambda v: flows.pure(terms.uint32(v))
+        ),
+    )
+
+
+def uint64() -> TermCoder[int]:
+    """TermCoder for 64-bit unsigned integers."""
+    return TermCoder(
+        type=types.uint64(),
+        coder=Coder(
+            encode=extract.uint64,
+            decode=lambda v: flows.pure(terms.uint64(v))
+        ),
+    )
+
+
+def string() -> TermCoder[str]:
     """TermCoder for strings."""
     return TermCoder(
         type=types.string(),
         coder=Coder(
-            encode=Expect[Graph].string, decode=lambda s: flows.pure(terms.string(s))
+            encode=extract.string,
+            decode=lambda s: flows.pure(terms.string(s))
         ),
     )
 
 
-def int32_coder() -> TermCoder[int]:
-    """TermCoder for 32-bit integers."""
+# Core value types
+
+def comparison() -> TermCoder[Comparison]:
+    """TermCoder for Comparison values."""
+    import hydra.extract.mantle as extract_mantle
     return TermCoder(
-        type=types.int32(),
+        type=types.var("Comparison"),
         coder=Coder(
-            encode=lambda term: flows.fail(
-                "int32 expect not implemented"
-            ),  # Placeholder
-            decode=lambda i: flows.pure(terms.int32(i)),
+            encode=extract_mantle.comparison,
+            decode=lambda c: flows.pure(terms.comparison(c))
         ),
+    )
+
+
+def float_type() -> TermCoder[FloatType]:
+    """TermCoder for FloatType values."""
+    import hydra.decode.core as decode_core
+    import hydra.encode.core as encode_core
+    return TermCoder(
+        type=types.var("FloatType"),
+        coder=Coder(
+            encode=decode_core.float_type,
+            decode=lambda ft: flows.pure(encode_core.float_type(ft))
+        ),
+    )
+
+
+def float_value() -> TermCoder[FloatValue]:
+    """TermCoder for FloatValue values."""
+    return TermCoder(
+        type=types.var("FloatValue"),
+        coder=Coder(
+            encode=extract.float_value,
+            decode=lambda fv: flows.pure(terms.float_(fv))
+        ),
+    )
+
+
+def integer_type() -> TermCoder[IntegerType]:
+    """TermCoder for IntegerType values."""
+    import hydra.decode.core as decode_core
+    import hydra.encode.core as encode_core
+    return TermCoder(
+        type=types.var("IntegerType"),
+        coder=Coder(
+            encode=decode_core.integer_type,
+            decode=lambda it: flows.pure(encode_core.integer_type(it))
+        ),
+    )
+
+
+def integer_value() -> TermCoder[IntegerValue]:
+    """TermCoder for IntegerValue values."""
+    return TermCoder(
+        type=types.var("IntegerValue"),
+        coder=Coder(
+            encode=extract.integer_value,
+            decode=lambda iv: flows.pure(terms.integer(iv))
+        ),
+    )
+
+
+def literal() -> TermCoder[Literal]:
+    """TermCoder for Literal values."""
+    return TermCoder(
+        type=types.var("Literal"),
+        coder=Coder(
+            encode=extract.literal,
+            decode=lambda lit: flows.pure(terms.literal(lit))
+        ),
+    )
+
+
+def literal_type() -> TermCoder[LiteralType]:
+    """TermCoder for LiteralType values."""
+    import hydra.decode.core as decode_core
+    import hydra.encode.core as encode_core
+    return TermCoder(
+        type=types.var("LiteralType"),
+        coder=Coder(
+            encode=decode_core.literal_type,
+            decode=lambda lt: flows.pure(encode_core.literal_type(lt))
+        ),
+    )
+
+
+def term() -> TermCoder[Term]:
+    """TermCoder for Term values."""
+    return TermCoder(
+        type=types.var("Term"),
+        coder=Coder(
+            encode=lambda t: flows.pure(t),
+            decode=lambda t: flows.pure(t)
+        ),
+    )
+
+
+def type_() -> TermCoder[Type]:
+    """TermCoder for Type values."""
+    import hydra.decode.core as decode_core
+    import hydra.encode.core as encode_core
+    return TermCoder(
+        type=types.var("Type"),
+        coder=Coder(
+            encode=decode_core.type,
+            decode=lambda t: flows.pure(encode_core.type(t))
+        ),
+    )
+
+
+# Container types
+
+def list_(els: TermCoder[X]) -> TermCoder[frozenlist[X]]:
+    """TermCoder for lists."""
+    return TermCoder(
+        type=types.list_(els.type),
+        coder=Coder(
+            encode=lambda term: extract.list_of(els.coder.encode, term),
+            decode=lambda lst: flows.bind(
+                flows.map_list(els.coder.decode, lst),
+                lambda decoded: flows.pure(terms.list_(decoded))
+            )
+        ),
+    )
+
+
+def map_(keys: TermCoder[X], values: TermCoder[Y]) -> TermCoder[FrozenDict[X, Y]]:
+    """TermCoder for maps."""
+    return TermCoder(
+        type=types.map_(keys.type, values.type),
+        coder=Coder(
+            encode=lambda term: extract.map(keys.coder.encode, values.coder.encode, term),
+            decode=lambda m: flows.bind(
+                flows.map_list(
+                    lambda kv: flows.bind(
+                        keys.coder.decode(kv[0]),
+                        lambda k: flows.bind(
+                            values.coder.decode(kv[1]),
+                            lambda v: flows.pure((k, v))
+                        )
+                    ),
+                    list(m.items())
+                ),
+                lambda pairs: flows.pure(terms.map_(FrozenDict(dict(pairs))))
+            )
+        ),
+    )
+
+from typing import cast
+
+def optional(mel: TermCoder[X]) -> TermCoder[Maybe[X]]:
+    """TermCoder for optional values."""
+    def to_maybe_term(mv: Maybe[X]) -> Flow[Graph, Maybe[Term]]:
+        if isinstance(mv, Nothing):
+            # Make the branch type explicit: Flow[Graph, Maybe[Term]]
+            return cast(Flow[Graph, Maybe[Term]], flows.pure(Nothing()))
+        else:
+            # mv: Just[X] -> decode X to Term, then wrap as Just[Term]
+            return flows.bind(
+                mel.coder.decode(mv.value),            # Flow[Graph, Term]
+                lambda v_term: flows.pure(Just(cast(Term, v_term)))  # Flow[Graph, Just[Term]]
+            )
+
+    return TermCoder(
+        type=types.optional(mel.type),
+        coder=Coder(
+            encode=lambda term: extract.optional(mel.coder.encode, term),
+            decode=lambda mv: flows.bind(
+                to_maybe_term(mv),                      # Flow[Graph, Maybe[Term]]
+                lambda decoded: flows.pure(terms.optional(decoded))
+            ),
+        ),
+    )
+
+
+
+def pair(k_coder: TermCoder[X], v_coder: TermCoder[Y]) -> TermCoder[tuple[X, Y]]:
+    """TermCoder for pairs."""
+    return TermCoder(
+        type=types.product([k_coder.type, v_coder.type]),
+        coder=Coder(
+            encode=lambda term: extract.pair(k_coder.coder.encode, v_coder.coder.encode, term),
+            decode=lambda kv: flows.bind(
+                k_coder.coder.decode(kv[0]),
+                lambda k_term: flows.bind(
+                    v_coder.coder.decode(kv[1]),
+                    lambda v_term: flows.pure(terms.tuple_([k_term, v_term]))
+                )
+            )
+        ),
+    )
+
+
+def set_(els: TermCoder[X]) -> TermCoder[frozenset[X]]:
+    """TermCoder for sets."""
+    return TermCoder(
+        type=types.set_(els.type),
+        coder=Coder(
+            encode=lambda term: extract.set_of(els.coder.encode, term),
+            decode=lambda s: flows.bind(
+                flows.map_list(els.coder.decode, list(s)),
+                lambda decoded: flows.pure(terms.set_(set(decoded)))
+            )
+        ),
+    )
+
+
+# Special types
+
+def flow(states: TermCoder[S], values: TermCoder[X]) -> TermCoder[Flow[S, X]]:
+    """TermCoder for Flow values (not actually encodable/decodable)."""
+    return TermCoder(
+        type=types.apply_many([
+            types.var("Flow"),
+            states.type,
+            values.type
+        ]),
+        coder=Coder(
+            encode=lambda _: flows.fail("cannot currently encode flows from terms"),
+            decode=lambda _: flows.fail("cannot decode flows to terms")
+        ),
+    )
+
+
+def function(dom: TermCoder[X], cod: TermCoder[Y]) -> TermCoder[Callable[[X], Y]]:
+    """TermCoder for function values (not actually encodable/decodable)."""
+    return TermCoder(
+        type=types.function(dom.type, cod.type),
+        coder=Coder(
+            encode=lambda term: flows.fail(f"cannot encode term to a function: {term}"),
+            decode=lambda _: flows.fail("cannot decode functions to terms")
+        ),
+    )
+
+
+def variable(v: str) -> TermCoder[Term]:
+    """TermCoder for type variables."""
+    return TermCoder(
+        type=types.var(v),
+        coder=Coder(
+            encode=lambda t: flows.pure(t),
+            decode=lambda t: flows.pure(t)
+        ),
+    )
+
+
+# Primitive constructors
+
+def no_interpreted_form(name: Name) -> Flow[Graph, Term]:
+    """Helper for primitives without interpreted forms."""
+    return flows.fail(
+        f"primitive {name.value} does not have an interpreted form; "
+        "it can only be used in compiled code"
     )
 
 
 def prim0(
-    name: Name, value: A, variables: list[str], output: TermCoder[A]
+        name: Name, value: A, variables: list[str], output: TermCoder[A]
 ) -> Primitive:
     """Create a 0-argument primitive function."""
 
@@ -55,23 +470,23 @@ def prim0(
 
 
 def prim1(
-    name: Name,
-    compute: Callable[[A], B],
-    variables: list[str],
-    input1: TermCoder[A],
-    output: TermCoder[B],
+        name: Name,
+        compute: Callable[[A], B],
+        variables: list[str],
+        input1: TermCoder[A],
+        output: TermCoder[B],
 ) -> Primitive:
     """Create a 1-argument primitive function."""
 
     def impl(args: frozenlist[Term]) -> Flow[Graph, Term]:
-        if len(args) != 1:
-            return flows.fail(f"Expected 1 argument for {name}, got {len(args)}")
+        def check_args(_: None) -> Flow[Graph, Term]:
+            def process_arg1(arg1: A) -> Flow[Graph, Term]:
+                result = compute(arg1)
+                return output.coder.decode(result)
 
-        def func(arg1: A) -> Flow[Graph, Term]:
-            result = compute(arg1)
-            return output.coder.decode(result)
+            return flows.bind(input1.coder.encode(args[0]), process_arg1)
 
-        return flows.bind(input1.coder.encode(args[0]), func)
+        return flows.bind(extract.n_args(name, 1, args), check_args)
 
     return Primitive(
         name=name,
@@ -81,32 +496,62 @@ def prim1(
 
 
 def prim2(
-    name: Name,
-    compute: Callable[[A, B], C],
-    variables: list[str],
-    input1: TermCoder[A],
-    input2: TermCoder[B],
-    output: TermCoder[C],
+        name: Name,
+        compute: Callable[[A, B], C],
+        variables: list[str],
+        input1: TermCoder[A],
+        input2: TermCoder[B],
+        output: TermCoder[C],
 ) -> Primitive:
     """Create a 2-argument primitive function."""
 
     def impl(args: frozenlist[Term]) -> Flow[Graph, Term]:
-        if len(args) != 2:
-            return flows.fail(f"Expected 2 arguments for {name}, got {len(args)}")
+        def check_args(_: None) -> Flow[Graph, Term]:
+            def process_arg1(arg1: A) -> Flow[Graph, Term]:
+                def process_arg2(arg2: B) -> Flow[Graph, Term]:
+                    result = compute(arg1, arg2)
+                    return output.coder.decode(result)
 
-        # Chain the encode operations with bind
-        arg1_flow = input1.coder.encode(args[0])
+                return flows.bind(input2.coder.encode(args[1]), process_arg2)
 
-        def process_arg1(arg1: A) -> Flow[Graph, Term]:
-            arg2_flow = input2.coder.encode(args[1])
+            return flows.bind(input1.coder.encode(args[0]), process_arg1)
 
-            def process_arg2(arg2: B) -> Flow[Graph, Term]:
-                result = compute(arg1, arg2)
-                return output.coder.decode(result)
+        return flows.bind(extract.n_args(name, 2, args), check_args)
 
-            return flows.bind(arg2_flow, process_arg2)
+    return Primitive(
+        name=name,
+        type=types.poly(
+            variables,
+            types.function(input1.type, types.function(input2.type, output.type)),
+        ),
+        implementation=impl,
+    )
 
-        return flows.bind(arg1_flow, process_arg1)
+
+def prim2_interp(
+        name: Name,
+        compute: Maybe[Callable[[Term, Term], Flow[Graph, Term]]],
+        variables: list[str],
+        input1: TermCoder[A],
+        input2: TermCoder[B],
+        output: TermCoder[C],
+) -> Primitive:
+    """Create a 2-argument primitive function with optional interpreted form."""
+
+    def default_compute(a: Term, b: Term) -> Flow[Graph, Term]:
+        return no_interpreted_form(name)
+
+    match compute:
+        case Just(comp):
+            actual_compute = comp
+        case Nothing():
+            actual_compute = default_compute
+
+    def impl(args: frozenlist[Term]) -> Flow[Graph, Term]:
+        def check_args(_: None) -> Flow[Graph, Term]:
+            return actual_compute(args[0], args[1])
+
+        return flows.bind(extract.n_args(name, 2, args), check_args)
 
     return Primitive(
         name=name,
@@ -119,38 +564,70 @@ def prim2(
 
 
 def prim3(
-    name: Name,
-    compute: Callable[[A, B, C], D],
-    variables: list[str],
-    input1: TermCoder[A],
-    input2: TermCoder[B],
-    input3: TermCoder[C],
-    output: TermCoder[D],
+        name: Name,
+        compute: Callable[[A, B, C], D],
+        variables: list[str],
+        input1: TermCoder[A],
+        input2: TermCoder[B],
+        input3: TermCoder[C],
+        output: TermCoder[D],
 ) -> Primitive:
     """Create a 3-argument primitive function."""
 
     def impl(args: frozenlist[Term]) -> Flow[Graph, Term]:
-        if len(args) != 3:
-            return flows.fail(f"Expected 3 arguments for {name}, got {len(args)}")
+        def check_args(_: None) -> Flow[Graph, Term]:
+            def process_arg1(arg1: A) -> Flow[Graph, Term]:
+                def process_arg2(arg2: B) -> Flow[Graph, Term]:
+                    def process_arg3(arg3: C) -> Flow[Graph, Term]:
+                        result = compute(arg1, arg2, arg3)
+                        return output.coder.decode(result)
 
-        # Chain all three encode operations with bind
-        arg1_flow = input1.coder.encode(args[0])
+                    return flows.bind(input3.coder.encode(args[2]), process_arg3)
 
-        def process_arg1(arg1: A) -> Flow[Graph, Term]:
-            arg2_flow = input2.coder.encode(args[1])
+                return flows.bind(input2.coder.encode(args[1]), process_arg2)
 
-            def process_arg2(arg2: B) -> Flow[Graph, Term]:
-                arg3_flow = input3.coder.encode(args[2])
+            return flows.bind(input1.coder.encode(args[0]), process_arg1)
 
-                def process_arg3(arg3: C) -> Flow[Graph, Term]:
-                    result = compute(arg1, arg2, arg3)
-                    return output.coder.decode(result)
+        return flows.bind(extract.n_args(name, 3, args), check_args)
 
-                return flows.bind(arg3_flow, process_arg3)
+    return Primitive(
+        name=name,
+        type=types.poly(
+            variables,
+            types.function(
+                input1.type,
+                types.function(input2.type, types.function(input3.type, output.type)),
+            ),
+        ),
+        implementation=impl,
+    )
 
-            return flows.bind(arg2_flow, process_arg2)
 
-        return flows.bind(arg1_flow, process_arg1)
+def prim3_interp(
+        name: Name,
+        compute: Maybe[Callable[[Term, Term, Term], Flow[Graph, Term]]],
+        variables: list[str],
+        input1: TermCoder[A],
+        input2: TermCoder[B],
+        input3: TermCoder[C],
+        output: TermCoder[D],
+) -> Primitive:
+    """Create a 3-argument primitive function with optional interpreted form."""
+
+    def default_compute(a: Term, b: Term, c: Term) -> Flow[Graph, Term]:
+        return no_interpreted_form(name)
+
+    match compute:
+        case Just(comp):
+            actual_compute = comp
+        case Nothing():
+            actual_compute = default_compute
+
+    def impl(args: frozenlist[Term]) -> Flow[Graph, Term]:
+        def check_args(_: None) -> Flow[Graph, Term]:
+            return actual_compute(args[0], args[1], args[2])
+
+        return flows.bind(extract.n_args(name, 3, args), check_args)
 
     return Primitive(
         name=name,
