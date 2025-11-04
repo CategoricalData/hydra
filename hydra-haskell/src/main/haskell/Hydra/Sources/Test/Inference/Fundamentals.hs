@@ -282,8 +282,8 @@ testGroupForLet = supergroup "Let terms" [
           pair (var "foo") (var "bar"))
         ["t0", "t1"] (T.pair (T.var "t0") (T.var "t1"))]]
   where
-    s = primitive _math_neg
-    p = primitive _math_neg
+    s = primitive _math_negate
+    p = primitive _math_negate
 
 testGroupForLiterals :: TTerm TestGroup
 testGroupForLiterals = subgroup "Literals" [

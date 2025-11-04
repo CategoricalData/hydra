@@ -31,7 +31,7 @@ applyOp :: Ast.Op
 applyOp = (Serialization.op "$" 0 Ast.AssociativityRight)
 
 arrowOp :: Ast.Op
-arrowOp = (Serialization.op "->" (Math.neg 1) Ast.AssociativityRight)
+arrowOp = (Serialization.op "->" (Math.negate 1) Ast.AssociativityRight)
 
 -- | No source
 assertOp :: Ast.Op
@@ -86,7 +86,7 @@ indexOp = (Serialization.op "!!" 9 Ast.AssociativityLeft)
 
 -- | No source
 lambdaOp :: Ast.Op
-lambdaOp = (Serialization.op "->" (Math.neg 1) Ast.AssociativityRight)
+lambdaOp = (Serialization.op "->" (Math.negate 1) Ast.AssociativityRight)
 
 ltOp :: Ast.Op
 ltOp = (Serialization.op "<" 4 Ast.AssociativityNone)

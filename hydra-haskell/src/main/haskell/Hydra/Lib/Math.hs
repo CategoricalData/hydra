@@ -18,8 +18,8 @@ mod = Prelude.mod
 mul :: Num a => a -> a -> a
 mul x y = x * y
 
-neg :: Num a => a -> a
-neg = negate
+negate :: Num a => a -> a
+negate = Prelude.negate
 
 pred :: Enum a => a -> a
 pred = Prelude.pred
