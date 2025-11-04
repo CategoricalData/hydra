@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -95,8 +95,8 @@ module_ = Module (Namespace "hydra.extract.core") elements
      el mapDef,
      el mapTypeDef,
      el nArgsDef,
-     el optionalDef,
-     el optionalTypeDef,
+     el maybeTermDef,
+     el maybeTypeDef,
      el pairDef,
      el productTypeDef,
      el recordDef,
@@ -551,31 +551,31 @@ nArgsDef = define "nArgs" $
       " arguments to primitive ",
       Literals.showString (Core.unName (var "name"))]) @@ (Literals.showInt32 (Lists.length (var "args"))))
 
-optionalDef :: TBinding ((Term -> Flow Graph x) -> Term -> Flow Graph (Maybe x))
-optionalDef = define "optional" $
+maybeTermDef :: TBinding ((Term -> Flow Graph x) -> Term -> Flow Graph (Maybe x))
+maybeTermDef = define "maybeTerm" $
   doc "Extract an optional value from a term, applying a function to the value if present" $
   "f" ~> "term0" ~>
   "extract" <~ ("term" ~> cases _Term (var "term")
     (Just (ref Monads.unexpectedDef
-      @@ "optional value"
+      @@ "maybe value"
       @@ (ref ShowCore.termDef @@ var "term"))) [
-    _Term_optional>>: "mt" ~> Maybes.maybe
+    _Term_maybe>>: "mt" ~> Maybes.maybe
       (produce nothing)
       ("t" ~> Flows.map (unaryFunction just) (var "f" @@ var "t"))
       (var "mt")]) $
   "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
   var "extract" @@ var "term"
 
-optionalTypeDef :: TBinding (Type -> Flow s Type)
-optionalTypeDef = define "optionalType" $
+maybeTypeDef :: TBinding (Type -> Flow s Type)
+maybeTypeDef = define "maybeType" $
   doc "Extract the base type from an optional type" $
   "typ" ~>
   "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
   cases _Type (var "stripped")
     (Just (ref Monads.unexpectedDef
-      @@ "optional type"
+      @@ "maybe type"
       @@ (ref ShowCore.typeDef @@ var "typ"))) [
-    _Type_optional>>: "t" ~> Flows.pure (var "t")]
+    _Type_maybe>>: "t" ~> Flows.pure (var "t")]
 
 pairDef :: TBinding ((Term -> Flow Graph k) -> (Term -> Flow Graph v) -> Term -> Flow Graph (k, v))
 pairDef = define "pair" $

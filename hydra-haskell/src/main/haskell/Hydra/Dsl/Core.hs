@@ -393,8 +393,8 @@ termLiteral = variant _Term _Term_literal
 termMap :: TTerm (M.Map Term Term) -> TTerm Term
 termMap = variant _Term _Term_map
 
-termOptional :: TTerm (Maybe Term) -> TTerm Term
-termOptional = variant _Term _Term_optional
+termMaybe :: TTerm (Maybe Term) -> TTerm Term
+termMaybe = variant _Term _Term_maybe
 
 termProduct :: TTerm [Term] -> TTerm Term
 termProduct = variant _Term _Term_product
@@ -473,8 +473,8 @@ typeLiteral = variant _Type _Type_literal
 typeMap :: TTerm MapType -> TTerm Type
 typeMap = variant _Type _Type_map
 
-typeOptional :: TTerm Type -> TTerm Type
-typeOptional = variant _Type _Type_optional
+typeMaybe :: TTerm Type -> TTerm Type
+typeMaybe = variant _Type _Type_maybe
 
 typeProduct :: TTerm [Type] -> TTerm Type
 typeProduct = variant _Type _Type_product

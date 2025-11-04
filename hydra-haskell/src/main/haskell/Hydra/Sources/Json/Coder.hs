@@ -181,11 +181,11 @@ encodeRecordDef = define "encodeRecord" $
         (Just $ binds [
           "encoded">: Compute.coderEncode (var "coder'") @@ var "fvalue"] $
           produce $ just $ pair (Core.unName $ var "fname") (var "encoded")) [
-        _Type_optional>>: lambda "ot" $ cases _Term (var "fvalue")
+        _Type_maybe>>: lambda "ot" $ cases _Term (var "fvalue")
           (Just $ binds [
             "encoded">: Compute.coderEncode (var "coder'") @@ var "fvalue"] $
             produce $ just $ pair (Core.unName $ var "fname") (var "encoded")) [
-          _Term_optional>>: lambda "opt" $ Maybes.maybe
+          _Term_maybe>>: lambda "opt" $ Maybes.maybe
             (produce nothing)
             (lambda "v" $ binds [
               "encoded">: Compute.coderEncode (var "coder'") @@ var "v"] $
@@ -280,22 +280,22 @@ termCoderDef = define "termCoder" $
             _Value_object>>: lambda "m" $ binds [
               "entries">: Flows.mapList (var "decodeEntry") $ Maps.toList $ var "m"] $
               produce $ Core.termMap $ Maps.fromList $ var "entries"]),
-      _Type_optional>>: lambda "ot" $ binds [
+      _Type_maybe>>: lambda "ot" $ binds [
         "oc">: ref termCoderDef @@ var "ot"] $
         produce $ Compute.coder
           (lambda "t" $ lets [
             "stripped">: ref Rewriting.deannotateTermDef @@ var "t"] $
             cases _Term (var "stripped")
               (Just $ ref Monads.unexpectedDef @@ string "optional term" @@ (ref ShowCore.termDef @@ var "t")) [
-              _Term_optional>>: lambda "el" $ Maybes.maybe
+              _Term_maybe>>: lambda "el" $ Maybes.maybe
                 (produce Json.valueNull)
                 (Compute.coderEncode $ var "oc")
                 (var "el")])
           (lambda "n" $ cases _Value (var "n")
             (Just $ binds [
               "decoded">: Compute.coderDecode (var "oc") @@ var "n"] $
-              produce $ Core.termOptional $ just $ var "decoded") [
-            _Value_null>>: constant $ produce $ Core.termOptional nothing]),
+              produce $ Core.termMaybe $ just $ var "decoded") [
+            _Value_null>>: constant $ produce $ Core.termMaybe nothing]),
       _Type_record>>: lambda "rt" $ ref recordCoderDef @@ var "rt",
       _Type_unit>>: constant $ produce $ ref unitCoderDef,
       _Type_variable>>: lambda "name" $ produce $ Compute.coder
@@ -331,7 +331,7 @@ untypedTermToJsonDef = define "untypedTermToJson" $
     "fieldToKeyval">: lambda "f" $ lets [
       "forTerm">: lambda "t" $ cases _Term (var "t")
         (Just $ Flows.map (unaryFunction just) $ ref untypedTermToJsonDef @@ var "t") [
-        _Term_optional>>: lambda "mt" $ Maybes.maybe
+        _Term_maybe>>: lambda "mt" $ Maybes.maybe
           (produce nothing)
           (var "forTerm")
           (var "mt")]] $ binds [
@@ -368,7 +368,7 @@ untypedTermToJsonDef = define "untypedTermToJson" $
             (Core.termVariable $ Core.projectionField $ var "proj")],
         _Function_lambda>>: lambda "l" $ var "asRecord" @@ list [
           Core.field (Core.name $ string "parameter") (Core.termVariable $ Core.lambdaParameter $ var "l"),
-          Core.field (Core.name $ string "domain") (Core.termOptional $
+          Core.field (Core.name $ string "domain") (Core.termMaybe $
             Maybes.map (ref EncodeCore.typeDef) (Core.lambdaDomain $ var "l")),
           Core.field (Core.name $ string "body") (Core.lambdaBody $ var "l")],
         _Function_primitive>>: lambda "name" $ produce $ Json.valueString $ Core.unName $ var "name"],
@@ -395,7 +395,7 @@ untypedTermToJsonDef = define "untypedTermToJson" $
           "f">: Literals.bigintToBigfloat $ var "bf"] $
           Json.valueNumber $ var "f",
         _Literal_string>>: lambda "s" $ Json.valueString $ var "s"],
-      _Term_optional>>: lambda "mt" $ Maybes.maybe
+      _Term_maybe>>: lambda "mt" $ Maybes.maybe
         (produce Json.valueNull)
         (ref untypedTermToJsonDef)
         (var "mt"),

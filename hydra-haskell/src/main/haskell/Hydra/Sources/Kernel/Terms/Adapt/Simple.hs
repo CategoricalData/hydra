@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -406,7 +406,7 @@ termAlternativesDef = define "termAlternatives" $
       "term2" <~ Core.annotatedTermBody (var "at") $
       produce $ list [
         var "term2"], -- TODO: lossy
-    _Term_optional>>: "ot" ~> produce $ list [
+    _Term_maybe>>: "ot" ~> produce $ list [
       Core.termList $ optCases (var "ot")
         (list [])
         ("term2" ~> list [var "term2"])],
@@ -418,7 +418,7 @@ termAlternativesDef = define "termAlternatives" $
       "fterm" <~ Core.fieldTerm (var "field") $
       "forFieldType" <~ ("ft" ~>
         "ftname" <~ Core.fieldTypeName (var "ft") $
-        Core.field (var "fname") $ Core.termOptional $ Logic.ifElse (Equality.equal (var "ftname") (var "fname"))
+        Core.field (var "fname") $ Core.termMaybe $ Logic.ifElse (Equality.equal (var "ftname") (var "fname"))
           (just $ var "fterm")
           (nothing)) $
       "rt" <<~ ref Schemas.requireUnionTypeDef @@ var "tname" $
@@ -439,7 +439,7 @@ typeAlternativesDef = define "typeAlternatives" $
     _Type_annotated>>: "at" ~>
       "type2" <~ Core.annotatedTypeBody (var "at") $
        list [var "type2"], -- TODO: lossy
-    _Type_optional>>: "ot" ~> list [
+    _Type_maybe>>: "ot" ~> list [
       Core.typeList $ var "ot"],
     _Type_union>>: "rt" ~>
       "tname" <~ Core.rowTypeTypeName (var "rt") $

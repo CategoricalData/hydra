@@ -108,7 +108,7 @@ jsonSchemaLanguageDef = define "jsonSchemaLanguage" $
     Mantle.typeVariantList,
     Mantle.typeVariantLiteral,
     Mantle.typeVariantMap,
-    Mantle.typeVariantOptional,
+    Mantle.typeVariantMaybe,
     Mantle.typeVariantRecord,
     Mantle.typeVariantUnion,
     Mantle.typeVariantVariable],

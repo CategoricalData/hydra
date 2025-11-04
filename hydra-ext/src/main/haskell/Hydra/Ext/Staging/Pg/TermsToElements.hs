@@ -118,7 +118,7 @@ parsePattern pat = withTrace "parse path pattern" $ do
           then pure [term]
           else case deannotateTerm term of
               TermList terms -> L.concat <$> CM.mapM (evalStep step) terms
-              TermOptional mt -> case mt of
+              TermMaybe mt -> case mt of
                 Nothing -> pure []
                 Just term' -> evalStep step term'
               TermRecord (Record _ fields) -> case M.lookup (Name step) (fieldMap fields) of
@@ -150,7 +150,7 @@ parsePattern pat = withTrace "parse path pattern" $ do
           FloatValueFloat32 v -> show v
           FloatValueFloat64 v -> show v
         LiteralString s -> s
-      TermOptional mt -> case mt of
+      TermMaybe mt -> case mt of
         Nothing -> pure "nothing"
         Just t -> toString t
       _ -> pure $ show term

@@ -73,7 +73,7 @@ hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
       Core.TypeList et -> TyList <$> toStlc et
       Core.TypeLiteral lt -> pure $ TyLit lt
 --      TypeMap MapType |
---      TypeOptional Type |
+--      TypeMaybe Type |
       Core.TypeProduct types -> toProd <$> (CM.mapM toStlc types)
         where
           toProd ts = case ts of

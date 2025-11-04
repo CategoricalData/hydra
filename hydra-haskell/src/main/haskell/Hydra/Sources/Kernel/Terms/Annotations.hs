@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -159,7 +159,7 @@ getDebugIdDef = define "getDebugId" $
   doc "Get the debug ID from flow state" $
   ref Lexical.withEmptyGraphDef @@ (Flows.bind
     (ref getAttrDef @@ ref Constants.key_debugIdDef)
-    ("desc" ~> Flows.mapOptional (ref ExtractCore.stringDef) (var "desc")))
+    ("desc" ~> Flows.mapMaybe (ref ExtractCore.stringDef) (var "desc")))
 
 getDescriptionDef :: TBinding (M.Map Name Term -> Flow Graph (Maybe String))
 getDescriptionDef = define "getDescription" $

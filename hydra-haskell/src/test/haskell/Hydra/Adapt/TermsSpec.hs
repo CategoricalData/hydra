@@ -83,7 +83,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
 
   H.it "Optionals (when supported) pass through without change" $
     QC.property $ \mi -> checkDataAdapter
-      [TypeVariantLiteral, TypeVariantOptional]
+      [TypeVariantLiteral, TypeVariantMaybe]
       optionalInt8Type
       optionalInt16Type
       False
@@ -187,7 +187,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
 
   H.it "Unions (when unsupported) become records" $
     QC.property $ \i -> checkDataAdapter
-      [TypeVariantLiteral, TypeVariantOptional, TypeVariantRecord]
+      [TypeVariantLiteral, TypeVariantMaybe, TypeVariantRecord]
       eitherStringOrInt8Type
       (TypeRecord $ RowType eitherStringOrInt8TypeName [
         Types.field "left" $ Types.optional Types.string,
@@ -288,7 +288,7 @@ roundTripIsNoop typ term = shouldSucceedWith
       languageConstraintsTypeVariants = S.fromList [
         TypeVariantAnnotated, TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion],
       languageConstraintsTypes = \typ -> case deannotateType typ of
-        TypeOptional (TypeOptional _) -> False
+        TypeMaybe (TypeMaybe _) -> False
         _ -> True }
 
     -- Note: in a real application, you wouldn't create the adapter just to use it once;

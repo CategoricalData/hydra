@@ -48,7 +48,7 @@ protobufLanguage = Coders.Language {
       Mantle.TermVariantList,
       Mantle.TermVariantLiteral,
       Mantle.TermVariantMap,
-      Mantle.TermVariantOptional,
+      Mantle.TermVariantMaybe,
       Mantle.TermVariantRecord,
       Mantle.TermVariantUnion,
       Mantle.TermVariantUnit])
@@ -57,7 +57,7 @@ protobufLanguage = Coders.Language {
       Mantle.TypeVariantList,
       Mantle.TypeVariantLiteral,
       Mantle.TypeVariantMap,
-      Mantle.TypeVariantOptional,
+      Mantle.TypeVariantMaybe,
       Mantle.TypeVariantRecord,
       Mantle.TypeVariantUnion,
       Mantle.TypeVariantUnit,
@@ -67,7 +67,7 @@ protobufLanguage = Coders.Language {
         let valuesType = (Core.mapTypeValues v1) 
             stripped = (Rewriting.deannotateType valuesType)
         in ((\x -> case x of
-          Core.TypeOptional _ -> False
+          Core.TypeMaybe _ -> False
           _ -> True) stripped)
       _ -> True) typ)
 

@@ -125,7 +125,7 @@ def unary_function(f) -> TTerm[A]:
     match term:
         case terms.TermApplication(terms.Application(lhs, _)):
             return TTerm[A](lhs)
-        case terms.TermOptional(Just(_)):
+        case terms.TermMaybe(Just(_)):
             return TTerm[A](terms.primitive(Name("hydra.lib.maybes.pure")))
         case terms.TermUnion(terms.Injection(tname, Field(fname, _))):
             return lambda_("x", inject(tname, fname, var("x")))

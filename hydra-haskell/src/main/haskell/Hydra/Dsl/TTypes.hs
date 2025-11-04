@@ -162,7 +162,7 @@ map k v = typeMap $ mapType k v
 -- | Create a term-encoded optional (nullable) type
 -- Example: optional string
 optional :: TTerm Type -> TTerm Type
-optional = typeOptional
+optional = typeMaybe
 
 -- | Create a term-encoded set type
 -- Example: set string

@@ -251,7 +251,7 @@ inferTypeOfCaseStatement cx caseStmt =
           let svars = (Core.typeSchemeVariables schemaType)
           in  
             let stype = (Core.typeSchemeType schemaType)
-            in (Flows.bind (Core_.unionType tname stype) (\sfields -> Flows.bind (Flows.mapOptional (\t -> inferTypeOfTerm cx t (Strings.cat [
+            in (Flows.bind (Core_.unionType tname stype) (\sfields -> Flows.bind (Flows.mapMaybe (\t -> inferTypeOfTerm cx t (Strings.cat [
               "case ",
               Core.unName tname,
               ".<default>"])) dflt) (\dfltResult -> Flows.bind (inferMany cx (Lists.map (\f -> (Core.fieldTerm f, (Strings.cat [
@@ -269,7 +269,7 @@ inferTypeOfCaseStatement cx caseStmt =
                     in  
                       let caseMap = (Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) sfields))
                       in  
-                        let dfltConstraints = (Monads.optionalToList (Maybes.map (\r -> Typing_.TypeConstraint {
+                        let dfltConstraints = (Monads.maybeToList (Maybes.map (\r -> Typing_.TypeConstraint {
                                 Typing_.typeConstraintLeft = cod,
                                 Typing_.typeConstraintRight = (Typing_.inferenceResultType r),
                                 Typing_.typeConstraintComment = "match default"}) dfltResult))
@@ -288,7 +288,7 @@ inferTypeOfCaseStatement cx caseStmt =
                               Core.fieldTerm = t}) fnames iterms)}))))) (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
                             Core.functionTypeCodomain = cod})) (Substitution.composeTypeSubstList (Lists.concat [
-                            Monads.optionalToList (Maybes.map Typing_.inferenceResultSubst dfltResult),
+                            Monads.maybeToList (Maybes.map Typing_.inferenceResultSubst dfltResult),
                             [
                               isubst,
                               subst]]))) (Lists.concat [
@@ -611,8 +611,8 @@ inferTypeOfMap cx m = (Flows.bind Schemas.freshName (\kvar -> Flows.bind Schemas
 
 inferTypeOfOptional :: (Typing_.InferenceContext -> Maybe Core.Term -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfOptional cx m =  
-  let trmCons = (\terms -> Logic.ifElse (Lists.null terms) (Core.TermOptional Nothing) (Core.TermOptional (Just (Lists.head terms))))
-  in (inferTypeOfCollection cx (\x -> Core.TypeOptional x) trmCons "optional element" (Maybes.maybe [] Lists.singleton m))
+  let trmCons = (\terms -> Logic.ifElse (Lists.null terms) (Core.TermMaybe Nothing) (Core.TermMaybe (Just (Lists.head terms))))
+  in (inferTypeOfCollection cx (\x -> Core.TypeMaybe x) trmCons "optional element" (Maybes.maybe [] Lists.singleton m))
 
 inferTypeOfPrimitive :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfPrimitive cx name = (Maybes.maybe (Flows.fail (Strings.cat2 "No such primitive: " (Core.unName name))) (\scheme -> Flows.bind (Schemas.instantiateTypeScheme scheme) (\ts -> yieldChecked (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermFunction (Core.FunctionPrimitive name))) (Core.typeSchemeType ts) Substitution.idTypeSubst)) (Maps.lookup name (Typing_.inferenceContextPrimitiveTypes cx)))
@@ -711,7 +711,7 @@ inferTypeOfTerm cx term desc =
           Core.TermList v1 -> (inferTypeOfList cx v1)
           Core.TermLiteral v1 -> (inferTypeOfLiteral cx v1)
           Core.TermMap v1 -> (inferTypeOfMap cx v1)
-          Core.TermOptional v1 -> (inferTypeOfOptional cx v1)
+          Core.TermMaybe v1 -> (inferTypeOfOptional cx v1)
           Core.TermProduct v1 -> (inferTypeOfProduct cx v1)
           Core.TermRecord v1 -> (inferTypeOfRecord cx v1)
           Core.TermSet v1 -> (inferTypeOfSet cx v1)

@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -391,7 +391,7 @@ inferTypeOfCaseStatementDef = define "inferTypeOfCaseStatement" $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "stype" <~ Core.typeSchemeType (var "schemaType") $
   "sfields" <<~ ref ExtractCore.unionTypeDef @@ var "tname" @@ var "stype" $
-  "dfltResult" <<~ Flows.mapOptional ("t" ~> ref inferTypeOfTermDef @@ var "cx" @@ var "t" @@
+  "dfltResult" <<~ Flows.mapMaybe ("t" ~> ref inferTypeOfTermDef @@ var "cx" @@ var "t" @@
     (Strings.cat $ list [string "case ", Core.unName $ var "tname", string ".<default>"])) (var "dflt") $
   "caseResults" <<~ ref inferManyDef @@ var "cx" @@ Lists.map
     ("f" ~> pair (Core.fieldTerm $ var "f")
@@ -405,7 +405,7 @@ inferTypeOfCaseStatementDef = define "inferTypeOfCaseStatement" $
   "caseMap" <~ Maps.fromList (Lists.map
     ("ft" ~> pair (Core.fieldTypeName $ var "ft") (Core.fieldTypeType $ var "ft"))
     (var "sfields")) $
-  "dfltConstraints" <~ ref Monads.optionalToListDef @@ (Maybes.map
+  "dfltConstraints" <~ ref Monads.maybeToListDef @@ (Maybes.map
     ("r" ~> Typing.typeConstraint (var "cod") (Typing.inferenceResultType $ var "r") (string "match default"))
     (var "dfltResult")) $
   "caseConstraints" <~ Maybes.cat (Lists.zipWith
@@ -428,7 +428,7 @@ inferTypeOfCaseStatementDef = define "inferTypeOfCaseStatement" $
           (var "cod"))
       @@ (ref Substitution.composeTypeSubstListDef
         @@ (Lists.concat $ list [
-          ref Monads.optionalToListDef @@ (Maybes.map (unaryFunction Typing.inferenceResultSubst) (var "dfltResult")),
+          ref Monads.maybeToListDef @@ (Maybes.map (unaryFunction Typing.inferenceResultSubst) (var "dfltResult")),
           list [var "isubst", var "subst"]])))
     @@ (Lists.concat $ list [var "dfltConstraints", var "caseConstraints"])
 
@@ -750,11 +750,11 @@ inferTypeOfOptionalDef = define "inferTypeOfOptional" $
   doc "Infer the type of an optional" $
   "cx" ~> "m" ~>
   "trmCons" <~ ("terms" ~> Logic.ifElse (Lists.null $ var "terms")
-    (Core.termOptional nothing)
-    (Core.termOptional $ just $ Lists.head $ var "terms")) $
+    (Core.termMaybe nothing)
+    (Core.termMaybe $ just $ Lists.head $ var "terms")) $
   ref inferTypeOfCollectionDef
     @@ var "cx"
-    @@ (unaryFunction Core.typeOptional)
+    @@ (unaryFunction Core.typeMaybe)
     @@ var "trmCons"
     @@ string "optional element"
     @@ (Maybes.maybe (list []) (unaryFunction Lists.singleton) $ var "m")
@@ -885,7 +885,7 @@ inferTypeOfTermDef = define "inferTypeOfTerm" $
     _Term_list>>: "els" ~> ref inferTypeOfListDef @@ var "cx" @@ var "els",
     _Term_literal>>: "l" ~> ref inferTypeOfLiteralDef @@ var "cx" @@ var "l",
     _Term_map>>: "m" ~> ref inferTypeOfMapDef @@ var "cx" @@ var "m",
-    _Term_optional>>: "m" ~> ref inferTypeOfOptionalDef @@ var "cx" @@ var "m",
+    _Term_maybe>>: "m" ~> ref inferTypeOfOptionalDef @@ var "cx" @@ var "m",
     _Term_product>>: "els" ~> ref inferTypeOfProductDef @@ var "cx" @@ var "els",
     _Term_record>>: "r" ~> ref inferTypeOfRecordDef @@ var "cx" @@ var "r",
     _Term_set>>: "s" ~> ref inferTypeOfSetDef @@ var "cx" @@ var "s",

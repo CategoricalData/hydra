@@ -433,7 +433,7 @@ class TermLiteral(Node["Literal"]):
 class TermMap(Node["FrozenDict[Term, Term]"]):
     r"""A map of keys to values."""
 
-class TermOptional(Node["Maybe[Term]"]):
+class TermMaybe(Node["Maybe[Term]"]):
     r"""An optional value."""
 
 class TermProduct(Node["frozenlist[Term]"]):
@@ -467,7 +467,7 @@ class TermWrap(Node["WrappedTerm"]):
     r"""A wrapped term; an instance of a wrapper type (newtype)."""
 
 # A data term.
-type Term = TermAnnotated | TermApplication | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermOptional | TermProduct | TermRecord | TermSet | TermSum | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap
+type Term = TermAnnotated | TermApplication | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermProduct | TermRecord | TermSet | TermSum | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap
 
 TERM__NAME = Name("hydra.core.Term")
 TERM__ANNOTATED__NAME = Name("annotated")
@@ -477,7 +477,7 @@ TERM__LET__NAME = Name("let")
 TERM__LIST__NAME = Name("list")
 TERM__LITERAL__NAME = Name("literal")
 TERM__MAP__NAME = Name("map")
-TERM__OPTIONAL__NAME = Name("optional")
+TERM__MAYBE__NAME = Name("maybe")
 TERM__PRODUCT__NAME = Name("product")
 TERM__RECORD__NAME = Name("record")
 TERM__SET__NAME = Name("set")
@@ -516,7 +516,7 @@ class TypeLiteral(Node["LiteralType"]): ...
 
 class TypeMap(Node["MapType"]): ...
 
-class TypeOptional(Node["Type"]): ...
+class TypeMaybe(Node["Type"]): ...
 
 class TypeProduct(Node["frozenlist[Type]"]): ...
 
@@ -535,7 +535,7 @@ class TypeVariable(Node["Name"]): ...
 class TypeWrap(Node["WrappedType"]): ...
 
 # A data type.
-type Type = TypeAnnotated | TypeApplication | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeOptional | TypeProduct | TypeRecord | TypeSet | TypeSum | TypeUnion | TypeUnit | TypeVariable | TypeWrap
+type Type = TypeAnnotated | TypeApplication | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeMaybe | TypeProduct | TypeRecord | TypeSet | TypeSum | TypeUnion | TypeUnit | TypeVariable | TypeWrap
 
 TYPE__NAME = Name("hydra.core.Type")
 TYPE__ANNOTATED__NAME = Name("annotated")
@@ -545,7 +545,7 @@ TYPE__FUNCTION__NAME = Name("function")
 TYPE__LIST__NAME = Name("list")
 TYPE__LITERAL__NAME = Name("literal")
 TYPE__MAP__NAME = Name("map")
-TYPE__OPTIONAL__NAME = Name("optional")
+TYPE__MAYBE__NAME = Name("maybe")
 TYPE__PRODUCT__NAME = Name("product")
 TYPE__RECORD__NAME = Name("record")
 TYPE__SET__NAME = Name("set")

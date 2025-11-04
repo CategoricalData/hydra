@@ -44,7 +44,7 @@ jsonSchemaLanguage = Coders.Language {
       Mantle.TypeVariantList,
       Mantle.TypeVariantLiteral,
       Mantle.TypeVariantMap,
-      Mantle.TypeVariantOptional,
+      Mantle.TypeVariantMaybe,
       Mantle.TypeVariantRecord,
       Mantle.TypeVariantUnion,
       Mantle.TypeVariantVariable])

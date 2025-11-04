@@ -80,9 +80,9 @@ checkForUnboundTypeVariables cx term0 =
                                 ". bound type = "],
                               (Maybes.maybe "none" Core__.typeScheme (Core.bindingType binding))]) lbinding)]))))
                 in  
-                  let checkOptional = (\m -> Flows.bind (Flows.mapOptional check m) (\_ -> Flows.pure ()))
+                  let checkOptional = (\m -> Flows.bind (Flows.mapMaybe check m) (\_ -> Flows.pure ()))
                   in  
-                    let checkOptionalList = (\ml -> Flows.bind (Flows.mapOptional (\l -> Flows.mapList check l) ml) (\_ -> Flows.pure ()))
+                    let checkOptionalList = (\ml -> Flows.bind (Flows.mapMaybe (\l -> Flows.mapList check l) ml) (\_ -> Flows.pure ()))
                     in ((\x -> case x of
                       Core.TermFunction v1 -> ((\x -> case x of
                         Core.FunctionElimination v2 -> ((\x -> case x of
@@ -227,7 +227,7 @@ typeOf tx typeArgs term =
           Core.TermList v1 -> (typeOfList tx typeArgs v1)
           Core.TermLiteral v1 -> (typeOfLiteral tx typeArgs v1)
           Core.TermMap v1 -> (typeOfMap tx typeArgs v1)
-          Core.TermOptional v1 -> (typeOfOptional tx typeArgs v1)
+          Core.TermMaybe v1 -> (typeOfMaybe tx typeArgs v1)
           Core.TermProduct v1 -> (typeOfTuple tx typeArgs v1)
           Core.TermRecord v1 -> (typeOfRecord tx typeArgs v1)
           Core.TermSet v1 -> (typeOfSet tx typeArgs v1)
@@ -285,7 +285,7 @@ typeOfCaseStatement tx typeArgs cs =
       let cases = (Core.caseStatementCases cs)
       in  
         let cterms = (Lists.map Core.fieldTerm cases)
-        in (Flows.bind (Flows.mapOptional (\e -> typeOf tx [] e) dflt) (\tdflt -> Flows.bind (Flows.mapList (\e -> typeOf tx [] e) cterms) (\tcterms -> Flows.bind (Flows.mapList (\t -> Flows.map Core.functionTypeCodomain (Core_.functionType t)) tcterms) (\fcods ->  
+        in (Flows.bind (Flows.mapMaybe (\e -> typeOf tx [] e) dflt) (\tdflt -> Flows.bind (Flows.mapList (\e -> typeOf tx [] e) cterms) (\tcterms -> Flows.bind (Flows.mapList (\t -> Flows.map Core.functionTypeCodomain (Core_.functionType t)) tcterms) (\fcods ->  
           let cods = (Maybes.cat (Lists.cons tdflt (Lists.map Maybes.pure fcods)))
           in (Flows.bind (checkSameType tx "case branches" cods) (\cod -> Flows.pure (Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = (Schemas.nominalApplication tname typeArgs),
@@ -367,17 +367,17 @@ typeOfMap tx typeArgs m =
     Core.mapTypeKeys = (Lists.at 0 typeArgs),
     Core.mapTypeValues = (Lists.at 1 typeArgs)}))) (Flows.fail "map type applied to more or less than two arguments")) nonnull)
 
-typeOfOptional :: (Typing.TypeContext -> [Core.Type] -> Maybe Core.Term -> Compute.Flow t0 Core.Type)
-typeOfOptional tx typeArgs mt =  
+typeOfMaybe :: (Typing.TypeContext -> [Core.Type] -> Maybe Core.Term -> Compute.Flow t0 Core.Type)
+typeOfMaybe tx typeArgs mt =  
   let forNothing =  
           let n = (Lists.length typeArgs)
-          in (Logic.ifElse (Equality.equal n 1) (Flows.pure (Core.TypeOptional (Lists.head typeArgs))) (Flows.fail (Strings.cat [
+          in (Logic.ifElse (Equality.equal n 1) (Flows.pure (Core.TypeMaybe (Lists.head typeArgs))) (Flows.fail (Strings.cat [
             Strings.cat [
               "optional type applied to ",
               (Literals.showInt32 n)],
             " argument(s). Expected 1."])))
   in  
-    let forJust = (\term -> Flows.bind (Flows.bind (typeOf tx [] term) (\termType -> Flows.bind (checkTypeVariables tx termType) (\_ -> Flows.pure (Core.TypeOptional termType)))) (\t -> applyTypeArgumentsToType tx typeArgs t))
+    let forJust = (\term -> Flows.bind (Flows.bind (typeOf tx [] term) (\termType -> Flows.bind (checkTypeVariables tx termType) (\_ -> Flows.pure (Core.TypeMaybe termType)))) (\t -> applyTypeArgumentsToType tx typeArgs t))
     in (Maybes.maybe forNothing forJust mt)
 
 typeOfPrimitive :: (Typing.TypeContext -> [Core.Type] -> Core.Name -> Compute.Flow t0 Core.Type)

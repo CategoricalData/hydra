@@ -26,7 +26,7 @@ from hydra.core import (
     TypeList,
     TypeLiteral,
     TypeMap,
-    TypeOptional,
+    TypeMaybe,
     TypeProduct,
     TypeRecord,
     TypeScheme,
@@ -212,7 +212,7 @@ def map_(k: Type, v: Type) -> Type:
 
 def optional(t: Type) -> Type:
     """Optional (nullable) type."""
-    return TypeOptional(t)
+    return TypeMaybe(t)
 
 
 def set_(t: Type) -> Type:

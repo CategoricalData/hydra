@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -776,11 +776,11 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
       _Term_list>>: "els" ~> var "forMany" @@ var "recurse" @@ (unaryFunction Core.termList) @@ var "val0" @@ var "els",
       _Term_map>>: "m" ~> var "forMany" @@ var "forPair"
         @@ ("pairs" ~> Core.termMap $ Maps.fromList $ var "pairs") @@ var "val0" @@ Maps.toList (var "m"),
-      _Term_optional>>: "mt" ~> optCases (var "mt")
+      _Term_maybe>>: "mt" ~> optCases (var "mt")
         (var "dflt")
         ("t" ~> var "forSingle"
           @@ var "recurse"
-          @@ ("t1" ~> Core.termOptional $ just $ var "t1")
+          @@ ("t1" ~> Core.termMaybe $ just $ var "t1")
           @@ var "val0"
           @@ var "t"),
       _Term_product>>: "terms" ~> var "forMany" @@ var "recurse"
@@ -919,11 +919,11 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
       _Term_list>>: "els" ~> var "forMany" @@ var "recurse" @@ (unaryFunction Core.termList) @@ var "val0" @@ var "els",
       _Term_map>>: "m" ~> var "forMany" @@ var "forPair"
         @@ ("pairs" ~> Core.termMap $ Maps.fromList $ var "pairs") @@ var "val0" @@ Maps.toList (var "m"),
-      _Term_optional>>: "mt" ~> Maybes.maybe
+      _Term_maybe>>: "mt" ~> Maybes.maybe
         (var "dflt")
         ("t" ~> var "forSingle"
           @@ var "recurse"
-          @@ ("t1" ~> Core.termOptional $ just $ var "t1")
+          @@ ("t1" ~> Core.termMaybe $ just $ var "t1")
           @@ var "val0"
           @@ var "t")
         (var "mt"),
@@ -1012,7 +1012,7 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~> "term0" ~>
       _Term_list>>: "els" ~> Core.termList $ Lists.map (var "recurse") (var "els"),
       _Term_literal>>: "v" ~> Core.termLiteral $ var "v",
       _Term_map>>: "m" ~> Core.termMap $ var "forMap" @@ var "m",
-      _Term_optional>>: "m" ~> Core.termOptional $ Maybes.map (var "recurse") (var "m"),
+      _Term_maybe>>: "m" ~> Core.termMaybe $ Maybes.map (var "recurse") (var "m"),
       _Term_product>>: "tuple" ~> Core.termProduct $ Lists.map (var "recurse") (var "tuple"),
       _Term_record>>: "r" ~> Core.termRecord $ Core.record
         (Core.recordTypeName $ var "r")
@@ -1103,9 +1103,9 @@ rewriteTermMDef = define "rewriteTermM" $
       _Term_map>>: "m" ~>
         "pairs" <<~ Flows.mapList (var "forPair") (Maps.toList $ var "m") $
         produce $ Core.termMap $ Maps.fromList $ var "pairs",
-      _Term_optional>>: "m" ~>
-        "rm" <<~ Flows.mapOptional (var "recurse") (var "m") $
-        produce $ Core.termOptional $ var "rm",
+      _Term_maybe>>: "m" ~>
+        "rm" <<~ Flows.mapMaybe (var "recurse") (var "m") $
+        produce $ Core.termMaybe $ var "rm",
       _Term_product>>: "tuple" ~> Flows.map
           ("rtuple" ~> Core.termProduct $ var "rtuple")
           (Flows.mapList (var "recurse") (var "tuple")),
@@ -1195,7 +1195,7 @@ rewriteTermWithContextDef = define "rewriteTermWithContext" $
       _Term_list>>: "els" ~> Core.termList $ Lists.map (var "recurse") (var "els"),
       _Term_literal>>: "v" ~> Core.termLiteral $ var "v",
       _Term_map>>: "m" ~> Core.termMap $ var "forMap" @@ var "m",
-      _Term_optional>>: "m" ~> Core.termOptional $ Maybes.map (var "recurse") (var "m"),
+      _Term_maybe>>: "m" ~> Core.termMaybe $ Maybes.map (var "recurse") (var "m"),
       _Term_product>>: "tuple" ~> Core.termProduct $ Lists.map (var "recurse") (var "tuple"),
       _Term_record>>: "r" ~> Core.termRecord $ Core.record
         (Core.recordTypeName $ var "r")
@@ -1287,9 +1287,9 @@ rewriteTermWithContextMDef = define "rewriteTermWithContextM" $
       _Term_map>>: "m" ~>
         "pairs" <<~ Flows.mapList (var "forPair") (Maps.toList $ var "m") $
         produce $ Core.termMap $ Maps.fromList $ var "pairs",
-      _Term_optional>>: "m" ~>
-        "rm" <<~ Flows.mapOptional (var "recurse") (var "m") $
-        produce $ Core.termOptional $ var "rm",
+      _Term_maybe>>: "m" ~>
+        "rm" <<~ Flows.mapMaybe (var "recurse") (var "m") $
+        produce $ Core.termMaybe $ var "rm",
       _Term_product>>: "tuple" ~> Flows.map
           ("rtuple" ~> Core.termProduct $ var "rtuple")
           (Flows.mapList (var "recurse") (var "tuple")),
@@ -1355,7 +1355,7 @@ rewriteTypeDef = define "rewriteType" $ "f" ~> "typ0" ~>
       _Type_map>>: "mt" ~> Core.typeMap $ Core.mapType
         (var "recurse" @@ (Core.mapTypeKeys $ var "mt"))
         (var "recurse" @@ (Core.mapTypeValues $ var "mt")),
-      _Type_optional>>: "t" ~> Core.typeOptional $ var "recurse" @@ var "t",
+      _Type_maybe>>: "t" ~> Core.typeMaybe $ var "recurse" @@ var "t",
       _Type_product>>: "ts" ~> Core.typeProduct $ Lists.map (var "recurse") (var "ts"),
       _Type_record>>: "rt" ~> Core.typeRecord $ Core.rowType
         (Core.rowTypeTypeName $ var "rt")
@@ -1401,9 +1401,9 @@ rewriteTypeMDef = define "rewriteTypeM" $
       "kt" <<~ var "recurse" @@ (Core.mapTypeKeys $ var "mt") $
       "vt" <<~ var "recurse" @@ (Core.mapTypeValues $ var "mt") $
       produce $ Core.typeMap $ Core.mapType (var "kt") (var "vt"),
-    _Type_optional>>: "t" ~>
+    _Type_maybe>>: "t" ~>
       "rt" <<~ var "recurse" @@ var "t" $
-      produce $ Core.typeOptional $ var "rt",
+      produce $ Core.typeMaybe $ var "rt",
     _Type_product>>: "types" ~>
       "rtypes" <<~ Flows.mapList (var "recurse") (var "types") $
       produce $ Core.typeProduct $ var "rtypes",
@@ -1538,7 +1538,7 @@ subtermsDef = define "subterms" $
     _Term_map>>: "m" ~> Lists.concat $ Lists.map
       ("p" ~> list [first $ var "p", second $ var "p"])
       (Maps.toList $ var "m"),
-    _Term_optional>>: "m" ~> Maybes.maybe (list []) ("t" ~> list [var "t"]) (var "m"),
+    _Term_maybe>>: "m" ~> Maybes.maybe (list []) ("t" ~> list [var "t"]) (var "m"),
     _Term_product>>: "tuple" ~> var "tuple",
     _Term_record>>: "rt" ~> Lists.map (unaryFunction Core.fieldTerm) (Core.recordFields $ var "rt"),
     _Term_set>>: "l" ~> Sets.toList $ var "l",
@@ -1587,7 +1587,7 @@ subtermsWithAccessorsDef = define "subtermsWithAccessors" $
           result (Mantle.termAccessorMapKey $ int32 0) $ first $ var "p",
           result (Mantle.termAccessorMapValue $ int32 0) $ second $ var "p"])
         (Maps.toList $ var "m")),
-    _Term_optional>>: "m" ~> Maybes.maybe none
+    _Term_maybe>>: "m" ~> Maybes.maybe none
       ("t" ~> single Mantle.termAccessorOptionalTerm $ var "t")
       (var "m"),
     _Term_product>>: "p" ~> Lists.map
@@ -1639,7 +1639,7 @@ subtypesDef = define "subtypes" $
     _Type_map>>: "mt" ~> list [
       Core.mapTypeKeys $ var "mt",
       Core.mapTypeValues $ var "mt"],
-    _Type_optional>>: "ot" ~> list [var "ot"],
+    _Type_maybe>>: "ot" ~> list [var "ot"],
     _Type_product>>: "pt" ~> var "pt",
     _Type_record>>: "rt" ~> Lists.map (unaryFunction Core.fieldTypeType) (Core.rowTypeFields $ var "rt"),
     _Type_set>>: "st" ~> list [var "st"],

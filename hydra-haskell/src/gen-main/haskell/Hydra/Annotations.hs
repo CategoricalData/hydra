@@ -6,7 +6,6 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Encode.Core as Core__
 import qualified Hydra.Extract.Core as Core___
 import qualified Hydra.Graph as Graph
@@ -43,7 +42,7 @@ failOnFlag :: (Core.Name -> String -> Compute.Flow t0 ())
 failOnFlag flag msg = (Flows.bind (hasFlag flag) (\val -> Logic.ifElse val (Flows.fail msg) (Flows.pure ())))
 
 getDebugId :: (Compute.Flow t0 (Maybe String))
-getDebugId = (Lexical.withEmptyGraph (Flows.bind (getAttr Constants.key_debugId) (\desc -> Flows.mapOptional Core___.string desc)))
+getDebugId = (Lexical.withEmptyGraph (Flows.bind (getAttr Constants.key_debugId) (\desc -> Flows.mapMaybe Core___.string desc)))
 
 getAttr :: (Core.Name -> Compute.Flow t0 (Maybe Core.Term))
 getAttr key = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
@@ -94,7 +93,7 @@ getTypeDescription typ = (getDescription (typeAnnotationInternal typ))
 -- | For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression.
 isNativeType :: (Core.Binding -> Bool)
 isNativeType el =  
-  let isFlaggedAsFirstClassType = (Maybes.fromMaybe False (Maybes.bind (getTermAnnotation Constants.key_firstClassType (Core.bindingTerm el)) Decoding.boolean))
+  let isFlaggedAsFirstClassType = (Maybes.fromMaybe False (Maybes.map (\_ -> True) (getTermAnnotation Constants.key_firstClassType (Core.bindingTerm el))))
   in (Maybes.maybe False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
     Core.typeSchemeVariables = [],
     Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type"))})) (Logic.not isFlaggedAsFirstClassType)) (Core.bindingType el))

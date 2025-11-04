@@ -112,7 +112,7 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
     Mantle.termVariantList,
     Mantle.termVariantLiteral,
     Mantle.termVariantMap,
-    Mantle.termVariantOptional,
+    Mantle.termVariantMaybe,
     Mantle.termVariantRecord,
     Mantle.termVariantUnion,
     Mantle.termVariantUnit],
@@ -121,7 +121,7 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
     Mantle.typeVariantList,
     Mantle.typeVariantLiteral,
     Mantle.typeVariantMap,
-    Mantle.typeVariantOptional,
+    Mantle.typeVariantMaybe,
     Mantle.typeVariantRecord,
     Mantle.typeVariantUnion,
     Mantle.typeVariantUnit,
@@ -133,7 +133,7 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
       "stripped">: ref Rewriting.deannotateTypeDef @@ var "valuesType"] $
       cases _Type (var "stripped")
         (Just true) [
-        _Type_optional>>: constant false]]] $
+        _Type_maybe>>: constant false]]] $
   Coders.language
     (Coders.languageName $ string "hydra.ext.protobuf")
     (Coders.languageConstraints

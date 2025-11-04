@@ -100,8 +100,8 @@ mutateTrace mutate restore f =
               in (choose forLeft forRight (mutate t0)))
     in (Compute.Flow flowFun)
 
-optionalToList :: (Maybe t0 -> [t0])
-optionalToList mx = (Maybes.maybe [] Lists.pure mx)
+maybeToList :: (Maybe t0 -> [t0])
+maybeToList mx = (Maybes.maybe [] Lists.pure mx)
 
 pure :: (t0 -> Compute.Flow t1 t0)
 pure xp = (Compute.Flow (\s -> \t -> Compute.FlowState {

@@ -73,7 +73,7 @@ termAccessorMapValue :: TTerm Int -> TTerm TermAccessor
 termAccessorMapValue = variant _TermAccessor _TermAccessor_mapValue
 
 termAccessorOptionalTerm :: TTerm TermAccessor
-termAccessorOptionalTerm = unitVariant _TermAccessor _TermAccessor_optionalTerm
+termAccessorOptionalTerm = unitVariant _TermAccessor _TermAccessor_maybeTerm
 
 termAccessorProductTerm :: TTerm Int -> TTerm TermAccessor
 termAccessorProductTerm = variant _TermAccessor _TermAccessor_productTerm

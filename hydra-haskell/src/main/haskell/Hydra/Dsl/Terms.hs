@@ -269,7 +269,7 @@ nothing = optional Nothing
 -- | Create an optional (nullable) term
 -- Example: optional (Just (string "found"))
 optional :: Maybe Term -> Term
-optional = TermOptional
+optional = TermMaybe
 
 -- | Create a set of terms
 -- Example: set (S.fromList [string "a", string "b", string "c"])

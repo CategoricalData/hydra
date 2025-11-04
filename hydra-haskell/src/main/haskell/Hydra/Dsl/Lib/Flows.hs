@@ -37,8 +37,8 @@ mapKeys = primitive2 _flows_mapKeys
 mapList :: TTerm (x -> Flow s y) -> TTerm [x] -> TTerm (Flow s [y])
 mapList = primitive2 _flows_mapList
 
-mapOptional :: TTerm (x -> Flow s y) -> TTerm (Maybe x) -> TTerm (Flow s (Maybe y))
-mapOptional = primitive2 _flows_mapOptional
+mapMaybe :: TTerm (x -> Flow s y) -> TTerm (Maybe x) -> TTerm (Flow s (Maybe y))
+mapMaybe = primitive2 _flows_mapMaybe
 
 mapSet :: TTerm (x -> Flow s y) -> TTerm (S.Set x) -> TTerm (Flow s (S.Set y))
 mapSet = primitive2 _flows_mapSet

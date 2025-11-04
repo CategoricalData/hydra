@@ -492,7 +492,7 @@ data Term =
   -- | A map of keys to values
   TermMap (M.Map Term Term) |
   -- | An optional value
-  TermOptional (Maybe Term) |
+  TermMaybe (Maybe Term) |
   -- | A tuple
   TermProduct [Term] |
   -- | A record term
@@ -531,7 +531,7 @@ _Term_literal = (Name "literal")
 
 _Term_map = (Name "map")
 
-_Term_optional = (Name "optional")
+_Term_maybe = (Name "maybe")
 
 _Term_product = (Name "product")
 
@@ -581,7 +581,7 @@ data Type =
   TypeList Type |
   TypeLiteral LiteralType |
   TypeMap MapType |
-  TypeOptional Type |
+  TypeMaybe Type |
   TypeProduct [Type] |
   TypeRecord RowType |
   TypeSet Type |
@@ -608,7 +608,7 @@ _Type_literal = (Name "literal")
 
 _Type_map = (Name "map")
 
-_Type_optional = (Name "optional")
+_Type_maybe = (Name "maybe")
 
 _Type_product = (Name "product")
 

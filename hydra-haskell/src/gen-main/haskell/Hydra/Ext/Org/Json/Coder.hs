@@ -79,8 +79,8 @@ encodeRecord coders term =
                     fname = (Core.fieldName field)
                     fvalue = (Core.fieldTerm field)
                 in ((\x -> case x of
-                  Core.TypeOptional _ -> ((\x -> case x of
-                    Core.TermOptional v2 -> (Maybes.maybe (Flows.pure Nothing) (\v -> Flows.bind (Compute.coderEncode coder_ v) (\encoded -> Flows.pure (Just (Core.unName fname, encoded)))) v2)
+                  Core.TypeMaybe _ -> ((\x -> case x of
+                    Core.TermMaybe v2 -> (Maybes.maybe (Flows.pure Nothing) (\v -> Flows.bind (Compute.coderEncode coder_ v) (\encoded -> Flows.pure (Just (Core.unName fname, encoded)))) v2)
                     _ -> (Flows.bind (Compute.coderEncode coder_ fvalue) (\encoded -> Flows.pure (Just (Core.unName fname, encoded))))) fvalue)
                   _ -> (Flows.bind (Compute.coderEncode coder_ fvalue) (\encoded -> Flows.pure (Just (Core.unName fname, encoded))))) (Core.fieldTypeType ft)))
     in (Flows.bind (Flows.mapList encodeField (Lists.zip coders fields)) (\maybeFields -> Flows.pure (Json.ValueObject (Maps.fromList (Maybes.cat maybeFields)))))))
@@ -144,15 +144,15 @@ termCoder typ =
           Compute.coderDecode = (\n -> (\x -> case x of
             Json.ValueObject v2 -> (Flows.bind (Flows.mapList decodeEntry (Maps.toList v2)) (\entries -> Flows.pure (Core.TermMap (Maps.fromList entries))))
             _ -> (Monads.unexpected "mapping" (showValue n))) n)}))))))
-    Core.TypeOptional v1 -> (Flows.bind (termCoder v1) (\oc -> Flows.pure (Compute.Coder {
+    Core.TypeMaybe v1 -> (Flows.bind (termCoder v1) (\oc -> Flows.pure (Compute.Coder {
       Compute.coderEncode = (\t ->  
         let stripped = (Rewriting.deannotateTerm t)
         in ((\x -> case x of
-          Core.TermOptional v2 -> (Maybes.maybe (Flows.pure Json.ValueNull) (Compute.coderEncode oc) v2)
+          Core.TermMaybe v2 -> (Maybes.maybe (Flows.pure Json.ValueNull) (Compute.coderEncode oc) v2)
           _ -> (Monads.unexpected "optional term" (Core___.term t))) stripped)),
       Compute.coderDecode = (\n -> (\x -> case x of
-        Json.ValueNull -> (Flows.pure (Core.TermOptional Nothing))
-        _ -> (Flows.bind (Compute.coderDecode oc n) (\decoded -> Flows.pure (Core.TermOptional (Just decoded))))) n)})))
+        Json.ValueNull -> (Flows.pure (Core.TermMaybe Nothing))
+        _ -> (Flows.bind (Compute.coderDecode oc n) (\decoded -> Flows.pure (Core.TermMaybe (Just decoded))))) n)})))
     Core.TypeRecord v1 -> (recordCoder v1)
     Core.TypeUnit -> (Flows.pure unitCoder)
     Core.TypeVariable v1 -> (Flows.pure (Compute.Coder {
@@ -191,7 +191,7 @@ untypedTermToJson term =
                 Core.fieldTerm = term}})))
       fieldToKeyval = (\f ->  
               let forTerm = (\t -> (\x -> case x of
-                      Core.TermOptional v1 -> (Maybes.maybe (Flows.pure Nothing) forTerm v1)
+                      Core.TermMaybe v1 -> (Maybes.maybe (Flows.pure Nothing) forTerm v1)
                       _ -> (Flows.map Maybes.pure (untypedTermToJson t))) t)
               in (Flows.bind (forTerm (Core.fieldTerm f)) (\mjson -> Flows.pure (Maybes.map (\j -> (Core.unName (Core.fieldName f), j)) mjson))))
   in ((\x -> case x of
@@ -224,7 +224,7 @@ untypedTermToJson term =
           Core.fieldTerm = (Core.TermVariable (Core.lambdaParameter v2))},
         Core.Field {
           Core.fieldName = (Core.Name "domain"),
-          Core.fieldTerm = (Core.TermOptional (Maybes.map Core_.type_ (Core.lambdaDomain v2)))},
+          Core.fieldTerm = (Core.TermMaybe (Maybes.map Core_.type_ (Core.lambdaDomain v2)))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.lambdaBody v2)}])
@@ -254,7 +254,7 @@ untypedTermToJson term =
             f = (Literals.bigintToBigfloat bf)
         in (Json.ValueNumber f)
       Core.LiteralString v2 -> (Json.ValueString v2)) v1))
-    Core.TermOptional v1 -> (Maybes.maybe (Flows.pure Json.ValueNull) untypedTermToJson v1)
+    Core.TermMaybe v1 -> (Maybes.maybe (Flows.pure Json.ValueNull) untypedTermToJson v1)
     Core.TermProduct v1 -> (untypedTermToJson (Core.TermList v1))
     Core.TermRecord v1 ->  
       let fields = (Core.recordFields v1)

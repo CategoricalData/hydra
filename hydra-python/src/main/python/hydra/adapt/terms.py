@@ -57,7 +57,7 @@ def union_type_to_record_type(rt: hydra.core.RowType) -> hydra.core.RowType:
     def make_optional(f: hydra.core.FieldType) -> hydra.core.FieldType:
         fn = f.name
         ft = f.type
-        return hydra.core.FieldType(fn, hydra.rewriting.map_beneath_type_annotations((lambda x: cast(hydra.core.Type, hydra.core.TypeOptional(x))), ft))
+        return hydra.core.FieldType(fn, hydra.rewriting.map_beneath_type_annotations((lambda x: cast(hydra.core.Type, hydra.core.TypeMaybe(x))), ft))
     return hydra.core.RowType(rt.type_name, hydra.lib.lists.map(make_optional, rt.fields))
 
 def unit_to_record[T0, T1, T2, T3](_: T0) -> hydra.compute.Flow[T1, hydra.compute.Adapter[T2, T3, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
@@ -164,12 +164,12 @@ def lambda_to_monotype(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Ad
         case _:
             raise TypeError("Unsupported Type")
 
-def optional_to_list(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
+def maybe_to_list(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     r"""Convert optional types to list types."""
     
     def encode[T0, T1, T2, T3](ad: hydra.compute.Adapter[T0, T1, T2, T3, hydra.core.Term, hydra.core.Term], term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
         match term:
-            case hydra.core.TermOptional(value=m):
+            case hydra.core.TermMaybe(value=m):
                 return hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermList(cast(frozenlist[hydra.core.Term], ())))), (lambda r: hydra.lib.flows.bind(ad.coder.encode(r), (lambda encoded: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermList((encoded,))))))), m)
             
             case _:
@@ -177,12 +177,12 @@ def optional_to_list(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adap
     def decode[T0, T1, T2, T3](ad: hydra.compute.Adapter[T0, T1, T2, T3, hydra.core.Term, hydra.core.Term], term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.core.Term]:
         match term:
             case hydra.core.TermList(value=l):
-                return hydra.lib.flows.map((lambda x: cast(hydra.core.Term, hydra.core.TermOptional(x))), hydra.lib.logic.if_else(hydra.lib.lists.null(l), hydra.lib.flows.pure(cast(Maybe[hydra.core.Term], Nothing())), hydra.lib.flows.bind(ad.coder.decode(hydra.lib.lists.head(l)), (lambda decoded: hydra.lib.flows.pure(cast(Maybe[hydra.core.Term], Just(decoded)))))))
+                return hydra.lib.flows.map((lambda x: cast(hydra.core.Term, hydra.core.TermMaybe(x))), hydra.lib.logic.if_else(hydra.lib.lists.null(l), hydra.lib.flows.pure(cast(Maybe[hydra.core.Term], Nothing())), hydra.lib.flows.bind(ad.coder.decode(hydra.lib.lists.head(l)), (lambda decoded: hydra.lib.flows.pure(cast(Maybe[hydra.core.Term], Just(decoded)))))))
             
             case _:
                 raise TypeError("Unsupported Term")
     match t:
-        case hydra.core.TypeOptional(value=ot):
+        case hydra.core.TypeMaybe(value=ot):
             return hydra.lib.flows.bind(term_adapter(ot), (lambda ad: hydra.lib.flows.pure(cast(hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(False, t, cast(hydra.core.Type, hydra.core.TypeList(ad.target)), cast(hydra.compute.Coder[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Term, hydra.core.Term], hydra.compute.Coder((lambda v1: encode(ad, v1)), (lambda v1: decode(ad, v1)))))))))
         
         case _:
@@ -228,7 +228,7 @@ def pass_function(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapter
                 return hydra.lib.flows.pure(cast(FrozenDict[hydra.core.Name, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.FieldType, hydra.core.FieldType, hydra.core.Field, hydra.core.Field]], hydra.lib.maps.empty()))
     def to_option_ad(dom: hydra.core.Type, cod: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, Maybe[hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]:
         match hydra.rewriting.deannotate_type(dom):
-            case hydra.core.TypeOptional(value=ot):
+            case hydra.core.TypeMaybe(value=ot):
                 return hydra.lib.flows.map(cast(Callable[[
                   hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]], Maybe[hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]], hydra.lib.maybes.pure), term_adapter(cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(ot, cod)))))
             
@@ -321,10 +321,10 @@ def pass_optional(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapter
     r"""Pass through optional types."""
     
     def map_term(coder: hydra.compute.Coder[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Term, hydra.core.Term], dir: hydra.coders.CoderDirection, term: hydra.core.Term) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.core.Term]:
-        return hydra.lib.flows.bind(with_graph_context(hydra.extract.core.optional(cast(Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], hydra.lib.flows.pure), term)), (lambda opt: hydra.lib.flows.bind(hydra.lib.flows.map_optional((lambda v1: hydra.adapt.utils.encode_decode(dir, coder, v1)), opt), (lambda new_opt: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermOptional(new_opt)))))))
+        return hydra.lib.flows.bind(with_graph_context(hydra.extract.core.optional(cast(Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], hydra.lib.flows.pure), term)), (lambda opt: hydra.lib.flows.bind(hydra.lib.flows.map_maybe((lambda v1: hydra.adapt.utils.encode_decode(dir, coder, v1)), opt), (lambda new_opt: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(new_opt)))))))
     match t:
-        case hydra.core.TypeOptional(value=ot):
-            return hydra.lib.flows.bind(term_adapter(ot), (lambda adapter: hydra.lib.flows.pure(cast(hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(adapter.is_lossy, t, cast(hydra.core.Type, hydra.core.TypeOptional(adapter.target)), hydra.adapt.utils.bidirectional((lambda v1, v2: map_term(adapter.coder, v1, v2))))))))
+        case hydra.core.TypeMaybe(value=ot):
+            return hydra.lib.flows.bind(term_adapter(ot), (lambda adapter: hydra.lib.flows.pure(cast(hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(adapter.is_lossy, t, cast(hydra.core.Type, hydra.core.TypeMaybe(adapter.target)), hydra.adapt.utils.bidirectional((lambda v1, v2: map_term(adapter.coder, v1, v2))))))))
         
         case _:
             raise TypeError("Unsupported Type")
@@ -505,8 +505,8 @@ def term_adapter(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapte
             case hydra.mantle.TypeVariant.MAP:
                 return (pass_map,)
             
-            case hydra.mantle.TypeVariant.OPTIONAL:
-                return (pass_optional, optional_to_list)
+            case hydra.mantle.TypeVariant.MAYBE:
+                return (pass_optional, maybe_to_list)
             
             case hydra.mantle.TypeVariant.PRODUCT:
                 return (pass_product,)
@@ -542,8 +542,8 @@ def term_adapter(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapte
             case hydra.mantle.TypeVariant.FORALL:
                 return (lambda_to_monotype,)
             
-            case hydra.mantle.TypeVariant.OPTIONAL:
-                return (optional_to_list,)
+            case hydra.mantle.TypeVariant.MAYBE:
+                return (maybe_to_list,)
             
             case hydra.mantle.TypeVariant.SET:
                 return (set_to_list,)
@@ -582,7 +582,7 @@ def union_to_record(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapt
         fn = field.name
         fterm = field.term
         match fterm:
-            case hydra.core.TermOptional(value=opt):
+            case hydra.core.TermMaybe(value=opt):
                 return hydra.lib.maybes.bind(opt, (lambda t2: cast(Maybe[hydra.core.Field], Just(hydra.core.Field(fn, t2)))))
             
             case _:
@@ -605,7 +605,7 @@ def union_to_record(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapt
             target = cast(hydra.core.Type, hydra.core.TypeRecord(union_type_to_record_type(rt)))
             def to_record_field(term: hydra.core.Term, fn: hydra.core.Name, f: hydra.core.FieldType) -> hydra.core.Field:
                 fn_ = f.name
-                return hydra.core.Field(fn_, cast(hydra.core.Term, hydra.core.TermOptional(hydra.lib.logic.if_else(hydra.lib.equality.equal(fn_, fn), cast(Maybe[hydra.core.Term], Just(term)), cast(Maybe[hydra.core.Term], Nothing())))))
+                return hydra.core.Field(fn_, cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.logic.if_else(hydra.lib.equality.equal(fn_, fn), cast(Maybe[hydra.core.Term], Just(term)), cast(Maybe[hydra.core.Term], Nothing())))))
             return hydra.lib.flows.bind(term_adapter(target), (lambda ad: hydra.lib.flows.pure(cast(hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(ad.is_lossy, t, ad.target, cast(hydra.compute.Coder[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Term, hydra.core.Term], hydra.compute.Coder((lambda term_: hydra.lib.flows.bind(with_graph_context(hydra.extract.core.injection(rt.type_name, term_)), (lambda field: (fn := field.name, term := field.term, ad.coder.encode(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(nm, hydra.lib.lists.map((lambda v1: to_record_field(term, fn, v1)), sfields))))))[2]))), (lambda term: hydra.lib.flows.bind(ad.coder.decode(term), (lambda rec_term: for_rec_term(nm, ad, term, rec_term)))))))))))
         
         case _:

@@ -135,7 +135,7 @@ encodeTerm term = fail "not yet implemented"
 
 encodeType :: Prefixes -> Type -> Flow Graph G.Type
 encodeType prefixes typ = case deannotateType typ of
-    TypeOptional et -> case deannotateType et of
+    TypeMaybe et -> case deannotateType et of
         TypeList et -> G.TypeList . G.ListType <$> encodeType prefixes et
         TypeLiteral lt -> G.TypeNamed <$> encodeLiteralType lt
         TypeRecord rt -> forRowType rt

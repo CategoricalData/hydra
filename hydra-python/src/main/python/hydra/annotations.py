@@ -36,7 +36,7 @@ def get_attr[T0](key: hydra.core.Name) -> hydra.compute.Flow[T0, Maybe[hydra.cor
     return cast(hydra.compute.Flow[T0, Maybe[hydra.core.Term]], hydra.compute.Flow((lambda s0, t0: cast(hydra.compute.FlowState[T0, Maybe[hydra.core.Term]], hydra.compute.FlowState(cast(Maybe[Maybe[hydra.core.Term]], Just(hydra.lib.maps.lookup(key, t0.other))), s0, t0)))))
 
 def get_debug_id[T0]() -> hydra.compute.Flow[T0, Maybe[str]]:
-    return hydra.lexical.with_empty_graph(hydra.lib.flows.bind(get_attr(hydra.constants.key_debug_id), (lambda desc: hydra.lib.flows.map_optional(hydra.extract.core.string, desc))))
+    return hydra.lexical.with_empty_graph(hydra.lib.flows.bind(get_attr(hydra.constants.key_debug_id), (lambda desc: hydra.lib.flows.map_maybe(hydra.extract.core.string, desc))))
 
 def debug_if[T0, T1](debug_id: T0, message: str) -> hydra.compute.Flow[T1, None]:
     def check_and_fail[T2](desc: Maybe[str]) -> hydra.compute.Flow[T2, None]:

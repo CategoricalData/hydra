@@ -64,7 +64,7 @@ encodeFieldType rname order (FieldType fname ft) = do
   where
     iri = propertyIri rname fname
     forType mn mx t = case deannotateType t of
-      TypeOptional ot -> forType (Just 0) mx ot
+      TypeMaybe ot -> forType (Just 0) mx ot
       TypeSet st -> forType mn Nothing st
       _ -> do
         cp <- encodeType t
@@ -134,7 +134,7 @@ encodeTerm subject term = case term of
   TermWrap (WrappedTerm name inner) -> do
     descs <- encodeTerm subject inner
     return $ (withType name $ L.head descs):(L.tail descs)
-  TermOptional mterm -> case mterm of
+  TermMaybe mterm -> case mterm of
     Nothing -> pure []
     Just inner -> encodeTerm subject inner
   TermRecord (Record rname fields) -> do

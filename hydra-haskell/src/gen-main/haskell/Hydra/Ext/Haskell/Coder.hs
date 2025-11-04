@@ -239,7 +239,7 @@ encodeTerm namespaces term =
                     hk,
                     hv])))
       in (Flows.bind (Flows.map (\x -> Ast.ExpressionList x) (Flows.mapList encodePair (Maps.toList v1))) (\rhs -> Flows.pure (Utils.hsapp lhs rhs)))
-    Core.TermOptional v1 -> (Maybes.cases v1 (Flows.pure (Utils.hsvar "Nothing")) (\t -> Flows.bind (encode t) (\ht -> Flows.pure (Utils.hsapp (Utils.hsvar "Just") ht))))
+    Core.TermMaybe v1 -> (Maybes.cases v1 (Flows.pure (Utils.hsvar "Nothing")) (\t -> Flows.bind (encode t) (\ht -> Flows.pure (Utils.hsapp (Utils.hsvar "Just") ht))))
     Core.TermProduct v1 -> (Flows.bind (Flows.mapList encode v1) (\hterms -> Flows.pure (Ast.ExpressionTuple hterms)))
     Core.TermRecord v1 ->  
       let sname = (Core.recordTypeName v1) 
@@ -328,7 +328,7 @@ encodeType namespaces typ =
         Flows.pure (Ast.TypeVariable (Utils.rawName "M.Map")),
         encode kt,
         (encode vt)]))
-    Core.TypeOptional v1 -> (Flows.map Utils.toTypeApplication (Flows.sequence [
+    Core.TypeMaybe v1 -> (Flows.map Utils.toTypeApplication (Flows.sequence [
       Flows.pure (Ast.TypeVariable (Utils.rawName "Maybe")),
       (encode v1)]))
     Core.TypeProduct v1 -> (Flows.bind (Flows.mapList encode v1) (\htypes -> Flows.pure (Ast.TypeTuple htypes)))

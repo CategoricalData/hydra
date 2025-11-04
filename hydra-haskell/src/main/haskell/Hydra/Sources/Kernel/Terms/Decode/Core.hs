@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -191,8 +191,8 @@ typeDef = define "type" $
         (Core.nameLift _Type_map)
         (lambda "mt" $ Flows.map (unaryFunction Core.typeMap) $ ref mapTypeDef @@ var "mt"),
       pair
-        (Core.nameLift _Type_optional)
-        (lambda "et" $ Flows.map (unaryFunction Core.typeOptional) $ ref typeDef @@ var "et"),
+        (Core.nameLift _Type_maybe)
+        (lambda "et" $ Flows.map (unaryFunction Core.typeMaybe) $ ref typeDef @@ var "et"),
       pair
         (Core.nameLift _Type_product)
         (lambda "types" $ Flows.map (unaryFunction Core.typeProduct) $ ref ExtractCore.listOfDef @@ ref typeDef @@ var "types"),

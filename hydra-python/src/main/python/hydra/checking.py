@@ -72,9 +72,9 @@ def check_for_unbound_type_variables[T0](cx: hydra.typing.InferenceContext, term
             badvars = hydra.lib.sets.difference(hydra.lib.sets.difference(freevars, vars), svars)
             return hydra.lib.logic.if_else(hydra.lib.sets.null(badvars), hydra.lib.flows.pure(None), hydra.lib.flows.fail(hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("unbound type variables: {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda v1: v1.value), hydra.lib.sets.to_list(badvars))))), "} in type ")), hydra.show.core.type(typ))), " at path: ")), hydra.lib.strings.intercalate(" >> ", hydra.lib.lists.reverse(trace)))), hydra.lib.maybes.maybe("none", (lambda binding: hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((". bound term = ", hydra.show.core.term(binding.term))), ". bound type = ")), hydra.lib.maybes.maybe("none", hydra.show.core.type_scheme, binding.type)))), lbinding)))))
         def check_optional[T2](m: Maybe[hydra.core.Type]) -> hydra.compute.Flow[T2, None]:
-            return hydra.lib.flows.bind(hydra.lib.flows.map_optional(cast(Callable[[hydra.core.Type], hydra.compute.Flow[T2, None]], check), m), (lambda _: hydra.lib.flows.pure(None)))
+            return hydra.lib.flows.bind(hydra.lib.flows.map_maybe(cast(Callable[[hydra.core.Type], hydra.compute.Flow[T2, None]], check), m), (lambda _: hydra.lib.flows.pure(None)))
         def check_optional_list[T2](ml: Maybe[frozenlist[hydra.core.Type]]) -> hydra.compute.Flow[T2, None]:
-            return hydra.lib.flows.bind(hydra.lib.flows.map_optional((lambda l: hydra.lib.flows.map_list(cast(Callable[[hydra.core.Type], hydra.compute.Flow[T2, None]], check), l)), ml), (lambda _: hydra.lib.flows.pure(None)))
+            return hydra.lib.flows.bind(hydra.lib.flows.map_maybe((lambda l: hydra.lib.flows.map_list(cast(Callable[[hydra.core.Type], hydra.compute.Flow[T2, None]], check), l)), ml), (lambda _: hydra.lib.flows.pure(None)))
         match term:
             case hydra.core.TermFunction(value=f):
                 match f:
@@ -209,8 +209,8 @@ def type_of[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.T
             case hydra.core.TermMap(value=v16):
                 return type_of_map(tx, type_args, v16)
             
-            case hydra.core.TermOptional(value=v17):
-                return type_of_optional(tx, type_args, v17)
+            case hydra.core.TermMaybe(value=v17):
+                return type_of_maybe(tx, type_args, v17)
             
             case hydra.core.TermProduct(value=v18):
                 return type_of_tuple(tx, type_args, v18)
@@ -268,7 +268,7 @@ def type_of_case_statement[T0](tx: hydra.typing.TypeContext, type_args: frozenli
     dflt = cs.default
     cases = cs.cases
     cterms = hydra.lib.lists.map((lambda v1: v1.term), cases)
-    return hydra.lib.flows.bind(hydra.lib.flows.map_optional((lambda e: type_of(tx, cast(frozenlist[hydra.core.Type], ()), e)), dflt), (lambda tdflt: hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda e: type_of(tx, cast(frozenlist[hydra.core.Type], ()), e)), cterms), (lambda tcterms: hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda t: hydra.lib.flows.map((lambda v1: v1.codomain), hydra.extract.core.function_type(t))), tcterms), (lambda fcods: (cods := hydra.lib.maybes.cat(hydra.lib.lists.cons(tdflt, hydra.lib.lists.map(cast(Callable[[hydra.core.Type], Maybe[hydra.core.Type]], hydra.lib.maybes.pure), fcods))), hydra.lib.flows.bind(check_same_type(tx, "case branches", cods), (lambda cod: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(hydra.schemas.nominal_application(tname, type_args), cod)))))))[1]))))))
+    return hydra.lib.flows.bind(hydra.lib.flows.map_maybe((lambda e: type_of(tx, cast(frozenlist[hydra.core.Type], ()), e)), dflt), (lambda tdflt: hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda e: type_of(tx, cast(frozenlist[hydra.core.Type], ()), e)), cterms), (lambda tcterms: hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda t: hydra.lib.flows.map((lambda v1: v1.codomain), hydra.extract.core.function_type(t))), tcterms), (lambda fcods: (cods := hydra.lib.maybes.cat(hydra.lib.lists.cons(tdflt, hydra.lib.lists.map(cast(Callable[[hydra.core.Type], Maybe[hydra.core.Type]], hydra.lib.maybes.pure), fcods))), hydra.lib.flows.bind(check_same_type(tx, "case branches", cods), (lambda cod: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(hydra.schemas.nominal_application(tname, type_args), cod)))))))[1]))))))
 
 def type_of_lambda[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], l: hydra.core.Lambda) -> hydra.compute.Flow[T0, hydra.core.Type]:
     v = l.parameter
@@ -294,12 +294,12 @@ def type_of_map[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.co
         return hydra.lib.flows.bind(hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: type_of(tx, cast(frozenlist[hydra.core.Type], ()), v1)), hydra.lib.lists.map((lambda v1: v1[0]), pairs)), (lambda v1: check_same_type(tx, "map keys", v1))), (lambda kt: hydra.lib.flows.bind(hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: type_of(tx, cast(frozenlist[hydra.core.Type], ()), v1)), hydra.lib.lists.map((lambda v1: v1[1]), pairs)), (lambda v1: check_same_type(tx, "map values", v1))), (lambda vt: hydra.lib.flows.bind(check_type_variables(tx, kt), (lambda _: hydra.lib.flows.bind(check_type_variables(tx, vt), (lambda _2: apply_type_arguments_to_type(tx, type_args, cast(hydra.core.Type, hydra.core.TypeMap(hydra.core.MapType(kt, vt))))))))))))
     return hydra.lib.logic.if_else(hydra.lib.maps.null(m), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(type_args), 2), hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeMap(hydra.core.MapType(hydra.lib.lists.at(0, type_args), hydra.lib.lists.at(1, type_args))))), hydra.lib.flows.fail("map type applied to more or less than two arguments")), nonnull())
 
-def type_of_optional[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], mt: Maybe[hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.core.Type]:
+def type_of_maybe[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], mt: Maybe[hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.core.Type]:
     def for_nothing[T1]() -> hydra.compute.Flow[T1, hydra.core.Type]:
         n = hydra.lib.lists.length(type_args)
-        return hydra.lib.logic.if_else(hydra.lib.equality.equal(n, 1), hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeOptional(hydra.lib.lists.head(type_args)))), hydra.lib.flows.fail(hydra.lib.strings.cat((hydra.lib.strings.cat(("optional type applied to ", hydra.lib.literals.show_int32(n))), " argument(s). Expected 1."))))
+        return hydra.lib.logic.if_else(hydra.lib.equality.equal(n, 1), hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeMaybe(hydra.lib.lists.head(type_args)))), hydra.lib.flows.fail(hydra.lib.strings.cat((hydra.lib.strings.cat(("optional type applied to ", hydra.lib.literals.show_int32(n))), " argument(s). Expected 1."))))
     def for_just(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Type]:
-        return hydra.lib.flows.bind(hydra.lib.flows.bind(type_of(tx, cast(frozenlist[hydra.core.Type], ()), term), (lambda term_type: hydra.lib.flows.bind(check_type_variables(tx, term_type), (lambda _: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeOptional(term_type))))))), (lambda t: apply_type_arguments_to_type(tx, type_args, t)))
+        return hydra.lib.flows.bind(hydra.lib.flows.bind(type_of(tx, cast(frozenlist[hydra.core.Type], ()), term), (lambda term_type: hydra.lib.flows.bind(check_type_variables(tx, term_type), (lambda _: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeMaybe(term_type))))))), (lambda t: apply_type_arguments_to_type(tx, type_args, t)))
     return hydra.lib.maybes.maybe(cast(hydra.compute.Flow[T0, hydra.core.Type], for_nothing()), for_just, mt)
 
 def type_of_record[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], record: hydra.core.Record) -> hydra.compute.Flow[T0, hydra.core.Type]:

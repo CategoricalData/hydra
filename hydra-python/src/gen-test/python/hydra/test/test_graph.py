@@ -45,13 +45,13 @@ test_data_arthur = hydra.core.TermRecord(hydra.core.Record("test_type_person_nam
 
 test_type_buddy_list_a = hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("a"), hydra.core.TypeRecord(hydra.core.RowType("test_type_buddy_list_a_name", tuple([
   hydra.core.FieldType(hydra.core.Name("head"), hydra.core.TypeVariable(hydra.core.Name("a"))),
-  hydra.core.FieldType(hydra.core.Name("tail"), hydra.core.TypeOptional(hydra.core.TypeApplication(hydra.core.ApplicationType(hydra.core.TypeVariable("test_type_buddy_list_b_name"), hydra.core.TypeVariable(hydra.core.Name("a"))))))])))))
+  hydra.core.FieldType(hydra.core.Name("tail"), hydra.core.TypeMaybe(hydra.core.TypeApplication(hydra.core.ApplicationType(hydra.core.TypeVariable("test_type_buddy_list_b_name"), hydra.core.TypeVariable(hydra.core.Name("a"))))))])))))
 
 test_type_buddy_list_a_name = hydra.core.Name("BuddyListA")
 
 test_type_buddy_list_b = hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("a"), hydra.core.TypeRecord(hydra.core.RowType("test_type_buddy_list_b_name", tuple([
   hydra.core.FieldType(hydra.core.Name("head"), hydra.core.TypeVariable(hydra.core.Name("a"))),
-  hydra.core.FieldType(hydra.core.Name("tail"), hydra.core.TypeOptional(hydra.core.TypeApplication(hydra.core.ApplicationType(hydra.core.TypeVariable("test_type_buddy_list_a_name"), hydra.core.TypeVariable(hydra.core.Name("a"))))))])))))
+  hydra.core.FieldType(hydra.core.Name("tail"), hydra.core.TypeMaybe(hydra.core.TypeApplication(hydra.core.ApplicationType(hydra.core.TypeVariable("test_type_buddy_list_a_name"), hydra.core.TypeVariable(hydra.core.Name("a"))))))])))))
 
 test_type_buddy_list_b_name = hydra.core.Name("BuddyListB")
 
@@ -64,7 +64,7 @@ test_type_comparison_name = hydra.core.Name("Comparison")
 
 test_type_int_list = hydra.core.TypeRecord(hydra.core.RowType("test_type_int_list_name", tuple([
   hydra.core.FieldType(hydra.core.Name("head"), hydra.core.TypeLiteral(hydra.core.LiteralTypeInteger(hydra.core.IntegerType.INT32))),
-  hydra.core.FieldType(hydra.core.Name("tail"), hydra.core.TypeOptional(hydra.core.TypeVariable("test_type_int_list_name")))])))
+  hydra.core.FieldType(hydra.core.Name("tail"), hydra.core.TypeMaybe(hydra.core.TypeVariable("test_type_int_list_name")))])))
 
 test_type_int_list_name = hydra.core.Name("IntList")
 
@@ -82,7 +82,7 @@ test_type_hydra_type_name = hydra.core.Name("HydraType")
 
 test_type_list = hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("a"), hydra.core.TypeRecord(hydra.core.RowType("test_type_list_name", tuple([
   hydra.core.FieldType(hydra.core.Name("head"), hydra.core.TypeVariable(hydra.core.Name("a"))),
-  hydra.core.FieldType(hydra.core.Name("tail"), hydra.core.TypeOptional(hydra.core.TypeApplication(hydra.core.ApplicationType(hydra.core.TypeVariable("test_type_list_name"), hydra.core.TypeVariable(hydra.core.Name("a"))))))])))))
+  hydra.core.FieldType(hydra.core.Name("tail"), hydra.core.TypeMaybe(hydra.core.TypeApplication(hydra.core.ApplicationType(hydra.core.TypeVariable("test_type_list_name"), hydra.core.TypeVariable(hydra.core.Name("a"))))))])))))
 
 test_type_list_name = hydra.core.Name("List")
 

@@ -153,7 +153,7 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
                 return ((lname, cast(hydra.core.Type, hydra.core.TypeVariable(to_name(ns, s.value)))),)
             
             case hydra.grammar.PatternOption(value=p):
-                return mod("Option", (lambda x: cast(hydra.core.Type, hydra.core.TypeOptional(x))), p)
+                return mod("Option", (lambda x: cast(hydra.core.Type, hydra.core.TypeMaybe(x))), p)
             
             case hydra.grammar.PatternPlus(value=p2):
                 return mod("Elmt", (lambda x: cast(hydra.core.Type, hydra.core.TypeList(x))), p2)

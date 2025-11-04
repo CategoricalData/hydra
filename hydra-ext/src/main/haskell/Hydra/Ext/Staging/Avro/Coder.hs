@@ -167,10 +167,10 @@ avroHydraAdapter schema = case schema of
                       return $ TermVariable $ constr s
                 -- Support three special cases of foreign key types: plain, optional, and list
                 case deannotateType (adapterTarget ad) of
-                  TypeOptional (TypeLiteral lit) -> forTypeAndCoder ad (Types.optional elTyp) coder
+                  TypeMaybe (TypeLiteral lit) -> forTypeAndCoder ad (Types.optional elTyp) coder
                     where
                       coder = Coder {
-                        coderEncode = \json -> (TermOptional . Just) <$> encodeValue json,
+                        coderEncode = \json -> (TermMaybe . Just) <$> encodeValue json,
                         coderDecode = decodeTerm}
                   TypeList (TypeLiteral lit) -> forTypeAndCoder ad (Types.list elTyp) coder
                     where
@@ -247,12 +247,12 @@ avroHydraAdapter schema = case schema of
         forOptional s = do
           ad <- avroHydraAdapter s
           let coder = Coder {
-                coderDecode = \(TermOptional ot) -> case ot of
+                coderDecode = \(TermMaybe ot) -> case ot of
                   Nothing -> pure $ Json.ValueNull
                   Just term -> coderDecode (adapterCoder ad) term,
                 coderEncode = \v -> case v of
-                  Json.ValueNull -> pure $ TermOptional Nothing
-                  _ -> TermOptional . Just <$> coderEncode (adapterCoder ad) v}
+                  Json.ValueNull -> pure $ TermMaybe Nothing
+                  _ -> TermMaybe . Just <$> coderEncode (adapterCoder ad) v}
           return $ Adapter (adapterIsLossy ad) schema (Types.optional $ adapterTarget ad) coder
   where
     simpleAdapter typ encode decode = pure $ Adapter False schema typ $ Coder encode decode
@@ -389,5 +389,5 @@ termToString term = case deannotateTerm term of
       IntegerValueUint64 i -> show i
     LiteralString s -> pure s
     _ -> unexpected "boolean, integer, or string" $ show l
-  TermOptional (Just term') -> termToString term'
+  TermMaybe (Just term') -> termToString term'
   _ -> unexpected "literal value" $ show term

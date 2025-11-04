@@ -43,19 +43,19 @@ typeScriptLanguage = Coders.Language {
       Mantle.TermVariantList,
       Mantle.TermVariantLiteral,
       Mantle.TermVariantMap,
-      Mantle.TermVariantOptional,
+      Mantle.TermVariantMaybe,
       Mantle.TermVariantRecord,
       Mantle.TermVariantUnion])
     typeVariants = (Sets.fromList [
       Mantle.TypeVariantList,
       Mantle.TypeVariantLiteral,
       Mantle.TypeVariantMap,
-      Mantle.TypeVariantOptional,
+      Mantle.TypeVariantMaybe,
       Mantle.TypeVariantRecord,
       Mantle.TypeVariantUnion])
     types = (\x -> case x of
       Core.TypeMap v1 -> ((\x -> case x of
-        Core.TypeOptional _ -> False
+        Core.TypeMaybe _ -> False
         _ -> True) (Rewriting.deannotateType (Core.mapTypeValues v1)))
       _ -> True)
 

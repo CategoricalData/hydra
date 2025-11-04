@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -65,7 +65,7 @@ module_ = Module (Namespace "hydra.monads") elements
       el mapDef,
       el modifyDef,
       el mutateTraceDef,
-      el optionalToListDef,
+      el maybeToListDef,
       el pureDef,
       el pushErrorDef,
       el putStateDef,
@@ -175,8 +175,8 @@ mutateTraceDef = define "mutateTrace" $
     var "choose" @@ var "forLeft" @@ var "forRight" @@ (var "mutate" @@ var "t0")) $
   Compute.flow $ var "flowFun"
 
-optionalToListDef :: TBinding (Maybe a -> [a])
-optionalToListDef = define "optionalToList" $
+maybeToListDef :: TBinding (Maybe a -> [a])
+maybeToListDef = define "maybeToList" $
   doc "Converts an optional value either to an empty list (if nothing) or a singleton list (if just)." $
   "mx" ~> Maybes.maybe (list []) (unaryFunction Lists.pure) (var "mx")
 

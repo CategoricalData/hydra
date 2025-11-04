@@ -173,7 +173,7 @@ nominal getName getB getA expected =
 
 optional :: (Core.Term -> Maybe (Maybe Core.Term))
 optional arg_ = ((\x -> case x of
-  Core.TermOptional v1 -> (Maybes.pure v1)
+  Core.TermMaybe v1 -> (Maybes.pure v1)
   _ -> Nothing) (Rewriting.deannotateTerm arg_))
 
 pair :: (Core.Term -> Maybe (Core.Term, Core.Term))

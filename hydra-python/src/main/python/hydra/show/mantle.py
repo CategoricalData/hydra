@@ -31,8 +31,8 @@ def term_variant(v1: hydra.mantle.TermVariant) -> str:
         case hydra.mantle.TermVariant.MAP:
             return "map"
         
-        case hydra.mantle.TermVariant.OPTIONAL:
-            return "optional"
+        case hydra.mantle.TermVariant.MAYBE:
+            return "maybe"
         
         case hydra.mantle.TermVariant.PRODUCT:
             return "product"
@@ -89,8 +89,8 @@ def type_variant(v1: hydra.mantle.TypeVariant) -> str:
         case hydra.mantle.TypeVariant.MAP:
             return "map"
         
-        case hydra.mantle.TypeVariant.OPTIONAL:
-            return "optional"
+        case hydra.mantle.TypeVariant.MAYBE:
+            return "maybe"
         
         case hydra.mantle.TypeVariant.PRODUCT:
             return "product"

@@ -112,7 +112,7 @@ makeElements omitTrivial ns lname pat =
                 Grammar.PatternNil -> trivial
                 Grammar.PatternNonterminal v1 -> [
                   (lname, (Core.TypeVariable (toName ns (Grammar.unSymbol v1))))]
-                Grammar.PatternOption v1 -> (mod "Option" (\x -> Core.TypeOptional x) v1)
+                Grammar.PatternOption v1 -> (mod "Option" (\x -> Core.TypeMaybe x) v1)
                 Grammar.PatternPlus v1 -> (mod "Elmt" (\x -> Core.TypeList x) v1)
                 Grammar.PatternRegex _ -> [
                   (lname, (Core.TypeLiteral Core.LiteralTypeString))]
