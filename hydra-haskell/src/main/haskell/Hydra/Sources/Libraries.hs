@@ -423,25 +423,33 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
 _hydra_lib_math :: Namespace
 _hydra_lib_math = Namespace "hydra.lib.math"
 
-_math_add   = qname _hydra_lib_math "add" :: Name
-_math_div   = qname _hydra_lib_math "div" :: Name
-_math_mod   = qname _hydra_lib_math "mod" :: Name
-_math_mul   = qname _hydra_lib_math "mul" :: Name
-_math_neg   = qname _hydra_lib_math "neg" :: Name
-_math_range = qname _hydra_lib_math "range" :: Name
-_math_rem   = qname _hydra_lib_math "rem" :: Name
-_math_sub   = qname _hydra_lib_math "sub" :: Name
+_math_abs    = qname _hydra_lib_math "abs" :: Name
+_math_add    = qname _hydra_lib_math "add" :: Name
+_math_div    = qname _hydra_lib_math "div" :: Name
+_math_mod    = qname _hydra_lib_math "mod" :: Name
+_math_mul    = qname _hydra_lib_math "mul" :: Name
+_math_neg    = qname _hydra_lib_math "neg" :: Name
+_math_pred   = qname _hydra_lib_math "pred" :: Name
+_math_range  = qname _hydra_lib_math "range" :: Name
+_math_rem    = qname _hydra_lib_math "rem" :: Name
+_math_signum = qname _hydra_lib_math "signum" :: Name
+_math_sub    = qname _hydra_lib_math "sub" :: Name
+_math_succ   = qname _hydra_lib_math "succ" :: Name
 
 hydraLibMathInt32 :: Library
 hydraLibMathInt32 = standardLibrary _hydra_lib_math [
-  prim2 _math_add   Math.add   [] int32 int32 int32,
-  prim2 _math_div   Math.div   [] int32 int32 int32,
-  prim2 _math_mod   Math.mod   [] int32 int32 int32,
-  prim2 _math_mul   Math.mul   [] int32 int32 int32,
-  prim1 _math_neg   Math.neg   [] int32 int32,
-  prim2 _math_range Math.range [] int32 int32 (list int32),
-  prim2 _math_rem   Math.rem   [] int32 int32 int32,
-  prim2 _math_sub   Math.sub   [] int32 int32 int32]
+  prim1 _math_abs    Math.abs    [] int32 int32,
+  prim2 _math_add    Math.add    [] int32 int32 int32,
+  prim2 _math_div    Math.div    [] int32 int32 int32,
+  prim2 _math_mod    Math.mod    [] int32 int32 int32,
+  prim2 _math_mul    Math.mul    [] int32 int32 int32,
+  prim1 _math_neg    Math.neg    [] int32 int32,
+  prim1 _math_pred   Math.pred   [] int32 int32,
+  prim2 _math_range  Math.range  [] int32 int32 (list int32),
+  prim2 _math_rem    Math.rem    [] int32 int32 int32,
+  prim1 _math_signum Math.signum [] int32 int32,
+  prim2 _math_sub    Math.sub    [] int32 int32 int32,
+  prim1 _math_succ   Math.succ   [] int32 int32]
 
 -- * hydra.lib.optionals primitives
 

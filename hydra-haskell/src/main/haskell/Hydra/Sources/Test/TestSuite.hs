@@ -59,4 +59,3 @@ primitiveTestsEl = encodedTestGroupToBinding testSuiteNs "primitiveTests" $
       stringPrimitiveTestsEl]
 
 stringPrimitiveTestsEl = testGroupToBinding testSuiteNs "stringPrimitiveTests" stringPrimitiveTests
-

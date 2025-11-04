@@ -3,8 +3,8 @@
 module Hydra.Lib.Math where
 
 
-neg :: Num a => a -> a
-neg = negate
+abs :: Num a => a -> a
+abs = Prelude.abs
 
 add :: Num a => a -> a -> a
 add x y = x + y
@@ -18,11 +18,23 @@ mod = Prelude.mod
 mul :: Num a => a -> a -> a
 mul x y = x * y
 
+neg :: Num a => a -> a
+neg = negate
+
+pred :: Enum a => a -> a
+pred = Prelude.pred
+
 range :: Enum a => a -> a -> [a]
 range start end = [start .. end]
 
 rem :: Integral a => a -> a -> a
 rem = Prelude.rem
 
+signum :: Num a => a -> a
+signum = Prelude.signum
+
 sub :: Num a => a -> a -> a
 sub x y = x - y
+
+succ :: Enum a => a -> a
+succ = Prelude.succ
