@@ -17,7 +17,7 @@ import hydra.lib.lists
 import hydra.lib.literals
 import hydra.lib.logic
 import hydra.lib.maps
-import hydra.lib.optionals
+import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.monads
 import hydra.rewriting
@@ -343,7 +343,7 @@ def optional[T0](f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.G
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[T0]]:
         match term:
             case hydra.core.TermOptional(value=mt):
-                return hydra.lib.optionals.maybe(hydra.lib.flows.pure(cast(Maybe[T0], Nothing())), (lambda t: hydra.lib.flows.map(cast(Callable[[T0], Maybe[T0]], hydra.lib.optionals.pure), f(t))), mt)
+                return hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(Maybe[T0], Nothing())), (lambda t: hydra.lib.flows.map(cast(Callable[[T0], Maybe[T0]], hydra.lib.maybes.pure), f(t))), mt)
             
             case _:
                 return hydra.monads.unexpected("optional value", hydra.show.core.term(term))

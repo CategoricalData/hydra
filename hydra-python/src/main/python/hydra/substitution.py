@@ -10,7 +10,7 @@ import hydra.core
 import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
-import hydra.lib.optionals
+import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.rewriting
 import hydra.typing
@@ -19,10 +19,10 @@ def subst_in_type(subst: hydra.typing.TypeSubst, typ0: hydra.core.Type) -> hydra
     def rewrite(recurse: Callable[[hydra.core.Type], hydra.core.Type], typ: hydra.core.Type) -> hydra.core.Type:
         match typ:
             case hydra.core.TypeForall(value=lt):
-                return hydra.lib.optionals.maybe(recurse(typ), (lambda styp: cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(lt.parameter, subst_in_type(remove_var(lt.parameter), lt.body))))), hydra.lib.maps.lookup(lt.parameter, subst.value))
+                return hydra.lib.maybes.maybe(recurse(typ), (lambda styp: cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(lt.parameter, subst_in_type(remove_var(lt.parameter), lt.body))))), hydra.lib.maps.lookup(lt.parameter, subst.value))
             
             case hydra.core.TypeVariable(value=v):
-                return hydra.lib.optionals.maybe(typ, (lambda styp: styp), hydra.lib.maps.lookup(v, subst.value))
+                return hydra.lib.maybes.maybe(typ, (lambda styp: styp), hydra.lib.maps.lookup(v, subst.value))
             
             case _:
                 return recurse(typ)
@@ -32,7 +32,7 @@ def subst_in_type(subst: hydra.typing.TypeSubst, typ0: hydra.core.Type) -> hydra
 
 def compose_type_subst(s1: hydra.typing.TypeSubst, s2: hydra.typing.TypeSubst) -> hydra.typing.TypeSubst:
     def is_extra[T0](k: hydra.core.Name, v: T0) -> bool:
-        return hydra.lib.optionals.is_nothing(hydra.lib.maps.lookup(k, s1.value))
+        return hydra.lib.maybes.is_nothing(hydra.lib.maps.lookup(k, s1.value))
     with_extra = hydra.lib.maps.filter_with_key(cast(Callable[[hydra.core.Name, hydra.core.Type], bool], is_extra), s2.value)
     return hydra.typing.TypeSubst(hydra.lib.maps.union(with_extra, hydra.lib.maps.map((lambda v1: subst_in_type(s2, v1)), s1.value)))
 
@@ -71,13 +71,13 @@ def subst_types_in_term(subst: hydra.typing.TypeSubst, term0: hydra.core.Term) -
                 case _:
                     return dflt
         def for_lambda(l: hydra.core.Lambda) -> hydra.core.Term:
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, hydra.lib.optionals.map((lambda v1: subst_in_type(subst, v1)), l.domain), subst_types_in_term(subst, l.body))))))
+            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, hydra.lib.maybes.map((lambda v1: subst_in_type(subst, v1)), l.domain), subst_types_in_term(subst, l.body))))))
         def for_let(l: hydra.core.Let) -> hydra.core.Term:
             def rewrite_binding(b: hydra.core.Binding) -> hydra.core.Binding:
-                return hydra.core.Binding(b.name, subst_types_in_term(subst, b.term), hydra.lib.optionals.map((lambda v1: subst_in_type_scheme(subst, v1)), b.type))
+                return hydra.core.Binding(b.name, subst_types_in_term(subst, b.term), hydra.lib.maybes.map((lambda v1: subst_in_type_scheme(subst, v1)), b.type))
             return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.map(rewrite_binding, l.bindings), subst_types_in_term(subst, l.body))))
         def for_tuple_projection(tp: hydra.core.TupleProjection) -> hydra.core.Term:
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationProduct(hydra.core.TupleProjection(tp.arity, tp.index, hydra.lib.optionals.map((lambda types: hydra.lib.lists.map((lambda v1: subst_in_type(subst, v1)), types)), tp.domain))))))))
+            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationProduct(hydra.core.TupleProjection(tp.arity, tp.index, hydra.lib.maybes.map((lambda types: hydra.lib.lists.map((lambda v1: subst_in_type(subst, v1)), types)), tp.domain))))))))
         def for_type_application(tt: hydra.core.TypeApplicationTerm) -> hydra.core.Term:
             return cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(subst_types_in_term(subst, tt.body), subst_in_type(subst, tt.type))))
         def for_type_lambda(ta: hydra.core.TypeLambda) -> hydra.core.Term:
@@ -134,7 +134,7 @@ def substitute_in_term(subst: hydra.typing.TermSubst, term0: hydra.core.Term) ->
                 return with_let(l)
             
             case hydra.core.TermVariable(value=name):
-                return hydra.lib.optionals.maybe(recurse(term), (lambda sterm: sterm), hydra.lib.maps.lookup(name, s))
+                return hydra.lib.maybes.maybe(recurse(term), (lambda sterm: sterm), hydra.lib.maps.lookup(name, s))
             
             case _:
                 return recurse(term)

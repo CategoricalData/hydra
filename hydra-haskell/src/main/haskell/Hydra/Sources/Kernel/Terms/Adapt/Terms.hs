@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -118,7 +118,7 @@ forTypeReferenceDef = define "forTypeReference" $
   "encdec" <~ ("name" ~> "dir" ~> "term" ~>
     "cx" <<~ ref Monads.getStateDef $
     "adapters" <~ Coders.adapterContextAdapters (var "cx") $
-    Optionals.maybe
+    Maybes.maybe
       (Flows.fail (Strings.cat2 "no adapter for reference type " (unwrap _Name @@ var "name")))
       ("ad" ~> ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder (var "ad")) @@ var "term")
       (Maps.lookup (var "name") (var "adapters"))) $
@@ -139,7 +139,7 @@ forTypeReferenceDef = define "forTypeReference" $
       (var "newAdapters") $
     "ignored" <<~ ref Monads.putStateDef @@ var "newCx" $
     "mt" <<~ ref withGraphContextDef @@ (ref Schemas.resolveTypeDef @@ (Core.typeVariable (var "name"))) $
-    Optionals.maybe
+    Maybes.maybe
       (produce (Compute.adapter (var "lossy") (Core.typeVariable (var "name")) (Core.typeVariable (var "name"))
         (ref AdaptUtils.bidirectionalDef @@ ("dir" ~> "term" ~> produce (var "term")))))
       (var "forType" @@ var "cx" @@ var "adapters")
@@ -150,7 +150,7 @@ forTypeReferenceDef = define "forTypeReference" $
       (ref AdaptUtils.bidirectionalDef @@ (var "encdec" @@ var "name")) $
     "cx" <<~ ref Monads.getStateDef $
     "adapters" <~ Coders.adapterContextAdapters (var "cx") $
-    Optionals.maybe
+    Maybes.maybe
       (var "forMissingAdapter" @@ var "cx" @@ var "lossy" @@ var "adapters" @@ var "placeholder")
       (unaryFunction Flows.pure)
       (Maps.lookup (var "name") (var "adapters"))) $
@@ -199,7 +199,7 @@ functionToUnionDef = define "functionToUnion" $
     Compute.coderEncode (Compute.adapterCoder (var "ad")) @@ (var "encTerm" @@ var "term" @@ var "strippedTerm")) $
   "readFromString" <~ ("term" ~>
     "s" <<~ ref ExtractCore.stringDef @@ var "term" $
-    Optionals.maybe
+    Maybes.maybe
       (Flows.fail (Strings.cat2 "failed to parse term: " (var "s")))
       (unaryFunction Flows.pure)
       (ref ShowCore.readTermDef @@ var "s")) $
@@ -215,7 +215,7 @@ functionToUnionDef = define "functionToUnion" $
     "field" <<~ ref withGraphContextDef @@ (ref ExtractCore.injectionDef @@ (ref functionProxyNameDef) @@ var "injTerm") $
     "fname" <~ Core.fieldName (var "field") $
     "fterm" <~ Core.fieldTerm (var "field") $
-    Optionals.fromMaybe (var "notFound" @@ var "fname") (Maps.lookup (var "fname") (Maps.fromList (list [
+    Maybes.fromMaybe (var "notFound" @@ var "fname") (Maps.lookup (var "fname") (Maps.fromList (list [
       pair (Core.nameLift _Elimination_wrap) (var "forWrapped" @@ var "fterm"),
       pair (Core.nameLift _Elimination_record) (var "forProjection" @@ var "fterm"),
       pair (Core.nameLift _Elimination_union) (var "forCases" @@ var "fterm"),
@@ -264,7 +264,7 @@ optionalToListDef = define "optionalToList" $
   "t" ~>
   "encode" <~ ("ad" ~> "term" ~> cases _Term (var "term")
     Nothing [
-    _Term_optional>>: "m" ~> Optionals.maybe
+    _Term_optional>>: "m" ~> Maybes.maybe
       (produce (TTerms.list []))
       ("r" ~>
         "encoded" <<~ Compute.coderEncode (Compute.adapterCoder (var "ad")) @@ var "r" $
@@ -344,7 +344,7 @@ passFunctionDef = define "passFunction" $
     (Just (produce nothing)) [
     _Type_optional >>: "ot" ~>
       Flows.map (unaryFunction just) (ref termAdapterDef @@ TTypes.function (var "ot") (var "cod"))]) $
-  "getCoder" <~ ("caseAds" ~> "fname" ~> Optionals.maybe
+  "getCoder" <~ ("caseAds" ~> "fname" ~> Maybes.maybe
     (ref AdaptUtils.idCoderDef)
     (unaryFunction Compute.adapterCoder)
     (Maps.lookup (var "fname") (var "caseAds"))) $
@@ -357,7 +357,7 @@ passFunctionDef = define "passFunction" $
       "rcases" <<~ Flows.mapList
         ("f" ~> ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (var "getCoder" @@ var "caseAds" @@ Core.fieldName (var "f")) @@ var "f")
         (var "cases") $
-      "rdef" <<~ Optionals.maybe
+      "rdef" <<~ Maybes.maybe
         (produce nothing)
         ("d" ~> Flows.map (unaryFunction just) (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ Compute.adapterCoder (var "codAd") @@ var "d"))
         (var "def") $
@@ -583,7 +583,7 @@ passUnionDef = define "passUnion" $
       "sfields" <~ Core.rowTypeFields (var "rt") $
       "tname" <~ Core.rowTypeTypeName (var "rt") $
       "getAdapter" <~ ("adaptersMap" ~> "f" ~>
-        Optionals.maybe
+        Maybes.maybe
           (Flows.fail (Strings.cat2 "no such field: " (unwrap _Name @@ (Core.fieldName (var "f")))))
           (unaryFunction Flows.pure)
           (Maps.lookup (Core.fieldName (var "f")) (var "adaptersMap"))) $
@@ -698,10 +698,10 @@ unionToRecordDef = define "unionToRecord" $
     "fterm" <~ Core.fieldTerm (var "field") $
     cases _Term (var "fterm")
       Nothing [
-      _Term_optional>>: "opt" ~> Optionals.bind (var "opt") ("t" ~>
+      _Term_optional>>: "opt" ~> Maybes.bind (var "opt") ("t" ~>
         just (Core.field (var "fn") (var "t")))]) $
   "fromRecordFields" <~ ("term" ~> "term'" ~> "t'" ~> "fields" ~>
-    "matches" <~ Optionals.mapMaybe (var "forField") (var "fields") $
+    "matches" <~ Maybes.mapMaybe (var "forField") (var "fields") $
     Logic.ifElse (Lists.null (var "matches"))
       (Flows.fail (Strings.cat (list [
         "cannot convert term back to union: ",

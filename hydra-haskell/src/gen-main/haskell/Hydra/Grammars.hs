@@ -13,7 +13,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
@@ -40,7 +40,7 @@ findNames pats =
             in  
               let rn = (rawName pat)
               in  
-                let nameAndIndex = (Optionals.maybe (rn, 1) (\i -> (Strings.cat2 rn (Literals.showInt32 (Math.add i 1)), (Math.add i 1))) (Maps.lookup rn nameMap))
+                let nameAndIndex = (Maybes.maybe (rn, 1) (\i -> (Strings.cat2 rn (Literals.showInt32 (Math.add i 1)), (Math.add i 1))) (Maps.lookup rn nameMap))
                 in  
                   let nn = (fst nameAndIndex)
                   in  

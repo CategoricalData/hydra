@@ -8,7 +8,7 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
@@ -25,7 +25,7 @@ compactName namespaces name =
   let qualName = (qualifyName name) 
       mns = (Module.qualifiedNameNamespace qualName)
       local = (Module.qualifiedNameLocal qualName)
-  in (Optionals.maybe (Core.unName name) (\ns -> Optionals.maybe local (\pre -> Strings.cat [
+  in (Maybes.maybe (Core.unName name) (\ns -> Maybes.maybe local (\pre -> Strings.cat [
     pre,
     ":",
     local]) (Maps.lookup ns namespaces)) mns)
@@ -68,7 +68,7 @@ uniqueLabel visited l = (Logic.ifElse (Sets.member l visited) (uniqueLabel visit
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: (Module.QualifiedName -> Core.Name)
 unqualifyName qname =  
-  let prefix = (Optionals.maybe "" (\n -> Strings.cat [
+  let prefix = (Maybes.maybe "" (\n -> Strings.cat [
           Module.unNamespace n,
           "."]) (Module.qualifiedNameNamespace qname))
   in (Core.Name (Strings.cat [

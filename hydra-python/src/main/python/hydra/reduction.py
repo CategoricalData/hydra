@@ -20,7 +20,7 @@ import hydra.lib.literals
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.math
-import hydra.lib.optionals
+import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.rewriting
@@ -113,7 +113,7 @@ def eta_expansion_arity(graph: hydra.graph.Graph, term: hydra.core.Term) -> int:
                     return 0
                 
                 case hydra.core.FunctionPrimitive(value=name):
-                    return hydra.arity.primitive_arity(hydra.lib.optionals.from_just(hydra.lexical.lookup_primitive(graph, name)))
+                    return hydra.arity.primitive_arity(hydra.lib.maybes.from_just(hydra.lexical.lookup_primitive(graph, name)))
         
         case hydra.core.TermTypeLambda(value=ta):
             return eta_expansion_arity(graph, ta.body)
@@ -122,7 +122,7 @@ def eta_expansion_arity(graph: hydra.graph.Graph, term: hydra.core.Term) -> int:
             return eta_expansion_arity(graph, tt.body)
         
         case hydra.core.TermVariable(value=name):
-            return hydra.lib.optionals.maybe(0, (lambda ts: hydra.arity.type_arity(ts.type)), hydra.lib.optionals.bind(hydra.lexical.lookup_element(graph, name), (lambda b: b.type)))
+            return hydra.lib.maybes.maybe(0, (lambda ts: hydra.arity.type_arity(ts.type)), hydra.lib.maybes.bind(hydra.lexical.lookup_element(graph, name), (lambda b: b.type)))
         
         case _:
             return 0
@@ -330,7 +330,7 @@ def reduce_term(eager: bool, term: hydra.core.Term) -> hydra.compute.Flow[hydra.
                 return hydra.lib.flows.bind(hydra.extract.core.record(proj.type_name, hydra.rewriting.deannotate_term(reduced_arg)), (lambda fields: (matching_fields := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, proj.field)), fields), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), hydra.lib.flows.fail(hydra.lib.strings.cat(("no such field: ", proj.field.value, " in ", proj.type_name.value, " record"))), hydra.lib.flows.pure(hydra.lib.lists.head(matching_fields).term)))[1]))
             
             case hydra.core.EliminationUnion(value=cs):
-                return hydra.lib.flows.bind(hydra.extract.core.injection(cs.type_name, reduced_arg), (lambda field: (matching_fields := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, field.name)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), hydra.lib.optionals.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("no such field ", field.name.value, " in ", cs.type_name.value, " case statement"))), cast(Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], hydra.lib.flows.pure), cs.default), hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(hydra.lib.lists.head(matching_fields).term, field.term))))))[1]))
+                return hydra.lib.flows.bind(hydra.extract.core.injection(cs.type_name, reduced_arg), (lambda field: (matching_fields := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, field.name)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("no such field ", field.name.value, " in ", cs.type_name.value, " case statement"))), cast(Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], hydra.lib.flows.pure), cs.default), hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(hydra.lib.lists.head(matching_fields).term, field.term))))))[1]))
             
             case hydra.core.EliminationWrap(value=name):
                 return hydra.extract.core.wrap(name, reduced_arg)
@@ -400,7 +400,7 @@ def term_is_value[T0](g: T0, term: hydra.core.Term) -> bool:
                         return True
                     
                     case hydra.core.EliminationUnion(value=cs):
-                        return hydra.lib.logic.and_(check_fields(cs.cases), hydra.lib.optionals.maybe(True, (lambda v1: term_is_value(g, v1)), cs.default))
+                        return hydra.lib.logic.and_(check_fields(cs.cases), hydra.lib.maybes.maybe(True, (lambda v1: term_is_value(g, v1)), cs.default))
                     
                     case _:
                         raise TypeError("Unsupported Elimination")
@@ -427,7 +427,7 @@ def term_is_value[T0](g: T0, term: hydra.core.Term) -> bool:
             return hydra.lib.lists.foldl((lambda b, kv: hydra.lib.logic.and_(b, hydra.lib.logic.and_(term_is_value(g, kv[0]), term_is_value(g, kv[1])))), True, hydra.lib.maps.to_list(m))
         
         case hydra.core.TermOptional(value=m2):
-            return hydra.lib.optionals.maybe(True, (lambda v1: term_is_value(g, v1)), m2)
+            return hydra.lib.maybes.maybe(True, (lambda v1: term_is_value(g, v1)), m2)
         
         case hydra.core.TermRecord(value=r):
             return check_fields(r.fields)

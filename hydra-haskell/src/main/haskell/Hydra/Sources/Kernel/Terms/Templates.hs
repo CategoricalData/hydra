@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -141,7 +141,7 @@ instantiateTemplateDef = define "instantiateTemplate" $
       (Flows.bind (var "inst" @@ var "et") (
         "e" ~> Flows.pure (Core.termSet (Sets.fromList (list [var "e"]))))),
     _Type_variable>>: "tname" ~>
-      Optionals.maybe
+      Maybes.maybe
         (Flows.fail (Strings.cat2 (string "Type variable ") (Strings.cat2 (ref ShowCore.termDef @@ (Core.termVariable (var "tname"))) (string " not found in schema"))))
         (var "inst")
         (Maps.lookup (var "tname") (var "schema")),

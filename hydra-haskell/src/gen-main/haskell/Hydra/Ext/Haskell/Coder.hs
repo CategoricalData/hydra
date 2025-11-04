@@ -23,7 +23,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
@@ -95,9 +95,9 @@ constructModule namespaces mod coders pairs =
                                   Ast.importExportSpecName = (Utils.simpleName n),
                                   Ast.importExportSpecSubspec = Nothing}) hidden))))
                       in Ast.Import {
-                        Ast.importQualified = (Optionals.isJust malias),
+                        Ast.importQualified = (Maybes.isJust malias),
                         Ast.importModule = (Ast.ModuleName name),
-                        Ast.importAs = (Optionals.map (\x -> Ast.ModuleName x) malias),
+                        Ast.importAs = (Maybes.map (\x -> Ast.ModuleName x) malias),
                         Ast.importSpec = spec})
               in (Lists.map toImport [
                 (("Prelude", Nothing), [
@@ -125,7 +125,7 @@ constructModule namespaces mod coders pairs =
 encodeFunction :: (Module.Namespaces Ast.ModuleName -> Core.Function -> Compute.Flow Graph.Graph Ast.Expression)
 encodeFunction namespaces fun = ((\x -> case x of
   Core.FunctionElimination v1 -> ((\x -> case x of
-    Core.EliminationWrap v2 -> (Flows.pure (Ast.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Optionals.fromJust (Names.namespaceOf v2)) (Utils.newtypeAccessorName v2)))))
+    Core.EliminationWrap v2 -> (Flows.pure (Ast.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Maybes.fromJust (Names.namespaceOf v2)) (Utils.newtypeAccessorName v2)))))
     Core.EliminationProduct v2 ->  
       let arity = (Core.tupleProjectionArity v2) 
           idx = (Core.tupleProjectionIndex v2)
@@ -141,7 +141,7 @@ encodeFunction namespaces fun = ((\x -> case x of
           caseExpr = (Flows.bind (Lexical.withSchemaContext (Schemas.requireUnionType dn)) (\rt ->  
                   let fieldMap = (Maps.fromList (Lists.map toFieldMapEntry (Core.rowTypeFields rt))) 
                       toFieldMapEntry = (\f -> (Core.fieldTypeName f, f))
-                  in (Flows.bind (Flows.mapList (toAlt fieldMap) fields) (\ecases -> Flows.bind (Optionals.cases def (Flows.pure []) (\d -> Flows.bind (Flows.map (\x -> Ast.CaseRhs x) (encodeTerm namespaces d)) (\cs ->  
+                  in (Flows.bind (Flows.mapList (toAlt fieldMap) fields) (\ecases -> Flows.bind (Maybes.cases def (Flows.pure []) (\d -> Flows.bind (Flows.map (\x -> Ast.CaseRhs x) (encodeTerm namespaces d)) (\cs ->  
                     let lhs = (Ast.PatternName (Utils.rawName Constants.ignoredVariable)) 
                         alt = Ast.Alternative {
                                 Ast.alternativePattern = lhs,
@@ -162,7 +162,7 @@ encodeFunction namespaces fun = ((\x -> case x of
                         rhsTerm = (Rewriting.simplifyTerm raw)
                         v1 = (Logic.ifElse (Rewriting.isFreeVariableInTerm (Core.Name v0) rhsTerm) Constants.ignoredVariable v0)
                         hname = (Utils.unionFieldReference namespaces dn fn)
-                    in (Flows.bind (Optionals.cases (Maps.lookup fn fieldMap) (Flows.fail (Strings.cat [
+                    in (Flows.bind (Maybes.cases (Maps.lookup fn fieldMap) (Flows.fail (Strings.cat [
                       "field ",
                       Literals.showString (Core.unName fn),
                       " not found in ",
@@ -239,7 +239,7 @@ encodeTerm namespaces term =
                     hk,
                     hv])))
       in (Flows.bind (Flows.map (\x -> Ast.ExpressionList x) (Flows.mapList encodePair (Maps.toList v1))) (\rhs -> Flows.pure (Utils.hsapp lhs rhs)))
-    Core.TermOptional v1 -> (Optionals.cases v1 (Flows.pure (Utils.hsvar "Nothing")) (\t -> Flows.bind (encode t) (\ht -> Flows.pure (Utils.hsapp (Utils.hsvar "Just") ht))))
+    Core.TermOptional v1 -> (Maybes.cases v1 (Flows.pure (Utils.hsvar "Nothing")) (\t -> Flows.bind (encode t) (\ht -> Flows.pure (Utils.hsapp (Utils.hsvar "Just") ht))))
     Core.TermProduct v1 -> (Flows.bind (Flows.mapList encode v1) (\hterms -> Flows.pure (Ast.ExpressionTuple hterms)))
     Core.TermRecord v1 ->  
       let sname = (Core.recordTypeName v1) 
@@ -384,7 +384,7 @@ findOrdVariables typ =
           _ -> names) typ_) 
       isTypeVariable = (\v ->  
               let nameStr = (Core.unName v) 
-                  hasNoNamespace = (Optionals.isNothing (Names.namespaceOf v))
+                  hasNoNamespace = (Maybes.isNothing (Names.namespaceOf v))
                   startsWithT = (Equality.equal (Strings.charAt 0 nameStr) 116)
               in (Logic.and hasNoNamespace startsWithT))
       tryType = (\names -> \t -> (\x -> case x of
@@ -435,7 +435,7 @@ toDataDeclaration coders namespaces pair =
       tt = (snd pair)
       term = (Core.typeApplicationTermBody tt)
       typ = (Core.typeApplicationTermType tt)
-      coder = (Optionals.fromJust (Maps.lookup typ coders))
+      coder = (Maybes.fromJust (Maps.lookup typ coders))
       hname = (Utils.simpleName (Names.localNameOf (Core.bindingName el)))
       rewriteValueBinding = (\vb -> (\x -> case x of
               Ast.ValueBindingSimple v1 ->  
@@ -464,7 +464,7 @@ toDataDeclaration coders namespaces pair =
                 let lbindings = (Core.letBindings v1) 
                     env = (Core.letBody v1)
                     toBinding = (\hname_ -> \hterm_ -> Ast.LocalBindingValue (Utils.simpleValueBinding hname_ hterm_ Nothing))
-                    ts = (Lists.map (\binding -> Core.typeSchemeType (Optionals.fromJust (Core.bindingType binding))) lbindings)
+                    ts = (Lists.map (\binding -> Core.typeSchemeType (Maybes.fromJust (Core.bindingType binding))) lbindings)
                 in (Flows.bind (Flows.mapList (\t -> Modules.constructCoder Language.haskellLanguage (encodeTerm namespaces) t) ts) (\coders_ ->  
                   let hnames = (Lists.map (\binding -> Utils.simpleName (Core.unName (Core.bindingName binding))) lbindings) 
                       terms = (Lists.map Core.bindingTerm lbindings)
@@ -533,7 +533,7 @@ toTypeDeclarations namespaces el term =
                           let tname = (Names.unqualifyName (Module.QualifiedName {
                                   Module.qualifiedNameNamespace = (Just (fst (Module.namespacesFocus namespaces))),
                                   Module.qualifiedNameLocal = name}))
-                          in (Logic.ifElse (Optionals.isJust (Maps.lookup tname (Graph.graphElements g_))) (deconflict (Strings.cat2 name "_")) name))
+                          in (Logic.ifElse (Maybes.isJust (Maps.lookup tname (Graph.graphElements g_))) (deconflict (Strings.cat2 name "_")) name))
               in (Flows.bind (Annotations.getTypeDescription ftype) (\comments ->  
                 let nm = (deconflict (Strings.cat2 (Formatting.capitalize lname_) (Formatting.capitalize (Core.unName fname))))
                 in (Flows.bind (Logic.ifElse (Equality.equal (Rewriting.deannotateType ftype) Core.TypeUnit) (Flows.pure []) (Flows.bind (adaptTypeToHaskellAndEncode namespaces ftype) (\htype -> Flows.pure [
@@ -611,21 +611,21 @@ typeDecl namespaces name typ =
                             _ -> Nothing) v1)
                           _ -> Nothing) (Rewriting.deannotateTerm term))
                   decodeName = (\term -> (\x -> case x of
-                          Core.TermWrap v1 -> (Logic.ifElse (Equality.equal (Core.wrappedTermTypeName v1) (Core.Name "hydra.core.Name")) (Optionals.map (\x -> Core.Name x) (decodeString (Core.wrappedTermBody v1))) Nothing)
+                          Core.TermWrap v1 -> (Logic.ifElse (Equality.equal (Core.wrappedTermTypeName v1) (Core.Name "hydra.core.Name")) (Maybes.map (\x -> Core.Name x) (decodeString (Core.wrappedTermBody v1))) Nothing)
                           _ -> Nothing) (Rewriting.deannotateTerm term))
                   forType = (\field ->  
                           let fname = (Core.fieldName field) 
                               fterm = (Core.fieldTerm field)
-                          in (Logic.ifElse (Equality.equal fname (Core.Name "record")) Nothing (Logic.ifElse (Equality.equal fname (Core.Name "variable")) (Optionals.bind (decodeName fterm) forVariableType) Nothing)))
+                          in (Logic.ifElse (Equality.equal fname (Core.Name "record")) Nothing (Logic.ifElse (Equality.equal fname (Core.Name "variable")) (Maybes.bind (decodeName fterm) forVariableType) Nothing)))
                   forVariableType = (\vname ->  
                           let qname = (Names.qualifyName vname) 
                               mns = (Module.qualifiedNameNamespace qname)
                               local = (Module.qualifiedNameLocal qname)
-                          in (Optionals.map (\ns -> Core.TermVariable (Names.qname ns (Strings.cat [
+                          in (Maybes.map (\ns -> Core.TermVariable (Names.qname ns (Strings.cat [
                             "_",
                             local,
                             "_type_"]))) mns))
-              in (Optionals.fromMaybe (recurse term) (Optionals.bind variantResult forType)))
+              in (Maybes.fromMaybe (recurse term) (Maybes.bind variantResult forType)))
       finalTerm = (Rewriting.rewriteTerm rewrite rawTerm)
   in (Flows.bind (Modules.constructCoder Language.haskellLanguage (encodeTerm namespaces) (Core.TypeVariable (Core.Name "hydra.core.Type"))) (\coder -> Flows.bind (Compute.coderEncode coder finalTerm) (\expr ->  
     let rhs = (Ast.RightHandSide expr) 

@@ -10,7 +10,7 @@ import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
@@ -136,7 +136,7 @@ unifyTypeConstraints schemaTypes constraints =
                               _ -> noVars) sright)
                       in ((\x -> case x of
                         Core.TypeVariable v1 -> ((\x -> case x of
-                          Core.TypeVariable v2 -> (Logic.ifElse (Equality.equal (Core.unName v1) (Core.unName v2)) (unifyTypeConstraints schemaTypes rest) (Logic.ifElse (Optionals.isJust (Maps.lookup v1 schemaTypes)) (Logic.ifElse (Optionals.isJust (Maps.lookup v2 schemaTypes)) (Flows.fail (Strings.cat [
+                          Core.TypeVariable v2 -> (Logic.ifElse (Equality.equal (Core.unName v1) (Core.unName v2)) (unifyTypeConstraints schemaTypes rest) (Logic.ifElse (Maybes.isJust (Maps.lookup v1 schemaTypes)) (Logic.ifElse (Maybes.isJust (Maps.lookup v2 schemaTypes)) (Flows.fail (Strings.cat [
                             Strings.cat [
                               Strings.cat [
                                 Strings.cat [

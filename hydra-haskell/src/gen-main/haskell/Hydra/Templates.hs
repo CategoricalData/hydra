@@ -9,7 +9,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core__
@@ -85,7 +85,7 @@ instantiateTemplate minimal schema t =
                     Core.recordFields = dfields}))))
             Core.TypeSet v1 -> (Logic.ifElse minimal (Flows.pure (Core.TermSet Sets.empty)) (Flows.bind (inst v1) (\e -> Flows.pure (Core.TermSet (Sets.fromList [
               e])))))
-            Core.TypeVariable v1 -> (Optionals.maybe (Flows.fail (Strings.cat2 "Type variable " (Strings.cat2 (Core__.term (Core.TermVariable v1)) " not found in schema"))) inst (Maps.lookup v1 schema))
+            Core.TypeVariable v1 -> (Maybes.maybe (Flows.fail (Strings.cat2 "Type variable " (Strings.cat2 (Core__.term (Core.TermVariable v1)) " not found in schema"))) inst (Maps.lookup v1 schema))
             Core.TypeWrap v1 ->  
               let tname = (Core.wrappedTypeTypeName v1)
               in  

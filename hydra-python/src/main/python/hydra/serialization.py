@@ -12,7 +12,7 @@ import hydra.lib.lists
 import hydra.lib.literals
 import hydra.lib.logic
 import hydra.lib.math
-import hydra.lib.optionals
+import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.mantle
 
@@ -47,7 +47,7 @@ def angle_braces_list(style: hydra.ast.BlockStyle, els: frozenlist[hydra.ast.Exp
 curly_braces = hydra.ast.Brackets(sym("{"), sym("}"))
 
 def curly_braces_list(msymb: Maybe[str], style: hydra.ast.BlockStyle, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(els), cst("{}"), brackets(curly_braces, style, symbol_sep(hydra.lib.optionals.from_maybe(",", msymb), style, els)))
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(els), cst("{}"), brackets(curly_braces, style, symbol_sep(hydra.lib.maybes.from_maybe(",", msymb), style, els)))
 
 def expression_length(e: hydra.ast.Expr) -> int:
     r"""Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it."""
@@ -71,7 +71,7 @@ def expression_length(e: hydra.ast.Expr) -> int:
             case hydra.ast.WsDoubleBreak():
                 return 2
     def block_style_length(style: hydra.ast.BlockStyle) -> int:
-        mindent_len = hydra.lib.optionals.maybe(0, hydra.lib.strings.length, style.indent)
+        mindent_len = hydra.lib.maybes.maybe(0, hydra.lib.strings.length, style.indent)
         nl_before_len = hydra.lib.logic.if_else(style.newline_before_content, 1, 0)
         nl_after_len = hydra.lib.logic.if_else(style.newline_after_content, 1, 0)
         return hydra.lib.math.add(mindent_len, hydra.lib.math.add(nl_before_len, nl_after_len))
@@ -354,7 +354,7 @@ def print_expr(e: hydra.ast.Expr) -> str:
             do_indent = style.indent
             nl_before = style.newline_before_content
             nl_after = style.newline_after_content
-            ibody = hydra.lib.optionals.maybe(body, (lambda idt: custom_indent(idt, body)), do_indent)
+            ibody = hydra.lib.maybes.maybe(body, (lambda idt: custom_indent(idt, body)), do_indent)
             pre = hydra.lib.logic.if_else(nl_before, "\n", "")
             suf = hydra.lib.logic.if_else(nl_after, "\n", "")
             return hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((l, pre)), ibody)), suf)), r))

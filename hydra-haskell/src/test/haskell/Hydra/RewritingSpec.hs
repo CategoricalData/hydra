@@ -129,9 +129,9 @@ testEtaExpandTypedTerms g = do
       noChange "test #4"
         (splitOn @@ string "foo" @@ string "bar")
       expandsTo "test #5"
-        (primitive _optionals_maybe @@ (int32 42) @@ length)
-        (lambda "v1" $ primitive _optionals_maybe @@ (int32 42) @@ length @@ var "v1")
---        (lambda "v1" $ (primitive _optionals_maybe @@ (int32 42) @@ (lambda "v1" $ length @@ var "v1")) @@ var "v1")
+        (primitive _maybes_maybe @@ (int32 42) @@ length)
+        (lambda "v1" $ primitive _maybes_maybe @@ (int32 42) @@ length @@ var "v1")
+--        (lambda "v1" $ (primitive _maybes_maybe @@ (int32 42) @@ (lambda "v1" $ length @@ var "v1")) @@ var "v1")
       expandsTo "test #6"
         (project (Name "Person") (Name "firstName"))
         (lambda "v1" $ ((project (Name "Person") (Name "firstName") @@ var "v1")))
@@ -219,9 +219,9 @@ testEtaExpandUntypedTerms g = do
           (splitOn @@ var "foo" @@ var "bar" @@ var "baz")
       H.it "test #6" $
         expandsTo
-          (primitive _optionals_maybe @@ (int32 42) @@ length)
+          (primitive _maybes_maybe @@ (int32 42) @@ length)
           -- Note two levels of lambda expansion
-          (lambda "v1" $ (primitive _optionals_maybe @@ (int32 42) @@ (lambda "v1" $ length @@ var "v1")) @@ var "v1")
+          (lambda "v1" $ (primitive _maybes_maybe @@ (int32 42) @@ (lambda "v1" $ length @@ var "v1")) @@ var "v1")
       H.it "test #7" $
         expandsTo
           (project (Name "Person") (Name "firstName"))

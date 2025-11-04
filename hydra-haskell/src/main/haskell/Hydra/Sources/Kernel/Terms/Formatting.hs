@@ -19,7 +19,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -220,9 +220,9 @@ withCharacterAliasesDef = define "withCharacterAliases" $
       pair (int32 124) (string "verbar"),
       pair (int32 125) (string "rcub"),
       pair (int32 126) (string "tilde")],
-    "alias">: lambda "c" $ Optionals.fromMaybe
+    "alias">: lambda "c" $ Maybes.fromMaybe
       (Lists.pure $ var "c")
-      (Optionals.map (unaryFunction Strings.toList) $ Maps.lookup (var "c") (var "aliases"))]
+      (Maybes.map (unaryFunction Strings.toList) $ Maps.lookup (var "c") (var "aliases"))]
     $ Strings.fromList $ Lists.filter (unaryFunction Chars.isAlphaNum) $ Lists.concat $
       Lists.map (var "alias") $ Strings.toList $ var "original"
 

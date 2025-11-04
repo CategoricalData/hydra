@@ -6,7 +6,7 @@ import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
@@ -23,7 +23,7 @@ termAccessor :: (Accessors.TermAccessor -> Maybe String)
 termAccessor accessor =  
   let idx = (\i -> Nothing)
   in  
-    let idxSuff = (\suffix -> \i -> Optionals.map (\s -> Strings.cat2 s suffix) (idx i))
+    let idxSuff = (\suffix -> \i -> Maybes.map (\s -> Strings.cat2 s suffix) (idx i))
     in ((\x -> case x of
       Accessors.TermAccessorAnnotatedBody -> Nothing
       Accessors.TermAccessorApplicationFunction -> (Just "fun")
@@ -118,7 +118,7 @@ termToAccessorGraph namespaces term =
                                               in  
                                                 let stateAfterBindings = (Lists.foldl addBindingTerm ((Lists.concat2 nodes1 nodes, edges), visited1) nodeBindingPairs)
                                                 in (helper ids1 mroot nextPath stateAfterBindings (Accessors.TermAccessorLetBody, env))
-                          Core.TermVariable v1 -> (Optionals.maybe state (\root -> Optionals.maybe state (\node ->  
+                          Core.TermVariable v1 -> (Maybes.maybe state (\root -> Maybes.maybe state (\node ->  
                             let edge = Accessors.AccessorEdge {
                                     Accessors.accessorEdgeSource = root,
                                     Accessors.accessorEdgePath = (Accessors.AccessorPath (Lists.reverse nextPath)),

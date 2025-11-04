@@ -10,7 +10,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Topology as Topology
@@ -48,9 +48,9 @@ adjacencyListsToGraph edges0 =
                     let kNeighbors = (snd vkNeighbors)
                     in  
                       let neighbors = (snd kNeighbors)
-                      in (v, (Optionals.mapMaybe (\k -> Maps.lookup k keyToVertex) neighbors))) indexedEdges))
+                      in (v, (Maybes.mapMaybe (\k -> Maps.lookup k keyToVertex) neighbors))) indexedEdges))
           in  
-            let vertexToKey = (\v -> Optionals.fromJust (Maps.lookup v vertexMap))
+            let vertexToKey = (\v -> Maybes.fromJust (Maps.lookup v vertexMap))
             in (graph, vertexToKey)
 
 -- | Compute the strongly connected components of the given graph. The components are returned in reverse topological order

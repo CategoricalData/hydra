@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -559,7 +559,7 @@ optionalDef = define "optional" $
     (Just (ref Monads.unexpectedDef
       @@ "optional value"
       @@ (ref ShowCore.termDef @@ var "term"))) [
-    _Term_optional>>: "mt" ~> Optionals.maybe
+    _Term_optional>>: "mt" ~> Maybes.maybe
       (produce nothing)
       ("t" ~> Flows.map (unaryFunction just) (var "f" @@ var "t"))
       (var "mt")]) $

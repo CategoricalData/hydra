@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -212,11 +212,11 @@ adaptLiteralTypeDef = define "adaptLiteralType" $
   "forUnsupported" <~ ("lt" ~> cases _LiteralType (var "lt")
     (Just nothing) [
     _LiteralType_binary>>: constant $ just Core.literalTypeString,
-    _LiteralType_boolean>>: constant $ Optionals.map (unaryFunction Core.literalTypeInteger) $
+    _LiteralType_boolean>>: constant $ Maybes.map (unaryFunction Core.literalTypeInteger) $
       ref adaptIntegerTypeDef @@ var "constraints" @@ Core.integerTypeInt8,
-    _LiteralType_float>>: "ft" ~> Optionals.map (unaryFunction Core.literalTypeFloat) $
+    _LiteralType_float>>: "ft" ~> Maybes.map (unaryFunction Core.literalTypeFloat) $
       ref adaptFloatTypeDef @@ var "constraints" @@ var "ft",
-    _LiteralType_integer>>: "it" ~> Optionals.map (unaryFunction Core.literalTypeInteger) $
+    _LiteralType_integer>>: "it" ~> Maybes.map (unaryFunction Core.literalTypeInteger) $
       ref adaptIntegerTypeDef @@ var "constraints" @@ var "it"]) $
   Logic.ifElse (ref literalTypeSupportedDef @@ var "constraints" @@ var "lt")
     nothing
@@ -229,7 +229,7 @@ adaptLiteralTypesMapDef = define "adaptLiteralTypesMap" $
   "tryType" <~ ("lt" ~> optCases (ref adaptLiteralTypeDef @@ var "constraints" @@ var "lt")
     nothing
     ("lt2" ~> just $ pair (var "lt") (var "lt2"))) $
-  Maps.fromList $ Optionals.cat $ Lists.map (var "tryType") (ref Variants.literalTypesDef)
+  Maps.fromList $ Maybes.cat $ Lists.map (var "tryType") (ref Variants.literalTypesDef)
 
 adaptLiteralValueDef :: TBinding (M.Map LiteralType LiteralType -> LiteralType -> Literal -> Literal)
 adaptLiteralValueDef = define "adaptLiteralValue" $
@@ -352,7 +352,7 @@ dataGraphToDefinitionsDef = define "dataGraphToDefinitions" $
 
   -- Construct term definitions
   "toDef" <~ ("el" ~>
-    "ts" <~ Optionals.fromJust (Core.bindingType $ var "el") $
+    "ts" <~ Maybes.fromJust (Core.bindingType $ var "el") $
     Module.termDefinition
       (Core.bindingName $ var "el")
       (Core.bindingTerm $ var "el")
@@ -362,7 +362,7 @@ dataGraphToDefinitionsDef = define "dataGraphToDefinitions" $
     (var "graph2")
     (Lists.map
       ("names" ~> Lists.map (var "toDef") $
-        Lists.map ("n" ~> Optionals.fromJust $ Maps.lookup (var"n") (Graph.graphElements $ var "graph2")) (var "names"))
+        Lists.map ("n" ~> Maybes.fromJust $ Maps.lookup (var"n") (Graph.graphElements $ var "graph2")) (var "names"))
       (var "nameLists"))
 
 literalTypeSupportedDef :: TBinding (LanguageConstraints -> LiteralType -> Bool)
@@ -394,7 +394,7 @@ schemaGraphToDefinitionsDef = define "schemaGraphToDefinitions" $
     (var "tmap1")
     (Lists.map
       ("names" ~> Lists.map (var "toDef") $
-        Lists.map ("n" ~> pair (var "n") (Optionals.fromJust $ Maps.lookup (var "n") (var "tmap1"))) (var "names"))
+        Lists.map ("n" ~> pair (var "n") (Maybes.fromJust $ Maps.lookup (var "n") (var "tmap1"))) (var "names"))
       (var "nameLists"))
 
 termAlternativesDef :: TBinding (Term -> Flow Graph [Term])

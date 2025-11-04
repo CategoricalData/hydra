@@ -14,7 +14,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
@@ -72,13 +72,13 @@ checkForUnboundTypeVariables cx term0 =
                                   (Core__.type_ typ)],
                                 " at path: "],
                               (Strings.intercalate " >> " (Lists.reverse trace))],
-                            (Optionals.maybe "none" (\binding -> Strings.cat [
+                            (Maybes.maybe "none" (\binding -> Strings.cat [
                               Strings.cat [
                                 Strings.cat [
                                   ". bound term = ",
                                   (Core__.term (Core.bindingTerm binding))],
                                 ". bound type = "],
-                              (Optionals.maybe "none" Core__.typeScheme (Core.bindingType binding))]) lbinding)]))))
+                              (Maybes.maybe "none" Core__.typeScheme (Core.bindingType binding))]) lbinding)]))))
                 in  
                   let checkOptional = (\m -> Flows.bind (Flows.mapOptional check m) (\_ -> Flows.pure ()))
                   in  
@@ -94,7 +94,7 @@ checkForUnboundTypeVariables cx term0 =
                         let forBinding = (\b ->  
                                 let bterm = (Core.bindingTerm b)
                                 in  
-                                  let newVars = (Optionals.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingType b))
+                                  let newVars = (Maybes.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingType b))
                                   in  
                                     let newTrace = (Lists.cons (Core.unName (Core.bindingName b)) trace)
                                     in (checkRecursive newVars newTrace (Just b) bterm))
@@ -164,7 +164,7 @@ checkTypeSubst cx subst =
                 Core.TypeWrap _ -> True
                 _ -> False) (Rewriting.deannotateType (Core.typeSchemeType ts)))
         in  
-          let badVars = (Sets.fromList (Lists.filter (\v -> Optionals.maybe False isNominal (Lexical.dereferenceSchemaType v (Typing.inferenceContextSchemaTypes cx))) (Sets.toList suspectVars)))
+          let badVars = (Sets.fromList (Lists.filter (\v -> Maybes.maybe False isNominal (Lexical.dereferenceSchemaType v (Typing.inferenceContextSchemaTypes cx))) (Sets.toList suspectVars)))
           in  
             let badPairs = (Lists.filter (\p -> Sets.member (fst p) badVars) (Maps.toList s))
             in  
@@ -286,7 +286,7 @@ typeOfCaseStatement tx typeArgs cs =
       in  
         let cterms = (Lists.map Core.fieldTerm cases)
         in (Flows.bind (Flows.mapOptional (\e -> typeOf tx [] e) dflt) (\tdflt -> Flows.bind (Flows.mapList (\e -> typeOf tx [] e) cterms) (\tcterms -> Flows.bind (Flows.mapList (\t -> Flows.map Core.functionTypeCodomain (Core_.functionType t)) tcterms) (\fcods ->  
-          let cods = (Optionals.cat (Lists.cons tdflt (Lists.map Optionals.pure fcods)))
+          let cods = (Maybes.cat (Lists.cons tdflt (Lists.map Maybes.pure fcods)))
           in (Flows.bind (checkSameType tx "case branches" cods) (\cod -> Flows.pure (Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = (Schemas.nominalApplication tname typeArgs),
             Core.functionTypeCodomain = cod}))))))))
@@ -313,7 +313,7 @@ typeOfLambda tx typeArgs l =
     let mdom = (Core.lambdaDomain l)
     in  
       let body = (Core.lambdaBody l)
-      in (Flows.bind (Optionals.maybe (Flows.fail "untyped lambda") (\dom -> Flows.bind (checkTypeVariables tx dom) (\_ ->  
+      in (Flows.bind (Maybes.maybe (Flows.fail "untyped lambda") (\dom -> Flows.bind (checkTypeVariables tx dom) (\_ ->  
         let types2 = (Maps.insert v dom (Typing.typeContextTypes tx))
         in (Flows.bind (typeOf (Typing.TypeContext {
           Typing.typeContextTypes = types2,
@@ -332,7 +332,7 @@ typeOfLet tx typeArgs letTerm =
       in  
         let bterms = (Lists.map Core.bindingTerm bs)
         in  
-          let bindingType = (\b -> Optionals.maybe (Flows.fail (Strings.cat [
+          let bindingType = (\b -> Maybes.maybe (Flows.fail (Strings.cat [
                   "untyped let binding: ",
                   (Core__.binding b)])) (\ts -> Flows.pure (Schemas.typeSchemeToFType ts)) (Core.bindingType b))
           in (Flows.bind (Flows.mapList bindingType bs) (\btypes ->  
@@ -378,10 +378,10 @@ typeOfOptional tx typeArgs mt =
             " argument(s). Expected 1."])))
   in  
     let forJust = (\term -> Flows.bind (Flows.bind (typeOf tx [] term) (\termType -> Flows.bind (checkTypeVariables tx termType) (\_ -> Flows.pure (Core.TypeOptional termType)))) (\t -> applyTypeArgumentsToType tx typeArgs t))
-    in (Optionals.maybe forNothing forJust mt)
+    in (Maybes.maybe forNothing forJust mt)
 
 typeOfPrimitive :: (Typing.TypeContext -> [Core.Type] -> Core.Name -> Compute.Flow t0 Core.Type)
-typeOfPrimitive tx typeArgs name = (Flows.bind (Optionals.maybe (Flows.fail (Strings.cat [
+typeOfPrimitive tx typeArgs name = (Flows.bind (Maybes.maybe (Flows.fail (Strings.cat [
   "no such primitive: ",
   (Core.unName name)])) Schemas.instantiateTypeScheme (Maps.lookup name (Typing.inferenceContextPrimitiveTypes (Typing.typeContextInferenceContext tx)))) (\ts ->  
   let t = (Schemas.typeSchemeToFType ts)
@@ -424,7 +424,7 @@ typeOfTupleProjection tx typeArgs tp =
     let arity = (Core.tupleProjectionArity tp)
     in  
       let mtypes = (Core.tupleProjectionDomain tp)
-      in (Flows.bind (Optionals.maybe (Flows.fail "untyped tuple projection") (\types -> Flows.bind (Flows.mapList (checkTypeVariables tx) types) (\_ -> Flows.pure (Core.TypeFunction (Core.FunctionType {
+      in (Flows.bind (Maybes.maybe (Flows.fail "untyped tuple projection") (\types -> Flows.bind (Flows.mapList (checkTypeVariables tx) types) (\_ -> Flows.pure (Core.TypeFunction (Core.FunctionType {
         Core.functionTypeDomain = (Core.TypeProduct types),
         Core.functionTypeCodomain = (Lists.at index types)})))) mtypes) (\t -> applyTypeArgumentsToType tx typeArgs t))
 
@@ -468,7 +468,7 @@ typeOfUnwrap tx typeArgs tname = (Flows.bind (Schemas.requireSchemaType (Typing.
           Core.functionTypeCodomain = swrapped})))))))
 
 typeOfVariable :: (Typing.TypeContext -> [Core.Type] -> Core.Name -> Compute.Flow t0 Core.Type)
-typeOfVariable tx typeArgs name = (Flows.bind (Optionals.maybe (Flows.fail (Strings.cat [
+typeOfVariable tx typeArgs name = (Flows.bind (Maybes.maybe (Flows.fail (Strings.cat [
   "unbound variable: ",
   (Core.unName name)])) Schemas.instantiateType (Maps.lookup name (Typing.typeContextTypes tx))) (\t -> applyTypeArgumentsToType tx typeArgs t))
 

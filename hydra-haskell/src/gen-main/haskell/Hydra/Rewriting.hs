@@ -13,7 +13,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
@@ -187,16 +187,16 @@ freeTypeVariablesInTerm term0 =
                 in ((\x -> case x of
                   Core.TermFunction v1 -> ((\x -> case x of
                     Core.FunctionElimination v2 -> ((\x -> case x of
-                      Core.EliminationProduct v3 -> (Optionals.maybe Sets.empty (\typs -> allOf (Lists.map (tryType vars) typs)) (Core.tupleProjectionDomain v3))
+                      Core.EliminationProduct v3 -> (Maybes.maybe Sets.empty (\typs -> allOf (Lists.map (tryType vars) typs)) (Core.tupleProjectionDomain v3))
                       _ -> dflt) v2)
                     Core.FunctionLambda v2 ->  
-                      let domt = (Optionals.maybe Sets.empty (tryType vars) (Core.lambdaDomain v2))
+                      let domt = (Maybes.maybe Sets.empty (tryType vars) (Core.lambdaDomain v2))
                       in (Sets.union domt (recurse (Core.lambdaBody v2)))
                     _ -> dflt) v1)
                   Core.TermLet v1 ->  
                     let forBinding = (\b ->  
-                            let newVars = (Optionals.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingType b))
-                            in (Sets.union (getAll newVars (Core.bindingTerm b)) (Optionals.maybe Sets.empty (\ts -> tryType newVars (Core.typeSchemeType ts)) (Core.bindingType b))))
+                            let newVars = (Maybes.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingType b))
+                            in (Sets.union (getAll newVars (Core.bindingTerm b)) (Maybes.maybe Sets.empty (\ts -> tryType newVars (Core.typeSchemeType ts)) (Core.bindingType b))))
                     in (Sets.union (allOf (Lists.map forBinding (Core.letBindings v1))) (recurse (Core.letBody v1)))
                   Core.TermTypeApplication v1 -> (Sets.union (tryType vars (Core.typeApplicationTermType v1)) (recurse (Core.typeApplicationTermBody v1)))
                   Core.TermTypeLambda v1 -> (Sets.union (tryType vars (Core.TypeVariable (Core.typeLambdaParameter v1))) (recurse (Core.typeLambdaBody v1)))
@@ -262,7 +262,7 @@ inlineType :: (M.Map Core.Name Core.Type -> Core.Type -> Compute.Flow t0 Core.Ty
 inlineType schema typ =  
   let f = (\recurse -> \typ ->  
           let afterRecurse = (\tr -> (\x -> case x of
-                  Core.TypeVariable v1 -> (Optionals.maybe (Flows.fail (Strings.cat2 "No such type in schema: " (Core.unName v1))) (inlineType schema) (Maps.lookup v1 schema))
+                  Core.TypeVariable v1 -> (Maybes.maybe (Flows.fail (Strings.cat2 "No such type in schema: " (Core.unName v1))) (inlineType schema) (Maps.lookup v1 schema))
                   _ -> (Flows.pure tr)) tr)
           in (Flows.bind (recurse typ) (\tr -> afterRecurse tr)))
   in (rewriteTypeM f typ)
@@ -323,7 +323,7 @@ mapBeneathTypeAnnotations f t = ((\x -> case x of
 -- | Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ...
 normalizeTypeVariablesInTerm :: (Core.Term -> Core.Term)
 normalizeTypeVariablesInTerm term =  
-  let replaceName = (\subst -> \v -> Optionals.fromMaybe v (Maps.lookup v subst))
+  let replaceName = (\subst -> \v -> Maybes.fromMaybe v (Maps.lookup v subst))
   in  
     let substType = (\subst -> \typ ->  
             let rewrite = (\recurse -> \typ -> (\x -> case x of
@@ -348,13 +348,13 @@ normalizeTypeVariablesInTerm term =
                                     in (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
                                       Core.tupleProjectionArity = (Core.tupleProjectionArity v3),
                                       Core.tupleProjectionIndex = (Core.tupleProjectionIndex v3),
-                                      Core.tupleProjectionDomain = (Optionals.map (\types -> Lists.map (substType subst) types) domain)}))))
+                                      Core.tupleProjectionDomain = (Maybes.map (\types -> Lists.map (substType subst) types) domain)}))))
                                   _ -> (recurse term)) v2)
                                 Core.FunctionLambda v2 ->  
                                   let domain = (Core.lambdaDomain v2)
                                   in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.lambdaParameter v2),
-                                    Core.lambdaDomain = (Optionals.map (substType subst) domain),
+                                    Core.lambdaDomain = (Maybes.map (substType subst) domain),
                                     Core.lambdaBody = (rewriteWithSubst ((subst, boundVars), next) (Core.lambdaBody v2))})))
                                 _ -> (recurse term)) v1)
                               Core.TermLet v1 ->  
@@ -402,7 +402,7 @@ normalizeTypeVariablesInTerm term =
                                                                                     Core.typeSchemeVariables = newVars,
                                                                                     Core.typeSchemeType = (substType newSubst typ)}))}
                                                                           in (step (Lists.cons b1 acc) tl))
-                                                  in (Logic.ifElse (Lists.null bs) (Lists.reverse acc) (Optionals.maybe noType (\ts -> withType ts) (Core.bindingType b))))
+                                                  in (Logic.ifElse (Lists.null bs) (Lists.reverse acc) (Maybes.maybe noType (\ts -> withType ts) (Core.bindingType b))))
                                     in  
                                       let bindings1 = (step [] bindings0)
                                       in (Core.TermLet (Core.Let {
@@ -512,7 +512,7 @@ replaceTypedefs types typ0 =
                 let forTypeScheme = (\ts ->  
                         let t = (Core.typeSchemeType ts)
                         in (Logic.ifElse (Lists.null (Core.typeSchemeVariables ts)) (forMono t) dflt))
-                in (Optionals.maybe dflt (\ts -> forTypeScheme ts) (Maps.lookup v1 types))
+                in (Maybes.maybe dflt (\ts -> forTypeScheme ts) (Maps.lookup v1 types))
             Core.TypeWrap _ -> typ
             _ -> dflt) typ))
   in (rewriteType rewrite typ0)
@@ -554,14 +554,14 @@ rewriteAndFoldTerm f term0 =
                       let forElimination = (\val -> \elm ->  
                               let r = ((\x -> case x of
                                       Core.EliminationUnion v1 ->  
-                                        let rmd = (Optionals.map (recurse val) (Core.caseStatementDefault v1))
+                                        let rmd = (Maybes.map (recurse val) (Core.caseStatementDefault v1))
                                         in  
-                                          let val1 = (Optionals.maybe val fst rmd)
+                                          let val1 = (Maybes.maybe val fst rmd)
                                           in  
                                             let rcases = (forFields val1 (Core.caseStatementCases v1))
                                             in (fst rcases, (Core.EliminationUnion (Core.CaseStatement {
                                               Core.caseStatementTypeName = (Core.caseStatementTypeName v1),
-                                              Core.caseStatementDefault = (Optionals.map snd rmd),
+                                              Core.caseStatementDefault = (Maybes.map snd rmd),
                                               Core.caseStatementCases = (snd rcases)})))
                                       _ -> (val, elm)) elm)
                               in (fst r, (snd r)))
@@ -598,7 +598,7 @@ rewriteAndFoldTerm f term0 =
                                 Core.letBody = (snd renv)})) (fst renv) (Core.letBindings v1))
                             Core.TermList v1 -> (forMany recurse (\x -> Core.TermList x) val0 v1)
                             Core.TermMap v1 -> (forMany forPair (\pairs -> Core.TermMap (Maps.fromList pairs)) val0 (Maps.toList v1))
-                            Core.TermOptional v1 -> (Optionals.maybe dflt (\t -> forSingle recurse (\t1 -> Core.TermOptional (Just t1)) val0 t) v1)
+                            Core.TermOptional v1 -> (Maybes.maybe dflt (\t -> forSingle recurse (\t1 -> Core.TermOptional (Just t1)) val0 t) v1)
                             Core.TermProduct v1 -> (forMany recurse (\x -> Core.TermProduct x) val0 v1)
                             Core.TermRecord v1 -> (forMany forField (\fields -> Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.recordTypeName v1),
@@ -649,11 +649,11 @@ rewriteAndFoldTermM f term0 =
                     in  
                       let forElimination = (\val -> \elm ->  
                               let rw = (\elm -> (\x -> case x of
-                                      Core.EliminationUnion v1 -> (Flows.bind (Optionals.maybe (Flows.pure Nothing) (\def -> Flows.map Optionals.pure (recurse val def)) (Core.caseStatementDefault v1)) (\rmd ->  
-                                        let val1 = (Optionals.maybe val fst rmd)
+                                      Core.EliminationUnion v1 -> (Flows.bind (Maybes.maybe (Flows.pure Nothing) (\def -> Flows.map Maybes.pure (recurse val def)) (Core.caseStatementDefault v1)) (\rmd ->  
+                                        let val1 = (Maybes.maybe val fst rmd)
                                         in (Flows.bind (forFields val1 (Core.caseStatementCases v1)) (\rcases -> Flows.pure (fst rcases, (Core.EliminationUnion (Core.CaseStatement {
                                           Core.caseStatementTypeName = (Core.caseStatementTypeName v1),
-                                          Core.caseStatementDefault = (Optionals.map snd rmd),
+                                          Core.caseStatementDefault = (Maybes.map snd rmd),
                                           Core.caseStatementCases = (snd rcases)})))))))
                                       _ -> (Flows.pure (val, elm))) elm)
                               in (Flows.bind (rw elm) (\r -> Flows.pure (fst r, (snd r)))))
@@ -680,7 +680,7 @@ rewriteAndFoldTermM f term0 =
                               Core.letBody = (snd renv)})) (fst renv) (Core.letBindings v1)))
                             Core.TermList v1 -> (forMany recurse (\x -> Core.TermList x) val0 v1)
                             Core.TermMap v1 -> (forMany forPair (\pairs -> Core.TermMap (Maps.fromList pairs)) val0 (Maps.toList v1))
-                            Core.TermOptional v1 -> (Optionals.maybe dflt (\t -> forSingle recurse (\t1 -> Core.TermOptional (Just t1)) val0 t) v1)
+                            Core.TermOptional v1 -> (Maybes.maybe dflt (\t -> forSingle recurse (\t1 -> Core.TermOptional (Just t1)) val0 t) v1)
                             Core.TermProduct v1 -> (forMany recurse (\x -> Core.TermProduct x) val0 v1)
                             Core.TermRecord v1 -> (forMany forField (\fields -> Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.recordTypeName v1),
@@ -721,7 +721,7 @@ rewriteTerm f term0 =
                     Core.EliminationRecord v1 -> (Core.EliminationRecord v1)
                     Core.EliminationUnion v1 -> (Core.EliminationUnion (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.caseStatementTypeName v1),
-                      Core.caseStatementDefault = (Optionals.map recurse (Core.caseStatementDefault v1)),
+                      Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v1)),
                       Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v1))}))
                     Core.EliminationWrap v1 -> (Core.EliminationWrap v1)) elm)
             in  
@@ -757,7 +757,7 @@ rewriteTerm f term0 =
                     Core.TermList v1 -> (Core.TermList (Lists.map recurse v1))
                     Core.TermLiteral v1 -> (Core.TermLiteral v1)
                     Core.TermMap v1 -> (Core.TermMap (forMap v1))
-                    Core.TermOptional v1 -> (Core.TermOptional (Optionals.map recurse v1))
+                    Core.TermOptional v1 -> (Core.TermOptional (Maybes.map recurse v1))
                     Core.TermProduct v1 -> (Core.TermProduct (Lists.map recurse v1))
                     Core.TermRecord v1 -> (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.recordTypeName v1),
@@ -815,7 +815,7 @@ rewriteTermM f term0 =
                               let def = (Core.caseStatementDefault v2)
                               in  
                                 let cases = (Core.caseStatementCases v2)
-                                in (Flows.bind (Optionals.maybe (Flows.pure Nothing) (\t -> Flows.map Optionals.pure (recurse t)) def) (\rdef -> Flows.map (\rcases -> Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                                in (Flows.bind (Maybes.maybe (Flows.pure Nothing) (\t -> Flows.map Maybes.pure (recurse t)) def) (\rdef -> Flows.map (\rcases -> Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                   Core.caseStatementTypeName = n,
                                   Core.caseStatementDefault = rdef,
                                   Core.caseStatementCases = rcases}))) (Flows.mapList forField cases)))
@@ -909,7 +909,7 @@ rewriteTermWithContext f cx0 term0 =
                       Core.EliminationRecord v1 -> (Core.EliminationRecord v1)
                       Core.EliminationUnion v1 -> (Core.EliminationUnion (Core.CaseStatement {
                         Core.caseStatementTypeName = (Core.caseStatementTypeName v1),
-                        Core.caseStatementDefault = (Optionals.map recurse (Core.caseStatementDefault v1)),
+                        Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v1)),
                         Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v1))}))
                       Core.EliminationWrap v1 -> (Core.EliminationWrap v1)) elm)
               in  
@@ -945,7 +945,7 @@ rewriteTermWithContext f cx0 term0 =
                       Core.TermList v1 -> (Core.TermList (Lists.map recurse v1))
                       Core.TermLiteral v1 -> (Core.TermLiteral v1)
                       Core.TermMap v1 -> (Core.TermMap (forMap v1))
-                      Core.TermOptional v1 -> (Core.TermOptional (Optionals.map recurse v1))
+                      Core.TermOptional v1 -> (Core.TermOptional (Maybes.map recurse v1))
                       Core.TermProduct v1 -> (Core.TermProduct (Lists.map recurse v1))
                       Core.TermRecord v1 -> (Core.TermRecord (Core.Record {
                         Core.recordTypeName = (Core.recordTypeName v1),
@@ -993,7 +993,7 @@ rewriteTermWithContextM f cx0 term0 =
                             let def = (Core.caseStatementDefault v1)
                             in  
                               let cases = (Core.caseStatementCases v1)
-                              in (Flows.bind (Optionals.maybe (Flows.pure Nothing) (\t -> Flows.map Optionals.pure (recurse t)) def) (\rdef -> Flows.map (\rcases -> Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                              in (Flows.bind (Maybes.maybe (Flows.pure Nothing) (\t -> Flows.map Maybes.pure (recurse t)) def) (\rdef -> Flows.map (\rcases -> Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                 Core.caseStatementTypeName = n,
                                 Core.caseStatementDefault = rdef,
                                 Core.caseStatementCases = rcases}))) (Flows.mapList forField cases)))
@@ -1219,7 +1219,7 @@ simplifyTerm term =
 substituteTypeVariables :: (M.Map Core.Name Core.Name -> Core.Type -> Core.Type)
 substituteTypeVariables subst typ =  
   let replace = (\recurse -> \typ -> (\x -> case x of
-          Core.TypeVariable v1 -> (Core.TypeVariable (Optionals.fromMaybe v1 (Maps.lookup v1 subst)))
+          Core.TypeVariable v1 -> (Core.TypeVariable (Maybes.fromMaybe v1 (Maps.lookup v1 subst)))
           _ -> (recurse typ)) typ)
   in (rewriteType replace typ)
 
@@ -1238,9 +1238,9 @@ substituteVariable from to term =
 substituteVariables :: (M.Map Core.Name Core.Name -> Core.Term -> Core.Term)
 substituteVariables subst term =  
   let replace = (\recurse -> \term -> (\x -> case x of
-          Core.TermVariable v1 -> (Core.TermVariable (Optionals.fromMaybe v1 (Maps.lookup v1 subst)))
+          Core.TermVariable v1 -> (Core.TermVariable (Maybes.fromMaybe v1 (Maps.lookup v1 subst)))
           Core.TermFunction v1 -> ((\x -> case x of
-            Core.FunctionLambda v2 -> (Optionals.maybe (recurse term) (\_ -> term) (Maps.lookup (Core.lambdaParameter v2) subst))
+            Core.FunctionLambda v2 -> (Maybes.maybe (recurse term) (\_ -> term) (Maps.lookup (Core.lambdaParameter v2) subst))
             _ -> (recurse term)) v1)
           _ -> (recurse term)) term)
   in (rewriteTerm replace term)
@@ -1255,7 +1255,7 @@ subterms x = case x of
     (Core.applicationArgument v1)]
   Core.TermFunction v1 -> ((\x -> case x of
     Core.FunctionElimination v2 -> ((\x -> case x of
-      Core.EliminationUnion v3 -> (Lists.concat2 (Optionals.maybe [] (\t -> [
+      Core.EliminationUnion v3 -> (Lists.concat2 (Maybes.maybe [] (\t -> [
         t]) (Core.caseStatementDefault v3)) (Lists.map Core.fieldTerm (Core.caseStatementCases v3)))
       _ -> []) v2)
     Core.FunctionLambda v2 -> [
@@ -1267,7 +1267,7 @@ subterms x = case x of
   Core.TermMap v1 -> (Lists.concat (Lists.map (\p -> [
     fst p,
     (snd p)]) (Maps.toList v1)))
-  Core.TermOptional v1 -> (Optionals.maybe [] (\t -> [
+  Core.TermOptional v1 -> (Maybes.maybe [] (\t -> [
     t]) v1)
   Core.TermProduct v1 -> v1
   Core.TermRecord v1 -> (Lists.map Core.fieldTerm (Core.recordFields v1))
@@ -1295,7 +1295,7 @@ subtermsWithAccessors x = case x of
     (Accessors.TermAccessorApplicationArgument, (Core.applicationArgument v1))]
   Core.TermFunction v1 -> ((\x -> case x of
     Core.FunctionElimination v2 -> ((\x -> case x of
-      Core.EliminationUnion v3 -> (Lists.concat2 (Optionals.maybe [] (\t -> [
+      Core.EliminationUnion v3 -> (Lists.concat2 (Maybes.maybe [] (\t -> [
         (Accessors.TermAccessorUnionCasesDefault, t)]) (Core.caseStatementDefault v3)) (Lists.map (\f -> (Accessors.TermAccessorUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v3)))
       _ -> []) v2)
     Core.FunctionLambda v2 -> [
@@ -1307,7 +1307,7 @@ subtermsWithAccessors x = case x of
   Core.TermMap v1 -> (Lists.concat (Lists.map (\p -> [
     (Accessors.TermAccessorMapKey 0, (fst p)),
     (Accessors.TermAccessorMapValue 0, (snd p))]) (Maps.toList v1)))
-  Core.TermOptional v1 -> (Optionals.maybe [] (\t -> [
+  Core.TermOptional v1 -> (Maybes.maybe [] (\t -> [
     (Accessors.TermAccessorOptionalTerm, t)]) v1)
   Core.TermProduct v1 -> (Lists.map (\e -> (Accessors.TermAccessorProductTerm 0, e)) v1)
   Core.TermRecord v1 -> (Lists.map (\f -> (Accessors.TermAccessorRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v1))
@@ -1388,7 +1388,7 @@ toShortNames original =
   let addName = (\acc -> \name ->  
           let local = (Names.localNameOf name)
           in  
-            let group = (Optionals.fromMaybe Sets.empty (Maps.lookup local acc))
+            let group = (Maybes.fromMaybe Sets.empty (Maps.lookup local acc))
             in (Maps.insert local (Sets.insert name group) acc))
   in  
     let groupNamesByLocal = (\names -> Lists.foldl addName Maps.empty names)
@@ -1423,7 +1423,7 @@ topologicalSortBindingMap bindingMap =
                   let term = (snd nameAndTerm)
                   in (name, (Logic.ifElse (hasTypeAnnotation term) [] (Sets.toList (Sets.intersection keys (freeVariablesInTerm term))))))
         in  
-          let toPair = (\name -> (name, (Optionals.fromMaybe (Core.TermLiteral (Core.LiteralString "Impossible!")) (Maps.lookup name bindingMap))))
+          let toPair = (\name -> (name, (Maybes.fromMaybe (Core.TermLiteral (Core.LiteralString "Impossible!")) (Maps.lookup name bindingMap))))
           in (Lists.map (Lists.map toPair) (Sorting.topologicalSortComponents (Lists.map depsOf bindings)))
 
 -- | Topological sort of elements based on their dependencies
@@ -1463,7 +1463,7 @@ unshadowVariables term =
                   let domain = (Core.lambdaDomain v2)
                   in  
                     let body = (Core.lambdaBody v2)
-                    in (m, (Optionals.maybe (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    in (m, (Maybes.maybe (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = v,
                       Core.lambdaDomain = domain,
                       Core.lambdaBody = (snd (rewrite recurse (Maps.insert v 1 m) body))}))) (\i ->  
@@ -1477,6 +1477,6 @@ unshadowVariables term =
                             Core.lambdaDomain = domain,
                             Core.lambdaBody = (snd (rewrite recurse m2 body))})))) (Maps.lookup v m)))
               _ -> dflt) v1)
-            Core.TermVariable v1 -> (m, (Core.TermVariable (Optionals.maybe v1 (\i -> Logic.ifElse (Equality.equal i 1) v1 (Core.Name (Strings.cat2 (Core.unName v1) (Literals.showInt32 i)))) (Maps.lookup v1 m))))
+            Core.TermVariable v1 -> (m, (Core.TermVariable (Maybes.maybe v1 (\i -> Logic.ifElse (Equality.equal i 1) v1 (Core.Name (Strings.cat2 (Core.unName v1) (Literals.showInt32 i)))) (Maps.lookup v1 m))))
             _ -> dflt) term))
   in (snd (rewriteAndFoldTerm rewrite Maps.empty term))

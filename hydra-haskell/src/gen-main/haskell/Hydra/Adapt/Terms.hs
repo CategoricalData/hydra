@@ -15,7 +15,7 @@ import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
@@ -53,7 +53,7 @@ forTypeReference :: (Core.Name -> Compute.Flow Coders.AdapterContext (Compute.Ad
 forTypeReference name =  
   let encdec = (\name -> \dir -> \term -> Flows.bind Monads.getState (\cx ->  
           let adapters = (Coders.adapterContextAdapters cx)
-          in (Optionals.maybe (Flows.fail (Strings.cat2 "no adapter for reference type " (Core.unName name))) (\ad -> Utils.encodeDecode dir (Compute.adapterCoder ad) term) (Maps.lookup name adapters))))
+          in (Maybes.maybe (Flows.fail (Strings.cat2 "no adapter for reference type " (Core.unName name))) (\ad -> Utils.encodeDecode dir (Compute.adapterCoder ad) term) (Maps.lookup name adapters))))
   in  
     let forType = (\cx -> \adapters -> \t -> Flows.bind (termAdapter t) (\actual ->  
             let finalAdapters = (Maps.insert name actual adapters)
@@ -71,7 +71,7 @@ forTypeReference name =
                         Coders.adapterContextGraph = (Coders.adapterContextGraph cx),
                         Coders.adapterContextLanguage = (Coders.adapterContextLanguage cx),
                         Coders.adapterContextAdapters = newAdapters}
-                in (Flows.bind (Monads.putState newCx) (\ignored -> Flows.bind (withGraphContext (Schemas.resolveType (Core.TypeVariable name))) (\mt -> Optionals.maybe (Flows.pure (Compute.Adapter {
+                in (Flows.bind (Monads.putState newCx) (\ignored -> Flows.bind (withGraphContext (Schemas.resolveType (Core.TypeVariable name))) (\mt -> Maybes.maybe (Flows.pure (Compute.Adapter {
                   Compute.adapterIsLossy = lossy,
                   Compute.adapterSource = (Core.TypeVariable name),
                   Compute.adapterTarget = (Core.TypeVariable name),
@@ -87,7 +87,7 @@ forTypeReference name =
                           Compute.adapterCoder = (Utils.bidirectional (encdec name))}
                   in (Flows.bind Monads.getState (\cx ->  
                     let adapters = (Coders.adapterContextAdapters cx)
-                    in (Optionals.maybe (forMissingAdapter cx lossy adapters placeholder) Flows.pure (Maps.lookup name adapters))))
+                    in (Maybes.maybe (forMissingAdapter cx lossy adapters placeholder) Flows.pure (Maps.lookup name adapters))))
         in (Monads.withTrace (Strings.cat2 "adapt named type " (Core.unName name)) flow)
 
 functionProxyName :: Core.Name
@@ -157,7 +157,7 @@ functionToUnion t =
             let strippedTerm = (Rewriting.deannotateTerm term)
             in (Compute.coderEncode (Compute.adapterCoder ad) (encTerm term strippedTerm)))
     in  
-      let readFromString = (\term -> Flows.bind (Core__.string term) (\s -> Optionals.maybe (Flows.fail (Strings.cat2 "failed to parse term: " s)) Flows.pure (Core___.readTerm s)))
+      let readFromString = (\term -> Flows.bind (Core__.string term) (\s -> Maybes.maybe (Flows.fail (Strings.cat2 "failed to parse term: " s)) Flows.pure (Core___.readTerm s)))
       in  
         let decode = (\ad -> \term ->  
                 let notFound = (\fname -> Flows.fail (Strings.cat2 "unexpected field: " (Core.unName fname)))
@@ -177,7 +177,7 @@ functionToUnion t =
                               let fname = (Core.fieldName field)
                               in  
                                 let fterm = (Core.fieldTerm field)
-                                in (Optionals.fromMaybe (notFound fname) (Maps.lookup fname (Maps.fromList [
+                                in (Maybes.fromMaybe (notFound fname) (Maps.lookup fname (Maps.fromList [
                                   (Core.Name "wrap", (forWrapped fterm)),
                                   (Core.Name "record", (forProjection fterm)),
                                   (Core.Name "union", (forCases fterm)),
@@ -234,7 +234,7 @@ lambdaToMonotype t = ((\x -> case x of
 optionalToList :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 optionalToList t =  
   let encode = (\ad -> \term -> (\x -> case x of
-          Core.TermOptional v1 -> (Optionals.maybe (Flows.pure (Core.TermList [])) (\r -> Flows.bind (Compute.coderEncode (Compute.adapterCoder ad) r) (\encoded -> Flows.pure (Core.TermList [
+          Core.TermOptional v1 -> (Maybes.maybe (Flows.pure (Core.TermList [])) (\r -> Flows.bind (Compute.coderEncode (Compute.adapterCoder ad) r) (\encoded -> Flows.pure (Core.TermList [
             encoded]))) v1)) term)
   in  
     let decode = (\ad -> \term -> (\x -> case x of
@@ -277,12 +277,12 @@ passFunction t =
           _ -> (Flows.pure Maps.empty)) (Rewriting.deannotateType dom))
   in  
     let toOptionAd = (\dom -> \cod -> (\x -> case x of
-            Core.TypeOptional v1 -> (Flows.map Optionals.pure (termAdapter (Core.TypeFunction (Core.FunctionType {
+            Core.TypeOptional v1 -> (Flows.map Maybes.pure (termAdapter (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = v1,
               Core.functionTypeCodomain = cod}))))
             _ -> (Flows.pure Nothing)) (Rewriting.deannotateType dom))
     in  
-      let getCoder = (\caseAds -> \fname -> Optionals.maybe Utils.idCoder Compute.adapterCoder (Maps.lookup fname caseAds))
+      let getCoder = (\caseAds -> \fname -> Maybes.maybe Utils.idCoder Compute.adapterCoder (Maps.lookup fname caseAds))
       in  
         let forElimination = (\dir -> \codAd -> \caseAds -> \e -> (\x -> case x of
                 Core.EliminationUnion v1 ->  
@@ -291,7 +291,7 @@ passFunction t =
                     let def = (Core.caseStatementDefault v1)
                     in  
                       let cases = (Core.caseStatementCases v1)
-                      in (Flows.bind (Flows.mapList (\f -> Utils.encodeDecode dir (getCoder caseAds (Core.fieldName f)) f) cases) (\rcases -> Flows.bind (Optionals.maybe (Flows.pure Nothing) (\d -> Flows.map Optionals.pure (Utils.encodeDecode dir (Compute.adapterCoder codAd) d)) def) (\rdef -> Flows.pure (Core.EliminationUnion (Core.CaseStatement {
+                      in (Flows.bind (Flows.mapList (\f -> Utils.encodeDecode dir (getCoder caseAds (Core.fieldName f)) f) cases) (\rcases -> Flows.bind (Maybes.maybe (Flows.pure Nothing) (\d -> Flows.map Maybes.pure (Utils.encodeDecode dir (Compute.adapterCoder codAd) d)) def) (\rdef -> Flows.pure (Core.EliminationUnion (Core.CaseStatement {
                         Core.caseStatementTypeName = n,
                         Core.caseStatementDefault = rdef,
                         Core.caseStatementCases = rcases})))))) e)
@@ -494,7 +494,7 @@ passUnion t = ((\x -> case x of
     in  
       let tname = (Core.rowTypeTypeName v1)
       in  
-        let getAdapter = (\adaptersMap -> \f -> Optionals.maybe (Flows.fail (Strings.cat2 "no such field: " (Core.unName (Core.fieldName f)))) Flows.pure (Maps.lookup (Core.fieldName f) adaptersMap))
+        let getAdapter = (\adaptersMap -> \f -> Maybes.maybe (Flows.fail (Strings.cat2 "no such field: " (Core.unName (Core.fieldName f)))) Flows.pure (Maps.lookup (Core.fieldName f) adaptersMap))
         in (Flows.bind (Flows.mapList (\f -> Flows.bind (fieldAdapter f) (\ad -> Flows.pure (Core.fieldTypeName f, ad))) sfields) (\adapters ->  
           let adaptersMap = (Maps.fromList adapters)
           in  
@@ -656,12 +656,12 @@ unionToRecord t =
           in  
             let fterm = (Core.fieldTerm field)
             in ((\x -> case x of
-              Core.TermOptional v1 -> (Optionals.bind v1 (\t -> Just (Core.Field {
+              Core.TermOptional v1 -> (Maybes.bind v1 (\t -> Just (Core.Field {
                 Core.fieldName = fn,
                 Core.fieldTerm = t})))) fterm))
   in  
     let fromRecordFields = (\term -> \term_ -> \t_ -> \fields ->  
-            let matches = (Optionals.mapMaybe forField fields)
+            let matches = (Maybes.mapMaybe forField fields)
             in (Logic.ifElse (Lists.null matches) (Flows.fail (Strings.cat [
               "cannot convert term back to union: ",
               Core___.term term,

@@ -8,7 +8,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -59,7 +59,7 @@ curlyBraces = Ast.Brackets {
   Ast.bracketsClose = (sym "}")}
 
 curlyBracesList :: (Maybe String -> Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr)
-curlyBracesList msymb style els = (Logic.ifElse (Lists.null els) (cst "{}") (brackets curlyBraces style (symbolSep (Optionals.fromMaybe "," msymb) style els)))
+curlyBracesList msymb style els = (Logic.ifElse (Lists.null els) (cst "{}") (brackets curlyBraces style (symbolSep (Maybes.fromMaybe "," msymb) style els)))
 
 cst :: (String -> Ast.Expr)
 cst s = (Ast.ExprConst (sym s))
@@ -118,7 +118,7 @@ expressionLength e =
             Ast.WsDoubleBreak -> 2) ws)
     in  
       let blockStyleLength = (\style ->  
-              let mindentLen = (Optionals.maybe 0 Strings.length (Ast.blockStyleIndent style))
+              let mindentLen = (Maybes.maybe 0 Strings.length (Ast.blockStyleIndent style))
               in  
                 let nlBeforeLen = (Logic.ifElse (Ast.blockStyleNewlineBeforeContent style) 1 0)
                 in  
@@ -428,7 +428,7 @@ printExpr e =
                       in  
                         let nlAfter = (Ast.blockStyleNewlineAfterContent style)
                         in  
-                          let ibody = (Optionals.maybe body (\idt -> customIndent idt body) doIndent)
+                          let ibody = (Maybes.maybe body (\idt -> customIndent idt body) doIndent)
                           in  
                             let pre = (Logic.ifElse nlBefore "\n" "")
                             in  

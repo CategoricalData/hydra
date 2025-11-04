@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Lib.Literals                     as Literals
 import qualified Hydra.Dsl.Lib.Logic                        as Logic
 import qualified Hydra.Dsl.Lib.Maps                         as Maps
 import qualified Hydra.Dsl.Lib.Math                         as Math
-import qualified Hydra.Dsl.Lib.Optionals                    as Optionals
+import qualified Hydra.Dsl.Lib.Maybes                    as Maybes
 import qualified Hydra.Dsl.Lib.Sets                         as Sets
 import           Hydra.Dsl.Lib.Strings                      as Strings
 import qualified Hydra.Dsl.Mantle                           as Mantle
@@ -142,7 +142,7 @@ optDef = define "opt" $
 optArrayDef :: TBinding (String -> M.Map String Value -> Flow s (Maybe [Value]))
 optArrayDef = define "optArray" $
   doc "Look up an optional array field in a JSON object" $
-  lambdas ["fname", "m"] $ Optionals.maybe
+  lambdas ["fname", "m"] $ Maybes.maybe
     (Flows.pure nothing)
     (lambda "a" $ Flows.map (unaryFunction just) $ ref expectArrayDef @@ var "a")
     (ref optDef @@ var "fname" @@ var "m")
@@ -150,7 +150,7 @@ optArrayDef = define "optArray" $
 optStringDef :: TBinding (String -> M.Map String Value -> Flow s (Maybe String))
 optStringDef = define "optString" $
   doc "Look up an optional string field in a JSON object" $
-  lambdas ["fname", "m"] $ Optionals.maybe
+  lambdas ["fname", "m"] $ Maybes.maybe
     (Flows.pure nothing)
     (lambda "s" $ Flows.map (unaryFunction just) $ ref expectStringDef @@ var "s")
     (ref optDef @@ var "fname" @@ var "m")
@@ -158,7 +158,7 @@ optStringDef = define "optString" $
 requireDef :: TBinding (String -> M.Map String Value -> Flow s Value)
 requireDef = define "require" $
   doc "Look up a required field in a JSON object, failing if not found" $
-  lambdas ["fname", "m"] $ Optionals.maybe
+  lambdas ["fname", "m"] $ Maybes.maybe
     (Flows.fail $ Strings.cat $ list [
       string "required attribute ",
       ref showValueDef @@ var "fname",

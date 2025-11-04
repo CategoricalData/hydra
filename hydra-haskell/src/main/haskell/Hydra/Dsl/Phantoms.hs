@@ -99,7 +99,7 @@ trace msg flow = var "hydra.monads.withTrace" @@ msg @@ flow
 unaryFunction :: (TTerm a -> TTerm b) -> TTerm (a -> b)
 unaryFunction f = case (unTTerm $ f $ var "x") of
   TermApplication (Application lhs _) -> TTerm lhs
-  TermOptional (Just _) -> primitive _optionals_pure
+  TermOptional (Just _) -> primitive _maybes_pure
   TermUnion (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
   TermWrap (WrappedTerm tname _) -> lambda "x" $ wrap tname $ var "x"
 
@@ -294,7 +294,7 @@ match :: Name -> Maybe (TTerm b) -> [Field] -> TTerm (a -> b)
 match name dflt fields = TTerm $ Terms.match name (unTTerm <$> dflt) fields
 
 optCases :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
-optCases arg ifNothing ifJust = primitive3 (Name "hydra.lib.optionals.maybe") ifNothing ifJust arg
+optCases arg ifNothing ifJust = primitive3 (Name "hydra.lib.maybes.maybe") ifNothing ifJust arg
 
 -- * Definitions and modules
 

@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -206,7 +206,7 @@ caseStatementDef = define "CaseStatement" $
   "cs" ~> encodedRecord _CaseStatement [
     field _CaseStatement_typeName (ref nameDef @@ (Core.caseStatementTypeName (var "cs"))),
     field _CaseStatement_default (encodedOptional
-      (primitive _optionals_map @@ ref termDef @@ (Core.caseStatementDefault (var "cs")))),
+      (primitive _maybes_map @@ ref termDef @@ (Core.caseStatementDefault (var "cs")))),
     field _CaseStatement_cases (encodedList
       (primitive _lists_map @@ ref fieldDef @@ (Core.caseStatementCases (var "cs"))))]
 
@@ -307,7 +307,7 @@ lambdaDef :: TBinding (Lambda -> Term)
 lambdaDef = define "Lambda" $
   "l" ~> encodedRecord _Lambda [
     field _Lambda_parameter (ref nameDef @@ (Core.lambdaParameter (var "l"))),
-    field _Lambda_domain (encodedOptional (primitive _optionals_map @@ ref typeDef @@ (Core.lambdaDomain (var "l")))),
+    field _Lambda_domain (encodedOptional (primitive _maybes_map @@ ref typeDef @@ (Core.lambdaDomain (var "l")))),
     field _Lambda_body (ref termDef @@ (Core.lambdaBody (var "l")))]
 
 forallTypeDef :: TBinding (ForallType -> Term)
@@ -327,7 +327,7 @@ letBindingDef = define "Binding" $
   "b" ~> encodedRecord _Binding [
     field _Binding_name (ref nameDef @@ (Core.bindingName (var "b"))),
     field _Binding_term (ref termDef @@ (Core.bindingTerm (var "b"))),
-    field _Binding_type (encodedOptional (primitive _optionals_map @@ ref typeSchemeDef @@ (Core.bindingType (var "b"))))]
+    field _Binding_type (encodedOptional (primitive _maybes_map @@ ref typeSchemeDef @@ (Core.bindingType (var "b"))))]
 
 literalDef :: TBinding (Literal -> Term)
 literalDef = define "Literal" $
@@ -397,7 +397,7 @@ termDef = define "Term" $
     ecase _Term_literal (ref literalDef),
     ecase2 _Term_list $ encodedList $ primitive _lists_map @@ (ref termDef) @@ var "v",
     ecase2 _Term_map $ encodedMap (primitive _maps_bimap @@ ref termDef @@ ref termDef @@ var "v"),
-    ecase2 _Term_optional $ encodedOptional (primitive _optionals_map @@ ref termDef @@ var "v"),
+    ecase2 _Term_optional $ encodedOptional (primitive _maybes_map @@ ref termDef @@ var "v"),
     ecase2 _Term_product $ encodedList (primitive _lists_map @@ ref termDef @@ var "v"),
     ecase _Term_record (ref recordDef),
     ecase2 _Term_set $ encodedSet $ primitive _sets_map @@ (ref termDef) @@ var "v",
@@ -419,7 +419,7 @@ tupleProjectionDef = define "TupleProjection" $
   encodedRecord _TupleProjection [
     field _TupleProjection_arity (encodedInt32 (Core.tupleProjectionArity (var "tp"))),
     field _TupleProjection_index (encodedInt32 (Core.tupleProjectionIndex (var "tp"))),
-    field _TupleProjection_domain (encodedOptional (primitive _optionals_map @@ var "encodeTypes" @@ (Core.tupleProjectionDomain (var "tp"))))]
+    field _TupleProjection_domain (encodedOptional (primitive _maybes_map @@ var "encodeTypes" @@ (Core.tupleProjectionDomain (var "tp"))))]
 
 typeDef :: TBinding (Type -> Term)
 typeDef = define "Type" $

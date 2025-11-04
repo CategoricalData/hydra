@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -81,7 +81,7 @@ bindingDef = define "binding" $
   "el" ~>
   "name" <~ unwrap _Name @@ (Core.bindingName $ var "el") $
   "t" <~ Core.bindingTerm (var "el") $
-  "typeStr" <~ Optionals.maybe
+  "typeStr" <~ Maybes.maybe
     (string "")
     ("ts" ~> Strings.concat [string ":(", ref typeSchemeDef @@ var "ts", string ")"])
     (Core.bindingType $ var "el") $
@@ -118,7 +118,7 @@ eliminationDef = define "elimination" $
       "tname" <~ unwrap _Name @@ (Core.caseStatementTypeName $ var "cs") $
       "mdef" <~ Core.caseStatementDefault (var "cs") $
       "cases" <~ Core.caseStatementCases (var "cs") $
-      "defaultField" <~ Optionals.maybe
+      "defaultField" <~ Maybes.maybe
         (list [])
         ("d" ~> list [Core.field (Core.name $ string "[default]") (var "d")])
         (var "mdef") $
@@ -218,7 +218,7 @@ lambdaDef = define "lambda" $
   "v" <~ unwrap _Name @@ (Core.lambdaParameter $ var "l") $
   "mt" <~ Core.lambdaDomain (var "l") $
   "body" <~ Core.lambdaBody (var "l") $
-  "typeStr" <~ Optionals.maybe
+  "typeStr" <~ Maybes.maybe
     (string "")
     ("t" ~> Strings.cat2 (string ":") (ref typeDef @@ var "t"))
     (var "mt") $
@@ -304,7 +304,7 @@ termDef = define "term" $
         string "{",
         Strings.intercalate (string ", ") $ Lists.map (var "entry") $ Maps.toList $ var "m",
         string "}"],
-    _Term_optional>>: "mt" ~> Optionals.maybe
+    _Term_optional>>: "mt" ~> Maybes.maybe
       (string "nothing")
       ("t" ~> Strings.cat $ list [
         string "just(",

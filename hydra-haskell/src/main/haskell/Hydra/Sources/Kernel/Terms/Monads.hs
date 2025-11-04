@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -84,7 +84,7 @@ bindDef = define "bind" $
   "l" ~> "r" ~>
   "q" <~ ("s0" ~> "t0" ~>
     "fs1" <~ Compute.unFlow (var "l") (var "s0") (var "t0") $
-    Optionals.maybe
+    Maybes.maybe
       (Compute.flowState
         nothing
         (Compute.flowStateState $ var "fs1")
@@ -115,12 +115,12 @@ flowSucceedsDef :: TBinding (Flow s a -> Bool)
 flowSucceedsDef = define "flowSucceeds" $
   doc "Check whether a flow succeeds" $
   "s" ~> "f" ~>
-  Optionals.isJust (Compute.flowStateValue (Compute.unFlow (var "f") (var "s") (ref emptyTraceDef)))
+  Maybes.isJust (Compute.flowStateValue (Compute.unFlow (var "f") (var "s") (ref emptyTraceDef)))
 
 fromFlowDef :: TBinding (a -> s -> Flow s a -> a)
 fromFlowDef = define "fromFlow" $
   doc "Get the value of a flow, or a default value if the flow fails" $
-  "def" ~> "cx" ~> "f" ~> Optionals.maybe
+  "def" ~> "cx" ~> "f" ~> Maybes.maybe
     (var "def")
     ("xmo" ~> var "xmo")
     (Compute.flowStateValue (Compute.unFlow (var "f") (var "cx") (ref emptyTraceDef)))
@@ -134,7 +134,7 @@ getStateDef = define "getState" $
     "v" <~ Compute.flowStateValue (var "fs1") $
     "s" <~ Compute.flowStateState (var "fs1") $
     "t" <~ Compute.flowStateTrace (var "fs1") $
-    Optionals.maybe
+    Maybes.maybe
       (Compute.flowState nothing (var "s") (var "t"))
       (constant (Compute.flowState (just (var "s")) (var "s") (var "t")))
       (var "v"))
@@ -147,7 +147,7 @@ mapDef = define "map" $
     "s0" ~> "t0" ~>
     "f2" <~ Compute.unFlow (var "f1") (var "s0") (var "t0") $
     Compute.flowState
-      (Optionals.map (var "f") (Compute.flowStateValue (var "f2")))
+      (Maybes.map (var "f") (Compute.flowStateValue (var "f2")))
       (Compute.flowStateState (var "f2"))
       (Compute.flowStateTrace (var "f2")))
 
@@ -178,7 +178,7 @@ mutateTraceDef = define "mutateTrace" $
 optionalToListDef :: TBinding (Maybe a -> [a])
 optionalToListDef = define "optionalToList" $
   doc "Converts an optional value either to an empty list (if nothing) or a singleton list (if just)." $
-  "mx" ~> Optionals.maybe (list []) (unaryFunction Lists.pure) (var "mx")
+  "mx" ~> Maybes.maybe (list []) (unaryFunction Lists.pure) (var "mx")
 
 pureDef :: TBinding (a -> Flow s a)
 pureDef = define "pure" $

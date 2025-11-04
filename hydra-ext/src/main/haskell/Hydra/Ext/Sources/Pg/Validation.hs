@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals                     as Literals
 import qualified Hydra.Dsl.Lib.Logic                        as Logic
 import qualified Hydra.Dsl.Lib.Maps                         as Maps
 import qualified Hydra.Dsl.Lib.Math                         as Math
-import qualified Hydra.Dsl.Lib.Optionals                    as Optionals
+import qualified Hydra.Dsl.Lib.Maybes                    as Maybes
 import qualified Hydra.Dsl.Lib.Sets                         as Sets
 import           Hydra.Dsl.Lib.Strings                      as Strings
 import qualified Hydra.Dsl.Mantle                           as Mantle
@@ -128,18 +128,18 @@ validateEdgeDef = validationDefinition "validateEdge" $
             (unwrap _EdgeLabel @@ var "actual")
             (unwrap _EdgeLabel @@ var "expected"))
           @@ (var "failWith" @@ (ref prependDef @@ "Wrong label" @@ (ref edgeLabelMismatchDef @@ var "expected" @@ var "actual"))),
-      "checkId">: Optionals.map
+      "checkId">: Maybes.map
         (var "failWith" <.> (ref prependDef @@ "Invalid id"))
         (var "checkValue" @@ (project _EdgeType _EdgeType_id @@ var "typ") @@ (project _Edge _Edge_id @@ var "el")),
-      "checkProperties">: Optionals.map
+      "checkProperties">: Maybes.map
         (var "failWith" <.> (ref prependDef @@ "Invalid property"))
         (ref validatePropertiesDef
           @@ var "checkValue"
           @@ (project _EdgeType _EdgeType_properties @@ var "typ")
           @@ (project _Edge _Edge_properties @@ var "el")),
-      "checkOut">: Optionals.maybe
+      "checkOut">: Maybes.maybe
         nothing
-        (lambda "f" $ Optionals.maybe
+        (lambda "f" $ Maybes.maybe
           (just (var "failWith" @@ (ref prependDef @@ "Out-vertex does not exist" @@ (var "showValue" @@ (project _Edge _Edge_out @@ var "el")))))
           (lambda "label" $ ref verifyDef
             @@ (Equality.equal
@@ -148,9 +148,9 @@ validateEdgeDef = validationDefinition "validateEdge" $
             @@ (var "failWith" @@ (ref prependDef @@ "Wrong out-vertex label" @@ (ref vertexLabelMismatchDef @@ (project _EdgeType _EdgeType_out @@ var "typ") @@ var "label"))))
           (var "f" @@ (project _Edge _Edge_out @@ var "el")))
           (var "labelForVertexId"),
-      "checkIn">: Optionals.maybe
+      "checkIn">: Maybes.maybe
         nothing
-        (lambda "f" $ Optionals.maybe
+        (lambda "f" $ Maybes.maybe
           (just (var "failWith" @@ (ref prependDef @@ "In-vertex does not exist" @@ (var "showValue" @@ (project _Edge _Edge_in @@ var "el")))))
           (lambda "label" $ ref verifyDef
             @@ (Equality.equal
@@ -198,7 +198,7 @@ validateGraphDef = validationDefinition "validateGraph" $
   withOrd "t0" $
   lambda "checkValue" $ lambda "showValue" $ lambda "schema" $ lambda "graph" $ lets [
     "checkVertices">: lets [
-      "checkVertex">: lambda "el" $ Optionals.maybe
+      "checkVertex">: lambda "el" $ Maybes.maybe
         (just (ref vertexErrorDef @@ var "showValue" @@ var "el"
           @@ (ref prependDef @@ "Unexpected label" @@ (unwrap _VertexLabel @@ (project _Vertex _Vertex_label @@ var "el")))))
         (lambda "t" $ ref validateVertexDef
@@ -212,7 +212,7 @@ validateGraphDef = validationDefinition "validateGraph" $
       $ ref checkAllDef
           @@ (Lists.map (var "checkVertex") $ Maps.elems $ project _Graph _Graph_vertices @@ var "graph"),
     "checkEdges">: lets [
-        "checkEdge">: lambda "el" $ Optionals.maybe
+        "checkEdge">: lambda "el" $ Maybes.maybe
           (just (ref edgeErrorDef @@ var "showValue" @@ var "el"
             @@ (ref prependDef @@ "Unexpected label" @@ (unwrap _EdgeLabel @@ (project _Edge _Edge_label @@ var "el")))))
           (lambda "t" $ ref validateEdgeDef
@@ -225,7 +225,7 @@ validateGraphDef = validationDefinition "validateGraph" $
             (project _Edge _Edge_label @@ var "el")
             (project _GraphSchema _GraphSchema_edges @@ var "schema")),
         "labelForVertexId">: just $ lambda "i" $
-          Optionals.map (project _Vertex _Vertex_label) (Maps.lookup (var "i") (project _Graph _Graph_vertices @@ var "graph"))]
+          Maybes.map (project _Vertex _Vertex_label) (Maps.lookup (var "i") (project _Graph _Graph_vertices @@ var "graph"))]
       $ ref checkAllDef
           @@ (Lists.map (var "checkEdge") $ Maps.elems $ project _Graph _Graph_edges @@ var "graph")]
     $ ref checkAllDef @@ list [var "checkVertices", var "checkEdges"]
@@ -240,7 +240,7 @@ validatePropertiesDef = validationDefinition "validateProperties" $
     "checkTypes">: ref checkAllDef @@ (Lists.map (var "checkType") (var "types")),
     "checkType">:
       lambda "t" $ Logic.ifElse (project _PropertyType _PropertyType_required @@ var "t")
-        (Optionals.maybe
+        (Maybes.maybe
           (just (ref prependDef @@ "Missing value for " @@ (unwrap _PropertyKey @@ (project _PropertyType _PropertyType_key @@ var "t"))))
           (constant nothing)
           (Maps.lookup (project _PropertyType _PropertyType_key @@ var "t") $ var "props"))
@@ -254,9 +254,9 @@ validatePropertiesDef = validationDefinition "validateProperties" $
       "checkPair">: lambda "pair" $ lets [
         "key">: first $ var "pair",
         "val">: second $ var "pair"]
-        $ Optionals.maybe
+        $ Maybes.maybe
           (just (ref prependDef @@ "Unexpected key" @@ (unwrap _PropertyKey @@ var "key")))
-          (lambda "typ" $ Optionals.map
+          (lambda "typ" $ Maybes.map
             (ref prependDef @@ "Invalid value")
             (var "checkValue" @@ var "typ" @@ var "val"))
           (Maps.lookup (var "key") (var "m"))]
@@ -280,10 +280,10 @@ validateVertexDef = validationDefinition "validateVertex" $
           (unwrap _VertexLabel @@ var "actual")
           (unwrap _VertexLabel @@ var "expected"))
         @@ (var "failWith" @@ (ref prependDef @@ "Wrong label" @@ (ref vertexLabelMismatchDef @@ var "expected" @@ var "actual"))),
-    "checkId">: Optionals.map
+    "checkId">: Maybes.map
       (var "failWith" <.> (ref prependDef @@ "Invalid id"))
       (var "checkValue" @@ (project _VertexType _VertexType_id @@ var "typ") @@ (project _Vertex _Vertex_id @@ var "el")),
-    "checkProperties">: Optionals.map
+    "checkProperties">: Maybes.map
       (var "failWith" <.> (ref prependDef @@ "Invalid property"))
       (ref validatePropertiesDef
         @@ var "checkValue"
@@ -296,7 +296,7 @@ validateVertexDef = validationDefinition "validateVertex" $
 checkAllDef :: TBinding ([Y.Maybe a] -> Y.Maybe a)
 checkAllDef = validationDefinition "checkAll" $
   lambda "checks" $ lets [
-    "errors">: Optionals.cat $ var "checks"]
+    "errors">: Maybes.cat $ var "checks"]
     $ Lists.safeHead $ var "errors"
 
 edgeErrorDef :: TBinding ((v -> String) -> PG.Edge v -> String -> String)

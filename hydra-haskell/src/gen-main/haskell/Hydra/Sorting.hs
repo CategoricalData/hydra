@@ -5,7 +5,7 @@ module Hydra.Sorting where
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Tarjan as Tarjan
 import qualified Hydra.Topology as Topology
@@ -19,11 +19,11 @@ createOrderingIsomorphism :: (Ord t0) => ([t0] -> [t0] -> Topology.OrderingIsomo
 createOrderingIsomorphism sourceOrd targetOrd =  
   let sourceToTargetMapping = (\els ->  
           let mp = (Maps.fromList (Lists.zip sourceOrd els))
-          in (Optionals.cat (Lists.map (\n -> Maps.lookup n mp) targetOrd)))
+          in (Maybes.cat (Lists.map (\n -> Maps.lookup n mp) targetOrd)))
   in  
     let targetToSourceMapping = (\els ->  
             let mp = (Maps.fromList (Lists.zip targetOrd els))
-            in (Optionals.cat (Lists.map (\n -> Maps.lookup n mp) sourceOrd)))
+            in (Maybes.cat (Lists.map (\n -> Maps.lookup n mp) sourceOrd)))
     in Topology.OrderingIsomorphism {
       Topology.orderingIsomorphismEncode = sourceToTargetMapping,
       Topology.orderingIsomorphismDecode = targetToSourceMapping}
@@ -53,4 +53,4 @@ topologicalSortNodes getKey getAdj nodes =
     let pairs = (Lists.map (\n -> (getKey n, (getAdj n))) nodes)
     in  
       let comps = (topologicalSortComponents pairs)
-      in (Lists.map (\c -> Optionals.cat (Lists.map (\k -> Maps.lookup k nodesByKey) c)) comps)
+      in (Lists.map (\c -> Maybes.cat (Lists.map (\k -> Maps.lookup k nodesByKey) c)) comps)

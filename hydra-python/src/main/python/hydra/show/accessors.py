@@ -9,7 +9,7 @@ import hydra.accessors
 import hydra.core
 import hydra.lib.lists
 import hydra.lib.maps
-import hydra.lib.optionals
+import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.module
@@ -22,7 +22,7 @@ def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
     def idx[T0, T1](i: T0) -> Maybe[T1]:
         return cast(Maybe[T1], Nothing())
     def idx_suff[T0](suffix: str, i: T0) -> Maybe[str]:
-        return hydra.lib.optionals.map((lambda s: hydra.lib.strings.cat2(s, suffix)), idx(i))
+        return hydra.lib.maybes.map((lambda s: hydra.lib.strings.cat2(s, suffix)), idx(i))
     match accessor:
         case hydra.accessors.TermAccessorAnnotatedBody():
             return cast(Maybe[str], Nothing())
@@ -127,7 +127,7 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                 return helper(ids1, mroot, next_path, state_after_bindings, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody(None)), env))
             
             case hydra.core.TermVariable(value=name):
-                return hydra.lib.optionals.maybe(state, (lambda root: hydra.lib.optionals.maybe(state, (lambda node: (edge := hydra.accessors.AccessorEdge(root, hydra.accessors.AccessorPath(hydra.lib.lists.reverse(next_path)), node), new_edges := hydra.lib.lists.cons(edge, edges), ((nodes, new_edges), visited))[2]), hydra.lib.maps.lookup(name, ids))), mroot)
+                return hydra.lib.maybes.maybe(state, (lambda root: hydra.lib.maybes.maybe(state, (lambda node: (edge := hydra.accessors.AccessorEdge(root, hydra.accessors.AccessorPath(hydra.lib.lists.reverse(next_path)), node), new_edges := hydra.lib.lists.cons(edge, edges), ((nodes, new_edges), visited))[2]), hydra.lib.maps.lookup(name, ids))), mroot)
             
             case _:
                 return hydra.lib.lists.foldl((lambda v1, v2: helper(ids, mroot, next_path, v1, v2)), state, hydra.rewriting.subterms_with_accessors(current_term))

@@ -126,7 +126,7 @@ def unary_function(f) -> TTerm[A]:
         case terms.TermApplication(terms.Application(lhs, _)):
             return TTerm[A](lhs)
         case terms.TermOptional(Just(_)):
-            return TTerm[A](terms.primitive(Name("hydra.lib.optionals.pure")))
+            return TTerm[A](terms.primitive(Name("hydra.lib.maybes.pure")))
         case terms.TermUnion(terms.Injection(tname, Field(fname, _))):
             return lambda_("x", inject(tname, fname, var("x")))
         case terms.TermWrap(terms.WrappedTerm(tname, _)):
@@ -387,7 +387,7 @@ def match(name: Name, dflt: Maybe[TTerm[B]], fields: Sequence[Field]) -> TTerm[A
 def opt_cases(arg: TTerm[Maybe[A]], if_nothing: TTerm[B], if_just: TTerm[A]) -> TTerm[B]:
     """Pattern match on an optional value."""
     return primitive3(
-        Name("hydra.lib.optionals.maybe"),
+        Name("hydra.lib.maybes.maybe"),
         if_nothing,
         if_just,
         arg
