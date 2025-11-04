@@ -27,8 +27,8 @@ evaluate = reduceTerm True
 evaluateEdge :: Pg.Edge Term -> Term -> Flow Graph (Maybe (Pg.Edge Term))
 evaluateEdge (Pg.Edge label idSpec outSpec inSpec propSpecs) term = do
     id <- evaluate $ Terms.apply idSpec term
-    mOutId <- evaluate (Terms.apply outSpec term) >>= (ExtractCore.optional pure)
-    mInId <- evaluate (Terms.apply inSpec term) >>= (ExtractCore.optional pure)
+    mOutId <- evaluate (Terms.apply outSpec term) >>= (ExtractCore.maybeTerm pure)
+    mInId <- evaluate (Terms.apply inSpec term) >>= (ExtractCore.maybeTerm pure)
     props <- evaluateProperties propSpecs term
     return $ case mOutId of
       Nothing -> Nothing
@@ -49,7 +49,7 @@ evaluateProperties specs record = M.fromList . Y.catMaybes <$> (CM.mapM forPair 
 
 evaluateVertex :: Pg.Vertex Term -> Term -> Flow Graph (Maybe (Pg.Vertex Term))
 evaluateVertex (Pg.Vertex label idSpec propSpecs) record = do
-  mId <- evaluate (Terms.apply idSpec record) >>= (ExtractCore.optional pure)
+  mId <- evaluate (Terms.apply idSpec record) >>= (ExtractCore.maybeTerm pure)
   props <- evaluateProperties propSpecs record
   return $ case mId of
     Nothing -> Nothing
