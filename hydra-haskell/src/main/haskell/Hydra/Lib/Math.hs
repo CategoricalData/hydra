@@ -9,9 +9,11 @@ abs = Prelude.abs
 add :: Num a => a -> a -> a
 add x y = x + y
 
+-- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
 div :: Integral a => a -> a -> a
 div = Prelude.div
 
+-- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
 mod :: Integral a => a -> a -> a
 mod = Prelude.mod
 
@@ -27,6 +29,7 @@ pred = Prelude.pred
 range :: Enum a => a -> a -> [a]
 range start end = [start .. end]
 
+-- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
 rem :: Integral a => a -> a -> a
 rem = Prelude.rem
 
