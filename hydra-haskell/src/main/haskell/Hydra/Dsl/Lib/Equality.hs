@@ -2,12 +2,11 @@
 
 module Hydra.Dsl.Lib.Equality where
 
-import Hydra.Core
 import Hydra.Mantle
 import Hydra.Phantoms
-import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Dsl.Phantoms
+import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Sources.Libraries
 
 import Data.Int
 

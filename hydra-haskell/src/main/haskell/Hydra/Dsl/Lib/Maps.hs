@@ -3,9 +3,9 @@
 module Hydra.Dsl.Lib.Maps where
 
 import Hydra.Phantoms
-import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Dsl.Phantoms
+import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Sources.Libraries
 
 import Data.Map
 

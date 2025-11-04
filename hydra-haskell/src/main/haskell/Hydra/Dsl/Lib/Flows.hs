@@ -2,13 +2,12 @@
 
 module Hydra.Dsl.Lib.Flows where
 
-import Hydra.Dsl.Phantoms
-import Hydra.Core
 import Hydra.Compute
 import Hydra.Phantoms
-import Hydra.Sources.Libraries
+import Hydra.Dsl.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Sources.Libraries
 
 import qualified Data.Map as M
 import qualified Data.Set as S

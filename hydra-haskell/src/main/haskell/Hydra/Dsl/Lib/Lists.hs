@@ -3,9 +3,9 @@
 module Hydra.Dsl.Lib.Lists where
 
 import Hydra.Phantoms
-import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Dsl.Phantoms
+import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Sources.Libraries
 
 
 apply :: TTerm [a -> b] -> TTerm [a] -> TTerm [b]
