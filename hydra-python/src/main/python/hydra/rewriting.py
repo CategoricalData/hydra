@@ -849,7 +849,7 @@ def remove_types_from_term(term: hydra.core.Term) -> hydra.core.Term:
                     case hydra.core.FunctionElimination(value=e):
                         match e:
                             case hydra.core.EliminationProduct(value=tp):
-                                return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationProduct(hydra.core.TupleProjection(tp.index, tp.arity, cast(Maybe[frozenlist[hydra.core.Type]], Nothing()))))))))
+                                return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationProduct(hydra.core.TupleProjection(tp.arity, tp.index, cast(Maybe[frozenlist[hydra.core.Type]], Nothing()))))))))
                             
                             case _:
                                 return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(e))))
