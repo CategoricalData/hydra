@@ -58,7 +58,7 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
           "listElement">: int32,
           "mapKey">: int32,
           "mapValue">: int32,
-          "optionalTerm">: unit,
+          "maybeTerm">: unit,
           "productTerm">: int32,
           "recordField">: core "Name",
           "setElement">: int32,

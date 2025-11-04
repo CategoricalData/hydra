@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -121,10 +121,10 @@ instantiateTemplateDef = define "instantiateTemplate" $
           "ke" ~>
           Flows.bind (var "inst" @@ var "vt") (
             "ve" ~> Flows.pure (Core.termMap (Maps.singleton (var "ke") (var "ve")))))),
-    _Type_optional>>: "ot" ~> Logic.ifElse (var "minimal")
-      (Flows.pure (Core.termOptional nothing))
+    _Type_maybe>>: "ot" ~> Logic.ifElse (var "minimal")
+      (Flows.pure (Core.termMaybe nothing))
       (Flows.bind (var "inst" @@ var "ot") (
-        "e" ~> Flows.pure (Core.termOptional (just (var "e"))))),
+        "e" ~> Flows.pure (Core.termMaybe (just (var "e"))))),
     _Type_product>>: "types" ~>
       Flows.bind (Flows.mapList (var "inst") (var "types")) (
         "es" ~> Flows.pure (Core.termProduct (var "es"))),

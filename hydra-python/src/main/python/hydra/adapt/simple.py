@@ -51,7 +51,7 @@ def type_alternatives(type: hydra.core.Type) -> frozenlist[hydra.core.Type]:
             type2 = at.body
             return (type2,)
         
-        case hydra.core.TypeOptional(value=ot):
+        case hydra.core.TypeMaybe(value=ot):
             return (cast(hydra.core.Type, hydra.core.TypeList(ot)),)
         
         case hydra.core.TypeUnion(value=rt):
@@ -235,7 +235,7 @@ def term_alternatives(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.G
             term2 = at.body
             return hydra.lib.flows.pure((term2,))
         
-        case hydra.core.TermOptional(value=ot):
+        case hydra.core.TermMaybe(value=ot):
             return hydra.lib.flows.pure((cast(hydra.core.Term, hydra.core.TermList(hydra.lib.maybes.maybe(cast(frozenlist[hydra.core.Term], ()), (lambda term2: (term2,)), ot))),))
         
         case hydra.core.TermUnion(value=inj):
@@ -245,7 +245,7 @@ def term_alternatives(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.G
             fterm = field.term
             def for_field_type(ft: hydra.core.FieldType) -> hydra.core.Field:
                 ftname = ft.name
-                return hydra.core.Field(fname, cast(hydra.core.Term, hydra.core.TermOptional(hydra.lib.logic.if_else(hydra.lib.equality.equal(ftname, fname), cast(Maybe[hydra.core.Term], Just(fterm)), cast(Maybe[hydra.core.Term], Nothing())))))
+                return hydra.core.Field(fname, cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.logic.if_else(hydra.lib.equality.equal(ftname, fname), cast(Maybe[hydra.core.Term], Just(fterm)), cast(Maybe[hydra.core.Term], Nothing())))))
             return hydra.lib.flows.bind(hydra.schemas.require_union_type(tname), (lambda rt: hydra.lib.flows.pure((cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(tname, hydra.lib.lists.map(for_field_type, rt.fields)))),))))
         
         case hydra.core.TermUnit():

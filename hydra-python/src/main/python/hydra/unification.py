@@ -69,9 +69,9 @@ def join_types[T0](left: hydra.core.Type, right: hydra.core.Type, comment: str) 
                 case _:
                     return cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify)
         
-        case hydra.core.TypeOptional(value=l5):
+        case hydra.core.TypeMaybe(value=l5):
             match sright:
-                case hydra.core.TypeOptional(value=r):
+                case hydra.core.TypeMaybe(value=r):
                     return hydra.lib.flows.pure((join_one(l5, r),))
                 
                 case _:

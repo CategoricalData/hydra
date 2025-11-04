@@ -96,8 +96,8 @@ def rewrite_type(f: Callable[[Callable[[hydra.core.Type], hydra.core.Type], hydr
             case hydra.core.TypeMap(value=mt):
                 return cast(hydra.core.Type, hydra.core.TypeMap(hydra.core.MapType(recurse(mt.keys), recurse(mt.values))))
             
-            case hydra.core.TypeOptional(value=t2):
-                return cast(hydra.core.Type, hydra.core.TypeOptional(recurse(t2)))
+            case hydra.core.TypeMaybe(value=t2):
+                return cast(hydra.core.Type, hydra.core.TypeMaybe(recurse(t2)))
             
             case hydra.core.TypeProduct(value=ts):
                 return cast(hydra.core.Type, hydra.core.TypeProduct(hydra.lib.lists.map(recurse, ts)))
@@ -221,8 +221,8 @@ def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydr
             case hydra.core.TermMap(value=m):
                 return cast(hydra.core.Term, hydra.core.TermMap(for_map(m)))
             
-            case hydra.core.TermOptional(value=m2):
-                return cast(hydra.core.Term, hydra.core.TermOptional(hydra.lib.maybes.map(recurse, m2)))
+            case hydra.core.TermMaybe(value=m2):
+                return cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(recurse, m2)))
             
             case hydra.core.TermProduct(value=tuple):
                 return cast(hydra.core.Term, hydra.core.TermProduct(hydra.lib.lists.map(recurse, tuple)))
@@ -365,7 +365,7 @@ def subterms(v1: hydra.core.Term) -> frozenlist[hydra.core.Term]:
         case hydra.core.TermMap(value=m):
             return hydra.lib.lists.concat(hydra.lib.lists.map((lambda p: (p[0], p[1])), hydra.lib.maps.to_list(m)))
         
-        case hydra.core.TermOptional(value=m2):
+        case hydra.core.TermMaybe(value=m2):
             return hydra.lib.maybes.maybe(cast(frozenlist[hydra.core.Term], ()), (lambda t: (t,)), m2)
         
         case hydra.core.TermProduct(value=tuple):
@@ -431,7 +431,7 @@ def subtypes(v1: hydra.core.Type) -> frozenlist[hydra.core.Type]:
         case hydra.core.TypeMap(value=mt):
             return (mt.keys, mt.values)
         
-        case hydra.core.TypeOptional(value=ot):
+        case hydra.core.TypeMaybe(value=ot):
             return (ot,)
         
         case hydra.core.TypeProduct(value=pt):
@@ -614,8 +614,8 @@ def rewrite_type_m[T0](f: Callable[[
             case hydra.core.TypeMap(value=mt):
                 return hydra.lib.flows.bind(recurse(mt.keys), (lambda kt: hydra.lib.flows.bind(recurse(mt.values), (lambda vt: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeMap(hydra.core.MapType(kt, vt))))))))
             
-            case hydra.core.TypeOptional(value=t2):
-                return hydra.lib.flows.bind(recurse(t2), (lambda rt: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeOptional(rt)))))
+            case hydra.core.TypeMaybe(value=t2):
+                return hydra.lib.flows.bind(recurse(t2), (lambda rt: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeMaybe(rt)))))
             
             case hydra.core.TypeProduct(value=types):
                 return hydra.lib.flows.bind(hydra.lib.flows.map_list(recurse, types), (lambda rtypes: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeProduct(rtypes)))))
@@ -1020,8 +1020,8 @@ def rewrite_and_fold_term[T0](f: Callable[[
             case hydra.core.TermMap(value=m):
                 return for_many(for_pair, (lambda pairs: cast(hydra.core.Term, hydra.core.TermMap(cast(FrozenDict[hydra.core.Term, hydra.core.Term], hydra.lib.maps.from_list(pairs))))), val0, hydra.lib.maps.to_list(m))
             
-            case hydra.core.TermOptional(value=mt):
-                return hydra.lib.maybes.maybe(dflt, (lambda t: for_single(recurse, (lambda t1: cast(hydra.core.Term, hydra.core.TermOptional(cast(Maybe[hydra.core.Term], Just(t1))))), val0, t)), mt)
+            case hydra.core.TermMaybe(value=mt):
+                return hydra.lib.maybes.maybe(dflt, (lambda t: for_single(recurse, (lambda t1: cast(hydra.core.Term, hydra.core.TermMaybe(cast(Maybe[hydra.core.Term], Just(t1))))), val0, t)), mt)
             
             case hydra.core.TermProduct(value=terms):
                 return for_many(recurse, (lambda x: cast(hydra.core.Term, hydra.core.TermProduct(x))), val0, terms)
@@ -1110,8 +1110,8 @@ def rewrite_and_fold_term_m[T0, T1](f: Callable[[
             case hydra.core.TermMap(value=m):
                 return for_many(for_pair, (lambda pairs: cast(hydra.core.Term, hydra.core.TermMap(cast(FrozenDict[hydra.core.Term, hydra.core.Term], hydra.lib.maps.from_list(pairs))))), val0, hydra.lib.maps.to_list(m))
             
-            case hydra.core.TermOptional(value=mt):
-                return hydra.lib.maybes.maybe(cast(hydra.compute.Flow[T3, Tuple[T2, hydra.core.Term]], dflt), (lambda t: for_single(recurse, (lambda t1: cast(hydra.core.Term, hydra.core.TermOptional(cast(Maybe[hydra.core.Term], Just(t1))))), val0, t)), mt)
+            case hydra.core.TermMaybe(value=mt):
+                return hydra.lib.maybes.maybe(cast(hydra.compute.Flow[T3, Tuple[T2, hydra.core.Term]], dflt), (lambda t: for_single(recurse, (lambda t1: cast(hydra.core.Term, hydra.core.TermMaybe(cast(Maybe[hydra.core.Term], Just(t1))))), val0, t)), mt)
             
             case hydra.core.TermProduct(value=terms):
                 return for_many(recurse, (lambda x: cast(hydra.core.Term, hydra.core.TermProduct(x))), val0, terms)
@@ -1206,8 +1206,8 @@ def rewrite_term_m[T0](f: Callable[[
             case hydra.core.TermMap(value=m):
                 return hydra.lib.flows.bind(hydra.lib.flows.map_list(for_pair, hydra.lib.maps.to_list(m)), (lambda pairs: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMap(cast(FrozenDict[hydra.core.Term, hydra.core.Term], hydra.lib.maps.from_list(pairs)))))))
             
-            case hydra.core.TermOptional(value=m2):
-                return hydra.lib.flows.bind(hydra.lib.flows.map_optional(recurse, m2), (lambda rm: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermOptional(rm)))))
+            case hydra.core.TermMaybe(value=m2):
+                return hydra.lib.flows.bind(hydra.lib.flows.map_maybe(recurse, m2), (lambda rm: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(rm)))))
             
             case hydra.core.TermProduct(value=tuple):
                 return hydra.lib.flows.map((lambda rtuple: cast(hydra.core.Term, hydra.core.TermProduct(rtuple))), hydra.lib.flows.map_list(recurse, tuple))
@@ -1315,8 +1315,8 @@ def rewrite_term_with_context[T0](f: Callable[[
             case hydra.core.TermMap(value=m):
                 return cast(hydra.core.Term, hydra.core.TermMap(for_map(m)))
             
-            case hydra.core.TermOptional(value=m2):
-                return cast(hydra.core.Term, hydra.core.TermOptional(hydra.lib.maybes.map(recurse, m2)))
+            case hydra.core.TermMaybe(value=m2):
+                return cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(recurse, m2)))
             
             case hydra.core.TermProduct(value=tuple):
                 return cast(hydra.core.Term, hydra.core.TermProduct(hydra.lib.lists.map(recurse, tuple)))
@@ -1417,8 +1417,8 @@ def rewrite_term_with_context_m[T0, T1](f: Callable[[
             case hydra.core.TermMap(value=m):
                 return hydra.lib.flows.bind(hydra.lib.flows.map_list(for_pair, hydra.lib.maps.to_list(m)), (lambda pairs: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMap(cast(FrozenDict[hydra.core.Term, hydra.core.Term], hydra.lib.maps.from_list(pairs)))))))
             
-            case hydra.core.TermOptional(value=m2):
-                return hydra.lib.flows.bind(hydra.lib.flows.map_optional(recurse, m2), (lambda rm: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermOptional(rm)))))
+            case hydra.core.TermMaybe(value=m2):
+                return hydra.lib.flows.bind(hydra.lib.flows.map_maybe(recurse, m2), (lambda rm: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(rm)))))
             
             case hydra.core.TermProduct(value=tuple):
                 return hydra.lib.flows.map((lambda rtuple: cast(hydra.core.Term, hydra.core.TermProduct(rtuple))), hydra.lib.flows.map_list(recurse, tuple))
@@ -1574,8 +1574,8 @@ def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[Tuple[hydra.acces
         case hydra.core.TermMap(value=m):
             return hydra.lib.lists.concat(hydra.lib.lists.map((lambda p: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMapKey(0)), p[0]), (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMapValue(0)), p[1]))), hydra.lib.maps.to_list(m)))
         
-        case hydra.core.TermOptional(value=m2):
-            return hydra.lib.maybes.maybe(cast(frozenlist[Tuple[hydra.accessors.TermAccessor, hydra.core.Term]], ()), (lambda t: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorOptionalTerm(None)), t),)), m2)
+        case hydra.core.TermMaybe(value=m2):
+            return hydra.lib.maybes.maybe(cast(frozenlist[Tuple[hydra.accessors.TermAccessor, hydra.core.Term]], ()), (lambda t: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMaybeTerm(None)), t),)), m2)
         
         case hydra.core.TermProduct(value=p2):
             return hydra.lib.lists.map((lambda e: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorProductTerm(0)), e)), p2)

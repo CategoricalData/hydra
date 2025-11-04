@@ -55,9 +55,9 @@ composeCoders c1 c2 = Compute.Coder {
   Compute.coderDecode = (\c -> Flows.bind (Compute.coderDecode c2 c) (\b2 -> Compute.coderDecode c1 b2))}
 
 encodeDecode :: (Coders.CoderDirection -> Compute.Coder t0 t0 t1 t1 -> t1 -> Compute.Flow t0 t1)
-encodeDecode dir coder = ((\x -> case x of
-  Coders.CoderDirectionEncode -> (Compute.coderEncode coder)
-  Coders.CoderDirectionDecode -> (Compute.coderDecode coder)) dir)
+encodeDecode dir coder term = ((\x -> case x of
+  Coders.CoderDirectionEncode -> (Compute.coderEncode coder term)
+  Coders.CoderDirectionDecode -> (Compute.coderDecode coder term)) dir)
 
 -- | Check if float type is supported by language constraints
 floatTypeIsSupported :: (Coders.LanguageConstraints -> Core.FloatType -> Bool)
@@ -127,7 +127,7 @@ typeIsSupported constraints t =
                 Core.TypeList v1 -> (typeIsSupported constraints v1)
                 Core.TypeLiteral v1 -> (literalTypeIsSupported constraints v1)
                 Core.TypeMap v1 -> (Logic.and (typeIsSupported constraints (Core.mapTypeKeys v1)) (typeIsSupported constraints (Core.mapTypeValues v1)))
-                Core.TypeOptional v1 -> (typeIsSupported constraints v1)
+                Core.TypeMaybe v1 -> (typeIsSupported constraints v1)
                 Core.TypeProduct v1 -> (Lists.foldl Logic.and True (Lists.map (typeIsSupported constraints) v1))
                 Core.TypeRecord v1 -> (Lists.foldl Logic.and True (Lists.map (\field -> typeIsSupported constraints (Core.fieldTypeType field)) (Core.rowTypeFields v1)))
                 Core.TypeSet v1 -> (typeIsSupported constraints v1)

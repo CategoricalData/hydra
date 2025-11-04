@@ -121,7 +121,7 @@ testTypeBuddyListA = (Core.TypeForall (Core.ForallType {
         Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))},
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "tail"),
-        Core.fieldTypeType = (Core.TypeOptional (Core.TypeApplication (Core.ApplicationType {
+        Core.fieldTypeType = (Core.TypeMaybe (Core.TypeApplication (Core.ApplicationType {
           Core.applicationTypeFunction = (Core.TypeVariable testTypeBuddyListBName),
           Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))})))}]}))}))
 
@@ -139,7 +139,7 @@ testTypeBuddyListB = (Core.TypeForall (Core.ForallType {
         Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))},
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "tail"),
-        Core.fieldTypeType = (Core.TypeOptional (Core.TypeApplication (Core.ApplicationType {
+        Core.fieldTypeType = (Core.TypeMaybe (Core.TypeApplication (Core.ApplicationType {
           Core.applicationTypeFunction = (Core.TypeVariable testTypeBuddyListAName),
           Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))})))}]}))}))
 
@@ -190,7 +190,7 @@ testTypeIntList = (Core.TypeRecord (Core.RowType {
       Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))},
     Core.FieldType {
       Core.fieldTypeName = (Core.Name "tail"),
-      Core.fieldTypeType = (Core.TypeOptional (Core.TypeVariable testTypeIntListName))}]}))
+      Core.fieldTypeType = (Core.TypeMaybe (Core.TypeVariable testTypeIntListName))}]}))
 
 testTypeIntListName :: Core.Name
 testTypeIntListName = (Core.Name "IntList")
@@ -234,7 +234,7 @@ testTypeList = (Core.TypeForall (Core.ForallType {
         Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))},
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "tail"),
-        Core.fieldTypeType = (Core.TypeOptional (Core.TypeApplication (Core.ApplicationType {
+        Core.fieldTypeType = (Core.TypeMaybe (Core.TypeApplication (Core.ApplicationType {
           Core.applicationTypeFunction = (Core.TypeVariable testTypeListName),
           Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))})))}]}))}))
 
@@ -433,7 +433,7 @@ testTypeFlowState = (Core.TypeForall (Core.ForallType {
       Core.rowTypeFields = [
         Core.FieldType {
           Core.fieldTypeName = (Core.Name "value"),
-          Core.fieldTypeType = (Core.TypeOptional (Core.TypeVariable (Core.Name "v")))},
+          Core.fieldTypeType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "v")))},
         Core.FieldType {
           Core.fieldTypeName = (Core.Name "state"),
           Core.fieldTypeType = (Core.TypeVariable (Core.Name "s"))},

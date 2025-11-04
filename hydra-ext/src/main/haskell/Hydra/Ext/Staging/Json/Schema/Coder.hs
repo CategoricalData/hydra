@@ -120,7 +120,7 @@ encodeType optional typ = case typ of
       vschema <- JS.Schema <$> encodeType False vt
       let objRes = [JS.RestrictionObject $ JS.ObjectRestrictionAdditionalProperties $ JS.AdditionalItemsSchema vschema]
       Monads.pure $ jsType JS.TypeNameObject ++ objRes
-    Core.TypeOptional t -> encodeType True t -- Note: nested optionals are lost
+    Core.TypeMaybe t -> encodeType True t -- Note: nested optionals are lost
     Core.TypeRecord rt -> encodeRecordOrUnion False rt
     Core.TypeUnion rt -> if L.null simpleFields
         then asRecord rt
@@ -159,7 +159,7 @@ encodeType optional typ = case typ of
 
 isRequiredField :: Core.FieldType -> Bool
 isRequiredField (Core.FieldType _ typ) = case Rewriting.deannotateType typ of
-  Core.TypeOptional _ -> False
+  Core.TypeMaybe _ -> False
   _ -> True
 
 moduleToJsonSchemaDocuments :: JsonSchemaOptions -> Module.Module -> Compute.Flow Graph.Graph (M.Map FilePath JS.Document)

@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -68,7 +68,7 @@ module_ = Module (Namespace "hydra.adapt.terms") elements
       el functionProxyTypeDef,
       el functionToUnionDef,
       el lambdaToMonotypeDef,
-      el optionalToListDef,
+      el maybeToListDef,
       el passApplicationDef,
       el passFunctionDef,
       el passForallDef,
@@ -258,13 +258,13 @@ lambdaToMonotypeDef = define "lambdaToMonotype" $
         (Compute.adapterTarget (var "ad"))
         (Compute.adapterCoder (var "ad")))]
 
-optionalToListDef :: TBinding TypeAdapter
-optionalToListDef = define "optionalToList" $
+maybeToListDef :: TBinding TypeAdapter
+maybeToListDef = define "maybeToList" $
   doc "Convert optional types to list types" $
   "t" ~>
   "encode" <~ ("ad" ~> "term" ~> cases _Term (var "term")
     Nothing [
-    _Term_optional>>: "m" ~> Maybes.maybe
+    _Term_maybe>>: "m" ~> Maybes.maybe
       (produce (TTerms.list []))
       ("r" ~>
         "encoded" <<~ Compute.coderEncode (Compute.adapterCoder (var "ad")) @@ var "r" $
@@ -272,13 +272,13 @@ optionalToListDef = define "optionalToList" $
       (var "m")]) $
   "decode" <~ ("ad" ~> "term" ~> cases _Term (var "term")
     Nothing [
-    _Term_list>>: "l" ~> Flows.map (unaryFunction Core.termOptional) (Logic.ifElse (Lists.null (var "l"))
+    _Term_list>>: "l" ~> Flows.map (unaryFunction Core.termMaybe) (Logic.ifElse (Lists.null (var "l"))
       (produce nothing)
       ("decoded" <<~ Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ (Lists.head (var "l")) $
        produce (just (var "decoded"))))]) $
   cases _Type (var "t")
     Nothing [
-    _Type_optional>>: "ot" ~>
+    _Type_maybe>>: "ot" ~>
       "ad" <<~ ref termAdapterDef @@ var "ot" $
       produce (Compute.adapter
         false
@@ -342,7 +342,7 @@ passFunctionDef = define "passFunction" $
       produce (Maps.fromList (var "pairs"))]) $
   "toOptionAd" <~ ("dom" ~> "cod" ~> cases _Type (ref Rewriting.deannotateTypeDef @@ var "dom")
     (Just (produce nothing)) [
-    _Type_optional >>: "ot" ~>
+    _Type_maybe >>: "ot" ~>
       Flows.map (unaryFunction just) (ref termAdapterDef @@ TTypes.function (var "ot") (var "cod"))]) $
   "getCoder" <~ ("caseAds" ~> "fname" ~> Maybes.maybe
     (ref AdaptUtils.idCoderDef)
@@ -470,17 +470,17 @@ passOptionalDef = define "passOptional" $
   doc "Pass through optional types" $
   "t" ~>
   "mapTerm" <~ ("coder" ~> "dir" ~> "term" ~>
-    "opt" <<~ ref withGraphContextDef @@ (ref ExtractCore.optionalDef @@ unaryFunction Flows.pure @@ var "term") $
-    "newOpt" <<~ Flows.mapOptional (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ var "coder") (var "opt") $
-    produce (Core.termOptional (var "newOpt"))) $
+    "opt" <<~ ref withGraphContextDef @@ (ref ExtractCore.maybeTermDef @@ unaryFunction Flows.pure @@ var "term") $
+    "newOpt" <<~ Flows.mapMaybe (ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ var "coder") (var "opt") $
+    produce (Core.termMaybe (var "newOpt"))) $
   cases _Type (var "t")
     Nothing [
-    _Type_optional>>: "ot" ~>
+    _Type_maybe>>: "ot" ~>
       "adapter" <<~ ref termAdapterDef @@ var "ot" $
       produce (Compute.adapter
         (Compute.adapterIsLossy (var "adapter"))
         (var "t")
-        (Core.typeOptional (Compute.adapterTarget (var "adapter")))
+        (Core.typeMaybe (Compute.adapterTarget (var "adapter")))
         (ref AdaptUtils.bidirectionalDef @@ (var "mapTerm" @@ (Compute.adapterCoder (var "adapter")))))]
 
 passProductDef :: TBinding TypeAdapter
@@ -698,7 +698,7 @@ unionToRecordDef = define "unionToRecord" $
     "fterm" <~ Core.fieldTerm (var "field") $
     cases _Term (var "fterm")
       Nothing [
-      _Term_optional>>: "opt" ~> Maybes.bind (var "opt") ("t" ~>
+      _Term_maybe>>: "opt" ~> Maybes.bind (var "opt") ("t" ~>
         just (Core.field (var "fn") (var "t")))]) $
   "fromRecordFields" <~ ("term" ~> "term'" ~> "t'" ~> "fields" ~>
     "matches" <~ Maybes.mapMaybe (var "forField") (var "fields") $
@@ -730,7 +730,7 @@ unionToRecordDef = define "unionToRecord" $
       "target" <~ Core.typeRecord (ref unionTypeToRecordTypeDef @@ var "rt") $
       "toRecordField" <~ ("term" ~> "fn" ~> "f" ~>
         "fn'" <~ Core.fieldTypeName (var "f") $
-        Core.field (var "fn'") (Core.termOptional (Logic.ifElse
+        Core.field (var "fn'") (Core.termMaybe (Logic.ifElse
           (Equality.equal (var "fn'") (var "fn"))
           (just (var "term"))
           nothing))) $
@@ -757,7 +757,7 @@ unionTypeToRecordTypeDef = define "unionTypeToRecordType" $
   "makeOptional" <~ ("f" ~>
     "fn" <~ Core.fieldTypeName (var "f") $
     "ft" <~ Core.fieldTypeType (var "f") $
-    Core.fieldType (var "fn") (ref Rewriting.mapBeneathTypeAnnotationsDef @@ unaryFunction Core.typeOptional @@ var "ft")) $
+    Core.fieldType (var "fn") (ref Rewriting.mapBeneathTypeAnnotationsDef @@ unaryFunction Core.typeMaybe @@ var "ft")) $
   Core.rowType (Core.rowTypeTypeName (var "rt")) (Lists.map (var "makeOptional") (Core.rowTypeFields (var "rt")))
 
 wrapToUnwrappedDef :: TBinding TypeAdapter
@@ -802,7 +802,7 @@ termAdapterDef = define "termAdapter" $
     _TypeVariant_list>>: constant (list [ref passListDef]),
     _TypeVariant_literal>>: constant (list [ref passLiteralDef]),
     _TypeVariant_map>>: constant (list [ref passMapDef]),
-    _TypeVariant_optional>>: constant (list [ref passOptionalDef, ref optionalToListDef]),
+    _TypeVariant_maybe>>: constant (list [ref passOptionalDef, ref maybeToListDef]),
     _TypeVariant_product>>: constant (list [ref passProductDef]),
     _TypeVariant_record>>: constant (list [ref passRecordDef]),
     _TypeVariant_set>>: constant (list [ref passSetDef]),
@@ -815,7 +815,7 @@ termAdapterDef = define "termAdapter" $
     _TypeVariant_application>>: constant (list [ref simplifyApplicationDef]),
     _TypeVariant_function>>: constant (list [ref functionToUnionDef]),
     _TypeVariant_forall>>: constant (list [ref lambdaToMonotypeDef]),
-    _TypeVariant_optional>>: constant (list [ref optionalToListDef]),
+    _TypeVariant_maybe>>: constant (list [ref maybeToListDef]),
     _TypeVariant_set>>: constant (list [ref setToListDef]),
     _TypeVariant_union>>: constant (list [ref unionToRecordDef]),
     _TypeVariant_unit>>: constant (list [ref unitToRecordDef]),

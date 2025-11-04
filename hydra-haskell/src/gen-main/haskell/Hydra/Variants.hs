@@ -166,7 +166,7 @@ termVariant x = case x of
   Core.TermList _ -> Mantle.TermVariantList
   Core.TermLiteral _ -> Mantle.TermVariantLiteral
   Core.TermMap _ -> Mantle.TermVariantMap
-  Core.TermOptional _ -> Mantle.TermVariantOptional
+  Core.TermMaybe _ -> Mantle.TermVariantMaybe
   Core.TermProduct _ -> Mantle.TermVariantProduct
   Core.TermRecord _ -> Mantle.TermVariantRecord
   Core.TermSet _ -> Mantle.TermVariantSet
@@ -187,7 +187,7 @@ termVariants = [
   Mantle.TermVariantFunction,
   Mantle.TermVariantList,
   Mantle.TermVariantMap,
-  Mantle.TermVariantOptional,
+  Mantle.TermVariantMaybe,
   Mantle.TermVariantProduct,
   Mantle.TermVariantRecord,
   Mantle.TermVariantSet,
@@ -209,7 +209,7 @@ typeVariant x = case x of
   Core.TypeList _ -> Mantle.TypeVariantList
   Core.TypeLiteral _ -> Mantle.TypeVariantLiteral
   Core.TypeMap _ -> Mantle.TypeVariantMap
-  Core.TypeOptional _ -> Mantle.TypeVariantOptional
+  Core.TypeMaybe _ -> Mantle.TypeVariantMaybe
   Core.TypeProduct _ -> Mantle.TypeVariantProduct
   Core.TypeRecord _ -> Mantle.TypeVariantRecord
   Core.TypeSet _ -> Mantle.TypeVariantSet
@@ -230,7 +230,7 @@ typeVariants = [
   Mantle.TypeVariantLiteral,
   Mantle.TypeVariantMap,
   Mantle.TypeVariantWrap,
-  Mantle.TypeVariantOptional,
+  Mantle.TypeVariantMaybe,
   Mantle.TypeVariantProduct,
   Mantle.TypeVariantRecord,
   Mantle.TypeVariantSet,

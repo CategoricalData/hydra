@@ -102,7 +102,7 @@ encodeType aliases typ = case typ of
       LiteralTypeString -> pure PDL.PrimitiveTypeString
     TypeMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
     TypeVariable name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
-    TypeOptional ot -> fail $ "optionals unexpected at top level"
+    TypeMaybe ot -> fail $ "optionals unexpected at top level"
     TypeRecord rt -> do
       let includes = []
       rfields <- CM.mapM encodeRecordField $ rowTypeFields rt
@@ -148,7 +148,7 @@ encodeType aliases typ = case typ of
         PDL.enumFieldName = PDL.EnumFieldName $ convertCase CaseConventionCamel CaseConventionUpperSnake name,
         PDL.enumFieldAnnotations = anns}
     encodePossiblyOptionalType typ = case deannotateType typ of
-      TypeOptional ot -> do
+      TypeMaybe ot -> do
         t <- encode ot
         return (t, True)
       _ -> do

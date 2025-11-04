@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -198,7 +198,7 @@ typeIsSupportedDef = define "typeIsSupported" $
       Logic.and
         (ref typeIsSupportedDef @@ var "constraints" @@ Core.mapTypeKeys (var "mt"))
         (ref typeIsSupportedDef @@ var "constraints" @@ Core.mapTypeValues (var "mt")),
-    _Type_optional>>: "ot" ~> ref typeIsSupportedDef @@ var "constraints" @@ var "ot",
+    _Type_maybe>>: "ot" ~> ref typeIsSupportedDef @@ var "constraints" @@ var "ot",
     _Type_product>>: "types" ~>
       andAll (Lists.map (ref typeIsSupportedDef @@ var "constraints") (var "types")),
     _Type_record>>: "rt" ~>

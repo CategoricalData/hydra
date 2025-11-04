@@ -48,8 +48,8 @@ mapKeys f m = M.fromList <$> (CM.mapM (\(k, v) -> (,) <$> f k <*> Monads.pure v)
 mapList :: (x -> Flow s y) -> [x] -> Flow s [y]
 mapList = CM.mapM
 
-mapOptional :: (x -> Flow s y) -> Maybe x -> Flow s (Maybe y)
-mapOptional = traverse
+mapMaybe :: (x -> Flow s y) -> Maybe x -> Flow s (Maybe y)
+mapMaybe = traverse
 
 mapSet :: Ord y => (x -> Flow s y) -> S.Set x -> Flow s (S.Set y)
 mapSet f xs = S.fromList <$> (CM.mapM f $ S.toList xs)

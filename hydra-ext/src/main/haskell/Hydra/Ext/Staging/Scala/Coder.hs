@@ -163,7 +163,7 @@ encodeTerm term = case deannotateTerm term of
       where
         toPair (k, v) = sassign <$> encodeTerm k <*> encodeTerm v
     TermWrap (WrappedTerm _ term') -> encodeTerm term'
-    TermOptional m -> case m of
+    TermMaybe m -> case m of
       Nothing -> pure $ sname "None"
       Just t -> (\s -> sapply (sname "Some") [s]) <$> encodeTerm t
     TermRecord (Record name fields) -> do
@@ -209,7 +209,7 @@ encodeType t = case deannotateType t of
 --      IntegerTypeUint64 ->
     LiteralTypeString -> pure $ stref "String"
   TypeMap (MapType kt vt) -> stapply2 <$> pure (stref "Map") <*> encodeType kt <*> encodeType vt
-  TypeOptional ot -> stapply1 <$> pure (stref "Option") <*> encodeType ot
+  TypeMaybe ot -> stapply1 <$> pure (stref "Option") <*> encodeType ot
 --  TypeRecord sfields ->
   TypeSet st -> stapply1 <$> pure (stref "Set") <*> encodeType st
 --  TypeUnion sfields ->

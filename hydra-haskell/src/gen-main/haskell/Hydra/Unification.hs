@@ -69,8 +69,8 @@ joinTypes left right comment =
                     joinOne (Core.mapTypeKeys v1) (Core.mapTypeKeys v2),
                     (joinOne (Core.mapTypeValues v1) (Core.mapTypeValues v2))])
                   _ -> cannotUnify) sright)
-                Core.TypeOptional v1 -> ((\x -> case x of
-                  Core.TypeOptional v2 -> (Flows.pure [
+                Core.TypeMaybe v1 -> ((\x -> case x of
+                  Core.TypeMaybe v2 -> (Flows.pure [
                     joinOne v1 v2])
                   _ -> cannotUnify) sright)
                 Core.TypeProduct v1 -> ((\x -> case x of

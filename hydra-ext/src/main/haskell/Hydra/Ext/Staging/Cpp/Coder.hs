@@ -263,7 +263,7 @@ encodeType env typ = case deannotateType typ of
     TypeList et -> toConstType <$> (createTemplateType "std::vector" <$> ((:[]) <$> encode et))
     TypeMap (MapType kt vt) -> toConstType <$> (createTemplateType "std::map" <$> sequence [encode kt, encode vt])
     TypeLiteral lt -> encodeLiteralType lt
-    TypeOptional et -> toConstType <$> (createTemplateType "std::optional" <$> ((:[]) <$> encode et))
+    TypeMaybe et -> toConstType <$> (createTemplateType "std::optional" <$> ((:[]) <$> encode et))
     TypeRecord rt -> typeref typ (rowTypeTypeName rt)
     TypeSet et -> toConstType <$> (createTemplateType "std::set" <$> ((:[]) <$> encode et))
     TypeUnion rt -> typeref typ (rowTypeTypeName rt)
@@ -599,7 +599,7 @@ gatherMetadata defs = L.foldl addDef start defs
       TermList _ -> meta {cppModuleMetadataUsesVector = True}
       TermSet _ -> meta {cppModuleMetadataUsesSet = True}
       TermLiteral (LiteralString _) -> meta {cppModuleMetadataUsesString = True}
-      TermOptional _ -> meta {cppModuleMetadataUsesOptional = True}
+      TermMaybe _ -> meta {cppModuleMetadataUsesOptional = True}
       _ -> meta
 
     extendMetaForType meta typ = case deannotateType typ of
@@ -610,7 +610,7 @@ gatherMetadata defs = L.foldl addDef start defs
       TypeLiteral lt -> case lt of
         LiteralTypeString -> meta {cppModuleMetadataUsesString = True}
         _ -> meta
-      TypeOptional _ -> meta {cppModuleMetadataUsesOptional = True}
+      TypeMaybe _ -> meta {cppModuleMetadataUsesOptional = True}
       TypeRecord rt -> meta
       TypeSet _ -> meta {cppModuleMetadataUsesSet = True}
       TypeUnion _ -> meta {cppModuleMetadataUsesTypeinfo = True}
@@ -630,7 +630,7 @@ isStdContainerType typ = case deannotateType typ of
   TypeApplication (ApplicationType lhs _) -> isStdContainerType lhs
   TypeList _ -> True
   TypeMap _ -> True
-  TypeOptional _ -> True
+  TypeMaybe _ -> True
   TypeSet _ -> True
   _ -> False
 

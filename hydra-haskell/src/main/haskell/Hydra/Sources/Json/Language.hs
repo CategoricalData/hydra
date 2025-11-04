@@ -107,21 +107,21 @@ jsonLanguageDef = define "jsonLanguage" $
     Mantle.termVariantList,
     Mantle.termVariantLiteral,
     Mantle.termVariantMap,
-    Mantle.termVariantOptional,
+    Mantle.termVariantMaybe,
     Mantle.termVariantRecord],
     -- Note: TypeVariantUnit is excluded because JSON null is used for optionals
   "typeVariants">: Sets.fromList $ list [
     Mantle.typeVariantList,
     Mantle.typeVariantLiteral,
     Mantle.typeVariantMap,
-    Mantle.typeVariantOptional,
+    Mantle.typeVariantMaybe,
     Mantle.typeVariantRecord],
   "typePredicate">: lambda "typ" $ cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ")
     (Just true) [
-    _Type_optional>>: lambda "innerType" $
+    _Type_maybe>>: lambda "innerType" $
       cases _Type (var "innerType")
         (Just true) [
-        _Type_optional>>: constant false]]] $
+        _Type_maybe>>: constant false]]] $
   Coders.language
     (Coders.languageName "hydra.ext.org.json")
     (Coders.languageConstraints

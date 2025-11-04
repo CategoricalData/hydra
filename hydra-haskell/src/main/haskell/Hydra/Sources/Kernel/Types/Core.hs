@@ -299,7 +299,7 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "map">:
             doc "A map of keys to values" $
             Types.map (core "Term") (core "Term"),
-          "optional">:
+          "maybe">:
             doc "An optional value" $
             optional $ core "Term",
           "product">:
@@ -356,7 +356,7 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "list">: core "Type",
           "literal">: core "LiteralType",
           "map">: core "MapType",
-          "optional">: core "Type",
+          "maybe">: core "Type",
           "product">: list (core "Type"),
           "record">: core "RowType",
           "set">: core "Type",

@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -308,7 +308,7 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
       "tname" <~ Core.caseStatementTypeName (var "cs") $
       "dflt" <~ Core.caseStatementDefault (var "cs") $
       "cases" <~ Core.caseStatementCases (var "cs") $
-      "rdflt" <<~ Flows.mapOptional (var "rewrite" @@ false @@ false @@ list [] @@ var "recurse" @@ var "tx") (var "dflt") $
+      "rdflt" <<~ Flows.mapMaybe (var "rewrite" @@ false @@ false @@ list [] @@ var "recurse" @@ var "tx") (var "dflt") $
       "rcases" <<~ Flows.mapList (var "forCase") (var "cases") $
       produce $ Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
         Core.caseStatement (var "tname") (var "rdflt") (var "rcases")) $
@@ -537,7 +537,7 @@ termIsValueDef = define "termIsValue" $
           (ref termIsValueDef @@ var "g" @@ first (var "kv"))
           (ref termIsValueDef @@ var "g" @@ second (var "kv")))
         true $ Maps.toList (var "m"),
-    _Term_optional>>: "m" ~>
+    _Term_maybe>>: "m" ~>
       Maybes.maybe true (ref termIsValueDef @@ var "g") (var "m"),
     _Term_record>>: "r" ~> var "checkFields" @@ Core.recordFields (var "r"),
     _Term_set>>: "s" ~> var "forList" @@ Sets.toList (var "s"),

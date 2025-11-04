@@ -56,7 +56,7 @@ caseStatement cs = (Core.TermRecord (Core.Record {
       Core.fieldTerm = (name (Core.caseStatementTypeName cs))},
     Core.Field {
       Core.fieldName = (Core.Name "default"),
-      Core.fieldTerm = (Core.TermOptional (Maybes.map term (Core.caseStatementDefault cs)))},
+      Core.fieldTerm = (Core.TermMaybe (Maybes.map term (Core.caseStatementDefault cs)))},
     Core.Field {
       Core.fieldName = (Core.Name "cases"),
       Core.fieldTerm = (Core.TermList (Lists.map field (Core.caseStatementCases cs)))}]}))
@@ -289,7 +289,7 @@ lambda l = (Core.TermRecord (Core.Record {
       Core.fieldTerm = (name (Core.lambdaParameter l))},
     Core.Field {
       Core.fieldName = (Core.Name "domain"),
-      Core.fieldTerm = (Core.TermOptional (Maybes.map type_ (Core.lambdaDomain l)))},
+      Core.fieldTerm = (Core.TermMaybe (Maybes.map type_ (Core.lambdaDomain l)))},
     Core.Field {
       Core.fieldName = (Core.Name "body"),
       Core.fieldTerm = (term (Core.lambdaBody l))}]}))
@@ -328,7 +328,7 @@ binding b = (Core.TermRecord (Core.Record {
       Core.fieldTerm = (term (Core.bindingTerm b))},
     Core.Field {
       Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (Core.TermOptional (Maybes.map typeScheme (Core.bindingType b)))}]}))
+      Core.fieldTerm = (Core.TermMaybe (Maybes.map typeScheme (Core.bindingType b)))}]}))
 
 literal :: (Core.Literal -> Core.Term)
 literal x = case x of
@@ -486,11 +486,11 @@ term x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "map"),
       Core.fieldTerm = (Core.TermMap (Maps.bimap term term v1))}}))
-  Core.TermOptional v1 -> (Core.TermUnion (Core.Injection {
+  Core.TermMaybe v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "optional"),
-      Core.fieldTerm = (Core.TermOptional (Maybes.map term v1))}}))
+      Core.fieldName = (Core.Name "maybe"),
+      Core.fieldTerm = (Core.TermMaybe (Maybes.map term v1))}}))
   Core.TermProduct v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
@@ -543,20 +543,20 @@ term x = case x of
       Core.fieldTerm = (wrappedTerm v1)}}))
 
 tupleProjection :: (Core.TupleProjection -> Core.Term)
-tupleProjection tp = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.core.TupleProjection"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "arity"),
-      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.tupleProjectionArity tp))))},
-    Core.Field {
-      Core.fieldName = (Core.Name "index"),
-      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.tupleProjectionIndex tp))))},
-    Core.Field {
-      Core.fieldName = (Core.Name "domain"),
-      Core.fieldTerm = (Core.TermOptional (Maybes.map encodeTypes (Core.tupleProjectionDomain tp)))}]})) 
-  where 
-    encodeTypes = (\types -> Core.TermList (Lists.map type_ types))
+tupleProjection tp =  
+  let encodeTypes = (\types -> Core.TermList (Lists.map type_ types))
+  in (Core.TermRecord (Core.Record {
+    Core.recordTypeName = (Core.Name "hydra.core.TupleProjection"),
+    Core.recordFields = [
+      Core.Field {
+        Core.fieldName = (Core.Name "arity"),
+        Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.tupleProjectionArity tp))))},
+      Core.Field {
+        Core.fieldName = (Core.Name "index"),
+        Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.tupleProjectionIndex tp))))},
+      Core.Field {
+        Core.fieldName = (Core.Name "domain"),
+        Core.fieldTerm = (Core.TermMaybe (Maybes.map encodeTypes (Core.tupleProjectionDomain tp)))}]}))
 
 type_ :: (Core.Type -> Core.Term)
 type_ x = case x of
@@ -593,10 +593,10 @@ type_ x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "map"),
       Core.fieldTerm = (mapType v1)}}))
-  Core.TypeOptional v1 -> (Core.TermUnion (Core.Injection {
+  Core.TypeMaybe v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Type"),
     Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "optional"),
+      Core.fieldName = (Core.Name "maybe"),
       Core.fieldTerm = (type_ v1)}}))
   Core.TypeProduct v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Type"),

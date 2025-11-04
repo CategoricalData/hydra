@@ -17,7 +17,7 @@ avroLanguage = Language (LanguageName "hydra.ext.avro") $ LanguageConstraints {
     TermVariantList,
     TermVariantLiteral,
     TermVariantMap,
-    TermVariantOptional,
+    TermVariantMaybe,
     TermVariantRecord],
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantAnnotated,
@@ -25,8 +25,8 @@ avroLanguage = Language (LanguageName "hydra.ext.avro") $ LanguageConstraints {
     TypeVariantLiteral,
     TypeVariantMap,
     TypeVariantWrap,
-    TypeVariantOptional,
+    TypeVariantMaybe,
     TypeVariantRecord],
   languageConstraintsTypes = \typ -> case deannotateType typ of
-    TypeOptional (TypeOptional _) -> False
+    TypeMaybe (TypeMaybe _) -> False
     _ -> True }

@@ -191,7 +191,7 @@ map keys vals = TypeMap $ MapType keys vals
 -- | Optional (nullable) type
 -- Example: optional string
 optional :: Type -> Type
-optional = TypeOptional
+optional = TypeMaybe
 
 -- | Set type
 -- Example: set string

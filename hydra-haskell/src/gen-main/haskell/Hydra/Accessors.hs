@@ -71,7 +71,7 @@ data TermAccessor =
   TermAccessorListElement Int |
   TermAccessorMapKey Int |
   TermAccessorMapValue Int |
-  TermAccessorOptionalTerm  |
+  TermAccessorMaybeTerm  |
   TermAccessorProductTerm Int |
   TermAccessorRecordField Core.Name |
   TermAccessorSetElement Int |
@@ -106,7 +106,7 @@ _TermAccessor_mapKey = (Core.Name "mapKey")
 
 _TermAccessor_mapValue = (Core.Name "mapValue")
 
-_TermAccessor_optionalTerm = (Core.Name "optionalTerm")
+_TermAccessor_maybeTerm = (Core.Name "maybeTerm")
 
 _TermAccessor_productTerm = (Core.Name "productTerm")
 

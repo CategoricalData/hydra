@@ -248,7 +248,7 @@ etaExpandTypedTerm tx0 term0 =
                                       let dflt = (Core.caseStatementDefault cs)
                                       in  
                                         let cases = (Core.caseStatementCases cs)
-                                        in (Flows.bind (Flows.mapOptional (rewrite False False [] recurse tx) dflt) (\rdflt -> Flows.bind (Flows.mapList forCase cases) (\rcases -> Flows.pure (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                                        in (Flows.bind (Flows.mapMaybe (rewrite False False [] recurse tx) dflt) (\rdflt -> Flows.bind (Flows.mapList forCase cases) (\rcases -> Flows.pure (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                           Core.caseStatementTypeName = tname,
                                           Core.caseStatementDefault = rdflt,
                                           Core.caseStatementCases = rcases}))))))))
@@ -389,7 +389,7 @@ termIsValue g term =
           Core.TermFunction v1 -> (functionIsValue v1)
           Core.TermList v1 -> (forList v1)
           Core.TermMap v1 -> (Lists.foldl (\b -> \kv -> Logic.and b (Logic.and (termIsValue g (fst kv)) (termIsValue g (snd kv)))) True (Maps.toList v1))
-          Core.TermOptional v1 -> (Maybes.maybe True (termIsValue g) v1)
+          Core.TermMaybe v1 -> (Maybes.maybe True (termIsValue g) v1)
           Core.TermRecord v1 -> (checkFields (Core.recordFields v1))
           Core.TermSet v1 -> (forList (Sets.toList v1))
           Core.TermUnion v1 -> (checkField (Core.injectionField v1))

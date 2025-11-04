@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -245,7 +245,7 @@ termVariantDef = define "termVariant" $
     _Term_list>>: constant Mantle.termVariantList,
     _Term_literal>>: constant Mantle.termVariantLiteral,
     _Term_map>>: constant Mantle.termVariantMap,
-    _Term_optional>>: constant Mantle.termVariantOptional,
+    _Term_maybe>>: constant Mantle.termVariantMaybe,
     _Term_product>>: constant Mantle.termVariantProduct,
     _Term_record>>: constant Mantle.termVariantRecord,
     _Term_set>>: constant Mantle.termVariantSet,
@@ -267,7 +267,7 @@ termVariantsDef = define "termVariants" $
     _TermVariant_function,
     _TermVariant_list,
     _TermVariant_map,
-    _TermVariant_optional,
+    _TermVariant_maybe,
     _TermVariant_product,
     _TermVariant_record,
     _TermVariant_set,
@@ -290,7 +290,7 @@ typeVariantDef = define "typeVariant" $
     _Type_list>>: constant Mantle.typeVariantList,
     _Type_literal>>: constant Mantle.typeVariantLiteral,
     _Type_map>>: constant Mantle.typeVariantMap,
-    _Type_optional>>: constant Mantle.typeVariantOptional,
+    _Type_maybe>>: constant Mantle.typeVariantMaybe,
     _Type_product>>: constant Mantle.typeVariantProduct,
     _Type_record>>: constant Mantle.typeVariantRecord,
     _Type_set>>: constant Mantle.typeVariantSet,
@@ -312,7 +312,7 @@ typeVariantsDef = define "typeVariants" $
     _TypeVariant_literal,
     _TypeVariant_map,
     _TypeVariant_wrap,
-    _TypeVariant_optional,
+    _TypeVariant_maybe,
     _TypeVariant_product,
     _TypeVariant_record,
     _TypeVariant_set,

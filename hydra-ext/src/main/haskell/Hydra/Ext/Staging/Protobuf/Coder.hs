@@ -89,7 +89,7 @@ constructModule mod@(Module ns els _ _ desc) _ pairs = do
         else []
       where
         isOptionalScalarField typ = case typ of
-          TypeOptional ot -> case deannotateType ot of
+          TypeMaybe ot -> case deannotateType ot of
             TypeLiteral _ -> True
             _ -> False
           _ -> False
@@ -165,7 +165,7 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
       TypeList lt -> do
         P3.FieldTypeRepeated <$> encodeSimpleType True lt
       TypeMap (MapType kt vt) -> P3.FieldTypeMap <$> (P3.MapType <$> encodeSimpleType False kt <*> encodeSimpleType True vt)
-      TypeOptional ot -> case deannotateType ot of
+      TypeMaybe ot -> case deannotateType ot of
         TypeLiteral lt -> P3.FieldTypeSimple <$> encodeScalarTypeWrapped lt
         _ -> encodeType ot -- TODO
       TypeUnion (RowType _ fields) -> do

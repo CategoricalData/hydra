@@ -231,16 +231,16 @@ lambdaToMonotype t = ((\x -> case x of
       Compute.adapterCoder = (Compute.adapterCoder ad)})))) t)
 
 -- | Convert optional types to list types
-optionalToList :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
-optionalToList t =  
+maybeToList :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
+maybeToList t =  
   let encode = (\ad -> \term -> (\x -> case x of
-          Core.TermOptional v1 -> (Maybes.maybe (Flows.pure (Core.TermList [])) (\r -> Flows.bind (Compute.coderEncode (Compute.adapterCoder ad) r) (\encoded -> Flows.pure (Core.TermList [
+          Core.TermMaybe v1 -> (Maybes.maybe (Flows.pure (Core.TermList [])) (\r -> Flows.bind (Compute.coderEncode (Compute.adapterCoder ad) r) (\encoded -> Flows.pure (Core.TermList [
             encoded]))) v1)) term)
   in  
     let decode = (\ad -> \term -> (\x -> case x of
-            Core.TermList v1 -> (Flows.map (\x -> Core.TermOptional x) (Logic.ifElse (Lists.null v1) (Flows.pure Nothing) (Flows.bind (Compute.coderDecode (Compute.adapterCoder ad) (Lists.head v1)) (\decoded -> Flows.pure (Just decoded)))))) term)
+            Core.TermList v1 -> (Flows.map (\x -> Core.TermMaybe x) (Logic.ifElse (Lists.null v1) (Flows.pure Nothing) (Flows.bind (Compute.coderDecode (Compute.adapterCoder ad) (Lists.head v1)) (\decoded -> Flows.pure (Just decoded)))))) term)
     in ((\x -> case x of
-      Core.TypeOptional v1 -> (Flows.bind (termAdapter v1) (\ad -> Flows.pure (Compute.Adapter {
+      Core.TypeMaybe v1 -> (Flows.bind (termAdapter v1) (\ad -> Flows.pure (Compute.Adapter {
         Compute.adapterIsLossy = False,
         Compute.adapterSource = t,
         Compute.adapterTarget = (Core.TypeList (Compute.adapterTarget ad)),
@@ -277,7 +277,7 @@ passFunction t =
           _ -> (Flows.pure Maps.empty)) (Rewriting.deannotateType dom))
   in  
     let toOptionAd = (\dom -> \cod -> (\x -> case x of
-            Core.TypeOptional v1 -> (Flows.map Maybes.pure (termAdapter (Core.TypeFunction (Core.FunctionType {
+            Core.TypeMaybe v1 -> (Flows.map Maybes.pure (termAdapter (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = v1,
               Core.functionTypeCodomain = cod}))))
             _ -> (Flows.pure Nothing)) (Rewriting.deannotateType dom))
@@ -405,12 +405,12 @@ passMap t =
 -- | Pass through optional types
 passOptional :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passOptional t =  
-  let mapTerm = (\coder -> \dir -> \term -> Flows.bind (withGraphContext (Core__.optional Flows.pure term)) (\opt -> Flows.bind (Flows.mapOptional (Utils.encodeDecode dir coder) opt) (\newOpt -> Flows.pure (Core.TermOptional newOpt))))
+  let mapTerm = (\coder -> \dir -> \term -> Flows.bind (withGraphContext (Core__.maybeTerm Flows.pure term)) (\opt -> Flows.bind (Flows.mapMaybe (Utils.encodeDecode dir coder) opt) (\newOpt -> Flows.pure (Core.TermMaybe newOpt))))
   in ((\x -> case x of
-    Core.TypeOptional v1 -> (Flows.bind (termAdapter v1) (\adapter -> Flows.pure (Compute.Adapter {
+    Core.TypeMaybe v1 -> (Flows.bind (termAdapter v1) (\adapter -> Flows.pure (Compute.Adapter {
       Compute.adapterIsLossy = (Compute.adapterIsLossy adapter),
       Compute.adapterSource = t,
-      Compute.adapterTarget = (Core.TypeOptional (Compute.adapterTarget adapter)),
+      Compute.adapterTarget = (Core.TypeMaybe (Compute.adapterTarget adapter)),
       Compute.adapterCoder = (Utils.bidirectional (mapTerm (Compute.adapterCoder adapter)))})))) t)
 
 -- | Pass through product types
@@ -597,9 +597,9 @@ termAdapter typ =
                     passLiteral]
                   Mantle.TypeVariantMap -> [
                     passMap]
-                  Mantle.TypeVariantOptional -> [
+                  Mantle.TypeVariantMaybe -> [
                     passOptional,
-                    optionalToList]
+                    maybeToList]
                   Mantle.TypeVariantProduct -> [
                     passProduct]
                   Mantle.TypeVariantRecord -> [
@@ -622,8 +622,8 @@ termAdapter typ =
                       functionToUnion]
                     Mantle.TypeVariantForall -> [
                       lambdaToMonotype]
-                    Mantle.TypeVariantOptional -> [
-                      optionalToList]
+                    Mantle.TypeVariantMaybe -> [
+                      maybeToList]
                     Mantle.TypeVariantSet -> [
                       setToList]
                     Mantle.TypeVariantUnion -> [
@@ -656,7 +656,7 @@ unionToRecord t =
           in  
             let fterm = (Core.fieldTerm field)
             in ((\x -> case x of
-              Core.TermOptional v1 -> (Maybes.bind v1 (\t -> Just (Core.Field {
+              Core.TermMaybe v1 -> (Maybes.bind v1 (\t -> Just (Core.Field {
                 Core.fieldName = fn,
                 Core.fieldTerm = t})))) fterm))
   in  
@@ -690,7 +690,7 @@ unionToRecord t =
                         let fn_ = (Core.fieldTypeName f)
                         in Core.Field {
                           Core.fieldName = fn_,
-                          Core.fieldTerm = (Core.TermOptional (Logic.ifElse (Equality.equal fn_ fn) (Just term) Nothing))})
+                          Core.fieldTerm = (Core.TermMaybe (Logic.ifElse (Equality.equal fn_ fn) (Just term) Nothing))})
                 in (Flows.bind (termAdapter target) (\ad -> Flows.pure (Compute.Adapter {
                   Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
                   Compute.adapterSource = t,
@@ -714,7 +714,7 @@ unionTypeToRecordType rt =
             let ft = (Core.fieldTypeType f)
             in Core.FieldType {
               Core.fieldTypeName = fn,
-              Core.fieldTypeType = (Rewriting.mapBeneathTypeAnnotations (\x -> Core.TypeOptional x) ft)})
+              Core.fieldTypeType = (Rewriting.mapBeneathTypeAnnotations (\x -> Core.TypeMaybe x) ft)})
   in Core.RowType {
     Core.rowTypeTypeName = (Core.rowTypeTypeName rt),
     Core.rowTypeFields = (Lists.map makeOptional (Core.rowTypeFields rt))}

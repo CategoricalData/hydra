@@ -83,7 +83,7 @@ def mutate_trace[T0, T1](mutate: Callable[[hydra.compute.Trace], hydra.mantle.Ei
         return choose(cast(Callable[[str], hydra.compute.FlowState[T0, T1]], for_left), for_right, mutate(t0))
     return cast(hydra.compute.Flow[T0, T1], hydra.compute.Flow(flow_fun))
 
-def optional_to_list[T0](mx: Maybe[T0]) -> frozenlist[T0]:
+def maybe_to_list[T0](mx: Maybe[T0]) -> frozenlist[T0]:
     return hydra.lib.maybes.maybe(cast(frozenlist[T0], ()), cast(Callable[[T0], frozenlist[T0]], hydra.lib.lists.pure), mx)
 
 def trace_summary(t: hydra.compute.Trace) -> str:

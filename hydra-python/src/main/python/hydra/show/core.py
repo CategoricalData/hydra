@@ -137,8 +137,8 @@ def type(typ: hydra.core.Type) -> str:
             val_typ = mt.values
             return hydra.lib.strings.cat(("map<", type(key_typ), ", ", type(val_typ), ">"))
         
-        case hydra.core.TypeOptional(value=etyp2):
-            return hydra.lib.strings.cat(("optional<", type(etyp2), ">"))
+        case hydra.core.TypeMaybe(value=etyp2):
+            return hydra.lib.strings.cat(("maybe<", type(etyp2), ">"))
         
         case hydra.core.TypeProduct(value=types):
             type_strs = hydra.lib.lists.map(type, types)
@@ -354,7 +354,7 @@ def term(t: hydra.core.Term) -> str:
                 return hydra.lib.strings.cat((term(p[0]), "=", term(p[1])))
             return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map(entry, hydra.lib.maps.to_list(m))), "}"))
         
-        case hydra.core.TermOptional(value=mt):
+        case hydra.core.TermMaybe(value=mt):
             return hydra.lib.maybes.maybe("nothing", (lambda t2: hydra.lib.strings.cat(("just(", term(t2), ")"))), mt)
         
         case hydra.core.TermProduct(value=els2):
