@@ -183,7 +183,7 @@ def adapt_type_scheme[T0](constraints: hydra.coders.LanguageConstraints, litmap:
 
 def adapt_primitive[T0](constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], prim0: hydra.graph.Primitive) -> hydra.compute.Flow[T0, hydra.graph.Primitive]:
     ts0 = prim0.type
-    return hydra.lib.flows.bind(adapt_type_scheme(constraints, litmap, ts0), (lambda ts1: hydra.lib.flows.pure(hydra.graph.Primitive(prim0.name, ts1, (lambda v1: prim0.implementation(v1))))))
+    return hydra.lib.flows.bind(adapt_type_scheme(constraints, litmap, ts0), (lambda ts1: hydra.lib.flows.pure(hydra.graph.Primitive(prim0.name, ts1, prim0.implementation))))
 
 def adapt_literal(lt: hydra.core.LiteralType, l: hydra.core.Literal) -> hydra.core.Literal:
     r"""Convert a literal to a different type."""
@@ -288,7 +288,7 @@ def adapt_data_graph(constraints: hydra.coders.LanguageConstraints, do_expand: b
     r"""Adapt a graph and its schema to the given language constraints, prior to inference."""
     
     def expand[T0](graph: hydra.graph.Graph, gterm: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
-        return hydra.lib.flows.bind(hydra.schemas.graph_to_type_context(graph), (lambda tx: hydra.lib.flows.bind(hydra.reduction.eta_expand_typed_term(tx, gterm), (lambda gterm1: hydra.lib.flows.pure(hydra.rewriting.lift_lambda_above_let(hydra.rewriting.unshadow_variables(gterm1)))))))
+        return hydra.lib.flows.bind(hydra.schemas.graph_to_type_context(graph), (lambda tx: hydra.lib.flows.bind(hydra.reduction.eta_expand_typed_term(tx, gterm), (lambda gterm1: hydra.lib.flows.pure(hydra.rewriting.lift_lambda_above_let(hydra.rewriting.unshadow_variables(hydra.rewriting.remove_types_from_term(gterm1))))))))
     litmap = adapt_literal_types_map(constraints)
     els0 = graph0.elements
     env0 = graph0.environment

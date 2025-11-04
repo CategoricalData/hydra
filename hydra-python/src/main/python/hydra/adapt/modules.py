@@ -37,12 +37,13 @@ def adapt_type_to_language[T1, T0](lang: hydra.coders.Language, typ: hydra.core.
     return hydra.lib.flows.bind(language_adapter(lang, typ), (lambda adapter: hydra.lib.flows.pure(adapter.target)))
 
 def adapt_type_to_language_and_encode[T0](lang: hydra.coders.Language, enc: Callable[[hydra.core.Type], hydra.compute.Flow[hydra.graph.Graph, T0]], typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, T0]:
+    dflt = hydra.lib.flows.bind(adapt_type_to_language(lang, typ), (lambda adapted_type: enc(adapted_type)))
     match hydra.rewriting.deannotate_type(typ):
         case hydra.core.TypeVariable():
             return enc(typ)
         
         case _:
-            return hydra.lib.flows.bind(adapt_type_to_language(lang, typ), (lambda adapted_type: enc(adapted_type)))
+            return dflt
 
 def adapted_module_definitions[T0](lang: hydra.coders.Language, mod: hydra.module.Module) -> hydra.compute.Flow[hydra.graph.Graph, frozenlist[hydra.module.Definition]]:
     els = mod.elements

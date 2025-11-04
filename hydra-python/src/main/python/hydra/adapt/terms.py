@@ -321,7 +321,7 @@ def pass_optional(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapter
     r"""Pass through optional types."""
     
     def map_term(coder: hydra.compute.Coder[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Term, hydra.core.Term], dir: hydra.coders.CoderDirection, term: hydra.core.Term) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.core.Term]:
-        return hydra.lib.flows.bind(with_graph_context(hydra.extract.core.optional(cast(Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], hydra.lib.flows.pure), term)), (lambda opt: hydra.lib.flows.bind(hydra.lib.flows.map_maybe((lambda v1: hydra.adapt.utils.encode_decode(dir, coder, v1)), opt), (lambda new_opt: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(new_opt)))))))
+        return hydra.lib.flows.bind(with_graph_context(hydra.extract.core.maybe_term(cast(Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], hydra.lib.flows.pure), term)), (lambda opt: hydra.lib.flows.bind(hydra.lib.flows.map_maybe((lambda v1: hydra.adapt.utils.encode_decode(dir, coder, v1)), opt), (lambda new_opt: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(new_opt)))))))
     match t:
         case hydra.core.TypeMaybe(value=ot):
             return hydra.lib.flows.bind(term_adapter(ot), (lambda adapter: hydra.lib.flows.pure(cast(hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(adapter.is_lossy, t, cast(hydra.core.Type, hydra.core.TypeMaybe(adapter.target)), hydra.adapt.utils.bidirectional((lambda v1, v2: map_term(adapter.coder, v1, v2))))))))

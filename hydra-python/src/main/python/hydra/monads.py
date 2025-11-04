@@ -60,6 +60,9 @@ def get_state[T0]() -> hydra.compute.Flow[T0, T0]:
 def map[T0, T1, T2](f: Callable[[T0], T1], f1: hydra.compute.Flow[T2, T0]) -> hydra.compute.Flow[T2, T1]:
     return cast(hydra.compute.Flow[T2, T1], hydra.compute.Flow((lambda s0, t0: (f2 := f1.value(s0, t0), cast(hydra.compute.FlowState[T2, T1], hydra.compute.FlowState(hydra.lib.maybes.map(f, f2.value), f2.state, f2.trace)))[1])))
 
+def maybe_to_list[T0](mx: Maybe[T0]) -> frozenlist[T0]:
+    return hydra.lib.maybes.maybe(cast(frozenlist[T0], ()), cast(Callable[[T0], frozenlist[T0]], hydra.lib.lists.pure), mx)
+
 def put_state[T0](cx: T0) -> hydra.compute.Flow[T0, None]:
     return cast(hydra.compute.Flow[T0, None], hydra.compute.Flow((lambda s0, t0: (f1 := pure(None).value(s0, t0), cast(hydra.compute.FlowState[T0, None], hydra.compute.FlowState(f1.value, cx, f1.trace)))[1])))
 
@@ -82,9 +85,6 @@ def mutate_trace[T0, T1](mutate: Callable[[hydra.compute.Trace], hydra.mantle.Ei
             return cast(hydra.compute.FlowState[T0, T1], hydra.compute.FlowState(f2.value, f2.state, restore(t0, f2.trace)))
         return choose(cast(Callable[[str], hydra.compute.FlowState[T0, T1]], for_left), for_right, mutate(t0))
     return cast(hydra.compute.Flow[T0, T1], hydra.compute.Flow(flow_fun))
-
-def maybe_to_list[T0](mx: Maybe[T0]) -> frozenlist[T0]:
-    return hydra.lib.maybes.maybe(cast(frozenlist[T0], ()), cast(Callable[[T0], frozenlist[T0]], hydra.lib.lists.pure), mx)
 
 def trace_summary(t: hydra.compute.Trace) -> str:
     r"""Summarize a trace as a string."""

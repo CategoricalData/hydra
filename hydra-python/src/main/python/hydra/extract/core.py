@@ -336,27 +336,27 @@ def map_type[T0](typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.MapT
         case _:
             return hydra.monads.unexpected("map type", hydra.show.core.type(typ))
 
-def n_args[T0, T1](name: hydra.core.Name, n: int, args: frozenlist[T0]) -> hydra.compute.Flow[T1, None]:
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(args), n), hydra.lib.flows.pure(None), hydra.monads.unexpected(hydra.lib.strings.cat((hydra.lib.literals.show_int32(n), " arguments to primitive ", hydra.lib.literals.show_string(name.value))), hydra.lib.literals.show_int32(hydra.lib.lists.length(args))))
-
-def optional[T0](f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[T0]]:
+def maybe_term[T0](f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[T0]]:
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[T0]]:
         match term:
             case hydra.core.TermMaybe(value=mt):
                 return hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(Maybe[T0], Nothing())), (lambda t: hydra.lib.flows.map(cast(Callable[[T0], Maybe[T0]], hydra.lib.maybes.pure), f(t))), mt)
             
             case _:
-                return hydra.monads.unexpected("optional value", hydra.show.core.term(term))
+                return hydra.monads.unexpected("maybe value", hydra.show.core.term(term))
     return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
 
-def optional_type[T0](typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
+def maybe_type[T0](typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
     stripped = hydra.rewriting.deannotate_type(typ)
     match stripped:
         case hydra.core.TypeMaybe(value=t):
             return hydra.lib.flows.pure(t)
         
         case _:
-            return hydra.monads.unexpected("optional type", hydra.show.core.type(typ))
+            return hydra.monads.unexpected("maybe type", hydra.show.core.type(typ))
+
+def n_args[T0, T1](name: hydra.core.Name, n: int, args: frozenlist[T0]) -> hydra.compute.Flow[T1, None]:
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(args), n), hydra.lib.flows.pure(None), hydra.monads.unexpected(hydra.lib.strings.cat((hydra.lib.literals.show_int32(n), " arguments to primitive ", hydra.lib.literals.show_string(name.value))), hydra.lib.literals.show_int32(hydra.lib.lists.length(args))))
 
 def pair[T0, T1](kf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], vf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T1]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, T1]]:
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, T1]]:
