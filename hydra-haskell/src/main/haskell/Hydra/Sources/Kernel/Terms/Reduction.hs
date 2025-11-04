@@ -246,19 +246,21 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
     -- TODO: this function is moving toward "syntactic" arity which does not require type checking; only
     --       type lookups.
     "arityOf" <~ ("tx" ~> "term" ~>
-      trace ("arityOf(" ++ (ref ShowCore.termDef @@ var "term") ++ ")") $
       "dflt" <~ Flows.map (ref Arity.typeArityDef) (ref Checking.typeOfDef @@ var "tx" @@ list [] @@ var "term") $
       "forFunction" <~ ("tx" ~> "f" ~> cases _Function (var "f")
-        (Just $ var "dflt") [
+        Nothing [
         _Function_elimination>>: constant $ produce $ int32 1,
-        --_Function_lambda>>: "l" ~> ...
+        _Function_lambda>>: "l" ~>
+          "tx2" <~ ref Schemas.extendTypeContextForLambdaDef @@ var "tx" @@ var "l" $
+          var "arityOf" @@ var "tx2" @@ Core.lambdaBody (var "l"),
         _Function_primitive>>: "name" ~> Flows.map
           (ref Arity.typeSchemeArityDef)
           (ref Lexical.requirePrimitiveTypeDef @@ var "tx" @@ var "name")]) $
+--      trace ("arityOf(" ++ (ref ShowCore.termDef @@ var "term") ++ ")") $
       cases _Term (var "term")
         (Just $ var "dflt") [
         _Term_annotated>>: "at" ~> var "arityOf" @@ var "tx" @@ Core.annotatedTermBody (var "at"),
-        --_Term_application>>: ...
+--        _Term_application>>: ...
         _Term_function>>: "f" ~> var "forFunction" @@ var "tx" @@ var "f",
         _Term_let>>: "l" ~>
           "tx2" <~ ref Schemas.extendTypeContextForLetDef @@ var "tx" @@ var "l" $
@@ -266,9 +268,12 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
         _Term_typeApplication>>: "tat" ~> var "arityOf" @@ var "tx" @@ Core.typeApplicationTermBody (var "tat"),
         _Term_typeLambda>>: "tl" ~>
           "tx2" <~ ref Schemas.extendTypeContextForTypeLambdaDef @@ var "tx" @@ var "tl" $
-          var "arityOf" @@ var "tx2" @@ Core.typeLambdaBody (var "tl")
-        --_Term_variable>>: ...
-        ]) $
+          var "arityOf" @@ var "tx2" @@ Core.typeLambdaBody (var "tl"),
+        _Term_variable>>: "name" ~> optCases (Maps.lookup (var "name") (Typing.typeContextTypes $ var "tx"))
+          (Flows.fail $ Strings.cat $ list [
+            string "unbound variable: ",
+            Core.unName $ var "name"])
+          ("t" ~> produce $ ref Arity.typeArityDef @@ var "t")]) $
 
 --    "arityOf" <~ ("term" ~> Flows.map
 --      (ref Arity.typeArityDef)

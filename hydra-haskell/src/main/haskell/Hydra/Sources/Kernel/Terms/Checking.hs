@@ -378,12 +378,16 @@ typeOfApplicationDef = define "typeOfApplication" $
   "arg" <~ Core.applicationArgument (var "app") $
   "tryType" <~ ("tfun" ~> "targ" ~> cases _Type (var "tfun")
     (Just $ Flows.fail $ Strings.cat $ list [
-      "left hand side of application ",
+      "left hand side of application (",
       ref ShowCore.termDef @@ var "fun",
-      " is not a function type: ",
-      ref ShowCore.typeDef @@ var "tfun"]) [
+      ") is not function-typed (",
+      ref ShowCore.typeDef @@ var "tfun",
+      ")",
+      ". types: ", Strings.intercalate ", " (Lists.map
+        ("p" ~> Strings.cat $ list [Core.unName (first $ var "p"), ": ", ref ShowCore.typeDef @@ (second $ var "p")]) $
+        Maps.toList $ Typing.typeContextTypes $ var "tx")]) [
     -- These forall types can arise from bindUnboundTypeVariables
-    _Type_forall>>: "ft" ~> var "tryType" @@ var "targ" @@ (Core.forallTypeBody (var "ft")),
+    _Type_forall>>: "ft" ~> var "tryType" @@ (Core.forallTypeBody (var "ft")) @@ var "targ",
     _Type_function>>: "ft" ~>
       "dom" <~ Core.functionTypeDomain (var "ft") $
       "cod" <~ Core.functionTypeCodomain (var "ft") $
