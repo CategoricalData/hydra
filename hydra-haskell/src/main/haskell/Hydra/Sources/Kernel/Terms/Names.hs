@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -70,10 +70,10 @@ compactNameDef = define "compactName" $
     "qualName">: ref qualifyNameDef @@ var "name",
     "mns">: Module.qualifiedNameNamespace $ var "qualName",
     "local">: Module.qualifiedNameLocal $ var "qualName"]
-    $ Optionals.maybe
+    $ Maybes.maybe
         (Core.unName $ var "name")
         (lambda "ns" $
-          Optionals.maybe (var "local")
+          Maybes.maybe (var "local")
             (lambda "pre" $ Strings.cat $ list [var "pre", string ":", var "local"])
             (Maps.lookup (var "ns") (var "namespaces")))
         (var "mns")
@@ -125,7 +125,7 @@ unqualifyNameDef :: TBinding (QualifiedName -> Name)
 unqualifyNameDef = define "unqualifyName" $
   doc "Convert a qualified name to a dot-separated name" $
   lambda "qname" $ lets [
-    "prefix">: Optionals.maybe
+    "prefix">: Maybes.maybe
       (string "")
       (lambda "n" $ (unwrap _Namespace @@ var "n") ++ string ".")
       (project _QualifiedName _QualifiedName_namespace @@ var "qname")]

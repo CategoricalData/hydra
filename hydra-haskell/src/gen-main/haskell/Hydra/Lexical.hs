@@ -10,7 +10,7 @@ import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
@@ -30,14 +30,14 @@ dereferenceSchemaType :: (Core.Name -> M.Map Core.Name Core.TypeScheme -> Maybe 
 dereferenceSchemaType name types =  
   let forType = (\t -> (\x -> case x of
           Core.TypeAnnotated v1 -> (forType (Core.annotatedTypeBody v1))
-          Core.TypeForall v1 -> (Optionals.map (\ts -> Core.TypeScheme {
+          Core.TypeForall v1 -> (Maybes.map (\ts -> Core.TypeScheme {
             Core.typeSchemeVariables = (Lists.cons (Core.forallTypeParameter v1) (Core.typeSchemeVariables ts)),
             Core.typeSchemeType = (Core.typeSchemeType ts)}) (forType (Core.forallTypeBody v1)))
           Core.TypeVariable v1 -> (dereferenceSchemaType v1 types)
           _ -> (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = t}))) t)
-  in (Optionals.bind (Maps.lookup name types) (\ts -> Optionals.map (\ts2 -> Core.TypeScheme {
+  in (Maybes.bind (Maps.lookup name types) (\ts -> Maybes.map (\ts2 -> Core.TypeScheme {
     Core.typeSchemeVariables = (Lists.concat2 (Core.typeSchemeVariables ts) (Core.typeSchemeVariables ts2)),
     Core.typeSchemeType = (Core.typeSchemeType ts2)}) (forType (Core.typeSchemeType ts))))
 
@@ -94,7 +94,7 @@ fieldsOf t =
     _ -> []) stripped)
 
 getField :: (M.Map Core.Name t0 -> Core.Name -> (t0 -> Compute.Flow t1 t2) -> Compute.Flow t1 t2)
-getField m fname decode = (Optionals.maybe (Flows.fail (Strings.cat [
+getField m fname decode = (Maybes.maybe (Flows.fail (Strings.cat [
   Strings.cat [
     "expected field ",
     (Core.unName fname)],
@@ -128,7 +128,7 @@ matchUnion tname pairs term =
                 let fname = (Core.fieldName (Core.injectionField v1))
                 in  
                   let val = (Core.fieldTerm (Core.injectionField v1))
-                  in (Optionals.maybe (Flows.fail (Strings.cat [
+                  in (Maybes.maybe (Flows.fail (Strings.cat [
                     Strings.cat [
                       Strings.cat [
                         "no matching case for field ",
@@ -163,22 +163,22 @@ requireElement name =
                   ". Available elements: {"],
                 (Strings.intercalate ", " (ellipsis (Lists.map (\el -> Core.unName (Core.bindingName el)) (Maps.elems (Graph.graphElements g)))))],
               "}"]))
-      in (Flows.bind (dereferenceElement name) (\mel -> Optionals.maybe (Flows.bind Monads.getState (\g -> err g)) Flows.pure mel))
+      in (Flows.bind (dereferenceElement name) (\mel -> Maybes.maybe (Flows.bind Monads.getState (\g -> err g)) Flows.pure mel))
 
 requirePrimitive :: (Core.Name -> Compute.Flow Graph.Graph Graph.Primitive)
-requirePrimitive name = (Flows.bind Monads.getState (\g -> Optionals.maybe (Flows.fail (Strings.cat [
+requirePrimitive name = (Flows.bind Monads.getState (\g -> Maybes.maybe (Flows.fail (Strings.cat [
   "no such primitive function: ",
   (Core.unName name)])) Flows.pure (lookupPrimitive g name)))
 
 requirePrimitiveType :: (Typing.TypeContext -> Core.Name -> Compute.Flow t0 Core.TypeScheme)
 requirePrimitiveType tx name =  
   let mts = (Maps.lookup name (Typing.inferenceContextPrimitiveTypes (Typing.typeContextInferenceContext tx)))
-  in (Optionals.maybe (Flows.fail (Strings.cat [
+  in (Maybes.maybe (Flows.fail (Strings.cat [
     "no such primitive function: ",
     (Core.unName name)])) (\ts -> Flows.pure ts) mts)
 
 requireTerm :: (Core.Name -> Compute.Flow Graph.Graph Core.Term)
-requireTerm name = (Flows.bind (resolveTerm name) (\mt -> Optionals.maybe (Flows.fail (Strings.cat [
+requireTerm name = (Flows.bind (resolveTerm name) (\mt -> Maybes.maybe (Flows.fail (Strings.cat [
   "no such element: ",
   (Core.unName name)])) Flows.pure mt))
 
@@ -190,11 +190,11 @@ resolveTerm name =
           in ((\x -> case x of
             Core.TermVariable v1 -> (resolveTerm v1)
             _ -> (Flows.pure (Just (Core.bindingTerm el)))) stripped))
-  in (Flows.bind Monads.getState (\g -> Optionals.maybe (Flows.pure Nothing) recurse (Maps.lookup name (Graph.graphElements g))))
+  in (Flows.bind Monads.getState (\g -> Maybes.maybe (Flows.pure Nothing) recurse (Maps.lookup name (Graph.graphElements g))))
 
 -- | Note: assuming for now that primitive functions are the same in the schema graph
 schemaContext :: (Graph.Graph -> Graph.Graph)
-schemaContext g = (Optionals.fromMaybe g (Graph.graphSchema g))
+schemaContext g = (Maybes.fromMaybe g (Graph.graphSchema g))
 
 stripAndDereferenceTerm :: (Core.Term -> Compute.Flow Graph.Graph Core.Term)
 stripAndDereferenceTerm term =  

@@ -13,7 +13,7 @@ import hydra.lib.flows
 import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
-import hydra.lib.optionals
+import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.rewriting
 import hydra.show.core
@@ -175,7 +175,7 @@ def unify_type_constraints[T0, T1](schema_types: FrozenDict[hydra.core.Name, T0]
             case hydra.core.TypeVariable(value=name):
                 match sright:
                     case hydra.core.TypeVariable(value=name2):
-                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(name.value, name2.value), unify_type_constraints(schema_types, rest), hydra.lib.logic.if_else(hydra.lib.optionals.is_just(hydra.lib.maps.lookup(name, schema_types)), hydra.lib.logic.if_else(hydra.lib.optionals.is_just(hydra.lib.maps.lookup(name2, schema_types)), hydra.lib.flows.fail(hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("Attempted to unify schema names ", name.value)), " and ")), name2.value)), " (")), comment)), ")"))), bind(name2, sleft)), bind(name, sright)))
+                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(name.value, name2.value), unify_type_constraints(schema_types, rest), hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(name, schema_types)), hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(name2, schema_types)), hydra.lib.flows.fail(hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("Attempted to unify schema names ", name.value)), " and ")), name2.value)), " (")), comment)), ")"))), bind(name2, sleft)), bind(name, sright)))
                     
                     case _:
                         return try_binding(name, sright)

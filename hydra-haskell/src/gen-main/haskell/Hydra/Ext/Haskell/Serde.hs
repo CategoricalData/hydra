@@ -13,7 +13,7 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -86,7 +86,7 @@ constructorWithCommentsToExpr :: (Ast_.ConstructorWithComments -> Ast.Expr)
 constructorWithCommentsToExpr consWithComments =  
   let body = (Ast_.constructorWithCommentsBody consWithComments) 
       mc = (Ast_.constructorWithCommentsComments consWithComments)
-  in (Optionals.maybe (constructorToExpr body) (\c -> Serialization.newlineSep [
+  in (Maybes.maybe (constructorToExpr body) (\c -> Serialization.newlineSep [
     Serialization.cst (toHaskellComments c),
     (constructorToExpr body)]) mc)
 
@@ -147,7 +147,7 @@ declarationWithCommentsToExpr :: (Ast_.DeclarationWithComments -> Ast.Expr)
 declarationWithCommentsToExpr declWithComments =  
   let body = (Ast_.declarationWithCommentsBody declWithComments) 
       mc = (Ast_.declarationWithCommentsComments declWithComments)
-  in (Optionals.maybe (declarationToExpr body) (\c -> Serialization.newlineSep [
+  in (Maybes.maybe (declarationToExpr body) (\c -> Serialization.newlineSep [
     Serialization.cst (toHaskellComments c),
     (declarationToExpr body)]) mc)
 
@@ -203,7 +203,7 @@ fieldWithCommentsToExpr :: (Ast_.FieldWithComments -> Ast.Expr)
 fieldWithCommentsToExpr fieldWithComments =  
   let field = (Ast_.fieldWithCommentsField fieldWithComments) 
       mc = (Ast_.fieldWithCommentsComments fieldWithComments)
-  in (Optionals.maybe (fieldToExpr field) (\c -> Serialization.newlineSep [
+  in (Maybes.maybe (fieldToExpr field) (\c -> Serialization.newlineSep [
     Serialization.cst (toHaskellComments c),
     (fieldToExpr field)]) mc)
 
@@ -244,12 +244,12 @@ importToExpr import_ =
               Ast_.SpecImportHiding v1 -> (Serialization.spaceSep [
                 Serialization.cst "hiding ",
                 (Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map importExportSpecToExpr v1)))])) spec)
-      parts = (Optionals.cat [
+      parts = (Maybes.cat [
               Just (Serialization.cst "import"),
               Logic.ifElse qual (Just (Serialization.cst "qualified")) Nothing,
               Just (Serialization.cst name),
-              Optionals.map (\m -> Serialization.cst (Strings.cat2 "as " (Ast_.unModuleName m))) mod,
-              (Optionals.map hidingSec mspec)])
+              Maybes.map (\m -> Serialization.cst (Strings.cat2 "as " (Ast_.unModuleName m))) mod,
+              (Maybes.map hidingSec mspec)])
   in (Serialization.spaceSep parts)
 
 lambdaExpressionToExpr :: (Ast_.LambdaExpression -> Ast.Expr)
@@ -283,7 +283,7 @@ moduleHeadToExpr moduleHead =
               Serialization.cst "module",
               Serialization.cst mname,
               (Serialization.cst "where")])
-  in (Optionals.maybe head (\c -> Serialization.newlineSep [
+  in (Maybes.maybe head (\c -> Serialization.newlineSep [
     Serialization.cst (toHaskellComments c),
     Serialization.cst "",
     head]) mc)
@@ -293,7 +293,7 @@ moduleToExpr module_ =
   let mh = (Ast_.moduleHead module_) 
       imports = (Ast_.moduleImports module_)
       decls = (Ast_.moduleDeclarations module_)
-      headerLine = (Optionals.maybe [] (\h -> [
+      headerLine = (Maybes.maybe [] (\h -> [
               moduleHeadToExpr h]) mh)
       declLines = (Lists.map declarationWithCommentsToExpr decls)
       importLines = (Logic.ifElse (Lists.null imports) [] [
@@ -363,7 +363,7 @@ valueBindingToExpr vb = ((\x -> case x of
         rhs = (Ast_.simpleValueBindingRhs v1)
         local = (Ast_.simpleValueBindingLocalBindings v1)
         body = (Serialization.ifx Operators.defineOp (patternToExpr pat) (rightHandSideToExpr rhs))
-    in (Optionals.maybe body (\localBindings ->  
+    in (Maybes.maybe body (\localBindings ->  
       let bindings = (Ast_.unLocalBindings localBindings)
       in (Serialization.indentBlock [
         body,

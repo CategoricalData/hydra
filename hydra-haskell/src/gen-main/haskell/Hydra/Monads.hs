@@ -10,7 +10,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Show.Core as Core_
@@ -24,7 +24,7 @@ bind :: (Compute.Flow t0 t1 -> (t1 -> Compute.Flow t0 t2) -> Compute.Flow t0 t2)
 bind l r =  
   let q = (\s0 -> \t0 ->  
           let fs1 = (Compute.unFlow l s0 t0)
-          in (Optionals.maybe (Compute.FlowState {
+          in (Maybes.maybe (Compute.FlowState {
             Compute.flowStateValue = Nothing,
             Compute.flowStateState = (Compute.flowStateState fs1),
             Compute.flowStateTrace = (Compute.flowStateTrace fs1)}) (\v -> Compute.unFlow (r v) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1)) (Compute.flowStateValue fs1)))
@@ -46,10 +46,10 @@ fail msg = (Compute.Flow (\s -> \t -> Compute.FlowState {
   Compute.flowStateTrace = (pushError msg t)}))
 
 flowSucceeds :: (t0 -> Compute.Flow t0 t1 -> Bool)
-flowSucceeds s f = (Optionals.isJust (Compute.flowStateValue (Compute.unFlow f s emptyTrace)))
+flowSucceeds s f = (Maybes.isJust (Compute.flowStateValue (Compute.unFlow f s emptyTrace)))
 
 fromFlow :: (t0 -> t1 -> Compute.Flow t1 t0 -> t0)
-fromFlow def cx f = (Optionals.maybe def (\xmo -> xmo) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
+fromFlow def cx f = (Maybes.maybe def (\xmo -> xmo) (Compute.flowStateValue (Compute.unFlow f cx emptyTrace)))
 
 getState :: (Compute.Flow t0 t0)
 getState = (Compute.Flow (\s0 -> \t0 ->  
@@ -60,7 +60,7 @@ getState = (Compute.Flow (\s0 -> \t0 ->
       let s = (Compute.flowStateState fs1)
       in  
         let t = (Compute.flowStateTrace fs1)
-        in (Optionals.maybe (Compute.FlowState {
+        in (Maybes.maybe (Compute.FlowState {
           Compute.flowStateValue = Nothing,
           Compute.flowStateState = s,
           Compute.flowStateTrace = t}) (\_ -> Compute.FlowState {
@@ -72,7 +72,7 @@ map :: ((t0 -> t1) -> Compute.Flow t2 t0 -> Compute.Flow t2 t1)
 map f f1 = (Compute.Flow (\s0 -> \t0 ->  
   let f2 = (Compute.unFlow f1 s0 t0)
   in Compute.FlowState {
-    Compute.flowStateValue = (Optionals.map f (Compute.flowStateValue f2)),
+    Compute.flowStateValue = (Maybes.map f (Compute.flowStateValue f2)),
     Compute.flowStateState = (Compute.flowStateState f2),
     Compute.flowStateTrace = (Compute.flowStateTrace f2)}))
 
@@ -101,7 +101,7 @@ mutateTrace mutate restore f =
     in (Compute.Flow flowFun)
 
 optionalToList :: (Maybe t0 -> [t0])
-optionalToList mx = (Optionals.maybe [] Lists.pure mx)
+optionalToList mx = (Maybes.maybe [] Lists.pure mx)
 
 pure :: (t0 -> Compute.Flow t1 t0)
 pure xp = (Compute.Flow (\s -> \t -> Compute.FlowState {

@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Lib.Literals                     as Literals
 import qualified Hydra.Dsl.Lib.Logic                        as Logic
 import qualified Hydra.Dsl.Lib.Maps                         as Maps
 import qualified Hydra.Dsl.Lib.Math                         as Math
-import qualified Hydra.Dsl.Lib.Optionals                    as Optionals
+import qualified Hydra.Dsl.Lib.Maybes                    as Maybes
 import qualified Hydra.Dsl.Lib.Sets                         as Sets
 import           Hydra.Dsl.Lib.Strings                      as Strings
 import qualified Hydra.Dsl.Mantle                           as Mantle
@@ -213,7 +213,7 @@ constructorWithCommentsToExprDef = haskellSerdeDefinition "constructorWithCommen
   lambda "consWithComments" $ lets [
     "body">: project H._ConstructorWithComments H._ConstructorWithComments_body @@ var "consWithComments",
     "mc">: project H._ConstructorWithComments H._ConstructorWithComments_comments @@ var "consWithComments"] $
-    Optionals.maybe
+    Maybes.maybe
       (ref constructorToExprDef @@ var "body")
       (lambda "c" $ ref Serialization.newlineSepDef @@ list [
         ref Serialization.cstDef @@ (ref toHaskellCommentsDef @@ var "c"),
@@ -280,7 +280,7 @@ declarationWithCommentsToExprDef = haskellSerdeDefinition "declarationWithCommen
   lambda "declWithComments" $ lets [
     "body">: project H._DeclarationWithComments H._DeclarationWithComments_body @@ var "declWithComments",
     "mc">: project H._DeclarationWithComments H._DeclarationWithComments_comments @@ var "declWithComments"] $
-    Optionals.maybe
+    Maybes.maybe
       (ref declarationToExprDef @@ var "body")
       (lambda "c" $ ref Serialization.newlineSepDef @@ list [
         ref Serialization.cstDef @@ (ref toHaskellCommentsDef @@ var "c"),
@@ -341,7 +341,7 @@ fieldWithCommentsToExprDef = haskellSerdeDefinition "fieldWithCommentsToExpr" $
   lambda "fieldWithComments" $ lets [
     "field">: project H._FieldWithComments H._FieldWithComments_field @@ var "fieldWithComments",
     "mc">: project H._FieldWithComments H._FieldWithComments_comments @@ var "fieldWithComments"] $
-    Optionals.maybe
+    Maybes.maybe
       (ref fieldToExprDef @@ var "field")
       (lambda "c" $ ref Serialization.newlineSepDef @@ list [
         ref Serialization.cstDef @@ (ref toHaskellCommentsDef @@ var "c"),
@@ -385,12 +385,12 @@ importToExprDef = haskellSerdeDefinition "importToExpr" $
             ref Serialization.cstDef @@ string "hiding ",
             ref Serialization.parensDef @@
               (ref Serialization.commaSepDef @@ ref Serialization.inlineStyleDef @@ (Lists.map (ref importExportSpecToExprDef) (var "names")))]],
-    "parts">: Optionals.cat $ list [
+    "parts">: Maybes.cat $ list [
       just $ ref Serialization.cstDef @@ string "import",
       Logic.ifElse (var "qual") (just $ ref Serialization.cstDef @@ string "qualified") nothing,
       just $ ref Serialization.cstDef @@ var "name",
-      Optionals.map (lambda "m" $ ref Serialization.cstDef @@ Strings.cat2 (string "as ") (unwrap H._ModuleName @@ var "m")) (var "mod"),
-      Optionals.map (var "hidingSec") (var "mspec")]] $
+      Maybes.map (lambda "m" $ ref Serialization.cstDef @@ Strings.cat2 (string "as ") (unwrap H._ModuleName @@ var "m")) (var "mod"),
+      Maybes.map (var "hidingSec") (var "mspec")]] $
     ref Serialization.spaceSepDef @@ var "parts"
 
 lambdaExpressionToExprDef :: TBinding (H.LambdaExpression -> Expr)
@@ -442,7 +442,7 @@ moduleHeadToExprDef = haskellSerdeDefinition "moduleHeadToExpr" $
       ref Serialization.cstDef @@ string "module",
       ref Serialization.cstDef @@ var "mname",
       ref Serialization.cstDef @@ string "where"]] $
-    Optionals.maybe
+    Maybes.maybe
       (var "head")
       (lambda "c" $ ref Serialization.newlineSepDef @@ list [
         ref Serialization.cstDef @@ (ref toHaskellCommentsDef @@ var "c"),
@@ -456,7 +456,7 @@ moduleToExprDef = haskellSerdeDefinition "moduleToExpr" $
     "mh">: project H._Module H._Module_head @@ var "module",
     "imports">: project H._Module H._Module_imports @@ var "module",
     "decls">: project H._Module H._Module_declarations @@ var "module",
-    "headerLine">: Optionals.maybe (list []) (lambda "h" $ list [ref moduleHeadToExprDef @@ var "h"]) (var "mh"),
+    "headerLine">: Maybes.maybe (list []) (lambda "h" $ list [ref moduleHeadToExprDef @@ var "h"]) (var "mh"),
     "declLines">: Lists.map (ref declarationWithCommentsToExprDef) (var "decls"),
     "importLines">: Logic.ifElse (Lists.null $ var "imports")
       (list [])
@@ -532,7 +532,7 @@ valueBindingToExprDef = haskellSerdeDefinition "valueBindingToExpr" $
         "rhs">: project H._SimpleValueBinding H._SimpleValueBinding_rhs @@ var "simpleVB",
         "local">: project H._SimpleValueBinding H._SimpleValueBinding_localBindings @@ var "simpleVB",
         "body">: ref Serialization.ifxDef @@ ref Operators.defineOpDef @@ (ref patternToExprDef @@ var "pat") @@ (ref rightHandSideToExprDef @@ var "rhs")] $
-        Optionals.maybe
+        Maybes.maybe
           (var "body")
           (lambda "localBindings" $ lets [
             "bindings">: unwrap H._LocalBindings @@ var "localBindings"] $

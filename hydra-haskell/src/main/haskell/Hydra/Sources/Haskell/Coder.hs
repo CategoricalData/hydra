@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Lib.Literals                     as Literals
 import qualified Hydra.Dsl.Lib.Logic                        as Logic
 import qualified Hydra.Dsl.Lib.Maps                         as Maps
 import qualified Hydra.Dsl.Lib.Math                         as Math
-import qualified Hydra.Dsl.Lib.Optionals                    as Optionals
+import qualified Hydra.Dsl.Lib.Maybes                    as Maybes
 import qualified Hydra.Dsl.Lib.Sets                         as Sets
 import           Hydra.Dsl.Lib.Strings                      as Strings
 import qualified Hydra.Dsl.Mantle                           as Mantle
@@ -192,9 +192,9 @@ constructModuleDef = haskellCoderDefinition "constructModule" $ lambdas ["namesp
             H._ImportExportSpec_name>>: ref HaskellUtils.simpleNameDef @@ var "n",
             H._ImportExportSpec_subspec>>: nothing]) (var "hidden"))] $
         record H._Import [
-          H._Import_qualified>>: Optionals.isJust $ var "malias",
+          H._Import_qualified>>: Maybes.isJust $ var "malias",
           H._Import_module>>: wrap H._ModuleName $ var "name",
-          H._Import_as>>: Optionals.map (unaryFunction $ wrap H._ModuleName) (var "malias"),
+          H._Import_as>>: Maybes.map (unaryFunction $ wrap H._ModuleName) (var "malias"),
           H._Import_spec>>: var "spec"]] $
       Lists.map (var "toImport") $ list [
         pair (pair (string "Prelude") nothing) (list $ string <$> [
@@ -223,7 +223,7 @@ encodeFunctionDef = haskellCoderDefinition "encodeFunction" $
         cases _Elimination (var "e") Nothing [
           _Elimination_wrap>>: lambda "name" $
             Flows.pure $ inject H._Expression H._Expression_variable $ ref HaskellUtils.elementReferenceDef @@ var "namespaces" @@
-              (ref Names.qnameDef @@ (Optionals.fromJust $ ref Names.namespaceOfDef @@ var "name") @@ (ref HaskellUtils.newtypeAccessorNameDef @@ var "name")),
+              (ref Names.qnameDef @@ (Maybes.fromJust $ ref Names.namespaceOfDef @@ var "name") @@ (ref HaskellUtils.newtypeAccessorNameDef @@ var "name")),
           _Elimination_product>>: lambda "proj" $ lets [
             "arity">: Core.tupleProjectionArity $ var "proj",
             "idx">: Core.tupleProjectionIndex $ var "proj"] $
@@ -244,7 +244,7 @@ encodeFunctionDef = haskellCoderDefinition "encodeFunction" $
               "toFieldMapEntry">: lambda "f" $
                 pair (Core.fieldTypeName $ var "f") (var "f")] $
               bind "ecases" (Flows.mapList (var "toAlt" @@ var "fieldMap") (var "fields")) $
-              bind "dcases" (Optionals.cases (var "def")
+              bind "dcases" (Maybes.cases (var "def")
                 (Flows.pure $ list []) $
                 (lambda "d" $
                   bind "cs" (Flows.map (unaryFunction $ wrap H._CaseRhs) $ ref encodeTermDef @@ var "namespaces" @@ var "d") $ lets [
@@ -270,7 +270,7 @@ encodeFunctionDef = haskellCoderDefinition "encodeFunction" $
                       (var "v0"),
                     "hname">: ref HaskellUtils.unionFieldReferenceDef @@ var "namespaces" @@ var "dn" @@ var "fn"] $
                     bind "args"
-                      (Optionals.cases (Maps.lookup (var "fn") (var "fieldMap"))
+                      (Maybes.cases (Maps.lookup (var "fn") (var "fieldMap"))
                         (Flows.fail $ Strings.cat $ list [string "field ", Literals.showString $ (Core.unName $ var "fn"),
                           string " not found in ", Literals.showString $ (Core.unName $ var "dn")])
                         (lambda "fieldType" $ lets [
@@ -381,7 +381,7 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
           (Flows.mapList (var "encodePair") $ Maps.toList (var "m"))) $
         Flows.pure $ ref HaskellUtils.hsappDef @@ var "lhs" @@ var "rhs",
       _Term_optional>>: lambda "m" $
-        Optionals.cases (var "m")
+        Maybes.cases (var "m")
           (Flows.pure $ ref HaskellUtils.hsvarDef @@ string "Nothing") $
           lambda "t" $
             Flows.bind (var "encode" @@ var "t") $ lambda "ht" $
@@ -576,7 +576,7 @@ findOrdVariablesDef = haskellCoderDefinition "findOrdVariables" $
           var "tryType" @@ var "names" @@ var "et"],
     "isTypeVariable">: lambda "v" $ lets [
       "nameStr">: Core.unName $ var "v",
-      "hasNoNamespace">: Optionals.isNothing $ ref Names.namespaceOfDef @@ var "v",
+      "hasNoNamespace">: Maybes.isNothing $ ref Names.namespaceOfDef @@ var "v",
       "startsWithT">: Equality.equal (Strings.charAt (int32 0) (var "nameStr")) (int32 116)] $ -- 't' character
       Logic.and (var "hasNoNamespace") (var "startsWithT"),
     "tryType">: lambda "names" $ lambda "t" $
@@ -640,7 +640,7 @@ toDataDeclarationDef = haskellCoderDefinition "toDataDeclaration" $
     "tt">: second $ var "pair",
     "term">: Core.typeApplicationTermBody $ var "tt",
     "typ">: Core.typeApplicationTermType $ var "tt",
-    "coder">: Optionals.fromJust $ Maps.lookup (var "typ") (var "coders"),
+    "coder">: Maybes.fromJust $ Maps.lookup (var "typ") (var "coders"),
     "hname">: ref HaskellUtils.simpleNameDef @@ (ref Names.localNameOfDef @@ (Core.bindingName $ var "el")),
     "rewriteValueBinding">: lambda "vb" $
       cases H._ValueBinding (var "vb") Nothing [
@@ -687,7 +687,7 @@ toDataDeclarationDef = haskellCoderDefinition "toDataDeclaration" $
           "env">: Core.letBody $ var "letTerm",
           "toBinding">: lambda "hname''" $ lambda "hterm'" $
             inject H._LocalBinding H._LocalBinding_value $ ref HaskellUtils.simpleValueBindingDef @@ var "hname''" @@ var "hterm'" @@ nothing,
-          "ts">: Lists.map (lambda "binding" $ Core.typeSchemeType $ Optionals.fromJust $ Core.bindingType $ var "binding") (var "lbindings")] $
+          "ts">: Lists.map (lambda "binding" $ Core.typeSchemeType $ Maybes.fromJust $ Core.bindingType $ var "binding") (var "lbindings")] $
           bind "coders'" (Flows.mapList (lambda "t" $ ref AdaptModules.constructCoderDef @@ (ref HaskellLanguage.haskellLanguageDef) @@ (ref encodeTermDef @@ var "namespaces") @@ var "t") (var "ts")) $ lets [
           "hnames">: Lists.map (lambda "binding" $ ref HaskellUtils.simpleNameDef @@ (Core.unName $ Core.bindingName $ var "binding")) (var "lbindings"),
           "terms">: Lists.map (unaryFunction $ Core.bindingTerm) (var "lbindings")] $
@@ -753,7 +753,7 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
         "tname">: ref Names.unqualifyNameDef @@ record _QualifiedName [
           _QualifiedName_namespace>>: just $ first $ Module.namespacesFocus $ var "namespaces",
           _QualifiedName_local>>: var "name"]] $
-        Logic.ifElse (Optionals.isJust $ Maps.lookup (var "tname") (Graph.graphElements $ var "g'"))
+        Logic.ifElse (Maybes.isJust $ Maps.lookup (var "tname") (Graph.graphElements $ var "g'"))
           (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
           (var "name")] $
       bind "comments" (ref Annotations.getTypeDescriptionDef @@ var "ftype") $ lets [
@@ -842,7 +842,7 @@ typeDeclDef = haskellCoderDefinition "typeDecl" $
       "decodeName">: lambda "term" (cases _Term (ref Rewriting.deannotateTermDef @@ var "term")
         (Just nothing) [
         _Term_wrap>>: "wt" ~> Logic.ifElse (Equality.equal (Core.wrappedTermTypeName $ var "wt") (Core.nameLift _Name))
-          (Optionals.map (unaryFunction Core.name) $ var "decodeString" @@ (Core.wrappedTermBody $ var "wt"))
+          (Maybes.map (unaryFunction Core.name) $ var "decodeString" @@ (Core.wrappedTermBody $ var "wt"))
           nothing]),
       "forType">: lambda "field" $ lets [
         "fname">: Core.fieldName $ var "field",
@@ -850,14 +850,14 @@ typeDeclDef = haskellCoderDefinition "typeDecl" $
         Logic.ifElse (Equality.equal (var "fname") $ Core.nameLift _Type_record)
           nothing
           (Logic.ifElse (Equality.equal (var "fname") $ Core.nameLift _Type_variable)
-            (Optionals.bind (var "decodeName" @@ var "fterm") (var "forVariableType"))
+            (Maybes.bind (var "decodeName" @@ var "fterm") (var "forVariableType"))
             nothing),
       "forVariableType">: lambda "vname" $ lets [
         "qname">: ref Names.qualifyNameDef @@ var "vname",
         "mns">: Module.qualifiedNameNamespace $ var "qname",
         "local">: Module.qualifiedNameLocal $ var "qname"] $
-        Optionals.map (lambda "ns" $ Core.termVariable $ ref Names.qnameDef @@ var "ns" @@ (Strings.cat $ list [string "_", var "local", string "_type_"])) (var "mns")] $
-      Optionals.fromMaybe (var "recurse" @@ var "term") (Optionals.bind (var "variantResult") (var "forType")),
+        Maybes.map (lambda "ns" $ Core.termVariable $ ref Names.qnameDef @@ var "ns" @@ (Strings.cat $ list [string "_", var "local", string "_type_"])) (var "mns")] $
+      Maybes.fromMaybe (var "recurse" @@ var "term") (Maybes.bind (var "variantResult") (var "forType")),
     "finalTerm">: ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "rawTerm"] $
     -- Note: consider constructing this coder just once, then reusing it
     bind "coder" (ref AdaptModules.constructCoderDef @@ (ref HaskellLanguage.haskellLanguageDef) @@ (ref encodeTermDef @@ var "namespaces") @@ (Core.typeVariable $ Core.nameLift _Type)) $

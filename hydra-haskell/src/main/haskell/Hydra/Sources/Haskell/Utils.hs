@@ -20,7 +20,7 @@ import qualified Hydra.Dsl.Lib.Literals                     as Literals
 import qualified Hydra.Dsl.Lib.Logic                        as Logic
 import qualified Hydra.Dsl.Lib.Maps                         as Maps
 import qualified Hydra.Dsl.Lib.Math                         as Math
-import qualified Hydra.Dsl.Lib.Optionals                    as Optionals
+import qualified Hydra.Dsl.Lib.Maybes                    as Maybes
 import qualified Hydra.Dsl.Lib.Sets                         as Sets
 import           Hydra.Dsl.Lib.Strings                      as Strings
 import qualified Hydra.Dsl.Mantle                           as Mantle
@@ -132,10 +132,10 @@ elementReferenceDef = haskellUtilsDefinition "elementReference" $
     "local">: Module.qualifiedNameLocal $ var "qname",
     "escLocal">: ref sanitizeHaskellNameDef @@ var "local",
     "mns">: Module.qualifiedNameNamespace $ var "qname"] $
-    Optionals.cases (Module.qualifiedNameNamespace $ var "qname")
+    Maybes.cases (Module.qualifiedNameNamespace $ var "qname")
       (ref simpleNameDef @@ var "local") $
       lambda "ns" $
-        Optionals.cases (Maps.lookup (var "ns") (var "namespacesMap"))
+        Maybes.cases (Maps.lookup (var "ns") (var "namespacesMap"))
           (ref simpleNameDef @@ var "local") $
           lambda "mn" $ lets [
             "aliasStr">: unwrap H._ModuleName @@ var "mn"] $

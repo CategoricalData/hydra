@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -68,7 +68,7 @@ define = definitionInModule module_
 composeTypeSubstDef :: TBinding (TypeSubst -> TypeSubst -> TypeSubst)
 composeTypeSubstDef = define "composeTypeSubst" $
   lambdas ["s1", "s2"] $ lets [
-    "isExtra">: lambdas ["k", "v"] $ Optionals.isNothing (Maps.lookup (var "k") (Typing.unTypeSubst $ var "s1")),
+    "isExtra">: lambdas ["k", "v"] $ Maybes.isNothing (Maps.lookup (var "k") (Typing.unTypeSubst $ var "s1")),
     "withExtra">: Maps.filterWithKey (var "isExtra") (Typing.unTypeSubst $ var "s2")] $
     Typing.typeSubst $ Maps.union (var "withExtra") $ Maps.map (ref substInTypeDef @@ var "s2") $ Typing.unTypeSubst $ var "s1"
 
@@ -128,7 +128,7 @@ substituteInTermDef = define "substituteInTerm" $
           (Just $ var "recurse" @@ var "term") [
           _Function_lambda>>: "l" ~> var "withLambda" @@ var "l"],
         _Term_let>>: "l" ~> var "withLet" @@ var "l",
-        _Term_variable>>: lambda "name" $ Optionals.maybe
+        _Term_variable>>: lambda "name" $ Maybes.maybe
           (var "recurse" @@ var "term")
           (lambda "sterm" $ var "sterm")
           (Maps.lookup (var "name") (var "s"))]] $
@@ -139,7 +139,7 @@ substInTypeDef :: TBinding (TypeSubst -> Type -> Type)
 substInTypeDef = define "substInType" $
   "subst" ~> "typ0" ~> lets [
     "rewrite">: lambdas ["recurse", "typ"] $ cases _Type (var "typ") (Just $ var "recurse" @@ var "typ") [
-      _Type_forall>>: lambda "lt" $ Optionals.maybe
+      _Type_forall>>: lambda "lt" $ Maybes.maybe
         (var "recurse" @@ var "typ")
         (lambda "styp" $ Core.typeForall $ Core.forallType
           (Core.forallTypeParameter $ var "lt")
@@ -147,7 +147,7 @@ substInTypeDef = define "substInType" $
             @@ (var "removeVar" @@ (Core.forallTypeParameter $ var "lt"))
             @@ (Core.forallTypeBody $ var "lt")))
         (Maps.lookup (Core.forallTypeParameter $ var "lt") (Typing.unTypeSubst $ var "subst")),
-      _Type_variable>>: lambda "v" $ Optionals.maybe
+      _Type_variable>>: lambda "v" $ Maybes.maybe
         (var "typ")
         (lambda "styp" $ var "styp")
         (Maps.lookup (var "v") (Typing.unTypeSubst $ var "subst"))],
@@ -174,13 +174,13 @@ substTypesInTermDef = define "substTypesInTerm" $
         _Function_lambda>>: "l" ~> var "forLambda" @@ var "l"],
       "forLambda">: lambda "l" $ Core.termFunction $ Core.functionLambda $ Core.lambda
         (Core.lambdaParameter $ var "l")
-        (Optionals.map (ref substInTypeDef @@ var "subst") $ Core.lambdaDomain $ var "l")
+        (Maybes.map (ref substInTypeDef @@ var "subst") $ Core.lambdaDomain $ var "l")
         (ref substTypesInTermDef @@ var "subst" @@ (Core.lambdaBody $ var "l")),
       "forLet">: lambda "l" $ lets [
         "rewriteBinding">: lambda "b" $ Core.binding
           (Core.bindingName $ var "b")
           (ref substTypesInTermDef @@ var "subst" @@ (Core.bindingTerm $ var "b"))
-          (Optionals.map (ref substInTypeSchemeDef @@ var "subst") (Core.bindingType $ var "b"))] $
+          (Maybes.map (ref substInTypeSchemeDef @@ var "subst") (Core.bindingType $ var "b"))] $
         Core.termLet $ Core.let_
           (Lists.map (var "rewriteBinding") (Core.letBindings $ var "l"))
           (ref substTypesInTermDef @@ var "subst" @@ (Core.letBody $ var "l")),
@@ -188,7 +188,7 @@ substTypesInTermDef = define "substTypesInTerm" $
         Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $ Core.tupleProjection
           (Core.tupleProjectionArity $ var "tp")
           (Core.tupleProjectionIndex $ var "tp")
-          (Optionals.map (lambda "types" $ Lists.map (ref substInTypeDef @@ var "subst") (var "types")) (Core.tupleProjectionDomain $ var "tp")),
+          (Maybes.map (lambda "types" $ Lists.map (ref substInTypeDef @@ var "subst") (var "types")) (Core.tupleProjectionDomain $ var "tp")),
       "forTypeApplication">: lambda "tt" $
          Core.termTypeApplication $ Core.typeApplicationTerm
            (ref substTypesInTermDef @@ var "subst" @@ (Core.typeApplicationTermBody $ var "tt"))

@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -115,7 +115,7 @@ addNamesToNamespacesDef = define "addNamesToNamespaces" $
   doc "Add names to existing namespaces mapping" $
   "encodeNamespace" ~> "names" ~> "ns0" ~>
 --  "nss" <~ Sets.empty $
-  "nss" <~ Sets.fromList (Optionals.cat $ Lists.map (ref Names.namespaceOfDef) $ Sets.toList $ var "names") $
+  "nss" <~ Sets.fromList (Maybes.cat $ Lists.map (ref Names.namespaceOfDef) $ Sets.toList $ var "names") $
   "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeNamespace" @@ var "ns")) $
   Module.namespacesWithMapping (var "ns0") $ Maps.union
     (Module.namespacesMapping $ var "ns0")
@@ -133,7 +133,7 @@ definitionDependencyNamespacesDef = define "definitionDependencyNamespaces" $
         ref Rewriting.termDependencyNamesDef @@ true @@ true @@ true @@ Module.termDefinitionTerm (var "termDef")]
     @@ var "def") $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
-  Sets.fromList (Optionals.cat (Lists.map (ref Names.namespaceOfDef) (Sets.toList (var "allNames"))))
+  Sets.fromList (Maybes.cat (Lists.map (ref Names.namespaceOfDef) (Sets.toList (var "allNames"))))
 
 dependencyNamespacesDef :: TBinding (Bool -> Bool -> Bool -> Bool -> [Binding] -> Flow Graph (S.Set Namespace))
 dependencyNamespacesDef = define "dependencyNamespaces" $
@@ -143,7 +143,7 @@ dependencyNamespacesDef = define "dependencyNamespaces" $
     "term" <~ Core.bindingTerm (var "el") $
     "dataNames" <~ ref Rewriting.termDependencyNamesDef @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "term" $
     "schemaNames" <~ Logic.ifElse (var "withSchema")
-      (Optionals.maybe Sets.empty
+      (Maybes.maybe Sets.empty
         ("ts" ~> ref Rewriting.typeDependencyNamesDef @@ true @@ Core.typeSchemeType (var "ts"))
         (Core.bindingType (var "el")))
       Sets.empty $
@@ -154,7 +154,7 @@ dependencyNamespacesDef = define "dependencyNamespaces" $
           ref Rewriting.typeDependencyNamesDef @@ true @@ var "typ"]))))
       (Flows.pure (Sets.unions (list [var "dataNames", var "schemaNames"])))) $
   Flows.bind (Flows.mapList (var "depNames") (var "els")) (
-    "namesList" ~> Flows.pure (Sets.fromList (Optionals.cat (Lists.map (ref Names.namespaceOfDef) (
+    "namesList" ~> Flows.pure (Sets.fromList (Maybes.cat (Lists.map (ref Names.namespaceOfDef) (
       Sets.toList (Sets.delete (ref Constants.placeholderNameDef) (Sets.unions (var "namesList"))))))))
 
 dereferenceTypeDef :: TBinding (Name -> Flow Graph (Maybe Type))
@@ -170,7 +170,7 @@ elementAsTypeApplicationTermDef :: TBinding (Binding -> Flow Graph TypeApplicati
 elementAsTypeApplicationTermDef = define "elementAsTypeApplicationTerm" $
   doc "Convert an element to a typed term" $
   "el" ~>
-  Optionals.maybe (Flows.fail (string "missing element type"))
+  Maybes.maybe (Flows.fail (string "missing element type"))
     ("ts" ~> Flows.pure (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeType (var "ts"))))
     (Core.bindingType (var "el"))
 
@@ -189,7 +189,7 @@ extendTypeContextForLambdaDef = define "extendTypeContextForLambda" $
   doc "Extend a type context by descending into a System F lambda body" $
   "tcontext" ~> "lam" ~>
   "var" <~ Core.lambdaParameter (var "lam") $
-  "dom" <~ Optionals.fromJust (Core.lambdaDomain (var "lam")) $
+  "dom" <~ Maybes.fromJust (Core.lambdaDomain (var "lam")) $
   Typing.typeContextWithTypes
     (var "tcontext")
     (Maps.insert (var "var") (var "dom") (Typing.typeContextTypes (var "tcontext")))
@@ -206,7 +206,7 @@ extendTypeContextForLetDef = define "extendTypeContextForLet" $
       (Maps.fromList $ Lists.map
         ("b" ~> pair
           (Core.bindingName $ var "b")
-          (ref typeSchemeToFTypeDef @@ (Optionals.fromJust $ Core.bindingType $ var "b")))
+          (ref typeSchemeToFTypeDef @@ (Maybes.fromJust $ Core.bindingType $ var "b")))
         (var "bindings")))
 
 extendTypeContextForTypeLambdaDef :: TBinding (TypeContext -> TypeLambda -> TypeContext)
@@ -319,7 +319,7 @@ graphToInferenceContextDef :: TBinding (Graph -> Flow s InferenceContext)
 graphToInferenceContextDef = define "graphToInferenceContext" $
   doc "Convert a graph to an inference context" $
   "graph" ~>
-  "schema" <~ Optionals.fromMaybe (var "graph") (Graph.graphSchema $ var "graph") $
+  "schema" <~ Maybes.fromMaybe (var "graph") (Graph.graphSchema $ var "graph") $
   "primTypes" <~ Maps.fromList (Lists.map
     ("p" ~> pair (Graph.primitiveName $ var "p") (Graph.primitiveType $ var "p"))
     (Maps.elems $ Graph.graphPrimitives $ var "graph")) $
@@ -426,7 +426,7 @@ requireRowTypeDef = define "requireRowType" $
     _Type_forall>>: "ft" ~> var "rawType" @@ Core.forallTypeBody (var "ft")]) $
   Flows.bind (ref requireTypeDef @@ var "name") (
     "t" ~>
-    Optionals.maybe
+    Maybes.maybe
       (Flows.fail (Strings.cat (list [
         Core.unName (var "name"),
         string " does not resolve to a ",
@@ -440,7 +440,7 @@ requireSchemaTypeDef :: TBinding (InferenceContext -> Name -> Flow s TypeScheme)
 requireSchemaTypeDef = define "requireSchemaType" $
   doc "Look up a schema type in the context and instantiate it" $
   "cx" ~> "tname" ~>
-  Optionals.maybe
+  Maybes.maybe
     (Flows.fail $ Strings.cat2 (string "No such schema type: ") (Core.unName $ var "tname"))
     -- TODO: the deannotation is probably superfluous
     ("ts" ~> ref instantiateTypeSchemeDef @@ (ref Rewriting.deannotateTypeSchemeRecursiveDef @@ var "ts"))
@@ -472,7 +472,7 @@ resolveTypeDef = define "resolveType" $
       ref Lexical.withSchemaContextDef @@
         (Flows.bind (ref Lexical.resolveTermDef @@ var "name") (
           "mterm" ~>
-          Optionals.maybe (Flows.pure nothing)
+          Maybes.maybe (Flows.pure nothing)
             ("t" ~> Flows.map (unaryFunction just) (ref DecodeCore.typeDef @@ var "t"))
             (var "mterm")))]
   @@ (ref Rewriting.deannotateTypeDef @@ var "typ")
@@ -510,10 +510,10 @@ schemaGraphToTypingEnvironmentDef = define "schemaGraphToTypingEnvironment" $
           (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable (Core.nameLift _Type))))
           (Flows.map ("decoded" ~> just (var "toTypeScheme" @@ list [] @@ var "decoded")) (ref DecodeCore.typeDef @@ Core.bindingTerm (var "el")))
           (var "forTerm" @@ (ref Rewriting.deannotateTermDef @@ (Core.bindingTerm (var "el")))))) $
-    produce $ Optionals.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts")) $
+    produce $ Maybes.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts")) $
   ref Monads.withStateDef @@ var "g" @@
     (Flows.bind (Flows.mapList (var "toPair") (Maps.elems (Graph.graphElements (var "g")))) (
-      "mpairs" ~> Flows.pure (Maps.fromList (Optionals.cat (var "mpairs")))))
+      "mpairs" ~> Flows.pure (Maps.fromList (Maybes.cat (var "mpairs")))))
 
 -- Note: this is lossy, as it throws away the term body
 termAsGraphDef :: TBinding (Term -> (M.Map Name Term, Term))
@@ -541,7 +541,7 @@ topologicalSortTypeDefinitionsDef = define "topologicalSortTypeDefinitions" $
     ("d" ~> pair (Module.typeDefinitionName (var "d")) (var "d"))
     (var "defs")) $
   "sorted" <~ ref Sorting.topologicalSortComponentsDef @@ Lists.map (var "toPair") (var "defs") $
-  Lists.map ("names" ~> Optionals.cat (Lists.map ("n" ~> Maps.lookup (var "n") (var "nameToDef")) (var "names"))) (
+  Lists.map ("names" ~> Maybes.cat (Lists.map ("n" ~> Maps.lookup (var "n") (var "nameToDef")) (var "names"))) (
     var "sorted")
 
 typeDependenciesDef :: TBinding (Bool -> (Type -> Type) -> Name -> Flow Graph (M.Map Name Type))

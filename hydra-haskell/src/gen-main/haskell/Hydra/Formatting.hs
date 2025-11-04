@@ -7,7 +7,7 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
@@ -148,7 +148,7 @@ withCharacterAliases original =
           (124, "verbar"),
           (125, "rcub"),
           (126, "tilde")]) 
-      alias = (\c -> Optionals.fromMaybe (Lists.pure c) (Optionals.map Strings.toList (Maps.lookup c aliases)))
+      alias = (\c -> Maybes.fromMaybe (Lists.pure c) (Maybes.map Strings.toList (Maps.lookup c aliases)))
   in (Strings.fromList (Lists.filter Chars.isAlphaNum (Lists.concat (Lists.map alias (Strings.toList original)))))
 
 -- | A simple soft line wrap which is suitable for code comments

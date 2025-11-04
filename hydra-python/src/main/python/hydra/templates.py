@@ -14,7 +14,7 @@ import hydra.graph
 import hydra.lib.flows
 import hydra.lib.logic
 import hydra.lib.maps
-import hydra.lib.optionals
+import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.show.core
@@ -128,7 +128,7 @@ def instantiate_template[T0](minimal: bool, schema: FrozenDict[hydra.core.Name, 
             return hydra.lib.logic.if_else(minimal, hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermSet(cast(frozenset[hydra.core.Term], hydra.lib.sets.empty())))), hydra.lib.flows.bind(inst(et2), (lambda e: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list((e,))))))))
         
         case hydra.core.TypeVariable(value=tname):
-            return hydra.lib.optionals.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("Type variable ", hydra.lib.strings.cat2(hydra.show.core.term(cast(hydra.core.Term, hydra.core.TermVariable(tname))), " not found in schema"))), inst, hydra.lib.maps.lookup(tname, schema))
+            return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("Type variable ", hydra.lib.strings.cat2(hydra.show.core.term(cast(hydra.core.Term, hydra.core.TermVariable(tname))), " not found in schema"))), inst, hydra.lib.maps.lookup(tname, schema))
         
         case hydra.core.TypeWrap(value=wt):
             tname = wt.type_name

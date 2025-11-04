@@ -62,19 +62,19 @@ testGroupForFunctionTerms = supergroup "Function terms" [
 
     subgroup "Optional eliminations" [
       expectMono 1 [tag_disabledForMinimalInference]
-        (primitive _optionals_maybe @@ (int32 42) @@ (primitive _math_negate))
+        (primitive _maybes_maybe @@ (int32 42) @@ (primitive _math_negate))
         (T.function (T.optional T.int32) T.int32),
       expectMono 2 [tag_disabledForMinimalInference]
-        (primitive _optionals_maybe @@ (int32 42) @@ (primitive _math_negate) @@ (optional (just $ int32 137)))
+        (primitive _maybes_maybe @@ (int32 42) @@ (primitive _math_negate) @@ (optional (just $ int32 137)))
         T.int32,
       expectMono 3 [tag_disabledForMinimalInference]
-        (primitive _optionals_maybe @@ (int32 42) @@ (primitive _math_negate) @@ optional nothing)
+        (primitive _maybes_maybe @@ (int32 42) @@ (primitive _math_negate) @@ optional nothing)
         T.int32,
       expectPoly 4 [tag_disabledForMinimalInference]
-        (lambda "x" $ primitive _optionals_maybe @@ (var "x") @@ (primitive _optionals_pure) @@ var "x")
+        (lambda "x" $ primitive _maybes_maybe @@ (var "x") @@ (primitive _maybes_pure) @@ var "x")
         ["t0"] (T.function (T.optional $ T.var "t0") (T.optional $ T.var "t0")),
       expectPoly 5 [tag_disabledForMinimalInference]
-        (primitive _optionals_maybe @@ (list []) @@ (lambda "x" $ list [var "x"]))
+        (primitive _maybes_maybe @@ (list []) @@ (lambda "x" $ list [var "x"]))
         ["t0"] (T.function (T.optional $ T.var "t0") (T.list $ T.var "t0"))],
 
    subgroup "Tuple projections" [

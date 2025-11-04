@@ -1,6 +1,6 @@
 -- | Haskell implementations of hydra.lib.math primitives
 
--- TODO: real-valued primitives such as pi, exp, log, etc. for symmetry with Prelude
+-- TODO: real-valued primitives. See https://github.com/CategoricalData/hydra/issues/208
 
 module Hydra.Lib.Math where
 

@@ -17,7 +17,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Literals as Literals_
@@ -80,10 +80,10 @@ encodeRecord coders term =
                     fvalue = (Core.fieldTerm field)
                 in ((\x -> case x of
                   Core.TypeOptional _ -> ((\x -> case x of
-                    Core.TermOptional v2 -> (Optionals.maybe (Flows.pure Nothing) (\v -> Flows.bind (Compute.coderEncode coder_ v) (\encoded -> Flows.pure (Just (Core.unName fname, encoded)))) v2)
+                    Core.TermOptional v2 -> (Maybes.maybe (Flows.pure Nothing) (\v -> Flows.bind (Compute.coderEncode coder_ v) (\encoded -> Flows.pure (Just (Core.unName fname, encoded)))) v2)
                     _ -> (Flows.bind (Compute.coderEncode coder_ fvalue) (\encoded -> Flows.pure (Just (Core.unName fname, encoded))))) fvalue)
                   _ -> (Flows.bind (Compute.coderEncode coder_ fvalue) (\encoded -> Flows.pure (Just (Core.unName fname, encoded))))) (Core.fieldTypeType ft)))
-    in (Flows.bind (Flows.mapList encodeField (Lists.zip coders fields)) (\maybeFields -> Flows.pure (Json.ValueObject (Maps.fromList (Optionals.cat maybeFields)))))))
+    in (Flows.bind (Flows.mapList encodeField (Lists.zip coders fields)) (\maybeFields -> Flows.pure (Json.ValueObject (Maps.fromList (Maybes.cat maybeFields)))))))
 
 decodeRecord :: (Core.RowType -> [(Core.FieldType, (Compute.Coder t0 t1 Core.Term Json.Value))] -> Json.Value -> Compute.Flow t1 Core.Term)
 decodeRecord rt coders n = ((\x -> case x of
@@ -93,7 +93,7 @@ decodeRecord rt coders n = ((\x -> case x of
                 coder_ = (snd coder)
                 fname = (Core.fieldTypeName ft)
                 defaultValue = Json.ValueNull
-                jsonValue = (Optionals.fromMaybe defaultValue (Maps.lookup (Core.unName fname) v1))
+                jsonValue = (Maybes.fromMaybe defaultValue (Maps.lookup (Core.unName fname) v1))
             in (Flows.bind (Compute.coderDecode coder_ jsonValue) (\v -> Flows.pure (Core.Field {
               Core.fieldName = fname,
               Core.fieldTerm = v}))))
@@ -148,7 +148,7 @@ termCoder typ =
       Compute.coderEncode = (\t ->  
         let stripped = (Rewriting.deannotateTerm t)
         in ((\x -> case x of
-          Core.TermOptional v2 -> (Optionals.maybe (Flows.pure Json.ValueNull) (Compute.coderEncode oc) v2)
+          Core.TermOptional v2 -> (Maybes.maybe (Flows.pure Json.ValueNull) (Compute.coderEncode oc) v2)
           _ -> (Monads.unexpected "optional term" (Core___.term t))) stripped)),
       Compute.coderDecode = (\n -> (\x -> case x of
         Json.ValueNull -> (Flows.pure (Core.TermOptional Nothing))
@@ -191,9 +191,9 @@ untypedTermToJson term =
                 Core.fieldTerm = term}})))
       fieldToKeyval = (\f ->  
               let forTerm = (\t -> (\x -> case x of
-                      Core.TermOptional v1 -> (Optionals.maybe (Flows.pure Nothing) forTerm v1)
-                      _ -> (Flows.map Optionals.pure (untypedTermToJson t))) t)
-              in (Flows.bind (forTerm (Core.fieldTerm f)) (\mjson -> Flows.pure (Optionals.map (\j -> (Core.unName (Core.fieldName f), j)) mjson))))
+                      Core.TermOptional v1 -> (Maybes.maybe (Flows.pure Nothing) forTerm v1)
+                      _ -> (Flows.map Maybes.pure (untypedTermToJson t))) t)
+              in (Flows.bind (forTerm (Core.fieldTerm f)) (\mjson -> Flows.pure (Maybes.map (\j -> (Core.unName (Core.fieldName f), j)) mjson))))
   in ((\x -> case x of
     Core.TermAnnotated v1 ->  
       let term1 = (Core.annotatedTermBody v1) 
@@ -224,7 +224,7 @@ untypedTermToJson term =
           Core.fieldTerm = (Core.TermVariable (Core.lambdaParameter v2))},
         Core.Field {
           Core.fieldName = (Core.Name "domain"),
-          Core.fieldTerm = (Core.TermOptional (Optionals.map Core_.type_ (Core.lambdaDomain v2)))},
+          Core.fieldTerm = (Core.TermOptional (Maybes.map Core_.type_ (Core.lambdaDomain v2)))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.lambdaBody v2)}])
@@ -254,11 +254,11 @@ untypedTermToJson term =
             f = (Literals.bigintToBigfloat bf)
         in (Json.ValueNumber f)
       Core.LiteralString v2 -> (Json.ValueString v2)) v1))
-    Core.TermOptional v1 -> (Optionals.maybe (Flows.pure Json.ValueNull) untypedTermToJson v1)
+    Core.TermOptional v1 -> (Maybes.maybe (Flows.pure Json.ValueNull) untypedTermToJson v1)
     Core.TermProduct v1 -> (untypedTermToJson (Core.TermList v1))
     Core.TermRecord v1 ->  
       let fields = (Core.recordFields v1)
-      in (Flows.bind (Flows.mapList fieldToKeyval fields) (\keyvals -> Flows.pure (Json.ValueObject (Maps.fromList (Optionals.cat keyvals)))))
+      in (Flows.bind (Flows.mapList fieldToKeyval fields) (\keyvals -> Flows.pure (Json.ValueObject (Maps.fromList (Maybes.cat keyvals)))))
     Core.TermSet v1 -> (untypedTermToJson (Core.TermList (Sets.toList v1)))
     Core.TermSum v1 -> (asRecord [
       Core.Field {
@@ -286,7 +286,7 @@ untypedTermToJson term =
         Core.fieldTerm = (Core_.type_ (Core.typeApplicationTermType v1))}])
     Core.TermUnion v1 ->  
       let field = (Core.injectionField v1)
-      in (Logic.ifElse (Equality.equal (Core.fieldTerm field) Core.TermUnit) (Flows.pure (Json.ValueString (Core.unName (Core.fieldName field)))) (Flows.bind (fieldToKeyval field) (\mkeyval -> Flows.pure (Json.ValueObject (Maps.fromList (Optionals.maybe [] (\keyval -> [
+      in (Logic.ifElse (Equality.equal (Core.fieldTerm field) Core.TermUnit) (Flows.pure (Json.ValueString (Core.unName (Core.fieldName field)))) (Flows.bind (fieldToKeyval field) (\mkeyval -> Flows.pure (Json.ValueObject (Maps.fromList (Maybes.maybe [] (\keyval -> [
         keyval]) mkeyval))))))
     Core.TermVariable v1 -> (Flows.pure (Json.ValueString (Core.unName v1)))
     Core.TermWrap v1 -> (untypedTermToJson (Core.wrappedTermBody v1))

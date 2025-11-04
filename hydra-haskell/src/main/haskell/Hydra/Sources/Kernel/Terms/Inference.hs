@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -315,7 +315,7 @@ inferTypeOfDef = define "inferTypeOf" $
     "binding" <~ Lists.head (var "bindings") $
     "term1" <~ Core.bindingTerm (var "binding") $
     "mts" <~ Core.bindingType (var "binding") $
-    Optionals.maybe
+    Maybes.maybe
       (Flows.fail $ string "Expected a type scheme")
       ("ts" ~> Flows.pure $ pair (var "term1") (var "ts"))
       (var "mts")) $
@@ -405,11 +405,11 @@ inferTypeOfCaseStatementDef = define "inferTypeOfCaseStatement" $
   "caseMap" <~ Maps.fromList (Lists.map
     ("ft" ~> pair (Core.fieldTypeName $ var "ft") (Core.fieldTypeType $ var "ft"))
     (var "sfields")) $
-  "dfltConstraints" <~ ref Monads.optionalToListDef @@ (Optionals.map
+  "dfltConstraints" <~ ref Monads.optionalToListDef @@ (Maybes.map
     ("r" ~> Typing.typeConstraint (var "cod") (Typing.inferenceResultType $ var "r") (string "match default"))
     (var "dfltResult")) $
-  "caseConstraints" <~ Optionals.cat (Lists.zipWith
-    ("fname" ~> "itype" ~> Optionals.map
+  "caseConstraints" <~ Maybes.cat (Lists.zipWith
+    ("fname" ~> "itype" ~> Maybes.map
       ("ftype" ~> Typing.typeConstraint
         (var "itype")
         (Core.typeFunction $ Core.functionType (var "ftype") (var "cod"))
@@ -421,14 +421,14 @@ inferTypeOfCaseStatementDef = define "inferTypeOfCaseStatement" $
     @@ ("subst" ~> ref yieldDef
       @@ (ref buildTypeApplicationTermDef @@ var "svars"
           @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
-            Core.caseStatement (var "tname") (Optionals.map (unaryFunction Typing.inferenceResultTerm) $ var "dfltResult") $
+            Core.caseStatement (var "tname") (Maybes.map (unaryFunction Typing.inferenceResultTerm) $ var "dfltResult") $
             Lists.zipWith ("n" ~> "t" ~> Core.field (var "n") (var "t")) (var "fnames") (var "iterms")))
       @@ (Core.typeFunction $ Core.functionType
           (ref Schemas.nominalApplicationDef @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
           (var "cod"))
       @@ (ref Substitution.composeTypeSubstListDef
         @@ (Lists.concat $ list [
-          ref Monads.optionalToListDef @@ (Optionals.map (unaryFunction Typing.inferenceResultSubst) (var "dfltResult")),
+          ref Monads.optionalToListDef @@ (Maybes.map (unaryFunction Typing.inferenceResultSubst) (var "dfltResult")),
           list [var "isubst", var "subst"]])))
     @@ (Lists.concat $ list [var "dfltConstraints", var "caseConstraints"])
 
@@ -546,7 +546,7 @@ inferTypeOfLetDef = define "inferTypeOfLet" $
   "groups" <~ ref Sorting.topologicalSortComponentsDef @@ var "adjList" $
   "bindingMap" <~ Maps.fromList (Lists.zip (var "names") (var "bindings0")) $
   "createLet" <~ ("e" ~> "group" ~> Core.termLet $ Core.let_
-    (Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "bindingMap")) (var "group"))
+    (Maybes.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "bindingMap")) (var "group"))
     (var "e")) $
   -- Note: this rewritten let term will yield success in all cases of dependencies among letrec bindings *except*
   --       in cases of polymorphic recursion. In those cases, type hints will be needed (#162).
@@ -569,7 +569,7 @@ inferTypeOfLetDef = define "inferTypeOfLet" $
     "e" <~ second (var "result") $
     "bindingMap2" <~ Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName $ var "b") (var "b")) (var "bindingList")) $
     Core.termLet $ Core.let_
-      (Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "bindingMap2")) (var "names"))
+      (Maybes.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "bindingMap2")) (var "names"))
       (var "e")) $
   "rewriteResult" <~ ("result" ~>
     "iterm" <~ Typing.inferenceResultTerm (var "result") $
@@ -757,13 +757,13 @@ inferTypeOfOptionalDef = define "inferTypeOfOptional" $
     @@ (unaryFunction Core.typeOptional)
     @@ var "trmCons"
     @@ string "optional element"
-    @@ (Optionals.maybe (list []) (unaryFunction Lists.singleton) $ var "m")
+    @@ (Maybes.maybe (list []) (unaryFunction Lists.singleton) $ var "m")
 
 inferTypeOfPrimitiveDef :: TBinding (InferenceContext -> Name -> Flow s InferenceResult)
 inferTypeOfPrimitiveDef = define "inferTypeOfPrimitive" $
   doc "Infer the type of a primitive function" $
   "cx" ~> "name" ~>
-  Optionals.maybe
+  Maybes.maybe
     (Flows.fail $ Strings.cat2 (string "No such primitive: ") (Core.unName $ var "name"))
     ("scheme" ~>
       "ts" <<~ ref Schemas.instantiateTypeSchemeDef @@ var "scheme" $
@@ -957,7 +957,7 @@ inferTypeOfVariableDef :: TBinding (InferenceContext -> Name -> Flow s Inference
 inferTypeOfVariableDef = define "inferTypeOfVariable" $
   doc "Infer the type of a variable" $
   "cx" ~> "name" ~>
-  Optionals.maybe
+  Maybes.maybe
     (Flows.fail $ Strings.cat2 (string "Variable not bound to type: ") (Core.unName $ var "name"))
     ("scheme" ~>
       "ts" <<~ ref Schemas.instantiateTypeSchemeDef @@ var "scheme" $

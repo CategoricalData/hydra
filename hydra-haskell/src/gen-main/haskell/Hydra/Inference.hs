@@ -16,7 +16,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
@@ -50,7 +50,7 @@ bindUnboundTypeVariables cx term0 =
                       let bname = (Core.bindingName b)
                       in  
                         let bterm = (Core.bindingTerm b)
-                        in (Optionals.maybe (Core.Binding {
+                        in (Maybes.maybe (Core.Binding {
                           Core.bindingName = bname,
                           Core.bindingTerm = (bindUnboundTypeVariables cx bterm),
                           Core.bindingType = Nothing}) (\ts ->  
@@ -269,12 +269,12 @@ inferTypeOfCaseStatement cx caseStmt =
                     in  
                       let caseMap = (Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) sfields))
                       in  
-                        let dfltConstraints = (Monads.optionalToList (Optionals.map (\r -> Typing_.TypeConstraint {
+                        let dfltConstraints = (Monads.optionalToList (Maybes.map (\r -> Typing_.TypeConstraint {
                                 Typing_.typeConstraintLeft = cod,
                                 Typing_.typeConstraintRight = (Typing_.inferenceResultType r),
                                 Typing_.typeConstraintComment = "match default"}) dfltResult))
                         in  
-                          let caseConstraints = (Optionals.cat (Lists.zipWith (\fname -> \itype -> Optionals.map (\ftype -> Typing_.TypeConstraint {
+                          let caseConstraints = (Maybes.cat (Lists.zipWith (\fname -> \itype -> Maybes.map (\ftype -> Typing_.TypeConstraint {
                                   Typing_.typeConstraintLeft = itype,
                                   Typing_.typeConstraintRight = (Core.TypeFunction (Core.FunctionType {
                                     Core.functionTypeDomain = ftype,
@@ -282,13 +282,13 @@ inferTypeOfCaseStatement cx caseStmt =
                                   Typing_.typeConstraintComment = "case type"}) (Maps.lookup fname caseMap)) fnames itypes))
                           in (mapConstraints cx (\subst -> yield (buildTypeApplicationTerm svars (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                             Core.caseStatementTypeName = tname,
-                            Core.caseStatementDefault = (Optionals.map Typing_.inferenceResultTerm dfltResult),
+                            Core.caseStatementDefault = (Maybes.map Typing_.inferenceResultTerm dfltResult),
                             Core.caseStatementCases = (Lists.zipWith (\n -> \t -> Core.Field {
                               Core.fieldName = n,
                               Core.fieldTerm = t}) fnames iterms)}))))) (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
                             Core.functionTypeCodomain = cod})) (Substitution.composeTypeSubstList (Lists.concat [
-                            Monads.optionalToList (Optionals.map Typing_.inferenceResultSubst dfltResult),
+                            Monads.optionalToList (Maybes.map Typing_.inferenceResultSubst dfltResult),
                             [
                               isubst,
                               subst]]))) (Lists.concat [
@@ -334,7 +334,7 @@ inferTypeOf cx term =
               let term1 = (Core.bindingTerm binding)
               in  
                 let mts = (Core.bindingType binding)
-                in (Optionals.maybe (Flows.fail "Expected a type scheme") (\ts -> Flows.pure (term1, ts)) mts))
+                in (Maybes.maybe (Flows.fail "Expected a type scheme") (\ts -> Flows.pure (term1, ts)) mts))
     in  
       let unifyAndSubst = (\result ->  
               let subst = (Typing_.inferenceResultSubst result)
@@ -520,7 +520,7 @@ inferTypeOfLet cx let0 =
                 let bindingMap = (Maps.fromList (Lists.zip names bindings0))
                 in  
                   let createLet = (\e -> \group -> Core.TermLet (Core.Let {
-                          Core.letBindings = (Optionals.cat (Lists.map (\n -> Maps.lookup n bindingMap) group)),
+                          Core.letBindings = (Maybes.cat (Lists.map (\n -> Maps.lookup n bindingMap) group)),
                           Core.letBody = e}))
                   in  
                     let rewrittenLet = (Lists.foldl createLet body0 (Lists.reverse groups))
@@ -545,7 +545,7 @@ inferTypeOfLet cx let0 =
                                     in  
                                       let bindingMap2 = (Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) bindingList))
                                       in (Core.TermLet (Core.Let {
-                                        Core.letBindings = (Optionals.cat (Lists.map (\n -> Maps.lookup n bindingMap2) names)),
+                                        Core.letBindings = (Maybes.cat (Lists.map (\n -> Maps.lookup n bindingMap2) names)),
                                         Core.letBody = e})))
                       in  
                         let rewriteResult = (\result ->  
@@ -612,10 +612,10 @@ inferTypeOfMap cx m = (Flows.bind Schemas.freshName (\kvar -> Flows.bind Schemas
 inferTypeOfOptional :: (Typing_.InferenceContext -> Maybe Core.Term -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfOptional cx m =  
   let trmCons = (\terms -> Logic.ifElse (Lists.null terms) (Core.TermOptional Nothing) (Core.TermOptional (Just (Lists.head terms))))
-  in (inferTypeOfCollection cx (\x -> Core.TypeOptional x) trmCons "optional element" (Optionals.maybe [] Lists.singleton m))
+  in (inferTypeOfCollection cx (\x -> Core.TypeOptional x) trmCons "optional element" (Maybes.maybe [] Lists.singleton m))
 
 inferTypeOfPrimitive :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 Typing_.InferenceResult)
-inferTypeOfPrimitive cx name = (Optionals.maybe (Flows.fail (Strings.cat2 "No such primitive: " (Core.unName name))) (\scheme -> Flows.bind (Schemas.instantiateTypeScheme scheme) (\ts -> yieldChecked (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermFunction (Core.FunctionPrimitive name))) (Core.typeSchemeType ts) Substitution.idTypeSubst)) (Maps.lookup name (Typing_.inferenceContextPrimitiveTypes cx)))
+inferTypeOfPrimitive cx name = (Maybes.maybe (Flows.fail (Strings.cat2 "No such primitive: " (Core.unName name))) (\scheme -> Flows.bind (Schemas.instantiateTypeScheme scheme) (\ts -> yieldChecked (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermFunction (Core.FunctionPrimitive name))) (Core.typeSchemeType ts) Substitution.idTypeSubst)) (Maps.lookup name (Typing_.inferenceContextPrimitiveTypes cx)))
 
 inferTypeOfProduct :: (Typing_.InferenceContext -> [Core.Term] -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfProduct cx els = (Flows.map (\results ->  
@@ -768,7 +768,7 @@ inferTypeOfUnwrap cx tname = (Flows.bind (Schemas.requireSchemaType cx tname) (\
       Core.functionTypeCodomain = wtyp})) Substitution.idTypeSubst)))))
 
 inferTypeOfVariable :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 Typing_.InferenceResult)
-inferTypeOfVariable cx name = (Optionals.maybe (Flows.fail (Strings.cat2 "Variable not bound to type: " (Core.unName name))) (\scheme -> Flows.bind (Schemas.instantiateTypeScheme scheme) (\ts -> Flows.pure (Typing_.InferenceResult {
+inferTypeOfVariable cx name = (Maybes.maybe (Flows.fail (Strings.cat2 "Variable not bound to type: " (Core.unName name))) (\scheme -> Flows.bind (Schemas.instantiateTypeScheme scheme) (\ts -> Flows.pure (Typing_.InferenceResult {
   Typing_.inferenceResultTerm = (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)),
   Typing_.inferenceResultType = (Core.typeSchemeType ts),
   Typing_.inferenceResultSubst = Substitution.idTypeSubst}))) (Maps.lookup name (Typing_.inferenceContextDataTypes cx)))
@@ -834,7 +834,7 @@ initialTypeContext g =
           let name = (fst pair)
           in  
             let el = (snd pair)
-            in (Optionals.maybe (Flows.fail (Strings.cat [
+            in (Maybes.maybe (Flows.fail (Strings.cat [
               "untyped element: ",
               (Core.unName name)])) (\ts -> Flows.pure (name, (Schemas.typeSchemeToFType ts))) (Core.bindingType el)))
   in (Flows.bind (Schemas.graphToInferenceContext g) (\ix -> Flows.bind (Flows.map Maps.fromList (Flows.mapList toPair (Maps.toList (Graph.graphElements g)))) (\types -> Flows.pure (Typing_.TypeContext {

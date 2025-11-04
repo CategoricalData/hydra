@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Lib.Literals                     as Literals
 import qualified Hydra.Dsl.Lib.Logic                        as Logic
 import qualified Hydra.Dsl.Lib.Maps                         as Maps
 import qualified Hydra.Dsl.Lib.Math                         as Math
-import qualified Hydra.Dsl.Lib.Optionals                    as Optionals
+import qualified Hydra.Dsl.Lib.Maybes                    as Maybes
 import qualified Hydra.Dsl.Lib.Sets                         as Sets
 import           Hydra.Dsl.Lib.Strings                      as Strings
 import qualified Hydra.Dsl.Mantle                           as Mantle
@@ -116,7 +116,7 @@ decodeFieldDef  = define "Field" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     Flows.bind
       (ref decodeOptionalFieldDef @@ var "decodeValue" @@ var "name" @@ var "m")
-      (primitive _optionals_maybe
+      (primitive _maybes_maybe
         @@ (Flows.fail $ Strings.cat2 "missing field: " (var "name"))
         @@ (lambda "f" $ Flows.pure $ var "f"))
 
@@ -133,7 +133,7 @@ decodeObjectDef  = define "Object" $
 decodeOptionalFieldDef :: TBinding ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s (Maybe a))
 decodeOptionalFieldDef  = define "OptionalField" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
-    (primitive _optionals_maybe
+    (primitive _maybes_maybe
         @@ (Flows.pure nothing)
         @@ (lambda "v" (Flows.map (lambda "x" (just $ var "x")) (var "decodeValue" @@ var "v"))))
       @@ (Maps.lookup (var "name") (var "m"))

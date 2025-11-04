@@ -15,7 +15,7 @@ import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.math
-import hydra.lib.optionals
+import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.monads
 import hydra.topology
@@ -25,9 +25,9 @@ def adjacency_lists_to_graph[T0](edges0: frozenlist[Tuple[T0, frozenlist[T0]]]) 
     indexed_edges = hydra.lib.lists.zip(hydra.lib.math.range_(0, hydra.lib.lists.length(sorted_edges)), sorted_edges)
     key_to_vertex = cast(FrozenDict[T0, int], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := vk_neighbors[0], k_neighbors := vk_neighbors[1], k := k_neighbors[0], (k, v))[3]), indexed_edges)))
     vertex_map = cast(FrozenDict[int, T0], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := vk_neighbors[0], k_neighbors := vk_neighbors[1], k := k_neighbors[0], (v, k))[3]), indexed_edges)))
-    graph = cast(FrozenDict[int, frozenlist[int]], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := vk_neighbors[0], k_neighbors := vk_neighbors[1], neighbors := k_neighbors[1], (v, hydra.lib.optionals.map_maybe((lambda k: hydra.lib.maps.lookup(k, key_to_vertex)), neighbors)))[3]), indexed_edges)))
+    graph = cast(FrozenDict[int, frozenlist[int]], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := vk_neighbors[0], k_neighbors := vk_neighbors[1], neighbors := k_neighbors[1], (v, hydra.lib.maybes.map_maybe((lambda k: hydra.lib.maps.lookup(k, key_to_vertex)), neighbors)))[3]), indexed_edges)))
     def vertex_to_key(v: int) -> T0:
-        return hydra.lib.optionals.from_just(hydra.lib.maps.lookup(v, vertex_map))
+        return hydra.lib.maybes.from_just(hydra.lib.maps.lookup(v, vertex_map))
     return (graph, vertex_to_key)
 
 # Initial state for Tarjan's algorithm.

@@ -14,7 +14,7 @@ import hydra.lib.flows
 import hydra.lib.lists
 import hydra.lib.literals
 import hydra.lib.logic
-import hydra.lib.optionals
+import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.mantle
@@ -80,7 +80,7 @@ def name_to_file_path(ns_conv: hydra.mantle.CaseConvention, local_conv: hydra.ma
     local = qual_name.local
     def ns_to_file_path(ns: hydra.module.Namespace) -> str:
         return hydra.lib.strings.intercalate("/", hydra.lib.lists.map((lambda part: hydra.formatting.convert_case(hydra.mantle.CaseConvention.CAMEL, ns_conv, part)), hydra.lib.strings.split_on(".", ns.value)))
-    prefix = hydra.lib.optionals.maybe("", (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns)
+    prefix = hydra.lib.maybes.maybe("", (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns)
     suffix = hydra.formatting.convert_case(hydra.mantle.CaseConvention.PASCAL, local_conv, local)
     return hydra.lib.strings.cat((prefix, suffix, ".", ext.value))
 

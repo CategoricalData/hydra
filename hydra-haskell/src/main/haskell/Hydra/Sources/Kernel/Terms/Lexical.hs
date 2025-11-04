@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -92,16 +92,16 @@ dereferenceSchemaTypeDef = define "dereferenceSchemaType" $
   "forType" <~ ("t" ~> cases _Type (var "t")
     (Just (just (Core.typeScheme (list []) (var "t")))) [
     _Type_annotated>>: "at" ~> var "forType" @@ (Core.annotatedTypeBody (var "at")),
-    _Type_forall>>: "ft" ~> Optionals.map
+    _Type_forall>>: "ft" ~> Maybes.map
       ("ts" ~> Core.typeScheme
         -- Note: no alpha-renaming of type variables
         (Lists.cons (Core.forallTypeParameter (var "ft")) (Core.typeSchemeVariables (var "ts")))
         (Core.typeSchemeType (var "ts")))
       (var "forType" @@ (Core.forallTypeBody (var "ft"))),
     _Type_variable>>: "v" ~> ref dereferenceSchemaTypeDef @@ var "v" @@ var "types"]) $
-  Optionals.bind
+  Maybes.bind
     (Maps.lookup (var "name") (var "types"))
-    ("ts" ~> Optionals.map
+    ("ts" ~> Maybes.map
       ("ts2" ~> Core.typeScheme
         -- Note: no alpha-renaming of type variables
         (Lists.concat2 (Core.typeSchemeVariables (var "ts")) (Core.typeSchemeVariables (var "ts2")))
@@ -155,7 +155,7 @@ fieldsOfDef = define "fieldsOf" $
 getFieldDef :: TBinding (M.Map Name Term -> Name -> (Term -> Flow Graph b) -> Flow Graph b)
 getFieldDef = define "getField" $
   "m" ~> "fname" ~> "decode" ~>
-  Optionals.maybe
+  Maybes.maybe
     (Flows.fail ("expected field " ++ (Core.unName (var "fname")) ++ " not found"))
     (var "decode")
     (Maps.lookup (var "fname") (var "m"))
@@ -202,7 +202,7 @@ matchUnionDef = define "matchUnion" $
       "exp" <~ (
         "fname" <~ Core.fieldName (Core.injectionField (var "injection")) $
         "val" <~ Core.fieldTerm (Core.injectionField (var "injection")) $
-        Optionals.maybe
+        Maybes.maybe
           (Flows.fail ("no matching case for field " ++ (Core.unName (var "fname"))
             ++ " in union type " ++ (Core.unName (var "tname"))))
           ("f" ~> var "f" @@ var "val")
@@ -229,7 +229,7 @@ requireElementDef = define "requireElement" $
     (Strings.intercalate ", " (var "ellipsis" @@ (Lists.map ("el" ~> Core.unName (Core.bindingName (var "el"))) (Maps.elems (Graph.graphElements (var "g")))))) ++
     "}")) $
   "mel" <<~ ref dereferenceElementDef @@ var "name" $
-  Optionals.maybe
+  Maybes.maybe
     ("g" <<~ ref Monads.getStateDef $ var "err" @@ var "g")
     (unaryFunction Flows.pure)
     (var "mel")
@@ -238,7 +238,7 @@ requirePrimitiveDef :: TBinding (Name -> Flow Graph Primitive)
 requirePrimitiveDef = define "requirePrimitive" $
   "name" ~>
   "g" <<~ ref Monads.getStateDef $
-  Optionals.maybe
+  Maybes.maybe
     (Flows.fail ("no such primitive function: " ++ (Core.unName (var "name"))))
     (unaryFunction Flows.pure)
     (ref lookupPrimitiveDef @@ var "g" @@ var "name")
@@ -257,7 +257,7 @@ requireTermDef :: TBinding (Name -> Flow Graph Term)
 requireTermDef = define "requireTerm" $
   "name" ~>
   "mt" <<~ ref resolveTermDef @@ var "name" $
-  Optionals.maybe
+  Maybes.maybe
     (Flows.fail ("no such element: " ++ (Core.unName (var "name"))))
     (unaryFunction Flows.pure)
     (var "mt")
@@ -272,7 +272,7 @@ resolveTermDef = define "resolveTerm" $
       (Just (produce (just (Core.bindingTerm (var "el"))))) [
       _Term_variable>>: "name'" ~> ref resolveTermDef @@ var "name'"]) $
   "g" <<~ ref Monads.getStateDef $
-  Optionals.maybe
+  Maybes.maybe
     (produce nothing)
     (var "recurse")
     (Maps.lookup (var "name") (Graph.graphElements (var "g")))
@@ -280,7 +280,7 @@ resolveTermDef = define "resolveTerm" $
 schemaContextDef :: TBinding (Graph -> Graph)
 schemaContextDef = define "schemaContext" $
   doc "Note: assuming for now that primitive functions are the same in the schema graph" $
-  "g" ~> Optionals.fromMaybe (var "g") (Graph.graphSchema (var "g"))
+  "g" ~> Maybes.fromMaybe (var "g") (Graph.graphSchema (var "g"))
 
 stripAndDereferenceTermDef :: TBinding (Term -> Flow Graph Term)
 stripAndDereferenceTermDef = define "stripAndDereferenceTerm" $

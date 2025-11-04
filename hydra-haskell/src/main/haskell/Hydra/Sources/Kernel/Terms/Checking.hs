@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -262,7 +262,7 @@ checkTypeSubstDef = define "checkTypeSubst" $
     _Type_union>>: constant true,
     _Type_wrap>>: constant true]) $
   "badVars" <~ Sets.fromList (Lists.filter
-    ("v" ~> Optionals.maybe false (var "isNominal") $
+    ("v" ~> Maybes.maybe false (var "isNominal") $
       ref Lexical.dereferenceSchemaTypeDef @@ var "v" @@ (Typing.inferenceContextSchemaTypes $ var "cx"))
     (Sets.toList $ var "suspectVars")) $
   "badPairs" <~ Lists.filter ("p" ~> Sets.member (first $ var "p") (var "badVars")) (Maps.toList $ var "s") $
@@ -413,7 +413,7 @@ typeOfCaseStatementDef = define "typeOfCaseStatement" $
   "tdflt" <<~ Flows.mapOptional ("e" ~> ref typeOfDef @@ var "tx" @@ list [] @@ var "e") (var "dflt") $
   "tcterms" <<~ Flows.mapList ("e" ~> ref typeOfDef @@ var "tx" @@ list [] @@ var "e") (var "cterms") $
   "fcods" <<~ Flows.mapList ("t" ~> Flows.map (unaryFunction Core.functionTypeCodomain) $ ref ExtractCore.functionTypeDef @@ var "t") (var "tcterms") $
-  "cods" <~ Optionals.cat (Lists.cons (var "tdflt") $ Lists.map (unaryFunction Optionals.pure) (var "fcods")) $
+  "cods" <~ Maybes.cat (Lists.cons (var "tdflt") $ Lists.map (unaryFunction Maybes.pure) (var "fcods")) $
   "cod" <<~ ref checkSameTypeDef @@ var "tx" @@ string "case branches" @@ var "cods" $
 --  "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
 --  "scod" <~ ref Substitution.substInTypeDef @@ var "subst" @@ var "cod" $
@@ -466,7 +466,7 @@ typeOfLetDef = define "typeOfLet" $
   "bnames" <~ Lists.map (unaryFunction Core.bindingName) (var "bs") $
   "bterms" <~ Lists.map (unaryFunction Core.bindingTerm) (var "bs") $
   "bindingType" <~ ("b" ~>
-    Optionals.maybe
+    Maybes.maybe
       (Flows.fail $ Strings.cat $ list [
         string "untyped let binding: ",
         ref ShowCore.bindingDef @@ var "b"])
