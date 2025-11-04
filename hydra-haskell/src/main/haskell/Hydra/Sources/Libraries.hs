@@ -20,6 +20,7 @@ import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Lib.Tuples as Tuples
 
 import qualified Data.List as L
 
@@ -44,7 +45,8 @@ standardLibraries = [
   hydraLibMathInt32,
   hydraLibOptionals,
   hydraLibSets,
-  hydraLibStrings]
+  hydraLibStrings,
+  hydraLibTuples]
 
 -- * hydra.lib.chars primitives
 
@@ -584,3 +586,22 @@ hydraLibStrings = standardLibrary _hydra_lib_strings [
   prim1 _strings_toLower     Strings.toLower     [] string string,
   prim1 _strings_toUpper     Strings.toUpper     [] string string,
   prim1 _strings_unlines     Strings.unlines     [] (list string) string]
+
+_hydra_lib_tuples :: Namespace
+_hydra_lib_tuples = Namespace "hydra.lib.tuples"
+
+_tuples_curry   = qname _hydra_lib_tuples "curry"  :: Name
+_tuples_fst     = qname _hydra_lib_tuples "fst"    :: Name
+_tuples_snd     = qname _hydra_lib_tuples "snd"    :: Name
+_tuples_uncurry = qname _hydra_lib_tuples "uncurry" :: Name
+
+hydraLibTuples :: Library
+hydraLibTuples = standardLibrary _hydra_lib_tuples [
+    prim1 _tuples_curry   Tuples.curry   ["a", "b", "c"] (function (pair a b) c) (function a (function b c)),
+    prim1 _tuples_fst     Tuples.fst     ["a", "b"]      (pair a b) a,
+    prim1 _tuples_snd     Tuples.snd     ["a", "b"]      (pair a b) b,
+    prim1 _tuples_uncurry Tuples.uncurry ["a", "b", "c"] (function a (function b c)) (function (pair a b) c)]
+  where
+    a = variable "a"
+    b = variable "b"
+    c = variable "c"
