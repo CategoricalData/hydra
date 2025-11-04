@@ -27,8 +27,7 @@ def create_ordering_isomorphism[T0, T1](source_ord: frozenlist[T0], target_ord: 
 def topological_sort_components[T0](pairs: frozenlist[Tuple[T0, frozenlist[T0]]]) -> frozenlist[frozenlist[T0]]:
     graph_result = hydra.tarjan.adjacency_lists_to_graph(pairs)
     g = graph_result[0]
-    def get_key(v1: int) -> T0:
-        return graph_result[1](v1)
+    get_key = graph_result[1]
     return hydra.lib.lists.map((lambda comp: hydra.lib.lists.map(get_key, comp)), hydra.tarjan.strongly_connected_components(g))
 
 def topological_sort[T0](pairs: frozenlist[Tuple[T0, frozenlist[T0]]]) -> hydra.mantle.Either[frozenlist[frozenlist[T0]], frozenlist[T0]]:
