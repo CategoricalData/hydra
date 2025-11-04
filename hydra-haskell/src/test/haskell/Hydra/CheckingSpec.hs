@@ -911,7 +911,7 @@ checkTypeOfPrimitives = H.describe "Primitives" $ do
       (tylam "t0" $ tyapp (primitive _lists_head) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.list $ Types.var "t0") (Types.var "t0"))
     expectSameTermWithType "math neg"
-      (primitive _math_neg)
+      (primitive _math_negate)
       (Types.function Types.int32 Types.int32)
     expectSameTermWithType "logic not"
       (primitive _logic_not)

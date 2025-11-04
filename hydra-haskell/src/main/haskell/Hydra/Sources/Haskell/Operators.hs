@@ -149,7 +149,7 @@ applyOpDef = haskellOperatorsDefinition "applyOp" $
 
 arrowOpDef :: TBinding Op
 arrowOpDef = haskellOperatorsDefinition "arrowOp" $
-  ref Serialization.opDef @@ string "->" @@ (Math.neg $ int32 1) @@ Ast.associativityRight
+  ref Serialization.opDef @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
 
 assertOpDef :: TBinding Op
 assertOpDef = haskellOperatorsDefinition "assertOp" $
@@ -221,7 +221,7 @@ indexOpDef = haskellOperatorsDefinition "indexOp" $
 lambdaOpDef :: TBinding Op
 lambdaOpDef = haskellOperatorsDefinition "lambdaOp" $
   doc "No source" $
-  ref Serialization.opDef @@ string "->" @@ (Math.neg $ int32 1) @@ Ast.associativityRight
+  ref Serialization.opDef @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
 
 ltOpDef :: TBinding Op
 ltOpDef = haskellOperatorsDefinition "ltOp" $

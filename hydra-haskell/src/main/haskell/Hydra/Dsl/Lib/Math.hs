@@ -23,8 +23,8 @@ mod = primitive2 _math_mod
 mul :: TTerm a -> TTerm a -> TTerm a
 mul = primitive2 _math_mul
 
-neg :: TTerm a -> TTerm a
-neg = primitive1 _math_neg
+negate :: TTerm a -> TTerm a
+negate = primitive1 _math_negate
 
 pred :: TTerm a -> TTerm a
 pred = primitive1 _math_pred
