@@ -167,34 +167,40 @@ def eta_expand_typed_term[T0](tx0: hydra.typing.TypeContext, term0: hydra.core.T
                 
                 case _:
                     return rewrite(False, False, cast(frozenlist[hydra.core.Type], ()), recurse, tx, term2)
-        def arity_of[T2](term2: hydra.core.Term) -> hydra.compute.Flow[T2, int]:
+        def arity_of[T2](tx2: hydra.typing.TypeContext, term2: hydra.core.Term) -> hydra.compute.Flow[T2, int]:
             def dflt[T3]() -> hydra.compute.Flow[T3, int]:
-                return hydra.lib.flows.map(hydra.arity.type_arity, hydra.checking.type_of(tx, cast(frozenlist[hydra.core.Type], ()), term2))
-            def for_function[T3](f: hydra.core.Function) -> hydra.compute.Flow[T3, int]:
+                return hydra.lib.flows.map(hydra.arity.type_arity, hydra.checking.type_of(tx2, cast(frozenlist[hydra.core.Type], ()), term2))
+            def for_function(tx3: hydra.typing.TypeContext, f: hydra.core.Function) -> hydra.compute.Flow[T2, int]:
                 match f:
                     case hydra.core.FunctionElimination():
                         return hydra.lib.flows.pure(1)
                     
-                    case hydra.core.FunctionPrimitive(value=name):
-                        return hydra.lib.flows.map(hydra.arity.type_scheme_arity, hydra.lexical.require_primitive_type(tx, name))
+                    case hydra.core.FunctionLambda(value=l):
+                        tx2 = hydra.schemas.extend_type_context_for_lambda(tx3, l)
+                        return arity_of(tx2, l.body)
                     
-                    case _:
-                        return cast(hydra.compute.Flow[T3, int], dflt)
+                    case hydra.core.FunctionPrimitive(value=name):
+                        return hydra.lib.flows.map(hydra.arity.type_scheme_arity, hydra.lexical.require_primitive_type(tx3, name))
             match term2:
                 case hydra.core.TermAnnotated(value=at):
-                    return arity_of(at.body)
+                    return arity_of(tx2, at.body)
                 
                 case hydra.core.TermFunction(value=f):
-                    return for_function(f)
+                    return for_function(tx2, f)
                 
                 case hydra.core.TermLet(value=l):
-                    return arity_of(l.body)
+                    tx2 = hydra.schemas.extend_type_context_for_let(tx2, l)
+                    return arity_of(tx2, l.body)
                 
                 case hydra.core.TermTypeApplication(value=tat):
-                    return arity_of(tat.body)
+                    return arity_of(tx2, tat.body)
                 
                 case hydra.core.TermTypeLambda(value=tl):
-                    return arity_of(tl.body)
+                    tx2 = hydra.schemas.extend_type_context_for_type_lambda(tx2, tl)
+                    return arity_of(tx2, tl.body)
+                
+                case hydra.core.TermVariable(value=name):
+                    return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("unbound variable: ", name.value))), (lambda t: hydra.lib.flows.pure(hydra.arity.type_arity(t))), hydra.lib.maps.lookup(name, tx2.types))
                 
                 case _:
                     return cast(hydra.compute.Flow[T2, int], dflt)
@@ -230,7 +236,7 @@ def eta_expand_typed_term[T0](tx0: hydra.typing.TypeContext, term0: hydra.core.T
             case hydra.core.TermApplication(value=a):
                 lhs = a.function
                 rhs = a.argument
-                return hydra.lib.flows.bind(rewrite(True, False, cast(frozenlist[hydra.core.Type], ()), recurse, tx, rhs), (lambda rhs2: hydra.lib.flows.bind(arity_of(lhs), (lambda lhsarity: hydra.lib.flows.bind(rewrite_spine(lhs), (lambda lhs2: (a2 := cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs2, rhs2))), hydra.lib.flows.pure(hydra.lib.logic.if_else(hydra.lib.equality.gt(lhsarity, 1), padn(hydra.lib.math.sub(lhsarity, 1), a2), a2)))[1]))))))
+                return hydra.lib.flows.bind(rewrite(True, False, cast(frozenlist[hydra.core.Type], ()), recurse, tx, rhs), (lambda rhs2: hydra.lib.flows.bind(arity_of(tx, lhs), (lambda lhsarity: hydra.lib.flows.bind(rewrite_spine(lhs), (lambda lhs2: (a2 := cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs2, rhs2))), hydra.lib.flows.pure(hydra.lib.logic.if_else(hydra.lib.equality.gt(lhsarity, 1), padn(hydra.lib.math.sub(lhsarity, 1), a2), a2)))[1]))))))
             
             case hydra.core.TermFunction(value=f):
                 match f:

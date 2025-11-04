@@ -366,7 +366,7 @@ def optional(mel: TermCoder[X]) -> TermCoder[Maybe[X]]:
     return TermCoder(
         type=types.optional(mel.type),
         coder=Coder(
-            encode=lambda term: extract.optional(mel.coder.encode, term),
+            encode=lambda term: extract.maybe_term(mel.coder.encode, term),
             decode=lambda mv: flows.bind(
                 to_maybe_term(mv),                      # Flow[Graph, Maybe[Term]]
                 lambda decoded: flows.pure(terms.optional(decoded))
