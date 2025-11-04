@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -171,7 +171,7 @@ curlyBracesListDef = define "curlyBracesList" $
     Logic.ifElse (Lists.null $ var "els")
       (ref cstDef @@ string "{}")
       (ref bracketsDef @@ ref curlyBracesDef @@ var "style" @@
-        (ref symbolSepDef @@ (Optionals.fromMaybe (string ",") (var "msymb")) @@ var "style" @@ var "els"))
+        (ref symbolSepDef @@ (Maybes.fromMaybe (string ",") (var "msymb")) @@ var "style" @@ var "els"))
 
 customIndentBlockDef :: TBinding (String -> [Expr] -> Expr)
 customIndentBlockDef = define "customIndentBlock" $
@@ -226,7 +226,7 @@ expressionLengthDef = define "expressionLength" $
     _Ws_breakAndIndent>>: "s" ~> Math.add (int32 1) (Strings.length $ var "s"),
     _Ws_doubleBreak>>: constant $ int32 2]) $
   "blockStyleLength" <~ ("style" ~>
-    "mindentLen" <~ Optionals.maybe (int32 0) (unaryFunction Strings.length) (Ast.blockStyleIndent $ var "style") $
+    "mindentLen" <~ Maybes.maybe (int32 0) (unaryFunction Strings.length) (Ast.blockStyleIndent $ var "style") $
     "nlBeforeLen" <~ Logic.ifElse (Ast.blockStyleNewlineBeforeContent $ var "style") (int32 1) (int32 0) $
     "nlAfterLen" <~ Logic.ifElse (Ast.blockStyleNewlineAfterContent $ var "style") (int32 1) (int32 0) $
     Math.add (var "mindentLen") $ Math.add (var "nlBeforeLen") (var "nlAfterLen")) $
@@ -491,7 +491,7 @@ printExprDef = define "printExpr" $
       "doIndent" <~ Ast.blockStyleIndent (var "style") $
       "nlBefore" <~ Ast.blockStyleNewlineBeforeContent (var "style") $
       "nlAfter" <~ Ast.blockStyleNewlineAfterContent (var "style") $
-      "ibody" <~ Optionals.maybe (var "body") ("idt" ~> ref customIndentDef @@ var "idt" @@ var "body") (var "doIndent") $
+      "ibody" <~ Maybes.maybe (var "body") ("idt" ~> ref customIndentDef @@ var "idt" @@ var "body") (var "doIndent") $
       "pre" <~ Logic.ifElse (var "nlBefore") (string "\n") (string "") $
       "suf" <~ Logic.ifElse (var "nlAfter") (string "\n") (string "") $
       var "l" ++ var "pre" ++ var "ibody" ++ var "suf" ++ var "r"]

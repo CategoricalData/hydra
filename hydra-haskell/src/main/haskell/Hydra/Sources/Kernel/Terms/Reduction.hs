@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -201,14 +201,14 @@ etaExpansionArityDef = define "etaExpansionArity" $
       _Function_elimination>>: constant $ int32 1,
       _Function_lambda>>: constant $ int32 0,
       _Function_primitive>>: "name" ~> ref Arity.primitiveArityDef
-        @@ (Optionals.fromJust (ref Lexical.lookupPrimitiveDef @@ var "graph" @@ var "name"))],
+        @@ (Maybes.fromJust (ref Lexical.lookupPrimitiveDef @@ var "graph" @@ var "name"))],
     _Term_typeLambda>>: "ta" ~> ref etaExpansionArityDef @@ var "graph" @@ Core.typeLambdaBody (var "ta"),
     _Term_typeApplication>>: "tt" ~> ref etaExpansionArityDef @@ var "graph" @@ Core.typeApplicationTermBody (var "tt"),
     _Term_variable>>: "name" ~>
       -- Note: we assume that the graph is fully typed.
-      Optionals.maybe (int32 0)
+      Maybes.maybe (int32 0)
         ("ts" ~> ref Arity.typeArityDef @@ (Core.typeSchemeType $ var "ts"))
-        (Optionals.bind
+        (Maybes.bind
           (ref Lexical.lookupElementDef @@ var "graph" @@ var "name")
           ("b" ~> Core.bindingType $ var "b"))]
 
@@ -437,7 +437,7 @@ reduceTermDef = define "reduceTerm" $
           ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.fieldName $ var "field"))
           (Core.caseStatementCases $ var "cs") $
         Logic.ifElse (Lists.null $ var "matchingFields")
-          (Optionals.maybe
+          (Maybes.maybe
             (Flows.fail $ Strings.cat $ list [
               string "no such field ",
               unwrap _Name @@ (Core.fieldName $ var "field"),
@@ -522,7 +522,7 @@ termIsValueDef = define "termIsValue" $
         _Elimination_record>>: constant true,
         _Elimination_union>>: "cs" ~>
           Logic.and (var "checkFields" @@ Core.caseStatementCases (var "cs"))
-            (Optionals.maybe true (ref termIsValueDef @@ var "g") (Core.caseStatementDefault $ var "cs"))],
+            (Maybes.maybe true (ref termIsValueDef @@ var "g") (Core.caseStatementDefault $ var "cs"))],
     _Function_lambda>>: "l" ~> ref termIsValueDef @@ var "g" @@ Core.lambdaBody (var "l"),
     _Function_primitive>>: constant true]) $
   cases _Term (ref Rewriting.deannotateTermDef @@ var "term")
@@ -538,7 +538,7 @@ termIsValueDef = define "termIsValue" $
           (ref termIsValueDef @@ var "g" @@ second (var "kv")))
         true $ Maps.toList (var "m"),
     _Term_optional>>: "m" ~>
-      Optionals.maybe true (ref termIsValueDef @@ var "g") (var "m"),
+      Maybes.maybe true (ref termIsValueDef @@ var "g") (var "m"),
     _Term_record>>: "r" ~> var "checkFields" @@ Core.recordFields (var "r"),
     _Term_set>>: "s" ~> var "forList" @@ Sets.toList (var "s"),
     _Term_union>>: "i" ~> var "checkField" @@ Core.injectionField (var "i"),

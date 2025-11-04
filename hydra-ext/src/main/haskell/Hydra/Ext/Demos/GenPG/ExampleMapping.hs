@@ -7,14 +7,14 @@ import Hydra.Phantoms (TTerm)
 import Hydra.Dsl.Phantoms ((@@), constant, just, lambda, nothing, string, var)
 import Hydra.Ext.Dsl.Pg.Mappings (LazyGraph, column, edge, edgeNoId, graph, property, vertex)
 import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import qualified Hydra.Dsl.Lib.Strings as Strings
 import Hydra.Ext.Demos.GenPG.ExampleGraphSchema
 
 -- Helpers -----------------------
 
 labeledIntId :: String -> TTerm (r -> Maybe Int) -> TTerm (r -> String)
-labeledIntId itype iid = lambda "r" $ Optionals.map
+labeledIntId itype iid = lambda "r" $ Maybes.map
   (lambda "i" $ Strings.concat [
     string $ decapitalize itype,
     string "_",

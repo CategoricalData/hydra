@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -64,7 +64,7 @@ termAccessorDef = define "termAccessor" $
   "accessor" ~>
   "idx" <~ ("i" ~> nothing) $  -- TODO: restore index functionality
   "idxSuff" <~ ("suffix" ~> "i" ~>
-    Optionals.map ("s" ~> Strings.cat2 (var "s") (var "suffix")) (var "idx" @@ var "i")) $
+    Maybes.map ("s" ~> Strings.cat2 (var "s") (var "suffix")) (var "idx" @@ var "i")) $
   cases _TermAccessor (var "accessor")
     Nothing [
     _TermAccessor_annotatedBody>>: constant nothing,
@@ -145,9 +145,9 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
           $ var "helper" @@ var "ids1" @@ var "mroot" @@ var "nextPath" @@ var "stateAfterBindings" @@
             pair Mantle.termAccessorLetEnvironment (var "env"),
         _Term_variable>>: lambda "name" $
-          Optionals.maybe (var "state")
+          Maybes.maybe (var "state")
             (lambda "root" $
-              Optionals.maybe (var "state")
+              Maybes.maybe (var "state")
                 (lambda "node" $ lets [
                   "edge">: Accessors.accessorEdge (var "root")
                     (Accessors.accessorPath $ Lists.reverse $ var "nextPath") (var "node"),

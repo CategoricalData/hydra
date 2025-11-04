@@ -9,7 +9,7 @@ import hydra.core
 import hydra.lib.equality
 import hydra.lib.lists
 import hydra.lib.maps
-import hydra.lib.optionals
+import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.rewriting
 
@@ -150,7 +150,7 @@ def wrapped_type(nt: hydra.core.WrappedType) -> hydra.core.Term:
 def tuple_projection(tp: hydra.core.TupleProjection) -> hydra.core.Term:
     def encode_types(types: frozenlist[hydra.core.Type]) -> hydra.core.Term:
         return cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(type, types)))
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TupleProjection"), (hydra.core.Field(hydra.core.Name("arity"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(tp.arity))))))), hydra.core.Field(hydra.core.Name("index"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(tp.index))))))), hydra.core.Field(hydra.core.Name("domain"), cast(hydra.core.Term, hydra.core.TermOptional(hydra.lib.optionals.map(encode_types, tp.domain))))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TupleProjection"), (hydra.core.Field(hydra.core.Name("arity"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(tp.arity))))))), hydra.core.Field(hydra.core.Name("index"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(tp.index))))))), hydra.core.Field(hydra.core.Name("domain"), cast(hydra.core.Term, hydra.core.TermOptional(hydra.lib.maybes.map(encode_types, tp.domain))))))))
 
 def type_scheme(ts: hydra.core.TypeScheme) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeScheme"), (hydra.core.Field(hydra.core.Name("variables"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(name, ts.variables)))), hydra.core.Field(hydra.core.Name("type"), type(ts.type))))))
@@ -219,10 +219,10 @@ def application(app: hydra.core.Application) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Application"), (hydra.core.Field(hydra.core.Name("function"), term(app.function)), hydra.core.Field(hydra.core.Name("argument"), term(app.argument))))))
 
 def binding(b: hydra.core.Binding) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Binding"), (hydra.core.Field(hydra.core.Name("name"), name(b.name)), hydra.core.Field(hydra.core.Name("term"), term(b.term)), hydra.core.Field(hydra.core.Name("type"), cast(hydra.core.Term, hydra.core.TermOptional(hydra.lib.optionals.map(type_scheme, b.type))))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Binding"), (hydra.core.Field(hydra.core.Name("name"), name(b.name)), hydra.core.Field(hydra.core.Name("term"), term(b.term)), hydra.core.Field(hydra.core.Name("type"), cast(hydra.core.Term, hydra.core.TermOptional(hydra.lib.maybes.map(type_scheme, b.type))))))))
 
 def case_statement(cs: hydra.core.CaseStatement) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.CaseStatement"), (hydra.core.Field(hydra.core.Name("typeName"), name(cs.type_name)), hydra.core.Field(hydra.core.Name("default"), cast(hydra.core.Term, hydra.core.TermOptional(hydra.lib.optionals.map(term, cs.default)))), hydra.core.Field(hydra.core.Name("cases"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(field, cs.cases))))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.CaseStatement"), (hydra.core.Field(hydra.core.Name("typeName"), name(cs.type_name)), hydra.core.Field(hydra.core.Name("default"), cast(hydra.core.Term, hydra.core.TermOptional(hydra.lib.maybes.map(term, cs.default)))), hydra.core.Field(hydra.core.Name("cases"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(field, cs.cases))))))))
 
 def elimination(v1: hydra.core.Elimination) -> hydra.core.Term:
     match v1:
@@ -256,7 +256,7 @@ def injection(i: hydra.core.Injection) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Injection"), (hydra.core.Field(hydra.core.Name("typeName"), name(i.type_name)), hydra.core.Field(hydra.core.Name("field"), field(i.field))))))
 
 def lambda_(l: hydra.core.Lambda) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Lambda"), (hydra.core.Field(hydra.core.Name("parameter"), name(l.parameter)), hydra.core.Field(hydra.core.Name("domain"), cast(hydra.core.Term, hydra.core.TermOptional(hydra.lib.optionals.map(type, l.domain)))), hydra.core.Field(hydra.core.Name("body"), term(l.body))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Lambda"), (hydra.core.Field(hydra.core.Name("parameter"), name(l.parameter)), hydra.core.Field(hydra.core.Name("domain"), cast(hydra.core.Term, hydra.core.TermOptional(hydra.lib.maybes.map(type, l.domain)))), hydra.core.Field(hydra.core.Name("body"), term(l.body))))))
 
 def let(l: hydra.core.Let) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Let"), (hydra.core.Field(hydra.core.Name("bindings"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(binding, l.bindings)))), hydra.core.Field(hydra.core.Name("body"), term(l.body))))))
@@ -291,7 +291,7 @@ def term(v1: hydra.core.Term) -> hydra.core.Term:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap(term, term, v7)))))))
         
         case hydra.core.TermOptional(value=v8):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("optional"), cast(hydra.core.Term, hydra.core.TermOptional(hydra.lib.optionals.map(term, v8)))))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("optional"), cast(hydra.core.Term, hydra.core.TermOptional(hydra.lib.maybes.map(term, v8)))))))
         
         case hydra.core.TermProduct(value=v9):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("product"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(term, v9)))))))

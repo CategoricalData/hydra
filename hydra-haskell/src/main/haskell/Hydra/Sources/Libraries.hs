@@ -17,7 +17,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Lib.Tuples as Tuples
@@ -43,7 +43,7 @@ standardLibraries = [
   hydraLibLogic,
   hydraLibMaps,
   hydraLibMathInt32,
-  hydraLibOptionals,
+  hydraLibMaybes,
   hydraLibSets,
   hydraLibStrings,
   hydraLibTuples]
@@ -457,51 +457,51 @@ hydraLibMathInt32 = standardLibrary _hydra_lib_math [
   prim2 _math_sub    Math.sub    [] int32 int32 int32,
   prim1 _math_succ   Math.succ   [] int32 int32]
 
--- * hydra.lib.optionals primitives
+-- * hydra.lib.maybes primitives
 
-_hydra_lib_optionals :: Namespace
-_hydra_lib_optionals = Namespace "hydra.lib.optionals"
+_hydra_lib_maybes :: Namespace
+_hydra_lib_maybes = Namespace "hydra.lib.maybes"
 
-_optionals_apply :: Name
-_optionals_apply     = qname _hydra_lib_optionals "apply" :: Name
-_optionals_bind      = qname _hydra_lib_optionals "bind" :: Name
-_optionals_cases     = qname _hydra_lib_optionals "cases" :: Name
-_optionals_cat       = qname _hydra_lib_optionals "cat" :: Name
-_optionals_compose   = qname _hydra_lib_optionals "compose" :: Name
-_optionals_fromJust  = qname _hydra_lib_optionals "fromJust" :: Name
-_optionals_fromMaybe = qname _hydra_lib_optionals "fromMaybe" :: Name
-_optionals_isJust    = qname _hydra_lib_optionals "isJust" :: Name
-_optionals_isNothing = qname _hydra_lib_optionals "isNothing" :: Name
-_optionals_map       = qname _hydra_lib_optionals "map" :: Name
-_optionals_mapMaybe  = qname _hydra_lib_optionals "mapMaybe" :: Name
-_optionals_maybe     = qname _hydra_lib_optionals "maybe" :: Name
-_optionals_pure      = qname _hydra_lib_optionals "pure" :: Name
+_maybes_apply :: Name
+_maybes_apply     = qname _hydra_lib_maybes "apply" :: Name
+_maybes_bind      = qname _hydra_lib_maybes "bind" :: Name
+_maybes_cases     = qname _hydra_lib_maybes "cases" :: Name
+_maybes_cat       = qname _hydra_lib_maybes "cat" :: Name
+_maybes_compose   = qname _hydra_lib_maybes "compose" :: Name
+_maybes_fromJust  = qname _hydra_lib_maybes "fromJust" :: Name
+_maybes_fromMaybe = qname _hydra_lib_maybes "fromMaybe" :: Name
+_maybes_isJust    = qname _hydra_lib_maybes "isJust" :: Name
+_maybes_isNothing = qname _hydra_lib_maybes "isNothing" :: Name
+_maybes_map       = qname _hydra_lib_maybes "map" :: Name
+_maybes_mapMaybe  = qname _hydra_lib_maybes "mapMaybe" :: Name
+_maybes_maybe     = qname _hydra_lib_maybes "maybe" :: Name
+_maybes_pure      = qname _hydra_lib_maybes "pure" :: Name
 
-hydraLibOptionals :: Library
-hydraLibOptionals = standardLibrary _hydra_lib_optionals [
-    prim2       _optionals_apply     Optionals.apply           ["x", "y"]      (optional $ function x y) (optional x) (optional y),
-    prim2       _optionals_bind      Optionals.bind            ["x", "y"]      (optional x) (function x (optional y)) (optional y),
-    prim3Interp _optionals_cases     (Just casesInterp)        ["x", "y"]      (optional x) y (function x y) y,
-    prim1       _optionals_cat       Optionals.cat             ["x"]           (list $ optional x) (list x),
-    prim2       _optionals_compose   Optionals.compose         ["x", "y", "z"] (function x $ optional y) (function y $ optional z) (function x $ optional z),
-    prim1       _optionals_fromJust  Optionals.fromJust        ["x"]           (optional x) x,
-    prim2       _optionals_fromMaybe Optionals.fromMaybe       ["x"]           x (optional x) x,
-    prim1       _optionals_isJust    Optionals.isJust          ["x"]           (optional x) boolean,
-    prim1       _optionals_isNothing Optionals.isNothing       ["x"]           (optional x) boolean,
-    prim2Interp _optionals_map       (Just optionalsMapInterp) ["x", "y"]      (function x y) (optional x) (optional y),
-    prim2Interp _optionals_mapMaybe  Nothing                   ["x", "y"]      (function x $ optional y) (list x) (list y),
-    prim3Interp _optionals_maybe     (Just maybeInterp)        ["y", "x"]      y (function x y) (optional x) y,
-    prim1       _optionals_pure      Optionals.pure            ["x"]           x (optional x)]
+hydraLibMaybes :: Library
+hydraLibMaybes = standardLibrary _hydra_lib_maybes [
+    prim2       _maybes_apply     Maybes.apply           ["x", "y"]      (optional $ function x y) (optional x) (optional y),
+    prim2       _maybes_bind      Maybes.bind            ["x", "y"]      (optional x) (function x (optional y)) (optional y),
+    prim3Interp _maybes_cases     (Just casesInterp)     ["x", "y"]      (optional x) y (function x y) y,
+    prim1       _maybes_cat       Maybes.cat             ["x"]           (list $ optional x) (list x),
+    prim2       _maybes_compose   Maybes.compose         ["x", "y", "z"] (function x $ optional y) (function y $ optional z) (function x $ optional z),
+    prim1       _maybes_fromJust  Maybes.fromJust        ["x"]           (optional x) x,
+    prim2       _maybes_fromMaybe Maybes.fromMaybe       ["x"]           x (optional x) x,
+    prim1       _maybes_isJust    Maybes.isJust          ["x"]           (optional x) boolean,
+    prim1       _maybes_isNothing Maybes.isNothing       ["x"]           (optional x) boolean,
+    prim2Interp _maybes_map       (Just maybesMapInterp) ["x", "y"]      (function x y) (optional x) (optional y),
+    prim2Interp _maybes_mapMaybe  Nothing                ["x", "y"]      (function x $ optional y) (list x) (list y),
+    prim3Interp _maybes_maybe     (Just maybeInterp)     ["y", "x"]      y (function x y) (optional x) y,
+    prim1       _maybes_pure      Maybes.pure            ["x"]           x (optional x)]
   where
     x = variable "x"
     y = variable "y"
     z = variable "z"
 
--- | Interpreted implementation of hydra.lib.optionals.cases
+-- | Interpreted implementation of hydra.lib.maybes.cases
 casesInterp :: Term -> Term -> Term -> Flow Graph Term
 casesInterp opt def fun = maybeInterp def fun opt
 
--- | Interpreted implementation of hydra.lib.optionals.maybe
+-- | Interpreted implementation of hydra.lib.maybes.maybe
 maybeInterp :: Term -> Term -> Term -> Flow Graph Term
 maybeInterp def fun opt = do
     mval <- ExtractCore.optional Prelude.pure opt
@@ -509,8 +509,8 @@ maybeInterp def fun opt = do
       Nothing -> def
       Just val -> Terms.apply fun val
 
-optionalsMapInterp :: Term -> Term -> Flow Graph Term
-optionalsMapInterp fun opt = do
+maybesMapInterp :: Term -> Term -> Flow Graph Term
+maybesMapInterp fun opt = do
     mval <- ExtractCore.optional Prelude.pure opt
     return $ case mval of
       Nothing -> Terms.nothing

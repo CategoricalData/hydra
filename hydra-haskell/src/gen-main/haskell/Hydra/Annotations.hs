@@ -17,7 +17,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Monads as Monads
@@ -31,7 +31,7 @@ import qualified Data.Set as S
 
 aggregateAnnotations :: (Ord t2) => ((t0 -> Maybe t1) -> (t1 -> t0) -> (t1 -> M.Map t2 t3) -> t0 -> M.Map t2 t3)
 aggregateAnnotations getValue getX getAnns t =  
-  let toPairs = (\rest -> \t -> Optionals.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t))
+  let toPairs = (\rest -> \t -> Maybes.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t))
   in (Maps.fromList (Lists.concat (toPairs [] t)))
 
 debugIf :: (t0 -> String -> Compute.Flow t1 ())
@@ -52,14 +52,14 @@ getAttr key = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
   Compute.flowStateTrace = t0}))
 
 getAttrWithDefault :: (Core.Name -> Core.Term -> Compute.Flow t0 Core.Term)
-getAttrWithDefault key def = (Flows.map (\mval -> Optionals.fromMaybe def mval) (getAttr key))
+getAttrWithDefault key def = (Flows.map (\mval -> Maybes.fromMaybe def mval) (getAttr key))
 
 getCount :: (Core.Name -> Compute.Flow t0 Int)
 getCount key = (Lexical.withEmptyGraph (Flows.bind (getAttrWithDefault key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))) Core___.int32))
 
 -- | Get description from annotations map
 getDescription :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe String))
-getDescription anns = (Optionals.maybe (Flows.pure Nothing) (\term -> Flows.map Optionals.pure (Core___.string term)) (Maps.lookup (Core.Name "description") anns))
+getDescription anns = (Maybes.maybe (Flows.pure Nothing) (\term -> Flows.map Maybes.pure (Core___.string term)) (Maps.lookup (Core.Name "description") anns))
 
 -- | Get a term annotation
 getTermAnnotation :: (Core.Name -> Core.Term -> Maybe Core.Term)
@@ -71,7 +71,7 @@ getTermDescription term = (getDescription (termAnnotationInternal term))
 
 -- | Get type from annotations
 getType :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe Core.Type))
-getType anns = (Optionals.maybe (Flows.pure Nothing) (\dat -> Flows.map Optionals.pure (Core_.type_ dat)) (Maps.lookup Constants.key_type anns))
+getType anns = (Maybes.maybe (Flows.pure Nothing) (\dat -> Flows.map Maybes.pure (Core_.type_ dat)) (Maps.lookup Constants.key_type anns))
 
 -- | Get a type annotation
 getTypeAnnotation :: (Core.Name -> Core.Type -> Maybe Core.Term)
@@ -84,8 +84,8 @@ getTypeClasses term =
           let byName = (Maps.fromList [
                   (Core.Name "equality", Mantle.TypeClassEquality),
                   (Core.Name "ordering", Mantle.TypeClassOrdering)])
-          in (Flows.bind (Core___.unitVariant (Core.Name "hydra.mantle.TypeClass") term) (\fn -> Optionals.maybe (Monads.unexpected "type class" (Core____.term term)) Flows.pure (Maps.lookup fn byName))))
-  in (Optionals.maybe (Flows.pure Maps.empty) (\term -> Core___.map Core_.name (Core___.setOf decodeClass) term) (getTermAnnotation Constants.key_classes term))
+          in (Flows.bind (Core___.unitVariant (Core.Name "hydra.mantle.TypeClass") term) (\fn -> Maybes.maybe (Monads.unexpected "type class" (Core____.term term)) Flows.pure (Maps.lookup fn byName))))
+  in (Maybes.maybe (Flows.pure Maps.empty) (\term -> Core___.map Core_.name (Core___.setOf decodeClass) term) (getTermAnnotation Constants.key_classes term))
 
 -- | Get type description
 getTypeDescription :: (Core.Type -> Compute.Flow Graph.Graph (Maybe String))
@@ -94,13 +94,13 @@ getTypeDescription typ = (getDescription (typeAnnotationInternal typ))
 -- | For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression.
 isNativeType :: (Core.Binding -> Bool)
 isNativeType el =  
-  let isFlaggedAsFirstClassType = (Optionals.fromMaybe False (Optionals.bind (getTermAnnotation Constants.key_firstClassType (Core.bindingTerm el)) Decoding.boolean))
-  in (Optionals.maybe False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
+  let isFlaggedAsFirstClassType = (Maybes.fromMaybe False (Maybes.bind (getTermAnnotation Constants.key_firstClassType (Core.bindingTerm el)) Decoding.boolean))
+  in (Maybes.maybe False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
     Core.typeSchemeVariables = [],
     Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type"))})) (Logic.not isFlaggedAsFirstClassType)) (Core.bindingType el))
 
 hasDescription :: (M.Map Core.Name t0 -> Bool)
-hasDescription anns = (Optionals.isJust (Maps.lookup Constants.key_description anns))
+hasDescription anns = (Maybes.isJust (Maps.lookup Constants.key_description anns))
 
 hasFlag :: (Core.Name -> Compute.Flow t0 Bool)
 hasFlag flag = (Lexical.withEmptyGraph (Flows.bind (getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False))) (\term -> Core___.boolean term)))
@@ -152,7 +152,7 @@ setAnnotation key val m = (Maps.alter (\_ -> val) key m)
 
 -- | Set description in annotations
 setDescription :: (Maybe String -> M.Map Core.Name Core.Term -> M.Map Core.Name Core.Term)
-setDescription d = (setAnnotation Constants.key_description (Optionals.map (\arg_ -> (\x -> Core.TermLiteral x) ((\x -> Core.LiteralString x) arg_)) d))
+setDescription d = (setAnnotation Constants.key_description (Maybes.map (\arg_ -> (\x -> Core.TermLiteral x) ((\x -> Core.LiteralString x) arg_)) d))
 
 -- | Set term annotation
 setTermAnnotation :: (Core.Name -> Maybe Core.Term -> Core.Term -> Core.Term)
@@ -166,11 +166,11 @@ setTermAnnotation key val term =
 
 -- | Set term description
 setTermDescription :: (Maybe String -> Core.Term -> Core.Term)
-setTermDescription d = (setTermAnnotation Constants.key_description (Optionals.map (\s -> Core.TermLiteral (Core.LiteralString s)) d))
+setTermDescription d = (setTermAnnotation Constants.key_description (Maybes.map (\s -> Core.TermLiteral (Core.LiteralString s)) d))
 
 -- | Set type in annotations
 setType :: (Maybe Core.Type -> M.Map Core.Name Core.Term -> M.Map Core.Name Core.Term)
-setType mt = (setAnnotation Constants.key_type (Optionals.map Core__.type_ mt))
+setType mt = (setAnnotation Constants.key_type (Maybes.map Core__.type_ mt))
 
 -- | Set type annotation
 setTypeAnnotation :: (Core.Name -> Maybe Core.Term -> Core.Type -> Core.Type)
@@ -208,7 +208,7 @@ setTypeClasses m term =
 
 -- | Set type description
 setTypeDescription :: (Maybe String -> Core.Type -> Core.Type)
-setTypeDescription d = (setTypeAnnotation Constants.key_description (Optionals.map (\arg_ -> (\x -> Core.TermLiteral x) ((\x -> Core.LiteralString x) arg_)) d))
+setTypeDescription d = (setTypeAnnotation Constants.key_description (Maybes.map (\arg_ -> (\x -> Core.TermLiteral x) ((\x -> Core.LiteralString x) arg_)) d))
 
 -- | Get internal term annotations
 termAnnotationInternal :: (Core.Term -> M.Map Core.Name Core.Term)

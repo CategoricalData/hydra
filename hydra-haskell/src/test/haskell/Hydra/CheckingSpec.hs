@@ -969,8 +969,8 @@ checkTypeOfPrimitives = H.describe "Primitives" $ do
       (tylam "t0" $ tyapp (primitive _lists_filter) (Types.var "t0"))
       (Types.forAll "t0" $ Types.function (Types.function (Types.var "t0") Types.boolean) (Types.function (Types.list $ Types.var "t0") (Types.list $ Types.var "t0")))
     expectTermWithType "optionals maybe"
-      (primitive _optionals_maybe)
-      (tylams ["t0", "t1"] $ tyapps (primitive _optionals_maybe) [Types.var "t0", Types.var "t1"])
+      (primitive _maybes_maybe)
+      (tylams ["t0", "t1"] $ tyapps (primitive _maybes_maybe) [Types.var "t0", Types.var "t1"])
       (Types.forAlls ["t0", "t1"] $
         Types.function (Types.var "t0") (Types.function (Types.function (Types.var "t1") (Types.var "t0")) (Types.function (Types.optional $ Types.var "t1") (Types.var "t0"))))
 
@@ -1577,12 +1577,12 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
       Types.int32
     expectTermWithType "nested projection from recursive record"
       (lambda "intList" $
-       primitive _optionals_maybe @@
+       primitive _maybes_maybe @@
        int32 0 @@
        (project testTypeIntListName (Name "head")) @@
        (project testTypeIntListName (Name "tail") @@ var "intList"))
       (lambdaTyped "intList" (Types.var "IntList") $
-       tyapps (primitive _optionals_maybe) [Types.int32, Types.var "IntList"] @@
+       tyapps (primitive _maybes_maybe) [Types.int32, Types.var "IntList"] @@
        int32 0 @@
        (project testTypeIntListName (Name "head")) @@
        (project testTypeIntListName (Name "tail") @@ var "intList"))
@@ -1601,19 +1601,19 @@ checkTypeOfRecordEliminations = H.describe "Record eliminations" $ do
         (Types.optional (Types.apply (Types.var "BuddyListA") (Types.var "t0"))))
     expectTermWithType "chained projections across mutual recursion"
         (lambda "listA" $
-          primitive _optionals_maybe
+          primitive _maybes_maybe
             @@ nothing
             @@ (lambda "listB" $
-              primitive _optionals_maybe
+              primitive _maybes_maybe
                 @@ nothing
                 @@ (project testTypeBuddyListAName (Name "tail"))
                 @@ (project testTypeBuddyListBName (Name "tail") @@ var "listB"))
             @@ (project testTypeBuddyListAName (Name "tail") @@ var "listA"))
         (tylam "t0" $ lambdaTyped "listA" (Types.apply (Types.var "BuddyListA") (Types.var "t0")) $
-          tyapps (primitive _optionals_maybe) [Types.optional (Types.apply (Types.var "BuddyListB") (Types.var "t0")), Types.apply (Types.var "BuddyListB") (Types.var "t0")] @@
+          tyapps (primitive _maybes_maybe) [Types.optional (Types.apply (Types.var "BuddyListB") (Types.var "t0")), Types.apply (Types.var "BuddyListB") (Types.var "t0")] @@
             tyapp nothing (Types.apply (Types.var "BuddyListB") (Types.var "t0")) @@
             (lambdaTyped "listB" (Types.apply (Types.var "BuddyListB") (Types.var "t0")) $
-              tyapps (primitive _optionals_maybe) [Types.optional (Types.apply (Types.var "BuddyListB") (Types.var "t0")), Types.apply (Types.var "BuddyListA") (Types.var "t0")] @@
+              tyapps (primitive _maybes_maybe) [Types.optional (Types.apply (Types.var "BuddyListB") (Types.var "t0")), Types.apply (Types.var "BuddyListA") (Types.var "t0")] @@
                 tyapp nothing (Types.apply (Types.var "BuddyListB") (Types.var "t0")) @@
                 (tyapp (project testTypeBuddyListAName (Name "tail")) (Types.var "t0")) @@
                 (tyapp (project testTypeBuddyListBName (Name "tail")) (Types.var "t0") @@ var "listB")) @@
@@ -2689,14 +2689,14 @@ checkTypeOfWrapEliminations = H.describe "Wrap eliminations" $ do
             (Types.set $ Types.var "t1"))
     expectTermWithType "unwrap with maybe to handle optional symmetric triple"
         (lambda "mst" $
-          primitive _optionals_maybe @@
+          primitive _maybes_maybe @@
           nothing @@
           (lambda "st" $
             just $ project testTypeTripleName (Name "second") @@ (unwrap testTypeSymmetricTripleName @@ var "st")) @@
           var "mst")
         (tylams ["t0", "t1"] $
           lambdaTyped "mst" (Types.optional $ Types.applys (Types.var "SymmetricTriple") [Types.var "t0", Types.var "t1"]) $
-          tyapps (primitive _optionals_maybe)
+          tyapps (primitive _maybes_maybe)
             [Types.optional (Types.var "t1"),
              Types.applys (Types.var "SymmetricTriple") [Types.var "t0", Types.var "t1"]] @@
           tyapp nothing (Types.var "t1") @@

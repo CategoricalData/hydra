@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -92,9 +92,9 @@ adjacencyListsToGraphDef = define "adjacencyListsToGraph" $
       "v" <~ first (var "vkNeighbors") $
       "kNeighbors" <~ second (var "vkNeighbors") $
       "neighbors" <~ second (var "kNeighbors") $
-      pair (var "v") (Optionals.mapMaybe ("k" ~> Maps.lookup (var "k") (var "keyToVertex")) (var "neighbors")))
+      pair (var "v") (Maybes.mapMaybe ("k" ~> Maps.lookup (var "k") (var "keyToVertex")) (var "neighbors")))
     (var "indexedEdges")) $
-  "vertexToKey" <~ ("v" ~> Optionals.fromJust (Maps.lookup (var "v") (var "vertexMap"))) $
+  "vertexToKey" <~ ("v" ~> Maybes.fromJust (Maps.lookup (var "v") (var "vertexMap"))) $
   pair (var "graph") (var "vertexToKey")
 
 initialStateDef :: TBinding Topo.TarjanState

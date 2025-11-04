@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -84,7 +84,7 @@ findNamesDef = define "findNames" $
     "names" <~ first (var "acc") $
     "nameMap" <~ second (var "acc") $
     "rn" <~ ref rawNameDef @@ var "pat" $
-    "nameAndIndex" <~ Optionals.maybe
+    "nameAndIndex" <~ Maybes.maybe
       (pair (var "rn") (int32 1))
       ("i" ~> pair (Strings.cat2 (var "rn") (Literals.showInt32 (Math.add (var "i") (int32 1)))) (Math.add (var "i") (int32 1)))
       (Maps.lookup (var "rn") (var "nameMap")) $

@@ -7,7 +7,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -27,7 +27,7 @@ binding el =
   in  
     let t = (Core.bindingTerm el)
     in  
-      let typeStr = (Optionals.maybe "" (\ts -> Strings.cat [
+      let typeStr = (Maybes.maybe "" (\ts -> Strings.cat [
               ":(",
               typeScheme ts,
               ")"]) (Core.bindingType el))
@@ -67,7 +67,7 @@ elimination elm = ((\x -> case x of
       in  
         let cases = (Core.caseStatementCases v1)
         in  
-          let defaultField = (Optionals.maybe [] (\d -> [
+          let defaultField = (Maybes.maybe [] (\d -> [
                   Core.Field {
                     Core.fieldName = (Core.Name "[default]"),
                     Core.fieldTerm = d}]) mdef)
@@ -193,7 +193,7 @@ lambda l =
     in  
       let body = (Core.lambdaBody l)
       in  
-        let typeStr = (Optionals.maybe "" (\t -> Strings.cat2 ":" (type_ t)) mt)
+        let typeStr = (Maybes.maybe "" (\t -> Strings.cat2 ":" (type_ t)) mt)
         in (Strings.cat [
           "\955",
           v,
@@ -275,7 +275,7 @@ term t =
         "{",
         Strings.intercalate ", " (Lists.map entry (Maps.toList v1)),
         "}"])
-    Core.TermOptional v1 -> (Optionals.maybe "nothing" (\t -> Strings.cat [
+    Core.TermOptional v1 -> (Maybes.maybe "nothing" (\t -> Strings.cat [
       "just(",
       term t,
       ")"]) v1)

@@ -17,7 +17,7 @@ import hydra.lib.literals
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.math
-import hydra.lib.optionals
+import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.module
 import hydra.names
@@ -71,7 +71,7 @@ def find_names(pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[str]:
         names = acc[0]
         name_map = acc[1]
         rn = raw_name(pat)
-        name_and_index = hydra.lib.optionals.maybe((rn, 1), (lambda i: (hydra.lib.strings.cat2(rn, hydra.lib.literals.show_int32(hydra.lib.math.add(i, 1))), hydra.lib.math.add(i, 1))), hydra.lib.maps.lookup(rn, name_map))
+        name_and_index = hydra.lib.maybes.maybe((rn, 1), (lambda i: (hydra.lib.strings.cat2(rn, hydra.lib.literals.show_int32(hydra.lib.math.add(i, 1))), hydra.lib.math.add(i, 1))), hydra.lib.maps.lookup(rn, name_map))
         nn = name_and_index[0]
         ni = name_and_index[1]
         return (hydra.lib.lists.cons(nn, names), hydra.lib.maps.insert(rn, ni, name_map))

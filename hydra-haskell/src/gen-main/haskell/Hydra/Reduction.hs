@@ -16,7 +16,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
@@ -166,10 +166,10 @@ etaExpansionArity graph term = ((\x -> case x of
   Core.TermFunction v1 -> ((\x -> case x of
     Core.FunctionElimination _ -> 1
     Core.FunctionLambda _ -> 0
-    Core.FunctionPrimitive v2 -> (Arity.primitiveArity (Optionals.fromJust (Lexical.lookupPrimitive graph v2)))) v1)
+    Core.FunctionPrimitive v2 -> (Arity.primitiveArity (Maybes.fromJust (Lexical.lookupPrimitive graph v2)))) v1)
   Core.TermTypeLambda v1 -> (etaExpansionArity graph (Core.typeLambdaBody v1))
   Core.TermTypeApplication v1 -> (etaExpansionArity graph (Core.typeApplicationTermBody v1))
-  Core.TermVariable v1 -> (Optionals.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Optionals.bind (Lexical.lookupElement graph v1) (\b -> Core.bindingType b)))
+  Core.TermVariable v1 -> (Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Maybes.bind (Lexical.lookupElement graph v1) (\b -> Core.bindingType b)))
   _ -> 0) term)
 
 etaExpandTypedTerm :: (Typing.TypeContext -> Core.Term -> Compute.Flow t0 Core.Term)
@@ -316,7 +316,7 @@ reduceTerm eager term =
                       " record"])) (Flows.pure (Core.fieldTerm (Lists.head matchingFields))))))
                   Core.EliminationUnion v1 -> (Flows.bind (Core_.injection (Core.caseStatementTypeName v1) reducedArg) (\field ->  
                     let matchingFields = (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases v1))
-                    in (Logic.ifElse (Lists.null matchingFields) (Optionals.maybe (Flows.fail (Strings.cat [
+                    in (Logic.ifElse (Lists.null matchingFields) (Maybes.maybe (Flows.fail (Strings.cat [
                       "no such field ",
                       Core.unName (Core.fieldName field),
                       " in ",
@@ -380,7 +380,7 @@ termIsValue g term =
                 Core.FunctionElimination v1 -> ((\x -> case x of
                   Core.EliminationWrap _ -> True
                   Core.EliminationRecord _ -> True
-                  Core.EliminationUnion v2 -> (Logic.and (checkFields (Core.caseStatementCases v2)) (Optionals.maybe True (termIsValue g) (Core.caseStatementDefault v2)))) v1)
+                  Core.EliminationUnion v2 -> (Logic.and (checkFields (Core.caseStatementCases v2)) (Maybes.maybe True (termIsValue g) (Core.caseStatementDefault v2)))) v1)
                 Core.FunctionLambda v1 -> (termIsValue g (Core.lambdaBody v1))
                 Core.FunctionPrimitive _ -> True) f)
         in ((\x -> case x of
@@ -389,7 +389,7 @@ termIsValue g term =
           Core.TermFunction v1 -> (functionIsValue v1)
           Core.TermList v1 -> (forList v1)
           Core.TermMap v1 -> (Lists.foldl (\b -> \kv -> Logic.and b (Logic.and (termIsValue g (fst kv)) (termIsValue g (snd kv)))) True (Maps.toList v1))
-          Core.TermOptional v1 -> (Optionals.maybe True (termIsValue g) v1)
+          Core.TermOptional v1 -> (Maybes.maybe True (termIsValue g) v1)
           Core.TermRecord v1 -> (checkFields (Core.recordFields v1))
           Core.TermSet v1 -> (forList (Sets.toList v1))
           Core.TermUnion v1 -> (checkField (Core.injectionField v1))

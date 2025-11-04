@@ -10,7 +10,7 @@ import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
@@ -99,7 +99,7 @@ nameToFilePath nsConv localConv ext name =
       in  
         let nsToFilePath = (\ns -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Mantle.CaseConventionCamel nsConv part) (Strings.splitOn "." (Module.unNamespace ns))))
         in  
-          let prefix = (Optionals.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns)
+          let prefix = (Maybes.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns)
           in  
             let suffix = (Formatting.convertCase Mantle.CaseConventionPascal localConv local)
             in (Strings.cat [

@@ -381,7 +381,7 @@ primitiveTypeErrorTests = supergroup "Primitive function type errors" [
     expectFailure 3 []
       (primitive _lists_head @@ string "not a list"),
     expectFailure 4 []
-      (primitive _optionals_fromMaybe @@ int32 42 @@ string "not optional")],
+      (primitive _maybes_fromMaybe @@ int32 42 @@ string "not optional")],
 
   subgroup "Math primitive errors" [
     expectFailure 1 []

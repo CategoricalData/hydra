@@ -1,4 +1,4 @@
-"""Python implementations of hydra.lib.optionals primitives."""
+"""Python implementations of hydra.lib.maybes primitives."""
 
 from collections.abc import Callable, Sequence
 from typing import Any

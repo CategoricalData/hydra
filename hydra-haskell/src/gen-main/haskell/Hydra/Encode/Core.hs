@@ -6,7 +6,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -56,7 +56,7 @@ caseStatement cs = (Core.TermRecord (Core.Record {
       Core.fieldTerm = (name (Core.caseStatementTypeName cs))},
     Core.Field {
       Core.fieldName = (Core.Name "default"),
-      Core.fieldTerm = (Core.TermOptional (Optionals.map term (Core.caseStatementDefault cs)))},
+      Core.fieldTerm = (Core.TermOptional (Maybes.map term (Core.caseStatementDefault cs)))},
     Core.Field {
       Core.fieldName = (Core.Name "cases"),
       Core.fieldTerm = (Core.TermList (Lists.map field (Core.caseStatementCases cs)))}]}))
@@ -289,7 +289,7 @@ lambda l = (Core.TermRecord (Core.Record {
       Core.fieldTerm = (name (Core.lambdaParameter l))},
     Core.Field {
       Core.fieldName = (Core.Name "domain"),
-      Core.fieldTerm = (Core.TermOptional (Optionals.map type_ (Core.lambdaDomain l)))},
+      Core.fieldTerm = (Core.TermOptional (Maybes.map type_ (Core.lambdaDomain l)))},
     Core.Field {
       Core.fieldName = (Core.Name "body"),
       Core.fieldTerm = (term (Core.lambdaBody l))}]}))
@@ -328,7 +328,7 @@ binding b = (Core.TermRecord (Core.Record {
       Core.fieldTerm = (term (Core.bindingTerm b))},
     Core.Field {
       Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (Core.TermOptional (Optionals.map typeScheme (Core.bindingType b)))}]}))
+      Core.fieldTerm = (Core.TermOptional (Maybes.map typeScheme (Core.bindingType b)))}]}))
 
 literal :: (Core.Literal -> Core.Term)
 literal x = case x of
@@ -490,7 +490,7 @@ term x = case x of
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "optional"),
-      Core.fieldTerm = (Core.TermOptional (Optionals.map term v1))}}))
+      Core.fieldTerm = (Core.TermOptional (Maybes.map term v1))}}))
   Core.TermProduct v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
@@ -554,7 +554,7 @@ tupleProjection tp = (Core.TermRecord (Core.Record {
       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.tupleProjectionIndex tp))))},
     Core.Field {
       Core.fieldName = (Core.Name "domain"),
-      Core.fieldTerm = (Core.TermOptional (Optionals.map encodeTypes (Core.tupleProjectionDomain tp)))}]})) 
+      Core.fieldTerm = (Core.TermOptional (Maybes.map encodeTypes (Core.tupleProjectionDomain tp)))}]})) 
   where 
     encodeTypes = (\types -> Core.TermList (Lists.map type_ types))
 

@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -164,8 +164,8 @@ unifyTypeConstraintsDef = define "unifyTypeConstraints" $
         (Just (var "tryBinding" @@ var "name" @@ var "sright")) [
         _Type_variable>>: "name2" ~> Logic.ifElse (Core.equalName_ (var "name") (var "name2"))
           (ref unifyTypeConstraintsDef @@ var "schemaTypes" @@ var "rest")
-          (Logic.ifElse (Optionals.isJust (Maps.lookup (var "name") (var "schemaTypes")))
-            (Logic.ifElse (Optionals.isJust (Maps.lookup (var "name2") (var "schemaTypes")))
+          (Logic.ifElse (Maybes.isJust (Maps.lookup (var "name") (var "schemaTypes")))
+            (Logic.ifElse (Maybes.isJust (Maps.lookup (var "name2") (var "schemaTypes")))
               (Flows.fail ("Attempted to unify schema names " ++ (Core.unName (var "name")) ++ " and " ++ (Core.unName (var "name2"))
                 ++ " (" ++ var "comment" ++ ")"))
               (var "bind" @@ var "name2" @@ var "sleft"))

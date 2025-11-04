@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -105,7 +105,7 @@ aggregateAnnotationsDef :: TBinding ((x -> Maybe y) -> (y -> x) -> (y -> M.Map N
 aggregateAnnotationsDef = define "aggregateAnnotations" $
   doc "Aggregate annotations from nested structures" $
   "getValue" ~> "getX" ~> "getAnns" ~> "t" ~>
-  "toPairs" <~ ("rest" ~> "t" ~> Optionals.maybe (var "rest")
+  "toPairs" <~ ("rest" ~> "t" ~> Maybes.maybe (var "rest")
     (lambda "yy" (var "toPairs"
       @@ Lists.cons (Maps.toList (var "getAnns" @@ var "yy")) (var "rest")
       @@ (var "getX" @@ var "yy")))
@@ -144,7 +144,7 @@ getAttrWithDefaultDef :: TBinding (Name -> Term -> Flow s Term)
 getAttrWithDefaultDef = define "getAttrWithDefault" $
   doc "Get an attribute with a default value" $
   "key" ~> "def" ~> Flows.map
-    ("mval" ~> Optionals.fromMaybe (var "def") (var "mval"))
+    ("mval" ~> Maybes.fromMaybe (var "def") (var "mval"))
     (ref getAttrDef @@ var "key")
 
 getCountDef :: TBinding (Name -> Flow s Int)
@@ -164,7 +164,7 @@ getDebugIdDef = define "getDebugId" $
 getDescriptionDef :: TBinding (M.Map Name Term -> Flow Graph (Maybe String))
 getDescriptionDef = define "getDescription" $
   doc "Get description from annotations map" $
-  "anns" ~> Optionals.maybe
+  "anns" ~> Maybes.maybe
     (produce nothing)
     ("term" ~> Flows.map (unaryFunction just) (ref ExtractCore.stringDef @@ var "term"))
     (Maps.lookup (Core.nameLift key_description) (var "anns"))
@@ -182,7 +182,7 @@ getTermDescriptionDef = define "getTermDescription" $
 getTypeDef :: TBinding (M.Map Name Term -> Flow Graph (Maybe Type))
 getTypeDef = define "getType" $
   doc "Get type from annotations" $
-  "anns" ~> Optionals.maybe
+  "anns" ~> Maybes.maybe
     (produce nothing)
     ("dat" ~> Flows.map (unaryFunction just) (ref DecodeCore.typeDef @@ var "dat"))
     (Maps.lookup (ref Constants.key_typeDef) (var "anns"))
@@ -201,11 +201,11 @@ getTypeClassesDef = define "getTypeClasses" $
       pair (Core.nameLift _TypeClass_equality) Graph.typeClassEquality,
       pair (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]) $
     "fn" <<~ ref ExtractCore.unitVariantDef @@ Core.nameLift _TypeClass @@ var "term" $
-    Optionals.maybe
+    Maybes.maybe
       (ref Monads.unexpectedDef @@ string "type class" @@ (ref ShowCore.termDef @@ var "term"))
       (unaryFunction produce)
       (Maps.lookup (var "fn") (var "byName"))) $
-  Optionals.maybe
+  Maybes.maybe
     (produce Maps.empty)
     ("term" ~> ref ExtractCore.mapDef
       @@ (ref DecodeCore.nameDef)
@@ -223,11 +223,11 @@ isNativeTypeDef = define "isNativeType" $
   doc ("For a typed term, decide whether a coder should encode it as a native type expression,"
     <> " or as a Hydra type expression.") $
   "el" ~>
-  "isFlaggedAsFirstClassType" <~ Optionals.fromMaybe false (
-    Optionals.map
+  "isFlaggedAsFirstClassType" <~ Maybes.fromMaybe false (
+    Maybes.map
       (constant true)
       (ref getTermAnnotationDef @@ ref Constants.key_firstClassTypeDef @@ (Core.bindingTerm (var "el")))) $
-  Optionals.maybe false
+  Maybes.maybe false
     ("ts" ~> Logic.and
       (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable (Core.nameLift _Type))))
       (Logic.not (var "isFlaggedAsFirstClassType")))
@@ -236,7 +236,7 @@ isNativeTypeDef = define "isNativeType" $
 hasDescriptionDef :: TBinding (M.Map Name Term -> Bool)
 hasDescriptionDef = define "hasDescription" $
   doc "Check if annotations contain description" $
-  "anns" ~> Optionals.isJust (Maps.lookup (ref Constants.key_descriptionDef) (var "anns"))
+  "anns" ~> Maybes.isJust (Maps.lookup (ref Constants.key_descriptionDef) (var "anns"))
 
 hasFlagDef :: TBinding (Name -> Flow s Bool)
 hasFlagDef = define "hasFlag" $
@@ -310,7 +310,7 @@ setDescriptionDef = define "setDescription" $
   doc "Set description in annotations" $
   "d" ~> ref setAnnotationDef
     @@ ref Constants.key_descriptionDef
-    @@ Optionals.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
+    @@ Maybes.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
 
 setTermAnnotationDef :: TBinding (Name -> Maybe Term -> Term -> Term)
 setTermAnnotationDef = define "setTermAnnotation" $
@@ -327,12 +327,12 @@ setTermDescriptionDef = define "setTermDescription" $
   doc "Set term description" $
   "d" ~> ref setTermAnnotationDef
     @@ ref Constants.key_descriptionDef
-    @@ Optionals.map ("s" ~> Core.termLiteral (Core.literalString (var "s"))) (var "d")
+    @@ Maybes.map ("s" ~> Core.termLiteral (Core.literalString (var "s"))) (var "d")
 
 setTypeDef :: TBinding (Maybe Type -> M.Map Name Term -> M.Map Name Term)
 setTypeDef = define "setType" $
   doc "Set type in annotations" $
-  "mt" ~> ref setAnnotationDef @@ ref Constants.key_typeDef @@ Optionals.map (ref EncodeCore.typeDef) (var "mt")
+  "mt" ~> ref setAnnotationDef @@ ref Constants.key_typeDef @@ Maybes.map (ref EncodeCore.typeDef) (var "mt")
 
 setTypeAnnotationDef :: TBinding (Name -> Maybe Term -> Type -> Type)
 setTypeAnnotationDef = define "setTypeAnnotation" $
@@ -368,7 +368,7 @@ setTypeDescriptionDef = define "setTypeDescription" $
   doc "Set type description" $
   "d" ~> ref setTypeAnnotationDef
     @@ ref Constants.key_descriptionDef
-    @@ Optionals.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
+    @@ Maybes.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
 
 termAnnotationInternalDef :: TBinding (Term -> M.Map Name Term)
 termAnnotationInternalDef = define "termAnnotationInternal" $

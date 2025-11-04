@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Maybes as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -389,7 +389,7 @@ inlineTypeDef = define "inlineType" $
     "afterRecurse" <~ ("tr" ~> cases _Type (var "tr")
       (Just $ produce $ var "tr") [
       _Type_variable>>: "v" ~>
-        Optionals.maybe
+        Maybes.maybe
           (Flows.fail $ Strings.cat2 (string "No such type in schema: ") (unwrap _Name @@ var "v"))
           (ref inlineTypeDef @@ var "schema")
           (Maps.lookup (var "v") (var "schema"))]) $
@@ -461,7 +461,7 @@ normalizeTypeVariablesInTermDef :: TBinding (Term -> Term)
 normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
   doc "Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ..." $
   "term" ~>
-  "replaceName" <~ ("subst" ~> "v" ~> Optionals.fromMaybe (var "v") $ Maps.lookup (var "v") (var "subst")) $
+  "replaceName" <~ ("subst" ~> "v" ~> Maybes.fromMaybe (var "v") $ Maps.lookup (var "v") (var "subst")) $
   "substType" <~ ("subst" ~> "typ" ~>
     "rewrite" <~ ("recurse" ~> "typ" ~> cases _Type (var "typ")
       (Just $ var "recurse" @@ var "typ") [
@@ -485,14 +485,14 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
             Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $ Core.tupleProjection
               (Core.tupleProjectionArity $ var "tproj")
               (Core.tupleProjectionIndex $ var "tproj")
-              (Optionals.map
+              (Maybes.map
                 ("types" ~> Lists.map (var "substType" @@ var "subst") (var "types"))
                 (var "domain"))],
         _Function_lambda>>: "l" ~>
           "domain" <~ Core.lambdaDomain (var "l") $
           Core.termFunction $ Core.functionLambda $ Core.lambda
             (Core.lambdaParameter $ var "l")
-            (Optionals.map (var "substType" @@ var "subst") (var "domain"))
+            (Maybes.map (var "substType" @@ var "subst") (var "domain"))
             (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.lambdaBody $ var "l"))],
       -- Let bindings each have a type which needs to be rewritten
       _Term_let>>: "lt" ~>
@@ -722,7 +722,7 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
       "r" <~ cases _Elimination (var "elm")
         (Just $ pair (var "val") (var "elm")) [
         _Elimination_union>>: "cs" ~>
-          "rmd" <~ Optionals.map (var "recurse" @@ var "val") (Core.caseStatementDefault $ var "cs") $
+          "rmd" <~ Maybes.map (var "recurse" @@ var "val") (Core.caseStatementDefault $ var "cs") $
           "val1" <~ optCases (var "rmd")
             (var "val")
             (unaryFunction first) $
@@ -731,7 +731,7 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
             (first $ var "rcases")
             (Core.eliminationUnion $ Core.caseStatement
               (Core.caseStatementTypeName $ var "cs")
-              (Optionals.map (unaryFunction second) (var "rmd"))
+              (Maybes.map (unaryFunction second) (var "rmd"))
               (second $ var "rcases"))] $
       pair (first $ var "r") (second $ var "r")) $
     "forFunction" <~ ("val" ~> "fun" ~> cases _Function (var "fun")
@@ -864,16 +864,16 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
       "rw" <~ ("elm" ~> cases _Elimination (var "elm")
         (Just $ produce $ pair (var "val") (var "elm")) [
         _Elimination_union>>: "cs" ~>
-          "rmd" <<~ Optionals.maybe (produce nothing)
+          "rmd" <<~ Maybes.maybe (produce nothing)
             ("def" ~> Flows.map (unaryFunction just) (var "recurse" @@ var "val" @@ var "def"))
             (Core.caseStatementDefault $ var "cs") $
-          "val1" <~ Optionals.maybe (var "val") (unaryFunction first) (var "rmd") $
+          "val1" <~ Maybes.maybe (var "val") (unaryFunction first) (var "rmd") $
           "rcases" <<~ var "forFields" @@ var "val1" @@ (Core.caseStatementCases $ var "cs") $
           produce $ pair
             (first $ var "rcases")
             (Core.eliminationUnion $ Core.caseStatement
               (Core.caseStatementTypeName $ var "cs")
-              (Optionals.map (unaryFunction second) (var "rmd"))
+              (Maybes.map (unaryFunction second) (var "rmd"))
               (second $ var "rcases"))]) $
       "r" <<~ var "rw" @@ var "elm" $
       produce $ pair (first $ var "r") (second $ var "r")) $
@@ -919,7 +919,7 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
       _Term_list>>: "els" ~> var "forMany" @@ var "recurse" @@ (unaryFunction Core.termList) @@ var "val0" @@ var "els",
       _Term_map>>: "m" ~> var "forMany" @@ var "forPair"
         @@ ("pairs" ~> Core.termMap $ Maps.fromList $ var "pairs") @@ var "val0" @@ Maps.toList (var "m"),
-      _Term_optional>>: "mt" ~> Optionals.maybe
+      _Term_optional>>: "mt" ~> Maybes.maybe
         (var "dflt")
         ("t" ~> var "forSingle"
           @@ var "recurse"
@@ -979,7 +979,7 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~> "term0" ~>
       _Elimination_record>>: "p" ~> Core.eliminationRecord (var "p"),
       _Elimination_union>>: "cs" ~> Core.eliminationUnion $ Core.caseStatement
         (Core.caseStatementTypeName $ var "cs")
-        (Optionals.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
+        (Maybes.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
         (Lists.map (var "forField") (Core.caseStatementCases $ var "cs")),
       _Elimination_wrap>>: "name" ~> Core.eliminationWrap $ var "name"]) $
     "forFunction" <~ ("fun" ~> cases _Function (var "fun") Nothing [
@@ -1012,7 +1012,7 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~> "term0" ~>
       _Term_list>>: "els" ~> Core.termList $ Lists.map (var "recurse") (var "els"),
       _Term_literal>>: "v" ~> Core.termLiteral $ var "v",
       _Term_map>>: "m" ~> Core.termMap $ var "forMap" @@ var "m",
-      _Term_optional>>: "m" ~> Core.termOptional $ Optionals.map (var "recurse") (var "m"),
+      _Term_optional>>: "m" ~> Core.termOptional $ Maybes.map (var "recurse") (var "m"),
       _Term_product>>: "tuple" ~> Core.termProduct $ Lists.map (var "recurse") (var "tuple"),
       _Term_record>>: "r" ~> Core.termRecord $ Core.record
         (Core.recordTypeName $ var "r")
@@ -1071,7 +1071,7 @@ rewriteTermMDef = define "rewriteTermM" $
             "n" <~ Core.caseStatementTypeName (var "cs") $
             "def" <~ Core.caseStatementDefault (var "cs") $
             "cases" <~ Core.caseStatementCases (var "cs") $
-            "rdef" <<~ Optionals.maybe (produce nothing)
+            "rdef" <<~ Maybes.maybe (produce nothing)
               ("t" ~> Flows.map (unaryFunction just) $ var "recurse" @@ var "t")
               (var "def") $
             Flows.map
@@ -1162,7 +1162,7 @@ rewriteTermWithContextDef = define "rewriteTermWithContext" $
       _Elimination_record>>: "p" ~> Core.eliminationRecord (var "p"),
       _Elimination_union>>: "cs" ~> Core.eliminationUnion $ Core.caseStatement
         (Core.caseStatementTypeName $ var "cs")
-        (Optionals.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
+        (Maybes.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
         (Lists.map (var "forField") (Core.caseStatementCases $ var "cs")),
       _Elimination_wrap>>: "name" ~> Core.eliminationWrap $ var "name"]) $
     "forFunction" <~ ("fun" ~> cases _Function (var "fun") Nothing [
@@ -1195,7 +1195,7 @@ rewriteTermWithContextDef = define "rewriteTermWithContext" $
       _Term_list>>: "els" ~> Core.termList $ Lists.map (var "recurse") (var "els"),
       _Term_literal>>: "v" ~> Core.termLiteral $ var "v",
       _Term_map>>: "m" ~> Core.termMap $ var "forMap" @@ var "m",
-      _Term_optional>>: "m" ~> Core.termOptional $ Optionals.map (var "recurse") (var "m"),
+      _Term_optional>>: "m" ~> Core.termOptional $ Maybes.map (var "recurse") (var "m"),
       _Term_product>>: "tuple" ~> Core.termProduct $ Lists.map (var "recurse") (var "tuple"),
       _Term_record>>: "r" ~> Core.termRecord $ Core.record
         (Core.recordTypeName $ var "r")
@@ -1243,7 +1243,7 @@ rewriteTermWithContextMDef = define "rewriteTermWithContextM" $
         "n" <~ Core.caseStatementTypeName (var "cs") $
         "def" <~ Core.caseStatementDefault (var "cs") $
         "cases" <~ Core.caseStatementCases (var "cs") $
-        "rdef" <<~ Optionals.maybe (produce nothing)
+        "rdef" <<~ Maybes.maybe (produce nothing)
           ("t" ~> Flows.map (unaryFunction just) $ var "recurse" @@ var "t")
           (var "def") $
         Flows.map
@@ -1476,7 +1476,7 @@ substituteTypeVariablesDef = define "substituteTypeVariables" $
   "replace" <~ ("recurse" ~> "typ" ~> cases _Type (var "typ")
     (Just $ var "recurse" @@ var "typ") [
     _Type_variable>>: "n" ~>
-      Core.typeVariable $ Optionals.fromMaybe (var "n") $ Maps.lookup (var "n") (var "subst")]) $
+      Core.typeVariable $ Maybes.fromMaybe (var "n") $ Maps.lookup (var "n") (var "subst")]) $
   ref rewriteTypeDef @@ var "replace" @@ var "typ"
 
 substituteVariableDef :: TBinding (Name -> Name -> Term -> Term)
@@ -1504,11 +1504,11 @@ substituteVariablesDef = define "substituteVariables" $
     cases _Term (var "term")
       (Just $ var "recurse" @@ var "term") [
       _Term_variable>>: "n" ~>
-        Core.termVariable $ Optionals.fromMaybe (var "n") $ Maps.lookup (var "n") (var "subst"),
+        Core.termVariable $ Maybes.fromMaybe (var "n") $ Maps.lookup (var "n") (var "subst"),
       _Term_function>>: match _Function
         (Just $ var "recurse" @@ var "term") [
         _Function_lambda>>: "l" ~>
-          Optionals.maybe
+          Maybes.maybe
             (var "recurse" @@ var "term")
             (constant $ var "term")
             (Maps.lookup (Core.lambdaParameter $ var "l") (var "subst"))]]) $
@@ -1527,7 +1527,7 @@ subtermsDef = define "subterms" $
       _Function_elimination>>: match _Elimination
         (Just $ list []) [
         _Elimination_union>>: "cs" ~> Lists.concat2
-          (Optionals.maybe (list []) ("t" ~> list [var "t"]) (Core.caseStatementDefault $ var "cs"))
+          (Maybes.maybe (list []) ("t" ~> list [var "t"]) (Core.caseStatementDefault $ var "cs"))
           (Lists.map (unaryFunction Core.fieldTerm) (Core.caseStatementCases $ var "cs"))],
       _Function_lambda>>: "l" ~> list [Core.lambdaBody $ var "l"]],
     _Term_let>>: "lt" ~> Lists.cons
@@ -1538,7 +1538,7 @@ subtermsDef = define "subterms" $
     _Term_map>>: "m" ~> Lists.concat $ Lists.map
       ("p" ~> list [first $ var "p", second $ var "p"])
       (Maps.toList $ var "m"),
-    _Term_optional>>: "m" ~> Optionals.maybe (list []) ("t" ~> list [var "t"]) (var "m"),
+    _Term_optional>>: "m" ~> Maybes.maybe (list []) ("t" ~> list [var "t"]) (var "m"),
     _Term_product>>: "tuple" ~> var "tuple",
     _Term_record>>: "rt" ~> Lists.map (unaryFunction Core.fieldTerm) (Core.recordFields $ var "rt"),
     _Term_set>>: "l" ~> Sets.toList $ var "l",
@@ -1563,7 +1563,7 @@ subtermsWithAccessorsDef = define "subtermsWithAccessors" $
       _Function_elimination>>: match _Elimination
         (Just none) [
         _Elimination_union>>: "cs" ~> Lists.concat2
-          (Optionals.maybe none
+          (Maybes.maybe none
             ("t" ~> single Mantle.termAccessorUnionCasesDefault $ var "t")
             (Core.caseStatementDefault $ var "cs"))
           (Lists.map
@@ -1587,7 +1587,7 @@ subtermsWithAccessorsDef = define "subtermsWithAccessors" $
           result (Mantle.termAccessorMapKey $ int32 0) $ first $ var "p",
           result (Mantle.termAccessorMapValue $ int32 0) $ second $ var "p"])
         (Maps.toList $ var "m")),
-    _Term_optional>>: "m" ~> Optionals.maybe none
+    _Term_optional>>: "m" ~> Maybes.maybe none
       ("t" ~> single Mantle.termAccessorOptionalTerm $ var "t")
       (var "m"),
     _Term_product>>: "p" ~> Lists.map
@@ -1685,7 +1685,7 @@ toShortNamesDef = define "toShortNames" $
   "original" ~>
   "addName" <~ ("acc" ~> "name" ~>
     "local" <~ ref Names.localNameOfDef @@ var "name" $
-    "group" <~ Optionals.fromMaybe Sets.empty (Maps.lookup (var "local") (var "acc")) $
+    "group" <~ Maybes.fromMaybe Sets.empty (Maps.lookup (var "local") (var "acc")) $
     Maps.insert (var "local") (Sets.insert (var "name") (var "group")) (var "acc")) $
   "groupNamesByLocal" <~ ("names" ~> Lists.foldl (var "addName") Maps.empty (var "names")) $
   "groups" <~ var "groupNamesByLocal" @@ var "original" $
@@ -1717,7 +1717,7 @@ topologicalSortBindingMapDef = define "topologicalSortBindingMap" $
     pair (var "name") $ Logic.ifElse (var "hasTypeAnnotation" @@ var "term")
       (list [])
       (Sets.toList $ Sets.intersection (var "keys") $ ref freeVariablesInTermDef @@ var "term")) $
-  "toPair" <~ ("name" ~> pair (var "name") $ Optionals.fromMaybe
+  "toPair" <~ ("name" ~> pair (var "name") $ Maybes.fromMaybe
     (Core.termLiteral $ Core.literalString $ string "Impossible!")
     (Maps.lookup (var "name") (var "bindingMap"))) $
   Lists.map (unaryFunction $ Lists.map $ var "toPair") (ref Sorting.topologicalSortComponentsDef @@ Lists.map (var "depsOf") (var "bindings"))

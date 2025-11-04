@@ -3,11 +3,6 @@
 from hydra.dsl.python import frozenlist
 
 
-def neg(x: int) -> int:
-    """Negate an integer."""
-    return -x
-
-
 def add(x: int, y: int) -> int:
     """Add two integers."""
     return x + y
@@ -26,6 +21,11 @@ def mod(a: int, b: int) -> int:
 def mul(x: int, y: int) -> int:
     """Multiply two integers."""
     return x * y
+
+
+def negate(x: int) -> int:
+    """Negate an integer."""
+    return -x
 
 
 def range_(start: int, end: int) -> frozenlist[int]:

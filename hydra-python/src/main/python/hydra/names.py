@@ -11,7 +11,7 @@ import hydra.lib.equality
 import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
-import hydra.lib.optionals
+import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.mantle
@@ -27,7 +27,7 @@ def compact_name(namespaces: FrozenDict[hydra.module.Namespace, str], name: hydr
     qual_name = qualify_name(name)
     mns = qual_name.namespace
     local = qual_name.local
-    return hydra.lib.optionals.maybe(name.value, (lambda ns: hydra.lib.optionals.maybe(local, (lambda pre: hydra.lib.strings.cat((pre, ":", local))), hydra.lib.maps.lookup(ns, namespaces))), mns)
+    return hydra.lib.maybes.maybe(name.value, (lambda ns: hydra.lib.maybes.maybe(local, (lambda pre: hydra.lib.strings.cat((pre, ":", local))), hydra.lib.maps.lookup(ns, namespaces))), mns)
 
 def local_name_of(arg_: hydra.core.Name) -> str:
     return qualify_name(arg_).local
@@ -52,5 +52,5 @@ def unique_label(visited: frozenset[str], l: str) -> str:
 def unqualify_name(qname: hydra.module.QualifiedName) -> hydra.core.Name:
     r"""Convert a qualified name to a dot-separated name."""
     
-    prefix = hydra.lib.optionals.maybe("", (lambda n: hydra.lib.strings.cat((n.value, "."))), qname.namespace)
+    prefix = hydra.lib.maybes.maybe("", (lambda n: hydra.lib.strings.cat((n.value, "."))), qname.namespace)
     return hydra.core.Name(hydra.lib.strings.cat((prefix, qname.local)))

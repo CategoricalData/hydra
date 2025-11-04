@@ -6,7 +6,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Typing as Typing
@@ -18,7 +18,7 @@ import qualified Data.Set as S
 
 composeTypeSubst :: (Typing.TypeSubst -> Typing.TypeSubst -> Typing.TypeSubst)
 composeTypeSubst s1 s2 =  
-  let isExtra = (\k -> \v -> Optionals.isNothing (Maps.lookup k (Typing.unTypeSubst s1))) 
+  let isExtra = (\k -> \v -> Maybes.isNothing (Maps.lookup k (Typing.unTypeSubst s1))) 
       withExtra = (Maps.filterWithKey isExtra (Typing.unTypeSubst s2))
   in (Typing.TypeSubst (Maps.union withExtra (Maps.map (substInType s2) (Typing.unTypeSubst s1))))
 
@@ -74,17 +74,17 @@ substituteInTerm subst term0 =
                   Core.FunctionLambda v2 -> (withLambda v2)
                   _ -> (recurse term)) v1)
                 Core.TermLet v1 -> (withLet v1)
-                Core.TermVariable v1 -> (Optionals.maybe (recurse term) (\sterm -> sterm) (Maps.lookup v1 s))
+                Core.TermVariable v1 -> (Maybes.maybe (recurse term) (\sterm -> sterm) (Maps.lookup v1 s))
                 _ -> (recurse term)) term))
   in (Rewriting.rewriteTerm rewrite term0)
 
 substInType :: (Typing.TypeSubst -> Core.Type -> Core.Type)
 substInType subst typ0 =  
   let rewrite = (\recurse -> \typ -> (\x -> case x of
-          Core.TypeForall v1 -> (Optionals.maybe (recurse typ) (\styp -> Core.TypeForall (Core.ForallType {
+          Core.TypeForall v1 -> (Maybes.maybe (recurse typ) (\styp -> Core.TypeForall (Core.ForallType {
             Core.forallTypeParameter = (Core.forallTypeParameter v1),
             Core.forallTypeBody = (substInType (removeVar (Core.forallTypeParameter v1)) (Core.forallTypeBody v1))})) (Maps.lookup (Core.forallTypeParameter v1) (Typing.unTypeSubst subst)))
-          Core.TypeVariable v1 -> (Optionals.maybe typ (\styp -> styp) (Maps.lookup v1 (Typing.unTypeSubst subst)))
+          Core.TypeVariable v1 -> (Maybes.maybe typ (\styp -> styp) (Maps.lookup v1 (Typing.unTypeSubst subst)))
           _ -> (recurse typ)) typ) 
       removeVar = (\v -> Typing.TypeSubst (Maps.remove v (Typing.unTypeSubst subst)))
   in (Rewriting.rewriteType rewrite typ0)
@@ -107,20 +107,20 @@ substTypesInTerm subst term0 =
                       _ -> dflt) f)
               forLambda = (\l -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.lambdaParameter l),
-                      Core.lambdaDomain = (Optionals.map (substInType subst) (Core.lambdaDomain l)),
+                      Core.lambdaDomain = (Maybes.map (substInType subst) (Core.lambdaDomain l)),
                       Core.lambdaBody = (substTypesInTerm subst (Core.lambdaBody l))})))
               forLet = (\l ->  
                       let rewriteBinding = (\b -> Core.Binding {
                               Core.bindingName = (Core.bindingName b),
                               Core.bindingTerm = (substTypesInTerm subst (Core.bindingTerm b)),
-                              Core.bindingType = (Optionals.map (substInTypeScheme subst) (Core.bindingType b))})
+                              Core.bindingType = (Maybes.map (substInTypeScheme subst) (Core.bindingType b))})
                       in (Core.TermLet (Core.Let {
                         Core.letBindings = (Lists.map rewriteBinding (Core.letBindings l)),
                         Core.letBody = (substTypesInTerm subst (Core.letBody l))})))
               forTupleProjection = (\tp -> Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
                       Core.tupleProjectionArity = (Core.tupleProjectionArity tp),
                       Core.tupleProjectionIndex = (Core.tupleProjectionIndex tp),
-                      Core.tupleProjectionDomain = (Optionals.map (\types -> Lists.map (substInType subst) types) (Core.tupleProjectionDomain tp))}))))
+                      Core.tupleProjectionDomain = (Maybes.map (\types -> Lists.map (substInType subst) types) (Core.tupleProjectionDomain tp))}))))
               forTypeApplication = (\tt -> Core.TermTypeApplication (Core.TypeApplicationTerm {
                       Core.typeApplicationTermBody = (substTypesInTerm subst (Core.typeApplicationTermBody tt)),
                       Core.typeApplicationTermType = (substInType subst (Core.typeApplicationTermType tt))}))

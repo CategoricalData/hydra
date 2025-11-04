@@ -1,6 +1,6 @@
--- | Haskell implementations of hydra.lib.optionals primitives
+-- | Haskell implementations of hydra.lib.maybes primitives
 
-module Hydra.Lib.Optionals where
+module Hydra.Lib.Maybes where
 
 import qualified Data.Maybe as Y
 

@@ -12,7 +12,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
@@ -274,7 +274,7 @@ nArgs name n args = (Logic.ifElse (Equality.equal (Lists.length args) n) (Flows.
 optional :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> Core.Term -> Compute.Flow Graph.Graph (Maybe t0))
 optional f term0 =  
   let extract = (\term -> (\x -> case x of
-          Core.TermOptional v1 -> (Optionals.maybe (Flows.pure Nothing) (\t -> Flows.map Optionals.pure (f t)) v1)
+          Core.TermOptional v1 -> (Maybes.maybe (Flows.pure Nothing) (\t -> Flows.map Maybes.pure (f t)) v1)
           _ -> (Monads.unexpected "optional value" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 

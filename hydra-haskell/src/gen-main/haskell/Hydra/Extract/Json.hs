@@ -6,7 +6,7 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Json as Json
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -39,13 +39,13 @@ opt :: (Ord t0) => (t0 -> M.Map t0 t1 -> Maybe t1)
 opt fname m = (Maps.lookup fname m)
 
 optArray :: (Ord t0) => (t0 -> M.Map t0 Json.Value -> Compute.Flow t1 (Maybe [Json.Value]))
-optArray fname m = (Optionals.maybe (Flows.pure Nothing) (\a -> Flows.map Optionals.pure (expectArray a)) (opt fname m))
+optArray fname m = (Maybes.maybe (Flows.pure Nothing) (\a -> Flows.map Maybes.pure (expectArray a)) (opt fname m))
 
 optString :: (Ord t0) => (t0 -> M.Map t0 Json.Value -> Compute.Flow t1 (Maybe String))
-optString fname m = (Optionals.maybe (Flows.pure Nothing) (\s -> Flows.map Optionals.pure (expectString s)) (opt fname m))
+optString fname m = (Maybes.maybe (Flows.pure Nothing) (\s -> Flows.map Maybes.pure (expectString s)) (opt fname m))
 
 require :: (Ord t0) => (t0 -> M.Map t0 t1 -> Compute.Flow t2 t1)
-require fname m = (Optionals.maybe (Flows.fail (Strings.cat [
+require fname m = (Maybes.maybe (Flows.fail (Strings.cat [
   "required attribute ",
   showValue fname,
   " not found"])) (\value -> Flows.pure value) (Maps.lookup fname m))

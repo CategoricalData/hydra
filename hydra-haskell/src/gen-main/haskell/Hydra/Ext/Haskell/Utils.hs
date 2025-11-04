@@ -13,7 +13,7 @@ import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
@@ -41,7 +41,7 @@ elementReference namespaces name =
       local = (Module.qualifiedNameLocal qname)
       escLocal = (sanitizeHaskellName local)
       mns = (Module.qualifiedNameNamespace qname)
-  in (Optionals.cases (Module.qualifiedNameNamespace qname) (simpleName local) (\ns -> Optionals.cases (Maps.lookup ns namespacesMap) (simpleName local) (\mn ->  
+  in (Maybes.cases (Module.qualifiedNameNamespace qname) (simpleName local) (\ns -> Maybes.cases (Maps.lookup ns namespacesMap) (simpleName local) (\mn ->  
     let aliasStr = (Ast.unModuleName mn)
     in (Logic.ifElse (Equality.equal ns gname) (simpleName escLocal) (rawName (Strings.cat [
       aliasStr,

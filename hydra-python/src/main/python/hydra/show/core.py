@@ -11,7 +11,7 @@ import hydra.lib.lists
 import hydra.lib.literals
 import hydra.lib.logic
 import hydra.lib.maps
-import hydra.lib.optionals
+import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
 
@@ -245,7 +245,7 @@ def binding(el: hydra.core.Binding) -> str:
     
     name = el.name.value
     t = el.term
-    type_str = hydra.lib.optionals.maybe("", (lambda ts: hydra.lib.strings.cat((":(", type_scheme(ts), ")"))), el.type)
+    type_str = hydra.lib.maybes.maybe("", (lambda ts: hydra.lib.strings.cat((":(", type_scheme(ts), ")"))), el.type)
     return hydra.lib.strings.cat((name, type_str, " = ", term(t)))
 
 def elimination(elm: hydra.core.Elimination) -> str:
@@ -266,7 +266,7 @@ def elimination(elm: hydra.core.Elimination) -> str:
             tname = cs.type_name.value
             mdef = cs.default
             cases = cs.cases
-            default_field = hydra.lib.optionals.maybe(cast(frozenlist[hydra.core.Field], ()), (lambda d: (hydra.core.Field(hydra.core.Name("[default]"), d),)), mdef)
+            default_field = hydra.lib.maybes.maybe(cast(frozenlist[hydra.core.Field], ()), (lambda d: (hydra.core.Field(hydra.core.Name("[default]"), d),)), mdef)
             all_fields = hydra.lib.lists.concat((cases, default_field))
             return hydra.lib.strings.cat(("case(", tname, ")", fields(all_fields)))
         
@@ -309,7 +309,7 @@ def lambda_(l: hydra.core.Lambda) -> str:
     v = l.parameter.value
     mt = l.domain
     body = l.body
-    type_str = hydra.lib.optionals.maybe("", (lambda t: hydra.lib.strings.cat2(":", type(t))), mt)
+    type_str = hydra.lib.maybes.maybe("", (lambda t: hydra.lib.strings.cat2(":", type(t))), mt)
     return hydra.lib.strings.cat(("λ", v, type_str, ".", term(body)))
 
 def term(t: hydra.core.Term) -> str:
@@ -355,7 +355,7 @@ def term(t: hydra.core.Term) -> str:
             return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map(entry, hydra.lib.maps.to_list(m))), "}"))
         
         case hydra.core.TermOptional(value=mt):
-            return hydra.lib.optionals.maybe("nothing", (lambda t2: hydra.lib.strings.cat(("just(", term(t2), ")"))), mt)
+            return hydra.lib.maybes.maybe("nothing", (lambda t2: hydra.lib.strings.cat(("just(", term(t2), ")"))), mt)
         
         case hydra.core.TermProduct(value=els2):
             term_strs = hydra.lib.lists.map(term, els2)
