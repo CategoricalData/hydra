@@ -66,10 +66,10 @@ listsAt = TestGroup "at" Nothing [] [
 
 listsBind :: TestGroup
 listsBind = TestGroup "bind" Nothing [] [
-    test "negation function" [1, 2, 3, 4] (primitive _lists_pure <.> primitive _math_neg) (negate <$> [1, 2, 3, 4]),
-    test "empty list" [] (primitive _lists_pure <.> primitive _math_neg) [],
-    test "single element" [5] (primitive _lists_pure <.> primitive _math_neg) [-5],
-    test "duplicate elements" [1, 1, 2] (primitive _lists_pure <.> primitive _math_neg) [-1, -1, -2]]
+    test "negation function" [1, 2, 3, 4] (primitive _lists_pure <.> primitive _math_negate) (negate <$> [1, 2, 3, 4]),
+    test "empty list" [] (primitive _lists_pure <.> primitive _math_negate) [],
+    test "single element" [5] (primitive _lists_pure <.> primitive _math_negate) [-5],
+    test "duplicate elements" [1, 1, 2] (primitive _lists_pure <.> primitive _math_negate) [-1, -1, -2]]
   where
     test name lst fun result = primCase name _lists_bind [intList lst, fun] (intList result)
 
@@ -236,7 +236,7 @@ listsMap = TestGroup "map" Nothing [] [
     testStr "string to uppercase" (primitive _strings_toUpper) ["one", "two"] ["ONE", "TWO"],
     testStr "empty list" (primitive _strings_toUpper) [] [],
     testStr "single element" (primitive _strings_toUpper) ["hello"] ["HELLO"],
-    testInt "number negation" (primitive _math_neg) [1, 2, 3] [-1, -2, -3],
+    testInt "number negation" (primitive _math_negate) [1, 2, 3] [-1, -2, -3],
     testInt "identity function" (primitive _equality_identity) [1, 2, 3] [1, 2, 3]]
   where
     testStr name fun lst result = primCase name _lists_map [fun, stringList lst] (stringList result)
@@ -339,8 +339,8 @@ listsSortOn = TestGroup "sortOn" Nothing [] [
    testStr "sort by string length" (primitive _strings_length) ["hello", "hi", "world"] ["hi", "hello", "world"],
    testStr "empty string list" (primitive _strings_length) [] [],
    testStr "single string element" (primitive _strings_length) ["test"] ["test"],
-   testInt "sort by negation" (primitive _math_neg) [1, 3, 2] [3, 2, 1],
-   testInt "sort by absolute value" (primitive _math_neg) [-1, -3, 2] [-1, 2, -3]]
+   testInt "sort by negation" (primitive _math_negate) [1, 3, 2] [3, 2, 1],
+   testInt "sort by absolute value" (primitive _math_negate) [-1, -3, 2] [-1, 2, -3]]
  where
    testStr name keyFn lst result = primCase name _lists_sortOn [keyFn, stringList lst] (stringList result)
    testInt name keyFn lst result = primCase name _lists_sortOn [keyFn, intList lst] (intList result)

@@ -192,5 +192,5 @@ testGroupForSystemF = subgroup "STLC to System F" [
   where
     -- Placeholders for the primitives in @wisnesky's test cases; they are not necessarily the same functions,
     -- but they have the same types.
-    primPred = primitive _math_neg
-    primSucc = primitive _math_neg
+    primPred = primitive _math_negate
+    primSucc = primitive _math_negate

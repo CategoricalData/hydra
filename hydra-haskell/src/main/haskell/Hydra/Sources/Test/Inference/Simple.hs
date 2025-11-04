@@ -62,13 +62,13 @@ testGroupForFunctionTerms = supergroup "Function terms" [
 
     subgroup "Optional eliminations" [
       expectMono 1 [tag_disabledForMinimalInference]
-        (primitive _optionals_maybe @@ (int32 42) @@ (primitive _math_neg))
+        (primitive _optionals_maybe @@ (int32 42) @@ (primitive _math_negate))
         (T.function (T.optional T.int32) T.int32),
       expectMono 2 [tag_disabledForMinimalInference]
-        (primitive _optionals_maybe @@ (int32 42) @@ (primitive _math_neg) @@ (optional (just $ int32 137)))
+        (primitive _optionals_maybe @@ (int32 42) @@ (primitive _math_negate) @@ (optional (just $ int32 137)))
         T.int32,
       expectMono 3 [tag_disabledForMinimalInference]
-        (primitive _optionals_maybe @@ (int32 42) @@ (primitive _math_neg) @@ optional nothing)
+        (primitive _optionals_maybe @@ (int32 42) @@ (primitive _math_negate) @@ optional nothing)
         T.int32,
       expectPoly 4 [tag_disabledForMinimalInference]
         (lambda "x" $ primitive _optionals_maybe @@ (var "x") @@ (primitive _optionals_pure) @@ var "x")
