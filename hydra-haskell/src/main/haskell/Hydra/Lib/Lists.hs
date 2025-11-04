@@ -13,6 +13,7 @@ import qualified Data.List as L
 apply :: [a -> b] -> [a] -> [b]
 apply = (<*>)
 
+-- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
 at :: Int -> [a] -> a
 at i l = l !! i
 
@@ -46,9 +47,11 @@ foldl = L.foldl
 group :: Eq a => [a] -> [[a]]
 group = L.group
 
+-- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
 head :: [a] -> a
 head = L.head
 
+-- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
 init :: [a] -> [a]
 init = L.init
 
@@ -58,6 +61,7 @@ intercalate = L.intercalate
 intersperse :: a -> [a] -> [a]
 intersperse = L.intersperse
 
+-- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
 last :: [a] -> a
 last = L.last
 
@@ -82,6 +86,7 @@ replicate = L.replicate
 reverse :: [a] -> [a]
 reverse = L.reverse
 
+-- TODO: consider renaming. See https://github.com/CategoricalData/hydra/issues/201
 safeHead :: [a] -> Maybe a
 safeHead [] = Nothing
 safeHead (x:_) = Just x
@@ -98,6 +103,7 @@ sortOn = L.sortOn
 span :: (a -> Bool) -> [a] -> ([a], [a])
 span = L.span
 
+-- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
 tail :: [a] -> [a]
 tail = L.tail
 
