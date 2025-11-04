@@ -64,7 +64,7 @@ class TermAccessorMapKey(Node[int]): ...
 
 class TermAccessorMapValue(Node[int]): ...
 
-class TermAccessorOptionalTerm(Node[None]): ...
+class TermAccessorMaybeTerm(Node[None]): ...
 
 class TermAccessorProductTerm(Node[int]): ...
 
@@ -83,7 +83,7 @@ class TermAccessorInjectionTerm(Node[None]): ...
 class TermAccessorWrappedTerm(Node[None]): ...
 
 # A function which maps from a term to a particular immediate subterm.
-type TermAccessor = TermAccessorAnnotatedBody | TermAccessorApplicationFunction | TermAccessorApplicationArgument | TermAccessorLambdaBody | TermAccessorUnionCasesDefault | TermAccessorUnionCasesBranch | TermAccessorLetBody | TermAccessorLetBinding | TermAccessorListElement | TermAccessorMapKey | TermAccessorMapValue | TermAccessorOptionalTerm | TermAccessorProductTerm | TermAccessorRecordField | TermAccessorSetElement | TermAccessorSumTerm | TermAccessorTypeLambdaBody | TermAccessorTypeApplicationTerm | TermAccessorInjectionTerm | TermAccessorWrappedTerm
+type TermAccessor = TermAccessorAnnotatedBody | TermAccessorApplicationFunction | TermAccessorApplicationArgument | TermAccessorLambdaBody | TermAccessorUnionCasesDefault | TermAccessorUnionCasesBranch | TermAccessorLetBody | TermAccessorLetBinding | TermAccessorListElement | TermAccessorMapKey | TermAccessorMapValue | TermAccessorMaybeTerm | TermAccessorProductTerm | TermAccessorRecordField | TermAccessorSetElement | TermAccessorSumTerm | TermAccessorTypeLambdaBody | TermAccessorTypeApplicationTerm | TermAccessorInjectionTerm | TermAccessorWrappedTerm
 
 TERM_ACCESSOR__NAME = hydra.core.Name("hydra.accessors.TermAccessor")
 TERM_ACCESSOR__ANNOTATED_BODY__NAME = hydra.core.Name("annotatedBody")
@@ -97,7 +97,7 @@ TERM_ACCESSOR__LET_BINDING__NAME = hydra.core.Name("letBinding")
 TERM_ACCESSOR__LIST_ELEMENT__NAME = hydra.core.Name("listElement")
 TERM_ACCESSOR__MAP_KEY__NAME = hydra.core.Name("mapKey")
 TERM_ACCESSOR__MAP_VALUE__NAME = hydra.core.Name("mapValue")
-TERM_ACCESSOR__OPTIONAL_TERM__NAME = hydra.core.Name("optionalTerm")
+TERM_ACCESSOR__MAYBE_TERM__NAME = hydra.core.Name("maybeTerm")
 TERM_ACCESSOR__PRODUCT_TERM__NAME = hydra.core.Name("productTerm")
 TERM_ACCESSOR__RECORD_FIELD__NAME = hydra.core.Name("recordField")
 TERM_ACCESSOR__SET_ELEMENT__NAME = hydra.core.Name("setElement")

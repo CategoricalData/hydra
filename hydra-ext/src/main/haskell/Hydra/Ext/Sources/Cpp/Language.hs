@@ -125,7 +125,7 @@ cppLanguageDef = cppLanguageDefinition "cppLanguage" $
     Mantle.termVariantList,       -- std::vector
     Mantle.termVariantLiteral,
     Mantle.termVariantMap,        -- std::map
-    Mantle.termVariantOptional,   -- std::optional
+    Mantle.termVariantMaybe,   -- std::optional
     Mantle.termVariantProduct,    -- struct with unnamed fields
     Mantle.termVariantRecord,     -- struct with named fields
     Mantle.termVariantSet,        -- std::set
@@ -139,7 +139,7 @@ cppLanguageDef = cppLanguageDefinition "cppLanguage" $
     Mantle.typeVariantList,        -- std::vector
     Mantle.typeVariantLiteral,     -- primitive types
     Mantle.typeVariantMap,         -- std::map
-    Mantle.typeVariantOptional,    -- std::optional
+    Mantle.typeVariantMaybe,    -- std::optional
     Mantle.typeVariantProduct,     -- anonymous structs
     Mantle.typeVariantRecord,      -- structs
     Mantle.typeVariantSet,         -- std::set

@@ -42,7 +42,7 @@ evaluateProperties specs record = M.fromList . Y.catMaybes <$> (CM.mapM forPair 
     forPair (k, spec) = do
       value <- (evaluate $ Terms.apply spec record)
       case deannotateTerm value of
-        TermOptional mv -> case mv of
+        TermMaybe mv -> case mv of
           Nothing -> return Nothing
           Just v -> return $ Just (k, v)
         _ -> fail $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ ShowCore.term value
@@ -104,7 +104,7 @@ termRowToRecord :: TableType -> DataRow Term -> Term
 termRowToRecord (TableType (RelationName tname) colTypes) (DataRow cells) = TermRecord $ Record (Name tname) $
     L.zipWith toField colTypes cells
   where
-    toField (ColumnType (ColumnName cname) _) mvalue = Field (Name cname) $ TermOptional mvalue
+    toField (ColumnType (ColumnName cname) _) mvalue = Field (Name cname) $ TermMaybe mvalue
 
 transformRecord :: [Pg.Vertex Term] -> [Pg.Edge Term] -> Term -> Flow Graph ([Pg.Vertex Term], [Pg.Edge Term])
 transformRecord vspecs especs term = do

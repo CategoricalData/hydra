@@ -415,21 +415,21 @@ inferenceTests = Testing.TestGroup {
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+                Testing.inferenceTestCaseInput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
                 Testing.inferenceTestCaseOutput = Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
+                  Core.typeSchemeType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                Testing.inferenceTestCaseInput = (Core.TermOptional Nothing),
+                Testing.inferenceTestCaseInput = (Core.TermMaybe Nothing),
                 Testing.inferenceTestCaseOutput = Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
-                  Core.typeSchemeType = (Core.TypeOptional (Core.TypeVariable (Core.Name "t0")))}})),
+                  Core.typeSchemeType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0")))}})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]},
@@ -1567,7 +1567,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataName = "#3",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
                     Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermOptional Nothing),
+                      Core.applicationFunction = (Core.TermMaybe Nothing),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "value"))}))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
@@ -4906,21 +4906,21 @@ inferenceTests = Testing.TestGroup {
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermOptional Nothing),
+                    Testing.inferenceTestCaseInput = (Core.TermMaybe Nothing),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeOptional (Core.TypeVariable (Core.Name "t0")))}})),
+                      Core.typeSchemeType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0")))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForMinimalInference"]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#3",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+                    Testing.inferenceTestCaseInput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
+                      Core.typeSchemeType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForMinimalInference"]}]},
@@ -5624,7 +5624,7 @@ inferenceTests = Testing.TestGroup {
                           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))},
                         Core.Field {
                           Core.fieldName = (Core.Name "tail"),
-                          Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
+                          Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
                             Core.recordTypeName = TestGraph.testTypeIntListName,
                             Core.recordFields = [
                               Core.Field {
@@ -5632,7 +5632,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 43)))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "tail"),
-                                Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]})),
+                                Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypeIntListName)}})),
@@ -5654,7 +5654,7 @@ inferenceTests = Testing.TestGroup {
                               Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                             Core.Field {
                               Core.fieldName = (Core.Name "tail"),
-                              Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
+                              Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
                                 Core.recordTypeName = TestGraph.testTypeIntListName,
                                 Core.recordFields = [
                                   Core.Field {
@@ -5662,7 +5662,7 @@ inferenceTests = Testing.TestGroup {
                                     Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                                   Core.Field {
                                     Core.fieldName = (Core.Name "tail"),
-                                    Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))}))),
+                                    Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))}))),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
@@ -5681,7 +5681,7 @@ inferenceTests = Testing.TestGroup {
                           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))},
                         Core.Field {
                           Core.fieldName = (Core.Name "tail"),
-                          Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
+                          Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
                             Core.recordTypeName = TestGraph.testTypeListName,
                             Core.recordFields = [
                               Core.Field {
@@ -5689,7 +5689,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 43)))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "tail"),
-                                Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]})),
+                                Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
@@ -5713,7 +5713,7 @@ inferenceTests = Testing.TestGroup {
                               Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                             Core.Field {
                               Core.fieldName = (Core.Name "tail"),
-                              Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
+                              Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
                                 Core.recordTypeName = TestGraph.testTypeListName,
                                 Core.recordFields = [
                                   Core.Field {
@@ -5721,7 +5721,7 @@ inferenceTests = Testing.TestGroup {
                                     Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                                   Core.Field {
                                     Core.fieldName = (Core.Name "tail"),
-                                    Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))}))),
+                                    Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))}))),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
@@ -5745,7 +5745,7 @@ inferenceTests = Testing.TestGroup {
                             Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                           Core.Field {
                             Core.fieldName = (Core.Name "tail"),
-                            Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
+                            Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
                               Core.recordTypeName = TestGraph.testTypeListName,
                               Core.recordFields = [
                                 Core.Field {
@@ -5753,7 +5753,7 @@ inferenceTests = Testing.TestGroup {
                                   Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                                 Core.Field {
                                   Core.fieldName = (Core.Name "tail"),
-                                  Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))}))),
+                                  Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))}))),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
@@ -5785,7 +5785,7 @@ inferenceTests = Testing.TestGroup {
                               Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                             Core.Field {
                               Core.fieldName = (Core.Name "tail"),
-                              Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
+                              Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
                                 Core.recordTypeName = TestGraph.testTypeBuddyListBName,
                                 Core.recordFields = [
                                   Core.Field {
@@ -5793,7 +5793,7 @@ inferenceTests = Testing.TestGroup {
                                     Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                                   Core.Field {
                                     Core.fieldName = (Core.Name "tail"),
-                                    Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))}))),
+                                    Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))}))),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
@@ -5817,7 +5817,7 @@ inferenceTests = Testing.TestGroup {
                             Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                           Core.Field {
                             Core.fieldName = (Core.Name "tail"),
-                            Core.fieldTerm = (Core.TermOptional (Just (Core.TermRecord (Core.Record {
+                            Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
                               Core.recordTypeName = TestGraph.testTypeBuddyListBName,
                               Core.recordFields = [
                                 Core.Field {
@@ -5825,7 +5825,7 @@ inferenceTests = Testing.TestGroup {
                                   Core.fieldTerm = (Core.TermVariable (Core.Name "x"))},
                                 Core.Field {
                                   Core.fieldName = (Core.Name "tail"),
-                                  Core.fieldTerm = (Core.TermOptional Nothing)}]}))))}]}))}))),
+                                  Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]}))}))),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
@@ -6169,7 +6169,7 @@ inferenceTests = Testing.TestGroup {
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
+                        Core.functionTypeDomain = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
                         Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -6183,7 +6183,7 @@ inferenceTests = Testing.TestGroup {
                           Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.maybe"))),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Core.applicationArgument = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.negate")))})),
-                      Core.applicationArgument = (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))))})),
+                      Core.applicationArgument = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
@@ -6199,7 +6199,7 @@ inferenceTests = Testing.TestGroup {
                           Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.maybe"))),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Core.applicationArgument = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.negate")))})),
-                      Core.applicationArgument = (Core.TermOptional Nothing)})),
+                      Core.applicationArgument = (Core.TermMaybe Nothing)})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
@@ -6223,8 +6223,8 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
                       Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "t0"))),
-                        Core.functionTypeCodomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "t0")))}))}})),
+                        Core.functionTypeDomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0"))),
+                        Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0")))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForMinimalInference"]},
@@ -6244,7 +6244,7 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
                       Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "t0"))),
+                        Core.functionTypeDomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0"))),
                         Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -6487,21 +6487,21 @@ inferenceTests = Testing.TestGroup {
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#1",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+                    Testing.inferenceTestCaseInput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
+                      Core.typeSchemeType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForMinimalInference"]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermOptional Nothing),
+                    Testing.inferenceTestCaseInput = (Core.TermMaybe Nothing),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
-                      Core.typeSchemeType = (Core.TypeOptional (Core.TypeVariable (Core.Name "t0")))}})),
+                      Core.typeSchemeType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0")))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForMinimalInference"]}]},
@@ -8729,7 +8729,7 @@ listPrimitiveTests = Testing.TestGroup {
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
-            Testing.evaluationTestCaseOutput = (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))))})),
+            Testing.evaluationTestCaseOutput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -8739,7 +8739,7 @@ listPrimitiveTests = Testing.TestGroup {
             Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.safeHead"))),
               Core.applicationArgument = (Core.TermList [])})),
-            Testing.evaluationTestCaseOutput = (Core.TermOptional Nothing)})),
+            Testing.evaluationTestCaseOutput = (Core.TermMaybe Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -8750,7 +8750,7 @@ listPrimitiveTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.safeHead"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))])})),
-            Testing.evaluationTestCaseOutput = (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))})),
+            Testing.evaluationTestCaseOutput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -8762,7 +8762,7 @@ listPrimitiveTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString "hello"),
                 (Core.TermLiteral (Core.LiteralString "world"))])})),
-            Testing.evaluationTestCaseOutput = (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralString "hello"))))})),
+            Testing.evaluationTestCaseOutput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "hello"))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -8772,7 +8772,7 @@ listPrimitiveTests = Testing.TestGroup {
             Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.safeHead"))),
               Core.applicationArgument = (Core.TermList [])})),
-            Testing.evaluationTestCaseOutput = (Core.TermOptional Nothing)})),
+            Testing.evaluationTestCaseOutput = (Core.TermMaybe Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {

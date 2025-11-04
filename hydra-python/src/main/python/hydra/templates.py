@@ -111,8 +111,8 @@ def instantiate_template[T0](minimal: bool, schema: FrozenDict[hydra.core.Name, 
             vt = mt.values
             return hydra.lib.logic.if_else(minimal, hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMap(cast(FrozenDict[hydra.core.Term, hydra.core.Term], hydra.lib.maps.empty())))), hydra.lib.flows.bind(inst(kt), (lambda ke: hydra.lib.flows.bind(inst(vt), (lambda ve: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.singleton(ke, ve)))))))))
         
-        case hydra.core.TypeOptional(value=ot):
-            return hydra.lib.logic.if_else(minimal, hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermOptional(cast(Maybe[hydra.core.Term], Nothing())))), hydra.lib.flows.bind(inst(ot), (lambda e: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermOptional(cast(Maybe[hydra.core.Term], Just(e))))))))
+        case hydra.core.TypeMaybe(value=ot):
+            return hydra.lib.logic.if_else(minimal, hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(cast(Maybe[hydra.core.Term], Nothing())))), hydra.lib.flows.bind(inst(ot), (lambda e: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(cast(Maybe[hydra.core.Term], Just(e))))))))
         
         case hydra.core.TypeProduct(value=types):
             return hydra.lib.flows.bind(hydra.lib.flows.map_list(inst, types), (lambda es: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermProduct(es)))))

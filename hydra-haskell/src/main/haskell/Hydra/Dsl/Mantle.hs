@@ -147,7 +147,7 @@ termAccessorMapValue :: TTerm Int -> TTerm TermAccessor
 termAccessorMapValue = variant _TermAccessor _TermAccessor_mapValue
 
 termAccessorOptionalTerm :: TTerm TermAccessor
-termAccessorOptionalTerm = unitVariant _TermAccessor _TermAccessor_optionalTerm
+termAccessorOptionalTerm = unitVariant _TermAccessor _TermAccessor_maybeTerm
 
 termAccessorProductTerm :: TTerm Int -> TTerm TermAccessor
 termAccessorProductTerm = variant _TermAccessor _TermAccessor_productTerm
@@ -182,7 +182,7 @@ termVariant v = unitVariant _TermVariant $ case v of
   TermVariantList -> _TermVariant_list
   TermVariantLiteral -> _TermVariant_literal
   TermVariantMap -> _TermVariant_map
-  TermVariantOptional -> _TermVariant_optional
+  TermVariantMaybe -> _TermVariant_maybe
   TermVariantProduct -> _TermVariant_product
   TermVariantRecord -> _TermVariant_record
   TermVariantSet -> _TermVariant_set
@@ -215,8 +215,8 @@ termVariantLiteral = unitVariant _TermVariant _TermVariant_literal
 termVariantMap :: TTerm TermVariant
 termVariantMap = unitVariant _TermVariant _TermVariant_map
 
-termVariantOptional :: TTerm TermVariant
-termVariantOptional = unitVariant _TermVariant _TermVariant_optional
+termVariantMaybe :: TTerm TermVariant
+termVariantMaybe = unitVariant _TermVariant _TermVariant_maybe
 
 termVariantProduct :: TTerm TermVariant
 termVariantProduct = unitVariant _TermVariant _TermVariant_product
@@ -257,7 +257,7 @@ typeVariant v = unitVariant _TypeVariant $ case v of
   TypeVariantList -> _TypeVariant_list
   TypeVariantLiteral -> _TypeVariant_literal
   TypeVariantMap -> _TypeVariant_map
-  TypeVariantOptional -> _TypeVariant_optional
+  TypeVariantMaybe -> _TypeVariant_maybe
   TypeVariantProduct -> _TypeVariant_product
   TypeVariantRecord -> _TypeVariant_record
   TypeVariantSet -> _TypeVariant_set
@@ -287,8 +287,8 @@ typeVariantLiteral = unitVariant _TypeVariant _TypeVariant_literal
 typeVariantMap :: TTerm TypeVariant
 typeVariantMap = unitVariant _TypeVariant _TypeVariant_map
 
-typeVariantOptional :: TTerm TypeVariant
-typeVariantOptional = unitVariant _TypeVariant _TypeVariant_optional
+typeVariantMaybe :: TTerm TypeVariant
+typeVariantMaybe = unitVariant _TypeVariant _TypeVariant_maybe
 
 typeVariantProduct :: TTerm TypeVariant
 typeVariantProduct = unitVariant _TypeVariant _TypeVariant_product

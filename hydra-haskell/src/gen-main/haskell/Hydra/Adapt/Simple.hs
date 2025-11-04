@@ -232,7 +232,7 @@ termAlternatives term = ((\x -> case x of
     let term2 = (Core.annotatedTermBody v1)
     in (Flows.pure [
       term2])
-  Core.TermOptional v1 -> (Flows.pure [
+  Core.TermMaybe v1 -> (Flows.pure [
     Core.TermList (Maybes.maybe [] (\term2 -> [
       term2]) v1)])
   Core.TermUnion v1 ->  
@@ -248,7 +248,7 @@ termAlternatives term = ((\x -> case x of
                     let ftname = (Core.fieldTypeName ft)
                     in Core.Field {
                       Core.fieldName = fname,
-                      Core.fieldTerm = (Core.TermOptional (Logic.ifElse (Equality.equal ftname fname) (Just fterm) Nothing))})
+                      Core.fieldTerm = (Core.TermMaybe (Logic.ifElse (Equality.equal ftname fname) (Just fterm) Nothing))})
             in (Flows.bind (Schemas.requireUnionType tname) (\rt -> Flows.pure [
               Core.TermRecord (Core.Record {
                 Core.recordTypeName = tname,
@@ -268,7 +268,7 @@ typeAlternatives type_ = ((\x -> case x of
     let type2 = (Core.annotatedTypeBody v1)
     in [
       type2]
-  Core.TypeOptional v1 -> [
+  Core.TypeMaybe v1 -> [
     Core.TypeList v1]
   Core.TypeUnion v1 ->  
     let tname = (Core.rowTypeTypeName v1)

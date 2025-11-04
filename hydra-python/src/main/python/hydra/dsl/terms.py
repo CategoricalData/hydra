@@ -38,7 +38,7 @@ from hydra.core import (
     TermList,
     TermLiteral,
     TermMap,
-    TermOptional,
+    TermMaybe,
     TermProduct,
     TermRecord,
     TermSet,
@@ -317,7 +317,7 @@ def nothing() -> Term:
 
 def optional(term: Maybe[Term]) -> Term:
     """Construct an optional term."""
-    return TermOptional(term)
+    return TermMaybe(term)
 
 
 def pair(a: Term, b: Term) -> Term:

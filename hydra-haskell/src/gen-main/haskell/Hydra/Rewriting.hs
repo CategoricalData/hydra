@@ -598,7 +598,7 @@ rewriteAndFoldTerm f term0 =
                                 Core.letBody = (snd renv)})) (fst renv) (Core.letBindings v1))
                             Core.TermList v1 -> (forMany recurse (\x -> Core.TermList x) val0 v1)
                             Core.TermMap v1 -> (forMany forPair (\pairs -> Core.TermMap (Maps.fromList pairs)) val0 (Maps.toList v1))
-                            Core.TermOptional v1 -> (Maybes.maybe dflt (\t -> forSingle recurse (\t1 -> Core.TermOptional (Just t1)) val0 t) v1)
+                            Core.TermMaybe v1 -> (Maybes.maybe dflt (\t -> forSingle recurse (\t1 -> Core.TermMaybe (Just t1)) val0 t) v1)
                             Core.TermProduct v1 -> (forMany recurse (\x -> Core.TermProduct x) val0 v1)
                             Core.TermRecord v1 -> (forMany forField (\fields -> Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.recordTypeName v1),
@@ -680,7 +680,7 @@ rewriteAndFoldTermM f term0 =
                               Core.letBody = (snd renv)})) (fst renv) (Core.letBindings v1)))
                             Core.TermList v1 -> (forMany recurse (\x -> Core.TermList x) val0 v1)
                             Core.TermMap v1 -> (forMany forPair (\pairs -> Core.TermMap (Maps.fromList pairs)) val0 (Maps.toList v1))
-                            Core.TermOptional v1 -> (Maybes.maybe dflt (\t -> forSingle recurse (\t1 -> Core.TermOptional (Just t1)) val0 t) v1)
+                            Core.TermMaybe v1 -> (Maybes.maybe dflt (\t -> forSingle recurse (\t1 -> Core.TermMaybe (Just t1)) val0 t) v1)
                             Core.TermProduct v1 -> (forMany recurse (\x -> Core.TermProduct x) val0 v1)
                             Core.TermRecord v1 -> (forMany forField (\fields -> Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.recordTypeName v1),
@@ -757,7 +757,7 @@ rewriteTerm f term0 =
                     Core.TermList v1 -> (Core.TermList (Lists.map recurse v1))
                     Core.TermLiteral v1 -> (Core.TermLiteral v1)
                     Core.TermMap v1 -> (Core.TermMap (forMap v1))
-                    Core.TermOptional v1 -> (Core.TermOptional (Maybes.map recurse v1))
+                    Core.TermMaybe v1 -> (Core.TermMaybe (Maybes.map recurse v1))
                     Core.TermProduct v1 -> (Core.TermProduct (Lists.map recurse v1))
                     Core.TermRecord v1 -> (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.recordTypeName v1),
@@ -845,7 +845,7 @@ rewriteTermM f term0 =
                 Core.TermList v1 -> (Flows.bind (Flows.mapList recurse v1) (\rels -> Flows.pure (Core.TermList rels)))
                 Core.TermLiteral v1 -> (Flows.pure (Core.TermLiteral v1))
                 Core.TermMap v1 -> (Flows.bind (Flows.mapList forPair (Maps.toList v1)) (\pairs -> Flows.pure (Core.TermMap (Maps.fromList pairs))))
-                Core.TermOptional v1 -> (Flows.bind (Flows.mapOptional recurse v1) (\rm -> Flows.pure (Core.TermOptional rm)))
+                Core.TermMaybe v1 -> (Flows.bind (Flows.mapMaybe recurse v1) (\rm -> Flows.pure (Core.TermMaybe rm)))
                 Core.TermProduct v1 -> (Flows.map (\rtuple -> Core.TermProduct rtuple) (Flows.mapList recurse v1))
                 Core.TermRecord v1 ->  
                   let n = (Core.recordTypeName v1)
@@ -945,7 +945,7 @@ rewriteTermWithContext f cx0 term0 =
                       Core.TermList v1 -> (Core.TermList (Lists.map recurse v1))
                       Core.TermLiteral v1 -> (Core.TermLiteral v1)
                       Core.TermMap v1 -> (Core.TermMap (forMap v1))
-                      Core.TermOptional v1 -> (Core.TermOptional (Maybes.map recurse v1))
+                      Core.TermMaybe v1 -> (Core.TermMaybe (Maybes.map recurse v1))
                       Core.TermProduct v1 -> (Core.TermProduct (Lists.map recurse v1))
                       Core.TermRecord v1 -> (Core.TermRecord (Core.Record {
                         Core.recordTypeName = (Core.recordTypeName v1),
@@ -1035,7 +1035,7 @@ rewriteTermWithContextM f cx0 term0 =
                       Core.TermList v1 -> (Flows.bind (Flows.mapList recurse v1) (\rels -> Flows.pure (Core.TermList rels)))
                       Core.TermLiteral v1 -> (Flows.pure (Core.TermLiteral v1))
                       Core.TermMap v1 -> (Flows.bind (Flows.mapList forPair (Maps.toList v1)) (\pairs -> Flows.pure (Core.TermMap (Maps.fromList pairs))))
-                      Core.TermOptional v1 -> (Flows.bind (Flows.mapOptional recurse v1) (\rm -> Flows.pure (Core.TermOptional rm)))
+                      Core.TermMaybe v1 -> (Flows.bind (Flows.mapMaybe recurse v1) (\rm -> Flows.pure (Core.TermMaybe rm)))
                       Core.TermProduct v1 -> (Flows.map (\rtuple -> Core.TermProduct rtuple) (Flows.mapList recurse v1))
                       Core.TermRecord v1 ->  
                         let n = (Core.recordTypeName v1)
@@ -1109,7 +1109,7 @@ rewriteType f typ0 =
             Core.TypeMap v1 -> (Core.TypeMap (Core.MapType {
               Core.mapTypeKeys = (recurse (Core.mapTypeKeys v1)),
               Core.mapTypeValues = (recurse (Core.mapTypeValues v1))}))
-            Core.TypeOptional v1 -> (Core.TypeOptional (recurse v1))
+            Core.TypeMaybe v1 -> (Core.TypeMaybe (recurse v1))
             Core.TypeProduct v1 -> (Core.TypeProduct (Lists.map recurse v1))
             Core.TypeRecord v1 -> (Core.TypeRecord (Core.RowType {
               Core.rowTypeTypeName = (Core.rowTypeTypeName v1),
@@ -1148,7 +1148,7 @@ rewriteTypeM f typ0 =
           Core.TypeMap v1 -> (Flows.bind (recurse (Core.mapTypeKeys v1)) (\kt -> Flows.bind (recurse (Core.mapTypeValues v1)) (\vt -> Flows.pure (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = kt,
             Core.mapTypeValues = vt})))))
-          Core.TypeOptional v1 -> (Flows.bind (recurse v1) (\rt -> Flows.pure (Core.TypeOptional rt)))
+          Core.TypeMaybe v1 -> (Flows.bind (recurse v1) (\rt -> Flows.pure (Core.TypeMaybe rt)))
           Core.TypeProduct v1 -> (Flows.bind (Flows.mapList recurse v1) (\rtypes -> Flows.pure (Core.TypeProduct rtypes)))
           Core.TypeRecord v1 ->  
             let name = (Core.rowTypeTypeName v1)
@@ -1267,7 +1267,7 @@ subterms x = case x of
   Core.TermMap v1 -> (Lists.concat (Lists.map (\p -> [
     fst p,
     (snd p)]) (Maps.toList v1)))
-  Core.TermOptional v1 -> (Maybes.maybe [] (\t -> [
+  Core.TermMaybe v1 -> (Maybes.maybe [] (\t -> [
     t]) v1)
   Core.TermProduct v1 -> v1
   Core.TermRecord v1 -> (Lists.map Core.fieldTerm (Core.recordFields v1))
@@ -1307,8 +1307,8 @@ subtermsWithAccessors x = case x of
   Core.TermMap v1 -> (Lists.concat (Lists.map (\p -> [
     (Accessors.TermAccessorMapKey 0, (fst p)),
     (Accessors.TermAccessorMapValue 0, (snd p))]) (Maps.toList v1)))
-  Core.TermOptional v1 -> (Maybes.maybe [] (\t -> [
-    (Accessors.TermAccessorOptionalTerm, t)]) v1)
+  Core.TermMaybe v1 -> (Maybes.maybe [] (\t -> [
+    (Accessors.TermAccessorMaybeTerm, t)]) v1)
   Core.TermProduct v1 -> (Lists.map (\e -> (Accessors.TermAccessorProductTerm 0, e)) v1)
   Core.TermRecord v1 -> (Lists.map (\f -> (Accessors.TermAccessorRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v1))
   Core.TermSet v1 -> (Lists.map (\e -> (Accessors.TermAccessorListElement 0, e)) (Sets.toList v1))
@@ -1344,7 +1344,7 @@ subtypes x = case x of
   Core.TypeMap v1 -> [
     Core.mapTypeKeys v1,
     (Core.mapTypeValues v1)]
-  Core.TypeOptional v1 -> [
+  Core.TypeMaybe v1 -> [
     v1]
   Core.TypeProduct v1 -> v1
   Core.TypeRecord v1 -> (Lists.map Core.fieldTypeType (Core.rowTypeFields v1))

@@ -62,8 +62,8 @@ type_ x = case x of
         (type_ (Core.mapTypeKeys v1))],
       " to "],
     (type_ (Core.mapTypeValues v1))])
-  Core.TypeOptional v1 -> (Strings.cat [
-    "optional ",
+  Core.TypeMaybe v1 -> (Strings.cat [
+    "maybe ",
     (type_ v1)])
   Core.TypeProduct _ -> "tuple"
   Core.TypeRecord _ -> "record"

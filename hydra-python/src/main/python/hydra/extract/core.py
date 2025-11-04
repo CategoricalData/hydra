@@ -342,7 +342,7 @@ def n_args[T0, T1](name: hydra.core.Name, n: int, args: frozenlist[T0]) -> hydra
 def optional[T0](f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[T0]]:
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[T0]]:
         match term:
-            case hydra.core.TermOptional(value=mt):
+            case hydra.core.TermMaybe(value=mt):
                 return hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(Maybe[T0], Nothing())), (lambda t: hydra.lib.flows.map(cast(Callable[[T0], Maybe[T0]], hydra.lib.maybes.pure), f(t))), mt)
             
             case _:
@@ -352,7 +352,7 @@ def optional[T0](f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.G
 def optional_type[T0](typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
     stripped = hydra.rewriting.deannotate_type(typ)
     match stripped:
-        case hydra.core.TypeOptional(value=t):
+        case hydra.core.TypeMaybe(value=t):
             return hydra.lib.flows.pure(t)
         
         case _:

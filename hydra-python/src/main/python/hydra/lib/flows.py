@@ -168,7 +168,7 @@ def map_list[S, X, Y](f: Callable[[X], Flow[S, Y]], xs: Sequence[X]) -> Flow[S, 
     return Flow(run)
 
 
-def map_optional[S, X, Y](f: Callable[[X], Flow[S, Y]], mx: Maybe[X]) -> Flow[S, Maybe[Y]]:
+def map_maybe[S, X, Y](f: Callable[[X], Flow[S, Y]], mx: Maybe[X]) -> Flow[S, Maybe[Y]]:
     """Map a monadic function over an optional value."""
     def run(state: S, trace: Trace) -> FlowState[S, Maybe[Y]]:
         match mx:

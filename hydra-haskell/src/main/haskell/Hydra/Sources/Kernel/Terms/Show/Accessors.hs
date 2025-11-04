@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -78,7 +78,7 @@ termAccessorDef = define "termAccessor" $
     _TermAccessor_listElement>>: "i" ~> var "idx" @@ var "i",
     _TermAccessor_mapKey>>: "i" ~> var "idxSuff" @@ ".key" @@ var "i",
     _TermAccessor_mapValue>>: "i" ~> var "idxSuff" @@ ".value" @@ var "i",
-    _TermAccessor_optionalTerm>>: constant (just "just"),
+    _TermAccessor_maybeTerm>>: constant (just "just"),
     _TermAccessor_productTerm>>: "i" ~> var "idx" @@ var "i",
     _TermAccessor_recordField>>: "name" ~> just (Strings.cat2 "." (Core.unName (var "name"))),
     _TermAccessor_setElement>>: "i" ~> var "idx" @@ var "i",

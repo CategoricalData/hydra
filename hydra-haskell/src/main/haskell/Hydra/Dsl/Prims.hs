@@ -163,7 +163,7 @@ noInterpretedForm name = fail $ "primitive " ++ unName name ++ " does not have a
 optional :: TermCoder x -> TermCoder (Y.Maybe x)
 optional mel = TermCoder (Types.optional $ termCoderType mel) $ Coder encode decode
   where
-    encode = ExtractCore.optional (coderEncode $ termCoderCoder mel)
+    encode = ExtractCore.maybeTerm (coderEncode $ termCoderCoder mel)
     decode mv = Terms.optional <$> case mv of
       Nothing -> pure Nothing
       Just v -> Just <$> (coderDecode $ termCoderCoder mel) v

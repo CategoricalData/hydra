@@ -685,7 +685,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
 
         TermLiteral l -> pure $ encodeLiteral l
 
-        TermOptional mt -> case mt of
+        TermMaybe mt -> case mt of
           Nothing -> pure $ javaMethodInvocationToJavaExpression $
             methodInvocationStatic (Java.Identifier "hydra.util.Opt") (Java.Identifier "empty") []
           Just term1 -> do
@@ -763,7 +763,7 @@ encodeType aliases t = case deannotateType t of
     TypeRecord (RowType _Unit []) -> unit
     TypeRecord (RowType name _) -> pure $
       Java.TypeReference $ nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) name Nothing
-    TypeOptional ot -> do
+    TypeMaybe ot -> do
       jot <- encode ot >>= javaTypeToJavaReferenceType
       return $ javaRefType [jot] hydraUtilPackageName "Opt"
     TypeSet st -> do

@@ -216,7 +216,7 @@ def eta_expand_typed_term[T0](tx0: hydra.typing.TypeContext, term0: hydra.core.T
             tname = cs.type_name
             dflt = cs.default
             cases = cs.cases
-            return hydra.lib.flows.bind(hydra.lib.flows.map_optional((lambda v1: rewrite(False, False, cast(frozenlist[hydra.core.Type], ()), recurse, tx, v1)), dflt), (lambda rdflt: hydra.lib.flows.bind(hydra.lib.flows.map_list(for_case, cases), (lambda rcases: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(tname, rdflt, rcases))))))))))))
+            return hydra.lib.flows.bind(hydra.lib.flows.map_maybe((lambda v1: rewrite(False, False, cast(frozenlist[hydra.core.Type], ()), recurse, tx, v1)), dflt), (lambda rdflt: hydra.lib.flows.bind(hydra.lib.flows.map_list(for_case, cases), (lambda rcases: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(tname, rdflt, rcases))))))))))))
         def for_elimination(elm: hydra.core.Elimination) -> hydra.compute.Flow[T1, hydra.core.Term]:
             def check_base(elm2: hydra.core.Elimination) -> hydra.compute.Flow[T1, hydra.core.Term]:
                 match elm2:
@@ -426,7 +426,7 @@ def term_is_value[T0](g: T0, term: hydra.core.Term) -> bool:
         case hydra.core.TermMap(value=m):
             return hydra.lib.lists.foldl((lambda b, kv: hydra.lib.logic.and_(b, hydra.lib.logic.and_(term_is_value(g, kv[0]), term_is_value(g, kv[1])))), True, hydra.lib.maps.to_list(m))
         
-        case hydra.core.TermOptional(value=m2):
+        case hydra.core.TermMaybe(value=m2):
             return hydra.lib.maybes.maybe(True, (lambda v1: term_is_value(g, v1)), m2)
         
         case hydra.core.TermRecord(value=r):

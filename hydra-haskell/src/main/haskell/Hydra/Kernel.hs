@@ -58,7 +58,7 @@ import Hydra.Accessors
 import Hydra.Adapt.Literals
 import Hydra.Adapt.Modules
 import Hydra.Adapt.Simple
-import Hydra.Adapt.Terms hiding (optionalToList)
+import Hydra.Adapt.Terms hiding (maybeToList)
 import Hydra.Adapt.Utils
 import Hydra.Annotations
 import Hydra.Arity

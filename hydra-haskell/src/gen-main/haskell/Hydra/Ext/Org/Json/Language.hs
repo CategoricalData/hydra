@@ -42,16 +42,16 @@ jsonLanguage = Coders.Language {
       Mantle.TermVariantList,
       Mantle.TermVariantLiteral,
       Mantle.TermVariantMap,
-      Mantle.TermVariantOptional,
+      Mantle.TermVariantMaybe,
       Mantle.TermVariantRecord])
     typeVariants = (Sets.fromList [
       Mantle.TypeVariantList,
       Mantle.TypeVariantLiteral,
       Mantle.TypeVariantMap,
-      Mantle.TypeVariantOptional,
+      Mantle.TypeVariantMaybe,
       Mantle.TypeVariantRecord])
     typePredicate = (\typ -> (\x -> case x of
-      Core.TypeOptional v1 -> ((\x -> case x of
-        Core.TypeOptional _ -> False
+      Core.TypeMaybe v1 -> ((\x -> case x of
+        Core.TypeMaybe _ -> False
         _ -> True) v1)
       _ -> True) (Rewriting.deannotateType typ))

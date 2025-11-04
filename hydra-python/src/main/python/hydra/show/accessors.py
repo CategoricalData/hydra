@@ -57,7 +57,7 @@ def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
         case hydra.accessors.TermAccessorMapValue(value=i3):
             return idx_suff(".value", i3)
         
-        case hydra.accessors.TermAccessorOptionalTerm():
+        case hydra.accessors.TermAccessorMaybeTerm():
             return cast(Maybe[str], Just("just"))
         
         case hydra.accessors.TermAccessorProductTerm(value=i4):

@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -91,7 +91,7 @@ module_ = Module (Namespace "hydra.checking") elements
       el typeOfListDef,
       el typeOfLiteralDef,
       el typeOfMapDef,
-      el typeOfOptionalDef,
+      el typeOfMaybeDef,
       el typeOfPrimitiveDef,
       el typeOfProjectionDef,
       el typeOfRecordDef,
@@ -169,10 +169,10 @@ checkForUnboundTypeVariablesDef = define "checkForUnboundTypeVariables" $
                  ". bound term = " ++ (ref ShowCore.termDef @@ (Core.bindingTerm $ var "binding"))
               ++ ". bound type = " ++ (optCases (Core.bindingType $ var "binding") ("none") (ref ShowCore.typeSchemeDef)))))) $
     "checkOptional" <~ ("m" ~>
-      exec (Flows.mapOptional (var "check") (var "m")) $
+      exec (Flows.mapMaybe (var "check") (var "m")) $
       produce unit) $
     "checkOptionalList" <~ ("ml" ~>
-      exec (Flows.mapOptional ("l" ~> Flows.mapList (var "check") (var "l")) (var "ml")) $
+      exec (Flows.mapMaybe ("l" ~> Flows.mapList (var "check") (var "l")) (var "ml")) $
       produce unit) $
     cases _Term (var "term")
       (Just $ var "dflt") [
@@ -340,7 +340,7 @@ typeOfDef = define "typeOf" $
     _Term_list>>: ref typeOfListDef @@ var "tx" @@ var "typeArgs",
     _Term_literal>>: ref typeOfLiteralDef @@ var "tx" @@ var "typeArgs",
     _Term_map>>: ref typeOfMapDef @@ var "tx" @@ var "typeArgs",
-    _Term_optional>>: ref typeOfOptionalDef @@ var "tx" @@ var "typeArgs",
+    _Term_maybe>>: ref typeOfMaybeDef @@ var "tx" @@ var "typeArgs",
     _Term_product>>: ref typeOfTupleDef @@ var "tx" @@ var "typeArgs",
     _Term_record>>: ref typeOfRecordDef @@ var "tx" @@ var "typeArgs",
     _Term_set>>: ref typeOfSetDef @@ var "tx" @@ var "typeArgs",
@@ -410,7 +410,7 @@ typeOfCaseStatementDef = define "typeOfCaseStatement" $
   "dflt" <~ Core.caseStatementDefault (var "cs") $
   "cases" <~ Core.caseStatementCases (var "cs") $
   "cterms" <~ Lists.map (unaryFunction Core.fieldTerm) (var "cases") $
-  "tdflt" <<~ Flows.mapOptional ("e" ~> ref typeOfDef @@ var "tx" @@ list [] @@ var "e") (var "dflt") $
+  "tdflt" <<~ Flows.mapMaybe ("e" ~> ref typeOfDef @@ var "tx" @@ list [] @@ var "e") (var "dflt") $
   "tcterms" <<~ Flows.mapList ("e" ~> ref typeOfDef @@ var "tx" @@ list [] @@ var "e") (var "cterms") $
   "fcods" <<~ Flows.mapList ("t" ~> Flows.map (unaryFunction Core.functionTypeCodomain) $ ref ExtractCore.functionTypeDef @@ var "t") (var "tcterms") $
   "cods" <~ Maybes.cat (Lists.cons (var "tdflt") $ Lists.map (unaryFunction Maybes.pure) (var "fcods")) $
@@ -547,22 +547,22 @@ typeOfMapDef = define "typeOfMap" $
     -- Nonempty map must have keys and values of the same type
     (var "nonnull")
 
-typeOfOptionalDef :: TBinding (TypeContext -> [Type] -> Maybe Term -> Flow s Type)
-typeOfOptionalDef = define "typeOfOptional" $
+typeOfMaybeDef :: TBinding (TypeContext -> [Type] -> Maybe Term -> Flow s Type)
+typeOfMaybeDef = define "typeOfMaybe" $
   doc "Reconstruct the type of an optional value" $
   "tx" ~> "typeArgs" ~> "mt" ~>
     -- Nothing case is polymorphic
   "forNothing" <~ (
     "n" <~ Lists.length (var "typeArgs") $
     Logic.ifElse (Equality.equal (var "n") (int32 1))
-      (Flows.pure $ Core.typeOptional $ Lists.head $ var "typeArgs")
+      (Flows.pure $ Core.typeMaybe $ Lists.head $ var "typeArgs")
       (Flows.fail $ "optional type applied to " ++ Literals.showInt32 (var "n") ++ " argument(s). Expected 1.")) $
     -- Just case: infer type of the contained term
   "forJust" <~ ("term" ~>
     "t" <<~ (
       "termType" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "term" $
        exec (ref checkTypeVariablesDef @@ var "tx" @@ var "termType") $
-       Flows.pure $ Core.typeOptional $ var "termType") $
+       Flows.pure $ Core.typeMaybe $ var "termType") $
     ref applyTypeArgumentsToTypeDef @@ var "tx" @@ var "typeArgs" @@ var "t") $
   optCases (var "mt") (var "forNothing") (var "forJust")
 

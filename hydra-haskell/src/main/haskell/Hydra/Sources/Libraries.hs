@@ -111,7 +111,7 @@ _flows_map         = qname _hydra_lib_flows "map" :: Name
 _flows_mapElems    = qname _hydra_lib_flows "mapElems" :: Name
 _flows_mapKeys     = qname _hydra_lib_flows "mapKeys" :: Name
 _flows_mapList     = qname _hydra_lib_flows "mapList" :: Name
-_flows_mapOptional = qname _hydra_lib_flows "mapOptional" :: Name
+_flows_mapMaybe = qname _hydra_lib_flows "mapMaybe" :: Name
 _flows_mapSet      = qname _hydra_lib_flows "mapSet" :: Name
 _flows_pure        = qname _hydra_lib_flows "pure" :: Name
 _flows_sequence    = qname _hydra_lib_flows "sequence" :: Name
@@ -126,7 +126,7 @@ hydraLibFlows = standardLibrary _hydra_lib_flows [
     prim2 _flows_mapElems    Flows.mapElems    ["v1", "s", "v2", "k"] (function v1 (flow s v2)) (Prims.map k v1) (flow s (Prims.map k v2)),
     prim2 _flows_mapKeys     Flows.mapKeys     ["k1", "s", "k2", "v"] (function k1 (flow s k2)) (Prims.map k1 v) (flow s (Prims.map k2 v)),
     prim2 _flows_mapList     Flows.mapList     ["x", "s", "y"]        (function x (flow s y)) (list x) (flow s (list y)),
-    prim2 _flows_mapOptional Flows.mapOptional ["x", "s", "y"]        (function x $ flow s y) (optional x) (flow s $ optional y),
+    prim2 _flows_mapMaybe Flows.mapMaybe ["x", "s", "y"]        (function x $ flow s y) (optional x) (flow s $ optional y),
     prim2 _flows_mapSet      Flows.mapSet      ["x", "s", "y"]        (function x (flow s y)) (set x) (flow s (set y)),
     prim1 _flows_pure        Flows.pure        ["x", "s"]             x (flow s x),
     prim1 _flows_sequence    Flows.sequence    ["s", "x"]             (list (flow s x)) (flow s (list x))]
@@ -504,14 +504,14 @@ casesInterp opt def fun = maybeInterp def fun opt
 -- | Interpreted implementation of hydra.lib.maybes.maybe
 maybeInterp :: Term -> Term -> Term -> Flow Graph Term
 maybeInterp def fun opt = do
-    mval <- ExtractCore.optional Prelude.pure opt
+    mval <- ExtractCore.maybeTerm Prelude.pure opt
     return $ case mval of
       Nothing -> def
       Just val -> Terms.apply fun val
 
 maybesMapInterp :: Term -> Term -> Flow Graph Term
 maybesMapInterp fun opt = do
-    mval <- ExtractCore.optional Prelude.pure opt
+    mval <- ExtractCore.maybeTerm Prelude.pure opt
     return $ case mval of
       Nothing -> Terms.nothing
       Just val -> Terms.just $ Terms.apply fun val

@@ -380,7 +380,7 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
           (unaryFunction $ inject H._Expression H._Expression_list)
           (Flows.mapList (var "encodePair") $ Maps.toList (var "m"))) $
         Flows.pure $ ref HaskellUtils.hsappDef @@ var "lhs" @@ var "rhs",
-      _Term_optional>>: lambda "m" $
+      _Term_maybe>>: lambda "m" $
         Maybes.cases (var "m")
           (Flows.pure $ ref HaskellUtils.hsvarDef @@ string "Nothing") $
           lambda "t" $
@@ -504,7 +504,7 @@ encodeTypeDef = haskellCoderDefinition "encodeType" $
           Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "M.Map",
           var "encode" @@ var "kt",
           var "encode" @@ var "vt"]),
-    _Type_optional>>: lambda "ot" $
+    _Type_maybe>>: lambda "ot" $
       Flows.map
         (ref HaskellUtils.toTypeApplicationDef)
         (Flows.sequence $ list [

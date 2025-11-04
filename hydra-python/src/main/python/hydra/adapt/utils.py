@@ -120,7 +120,7 @@ def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.co
             case hydra.core.TypeMap(value=mt):
                 return hydra.lib.logic.and_(type_is_supported(constraints, mt.keys), type_is_supported(constraints, mt.values))
             
-            case hydra.core.TypeOptional(value=ot):
+            case hydra.core.TypeMaybe(value=ot):
                 return type_is_supported(constraints, ot)
             
             case hydra.core.TypeProduct(value=types):

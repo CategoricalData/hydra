@@ -107,21 +107,21 @@ typeScriptLanguageDef = typeScriptLanguageDefinition "typeScriptLanguage" $
     Mantle.termVariantList,
     Mantle.termVariantLiteral,
     Mantle.termVariantMap,
-    Mantle.termVariantOptional,
+    Mantle.termVariantMaybe,
     Mantle.termVariantRecord,
     Mantle.termVariantUnion],
   "typeVariants">: Sets.fromList $ list [
     Mantle.typeVariantList,
     Mantle.typeVariantLiteral,
     Mantle.typeVariantMap,
-    Mantle.typeVariantOptional,
+    Mantle.typeVariantMaybe,
     Mantle.typeVariantRecord,
     Mantle.typeVariantUnion],
   "types">: match _Type
     (Just true) [
     _Type_map>>: lambda "mt" (cases _Type ((ref Rewriting.deannotateTypeDef @@ (Core.mapTypeValues $ var "mt")))
       (Just true) [
-      _Type_optional>>: constant false])]] $
+      _Type_maybe>>: constant false])]] $
   Coders.language
     (Coders.languageName "hydra.ext.typeScript")
     (Coders.languageConstraints

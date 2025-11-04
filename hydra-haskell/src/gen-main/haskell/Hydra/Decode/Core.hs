@@ -98,7 +98,7 @@ type_ dat = ((\x -> case x of
     (Core.Name "list", (\et -> Flows.map (\x -> Core.TypeList x) (type_ et))),
     (Core.Name "literal", (\lt -> Flows.map (\x -> Core.TypeLiteral x) (literalType lt))),
     (Core.Name "map", (\mt -> Flows.map (\x -> Core.TypeMap x) (mapType mt))),
-    (Core.Name "optional", (\et -> Flows.map (\x -> Core.TypeOptional x) (type_ et))),
+    (Core.Name "maybe", (\et -> Flows.map (\x -> Core.TypeMaybe x) (type_ et))),
     (Core.Name "product", (\types -> Flows.map (\x -> Core.TypeProduct x) (Core_.listOf type_ types))),
     (Core.Name "record", (\rt -> Flows.map (\x -> Core.TypeRecord x) (rowType rt))),
     (Core.Name "set", (\et -> Flows.map (\x -> Core.TypeSet x) (type_ et))),

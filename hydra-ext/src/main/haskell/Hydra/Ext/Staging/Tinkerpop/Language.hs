@@ -42,13 +42,13 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       cond TermVariantLiteral supportsLiterals,
       cond TermVariantMap supportsMaps,
       -- An optional value translates to an absent vertex property
-      Just TermVariantOptional],
+      Just TermVariantMaybe],
 
     languageConstraintsTypeVariants = S.fromList $ Y.catMaybes [
       cond TypeVariantList supportsLists,
       cond TypeVariantLiteral supportsLiterals,
       cond TypeVariantMap supportsMaps,
-      Just TypeVariantOptional,
+      Just TypeVariantMaybe,
       Just TypeVariantWrap],
 
     languageConstraintsTypes = \typ -> case deannotateType typ of
@@ -71,7 +71,7 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       TypeLiteral _ -> True
       TypeMap (MapType kt _) -> extraFeaturesSupportsMapKey extras kt
       TypeWrap _ -> True
-      TypeOptional ot -> case deannotateType ot of
+      TypeMaybe ot -> case deannotateType ot of
         TypeLiteral _ -> True
         _ -> False
       _ -> True}

@@ -42,7 +42,7 @@ data FieldRepetitionType =
   -- | This field is required (can not be null) and each record has exactly 1 value.
   FieldRepetitionTypeRequired  |
   -- | The field is optional (can be null) and each record has 0 or 1 values.
-  FieldRepetitionTypeOptional  |
+  FieldRepetitionTypeMaybe  |
   -- | The field is repeated and can contain 0 or more values
   FieldRepetitionTypeRepeated 
   deriving (Eq, Ord, Read, Show)

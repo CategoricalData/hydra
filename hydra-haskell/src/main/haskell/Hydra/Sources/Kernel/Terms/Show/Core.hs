@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -304,7 +304,7 @@ termDef = define "term" $
         string "{",
         Strings.intercalate (string ", ") $ Lists.map (var "entry") $ Maps.toList $ var "m",
         string "}"],
-    _Term_optional>>: "mt" ~> Maybes.maybe
+    _Term_maybe>>: "mt" ~> Maybes.maybe
       (string "nothing")
       ("t" ~> Strings.cat $ list [
         string "just(",
@@ -441,8 +441,8 @@ typeDef = define "type" $
         string ", ",
         ref typeDef @@ var "valTyp",
         string ">"],
-    _Type_optional>>: "etyp" ~> Strings.cat $ list [
-      string "optional<",
+    _Type_maybe>>: "etyp" ~> Strings.cat $ list [
+      string "maybe<",
       ref typeDef @@ var "etyp",
       string ">"],
     _Type_product>>: "types" ~>

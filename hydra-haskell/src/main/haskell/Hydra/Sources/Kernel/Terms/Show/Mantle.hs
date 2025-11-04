@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -68,7 +68,7 @@ termVariantDef = define "termVariant" $
     _TermVariant_list>>: constant $ string "list",
     _TermVariant_literal>>: constant $ string "literal",
     _TermVariant_map>>: constant $ string "map",
-    _TermVariant_optional>>: constant $ string "optional",
+    _TermVariant_maybe>>: constant $ string "maybe",
     _TermVariant_product>>: constant $ string "product",
     _TermVariant_record>>: constant $ string "record",
     _TermVariant_set>>: constant $ string "set",
@@ -91,7 +91,7 @@ typeVariantDef = define "typeVariant" $
     _TypeVariant_list>>: constant $ string "list",
     _TypeVariant_literal>>: constant $ string "literal",
     _TypeVariant_map>>: constant $ string "map",
-    _TypeVariant_optional>>: constant $ string "optional",
+    _TypeVariant_maybe>>: constant $ string "maybe",
     _TypeVariant_product>>: constant $ string "product",
     _TypeVariant_record>>: constant $ string "record",
     _TypeVariant_set>>: constant $ string "set",

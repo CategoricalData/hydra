@@ -104,7 +104,7 @@ edgeCoder dir schema source eidType tname label outLabel inLabel mIdAdapter outA
     coder = Coder encode decode
       where
         encode term = case deannotateTerm term of
-          TermOptional (Just ot) -> encode ot
+          TermMaybe (Just ot) -> encode ot
           TermRecord (Record tname' fields) -> do
               checkRecordName tname tname'
               let fieldsm = fieldMap fields
@@ -146,7 +146,7 @@ elementCoder :: (Show t, Show v)
   -> t -> t
   -> Flow s (ElementAdapter s t v)
 elementCoder mparent schema source vidType eidType = case deannotateType source of
-    TypeOptional ot -> elementCoder mparent schema ot vidType eidType
+    TypeMaybe ot -> elementCoder mparent schema ot vidType eidType
 
     TypeRecord (RowType name fields) -> withTrace ("adapter for " ++ unName name) $ do
 
@@ -191,11 +191,11 @@ encodeProperty :: M.Map Name Term -> PropertyAdapter s t v -> Flow s (Maybe (PG.
 encodeProperty fields adapter = do
   case M.lookup fname fields of
     Nothing -> case ftyp of
-      TypeOptional _ -> pure Nothing
+      TypeMaybe _ -> pure Nothing
       _ -> fail $ "expected field not found in record: " ++ unName fname
     Just value -> case ftyp of
-      TypeOptional _ -> case deannotateTerm value of
-        TermOptional ov -> case ov of
+      TypeMaybe _ -> case deannotateTerm value of
+        TermMaybe ov -> case ov of
           Nothing -> pure Nothing
           Just v -> Just <$> encodeValue v
         _ -> unexpected "optional term" $ show value
@@ -366,7 +366,7 @@ vertexCoder schema source vidType tname vlabel idAdapter propAdapters edgeAdapte
     coder = Coder encode decode
       where
         encode term = case deannotateTerm term of
-            TermOptional (Just ot) -> encode ot
+            TermMaybe (Just ot) -> encode ot
             TermRecord (Record tname' fields) -> do
               checkRecordName tname tname'
               let fieldsm = fieldMap fields

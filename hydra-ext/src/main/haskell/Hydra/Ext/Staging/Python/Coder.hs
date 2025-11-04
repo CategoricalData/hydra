@@ -515,7 +515,7 @@ encodeTermInline env term = case deannotateTerm term of
           pyK <- encode k
           pyV <- encode v
           return $ Py.DoubleStarredKvpairPair $ Py.Kvpair pyK pyV
-    TermOptional mt -> case mt of
+    TermMaybe mt -> case mt of
         Nothing -> return $ functionCall (pyNameToPyPrimary $ Py.Name "Nothing") []
         Just term1 -> do
           pyexp <- encode term1
@@ -654,7 +654,7 @@ encodeType env typ = case deannotateType typ of
       pyvt <- encode vt
       return $ nameAndParams (Py.Name "FrozenDict") [pykt, pyvt]
     TypeLiteral lt -> encodeLiteralType lt
-    TypeOptional et -> do
+    TypeMaybe et -> do
       ptype <- encode et
       return $ pyPrimaryToPyExpression $
         primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Maybe") [ptype]
@@ -815,7 +815,7 @@ extendMetaForTerm topLevel meta0 t = case t of
         _ -> meta
       _ -> meta
     TermMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
-    TermOptional m -> case m of
+    TermMaybe m -> case m of
       Nothing -> meta {pythonModuleMetadataUsesNothing = True}
       Just _ -> meta {pythonModuleMetadataUsesJust = True}
     _ -> meta
@@ -865,7 +865,7 @@ extendMetaForType topLevel isTermAnnot typ meta = extendFor meta3 typ
             _ -> meta
           _ -> meta
         TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
-        TypeOptional _ -> meta {pythonModuleMetadataUsesMaybe = True}
+        TypeMaybe _ -> meta {pythonModuleMetadataUsesMaybe = True}
         TypeProduct _ -> meta {pythonModuleMetadataUsesTuple = True}
         TypeRecord (RowType _ fields) -> meta {
             pythonModuleMetadataUsesAnnotated = L.foldl checkForAnnotated (pythonModuleMetadataUsesAnnotated meta) fields,

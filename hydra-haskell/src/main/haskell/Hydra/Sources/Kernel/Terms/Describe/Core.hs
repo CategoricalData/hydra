@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -102,7 +102,7 @@ typeDef = define "type" $
       ++ (ref typeDef @@ (project _MapType _MapType_keys @@ var "mt"))
       ++ string " to "
       ++ (ref typeDef @@ (project _MapType _MapType_values  @@ var "mt")),
-    _Type_optional>>: lambda "ot" $ string "optional " ++ (ref typeDef @@ var "ot"),
+    _Type_maybe>>: lambda "ot" $ string "maybe " ++ (ref typeDef @@ var "ot"),
     _Type_product>>: constant $ string "tuple",
     _Type_record>>: constant $ string "record",
     _Type_set>>: lambda "st" $ string "set of " ++ (ref typeDef @@ var "st"),

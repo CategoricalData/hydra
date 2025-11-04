@@ -275,7 +275,7 @@ term t =
         "{",
         Strings.intercalate ", " (Lists.map entry (Maps.toList v1)),
         "}"])
-    Core.TermOptional v1 -> (Maybes.maybe "nothing" (\t -> Strings.cat [
+    Core.TermMaybe v1 -> (Maybes.maybe "nothing" (\t -> Strings.cat [
       "just(",
       term t,
       ")"]) v1)
@@ -423,8 +423,8 @@ type_ typ =
                 ", ",
                 type_ valTyp,
                 ">"])
-          Core.TypeOptional v1 -> (Strings.cat [
-            "optional<",
+          Core.TypeMaybe v1 -> (Strings.cat [
+            "maybe<",
             type_ v1,
             ">"])
           Core.TypeProduct v1 ->  

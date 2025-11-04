@@ -130,7 +130,7 @@ class TermVariant(Enum):
     
     MAP = "map"
     
-    OPTIONAL = "optional"
+    MAYBE = "maybe"
     
     PRODUCT = "product"
     
@@ -160,7 +160,7 @@ TERM_VARIANT__LET__NAME = hydra.core.Name("let")
 TERM_VARIANT__LIST__NAME = hydra.core.Name("list")
 TERM_VARIANT__LITERAL__NAME = hydra.core.Name("literal")
 TERM_VARIANT__MAP__NAME = hydra.core.Name("map")
-TERM_VARIANT__OPTIONAL__NAME = hydra.core.Name("optional")
+TERM_VARIANT__MAYBE__NAME = hydra.core.Name("maybe")
 TERM_VARIANT__PRODUCT__NAME = hydra.core.Name("product")
 TERM_VARIANT__RECORD__NAME = hydra.core.Name("record")
 TERM_VARIANT__SET__NAME = hydra.core.Name("set")
@@ -200,7 +200,7 @@ class TypeVariant(Enum):
     
     MAP = "map"
     
-    OPTIONAL = "optional"
+    MAYBE = "maybe"
     
     PRODUCT = "product"
     
@@ -226,7 +226,7 @@ TYPE_VARIANT__FUNCTION__NAME = hydra.core.Name("function")
 TYPE_VARIANT__LIST__NAME = hydra.core.Name("list")
 TYPE_VARIANT__LITERAL__NAME = hydra.core.Name("literal")
 TYPE_VARIANT__MAP__NAME = hydra.core.Name("map")
-TYPE_VARIANT__OPTIONAL__NAME = hydra.core.Name("optional")
+TYPE_VARIANT__MAYBE__NAME = hydra.core.Name("maybe")
 TYPE_VARIANT__PRODUCT__NAME = hydra.core.Name("product")
 TYPE_VARIANT__RECORD__NAME = hydra.core.Name("record")
 TYPE_VARIANT__SET__NAME = hydra.core.Name("set")

@@ -26,7 +26,7 @@ pdlLanguage = Language (LanguageName "hydra.ext.pegasus.pdl") $ LanguageConstrai
     TermVariantLiteral,
     TermVariantMap,
     TermVariantWrap,
-    TermVariantOptional,
+    TermVariantMaybe,
     TermVariantRecord,
     TermVariantUnion],
   languageConstraintsTypeVariants = S.fromList [
@@ -35,7 +35,7 @@ pdlLanguage = Language (LanguageName "hydra.ext.pegasus.pdl") $ LanguageConstrai
     TypeVariantLiteral,
     TypeVariantMap,
     TypeVariantWrap,
-    TypeVariantOptional,
+    TypeVariantMaybe,
     TypeVariantRecord,
     TypeVariantUnion],
   languageConstraintsTypes = const True }

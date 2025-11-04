@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -107,8 +107,8 @@ joinTypesDef = define "joinTypes" $
       _Type_map>>: "r" ~> Flows.pure (list [
         var "joinOne" @@ (Core.mapTypeKeys (var "l")) @@ (Core.mapTypeKeys (var "r")),
         var "joinOne" @@ (Core.mapTypeValues (var "l")) @@ (Core.mapTypeValues (var "r"))])],
-    _Type_optional>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
-      _Type_optional>>: "r" ~> Flows.pure (list [
+    _Type_maybe>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
+      _Type_maybe>>: "r" ~> Flows.pure (list [
         var "joinOne" @@ (var "l") @@ (var "r")])],
     _Type_product>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
       _Type_product>>: "r" ~> var "joinList" @@ (var "l") @@ (var "r")],

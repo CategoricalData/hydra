@@ -153,7 +153,7 @@ termLabel compact namespaces term = case term of
         FloatValueFloat64 v -> show v
       LiteralString s -> s -- show s
     TermMap _ -> simpleLabel $ if compact then "<,>" else "map"
-    TermOptional _ -> simpleLabel $ if compact then "opt" else "optional"
+    TermMaybe _ -> simpleLabel $ if compact then "opt" else "optional"
     TermProduct _ -> simpleLabel $ if compact then "\x2227" else "product"
     TermRecord (Record name _) -> simpleLabel $ "\x2227" ++ Names.compactName namespaces name
     TermTypeLambda (TypeLambda v term1) -> simpleLabel "tyabs"

@@ -44,7 +44,7 @@ recordCoder rt = do
       TermRecord (Record _ fields) -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
           encodeField (ft, coder) (Field (Name fn) fv) = case (fieldTypeType ft, fv) of
-            (TypeOptional _, TermOptional Nothing) -> pure Nothing
+            (TypeMaybe _, TermMaybe Nothing) -> pure Nothing
             _ -> Just <$> ((,) <$> pure (yamlString fn) <*> coderEncode coder fv)
       _ -> unexpected "record" $ show term
     decode coders n = case n of
@@ -79,12 +79,12 @@ termCoder typ = case deannotateType typ of
       coderDecode = \n -> case n of
         YM.NodeSequence nodes -> Terms.list <$> CM.mapM (coderDecode lc) nodes
         _ -> unexpected "sequence" $ show n}
-  TypeOptional ot -> do
+  TypeMaybe ot -> do
     oc <- termCoder ot
     return Coder {
       coderEncode = \t -> case t of
-         TermOptional el -> Y.maybe (pure yamlNull) (coderEncode oc) el
-         _ -> unexpected "optional" $ show t,
+         TermMaybe el -> Y.maybe (pure yamlNull) (coderEncode oc) el
+         _ -> unexpected "maybe" $ show t,
       coderDecode = \n -> case n of
         YM.NodeScalar YM.ScalarNull -> pure $ Terms.optional Nothing
         _ -> Terms.optional . Just <$> coderDecode oc n}

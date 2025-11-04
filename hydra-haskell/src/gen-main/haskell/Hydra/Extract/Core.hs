@@ -271,19 +271,19 @@ nArgs name n args = (Logic.ifElse (Equality.equal (Lists.length args) n) (Flows.
   " arguments to primitive ",
   (Literals.showString (Core.unName name))]) (Literals.showInt32 (Lists.length args))))
 
-optional :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> Core.Term -> Compute.Flow Graph.Graph (Maybe t0))
-optional f term0 =  
+maybeTerm :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> Core.Term -> Compute.Flow Graph.Graph (Maybe t0))
+maybeTerm f term0 =  
   let extract = (\term -> (\x -> case x of
-          Core.TermOptional v1 -> (Maybes.maybe (Flows.pure Nothing) (\t -> Flows.map Maybes.pure (f t)) v1)
-          _ -> (Monads.unexpected "optional value" (Core_.term term))) term)
+          Core.TermMaybe v1 -> (Maybes.maybe (Flows.pure Nothing) (\t -> Flows.map Maybes.pure (f t)) v1)
+          _ -> (Monads.unexpected "maybe value" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
-optionalType :: (Core.Type -> Compute.Flow t0 Core.Type)
-optionalType typ =  
+maybeType :: (Core.Type -> Compute.Flow t0 Core.Type)
+maybeType typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeOptional v1 -> (Flows.pure v1)
-    _ -> (Monads.unexpected "optional type" (Core_.type_ typ))) stripped)
+    Core.TypeMaybe v1 -> (Flows.pure v1)
+    _ -> (Monads.unexpected "maybe type" (Core_.type_ typ))) stripped)
 
 pair :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flow Graph.Graph t1) -> Core.Term -> Compute.Flow Graph.Graph (t0, t1))
 pair kf vf term0 =  

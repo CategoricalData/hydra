@@ -62,8 +62,8 @@ def type(v1: hydra.core.Type) -> str:
         case hydra.core.TypeMap(value=mt):
             return hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("map from ", type(mt.keys))), " to ")), type(mt.values)))
         
-        case hydra.core.TypeOptional(value=ot):
-            return hydra.lib.strings.cat(("optional ", type(ot)))
+        case hydra.core.TypeMaybe(value=ot):
+            return hydra.lib.strings.cat(("maybe ", type(ot)))
         
         case hydra.core.TypeProduct():
             return "tuple"
