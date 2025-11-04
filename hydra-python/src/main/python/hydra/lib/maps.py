@@ -67,8 +67,10 @@ def keys[K](mapping: Mapping[K, Any]) -> frozenlist[K]:
 
 def lookup[K, V](key: K, mapping: Mapping[K, V]) -> Maybe[V]:
     """Lookup a value in a map."""
-    result = mapping.get(key)
-    return Just(result) if result is not None else NOTHING
+    if key in mapping:
+        return Just(mapping[key])
+    else:
+        return NOTHING
 
 
 def map[K, V1, V2](f: Callable[[V1], V2], mapping: Mapping[K, V1]) -> FrozenDict[K, V2]:
