@@ -2,10 +2,10 @@
 
 module Hydra.Dsl.Lib.Chars where
 
-import Hydra.Dsl.Phantoms
 import Hydra.Phantoms
-import Hydra.Sources.Libraries
+import Hydra.Dsl.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Sources.Libraries
 
 
 -- Follow's GHC.s Data.Char.isAlphaNum
