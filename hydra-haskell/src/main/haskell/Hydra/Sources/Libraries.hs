@@ -428,9 +428,11 @@ _hydra_lib_math = Namespace "hydra.lib.math"
 _math_abs    = qname _hydra_lib_math "abs" :: Name
 _math_add    = qname _hydra_lib_math "add" :: Name
 _math_div    = qname _hydra_lib_math "div" :: Name
+_math_even   = qname _hydra_lib_math "even" :: Name
 _math_mod    = qname _hydra_lib_math "mod" :: Name
 _math_mul    = qname _hydra_lib_math "mul" :: Name
 _math_negate = qname _hydra_lib_math "negate" :: Name
+_math_odd    = qname _hydra_lib_math "odd" :: Name
 _math_pred   = qname _hydra_lib_math "pred" :: Name
 _math_range  = qname _hydra_lib_math "range" :: Name
 _math_rem    = qname _hydra_lib_math "rem" :: Name
@@ -443,9 +445,11 @@ hydraLibMathInt32 = standardLibrary _hydra_lib_math [
   prim1 _math_abs    Math.abs    [] int32 int32,
   prim2 _math_add    Math.add    [] int32 int32 int32,
   prim2 _math_div    Math.div    [] int32 int32 int32,
+  prim1 _math_even   Math.even   [] int32 boolean,
   prim2 _math_mod    Math.mod    [] int32 int32 int32,
   prim2 _math_mul    Math.mul    [] int32 int32 int32,
   prim1 _math_negate Math.negate [] int32 int32,
+  prim1 _math_odd    Math.odd    [] int32 boolean,
   prim1 _math_pred   Math.pred   [] int32 int32,
   prim2 _math_range  Math.range  [] int32 int32 (list int32),
   prim2 _math_rem    Math.rem    [] int32 int32 int32,

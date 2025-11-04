@@ -1,5 +1,7 @@
 -- | Haskell implementations of hydra.lib.math primitives
 
+-- TODO: real-valued primitives such as pi, exp, log, etc. for symmetry with Prelude
+
 module Hydra.Lib.Math where
 
 
@@ -13,6 +15,9 @@ add x y = x + y
 div :: Integral a => a -> a -> a
 div = Prelude.div
 
+even :: Integral a => a -> Bool
+even = Prelude.even
+
 -- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
 mod :: Integral a => a -> a -> a
 mod = Prelude.mod
@@ -22,6 +27,9 @@ mul x y = x * y
 
 negate :: Num a => a -> a
 negate = Prelude.negate
+
+odd :: Integral a => a -> Bool
+odd = Prelude.odd
 
 pred :: Enum a => a -> a
 pred = Prelude.pred
