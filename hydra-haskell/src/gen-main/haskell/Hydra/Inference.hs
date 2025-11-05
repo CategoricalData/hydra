@@ -348,20 +348,46 @@ inferTypeOf cx term =
 
 inferTypeOfEither :: (Typing_.InferenceContext -> Either Core.Term Core.Term -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfEither cx e = (Eithers.either (\l -> Flows.bind (inferTypeOfTerm cx l "either left value") (\r1 ->  
-  let leftType = (Typing_.inferenceResultType r1)
-  in (Flows.bind freshVariableType (\rightType -> Flows.pure (Typing_.InferenceResult {
-    Typing_.inferenceResultTerm = (Core.TermEither (Left l)),
-    Typing_.inferenceResultType = (Core.TypeEither (Core.EitherType {
-      Core.eitherTypeLeft = leftType,
-      Core.eitherTypeRight = rightType})),
-    Typing_.inferenceResultSubst = (Typing_.inferenceResultSubst r1)}))))) (\r -> Flows.bind (inferTypeOfTerm cx r "either right value") (\r1 ->  
-  let rightType = (Typing_.inferenceResultType r1)
-  in (Flows.bind freshVariableType (\leftType -> Flows.pure (Typing_.InferenceResult {
-    Typing_.inferenceResultTerm = (Core.TermEither (Right r)),
-    Typing_.inferenceResultType = (Core.TypeEither (Core.EitherType {
-      Core.eitherTypeLeft = leftType,
-      Core.eitherTypeRight = rightType})),
-    Typing_.inferenceResultSubst = (Typing_.inferenceResultSubst r1)}))))) e)
+  let iterm = (Typing_.inferenceResultTerm r1)
+  in  
+    let leftType = (Typing_.inferenceResultType r1)
+    in  
+      let subst = (Typing_.inferenceResultSubst r1)
+      in (Flows.bind freshVariableType (\rightType ->  
+        let eitherTerm = (Core.TermEither (Left iterm))
+        in  
+          let termWithLeftType = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = eitherTerm,
+                  Core.typeApplicationTermType = leftType}))
+          in  
+            let termWithBothTypes = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = termWithLeftType,
+                    Core.typeApplicationTermType = rightType}))
+            in  
+              let eitherType = (Core.TypeEither (Core.EitherType {
+                      Core.eitherTypeLeft = leftType,
+                      Core.eitherTypeRight = rightType}))
+              in (yieldChecked termWithBothTypes eitherType subst))))) (\r -> Flows.bind (inferTypeOfTerm cx r "either right value") (\r1 ->  
+  let iterm = (Typing_.inferenceResultTerm r1)
+  in  
+    let rightType = (Typing_.inferenceResultType r1)
+    in  
+      let subst = (Typing_.inferenceResultSubst r1)
+      in (Flows.bind freshVariableType (\leftType ->  
+        let eitherTerm = (Core.TermEither (Right iterm))
+        in  
+          let termWithLeftType = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = eitherTerm,
+                  Core.typeApplicationTermType = leftType}))
+          in  
+            let termWithBothTypes = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = termWithLeftType,
+                    Core.typeApplicationTermType = rightType}))
+            in  
+              let eitherType = (Core.TypeEither (Core.EitherType {
+                      Core.eitherTypeLeft = leftType,
+                      Core.eitherTypeRight = rightType}))
+              in (yieldChecked termWithBothTypes eitherType subst))))) e)
 
 inferTypeOfElimination :: (Typing_.InferenceContext -> Core.Elimination -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfElimination cx elm = ((\x -> case x of
@@ -721,19 +747,19 @@ inferTypeOfTerm cx term desc =
   let matchTerm = ((\x -> case x of
           Core.TermAnnotated v1 -> (inferTypeOfAnnotatedTerm cx v1)
           Core.TermApplication v1 -> (inferTypeOfApplication cx v1)
+          Core.TermEither v1 -> (inferTypeOfEither cx v1)
           Core.TermFunction v1 -> (inferTypeOfFunction cx v1)
           Core.TermLet v1 -> (inferTypeOfLet cx v1)
           Core.TermList v1 -> (inferTypeOfList cx v1)
           Core.TermLiteral v1 -> (inferTypeOfLiteral cx v1)
           Core.TermMap v1 -> (inferTypeOfMap cx v1)
           Core.TermMaybe v1 -> (inferTypeOfOptional cx v1)
-          Core.TermEither v1 -> (inferTypeOfEither cx v1)
           Core.TermProduct v1 -> (inferTypeOfProduct cx v1)
           Core.TermRecord v1 -> (inferTypeOfRecord cx v1)
           Core.TermSet v1 -> (inferTypeOfSet cx v1)
           Core.TermSum v1 -> (inferTypeOfSum cx v1)
-          Core.TermTypeLambda v1 -> (inferTypeOfTypeLambda cx v1)
           Core.TermTypeApplication v1 -> (inferTypeOfTypeApplication cx v1)
+          Core.TermTypeLambda v1 -> (inferTypeOfTypeLambda cx v1)
           Core.TermUnion v1 -> (inferTypeOfInjection cx v1)
           Core.TermUnit -> (Flows.pure inferTypeOfUnit)
           Core.TermVariable v1 -> (inferTypeOfVariable cx v1)

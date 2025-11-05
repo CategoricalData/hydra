@@ -463,6 +463,35 @@ inferTypeOfCollectionDef = define "inferTypeOfCollection" $
         ref yieldDef @@ var "iterm" @@ var "itype" @@ var "isubst") @@
       var "constraints")
 
+inferTypeOfEitherDef :: TBinding (InferenceContext -> Prelude.Either Term Term -> Flow s InferenceResult)
+inferTypeOfEitherDef = define "inferTypeOfEither" $
+  doc "Infer the type of an either value" $
+  "cx" ~> "e" ~>
+  Eithers.either_
+    ("l" ~>
+      "r1" <<~ (ref inferTypeOfTermDef @@ var "cx" @@ var "l" @@ string "either left value") $
+      "iterm" <~ Typing.inferenceResultTerm (var "r1") $
+      "leftType" <~ Typing.inferenceResultType (var "r1") $
+      "subst" <~ Typing.inferenceResultSubst (var "r1") $
+      "rightType" <<~ ref freshVariableTypeDef $
+      "eitherTerm" <~ (Core.termEither $ left $ var "iterm") $
+      "termWithLeftType" <~ (Core.termTypeApplication $ Core.typeApplicationTerm (var "eitherTerm") (var "leftType")) $
+      "termWithBothTypes" <~ (Core.termTypeApplication $ Core.typeApplicationTerm (var "termWithLeftType") (var "rightType")) $
+      "eitherType" <~ (Core.typeEither $ Core.eitherType (var "leftType") (var "rightType")) $
+      ref yieldCheckedDef @@ var "termWithBothTypes" @@ var "eitherType" @@ var "subst")
+    ("r" ~>
+      "r1" <<~ (ref inferTypeOfTermDef @@ var "cx" @@ var "r" @@ string "either right value") $
+      "iterm" <~ Typing.inferenceResultTerm (var "r1") $
+      "rightType" <~ Typing.inferenceResultType (var "r1") $
+      "subst" <~ Typing.inferenceResultSubst (var "r1") $
+      "leftType" <<~ ref freshVariableTypeDef $
+      "eitherTerm" <~ (Core.termEither $ right $ var "iterm") $
+      "termWithLeftType" <~ (Core.termTypeApplication $ Core.typeApplicationTerm (var "eitherTerm") (var "leftType")) $
+      "termWithBothTypes" <~ (Core.termTypeApplication $ Core.typeApplicationTerm (var "termWithLeftType") (var "rightType")) $
+      "eitherType" <~ (Core.typeEither $ Core.eitherType (var "leftType") (var "rightType")) $
+      ref yieldCheckedDef @@ var "termWithBothTypes" @@ var "eitherType" @@ var "subst")
+    (var "e")
+
 inferTypeOfEliminationDef :: TBinding (InferenceContext -> Elimination -> Flow s InferenceResult)
 inferTypeOfEliminationDef = define "inferTypeOfElimination" $
   doc "Infer the type of an elimination" $
@@ -703,29 +732,6 @@ inferTypeOfListDef = define "inferTypeOfList" $
     @@ (unaryFunction Core.termList)
     @@ string "list element"
 
-inferTypeOfEitherDef :: TBinding (InferenceContext -> Prelude.Either Term Term -> Flow s InferenceResult)
-inferTypeOfEitherDef = define "inferTypeOfEither" $
-  doc "Infer the type of an either value" $
-  "cx" ~> "e" ~>
-  Eithers.either_
-    ("l" ~>
-      "r1" <<~ (ref inferTypeOfTermDef @@ var "cx" @@ var "l" @@ string "either left value") $
-      "leftType" <~ Typing.inferenceResultType (var "r1") $
-      "rightType" <<~ ref freshVariableTypeDef $
-      produce $ Typing.inferenceResult
-        (Core.termEither $ left $ var "l")
-        (Core.typeEither $ Core.eitherType (var "leftType") (var "rightType"))
-        (Typing.inferenceResultSubst (var "r1")))
-    ("r" ~>
-      "r1" <<~ (ref inferTypeOfTermDef @@ var "cx" @@ var "r" @@ string "either right value") $
-      "rightType" <~ Typing.inferenceResultType (var "r1") $
-      "leftType" <<~ ref freshVariableTypeDef $
-      produce $ Typing.inferenceResult
-        (Core.termEither $ right $ var "r")
-        (Core.typeEither $ Core.eitherType (var "leftType") (var "rightType"))
-        (Typing.inferenceResultSubst (var "r1")))
-    (var "e")
-
 inferTypeOfLiteralDef :: TBinding (InferenceContext -> Literal -> Flow s InferenceResult)
 inferTypeOfLiteralDef = define "inferTypeOfLiteral" $
   doc "Infer the type of a literal" $
@@ -905,19 +911,19 @@ inferTypeOfTermDef = define "inferTypeOfTerm" $
   "matchTerm" <~ (cases _Term (var "term") Nothing [
     _Term_annotated>>: "a" ~> ref inferTypeOfAnnotatedTermDef @@ var "cx" @@ var "a",
     _Term_application>>: "a" ~> ref inferTypeOfApplicationDef @@ var "cx" @@ var "a",
+    _Term_either>>: "e" ~> ref inferTypeOfEitherDef @@ var "cx" @@ var "e",
     _Term_function>>: "f" ~> ref inferTypeOfFunctionDef @@ var "cx" @@ var "f",
     _Term_let>>: "l" ~> ref inferTypeOfLetDef @@ var "cx" @@ var "l",
     _Term_list>>: "els" ~> ref inferTypeOfListDef @@ var "cx" @@ var "els",
     _Term_literal>>: "l" ~> ref inferTypeOfLiteralDef @@ var "cx" @@ var "l",
     _Term_map>>: "m" ~> ref inferTypeOfMapDef @@ var "cx" @@ var "m",
     _Term_maybe>>: "m" ~> ref inferTypeOfOptionalDef @@ var "cx" @@ var "m",
-    _Term_either>>: "e" ~> ref inferTypeOfEitherDef @@ var "cx" @@ var "e",
     _Term_product>>: "els" ~> ref inferTypeOfProductDef @@ var "cx" @@ var "els",
     _Term_record>>: "r" ~> ref inferTypeOfRecordDef @@ var "cx" @@ var "r",
     _Term_set>>: "s" ~> ref inferTypeOfSetDef @@ var "cx" @@ var "s",
     _Term_sum>>: "s" ~> ref inferTypeOfSumDef @@ var "cx" @@ var "s",
-    _Term_typeLambda>>: "ta" ~> ref inferTypeOfTypeLambdaDef @@ var "cx" @@ var "ta",
     _Term_typeApplication>>: "tt" ~> ref inferTypeOfTypeApplicationDef @@ var "cx" @@ var "tt",
+    _Term_typeLambda>>: "ta" ~> ref inferTypeOfTypeLambdaDef @@ var "cx" @@ var "ta",
     _Term_union>>: "i" ~> ref inferTypeOfInjectionDef @@ var "cx" @@ var "i",
     _Term_unit>>: constant $ produce $ ref inferTypeOfUnitDef,
     _Term_variable>>: "name" ~> ref inferTypeOfVariableDef @@ var "cx" @@ var "name",

@@ -47,6 +47,7 @@ checkTypeOf :: H.SpecWith ()
 checkTypeOf = H.describe "typeOf" $ do
   checkTypeOfAnnotatedTerms
   checkTypeOfApplications
+  checkTypeOfEithers
   checkTypeOfFlows
   checkTypeOfFunctions
   checkTypeOfLetTerms
@@ -246,6 +247,120 @@ checkTypeOfEliminations = H.describe "Eliminations" $ do
   checkTypeOfRecordEliminations
   checkTypeOfUnionEliminations
   checkTypeOfWrapEliminations
+
+checkTypeOfEithers :: H.SpecWith ()
+checkTypeOfEithers = H.describe "Eithers" $ do
+  H.describe "Left values" $ do
+    expectTermWithType "left int"
+      (left $ int32 42)
+      (tylam "t0" $ tyapps (left $ int32 42) [Types.int32, Types.var "t0"])
+      (Types.forAll "t0" $ Types.either_ Types.int32 (Types.var "t0"))
+    expectTermWithType "left string"
+      (left $ string "error")
+      (tylam "t0" $ tyapps (left $ string "error") [Types.string, Types.var "t0"])
+      (Types.forAll "t0" $ Types.either_ Types.string (Types.var "t0"))
+    expectTermWithType "left boolean"
+      (left $ boolean False)
+      (tylam "t0" $ tyapps (left $ boolean False) [Types.boolean, Types.var "t0"])
+      (Types.forAll "t0" $ Types.either_ Types.boolean (Types.var "t0"))
+
+  H.describe "Right values" $ do
+    expectTermWithType "right int"
+      (right $ int32 42)
+      (tylam "t0" $ tyapps (right $ int32 42) [Types.var "t0", Types.int32])
+      (Types.forAll "t0" $ Types.either_ (Types.var "t0") Types.int32)
+    expectTermWithType "right string"
+      (right $ string "success")
+      (tylam "t0" $ tyapps (right $ string "success") [Types.var "t0", Types.string])
+      (Types.forAll "t0" $ Types.either_ (Types.var "t0") Types.string)
+    expectTermWithType "right boolean"
+      (right $ boolean True)
+      (tylam "t0" $ tyapps (right $ boolean True) [Types.var "t0", Types.boolean])
+      (Types.forAll "t0" $ Types.either_ (Types.var "t0") Types.boolean)
+
+  H.describe "Polymorphic eithers" $ do
+    expectTermWithType "left from lambda"
+      (lambda "x" $ left $ var "x")
+      (tylams ["t0", "t1"] $ lambdaTyped "x" (Types.var "t0") $ tyapps (left $ var "x") [Types.var "t0", Types.var "t1"])
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.either_ (Types.var "t0") (Types.var "t1")))
+    expectTermWithType "right from lambda"
+      (lambda "x" $ right $ var "x")
+      (tylams ["t0", "t1"] $ lambdaTyped "x" (Types.var "t0") $ tyapps (right $ var "x") [Types.var "t1", Types.var "t0"])
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.either_ (Types.var "t1") (Types.var "t0")))
+    expectTermWithType "either from two lambdas"
+      (lambda "flag" $ lambda "x" $
+        primitive _logic_ifElse @@ var "flag" @@
+          (left $ var "x") @@
+          (right $ var "x"))
+      (tylam "t0" $ lambdaTyped "flag" Types.boolean $ lambdaTyped "x" (Types.var "t0") $
+        tyapp (primitive _logic_ifElse) (Types.either_ (Types.var "t0") (Types.var "t0")) @@ var "flag" @@
+          tyapps (left $ var "x") [Types.var "t0", Types.var "t0"] @@
+          tyapps (right $ var "x") [Types.var "t0", Types.var "t0"])
+      (Types.forAll "t0" $ Types.function Types.boolean (Types.function (Types.var "t0") (Types.either_ (Types.var "t0") (Types.var "t0"))))
+
+  H.describe "Eithers in complex contexts" $ do
+    expectTermWithType "either in tuple"
+      (tuple [left $ string "error", int32 100])
+      (tylam "t0" $ tuple [tyapps (left $ string "error") [Types.string, Types.var "t0"], int32 100])
+      (Types.forAll "t0" $ Types.product [Types.either_ Types.string (Types.var "t0"), Types.int32])
+    expectTermWithType "either in list"
+      (list [left $ string "error", right $ int32 42])
+      (list [tyapps (left $ string "error") [Types.string, Types.int32], tyapps (right $ int32 42) [Types.string, Types.int32]])
+      (Types.list $ Types.either_ Types.string Types.int32)
+    expectTermWithType "either in let binding"
+      (lets ["result">: right $ int32 42] $
+            var "result")
+      (tylam "t0" $ letsTyped [("result", tylam "t1" $ tyapps (right $ int32 42) [Types.var "t1", Types.int32], Types.poly ["t1"] $ Types.either_ (Types.var "t1") Types.int32)] $
+        tyapp (var "result") (Types.var "t0"))
+      (Types.forAll "t0" $ Types.either_ (Types.var "t0") Types.int32)
+
+  H.describe "Nested eithers" $ do
+    expectTermWithType "either of either (left left)"
+      (left $ left $ int32 1)
+      (tylams ["t0", "t1"] $ tyapps (left $ tyapps (left $ int32 1) [Types.int32, Types.var "t0"]) [Types.either_ Types.int32 (Types.var "t0"), Types.var "t1"])
+      (Types.forAlls ["t0", "t1"] $ Types.either_ (Types.either_ Types.int32 (Types.var "t0")) (Types.var "t1"))
+    expectTermWithType "either of either (left right)"
+      (left $ right $ string "nested")
+      (tylams ["t0", "t1"] $ tyapps (left $ tyapps (right $ string "nested") [Types.var "t0", Types.string]) [Types.either_ (Types.var "t0") Types.string, Types.var "t1"])
+      (Types.forAlls ["t0", "t1"] $ Types.either_ (Types.either_ (Types.var "t0") Types.string) (Types.var "t1"))
+    expectTermWithType "either of either (right)"
+      (right $ boolean True)
+      (tylam "t0" $ tyapps (right $ boolean True) [Types.var "t0", Types.boolean])
+      (Types.forAll "t0" $ Types.either_ (Types.var "t0") Types.boolean)
+    expectTermWithType "either of list"
+      (left $ list [int32 1, int32 2])
+      (tylam "t0" $ tyapps (left $ list [int32 1, int32 2]) [Types.list Types.int32, Types.var "t0"])
+      (Types.forAll "t0" $ Types.either_ (Types.list Types.int32) (Types.var "t0"))
+    expectTermWithType "list of eithers"
+      (list [left $ string "a", right $ int32 1, left $ string "b"])
+      (list [tyapps (left $ string "a") [Types.string, Types.int32], tyapps (right $ int32 1) [Types.string, Types.int32], tyapps (left $ string "b") [Types.string, Types.int32]])
+      (Types.list $ Types.either_ Types.string Types.int32)
+
+  H.describe "Eithers with complex types" $ do
+    expectTermWithType "either with record on left"
+      (left $ record testTypePersonName [
+        field "firstName" (string "Alice"),
+        field "lastName" (string "Smith"),
+        field "age" (int32 30)])
+      (tylam "t0" $ tyapps (left $ record testTypePersonName [
+        field "firstName" (string "Alice"),
+        field "lastName" (string "Smith"),
+        field "age" (int32 30)]) [Types.var "Person", Types.var "t0"])
+      (Types.forAll "t0" $ Types.either_ (Types.var "Person") (Types.var "t0"))
+    expectTermWithType "either with record on right"
+      (right $ record testTypePersonName [
+        field "firstName" (string "Bob"),
+        field "lastName" (string "Jones"),
+        field "age" (int32 25)])
+      (tylam "t0" $ tyapps (right $ record testTypePersonName [
+        field "firstName" (string "Bob"),
+        field "lastName" (string "Jones"),
+        field "age" (int32 25)]) [Types.var "t0", Types.var "Person"])
+      (Types.forAll "t0" $ Types.either_ (Types.var "t0") (Types.var "Person"))
+    expectTermWithType "either with tuple"
+      (left $ tuple [string "error", int32 404])
+      (tylam "t0" $ tyapps (left $ tuple [string "error", int32 404]) [Types.product [Types.string, Types.int32], Types.var "t0"])
+      (Types.forAll "t0" $ Types.either_ (Types.product [Types.string, Types.int32]) (Types.var "t0"))
 
 -- Note: Flow is not part of Hydra Core, but it is essential to Hydra. See https://github.com/CategoricalData/hydra/issues/200.
 checkTypeOfFlows :: H.SpecWith ()

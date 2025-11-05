@@ -7,7 +7,7 @@ in Hydra, programs are graphs, and graphs are programs.
 Hydra has the ability to translate its own kernel into several other languages, including
 Haskell ([Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)),
 Java ([Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java)),
-and Python ([Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python); in progress).
+and Python ([Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python); complete and being tested for production readiness).
 Hydra is used for data modeling, validation, and transforms at Microsoft,
 while its closed-source predecessor [Dragon](https://www.uber.com/blog/dragon-schema-integration-at-uber-scale/) was used
 for data integration and graph construction at Uber.
