@@ -290,6 +290,9 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "application">:
             doc "A function application" $
             core "Application",
+          "either">:
+            doc "An either value" $
+            Types.either_ (core "Term") (core "Term"),
           "function">:
             doc "A function term" $
             core "Function",
