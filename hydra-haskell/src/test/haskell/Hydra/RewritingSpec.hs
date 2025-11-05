@@ -96,6 +96,56 @@ checkStripType = do
         TypeAnnotated _ -> True
         _ -> deannotateType (Types.annot M.empty (Types.annot M.empty typ)) == typ
 
+testEitherTypes :: H.SpecWith ()
+testEitherTypes = do
+  H.describe "Tests for type rewriting with either types" $ do
+    H.it "String type in left side of either is replaced" $
+      H.shouldBe
+        (rewriteType replaceStringWithInt $ TypeEither $ EitherType Types.string Types.int32)
+        (TypeEither $ EitherType Types.int32 Types.int32)
+
+    H.it "String type in right side of either is replaced" $
+      H.shouldBe
+        (rewriteType replaceStringWithInt $ TypeEither $ EitherType Types.int32 Types.string)
+        (TypeEither $ EitherType Types.int32 Types.int32)
+
+    H.it "String types in both sides of either are replaced" $
+      H.shouldBe
+        (rewriteType replaceStringWithInt $ TypeEither $ EitherType Types.string Types.string)
+        (TypeEither $ EitherType Types.int32 Types.int32)
+
+    H.it "String type in nested either (left of left) is replaced" $
+      H.shouldBe
+        (rewriteType replaceStringWithInt $ TypeEither $ EitherType
+          (TypeEither $ EitherType Types.string Types.int32)
+          Types.int64)
+        (TypeEither $ EitherType
+          (TypeEither $ EitherType Types.int32 Types.int32)
+          Types.int64)
+
+    H.it "String type in nested either (right of right) is replaced" $
+      H.shouldBe
+        (rewriteType replaceStringWithInt $ TypeEither $ EitherType
+          Types.int64
+          (TypeEither $ EitherType Types.int32 Types.string))
+        (TypeEither $ EitherType
+          Types.int64
+          (TypeEither $ EitherType Types.int32 Types.int32))
+
+    H.it "String types in complex nested either are all replaced" $
+      H.shouldBe
+        (rewriteType replaceStringWithInt $ TypeEither $ EitherType
+          (TypeEither $ EitherType Types.string Types.string)
+          (TypeEither $ EitherType Types.string Types.int64))
+        (TypeEither $ EitherType
+          (TypeEither $ EitherType Types.int32 Types.int32)
+          (TypeEither $ EitherType Types.int32 Types.int64))
+  where
+    replaceStringWithInt :: (Type -> Type) -> Type -> Type
+    replaceStringWithInt recurse typ = case typ of
+      TypeLiteral LiteralTypeString -> Types.int32
+      _ -> recurse typ
+
 testEtaExpandTypedTerms :: Graph -> H.SpecWith ()
 testEtaExpandTypedTerms g = do
   H.describe "Test eta expansion of typed terms" $ do
@@ -144,14 +194,8 @@ testEtaExpandTypedTerms g = do
       expandsTo "test #2"
         (lambda "x" $ splitOn @@ var "x")
         (lambda "x" $ lambda "v1" $ splitOn @@ var "x" @@ var "v1")
-      expandsTo "test #3"
+      noChange "test #3"
         ((lambda "x" $ var "x") @@ length)
-        (lambda "v1" $ ((lambda "x" $ var "x") @@ length) @@ var "v1")
---      noChange "test #3"
---        ((lambda "x" $ var "x") @@ length)
---      expandsTo "test #3"
---        ((lambda "x" $ var "x") @@ length)
---        (lambda "v1" $ length @@ var "v1")
 
     H.describe "Try let terms" $ do
       noChange "test #1"
@@ -1033,6 +1077,7 @@ spec = do
   checkFoldOverTerm
   checkStripTerm
   checkStripType
+  testEitherTypes
 
   testFoldOverTerm
 

@@ -204,6 +204,7 @@ typeVariant :: (Core.Type -> Mantle.TypeVariant)
 typeVariant x = case x of
   Core.TypeAnnotated _ -> Mantle.TypeVariantAnnotated
   Core.TypeApplication _ -> Mantle.TypeVariantApplication
+  Core.TypeEither _ -> Mantle.TypeVariantEither
   Core.TypeFunction _ -> Mantle.TypeVariantFunction
   Core.TypeForall _ -> Mantle.TypeVariantForall
   Core.TypeList _ -> Mantle.TypeVariantList
@@ -224,6 +225,7 @@ typeVariants :: [Mantle.TypeVariant]
 typeVariants = [
   Mantle.TypeVariantAnnotated,
   Mantle.TypeVariantApplication,
+  Mantle.TypeVariantEither,
   Mantle.TypeVariantFunction,
   Mantle.TypeVariantForall,
   Mantle.TypeVariantList,
