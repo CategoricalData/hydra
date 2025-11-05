@@ -3,6 +3,7 @@
 module Hydra.Encode.Core where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
@@ -472,6 +473,11 @@ term x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "application"),
       Core.fieldTerm = (application v1)}}))
+  Core.TermEither v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "either"),
+      Core.fieldTerm = (Core.TermEither (Eithers.either (\l -> Left (term l)) (\r -> Right (term r)) v1))}}))
   Core.TermFunction v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {

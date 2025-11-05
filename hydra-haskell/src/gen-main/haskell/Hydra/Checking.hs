@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -223,6 +224,7 @@ typeOf tx typeArgs term =
               Core.EliminationWrap v3 -> (typeOfUnwrap tx typeArgs v3)) v2)
             Core.FunctionLambda v2 -> (typeOfLambda tx typeArgs v2)
             Core.FunctionPrimitive v2 -> (typeOfPrimitive tx typeArgs v2)) v1)
+          Core.TermEither v1 -> (typeOfEither tx typeArgs v1)
           Core.TermLet v1 -> (typeOfLet tx typeArgs v1)
           Core.TermList v1 -> (typeOfList tx typeArgs v1)
           Core.TermLiteral v1 -> (typeOfLiteral tx typeArgs v1)
@@ -296,6 +298,19 @@ typeOfCaseStatement tx typeArgs cs =
           in (Flows.bind (checkSameType tx "case branches" cods) (\cod -> Flows.pure (Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = (Schemas.nominalApplication tname typeArgs),
             Core.functionTypeCodomain = cod}))))))))
+
+typeOfEither :: (Typing.TypeContext -> [Core.Type] -> Either Core.Term Core.Term -> Compute.Flow t0 Core.Type)
+typeOfEither tx typeArgs et =  
+  let checkLength =  
+          let n = (Lists.length typeArgs)
+          in (Logic.ifElse (Equality.equal n 2) (Flows.pure ()) (Flows.fail (Strings.cat [
+            "either type requires 2 type arguments, got ",
+            (Literals.showInt32 n)])))
+  in (Flows.bind checkLength (\_ -> Eithers.either (\leftTerm -> Flows.bind (typeOf tx [] leftTerm) (\leftType -> Flows.bind (checkTypeVariables tx leftType) (\_ -> Flows.pure (Core.TypeEither (Core.EitherType {
+    Core.eitherTypeLeft = leftType,
+    Core.eitherTypeRight = (Lists.at 1 typeArgs)}))))) (\rightTerm -> Flows.bind (typeOf tx [] rightTerm) (\rightType -> Flows.bind (checkTypeVariables tx rightType) (\_ -> Flows.pure (Core.TypeEither (Core.EitherType {
+    Core.eitherTypeLeft = (Lists.at 0 typeArgs),
+    Core.eitherTypeRight = rightType}))))) et))
 
 typeOfInjection :: (Typing.TypeContext -> [Core.Type] -> Core.Injection -> Compute.Flow t0 Core.Type)
 typeOfInjection tx typeArgs injection =  
