@@ -5,6 +5,7 @@ module Hydra.Monads where
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
@@ -12,7 +13,6 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Show.Core as Core_
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -79,11 +79,9 @@ map f f1 = (Compute.Flow (\s0 -> \t0 ->
 modify :: ((t0 -> t0) -> Compute.Flow t0 ())
 modify f = (bind getState (\s -> putState (f s)))
 
-mutateTrace :: ((Compute.Trace -> Mantle.Either String Compute.Trace) -> (Compute.Trace -> Compute.Trace -> Compute.Trace) -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
+mutateTrace :: ((Compute.Trace -> Either String Compute.Trace) -> (Compute.Trace -> Compute.Trace -> Compute.Trace) -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 mutateTrace mutate restore f =  
-  let choose = (\forLeft -> \forRight -> \e -> (\x -> case x of
-          Mantle.EitherLeft v1 -> (forLeft v1)
-          Mantle.EitherRight v1 -> (forRight v1)) e)
+  let choose = (\forLeft -> \forRight -> \e -> Eithers.either (\l -> forLeft l) (\r -> forRight r) e)
   in  
     let flowFun = (\s0 -> \t0 ->  
             let forLeft = (\msg -> Compute.FlowState {
@@ -185,7 +183,7 @@ warn msg b = (Compute.Flow (\s0 -> \t0 ->
 
 withFlag :: (Core.Name -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 withFlag flag f =  
-  let mutate = (\t -> Logic.ifElse False (Mantle.EitherLeft "never happens") (Mantle.EitherRight (Compute.Trace {
+  let mutate = (\t -> Logic.ifElse False (Left "never happens") (Right (Compute.Trace {
           Compute.traceStack = (Compute.traceStack t),
           Compute.traceMessages = (Compute.traceMessages t),
           Compute.traceOther = (Maps.insert flag (Core.TermLiteral (Core.LiteralBoolean True)) (Compute.traceOther t))})))
@@ -206,7 +204,7 @@ withState cx0 f = (Compute.Flow (\cx1 -> \t1 ->
 
 withTrace :: (String -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 withTrace msg f =  
-  let mutate = (\t -> Logic.ifElse (Equality.gte (Lists.length (Compute.traceStack t)) Constants.maxTraceDepth) (Mantle.EitherLeft "maximum trace depth exceeded. This may indicate an infinite loop") (Mantle.EitherRight (Compute.Trace {
+  let mutate = (\t -> Logic.ifElse (Equality.gte (Lists.length (Compute.traceStack t)) Constants.maxTraceDepth) (Left "maximum trace depth exceeded. This may indicate an infinite loop") (Right (Compute.Trace {
           Compute.traceStack = (Lists.cons msg (Compute.traceStack t)),
           Compute.traceMessages = (Compute.traceMessages t),
           Compute.traceOther = (Compute.traceOther t)})))

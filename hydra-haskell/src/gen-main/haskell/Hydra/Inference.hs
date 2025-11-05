@@ -20,7 +20,6 @@ import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
@@ -703,11 +702,9 @@ inferTypeOfSum cx sum =
     in  
       let term = (Core.sumTerm sum)
       in  
-        let toType = (\x -> case x of
-                Mantle.EitherLeft v1 -> v1
-                Mantle.EitherRight v1 -> (Core.TypeVariable v1))
+        let toType = (\e -> Eithers.either (\t -> t) (\v -> Core.TypeVariable v) e)
         in  
-          let varOrTerm = (\t -> \j -> Logic.ifElse (Equality.equal i j) (Flows.pure (Mantle.EitherLeft t)) (Flows.map (\x -> Mantle.EitherRight x) Schemas.freshName))
+          let varOrTerm = (\t -> \j -> Logic.ifElse (Equality.equal i j) (Flows.pure (Left t)) (Flows.map (\x -> Right x) Schemas.freshName))
           in (Flows.bind (inferTypeOfTerm cx term "sum term") (\result ->  
             let iterm = (Typing_.inferenceResultTerm result)
             in  

@@ -12,7 +12,7 @@ import Hydra.Tools.Monads
 
 
 checkSort :: [(Int, [Int])] -> Either [[Int]] [Int] -> H.Expectation
-checkSort adj exp = H.shouldBe (hydraEitherToHaskellEither $ topologicalSort adj) exp
+checkSort adj exp = H.shouldBe (topologicalSort adj) exp
 
 checkSortSCC :: [(Int, [Int])] -> [[Int]] -> H.Expectation
 checkSortSCC adj exp = H.shouldBe (topologicalSortComponents adj) exp

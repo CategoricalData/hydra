@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Grammar       as Grammar
 import qualified Hydra.Dsl.Graph         as Graph
 import qualified Hydra.Dsl.Json          as Json
 import qualified Hydra.Dsl.Lib.Chars     as Chars
+import qualified Hydra.Dsl.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Lib.Flows     as Flows
 import qualified Hydra.Dsl.Lib.Lists     as Lists
@@ -157,12 +158,13 @@ modifyDef = define "modify" $ lambda "f" $
     @@ (ref getStateDef)
     @@ (lambda "s" $ ref putStateDef @@ (var "f" @@ var "s"))
 
-mutateTraceDef :: TBinding ((Trace -> Hydra.Mantle.Either String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a)
+mutateTraceDef :: TBinding ((Trace -> Prelude.Either String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a)
 mutateTraceDef = define "mutateTrace" $
   "mutate" ~> "restore" ~> "f" ~>
-  "choose" <~ ("forLeft" ~> "forRight" ~> "e" ~> cases _Either (var "e") Nothing [
-    _Either_left>>: "e" ~> var "forLeft" @@ var "e",
-    _Either_right>>: "e" ~> var "forRight" @@ var "e"]) $
+  "choose" <~ ("forLeft" ~> "forRight" ~> "e" ~> Eithers.either_
+    ("l" ~> var "forLeft" @@ var "l")
+    ("r" ~> var "forRight" @@ var "r")
+    (var "e")) $
   "flowFun" <~ ("s0" ~> "t0" ~>
     "forLeft" <~ ("msg" ~>
       Compute.flowState nothing (var "s0") (ref pushErrorDef @@ var "msg" @@ var "t0")) $
@@ -271,8 +273,8 @@ withFlagDef = define "withFlag" $
   "flag" ~> "f" ~>
   "mutate" <~ ("t" ~> Logic.ifElse
     (boolean False)
-    (Mantle.eitherLeft (string "never happens"))  -- Forces the left type to String
-    (Mantle.eitherRight (Compute.trace
+    (left (string "never happens"))  -- Forces the left type to String
+    (right (Compute.trace
       (Compute.traceStack (var "t"))
       (Compute.traceMessages (var "t"))
       (Maps.insert (var "flag") (Core.termLiteral (Core.literalBoolean (boolean True))) (Compute.traceOther (var "t")))))) $
@@ -299,8 +301,8 @@ withTraceDef = define "withTrace" $
   doc "Continue the current flow after augmenting the trace" $
   "msg" ~> "f" ~>
   "mutate" <~ ("t" ~> Logic.ifElse (Equality.gte (Lists.length (Compute.traceStack (var "t"))) (ref Constants.maxTraceDepthDef))
-    (Mantle.eitherLeft (string "maximum trace depth exceeded. This may indicate an infinite loop"))
-    (Mantle.eitherRight (Compute.trace
+    (left (string "maximum trace depth exceeded. This may indicate an infinite loop"))
+    (right (Compute.trace
       (Lists.cons (var "msg") (Compute.traceStack (var "t")))
       (Compute.traceMessages (var "t"))
       (Compute.traceOther (var "t"))))) $

@@ -37,12 +37,6 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
           "equalTo",
           "greaterThan"],
 
-      def "Either" $
-        doc "A disjoint union between a 'left' type and a 'right' type" $
-        forAlls ["a", "b"] $ union [
-          "left">: "a",
-          "right">: "b"],
-
       def "EliminationVariant" $
         doc "The identifier of an elimination constructor" $
         enum [
