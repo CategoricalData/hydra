@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Grammar       as Grammar
 import qualified Hydra.Dsl.Graph         as Graph
 import qualified Hydra.Dsl.Json          as Json
 import qualified Hydra.Dsl.Lib.Chars     as Chars
+import qualified Hydra.Dsl.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Lib.Flows     as Flows
 import qualified Hydra.Dsl.Lib.Lists     as Lists
@@ -113,6 +114,9 @@ encodedBoolean = encodedLiteral . Core.literalBoolean
 
 encodedCase :: Name -> Name -> TTerm (a -> Term) -> Field
 encodedCase tname fname enc = field fname $ lambda "v" $ encodedVariant tname fname (enc @@ var "v")
+
+encodedEither :: TTerm (Prelude.Either a b) -> TTerm Term
+encodedEither = variant _Term _Term_either
 
 encodedField :: Name -> TTerm Term -> TTerm Term
 encodedField fname term = encodedFieldRaw (encodedName fname) term
@@ -399,6 +403,11 @@ termDef = define "Term" $
   match _Term Nothing [
     ecase _Term_annotated (ref annotatedTermDef),
     ecase _Term_application (ref applicationDef),
+    ecase2 _Term_either $ encodedEither (
+      primitive _eithers_either
+        @@ lambda "l" (left $ ref termDef @@ var "l")
+        @@ lambda "r" (right $ ref termDef @@ var "r")
+        @@ var "v"),
     ecase _Term_function (ref functionDef),
     ecase _Term_let (ref letDef),
     ecase _Term_literal (ref literalDef),

@@ -3,6 +3,7 @@
 module Hydra.Show.Core where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -247,6 +248,13 @@ term t =
           "(",
           Strings.intercalate " @ " termStrs,
           ")"])
+    Core.TermEither v1 -> (Eithers.either (\l -> Strings.cat [
+      "left(",
+      term l,
+      ")"]) (\r -> Strings.cat [
+      "right(",
+      term r,
+      ")"]) v1)
     Core.TermFunction v1 -> (function v1)
     Core.TermLet v1 ->  
       let bindings = (Core.letBindings v1)

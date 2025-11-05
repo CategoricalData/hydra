@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Grammar       as Grammar
 import qualified Hydra.Dsl.Graph         as Graph
 import qualified Hydra.Dsl.Json          as Json
 import qualified Hydra.Dsl.Lib.Chars     as Chars
+import qualified Hydra.Dsl.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Lib.Flows     as Flows
 import qualified Hydra.Dsl.Lib.Lists     as Lists
@@ -278,6 +279,16 @@ termDef = define "term" $
         string "(",
         Strings.intercalate (string " @ ") (var "termStrs"),
         string ")"],
+    _Term_either>>: "e" ~> Eithers.either_
+      ("l" ~> Strings.cat $ list [
+        string "left(",
+        ref termDef @@ var "l",
+        string ")"])
+      ("r" ~> Strings.cat $ list [
+        string "right(",
+        ref termDef @@ var "r",
+        string ")"])
+      (var "e"),
     _Term_function>>: ref functionDef,
     _Term_let>>: "l" ~>
       "bindings" <~ Core.letBindings (var "l") $
