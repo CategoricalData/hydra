@@ -216,6 +216,7 @@ typeOf tx typeArgs term =
   let check = ((\x -> case x of
           Core.TermAnnotated v1 -> (typeOfAnnotatedTerm tx typeArgs v1)
           Core.TermApplication v1 -> (typeOfApplication tx typeArgs v1)
+          Core.TermEither v1 -> (typeOfEither tx typeArgs v1)
           Core.TermFunction v1 -> ((\x -> case x of
             Core.FunctionElimination v2 -> ((\x -> case x of
               Core.EliminationProduct v3 -> (typeOfTupleProjection tx typeArgs v3)
@@ -224,7 +225,6 @@ typeOf tx typeArgs term =
               Core.EliminationWrap v3 -> (typeOfUnwrap tx typeArgs v3)) v2)
             Core.FunctionLambda v2 -> (typeOfLambda tx typeArgs v2)
             Core.FunctionPrimitive v2 -> (typeOfPrimitive tx typeArgs v2)) v1)
-          Core.TermEither v1 -> (typeOfEither tx typeArgs v1)
           Core.TermLet v1 -> (typeOfLet tx typeArgs v1)
           Core.TermList v1 -> (typeOfList tx typeArgs v1)
           Core.TermLiteral v1 -> (typeOfLiteral tx typeArgs v1)
