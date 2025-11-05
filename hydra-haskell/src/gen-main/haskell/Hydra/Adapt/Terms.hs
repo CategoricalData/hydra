@@ -265,6 +265,23 @@ passApplication t =
   in ((\x -> case x of
     Core.TypeApplication v1 -> (forApplicationType v1)) t)
 
+-- | Pass through either types
+passEither :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
+passEither t =  
+  let forEitherType = (\et ->  
+          let left = (Core.eitherTypeLeft et)
+          in  
+            let right = (Core.eitherTypeRight et)
+            in (Flows.bind (termAdapter left) (\leftAd -> Flows.bind (termAdapter right) (\rightAd -> Flows.pure (Compute.Adapter {
+              Compute.adapterIsLossy = (Logic.or (Compute.adapterIsLossy leftAd) (Compute.adapterIsLossy rightAd)),
+              Compute.adapterSource = t,
+              Compute.adapterTarget = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Compute.adapterTarget leftAd),
+                Core.eitherTypeRight = (Compute.adapterTarget rightAd)})),
+              Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> Utils.encodeDecode dir (Compute.adapterCoder leftAd) term))})))))
+  in ((\x -> case x of
+    Core.TypeEither v1 -> (forEitherType v1)) t)
+
 -- | Pass through function types with adaptation
 passFunction :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passFunction t =  
@@ -587,6 +604,8 @@ termAdapter typ =
           let pass = (\t -> (\x -> case x of
                   Mantle.TypeVariantApplication -> [
                     passApplication]
+                  Mantle.TypeVariantEither -> [
+                    passEither]
                   Mantle.TypeVariantForall -> [
                     passForall]
                   Mantle.TypeVariantFunction -> [
