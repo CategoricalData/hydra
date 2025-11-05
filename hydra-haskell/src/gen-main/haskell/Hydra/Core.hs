@@ -494,6 +494,8 @@ data Term =
   TermAnnotated AnnotatedTerm |
   -- | A function application
   TermApplication Application |
+  -- | An either value
+  TermEither (Either Term Term) |
   -- | A function term
   TermFunction Function |
   -- | A 'let' term, which binds variables to terms
@@ -533,6 +535,8 @@ _Term = (Name "hydra.core.Term")
 _Term_annotated = (Name "annotated")
 
 _Term_application = (Name "application")
+
+_Term_either = (Name "either")
 
 _Term_function = (Name "function")
 
