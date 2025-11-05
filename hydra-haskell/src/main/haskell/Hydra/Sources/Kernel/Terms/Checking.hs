@@ -328,6 +328,7 @@ typeOfDef = define "typeOf" $
       ref ShowMantle.termVariantDef @@ (ref Variants.termVariantDef @@ var "term")]) [
     _Term_annotated>>: ref typeOfAnnotatedTermDef @@ var "tx" @@ var "typeArgs",
     _Term_application>>: ref typeOfApplicationDef @@ var "tx" @@ var "typeArgs",
+    _Term_either>>: ref typeOfEitherDef @@ var "tx" @@ var "typeArgs",
     _Term_function>>: "f" ~>
       cases _Function (var "f") Nothing [
         _Function_elimination>>: "elm" ~>
@@ -338,7 +339,6 @@ typeOfDef = define "typeOf" $
             _Elimination_wrap>>: ref typeOfUnwrapDef @@ var "tx" @@ var "typeArgs"],
         _Function_lambda>>: ref typeOfLambdaDef @@ var "tx" @@ var "typeArgs",
         _Function_primitive>>: ref typeOfPrimitiveDef @@ var "tx" @@ var "typeArgs"],
-    _Term_either>>: ref typeOfEitherDef @@ var "tx" @@ var "typeArgs",
     _Term_let>>: ref typeOfLetDef @@ var "tx" @@ var "typeArgs",
     _Term_list>>: ref typeOfListDef @@ var "tx" @@ var "typeArgs",
     _Term_literal>>: ref typeOfLiteralDef @@ var "tx" @@ var "typeArgs",
@@ -440,12 +440,10 @@ typeOfEitherDef = define "typeOfEither" $
       (Flows.fail $ "either type requires 2 type arguments, got " ++ Literals.showInt32 (var "n"))) $
   exec (var "checkLength") $
   Eithers.either_
-    -- Left case: infer left type, get right type from typeArgs
     ("leftTerm" ~>
       "leftType" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "leftTerm" $
       exec (ref checkTypeVariablesDef @@ var "tx" @@ var "leftType") $
       Flows.pure $ Core.typeEither $ Core.eitherType (var "leftType") (Lists.at (int32 1) $ var "typeArgs"))
-    -- Right case: infer right type, get left type from typeArgs
     ("rightTerm" ~>
       "rightType" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "rightTerm" $
       exec (ref checkTypeVariablesDef @@ var "tx" @@ var "rightType") $
