@@ -168,6 +168,11 @@ lets pairs body = Core.termLet $ Core.let_ (Phantoms.list $ toBinding pairs) bod
   where
     toBinding = fmap (\(n, t) -> Core.binding n t Phantoms.nothing)
 
+-- | Create a term-encoded left either value
+-- Example: left (string "error")
+left :: TTerm Term -> TTerm Term
+left t = Core.termEither $ Phantoms.left t
+
 -- | Create a term-encoded list
 -- Example: list [int32 1, int32 2, int32 3]
 list :: [TTerm Term] -> TTerm Term
@@ -220,6 +225,11 @@ record :: TTerm Name -> [(TTerm Name, TTerm Term)] -> TTerm Term
 record name pairs = Core.termRecord $ Core.record name $ Phantoms.list (toField <$> pairs)
   where
     toField (n, t) = Core.field n t
+
+-- | Create a term-encoded right either value
+-- Example: right (int32 42)
+right :: TTerm Term -> TTerm Term
+right t = Core.termEither $ Phantoms.right t
 
 second :: TTerm Term -> TTerm Term
 second pair = untuple 2 1 @@ pair

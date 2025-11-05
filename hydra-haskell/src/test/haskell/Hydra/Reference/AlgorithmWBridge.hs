@@ -56,6 +56,9 @@ hydraTermToStlc context term = case term of
           [] -> Const TT
           [h] -> h
           (h:r) -> pair h (toPairs r)
+    Core.TermEither et -> case et of
+      Left l -> App (Const Inl) <$> toStlc l
+      Right r -> App (Const Inr) <$> toStlc r
     Core.TermVariable (Core.Name v) -> pure $ Var v
     _ -> Left $ "Unsupported term: " ++ show term
   where
@@ -89,6 +92,7 @@ hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
             stypes <- CM.mapM toStlc types
             let rev = L.reverse stypes
             return $ L.foldl (\a e -> TySum e a) (TySum (rev !! 1) (rev !! 0)) $ L.drop 2 rev
+      Core.TypeEither (Core.EitherType left right) -> TyEither <$> toStlc left <*> toStlc right
 --      TypeUnion RowType |
       Core.TypeVariable name -> pure $ TyVar $ Core.unName name
 --      TypeWrap (Nominal Type)
@@ -115,6 +119,8 @@ toTerm expr = case expr of
           FTyApp (FConst Nil) _ -> []
           FApp (FApp (FTyApp (FConst Cons) _) hd) tl -> hd:(gather tl)
     FApp (FTyApp (FConst Pair) _) lhs -> Core.TermProduct [toTerm lhs, toTerm e2]
+    FTyApp (FConst Inl) _ -> Core.TermEither $ Left $ toTerm e2
+    FTyApp (FConst Inr) _ -> Core.TermEither $ Right $ toTerm e2
     _ -> Core.TermApplication $ Core.Application (toTerm e1) (toTerm e2)
   FConst prim -> case prim of
     PrimLiteral lit -> Core.TermLiteral lit
@@ -149,6 +155,7 @@ toType ty = case ty of
       componentsTypesOf t = case t of
         FTySum t1 t2 -> t1:(componentsTypesOf t2)
         _ -> [t]
+  FTyEither t1 t2 -> Core.TypeEither $ Core.EitherType (toType t1) (toType t2)
   FTyUnit -> Core.TypeProduct []
   FTyVoid -> Core.TypeSum []
 
