@@ -307,6 +307,7 @@ typeVariantsDef = define "typeVariants" $
   list $ unitVariant _TypeVariant <$> [
     _TypeVariant_annotated,
     _TypeVariant_application,
+    _TypeVariant_either,
     _TypeVariant_function,
     _TypeVariant_forall,
     _TypeVariant_list,

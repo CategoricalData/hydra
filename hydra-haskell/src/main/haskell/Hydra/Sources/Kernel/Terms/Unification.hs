@@ -95,6 +95,10 @@ joinTypesDef = define "joinTypes" $
       _Type_application>>: "r" ~> Flows.pure (list [
         var "joinOne" @@ (Core.applicationTypeFunction (var "l")) @@ (Core.applicationTypeFunction (var "r")),
         var "joinOne" @@ (Core.applicationTypeArgument (var "l")) @@ (Core.applicationTypeArgument (var "r"))])],
+    _Type_either>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
+      _Type_either>>: "r" ~> Flows.pure (list [
+        var "joinOne" @@ (Core.eitherTypeLeft (var "l")) @@ (Core.eitherTypeLeft (var "r")),
+        var "joinOne" @@ (Core.eitherTypeRight (var "l")) @@ (Core.eitherTypeRight (var "r"))])],
     _Type_function>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
       _Type_function>>: "r" ~> Flows.pure (list [
         var "joinOne" @@ (Core.functionTypeDomain (var "l")) @@ (Core.functionTypeDomain (var "r")),
