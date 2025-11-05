@@ -389,6 +389,9 @@ termAnnotated = variant _Term _Term_annotated
 termApplication :: TTerm Application -> TTerm Term
 termApplication = variant _Term _Term_application
 
+termEither :: TTerm (Either Term Term) -> TTerm Term
+termEither = variant _Term _Term_either
+
 termFunction :: TTerm Function -> TTerm Term
 termFunction = variant _Term _Term_function
 
