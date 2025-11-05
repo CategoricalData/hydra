@@ -252,6 +252,7 @@ typeVariant :: TypeVariant -> TTerm TypeVariant
 typeVariant v = unitVariant _TypeVariant $ case v of
   TypeVariantAnnotated -> _TypeVariant_annotated
   TypeVariantApplication -> _TypeVariant_application
+  TypeVariantEither -> _TypeVariant_either
   TypeVariantFunction -> _TypeVariant_function
   TypeVariantForall -> _TypeVariant_forall
   TypeVariantList -> _TypeVariant_list
@@ -271,6 +272,9 @@ typeVariantAnnotated = unitVariant _TypeVariant _TypeVariant_annotated
 
 typeVariantApplication :: TTerm TypeVariant
 typeVariantApplication = unitVariant _TypeVariant _TypeVariant_application
+
+typeVariantEither :: TTerm TypeVariant
+typeVariantEither = unitVariant _TypeVariant _TypeVariant_either
 
 typeVariantFunction :: TTerm TypeVariant
 typeVariantFunction = unitVariant _TypeVariant _TypeVariant_function

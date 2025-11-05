@@ -390,6 +390,16 @@ type_ typ =
                 "(",
                 Strings.intercalate " @ " typeStrs,
                 ")"])
+          Core.TypeEither v1 ->  
+            let leftTyp = (Core.eitherTypeLeft v1)
+            in  
+              let rightTyp = (Core.eitherTypeRight v1)
+              in (Strings.cat [
+                "either<",
+                type_ leftTyp,
+                ", ",
+                type_ rightTyp,
+                ">"])
           Core.TypeForall v1 ->  
             let var = (Core.unName (Core.forallTypeParameter v1))
             in  

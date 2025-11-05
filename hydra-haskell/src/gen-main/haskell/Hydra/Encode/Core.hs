@@ -144,6 +144,17 @@ floatValue x = case x of
       Core.fieldName = (Core.Name "float64"),
       Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 v1)))}}))
 
+eitherType :: (Core.EitherType -> Core.Term)
+eitherType et = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.core.EitherType"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "left"),
+      Core.fieldTerm = (type_ (Core.eitherTypeLeft et))},
+    Core.Field {
+      Core.fieldName = (Core.Name "right"),
+      Core.fieldTerm = (type_ (Core.eitherTypeRight et))}]}))
+
 function :: (Core.Function -> Core.Term)
 function x = case x of
   Core.FunctionElimination v1 -> (Core.TermUnion (Core.Injection {
@@ -568,6 +579,11 @@ type_ x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "application"),
       Core.fieldTerm = (applicationType v1)}}))
+  Core.TypeEither v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.core.Type"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "either"),
+      Core.fieldTerm = (eitherType v1)}}))
   Core.TypeFunction v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Type"),
     Core.injectionField = Core.Field {
