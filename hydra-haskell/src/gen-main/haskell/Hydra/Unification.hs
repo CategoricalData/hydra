@@ -54,6 +54,11 @@ joinTypes left right comment =
                     joinOne (Core.applicationTypeFunction v1) (Core.applicationTypeFunction v2),
                     (joinOne (Core.applicationTypeArgument v1) (Core.applicationTypeArgument v2))])
                   _ -> cannotUnify) sright)
+                Core.TypeEither v1 -> ((\x -> case x of
+                  Core.TypeEither v2 -> (Flows.pure [
+                    joinOne (Core.eitherTypeLeft v1) (Core.eitherTypeLeft v2),
+                    (joinOne (Core.eitherTypeRight v1) (Core.eitherTypeRight v2))])
+                  _ -> cannotUnify) sright)
                 Core.TypeFunction v1 -> ((\x -> case x of
                   Core.TypeFunction v2 -> (Flows.pure [
                     joinOne (Core.functionTypeDomain v1) (Core.functionTypeDomain v2),
