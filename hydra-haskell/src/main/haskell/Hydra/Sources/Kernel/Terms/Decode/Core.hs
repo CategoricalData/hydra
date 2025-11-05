@@ -57,6 +57,7 @@ module_ = Module (Namespace "hydra.decode.core") elements
   where
    elements = [
      el applicationTypeDef,
+     el eitherTypeDef,
      el fieldTypeDef,
      el fieldTypesDef,
      el floatTypeDef,
@@ -81,6 +82,13 @@ applicationTypeDef = define "applicationType" $
     "function">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _ApplicationType_function @@ ref typeDef,
     "argument">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _ApplicationType_argument @@ ref typeDef] $
     produce $ Core.applicationType (var "function") (var "argument"))
+
+eitherTypeDef :: TBinding (Term -> Flow Graph EitherType)
+eitherTypeDef = define "eitherType" $
+  ref Lexical.matchRecordDef @@ (lambda "m" $ binds [
+    "left">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _EitherType_left @@ ref typeDef,
+    "right">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _EitherType_right @@ ref typeDef] $
+    produce $ Core.eitherType (var "left") (var "right"))
 
 fieldTypeDef :: TBinding (Term -> Flow Graph FieldType)
 fieldTypeDef = define "fieldType" $
@@ -175,6 +183,9 @@ typeDef = define "type" $
       pair
         (Core.nameLift _Type_application)
         (lambda "at" $ Flows.map (unaryFunction Core.typeApplication) $ ref applicationTypeDef @@ var "at"),
+      pair
+        (Core.nameLift _Type_either)
+        (lambda "et" $ Flows.map (unaryFunction Core.typeEither) $ ref eitherTypeDef @@ var "et"),
       pair
         (Core.nameLift _Type_forall)
         (lambda "ft" $ Flows.map (unaryFunction Core.typeForall) $ ref forallTypeDef @@ var "ft"),

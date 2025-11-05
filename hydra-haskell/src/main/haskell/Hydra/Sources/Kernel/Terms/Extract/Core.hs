@@ -71,6 +71,7 @@ module_ = Module (Namespace "hydra.extract.core") elements
      el float64ValueDef,
      el floatLiteralDef,
      el floatValueDef,
+     el eitherTypeDef,
      el functionTypeDef,
      el injectionDef,
      el int16Def,
@@ -296,6 +297,17 @@ floatValueDef = define "floatValue" $
   "t" ~>
   "l" <<~ ref literalDef @@ var "t" $
   ref floatLiteralDef @@ var "l"
+
+eitherTypeDef :: TBinding (Type -> Flow s EitherType)
+eitherTypeDef = define "eitherType" $
+  doc "Extract the left and right types from an either type" $
+  "typ" ~>
+  "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
+  cases _Type (var "stripped")
+    (Just (ref Monads.unexpectedDef
+      @@ "either type"
+      @@ (ref ShowCore.typeDef @@ var "typ"))) [
+    _Type_either>>: "et" ~> Flows.pure (var "et")]
 
 functionTypeDef :: TBinding (Type -> Flow s FunctionType)
 functionTypeDef = define "functionType" $

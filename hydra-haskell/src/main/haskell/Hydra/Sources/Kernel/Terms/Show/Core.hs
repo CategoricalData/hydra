@@ -411,6 +411,15 @@ typeDef = define "type" $
         string "(",
         Strings.intercalate (string " @ ") (var "typeStrs"),
         string ")"],
+    _Type_either>>: "et" ~>
+      "leftTyp" <~ Core.eitherTypeLeft (var "et") $
+      "rightTyp" <~ Core.eitherTypeRight (var "et") $
+      Strings.cat $ list [
+        string "either<",
+        ref typeDef @@ var "leftTyp",
+        string ", ",
+        ref typeDef @@ var "rightTyp",
+        string ">"],
     _Type_forall>>: "ft" ~>
       "var" <~ unwrap _Name @@ (Core.forallTypeParameter $ var "ft") $
       "body" <~ Core.forallTypeBody (var "ft") $
