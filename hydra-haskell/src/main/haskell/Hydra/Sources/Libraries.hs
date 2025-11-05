@@ -10,6 +10,7 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Hydra.Lib.Chars as Chars
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -36,6 +37,7 @@ standardLibrary ns prims = Library {
 standardLibraries :: [Library]
 standardLibraries = [
   hydraLibChars,
+  hydraLibEithers,
   hydraLibEquality,
   hydraLibFlows,
   hydraLibLists,
@@ -98,6 +100,43 @@ hydraLibEquality = standardLibrary _hydra_lib_equality [
     prim2 _equality_min      Equality.min      ["x"] x x x]
   where
     x = variable "x"
+
+-- * hydra.lib.eithers primitives
+
+_hydra_lib_eithers :: Namespace
+_hydra_lib_eithers = Namespace "hydra.lib.eithers"
+
+_eithers_either           = qname _hydra_lib_eithers "either" :: Name
+_eithers_fromLeft         = qname _hydra_lib_eithers "fromLeft" :: Name
+_eithers_fromRight        = qname _hydra_lib_eithers "fromRight" :: Name
+_eithers_isLeft           = qname _hydra_lib_eithers "isLeft" :: Name
+_eithers_isRight          = qname _hydra_lib_eithers "isRight" :: Name
+_eithers_lefts            = qname _hydra_lib_eithers "lefts" :: Name
+_eithers_partitionEithers = qname _hydra_lib_eithers "partitionEithers" :: Name
+_eithers_rights           = qname _hydra_lib_eithers "rights" :: Name
+
+hydraLibEithers :: Library
+hydraLibEithers = standardLibrary _hydra_lib_eithers [
+    prim3Interp _eithers_either           (Just eitherInterp)     ["x", "y", "z"] (function x z) (function y z) (Prims.either_ x y) z,
+    prim2       _eithers_fromLeft         Eithers.fromLeft        ["x", "y"]      x (Prims.either_ x y) x,
+    prim2       _eithers_fromRight        Eithers.fromRight       ["x", "y"]      y (Prims.either_ x y) y,
+    prim1       _eithers_isLeft           Eithers.isLeft          ["x", "y"]      (Prims.either_ x y) boolean,
+    prim1       _eithers_isRight          Eithers.isRight         ["x", "y"]      (Prims.either_ x y) boolean,
+    prim1       _eithers_lefts            Eithers.lefts           ["x", "y"]      (list $ Prims.either_ x y) (list x),
+    prim1       _eithers_partitionEithers Eithers.partitionEithers ["x", "y"]     (list $ Prims.either_ x y) (pair (list x) (list y)),
+    prim1       _eithers_rights           Eithers.rights          ["x", "y"]      (list $ Prims.either_ x y) (list y)]
+  where
+    x = variable "x"
+    y = variable "y"
+    z = variable "z"
+
+-- | Interpreted implementation of hydra.lib.eithers.either
+eitherInterp :: Term -> Term -> Term -> Flow Graph Term
+eitherInterp leftFun rightFun eitherVal = case eitherVal of
+    TermEither e -> return $ case e of
+      Left val -> Terms.apply leftFun val
+      Right val -> Terms.apply rightFun val
+    _ -> fail $ "expected either value, got: " ++ show eitherVal
 
 -- * hydra.lib.flows primitives
 
