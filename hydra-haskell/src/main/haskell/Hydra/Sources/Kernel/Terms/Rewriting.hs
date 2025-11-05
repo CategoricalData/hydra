@@ -1344,6 +1344,9 @@ rewriteTypeDef = define "rewriteType" $ "f" ~> "typ0" ~>
       _Type_application>>: "app" ~> Core.typeApplication $ Core.applicationType
         (var "recurse" @@ (Core.applicationTypeFunction $ var "app"))
         (var "recurse" @@ (Core.applicationTypeArgument $ var "app")),
+      _Type_either>>: "et" ~> Core.typeEither $ Core.eitherType
+        (var "recurse" @@ (Core.eitherTypeLeft $ var "et"))
+        (var "recurse" @@ (Core.eitherTypeRight $ var "et")),
       _Type_function>>: "fun" ~> Core.typeFunction $ Core.functionType
         (var "recurse" @@ (Core.functionTypeDomain $ var "fun"))
         (var "recurse" @@ (Core.functionTypeCodomain $ var "fun")),
@@ -1386,6 +1389,10 @@ rewriteTypeMDef = define "rewriteTypeM" $
       "lhs" <<~ var "recurse" @@ (Core.applicationTypeFunction $ var "at") $
       "rhs" <<~ var "recurse" @@ (Core.applicationTypeArgument $ var "at") $
       produce $ Core.typeApplication $ Core.applicationType (var "lhs") (var "rhs"),
+    _Type_either>>: "et" ~>
+      "left" <<~ var "recurse" @@ (Core.eitherTypeLeft $ var "et") $
+      "right" <<~ var "recurse" @@ (Core.eitherTypeRight $ var "et") $
+      produce $ Core.typeEither $ Core.eitherType (var "left") (var "right"),
     _Type_function>>: "ft" ~>
       "dom" <<~ var "recurse" @@ (Core.functionTypeDomain $ var "ft") $
       "cod" <<~ var "recurse" @@ (Core.functionTypeCodomain $ var "ft") $
@@ -1630,6 +1637,9 @@ subtypesDef = define "subtypes" $
     _Type_application>>: "at" ~> list [
       Core.applicationTypeFunction $ var "at",
       Core.applicationTypeArgument $ var "at"],
+    _Type_either>>: "et" ~> list [
+      Core.eitherTypeLeft $ var "et",
+      Core.eitherTypeRight $ var "et"],
     _Type_function>>: "ft" ~> list [
       Core.functionTypeDomain $ var "ft",
       Core.functionTypeCodomain $ var "ft"],

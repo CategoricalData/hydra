@@ -66,6 +66,7 @@ module_ = Module (Namespace "hydra.encode.core") elements
       el fieldTypeDef,
       el floatTypeDef,
       el floatValueDef,
+      el eitherTypeDef,
       el functionDef,
       el functionTypeDef,
       el injectionDef,
@@ -251,6 +252,12 @@ floatValueDef = define "FloatValue" $
     varField fname = field fname $ lambda "v" $ encodedVariant _FloatValue fname $ encodedFloatValue $
       variant _FloatValue fname $ var "v"
 
+eitherTypeDef :: TBinding (EitherType -> Term)
+eitherTypeDef = define "EitherType" $
+  "et" ~> encodedRecord _EitherType [
+    field _EitherType_left (ref typeDef @@ (Core.eitherTypeLeft (var "et"))),
+    field _EitherType_right (ref typeDef @@ (Core.eitherTypeRight (var "et")))]
+
 functionDef :: TBinding (Function -> Term)
 functionDef = define "Function" $
     match _Function Nothing [
@@ -428,6 +435,7 @@ typeDef = define "Type" $
       field _AnnotatedTerm_body $ ref typeDef @@ (Core.annotatedTypeBody $ var "v"),
       field _AnnotatedTerm_annotation $ Core.annotatedTypeAnnotation $ var "v"],
     csref _Type_application applicationTypeDef,
+    csref _Type_either eitherTypeDef,
     csref _Type_function functionTypeDef,
     csref _Type_forall forallTypeDef,
     csref _Type_list typeDef,
