@@ -78,6 +78,7 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
         enum [
           "annotated",
           "application",
+          "either",
           "function",
           "let",
           "list",
@@ -106,6 +107,7 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
         enum [
           "annotated",
           "application",
+          "either",
           "forall",
           "function",
           "list",
