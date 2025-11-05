@@ -68,6 +68,7 @@ haskellLanguage = Coders.Language {
     typeVariants = (Sets.fromList [
       Mantle.TypeVariantAnnotated,
       Mantle.TypeVariantApplication,
+      Mantle.TypeVariantEither,
       Mantle.TypeVariantFunction,
       Mantle.TypeVariantForall,
       Mantle.TypeVariantList,

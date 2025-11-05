@@ -70,6 +70,7 @@ module_ = Module (Namespace "hydra.adapt.terms") elements
       el lambdaToMonotypeDef,
       el maybeToListDef,
       el passApplicationDef,
+      el passEitherDef,
       el passFunctionDef,
       el passForallDef,
       el passLiteralDef,
@@ -304,6 +305,25 @@ passApplicationDef = define "passApplication" $
   cases _Type (var "t")
     Nothing [
     _Type_application>>: "at" ~> var "forApplicationType" @@ var "at"]
+
+passEitherDef :: TBinding TypeAdapter
+passEitherDef = define "passEither" $
+  doc "Pass through either types" $
+  "t" ~>
+  "forEitherType" <~ ("et" ~>
+    "left" <~ Core.eitherTypeLeft (var "et") $
+    "right" <~ Core.eitherTypeRight (var "et") $
+    "leftAd" <<~ ref termAdapterDef @@ var "left" $
+    "rightAd" <<~ ref termAdapterDef @@ var "right" $
+    produce (Compute.adapter
+      (Logic.or (Compute.adapterIsLossy (var "leftAd")) (Compute.adapterIsLossy (var "rightAd")))
+      (var "t")
+      (Core.typeEither (Core.eitherType (Compute.adapterTarget (var "leftAd")) (Compute.adapterTarget (var "rightAd"))))
+      (ref AdaptUtils.bidirectionalDef @@
+        ("dir" ~> "term" ~> ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder (var "leftAd")) @@ var "term")))) $
+  cases _Type (var "t")
+    Nothing [
+    _Type_either>>: "et" ~> var "forEitherType" @@ var "et"]
 
 passForallDef :: TBinding TypeAdapter
 passForallDef = define "passForall" $
@@ -797,6 +817,7 @@ termAdapterDef = define "termAdapter" $
   "pass" <~ ("t" ~> cases _TypeVariant (ref Variants.typeVariantDef @@ (ref Rewriting.deannotateTypeDef @@ var "t"))
     Nothing [
     _TypeVariant_application>>: constant (list [ref passApplicationDef]),
+    _TypeVariant_either>>: constant (list [ref passEitherDef]),
     _TypeVariant_forall>>: constant (list [ref passForallDef]),
     _TypeVariant_function>>: constant (list [ref passFunctionDef]),
     _TypeVariant_list>>: constant (list [ref passListDef]),
