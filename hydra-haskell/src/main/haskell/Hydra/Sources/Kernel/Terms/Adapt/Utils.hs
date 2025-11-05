@@ -187,6 +187,10 @@ typeIsSupportedDef = define "typeIsSupported" $
       Logic.and
         (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeFunction (var "app"))
         (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeArgument (var "app")),
+    _Type_either>>: "et" ~>
+      Logic.and
+        (ref typeIsSupportedDef @@ var "constraints" @@ Core.eitherTypeLeft (var "et"))
+        (ref typeIsSupportedDef @@ var "constraints" @@ Core.eitherTypeRight (var "et")),
     _Type_forall>>: "ft" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.forallTypeBody (var "ft"),
     _Type_function>>: "ft" ~>
       Logic.and

@@ -122,6 +122,7 @@ typeIsSupported constraints t =
         let isSupported = (\base -> (\x -> case x of
                 Core.TypeAnnotated v1 -> (typeIsSupported constraints (Core.annotatedTypeBody v1))
                 Core.TypeApplication v1 -> (Logic.and (typeIsSupported constraints (Core.applicationTypeFunction v1)) (typeIsSupported constraints (Core.applicationTypeArgument v1)))
+                Core.TypeEither v1 -> (Logic.and (typeIsSupported constraints (Core.eitherTypeLeft v1)) (typeIsSupported constraints (Core.eitherTypeRight v1)))
                 Core.TypeForall v1 -> (typeIsSupported constraints (Core.forallTypeBody v1))
                 Core.TypeFunction v1 -> (Logic.and (typeIsSupported constraints (Core.functionTypeDomain v1)) (typeIsSupported constraints (Core.functionTypeCodomain v1)))
                 Core.TypeList v1 -> (typeIsSupported constraints v1)
