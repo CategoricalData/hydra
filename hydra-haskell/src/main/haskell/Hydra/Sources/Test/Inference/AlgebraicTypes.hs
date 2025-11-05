@@ -14,11 +14,12 @@ import qualified Hydra.Dsl.TTypes as T
 import Hydra.Sources.Test.Inference.Fundamentals
 
 import qualified Data.Map as M
-import Prelude hiding (map, sum)
+import Prelude hiding (either, map, sum)
 
 
 algebraicTypesTests :: TTerm TestGroup
 algebraicTypesTests = supergroup "Algebraic terms" [
+  testGroupForEithers,
   testGroupForFolds,
   testGroupForLists,
   testGroupForMaps,
@@ -26,6 +27,56 @@ algebraicTypesTests = supergroup "Algebraic terms" [
   testGroupForProducts,
   testGroupForSets,
   testGroupForSums]
+
+testGroupForEithers :: TTerm TestGroup
+testGroupForEithers = supergroup "Either terms" [
+    subgroup "Left values" [
+      expectMono 1 []
+        (list [left $ string "error", right $ int32 42])
+        (T.list $ T.either T.string T.int32),
+      expectPoly 2 []
+        (left $ string "error")
+        ["t0"] (T.either T.string (T.var "t0"))],
+
+    subgroup "Right values" [
+      expectMono 1 []
+        (list [right $ int32 42, left $ string "error"])
+        (T.list $ T.either T.string T.int32),
+      expectPoly 2 []
+        (right $ int32 42)
+        ["t0"] (T.either (T.var "t0") T.int32)],
+
+    subgroup "Polymorphic either values" [
+      expectPoly 1 []
+        (left $ list [])
+        ["t0", "t1"] (T.either (T.list $ T.var "t0") (T.var "t1")),
+      expectPoly 2 []
+        (right $ list [])
+        ["t0", "t1"] (T.either (T.var "t0") (T.list $ T.var "t1"))],
+
+    subgroup "Nested either values" [
+      expectMono 1 []
+        (list [left $ left $ int32 1, left $ right $ string "nested", right $ true])
+        (T.list $ T.either (T.either T.int32 T.string) T.boolean),
+      expectMono 2 []
+        (list [right $ left $ int32 42, right $ right $ true, left $ string "foo"])
+        (T.list $ T.either T.string (T.either T.int32 T.boolean))],
+
+    subgroup "Either in lambda" [
+      expectPoly 1 []
+        (lambda "x" (left $ var "x"))
+        ["t0", "t1"] (T.function (T.var "t0") (T.either (T.var "t0") (T.var "t1"))),
+      expectPoly 2 []
+        (lambda "x" (right $ var "x"))
+        ["t0", "t1"] (T.function (T.var "t0") (T.either (T.var "t1") (T.var "t0")))],
+
+    subgroup "Either in data structures" [
+      expectMono 1 []
+        (list [left $ string "error", right $ int32 42])
+        (T.list $ T.either T.string T.int32),
+      expectPoly 2 []
+        (pair (list [left $ string "error", right $ int32 42]) (list []))
+        ["t0"] (T.pair (T.list $ T.either T.string T.int32) (T.list $ T.var "t0"))]]
 
 testGroupForFolds :: TTerm TestGroup
 testGroupForFolds = subgroup "List eliminations (folds)" [

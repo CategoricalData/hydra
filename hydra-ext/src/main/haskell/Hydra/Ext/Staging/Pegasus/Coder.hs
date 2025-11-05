@@ -31,8 +31,8 @@ constructModule ::
   -> Flow Graph (M.Map FilePath PDL.SchemaFile)
 constructModule aliases mod coders pairs = do
     sortedPairs <- case (topologicalSortBindings $ fst <$> pairs) of
-      EitherLeft comps -> fail $ "types form a cycle (unsupported in PDL): " ++ show (L.head comps)
-      EitherRight sorted -> pure $ Y.catMaybes $ fmap (\n -> M.lookup n pairByName) sorted
+      Left comps -> fail $ "types form a cycle (unsupported in PDL): " ++ show (L.head comps)
+      Right sorted -> pure $ Y.catMaybes $ fmap (\n -> M.lookup n pairByName) sorted
     schemas <- CM.mapM toSchema sortedPairs
     return $ M.fromList (toPair <$> schemas)
   where

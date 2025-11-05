@@ -14,7 +14,7 @@ import Hydra.Dsl.TBase
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
-import Prelude hiding (map, product, sum)
+import Prelude hiding (either, map, product, sum)
 
 
 -- Operators
@@ -65,6 +65,11 @@ float32 = typeLiteral $ literalTypeFloat $ float FloatTypeFloat32
 -- Example: float64
 float64 :: TTerm Type
 float64 = typeLiteral $ literalTypeFloat $ float FloatTypeFloat64
+
+-- | Create a term-encoded either type
+-- Example: either string int32
+either :: TTerm Type -> TTerm Type -> TTerm Type
+either l r = typeEither $ eitherType l r
 
 -- | Create a term-encoded universal quantification (polymorphic type)
 -- Example: forAll "a" (var "a" --> var "a")
