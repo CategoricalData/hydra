@@ -133,6 +133,7 @@ haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
   "typeVariants">: Sets.fromList $ list [
     Mantle.typeVariantAnnotated,
     Mantle.typeVariantApplication,
+    Mantle.typeVariantEither,
     Mantle.typeVariantFunction,
     Mantle.typeVariantForall,
     Mantle.typeVariantList,
