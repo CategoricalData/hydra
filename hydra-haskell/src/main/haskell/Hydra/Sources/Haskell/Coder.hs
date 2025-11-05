@@ -15,6 +15,7 @@ import qualified Hydra.Dsl.Grammar                          as Grammar
 import qualified Hydra.Dsl.Graph                            as Graph
 import qualified Hydra.Dsl.Json                             as Json
 import qualified Hydra.Dsl.Lib.Chars                        as Chars
+import qualified Hydra.Dsl.Lib.Eithers                      as Eithers
 import qualified Hydra.Dsl.Lib.Equality                     as Equality
 import qualified Hydra.Dsl.Lib.Flows                        as Flows
 import qualified Hydra.Dsl.Lib.Lists                        as Lists
@@ -345,6 +346,15 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
         Flows.bind (var "encode" @@ var "fun") $ lambda "hfun" $
           Flows.bind (var "encode" @@ var "arg") $ lambda "harg" $
             Flows.pure $ ref HaskellUtils.hsappDef @@ var "hfun" @@ var "harg",
+      _Term_either>>: lambda "e" $
+        Eithers.either_
+          (lambda "l" $
+            Flows.bind (var "encode" @@ var "l") $ lambda "hl" $
+              Flows.pure $ ref HaskellUtils.hsappDef @@ (ref HaskellUtils.hsvarDef @@ string "Left") @@ var "hl")
+          (lambda "r" $
+            Flows.bind (var "encode" @@ var "r") $ lambda "hr" $
+              Flows.pure $ ref HaskellUtils.hsappDef @@ (ref HaskellUtils.hsvarDef @@ string "Right") @@ var "hr")
+          (var "e"),
       _Term_function>>: lambda "f" $
         ref encodeFunctionDef @@ var "namespaces" @@ var "f",
       _Term_let>>: lambda "letTerm" $ lets [
@@ -452,6 +462,15 @@ encodeTypeDef = haskellCoderDefinition "encodeType" $
       Flows.bind (var "encode" @@ var "lhs") $ lambda "hlhs" $
         Flows.bind (var "encode" @@ var "rhs") $ lambda "hrhs" $
           Flows.pure $ ref HaskellUtils.toTypeApplicationDef @@ list [var "hlhs", var "hrhs"],
+    _Type_either>>: lambda "eitherType" $ lets [
+      "left">: Core.eitherTypeLeft $ var "eitherType",
+      "right">: Core.eitherTypeRight $ var "eitherType"] $
+      Flows.map
+        (ref HaskellUtils.toTypeApplicationDef)
+        (Flows.sequence $ list [
+          Flows.pure $ inject H._Type H._Type_variable $ ref HaskellUtils.rawNameDef @@ string "Either",
+          var "encode" @@ var "left",
+          var "encode" @@ var "right"]),
     _Type_function>>: lambda "funType" $ lets [
       "dom">: Core.functionTypeDomain $ var "funType",
       "cod">: Core.functionTypeCodomain $ var "funType"] $

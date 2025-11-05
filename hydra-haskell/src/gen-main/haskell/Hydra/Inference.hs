@@ -9,6 +9,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -345,6 +346,23 @@ inferTypeOf cx term =
                   Literals.showInt32 (Lists.length bindings),
                   " bindings"])))))))
       in (Flows.bind (inferTypeOfTerm cx letTerm "infer type of term") (\result -> unifyAndSubst result))
+
+inferTypeOfEither :: (Typing_.InferenceContext -> Either Core.Term Core.Term -> Compute.Flow t0 Typing_.InferenceResult)
+inferTypeOfEither cx e = (Eithers.either (\l -> Flows.bind (inferTypeOfTerm cx l "either left value") (\r1 ->  
+  let leftType = (Typing_.inferenceResultType r1)
+  in (Flows.bind freshVariableType (\rightType -> Flows.pure (Typing_.InferenceResult {
+    Typing_.inferenceResultTerm = (Core.TermEither (Left l)),
+    Typing_.inferenceResultType = (Core.TypeEither (Core.EitherType {
+      Core.eitherTypeLeft = leftType,
+      Core.eitherTypeRight = rightType})),
+    Typing_.inferenceResultSubst = (Typing_.inferenceResultSubst r1)}))))) (\r -> Flows.bind (inferTypeOfTerm cx r "either right value") (\r1 ->  
+  let rightType = (Typing_.inferenceResultType r1)
+  in (Flows.bind freshVariableType (\leftType -> Flows.pure (Typing_.InferenceResult {
+    Typing_.inferenceResultTerm = (Core.TermEither (Right r)),
+    Typing_.inferenceResultType = (Core.TypeEither (Core.EitherType {
+      Core.eitherTypeLeft = leftType,
+      Core.eitherTypeRight = rightType})),
+    Typing_.inferenceResultSubst = (Typing_.inferenceResultSubst r1)}))))) e)
 
 inferTypeOfElimination :: (Typing_.InferenceContext -> Core.Elimination -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfElimination cx elm = ((\x -> case x of
@@ -712,6 +730,7 @@ inferTypeOfTerm cx term desc =
           Core.TermLiteral v1 -> (inferTypeOfLiteral cx v1)
           Core.TermMap v1 -> (inferTypeOfMap cx v1)
           Core.TermMaybe v1 -> (inferTypeOfOptional cx v1)
+          Core.TermEither v1 -> (inferTypeOfEither cx v1)
           Core.TermProduct v1 -> (inferTypeOfProduct cx v1)
           Core.TermRecord v1 -> (inferTypeOfRecord cx v1)
           Core.TermSet v1 -> (inferTypeOfSet cx v1)
