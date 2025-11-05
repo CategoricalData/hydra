@@ -1,5 +1,7 @@
 """Python implementations of hydra.lib.math primitives."""
 
+import math
+
 from hydra.dsl.python import frozenlist
 
 
@@ -76,3 +78,130 @@ def sub(x: int, y: int) -> int:
 def succ(x: int) -> int:
     """Return the successor of an integer (x + 1)."""
     return x + 1
+
+
+# Floating-point constants
+
+e: float = math.e
+"""Euler's number (e ≈ 2.71828)."""
+
+pi: float = math.pi
+"""Pi (π ≈ 3.14159)."""
+
+
+# Trigonometric functions
+
+def acos(x: float) -> float:
+    """Return the arc cosine of x in radians."""
+    return math.acos(x)
+
+
+def asin(x: float) -> float:
+    """Return the arc sine of x in radians."""
+    return math.asin(x)
+
+
+def atan(x: float) -> float:
+    """Return the arc tangent of x in radians."""
+    return math.atan(x)
+
+
+def atan2(y: float, x: float) -> float:
+    """Return the arc tangent of y/x in radians, using signs to determine quadrant."""
+    return math.atan2(y, x)
+
+
+def cos(x: float) -> float:
+    """Return the cosine of x radians."""
+    return math.cos(x)
+
+
+def sin(x: float) -> float:
+    """Return the sine of x radians."""
+    return math.sin(x)
+
+
+def tan(x: float) -> float:
+    """Return the tangent of x radians."""
+    return math.tan(x)
+
+
+# Hyperbolic functions
+
+def acosh(x: float) -> float:
+    """Return the inverse hyperbolic cosine of x."""
+    return math.acosh(x)
+
+
+def asinh(x: float) -> float:
+    """Return the inverse hyperbolic sine of x."""
+    return math.asinh(x)
+
+
+def atanh(x: float) -> float:
+    """Return the inverse hyperbolic tangent of x."""
+    return math.atanh(x)
+
+
+def cosh(x: float) -> float:
+    """Return the hyperbolic cosine of x."""
+    return math.cosh(x)
+
+
+def sinh(x: float) -> float:
+    """Return the hyperbolic sine of x."""
+    return math.sinh(x)
+
+
+def tanh(x: float) -> float:
+    """Return the hyperbolic tangent of x."""
+    return math.tanh(x)
+
+
+# Power and logarithmic functions
+
+def exp(x: float) -> float:
+    """Return e raised to the power x."""
+    return math.exp(x)
+
+
+def log(x: float) -> float:
+    """Return the natural logarithm of x."""
+    return math.log(x)
+
+
+def log_base(base: float, x: float) -> float:
+    """Return the logarithm of x to the given base."""
+    return math.log(x, base)
+
+
+def pow_(x: float, y: float) -> float:
+    """Return x raised to the power y."""
+    return math.pow(x, y)
+
+
+def sqrt(x: float) -> float:
+    """Return the square root of x."""
+    return math.sqrt(x)
+
+
+# Rounding functions
+
+def ceiling(x: float) -> int:
+    """Return the ceiling of x as an integer."""
+    return math.ceil(x)
+
+
+def floor(x: float) -> int:
+    """Return the floor of x as an integer."""
+    return math.floor(x)
+
+
+def round_(x: float) -> int:
+    """Return x rounded to the nearest integer."""
+    return round(x)
+
+
+def truncate(x: float) -> int:
+    """Return x truncated to an integer (towards zero)."""
+    return math.trunc(x)
