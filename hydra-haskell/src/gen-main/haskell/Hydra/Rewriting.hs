@@ -17,7 +17,6 @@ import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Names as Names
 import qualified Hydra.Sorting as Sorting
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -1443,7 +1442,7 @@ topologicalSortBindingMap bindingMap =
           in (Lists.map (Lists.map toPair) (Sorting.topologicalSortComponents (Lists.map depsOf bindings)))
 
 -- | Topological sort of elements based on their dependencies
-topologicalSortBindings :: ([Core.Binding] -> Mantle.Either [[Core.Name]] [Core.Name])
+topologicalSortBindings :: ([Core.Binding] -> Either [[Core.Name]] [Core.Name])
 topologicalSortBindings els =  
   let adjlist = (\e -> (Core.bindingName e, (Sets.toList (termDependencyNames False True True (Core.bindingTerm e)))))
   in (Sorting.topologicalSort (Lists.map adjlist els))

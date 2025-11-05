@@ -41,18 +41,6 @@ _Comparison_equalTo = (Core.Name "equalTo")
 
 _Comparison_greaterThan = (Core.Name "greaterThan")
 
--- | A disjoint union between a 'left' type and a 'right' type
-data Either a b = 
-  EitherLeft a |
-  EitherRight b
-  deriving (Eq, Ord, Read, Show)
-
-_Either = (Core.Name "hydra.mantle.Either")
-
-_Either_left = (Core.Name "left")
-
-_Either_right = (Core.Name "right")
-
 -- | The identifier of an elimination constructor
 data EliminationVariant = 
   EliminationVariantProduct  |
