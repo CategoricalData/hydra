@@ -119,6 +119,13 @@ floatLiteral lit = ((\x -> case x of
 floatValue :: (Core.Term -> Compute.Flow Graph.Graph Core.FloatValue)
 floatValue t = (Flows.bind (literal t) (\l -> floatLiteral l))
 
+eitherType :: (Core.Type -> Compute.Flow t0 Core.EitherType)
+eitherType typ =  
+  let stripped = (Rewriting.deannotateType typ)
+  in ((\x -> case x of
+    Core.TypeEither v1 -> (Flows.pure v1)
+    _ -> (Monads.unexpected "either type" (Core_.type_ typ))) stripped)
+
 functionType :: (Core.Type -> Compute.Flow t0 Core.FunctionType)
 functionType typ =  
   let stripped = (Rewriting.deannotateType typ)

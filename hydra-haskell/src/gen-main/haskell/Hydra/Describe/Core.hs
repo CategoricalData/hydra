@@ -43,6 +43,13 @@ type_ x = case x of
     type_ (Core.applicationTypeFunction v1),
     " applied to ",
     (type_ (Core.applicationTypeArgument v1))])
+  Core.TypeEither v1 -> (Strings.cat [
+    Strings.cat [
+      Strings.cat [
+        "either ",
+        (type_ (Core.eitherTypeLeft v1))],
+      " or "],
+    (type_ (Core.eitherTypeRight v1))])
   Core.TypeLiteral v1 -> (literalType v1)
   Core.TypeFunction v1 -> (Strings.cat [
     Strings.cat [

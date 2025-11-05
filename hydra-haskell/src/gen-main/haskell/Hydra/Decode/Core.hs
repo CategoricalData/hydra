@@ -22,6 +22,11 @@ applicationType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Co
   Core.applicationTypeFunction = function,
   Core.applicationTypeArgument = argument})))))
 
+eitherType :: (Core.Term -> Compute.Flow Graph.Graph Core.EitherType)
+eitherType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "left") type_) (\left -> Flows.bind (Lexical.getField m (Core.Name "right") type_) (\right -> Flows.pure (Core.EitherType {
+  Core.eitherTypeLeft = left,
+  Core.eitherTypeRight = right})))))
+
 fieldType :: (Core.Term -> Compute.Flow Graph.Graph Core.FieldType)
 fieldType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "name") name) (\name -> Flows.bind (Lexical.getField m (Core.Name "type") type_) (\typ -> Flows.pure (Core.FieldType {
   Core.fieldTypeName = name,
@@ -93,6 +98,7 @@ type_ dat = ((\x -> case x of
     Core.annotatedTypeAnnotation = (Core.annotatedTermAnnotation v1)})) (type_ (Core.annotatedTermBody v1)))
   _ -> (Lexical.matchUnion (Core.Name "hydra.core.Type") [
     (Core.Name "application", (\at -> Flows.map (\x -> Core.TypeApplication x) (applicationType at))),
+    (Core.Name "either", (\et -> Flows.map (\x -> Core.TypeEither x) (eitherType et))),
     (Core.Name "forall", (\ft -> Flows.map (\x -> Core.TypeForall x) (forallType ft))),
     (Core.Name "function", (\ft -> Flows.map (\x -> Core.TypeFunction x) (functionType ft))),
     (Core.Name "list", (\et -> Flows.map (\x -> Core.TypeList x) (type_ et))),

@@ -285,6 +285,7 @@ typeVariantDef = define "typeVariant" $
   match _Type Nothing [
     _Type_annotated>>: constant Mantle.typeVariantAnnotated,
     _Type_application>>: constant Mantle.typeVariantApplication,
+    _Type_either>>: constant Mantle.typeVariantEither,
     _Type_function>>: constant Mantle.typeVariantFunction,
     _Type_forall>>: constant Mantle.typeVariantForall,
     _Type_list>>: constant Mantle.typeVariantList,
