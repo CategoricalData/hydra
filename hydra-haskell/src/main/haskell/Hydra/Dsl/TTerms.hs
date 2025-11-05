@@ -20,91 +20,27 @@ import Data.Int
 import Prelude hiding (map, product, sum)
 
 
--- * Operators
+-- Operators
 
 -- | Function application operator for term-encoded terms
 -- Example: fun @@ arg
 (@@) :: TTerm Term -> TTerm Term -> TTerm Term
 f @@ x = apply f x
 
--- * Fundamentals
 
 -- | Apply a term-encoded function to a term-encoded argument
 -- Example: apply (var "add") (int32 1)
 apply :: TTerm Term -> TTerm Term -> TTerm Term
 apply func arg = Core.termApplication $ Core.application func arg
 
--- | Create a term-encoded field with the given name and term-encoded value
--- Example: field "age" (int32 30)
-field :: String -> TTerm Term -> TTerm Field
-field s = Core.field (name s)
+-- | Create a term-encoded unlimited precision floating point literal
+-- Example: bigfloat 3.14159
+bigfloat :: Double -> TTerm Term
+bigfloat = bigfloatLift . TTerm . Terms.bigfloat
 
--- | Create a term-encoded let expression with multiple bindings
--- Example: lets ["x">: int32 1, "y">: int32 2] (var "add" @@ var "x" @@ var "y")
-lets :: [(TTerm Name, TTerm Term)] -> TTerm Term -> TTerm Term
-lets pairs body = Core.termLet $ Core.let_ (Phantoms.list $ toBinding pairs) body
-  where
-    toBinding = fmap (\(n, t) -> Core.binding n t Phantoms.nothing)
-
--- | Create a term-encoded variable reference from a string
--- Example: var "x"
-var :: String -> TTerm Term
-var = Core.termVariable . name
-
--- | Create a term-encoded variable reference from a Name
--- Example: varName (Name "x")
-varName :: Name -> TTerm Term
-varName (Name n) = Core.termVariable $ TTerm $ Terms.string n
-
--- | Maps a string to a phantom-typed variable term
--- Example: varPhantom "x" :: TTerm Int
-varPhantom :: String -> TTerm a
-varPhantom = TTerm . TermVariable . Name
-
--- | Create a phantom-typed variable reference from a Name
--- Example: varNamePhantom (Name "x") :: TTerm Int
-varNamePhantom :: Name -> TTerm a
-varNamePhantom = TTerm . TermVariable
-
--- * Functions
-
--- | Create a term-encoded constant function that always returns the same term-encoded value
--- Example: constant (int32 42)
-constant :: TTerm Term -> TTerm Term
-constant = lambda ignoredVariable
-
--- | Create a term-encoded lambda function with one parameter
--- Example: lambda "x" (var "add" @@ var "x" @@ int32 1)
-lambda :: String -> TTerm Term -> TTerm Term
-lambda var body = Core.termFunction $ Core.functionLambda $ Core.lambda (name var) Phantoms.nothing body
-
--- | Create a term-encoded multi-parameter lambda function (curried form)
--- Example: lambdas ["x", "y"] (var "add" @@ var "x" @@ var "y")
-lambdas :: [String] -> TTerm Term -> TTerm Term
-lambdas params body = case params of
-  [] -> body
-  (h:rest) -> Core.termFunction $ Core.functionLambda $ Core.lambda (name h) Phantoms.nothing $ lambdas rest body
-
--- | Create a term-encoded primitive function reference
--- Example: primitive (Name "hydra.lib.strings.length")
-primitive :: Name -> TTerm Term
-primitive = primitiveLift . TTerm . EncodeCore.name
-
-primitiveLift :: TTerm Name -> TTerm Term
-primitiveLift = Core.termFunction . Core.functionPrimitive
-
--- | Create a term-encoded field projection function
--- Example: project (name "Person") (name "firstName")
-project :: TTerm Name -> TTerm Name -> TTerm Term
-project tname fname = Core.termFunction $ Core.functionElimination $ Core.eliminationRecord
-  $ Core.projection tname fname
-
--- | Create a term-encoded unwrap function for a wrapped type
--- Example: unwrap (name "Email")
-unwrap :: TTerm Name -> TTerm Term
-unwrap = Core.termFunction . Core.functionElimination . Core.eliminationWrap
-
--- * Literal values
+-- | Lift a TTerm Double to a term-encoded bigfloat literal
+bigfloatLift :: TTerm Double -> TTerm Term
+bigfloatLift = Core.termLiteral . Core.literalFloat . Core.floatValueBigfloat
 
 -- | Create a term-encoded unlimited precision integer
 -- Example: bigint 42
@@ -126,18 +62,22 @@ boolean = booleanLift . TTerm . Terms.boolean
 booleanLift :: TTerm Bool -> TTerm Term
 booleanLift = Core.termLiteral . Core.literalBoolean
 
+-- | Create a term-encoded constant function that always returns the same term-encoded value
+-- Example: constant (int32 42)
+constant :: TTerm Term -> TTerm Term
+constant = lambda ignoredVariable
+
 -- | Term-encoded boolean false literal
 false :: TTerm Term
 false = boolean False
 
--- | Create a term-encoded unlimited precision floating point literal
--- Example: bigfloat 3.14159
-bigfloat :: Double -> TTerm Term
-bigfloat = bigfloatLift . TTerm . Terms.bigfloat
+-- | Create a term-encoded field with the given name and term-encoded value
+-- Example: field "age" (int32 30)
+field :: String -> TTerm Term -> TTerm Field
+field s = Core.field (name s)
 
--- | Lift a TTerm Double to a term-encoded bigfloat literal
-bigfloatLift :: TTerm Double -> TTerm Term
-bigfloatLift = Core.termLiteral . Core.literalFloat . Core.floatValueBigfloat
+first :: TTerm Term -> TTerm Term
+first pair = untuple 2 0 @@ pair
 
 -- | Create a term-encoded 32-bit floating point literal
 -- Example: float32 3.14
@@ -158,6 +98,11 @@ float64 = float64Lift . TTerm . Terms.float64
 -- Example: float64Lift (varPhantom "x" :: TTerm Float)
 float64Lift :: TTerm Double -> TTerm Term
 float64Lift = Core.termLiteral . Core.literalFloat . Core.floatValueFloat64
+
+-- | Create a term-encoded union injection
+-- Example: inject (name "Result") "success" (int32 42)
+inject :: TTerm Name -> String -> TTerm Term -> TTerm Term
+inject tname fname = Core.termUnion . Core.injection tname . Core.field (name fname)
 
 -- | Create a term-encoded 8-bit signed integer literal
 -- Example: int8 127
@@ -199,6 +144,91 @@ int64 = int64Lift . TTerm . Terms.int64
 int64Lift :: TTerm Int64 -> TTerm Term
 int64Lift = Core.termLiteral . Core.literalInteger . Core.integerValueInt64
 
+-- | Create a term-encoded 'Just' optional value
+-- Example: just (string "found")
+just :: TTerm Term -> TTerm (Maybe Term)
+just = Phantoms.just
+
+-- | Create a term-encoded lambda function with one parameter
+-- Example: lambda "x" (var "add" @@ var "x" @@ int32 1)
+lambda :: String -> TTerm Term -> TTerm Term
+lambda var body = Core.termFunction $ Core.functionLambda $ Core.lambda (name var) Phantoms.nothing body
+
+-- | Create a term-encoded multi-parameter lambda function (curried form)
+-- Example: lambdas ["x", "y"] (var "add" @@ var "x" @@ var "y")
+lambdas :: [String] -> TTerm Term -> TTerm Term
+lambdas params body = case params of
+  [] -> body
+  (h:rest) -> Core.termFunction $ Core.functionLambda $ Core.lambda (name h) Phantoms.nothing $ lambdas rest body
+
+-- | Create a term-encoded let expression with multiple bindings
+-- Example: lets ["x">: int32 1, "y">: int32 2] (var "add" @@ var "x" @@ var "y")
+lets :: [(TTerm Name, TTerm Term)] -> TTerm Term -> TTerm Term
+lets pairs body = Core.termLet $ Core.let_ (Phantoms.list $ toBinding pairs) body
+  where
+    toBinding = fmap (\(n, t) -> Core.binding n t Phantoms.nothing)
+
+-- | Create a term-encoded list
+-- Example: list [int32 1, int32 2, int32 3]
+list :: [TTerm Term] -> TTerm Term
+list = Core.termList . Phantoms.list
+
+-- | Create a term-encoded map/dictionary
+-- Example: map (fromList [(string "key", int32 42)])
+map :: TTerm (M.Map Term Term) -> TTerm Term
+map = Core.termMap
+
+-- | Create a term-encoded pattern match on a union
+-- Example: match (name "Result") nothing ["success">: int32 42, "error">: string "fail"]
+match :: TTerm Name -> TTerm (Maybe Term) -> [(TTerm Name, TTerm Term)] -> TTerm Term
+match tname def pairs = Core.termFunction $ Core.functionElimination $ Core.eliminationUnion
+    $ Core.caseStatement tname def $ Phantoms.list $ toField pairs
+  where
+    toField = fmap (\(n, t) -> Core.field n t)
+
+-- | Create a term-encoded 'Nothing' optional value
+nothing :: TTerm (Maybe Term)
+nothing = Phantoms.nothing
+
+-- | Create a term-encoded optional value from a Maybe
+-- Example: optional (just (int32 42))
+optional :: TTerm (Maybe Term) -> TTerm Term
+optional = Core.termMaybe
+
+-- | Create a term-encoded pair (2-tuple)
+-- Example: pair (string "name") (int32 42)
+pair :: TTerm Term -> TTerm Term -> TTerm Term
+pair t1 t2 = tuple [t1, t2]
+
+-- | Create a term-encoded primitive function reference
+-- Example: primitive (Name "hydra.lib.strings.length")
+primitive :: Name -> TTerm Term
+primitive = primitiveLift . TTerm . EncodeCore.name
+
+primitiveLift :: TTerm Name -> TTerm Term
+primitiveLift = Core.termFunction . Core.functionPrimitive
+
+-- | Create a term-encoded field projection function
+-- Example: project (name "Person") (name "firstName")
+project :: TTerm Name -> TTerm Name -> TTerm Term
+project tname fname = Core.termFunction $ Core.functionElimination $ Core.eliminationRecord
+  $ Core.projection tname fname
+
+-- | Create a term-encoded record with named fields
+-- Example: record (name "Person") ["name">: string "John", "age">: int32 30]
+record :: TTerm Name -> [(TTerm Name, TTerm Term)] -> TTerm Term
+record name pairs = Core.termRecord $ Core.record name $ Phantoms.list (toField <$> pairs)
+  where
+    toField (n, t) = Core.field n t
+
+second :: TTerm Term -> TTerm Term
+second pair = untuple 2 1 @@ pair
+
+-- | Create a term-encoded set
+-- Example: set [string "a", string "b", string "c"]
+set :: [TTerm Term] -> TTerm Term
+set els = Core.termSet $ TTerm $ TermSet $ S.fromList (unTTerm <$> els)
+
 -- | Create a term-encoded string literal
 -- Example: string "hello world"
 string :: String -> TTerm Term
@@ -209,9 +239,19 @@ string = stringLift . TTerm . Terms.string
 stringLift :: TTerm String -> TTerm Term
 stringLift = Core.termLiteral . Core.literalString
 
+-- | Create a term-encoded sum type instance
+-- Example: sum 0 3 (int32 1) represents the first element of a 3-element sum
+sum :: Int -> Int -> TTerm Term -> TTerm Term
+sum i s = Core.termSum . Core.sum (Phantoms.int32 i) (Phantoms.int32 s)
+
 -- | Term-encoded boolean true literal
 true :: TTerm Term
 true = boolean True
+
+-- | Create a term-encoded tuple with multiple components
+-- Example: tuple [string "name", int32 42, boolean True]
+tuple :: [TTerm Term] -> TTerm Term
+tuple = Core.termProduct . Phantoms.list
 
 -- | Create a term-encoded 8-bit unsigned integer literal
 -- Example: uint8 255
@@ -250,62 +290,8 @@ uint64 = uint64Lift . TTerm . Terms.uint64
 uint64Lift :: TTerm Integer -> TTerm Term
 uint64Lift = Core.termLiteral . Core.literalInteger . Core.integerValueUint64
 
--- * Collections
-
--- | Create a term-encoded 'Just' optional value
--- Example: just (string "found")
-just :: TTerm Term -> TTerm (Maybe Term)
-just = Phantoms.just
-
--- | Create a term-encoded list
--- Example: list [int32 1, int32 2, int32 3]
-list :: [TTerm Term] -> TTerm Term
-list = Core.termList . Phantoms.list
-
--- | Create a term-encoded map/dictionary
--- Example: map (fromList [(string "key", int32 42)])
-map :: TTerm (M.Map Term Term) -> TTerm Term
-map = Core.termMap
-
--- | Create a term-encoded 'Nothing' optional value
-nothing :: TTerm (Maybe Term)
-nothing = Phantoms.nothing
-
--- | Create a term-encoded optional value from a Maybe
--- Example: optional (just (int32 42))
-optional :: TTerm (Maybe Term) -> TTerm Term
-optional = Core.termMaybe
-
--- | Create a term-encoded set
--- Example: set [string "a", string "b", string "c"]
-set :: [TTerm Term] -> TTerm Term
-set els = Core.termSet $ TTerm $ TermSet $ S.fromList (unTTerm <$> els)
-
--- * Products and tuples
-
---first :: TTerm Term -> TTerm Term
---first t = Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $ Core.tupleProjection 2 0 $
-
-first :: TTerm Term -> TTerm Term
-first pair = untuple 2 0 @@ pair
-
--- | Create a term-encoded pair (2-tuple)
--- Example: pair (string "name") (int32 42)
-pair :: TTerm Term -> TTerm Term -> TTerm Term
-pair t1 t2 = tuple [t1, t2]
-
----- | Create a term-encoded product (tuple) with multiple components
----- Example: product [string "name", int32 42, boolean True]
---product :: [TTerm Term] -> TTerm Term
---product terms = Core.termProduct $ TTerm $ TermList (unTTerm <$> terms)
-
-second :: TTerm Term -> TTerm Term
-second pair = untuple 2 1 @@ pair
-
--- | Create a term-encoded tuple with multiple components
--- Example: tuple [string "name", int32 42, boolean True]
-tuple :: [TTerm Term] -> TTerm Term
-tuple = Core.termProduct . Phantoms.list
+unitVariantPhantom :: Name -> Name -> TTerm Term
+unitVariantPhantom tname fname = variantPhantom tname fname Core.termUnit
 
 -- | Create a term-encoded tuple projection function
 -- Example: untuple 3 1 extracts the second element of a 3-tuple
@@ -313,35 +299,30 @@ untuple :: Int -> Int -> TTerm Term
 untuple arity idx = Core.termFunction $ Core.functionElimination $ Core.eliminationProduct
   $ Core.tupleProjection (Phantoms.int32 arity) (Phantoms.int32 idx) Phantoms.nothing
 
--- * Records and unions
+-- | Create a term-encoded unwrap function for a wrapped type
+-- Example: unwrap (name "Email")
+unwrap :: TTerm Name -> TTerm Term
+unwrap = Core.termFunction . Core.functionElimination . Core.eliminationWrap
 
--- | Create a term-encoded union injection
--- Example: inject (name "Result") "success" (int32 42)
-inject :: TTerm Name -> String -> TTerm Term -> TTerm Term
-inject tname fname = Core.termUnion . Core.injection tname . Core.field (name fname)
+-- | Create a term-encoded variable reference from a string
+-- Example: var "x"
+var :: String -> TTerm Term
+var = Core.termVariable . name
 
--- | Create a term-encoded pattern match on a union
--- Example: match (name "Result") nothing ["success">: int32 42, "error">: string "fail"]
-match :: TTerm Name -> TTerm (Maybe Term) -> [(TTerm Name, TTerm Term)] -> TTerm Term
-match tname def pairs = Core.termFunction $ Core.functionElimination $ Core.eliminationUnion
-    $ Core.caseStatement tname def $ Phantoms.list $ toField pairs
-  where
-    toField = fmap (\(n, t) -> Core.field n t)
+-- | Create a term-encoded variable reference from a Name
+-- Example: varName (Name "x")
+varName :: Name -> TTerm Term
+varName (Name n) = Core.termVariable $ TTerm $ Terms.string n
 
--- | Create a term-encoded record with named fields
--- Example: record (name "Person") ["name">: string "John", "age">: int32 30]
-record :: TTerm Name -> [(TTerm Name, TTerm Term)] -> TTerm Term
-record name pairs = Core.termRecord $ Core.record name $ Phantoms.list (toField <$> pairs)
-  where
-    toField (n, t) = Core.field n t
+-- | Create a phantom-typed variable reference from a Name
+-- Example: varNamePhantom (Name "x") :: TTerm Int
+varNamePhantom :: Name -> TTerm a
+varNamePhantom = TTerm . TermVariable
 
--- | Create a term-encoded sum type instance
--- Example: sum 0 3 (int32 1) represents the first element of a 3-element sum
-sum :: Int -> Int -> TTerm Term -> TTerm Term
-sum i s = Core.termSum . Core.sum (Phantoms.int32 i) (Phantoms.int32 s)
-
-unitVariantPhantom :: Name -> Name -> TTerm Term
-unitVariantPhantom tname fname = variantPhantom tname fname Core.termUnit
+-- | Maps a string to a phantom-typed variable term
+-- Example: varPhantom "x" :: TTerm Int
+varPhantom :: String -> TTerm a
+varPhantom = TTerm . TermVariable . Name
 
 variantPhantom :: Name -> Name -> TTerm Term -> TTerm Term
 variantPhantom tname fname term = Core.termUnion $ Core.injection (Core.nameLift tname) $ Core.field (Core.nameLift fname) term

@@ -19,7 +19,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
--- * Operators
+-- Operators
 
 infixr 0 ~>
 (~>) :: String -> TTerm x -> TTerm (a -> b)
@@ -55,58 +55,35 @@ infixr 0 >>:
 (>>:) :: Name -> TTerm a -> Field
 fname >>: d = Field fname (unTTerm d)
 
--- * Fundamentals
+
+-- | Add an annotation to a term
+-- Example: annot (Name "deprecated") (Just (boolean True)) myFunction
+annot :: Name -> Maybe Term -> TTerm a -> TTerm a
+annot key mvalue (TTerm term) = TTerm $ Ann.annotateTerm key mvalue term
 
 -- | Apply a function to an argument
 -- Example: apply (var "add") (int32 1)
 apply :: TTerm (a -> b) -> TTerm a -> TTerm b
 apply (TTerm lhs) (TTerm rhs) = TTerm $ Terms.apply lhs rhs
 
-let1 :: String -> TTerm a -> TTerm b -> TTerm b
-let1 name (TTerm value) (TTerm env) = TTerm $ TermLet $ Let [Binding (Name name) value Nothing] env
-
--- | Create a let expression with multiple bindings
--- Example: lets ["x">: int32 1, "y">: int32 2] (var "add" @@ var "x" @@ var "y")
-lets :: [Field] -> TTerm a -> TTerm a
-lets fields (TTerm env) = TTerm $ TermLet $ Let (toBinding <$> fields) env
-  where
-     toBinding (Field name value) = Binding name value Nothing
-
--- | Create a variable reference
--- Example: var "x"
-var :: String -> TTerm a
-var v = TTerm $ Terms.var v
-
 bind :: String -> TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
 bind v def body = primitive2 _flows_bind def $ lambda v $ body
+
+binaryFunction :: (TTerm a -> TTerm b -> TTerm c) -> TTerm (a -> b -> c)
+binaryFunction f = case (unTTerm $ f (var "x") (var "y")) of
+  TermApplication (Application (TermApplication (Application lhs _)) _) -> TTerm lhs
+  t -> TTerm $ Terms.string $ "unexpected term as binary function: " <> ShowCore.term t
 
 binds :: [Field] -> TTerm (Flow s a) -> TTerm (Flow s a)
 binds fields rhs = L.foldr withField rhs fields
   where
     withField (Field (Name fname) fterm) b = bind fname (TTerm fterm) b
 
-exec :: TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
-exec f b = primitive2 _flows_bind f (lambda ignoredVariable b)
-
-produce :: TTerm a -> TTerm (Flow s a)
-produce = primitive1 _flows_pure
-
-trace :: TTerm String -> TTerm (Flow s a) -> TTerm (Flow s a)
-trace msg flow = var "hydra.monads.withTrace" @@ msg @@ flow
-
--- * Functions
-
-unaryFunction :: (TTerm a -> TTerm b) -> TTerm (a -> b)
-unaryFunction f = case (unTTerm $ f $ var "x") of
-  TermApplication (Application lhs _) -> TTerm lhs
-  TermMaybe (Just _) -> primitive _maybes_pure
-  TermUnion (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
-  TermWrap (WrappedTerm tname _) -> lambda "x" $ wrap tname $ var "x"
-
-binaryFunction :: (TTerm a -> TTerm b -> TTerm c) -> TTerm (a -> b -> c)
-binaryFunction f = case (unTTerm $ f (var "x") (var "y")) of
-  TermApplication (Application (TermApplication (Application lhs _)) _) -> TTerm lhs
-  t -> TTerm $ Terms.string $ "unexpected term as binary function: " <> ShowCore.term t
+-- | Apply a named case match to an argument
+-- Example: cases resultTypeName myResult Nothing [onSuccess, onError]
+-- See also: 'match'
+cases :: Name -> TTerm a -> Maybe (TTerm b) -> [Field] -> TTerm b
+cases name arg dflt fields = TTerm $ Terms.apply (Terms.match name (unTTerm <$> dflt) fields) (unTTerm arg)
 
 -- | Compose two functions (g then f)
 -- Example: compose (var "stringLength") (var "toString")
@@ -118,10 +95,78 @@ compose (TTerm f) (TTerm g) = TTerm $ Terms.compose f g
 constant :: TTerm a -> TTerm (b -> a)
 constant (TTerm term) = TTerm $ Terms.constant term
 
+-- | Create a definition in a module
+-- Example: definitionInModule myModule "addInts" (lambda "x" (lambda "y" (add @@ var "x" @@ var "y")))
+definitionInModule :: Module -> String -> TTerm a -> TBinding a
+definitionInModule mod = definitionInNamespace $ moduleNamespace mod
+
+-- | Create a definition in a namespace
+-- Example: definitionInNamespace (Namespace "com.example") "addInts" myFunction
+definitionInNamespace :: Namespace -> String -> TTerm a -> TBinding a
+definitionInNamespace ns lname = TBinding $ unqualifyName $ QualifiedName (Just ns) lname
+
+-- | Add documentation to a term
+-- Example: doc "Adds two integers" addFunction
+doc :: String -> TTerm a -> TTerm a
+doc s (TTerm term) = TTerm $ setTermDescription (Just s) term
+
+-- | Add documentation with line wrapping at the specified width
+-- Example: docWrapped 80 "This is a long documentation string that will be wrapped..." myFunction
+docWrapped :: Int -> String -> TTerm a -> TTerm a
+docWrapped len = doc . wrapLine len
+
+-- | Convert a typed element to an untyped element
+-- Example: el (definitionInModule myModule "addInts" myFunction)
+el :: TBinding a -> Binding
+el (TBinding name (TTerm term)) = Binding name term Nothing
+
+exec :: TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
+exec f b = primitive2 _flows_bind f (lambda ignoredVariable b)
+
+-- | Create a field with the given name and value
+-- Example: field (Name "age") (int32 30)
+field :: Name -> TTerm a -> Field
+field fname (TTerm val) = Field fname val
+
+-- | First element projection function for pairs
+-- Example: first $ pair (string "foo") (string "bar")
+first :: TTerm (a, b) -> TTerm a
+first pair = TTerm (Terms.untuple 2 0) @@ pair
+
+-- | Mark a type as first-class
+-- Example: firstClassType (record ...)
+firstClassType :: TTerm Type -> TTerm Type
+firstClassType typ = annot key_firstClassType (Just $ Terms.boolean True) typ
+
+-- | Create a fold function to process lists
+-- Example: fold (lambda "acc" (lambda "x" (add @@ var "acc" @@ var "x")))
+fold :: TTerm (b -> a -> b) -> TTerm (b -> [a] -> b)
+fold f = (primitive _lists_foldl) @@ f
+
 -- | Identity function that returns its argument unchanged
 -- Example: identity
 identity :: TTerm (a -> a)
 identity = TTerm Terms.identity
+
+-- | Create a union injection
+-- Example: inject (Name "Result") (Name "success") (string "ok")
+inject :: Name -> Name -> TTerm a -> TTerm b
+inject name fname (TTerm term) = TTerm $ Terms.inject name (Field fname term)
+
+-- | Create a function that injects its argument into a union variant
+-- Example: injectLambda (Name "Result") (Name "success")
+injectLambda :: Name -> Name -> TTerm (a -> b)
+injectLambda name fname = lambda "injected_" $ inject name fname $ var "injected_"
+
+-- | Create a 'Just' optional value
+-- Example: just (string "found")
+just :: TTerm a -> TTerm (Maybe a)
+just (TTerm term) = TTerm $ Terms.just term
+
+-- | Function that wraps a value in 'Just'
+-- Example: just_ @@ myValue
+just_ :: TTerm (a -> Maybe a)
+just_ = TTerm $ Terms.lambda "just_" $ Terms.just $ Terms.var "just_"
 
 -- | Create a lambda function with one parameter
 -- Example: lambda "x" (var "add" @@ var "x" @@ int32 1)
@@ -132,6 +177,51 @@ lambda v (TTerm body) = TTerm $ Terms.lambda v body
 -- Example: lambdas ["x", "y"] (add @@ var "x" @@ var "y")
 lambdas :: [String] -> TTerm x -> TTerm (a -> b)
 lambdas params (TTerm body) = TTerm $ Terms.lambdas params body
+
+let1 :: String -> TTerm a -> TTerm b -> TTerm b
+let1 name (TTerm value) (TTerm env) = TTerm $ TermLet $ Let [Binding (Name name) value Nothing] env
+
+-- | Create a let expression with multiple bindings
+-- Example: lets ["x">: int32 1, "y">: int32 2] (var "add" @@ var "x" @@ var "y")
+lets :: [Field] -> TTerm a -> TTerm a
+lets fields (TTerm env) = TTerm $ TermLet $ Let (toBinding <$> fields) env
+  where
+     toBinding (Field name value) = Binding name value Nothing
+
+-- | Create a list of terms
+-- Example: list [int32 1, int32 2, int32 3]
+list :: [TTerm a] -> TTerm [a]
+list els = TTerm $ Terms.list (unTTerm <$> els)
+
+-- | Create a map/dictionary term
+-- Example: map (M.fromList [(string "a", int32 1), (string "b", int32 2)])
+map :: M.Map (TTerm a) (TTerm b) -> TTerm (M.Map a b)
+map = TTerm . Terms.map . M.fromList . fmap fromTTerm . M.toList
+  where
+    fromTTerm (TTerm k, TTerm v) = (k, v)
+
+-- | Create a pattern match on a union term
+-- Example: match (Name "Result") (Just $ string "what?") ["success">: string "yay", "error">: string "boo"]
+match :: Name -> Maybe (TTerm b) -> [Field] -> TTerm (a -> b)
+match name dflt fields = TTerm $ Terms.match name (unTTerm <$> dflt) fields
+
+-- | Create a 'Nothing' optional value
+-- Example: nothing
+nothing :: TTerm (Maybe a)
+nothing = TTerm Terms.nothing
+
+-- | Create an optional value from a Maybe
+-- Example: opt (Just myValue)
+opt :: Maybe (TTerm a) -> TTerm (Maybe a)
+opt mc = TTerm $ Terms.optional (unTTerm <$> mc)
+
+optCases :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
+optCases arg ifNothing ifJust = primitive3 (Name "hydra.lib.maybes.maybe") ifNothing ifJust arg
+
+-- | Create a pair (2-tuple)
+-- Example: pair (string "age") (int32 32)
+pair :: (TTerm a) -> (TTerm b) -> TTerm (a, b)
+pair (TTerm l) (TTerm r) = TTerm $ Terms.pair l r
 
 -- | Primitive function by name
 -- Example: primitive (Name "hydra.lib.strings.length")
@@ -153,97 +243,8 @@ primitive2 primName (TTerm a) (TTerm b) = TTerm $ Terms.primitive primName Terms
 primitive3 :: Name -> TTerm a -> TTerm b -> TTerm c -> TTerm d
 primitive3 primName (TTerm a) (TTerm b) (TTerm c) = TTerm $ Terms.primitive primName Terms.@@ a Terms.@@ b Terms.@@ c
 
--- * Collections
-
--- | Create a fold function to process lists
--- Example: fold (lambda "acc" (lambda "x" (add @@ var "acc" @@ var "x")))
-fold :: TTerm (b -> a -> b) -> TTerm (b -> [a] -> b)
-fold f = (primitive _lists_foldl) @@ f
-
--- | Create a 'Just' optional value
--- Example: just (string "found")
-just :: TTerm a -> TTerm (Maybe a)
-just (TTerm term) = TTerm $ Terms.just term
-
--- | Function that wraps a value in 'Just'
--- Example: just_ @@ myValue
-just_ :: TTerm (a -> Maybe a)
-just_ = TTerm $ Terms.lambda "just_" $ Terms.just $ Terms.var "just_"
-
--- | Create a list of terms
--- Example: list [int32 1, int32 2, int32 3]
-list :: [TTerm a] -> TTerm [a]
-list els = TTerm $ Terms.list (unTTerm <$> els)
-
--- | Create a map/dictionary term
--- Example: map (M.fromList [(string "a", int32 1), (string "b", int32 2)])
-map :: M.Map (TTerm a) (TTerm b) -> TTerm (M.Map a b)
-map = TTerm . Terms.map . M.fromList . fmap fromTTerm . M.toList
-  where
-    fromTTerm (TTerm k, TTerm v) = (k, v)
-
--- | Create a 'Nothing' optional value
--- Example: nothing
-nothing :: TTerm (Maybe a)
-nothing = TTerm Terms.nothing
-
--- | Create an optional value from a Maybe
--- Example: opt (Just myValue)
-opt :: Maybe (TTerm a) -> TTerm (Maybe a)
-opt mc = TTerm $ Terms.optional (unTTerm <$> mc)
-
--- | Create a set of terms
--- Example: set [string "a", string "b", string "c"]
-set :: [TTerm a] -> TTerm (S.Set a)
-set = TTerm . Terms.set . S.fromList . fmap unTTerm
-
--- * Products and tuples
-
--- | First element projection function for pairs
--- Example: first $ pair (string "foo") (string "bar")
-first :: TTerm (a, b) -> TTerm a
-first pair = TTerm (Terms.untuple 2 0) @@ pair
-
--- | Create a pair (2-tuple)
--- Example: pair (string "age") (int32 32)
-pair :: (TTerm a) -> (TTerm b) -> TTerm (a, b)
-pair (TTerm l) (TTerm r) = TTerm $ Terms.pair l r
-
--- | Second element projection function for pairs
--- Example: second $ pair (string "foo") (string "bar")
-second :: TTerm (a, b) -> TTerm b
-second pair = TTerm (Terms.untuple 2 1) @@ pair
-
-triple :: TTerm a -> TTerm b -> TTerm c -> TTerm (a, b, c)
-triple (TTerm a) (TTerm b) (TTerm c) = TTerm $ Terms.triple a b c
-
-tuple4 :: TTerm a -> TTerm b -> TTerm c -> TTerm d -> TTerm (a, b, c, d)
-tuple4 (TTerm a) (TTerm b) (TTerm c) (TTerm d) = TTerm $ Terms.tuple4 a b c d
-
-tuple5 :: TTerm a -> TTerm b -> TTerm c -> TTerm d -> TTerm e -> TTerm (a, b, c, d, e)
-tuple5 (TTerm a) (TTerm b) (TTerm c) (TTerm d) (TTerm e) = TTerm $ Terms.tuple5 a b c d e
-
--- | Create a tuple projection function
--- Example: untuple 3 1 extracts the second element of a 3-tuple
-untuple :: Int -> Int -> TTerm (a -> b)
-untuple arity idx = TTerm $ Terms.untuple arity idx
-
--- * Records, unions and newtypes
-
--- | Create a field with the given name and value
--- Example: field (Name "age") (int32 30)
-field :: Name -> TTerm a -> Field
-field fname (TTerm val) = Field fname val
-
--- | Create a union injection
--- Example: inject (Name "Result") (Name "success") (string "ok")
-inject :: Name -> Name -> TTerm a -> TTerm b
-inject name fname (TTerm term) = TTerm $ Terms.inject name (Field fname term)
-
--- | Create a function that injects its argument into a union variant
--- Example: injectLambda (Name "Result") (Name "success")
-injectLambda :: Name -> Name -> TTerm (a -> b)
-injectLambda name fname = lambda "injected_" $ inject name fname $ var "injected_"
+produce :: TTerm a -> TTerm (Flow s a)
+produce = primitive1 _flows_pure
 
 -- | Extract a field from a record
 -- Example: project (Name "Person") (Name "name")
@@ -255,6 +256,40 @@ project name fname = TTerm $ Terms.project name fname
 record :: Name -> [Field] -> TTerm a
 record name fields = TTerm $ Terms.record name fields
 
+-- | Reference a defined element
+-- Example: ref (definitionInModule myModule "addInts")
+ref :: TBinding a -> TTerm a
+ref (TBinding name _) = TTerm (TermVariable name)
+
+-- | Second element projection function for pairs
+-- Example: second $ pair (string "foo") (string "bar")
+second :: TTerm (a, b) -> TTerm b
+second pair = TTerm (Terms.untuple 2 1) @@ pair
+
+-- | Create a set of terms
+-- Example: set [string "a", string "b", string "c"]
+set :: [TTerm a] -> TTerm (S.Set a)
+set = TTerm . Terms.set . S.fromList . fmap unTTerm
+
+trace :: TTerm String -> TTerm (Flow s a) -> TTerm (Flow s a)
+trace msg flow = var "hydra.monads.withTrace" @@ msg @@ flow
+
+triple :: TTerm a -> TTerm b -> TTerm c -> TTerm (a, b, c)
+triple (TTerm a) (TTerm b) (TTerm c) = TTerm $ Terms.triple a b c
+
+tuple4 :: TTerm a -> TTerm b -> TTerm c -> TTerm d -> TTerm (a, b, c, d)
+tuple4 (TTerm a) (TTerm b) (TTerm c) (TTerm d) = TTerm $ Terms.tuple4 a b c d
+
+tuple5 :: TTerm a -> TTerm b -> TTerm c -> TTerm d -> TTerm e -> TTerm (a, b, c, d, e)
+tuple5 (TTerm a) (TTerm b) (TTerm c) (TTerm d) (TTerm e) = TTerm $ Terms.tuple5 a b c d e
+
+unaryFunction :: (TTerm a -> TTerm b) -> TTerm (a -> b)
+unaryFunction f = case (unTTerm $ f $ var "x") of
+  TermApplication (Application lhs _) -> TTerm lhs
+  TermMaybe (Just _) -> primitive _maybes_pure
+  TermUnion (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
+  TermWrap (WrappedTerm tname _) -> lambda "x" $ wrap tname $ var "x"
+
 -- | Unit value (empty record)
 unit :: TTerm a
 unit = TTerm Terms.unit
@@ -264,81 +299,25 @@ unit = TTerm Terms.unit
 unitVariant :: Name -> Name -> TTerm a
 unitVariant name fname = TTerm $ Terms.inject name $ Field fname Terms.unit
 
+-- | Create a tuple projection function
+-- Example: untuple 3 1 extracts the second element of a 3-tuple
+untuple :: Int -> Int -> TTerm (a -> b)
+untuple arity idx = TTerm $ Terms.untuple arity idx
+
 -- | Create an unwrap function for a wrapped type
 -- Example: unwrap (Name "Email")
 unwrap :: Name -> TTerm (a -> b)
 unwrap = TTerm . Terms.unwrap
 
+-- | Create a variable reference
+-- Example: var "x"
+var :: String -> TTerm a
+var v = TTerm $ Terms.var v
+
 -- | Create a union variant
 -- Example: variant (Name "Result") (Name "success") (string "ok")
 variant :: Name -> Name -> TTerm a -> TTerm b
 variant name fname (TTerm term) = TTerm $ Terms.inject name $ Field fname term
-
--- | Create a wrapped term (instance of a newtype)
--- Example: wrap (Name "Email") (string "user@example.com")
--- Note: the phantom types provide no guarantee of type safety in this case
-wrap :: Name -> TTerm a -> TTerm b
-wrap name (TTerm term) = TTerm $ Terms.wrap name term
-
--- * Pattern matching
-
--- | Apply a named case match to an argument
--- Example: cases resultTypeName myResult Nothing [onSuccess, onError]
--- See also: 'match'
-cases :: Name -> TTerm a -> Maybe (TTerm b) -> [Field] -> TTerm b
-cases name arg dflt fields = TTerm $ Terms.apply (Terms.match name (unTTerm <$> dflt) fields) (unTTerm arg)
-
--- | Create a pattern match on a union term
--- Example: match (Name "Result") (Just $ string "what?") ["success">: string "yay", "error">: string "boo"]
-match :: Name -> Maybe (TTerm b) -> [Field] -> TTerm (a -> b)
-match name dflt fields = TTerm $ Terms.match name (unTTerm <$> dflt) fields
-
-optCases :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
-optCases arg ifNothing ifJust = primitive3 (Name "hydra.lib.maybes.maybe") ifNothing ifJust arg
-
--- * Definitions and modules
-
--- | Create a definition in a module
--- Example: definitionInModule myModule "addInts" (lambda "x" (lambda "y" (add @@ var "x" @@ var "y")))
-definitionInModule :: Module -> String -> TTerm a -> TBinding a
-definitionInModule mod = definitionInNamespace $ moduleNamespace mod
-
--- | Create a definition in a namespace
--- Example: definitionInNamespace (Namespace "com.example") "addInts" myFunction
-definitionInNamespace :: Namespace -> String -> TTerm a -> TBinding a
-definitionInNamespace ns lname = TBinding $ unqualifyName $ QualifiedName (Just ns) lname
-
--- | Convert a typed element to an untyped element
--- Example: el (definitionInModule myModule "addInts" myFunction)
-el :: TBinding a -> Binding
-el (TBinding name (TTerm term)) = Binding name term Nothing
-
--- | Reference a defined element
--- Example: ref (definitionInModule myModule "addInts")
-ref :: TBinding a -> TTerm a
-ref (TBinding name _) = TTerm (TermVariable name)
-
--- * Metadata and annotations
-
--- | Add an annotation to a term
--- Example: annot (Name "deprecated") (Just (boolean True)) myFunction
-annot :: Name -> Maybe Term -> TTerm a -> TTerm a
-annot key mvalue (TTerm term) = TTerm $ Ann.annotateTerm key mvalue term
-
--- | Add documentation to a term
--- Example: doc "Adds two integers" addFunction
-doc :: String -> TTerm a -> TTerm a
-doc s (TTerm term) = TTerm $ setTermDescription (Just s) term
-
--- | Add documentation with line wrapping at the specified width
--- Example: docWrapped 80 "This is a long documentation string that will be wrapped..." myFunction
-docWrapped :: Int -> String -> TTerm a -> TTerm a
-docWrapped len = doc . wrapLine len
-
--- | Mark a type as first-class
--- Example: firstClassType (record ...)
-firstClassType :: TTerm Type -> TTerm Type
-firstClassType typ = annot key_firstClassType (Just $ Terms.boolean True) typ
 
 -- | Associate the Eq type class with the inferred type of a term
 -- Example: withEq "t0" myTerm
@@ -354,3 +333,9 @@ withOrd v = withTypeClasses $ M.fromList [(Name v, S.singleton TypeClassOrdering
 -- Example: withTypeClasses (M.fromList [(Name "t0", S.singleton TypeClassOrdering)]) myTerm
 withTypeClasses :: M.Map Name (S.Set TypeClass) -> TTerm a -> TTerm a
 withTypeClasses classes (TTerm term) = TTerm $ setTypeClasses classes term
+
+-- | Create a wrapped term (instance of a newtype)
+-- Example: wrap (Name "Email") (string "user@example.com")
+-- Note: the phantom types provide no guarantee of type safety in this case
+wrap :: Name -> TTerm a -> TTerm b
+wrap name (TTerm term) = TTerm $ Terms.wrap name term
