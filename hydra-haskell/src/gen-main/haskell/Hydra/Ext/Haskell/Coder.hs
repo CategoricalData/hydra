@@ -17,6 +17,7 @@ import qualified Hydra.Ext.Haskell.Utils as Utils
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -214,6 +215,7 @@ encodeTerm namespaces term =
       let fun = (Core.applicationFunction v1) 
           arg = (Core.applicationArgument v1)
       in (Flows.bind (encode fun) (\hfun -> Flows.bind (encode arg) (\harg -> Flows.pure (Utils.hsapp hfun harg))))
+    Core.TermEither v1 -> (Eithers.either (\l -> Flows.bind (encode l) (\hl -> Flows.pure (Utils.hsapp (Utils.hsvar "Left") hl))) (\r -> Flows.bind (encode r) (\hr -> Flows.pure (Utils.hsapp (Utils.hsvar "Right") hr))) v1)
     Core.TermFunction v1 -> (encodeFunction namespaces v1)
     Core.TermLet v1 ->  
       let bindings = (Core.letBindings v1) 
@@ -295,6 +297,13 @@ encodeType namespaces typ =
       in (Flows.bind (encode lhs) (\hlhs -> Flows.bind (encode rhs) (\hrhs -> Flows.pure (Utils.toTypeApplication [
         hlhs,
         hrhs]))))
+    Core.TypeEither v1 ->  
+      let left = (Core.eitherTypeLeft v1) 
+          right = (Core.eitherTypeRight v1)
+      in (Flows.map Utils.toTypeApplication (Flows.sequence [
+        Flows.pure (Ast.TypeVariable (Utils.rawName "Either")),
+        encode left,
+        (encode right)]))
     Core.TypeFunction v1 ->  
       let dom = (Core.functionTypeDomain v1) 
           cod = (Core.functionTypeCodomain v1)

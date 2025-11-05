@@ -6,6 +6,7 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -118,6 +119,13 @@ floatLiteral lit = ((\x -> case x of
 -- | Extract a float value from a term
 floatValue :: (Core.Term -> Compute.Flow Graph.Graph Core.FloatValue)
 floatValue t = (Flows.bind (literal t) (\l -> floatLiteral l))
+
+eitherTerm :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flow Graph.Graph t1) -> Core.Term -> Compute.Flow Graph.Graph (Either t0 t1))
+eitherTerm leftFun rightFun term0 =  
+  let extract = (\term -> (\x -> case x of
+          Core.TermEither v1 -> (Eithers.either (\l -> Flows.map (\x -> Left x) (leftFun l)) (\r -> Flows.map (\x -> Right x) (rightFun r)) v1)
+          _ -> (Monads.unexpected "either value" (Core_.term term))) term)
+  in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
 eitherType :: (Core.Type -> Compute.Flow t0 Core.EitherType)
 eitherType typ =  

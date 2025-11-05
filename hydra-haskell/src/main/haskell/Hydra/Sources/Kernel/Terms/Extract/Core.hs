@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Grammar       as Grammar
 import qualified Hydra.Dsl.Graph         as Graph
 import qualified Hydra.Dsl.Json          as Json
 import qualified Hydra.Dsl.Lib.Chars     as Chars
+import qualified Hydra.Dsl.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Lib.Flows     as Flows
 import qualified Hydra.Dsl.Lib.Lists     as Lists
@@ -71,6 +72,7 @@ module_ = Module (Namespace "hydra.extract.core") elements
      el float64ValueDef,
      el floatLiteralDef,
      el floatValueDef,
+     el eitherTermDef,
      el eitherTypeDef,
      el functionTypeDef,
      el injectionDef,
@@ -297,6 +299,21 @@ floatValueDef = define "floatValue" $
   "t" ~>
   "l" <<~ ref literalDef @@ var "t" $
   ref floatLiteralDef @@ var "l"
+
+eitherTermDef :: TBinding ((Term -> Flow Graph x) -> (Term -> Flow Graph y) -> Term -> Flow Graph (Either x y))
+eitherTermDef = define "eitherTerm" $
+  doc "Extract an either value from a term, applying functions to the left and right values" $
+  "leftFun" ~> "rightFun" ~> "term0" ~>
+  "extract" <~ ("term" ~> cases _Term (var "term")
+    (Just (ref Monads.unexpectedDef
+      @@ "either value"
+      @@ (ref ShowCore.termDef @@ var "term"))) [
+    _Term_either>>: "et" ~> Eithers.either_
+      ("l" ~> Flows.map (unaryFunction left) (var "leftFun" @@ var "l"))
+      ("r" ~> Flows.map (unaryFunction right) (var "rightFun" @@ var "r"))
+      (var "et")]) $
+  "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
+  var "extract" @@ var "term"
 
 eitherTypeDef :: TBinding (Type -> Flow s EitherType)
 eitherTypeDef = define "eitherType" $

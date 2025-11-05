@@ -6,6 +6,7 @@ import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -752,6 +753,7 @@ rewriteTerm f term0 =
                     Core.TermApplication v1 -> (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (recurse (Core.applicationFunction v1)),
                       Core.applicationArgument = (recurse (Core.applicationArgument v1))}))
+                    Core.TermEither v1 -> (Core.TermEither (Eithers.either (\l -> Left (recurse l)) (\r -> Right (recurse r)) v1))
                     Core.TermFunction v1 -> (Core.TermFunction (forFunction v1))
                     Core.TermLet v1 -> (Core.TermLet (forLet v1))
                     Core.TermList v1 -> (Core.TermList (Lists.map recurse v1))
@@ -940,6 +942,7 @@ rewriteTermWithContext f cx0 term0 =
                       Core.TermApplication v1 -> (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (recurse (Core.applicationFunction v1)),
                         Core.applicationArgument = (recurse (Core.applicationArgument v1))}))
+                      Core.TermEither v1 -> (Core.TermEither (Eithers.either (\l -> Left (recurse l)) (\r -> Right (recurse r)) v1))
                       Core.TermFunction v1 -> (Core.TermFunction (forFunction v1))
                       Core.TermLet v1 -> (Core.TermLet (forLet v1))
                       Core.TermList v1 -> (Core.TermList (Lists.map recurse v1))
@@ -1259,6 +1262,9 @@ subterms x = case x of
   Core.TermApplication v1 -> [
     Core.applicationFunction v1,
     (Core.applicationArgument v1)]
+  Core.TermEither v1 -> (Eithers.either (\l -> [
+    l]) (\r -> [
+    r]) v1)
   Core.TermFunction v1 -> ((\x -> case x of
     Core.FunctionElimination v2 -> ((\x -> case x of
       Core.EliminationUnion v3 -> (Lists.concat2 (Maybes.maybe [] (\t -> [
@@ -1299,6 +1305,7 @@ subtermsWithAccessors x = case x of
   Core.TermApplication v1 -> [
     (Accessors.TermAccessorApplicationFunction, (Core.applicationFunction v1)),
     (Accessors.TermAccessorApplicationArgument, (Core.applicationArgument v1))]
+  Core.TermEither _ -> []
   Core.TermFunction v1 -> ((\x -> case x of
     Core.FunctionElimination v2 -> ((\x -> case x of
       Core.EliminationUnion v3 -> (Lists.concat2 (Maybes.maybe [] (\t -> [
