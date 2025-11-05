@@ -49,6 +49,21 @@ boolean = TermCoder Types.boolean $ Coder encode decode
     encode = ExtractCore.boolean
     decode = pure . Terms.boolean
 
+either_ :: TermCoder x -> TermCoder y -> TermCoder (Prelude.Either x y)
+either_ xCoder yCoder = TermCoder (Types.either_ (termCoderType xCoder) (termCoderType yCoder)) $ Coder encode decode
+  where
+    encode term = case term of
+      TermEither (Prelude.Left l) -> Prelude.Left <$> coderEncode (termCoderCoder xCoder) l
+      TermEither (Prelude.Right r) -> Prelude.Right <$> coderEncode (termCoderCoder yCoder) r
+      _ -> fail $ "expected either term, got: " ++ show term
+    decode ev = case ev of
+      Prelude.Left x -> do
+        xTerm <- coderDecode (termCoderCoder xCoder) x
+        return $ Terms.left xTerm
+      Prelude.Right y -> do
+        yTerm <- coderDecode (termCoderCoder yCoder) y
+        return $ Terms.right yTerm
+
 comparison :: TermCoder Comparison
 comparison = TermCoder (TypeVariable _Comparison) $ Coder encode decode
   where
