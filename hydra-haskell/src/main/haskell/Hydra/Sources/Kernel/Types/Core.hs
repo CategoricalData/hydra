@@ -67,6 +67,12 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "default">: optional (core "Term"),
           "cases">: list $ core "Field"],
 
+      def "EitherType" $
+        doc "A type which provides a choice between a 'left' type and a 'right' type" $
+        record [
+          "left">: core "Type",
+          "right">: core "Type"],
+
       def "Elimination" $
         doc "A corresponding elimination for an introduction term" $
         union [
@@ -351,6 +357,7 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
         union [
           "annotated">: core "AnnotatedType",
           "application">: core "ApplicationType",
+          "either">: core "EitherType",
           "forall">: core "ForallType",
           "function">: core "FunctionType",
           "list">: core "Type",

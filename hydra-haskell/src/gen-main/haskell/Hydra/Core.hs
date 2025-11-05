@@ -96,6 +96,19 @@ _CaseStatement_default = (Name "default")
 
 _CaseStatement_cases = (Name "cases")
 
+-- | A type which provides a choice between a 'left' type and a 'right' type
+data EitherType = 
+  EitherType {
+    eitherTypeLeft :: Type,
+    eitherTypeRight :: Type}
+  deriving (Eq, Ord, Read, Show)
+
+_EitherType = (Name "hydra.core.EitherType")
+
+_EitherType_left = (Name "left")
+
+_EitherType_right = (Name "right")
+
 -- | A corresponding elimination for an introduction term
 data Elimination = 
   -- | Eliminates a tuple by projecting the component at a given 0-indexed offset
@@ -576,6 +589,7 @@ _TupleProjection_domain = (Name "domain")
 data Type = 
   TypeAnnotated AnnotatedType |
   TypeApplication ApplicationType |
+  TypeEither EitherType |
   TypeForall ForallType |
   TypeFunction FunctionType |
   TypeList Type |
@@ -597,6 +611,8 @@ _Type = (Name "hydra.core.Type")
 _Type_annotated = (Name "annotated")
 
 _Type_application = (Name "application")
+
+_Type_either = (Name "either")
 
 _Type_forall = (Name "forall")
 
