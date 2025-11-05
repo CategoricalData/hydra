@@ -123,6 +123,7 @@ _Precision_bits = (Core.Name "bits")
 data TermVariant = 
   TermVariantAnnotated  |
   TermVariantApplication  |
+  TermVariantEither  |
   TermVariantFunction  |
   TermVariantLet  |
   TermVariantList  |
@@ -146,6 +147,8 @@ _TermVariant = (Core.Name "hydra.mantle.TermVariant")
 _TermVariant_annotated = (Core.Name "annotated")
 
 _TermVariant_application = (Core.Name "application")
+
+_TermVariant_either = (Core.Name "either")
 
 _TermVariant_function = (Core.Name "function")
 
@@ -195,6 +198,7 @@ _TypeClass_ordering = (Core.Name "ordering")
 data TypeVariant = 
   TypeVariantAnnotated  |
   TypeVariantApplication  |
+  TypeVariantEither  |
   TypeVariantForall  |
   TypeVariantFunction  |
   TypeVariantList  |
@@ -216,6 +220,8 @@ _TypeVariant = (Core.Name "hydra.mantle.TypeVariant")
 _TypeVariant_annotated = (Core.Name "annotated")
 
 _TypeVariant_application = (Core.Name "application")
+
+_TypeVariant_either = (Core.Name "either")
 
 _TypeVariant_forall = (Core.Name "forall")
 
