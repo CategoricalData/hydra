@@ -168,6 +168,26 @@ just (TTerm term) = TTerm $ Terms.just term
 just_ :: TTerm (a -> Maybe a)
 just_ = TTerm $ Terms.lambda "just_" $ Terms.just $ Terms.var "just_"
 
+-- | Create a 'Left' either value
+-- Example: left (string "error")
+left :: TTerm a -> TTerm (Either a b)
+left (TTerm term) = TTerm $ Terms.left term
+
+-- | Function that wraps a value in 'Left'
+-- Example: left_ @@ myValue
+left_ :: TTerm (a -> Either a b)
+left_ = TTerm $ Terms.lambda "left_" $ Terms.left $ Terms.var "left_"
+
+-- | Create a 'Right' either value
+-- Example: right (int32 42)
+right :: TTerm b -> TTerm (Either a b)
+right (TTerm term) = TTerm $ Terms.right term
+
+-- | Function that wraps a value in 'Right'
+-- Example: right_ @@ myValue
+right_ :: TTerm (b -> Either a b)
+right_ = TTerm $ Terms.lambda "right_" $ Terms.right $ Terms.var "right_"
+
 -- | Create a lambda function with one parameter
 -- Example: lambda "x" (var "add" @@ var "x" @@ int32 1)
 lambda :: String -> TTerm x -> TTerm (a -> b)
@@ -286,6 +306,8 @@ tuple5 (TTerm a) (TTerm b) (TTerm c) (TTerm d) (TTerm e) = TTerm $ Terms.tuple5 
 unaryFunction :: (TTerm a -> TTerm b) -> TTerm (a -> b)
 unaryFunction f = case (unTTerm $ f $ var "x") of
   TermApplication (Application lhs _) -> TTerm lhs
+  TermEither (Prelude.Left _) -> lambda "x" $ TTerm $ TermEither $ Prelude.Left $ Terms.var "x"
+  TermEither (Prelude.Right _) -> lambda "x" $ TTerm $ TermEither $ Prelude.Right $ Terms.var "x"
   TermMaybe (Just _) -> primitive _maybes_pure
   TermUnion (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
   TermWrap (WrappedTerm tname _) -> lambda "x" $ wrap tname $ var "x"

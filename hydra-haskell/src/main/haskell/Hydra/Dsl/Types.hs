@@ -64,6 +64,11 @@ binary = literal LiteralTypeBinary
 boolean :: Type
 boolean = literal LiteralTypeBoolean
 
+-- | Create an either type (a choice between two types)
+-- Example: either_ string int32
+either_ :: Type -> Type -> Type
+either_ left right = TypeEither $ EitherType left right
+
 -- | Create an enum type with the given variant names (conventionally in camelCase)
 -- Example: enum ["red", "green", "blue"]
 enum :: [String] -> Type

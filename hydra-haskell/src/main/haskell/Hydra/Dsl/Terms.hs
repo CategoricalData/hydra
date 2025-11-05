@@ -160,6 +160,11 @@ integer = literal . Literals.integer
 just :: Term -> Term
 just = optional . Just
 
+-- | Create a 'Left' either value
+-- Example: left (string "error")
+left :: Term -> Term
+left term = TermEither (Left term)
+
 -- | Create a lambda function with one parameter
 -- Example: lambda "x" (var "x" @@ int32 1)
 lambda :: String -> Term -> Term
@@ -246,6 +251,11 @@ project tname fname = TermFunction $ FunctionElimination $ EliminationRecord $ P
 -- Records are products of named fields with values that can be accessed by field name
 record :: Name -> [Field] -> Term
 record tname fields = TermRecord $ Record tname fields
+
+-- | Create a 'Right' either value
+-- Example: right (int32 42)
+right :: Term -> Term
+right term = TermEither (Right term)
 
 -- | Second element projection function for pairs
 second :: Term
