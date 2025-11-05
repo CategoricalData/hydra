@@ -91,6 +91,10 @@ typeDef = define "type" $
       ref typeDef @@ (Core.applicationTypeFunction $ var "at"),
       string " applied to ",
       ref typeDef @@ (Core.applicationTypeArgument $ var "at")],
+    _Type_either>>: lambda "et" $ string "either "
+      ++ (ref typeDef @@ (project _EitherType _EitherType_left @@ var "et"))
+      ++ string " or "
+      ++ (ref typeDef @@ (project _EitherType _EitherType_right @@ var "et")),
     _Type_literal>>: ref literalTypeDef,
     _Type_function>>: lambda "ft" $ string "function from "
       ++ (ref typeDef @@ (project _FunctionType _FunctionType_domain @@ var "ft"))

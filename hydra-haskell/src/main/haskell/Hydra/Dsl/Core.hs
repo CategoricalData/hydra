@@ -64,6 +64,17 @@ applicationTypeFunction app = Phantoms.project _ApplicationType _ApplicationType
 applicationTypeArgument :: TTerm ApplicationType -> TTerm Type
 applicationTypeArgument app = Phantoms.project _ApplicationType _ApplicationType_argument @@ app
 
+eitherType :: TTerm Type -> TTerm Type -> TTerm EitherType
+eitherType left right = Phantoms.record _EitherType [
+  _EitherType_left>>: left,
+  _EitherType_right>>: right]
+
+eitherTypeLeft :: TTerm EitherType -> TTerm Type
+eitherTypeLeft et = Phantoms.project _EitherType _EitherType_left @@ et
+
+eitherTypeRight :: TTerm EitherType -> TTerm Type
+eitherTypeRight et = Phantoms.project _EitherType _EitherType_right @@ et
+
 binding :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm Binding
 binding name term mtype = Phantoms.record _Binding [
   _Binding_name>>: name,
@@ -457,6 +468,9 @@ typeAnnotated = variant _Type _Type_annotated
 
 typeApplication :: TTerm ApplicationType -> TTerm Type
 typeApplication = variant _Type _Type_application
+
+typeEither :: TTerm EitherType -> TTerm Type
+typeEither = variant _Type _Type_either
 
 typeForall :: TTerm ForallType -> TTerm Type
 typeForall = variant _Type _Type_forall
