@@ -1098,6 +1098,9 @@ rewriteType f typ0 =
             Core.TypeApplication v1 -> (Core.TypeApplication (Core.ApplicationType {
               Core.applicationTypeFunction = (recurse (Core.applicationTypeFunction v1)),
               Core.applicationTypeArgument = (recurse (Core.applicationTypeArgument v1))}))
+            Core.TypeEither v1 -> (Core.TypeEither (Core.EitherType {
+              Core.eitherTypeLeft = (recurse (Core.eitherTypeLeft v1)),
+              Core.eitherTypeRight = (recurse (Core.eitherTypeRight v1))}))
             Core.TypeFunction v1 -> (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (recurse (Core.functionTypeDomain v1)),
               Core.functionTypeCodomain = (recurse (Core.functionTypeCodomain v1))}))
@@ -1137,6 +1140,9 @@ rewriteTypeM f typ0 =
           Core.TypeApplication v1 -> (Flows.bind (recurse (Core.applicationTypeFunction v1)) (\lhs -> Flows.bind (recurse (Core.applicationTypeArgument v1)) (\rhs -> Flows.pure (Core.TypeApplication (Core.ApplicationType {
             Core.applicationTypeFunction = lhs,
             Core.applicationTypeArgument = rhs})))))
+          Core.TypeEither v1 -> (Flows.bind (recurse (Core.eitherTypeLeft v1)) (\left -> Flows.bind (recurse (Core.eitherTypeRight v1)) (\right -> Flows.pure (Core.TypeEither (Core.EitherType {
+            Core.eitherTypeLeft = left,
+            Core.eitherTypeRight = right})))))
           Core.TypeFunction v1 -> (Flows.bind (recurse (Core.functionTypeDomain v1)) (\dom -> Flows.bind (recurse (Core.functionTypeCodomain v1)) (\cod -> Flows.pure (Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = dom,
             Core.functionTypeCodomain = cod})))))
@@ -1333,6 +1339,9 @@ subtypes x = case x of
   Core.TypeApplication v1 -> [
     Core.applicationTypeFunction v1,
     (Core.applicationTypeArgument v1)]
+  Core.TypeEither v1 -> [
+    Core.eitherTypeLeft v1,
+    (Core.eitherTypeRight v1)]
   Core.TypeFunction v1 -> [
     Core.functionTypeDomain v1,
     (Core.functionTypeCodomain v1)]
