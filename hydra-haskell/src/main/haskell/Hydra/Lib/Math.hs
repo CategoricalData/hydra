@@ -1,12 +1,43 @@
 -- | Haskell implementations of hydra.lib.math primitives
 
--- TODO: real-valued primitives. See https://github.com/CategoricalData/hydra/issues/208
-
 module Hydra.Lib.Math where
+
+import Prelude (Num, Integral, Enum, Bool, Double, Integer, Float, (.), ($), (+), (-), (*))
+import qualified Prelude
 
 
 abs :: Num a => a -> a
 abs = Prelude.abs
+
+acos :: Double -> Double
+acos = Prelude.acos
+
+acosh :: Double -> Double
+acosh = Prelude.acosh
+
+asin :: Double -> Double
+asin = Prelude.asin
+
+asinh :: Double -> Double
+asinh = Prelude.asinh
+
+atan :: Double -> Double
+atan = Prelude.atan
+
+atan2 :: Double -> Double -> Double
+atan2 = Prelude.atan2
+
+atanh :: Double -> Double
+atanh = Prelude.atanh
+
+ceiling :: Double -> Integer
+ceiling = Prelude.ceiling
+
+cos :: Double -> Double
+cos = Prelude.cos
+
+cosh :: Double -> Double
+cosh = Prelude.cosh
 
 add :: Num a => a -> a -> a
 add x y = x + y
@@ -15,8 +46,23 @@ add x y = x + y
 div :: Integral a => a -> a -> a
 div = Prelude.div
 
+e :: Double
+e = Prelude.exp 1.0
+
 even :: Integral a => a -> Bool
 even = Prelude.even
+
+exp :: Double -> Double
+exp = Prelude.exp
+
+floor :: Double -> Integer
+floor = Prelude.floor
+
+log :: Double -> Double
+log = Prelude.log
+
+logBase :: Double -> Double -> Double
+logBase = Prelude.logBase
 
 -- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
 mod :: Integral a => a -> a -> a
@@ -31,6 +77,12 @@ negate = Prelude.negate
 odd :: Integral a => a -> Bool
 odd = Prelude.odd
 
+pi :: Double
+pi = Prelude.pi
+
+pow :: Double -> Double -> Double
+pow = (Prelude.**)
+
 pred :: Enum a => a -> a
 pred = Prelude.pred
 
@@ -41,11 +93,32 @@ range start end = [start .. end]
 rem :: Integral a => a -> a -> a
 rem = Prelude.rem
 
+round :: Double -> Integer
+round = Prelude.round
+
 signum :: Num a => a -> a
 signum = Prelude.signum
+
+sin :: Double -> Double
+sin = Prelude.sin
+
+sinh :: Double -> Double
+sinh = Prelude.sinh
+
+sqrt :: Double -> Double
+sqrt = Prelude.sqrt
 
 sub :: Num a => a -> a -> a
 sub x y = x - y
 
 succ :: Enum a => a -> a
 succ = Prelude.succ
+
+tan :: Double -> Double
+tan = Prelude.tan
+
+tanh :: Double -> Double
+tanh = Prelude.tanh
+
+truncate :: Double -> Integer
+truncate = Prelude.truncate
