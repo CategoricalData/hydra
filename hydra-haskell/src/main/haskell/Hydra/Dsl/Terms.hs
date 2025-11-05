@@ -50,9 +50,6 @@ annotated term ann = TermAnnotated $ AnnotatedTerm term ann
 apply :: Term -> Term -> Term
 apply fun arg = TermApplication $ Application fun arg
 
-applyAll :: Term -> [Term] -> Term
-applyAll fun args = foldl apply fun args
-
 -- | Create a binary data literal. The encoding scheme is currently application-dependent.
 -- Example: binary ""\x48\x65\x00\xff\x20\x7a\x1b\x80"
 binary :: String -> Term
@@ -217,13 +214,6 @@ map = TermMap
 match :: Name -> Maybe Term -> [Field] -> Term
 match tname def fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement tname def fields
 
--- | Create a pattern match using variant name pairs
--- Example: matchWithVariants (Name "Result") Nothing [(Name "success", Name "handleSuccess"), (Name "error", Name "handleError")]
-matchWithVariants :: Name -> Maybe Term -> [(Name, Name)] -> Term
-matchWithVariants tname def pairs = match tname def (toField <$> pairs)
-  where
-    toField (from, to) = Field from $ constant $ unitVariant tname to
-
 -- | Create a 'Nothing' optional value
 nothing :: Term
 nothing = optional Nothing
@@ -370,11 +360,6 @@ var = TermVariable . Name
 -- Example: variant (Name "Result") (Name "success") (string "ok")
 variant :: Name -> Name -> Term -> Term
 variant tname fname term = TermUnion $ Injection tname $ Field fname term
-
--- | Create a constant function that produces a unit variant
--- Example: withVariant (Name "Result") (Name "success")
-withVariant :: Name -> Name -> Term
-withVariant tname = constant . unitVariant tname
 
 -- | Create a wrapped term
 -- Example: wrap (Name "Email") (string "user@example.com")
