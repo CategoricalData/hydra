@@ -9,6 +9,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -384,6 +385,7 @@ termIsValue g term =
                 Core.FunctionPrimitive _ -> True) f)
         in ((\x -> case x of
           Core.TermApplication _ -> False
+          Core.TermEither v1 -> (Eithers.either (\l -> termIsValue g l) (\r -> termIsValue g r) v1)
           Core.TermLiteral _ -> True
           Core.TermFunction v1 -> (functionIsValue v1)
           Core.TermList v1 -> (forList v1)

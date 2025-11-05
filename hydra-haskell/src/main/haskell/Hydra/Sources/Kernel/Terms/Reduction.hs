@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Grammar       as Grammar
 import qualified Hydra.Dsl.Graph         as Graph
 import qualified Hydra.Dsl.Json          as Json
 import qualified Hydra.Dsl.Lib.Chars     as Chars
+import qualified Hydra.Dsl.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Lib.Flows     as Flows
 import qualified Hydra.Dsl.Lib.Lists     as Lists
@@ -533,6 +534,11 @@ termIsValueDef = define "termIsValue" $
   cases _Term (ref Rewriting.deannotateTermDef @@ var "term")
     (Just false) [
     _Term_application>>: constant false,
+    _Term_either>>: "e" ~>
+      Eithers.either_
+        ("l" ~> ref termIsValueDef @@ var "g" @@ var "l")
+        ("r" ~> ref termIsValueDef @@ var "g" @@ var "r")
+        (var "e"),
     _Term_literal>>: constant true,
     _Term_function>>: "f" ~> var "functionIsValue" @@ var "f",
     _Term_list>>: "els" ~> var "forList" @@ var "els",
