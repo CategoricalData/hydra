@@ -42,6 +42,7 @@ standardLibraries = [
   hydraLibLiterals,
   hydraLibLogic,
   hydraLibMaps,
+  hydraLibMathFloat64,
   hydraLibMathInt32,
   hydraLibMaybes,
   hydraLibSets,
@@ -425,20 +426,71 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
 _hydra_lib_math :: Namespace
 _hydra_lib_math = Namespace "hydra.lib.math"
 
-_math_abs    = qname _hydra_lib_math "abs" :: Name
-_math_add    = qname _hydra_lib_math "add" :: Name
-_math_div    = qname _hydra_lib_math "div" :: Name
-_math_even   = qname _hydra_lib_math "even" :: Name
-_math_mod    = qname _hydra_lib_math "mod" :: Name
-_math_mul    = qname _hydra_lib_math "mul" :: Name
-_math_negate = qname _hydra_lib_math "negate" :: Name
-_math_odd    = qname _hydra_lib_math "odd" :: Name
-_math_pred   = qname _hydra_lib_math "pred" :: Name
-_math_range  = qname _hydra_lib_math "range" :: Name
-_math_rem    = qname _hydra_lib_math "rem" :: Name
-_math_signum = qname _hydra_lib_math "signum" :: Name
-_math_sub    = qname _hydra_lib_math "sub" :: Name
-_math_succ   = qname _hydra_lib_math "succ" :: Name
+_math_abs     = qname _hydra_lib_math "abs" :: Name
+_math_acos    = qname _hydra_lib_math "acos" :: Name
+_math_acosh   = qname _hydra_lib_math "acosh" :: Name
+_math_add     = qname _hydra_lib_math "add" :: Name
+_math_asin    = qname _hydra_lib_math "asin" :: Name
+_math_asinh   = qname _hydra_lib_math "asinh" :: Name
+_math_atan    = qname _hydra_lib_math "atan" :: Name
+_math_atan2   = qname _hydra_lib_math "atan2" :: Name
+_math_atanh   = qname _hydra_lib_math "atanh" :: Name
+_math_ceiling = qname _hydra_lib_math "ceiling" :: Name
+_math_cos     = qname _hydra_lib_math "cos" :: Name
+_math_cosh    = qname _hydra_lib_math "cosh" :: Name
+_math_div     = qname _hydra_lib_math "div" :: Name
+_math_e       = qname _hydra_lib_math "e" :: Name
+_math_even    = qname _hydra_lib_math "even" :: Name
+_math_exp     = qname _hydra_lib_math "exp" :: Name
+_math_floor   = qname _hydra_lib_math "floor" :: Name
+_math_log     = qname _hydra_lib_math "log" :: Name
+_math_logBase = qname _hydra_lib_math "logBase" :: Name
+_math_mod     = qname _hydra_lib_math "mod" :: Name
+_math_mul     = qname _hydra_lib_math "mul" :: Name
+_math_negate  = qname _hydra_lib_math "negate" :: Name
+_math_odd     = qname _hydra_lib_math "odd" :: Name
+_math_pi      = qname _hydra_lib_math "pi" :: Name
+_math_pow     = qname _hydra_lib_math "pow" :: Name
+_math_pred    = qname _hydra_lib_math "pred" :: Name
+_math_range   = qname _hydra_lib_math "range" :: Name
+_math_rem     = qname _hydra_lib_math "rem" :: Name
+_math_round   = qname _hydra_lib_math "round" :: Name
+_math_signum  = qname _hydra_lib_math "signum" :: Name
+_math_sin     = qname _hydra_lib_math "sin" :: Name
+_math_sinh    = qname _hydra_lib_math "sinh" :: Name
+_math_sqrt    = qname _hydra_lib_math "sqrt" :: Name
+_math_sub     = qname _hydra_lib_math "sub" :: Name
+_math_succ    = qname _hydra_lib_math "succ" :: Name
+_math_tan     = qname _hydra_lib_math "tan" :: Name
+_math_tanh    = qname _hydra_lib_math "tanh" :: Name
+_math_truncate = qname _hydra_lib_math "truncate" :: Name
+
+hydraLibMathFloat64 :: Library
+hydraLibMathFloat64 = standardLibrary _hydra_lib_math [
+  prim1 _math_acos     Math.acos     [] float64 float64,
+  prim1 _math_acosh    Math.acosh    [] float64 float64,
+  prim1 _math_asin     Math.asin     [] float64 float64,
+  prim1 _math_asinh    Math.asinh    [] float64 float64,
+  prim1 _math_atan     Math.atan     [] float64 float64,
+  prim2 _math_atan2    Math.atan2    [] float64 float64 float64,
+  prim1 _math_atanh    Math.atanh    [] float64 float64,
+  prim1 _math_ceiling  Math.ceiling  [] float64 bigint,
+  prim1 _math_cos      Math.cos      [] float64 float64,
+  prim1 _math_cosh     Math.cosh     [] float64 float64,
+  prim0 _math_e        Math.e        [] float64,
+  prim1 _math_exp      Math.exp      [] float64 float64,
+  prim1 _math_floor    Math.floor    [] float64 bigint,
+  prim1 _math_log      Math.log      [] float64 float64,
+  prim2 _math_logBase  Math.logBase  [] float64 float64 float64,
+  prim0 _math_pi       Math.pi       [] float64,
+  prim2 _math_pow      Math.pow      [] float64 float64 float64,
+  prim1 _math_round    Math.round    [] float64 bigint,
+  prim1 _math_sin      Math.sin      [] float64 float64,
+  prim1 _math_sinh     Math.sinh     [] float64 float64,
+  prim1 _math_sqrt     Math.sqrt     [] float64 float64,
+  prim1 _math_tan      Math.tan      [] float64 float64,
+  prim1 _math_tanh     Math.tanh     [] float64 float64,
+  prim1 _math_truncate Math.truncate [] float64 bigint]
 
 hydraLibMathInt32 :: Library
 hydraLibMathInt32 = standardLibrary _hydra_lib_math [
