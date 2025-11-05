@@ -81,8 +81,8 @@ topologicalSortDef = define "topologicalSort" $
   "isCycle" <~ ("scc" ~> Logic.not $ Lists.null $ Lists.tail $ var "scc") $
   "withCycles" <~ Lists.filter (var "isCycle") (var "sccs") $
   Logic.ifElse (Lists.null $ var "withCycles")
-    (Mantle.eitherRight $ Lists.concat $ var "sccs")
-    (Mantle.eitherLeft $ var "withCycles")
+    (right $ Lists.concat $ var "sccs")
+    (left $ var "withCycles")
 
 topologicalSortComponentsDef :: TBinding ([(a, [a])] -> [[a]])
 topologicalSortComponentsDef = define "topologicalSortComponents" $

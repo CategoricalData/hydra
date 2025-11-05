@@ -23,11 +23,6 @@ flowToIo cx f = case mv of
   where
     FlowState mv _ trace = unFlow f cx emptyTrace
 
-hydraEitherToHaskellEither :: Mantle.Either a b -> Either a b
-hydraEitherToHaskellEither e = case e of
-   Mantle.EitherLeft l -> Left l
-   Mantle.EitherRight r -> Right r
-
 fromMaybe :: String -> Maybe a -> Flow s a
 fromMaybe message m = case m of
   Nothing -> Flows.fail message

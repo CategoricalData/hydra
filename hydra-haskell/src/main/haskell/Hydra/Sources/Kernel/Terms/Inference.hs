@@ -881,13 +881,13 @@ inferTypeOfSumDef = define "inferTypeOfSum" $
   "i" <~ Core.sumIndex (var "sum") $
   "s" <~ Core.sumSize (var "sum") $
   "term" <~ Core.sumTerm (var "sum") $
-  "toType" <~ (match _Either
-    Nothing [
-    _Either_left>>: "t" ~> var "t",
-    _Either_right>>: "v" ~> Core.typeVariable $ var "v"]) $
+  "toType" <~ ("e" ~> Eithers.either_
+    ("t" ~> var "t")
+    ("v" ~> Core.typeVariable $ var "v")
+    (var "e")) $
   "varOrTerm" <~ ("t" ~> "j" ~> Logic.ifElse (Equality.equal (var "i") (var "j"))
-    (Flows.pure $ Mantle.eitherLeft $ var "t")
-    (Flows.map (unaryFunction Mantle.eitherRight) $ ref Schemas.freshNameDef)) $
+    (Flows.pure $ left $ var "t")
+    (Flows.map (unaryFunction right) $ ref Schemas.freshNameDef)) $
   "result" <<~ ref inferTypeOfTermDef @@ var "cx" @@ var "term" @@ string "sum term" $
   "iterm" <~ Typing.inferenceResultTerm (var "result") $
   "ityp" <~ Typing.inferenceResultType (var "result") $
