@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Grammar       as Grammar
 import qualified Hydra.Dsl.Graph         as Graph
 import qualified Hydra.Dsl.Json          as Json
 import qualified Hydra.Dsl.Lib.Chars     as Chars
+import qualified Hydra.Dsl.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Lib.Flows     as Flows
 import qualified Hydra.Dsl.Lib.Lists     as Lists
@@ -1007,6 +1008,10 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~> "term0" ~>
       _Term_application>>: "a" ~> Core.termApplication $ Core.application
         (var "recurse" @@ (Core.applicationFunction $ var "a"))
         (var "recurse" @@ (Core.applicationArgument $ var "a")),
+      _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
+        ("l" ~> left $ var "recurse" @@ var "l")
+        ("r" ~> right $ var "recurse" @@ var "r")
+        (var "e"),
       _Term_function>>: "fun" ~> Core.termFunction $ var "forFunction" @@ var "fun",
       _Term_let>>: "lt" ~> Core.termLet $ var "forLet" @@ var "lt",
       _Term_list>>: "els" ~> Core.termList $ Lists.map (var "recurse") (var "els"),
@@ -1190,6 +1195,10 @@ rewriteTermWithContextDef = define "rewriteTermWithContext" $
       _Term_application>>: "a" ~> Core.termApplication $ Core.application
         (var "recurse" @@ (Core.applicationFunction $ var "a"))
         (var "recurse" @@ (Core.applicationArgument $ var "a")),
+      _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
+        ("l" ~> left $ var "recurse" @@ var "l")
+        ("r" ~> right $ var "recurse" @@ var "r")
+        (var "e"),
       _Term_function>>: "fun" ~> Core.termFunction $ var "forFunction" @@ var "fun",
       _Term_let>>: "lt" ~> Core.termLet $ var "forLet" @@ var "lt",
       _Term_list>>: "els" ~> Core.termList $ Lists.map (var "recurse") (var "els"),
@@ -1529,6 +1538,10 @@ subtermsDef = define "subterms" $
     _Term_application>>: "p" ~> list [
       Core.applicationFunction $ var "p",
       Core.applicationArgument $ var "p"],
+    _Term_either>>: "e" ~> Eithers.either_
+      ("l" ~> list [var "l"])
+      ("r" ~> list [var "r"])
+      (var "e"),
     _Term_function>>: match _Function
       (Just $ list []) [
       _Function_elimination>>: match _Elimination
@@ -1565,6 +1578,7 @@ subtermsWithAccessorsDef = define "subtermsWithAccessors" $
     _Term_application>>: "p" ~> list [
       result Mantle.termAccessorApplicationFunction $ Core.applicationFunction $ var "p",
       result Mantle.termAccessorApplicationArgument $ Core.applicationArgument $ var "p"],
+    _Term_either>>: "e" ~> none, -- TODO: add accessors when TermAccessor type is updated
     _Term_function>>: match _Function
       (Just none) [
       _Function_elimination>>: match _Elimination
