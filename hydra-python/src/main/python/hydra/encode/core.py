@@ -3,9 +3,10 @@
 r"""Mapping of hydra.core constructs in a host language like Haskell or Java  to their native Hydra counterparts as terms.  This includes an implementation of LambdaGraph's epsilon encoding (types to terms)."""
 
 from __future__ import annotations
-from hydra.dsl.python import frozenlist
+from hydra.dsl.python import Either, Left, Right, frozenlist
 from typing import cast
 import hydra.core
+import hydra.lib.eithers
 import hydra.lib.equality
 import hydra.lib.lists
 import hydra.lib.maps
@@ -79,6 +80,9 @@ def literal_type(v1: hydra.core.LiteralType) -> hydra.core.Term:
 def application_type(at: hydra.core.ApplicationType) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.ApplicationType"), (hydra.core.Field(hydra.core.Name("function"), type(at.function)), hydra.core.Field(hydra.core.Name("argument"), type(at.argument))))))
 
+def either_type(et: hydra.core.EitherType) -> hydra.core.Term:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.EitherType"), (hydra.core.Field(hydra.core.Name("left"), type(et.left)), hydra.core.Field(hydra.core.Name("right"), type(et.right))))))
+
 def field_type(ft: hydra.core.FieldType) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.FieldType"), (hydra.core.Field(hydra.core.Name("name"), name(ft.name)), hydra.core.Field(hydra.core.Name("type"), type(ft.type))))))
 
@@ -102,47 +106,50 @@ def type(v1: hydra.core.Type) -> hydra.core.Term:
         case hydra.core.TypeApplication(value=v2):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("application"), application_type(v2)))))
         
-        case hydra.core.TypeFunction(value=v3):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("function"), function_type(v3)))))
+        case hydra.core.TypeEither(value=v3):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("either"), either_type(v3)))))
         
-        case hydra.core.TypeForall(value=v4):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("forall"), forall_type(v4)))))
+        case hydra.core.TypeFunction(value=v4):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("function"), function_type(v4)))))
         
-        case hydra.core.TypeList(value=v5):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("list"), type(v5)))))
+        case hydra.core.TypeForall(value=v5):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("forall"), forall_type(v5)))))
         
-        case hydra.core.TypeLiteral(value=v6):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("literal"), literal_type(v6)))))
+        case hydra.core.TypeList(value=v6):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("list"), type(v6)))))
         
-        case hydra.core.TypeMap(value=v7):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("map"), map_type(v7)))))
+        case hydra.core.TypeLiteral(value=v7):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("literal"), literal_type(v7)))))
         
-        case hydra.core.TypeMaybe(value=v8):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("maybe"), type(v8)))))
+        case hydra.core.TypeMap(value=v8):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("map"), map_type(v8)))))
         
-        case hydra.core.TypeProduct(value=v9):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("product"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(type, v9)))))))
+        case hydra.core.TypeMaybe(value=v9):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("maybe"), type(v9)))))
         
-        case hydra.core.TypeRecord(value=v10):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("record"), row_type(v10)))))
+        case hydra.core.TypeProduct(value=v10):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("product"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(type, v10)))))))
         
-        case hydra.core.TypeSet(value=v11):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("set"), type(v11)))))
+        case hydra.core.TypeRecord(value=v11):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("record"), row_type(v11)))))
         
-        case hydra.core.TypeSum(value=v12):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("sum"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(type, v12)))))))
+        case hydra.core.TypeSet(value=v12):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("set"), type(v12)))))
         
-        case hydra.core.TypeUnion(value=v13):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("union"), row_type(v13)))))
+        case hydra.core.TypeSum(value=v13):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("sum"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(type, v13)))))))
+        
+        case hydra.core.TypeUnion(value=v14):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("union"), row_type(v14)))))
         
         case hydra.core.TypeUnit():
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit(None))))))
         
-        case hydra.core.TypeVariable(value=v14):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("variable"), name(v14)))))
+        case hydra.core.TypeVariable(value=v15):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("variable"), name(v15)))))
         
-        case hydra.core.TypeWrap(value=v15):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("wrap"), wrapped_type(v15)))))
+        case hydra.core.TypeWrap(value=v16):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("wrap"), wrapped_type(v16)))))
 
 def wrapped_type(nt: hydra.core.WrappedType) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.WrappedType"), (hydra.core.Field(hydra.core.Name("typeName"), name(nt.type_name)), hydra.core.Field(hydra.core.Name("body"), type(nt.body))))))
@@ -275,53 +282,56 @@ def term(v1: hydra.core.Term) -> hydra.core.Term:
         case hydra.core.TermApplication(value=v2):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("application"), application(v2)))))
         
-        case hydra.core.TermFunction(value=v3):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("function"), function(v3)))))
+        case hydra.core.TermEither(value=v3):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("either"), cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.either((lambda l: cast(Either[hydra.core.Term, hydra.core.Term], Left(term(l)))), (lambda r: cast(Either[hydra.core.Term, hydra.core.Term], Right(term(r)))), v3)))))))
         
-        case hydra.core.TermLet(value=v4):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("let"), let(v4)))))
+        case hydra.core.TermFunction(value=v4):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("function"), function(v4)))))
         
-        case hydra.core.TermLiteral(value=v5):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), literal(v5)))))
+        case hydra.core.TermLet(value=v5):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("let"), let(v5)))))
         
-        case hydra.core.TermList(value=v6):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("list"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(term, v6)))))))
+        case hydra.core.TermLiteral(value=v6):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), literal(v6)))))
         
-        case hydra.core.TermMap(value=v7):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap(term, term, v7)))))))
+        case hydra.core.TermList(value=v7):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("list"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(term, v7)))))))
         
-        case hydra.core.TermMaybe(value=v8):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("maybe"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(term, v8)))))))
+        case hydra.core.TermMap(value=v8):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap(term, term, v8)))))))
         
-        case hydra.core.TermProduct(value=v9):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("product"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(term, v9)))))))
+        case hydra.core.TermMaybe(value=v9):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("maybe"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(term, v9)))))))
         
-        case hydra.core.TermRecord(value=v10):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("record"), record(v10)))))
+        case hydra.core.TermProduct(value=v10):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("product"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(term, v10)))))))
         
-        case hydra.core.TermSet(value=v11):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("set"), cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.map(term, v11)))))))
+        case hydra.core.TermRecord(value=v11):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("record"), record(v11)))))
         
-        case hydra.core.TermSum(value=v12):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("sum"), sum(v12)))))
+        case hydra.core.TermSet(value=v12):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("set"), cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.map(term, v12)))))))
         
-        case hydra.core.TermTypeLambda(value=v13):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeLambda"), type_lambda(v13)))))
+        case hydra.core.TermSum(value=v13):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("sum"), sum(v13)))))
         
-        case hydra.core.TermTypeApplication(value=v14):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeApplication"), type_application_term(v14)))))
+        case hydra.core.TermTypeLambda(value=v14):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeLambda"), type_lambda(v14)))))
         
-        case hydra.core.TermUnion(value=v15):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("union"), injection(v15)))))
+        case hydra.core.TermTypeApplication(value=v15):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeApplication"), type_application_term(v15)))))
         
-        case hydra.core.TermUnit(value=v16):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit(None)))(v16)))))
+        case hydra.core.TermUnion(value=v16):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("union"), injection(v16)))))
         
-        case hydra.core.TermVariable(value=v17):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("variable"), name(v17)))))
+        case hydra.core.TermUnit(value=v17):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit(None)))(v17)))))
         
-        case hydra.core.TermWrap(value=v18):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), wrapped_term(v18)))))
+        case hydra.core.TermVariable(value=v18):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("variable"), name(v18)))))
+        
+        case hydra.core.TermWrap(value=v19):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), wrapped_term(v19)))))
 
 def type_application_term(tt: hydra.core.TypeApplicationTerm) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeApplicationTerm"), (hydra.core.Field(hydra.core.Name("body"), term(tt.body)), hydra.core.Field(hydra.core.Name("type"), type(tt.type))))))

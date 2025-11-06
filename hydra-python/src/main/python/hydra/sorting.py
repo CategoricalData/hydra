@@ -4,14 +4,13 @@ r"""Utilities for sorting."""
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import FrozenDict, frozenlist
+from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
 from typing import Tuple, cast
 import hydra.core
 import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.maybes
-import hydra.mantle
 import hydra.tarjan
 import hydra.topology
 
@@ -30,12 +29,12 @@ def topological_sort_components[T0](pairs: frozenlist[Tuple[T0, frozenlist[T0]]]
     get_key = graph_result[1]
     return hydra.lib.lists.map((lambda comp: hydra.lib.lists.map(get_key, comp)), hydra.tarjan.strongly_connected_components(g))
 
-def topological_sort[T0](pairs: frozenlist[Tuple[T0, frozenlist[T0]]]) -> hydra.mantle.Either[frozenlist[frozenlist[T0]], frozenlist[T0]]:
+def topological_sort[T0](pairs: frozenlist[Tuple[T0, frozenlist[T0]]]) -> Either[frozenlist[frozenlist[T0]], frozenlist[T0]]:
     sccs = topological_sort_components(pairs)
     def is_cycle[T1](scc: frozenlist[T1]) -> bool:
         return hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.lists.tail(scc)))
     with_cycles = hydra.lib.lists.filter(cast(Callable[[frozenlist[T0]], bool], is_cycle), sccs)
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(with_cycles), cast(hydra.mantle.Either[frozenlist[frozenlist[T0]], frozenlist[T0]], cast(hydra.mantle.Either, hydra.mantle.EitherRight(hydra.lib.lists.concat(sccs)))), cast(hydra.mantle.Either[frozenlist[frozenlist[T0]], frozenlist[T0]], cast(hydra.mantle.Either, hydra.mantle.EitherLeft(with_cycles))))
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(with_cycles), cast(Either[frozenlist[frozenlist[T0]], frozenlist[T0]], Right(hydra.lib.lists.concat(sccs))), cast(Either[frozenlist[frozenlist[T0]], frozenlist[T0]], Left(with_cycles)))
 
 def topological_sort_nodes[T0, T1](get_key: Callable[[T0], T1], get_adj: Callable[[T0], frozenlist[T1]], nodes: frozenlist[T0]) -> frozenlist[frozenlist[T0]]:
     nodes_by_key = cast(FrozenDict[T1, T0], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda n: (get_key(n), n)), nodes)))

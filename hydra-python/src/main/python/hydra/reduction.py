@@ -13,6 +13,7 @@ import hydra.core
 import hydra.extract.core
 import hydra.graph
 import hydra.lexical
+import hydra.lib.eithers
 import hydra.lib.equality
 import hydra.lib.flows
 import hydra.lib.lists
@@ -419,6 +420,9 @@ def term_is_value[T0](g: T0, term: hydra.core.Term) -> bool:
     match hydra.rewriting.deannotate_term(term):
         case hydra.core.TermApplication():
             return False
+        
+        case hydra.core.TermEither(value=e):
+            return hydra.lib.eithers.either((lambda l: term_is_value(g, l)), (lambda r: term_is_value(g, r)), e)
         
         case hydra.core.TermLiteral():
             return True

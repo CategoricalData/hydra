@@ -5,11 +5,7 @@ r"""A set of types which supplement hydra.core, but are not referenced by hydra.
 from __future__ import annotations
 from enum import Enum
 from hydra.dsl.python import Node
-from typing import TypeVar
 import hydra.core
-
-A = TypeVar("A")
-B = TypeVar("B")
 
 class CaseConvention(Enum):
     CAMEL = "camel"
@@ -39,17 +35,6 @@ COMPARISON__NAME = hydra.core.Name("hydra.mantle.Comparison")
 COMPARISON__LESS_THAN__NAME = hydra.core.Name("lessThan")
 COMPARISON__EQUAL_TO__NAME = hydra.core.Name("equalTo")
 COMPARISON__GREATER_THAN__NAME = hydra.core.Name("greaterThan")
-
-class EitherLeft(Node["A"]): ...
-
-class EitherRight(Node["B"]): ...
-
-# A disjoint union between a 'left' type and a 'right' type.
-type Either[A, B] = EitherLeft[A] | EitherRight[B]
-
-EITHER__NAME = hydra.core.Name("hydra.mantle.Either")
-EITHER__LEFT__NAME = hydra.core.Name("left")
-EITHER__RIGHT__NAME = hydra.core.Name("right")
 
 class EliminationVariant(Enum):
     r"""The identifier of an elimination constructor."""
@@ -120,6 +105,8 @@ class TermVariant(Enum):
     
     APPLICATION = "application"
     
+    EITHER = "either"
+    
     FUNCTION = "function"
     
     LET = "let"
@@ -155,6 +142,7 @@ class TermVariant(Enum):
 TERM_VARIANT__NAME = hydra.core.Name("hydra.mantle.TermVariant")
 TERM_VARIANT__ANNOTATED__NAME = hydra.core.Name("annotated")
 TERM_VARIANT__APPLICATION__NAME = hydra.core.Name("application")
+TERM_VARIANT__EITHER__NAME = hydra.core.Name("either")
 TERM_VARIANT__FUNCTION__NAME = hydra.core.Name("function")
 TERM_VARIANT__LET__NAME = hydra.core.Name("let")
 TERM_VARIANT__LIST__NAME = hydra.core.Name("list")
@@ -190,6 +178,8 @@ class TypeVariant(Enum):
     
     APPLICATION = "application"
     
+    EITHER = "either"
+    
     FORALL = "forall"
     
     FUNCTION = "function"
@@ -221,6 +211,7 @@ class TypeVariant(Enum):
 TYPE_VARIANT__NAME = hydra.core.Name("hydra.mantle.TypeVariant")
 TYPE_VARIANT__ANNOTATED__NAME = hydra.core.Name("annotated")
 TYPE_VARIANT__APPLICATION__NAME = hydra.core.Name("application")
+TYPE_VARIANT__EITHER__NAME = hydra.core.Name("either")
 TYPE_VARIANT__FORALL__NAME = hydra.core.Name("forall")
 TYPE_VARIANT__FUNCTION__NAME = hydra.core.Name("function")
 TYPE_VARIANT__LIST__NAME = hydra.core.Name("list")

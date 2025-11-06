@@ -7,6 +7,7 @@ from collections.abc import Callable
 from hydra.dsl.python import Just, Maybe, frozenlist
 from typing import Tuple, cast
 import hydra.core
+import hydra.lib.eithers
 import hydra.lib.lists
 import hydra.lib.literals
 import hydra.lib.logic
@@ -115,6 +116,11 @@ def type(typ: hydra.core.Type) -> str:
             types = gather_types(cast(frozenlist[hydra.core.Type], ()), app)
             type_strs = hydra.lib.lists.map(type, types)
             return hydra.lib.strings.cat(("(", hydra.lib.strings.intercalate(" @ ", type_strs), ")"))
+        
+        case hydra.core.TypeEither(value=et):
+            left_typ = et.left
+            right_typ = et.right
+            return hydra.lib.strings.cat(("either<", type(left_typ), ", ", type(right_typ), ">"))
         
         case hydra.core.TypeForall(value=ft):
             var = ft.parameter.value
@@ -332,6 +338,9 @@ def term(t: hydra.core.Term) -> str:
             terms = gather_terms(cast(frozenlist[hydra.core.Term], ()), app)
             term_strs = hydra.lib.lists.map(term, terms)
             return hydra.lib.strings.cat(("(", hydra.lib.strings.intercalate(" @ ", term_strs), ")"))
+        
+        case hydra.core.TermEither(value=e):
+            return hydra.lib.eithers.either((lambda l: hydra.lib.strings.cat(("left(", term(l), ")"))), (lambda r: hydra.lib.strings.cat(("right(", term(r), ")"))), e)
         
         case hydra.core.TermFunction(value=v1):
             return function(v1)

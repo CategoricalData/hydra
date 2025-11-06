@@ -4,12 +4,13 @@ r"""Utilities for type and term rewriting and analysis."""
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
+from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
 from typing import Tuple, cast
 import hydra.accessors
 import hydra.coders
 import hydra.compute
 import hydra.core
+import hydra.lib.eithers
 import hydra.lib.equality
 import hydra.lib.flows
 import hydra.lib.lists
@@ -20,7 +21,6 @@ import hydra.lib.math
 import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.mantle
 import hydra.names
 import hydra.sorting
 
@@ -80,6 +80,9 @@ def rewrite_type(f: Callable[[Callable[[hydra.core.Type], hydra.core.Type], hydr
             
             case hydra.core.TypeApplication(value=app):
                 return cast(hydra.core.Type, hydra.core.TypeApplication(hydra.core.ApplicationType(recurse(app.function), recurse(app.argument))))
+            
+            case hydra.core.TypeEither(value=et):
+                return cast(hydra.core.Type, hydra.core.TypeEither(hydra.core.EitherType(recurse(et.left), recurse(et.right))))
             
             case hydra.core.TypeFunction(value=fun):
                 return cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(recurse(fun.domain), recurse(fun.codomain))))
@@ -205,6 +208,9 @@ def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydr
             
             case hydra.core.TermApplication(value=a):
                 return cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(recurse(a.function), recurse(a.argument))))
+            
+            case hydra.core.TermEither(value=e):
+                return cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.either((lambda l: cast(Either[hydra.core.Term, hydra.core.Term], Left(recurse(l)))), (lambda r: cast(Either[hydra.core.Term, hydra.core.Term], Right(recurse(r)))), e)))
             
             case hydra.core.TermFunction(value=fun):
                 return cast(hydra.core.Term, hydra.core.TermFunction(for_function(fun)))
@@ -337,6 +343,9 @@ def subterms(v1: hydra.core.Term) -> frozenlist[hydra.core.Term]:
         case hydra.core.TermApplication(value=p):
             return (p.function, p.argument)
         
+        case hydra.core.TermEither(value=e):
+            return hydra.lib.eithers.either((lambda l: (l,)), (lambda r: (r,)), e)
+        
         case hydra.core.TermFunction(value=v12):
             match v12:
                 case hydra.core.FunctionElimination(value=v13):
@@ -415,6 +424,9 @@ def subtypes(v1: hydra.core.Type) -> frozenlist[hydra.core.Type]:
         
         case hydra.core.TypeApplication(value=at2):
             return (at2.function, at2.argument)
+        
+        case hydra.core.TypeEither(value=et):
+            return (et.left, et.right)
         
         case hydra.core.TypeFunction(value=ft):
             return (ft.domain, ft.codomain)
@@ -598,6 +610,9 @@ def rewrite_type_m[T0](f: Callable[[
             
             case hydra.core.TypeApplication(value=at2):
                 return hydra.lib.flows.bind(recurse(at2.function), (lambda lhs: hydra.lib.flows.bind(recurse(at2.argument), (lambda rhs: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeApplication(hydra.core.ApplicationType(lhs, rhs))))))))
+            
+            case hydra.core.TypeEither(value=et):
+                return hydra.lib.flows.bind(recurse(et.left), (lambda left: hydra.lib.flows.bind(recurse(et.right), (lambda right: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeEither(hydra.core.EitherType(left, right))))))))
             
             case hydra.core.TypeFunction(value=ft):
                 return hydra.lib.flows.bind(recurse(ft.domain), (lambda dom: hydra.lib.flows.bind(recurse(ft.codomain), (lambda cod: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(dom, cod))))))))
@@ -1007,6 +1022,9 @@ def rewrite_and_fold_term[T0](f: Callable[[
                 rrhs = recurse(rlhs[0], a.argument)
                 return (rrhs[0], cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(rlhs[1], rrhs[1]))))
             
+            case hydra.core.TermEither(value=e):
+                return hydra.lib.eithers.either((lambda l: (rl := recurse(val0, l), (rl[0], cast(hydra.core.Term, hydra.core.TermEither(cast(Either[hydra.core.Term, hydra.core.Term], Left(rl[1]))))))[1]), (lambda r: (rr := recurse(val0, r), (rr[0], cast(hydra.core.Term, hydra.core.TermEither(cast(Either[hydra.core.Term, hydra.core.Term], Right(rr[1]))))))[1]), e)
+            
             case hydra.core.TermFunction(value=f2):
                 return for_single(for_function, (lambda f3: cast(hydra.core.Term, hydra.core.TermFunction(f3))), val0, f2)
             
@@ -1098,6 +1116,9 @@ def rewrite_and_fold_term_m[T0, T1](f: Callable[[
             case hydra.core.TermApplication(value=a):
                 return hydra.lib.flows.bind(recurse(val0, a.function), (lambda rlhs: hydra.lib.flows.bind(recurse(rlhs[0], a.argument), (lambda rrhs: hydra.lib.flows.pure((rrhs[0], cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(rlhs[1], rrhs[1])))))))))
             
+            case hydra.core.TermEither(value=e):
+                return hydra.lib.eithers.either((lambda l: hydra.lib.flows.bind(recurse(val0, l), (lambda rl: hydra.lib.flows.pure((rl[0], cast(hydra.core.Term, hydra.core.TermEither(cast(Either[hydra.core.Term, hydra.core.Term], Left(rl[1]))))))))), (lambda r: hydra.lib.flows.bind(recurse(val0, r), (lambda rr: hydra.lib.flows.pure((rr[0], cast(hydra.core.Term, hydra.core.TermEither(cast(Either[hydra.core.Term, hydra.core.Term], Right(rr[1]))))))))), e)
+            
             case hydra.core.TermFunction(value=f2):
                 return for_single(for_function, (lambda f3: cast(hydra.core.Term, hydra.core.TermFunction(f3))), val0, f2)
             
@@ -1159,6 +1180,9 @@ def rewrite_term_m[T0](f: Callable[[
             
             case hydra.core.TermApplication(value=app):
                 return hydra.lib.flows.bind(recurse(app.function), (lambda lhs: hydra.lib.flows.bind(recurse(app.argument), (lambda rhs: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs, rhs))))))))
+            
+            case hydra.core.TermEither(value=e):
+                return hydra.lib.flows.bind(hydra.lib.eithers.either((lambda l: hydra.lib.flows.map((lambda x: cast(Either[hydra.core.Term, hydra.core.Term], Left(x))), recurse(l))), (lambda r: hydra.lib.flows.map((lambda x: cast(Either[hydra.core.Term, hydra.core.Term], Right(x))), recurse(r))), e), (lambda re: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermEither(re)))))
             
             case hydra.core.TermFunction(value=fun):
                 def for_elm(e: hydra.core.Elimination) -> hydra.compute.Flow[T1, hydra.core.Function]:
@@ -1300,6 +1324,9 @@ def rewrite_term_with_context[T0](f: Callable[[
             case hydra.core.TermApplication(value=a):
                 return cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(recurse(a.function), recurse(a.argument))))
             
+            case hydra.core.TermEither(value=e):
+                return cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.either((lambda l: cast(Either[hydra.core.Term, hydra.core.Term], Left(recurse(l)))), (lambda r: cast(Either[hydra.core.Term, hydra.core.Term], Right(recurse(r)))), e)))
+            
             case hydra.core.TermFunction(value=fun):
                 return cast(hydra.core.Term, hydra.core.TermFunction(for_function(fun)))
             
@@ -1399,6 +1426,9 @@ def rewrite_term_with_context_m[T0, T1](f: Callable[[
             
             case hydra.core.TermApplication(value=app):
                 return hydra.lib.flows.bind(recurse(app.function), (lambda lhs: hydra.lib.flows.bind(recurse(app.argument), (lambda rhs: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs, rhs))))))))
+            
+            case hydra.core.TermEither(value=e):
+                return hydra.lib.flows.bind(hydra.lib.eithers.either((lambda l: hydra.lib.flows.map((lambda x: cast(Either[hydra.core.Term, hydra.core.Term], Left(x))), recurse(l))), (lambda r: hydra.lib.flows.map((lambda x: cast(Either[hydra.core.Term, hydra.core.Term], Right(x))), recurse(r))), e), (lambda re: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermEither(re)))))
             
             case hydra.core.TermFunction(value=fun):
                 return hydra.lib.flows.bind(for_function(fun), (lambda rfun: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermFunction(rfun)))))
@@ -1545,6 +1575,9 @@ def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[Tuple[hydra.acces
         
         case hydra.core.TermApplication(value=p):
             return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorApplicationFunction(None)), p.function), (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorApplicationArgument(None)), p.argument))
+        
+        case hydra.core.TermEither():
+            return cast(frozenlist[Tuple[hydra.accessors.TermAccessor, hydra.core.Term]], ())
         
         case hydra.core.TermFunction(value=v12):
             match v12:
@@ -1696,7 +1729,7 @@ def topological_sort_binding_map(binding_map: FrozenDict[hydra.core.Name, hydra.
         return (name, hydra.lib.maybes.from_maybe(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("Impossible!")))), hydra.lib.maps.lookup(name, binding_map)))
     return hydra.lib.lists.map((lambda v1: hydra.lib.lists.map(to_pair, v1)), hydra.sorting.topological_sort_components(hydra.lib.lists.map(cast(Callable[[Tuple[hydra.core.Name, hydra.core.Term]], Tuple[hydra.core.Name, frozenlist[hydra.core.Name]]], deps_of), bindings)))
 
-def topological_sort_bindings(els: frozenlist[hydra.core.Binding]) -> hydra.mantle.Either[frozenlist[frozenlist[hydra.core.Name]], frozenlist[hydra.core.Name]]:
+def topological_sort_bindings(els: frozenlist[hydra.core.Binding]) -> Either[frozenlist[frozenlist[hydra.core.Name]], frozenlist[hydra.core.Name]]:
     r"""Topological sort of elements based on their dependencies."""
     
     def adjlist(e: hydra.core.Binding) -> Tuple[hydra.core.Name, frozenlist[hydra.core.Name]]:

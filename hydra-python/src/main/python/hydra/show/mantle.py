@@ -63,6 +63,9 @@ def term_variant(v1: hydra.mantle.TermVariant) -> str:
         
         case hydra.mantle.TermVariant.WRAP:
             return "wrap"
+        
+        case _:
+            raise TypeError("Unsupported TermVariant")
 
 def type_variant(v1: hydra.mantle.TypeVariant) -> str:
     r"""Show a type variant as a string."""
@@ -115,3 +118,6 @@ def type_variant(v1: hydra.mantle.TypeVariant) -> str:
         
         case hydra.mantle.TypeVariant.WRAP:
             return "wrap"
+        
+        case _:
+            raise TypeError("Unsupported TypeVariant")

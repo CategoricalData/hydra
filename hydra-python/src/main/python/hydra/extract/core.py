@@ -5,12 +5,13 @@ r"""A DSL for decoding and validating Hydra terms at runtime. This module provid
 from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
-from hydra.dsl.python import FrozenDict, Maybe, Nothing, frozenlist
+from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Nothing, Right, frozenlist
 from typing import Tuple, cast
 import hydra.compute
 import hydra.core
 import hydra.graph
 import hydra.lexical
+import hydra.lib.eithers
 import hydra.lib.equality
 import hydra.lib.flows
 import hydra.lib.lists
@@ -130,6 +131,25 @@ def case_field(name: hydra.core.Name, n: str, term: hydra.core.Term) -> hydra.co
     
     field_name = hydra.core.Name(n)
     return hydra.lib.flows.bind(cases(name, term), (lambda cs: (matching := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, field_name.value)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching), hydra.lib.flows.fail("not enough cases"), hydra.lib.flows.pure(hydra.lib.lists.head(matching))))[1]))
+
+def either_term[T0, T1](left_fun: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], right_fun: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T1]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Either[T0, T1]]:
+    def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Either[T0, T1]]:
+        match term:
+            case hydra.core.TermEither(value=et):
+                return hydra.lib.eithers.either((lambda l: hydra.lib.flows.map((lambda x: cast(Either[T0, T1], Left(x))), left_fun(l))), (lambda r: hydra.lib.flows.map((lambda x: cast(Either[T0, T1], Right(x))), right_fun(r))), et)
+            
+            case _:
+                return hydra.monads.unexpected("either value", hydra.show.core.term(term))
+    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
+
+def either_type[T0](typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.EitherType]:
+    stripped = hydra.rewriting.deannotate_type(typ)
+    match stripped:
+        case hydra.core.TypeEither(value=et):
+            return hydra.lib.flows.pure(et)
+        
+        case _:
+            return hydra.monads.unexpected("either type", hydra.show.core.type(typ))
 
 def field[T0](fname: hydra.core.Name, mapping: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], fields: frozenlist[hydra.core.Field]) -> hydra.compute.Flow[hydra.graph.Graph, T0]:
     matching_fields = hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, fname.value)), fields)
