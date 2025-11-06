@@ -7,6 +7,8 @@ from typing import Any, Generic, TypeVar, cast, final
 
 
 K = TypeVar("K")
+L = TypeVar("L")
+R = TypeVar("R")
 T = TypeVar("T")
 V = TypeVar("V")
 
@@ -29,6 +31,19 @@ class Nothing:
 NOTHING = Nothing()
 
 type Maybe[T] = Just[T] | Nothing
+
+
+@final
+@dataclass(frozen=True)
+class Left(Generic[L]):
+    value: L
+
+@final
+@dataclass(frozen=True)
+class Right(Generic[R]):
+    value: R
+
+type Either[L, R] = Left[L] | Right[R]
 
 
 @dataclass(frozen=True, unsafe_hash=True, eq=True, order=True)
