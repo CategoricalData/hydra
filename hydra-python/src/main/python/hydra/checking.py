@@ -159,7 +159,7 @@ def type_of_tuple_projection[T0](tx: hydra.typing.TypeContext, type_args: frozen
     return hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.fail("untyped tuple projection"), (lambda types: hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: check_type_variables(tx, v1)), types), (lambda _: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(cast(hydra.core.Type, hydra.core.TypeProduct(types)), hydra.lib.lists.at(index, types)))))))), mtypes), (lambda t: apply_type_arguments_to_type(tx, type_args, t)))
 
 def type_of_unit[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type]) -> hydra.compute.Flow[T0, hydra.core.Type]:
-    return apply_type_arguments_to_type(tx, type_args, cast(hydra.core.Type, hydra.core.TypeUnit(None)))
+    return apply_type_arguments_to_type(tx, type_args, cast(hydra.core.Type, hydra.core.TypeUnit()))
 
 def type_of_unwrap[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], tname: hydra.core.Name) -> hydra.compute.Flow[T0, hydra.core.Type]:
     return hydra.lib.flows.bind(hydra.schemas.require_schema_type(tx.inference_context, tname), (lambda schema_type: (svars := schema_type.variables, sbody := schema_type.type, hydra.lib.flows.bind(hydra.extract.core.wrapped_type(tname, sbody), (lambda wrapped: (subst := hydra.typing.TypeSubst(cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.from_list(hydra.lib.lists.zip(svars, type_args)))), swrapped := hydra.substitution.subst_in_type(subst, wrapped), hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(hydra.schemas.nominal_application(tname, type_args), swrapped)))))[2])))[2]))
@@ -318,7 +318,7 @@ def type_of_maybe[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.
 def type_of_pair[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], p: Tuple[hydra.core.Term, hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.core.Type]:
     def check_length[T1]() -> hydra.compute.Flow[T1, None]:
         n = hydra.lib.lists.length(type_args)
-        return hydra.lib.logic.if_else(hydra.lib.equality.equal(n, 2), hydra.lib.flows.pure(None), hydra.lib.flows.fail(hydra.lib.strings.cat(("pair type requires 2 type arguments, got ", hydra.lib.literals.show_int32(n)))))
+        return hydra.lib.logic.if_else(hydra.lib.equality.equal(n, 2), hydra.lib.flows.pure(None), hydra.lib.flows.fail(hydra.lib.strings.cat(("tuple2 type requires 2 type arguments, got ", hydra.lib.literals.show_int32(n)))))
     return hydra.lib.flows.bind(cast(hydra.compute.Flow[T0, None], check_length()), (lambda _: (pair_fst := p[0], pair_snd := p[1], hydra.lib.flows.bind(type_of(tx, cast(frozenlist[hydra.core.Type], ()), pair_fst), (lambda first_type: hydra.lib.flows.bind(check_type_variables(tx, first_type), (lambda _2: hydra.lib.flows.bind(type_of(tx, cast(frozenlist[hydra.core.Type], ()), pair_snd), (lambda second_type: hydra.lib.flows.bind(check_type_variables(tx, second_type), (lambda _3: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypePair(hydra.core.PairType(first_type, second_type)))))))))))))[2]))
 
 def type_of_record[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], record: hydra.core.Record) -> hydra.compute.Flow[T0, hydra.core.Type]:

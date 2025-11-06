@@ -13,7 +13,7 @@ class ValueArray(Node["frozenlist[Value]"]):
 class ValueBoolean(Node[bool]):
     r"""A boolean value."""
 
-class ValueNull(Node[None]):
+class ValueNull:
     r"""JSON's null value."""
 
 class ValueNumber(Node[Decimal]):

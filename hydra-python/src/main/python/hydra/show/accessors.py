@@ -87,7 +87,7 @@ def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
 def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], term: hydra.core.Term) -> hydra.accessors.AccessorGraph:
     r"""Build an accessor graph from a term."""
     
-    dont_care_accessor = cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorAnnotatedBody(None))
+    dont_care_accessor = cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorAnnotatedBody())
     def helper(ids: FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode], mroot: Maybe[hydra.accessors.AccessorNode], path: frozenlist[hydra.accessors.TermAccessor], state: Tuple[Tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]], accessor_term: Tuple[hydra.accessors.TermAccessor, hydra.core.Term]) -> Tuple[Tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]]:
         accessor = accessor_term[0]
         current_term = accessor_term[1]
@@ -124,7 +124,7 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                     return helper(ids1, cast(Maybe[hydra.accessors.AccessorNode], Just(root)), cast(frozenlist[hydra.accessors.TermAccessor], ()), current_state, (dont_care_accessor, term1))
                 node_binding_pairs = hydra.lib.lists.zip(nodes1, bindings)
                 state_after_bindings = hydra.lib.lists.foldl(add_binding_term, ((hydra.lib.lists.concat2(nodes1, nodes), edges), visited1), node_binding_pairs)
-                return helper(ids1, mroot, next_path, state_after_bindings, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody(None)), env))
+                return helper(ids1, mroot, next_path, state_after_bindings, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()), env))
             
             case hydra.core.TermVariable(value=name):
                 return hydra.lib.maybes.maybe(state, (lambda root: hydra.lib.maybes.maybe(state, (lambda node: (edge := hydra.accessors.AccessorEdge(root, hydra.accessors.AccessorPath(hydra.lib.lists.reverse(next_path)), node), new_edges := hydra.lib.lists.cons(edge, edges), ((nodes, new_edges), visited))[2]), hydra.lib.maps.lookup(name, ids))), mroot)

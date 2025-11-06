@@ -85,42 +85,50 @@ def join_types[T0](left: hydra.core.Type, right: hydra.core.Type, comment: str) 
                 case _:
                     return cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify)
         
-        case hydra.core.TypeProduct(value=l7):
+        case hydra.core.TypePair(value=l7):
+            match sright:
+                case hydra.core.TypePair(value=r):
+                    return hydra.lib.flows.pure((join_one(l7.first, r.first), join_one(l7.second, r.second)))
+                
+                case _:
+                    return cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify)
+        
+        case hydra.core.TypeProduct(value=l8):
             match sright:
                 case hydra.core.TypeProduct(value=r):
-                    return join_list(l7, r)
+                    return join_list(l8, r)
                 
                 case _:
                     return cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify)
         
-        case hydra.core.TypeRecord(value=l8):
+        case hydra.core.TypeRecord(value=l9):
             match sright:
                 case hydra.core.TypeRecord(value=r):
-                    return join_row_types(l8, r)
+                    return join_row_types(l9, r)
                 
                 case _:
                     return cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify)
         
-        case hydra.core.TypeSet(value=l9):
+        case hydra.core.TypeSet(value=l10):
             match sright:
                 case hydra.core.TypeSet(value=r):
-                    return hydra.lib.flows.pure((join_one(l9, r),))
+                    return hydra.lib.flows.pure((join_one(l10, r),))
                 
                 case _:
                     return cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify)
         
-        case hydra.core.TypeSum(value=l10):
+        case hydra.core.TypeSum(value=l11):
             match sright:
                 case hydra.core.TypeSum(value=r):
-                    return join_list(l10, r)
+                    return join_list(l11, r)
                 
                 case _:
                     return cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify)
         
-        case hydra.core.TypeUnion(value=l11):
+        case hydra.core.TypeUnion(value=l12):
             match sright:
                 case hydra.core.TypeUnion(value=r):
-                    return join_row_types(l11, r)
+                    return join_row_types(l12, r)
                 
                 case _:
                     return cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify)
@@ -133,10 +141,10 @@ def join_types[T0](left: hydra.core.Type, right: hydra.core.Type, comment: str) 
                 case _:
                     return cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify)
         
-        case hydra.core.TypeWrap(value=l12):
+        case hydra.core.TypeWrap(value=l13):
             match sright:
                 case hydra.core.TypeWrap(value=r):
-                    return hydra.lib.logic.if_else(hydra.lib.equality.equal(l12.type_name.value, r.type_name.value), hydra.lib.flows.pure((join_one(l12.body, r.body),)), cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify))
+                    return hydra.lib.logic.if_else(hydra.lib.equality.equal(l13.type_name.value, r.type_name.value), hydra.lib.flows.pure((join_one(l13.body, r.body),)), cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify))
                 
                 case _:
                     return cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify)
@@ -154,7 +162,7 @@ def variable_occurs_in_type(var: hydra.core.Name, typ0: hydra.core.Type) -> bool
             
             case _:
                 return b
-    return hydra.rewriting.fold_over_type(cast(hydra.coders.TraversalOrder, hydra.coders.TraversalOrderPre(None)), try_type, False, typ0)
+    return hydra.rewriting.fold_over_type(hydra.coders.TraversalOrder.PRE, try_type, False, typ0)
 
 def unify_type_constraints[T0, T1](schema_types: FrozenDict[hydra.core.Name, T0], constraints: frozenlist[hydra.typing.TypeConstraint]) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
     def with_constraint(c: hydra.typing.TypeConstraint, rest: frozenlist[hydra.typing.TypeConstraint]) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:

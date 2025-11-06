@@ -23,9 +23,9 @@ def type_subst(ts: hydra.typing.TypeSubst) -> str:
     
     subst = ts.value
     pairs = hydra.lib.maps.to_list(subst)
-    def show_pair(pair: Tuple[hydra.core.Name, hydra.core.Type]) -> str:
-        name = pair[0].value
-        typ = pair[1]
+    def show_pair(tuple2: Tuple[hydra.core.Name, hydra.core.Type]) -> str:
+        name = tuple2[0].value
+        typ = tuple2[1]
         return hydra.lib.strings.cat((name, "↦", hydra.show.core.type(typ)))
     pair_strs = hydra.lib.lists.map(show_pair, pairs)
     return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(",", pair_strs), "}"))

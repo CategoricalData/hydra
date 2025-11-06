@@ -50,7 +50,7 @@ def sequence(patterns: list[Pattern]) -> Pattern:
 
 def nil() -> Pattern:
     """Construct a nil pattern."""
-    return PatternNil(None)
+    return PatternNil()
 
 
 def opt(pattern: Pattern) -> Pattern:

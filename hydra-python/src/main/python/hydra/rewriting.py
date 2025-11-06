@@ -84,6 +84,9 @@ def rewrite_type(f: Callable[[Callable[[hydra.core.Type], hydra.core.Type], hydr
             case hydra.core.TypeEither(value=et):
                 return cast(hydra.core.Type, hydra.core.TypeEither(hydra.core.EitherType(recurse(et.left), recurse(et.right))))
             
+            case hydra.core.TypePair(value=pt):
+                return cast(hydra.core.Type, hydra.core.TypePair(hydra.core.PairType(recurse(pt.first), recurse(pt.second))))
+            
             case hydra.core.TypeFunction(value=fun):
                 return cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(recurse(fun.domain), recurse(fun.codomain))))
             
@@ -118,16 +121,13 @@ def rewrite_type(f: Callable[[Callable[[hydra.core.Type], hydra.core.Type], hydr
                 return cast(hydra.core.Type, hydra.core.TypeUnion(hydra.core.RowType(rt2.type_name, hydra.lib.lists.map(for_field, rt2.fields))))
             
             case hydra.core.TypeUnit():
-                return cast(hydra.core.Type, hydra.core.TypeUnit(None))
+                return cast(hydra.core.Type, hydra.core.TypeUnit())
             
             case hydra.core.TypeVariable(value=v):
                 return cast(hydra.core.Type, hydra.core.TypeVariable(v))
             
             case hydra.core.TypeWrap(value=wt):
                 return cast(hydra.core.Type, hydra.core.TypeWrap(hydra.core.WrappedType(wt.type_name, recurse(wt.body))))
-            
-            case _:
-                raise TypeError("Unsupported Type")
     def recurse(v1: hydra.core.Type) -> hydra.core.Type:
         return f((lambda v12: fsub(recurse, v12)), v1)
     return recurse(typ0)
@@ -258,7 +258,7 @@ def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydr
                 return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(i.type_name, for_field(i.field))))
             
             case hydra.core.TermUnit():
-                return cast(hydra.core.Term, hydra.core.TermUnit(None))
+                return cast(hydra.core.Term, hydra.core.TermUnit())
             
             case hydra.core.TermVariable(value=v2):
                 return cast(hydra.core.Term, hydra.core.TermVariable(v2))
@@ -418,10 +418,10 @@ def subterms(v1: hydra.core.Term) -> frozenlist[hydra.core.Term]:
 
 def fold_over_term[T0](order: hydra.coders.TraversalOrder, fld: Callable[[T0, hydra.core.Term], T0], b0: T0, term: hydra.core.Term) -> T0:
     match order:
-        case hydra.coders.TraversalOrderPre():
+        case hydra.coders.TraversalOrder.PRE:
             return hydra.lib.lists.foldl((lambda v1, v2: fold_over_term(order, fld, v1, v2)), fld(b0, term), subterms(term))
         
-        case hydra.coders.TraversalOrderPost():
+        case hydra.coders.TraversalOrder.POST:
             return fld(hydra.lib.lists.foldl((lambda v1, v2: fold_over_term(order, fld, v1, v2)), b0, subterms(term)), term)
 
 def subtypes(v1: hydra.core.Type) -> frozenlist[hydra.core.Type]:
@@ -436,6 +436,9 @@ def subtypes(v1: hydra.core.Type) -> frozenlist[hydra.core.Type]:
         
         case hydra.core.TypeEither(value=et):
             return (et.left, et.right)
+        
+        case hydra.core.TypePair(value=pt):
+            return (pt.first, pt.second)
         
         case hydra.core.TypeFunction(value=ft):
             return (ft.domain, ft.codomain)
@@ -455,8 +458,8 @@ def subtypes(v1: hydra.core.Type) -> frozenlist[hydra.core.Type]:
         case hydra.core.TypeMaybe(value=ot):
             return (ot,)
         
-        case hydra.core.TypeProduct(value=pt):
-            return pt
+        case hydra.core.TypeProduct(value=pt2):
+            return pt2
         
         case hydra.core.TypeRecord(value=rt):
             return hydra.lib.lists.map((lambda v12: v12.type), rt.fields)
@@ -478,16 +481,13 @@ def subtypes(v1: hydra.core.Type) -> frozenlist[hydra.core.Type]:
         
         case hydra.core.TypeWrap(value=nt):
             return (nt.body,)
-        
-        case _:
-            raise TypeError("Unsupported Type")
 
 def fold_over_type[T0](order: hydra.coders.TraversalOrder, fld: Callable[[T0, hydra.core.Type], T0], b0: T0, typ: hydra.core.Type) -> T0:
     match order:
-        case hydra.coders.TraversalOrderPre():
+        case hydra.coders.TraversalOrder.PRE:
             return hydra.lib.lists.foldl((lambda v1, v2: fold_over_type(order, fld, v1, v2)), fld(b0, typ), subtypes(typ))
         
-        case hydra.coders.TraversalOrderPost():
+        case hydra.coders.TraversalOrder.POST:
             return fld(hydra.lib.lists.foldl((lambda v1, v2: fold_over_type(order, fld, v1, v2)), b0, subtypes(typ)), typ)
 
 def free_variables_in_type(typ: hydra.core.Type) -> frozenset[hydra.core.Name]:
@@ -603,7 +603,7 @@ def free_variables_in_type_simple(typ: hydra.core.Type) -> frozenset[hydra.core.
             
             case _:
                 return types
-    return fold_over_type(cast(hydra.coders.TraversalOrder, hydra.coders.TraversalOrderPre(None)), helper, cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), typ)
+    return fold_over_type(hydra.coders.TraversalOrder.PRE, helper, cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), typ)
 
 def free_variables_in_type_scheme_simple(ts: hydra.core.TypeScheme) -> frozenset[hydra.core.Name]:
     r"""Find free variables in a type scheme (simple version)."""
@@ -625,6 +625,9 @@ def rewrite_type_m[T0](f: Callable[[
             
             case hydra.core.TypeEither(value=et):
                 return hydra.lib.flows.bind(recurse(et.left), (lambda left: hydra.lib.flows.bind(recurse(et.right), (lambda right: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeEither(hydra.core.EitherType(left, right))))))))
+            
+            case hydra.core.TypePair(value=pt):
+                return hydra.lib.flows.bind(recurse(pt.first), (lambda pair_first: hydra.lib.flows.bind(recurse(pt.second), (lambda pair_second: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypePair(hydra.core.PairType(pair_first, pair_second))))))))
             
             case hydra.core.TypeFunction(value=ft):
                 return hydra.lib.flows.bind(recurse(ft.domain), (lambda dom: hydra.lib.flows.bind(recurse(ft.codomain), (lambda cod: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(dom, cod))))))))
@@ -668,16 +671,13 @@ def rewrite_type_m[T0](f: Callable[[
                 return hydra.lib.flows.bind(hydra.lib.flows.map_list(for_field, fields), (lambda rfields: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeUnion(hydra.core.RowType(name, rfields))))))
             
             case hydra.core.TypeUnit():
-                return hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeUnit(None)))
+                return hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeUnit()))
             
             case hydra.core.TypeVariable(value=v):
                 return hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeVariable(v)))
             
             case hydra.core.TypeWrap(value=wt):
                 return hydra.lib.flows.bind(recurse(wt.body), (lambda t: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeWrap(hydra.core.WrappedType(wt.type_name, t))))))
-            
-            case _:
-                raise TypeError("Unsupported Type")
     def recurse(v1: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
         return f((lambda v12: fsub(recurse, v12)), v1)
     return recurse(typ0)
@@ -1290,7 +1290,7 @@ def rewrite_term_m[T0](f: Callable[[
                 return hydra.lib.flows.map((lambda rfield: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(n, rfield)))), for_field(field))
             
             case hydra.core.TermUnit():
-                return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermUnit(None)))
+                return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermUnit()))
             
             case hydra.core.TermVariable(value=v2):
                 return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermVariable(v2)))
@@ -1396,7 +1396,7 @@ def rewrite_term_with_context[T0](f: Callable[[
                 return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(i.type_name, for_field(i.field))))
             
             case hydra.core.TermUnit():
-                return cast(hydra.core.Term, hydra.core.TermUnit(None))
+                return cast(hydra.core.Term, hydra.core.TermUnit())
             
             case hydra.core.TermVariable(value=v2):
                 return cast(hydra.core.Term, hydra.core.TermVariable(v2))
@@ -1510,7 +1510,7 @@ def rewrite_term_with_context_m[T0, T1](f: Callable[[
                 return hydra.lib.flows.map((lambda rfield: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(n, rfield)))), for_field(field))
             
             case hydra.core.TermUnit():
-                return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermUnit(None)))
+                return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermUnit()))
             
             case hydra.core.TermVariable(value=v2):
                 return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermVariable(v2)))
@@ -1603,10 +1603,10 @@ def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[Tuple[hydra.acces
     
     match v1:
         case hydra.core.TermAnnotated(value=at):
-            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorAnnotatedBody(None)), at.body),)
+            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorAnnotatedBody()), at.body),)
         
         case hydra.core.TermApplication(value=p):
-            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorApplicationFunction(None)), p.function), (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorApplicationArgument(None)), p.argument))
+            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorApplicationFunction()), p.function), (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorApplicationArgument()), p.argument))
         
         case hydra.core.TermEither():
             return cast(frozenlist[Tuple[hydra.accessors.TermAccessor, hydra.core.Term]], ())
@@ -1616,19 +1616,19 @@ def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[Tuple[hydra.acces
                 case hydra.core.FunctionElimination(value=v13):
                     match v13:
                         case hydra.core.EliminationUnion(value=cs):
-                            return hydra.lib.lists.concat2(hydra.lib.maybes.maybe(cast(frozenlist[Tuple[hydra.accessors.TermAccessor, hydra.core.Term]], ()), (lambda t: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorUnionCasesDefault(None)), t),)), cs.default), hydra.lib.lists.map((lambda f: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorUnionCasesBranch(f.name)), f.term)), cs.cases))
+                            return hydra.lib.lists.concat2(hydra.lib.maybes.maybe(cast(frozenlist[Tuple[hydra.accessors.TermAccessor, hydra.core.Term]], ()), (lambda t: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorUnionCasesDefault()), t),)), cs.default), hydra.lib.lists.map((lambda f: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorUnionCasesBranch(f.name)), f.term)), cs.cases))
                         
                         case _:
                             return cast(frozenlist[Tuple[hydra.accessors.TermAccessor, hydra.core.Term]], ())
                 
                 case hydra.core.FunctionLambda(value=l):
-                    return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLambdaBody(None)), l.body),)
+                    return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLambdaBody()), l.body),)
                 
                 case _:
                     return cast(frozenlist[Tuple[hydra.accessors.TermAccessor, hydra.core.Term]], ())
         
         case hydra.core.TermLet(value=lt):
-            return hydra.lib.lists.cons((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody(None)), lt.body), hydra.lib.lists.map((lambda b: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBinding(b.name)), b.term)), lt.bindings))
+            return hydra.lib.lists.cons((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()), lt.body), hydra.lib.lists.map((lambda b: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBinding(b.name)), b.term)), lt.bindings))
         
         case hydra.core.TermList(value=l):
             return hydra.lib.lists.map((lambda e: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorListElement(0)), e)), l)
@@ -1640,7 +1640,7 @@ def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[Tuple[hydra.acces
             return hydra.lib.lists.concat(hydra.lib.lists.map((lambda p: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMapKey(0)), p[0]), (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMapValue(0)), p[1]))), hydra.lib.maps.to_list(m)))
         
         case hydra.core.TermMaybe(value=m2):
-            return hydra.lib.maybes.maybe(cast(frozenlist[Tuple[hydra.accessors.TermAccessor, hydra.core.Term]], ()), (lambda t: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMaybeTerm(None)), t),)), m2)
+            return hydra.lib.maybes.maybe(cast(frozenlist[Tuple[hydra.accessors.TermAccessor, hydra.core.Term]], ()), (lambda t: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMaybeTerm()), t),)), m2)
         
         case hydra.core.TermPair():
             return cast(frozenlist[Tuple[hydra.accessors.TermAccessor, hydra.core.Term]], ())
@@ -1655,16 +1655,16 @@ def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[Tuple[hydra.acces
             return hydra.lib.lists.map((lambda e: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorListElement(0)), e)), hydra.lib.sets.to_list(s))
         
         case hydra.core.TermSum(value=st):
-            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorSumTerm(None)), st.term),)
+            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorSumTerm()), st.term),)
         
         case hydra.core.TermTypeApplication(value=ta):
-            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorTypeApplicationTerm(None)), ta.body),)
+            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorTypeApplicationTerm()), ta.body),)
         
         case hydra.core.TermTypeLambda(value=ta2):
-            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorTypeLambdaBody(None)), ta2.body),)
+            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorTypeLambdaBody()), ta2.body),)
         
         case hydra.core.TermUnion(value=ut):
-            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorInjectionTerm(None)), ut.field.term),)
+            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorInjectionTerm()), ut.field.term),)
         
         case hydra.core.TermUnit():
             return cast(frozenlist[Tuple[hydra.accessors.TermAccessor, hydra.core.Term]], ())
@@ -1673,7 +1673,7 @@ def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[Tuple[hydra.acces
             return cast(frozenlist[Tuple[hydra.accessors.TermAccessor, hydra.core.Term]], ())
         
         case hydra.core.TermWrap(value=n):
-            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorWrappedTerm(None)), n.body),)
+            return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorWrappedTerm()), n.body),)
 
 def term_dependency_names(binds: bool, with_prims: bool, with_noms: bool, term0: hydra.core.Term) -> frozenset[hydra.core.Name]:
     r"""Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that."""
@@ -1722,7 +1722,7 @@ def term_dependency_names(binds: bool, with_prims: bool, with_noms: bool, term0:
             
             case _:
                 return names
-    return fold_over_term(cast(hydra.coders.TraversalOrder, hydra.coders.TraversalOrderPre(None)), add_names, cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), term0)
+    return fold_over_term(hydra.coders.TraversalOrder.PRE, add_names, cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), term0)
 
 def to_short_names(original: frozenlist[hydra.core.Name]) -> FrozenDict[hydra.core.Name, hydra.core.Name]:
     r"""Generate short names from a list of fully qualified names."""
@@ -1788,7 +1788,7 @@ def type_names_in_type(typ0: hydra.core.Type) -> frozenset[hydra.core.Name]:
             
             case _:
                 return names
-    return fold_over_type(cast(hydra.coders.TraversalOrder, hydra.coders.TraversalOrderPre(None)), add_names, cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), typ0)
+    return fold_over_type(hydra.coders.TraversalOrder.PRE, add_names, cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), typ0)
 
 def type_dependency_names(with_schema: bool, typ: hydra.core.Type) -> frozenset[hydra.core.Name]:
     return hydra.lib.logic.if_else(with_schema, hydra.lib.sets.union(free_variables_in_type(typ), type_names_in_type(typ)), free_variables_in_type(typ))

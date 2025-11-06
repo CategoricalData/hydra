@@ -242,7 +242,7 @@ def record_with_name(tname: Name, fields: Sequence[FieldType]) -> Type:
 
 def unit() -> Type:
     """Unit type."""
-    return TypeUnit(None)
+    return TypeUnit()
 
 
 def union(fields: Sequence[FieldType]) -> Type:

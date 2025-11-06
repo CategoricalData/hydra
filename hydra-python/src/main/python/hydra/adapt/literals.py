@@ -161,8 +161,8 @@ def float_adapter[T0, T1](ft: hydra.core.FloatType) -> hydra.compute.Flow[hydra.
 def integer_adapter[T0, T1](it: hydra.core.IntegerType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[T0, T1, hydra.core.IntegerType, hydra.core.IntegerType, hydra.core.IntegerValue, hydra.core.IntegerValue]]:
     def interleave[T2](xs: frozenlist[T2], ys: frozenlist[T2]) -> frozenlist[T2]:
         return hydra.lib.lists.concat(hydra.lib.lists.transpose((xs, ys)))
-    signed_ordered = hydra.lib.lists.filter((lambda v: hydra.lib.logic.and_(hydra.variants.integer_type_is_signed(v), hydra.lib.logic.not_(hydra.lib.equality.equal(hydra.variants.integer_type_precision(v), cast(hydra.mantle.Precision, hydra.mantle.PrecisionArbitrary(None)))))), hydra.variants.integer_types)
-    unsigned_ordered = hydra.lib.lists.filter((lambda v: hydra.lib.logic.and_(hydra.lib.logic.not_(hydra.variants.integer_type_is_signed(v)), hydra.lib.logic.not_(hydra.lib.equality.equal(hydra.variants.integer_type_precision(v), cast(hydra.mantle.Precision, hydra.mantle.PrecisionArbitrary(None)))))), hydra.variants.integer_types)
+    signed_ordered = hydra.lib.lists.filter((lambda v: hydra.lib.logic.and_(hydra.variants.integer_type_is_signed(v), hydra.lib.logic.not_(hydra.lib.equality.equal(hydra.variants.integer_type_precision(v), cast(hydra.mantle.Precision, hydra.mantle.PrecisionArbitrary()))))), hydra.variants.integer_types)
+    unsigned_ordered = hydra.lib.lists.filter((lambda v: hydra.lib.logic.and_(hydra.lib.logic.not_(hydra.variants.integer_type_is_signed(v)), hydra.lib.logic.not_(hydra.lib.equality.equal(hydra.variants.integer_type_precision(v), cast(hydra.mantle.Precision, hydra.mantle.PrecisionArbitrary()))))), hydra.variants.integer_types)
     signed_pref = interleave(signed_ordered, unsigned_ordered)
     unsigned_pref = interleave(unsigned_ordered, signed_ordered)
     signed_non_pref = hydra.lib.lists.reverse(unsigned_pref)
@@ -227,7 +227,7 @@ def literal_adapter[T0](lt: hydra.core.LiteralType) -> hydra.compute.Flow[hydra.
                     raise TypeError("Unsupported Literal")
         def step[T5, T6]() -> hydra.compute.Coder[T5, T6, hydra.core.Literal, hydra.core.Literal]:
             return cast(hydra.compute.Coder[T5, T6, hydra.core.Literal, hydra.core.Literal], hydra.compute.Coder(cast(Callable[[hydra.core.Literal], hydra.compute.Flow[T5, hydra.core.Literal]], match_binary), cast(Callable[[hydra.core.Literal], hydra.compute.Flow[T6, hydra.core.Literal]], match_string)))
-        return hydra.lib.flows.pure((cast(hydra.compute.Adapter[T3, T4, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal], hydra.compute.Adapter(False, t, cast(hydra.core.LiteralType, hydra.core.LiteralTypeString(None)), cast(hydra.compute.Coder[T3, T4, hydra.core.Literal, hydra.core.Literal], step))),))
+        return hydra.lib.flows.pure((cast(hydra.compute.Adapter[T3, T4, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal], hydra.compute.Adapter(False, t, cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()), cast(hydra.compute.Coder[T3, T4, hydra.core.Literal, hydra.core.Literal], step))),))
     def for_boolean[T1, T2, T3](t: T1) -> hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T2, T3, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
         def match_boolean[T4, T5](step_: hydra.compute.Coder[T4, T5, hydra.core.IntegerValue, hydra.core.IntegerValue], lit: hydra.core.Literal) -> hydra.compute.Flow[T4, hydra.core.Literal]:
             match lit:
