@@ -146,13 +146,13 @@ traceSummary :: (Compute.Trace -> String)
 traceSummary t =  
   let messageLines = (Lists.nub (Compute.traceMessages t))
   in  
-    let toLine = (\pair -> Strings.cat [
+    let toLine = (\tuple2 -> Strings.cat [
             Strings.cat [
               Strings.cat [
                 "\t",
-                (Core.unName (fst pair))],
+                (Core.unName (fst tuple2))],
               ": "],
-            (Core_.term (snd pair))])
+            (Core_.term (snd tuple2))])
     in  
       let keyvalLines = (Logic.ifElse (Maps.null (Compute.traceOther t)) [] (Lists.cons "key/value pairs: " (Lists.map toLine (Maps.toList (Compute.traceOther t)))))
       in (Strings.intercalate "\n" (Lists.concat2 messageLines keyvalLines))

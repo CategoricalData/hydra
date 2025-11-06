@@ -178,6 +178,7 @@ termVariant v = unitVariant _TermVariant $ case v of
   TermVariantLiteral -> _TermVariant_literal
   TermVariantMap -> _TermVariant_map
   TermVariantMaybe -> _TermVariant_maybe
+  TermVariantPair -> _TermVariant_pair
   TermVariantProduct -> _TermVariant_product
   TermVariantRecord -> _TermVariant_record
   TermVariantSet -> _TermVariant_set
@@ -215,6 +216,9 @@ termVariantMap = unitVariant _TermVariant _TermVariant_map
 
 termVariantMaybe :: TTerm TermVariant
 termVariantMaybe = unitVariant _TermVariant _TermVariant_maybe
+
+termVariantPair :: TTerm TermVariant
+termVariantPair = unitVariant _TermVariant _TermVariant_pair
 
 termVariantProduct :: TTerm TermVariant
 termVariantProduct = unitVariant _TermVariant _TermVariant_product
@@ -257,6 +261,7 @@ typeVariant v = unitVariant _TypeVariant $ case v of
   TypeVariantLiteral -> _TypeVariant_literal
   TypeVariantMap -> _TypeVariant_map
   TypeVariantMaybe -> _TypeVariant_maybe
+  TypeVariantPair -> _TypeVariant_pair
   TypeVariantProduct -> _TypeVariant_product
   TypeVariantRecord -> _TypeVariant_record
   TypeVariantSet -> _TypeVariant_set
@@ -291,6 +296,9 @@ typeVariantMap = unitVariant _TypeVariant _TypeVariant_map
 
 typeVariantMaybe :: TTerm TypeVariant
 typeVariantMaybe = unitVariant _TypeVariant _TypeVariant_maybe
+
+typeVariantPair :: TTerm TypeVariant
+typeVariantPair = unitVariant _TypeVariant _TypeVariant_pair
 
 typeVariantProduct :: TTerm TypeVariant
 typeVariantProduct = unitVariant _TypeVariant _TypeVariant_product

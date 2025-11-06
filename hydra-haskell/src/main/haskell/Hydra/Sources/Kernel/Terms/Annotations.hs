@@ -198,8 +198,8 @@ getTypeClassesDef = define "getTypeClasses" $
   "term" ~>
   "decodeClass" <~ ("term" ~>
     "byName" <~ Maps.fromList (list [
-      pair (Core.nameLift _TypeClass_equality) Graph.typeClassEquality,
-      pair (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]) $
+      tuple2 (Core.nameLift _TypeClass_equality) Graph.typeClassEquality,
+      tuple2 (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]) $
     "fn" <<~ ref ExtractCore.unitVariantDef @@ Core.nameLift _TypeClass @@ var "term" $
     Maybes.maybe
       (ref Monads.unexpectedDef @@ string "type class" @@ (ref ShowCore.termDef @@ var "term"))
@@ -355,7 +355,7 @@ setTypeClassesDef = define "setTypeClasses" $
   "encodePair" <~ ("nameClasses" ~>
     "name" <~ first (var "nameClasses") $
     "classes" <~ second (var "nameClasses") $
-    pair
+    tuple2
       (ref EncodeCore.nameDef @@ var "name")
       (Core.termSet (Sets.fromList (Lists.map (var "encodeClass") (Sets.toList (var "classes")))))) $
   "encoded" <~ Logic.ifElse (Maps.null (var "m"))
@@ -404,7 +404,7 @@ typeElementDef = define "typeElement" $
   "schemaTerm" <~ Core.termVariable (Core.nameLift _Type) $
   "dataTerm" <~ ref normalizeTermAnnotationsDef @@ (Core.termAnnotated (Core.annotatedTerm
     (ref EncodeCore.typeDef @@ var "typ")
-    (Maps.fromList (list [pair (ref Constants.key_typeDef) (var "schemaTerm")])))) $
+    (Maps.fromList (list [tuple2 (ref Constants.key_typeDef) (var "schemaTerm")])))) $
   Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list []) (var "typ")))
 
 whenFlagDef :: TBinding (Name -> Flow s a -> Flow s a -> Flow s a)

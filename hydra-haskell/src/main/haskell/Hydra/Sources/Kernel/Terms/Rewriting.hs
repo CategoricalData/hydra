@@ -26,6 +26,7 @@ import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
+import qualified Hydra.Dsl.Lib.Tuples    as Tuples
 import qualified Hydra.Dsl.Mantle        as Mantle
 import qualified Hydra.Dsl.Module        as Module
 import qualified Hydra.Dsl.TTerms        as TTerms
@@ -179,7 +180,7 @@ flattenLetTermsDef = define "flattenLetTerms" $
     "val0" <~ Core.bindingTerm (var "binding") $
     "t" <~ Core.bindingType (var "binding") $
     cases _Term (var "val0")
-      (Just $ pair (Core.binding (var "key0") (var "val0") (var "t")) (list [])) [
+      (Just $ tuple2 (Core.binding (var "key0") (var "val0") (var "t")) (list [])) [
       _Term_annotated>>: "at" ~>
         "val1" <~ Core.annotatedTermBody (var "at") $
         "ann" <~ Core.annotatedTermAnnotation (var "at") $
@@ -187,7 +188,7 @@ flattenLetTermsDef = define "flattenLetTerms" $
         "innerBinding" <~ first (var "recursive") $
         "deps" <~ second (var "recursive") $
         "val2" <~ Core.bindingTerm (var "innerBinding") $
-        pair
+        tuple2
           (Core.binding (var "key0") (Core.termAnnotated $ Core.annotatedTerm (var "val2") (var "ann")) (var "t"))
           (var "deps"),
       _Term_let>>: "innerLet" ~>
@@ -195,7 +196,7 @@ flattenLetTermsDef = define "flattenLetTerms" $
         "body1" <~ Core.letBody (var "innerLet") $
         "prefix" <~ Strings.cat2 (unwrap _Name @@ var "key0") (string "_") $
         "qualify" <~ ("n" ~> Core.name $ Strings.cat2 (var "prefix") (unwrap _Name @@ var "n")) $
-        "toSubstPair" <~ ("b" ~> pair (Core.bindingName $ var "b") (var "qualify" @@ (Core.bindingName $ var "b"))) $
+        "toSubstPair" <~ ("b" ~> tuple2 (Core.bindingName $ var "b") (var "qualify" @@ (Core.bindingName $ var "b"))) $
         "subst" <~ Maps.fromList (Lists.map (var "toSubstPair") (var "bindings1")) $
         "replaceVars" <~ ref substituteVariablesDef @@ var "subst" $
         "newBody" <~ var "replaceVars" @@ var "body1" $
@@ -203,7 +204,7 @@ flattenLetTermsDef = define "flattenLetTerms" $
           (var "qualify" @@ (Core.bindingName $ var "b"))
           (var "replaceVars" @@ (Core.bindingTerm $ var "b"))
           (Core.bindingType $ var "b")) $
-        pair
+        tuple2
           (Core.binding (var "key0") (var "newBody") (var "t"))
           (Lists.map (var "newBinding") (var "bindings1"))]) $
   "flatten" <~ ("recurse" ~> "term" ~>
@@ -494,7 +495,7 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
           Core.termFunction $ Core.functionLambda $ Core.lambda
             (Core.lambdaParameter $ var "l")
             (Maybes.map (var "substType" @@ var "subst") (var "domain"))
-            (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.lambdaBody $ var "l"))],
+            (var "rewriteWithSubst" @@ (tuple2 (tuple2 (var "subst") (var "boundVars")) (var "next")) @@ (Core.lambdaBody $ var "l"))],
       -- Let bindings each have a type which needs to be rewritten
       _Term_let>>: "lt" ~>
         "bindings0" <~ Core.letBindings (var "lt") $
@@ -504,7 +505,7 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
           "b"  <~ Lists.head (var "bs") $
           "tl" <~ Lists.tail (var "bs") $
           "noType" <~ (
-            "newVal" <~ var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.bindingTerm $ var "b") $
+            "newVal" <~ var "rewriteWithSubst" @@ (tuple2 (tuple2 (var "subst") (var "boundVars")) (var "next")) @@ (Core.bindingTerm $ var "b") $
             "b1"     <~ Core.binding (Core.bindingName $ var "b") (var "newVal") nothing $
             var "step" @@ (Lists.cons (var "b1") (var "acc")) @@ var "tl") $
           "withType" <~ ("ts" ~>
@@ -523,7 +524,7 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
             "newVars"  <~ var "gen" @@ (int32 0) @@ (var "k") @@ (list []) $
             "newSubst" <~ Maps.union (Maps.fromList $ Lists.zip (var "vars") (var "newVars")) (var "subst") $
             "newBound" <~ Sets.union (var "boundVars") (Sets.fromList (var "newVars")) $
-            "newVal"   <~ var "rewriteWithSubst" @@ (pair (pair (var "newSubst") (var "newBound")) (Math.add (var "next") (var "k"))) @@ (Core.bindingTerm $ var "b") $
+            "newVal"   <~ var "rewriteWithSubst" @@ (tuple2 (tuple2 (var "newSubst") (var "newBound")) (Math.add (var "next") (var "k"))) @@ (Core.bindingTerm $ var "b") $
             "b1"       <~ Core.binding
               (Core.bindingName $ var "b")
               (var "newVal")
@@ -541,10 +542,10 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
         Core.termLet $ Core.let_
           (var "bindings1")
           -- Body sees the original 'next' (binding lambdas don't bind in the body)
-          (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ var "body0"),
+          (var "rewriteWithSubst" @@ (tuple2 (tuple2 (var "subst") (var "boundVars")) (var "next")) @@ var "body0"),
       -- Type application terms have a type which needs to be rewritten, and we also recurse into the body term.
       _Term_typeApplication>>: "tt" ~> Core.termTypeApplication $ Core.typeApplicationTerm
-        (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.typeApplicationTermBody $ var "tt"))
+        (var "rewriteWithSubst" @@ (tuple2 (tuple2 (var "subst") (var "boundVars")) (var "next")) @@ (Core.typeApplicationTermBody $ var "tt"))
         (var "substType" @@ var "subst" @@ (Core.typeApplicationTermType $ var "tt")),
       -- Type lambdas introduce a type variable which needs to be replaced, and we also recurse into the body term.
       -- Note: in Hydra currently, type lambdas are exclusively created during type inference in combination with
@@ -552,10 +553,10 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
       -- If "free-standing" type lambdas are ever supported in the future, we will have to create a fresh type variable here.
       _Term_typeLambda>>: "ta" ~> Core.termTypeLambda $ Core.typeLambda
         (var "replaceName" @@ var "subst" @@ (Core.typeLambdaParameter $ var "ta"))
-        (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.typeLambdaBody $ var "ta"))]) $
+        (var "rewriteWithSubst" @@ (tuple2 (tuple2 (var "subst") (var "boundVars")) (var "next")) @@ (Core.typeLambdaBody $ var "ta"))]) $
     ref rewriteTermDef @@ var "rewrite" @@ var "term0") $
   -- initial state: ((emptySubst, emptyBound), next=0)
-  var "rewriteWithSubst" @@ (pair (pair Maps.empty Sets.empty) (int32 0)) @@ var "term"
+  var "rewriteWithSubst" @@ (tuple2 (tuple2 Maps.empty Sets.empty) (int32 0)) @@ var "term"
 
 removeTermAnnotationsDef :: TBinding (Term -> Term)
 removeTermAnnotationsDef = define "removeTermAnnotations" $
@@ -692,28 +693,28 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
   "fsub" <~ ("recurse" ~> "val0" ~> "term0" ~>
     "forSingle" <~ ("rec" ~> "cons" ~> "val" ~> "term" ~>
       "r" <~ var "rec" @@ var "val" @@ var "term" $
-      pair (first $ var "r") (var "cons" @@ (second $ var "r"))) $
+      tuple2 (first $ var "r") (var "cons" @@ (second $ var "r"))) $
     "forMany" <~ ("rec" ~> "cons" ~> "val" ~> "els" ~>
       "rr" <~ Lists.foldl
         ("r" ~> "el" ~>
           "r2" <~ var "rec" @@ (first $ var "r") @@ var "el" $
-          pair (first $ var "r2") (Lists.cons (second $ var "r2") (second $ var "r")))
-        (pair (var "val") (list []))
+          tuple2 (first $ var "r2") (Lists.cons (second $ var "r2") (second $ var "r")))
+        (tuple2 (var "val") (list []))
         (var "els") $
-      pair (first $ var "rr") (var "cons" @@ (Lists.reverse $ second $ var "rr"))) $
+      tuple2 (first $ var "rr") (var "cons" @@ (Lists.reverse $ second $ var "rr"))) $
     "forField" <~ ("val" ~> "field" ~>
       "r" <~ var "recurse" @@ var "val" @@ Core.fieldTerm (var "field") $
-      pair (first $ var "r") (Core.field (Core.fieldName $ var "field") (second $ var "r"))) $
+      tuple2 (first $ var "r") (Core.field (Core.fieldName $ var "field") (second $ var "r"))) $
     "forFields" <~ var "forMany" @@ var "forField" @@ ("x" ~> var "x") $
     "forPair" <~ ("val" ~> "kv" ~>
       "rk" <~ var "recurse" @@ var "val" @@ (first $ var "kv") $
       "rv" <~ var "recurse" @@ (first $ var "rk") @@ (second $ var "kv") $
-      pair
+      tuple2
         (first $ var "rv")
-        (pair (second $ var "rk") (second $ var "rv"))) $
+        (tuple2 (second $ var "rk") (second $ var "rv"))) $
     "forBinding" <~ ("val" ~> "binding" ~>
       "r" <~ var "recurse" @@ var "val" @@ Core.bindingTerm (var "binding") $
-      pair
+      tuple2
         (first $ var "r")
         (Core.binding
           (Core.bindingName $ var "binding")
@@ -721,34 +722,34 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
           (Core.bindingType $ var "binding"))) $
     "forElimination" <~ ("val" ~> "elm" ~>
       "r" <~ cases _Elimination (var "elm")
-        (Just $ pair (var "val") (var "elm")) [
+        (Just $ tuple2 (var "val") (var "elm")) [
         _Elimination_union>>: "cs" ~>
           "rmd" <~ Maybes.map (var "recurse" @@ var "val") (Core.caseStatementDefault $ var "cs") $
           "val1" <~ optCases (var "rmd")
             (var "val")
             (unaryFunction first) $
           "rcases" <~ var "forFields" @@ var "val1" @@ (Core.caseStatementCases $ var "cs") $
-          pair
+          tuple2
             (first $ var "rcases")
             (Core.eliminationUnion $ Core.caseStatement
               (Core.caseStatementTypeName $ var "cs")
               (Maybes.map (unaryFunction second) (var "rmd"))
               (second $ var "rcases"))] $
-      pair (first $ var "r") (second $ var "r")) $
+      tuple2 (first $ var "r") (second $ var "r")) $
     "forFunction" <~ ("val" ~> "fun" ~> cases _Function (var "fun")
-      (Just $ pair (var "val") (var "fun")) [
+      (Just $ tuple2 (var "val") (var "fun")) [
       _Function_elimination>>: "elm" ~>
          "r" <~ var "forElimination" @@ var "val" @@ var "elm" $
-         pair (first $ var "r") (Core.functionElimination (second $ var "r")),
+         tuple2 (first $ var "r") (Core.functionElimination (second $ var "r")),
       _Function_lambda>>: "l" ~>
         "r" <~ var "recurse" @@ var "val" @@ (Core.lambdaBody $ var "l") $
-        pair
+        tuple2
           (first $ var "r")
           (Core.functionLambda $ Core.lambda
             (Core.lambdaParameter $ var "l")
             (Core.lambdaDomain $ var "l")
             (second $ var "r"))]) $
-    "dflt" <~ pair (var "val0") (var "term0") $
+    "dflt" <~ tuple2 (var "val0") (var "term0") $
     cases _Term (var "term0")
       (Just $ var "dflt") [
       _Term_annotated>>: "at" ~> var "forSingle"
@@ -759,7 +760,7 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
       _Term_application>>: "a" ~>
         "rlhs" <~ var "recurse" @@ var "val0" @@ (Core.applicationFunction $ var "a") $
         "rrhs" <~ var "recurse" @@ (first $ var "rlhs") @@ (Core.applicationArgument $ var "a") $
-        pair
+        tuple2
           (first $ var "rrhs")
           (Core.termApplication $ Core.application
             (second $ var "rlhs")
@@ -767,10 +768,10 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
       _Term_either>>: "e" ~> Eithers.either_
         ("l" ~>
           "rl" <~ var "recurse" @@ var "val0" @@ var "l" $
-          pair (first $ var "rl") (Core.termEither $ left $ second $ var "rl"))
+          tuple2 (first $ var "rl") (Core.termEither $ left $ second $ var "rl"))
         ("r" ~>
           "rr" <~ var "recurse" @@ var "val0" @@ var "r" $
-          pair (first $ var "rr") (Core.termEither $ right $ second $ var "rr"))
+          tuple2 (first $ var "rr") (Core.termEither $ right $ second $ var "rr"))
         (var "e"),
       _Term_function>>: "f" ~> var "forSingle"
         @@ var "forFunction"
@@ -792,6 +793,10 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
           @@ ("t1" ~> Core.termMaybe $ just $ var "t1")
           @@ var "val0"
           @@ var "t"),
+      _Term_pair>>: "p" ~>
+        "rf" <~ var "recurse" @@ var "val0" @@ (first $ var "p") $
+        "rs" <~ var "recurse" @@ (first $ var "rf") @@ (second $ var "p") $
+        tuple2 (first $ var "rs") (Core.termPair $ tuple2 (second $ var "rf") (second $ var "rs")),
       _Term_product>>: "terms" ~> var "forMany" @@ var "recurse"
         @@ (unaryFunction Core.termProduct) @@ var "val0" @@ var "terms",
       _Term_record>>: "r" ~> var "forMany"
@@ -842,28 +847,28 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
   "fsub" <~ ("recurse" ~> "val0" ~> "term0" ~>
     "forSingle" <~ ("rec" ~> "cons" ~> "val" ~> "term" ~>
       "r" <<~ var "rec" @@ var "val" @@ var "term" $
-      produce $ pair (first $ var "r") (var "cons" @@ (second $ var "r"))) $
+      produce $ tuple2 (first $ var "r") (var "cons" @@ (second $ var "r"))) $
     "forMany" <~ ("rec" ~> "cons" ~> "val" ~> "els" ~>
       "rr" <<~ Flows.foldl
         ("r" ~> "el" ~>
           "r2" <<~ var "rec" @@ (first $ var "r") @@ var "el" $
-          produce $ pair (first $ var "r2") (Lists.cons (second $ var "r2") (second $ var "r")))
-        (pair (var "val") (list []))
+          produce $ tuple2 (first $ var "r2") (Lists.cons (second $ var "r2") (second $ var "r")))
+        (tuple2 (var "val") (list []))
         (var "els") $
-      produce $ pair (first $ var "rr") (var "cons" @@ (Lists.reverse $ second $ var "rr"))) $
+      produce $ tuple2 (first $ var "rr") (var "cons" @@ (Lists.reverse $ second $ var "rr"))) $
     "forField" <~ ("val" ~> "field" ~>
       "r" <<~ var "recurse" @@ var "val" @@ Core.fieldTerm (var "field") $
-      produce $ pair (first $ var "r") (Core.field (Core.fieldName $ var "field") (second $ var "r"))) $
+      produce $ tuple2 (first $ var "r") (Core.field (Core.fieldName $ var "field") (second $ var "r"))) $
     "forFields" <~ var "forMany" @@ var "forField" @@ ("x" ~> var "x") $
     "forPair" <~ ("val" ~> "kv" ~>
       "rk" <<~ var "recurse" @@ var "val" @@ (first $ var "kv") $
       "rv" <<~ var "recurse" @@ (first $ var "rk") @@ (second $ var "kv") $
-      produce $ pair
+      produce $ tuple2
         (first $ var "rv")
-        (pair (second $ var "rk") (second $ var "rv"))) $
+        (tuple2 (second $ var "rk") (second $ var "rv"))) $
     "forBinding" <~ ("val" ~> "binding" ~>
       "r" <<~ var "recurse" @@ var "val" @@ Core.bindingTerm (var "binding") $
-      produce $ pair
+      produce $ tuple2
         (first $ var "r")
         (Core.binding
           (Core.bindingName $ var "binding")
@@ -871,35 +876,35 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
           (Core.bindingType $ var "binding"))) $
     "forElimination" <~ ("val" ~> "elm" ~>
       "rw" <~ ("elm" ~> cases _Elimination (var "elm")
-        (Just $ produce $ pair (var "val") (var "elm")) [
+        (Just $ produce $ tuple2 (var "val") (var "elm")) [
         _Elimination_union>>: "cs" ~>
           "rmd" <<~ Maybes.maybe (produce nothing)
             ("def" ~> Flows.map (unaryFunction just) (var "recurse" @@ var "val" @@ var "def"))
             (Core.caseStatementDefault $ var "cs") $
           "val1" <~ Maybes.maybe (var "val") (unaryFunction first) (var "rmd") $
           "rcases" <<~ var "forFields" @@ var "val1" @@ (Core.caseStatementCases $ var "cs") $
-          produce $ pair
+          produce $ tuple2
             (first $ var "rcases")
             (Core.eliminationUnion $ Core.caseStatement
               (Core.caseStatementTypeName $ var "cs")
               (Maybes.map (unaryFunction second) (var "rmd"))
               (second $ var "rcases"))]) $
       "r" <<~ var "rw" @@ var "elm" $
-      produce $ pair (first $ var "r") (second $ var "r")) $
+      produce $ tuple2 (first $ var "r") (second $ var "r")) $
     "forFunction" <~ ("val" ~> "fun" ~> cases _Function (var "fun")
-      (Just $ produce $ pair (var "val") (var "fun")) [
+      (Just $ produce $ tuple2 (var "val") (var "fun")) [
       _Function_elimination>>: "elm" ~>
          "r" <<~ var "forElimination" @@ var "val" @@ var "elm" $
-         produce $ pair (first $ var "r") (Core.functionElimination (second $ var "r")),
+         produce $ tuple2 (first $ var "r") (Core.functionElimination (second $ var "r")),
       _Function_lambda>>: "l" ~>
         "r" <<~ var "recurse" @@ var "val" @@ (Core.lambdaBody $ var "l") $
-        produce $ pair
+        produce $ tuple2
           (first $ var "r")
           (Core.functionLambda $ Core.lambda
             (Core.lambdaParameter $ var "l")
             (Core.lambdaDomain $ var "l")
             (second $ var "r"))]) $
-    "dflt" <~ produce (pair (var "val0") (var "term0")) $
+    "dflt" <~ produce (tuple2 (var "val0") (var "term0")) $
     cases _Term (var "term0")
       (Just $ var "dflt") [
       _Term_annotated>>: "at" ~> var "forSingle"
@@ -910,7 +915,7 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
       _Term_application>>: "a" ~>
         "rlhs" <<~ var "recurse" @@ var "val0" @@ (Core.applicationFunction $ var "a") $
         "rrhs" <<~ var "recurse" @@ (first $ var "rlhs") @@ (Core.applicationArgument $ var "a") $
-        produce $ pair
+        produce $ tuple2
           (first $ var "rrhs")
           (Core.termApplication $ Core.application
             (second $ var "rlhs")
@@ -918,10 +923,10 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
       _Term_either>>: "e" ~> Eithers.either_
         ("l" ~>
           "rl" <<~ var "recurse" @@ var "val0" @@ var "l" $
-          produce $ pair (first $ var "rl") (Core.termEither $ left $ second $ var "rl"))
+          produce $ tuple2 (first $ var "rl") (Core.termEither $ left $ second $ var "rl"))
         ("r" ~>
           "rr" <<~ var "recurse" @@ var "val0" @@ var "r" $
-          produce $ pair (first $ var "rr") (Core.termEither $ right $ second $ var "rr"))
+          produce $ tuple2 (first $ var "rr") (Core.termEither $ right $ second $ var "rr"))
         (var "e"),
       _Term_function>>: "f" ~> var "forSingle"
         @@ var "forFunction"
@@ -944,6 +949,10 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
           @@ var "val0"
           @@ var "t")
         (var "mt"),
+      _Term_pair>>: "p" ~>
+        "rf" <<~ var "recurse" @@ var "val0" @@ (first $ var "p") $
+        "rs" <<~ var "recurse" @@ (first $ var "rf") @@ (second $ var "p") $
+        produce $ tuple2 (first $ var "rs") (Core.termPair $ tuple2 (second $ var "rf") (second $ var "rs")),
       _Term_product>>: "terms" ~> var "forMany" @@ var "recurse"
         @@ (unaryFunction Core.termProduct) @@ var "val0" @@ var "terms",
       _Term_record>>: "r" ~> var "forMany"
@@ -1015,7 +1024,7 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~> "term0" ~>
         (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
         (var "recurse" @@ (Core.letBody $ var "lt"))) $
     "forMap" <~ ("m" ~>
-      "forPair" <~ ("p" ~> pair (var "recurse" @@ (untuple 2 0 @@ var "p")) (var "recurse" @@ (untuple 2 1 @@ var "p"))) $
+      "forPair" <~ ("p" ~> tuple2 (var "recurse" @@ (untuple 2 0 @@ var "p")) (var "recurse" @@ (untuple 2 1 @@ var "p"))) $
       Maps.fromList $ Lists.map (var "forPair") $ Maps.toList $ var "m") $
     cases _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
@@ -1034,6 +1043,9 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~> "term0" ~>
       _Term_literal>>: "v" ~> Core.termLiteral $ var "v",
       _Term_map>>: "m" ~> Core.termMap $ var "forMap" @@ var "m",
       _Term_maybe>>: "m" ~> Core.termMaybe $ Maybes.map (var "recurse") (var "m"),
+      _Term_pair>>: "p" ~> Core.termPair $ tuple2
+        (var "recurse" @@ (first $ var "p"))
+        (var "recurse" @@ (second $ var "p")),
       _Term_product>>: "tuple" ~> Core.termProduct $ Lists.map (var "recurse") (var "tuple"),
       _Term_record>>: "r" ~> Core.termRecord $ Core.record
         (Core.recordTypeName $ var "r")
@@ -1072,7 +1084,7 @@ rewriteTermMDef = define "rewriteTermM" $
     "forPair" <~ ("kv" ~>
       "k" <<~ var "recurse" @@ (first $ var "kv") $
       "v" <<~ var "recurse" @@ (second $ var "kv") $
-      produce $ pair (var "k") (var "v")) $
+      produce $ tuple2 (var "k") (var "v")) $
     "mapBinding" <~ ("b" ~>
       "v" <<~ var "recurse" @@ (Core.bindingTerm $ var "b") $
       produce $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingType $ var "b")) $
@@ -1133,6 +1145,10 @@ rewriteTermMDef = define "rewriteTermM" $
       _Term_maybe>>: "m" ~>
         "rm" <<~ Flows.mapMaybe (var "recurse") (var "m") $
         produce $ Core.termMaybe $ var "rm",
+      _Term_pair>>: "p" ~>
+        "rf" <<~ var "recurse" @@ (first $ var "p") $
+        "rs" <<~ var "recurse" @@ (second $ var "p") $
+        produce $ Core.termPair $ tuple2 (var "rf") (var "rs"),
       _Term_product>>: "tuple" ~> Flows.map
           ("rtuple" ~> Core.termProduct $ var "rtuple")
           (Flows.mapList (var "recurse") (var "tuple")),
@@ -1208,7 +1224,7 @@ rewriteTermWithContextDef = define "rewriteTermWithContext" $
         (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
         (var "recurse" @@ (Core.letBody $ var "lt"))) $
     "forMap" <~ ("m" ~>
-      "forPair" <~ ("p" ~> pair (var "recurse" @@ (untuple 2 0 @@ var "p")) (var "recurse" @@ (untuple 2 1 @@ var "p"))) $
+      "forPair" <~ ("p" ~> tuple2 (var "recurse" @@ (untuple 2 0 @@ var "p")) (var "recurse" @@ (untuple 2 1 @@ var "p"))) $
       Maps.fromList $ Lists.map (var "forPair") $ Maps.toList $ var "m") $
     cases _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
@@ -1227,6 +1243,9 @@ rewriteTermWithContextDef = define "rewriteTermWithContext" $
       _Term_literal>>: "v" ~> Core.termLiteral $ var "v",
       _Term_map>>: "m" ~> Core.termMap $ var "forMap" @@ var "m",
       _Term_maybe>>: "m" ~> Core.termMaybe $ Maybes.map (var "recurse") (var "m"),
+      _Term_pair>>: "p" ~> Core.termPair $ tuple2
+        (var "recurse" @@ (first $ var "p"))
+        (var "recurse" @@ (second $ var "p")),
       _Term_product>>: "tuple" ~> Core.termProduct $ Lists.map (var "recurse") (var "tuple"),
       _Term_record>>: "r" ~> Core.termRecord $ Core.record
         (Core.recordTypeName $ var "r")
@@ -1266,7 +1285,7 @@ rewriteTermWithContextMDef = define "rewriteTermWithContextM" $
     "forPair" <~ ("kv" ~>
       "k" <<~ var "recurse" @@ (first $ var "kv") $
       "v" <<~ var "recurse" @@ (second $ var "kv") $
-      produce $ pair (var "k") (var "v")) $
+      produce $ tuple2 (var "k") (var "v")) $
     "forElimination" <~ ("e" ~> cases _Elimination (var "e") Nothing [
       _Elimination_product>>: "tp" ~> produce $ Core.functionElimination $ Core.eliminationProduct $ var "tp",
       _Elimination_record>>: "p" ~> produce $ Core.functionElimination $ Core.eliminationRecord $ var "p",
@@ -1384,6 +1403,9 @@ rewriteTypeDef = define "rewriteType" $ "f" ~> "typ0" ~>
       _Type_either>>: "et" ~> Core.typeEither $ Core.eitherType
         (var "recurse" @@ (Core.eitherTypeLeft $ var "et"))
         (var "recurse" @@ (Core.eitherTypeRight $ var "et")),
+      _Type_pair>>: "pt" ~> Core.typePair $ Core.pairType
+        (var "recurse" @@ (Core.pairTypeFirst $ var "pt"))
+        (var "recurse" @@ (Core.pairTypeSecond $ var "pt")),
       _Type_function>>: "fun" ~> Core.typeFunction $ Core.functionType
         (var "recurse" @@ (Core.functionTypeDomain $ var "fun"))
         (var "recurse" @@ (Core.functionTypeCodomain $ var "fun")),
@@ -1430,6 +1452,10 @@ rewriteTypeMDef = define "rewriteTypeM" $
       "left" <<~ var "recurse" @@ (Core.eitherTypeLeft $ var "et") $
       "right" <<~ var "recurse" @@ (Core.eitherTypeRight $ var "et") $
       produce $ Core.typeEither $ Core.eitherType (var "left") (var "right"),
+    _Type_pair>>: "pt" ~>
+      "pairFirst" <<~ var "recurse" @@ (Core.pairTypeFirst $ var "pt") $
+      "pairSecond" <<~ var "recurse" @@ (Core.pairTypeSecond $ var "pt") $
+      produce $ Core.typePair $ Core.pairType (var "pairFirst") (var "pairSecond"),
     _Type_function>>: "ft" ~>
       "dom" <<~ var "recurse" @@ (Core.functionTypeDomain $ var "ft") $
       "cod" <<~ var "recurse" @@ (Core.functionTypeCodomain $ var "ft") $
@@ -1587,6 +1613,7 @@ subtermsDef = define "subterms" $
       ("p" ~> list [first $ var "p", second $ var "p"])
       (Maps.toList $ var "m"),
     _Term_maybe>>: "m" ~> Maybes.maybe (list []) ("t" ~> list [var "t"]) (var "m"),
+    _Term_pair>>: "p" ~> list [first $ var "p", second $ var "p"],
     _Term_product>>: "tuple" ~> var "tuple",
     _Term_record>>: "rt" ~> Lists.map (unaryFunction Core.fieldTerm) (Core.recordFields $ var "rt"),
     _Term_set>>: "l" ~> Sets.toList $ var "l",
@@ -1639,6 +1666,7 @@ subtermsWithAccessorsDef = define "subtermsWithAccessors" $
     _Term_maybe>>: "m" ~> Maybes.maybe none
       ("t" ~> single Mantle.termAccessorOptionalTerm $ var "t")
       (var "m"),
+    _Term_pair>>: "p" ~> none, -- TODO: add accessors when TermAccessor type is updated
     _Term_product>>: "p" ~> Lists.map
       -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
       ("e" ~> result (Mantle.termAccessorProductTerm $ int32 0) $ var "e")
@@ -1668,7 +1696,7 @@ subtermsWithAccessorsDef = define "subtermsWithAccessors" $
   where
     none = list []
     single accessor term = list [result accessor term]
-    result accessor term = pair accessor term
+    result accessor term = tuple2 accessor term
     simple term = result Mantle.termAccessorAnnotatedBody term
 
 subtypesDef :: TBinding (Type -> [Type])
@@ -1682,6 +1710,9 @@ subtypesDef = define "subtypes" $
     _Type_either>>: "et" ~> list [
       Core.eitherTypeLeft $ var "et",
       Core.eitherTypeRight $ var "et"],
+    _Type_pair>>: "pt" ~> list [
+      Core.pairTypeFirst $ var "pt",
+      Core.pairTypeSecond $ var "pt"],
     _Type_function>>: "ft" ~> list [
       Core.functionTypeDomain $ var "ft",
       Core.functionTypeCodomain $ var "ft"],
@@ -1745,7 +1776,7 @@ toShortNamesDef = define "toShortNames" $
     "local" <~ first (var "localNames") $
     "names" <~ second (var "localNames") $
     "rangeFrom" <~ ("start" ~> Lists.cons (var "start") (var "rangeFrom" @@ (Math.add (var "start") (int32 1)))) $
-    "rename" <~ ("name" ~> "i" ~> pair (var "name") $ Core.name $
+    "rename" <~ ("name" ~> "i" ~> tuple2 (var "name") $ Core.name $
       Logic.ifElse (Equality.gt (var "i") (int32 1))
         (Strings.cat2 (var "local") (Literals.showInt32 $ var "i"))
         (var "local")) $
@@ -1766,10 +1797,10 @@ topologicalSortBindingMapDef = define "topologicalSortBindingMap" $
   "depsOf" <~ ("nameAndTerm" ~>
     "name" <~ first (var "nameAndTerm") $
     "term" <~ second (var "nameAndTerm") $
-    pair (var "name") $ Logic.ifElse (var "hasTypeAnnotation" @@ var "term")
+    tuple2 (var "name") $ Logic.ifElse (var "hasTypeAnnotation" @@ var "term")
       (list [])
       (Sets.toList $ Sets.intersection (var "keys") $ ref freeVariablesInTermDef @@ var "term")) $
-  "toPair" <~ ("name" ~> pair (var "name") $ Maybes.fromMaybe
+  "toPair" <~ ("name" ~> tuple2 (var "name") $ Maybes.fromMaybe
     (Core.termLiteral $ Core.literalString $ string "Impossible!")
     (Maps.lookup (var "name") (var "bindingMap"))) $
   Lists.map (unaryFunction $ Lists.map $ var "toPair") (ref Sorting.topologicalSortComponentsDef @@ Lists.map (var "depsOf") (var "bindings"))
@@ -1778,7 +1809,7 @@ topologicalSortBindingsDef :: TBinding ([Binding] -> Either [[Name]] [Name])
 topologicalSortBindingsDef = define "topologicalSortBindings" $
   doc "Topological sort of elements based on their dependencies" $
   "els" ~>
-  "adjlist" <~ ("e" ~> pair
+  "adjlist" <~ ("e" ~> tuple2
     (Core.bindingName $ var "e")
     (Sets.toList $ ref termDependencyNamesDef @@ false @@ true @@ true @@ (Core.bindingTerm $ var "e"))) $
   ref Sorting.topologicalSortDef @@ Lists.map (var "adjlist") (var "els")
@@ -1822,7 +1853,7 @@ unshadowVariablesDef = define "unshadowVariables" $
             "v" <~ Core.lambdaParameter (var "l") $
             "domain" <~ Core.lambdaDomain (var "l") $
             "body" <~ Core.lambdaBody (var "l") $
-            pair (var "m") $ optCases (Maps.lookup (var "v") (var "m"))
+            tuple2 (var "m") $ optCases (Maps.lookup (var "v") (var "m"))
               (Core.termFunction $ Core.functionLambda $ Core.lambda (var "v") (var "domain")
                 (second $ var "rewrite"
                   @@ var "recurse"
@@ -1834,7 +1865,7 @@ unshadowVariablesDef = define "unshadowVariables" $
                 "m2" <~ Maps.insert (var "v") (var "i2") (var "m") $
                 Core.termFunction $ Core.functionLambda $ Core.lambda (var "v2") (var "domain")
                   (second $ var "rewrite" @@ var "recurse" @@ var "m2" @@ var "body"))],
-        _Term_variable>>: "v" ~> pair (var "m") $ Core.termVariable $ optCases (Maps.lookup (var "v") (var "m"))
+        _Term_variable>>: "v" ~> tuple2 (var "m") $ Core.termVariable $ optCases (Maps.lookup (var "v") (var "m"))
           (var "v")
           ("i" ~> Logic.ifElse (Equality.equal (var "i") (int32 1))
             (var "v")

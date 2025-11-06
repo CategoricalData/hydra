@@ -75,6 +75,17 @@ eitherTypeLeft et = Phantoms.project _EitherType _EitherType_left @@ et
 eitherTypeRight :: TTerm EitherType -> TTerm Type
 eitherTypeRight et = Phantoms.project _EitherType _EitherType_right @@ et
 
+pairType :: TTerm Type -> TTerm Type -> TTerm PairType
+pairType first second = Phantoms.record _PairType [
+  _PairType_first>>: first,
+  _PairType_second>>: second]
+
+pairTypeFirst :: TTerm PairType -> TTerm Type
+pairTypeFirst pt = Phantoms.project _PairType _PairType_first @@ pt
+
+pairTypeSecond :: TTerm PairType -> TTerm Type
+pairTypeSecond pt = Phantoms.project _PairType _PairType_second @@ pt
+
 binding :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm Binding
 binding name term mtype = Phantoms.record _Binding [
   _Binding_name>>: name,
@@ -410,6 +421,9 @@ termMap = variant _Term _Term_map
 termMaybe :: TTerm (Maybe Term) -> TTerm Term
 termMaybe = variant _Term _Term_maybe
 
+termPair :: TTerm (Term, Term) -> TTerm Term
+termPair = variant _Term _Term_pair
+
 termProduct :: TTerm [Term] -> TTerm Term
 termProduct = variant _Term _Term_product
 
@@ -492,6 +506,9 @@ typeMap = variant _Type _Type_map
 
 typeMaybe :: TTerm Type -> TTerm Type
 typeMaybe = variant _Type _Type_maybe
+
+typePair :: TTerm PairType -> TTerm Type
+typePair = variant _Type _Type_pair
 
 typeProduct :: TTerm [Type] -> TTerm Type
 typeProduct = variant _Type _Type_product

@@ -154,11 +154,11 @@ adaptGraphSchemaDef :: TBinding (LanguageConstraints -> M.Map LiteralType Litera
 adaptGraphSchemaDef = define "adaptGraphSchema" $
   doc "Adapt a schema graph to the given language constraints" $
   "constraints" ~> "litmap" ~> "types0" ~>
-  "mapPair" <~ ("pair" ~>
-    "name" <~ first (var "pair") $
-    "typ" <~ second (var "pair") $
+  "mapPair" <~ ("tuple2" ~>
+    "name" <~ first (var "tuple2") $
+    "typ" <~ second (var "tuple2") $
     "typ1" <<~ ref adaptTypeDef @@ var "constraints" @@ var "litmap" @@ var "typ" $
-    produce $ pair (var "name") (var "typ1")) $
+    produce $ tuple2 (var "name") (var "typ1")) $
   "pairs" <<~ Flows.mapList (var "mapPair") (Maps.toList $ var "types0") $
   produce $ Maps.fromList (var "pairs")
 
@@ -228,7 +228,7 @@ adaptLiteralTypesMapDef = define "adaptLiteralTypesMap" $
   "constraints" ~>
   "tryType" <~ ("lt" ~> optCases (ref adaptLiteralTypeDef @@ var "constraints" @@ var "lt")
     nothing
-    ("lt2" ~> just $ pair (var "lt") (var "lt2"))) $
+    ("lt2" ~> just $ tuple2 (var "lt") (var "lt2"))) $
   Maps.fromList $ Maybes.cat $ Lists.map (var "tryType") (ref Variants.literalTypesDef)
 
 adaptLiteralValueDef :: TBinding (M.Map LiteralType LiteralType -> LiteralType -> Literal -> Literal)
@@ -358,7 +358,7 @@ dataGraphToDefinitionsDef = define "dataGraphToDefinitions" $
       (Core.bindingTerm $ var "el")
       (ref Schemas.typeSchemeToFTypeDef @@ var "ts")) $
 
-  produce $ pair
+  produce $ tuple2
     (var "graph2")
     (Lists.map
       ("names" ~> Lists.map (var "toDef") $
@@ -389,12 +389,12 @@ schemaGraphToDefinitionsDef = define "schemaGraphToDefinitions" $
   "litmap" <~ ref adaptLiteralTypesMapDef @@ var "constraints" $
   "tmap0" <<~ ref Schemas.graphAsTypesDef @@ var "graph" $
   "tmap1" <<~ ref adaptGraphSchemaDef @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
-  "toDef" <~ ("pair" ~> Module.typeDefinition (first $ var "pair") (second $ var "pair")) $
-  produce $ pair
+  "toDef" <~ ("tuple2" ~> Module.typeDefinition (first $ var "tuple2") (second $ var "tuple2")) $
+  produce $ tuple2
     (var "tmap1")
     (Lists.map
       ("names" ~> Lists.map (var "toDef") $
-        Lists.map ("n" ~> pair (var "n") (Maybes.fromJust $ Maps.lookup (var "n") (var "tmap1"))) (var "names"))
+        Lists.map ("n" ~> tuple2 (var "n") (Maybes.fromJust $ Maps.lookup (var "n") (var "tmap1"))) (var "names"))
       (var "nameLists"))
 
 termAlternativesDef :: TBinding (Term -> Flow Graph [Term])

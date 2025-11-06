@@ -228,10 +228,15 @@ nothing = optional Nothing
 optional :: Maybe Term -> Term
 optional = TermMaybe
 
--- | Create a pair (2-tuple)
+-- | Create a pair
 -- Example: pair (string "name") (int32 42)
 pair :: Term -> Term -> Term
-pair a b = TermProduct [a, b]
+pair a b = TermPair (a, b)
+
+-- | Create a 2-tuple
+-- Example: tuple2 (string "name") (int32 42)
+tuple2 :: Term -> Term -> Term
+tuple2 a b = TermProduct [a, b]
 
 -- | Create a primitive function
 -- Example: primitive (Name "hydra.lib.strings.length")

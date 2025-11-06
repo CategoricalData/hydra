@@ -224,7 +224,7 @@ instantiateTypeScheme scheme =
 
 -- | Check if a row type represents an enum (all fields are unit-typed)
 isEnumRowType :: (Core.RowType -> Bool)
-isEnumRowType rt = (Lists.foldl Logic.and True (Lists.map (\f -> Core__.isUnitType (Core.fieldTypeType f)) (Core.rowTypeFields rt)))
+isEnumRowType rt = (Lists.foldl Logic.and True (Lists.map (\f -> Core__.isUnitType (Rewriting.deannotateType (Core.fieldTypeType f))) (Core.rowTypeFields rt)))
 
 -- | Check if a type is an enum type
 isEnumType :: (Core.Type -> Bool)
@@ -364,7 +364,7 @@ typeDependencies withSchema transform name =
       let deps = (\seeds -> \names -> Logic.ifElse (Sets.null seeds) (Flows.pure names) (Flows.bind (Flows.mapList toPair (Sets.toList seeds)) (\pairs ->  
               let newNames = (Maps.union names (Maps.fromList pairs))
               in  
-                let refs = (Lists.foldl Sets.union Sets.empty (Lists.map (\pair -> Rewriting.typeDependencyNames withSchema (snd pair)) pairs))
+                let refs = (Lists.foldl Sets.union Sets.empty (Lists.map (\tuple2 -> Rewriting.typeDependencyNames withSchema (snd tuple2)) pairs))
                 in  
                   let visited = (Sets.fromList (Maps.keys names))
                   in  
@@ -395,10 +395,10 @@ typeToTypeScheme t0 =
 -- | Encode a map of named types to a map of elements
 typesToElements :: (M.Map Core.Name Core.Type -> M.Map Core.Name Core.Binding)
 typesToElements typeMap =  
-  let toElement = (\pair ->  
-          let name = (fst pair)
+  let toElement = (\tuple2 ->  
+          let name = (fst tuple2)
           in (name, Core.Binding {
             Core.bindingName = name,
-            Core.bindingTerm = (Core__.type_ (snd pair)),
+            Core.bindingTerm = (Core__.type_ (snd tuple2)),
             Core.bindingType = Nothing}))
   in (Maps.fromList (Lists.map toElement (Maps.toList typeMap)))

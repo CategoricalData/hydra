@@ -23,6 +23,7 @@ import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
 import qualified Hydra.Dsl.Lib.Maybes    as Maybes
+import qualified Hydra.Dsl.Lib.Pairs     as Pairs
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
@@ -68,6 +69,7 @@ module_ = Module (Namespace "hydra.encode.core") elements
       el floatTypeDef,
       el floatValueDef,
       el eitherTypeDef,
+      el pairTypeDef,
       el functionDef,
       el functionTypeDef,
       el injectionDef,
@@ -162,6 +164,9 @@ encodedWrappedTermRaw (TTerm name) (TTerm term) = TTerm $ Terms.variant _Term _T
 
 encodedOptional :: TTerm (Maybe a) -> TTerm Term
 encodedOptional = variant _Term _Term_maybe
+
+encodedPair :: TTerm (a, b) -> TTerm Term
+encodedPair = variant _Term _Term_pair
 
 encodedRecord :: Name -> [Field] -> TTerm Term
 encodedRecord tname fields = TTerm $ Terms.variant _Term _Term_record $ Terms.record _Record [
@@ -261,6 +266,12 @@ eitherTypeDef = define "EitherType" $
   "et" ~> encodedRecord _EitherType [
     field _EitherType_left (ref typeDef @@ (Core.eitherTypeLeft (var "et"))),
     field _EitherType_right (ref typeDef @@ (Core.eitherTypeRight (var "et")))]
+
+pairTypeDef :: TBinding (PairType -> Term)
+pairTypeDef = define "PairType" $
+  "pt" ~> encodedRecord _PairType [
+    field _PairType_first (ref typeDef @@ (Core.pairTypeFirst (var "pt"))),
+    field _PairType_second (ref typeDef @@ (Core.pairTypeSecond (var "pt")))]
 
 functionDef :: TBinding (Function -> Term)
 functionDef = define "Function" $
@@ -414,6 +425,7 @@ termDef = define "Term" $
     ecase2 _Term_list $ encodedList $ primitive _lists_map @@ (ref termDef) @@ var "v",
     ecase2 _Term_map $ encodedMap (primitive _maps_bimap @@ ref termDef @@ ref termDef @@ var "v"),
     ecase2 _Term_maybe $ encodedOptional (primitive _maybes_map @@ ref termDef @@ var "v"),
+    ecase2 _Term_pair $ encodedPair (tuple2 (ref termDef @@ (first $ var "v")) (ref termDef @@ (second $ var "v"))),
     ecase2 _Term_product $ encodedList (primitive _lists_map @@ ref termDef @@ var "v"),
     ecase _Term_record (ref recordDef),
     ecase2 _Term_set $ encodedSet $ primitive _sets_map @@ (ref termDef) @@ var "v",
@@ -451,6 +463,7 @@ typeDef = define "Type" $
     csref _Type_literal literalTypeDef,
     csref _Type_map mapTypeDef,
     csref _Type_maybe typeDef,
+    csref _Type_pair pairTypeDef,
     cs _Type_product $ encodedList $ primitive _lists_map @@ ref typeDef @@ var "v",
     csref _Type_record rowTypeDef,
     csref _Type_set typeDef,

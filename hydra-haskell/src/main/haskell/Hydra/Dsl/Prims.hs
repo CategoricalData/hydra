@@ -183,10 +183,19 @@ optional mel = TermCoder (Types.optional $ termCoderType mel) $ Coder encode dec
       Nothing -> pure Nothing
       Just v -> Just <$> (coderDecode $ termCoderCoder mel) v
 
-pair :: TermCoder k -> TermCoder v -> TermCoder (k, v)
-pair kCoder vCoder = TermCoder (Types.product [termCoderType kCoder, termCoderType vCoder]) $ Coder encode decode
+pair :: TermCoder x -> TermCoder y -> TermCoder (x, y)
+pair xCoder yCoder = TermCoder (Types.pair (termCoderType xCoder) (termCoderType yCoder)) $ Coder encode decode
   where
-    encode = ExtractCore.pair (coderEncode $ termCoderCoder kCoder) (coderEncode $ termCoderCoder vCoder)
+    encode = ExtractCore.tuple2 (coderEncode $ termCoderCoder xCoder) (coderEncode $ termCoderCoder yCoder)
+    decode (x, y) = do
+      xTerm <- coderDecode (termCoderCoder xCoder) x
+      yTerm <- coderDecode (termCoderCoder yCoder) y
+      return $ Terms.pair xTerm yTerm
+
+tuple2 :: TermCoder k -> TermCoder v -> TermCoder (k, v)
+tuple2 kCoder vCoder = TermCoder (Types.product [termCoderType kCoder, termCoderType vCoder]) $ Coder encode decode
+  where
+    encode = ExtractCore.tuple2 (coderEncode $ termCoderCoder kCoder) (coderEncode $ termCoderCoder vCoder)
     decode (k, v) = do
       kTerm <- coderDecode (termCoderCoder kCoder) k
       vTerm <- coderDecode (termCoderCoder vCoder) v

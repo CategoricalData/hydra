@@ -200,10 +200,15 @@ nothing = Phantoms.nothing
 optional :: TTerm (Maybe Term) -> TTerm Term
 optional = Core.termMaybe
 
--- | Create a term-encoded pair (2-tuple)
+-- | Create a term-encoded pair
 -- Example: pair (string "name") (int32 42)
 pair :: TTerm Term -> TTerm Term -> TTerm Term
-pair t1 t2 = tuple [t1, t2]
+pair t1 t2 = Core.termPair $ Phantoms.tuple2 t1 t2
+
+-- | Create a term-encoded 2-tuple
+-- Example: tuple2 (string "name") (int32 42)
+tuple2 :: TTerm Term -> TTerm Term -> TTerm Term
+tuple2 t1 t2 = tuple [t1, t2]
 
 -- | Create a term-encoded primitive function reference
 -- Example: primitive (Name "hydra.lib.strings.length")

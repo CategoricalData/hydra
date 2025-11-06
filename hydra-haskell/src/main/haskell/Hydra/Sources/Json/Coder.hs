@@ -159,7 +159,7 @@ recordCoderDef = define "recordCoder" $
     "fields">: Core.rowTypeFields $ var "rt",
     "getCoder">: lambda "f" $ binds [
       "coder">: ref termCoderDef @@ (Core.fieldTypeType $ var "f")] $
-      produce $ pair (var "f") (var "coder")] $ binds [
+      produce $ tuple2 (var "f") (var "coder")] $ binds [
     "coders">: Flows.mapList (var "getCoder") (var "fields")] $
     produce $ Compute.coder (ref encodeRecordDef @@ var "coders") (ref decodeRecordDef @@ var "rt" @@ var "coders")
 
@@ -180,16 +180,16 @@ encodeRecordDef = define "encodeRecord" $
       cases _Type (Core.fieldTypeType $ var "ft")
         (Just $ binds [
           "encoded">: Compute.coderEncode (var "coder'") @@ var "fvalue"] $
-          produce $ just $ pair (Core.unName $ var "fname") (var "encoded")) [
+          produce $ just $ tuple2 (Core.unName $ var "fname") (var "encoded")) [
         _Type_maybe>>: lambda "ot" $ cases _Term (var "fvalue")
           (Just $ binds [
             "encoded">: Compute.coderEncode (var "coder'") @@ var "fvalue"] $
-            produce $ just $ pair (Core.unName $ var "fname") (var "encoded")) [
+            produce $ just $ tuple2 (Core.unName $ var "fname") (var "encoded")) [
           _Term_maybe>>: lambda "opt" $ Maybes.maybe
             (produce nothing)
             (lambda "v" $ binds [
               "encoded">: Compute.coderEncode (var "coder'") @@ var "v"] $
-              produce $ just $ pair (Core.unName $ var "fname") (var "encoded"))
+              produce $ just $ tuple2 (Core.unName $ var "fname") (var "encoded"))
             (var "opt")]]] $ binds [
     "maybeFields">: Flows.mapList (var "encodeField") (Lists.zip (var "coders") (var "fields"))] $
     produce $ Json.valueObject $ Maps.fromList $ Maybes.cat $ var "maybeFields"
@@ -263,12 +263,12 @@ termCoderDef = define "termCoder" $
           "k">: first $ var "kv",
           "v">: second $ var "kv"] $ binds [
           "encodedV">: Compute.coderEncode (var "vc") @@ var "v"] $
-          produce $ pair (var "toString" @@ var "k") (var "encodedV"),
+          produce $ tuple2 (var "toString" @@ var "k") (var "encodedV"),
         "decodeEntry">: lambda "kv" $ lets [
           "k">: first $ var "kv",
           "v">: second $ var "kv"] $ binds [
           "decodedV">: Compute.coderDecode (var "vc") @@ var "v"] $
-          produce $ pair (var "fromString" @@ var "k") (var "decodedV")] $
+          produce $ tuple2 (var "fromString" @@ var "k") (var "decodedV")] $
         produce $ Compute.coder
           (lambda "term" $ cases _Term (var "term")
             (Just $ ref Monads.unexpectedDef @@ string "map term" @@ (ref ShowCore.termDef @@ var "term")) [
@@ -337,7 +337,7 @@ untypedTermToJsonDef = define "untypedTermToJson" $
           (var "mt")]] $ binds [
       "mjson">: var "forTerm" @@ (Core.fieldTerm $ var "f")] $
       produce $ Maybes.map
-        (lambda "j" $ pair (Core.unName $ Core.fieldName $ var "f") (var "j"))
+        (lambda "j" $ tuple2 (Core.unName $ Core.fieldName $ var "f") (var "j"))
         (var "mjson")] $
     cases _Term (var "term")
       (Just $ var "unexp" @@ (Strings.cat $ list [
@@ -350,12 +350,12 @@ untypedTermToJsonDef = define "untypedTermToJson" $
           "k">: Core.unName $ first $ var "kv",
           "v">: second $ var "kv"] $ binds [
           "json">: ref untypedTermToJsonDef @@ var "v"] $
-          produce $ pair (var "k") (var "json")] $ binds [
+          produce $ tuple2 (var "k") (var "json")] $ binds [
         "json">: ref untypedTermToJsonDef @@ var "term1",
         "pairs">: Flows.mapList (var "encodePair") $ Maps.toList $ var "ann"] $
         produce $ Json.valueObject $ Maps.fromList $ list [
-          pair (string "term") (var "json"),
-          pair (string "annotations") (Json.valueObject $ Maps.fromList $ var "pairs")],
+          tuple2 (string "term") (var "json"),
+          tuple2 (string "annotations") (Json.valueObject $ Maps.fromList $ var "pairs")],
       _Term_application>>: lambda "app" $ var "asRecord" @@ list [
         Core.field (Core.name $ string "function") (Core.applicationFunction $ var "app"),
         Core.field (Core.name $ string "argument") (Core.applicationArgument $ var "app")],

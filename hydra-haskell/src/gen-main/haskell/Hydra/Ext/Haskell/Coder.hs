@@ -66,19 +66,19 @@ constantForTypeName tname = (Strings.cat2 "_" (Names.localNameOf tname))
 constructModule :: (Module.Namespaces Ast.ModuleName -> Module.Module -> M.Map Core.Type (Compute.Coder Graph.Graph t0 Core.Term Ast.Expression) -> [(Core.Binding, Core.TypeApplicationTerm)] -> Compute.Flow Graph.Graph Ast.Module)
 constructModule namespaces mod coders pairs =  
   let h = (\namespace -> Module.unNamespace namespace) 
-      createDeclarations = (\g -> \pair ->  
-              let el = (fst pair) 
-                  tt = (snd pair)
+      createDeclarations = (\g -> \tuple2 ->  
+              let el = (fst tuple2) 
+                  tt = (snd tuple2)
                   term = (Core.typeApplicationTermBody tt)
                   typ = (Core.typeApplicationTermType tt)
-              in (Logic.ifElse (Annotations.isNativeType el) (toTypeDeclarations namespaces el term) (Flows.bind (toDataDeclaration coders namespaces pair) (\d -> Flows.pure [
+              in (Logic.ifElse (Annotations.isNativeType el) (toTypeDeclarations namespaces el term) (Flows.bind (toDataDeclaration coders namespaces tuple2) (\d -> Flows.pure [
                 d]))))
       importName = (\name -> Ast.ModuleName (Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." name))))
       imports = (Lists.concat2 domainImports standardImports)
       domainImports =  
-              let toImport = (\pair ->  
-                      let namespace = (fst pair) 
-                          alias = (snd pair)
+              let toImport = (\tuple2 ->  
+                      let namespace = (fst tuple2) 
+                          alias = (snd tuple2)
                           name = (h namespace)
                       in Ast.Import {
                         Ast.importQualified = True,
@@ -232,9 +232,9 @@ encodeTerm namespaces term =
     Core.TermLiteral v1 -> (encodeLiteral v1)
     Core.TermMap v1 ->  
       let lhs = (Utils.hsvar "M.fromList") 
-          encodePair = (\pair ->  
-                  let k = (fst pair) 
-                      v = (snd pair)
+          encodePair = (\tuple2 ->  
+                  let k = (fst tuple2) 
+                      v = (snd tuple2)
                       hk = (encode k)
                       hv = (encode v)
                   in (Flows.map (\x -> Ast.ExpressionTuple x) (Flows.sequence [
@@ -242,6 +242,9 @@ encodeTerm namespaces term =
                     hv])))
       in (Flows.bind (Flows.map (\x -> Ast.ExpressionList x) (Flows.mapList encodePair (Maps.toList v1))) (\rhs -> Flows.pure (Utils.hsapp lhs rhs)))
     Core.TermMaybe v1 -> (Maybes.cases v1 (Flows.pure (Utils.hsvar "Nothing")) (\t -> Flows.bind (encode t) (\ht -> Flows.pure (Utils.hsapp (Utils.hsvar "Just") ht))))
+    Core.TermPair v1 -> (Flows.bind (encode (fst v1)) (\f -> Flows.bind (encode (snd v1)) (\s -> Flows.pure (Ast.ExpressionTuple [
+      f,
+      s]))))
     Core.TermProduct v1 -> (Flows.bind (Flows.mapList encode v1) (\hterms -> Flows.pure (Ast.ExpressionTuple hterms)))
     Core.TermRecord v1 ->  
       let sname = (Core.recordTypeName v1) 
@@ -340,6 +343,9 @@ encodeType namespaces typ =
     Core.TypeMaybe v1 -> (Flows.map Utils.toTypeApplication (Flows.sequence [
       Flows.pure (Ast.TypeVariable (Utils.rawName "Maybe")),
       (encode v1)]))
+    Core.TypePair v1 -> (Flows.bind (encode (Core.pairTypeFirst v1)) (\f -> Flows.bind (encode (Core.pairTypeSecond v1)) (\s -> Flows.pure (Ast.TypeTuple [
+      f,
+      s]))))
     Core.TypeProduct v1 -> (Flows.bind (Flows.mapList encode v1) (\htypes -> Flows.pure (Ast.TypeTuple htypes)))
     Core.TypeRecord v1 -> (ref (Core.rowTypeTypeName v1))
     Core.TypeSet v1 -> (Flows.map Utils.toTypeApplication (Flows.sequence [
@@ -359,9 +365,9 @@ encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core
 encodeTypeWithClassAssertions namespaces explicitClasses typ =  
   let classes = (Maps.union explicitClasses (getImplicitTypeClasses typ)) 
       implicitClasses = (getImplicitTypeClasses typ)
-      encodeAssertion = (\pair ->  
-              let name = (fst pair) 
-                  cls = (snd pair)
+      encodeAssertion = (\tuple2 ->  
+              let name = (fst tuple2) 
+                  cls = (snd tuple2)
                   hname = (Utils.rawName ((\x -> case x of
                           Mantle.TypeClassEquality -> "Eq"
                           Mantle.TypeClassOrdering -> "Ord") cls))
@@ -419,9 +425,9 @@ moduleToHaskell mod = (Flows.bind (moduleToHaskellModule mod) (\hsmod ->
 nameDecls :: (t0 -> Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> [Ast.DeclarationWithComments])
 nameDecls g namespaces name typ =  
   let nm = (Core.unName name) 
-      toDecl = (\n -> \pair ->  
-              let k = (fst pair) 
-                  v = (snd pair)
+      toDecl = (\n -> \tuple2 ->  
+              let k = (fst tuple2) 
+                  v = (snd tuple2)
                   decl = (Ast.DeclarationValueBinding (Ast.ValueBindingSimple (Ast.SimpleValueBinding {
                           Ast.simpleValueBindingPattern = (Utils.applicationPattern (Utils.simpleName k) []),
                           Ast.simpleValueBindingRhs = (Ast.RightHandSide (Ast.ExpressionApplication (Ast.ApplicationExpression {
@@ -439,9 +445,9 @@ nameDecls g namespaces name typ =
   in (Logic.ifElse useCoreImport (Lists.cons (toDecl (Core.Name "hydra.core.Name") nameDecl) (Lists.map (toDecl (Core.Name "hydra.core.Name")) fieldDecls)) [])
 
 toDataDeclaration :: (M.Map Core.Type (Compute.Coder Graph.Graph t0 Core.Term Ast.Expression) -> Module.Namespaces Ast.ModuleName -> (Core.Binding, Core.TypeApplicationTerm) -> Compute.Flow Graph.Graph Ast.DeclarationWithComments)
-toDataDeclaration coders namespaces pair =  
-  let el = (fst pair) 
-      tt = (snd pair)
+toDataDeclaration coders namespaces tuple2 =  
+  let el = (fst tuple2) 
+      tt = (snd tuple2)
       term = (Core.typeApplicationTermBody tt)
       typ = (Core.typeApplicationTermType tt)
       coder = (Maybes.fromJust (Maps.lookup typ coders))

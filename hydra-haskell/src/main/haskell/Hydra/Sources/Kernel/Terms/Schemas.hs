@@ -116,7 +116,7 @@ addNamesToNamespacesDef = define "addNamesToNamespaces" $
   "encodeNamespace" ~> "names" ~> "ns0" ~>
 --  "nss" <~ Sets.empty $
   "nss" <~ Sets.fromList (Maybes.cat $ Lists.map (ref Names.namespaceOfDef) $ Sets.toList $ var "names") $
-  "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeNamespace" @@ var "ns")) $
+  "toPair" <~ ("ns" ~> tuple2 (var "ns") (var "encodeNamespace" @@ var "ns")) $
   Module.namespacesWithMapping (var "ns0") $ Maps.union
     (Module.namespacesMapping $ var "ns0")
     (Maps.fromList $ Lists.map (var "toPair") $ Sets.toList $ var "nss")
@@ -204,7 +204,7 @@ extendTypeContextForLetDef = define "extendTypeContextForLet" $
     (Maps.union
       (Typing.typeContextTypes (var "tcontext"))
       (Maps.fromList $ Lists.map
-        ("b" ~> pair
+        ("b" ~> tuple2
           (Core.bindingName $ var "b")
           (ref typeSchemeToFTypeDef @@ (Maybes.fromJust $ Core.bindingType $ var "b")))
         (var "bindings")))
@@ -221,13 +221,13 @@ extendTypeContextForTypeLambdaDef = define "extendTypeContextForTypeLambda" $
 fieldMapDef :: TBinding ([Field] -> M.Map Name Term)
 fieldMapDef = define "fieldMap" $
   "fields" ~>
-  "toPair" <~ ("f" ~> pair (Core.fieldName $ var "f") (Core.fieldTerm $ var "f")) $
+  "toPair" <~ ("f" ~> tuple2 (Core.fieldName $ var "f") (Core.fieldTerm $ var "f")) $
   Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
 fieldTypeMapDef :: TBinding ([FieldType] -> M.Map Name Type)
 fieldTypeMapDef = define "fieldTypeMap" $
   "fields" ~>
-  "toPair" <~ ("f" ~> pair (Core.fieldTypeName $ var "f") (Core.fieldTypeType $ var "f")) $
+  "toPair" <~ ("f" ~> tuple2 (Core.fieldTypeName $ var "f") (Core.fieldTypeType $ var "f")) $
   Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
 fieldTypesDef :: TBinding (Type -> Flow Graph (M.Map Name Type))
@@ -235,7 +235,7 @@ fieldTypesDef = define "fieldTypes" $
   doc "Get field types from a record or union type" $
   "t" ~>
   "toMap" <~ ("fields" ~> Maps.fromList (Lists.map
-    ("ft" ~> pair (Core.fieldTypeName (var "ft")) (Core.fieldTypeType (var "ft")))
+    ("ft" ~> tuple2 (Core.fieldTypeName (var "ft")) (Core.fieldTypeType (var "ft")))
     (var "fields"))) $
   match _Type (Just (ref Monads.unexpectedDef @@ string "record or union type" @@ (ref ShowCore.typeDef @@ var "t"))) [
     _Type_forall>>: "ft" ~> ref fieldTypesDef @@ Core.forallTypeBody (var "ft"),
@@ -311,7 +311,7 @@ graphAsTypesDef = define "graphAsTypes" $
   "els" <~ Maps.elems (Graph.graphElements (var "sg")) $
   "toPair" <~ ("el" ~>
     "typ" <<~ ref DecodeCore.typeDef @@ (Core.bindingTerm $ var "el") $
-    produce $ pair (Core.bindingName $ var "el") (var "typ")) $
+    produce $ tuple2 (Core.bindingName $ var "el") (var "typ")) $
   "pairs" <<~ Flows.mapList (var "toPair") (var "els") $
   produce $ Maps.fromList $ var "pairs"
 
@@ -321,7 +321,7 @@ graphToInferenceContextDef = define "graphToInferenceContext" $
   "graph" ~>
   "schema" <~ Maybes.fromMaybe (var "graph") (Graph.graphSchema $ var "graph") $
   "primTypes" <~ Maps.fromList (Lists.map
-    ("p" ~> pair (Graph.primitiveName $ var "p") (Graph.primitiveType $ var "p"))
+    ("p" ~> tuple2 (Graph.primitiveName $ var "p") (Graph.primitiveType $ var "p"))
     (Maps.elems $ Graph.graphPrimitives $ var "graph")) $
   "varTypes" <~ Maps.empty $
   "schemaTypes" <<~ ref schemaGraphToTypingEnvironmentDef @@ var "schema" $
@@ -354,9 +354,9 @@ instantiateTypeSchemeDef = define "instantiateTypeScheme" $
 isEnumRowTypeDef :: TBinding (RowType -> Bool)
 isEnumRowTypeDef = define "isEnumRowType" $
   doc "Check if a row type represents an enum (all fields are unit-typed)" $
-  "rt" ~> Lists.foldl (binaryFunction Logic.and) true (
-    Lists.map ("f" ~> ref EncodeCore.isUnitTypeDef @@ (Core.fieldTypeType (var "f"))) (
-      Core.rowTypeFields (var "rt")))
+  "rt" ~> Lists.foldl (binaryFunction Logic.and) true $
+    Lists.map ("f" ~> ref EncodeCore.isUnitTypeDef @@ (ref Rewriting.deannotateTypeDef @@ (Core.fieldTypeType (var "f")))) $
+      Core.rowTypeFields $ var "rt"
 
 isEnumTypeDef :: TBinding (Type -> Bool)
 isEnumTypeDef = define "isEnumType" $
@@ -392,7 +392,7 @@ namespacesForDefinitionsDef = define "namespacesForDefinitions" $
   doc "Create namespaces mapping for definitions" $
   "encodeNamespace" ~> "focusNs" ~> "defs" ~>
   "nss" <~ Sets.delete (var "focusNs") (ref definitionDependencyNamespacesDef @@ var "defs") $
-  "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeNamespace" @@ var "ns")) $
+  "toPair" <~ ("ns" ~> tuple2 (var "ns") (var "encodeNamespace" @@ var "ns")) $
   Module.namespaces (var "toPair" @@ var "focusNs") (Maps.fromList (Lists.map (var "toPair") (Sets.toList (var "nss"))))
 
 nominalApplicationDef :: TBinding (Name -> [Type] -> Type)
@@ -510,7 +510,7 @@ schemaGraphToTypingEnvironmentDef = define "schemaGraphToTypingEnvironment" $
           (Equality.equal (var "ts") (Core.typeScheme (list []) (Core.typeVariable (Core.nameLift _Type))))
           (Flows.map ("decoded" ~> just (var "toTypeScheme" @@ list [] @@ var "decoded")) (ref DecodeCore.typeDef @@ Core.bindingTerm (var "el")))
           (var "forTerm" @@ (ref Rewriting.deannotateTermDef @@ (Core.bindingTerm (var "el")))))) $
-    produce $ Maybes.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts")) $
+    produce $ Maybes.map ("ts" ~> tuple2 (Core.bindingName (var "el")) (var "ts")) (var "mts")) $
   ref Monads.withStateDef @@ var "g" @@
     (Flows.bind (Flows.mapList (var "toPair") (Maps.elems (Graph.graphElements (var "g")))) (
       "mpairs" ~> Flows.pure (Maps.fromList (Maybes.cat (var "mpairs")))))
@@ -527,18 +527,18 @@ termAsGraphDef = define "termAsGraph" $
         "name" <~ Core.bindingName (var "b") $
         "term" <~ Core.bindingTerm (var "b") $
         "ts" <~ Core.bindingType (var "b") $
-        pair (var "name") (Core.binding (var "name") (var "term") (var "ts"))) $
+        tuple2 (var "name") (Core.binding (var "name") (var "term") (var "ts"))) $
       Maps.fromList $ Lists.map (var "fromBinding") (var "bindings")]
 
 topologicalSortTypeDefinitionsDef :: TBinding ([TypeDefinition] -> [[TypeDefinition]])
 topologicalSortTypeDefinitionsDef = define "topologicalSortTypeDefinitions" $
   doc "Topologically sort type definitions by dependencies" $
   "defs" ~>
-  "toPair" <~ ("def" ~> pair
+  "toPair" <~ ("def" ~> tuple2
     (Module.typeDefinitionName (var "def"))
     (Sets.toList (ref Rewriting.typeDependencyNamesDef @@ false @@ Module.typeDefinitionType (var "def")))) $
   "nameToDef" <~ Maps.fromList (Lists.map
-    ("d" ~> pair (Module.typeDefinitionName (var "d")) (var "d"))
+    ("d" ~> tuple2 (Module.typeDefinitionName (var "d")) (var "d"))
     (var "defs")) $
   "sorted" <~ ref Sorting.topologicalSortComponentsDef @@ Lists.map (var "toPair") (var "defs") $
   Lists.map ("names" ~> Maybes.cat (Lists.map ("n" ~> Maps.lookup (var "n") (var "nameToDef")) (var "names"))) (
@@ -554,7 +554,7 @@ typeDependenciesDef = define "typeDependencies" $
       "el" ~> ref DecodeCore.typeDef @@ Core.bindingTerm (var "el")))) $
   "toPair" <~ ("name" ~>
     Flows.bind (var "requireType" @@ var "name") (
-      "typ" ~> Flows.pure (pair (var "name") (var "transform" @@ var "typ")))) $
+      "typ" ~> Flows.pure (tuple2 (var "name") (var "transform" @@ var "typ")))) $
   "deps" <~ ("seeds" ~> "names" ~>
     Logic.ifElse (Sets.null (var "seeds"))
       (Flows.pure (var "names"))
@@ -562,7 +562,7 @@ typeDependenciesDef = define "typeDependencies" $
         "pairs" ~>
         "newNames" <~ Maps.union (var "names") (Maps.fromList (var "pairs")) $
         "refs" <~ Lists.foldl (binaryFunction Sets.union) Sets.empty (Lists.map
-          ("pair" ~> ref Rewriting.typeDependencyNamesDef @@ var "withSchema" @@ second (var "pair"))
+          ("tuple2" ~> ref Rewriting.typeDependencyNamesDef @@ var "withSchema" @@ second (var "tuple2"))
           (var "pairs")) $
         "visited" <~ Sets.fromList (Maps.keys (var "names")) $
         "newSeeds" <~ Sets.difference (var "refs") (var "visited") $
@@ -596,12 +596,12 @@ typesToElementsDef :: TBinding (M.Map Name Type -> M.Map Name Binding)
 typesToElementsDef = define "typesToElements" $
   doc "Encode a map of named types to a map of elements" $
   "typeMap" ~>
-  "toElement" <~ ("pair" ~>
-    "name" <~ first (var "pair") $
-    pair
+  "toElement" <~ ("tuple2" ~>
+    "name" <~ first (var "tuple2") $
+    tuple2
       (var "name")
       (Core.binding
         (var "name")
-        (ref EncodeCore.typeDef @@ (second $ var "pair"))
+        (ref EncodeCore.typeDef @@ (second $ var "tuple2"))
         nothing)) $
   Maps.fromList $ Lists.map (var "toElement") $ Maps.toList $ var "typeMap"

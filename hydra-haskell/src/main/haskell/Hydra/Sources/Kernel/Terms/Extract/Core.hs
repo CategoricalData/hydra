@@ -111,6 +111,7 @@ module_ = Module (Namespace "hydra.extract.core") elements
      el stringLiteralDef,
      el sumTypeDef,
      el termRecordDef,
+     el tuple2Def,
      el uint16Def,
      el uint16ValueDef,
      el uint32Def,
@@ -543,17 +544,17 @@ mapDef :: TBinding ((Term -> Flow Graph k) -> (Term -> Flow Graph v) -> Term -> 
 mapDef = define "map" $
   doc "Extract a map of key-value pairs from a term, mapping functions over each key and value" $
   "fk" ~> "fv" ~> "term0" ~>
-  "pair" <~ ("kvPair" ~>
+  "tuple2" <~ ("kvPair" ~>
     "kterm" <~ first (var "kvPair") $
     "vterm" <~ second (var "kvPair") $
     "kval" <<~ var "fk" @@ var "kterm" $
     "vval" <<~ var "fv" @@ var "vterm" $
-    produce (pair (var "kval") (var "vval"))) $
+    produce (tuple2 (var "kval") (var "vval"))) $
   "extract" <~ ("term" ~> cases _Term (var "term")
     (Just (ref Monads.unexpectedDef
       @@ "map"
       @@ (ref ShowCore.termDef @@ var "term"))) [
-    _Term_map>>: "m" ~> Flows.map (unaryFunction Maps.fromList) (Flows.mapList (var "pair") (Maps.toList (var "m")))]) $
+    _Term_map>>: "m" ~> Flows.map (unaryFunction Maps.fromList) (Flows.mapList (var "tuple2") (Maps.toList (var "m")))]) $
   "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
   var "extract" @@ var "term"
 
@@ -614,13 +615,40 @@ pairDef = define "pair" $
     (Just (ref Monads.unexpectedDef
       @@ "product"
       @@ (ref ShowCore.termDef @@ var "term"))) [
+    _Term_pair>>: "p" ~>
+      "kVal" <<~ var "kf" @@ (first $ var "p") $
+      "vVal" <<~ var "vf" @@ (second $ var "p") $
+      produce (tuple2 (var "kVal") (var "vVal")),
     _Term_product>>: "terms" ~>
       Logic.ifElse (Equality.equal (Lists.length (var "terms")) (int32 2))
         ("kVal" <<~ var "kf" @@ (Lists.head (var "terms")) $
          "vVal" <<~ var "vf" @@ (Lists.head (Lists.tail (var "terms"))) $
-         produce (pair (var "kVal") (var "vVal")))
+         produce (tuple2 (var "kVal") (var "vVal")))
         (ref Monads.unexpectedDef
-          @@ "pair"
+          @@ "tuple2"
+          @@ (ref ShowCore.termDef @@ var "term"))]) $
+  "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
+  var "extract" @@ var "term"
+
+tuple2Def :: TBinding ((Term -> Flow Graph k) -> (Term -> Flow Graph v) -> Term -> Flow Graph (k, v))
+tuple2Def = define "tuple2" $
+  doc "Extract a tuple2 of values from a term, applying functions to each component" $
+  "kf" ~> "vf" ~> "term0" ~>
+  "extract" <~ ("term" ~> cases _Term (var "term")
+    (Just (ref Monads.unexpectedDef
+      @@ "product"
+      @@ (ref ShowCore.termDef @@ var "term"))) [
+    _Term_pair>>: "p" ~>
+      "kVal" <<~ var "kf" @@ (first $ var "p") $
+      "vVal" <<~ var "vf" @@ (second $ var "p") $
+      produce (tuple2 (var "kVal") (var "vVal")),
+    _Term_product>>: "terms" ~>
+      Logic.ifElse (Equality.equal (Lists.length (var "terms")) (int32 2))
+        ("kVal" <<~ var "kf" @@ (Lists.head (var "terms")) $
+         "vVal" <<~ var "vf" @@ (Lists.head (Lists.tail (var "terms"))) $
+         produce (tuple2 (var "kVal") (var "vVal")))
+        (ref Monads.unexpectedDef
+          @@ "tuple2"
           @@ (ref ShowCore.termDef @@ var "term"))]) $
   "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
   var "extract" @@ var "term"

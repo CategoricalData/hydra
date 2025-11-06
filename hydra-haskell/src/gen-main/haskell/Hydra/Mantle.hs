@@ -118,6 +118,7 @@ data TermVariant =
   TermVariantLiteral  |
   TermVariantMap  |
   TermVariantMaybe  |
+  TermVariantPair  |
   TermVariantProduct  |
   TermVariantRecord  |
   TermVariantSet  |
@@ -149,6 +150,8 @@ _TermVariant_literal = (Core.Name "literal")
 _TermVariant_map = (Core.Name "map")
 
 _TermVariant_maybe = (Core.Name "maybe")
+
+_TermVariant_pair = (Core.Name "pair")
 
 _TermVariant_product = (Core.Name "product")
 
@@ -193,6 +196,7 @@ data TypeVariant =
   TypeVariantLiteral  |
   TypeVariantMap  |
   TypeVariantMaybe  |
+  TypeVariantPair  |
   TypeVariantProduct  |
   TypeVariantRecord  |
   TypeVariantSet  |
@@ -222,6 +226,8 @@ _TypeVariant_literal = (Core.Name "literal")
 _TypeVariant_map = (Core.Name "map")
 
 _TypeVariant_maybe = (Core.Name "maybe")
+
+_TypeVariant_pair = (Core.Name "pair")
 
 _TypeVariant_product = (Core.Name "product")
 

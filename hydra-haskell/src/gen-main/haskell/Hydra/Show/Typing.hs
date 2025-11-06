@@ -29,9 +29,9 @@ typeSubst :: (Typing.TypeSubst -> String)
 typeSubst ts =  
   let subst = (Typing.unTypeSubst ts) 
       pairs = (Maps.toList subst)
-      showPair = (\pair ->  
-              let name = (Core.unName (fst pair)) 
-                  typ = (snd pair)
+      showPair = (\tuple2 ->  
+              let name = (Core.unName (fst tuple2)) 
+                  typ = (snd tuple2)
               in (Strings.cat [
                 name,
                 "\8614",
