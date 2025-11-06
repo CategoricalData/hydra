@@ -30,6 +30,7 @@ bind l r =
             Compute.flowStateTrace = (Compute.flowStateTrace fs1)}) (\v -> Compute.unFlow (r v) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1)) (Compute.flowStateValue fs1)))
   in (Compute.Flow q)
 
+-- | An empty trace with no stack, messages, or other attributes
 emptyTrace :: Compute.Trace
 emptyTrace = Compute.Trace {
   Compute.traceStack = [],

@@ -78,6 +78,7 @@ define = definitionInModule module_
 
 applicationTypeDef :: TBinding (Term -> Flow Graph ApplicationType)
 applicationTypeDef = define "applicationType" $
+  doc "Decode an application type from a term" $
   ref Lexical.matchRecordDef @@ (lambda "m" $ binds [
     "function">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _ApplicationType_function @@ ref typeDef,
     "argument">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _ApplicationType_argument @@ ref typeDef] $
@@ -85,6 +86,7 @@ applicationTypeDef = define "applicationType" $
 
 eitherTypeDef :: TBinding (Term -> Flow Graph EitherType)
 eitherTypeDef = define "eitherType" $
+  doc "Decode an either type from a term" $
   ref Lexical.matchRecordDef @@ (lambda "m" $ binds [
     "left">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _EitherType_left @@ ref typeDef,
     "right">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _EitherType_right @@ ref typeDef] $
@@ -92,6 +94,7 @@ eitherTypeDef = define "eitherType" $
 
 fieldTypeDef :: TBinding (Term -> Flow Graph FieldType)
 fieldTypeDef = define "fieldType" $
+  doc "Decode a field type from a term" $
   ref Lexical.matchRecordDef @@ (lambda "m" $ binds [
     "name">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _FieldType_name @@ ref nameDef,
     "typ">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _FieldType_type @@ ref typeDef] $
@@ -99,6 +102,7 @@ fieldTypeDef = define "fieldType" $
 
 fieldTypesDef :: TBinding (Term -> Flow Graph [FieldType])
 fieldTypesDef = define "fieldTypes" $
+  doc "Decode a list of field types from a term" $
   lambda "term" $ lets [
     "stripped">: ref Rewriting.deannotateAndDetypeTermDef @@ var "term"]
     $ cases _Term (var "stripped")
@@ -107,6 +111,7 @@ fieldTypesDef = define "fieldTypes" $
 
 floatTypeDef :: TBinding (Term -> Flow Graph FloatType)
 floatTypeDef = define "floatType" $
+  doc "Decode a floating-point type from a term" $
   ref Lexical.matchEnumDef @@ Core.nameLift _FloatType @@ list [
     tuple2 (Core.nameLift _FloatType_bigfloat) Core.floatTypeBigfloat,
     tuple2 (Core.nameLift _FloatType_float32) Core.floatTypeFloat32,
@@ -114,6 +119,7 @@ floatTypeDef = define "floatType" $
 
 forallTypeDef :: TBinding (Term -> Flow Graph ForallType)
 forallTypeDef = define "forallType" $
+  doc "Decode a forall type from a term" $
   ref Lexical.matchRecordDef @@ (lambda "m" $ binds [
     "parameter">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _ForallType_parameter @@ ref nameDef,
     "body">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _ForallType_body @@ ref typeDef] $
@@ -121,6 +127,7 @@ forallTypeDef = define "forallType" $
 
 functionTypeDef :: TBinding (Term -> Flow Graph FunctionType)
 functionTypeDef = define "functionType" $
+  doc "Decode a function type from a term" $
   ref Lexical.matchRecordDef @@ (lambda "m" $ binds [
     "domain">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _FunctionType_domain @@ ref typeDef,
     "codomain">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _FunctionType_codomain @@ ref typeDef] $
@@ -128,6 +135,7 @@ functionTypeDef = define "functionType" $
 
 integerTypeDef :: TBinding (Term -> Flow Graph IntegerType)
 integerTypeDef = define "integerType" $
+  doc "Decode an integer type from a term" $
   ref Lexical.matchEnumDef @@ Core.nameLift _IntegerType @@ list [
     tuple2 (Core.nameLift _IntegerType_bigint) Core.integerTypeBigint,
     tuple2 (Core.nameLift _IntegerType_int8) Core.integerTypeInt8,
@@ -141,6 +149,7 @@ integerTypeDef = define "integerType" $
 
 literalTypeDef :: TBinding (Term -> Flow Graph LiteralType)
 literalTypeDef = define "literalType" $
+  doc "Decode a literal type from a term" $
   ref Lexical.matchUnionDef @@ Core.nameLift _LiteralType @@ list [
     ref Lexical.matchUnitFieldDef @@ Core.nameLift _LiteralType_binary @@ Core.literalTypeBinary,
     ref Lexical.matchUnitFieldDef @@ Core.nameLift _LiteralType_boolean @@ Core.literalTypeBoolean,
@@ -154,6 +163,7 @@ literalTypeDef = define "literalType" $
 
 mapTypeDef :: TBinding (Term -> Flow Graph MapType)
 mapTypeDef = define "mapType" $
+  doc "Decode a map type from a term" $
   ref Lexical.matchRecordDef @@ (lambda "m" $ binds [
    "keys">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _MapType_keys @@ ref typeDef,
    "values">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _MapType_values @@ ref typeDef] $
@@ -161,12 +171,14 @@ mapTypeDef = define "mapType" $
 
 nameDef :: TBinding (Term -> Flow Graph Name)
 nameDef = define "name" $
+  doc "Decode a name from a term" $
   lambda "term" $ Flows.map (unaryFunction Core.name) $
     Flows.bind (ref ExtractCore.wrapDef @@ Core.nameLift _Name @@ var "term") $
     ref ExtractCore.stringDef
 
 rowTypeDef :: TBinding (Term -> Flow Graph RowType)
 rowTypeDef = define "rowType" $
+  doc "Decode a row type from a term" $
   ref Lexical.matchRecordDef @@ (lambda "m" $ binds [
    "typeName">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _RowType_typeName @@ ref nameDef,
    "fields">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _RowType_fields @@ ref fieldTypesDef] $
@@ -174,10 +186,12 @@ rowTypeDef = define "rowType" $
 
 stringDef :: TBinding (Term -> Flow Graph String)
 stringDef = define "string" $
+  doc "Decode a string from a term" $
   lambda "term" $ ref ExtractCore.stringDef @@ (ref Rewriting.deannotateAndDetypeTermDef @@ var "term")
 
 typeDef :: TBinding (Term -> Flow Graph Type)
 typeDef = define "type" $
+  doc "Decode a type from a term" $
   lambda "dat" $ cases _Term (var "dat")
     (Just $ ref Lexical.matchUnionDef @@ Core.nameLift _Type @@ list [
       tuple2
@@ -235,6 +249,7 @@ typeDef = define "type" $
 
 typeSchemeDef :: TBinding (Term -> Flow Graph TypeScheme)
 typeSchemeDef = define "typeScheme" $
+  doc "Decode a type scheme from a term" $
   ref Lexical.matchRecordDef @@ (lambda "m" $ binds [
     "vars">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _TypeScheme_variables @@ (ref ExtractCore.listOfDef @@ ref nameDef),
     "body">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _TypeScheme_type @@ ref typeDef] $
@@ -242,6 +257,7 @@ typeSchemeDef = define "typeScheme" $
 
 wrappedTypeDef :: TBinding (Term -> Flow Graph WrappedType)
 wrappedTypeDef = define "wrappedType" $
+  doc "Decode a wrapped type from a term" $
   lambda "term" $ binds [
     "fields">: ref ExtractCore.recordDef @@ Core.nameLift _WrappedType @@ var "term",
     "name">: ref ExtractCore.fieldDef @@ Core.nameLift _WrappedType_typeName @@ ref nameDef @@ var "fields",

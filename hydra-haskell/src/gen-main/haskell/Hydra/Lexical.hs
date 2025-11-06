@@ -22,6 +22,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Look up an element in the current graph context
 dereferenceElement :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Binding))
 dereferenceElement name = (Flows.map (\g -> lookupElement g name) Monads.getState)
 
@@ -41,6 +42,7 @@ dereferenceSchemaType name types =
     Core.typeSchemeVariables = (Lists.concat2 (Core.typeSchemeVariables ts) (Core.typeSchemeVariables ts2)),
     Core.typeSchemeType = (Core.typeSchemeType ts2)}) (forType (Core.typeSchemeType ts))))
 
+-- | Create a graph from a parent graph, optional schema, and list of element bindings
 elementsToGraph :: (Graph.Graph -> Maybe Graph.Graph -> [Core.Binding] -> Graph.Graph)
 elementsToGraph parent schema elements =  
   let toPair = (\el -> (Core.bindingName el, el))
@@ -62,6 +64,7 @@ emptyGraph = Graph.Graph {
   Graph.graphPrimitives = Maps.empty,
   Graph.graphSchema = Nothing}
 
+-- | Add bindings to an existing graph
 extendGraphWithBindings :: ([Core.Binding] -> Graph.Graph -> Graph.Graph)
 extendGraphWithBindings bindings g =  
   let toEl = (\binding ->  
@@ -84,6 +87,7 @@ extendGraphWithBindings bindings g =
       Graph.graphPrimitives = (Graph.graphPrimitives g),
       Graph.graphSchema = (Graph.graphSchema g)}
 
+-- | Extract the fields of a record or union type
 fieldsOf :: (Core.Type -> [Core.FieldType])
 fieldsOf t =  
   let stripped = (Rewriting.deannotateType t)

@@ -33,6 +33,7 @@ import qualified Data.Set as S
 alphaConvert :: (Core.Name -> Core.Name -> Core.Term -> Core.Term)
 alphaConvert vold vnew term = (Rewriting.replaceFreeTermVariable vold (Core.TermVariable vnew) term)
 
+-- | Eagerly beta-reduce a type by substituting type arguments into type lambdas
 betaReduceType :: (Core.Type -> Compute.Flow Graph.Graph Core.Type)
 betaReduceType typ =  
   let reduceApp = (\app ->  
@@ -86,6 +87,7 @@ contractTerm term =
 countPrimitiveInvocations :: Bool
 countPrimitiveInvocations = True
 
+-- | Eta-reduce a term by removing redundant lambda abstractions
 etaReduceTerm :: (Core.Term -> Core.Term)
 etaReduceTerm term =  
   let noChange = term

@@ -17,21 +17,25 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Decode an application type from a term
 applicationType :: (Core.Term -> Compute.Flow Graph.Graph Core.ApplicationType)
 applicationType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "function") type_) (\function -> Flows.bind (Lexical.getField m (Core.Name "argument") type_) (\argument -> Flows.pure (Core.ApplicationType {
   Core.applicationTypeFunction = function,
   Core.applicationTypeArgument = argument})))))
 
+-- | Decode an either type from a term
 eitherType :: (Core.Term -> Compute.Flow Graph.Graph Core.EitherType)
 eitherType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "left") type_) (\left -> Flows.bind (Lexical.getField m (Core.Name "right") type_) (\right -> Flows.pure (Core.EitherType {
   Core.eitherTypeLeft = left,
   Core.eitherTypeRight = right})))))
 
+-- | Decode a field type from a term
 fieldType :: (Core.Term -> Compute.Flow Graph.Graph Core.FieldType)
 fieldType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "name") name) (\name -> Flows.bind (Lexical.getField m (Core.Name "type") type_) (\typ -> Flows.pure (Core.FieldType {
   Core.fieldTypeName = name,
   Core.fieldTypeType = typ})))))
 
+-- | Decode a list of field types from a term
 fieldTypes :: (Core.Term -> Compute.Flow Graph.Graph [Core.FieldType])
 fieldTypes term =  
   let stripped = (Rewriting.deannotateAndDetypeTerm term)
@@ -39,22 +43,26 @@ fieldTypes term =
     Core.TermList v1 -> (Flows.mapList fieldType v1)
     _ -> (Monads.unexpected "list" (Core__.term term))) stripped)
 
+-- | Decode a floating-point type from a term
 floatType :: (Core.Term -> Compute.Flow Graph.Graph Core.FloatType)
 floatType = (Lexical.matchEnum (Core.Name "hydra.core.FloatType") [
   (Core.Name "bigfloat", Core.FloatTypeBigfloat),
   (Core.Name "float32", Core.FloatTypeFloat32),
   (Core.Name "float64", Core.FloatTypeFloat64)])
 
+-- | Decode a forall type from a term
 forallType :: (Core.Term -> Compute.Flow Graph.Graph Core.ForallType)
 forallType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "parameter") name) (\parameter -> Flows.bind (Lexical.getField m (Core.Name "body") type_) (\body -> Flows.pure (Core.ForallType {
   Core.forallTypeParameter = parameter,
   Core.forallTypeBody = body})))))
 
+-- | Decode a function type from a term
 functionType :: (Core.Term -> Compute.Flow Graph.Graph Core.FunctionType)
 functionType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "domain") type_) (\domain -> Flows.bind (Lexical.getField m (Core.Name "codomain") type_) (\codomain -> Flows.pure (Core.FunctionType {
   Core.functionTypeDomain = domain,
   Core.functionTypeCodomain = codomain})))))
 
+-- | Decode an integer type from a term
 integerType :: (Core.Term -> Compute.Flow Graph.Graph Core.IntegerType)
 integerType = (Lexical.matchEnum (Core.Name "hydra.core.IntegerType") [
   (Core.Name "bigint", Core.IntegerTypeBigint),
@@ -67,6 +75,7 @@ integerType = (Lexical.matchEnum (Core.Name "hydra.core.IntegerType") [
   (Core.Name "uint32", Core.IntegerTypeUint32),
   (Core.Name "uint64", Core.IntegerTypeUint64)])
 
+-- | Decode a literal type from a term
 literalType :: (Core.Term -> Compute.Flow Graph.Graph Core.LiteralType)
 literalType = (Lexical.matchUnion (Core.Name "hydra.core.LiteralType") [
   Lexical.matchUnitField (Core.Name "binary") Core.LiteralTypeBinary,
@@ -75,22 +84,27 @@ literalType = (Lexical.matchUnion (Core.Name "hydra.core.LiteralType") [
   (Core.Name "integer", (\it -> Flows.map (\x -> Core.LiteralTypeInteger x) (integerType it))),
   (Lexical.matchUnitField (Core.Name "string") Core.LiteralTypeString)])
 
+-- | Decode a map type from a term
 mapType :: (Core.Term -> Compute.Flow Graph.Graph Core.MapType)
 mapType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "keys") type_) (\keys -> Flows.bind (Lexical.getField m (Core.Name "values") type_) (\values -> Flows.pure (Core.MapType {
   Core.mapTypeKeys = keys,
   Core.mapTypeValues = values})))))
 
+-- | Decode a name from a term
 name :: (Core.Term -> Compute.Flow Graph.Graph Core.Name)
 name term = (Flows.map (\x -> Core.Name x) (Flows.bind (Core_.wrap (Core.Name "hydra.core.Name") term) Core_.string))
 
+-- | Decode a row type from a term
 rowType :: (Core.Term -> Compute.Flow Graph.Graph Core.RowType)
 rowType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "typeName") name) (\typeName -> Flows.bind (Lexical.getField m (Core.Name "fields") fieldTypes) (\fields -> Flows.pure (Core.RowType {
   Core.rowTypeTypeName = typeName,
   Core.rowTypeFields = fields})))))
 
+-- | Decode a string from a term
 string :: (Core.Term -> Compute.Flow Graph.Graph String)
 string term = (Core_.string (Rewriting.deannotateAndDetypeTerm term))
 
+-- | Decode a type from a term
 type_ :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)
 type_ dat = ((\x -> case x of
   Core.TermAnnotated v1 -> (Flows.map (\t -> Core.TypeAnnotated (Core.AnnotatedType {
@@ -114,11 +128,13 @@ type_ dat = ((\x -> case x of
     (Core.Name "variable", (\n -> Flows.map (\x -> Core.TypeVariable x) (name n))),
     (Core.Name "wrap", (\wt -> Flows.map (\x -> Core.TypeWrap x) (wrappedType wt)))] dat)) dat)
 
+-- | Decode a type scheme from a term
 typeScheme :: (Core.Term -> Compute.Flow Graph.Graph Core.TypeScheme)
 typeScheme = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "variables") (Core_.listOf name)) (\vars -> Flows.bind (Lexical.getField m (Core.Name "type") type_) (\body -> Flows.pure (Core.TypeScheme {
   Core.typeSchemeVariables = vars,
   Core.typeSchemeType = body})))))
 
+-- | Decode a wrapped type from a term
 wrappedType :: (Core.Term -> Compute.Flow Graph.Graph Core.WrappedType)
 wrappedType term = (Flows.bind (Core_.record (Core.Name "hydra.core.WrappedType") term) (\fields -> Flows.bind (Core_.field (Core.Name "typeName") name fields) (\name -> Flows.bind (Core_.field (Core.Name "body") type_ fields) (\obj -> Flows.pure (Core.WrappedType {
   Core.wrappedTypeTypeName = name,
