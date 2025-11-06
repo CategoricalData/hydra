@@ -24,14 +24,22 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
       def "AnnotatedTerm" $
         doc "A term together with an annotation" $
         record [
-          "body">: core "Term",
-          "annotation">: Types.map (core "Name") $ core "Term"],
+          "body">:
+            doc "The term being annotated" $
+            core "Term",
+          "annotation">:
+            doc "The annotation as a map from keys to values" $
+            Types.map (core "Name") $ core "Term"],
 
       def "AnnotatedType" $
         doc "A type together with an annotation" $
         record [
-          "body">: core "Type",
-          "annotation">: Types.map (core "Name") $ core "Term"],
+          "body">:
+            doc "The type being annotated" $
+            core "Type",
+          "annotation">:
+            doc "The annotation as a map from keys to values" $
+            Types.map (core "Name") $ core "Term"],
 
       def "Application" $
         doc "A term which applies a function to an argument" $
@@ -56,22 +64,48 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
       def "Binding" $
         doc "A field with an optional type scheme, used to bind variables to terms in a 'let' expression" $
         record [
-          "name">: core "Name",
-          "term">: core "Term",
-          "type">: optional $ core "TypeScheme"],
+          "name">:
+            doc "The name of the bound variable" $
+            core "Name",
+          "term">:
+            doc "The term to which the variable is bound" $
+            core "Term",
+          "type">:
+            doc "The optional type of the bound term" $
+            optional $ core "TypeScheme"],
 
       def "CaseStatement" $
         doc "A union elimination; a case statement" $
         record [
-          "typeName">: core "Name",
-          "default">: optional (core "Term"),
-          "cases">: list $ core "Field"],
+          "typeName">:
+            doc "The name of the union type" $
+            core "Name",
+          "default">:
+            doc "An optional default case, used if none of the explicit cases match" $
+            optional (core "Term"),
+          "cases">:
+            doc "A list of case alternatives, one per union field" $
+            list $ core "Field"],
 
       def "EitherType" $
         doc "A type which provides a choice between a 'left' type and a 'right' type" $
         record [
-          "left">: core "Type",
-          "right">: core "Type"],
+          "left">:
+            doc "The 'left' alternative" $
+            core "Type",
+          "right">:
+            doc "The 'right' alternative" $
+            core "Type"],
+
+      def "PairType" $
+        doc "A type which pairs a 'first' type and a 'second' type" $
+        record [
+          "first">:
+            doc "The first component of the pair" $
+            core "Type",
+          "second">:
+            doc "The second component of the pair" $
+            core "Type"],
 
       def "Elimination" $
         doc "A corresponding elimination for an introduction term" $
@@ -90,23 +124,37 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
             core "Name"],
 
       def "Field" $
-        doc "A name/term pair" $
+        doc "A name/term tuple2" $
         record [
-          "name">: core "Name",
-          "term">: core "Term"],
+          "name">:
+            doc "The name of the field" $
+            core "Name",
+          "term">:
+            doc "The term value of the field" $
+            core "Term"],
 
       def "FieldType" $
-        doc "A name/type pair" $
+        doc "A name/type tuple2" $
         record [
-          "name">: core "Name",
-          "type">: core "Type"],
+          "name">:
+            doc "The name of the field" $
+            core "Name",
+          "type">:
+            doc "The type of the field" $
+            core "Type"],
 
       def "FloatType" $
         doc "A floating-point type" $
-        enum [
-          "bigfloat",
-          "float32",
-          "float64"],
+        union [
+          "bigfloat">:
+            doc "An arbitrary-precision floating-point type" $
+            unit,
+          "float32">:
+            doc "A 32-bit floating-point type" $
+            unit,
+          "float64">:
+            doc "A 64-bit floating-point type" $
+            unit],
 
       def "FloatValue" $
         doc "A floating-point literal value" $
@@ -144,27 +192,53 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
       def "FunctionType" $
         doc "A function type, also known as an arrow type" $
         record [
-          "domain">: core "Type",
-          "codomain">: core "Type"],
+          "domain">:
+            doc "The domain (input) type of the function" $
+            core "Type",
+          "codomain">:
+            doc "The codomain (output) type of the function" $
+            core "Type"],
 
       def "Injection" $
         doc "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()" $
         record [
-          "typeName">: core "Name",
-          "field">: core "Field"],
+          "typeName">:
+            doc "The name of the union type" $
+            core "Name",
+          "field">:
+            doc "The field being injected, including its name and value" $
+            core "Field"],
 
       def "IntegerType" $
         doc "An integer type" $
-        enum [
-          "bigint",
-          "int8",
-          "int16",
-          "int32",
-          "int64",
-          "uint8",
-          "uint16",
-          "uint32",
-          "uint64"],
+        union [
+          "bigint">:
+            doc "An arbitrary-precision integer type" $
+            unit,
+          "int8">:
+            doc "An 8-bit signed integer type" $
+            unit,
+          "int16">:
+            doc "A 16-bit signed integer type" $
+            unit,
+          "int32">:
+            doc "A 32-bit signed integer type" $
+            unit,
+          "int64">:
+            doc "A 64-bit signed integer type" $
+            unit,
+          "uint8">:
+            doc "An 8-bit unsigned integer type" $
+            unit,
+          "uint16">:
+            doc "A 16-bit unsigned integer type" $
+            unit,
+          "uint32">:
+            doc "A 32-bit unsigned integer type" $
+            unit,
+          "uint64">:
+            doc "A 64-bit unsigned integer type" $
+            unit],
 
       def "IntegerValue" $
         doc "An integer literal value" $
@@ -204,8 +278,12 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
       def "Let" $
         doc "A set of (possibly recursive) 'let' bindings together with a body in which they are bound" $
         record [
-          "bindings">: list $ core "Binding",
-          "body">: core "Term"],
+          "bindings">:
+            doc "The list of variable bindings" $
+            list $ core "Binding",
+          "body">:
+            doc "The body term in which the variables are bound" $
+            core "Term"],
 
       def "Literal" $
         doc "A term constant; an instance of a literal type" $
@@ -241,8 +319,12 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
       def "MapType" $
         doc "A map type" $
         record [
-          "keys">: core "Type",
-          "values">: core "Type"],
+          "keys">:
+            doc "The type of keys in the map" $
+            core "Type",
+          "values">:
+            doc "The type of values in the map" $
+            core "Type"],
 
       def "Name" $
         doc "A unique identifier in some context; a string-valued key"
@@ -261,8 +343,12 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
       def "Record" $
         doc "A record, or labeled tuple; a map of field names to terms" $
         record [
-          "typeName">: core "Name",
-          "fields">: list $ core "Field"],
+          "typeName">:
+            doc "The name of the record type" $
+            core "Name",
+          "fields">:
+            doc "The fields of the record, as a list of name/term pairs" $
+            list $ core "Field"],
 
       def "RowType" $
         doc "A labeled record or union type" $
@@ -277,9 +363,15 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
       def "Sum" $
         doc "The unlabeled equivalent of an Injection term" $
         record [
-          "index">: int32,
-          "size">: int32,
-          "term">: core "Term"],
+          "index">:
+            doc "The 0-indexed position of the variant" $
+            int32,
+          "size">:
+            doc "The total number of variants in the sum type" $
+            int32,
+          "term">:
+            doc "The term value of the variant" $
+            core "Term"],
 
       def "Term" $
         doc "A data term" $
@@ -311,6 +403,9 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "maybe">:
             doc "An optional value" $
             optional $ core "Term",
+          "pair">:
+            doc "A pair (2-tuple)" $
+            Types.tuple2 (core "Term") (core "Term"),
           "product">:
             doc "A tuple" $
             list (core "Term"),
@@ -358,29 +453,70 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
       def "Type" $
         doc "A data type" $
         union [
-          "annotated">: core "AnnotatedType",
-          "application">: core "ApplicationType",
-          "either">: core "EitherType",
-          "forall">: core "ForallType",
-          "function">: core "FunctionType",
-          "list">: core "Type",
-          "literal">: core "LiteralType",
-          "map">: core "MapType",
-          "maybe">: core "Type",
-          "product">: list (core "Type"),
-          "record">: core "RowType",
-          "set">: core "Type",
-          "sum">: list (core "Type"),
-          "union">: core "RowType",
-          "unit">: unit,
-          "variable">: core "Name",
-          "wrap">: core "WrappedType"],
+          "annotated">:
+            doc "An annotated type" $
+            core "AnnotatedType",
+          "application">:
+            doc "A type application" $
+            core "ApplicationType",
+          "either">:
+            doc "An either (sum) type" $
+            core "EitherType",
+          "forall">:
+            doc "A universally quantified (polymorphic) type" $
+            core "ForallType",
+          "function">:
+            doc "A function type" $
+            core "FunctionType",
+          "list">:
+            doc "A list type" $
+            core "Type",
+          "literal">:
+            doc "A literal type" $
+            core "LiteralType",
+          "map">:
+            doc "A map type" $
+            core "MapType",
+          "maybe">:
+            doc "An optional type" $
+            core "Type",
+          "pair">:
+            doc "A pair (2-tuple) type" $
+            core "PairType",
+          "product">:
+            doc "A tuple type" $
+            list (core "Type"),
+          "record">:
+            doc "A record type" $
+            core "RowType",
+          "set">:
+            doc "A set type" $
+            core "Type",
+          "sum">:
+            doc "A union type without field names" $
+            list (core "Type"),
+          "union">:
+            doc "A union type with field names" $
+            core "RowType",
+          "unit">:
+            doc "The unit type" $
+            unit,
+          "variable">:
+            doc "A type variable" $
+            core "Name",
+          "wrap">:
+            doc "A wrapped type (newtype)" $
+            core "WrappedType"],
 
       def "TypeApplicationTerm" $
         doc "A term applied to a type; a type application" $
         record [
-          "body">: core "Term",
-          "type">: core "Type"],
+          "body">:
+            doc "The term being applied to a type" $
+            core "Term",
+          "type">:
+            doc "The type argument" $
+            core "Type"],
 
       def "TypeLambda" $
         doc "A System F type abstraction term" $
@@ -395,17 +531,29 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
       def "TypeScheme" $
         doc "A type expression together with free type variables occurring in the expression" $
         record [
-          "variables">: list $ core "Name",
-          "type">: core "Type"],
+          "variables">:
+            doc "The free type variables" $
+            list $ core "Name",
+          "type">:
+            doc "The type expression" $
+            core "Type"],
 
       def "WrappedTerm" $
         doc "A term wrapped in a type name" $
         record [
-          "typeName">: core "Name",
-          "body">: core "Term"],
+          "typeName">:
+            doc "The name of the wrapper type" $
+            core "Name",
+          "body">:
+            doc "The wrapped term" $
+            core "Term"],
 
       def "WrappedType" $
         doc "A type wrapped in a type name; a newtype" $
         record [
-          "typeName">: core "Name",
-          "body">: core "Type"]]
+          "typeName">:
+            doc "The name of the wrapper (newtype)" $
+            core "Name",
+          "body">:
+            doc "The wrapped type" $
+            core "Type"]]

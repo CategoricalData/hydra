@@ -78,7 +78,7 @@ module_ = Module ns elements [Graph.module_] [Core.module_] $
       def "Namespaces" $
         doc "A mapping from namespaces to values of type n, with a focus on one namespace" $
         forAll "n" $ record [
-          "focus">: pair (mod "Namespace") (var "n"),
+          "focus">: tuple2 (mod "Namespace") (var "n"),
           "mapping">: Types.map (mod "Namespace") (var "n")],
 
       def "QualifiedName" $
