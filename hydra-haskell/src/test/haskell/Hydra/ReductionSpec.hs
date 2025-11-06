@@ -140,8 +140,8 @@ testEtaExpansion = H.describe "etaExpandTypedTerms" $ do
           (list [lambda "v1" $ project (Name "Person") (Name "firstName") @@ var "v1", toLower])
 
         expandsTo "projection in a tuple"
-          (pair (project (Name "Person") (Name "firstName")) (string "default"))
-          (pair (lambda "v1" $ project (Name "Person") (Name "firstName") @@ var "v1") (string "default"))
+          (tuple2 (project (Name "Person") (Name "firstName")) (string "default"))
+          (tuple2 (lambda "v1" $ project (Name "Person") (Name "firstName") @@ var "v1") (string "default"))
 
         expandsTo "projection in let binding"
           (lets ["getter">: project (Name "Person") (Name "firstName")] (var "getter"))
