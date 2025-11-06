@@ -120,6 +120,7 @@ decapitalizeDef = define "decapitalize" $
 
 escapeWithUnderscoreDef :: TBinding (S.Set String -> String -> String)
 escapeWithUnderscoreDef = define "escapeWithUnderscore" $
+  doc "Escape reserved words by appending an underscore" $
   lambdas ["reserved", "s"] $
     Logic.ifElse (Sets.member (var "s") (var "reserved"))
       (var "s" ++ string "_")
@@ -127,12 +128,14 @@ escapeWithUnderscoreDef = define "escapeWithUnderscore" $
 
 indentLinesDef :: TBinding (String -> String)
 indentLinesDef = define "indentLines" $
+  doc "Indent each line of a string with four spaces" $
   lambda "s" $ lets [
     "indent">: lambda "l" $ string "    " ++ var "l"]
     $ Strings.unlines $ Lists.map (var "indent") $ Strings.lines $ var "s"
 
 javaStyleCommentDef :: TBinding (String -> String)
 javaStyleCommentDef = define "javaStyleComment" $
+  doc "Format a string as a Java-style block comment" $
   lambda "s" $ string "/**\n" ++ string " * " ++ var "s" ++ string "\n */"
 
 -- TODO: simplify this helper
@@ -149,6 +152,7 @@ mapFirstLetterDef = define "mapFirstLetter" $
 
 nonAlnumToUnderscoresDef :: TBinding (String -> String)
 nonAlnumToUnderscoresDef = define "nonAlnumToUnderscores" $
+  doc "Replace sequences of non-alphanumeric characters with single underscores" $
   "input" ~>
   "isAlnum" <~ ("c" ~> Logic.or
     (Logic.and (Equality.gte (var "c") (char 'A')) (Equality.lte (var "c") (char 'Z')))
@@ -168,10 +172,12 @@ nonAlnumToUnderscoresDef = define "nonAlnumToUnderscores" $
 
 sanitizeWithUnderscoresDef :: TBinding (S.Set String -> String -> String)
 sanitizeWithUnderscoresDef = define "sanitizeWithUnderscores" $
+  doc "Sanitize a string by replacing non-alphanumeric characters and escaping reserved words" $
   "reserved" ~> "s" ~> ref escapeWithUnderscoreDef @@ var "reserved" @@ (ref nonAlnumToUnderscoresDef @@ var "s")
 
 showListDef :: TBinding ((a -> String) -> [a] -> String)
 showListDef = define "showList" $
+  doc "Format a list of elements as a bracketed, comma-separated string" $
   "f" ~> "els" ~> Strings.cat $ list [
     string "[",
     Strings.intercalate (string ", ") $ Lists.map (var "f") $ var "els",
@@ -179,11 +185,13 @@ showListDef = define "showList" $
 
 stripLeadingAndTrailingWhitespaceDef :: TBinding (String -> String)
 stripLeadingAndTrailingWhitespaceDef = define "stripLeadingAndTrailingWhitespace" $
+  doc "Remove leading and trailing whitespace from a string" $
   "s" ~> Strings.fromList $ Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $
     Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $ Strings.toList $ var "s"
 
 withCharacterAliasesDef :: TBinding (String -> String)
 withCharacterAliasesDef = define "withCharacterAliases" $
+  doc "Replace special characters with their alphanumeric aliases" $
   lambda "original" $ lets [
     -- Taken from: https://cs.stanford.edu/people/miles/iso8859.html
     "aliases">: Maps.fromList $ list [

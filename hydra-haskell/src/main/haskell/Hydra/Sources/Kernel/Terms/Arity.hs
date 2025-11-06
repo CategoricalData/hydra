@@ -61,6 +61,7 @@ define = definitionInModule module_
 
 functionArityDef :: TBinding (Function -> Int)
 functionArityDef = define "functionArity" $
+  doc "Find the arity (expected number of arguments) of a function" $
   match _Function Nothing [
     _Function_elimination>>: constant (int32 1),
     _Function_lambda>>: (lambda "i" $ Math.add (int32 1) (var "i")) <.> (ref termArityDef <.> unaryFunction Core.lambdaBody),
@@ -74,6 +75,7 @@ primitiveArityDef = define "primitiveArity" $
 
 termArityDef :: TBinding (Term -> Int)
 termArityDef = define "termArity" $
+  doc "Find the arity (expected number of arguments) of a term" $
   match _Term (Just $ int32 0) [
     _Term_application>>: (lambda "xapp" $ Math.sub (var "xapp") (int32 1)) <.> ref termArityDef <.> unaryFunction Core.applicationFunction,
     _Term_function>>: ref functionArityDef]
@@ -81,6 +83,7 @@ termArityDef = define "termArity" $
 
 typeArityDef :: TBinding (Type -> Int)
 typeArityDef = define "typeArity" $
+  doc "Find the arity (expected number of arguments) of a type" $
   match _Type (Just $ int32 0) [
     _Type_annotated>>: ref typeArityDef <.> unaryFunction Core.annotatedTypeBody,
     _Type_application>>: ref typeArityDef <.> unaryFunction Core.applicationTypeFunction,
@@ -90,6 +93,7 @@ typeArityDef = define "typeArity" $
 
 typeSchemeArityDef :: TBinding (TypeScheme -> Int)
 typeSchemeArityDef = define "typeSchemeArity" $
+  doc "Find the arity (expected number of arguments) of a type scheme" $
   "ts" ~> ref typeArityDef @@ (Core.typeSchemeType $ var "ts")
 
 uncurryTypeDef :: TBinding (Type -> [Type])

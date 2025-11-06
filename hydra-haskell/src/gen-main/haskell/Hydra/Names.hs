@@ -30,12 +30,15 @@ compactName namespaces name =
     ":",
     local]) (Maps.lookup ns namespaces)) mns)
 
+-- | Extract the local part of a name
 localNameOf :: (Core.Name -> String)
 localNameOf arg_ = (Module.qualifiedNameLocal (qualifyName arg_))
 
+-- | Extract the namespace of a name, if any
 namespaceOf :: (Core.Name -> Maybe Module.Namespace)
 namespaceOf arg_ = (Module.qualifiedNameNamespace (qualifyName arg_))
 
+-- | Convert a namespace to a file path with the given case convention and file extension
 namespaceToFilePath :: (Mantle.CaseConvention -> Module.FileExtension -> Module.Namespace -> String)
 namespaceToFilePath caseConv ext ns =  
   let parts = (Lists.map (Formatting.convertCase Mantle.CaseConventionCamel caseConv) (Strings.splitOn "." (Module.unNamespace ns)))
@@ -52,6 +55,7 @@ qname ns name = (Core.Name (Strings.cat [
   ".",
   name]))
 
+-- | Split a dot-separated name into a namespace and local name
 qualifyName :: (Core.Name -> Module.QualifiedName)
 qualifyName name =  
   let parts = (Lists.reverse (Strings.splitOn "." (Core.unName name)))

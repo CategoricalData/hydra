@@ -86,6 +86,7 @@ alphaConvertDef = define "alphaConvert" $
 --       and always reduce the right-hand side of an application prior to substitution
 betaReduceTypeDef :: TBinding (Type -> Flow Graph Type)
 betaReduceTypeDef = define "betaReduceType" $
+  doc "Eagerly beta-reduce a type by substituting type arguments into type lambdas" $
   "typ" ~>
   "reduceApp" <~ ("app" ~>
     "lhs" <~ Core.applicationTypeFunction (var "app") $
@@ -362,6 +363,7 @@ etaExpandTypedTermDef = define "etaExpandTypedTerm" $
 -- Note: unused / untested
 etaReduceTermDef :: TBinding (Term -> Term)
 etaReduceTermDef = define "etaReduceTerm" $
+  doc "Eta-reduce a term by removing redundant lambda abstractions" $
   "term" ~>
   "noChange" <~ var "term" $
   "reduceLambda" <~ ("l" ~>

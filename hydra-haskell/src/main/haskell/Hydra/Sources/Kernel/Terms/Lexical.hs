@@ -81,6 +81,7 @@ define = definitionInModule module_
 
 dereferenceElementDef :: TBinding (Name -> Flow Graph (Maybe Binding))
 dereferenceElementDef = define "dereferenceElement" $
+  doc "Look up an element in the current graph context" $
   "name" ~> Flows.map
     ("g" ~> ref lookupElementDef @@ var "g" @@ var "name")
     (ref Monads.getStateDef)
@@ -110,6 +111,7 @@ dereferenceSchemaTypeDef = define "dereferenceSchemaType" $
 
 elementsToGraphDef :: TBinding (Graph -> Maybe Graph -> [Binding] -> Graph)
 elementsToGraphDef = define "elementsToGraph" $
+  doc "Create a graph from a parent graph, optional schema, and list of element bindings" $
   "parent" ~> "schema" ~> "elements" ~>
   "toPair" <~ ("el" ~> tuple2 (Core.bindingName (var "el")) (var "el")) $
   Graph.graph
@@ -133,6 +135,7 @@ emptyGraphDef = define "emptyGraph" $
 
 extendGraphWithBindingsDef :: TBinding ([Binding] -> Graph -> Graph)
 extendGraphWithBindingsDef = define "extendGraphWithBindings" $
+  doc "Add bindings to an existing graph" $
   "bindings" ~> "g" ~>
   "toEl" <~ ("binding" ~>
     "name" <~ Core.bindingName (var "binding") $
@@ -144,6 +147,7 @@ extendGraphWithBindingsDef = define "extendGraphWithBindings" $
 
 fieldsOfDef :: TBinding (Type -> [FieldType])
 fieldsOfDef = define "fieldsOf" $
+  doc "Extract the fields of a record or union type" $
   "t" ~>
   "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "t" $
   cases _Type (var "stripped")
