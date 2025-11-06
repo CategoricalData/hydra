@@ -19,6 +19,7 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Lib.Tuples as Tuples
@@ -47,6 +48,7 @@ standardLibraries = [
   hydraLibMathFloat64,
   hydraLibMathInt32,
   hydraLibMaybes,
+  hydraLibPairs,
   hydraLibSets,
   hydraLibStrings,
   hydraLibTuples]
@@ -123,7 +125,7 @@ hydraLibEithers = standardLibrary _hydra_lib_eithers [
     prim1       _eithers_isLeft           Eithers.isLeft          ["x", "y"]      (Prims.either_ x y) boolean,
     prim1       _eithers_isRight          Eithers.isRight         ["x", "y"]      (Prims.either_ x y) boolean,
     prim1       _eithers_lefts            Eithers.lefts           ["x", "y"]      (list $ Prims.either_ x y) (list x),
-    prim1       _eithers_partitionEithers Eithers.partitionEithers ["x", "y"]     (list $ Prims.either_ x y) (pair (list x) (list y)),
+    prim1       _eithers_partitionEithers Eithers.partitionEithers ["x", "y"]     (list $ Prims.either_ x y) (tuple2 (list x) (list y)),
     prim1       _eithers_rights           Eithers.rights          ["x", "y"]      (list $ Prims.either_ x y) (list y)]
   where
     x = variable "x"
@@ -250,12 +252,12 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim1       _lists_safeHead    Lists.safeHead     ["x"] (list x) (optional x),
     prim1       _lists_singleton   Lists.singleton    ["x"] x (list x),
     prim2Interp _lists_sortOn      Nothing            ["x", "y"] (function x y) (list x) (list x),
-    prim2Interp _lists_span        Nothing            ["x"] (function x boolean) (list x) (pair (list x) (list x)),
+    prim2Interp _lists_span        Nothing            ["x"] (function x boolean) (list x) (tuple2 (list x) (list x)),
     prim1       _lists_sort        Lists.sort         ["x"] (list x) (list x),
     prim1       _lists_tail        Lists.tail         ["x"] (list x) (list x),
     prim2       _lists_take        Lists.take         ["x"] int32 (list x) (list x),
     prim1       _lists_transpose   Lists.transpose    ["x"] (list (list x)) (list (list x)),
-    prim2       _lists_zip         Lists.zip          ["x", "y"] (list x) (list y) (list (pair x y)),
+    prim2       _lists_zip         Lists.zip          ["x", "y"] (list x) (list y) (list (tuple2 x y)),
     prim3       _lists_zipWith     Lists.zipWith      ["x", "y", "z"] (function x $ function y z) (list x) (list y) (list z)]
   where
     x = variable "x"
@@ -437,7 +439,7 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
     prim2 _maps_filter          Maps.filter          ["v", "k"]               (function v boolean) mapKv mapKv,
     prim2 _maps_filterWithKey   Maps.filterWithKey   ["k", "v"]               (function k (function v boolean)) mapKv mapKv,
     prim3 _maps_findWithDefault Maps.findWithDefault ["v", "k"]               v k mapKv v,
-    prim1 _maps_fromList        Maps.fromList        ["k", "v"]               (list $ pair k v) mapKv,
+    prim1 _maps_fromList        Maps.fromList        ["k", "v"]               (list $ tuple2 k v) mapKv,
     prim3 _maps_insert          Maps.insert          ["k", "v"]               k v mapKv mapKv,
     prim1 _maps_keys            Maps.keys            ["k", "v"]               mapKv (list k),
     prim2 _maps_lookup          Maps.lookup          ["k", "v"]               k mapKv (optional v),
@@ -449,7 +451,7 @@ hydraLibMaps = standardLibrary _hydra_lib_maps [
     prim2 _maps_remove          Maps.remove          ["k", "v"]               k mapKv mapKv,
     prim2 _maps_singleton       Maps.singleton       ["k", "v"]               k v mapKv,
     prim1 _maps_size            Maps.size            ["k", "v"]               mapKv int32,
-    prim1 _maps_toList          Maps.toList          ["k", "v"]               mapKv (list $ pair k v),
+    prim1 _maps_toList          Maps.toList          ["k", "v"]               mapKv (list $ tuple2 k v),
     prim2 _maps_union           Maps.union           ["k", "v"]               mapKv mapKv mapKv]
   where
     k = variable "k"
@@ -692,11 +694,25 @@ _tuples_uncurry = qname _hydra_lib_tuples "uncurry" :: Name
 
 hydraLibTuples :: Library
 hydraLibTuples = standardLibrary _hydra_lib_tuples [
-    prim1 _tuples_curry   Tuples.curry   ["a", "b", "c"] (function (pair a b) c) (function a (function b c)),
-    prim1 _tuples_fst     Tuples.fst     ["a", "b"]      (pair a b) a,
-    prim1 _tuples_snd     Tuples.snd     ["a", "b"]      (pair a b) b,
-    prim1 _tuples_uncurry Tuples.uncurry ["a", "b", "c"] (function a (function b c)) (function (pair a b) c)]
+    prim1 _tuples_curry   Tuples.curry   ["a", "b", "c"] (function (tuple2 a b) c) (function a (function b c)),
+    prim1 _tuples_fst     Tuples.fst     ["a", "b"]      (tuple2 a b) a,
+    prim1 _tuples_snd     Tuples.snd     ["a", "b"]      (tuple2 a b) b,
+    prim1 _tuples_uncurry Tuples.uncurry ["a", "b", "c"] (function a (function b c)) (function (tuple2 a b) c)]
   where
     a = variable "a"
     b = variable "b"
     c = variable "c"
+
+_hydra_lib_pairs :: Namespace
+_hydra_lib_pairs = Namespace "hydra.lib.pairs"
+
+_pairs_first  = qname _hydra_lib_pairs "first"  :: Name
+_pairs_second = qname _hydra_lib_pairs "second" :: Name
+
+hydraLibPairs :: Library
+hydraLibPairs = standardLibrary _hydra_lib_pairs [
+    prim1 _pairs_first  Pairs.first  ["a", "b"] (pair a b) a,
+    prim1 _pairs_second Pairs.second ["a", "b"] (pair a b) b]
+  where
+    a = variable "a"
+    b = variable "b"
