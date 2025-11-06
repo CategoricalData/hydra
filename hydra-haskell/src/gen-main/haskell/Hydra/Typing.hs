@@ -18,6 +18,7 @@ data InferenceContext =
     inferenceContextPrimitiveTypes :: (M.Map Core.Name Core.TypeScheme),
     -- | A mutable typing environment which is specific to the current graph being processed. This environment is (usually) smaller than the schema and primitive typing environments, and is subject to global substitutions.
     inferenceContextDataTypes :: (M.Map Core.Name Core.TypeScheme),
+    -- | Whether to enable debug output during type inference
     inferenceContextDebug :: Bool}
   deriving (Eq, Ord, Read, Show)
 
@@ -34,8 +35,11 @@ _InferenceContext_debug = (Core.Name "debug")
 -- | The result of applying inference rules to a term.
 data InferenceResult = 
   InferenceResult {
+    -- | The term which was inferred
     inferenceResultTerm :: Core.Term,
+    -- | The inferred type of the term
     inferenceResultType :: Core.Type,
+    -- | The type substitution resulting from unification
     inferenceResultSubst :: TypeSubst}
   deriving (Eq, Ord, Read, Show)
 
@@ -58,7 +62,9 @@ _TermSubst = (Core.Name "hydra.typing.TermSubst")
 -- | An assertion that two types can be unified into a single type
 data TypeConstraint = 
   TypeConstraint {
+    -- | The left-hand side of the constraint
     typeConstraintLeft :: Core.Type,
+    -- | The right-hand side of the constraint
     typeConstraintRight :: Core.Type,
     -- | A description of the type constraint which may be used for tracing or debugging
     typeConstraintComment :: String}

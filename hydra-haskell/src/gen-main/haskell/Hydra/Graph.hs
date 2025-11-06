@@ -61,7 +61,9 @@ _Primitive_implementation = (Core.Name "implementation")
 -- | A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
 data TermCoder a = 
   TermCoder {
+    -- | The Hydra type of encoded terms
     termCoderType :: Core.Type,
+    -- | A coder between Hydra terms and instances of the given type
     termCoderCoder :: (Compute.Coder Graph Graph Core.Term a)}
 
 _TermCoder = (Core.Name "hydra.graph.TermCoder")

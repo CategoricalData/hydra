@@ -9,6 +9,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | A naming convention for symbols, such as camelCase or snake_case
 data CaseConvention = 
   CaseConventionCamel  |
   CaseConventionPascal  |
@@ -97,7 +98,9 @@ _LiteralVariant_string = (Core.Name "string")
 
 -- | Numeric precision: arbitrary precision, or precision to a specified number of bits
 data Precision = 
+  -- | Arbitrary precision
   PrecisionArbitrary  |
+  -- | Precision to a specified number of bits
   PrecisionBits Int
   deriving (Eq, Ord, Read, Show)
 

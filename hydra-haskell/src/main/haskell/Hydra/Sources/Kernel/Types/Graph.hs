@@ -70,5 +70,9 @@ module_ = Module ns elements [Compute.module_] [Core.module_] $
       def "TermCoder" $
         doc "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms" $
         forAll "a" $ record [
-          "type">: core "Type",
-          "coder">: compute "Coder" @@ graph "Graph" @@ graph "Graph" @@ core "Term" @@ "a"]]
+          "type">:
+            doc "The Hydra type of encoded terms" $
+            core "Type",
+          "coder">:
+            doc "A coder between Hydra terms and instances of the given type" $
+            compute "Coder" @@ graph "Graph" @@ graph "Graph" @@ core "Term" @@ "a"]]

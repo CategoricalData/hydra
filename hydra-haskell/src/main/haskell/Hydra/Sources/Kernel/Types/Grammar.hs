@@ -40,29 +40,59 @@ module_ = Module ns elements [] [Core.module_] $
       def "LabeledPattern" $
         doc "A pattern together with a name (label)" $
         record [
-        "label">: grammar "Label",
-        "pattern">: grammar "Pattern"],
+        "label">:
+          doc "The label for the pattern" $
+          grammar "Label",
+        "pattern">:
+          doc "The pattern being labeled" $
+          grammar "Pattern"],
 
       def "Pattern" $
         doc "A pattern which matches valid expressions in the language" $
         union [
-          "alternatives">: list $ grammar "Pattern",
-          "constant">: grammar "Constant",
-          "ignored">: grammar "Pattern",
-          "labeled">: grammar "LabeledPattern",
-          "nil">: unit,
-          "nonterminal">: grammar "Symbol",
-          "option">: grammar "Pattern",
-          "plus">: grammar "Pattern",
-          "regex">: grammar "Regex",
-          "sequence">: list $ grammar "Pattern",
-          "star">: grammar "Pattern"],
+          "alternatives">:
+            doc "A choice between alternative patterns" $
+            list $ grammar "Pattern",
+          "constant">:
+            doc "A constant (terminal) pattern" $
+            grammar "Constant",
+          "ignored">:
+            doc "A pattern to be ignored (not captured)" $
+            grammar "Pattern",
+          "labeled">:
+            doc "A labeled pattern" $
+            grammar "LabeledPattern",
+          "nil">:
+            doc "An empty pattern" $
+            unit,
+          "nonterminal">:
+            doc "A nonterminal symbol reference" $
+            grammar "Symbol",
+          "option">:
+            doc "An optional pattern (zero or one occurrence)" $
+            grammar "Pattern",
+          "plus">:
+            doc "One or more occurrences of a pattern" $
+            grammar "Pattern",
+          "regex">:
+            doc "A regular expression pattern" $
+            grammar "Regex",
+          "sequence">:
+            doc "A sequence of patterns" $
+            list $ grammar "Pattern",
+          "star">:
+            doc "Zero or more occurrences of a pattern" $
+            grammar "Pattern"],
 
       def "Production" $
         doc "A BNF production" $
         record [
-          "symbol">: grammar "Symbol",
-          "pattern">: grammar "Pattern"],
+          "symbol">:
+            doc "The nonterminal symbol being defined" $
+            grammar "Symbol",
+          "pattern">:
+            doc "The pattern which defines the symbol" $
+            grammar "Pattern"],
 
       def "Regex" $
         doc "A regular expression" $

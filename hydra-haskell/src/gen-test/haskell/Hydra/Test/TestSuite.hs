@@ -662,7 +662,8 @@ inferenceTests = Testing.TestGroup {
                         Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
                         Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForMinimalInference"]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -675,7 +676,8 @@ inferenceTests = Testing.TestGroup {
                         Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
                         Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForMinimalInference"]}]},
             Testing.TestGroup {
               Testing.testGroupName = "Polytyped pairs",
               Testing.testGroupDescription = Nothing,
@@ -692,7 +694,8 @@ inferenceTests = Testing.TestGroup {
                         Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
                         Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForMinimalInference"]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -705,7 +708,8 @@ inferenceTests = Testing.TestGroup {
                         Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
                         Core.pairTypeSecond = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForMinimalInference"]}]},
             Testing.TestGroup {
               Testing.testGroupName = "Nested pairs",
               Testing.testGroupDescription = Nothing,
@@ -723,7 +727,8 @@ inferenceTests = Testing.TestGroup {
                           Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})),
                         Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeBoolean)}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForMinimalInference"]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -737,7 +742,8 @@ inferenceTests = Testing.TestGroup {
                           Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                           Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)))}))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForMinimalInference"]}]},
             Testing.TestGroup {
               Testing.testGroupName = "Pairs in lambda",
               Testing.testGroupDescription = Nothing,
@@ -759,7 +765,8 @@ inferenceTests = Testing.TestGroup {
                           Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
                           Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForMinimalInference"]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -776,7 +783,8 @@ inferenceTests = Testing.TestGroup {
                           Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
                           Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]},
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForMinimalInference"]}]},
             Testing.TestGroup {
               Testing.testGroupName = "Pairs in data structures",
               Testing.testGroupDescription = Nothing,
@@ -794,7 +802,8 @@ inferenceTests = Testing.TestGroup {
                         Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
                         Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForMinimalInference"]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -807,7 +816,8 @@ inferenceTests = Testing.TestGroup {
                         Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
                         Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]}],
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForMinimalInference"]}]}],
           Testing.testGroupCases = []},
         Testing.TestGroup {
           Testing.testGroupName = "Product terms",
@@ -931,7 +941,8 @@ inferenceTests = Testing.TestGroup {
                         Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
                         (Core.TypeLiteral Core.LiteralTypeString)])}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForMinimalInference"]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -945,7 +956,8 @@ inferenceTests = Testing.TestGroup {
                         Core.TypeList (Core.TypeVariable (Core.Name "t0")),
                         (Core.TypeLiteral Core.LiteralTypeString)])}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []},
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForMinimalInference"]},
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#3",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -960,7 +972,8 @@ inferenceTests = Testing.TestGroup {
                         Core.TypeList (Core.TypeVariable (Core.Name "t0")),
                         (Core.TypeList (Core.TypeVariable (Core.Name "t1")))])}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
-                  Testing.testCaseWithMetadataTags = []}]}],
+                  Testing.testCaseWithMetadataTags = [
+                    Testing.Tag "disabledForMinimalInference"]}]}],
           Testing.testGroupCases = []},
         Testing.TestGroup {
           Testing.testGroupName = "Set terms",

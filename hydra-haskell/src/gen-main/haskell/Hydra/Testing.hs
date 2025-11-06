@@ -25,9 +25,13 @@ _EvaluationStyle_lazy = (Core.Name "lazy")
 -- | A test case which checks that strings are converted between different case conventions correctly
 data CaseConversionTestCase = 
   CaseConversionTestCase {
+    -- | The source case convention
     caseConversionTestCaseFromConvention :: Mantle.CaseConvention,
+    -- | The target case convention
     caseConversionTestCaseToConvention :: Mantle.CaseConvention,
+    -- | The input string
     caseConversionTestCaseFromString :: String,
+    -- | The expected output string
     caseConversionTestCaseToString :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -44,8 +48,11 @@ _CaseConversionTestCase_toString = (Core.Name "toString")
 -- | A test case which evaluates (reduces) a given term and compares it with the expected result
 data EvaluationTestCase = 
   EvaluationTestCase {
+    -- | The evaluation style (eager or lazy)
     evaluationTestCaseEvaluationStyle :: EvaluationStyle,
+    -- | The term to evaluate
     evaluationTestCaseInput :: Core.Term,
+    -- | The expected result
     evaluationTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
@@ -60,6 +67,7 @@ _EvaluationTestCase_output = (Core.Name "output")
 -- | A test case providing a term for which type inference is expected to fail
 data InferenceFailureTestCase = 
   InferenceFailureTestCase {
+    -- | The term for which inference should fail
     inferenceFailureTestCaseInput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
@@ -70,7 +78,9 @@ _InferenceFailureTestCase_input = (Core.Name "input")
 -- | A test case which performs type inference on a given term and compares the result with an expected type scheme
 data InferenceTestCase = 
   InferenceTestCase {
+    -- | The term to infer
     inferenceTestCaseInput :: Core.Term,
+    -- | The expected type scheme
     inferenceTestCaseOutput :: Core.TypeScheme}
   deriving (Eq, Ord, Read, Show)
 
@@ -80,6 +90,7 @@ _InferenceTestCase_input = (Core.Name "input")
 
 _InferenceTestCase_output = (Core.Name "output")
 
+-- | A tag for categorizing test cases
 newtype Tag = 
   Tag {
     unTag :: String}
@@ -89,9 +100,13 @@ _Tag = (Core.Name "hydra.testing.Tag")
 
 -- | A simple test case with an input and an expected output
 data TestCase = 
+  -- | A case conversion test
   TestCaseCaseConversion CaseConversionTestCase |
+  -- | A term evaluation test
   TestCaseEvaluation EvaluationTestCase |
+  -- | A type inference test
   TestCaseInference InferenceTestCase |
+  -- | A type inference failure test
   TestCaseInferenceFailure InferenceFailureTestCase
   deriving (Eq, Ord, Read, Show)
 
@@ -108,9 +123,13 @@ _TestCase_inferenceFailure = (Core.Name "inferenceFailure")
 -- | One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
 data TestCaseWithMetadata = 
   TestCaseWithMetadata {
+    -- | The name of the test case
     testCaseWithMetadataName :: String,
+    -- | The test case itself
     testCaseWithMetadataCase :: TestCase,
+    -- | An optional description of the test
     testCaseWithMetadataDescription :: (Maybe String),
+    -- | Zero or more tags for categorizing the test
     testCaseWithMetadataTags :: [Tag]}
   deriving (Eq, Ord, Read, Show)
 
@@ -127,9 +146,13 @@ _TestCaseWithMetadata_tags = (Core.Name "tags")
 -- | A collection of test cases with a name and optional description
 data TestGroup = 
   TestGroup {
+    -- | The name of the test group
     testGroupName :: String,
+    -- | An optional description of the group
     testGroupDescription :: (Maybe String),
+    -- | Nested test groups
     testGroupSubgroups :: [TestGroup],
+    -- | The test cases in this group
     testGroupCases :: [TestCaseWithMetadata]}
   deriving (Eq, Ord, Read, Show)
 
