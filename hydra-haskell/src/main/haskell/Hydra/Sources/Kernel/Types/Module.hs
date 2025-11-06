@@ -32,8 +32,12 @@ module_ = Module ns elements [Graph.module_] [Core.module_] $
       def "Definition" $
         doc "A definition, which may be either a term or type definition" $
         union [
-          "term">: mod "TermDefinition",
-          "type">: mod "TypeDefinition"],
+          "term">:
+            doc "A term definition" $
+            mod "TermDefinition",
+          "type">:
+            doc "A type definition" $
+            mod "TypeDefinition"],
 
       def "FileExtension" $
         doc "A file extension (without the dot), e.g. \"json\" or \"py\"" $
@@ -46,7 +50,7 @@ module_ = Module ns elements [Graph.module_] [Core.module_] $
             doc "A common prefix for all primitive function names in the library" $
             mod "Namespace",
           "prefix">:
-            doc "A preferred namespace prefix for function names in the library"
+            doc "A preferred namespace prefix for function names in the library" $
             string,
           "primitives">:
             doc "The primitives defined in this library" $
@@ -78,25 +82,43 @@ module_ = Module ns elements [Graph.module_] [Core.module_] $
       def "Namespaces" $
         doc "A mapping from namespaces to values of type n, with a focus on one namespace" $
         forAll "n" $ record [
-          "focus">: tuple2 (mod "Namespace") (var "n"),
-          "mapping">: Types.map (mod "Namespace") (var "n")],
+          "focus">:
+            doc "The namespace in focus, together with its associated value" $
+            tuple2 (mod "Namespace") (var "n"),
+          "mapping">:
+            doc "A mapping of namespaces to values" $
+            Types.map (mod "Namespace") (var "n")],
 
       def "QualifiedName" $
         doc "A qualified name consisting of an optional namespace together with a mandatory local name" $
         record [
-          "namespace">: optional $ mod "Namespace",
-          "local">: string],
+          "namespace">:
+            doc "The optional namespace" $
+            optional $ mod "Namespace",
+          "local">:
+            doc "The local name" $
+            string],
 
       def "TermDefinition" $
         doc "A term-level definition, including a name, a term, and the type of the term" $
         record [
-          "name">: core "Name",
-          "term">: core "Term",
-          "type">: core "Type"],
+          "name">:
+            doc "The name of the term" $
+            core "Name",
+          "term">:
+            doc "The term being defined" $
+            core "Term",
+          "type">:
+            doc "The type of the term" $
+            core "Type"],
 
      def "TypeDefinition" $
         doc "A type-level definition, including a name and the type" $
         record [
-          "name">: core "Name",
+          "name">:
+            doc "The name of the type" $
+            core "Name",
           -- TODO: consider using TypeScheme here instead of Type
-          "type">: core "Type"]]
+          "type">:
+            doc "The type being defined" $
+            core "Type"]]

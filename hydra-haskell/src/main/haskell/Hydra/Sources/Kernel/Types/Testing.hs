@@ -36,51 +36,97 @@ module_ = Module ns elements [Mantle.module_] [Core.module_] $
       def "CaseConversionTestCase" $
         doc "A test case which checks that strings are converted between different case conventions correctly" $
         record [
-          "fromConvention">: mantle "CaseConvention",
-          "toConvention">: mantle "CaseConvention",
-          "fromString">: string,
-          "toString">: string],
+          "fromConvention">:
+            doc "The source case convention" $
+            mantle "CaseConvention",
+          "toConvention">:
+            doc "The target case convention" $
+            mantle "CaseConvention",
+          "fromString">:
+            doc "The input string" $
+            string,
+          "toString">:
+            doc "The expected output string" $
+            string],
 
       def "EvaluationTestCase" $
         doc "A test case which evaluates (reduces) a given term and compares it with the expected result" $
         record [
-          "evaluationStyle">: testing "EvaluationStyle",
-          "input">: core "Term",
-          "output">: core "Term"],
+          "evaluationStyle">:
+            doc "The evaluation style (eager or lazy)" $
+            testing "EvaluationStyle",
+          "input">:
+            doc "The term to evaluate" $
+            core "Term",
+          "output">:
+            doc "The expected result" $
+            core "Term"],
 
       def "InferenceFailureTestCase" $
         doc "A test case providing a term for which type inference is expected to fail" $
         record [
-          "input">: core "Term"],
+          "input">:
+            doc "The term for which inference should fail" $
+            core "Term"],
 
       def "InferenceTestCase" $
         doc "A test case which performs type inference on a given term and compares the result with an expected type scheme" $
         record [
-          "input">: core "Term",
-          "output">: core "TypeScheme"],
+          "input">:
+            doc "The term to infer" $
+            core "Term",
+          "output">:
+            doc "The expected type scheme" $
+            core "TypeScheme"],
 
-      def "Tag" $ wrap string,
+      def "Tag" $
+        doc "A tag for categorizing test cases" $
+        wrap string,
 
       def "TestCase" $
         doc "A simple test case with an input and an expected output" $
         union [
-          "caseConversion">: testing "CaseConversionTestCase",
-          "evaluation">: testing "EvaluationTestCase",
-          "inference">: testing "InferenceTestCase",
-          "inferenceFailure">: testing "InferenceFailureTestCase"],
+          "caseConversion">:
+            doc "A case conversion test" $
+            testing "CaseConversionTestCase",
+          "evaluation">:
+            doc "A term evaluation test" $
+            testing "EvaluationTestCase",
+          "inference">:
+            doc "A type inference test" $
+            testing "InferenceTestCase",
+          "inferenceFailure">:
+            doc "A type inference failure test" $
+            testing "InferenceFailureTestCase"],
 
       def "TestCaseWithMetadata" $
         doc "One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags" $
         record [
-          "name">: string,
-          "case">: testing "TestCase",
-          "description">: optional string,
-          "tags">: list $ testing "Tag"],
+          "name">:
+            doc "The name of the test case" $
+            string,
+          "case">:
+            doc "The test case itself" $
+            testing "TestCase",
+          "description">:
+            doc "An optional description of the test" $
+            optional string,
+          "tags">:
+            doc "Zero or more tags for categorizing the test" $
+            list $ testing "Tag"],
 
       def "TestGroup" $
         doc "A collection of test cases with a name and optional description" $
         record [
-          "name">: string,
-          "description">: optional string,
-          "subgroups">: list (testing "TestGroup"),
-          "cases">: list (testing "TestCaseWithMetadata")]]
+          "name">:
+            doc "The name of the test group" $
+            string,
+          "description">:
+            doc "An optional description of the group" $
+            optional string,
+          "subgroups">:
+            doc "Nested test groups" $
+            list (testing "TestGroup"),
+          "cases">:
+            doc "The test cases in this group" $
+            list (testing "TestCaseWithMetadata")]]

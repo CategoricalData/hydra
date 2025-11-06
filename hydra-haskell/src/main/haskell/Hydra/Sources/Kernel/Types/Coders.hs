@@ -37,9 +37,15 @@ module_ = Module ns elements [Graph.module_, Compute.module_] [Core.module_] $
       def "AdapterContext" $
         doc "An evaluation context together with a source language and a target language" $
         record [
-          "graph">: graph "Graph",
-          "language">: coders "Language",
-          "adapters">: Types.map (core "Name") (compute "Adapter"
+          "graph">:
+            doc "The underlying graph of elements and primitives" $
+            graph "Graph",
+          "language">:
+            doc "The language being encoded or decoded" $
+            coders "Language",
+          "adapters">:
+            doc "A map of type names to adapters for those types" $
+            Types.map (core "Name") (compute "Adapter"
             @@ coders "AdapterContext" @@ coders "AdapterContext"
             @@ core "Type" @@ core "Type"
             @@ core "Term" @@ core "Term")],
@@ -53,8 +59,12 @@ module_ = Module ns elements [Graph.module_, Compute.module_] [Core.module_] $
       def "Language" $
         doc "A named language together with language-specific constraints" $
         record [
-          "name">: coders "LanguageName",
-          "constraints">: coders "LanguageConstraints"],
+          "name">:
+            doc "The unique name of the language" $
+            coders "LanguageName",
+          "constraints">:
+            doc "The constraints which characterize the language" $
+            coders "LanguageConstraints"],
 
       def "LanguageConstraints" $
         doc "A set of constraints on valid type and term expressions, characterizing a language" $

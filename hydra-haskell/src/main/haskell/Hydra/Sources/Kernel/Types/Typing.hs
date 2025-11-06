@@ -40,14 +40,22 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
               ++ " This environment is (usually) smaller than the schema and primitive typing environments,"
               ++ " and is subject to global substitutions.") $
             Types.map (core "Name") (core "TypeScheme"),
-          "debug">: boolean],
+          "debug">:
+            doc "Whether to enable debug output during type inference" $
+            boolean],
 
       def "InferenceResult" $
         doc "The result of applying inference rules to a term." $
         record [
-          "term">: core "Term",
-          "type">: core "Type",
-          "subst">: typing "TypeSubst"],
+          "term">:
+            doc "The term which was inferred" $
+            core "Term",
+          "type">:
+            doc "The inferred type of the term" $
+            core "Type",
+          "subst">:
+            doc "The type substitution resulting from unification" $
+            typing "TypeSubst"],
 
       def "TermSubst" $
         doc "A substitution of term variables for terms" $
@@ -56,10 +64,14 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
       def "TypeConstraint" $
         doc "An assertion that two types can be unified into a single type" $
         record [
-          "left">: core "Type",
-          "right">: core "Type",
+          "left">:
+            doc "The left-hand side of the constraint" $
+            core "Type",
+          "right">:
+            doc "The right-hand side of the constraint" $
+            core "Type",
           "comment">:
-            doc "A description of the type constraint which may be used for tracing or debugging"
+            doc "A description of the type constraint which may be used for tracing or debugging" $
             string],
 
       def "TypeContext" $

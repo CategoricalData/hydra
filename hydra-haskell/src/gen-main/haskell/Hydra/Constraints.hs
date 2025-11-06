@@ -13,7 +13,9 @@ import qualified Data.Set as S
 -- | A declared equivalence between two abstract paths in a graph
 data PathEquation = 
   PathEquation {
+    -- | The left-hand side of the equation
     pathEquationLeft :: Query.Path,
+    -- | The right-hand side of the equation
     pathEquationRight :: Query.Path}
   deriving (Eq, Ord, Read, Show)
 
@@ -26,7 +28,9 @@ _PathEquation_right = (Core.Name "right")
 -- | A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns.
 data PatternImplication = 
   PatternImplication {
+    -- | The pattern which, if it matches, triggers the constraint
     patternImplicationAntecedent :: Query.Pattern,
+    -- | The pattern which must also match when the antecedent matches
     patternImplicationConsequent :: Query.Pattern}
   deriving (Eq, Ord, Read, Show)
 

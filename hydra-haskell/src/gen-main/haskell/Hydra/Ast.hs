@@ -30,8 +30,11 @@ _Associativity_both = (Core.Name "both")
 -- | Formatting option for code blocks
 data BlockStyle = 
   BlockStyle {
+    -- | An optional indentation string
     blockStyleIndent :: (Maybe String),
+    -- | Whether to place a newline before the content
     blockStyleNewlineBeforeContent :: Bool,
+    -- | Whether to place a newline after the content
     blockStyleNewlineAfterContent :: Bool}
   deriving (Eq, Ord, Read, Show)
 
@@ -46,8 +49,11 @@ _BlockStyle_newlineAfterContent = (Core.Name "newlineAfterContent")
 -- | An expression enclosed by brackets
 data BracketExpr = 
   BracketExpr {
+    -- | The bracket pair enclosing the expression
     bracketExprBrackets :: Brackets,
+    -- | The expression within the brackets
     bracketExprEnclosed :: Expr,
+    -- | The formatting style for the bracketed block
     bracketExprStyle :: BlockStyle}
   deriving (Eq, Ord, Read, Show)
 
@@ -62,7 +68,9 @@ _BracketExpr_style = (Core.Name "style")
 -- | Matching open and close bracket symbols
 data Brackets = 
   Brackets {
+    -- | The opening bracket symbol
     bracketsOpen :: Symbol,
+    -- | The closing bracket symbol
     bracketsClose :: Symbol}
   deriving (Eq, Ord, Read, Show)
 
@@ -74,9 +82,13 @@ _Brackets_close = (Core.Name "close")
 
 -- | An abstract expression
 data Expr = 
+  -- | A constant symbol
   ExprConst Symbol |
+  -- | An indented expression
   ExprIndent IndentedExpression |
+  -- | An operator expression
   ExprOp OpExpr |
+  -- | A bracketed expression
   ExprBrackets BracketExpr
   deriving (Eq, Ord, Read, Show)
 
@@ -93,7 +105,9 @@ _Expr_brackets = (Core.Name "brackets")
 -- | An expression indented in a certain style
 data IndentedExpression = 
   IndentedExpression {
+    -- | The indentation style
     indentedExpressionStyle :: IndentStyle,
+    -- | The expression to be indented
     indentedExpressionExpr :: Expr}
   deriving (Eq, Ord, Read, Show)
 
@@ -105,7 +119,9 @@ _IndentedExpression_expr = (Core.Name "expr")
 
 -- | Any of several indentation styles
 data IndentStyle = 
+  -- | Indent all lines with the given string
   IndentStyleAllLines String |
+  -- | Indent only lines after the first with the given string
   IndentStyleSubsequentLines String
   deriving (Eq, Ord, Read, Show)
 
@@ -118,9 +134,13 @@ _IndentStyle_subsequentLines = (Core.Name "subsequentLines")
 -- | An operator symbol
 data Op = 
   Op {
+    -- | The operator symbol
     opSymbol :: Symbol,
+    -- | The padding around the operator
     opPadding :: Padding,
+    -- | The precedence of the operator
     opPrecedence :: Precedence,
+    -- | The associativity of the operator
     opAssociativity :: Associativity}
   deriving (Eq, Ord, Read, Show)
 
@@ -137,8 +157,11 @@ _Op_associativity = (Core.Name "associativity")
 -- | An operator expression
 data OpExpr = 
   OpExpr {
+    -- | The operator
     opExprOp :: Op,
+    -- | The left-hand side operand
     opExprLhs :: Expr,
+    -- | The right-hand side operand
     opExprRhs :: Expr}
   deriving (Eq, Ord, Read, Show)
 
@@ -153,7 +176,9 @@ _OpExpr_rhs = (Core.Name "rhs")
 -- | Left and right padding for an operator
 data Padding = 
   Padding {
+    -- | Padding to the left of the operator
     paddingLeft :: Ws,
+    -- | Padding to the right of the operator
     paddingRight :: Ws}
   deriving (Eq, Ord, Read, Show)
 
@@ -181,10 +206,15 @@ _Symbol = (Core.Name "hydra.ast.Symbol")
 
 -- | One of several classes of whitespace
 data Ws = 
+  -- | No whitespace
   WsNone  |
+  -- | A single space
   WsSpace  |
+  -- | A line break
   WsBreak  |
+  -- | A line break followed by indentation
   WsBreakAndIndent String |
+  -- | Two line breaks
   WsDoubleBreak 
   deriving (Eq, Ord, Read, Show)
 

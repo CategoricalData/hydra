@@ -23,7 +23,9 @@ module_ = Module ns elements [] [Core.module_] $
 
     elements = [
 
-      def "Graph" $ Types.map (topo "Vertex") (list $ topo "Vertex"),
+      def "Graph" $
+        doc "A directed graph represented as an adjacency list mapping vertices to their outgoing neighbors" $
+        Types.map (topo "Vertex") (list $ topo "Vertex"),
 
       -- Note: useful, but currently unused
       def "OrderingIsomorphism" $ forAlls ["a"] $ record [
@@ -54,4 +56,6 @@ module_ = Module ns elements [] [Core.module_] $
           doc "Accumulated strongly connected components, each a list of vertices" $
           list $ list $ topo "Vertex"],
 
-      def "Vertex" $ int32]
+      def "Vertex" $
+        doc "A graph vertex, represented as a 32-bit integer identifier" $
+        int32]

@@ -138,7 +138,7 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
       expectMono 1 []
         (tuple [])
         (T.product []),
-      expectMono 2 [tag_disabledForMinimalInference]
+      expectMono 2 []
         (tuple2 (int32 42) (string "foo"))
         (T.product [T.int32, T.string])],
 
@@ -242,14 +242,14 @@ testGroupForProductTerms = supergroup "Product terms" [
         (tuple [])
         (T.product [])],
     subgroup "Non-empty monotyped products" [
-      expectMono 1 [tag_disabledForMinimalInference]
+      expectMono 1 []
         (tuple [string "foo", int32 42])
         (T.product [T.string, T.int32]),
-      expectMono 2 [tag_disabledForMinimalInference]
+      expectMono 2 []
         (tuple [string "foo", list [float32 42.0, float32 137.0]])
         (T.product [T.string, T.list T.float32])],
     subgroup "Polytyped products" [
-      expectPoly 1 [tag_disabledForMinimalInference]
+      expectPoly 1 []
         (tuple [list [], string "foo"])
         ["t0"] (T.product [T.list $ T.var "t0", T.string])]]
 

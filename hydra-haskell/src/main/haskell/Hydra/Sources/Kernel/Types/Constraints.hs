@@ -32,11 +32,19 @@ module_ = Module ns elements [Query.module_] [Core.module_] $
       def "PathEquation" $
         doc "A declared equivalence between two abstract paths in a graph" $
         record [
-          "left">: query "Path",
-          "right">: query "Path"],
+          "left">:
+            doc "The left-hand side of the equation" $
+            query "Path",
+          "right">:
+            doc "The right-hand side of the equation" $
+            query "Path"],
 
       def "PatternImplication" $
         doc "A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns." $
         record [
-          "antecedent">: query "Pattern",
-          "consequent">: query "Pattern"]]
+          "antecedent">:
+            doc "The pattern which, if it matches, triggers the constraint" $
+            query "Pattern",
+          "consequent">:
+            doc "The pattern which must also match when the antecedent matches" $
+            query "Pattern"]]

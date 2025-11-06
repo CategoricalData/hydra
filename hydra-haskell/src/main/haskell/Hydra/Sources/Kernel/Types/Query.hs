@@ -109,8 +109,12 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
       def "Range" $
         doc "A range from min to max, inclusive" $
         record [
-          "min">: int32,
-          "max">: int32],
+          "min">:
+            doc "The minimum value (inclusive)" $
+            int32,
+          "max">:
+            doc "The maximum value (inclusive)" $
+            int32],
 
       def "RegexQuantifier" $
         doc "A regular expression quantifier" $
@@ -126,8 +130,12 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
       def "RegexSequence" $
         doc "A path with a regex quantifier" $
         record [
-          "path">: query "Path",
-          "quantifier">: query "RegexQuantifier"],
+          "path">:
+            doc "The path to which the quantifier applies" $
+            query "Path",
+          "quantifier">:
+            doc "The quantifier" $
+            query "RegexQuantifier"],
 
       def "Step" $
         doc "An atomic function as part of a query. When applied to a graph, steps are typed by function types." $
@@ -145,9 +153,15 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
       def "TriplePattern" $
         doc "A subject/predicate/object pattern" $
         record [
-          "subject">: query "Node",
-          "predicate">: query "Path",
-          "object">: query "Node"],
+          "subject">:
+            doc "The subject of the pattern" $
+            query "Node",
+          "predicate">:
+            doc "The predicate (property) of the pattern" $
+            query "Path",
+          "object">:
+            doc "The object of the pattern" $
+            query "Node"],
 
       def "Variable" $
         doc "A query variable" $

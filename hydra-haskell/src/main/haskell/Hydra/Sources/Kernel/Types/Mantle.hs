@@ -28,6 +28,7 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
 
       -- TODO: find another home for CaseConvention; it doesn't really belong in hydra.mantle
       def "CaseConvention" $
+        doc "A naming convention for symbols, such as camelCase or snake_case" $
         Types.enum ["camel", "pascal", "lowerSnake", "upperSnake"],
 
       def "Comparison" $
@@ -64,8 +65,12 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
       def "Precision" $
         doc "Numeric precision: arbitrary precision, or precision to a specified number of bits" $
         union [
-          "arbitrary">: unit,
-          "bits">: int32],
+          "arbitrary">:
+            doc "Arbitrary precision" $
+            unit,
+          "bits">:
+            doc "Precision to a specified number of bits" $
+            int32],
 
       def "TermVariant" $
         doc "The identifier of a term expression constructor" $

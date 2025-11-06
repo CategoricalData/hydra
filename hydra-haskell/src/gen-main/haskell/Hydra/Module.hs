@@ -12,7 +12,9 @@ import qualified Data.Set as S
 
 -- | A definition, which may be either a term or type definition
 data Definition = 
+  -- | A term definition
   DefinitionTerm TermDefinition |
+  -- | A type definition
   DefinitionType TypeDefinition
   deriving (Eq, Ord, Read, Show)
 
@@ -86,7 +88,9 @@ _Namespace = (Core.Name "hydra.module.Namespace")
 -- | A mapping from namespaces to values of type n, with a focus on one namespace
 data Namespaces n = 
   Namespaces {
+    -- | The namespace in focus, together with its associated value
     namespacesFocus :: (Namespace, n),
+    -- | A mapping of namespaces to values
     namespacesMapping :: (M.Map Namespace n)}
   deriving (Eq, Ord, Read, Show)
 
@@ -99,7 +103,9 @@ _Namespaces_mapping = (Core.Name "mapping")
 -- | A qualified name consisting of an optional namespace together with a mandatory local name
 data QualifiedName = 
   QualifiedName {
+    -- | The optional namespace
     qualifiedNameNamespace :: (Maybe Namespace),
+    -- | The local name
     qualifiedNameLocal :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -112,8 +118,11 @@ _QualifiedName_local = (Core.Name "local")
 -- | A term-level definition, including a name, a term, and the type of the term
 data TermDefinition = 
   TermDefinition {
+    -- | The name of the term
     termDefinitionName :: Core.Name,
+    -- | The term being defined
     termDefinitionTerm :: Core.Term,
+    -- | The type of the term
     termDefinitionType :: Core.Type}
   deriving (Eq, Ord, Read, Show)
 
@@ -128,7 +137,9 @@ _TermDefinition_type = (Core.Name "type")
 -- | A type-level definition, including a name and the type
 data TypeDefinition = 
   TypeDefinition {
+    -- | The name of the type
     typeDefinitionName :: Core.Name,
+    -- | The type being defined
     typeDefinitionType :: Core.Type}
   deriving (Eq, Ord, Read, Show)
 

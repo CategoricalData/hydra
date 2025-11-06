@@ -15,8 +15,11 @@ import qualified Data.Set as S
 -- | An evaluation context together with a source language and a target language
 data AdapterContext = 
   AdapterContext {
+    -- | The underlying graph of elements and primitives
     adapterContextGraph :: Graph.Graph,
+    -- | The language being encoded or decoded
     adapterContextLanguage :: Language,
+    -- | A map of type names to adapters for those types
     adapterContextAdapters :: (M.Map Core.Name (Compute.Adapter AdapterContext AdapterContext Core.Type Core.Type Core.Term Core.Term))}
 
 _AdapterContext = (Core.Name "hydra.coders.AdapterContext")
@@ -42,7 +45,9 @@ _CoderDirection_decode = (Core.Name "decode")
 -- | A named language together with language-specific constraints
 data Language = 
   Language {
+    -- | The unique name of the language
     languageName :: LanguageName,
+    -- | The constraints which characterize the language
     languageConstraints :: LanguageConstraints}
 
 _Language = (Core.Name "hydra.coders.Language")
