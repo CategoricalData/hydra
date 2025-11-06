@@ -4,7 +4,7 @@ r"""Type inference following Algorithm W, extended for nominal terms and types."
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
+from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
 from typing import Tuple, cast
 import hydra.annotations
 import hydra.checking
@@ -13,6 +13,7 @@ import hydra.core
 import hydra.extract.core
 import hydra.graph
 import hydra.lexical
+import hydra.lib.eithers
 import hydra.lib.equality
 import hydra.lib.flows
 import hydra.lib.lists
@@ -23,7 +24,6 @@ import hydra.lib.math
 import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.mantle
 import hydra.monads
 import hydra.rewriting
 import hydra.schemas
@@ -72,6 +72,14 @@ def finalize_inferred_term[T0](cx: hydra.typing.InferenceContext, term: hydra.co
     term2 = bind_unbound_type_variables(cx, term)
     return hydra.lib.flows.bind(hydra.checking.check_for_unbound_type_variables(cx, term2), (lambda _: hydra.lib.flows.pure(hydra.rewriting.normalize_type_variables_in_term(term2))))
 
+def fresh_variable_type[T0]() -> hydra.compute.Flow[T0, hydra.core.Type]:
+    return hydra.lib.flows.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), cast(hydra.compute.Flow[T0, hydra.core.Name], hydra.schemas.fresh_name))
+
+def yield_checked[T0](term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.TypeSubst) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
+    iterm = hydra.substitution.subst_types_in_term(subst, term)
+    itype = hydra.substitution.subst_in_type(subst, typ)
+    return hydra.lib.flows.pure(hydra.typing.InferenceResult(iterm, itype, subst))
+
 def map_constraints[T0, T1](cx: hydra.typing.InferenceContext, f: Callable[[hydra.typing.TypeSubst], T0], constraints: frozenlist[hydra.typing.TypeConstraint]) -> hydra.compute.Flow[T1, T0]:
     return hydra.lib.flows.bind(hydra.unification.unify_type_constraints(cx.schema_types, constraints), (lambda s: hydra.lib.flows.bind(hydra.checking.check_type_subst(cx, s), (lambda _: hydra.lib.flows.pure(f(s))))))
 
@@ -97,11 +105,6 @@ def free_variables_in_context(cx: hydra.typing.InferenceContext) -> frozenset[hy
     r"""Get all free variables in an inference context."""
     
     return hydra.lib.lists.foldl(cast(Callable[[frozenset[hydra.core.Name], frozenset[hydra.core.Name]], frozenset[hydra.core.Name]], hydra.lib.sets.union), cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), hydra.lib.lists.map(hydra.rewriting.free_variables_in_type_scheme_simple, hydra.lib.maps.elems(cx.data_types)))
-
-def yield_checked[T0](term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.TypeSubst) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
-    iterm = hydra.substitution.subst_types_in_term(subst, term)
-    itype = hydra.substitution.subst_in_type(subst, typ)
-    return hydra.lib.flows.pure(hydra.typing.InferenceResult(iterm, itype, subst))
 
 def infer_type_of_primitive[T0](cx: hydra.typing.InferenceContext, name: hydra.core.Name) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("No such primitive: ", name.value)), (lambda scheme: hydra.lib.flows.bind(hydra.schemas.instantiate_type_scheme(scheme), (lambda ts: yield_checked(build_type_application_term(ts.variables, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(name))))), ts.type, hydra.substitution.id_type_subst)))), hydra.lib.maps.lookup(name, cx.primitive_types))
@@ -153,6 +156,9 @@ def infer_type_of_case_statement[T0](cx: hydra.typing.InferenceContext, case_stm
 
 def infer_type_of_collection[T0](cx: hydra.typing.InferenceContext, typ_cons: Callable[[hydra.core.Type], hydra.core.Type], trm_cons: Callable[[frozenlist[hydra.core.Term]], hydra.core.Term], desc: str, els: frozenlist[hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     return hydra.lib.flows.bind(cast(hydra.compute.Flow[T0, hydra.core.Name], hydra.schemas.fresh_name), (lambda var: hydra.lib.logic.if_else(hydra.lib.lists.null(els), hydra.lib.flows.pure(yield_(build_type_application_term((var,), trm_cons(cast(frozenlist[hydra.core.Term], ()))), typ_cons(cast(hydra.core.Type, hydra.core.TypeVariable(var))), hydra.substitution.id_type_subst)), hydra.lib.flows.bind(infer_many(cx, hydra.lib.lists.zip(els, hydra.lib.lists.map((lambda i: hydra.lib.strings.cat(("#", hydra.lib.literals.show_int32(i)))), hydra.lib.math.range_(1, hydra.lib.math.add(hydra.lib.lists.length(els), 1))))), (lambda results: (terms := results[0], types := results[1][0], subst1 := results[1][1], constraints := hydra.lib.lists.map((lambda t: hydra.typing.TypeConstraint(cast(hydra.core.Type, hydra.core.TypeVariable(var)), t, desc)), types), map_constraints(cx, (lambda subst2: (iterm := trm_cons(terms), itype := typ_cons(cast(hydra.core.Type, hydra.core.TypeVariable(var))), isubst := hydra.substitution.compose_type_subst(subst1, subst2), yield_(iterm, itype, isubst))[3]), constraints))[4])))))
+
+def infer_type_of_either[T0](cx: hydra.typing.InferenceContext, e: Either[hydra.core.Term, hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
+    return hydra.lib.eithers.either((lambda l: hydra.lib.flows.bind(infer_type_of_term(cx, l, "either left value"), (lambda r1: (iterm := r1.term, left_type := r1.type, subst := r1.subst, hydra.lib.flows.bind(cast(hydra.compute.Flow[T0, hydra.core.Type], fresh_variable_type), (lambda right_type: (either_term := cast(hydra.core.Term, hydra.core.TermEither(cast(Either[hydra.core.Term, hydra.core.Term], Left(iterm)))), term_with_left_type := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(either_term, left_type))), term_with_both_types := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(term_with_left_type, right_type))), either_type := cast(hydra.core.Type, hydra.core.TypeEither(hydra.core.EitherType(left_type, right_type))), yield_checked(term_with_both_types, either_type, subst))[4])))[3]))), (lambda r: hydra.lib.flows.bind(infer_type_of_term(cx, r, "either right value"), (lambda r1: (iterm := r1.term, right_type := r1.type, subst := r1.subst, hydra.lib.flows.bind(cast(hydra.compute.Flow[T0, hydra.core.Type], fresh_variable_type), (lambda left_type: (either_term := cast(hydra.core.Term, hydra.core.TermEither(cast(Either[hydra.core.Term, hydra.core.Term], Right(iterm)))), term_with_left_type := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(either_term, left_type))), term_with_both_types := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(term_with_left_type, right_type))), either_type := cast(hydra.core.Type, hydra.core.TypeEither(hydra.core.EitherType(left_type, right_type))), yield_checked(term_with_both_types, either_type, subst))[4])))[3]))), e)
 
 def infer_type_of_elimination[T0](cx: hydra.typing.InferenceContext, elm: hydra.core.Elimination) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     match elm:
@@ -270,15 +276,10 @@ def infer_type_of_sum[T0](cx: hydra.typing.InferenceContext, sum: hydra.core.Sum
     i = sum.index
     s = sum.size
     term = sum.term
-    def to_type(v1: hydra.mantle.Either[hydra.core.Type, hydra.core.Name]) -> hydra.core.Type:
-        match v1:
-            case hydra.mantle.EitherLeft(value=t):
-                return t
-            
-            case hydra.mantle.EitherRight(value=v):
-                return cast(hydra.core.Type, hydra.core.TypeVariable(v))
-    def var_or_term[T1, T2](t: T1, j: int) -> hydra.compute.Flow[T2, hydra.mantle.Either[T1, hydra.core.Name]]:
-        return hydra.lib.logic.if_else(hydra.lib.equality.equal(i, j), hydra.lib.flows.pure(cast(hydra.mantle.Either[T1, hydra.core.Name], cast(hydra.mantle.Either, hydra.mantle.EitherLeft(t)))), hydra.lib.flows.map((lambda x: cast(hydra.mantle.Either[T1, hydra.core.Name], cast(hydra.mantle.Either, hydra.mantle.EitherRight(x)))), cast(hydra.compute.Flow[T2, hydra.core.Name], hydra.schemas.fresh_name)))
+    def to_type(e: Either[hydra.core.Type, hydra.core.Name]) -> hydra.core.Type:
+        return hydra.lib.eithers.either((lambda t: t), (lambda v: cast(hydra.core.Type, hydra.core.TypeVariable(v))), e)
+    def var_or_term[T1, T2](t: T1, j: int) -> hydra.compute.Flow[T2, Either[T1, hydra.core.Name]]:
+        return hydra.lib.logic.if_else(hydra.lib.equality.equal(i, j), hydra.lib.flows.pure(cast(Either[T1, hydra.core.Name], Left(t))), hydra.lib.flows.map((lambda x: cast(Either[T1, hydra.core.Name], Right(x))), cast(hydra.compute.Flow[T2, hydra.core.Name], hydra.schemas.fresh_name)))
     return hydra.lib.flows.bind(infer_type_of_term(cx, term, "sum term"), (lambda result: (iterm := result.term, ityp := result.type, isubst := result.subst, hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: var_or_term(ityp, v1)), hydra.lib.math.range_(0, hydra.lib.math.sub(s, 1))), (lambda vars: hydra.lib.flows.pure(yield_(cast(hydra.core.Term, hydra.core.TermSum(hydra.core.Sum(i, s, iterm))), cast(hydra.core.Type, hydra.core.TypeSum(hydra.lib.lists.map(to_type, vars))), isubst)))))[3]))
 
 def infer_type_of_term[T0](cx: hydra.typing.InferenceContext, term: hydra.core.Term, desc: str) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
@@ -289,6 +290,9 @@ def infer_type_of_term[T0](cx: hydra.typing.InferenceContext, term: hydra.core.T
             
             case hydra.core.TermApplication(value=a2):
                 return infer_type_of_application(cx, a2)
+            
+            case hydra.core.TermEither(value=e):
+                return infer_type_of_either(cx, e)
             
             case hydra.core.TermFunction(value=f):
                 return infer_type_of_function(cx, f)
@@ -320,11 +324,11 @@ def infer_type_of_term[T0](cx: hydra.typing.InferenceContext, term: hydra.core.T
             case hydra.core.TermSum(value=s2):
                 return infer_type_of_sum(cx, s2)
             
-            case hydra.core.TermTypeLambda(value=ta):
-                return infer_type_of_type_lambda(cx, ta)
-            
             case hydra.core.TermTypeApplication(value=tt):
                 return infer_type_of_type_application(cx, tt)
+            
+            case hydra.core.TermTypeLambda(value=ta):
+                return infer_type_of_type_lambda(cx, ta)
             
             case hydra.core.TermUnion(value=i):
                 return infer_type_of_injection(cx, i)
@@ -361,9 +365,6 @@ def infer_types_of_temporary_bindings[T0](cx: hydra.typing.InferenceContext, bin
 
 def for_inferred_term[T0, T1](cx: hydra.typing.InferenceContext, term: hydra.core.Term, desc: str, f: Callable[[hydra.typing.InferenceResult], T0]) -> hydra.compute.Flow[T1, T0]:
     return hydra.lib.flows.map(f, infer_type_of_term(cx, term, desc))
-
-def fresh_variable_type[T0]() -> hydra.compute.Flow[T0, hydra.core.Type]:
-    return hydra.lib.flows.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), cast(hydra.compute.Flow[T0, hydra.core.Name], hydra.schemas.fresh_name))
 
 def infer_graph_types[T0](g0: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.graph.Graph]:
     def from_let_term(l: hydra.core.Let) -> hydra.graph.Graph:

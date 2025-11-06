@@ -47,6 +47,9 @@ def type(v1: hydra.core.Type) -> str:
         case hydra.core.TypeApplication(value=at):
             return hydra.lib.strings.cat((type(at.function), " applied to ", type(at.argument)))
         
+        case hydra.core.TypeEither(value=et):
+            return hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("either ", type(et.left))), " or ")), type(et.right)))
+        
         case hydra.core.TypeLiteral(value=v12):
             return literal_type(v12)
         

@@ -105,6 +105,9 @@ def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.co
             case hydra.core.TypeApplication(value=app):
                 return hydra.lib.logic.and_(type_is_supported(constraints, app.function), type_is_supported(constraints, app.argument))
             
+            case hydra.core.TypeEither(value=et):
+                return hydra.lib.logic.and_(type_is_supported(constraints, et.left), type_is_supported(constraints, et.right))
+            
             case hydra.core.TypeForall(value=ft):
                 return type_is_supported(constraints, ft.body)
             
