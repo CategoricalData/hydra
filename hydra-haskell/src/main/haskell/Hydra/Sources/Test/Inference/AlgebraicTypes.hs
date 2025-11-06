@@ -24,6 +24,7 @@ algebraicTypesTests = supergroup "Algebraic terms" [
   testGroupForLists,
   testGroupForMaps,
   testGroupForOptionals,
+  testGroupForPairs,
   testGroupForProducts,
   testGroupForSets,
   testGroupForSums]
@@ -75,8 +76,8 @@ testGroupForEithers = supergroup "Either terms" [
         (list [left $ string "error", right $ int32 42])
         (T.list $ T.either T.string T.int32),
       expectPoly 2 []
-        (pair (list [left $ string "error", right $ int32 42]) (list []))
-        ["t0"] (T.pair (T.list $ T.either T.string T.int32) (T.list $ T.var "t0"))]]
+        (tuple2 (list [left $ string "error", right $ int32 42]) (list []))
+        ["t0"] (T.tuple2 (T.list $ T.either T.string T.int32) (T.list $ T.var "t0"))]]
 
 testGroupForFolds :: TTerm TestGroup
 testGroupForFolds = subgroup "List eliminations (folds)" [
@@ -143,6 +144,48 @@ testGroupForOptionals = subgroup "Optional terms" [
       (optional nothing)
       ["t0"] (T.optional $ T.var "t0")]
 
+testGroupForPairs :: TTerm TestGroup
+testGroupForPairs = supergroup "Pair terms" [
+    subgroup "Monotyped pairs" [
+      expectMono 1 []
+        (pair (string "foo") (int32 42))
+        (T.pair T.string T.int32),
+      expectMono 2 []
+        (pair (string "foo") (list [float32 42.0, float32 137.0]))
+        (T.pair T.string (T.list T.float32))],
+
+    subgroup "Polytyped pairs" [
+      expectPoly 1 []
+        (pair (list []) (string "foo"))
+        ["t0"] (T.pair (T.list $ T.var "t0") T.string),
+      expectPoly 2 []
+        (pair (list []) (list []))
+        ["t0", "t1"] (T.pair (T.list $ T.var "t0") (T.list $ T.var "t1"))],
+
+    subgroup "Nested pairs" [
+      expectMono 1 []
+        (pair (pair (int32 1) (string "nested")) true)
+        (T.pair (T.pair T.int32 T.string) T.boolean),
+      expectMono 2 []
+        (pair (string "foo") (pair (int32 42) (list [float32 42.0])))
+        (T.pair T.string (T.pair T.int32 (T.list T.float32)))],
+
+    subgroup "Pairs in lambda" [
+      expectPoly 1 []
+        (lambda "x" (pair (var "x") (string "constant")))
+        ["t0"] (T.function (T.var "t0") (T.pair (T.var "t0") T.string)),
+      expectPoly 2 []
+        (lambda "p" (pair (var "p") (var "p")))
+        ["t0"] (T.function (T.var "t0") (T.pair (T.var "t0") (T.var "t0")))],
+
+    subgroup "Pairs in data structures" [
+      expectMono 1 []
+        (list [pair (string "a") (int32 1), pair (string "b") (int32 2)])
+        (T.list $ T.pair T.string T.int32),
+      expectPoly 2 []
+        (list [pair (list []) (string "foo")])
+        ["t0"] (T.list $ T.pair (T.list $ T.var "t0") T.string)]]
+
 testGroupForProducts :: TTerm TestGroup
 testGroupForProducts = supergroup "Product terms" [
     subgroup "Empty products" [
@@ -171,14 +214,14 @@ testGroupForProducts = supergroup "Product terms" [
 
     subgroup "Pairs" [
       expectMono 1 []
-        (pair (int32 42) (string "foo"))
-        (T.pair T.int32 T.string),
+        (tuple2 (int32 42) (string "foo"))
+        (T.tuple2 T.int32 T.string),
       expectPoly 2 []
-        (pair (list []) (string "foo"))
-        ["t0"] (T.pair (T.list $ T.var "t0") T.string),
+        (tuple2 (list []) (string "foo"))
+        ["t0"] (T.tuple2 (T.list $ T.var "t0") T.string),
       expectPoly 3 []
-        (pair (list []) (list []))
-        ["t0", "t1"] (T.pair (T.list $ T.var "t0") (T.list $ T.var "t1"))]]
+        (tuple2 (list []) (list []))
+        ["t0", "t1"] (T.tuple2 (T.list $ T.var "t0") (T.list $ T.var "t1"))]]
 
 testGroupForSets :: TTerm TestGroup
 testGroupForSets = subgroup "Set terms" [
