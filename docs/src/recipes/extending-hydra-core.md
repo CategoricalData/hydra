@@ -1,4 +1,4 @@
-# Adding New Type and Term Constructors to Hydra Core
+# Adding new type and term constructors to Hydra Core
 
 This guide documents the process of adding native support for new type constructors and corresponding term constructors to Hydra Core. This was documented while adding `Either` type support and serves as a reference for adding other constructs like pairs, sum types, etc.
 
@@ -12,6 +12,7 @@ This guide documents the process of adding native support for new type construct
 - [Step-by-Step Guide](#step-by-step-guide)
   - [Step 1: Update Core Schema](#step-1-update-core-schema)
   - [Step 2: Verify DSL Constructors](#step-2-verify-dsl-constructors)
+  - [Step 2.5: Update Variants and Mantle DSL](#step-25-update-variants-and-mantle-dsl)
   - [Step 3: Add Type Inference](#step-3-add-type-inference)
   - [Step 3.5: Add Type Checking](#step-35-add-type-checking)
   - [Step 4: Update Rewriting Functions](#step-4-update-rewriting-functions)
@@ -22,6 +23,7 @@ This guide documents the process of adding native support for new type construct
   - [Step 9: Rebuild](#step-9-rebuild)
   - [Step 10: Run Code Generation](#step-10-run-code-generation)
   - [Step 11: Final Verification](#step-11-final-verification)
+  - [Step 11.5: Update Language Support](#step-115-update-language-support-optional)
   - [Step 12: Add Comprehensive Tests](#step-12-add-comprehensive-tests)
 - [Common Pitfalls](#common-pitfalls)
 - [Tips for Success](#tips-for-success)
@@ -30,6 +32,8 @@ This guide documents the process of adding native support for new type construct
 ---
 
 ## Overview
+
+This guide documents how the `Either` type was added to Hydra Core and serves as a template for adding other constructors in the future. While `Either` is now built-in (available as `hydra.core.EitherType` and `Term.either`), the process described here can be followed for adding new type/term constructors like pairs, sum types, or other constructs.
 
 Adding a new type/term constructor to Hydra Core involves:
 
@@ -46,6 +50,7 @@ The most challenging aspect is the **bootstrap problem**: the code generator nee
 ## Prerequisites
 
 - Understanding of Hydra's type system and DSL
+  - See the [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) wiki page for core concepts
 - Familiarity with the Haskell DSL used in `Hydra.Sources` modules
 - Access to the Hydra codebase with write permissions
 - `stack` build tool installed
@@ -121,6 +126,66 @@ right (TTerm term) = TTerm $ Terms.right term
 ```
 
 If missing, add them following existing patterns like `just` and `nothing` for `Maybe`.
+
+---
+
+### Step 2.5: Update Variants and Mantle DSL
+
+#### 2.5.1: Update Hydra.Variants
+
+**File:** `src/gen-main/haskell/Hydra/Variants.hs`
+
+This is a generated file, but you'll need to manually patch it during bootstrap. Add two things:
+
+1. **Add case to `termVariant` function:**
+```haskell
+termVariant :: (Core.Term -> Mantle.TermVariant)
+termVariant x = case x of
+  Core.TermAnnotated _ -> Mantle.TermVariantAnnotated
+  Core.TermApplication _ -> Mantle.TermVariantApplication
+  Core.TermEither _ -> Mantle.TermVariantEither  -- ← ADD THIS
+  Core.TermFunction _ -> Mantle.TermVariantFunction
+  -- ...
+```
+
+2. **Add to `termVariants` list:**
+```haskell
+termVariants :: [Mantle.TermVariant]
+termVariants = [
+  Mantle.TermVariantAnnotated,
+  Mantle.TermVariantApplication,
+  Mantle.TermVariantEither,  -- ← ADD THIS (alphabetical order)
+  Mantle.TermVariantFunction,
+  -- ...
+]
+```
+
+Similarly, if adding a Type constructor, update `typeVariant` and `typeVariants`.
+
+#### 2.5.2: Update Hydra.Dsl.Mantle
+
+**File:** `src/main/haskell/Hydra/Dsl/Mantle.hs`
+
+Add DSL helpers for the variant metadata:
+
+1. **Add case to `termVariant` pattern match:**
+```haskell
+termVariant :: TermVariant -> TTerm TermVariant
+termVariant v = unitVariant _TermVariant $ case v of
+  TermVariantAnnotated -> _TermVariant_annotated
+  TermVariantApplication -> _TermVariant_application
+  TermVariantEither -> _TermVariant_either  -- ← ADD THIS
+  TermVariantFunction -> _TermVariant_function
+  -- ...
+```
+
+2. **Add helper function:**
+```haskell
+termVariantEither :: TTerm TermVariant
+termVariantEither = unitVariant _TermVariant _TermVariant_either
+```
+
+Place in alphabetical order among the other `termVariantX` helpers.
 
 ---
 
@@ -234,40 +299,64 @@ Add case to main checking function and register in elements list, similar to inf
 
 **File:** `src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs`
 
-> **⚠️ Critical Distinction:** Use library elimination functions (`Eithers.either_`) for Haskell's **built-in** types, not `cases _Either`. The DSL `cases` construct only works on Hydra union types, not Haskell's native types.
+> **⚠️ Critical Distinction:** Use library elimination functions (`Eithers.either_`) for Haskell's **built-in** types like `Prelude.Either`, `Prelude.Maybe`, etc. The DSL `cases` construct only works on Hydra union types (union types defined with the `union` combinator in Core.hs), not Haskell's native algebraic data types.
 
-#### 4.1: In `rewriteTermDef`
+> **⚠️ Important:** This file contains multiple rewriting functions with different characteristics (pure vs monadic, with/without context, with/without accumulator). Add your constructor case to **all of them**, following the existing patterns.
+
+**Key functions to update:**
+- `rewriteTermDef` - Pure rewriting
+- `rewriteTermMDef` - Monadic rewriting
+- `rewriteTermWithContextDef` / `rewriteTermWithContextMDef` - Context-passing variants
+- `rewriteAndFoldTermDef` / `rewriteAndFoldTermMDef` - Accumulator variants
+- `subtermsDef` - Subterm extraction
+
+**Example (pure rewriting):**
 
 ```haskell
+-- In rewriteTermDef
 _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
   ("l" ~> left $ var "recurse" @@ var "l")
   ("r" ~> right $ var "recurse" @@ var "r")
   (var "e"),
 ```
 
-#### 4.2: In `subtermsDef`
+**Example (monadic with accumulator):**
 
 ```haskell
+-- In rewriteAndFoldTermMDef
 _Term_either>>: "e" ~> Eithers.either_
-  ("l" ~> list [var "l"])
-  ("r" ~> list [var "r"])
+  ("l" ~>
+    "rl" <<~ var "recurse" @@ var "val0" @@ var "l" $
+    produce $ pair (first $ var "rl") (Core.termEither $ left $ second $ var "rl"))
+  ("r" ~>
+    "rr" <<~ var "recurse" @@ var "val0" @@ var "r" $
+    produce $ pair (first $ var "rr") (Core.termEither $ right $ second $ var "rr"))
   (var "e"),
 ```
 
-#### 4.3: Add Import
+**Add import:**
 
 ```haskell
 import qualified Hydra.Dsl.Lib.Eithers as Eithers
+```
+
+**Verification:** Check your constructor appears in the file:
+```bash
+grep "_Term_either" src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs
 ```
 
 ---
 
 ### Step 5: Update Other Term Traversals
 
-Find other files that pattern match on Term constructors:
+Find other files that pattern match on Term constructors. Replace `Either` with your constructor name:
 
 ```bash
-grep -l "Core\.TermApplication" src/main/haskell/Hydra/Sources/Kernel/Terms/*.hs
+# Find files that might need updates
+grep -l "TermApplication\|TermLet\|TermList" src/main/haskell/Hydra/Sources/Kernel/Terms/*.hs
+
+# After adding, verify your constructor is handled everywhere
+grep -c "TermEither" src/main/haskell/Hydra/Sources/Kernel/Terms/*.hs
 ```
 
 Common files to update:
@@ -283,9 +372,18 @@ _Term_either>>: "et" ~> Eithers.either_
 
 Add import: `import qualified Hydra.Dsl.Lib.Eithers as Eithers`
 
-#### 5.2: Other files
+#### 5.2: Other traversal files
 
-Check `Hydra/Sources/Kernel/Terms/Monads.hs` and similar files, but **be careful**: some may use custom Hydra union types (like `Hydra.Mantle.Either`) which should continue using `cases _Either`.
+Check other term traversal files that may need updates:
+- `Hydra/Sources/Kernel/Terms/Monads.hs`
+- `Hydra/Sources/Kernel/Terms/Encode/Core.hs`
+- `Hydra/Sources/Kernel/Terms/Decode/Core.hs`
+- `Hydra/Sources/Kernel/Terms/Show/Core.hs`
+- `Hydra/Sources/Kernel/Terms/Describe/Core.hs`
+
+Follow the same pattern: use library elimination functions for Haskell built-in types.
+
+> **Note on `hydra.mantle`:** The `Hydra.Mantle` module (defined in `Hydra/Sources/Kernel/Types/Mantle.hs`) contains supporting enum types like `TermVariant` and `TypeVariant` which list the available term and type constructors. These are metadata types used for introspection and constraints, not the actual union types themselves. You don't need to manually update these—they are typically kept in sync during code generation.
 
 ---
 
@@ -456,6 +554,91 @@ stack build
 
 ---
 
+### Step 11.5: Update Language Support (Optional)
+
+If you want target languages (Python, Java, Scala, etc.) to support the new constructor, update their language definitions and regenerate code.
+
+#### 11.5.1: Update Python Language Definition
+
+**File:** `hydra-ext/src/main/haskell/Hydra/Ext/Sources/Python/Language.hs`
+
+Add the new term variant to the supported features:
+
+```haskell
+-- Around line 115-130
+"termVariants">: Sets.fromList $ list [
+  Mantle.termVariantAnnotated,
+  Mantle.termVariantApplication,
+  Mantle.termVariantEither,  -- ← ADD THIS
+  Mantle.termVariantFunction,
+  Mantle.termVariantLet,
+  -- ...
+]
+```
+
+Add the type variant if you added a new type constructor:
+
+```haskell
+"typeVariants">: Sets.fromList $ list [
+  Mantle.typeVariantAnnotated,
+  Mantle.typeVariantApplication,
+  Mantle.typeVariantEither,  -- ← ADD THIS
+  Mantle.typeVariantFunction,
+  -- ...
+]
+```
+
+#### 11.5.2: Regenerate Python Code
+
+From `hydra-ext`:
+
+```bash
+cd hydra-ext
+stack runghc debug/WritePython.hs
+```
+
+Or use the REPL:
+```haskell
+stack exec ghci
+> :l debug/WritePython.hs
+> writePython "../hydra-python/src/main/python" kernelModules
+```
+
+This regenerates:
+- `hydra-python/src/main/python/hydra/core.py` (adds `TermEither` constructor)
+- `hydra-python/src/main/python/hydra/mantle.py` (adds `Either` type and helpers)
+- All other Hydra kernel modules in Python
+
+#### 11.5.3: Update Other Languages
+
+Follow similar patterns for Java, Scala, etc.:
+
+- **Java:** Update `Hydra/Ext/Sources/Java/Language.hs`, regenerate with `WriteJava.hs`
+- **Scala:** Update `Hydra/Ext/Sources/Scala/Language.hs`, regenerate with `WriteScala.hs`
+
+Each language coder needs to know how to encode/decode the new types in the target language.
+
+#### 11.5.4: Verify Generated Code
+
+```bash
+# Python
+cd hydra-python
+python3 -m py_compile src/main/python/hydra/core.py
+python3 -m py_compile src/main/python/hydra/mantle.py
+
+# Java (if applicable)
+cd hydra-java
+./gradlew compileJava
+
+# Scala (if applicable)
+cd hydra-scala
+sbt compile
+```
+
+**Note:** Target language support is optional but recommended if those languages are actively used in your project.
+
+---
+
 ### Step 12: Add Comprehensive Tests
 
 After verifying that the build succeeds, add thorough test coverage for both type inference and type checking.
@@ -551,6 +734,9 @@ stack test
 | Using `cases _Either` on built-in types | Confusion between Hydra unions and Haskell types | Use library functions (`Eithers.either_`) for Haskell built-ins |
 | `unexpected type: either<...>` in codegen | Coder doesn't know how to encode the type | Manually patch `Hydra/Ext/Haskell/Coder.hs` |
 | Type signature mismatch | Using wrong Monad operations | Use `<<~` for `Flow` binds, `<~` for pure lets |
+| Missing rewrite function cases | Forgot to add to all rewriting variants | Search for `_Term_maybe` in `Rewriting.hs` to find all functions needing updates |
+| Variants not updated | Missing from `Hydra.Variants` or `Hydra.Dsl.Mantle` | Add to `termVariant` function, `termVariants` list, and DSL helpers |
+| Language support missing | Constructor not in language definition | Add to `termVariants` in `Hydra/Ext/Sources/Python/Language.hs` (or other language) and regenerate |
 
 ---
 
@@ -560,20 +746,30 @@ stack test
 
 2. **Use existing patterns** - Study how `Maybe` is handled throughout the codebase
 
-3. **Strategic grepping** - Find all places needing updates:
+3. **Strategic grepping** - Find all places needing updates (replace with your constructor):
    ```bash
-   grep -r "TermApplication" src/main/haskell/Hydra/Sources/Kernel/Terms/
+   # Find files handling term constructors
+   grep -r "TermApplication\|TermLet" src/main/haskell/Hydra/Sources/Kernel/Terms/
+
+   # After adding, verify your constructor is everywhere it should be
+   grep -r "TermEither" src/main/haskell/Hydra/Sources/Kernel/Terms/
    ```
 
 4. **Understand the distinction:**
-   - **Hydra union types** (like `Hydra.Mantle.Either`) → use `cases`
-   - **Haskell built-in types** (like `Prelude.Either`) → use library functions
+   - **Hydra union types** (defined with `union` combinator in DSL) → use `cases`
+   - **Haskell built-in types** (like `Prelude.Either`, `Prelude.Maybe`) → use library functions (`Eithers.either_`, `Maybes.maybe`)
 
 5. **Don't skip bootstrap patching** - Manual patching is necessary to break the circular dependency
 
 6. **Check both Term and Type** - Most constructors need updates to both
 
 7. **Follow alphabetical order** - Makes code easier to navigate and maintain
+
+8. **Check all rewrite functions** - The `Rewriting.hs` file has multiple variants (pure/monadic, with/without context, with/without accumulator). Search the file for existing constructors like `_Term_maybe` to see all the places you need to add your constructor.
+
+9. **Update variants metadata** - Both `Hydra.Variants` and `Hydra.Dsl.Mantle` need updates for language support and introspection
+
+10. **Test target languages** - If you regenerate Python/Java/Scala, verify the generated code compiles
 
 ---
 
@@ -585,6 +781,12 @@ stack test
   - [ ] Add to Term union
   - [ ] Add to Type union (if applicable)
   - [ ] Add supporting type definitions
+
+- [ ] `src/main/haskell/Hydra/Dsl/Mantle.hs`
+  - [ ] Add case to `termVariant` pattern match
+  - [ ] Add `termVariantX` helper function
+  - [ ] Add case to `typeVariant` pattern match (if applicable)
+  - [ ] Add `typeVariantX` helper function (if applicable)
 
 - [ ] `src/main/haskell/Hydra/Sources/Kernel/Terms/Inference.hs`
   - [ ] Create `inferTypeOfXDef` function with type applications
@@ -600,9 +802,8 @@ stack test
   - [ ] Add necessary imports
 
 - [ ] `src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs`
-  - [ ] Add case in `rewriteTermDef`
+  - [ ] Add cases to all `rewriteTerm*` functions (search for `_Term_maybe` to find them all)
   - [ ] Add case in `subtermsDef`
-  - [ ] Add case in other rewriting functions
   - [ ] Add necessary imports
 
 ### Source Files (Sometimes Modified)
@@ -612,6 +813,12 @@ stack test
 - [ ] `src/main/haskell/Hydra/Sources/Libraries.hs` - Register library functions
 
 ### Generated Files (Bootstrap Patches)
+
+- [ ] `src/gen-main/haskell/Hydra/Variants.hs`
+  - [ ] Add case to `termVariant` function
+  - [ ] Add to `termVariants` list
+  - [ ] Add case to `typeVariant` function (if applicable)
+  - [ ] Add to `typeVariants` list (if applicable)
 
 - [ ] `src/gen-main/haskell/Hydra/Inference.hs`
   - [ ] Add inference function implementation (with type applications)
@@ -626,6 +833,26 @@ stack test
   - [ ] Add `encodeTerm` case for new Term constructor (if needed)
 
 - [ ] `src/gen-main/haskell/Hydra/Core.hs` - Verify constructors present
+
+### Language Support Files (Optional)
+
+- [ ] `hydra-ext/src/main/haskell/Hydra/Ext/Sources/Python/Language.hs`
+  - [ ] Add to `termVariants` list
+  - [ ] Add to `typeVariants` list (if applicable)
+
+- [ ] Regenerate Python code
+  - [ ] Run `writePython` from hydra-ext
+  - [ ] Verify `hydra-python/src/main/python/hydra/core.py`
+  - [ ] Verify `hydra-python/src/main/python/hydra/mantle.py`
+  - [ ] Compile Python modules
+
+- [ ] Java (if needed)
+  - [ ] Update `Hydra/Ext/Sources/Java/Language.hs`
+  - [ ] Regenerate Java code
+
+- [ ] Scala (if needed)
+  - [ ] Update `Hydra/Ext/Sources/Scala/Language.hs`
+  - [ ] Regenerate Scala code
 
 ### Test Files (Always Modified)
 
@@ -666,10 +893,11 @@ See commit history for the complete implementation of Either type support, which
 
 ## Further Reading
 
-- [Hydra Type System](./Type-System.md) - Understanding Hydra's type system
-- [DSL Guide](./DSL-Guide.md) - Using the Hydra DSL effectively
-- [Code Generation Architecture](./Code-Generation.md) - How Hydra generates code
+- [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) - Core Hydra concepts and type system
+- [Testing](https://github.com/CategoricalData/hydra/wiki/Testing) - Common test suite architecture
+- [Hydra Developers](https://github.com/CategoricalData/hydra/wiki/Hydra-developers) - Source code organization
+- [Main README](https://github.com/CategoricalData/hydra) - Project overview
 
 ---
 
-**Questions or Issues?** Open an issue on the Hydra repository with the `documentation` label.
+**Questions or Issues?** Open an issue on the [Hydra repository](https://github.com/CategoricalData/hydra/issues) or ask on the [LambdaGraph Discord](https://bit.ly/lg-discord).
