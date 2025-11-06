@@ -18,6 +18,9 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Primitive function: BigintToUint16.
+ */
 public class BigintToUint16 extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.literals.bigintToUint16");
@@ -33,7 +36,12 @@ public class BigintToUint16 extends PrimitiveFunction {
         return args -> Flows.map(Expect.bigint(args.get(0)), s -> Terms.uint16(apply(s)));
     }
 
-    public static Character apply(BigInteger value) {
+    /**
+     * Applies the BigintToUint16 operation.
+     * @param value the value
+     * @return the result
+     */
+        public static Character apply(BigInteger value) {
         return Character.valueOf((char) value.intValue());
     }
 }

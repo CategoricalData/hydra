@@ -17,6 +17,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 
+/**
+ * Primitive function: ShowString.
+ */
 public class ShowString extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.literals.showString");
@@ -32,7 +35,12 @@ public class ShowString extends PrimitiveFunction {
         return args -> Flows.map(Expect.string(args.get(0)), (Function<String, Term>) s -> Terms.string(apply(s)));
     }
 
-    public static String apply(String value) {
+    /**
+     * Applies the ShowString operation.
+     * @param value the value
+     * @return the result
+     */
+        public static String apply(String value) {
         return "\"" + StringEscapeUtils.escapeJava(value) + "\"";
     }
 }

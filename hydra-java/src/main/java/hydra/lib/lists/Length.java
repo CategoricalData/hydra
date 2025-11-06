@@ -18,6 +18,9 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Returns the length of a list.
+ */
 public class Length extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.lists.length");
@@ -33,7 +36,12 @@ public class Length extends PrimitiveFunction {
         return args -> Flows.map(Expect.list(Flows::pure, args.get(0)), l -> Terms.int32(apply(l)));
     }
 
-    public static <X> int apply(List<X> list) {
+    /**
+     * Returns the number of elements.
+     * @param list the list
+     * @return the length
+     */
+        public static <X> int apply(List<X> list) {
         return list.size();
     }
 }

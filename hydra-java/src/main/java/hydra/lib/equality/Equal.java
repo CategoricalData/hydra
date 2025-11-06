@@ -17,6 +17,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 
 
+/**
+ * Tests equality.
+ */
 public class Equal extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.equality.equal");
@@ -33,11 +36,22 @@ public class Equal extends PrimitiveFunction {
         return args -> Flows.pure(Terms.boolean_(args.get(0).equals(args.get(1))));
     }
 
-    public static <A> Function<A, Boolean> apply(A left) {
+    /**
+     * Checks if two values are equal.
+     * @param left the value1
+     * @return true if equal, false otherwise
+     */
+        public static <A> Function<A, Boolean> apply(A left) {
         return right -> apply(left, right);
     }
 
-    public static <A> boolean apply(A left, A right) {
+    /**
+     * Checks if two values are equal.
+     * @param left the value1
+     * @param right the value2
+     * @return true if equal, false otherwise
+     */
+        public static <A> boolean apply(A left, A right) {
         return left.equals(right);
     }
 }

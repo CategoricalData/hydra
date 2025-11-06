@@ -20,6 +20,9 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 
 
+/**
+ * Adds an element to a set.
+ */
 public class Insert extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.sets.insert");
@@ -35,7 +38,12 @@ public class Insert extends PrimitiveFunction {
         return args -> Flows.map(Expect.set(Flows::pure, args.get(1)), arg -> Terms.set(apply(args.get(0), arg)));
     }
 
-    public static <X> Function<Set<X>, Set<X>> apply(X elem) {
+    /**
+     * Adds an element.
+     * @param elem the element
+     * @return the updated set
+     */
+        public static <X> Function<Set<X>, Set<X>> apply(X elem) {
         return (arg) -> apply(elem, arg);
     }
 

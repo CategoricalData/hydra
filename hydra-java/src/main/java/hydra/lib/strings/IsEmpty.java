@@ -18,7 +18,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 
-
+/**
+ * Determines whether a string is empty.
+ */
 public class IsEmpty extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.strings.isEmpty");
@@ -34,6 +36,11 @@ public class IsEmpty extends PrimitiveFunction {
         return args -> map(Expect.string(args.get(0)), s -> Terms.boolean_(apply(s)));
     }
 
+    /**
+     * Checks whether the given string is empty.
+     * @param s the string to test
+     * @return true if the string is empty, false otherwise
+     */
     public static boolean apply(String s) {
         return s.isEmpty();
     }

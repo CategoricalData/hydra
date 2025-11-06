@@ -18,6 +18,9 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Primitive function: Int8ToBigint.
+ */
 public class Int8ToBigint extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.literals.int8ToBigint");
@@ -33,7 +36,12 @@ public class Int8ToBigint extends PrimitiveFunction {
         return args -> Flows.map(Expect.int8(args.get(0)), s -> Terms.bigint(apply(s)));
     }
 
-    public static BigInteger apply(Byte value) {
+    /**
+     * Applies the Int8ToBigint operation.
+     * @param value the value
+     * @return the result
+     */
+        public static BigInteger apply(Byte value) {
         return BigInteger.valueOf(value);
     }
 }

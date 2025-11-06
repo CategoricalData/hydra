@@ -20,6 +20,9 @@ import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
 
 
+/**
+ * Maps a flow function over map keys.
+ */
 public class MapKeys extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.maps.mapKeys");
@@ -37,7 +40,12 @@ public class MapKeys extends PrimitiveFunction {
             Expect.map(k -> pure(Terms.apply(args.get(0), k)), Flows::pure, args.get(1)), Terms::map);
     }
 
-    public static <K1, K2, V> Function<java.util.Map<K1, V>, java.util.Map<K2, V>> apply(Function<K1, K2> mapping) {
+    /**
+     * Transforms map keys with flow.
+     * @param mapping the function
+     * @return the flow of results
+     */
+        public static <K1, K2, V> Function<java.util.Map<K1, V>, java.util.Map<K2, V>> apply(Function<K1, K2> mapping) {
         return (arg) -> apply(mapping, arg);
     }
 

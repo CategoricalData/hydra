@@ -17,7 +17,9 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import static hydra.dsl.Types.variable;
 
-
+/**
+ * Converts a term to its string representation.
+ */
 public class ShowTerm extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.io.showTerm");
@@ -33,6 +35,11 @@ public class ShowTerm extends PrimitiveFunction {
         return args -> Flows.pure(Terms.string(ShowTerm.apply(args.get(0))));
     }
 
+    /**
+     * Converts a term to its string representation.
+     * @param term the term to convert
+     * @return the string representation of the term
+     */
     public static  String apply(Term term) {
         // TODO: temporary
         return term.toString();

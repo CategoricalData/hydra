@@ -20,6 +20,9 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Returns all keys.
+ */
 public class Keys extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.maps.keys");
@@ -41,7 +44,12 @@ public class Keys extends PrimitiveFunction {
         };
     }
 
-    public static <K, V> List<K> apply(Map<K, V> map) {
+    /**
+     * Returns the list of keys.
+     * @param map the map
+     * @return the keys
+     */
+        public static <K, V> List<K> apply(Map<K, V> map) {
         return new ArrayList<K>(map.keySet());
     }
 }

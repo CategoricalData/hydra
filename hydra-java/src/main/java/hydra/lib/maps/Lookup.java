@@ -20,6 +20,9 @@ import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Looks up a value by key.
+ */
 public class Lookup extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.maps.lookup");
@@ -37,11 +40,22 @@ public class Lookup extends PrimitiveFunction {
                 (Function<Map<Term, Term>, Term>) mp -> Terms.optional(apply(args.get(0), mp)));
     }
 
-    public static <K, V> Function<Map<K, V>, Opt<V>> apply(K k) {
+    /**
+     * Retrieves the value for the key.
+     * @param k the key
+     * @return Just the value or Nothing
+     */
+        public static <K, V> Function<Map<K, V>, Opt<V>> apply(K k) {
         return mp -> apply(k, mp);
     }
 
-    public static <K, V> Opt<V> apply(K k, Map<K, V> mp) {
+    /**
+     * Retrieves the value for the key.
+     * @param k the key
+     * @param mp the map
+     * @return Just the value or Nothing
+     */
+        public static <K, V> Opt<V> apply(K k, Map<K, V> mp) {
         V v = mp.get(k);
         return v == null ? Opt.empty() : Opt.of(v);
     }

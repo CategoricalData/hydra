@@ -19,6 +19,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Concatenates a list of lists.
+ */
 public class Concat extends PrimitiveFunction {
     public static final Name NAME = new Name("hydra.lib.lists.concat");
 
@@ -36,7 +39,12 @@ public class Concat extends PrimitiveFunction {
         return args -> Flows.map(Expect.list(t -> Expect.list(Flows::pure, t), args.get(0)), l -> Terms.list(apply(l)));
     }
 
-    public static <X> List<X> apply(List<List<X>> sublists) {
+    /**
+     * Flattens a list of lists.
+     * @param sublists the lists
+     * @return the concatenated list
+     */
+        public static <X> List<X> apply(List<List<X>> sublists) {
         return sublists.stream().flatMap(Collection::stream).collect(Collectors.toList());
     }
 }

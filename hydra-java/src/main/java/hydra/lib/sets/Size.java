@@ -20,6 +20,9 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 
 
+/**
+ * Returns the number of entries.
+ */
 public class Size extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.sets.size");
@@ -35,7 +38,12 @@ public class Size extends PrimitiveFunction {
         return args -> Flows.map(Expect.set(Flows::pure, args.get(0)), arg -> Terms.int32(apply(arg)));
     }
 
-    public static <X> Integer apply(Set<X> arg) {
+    /**
+     * Returns the size of the map.
+     * @param arg the map
+     * @return the size
+     */
+        public static <X> Integer apply(Set<X> arg) {
         return arg.size();
     }
 }

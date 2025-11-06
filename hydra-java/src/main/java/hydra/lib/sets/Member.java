@@ -20,6 +20,9 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 
 
+/**
+ * Checks if an element is in a set.
+ */
 public class Member extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.sets.contains");
@@ -36,11 +39,22 @@ public class Member extends PrimitiveFunction {
             terms -> Terms.boolean_(apply(args.get(0), terms)));
     }
 
-    public static <X> Function<Set<X>, Boolean> apply(X elem) {
+    /**
+     * Checks if the element is present.
+     * @param elem the element
+     * @return true if present, false otherwise
+     */
+        public static <X> Function<Set<X>, Boolean> apply(X elem) {
         return (arg) -> apply(elem, arg);
     }
 
-    public static <X> Boolean apply(X elem, Set<X> arg) {
+    /**
+     * Checks if the element is present.
+     * @param elem the element
+     * @param arg the set
+     * @return true if present, false otherwise
+     */
+        public static <X> Boolean apply(X elem, Set<X> arg) {
         return arg.contains(elem);
     }
 }

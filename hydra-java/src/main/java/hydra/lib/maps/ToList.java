@@ -24,6 +24,9 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.variable;
 
 
+/**
+ * Converts a map to a list of pairs.
+ */
 public class ToList extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.maps.toList");

@@ -17,6 +17,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Returns the last element of a list.
+ */
 public class Last extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.lists.last");
@@ -32,7 +35,12 @@ public class Last extends PrimitiveFunction {
         return args -> map(Expect.list(Flows::pure, args.get(0)), Last::apply);
     }
 
-    public static <X> X apply(List<X> list) {
+    /**
+     * Returns the last element.
+     * @param list the list
+     * @return the last element
+     */
+        public static <X> X apply(List<X> list) {
         return list.get(list.size() - 1);
     }
 }

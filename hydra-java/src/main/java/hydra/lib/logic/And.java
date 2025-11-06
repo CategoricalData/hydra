@@ -17,7 +17,9 @@ import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 
-
+/**
+ * Performs logical AND on two boolean values.
+ */
 public class And extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.logic.and");
@@ -36,10 +38,21 @@ public class And extends PrimitiveFunction {
                 (b1, b2) -> Terms.boolean_(And.apply(b1, b2)));
     }
 
+    /**
+     * Returns a function that performs logical AND with the given boolean value.
+     * @param b1 the first boolean value
+     * @return a function that takes a second boolean and returns the AND result
+     */
     public static Function<Boolean, Boolean> apply(boolean b1) {
         return b2 -> apply(b1, b2);
     }
 
+    /**
+     * Performs logical AND on two boolean values.
+     * @param b1 the first boolean value
+     * @param b2 the second boolean value
+     * @return true if both values are true, false otherwise
+     */
     public static boolean apply(boolean b1, boolean b2) {
         return b1 && b2;
     }

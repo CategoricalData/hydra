@@ -20,6 +20,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Removes duplicate elements.
+ */
 public class Nub extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.lists.nub");
