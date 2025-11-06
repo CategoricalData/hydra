@@ -171,6 +171,7 @@ termVariant :: TermVariant -> TTerm TermVariant
 termVariant v = unitVariant _TermVariant $ case v of
   TermVariantAnnotated -> _TermVariant_annotated
   TermVariantApplication -> _TermVariant_application
+  TermVariantEither -> _TermVariant_either
   TermVariantFunction -> _TermVariant_function
   TermVariantLet -> _TermVariant_let
   TermVariantList -> _TermVariant_list
@@ -193,6 +194,9 @@ termVariantAnnotated = unitVariant _TermVariant _TermVariant_annotated
 
 termVariantApplication :: TTerm TermVariant
 termVariantApplication = unitVariant _TermVariant _TermVariant_application
+
+termVariantEither :: TTerm TermVariant
+termVariantEither = unitVariant _TermVariant _TermVariant_either
 
 termVariantFunction :: TTerm TermVariant
 termVariantFunction = unitVariant _TermVariant _TermVariant_function

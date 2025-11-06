@@ -575,7 +575,7 @@ encodeTermInline env noCast term = case deannotateTerm term of
     t -> fail $ "unsupported term variant: " ++ show (termVariant t) ++ " in " ++ show term
   where
     withCast pyexp = if noCast then pure pyexp else do
-      typ <- withTrace ("debug 4: " ++ ShowCore.term term) $ typeOf (pythonEnvironmentTypeContext env) [] term
+      typ <- withTrace ("debug 4") $ typeOf (pythonEnvironmentTypeContext env) [] term
       pytyp <- encodeType env typ
       updateMeta $ \m -> extendMetaForType True False typ $ m { pythonModuleMetadataUsesCast = True }
       return $ castTo pytyp pyexp

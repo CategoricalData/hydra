@@ -590,6 +590,11 @@ rewriteAndFoldTerm f term0 =
                                 in (fst rrhs, (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (snd rlhs),
                                   Core.applicationArgument = (snd rrhs)})))
+                            Core.TermEither v1 -> (Eithers.either (\l ->  
+                              let rl = (recurse val0 l)
+                              in (fst rl, (Core.TermEither (Left (snd rl))))) (\r ->  
+                              let rr = (recurse val0 r)
+                              in (fst rr, (Core.TermEither (Right (snd rr))))) v1)
                             Core.TermFunction v1 -> (forSingle forFunction (\f -> Core.TermFunction f) val0 v1)
                             Core.TermLet v1 ->  
                               let renv = (recurse val0 (Core.letBody v1))
@@ -674,6 +679,7 @@ rewriteAndFoldTermM f term0 =
                             Core.TermApplication v1 -> (Flows.bind (recurse val0 (Core.applicationFunction v1)) (\rlhs -> Flows.bind (recurse (fst rlhs) (Core.applicationArgument v1)) (\rrhs -> Flows.pure (fst rrhs, (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (snd rlhs),
                               Core.applicationArgument = (snd rrhs)}))))))
+                            Core.TermEither v1 -> (Eithers.either (\l -> Flows.bind (recurse val0 l) (\rl -> Flows.pure (fst rl, (Core.TermEither (Left (snd rl)))))) (\r -> Flows.bind (recurse val0 r) (\rr -> Flows.pure (fst rr, (Core.TermEither (Right (snd rr)))))) v1)
                             Core.TermFunction v1 -> (forSingle forFunction (\f -> Core.TermFunction f) val0 v1)
                             Core.TermLet v1 -> (Flows.bind (recurse val0 (Core.letBody v1)) (\renv -> forMany forBinding (\bins -> Core.TermLet (Core.Let {
                               Core.letBindings = bins,
@@ -806,6 +812,7 @@ rewriteTermM f term0 =
                 Core.TermApplication v1 -> (Flows.bind (recurse (Core.applicationFunction v1)) (\lhs -> Flows.bind (recurse (Core.applicationArgument v1)) (\rhs -> Flows.pure (Core.TermApplication (Core.Application {
                   Core.applicationFunction = lhs,
                   Core.applicationArgument = rhs})))))
+                Core.TermEither v1 -> (Flows.bind (Eithers.either (\l -> Flows.map (\x -> Left x) (recurse l)) (\r -> Flows.map (\x -> Right x) (recurse r)) v1) (\re -> Flows.pure (Core.TermEither re)))
                 Core.TermFunction v1 ->  
                   let forElm = (\e -> (\x -> case x of
                           Core.EliminationProduct v2 -> (Flows.pure (Core.FunctionElimination (Core.EliminationProduct v2)))
@@ -1026,6 +1033,7 @@ rewriteTermWithContextM f cx0 term0 =
                       Core.TermApplication v1 -> (Flows.bind (recurse (Core.applicationFunction v1)) (\lhs -> Flows.bind (recurse (Core.applicationArgument v1)) (\rhs -> Flows.pure (Core.TermApplication (Core.Application {
                         Core.applicationFunction = lhs,
                         Core.applicationArgument = rhs})))))
+                      Core.TermEither v1 -> (Flows.bind (Eithers.either (\l -> Flows.map (\x -> Left x) (recurse l)) (\r -> Flows.map (\x -> Right x) (recurse r)) v1) (\re -> Flows.pure (Core.TermEither re)))
                       Core.TermFunction v1 -> (Flows.bind (forFunction v1) (\rfun -> Flows.pure (Core.TermFunction rfun)))
                       Core.TermLet v1 ->  
                         let bindings = (Core.letBindings v1)
