@@ -21,6 +21,9 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 
 
+/**
+ * Converts a map to a list of pairs.
+ */
 public class ToList extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.sets.toList");
@@ -36,7 +39,12 @@ public class ToList extends PrimitiveFunction {
         return args -> Flows.map(Expect.set(Flows::pure, args.get(0)), terms -> Terms.list(apply(terms)));
     }
 
-    public static <X> List<X> apply(Set<X> arg) {
+    /**
+     * Converts to key-value pairs.
+     * @param arg the map
+     * @return the list of pairs
+     */
+        public static <X> List<X> apply(Set<X> arg) {
         return new ArrayList<>(arg);
     }
 }

@@ -25,6 +25,9 @@ import static hydra.dsl.Terms.project;
 import static hydra.dsl.Terms.variable;
 
 
+/**
+ * Monadic bind for flows.
+ */
 public class Bind extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.flows.bind");
@@ -57,11 +60,22 @@ public class Bind extends PrimitiveFunction {
         };
     }
 
-    public static <S, X, Y> Function<Function<X, Flow<S, Y>>, Flow<S, Y>> apply(Flow<S, X> input) {
+    /**
+     * Chains flow computations.
+     * @param input the flowValue
+     * @return the result flow
+     */
+        public static <S, X, Y> Function<Function<X, Flow<S, Y>>, Flow<S, Y>> apply(Flow<S, X> input) {
         return mapping -> apply(input, mapping);
     }
 
-    public static <S, X, Y> Flow<S, Y> apply(Flow<S, X> input, Function<X, Flow<S, Y>> mapping) {
+    /**
+     * Chains flow computations.
+     * @param input the flowValue
+     * @param mapping the function
+     * @return the result flow
+     */
+        public static <S, X, Y> Flow<S, Y> apply(Flow<S, X> input, Function<X, Flow<S, Y>> mapping) {
         return Flows.bind(input, mapping);
     }
 }

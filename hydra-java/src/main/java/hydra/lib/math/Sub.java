@@ -18,6 +18,9 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
 
 
+/**
+ * Performs subtraction on two numbers.
+ */
 public class Sub extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.math.sub");
@@ -34,11 +37,22 @@ public class Sub extends PrimitiveFunction {
             (arg0, arg1) -> Terms.int32(apply(arg0, arg1)));
     }
 
-    public static Function<Integer, Integer> apply(Integer minuend) {
+    /**
+     * Subtracts the second number from the first.
+     * @param minuend the minuend
+     * @return the difference
+     */
+        public static Function<Integer, Integer> apply(Integer minuend) {
         return (subtrahend) -> apply(minuend, subtrahend);
     }
 
-    public static Integer apply(Integer minuend, Integer subtrahend) {
+    /**
+     * Subtracts the second number from the first.
+     * @param minuend the minuend
+     * @param subtrahend the subtrahend
+     * @return the difference
+     */
+        public static Integer apply(Integer minuend, Integer subtrahend) {
         return (minuend - subtrahend);
     }
 }

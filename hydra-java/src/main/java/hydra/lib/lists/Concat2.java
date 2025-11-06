@@ -18,6 +18,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Concatenates two lists.
+ */
 public class Concat2 extends PrimitiveFunction {
     public static final Name NAME = new Name("hydra.lib.lists.concat2");
 

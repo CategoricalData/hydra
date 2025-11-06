@@ -19,6 +19,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Checks if a map is empty.
+ */
 public class IsEmpty extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.maps.isEmpty");
@@ -39,7 +42,12 @@ public class IsEmpty extends PrimitiveFunction {
         };
     }
 
-    public static <K, V> boolean apply(Map<K, V> map) {
+    /**
+     * Checks if the map is empty.
+     * @param map the map
+     * @return true if empty, false otherwise
+     */
+        public static <K, V> boolean apply(Map<K, V> map) {
         return map.isEmpty();
     }
 }

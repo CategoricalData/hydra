@@ -19,6 +19,9 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 
 
+/**
+ * Monadic bind for flows.
+ */
 public class Bind extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.lists.bind");
@@ -40,11 +43,22 @@ public class Bind extends PrimitiveFunction {
         });
     }
 
-    public static <X, Y> Function<Function<X, List<Y>>, List<Y>> apply(List<X> args) {
+    /**
+     * Chains flow computations.
+     * @param args the flowValue
+     * @return the result flow
+     */
+        public static <X, Y> Function<Function<X, List<Y>>, List<Y>> apply(List<X> args) {
         return (mapping) -> apply(args, mapping);
     }
 
-    public static <X, Y> List<Y> apply(List<X> args, Function<X, List<Y>> mapping) {
+    /**
+     * Chains flow computations.
+     * @param args the flowValue
+     * @param mapping the function
+     * @return the result flow
+     */
+        public static <X, Y> List<Y> apply(List<X> args, Function<X, List<Y>> mapping) {
         return args.stream().flatMap(x -> mapping.apply(x).stream()).collect(Collectors.toList());
     }
 }

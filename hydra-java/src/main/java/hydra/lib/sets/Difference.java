@@ -19,6 +19,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 
+/**
+ * Computes the set difference.
+ */
 public class Difference extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.sets.difference");
@@ -37,7 +40,12 @@ public class Difference extends PrimitiveFunction {
                 (s1, s2) -> Terms.set(apply(s1, s2)));
     }
 
-    public static <X> Function<Set<X>, Set<X>> apply(Set<X> s1) {
+    /**
+     * Removes elements of second set from first.
+     * @param s1 the set1
+     * @return the difference
+     */
+        public static <X> Function<Set<X>, Set<X>> apply(Set<X> s1) {
         return (s2) -> apply(s1, s2);
     }
 

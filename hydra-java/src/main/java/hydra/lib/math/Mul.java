@@ -18,6 +18,9 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
 
 
+/**
+ * Performs multiplication on two numbers.
+ */
 public class Mul extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.math.mul");
@@ -34,11 +37,22 @@ public class Mul extends PrimitiveFunction {
             (arg0, arg1) -> Terms.int32(apply(arg0, arg1)));
     }
 
-    public static Function<Integer, Integer> apply(Integer multiplier) {
+    /**
+     * Multiplies two numbers.
+     * @param multiplier the multiplicand
+     * @return the product
+     */
+        public static Function<Integer, Integer> apply(Integer multiplier) {
         return (multiplicand) -> apply(multiplier, multiplicand);
     }
 
-    public static Integer apply(Integer multiplier, Integer multiplicand) {
+    /**
+     * Multiplies two numbers.
+     * @param multiplier the multiplicand
+     * @param multiplicand the multiplier
+     * @return the product
+     */
+        public static Integer apply(Integer multiplier, Integer multiplicand) {
         return (multiplier * multiplicand);
     }
 }

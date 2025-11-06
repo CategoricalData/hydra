@@ -18,6 +18,9 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 
 
+/**
+ * Returns the first element of a list.
+ */
 public class Head extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.lists.head");

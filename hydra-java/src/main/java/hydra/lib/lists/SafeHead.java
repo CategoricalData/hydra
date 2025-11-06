@@ -21,6 +21,9 @@ import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 
 
+/**
+ * Safely returns the first element.
+ */
 public class SafeHead extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.lists.safeHead");

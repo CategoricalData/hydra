@@ -18,6 +18,9 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 
 
+/**
+ * Primitive function: ShowInt32.
+ */
 public class ShowInt32 extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.literals.showInt32");
@@ -33,7 +36,12 @@ public class ShowInt32 extends PrimitiveFunction {
         return args -> Flows.map(Expect.int32(args.get(0)), (Function<Integer, Term>) s -> Terms.string(apply(s)));
     }
 
-    public static String apply(Integer value) {
+    /**
+     * Applies the ShowInt32 operation.
+     * @param value the value
+     * @return the result
+     */
+        public static String apply(Integer value) {
         return Integer.toString(value);
     }
 }

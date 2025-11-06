@@ -17,6 +17,9 @@ import java.util.function.Function;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Creates an empty map.
+ */
 public class Empty extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.maps.empty");
@@ -32,7 +35,11 @@ public class Empty extends PrimitiveFunction {
         return ignored -> Flows.pure(Terms.map(apply()));
     }
 
-    public static <K, V> Map<K, V> apply() {
+    /**
+     * Creates an empty map.
+     * @return the empty map
+     */
+        public static <K, V> Map<K, V> apply() {
         return Collections.emptyMap();
     }
 }

@@ -23,6 +23,9 @@ import static hydra.dsl.Terms.unwrap;
 import static hydra.dsl.Terms.variable;
 
 
+/**
+ * Creates a failed flow.
+ */
 public class Fail extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.flows.fail");
@@ -41,7 +44,12 @@ public class Fail extends PrimitiveFunction {
                 app((new Cons().term()), args.get(0), app(project(FlowState.TYPE_NAME, "trace"), variable("q")))))));
     }
 
-    public static <S, X> Flow<S, X> apply(String msg) {
+    /**
+     * Creates a flow with an error.
+     * @param msg the message
+     * @return the failed flow
+     */
+        public static <S, X> Flow<S, X> apply(String msg) {
         return Flows.fail(msg);
     }
 }

@@ -17,7 +17,9 @@ import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 
-
+/**
+ * Performs logical OR on two boolean values.
+ */
 public class Or extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.logic.or");
@@ -36,10 +38,21 @@ public class Or extends PrimitiveFunction {
                 (b1, b2) -> Terms.boolean_(Or.apply(b1, b2)));
     }
 
+    /**
+     * Returns a function that performs logical OR with the given boolean value.
+     * @param b1 the first boolean value
+     * @return a function that takes a second boolean and returns the OR result
+     */
     public static Function<Boolean, Boolean> apply(boolean b1) {
         return b2 -> apply(b1, b2);
     }
 
+    /**
+     * Performs logical OR on two boolean values.
+     * @param b1 the first boolean value
+     * @param b2 the second boolean value
+     * @return true if at least one value is true, false otherwise
+     */
     public static boolean apply(boolean b1, boolean b2) {
         return b1 || b2;
     }

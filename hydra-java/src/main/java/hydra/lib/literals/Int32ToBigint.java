@@ -18,6 +18,9 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Primitive function: Int32ToBigint.
+ */
 public class Int32ToBigint extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.literals.int32ToBigint");
@@ -33,7 +36,12 @@ public class Int32ToBigint extends PrimitiveFunction {
         return args -> Flows.map(Expect.int32(args.get(0)), s -> Terms.bigint(apply(s)));
     }
 
-    public static BigInteger apply(Integer value) {
+    /**
+     * Applies the Int32ToBigint operation.
+     * @param value the value
+     * @return the result
+     */
+        public static BigInteger apply(Integer value) {
         return BigInteger.valueOf(value);
     }
 }

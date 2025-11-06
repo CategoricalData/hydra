@@ -19,6 +19,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Reverses a list.
+ */
 public class Reverse extends PrimitiveFunction {
     public static final Name NAME = new Name("hydra.lib.lists.reverse");
 

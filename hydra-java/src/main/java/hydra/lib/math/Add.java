@@ -18,6 +18,9 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
 
 
+/**
+ * Performs addition on two numbers.
+ */
 public class Add extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.math.add");
@@ -34,11 +37,22 @@ public class Add extends PrimitiveFunction {
             (arg0, arg1) -> Terms.int32(apply(arg0, arg1)));
     }
 
-    public static Function<Integer, Integer> apply(Integer augend) {
+    /**
+     * Adds two numbers.
+     * @param augend the augend
+     * @return the sum
+     */
+        public static Function<Integer, Integer> apply(Integer augend) {
         return (addend) -> apply(augend, addend);
     }
 
-    public static Integer apply(Integer augend, Integer addend) {
+    /**
+     * Adds two numbers.
+     * @param augend the augend
+     * @param addend the addend
+     * @return the sum
+     */
+        public static Integer apply(Integer augend, Integer addend) {
         return (augend + addend);
     }
 }

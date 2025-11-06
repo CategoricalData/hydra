@@ -18,6 +18,9 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 
+/**
+ * Joins a list of strings with a delimiter string.
+ */
 public class Intercalate extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.strings.intercalate");
@@ -36,12 +39,20 @@ public class Intercalate extends PrimitiveFunction {
                 (delim, strings) -> Terms.string(Intercalate.apply(delim, strings)));
     }
 
+    /**
+     * Returns a function that joins strings with the given delimiter.
+     * @param delim the delimiter string
+     * @return a function that takes a list of strings and returns the joined result
+     */
     public static Function<List<String>, String> apply(String delim) {
         return (strings) -> apply(delim, strings);
     }
 
     /**
-     * Apply the function to both arguments.
+     * Joins a list of strings with a delimiter.
+     * @param delim the delimiter string
+     * @param strings the list of strings to join
+     * @return the joined string
      */
     public static String apply(String delim, List<String> strings) {
         StringBuilder sb = new StringBuilder();

@@ -18,6 +18,9 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
 
 
+/**
+ * Negates a number.
+ */
 public class Neg extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.math.neg");
@@ -34,7 +37,12 @@ public class Neg extends PrimitiveFunction {
             (arg0) -> Terms.int32(apply(arg0)));
     }
 
-    public static Integer apply(Integer num) {
+    /**
+     * Negates the given number.
+     * @param num the number
+     * @return the negated value
+     */
+        public static Integer apply(Integer num) {
         return (-1 * num);
     }
 }

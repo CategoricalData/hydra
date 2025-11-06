@@ -19,6 +19,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Removes a key from the map.
+ */
 public class Remove extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.maps.remove");
@@ -39,7 +42,12 @@ public class Remove extends PrimitiveFunction {
         };
     }
 
-    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(K k) {
+    /**
+     * Removes the key and its value.
+     * @param k the key
+     * @return the updated map
+     */
+        public static <K, V> Function<Map<K, V>, Map<K, V>> apply(K k) {
         return before -> apply(k, before);
     }
 

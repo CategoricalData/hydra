@@ -19,6 +19,9 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 
 
+/**
+ * Creates a singleton list.
+ */
 public class Singleton extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.sets.singleton");

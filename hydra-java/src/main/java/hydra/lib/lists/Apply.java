@@ -21,6 +21,9 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 
 
+/**
+ * Applies a function in a flow context.
+ */
 public class Apply extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.lists.apply");
@@ -49,7 +52,12 @@ public class Apply extends PrimitiveFunction {
                 });
     }
 
-    public static <X, Y> Function<List<X>, List<Y>> apply(List<Function<X, Y>> functions) {
+    /**
+     * Applies a function within a flow.
+     * @param functions the flowFunction
+     * @return the result flow
+     */
+        public static <X, Y> Function<List<X>, List<Y>> apply(List<Function<X, Y>> functions) {
         return (args) -> apply(functions, args);
     }
 

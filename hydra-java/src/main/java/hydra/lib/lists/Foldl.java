@@ -19,6 +19,9 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.variable;
 
 
+/**
+ * Left fold with flow function.
+ */
 public class Foldl extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.lists.foldl");
@@ -45,15 +48,33 @@ public class Foldl extends PrimitiveFunction {
         };
     }
 
-    public static <X, Y> Function<Y, Function<List<X>, Y>> apply(Function<Y, Function<X, Y>> mapping) {
+    /**
+     * Performs a left fold in flow context.
+     * @param mapping the function
+     * @return the flow of result
+     */
+        public static <X, Y> Function<Y, Function<List<X>, Y>> apply(Function<Y, Function<X, Y>> mapping) {
         return y -> xs -> apply(mapping, y, xs);
     }
 
-    public static <X, Y> Function<List<X>, Y> apply(Function<Y, Function<X, Y>> mapping, Y init) {
+    /**
+     * Performs a left fold in flow context.
+     * @param mapping the function
+     * @param init the initial
+     * @return the flow of result
+     */
+        public static <X, Y> Function<List<X>, Y> apply(Function<Y, Function<X, Y>> mapping, Y init) {
         return xs -> apply(mapping, init, xs);
     }
 
-    public static <X, Y> Y apply(Function<Y, Function<X, Y>> mapping, Y init, List<X> xs) {
+    /**
+     * Performs a left fold in flow context.
+     * @param mapping the function
+     * @param init the initial
+     * @param xs the list
+     * @return the flow of result
+     */
+        public static <X, Y> Y apply(Function<Y, Function<X, Y>> mapping, Y init, List<X> xs) {
         Y cur = init;
         for (X x : xs) {
             cur = mapping.apply(cur).apply(x);

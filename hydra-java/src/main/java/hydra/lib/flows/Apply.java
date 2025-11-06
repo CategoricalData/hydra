@@ -25,6 +25,9 @@ import static hydra.dsl.Terms.project;
 import static hydra.dsl.Terms.variable;
 
 
+/**
+ * Applies a function in a flow context.
+ */
 public class Apply extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.flows.apply");
@@ -58,11 +61,22 @@ public class Apply extends PrimitiveFunction {
         };
     }
 
-    public static <S, X, Y> Function<Flow<S, X>, Flow<S, Y>> apply(Flow<S, Function<X, Y>> mapping) {
+    /**
+     * Applies a function within a flow.
+     * @param mapping the flowFunction
+     * @return the result flow
+     */
+        public static <S, X, Y> Function<Flow<S, X>, Flow<S, Y>> apply(Flow<S, Function<X, Y>> mapping) {
         return input -> apply(mapping, input);
     }
 
-    public static <S, X, Y> Flow<S, Y> apply(Flow<S, Function<X, Y>> mapping, Flow<S, X> input) {
+    /**
+     * Applies a function within a flow.
+     * @param mapping the flowFunction
+     * @param input the flowValue
+     * @return the result flow
+     */
+        public static <S, X, Y> Flow<S, Y> apply(Flow<S, Function<X, Y>> mapping, Flow<S, X> input) {
         return Flows.apply(mapping, input);
     }
 }
