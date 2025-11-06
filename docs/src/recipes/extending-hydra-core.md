@@ -187,6 +187,41 @@ termVariantEither = unitVariant _TermVariant _TermVariant_either
 
 Place in alphabetical order among the other `termVariantX` helpers.
 
+#### 2.5.3: Update Mantle Enum Definitions (CRITICAL!)
+
+**File:** `src/main/haskell/Hydra/Sources/Kernel/Types/Mantle.hs`
+
+> **⚠️ CRITICAL:** You MUST add your new constructor to the TermVariant and TypeVariant enum definitions in the Mantle module. This is the source of the "No such field: X" error during code generation.
+
+Add to the `TermVariant` enum (around line 70-91):
+```haskell
+def "TermVariant" $
+  doc "The identifier of a term expression constructor" $
+  enum [
+    "annotated",
+    "application",
+    "either",      -- ← ADD THIS (alphabetical order)
+    "function",
+    -- ... rest of variants
+  ]
+```
+
+Add to the `TypeVariant` enum (around line 99-118):
+```haskell
+def "TypeVariant" $
+  doc "The identifier of a type constructor" $
+  enum [
+    "annotated",
+    "application",
+    "either",      -- ← ADD THIS (alphabetical order)
+    "forall",
+    "function",
+    -- ... rest of variants
+  ]
+```
+
+**Why this is necessary:** The `Variants` module uses these enums to map between Term/Type constructors and their metadata. The enums are defined in the [`hydra.mantle`](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Mantle.hs) module, which supplements `hydra.core` with metadata types. Without adding your constructor here, code generation will fail with "No such field: X".
+
 ---
 
 ### Step 3: Add Type Inference
@@ -194,6 +229,8 @@ Place in alphabetical order among the other `termVariantX` helpers.
 **File:** `src/main/haskell/Hydra/Sources/Kernel/Terms/Inference.hs`
 
 #### 3.1: Create Inference Function
+
+> **⚠️ Variable Naming:** Avoid using variable names that clash with Prelude functions (`fst`, `snd`, `head`, `tail`, `map`, `filter`, etc.). The DSL code generates Haskell that imports Prelude, so these names will cause compilation errors. Use descriptive names like `pairFst`, `pairSnd`, `listHead`, etc.
 
 ```haskell
 inferTypeOfEitherDef :: TBinding (InferenceContext -> Prelude.Either Term Term -> Flow s InferenceResult)
@@ -382,8 +419,6 @@ Check other term traversal files that may need updates:
 - `Hydra/Sources/Kernel/Terms/Describe/Core.hs`
 
 Follow the same pattern: use library elimination functions for Haskell built-in types.
-
-> **Note on `hydra.mantle`:** The `Hydra.Mantle` module (defined in `Hydra/Sources/Kernel/Types/Mantle.hs`) contains supporting enum types like `TermVariant` and `TypeVariant` which list the available term and type constructors. These are metadata types used for introspection and constraints, not the actual union types themselves. You don't need to manually update these—they are typically kept in sync during code generation.
 
 ---
 
@@ -729,7 +764,9 @@ stack test
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| `No such field: either` | Term union missing the constructor in schema | Add to `src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs` |
+| `No such field: pair` during code generation | Missing from TermVariant/TypeVariant enums in Mantle module | **CRITICAL:** Add to `TermVariant` and `TypeVariant` enum definitions in `src/main/haskell/Hydra/Sources/Kernel/Types/Mantle.hs` |
+| `Variable not in scope: fst` compilation error | Variable name clashes with Prelude function | Use descriptive names: `pairFst`, `pairSnd`, not `fst`, `snd` |
+| `No such field: either` | Term union missing the constructor in Core schema | Add to `src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs` |
 | `Variable not bound to type: hydra.inference.inferTypeOfX` | Function not registered in module exports | Add `el inferTypeOfXDef` to elements list |
 | Using `cases _Either` on built-in types | Confusion between Hydra unions and Haskell types | Use library functions (`Eithers.either_`) for Haskell built-ins |
 | `unexpected type: either<...>` in codegen | Coder doesn't know how to encode the type | Manually patch `Hydra/Ext/Haskell/Coder.hs` |
@@ -781,6 +818,10 @@ stack test
   - [ ] Add to Term union
   - [ ] Add to Type union (if applicable)
   - [ ] Add supporting type definitions
+
+- [ ] `src/main/haskell/Hydra/Sources/Kernel/Types/Mantle.hs` (**CRITICAL!**)
+  - [ ] Add to `TermVariant` enum definition
+  - [ ] Add to `TypeVariant` enum definition (if applicable)
 
 - [ ] `src/main/haskell/Hydra/Dsl/Mantle.hs`
   - [ ] Add case to `termVariant` pattern match
