@@ -685,6 +685,25 @@ encodeTerm aliases term0 = encodeInternal [] term0
 
         TermLiteral l -> pure $ encodeLiteral l
 
+        TermEither et -> case et of
+          Left term1 -> do
+            expr <- encode term1
+            return $ javaMethodInvocationToJavaExpression $
+              methodInvocationStatic (Java.Identifier "hydra.util.Either") (Java.Identifier "left") [expr]
+          Right term1 -> do
+            expr <- encode term1
+            return $ javaMethodInvocationToJavaExpression $
+              methodInvocationStatic (Java.Identifier "hydra.util.Either") (Java.Identifier "right") [expr]
+
+        TermMap m -> do
+          jkeys <- CM.mapM encode $ M.keys m
+          jvals <- CM.mapM encode $ M.elems m
+          let pairs = L.zip jkeys jvals
+          let pairExprs = (\(k, v) -> javaMethodInvocationToJavaExpression $
+                methodInvocationStatic (Java.Identifier "java.util.Map") (Java.Identifier "entry") [k, v]) <$> pairs
+          return $ javaMethodInvocationToJavaExpression $
+            methodInvocationStatic (Java.Identifier "java.util.Map") (Java.Identifier "ofEntries") pairExprs
+
         TermMaybe mt -> case mt of
           Nothing -> pure $ javaMethodInvocationToJavaExpression $
             methodInvocationStatic (Java.Identifier "hydra.util.Opt") (Java.Identifier "empty") []
@@ -692,6 +711,12 @@ encodeTerm aliases term0 = encodeInternal [] term0
             expr <- encode term1
             return $ javaMethodInvocationToJavaExpression $
               methodInvocationStatic (Java.Identifier "hydra.util.Opt") (Java.Identifier "of") [expr]
+
+        TermPair (t1, t2) -> do
+          jterm1 <- encode t1
+          jterm2 <- encode t2
+          let tupleTypeName = "hydra.util.Tuple.Tuple2"
+          return $ javaConstructorCall (javaConstructorName (Java.Identifier tupleTypeName) Nothing) [jterm1, jterm2] Nothing
 
         TermProduct terms -> do
           jterms <- CM.mapM encode terms
@@ -751,10 +776,18 @@ encodeType aliases t = case deannotateType t of
           rt <- javaTypeToJavaReferenceType jet
           return $ javaRefType [rt] javaUtilPackageName "List"
     TypeLiteral lt -> encodeLiteralType lt
+    TypeEither (EitherType lt rt) -> do
+      jlt <- encode lt >>= javaTypeToJavaReferenceType
+      jrt <- encode rt >>= javaTypeToJavaReferenceType
+      return $ javaRefType [jlt, jrt] hydraUtilPackageName "Either"
     TypeMap (MapType kt vt) -> do
       jkt <- encode kt >>= javaTypeToJavaReferenceType
       jvt <- encode vt >>= javaTypeToJavaReferenceType
       return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
+    TypePair (PairType first second) -> do
+      jfirst <- encode first >>= javaTypeToJavaReferenceType
+      jsecond <- encode second >>= javaTypeToJavaReferenceType
+      return $ javaRefType [jfirst, jsecond] hydraUtilPackageName "Tuple.Tuple2"
     TypeProduct types -> case types of
       [] -> unit
       _ -> do
