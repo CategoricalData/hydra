@@ -189,30 +189,35 @@ encodedVariant tname fname term = encodedUnion $ encodedInjection tname fname te
 
 annotatedTermDef :: TBinding (AnnotatedTerm -> Term)
 annotatedTermDef = define "AnnotatedTerm" $
+  doc "Encode an annotated term as a term" $
   "a" ~> variant _Term _Term_annotated (record _AnnotatedTerm [
     field _AnnotatedTerm_body (ref termDef @@ (Core.annotatedTermBody (var "a"))),
     field _AnnotatedTerm_annotation (Core.annotatedTermAnnotation (var "a"))])
 
 annotatedTypeDef :: TBinding (AnnotatedType -> Term)
 annotatedTypeDef = define "AnnotatedType" $
+  doc "Encode an annotated type as a term" $
   "at" ~> variant _Term _Term_annotated (record _AnnotatedTerm [
     field _AnnotatedTerm_body (ref typeDef @@ (Core.annotatedTypeBody (var "at"))),
     field _AnnotatedTerm_annotation (Core.annotatedTypeAnnotation (var "at"))])
 
 applicationDef :: TBinding (Application -> Term)
 applicationDef = define "Application" $
+  doc "Encode an application as a term" $
   "app" ~> encodedRecord _Application [
     field _Application_function (ref termDef @@ (Core.applicationFunction (var "app"))),
     field _Application_argument (ref termDef @@ (Core.applicationArgument (var "app")))]
 
 applicationTypeDef :: TBinding (ApplicationType -> Term)
 applicationTypeDef = define "ApplicationType" $
+  doc "Encode an application type as a term" $
   "at" ~> encodedRecord _ApplicationType [
     field _ApplicationType_function (ref typeDef @@ (Core.applicationTypeFunction (var "at"))),
     field _ApplicationType_argument (ref typeDef @@ (Core.applicationTypeArgument (var "at")))]
 
 caseStatementDef :: TBinding (CaseStatement -> Term)
 caseStatementDef = define "CaseStatement" $
+  doc "Encode a case statement as a term" $
   "cs" ~> encodedRecord _CaseStatement [
     field _CaseStatement_typeName (ref nameDef @@ (Core.caseStatementTypeName (var "cs"))),
     field _CaseStatement_default (encodedOptional
@@ -222,6 +227,7 @@ caseStatementDef = define "CaseStatement" $
 
 eliminationDef :: TBinding (Elimination -> Term)
 eliminationDef = define "Elimination" $
+  doc "Encode an elimination as a term" $
     match _Elimination Nothing [
       ecase _Elimination_product tupleProjectionDef,
       ecase _Elimination_record projectionDef,
@@ -232,18 +238,21 @@ eliminationDef = define "Elimination" $
 
 fieldDef :: TBinding (Field -> Term)
 fieldDef = define "Field" $
+  doc "Encode a field as a term" $
   "f" ~> encodedRecord _Field [
     field _Field_name (encodedWrappedTerm _Name (encodedString (unwrap _Name @@ (Core.fieldName (var "f"))))),
     field _Field_term (ref termDef @@ (Core.fieldTerm (var "f")))]
 
 fieldTypeDef :: TBinding (FieldType -> Term)
 fieldTypeDef = define "FieldType" $
+  doc "Encode a field type as a term" $
   "ft" ~> encodedRecord _FieldType [
     field _FieldType_name (ref nameDef @@ (Core.fieldTypeName (var "ft"))),
     field _FieldType_type (ref typeDef @@ (Core.fieldTypeType (var "ft")))]
 
 floatTypeDef :: TBinding (FloatType -> Term)
 floatTypeDef = define "FloatType" $
+  doc "Encode a floating-point type as a term" $
     match _FloatType Nothing (cs <$> [
       _FloatType_bigfloat,
       _FloatType_float32,
@@ -253,6 +262,7 @@ floatTypeDef = define "FloatType" $
 
 floatValueDef :: TBinding (FloatValue -> Term)
 floatValueDef = define "FloatValue" $
+  doc "Encode a floating-point value as a term" $
   match _FloatValue Nothing (varField <$> [
     _FloatValue_bigfloat,
     _FloatValue_float32,
@@ -263,18 +273,21 @@ floatValueDef = define "FloatValue" $
 
 eitherTypeDef :: TBinding (EitherType -> Term)
 eitherTypeDef = define "EitherType" $
+  doc "Encode an either type as a term" $
   "et" ~> encodedRecord _EitherType [
     field _EitherType_left (ref typeDef @@ (Core.eitherTypeLeft (var "et"))),
     field _EitherType_right (ref typeDef @@ (Core.eitherTypeRight (var "et")))]
 
 pairTypeDef :: TBinding (PairType -> Term)
 pairTypeDef = define "PairType" $
+  doc "Encode a pair type as a term" $
   "pt" ~> encodedRecord _PairType [
     field _PairType_first (ref typeDef @@ (Core.pairTypeFirst (var "pt"))),
     field _PairType_second (ref typeDef @@ (Core.pairTypeSecond (var "pt")))]
 
 functionDef :: TBinding (Function -> Term)
 functionDef = define "Function" $
+  doc "Encode a function as a term" $
     match _Function Nothing [
       ecase _Function_elimination eliminationDef,
       ecase _Function_lambda lambdaDef,
@@ -284,18 +297,21 @@ functionDef = define "Function" $
 
 functionTypeDef :: TBinding (FunctionType -> Term)
 functionTypeDef = define "FunctionType" $
+  doc "Encode a function type as a term" $
   "ft" ~> encodedRecord _FunctionType [
     field _FunctionType_domain (ref typeDef @@ (Core.functionTypeDomain (var "ft"))),
     field _FunctionType_codomain (ref typeDef @@ (Core.functionTypeCodomain (var "ft")))]
 
 injectionDef :: TBinding (Injection -> Term)
 injectionDef = define "Injection" $
+  doc "Encode an injection as a term" $
   "i" ~> encodedRecord _Injection [
     field _Injection_typeName (ref nameDef @@ (Core.injectionTypeName (var "i"))),
     field _Injection_field (ref fieldDef @@ (Core.injectionField (var "i")))]
 
 integerTypeDef :: TBinding (IntegerType -> Term)
 integerTypeDef = define "IntegerType" $
+  doc "Encode an integer type as a term" $
     match _IntegerType Nothing (cs <$> [
       _IntegerType_bigint,
       _IntegerType_int8,
@@ -311,6 +327,7 @@ integerTypeDef = define "IntegerType" $
 
 integerValueDef :: TBinding (IntegerValue -> Term)
 integerValueDef = define "IntegerValue" $
+  doc "Encode an integer value as a term" $
   match _IntegerValue Nothing (varField <$> [
     _IntegerValue_bigint,
     _IntegerValue_int8,
@@ -327,6 +344,7 @@ integerValueDef = define "IntegerValue" $
 
 lambdaDef :: TBinding (Lambda -> Term)
 lambdaDef = define "Lambda" $
+  doc "Encode a lambda as a term" $
   "l" ~> encodedRecord _Lambda [
     field _Lambda_parameter (ref nameDef @@ (Core.lambdaParameter (var "l"))),
     field _Lambda_domain (encodedOptional (primitive _maybes_map @@ ref typeDef @@ (Core.lambdaDomain (var "l")))),
@@ -334,18 +352,21 @@ lambdaDef = define "Lambda" $
 
 forallTypeDef :: TBinding (ForallType -> Term)
 forallTypeDef = define "ForallType" $
+  doc "Encode a forall type as a term" $
   "lt" ~> encodedRecord _ForallType [
     field _ForallType_parameter (ref nameDef @@ (Core.forallTypeParameter (var "lt"))),
     field _ForallType_body (ref typeDef @@ (Core.forallTypeBody (var "lt")))]
 
 letDef :: TBinding (Let -> Term)
 letDef = define "Let" $
+  doc "Encode a let expression as a term" $
   "l" ~> encodedRecord _Let [
     field _Let_bindings (encodedList (primitive _lists_map @@ ref letBindingDef @@ (Core.letBindings (var "l")))),
     field _Let_body (ref termDef @@ (Core.letBody (var "l")))]
 
 letBindingDef :: TBinding (Binding -> Term)
 letBindingDef = define "Binding" $
+  doc "Encode a let binding as a term" $
   "b" ~> encodedRecord _Binding [
     field _Binding_name (ref nameDef @@ (Core.bindingName (var "b"))),
     field _Binding_term (ref termDef @@ (Core.bindingTerm (var "b"))),
@@ -353,6 +374,7 @@ letBindingDef = define "Binding" $
 
 literalDef :: TBinding (Literal -> Term)
 literalDef = define "Literal" $
+  doc "Encode a literal as a term" $
   match _Literal Nothing [
     varField _Literal_binary $ encodedBinary $ var "v",
     varField _Literal_boolean $ encodedBoolean $ var "v",
@@ -364,6 +386,7 @@ literalDef = define "Literal" $
 
 literalTypeDef :: TBinding (LiteralType -> Term)
 literalTypeDef = define "LiteralType" $
+  doc "Encode a literal type as a term" $
   match _LiteralType Nothing [
     csunit _LiteralType_binary,
     csunit _LiteralType_boolean,
@@ -376,34 +399,40 @@ literalTypeDef = define "LiteralType" $
 
 mapTypeDef :: TBinding (MapType -> Term)
 mapTypeDef = define "MapType" $
+  doc "Encode a map type as a term" $
   "mt" ~> encodedRecord _MapType [
     field _MapType_keys (ref typeDef @@ (Core.mapTypeKeys (var "mt"))),
     field _MapType_values (ref typeDef @@ (Core.mapTypeValues (var "mt")))]
 
 nameDef :: TBinding (Name -> Term)
 nameDef = define "Name" $
+  doc "Encode a name as a term" $
   "fn" ~> encodedWrappedTerm _Name (encodedString (unwrap _Name @@ var "fn"))
 
 projectionDef :: TBinding (Projection -> Term)
 projectionDef = define "Projection" $
+  doc "Encode a projection as a term" $
   "p" ~> encodedRecord _Projection [
     field _Projection_typeName (ref nameDef @@ (Core.projectionTypeName (var "p"))),
     field _Projection_field (ref nameDef @@ (Core.projectionField (var "p")))]
 
 recordDef :: TBinding (Record -> Term)
 recordDef = define "Record" $
+  doc "Encode a record as a term" $
   "r" ~> encodedRecord _Record [
     field _Record_typeName (ref nameDef @@ (Core.recordTypeName (var "r"))),
     field _Record_fields (encodedList (primitive _lists_map @@ (ref fieldDef) @@ (Core.recordFields (var "r"))))]
 
 rowTypeDef :: TBinding (RowType -> Term)
 rowTypeDef = define "RowType" $
+  doc "Encode a row type as a term" $
   "rt" ~> encodedRecord _RowType [
     field _RowType_typeName (ref nameDef @@ (Core.rowTypeTypeName (var "rt"))),
     field _RowType_fields (encodedList (primitive _lists_map @@ ref fieldTypeDef @@ (Core.rowTypeFields (var "rt"))))]
 
 sumDef :: TBinding (Sum -> Term)
 sumDef = define "Sum" $
+  doc "Encode a sum as a term" $
   lambda "s" $ encodedRecord _Sum [
     field _Sum_index $ encodedInt32 $ Core.sumIndex $ var "s",
     field _Sum_size $ encodedInt32 $ Core.sumSize $ var "s",
@@ -411,6 +440,7 @@ sumDef = define "Sum" $
 
 termDef :: TBinding (Term -> Term)
 termDef = define "Term" $
+  doc "Encode a term as a term (identity encoding)" $
   match _Term Nothing [
     ecase _Term_annotated (ref annotatedTermDef),
     ecase _Term_application (ref applicationDef),
@@ -442,6 +472,7 @@ termDef = define "Term" $
 
 tupleProjectionDef :: TBinding (TupleProjection -> Term)
 tupleProjectionDef = define "TupleProjection" $
+  doc "Encode a tuple projection as a term" $
   "tp" ~>
   "encodeTypes" <~ ("types" ~> encodedList (primitive _lists_map @@ ref typeDef @@ var "types")) $
   encodedRecord _TupleProjection [
@@ -451,6 +482,7 @@ tupleProjectionDef = define "TupleProjection" $
 
 typeDef :: TBinding (Type -> Term)
 typeDef = define "Type" $
+  doc "Encode a type as a term (epsilon encoding)" $
   match _Type Nothing [
     field _Type_annotated $ lambda "v" $ variant _Term _Term_annotated $ record _AnnotatedTerm [
       field _AnnotatedTerm_body $ ref typeDef @@ (Core.annotatedTypeBody $ var "v"),
@@ -478,30 +510,35 @@ typeDef = define "Type" $
 
 typeLambdaDef :: TBinding (TypeLambda -> Term)
 typeLambdaDef = define "TypeLambda" $
+  doc "Encode a type lambda as a term" $
   "l" ~> encodedRecord _TypeLambda [
     field _TypeLambda_parameter (ref nameDef @@ (project _TypeLambda _TypeLambda_parameter @@ var "l")),
     field _TypeLambda_body (ref termDef @@ (project _TypeLambda _TypeLambda_body @@ var "l"))]
 
 typeSchemeDef :: TBinding (TypeScheme -> Term)
 typeSchemeDef = define "TypeScheme" $
+  doc "Encode a type scheme as a term" $
   "ts" ~> encodedRecord _TypeScheme [
     field _TypeScheme_variables (encodedList (primitive _lists_map @@ ref nameDef @@ (Core.typeSchemeVariables (var "ts")))),
     field _TypeScheme_type (ref typeDef @@ (Core.typeSchemeType (var "ts")))]
 
 typeApplicationTermDef :: TBinding (TypeApplicationTerm -> Term)
 typeApplicationTermDef = define "TypeApplicationTerm" $
+  doc "Encode a type application term as a term" $
   "tt" ~> encodedRecord _TypeApplicationTerm [
     field _TypeApplicationTerm_body (ref termDef @@ (project _TypeApplicationTerm _TypeApplicationTerm_body @@ var "tt")),
     field _TypeApplicationTerm_type (ref typeDef @@ (project _TypeApplicationTerm _TypeApplicationTerm_type @@ var "tt"))]
 
 wrappedTermDef :: TBinding (WrappedTerm -> Term)
 wrappedTermDef = define "WrappedTerm" $
+  doc "Encode a wrapped term as a term" $
   "n" ~> encodedRecord _WrappedTerm [
     field _WrappedTerm_typeName (ref nameDef @@ (Core.wrappedTermTypeName (var "n"))),
     field _WrappedTerm_body (ref termDef @@ (Core.wrappedTermBody (var "n")))]
 
 wrappedTypeDef :: TBinding (WrappedType -> Term)
 wrappedTypeDef = define "WrappedType" $
+  doc "Encode a wrapped type as a term" $
   "nt" ~> encodedRecord _WrappedType [
     field _WrappedType_typeName (ref nameDef @@ (Core.wrappedTypeTypeName (var "nt"))),
     field _WrappedType_body (ref typeDef @@ (Core.wrappedTypeBody (var "nt")))]
@@ -519,6 +556,7 @@ isEncodedTypeDef = coreEncodingExtrasDefinition "isEncodedType" $
 
 isTypeDef :: TBinding (Type -> Bool)
 isTypeDef = coreEncodingExtrasDefinition "isType" $
+  doc "Check whether a type is a type (always true for non-encoded types)" $
   "t" ~> cases _Type (ref Rewriting.deannotateTypeDef @@ var "t") (Just false) [
     _Type_application>>: "a" ~>
       ref isTypeDef @@ (Core.applicationTypeFunction (var "a")),
@@ -530,8 +568,10 @@ isTypeDef = coreEncodingExtrasDefinition "isType" $
 
 isUnitTermDef :: TBinding (Term -> Bool)
 isUnitTermDef = coreEncodingExtrasDefinition "isUnitTerm" $
+  doc "Check whether a term is the unit term" $
   match _Term (Just false) [_Term_unit>>: constant true]
 
 isUnitTypeDef :: TBinding (Type -> Bool)
 isUnitTypeDef = coreEncodingExtrasDefinition "isUnitType" $
+  doc "Check whether a type is the unit type" $
   match _Type (Just false) [_Type_unit>>: constant true]

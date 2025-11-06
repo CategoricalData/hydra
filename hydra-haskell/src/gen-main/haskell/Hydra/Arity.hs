@@ -12,6 +12,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Find the arity (expected number of arguments) of a function
 functionArity :: (Core.Function -> Int)
 functionArity x = case x of
   Core.FunctionElimination _ -> 1
@@ -22,12 +23,14 @@ functionArity x = case x of
 primitiveArity :: (Graph.Primitive -> Int)
 primitiveArity arg_ = ((\arg_ -> typeArity (Core.typeSchemeType arg_)) (Graph.primitiveType arg_))
 
+-- | Find the arity (expected number of arguments) of a term
 termArity :: (Core.Term -> Int)
 termArity x = case x of
   Core.TermApplication v1 -> ((\arg_ -> (\xapp -> Math.sub xapp 1) (termArity arg_)) (Core.applicationFunction v1))
   Core.TermFunction v1 -> (functionArity v1)
   _ -> 0
 
+-- | Find the arity (expected number of arguments) of a type
 typeArity :: (Core.Type -> Int)
 typeArity x = case x of
   Core.TypeAnnotated v1 -> (typeArity (Core.annotatedTypeBody v1))
@@ -36,6 +39,7 @@ typeArity x = case x of
   Core.TypeFunction v1 -> (Math.add 1 (typeArity (Core.functionTypeCodomain v1)))
   _ -> 0
 
+-- | Find the arity (expected number of arguments) of a type scheme
 typeSchemeArity :: (Core.TypeScheme -> Int)
 typeSchemeArity ts = (typeArity (Core.typeSchemeType ts))
 

@@ -82,6 +82,7 @@ define = definitionInModule module_
 
 bindDef :: TBinding (Flow s a -> (a -> Flow s b) -> Flow s b)
 bindDef = define "bind" $
+  doc "Monadic bind for flows" $
   "l" ~> "r" ~>
   "q" <~ ("s0" ~> "t0" ~>
     "fs1" <~ Compute.unFlow (var "l") (var "s0") (var "t0") $
@@ -98,15 +99,19 @@ bindDef = define "bind" $
   Compute.flow $ var "q"
 
 emptyTraceDef :: TBinding Trace
-emptyTraceDef = define "emptyTrace" $ Compute.trace (list []) (list []) Maps.empty
+emptyTraceDef = define "emptyTrace" $
+  doc "An empty trace with no stack, messages, or other attributes" $
+  Compute.trace (list []) (list []) Maps.empty
 
 execDef :: TBinding (Flow s a -> s -> s)
 execDef = define "exec" $
+  doc "Execute a flow and return the final state" $
   "f" ~> "s0" ~>
   Compute.flowStateState (Compute.unFlow (var "f") (var "s0") (ref emptyTraceDef))
 
 failDef :: TBinding (String -> Flow s a)
 failDef = define "fail" $
+  doc "Fail a flow with an error message" $
   "msg" ~>
   Compute.flow (
     "s" ~> "t" ~>
@@ -153,13 +158,16 @@ mapDef = define "map" $
       (Compute.flowStateTrace (var "f2")))
 
 modifyDef :: TBinding ((s -> s) -> Flow s ())
-modifyDef = define "modify" $ lambda "f" $
+modifyDef = define "modify" $
+  doc "Modify the state of a flow using a given function" $
+  lambda "f" $
   ref bindDef
     @@ (ref getStateDef)
     @@ (lambda "s" $ ref putStateDef @@ (var "f" @@ var "s"))
 
 mutateTraceDef :: TBinding ((Trace -> Prelude.Either String Trace) -> (Trace -> Trace -> Trace) -> Flow s a -> Flow s a)
 mutateTraceDef = define "mutateTrace" $
+  doc "Temporarily mutate the trace for the duration of a flow" $
   "mutate" ~> "restore" ~> "f" ~>
   "choose" <~ ("forLeft" ~> "forRight" ~> "e" ~> Eithers.either_
     ("l" ~> var "forLeft" @@ var "l")
@@ -184,6 +192,7 @@ maybeToListDef = define "maybeToList" $
 
 pureDef :: TBinding (a -> Flow s a)
 pureDef = define "pure" $
+  doc "Lift a value into a flow" $
   "xp" ~>
   Compute.flow (
     "s" ~> "t" ~> Compute.flowState (just (var "xp")) (var "s") (var "t"))

@@ -80,14 +80,17 @@ compactNameDef = define "compactName" $
 
 localNameOfDef :: TBinding (Name -> String)
 localNameOfDef = define "localNameOf" $
+  doc "Extract the local part of a name" $
   unaryFunction Module.qualifiedNameLocal <.> ref qualifyNameDef
 
 namespaceOfDef :: TBinding (Name -> Maybe Namespace)
 namespaceOfDef = define "namespaceOf" $
+  doc "Extract the namespace of a name, if any" $
   unaryFunction Module.qualifiedNameNamespace <.> ref qualifyNameDef
 
 namespaceToFilePathDef :: TBinding (CaseConvention -> FileExtension -> Namespace -> String)
 namespaceToFilePathDef = define "namespaceToFilePath" $
+  doc "Convert a namespace to a file path with the given case convention and file extension" $
   lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
     "parts">: Lists.map
       (ref Formatting.convertCaseDef @@ Mantle.caseConventionCamel @@ var "caseConv")
@@ -104,6 +107,7 @@ qnameDef = define "qname" $
 
 qualifyNameDef :: TBinding (Name -> QualifiedName)
 qualifyNameDef = define "qualifyName" $
+  doc "Split a dot-separated name into a namespace and local name" $
   lambda "name" $ lets [
     "parts">: Lists.reverse (Strings.splitOn "." (Core.unName $ var "name"))]
     $ Logic.ifElse
