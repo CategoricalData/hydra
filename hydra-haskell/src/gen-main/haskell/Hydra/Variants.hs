@@ -161,6 +161,7 @@ termVariant :: (Core.Term -> Mantle.TermVariant)
 termVariant x = case x of
   Core.TermAnnotated _ -> Mantle.TermVariantAnnotated
   Core.TermApplication _ -> Mantle.TermVariantApplication
+  Core.TermEither _ -> Mantle.TermVariantEither
   Core.TermFunction _ -> Mantle.TermVariantFunction
   Core.TermLet _ -> Mantle.TermVariantLet
   Core.TermList _ -> Mantle.TermVariantList
@@ -183,9 +184,10 @@ termVariants :: [Mantle.TermVariant]
 termVariants = [
   Mantle.TermVariantAnnotated,
   Mantle.TermVariantApplication,
-  Mantle.TermVariantLiteral,
+  Mantle.TermVariantEither,
   Mantle.TermVariantFunction,
   Mantle.TermVariantList,
+  Mantle.TermVariantLiteral,
   Mantle.TermVariantMap,
   Mantle.TermVariantMaybe,
   Mantle.TermVariantProduct,
