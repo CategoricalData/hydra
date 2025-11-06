@@ -168,10 +168,15 @@ nonNegativeInt32 = int32
 optional :: Type -> Type
 optional = TypeMaybe
 
--- | Create a pair (2-tuple) type
+-- | Create a pair type
 -- Example: pair string int32
 pair :: Type -> Type -> Type
-pair a b = TypeProduct [a, b]
+pair first second = TypePair $ PairType first second
+
+-- | Create a 2-tuple type
+-- Example: tuple2 string int32
+tuple2 :: Type -> Type -> Type
+tuple2 a b = TypeProduct [a, b]
 
 -- | Create a polymorphic type scheme with explicit type variables
 -- Example: poly ["a", "b"] (var "a" --> var "b")

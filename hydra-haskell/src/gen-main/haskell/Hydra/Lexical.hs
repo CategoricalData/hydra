@@ -107,7 +107,7 @@ lookupPrimitive :: (Graph.Graph -> Core.Name -> Maybe Graph.Primitive)
 lookupPrimitive g name = (Maps.lookup name (Graph.graphPrimitives g))
 
 matchEnum :: (Core.Name -> [(Core.Name, t0)] -> Core.Term -> Compute.Flow Graph.Graph t0)
-matchEnum tname pairs = (matchUnion tname (Lists.map (\pair -> matchUnitField (fst pair) (snd pair)) pairs))
+matchEnum tname pairs = (matchUnion tname (Lists.map (\tuple2 -> matchUnitField (fst tuple2) (snd tuple2)) pairs))
 
 matchRecord :: ((M.Map Core.Name Core.Term -> Compute.Flow t0 t1) -> Core.Term -> Compute.Flow t0 t1)
 matchRecord decode term =  
@@ -139,9 +139,10 @@ matchUnion tname pairs term =
           "injection for type ",
           (Core.unName tname)]) (Core_.term term)))
       _ -> (Monads.unexpected (Strings.cat [
-        Strings.cat [
-          "union with one of {",
-          (Strings.intercalate ", " (Lists.map (\pair -> Core.unName (fst pair)) pairs))],
+        "union_{",
+        Core.unName tname,
+        "} with one of {",
+        Strings.intercalate ", " (Lists.map (\tuple2 -> Core.unName (fst tuple2)) pairs),
         "}"]) (Core_.term stripped))) stripped)
 
 matchUnitField :: (t0 -> t1 -> (t0, (t2 -> Compute.Flow t3 t1)))

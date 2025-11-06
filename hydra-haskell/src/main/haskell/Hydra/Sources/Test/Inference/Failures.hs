@@ -49,7 +49,7 @@ undefinedVariableTests = supergroup "Undefined variable" [
     expectFailure 2 []
       (lets ["x">: var "y", "z">: int32 42] $ var "x"),
     expectFailure 3 []
-      (lets ["x">: int32 42, "y">: var "z"] $ pair (var "x") (var "y"))],
+      (lets ["x">: int32 42, "y">: var "z"] $ tuple2 (var "x") (var "y"))],
 
   subgroup "Shadowing scope errors" [
     expectFailure 1 []
@@ -69,7 +69,7 @@ unificationFailureTests = supergroup "Unification failure" [
     expectFailure 3 []
       (list [list [int32 42], string "foo"]),
     expectFailure 4 []
-      (pair (int32 42) (string "foo") @@ string "bar")],
+      (tuple2 (int32 42) (string "foo") @@ string "bar")],
 
   subgroup "Collection type mismatches" [
     expectFailure 1 []
@@ -77,7 +77,7 @@ unificationFailureTests = supergroup "Unification failure" [
     expectFailure 2 []
       (list [int32 42, list [string "foo"]]),
     expectFailure 3 []
-      (pair (list [int32 42]) (list [string "foo"]) @@ int32 137),
+      (tuple2 (list [int32 42]) (list [string "foo"]) @@ int32 137),
     expectFailure 4 []
       (primitive _lists_concat @@ list [list [int32 42], list [string "foo"]])],
 
@@ -95,7 +95,7 @@ unificationFailureTests = supergroup "Unification failure" [
         list [var "f" @@ int32 42, var "f" @@ string "foo"]),
     expectFailure 2 []
       (lets ["id">: lambda "x" $ var "x"] $
-        pair (var "id" @@ int32 42) (var "id" @@ string "foo") @@ true),
+        tuple2 (var "id" @@ int32 42) (var "id" @@ string "foo") @@ true),
     expectFailure 3 []
       (lets ["cons">: primitive _lists_cons] $
         list [var "cons" @@ int32 42, var "cons" @@ string "foo"])]]
@@ -116,7 +116,7 @@ invalidApplicationTests = supergroup "Invalid application" [
     expectFailure 1 []
       (list [int32 42] @@ string "bar"),
     expectFailure 2 []
-      (pair (int32 42) (string "foo") @@ true),
+      (tuple2 (int32 42) (string "foo") @@ true),
     expectFailure 3 []
       (list [] @@ int32 42),
     expectFailure 4 []
@@ -172,7 +172,7 @@ recursiveTypeTests = supergroup "Recursive type construction" [
     expectFailure 1 []
       (lets ["x">: list [var "x"]] $ var "x"),
     expectFailure 2 []
-      (lets ["x">: pair (var "x") (int32 42)] $ var "x"),
+      (lets ["x">: tuple2 (var "x") (int32 42)] $ var "x"),
     expectFailure 3 []
       (lets ["x">: tuple [var "x", var "x"]] $ var "x")],
 
@@ -186,7 +186,7 @@ recursiveTypeTests = supergroup "Recursive type construction" [
 
   subgroup "Mutually recursive types" [
     expectFailure 1 []
-      (lets ["x">: list [var "y"], "y">: pair (var "x") (int32 42)] $ var "x"),
+      (lets ["x">: list [var "y"], "y">: tuple2 (var "x") (int32 42)] $ var "x"),
     expectFailure 2 []
       (lets ["a">: lambda "x" $ var "b", "b">: var "a"] $ var "a"),
     expectFailure 3 []
@@ -261,13 +261,13 @@ polymorphismViolationTests = supergroup "Polymorphism violations" [
         list [var "id" @@ int32 42, var "id" @@ string "foo"]),
     expectFailure 3 []
       (lets ["id">: lambda "x" $ var "x"] $
-        pair (var "id" @@ int32 42) (var "id" @@ string "foo") @@ true)],
+        tuple2 (var "id" @@ int32 42) (var "id" @@ string "foo") @@ true)],
 
   subgroup "Constrained polymorphism violations" [
     expectFailure 1 []
       (lets ["f">: lambda "x" $ list [var "x", int32 42]] $ var "f" @@ string "foo"),
     expectFailure 2 []
-      (lets ["g">: lambda "x" $ pair (var "x") (string "constant")] $
+      (lets ["g">: lambda "x" $ tuple2 (var "x") (string "constant")] $
         primitive _math_add @@ (first $ var "g" @@ int32 42) @@ (first $ var "g" @@ string "bad")),
     expectFailure 3 []
       (lets ["h">: lambda "x" $ primitive _lists_cons @@ var "x" @@ list [int32 0]] $
@@ -275,7 +275,7 @@ polymorphismViolationTests = supergroup "Polymorphism violations" [
 
   subgroup "Higher-order polymorphism violations" [
     expectFailure 1 []
-      (lambda "f" $ pair (var "f" @@ int32 42) (var "f" @@ string "foo")),
+      (lambda "f" $ tuple2 (var "f" @@ int32 42) (var "f" @@ string "foo")),
     expectFailure 2 []
       (lambda "g" $ list [var "g" @@ int32 1, var "g" @@ string "bad"]),
     expectFailure 3 []
@@ -308,8 +308,8 @@ letBindingMismatchTests = supergroup "Let binding type mismatches" [
         "mixed">: primitive _lists_cons @@ string "bad" @@ var "nums"] $ var "mixed"),
     expectFailure 3 []
       (lets [
-        "pair1">: pair (int32 42) (string "foo"),
-        "pair2">: pair (string "bar") (var "pair1")] $
+        "pair1">: tuple2 (int32 42) (string "foo"),
+        "pair2">: tuple2 (string "bar") (var "pair1")] $
         primitive _math_add @@ (first $ var "pair2") @@ int32 1)],
 
   subgroup "Function binding mismatches" [
@@ -398,13 +398,13 @@ complexConstraintFailureTests = supergroup "Complex constraint failures" [
   subgroup "Multi-level constraint conflicts" [
     expectFailure 1 []
       (lets [
-        "f">: lambda "x" $ lambda "y" $ pair (var "x") (var "y"),
+        "f">: lambda "x" $ lambda "y" $ tuple2 (var "x") (var "y"),
         "g">: lambda "a" $ var "f" @@ var "a" @@ var "a",
         "h">: var "g" @@ (lambda "z" $ var "z")] $ var "h" @@ int32 42),
     expectFailure 2 []
       (lets [
         "weird">: lambda "f" $ lambda "x" $ var "f" @@ (var "f" @@ var "x"),
-        "bad">: var "weird" @@ (lambda "y" $ pair (var "y") (int32 42))] $ var "bad"),
+        "bad">: var "weird" @@ (lambda "y" $ tuple2 (var "y") (int32 42))] $ var "bad"),
     expectFailure 3 []
       (lets [
         "nested">: lambda "f" $ lambda "g" $ lambda "x" $

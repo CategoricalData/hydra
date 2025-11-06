@@ -96,14 +96,14 @@ testGroupForSystemF = subgroup "STLC to System F" [
       ["t0"] (T.function (T.var "t0") (T.list $ T.var "t0")),
 
 --  --Untyped input:
---  --	let sng = (\x. (cons x nil)) in (pair (sng 0) (sng alice))
+--  --	let sng = (\x. (cons x nil)) in (tuple2 (sng 0) (sng alice))
 --  --System F type:
 --  -- 	((List Nat) * (List String))
     expectMono 6 []
       (lets [
         "sng" >: lambda "x" $ list [var "x"]]
-        $ pair (var "sng" @@ int32 0) (var "sng" @@ string "alice"))
-      (T.pair (T.list T.int32) (T.list T.string)),
+        $ tuple2 (var "sng" @@ int32 0) (var "sng" @@ string "alice"))
+      (T.tuple2 (T.list T.int32) (T.list T.string)),
 
 --  --Untyped input:
 --  --	letrecs + = (\x. (\y. (S (+ (P x) y))))
@@ -130,15 +130,15 @@ testGroupForSystemF = subgroup "STLC to System F" [
 ----Untyped input:
 ----	letrec f = (\x. (\y. (f 0 x)))
 ----		g = (\xx. (\yy. (g 0 xx)))
-----		in (pair f g)
+----		in (tuple2 f g)
 ----Type inferred by Hindley-Milner:
 ----	((Int32 -> (Int32 -> v12)) * (Int32 -> (Int32 -> v14)))
     expectPoly 10 []
       (lets [
         "f">: lambdas ["x", "y"] (var "f" @@ int32 0 @@ var "x"),
         "g">: lambda "xx" $ lambda "yy" (var "g" @@ int32 0 @@ var "xx")]
-        $ pair (var "f") (var "g"))
-      ["t0", "t1"] (T.pair
+        $ tuple2 (var "f") (var "g"))
+      ["t0", "t1"] (T.tuple2
         (T.functionMany [T.int32, T.int32, T.var "t0"])
         (T.functionMany [T.int32, T.int32, T.var "t1"])),
 
@@ -148,45 +148,45 @@ testGroupForSystemF = subgroup "STLC to System F" [
 --  --Untyped input:
 --  --	letrecs f = (\x. (\y. (g 0 x)))
 --  --		g = (\u. (\v. (f v 0)))
---  --		in (pair f g)
+--  --		in (tuple2 f g)
 --  --System F type:
 --  -- 	((v12 -> (Nat -> v13)) * (Nat -> (v15 -> v16)))
     expectPoly 11 []
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
         "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
-        $ pair (var "f") (var "g"))
-      ["t0", "t1", "t2", "t3"] (T.pair
+        $ tuple2 (var "f") (var "g"))
+      ["t0", "t1", "t2", "t3"] (T.tuple2
         (T.functionMany [T.var "t0", T.int32, T.var "t1"])
         (T.functionMany [T.int32, T.var "t2", T.var "t3"])),
 
 --  --Untyped input:
 --  --	letrecs f = (\x. (\y. (g 0 0)))
 --  --		g = (\u. (\v. (f v 0)))
---  --		in (pair f g)
+--  --		in (tuple2 f g)
 --  --System F type:
 --  -- 	((Nat -> (Nat -> v12)) * (Nat -> (Nat -> v14)))
     expectPoly 12 []
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ int32 0),
         "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
-        $ pair (var "f") (var "g"))
-      ["t0", "t1"] (T.pair
+        $ tuple2 (var "f") (var "g"))
+      ["t0", "t1"] (T.tuple2
         (T.functionMany [T.int32, T.int32, T.var "t0"])
         (T.functionMany [T.int32, T.int32, T.var "t1"])),
 
 --  --Untyped input:
 --  --	letrecs f = (\x. (\y. (g 0 x)))
 --  --		g = (\u. (\v. (f 0 0)))
---  --		in (pair f g)
+--  --		in (tuple2 f g)
 --  --System F type:
 --  -- 	((Nat -> (Nat -> v12)) * (Nat -> (Nat -> v14)))
     expectPoly 13 []
       (lets [
         "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
         "g">: lambda "u" $ lambda "v" (var "f" @@ int32 0 @@ int32 0)]
-        $ pair (var "f") (var "g"))
-      ["t0", "t1"] (T.pair
+        $ tuple2 (var "f") (var "g"))
+      ["t0", "t1"] (T.tuple2
         (T.functionMany [T.int32, T.int32, T.var "t0"])
         (T.functionMany [T.int32, T.int32, T.var "t1"]))]
   where

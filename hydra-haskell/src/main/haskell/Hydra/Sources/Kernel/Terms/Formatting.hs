@@ -159,11 +159,11 @@ nonAlnumToUnderscoresDef = define "nonAlnumToUnderscores" $
     "s" <~ first (var "p") $
     "b" <~ second (var "p") $
     Logic.ifElse (var "isAlnum" @@ var "c")
-      (pair (Lists.cons (var "c") (var "s")) (boolean False))
+      (tuple2 (Lists.cons (var "c") (var "s")) (boolean False))
       (Logic.ifElse (var "b")
-        (pair (var "s") (boolean True))
-        (pair (Lists.cons (char '_') (var "s")) (boolean True)))) $
-  "result" <~ Lists.foldl (var "replace") (pair (list []) (boolean False)) (Strings.toList $ var "input") $
+        (tuple2 (var "s") (boolean True))
+        (tuple2 (Lists.cons (char '_') (var "s")) (boolean True)))) $
+  "result" <~ Lists.foldl (var "replace") (tuple2 (list []) (boolean False)) (Strings.toList $ var "input") $
   Strings.fromList $ Lists.reverse $ first $ var "result"
 
 sanitizeWithUnderscoresDef :: TBinding (S.Set String -> String -> String)
@@ -187,39 +187,39 @@ withCharacterAliasesDef = define "withCharacterAliases" $
   lambda "original" $ lets [
     -- Taken from: https://cs.stanford.edu/people/miles/iso8859.html
     "aliases">: Maps.fromList $ list [
-      pair (int32 32) (string "sp"),
-      pair (int32 33) (string "excl"),
-      pair (int32 34) (string "quot"),
-      pair (int32 35) (string "num"),
-      pair (int32 36) (string "dollar"),
-      pair (int32 37) (string "percnt"),
-      pair (int32 38) (string "amp"),
-      pair (int32 39) (string "apos"),
-      pair (int32 40) (string "lpar"),
-      pair (int32 41) (string "rpar"),
-      pair (int32 42) (string "ast"),
-      pair (int32 43) (string "plus"),
-      pair (int32 44) (string "comma"),
-      pair (int32 45) (string "minus"),
-      pair (int32 46) (string "period"),
-      pair (int32 47) (string "sol"),
-      pair (int32 58) (string "colon"),
-      pair (int32 59) (string "semi"),
-      pair (int32 60) (string "lt"),
-      pair (int32 61) (string "equals"),
-      pair (int32 62) (string "gt"),
-      pair (int32 63) (string "quest"),
-      pair (int32 64) (string "commat"),
-      pair (int32 91) (string "lsqb"),
-      pair (int32 92) (string "bsol"),
-      pair (int32 93) (string "rsqb"),
-      pair (int32 94) (string "circ"),
-      pair (int32 95) (string "lowbar"),
-      pair (int32 96) (string "grave"),
-      pair (int32 123) (string "lcub"),
-      pair (int32 124) (string "verbar"),
-      pair (int32 125) (string "rcub"),
-      pair (int32 126) (string "tilde")],
+      tuple2 (int32 32) (string "sp"),
+      tuple2 (int32 33) (string "excl"),
+      tuple2 (int32 34) (string "quot"),
+      tuple2 (int32 35) (string "num"),
+      tuple2 (int32 36) (string "dollar"),
+      tuple2 (int32 37) (string "percnt"),
+      tuple2 (int32 38) (string "amp"),
+      tuple2 (int32 39) (string "apos"),
+      tuple2 (int32 40) (string "lpar"),
+      tuple2 (int32 41) (string "rpar"),
+      tuple2 (int32 42) (string "ast"),
+      tuple2 (int32 43) (string "plus"),
+      tuple2 (int32 44) (string "comma"),
+      tuple2 (int32 45) (string "minus"),
+      tuple2 (int32 46) (string "period"),
+      tuple2 (int32 47) (string "sol"),
+      tuple2 (int32 58) (string "colon"),
+      tuple2 (int32 59) (string "semi"),
+      tuple2 (int32 60) (string "lt"),
+      tuple2 (int32 61) (string "equals"),
+      tuple2 (int32 62) (string "gt"),
+      tuple2 (int32 63) (string "quest"),
+      tuple2 (int32 64) (string "commat"),
+      tuple2 (int32 91) (string "lsqb"),
+      tuple2 (int32 92) (string "bsol"),
+      tuple2 (int32 93) (string "rsqb"),
+      tuple2 (int32 94) (string "circ"),
+      tuple2 (int32 95) (string "lowbar"),
+      tuple2 (int32 96) (string "grave"),
+      tuple2 (int32 123) (string "lcub"),
+      tuple2 (int32 124) (string "verbar"),
+      tuple2 (int32 125) (string "rcub"),
+      tuple2 (int32 126) (string "tilde")],
     "alias">: lambda "c" $ Maybes.fromMaybe
       (Lists.pure $ var "c")
       (Maybes.map (unaryFunction Strings.toList) $ Maps.lookup (var "c") (var "aliases"))]

@@ -644,6 +644,172 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]},
         Testing.TestGroup {
+          Testing.testGroupName = "Pair terms",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Monotyped pairs",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermPair (Core.TermLiteral (Core.LiteralString "foo"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                        Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
+                        Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermPair (Core.TermLiteral (Core.LiteralString "foo"), (Core.TermList [
+                      Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 42.0)),
+                      (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 137.0)))]))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                        Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
+                        Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Polytyped pairs",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermPair (Core.TermList [], (Core.TermLiteral (Core.LiteralString "foo")))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                        Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+                        Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermPair (Core.TermList [], (Core.TermList []))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0",
+                        (Core.Name "t1")],
+                      Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                        Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+                        Core.pairTypeSecond = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Nested pairs",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermPair (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "nested"))), (Core.TermLiteral (Core.LiteralBoolean True)))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                        Core.pairTypeFirst = (Core.TypePair (Core.PairType {
+                          Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                          Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})),
+                        Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeBoolean)}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermPair (Core.TermLiteral (Core.LiteralString "foo"), (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)), (Core.TermList [
+                      Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 42.0))]))))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                        Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
+                        Core.pairTypeSecond = (Core.TypePair (Core.PairType {
+                          Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                          Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)))}))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Pairs in lambda",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermLiteral (Core.LiteralString "constant"))))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
+                          Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
+                          Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "p"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "p"), (Core.TermVariable (Core.Name "p"))))}))),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                        Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
+                          Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
+                          Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]},
+            Testing.TestGroup {
+              Testing.testGroupName = "Pairs in data structures",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = [
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#1",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermList [
+                      Core.TermPair (Core.TermLiteral (Core.LiteralString "a"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))),
+                      (Core.TermPair (Core.TermLiteral (Core.LiteralString "b"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))))]),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeList (Core.TypePair (Core.PairType {
+                        Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
+                        Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []},
+                Testing.TestCaseWithMetadata {
+                  Testing.testCaseWithMetadataName = "#2",
+                  Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+                    Testing.inferenceTestCaseInput = (Core.TermList [
+                      Core.TermPair (Core.TermList [], (Core.TermLiteral (Core.LiteralString "foo")))]),
+                    Testing.inferenceTestCaseOutput = Core.TypeScheme {
+                      Core.typeSchemeVariables = [
+                        Core.Name "t0"],
+                      Core.typeSchemeType = (Core.TypeList (Core.TypePair (Core.PairType {
+                        Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+                        Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))}})),
+                  Testing.testCaseWithMetadataDescription = Nothing,
+                  Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
           Testing.testGroupName = "Product terms",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [
@@ -9839,7 +10005,7 @@ stringPrimitiveTests = Testing.TestGroup {
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "second of combining pair",
+          Testing.testCaseWithMetadataName = "second of combining tuple2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
             Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
             Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {

@@ -106,7 +106,7 @@ languageAdapterDef = define "languageAdapter" $
   "getPair" <~ ("typ" ~>
     "ad" <<~ ref AdaptTerms.termAdapterDef @@ var "typ" $
     "cx" <<~ ref Monads.getStateDef $
-    produce $ pair (var "ad") (var "cx")) $
+    produce $ tuple2 (var "ad") (var "cx")) $
   "g" <<~ ref Monads.getStateDef $
   "cx0" <~ Coders.adapterContext (var "g") (var "lang") Maps.empty $
   "result" <<~ ref Monads.withStateDef @@ var "cx0" @@ (var "getPair" @@ var "typ") $
@@ -140,9 +140,9 @@ adaptedModuleDefinitionsDef = define "adaptedModuleDefinitions" $
   "adaptersFor" <~ lambda "types" (
     "adapters" <<~ Flows.mapList (ref languageAdapterDef @@ var "lang") (var "types") $
     produce $ Maps.fromList $ Lists.zip (var "types") (var "adapters")) $
-  "classify" <~ ("adapters" ~> "pair" ~>
-    "el" <~ first (var "pair") $
-    "tt" <~ second (var "pair") $
+  "classify" <~ ("adapters" ~> "tuple2" ~>
+    "el" <~ first (var "tuple2") $
+    "tt" <~ second (var "tuple2") $
     "term" <~ Core.typeApplicationTermBody (var "tt") $
     "typ" <~ Core.typeApplicationTermType (var "tt") $
     "name" <~ Core.bindingName (var "el") $

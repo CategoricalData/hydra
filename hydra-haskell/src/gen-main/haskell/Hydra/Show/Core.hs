@@ -287,6 +287,12 @@ term t =
       "just(",
       term t,
       ")"]) v1)
+    Core.TermPair v1 -> (Strings.cat [
+      "(",
+      term (fst v1),
+      ", ",
+      term (snd v1),
+      ")"])
     Core.TermProduct v1 ->  
       let termStrs = (Lists.map term v1)
       in (Strings.cat [
@@ -445,6 +451,16 @@ type_ typ =
             "maybe<",
             type_ v1,
             ">"])
+          Core.TypePair v1 ->  
+            let firstTyp = (Core.pairTypeFirst v1)
+            in  
+              let secondTyp = (Core.pairTypeSecond v1)
+              in (Strings.cat [
+                "(",
+                type_ firstTyp,
+                ", ",
+                type_ secondTyp,
+                ")"])
           Core.TypeProduct v1 ->  
             let typeStrs = (Lists.map type_ v1)
             in (Strings.intercalate "\215" typeStrs)

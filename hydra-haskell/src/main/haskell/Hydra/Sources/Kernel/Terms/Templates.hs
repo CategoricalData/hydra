@@ -66,7 +66,7 @@ graphToSchemaDef = define "graphToSchema" $
     "name" <~ first (var "nameAndEl") $
     "el" <~ second (var "nameAndEl") $
     Flows.bind (ref DecodeCore.typeDef @@ (Core.bindingTerm (var "el"))) (
-      "t" ~> Flows.pure (pair (var "name") (var "t")))) $
+      "t" ~> Flows.pure (tuple2 (var "name") (var "t")))) $
   Flows.bind (Flows.mapList (var "toPair") (Maps.toList (Graph.graphElements (var "g")))) (
     "pairs" ~> Flows.pure (Maps.fromList (var "pairs")))
 

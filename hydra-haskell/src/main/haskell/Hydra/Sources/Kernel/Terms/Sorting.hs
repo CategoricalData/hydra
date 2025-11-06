@@ -101,7 +101,7 @@ topologicalSortNodesDef = define "topologicalSortNodes" $
     <> " one for node keys, and one for the adjacency list of connected node keys."
     <> " The result is a list of strongly-connected components (cycles), in which singleton lists represent acyclic nodes.") $
   withOrd "t1" $ "getKey" ~> "getAdj" ~> "nodes" ~>
-  "nodesByKey" <~ Maps.fromList (Lists.map ("n" ~> pair (var "getKey" @@ var "n") (var "n")) (var "nodes")) $
-  "pairs" <~ Lists.map ("n" ~> pair (var "getKey" @@ var "n") (var "getAdj" @@ var "n")) (var "nodes") $
+  "nodesByKey" <~ Maps.fromList (Lists.map ("n" ~> tuple2 (var "getKey" @@ var "n") (var "n")) (var "nodes")) $
+  "pairs" <~ Lists.map ("n" ~> tuple2 (var "getKey" @@ var "n") (var "getAdj" @@ var "n")) (var "nodes") $
   "comps" <~ ref topologicalSortComponentsDef @@ var "pairs" $
   Lists.map ("c" ~> Maybes.cat $ Lists.map ("k" ~> Maps.lookup (var "k") (var "nodesByKey")) (var "c")) (var "comps")

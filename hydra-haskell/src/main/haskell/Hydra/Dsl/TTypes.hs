@@ -142,10 +142,15 @@ mono t = Phantoms.record _TypeScheme [
 optional :: TTerm Type -> TTerm Type
 optional = typeMaybe
 
--- | Create a term-encoded pair (2-tuple) type
+-- | Create a term-encoded pair type
 -- Example: pair string int32
 pair :: TTerm Type -> TTerm Type -> TTerm Type
-pair l r = product [l, r]
+pair first second = Core.typePair $ Core.pairType first second
+
+-- | Create a term-encoded 2-tuple type
+-- Example: tuple2 string int32
+tuple2 :: TTerm Type -> TTerm Type -> TTerm Type
+tuple2 l r = product [l, r]
 
 -- | Create a term-encoded polymorphic type scheme
 -- Example: poly ["a", "b"] (var "a" --> var "b")

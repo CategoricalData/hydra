@@ -45,10 +45,10 @@ adaptedModuleDefinitions lang mod =
   in  
     let adaptersFor = (\types -> Flows.bind (Flows.mapList (languageAdapter lang) types) (\adapters -> Flows.pure (Maps.fromList (Lists.zip types adapters))))
     in  
-      let classify = (\adapters -> \pair ->  
-              let el = (fst pair)
+      let classify = (\adapters -> \tuple2 ->  
+              let el = (fst tuple2)
               in  
-                let tt = (snd pair)
+                let tt = (snd tuple2)
                 in  
                   let term = (Core.typeApplicationTermBody tt)
                   in  

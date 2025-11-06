@@ -111,7 +111,7 @@ dereferenceSchemaTypeDef = define "dereferenceSchemaType" $
 elementsToGraphDef :: TBinding (Graph -> Maybe Graph -> [Binding] -> Graph)
 elementsToGraphDef = define "elementsToGraph" $
   "parent" ~> "schema" ~> "elements" ~>
-  "toPair" <~ ("el" ~> pair (Core.bindingName (var "el")) (var "el")) $
+  "toPair" <~ ("el" ~> tuple2 (Core.bindingName (var "el")) (var "el")) $
   Graph.graph
     (Maps.fromList (Lists.map (var "toPair") (var "elements")))
     (Graph.graphEnvironment (var "parent"))
@@ -138,7 +138,7 @@ extendGraphWithBindingsDef = define "extendGraphWithBindings" $
     "name" <~ Core.bindingName (var "binding") $
     "term" <~ Core.bindingTerm (var "binding") $
     "mts" <~ Core.bindingType (var "binding") $
-    pair (var "name") (Core.binding (var "name") (var "term") (var "mts"))) $
+    tuple2 (var "name") (Core.binding (var "name") (var "term") (var "mts"))) $
   "newEls" <~ Maps.fromList (Lists.map (var "toEl") (var "bindings")) $
   Graph.graphWithElements (var "g") (Maps.union (var "newEls") (Graph.graphElements (var "g")))
 
@@ -172,8 +172,8 @@ lookupPrimitiveDef = define "lookupPrimitive" $
 matchEnumDef :: TBinding (Name -> [(Name, b)] -> Term -> Flow Graph b)
 matchEnumDef = define "matchEnum" $
   "tname" ~> "pairs" ~>
-  ref matchUnionDef @@ var "tname" @@ (Lists.map ("pair" ~>
-    ref matchUnitFieldDef @@ (first (var "pair")) @@ (second (var "pair"))) (var "pairs"))
+  ref matchUnionDef @@ var "tname" @@ (Lists.map ("tuple2" ~>
+    ref matchUnitFieldDef @@ (first (var "tuple2")) @@ (second (var "tuple2"))) (var "pairs"))
 
 matchRecordDef :: TBinding ((M.Map Name Term -> Flow Graph b) -> Term -> Flow Graph b)
 matchRecordDef = define "matchRecord" $
@@ -183,7 +183,7 @@ matchRecordDef = define "matchRecord" $
     (Just (ref Monads.unexpectedDef @@ "record" @@ (ref ShowCore.termDef @@ var "term"))) [
     _Term_record>>: "record" ~> var "decode" @@
       (Maps.fromList (Lists.map
-        ("field" ~> pair (Core.fieldName (var "field")) (Core.fieldTerm (var "field")))
+        ("field" ~> tuple2 (Core.fieldName (var "field")) (Core.fieldTerm (var "field")))
         (Core.recordFields (var "record"))))]
 
 matchUnionDef :: TBinding (Name -> [(Name, Term -> Flow Graph b)] -> Term -> Flow Graph b)
@@ -193,7 +193,11 @@ matchUnionDef = define "matchUnion" $
   "mapping" <~ Maps.fromList (var "pairs") $
   cases _Term (var "stripped")
     (Just (ref Monads.unexpectedDef @@
-      ("union with one of {" ++ (Strings.intercalate ", " (Lists.map ("pair" ~> Core.unName (first (var "pair"))) (var "pairs"))) ++ "}") @@
+      (Strings.cat $ list [
+        "union_{", Core.unName (var "tname"),
+        "} with one of {",
+        (Strings.intercalate ", " (Lists.map ("tuple2" ~> Core.unName (first (var "tuple2"))) (var "pairs"))),
+        "}"]) @@
       (ref ShowCore.termDef @@ var "stripped"))) [
     _Term_variable>>: "name" ~>
       "el" <<~ ref requireElementDef @@ var "name" $
@@ -213,7 +217,7 @@ matchUnionDef = define "matchUnion" $
 
 matchUnitFieldDef :: TBinding (Name -> y -> (Name, x -> Flow Graph y))
 matchUnitFieldDef = define "matchUnitField" $
-  "fname" ~> "x" ~> pair (var "fname") ("ignored" ~> produce (var "x"))
+  "fname" ~> "x" ~> tuple2 (var "fname") ("ignored" ~> produce (var "x"))
 
 requireElementDef :: TBinding (Name -> Flow Graph Binding)
 requireElementDef = define "requireElement" $

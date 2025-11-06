@@ -430,7 +430,7 @@ _UpdateRecordExpression_inner = (Core.Name "inner")
 
 _UpdateRecordExpression_fields = (Core.Name "fields")
 
--- | A field (name/type pair)
+-- | A field (name/type tuple2)
 data Field = 
   Field {
     fieldName :: Name,

@@ -156,6 +156,17 @@ eitherType et = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "right"),
       Core.fieldTerm = (type_ (Core.eitherTypeRight et))}]}))
 
+pairType :: (Core.PairType -> Core.Term)
+pairType pt = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.core.PairType"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "first"),
+      Core.fieldTerm = (type_ (Core.pairTypeFirst pt))},
+    Core.Field {
+      Core.fieldName = (Core.Name "second"),
+      Core.fieldTerm = (type_ (Core.pairTypeSecond pt))}]}))
+
 function :: (Core.Function -> Core.Term)
 function x = case x of
   Core.FunctionElimination v1 -> (Core.TermUnion (Core.Injection {
@@ -508,6 +519,11 @@ term x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "maybe"),
       Core.fieldTerm = (Core.TermMaybe (Maybes.map term v1))}}))
+  Core.TermPair v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "pair"),
+      Core.fieldTerm = (Core.TermPair (term (fst v1), (term (snd v1))))}}))
   Core.TermProduct v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
@@ -620,6 +636,11 @@ type_ x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "maybe"),
       Core.fieldTerm = (type_ v1)}}))
+  Core.TypePair v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.core.Type"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "pair"),
+      Core.fieldTerm = (pairType v1)}}))
   Core.TypeProduct v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Type"),
     Core.injectionField = Core.Field {

@@ -53,16 +53,16 @@ grammarToModule :: (Module.Namespace -> Grammar.Grammar -> Maybe String -> Modul
 grammarToModule ns grammar desc =  
   let prodPairs = (Lists.map (\prod -> (Grammar.unSymbol (Grammar.productionSymbol prod), (Grammar.productionPattern prod))) (Grammar.unGrammar grammar))
   in  
-    let capitalizedNames = (Lists.map (\pair -> Formatting.capitalize (fst pair)) prodPairs)
+    let capitalizedNames = (Lists.map (\tuple2 -> Formatting.capitalize (fst tuple2)) prodPairs)
     in  
-      let patterns = (Lists.map (\pair -> snd pair) prodPairs)
+      let patterns = (Lists.map (\tuple2 -> snd tuple2) prodPairs)
       in  
         let elementPairs = (Lists.concat (Lists.zipWith (makeElements False ns) capitalizedNames patterns))
         in  
-          let elements = (Lists.map (\pair ->  
-                  let lname = (fst pair)
+          let elements = (Lists.map (\tuple2 ->  
+                  let lname = (fst tuple2)
                   in  
-                    let typ = (wrapType (snd pair))
+                    let typ = (wrapType (snd tuple2))
                     in (Annotations.typeElement (toName ns lname) typ)) elementPairs)
           in Module.Module {
             Module.moduleNamespace = ns,

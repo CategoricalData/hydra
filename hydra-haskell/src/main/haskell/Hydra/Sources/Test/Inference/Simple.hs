@@ -82,7 +82,7 @@ testGroupForFunctionTerms = supergroup "Function terms" [
        (untuple 2 0)
        ["t0", "t1"] (T.function (T.product [T.var "t0", T.var "t1"]) (T.var "t0")),
      expectMono 2 [tag_disabledForMinimalInference]
-       (untuple 2 1 @@ pair (int32 42) (string "foo"))
+       (untuple 2 1 @@ tuple2 (int32 42) (string "foo"))
        T.string,
      expectPoly 3 [tag_disabledForMinimalInference]
        (lambda "x" $ untuple 1 0 @@ tuple [var "x"])
@@ -138,8 +138,8 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
       expectMono 1 []
         (tuple [])
         (T.product []),
-      expectMono 2 []
-        (pair (int32 42) (string "foo"))
+      expectMono 2 [tag_disabledForMinimalInference]
+        (tuple2 (int32 42) (string "foo"))
         (T.product [T.int32, T.string])],
 
     subgroup "Sets" [
@@ -242,14 +242,14 @@ testGroupForProductTerms = supergroup "Product terms" [
         (tuple [])
         (T.product [])],
     subgroup "Non-empty monotyped products" [
-      expectMono 1 []
+      expectMono 1 [tag_disabledForMinimalInference]
         (tuple [string "foo", int32 42])
         (T.product [T.string, T.int32]),
-      expectMono 2 []
+      expectMono 2 [tag_disabledForMinimalInference]
         (tuple [string "foo", list [float32 42.0, float32 137.0]])
         (T.product [T.string, T.list T.float32])],
     subgroup "Polytyped products" [
-      expectPoly 1 []
+      expectPoly 1 [tag_disabledForMinimalInference]
         (tuple [list [], string "foo"])
         ["t0"] (T.product [T.list $ T.var "t0", T.string])]]
 

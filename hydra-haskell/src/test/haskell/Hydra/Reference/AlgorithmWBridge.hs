@@ -50,6 +50,7 @@ hydraTermToStlc context term = case term of
       sels <- CM.mapM toStlc els
       return $ foldr (\el acc -> App (App (Const Cons) el) acc) (Const Nil) sels
     Core.TermLiteral lit -> pure $ Const $ PrimLiteral lit
+    Core.TermPair (t1, t2) -> pair <$> toStlc t1 <*> toStlc t2
     Core.TermProduct els -> toPairs <$> CM.mapM toStlc els
       where
         toPairs sels = case sels of
@@ -77,6 +78,7 @@ hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
       Core.TypeLiteral lt -> pure $ TyLit lt
 --      TypeMap MapType |
 --      TypeMaybe Type |
+      Core.TypePair (Core.PairType first second) -> TyProd <$> toStlc first <*> toStlc second
       Core.TypeProduct types -> toProd <$> (CM.mapM toStlc types)
         where
           toProd ts = case ts of
@@ -118,7 +120,7 @@ toTerm expr = case expr of
         gather e = case e of
           FTyApp (FConst Nil) _ -> []
           FApp (FApp (FTyApp (FConst Cons) _) hd) tl -> hd:(gather tl)
-    FApp (FTyApp (FConst Pair) _) lhs -> Core.TermProduct [toTerm lhs, toTerm e2]
+    FApp (FTyApp (FConst Pair) _) lhs -> Core.TermPair (toTerm lhs, toTerm e2)
     FTyApp (FConst Inl) _ -> Core.TermEither $ Left $ toTerm e2
     FTyApp (FConst Inr) _ -> Core.TermEither $ Right $ toTerm e2
     _ -> Core.TermApplication $ Core.Application (toTerm e1) (toTerm e2)

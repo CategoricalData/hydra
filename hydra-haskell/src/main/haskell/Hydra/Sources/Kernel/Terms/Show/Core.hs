@@ -322,6 +322,12 @@ termDef = define "term" $
         ref termDef @@ var "t",
         string ")"])
       (var "mt"),
+    _Term_pair>>: "p" ~> Strings.cat $ list [
+      string "(",
+      ref termDef @@ (first $ var "p"),
+      string ", ",
+      ref termDef @@ (second $ var "p"),
+      string ")"],
     _Term_product>>: "els" ~>
       "termStrs" <~ Lists.map (ref termDef) (var "els") $
       Strings.cat $ list [
@@ -465,6 +471,15 @@ typeDef = define "type" $
       string "maybe<",
       ref typeDef @@ var "etyp",
       string ">"],
+    _Type_pair>>: "pt" ~>
+      "firstTyp" <~ Core.pairTypeFirst (var "pt") $
+      "secondTyp" <~ Core.pairTypeSecond (var "pt") $
+      Strings.cat $ list [
+        string "(",
+        ref typeDef @@ var "firstTyp",
+        string ", ",
+        ref typeDef @@ var "secondTyp",
+        ")"],
     _Type_product>>: "types" ~>
       "typeStrs" <~ Lists.map (ref typeDef) (var "types") $
       Strings.intercalate (string "×") (var "typeStrs"),
