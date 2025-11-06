@@ -14,17 +14,17 @@ from hydra.core import (
 
 def binary() -> LiteralType:
     """Construct a binary literal type."""
-    return LiteralTypeBinary(None)
+    return LiteralTypeBinary()
 
 
 def boolean() -> LiteralType:
     """Construct a boolean literal type."""
-    return LiteralTypeBoolean(None)
+    return LiteralTypeBoolean()
 
 
 def string() -> LiteralType:
     """Construct a string literal type."""
-    return LiteralTypeString(None)
+    return LiteralTypeString()
 
 
 def float_(ftype: FloatType) -> LiteralType:

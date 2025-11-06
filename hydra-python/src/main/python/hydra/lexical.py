@@ -106,13 +106,13 @@ def match_union[T0](tname: hydra.core.Name, pairs: frozenlist[Tuple[hydra.core.N
             return hydra.lib.logic.if_else(hydra.lib.equality.equal(injection.type_name.value, tname.value), exp(), hydra.monads.unexpected(hydra.lib.strings.cat(("injection for type ", tname.value)), hydra.show.core.term(term)))
         
         case _:
-            return hydra.monads.unexpected(hydra.lib.strings.cat(("union_{", tname.value, "} with one of {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda pair: pair[0].value), pairs)), "}")), hydra.show.core.term(stripped))
+            return hydra.monads.unexpected(hydra.lib.strings.cat(("union_{", tname.value, "} with one of {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda tuple2: tuple2[0].value), pairs)), "}")), hydra.show.core.term(stripped))
 
 def match_unit_field[T0, T1, T2, T3](fname: T0, x: T1) -> Tuple[T0, Callable[[T2], hydra.compute.Flow[T3, T1]]]:
     return (fname, (lambda ignored: hydra.lib.flows.pure(x)))
 
 def match_enum[T0](tname: hydra.core.Name, pairs: frozenlist[Tuple[hydra.core.Name, T0]], v1: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, T0]:
-    return match_union(tname, hydra.lib.lists.map((lambda pair: match_unit_field(pair[0], pair[1])), pairs), v1)
+    return match_union(tname, hydra.lib.lists.map((lambda tuple2: match_unit_field(tuple2[0], tuple2[1])), pairs), v1)
 
 def match_record[T0, T1](decode: Callable[[FrozenDict[hydra.core.Name, hydra.core.Term]], hydra.compute.Flow[T0, T1]], term: hydra.core.Term) -> hydra.compute.Flow[T0, T1]:
     stripped = hydra.rewriting.deannotate_and_detype_term(term)

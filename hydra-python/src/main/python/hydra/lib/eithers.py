@@ -2,7 +2,7 @@
 
 from collections.abc import Callable
 from typing import TypeVar
-from hydra.dsl.python import Either, Left, Right
+from hydra.dsl.python import Either, Left, Right, frozenlist
 
 A = TypeVar("A")
 B = TypeVar("B")
@@ -64,7 +64,7 @@ def from_right[A, B](default: B, e: Either[A, B]) -> B:
             return val
 
 
-def lefts[A, B](eithers: list[Either[A, B]]) -> list[A]:
+def lefts[A, B](eithers: frozenlist[Either[A, B]]) -> frozenlist[A]:
     """Extract all Left values from a list of Eithers."""
     result: list[A] = []
     for e in eithers:
@@ -73,10 +73,10 @@ def lefts[A, B](eithers: list[Either[A, B]]) -> list[A]:
                 result.append(val)
             case Right(_):
                 pass
-    return result
+    return tuple(result)
 
 
-def rights[A, B](eithers: list[Either[A, B]]) -> list[B]:
+def rights[A, B](eithers: frozenlist[Either[A, B]]) -> frozenlist[B]:
     """Extract all Right values from a list of Eithers."""
     result: list[B] = []
     for e in eithers:
@@ -85,10 +85,10 @@ def rights[A, B](eithers: list[Either[A, B]]) -> list[B]:
                 pass
             case Right(val):
                 result.append(val)
-    return result
+    return tuple(result)
 
 
-def partition_eithers[A, B](eithers: list[Either[A, B]]) -> tuple[list[A], list[B]]:
+def partition_eithers[A, B](eithers: frozenlist[Either[A, B]]) -> tuple[frozenlist[A], frozenlist[B]]:
     """Partition a list of Eithers into lefts and rights."""
     left_vals: list[A] = []
     right_vals: list[B] = []
@@ -98,4 +98,4 @@ def partition_eithers[A, B](eithers: list[Either[A, B]]) -> tuple[list[A], list[
                 left_vals.append(val)
             case Right(val):
                 right_vals.append(val)
-    return (left_vals, right_vals)
+    return (tuple(left_vals), tuple(right_vals))

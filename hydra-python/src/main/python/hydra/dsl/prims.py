@@ -405,7 +405,7 @@ def pair(k_coder: TermCoder[X], v_coder: TermCoder[Y]) -> TermCoder[tuple[X, Y]]
     return TermCoder(
         type=types.product([k_coder.type, v_coder.type]),
         coder=Coder(
-            encode=lambda term: extract.pair(k_coder.coder.encode, v_coder.coder.encode, term),
+            encode=lambda term: extract.tuple2(k_coder.coder.encode, v_coder.coder.encode, term),
             decode=lambda kv: flows.bind(
                 k_coder.coder.decode(kv[0]),
                 lambda k_term: flows.bind(

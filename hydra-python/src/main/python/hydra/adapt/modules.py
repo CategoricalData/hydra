@@ -49,9 +49,9 @@ def adapted_module_definitions[T0](lang: hydra.coders.Language, mod: hydra.modul
     els = mod.elements
     def adapters_for[T1, T2](types: frozenlist[hydra.core.Type]) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Type, hydra.compute.Adapter[T1, T2, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]:
         return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: language_adapter(lang, v1)), types), (lambda adapters: hydra.lib.flows.pure(cast(FrozenDict[hydra.core.Type, hydra.compute.Adapter[T1, T2, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]], hydra.lib.maps.from_list(hydra.lib.lists.zip(types, adapters))))))
-    def classify[T1, T2](adapters: FrozenDict[hydra.core.Type, hydra.compute.Adapter[hydra.graph.Graph, T1, T2, hydra.core.Type, hydra.core.Term, hydra.core.Term]], pair: Tuple[hydra.core.Binding, hydra.core.TypeApplicationTerm]) -> hydra.compute.Flow[hydra.graph.Graph, hydra.module.Definition]:
-        el = pair[0]
-        tt = pair[1]
+    def classify[T1, T2](adapters: FrozenDict[hydra.core.Type, hydra.compute.Adapter[hydra.graph.Graph, T1, T2, hydra.core.Type, hydra.core.Term, hydra.core.Term]], tuple2: Tuple[hydra.core.Binding, hydra.core.TypeApplicationTerm]) -> hydra.compute.Flow[hydra.graph.Graph, hydra.module.Definition]:
+        el = tuple2[0]
+        tt = tuple2[1]
         term = tt.body
         typ = tt.type
         name = el.name
