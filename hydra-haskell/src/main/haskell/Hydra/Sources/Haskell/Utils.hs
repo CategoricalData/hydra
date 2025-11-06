@@ -181,7 +181,7 @@ namespacesForModuleDef = haskellUtilsDefinition "namespacesForModule" $
     "focusPair">: var "toPair" @@ var "ns",
     "nssAsList">: Sets.toList $ var "nss",
     "nssPairs">: Lists.map (var "toPair") (var "nssAsList"),
-    "emptyState">: pair Maps.empty Sets.empty,
+    "emptyState">: tuple2 Maps.empty Sets.empty,
     "finalState">: Lists.foldl (var "addPair") (var "emptyState") (var "nssPairs"),
     "resultMap">: first $ var "finalState",
     "toModuleName">: lambda "namespace" $ lets [
@@ -191,7 +191,7 @@ namespacesForModuleDef = haskellUtilsDefinition "namespacesForModule" $
       "capitalized">: ref Formatting.capitalizeDef @@ var "lastPart"] $
       wrap H._ModuleName $ var "capitalized",
     "toPair">: lambda "name" $
-      pair (var "name") (var "toModuleName" @@ var "name"),
+      tuple2 (var "name") (var "toModuleName" @@ var "name"),
     "addPair">: lambda "state" $ lambda "namePair" $ lets [
       "currentMap">: first $ var "state",
       "currentSet">: second $ var "state",
@@ -199,8 +199,8 @@ namespacesForModuleDef = haskellUtilsDefinition "namespacesForModule" $
       "alias">: second $ var "namePair",
       "aliasStr">: unwrap H._ModuleName @@ var "alias"] $
       Logic.ifElse (Sets.member (var "alias") (var "currentSet"))
-        (var "addPair" @@ var "state" @@ pair (var "name") (wrap H._ModuleName $ Strings.cat2 (var "aliasStr") (string "_")))
-        (pair (Maps.insert (var "name") (var "alias") (var "currentMap")) (Sets.insert (var "alias") (var "currentSet")))] $
+        (var "addPair" @@ var "state" @@ tuple2 (var "name") (wrap H._ModuleName $ Strings.cat2 (var "aliasStr") (string "_")))
+        (tuple2 (Maps.insert (var "name") (var "alias") (var "currentMap")) (Sets.insert (var "alias") (var "currentSet")))] $
     Flows.pure $ Module.namespaces (var "focusPair") (var "resultMap")
 
 newtypeAccessorNameDef :: TBinding (Name -> String)
@@ -291,11 +291,11 @@ unionFieldReferenceDef = haskellUtilsDefinition "unionFieldReference" $
 unpackForallTypeDef :: TBinding (Graph -> Type -> ([Name], Type))
 unpackForallTypeDef = haskellUtilsDefinition "unpackForallType" $
   lambdas ["cx", "t"] $ cases _Type (ref Rewriting.deannotateTypeDef @@ var "t")
-    (Just $ pair (list []) (var "t")) [
+    (Just $ tuple2 (list []) (var "t")) [
     _Type_forall>>: lambda "fat" $ lets [
       "v">: Core.forallTypeParameter $ var "fat",
       "tbody">: Core.forallTypeBody $ var "fat",
       "recursiveResult">: ref unpackForallTypeDef @@ var "cx" @@ var "tbody",
       "vars">: first $ var "recursiveResult",
       "finalType">: second $ var "recursiveResult"] $
-      pair (Lists.cons (var "v") (var "vars")) (var "finalType")]
+      tuple2 (Lists.cons (var "v") (var "vars")) (var "finalType")]
