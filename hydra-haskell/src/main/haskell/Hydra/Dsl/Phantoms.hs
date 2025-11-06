@@ -238,10 +238,10 @@ opt mc = TTerm $ Terms.optional (unTTerm <$> mc)
 optCases :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
 optCases arg ifNothing ifJust = primitive3 (Name "hydra.lib.maybes.maybe") ifNothing ifJust arg
 
--- | Create a pair (2-tuple)
--- Example: pair (string "age") (int32 32)
-pair :: (TTerm a) -> (TTerm b) -> TTerm (a, b)
-pair (TTerm l) (TTerm r) = TTerm $ Terms.pair l r
+-- | Create a 2-tuple
+-- Example: tuple2 (string "age") (int32 32)
+tuple2 :: (TTerm a) -> (TTerm b) -> TTerm (a, b)
+tuple2 (TTerm l) (TTerm r) = TTerm $ Terms.tuple2 l r
 
 -- | Primitive function by name
 -- Example: primitive (Name "hydra.lib.strings.length")

@@ -352,7 +352,7 @@ listsSpan = TestGroup "span" Nothing [] [
     test "span no elements" (lambda "x" (primitive _equality_gt <.> var "x" <.> int32 10)) [1, 2, 3] ([], [1, 2, 3]),
     test "empty list" (lambda "x" (primitive _equality_lt <.> var "x" <.> int32 5)) [] ([], [])]
   where
-    test name pred lst (prefix, suffix) = primCase name _lists_span [pred, intList lst] (pair (intList prefix) (intList suffix))
+    test name pred lst (prefix, suffix) = primCase name _lists_span [pred, intList lst] (tuple2 (intList prefix) (intList suffix))
 
 listsTail :: TestGroup
 listsTail = TestGroup "tail" Nothing [] [
@@ -394,7 +394,7 @@ listsZip = TestGroup "zip" Nothing [] [
     test "empty second list" [1, 2] [] [],
     test "both empty lists" [] [] []]
   where
-    test name lst1 lst2 result = primCase name _lists_zip [intList lst1, stringList lst2] (list ((\(x, y) -> pair (int32 x) (string y)) <$> result))
+    test name lst1 lst2 result = primCase name _lists_zip [intList lst1, stringList lst2] (list ((\(x, y) -> tuple2 (int32 x) (string y)) <$> result))
 
 listsZipWith :: TestGroup
 listsZipWith = TestGroup "zipWith" Nothing [] [

@@ -230,6 +230,7 @@ typeOf tx typeArgs term =
           Core.TermLiteral v1 -> (typeOfLiteral tx typeArgs v1)
           Core.TermMap v1 -> (typeOfMap tx typeArgs v1)
           Core.TermMaybe v1 -> (typeOfMaybe tx typeArgs v1)
+          Core.TermPair v1 -> (typeOfPair tx typeArgs v1)
           Core.TermProduct v1 -> (typeOfTuple tx typeArgs v1)
           Core.TermRecord v1 -> (typeOfRecord tx typeArgs v1)
           Core.TermSet v1 -> (typeOfSet tx typeArgs v1)
@@ -400,6 +401,21 @@ typeOfMaybe tx typeArgs mt =
   in  
     let forJust = (\term -> Flows.bind (Flows.bind (typeOf tx [] term) (\termType -> Flows.bind (checkTypeVariables tx termType) (\_ -> Flows.pure (Core.TypeMaybe termType)))) (\t -> applyTypeArgumentsToType tx typeArgs t))
     in (Maybes.maybe forNothing forJust mt)
+
+typeOfPair :: (Typing.TypeContext -> [Core.Type] -> (Core.Term, Core.Term) -> Compute.Flow t0 Core.Type)
+typeOfPair tx typeArgs p =  
+  let checkLength =  
+          let n = (Lists.length typeArgs)
+          in (Logic.ifElse (Equality.equal n 2) (Flows.pure ()) (Flows.fail (Strings.cat [
+            "tuple2 type requires 2 type arguments, got ",
+            (Literals.showInt32 n)])))
+  in (Flows.bind checkLength (\_ ->  
+    let pairFst = (fst p)
+    in  
+      let pairSnd = (snd p)
+      in (Flows.bind (typeOf tx [] pairFst) (\firstType -> Flows.bind (checkTypeVariables tx firstType) (\_ -> Flows.bind (typeOf tx [] pairSnd) (\secondType -> Flows.bind (checkTypeVariables tx secondType) (\_ -> Flows.pure (Core.TypePair (Core.PairType {
+        Core.pairTypeFirst = firstType,
+        Core.pairTypeSecond = secondType})))))))))
 
 typeOfPrimitive :: (Typing.TypeContext -> [Core.Type] -> Core.Name -> Compute.Flow t0 Core.Type)
 typeOfPrimitive tx typeArgs name = (Flows.bind (Maybes.maybe (Flows.fail (Strings.cat [

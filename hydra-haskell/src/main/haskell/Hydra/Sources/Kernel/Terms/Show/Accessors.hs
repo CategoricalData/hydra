@@ -122,10 +122,10 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
             "newVisited">: Sets.insert (var "uniqueLabel") (var "currentVisited"),
             "newNodes">: Lists.cons (var "node") (var "currentNodes"),
             "newIds">: Maps.insert (var "name") (var "node") (var "currentIds")]
-            $ pair (pair (var "newNodes") (var "newVisited")) (var "newIds"),
+            $ tuple2 (tuple2 (var "newNodes") (var "newVisited")) (var "newIds"),
           "nodesVisitedIds1">: Lists.foldl
             (var "addBindingName")
-            (pair (pair (list []) (var "visited")) (var "ids"))
+            (tuple2 (tuple2 (list []) (var "visited")) (var "ids"))
             (var "bindingNames"),
           "nodes1">: first $ first $ var "nodesVisitedIds1",
           "visited1">: second $ first $ var "nodesVisitedIds1",
@@ -136,14 +136,14 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
             "binding">: second $ var "nodeBinding",
             "term1">: Core.bindingTerm $ var "binding"]
             $ var "helper" @@ var "ids1" @@ just (var "root") @@ list [] @@ var "currentState" @@
-              pair (var "dontCareAccessor") (var "term1"),
+              tuple2 (var "dontCareAccessor") (var "term1"),
           "nodeBindingPairs">: Lists.zip (var "nodes1") (var "bindings"),
           "stateAfterBindings">: Lists.foldl
             (var "addBindingTerm")
-            (pair (pair (Lists.concat2 (var "nodes1") (var "nodes")) (var "edges")) (var "visited1"))
+            (tuple2 (tuple2 (Lists.concat2 (var "nodes1") (var "nodes")) (var "edges")) (var "visited1"))
             (var "nodeBindingPairs")]
           $ var "helper" @@ var "ids1" @@ var "mroot" @@ var "nextPath" @@ var "stateAfterBindings" @@
-            pair Mantle.termAccessorLetEnvironment (var "env"),
+            tuple2 Mantle.termAccessorLetEnvironment (var "env"),
         _Term_variable>>: lambda "name" $
           Maybes.maybe (var "state")
             (lambda "root" $
@@ -152,13 +152,13 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
                   "edge">: Accessors.accessorEdge (var "root")
                     (Accessors.accessorPath $ Lists.reverse $ var "nextPath") (var "node"),
                   "newEdges">: Lists.cons (var "edge") (var "edges")]
-                  $ pair (pair (var "nodes") (var "newEdges")) (var "visited"))
+                  $ tuple2 (tuple2 (var "nodes") (var "newEdges")) (var "visited"))
                 (Maps.lookup (var "name") (var "ids")))
             (var "mroot")]
       @@ var "currentTerm",
-    "initialState">: pair (pair (list []) (list [])) Sets.empty,
+    "initialState">: tuple2 (tuple2 (list []) (list [])) Sets.empty,
     "result">: var "helper" @@ Maps.empty @@ nothing @@ list [] @@ var "initialState" @@
-      pair (var "dontCareAccessor") (var "term"),
+      tuple2 (var "dontCareAccessor") (var "term"),
     "finalNodesEdges">: first $ var "result",
     "finalNodes">: first $ var "finalNodesEdges",
     "finalEdges">: second $ var "finalNodesEdges"] $

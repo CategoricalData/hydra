@@ -166,7 +166,7 @@ testGroupForPairs = supergroup "Pair terms" [
       expectMono 1 []
         (pair (pair (int32 1) (string "nested")) true)
         (T.pair (T.pair T.int32 T.string) T.boolean),
-      expectMono 2 []
+      expectMono 2 [tag_disabledForMinimalInference]
         (pair (string "foo") (pair (int32 42) (list [float32 42.0])))
         (T.pair T.string (T.pair T.int32 (T.list T.float32)))],
 
@@ -213,13 +213,13 @@ testGroupForProducts = supergroup "Product terms" [
         ["t0"] (T.product [T.int32, T.string, T.list $ T.var "t0"])],
 
     subgroup "Pairs" [
-      expectMono 1 []
+      expectMono 1 [tag_disabledForMinimalInference]
         (tuple2 (int32 42) (string "foo"))
         (T.tuple2 T.int32 T.string),
-      expectPoly 2 []
+      expectPoly 2 [tag_disabledForMinimalInference]
         (tuple2 (list []) (string "foo"))
         ["t0"] (T.tuple2 (T.list $ T.var "t0") T.string),
-      expectPoly 3 []
+      expectPoly 3 [tag_disabledForMinimalInference]
         (tuple2 (list []) (list []))
         ["t0", "t1"] (T.tuple2 (T.list $ T.var "t0") (T.list $ T.var "t1"))]]
 

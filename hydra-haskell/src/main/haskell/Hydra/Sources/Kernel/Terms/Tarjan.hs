@@ -78,24 +78,24 @@ adjacencyListsToGraphDef = define "adjacencyListsToGraph" $
       "v" <~ first (var "vkNeighbors") $
       "kNeighbors" <~ second (var "vkNeighbors") $
       "k" <~ first (var "kNeighbors") $
-      pair (var "k") (var "v"))
+      tuple2 (var "k") (var "v"))
     (var "indexedEdges")) $
   "vertexMap" <~ Maps.fromList (Lists.map
     ("vkNeighbors" ~>
       "v" <~ first (var "vkNeighbors") $
       "kNeighbors" <~ second (var "vkNeighbors") $
       "k" <~ first (var "kNeighbors") $
-      pair (var "v") (var "k"))
+      tuple2 (var "v") (var "k"))
     (var "indexedEdges")) $
   "graph" <~ Maps.fromList (Lists.map
     ("vkNeighbors" ~>
       "v" <~ first (var "vkNeighbors") $
       "kNeighbors" <~ second (var "vkNeighbors") $
       "neighbors" <~ second (var "kNeighbors") $
-      pair (var "v") (Maybes.mapMaybe ("k" ~> Maps.lookup (var "k") (var "keyToVertex")) (var "neighbors")))
+      tuple2 (var "v") (Maybes.mapMaybe ("k" ~> Maps.lookup (var "k") (var "keyToVertex")) (var "neighbors")))
     (var "indexedEdges")) $
   "vertexToKey" <~ ("v" ~> Maybes.fromJust (Maps.lookup (var "v") (var "vertexMap"))) $
-  pair (var "graph") (var "vertexToKey")
+  tuple2 (var "graph") (var "vertexToKey")
 
 initialStateDef :: TBinding Topo.TarjanState
 initialStateDef = define "initialState" $

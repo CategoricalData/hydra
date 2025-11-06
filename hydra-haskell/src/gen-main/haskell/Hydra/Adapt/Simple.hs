@@ -80,10 +80,10 @@ adaptDataGraph constraints doExpand graph0 =
 
 adaptGraphSchema :: (Ord t0) => (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> M.Map t0 Core.Type -> Compute.Flow t1 (M.Map t0 Core.Type))
 adaptGraphSchema constraints litmap types0 =  
-  let mapPair = (\pair ->  
-          let name = (fst pair)
+  let mapPair = (\tuple2 ->  
+          let name = (fst tuple2)
           in  
-            let typ = (snd pair)
+            let typ = (snd tuple2)
             in (Flows.bind (adaptType constraints litmap typ) (\typ1 -> Flows.pure (name, typ1))))
   in (Flows.bind (Flows.mapList mapPair (Maps.toList types0)) (\pairs -> Flows.pure (Maps.fromList pairs)))
 
@@ -220,9 +220,9 @@ schemaGraphToDefinitions :: (Coders.LanguageConstraints -> Graph.Graph -> [[Core
 schemaGraphToDefinitions constraints graph nameLists =  
   let litmap = (adaptLiteralTypesMap constraints)
   in (Flows.bind (Schemas.graphAsTypes graph) (\tmap0 -> Flows.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->  
-    let toDef = (\pair -> Module.TypeDefinition {
-            Module.typeDefinitionName = (fst pair),
-            Module.typeDefinitionType = (snd pair)})
+    let toDef = (\tuple2 -> Module.TypeDefinition {
+            Module.typeDefinitionName = (fst tuple2),
+            Module.typeDefinitionType = (snd tuple2)})
     in (Flows.pure (tmap1, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> (n, (Maybes.fromJust (Maps.lookup n tmap1)))) names)) nameLists))))))
 
 -- | Find a list of alternatives for a given term, if any

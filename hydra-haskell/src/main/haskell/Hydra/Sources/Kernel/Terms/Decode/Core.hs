@@ -108,9 +108,9 @@ fieldTypesDef = define "fieldTypes" $
 floatTypeDef :: TBinding (Term -> Flow Graph FloatType)
 floatTypeDef = define "floatType" $
   ref Lexical.matchEnumDef @@ Core.nameLift _FloatType @@ list [
-    pair (Core.nameLift _FloatType_bigfloat) Core.floatTypeBigfloat,
-    pair (Core.nameLift _FloatType_float32) Core.floatTypeFloat32,
-    pair (Core.nameLift _FloatType_float64) Core.floatTypeFloat64]
+    tuple2 (Core.nameLift _FloatType_bigfloat) Core.floatTypeBigfloat,
+    tuple2 (Core.nameLift _FloatType_float32) Core.floatTypeFloat32,
+    tuple2 (Core.nameLift _FloatType_float64) Core.floatTypeFloat64]
 
 forallTypeDef :: TBinding (Term -> Flow Graph ForallType)
 forallTypeDef = define "forallType" $
@@ -129,25 +129,25 @@ functionTypeDef = define "functionType" $
 integerTypeDef :: TBinding (Term -> Flow Graph IntegerType)
 integerTypeDef = define "integerType" $
   ref Lexical.matchEnumDef @@ Core.nameLift _IntegerType @@ list [
-    pair (Core.nameLift _IntegerType_bigint) Core.integerTypeBigint,
-    pair (Core.nameLift _IntegerType_int8) Core.integerTypeInt8,
-    pair (Core.nameLift _IntegerType_int16) Core.integerTypeInt16,
-    pair (Core.nameLift _IntegerType_int32) Core.integerTypeInt32,
-    pair (Core.nameLift _IntegerType_int64) Core.integerTypeInt64,
-    pair (Core.nameLift _IntegerType_uint8) Core.integerTypeUint8,
-    pair (Core.nameLift _IntegerType_uint16) Core.integerTypeUint16,
-    pair (Core.nameLift _IntegerType_uint32) Core.integerTypeUint32,
-    pair (Core.nameLift _IntegerType_uint64) Core.integerTypeUint64]
+    tuple2 (Core.nameLift _IntegerType_bigint) Core.integerTypeBigint,
+    tuple2 (Core.nameLift _IntegerType_int8) Core.integerTypeInt8,
+    tuple2 (Core.nameLift _IntegerType_int16) Core.integerTypeInt16,
+    tuple2 (Core.nameLift _IntegerType_int32) Core.integerTypeInt32,
+    tuple2 (Core.nameLift _IntegerType_int64) Core.integerTypeInt64,
+    tuple2 (Core.nameLift _IntegerType_uint8) Core.integerTypeUint8,
+    tuple2 (Core.nameLift _IntegerType_uint16) Core.integerTypeUint16,
+    tuple2 (Core.nameLift _IntegerType_uint32) Core.integerTypeUint32,
+    tuple2 (Core.nameLift _IntegerType_uint64) Core.integerTypeUint64]
 
 literalTypeDef :: TBinding (Term -> Flow Graph LiteralType)
 literalTypeDef = define "literalType" $
   ref Lexical.matchUnionDef @@ Core.nameLift _LiteralType @@ list [
     ref Lexical.matchUnitFieldDef @@ Core.nameLift _LiteralType_binary @@ Core.literalTypeBinary,
     ref Lexical.matchUnitFieldDef @@ Core.nameLift _LiteralType_boolean @@ Core.literalTypeBoolean,
-    pair
+    tuple2
      (Core.nameLift _LiteralType_float)
      (lambda "ft" $ Flows.map (unaryFunction Core.literalTypeFloat) (ref floatTypeDef @@ var "ft")),
-    pair
+    tuple2
       (Core.nameLift _LiteralType_integer)
       (lambda "it" $ Flows.map (unaryFunction Core.literalTypeInteger) (ref integerTypeDef @@ var "it")),
     ref Lexical.matchUnitFieldDef @@ Core.nameLift _LiteralType_string @@ Core.literalTypeString]
@@ -180,52 +180,52 @@ typeDef :: TBinding (Term -> Flow Graph Type)
 typeDef = define "type" $
   lambda "dat" $ cases _Term (var "dat")
     (Just $ ref Lexical.matchUnionDef @@ Core.nameLift _Type @@ list [
-      pair
+      tuple2
         (Core.nameLift _Type_application)
         (lambda "at" $ Flows.map (unaryFunction Core.typeApplication) $ ref applicationTypeDef @@ var "at"),
-      pair
+      tuple2
         (Core.nameLift _Type_either)
         (lambda "et" $ Flows.map (unaryFunction Core.typeEither) $ ref eitherTypeDef @@ var "et"),
-      pair
+      tuple2
         (Core.nameLift _Type_forall)
         (lambda "ft" $ Flows.map (unaryFunction Core.typeForall) $ ref forallTypeDef @@ var "ft"),
-      pair
+      tuple2
         (Core.nameLift _Type_function)
         (lambda "ft" $ Flows.map (unaryFunction Core.typeFunction) $ ref functionTypeDef @@ var "ft"),
-      pair
+      tuple2
         (Core.nameLift _Type_list)
         (lambda "et" $ Flows.map (unaryFunction Core.typeList) $ ref typeDef @@ var "et"),
-      pair
+      tuple2
         (Core.nameLift _Type_literal)
         (lambda "lt" $ Flows.map (unaryFunction Core.typeLiteral) $ ref literalTypeDef @@ var "lt"),
-      pair
+      tuple2
         (Core.nameLift _Type_map)
         (lambda "mt" $ Flows.map (unaryFunction Core.typeMap) $ ref mapTypeDef @@ var "mt"),
-      pair
+      tuple2
         (Core.nameLift _Type_maybe)
         (lambda "et" $ Flows.map (unaryFunction Core.typeMaybe) $ ref typeDef @@ var "et"),
-      pair
+      tuple2
         (Core.nameLift _Type_product)
         (lambda "types" $ Flows.map (unaryFunction Core.typeProduct) $ ref ExtractCore.listOfDef @@ ref typeDef @@ var "types"),
-      pair
+      tuple2
         (Core.nameLift _Type_record)
         (lambda "rt" $ Flows.map (unaryFunction Core.typeRecord) $ ref rowTypeDef @@ var "rt"),
-      pair
+      tuple2
         (Core.nameLift _Type_set)
         (lambda "et" $ Flows.map (unaryFunction Core.typeSet) $ ref typeDef @@ var "et"),
-      pair
+      tuple2
         (Core.nameLift _Type_sum)
         (lambda "types" $ Flows.map (unaryFunction Core.typeSum) $ ref ExtractCore.listOfDef @@ ref typeDef @@ var "types"),
-      pair
+      tuple2
         (Core.nameLift _Type_union)
         (lambda "rt" $ Flows.map (unaryFunction Core.typeUnion) $ ref rowTypeDef @@ var "rt"),
-      pair
+      tuple2
         (Core.nameLift _Type_unit)
         (constant $ Flows.pure Core.typeUnit),
-      pair
+      tuple2
         (Core.nameLift _Type_variable)
         (lambda "n" $ Flows.map (unaryFunction Core.typeVariable) $ ref nameDef @@ var "n"),
-      pair
+      tuple2
         (Core.nameLift _Type_wrap)
         (lambda "wt" $ Flows.map (unaryFunction Core.typeWrap) $ ref wrappedTypeDef @@ var "wt")] @@ var "dat") [
     _Term_annotated>>: lambda "annotatedTerm" $

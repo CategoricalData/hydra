@@ -62,7 +62,7 @@ stringsCharAt = TestGroup "charAt" Nothing [] [
     test "single character string" 0 "a" 97,      -- 'a'
     test "unicode character" 0 "\241" 241,    -- ñ
     test "multi-byte unicode" 0 "\19990" 19990,  -- 世
-    test "second of combining pair" 1 "e\769" 769]  -- combining acute accent
+    test "second of combining tuple2" 1 "e\769" 769]  -- combining acute accent
     -- TODO: failure cases (need syntax support)
     -- test "negative index" (-1) "hello" <error>
     -- test "index out of bounds" 10 "hello" <error>

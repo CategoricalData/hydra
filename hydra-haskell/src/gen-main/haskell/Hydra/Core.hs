@@ -11,7 +11,9 @@ import qualified Data.Set as S
 -- | A term together with an annotation
 data AnnotatedTerm = 
   AnnotatedTerm {
+    -- | The term being annotated
     annotatedTermBody :: Term,
+    -- | The annotation as a map from keys to values
     annotatedTermAnnotation :: (M.Map Name Term)}
   deriving (Eq, Ord, Read, Show)
 
@@ -24,7 +26,9 @@ _AnnotatedTerm_annotation = (Name "annotation")
 -- | A type together with an annotation
 data AnnotatedType = 
   AnnotatedType {
+    -- | The type being annotated
     annotatedTypeBody :: Type,
+    -- | The annotation as a map from keys to values
     annotatedTypeAnnotation :: (M.Map Name Term)}
   deriving (Eq, Ord, Read, Show)
 
@@ -67,8 +71,11 @@ _ApplicationType_argument = (Name "argument")
 -- | A field with an optional type scheme, used to bind variables to terms in a 'let' expression
 data Binding = 
   Binding {
+    -- | The name of the bound variable
     bindingName :: Name,
+    -- | The term to which the variable is bound
     bindingTerm :: Term,
+    -- | The optional type of the bound term
     bindingType :: (Maybe TypeScheme)}
   deriving (Eq, Ord, Read, Show)
 
@@ -83,8 +90,11 @@ _Binding_type = (Name "type")
 -- | A union elimination; a case statement
 data CaseStatement = 
   CaseStatement {
+    -- | The name of the union type
     caseStatementTypeName :: Name,
+    -- | An optional default case, used if none of the explicit cases match
     caseStatementDefault :: (Maybe Term),
+    -- | A list of case alternatives, one per union field
     caseStatementCases :: [Field]}
   deriving (Eq, Ord, Read, Show)
 
@@ -99,7 +109,9 @@ _CaseStatement_cases = (Name "cases")
 -- | A type which provides a choice between a 'left' type and a 'right' type
 data EitherType = 
   EitherType {
+    -- | The 'left' alternative
     eitherTypeLeft :: Type,
+    -- | The 'right' alternative
     eitherTypeRight :: Type}
   deriving (Eq, Ord, Read, Show)
 
@@ -108,6 +120,21 @@ _EitherType = (Name "hydra.core.EitherType")
 _EitherType_left = (Name "left")
 
 _EitherType_right = (Name "right")
+
+-- | A type which pairs a 'first' type and a 'second' type
+data PairType = 
+  PairType {
+    -- | The first component of the pair
+    pairTypeFirst :: Type,
+    -- | The second component of the pair
+    pairTypeSecond :: Type}
+  deriving (Eq, Ord, Read, Show)
+
+_PairType = (Name "hydra.core.PairType")
+
+_PairType_first = (Name "first")
+
+_PairType_second = (Name "second")
 
 -- | A corresponding elimination for an introduction term
 data Elimination = 
@@ -131,10 +158,12 @@ _Elimination_union = (Name "union")
 
 _Elimination_wrap = (Name "wrap")
 
--- | A name/term pair
+-- | A name/term tuple2
 data Field = 
   Field {
+    -- | The name of the field
     fieldName :: Name,
+    -- | The term value of the field
     fieldTerm :: Term}
   deriving (Eq, Ord, Read, Show)
 
@@ -144,10 +173,12 @@ _Field_name = (Name "name")
 
 _Field_term = (Name "term")
 
--- | A name/type pair
+-- | A name/type tuple2
 data FieldType = 
   FieldType {
+    -- | The name of the field
     fieldTypeName :: Name,
+    -- | The type of the field
     fieldTypeType :: Type}
   deriving (Eq, Ord, Read, Show)
 
@@ -159,8 +190,11 @@ _FieldType_type = (Name "type")
 
 -- | A floating-point type
 data FloatType = 
+  -- | An arbitrary-precision floating-point type
   FloatTypeBigfloat  |
+  -- | A 32-bit floating-point type
   FloatTypeFloat32  |
+  -- | A 64-bit floating-point type
   FloatTypeFloat64 
   deriving (Eq, Ord, Read, Show)
 
@@ -226,7 +260,9 @@ _Function_primitive = (Name "primitive")
 -- | A function type, also known as an arrow type
 data FunctionType = 
   FunctionType {
+    -- | The domain (input) type of the function
     functionTypeDomain :: Type,
+    -- | The codomain (output) type of the function
     functionTypeCodomain :: Type}
   deriving (Eq, Ord, Read, Show)
 
@@ -239,7 +275,9 @@ _FunctionType_codomain = (Name "codomain")
 -- | An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
 data Injection = 
   Injection {
+    -- | The name of the union type
     injectionTypeName :: Name,
+    -- | The field being injected, including its name and value
     injectionField :: Field}
   deriving (Eq, Ord, Read, Show)
 
@@ -251,14 +289,23 @@ _Injection_field = (Name "field")
 
 -- | An integer type
 data IntegerType = 
+  -- | An arbitrary-precision integer type
   IntegerTypeBigint  |
+  -- | An 8-bit signed integer type
   IntegerTypeInt8  |
+  -- | A 16-bit signed integer type
   IntegerTypeInt16  |
+  -- | A 32-bit signed integer type
   IntegerTypeInt32  |
+  -- | A 64-bit signed integer type
   IntegerTypeInt64  |
+  -- | An 8-bit unsigned integer type
   IntegerTypeUint8  |
+  -- | A 16-bit unsigned integer type
   IntegerTypeUint16  |
+  -- | A 32-bit unsigned integer type
   IntegerTypeUint32  |
+  -- | A 64-bit unsigned integer type
   IntegerTypeUint64 
   deriving (Eq, Ord, Read, Show)
 
@@ -346,7 +393,9 @@ _Lambda_body = (Name "body")
 -- | A set of (possibly recursive) 'let' bindings together with a body in which they are bound
 data Let = 
   Let {
+    -- | The list of variable bindings
     letBindings :: [Binding],
+    -- | The body term in which the variables are bound
     letBody :: Term}
   deriving (Eq, Ord, Read, Show)
 
@@ -411,7 +460,9 @@ _LiteralType_string = (Name "string")
 -- | A map type
 data MapType = 
   MapType {
+    -- | The type of keys in the map
     mapTypeKeys :: Type,
+    -- | The type of values in the map
     mapTypeValues :: Type}
   deriving (Eq, Ord, Read, Show)
 
@@ -447,7 +498,9 @@ _Projection_field = (Name "field")
 -- | A record, or labeled tuple; a map of field names to terms
 data Record = 
   Record {
+    -- | The name of the record type
     recordTypeName :: Name,
+    -- | The fields of the record, as a list of name/term pairs
     recordFields :: [Field]}
   deriving (Eq, Ord, Read, Show)
 
@@ -475,8 +528,11 @@ _RowType_fields = (Name "fields")
 -- | The unlabeled equivalent of an Injection term
 data Sum = 
   Sum {
+    -- | The 0-indexed position of the variant
     sumIndex :: Int,
+    -- | The total number of variants in the sum type
     sumSize :: Int,
+    -- | The term value of the variant
     sumTerm :: Term}
   deriving (Eq, Ord, Read, Show)
 
@@ -508,6 +564,8 @@ data Term =
   TermMap (M.Map Term Term) |
   -- | An optional value
   TermMaybe (Maybe Term) |
+  -- | A pair (2-tuple)
+  TermPair (Term, Term) |
   -- | A tuple
   TermProduct [Term] |
   -- | A record term
@@ -550,6 +608,8 @@ _Term_map = (Name "map")
 
 _Term_maybe = (Name "maybe")
 
+_Term_pair = (Name "pair")
+
 _Term_product = (Name "product")
 
 _Term_record = (Name "record")
@@ -591,22 +651,41 @@ _TupleProjection_domain = (Name "domain")
 
 -- | A data type
 data Type = 
+  -- | An annotated type
   TypeAnnotated AnnotatedType |
+  -- | A type application
   TypeApplication ApplicationType |
+  -- | An either (sum) type
   TypeEither EitherType |
+  -- | A universally quantified (polymorphic) type
   TypeForall ForallType |
+  -- | A function type
   TypeFunction FunctionType |
+  -- | A list type
   TypeList Type |
+  -- | A literal type
   TypeLiteral LiteralType |
+  -- | A map type
   TypeMap MapType |
+  -- | An optional type
   TypeMaybe Type |
+  -- | A pair (2-tuple) type
+  TypePair PairType |
+  -- | A tuple type
   TypeProduct [Type] |
+  -- | A record type
   TypeRecord RowType |
+  -- | A set type
   TypeSet Type |
+  -- | A union type without field names
   TypeSum [Type] |
+  -- | A union type with field names
   TypeUnion RowType |
+  -- | The unit type
   TypeUnit  |
+  -- | A type variable
   TypeVariable Name |
+  -- | A wrapped type (newtype)
   TypeWrap WrappedType
   deriving (Eq, Ord, Read, Show)
 
@@ -630,6 +709,8 @@ _Type_map = (Name "map")
 
 _Type_maybe = (Name "maybe")
 
+_Type_pair = (Name "pair")
+
 _Type_product = (Name "product")
 
 _Type_record = (Name "record")
@@ -649,7 +730,9 @@ _Type_wrap = (Name "wrap")
 -- | A term applied to a type; a type application
 data TypeApplicationTerm = 
   TypeApplicationTerm {
+    -- | The term being applied to a type
     typeApplicationTermBody :: Term,
+    -- | The type argument
     typeApplicationTermType :: Type}
   deriving (Eq, Ord, Read, Show)
 
@@ -677,7 +760,9 @@ _TypeLambda_body = (Name "body")
 -- | A type expression together with free type variables occurring in the expression
 data TypeScheme = 
   TypeScheme {
+    -- | The free type variables
     typeSchemeVariables :: [Name],
+    -- | The type expression
     typeSchemeType :: Type}
   deriving (Eq, Ord, Read, Show)
 
@@ -690,7 +775,9 @@ _TypeScheme_type = (Name "type")
 -- | A term wrapped in a type name
 data WrappedTerm = 
   WrappedTerm {
+    -- | The name of the wrapper type
     wrappedTermTypeName :: Name,
+    -- | The wrapped term
     wrappedTermBody :: Term}
   deriving (Eq, Ord, Read, Show)
 
@@ -703,7 +790,9 @@ _WrappedTerm_body = (Name "body")
 -- | A type wrapped in a type name; a newtype
 data WrappedType = 
   WrappedType {
+    -- | The name of the wrapper (newtype)
     wrappedTypeTypeName :: Name,
+    -- | The wrapped type
     wrappedTypeBody :: Type}
   deriving (Eq, Ord, Read, Show)
 

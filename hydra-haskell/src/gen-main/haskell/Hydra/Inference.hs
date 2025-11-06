@@ -504,10 +504,10 @@ inferTypeOfLetNormalized cx0 letTerm =
                           in  
                             let sbody = (Typing_.inferenceResultSubst bodyResult)
                             in  
-                              let st1 = (Typing_.TermSubst (Maps.fromList (Lists.map (\pair ->  
-                                      let name = (fst pair)
+                              let st1 = (Typing_.TermSubst (Maps.fromList (Lists.map (\tuple2 ->  
+                                      let name = (fst tuple2)
                                       in  
-                                        let ts = (snd pair)
+                                        let ts = (snd tuple2)
                                         in (name, (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)))) tsbins1)))
                               in  
                                 let createBinding = (\bindingPair ->  
@@ -657,6 +657,39 @@ inferTypeOfOptional cx m =
   let trmCons = (\terms -> Logic.ifElse (Lists.null terms) (Core.TermMaybe Nothing) (Core.TermMaybe (Just (Lists.head terms))))
   in (inferTypeOfCollection cx (\x -> Core.TypeMaybe x) trmCons "optional element" (Maybes.maybe [] Lists.singleton m))
 
+inferTypeOfPair :: (Typing_.InferenceContext -> (Core.Term, Core.Term) -> Compute.Flow t0 Typing_.InferenceResult)
+inferTypeOfPair cx p =  
+  let pairFst = (fst p)
+  in  
+    let pairSnd = (snd p)
+    in (Flows.bind (inferTypeOfTerm cx pairFst "tuple2 first element") (\r1 ->  
+      let ifst = (Typing_.inferenceResultTerm r1)
+      in  
+        let firstType = (Typing_.inferenceResultType r1)
+        in  
+          let subst1 = (Typing_.inferenceResultSubst r1)
+          in (Flows.bind (inferTypeOfTerm cx pairSnd "tuple2 second element") (\r2 ->  
+            let isnd = (Typing_.inferenceResultTerm r2)
+            in  
+              let secondType = (Typing_.inferenceResultType r2)
+              in  
+                let subst2 = (Typing_.inferenceResultSubst r2)
+                in  
+                  let pairTerm = (Core.TermPair (ifst, isnd))
+                  in  
+                    let termWithFirstType = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                            Core.typeApplicationTermBody = pairTerm,
+                            Core.typeApplicationTermType = firstType}))
+                    in  
+                      let termWithBothTypes = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                              Core.typeApplicationTermBody = termWithFirstType,
+                              Core.typeApplicationTermType = secondType}))
+                      in  
+                        let pairType = (Core.TypePair (Core.PairType {
+                                Core.pairTypeFirst = firstType,
+                                Core.pairTypeSecond = secondType}))
+                        in (yieldChecked termWithBothTypes pairType subst2)))))
+
 inferTypeOfPrimitive :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfPrimitive cx name = (Maybes.maybe (Flows.fail (Strings.cat2 "No such primitive: " (Core.unName name))) (\scheme -> Flows.bind (Schemas.instantiateTypeScheme scheme) (\ts -> yieldChecked (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermFunction (Core.FunctionPrimitive name))) (Core.typeSchemeType ts) Substitution.idTypeSubst)) (Maps.lookup name (Typing_.inferenceContextPrimitiveTypes cx)))
 
@@ -754,6 +787,7 @@ inferTypeOfTerm cx term desc =
           Core.TermLiteral v1 -> (inferTypeOfLiteral cx v1)
           Core.TermMap v1 -> (inferTypeOfMap cx v1)
           Core.TermMaybe v1 -> (inferTypeOfOptional cx v1)
+          Core.TermPair v1 -> (inferTypeOfPair cx v1)
           Core.TermProduct v1 -> (inferTypeOfProduct cx v1)
           Core.TermRecord v1 -> (inferTypeOfRecord cx v1)
           Core.TermSet v1 -> (inferTypeOfSet cx v1)
@@ -872,10 +906,10 @@ inferTypesOfTemporaryBindings cx bins =
 
 initialTypeContext :: (Graph.Graph -> Compute.Flow t0 Typing_.TypeContext)
 initialTypeContext g =  
-  let toPair = (\pair ->  
-          let name = (fst pair)
+  let toPair = (\tuple2 ->  
+          let name = (fst tuple2)
           in  
-            let el = (snd pair)
+            let el = (snd tuple2)
             in (Maybes.maybe (Flows.fail (Strings.cat [
               "untyped element: ",
               (Core.unName name)])) (\ts -> Flows.pure (name, (Schemas.typeSchemeToFType ts))) (Core.bindingType el)))
