@@ -202,6 +202,20 @@ def pass_application(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adap
         case _:
             raise TypeError("Unsupported Type")
 
+def pass_either(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
+    r"""Pass through either types."""
+    
+    def for_either_type(et: hydra.core.EitherType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
+        left = et.left
+        right = et.right
+        return hydra.lib.flows.bind(term_adapter(left), (lambda left_ad: hydra.lib.flows.bind(term_adapter(right), (lambda right_ad: hydra.lib.flows.pure(cast(hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(hydra.lib.logic.or_(left_ad.is_lossy, right_ad.is_lossy), t, cast(hydra.core.Type, hydra.core.TypeEither(hydra.core.EitherType(left_ad.target, right_ad.target))), hydra.adapt.utils.bidirectional((lambda dir, term: hydra.adapt.utils.encode_decode(dir, left_ad.coder, term))))))))))
+    match t:
+        case hydra.core.TypeEither(value=et):
+            return for_either_type(et)
+        
+        case _:
+            raise TypeError("Unsupported Type")
+
 def pass_forall(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     r"""Pass through forall types."""
     
@@ -489,6 +503,9 @@ def term_adapter(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapte
         match hydra.variants.type_variant(hydra.rewriting.deannotate_type(t)):
             case hydra.mantle.TypeVariant.APPLICATION:
                 return (pass_application,)
+            
+            case hydra.mantle.TypeVariant.EITHER:
+                return (pass_either,)
             
             case hydra.mantle.TypeVariant.FORALL:
                 return (pass_forall,)

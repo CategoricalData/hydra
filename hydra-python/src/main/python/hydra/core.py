@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from decimal import Decimal
 from enum import Enum
-from hydra.dsl.python import FrozenDict, Maybe, Node, frozenlist
+from hydra.dsl.python import Either, FrozenDict, Maybe, Node, frozenlist
 from typing import Annotated
 
 class Name(Node[str]):
@@ -83,6 +83,17 @@ CASE_STATEMENT__NAME = Name("hydra.core.CaseStatement")
 CASE_STATEMENT__TYPE_NAME__NAME = Name("typeName")
 CASE_STATEMENT__DEFAULT__NAME = Name("default")
 CASE_STATEMENT__CASES__NAME = Name("cases")
+
+@dataclass
+class EitherType:
+    r"""A type which provides a choice between a 'left' type and a 'right' type."""
+    
+    left: Type
+    right: Type
+
+EITHER_TYPE__NAME = Name("hydra.core.EitherType")
+EITHER_TYPE__LEFT__NAME = Name("left")
+EITHER_TYPE__RIGHT__NAME = Name("right")
 
 class EliminationProduct(Node["TupleProjection"]):
     r"""Eliminates a tuple by projecting the component at a given 0-indexed offset."""
@@ -418,6 +429,9 @@ class TermAnnotated(Node["AnnotatedTerm"]):
 class TermApplication(Node["Application"]):
     r"""A function application."""
 
+class TermEither(Node["Either[Term, Term]"]):
+    r"""An either value."""
+
 class TermFunction(Node["Function"]):
     r"""A function term."""
 
@@ -467,11 +481,12 @@ class TermWrap(Node["WrappedTerm"]):
     r"""A wrapped term; an instance of a wrapper type (newtype)."""
 
 # A data term.
-type Term = TermAnnotated | TermApplication | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermProduct | TermRecord | TermSet | TermSum | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap
+type Term = TermAnnotated | TermApplication | TermEither | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermProduct | TermRecord | TermSet | TermSum | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap
 
 TERM__NAME = Name("hydra.core.Term")
 TERM__ANNOTATED__NAME = Name("annotated")
 TERM__APPLICATION__NAME = Name("application")
+TERM__EITHER__NAME = Name("either")
 TERM__FUNCTION__NAME = Name("function")
 TERM__LET__NAME = Name("let")
 TERM__LIST__NAME = Name("list")
@@ -506,6 +521,8 @@ class TypeAnnotated(Node["AnnotatedType"]): ...
 
 class TypeApplication(Node["ApplicationType"]): ...
 
+class TypeEither(Node["EitherType"]): ...
+
 class TypeForall(Node["ForallType"]): ...
 
 class TypeFunction(Node["FunctionType"]): ...
@@ -535,11 +552,12 @@ class TypeVariable(Node["Name"]): ...
 class TypeWrap(Node["WrappedType"]): ...
 
 # A data type.
-type Type = TypeAnnotated | TypeApplication | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeMaybe | TypeProduct | TypeRecord | TypeSet | TypeSum | TypeUnion | TypeUnit | TypeVariable | TypeWrap
+type Type = TypeAnnotated | TypeApplication | TypeEither | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeMaybe | TypeProduct | TypeRecord | TypeSet | TypeSum | TypeUnion | TypeUnit | TypeVariable | TypeWrap
 
 TYPE__NAME = Name("hydra.core.Type")
 TYPE__ANNOTATED__NAME = Name("annotated")
 TYPE__APPLICATION__NAME = Name("application")
+TYPE__EITHER__NAME = Name("either")
 TYPE__FORALL__NAME = Name("forall")
 TYPE__FUNCTION__NAME = Name("function")
 TYPE__LIST__NAME = Name("list")

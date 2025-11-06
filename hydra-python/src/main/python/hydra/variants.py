@@ -228,6 +228,9 @@ def term_variant(v1: hydra.core.Term) -> hydra.mantle.TermVariant:
         case hydra.core.TermApplication():
             return hydra.mantle.TermVariant.APPLICATION
         
+        case hydra.core.TermEither():
+            return hydra.mantle.TermVariant.EITHER
+        
         case hydra.core.TermFunction():
             return hydra.mantle.TermVariant.FUNCTION
         
@@ -277,7 +280,7 @@ def term_variant(v1: hydra.core.Term) -> hydra.mantle.TermVariant:
             return hydra.mantle.TermVariant.WRAP
 
 # All term (expression) variants, in a canonical order.
-term_variants = (hydra.mantle.TermVariant.ANNOTATED, hydra.mantle.TermVariant.APPLICATION, hydra.mantle.TermVariant.LITERAL, hydra.mantle.TermVariant.FUNCTION, hydra.mantle.TermVariant.LIST, hydra.mantle.TermVariant.MAP, hydra.mantle.TermVariant.MAYBE, hydra.mantle.TermVariant.PRODUCT, hydra.mantle.TermVariant.RECORD, hydra.mantle.TermVariant.SET, hydra.mantle.TermVariant.SUM, hydra.mantle.TermVariant.TYPE_LAMBDA, hydra.mantle.TermVariant.TYPE_APPLICATION, hydra.mantle.TermVariant.UNION, hydra.mantle.TermVariant.UNIT, hydra.mantle.TermVariant.VARIABLE, hydra.mantle.TermVariant.WRAP)
+term_variants = (hydra.mantle.TermVariant.ANNOTATED, hydra.mantle.TermVariant.APPLICATION, hydra.mantle.TermVariant.EITHER, hydra.mantle.TermVariant.FUNCTION, hydra.mantle.TermVariant.LIST, hydra.mantle.TermVariant.LITERAL, hydra.mantle.TermVariant.MAP, hydra.mantle.TermVariant.MAYBE, hydra.mantle.TermVariant.PRODUCT, hydra.mantle.TermVariant.RECORD, hydra.mantle.TermVariant.SET, hydra.mantle.TermVariant.SUM, hydra.mantle.TermVariant.TYPE_LAMBDA, hydra.mantle.TermVariant.TYPE_APPLICATION, hydra.mantle.TermVariant.UNION, hydra.mantle.TermVariant.UNIT, hydra.mantle.TermVariant.VARIABLE, hydra.mantle.TermVariant.WRAP)
 
 def type_variant(v1: hydra.core.Type) -> hydra.mantle.TypeVariant:
     r"""Find the type variant (constructor) for a given type."""
@@ -288,6 +291,9 @@ def type_variant(v1: hydra.core.Type) -> hydra.mantle.TypeVariant:
         
         case hydra.core.TypeApplication():
             return hydra.mantle.TypeVariant.APPLICATION
+        
+        case hydra.core.TypeEither():
+            return hydra.mantle.TypeVariant.EITHER
         
         case hydra.core.TypeFunction():
             return hydra.mantle.TypeVariant.FUNCTION
@@ -332,4 +338,4 @@ def type_variant(v1: hydra.core.Type) -> hydra.mantle.TypeVariant:
             return hydra.mantle.TypeVariant.WRAP
 
 # All type variants, in a canonical order.
-type_variants = (hydra.mantle.TypeVariant.ANNOTATED, hydra.mantle.TypeVariant.APPLICATION, hydra.mantle.TypeVariant.FUNCTION, hydra.mantle.TypeVariant.FORALL, hydra.mantle.TypeVariant.LIST, hydra.mantle.TypeVariant.LITERAL, hydra.mantle.TypeVariant.MAP, hydra.mantle.TypeVariant.WRAP, hydra.mantle.TypeVariant.MAYBE, hydra.mantle.TypeVariant.PRODUCT, hydra.mantle.TypeVariant.RECORD, hydra.mantle.TypeVariant.SET, hydra.mantle.TypeVariant.SUM, hydra.mantle.TypeVariant.UNION, hydra.mantle.TypeVariant.UNIT, hydra.mantle.TypeVariant.VARIABLE)
+type_variants = (hydra.mantle.TypeVariant.ANNOTATED, hydra.mantle.TypeVariant.APPLICATION, hydra.mantle.TypeVariant.EITHER, hydra.mantle.TypeVariant.FUNCTION, hydra.mantle.TypeVariant.FORALL, hydra.mantle.TypeVariant.LIST, hydra.mantle.TypeVariant.LITERAL, hydra.mantle.TypeVariant.MAP, hydra.mantle.TypeVariant.WRAP, hydra.mantle.TypeVariant.MAYBE, hydra.mantle.TypeVariant.PRODUCT, hydra.mantle.TypeVariant.RECORD, hydra.mantle.TypeVariant.SET, hydra.mantle.TypeVariant.SUM, hydra.mantle.TypeVariant.UNION, hydra.mantle.TypeVariant.UNIT, hydra.mantle.TypeVariant.VARIABLE)
