@@ -246,7 +246,7 @@ def instantiate_type[T0](typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.c
 def is_enum_row_type(rt: hydra.core.RowType) -> bool:
     r"""Check if a row type represents an enum (all fields are unit-typed)."""
     
-    return hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.map((lambda f: hydra.encode.core.is_unit_type(f.type)), rt.fields))
+    return hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.map((lambda f: hydra.encode.core.is_unit_type(hydra.rewriting.deannotate_type(f.type))), rt.fields))
 
 def is_enum_type(typ: hydra.core.Type) -> bool:
     r"""Check if a type is an enum type."""
@@ -266,14 +266,14 @@ def type_dependencies(with_schema: bool, transform: Callable[[hydra.core.Type], 
     def to_pair(name2: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[hydra.core.Name, hydra.core.Type]]:
         return hydra.lib.flows.bind(require_type(name2), (lambda typ: hydra.lib.flows.pure((name2, transform(typ)))))
     def deps(seeds: frozenset[hydra.core.Name], names: FrozenDict[hydra.core.Name, hydra.core.Type]) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, hydra.core.Type]]:
-        return hydra.lib.logic.if_else(hydra.lib.sets.null(seeds), hydra.lib.flows.pure(names), hydra.lib.flows.bind(hydra.lib.flows.map_list(to_pair, hydra.lib.sets.to_list(seeds)), (lambda pairs: (new_names := hydra.lib.maps.union(names, cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.from_list(pairs))), refs := hydra.lib.lists.foldl(cast(Callable[[frozenset[hydra.core.Name], frozenset[hydra.core.Name]], frozenset[hydra.core.Name]], hydra.lib.sets.union), cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), hydra.lib.lists.map((lambda pair: hydra.rewriting.type_dependency_names(with_schema, pair[1])), pairs)), visited := hydra.lib.sets.from_list(hydra.lib.maps.keys(names)), new_seeds := hydra.lib.sets.difference(refs, visited), deps(new_seeds, new_names))[4])))
+        return hydra.lib.logic.if_else(hydra.lib.sets.null(seeds), hydra.lib.flows.pure(names), hydra.lib.flows.bind(hydra.lib.flows.map_list(to_pair, hydra.lib.sets.to_list(seeds)), (lambda pairs: (new_names := hydra.lib.maps.union(names, cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.from_list(pairs))), refs := hydra.lib.lists.foldl(cast(Callable[[frozenset[hydra.core.Name], frozenset[hydra.core.Name]], frozenset[hydra.core.Name]], hydra.lib.sets.union), cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), hydra.lib.lists.map((lambda tuple2: hydra.rewriting.type_dependency_names(with_schema, tuple2[1])), pairs)), visited := hydra.lib.sets.from_list(hydra.lib.maps.keys(names)), new_seeds := hydra.lib.sets.difference(refs, visited), deps(new_seeds, new_names))[4])))
     return deps(hydra.lib.sets.singleton(name), cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.empty()))
 
 def is_serializable(el: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, bool]:
     r"""Check if an element is serializable (no function types in dependencies)."""
     
     def variants(typ: hydra.core.Type) -> frozenlist[hydra.mantle.TypeVariant]:
-        return hydra.lib.lists.map(hydra.variants.type_variant, hydra.rewriting.fold_over_type(cast(hydra.coders.TraversalOrder, hydra.coders.TraversalOrderPre(None)), (lambda m, t: hydra.lib.lists.cons(t, m)), cast(frozenlist[hydra.core.Type], ()), typ))
+        return hydra.lib.lists.map(hydra.variants.type_variant, hydra.rewriting.fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda m, t: hydra.lib.lists.cons(t, m)), cast(frozenlist[hydra.core.Type], ()), typ))
     return hydra.lib.flows.map((lambda deps: (all_variants := hydra.lib.sets.from_list(hydra.lib.lists.concat(hydra.lib.lists.map(variants, hydra.lib.maps.elems(deps)))), hydra.lib.logic.not_(hydra.lib.sets.member(hydra.mantle.TypeVariant.FUNCTION, all_variants)))[1]), type_dependencies(False, cast(Callable[[hydra.core.Type], hydra.core.Type], hydra.lib.equality.identity), el.name))
 
 def module_dependency_namespaces(binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, mod: hydra.module.Module) -> hydra.compute.Flow[hydra.graph.Graph, frozenset[hydra.module.Namespace]]:
@@ -375,7 +375,7 @@ def topological_sort_type_definitions(defs: frozenlist[hydra.module.TypeDefiniti
 def types_to_elements(type_map: FrozenDict[hydra.core.Name, hydra.core.Type]) -> FrozenDict[hydra.core.Name, hydra.core.Binding]:
     r"""Encode a map of named types to a map of elements."""
     
-    def to_element(pair: Tuple[hydra.core.Name, hydra.core.Type]) -> Tuple[hydra.core.Name, hydra.core.Binding]:
-        name = pair[0]
-        return (name, hydra.core.Binding(name, hydra.encode.core.type(pair[1]), cast(Maybe[hydra.core.TypeScheme], Nothing())))
+    def to_element(tuple2: Tuple[hydra.core.Name, hydra.core.Type]) -> Tuple[hydra.core.Name, hydra.core.Binding]:
+        name = tuple2[0]
+        return (name, hydra.core.Binding(name, hydra.encode.core.type(tuple2[1]), cast(Maybe[hydra.core.TypeScheme], Nothing())))
     return cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.from_list(hydra.lib.lists.map(to_element, hydra.lib.maps.to_list(type_map))))

@@ -146,6 +146,11 @@ def type(typ: hydra.core.Type) -> str:
         case hydra.core.TypeMaybe(value=etyp2):
             return hydra.lib.strings.cat(("maybe<", type(etyp2), ">"))
         
+        case hydra.core.TypePair(value=pt):
+            first_typ = pt.first
+            second_typ = pt.second
+            return hydra.lib.strings.cat(("(", type(first_typ), ", ", type(second_typ), ")"))
+        
         case hydra.core.TypeProduct(value=types):
             type_strs = hydra.lib.lists.map(type, types)
             return hydra.lib.strings.intercalate("×", type_strs)
@@ -173,9 +178,6 @@ def type(typ: hydra.core.Type) -> str:
             tname = wt.type_name.value
             typ1 = wt.body
             return hydra.lib.strings.cat(("wrap[", tname, "](", type(typ1), ")"))
-        
-        case _:
-            raise TypeError("Unsupported Type")
 
 def float(fv: hydra.core.FloatValue) -> str:
     r"""Show a float value as a string."""

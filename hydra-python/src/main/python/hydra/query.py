@@ -62,7 +62,7 @@ class NodeTerm(Node["hydra.core.Term"]):
 class NodeVariable(Node["Variable"]):
     r"""A query variable, not to be confused with a variable term."""
 
-class NodeWildcard(Node[None]):
+class NodeWildcard:
     r"""An anonymous variable which we do not care to join across patterns."""
 
 # A node in a query expression; it may be a term, a variable, or a wildcard.
@@ -137,16 +137,16 @@ RANGE__NAME = hydra.core.Name("hydra.query.Range")
 RANGE__MIN__NAME = hydra.core.Name("min")
 RANGE__MAX__NAME = hydra.core.Name("max")
 
-class RegexQuantifierOne(Node[None]):
+class RegexQuantifierOne:
     r"""No quantifier; matches a single occurrence."""
 
-class RegexQuantifierZeroOrOne(Node[None]):
+class RegexQuantifierZeroOrOne:
     r"""The ? quanifier; matches zero or one occurrence."""
 
-class RegexQuantifierZeroOrMore(Node[None]):
+class RegexQuantifierZeroOrMore:
     r"""The * quantifier; matches any number of occurrences."""
 
-class RegexQuantifierOneOrMore(Node[None]):
+class RegexQuantifierOneOrMore:
     r"""The + quantifier; matches one or more occurrences."""
 
 class RegexQuantifierExactly(Node[int]):

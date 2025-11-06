@@ -85,14 +85,14 @@ type SymmetricAdapter[S, T, V] = hydra.compute.Adapter[S, S, T, T, V, V]
 
 SYMMETRIC_ADAPTER__NAME = hydra.core.Name("hydra.coders.SymmetricAdapter")
 
-class TraversalOrderPre(Node[None]):
+class TraversalOrder(Enum):
+    r"""Specifies either a pre-order or post-order traversal."""
+    
+    PRE = "pre"
     r"""Pre-order traversal."""
-
-class TraversalOrderPost(Node[None]):
+    
+    POST = "post"
     r"""Post-order traversal."""
-
-# Specifies either a pre-order or post-order traversal.
-type TraversalOrder = TraversalOrderPre | TraversalOrderPost
 
 TRAVERSAL_ORDER__NAME = hydra.core.Name("hydra.coders.TraversalOrder")
 TRAVERSAL_ORDER__PRE__NAME = hydra.core.Name("pre")

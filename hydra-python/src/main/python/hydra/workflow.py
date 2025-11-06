@@ -45,7 +45,7 @@ class SchemaSpecHydra(Node["HydraSchemaSpec"]):
 class SchemaSpecFile(Node[str]):
     r"""A schema provided as a file, available at the given file path."""
 
-class SchemaSpecProvided(Node[None]):
+class SchemaSpecProvided:
     r"""A schema which will be provided within the workflow."""
 
 # The specification of a schema at the source end of a workflow.

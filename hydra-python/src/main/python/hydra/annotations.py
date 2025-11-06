@@ -195,10 +195,10 @@ def set_type_classes(m: FrozenDict[hydra.core.Name, frozenset[hydra.mantle.TypeC
     def encode_class(tc: hydra.mantle.TypeClass) -> hydra.core.Term:
         match tc:
             case hydra.mantle.TypeClass.EQUALITY:
-                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.mantle.TypeClass"), hydra.core.Field(hydra.core.Name("equality"), cast(hydra.core.Term, hydra.core.TermUnit(None))))))
+                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.mantle.TypeClass"), hydra.core.Field(hydra.core.Name("equality"), cast(hydra.core.Term, hydra.core.TermUnit())))))
             
             case hydra.mantle.TypeClass.ORDERING:
-                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.mantle.TypeClass"), hydra.core.Field(hydra.core.Name("ordering"), cast(hydra.core.Term, hydra.core.TermUnit(None))))))
+                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.mantle.TypeClass"), hydra.core.Field(hydra.core.Name("ordering"), cast(hydra.core.Term, hydra.core.TermUnit())))))
     def encode_pair(name_classes: Tuple[hydra.core.Name, frozenset[hydra.mantle.TypeClass]]) -> Tuple[hydra.core.Term, hydra.core.Term]:
         name = name_classes[0]
         classes = name_classes[1]
