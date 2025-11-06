@@ -7,6 +7,7 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 ### Core Development
 
 - **[Adding new type and term constructors to Hydra Core](extending-hydra-core.md)** - Complete process including schema updates, type inference, rewriting functions, and solving the bootstrap problem.
+- **[Adding new primitive functions](adding-primitives.md)** - Guide for implementing primitive functions across Haskell, Java, and Python implementations.
 
 ### Implementations
 
