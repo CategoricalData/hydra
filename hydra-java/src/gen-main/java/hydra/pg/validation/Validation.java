@@ -17,7 +17,7 @@ public interface Validation {
   static <T, V> java.util.function.Function<java.util.function.Function<V, String>, java.util.function.Function<Opt<Function<V, hydra.util.Opt<VertexLabel>>>, java.util.function.Function<hydra.pg.model.EdgeType<T>, java.util.function.Function<hydra.pg.model.Edge<V>, Opt<String>>>>> validateEdge(java.util.function.Function<T, java.util.function.Function<V, Opt<String>>> checkValue) {
     return (java.util.function.Function<java.util.function.Function<V, String>, java.util.function.Function<Opt<Function<V, hydra.util.Opt<VertexLabel>>>, java.util.function.Function<hydra.pg.model.EdgeType<T>, java.util.function.Function<hydra.pg.model.Edge<V>, Opt<String>>>>>) (showValue -> (java.util.function.Function<Opt<Function<V, hydra.util.Opt<VertexLabel>>>, java.util.function.Function<hydra.pg.model.EdgeType<T>, java.util.function.Function<hydra.pg.model.Edge<V>, Opt<String>>>>) (labelForVertexId -> (java.util.function.Function<hydra.pg.model.EdgeType<T>, java.util.function.Function<hydra.pg.model.Edge<V>, Opt<String>>>) (typ -> (java.util.function.Function<hydra.pg.model.Edge<V>, Opt<String>>) (el -> {
       java.util.function.Function<String, String> failWith = (hydra.pg.validation.Validation.edgeError((showValue))).apply((el));
-      Opt<String> checkProperties = hydra.lib.optionals.Map.apply(
+      Opt<String> checkProperties = hydra.lib.maybes.Map.apply(
         (java.util.function.Function<String, String>) (s2 -> ((failWith)).apply((hydra.pg.validation.Validation.prepend("Invalid property")).apply((s2)))),
         ((hydra.pg.validation.Validation.validateProperties((checkValue))).apply(((typ)).properties)).apply(((el)).properties));
       Opt<String> checkOut = (((labelForVertexId)).map((java.util.function.Function<java.util.function.Function<V, Opt<VertexLabel>>, Opt<String>>) (s0 -> ((((s0)).apply(((el)).out)).map((java.util.function.Function<hydra.pg.model.VertexLabel, Opt<String>>) (s1 -> (hydra.pg.validation.Validation.verify(hydra.lib.equality.EqualString.apply(
@@ -31,7 +31,7 @@ public interface Validation {
       Opt<String> checkIn = (((labelForVertexId)).map((java.util.function.Function<java.util.function.Function<V, Opt<VertexLabel>>, Opt<String>>) (f -> ((((f)).apply(((el)).in)).map((java.util.function.Function<hydra.pg.model.VertexLabel, Opt<String>>) (label -> (hydra.pg.validation.Validation.verify(hydra.lib.equality.EqualString.apply(
         ((label)).value,
         (((typ)).in).value))).apply(((failWith)).apply((hydra.pg.validation.Validation.prepend("Wrong in-vertex label")).apply((hydra.pg.validation.Validation.vertexLabelMismatch(((typ)).in)).apply((label)))))))).orElse(Opt.of(((failWith)).apply((hydra.pg.validation.Validation.prepend("In-vertex does not exist")).apply(((showValue)).apply(((el)).in)))))))).orElse(Opt.empty());
-      Opt<String> checkId = hydra.lib.optionals.Map.apply(
+      Opt<String> checkId = hydra.lib.maybes.Map.apply(
         (java.util.function.Function<String, String>) (x -> ((failWith)).apply((hydra.pg.validation.Validation.prepend("Invalid id")).apply((x)))),
         (((checkValue)).apply(((typ)).id)).apply(((el)).id));
       return hydra.pg.validation.Validation.checkAll(java.util.Arrays.asList(
@@ -85,7 +85,7 @@ public interface Validation {
       Opt<String> checkVertices = hydra.pg.validation.Validation.checkAll(hydra.lib.lists.Map.apply(
         (checkVertices_checkVertex),
         Elems.apply(((graph)).vertices)));
-      Opt<Function<V, hydra.util.Opt<VertexLabel>>> checkEdges_labelForVertexId = Opt.of((java.util.function.Function<V, Opt<VertexLabel>>) (i -> hydra.lib.optionals.Map.apply(
+      Opt<Function<V, hydra.util.Opt<VertexLabel>>> checkEdges_labelForVertexId = Opt.of((java.util.function.Function<V, Opt<VertexLabel>>) (i -> hydra.lib.maybes.Map.apply(
         (java.util.function.Function<hydra.pg.model.Vertex<V>, hydra.pg.model.VertexLabel>) (v1 -> ((v1)).label),
         hydra.lib.maps.Lookup.apply(
           (i),
@@ -112,7 +112,7 @@ public interface Validation {
         hydra.pg.model.PropertyKey key = ((pair)).object1;
         return ((hydra.lib.maps.Lookup.apply(
           (key),
-          (checkValues_m))).map((java.util.function.Function<T, Opt<String>>) (typ -> hydra.lib.optionals.Map.apply(
+          (checkValues_m))).map((java.util.function.Function<T, Opt<String>>) (typ -> hydra.lib.maybes.Map.apply(
           hydra.pg.validation.Validation.prepend("Invalid value"),
           (((checkValue)).apply((typ))).apply((val)))))).orElse(Opt.of((hydra.pg.validation.Validation.prepend("Unexpected key")).apply(((key)).value)));
       });
@@ -138,7 +138,7 @@ public interface Validation {
   static <T, V> java.util.function.Function<java.util.function.Function<V, String>, java.util.function.Function<hydra.pg.model.VertexType<T>, java.util.function.Function<hydra.pg.model.Vertex<V>, Opt<String>>>> validateVertex(java.util.function.Function<T, java.util.function.Function<V, Opt<String>>> checkValue) {
     return (java.util.function.Function<java.util.function.Function<V, String>, java.util.function.Function<hydra.pg.model.VertexType<T>, java.util.function.Function<hydra.pg.model.Vertex<V>, Opt<String>>>>) (showValue -> (java.util.function.Function<hydra.pg.model.VertexType<T>, java.util.function.Function<hydra.pg.model.Vertex<V>, Opt<String>>>) (typ -> (java.util.function.Function<hydra.pg.model.Vertex<V>, Opt<String>>) (el -> {
       java.util.function.Function<String, String> failWith = (hydra.pg.validation.Validation.vertexError((showValue))).apply((el));
-      Opt<String> checkProperties = hydra.lib.optionals.Map.apply(
+      Opt<String> checkProperties = hydra.lib.maybes.Map.apply(
         (java.util.function.Function<String, String>) (s0 -> ((failWith)).apply((hydra.pg.validation.Validation.prepend("Invalid property")).apply((s0)))),
         ((hydra.pg.validation.Validation.validateProperties((checkValue))).apply(((typ)).properties)).apply(((el)).properties));
       hydra.pg.model.VertexLabel checkLabel_expected = ((typ)).label;
@@ -146,7 +146,7 @@ public interface Validation {
       Opt<String> checkLabel = (hydra.pg.validation.Validation.verify(hydra.lib.equality.EqualString.apply(
         ((checkLabel_actual)).value,
         ((checkLabel_expected)).value))).apply(((failWith)).apply((hydra.pg.validation.Validation.prepend("Wrong label")).apply((hydra.pg.validation.Validation.vertexLabelMismatch((checkLabel_expected))).apply((checkLabel_actual)))));
-      Opt<String> checkId = hydra.lib.optionals.Map.apply(
+      Opt<String> checkId = hydra.lib.maybes.Map.apply(
         (java.util.function.Function<String, String>) (x -> ((failWith)).apply((hydra.pg.validation.Validation.prepend("Invalid id")).apply((x)))),
         (((checkValue)).apply(((typ)).id)).apply(((el)).id));
       return hydra.pg.validation.Validation.checkAll(java.util.Arrays.asList(
@@ -157,7 +157,7 @@ public interface Validation {
   }
   
   static <A> Opt<A> checkAll(java.util.List<Opt<A>> checks) {
-    java.util.List<A> errors = hydra.lib.optionals.Cat.apply((checks));
+    java.util.List<A> errors = hydra.lib.maybes.Cat.apply((checks));
     return hydra.lib.lists.SafeHead.apply(errors);
   }
   
