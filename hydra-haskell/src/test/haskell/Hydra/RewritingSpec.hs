@@ -63,7 +63,7 @@ checkFoldOverTerm = do
           (traverse TraversalOrderPost node2)
           ["b", "d", "c", "a"]
   where
-    node label children = Terms.pair (Terms.string label) (Terms.list children)
+    node label children = Terms.tuple2 (Terms.string label) (Terms.list children)
     labelOf term = case term of
       TermProduct [TermLiteral (LiteralString label), _] -> Just label
       _ -> Nothing
@@ -450,7 +450,7 @@ testLiftLambdaAboveLet = H.describe "liftLambdaAboveLet" $ do
         (lets ["x">: int32 42] (var "x"))
 
       noChange "let without lambda in body"
-        (lets ["x">: int32 42, "y">: string "hello"] (pair (var "x") (var "y")))
+        (lets ["x">: int32 42, "y">: string "hello"] (tuple2 (var "x") (var "y")))
 
       noChange "lambda with let in body"
         (lambda "y" $ lets ["x">: int32 42] (var "x"))
@@ -576,18 +576,18 @@ testLiftLambdaAboveLet = H.describe "liftLambdaAboveLet" $ do
             var "f")
 
         liftsTo "let-lambda inside a pair"
-          (pair
+          (tuple2
             (lets ["x">: int32 42] $ lambda "y" $ var "x")
             (string "test"))
-          (pair
+          (tuple2
             (lambda "y" $ lets ["x">: int32 42] $ var "x")
             (string "test"))
 
         liftsTo "let-lambda in both elements of a pair"
-          (pair
+          (tuple2
             (lets ["x">: int32 1] $ lambda "y" $ var "x")
             (lets ["z">: int32 2] $ lambda "w" $ var "z"))
-          (pair
+          (tuple2
             (lambda "y" $ lets ["x">: int32 1] $ var "x")
             (lambda "w" $ lets ["z">: int32 2] $ var "z"))
 
@@ -618,10 +618,6 @@ testLiftLambdaAboveLet = H.describe "liftLambdaAboveLet" $ do
       H.shouldBe (ShowCore.term result) (ShowCore.term termAfter)
     noChange desc term = liftsTo desc term term
     add = primitive _math_add
-
-
-
-
 
 testNormalizeTypeVariablesInTerm :: H.SpecWith ()
 testNormalizeTypeVariablesInTerm = do
@@ -675,13 +671,13 @@ testNormalizeTypeVariablesInTerm = do
             ("id2", Just ft1t1, lambdaTyped "x" t1 $ var "x")])])
       H.it "No shadowing, locally free type variable" $ changesTo
         (tlet (var "fun1" @@ string "foo" @@ int32 42) [
-          ("fun1", Just (Types.poly ["a", "b"] $ Types.functionMany [tA, tB, tPair tA tB]), lambdaTyped "x" tA $ lambdaTyped "y" tB $
+          ("fun1", Just (Types.poly ["a", "b"] $ Types.functionMany [tA, tB, Types.tuple2 tA tB]), lambdaTyped "x" tA $ lambdaTyped "y" tB $
             tlet (var "fun2" @@ var "x") [
-              ("fun2", Just (Types.poly ["c"] $ tFun tC $ tPair tC tB), lambdaTyped "z" tC $ pair (var "z") (var "y"))])])
+              ("fun2", Just (Types.poly ["c"] $ tFun tC $ Types.tuple2 tC tB), lambdaTyped "z" tC $ tuple2 (var "z") (var "y"))])])
         (tlet (var "fun1" @@ string "foo" @@ int32 42) [
-          ("fun1", Just (Types.poly ["t0", "t1"] $ Types.functionMany [t0, t1, tPair t0 t1]), lambdaTyped "x" t0 $ lambdaTyped "y" t1 $
+          ("fun1", Just (Types.poly ["t0", "t1"] $ Types.functionMany [t0, t1, Types.tuple2 t0 t1]), lambdaTyped "x" t0 $ lambdaTyped "y" t1 $
             tlet (var "fun2" @@ var "x") [
-              ("fun2", Just (Types.poly ["t2"] $ tFun t2 $ tPair t2 t1), lambdaTyped "z" t2 $ pair (var "z") (var "y"))])])
+              ("fun2", Just (Types.poly ["t2"] $ tFun t2 $ Types.tuple2 t2 t1), lambdaTyped "z" t2 $ tuple2 (var "z") (var "y"))])])
   where
     normalize = normalizeTypeVariablesInTerm
     changesTo term1 term2 = H.shouldBe (normalize term1) term2
@@ -821,8 +817,8 @@ testRewriteFunctionReachesSubterms functionName function = H.describe ("Test tha
       (record (Name "Data") ["a">: bar, "b">: baz, "c">: bar])
 
     checkRewrite "string in tuple"
-      (pair foo (int32 42))
-      (pair bar (int32 42))
+      (tuple2 foo (int32 42))
+      (tuple2 bar (int32 42))
 
   H.describe "Let bindings" $ do
     checkRewrite "string in let binding value"
