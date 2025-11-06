@@ -26,6 +26,7 @@ import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
+import qualified Hydra.Dsl.Lib.Tuples    as Tuples
 import qualified Hydra.Dsl.Mantle        as Mantle
 import qualified Hydra.Dsl.Module        as Module
 import qualified Hydra.Dsl.TTerms        as TTerms
@@ -96,6 +97,7 @@ module_ = Module (Namespace "hydra.inference") elements
       el inferTypeOfLiteralDef,
       el inferTypeOfMapDef,
       el inferTypeOfOptionalDef,
+      el inferTypeOfPairDef,
       el inferTypeOfPrimitiveDef,
       el inferTypeOfProductDef,
       el inferTypeOfProjectionDef,
@@ -241,7 +243,7 @@ inferGraphTypesDef = define "inferGraphTypes" $
   "fromLetTerm" <~ ("l" ~>
     "bindings" <~ Core.letBindings (var "l") $
     "body" <~ Core.letBody (var "l") $
-    "fromBinding" <~ ("b" ~> pair
+    "fromBinding" <~ ("b" ~> tuple2
       (Core.bindingName $ var "b")
       (var "b")) $
     Graph.graph
@@ -296,13 +298,13 @@ inferManyDef = define "inferMany" $
     "e2" <~ first (var "result2") $
     "t2" <~ first (second $ var "result2") $
     "s2" <~ second (second $ var "result2") $
-    produce $ pair
+    produce $ tuple2
       (Lists.cons (ref Substitution.substTypesInTermDef @@ var "s2" @@ var "e1") (var "e2"))
-      (pair
+      (tuple2
         (Lists.cons (ref Substitution.substInTypeDef @@ var "s2" @@ var "t1") (var "t2"))
         (ref Substitution.composeTypeSubstDef @@ var "s1" @@ var "s2"))) $
   Logic.ifElse (Lists.null $ var "pairs")
-    (Flows.pure $ pair (list []) $ pair (list []) (ref Substitution.idTypeSubstDef))
+    (Flows.pure $ tuple2 (list []) $ tuple2 (list []) (ref Substitution.idTypeSubstDef))
     (var "dflt")
 
 inferTypeOfDef :: TBinding (InferenceContext -> Term -> Flow s (Term, TypeScheme))
@@ -319,7 +321,7 @@ inferTypeOfDef = define "inferTypeOf" $
     "mts" <~ Core.bindingType (var "binding") $
     Maybes.maybe
       (Flows.fail $ string "Expected a type scheme")
-      ("ts" ~> Flows.pure $ pair (var "term1") (var "ts"))
+      ("ts" ~> Flows.pure $ tuple2 (var "term1") (var "ts"))
       (var "mts")) $
   "unifyAndSubst" <~ ("result" ~>
     "subst" <~ Typing.inferenceResultSubst (var "result") $
@@ -396,7 +398,7 @@ inferTypeOfCaseStatementDef = define "inferTypeOfCaseStatement" $
   "dfltResult" <<~ Flows.mapMaybe ("t" ~> ref inferTypeOfTermDef @@ var "cx" @@ var "t" @@
     (Strings.cat $ list [string "case ", Core.unName $ var "tname", string ".<default>"])) (var "dflt") $
   "caseResults" <<~ ref inferManyDef @@ var "cx" @@ Lists.map
-    ("f" ~> pair (Core.fieldTerm $ var "f")
+    ("f" ~> tuple2 (Core.fieldTerm $ var "f")
       (Strings.cat $ list [string "case ", Core.unName $ var "tname", string ".", Core.unName $ Core.fieldName $ var "f"]))
     (var "cases") $
   "iterms" <~ first (var "caseResults") $
@@ -405,7 +407,7 @@ inferTypeOfCaseStatementDef = define "inferTypeOfCaseStatement" $
   "codv" <<~ ref Schemas.freshNameDef $
   "cod" <~ Core.typeVariable (var "codv") $
   "caseMap" <~ Maps.fromList (Lists.map
-    ("ft" ~> pair (Core.fieldTypeName $ var "ft") (Core.fieldTypeType $ var "ft"))
+    ("ft" ~> tuple2 (Core.fieldTypeName $ var "ft") (Core.fieldTypeType $ var "ft"))
     (var "sfields")) $
   "dfltConstraints" <~ ref Monads.maybeToListDef @@ (Maybes.map
     ("r" ~> Typing.typeConstraint (var "cod") (Typing.inferenceResultType $ var "r") (string "match default"))
@@ -544,7 +546,7 @@ inferTypeOfLambdaDef = define "inferTypeOfLambda" $
   "body" <~ Core.lambdaBody (var "lambda") $
   "vdom" <<~ ref Schemas.freshNameDef $
   "dom" <~ Core.typeVariable (var "vdom") $
-  "cx2" <~ (ref extendContextDef @@ list [pair (var "var") (Core.typeScheme (list []) (var "dom"))] @@ var "cx") $
+  "cx2" <~ (ref extendContextDef @@ list [tuple2 (var "var") (Core.typeScheme (list []) (var "dom"))] @@ var "cx") $
   "result" <<~ ref inferTypeOfTermDef @@ var "cx2" @@ var "body" @@ string "lambda body" $
   "iterm" <~ Typing.inferenceResultTerm (var "result") $
   "icod" <~ Typing.inferenceResultType (var "result") $
@@ -571,7 +573,7 @@ inferTypeOfLetDef = define "inferTypeOfLet" $
   "toPair" <~ ("binding" ~>
     "name" <~ Core.bindingName (var "binding") $
     "term" <~ Core.bindingTerm (var "binding") $
-    pair (var "name") $ Lists.filter ("n" ~> Sets.member (var "n") (var "nameSet")) $
+    tuple2 (var "name") $ Lists.filter ("n" ~> Sets.member (var "n") (var "nameSet")) $
       Sets.toList $ ref Rewriting.freeVariablesInTermDef @@ var "term") $
   "adjList" <~ Lists.map (var "toPair") (var "bindings0") $
   "groups" <~ ref Sorting.topologicalSortComponentsDef @@ var "adjList" $
@@ -593,12 +595,12 @@ inferTypeOfLetDef = define "inferTypeOfLet" $
             (Lists.concat $ list [var "bs", var "bins"]) @@
             (var "e")]) $
       Logic.ifElse (Equality.equal (var "level") (int32 0))
-        (pair (var "bins") (var "term"))
+        (tuple2 (var "bins") (var "term"))
         (var "nonzero" @@ var "term")) $
     "result" <~ var "helper" @@ (Lists.length $ var "groups") @@ list [] @@ var "iterm" $
     "bindingList" <~ first (var "result") $
     "e" <~ second (var "result") $
-    "bindingMap2" <~ Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName $ var "b") (var "b")) (var "bindingList")) $
+    "bindingMap2" <~ Maps.fromList (Lists.map ("b" ~> tuple2 (Core.bindingName $ var "b") (var "b")) (var "bindingList")) $
     Core.termLet $ Core.let_
       (Maybes.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "bindingMap2")) (var "names"))
       (var "e")) $
@@ -681,10 +683,10 @@ inferTypeOfLetNormalizedDef = define "inferTypeOfLetNormalized" $
   -- e.g., foo becomes foo!<t0><t1> if its scheme is ∀t0,t1. ...
   "st1" <~ (Typing.termSubst (Maps.fromList $
     Lists.map
-      ("pair" ~>
-        "name" <~ first (var "pair") $
-        "ts" <~ second (var "pair") $
-        pair
+      ("tuple2" ~>
+        "name" <~ first (var "tuple2") $
+        "ts" <~ second (var "tuple2") $
+        tuple2
           (var "name") $
           (ref buildTypeApplicationTermDef
             @@ (Core.typeSchemeVariables $ var "ts")
@@ -757,13 +759,13 @@ inferTypeOfMapDef = define "inferTypeOfMap" $
       @@ ref Substitution.idTypeSubstDef)
     -- Non-empty map: infer and unify key and value types
     ("kresults" <<~ ref inferManyDef @@ var "cx" @@
-      (Lists.map ("k" ~> pair (var "k") (string "map key")) $ Maps.keys $ var "m") $
+      (Lists.map ("k" ~> tuple2 (var "k") (string "map key")) $ Maps.keys $ var "m") $
     "kterms" <~ first (var "kresults") $
     "ktypes" <~ first (second $ var "kresults") $
     "ksubst" <~ second (second $ var "kresults") $
     "vresults" <<~ ref inferManyDef
       @@ var "cx"
-      @@ (Lists.map ("v" ~> pair (var "v") (string "map value")) $ Maps.elems $ var "m") $
+      @@ (Lists.map ("v" ~> tuple2 (var "v") (string "map value")) $ Maps.elems $ var "m") $
     "vterms" <~ first (var "vresults") $
     "vtypes" <~ first (second $ var "vresults") $
     "vsubst" <~ second (second $ var "vresults") $
@@ -789,6 +791,26 @@ inferTypeOfOptionalDef = define "inferTypeOfOptional" $
     @@ var "trmCons"
     @@ string "optional element"
     @@ (Maybes.maybe (list []) (unaryFunction Lists.singleton) $ var "m")
+
+inferTypeOfPairDef :: TBinding (InferenceContext -> (Term, Term) -> Flow s InferenceResult)
+inferTypeOfPairDef = define "inferTypeOfPair" $
+  doc "Infer the type of a tuple2" $
+  "cx" ~> "p" ~>
+  "pairFst" <~ first (var "p") $
+  "pairSnd" <~ second (var "p") $
+  "r1" <<~ (ref inferTypeOfTermDef @@ var "cx" @@ var "pairFst" @@ string "tuple2 first element") $
+  "ifst" <~ Typing.inferenceResultTerm (var "r1") $
+  "firstType" <~ Typing.inferenceResultType (var "r1") $
+  "subst1" <~ Typing.inferenceResultSubst (var "r1") $
+  "r2" <<~ (ref inferTypeOfTermDef @@ var "cx" @@ var "pairSnd" @@ string "tuple2 second element") $
+  "isnd" <~ Typing.inferenceResultTerm (var "r2") $
+  "secondType" <~ Typing.inferenceResultType (var "r2") $
+  "subst2" <~ Typing.inferenceResultSubst (var "r2") $
+  "pairTerm" <~ (Core.termPair $ tuple2 (var "ifst") (var "isnd")) $
+  "termWithFirstType" <~ (Core.termTypeApplication $ Core.typeApplicationTerm (var "pairTerm") (var "firstType")) $
+  "termWithBothTypes" <~ (Core.termTypeApplication $ Core.typeApplicationTerm (var "termWithFirstType") (var "secondType")) $
+  "pairType" <~ (Core.typePair $ Core.pairType (var "firstType") (var "secondType")) $
+  ref yieldCheckedDef @@ var "termWithBothTypes" @@ var "pairType" @@ var "subst2"
 
 inferTypeOfPrimitiveDef :: TBinding (InferenceContext -> Name -> Flow s InferenceResult)
 inferTypeOfPrimitiveDef = define "inferTypeOfPrimitive" $
@@ -816,7 +838,7 @@ inferTypeOfProductDef = define "inferTypeOfProduct" $
       "itypes" <~ first (second $ var "results") $
       "isubst" <~ second (second $ var "results") $
       ref yieldDef @@ (Core.termProduct $ var "iterms") @@ (Core.typeProduct $ var "itypes") @@ var "isubst")
-    (ref inferManyDef @@ var "cx" @@ (Lists.map ("e" ~> pair (var "e") (string "tuple element")) $ var "els"))
+    (ref inferManyDef @@ var "cx" @@ (Lists.map ("e" ~> tuple2 (var "e") (string "tuple element")) $ var "els"))
 
 inferTypeOfProjectionDef :: TBinding (InferenceContext -> Projection -> Flow s InferenceResult)
 inferTypeOfProjectionDef = define "inferTypeOfProjection" $
@@ -846,7 +868,7 @@ inferTypeOfRecordDef = define "inferTypeOfRecord" $
   "fnames" <~ Lists.map (unaryFunction Core.fieldName) (var "fields") $
   "schemaType" <<~ ref Schemas.requireSchemaTypeDef @@ var "cx" @@ var "tname" $
   "results" <<~ ref inferManyDef @@ var "cx" @@ Lists.map
-    ("f" ~> pair
+    ("f" ~> tuple2
       (Core.fieldTerm $ var "f")
       (Strings.cat2 (string "field ") (Core.unName $ Core.fieldName $ var "f")))
     (var "fields") $
@@ -918,6 +940,7 @@ inferTypeOfTermDef = define "inferTypeOfTerm" $
     _Term_literal>>: "l" ~> ref inferTypeOfLiteralDef @@ var "cx" @@ var "l",
     _Term_map>>: "m" ~> ref inferTypeOfMapDef @@ var "cx" @@ var "m",
     _Term_maybe>>: "m" ~> ref inferTypeOfOptionalDef @@ var "cx" @@ var "m",
+    _Term_pair>>: "p" ~> ref inferTypeOfPairDef @@ var "cx" @@ var "p",
     _Term_product>>: "els" ~> ref inferTypeOfProductDef @@ var "cx" @@ var "els",
     _Term_record>>: "r" ~> ref inferTypeOfRecordDef @@ var "cx" @@ var "r",
     _Term_set>>: "s" ~> ref inferTypeOfSetDef @@ var "cx" @@ var "s",
@@ -1045,25 +1068,25 @@ inferTypesOfTemporaryBindingsDef = define "inferTypesOfTemporaryBindings" $
     "h" <~ first (var "result2") $
     "r_prime" <~ first (second $ var "result2") $
     "r" <~ second (second $ var "result2") $
-    Flows.pure $ pair
+    Flows.pure $ tuple2
       (Lists.cons (ref Substitution.substTypesInTermDef @@ var "r" @@ var "j") (var "h"))
-      (pair
+      (tuple2
         (Lists.cons (ref Substitution.substInTypeDef @@ var "r" @@ var "u_prime") (var "r_prime"))
         (ref Substitution.composeTypeSubstDef @@ var "u" @@ var "r"))) $
   Logic.ifElse (Lists.null $ var "bins")
-    (Flows.pure $ pair (list []) (pair (list []) (ref Substitution.idTypeSubstDef)))
+    (Flows.pure $ tuple2 (list []) (tuple2 (list []) (ref Substitution.idTypeSubstDef)))
     (var "dflt")
 
 initialTypeContextDef :: TBinding (Graph -> Flow s TypeContext)
 initialTypeContextDef = define "initialTypeContext" $
   doc "Create an initial type context from a graph" $
   "g" ~>
-  "toPair" <~ ("pair" ~>
-    "name" <~ first (var "pair") $
-    "el"  <~ second (var "pair") $
+  "toPair" <~ ("tuple2" ~>
+    "name" <~ first (var "tuple2") $
+    "el"  <~ second (var "tuple2") $
     optCases (Core.bindingType $ var "el")
       (Flows.fail $ "untyped element: " ++ Core.unName (var "name"))
-      ("ts" ~> produce $ pair (var "name") (ref Schemas.typeSchemeToFTypeDef @@ var "ts"))) $
+      ("ts" ~> produce $ tuple2 (var "name") (ref Schemas.typeSchemeToFTypeDef @@ var "ts"))) $
   "ix" <<~ ref Schemas.graphToInferenceContextDef @@ var "g" $
   "types" <<~ Flows.map
     (unaryFunction Maps.fromList)
