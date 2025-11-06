@@ -236,7 +236,7 @@ haskellAstModule = Module ns elements [Core.module_] [Core.module_] $
           "fields">: list $ ast "FieldUpdate"],
 
       def "Field" $ -- UFieldDecl
-        doc "A field (name/type pair)" $
+        doc "A field (name/type tuple2)" $
         record [
           "name">: ast "Name",
           "type">: ast "Type"],
