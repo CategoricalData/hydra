@@ -195,7 +195,7 @@ validateGraphDef :: TBinding (
   -> PG.Graph v
   -> Y.Maybe String)
 validateGraphDef = validationDefinition "validateGraph" $
-  withOrd "t0" $
+  withOrd "t0" $ withOrd "t1" $
   lambda "checkValue" $ lambda "showValue" $ lambda "schema" $ lambda "graph" $ lets [
     "checkVertices">: lets [
       "checkVertex">: lambda "el" $ Maybes.maybe
@@ -247,7 +247,7 @@ validatePropertiesDef = validationDefinition "validateProperties" $
         nothing,
     "checkValues">: lets [
       "m">: Maps.fromList (Lists.map
-          (lambda "p" $ pair
+          (lambda "p" $ tuple2
             (project _PropertyType _PropertyType_key @@ var "p")
             (project _PropertyType _PropertyType_value @@ var "p"))
           (var "types")),
