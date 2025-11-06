@@ -1,7 +1,7 @@
 """Python implementations of hydra.lib.literals primitives."""
 
 from decimal import Decimal
-from typing import Optional
+from hydra.dsl.python import Maybe, Just, NOTHING
 
 
 def bigfloat_to_bigint(x: Decimal) -> int:
@@ -99,64 +99,64 @@ def int64_to_bigint(x: int) -> int:
     return x
 
 
-def read_bigfloat(s: str) -> Optional[Decimal]:
+def read_bigfloat(s: str) -> Maybe[Decimal]:
     """Parse a string to a Decimal."""
     try:
-        return Decimal(s)
+        return Just(Decimal(s))
     except:
-        return None
+        return NOTHING
 
 
-def read_boolean(s: str) -> Optional[bool]:
+def read_boolean(s: str) -> Maybe[bool]:
     """Parse a string to a boolean."""
     if s == "true":
-        return True
+        return Just(True)
     elif s == "false":
-        return False
+        return Just(False)
     else:
-        return None
+        return NOTHING
 
 
-def read_float32(s: str) -> Optional[float]:
+def read_float32(s: str) -> Maybe[float]:
     """Parse a string to a float."""
     try:
-        return float(s)
+        return Just(float(s))
     except:
-        return None
+        return NOTHING
 
 
-def read_float64(s: str) -> Optional[float]:
+def read_float64(s: str) -> Maybe[float]:
     """Parse a string to a float."""
     try:
-        return float(s)
+        return Just(float(s))
     except:
-        return None
+        return NOTHING
 
 
-def read_int32(s: str) -> Optional[int]:
+def read_int32(s: str) -> Maybe[int]:
     """Parse a string to an int."""
     try:
-        return int(s)
+        return Just(int(s))
     except:
-        return None
+        return NOTHING
 
 
-def read_int64(s: str) -> Optional[int]:
+def read_int64(s: str) -> Maybe[int]:
     """Parse a string to an int."""
     try:
-        return int(s)
+        return Just(int(s))
     except:
-        return None
+        return NOTHING
 
 
-def read_string(s: str) -> Optional[str]:
+def read_string(s: str) -> Maybe[str]:
     """Parse a string literal."""
     try:
         import ast
         result = ast.literal_eval(s)
-        return result if isinstance(result, str) else None
+        return Just(result) if isinstance(result, str) else NOTHING
     except:
-        return None
+        return NOTHING
 
 
 def show_bigfloat(x: Decimal) -> str:

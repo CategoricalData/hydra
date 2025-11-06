@@ -381,6 +381,9 @@ def n_args[T0, T1](name: hydra.core.Name, n: int, args: frozenlist[T0]) -> hydra
 def pair[T0, T1](kf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], vf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T1]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, T1]]:
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, T1]]:
         match term:
+            case hydra.core.TermPair(value=p):
+                return hydra.lib.flows.bind(kf(p[0]), (lambda k_val: hydra.lib.flows.bind(vf(p[1]), (lambda v_val: hydra.lib.flows.pure((k_val, v_val))))))
+            
             case hydra.core.TermProduct(value=terms):
                 return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(terms), 2), hydra.lib.flows.bind(kf(hydra.lib.lists.head(terms)), (lambda k_val: hydra.lib.flows.bind(vf(hydra.lib.lists.head(hydra.lib.lists.tail(terms))), (lambda v_val: hydra.lib.flows.pure((k_val, v_val)))))), hydra.monads.unexpected("pair", hydra.show.core.term(term)))
             

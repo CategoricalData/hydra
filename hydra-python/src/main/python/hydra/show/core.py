@@ -173,6 +173,9 @@ def type(typ: hydra.core.Type) -> str:
             tname = wt.type_name.value
             typ1 = wt.body
             return hydra.lib.strings.cat(("wrap[", tname, "](", type(typ1), ")"))
+        
+        case _:
+            raise TypeError("Unsupported Type")
 
 def float(fv: hydra.core.FloatValue) -> str:
     r"""Show a float value as a string."""
@@ -365,6 +368,9 @@ def term(t: hydra.core.Term) -> str:
         
         case hydra.core.TermMaybe(value=mt):
             return hydra.lib.maybes.maybe("nothing", (lambda t2: hydra.lib.strings.cat(("just(", term(t2), ")"))), mt)
+        
+        case hydra.core.TermPair(value=p):
+            return hydra.lib.strings.cat(("(", term(p[0]), ", ", term(p[1]), ")"))
         
         case hydra.core.TermProduct(value=els2):
             term_strs = hydra.lib.lists.map(term, els2)

@@ -106,7 +106,7 @@ def match_union[T0](tname: hydra.core.Name, pairs: frozenlist[Tuple[hydra.core.N
             return hydra.lib.logic.if_else(hydra.lib.equality.equal(injection.type_name.value, tname.value), exp(), hydra.monads.unexpected(hydra.lib.strings.cat(("injection for type ", tname.value)), hydra.show.core.term(term)))
         
         case _:
-            return hydra.monads.unexpected(hydra.lib.strings.cat((hydra.lib.strings.cat(("union with one of {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda pair: pair[0].value), pairs)))), "}")), hydra.show.core.term(stripped))
+            return hydra.monads.unexpected(hydra.lib.strings.cat(("union_{", tname.value, "} with one of {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda pair: pair[0].value), pairs)), "}")), hydra.show.core.term(stripped))
 
 def match_unit_field[T0, T1, T2, T3](fname: T0, x: T1) -> Tuple[T0, Callable[[T2], hydra.compute.Flow[T3, T1]]]:
     return (fname, (lambda ignored: hydra.lib.flows.pure(x)))

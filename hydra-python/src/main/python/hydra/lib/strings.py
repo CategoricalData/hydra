@@ -74,3 +74,8 @@ def to_upper(s: str) -> str:
 def unlines(xs: Sequence[str]) -> str:
     """Join strings with newlines."""
     return '\n'.join(xs)
+
+
+def words(s: str) -> frozenlist[str]:
+    """Split a string into words."""
+    return tuple(s.split())

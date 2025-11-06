@@ -216,32 +216,35 @@ def type_of[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.T
             case hydra.core.TermMaybe(value=v18):
                 return type_of_maybe(tx, type_args, v18)
             
-            case hydra.core.TermProduct(value=v19):
-                return type_of_tuple(tx, type_args, v19)
+            case hydra.core.TermPair(value=v19):
+                return type_of_pair(tx, type_args, v19)
             
-            case hydra.core.TermRecord(value=v110):
-                return type_of_record(tx, type_args, v110)
+            case hydra.core.TermProduct(value=v110):
+                return type_of_tuple(tx, type_args, v110)
             
-            case hydra.core.TermSet(value=v111):
-                return type_of_set(tx, type_args, v111)
+            case hydra.core.TermRecord(value=v111):
+                return type_of_record(tx, type_args, v111)
             
-            case hydra.core.TermTypeApplication(value=v112):
-                return type_of_type_application(tx, type_args, v112)
+            case hydra.core.TermSet(value=v112):
+                return type_of_set(tx, type_args, v112)
             
-            case hydra.core.TermTypeLambda(value=v113):
-                return type_of_type_lambda(tx, type_args, v113)
+            case hydra.core.TermTypeApplication(value=v113):
+                return type_of_type_application(tx, type_args, v113)
             
-            case hydra.core.TermUnion(value=v114):
-                return type_of_injection(tx, type_args, v114)
+            case hydra.core.TermTypeLambda(value=v114):
+                return type_of_type_lambda(tx, type_args, v114)
+            
+            case hydra.core.TermUnion(value=v115):
+                return type_of_injection(tx, type_args, v115)
             
             case hydra.core.TermUnit():
                 return type_of_unit(tx, type_args)
             
-            case hydra.core.TermVariable(value=v115):
-                return type_of_variable(tx, type_args, v115)
+            case hydra.core.TermVariable(value=v116):
+                return type_of_variable(tx, type_args, v116)
             
-            case hydra.core.TermWrap(value=v116):
-                return type_of_wrapped_term(tx, type_args, v116)
+            case hydra.core.TermWrap(value=v117):
+                return type_of_wrapped_term(tx, type_args, v117)
             
             case _:
                 return hydra.lib.flows.fail(hydra.lib.strings.cat(("unsupported term variant in typeOf: ", hydra.show.mantle.term_variant(hydra.variants.term_variant(term)))))
@@ -311,6 +314,12 @@ def type_of_maybe[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.
     def for_just(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Type]:
         return hydra.lib.flows.bind(hydra.lib.flows.bind(type_of(tx, cast(frozenlist[hydra.core.Type], ()), term), (lambda term_type: hydra.lib.flows.bind(check_type_variables(tx, term_type), (lambda _: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeMaybe(term_type))))))), (lambda t: apply_type_arguments_to_type(tx, type_args, t)))
     return hydra.lib.maybes.maybe(cast(hydra.compute.Flow[T0, hydra.core.Type], for_nothing()), for_just, mt)
+
+def type_of_pair[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], p: Tuple[hydra.core.Term, hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.core.Type]:
+    def check_length[T1]() -> hydra.compute.Flow[T1, None]:
+        n = hydra.lib.lists.length(type_args)
+        return hydra.lib.logic.if_else(hydra.lib.equality.equal(n, 2), hydra.lib.flows.pure(None), hydra.lib.flows.fail(hydra.lib.strings.cat(("pair type requires 2 type arguments, got ", hydra.lib.literals.show_int32(n)))))
+    return hydra.lib.flows.bind(cast(hydra.compute.Flow[T0, None], check_length()), (lambda _: (pair_fst := p[0], pair_snd := p[1], hydra.lib.flows.bind(type_of(tx, cast(frozenlist[hydra.core.Type], ()), pair_fst), (lambda first_type: hydra.lib.flows.bind(check_type_variables(tx, first_type), (lambda _2: hydra.lib.flows.bind(type_of(tx, cast(frozenlist[hydra.core.Type], ()), pair_snd), (lambda second_type: hydra.lib.flows.bind(check_type_variables(tx, second_type), (lambda _3: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypePair(hydra.core.PairType(first_type, second_type)))))))))))))[2]))
 
 def type_of_record[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], record: hydra.core.Record) -> hydra.compute.Flow[T0, hydra.core.Type]:
     tname = record.type_name
