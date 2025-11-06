@@ -34,6 +34,7 @@ import qualified Hydra.Dsl.Lib.Maybes    as Maybes
 import           Hydra.Dsl.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
+import qualified Hydra.Dsl.Lib.Tuples    as Tuples
 import qualified Hydra.Dsl.Mantle        as Mantle
 import qualified Hydra.Dsl.Module        as Module
 import qualified Hydra.Dsl.TTerms        as TTerms
@@ -94,6 +95,7 @@ module_ = Module (Namespace "hydra.checking") elements
       el typeOfLiteralDef,
       el typeOfMapDef,
       el typeOfMaybeDef,
+      el typeOfPairDef,
       el typeOfPrimitiveDef,
       el typeOfProjectionDef,
       el typeOfRecordDef,
@@ -344,6 +346,7 @@ typeOfDef = define "typeOf" $
     _Term_literal>>: ref typeOfLiteralDef @@ var "tx" @@ var "typeArgs",
     _Term_map>>: ref typeOfMapDef @@ var "tx" @@ var "typeArgs",
     _Term_maybe>>: ref typeOfMaybeDef @@ var "tx" @@ var "typeArgs",
+    _Term_pair>>: ref typeOfPairDef @@ var "tx" @@ var "typeArgs",
     _Term_product>>: ref typeOfTupleDef @@ var "tx" @@ var "typeArgs",
     _Term_record>>: ref typeOfRecordDef @@ var "tx" @@ var "typeArgs",
     _Term_set>>: ref typeOfSetDef @@ var "tx" @@ var "typeArgs",
@@ -593,6 +596,24 @@ typeOfMaybeDef = define "typeOfMaybe" $
        Flows.pure $ Core.typeMaybe $ var "termType") $
     ref applyTypeArgumentsToTypeDef @@ var "tx" @@ var "typeArgs" @@ var "t") $
   optCases (var "mt") (var "forNothing") (var "forJust")
+
+typeOfPairDef :: TBinding (TypeContext -> [Type] -> (Term, Term) -> Flow s Type)
+typeOfPairDef = define "typeOfPair" $
+  doc "Reconstruct the type of a tuple2" $
+  "tx" ~> "typeArgs" ~> "p" ~>
+  "checkLength" <~ (
+    "n" <~ Lists.length (var "typeArgs") $
+    Logic.ifElse (Equality.equal (var "n") (int32 2))
+      (Flows.pure unit)
+      (Flows.fail $ "tuple2 type requires 2 type arguments, got " ++ Literals.showInt32 (var "n"))) $
+  exec (var "checkLength") $
+  "pairFst" <~ first (var "p") $
+  "pairSnd" <~ second (var "p") $
+  "firstType" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "pairFst" $
+  exec (ref checkTypeVariablesDef @@ var "tx" @@ var "firstType") $
+  "secondType" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "pairSnd" $
+  exec (ref checkTypeVariablesDef @@ var "tx" @@ var "secondType") $
+  Flows.pure $ Core.typePair $ Core.pairType (var "firstType") (var "secondType")
 
 typeOfPrimitiveDef :: TBinding (TypeContext -> [Type] -> Name -> Flow s Type)
 typeOfPrimitiveDef = define "typeOfPrimitive" $
