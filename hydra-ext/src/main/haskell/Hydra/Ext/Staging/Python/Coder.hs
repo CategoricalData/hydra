@@ -652,7 +652,7 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
                     then Py.ClosedPatternValue $ Py.ValuePattern $ Py.Attribute [
                       encodeName True CaseConventionPascal env tname,
                       encodeEnumValue env2 fname]
-                    else if isFreeVariableInTerm v body
+                    else if (isFreeVariableInTerm v body || EncodeCore.isUnitTerm body)
                     then Py.ClosedPatternClass $
                       Py.ClassPattern pyVarName Nothing Nothing
                     else Py.ClosedPatternClass $
