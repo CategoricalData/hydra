@@ -49,4 +49,6 @@ as well as a couple of earlier presentations [here](https://www.slideshare.net/j
 and [here](https://docs.google.com/presentation/d/1PF0K3KtopV0tMVa0sGBW2hDA7nw-cSwQm6h1AED1VSA),
 and the original design document [here](https://bit.ly/hydra-design-doc).
 
+For a detailed history of changes, see the [CHANGELOG](CHANGELOG.md).
+
 Share and enjoy.

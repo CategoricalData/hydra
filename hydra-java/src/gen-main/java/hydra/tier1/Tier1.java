@@ -123,7 +123,7 @@ public interface Tier1 {
   hydra.compute.Trace emptyTrace = new hydra.compute.Trace(java.util.Arrays.asList(), java.util.Arrays.asList(), hydra.lib.maps.Empty.apply());
 
   static <A, S> java.util.function.Function<hydra.compute.Flow<S, A>, Boolean> flowSucceeds(S cx) {
-    return (java.util.function.Function<hydra.compute.Flow<S, A>, Boolean>) (f -> hydra.lib.optionals.IsJust.apply((((((f)).value).apply((cx))).apply((hydra.tier1.Tier1.emptyTrace))).value));
+    return (java.util.function.Function<hydra.compute.Flow<S, A>, Boolean>) (f -> hydra.lib.maybes.IsJust.apply((((((f)).value).apply((cx))).apply((hydra.tier1.Tier1.emptyTrace))).value));
   }
 
   static <A, S> java.util.function.Function<S, java.util.function.Function<hydra.compute.Flow<S, A>, A>> fromFlow(A def) {

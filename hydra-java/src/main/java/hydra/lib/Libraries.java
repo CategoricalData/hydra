@@ -23,6 +23,10 @@ import hydra.lib.equality.GteInt32;
 import hydra.lib.equality.Identity;
 import hydra.lib.equality.LtInt32;
 import hydra.lib.equality.LteInt32;
+import hydra.lib.chars.IsAlphaNum;
+import hydra.lib.chars.IsLower;
+import hydra.lib.chars.IsSpace;
+import hydra.lib.chars.IsUpper;
 import hydra.lib.io.ShowTerm;
 import hydra.lib.maps.Elems;
 import hydra.lib.sets.Delete;
@@ -45,6 +49,7 @@ public class Libraries {
      */
     public static List<PrimitiveFunction> standardPrimitives() {
         List<PrimitiveFunction> prims = new ArrayList<>();
+        prims.addAll(charsPrimitives());
         prims.addAll(equalityPrimitives());
         prims.addAll(flowsPrimitives());
         prims.addAll(ioPrimitives());
@@ -53,11 +58,21 @@ public class Libraries {
         prims.addAll(logicPrimitives());
         prims.addAll(mapsPrimitives());
         prims.addAll(mathPrimitives());
-        prims.addAll(optionalsPrimitives());
+        prims.addAll(maybesPrimitives());
         prims.addAll(setsPrimitives());
         prims.addAll(stringsPrimitives());
 
         return prims;
+    }
+
+    private static List<PrimitiveFunction> charsPrimitives() {
+        return Arrays.asList(
+                new IsAlphaNum(),
+                new IsLower(),
+                new IsSpace(),
+                new IsUpper(),
+                new hydra.lib.chars.ToLower(),
+                new hydra.lib.chars.ToUpper());
     }
 
     private static List<PrimitiveFunction> equalityPrimitives() {
@@ -185,17 +200,16 @@ public class Libraries {
                 new hydra.lib.math.Sub());
     }
 
-    private static List<PrimitiveFunction> optionalsPrimitives() {
+    private static List<PrimitiveFunction> maybesPrimitives() {
         return Arrays.asList(
-                new hydra.lib.math.Add(),
-                new hydra.lib.optionals.Apply(),
-                new hydra.lib.optionals.Bind(),
-                new hydra.lib.optionals.Cat(),
-                new hydra.lib.optionals.Compose(),
-                new hydra.lib.optionals.IsJust(),
-                new hydra.lib.optionals.IsNothing(),
-                new hydra.lib.optionals.Map(),
-                new hydra.lib.optionals.Pure());
+                new hydra.lib.maybes.Apply(),
+                new hydra.lib.maybes.Bind(),
+                new hydra.lib.maybes.Cat(),
+                new hydra.lib.maybes.Compose(),
+                new hydra.lib.maybes.IsJust(),
+                new hydra.lib.maybes.IsNothing(),
+                new hydra.lib.maybes.Map(),
+                new hydra.lib.maybes.Pure());
     }
 
     private static List<PrimitiveFunction> setsPrimitives() {

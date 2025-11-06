@@ -7,7 +7,7 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.dsl.Types;
-import hydra.dsl.prims.Optionals;
+import hydra.dsl.prims.Maybes;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
@@ -40,7 +40,7 @@ public class Map extends PrimitiveFunction {
             Term input = args.get(1);
             Term output = lambda("s", "t",
                     app(lambda("q", flowState(
-                                    app(Optionals.map(), mapping, app(project(FlowState.TYPE_NAME, "value"), variable("q"))),
+                                    app(Maybes.map(), mapping, app(project(FlowState.TYPE_NAME, "value"), variable("q"))),
                                     app(project(FlowState.TYPE_NAME, "state"), variable("q")),
                                     app(project(FlowState.TYPE_NAME, "trace"), variable("q")))),
                             (app(unwrap(Flow.TYPE_NAME), input, variable("s"), variable("t")))));
