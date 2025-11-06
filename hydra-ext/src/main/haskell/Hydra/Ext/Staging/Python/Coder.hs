@@ -537,6 +537,10 @@ encodeTermInline env noCast term = case deannotateTerm term of
         -- Note that an extra cast on Nothing() is not necessary, since Hydra's nothing is always wrapped in
         -- a type application term (which generates a cast).
         withCast $ functionCall (pyNameToPyPrimary $ Py.Name "Just") [pyexp]
+    TermPair (t1, t2) -> do
+      pyExpr1 <- encode t1
+      pyExpr2 <- encode t2
+      return $ pyAtomToPyExpression $ Py.AtomTuple $ Py.Tuple [pyExpressionToPyStarNamedExpression pyExpr1, pyExpressionToPyStarNamedExpression pyExpr2]
     TermProduct terms -> do
       pyExprs <- CM.mapM encode terms
       return $ pyAtomToPyExpression $ Py.AtomTuple $ Py.Tuple (pyExpressionToPyStarNamedExpression <$> pyExprs)
@@ -559,14 +563,19 @@ encodeTermInline env noCast term = case deannotateTerm term of
         then return $ projectFromExpression (pyNameToPyExpression $ encodeNameQualified env tname)
           $ encodeEnumValue env $ fieldName field
         else do
-          parg <- encode $ fieldTerm field
+          -- Omit argument for unit-valued variants (resolves #206)
+          args <- if EncodeCore.isUnitTerm (fieldTerm field)
+            then return []
+            else do
+              parg <- encode $ fieldTerm field
+              return [parg]
 
           -- Explicitly casting to the union type avoids occasional Python type errors in which the narrower,
           -- variant type is assumed (e.g. hydra.core.TermList instead of hydra.core.Term).
           -- This is in addition to the cast expressions we create for type application terms.
           updateMeta $ \m -> m { pythonModuleMetadataUsesCast = True }
           return $ castTo (typeVariableReference env tname) $
-            functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) [parg]
+            functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) args
     TermUnit -> return $ pyNameToPyExpression pyNone
     TermVariable name -> encodeVariable env name []
     TermWrap (WrappedTerm tname term1) -> do
@@ -677,6 +686,10 @@ encodeType env typ = case deannotateType typ of
       pyright <- encode rt
       return $ pyPrimaryToPyExpression $
         primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Either") [pyleft, pyright]
+    TypePair (PairType first second) -> do
+      pyFirst <- encode first
+      pySecond <- encode second
+      return $ nameAndParams (Py.Name "Tuple") [pyFirst, pySecond]
     TypeProduct types -> nameAndParams (Py.Name "Tuple") <$> (CM.mapM encode types)
     TypeRecord rt -> pure $ typeVariableReference env $ rowTypeTypeName rt
     TypeSet et -> nameAndParams (Py.Name "frozenset") . L.singleton <$> encode et
@@ -736,14 +749,18 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumRowType rt th
       where
         toFieldStmt (FieldType fname ftype) = do
             comment <- fmap normalizeComment <$> (inGraphContext $ getTypeDescription ftype)
-            ptypeQuoted <- encodeTypeQuoted env ftype
             let body = indentedBlock comment []
+            margs <- if deannotateType ftype == TypeUnit
+                  then pure Nothing
+                  else do
+                    ptypeQuoted <- encodeTypeQuoted env ftype
+                    return $ Just $ variantArgs ptypeQuoted []
             return $ pyClassDefinitionToPyStatement $
               Py.ClassDefinition
                 Nothing
                 (variantName False env name fname)
                 (pyNameToPyTypeParameter <$> fieldParams ftype)
-                (Just $ variantArgs ptypeQuoted [])
+                margs
                 body
         unionStmt = typeAliasStatement
             (encodeName False CaseConventionPascal env name)
