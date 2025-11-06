@@ -29,7 +29,7 @@ public interface CoreEncoding {
   static hydra.core.Term coreEncodeCaseStatement(hydra.core.CaseStatement cs) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.CaseStatement"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("typeName"), hydra.coreEncoding.CoreEncoding.coreEncodeName(((cs)).typeName)),
-      new hydra.core.Field(new hydra.core.Name("default"), new hydra.core.Term.Optional(hydra.lib.optionals.Map.apply(
+      new hydra.core.Field(new hydra.core.Name("default"), new hydra.core.Term.Optional(hydra.lib.maybes.Map.apply(
         (hydra.coreEncoding.CoreEncoding::coreEncodeTerm),
         ((cs)).default_))),
       new hydra.core.Field(new hydra.core.Name("cases"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
@@ -253,7 +253,7 @@ public interface CoreEncoding {
   static hydra.core.Term coreEncodeLambda(hydra.core.Lambda l) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Lambda"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("parameter"), hydra.coreEncoding.CoreEncoding.coreEncodeName(((l)).parameter)),
-      new hydra.core.Field(new hydra.core.Name("domain"), new hydra.core.Term.Optional(hydra.lib.optionals.Map.apply(
+      new hydra.core.Field(new hydra.core.Name("domain"), new hydra.core.Term.Optional(hydra.lib.maybes.Map.apply(
         (hydra.coreEncoding.CoreEncoding::coreEncodeType),
         ((l)).domain))),
       new hydra.core.Field(new hydra.core.Name("body"), hydra.coreEncoding.CoreEncoding.coreEncodeTerm(((l)).body)))));
@@ -277,7 +277,7 @@ public interface CoreEncoding {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.LetBinding"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.coreEncoding.CoreEncoding.coreEncodeName(((b)).name)),
       new hydra.core.Field(new hydra.core.Name("term"), hydra.coreEncoding.CoreEncoding.coreEncodeTerm(((b)).term)),
-      new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Optional(hydra.lib.optionals.Map.apply(
+      new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Optional(hydra.lib.maybes.Map.apply(
         (hydra.coreEncoding.CoreEncoding::coreEncodeTypeScheme),
         ((b)).type))))));
   }
@@ -426,7 +426,7 @@ public interface CoreEncoding {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Optional instance) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("optional"), new hydra.core.Term.Optional(hydra.lib.optionals.Map.apply(
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("optional"), new hydra.core.Term.Optional(hydra.lib.maybes.Map.apply(
           (hydra.coreEncoding.CoreEncoding::coreEncodeTerm),
           (instance.value))))));
       }
