@@ -34,15 +34,18 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesCast :: Bool,
   pythonModuleMetadataUsesDataclass :: Bool,
   pythonModuleMetadataUsesDecimal :: Bool,
+  pythonModuleMetadataUsesEither :: Bool,
   pythonModuleMetadataUsesEnum :: Bool,
   pythonModuleMetadataUsesFrozenDict :: Bool,
   pythonModuleMetadataUsesFrozenList :: Bool,
   pythonModuleMetadataUsesGeneric :: Bool,
   pythonModuleMetadataUsesJust :: Bool,
+  pythonModuleMetadataUsesLeft :: Bool,
   pythonModuleMetadataUsesMaybe :: Bool,
   pythonModuleMetadataUsesName :: Bool,
   pythonModuleMetadataUsesNode :: Bool,
   pythonModuleMetadataUsesNothing :: Bool,
+  pythonModuleMetadataUsesRight :: Bool,
   pythonModuleMetadataUsesTuple :: Bool,
   pythonModuleMetadataUsesTypeVar :: Bool}
 
@@ -74,10 +77,10 @@ deduplicateCaseVariables cases = L.reverse $ snd $ L.foldl rewriteCase (M.empty,
 encodeApplication :: PythonEnvironment -> Application -> Flow PyGraph Py.Expression
 encodeApplication env app = do
     PyGraph g _ <- getState
-    arity <- typeArity <$> (typeOf (pythonEnvironmentTypeContext env) [] fun)
+    arity <- typeArity <$> (withTrace ("debug 2" ) $ typeOf (pythonEnvironmentTypeContext env) [] fun)
     let term = TermApplication app
-    typ <- typeOf (pythonEnvironmentTypeContext env) [] term
-    pargs <- CM.mapM (encodeTermInline env) args
+    typ <- withTrace ("debug 3") $ typeOf (pythonEnvironmentTypeContext env) [] term
+    pargs <- CM.mapM (encodeTermInline env False) args
     let hargs = L.take arity pargs
     let rargs = L.drop arity pargs
     lhs <- applyArgs hargs
@@ -128,7 +131,7 @@ encodeApplication env app = do
         firstArg = L.head hargs
         restArgs = L.tail hargs
         def = do
-          pfun <- encodeTermInline env fun
+          pfun <- encodeTermInline env False fun
           return $ functionCall (pyExpressionToPyPrimary pfun) hargs
 
 encodeApplicationType :: PythonEnvironment -> ApplicationType -> Flow PyGraph Py.Expression
@@ -144,7 +147,7 @@ encodeApplicationType env at = do
 
 encodeBindingAsAssignment :: PythonEnvironment -> Binding -> Flow PyGraph Py.NamedExpression
 encodeBindingAsAssignment env (Binding name term _) = do
-  pterm <- encodeTermInline env term
+  pterm <- encodeTermInline env False term
   let pyName = encodeName False CaseConventionLowerSnake env name
   return $ Py.NamedExpressionAssignment $ Py.AssignmentExpression pyName pterm
 
@@ -177,7 +180,7 @@ encodeDefinition env def = case def of
 
 encodeField :: PythonEnvironment -> Field -> Flow PyGraph (Py.Name, Py.Expression)
 encodeField env (Field fname fterm) = do
-  pterm <- encodeTermInline env fterm
+  pterm <- encodeTermInline env False fterm
   return (encodeFieldName env fname, pterm)
 
 encodeFieldType :: PythonEnvironment -> FieldType -> Flow PyGraph Py.Statement
@@ -208,7 +211,7 @@ encodeFunction env f = case f of
   FunctionLambda lam -> do
     (_, params, bindings, innerBody, _, _, innerEnv) <- withTrace "gather for lambda" $
       gatherBindingsAndParams env (TermFunction $ FunctionLambda lam)
-    pbody <- encodeTermInline innerEnv innerBody
+    pbody <- encodeTermInline innerEnv False innerBody
 --    let pparams = fmap (encodeNameQualified env) params
     let pparams = fmap (encodeName False CaseConventionLowerSnake innerEnv) params
 --    let pparams = fmap (termVariableReference env) params
@@ -417,11 +420,14 @@ encodeModule mod defs0 = do
                 ("enum", [
                   cond "Enum" $ pythonModuleMetadataUsesEnum meta]),
                 ("hydra.dsl.python", [
+                  cond "Either" $ pythonModuleMetadataUsesEither meta,
                   cond "FrozenDict" $ pythonModuleMetadataUsesFrozenDict meta,
                   cond "Just" $ pythonModuleMetadataUsesJust meta,
+                  cond "Left" $ pythonModuleMetadataUsesLeft meta,
                   cond "Maybe" $ pythonModuleMetadataUsesMaybe meta,
                   cond "Node" $ pythonModuleMetadataUsesNode meta,
                   cond "Nothing" $ pythonModuleMetadataUsesNothing meta,
+                  cond "Right" $ pythonModuleMetadataUsesRight meta,
                   cond "frozenlist" $ pythonModuleMetadataUsesFrozenList meta]),
                 ("typing", [
                   cond "Annotated" $ pythonModuleMetadataUsesAnnotated meta,
@@ -476,7 +482,7 @@ encodeTermAssignment env name term comment = do
   -- If there are no arguments or let bindings, and if we are not dealing with a case statement,
   -- we can use a simple a = b assignment.
   if isSimpleAssignment term then do
-    bodyExpr <- encodeTermInline env2 body
+    bodyExpr <- encodeTermInline env2 False body
     return $ annotatedStatement comment $ assignmentStatement (encodeName False CaseConventionLowerSnake env2 name) bodyExpr
   -- Otherwise, only a function definition will work.
   else do
@@ -497,9 +503,17 @@ encodeTermAssignment env name term comment = do
       encodeFunctionDefinition env2 name tparams params body doms cod comment bindingStmts
 
 -- | Encode a term to an inline Python expression
-encodeTermInline :: PythonEnvironment -> Term -> Flow PyGraph Py.Expression
-encodeTermInline env term = case deannotateTerm term of
+encodeTermInline :: PythonEnvironment -> Bool -> Term -> Flow PyGraph Py.Expression
+encodeTermInline env noCast term = case deannotateTerm term of
     TermApplication a -> encodeApplication env a
+    TermEither et -> case et of
+      Left term1 -> do
+        pyexp <- encode term1
+        -- Cast needed for the same reason as Just - to handle polymorphism
+        withCast $ functionCall (pyNameToPyPrimary $ Py.Name "Left") [pyexp]
+      Right term1 -> do
+        pyexp <- encode term1
+        withCast $ functionCall (pyNameToPyPrimary $ Py.Name "Right") [pyexp]
     TermFunction f -> encodeFunction env f
     TermLet _ -> pure $ stringToPyExpression Py.QuoteStyleDouble "let terms are not supported here"
     TermList terms -> do
@@ -516,13 +530,13 @@ encodeTermInline env term = case deannotateTerm term of
           pyV <- encode v
           return $ Py.DoubleStarredKvpairPair $ Py.Kvpair pyK pyV
     TermMaybe mt -> case mt of
-        Nothing -> return $ functionCall (pyNameToPyPrimary $ Py.Name "Nothing") []
-        Just term1 -> do
-          pyexp <- encode term1
-          -- This "extra" cast is necessary for the same reason we require casts on injections.
-          -- Note that an extra cast on Nothing() is not necessary, since Hydra's nothing is always wrapped in
-          -- a type application term (which generates a cast).
-          withCast term $ functionCall (pyNameToPyPrimary $ Py.Name "Just") [pyexp]
+      Nothing -> return $ functionCall (pyNameToPyPrimary $ Py.Name "Nothing") []
+      Just term1 -> do
+        pyexp <- encode term1
+        -- This "extra" cast is necessary for the same reason we require casts on injections.
+        -- Note that an extra cast on Nothing() is not necessary, since Hydra's nothing is always wrapped in
+        -- a type application term (which generates a cast).
+        withCast $ functionCall (pyNameToPyPrimary $ Py.Name "Just") [pyexp]
     TermProduct terms -> do
       pyExprs <- CM.mapM encode terms
       return $ pyAtomToPyExpression $ Py.AtomTuple $ Py.Tuple (pyExpressionToPyStarNamedExpression <$> pyExprs)
@@ -534,9 +548,9 @@ encodeTermInline env term = case deannotateTerm term of
       return $ functionCall (pyNameToPyPrimary $ Py.Name "frozenset")
         [pyAtomToPyExpression $ Py.AtomSet $ Py.Set (pyExpressionToPyStarNamedExpression <$> pyEls)]
     TermTypeApplication (TypeApplicationTerm body _) -> do
-      pybase <- encode $ deannotateAndDeTypeApplyTerm body
-      withCast term pybase
-    TermTypeLambda tl@(TypeLambda _ body) -> encodeTermInline env2 body
+      pybase <- encodeTermInline env True $ deannotateAndDeTypeApplyTerm body
+      withCast pybase
+    TermTypeLambda tl@(TypeLambda _ body) -> encodeTermInline env2 noCast body
       where
         env2 = extendEnvironmentForTypeLambda env tl
     TermUnion (Injection tname field) -> do
@@ -560,8 +574,8 @@ encodeTermInline env term = case deannotateTerm term of
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) [parg]
     t -> fail $ "unsupported term variant: " ++ show (termVariant t) ++ " in " ++ show term
   where
-    withCast term pyexp = do
-      typ <- typeOf (pythonEnvironmentTypeContext env) [] term
+    withCast pyexp = if noCast then pure pyexp else do
+      typ <- withTrace ("debug 4: " ++ ShowCore.term term) $ typeOf (pythonEnvironmentTypeContext env) [] term
       pytyp <- encodeType env typ
       updateMeta $ \m -> extendMetaForType True False typ $ m { pythonModuleMetadataUsesCast = True }
       return $ castTo pytyp pyexp
@@ -569,7 +583,7 @@ encodeTermInline env term = case deannotateTerm term of
       TermAnnotated at -> deannotateAndDeTypeApplyTerm (annotatedTermBody at)
       TermTypeApplication tat -> deannotateAndDeTypeApplyTerm (typeApplicationTermBody tat)
       _ -> term
-    encode = encodeTermInline env
+    encode = encodeTermInline env False
 
 -- | Encode a term to a list of statements, with the last statement as the return value.
 encodeTermMultiline :: PythonEnvironment -> Term -> Flow PyGraph [Py.Statement]
@@ -588,7 +602,7 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
         then fail $ "Functions currently unsupported in this context: " ++ ShowCore.term term
         else pure ()
       if (L.null bindings) then do
-        expr <- encodeTermInline env term
+        expr <- encodeTermInline env False term
         return [returnSingle expr]
       else do
         -- TODO: consider putting this inside of the updated environment, along with the body
@@ -603,7 +617,7 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
           rt <- inGraphContext $ requireUnionType tname
           let isEnum = isEnumRowType rt
           let isFull = L.length cases >= L.length (rowTypeFields rt)
-          pyArg <- encodeTermInline env arg
+          pyArg <- encodeTermInline env False arg
           pyCases <- CM.mapM (toCaseBlock isEnum) $ deduplicateCaseVariables cases
           pyDflt <- toDefault isFull dflt
           let subj = Py.SubjectExpressionSimple $ Py.NamedExpressionSimple pyArg
@@ -614,7 +628,7 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
             else do
               stmt <- case dflt of
                 Nothing -> pure $ raiseTypeError $ "Unsupported " ++ localNameOf tname
-                Just d -> returnSingle <$> encodeTermInline env d
+                Just d -> returnSingle <$> encodeTermInline env False d
               let patterns = pyClosedPatternToPyPatterns Py.ClosedPatternWildcard
               let body = indentedBlock Nothing [[stmt]]
               return [Py.CaseBlock patterns Nothing body]
@@ -658,6 +672,11 @@ encodeType env typ = case deannotateType typ of
       ptype <- encode et
       return $ pyPrimaryToPyExpression $
         primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Maybe") [ptype]
+    TypeEither (EitherType lt rt) -> do
+      pyleft <- encode lt
+      pyright <- encode rt
+      return $ pyPrimaryToPyExpression $
+        primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Either") [pyleft, pyright]
     TypeProduct types -> nameAndParams (Py.Name "Tuple") <$> (CM.mapM encode types)
     TypeRecord rt -> pure $ typeVariableReference env $ rowTypeTypeName rt
     TypeSet et -> nameAndParams (Py.Name "frozenset") . L.singleton <$> encode et
@@ -799,6 +818,9 @@ extendEnvironmentForTypeLambda env tlam = env {
 
 extendMetaForTerm :: Bool -> PythonModuleMetadata -> Term -> PythonModuleMetadata
 extendMetaForTerm topLevel meta0 t = case t of
+    TermEither e -> case e of
+      Left _ -> meta {pythonModuleMetadataUsesLeft = True}
+      Right _ -> meta {pythonModuleMetadataUsesRight = True}
     TermFunction f -> case f of
       FunctionLambda (Lambda _ (Just dom) body) -> if topLevel
           then extendMetaForType True False dom meta
@@ -866,6 +888,7 @@ extendMetaForType topLevel isTermAnnot typ meta = extendFor meta3 typ
           _ -> meta
         TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
         TypeMaybe _ -> meta {pythonModuleMetadataUsesMaybe = True}
+        TypeEither _ -> meta {pythonModuleMetadataUsesEither = True}
         TypeProduct _ -> meta {pythonModuleMetadataUsesTuple = True}
         TypeRecord (RowType _ fields) -> meta {
             pythonModuleMetadataUsesAnnotated = L.foldl checkForAnnotated (pythonModuleMetadataUsesAnnotated meta) fields,
@@ -921,7 +944,7 @@ gatherBindingsAndParams env term = withTrace ("gather for " ++ ShowCore.term ter
         t -> finish t
       where
         finish t = do
-            typ <- typeOf (pythonEnvironmentTypeContext env) [] t2
+            typ <- withTrace ("debug 1") $ typeOf (pythonEnvironmentTypeContext env) [] t2
             return (L.reverse tparams, L.reverse args, bindings, t2, L.reverse doms, typ, env)
           where
             t2 = L.foldl (\trm typ -> TermTypeApplication $ TypeApplicationTerm trm typ) t tapps
@@ -938,15 +961,18 @@ gatherMetadata focusNs defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataUsesCast = False,
       pythonModuleMetadataUsesDataclass = False,
       pythonModuleMetadataUsesDecimal = False,
+      pythonModuleMetadataUsesEither = False,
       pythonModuleMetadataUsesEnum = False,
       pythonModuleMetadataUsesFrozenDict = False,
       pythonModuleMetadataUsesFrozenList = False,
       pythonModuleMetadataUsesGeneric = False,
       pythonModuleMetadataUsesJust = False,
+      pythonModuleMetadataUsesLeft = False,
       pythonModuleMetadataUsesMaybe = False,
       pythonModuleMetadataUsesName = False,
       pythonModuleMetadataUsesNode = False,
       pythonModuleMetadataUsesNothing = False,
+      pythonModuleMetadataUsesRight = False,
       pythonModuleMetadataUsesTuple = False,
       pythonModuleMetadataUsesTypeVar = False}
     addDef meta def = case def of
