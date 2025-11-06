@@ -54,7 +54,7 @@ module_ = Module ns elements [Compute.module_, Graph.module_, Module.module_] [C
             doc "A function which serializes a list of output objects to a string representation" $
             list "a" --> compute "Flow" @@ "s" @@ string,
           "fileExtension">:
-            doc "A file extension for the generated file(s)"
+            doc "A file extension for the generated file(s)" $
             string],
 
       def "SchemaSpec" $
@@ -74,14 +74,14 @@ module_ = Module ns elements [Compute.module_, Graph.module_, Module.module_] [C
         doc "The specification of a workflow which takes a schema specification, reads data from a directory, and writes data to another directory" $
         record [
           "name">:
-            doc "A descriptive name for the workflow"
+            doc "A descriptive name for the workflow" $
             string,
           "schemaSpec">:
             doc "The schema specification" $
             wf "SchemaSpec",
           "srcDir">:
-            doc "The source directory"
+            doc "The source directory" $
             string,
           "destDir">:
-            doc "The destination directory"
+            doc "The destination directory" $
             string]]

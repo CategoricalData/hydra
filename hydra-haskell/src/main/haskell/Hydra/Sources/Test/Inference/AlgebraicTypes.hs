@@ -147,23 +147,23 @@ testGroupForOptionals = subgroup "Optional terms" [
 testGroupForPairs :: TTerm TestGroup
 testGroupForPairs = supergroup "Pair terms" [
     subgroup "Monotyped pairs" [
-      expectMono 1 []
+      expectMono 1 [tag_disabledForMinimalInference]
         (pair (string "foo") (int32 42))
         (T.pair T.string T.int32),
-      expectMono 2 []
+      expectMono 2 [tag_disabledForMinimalInference]
         (pair (string "foo") (list [float32 42.0, float32 137.0]))
         (T.pair T.string (T.list T.float32))],
 
     subgroup "Polytyped pairs" [
-      expectPoly 1 []
+      expectPoly 1 [tag_disabledForMinimalInference]
         (pair (list []) (string "foo"))
         ["t0"] (T.pair (T.list $ T.var "t0") T.string),
-      expectPoly 2 []
+      expectPoly 2 [tag_disabledForMinimalInference]
         (pair (list []) (list []))
         ["t0", "t1"] (T.pair (T.list $ T.var "t0") (T.list $ T.var "t1"))],
 
     subgroup "Nested pairs" [
-      expectMono 1 []
+      expectMono 1 [tag_disabledForMinimalInference]
         (pair (pair (int32 1) (string "nested")) true)
         (T.pair (T.pair T.int32 T.string) T.boolean),
       expectMono 2 [tag_disabledForMinimalInference]
@@ -171,18 +171,18 @@ testGroupForPairs = supergroup "Pair terms" [
         (T.pair T.string (T.pair T.int32 (T.list T.float32)))],
 
     subgroup "Pairs in lambda" [
-      expectPoly 1 []
+      expectPoly 1 [tag_disabledForMinimalInference]
         (lambda "x" (pair (var "x") (string "constant")))
         ["t0"] (T.function (T.var "t0") (T.pair (T.var "t0") T.string)),
-      expectPoly 2 []
+      expectPoly 2 [tag_disabledForMinimalInference]
         (lambda "p" (pair (var "p") (var "p")))
         ["t0"] (T.function (T.var "t0") (T.pair (T.var "t0") (T.var "t0")))],
 
     subgroup "Pairs in data structures" [
-      expectMono 1 []
+      expectMono 1 [tag_disabledForMinimalInference]
         (list [pair (string "a") (int32 1), pair (string "b") (int32 2)])
         (T.list $ T.pair T.string T.int32),
-      expectPoly 2 []
+      expectPoly 2 [tag_disabledForMinimalInference]
         (list [pair (list []) (string "foo")])
         ["t0"] (T.list $ T.pair (T.list $ T.var "t0") T.string)]]
 

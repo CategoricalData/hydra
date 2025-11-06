@@ -32,17 +32,17 @@ module_ = Module ns elements [] [Core.module_] $
             doc "A JSON array" $
             list $ json "Value",
           "boolean">:
-            doc "A boolean value"
+            doc "A boolean value" $
             boolean,
           "null">:
-            doc "JSON's null value"
+            doc "JSON's null value" $
             unit,
           "number">:
-            doc "A numeric value"
+            doc "A numeric value" $
             bigfloat, -- TODO: JSON numbers are decimal-encoded
           "object">:
             doc "A JSON object as a set of key/value pairs" $
             Types.map string (json "Value"),
           "string">:
-            doc "A string value"
+            doc "A string value" $
             string]]

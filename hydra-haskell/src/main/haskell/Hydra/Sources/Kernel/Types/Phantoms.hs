@@ -29,8 +29,12 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
       def "TBinding" $
         doc "An association of a named term (element) with a phantom type" $
         forAll "a" $ record [
-          "name">: core "Name",
-          "term">: phantoms "TTerm" @@ "a"],
+          "name">:
+            doc "The name of the term" $
+            core "Name",
+          "term">:
+            doc "The term with its phantom type" $
+            phantoms "TTerm" @@ "a"],
 
       def "TTerm" $
         doc "An association of a term with a phantom type" $

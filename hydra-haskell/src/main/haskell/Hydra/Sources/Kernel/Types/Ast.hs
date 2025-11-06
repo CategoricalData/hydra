@@ -30,63 +30,113 @@ module_ = Module ns elements [] [Core.module_] $
       def "BlockStyle" $
         doc "Formatting option for code blocks" $
         record [
-          "indent">: optional string,
-          "newlineBeforeContent">: boolean,
-          "newlineAfterContent">: boolean],
+          "indent">:
+            doc "An optional indentation string" $
+            optional string,
+          "newlineBeforeContent">:
+            doc "Whether to place a newline before the content" $
+            boolean,
+          "newlineAfterContent">:
+            doc "Whether to place a newline after the content" $
+            boolean],
 
       def "BracketExpr" $
         doc "An expression enclosed by brackets" $
         record [
-          "brackets">: ast "Brackets",
-          "enclosed">: ast "Expr",
-          "style">: ast "BlockStyle"],
+          "brackets">:
+            doc "The bracket pair enclosing the expression" $
+            ast "Brackets",
+          "enclosed">:
+            doc "The expression within the brackets" $
+            ast "Expr",
+          "style">:
+            doc "The formatting style for the bracketed block" $
+            ast "BlockStyle"],
 
       def "Brackets" $
         doc "Matching open and close bracket symbols" $
         record [
-          "open">: ast "Symbol",
-          "close">: ast "Symbol"],
+          "open">:
+            doc "The opening bracket symbol" $
+            ast "Symbol",
+          "close">:
+            doc "The closing bracket symbol" $
+            ast "Symbol"],
 
       def "Expr" $
         doc "An abstract expression" $
         union [
-          "const">: ast "Symbol",
-          "indent">: ast "IndentedExpression",
-          "op">: ast "OpExpr",
-          "brackets">: ast "BracketExpr"],
+          "const">:
+            doc "A constant symbol" $
+            ast "Symbol",
+          "indent">:
+            doc "An indented expression" $
+            ast "IndentedExpression",
+          "op">:
+            doc "An operator expression" $
+            ast "OpExpr",
+          "brackets">:
+            doc "A bracketed expression" $
+            ast "BracketExpr"],
 
       def "IndentedExpression" $
         doc "An expression indented in a certain style" $
         record [
-          "style">: ast "IndentStyle",
-          "expr">: ast "Expr"],
+          "style">:
+            doc "The indentation style" $
+            ast "IndentStyle",
+          "expr">:
+            doc "The expression to be indented" $
+            ast "Expr"],
 
       def "IndentStyle" $
         doc "Any of several indentation styles" $
         union [
-          "allLines">: string,
-          "subsequentLines">: string],
+          "allLines">:
+            doc "Indent all lines with the given string" $
+            string,
+          "subsequentLines">:
+            doc "Indent only lines after the first with the given string" $
+            string],
 
       def "Op" $
         doc "An operator symbol" $
         record [
-          "symbol">: ast "Symbol",
-          "padding">: ast "Padding",
-          "precedence">: ast "Precedence",
-          "associativity">: ast "Associativity"],
+          "symbol">:
+            doc "The operator symbol" $
+            ast "Symbol",
+          "padding">:
+            doc "The padding around the operator" $
+            ast "Padding",
+          "precedence">:
+            doc "The precedence of the operator" $
+            ast "Precedence",
+          "associativity">:
+            doc "The associativity of the operator" $
+            ast "Associativity"],
 
       def "OpExpr" $
         doc "An operator expression" $
         record [
-          "op">: ast "Op",
-          "lhs">: ast "Expr",
-          "rhs">: ast "Expr"],
+          "op">:
+            doc "The operator" $
+            ast "Op",
+          "lhs">:
+            doc "The left-hand side operand" $
+            ast "Expr",
+          "rhs">:
+            doc "The right-hand side operand" $
+            ast "Expr"],
 
       def "Padding" $
         doc "Left and right padding for an operator" $
         record [
-          "left">: ast "Ws",
-          "right">: ast "Ws"],
+          "left">:
+            doc "Padding to the left of the operator" $
+            ast "Ws",
+          "right">:
+            doc "Padding to the right of the operator" $
+            ast "Ws"],
 
       def "Precedence" $
         doc "Operator precedence" $
@@ -99,8 +149,18 @@ module_ = Module ns elements [] [Core.module_] $
       def "Ws" $
         doc "One of several classes of whitespace" $
         union [
-          "none">: unit,
-          "space">: unit,
-          "break">: unit,
-          "breakAndIndent">: string,
-          "doubleBreak">: unit]]
+          "none">:
+            doc "No whitespace" $
+            unit,
+          "space">:
+            doc "A single space" $
+            unit,
+          "break">:
+            doc "A line break" $
+            unit,
+          "breakAndIndent">:
+            doc "A line break followed by indentation" $
+            string,
+          "doubleBreak">:
+            doc "Two line breaks" $
+            unit]]

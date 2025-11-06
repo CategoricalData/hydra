@@ -12,7 +12,9 @@ import qualified Data.Set as S
 -- | An association of a named term (element) with a phantom type
 data TBinding a = 
   TBinding {
+    -- | The name of the term
     tBindingName :: Core.Name,
+    -- | The term with its phantom type
     tBindingTerm :: (TTerm a)}
   deriving (Eq, Ord, Read, Show)
 
