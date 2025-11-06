@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from enum import Enum
 from hydra.dsl.python import Either, FrozenDict, Maybe, Node, frozenlist
-from typing import Annotated
+from typing import Annotated, Tuple
 
 class Name(Node[str]):
     r"""A unique identifier in some context; a string-valued key."""
@@ -94,6 +94,17 @@ class EitherType:
 EITHER_TYPE__NAME = Name("hydra.core.EitherType")
 EITHER_TYPE__LEFT__NAME = Name("left")
 EITHER_TYPE__RIGHT__NAME = Name("right")
+
+@dataclass
+class PairType:
+    r"""A type which pairs a 'first' type and a 'second' type."""
+    
+    first: Type
+    second: Type
+
+PAIR_TYPE__NAME = Name("hydra.core.PairType")
+PAIR_TYPE__FIRST__NAME = Name("first")
+PAIR_TYPE__SECOND__NAME = Name("second")
 
 class EliminationProduct(Node["TupleProjection"]):
     r"""Eliminates a tuple by projecting the component at a given 0-indexed offset."""
@@ -450,6 +461,9 @@ class TermMap(Node["FrozenDict[Term, Term]"]):
 class TermMaybe(Node["Maybe[Term]"]):
     r"""An optional value."""
 
+class TermPair(Node["Tuple[Term, Term]"]):
+    r"""A pair (2-tuple)."""
+
 class TermProduct(Node["frozenlist[Term]"]):
     r"""A tuple."""
 
@@ -481,7 +495,7 @@ class TermWrap(Node["WrappedTerm"]):
     r"""A wrapped term; an instance of a wrapper type (newtype)."""
 
 # A data term.
-type Term = TermAnnotated | TermApplication | TermEither | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermProduct | TermRecord | TermSet | TermSum | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap
+type Term = TermAnnotated | TermApplication | TermEither | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermPair | TermProduct | TermRecord | TermSet | TermSum | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap
 
 TERM__NAME = Name("hydra.core.Term")
 TERM__ANNOTATED__NAME = Name("annotated")
@@ -493,6 +507,7 @@ TERM__LIST__NAME = Name("list")
 TERM__LITERAL__NAME = Name("literal")
 TERM__MAP__NAME = Name("map")
 TERM__MAYBE__NAME = Name("maybe")
+TERM__PAIR__NAME = Name("pair")
 TERM__PRODUCT__NAME = Name("product")
 TERM__RECORD__NAME = Name("record")
 TERM__SET__NAME = Name("set")
@@ -535,6 +550,8 @@ class TypeMap(Node["MapType"]): ...
 
 class TypeMaybe(Node["Type"]): ...
 
+class TypePair(Node["PairType"]): ...
+
 class TypeProduct(Node["frozenlist[Type]"]): ...
 
 class TypeRecord(Node["RowType"]): ...
@@ -552,7 +569,7 @@ class TypeVariable(Node["Name"]): ...
 class TypeWrap(Node["WrappedType"]): ...
 
 # A data type.
-type Type = TypeAnnotated | TypeApplication | TypeEither | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeMaybe | TypeProduct | TypeRecord | TypeSet | TypeSum | TypeUnion | TypeUnit | TypeVariable | TypeWrap
+type Type = TypeAnnotated | TypeApplication | TypeEither | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeMaybe | TypePair | TypeProduct | TypeRecord | TypeSet | TypeSum | TypeUnion | TypeUnit | TypeVariable | TypeWrap
 
 TYPE__NAME = Name("hydra.core.Type")
 TYPE__ANNOTATED__NAME = Name("annotated")
@@ -564,6 +581,7 @@ TYPE__LIST__NAME = Name("list")
 TYPE__LITERAL__NAME = Name("literal")
 TYPE__MAP__NAME = Name("map")
 TYPE__MAYBE__NAME = Name("maybe")
+TYPE__PAIR__NAME = Name("pair")
 TYPE__PRODUCT__NAME = Name("product")
 TYPE__RECORD__NAME = Name("record")
 TYPE__SET__NAME = Name("set")
