@@ -764,6 +764,14 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
           (Core.termApplication $ Core.application
             (second $ var "rlhs")
             (second $ var "rrhs")),
+      _Term_either>>: "e" ~> Eithers.either_
+        ("l" ~>
+          "rl" <~ var "recurse" @@ var "val0" @@ var "l" $
+          pair (first $ var "rl") (Core.termEither $ left $ second $ var "rl"))
+        ("r" ~>
+          "rr" <~ var "recurse" @@ var "val0" @@ var "r" $
+          pair (first $ var "rr") (Core.termEither $ right $ second $ var "rr"))
+        (var "e"),
       _Term_function>>: "f" ~> var "forSingle"
         @@ var "forFunction"
         @@ ("f" ~> Core.termFunction $ var "f")
@@ -907,6 +915,14 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
           (Core.termApplication $ Core.application
             (second $ var "rlhs")
             (second $ var "rrhs")),
+      _Term_either>>: "e" ~> Eithers.either_
+        ("l" ~>
+          "rl" <<~ var "recurse" @@ var "val0" @@ var "l" $
+          produce $ pair (first $ var "rl") (Core.termEither $ left $ second $ var "rl"))
+        ("r" ~>
+          "rr" <<~ var "recurse" @@ var "val0" @@ var "r" $
+          produce $ pair (first $ var "rr") (Core.termEither $ right $ second $ var "rr"))
+        (var "e"),
       _Term_function>>: "f" ~> var "forSingle"
         @@ var "forFunction"
         @@ ("f" ~> Core.termFunction $ var "f")
@@ -1068,6 +1084,12 @@ rewriteTermMDef = define "rewriteTermM" $
         "lhs" <<~ var "recurse" @@ Core.applicationFunction (var "app") $
         "rhs" <<~ var "recurse" @@ Core.applicationArgument (var "app") $
         produce $ Core.termApplication $ Core.application (var "lhs") (var "rhs"),
+      _Term_either>>: "e" ~>
+        "re" <<~ Eithers.either_
+          ("l" ~> Flows.map (unaryFunction left) $ var "recurse" @@ var "l")
+          ("r" ~> Flows.map (unaryFunction right) $ var "recurse" @@ var "r")
+          (var "e") $
+        produce $ Core.termEither $ var "re",
       _Term_function>>: "fun" ~>
         "forElm" <~ ("e" ~> cases _Elimination (var "e") Nothing [
           _Elimination_product>>: "tp" ~> produce $ Core.functionElimination $ Core.eliminationProduct $ var "tp",
@@ -1280,6 +1302,12 @@ rewriteTermWithContextMDef = define "rewriteTermWithContextM" $
         "lhs" <<~ var "recurse" @@ Core.applicationFunction (var "app") $
         "rhs" <<~ var "recurse" @@ Core.applicationArgument (var "app") $
         produce $ Core.termApplication $ Core.application (var "lhs") (var "rhs"),
+      _Term_either>>: "e" ~>
+        "re" <<~ Eithers.either_
+          ("l" ~> Flows.map (unaryFunction left) $ var "recurse" @@ var "l")
+          ("r" ~> Flows.map (unaryFunction right) $ var "recurse" @@ var "r")
+          (var "e") $
+        produce $ Core.termEither $ var "re",
       _Term_function>>: "fun" ~>
         "rfun" <<~ var "forFunction" @@ var "fun" $
         produce $ Core.termFunction $ var "rfun",

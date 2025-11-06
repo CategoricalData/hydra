@@ -16,7 +16,6 @@ description:  >
 github:       CategoricalData/hydra
 
 extra-source-files:
-  - CHANGELOG.md
   - LICENSE
   - README.md
   - stack.yaml

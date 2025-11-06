@@ -240,6 +240,7 @@ termVariantDef = define "termVariant" $
   match _Term Nothing [
     _Term_annotated>>: constant Mantle.termVariantAnnotated,
     _Term_application>>: constant Mantle.termVariantApplication,
+    _Term_either>>: constant Mantle.termVariantEither,
     _Term_function>>: constant Mantle.termVariantFunction,
     _Term_let>>: constant Mantle.termVariantLet,
     _Term_list>>: constant Mantle.termVariantList,
@@ -263,9 +264,10 @@ termVariantsDef = define "termVariants" $
   list $ unitVariant _TermVariant <$> [
     _TermVariant_annotated,
     _TermVariant_application,
-    _TermVariant_literal,
+    _TermVariant_either,
     _TermVariant_function,
     _TermVariant_list,
+    _TermVariant_literal,
     _TermVariant_map,
     _TermVariant_maybe,
     _TermVariant_product,
