@@ -115,6 +115,7 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
     "termVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
       Mantle.termVariantAnnotated,
       Mantle.termVariantApplication,
+      Mantle.termVariantEither,
       Mantle.termVariantFunction,
       Mantle.termVariantLet,
       Mantle.termVariantList,
@@ -133,6 +134,7 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
     "typeVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
       Mantle.typeVariantAnnotated,
       Mantle.typeVariantApplication,
+      Mantle.typeVariantEither,
       Mantle.typeVariantFunction,
       Mantle.typeVariantForall,
       Mantle.typeVariantList,
