@@ -6,11 +6,11 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 
 ### Core Development
 
-- **[Extending Hydra Core](extending-hydra-core.md)** - Add new type and term constructors to Hydra Core. This guide documents the complete process including schema updates, type inference, rewriting functions, and solving the bootstrap problem.
+- **[Adding new type and term constructors to Hydra Core](extending-hydra-core.md)** - Complete process including schema updates, type inference, rewriting functions, and solving the bootstrap problem.
 
 ### Implementations
 
-- **[Creating a New Hydra Implementation](new-implementation.md)** - Complete 11-step guide for implementing Hydra in a new language
+- **[Creating a new Hydra implementation](new-implementation.md)** - Step-by-step guide for implementing Hydra in a new language
 
 ## About Recipes
 
