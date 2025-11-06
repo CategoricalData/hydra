@@ -20,6 +20,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Performs division on two numbers.
+ */
 public class Div extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.math.div");
@@ -42,11 +45,22 @@ public class Div extends PrimitiveFunction {
             });
     }
 
-    public static Function<Integer, Integer> apply(Integer dividend) {
+    /**
+     * Divides the first number by the second.
+     * @param dividend the dividend
+     * @return the quotient
+     */
+        public static Function<Integer, Integer> apply(Integer dividend) {
         return (divisor) -> apply(dividend, divisor);
     }
 
-    public static Integer apply(Integer dividend, Integer divisor) {
+    /**
+     * Divides the first number by the second.
+     * @param dividend the dividend
+     * @param divisor the divisor
+     * @return the quotient
+     */
+        public static Integer apply(Integer dividend, Integer divisor) {
         return (dividend / divisor);
     }
 }

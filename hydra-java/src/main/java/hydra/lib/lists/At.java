@@ -20,6 +20,9 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.variable;
 
 
+/**
+ * Retrieves an element at an index.
+ */
 public class At extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.lists.at");
@@ -36,11 +39,22 @@ public class At extends PrimitiveFunction {
                 (i, list) -> list.get(i));
     }
 
-    public static <X> Function<List<X>, X> apply(int i) {
+    /**
+     * Retrieves the element at the given index.
+     * @param i the index
+     * @return the element
+     */
+        public static <X> Function<List<X>, X> apply(int i) {
         return list -> apply(i, list);
     }
 
-    public static <X> X apply(int i, List<X> list) {
+    /**
+     * Retrieves the element at the given index.
+     * @param i the index
+     * @param list the list
+     * @return the element
+     */
+        public static <X> X apply(int i, List<X> list) {
         if (list.isEmpty()) {
             throw new IllegalArgumentException("Cannot get head of empty list");
         } else {

@@ -20,6 +20,9 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 
+/**
+ * Converts a string to a list of character code points.
+ */
 public class ToList extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.strings.toList");
@@ -43,7 +46,9 @@ public class ToList extends PrimitiveFunction {
     }
 
     /**
-     * Apply the function to its single argument.
+     * Converts a string to a list of character code points.
+     * @param s the string to convert
+     * @return the list of character code points
      */
     public static List<Integer> apply(String s) {
         List<Integer> list = new ArrayList<>(s.length());

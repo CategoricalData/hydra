@@ -17,6 +17,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 
+/**
+ * Concatenates two strings.
+ */
 public class Cat2 extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.strings.cat2");
@@ -35,6 +38,12 @@ public class Cat2 extends PrimitiveFunction {
             (l, r) -> Terms.string(Cat2.apply(l, r)));
     }
 
+    /**
+     * Concatenates two strings.
+     * @param left the first string
+     * @param right the second string
+     * @return the concatenation of left and right
+     */
     public static String apply(String left, String right) {
         return left + right;
     }

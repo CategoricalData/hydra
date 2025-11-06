@@ -18,6 +18,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Prepends an element to a list.
+ */
 public class Cons extends PrimitiveFunction {
     public static final Name NAME = new Name("hydra.lib.lists.cons");
 

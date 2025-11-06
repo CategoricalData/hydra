@@ -19,6 +19,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Adds an element to a set.
+ */
 public class Insert extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.maps.insert");
@@ -40,11 +43,22 @@ public class Insert extends PrimitiveFunction {
         };
     }
 
-    public static <K, V> Function<V, Function<Map<K, V>, Map<K, V>>> apply(K k) {
+    /**
+     * Adds an element.
+     * @param k the element
+     * @return the updated set
+     */
+        public static <K, V> Function<V, Function<Map<K, V>, Map<K, V>>> apply(K k) {
         return v -> apply(k, v);
     }
 
-    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(K k, V v) {
+    /**
+     * Adds an element.
+     * @param k the element
+     * @param v the set
+     * @return the updated set
+     */
+        public static <K, V> Function<Map<K, V>, Map<K, V>> apply(K k, V v) {
         return before -> apply(k, v, before);
     }
 

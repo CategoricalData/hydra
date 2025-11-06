@@ -20,6 +20,9 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 
 
+/**
+ * Maps a function over a flow.
+ */
 public class Map extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.sets.map");
@@ -40,11 +43,22 @@ public class Map extends PrimitiveFunction {
         };
     }
 
-    public static <X, Y> Function<Set<X>, Set<Y>> apply(Function<X, Y> mapping) {
+    /**
+     * Transforms a flow value.
+     * @param mapping the function
+     * @return the transformed flow
+     */
+        public static <X, Y> Function<Set<X>, Set<Y>> apply(Function<X, Y> mapping) {
         return (arg) -> apply(mapping, arg);
     }
 
-    public static <X, Y> Set<Y> apply(Function<X, Y> mapping, Set<X> arg) {
+    /**
+     * Transforms a flow value.
+     * @param mapping the function
+     * @param arg the flowValue
+     * @return the transformed flow
+     */
+        public static <X, Y> Set<Y> apply(Function<X, Y> mapping, Set<X> arg) {
         return arg.stream().map(mapping).collect(Collectors.toSet());
     }
 }

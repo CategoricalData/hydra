@@ -18,7 +18,9 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 
-
+/**
+ * Concatenates a list of strings into a single string.
+ */
 public class Cat extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.strings.cat");
@@ -35,6 +37,11 @@ public class Cat extends PrimitiveFunction {
             strings -> Terms.string(apply(strings)));
     }
 
+    /**
+     * Concatenates the given list of strings.
+     * @param args the list of strings to concatenate
+     * @return the concatenated string
+     */
     public static String apply(List<String> args) {
         return String.join("", args);
     }

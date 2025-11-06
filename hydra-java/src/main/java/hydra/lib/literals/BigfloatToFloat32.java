@@ -17,6 +17,9 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Primitive function: BigfloatToFloat32.
+ */
 public class BigfloatToFloat32 extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.literals.bigfloatToFloat32");
@@ -32,7 +35,12 @@ public class BigfloatToFloat32 extends PrimitiveFunction {
         return args -> Flows.map(Expect.bigfloat(args.get(0)), s -> Terms.float32(apply(s)));
     }
 
-    public static Float apply(Double value) {
+    /**
+     * Applies the BigfloatToFloat32 operation.
+     * @param value the value
+     * @return the result
+     */
+        public static Float apply(Double value) {
         return (float) ((double) value);
     }
 }

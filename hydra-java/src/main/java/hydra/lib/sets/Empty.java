@@ -18,6 +18,9 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 
 
+/**
+ * Creates an empty map.
+ */
 public class Empty extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.sets.empty");
@@ -33,7 +36,11 @@ public class Empty extends PrimitiveFunction {
         return ignored -> Flows.pure(Terms.set(apply()));
     }
 
-    public static <X> Set<X> apply() {
+    /**
+     * Creates an empty map.
+     * @return the empty map
+     */
+        public static <X> Set<X> apply() {
         return Collections.emptySet();
     }
 }

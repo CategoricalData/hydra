@@ -23,6 +23,9 @@ import static hydra.dsl.Types.pair;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.variable;
 
+/**
+ * Creates a map from a list of pairs.
+ */
 public class FromList extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.maps.fromList");

@@ -22,6 +22,9 @@ import static hydra.dsl.Terms.unwrap;
 import static hydra.dsl.Terms.variable;
 
 
+/**
+ * Maps a function over a flow.
+ */
 public class Map extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.flows.map");
@@ -48,11 +51,22 @@ public class Map extends PrimitiveFunction {
         };
     }
 
-    public static <S, X, Y> Function<Flow<S, X>, Flow<S, Y>> apply(Function<X, Y> mapping) {
+    /**
+     * Transforms a flow value.
+     * @param mapping the function
+     * @return the transformed flow
+     */
+        public static <S, X, Y> Function<Flow<S, X>, Flow<S, Y>> apply(Function<X, Y> mapping) {
         return input -> apply(mapping, input);
     }
 
-    public static <S, X, Y> Flow<S, Y> apply(Function<X, Y> mapping, Flow<S, X> input) {
+    /**
+     * Transforms a flow value.
+     * @param mapping the function
+     * @param input the flowValue
+     * @return the transformed flow
+     */
+        public static <S, X, Y> Flow<S, Y> apply(Function<X, Y> mapping, Flow<S, X> input) {
         return Flows.map(mapping, input);
     }
 }

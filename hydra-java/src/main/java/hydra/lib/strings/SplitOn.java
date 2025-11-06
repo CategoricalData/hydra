@@ -20,7 +20,9 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 
-
+/**
+ * Splits a string on a given delimiter.
+ */
 public class SplitOn extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.strings.splitOn");
@@ -37,15 +39,23 @@ public class SplitOn extends PrimitiveFunction {
             (BiFunction<String, String, Term>) (s, s2) -> Terms.listOfStrings(apply(s, s2)));
     }
 
+    /**
+     * Returns a function that splits strings on the given delimiter.
+     * @param delim the delimiter string
+     * @return a function that takes a string and returns the split result
+     */
     public static Function<String, List<String>> apply(String delim) {
         return (string) -> apply(delim, string);
     }
 
     /**
-     * Apply the function to both arguments.
+     * Splits a string on a delimiter.
      * Note: the delimiter is not interpreted as a regular expression;
      * it is simply a literal string. See Haskell's Data.List.Split.
-     * */
+     * @param delim the delimiter string
+     * @param string the string to split
+     * @return the list of substrings
+     */
     public static List<String> apply(String delim, String string) {
         List<String> parts = new ArrayList<>();
 

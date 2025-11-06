@@ -21,6 +21,9 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
 
 
+/**
+ * Computes the remainder of integer division.
+ */
 public class Rem extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.math.rem");
@@ -43,11 +46,22 @@ public class Rem extends PrimitiveFunction {
             });
     }
 
-    public static Function<Integer, Integer> apply(Integer dividend) {
+    /**
+     * Computes the remainder.
+     * @param dividend the dividend
+     * @return the remainder
+     */
+        public static Function<Integer, Integer> apply(Integer dividend) {
         return (divisor) -> apply(dividend, divisor);
     }
 
-    public static Integer apply(Integer dividend, Integer divisor) {
+    /**
+     * Computes the remainder.
+     * @param dividend the dividend
+     * @param divisor the divisor
+     * @return the remainder
+     */
+        public static Integer apply(Integer dividend, Integer divisor) {
         // % in Java is a mathematical remainder, not modulus
         return (dividend % divisor);
     }

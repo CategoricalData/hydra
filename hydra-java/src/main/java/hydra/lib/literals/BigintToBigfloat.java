@@ -18,6 +18,9 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Primitive function: BigintToBigfloat.
+ */
 public class BigintToBigfloat extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.literals.bigintToBigfloat");
@@ -33,7 +36,12 @@ public class BigintToBigfloat extends PrimitiveFunction {
         return args -> Flows.map(Expect.bigint(args.get(0)), s -> Terms.bigfloat(apply(s)));
     }
 
-    public static Double apply(BigInteger value) {
+    /**
+     * Applies the BigintToBigfloat operation.
+     * @param value the value
+     * @return the result
+     */
+        public static Double apply(BigInteger value) {
         return value.doubleValue();
     }
 }

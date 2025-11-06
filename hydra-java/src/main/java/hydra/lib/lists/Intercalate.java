@@ -19,6 +19,9 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 
 
+/**
+ * Joins lists with a separator.
+ */
 public class Intercalate extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.lists.intercalate");
@@ -38,7 +41,12 @@ public class Intercalate extends PrimitiveFunction {
             (delim1, sublists1) -> Terms.list(apply(delim1, sublists1)));
     }
 
-    public static <X> Function<List<List<X>>, List<X>> apply(List<X> delim) {
+    /**
+     * Joins lists with a separator.
+     * @param delim the separator
+     * @return the joined list
+     */
+        public static <X> Function<List<List<X>>, List<X>> apply(List<X> delim) {
         return (sublists) -> apply(delim, sublists);
     }
 

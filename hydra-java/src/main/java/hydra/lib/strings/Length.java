@@ -18,7 +18,9 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 
-
+/**
+ * Returns the length of a string.
+ */
 public class Length extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.strings.length");
@@ -34,6 +36,11 @@ public class Length extends PrimitiveFunction {
         return args -> map(Expect.string(args.get(0)), s -> Terms.int32(apply(s)));
     }
 
+    /**
+     * Returns the length of the given string.
+     * @param s the string
+     * @return the length of the string
+     */
     public static int apply(String s) {
         return s.length();
     }

@@ -17,7 +17,9 @@ import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 
-
+/**
+ * Performs logical negation on a boolean value.
+ */
 public class Not extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.logic.not");
@@ -35,6 +37,11 @@ public class Not extends PrimitiveFunction {
                 b1 -> Terms.boolean_(Not.apply(b1)));
     }
 
+    /**
+     * Negates the given boolean value.
+     * @param b1 the boolean value to negate
+     * @return the negated value
+     */
     public static boolean apply(boolean b1) {
         return !b1;
     }

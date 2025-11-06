@@ -17,7 +17,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 
-
+/**
+ * Converts a string to uppercase.
+ */
 public class ToUpper extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.strings.toUpper");
@@ -33,6 +35,11 @@ public class ToUpper extends PrimitiveFunction {
         return args -> Flows.map(Expect.string(args.get(0)), s -> Terms.string(apply(s)));
     }
 
+    /**
+     * Converts the given string to uppercase.
+     * @param lower the string to convert
+     * @return the uppercase version of the string
+     */
     public static String apply(String lower) {
         // TODO: Java's built-in behavior may not agree with that of Haskell or other host languages
         return lower.toUpperCase();

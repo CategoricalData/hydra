@@ -20,6 +20,9 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 
 
+/**
+ * Checks if a map is empty.
+ */
 public class IsEmpty extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.sets.isEmpty");
@@ -35,7 +38,12 @@ public class IsEmpty extends PrimitiveFunction {
         return args -> Flows.map(Expect.set(Flows::pure, args.get(0)), arg -> Terms.boolean_(apply(arg)));
     }
 
-    public static <X> Boolean apply(Set<X> arg) {
+    /**
+     * Checks if the map is empty.
+     * @param arg the map
+     * @return true if empty, false otherwise
+     */
+        public static <X> Boolean apply(Set<X> arg) {
         return arg.isEmpty();
     }
 }

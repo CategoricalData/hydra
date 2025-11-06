@@ -17,6 +17,9 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
 
+/**
+ * Computes the modulo of two integers.
+ */
 public class Mod extends PrimitiveFunction {
     public Name name() {
         return new Name("hydra.lib.math.mod");
@@ -33,11 +36,22 @@ public class Mod extends PrimitiveFunction {
             (arg0, arg1) -> Terms.int32(apply(arg0, arg1)));
     }
 
-    public static Function<Integer, Integer> apply(Integer dividend) {
+    /**
+     * Computes the modulo.
+     * @param dividend the dividend
+     * @return the modulo
+     */
+        public static Function<Integer, Integer> apply(Integer dividend) {
         return (divisor) -> apply(dividend, divisor);
     }
 
-    public static Integer apply(Integer dividend, Integer divisor) {
+    /**
+     * Computes the modulo.
+     * @param dividend the dividend
+     * @param divisor the divisor
+     * @return the modulo
+     */
+        public static Integer apply(Integer dividend, Integer divisor) {
         return java.lang.Math.floorMod(dividend, divisor);
     }
 }
