@@ -787,6 +787,28 @@ def register_tuples_primitives() -> dict[Name, Primitive]:
     return primitives
 
 
+def register_pairs_primitives() -> dict[Name, Primitive]:
+    """Register all pairs primitive functions."""
+    from hydra.lib import pairs
+
+    namespace = "hydra.lib.pairs"
+    primitives: dict[Name, Primitive] = {}
+
+    a = prims.variable("a")
+    b = prims.variable("b")
+
+    primitives[qname(namespace, "first")] = prims.prim1(
+        qname(namespace, "first"), pairs.first, ["a", "b"],
+        prims.pair(a, b), a
+    )
+    primitives[qname(namespace, "second")] = prims.prim1(
+        qname(namespace, "second"), pairs.second, ["a", "b"],
+        prims.pair(a, b), b
+    )
+
+    return primitives
+
+
 def standard_library() -> dict[Name, Primitive]:
     """Get all standard library primitives."""
     primitives: dict[Name, Primitive] = {}
@@ -800,6 +822,7 @@ def standard_library() -> dict[Name, Primitive]:
     primitives.update(register_maps_primitives())
     primitives.update(register_math_primitives())
     primitives.update(register_maybes_primitives())
+    primitives.update(register_pairs_primitives())
     primitives.update(register_sets_primitives())
     primitives.update(register_strings_primitives())
     primitives.update(register_tuples_primitives())
