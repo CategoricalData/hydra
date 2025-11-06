@@ -55,6 +55,7 @@ checkTypeOf = H.describe "typeOf" $ do
   checkTypeOfLiterals
   checkTypeOfMaps
   checkTypeOfOptionals
+  checkTypeOfPairs
   checkTypeOfProducts
   checkTypeOfRecords
   checkTypeOfSets
@@ -719,9 +720,9 @@ checkTypeOfLists = H.describe "Lists" $ do
       (tylam "t0" $ tyapp (list []) (Types.var "t0"))
       (Types.forAll "t0" $ Types.list $ Types.var "t0")
     expectTermWithType "pair of empty lists"
-      (pair (list []) (list []))
-      (tylams ["t0", "t1"] $ pair (tyapp (list []) (Types.var "t0")) (tyapp (list []) (Types.var "t1")))
-      (Types.forAlls ["t0", "t1"] $ Types.pair (Types.list $ Types.var "t0") (Types.list $ Types.var "t1"))
+      (tuple2 (list []) (list []))
+      (tylams ["t0", "t1"] $ tuple2 (tyapp (list []) (Types.var "t0")) (tyapp (list []) (Types.var "t1")))
+      (Types.forAlls ["t0", "t1"] $ Types.tuple2 (Types.list $ Types.var "t0") (Types.list $ Types.var "t1"))
     expectTermWithType "empty list in tuple"
       (tuple [list [], string "context"])
       (tylam "t0" $ tuple [tyapp (list []) (Types.var "t0"), string "context"])
@@ -1008,6 +1009,96 @@ checkTypeOfOptionals = H.describe "Optionals" $ do
       (just $ Terms.map $ M.singleton (string "key") (int32 42))
       (Types.optional $ Types.map Types.string Types.int32)
 
+checkTypeOfPairs :: H.SpecWith ()
+checkTypeOfPairs = H.describe "Pairs" $ do
+  H.describe "Basic pairs" $ do
+    expectTermWithType "pair of int and string"
+      (TermPair (int32 42, string "hello"))
+      (tyapps (TermPair (int32 42, string "hello")) [Types.int32, Types.string])
+      (Types.pair Types.int32 Types.string)
+    expectTermWithType "pair of string and boolean"
+      (TermPair (string "test", boolean True))
+      (tyapps (TermPair (string "test", boolean True)) [Types.string, Types.boolean])
+      (Types.pair Types.string Types.boolean)
+    expectTermWithType "pair of boolean and int"
+      (TermPair (boolean False, int32 100))
+      (tyapps (TermPair (boolean False, int32 100)) [Types.boolean, Types.int32])
+      (Types.pair Types.boolean Types.int32)
+
+  H.describe "Polymorphic pairs" $ do
+    expectTermWithType "pair from lambda (first element)"
+      (lambda "x" $ TermPair (var "x", string "constant"))
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ tyapps (TermPair (var "x", string "constant")) [Types.var "t0", Types.string])
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.pair (Types.var "t0") Types.string))
+    expectTermWithType "pair from lambda (second element)"
+      (lambda "x" $ TermPair (string "constant", var "x"))
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ tyapps (TermPair (string "constant", var "x")) [Types.string, Types.var "t0"])
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.pair Types.string (Types.var "t0")))
+    expectTermWithType "pair from two lambdas"
+      (lambda "x" $ lambda "y" $ TermPair (var "x", var "y"))
+      (tylams ["t0", "t1"] $ lambdaTyped "x" (Types.var "t0") $ lambdaTyped "y" (Types.var "t1") $ tyapps (TermPair (var "x", var "y")) [Types.var "t0", Types.var "t1"])
+      (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0") (Types.function (Types.var "t1") (Types.pair (Types.var "t0") (Types.var "t1"))))
+    expectTermWithType "pair with repeated variable"
+      (lambda "x" $ TermPair (var "x", var "x"))
+      (tylam "t0" $ lambdaTyped "x" (Types.var "t0") $ tyapps (TermPair (var "x", var "x")) [Types.var "t0", Types.var "t0"])
+      (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.pair (Types.var "t0") (Types.var "t0")))
+
+  H.describe "Pairs in complex contexts" $ do
+    expectTermWithType "pair in tuple"
+      (tuple [TermPair (int32 1, string "one"), boolean True])
+      (tuple [tyapps (TermPair (int32 1, string "one")) [Types.int32, Types.string], boolean True])
+      (Types.product [Types.pair Types.int32 Types.string, Types.boolean])
+    expectTermWithType "pair in list"
+      (list [TermPair (int32 1, string "one"), TermPair (int32 2, string "two")])
+      (list [tyapps (TermPair (int32 1, string "one")) [Types.int32, Types.string], tyapps (TermPair (int32 2, string "two")) [Types.int32, Types.string]])
+      (Types.list $ Types.pair Types.int32 Types.string)
+    expectTermWithType "pair in let binding"
+      (lets ["result">: TermPair (int32 42, string "answer")] $
+            var "result")
+      (letsTyped [("result", tyapps (TermPair (int32 42, string "answer")) [Types.int32, Types.string], Types.mono $ Types.pair Types.int32 Types.string)] $
+        var "result")
+      (Types.pair Types.int32 Types.string)
+
+  H.describe "Nested pairs" $ do
+    expectTermWithType "pair of pairs"
+      (TermPair (TermPair (int32 1, string "one"), TermPair (boolean True, int32 2)))
+      (tyapps (TermPair (tyapps (TermPair (int32 1, string "one")) [Types.int32, Types.string], tyapps (TermPair (boolean True, int32 2)) [Types.boolean, Types.int32])) [Types.pair Types.int32 Types.string, Types.pair Types.boolean Types.int32])
+      (Types.pair (Types.pair Types.int32 Types.string) (Types.pair Types.boolean Types.int32))
+    expectTermWithType "pair with list"
+      (TermPair (list [int32 1, int32 2], string "numbers"))
+      (tyapps (TermPair (list [int32 1, int32 2], string "numbers")) [Types.list Types.int32, Types.string])
+      (Types.pair (Types.list Types.int32) Types.string)
+    expectTermWithType "list of pairs"
+      (list [TermPair (int32 1, string "a"), TermPair (int32 2, string "b")])
+      (list [tyapps (TermPair (int32 1, string "a")) [Types.int32, Types.string], tyapps (TermPair (int32 2, string "b")) [Types.int32, Types.string]])
+      (Types.list $ Types.pair Types.int32 Types.string)
+
+  H.describe "Pairs with complex types" $ do
+    expectTermWithType "pair with record on first"
+      (TermPair (record testTypePersonName [
+        field "firstName" (string "Alice"),
+        field "lastName" (string "Smith"),
+        field "age" (int32 30)], int32 1))
+      (tyapps (TermPair (record testTypePersonName [
+        field "firstName" (string "Alice"),
+        field "lastName" (string "Smith"),
+        field "age" (int32 30)], int32 1)) [Types.var "Person", Types.int32])
+      (Types.pair (Types.var "Person") Types.int32)
+    expectTermWithType "pair with record on second"
+      (TermPair (string "name", record testTypePersonName [
+        field "firstName" (string "Bob"),
+        field "lastName" (string "Jones"),
+        field "age" (int32 25)]))
+      (tyapps (TermPair (string "name", record testTypePersonName [
+        field "firstName" (string "Bob"),
+        field "lastName" (string "Jones"),
+        field "age" (int32 25)])) [Types.string, Types.var "Person"])
+      (Types.pair Types.string (Types.var "Person"))
+    expectTermWithType "pair of tuple and list"
+      (TermPair (tuple [int32 1, int32 2], list [string "a", string "b"]))
+      (tyapps (TermPair (tuple [int32 1, int32 2], list [string "a", string "b"])) [Types.product [Types.int32, Types.int32], Types.list Types.string])
+      (Types.pair (Types.product [Types.int32, Types.int32]) (Types.list Types.string))
+
 checkTypeOfPrimitives :: H.SpecWith ()
 checkTypeOfPrimitives = H.describe "Primitives" $ do
   H.describe "Nullary primitives" $ do
@@ -1153,10 +1244,10 @@ checkTypeOfProductEliminations :: H.SpecWith ()
 checkTypeOfProductEliminations = H.describe "Product eliminations" $ do
   H.describe "Simple tuple projections" $ do
     expectSameTermWithType "projection from pair"
-      (untuple 2 0 @@ pair (int32 42) (string "hello"))
+      (untuple 2 0 @@ tuple2 (int32 42) (string "hello"))
       Types.int32
     expectSameTermWithType "second projection from pair"
-      (untuple 2 1 @@ pair (int32 42) (string "hello"))
+      (untuple 2 1 @@ tuple2 (int32 42) (string "hello"))
       Types.string
     expectSameTermWithType "projection from triple"
       (untuple 3 1 @@ triple (int32 1) (string "middle") (boolean True))
@@ -1196,12 +1287,12 @@ checkTypeOfProductEliminations = H.describe "Product eliminations" $ do
 
   H.describe "Projections with variables" $ do
     expectTermWithType "projection with variable tuple"
-      (lambda "x" $ lambda "y" $ untuple 2 0 @@ pair (var "x") (var "y"))
-      (tylams ["t0", "t1"] $ lambdaTyped "x" (Types.var "t0") $ lambdaTyped "y" (Types.var "t1") $ untuple 2 0 @@ pair (var "x") (var "y"))
+      (lambda "x" $ lambda "y" $ untuple 2 0 @@ tuple2 (var "x") (var "y"))
+      (tylams ["t0", "t1"] $ lambdaTyped "x" (Types.var "t0") $ lambdaTyped "y" (Types.var "t1") $ untuple 2 0 @@ tuple2 (var "x") (var "y"))
       (Types.forAlls ["t0", "t1"] $ Types.function (Types.var "t0")
         (Types.function (Types.var "t1") (Types.var "t0")))
     expectTermWithType "projection preserves polymorphism"
-      (lambda "pair" $ pair (untuple 2 0 @@ var "pair") (untuple 2 1 @@ var "pair"))
+      (lambda "pair" $ tuple2 (untuple 2 0 @@ var "pair") (untuple 2 1 @@ var "pair"))
       (tylams ["t0", "t1"] $ lambdaTyped "pair" (Types.product [Types.var "t0", Types.var "t1"]) $ pair (untuple 2 0 @@ var "pair") (untuple 2 1 @@ var "pair"))
       (Types.forAlls ["t0", "t1"] $ Types.function
         (Types.product [Types.var "t0", Types.var "t1"])
@@ -1215,18 +1306,18 @@ checkTypeOfProductEliminations = H.describe "Product eliminations" $ do
 
   H.describe "Projections in complex contexts" $ do
     expectTermWithType "projection in let binding"
-      (lets ["pair">: pair (int32 10) (string "test")] $
+      (lets ["pair">: tuple2 (int32 10) (string "test")] $
             untuple 2 0 @@ var "pair")
-      (letsTyped [("pair", pair (int32 10) (string "test"), Types.mono $ Types.product [Types.int32, Types.string])] $
+      (letsTyped [("pair", tuple2 (int32 10) (string "test"), Types.mono $ Types.product [Types.int32, Types.string])] $
         untuple 2 0 @@ var "pair")
       Types.int32
     expectSameTermWithType "projection in tuple"
-      (pair (untuple 2 0 @@ pair (int32 1) (string "a"))
-            (untuple 2 1 @@ pair (int32 2) (string "b")))
+      (tuple2 (untuple 2 0 @@ tuple2 (int32 1) (string "a"))
+            (untuple 2 1 @@ tuple2 (int32 2) (string "b")))
       (Types.product [Types.int32, Types.string])
     expectSameTermWithType "projection in list"
-      (list [untuple 2 0 @@ pair (int32 1) (string "a"),
-             untuple 2 0 @@ pair (int32 2) (string "b")])
+      (list [untuple 2 0 @@ tuple2 (int32 1) (string "a"),
+             untuple 2 0 @@ tuple2 (int32 2) (string "b")])
       (Types.list Types.int32)
 
   H.describe "Projections with mixed types" $ do
@@ -1247,8 +1338,8 @@ checkTypeOfProductEliminations = H.describe "Product eliminations" $ do
                (untuple 4 3 @@ var "quadruple"))
       (Types.product [Types.int32, Types.string, Types.boolean, Types.float32])
     expectTermWithType "projection with function result"
-      (untuple 2 1 @@ pair (int32 42) (lambda "x" $ var "x"))
-      (tylam "t0" $ untuple 2 1 @@ pair (int32 42) (lambdaTyped "x" (Types.var "t0") $ var "x"))
+      (untuple 2 1 @@ tuple2 (int32 42) (lambda "x" $ var "x"))
+      (tylam "t0" $ untuple 2 1 @@ tuple2 (int32 42) (lambdaTyped "x" (Types.var "t0") $ var "x"))
       (Types.forAll "t0" $ Types.function (Types.var "t0") (Types.var "t0"))
 
   H.describe "Projections with primitive functions" $ do
