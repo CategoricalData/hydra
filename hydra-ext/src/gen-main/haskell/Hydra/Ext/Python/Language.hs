@@ -50,6 +50,7 @@ pythonLanguage = Coders.Language {
     termVariants = (Sets.fromList [
       Mantle.TermVariantAnnotated,
       Mantle.TermVariantApplication,
+      Mantle.TermVariantEither,
       Mantle.TermVariantFunction,
       Mantle.TermVariantLet,
       Mantle.TermVariantList,
@@ -68,6 +69,7 @@ pythonLanguage = Coders.Language {
     typeVariants = (Sets.fromList [
       Mantle.TypeVariantAnnotated,
       Mantle.TypeVariantApplication,
+      Mantle.TypeVariantEither,
       Mantle.TypeVariantFunction,
       Mantle.TypeVariantForall,
       Mantle.TypeVariantList,
