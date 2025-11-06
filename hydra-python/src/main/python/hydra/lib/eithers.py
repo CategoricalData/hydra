@@ -62,3 +62,40 @@ def from_right[A, B](default: B, e: Either[A, B]) -> B:
             return default
         case Right(val):
             return val
+
+
+def lefts[A, B](eithers: list[Either[A, B]]) -> list[A]:
+    """Extract all Left values from a list of Eithers."""
+    result: list[A] = []
+    for e in eithers:
+        match e:
+            case Left(val):
+                result.append(val)
+            case Right(_):
+                pass
+    return result
+
+
+def rights[A, B](eithers: list[Either[A, B]]) -> list[B]:
+    """Extract all Right values from a list of Eithers."""
+    result: list[B] = []
+    for e in eithers:
+        match e:
+            case Left(_):
+                pass
+            case Right(val):
+                result.append(val)
+    return result
+
+
+def partition_eithers[A, B](eithers: list[Either[A, B]]) -> tuple[list[A], list[B]]:
+    """Partition a list of Eithers into lefts and rights."""
+    left_vals: list[A] = []
+    right_vals: list[B] = []
+    for e in eithers:
+        match e:
+            case Left(val):
+                left_vals.append(val)
+            case Right(val):
+                right_vals.append(val)
+    return (left_vals, right_vals)

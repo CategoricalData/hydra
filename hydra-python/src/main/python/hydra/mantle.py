@@ -119,6 +119,8 @@ class TermVariant(Enum):
     
     MAYBE = "maybe"
     
+    PAIR = "pair"
+    
     PRODUCT = "product"
     
     RECORD = "record"
@@ -149,6 +151,7 @@ TERM_VARIANT__LIST__NAME = hydra.core.Name("list")
 TERM_VARIANT__LITERAL__NAME = hydra.core.Name("literal")
 TERM_VARIANT__MAP__NAME = hydra.core.Name("map")
 TERM_VARIANT__MAYBE__NAME = hydra.core.Name("maybe")
+TERM_VARIANT__PAIR__NAME = hydra.core.Name("pair")
 TERM_VARIANT__PRODUCT__NAME = hydra.core.Name("product")
 TERM_VARIANT__RECORD__NAME = hydra.core.Name("record")
 TERM_VARIANT__SET__NAME = hydra.core.Name("set")
@@ -192,6 +195,8 @@ class TypeVariant(Enum):
     
     MAYBE = "maybe"
     
+    PAIR = "pair"
+    
     PRODUCT = "product"
     
     RECORD = "record"
@@ -218,6 +223,7 @@ TYPE_VARIANT__LIST__NAME = hydra.core.Name("list")
 TYPE_VARIANT__LITERAL__NAME = hydra.core.Name("literal")
 TYPE_VARIANT__MAP__NAME = hydra.core.Name("map")
 TYPE_VARIANT__MAYBE__NAME = hydra.core.Name("maybe")
+TYPE_VARIANT__PAIR__NAME = hydra.core.Name("pair")
 TYPE_VARIANT__PRODUCT__NAME = hydra.core.Name("product")
 TYPE_VARIANT__RECORD__NAME = hydra.core.Name("record")
 TYPE_VARIANT__SET__NAME = hydra.core.Name("set")

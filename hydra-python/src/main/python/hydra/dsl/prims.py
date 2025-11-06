@@ -20,7 +20,7 @@ from hydra.core import (
     Term,
     Type,
 )
-from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing, frozenlist
+from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing, frozenlist, Either, Left, Right
 from hydra.graph import Graph, Primitive, TermCoder
 from hydra.mantle import Comparison
 
@@ -374,6 +374,30 @@ def optional(mel: TermCoder[X]) -> TermCoder[Maybe[X]]:
         ),
     )
 
+
+def either_(left_coder: TermCoder[X], right_coder: TermCoder[Y]) -> TermCoder[Either[X, Y]]:
+    """TermCoder for Either values."""
+    def to_either_term(ev: Either[X, Y]) -> Flow[Graph, Term]:
+        if isinstance(ev, Left):
+            # Decode left value and wrap in sum term with index 0
+            return flows.bind(
+                left_coder.coder.decode(ev.value),
+                lambda left_term: flows.pure(terms.sum_(0, 2, left_term))
+            )
+        else:  # Right
+            # Decode right value and wrap in sum term with index 1
+            return flows.bind(
+                right_coder.coder.decode(ev.value),
+                lambda right_term: flows.pure(terms.sum_(1, 2, right_term))
+            )
+
+    return TermCoder(
+        type=types.sum_([left_coder.type, right_coder.type]),
+        coder=Coder(
+            encode=lambda term: extract.either_term(left_coder.coder.encode, right_coder.coder.encode, term),
+            decode=to_either_term,
+        ),
+    )
 
 
 def pair(k_coder: TermCoder[X], v_coder: TermCoder[Y]) -> TermCoder[tuple[X, Y]]:

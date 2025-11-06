@@ -260,6 +260,11 @@ def infer_type_of_optional[T0](cx: hydra.typing.InferenceContext, m: Maybe[hydra
         return hydra.lib.logic.if_else(hydra.lib.lists.null(terms), cast(hydra.core.Term, hydra.core.TermMaybe(cast(Maybe[hydra.core.Term], Nothing()))), cast(hydra.core.Term, hydra.core.TermMaybe(cast(Maybe[hydra.core.Term], Just(hydra.lib.lists.head(terms))))))
     return infer_type_of_collection(cx, (lambda x: cast(hydra.core.Type, hydra.core.TypeMaybe(x))), trm_cons, "optional element", hydra.lib.maybes.maybe(cast(frozenlist[hydra.core.Term], ()), cast(Callable[[hydra.core.Term], frozenlist[hydra.core.Term]], hydra.lib.lists.singleton), m))
 
+def infer_type_of_pair[T0](cx: hydra.typing.InferenceContext, p: Tuple[hydra.core.Term, hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
+    pair_fst = p[0]
+    pair_snd = p[1]
+    return hydra.lib.flows.bind(infer_type_of_term(cx, pair_fst, "pair first element"), (lambda r1: (ifst := r1.term, first_type := r1.type, subst1 := r1.subst, hydra.lib.flows.bind(infer_type_of_term(cx, pair_snd, "pair second element"), (lambda r2: (isnd := r2.term, second_type := r2.type, subst2 := r2.subst, pair_term := cast(hydra.core.Term, hydra.core.TermPair((ifst, isnd))), term_with_first_type := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(pair_term, first_type))), term_with_both_types := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(term_with_first_type, second_type))), pair_type := cast(hydra.core.Type, hydra.core.TypePair(hydra.core.PairType(first_type, second_type))), yield_checked(term_with_both_types, pair_type, subst2))[7])))[3]))
+
 def infer_type_of_product[T0](cx: hydra.typing.InferenceContext, els: frozenlist[hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     return hydra.lib.flows.map((lambda results: (iterms := results[0], itypes := results[1][0], isubst := results[1][1], yield_(cast(hydra.core.Term, hydra.core.TermProduct(iterms)), cast(hydra.core.Type, hydra.core.TypeProduct(itypes)), isubst))[3]), infer_many(cx, hydra.lib.lists.map((lambda e: (e, "tuple element")), els)))
 
@@ -311,6 +316,9 @@ def infer_type_of_term[T0](cx: hydra.typing.InferenceContext, term: hydra.core.T
             
             case hydra.core.TermMaybe(value=m2):
                 return infer_type_of_optional(cx, m2)
+            
+            case hydra.core.TermPair(value=p):
+                return infer_type_of_pair(cx, p)
             
             case hydra.core.TermProduct(value=els2):
                 return infer_type_of_product(cx, els2)

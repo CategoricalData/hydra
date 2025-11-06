@@ -149,6 +149,9 @@ def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.co
             
             case hydra.core.TypeVariable():
                 return True
+            
+            case _:
+                raise TypeError("Unsupported Type")
     return hydra.lib.logic.and_(constraints.types(base), hydra.lib.logic.and_(is_supported_variant(hydra.variants.type_variant(base)), is_supported(base)))
 
 def unidirectional_coder[T0, T1, T2, T3](m: Callable[[T0], hydra.compute.Flow[T1, T2]]) -> hydra.compute.Coder[T1, T3, T0, T2]:

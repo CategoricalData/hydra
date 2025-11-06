@@ -91,3 +91,6 @@ def type(v1: hydra.core.Type) -> str:
         
         case hydra.core.TypeWrap(value=n):
             return hydra.lib.strings.cat(("wrapper for ", type(n.body)))
+        
+        case _:
+            raise TypeError("Unsupported Type")
