@@ -9,6 +9,7 @@ import Hydra.Kernel
 import Hydra.Generation
 import Hydra.Ext.Sources.All
 
+import Hydra.Ext.Java.Language
 import Hydra.Ext.Python.Language
 
 import Hydra.Ext.Staging.Cpp.Coder
@@ -32,7 +33,7 @@ writeGraphql :: FP.FilePath -> [Module] -> IO ()
 writeGraphql = generateSources moduleToGraphql
 
 writeJava :: FP.FilePath -> [Module] -> IO ()
-writeJava = generateSources moduleToJava
+writeJava = generateSourcesSimple moduleToJava javaLanguage False
 
 writeJsonSchema :: FP.FilePath -> [Module] -> IO ()
 writeJsonSchema = generateSources (moduleToJsonSchemaFiles (JsonSchemaOptions True))
