@@ -18,12 +18,24 @@ public class TestCaseWithMetadata implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_TAGS = new hydra.core.Name("tags");
   
+  /**
+   * The name of the test case
+   */
   public final String name;
   
+  /**
+   * The test case itself
+   */
   public final hydra.testing.TestCase case_;
   
+  /**
+   * An optional description of the test
+   */
   public final hydra.util.Opt<String> description;
   
+  /**
+   * Zero or more tags for categorizing the test
+   */
   public final java.util.List<hydra.testing.Tag> tags;
   
   public TestCaseWithMetadata (String name, hydra.testing.TestCase case_, hydra.util.Opt<String> description, java.util.List<hydra.testing.Tag> tags) {

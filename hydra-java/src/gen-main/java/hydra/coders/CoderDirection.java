@@ -41,8 +41,11 @@ public abstract class CoderDirection implements Serializable {
   }
   
   public static final class Encode extends hydra.coders.CoderDirection implements Serializable {
-    public Encode () {
+    public final Boolean value;
     
+    public Encode (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -51,12 +54,12 @@ public abstract class CoderDirection implements Serializable {
         return false;
       }
       Encode o = (Encode) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -66,8 +69,11 @@ public abstract class CoderDirection implements Serializable {
   }
   
   public static final class Decode extends hydra.coders.CoderDirection implements Serializable {
-    public Decode () {
+    public final Boolean value;
     
+    public Decode (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -76,12 +82,12 @@ public abstract class CoderDirection implements Serializable {
         return false;
       }
       Decode o = (Decode) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

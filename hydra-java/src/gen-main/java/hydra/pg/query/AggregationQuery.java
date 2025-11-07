@@ -30,8 +30,11 @@ public abstract class AggregationQuery implements Serializable {
   }
   
   public static final class Count extends hydra.pg.query.AggregationQuery implements Serializable {
-    public Count () {
+    public final Boolean value;
     
+    public Count (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -40,12 +43,12 @@ public abstract class AggregationQuery implements Serializable {
         return false;
       }
       Count o = (Count) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

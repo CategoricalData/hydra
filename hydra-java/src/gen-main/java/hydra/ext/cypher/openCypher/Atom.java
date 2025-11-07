@@ -202,8 +202,11 @@ public abstract class Atom implements Serializable {
   }
   
   public static final class CountStar extends hydra.ext.cypher.openCypher.Atom implements Serializable {
-    public CountStar () {
+    public final Boolean value;
     
+    public CountStar (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -212,12 +215,12 @@ public abstract class Atom implements Serializable {
         return false;
       }
       CountStar o = (CountStar) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

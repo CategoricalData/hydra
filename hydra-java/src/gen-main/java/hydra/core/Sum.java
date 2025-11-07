@@ -16,10 +16,19 @@ public class Sum implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
   
+  /**
+   * The 0-indexed position of the variant
+   */
   public final Integer index;
   
+  /**
+   * The total number of variants in the sum type
+   */
   public final Integer size;
   
+  /**
+   * The term value of the variant
+   */
   public final hydra.core.Term term;
   
   public Sum (Integer index, Integer size, hydra.core.Term term) {

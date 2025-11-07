@@ -16,10 +16,19 @@ public class OpExpr implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_RHS = new hydra.core.Name("rhs");
   
+  /**
+   * The operator
+   */
   public final hydra.ast.Op op;
   
+  /**
+   * The left-hand side operand
+   */
   public final hydra.ast.Expr lhs;
   
+  /**
+   * The right-hand side operand
+   */
   public final hydra.ast.Expr rhs;
   
   public OpExpr (hydra.ast.Op op, hydra.ast.Expr lhs, hydra.ast.Expr rhs) {

@@ -2,10 +2,12 @@
 
 package hydra.graph;
 
+import java.io.Serializable;
+
 /**
  * A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph
  */
-public class Graph {
+public class Graph implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.graph.Graph");
   
   public static final hydra.core.Name FIELD_NAME_ELEMENTS = new hydra.core.Name("elements");
@@ -23,7 +25,7 @@ public class Graph {
   /**
    * All of the elements in the graph
    */
-  public final java.util.Map<hydra.core.Name, hydra.graph.Element> elements;
+  public final java.util.Map<hydra.core.Name, hydra.core.Binding> elements;
   
   /**
    * The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)
@@ -50,7 +52,7 @@ public class Graph {
    */
   public final hydra.util.Opt<hydra.graph.Graph> schema;
   
-  public Graph (java.util.Map<hydra.core.Name, hydra.graph.Element> elements, java.util.Map<hydra.core.Name, hydra.util.Opt<hydra.core.Term>> environment, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types, hydra.core.Term body, java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives, hydra.util.Opt<hydra.graph.Graph> schema) {
+  public Graph (java.util.Map<hydra.core.Name, hydra.core.Binding> elements, java.util.Map<hydra.core.Name, hydra.util.Opt<hydra.core.Term>> environment, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types, hydra.core.Term body, java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives, hydra.util.Opt<hydra.graph.Graph> schema) {
     java.util.Objects.requireNonNull((elements));
     java.util.Objects.requireNonNull((environment));
     java.util.Objects.requireNonNull((types));
@@ -79,7 +81,7 @@ public class Graph {
     return 2 * elements.hashCode() + 3 * environment.hashCode() + 5 * types.hashCode() + 7 * body.hashCode() + 11 * primitives.hashCode() + 13 * schema.hashCode();
   }
   
-  public Graph withElements(java.util.Map<hydra.core.Name, hydra.graph.Element> elements) {
+  public Graph withElements(java.util.Map<hydra.core.Name, hydra.core.Binding> elements) {
     java.util.Objects.requireNonNull((elements));
     return new Graph(elements, environment, types, body, primitives, schema);
   }

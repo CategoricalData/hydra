@@ -14,8 +14,14 @@ public class LabeledPattern implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_PATTERN = new hydra.core.Name("pattern");
   
+  /**
+   * The label for the pattern
+   */
   public final hydra.grammar.Label label;
   
+  /**
+   * The pattern being labeled
+   */
   public final hydra.grammar.Pattern pattern;
   
   public LabeledPattern (hydra.grammar.Label label, hydra.grammar.Pattern pattern) {

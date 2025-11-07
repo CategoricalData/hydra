@@ -2,10 +2,12 @@
 
 package hydra.module;
 
+import java.io.Serializable;
+
 /**
  * A library of primitive functions
  */
-public class Library {
+public class Library implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.module.Library");
   
   public static final hydra.core.Name FIELD_NAME_NAMESPACE = new hydra.core.Name("namespace");

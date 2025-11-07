@@ -114,8 +114,11 @@ public abstract class SchemaSpec implements Serializable {
    * A schema which will be provided within the workflow
    */
   public static final class Provided extends hydra.workflow.SchemaSpec implements Serializable {
-    public Provided () {
+    public final Boolean value;
     
+    public Provided (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -124,12 +127,12 @@ public abstract class SchemaSpec implements Serializable {
         return false;
       }
       Provided o = (Provided) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

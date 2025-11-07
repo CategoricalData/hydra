@@ -54,8 +54,11 @@ public abstract class QuantifierOperator implements Serializable {
   }
   
   public static final class All extends hydra.ext.cypher.openCypher.QuantifierOperator implements Serializable {
-    public All () {
+    public final Boolean value;
     
+    public All (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -64,12 +67,12 @@ public abstract class QuantifierOperator implements Serializable {
         return false;
       }
       All o = (All) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -79,8 +82,11 @@ public abstract class QuantifierOperator implements Serializable {
   }
   
   public static final class Any extends hydra.ext.cypher.openCypher.QuantifierOperator implements Serializable {
-    public Any () {
+    public final Boolean value;
     
+    public Any (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -89,12 +95,12 @@ public abstract class QuantifierOperator implements Serializable {
         return false;
       }
       Any o = (Any) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -104,8 +110,11 @@ public abstract class QuantifierOperator implements Serializable {
   }
   
   public static final class None extends hydra.ext.cypher.openCypher.QuantifierOperator implements Serializable {
-    public None () {
+    public final Boolean value;
     
+    public None (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -114,12 +123,12 @@ public abstract class QuantifierOperator implements Serializable {
         return false;
       }
       None o = (None) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -129,8 +138,11 @@ public abstract class QuantifierOperator implements Serializable {
   }
   
   public static final class Single extends hydra.ext.cypher.openCypher.QuantifierOperator implements Serializable {
-    public Single () {
+    public final Boolean value;
     
+    public Single (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -139,12 +151,12 @@ public abstract class QuantifierOperator implements Serializable {
         return false;
       }
       Single o = (Single) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

@@ -4,6 +4,9 @@ package hydra.mantle;
 
 import java.io.Serializable;
 
+/**
+ * A naming convention for symbols, such as camelCase or snake_case
+ */
 public abstract class CaseConvention implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.CaseConvention");
   
@@ -54,8 +57,11 @@ public abstract class CaseConvention implements Serializable {
   }
   
   public static final class Camel extends hydra.mantle.CaseConvention implements Serializable {
-    public Camel () {
+    public final Boolean value;
     
+    public Camel (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -64,12 +70,12 @@ public abstract class CaseConvention implements Serializable {
         return false;
       }
       Camel o = (Camel) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -79,8 +85,11 @@ public abstract class CaseConvention implements Serializable {
   }
   
   public static final class Pascal extends hydra.mantle.CaseConvention implements Serializable {
-    public Pascal () {
+    public final Boolean value;
     
+    public Pascal (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -89,12 +98,12 @@ public abstract class CaseConvention implements Serializable {
         return false;
       }
       Pascal o = (Pascal) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -104,8 +113,11 @@ public abstract class CaseConvention implements Serializable {
   }
   
   public static final class LowerSnake extends hydra.mantle.CaseConvention implements Serializable {
-    public LowerSnake () {
+    public final Boolean value;
     
+    public LowerSnake (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -114,12 +126,12 @@ public abstract class CaseConvention implements Serializable {
         return false;
       }
       LowerSnake o = (LowerSnake) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -129,8 +141,11 @@ public abstract class CaseConvention implements Serializable {
   }
   
   public static final class UpperSnake extends hydra.mantle.CaseConvention implements Serializable {
-    public UpperSnake () {
+    public final Boolean value;
     
+    public UpperSnake (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -139,12 +154,12 @@ public abstract class CaseConvention implements Serializable {
         return false;
       }
       UpperSnake o = (UpperSnake) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

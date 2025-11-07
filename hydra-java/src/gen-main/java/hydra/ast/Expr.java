@@ -56,6 +56,9 @@ public abstract class Expr implements Serializable {
     }
   }
   
+  /**
+   * A constant symbol
+   */
   public static final class Const extends hydra.ast.Expr implements Serializable {
     public final hydra.ast.Symbol value;
     
@@ -84,6 +87,9 @@ public abstract class Expr implements Serializable {
     }
   }
   
+  /**
+   * An indented expression
+   */
   public static final class Indent extends hydra.ast.Expr implements Serializable {
     public final hydra.ast.IndentedExpression value;
     
@@ -112,6 +118,9 @@ public abstract class Expr implements Serializable {
     }
   }
   
+  /**
+   * An operator expression
+   */
   public static final class Op extends hydra.ast.Expr implements Serializable {
     public final hydra.ast.OpExpr value;
     
@@ -140,6 +149,9 @@ public abstract class Expr implements Serializable {
     }
   }
   
+  /**
+   * A bracketed expression
+   */
   public static final class Brackets extends hydra.ast.Expr implements Serializable {
     public final hydra.ast.BracketExpr value;
     

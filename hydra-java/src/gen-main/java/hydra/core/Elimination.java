@@ -10,10 +10,6 @@ import java.io.Serializable;
 public abstract class Elimination implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Elimination");
   
-  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
-  
-  public static final hydra.core.Name FIELD_NAME_OPTIONAL = new hydra.core.Name("optional");
-  
   public static final hydra.core.Name FIELD_NAME_PRODUCT = new hydra.core.Name("product");
   
   public static final hydra.core.Name FIELD_NAME_RECORD = new hydra.core.Name("record");
@@ -29,10 +25,6 @@ public abstract class Elimination implements Serializable {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(List instance) ;
-    
-    R visit(Optional instance) ;
-    
     R visit(Product instance) ;
     
     R visit(Record instance) ;
@@ -45,14 +37,6 @@ public abstract class Elimination implements Serializable {
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Elimination instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
-    }
-    
-    default R visit(List instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(Optional instance) {
-      return otherwise((instance));
     }
     
     default R visit(Product instance) {
@@ -69,68 +53,6 @@ public abstract class Elimination implements Serializable {
     
     default R visit(Wrap instance) {
       return otherwise((instance));
-    }
-  }
-  
-  /**
-   * Eliminates a list using a fold function; this function has the signature b -&gt; [a] -&gt; b
-   */
-  public static final class List extends hydra.core.Elimination implements Serializable {
-    public final hydra.core.Term value;
-    
-    public List (hydra.core.Term value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof List)) {
-        return false;
-      }
-      List o = (List) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  /**
-   * Eliminates an optional term by matching over the two possible cases
-   */
-  public static final class Optional extends hydra.core.Elimination implements Serializable {
-    public final hydra.core.OptionalCases value;
-    
-    public Optional (hydra.core.OptionalCases value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Optional)) {
-        return false;
-      }
-      Optional o = (Optional) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
     }
   }
   

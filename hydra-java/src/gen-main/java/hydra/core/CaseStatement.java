@@ -16,10 +16,19 @@ public class CaseStatement implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_CASES = new hydra.core.Name("cases");
   
+  /**
+   * The name of the union type
+   */
   public final hydra.core.Name typeName;
   
+  /**
+   * An optional default case, used if none of the explicit cases match
+   */
   public final hydra.util.Opt<hydra.core.Term> default_;
   
+  /**
+   * A list of case alternatives, one per union field
+   */
   public final java.util.List<hydra.core.Field> cases;
   
   public CaseStatement (hydra.core.Name typeName, hydra.util.Opt<hydra.core.Term> default_, java.util.List<hydra.core.Field> cases) {

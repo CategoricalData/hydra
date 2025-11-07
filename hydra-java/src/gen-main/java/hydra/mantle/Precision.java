@@ -40,9 +40,15 @@ public abstract class Precision implements Serializable {
     }
   }
   
+  /**
+   * Arbitrary precision
+   */
   public static final class Arbitrary extends hydra.mantle.Precision implements Serializable {
-    public Arbitrary () {
+    public final Boolean value;
     
+    public Arbitrary (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -51,12 +57,12 @@ public abstract class Precision implements Serializable {
         return false;
       }
       Arbitrary o = (Arbitrary) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -65,6 +71,9 @@ public abstract class Precision implements Serializable {
     }
   }
   
+  /**
+   * Precision to a specified number of bits
+   */
   public static final class Bits extends hydra.mantle.Precision implements Serializable {
     public final Integer value;
     

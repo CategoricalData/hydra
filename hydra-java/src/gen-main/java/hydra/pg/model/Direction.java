@@ -57,8 +57,11 @@ public abstract class Direction implements Serializable {
   }
   
   public static final class Out extends hydra.pg.model.Direction implements Serializable {
-    public Out () {
+    public final Boolean value;
     
+    public Out (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -67,12 +70,12 @@ public abstract class Direction implements Serializable {
         return false;
       }
       Out o = (Out) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -82,8 +85,11 @@ public abstract class Direction implements Serializable {
   }
   
   public static final class In extends hydra.pg.model.Direction implements Serializable {
-    public In () {
+    public final Boolean value;
     
+    public In (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -92,12 +98,12 @@ public abstract class Direction implements Serializable {
         return false;
       }
       In o = (In) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -107,8 +113,11 @@ public abstract class Direction implements Serializable {
   }
   
   public static final class Both extends hydra.pg.model.Direction implements Serializable {
-    public Both () {
+    public final Boolean value;
     
+    public Both (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -117,12 +126,12 @@ public abstract class Direction implements Serializable {
         return false;
       }
       Both o = (Both) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -132,8 +141,11 @@ public abstract class Direction implements Serializable {
   }
   
   public static final class Undirected extends hydra.pg.model.Direction implements Serializable {
-    public Undirected () {
+    public final Boolean value;
     
+    public Undirected (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -142,12 +154,12 @@ public abstract class Direction implements Serializable {
         return false;
       }
       Undirected o = (Undirected) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

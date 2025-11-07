@@ -68,8 +68,11 @@ public abstract class LiteralType implements Serializable {
    * The type of a binary (byte string) value
    */
   public static final class Binary extends hydra.core.LiteralType implements Serializable {
-    public Binary () {
+    public final Boolean value;
     
+    public Binary (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -78,12 +81,12 @@ public abstract class LiteralType implements Serializable {
         return false;
       }
       Binary o = (Binary) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -96,8 +99,11 @@ public abstract class LiteralType implements Serializable {
    * The type of a boolean (true/false) value
    */
   public static final class Boolean_ extends hydra.core.LiteralType implements Serializable {
-    public Boolean_ () {
+    public final Boolean value;
     
+    public Boolean_ (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -106,12 +112,12 @@ public abstract class LiteralType implements Serializable {
         return false;
       }
       Boolean_ o = (Boolean_) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -186,8 +192,11 @@ public abstract class LiteralType implements Serializable {
    * The type of a string value
    */
   public static final class String_ extends hydra.core.LiteralType implements Serializable {
-    public String_ () {
+    public final Boolean value;
     
+    public String_ (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -196,12 +205,12 @@ public abstract class LiteralType implements Serializable {
         return false;
       }
       String_ o = (String_) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

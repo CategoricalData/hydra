@@ -70,8 +70,11 @@ public abstract class ComparisonOperator implements Serializable {
   }
   
   public static final class Eq extends hydra.pg.query.ComparisonOperator implements Serializable {
-    public Eq () {
+    public final Boolean value;
     
+    public Eq (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -80,12 +83,12 @@ public abstract class ComparisonOperator implements Serializable {
         return false;
       }
       Eq o = (Eq) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -95,8 +98,11 @@ public abstract class ComparisonOperator implements Serializable {
   }
   
   public static final class Neq extends hydra.pg.query.ComparisonOperator implements Serializable {
-    public Neq () {
+    public final Boolean value;
     
+    public Neq (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -105,12 +111,12 @@ public abstract class ComparisonOperator implements Serializable {
         return false;
       }
       Neq o = (Neq) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -120,8 +126,11 @@ public abstract class ComparisonOperator implements Serializable {
   }
   
   public static final class Lt extends hydra.pg.query.ComparisonOperator implements Serializable {
-    public Lt () {
+    public final Boolean value;
     
+    public Lt (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -130,12 +139,12 @@ public abstract class ComparisonOperator implements Serializable {
         return false;
       }
       Lt o = (Lt) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -145,8 +154,11 @@ public abstract class ComparisonOperator implements Serializable {
   }
   
   public static final class Lte extends hydra.pg.query.ComparisonOperator implements Serializable {
-    public Lte () {
+    public final Boolean value;
     
+    public Lte (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -155,12 +167,12 @@ public abstract class ComparisonOperator implements Serializable {
         return false;
       }
       Lte o = (Lte) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -170,8 +182,11 @@ public abstract class ComparisonOperator implements Serializable {
   }
   
   public static final class Gt extends hydra.pg.query.ComparisonOperator implements Serializable {
-    public Gt () {
+    public final Boolean value;
     
+    public Gt (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -180,12 +195,12 @@ public abstract class ComparisonOperator implements Serializable {
         return false;
       }
       Gt o = (Gt) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -195,8 +210,11 @@ public abstract class ComparisonOperator implements Serializable {
   }
   
   public static final class Gte extends hydra.pg.query.ComparisonOperator implements Serializable {
-    public Gte () {
+    public final Boolean value;
     
+    public Gte (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -205,12 +223,12 @@ public abstract class ComparisonOperator implements Serializable {
         return false;
       }
       Gte o = (Gte) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

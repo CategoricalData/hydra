@@ -2,12 +2,10 @@
 
 package hydra.pg.model;
 
-import java.io.Serializable;
-
 /**
  * A graph schema; a vertex and edge types for the vertices and edges of a graph conforming to the schema
  */
-public class GraphSchema<T> implements Serializable {
+public class GraphSchema<T> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.GraphSchema");
   
   public static final hydra.core.Name FIELD_NAME_VERTICES = new hydra.core.Name("vertices");

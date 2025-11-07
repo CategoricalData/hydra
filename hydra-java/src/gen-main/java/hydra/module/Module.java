@@ -28,7 +28,7 @@ public class Module implements Serializable {
   /**
    * The elements defined in this module
    */
-  public final java.util.List<hydra.graph.Element> elements;
+  public final java.util.List<hydra.core.Binding> elements;
   
   /**
    * Any modules which the term expressions of this module directly depend upon
@@ -45,7 +45,7 @@ public class Module implements Serializable {
    */
   public final hydra.util.Opt<String> description;
   
-  public Module (hydra.module.Namespace namespace, java.util.List<hydra.graph.Element> elements, java.util.List<hydra.module.Module> termDependencies, java.util.List<hydra.module.Module> typeDependencies, hydra.util.Opt<String> description) {
+  public Module (hydra.module.Namespace namespace, java.util.List<hydra.core.Binding> elements, java.util.List<hydra.module.Module> termDependencies, java.util.List<hydra.module.Module> typeDependencies, hydra.util.Opt<String> description) {
     java.util.Objects.requireNonNull((namespace));
     java.util.Objects.requireNonNull((elements));
     java.util.Objects.requireNonNull((termDependencies));
@@ -77,7 +77,7 @@ public class Module implements Serializable {
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
-  public Module withElements(java.util.List<hydra.graph.Element> elements) {
+  public Module withElements(java.util.List<hydra.core.Binding> elements) {
     java.util.Objects.requireNonNull((elements));
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }

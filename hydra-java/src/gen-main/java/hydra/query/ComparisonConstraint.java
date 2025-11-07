@@ -73,8 +73,11 @@ public abstract class ComparisonConstraint implements Serializable {
   }
   
   public static final class Equal extends hydra.query.ComparisonConstraint implements Serializable {
-    public Equal () {
+    public final Boolean value;
     
+    public Equal (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -83,12 +86,12 @@ public abstract class ComparisonConstraint implements Serializable {
         return false;
       }
       Equal o = (Equal) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -98,8 +101,11 @@ public abstract class ComparisonConstraint implements Serializable {
   }
   
   public static final class NotEqual extends hydra.query.ComparisonConstraint implements Serializable {
-    public NotEqual () {
+    public final Boolean value;
     
+    public NotEqual (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -108,12 +114,12 @@ public abstract class ComparisonConstraint implements Serializable {
         return false;
       }
       NotEqual o = (NotEqual) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -123,8 +129,11 @@ public abstract class ComparisonConstraint implements Serializable {
   }
   
   public static final class LessThan extends hydra.query.ComparisonConstraint implements Serializable {
-    public LessThan () {
+    public final Boolean value;
     
+    public LessThan (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -133,12 +142,12 @@ public abstract class ComparisonConstraint implements Serializable {
         return false;
       }
       LessThan o = (LessThan) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -148,8 +157,11 @@ public abstract class ComparisonConstraint implements Serializable {
   }
   
   public static final class GreaterThan extends hydra.query.ComparisonConstraint implements Serializable {
-    public GreaterThan () {
+    public final Boolean value;
     
+    public GreaterThan (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -158,12 +170,12 @@ public abstract class ComparisonConstraint implements Serializable {
         return false;
       }
       GreaterThan o = (GreaterThan) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -173,8 +185,11 @@ public abstract class ComparisonConstraint implements Serializable {
   }
   
   public static final class LessThanOrEqual extends hydra.query.ComparisonConstraint implements Serializable {
-    public LessThanOrEqual () {
+    public final Boolean value;
     
+    public LessThanOrEqual (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -183,12 +198,12 @@ public abstract class ComparisonConstraint implements Serializable {
         return false;
       }
       LessThanOrEqual o = (LessThanOrEqual) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -198,8 +213,11 @@ public abstract class ComparisonConstraint implements Serializable {
   }
   
   public static final class GreaterThanOrEqual extends hydra.query.ComparisonConstraint implements Serializable {
-    public GreaterThanOrEqual () {
+    public final Boolean value;
     
+    public GreaterThanOrEqual (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -208,12 +226,12 @@ public abstract class ComparisonConstraint implements Serializable {
         return false;
       }
       GreaterThanOrEqual o = (GreaterThanOrEqual) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

@@ -14,8 +14,14 @@ public class PatternImplication implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_CONSEQUENT = new hydra.core.Name("consequent");
   
+  /**
+   * The pattern which, if it matches, triggers the constraint
+   */
   public final hydra.query.Pattern antecedent;
   
+  /**
+   * The pattern which must also match when the antecedent matches
+   */
   public final hydra.query.Pattern consequent;
   
   public PatternImplication (hydra.query.Pattern antecedent, hydra.query.Pattern consequent) {

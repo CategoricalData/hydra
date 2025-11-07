@@ -16,10 +16,19 @@ public class TriplePattern implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_OBJECT = new hydra.core.Name("object");
   
+  /**
+   * The subject of the pattern
+   */
   public final hydra.query.Node subject;
   
+  /**
+   * The predicate (property) of the pattern
+   */
   public final hydra.query.Path predicate;
   
+  /**
+   * The object of the pattern
+   */
   public final hydra.query.Node object;
   
   public TriplePattern (hydra.query.Node subject, hydra.query.Path predicate, hydra.query.Node object) {

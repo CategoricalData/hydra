@@ -98,8 +98,11 @@ public abstract class Literal implements Serializable {
   }
   
   public static final class Null extends hydra.ext.cypher.openCypher.Literal implements Serializable {
-    public Null () {
+    public final Boolean value;
     
+    public Null (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -108,12 +111,12 @@ public abstract class Literal implements Serializable {
         return false;
       }
       Null o = (Null) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

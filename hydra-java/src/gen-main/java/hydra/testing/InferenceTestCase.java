@@ -14,8 +14,14 @@ public class InferenceTestCase implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
   
+  /**
+   * The term to infer
+   */
   public final hydra.core.Term input;
   
+  /**
+   * The expected type scheme
+   */
   public final hydra.core.TypeScheme output;
   
   public InferenceTestCase (hydra.core.Term input, hydra.core.TypeScheme output) {

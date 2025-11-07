@@ -2,12 +2,10 @@
 
 package hydra.pg.model;
 
-import java.io.Serializable;
-
 /**
  * A graph; a self-contained collection of vertices and edges
  */
-public class Graph<V> implements Serializable {
+public class Graph<V> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.Graph");
   
   public static final hydra.core.Name FIELD_NAME_VERTICES = new hydra.core.Name("vertices");

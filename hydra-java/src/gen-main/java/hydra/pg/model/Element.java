@@ -2,12 +2,10 @@
 
 package hydra.pg.model;
 
-import java.io.Serializable;
-
 /**
  * Either a vertex or an edge
  */
-public abstract class Element<V> implements Serializable {
+public abstract class Element<V> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.Element");
   
   public static final hydra.core.Name FIELD_NAME_VERTEX = new hydra.core.Name("vertex");
@@ -40,7 +38,7 @@ public abstract class Element<V> implements Serializable {
     }
   }
   
-  public static final class Vertex<V> extends hydra.pg.model.Element<V> implements Serializable {
+  public static final class Vertex<V> extends hydra.pg.model.Element<V> {
     public final hydra.pg.model.Vertex<V> value;
     
     public Vertex (hydra.pg.model.Vertex<V> value) {
@@ -68,7 +66,7 @@ public abstract class Element<V> implements Serializable {
     }
   }
   
-  public static final class Edge<V> extends hydra.pg.model.Element<V> implements Serializable {
+  public static final class Edge<V> extends hydra.pg.model.Element<V> {
     public final hydra.pg.model.Edge<V> value;
     
     public Edge (hydra.pg.model.Edge<V> value) {

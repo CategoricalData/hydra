@@ -138,8 +138,11 @@ public abstract class Value implements Serializable {
    * JSON's null value
    */
   public static final class Null extends hydra.json.Value implements Serializable {
-    public Null () {
+    public final Boolean value;
     
+    public Null (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -148,12 +151,12 @@ public abstract class Value implements Serializable {
         return false;
       }
       Null o = (Null) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -166,9 +169,9 @@ public abstract class Value implements Serializable {
    * A numeric value
    */
   public static final class Number_ extends hydra.json.Value implements Serializable {
-    public final Double value;
+    public final String value;
     
-    public Number_ (Double value) {
+    public Number_ (String value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

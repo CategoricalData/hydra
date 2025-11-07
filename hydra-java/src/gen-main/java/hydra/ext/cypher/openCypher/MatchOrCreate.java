@@ -38,8 +38,11 @@ public abstract class MatchOrCreate implements Serializable {
   }
   
   public static final class Match extends hydra.ext.cypher.openCypher.MatchOrCreate implements Serializable {
-    public Match () {
+    public final Boolean value;
     
+    public Match (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -48,12 +51,12 @@ public abstract class MatchOrCreate implements Serializable {
         return false;
       }
       Match o = (Match) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -63,8 +66,11 @@ public abstract class MatchOrCreate implements Serializable {
   }
   
   public static final class Create extends hydra.ext.cypher.openCypher.MatchOrCreate implements Serializable {
-    public Create () {
+    public final Boolean value;
     
+    public Create (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -73,12 +79,12 @@ public abstract class MatchOrCreate implements Serializable {
         return false;
       }
       Create o = (Create) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

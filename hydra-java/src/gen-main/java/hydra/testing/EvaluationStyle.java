@@ -41,8 +41,11 @@ public abstract class EvaluationStyle implements Serializable {
   }
   
   public static final class Eager extends hydra.testing.EvaluationStyle implements Serializable {
-    public Eager () {
+    public final Boolean value;
     
+    public Eager (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -51,12 +54,12 @@ public abstract class EvaluationStyle implements Serializable {
         return false;
       }
       Eager o = (Eager) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -66,8 +69,11 @@ public abstract class EvaluationStyle implements Serializable {
   }
   
   public static final class Lazy extends hydra.testing.EvaluationStyle implements Serializable {
-    public Lazy () {
+    public final Boolean value;
     
+    public Lazy (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -76,12 +82,12 @@ public abstract class EvaluationStyle implements Serializable {
         return false;
       }
       Lazy o = (Lazy) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

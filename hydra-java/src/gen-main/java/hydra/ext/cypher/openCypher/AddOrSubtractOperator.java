@@ -38,8 +38,11 @@ public abstract class AddOrSubtractOperator implements Serializable {
   }
   
   public static final class Add extends hydra.ext.cypher.openCypher.AddOrSubtractOperator implements Serializable {
-    public Add () {
+    public final Boolean value;
     
+    public Add (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -48,12 +51,12 @@ public abstract class AddOrSubtractOperator implements Serializable {
         return false;
       }
       Add o = (Add) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -63,8 +66,11 @@ public abstract class AddOrSubtractOperator implements Serializable {
   }
   
   public static final class Subtract extends hydra.ext.cypher.openCypher.AddOrSubtractOperator implements Serializable {
-    public Subtract () {
+    public final Boolean value;
     
+    public Subtract (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -73,12 +79,12 @@ public abstract class AddOrSubtractOperator implements Serializable {
         return false;
       }
       Subtract o = (Subtract) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

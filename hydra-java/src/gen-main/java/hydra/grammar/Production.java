@@ -14,8 +14,14 @@ public class Production implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_PATTERN = new hydra.core.Name("pattern");
   
+  /**
+   * The nonterminal symbol being defined
+   */
   public final hydra.grammar.Symbol symbol;
   
+  /**
+   * The pattern which defines the symbol
+   */
   public final hydra.grammar.Pattern pattern;
   
   public Production (hydra.grammar.Symbol symbol, hydra.grammar.Pattern pattern) {

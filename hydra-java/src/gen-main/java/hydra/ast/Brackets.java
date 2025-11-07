@@ -14,8 +14,14 @@ public class Brackets implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_CLOSE = new hydra.core.Name("close");
   
+  /**
+   * The opening bracket symbol
+   */
   public final hydra.ast.Symbol open;
   
+  /**
+   * The closing bracket symbol
+   */
   public final hydra.ast.Symbol close;
   
   public Brackets (hydra.ast.Symbol open, hydra.ast.Symbol close) {
