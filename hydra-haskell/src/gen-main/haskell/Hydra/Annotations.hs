@@ -70,7 +70,7 @@ getTermDescription term = (getDescription (termAnnotationInternal term))
 
 -- | Get type from annotations
 getType :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe Core.Type))
-getType anns = (Maybes.maybe (Flows.pure Nothing) (\dat -> Flows.map Maybes.pure (Core_.type_ dat)) (Maps.lookup Constants.key_type anns))
+getType anns = (Maybes.maybe (Flows.pure Nothing) (\dat -> Flows.map Maybes.pure (Monads.withTrace "get type" (Core_.type_ dat))) (Maps.lookup Constants.key_type anns))
 
 -- | Get a type annotation
 getTypeAnnotation :: (Core.Name -> Core.Type -> Maybe Core.Term)

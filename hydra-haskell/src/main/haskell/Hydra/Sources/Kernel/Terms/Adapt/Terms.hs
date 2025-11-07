@@ -816,6 +816,7 @@ termAdapterDef = define "termAdapter" $
     (Coders.languageConstraintsTypes (var "constraints" @@ var "cx") @@ var "t")) $
   "pass" <~ ("t" ~> cases _TypeVariant (ref Variants.typeVariantDef @@ (ref Rewriting.deannotateTypeDef @@ var "t"))
     Nothing [
+    _TypeVariant_annotated>>: constant (list []),
     _TypeVariant_application>>: constant (list [ref passApplicationDef]),
     _TypeVariant_either>>: constant (list [ref passEitherDef]),
     _TypeVariant_forall>>: constant (list [ref passForallDef]),
@@ -824,22 +825,34 @@ termAdapterDef = define "termAdapter" $
     _TypeVariant_literal>>: constant (list [ref passLiteralDef]),
     _TypeVariant_map>>: constant (list [ref passMapDef]),
     _TypeVariant_maybe>>: constant (list [ref passOptionalDef, ref maybeToListDef]),
+    _TypeVariant_pair>>: constant (list []),
     _TypeVariant_product>>: constant (list [ref passProductDef]),
     _TypeVariant_record>>: constant (list [ref passRecordDef]),
     _TypeVariant_set>>: constant (list [ref passSetDef]),
     _TypeVariant_sum>>: constant (list [ref passSumDef]),
     _TypeVariant_union>>: constant (list [ref passUnionDef]),
     _TypeVariant_unit>>: constant (list [ref passUnitDef]),
+    _TypeVariant_variable>>: constant (list []),
     _TypeVariant_wrap>>: constant (list [ref passWrappedDef])]) $
   "trySubstitution" <~ ("t" ~> cases _TypeVariant (ref Variants.typeVariantDef @@ var "t")
     Nothing [
+    _TypeVariant_annotated>>: constant (list []),
     _TypeVariant_application>>: constant (list [ref simplifyApplicationDef]),
-    _TypeVariant_function>>: constant (list [ref functionToUnionDef]),
+    _TypeVariant_either>>: constant (list []),
     _TypeVariant_forall>>: constant (list [ref lambdaToMonotypeDef]),
+    _TypeVariant_function>>: constant (list [ref functionToUnionDef]),
+    _TypeVariant_list>>: constant (list []),
+    _TypeVariant_literal>>: constant (list []),
+    _TypeVariant_map>>: constant (list []),
     _TypeVariant_maybe>>: constant (list [ref maybeToListDef]),
+    _TypeVariant_pair>>: constant (list []),
+    _TypeVariant_product>>: constant (list []),
+    _TypeVariant_record>>: constant (list []),
     _TypeVariant_set>>: constant (list [ref setToListDef]),
+    _TypeVariant_sum>>: constant (list []),
     _TypeVariant_union>>: constant (list [ref unionToRecordDef]),
     _TypeVariant_unit>>: constant (list [ref unitToRecordDef]),
+    _TypeVariant_variable>>: constant (list []),
     _TypeVariant_wrap>>: constant (list [ref wrapToUnwrappedDef])]) $
   "alts" <~ ("cx" ~> "t" ~> Flows.mapList ("c" ~> var "c" @@ var "t")
      (Logic.ifElse (var "supportedAtTopLevel" @@ var "cx" @@ var "t")

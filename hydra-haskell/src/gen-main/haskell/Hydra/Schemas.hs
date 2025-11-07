@@ -70,11 +70,11 @@ dependencyNamespaces binds withPrims withNoms withSchema els =
                 (Rewriting.typeDependencyNames True typ)]))) (Flows.pure (Sets.unions [
                 dataNames,
                 schemaNames]))))
-  in (Flows.bind (Flows.mapList depNames els) (\namesList -> Flows.pure (Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (Sets.delete Constants.placeholderName (Sets.unions namesList))))))))
+  in (Monads.withTrace "namespaces" (Flows.bind (Flows.mapList depNames els) (\namesList -> Flows.pure (Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (Sets.delete Constants.placeholderName (Sets.unions namesList)))))))))
 
 -- | Dereference a type name to get the actual type
 dereferenceType :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Type))
-dereferenceType name = (Flows.bind (Lexical.dereferenceElement name) (\mel -> Maybes.maybe (Flows.pure Nothing) (\el -> Flows.map Maybes.pure (Core_.type_ (Core.bindingTerm el))) mel))
+dereferenceType name = (Monads.withTrace "dereference type" (Flows.bind (Lexical.dereferenceElement name) (\mel -> Maybes.maybe (Flows.pure Nothing) (\el -> Flows.map Maybes.pure (Core_.type_ (Core.bindingTerm el))) mel)))
 
 elementAsTypeApplicationTerm :: (Core.Binding -> Compute.Flow t0 Core.TypeApplicationTerm)
 elementAsTypeApplicationTerm el = (Maybes.maybe (Flows.fail "missing element type") (\ts -> Flows.pure (Core.TypeApplicationTerm {
@@ -137,12 +137,12 @@ findFieldType fname fields =
 fieldTypes :: (Core.Type -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type))
 fieldTypes t =  
   let toMap = (\fields -> Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) fields))
-  in ((\x -> case x of
+  in (Monads.withTrace "field types" ((\x -> case x of
     Core.TypeForall v1 -> (fieldTypes (Core.forallTypeBody v1))
     Core.TypeRecord v1 -> (Flows.pure (toMap (Core.rowTypeFields v1)))
     Core.TypeUnion v1 -> (Flows.pure (toMap (Core.rowTypeFields v1)))
     Core.TypeVariable v1 -> (Monads.withTrace (Strings.cat2 "field types of " (Core.unName v1)) (Flows.bind (Lexical.requireElement v1) (\el -> Flows.bind (Core_.type_ (Core.bindingTerm el)) fieldTypes)))
-    _ -> (Monads.unexpected "record or union type" (Core___.type_ t))) (Rewriting.deannotateType t))
+    _ -> (Monads.unexpected "record or union type" (Core___.type_ t))) (Rewriting.deannotateType t)))
 
 -- | Convert a forall type to a type scheme
 fTypeToTypeScheme :: (Core.Type -> Core.TypeScheme)
@@ -189,7 +189,7 @@ graphAsTypes sg =
   let els = (Maps.elems (Graph.graphElements sg))
   in  
     let toPair = (\el -> Flows.bind (Core_.type_ (Core.bindingTerm el)) (\typ -> Flows.pure (Core.bindingName el, typ)))
-    in (Flows.bind (Flows.mapList toPair els) (\pairs -> Flows.pure (Maps.fromList pairs)))
+    in (Flows.bind (Flows.mapList toPair els) (\pairs -> Monads.withTrace "graph as types" (Flows.pure (Maps.fromList pairs))))
 
 graphToInferenceContext :: (Graph.Graph -> Compute.Flow t0 Typing.InferenceContext)
 graphToInferenceContext graph =  
@@ -301,9 +301,9 @@ requireUnionType name =
 
 -- | Resolve a type, dereferencing type variables
 resolveType :: (Core.Type -> Compute.Flow Graph.Graph (Maybe Core.Type))
-resolveType typ = ((\x -> case x of
+resolveType typ = (Monads.withTrace "resolve type" ((\x -> case x of
   Core.TypeVariable v1 -> (Lexical.withSchemaContext (Flows.bind (Lexical.resolveTerm v1) (\mterm -> Maybes.maybe (Flows.pure Nothing) (\t -> Flows.map Maybes.pure (Core_.type_ t)) mterm)))
-  _ -> (Flows.pure (Just typ))) (Rewriting.deannotateType typ))
+  _ -> (Flows.pure (Just typ))) (Rewriting.deannotateType typ)))
 
 schemaGraphToTypingEnvironment :: (Graph.Graph -> Compute.Flow t0 (M.Map Core.Name Core.TypeScheme))
 schemaGraphToTypingEnvironment g =  
@@ -323,7 +323,7 @@ schemaGraphToTypingEnvironment g =
               Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.TypeScheme"))})) (Flows.map Maybes.pure (Core_.typeScheme (Core.bindingTerm el))) (Logic.ifElse (Equality.equal ts (Core.TypeScheme {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type"))})) (Flows.map (\decoded -> Just (toTypeScheme [] decoded)) (Core_.type_ (Core.bindingTerm el))) (forTerm (Rewriting.deannotateTerm (Core.bindingTerm el))))) (Core.bindingType el)) (\mts -> Flows.pure (Maybes.map (\ts -> (Core.bindingName el, ts)) mts))))
-    in (Monads.withState g (Flows.bind (Flows.mapList toPair (Maps.elems (Graph.graphElements g))) (\mpairs -> Flows.pure (Maps.fromList (Maybes.cat mpairs)))))
+    in (Monads.withTrace "schema graph to typing environment" (Monads.withState g (Flows.bind (Flows.mapList toPair (Maps.elems (Graph.graphElements g))) (\mpairs -> Flows.pure (Maps.fromList (Maybes.cat mpairs))))))
 
 -- | Find the equivalent graph representation of a term
 termAsGraph :: (Core.Term -> M.Map Core.Name Core.Binding)
@@ -370,7 +370,7 @@ typeDependencies withSchema transform name =
                   in  
                     let newSeeds = (Sets.difference refs visited)
                     in (deps newSeeds newNames))))
-      in (deps (Sets.singleton name) Maps.empty)
+      in (Monads.withTrace "type dependencies" (deps (Sets.singleton name) Maps.empty))
 
 -- | Convert a type scheme to a forall type
 typeSchemeToFType :: (Core.TypeScheme -> Core.Type)

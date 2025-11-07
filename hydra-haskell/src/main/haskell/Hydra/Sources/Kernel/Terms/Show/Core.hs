@@ -53,6 +53,8 @@ module_ = Module (Namespace "hydra.show.core") elements
      el readTermDef, -- TODO: move this to hydra.read.core
      el bindingDef,
      el eliminationDef,
+     el fieldDef,
+     el fieldTypeDef,
      el fieldsDef,
      el floatValueDef,
      el floatTypeDef,
@@ -134,15 +136,28 @@ eliminationDef = define "elimination" $
       unwrap _Name @@ var "tname",
       string ")"]]
 
+fieldDef :: TBinding (Field -> String)
+fieldDef = define "field" $
+  "field" ~>
+  "fname" <~ unwrap _Name @@ (Core.fieldName $ var "field") $
+  "fterm" <~ Core.fieldTerm (var "field") $
+  Strings.cat2 (var "fname") $ Strings.cat2 (string "=") (ref termDef @@ var "fterm")
+
+fieldTypeDef :: TBinding (FieldType -> String)
+fieldTypeDef = define "fieldType" $
+  "ft" ~>
+  "fname" <~ unwrap _Name @@ (Core.fieldTypeName $ var "ft") $
+  "ftyp" <~ Core.fieldTypeType (var "ft") $
+  Strings.cat $ list [
+    var "fname",
+    string ":",
+    ref typeDef @@ var "ftyp"]
+
 fieldsDef :: TBinding ([Field] -> String)
 fieldsDef = define "fields" $
   doc "Show a list of fields as a string" $
   "flds" ~>
-  "showField" <~ ("field" ~>
-    "fname" <~ unwrap _Name @@ (Core.fieldName $ var "field") $
-    "fterm" <~ Core.fieldTerm (var "field") $
-    Strings.cat2 (var "fname") $ Strings.cat2 (string "=") (ref termDef @@ var "fterm")) $
-  "fieldStrs" <~ Lists.map (var "showField") (var "flds") $
+  "fieldStrs" <~ Lists.map (ref fieldDef) (var "flds") $
   Strings.cat $ list [
     string "{",
     Strings.intercalate (string ", ") (var "fieldStrs"),
@@ -392,16 +407,9 @@ typeDef :: TBinding (Type -> String)
 typeDef = define "type" $
   doc "Show a type as a string" $
   "typ" ~>
-  "showFieldType" <~ ("ft" ~>
-    "fname" <~ unwrap _Name @@ (Core.fieldTypeName $ var "ft") $
-    "ftyp" <~ Core.fieldTypeType (var "ft") $
-    Strings.cat $ list [
-      var "fname",
-      string ":",
-      ref typeDef @@ var "ftyp"]) $
   "showRowType" <~ ("rt" ~>
     "flds" <~ Core.rowTypeFields (var "rt") $
-    "fieldStrs" <~ Lists.map (var "showFieldType") (var "flds") $
+    "fieldStrs" <~ Lists.map (ref fieldTypeDef) (var "flds") $
     Strings.cat $ list [
       string "{",
       Strings.intercalate (string ", ") (var "fieldStrs"),

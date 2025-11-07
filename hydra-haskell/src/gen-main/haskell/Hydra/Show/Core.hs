@@ -86,20 +86,31 @@ elimination elm = ((\x -> case x of
     Core.unName v1,
     ")"])) elm)
 
+field :: (Core.Field -> String)
+field field =  
+  let fname = (Core.unName (Core.fieldName field))
+  in  
+    let fterm = (Core.fieldTerm field)
+    in (Strings.cat2 fname (Strings.cat2 "=" (term fterm)))
+
+fieldType :: (Core.FieldType -> String)
+fieldType ft =  
+  let fname = (Core.unName (Core.fieldTypeName ft))
+  in  
+    let ftyp = (Core.fieldTypeType ft)
+    in (Strings.cat [
+      fname,
+      ":",
+      (type_ ftyp)])
+
 -- | Show a list of fields as a string
 fields :: ([Core.Field] -> String)
 fields flds =  
-  let showField = (\field ->  
-          let fname = (Core.unName (Core.fieldName field))
-          in  
-            let fterm = (Core.fieldTerm field)
-            in (Strings.cat2 fname (Strings.cat2 "=" (term fterm))))
-  in  
-    let fieldStrs = (Lists.map showField flds)
-    in (Strings.cat [
-      "{",
-      Strings.intercalate ", " fieldStrs,
-      "}"])
+  let fieldStrs = (Lists.map field flds)
+  in (Strings.cat [
+    "{",
+    Strings.intercalate ", " fieldStrs,
+    "}"])
 
 -- | Show a float value as a string
 float :: (Core.FloatValue -> String)
@@ -361,130 +372,121 @@ term t =
 -- | Show a type as a string
 type_ :: (Core.Type -> String)
 type_ typ =  
-  let showFieldType = (\ft ->  
-          let fname = (Core.unName (Core.fieldTypeName ft))
+  let showRowType = (\rt ->  
+          let flds = (Core.rowTypeFields rt)
           in  
-            let ftyp = (Core.fieldTypeType ft)
+            let fieldStrs = (Lists.map fieldType flds)
             in (Strings.cat [
-              fname,
-              ":",
-              (type_ ftyp)]))
+              "{",
+              Strings.intercalate ", " fieldStrs,
+              "}"]))
   in  
-    let showRowType = (\rt ->  
-            let flds = (Core.rowTypeFields rt)
+    let gatherTypes = (\prev -> \app ->  
+            let lhs = (Core.applicationTypeFunction app)
             in  
-              let fieldStrs = (Lists.map showFieldType flds)
-              in (Strings.cat [
-                "{",
-                Strings.intercalate ", " fieldStrs,
-                "}"]))
+              let rhs = (Core.applicationTypeArgument app)
+              in ((\x -> case x of
+                Core.TypeApplication v1 -> (gatherTypes (Lists.cons rhs prev) v1)
+                _ -> (Lists.cons lhs (Lists.cons rhs prev))) lhs))
     in  
-      let gatherTypes = (\prev -> \app ->  
-              let lhs = (Core.applicationTypeFunction app)
-              in  
-                let rhs = (Core.applicationTypeArgument app)
-                in ((\x -> case x of
-                  Core.TypeApplication v1 -> (gatherTypes (Lists.cons rhs prev) v1)
-                  _ -> (Lists.cons lhs (Lists.cons rhs prev))) lhs))
-      in  
-        let gatherFunctionTypes = (\prev -> \t -> (\x -> case x of
-                Core.TypeFunction v1 ->  
-                  let dom = (Core.functionTypeDomain v1)
-                  in  
-                    let cod = (Core.functionTypeCodomain v1)
-                    in (gatherFunctionTypes (Lists.cons dom prev) cod)
-                _ -> (Lists.reverse (Lists.cons t prev))) t)
-        in ((\x -> case x of
-          Core.TypeAnnotated v1 -> (type_ (Core.annotatedTypeBody v1))
-          Core.TypeApplication v1 ->  
-            let types = (gatherTypes [] v1)
-            in  
-              let typeStrs = (Lists.map type_ types)
-              in (Strings.cat [
-                "(",
-                Strings.intercalate " @ " typeStrs,
-                ")"])
-          Core.TypeEither v1 ->  
-            let leftTyp = (Core.eitherTypeLeft v1)
-            in  
-              let rightTyp = (Core.eitherTypeRight v1)
-              in (Strings.cat [
-                "either<",
-                type_ leftTyp,
-                ", ",
-                type_ rightTyp,
-                ">"])
-          Core.TypeForall v1 ->  
-            let var = (Core.unName (Core.forallTypeParameter v1))
-            in  
-              let body = (Core.forallTypeBody v1)
-              in (Strings.cat [
-                "(\8704",
-                var,
-                ".",
-                type_ body,
-                ")"])
-          Core.TypeFunction _ ->  
-            let types = (gatherFunctionTypes [] typ)
-            in  
-              let typeStrs = (Lists.map type_ types)
-              in (Strings.cat [
-                "(",
-                Strings.intercalate " \8594 " typeStrs,
-                ")"])
-          Core.TypeList v1 -> (Strings.cat [
-            "list<",
-            type_ v1,
-            ">"])
-          Core.TypeLiteral v1 -> (literalType v1)
-          Core.TypeMap v1 ->  
-            let keyTyp = (Core.mapTypeKeys v1)
-            in  
-              let valTyp = (Core.mapTypeValues v1)
-              in (Strings.cat [
-                "map<",
-                type_ keyTyp,
-                ", ",
-                type_ valTyp,
-                ">"])
-          Core.TypeMaybe v1 -> (Strings.cat [
-            "maybe<",
-            type_ v1,
-            ">"])
-          Core.TypePair v1 ->  
-            let firstTyp = (Core.pairTypeFirst v1)
-            in  
-              let secondTyp = (Core.pairTypeSecond v1)
-              in (Strings.cat [
-                "(",
-                type_ firstTyp,
-                ", ",
-                type_ secondTyp,
-                ")"])
-          Core.TypeProduct v1 ->  
-            let typeStrs = (Lists.map type_ v1)
-            in (Strings.intercalate "\215" typeStrs)
-          Core.TypeRecord v1 -> (Strings.cat2 "record" (showRowType v1))
-          Core.TypeSet v1 -> (Strings.cat [
-            "set<",
-            type_ v1,
-            ">"])
-          Core.TypeSum v1 ->  
-            let typeStrs = (Lists.map type_ v1)
-            in (Strings.intercalate "+" typeStrs)
-          Core.TypeUnion v1 -> (Strings.cat2 "union" (showRowType v1))
-          Core.TypeUnit -> "unit"
-          Core.TypeVariable v1 -> (Core.unName v1)
-          Core.TypeWrap v1 ->  
-            let tname = (Core.unName (Core.wrappedTypeTypeName v1))
-            in  
-              let typ1 = (Core.wrappedTypeBody v1)
-              in (Strings.cat [
-                "wrap[",
-                tname,
-                "](",
-                type_ typ1,
-                ")"])) typ)
+      let gatherFunctionTypes = (\prev -> \t -> (\x -> case x of
+              Core.TypeFunction v1 ->  
+                let dom = (Core.functionTypeDomain v1)
+                in  
+                  let cod = (Core.functionTypeCodomain v1)
+                  in (gatherFunctionTypes (Lists.cons dom prev) cod)
+              _ -> (Lists.reverse (Lists.cons t prev))) t)
+      in ((\x -> case x of
+        Core.TypeAnnotated v1 -> (type_ (Core.annotatedTypeBody v1))
+        Core.TypeApplication v1 ->  
+          let types = (gatherTypes [] v1)
+          in  
+            let typeStrs = (Lists.map type_ types)
+            in (Strings.cat [
+              "(",
+              Strings.intercalate " @ " typeStrs,
+              ")"])
+        Core.TypeEither v1 ->  
+          let leftTyp = (Core.eitherTypeLeft v1)
+          in  
+            let rightTyp = (Core.eitherTypeRight v1)
+            in (Strings.cat [
+              "either<",
+              type_ leftTyp,
+              ", ",
+              type_ rightTyp,
+              ">"])
+        Core.TypeForall v1 ->  
+          let var = (Core.unName (Core.forallTypeParameter v1))
+          in  
+            let body = (Core.forallTypeBody v1)
+            in (Strings.cat [
+              "(\8704",
+              var,
+              ".",
+              type_ body,
+              ")"])
+        Core.TypeFunction _ ->  
+          let types = (gatherFunctionTypes [] typ)
+          in  
+            let typeStrs = (Lists.map type_ types)
+            in (Strings.cat [
+              "(",
+              Strings.intercalate " \8594 " typeStrs,
+              ")"])
+        Core.TypeList v1 -> (Strings.cat [
+          "list<",
+          type_ v1,
+          ">"])
+        Core.TypeLiteral v1 -> (literalType v1)
+        Core.TypeMap v1 ->  
+          let keyTyp = (Core.mapTypeKeys v1)
+          in  
+            let valTyp = (Core.mapTypeValues v1)
+            in (Strings.cat [
+              "map<",
+              type_ keyTyp,
+              ", ",
+              type_ valTyp,
+              ">"])
+        Core.TypeMaybe v1 -> (Strings.cat [
+          "maybe<",
+          type_ v1,
+          ">"])
+        Core.TypePair v1 ->  
+          let firstTyp = (Core.pairTypeFirst v1)
+          in  
+            let secondTyp = (Core.pairTypeSecond v1)
+            in (Strings.cat [
+              "(",
+              type_ firstTyp,
+              ", ",
+              type_ secondTyp,
+              ")"])
+        Core.TypeProduct v1 ->  
+          let typeStrs = (Lists.map type_ v1)
+          in (Strings.intercalate "\215" typeStrs)
+        Core.TypeRecord v1 -> (Strings.cat2 "record" (showRowType v1))
+        Core.TypeSet v1 -> (Strings.cat [
+          "set<",
+          type_ v1,
+          ">"])
+        Core.TypeSum v1 ->  
+          let typeStrs = (Lists.map type_ v1)
+          in (Strings.intercalate "+" typeStrs)
+        Core.TypeUnion v1 -> (Strings.cat2 "union" (showRowType v1))
+        Core.TypeUnit -> "unit"
+        Core.TypeVariable v1 -> (Core.unName v1)
+        Core.TypeWrap v1 ->  
+          let tname = (Core.unName (Core.wrappedTypeTypeName v1))
+          in  
+            let typ1 = (Core.wrappedTypeBody v1)
+            in (Strings.cat [
+              "wrap[",
+              tname,
+              "](",
+              type_ typ1,
+              ")"])) typ)
 
 -- | Show a type scheme as a string
 typeScheme :: (Core.TypeScheme -> String)

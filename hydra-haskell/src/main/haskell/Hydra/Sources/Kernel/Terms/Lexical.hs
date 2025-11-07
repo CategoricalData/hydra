@@ -195,11 +195,12 @@ matchUnionDef = define "matchUnion" $
   "tname" ~> "pairs" ~> "term" ~>
   "stripped" <~ ref Rewriting.deannotateAndDetypeTermDef @@ var "term" $
   "mapping" <~ Maps.fromList (var "pairs") $
+  trace "match union" $
   cases _Term (var "stripped")
     (Just (ref Monads.unexpectedDef @@
       (Strings.cat $ list [
-        "union_{", Core.unName (var "tname"),
-        "} with one of {",
+        "inject(", Core.unName (var "tname"),
+        ") with one of {",
         (Strings.intercalate ", " (Lists.map ("tuple2" ~> Core.unName (first (var "tuple2"))) (var "pairs"))),
         "}"]) @@
       (ref ShowCore.termDef @@ var "stripped"))) [
