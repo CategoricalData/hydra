@@ -45,10 +45,10 @@ fieldTypes term =
 
 -- | Decode a floating-point type from a term
 floatType :: (Core.Term -> Compute.Flow Graph.Graph Core.FloatType)
-floatType = (Lexical.matchEnum (Core.Name "hydra.core.FloatType") [
+floatType term0 = (Monads.withTrace "dbg 1" (Lexical.matchEnum (Core.Name "hydra.core.FloatType") [
   (Core.Name "bigfloat", Core.FloatTypeBigfloat),
   (Core.Name "float32", Core.FloatTypeFloat32),
-  (Core.Name "float64", Core.FloatTypeFloat64)])
+  (Core.Name "float64", Core.FloatTypeFloat64)] term0))
 
 -- | Decode a forall type from a term
 forallType :: (Core.Term -> Compute.Flow Graph.Graph Core.ForallType)
@@ -64,7 +64,7 @@ functionType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.
 
 -- | Decode an integer type from a term
 integerType :: (Core.Term -> Compute.Flow Graph.Graph Core.IntegerType)
-integerType = (Lexical.matchEnum (Core.Name "hydra.core.IntegerType") [
+integerType term0 = (Monads.withTrace "dbg 1" (Lexical.matchEnum (Core.Name "hydra.core.IntegerType") [
   (Core.Name "bigint", Core.IntegerTypeBigint),
   (Core.Name "int8", Core.IntegerTypeInt8),
   (Core.Name "int16", Core.IntegerTypeInt16),
@@ -73,16 +73,16 @@ integerType = (Lexical.matchEnum (Core.Name "hydra.core.IntegerType") [
   (Core.Name "uint8", Core.IntegerTypeUint8),
   (Core.Name "uint16", Core.IntegerTypeUint16),
   (Core.Name "uint32", Core.IntegerTypeUint32),
-  (Core.Name "uint64", Core.IntegerTypeUint64)])
+  (Core.Name "uint64", Core.IntegerTypeUint64)] term0))
 
 -- | Decode a literal type from a term
 literalType :: (Core.Term -> Compute.Flow Graph.Graph Core.LiteralType)
-literalType = (Lexical.matchUnion (Core.Name "hydra.core.LiteralType") [
+literalType term0 = (Monads.withTrace "dbg 3" (Lexical.matchUnion (Core.Name "hydra.core.LiteralType") [
   Lexical.matchUnitField (Core.Name "binary") Core.LiteralTypeBinary,
   Lexical.matchUnitField (Core.Name "boolean") Core.LiteralTypeBoolean,
   (Core.Name "float", (\ft -> Flows.map (\x -> Core.LiteralTypeFloat x) (floatType ft))),
   (Core.Name "integer", (\it -> Flows.map (\x -> Core.LiteralTypeInteger x) (integerType it))),
-  (Lexical.matchUnitField (Core.Name "string") Core.LiteralTypeString)])
+  (Lexical.matchUnitField (Core.Name "string") Core.LiteralTypeString)] term0))
 
 -- | Decode a map type from a term
 mapType :: (Core.Term -> Compute.Flow Graph.Graph Core.MapType)
@@ -106,7 +106,7 @@ string term = (Core_.string (Rewriting.deannotateAndDetypeTerm term))
 
 -- | Decode a type from a term
 type_ :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)
-type_ dat = ((\x -> case x of
+type_ dat = (Monads.withTrace "dbg 4" ((\x -> case x of
   Core.TermAnnotated v1 -> (Flows.map (\t -> Core.TypeAnnotated (Core.AnnotatedType {
     Core.annotatedTypeBody = t,
     Core.annotatedTypeAnnotation = (Core.annotatedTermAnnotation v1)})) (type_ (Core.annotatedTermBody v1)))
@@ -126,7 +126,7 @@ type_ dat = ((\x -> case x of
     (Core.Name "union", (\rt -> Flows.map (\x -> Core.TypeUnion x) (rowType rt))),
     (Core.Name "unit", (\_ -> Flows.pure Core.TypeUnit)),
     (Core.Name "variable", (\n -> Flows.map (\x -> Core.TypeVariable x) (name n))),
-    (Core.Name "wrap", (\wt -> Flows.map (\x -> Core.TypeWrap x) (wrappedType wt)))] dat)) dat)
+    (Core.Name "wrap", (\wt -> Flows.map (\x -> Core.TypeWrap x) (wrappedType wt)))] dat)) dat))
 
 -- | Decode a type scheme from a term
 typeScheme :: (Core.Term -> Compute.Flow Graph.Graph Core.TypeScheme)

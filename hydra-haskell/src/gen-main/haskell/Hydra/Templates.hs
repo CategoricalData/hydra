@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Show.Core as Core__
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -26,7 +27,7 @@ graphToSchema g =
           let name = (fst nameAndEl)
           in  
             let el = (snd nameAndEl)
-            in (Flows.bind (Core_.type_ (Core.bindingTerm el)) (\t -> Flows.pure (name, t))))
+            in (Flows.bind (Monads.withTrace "graph to schema" (Core_.type_ (Core.bindingTerm el))) (\t -> Flows.pure (name, t))))
   in (Flows.bind (Flows.mapList toPair (Maps.toList (Graph.graphElements g))) (\pairs -> Flows.pure (Maps.fromList pairs)))
 
 instantiateTemplate :: (Bool -> M.Map Core.Name Core.Type -> Core.Type -> Compute.Flow t0 Core.Term)
