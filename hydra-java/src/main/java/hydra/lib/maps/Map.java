@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.function;
-import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Types.forall;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
 
@@ -31,7 +31,7 @@ public class Map extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return scheme("k", lambda("v1", lambda("v2",
+        return scheme("k", forall("v1", forall("v2",
             function(function("v1", "v2"), map("k", "v1"), map("k", "v2")))));
     }
 

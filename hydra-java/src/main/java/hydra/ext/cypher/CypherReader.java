@@ -186,17 +186,17 @@ public class CypherReader extends AntlrReaderBase {
     private static ComparisonOperator read(CypherParser.OC_ComparisonOperatorContext ctx) {
         switch (ctx.getText()) {
             case "=":
-                return new ComparisonOperator.Eq();
+                return new ComparisonOperator.Eq(false);
             case "<>":
-                return new ComparisonOperator.Neq();
+                return new ComparisonOperator.Neq(false);
             case "<":
-                return new ComparisonOperator.Lt();
+                return new ComparisonOperator.Lt(false);
             case ">":
-                return new ComparisonOperator.Gt();
+                return new ComparisonOperator.Gt(false);
             case "<=":
-                return new ComparisonOperator.Lte();
+                return new ComparisonOperator.Lte(false);
             case ">=":
-                return new ComparisonOperator.Gte();
+                return new ComparisonOperator.Gte(false);
             default:
                 return invalid("Unknown comparison operator: " + ctx.getText());
         }
@@ -232,11 +232,11 @@ public class CypherReader extends AntlrReaderBase {
     private static StringPredicateOperator read(CypherParser.OC_StringPredicateOperatorContext ctx) {
         return match(ctx,
                 matchCase(CypherParser.OC_StringPredicateOperatorContext::STARTS,
-                        new StringPredicateOperator.StartsWith()),
+                        new StringPredicateOperator.StartsWith(false)),
                 matchCase(CypherParser.OC_StringPredicateOperatorContext::ENDS,
-                        new StringPredicateOperator.EndsWith()),
+                        new StringPredicateOperator.EndsWith(false)),
                 matchCase(CypherParser.OC_StringPredicateOperatorContext::CONTAINS,
-                        new StringPredicateOperator.Contains()));
+                        new StringPredicateOperator.Contains(false)));
     }
 
     private static ListPredicateExpression read(CypherParser.OC_ListPredicateExpressionContext ctx) {
@@ -268,9 +268,9 @@ public class CypherReader extends AntlrReaderBase {
     private static AddOrSubtractOperator read(CypherParser.OC_AddOrSubtractExpression_OperatorContext ctx) {
         switch (ctx.getText()) {
             case "+":
-                return new AddOrSubtractOperator.Add();
+                return new AddOrSubtractOperator.Add(false);
             case "-":
-                return new AddOrSubtractOperator.Subtract();
+                return new AddOrSubtractOperator.Subtract(false);
             default:
                 return invalid("Unknown add or subtract operator: " + ctx.getText());
         }
@@ -297,11 +297,11 @@ public class CypherReader extends AntlrReaderBase {
             CypherParser.OC_MultiplyDivideModuloExpression_OperatorContext ctx) {
         switch (ctx.getText()) {
             case "*":
-                return new MultiplyDivideModuloOperator.Multiply();
+                return new MultiplyDivideModuloOperator.Multiply(false);
             case "/":
-                return new MultiplyDivideModuloOperator.Divide();
+                return new MultiplyDivideModuloOperator.Divide(false);
             case "%":
-                return new MultiplyDivideModuloOperator.Modulo();
+                return new MultiplyDivideModuloOperator.Modulo(false);
             default:
                 return invalid("Unknown multiply, divide or modulo operator: " + ctx.getText());
         }
@@ -377,7 +377,7 @@ public class CypherReader extends AntlrReaderBase {
                 matchCase(CypherParser.OC_AtomContext::oC_Literal, CypherReader::read, Atom.Literal::new),
                 matchCase(CypherParser.OC_AtomContext::oC_Parameter, CypherReader::read, Atom.Parameter::new),
                 matchCase(CypherParser.OC_AtomContext::oC_CaseExpression, CypherReader::read, Atom.Case::new),
-                matchCase(CypherParser.OC_AtomContext::COUNT, new Atom.CountStar()),
+                matchCase(CypherParser.OC_AtomContext::COUNT, new Atom.CountStar(false)),
                 matchCase(CypherParser.OC_AtomContext::oC_ListComprehension, CypherReader::read,
                         Atom.ListComprehension::new),
                 matchCase(CypherParser.OC_AtomContext::oC_PatternComprehension, CypherReader::read,
@@ -455,13 +455,13 @@ public class CypherReader extends AntlrReaderBase {
     private static QuantifierOperator read(CypherParser.OC_QuantifierOperatorContext ctx) {
         switch (ctx.getText()) {
             case "ALL":
-                return new QuantifierOperator.All();
+                return new QuantifierOperator.All(false);
             case "ANY":
-                return new QuantifierOperator.Any();
+                return new QuantifierOperator.Any(false);
             case "NONE":
-                return new QuantifierOperator.None();
+                return new QuantifierOperator.None(false);
             case "SINGLE":
-                return new QuantifierOperator.Single();
+                return new QuantifierOperator.Single(false);
             default:
                 throw new IllegalArgumentException("Unknown quantifier operator: " + ctx.getText());
         }
@@ -521,7 +521,7 @@ public class CypherReader extends AntlrReaderBase {
     private static Literal read(CypherParser.OC_LiteralContext ctx) {
         return match(ctx,
                 matchCase(CypherParser.OC_LiteralContext::oC_BooleanLiteral, CypherReader::read, Literal.Boolean_::new),
-                matchCase(CypherParser.OC_LiteralContext::NULL, new Literal.Null()),
+                matchCase(CypherParser.OC_LiteralContext::NULL, new Literal.Null(false)),
                 matchCase(CypherParser.OC_LiteralContext::oC_NumberLiteral, CypherReader::read, Literal.Number_::new),
                 matchCase(CypherParser.OC_LiteralContext::StringLiteral, CypherReader::read, Literal.String_::new),
                 matchCase(CypherParser.OC_LiteralContext::oC_ListLiteral, CypherReader::read, Literal.List::new),
@@ -566,9 +566,9 @@ public class CypherReader extends AntlrReaderBase {
     private static AddOrSubtractOperator read(CypherParser.OC_UnaryAddOrSubtractExpression_OperatorContext ctx) {
         switch (ctx.getText()) {
             case "+":
-                return new AddOrSubtractOperator.Add();
+                return new AddOrSubtractOperator.Add(false);
             case "-":
-                return new AddOrSubtractOperator.Subtract();
+                return new AddOrSubtractOperator.Subtract(false);
             default:
                 return invalid("Unknown unary add or subtract operator: " + ctx.getText());
         }
@@ -712,7 +712,7 @@ public class CypherReader extends AntlrReaderBase {
 
     private static StarOrYieldItems read(CypherParser.OC_StarOrYieldItemsContext ctx) {
         return null == ctx.oC_YieldItems()
-                ? new StarOrYieldItems.Star()
+                ? new StarOrYieldItems.Star(false)
                 : new StarOrYieldItems.Items(required(ctx, CypherParser.OC_StarOrYieldItemsContext::oC_YieldItems,
                 CypherReader::read));
     }
@@ -841,8 +841,8 @@ public class CypherReader extends AntlrReaderBase {
 
     private static SortOrder read(CypherParser.OC_SortOrderContext ctx) {
         return match(ctx,
-                matchCase(CypherParser.OC_SortOrderContext::oC_SortOrder_Ascending, new SortOrder.Ascending()),
-                matchCase(CypherParser.OC_SortOrderContext::oC_SortOrder_Descending, new SortOrder.Descending()));
+                matchCase(CypherParser.OC_SortOrderContext::oC_SortOrder_Ascending, new SortOrder.Ascending(false)),
+                matchCase(CypherParser.OC_SortOrderContext::oC_SortOrder_Descending, new SortOrder.Descending(false)));
     }
 
     private static ProjectionItems read(CypherParser.OC_ProjectionItemsContext ctx) {
@@ -955,8 +955,8 @@ public class CypherReader extends AntlrReaderBase {
 
     private static MatchOrCreate read(CypherParser.OC_MatchOrCreateContext ctx) {
         return match(ctx,
-                matchCase(CypherParser.OC_MatchOrCreateContext::MATCH, new MatchOrCreate.Match()),
-                matchCase(CypherParser.OC_MatchOrCreateContext::CREATE, new MatchOrCreate.Create()));
+                matchCase(CypherParser.OC_MatchOrCreateContext::MATCH, new MatchOrCreate.Match(false)),
+                matchCase(CypherParser.OC_MatchOrCreateContext::CREATE, new MatchOrCreate.Create(false)));
     }
 
     private static Create read(CypherParser.OC_CreateContext ctx) {

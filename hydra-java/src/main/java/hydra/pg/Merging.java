@@ -1,13 +1,13 @@
 package hydra.pg;
 
 import hydra.dsl.Flows;
-import hydra.basics.Basics;
+// import hydra.basics.Basics; // TODO: restore when kernel terms modules are generated
 import hydra.compute.Flow;
 import hydra.compute.StatelessAdapter;
 import hydra.compute.StatelessCoder;
 import hydra.core.Literal;
 import hydra.core.LiteralType;
-import hydra.core.Unit;
+import hydra.util.Unit;
 import hydra.dsl.LiteralTypes;
 import hydra.dsl.Literals;
 import hydra.pg.model.Edge;
@@ -233,7 +233,7 @@ public class Merging {
         if (unifiedPropertyKeys.contains(key)) {
             return key;
         } else {
-            String prefix = Basics.decapitalize(label) + "_";
+            String prefix = decapitalize(label) + "_";
             return new PropertyKey(prefix + key.value);
         }
     }
@@ -395,12 +395,12 @@ public class Merging {
             stringType,
             label -> StatelessCoder.of(
                 literal -> Flows.map(fromLiteral.apply(literal),
-                    s -> toLiteral.apply(Basics.decapitalize(label.value) + "_" + s)),
+                    s -> toLiteral.apply(decapitalize(label.value) + "_" + s)),
                 literal -> Flows.map(fromLiteral.apply(literal),
                     id -> toLiteral.apply(id.substring(label.value.length() + 1)))),
             label -> StatelessCoder.of(
                 literal -> Flows.map(fromLiteral.apply(literal),
-                    s -> toLiteral.apply(Basics.decapitalize(label.value) + "_" + s)),
+                    s -> toLiteral.apply(decapitalize(label.value) + "_" + s)),
                 literal -> Flows.map(fromLiteral.apply(literal),
                     id -> toLiteral.apply(id.substring(label.value.length() + 1)))));
     }
@@ -413,5 +413,13 @@ public class Merging {
             this.entity = entity;
             this.unifiedProperties = unifiedProperties;
         }
+    }
+
+    // TODO: inline implementation until hydra.basics.Basics is generated
+    private static String decapitalize(String s) {
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
+        return Character.toLowerCase(s.charAt(0)) + s.substring(1);
     }
 }

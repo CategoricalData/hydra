@@ -7,6 +7,7 @@ import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Tuple;
@@ -43,7 +44,7 @@ public class ToList extends PrimitiveFunction {
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
             Flow<Graph, Map<Term, Term>> r = Expect.map(Flows::pure, Flows::pure, args.get(0));
-            return Flows.map(r, map -> Terms.list(apply(map).stream().map(Terms::pair).collect(Collectors.toList())));
+            return Flows.map(r, map -> Terms.list(apply(map).stream().map(e -> Terms.pair(e.object1, e.object2)).collect(Collectors.toList())));
         };
     }
 

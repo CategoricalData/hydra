@@ -48,7 +48,7 @@ public class Expect {
 
             @Override
             public Flow<S, Double> visit(FloatValue.Bigfloat instance) {
-                return pure(instance.value);
+                return pure(Double.parseDouble(instance.value));
             }
         }));
     }
@@ -173,12 +173,13 @@ public class Expect {
     /**
      * Decode a function.
      */
-    public static <X, Y> Function<X, Flow<Graph, Y>> function(
-            final Function<X, Term> fin,
-            final Function<Term, Flow<Graph, Y>> fout,
-            final Term func) {
-        return x -> bind(Reduction.reduce(false, Terms.apply(func, fin.apply(x))), fout);
-    }
+    // TODO: Uncomment when Reduction.reduce() is restored
+//    public static <X, Y> Function<X, Flow<Graph, Y>> function(
+//            final Function<X, Term> fin,
+//            final Function<Term, Flow<Graph, Y>> fout,
+//            final Term func) {
+//        return x -> bind(Reduction.reduce(false, Terms.apply(func, fin.apply(x))), fout);
+//    }
 
     /**
      * Decode an int8 value.
@@ -346,7 +347,7 @@ public class Expect {
             }
 
             @Override
-            public Flow<S, Opt<X>> visit(Term.Optional instance) {
+            public Flow<S, Opt<X>> visit(Term.Maybe instance) {
                 return instance.value.isPresent() ? Flows.map(elems.apply(instance.value.get()), Opt::of)
                         : pure(Opt.empty());
             }
@@ -355,6 +356,7 @@ public class Expect {
 
     /**
      * Decode a pair of values.
+     * @return a Flow of the decoded pair
      */
     public static <S, T1, T2> Flow<S, Tuple.Tuple2<T1, T2>> pair(
             final Function<Term, Flow<S, T1>> first,
@@ -472,7 +474,7 @@ public class Expect {
 
                     @Override
                     public Flow<S, Character> visit(IntegerValue.Uint8 instance) {
-                        return pure(instance.value);
+                        return pure((char) (int) instance.value);
                     }
                 }));
     }

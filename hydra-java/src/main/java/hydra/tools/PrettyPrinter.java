@@ -200,7 +200,7 @@ public class PrettyPrinter {
                 public Consumer<StringBuilder> visit(Term.Annotated instance) {
                     AnnotatedTerm ann = instance.value;
                     Consumer<StringBuilder> ac = sb1 -> sb1.append(ann.annotation.toString());
-                    return var("annot", term(ann.subject), ac);
+                    return var("annot", term(ann.body), ac);
                 }
 
                 @Override
@@ -237,7 +237,7 @@ public class PrettyPrinter {
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Optional instance) {
+                public Consumer<StringBuilder> visit(Term.Maybe instance) {
                     Opt<Term> opt = instance.value;
                     return sb -> {
                         if (opt.isPresent()) {
@@ -246,6 +246,16 @@ public class PrettyPrinter {
                             sb.append("nothing");
                         }
                     };
+                }
+
+                @Override
+                public Consumer<StringBuilder> visit(Term.Pair instance) {
+                    return notImplemented("pair");
+                }
+
+                @Override
+                public Consumer<StringBuilder> visit(Term.Either instance) {
+                    return notImplemented("either");
                 }
 
                 @Override
@@ -269,8 +279,8 @@ public class PrettyPrinter {
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.TypeAbstraction instance) {
-                    return notImplemented("typeAbstraction");
+                public Consumer<StringBuilder> visit(Term.TypeLambda instance) {
+                    return notImplemented("typeLambda");
                 }
 
                 @Override
@@ -279,8 +289,8 @@ public class PrettyPrinter {
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Typed instance) {
-                    return notImplemented("typed");
+                public Consumer<StringBuilder> visit(Term.Unit instance) {
+                    return sb -> sb.append("unit");
                 }
 
                 @Override
@@ -296,7 +306,7 @@ public class PrettyPrinter {
                 @Override
                 public Consumer<StringBuilder> visit(Term.Wrap instance) {
                     WrappedTerm nom = instance.value;
-                    return var(shortName(nom.typeName), term(nom.object));
+                    return var(shortName(nom.typeName), term(nom.body));
                 }
             });
 

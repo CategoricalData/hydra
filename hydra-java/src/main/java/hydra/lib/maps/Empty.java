@@ -6,6 +6,7 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 

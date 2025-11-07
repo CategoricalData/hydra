@@ -1,7 +1,7 @@
 package hydra.dsl;
 
 import hydra.compute.FlowState;
-import hydra.core.Unit;
+import hydra.util.Unit;
 import hydra.tools.FlowException;
 import java.util.Arrays;
 import java.util.List;

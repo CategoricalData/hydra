@@ -10,27 +10,27 @@ import hydra.core.LiteralType;
  */
 public interface LiteralTypes {
     static LiteralType bigfloat() {
-        return float_(new FloatType.Bigfloat());
+        return float_(new FloatType.Bigfloat(false));
     }
 
     static LiteralType bigint() {
-        return integer(new IntegerType.Bigint());
+        return integer(new IntegerType.Bigint(false));
     }
 
     static LiteralType binary() {
-        return new LiteralType.Binary();
+        return new LiteralType.Binary(false);
     }
 
     static LiteralType boolean_() {
-        return new LiteralType.Boolean_();
+        return new LiteralType.Boolean_(false);
     }
 
     static LiteralType float32() {
-        return float_(new FloatType.Float32());
+        return float_(new FloatType.Float32(false));
     }
 
     static LiteralType float64() {
-        return float_(new FloatType.Float64());
+        return float_(new FloatType.Float64(false));
     }
 
     static LiteralType float_(final FloatType ftype) {
@@ -38,19 +38,19 @@ public interface LiteralTypes {
     }
 
     static LiteralType int16() {
-        return integer(new IntegerType.Int16());
+        return integer(new IntegerType.Int16(false));
     }
 
     static LiteralType int32() {
-        return integer(new IntegerType.Int32());
+        return integer(new IntegerType.Int32(false));
     }
 
     static LiteralType int64() {
-        return integer(new IntegerType.Int64());
+        return integer(new IntegerType.Int64(false));
     }
 
     static LiteralType int8() {
-        return integer(new IntegerType.Int8());
+        return integer(new IntegerType.Int8(false));
     }
 
     static LiteralType integer(final IntegerType itype) {
@@ -58,23 +58,23 @@ public interface LiteralTypes {
     }
 
     static LiteralType string() {
-        return new LiteralType.String_();
+        return new LiteralType.String_(false);
     }
 
     static LiteralType uint16() {
-        return integer(new IntegerType.Uint16());
+        return integer(new IntegerType.Uint16(false));
     }
 
     static LiteralType uint32() {
-        return integer(new IntegerType.Uint32());
+        return integer(new IntegerType.Uint32(false));
     }
 
     static LiteralType uint64() {
-        return integer(new IntegerType.Uint64());
+        return integer(new IntegerType.Uint64(false));
     }
 
     static LiteralType uint8() {
-        return integer(new IntegerType.Uint8());
+        return integer(new IntegerType.Uint8(false));
     }
 
     /**

@@ -121,7 +121,7 @@ public abstract class JsonDecoding {
 
             @Override
             public Double visit(Value.Number_ instance) {
-                return instance.value;
+                return Double.parseDouble(instance.value);
             }
         });
     }
@@ -392,7 +392,7 @@ public abstract class JsonDecoding {
                 if (mapping == null) {
                     throw new JsonDecodingException("unexpected union value: " + instance.value);
                 } else {
-                    return mapping.apply(new Value.Null());
+                    return mapping.apply(new Value.Null(false));
                 }
             }
         });

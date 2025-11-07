@@ -7,6 +7,7 @@ import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Opt;
@@ -35,7 +36,7 @@ public class Alter extends PrimitiveFunction {
     @Override
     public TypeScheme type() {
         return scheme("k", "v",
-                function(function(optional("v"), optional("v")), "k", map("k", "v"), map("k", "v")));
+                function(function(optional("v"), optional("v")), Types.var("k"), map("k", "v"), map("k", "v")));
     }
 
     @Override

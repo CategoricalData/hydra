@@ -6,10 +6,9 @@ import hydra.compute.FlowState;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.core.Unit;
+import hydra.util.Unit;
 import hydra.dsl.Flows;
 import hydra.dsl.Terms;
-import hydra.graph.Element;
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
 import hydra.lib.Libraries;
@@ -83,8 +82,8 @@ public class HydraTestBase {
         checkFlow(flow, new Unit(), consumer);
     }
 
-    protected static  Graph emptyGraph() {
-        Map<Name, Element> elements = Collections.emptyMap();
+    protected static Graph emptyGraph() {
+        Map<Name, hydra.core.Binding> elements = Collections.emptyMap();
         Map<Name, TypeScheme> types = Collections.emptyMap();
         Map<Name, Opt<Term>> environment = Collections.emptyMap();
         Term body = Terms.string("empty graph");

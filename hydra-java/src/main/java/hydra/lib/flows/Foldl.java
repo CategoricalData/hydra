@@ -8,6 +8,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
@@ -31,8 +32,8 @@ public class Foldl extends PrimitiveFunction {
     public TypeScheme type() {
         return Types.scheme("s", "a", "b",
                 Types.function(
-                        Types.function("a", "b", Types.flow("s", "a")),
-                        "a",
+                        Types.function(Types.var("a"), Types.var("b"), Types.flow("s", "a")),
+                        Types.var("a"),
                         Types.list("b"),
                         Types.flow("s", "a")));
     }

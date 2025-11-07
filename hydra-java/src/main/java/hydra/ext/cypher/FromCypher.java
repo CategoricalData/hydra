@@ -149,32 +149,32 @@ public class FromCypher extends MapperBase {
         return cypher.accept(new hydra.ext.cypher.openCypher.ComparisonOperator.Visitor<ComparisonOperator>() {
             @Override
             public ComparisonOperator visit(hydra.ext.cypher.openCypher.ComparisonOperator.Eq instance) {
-                return new ComparisonOperator.Eq();
+                return new ComparisonOperator.Eq(false);
             }
 
             @Override
             public ComparisonOperator visit(hydra.ext.cypher.openCypher.ComparisonOperator.Neq instance) {
-                return new ComparisonOperator.Neq();
+                return new ComparisonOperator.Neq(false);
             }
 
             @Override
             public ComparisonOperator visit(hydra.ext.cypher.openCypher.ComparisonOperator.Lt instance) {
-                return new ComparisonOperator.Lt();
+                return new ComparisonOperator.Lt(false);
             }
 
             @Override
             public ComparisonOperator visit(hydra.ext.cypher.openCypher.ComparisonOperator.Gt instance) {
-                return new ComparisonOperator.Gt();
+                return new ComparisonOperator.Gt(false);
             }
 
             @Override
             public ComparisonOperator visit(hydra.ext.cypher.openCypher.ComparisonOperator.Lte instance) {
-                return new ComparisonOperator.Lte();
+                return new ComparisonOperator.Lte(false);
             }
 
             @Override
             public ComparisonOperator visit(hydra.ext.cypher.openCypher.ComparisonOperator.Gte instance) {
-                return new ComparisonOperator.Gte();
+                return new ComparisonOperator.Gte(false);
             }
         });
     }
@@ -185,25 +185,25 @@ public class FromCypher extends MapperBase {
 
     public static Expression from(OrExpression cypher) {
         return oneOrMany(cypher.value, FromCypher::from, exps -> new Expression.Associative(new AssociativeExpression(
-                new BinaryOperator.Boolean_(new BinaryBooleanOperator.Or()),
+                new BinaryOperator.Boolean_(new BinaryBooleanOperator.Or(false)),
                 map(exps, FromCypher::from))));
     }
 
     public static Expression from(XorExpression cypher) {
         return oneOrMany(cypher.value, FromCypher::from, exps -> new Expression.Associative(new AssociativeExpression(
-                new BinaryOperator.Boolean_(new BinaryBooleanOperator.Xor()),
+                new BinaryOperator.Boolean_(new BinaryBooleanOperator.Xor(false)),
                 map(exps, FromCypher::from))));
     }
 
     public static Expression from(AndExpression cypher) {
         return oneOrMany(cypher.value, FromCypher::from, exps -> new Expression.Associative(new AssociativeExpression(
-                new BinaryOperator.Boolean_(new BinaryBooleanOperator.And()),
+                new BinaryOperator.Boolean_(new BinaryBooleanOperator.And(false)),
                 map(exps, FromCypher::from))));
     }
 
     public static Expression from(NotExpression cypher) {
         return cypher.not
-                ? new Expression.Unary(new UnaryExpression(new UnaryOperator.Negate(), from(cypher.expression)))
+                ? new Expression.Unary(new UnaryExpression(new UnaryOperator.Negate(false), from(cypher.expression)))
                 : from(cypher.expression);
     }
 
@@ -324,7 +324,7 @@ public class FromCypher extends MapperBase {
 
     public static Expression from(PowerOfExpression cypher) {
         return oneOrMany(cypher.value, FromCypher::from, exps -> new Expression.Associative(new AssociativeExpression(
-                new BinaryOperator.Power(),
+                new BinaryOperator.Power(false),
                 map(exps, FromCypher::from))));
     }
 
@@ -452,8 +452,8 @@ public class FromCypher extends MapperBase {
 
     private static Direction directionOf(RelationshipPattern cypher) {
         return cypher.leftArrow
-                ? (cypher.rightArrow ? new Direction.Both() : new Direction.In())
-                : (cypher.rightArrow ? new Direction.Out() : new Direction.Undirected());
+                ? (cypher.rightArrow ? new Direction.Both(false) : new Direction.In(false))
+                : (cypher.rightArrow ? new Direction.Out(false) : new Direction.Undirected(false));
     }
 
     private static Opt<VertexLabel> labelOf(NodePattern cypher) {
