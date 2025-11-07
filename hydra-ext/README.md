@@ -58,6 +58,14 @@ The generated Haskell can be updated using:
 writeHaskell "src/gen-main/haskell" hydraExtModules
 ```
 
+Currently, hydra-ext is also used to transform Hydra's kernel code into Hydra-Java and Hydra-Python:
+
+```haskell
+writeJava "../hydra-java/src/gen-main/java" kernelModules
+
+writePython "../hydra-python/src/python" kernelModules
+```
+
 ## Tools
 
 Miscellaneous tools include:

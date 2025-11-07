@@ -57,8 +57,17 @@ requireTermType term = fail $ "update me: types are derived using typeOf now, ra
 -- For now, the supported features are hard-coded to those of Java 11, rather than being configurable.
 javaFeatures = java11Features
 
-moduleToJava :: Module -> Flow Graph (M.Map FilePath String)
-moduleToJava mod = withTrace "encode module in Java" $ do
+-- | New simple adapter version that works with definitions directly
+moduleToJava :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
+moduleToJava mod defs = withTrace "encode module in Java" $ do
+    units <- defsToJavaCompilationUnits mod defs
+    return $ M.fromList $ forPair <$> M.toList units
+  where
+    forPair (name, unit) = (bindingNameToFilePath name, printExpr $ parenthesize $ writeCompilationUnit unit)
+
+-- | Old deprecated version using transformModule
+moduleToJavaDeprecated :: Module -> Flow Graph (M.Map FilePath String)
+moduleToJavaDeprecated mod = withTrace "encode module in Java" $ do
     units <- moduleToJavaCompilationUnit mod
     return $ M.fromList $ forPair <$> M.toList units
   where
@@ -139,6 +148,37 @@ constructElementsInterface mod members = (elName, cu)
       Java.NormalInterfaceDeclaration mods (javaTypeIdentifier className) [] [] body
     decl = Java.TypeDeclarationWithComments itf $ moduleDescription mod
 
+-- | Convert definitions directly to Java compilation units (simple adapter approach)
+defsToJavaCompilationUnits :: Module -> [Definition] -> Flow Graph (M.Map Name Java.CompilationUnit)
+defsToJavaCompilationUnits mod defs = do
+    let pkg = javaPackageDeclaration $ moduleNamespace mod
+    let aliases = importAliasesForModule mod
+    let typeDefs = [td | DefinitionType td <- defs]
+    units <- CM.mapM (typeDefToUnit pkg aliases) typeDefs
+    return $ M.fromList units
+  where
+    typeDefToUnit pkg aliases (TypeDefinition name typ) = do
+--      if (name == Name "hydra.relational.ColumnSchema")
+--        then fail $ "type: " ++ ShowCore.type_ typ
+--        else pure ()
+      isSer <- isSerializableType typ
+      let imports = if isSer
+                    then [Java.ImportDeclarationSingleType $ Java.SingleTypeImportDeclaration $ javaTypeName $ Java.Identifier "java.io.Serializable"]
+                    else []
+      decl <- typeDefToClassDecl isSer aliases name typ
+      return (name, Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports [decl])
+
+    typeDefToClassDecl isSer aliases name typ = do
+      decl <- toClassDecl False isSer aliases [] name typ
+      comment <- getTypeDescription typ
+      return $ Java.TypeDeclarationWithComments (Java.TypeDeclarationClass decl) comment
+
+    isSerializableType typ = case deannotateType typ of
+      TypeRecord _ -> pure True
+      TypeUnion _ -> pure True
+      TypeWrap _ -> pure True
+      _ -> pure False
+
 constructModule :: Module
   -> M.Map Type (Coder Graph Graph Term Java.Expression)
   -> [(Binding, TypeApplicationTerm)]
@@ -214,16 +254,14 @@ constructModule mod coders pairs = do
             _ -> unexpected "function term" $ show term
           _ -> unexpected "function type" $ show typ
 
-declarationForForallType :: Bool -> Aliases
-  -> [Java.TypeParameter] -> Name -> ForallType -> Flow Graph Java.ClassDeclaration
-declarationForForallType isSer aliases tparams elName (ForallType (Name v) body) =
-    toClassDecl False isSer aliases (tparams ++ [param]) elName body
-  where
-    param = javaTypeParameter $ capitalize v
-
 declarationForRecordType :: Bool -> Bool -> Aliases -> [Java.TypeParameter] -> Name
   -> [FieldType] -> Flow Graph Java.ClassDeclaration
 declarationForRecordType isInner isSer aliases tparams elName fields = do
+
+--    if (elName == Name "hydra.relational.ColumnSchema")
+--      then fail $ "fields: [" ++ (L.intercalate ", " $ fmap (ShowCore.fieldType) fields) ++ "], tparams: " ++ show tparams
+--      else pure ()
+
     memberVars <- CM.mapM toMemberVar fields
     memberVars' <- CM.zipWithM addComment memberVars fields
     withMethods <- if L.length fields > 1
@@ -756,7 +794,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
         _ -> failAsLiteral $ "Unimplemented term variant: " ++ show (termVariant term)
 
 encodeType :: Aliases -> Type -> Flow Graph Java.Type
-encodeType aliases t = case deannotateType t of
+encodeType aliases t =  case deannotateType t of
     TypeApplication (ApplicationType lhs rhs) -> do
       jlhs <- encode lhs
       jrhs <- encode rhs >>= javaTypeToJavaReferenceType
@@ -990,7 +1028,9 @@ toClassDecl :: Bool -> Bool -> Aliases -> [Java.TypeParameter]
 toClassDecl isInner isSer aliases tparams elName t = case deannotateType t of
     TypeRecord rt -> declarationForRecordType isInner isSer aliases tparams elName $ rowTypeFields rt
     TypeUnion rt -> declarationForUnionType isSer aliases tparams elName $ rowTypeFields rt
-    TypeForall ut -> declarationForForallType isSer aliases tparams elName ut
+    TypeForall (ForallType (Name v) body) -> toClassDecl False isSer aliases (tparams ++ [param]) elName body
+      where
+        param = javaTypeParameter $ capitalize v
     TypeWrap (WrappedType tname wt) -> declarationForRecordType isInner isSer aliases tparams elName
       [FieldType (Name "value") wt]
     -- Other types are not supported as class declarations, so we wrap them as record types.
