@@ -14,8 +14,14 @@ public class FunctionType implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_CODOMAIN = new hydra.core.Name("codomain");
   
+  /**
+   * The domain (input) type of the function
+   */
   public final hydra.core.Type domain;
   
+  /**
+   * The codomain (output) type of the function
+   */
   public final hydra.core.Type codomain;
   
   public FunctionType (hydra.core.Type domain, hydra.core.Type codomain) {

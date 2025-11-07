@@ -16,10 +16,19 @@ public class BlockStyle implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_NEWLINE_AFTER_CONTENT = new hydra.core.Name("newlineAfterContent");
   
+  /**
+   * An optional indentation string
+   */
   public final hydra.util.Opt<String> indent;
   
+  /**
+   * Whether to place a newline before the content
+   */
   public final Boolean newlineBeforeContent;
   
+  /**
+   * Whether to place a newline after the content
+   */
   public final Boolean newlineAfterContent;
   
   public BlockStyle (hydra.util.Opt<String> indent, Boolean newlineBeforeContent, Boolean newlineAfterContent) {

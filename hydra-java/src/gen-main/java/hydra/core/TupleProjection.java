@@ -14,6 +14,8 @@ public class TupleProjection implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_INDEX = new hydra.core.Name("index");
   
+  public static final hydra.core.Name FIELD_NAME_DOMAIN = new hydra.core.Name("domain");
+  
   /**
    * The arity of the tuple
    */
@@ -24,11 +26,18 @@ public class TupleProjection implements Serializable {
    */
   public final Integer index;
   
-  public TupleProjection (Integer arity, Integer index) {
+  /**
+   * An optional domain for the projection; this is a list of component types
+   */
+  public final hydra.util.Opt<java.util.List<hydra.core.Type>> domain;
+  
+  public TupleProjection (Integer arity, Integer index, hydra.util.Opt<java.util.List<hydra.core.Type>> domain) {
     java.util.Objects.requireNonNull((arity));
     java.util.Objects.requireNonNull((index));
+    java.util.Objects.requireNonNull((domain));
     this.arity = arity;
     this.index = index;
+    this.domain = domain;
   }
   
   @Override
@@ -37,21 +46,26 @@ public class TupleProjection implements Serializable {
       return false;
     }
     TupleProjection o = (TupleProjection) (other);
-    return arity.equals(o.arity) && index.equals(o.index);
+    return arity.equals(o.arity) && index.equals(o.index) && domain.equals(o.domain);
   }
   
   @Override
   public int hashCode() {
-    return 2 * arity.hashCode() + 3 * index.hashCode();
+    return 2 * arity.hashCode() + 3 * index.hashCode() + 5 * domain.hashCode();
   }
   
   public TupleProjection withArity(Integer arity) {
     java.util.Objects.requireNonNull((arity));
-    return new TupleProjection(arity, index);
+    return new TupleProjection(arity, index, domain);
   }
   
   public TupleProjection withIndex(Integer index) {
     java.util.Objects.requireNonNull((index));
-    return new TupleProjection(arity, index);
+    return new TupleProjection(arity, index, domain);
+  }
+  
+  public TupleProjection withDomain(hydra.util.Opt<java.util.List<hydra.core.Type>> domain) {
+    java.util.Objects.requireNonNull((domain));
+    return new TupleProjection(arity, index, domain);
   }
 }

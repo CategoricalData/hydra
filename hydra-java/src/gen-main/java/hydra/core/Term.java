@@ -14,6 +14,8 @@ public abstract class Term implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
   
+  public static final hydra.core.Name FIELD_NAME_EITHER = new hydra.core.Name("either");
+  
   public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
   
   public static final hydra.core.Name FIELD_NAME_LET = new hydra.core.Name("let");
@@ -24,7 +26,9 @@ public abstract class Term implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
   
-  public static final hydra.core.Name FIELD_NAME_OPTIONAL = new hydra.core.Name("optional");
+  public static final hydra.core.Name FIELD_NAME_MAYBE = new hydra.core.Name("maybe");
+  
+  public static final hydra.core.Name FIELD_NAME_PAIR = new hydra.core.Name("pair");
   
   public static final hydra.core.Name FIELD_NAME_PRODUCT = new hydra.core.Name("product");
   
@@ -34,13 +38,13 @@ public abstract class Term implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_SUM = new hydra.core.Name("sum");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_ABSTRACTION = new hydra.core.Name("typeAbstraction");
-  
   public static final hydra.core.Name FIELD_NAME_TYPE_APPLICATION = new hydra.core.Name("typeApplication");
   
-  public static final hydra.core.Name FIELD_NAME_TYPED = new hydra.core.Name("typed");
+  public static final hydra.core.Name FIELD_NAME_TYPE_LAMBDA = new hydra.core.Name("typeLambda");
   
   public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
+  
+  public static final hydra.core.Name FIELD_NAME_UNIT = new hydra.core.Name("unit");
   
   public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
   
@@ -57,6 +61,8 @@ public abstract class Term implements Serializable {
     
     R visit(Application instance) ;
     
+    R visit(Either instance) ;
+    
     R visit(Function instance) ;
     
     R visit(Let instance) ;
@@ -67,7 +73,9 @@ public abstract class Term implements Serializable {
     
     R visit(Map instance) ;
     
-    R visit(Optional instance) ;
+    R visit(Maybe instance) ;
+    
+    R visit(Pair instance) ;
     
     R visit(Product instance) ;
     
@@ -77,13 +85,13 @@ public abstract class Term implements Serializable {
     
     R visit(Sum instance) ;
     
-    R visit(TypeAbstraction instance) ;
-    
     R visit(TypeApplication instance) ;
     
-    R visit(Typed instance) ;
+    R visit(TypeLambda instance) ;
     
     R visit(Union instance) ;
+    
+    R visit(Unit instance) ;
     
     R visit(Variable instance) ;
     
@@ -100,6 +108,10 @@ public abstract class Term implements Serializable {
     }
     
     default R visit(Application instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Either instance) {
       return otherwise((instance));
     }
     
@@ -123,7 +135,11 @@ public abstract class Term implements Serializable {
       return otherwise((instance));
     }
     
-    default R visit(Optional instance) {
+    default R visit(Maybe instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Pair instance) {
       return otherwise((instance));
     }
     
@@ -143,19 +159,19 @@ public abstract class Term implements Serializable {
       return otherwise((instance));
     }
     
-    default R visit(TypeAbstraction instance) {
-      return otherwise((instance));
-    }
-    
     default R visit(TypeApplication instance) {
       return otherwise((instance));
     }
     
-    default R visit(Typed instance) {
+    default R visit(TypeLambda instance) {
       return otherwise((instance));
     }
     
     default R visit(Union instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Unit instance) {
       return otherwise((instance));
     }
     
@@ -231,6 +247,37 @@ public abstract class Term implements Serializable {
   }
   
   /**
+   * An either value
+   */
+  public static final class Either extends hydra.core.Term implements Serializable {
+    public final hydra.util.Either<hydra.core.Term, hydra.core.Term> value;
+    
+    public Either (hydra.util.Either<hydra.core.Term, hydra.core.Term> value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Either)) {
+        return false;
+      }
+      Either o = (Either) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
    * A function term
    */
   public static final class Function extends hydra.core.Term implements Serializable {
@@ -261,6 +308,9 @@ public abstract class Term implements Serializable {
     }
   }
   
+  /**
+   * A 'let' term, which binds variables to terms
+   */
   public static final class Let extends hydra.core.Term implements Serializable {
     public final hydra.core.Let value;
     
@@ -385,20 +435,51 @@ public abstract class Term implements Serializable {
   /**
    * An optional value
    */
-  public static final class Optional extends hydra.core.Term implements Serializable {
+  public static final class Maybe extends hydra.core.Term implements Serializable {
     public final hydra.util.Opt<hydra.core.Term> value;
     
-    public Optional (hydra.util.Opt<hydra.core.Term> value) {
+    public Maybe (hydra.util.Opt<hydra.core.Term> value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Optional)) {
+      if (!(other instanceof Maybe)) {
         return false;
       }
-      Optional o = (Optional) (other);
+      Maybe o = (Maybe) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A pair (2-tuple)
+   */
+  public static final class Pair extends hydra.core.Term implements Serializable {
+    public final hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term> value;
+    
+    public Pair (hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term> value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Pair)) {
+        return false;
+      }
+      Pair o = (Pair) (other);
       return value.equals(o.value);
     }
     
@@ -538,43 +619,12 @@ public abstract class Term implements Serializable {
   }
   
   /**
-   * A System F type abstraction term
-   */
-  public static final class TypeAbstraction extends hydra.core.Term implements Serializable {
-    public final hydra.core.TypeAbstraction value;
-    
-    public TypeAbstraction (hydra.core.TypeAbstraction value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof TypeAbstraction)) {
-        return false;
-      }
-      TypeAbstraction o = (TypeAbstraction) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  /**
    * A System F type application term
    */
   public static final class TypeApplication extends hydra.core.Term implements Serializable {
-    public final hydra.core.TypedTerm value;
+    public final hydra.core.TypeApplicationTerm value;
     
-    public TypeApplication (hydra.core.TypedTerm value) {
+    public TypeApplication (hydra.core.TypeApplicationTerm value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -600,22 +650,22 @@ public abstract class Term implements Serializable {
   }
   
   /**
-   * A term annotated with its type
+   * A System F type abstraction term
    */
-  public static final class Typed extends hydra.core.Term implements Serializable {
-    public final hydra.core.TypedTerm value;
+  public static final class TypeLambda extends hydra.core.Term implements Serializable {
+    public final hydra.core.TypeLambda value;
     
-    public Typed (hydra.core.TypedTerm value) {
+    public TypeLambda (hydra.core.TypeLambda value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Typed)) {
+      if (!(other instanceof TypeLambda)) {
         return false;
       }
-      Typed o = (Typed) (other);
+      TypeLambda o = (TypeLambda) (other);
       return value.equals(o.value);
     }
     
@@ -662,6 +712,37 @@ public abstract class Term implements Serializable {
   }
   
   /**
+   * A unit value; a term with no value
+   */
+  public static final class Unit extends hydra.core.Term implements Serializable {
+    public final Boolean value;
+    
+    public Unit (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Unit)) {
+        return false;
+      }
+      Unit o = (Unit) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
    * A variable reference
    */
   public static final class Variable extends hydra.core.Term implements Serializable {
@@ -692,6 +773,9 @@ public abstract class Term implements Serializable {
     }
   }
   
+  /**
+   * A wrapped term; an instance of a wrapper type (newtype)
+   */
   public static final class Wrap extends hydra.core.Term implements Serializable {
     public final hydra.core.WrappedTerm value;
     

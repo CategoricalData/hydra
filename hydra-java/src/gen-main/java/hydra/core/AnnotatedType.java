@@ -10,18 +10,24 @@ import java.io.Serializable;
 public class AnnotatedType implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.AnnotatedType");
   
-  public static final hydra.core.Name FIELD_NAME_SUBJECT = new hydra.core.Name("subject");
+  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATION = new hydra.core.Name("annotation");
   
-  public final hydra.core.Type subject;
+  /**
+   * The type being annotated
+   */
+  public final hydra.core.Type body;
   
+  /**
+   * The annotation as a map from keys to values
+   */
   public final java.util.Map<hydra.core.Name, hydra.core.Term> annotation;
   
-  public AnnotatedType (hydra.core.Type subject, java.util.Map<hydra.core.Name, hydra.core.Term> annotation) {
-    java.util.Objects.requireNonNull((subject));
+  public AnnotatedType (hydra.core.Type body, java.util.Map<hydra.core.Name, hydra.core.Term> annotation) {
+    java.util.Objects.requireNonNull((body));
     java.util.Objects.requireNonNull((annotation));
-    this.subject = subject;
+    this.body = body;
     this.annotation = annotation;
   }
   
@@ -31,21 +37,21 @@ public class AnnotatedType implements Serializable {
       return false;
     }
     AnnotatedType o = (AnnotatedType) (other);
-    return subject.equals(o.subject) && annotation.equals(o.annotation);
+    return body.equals(o.body) && annotation.equals(o.annotation);
   }
   
   @Override
   public int hashCode() {
-    return 2 * subject.hashCode() + 3 * annotation.hashCode();
+    return 2 * body.hashCode() + 3 * annotation.hashCode();
   }
   
-  public AnnotatedType withSubject(hydra.core.Type subject) {
-    java.util.Objects.requireNonNull((subject));
-    return new AnnotatedType(subject, annotation);
+  public AnnotatedType withBody(hydra.core.Type body) {
+    java.util.Objects.requireNonNull((body));
+    return new AnnotatedType(body, annotation);
   }
   
   public AnnotatedType withAnnotation(java.util.Map<hydra.core.Name, hydra.core.Term> annotation) {
     java.util.Objects.requireNonNull((annotation));
-    return new AnnotatedType(subject, annotation);
+    return new AnnotatedType(body, annotation);
   }
 }

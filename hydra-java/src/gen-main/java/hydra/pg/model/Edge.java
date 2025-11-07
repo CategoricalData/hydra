@@ -2,12 +2,10 @@
 
 package hydra.pg.model;
 
-import java.io.Serializable;
-
 /**
  * An edge
  */
-public class Edge<V> implements Serializable {
+public class Edge<V> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.Edge");
   
   public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");

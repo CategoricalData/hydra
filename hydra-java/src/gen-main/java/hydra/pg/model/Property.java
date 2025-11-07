@@ -2,12 +2,10 @@
 
 package hydra.pg.model;
 
-import java.io.Serializable;
-
 /**
  * A key/value property
  */
-public class Property<V> implements Serializable {
+public class Property<V> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.Property");
   
   public static final hydra.core.Name FIELD_NAME_KEY = new hydra.core.Name("key");

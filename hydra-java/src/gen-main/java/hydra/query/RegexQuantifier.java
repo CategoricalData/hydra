@@ -84,8 +84,11 @@ public abstract class RegexQuantifier implements Serializable {
    * No quantifier; matches a single occurrence
    */
   public static final class One extends hydra.query.RegexQuantifier implements Serializable {
-    public One () {
+    public final Boolean value;
     
+    public One (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -94,12 +97,12 @@ public abstract class RegexQuantifier implements Serializable {
         return false;
       }
       One o = (One) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -112,8 +115,11 @@ public abstract class RegexQuantifier implements Serializable {
    * The ? quanifier; matches zero or one occurrence
    */
   public static final class ZeroOrOne extends hydra.query.RegexQuantifier implements Serializable {
-    public ZeroOrOne () {
+    public final Boolean value;
     
+    public ZeroOrOne (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -122,12 +128,12 @@ public abstract class RegexQuantifier implements Serializable {
         return false;
       }
       ZeroOrOne o = (ZeroOrOne) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -140,8 +146,11 @@ public abstract class RegexQuantifier implements Serializable {
    * The * quantifier; matches any number of occurrences
    */
   public static final class ZeroOrMore extends hydra.query.RegexQuantifier implements Serializable {
-    public ZeroOrMore () {
+    public final Boolean value;
     
+    public ZeroOrMore (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -150,12 +159,12 @@ public abstract class RegexQuantifier implements Serializable {
         return false;
       }
       ZeroOrMore o = (ZeroOrMore) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -168,8 +177,11 @@ public abstract class RegexQuantifier implements Serializable {
    * The + quantifier; matches one or more occurrences
    */
   public static final class OneOrMore extends hydra.query.RegexQuantifier implements Serializable {
-    public OneOrMore () {
+    public final Boolean value;
     
+    public OneOrMore (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -178,12 +190,12 @@ public abstract class RegexQuantifier implements Serializable {
         return false;
       }
       OneOrMore o = (OneOrMore) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

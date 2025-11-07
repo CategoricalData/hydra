@@ -18,12 +18,24 @@ public class CaseConversionTestCase implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_TO_STRING = new hydra.core.Name("toString");
   
+  /**
+   * The source case convention
+   */
   public final hydra.mantle.CaseConvention fromConvention;
   
+  /**
+   * The target case convention
+   */
   public final hydra.mantle.CaseConvention toConvention;
   
+  /**
+   * The input string
+   */
   public final String fromString;
   
+  /**
+   * The expected output string
+   */
   public final String toString;
   
   public CaseConversionTestCase (hydra.mantle.CaseConvention fromConvention, hydra.mantle.CaseConvention toConvention, String fromString, String toString) {

@@ -12,8 +12,14 @@ public class Coder<S1, S2, V1, V2> {
   
   public static final hydra.core.Name FIELD_NAME_DECODE = new hydra.core.Name("decode");
   
+  /**
+   * A function from source values to a flow of target values
+   */
   public final java.util.function.Function<V1, hydra.compute.Flow<S1, V2>> encode;
   
+  /**
+   * A function from target values to a flow of source values
+   */
   public final java.util.function.Function<V2, hydra.compute.Flow<S2, V1>> decode;
   
   public Coder (java.util.function.Function<V1, hydra.compute.Flow<S1, V2>> encode, java.util.function.Function<V2, hydra.compute.Flow<S2, V1>> decode) {

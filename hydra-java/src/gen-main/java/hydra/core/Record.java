@@ -14,8 +14,14 @@ public class Record implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_FIELDS = new hydra.core.Name("fields");
   
+  /**
+   * The name of the record type
+   */
   public final hydra.core.Name typeName;
   
+  /**
+   * The fields of the record, as a list of name/term pairs
+   */
   public final java.util.List<hydra.core.Field> fields;
   
   public Record (hydra.core.Name typeName, java.util.List<hydra.core.Field> fields) {

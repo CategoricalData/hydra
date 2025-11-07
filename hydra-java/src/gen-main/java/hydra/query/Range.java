@@ -14,8 +14,14 @@ public class Range implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_MAX = new hydra.core.Name("max");
   
+  /**
+   * The minimum value (inclusive)
+   */
   public final Integer min;
   
+  /**
+   * The maximum value (inclusive)
+   */
   public final Integer max;
   
   public Range (Integer min, Integer max) {

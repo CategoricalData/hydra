@@ -14,8 +14,14 @@ public class MapType implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_VALUES = new hydra.core.Name("values");
   
+  /**
+   * The type of keys in the map
+   */
   public final hydra.core.Type keys;
   
+  /**
+   * The type of values in the map
+   */
   public final hydra.core.Type values;
   
   public MapType (hydra.core.Type keys, hydra.core.Type values) {

@@ -2,12 +2,10 @@
 
 package hydra.pg.model;
 
-import java.io.Serializable;
-
 /**
  * A vertex together with any outgoing and/or incoming edges; a vertex object
  */
-public class VertexWithAdjacentEdges<V> implements Serializable {
+public class VertexWithAdjacentEdges<V> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.VertexWithAdjacentEdges");
   
   public static final hydra.core.Name FIELD_NAME_VERTEX = new hydra.core.Name("vertex");

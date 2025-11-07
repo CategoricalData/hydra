@@ -5,7 +5,7 @@ package hydra.core;
 import java.io.Serializable;
 
 /**
- * A name/term pair
+ * A name/term tuple2
  */
 public class Field implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Field");
@@ -14,8 +14,14 @@ public class Field implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
   
+  /**
+   * The name of the field
+   */
   public final hydra.core.Name name;
   
+  /**
+   * The term value of the field
+   */
   public final hydra.core.Term term;
   
   public Field (hydra.core.Name name, hydra.core.Term term) {

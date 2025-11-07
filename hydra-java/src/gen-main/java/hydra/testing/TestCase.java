@@ -16,6 +16,8 @@ public abstract class TestCase implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_INFERENCE = new hydra.core.Name("inference");
   
+  public static final hydra.core.Name FIELD_NAME_INFERENCE_FAILURE = new hydra.core.Name("inferenceFailure");
+  
   private TestCase () {
   
   }
@@ -28,6 +30,8 @@ public abstract class TestCase implements Serializable {
     R visit(Evaluation instance) ;
     
     R visit(Inference instance) ;
+    
+    R visit(InferenceFailure instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -46,8 +50,15 @@ public abstract class TestCase implements Serializable {
     default R visit(Inference instance) {
       return otherwise((instance));
     }
+    
+    default R visit(InferenceFailure instance) {
+      return otherwise((instance));
+    }
   }
   
+  /**
+   * A case conversion test
+   */
   public static final class CaseConversion extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.CaseConversionTestCase value;
     
@@ -76,6 +87,9 @@ public abstract class TestCase implements Serializable {
     }
   }
   
+  /**
+   * A term evaluation test
+   */
   public static final class Evaluation extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.EvaluationTestCase value;
     
@@ -104,6 +118,9 @@ public abstract class TestCase implements Serializable {
     }
   }
   
+  /**
+   * A type inference test
+   */
   public static final class Inference extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.InferenceTestCase value;
     
@@ -118,6 +135,37 @@ public abstract class TestCase implements Serializable {
         return false;
       }
       Inference o = (Inference) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A type inference failure test
+   */
+  public static final class InferenceFailure extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.InferenceFailureTestCase value;
+    
+    public InferenceFailure (hydra.testing.InferenceFailureTestCase value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof InferenceFailure)) {
+        return false;
+      }
+      InferenceFailure o = (InferenceFailure) (other);
       return value.equals(o.value);
     }
     

@@ -96,9 +96,15 @@ public abstract class IntegerType implements Serializable {
     }
   }
   
+  /**
+   * An arbitrary-precision integer type
+   */
   public static final class Bigint extends hydra.core.IntegerType implements Serializable {
-    public Bigint () {
+    public final Boolean value;
     
+    public Bigint (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -107,12 +113,12 @@ public abstract class IntegerType implements Serializable {
         return false;
       }
       Bigint o = (Bigint) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -121,9 +127,15 @@ public abstract class IntegerType implements Serializable {
     }
   }
   
+  /**
+   * An 8-bit signed integer type
+   */
   public static final class Int8 extends hydra.core.IntegerType implements Serializable {
-    public Int8 () {
+    public final Boolean value;
     
+    public Int8 (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -132,12 +144,12 @@ public abstract class IntegerType implements Serializable {
         return false;
       }
       Int8 o = (Int8) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -146,9 +158,15 @@ public abstract class IntegerType implements Serializable {
     }
   }
   
+  /**
+   * A 16-bit signed integer type
+   */
   public static final class Int16 extends hydra.core.IntegerType implements Serializable {
-    public Int16 () {
+    public final Boolean value;
     
+    public Int16 (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -157,12 +175,12 @@ public abstract class IntegerType implements Serializable {
         return false;
       }
       Int16 o = (Int16) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -171,9 +189,15 @@ public abstract class IntegerType implements Serializable {
     }
   }
   
+  /**
+   * A 32-bit signed integer type
+   */
   public static final class Int32 extends hydra.core.IntegerType implements Serializable {
-    public Int32 () {
+    public final Boolean value;
     
+    public Int32 (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -182,12 +206,12 @@ public abstract class IntegerType implements Serializable {
         return false;
       }
       Int32 o = (Int32) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -196,9 +220,15 @@ public abstract class IntegerType implements Serializable {
     }
   }
   
+  /**
+   * A 64-bit signed integer type
+   */
   public static final class Int64 extends hydra.core.IntegerType implements Serializable {
-    public Int64 () {
+    public final Boolean value;
     
+    public Int64 (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -207,12 +237,12 @@ public abstract class IntegerType implements Serializable {
         return false;
       }
       Int64 o = (Int64) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -221,9 +251,15 @@ public abstract class IntegerType implements Serializable {
     }
   }
   
+  /**
+   * An 8-bit unsigned integer type
+   */
   public static final class Uint8 extends hydra.core.IntegerType implements Serializable {
-    public Uint8 () {
+    public final Boolean value;
     
+    public Uint8 (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -232,12 +268,12 @@ public abstract class IntegerType implements Serializable {
         return false;
       }
       Uint8 o = (Uint8) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -246,9 +282,15 @@ public abstract class IntegerType implements Serializable {
     }
   }
   
+  /**
+   * A 16-bit unsigned integer type
+   */
   public static final class Uint16 extends hydra.core.IntegerType implements Serializable {
-    public Uint16 () {
+    public final Boolean value;
     
+    public Uint16 (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -257,12 +299,12 @@ public abstract class IntegerType implements Serializable {
         return false;
       }
       Uint16 o = (Uint16) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -271,9 +313,15 @@ public abstract class IntegerType implements Serializable {
     }
   }
   
+  /**
+   * A 32-bit unsigned integer type
+   */
   public static final class Uint32 extends hydra.core.IntegerType implements Serializable {
-    public Uint32 () {
+    public final Boolean value;
     
+    public Uint32 (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -282,12 +330,12 @@ public abstract class IntegerType implements Serializable {
         return false;
       }
       Uint32 o = (Uint32) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -296,9 +344,15 @@ public abstract class IntegerType implements Serializable {
     }
   }
   
+  /**
+   * A 64-bit unsigned integer type
+   */
   public static final class Uint64 extends hydra.core.IntegerType implements Serializable {
-    public Uint64 () {
+    public final Boolean value;
     
+    public Uint64 (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -307,12 +361,12 @@ public abstract class IntegerType implements Serializable {
         return false;
       }
       Uint64 o = (Uint64) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

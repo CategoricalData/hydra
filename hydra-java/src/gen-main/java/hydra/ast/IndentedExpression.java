@@ -14,8 +14,14 @@ public class IndentedExpression implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_EXPR = new hydra.core.Name("expr");
   
+  /**
+   * The indentation style
+   */
   public final hydra.ast.IndentStyle style;
   
+  /**
+   * The expression to be indented
+   */
   public final hydra.ast.Expr expr;
   
   public IndentedExpression (hydra.ast.IndentStyle style, hydra.ast.Expr expr) {

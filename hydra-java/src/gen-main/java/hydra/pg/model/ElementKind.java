@@ -41,8 +41,11 @@ public abstract class ElementKind implements Serializable {
   }
   
   public static final class Vertex extends hydra.pg.model.ElementKind implements Serializable {
-    public Vertex () {
+    public final Boolean value;
     
+    public Vertex (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -51,12 +54,12 @@ public abstract class ElementKind implements Serializable {
         return false;
       }
       Vertex o = (Vertex) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -66,8 +69,11 @@ public abstract class ElementKind implements Serializable {
   }
   
   public static final class Edge extends hydra.pg.model.ElementKind implements Serializable {
-    public Edge () {
+    public final Boolean value;
     
+    public Edge (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -76,12 +82,12 @@ public abstract class ElementKind implements Serializable {
         return false;
       }
       Edge o = (Edge) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

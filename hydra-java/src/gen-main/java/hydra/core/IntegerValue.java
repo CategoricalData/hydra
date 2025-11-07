@@ -255,9 +255,9 @@ public abstract class IntegerValue implements Serializable {
    * An 8-bit unsigned integer value (byte)
    */
   public static final class Uint8 extends hydra.core.IntegerValue implements Serializable {
-    public final Character value;
+    public final Short value;
     
-    public Uint8 (Character value) {
+    public Uint8 (Short value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

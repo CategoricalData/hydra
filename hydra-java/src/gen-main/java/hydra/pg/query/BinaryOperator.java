@@ -102,8 +102,11 @@ public abstract class BinaryOperator implements Serializable {
   }
   
   public static final class Power extends hydra.pg.query.BinaryOperator implements Serializable {
-    public Power () {
+    public final Boolean value;
     
+    public Power (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -112,12 +115,12 @@ public abstract class BinaryOperator implements Serializable {
         return false;
       }
       Power o = (Power) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

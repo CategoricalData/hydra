@@ -14,8 +14,14 @@ public class PathEquation implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
   
+  /**
+   * The left-hand side of the equation
+   */
   public final hydra.query.Path left;
   
+  /**
+   * The right-hand side of the equation
+   */
   public final hydra.query.Path right;
   
   public PathEquation (hydra.query.Path left, hydra.query.Path right) {

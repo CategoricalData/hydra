@@ -14,6 +14,8 @@ public abstract class TermVariant implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
   
+  public static final hydra.core.Name FIELD_NAME_EITHER = new hydra.core.Name("either");
+  
   public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
   
   public static final hydra.core.Name FIELD_NAME_LET = new hydra.core.Name("let");
@@ -24,7 +26,9 @@ public abstract class TermVariant implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
   
-  public static final hydra.core.Name FIELD_NAME_OPTIONAL = new hydra.core.Name("optional");
+  public static final hydra.core.Name FIELD_NAME_MAYBE = new hydra.core.Name("maybe");
+  
+  public static final hydra.core.Name FIELD_NAME_PAIR = new hydra.core.Name("pair");
   
   public static final hydra.core.Name FIELD_NAME_PRODUCT = new hydra.core.Name("product");
   
@@ -34,13 +38,13 @@ public abstract class TermVariant implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_SUM = new hydra.core.Name("sum");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_ABSTRACTION = new hydra.core.Name("typeAbstraction");
-  
   public static final hydra.core.Name FIELD_NAME_TYPE_APPLICATION = new hydra.core.Name("typeApplication");
   
-  public static final hydra.core.Name FIELD_NAME_TYPED = new hydra.core.Name("typed");
+  public static final hydra.core.Name FIELD_NAME_TYPE_LAMBDA = new hydra.core.Name("typeLambda");
   
   public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
+  
+  public static final hydra.core.Name FIELD_NAME_UNIT = new hydra.core.Name("unit");
   
   public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
   
@@ -57,6 +61,8 @@ public abstract class TermVariant implements Serializable {
     
     R visit(Application instance) ;
     
+    R visit(Either instance) ;
+    
     R visit(Function instance) ;
     
     R visit(Let instance) ;
@@ -67,7 +73,9 @@ public abstract class TermVariant implements Serializable {
     
     R visit(Map instance) ;
     
-    R visit(Optional instance) ;
+    R visit(Maybe instance) ;
+    
+    R visit(Pair instance) ;
     
     R visit(Product instance) ;
     
@@ -77,13 +85,13 @@ public abstract class TermVariant implements Serializable {
     
     R visit(Sum instance) ;
     
-    R visit(TypeAbstraction instance) ;
-    
     R visit(TypeApplication instance) ;
     
-    R visit(Typed instance) ;
+    R visit(TypeLambda instance) ;
     
     R visit(Union instance) ;
+    
+    R visit(Unit instance) ;
     
     R visit(Variable instance) ;
     
@@ -100,6 +108,10 @@ public abstract class TermVariant implements Serializable {
     }
     
     default R visit(Application instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Either instance) {
       return otherwise((instance));
     }
     
@@ -123,7 +135,11 @@ public abstract class TermVariant implements Serializable {
       return otherwise((instance));
     }
     
-    default R visit(Optional instance) {
+    default R visit(Maybe instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Pair instance) {
       return otherwise((instance));
     }
     
@@ -143,19 +159,19 @@ public abstract class TermVariant implements Serializable {
       return otherwise((instance));
     }
     
-    default R visit(TypeAbstraction instance) {
-      return otherwise((instance));
-    }
-    
     default R visit(TypeApplication instance) {
       return otherwise((instance));
     }
     
-    default R visit(Typed instance) {
+    default R visit(TypeLambda instance) {
       return otherwise((instance));
     }
     
     default R visit(Union instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Unit instance) {
       return otherwise((instance));
     }
     
@@ -169,8 +185,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class Annotated extends hydra.mantle.TermVariant implements Serializable {
-    public Annotated () {
+    public final Boolean value;
     
+    public Annotated (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -179,12 +198,12 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Annotated o = (Annotated) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -194,8 +213,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class Application extends hydra.mantle.TermVariant implements Serializable {
-    public Application () {
+    public final Boolean value;
     
+    public Application (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -204,12 +226,40 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Application o = (Application) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Either extends hydra.mantle.TermVariant implements Serializable {
+    public final Boolean value;
+    
+    public Either (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Either)) {
+        return false;
+      }
+      Either o = (Either) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -219,8 +269,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class Function extends hydra.mantle.TermVariant implements Serializable {
-    public Function () {
+    public final Boolean value;
     
+    public Function (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -229,12 +282,12 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Function o = (Function) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -244,8 +297,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class Let extends hydra.mantle.TermVariant implements Serializable {
-    public Let () {
+    public final Boolean value;
     
+    public Let (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -254,12 +310,12 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Let o = (Let) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -269,8 +325,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class List extends hydra.mantle.TermVariant implements Serializable {
-    public List () {
+    public final Boolean value;
     
+    public List (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -279,12 +338,12 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       List o = (List) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -294,8 +353,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class Literal extends hydra.mantle.TermVariant implements Serializable {
-    public Literal () {
+    public final Boolean value;
     
+    public Literal (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -304,12 +366,12 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Literal o = (Literal) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -319,8 +381,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class Map extends hydra.mantle.TermVariant implements Serializable {
-    public Map () {
+    public final Boolean value;
     
+    public Map (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -329,12 +394,12 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Map o = (Map) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -343,23 +408,54 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Optional extends hydra.mantle.TermVariant implements Serializable {
-    public Optional () {
+  public static final class Maybe extends hydra.mantle.TermVariant implements Serializable {
+    public final Boolean value;
     
+    public Maybe (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Optional)) {
+      if (!(other instanceof Maybe)) {
         return false;
       }
-      Optional o = (Optional) (other);
-      return true;
+      Maybe o = (Maybe) (other);
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Pair extends hydra.mantle.TermVariant implements Serializable {
+    public final Boolean value;
+    
+    public Pair (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Pair)) {
+        return false;
+      }
+      Pair o = (Pair) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -369,8 +465,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class Product extends hydra.mantle.TermVariant implements Serializable {
-    public Product () {
+    public final Boolean value;
     
+    public Product (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -379,12 +478,12 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Product o = (Product) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -394,8 +493,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class Record extends hydra.mantle.TermVariant implements Serializable {
-    public Record () {
+    public final Boolean value;
     
+    public Record (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -404,12 +506,12 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Record o = (Record) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -419,8 +521,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class Set extends hydra.mantle.TermVariant implements Serializable {
-    public Set () {
+    public final Boolean value;
     
+    public Set (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -429,12 +534,12 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Set o = (Set) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -444,8 +549,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class Sum extends hydra.mantle.TermVariant implements Serializable {
-    public Sum () {
+    public final Boolean value;
     
+    public Sum (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -454,37 +562,12 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Sum o = (Sum) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  public static final class TypeAbstraction extends hydra.mantle.TermVariant implements Serializable {
-    public TypeAbstraction () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof TypeAbstraction)) {
-        return false;
-      }
-      TypeAbstraction o = (TypeAbstraction) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -494,8 +577,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class TypeApplication extends hydra.mantle.TermVariant implements Serializable {
-    public TypeApplication () {
+    public final Boolean value;
     
+    public TypeApplication (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -504,12 +590,12 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       TypeApplication o = (TypeApplication) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -518,23 +604,26 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Typed extends hydra.mantle.TermVariant implements Serializable {
-    public Typed () {
+  public static final class TypeLambda extends hydra.mantle.TermVariant implements Serializable {
+    public final Boolean value;
     
+    public TypeLambda (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Typed)) {
+      if (!(other instanceof TypeLambda)) {
         return false;
       }
-      Typed o = (Typed) (other);
-      return true;
+      TypeLambda o = (TypeLambda) (other);
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -544,8 +633,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class Union extends hydra.mantle.TermVariant implements Serializable {
-    public Union () {
+    public final Boolean value;
     
+    public Union (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -554,12 +646,40 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Union o = (Union) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Unit extends hydra.mantle.TermVariant implements Serializable {
+    public final Boolean value;
+    
+    public Unit (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Unit)) {
+        return false;
+      }
+      Unit o = (Unit) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -569,8 +689,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class Variable extends hydra.mantle.TermVariant implements Serializable {
-    public Variable () {
+    public final Boolean value;
     
+    public Variable (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -579,12 +702,12 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Variable o = (Variable) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -594,8 +717,11 @@ public abstract class TermVariant implements Serializable {
   }
   
   public static final class Wrap extends hydra.mantle.TermVariant implements Serializable {
-    public Wrap () {
+    public final Boolean value;
     
+    public Wrap (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -604,12 +730,12 @@ public abstract class TermVariant implements Serializable {
         return false;
       }
       Wrap o = (Wrap) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
