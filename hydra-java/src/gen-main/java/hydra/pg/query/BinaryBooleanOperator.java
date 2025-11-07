@@ -46,8 +46,11 @@ public abstract class BinaryBooleanOperator implements Serializable {
   }
   
   public static final class And extends hydra.pg.query.BinaryBooleanOperator implements Serializable {
-    public And () {
+    public final Boolean value;
     
+    public And (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -56,12 +59,12 @@ public abstract class BinaryBooleanOperator implements Serializable {
         return false;
       }
       And o = (And) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -71,8 +74,11 @@ public abstract class BinaryBooleanOperator implements Serializable {
   }
   
   public static final class Or extends hydra.pg.query.BinaryBooleanOperator implements Serializable {
-    public Or () {
+    public final Boolean value;
     
+    public Or (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -81,12 +87,12 @@ public abstract class BinaryBooleanOperator implements Serializable {
         return false;
       }
       Or o = (Or) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -96,8 +102,11 @@ public abstract class BinaryBooleanOperator implements Serializable {
   }
   
   public static final class Xor extends hydra.pg.query.BinaryBooleanOperator implements Serializable {
-    public Xor () {
+    public final Boolean value;
     
+    public Xor (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -106,12 +115,12 @@ public abstract class BinaryBooleanOperator implements Serializable {
         return false;
       }
       Xor o = (Xor) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

@@ -14,8 +14,14 @@ public class Padding implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
   
+  /**
+   * Padding to the left of the operator
+   */
   public final hydra.ast.Ws left;
   
+  /**
+   * Padding to the right of the operator
+   */
   public final hydra.ast.Ws right;
   
   public Padding (hydra.ast.Ws left, hydra.ast.Ws right) {

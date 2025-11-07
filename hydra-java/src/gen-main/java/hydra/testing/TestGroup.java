@@ -18,12 +18,24 @@ public class TestGroup implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_CASES = new hydra.core.Name("cases");
   
+  /**
+   * The name of the test group
+   */
   public final String name;
   
+  /**
+   * An optional description of the group
+   */
   public final hydra.util.Opt<String> description;
   
+  /**
+   * Nested test groups
+   */
   public final java.util.List<hydra.testing.TestGroup> subgroups;
   
+  /**
+   * The test cases in this group
+   */
   public final java.util.List<hydra.testing.TestCaseWithMetadata> cases;
   
   public TestGroup (String name, hydra.util.Opt<String> description, java.util.List<hydra.testing.TestGroup> subgroups, java.util.List<hydra.testing.TestCaseWithMetadata> cases) {

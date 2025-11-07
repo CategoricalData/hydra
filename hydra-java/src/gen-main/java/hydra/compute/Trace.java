@@ -16,8 +16,14 @@ public class Trace implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_OTHER = new hydra.core.Name("other");
   
+  /**
+   * A stack of context labels
+   */
   public final java.util.List<String> stack;
   
+  /**
+   * A log of informational messages
+   */
   public final java.util.List<String> messages;
   
   /**

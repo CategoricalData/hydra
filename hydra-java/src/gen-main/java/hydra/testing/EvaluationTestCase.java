@@ -16,10 +16,19 @@ public class EvaluationTestCase implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
   
+  /**
+   * The evaluation style (eager or lazy)
+   */
   public final hydra.testing.EvaluationStyle evaluationStyle;
   
+  /**
+   * The term to evaluate
+   */
   public final hydra.core.Term input;
   
+  /**
+   * The expected result
+   */
   public final hydra.core.Term output;
   
   public EvaluationTestCase (hydra.testing.EvaluationStyle evaluationStyle, hydra.core.Term input, hydra.core.Term output) {

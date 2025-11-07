@@ -2,10 +2,12 @@
 
 package hydra.coders;
 
+import java.io.Serializable;
+
 /**
  * An evaluation context together with a source language and a target language
  */
-public class AdapterContext {
+public class AdapterContext implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.coders.AdapterContext");
   
   public static final hydra.core.Name FIELD_NAME_GRAPH = new hydra.core.Name("graph");
@@ -14,10 +16,19 @@ public class AdapterContext {
   
   public static final hydra.core.Name FIELD_NAME_ADAPTERS = new hydra.core.Name("adapters");
   
+  /**
+   * The underlying graph of elements and primitives
+   */
   public final hydra.graph.Graph graph;
   
+  /**
+   * The language being encoded or decoded
+   */
   public final hydra.coders.Language language;
   
+  /**
+   * A map of type names to adapters for those types
+   */
   public final java.util.Map<hydra.core.Name, hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters;
   
   public AdapterContext (hydra.graph.Graph graph, hydra.coders.Language language, java.util.Map<hydra.core.Name, hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters) {

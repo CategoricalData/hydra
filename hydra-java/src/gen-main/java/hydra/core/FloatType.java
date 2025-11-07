@@ -48,9 +48,15 @@ public abstract class FloatType implements Serializable {
     }
   }
   
+  /**
+   * An arbitrary-precision floating-point type
+   */
   public static final class Bigfloat extends hydra.core.FloatType implements Serializable {
-    public Bigfloat () {
+    public final Boolean value;
     
+    public Bigfloat (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -59,12 +65,12 @@ public abstract class FloatType implements Serializable {
         return false;
       }
       Bigfloat o = (Bigfloat) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -73,9 +79,15 @@ public abstract class FloatType implements Serializable {
     }
   }
   
+  /**
+   * A 32-bit floating-point type
+   */
   public static final class Float32 extends hydra.core.FloatType implements Serializable {
-    public Float32 () {
+    public final Boolean value;
     
+    public Float32 (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -84,12 +96,12 @@ public abstract class FloatType implements Serializable {
         return false;
       }
       Float32 o = (Float32) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -98,9 +110,15 @@ public abstract class FloatType implements Serializable {
     }
   }
   
+  /**
+   * A 64-bit floating-point type
+   */
   public static final class Float64 extends hydra.core.FloatType implements Serializable {
-    public Float64 () {
+    public final Boolean value;
     
+    public Float64 (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -109,12 +127,12 @@ public abstract class FloatType implements Serializable {
         return false;
       }
       Float64 o = (Float64) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

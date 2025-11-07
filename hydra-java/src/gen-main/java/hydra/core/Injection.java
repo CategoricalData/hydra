@@ -14,8 +14,14 @@ public class Injection implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_FIELD = new hydra.core.Name("field");
   
+  /**
+   * The name of the union type
+   */
   public final hydra.core.Name typeName;
   
+  /**
+   * The field being injected, including its name and value
+   */
   public final hydra.core.Field field;
   
   public Injection (hydra.core.Name typeName, hydra.core.Field field) {

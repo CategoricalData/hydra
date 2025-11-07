@@ -65,8 +65,11 @@ public abstract class LiteralVariant implements Serializable {
   }
   
   public static final class Binary extends hydra.mantle.LiteralVariant implements Serializable {
-    public Binary () {
+    public final Boolean value;
     
+    public Binary (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -75,12 +78,12 @@ public abstract class LiteralVariant implements Serializable {
         return false;
       }
       Binary o = (Binary) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -90,8 +93,11 @@ public abstract class LiteralVariant implements Serializable {
   }
   
   public static final class Boolean_ extends hydra.mantle.LiteralVariant implements Serializable {
-    public Boolean_ () {
+    public final Boolean value;
     
+    public Boolean_ (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -100,12 +106,12 @@ public abstract class LiteralVariant implements Serializable {
         return false;
       }
       Boolean_ o = (Boolean_) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -115,8 +121,11 @@ public abstract class LiteralVariant implements Serializable {
   }
   
   public static final class Float_ extends hydra.mantle.LiteralVariant implements Serializable {
-    public Float_ () {
+    public final Boolean value;
     
+    public Float_ (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -125,12 +134,12 @@ public abstract class LiteralVariant implements Serializable {
         return false;
       }
       Float_ o = (Float_) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -140,8 +149,11 @@ public abstract class LiteralVariant implements Serializable {
   }
   
   public static final class Integer_ extends hydra.mantle.LiteralVariant implements Serializable {
-    public Integer_ () {
+    public final Boolean value;
     
+    public Integer_ (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -150,12 +162,12 @@ public abstract class LiteralVariant implements Serializable {
         return false;
       }
       Integer_ o = (Integer_) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -165,8 +177,11 @@ public abstract class LiteralVariant implements Serializable {
   }
   
   public static final class String_ extends hydra.mantle.LiteralVariant implements Serializable {
-    public String_ () {
+    public final Boolean value;
     
+    public String_ (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -175,12 +190,12 @@ public abstract class LiteralVariant implements Serializable {
         return false;
       }
       String_ o = (String_) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

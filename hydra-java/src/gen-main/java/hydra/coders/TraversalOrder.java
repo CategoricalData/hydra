@@ -44,8 +44,11 @@ public abstract class TraversalOrder implements Serializable {
    * Pre-order traversal
    */
   public static final class Pre extends hydra.coders.TraversalOrder implements Serializable {
-    public Pre () {
+    public final Boolean value;
     
+    public Pre (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -54,12 +57,12 @@ public abstract class TraversalOrder implements Serializable {
         return false;
       }
       Pre o = (Pre) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -72,8 +75,11 @@ public abstract class TraversalOrder implements Serializable {
    * Post-order traversal
    */
   public static final class Post extends hydra.coders.TraversalOrder implements Serializable {
-    public Post () {
+    public final Boolean value;
     
+    public Post (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -82,12 +88,12 @@ public abstract class TraversalOrder implements Serializable {
         return false;
       }
       Post o = (Post) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

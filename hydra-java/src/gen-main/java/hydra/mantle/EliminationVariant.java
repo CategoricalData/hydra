@@ -10,10 +10,6 @@ import java.io.Serializable;
 public abstract class EliminationVariant implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.EliminationVariant");
   
-  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
-  
-  public static final hydra.core.Name FIELD_NAME_OPTIONAL = new hydra.core.Name("optional");
-  
   public static final hydra.core.Name FIELD_NAME_PRODUCT = new hydra.core.Name("product");
   
   public static final hydra.core.Name FIELD_NAME_RECORD = new hydra.core.Name("record");
@@ -29,10 +25,6 @@ public abstract class EliminationVariant implements Serializable {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(List instance) ;
-    
-    R visit(Optional instance) ;
-    
     R visit(Product instance) ;
     
     R visit(Record instance) ;
@@ -45,14 +37,6 @@ public abstract class EliminationVariant implements Serializable {
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(EliminationVariant instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
-    }
-    
-    default R visit(List instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(Optional instance) {
-      return otherwise((instance));
     }
     
     default R visit(Product instance) {
@@ -72,59 +56,12 @@ public abstract class EliminationVariant implements Serializable {
     }
   }
   
-  public static final class List extends hydra.mantle.EliminationVariant implements Serializable {
-    public List () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof List)) {
-        return false;
-      }
-      List o = (List) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  public static final class Optional extends hydra.mantle.EliminationVariant implements Serializable {
-    public Optional () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Optional)) {
-        return false;
-      }
-      Optional o = (Optional) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
   public static final class Product extends hydra.mantle.EliminationVariant implements Serializable {
-    public Product () {
+    public final Boolean value;
     
+    public Product (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -133,12 +70,12 @@ public abstract class EliminationVariant implements Serializable {
         return false;
       }
       Product o = (Product) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -148,8 +85,11 @@ public abstract class EliminationVariant implements Serializable {
   }
   
   public static final class Record extends hydra.mantle.EliminationVariant implements Serializable {
-    public Record () {
+    public final Boolean value;
     
+    public Record (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -158,12 +98,12 @@ public abstract class EliminationVariant implements Serializable {
         return false;
       }
       Record o = (Record) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -173,8 +113,11 @@ public abstract class EliminationVariant implements Serializable {
   }
   
   public static final class Union extends hydra.mantle.EliminationVariant implements Serializable {
-    public Union () {
+    public final Boolean value;
     
+    public Union (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -183,12 +126,12 @@ public abstract class EliminationVariant implements Serializable {
         return false;
       }
       Union o = (Union) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -198,8 +141,11 @@ public abstract class EliminationVariant implements Serializable {
   }
   
   public static final class Wrap extends hydra.mantle.EliminationVariant implements Serializable {
-    public Wrap () {
+    public final Boolean value;
     
+    public Wrap (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -208,12 +154,12 @@ public abstract class EliminationVariant implements Serializable {
         return false;
       }
       Wrap o = (Wrap) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

@@ -49,8 +49,11 @@ public abstract class FunctionVariant implements Serializable {
   }
   
   public static final class Elimination extends hydra.mantle.FunctionVariant implements Serializable {
-    public Elimination () {
+    public final Boolean value;
     
+    public Elimination (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -59,12 +62,12 @@ public abstract class FunctionVariant implements Serializable {
         return false;
       }
       Elimination o = (Elimination) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -74,8 +77,11 @@ public abstract class FunctionVariant implements Serializable {
   }
   
   public static final class Lambda extends hydra.mantle.FunctionVariant implements Serializable {
-    public Lambda () {
+    public final Boolean value;
     
+    public Lambda (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -84,12 +90,12 @@ public abstract class FunctionVariant implements Serializable {
         return false;
       }
       Lambda o = (Lambda) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -99,8 +105,11 @@ public abstract class FunctionVariant implements Serializable {
   }
   
   public static final class Primitive extends hydra.mantle.FunctionVariant implements Serializable {
-    public Primitive () {
+    public final Boolean value;
     
+    public Primitive (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -109,12 +118,12 @@ public abstract class FunctionVariant implements Serializable {
         return false;
       }
       Primitive o = (Primitive) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

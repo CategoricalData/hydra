@@ -14,8 +14,14 @@ public class QualifiedName implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_LOCAL = new hydra.core.Name("local");
   
+  /**
+   * The optional namespace
+   */
   public final hydra.util.Opt<hydra.module.Namespace> namespace;
   
+  /**
+   * The local name
+   */
   public final String local;
   
   public QualifiedName (hydra.util.Opt<hydra.module.Namespace> namespace, String local) {

@@ -14,8 +14,14 @@ public class TypeScheme implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   
+  /**
+   * The free type variables
+   */
   public final java.util.List<hydra.core.Name> variables;
   
+  /**
+   * The type expression
+   */
   public final hydra.core.Type type;
   
   public TypeScheme (java.util.List<hydra.core.Name> variables, hydra.core.Type type) {

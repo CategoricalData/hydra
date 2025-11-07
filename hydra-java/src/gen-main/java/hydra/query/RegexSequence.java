@@ -14,8 +14,14 @@ public class RegexSequence implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_QUANTIFIER = new hydra.core.Name("quantifier");
   
+  /**
+   * The path to which the quantifier applies
+   */
   public final hydra.query.Path path;
   
+  /**
+   * The quantifier
+   */
   public final hydra.query.RegexQuantifier quantifier;
   
   public RegexSequence (hydra.query.Path path, hydra.query.RegexQuantifier quantifier) {

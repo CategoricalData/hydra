@@ -12,8 +12,14 @@ public class Bicoder<S1, S2, T1, T2, V1, V2> {
   
   public static final hydra.core.Name FIELD_NAME_DECODE = new hydra.core.Name("decode");
   
+  /**
+   * A function from source types to adapters
+   */
   public final java.util.function.Function<T1, hydra.compute.Adapter<S1, S2, T1, T2, V1, V2>> encode;
   
+  /**
+   * A function from target types to adapters
+   */
   public final java.util.function.Function<T2, hydra.compute.Adapter<S2, S1, T2, T1, V2, V1>> decode;
   
   public Bicoder (java.util.function.Function<T1, hydra.compute.Adapter<S1, S2, T1, T2, V1, V2>> encode, java.util.function.Function<T2, hydra.compute.Adapter<S2, S1, T2, T1, V2, V1>> decode) {

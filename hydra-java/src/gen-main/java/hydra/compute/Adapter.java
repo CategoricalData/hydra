@@ -16,12 +16,24 @@ public class Adapter<S1, S2, T1, T2, V1, V2> {
   
   public static final hydra.core.Name FIELD_NAME_CODER = new hydra.core.Name("coder");
   
+  /**
+   * Whether information may be lost in the course of this adaptation
+   */
   public final Boolean isLossy;
   
+  /**
+   * The source type
+   */
   public final T1 source;
   
+  /**
+   * The target type
+   */
   public final T2 target;
   
+  /**
+   * The coder for transforming instances of the source type to instances of the target type
+   */
   public final hydra.compute.Coder<S1, S2, V1, V2> coder;
   
   public Adapter (Boolean isLossy, T1 source, T2 target, hydra.compute.Coder<S1, S2, V1, V2> coder) {

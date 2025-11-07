@@ -114,8 +114,11 @@ public abstract class Node implements Serializable {
    * An anonymous variable which we do not care to join across patterns
    */
   public static final class Wildcard extends hydra.query.Node implements Serializable {
-    public Wildcard () {
+    public final Boolean value;
     
+    public Wildcard (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -124,12 +127,12 @@ public abstract class Node implements Serializable {
         return false;
       }
       Wildcard o = (Wildcard) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

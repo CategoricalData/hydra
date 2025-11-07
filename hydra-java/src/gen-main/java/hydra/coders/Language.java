@@ -2,18 +2,26 @@
 
 package hydra.coders;
 
+import java.io.Serializable;
+
 /**
  * A named language together with language-specific constraints
  */
-public class Language {
+public class Language implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.coders.Language");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
   
   public static final hydra.core.Name FIELD_NAME_CONSTRAINTS = new hydra.core.Name("constraints");
   
+  /**
+   * The unique name of the language
+   */
   public final hydra.coders.LanguageName name;
   
+  /**
+   * The constraints which characterize the language
+   */
   public final hydra.coders.LanguageConstraints constraints;
   
   public Language (hydra.coders.LanguageName name, hydra.coders.LanguageConstraints constraints) {

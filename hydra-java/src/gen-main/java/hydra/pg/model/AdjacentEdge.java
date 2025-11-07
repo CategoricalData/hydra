@@ -2,12 +2,10 @@
 
 package hydra.pg.model;
 
-import java.io.Serializable;
-
 /**
  * An edge which is adjacent to a given vertex. Only the other endpoint of the edge is provided.
  */
-public class AdjacentEdge<V> implements Serializable {
+public class AdjacentEdge<V> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.AdjacentEdge");
   
   public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");

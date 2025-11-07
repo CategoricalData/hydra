@@ -2,12 +2,10 @@
 
 package hydra.pg.model;
 
-import java.io.Serializable;
-
 /**
  * An element type together with its dependencies in some context
  */
-public class ElementTypeTree<T> implements Serializable {
+public class ElementTypeTree<T> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.ElementTypeTree");
   
   public static final hydra.core.Name FIELD_NAME_SELF = new hydra.core.Name("self");

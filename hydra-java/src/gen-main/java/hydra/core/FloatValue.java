@@ -52,9 +52,9 @@ public abstract class FloatValue implements Serializable {
    * An arbitrary-precision floating-point value
    */
   public static final class Bigfloat extends hydra.core.FloatValue implements Serializable {
-    public final Double value;
+    public final String value;
     
-    public Bigfloat (Double value) {
+    public Bigfloat (String value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

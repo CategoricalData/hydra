@@ -57,8 +57,11 @@ public abstract class Associativity implements Serializable {
   }
   
   public static final class None extends hydra.ast.Associativity implements Serializable {
-    public None () {
+    public final Boolean value;
     
+    public None (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -67,12 +70,12 @@ public abstract class Associativity implements Serializable {
         return false;
       }
       None o = (None) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -82,8 +85,11 @@ public abstract class Associativity implements Serializable {
   }
   
   public static final class Left extends hydra.ast.Associativity implements Serializable {
-    public Left () {
+    public final Boolean value;
     
+    public Left (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -92,12 +98,12 @@ public abstract class Associativity implements Serializable {
         return false;
       }
       Left o = (Left) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -107,8 +113,11 @@ public abstract class Associativity implements Serializable {
   }
   
   public static final class Right extends hydra.ast.Associativity implements Serializable {
-    public Right () {
+    public final Boolean value;
     
+    public Right (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -117,12 +126,12 @@ public abstract class Associativity implements Serializable {
         return false;
       }
       Right o = (Right) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -132,8 +141,11 @@ public abstract class Associativity implements Serializable {
   }
   
   public static final class Both extends hydra.ast.Associativity implements Serializable {
-    public Both () {
+    public final Boolean value;
     
+    public Both (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -142,12 +154,12 @@ public abstract class Associativity implements Serializable {
         return false;
       }
       Both o = (Both) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

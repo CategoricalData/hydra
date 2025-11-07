@@ -16,10 +16,19 @@ public class BracketExpr implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_STYLE = new hydra.core.Name("style");
   
+  /**
+   * The bracket pair enclosing the expression
+   */
   public final hydra.ast.Brackets brackets;
   
+  /**
+   * The expression within the brackets
+   */
   public final hydra.ast.Expr enclosed;
   
+  /**
+   * The formatting style for the bracketed block
+   */
   public final hydra.ast.BlockStyle style;
   
   public BracketExpr (hydra.ast.Brackets brackets, hydra.ast.Expr enclosed, hydra.ast.BlockStyle style) {

@@ -14,9 +14,11 @@ public abstract class Type implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
   
-  public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
+  public static final hydra.core.Name FIELD_NAME_EITHER = new hydra.core.Name("either");
   
-  public static final hydra.core.Name FIELD_NAME_LAMBDA = new hydra.core.Name("lambda");
+  public static final hydra.core.Name FIELD_NAME_FORALL = new hydra.core.Name("forall");
+  
+  public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
   
   public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
   
@@ -24,7 +26,9 @@ public abstract class Type implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
   
-  public static final hydra.core.Name FIELD_NAME_OPTIONAL = new hydra.core.Name("optional");
+  public static final hydra.core.Name FIELD_NAME_MAYBE = new hydra.core.Name("maybe");
+  
+  public static final hydra.core.Name FIELD_NAME_PAIR = new hydra.core.Name("pair");
   
   public static final hydra.core.Name FIELD_NAME_PRODUCT = new hydra.core.Name("product");
   
@@ -35,6 +39,8 @@ public abstract class Type implements Serializable {
   public static final hydra.core.Name FIELD_NAME_SUM = new hydra.core.Name("sum");
   
   public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
+  
+  public static final hydra.core.Name FIELD_NAME_UNIT = new hydra.core.Name("unit");
   
   public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
   
@@ -51,9 +57,11 @@ public abstract class Type implements Serializable {
     
     R visit(Application instance) ;
     
-    R visit(Function instance) ;
+    R visit(Either instance) ;
     
-    R visit(Lambda instance) ;
+    R visit(Forall instance) ;
+    
+    R visit(Function instance) ;
     
     R visit(List instance) ;
     
@@ -61,7 +69,9 @@ public abstract class Type implements Serializable {
     
     R visit(Map instance) ;
     
-    R visit(Optional instance) ;
+    R visit(Maybe instance) ;
+    
+    R visit(Pair instance) ;
     
     R visit(Product instance) ;
     
@@ -72,6 +82,8 @@ public abstract class Type implements Serializable {
     R visit(Sum instance) ;
     
     R visit(Union instance) ;
+    
+    R visit(Unit instance) ;
     
     R visit(Variable instance) ;
     
@@ -91,11 +103,15 @@ public abstract class Type implements Serializable {
       return otherwise((instance));
     }
     
-    default R visit(Function instance) {
+    default R visit(Either instance) {
       return otherwise((instance));
     }
     
-    default R visit(Lambda instance) {
+    default R visit(Forall instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Function instance) {
       return otherwise((instance));
     }
     
@@ -111,7 +127,11 @@ public abstract class Type implements Serializable {
       return otherwise((instance));
     }
     
-    default R visit(Optional instance) {
+    default R visit(Maybe instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Pair instance) {
       return otherwise((instance));
     }
     
@@ -135,6 +155,10 @@ public abstract class Type implements Serializable {
       return otherwise((instance));
     }
     
+    default R visit(Unit instance) {
+      return otherwise((instance));
+    }
+    
     default R visit(Variable instance) {
       return otherwise((instance));
     }
@@ -144,6 +168,9 @@ public abstract class Type implements Serializable {
     }
   }
   
+  /**
+   * An annotated type
+   */
   public static final class Annotated extends hydra.core.Type implements Serializable {
     public final hydra.core.AnnotatedType value;
     
@@ -172,6 +199,9 @@ public abstract class Type implements Serializable {
     }
   }
   
+  /**
+   * A type application
+   */
   public static final class Application extends hydra.core.Type implements Serializable {
     public final hydra.core.ApplicationType value;
     
@@ -200,6 +230,71 @@ public abstract class Type implements Serializable {
     }
   }
   
+  /**
+   * An either (sum) type
+   */
+  public static final class Either extends hydra.core.Type implements Serializable {
+    public final hydra.core.EitherType value;
+    
+    public Either (hydra.core.EitherType value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Either)) {
+        return false;
+      }
+      Either o = (Either) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A universally quantified (polymorphic) type
+   */
+  public static final class Forall extends hydra.core.Type implements Serializable {
+    public final hydra.core.ForallType value;
+    
+    public Forall (hydra.core.ForallType value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Forall)) {
+        return false;
+      }
+      Forall o = (Forall) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A function type
+   */
   public static final class Function extends hydra.core.Type implements Serializable {
     public final hydra.core.FunctionType value;
     
@@ -228,34 +323,9 @@ public abstract class Type implements Serializable {
     }
   }
   
-  public static final class Lambda extends hydra.core.Type implements Serializable {
-    public final hydra.core.LambdaType value;
-    
-    public Lambda (hydra.core.LambdaType value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Lambda)) {
-        return false;
-      }
-      Lambda o = (Lambda) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
+  /**
+   * A list type
+   */
   public static final class List extends hydra.core.Type implements Serializable {
     public final hydra.core.Type value;
     
@@ -284,6 +354,9 @@ public abstract class Type implements Serializable {
     }
   }
   
+  /**
+   * A literal type
+   */
   public static final class Literal extends hydra.core.Type implements Serializable {
     public final hydra.core.LiteralType value;
     
@@ -312,6 +385,9 @@ public abstract class Type implements Serializable {
     }
   }
   
+  /**
+   * A map type
+   */
   public static final class Map extends hydra.core.Type implements Serializable {
     public final hydra.core.MapType value;
     
@@ -340,20 +416,23 @@ public abstract class Type implements Serializable {
     }
   }
   
-  public static final class Optional extends hydra.core.Type implements Serializable {
+  /**
+   * An optional type
+   */
+  public static final class Maybe extends hydra.core.Type implements Serializable {
     public final hydra.core.Type value;
     
-    public Optional (hydra.core.Type value) {
+    public Maybe (hydra.core.Type value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Optional)) {
+      if (!(other instanceof Maybe)) {
         return false;
       }
-      Optional o = (Optional) (other);
+      Maybe o = (Maybe) (other);
       return value.equals(o.value);
     }
     
@@ -368,6 +447,40 @@ public abstract class Type implements Serializable {
     }
   }
   
+  /**
+   * A pair (2-tuple) type
+   */
+  public static final class Pair extends hydra.core.Type implements Serializable {
+    public final hydra.core.PairType value;
+    
+    public Pair (hydra.core.PairType value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Pair)) {
+        return false;
+      }
+      Pair o = (Pair) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A tuple type
+   */
   public static final class Product extends hydra.core.Type implements Serializable {
     public final java.util.List<hydra.core.Type> value;
     
@@ -396,6 +509,9 @@ public abstract class Type implements Serializable {
     }
   }
   
+  /**
+   * A record type
+   */
   public static final class Record extends hydra.core.Type implements Serializable {
     public final hydra.core.RowType value;
     
@@ -424,6 +540,9 @@ public abstract class Type implements Serializable {
     }
   }
   
+  /**
+   * A set type
+   */
   public static final class Set extends hydra.core.Type implements Serializable {
     public final hydra.core.Type value;
     
@@ -452,6 +571,9 @@ public abstract class Type implements Serializable {
     }
   }
   
+  /**
+   * A union type without field names
+   */
   public static final class Sum extends hydra.core.Type implements Serializable {
     public final java.util.List<hydra.core.Type> value;
     
@@ -480,6 +602,9 @@ public abstract class Type implements Serializable {
     }
   }
   
+  /**
+   * A union type with field names
+   */
   public static final class Union extends hydra.core.Type implements Serializable {
     public final hydra.core.RowType value;
     
@@ -508,6 +633,40 @@ public abstract class Type implements Serializable {
     }
   }
   
+  /**
+   * The unit type
+   */
+  public static final class Unit extends hydra.core.Type implements Serializable {
+    public final Boolean value;
+    
+    public Unit (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Unit)) {
+        return false;
+      }
+      Unit o = (Unit) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A type variable
+   */
   public static final class Variable extends hydra.core.Type implements Serializable {
     public final hydra.core.Name value;
     
@@ -536,6 +695,9 @@ public abstract class Type implements Serializable {
     }
   }
   
+  /**
+   * A wrapped type (newtype)
+   */
   public static final class Wrap extends hydra.core.Type implements Serializable {
     public final hydra.core.WrappedType value;
     

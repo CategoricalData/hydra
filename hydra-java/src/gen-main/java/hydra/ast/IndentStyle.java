@@ -40,6 +40,9 @@ public abstract class IndentStyle implements Serializable {
     }
   }
   
+  /**
+   * Indent all lines with the given string
+   */
   public static final class AllLines extends hydra.ast.IndentStyle implements Serializable {
     public final String value;
     
@@ -68,6 +71,9 @@ public abstract class IndentStyle implements Serializable {
     }
   }
   
+  /**
+   * Indent only lines after the first with the given string
+   */
   public static final class SubsequentLines extends hydra.ast.IndentStyle implements Serializable {
     public final String value;
     

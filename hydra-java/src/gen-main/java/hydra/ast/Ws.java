@@ -64,9 +64,15 @@ public abstract class Ws implements Serializable {
     }
   }
   
+  /**
+   * No whitespace
+   */
   public static final class None extends hydra.ast.Ws implements Serializable {
-    public None () {
+    public final Boolean value;
     
+    public None (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -75,12 +81,12 @@ public abstract class Ws implements Serializable {
         return false;
       }
       None o = (None) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -89,9 +95,15 @@ public abstract class Ws implements Serializable {
     }
   }
   
+  /**
+   * A single space
+   */
   public static final class Space extends hydra.ast.Ws implements Serializable {
-    public Space () {
+    public final Boolean value;
     
+    public Space (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -100,12 +112,12 @@ public abstract class Ws implements Serializable {
         return false;
       }
       Space o = (Space) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -114,9 +126,15 @@ public abstract class Ws implements Serializable {
     }
   }
   
+  /**
+   * A line break
+   */
   public static final class Break extends hydra.ast.Ws implements Serializable {
-    public Break () {
+    public final Boolean value;
     
+    public Break (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -125,12 +143,12 @@ public abstract class Ws implements Serializable {
         return false;
       }
       Break o = (Break) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override
@@ -139,6 +157,9 @@ public abstract class Ws implements Serializable {
     }
   }
   
+  /**
+   * A line break followed by indentation
+   */
   public static final class BreakAndIndent extends hydra.ast.Ws implements Serializable {
     public final String value;
     
@@ -167,9 +188,15 @@ public abstract class Ws implements Serializable {
     }
   }
   
+  /**
+   * Two line breaks
+   */
   public static final class DoubleBreak extends hydra.ast.Ws implements Serializable {
-    public DoubleBreak () {
+    public final Boolean value;
     
+    public DoubleBreak (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
     }
     
     @Override
@@ -178,12 +205,12 @@ public abstract class Ws implements Serializable {
         return false;
       }
       DoubleBreak o = (DoubleBreak) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

@@ -18,12 +18,24 @@ public class Op implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_ASSOCIATIVITY = new hydra.core.Name("associativity");
   
+  /**
+   * The operator symbol
+   */
   public final hydra.ast.Symbol symbol;
   
+  /**
+   * The padding around the operator
+   */
   public final hydra.ast.Padding padding;
   
+  /**
+   * The precedence of the operator
+   */
   public final hydra.ast.Precedence precedence;
   
+  /**
+   * The associativity of the operator
+   */
   public final hydra.ast.Associativity associativity;
   
   public Op (hydra.ast.Symbol symbol, hydra.ast.Padding padding, hydra.ast.Precedence precedence, hydra.ast.Associativity associativity) {
