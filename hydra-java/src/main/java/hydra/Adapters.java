@@ -3,7 +3,7 @@ package hydra;
 import hydra.compute.Adapter;
 import hydra.compute.Flow;
 import hydra.compute.StatelessAdapter;
-import hydra.core.Unit;
+import hydra.util.Unit;
 
 import hydra.dsl.Flows;
 import java.util.function.Function;

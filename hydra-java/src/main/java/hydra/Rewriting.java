@@ -7,21 +7,19 @@ import hydra.core.CaseStatement;
 import hydra.core.Elimination;
 import hydra.core.Field;
 import hydra.core.Injection;
+import hydra.core.Binding;
 import hydra.core.Lambda;
 import hydra.core.Let;
-import hydra.core.LetBinding;
 import hydra.core.Name;
-import hydra.core.OptionalCases;
 import hydra.core.Projection;
 import hydra.core.Record;
 import hydra.core.Sum;
 import hydra.core.Term;
-import hydra.core.TypedTerm;
-import hydra.core.Unit;
 import hydra.core.WrappedTerm;
 import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.util.Opt;
+import hydra.util.Unit;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,19 +49,21 @@ public interface Rewriting {
     static <S> Flow<S, Elimination> rewriteEliminationM(Function<Term, Flow<S, Term>> recurse,
                                                                  Elimination original) {
         return original.accept(new Elimination.Visitor<Flow<S, Elimination>>() {
-            @Override
-            public Flow<S, Elimination> visit(Elimination.List instance) {
-                // TODO: this is incorrect in Hydra Core
-                Term foldA = instance.value;
-                return map(recurse.apply(foldA), Elimination.List::new);
-            }
+            // Commented out - Elimination.List no longer exists in generated code
+            // @Override
+            // public Flow<S, Elimination> visit(Elimination.List instance) {
+            //     // TODO: this is incorrect in Hydra Core
+            //     Term foldA = instance.value;
+            //     return map(recurse.apply(foldA), Elimination.List::new);
+            // }
 
-            @Override
-            public Flow<S, Elimination> visit(Elimination.Optional instance) {
-                OptionalCases foldA = instance.value;
-                return map2(recurse.apply(foldA.nothing), recurse.apply(foldA.just),
-                        (n, j) -> new Elimination.Optional(new OptionalCases(n, j)));
-            }
+            // Commented out - Elimination.Optional no longer exists in generated code
+            // @Override
+            // public Flow<S, Elimination> visit(Elimination.Optional instance) {
+            //     OptionalCases foldA = instance.value;
+            //     return map2(recurse.apply(foldA.nothing), recurse.apply(foldA.just),
+            //             (n, j) -> new Elimination.Optional(new OptionalCases(n, j)));
+            // }
 
             @Override
             public Flow<S, Elimination> visit(Elimination.Product instance) {
@@ -152,7 +152,7 @@ public interface Rewriting {
                     @Override
                     public Flow<S, Term> visit(Term.Annotated instance) {
                         AnnotatedTerm ann = instance.value;
-                        return map2(recurse.apply(ann.subject), mf.apply(ann.annotation),
+                        return map2(recurse.apply(ann.body), mf.apply(ann.annotation),
                                 (term1, ann1) -> Terms.annot(ann1, term1));
                     }
 
@@ -172,12 +172,12 @@ public interface Rewriting {
 
                     @Override
                     public Flow<S, Term> visit(Term.Let instance) {
-                        List<LetBinding> bindingsA = instance.value.bindings;
-                        Term envA = instance.value.environment;
-                        Flow<S, List<LetBinding>> bindingsB = mapM(bindingsA,
+                        List<Binding> bindingsA = instance.value.bindings;
+                        Term bodyA = instance.value.body;
+                        Flow<S, List<Binding>> bindingsB = mapM(bindingsA,
                             b -> Flows.map(recurse.apply(b.term), b::withTerm));
-                        Flow<S, Term> envB = recurse.apply(envA);
-                        return map2(bindingsB, envB, (b, e) -> new Term.Let(new Let(b, e)));
+                        Flow<S, Term> bodyB = recurse.apply(bodyA);
+                        return map2(bindingsB, bodyB, (b, e) -> new Term.Let(new Let(b, e)));
                     }
 
                     @Override
@@ -200,10 +200,10 @@ public interface Rewriting {
                     }
 
                     @Override
-                    public Flow<S, Term> visit(Term.Optional instance) {
+                    public Flow<S, Term> visit(Term.Maybe instance) {
                         Opt<Term> termA = instance.value;
                         Flow<S, Opt<Term>> termB = mapM(termA, recurse);
-                        return map(termB, Term.Optional::new);
+                        return map(termB, Term.Maybe::new);
                     }
 
                     @Override
@@ -235,22 +235,47 @@ public interface Rewriting {
                                 new Sum(instance.value.index, instance.value.size, t2)));
                     }
 
-                  @Override
-                  public Flow<S, Term> visit(Term.TypeAbstraction instance) {
-                    throw new UnsupportedOperationException();
-                  }
-
-                  @Override
-                  public Flow<S, Term> visit(Term.TypeApplication instance) {
-                    throw new UnsupportedOperationException();
-                  }
-
-                  @Override
-                    public Flow<S, Term> visit(Term.Typed instance) {
-                        Term t0 = instance.value.term;
-                        Flow<S, Term> t1 = recurse.apply(t0);
-                        return map(t1, t2 -> new Term.Typed(new TypedTerm(t2, instance.value.type)));
+                    @Override
+                    public Flow<S, Term> visit(Term.Pair instance) {
+                        Term leftA = instance.value.object1;
+                        Term rightA = instance.value.object2;
+                        return map2(recurse.apply(leftA), recurse.apply(rightA),
+                                (l, r) -> Terms.pair(l, r));
                     }
+
+                    @Override
+                    public Flow<S, Term> visit(Term.Either instance) {
+                        if (instance.value instanceof hydra.util.Either.Left) {
+                            hydra.util.Either.Left<Term, Term> left = (hydra.util.Either.Left<Term, Term>) instance.value;
+                            return map(recurse.apply(left.value), Terms::left);
+                        } else {
+                            hydra.util.Either.Right<Term, Term> right = (hydra.util.Either.Right<Term, Term>) instance.value;
+                            return map(recurse.apply(right.value), Terms::right);
+                        }
+                    }
+
+                    @Override
+                    public Flow<S, Term> visit(Term.TypeLambda instance) {
+                        throw new UnsupportedOperationException();
+                    }
+
+                    @Override
+                    public Flow<S, Term> visit(Term.TypeApplication instance) {
+                        throw new UnsupportedOperationException();
+                    }
+
+                    @Override
+                    public Flow<S, Term> visit(Term.Unit instance) {
+                        return pure(new Term.Unit(false));
+                    }
+
+                    // Commented out - Term.Typed no longer exists in generated code
+                    // @Override
+                    // public Flow<S, Term> visit(Term.Typed instance) {
+                    //     Term t0 = instance.value.term;
+                    //     Flow<S, Term> t1 = recurse.apply(t0);
+                    //     return map(t1, t2 -> new Term.Typed(new TypedTerm(t2, instance.value.type)));
+                    // }
 
                     @Override
                     public Flow<S, Term> visit(Term.Union instance) {
@@ -265,7 +290,7 @@ public interface Rewriting {
 
                     @Override
                     public Flow<S, Term> visit(Term.Wrap instance) {
-                        Flow<S, Term> obj2 = recurse.apply(instance.value.object);
+                        Flow<S, Term> obj2 = recurse.apply(instance.value.body);
                         return map(obj2, term -> new Term.Wrap(new WrappedTerm(instance.value.typeName, term)));
                     }
                 });

@@ -61,7 +61,7 @@ public class TermsTest {
         return new Term.PartialVisitor<Integer>() {
             @Override
             public Integer visit(Term.Annotated instance) {
-                return instance.value.subject.accept(countBoundVariables());
+                return instance.value.body.accept(countBoundVariables());
             }
 
             @Override
@@ -120,7 +120,7 @@ public class TermsTest {
         assertTrue(longitudeAnnotated instanceof Term.Annotated);
         // Notice that annotations, here, are String-valued
         assertHasDescription(longitudeAnnotated, "Gets the longitude from a LatLon");
-        assertEquals(longitude, ((Term.Annotated) longitudeAnnotated).value.subject);
+        assertEquals(longitude, ((Term.Annotated) longitudeAnnotated).value.body);
     }
 
     @Test

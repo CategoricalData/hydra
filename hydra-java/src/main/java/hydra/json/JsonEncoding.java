@@ -23,11 +23,11 @@ public abstract class JsonEncoding {
   }
 
   protected static Value toJson(double d) {
-    return new Value.Number_(d);
+    return new Value.Number_(String.valueOf(d));
   }
 
   protected static Value toJson(int i) {
-    return new Value.Number_((double) i);
+    return new Value.Number_(String.valueOf(i));
   }
 
   protected static Value toJson(String value) {

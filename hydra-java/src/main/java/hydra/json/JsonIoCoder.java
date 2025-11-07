@@ -43,7 +43,12 @@ public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
 
             @Override
             public Flow<S, Object> visit(Value.Number_ instance) {
-                return Flows.pure(instance.value);
+                // Value.Number_ now stores the number as a String, so we parse it back to Double
+                try {
+                    return Flows.pure(Double.parseDouble(instance.value));
+                } catch (NumberFormatException e) {
+                    return Flows.fail("Invalid number format: " + instance.value, e);
+                }
             }
 
             @Override
@@ -67,7 +72,7 @@ public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
      */
     public static <S> Flow<S, Value> decode(Object value) {
         if (value == null) {
-            return Flows.pure(new Value.Null());
+            return Flows.pure(new Value.Null(false));
         } else if (value.getClass().isArray()) {
             Object[] array = (Object[]) value;
             return Flows.map(Flows.mapM(array, JsonIoCoder::decode), Value.Array::new);
@@ -79,7 +84,7 @@ public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
         } else if (value instanceof Boolean) {
             return Flows.pure(new Value.Boolean_((Boolean) value));
         } else if (value instanceof Number) {
-            return Flows.pure(new Value.Number_(((Number) value).doubleValue()));
+            return Flows.pure(new Value.Number_(String.valueOf(((Number) value).doubleValue())));
         } else {
             return Flows.unexpected("object, array, string, boolean, or number", value.getClass().getName());
         }

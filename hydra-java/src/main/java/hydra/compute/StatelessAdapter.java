@@ -1,6 +1,6 @@
 package hydra.compute;
 
-import hydra.core.Unit;
+import hydra.util.Unit;
 
 import java.util.function.Function;
 

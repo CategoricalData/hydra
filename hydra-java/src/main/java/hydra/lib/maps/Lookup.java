@@ -7,6 +7,7 @@ import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Opt;
@@ -31,7 +32,7 @@ public class Lookup extends PrimitiveFunction {
     @Override
     public TypeScheme type() {
         return scheme("k", "v",
-                function("k", map("k", "v"), optional("v")));
+                function(Types.var("k"), map("k", "v"), optional("v")));
     }
 
     @Override

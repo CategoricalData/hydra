@@ -6,6 +6,7 @@ import hydra.core.Term;
 import hydra.core.Type;
 import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.lib.PrimitiveType;
 import hydra.tools.PrimitiveFunction;
@@ -16,7 +17,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static hydra.dsl.Flows.map2;
-import static hydra.basics.Basics.capitalize;
+// import static hydra.basics.Basics.capitalize; // TODO: restore when kernel terms modules are generated
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
@@ -92,5 +93,13 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map2(expect.apply(args.get(0)), expect.apply(args.get(1)),
                 (arg0, arg1) -> Terms.boolean_(criterion.apply(arg0, arg1)));
+    }
+
+    // TODO: inline implementation until hydra.basics.Basics is generated
+    private static String capitalize(String s) {
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
+        return Character.toUpperCase(s.charAt(0)) + s.substring(1);
     }
 }
