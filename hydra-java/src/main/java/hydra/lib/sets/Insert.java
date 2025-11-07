@@ -7,6 +7,7 @@ import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
@@ -30,7 +31,7 @@ public class Insert extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return scheme("x", function("x", set("x"), set("x")));
+        return scheme("x", function(Types.var("x"), set("x"), set("x")));
     }
 
     @Override

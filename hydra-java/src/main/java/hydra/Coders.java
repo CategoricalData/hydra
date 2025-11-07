@@ -3,7 +3,7 @@ package hydra;
 import hydra.compute.Coder;
 import hydra.compute.Flow;
 import hydra.compute.StatelessCoder;
-import hydra.core.Unit;
+import hydra.util.Unit;
 import hydra.dsl.Flows;
 
 

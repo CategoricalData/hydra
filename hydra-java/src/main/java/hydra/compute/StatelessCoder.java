@@ -1,7 +1,7 @@
 package hydra.compute;
 
 import hydra.dsl.Flows;
-import hydra.core.Unit;
+import hydra.util.Unit;
 
 /**
  * A convenience class for stateless coders; we use Hydra's Unit as the state type.

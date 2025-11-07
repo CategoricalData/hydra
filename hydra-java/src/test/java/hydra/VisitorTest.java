@@ -87,7 +87,7 @@ public class VisitorTest {
             return instance.value.accept(new Scalar.PartialVisitor<Boolean>() {
                 @Override
                 public Boolean visit(Scalar.Float_ instance) {
-                    return instance.value == 42.0;
+                    return instance.value.equals(String.valueOf(42.0));
                 }
 
                 @Override
@@ -130,7 +130,7 @@ public class VisitorTest {
         }
 
         static Node float_(double value) {
-            return new Node.Scalar(new Scalar.Float_(value));
+            return new Node.Scalar(new Scalar.Float_(String.valueOf(value)));
         }
 
         static Node int_(int value) {

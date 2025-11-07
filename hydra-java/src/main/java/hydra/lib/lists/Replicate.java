@@ -7,6 +7,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Flows;
 import hydra.dsl.Terms;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
@@ -33,7 +34,7 @@ public class Replicate extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return scheme("a", function(int32(), "a", list("a")));
+        return scheme("a", function(int32(), Types.var("a"), list("a")));
     }
 
     @Override

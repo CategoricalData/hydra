@@ -1,7 +1,7 @@
 package hydra.ext.json;
 
 import hydra.HydraTestBase;
-import hydra.core.Unit;
+import hydra.util.Unit;
 import hydra.json.Value;
 import org.junit.jupiter.api.Test;
 
@@ -27,15 +27,15 @@ public class JsonSerdeTest extends HydraTestBase {
     }});
 
     private static final Value JSON_VALUE_1 = new Value.Object_(new HashMap<String, Value>() {{
-        put("numVal", new Value.Number_(42.0));
+        put("numVal", new Value.Number_(String.valueOf(42.0)));
         put("boolVal", new Value.Boolean_(true));
-        put("nullVal", new Value.Null());
+        put("nullVal", new Value.Null(false));
         put("objVal", new Value.Object_(new HashMap<String, Value>() {{
             put("foo", new Value.String_("bar"));
         }}));
-        put("arrayval", new Value.Array(Arrays.asList(new Value.Number_(1.0),
-                new Value.Number_(2.0),
-                new Value.Number_(3.0))));
+        put("arrayval", new Value.Array(Arrays.asList(new Value.Number_(String.valueOf(1.0)),
+                new Value.Number_(String.valueOf(2.0)),
+                new Value.Number_(String.valueOf(3.0)))));
     }});
 
     @Test
@@ -50,9 +50,9 @@ public class JsonSerdeTest extends HydraTestBase {
             @Override
             public Void visit(Value.Object_ instance) {
                 Map<String, Value> m = instance.value;
-                assertEquals(new Value.Number_(42.0), m.get("numVal"));
+                assertEquals(new Value.Number_(String.valueOf(42.0)), m.get("numVal"));
                 assertEquals(new Value.Boolean_(true), m.get("boolVal"));
-                assertEquals(new Value.Null(), m.get("nullVal"));
+                assertEquals(new Value.Null(false), m.get("nullVal"));
                 assertTrue(m.get("objVal") instanceof Value.Object_);
                 assertTrue(m.get("arrayval") instanceof Value.Array);
                 assertEquals(3, ((Value.Array) m.get("arrayval")).value.size());
@@ -66,15 +66,15 @@ public class JsonSerdeTest extends HydraTestBase {
         assertSucceedsWith("\"foo\"", JsonSerde.encode(new Value.String_("foo")));
         assertSucceedsWith("{\"foo\":42.0}",
                 JsonSerde.encode(new Value.Object_(new HashMap<String, Value>() {{
-                    put("foo", new Value.Number_(42.0));
+                    put("foo", new Value.Number_(String.valueOf(42.0)));
                 }})));
 
         // Raw values (other than null) are wrapped as objects by json-io
-        assertSucceedsWith("{\"value\":42.0}", JsonSerde.encode(new Value.Number_(42.0)));
+        assertSucceedsWith("{\"value\":42.0}", JsonSerde.encode(new Value.Number_(String.valueOf(42.0))));
         assertSucceedsWith("{\"value\":true}", JsonSerde.encode(new Value.Boolean_(true)));
 
         // Raw nulls are *not* wrapped by json-io
-        assertSucceedsWith("null", JsonSerde.encode(new Value.Null()));
+        assertSucceedsWith("null", JsonSerde.encode(new Value.Null(false)));
 
         assertSucceedsWith("[\"foo\"]",
                 JsonSerde.encode(new Value.Array(Arrays.asList(new Value.String_("foo")))));

@@ -76,13 +76,13 @@ public class RewritingTest {
         Opt<Term> result = resultState.value;
         assertTrue(result.isPresent());
         assertTrue(result.get() instanceof Term.Annotated);
-        Term list = ((Term.Annotated) result.get()).value.subject;
+        Term list = ((Term.Annotated) result.get()).value.body;
         assertTrue(list instanceof Term.List);
         List<Term> vals = ((Term.List) list).value;
         assertEquals(3, vals.size());
         Term stateAnn = vals.get(2);
         assertTrue(stateAnn instanceof Term.Annotated);
-        Term state = ((Term.Annotated) stateAnn).value.subject;
+        Term state = ((Term.Annotated) stateAnn).value.body;
         assertTrue(state instanceof Term.Record);
         List<Field> fields = ((Term.Record) state).value.fields;
         assertEquals(2, fields.size());

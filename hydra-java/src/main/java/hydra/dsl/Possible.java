@@ -1,7 +1,7 @@
 package hydra.dsl;
 
 import hydra.compute.Flow;
-import hydra.core.Unit;
+import hydra.util.Unit;
 import hydra.tools.Function3;
 import hydra.tools.Function4;
 import hydra.util.Opt;

@@ -3,8 +3,7 @@ package hydra.dsl;
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
 import hydra.compute.Trace;
-import hydra.core.Unit;
-import hydra.tier1.Tier1;
+import hydra.util.Unit;
 import hydra.tools.FlowException;
 import hydra.tools.Function3;
 import hydra.tools.Function4;
@@ -194,8 +193,8 @@ public interface Flows {
         requireNonNull(state, "state");
         requireNonNull(flow, "flow");
 
-        Function<S, Function<Flow<S, A>, A>> helper = Tier1.fromFlow(dflt);
-        return helper.apply(state).apply(flow);
+        FlowState<S, A> result = flow.value.apply(state).apply(EMPTY_TRACE);
+        return result.value.orElse(dflt);
     }
 
     /**
@@ -446,7 +445,15 @@ public interface Flows {
      * Continue a flow after adding a warning message.
      */
     static <S, A> Flow<S, A> warn(String message, Flow<S, A> flow) {
-        Function<Flow<S, A>, Flow<S, A>> f = Tier1.warn(message);
-        return f.apply(flow);
+        requireNonNull(message, "message");
+        requireNonNull(flow, "flow");
+
+        return new Flow<>(s0 -> t0 -> {
+            FlowState<S, A> result = flow.value.apply(s0).apply(t0);
+            String warnMsg = "Warning: " + message;
+            List<String> messages = new ArrayList<>(result.trace.messages);
+            messages.add(0, warnMsg);  // Prepend to maintain FILO ordering
+            return new FlowState<>(result.value, result.state, result.trace.withMessages(messages));
+        });
     }
 }

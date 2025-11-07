@@ -7,6 +7,7 @@ import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
@@ -31,7 +32,7 @@ public class Member extends PrimitiveFunction {
     @Override
     public TypeScheme type() {
         return scheme("k", "v",
-                function("k", hydra.dsl.Types.map("k", "v"), boolean_()));
+                function(Types.var("k"), hydra.dsl.Types.map("k", "v"), boolean_()));
     }
 
     @Override

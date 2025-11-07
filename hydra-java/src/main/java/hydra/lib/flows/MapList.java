@@ -35,7 +35,7 @@ public class MapList extends PrimitiveFunction {
     private final Term pure = (new Pure()).term();
     private final Term map2 = lambda("x", lambda("y", lambda("fun",
                 app(bind, variable("x"), lambda("x1", app(bind, variable("y"),
-                        lambda("y1", app(pure, app("f", "a1", "b1")))))))));
+                        lambda("y1", app(pure, app(variable("fun"), variable("x1"), variable("y1"))))))))));
 
     @Override
     public TypeScheme type() {
@@ -46,18 +46,25 @@ public class MapList extends PrimitiveFunction {
                         Types.flow("s", Types.list("y"))));
     }
 
+    // TODO: restore when Terms.fold() / Elimination.List is generated
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
-            Term mapping = args.get(0);
-            return Flows.map(Expect.list(Flows::pure, args.get(1)), (Function<List<Term>, Term>) terms -> {
-                Term appList = list(terms.stream().map(x -> app(mapping, x)).collect(Collectors.toList()));
-                Term foldFun = lambda("fList",
-                        lambda("fEl", app(map2, variable("fEl"), variable("fList"), cons)));
-                return app(Terms.fold(foldFun), app(pure, list()), appList);
-            });
+            throw new UnsupportedOperationException("MapList.implementation() not yet available - requires Elimination.List");
         };
     }
+    // @Override
+    // protected Function<List<Term>, Flow<Graph, Term>> implementation() {
+    //     return args -> {
+    //         Term mapping = args.get(0);
+    //         return Flows.map(Expect.list(Flows::pure, args.get(1)), (Function<List<Term>, Term>) terms -> {
+    //             Term appList = list(terms.stream().map(x -> app(mapping, x)).collect(Collectors.toList()));
+    //             Term foldFun = lambda("fList",
+    //                     lambda("fEl", app(map2, variable("fEl"), variable("fList"), cons)));
+    //             return app(Terms.fold(foldFun), app(pure, list()), appList);
+    //         });
+    //     };
+    // }
 
     /**
      * Applies a flow function to each element.

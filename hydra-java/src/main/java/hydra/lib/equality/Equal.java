@@ -6,6 +6,7 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
@@ -27,7 +28,7 @@ public class Equal extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return scheme("x", function("x", "x", boolean_()));
+        return scheme("x", function(Types.var("x"), Types.var("x"), boolean_()));
     }
 
     @Override
