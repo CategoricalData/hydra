@@ -184,7 +184,7 @@ getTypeDef = define "getType" $
   doc "Get type from annotations" $
   "anns" ~> Maybes.maybe
     (produce nothing)
-    ("dat" ~> Flows.map (unaryFunction just) (ref DecodeCore.typeDef @@ var "dat"))
+    ("dat" ~> Flows.map (unaryFunction just) (trace "get type" $ ref DecodeCore.typeDef @@ var "dat"))
     (Maps.lookup (ref Constants.key_typeDef) (var "anns"))
 
 getTypeAnnotationDef :: TBinding (Name -> Type -> Maybe Term)

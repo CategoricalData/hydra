@@ -602,6 +602,7 @@ termAdapter typ =
         let supportedAtTopLevel = (\cx -> \t -> Logic.and (variantIsSupported cx t) (Coders.languageConstraintsTypes (constraints cx) t))
         in  
           let pass = (\t -> (\x -> case x of
+                  Mantle.TypeVariantAnnotated -> []
                   Mantle.TypeVariantApplication -> [
                     passApplication]
                   Mantle.TypeVariantEither -> [
@@ -619,6 +620,7 @@ termAdapter typ =
                   Mantle.TypeVariantMaybe -> [
                     passOptional,
                     maybeToList]
+                  Mantle.TypeVariantPair -> []
                   Mantle.TypeVariantProduct -> [
                     passProduct]
                   Mantle.TypeVariantRecord -> [
@@ -631,24 +633,35 @@ termAdapter typ =
                     passUnion]
                   Mantle.TypeVariantUnit -> [
                     passUnit]
+                  Mantle.TypeVariantVariable -> []
                   Mantle.TypeVariantWrap -> [
                     passWrapped]) (Variants.typeVariant (Rewriting.deannotateType t)))
           in  
             let trySubstitution = (\t -> (\x -> case x of
+                    Mantle.TypeVariantAnnotated -> []
                     Mantle.TypeVariantApplication -> [
                       simplifyApplication]
-                    Mantle.TypeVariantFunction -> [
-                      functionToUnion]
+                    Mantle.TypeVariantEither -> []
                     Mantle.TypeVariantForall -> [
                       lambdaToMonotype]
+                    Mantle.TypeVariantFunction -> [
+                      functionToUnion]
+                    Mantle.TypeVariantList -> []
+                    Mantle.TypeVariantLiteral -> []
+                    Mantle.TypeVariantMap -> []
                     Mantle.TypeVariantMaybe -> [
                       maybeToList]
+                    Mantle.TypeVariantPair -> []
+                    Mantle.TypeVariantProduct -> []
+                    Mantle.TypeVariantRecord -> []
                     Mantle.TypeVariantSet -> [
                       setToList]
+                    Mantle.TypeVariantSum -> []
                     Mantle.TypeVariantUnion -> [
                       unionToRecord]
                     Mantle.TypeVariantUnit -> [
                       unitToRecord]
+                    Mantle.TypeVariantVariable -> []
                     Mantle.TypeVariantWrap -> [
                       wrapToUnwrapped]) (Variants.typeVariant t))
             in  

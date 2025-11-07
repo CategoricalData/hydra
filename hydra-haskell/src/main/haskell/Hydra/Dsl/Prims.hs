@@ -7,6 +7,7 @@ import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Mantle
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Extract.Core as ExtractCore
@@ -292,7 +293,7 @@ term = TermCoder (TypeVariable _Term) $ Coder encode decode
 type_ :: TermCoder Type
 type_ = TermCoder (TypeVariable _Type) $ Coder encode decode
   where
-    encode = DecodeCore.type_
+    encode term = Monads.withTrace "decode" $ DecodeCore.type_ term
     decode = pure . EncodeCore.type_
 
 uint8 :: TermCoder Int16

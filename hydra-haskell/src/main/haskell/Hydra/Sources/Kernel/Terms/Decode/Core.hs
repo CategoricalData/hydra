@@ -112,10 +112,12 @@ fieldTypesDef = define "fieldTypes" $
 floatTypeDef :: TBinding (Term -> Flow Graph FloatType)
 floatTypeDef = define "floatType" $
   doc "Decode a floating-point type from a term" $
+  "term0" ~>
+  trace ("dbg 1") $
   ref Lexical.matchEnumDef @@ Core.nameLift _FloatType @@ list [
     tuple2 (Core.nameLift _FloatType_bigfloat) Core.floatTypeBigfloat,
     tuple2 (Core.nameLift _FloatType_float32) Core.floatTypeFloat32,
-    tuple2 (Core.nameLift _FloatType_float64) Core.floatTypeFloat64]
+    tuple2 (Core.nameLift _FloatType_float64) Core.floatTypeFloat64] @@ var "term0"
 
 forallTypeDef :: TBinding (Term -> Flow Graph ForallType)
 forallTypeDef = define "forallType" $
@@ -136,6 +138,8 @@ functionTypeDef = define "functionType" $
 integerTypeDef :: TBinding (Term -> Flow Graph IntegerType)
 integerTypeDef = define "integerType" $
   doc "Decode an integer type from a term" $
+  "term0" ~>
+  trace ("dbg 1") $
   ref Lexical.matchEnumDef @@ Core.nameLift _IntegerType @@ list [
     tuple2 (Core.nameLift _IntegerType_bigint) Core.integerTypeBigint,
     tuple2 (Core.nameLift _IntegerType_int8) Core.integerTypeInt8,
@@ -145,11 +149,13 @@ integerTypeDef = define "integerType" $
     tuple2 (Core.nameLift _IntegerType_uint8) Core.integerTypeUint8,
     tuple2 (Core.nameLift _IntegerType_uint16) Core.integerTypeUint16,
     tuple2 (Core.nameLift _IntegerType_uint32) Core.integerTypeUint32,
-    tuple2 (Core.nameLift _IntegerType_uint64) Core.integerTypeUint64]
+    tuple2 (Core.nameLift _IntegerType_uint64) Core.integerTypeUint64] @@ var "term0"
 
 literalTypeDef :: TBinding (Term -> Flow Graph LiteralType)
 literalTypeDef = define "literalType" $
   doc "Decode a literal type from a term" $
+  "term0" ~>
+  trace ("dbg 3") $
   ref Lexical.matchUnionDef @@ Core.nameLift _LiteralType @@ list [
     ref Lexical.matchUnitFieldDef @@ Core.nameLift _LiteralType_binary @@ Core.literalTypeBinary,
     ref Lexical.matchUnitFieldDef @@ Core.nameLift _LiteralType_boolean @@ Core.literalTypeBoolean,
@@ -159,7 +165,7 @@ literalTypeDef = define "literalType" $
     tuple2
       (Core.nameLift _LiteralType_integer)
       (lambda "it" $ Flows.map (unaryFunction Core.literalTypeInteger) (ref integerTypeDef @@ var "it")),
-    ref Lexical.matchUnitFieldDef @@ Core.nameLift _LiteralType_string @@ Core.literalTypeString]
+    ref Lexical.matchUnitFieldDef @@ Core.nameLift _LiteralType_string @@ Core.literalTypeString] @@ var "term0"
 
 mapTypeDef :: TBinding (Term -> Flow Graph MapType)
 mapTypeDef = define "mapType" $
@@ -192,8 +198,9 @@ stringDef = define "string" $
 typeDef :: TBinding (Term -> Flow Graph Type)
 typeDef = define "type" $
   doc "Decode a type from a term" $
-  lambda "dat" $ cases _Term (var "dat")
-    (Just $ ref Lexical.matchUnionDef @@ Core.nameLift _Type @@ list [
+  lambda "dat" $
+  cases _Term (var "dat")
+    (Just $ trace ("dbg 4") $ ref Lexical.matchUnionDef @@ Core.nameLift _Type @@ list [
       tuple2
         (Core.nameLift _Type_application)
         (lambda "at" $ Flows.map (unaryFunction Core.typeApplication) $ ref applicationTypeDef @@ var "at"),
