@@ -48,8 +48,8 @@ PRIMITIVE__IMPLEMENTATION__NAME = hydra.core.Name("implementation")
 class TermCoder(Generic[A]):
     r"""A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms."""
     
-    type: hydra.core.Type
-    coder: hydra.compute.Coder[Graph, Graph, hydra.core.Term, A]
+    type: Annotated[hydra.core.Type, "The Hydra type of encoded terms"]
+    coder: Annotated[hydra.compute.Coder[Graph, Graph, hydra.core.Term, A], "A coder between Hydra terms and instances of the given type"]
 
 TERM_CODER__NAME = hydra.core.Name("hydra.graph.TermCoder")
 TERM_CODER__TYPE__NAME = hydra.core.Name("type")

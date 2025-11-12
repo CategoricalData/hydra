@@ -11,6 +11,7 @@ import hydra.core
 
 A = TypeVar("A")
 
+# A directed graph represented as an adjacency list mapping vertices to their outgoing neighbors.
 type Graph = FrozenDict[Vertex, frozenlist[Vertex]]
 
 GRAPH__NAME = hydra.core.Name("hydra.topology.Graph")
@@ -41,6 +42,7 @@ TARJAN_STATE__STACK__NAME = hydra.core.Name("stack")
 TARJAN_STATE__ON_STACK__NAME = hydra.core.Name("onStack")
 TARJAN_STATE__SCCS__NAME = hydra.core.Name("sccs")
 
+# A graph vertex, represented as a 32-bit integer identifier.
 type Vertex = int
 
 VERTEX__NAME = hydra.core.Name("hydra.topology.Vertex")

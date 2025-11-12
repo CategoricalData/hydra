@@ -8,6 +8,8 @@ from hydra.dsl.python import Node
 import hydra.core
 
 class CaseConvention(Enum):
+    r"""A naming convention for symbols, such as camelCase or snake_case."""
+    
     CAMEL = "camel"
     
     PASCAL = "pascal"
@@ -87,9 +89,11 @@ LITERAL_VARIANT__FLOAT__NAME = hydra.core.Name("float")
 LITERAL_VARIANT__INTEGER__NAME = hydra.core.Name("integer")
 LITERAL_VARIANT__STRING__NAME = hydra.core.Name("string")
 
-class PrecisionArbitrary: ...
+class PrecisionArbitrary:
+    r"""Arbitrary precision."""
 
-class PrecisionBits(Node[int]): ...
+class PrecisionBits(Node[int]):
+    r"""Precision to a specified number of bits."""
 
 # Numeric precision: arbitrary precision, or precision to a specified number of bits.
 type Precision = PrecisionArbitrary | PrecisionBits

@@ -6,6 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from hydra.dsl.python import Maybe, Node
+from typing import Annotated
 import hydra.core
 
 class Associativity(Enum):
@@ -29,9 +30,9 @@ ASSOCIATIVITY__BOTH__NAME = hydra.core.Name("both")
 class BlockStyle:
     r"""Formatting option for code blocks."""
     
-    indent: Maybe[str]
-    newline_before_content: bool
-    newline_after_content: bool
+    indent: Annotated[Maybe[str], "An optional indentation string"]
+    newline_before_content: Annotated[bool, "Whether to place a newline before the content"]
+    newline_after_content: Annotated[bool, "Whether to place a newline after the content"]
 
 BLOCK_STYLE__NAME = hydra.core.Name("hydra.ast.BlockStyle")
 BLOCK_STYLE__INDENT__NAME = hydra.core.Name("indent")
@@ -42,9 +43,9 @@ BLOCK_STYLE__NEWLINE_AFTER_CONTENT__NAME = hydra.core.Name("newlineAfterContent"
 class BracketExpr:
     r"""An expression enclosed by brackets."""
     
-    brackets: Brackets
-    enclosed: Expr
-    style: BlockStyle
+    brackets: Annotated[Brackets, "The bracket pair enclosing the expression"]
+    enclosed: Annotated[Expr, "The expression within the brackets"]
+    style: Annotated[BlockStyle, "The formatting style for the bracketed block"]
 
 BRACKET_EXPR__NAME = hydra.core.Name("hydra.ast.BracketExpr")
 BRACKET_EXPR__BRACKETS__NAME = hydra.core.Name("brackets")
@@ -55,20 +56,24 @@ BRACKET_EXPR__STYLE__NAME = hydra.core.Name("style")
 class Brackets:
     r"""Matching open and close bracket symbols."""
     
-    open: Symbol
-    close: Symbol
+    open: Annotated[Symbol, "The opening bracket symbol"]
+    close: Annotated[Symbol, "The closing bracket symbol"]
 
 BRACKETS__NAME = hydra.core.Name("hydra.ast.Brackets")
 BRACKETS__OPEN__NAME = hydra.core.Name("open")
 BRACKETS__CLOSE__NAME = hydra.core.Name("close")
 
-class ExprConst(Node["Symbol"]): ...
+class ExprConst(Node["Symbol"]):
+    r"""A constant symbol."""
 
-class ExprIndent(Node["IndentedExpression"]): ...
+class ExprIndent(Node["IndentedExpression"]):
+    r"""An indented expression."""
 
-class ExprOp(Node["OpExpr"]): ...
+class ExprOp(Node["OpExpr"]):
+    r"""An operator expression."""
 
-class ExprBrackets(Node["BracketExpr"]): ...
+class ExprBrackets(Node["BracketExpr"]):
+    r"""A bracketed expression."""
 
 # An abstract expression.
 type Expr = ExprConst | ExprIndent | ExprOp | ExprBrackets
@@ -83,16 +88,18 @@ EXPR__BRACKETS__NAME = hydra.core.Name("brackets")
 class IndentedExpression:
     r"""An expression indented in a certain style."""
     
-    style: IndentStyle
-    expr: Expr
+    style: Annotated[IndentStyle, "The indentation style"]
+    expr: Annotated[Expr, "The expression to be indented"]
 
 INDENTED_EXPRESSION__NAME = hydra.core.Name("hydra.ast.IndentedExpression")
 INDENTED_EXPRESSION__STYLE__NAME = hydra.core.Name("style")
 INDENTED_EXPRESSION__EXPR__NAME = hydra.core.Name("expr")
 
-class IndentStyleAllLines(Node[str]): ...
+class IndentStyleAllLines(Node[str]):
+    r"""Indent all lines with the given string."""
 
-class IndentStyleSubsequentLines(Node[str]): ...
+class IndentStyleSubsequentLines(Node[str]):
+    r"""Indent only lines after the first with the given string."""
 
 # Any of several indentation styles.
 type IndentStyle = IndentStyleAllLines | IndentStyleSubsequentLines
@@ -105,10 +112,10 @@ INDENT_STYLE__SUBSEQUENT_LINES__NAME = hydra.core.Name("subsequentLines")
 class Op:
     r"""An operator symbol."""
     
-    symbol: Symbol
-    padding: Padding
-    precedence: Precedence
-    associativity: Associativity
+    symbol: Annotated[Symbol, "The operator symbol"]
+    padding: Annotated[Padding, "The padding around the operator"]
+    precedence: Annotated[Precedence, "The precedence of the operator"]
+    associativity: Annotated[Associativity, "The associativity of the operator"]
 
 OP__NAME = hydra.core.Name("hydra.ast.Op")
 OP__SYMBOL__NAME = hydra.core.Name("symbol")
@@ -120,9 +127,9 @@ OP__ASSOCIATIVITY__NAME = hydra.core.Name("associativity")
 class OpExpr:
     r"""An operator expression."""
     
-    op: Op
-    lhs: Expr
-    rhs: Expr
+    op: Annotated[Op, "The operator"]
+    lhs: Annotated[Expr, "The left-hand side operand"]
+    rhs: Annotated[Expr, "The right-hand side operand"]
 
 OP_EXPR__NAME = hydra.core.Name("hydra.ast.OpExpr")
 OP_EXPR__OP__NAME = hydra.core.Name("op")
@@ -133,8 +140,8 @@ OP_EXPR__RHS__NAME = hydra.core.Name("rhs")
 class Padding:
     r"""Left and right padding for an operator."""
     
-    left: Ws
-    right: Ws
+    left: Annotated[Ws, "Padding to the left of the operator"]
+    right: Annotated[Ws, "Padding to the right of the operator"]
 
 PADDING__NAME = hydra.core.Name("hydra.ast.Padding")
 PADDING__LEFT__NAME = hydra.core.Name("left")
@@ -150,15 +157,20 @@ class Symbol(Node[str]):
 
 SYMBOL__NAME = hydra.core.Name("hydra.ast.Symbol")
 
-class WsNone: ...
+class WsNone:
+    r"""No whitespace."""
 
-class WsSpace: ...
+class WsSpace:
+    r"""A single space."""
 
-class WsBreak: ...
+class WsBreak:
+    r"""A line break."""
 
-class WsBreakAndIndent(Node[str]): ...
+class WsBreakAndIndent(Node[str]):
+    r"""A line break followed by indentation."""
 
-class WsDoubleBreak: ...
+class WsDoubleBreak:
+    r"""Two line breaks."""
 
 # One of several classes of whitespace.
 type Ws = WsNone | WsSpace | WsBreak | WsBreakAndIndent | WsDoubleBreak

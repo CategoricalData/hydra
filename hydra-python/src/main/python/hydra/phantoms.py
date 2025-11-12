@@ -5,7 +5,7 @@ r"""Phantom types for use with Hydra DSLs."""
 from __future__ import annotations
 from dataclasses import dataclass
 from hydra.dsl.python import Node
-from typing import Generic, TypeVar
+from typing import Annotated, Generic, TypeVar
 import hydra.core
 
 A = TypeVar("A")
@@ -14,8 +14,8 @@ A = TypeVar("A")
 class TBinding(Generic[A]):
     r"""An association of a named term (element) with a phantom type."""
     
-    name: hydra.core.Name
-    term: TTerm[A]
+    name: Annotated[hydra.core.Name, "The name of the term"]
+    term: Annotated[TTerm[A], "The term with its phantom type"]
 
 T_BINDING__NAME = hydra.core.Name("hydra.phantoms.TBinding")
 T_BINDING__NAME__NAME = hydra.core.Name("name")

@@ -34,6 +34,8 @@ def alpha_convert(vold: hydra.core.Name, vnew: hydra.core.Name, term: hydra.core
     return hydra.rewriting.replace_free_term_variable(vold, cast(hydra.core.Term, hydra.core.TermVariable(vnew)), term)
 
 def beta_reduce_type(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]:
+    r"""Eagerly beta-reduce a type by substituting type arguments into type lambdas."""
+    
     def reduce_app(app: hydra.core.ApplicationType) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]:
         lhs = app.function
         rhs = app.argument
@@ -267,6 +269,8 @@ def eta_expand_typed_term[T0](tx0: hydra.typing.TypeContext, term0: hydra.core.T
     return hydra.rewriting.rewrite_term_with_context_m((lambda v1, v2, v3: rewrite(True, False, cast(frozenlist[hydra.core.Type], ()), v1, v2, v3)), tx0, term0)
 
 def eta_reduce_term(term: hydra.core.Term) -> hydra.core.Term:
+    r"""Eta-reduce a term by removing redundant lambda abstractions."""
+    
     no_change = term
     def reduce_lambda(l: hydra.core.Lambda) -> hydra.core.Term:
         v = l.parameter

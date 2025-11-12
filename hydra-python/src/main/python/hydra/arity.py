@@ -10,6 +10,8 @@ import hydra.lib.lists
 import hydra.lib.math
 
 def function_arity(v1: hydra.core.Function) -> int:
+    r"""Find the arity (expected number of arguments) of a function."""
+    
     match v1:
         case hydra.core.FunctionElimination():
             return 1
@@ -21,6 +23,8 @@ def function_arity(v1: hydra.core.Function) -> int:
             return 42
 
 def term_arity(v1: hydra.core.Term) -> int:
+    r"""Find the arity (expected number of arguments) of a term."""
+    
     match v1:
         case hydra.core.TermApplication(value=arg_):
             return (lambda arg_2: (lambda xapp: hydra.lib.math.sub(xapp, 1))(term_arity(arg_2)))(arg_.function)
@@ -32,6 +36,8 @@ def term_arity(v1: hydra.core.Term) -> int:
             return 0
 
 def type_arity(v1: hydra.core.Type) -> int:
+    r"""Find the arity (expected number of arguments) of a type."""
+    
     match v1:
         case hydra.core.TypeAnnotated(value=arg_):
             return type_arity(arg_.body)
@@ -54,6 +60,8 @@ def primitive_arity(arg_: hydra.graph.Primitive) -> int:
     return (lambda arg_2: type_arity(arg_2.type))(arg_.type)
 
 def type_scheme_arity(ts: hydra.core.TypeScheme) -> int:
+    r"""Find the arity (expected number of arguments) of a type scheme."""
+    
     return type_arity(ts.type)
 
 def uncurry_type(t: hydra.core.Type) -> frozenlist[hydra.core.Type]:

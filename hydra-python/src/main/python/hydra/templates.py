@@ -17,6 +17,7 @@ import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
+import hydra.monads
 import hydra.show.core
 
 def graph_to_schema(g: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, hydra.core.Type]]:
@@ -25,7 +26,7 @@ def graph_to_schema(g: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Grap
     def to_pair[T0](name_and_el: Tuple[T0, hydra.core.Binding]) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, hydra.core.Type]]:
         name = name_and_el[0]
         el = name_and_el[1]
-        return hydra.lib.flows.bind(hydra.decode.core.type(el.term), (lambda t: hydra.lib.flows.pure((name, t))))
+        return hydra.lib.flows.bind(hydra.monads.with_trace("graph to schema", hydra.decode.core.type(el.term)), (lambda t: hydra.lib.flows.pure((name, t))))
     return hydra.lib.flows.bind(hydra.lib.flows.map_list(cast(Callable[[Tuple[hydra.core.Name, hydra.core.Binding]], hydra.compute.Flow[hydra.graph.Graph, Tuple[hydra.core.Name, hydra.core.Type]]], to_pair), hydra.lib.maps.to_list(g.elements)), (lambda pairs: hydra.lib.flows.pure(cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.from_list(pairs)))))
 
 def instantiate_template[T0](minimal: bool, schema: FrozenDict[hydra.core.Name, hydra.core.Type], t: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Term]:
