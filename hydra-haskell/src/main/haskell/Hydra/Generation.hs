@@ -45,8 +45,13 @@ generateSources printModule basePath mods = do
 
     forModule mod = withTrace ("module " ++ unNamespace (moduleNamespace mod)) $ printModule mod
 
-generateSourcesSimple :: (Module -> [Definition] -> Flow Graph (M.Map FilePath String)) -> Language -> Bool
-                      -> FilePath -> [Module] -> IO ()
+generateSourcesSimple
+  :: (Module -> [Definition] -> Flow Graph (M.Map FilePath String))
+  -> Language
+  -> Bool
+  -> FilePath
+  -> [Module]
+  -> IO ()
 generateSourcesSimple printDefinitions lang doExpand basePath mods = do
     mschemaFiles <- runFlow bootstrapGraph generateSchemaFiles
     case mschemaFiles of
@@ -58,11 +63,8 @@ generateSourcesSimple printDefinitions lang doExpand basePath mods = do
       Just files -> mapM_ writePair files
   where
     constraints = languageConstraints lang
-    isTypeElement el = case deannotateTerm (bindingTerm el) of
-      TermUnion inj -> injectionTypeName inj == _Type
-      _ -> False
     -- Note: we assume that no module contains both type-level and term-level elements
-    isSchemaModule mod = not $ L.null $ L.filter isTypeElement $ moduleElements mod
+    isSchemaModule mod = not $ L.null $ L.filter isNativeType $ moduleElements mod
     (schemaModules, dataModules) = L.partition isSchemaModule mods
 
     generateSchemaFiles = withTrace "generate schema files" $ do
