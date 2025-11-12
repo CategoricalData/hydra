@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.mantle;
+package hydra.util;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Numeric precision: arbitrary precision, or precision to a specified number of bits
  */
 public abstract class Precision implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.Precision");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.util.Precision");
   
   public static final hydra.core.Name FIELD_NAME_ARBITRARY = new hydra.core.Name("arbitrary");
   
@@ -43,7 +43,7 @@ public abstract class Precision implements Serializable {
   /**
    * Arbitrary precision
    */
-  public static final class Arbitrary extends hydra.mantle.Precision implements Serializable {
+  public static final class Arbitrary extends hydra.util.Precision implements Serializable {
     public final Boolean value;
     
     public Arbitrary (Boolean value) {
@@ -74,7 +74,7 @@ public abstract class Precision implements Serializable {
   /**
    * Precision to a specified number of bits
    */
-  public static final class Bits extends hydra.mantle.Precision implements Serializable {
+  public static final class Bits extends hydra.util.Precision implements Serializable {
     public final Integer value;
     
     public Bits (Integer value) {

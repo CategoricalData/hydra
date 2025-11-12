@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.mantle;
+package hydra.meta;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Any of a small number of built-in type classes
  */
 public abstract class TypeClass implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.TypeClass");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.meta.TypeClass");
   
   public static final hydra.core.Name FIELD_NAME_EQUALITY = new hydra.core.Name("equality");
   
@@ -40,7 +40,7 @@ public abstract class TypeClass implements Serializable {
     }
   }
   
-  public static final class Equality extends hydra.mantle.TypeClass implements Serializable {
+  public static final class Equality extends hydra.meta.TypeClass implements Serializable {
     public final Boolean value;
     
     public Equality (Boolean value) {
@@ -68,7 +68,7 @@ public abstract class TypeClass implements Serializable {
     }
   }
   
-  public static final class Ordering extends hydra.mantle.TypeClass implements Serializable {
+  public static final class Ordering extends hydra.meta.TypeClass implements Serializable {
     public final Boolean value;
     
     public Ordering (Boolean value) {

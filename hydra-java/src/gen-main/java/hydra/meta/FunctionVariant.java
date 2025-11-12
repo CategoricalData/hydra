@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.mantle;
+package hydra.meta;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The identifier of a function constructor
  */
 public abstract class FunctionVariant implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.FunctionVariant");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.meta.FunctionVariant");
   
   public static final hydra.core.Name FIELD_NAME_ELIMINATION = new hydra.core.Name("elimination");
   
@@ -48,7 +48,7 @@ public abstract class FunctionVariant implements Serializable {
     }
   }
   
-  public static final class Elimination extends hydra.mantle.FunctionVariant implements Serializable {
+  public static final class Elimination extends hydra.meta.FunctionVariant implements Serializable {
     public final Boolean value;
     
     public Elimination (Boolean value) {
@@ -76,7 +76,7 @@ public abstract class FunctionVariant implements Serializable {
     }
   }
   
-  public static final class Lambda extends hydra.mantle.FunctionVariant implements Serializable {
+  public static final class Lambda extends hydra.meta.FunctionVariant implements Serializable {
     public final Boolean value;
     
     public Lambda (Boolean value) {
@@ -104,7 +104,7 @@ public abstract class FunctionVariant implements Serializable {
     }
   }
   
-  public static final class Primitive extends hydra.mantle.FunctionVariant implements Serializable {
+  public static final class Primitive extends hydra.meta.FunctionVariant implements Serializable {
     public final Boolean value;
     
     public Primitive (Boolean value) {

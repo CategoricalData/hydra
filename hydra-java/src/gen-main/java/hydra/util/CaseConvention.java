@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.mantle;
+package hydra.util;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A naming convention for symbols, such as camelCase or snake_case
  */
 public abstract class CaseConvention implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.CaseConvention");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.util.CaseConvention");
   
   public static final hydra.core.Name FIELD_NAME_CAMEL = new hydra.core.Name("camel");
   
@@ -56,7 +56,7 @@ public abstract class CaseConvention implements Serializable {
     }
   }
   
-  public static final class Camel extends hydra.mantle.CaseConvention implements Serializable {
+  public static final class Camel extends hydra.util.CaseConvention implements Serializable {
     public final Boolean value;
     
     public Camel (Boolean value) {
@@ -84,7 +84,7 @@ public abstract class CaseConvention implements Serializable {
     }
   }
   
-  public static final class Pascal extends hydra.mantle.CaseConvention implements Serializable {
+  public static final class Pascal extends hydra.util.CaseConvention implements Serializable {
     public final Boolean value;
     
     public Pascal (Boolean value) {
@@ -112,7 +112,7 @@ public abstract class CaseConvention implements Serializable {
     }
   }
   
-  public static final class LowerSnake extends hydra.mantle.CaseConvention implements Serializable {
+  public static final class LowerSnake extends hydra.util.CaseConvention implements Serializable {
     public final Boolean value;
     
     public LowerSnake (Boolean value) {
@@ -140,7 +140,7 @@ public abstract class CaseConvention implements Serializable {
     }
   }
   
-  public static final class UpperSnake extends hydra.mantle.CaseConvention implements Serializable {
+  public static final class UpperSnake extends hydra.util.CaseConvention implements Serializable {
     public final Boolean value;
     
     public UpperSnake (Boolean value) {
