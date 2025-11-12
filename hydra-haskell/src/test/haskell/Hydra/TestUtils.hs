@@ -1,15 +1,27 @@
 module Hydra.TestUtils (
   module Hydra.TestUtils,
-  module Hydra.Staging.TestGraph,
+  module Hydra.Sources.Libraries,
+  module Hydra.Test.TestGraph,
+  module Hydra.Test.TestTypes,
+  module Hydra.Test.TestTerms,
 ) where
 
 import Hydra.Kernel
 import Hydra.Adapt.Literals
 import Hydra.Adapt.Terms
 import Hydra.Adapt.Utils
-import Hydra.Staging.TestGraph
 import Hydra.ArbitraryCore()
+import Hydra.Dsl.Bootstrap
+import Hydra.Dsl.Terms
+import Hydra.Sources.Kernel.Types.All
+import Hydra.Sources.Kernel.Types.Core
+import Hydra.Sources.Libraries
+import Hydra.Test.TestGraph
+import Hydra.Test.TestTypes
+import Hydra.Test.TestTerms
 import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Types as Types
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Show.Core as ShowCore
 
 import qualified Test.Hspec as H
@@ -20,6 +32,20 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import qualified Data.ByteString.Lazy as BS
 
+
+testGraph :: Graph
+testGraph = elementsToGraph hydraCoreGraph (Just testSchemaGraph) dataBindings
+  where
+    dataBindings = (\(name, term) -> Binding name term Nothing) <$> M.toList testTerms
+
+testSchemaGraph :: Graph
+testSchemaGraph = elementsToGraph hydraCoreGraph (Just hydraCoreGraph)
+    -- We include all types from the Hydra kernel, as well as some additional types specifically for tests.
+    (kernelElements ++ testElements)
+  where
+    kernelElements = L.concat $ fmap moduleElements kernelTypesModules
+    testElements = fmap
+      (\(n, t) -> Binding n (EncodeCore.type_ t) $ Just $ Types.mono $ TypeVariable _Type) $ M.toList testTypes
 
 baseLanguage :: Language
 baseLanguage = hydraLanguage
@@ -225,3 +251,6 @@ termTestContext variants = withConstraints $ (languageConstraints baseLanguage) 
 
 withConstraints :: LanguageConstraints -> AdapterContext
 withConstraints c = baseContext { adapterContextLanguage = baseLanguage { languageConstraints = c }}
+
+makeMap :: [(String, Int)] -> Term
+makeMap keyvals = Terms.map $ M.fromList $ ((\(k, v) -> (Terms.string k, Terms.int32 v)) <$> keyvals)

@@ -13,7 +13,6 @@ import qualified Hydra.Json as Json
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Tests
 
-import Hydra.TestData
 import Hydra.TestUtils
 
 import qualified Data.Bifunctor as BF
