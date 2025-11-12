@@ -8,7 +8,7 @@ from enum import Enum
 from hydra.dsl.python import Maybe, Node, frozenlist
 from typing import Annotated
 import hydra.core
-import hydra.mantle
+import hydra.util
 
 class EvaluationStyle(Enum):
     r"""One of two evaluation styles: eager or lazy."""
@@ -25,8 +25,8 @@ EVALUATION_STYLE__LAZY__NAME = hydra.core.Name("lazy")
 class CaseConversionTestCase:
     r"""A test case which checks that strings are converted between different case conventions correctly."""
     
-    from_convention: Annotated[hydra.mantle.CaseConvention, "The source case convention"]
-    to_convention: Annotated[hydra.mantle.CaseConvention, "The target case convention"]
+    from_convention: Annotated[hydra.util.CaseConvention, "The source case convention"]
+    to_convention: Annotated[hydra.util.CaseConvention, "The target case convention"]
     from_string: Annotated[str, "The input string"]
     to_string: Annotated[str, "The expected output string"]
 

@@ -7,39 +7,40 @@ from hydra.dsl.python import frozenlist
 from typing import cast
 import hydra.core
 import hydra.lib.lists
-import hydra.mantle
+import hydra.meta
+import hydra.util
 
-def elimination_variant(v1: hydra.core.Elimination) -> hydra.mantle.EliminationVariant:
+def elimination_variant(v1: hydra.core.Elimination) -> hydra.meta.EliminationVariant:
     r"""Find the elimination variant (constructor) for a given elimination term."""
     
     match v1:
         case hydra.core.EliminationProduct():
-            return hydra.mantle.EliminationVariant.PRODUCT
+            return hydra.meta.EliminationVariant.PRODUCT
         
         case hydra.core.EliminationRecord():
-            return hydra.mantle.EliminationVariant.RECORD
+            return hydra.meta.EliminationVariant.RECORD
         
         case hydra.core.EliminationUnion():
-            return hydra.mantle.EliminationVariant.UNION
+            return hydra.meta.EliminationVariant.UNION
         
         case hydra.core.EliminationWrap():
-            return hydra.mantle.EliminationVariant.WRAP
+            return hydra.meta.EliminationVariant.WRAP
 
 # All elimination variants (constructors), in a canonical order.
-elimination_variants = (hydra.mantle.EliminationVariant.PRODUCT, hydra.mantle.EliminationVariant.RECORD, hydra.mantle.EliminationVariant.UNION, hydra.mantle.EliminationVariant.WRAP)
+elimination_variants = (hydra.meta.EliminationVariant.PRODUCT, hydra.meta.EliminationVariant.RECORD, hydra.meta.EliminationVariant.UNION, hydra.meta.EliminationVariant.WRAP)
 
-def float_type_precision(v1: hydra.core.FloatType) -> hydra.mantle.Precision:
+def float_type_precision(v1: hydra.core.FloatType) -> hydra.util.Precision:
     r"""Find the precision of a given floating-point type."""
     
     match v1:
         case hydra.core.FloatType.BIGFLOAT:
-            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionArbitrary())
+            return cast(hydra.util.Precision, hydra.util.PrecisionArbitrary())
         
         case hydra.core.FloatType.FLOAT32:
-            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(32))
+            return cast(hydra.util.Precision, hydra.util.PrecisionBits(32))
         
         case hydra.core.FloatType.FLOAT64:
-            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(64))
+            return cast(hydra.util.Precision, hydra.util.PrecisionBits(64))
 
 # All floating-point types in a canonical order.
 float_types = (hydra.core.FloatType.BIGFLOAT, hydra.core.FloatType.FLOAT32, hydra.core.FloatType.FLOAT64)
@@ -57,21 +58,21 @@ def float_value_type(v1: hydra.core.FloatValue) -> hydra.core.FloatType:
         case hydra.core.FloatValueFloat64():
             return hydra.core.FloatType.FLOAT64
 
-def function_variant(v1: hydra.core.Function) -> hydra.mantle.FunctionVariant:
+def function_variant(v1: hydra.core.Function) -> hydra.meta.FunctionVariant:
     r"""Find the function variant (constructor) for a given function."""
     
     match v1:
         case hydra.core.FunctionElimination():
-            return hydra.mantle.FunctionVariant.ELIMINATION
+            return hydra.meta.FunctionVariant.ELIMINATION
         
         case hydra.core.FunctionLambda():
-            return hydra.mantle.FunctionVariant.LAMBDA
+            return hydra.meta.FunctionVariant.LAMBDA
         
         case hydra.core.FunctionPrimitive():
-            return hydra.mantle.FunctionVariant.PRIMITIVE
+            return hydra.meta.FunctionVariant.PRIMITIVE
 
 # All function variants (constructors), in a canonical order.
-function_variants = (hydra.mantle.FunctionVariant.ELIMINATION, hydra.mantle.FunctionVariant.LAMBDA, hydra.mantle.FunctionVariant.PRIMITIVE)
+function_variants = (hydra.meta.FunctionVariant.ELIMINATION, hydra.meta.FunctionVariant.LAMBDA, hydra.meta.FunctionVariant.PRIMITIVE)
 
 def integer_type_is_signed(v1: hydra.core.IntegerType) -> bool:
     r"""Find whether a given integer type is signed (true) or unsigned (false)."""
@@ -104,36 +105,36 @@ def integer_type_is_signed(v1: hydra.core.IntegerType) -> bool:
         case hydra.core.IntegerType.UINT64:
             return False
 
-def integer_type_precision(v1: hydra.core.IntegerType) -> hydra.mantle.Precision:
+def integer_type_precision(v1: hydra.core.IntegerType) -> hydra.util.Precision:
     r"""Find the precision of a given integer type."""
     
     match v1:
         case hydra.core.IntegerType.BIGINT:
-            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionArbitrary())
+            return cast(hydra.util.Precision, hydra.util.PrecisionArbitrary())
         
         case hydra.core.IntegerType.INT8:
-            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(8))
+            return cast(hydra.util.Precision, hydra.util.PrecisionBits(8))
         
         case hydra.core.IntegerType.INT16:
-            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(16))
+            return cast(hydra.util.Precision, hydra.util.PrecisionBits(16))
         
         case hydra.core.IntegerType.INT32:
-            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(32))
+            return cast(hydra.util.Precision, hydra.util.PrecisionBits(32))
         
         case hydra.core.IntegerType.INT64:
-            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(64))
+            return cast(hydra.util.Precision, hydra.util.PrecisionBits(64))
         
         case hydra.core.IntegerType.UINT8:
-            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(8))
+            return cast(hydra.util.Precision, hydra.util.PrecisionBits(8))
         
         case hydra.core.IntegerType.UINT16:
-            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(16))
+            return cast(hydra.util.Precision, hydra.util.PrecisionBits(16))
         
         case hydra.core.IntegerType.UINT32:
-            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(32))
+            return cast(hydra.util.Precision, hydra.util.PrecisionBits(32))
         
         case hydra.core.IntegerType.UINT64:
-            return cast(hydra.mantle.Precision, hydra.mantle.PrecisionBits(64))
+            return cast(hydra.util.Precision, hydra.util.PrecisionBits(64))
 
 # All integer types, in a canonical order.
 integer_types = (hydra.core.IntegerType.BIGINT, hydra.core.IntegerType.INT8, hydra.core.IntegerType.INT16, hydra.core.IntegerType.INT32, hydra.core.IntegerType.INT64, hydra.core.IntegerType.UINT8, hydra.core.IntegerType.UINT16, hydra.core.IntegerType.UINT32, hydra.core.IntegerType.UINT64)
@@ -188,160 +189,160 @@ def literal_type(v1: hydra.core.Literal) -> hydra.core.LiteralType:
         case hydra.core.LiteralString():
             return cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())
 
-def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.mantle.LiteralVariant:
+def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.meta.LiteralVariant:
     r"""Find the literal type variant (constructor) for a given literal value."""
     
     match v1:
         case hydra.core.LiteralTypeBinary():
-            return hydra.mantle.LiteralVariant.BINARY
+            return hydra.meta.LiteralVariant.BINARY
         
         case hydra.core.LiteralTypeBoolean():
-            return hydra.mantle.LiteralVariant.BOOLEAN
+            return hydra.meta.LiteralVariant.BOOLEAN
         
         case hydra.core.LiteralTypeFloat():
-            return hydra.mantle.LiteralVariant.FLOAT
+            return hydra.meta.LiteralVariant.FLOAT
         
         case hydra.core.LiteralTypeInteger():
-            return hydra.mantle.LiteralVariant.INTEGER
+            return hydra.meta.LiteralVariant.INTEGER
         
         case hydra.core.LiteralTypeString():
-            return hydra.mantle.LiteralVariant.STRING
+            return hydra.meta.LiteralVariant.STRING
 
 # All literal types, in a canonical order.
 literal_types = hydra.lib.lists.concat(((cast(hydra.core.LiteralType, hydra.core.LiteralTypeBinary()), cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean())), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(x))), float_types), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(x))), integer_types), (cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()),)))
 
-def literal_variant(arg_: hydra.core.Literal) -> hydra.mantle.LiteralVariant:
+def literal_variant(arg_: hydra.core.Literal) -> hydra.meta.LiteralVariant:
     r"""Find the literal variant (constructor) for a given literal value."""
     
     return literal_type_variant(literal_type(arg_))
 
 # All literal variants, in a canonical order.
-literal_variants = (hydra.mantle.LiteralVariant.BINARY, hydra.mantle.LiteralVariant.BOOLEAN, hydra.mantle.LiteralVariant.FLOAT, hydra.mantle.LiteralVariant.INTEGER, hydra.mantle.LiteralVariant.STRING)
+literal_variants = (hydra.meta.LiteralVariant.BINARY, hydra.meta.LiteralVariant.BOOLEAN, hydra.meta.LiteralVariant.FLOAT, hydra.meta.LiteralVariant.INTEGER, hydra.meta.LiteralVariant.STRING)
 
-def term_variant(v1: hydra.core.Term) -> hydra.mantle.TermVariant:
+def term_variant(v1: hydra.core.Term) -> hydra.meta.TermVariant:
     r"""Find the term variant (constructor) for a given term."""
     
     match v1:
         case hydra.core.TermAnnotated():
-            return hydra.mantle.TermVariant.ANNOTATED
+            return hydra.meta.TermVariant.ANNOTATED
         
         case hydra.core.TermApplication():
-            return hydra.mantle.TermVariant.APPLICATION
+            return hydra.meta.TermVariant.APPLICATION
         
         case hydra.core.TermEither():
-            return hydra.mantle.TermVariant.EITHER
+            return hydra.meta.TermVariant.EITHER
         
         case hydra.core.TermFunction():
-            return hydra.mantle.TermVariant.FUNCTION
+            return hydra.meta.TermVariant.FUNCTION
         
         case hydra.core.TermLet():
-            return hydra.mantle.TermVariant.LET
+            return hydra.meta.TermVariant.LET
         
         case hydra.core.TermList():
-            return hydra.mantle.TermVariant.LIST
+            return hydra.meta.TermVariant.LIST
         
         case hydra.core.TermLiteral():
-            return hydra.mantle.TermVariant.LITERAL
+            return hydra.meta.TermVariant.LITERAL
         
         case hydra.core.TermMap():
-            return hydra.mantle.TermVariant.MAP
+            return hydra.meta.TermVariant.MAP
         
         case hydra.core.TermMaybe():
-            return hydra.mantle.TermVariant.MAYBE
+            return hydra.meta.TermVariant.MAYBE
         
         case hydra.core.TermPair():
-            return hydra.mantle.TermVariant.PAIR
+            return hydra.meta.TermVariant.PAIR
         
         case hydra.core.TermProduct():
-            return hydra.mantle.TermVariant.PRODUCT
+            return hydra.meta.TermVariant.PRODUCT
         
         case hydra.core.TermRecord():
-            return hydra.mantle.TermVariant.RECORD
+            return hydra.meta.TermVariant.RECORD
         
         case hydra.core.TermSet():
-            return hydra.mantle.TermVariant.SET
+            return hydra.meta.TermVariant.SET
         
         case hydra.core.TermSum():
-            return hydra.mantle.TermVariant.SUM
+            return hydra.meta.TermVariant.SUM
         
         case hydra.core.TermTypeApplication():
-            return hydra.mantle.TermVariant.TYPE_APPLICATION
+            return hydra.meta.TermVariant.TYPE_APPLICATION
         
         case hydra.core.TermTypeLambda():
-            return hydra.mantle.TermVariant.TYPE_LAMBDA
+            return hydra.meta.TermVariant.TYPE_LAMBDA
         
         case hydra.core.TermUnion():
-            return hydra.mantle.TermVariant.UNION
+            return hydra.meta.TermVariant.UNION
         
         case hydra.core.TermUnit():
-            return hydra.mantle.TermVariant.UNIT
+            return hydra.meta.TermVariant.UNIT
         
         case hydra.core.TermVariable():
-            return hydra.mantle.TermVariant.VARIABLE
+            return hydra.meta.TermVariant.VARIABLE
         
         case hydra.core.TermWrap():
-            return hydra.mantle.TermVariant.WRAP
+            return hydra.meta.TermVariant.WRAP
 
 # All term (expression) variants, in a canonical order.
-term_variants = (hydra.mantle.TermVariant.ANNOTATED, hydra.mantle.TermVariant.APPLICATION, hydra.mantle.TermVariant.EITHER, hydra.mantle.TermVariant.FUNCTION, hydra.mantle.TermVariant.LIST, hydra.mantle.TermVariant.LITERAL, hydra.mantle.TermVariant.MAP, hydra.mantle.TermVariant.MAYBE, hydra.mantle.TermVariant.PAIR, hydra.mantle.TermVariant.PRODUCT, hydra.mantle.TermVariant.RECORD, hydra.mantle.TermVariant.SET, hydra.mantle.TermVariant.SUM, hydra.mantle.TermVariant.TYPE_LAMBDA, hydra.mantle.TermVariant.TYPE_APPLICATION, hydra.mantle.TermVariant.UNION, hydra.mantle.TermVariant.UNIT, hydra.mantle.TermVariant.VARIABLE, hydra.mantle.TermVariant.WRAP)
+term_variants = (hydra.meta.TermVariant.ANNOTATED, hydra.meta.TermVariant.APPLICATION, hydra.meta.TermVariant.EITHER, hydra.meta.TermVariant.FUNCTION, hydra.meta.TermVariant.LIST, hydra.meta.TermVariant.LITERAL, hydra.meta.TermVariant.MAP, hydra.meta.TermVariant.MAYBE, hydra.meta.TermVariant.PAIR, hydra.meta.TermVariant.PRODUCT, hydra.meta.TermVariant.RECORD, hydra.meta.TermVariant.SET, hydra.meta.TermVariant.SUM, hydra.meta.TermVariant.TYPE_LAMBDA, hydra.meta.TermVariant.TYPE_APPLICATION, hydra.meta.TermVariant.UNION, hydra.meta.TermVariant.UNIT, hydra.meta.TermVariant.VARIABLE, hydra.meta.TermVariant.WRAP)
 
-def type_variant(v1: hydra.core.Type) -> hydra.mantle.TypeVariant:
+def type_variant(v1: hydra.core.Type) -> hydra.meta.TypeVariant:
     r"""Find the type variant (constructor) for a given type."""
     
     match v1:
         case hydra.core.TypeAnnotated():
-            return hydra.mantle.TypeVariant.ANNOTATED
+            return hydra.meta.TypeVariant.ANNOTATED
         
         case hydra.core.TypeApplication():
-            return hydra.mantle.TypeVariant.APPLICATION
+            return hydra.meta.TypeVariant.APPLICATION
         
         case hydra.core.TypeEither():
-            return hydra.mantle.TypeVariant.EITHER
+            return hydra.meta.TypeVariant.EITHER
         
         case hydra.core.TypeFunction():
-            return hydra.mantle.TypeVariant.FUNCTION
+            return hydra.meta.TypeVariant.FUNCTION
         
         case hydra.core.TypeForall():
-            return hydra.mantle.TypeVariant.FORALL
+            return hydra.meta.TypeVariant.FORALL
         
         case hydra.core.TypeList():
-            return hydra.mantle.TypeVariant.LIST
+            return hydra.meta.TypeVariant.LIST
         
         case hydra.core.TypeLiteral():
-            return hydra.mantle.TypeVariant.LITERAL
+            return hydra.meta.TypeVariant.LITERAL
         
         case hydra.core.TypeMap():
-            return hydra.mantle.TypeVariant.MAP
+            return hydra.meta.TypeVariant.MAP
         
         case hydra.core.TypeMaybe():
-            return hydra.mantle.TypeVariant.MAYBE
+            return hydra.meta.TypeVariant.MAYBE
         
         case hydra.core.TypePair():
-            return hydra.mantle.TypeVariant.PAIR
+            return hydra.meta.TypeVariant.PAIR
         
         case hydra.core.TypeProduct():
-            return hydra.mantle.TypeVariant.PRODUCT
+            return hydra.meta.TypeVariant.PRODUCT
         
         case hydra.core.TypeRecord():
-            return hydra.mantle.TypeVariant.RECORD
+            return hydra.meta.TypeVariant.RECORD
         
         case hydra.core.TypeSet():
-            return hydra.mantle.TypeVariant.SET
+            return hydra.meta.TypeVariant.SET
         
         case hydra.core.TypeSum():
-            return hydra.mantle.TypeVariant.SUM
+            return hydra.meta.TypeVariant.SUM
         
         case hydra.core.TypeUnion():
-            return hydra.mantle.TypeVariant.UNION
+            return hydra.meta.TypeVariant.UNION
         
         case hydra.core.TypeUnit():
-            return hydra.mantle.TypeVariant.UNIT
+            return hydra.meta.TypeVariant.UNIT
         
         case hydra.core.TypeVariable():
-            return hydra.mantle.TypeVariant.VARIABLE
+            return hydra.meta.TypeVariant.VARIABLE
         
         case hydra.core.TypeWrap():
-            return hydra.mantle.TypeVariant.WRAP
+            return hydra.meta.TypeVariant.WRAP
 
 # All type variants, in a canonical order.
-type_variants = (hydra.mantle.TypeVariant.ANNOTATED, hydra.mantle.TypeVariant.APPLICATION, hydra.mantle.TypeVariant.EITHER, hydra.mantle.TypeVariant.FUNCTION, hydra.mantle.TypeVariant.FORALL, hydra.mantle.TypeVariant.LIST, hydra.mantle.TypeVariant.LITERAL, hydra.mantle.TypeVariant.MAP, hydra.mantle.TypeVariant.WRAP, hydra.mantle.TypeVariant.MAYBE, hydra.mantle.TypeVariant.PAIR, hydra.mantle.TypeVariant.PRODUCT, hydra.mantle.TypeVariant.RECORD, hydra.mantle.TypeVariant.SET, hydra.mantle.TypeVariant.SUM, hydra.mantle.TypeVariant.UNION, hydra.mantle.TypeVariant.UNIT, hydra.mantle.TypeVariant.VARIABLE)
+type_variants = (hydra.meta.TypeVariant.ANNOTATED, hydra.meta.TypeVariant.APPLICATION, hydra.meta.TypeVariant.EITHER, hydra.meta.TypeVariant.FUNCTION, hydra.meta.TypeVariant.FORALL, hydra.meta.TypeVariant.LIST, hydra.meta.TypeVariant.LITERAL, hydra.meta.TypeVariant.MAP, hydra.meta.TypeVariant.WRAP, hydra.meta.TypeVariant.MAYBE, hydra.meta.TypeVariant.PAIR, hydra.meta.TypeVariant.PRODUCT, hydra.meta.TypeVariant.RECORD, hydra.meta.TypeVariant.SET, hydra.meta.TypeVariant.SUM, hydra.meta.TypeVariant.UNION, hydra.meta.TypeVariant.UNIT, hydra.meta.TypeVariant.VARIABLE)

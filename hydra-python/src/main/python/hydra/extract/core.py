@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-r"""A DSL for decoding and validating Hydra terms at runtime. This module provides functions to extract typed values from Hydra terms with appropriate error handling."""
+r"""Extraction and validation for hydra.core types."""
 
 from __future__ import annotations
 from collections.abc import Callable

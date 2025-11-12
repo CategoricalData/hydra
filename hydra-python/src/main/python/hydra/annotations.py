@@ -22,7 +22,7 @@ import hydra.lib.maps
 import hydra.lib.math
 import hydra.lib.maybes
 import hydra.lib.sets
-import hydra.mantle
+import hydra.meta
 import hydra.monads
 import hydra.rewriting
 import hydra.show.core
@@ -104,13 +104,13 @@ def get_type_annotation(key: hydra.core.Name, typ: hydra.core.Type) -> Maybe[hyd
     
     return hydra.lib.maps.lookup(key, type_annotation_internal(typ))
 
-def get_type_classes(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, frozenset[hydra.mantle.TypeClass]]]:
+def get_type_classes(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, frozenset[hydra.meta.TypeClass]]]:
     r"""Get type classes from term."""
     
-    def decode_class(term2: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.mantle.TypeClass]:
-        by_name = cast(FrozenDict[hydra.core.Name, hydra.mantle.TypeClass], hydra.lib.maps.from_list(((hydra.core.Name("equality"), hydra.mantle.TypeClass.EQUALITY), (hydra.core.Name("ordering"), hydra.mantle.TypeClass.ORDERING))))
-        return hydra.lib.flows.bind(hydra.extract.core.unit_variant(hydra.core.Name("hydra.mantle.TypeClass"), term2), (lambda fn: hydra.lib.maybes.maybe(hydra.monads.unexpected("type class", hydra.show.core.term(term2)), cast(Callable[[hydra.mantle.TypeClass], hydra.compute.Flow[hydra.graph.Graph, hydra.mantle.TypeClass]], hydra.lib.flows.pure), hydra.lib.maps.lookup(fn, by_name))))
-    return hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(FrozenDict[hydra.core.Name, frozenset[hydra.mantle.TypeClass]], hydra.lib.maps.empty())), (lambda term2: hydra.extract.core.map(hydra.decode.core.name, (lambda v1: hydra.extract.core.set_of(decode_class, v1)), term2)), get_term_annotation(hydra.constants.key_classes, term))
+    def decode_class(term2: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.meta.TypeClass]:
+        by_name = cast(FrozenDict[hydra.core.Name, hydra.meta.TypeClass], hydra.lib.maps.from_list(((hydra.core.Name("equality"), hydra.meta.TypeClass.EQUALITY), (hydra.core.Name("ordering"), hydra.meta.TypeClass.ORDERING))))
+        return hydra.lib.flows.bind(hydra.extract.core.unit_variant(hydra.core.Name("hydra.meta.TypeClass"), term2), (lambda fn: hydra.lib.maybes.maybe(hydra.monads.unexpected("type class", hydra.show.core.term(term2)), cast(Callable[[hydra.meta.TypeClass], hydra.compute.Flow[hydra.graph.Graph, hydra.meta.TypeClass]], hydra.lib.flows.pure), hydra.lib.maps.lookup(fn, by_name))))
+    return hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(FrozenDict[hydra.core.Name, frozenset[hydra.meta.TypeClass]], hydra.lib.maps.empty())), (lambda term2: hydra.extract.core.map(hydra.decode.core.name, (lambda v1: hydra.extract.core.set_of(decode_class, v1)), term2)), get_term_annotation(hydra.constants.key_classes, term))
 
 def get_type_description(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[str]]:
     r"""Get type description."""
@@ -189,17 +189,17 @@ def set_type_annotation(key: hydra.core.Name, val: Maybe[hydra.core.Term], typ: 
     anns = set_annotation(key, val, type_annotation_internal(typ))
     return hydra.lib.logic.if_else(hydra.lib.maps.null(anns), typ_, cast(hydra.core.Type, hydra.core.TypeAnnotated(hydra.core.AnnotatedType(typ_, anns))))
 
-def set_type_classes(m: FrozenDict[hydra.core.Name, frozenset[hydra.mantle.TypeClass]], term: hydra.core.Term) -> hydra.core.Term:
+def set_type_classes(m: FrozenDict[hydra.core.Name, frozenset[hydra.meta.TypeClass]], term: hydra.core.Term) -> hydra.core.Term:
     r"""Set type classes on term."""
     
-    def encode_class(tc: hydra.mantle.TypeClass) -> hydra.core.Term:
+    def encode_class(tc: hydra.meta.TypeClass) -> hydra.core.Term:
         match tc:
-            case hydra.mantle.TypeClass.EQUALITY:
-                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.mantle.TypeClass"), hydra.core.Field(hydra.core.Name("equality"), cast(hydra.core.Term, hydra.core.TermUnit())))))
+            case hydra.meta.TypeClass.EQUALITY:
+                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.meta.TypeClass"), hydra.core.Field(hydra.core.Name("equality"), cast(hydra.core.Term, hydra.core.TermUnit())))))
             
-            case hydra.mantle.TypeClass.ORDERING:
-                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.mantle.TypeClass"), hydra.core.Field(hydra.core.Name("ordering"), cast(hydra.core.Term, hydra.core.TermUnit())))))
-    def encode_pair(name_classes: Tuple[hydra.core.Name, frozenset[hydra.mantle.TypeClass]]) -> Tuple[hydra.core.Term, hydra.core.Term]:
+            case hydra.meta.TypeClass.ORDERING:
+                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.meta.TypeClass"), hydra.core.Field(hydra.core.Name("ordering"), cast(hydra.core.Term, hydra.core.TermUnit())))))
+    def encode_pair(name_classes: Tuple[hydra.core.Name, frozenset[hydra.meta.TypeClass]]) -> Tuple[hydra.core.Term, hydra.core.Term]:
         name = name_classes[0]
         classes = name_classes[1]
         return (hydra.encode.core.name(name), cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list(hydra.lib.lists.map(encode_class, hydra.lib.sets.to_list(classes))))))

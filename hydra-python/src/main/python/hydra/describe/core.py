@@ -4,19 +4,19 @@ r"""Natural-language descriptions for hydra.core types."""
 
 from __future__ import annotations
 import hydra.core
-import hydra.describe.mantle
+import hydra.describe.util
 import hydra.lib.strings
 import hydra.variants
 
 def float_type(t: hydra.core.FloatType) -> str:
     r"""Display a floating-point type as a string."""
     
-    return hydra.lib.strings.cat(((lambda arg_: hydra.describe.mantle.precision(hydra.variants.float_type_precision(arg_)))(t), " floating-point number"))
+    return hydra.lib.strings.cat(((lambda arg_: hydra.describe.util.precision(hydra.variants.float_type_precision(arg_)))(t), " floating-point number"))
 
 def integer_type(t: hydra.core.IntegerType) -> str:
     r"""Display an integer type as a string."""
     
-    return hydra.lib.strings.cat(((lambda arg_: hydra.describe.mantle.precision(hydra.variants.integer_type_precision(arg_)))(t), " integer"))
+    return hydra.lib.strings.cat(((lambda arg_: hydra.describe.util.precision(hydra.variants.integer_type_precision(arg_)))(t), " integer"))
 
 def literal_type(v1: hydra.core.LiteralType) -> str:
     r"""Display a literal type as a string."""

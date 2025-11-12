@@ -15,7 +15,7 @@ import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.mantle
+import hydra.util
 
 def map_first_letter(mapping: Callable[[str], str], s: str) -> str:
     r"""A helper which maps the first letter of a string to another string."""
@@ -34,7 +34,7 @@ def decapitalize(v1: str) -> str:
     
     return map_first_letter(hydra.lib.strings.to_lower, v1)
 
-def convert_case(from_: hydra.mantle.CaseConvention, to: hydra.mantle.CaseConvention, original: str) -> str:
+def convert_case(from_: hydra.util.CaseConvention, to: hydra.util.CaseConvention, original: str) -> str:
     r"""Convert a string from one case convention to another."""
     
     def parts() -> frozenlist[str]:
@@ -44,44 +44,44 @@ def convert_case(from_: hydra.mantle.CaseConvention, to: hydra.mantle.CaseConven
             return hydra.lib.lists.map(hydra.lib.strings.from_list, hydra.lib.lists.foldl(split_on_uppercase, (cast(frozenlist[int], ()),), hydra.lib.lists.reverse(hydra.lib.strings.to_list(decapitalize(original)))))
         by_underscores = hydra.lib.strings.split_on("_", original)
         match from_:
-            case hydra.mantle.CaseConvention.CAMEL:
+            case hydra.util.CaseConvention.CAMEL:
                 return by_caps()
             
-            case hydra.mantle.CaseConvention.PASCAL:
+            case hydra.util.CaseConvention.PASCAL:
                 return by_caps()
             
-            case hydra.mantle.CaseConvention.LOWER_SNAKE:
+            case hydra.util.CaseConvention.LOWER_SNAKE:
                 return by_underscores
             
-            case hydra.mantle.CaseConvention.UPPER_SNAKE:
+            case hydra.util.CaseConvention.UPPER_SNAKE:
                 return by_underscores
     match to:
-        case hydra.mantle.CaseConvention.CAMEL:
+        case hydra.util.CaseConvention.CAMEL:
             return decapitalize(hydra.lib.strings.cat(hydra.lib.lists.map((lambda arg_: capitalize(hydra.lib.strings.to_lower(arg_))), parts())))
         
-        case hydra.mantle.CaseConvention.PASCAL:
+        case hydra.util.CaseConvention.PASCAL:
             return hydra.lib.strings.cat(hydra.lib.lists.map((lambda arg_: capitalize(hydra.lib.strings.to_lower(arg_))), parts()))
         
-        case hydra.mantle.CaseConvention.LOWER_SNAKE:
+        case hydra.util.CaseConvention.LOWER_SNAKE:
             return hydra.lib.strings.intercalate("_", hydra.lib.lists.map(hydra.lib.strings.to_lower, parts()))
         
-        case hydra.mantle.CaseConvention.UPPER_SNAKE:
+        case hydra.util.CaseConvention.UPPER_SNAKE:
             return hydra.lib.strings.intercalate("_", hydra.lib.lists.map(hydra.lib.strings.to_upper, parts()))
 
 def convert_case_camel_to_lower_snake(v1: str) -> str:
     r"""Convert a string from camel case to lower snake case."""
     
-    return convert_case(hydra.mantle.CaseConvention.CAMEL, hydra.mantle.CaseConvention.LOWER_SNAKE, v1)
+    return convert_case(hydra.util.CaseConvention.CAMEL, hydra.util.CaseConvention.LOWER_SNAKE, v1)
 
 def convert_case_camel_to_upper_snake(v1: str) -> str:
     r"""Convert a string from camel case to upper snake case."""
     
-    return convert_case(hydra.mantle.CaseConvention.CAMEL, hydra.mantle.CaseConvention.UPPER_SNAKE, v1)
+    return convert_case(hydra.util.CaseConvention.CAMEL, hydra.util.CaseConvention.UPPER_SNAKE, v1)
 
 def convert_case_pascal_to_upper_snake(v1: str) -> str:
     r"""Convert a string from pascal case to upper snake case."""
     
-    return convert_case(hydra.mantle.CaseConvention.PASCAL, hydra.mantle.CaseConvention.UPPER_SNAKE, v1)
+    return convert_case(hydra.util.CaseConvention.PASCAL, hydra.util.CaseConvention.UPPER_SNAKE, v1)
 
 def escape_with_underscore(reserved: frozenset[str], s: str) -> str:
     r"""Escape reserved words by appending an underscore."""
