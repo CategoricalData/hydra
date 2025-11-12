@@ -187,11 +187,11 @@ termVariantEither = unitVariant _TermVariant _TermVariant_either
 
 Place in alphabetical order among the other `termVariantX` helpers.
 
-#### 2.5.3: Update Mantle Enum Definitions (CRITICAL!)
+#### 2.5.3: Update Meta Enum Definitions (CRITICAL!)
 
-**File:** `src/main/haskell/Hydra/Sources/Kernel/Types/Mantle.hs`
+**File:** `src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs`
 
-> **⚠️ CRITICAL:** You MUST add your new constructor to the TermVariant and TypeVariant enum definitions in the Mantle module. This is the source of the "No such field: X" error during code generation.
+> **⚠️ CRITICAL:** You MUST add your new constructor to the TermVariant and TypeVariant enum definitions in the Meta module. This is the source of the "No such field: X" error during code generation.
 
 Add to the `TermVariant` enum (around line 70-91):
 ```haskell
@@ -220,7 +220,7 @@ def "TypeVariant" $
   ]
 ```
 
-**Why this is necessary:** The `Variants` module uses these enums to map between Term/Type constructors and their metadata. The enums are defined in the [`hydra.mantle`](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Mantle.hs) module, which supplements `hydra.core` with metadata types. Without adding your constructor here, code generation will fail with "No such field: X".
+**Why this is necessary:** The `Variants` module uses these enums to map between Term/Type constructors and their metadata. The enums are defined in the `hydra.meta` module (in the source file [`Hydra/Sources/Kernel/Types/Meta.hs`](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs)), which provides metadata and reflection types that describe the structure of Hydra core types and terms. Without adding your constructor here, code generation will fail with "No such field: X".
 
 ---
 
@@ -641,7 +641,8 @@ stack exec ghci
 
 This regenerates:
 - `hydra-python/src/main/python/hydra/core.py` (adds `TermEither` constructor)
-- `hydra-python/src/main/python/hydra/mantle.py` (adds `Either` type and helpers)
+- `hydra-python/src/main/python/hydra/meta.py` (adds variant enums and type classes)
+- `hydra-python/src/main/python/hydra/util.py` (adds utility types)
 - All other Hydra kernel modules in Python
 
 #### 11.5.3: Update Other Languages
@@ -659,7 +660,8 @@ Each language coder needs to know how to encode/decode the new types in the targ
 # Python
 cd hydra-python
 python3 -m py_compile src/main/python/hydra/core.py
-python3 -m py_compile src/main/python/hydra/mantle.py
+python3 -m py_compile src/main/python/hydra/meta.py
+python3 -m py_compile src/main/python/hydra/util.py
 
 # Java (if applicable)
 cd hydra-java
@@ -764,7 +766,7 @@ stack test
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| `No such field: pair` during code generation | Missing from TermVariant/TypeVariant enums in Mantle module | **CRITICAL:** Add to `TermVariant` and `TypeVariant` enum definitions in `src/main/haskell/Hydra/Sources/Kernel/Types/Mantle.hs` |
+| `No such field: pair` during code generation | Missing from TermVariant/TypeVariant enums in Meta module | **CRITICAL:** Add to `TermVariant` and `TypeVariant` enum definitions in `src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs` |
 | `Variable not in scope: fst` compilation error | Variable name clashes with Prelude function | Use descriptive names: `pairFst`, `pairSnd`, not `fst`, `snd` |
 | `No such field: either` | Term union missing the constructor in Core schema | Add to `src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs` |
 | `Variable not bound to type: hydra.inference.inferTypeOfX` | Function not registered in module exports | Add `el inferTypeOfXDef` to elements list |
@@ -819,7 +821,7 @@ stack test
   - [ ] Add to Type union (if applicable)
   - [ ] Add supporting type definitions
 
-- [ ] `src/main/haskell/Hydra/Sources/Kernel/Types/Mantle.hs` (**CRITICAL!**)
+- [ ] `src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs` (**CRITICAL!**)
   - [ ] Add to `TermVariant` enum definition
   - [ ] Add to `TypeVariant` enum definition (if applicable)
 
@@ -884,7 +886,8 @@ stack test
 - [ ] Regenerate Python code
   - [ ] Run `writePython` from hydra-ext
   - [ ] Verify `hydra-python/src/main/python/hydra/core.py`
-  - [ ] Verify `hydra-python/src/main/python/hydra/mantle.py`
+  - [ ] Verify `hydra-python/src/main/python/hydra/meta.py`
+  - [ ] Verify `hydra-python/src/main/python/hydra/util.py`
   - [ ] Compile Python modules
 
 - [ ] Java (if needed)
