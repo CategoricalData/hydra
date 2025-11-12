@@ -2,6 +2,7 @@ resolver: lts-24.7
 
 packages:
   - .
+  - ../hydra-haskell
 
 extra-deps:
 
