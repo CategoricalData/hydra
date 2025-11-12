@@ -3,7 +3,7 @@
 module Hydra.Testing where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -26,9 +26,9 @@ _EvaluationStyle_lazy = (Core.Name "lazy")
 data CaseConversionTestCase = 
   CaseConversionTestCase {
     -- | The source case convention
-    caseConversionTestCaseFromConvention :: Mantle.CaseConvention,
+    caseConversionTestCaseFromConvention :: Util.CaseConvention,
     -- | The target case convention
-    caseConversionTestCaseToConvention :: Mantle.CaseConvention,
+    caseConversionTestCaseToConvention :: Util.CaseConvention,
     -- | The input string
     caseConversionTestCaseFromString :: String,
     -- | The expected output string

@@ -9,7 +9,6 @@ import Hydra.Dsl.Phantoms as Base
 import Hydra.Dsl.Testing
 import qualified Hydra.Dsl.TTerms as TTerms
 import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
-import qualified Hydra.Sources.Kernel.Terms.All as Tier2
 
 import Hydra.Sources.Test.Lib.Lists
 import Hydra.Sources.Test.Lib.Strings

@@ -2,15 +2,18 @@
 
 module Hydra.Sources.Kernel.Terms.Rewriting where
 
--- Standard imports for term-level kernel modules
+-- Standard imports for kernel terms modules
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Accessors     as Accessors
+import qualified Hydra.Dsl.Annotations   as Annotations
 import qualified Hydra.Dsl.Ast           as Ast
+import qualified Hydra.Dsl.Bootstrap     as Bootstrap
 import qualified Hydra.Dsl.Coders        as Coders
 import qualified Hydra.Dsl.Compute       as Compute
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Grammar       as Grammar
+import qualified Hydra.Dsl.Grammars      as Grammars
 import qualified Hydra.Dsl.Graph         as Graph
 import qualified Hydra.Dsl.Json          as Json
 import qualified Hydra.Dsl.Lib.Chars     as Chars
@@ -23,18 +26,27 @@ import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
 import qualified Hydra.Dsl.Lib.Maybes    as Maybes
-import           Hydra.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Lib.Pairs     as Pairs
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
-import qualified Hydra.Dsl.Lib.Tuples    as Tuples
-import qualified Hydra.Dsl.Mantle        as Mantle
+import qualified Hydra.Dsl.Literals      as Literals
+import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
+import qualified Hydra.Dsl.Meta          as Meta
 import qualified Hydra.Dsl.Module        as Module
+import           Hydra.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Prims         as Prims
+import qualified Hydra.Dsl.Tabular       as Tabular
+import qualified Hydra.Dsl.Testing       as Testing
+import qualified Hydra.Dsl.TBase         as TBase
+import qualified Hydra.Dsl.Terms         as Terms
+import qualified Hydra.Dsl.Testing       as Testing
+import qualified Hydra.Dsl.Tests         as Tests
+import qualified Hydra.Dsl.Topology      as Topology
 import qualified Hydra.Dsl.TTerms        as TTerms
 import qualified Hydra.Dsl.TTypes        as TTypes
-import qualified Hydra.Dsl.Terms         as Terms
-import qualified Hydra.Dsl.Topology      as Topology
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
+import qualified Hydra.Dsl.Util          as Util
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
@@ -1629,10 +1641,10 @@ subtermsWithAccessorsDef :: TBinding (Term -> [(TermAccessor, Term)])
 subtermsWithAccessorsDef = define "subtermsWithAccessors" $
   doc "Find the children of a given term" $
   match _Term Nothing [
-    _Term_annotated>>: "at" ~> single Mantle.termAccessorAnnotatedBody $ Core.annotatedTermBody $ var "at",
+    _Term_annotated>>: "at" ~> single Accessors.termAccessorAnnotatedBody $ Core.annotatedTermBody $ var "at",
     _Term_application>>: "p" ~> list [
-      result Mantle.termAccessorApplicationFunction $ Core.applicationFunction $ var "p",
-      result Mantle.termAccessorApplicationArgument $ Core.applicationArgument $ var "p"],
+      result Accessors.termAccessorApplicationFunction $ Core.applicationFunction $ var "p",
+      result Accessors.termAccessorApplicationArgument $ Core.applicationArgument $ var "p"],
     _Term_either>>: "e" ~> none, -- TODO: add accessors when TermAccessor type is updated
     _Term_function>>: match _Function
       (Just none) [
@@ -1640,64 +1652,64 @@ subtermsWithAccessorsDef = define "subtermsWithAccessors" $
         (Just none) [
         _Elimination_union>>: "cs" ~> Lists.concat2
           (Maybes.maybe none
-            ("t" ~> single Mantle.termAccessorUnionCasesDefault $ var "t")
+            ("t" ~> single Accessors.termAccessorUnionCasesDefault $ var "t")
             (Core.caseStatementDefault $ var "cs"))
           (Lists.map
-            ("f" ~> result (Mantle.termAccessorUnionCasesBranch $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
+            ("f" ~> result (Accessors.termAccessorUnionCasesBranch $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
             (Core.caseStatementCases $ var "cs"))],
-      _Function_lambda>>: "l" ~> single Mantle.termAccessorLambdaBody $ Core.lambdaBody $ var "l"],
+      _Function_lambda>>: "l" ~> single Accessors.termAccessorLambdaBody $ Core.lambdaBody $ var "l"],
     _Term_let>>: "lt" ~> Lists.cons
-      (result Mantle.termAccessorLetEnvironment $ Core.letBody $ var "lt")
+      (result Accessors.termAccessorLetEnvironment $ Core.letBody $ var "lt")
       (Lists.map
-        ("b" ~> result (Mantle.termAccessorLetBinding $ Core.bindingName $ var "b") $ Core.bindingTerm $ var "b")
+        ("b" ~> result (Accessors.termAccessorLetBinding $ Core.bindingName $ var "b") $ Core.bindingTerm $ var "b")
         (Core.letBindings $ var "lt")),
     _Term_list>>: "l" ~> Lists.map
       -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-      ("e" ~> result (Mantle.termAccessorListElement $ int32 0) $ var "e")
+      ("e" ~> result (Accessors.termAccessorListElement $ int32 0) $ var "e")
       (var "l"),
     _Term_literal>>: constant none,
     _Term_map>>: "m" ~> Lists.concat
       (Lists.map
         ("p" ~> list [
           -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-          result (Mantle.termAccessorMapKey $ int32 0) $ first $ var "p",
-          result (Mantle.termAccessorMapValue $ int32 0) $ second $ var "p"])
+          result (Accessors.termAccessorMapKey $ int32 0) $ first $ var "p",
+          result (Accessors.termAccessorMapValue $ int32 0) $ second $ var "p"])
         (Maps.toList $ var "m")),
     _Term_maybe>>: "m" ~> Maybes.maybe none
-      ("t" ~> single Mantle.termAccessorOptionalTerm $ var "t")
+      ("t" ~> single Accessors.termAccessorOptionalTerm $ var "t")
       (var "m"),
     _Term_pair>>: "p" ~> none, -- TODO: add accessors when TermAccessor type is updated
     _Term_product>>: "p" ~> Lists.map
       -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-      ("e" ~> result (Mantle.termAccessorProductTerm $ int32 0) $ var "e")
+      ("e" ~> result (Accessors.termAccessorProductTerm $ int32 0) $ var "e")
       (var "p"),
     _Term_record>>: "rt" ~> Lists.map
-      ("f" ~> result (Mantle.termAccessorRecordField $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
+      ("f" ~> result (Accessors.termAccessorRecordField $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
       (Core.recordFields $ var "rt"),
     _Term_set>>: "s" ~> Lists.map
       -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-      ("e" ~> result (Mantle.termAccessorListElement $ int32 0) $ var "e")
+      ("e" ~> result (Accessors.termAccessorListElement $ int32 0) $ var "e")
       (Sets.toList $ var "s"),
     _Term_sum>>: "st" ~>
-      single Mantle.termAccessorSumTerm $
+      single Accessors.termAccessorSumTerm $
       Core.sumTerm $ var "st",
     _Term_typeApplication>>: "ta" ~>
-      single Mantle.termAccessorTypeApplicationTerm $
+      single Accessors.termAccessorTypeApplicationTerm $
       Core.typeApplicationTermBody $ var "ta",
     _Term_typeLambda>>: "ta" ~>
-      single Mantle.termAccessorTypeLambdaBody $
+      single Accessors.termAccessorTypeLambdaBody $
       Core.typeLambdaBody $ var "ta",
     _Term_union>>: "ut" ~>
-      single Mantle.termAccessorInjectionTerm $
+      single Accessors.termAccessorInjectionTerm $
       Core.fieldTerm $ (Core.injectionField $ var "ut"),
     _Term_unit>>: constant none,
     _Term_variable>>: constant none,
-    _Term_wrap>>: "n" ~> single Mantle.termAccessorWrappedTerm $ Core.wrappedTermBody $ var "n"]
+    _Term_wrap>>: "n" ~> single Accessors.termAccessorWrappedTerm $ Core.wrappedTermBody $ var "n"]
   where
     none = list []
     single accessor term = list [result accessor term]
     result accessor term = tuple2 accessor term
-    simple term = result Mantle.termAccessorAnnotatedBody term
+    simple term = result Accessors.termAccessorAnnotatedBody term
 
 subtypesDef :: TBinding (Type -> [Type])
 subtypesDef = define "subtypes" $

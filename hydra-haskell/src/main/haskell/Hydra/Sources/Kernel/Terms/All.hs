@@ -14,10 +14,10 @@ import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decode.Core     as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Describe.Core   as DescribeCore
-import qualified Hydra.Sources.Kernel.Terms.Describe.Mantle as DescribeMantle
+import qualified Hydra.Sources.Kernel.Terms.Describe.Util   as DescribeUtil
 import qualified Hydra.Sources.Kernel.Terms.Encode.Core     as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core    as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Extract.Mantle  as ExtractMantle
+import qualified Hydra.Sources.Kernel.Terms.Extract.Util    as ExtractUtil
 import qualified Hydra.Sources.Kernel.Terms.Formatting      as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Grammars        as Grammars
 import qualified Hydra.Sources.Kernel.Terms.Inference       as Inference
@@ -33,7 +33,7 @@ import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Accessors  as ShowAccessors
 import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph      as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Mantle     as ShowMantle
+import qualified Hydra.Sources.Kernel.Terms.Show.Meta       as ShowMeta
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing     as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting         as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution    as Substitution
@@ -56,10 +56,10 @@ kernelTermsModules = [
   Constants.module_,
   DecodeCore.module_,
   DescribeCore.module_,
-  DescribeMantle.module_,
+  DescribeUtil.module_,
   EncodeCore.module_,
   ExtractCore.module_,
-  ExtractMantle.module_,
+  ExtractUtil.module_,
   Formatting.module_,
   Grammars.module_,
   Inference.module_,
@@ -75,7 +75,7 @@ kernelTermsModules = [
   ShowAccessors.module_,
   ShowCore.module_,
   ShowGraph.module_,
-  ShowMantle.module_,
+  ShowMeta.module_,
   ShowTyping.module_,
   Sorting.module_,
   Substitution.module_,

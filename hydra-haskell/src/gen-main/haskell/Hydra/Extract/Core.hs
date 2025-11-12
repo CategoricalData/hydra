@@ -1,4 +1,4 @@
--- | A DSL for decoding and validating Hydra terms at runtime. This module provides functions to extract typed values from Hydra terms with appropriate error handling.
+-- | Extraction and validation for hydra.core types
 
 module Hydra.Extract.Core where
 

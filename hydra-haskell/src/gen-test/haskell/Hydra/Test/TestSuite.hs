@@ -4,10 +4,10 @@ module Hydra.Test.TestSuite where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Test.TestTerms as TestTerms
 import qualified Hydra.Test.TestTypes as TestTypes
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -33,8 +33,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#1 (lower_snake_case -> UPPER_SNAKE_CASE)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionLowerSnake,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionUpperSnake,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionLowerSnake,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionUpperSnake,
         Testing.caseConversionTestCaseFromString = "a_hello_world_42_a42_42a_b",
         Testing.caseConversionTestCaseToString = "A_HELLO_WORLD_42_A42_42A_B"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -42,8 +42,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#2 (lower_snake_case -> camelCase)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionLowerSnake,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionCamel,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionLowerSnake,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionCamel,
         Testing.caseConversionTestCaseFromString = "a_hello_world_42_a42_42a_b",
         Testing.caseConversionTestCaseToString = "aHelloWorld42A4242aB"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -51,8 +51,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#3 (lower_snake_case -> PascalCase)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionLowerSnake,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionPascal,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionLowerSnake,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionPascal,
         Testing.caseConversionTestCaseFromString = "a_hello_world_42_a42_42a_b",
         Testing.caseConversionTestCaseToString = "AHelloWorld42A4242aB"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -60,8 +60,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#4 (lower_snake_case -> lower_snake_case)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionLowerSnake,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionLowerSnake,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionLowerSnake,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionLowerSnake,
         Testing.caseConversionTestCaseFromString = "a_hello_world_42_a42_42a_b",
         Testing.caseConversionTestCaseToString = "a_hello_world_42_a42_42a_b"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -69,8 +69,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#5 (UPPER_SNAKE_CASE -> lower_snake_case)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionUpperSnake,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionLowerSnake,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionUpperSnake,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionLowerSnake,
         Testing.caseConversionTestCaseFromString = "A_HELLO_WORLD_42_A42_42A_B",
         Testing.caseConversionTestCaseToString = "a_hello_world_42_a42_42a_b"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -78,8 +78,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#6 (UPPER_SNAKE_CASE -> camelCase)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionUpperSnake,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionCamel,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionUpperSnake,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionCamel,
         Testing.caseConversionTestCaseFromString = "A_HELLO_WORLD_42_A42_42A_B",
         Testing.caseConversionTestCaseToString = "aHelloWorld42A4242aB"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -87,8 +87,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#7 (UPPER_SNAKE_CASE -> PascalCase)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionUpperSnake,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionPascal,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionUpperSnake,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionPascal,
         Testing.caseConversionTestCaseFromString = "A_HELLO_WORLD_42_A42_42A_B",
         Testing.caseConversionTestCaseToString = "AHelloWorld42A4242aB"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -96,8 +96,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#8 (UPPER_SNAKE_CASE -> UPPER_SNAKE_CASE)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionUpperSnake,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionUpperSnake,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionUpperSnake,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionUpperSnake,
         Testing.caseConversionTestCaseFromString = "A_HELLO_WORLD_42_A42_42A_B",
         Testing.caseConversionTestCaseToString = "A_HELLO_WORLD_42_A42_42A_B"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -105,8 +105,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#9 (camelCase -> lower_snake_case)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionCamel,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionLowerSnake,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionCamel,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionLowerSnake,
         Testing.caseConversionTestCaseFromString = "aHelloWorld42A4242aB",
         Testing.caseConversionTestCaseToString = "a_hello_world42_a4242a_b"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -114,8 +114,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#10 (camelCase -> UPPER_SNAKE_CASE)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionCamel,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionUpperSnake,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionCamel,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionUpperSnake,
         Testing.caseConversionTestCaseFromString = "aHelloWorld42A4242aB",
         Testing.caseConversionTestCaseToString = "A_HELLO_WORLD42_A4242A_B"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -123,8 +123,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#11 (camelCase -> PascalCase)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionCamel,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionPascal,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionCamel,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionPascal,
         Testing.caseConversionTestCaseFromString = "aHelloWorld42A4242aB",
         Testing.caseConversionTestCaseToString = "AHelloWorld42A4242aB"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -132,8 +132,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#12 (camelCase -> camelCase)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionCamel,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionCamel,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionCamel,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionCamel,
         Testing.caseConversionTestCaseFromString = "aHelloWorld42A4242aB",
         Testing.caseConversionTestCaseToString = "aHelloWorld42A4242aB"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -141,8 +141,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#13 (PascalCase -> lower_snake_case)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionPascal,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionLowerSnake,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionPascal,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionLowerSnake,
         Testing.caseConversionTestCaseFromString = "AHelloWorld42A4242aB",
         Testing.caseConversionTestCaseToString = "a_hello_world42_a4242a_b"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -150,8 +150,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#14 (PascalCase -> UPPER_SNAKE_CASE)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionPascal,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionUpperSnake,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionPascal,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionUpperSnake,
         Testing.caseConversionTestCaseFromString = "AHelloWorld42A4242aB",
         Testing.caseConversionTestCaseToString = "A_HELLO_WORLD42_A4242A_B"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -159,8 +159,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#15 (PascalCase -> camelCase)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionPascal,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionCamel,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionPascal,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionCamel,
         Testing.caseConversionTestCaseFromString = "AHelloWorld42A4242aB",
         Testing.caseConversionTestCaseToString = "aHelloWorld42A4242aB"})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -168,8 +168,8 @@ formattingTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "#16 (PascalCase -> PascalCase)",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseCaseConversion (Testing.CaseConversionTestCase {
-        Testing.caseConversionTestCaseFromConvention = Mantle.CaseConventionPascal,
-        Testing.caseConversionTestCaseToConvention = Mantle.CaseConventionPascal,
+        Testing.caseConversionTestCaseFromConvention = Util.CaseConventionPascal,
+        Testing.caseConversionTestCaseToConvention = Util.CaseConventionPascal,
         Testing.caseConversionTestCaseFromString = "AHelloWorld42A4242aB",
         Testing.caseConversionTestCaseToString = "AHelloWorld42A4242aB"})),
       Testing.testCaseWithMetadataDescription = Nothing,

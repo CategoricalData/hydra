@@ -529,16 +529,16 @@ term x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "let"),
       Core.fieldTerm = (let_ v1)}}))
-  Core.TermLiteral v1 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "literal"),
-      Core.fieldTerm = (literal v1)}}))
   Core.TermList v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "list"),
       Core.fieldTerm = (Core.TermList (Lists.map term v1))}}))
+  Core.TermLiteral v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "literal"),
+      Core.fieldTerm = (literal v1)}}))
   Core.TermMap v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
@@ -574,16 +574,16 @@ term x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "sum"),
       Core.fieldTerm = (sum v1)}}))
-  Core.TermTypeLambda v1 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "typeLambda"),
-      Core.fieldTerm = (typeLambda v1)}}))
   Core.TermTypeApplication v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "typeApplication"),
       Core.fieldTerm = (typeApplicationTerm v1)}}))
+  Core.TermTypeLambda v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "typeLambda"),
+      Core.fieldTerm = (typeLambda v1)}}))
   Core.TermUnion v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {

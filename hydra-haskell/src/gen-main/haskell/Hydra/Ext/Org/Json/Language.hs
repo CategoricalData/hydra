@@ -5,7 +5,7 @@ module Hydra.Ext.Org.Json.Language where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Meta as Meta
 import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -29,27 +29,27 @@ jsonLanguage = Coders.Language {
   where 
     eliminationVariants = Sets.empty
     literalVariants = (Sets.fromList [
-      Mantle.LiteralVariantBoolean,
-      Mantle.LiteralVariantFloat,
-      Mantle.LiteralVariantInteger,
-      Mantle.LiteralVariantString])
+      Meta.LiteralVariantBoolean,
+      Meta.LiteralVariantFloat,
+      Meta.LiteralVariantInteger,
+      Meta.LiteralVariantString])
     floatTypes = (Sets.fromList [
       Core.FloatTypeBigfloat])
     functionVariants = Sets.empty
     integerTypes = (Sets.fromList [
       Core.IntegerTypeBigint])
     termVariants = (Sets.fromList [
-      Mantle.TermVariantList,
-      Mantle.TermVariantLiteral,
-      Mantle.TermVariantMap,
-      Mantle.TermVariantMaybe,
-      Mantle.TermVariantRecord])
+      Meta.TermVariantList,
+      Meta.TermVariantLiteral,
+      Meta.TermVariantMap,
+      Meta.TermVariantMaybe,
+      Meta.TermVariantRecord])
     typeVariants = (Sets.fromList [
-      Mantle.TypeVariantList,
-      Mantle.TypeVariantLiteral,
-      Mantle.TypeVariantMap,
-      Mantle.TypeVariantMaybe,
-      Mantle.TypeVariantRecord])
+      Meta.TypeVariantList,
+      Meta.TypeVariantLiteral,
+      Meta.TypeVariantMap,
+      Meta.TypeVariantMaybe,
+      Meta.TypeVariantRecord])
     typePredicate = (\typ -> (\x -> case x of
       Core.TypeMaybe v1 -> ((\x -> case x of
         Core.TypeMaybe _ -> False

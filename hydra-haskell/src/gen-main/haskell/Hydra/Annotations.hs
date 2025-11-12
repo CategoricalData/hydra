@@ -18,7 +18,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Meta as Meta
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core____
@@ -77,13 +77,13 @@ getTypeAnnotation :: (Core.Name -> Core.Type -> Maybe Core.Term)
 getTypeAnnotation key typ = (Maps.lookup key (typeAnnotationInternal typ))
 
 -- | Get type classes from term
-getTypeClasses :: (Core.Term -> Compute.Flow Graph.Graph (M.Map Core.Name (S.Set Mantle.TypeClass)))
+getTypeClasses :: (Core.Term -> Compute.Flow Graph.Graph (M.Map Core.Name (S.Set Meta.TypeClass)))
 getTypeClasses term =  
   let decodeClass = (\term ->  
           let byName = (Maps.fromList [
-                  (Core.Name "equality", Mantle.TypeClassEquality),
-                  (Core.Name "ordering", Mantle.TypeClassOrdering)])
-          in (Flows.bind (Core___.unitVariant (Core.Name "hydra.mantle.TypeClass") term) (\fn -> Maybes.maybe (Monads.unexpected "type class" (Core____.term term)) Flows.pure (Maps.lookup fn byName))))
+                  (Core.Name "equality", Meta.TypeClassEquality),
+                  (Core.Name "ordering", Meta.TypeClassOrdering)])
+          in (Flows.bind (Core___.unitVariant (Core.Name "hydra.meta.TypeClass") term) (\fn -> Maybes.maybe (Monads.unexpected "type class" (Core____.term term)) Flows.pure (Maps.lookup fn byName))))
   in (Maybes.maybe (Flows.pure Maps.empty) (\term -> Core___.map Core_.name (Core___.setOf decodeClass) term) (getTermAnnotation Constants.key_classes term))
 
 -- | Get type description
@@ -182,16 +182,16 @@ setTypeAnnotation key val typ =
       Core.annotatedTypeAnnotation = anns})))
 
 -- | Set type classes on term
-setTypeClasses :: (M.Map Core.Name (S.Set Mantle.TypeClass) -> Core.Term -> Core.Term)
+setTypeClasses :: (M.Map Core.Name (S.Set Meta.TypeClass) -> Core.Term -> Core.Term)
 setTypeClasses m term =  
   let encodeClass = (\tc -> (\x -> case x of
-          Mantle.TypeClassEquality -> (Core.TermUnion (Core.Injection {
-            Core.injectionTypeName = (Core.Name "hydra.mantle.TypeClass"),
+          Meta.TypeClassEquality -> (Core.TermUnion (Core.Injection {
+            Core.injectionTypeName = (Core.Name "hydra.meta.TypeClass"),
             Core.injectionField = Core.Field {
               Core.fieldName = (Core.Name "equality"),
               Core.fieldTerm = Core.TermUnit}}))
-          Mantle.TypeClassOrdering -> (Core.TermUnion (Core.Injection {
-            Core.injectionTypeName = (Core.Name "hydra.mantle.TypeClass"),
+          Meta.TypeClassOrdering -> (Core.TermUnion (Core.Injection {
+            Core.injectionTypeName = (Core.Name "hydra.meta.TypeClass"),
             Core.injectionField = Core.Field {
               Core.fieldName = (Core.Name "ordering"),
               Core.fieldTerm = Core.TermUnit}}))) tc)

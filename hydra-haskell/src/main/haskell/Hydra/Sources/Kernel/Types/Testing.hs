@@ -14,17 +14,17 @@ import qualified Data.Map                        as M
 import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
-import qualified Hydra.Sources.Kernel.Types.Mantle as Mantle
+import qualified Hydra.Sources.Kernel.Types.Util as Util
 
 
 module_ :: Module
-module_ = Module ns elements [Mantle.module_] [Core.module_] $
+module_ = Module ns elements [Util.module_] [Core.module_] $
     Just "A model for unit testing"
   where
     ns = Namespace "hydra.testing"
     def = datatype ns
     core = typeref $ moduleNamespace Core.module_
-    mantle = typeref $ moduleNamespace Mantle.module_
+    util = typeref $ moduleNamespace Util.module_
     testing = typeref ns
 
     elements = [
@@ -38,10 +38,10 @@ module_ = Module ns elements [Mantle.module_] [Core.module_] $
         record [
           "fromConvention">:
             doc "The source case convention" $
-            mantle "CaseConvention",
+            util "CaseConvention",
           "toConvention">:
             doc "The target case convention" $
-            mantle "CaseConvention",
+            util "CaseConvention",
           "fromString">:
             doc "The input string" $
             string,

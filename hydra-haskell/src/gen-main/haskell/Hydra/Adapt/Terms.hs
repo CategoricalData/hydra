@@ -18,7 +18,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Meta as Meta
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
@@ -602,67 +602,67 @@ termAdapter typ =
         let supportedAtTopLevel = (\cx -> \t -> Logic.and (variantIsSupported cx t) (Coders.languageConstraintsTypes (constraints cx) t))
         in  
           let pass = (\t -> (\x -> case x of
-                  Mantle.TypeVariantAnnotated -> []
-                  Mantle.TypeVariantApplication -> [
+                  Meta.TypeVariantAnnotated -> []
+                  Meta.TypeVariantApplication -> [
                     passApplication]
-                  Mantle.TypeVariantEither -> [
+                  Meta.TypeVariantEither -> [
                     passEither]
-                  Mantle.TypeVariantForall -> [
+                  Meta.TypeVariantForall -> [
                     passForall]
-                  Mantle.TypeVariantFunction -> [
+                  Meta.TypeVariantFunction -> [
                     passFunction]
-                  Mantle.TypeVariantList -> [
+                  Meta.TypeVariantList -> [
                     passList]
-                  Mantle.TypeVariantLiteral -> [
+                  Meta.TypeVariantLiteral -> [
                     passLiteral]
-                  Mantle.TypeVariantMap -> [
+                  Meta.TypeVariantMap -> [
                     passMap]
-                  Mantle.TypeVariantMaybe -> [
+                  Meta.TypeVariantMaybe -> [
                     passOptional,
                     maybeToList]
-                  Mantle.TypeVariantPair -> []
-                  Mantle.TypeVariantProduct -> [
+                  Meta.TypeVariantPair -> []
+                  Meta.TypeVariantProduct -> [
                     passProduct]
-                  Mantle.TypeVariantRecord -> [
+                  Meta.TypeVariantRecord -> [
                     passRecord]
-                  Mantle.TypeVariantSet -> [
+                  Meta.TypeVariantSet -> [
                     passSet]
-                  Mantle.TypeVariantSum -> [
+                  Meta.TypeVariantSum -> [
                     passSum]
-                  Mantle.TypeVariantUnion -> [
+                  Meta.TypeVariantUnion -> [
                     passUnion]
-                  Mantle.TypeVariantUnit -> [
+                  Meta.TypeVariantUnit -> [
                     passUnit]
-                  Mantle.TypeVariantVariable -> []
-                  Mantle.TypeVariantWrap -> [
+                  Meta.TypeVariantVariable -> []
+                  Meta.TypeVariantWrap -> [
                     passWrapped]) (Variants.typeVariant (Rewriting.deannotateType t)))
           in  
             let trySubstitution = (\t -> (\x -> case x of
-                    Mantle.TypeVariantAnnotated -> []
-                    Mantle.TypeVariantApplication -> [
+                    Meta.TypeVariantAnnotated -> []
+                    Meta.TypeVariantApplication -> [
                       simplifyApplication]
-                    Mantle.TypeVariantEither -> []
-                    Mantle.TypeVariantForall -> [
+                    Meta.TypeVariantEither -> []
+                    Meta.TypeVariantForall -> [
                       lambdaToMonotype]
-                    Mantle.TypeVariantFunction -> [
+                    Meta.TypeVariantFunction -> [
                       functionToUnion]
-                    Mantle.TypeVariantList -> []
-                    Mantle.TypeVariantLiteral -> []
-                    Mantle.TypeVariantMap -> []
-                    Mantle.TypeVariantMaybe -> [
+                    Meta.TypeVariantList -> []
+                    Meta.TypeVariantLiteral -> []
+                    Meta.TypeVariantMap -> []
+                    Meta.TypeVariantMaybe -> [
                       maybeToList]
-                    Mantle.TypeVariantPair -> []
-                    Mantle.TypeVariantProduct -> []
-                    Mantle.TypeVariantRecord -> []
-                    Mantle.TypeVariantSet -> [
+                    Meta.TypeVariantPair -> []
+                    Meta.TypeVariantProduct -> []
+                    Meta.TypeVariantRecord -> []
+                    Meta.TypeVariantSet -> [
                       setToList]
-                    Mantle.TypeVariantSum -> []
-                    Mantle.TypeVariantUnion -> [
+                    Meta.TypeVariantSum -> []
+                    Meta.TypeVariantUnion -> [
                       unionToRecord]
-                    Mantle.TypeVariantUnit -> [
+                    Meta.TypeVariantUnit -> [
                       unitToRecord]
-                    Mantle.TypeVariantVariable -> []
-                    Mantle.TypeVariantWrap -> [
+                    Meta.TypeVariantVariable -> []
+                    Meta.TypeVariantWrap -> [
                       wrapToUnwrapped]) (Variants.typeVariant t))
             in  
               let alts = (\cx -> \t -> Flows.mapList (\c -> c t) (Logic.ifElse (supportedAtTopLevel cx t) (pass t) (trySubstitution t)))
