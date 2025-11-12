@@ -21,13 +21,13 @@ import qualified Data.List as L
 
 
 testSuiteNs = Namespace "hydra.test.testSuite"
-testSuitePrimitivesNs = Namespace "hydra.test.testSuite.primitives"
 
 testSuiteModule :: Module
 testSuiteModule = Module testSuiteNs elements
     [testGraphModule]
     KernelTypes.kernelTypesModules $
-    Just "Test cases for primitive functions"
+    Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
+      <> " the criterion for a true Hydra implementation is that all test cases pass.")
   where
     elements = [
       allTestsEl,
