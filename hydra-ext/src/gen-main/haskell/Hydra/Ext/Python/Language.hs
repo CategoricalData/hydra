@@ -6,7 +6,8 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Meta as Meta
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -28,63 +29,63 @@ pythonLanguage = Coders.Language {
     Coders.languageConstraintsTypes = typePredicate}} 
   where 
     eliminationVariants = (Sets.fromList [
-      Mantle.EliminationVariantProduct,
-      Mantle.EliminationVariantRecord,
-      Mantle.EliminationVariantUnion,
-      Mantle.EliminationVariantWrap])
+      Meta.EliminationVariantProduct,
+      Meta.EliminationVariantRecord,
+      Meta.EliminationVariantUnion,
+      Meta.EliminationVariantWrap])
     literalVariants = (Sets.fromList [
-      Mantle.LiteralVariantBinary,
-      Mantle.LiteralVariantBoolean,
-      Mantle.LiteralVariantFloat,
-      Mantle.LiteralVariantInteger,
-      Mantle.LiteralVariantString])
+      Meta.LiteralVariantBinary,
+      Meta.LiteralVariantBoolean,
+      Meta.LiteralVariantFloat,
+      Meta.LiteralVariantInteger,
+      Meta.LiteralVariantString])
     floatTypes = (Sets.fromList [
       Core.FloatTypeBigfloat,
       Core.FloatTypeFloat64])
     functionVariants = (Sets.fromList [
-      Mantle.FunctionVariantElimination,
-      Mantle.FunctionVariantLambda,
-      Mantle.FunctionVariantPrimitive])
+      Meta.FunctionVariantElimination,
+      Meta.FunctionVariantLambda,
+      Meta.FunctionVariantPrimitive])
     integerTypes = (Sets.fromList [
       Core.IntegerTypeBigint])
     termVariants = (Sets.fromList [
-      Mantle.TermVariantAnnotated,
-      Mantle.TermVariantApplication,
-      Mantle.TermVariantEither,
-      Mantle.TermVariantFunction,
-      Mantle.TermVariantLet,
-      Mantle.TermVariantList,
-      Mantle.TermVariantLiteral,
-      Mantle.TermVariantMap,
-      Mantle.TermVariantMaybe,
-      Mantle.TermVariantPair,
-      Mantle.TermVariantProduct,
-      Mantle.TermVariantRecord,
-      Mantle.TermVariantSet,
-      Mantle.TermVariantTypeApplication,
-      Mantle.TermVariantTypeLambda,
-      Mantle.TermVariantUnion,
-      Mantle.TermVariantUnit,
-      Mantle.TermVariantVariable,
-      Mantle.TermVariantWrap])
+      Meta.TermVariantAnnotated,
+      Meta.TermVariantApplication,
+      Meta.TermVariantEither,
+      Meta.TermVariantFunction,
+      Meta.TermVariantLet,
+      Meta.TermVariantList,
+      Meta.TermVariantLiteral,
+      Meta.TermVariantMap,
+      Meta.TermVariantMaybe,
+      Meta.TermVariantPair,
+      Meta.TermVariantProduct,
+      Meta.TermVariantRecord,
+      Meta.TermVariantSet,
+      Meta.TermVariantTypeApplication,
+      Meta.TermVariantTypeLambda,
+      Meta.TermVariantUnion,
+      Meta.TermVariantUnit,
+      Meta.TermVariantVariable,
+      Meta.TermVariantWrap])
     typeVariants = (Sets.fromList [
-      Mantle.TypeVariantAnnotated,
-      Mantle.TypeVariantApplication,
-      Mantle.TypeVariantEither,
-      Mantle.TypeVariantFunction,
-      Mantle.TypeVariantForall,
-      Mantle.TypeVariantList,
-      Mantle.TypeVariantLiteral,
-      Mantle.TypeVariantMap,
-      Mantle.TypeVariantMaybe,
-      Mantle.TypeVariantPair,
-      Mantle.TypeVariantProduct,
-      Mantle.TypeVariantRecord,
-      Mantle.TypeVariantSet,
-      Mantle.TypeVariantUnion,
-      Mantle.TypeVariantUnit,
-      Mantle.TypeVariantVariable,
-      Mantle.TypeVariantWrap])
+      Meta.TypeVariantAnnotated,
+      Meta.TypeVariantApplication,
+      Meta.TypeVariantEither,
+      Meta.TypeVariantFunction,
+      Meta.TypeVariantForall,
+      Meta.TypeVariantList,
+      Meta.TypeVariantLiteral,
+      Meta.TypeVariantMap,
+      Meta.TypeVariantMaybe,
+      Meta.TypeVariantPair,
+      Meta.TypeVariantProduct,
+      Meta.TypeVariantRecord,
+      Meta.TypeVariantSet,
+      Meta.TypeVariantUnion,
+      Meta.TypeVariantUnit,
+      Meta.TypeVariantVariable,
+      Meta.TypeVariantWrap])
     typePredicate = (\_ -> True)
 
 -- | A set of reserved words in Python

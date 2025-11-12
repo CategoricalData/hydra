@@ -2,16 +2,40 @@
 
 module Hydra.Ext.Sources.Tinkerpop.Gremlin where
 
+-- Standard imports for type-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
-
-import Hydra.Sources.Kernel.Types.Core
+import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
+import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
+import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
+import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
+import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
+import qualified Hydra.Sources.Kernel.Types.Core        as Core
+import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
+import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
+import qualified Hydra.Sources.Kernel.Types.Json        as Json
+import qualified Hydra.Sources.Kernel.Types.Meta        as Meta
+import qualified Hydra.Sources.Kernel.Types.Module      as Module
+import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
+import qualified Hydra.Sources.Kernel.Types.Query       as Query
+import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
+import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
+import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
+import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
+import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
+import qualified Hydra.Sources.Kernel.Types.Util        as Util
+import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
+import qualified Data.Int                               as I
+import qualified Data.List                              as L
+import qualified Data.Map                               as M
+import qualified Data.Set                               as S
+import qualified Data.Maybe                             as Y
 
 
 gremlinModule :: Module
-gremlinModule = Module ns elements [module_] [module_] $
+gremlinModule = Module ns elements [Core.module_] [Core.module_] $
     Just ("A Gremlin model, based on the Gremlin ANTLR grammar "
       ++ "(master branch, as of 2024-06-30).")
   where

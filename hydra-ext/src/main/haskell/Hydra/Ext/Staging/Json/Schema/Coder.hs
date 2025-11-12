@@ -14,10 +14,10 @@ import qualified Hydra.Dsl.Annotations as DslAnnotations
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Names as Names
+import qualified Hydra.Util as Util
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Ext.Org.Json.Schema.Language as JsonSchemaLanguage
@@ -76,7 +76,7 @@ constructModule opts mod coders pairs = M.fromList <$> CM.mapM toDocument pairs
       schema <- JS.Schema <$> encodeNamedType name atyp
       return (JS.Keyword $ encodeName $ Core.Name $ Names.localNameOf name, schema)
 
-    nameToPath name = Names.namespaceToFilePath Mantle.CaseConventionCamel (Module.FileExtension "json") (Module.Namespace $ nsPart ++ local)
+    nameToPath name = Names.namespaceToFilePath Util.CaseConventionCamel (Module.FileExtension "json") (Module.Namespace $ nsPart ++ local)
       where
         (Module.QualifiedName mns local) = Names.qualifyName name
         nsPart = case mns of
