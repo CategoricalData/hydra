@@ -5,7 +5,7 @@ from functools import reduce
 
 import hydra.constants
 import hydra.dsl.literals as lt
-import hydra.mantle
+import hydra.util
 from hydra.core import (
     AnnotatedTerm,
     Application,
@@ -111,23 +111,23 @@ def char(value: str) -> Term:
     return int32(ord(value))
 
 
-def comparison(comp: hydra.mantle.Comparison) -> Term:
+def comparison(comp: hydra.util.Comparison) -> Term:
     """Construct a comparison term."""
     match comp:
-        case hydra.mantle.Comparison.EQUAL_TO:
+        case hydra.util.Comparison.EQUAL_TO:
             return unit_variant(
-                hydra.mantle.COMPARISON__NAME,
-                hydra.mantle.COMPARISON__EQUAL_TO__NAME
+                hydra.util.COMPARISON__NAME,
+                hydra.util.COMPARISON__EQUAL_TO__NAME
             )
-        case hydra.mantle.Comparison.LESS_THAN:
+        case hydra.util.Comparison.LESS_THAN:
             return unit_variant(
-                hydra.mantle.COMPARISON__NAME,
-                hydra.mantle.COMPARISON__LESS_THAN__NAME
+                hydra.util.COMPARISON__NAME,
+                hydra.util.COMPARISON__LESS_THAN__NAME
             )
-        case hydra.mantle.Comparison.GREATER_THAN:
+        case hydra.util.Comparison.GREATER_THAN:
             return unit_variant(
-                hydra.mantle.COMPARISON__NAME,
-                hydra.mantle.COMPARISON__GREATER_THAN__NAME
+                hydra.util.COMPARISON__NAME,
+                hydra.util.COMPARISON__GREATER_THAN__NAME
             )
 
 

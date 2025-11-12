@@ -1,19 +1,19 @@
 """Python implementations of hydra.lib.equality primitives."""
 
 from typing import Any, TypeVar
-import hydra.mantle
+import hydra.util
 
 A = TypeVar('A')
 
 
-def compare(x: Any, y: Any) -> hydra.mantle.Comparison:
+def compare(x: Any, y: Any) -> hydra.util.Comparison:
     """Compare two values and return a Comparison."""
     if x < y:
-        return hydra.mantle.Comparison.LESS_THAN
+        return hydra.util.Comparison.LESS_THAN
     elif x > y:
-        return hydra.mantle.Comparison.GREATER_THAN
+        return hydra.util.Comparison.GREATER_THAN
     else:
-        return hydra.mantle.Comparison.EQUAL_TO
+        return hydra.util.Comparison.EQUAL_TO
 
 
 def equal(a: Any, b: Any) -> bool:
