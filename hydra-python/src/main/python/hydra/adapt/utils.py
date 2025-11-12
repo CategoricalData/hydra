@@ -44,6 +44,9 @@ def encode_decode[T0, T1](dir: hydra.coders.CoderDirection, coder: hydra.compute
         
         case hydra.coders.CoderDirection.DECODE:
             return coder.decode(term)
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def float_type_is_supported(constraints: hydra.coders.LanguageConstraints, ft: hydra.core.FloatType) -> bool:
     r"""Check if float type is supported by language constraints."""

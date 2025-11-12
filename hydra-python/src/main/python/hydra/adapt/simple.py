@@ -110,6 +110,9 @@ def adapt_float_type(constraints: hydra.coders.LanguageConstraints, ft: hydra.co
             
             case hydra.core.FloatType.FLOAT64:
                 return alt(hydra.core.FloatType.BIGFLOAT)
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     return hydra.lib.logic.if_else(supported, cast(Maybe[hydra.core.FloatType], Just(ft)), for_unsupported(ft))
 
 def adapt_integer_type(constraints: hydra.coders.LanguageConstraints, it: hydra.core.IntegerType) -> Maybe[hydra.core.IntegerType]:
@@ -146,6 +149,9 @@ def adapt_integer_type(constraints: hydra.coders.LanguageConstraints, it: hydra.
             
             case hydra.core.IntegerType.UINT64:
                 return alt(hydra.core.IntegerType.BIGINT)
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     return hydra.lib.logic.if_else(supported, cast(Maybe[hydra.core.IntegerType], Just(it)), for_unsupported(it))
 
 def adapt_literal_type(constraints: hydra.coders.LanguageConstraints, lt: hydra.core.LiteralType) -> Maybe[hydra.core.LiteralType]:

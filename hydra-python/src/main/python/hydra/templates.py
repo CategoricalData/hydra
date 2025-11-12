@@ -44,6 +44,9 @@ def instantiate_template[T0](minimal: bool, schema: FrozenDict[hydra.core.Name, 
             
             case hydra.core.FloatType.FLOAT64:
                 return cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(0.0))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     def for_integer(it: hydra.core.IntegerType) -> hydra.core.IntegerValue:
         match it:
             case hydra.core.IntegerType.BIGINT:
@@ -72,6 +75,9 @@ def instantiate_template[T0](minimal: bool, schema: FrozenDict[hydra.core.Name, 
             
             case hydra.core.IntegerType.UINT64:
                 return cast(hydra.core.IntegerValue, hydra.core.IntegerValueUint64(0))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     def for_literal(lt: hydra.core.LiteralType) -> hydra.core.Literal:
         match lt:
             case hydra.core.LiteralTypeBinary():
@@ -88,6 +94,9 @@ def instantiate_template[T0](minimal: bool, schema: FrozenDict[hydra.core.Name, 
             
             case hydra.core.LiteralTypeString():
                 return cast(hydra.core.Literal, hydra.core.LiteralString(""))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     match t:
         case hydra.core.TypeAnnotated(value=at):
             return inst(at.body)

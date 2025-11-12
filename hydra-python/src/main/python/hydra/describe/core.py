@@ -36,6 +36,9 @@ def literal_type(v1: hydra.core.LiteralType) -> str:
         
         case hydra.core.LiteralTypeString():
             return "character string"
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def type(v1: hydra.core.Type) -> str:
     r"""Display a type as a string."""

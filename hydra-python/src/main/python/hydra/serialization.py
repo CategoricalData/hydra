@@ -70,6 +70,9 @@ def expression_length(e: hydra.ast.Expr) -> int:
             
             case hydra.ast.WsDoubleBreak():
                 return 2
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     def block_style_length(style: hydra.ast.BlockStyle) -> int:
         mindent_len = hydra.lib.maybes.maybe(0, hydra.lib.strings.length, style.indent)
         nl_before_len = hydra.lib.logic.if_else(style.newline_before_content, 1, 0)
@@ -88,6 +91,9 @@ def expression_length(e: hydra.ast.Expr) -> int:
                 
                 case hydra.ast.IndentStyleSubsequentLines(value=s2):
                     return hydra.lib.strings.length(s2)
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
         return hydra.lib.math.add(base_len, indent_len())
     def op_length(op: hydra.ast.Op) -> int:
         sym_len = symbol_length(op.symbol)
@@ -112,6 +118,9 @@ def expression_length(e: hydra.ast.Expr) -> int:
         
         case hydra.ast.ExprBrackets(value=be):
             return bracket_expr_length(be)
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 double_space = "  "
 
@@ -263,6 +272,9 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.ast.Expr:
                             
                             case hydra.util.Comparison.EQUAL_TO:
                                 return hydra.lib.logic.if_else(hydra.lib.logic.and_(assoc_left(assoc), assoc_left(lassoc)), lhs_, parens(lhs_))
+                            
+                            case _:
+                                raise AssertionError("Unreachable: all variants handled")
                     
                     case _:
                         return lhs_
@@ -282,10 +294,16 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.ast.Expr:
                             
                             case hydra.util.Comparison.EQUAL_TO:
                                 return hydra.lib.logic.if_else(hydra.lib.logic.and_(assoc_right(assoc), assoc_right(rassoc)), rhs_, parens(rhs_))
+                            
+                            case _:
+                                raise AssertionError("Unreachable: all variants handled")
                     
                     case _:
                         return rhs_
             return cast(hydra.ast.Expr, hydra.ast.ExprOp(hydra.ast.OpExpr(op, lhs2(), rhs2())))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def prefix(p: str, expr: hydra.ast.Expr) -> hydra.ast.Expr:
     pre_op = hydra.ast.Op(sym(p), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), cast(hydra.ast.Ws, hydra.ast.WsNone())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
@@ -308,6 +326,9 @@ def print_expr(e: hydra.ast.Expr) -> str:
             
             case hydra.ast.WsDoubleBreak():
                 return "\n\n"
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     def idt(ws: hydra.ast.Ws, s: str) -> str:
         match ws:
             case hydra.ast.WsBreakAndIndent(value=indent_str):
@@ -330,6 +351,9 @@ def print_expr(e: hydra.ast.Expr) -> str:
                     
                     case hydra.ast.IndentStyleSubsequentLines(value=idt2):
                         return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(lns), 1), lns, hydra.lib.lists.cons(hydra.lib.lists.head(lns), hydra.lib.lists.map((lambda line: hydra.lib.strings.cat((idt2, line))), hydra.lib.lists.tail(lns))))
+                    
+                    case _:
+                        raise AssertionError("Unreachable: all variants handled")
             return hydra.lib.strings.intercalate("\n", ilns())
         
         case hydra.ast.ExprOp(value=op_expr):
@@ -358,6 +382,9 @@ def print_expr(e: hydra.ast.Expr) -> str:
             pre = hydra.lib.logic.if_else(nl_before, "\n", "")
             suf = hydra.lib.logic.if_else(nl_after, "\n", "")
             return hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((l, pre)), ibody)), suf)), r))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def semicolon_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return symbol_sep(";", inline_style, v1)

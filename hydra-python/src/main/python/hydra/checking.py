@@ -194,12 +194,18 @@ def type_of[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.T
                             
                             case hydra.core.EliminationWrap(value=v14):
                                 return type_of_unwrap(tx, type_args, v14)
+                            
+                            case _:
+                                raise AssertionError("Unreachable: all variants handled")
                     
                     case hydra.core.FunctionLambda(value=v1):
                         return type_of_lambda(tx, type_args, v1)
                     
                     case hydra.core.FunctionPrimitive(value=v12):
                         return type_of_primitive(tx, type_args, v12)
+                    
+                    case _:
+                        raise AssertionError("Unreachable: all variants handled")
             
             case hydra.core.TermLet(value=v14):
                 return type_of_let(tx, type_args, v14)

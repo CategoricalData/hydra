@@ -128,6 +128,9 @@ def rewrite_type(f: Callable[[Callable[[hydra.core.Type], hydra.core.Type], hydr
             
             case hydra.core.TypeWrap(value=wt):
                 return cast(hydra.core.Type, hydra.core.TypeWrap(hydra.core.WrappedType(wt.type_name, recurse(wt.body))))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     def recurse(v1: hydra.core.Type) -> hydra.core.Type:
         return f((lambda v12: fsub(recurse, v12)), v1)
     return recurse(typ0)
@@ -187,6 +190,9 @@ def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydr
                 
                 case hydra.core.EliminationWrap(value=name):
                     return cast(hydra.core.Elimination, hydra.core.EliminationWrap(name))
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
         def for_function(fun: hydra.core.Function) -> hydra.core.Function:
             match fun:
                 case hydra.core.FunctionElimination(value=elm):
@@ -197,6 +203,9 @@ def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydr
                 
                 case hydra.core.FunctionPrimitive(value=name):
                     return cast(hydra.core.Function, hydra.core.FunctionPrimitive(name))
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
         def for_let(lt: hydra.core.Let) -> hydra.core.Let:
             def map_binding(b: hydra.core.Binding) -> hydra.core.Binding:
                 return hydra.core.Binding(b.name, recurse(b.term), b.type)
@@ -265,6 +274,9 @@ def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydr
             
             case hydra.core.TermWrap(value=wt):
                 return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(wt.type_name, recurse(wt.body))))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     def recurse(v1: hydra.core.Term) -> hydra.core.Term:
         return f((lambda v12: fsub(recurse, v12)), v1)
     return recurse(term0)
@@ -415,6 +427,9 @@ def subterms(v1: hydra.core.Term) -> frozenlist[hydra.core.Term]:
         
         case hydra.core.TermWrap(value=n):
             return (n.body,)
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def fold_over_term[T0](order: hydra.coders.TraversalOrder, fld: Callable[[T0, hydra.core.Term], T0], b0: T0, term: hydra.core.Term) -> T0:
     match order:
@@ -423,6 +438,9 @@ def fold_over_term[T0](order: hydra.coders.TraversalOrder, fld: Callable[[T0, hy
         
         case hydra.coders.TraversalOrder.POST:
             return fld(hydra.lib.lists.foldl((lambda v1, v2: fold_over_term(order, fld, v1, v2)), b0, subterms(term)), term)
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def subtypes(v1: hydra.core.Type) -> frozenlist[hydra.core.Type]:
     r"""Find the children of a given type expression."""
@@ -481,6 +499,9 @@ def subtypes(v1: hydra.core.Type) -> frozenlist[hydra.core.Type]:
         
         case hydra.core.TypeWrap(value=nt):
             return (nt.body,)
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def fold_over_type[T0](order: hydra.coders.TraversalOrder, fld: Callable[[T0, hydra.core.Type], T0], b0: T0, typ: hydra.core.Type) -> T0:
     match order:
@@ -489,6 +510,9 @@ def fold_over_type[T0](order: hydra.coders.TraversalOrder, fld: Callable[[T0, hy
         
         case hydra.coders.TraversalOrder.POST:
             return fld(hydra.lib.lists.foldl((lambda v1, v2: fold_over_type(order, fld, v1, v2)), b0, subtypes(typ)), typ)
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def free_variables_in_type(typ: hydra.core.Type) -> frozenset[hydra.core.Name]:
     r"""Find the free variables (i.e. variables not bound by a lambda or let) in a type."""
@@ -678,6 +702,9 @@ def rewrite_type_m[T0](f: Callable[[
             
             case hydra.core.TypeWrap(value=wt):
                 return hydra.lib.flows.bind(recurse(wt.body), (lambda t: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeWrap(hydra.core.WrappedType(wt.type_name, t))))))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     def recurse(v1: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
         return f((lambda v12: fsub(recurse, v12)), v1)
     return recurse(typ0)
@@ -1224,6 +1251,9 @@ def rewrite_term_m[T0](f: Callable[[
                         
                         case hydra.core.EliminationWrap(value=name):
                             return hydra.lib.flows.pure(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(name)))))
+                        
+                        case _:
+                            raise AssertionError("Unreachable: all variants handled")
                 def for_fun(fun2: hydra.core.Function) -> hydra.compute.Flow[T1, hydra.core.Function]:
                     match fun2:
                         case hydra.core.FunctionElimination(value=e):
@@ -1237,6 +1267,9 @@ def rewrite_term_m[T0](f: Callable[[
                         
                         case hydra.core.FunctionPrimitive(value=name):
                             return hydra.lib.flows.pure(cast(hydra.core.Function, hydra.core.FunctionPrimitive(name)))
+                        
+                        case _:
+                            raise AssertionError("Unreachable: all variants handled")
                 return hydra.lib.flows.bind(for_fun(fun), (lambda rfun: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermFunction(rfun)))))
             
             case hydra.core.TermLet(value=lt):
@@ -1299,6 +1332,9 @@ def rewrite_term_m[T0](f: Callable[[
                 name = wt.type_name
                 t = wt.body
                 return hydra.lib.flows.bind(recurse(t), (lambda rt: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(name, rt))))))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     def recurse(v1: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
         return f((lambda v12: fsub(recurse, v12)), v1)
     return recurse(term0)
@@ -1325,6 +1361,9 @@ def rewrite_term_with_context[T0](f: Callable[[
                 
                 case hydra.core.EliminationWrap(value=name):
                     return cast(hydra.core.Elimination, hydra.core.EliminationWrap(name))
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
         def for_function(fun: hydra.core.Function) -> hydra.core.Function:
             match fun:
                 case hydra.core.FunctionElimination(value=elm):
@@ -1335,6 +1374,9 @@ def rewrite_term_with_context[T0](f: Callable[[
                 
                 case hydra.core.FunctionPrimitive(value=name):
                     return cast(hydra.core.Function, hydra.core.FunctionPrimitive(name))
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
         def for_let(lt: hydra.core.Let) -> hydra.core.Let:
             def map_binding(b: hydra.core.Binding) -> hydra.core.Binding:
                 return hydra.core.Binding(b.name, recurse(b.term), b.type)
@@ -1403,6 +1445,9 @@ def rewrite_term_with_context[T0](f: Callable[[
             
             case hydra.core.TermWrap(value=wt):
                 return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(wt.type_name, recurse(wt.body))))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     def rewrite(cx: T0, term: hydra.core.Term) -> hydra.core.Term:
         return f((lambda v1, v2: for_subterms(rewrite, v1, v2)), cx, term)
     return rewrite(cx0, term0)
@@ -1434,6 +1479,9 @@ def rewrite_term_with_context_m[T0, T1](f: Callable[[
                 
                 case hydra.core.EliminationWrap(value=name):
                     return hydra.lib.flows.pure(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(name)))))
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
         def for_function(fun: hydra.core.Function) -> hydra.compute.Flow[T3, hydra.core.Function]:
             match fun:
                 case hydra.core.FunctionElimination(value=e):
@@ -1447,6 +1495,9 @@ def rewrite_term_with_context_m[T0, T1](f: Callable[[
                 
                 case hydra.core.FunctionPrimitive(value=name):
                     return hydra.lib.flows.pure(cast(hydra.core.Function, hydra.core.FunctionPrimitive(name)))
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
         def map_binding(b: hydra.core.Binding) -> hydra.compute.Flow[T3, hydra.core.Binding]:
             return hydra.lib.flows.bind(recurse(b.term), (lambda v: hydra.lib.flows.pure(hydra.core.Binding(b.name, v, b.type))))
         match term:
@@ -1674,6 +1725,9 @@ def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[Tuple[hydra.acces
         
         case hydra.core.TermWrap(value=n):
             return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorWrappedTerm()), n.body),)
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def term_dependency_names(binds: bool, with_prims: bool, with_noms: bool, term0: hydra.core.Term) -> frozenset[hydra.core.Name]:
     r"""Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that."""

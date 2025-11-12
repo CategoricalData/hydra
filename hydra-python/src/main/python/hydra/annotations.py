@@ -199,6 +199,9 @@ def set_type_classes(m: FrozenDict[hydra.core.Name, frozenset[hydra.meta.TypeCla
             
             case hydra.meta.TypeClass.ORDERING:
                 return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.meta.TypeClass"), hydra.core.Field(hydra.core.Name("ordering"), cast(hydra.core.Term, hydra.core.TermUnit())))))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     def encode_pair(name_classes: Tuple[hydra.core.Name, frozenset[hydra.meta.TypeClass]]) -> Tuple[hydra.core.Term, hydra.core.Term]:
         name = name_classes[0]
         classes = name_classes[1]

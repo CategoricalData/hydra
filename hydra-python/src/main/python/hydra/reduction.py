@@ -117,6 +117,9 @@ def eta_expansion_arity(graph: hydra.graph.Graph, term: hydra.core.Term) -> int:
                 
                 case hydra.core.FunctionPrimitive(value=name):
                     return hydra.arity.primitive_arity(hydra.lib.maybes.from_just(hydra.lexical.lookup_primitive(graph, name)))
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
         
         case hydra.core.TermTypeLambda(value=ta):
             return eta_expansion_arity(graph, ta.body)
@@ -184,6 +187,9 @@ def eta_expand_typed_term[T0](tx0: hydra.typing.TypeContext, term0: hydra.core.T
                     
                     case hydra.core.FunctionPrimitive(value=name):
                         return hydra.lib.flows.map(hydra.arity.type_scheme_arity, hydra.lexical.require_primitive_type(tx3, name))
+                    
+                    case _:
+                        raise AssertionError("Unreachable: all variants handled")
             match term2:
                 case hydra.core.TermAnnotated(value=at):
                     return arity_of(tx2, at.body)
@@ -378,6 +384,9 @@ def reduce_term(eager: bool, term: hydra.core.Term) -> hydra.compute.Flow[hydra.
                     
                     case hydra.core.FunctionPrimitive(value=name):
                         return hydra.lib.flows.bind(hydra.lexical.require_primitive(name), (lambda prim: (arity := hydra.arity.primitive_arity(prim), hydra.lib.logic.if_else(hydra.lib.equality.gt(arity, hydra.lib.lists.length(args)), hydra.lib.flows.pure(apply_to_arguments(original, args)), for_primitive(prim, arity, args)))[1]))
+                    
+                    case _:
+                        raise AssertionError("Unreachable: all variants handled")
             
             case hydra.core.TermVariable():
                 return hydra.lib.flows.pure(apply_to_arguments(original, args))
@@ -421,6 +430,9 @@ def term_is_value[T0](g: T0, term: hydra.core.Term) -> bool:
             
             case hydra.core.FunctionPrimitive():
                 return True
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     match hydra.rewriting.deannotate_term(term):
         case hydra.core.TermApplication():
             return False

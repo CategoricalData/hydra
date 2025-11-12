@@ -173,6 +173,9 @@ def infer_type_of_elimination[T0](cx: hydra.typing.InferenceContext, elm: hydra.
         
         case hydra.core.EliminationWrap(value=tname):
             return infer_type_of_unwrap(cx, tname)
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def infer_type_of_function[T0](cx: hydra.typing.InferenceContext, f: hydra.core.Function) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     match f:
@@ -184,6 +187,9 @@ def infer_type_of_function[T0](cx: hydra.typing.InferenceContext, f: hydra.core.
         
         case hydra.core.FunctionPrimitive(value=name):
             return infer_type_of_primitive(cx, name)
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def infer_type_of_injection[T0](cx: hydra.typing.InferenceContext, injection: hydra.core.Injection) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     tname = injection.type_name
@@ -349,6 +355,9 @@ def infer_type_of_term[T0](cx: hydra.typing.InferenceContext, term: hydra.core.T
             
             case hydra.core.TermWrap(value=w):
                 return infer_type_of_wrapped_term(cx, w)
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     return hydra.monads.with_trace(desc, match_term())
 
 def infer_type_of_type_application[T0](cx: hydra.typing.InferenceContext, tt: hydra.core.TypeApplicationTerm) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:

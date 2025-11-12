@@ -36,6 +36,9 @@ def float_type(v1: hydra.core.FloatType) -> hydra.core.Term:
         
         case hydra.core.FloatType.FLOAT64:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("float64"), cast(hydra.core.Term, hydra.core.TermUnit())))))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def integer_type(v1: hydra.core.IntegerType) -> hydra.core.Term:
     r"""Encode an integer type as a term."""
@@ -67,6 +70,9 @@ def integer_type(v1: hydra.core.IntegerType) -> hydra.core.Term:
         
         case hydra.core.IntegerType.UINT64:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint64"), cast(hydra.core.Term, hydra.core.TermUnit())))))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def literal_type(v1: hydra.core.LiteralType) -> hydra.core.Term:
     r"""Encode a literal type as a term."""
@@ -86,6 +92,9 @@ def literal_type(v1: hydra.core.LiteralType) -> hydra.core.Term:
         
         case hydra.core.LiteralTypeString():
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("string"), cast(hydra.core.Term, hydra.core.TermUnit())))))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def application_type(at: hydra.core.ApplicationType) -> hydra.core.Term:
     r"""Encode an application type as a term."""
@@ -184,6 +193,9 @@ def type(v1: hydra.core.Type) -> hydra.core.Term:
         
         case hydra.core.TypeWrap(value=v17):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("wrap"), wrapped_type(v17)))))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def wrapped_type(nt: hydra.core.WrappedType) -> hydra.core.Term:
     r"""Encode a wrapped type as a term."""
@@ -214,6 +226,9 @@ def float_value(v1: hydra.core.FloatValue) -> hydra.core.Term:
         
         case hydra.core.FloatValueFloat64(value=v3):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatValue"), hydra.core.Field(hydra.core.Name("float64"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(v3))))))))))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def integer_value(v1: hydra.core.IntegerValue) -> hydra.core.Term:
     r"""Encode an integer value as a term."""
@@ -245,6 +260,9 @@ def integer_value(v1: hydra.core.IntegerValue) -> hydra.core.Term:
         
         case hydra.core.IntegerValueUint64(value=v9):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("uint64"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueUint64(v9))))))))))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def literal(v1: hydra.core.Literal) -> hydra.core.Term:
     r"""Encode a literal as a term."""
@@ -264,6 +282,9 @@ def literal(v1: hydra.core.Literal) -> hydra.core.Term:
         
         case hydra.core.LiteralString(value=v5):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("string"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(v5))))))))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def annotated_term(a: hydra.core.AnnotatedTerm) -> hydra.core.Term:
     r"""Encode an annotated term as a term."""
@@ -300,6 +321,9 @@ def elimination(v1: hydra.core.Elimination) -> hydra.core.Term:
         
         case hydra.core.EliminationWrap(value=v4):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("wrap"), name(v4)))))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def field(f: hydra.core.Field) -> hydra.core.Term:
     r"""Encode a field as a term."""
@@ -318,6 +342,9 @@ def function(v1: hydra.core.Function) -> hydra.core.Term:
         
         case hydra.core.FunctionPrimitive(value=v3):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Function"), hydra.core.Field(hydra.core.Name("primitive"), name(v3)))))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def injection(i: hydra.core.Injection) -> hydra.core.Term:
     r"""Encode an injection as a term."""
@@ -407,6 +434,9 @@ def term(v1: hydra.core.Term) -> hydra.core.Term:
         
         case hydra.core.TermWrap(value=v20):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), wrapped_term(v20)))))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def type_application_term(tt: hydra.core.TypeApplicationTerm) -> hydra.core.Term:
     r"""Encode a type application term as a term."""
