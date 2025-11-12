@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.mantle;
+package hydra.util;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An equality judgement: less than, equal to, or greater than
  */
 public abstract class Comparison implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.Comparison");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.util.Comparison");
   
   public static final hydra.core.Name FIELD_NAME_LESS_THAN = new hydra.core.Name("lessThan");
   
@@ -48,7 +48,7 @@ public abstract class Comparison implements Serializable {
     }
   }
   
-  public static final class LessThan extends hydra.mantle.Comparison implements Serializable {
+  public static final class LessThan extends hydra.util.Comparison implements Serializable {
     public final Boolean value;
     
     public LessThan (Boolean value) {
@@ -76,7 +76,7 @@ public abstract class Comparison implements Serializable {
     }
   }
   
-  public static final class EqualTo extends hydra.mantle.Comparison implements Serializable {
+  public static final class EqualTo extends hydra.util.Comparison implements Serializable {
     public final Boolean value;
     
     public EqualTo (Boolean value) {
@@ -104,7 +104,7 @@ public abstract class Comparison implements Serializable {
     }
   }
   
-  public static final class GreaterThan extends hydra.mantle.Comparison implements Serializable {
+  public static final class GreaterThan extends hydra.util.Comparison implements Serializable {
     public final Boolean value;
     
     public GreaterThan (Boolean value) {

@@ -21,12 +21,12 @@ public class CaseConversionTestCase implements Serializable {
   /**
    * The source case convention
    */
-  public final hydra.mantle.CaseConvention fromConvention;
+  public final hydra.util.CaseConvention fromConvention;
   
   /**
    * The target case convention
    */
-  public final hydra.mantle.CaseConvention toConvention;
+  public final hydra.util.CaseConvention toConvention;
   
   /**
    * The input string
@@ -38,7 +38,7 @@ public class CaseConversionTestCase implements Serializable {
    */
   public final String toString;
   
-  public CaseConversionTestCase (hydra.mantle.CaseConvention fromConvention, hydra.mantle.CaseConvention toConvention, String fromString, String toString) {
+  public CaseConversionTestCase (hydra.util.CaseConvention fromConvention, hydra.util.CaseConvention toConvention, String fromString, String toString) {
     java.util.Objects.requireNonNull((fromConvention));
     java.util.Objects.requireNonNull((toConvention));
     java.util.Objects.requireNonNull((fromString));
@@ -63,12 +63,12 @@ public class CaseConversionTestCase implements Serializable {
     return 2 * fromConvention.hashCode() + 3 * toConvention.hashCode() + 5 * fromString.hashCode() + 7 * toString.hashCode();
   }
   
-  public CaseConversionTestCase withFromConvention(hydra.mantle.CaseConvention fromConvention) {
+  public CaseConversionTestCase withFromConvention(hydra.util.CaseConvention fromConvention) {
     java.util.Objects.requireNonNull((fromConvention));
     return new CaseConversionTestCase(fromConvention, toConvention, fromString, toString);
   }
   
-  public CaseConversionTestCase withToConvention(hydra.mantle.CaseConvention toConvention) {
+  public CaseConversionTestCase withToConvention(hydra.util.CaseConvention toConvention) {
     java.util.Objects.requireNonNull((toConvention));
     return new CaseConversionTestCase(fromConvention, toConvention, fromString, toString);
   }

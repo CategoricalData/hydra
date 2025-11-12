@@ -1,14 +1,14 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.mantle;
+package hydra.meta;
 
 import java.io.Serializable;
 
 /**
- * The identifier of a type constructor
+ * The identifier of a term expression constructor
  */
-public abstract class TypeVariant implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.mantle.TypeVariant");
+public abstract class TermVariant implements Serializable {
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.meta.TermVariant");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATED = new hydra.core.Name("annotated");
   
@@ -16,9 +16,9 @@ public abstract class TypeVariant implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_EITHER = new hydra.core.Name("either");
   
-  public static final hydra.core.Name FIELD_NAME_FORALL = new hydra.core.Name("forall");
-  
   public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
+  
+  public static final hydra.core.Name FIELD_NAME_LET = new hydra.core.Name("let");
   
   public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
   
@@ -38,6 +38,10 @@ public abstract class TypeVariant implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_SUM = new hydra.core.Name("sum");
   
+  public static final hydra.core.Name FIELD_NAME_TYPE_APPLICATION = new hydra.core.Name("typeApplication");
+  
+  public static final hydra.core.Name FIELD_NAME_TYPE_LAMBDA = new hydra.core.Name("typeLambda");
+  
   public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
   
   public static final hydra.core.Name FIELD_NAME_UNIT = new hydra.core.Name("unit");
@@ -46,7 +50,7 @@ public abstract class TypeVariant implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_WRAP = new hydra.core.Name("wrap");
   
-  private TypeVariant () {
+  private TermVariant () {
   
   }
   
@@ -59,9 +63,9 @@ public abstract class TypeVariant implements Serializable {
     
     R visit(Either instance) ;
     
-    R visit(Forall instance) ;
-    
     R visit(Function instance) ;
+    
+    R visit(Let instance) ;
     
     R visit(List instance) ;
     
@@ -81,6 +85,10 @@ public abstract class TypeVariant implements Serializable {
     
     R visit(Sum instance) ;
     
+    R visit(TypeApplication instance) ;
+    
+    R visit(TypeLambda instance) ;
+    
     R visit(Union instance) ;
     
     R visit(Unit instance) ;
@@ -91,7 +99,7 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(TypeVariant instance) {
+    default R otherwise(TermVariant instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
@@ -107,11 +115,11 @@ public abstract class TypeVariant implements Serializable {
       return otherwise((instance));
     }
     
-    default R visit(Forall instance) {
+    default R visit(Function instance) {
       return otherwise((instance));
     }
     
-    default R visit(Function instance) {
+    default R visit(Let instance) {
       return otherwise((instance));
     }
     
@@ -151,6 +159,14 @@ public abstract class TypeVariant implements Serializable {
       return otherwise((instance));
     }
     
+    default R visit(TypeApplication instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(TypeLambda instance) {
+      return otherwise((instance));
+    }
+    
     default R visit(Union instance) {
       return otherwise((instance));
     }
@@ -168,7 +184,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Annotated extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Annotated extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Annotated (Boolean value) {
@@ -196,7 +212,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Application extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Application extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Application (Boolean value) {
@@ -224,7 +240,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Either extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Either extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Either (Boolean value) {
@@ -252,35 +268,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Forall extends hydra.mantle.TypeVariant implements Serializable {
-    public final Boolean value;
-    
-    public Forall (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Forall)) {
-        return false;
-      }
-      Forall o = (Forall) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  public static final class Function extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Function extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Function (Boolean value) {
@@ -308,7 +296,35 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class List extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Let extends hydra.meta.TermVariant implements Serializable {
+    public final Boolean value;
+    
+    public Let (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Let)) {
+        return false;
+      }
+      Let o = (Let) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class List extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public List (Boolean value) {
@@ -336,7 +352,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Literal extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Literal extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Literal (Boolean value) {
@@ -364,7 +380,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Map extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Map extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Map (Boolean value) {
@@ -392,7 +408,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Maybe extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Maybe extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Maybe (Boolean value) {
@@ -420,7 +436,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Pair extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Pair extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Pair (Boolean value) {
@@ -448,7 +464,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Product extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Product extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Product (Boolean value) {
@@ -476,7 +492,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Record extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Record extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Record (Boolean value) {
@@ -504,7 +520,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Set extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Set extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Set (Boolean value) {
@@ -532,7 +548,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Sum extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Sum extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Sum (Boolean value) {
@@ -560,7 +576,63 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Union extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class TypeApplication extends hydra.meta.TermVariant implements Serializable {
+    public final Boolean value;
+    
+    public TypeApplication (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TypeApplication)) {
+        return false;
+      }
+      TypeApplication o = (TypeApplication) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class TypeLambda extends hydra.meta.TermVariant implements Serializable {
+    public final Boolean value;
+    
+    public TypeLambda (Boolean value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TypeLambda)) {
+        return false;
+      }
+      TypeLambda o = (TypeLambda) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Union extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Union (Boolean value) {
@@ -588,7 +660,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Unit extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Unit extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Unit (Boolean value) {
@@ -616,7 +688,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Variable extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Variable extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Variable (Boolean value) {
@@ -644,7 +716,7 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Wrap extends hydra.mantle.TypeVariant implements Serializable {
+  public static final class Wrap extends hydra.meta.TermVariant implements Serializable {
     public final Boolean value;
     
     public Wrap (Boolean value) {

@@ -2,7 +2,7 @@ package hydra.dsl;
 
 import hydra.compute.FlowState;
 import hydra.core.*;
-import hydra.mantle.Comparison;
+import hydra.util.Comparison;
 import hydra.util.Opt;
 
 import java.math.BigInteger;
