@@ -3,11 +3,13 @@
 module Hydra.Ext.Generation (
   module Hydra.Ext.Generation,
   module Hydra.Ext.Sources.All,
+  module Hydra.Sources.All,
 ) where
 
 import Hydra.Kernel
 import Hydra.Generation
 import Hydra.Ext.Sources.All
+import Hydra.Sources.All
 
 import Hydra.Ext.Java.Language
 import Hydra.Ext.Python.Language
@@ -22,8 +24,6 @@ import Hydra.Ext.Staging.Python.Coder
 import Hydra.Ext.Staging.Scala.Coder
 
 import qualified System.FilePath as FP
-
-import GHC.Stack (HasCallStack) -- TODO: temporary
 
 
 writeCpp :: FP.FilePath -> [Module] -> IO ()
@@ -44,8 +44,7 @@ writePdl = generateSources moduleToPdl
 writeProtobuf :: FP.FilePath -> [Module] -> IO ()
 writeProtobuf = generateSources moduleToProtobuf
 
---writePython :: FP.FilePath -> [Module] -> IO ()
-writePython :: HasCallStack => FP.FilePath -> [Module] -> IO () -- TODO: temporary
+writePython :: FP.FilePath -> [Module] -> IO ()
 writePython = generateSourcesSimple moduleToPython pythonLanguage True
 
 writeScala :: FP.FilePath -> [Module] -> IO ()
