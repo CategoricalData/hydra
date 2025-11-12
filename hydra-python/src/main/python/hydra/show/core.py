@@ -28,6 +28,9 @@ def float_type(ft: hydra.core.FloatType) -> str:
         
         case hydra.core.FloatType.FLOAT64:
             return "float64"
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def integer_type(it: hydra.core.IntegerType) -> str:
     r"""Show an integer type as a string."""
@@ -59,6 +62,9 @@ def integer_type(it: hydra.core.IntegerType) -> str:
         
         case hydra.core.IntegerType.UINT64:
             return "uint64"
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def literal_type(lt: hydra.core.LiteralType) -> str:
     r"""Show a literal type as a string."""
@@ -78,6 +84,9 @@ def literal_type(lt: hydra.core.LiteralType) -> str:
         
         case hydra.core.LiteralTypeString():
             return "string"
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def field_type(ft: hydra.core.FieldType) -> str:
     fname = ft.name.value
@@ -179,6 +188,9 @@ def type(typ: hydra.core.Type) -> str:
             tname = wt.type_name.value
             typ1 = wt.body
             return hydra.lib.strings.cat(("wrap[", tname, "](", type(typ1), ")"))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def float(fv: hydra.core.FloatValue) -> str:
     r"""Show a float value as a string."""
@@ -192,6 +204,9 @@ def float(fv: hydra.core.FloatValue) -> str:
         
         case hydra.core.FloatValueFloat64(value=v3):
             return hydra.lib.strings.cat((hydra.lib.literals.show_float64(v3), ":float64"))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def integer(iv: hydra.core.IntegerValue) -> str:
     r"""Show an integer value as a string."""
@@ -223,6 +238,9 @@ def integer(iv: hydra.core.IntegerValue) -> str:
         
         case hydra.core.IntegerValueUint64(value=v9):
             return hydra.lib.strings.cat((hydra.lib.literals.show_uint64(v9), ":uint64"))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def literal(l: hydra.core.Literal) -> str:
     r"""Show a literal as a string."""
@@ -242,6 +260,9 @@ def literal(l: hydra.core.Literal) -> str:
         
         case hydra.core.LiteralString(value=s):
             return hydra.lib.literals.show_string(s)
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def type_scheme(ts: hydra.core.TypeScheme) -> str:
     r"""Show a type scheme as a string."""
@@ -284,6 +305,9 @@ def elimination(elm: hydra.core.Elimination) -> str:
         
         case hydra.core.EliminationWrap(value=tname):
             return hydra.lib.strings.cat(("unwrap(", tname.value, ")"))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def field(field: hydra.core.Field) -> str:
     fname = field.name.value
@@ -308,6 +332,9 @@ def function(f: hydra.core.Function) -> str:
         
         case hydra.core.FunctionPrimitive(value=name):
             return hydra.lib.strings.cat2(name.value, "!")
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def injection(inj: hydra.core.Injection) -> str:
     r"""Show an injection as a string."""
@@ -417,6 +444,9 @@ def term(t: hydra.core.Term) -> str:
             tname = wt.type_name.value
             term1 = wt.body
             return hydra.lib.strings.cat(("wrap(", tname, "){", term(term1), "}"))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def list[T0](f: Callable[[T0], str], xs: frozenlist[T0]) -> str:
     element_strs = hydra.lib.lists.map(f, xs)

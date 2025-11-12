@@ -83,6 +83,9 @@ def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
         
         case hydra.accessors.TermAccessorWrappedTerm():
             return cast(Maybe[str], Nothing())
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], term: hydra.core.Term) -> hydra.accessors.AccessorGraph:
     r"""Build an accessor graph from a term."""

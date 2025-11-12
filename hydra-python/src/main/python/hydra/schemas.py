@@ -51,6 +51,9 @@ def definition_dependency_namespaces(defs: frozenlist[hydra.module.Definition]) 
             
             case hydra.module.DefinitionTerm(value=term_def):
                 return hydra.rewriting.term_dependency_names(True, True, True, term_def.term)
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     all_names = hydra.lib.sets.unions(hydra.lib.lists.map(def_names, defs))
     return hydra.lib.sets.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map(hydra.names.namespace_of, hydra.lib.sets.to_list(all_names))))
 

@@ -17,3 +17,6 @@ def precision(v1: hydra.util.Precision) -> str:
         
         case hydra.util.PrecisionBits(value=bits):
             return hydra.lib.strings.cat((hydra.lib.literals.show_int32(bits), "-bit"))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")

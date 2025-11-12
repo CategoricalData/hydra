@@ -21,6 +21,9 @@ def function_arity(v1: hydra.core.Function) -> int:
         
         case hydra.core.FunctionPrimitive():
             return 42
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def term_arity(v1: hydra.core.Term) -> int:
     r"""Find the arity (expected number of arguments) of a term."""

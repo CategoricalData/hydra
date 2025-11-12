@@ -55,6 +55,9 @@ def convert_case(from_: hydra.util.CaseConvention, to: hydra.util.CaseConvention
             
             case hydra.util.CaseConvention.UPPER_SNAKE:
                 return by_underscores
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     match to:
         case hydra.util.CaseConvention.CAMEL:
             return decapitalize(hydra.lib.strings.cat(hydra.lib.lists.map((lambda arg_: capitalize(hydra.lib.strings.to_lower(arg_))), parts())))
@@ -67,6 +70,9 @@ def convert_case(from_: hydra.util.CaseConvention, to: hydra.util.CaseConvention
         
         case hydra.util.CaseConvention.UPPER_SNAKE:
             return hydra.lib.strings.intercalate("_", hydra.lib.lists.map(hydra.lib.strings.to_upper, parts()))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def convert_case_camel_to_lower_snake(v1: str) -> str:
     r"""Convert a string from camel case to lower snake case."""
