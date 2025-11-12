@@ -7,7 +7,6 @@ import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Tests
 
-import Hydra.TestData
 import Hydra.TestUtils
 
 import qualified Test.Hspec as H
