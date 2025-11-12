@@ -102,6 +102,11 @@ To see printed outputs, use the `-s` flag:
 pytest -s
 ```
 
+To generate a categorized summary report:
+```bash
+python src/test/python/test_summary_report.py
+```
+
 ## Generate Python code
 
 The Python code in `src/gen-main/python` and `src/gen-test/python` are generated from sources in Hydra's bootstrapping implementation, Hydra-Haskell.
