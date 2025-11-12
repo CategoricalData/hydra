@@ -632,15 +632,15 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
           let subj = Py.SubjectExpressionSimple $ Py.NamedExpressionSimple pyArg
           return [Py.StatementCompound $ Py.CompoundStatementMatch $ Py.MatchStatement subj $ pyCases ++ pyDflt]
         where
-          toDefault isFull dflt = if isFull
-            then pure []
-            else do
-              stmt <- case dflt of
-                Nothing -> pure $ raiseTypeError $ "Unsupported " ++ localNameOf tname
-                Just d -> returnSingle <$> encodeTermInline env False d
-              let patterns = pyClosedPatternToPyPatterns Py.ClosedPatternWildcard
-              let body = indentedBlock Nothing [[stmt]]
-              return [Py.CaseBlock patterns Nothing body]
+          toDefault isFull dflt = do
+            stmt <- case dflt of
+              Nothing -> if isFull
+                then pure $ raiseAssertionError "Unreachable: all variants handled"
+                else pure $ raiseTypeError $ "Unsupported " ++ localNameOf tname
+              Just d -> returnSingle <$> encodeTermInline env False d
+            let patterns = pyClosedPatternToPyPatterns Py.ClosedPatternWildcard
+            let body = indentedBlock Nothing [[stmt]]
+            return [Py.CaseBlock patterns Nothing body]
           toCaseBlock isEnum (Field fname fterm) = case deannotateTerm fterm of
             TermFunction (FunctionLambda lam@(Lambda v _ body)) -> do
                 stmts <- encodeTermMultiline env2 body
