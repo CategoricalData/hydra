@@ -195,7 +195,7 @@ matchUnionDef = define "matchUnion" $
   "tname" ~> "pairs" ~> "term" ~>
   "stripped" <~ ref Rewriting.deannotateAndDetypeTermDef @@ var "term" $
   "mapping" <~ Maps.fromList (var "pairs") $
-  trace "match union" $
+--  trace "match union" $
   cases _Term (var "stripped")
     (Just (ref Monads.unexpectedDef @@
       (Strings.cat $ list [

@@ -20,6 +20,8 @@ import qualified Hydra.Sources.Json.Extract as JsonExtract
 import qualified Hydra.Sources.Json.Language as JsonLanguage
 import Hydra.Sources.Test.TestGraph
 import Hydra.Sources.Test.TestSuite
+import Hydra.Sources.Test.TestTerms
+import Hydra.Sources.Test.TestTypes
 import Hydra.Sources.Yaml.Model
 
 
@@ -46,7 +48,9 @@ otherModules = [
 testModules :: [Module]
 testModules = [
   testGraphModule,
-  testSuiteModule]
+  testSuiteModule,
+  testTermsModule,
+  testTypesModule]
 
 kernelModules :: [Module]
 kernelModules = kernelTypesModules ++ kernelTermsModules
