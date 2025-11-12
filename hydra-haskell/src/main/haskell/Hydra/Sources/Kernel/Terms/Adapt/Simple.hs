@@ -396,6 +396,7 @@ schemaGraphToDefinitionsDef = define "schemaGraphToDefinitions" $
       ("names" ~> Lists.map (var "toDef") $
         Lists.map ("n" ~> tuple2 (var "n") (Maybes.fromJust $ Maps.lookup (var "n") (var "tmap1"))) (var "names"))
       (var "nameLists"))
+--  Flows.fail $ "schema graph for definitions: " ++ (ref ShowGraph.graphDef @@ var "graph")
 
 termAlternativesDef :: TBinding (Term -> Flow Graph [Term])
 termAlternativesDef = define "termAlternatives" $

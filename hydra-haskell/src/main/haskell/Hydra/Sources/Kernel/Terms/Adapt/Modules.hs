@@ -147,8 +147,9 @@ adaptedModuleDefinitionsDef = define "adaptedModuleDefinitions" $
     "typ" <~ Core.typeApplicationTermType (var "tt") $
     "name" <~ Core.bindingName (var "el") $
     Logic.ifElse (ref Annotations.isNativeTypeDef @@ var "el")
-      ("adaptedTyp" <<~ ("coreTyp" <<~ ref DecodeCore.typeDef @@ var "term" $
-                         ref adaptTypeToLanguageDef @@ var "lang" @@ var "coreTyp") $
+      ("adaptedTyp" <<~ (
+        "coreTyp" <<~ (trace "adapt module definitions" $ ref DecodeCore.typeDef @@ var "term") $
+        ref adaptTypeToLanguageDef @@ var "lang" @@ var "coreTyp") $
        produce $ Module.definitionType $ Module.typeDefinition (var "name") (var "adaptedTyp"))
       (Maybes.maybe
         (Flows.fail $ Strings.cat2 (string "no adapter for element ") (unwrap _Name @@ var "name"))

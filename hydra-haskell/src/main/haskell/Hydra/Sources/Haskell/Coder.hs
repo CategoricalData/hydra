@@ -799,7 +799,7 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
         H._ConstructorWithComments_comments>>: var "comments"]] $
     ref Monads.withTraceDef @@ (Strings.cat2 (string "type element ") (Core.unName $ var "elementName")) @@ (
       bind "g" (ref Monads.getStateDef) $
-      bind "t" (ref DecodeCore.typeDef @@ var "term") $
+      bind "t" (trace "to type declarations" $ ref DecodeCore.typeDef @@ var "term") $
       bind "isSer" (ref Schemas.isSerializableDef @@ var "el") $ lets [
       "deriv">: wrap H._Deriving $ Logic.ifElse (var "isSer")
         (Lists.map (ref HaskellUtils.rawNameDef) (list [string "Eq", string "Ord", string "Read", string "Show"]))
