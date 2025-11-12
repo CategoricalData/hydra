@@ -5,7 +5,8 @@ module Hydra.Test.TestSuite where
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Mantle as Mantle
-import qualified Hydra.Test.TestGraph as TestGraph
+import qualified Hydra.Test.TestTerms as TestTerms
+import qualified Hydra.Test.TestTypes as TestTypes
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -5809,7 +5810,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                 Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
-                  Core.caseStatementTypeName = TestGraph.testTypeSimpleNumberName,
+                  Core.caseStatementTypeName = TestTypes.testTypeSimpleNumberName,
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
                     Core.Field {
@@ -5827,7 +5828,7 @@ inferenceTests = Testing.TestGroup {
                 Testing.inferenceTestCaseOutput = Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Core.TypeVariable TestGraph.testTypeSimpleNumberName),
+                    Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypeSimpleNumberName),
                     Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
@@ -5836,7 +5837,7 @@ inferenceTests = Testing.TestGroup {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                 Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
-                  Core.caseStatementTypeName = TestGraph.testTypeUnionMonomorphicName,
+                  Core.caseStatementTypeName = TestTypes.testTypeUnionMonomorphicName,
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
                     Core.Field {
@@ -5860,7 +5861,7 @@ inferenceTests = Testing.TestGroup {
                 Testing.inferenceTestCaseOutput = Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Core.TypeVariable TestGraph.testTypeUnionMonomorphicName),
+                    Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypeUnionMonomorphicName),
                     Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeBoolean)}))}})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
@@ -5878,12 +5879,12 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataName = "#1",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                      Core.projectionTypeName = TestGraph.testTypePersonName,
+                      Core.projectionTypeName = TestTypes.testTypePersonName,
                       Core.projectionField = (Core.Name "firstName")})))),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeVariable TestGraph.testTypePersonName),
+                        Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypePersonName),
                         Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -5902,7 +5903,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataName = "#1",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermRecord (Core.Record {
-                      Core.recordTypeName = TestGraph.testTypeLatLonName,
+                      Core.recordTypeName = TestTypes.testTypeLatLonName,
                       Core.recordFields = [
                         Core.Field {
                           Core.fieldName = (Core.Name "lat"),
@@ -5912,7 +5913,7 @@ inferenceTests = Testing.TestGroup {
                           Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (0-122.4194))))}]})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypeLatLonName)}})),
+                      Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeLatLonName)}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForMinimalInference"]},
@@ -5920,7 +5921,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermRecord (Core.Record {
-                      Core.recordTypeName = TestGraph.testTypeLatLonPolyName,
+                      Core.recordTypeName = TestTypes.testTypeLatLonPolyName,
                       Core.recordFields = [
                         Core.Field {
                           Core.fieldName = (Core.Name "lat"),
@@ -5931,7 +5932,7 @@ inferenceTests = Testing.TestGroup {
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
-                        Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeLatLonPolyName),
+                        Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeLatLonPolyName),
                         Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -5943,7 +5944,7 @@ inferenceTests = Testing.TestGroup {
                       Core.lambdaParameter = (Core.Name "lon"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermRecord (Core.Record {
-                        Core.recordTypeName = TestGraph.testTypeLatLonPolyName,
+                        Core.recordTypeName = TestTypes.testTypeLatLonPolyName,
                         Core.recordFields = [
                           Core.Field {
                             Core.fieldName = (Core.Name "lat"),
@@ -5956,7 +5957,7 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                         Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)),
                         Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
-                          Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeLatLonPolyName),
+                          Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeLatLonPolyName),
                           Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -5968,7 +5969,7 @@ inferenceTests = Testing.TestGroup {
                       Core.lambdaParameter = (Core.Name "latlon"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermRecord (Core.Record {
-                        Core.recordTypeName = TestGraph.testTypeLatLonPolyName,
+                        Core.recordTypeName = TestTypes.testTypeLatLonPolyName,
                         Core.recordFields = [
                           Core.Field {
                             Core.fieldName = (Core.Name "lat"),
@@ -5982,7 +5983,7 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                         Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                         Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
-                          Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeLatLonPolyName),
+                          Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeLatLonPolyName),
                           Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -5990,10 +5991,10 @@ inferenceTests = Testing.TestGroup {
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#5",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = TestGraph.testDataArthur,
+                    Testing.inferenceTestCaseInput = TestTerms.testDataArthur,
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypePersonName)}})),
+                      Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypePersonName)}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForMinimalInference"]}]},
@@ -6006,7 +6007,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataName = "#1",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermRecord (Core.Record {
-                      Core.recordTypeName = TestGraph.testTypeIntListName,
+                      Core.recordTypeName = TestTypes.testTypeIntListName,
                       Core.recordFields = [
                         Core.Field {
                           Core.fieldName = (Core.Name "head"),
@@ -6014,7 +6015,7 @@ inferenceTests = Testing.TestGroup {
                         Core.Field {
                           Core.fieldName = (Core.Name "tail"),
                           Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
-                            Core.recordTypeName = TestGraph.testTypeIntListName,
+                            Core.recordTypeName = TestTypes.testTypeIntListName,
                             Core.recordFields = [
                               Core.Field {
                                 Core.fieldName = (Core.Name "head"),
@@ -6024,7 +6025,7 @@ inferenceTests = Testing.TestGroup {
                                 Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypeIntListName)}})),
+                      Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeIntListName)}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForMinimalInference"]},
@@ -6036,7 +6037,7 @@ inferenceTests = Testing.TestGroup {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermRecord (Core.Record {
-                          Core.recordTypeName = TestGraph.testTypeIntListName,
+                          Core.recordTypeName = TestTypes.testTypeIntListName,
                           Core.recordFields = [
                             Core.Field {
                               Core.fieldName = (Core.Name "head"),
@@ -6044,7 +6045,7 @@ inferenceTests = Testing.TestGroup {
                             Core.Field {
                               Core.fieldName = (Core.Name "tail"),
                               Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
-                                Core.recordTypeName = TestGraph.testTypeIntListName,
+                                Core.recordTypeName = TestTypes.testTypeIntListName,
                                 Core.recordFields = [
                                   Core.Field {
                                     Core.fieldName = (Core.Name "head"),
@@ -6055,7 +6056,7 @@ inferenceTests = Testing.TestGroup {
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypeIntListName)}})),
+                      Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeIntListName)}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForMinimalInference"]},
@@ -6063,7 +6064,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataName = "#3",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermRecord (Core.Record {
-                      Core.recordTypeName = TestGraph.testTypeListName,
+                      Core.recordTypeName = TestTypes.testTypeListName,
                       Core.recordFields = [
                         Core.Field {
                           Core.fieldName = (Core.Name "head"),
@@ -6071,7 +6072,7 @@ inferenceTests = Testing.TestGroup {
                         Core.Field {
                           Core.fieldName = (Core.Name "tail"),
                           Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
-                            Core.recordTypeName = TestGraph.testTypeListName,
+                            Core.recordTypeName = TestTypes.testTypeListName,
                             Core.recordFields = [
                               Core.Field {
                                 Core.fieldName = (Core.Name "head"),
@@ -6082,7 +6083,7 @@ inferenceTests = Testing.TestGroup {
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
-                        Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeListName),
+                        Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeListName),
                         Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -6095,7 +6096,7 @@ inferenceTests = Testing.TestGroup {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermRecord (Core.Record {
-                          Core.recordTypeName = TestGraph.testTypeListName,
+                          Core.recordTypeName = TestTypes.testTypeListName,
                           Core.recordFields = [
                             Core.Field {
                               Core.fieldName = (Core.Name "head"),
@@ -6103,7 +6104,7 @@ inferenceTests = Testing.TestGroup {
                             Core.Field {
                               Core.fieldName = (Core.Name "tail"),
                               Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
-                                Core.recordTypeName = TestGraph.testTypeListName,
+                                Core.recordTypeName = TestTypes.testTypeListName,
                                 Core.recordFields = [
                                   Core.Field {
                                     Core.fieldName = (Core.Name "head"),
@@ -6115,7 +6116,7 @@ inferenceTests = Testing.TestGroup {
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
-                        Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeListName),
+                        Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeListName),
                         Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -6127,7 +6128,7 @@ inferenceTests = Testing.TestGroup {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermRecord (Core.Record {
-                        Core.recordTypeName = TestGraph.testTypeListName,
+                        Core.recordTypeName = TestTypes.testTypeListName,
                         Core.recordFields = [
                           Core.Field {
                             Core.fieldName = (Core.Name "head"),
@@ -6135,7 +6136,7 @@ inferenceTests = Testing.TestGroup {
                           Core.Field {
                             Core.fieldName = (Core.Name "tail"),
                             Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
-                              Core.recordTypeName = TestGraph.testTypeListName,
+                              Core.recordTypeName = TestTypes.testTypeListName,
                               Core.recordFields = [
                                 Core.Field {
                                   Core.fieldName = (Core.Name "head"),
@@ -6149,7 +6150,7 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                         Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                         Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
-                          Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeListName),
+                          Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeListName),
                           Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -6167,7 +6168,7 @@ inferenceTests = Testing.TestGroup {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermRecord (Core.Record {
-                          Core.recordTypeName = TestGraph.testTypeBuddyListAName,
+                          Core.recordTypeName = TestTypes.testTypeBuddyListAName,
                           Core.recordFields = [
                             Core.Field {
                               Core.fieldName = (Core.Name "head"),
@@ -6175,7 +6176,7 @@ inferenceTests = Testing.TestGroup {
                             Core.Field {
                               Core.fieldName = (Core.Name "tail"),
                               Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
-                                Core.recordTypeName = TestGraph.testTypeBuddyListBName,
+                                Core.recordTypeName = TestTypes.testTypeBuddyListBName,
                                 Core.recordFields = [
                                   Core.Field {
                                     Core.fieldName = (Core.Name "head"),
@@ -6187,7 +6188,7 @@ inferenceTests = Testing.TestGroup {
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
-                        Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeBuddyListAName),
+                        Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeBuddyListAName),
                         Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -6199,7 +6200,7 @@ inferenceTests = Testing.TestGroup {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermRecord (Core.Record {
-                        Core.recordTypeName = TestGraph.testTypeBuddyListAName,
+                        Core.recordTypeName = TestTypes.testTypeBuddyListAName,
                         Core.recordFields = [
                           Core.Field {
                             Core.fieldName = (Core.Name "head"),
@@ -6207,7 +6208,7 @@ inferenceTests = Testing.TestGroup {
                           Core.Field {
                             Core.fieldName = (Core.Name "tail"),
                             Core.fieldTerm = (Core.TermMaybe (Just (Core.TermRecord (Core.Record {
-                              Core.recordTypeName = TestGraph.testTypeBuddyListBName,
+                              Core.recordTypeName = TestTypes.testTypeBuddyListBName,
                               Core.recordFields = [
                                 Core.Field {
                                   Core.fieldName = (Core.Name "head"),
@@ -6221,7 +6222,7 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                         Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                         Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
-                          Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeBuddyListAName),
+                          Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeBuddyListAName),
                           Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -6240,13 +6241,13 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataName = "#1",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermUnion (Core.Injection {
-                      Core.injectionTypeName = TestGraph.testTypeTimestampName,
+                      Core.injectionTypeName = TestTypes.testTypeTimestampName,
                       Core.injectionField = Core.Field {
                         Core.fieldName = (Core.Name "unixTimeMillis"),
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 1638200308368)))}})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypeTimestampName)}})),
+                      Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeTimestampName)}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForMinimalInference"]},
@@ -6254,13 +6255,13 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermUnion (Core.Injection {
-                      Core.injectionTypeName = TestGraph.testTypeUnionMonomorphicName,
+                      Core.injectionTypeName = TestTypes.testTypeUnionMonomorphicName,
                       Core.injectionField = Core.Field {
                         Core.fieldName = (Core.Name "string"),
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypeUnionMonomorphicName)}})),
+                      Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeUnionMonomorphicName)}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForMinimalInference"]}]},
@@ -6273,7 +6274,7 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataName = "#1",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermUnion (Core.Injection {
-                      Core.injectionTypeName = TestGraph.testTypeUnionPolymorphicRecursiveName,
+                      Core.injectionTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                       Core.injectionField = Core.Field {
                         Core.fieldName = (Core.Name "bool"),
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralBoolean True))}})),
@@ -6281,7 +6282,7 @@ inferenceTests = Testing.TestGroup {
                       Core.typeSchemeVariables = [
                         Core.Name "t0"],
                       Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
-                        Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeUnionPolymorphicRecursiveName),
+                        Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeUnionPolymorphicRecursiveName),
                         Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -6290,14 +6291,14 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermUnion (Core.Injection {
-                      Core.injectionTypeName = TestGraph.testTypeUnionPolymorphicRecursiveName,
+                      Core.injectionTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                       Core.injectionField = Core.Field {
                         Core.fieldName = (Core.Name "value"),
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
-                        Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeUnionPolymorphicRecursiveName),
+                        Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeUnionPolymorphicRecursiveName),
                         Core.applicationTypeArgument = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -6310,20 +6311,20 @@ inferenceTests = Testing.TestGroup {
                         Core.Binding {
                           Core.bindingName = (Core.Name "other"),
                           Core.bindingTerm = (Core.TermUnion (Core.Injection {
-                            Core.injectionTypeName = TestGraph.testTypeUnionPolymorphicRecursiveName,
+                            Core.injectionTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                             Core.injectionField = Core.Field {
                               Core.fieldName = (Core.Name "value"),
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}})),
                           Core.bindingType = Nothing}],
                       Core.letBody = (Core.TermUnion (Core.Injection {
-                        Core.injectionTypeName = TestGraph.testTypeUnionPolymorphicRecursiveName,
+                        Core.injectionTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                         Core.injectionField = Core.Field {
                           Core.fieldName = (Core.Name "other"),
                           Core.fieldTerm = (Core.TermVariable (Core.Name "other"))}}))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
-                        Core.applicationTypeFunction = (Core.TypeVariable TestGraph.testTypeUnionPolymorphicRecursiveName),
+                        Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeUnionPolymorphicRecursiveName),
                         Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -6342,11 +6343,11 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataName = "#1",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = TestGraph.testTypeStringAliasName,
+                      Core.wrappedTermTypeName = TestTypes.testTypeStringAliasName,
                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "foo"))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeVariable TestGraph.testTypeStringAliasName)}})),
+                      Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeStringAliasName)}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForMinimalInference"]},
@@ -6357,13 +6358,13 @@ inferenceTests = Testing.TestGroup {
                       Core.lambdaParameter = (Core.Name "v"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = TestGraph.testTypeStringAliasName,
+                        Core.wrappedTermTypeName = TestTypes.testTypeStringAliasName,
                         Core.wrappedTermBody = (Core.TermVariable (Core.Name "v"))}))}))),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                         Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
-                        Core.functionTypeCodomain = (Core.TypeVariable TestGraph.testTypeStringAliasName)}))}})),
+                        Core.functionTypeCodomain = (Core.TypeVariable TestTypes.testTypeStringAliasName)}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
                     Testing.Tag "disabledForMinimalInference"]}]},
@@ -6375,11 +6376,11 @@ inferenceTests = Testing.TestGroup {
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "#1",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap TestGraph.testTypeStringAliasName))),
+                    Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap TestTypes.testTypeStringAliasName))),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeVariable TestGraph.testTypeStringAliasName),
+                        Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypeStringAliasName),
                         Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = [
@@ -6388,9 +6389,9 @@ inferenceTests = Testing.TestGroup {
                   Testing.testCaseWithMetadataName = "#2",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
                     Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap TestGraph.testTypeStringAliasName))),
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap TestTypes.testTypeStringAliasName))),
                       Core.applicationArgument = (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = TestGraph.testTypeStringAliasName,
+                        Core.wrappedTermTypeName = TestTypes.testTypeStringAliasName,
                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "foo"))}))})),
                     Testing.inferenceTestCaseOutput = Core.TypeScheme {
                       Core.typeSchemeVariables = [],

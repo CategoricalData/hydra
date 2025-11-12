@@ -55,7 +55,7 @@ adaptedModuleDefinitions lang mod =
                     let typ = (Core.typeApplicationTermType tt)
                     in  
                       let name = (Core.bindingName el)
-                      in (Logic.ifElse (Annotations.isNativeType el) (Flows.bind (Flows.bind (Core_.type_ term) (\coreTyp -> adaptTypeToLanguage lang coreTyp)) (\adaptedTyp -> Flows.pure (Module.DefinitionType (Module.TypeDefinition {
+                      in (Logic.ifElse (Annotations.isNativeType el) (Flows.bind (Flows.bind (Monads.withTrace "adapt module definitions" (Core_.type_ term)) (\coreTyp -> adaptTypeToLanguage lang coreTyp)) (\adaptedTyp -> Flows.pure (Module.DefinitionType (Module.TypeDefinition {
                         Module.typeDefinitionName = name,
                         Module.typeDefinitionType = adaptedTyp})))) (Maybes.maybe (Flows.fail (Strings.cat2 "no adapter for element " (Core.unName name))) (\adapter -> Flows.bind (Compute.coderEncode (Compute.adapterCoder adapter) term) (\adapted -> Flows.pure (Module.DefinitionTerm (Module.TermDefinition {
                         Module.termDefinitionName = name,

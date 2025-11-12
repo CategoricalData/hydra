@@ -557,7 +557,7 @@ toTypeDeclarations namespaces el term =
                     Ast.ordinaryConstructorName = (Utils.simpleName nm),
                     Ast.ordinaryConstructorFields = typeList})),
                   Ast.constructorWithCommentsComments = comments}))))))
-  in (Monads.withTrace (Strings.cat2 "type element " (Core.unName elementName)) (Flows.bind Monads.getState (\g -> Flows.bind (Core_.type_ term) (\t -> Flows.bind (Schemas.isSerializable el) (\isSer ->  
+  in (Monads.withTrace (Strings.cat2 "type element " (Core.unName elementName)) (Flows.bind Monads.getState (\g -> Flows.bind (Monads.withTrace "to type declarations" (Core_.type_ term)) (\t -> Flows.bind (Schemas.isSerializable el) (\isSer ->  
     let deriv = (Ast.Deriving (Logic.ifElse isSer (Lists.map Utils.rawName [
             "Eq",
             "Ord",
