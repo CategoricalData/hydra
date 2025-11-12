@@ -1,11 +1,17 @@
-import subprocess
+"""Configure pytest for Hydra tests."""
 
-from pytest import Session
+from __future__ import annotations
 
+import sys
+from pathlib import Path
 
-def pytest_sessionstart(session: Session):
-    """Install the package before running tests"""
-    subprocess.run(["uv", "build"], check=True)
-    subprocess.run(
-        ["uv", "pip", "install", "dist/hydra-0.12.0-py3-none-any.whl"], check=True
-    )
+# Add source paths to Python path for test imports
+root = Path(__file__).parent.parent.parent
+main_path = root / "main" / "python"
+gen_test_path = root / "gen-test" / "python"
+
+# Insert at beginning of sys.path to ensure they're found first
+# IMPORTANT: main_path must come before gen_test_path so that the full hydra
+# package from src/main/python is found first, then hydra.test from gen-test
+sys.path.insert(0, str(gen_test_path.resolve()))
+sys.path.insert(0, str(main_path.resolve()))

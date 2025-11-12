@@ -61,27 +61,43 @@ pyright
 
 ## Testing
 
-To run the all the tests,
+Hydra-Python has two types of tests: the **common test suite** (shared across all Hydra implementations) and **Python-specific tests**. See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testing) for comprehensive documentation.
+
+### Common Test Suite
+
+The common test suite (`hydra.test.testSuite`) ensures parity across all Hydra implementations. **Passing all common test suite cases is the criterion for a true Hydra implementation.**
+
+To run only the common test suite:
+```bash
+pytest src/test/python/test_suite_runner.py
+```
+
+The test suite is generated from Hydra DSL sources and includes:
+- Primitive function tests (lists, strings, etc.)
+- Case conversion tests (camelCase, snake_case, etc.)
+- Type inference tests
+- Evaluation tests (currently skipped - integration in progress)
+
+### Python-Specific Tests
+
+Python-specific tests validate implementation details and Python-specific functionality:
+
+To run all tests (common suite + Python-specific):
 ```bash
 pytest
 ```
 
-To run a specific test,
+To run a specific test file:
 ```bash
 pytest src/test/python/test_grammar.py
 ```
 
-To match a specific test,
+To match a specific test by name:
 ```bash
 pytest -k test_grammar
 ```
-or
-To match a specific test,
-```bash
-pytest -k test_math_grammar
-```
 
-Additionally, if you want to see printed outputs, you can run the tests with the `-s` flag.
+To see printed outputs, use the `-s` flag:
 ```bash
 pytest -s
 ```
@@ -94,17 +110,17 @@ for more information on how this works.
 You can generate Hydra-Python kernel and test code by first entering GHCi
 
 ```bash
-cd ../hydra-haskell && stack ghci
+cd ../hydra-ext && stack ghci
 ```
 
 And then running the following commands in the GHC REPL.
 
 ```haskell
-writePython "../hydra-python/src/gen-main/python" (hydraCoreModule:tier1TypeModules)
+writePython "../hydra-python/src/main/python" kernelModules
 writePython "../hydra-python/src/gen-test/python" testModules
 ```
 
-This will generate `hydra/core` and the tier-0 kernel modules, as well as the test suite.
+This will generate the entire Hydra kernel, as well as the common test suite.
 Support for generating the rest of the kernel code is currently in progress.
 
 ### Validate generated code
