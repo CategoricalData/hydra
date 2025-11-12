@@ -56,7 +56,6 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils as AdaptUtils
-import qualified Hydra.Sources.Kernel.Terms.Describe.Core as DescribeCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
@@ -65,7 +64,7 @@ import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 module_ :: Module
 module_ = Module (Namespace "hydra.adapt.literals") elements
-    [ExtractCore.module_, Monads.module_, DescribeCore.module_, AdaptUtils.module_, ShowCore.module_, Variants.module_]
+    [ExtractCore.module_, Monads.module_, AdaptUtils.module_, ShowCore.module_, Variants.module_]
     kernelTypesModules $
     Just "Adapter framework for literal types and terms"
   where
@@ -175,8 +174,8 @@ floatAdapterDef = define "floatAdapter" $
       ("fv" ~> produce (ref convertFloatValueDef @@ var "source" @@ var "fv")) $
     "msg" <~ ref disclaimerDef
       @@ var "lossy"
-      @@ (ref DescribeCore.floatTypeDef @@ var "source")
-      @@ (ref DescribeCore.floatTypeDef @@ var "target") $
+      @@ (ref ShowCore.floatTypeDef @@ var "source")
+      @@ (ref ShowCore.floatTypeDef @@ var "target") $
     ref Monads.warnDef
       @@ var "msg"
       @@ (produce (Compute.adapter (var "lossy") (var "source") (var "target") (var "step")))) $
@@ -193,7 +192,7 @@ floatAdapterDef = define "floatAdapter" $
     @@ var "alts"
     @@ var "supported"
     @@ ref ShowCore.floatTypeDef
-    @@ ref DescribeCore.floatTypeDef
+    @@ ref ShowCore.floatTypeDef
     @@ var "ft"
 
 integerAdapterDef :: TBinding (IntegerType -> Flow AdapterContext (SymmetricAdapter s IntegerType IntegerValue))
@@ -234,8 +233,8 @@ integerAdapterDef = define "integerAdapter" $
       ("iv" ~> produce (ref convertIntegerValueDef @@ var "source" @@ var "iv")) $
     "msg" <~ ref disclaimerDef
       @@ var "lossy"
-      @@ (ref DescribeCore.integerTypeDef @@ var "source")
-      @@ (ref DescribeCore.integerTypeDef @@ var "target") $
+      @@ (ref ShowCore.integerTypeDef @@ var "source")
+      @@ (ref ShowCore.integerTypeDef @@ var "target") $
     ref Monads.warnDef
       @@ var "msg"
       @@ (produce (Compute.adapter (var "lossy") (var "source") (var "target") (var "step")))) $
@@ -258,7 +257,7 @@ integerAdapterDef = define "integerAdapter" $
     @@ var "alts"
     @@ var "supported"
     @@ ref ShowCore.integerTypeDef
-    @@ ref DescribeCore.integerTypeDef
+    @@ ref ShowCore.integerTypeDef
     @@ var "it"
 
 literalAdapterDef :: TBinding (LiteralType -> Flow AdapterContext (SymmetricAdapter s LiteralType Literal))
@@ -364,5 +363,5 @@ literalAdapterDef = define "literalAdapter" $
     @@ var "alts"
     @@ var "supported"
     @@ ref ShowCore.literalTypeDef
-    @@ ref DescribeCore.literalTypeDef
+    @@ ref ShowCore.literalTypeDef
     @@ var "lt"

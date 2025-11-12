@@ -9,7 +9,6 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Describe.Core as Core__
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Flows as Flows
@@ -23,6 +22,7 @@ import qualified Hydra.Module as Module
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Show.Core as Core__
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L

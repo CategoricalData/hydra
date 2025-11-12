@@ -13,8 +13,6 @@ import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decode.Core     as DecodeCore
-import qualified Hydra.Sources.Kernel.Terms.Describe.Core   as DescribeCore
-import qualified Hydra.Sources.Kernel.Terms.Describe.Util   as DescribeUtil
 import qualified Hydra.Sources.Kernel.Terms.Encode.Core     as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core    as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Util    as ExtractUtil
@@ -55,8 +53,6 @@ kernelTermsModules = [
   Checking.module_,
   Constants.module_,
   DecodeCore.module_,
-  DescribeCore.module_,
-  DescribeUtil.module_,
   EncodeCore.module_,
   ExtractCore.module_,
   ExtractUtil.module_,
