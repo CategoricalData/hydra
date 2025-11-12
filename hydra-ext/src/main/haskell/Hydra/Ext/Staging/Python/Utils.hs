@@ -205,11 +205,16 @@ projectFromExpression :: Py.Expression -> Py.Name -> Py.Expression
 projectFromExpression exp name = pyPrimaryToPyExpression $ Py.PrimaryCompound $
   Py.PrimaryWithRhs (pyExpressionToPyPrimary exp) $ Py.PrimaryRhsProject name
 
+raiseAssertionError :: String -> Py.Statement
+raiseAssertionError msg = pySimpleStatementToPyStatement $ Py.SimpleStatementRaise
+    $ Py.RaiseStatement $ Just $ Py.RaiseExpression err Nothing
+  where
+    err = functionCall (pyNameToPyPrimary $ Py.Name "AssertionError") [doubleQuotedString msg]
+
 raiseTypeError :: String -> Py.Statement
 raiseTypeError msg = pySimpleStatementToPyStatement $ Py.SimpleStatementRaise
     $ Py.RaiseStatement $ Just $ Py.RaiseExpression err Nothing
   where
-    err :: Py.Expression
     err = functionCall (pyNameToPyPrimary $ Py.Name "TypeError") [doubleQuotedString msg]
 
 returnSingle :: Py.Expression -> Py.Statement
