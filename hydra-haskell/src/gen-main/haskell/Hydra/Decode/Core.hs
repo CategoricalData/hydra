@@ -106,11 +106,11 @@ string term = (Core_.string (Rewriting.deannotateAndDetypeTerm term))
 
 -- | Decode a type from a term
 type_ :: (Core.Term -> Compute.Flow Graph.Graph Core.Type)
-type_ dat = (Monads.withTrace "dbg 4" ((\x -> case x of
+type_ dat = ((\x -> case x of
   Core.TermAnnotated v1 -> (Flows.map (\t -> Core.TypeAnnotated (Core.AnnotatedType {
     Core.annotatedTypeBody = t,
     Core.annotatedTypeAnnotation = (Core.annotatedTermAnnotation v1)})) (type_ (Core.annotatedTermBody v1)))
-  _ -> (Lexical.matchUnion (Core.Name "hydra.core.Type") [
+  _ -> (Monads.withTrace "dbg 4" (Lexical.matchUnion (Core.Name "hydra.core.Type") [
     (Core.Name "application", (\at -> Flows.map (\x -> Core.TypeApplication x) (applicationType at))),
     (Core.Name "either", (\et -> Flows.map (\x -> Core.TypeEither x) (eitherType et))),
     (Core.Name "forall", (\ft -> Flows.map (\x -> Core.TypeForall x) (forallType ft))),
@@ -126,7 +126,7 @@ type_ dat = (Monads.withTrace "dbg 4" ((\x -> case x of
     (Core.Name "union", (\rt -> Flows.map (\x -> Core.TypeUnion x) (rowType rt))),
     (Core.Name "unit", (\_ -> Flows.pure Core.TypeUnit)),
     (Core.Name "variable", (\n -> Flows.map (\x -> Core.TypeVariable x) (name n))),
-    (Core.Name "wrap", (\wt -> Flows.map (\x -> Core.TypeWrap x) (wrappedType wt)))] dat)) dat))
+    (Core.Name "wrap", (\wt -> Flows.map (\x -> Core.TypeWrap x) (wrappedType wt)))] dat))) dat)
 
 -- | Decode a type scheme from a term
 typeScheme :: (Core.Term -> Compute.Flow Graph.Graph Core.TypeScheme)
