@@ -405,7 +405,7 @@ typeElementDef = define "typeElement" $
   "dataTerm" <~ ref normalizeTermAnnotationsDef @@ (Core.termAnnotated (Core.annotatedTerm
     (ref EncodeCore.typeDef @@ var "typ")
     (Maps.fromList (list [tuple2 (ref Constants.key_typeDef) (var "schemaTerm")])))) $
-  Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list []) (var "typ")))
+  Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list []) (Core.typeVariable $ Core.nameLift _Type)))
 
 whenFlagDef :: TBinding (Name -> Flow s a -> Flow s a -> Flow s a)
 whenFlagDef = define "whenFlag" $

@@ -125,13 +125,12 @@ definitionDependencyNamespacesDef :: TBinding ([Definition] -> S.Set Namespace)
 definitionDependencyNamespacesDef = define "definitionDependencyNamespaces" $
   doc "Get dependency namespaces from definitions" $
   "defs" ~>
-  "defNames" <~ ("def" ~>
-    match _Definition Nothing [
-      _Definition_type>>: "typeDef" ~>
-        ref Rewriting.typeDependencyNamesDef @@ true @@ Module.typeDefinitionType (var "typeDef"),
-      _Definition_term>>: "termDef" ~>
-        ref Rewriting.termDependencyNamesDef @@ true @@ true @@ true @@ Module.termDefinitionTerm (var "termDef")]
-    @@ var "def") $
+  "defNames" <~ ("def" ~> cases _Definition (var "def")
+    Nothing [
+    _Definition_type>>: "typeDef" ~>
+      ref Rewriting.typeDependencyNamesDef @@ true @@ Module.typeDefinitionType (var "typeDef"),
+    _Definition_term>>: "termDef" ~>
+      ref Rewriting.termDependencyNamesDef @@ true @@ true @@ true @@ Module.termDefinitionTerm (var "termDef")]) $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
   Sets.fromList (Maybes.cat (Lists.map (ref Names.namespaceOfDef) (Sets.toList (var "allNames"))))
 
@@ -148,12 +147,11 @@ dependencyNamespacesDef = define "dependencyNamespaces" $
         (Core.bindingType (var "el")))
       Sets.empty $
     Logic.ifElse (ref EncodeCore.isEncodedTypeDef @@ (ref Rewriting.deannotateTermDef @@ var "term"))
-      (Flows.bind (ref DecodeCore.typeDef @@ var "term") (
+      (Flows.bind (trace "dependency namespace" $ ref DecodeCore.typeDef @@ var "term") (
         "typ" ~> Flows.pure (Sets.unions (list [
           var "dataNames", var "schemaNames",
           ref Rewriting.typeDependencyNamesDef @@ true @@ var "typ"]))))
       (Flows.pure (Sets.unions (list [var "dataNames", var "schemaNames"])))) $
-  trace "namespaces" $
   Flows.bind (Flows.mapList (var "depNames") (var "els")) (
     "namesList" ~> Flows.pure (Sets.fromList (Maybes.cat (Lists.map (ref Names.namespaceOfDef) (
       Sets.toList (Sets.delete (ref Constants.placeholderNameDef) (Sets.unions (var "namesList"))))))))
@@ -162,11 +160,10 @@ dereferenceTypeDef :: TBinding (Name -> Flow Graph (Maybe Type))
 dereferenceTypeDef = define "dereferenceType" $
   doc "Dereference a type name to get the actual type" $
   "name" ~>
-  trace "dereference type" $
   "mel" <<~ ref Lexical.dereferenceElementDef @@ var "name" $
   optCases (var "mel")
     (Flows.pure nothing)
-    ("el" ~> Flows.map (unaryFunction just) $ ref DecodeCore.typeDef @@ Core.bindingTerm (var "el"))
+    ("el" ~> Flows.map (unaryFunction just) $ (trace "dereference type" $ ref DecodeCore.typeDef @@ Core.bindingTerm (var "el")))
 
 elementAsTypeApplicationTermDef :: TBinding (Binding -> Flow Graph TypeApplicationTerm)
 elementAsTypeApplicationTermDef = define "elementAsTypeApplicationTerm" $
@@ -239,7 +236,6 @@ fieldTypesDef = define "fieldTypes" $
   "toMap" <~ ("fields" ~> Maps.fromList (Lists.map
     ("ft" ~> tuple2 (Core.fieldTypeName (var "ft")) (Core.fieldTypeType (var "ft")))
     (var "fields"))) $
-  trace "field types" $
   match _Type (Just (ref Monads.unexpectedDef @@ string "record or union type" @@ (ref ShowCore.typeDef @@ var "t"))) [
     _Type_forall>>: "ft" ~> ref fieldTypesDef @@ Core.forallTypeBody (var "ft"),
     _Type_record>>: "rt" ~> Flows.pure (var "toMap" @@ Core.rowTypeFields (var "rt")),
@@ -248,7 +244,7 @@ fieldTypesDef = define "fieldTypes" $
       trace (Strings.cat2 (string "field types of ") (Core.unName (var "name"))) (
       Flows.bind (ref Lexical.requireElementDef @@ var "name") (
         "el" ~>
-        Flows.bind (ref DecodeCore.typeDef @@ Core.bindingTerm (var "el")) (
+        Flows.bind (trace "field types" $ ref DecodeCore.typeDef @@ Core.bindingTerm (var "el")) (
           ref fieldTypesDef)))]
   @@ (ref Rewriting.deannotateTypeDef @@ var "t")
 
@@ -313,10 +309,9 @@ graphAsTypesDef = define "graphAsTypes" $
   "sg" ~>
   "els" <~ Maps.elems (Graph.graphElements (var "sg")) $
   "toPair" <~ ("el" ~>
-    "typ" <<~ ref DecodeCore.typeDef @@ (Core.bindingTerm $ var "el") $
+    "typ" <<~ (trace ("graph as types: " ++ Core.unName (Core.bindingName $ var "el")) $ ref DecodeCore.typeDef @@ (Core.bindingTerm $ var "el")) $
     produce $ tuple2 (Core.bindingName $ var "el") (var "typ")) $
   "pairs" <<~ Flows.mapList (var "toPair") (var "els") $
-  trace "graph as types" $
   produce $ Maps.fromList $ var "pairs"
 
 graphToInferenceContextDef :: TBinding (Graph -> Flow s InferenceContext)
@@ -444,11 +439,16 @@ requireSchemaTypeDef :: TBinding (InferenceContext -> Name -> Flow s TypeScheme)
 requireSchemaTypeDef = define "requireSchemaType" $
   doc "Look up a schema type in the context and instantiate it" $
   "cx" ~> "tname" ~>
+  "types" <~ (Typing.inferenceContextSchemaTypes $ var "cx") $
   Maybes.maybe
-    (Flows.fail $ Strings.cat2 (string "No such schema type: ") (Core.unName $ var "tname"))
+    (Flows.fail $ Strings.cat $ list [
+      "No such schema type: ",
+      Core.unName $ var "tname",
+      ". Available types are: ",
+      Strings.intercalate ", " (Lists.map (unaryFunction Core.unName) $ Maps.keys $ var "types")])
     -- TODO: the deannotation is probably superfluous
     ("ts" ~> ref instantiateTypeSchemeDef @@ (ref Rewriting.deannotateTypeSchemeRecursiveDef @@ var "ts"))
-    (Maps.lookup (var "tname") (Typing.inferenceContextSchemaTypes $ var "cx"))
+    (Maps.lookup (var "tname") (var "types"))
 
 requireTypeDef :: TBinding (Name -> Flow Graph Type)
 requireTypeDef = define "requireType" $
@@ -471,7 +471,7 @@ resolveTypeDef :: TBinding (Type -> Flow Graph (Maybe Type))
 resolveTypeDef = define "resolveType" $
   doc "Resolve a type, dereferencing type variables" $
   "typ" ~>
-  trace "resolve type" $
+--  trace "resolve type" $
   match _Type (Just (Flows.pure (just (var "typ")))) [
     _Type_variable>>: "name" ~>
       ref Lexical.withSchemaContextDef @@
