@@ -63,7 +63,15 @@ Currently, hydra-ext is also used to transform Hydra's kernel code into Hydra-Ja
 ```haskell
 writeJava "../hydra-java/src/gen-main/java" kernelModules
 
-writePython "../hydra-python/src/python" kernelModules
+writePython "../hydra-python/src/main/python" kernelModules
+```
+
+...and to transform the test suite:
+
+```haskell
+writeJava "../hydra-java/src/gen-test/java" testModules
+
+writePython "../hydra-python/src/gen-test/python" testModules"
 ```
 
 ## Tools
