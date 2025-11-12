@@ -22,7 +22,7 @@ import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.mantle
+import hydra.meta
 import hydra.monads
 import hydra.rewriting
 import hydra.schemas
@@ -501,113 +501,113 @@ def term_adapter(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapte
         return hydra.lib.logic.and_(variant_is_supported(cx, t), constraints(cx).types(t))
     def pass_(t: hydra.core.Type) -> frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]]:
         match hydra.variants.type_variant(hydra.rewriting.deannotate_type(t)):
-            case hydra.mantle.TypeVariant.ANNOTATED:
+            case hydra.meta.TypeVariant.ANNOTATED:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.mantle.TypeVariant.APPLICATION:
+            case hydra.meta.TypeVariant.APPLICATION:
                 return (pass_application,)
             
-            case hydra.mantle.TypeVariant.EITHER:
+            case hydra.meta.TypeVariant.EITHER:
                 return (pass_either,)
             
-            case hydra.mantle.TypeVariant.FORALL:
+            case hydra.meta.TypeVariant.FORALL:
                 return (pass_forall,)
             
-            case hydra.mantle.TypeVariant.FUNCTION:
+            case hydra.meta.TypeVariant.FUNCTION:
                 return (pass_function,)
             
-            case hydra.mantle.TypeVariant.LIST:
+            case hydra.meta.TypeVariant.LIST:
                 return (pass_list,)
             
-            case hydra.mantle.TypeVariant.LITERAL:
+            case hydra.meta.TypeVariant.LITERAL:
                 return (pass_literal,)
             
-            case hydra.mantle.TypeVariant.MAP:
+            case hydra.meta.TypeVariant.MAP:
                 return (pass_map,)
             
-            case hydra.mantle.TypeVariant.MAYBE:
+            case hydra.meta.TypeVariant.MAYBE:
                 return (pass_optional, maybe_to_list)
             
-            case hydra.mantle.TypeVariant.PAIR:
+            case hydra.meta.TypeVariant.PAIR:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.mantle.TypeVariant.PRODUCT:
+            case hydra.meta.TypeVariant.PRODUCT:
                 return (pass_product,)
             
-            case hydra.mantle.TypeVariant.RECORD:
+            case hydra.meta.TypeVariant.RECORD:
                 return (pass_record,)
             
-            case hydra.mantle.TypeVariant.SET:
+            case hydra.meta.TypeVariant.SET:
                 return (pass_set,)
             
-            case hydra.mantle.TypeVariant.SUM:
+            case hydra.meta.TypeVariant.SUM:
                 return (pass_sum,)
             
-            case hydra.mantle.TypeVariant.UNION:
+            case hydra.meta.TypeVariant.UNION:
                 return (pass_union,)
             
-            case hydra.mantle.TypeVariant.UNIT:
+            case hydra.meta.TypeVariant.UNIT:
                 return (cast(Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]], pass_unit),)
             
-            case hydra.mantle.TypeVariant.VARIABLE:
+            case hydra.meta.TypeVariant.VARIABLE:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.mantle.TypeVariant.WRAP:
+            case hydra.meta.TypeVariant.WRAP:
                 return (pass_wrapped,)
     def try_substitution(t: hydra.core.Type) -> frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]]:
         match hydra.variants.type_variant(t):
-            case hydra.mantle.TypeVariant.ANNOTATED:
+            case hydra.meta.TypeVariant.ANNOTATED:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.mantle.TypeVariant.APPLICATION:
+            case hydra.meta.TypeVariant.APPLICATION:
                 return (simplify_application,)
             
-            case hydra.mantle.TypeVariant.EITHER:
+            case hydra.meta.TypeVariant.EITHER:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.mantle.TypeVariant.FORALL:
+            case hydra.meta.TypeVariant.FORALL:
                 return (lambda_to_monotype,)
             
-            case hydra.mantle.TypeVariant.FUNCTION:
+            case hydra.meta.TypeVariant.FUNCTION:
                 return (function_to_union,)
             
-            case hydra.mantle.TypeVariant.LIST:
+            case hydra.meta.TypeVariant.LIST:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.mantle.TypeVariant.LITERAL:
+            case hydra.meta.TypeVariant.LITERAL:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.mantle.TypeVariant.MAP:
+            case hydra.meta.TypeVariant.MAP:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.mantle.TypeVariant.MAYBE:
+            case hydra.meta.TypeVariant.MAYBE:
                 return (maybe_to_list,)
             
-            case hydra.mantle.TypeVariant.PAIR:
+            case hydra.meta.TypeVariant.PAIR:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.mantle.TypeVariant.PRODUCT:
+            case hydra.meta.TypeVariant.PRODUCT:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.mantle.TypeVariant.RECORD:
+            case hydra.meta.TypeVariant.RECORD:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.mantle.TypeVariant.SET:
+            case hydra.meta.TypeVariant.SET:
                 return (set_to_list,)
             
-            case hydra.mantle.TypeVariant.SUM:
+            case hydra.meta.TypeVariant.SUM:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.mantle.TypeVariant.UNION:
+            case hydra.meta.TypeVariant.UNION:
                 return (union_to_record,)
             
-            case hydra.mantle.TypeVariant.UNIT:
+            case hydra.meta.TypeVariant.UNIT:
                 return (cast(Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]], unit_to_record),)
             
-            case hydra.mantle.TypeVariant.VARIABLE:
+            case hydra.meta.TypeVariant.VARIABLE:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.mantle.TypeVariant.WRAP:
+            case hydra.meta.TypeVariant.WRAP:
                 return (wrap_to_unwrapped,)
     def alts(cx: hydra.coders.AdapterContext, t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]:
         return hydra.lib.flows.map_list((lambda c: c(t)), hydra.lib.logic.if_else(supported_at_top_level(cx, t), pass_(t), try_substitution(t)))

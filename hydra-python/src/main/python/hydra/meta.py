@@ -1,42 +1,10 @@
 # Note: this is an automatically generated file. Do not edit.
 
-r"""A set of types which supplement hydra.core, but are not referenced by hydra.core."""
+r"""Metadata and reflection types which describe the structure of Hydra core types and terms."""
 
 from __future__ import annotations
 from enum import Enum
-from hydra.dsl.python import Node
 import hydra.core
-
-class CaseConvention(Enum):
-    r"""A naming convention for symbols, such as camelCase or snake_case."""
-    
-    CAMEL = "camel"
-    
-    PASCAL = "pascal"
-    
-    LOWER_SNAKE = "lowerSnake"
-    
-    UPPER_SNAKE = "upperSnake"
-
-CASE_CONVENTION__NAME = hydra.core.Name("hydra.mantle.CaseConvention")
-CASE_CONVENTION__CAMEL__NAME = hydra.core.Name("camel")
-CASE_CONVENTION__PASCAL__NAME = hydra.core.Name("pascal")
-CASE_CONVENTION__LOWER_SNAKE__NAME = hydra.core.Name("lowerSnake")
-CASE_CONVENTION__UPPER_SNAKE__NAME = hydra.core.Name("upperSnake")
-
-class Comparison(Enum):
-    r"""An equality judgement: less than, equal to, or greater than."""
-    
-    LESS_THAN = "lessThan"
-    
-    EQUAL_TO = "equalTo"
-    
-    GREATER_THAN = "greaterThan"
-
-COMPARISON__NAME = hydra.core.Name("hydra.mantle.Comparison")
-COMPARISON__LESS_THAN__NAME = hydra.core.Name("lessThan")
-COMPARISON__EQUAL_TO__NAME = hydra.core.Name("equalTo")
-COMPARISON__GREATER_THAN__NAME = hydra.core.Name("greaterThan")
 
 class EliminationVariant(Enum):
     r"""The identifier of an elimination constructor."""
@@ -49,7 +17,7 @@ class EliminationVariant(Enum):
     
     WRAP = "wrap"
 
-ELIMINATION_VARIANT__NAME = hydra.core.Name("hydra.mantle.EliminationVariant")
+ELIMINATION_VARIANT__NAME = hydra.core.Name("hydra.meta.EliminationVariant")
 ELIMINATION_VARIANT__PRODUCT__NAME = hydra.core.Name("product")
 ELIMINATION_VARIANT__RECORD__NAME = hydra.core.Name("record")
 ELIMINATION_VARIANT__UNION__NAME = hydra.core.Name("union")
@@ -64,7 +32,7 @@ class FunctionVariant(Enum):
     
     PRIMITIVE = "primitive"
 
-FUNCTION_VARIANT__NAME = hydra.core.Name("hydra.mantle.FunctionVariant")
+FUNCTION_VARIANT__NAME = hydra.core.Name("hydra.meta.FunctionVariant")
 FUNCTION_VARIANT__ELIMINATION__NAME = hydra.core.Name("elimination")
 FUNCTION_VARIANT__LAMBDA__NAME = hydra.core.Name("lambda")
 FUNCTION_VARIANT__PRIMITIVE__NAME = hydra.core.Name("primitive")
@@ -82,25 +50,12 @@ class LiteralVariant(Enum):
     
     STRING = "string"
 
-LITERAL_VARIANT__NAME = hydra.core.Name("hydra.mantle.LiteralVariant")
+LITERAL_VARIANT__NAME = hydra.core.Name("hydra.meta.LiteralVariant")
 LITERAL_VARIANT__BINARY__NAME = hydra.core.Name("binary")
 LITERAL_VARIANT__BOOLEAN__NAME = hydra.core.Name("boolean")
 LITERAL_VARIANT__FLOAT__NAME = hydra.core.Name("float")
 LITERAL_VARIANT__INTEGER__NAME = hydra.core.Name("integer")
 LITERAL_VARIANT__STRING__NAME = hydra.core.Name("string")
-
-class PrecisionArbitrary:
-    r"""Arbitrary precision."""
-
-class PrecisionBits(Node[int]):
-    r"""Precision to a specified number of bits."""
-
-# Numeric precision: arbitrary precision, or precision to a specified number of bits.
-type Precision = PrecisionArbitrary | PrecisionBits
-
-PRECISION__NAME = hydra.core.Name("hydra.mantle.Precision")
-PRECISION__ARBITRARY__NAME = hydra.core.Name("arbitrary")
-PRECISION__BITS__NAME = hydra.core.Name("bits")
 
 class TermVariant(Enum):
     r"""The identifier of a term expression constructor."""
@@ -145,7 +100,7 @@ class TermVariant(Enum):
     
     WRAP = "wrap"
 
-TERM_VARIANT__NAME = hydra.core.Name("hydra.mantle.TermVariant")
+TERM_VARIANT__NAME = hydra.core.Name("hydra.meta.TermVariant")
 TERM_VARIANT__ANNOTATED__NAME = hydra.core.Name("annotated")
 TERM_VARIANT__APPLICATION__NAME = hydra.core.Name("application")
 TERM_VARIANT__EITHER__NAME = hydra.core.Name("either")
@@ -174,7 +129,7 @@ class TypeClass(Enum):
     
     ORDERING = "ordering"
 
-TYPE_CLASS__NAME = hydra.core.Name("hydra.mantle.TypeClass")
+TYPE_CLASS__NAME = hydra.core.Name("hydra.meta.TypeClass")
 TYPE_CLASS__EQUALITY__NAME = hydra.core.Name("equality")
 TYPE_CLASS__ORDERING__NAME = hydra.core.Name("ordering")
 
@@ -217,7 +172,7 @@ class TypeVariant(Enum):
     
     WRAP = "wrap"
 
-TYPE_VARIANT__NAME = hydra.core.Name("hydra.mantle.TypeVariant")
+TYPE_VARIANT__NAME = hydra.core.Name("hydra.meta.TypeVariant")
 TYPE_VARIANT__ANNOTATED__NAME = hydra.core.Name("annotated")
 TYPE_VARIANT__APPLICATION__NAME = hydra.core.Name("application")
 TYPE_VARIANT__EITHER__NAME = hydra.core.Name("either")

@@ -26,7 +26,7 @@ import hydra.monads
 import hydra.rewriting
 import hydra.schemas
 import hydra.show.core
-import hydra.show.mantle
+import hydra.show.meta
 import hydra.substitution
 import hydra.typing
 import hydra.variants
@@ -247,7 +247,7 @@ def type_of[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.T
                 return type_of_wrapped_term(tx, type_args, v117)
             
             case _:
-                return hydra.lib.flows.fail(hydra.lib.strings.cat(("unsupported term variant in typeOf: ", hydra.show.mantle.term_variant(hydra.variants.term_variant(term)))))
+                return hydra.lib.flows.fail(hydra.lib.strings.cat(("unsupported term variant in typeOf: ", hydra.show.meta.term_variant(hydra.variants.term_variant(term)))))
     return hydra.monads.with_trace(hydra.lib.strings.cat(("checking type of: ", hydra.show.core.term(term), " (vars: ", hydra.formatting.show_list((lambda v1: v1.value), hydra.lib.sets.to_list(tx.variables)), ", typeArgs: ", hydra.formatting.show_list(hydra.show.core.type, type_args), ")")), check())
 
 def type_of_annotated_term[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], at: hydra.core.AnnotatedTerm) -> hydra.compute.Flow[T0, hydra.core.Type]:

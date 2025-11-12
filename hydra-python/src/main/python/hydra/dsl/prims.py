@@ -22,7 +22,7 @@ from hydra.core import (
 )
 from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing, frozenlist, Either, Left, Right
 from hydra.graph import Graph, Primitive, TermCoder
-from hydra.mantle import Comparison
+from hydra.util import Comparison
 
 A = TypeVar("A")
 B = TypeVar("B")
@@ -204,11 +204,11 @@ def string() -> TermCoder[str]:
 
 def comparison() -> TermCoder[Comparison]:
     """TermCoder for Comparison values."""
-    import hydra.extract.mantle as extract_mantle
+    import hydra.extract.util as extract_util
     return TermCoder(
         type=types.var("Comparison"),
         coder=Coder(
-            encode=extract_mantle.comparison,
+            encode=extract_util.comparison,
             decode=lambda c: flows.pure(terms.comparison(c))
         ),
     )

@@ -12,7 +12,8 @@ import hydra.constants
 import hydra.dsl.terms as terms
 import hydra.dsl.annotations as annotations
 import hydra.formatting
-import hydra.mantle
+import hydra.meta
+import hydra.util
 from hydra.core import Field, Name, Term, Type
 from hydra.module import Module, Namespace, QualifiedName
 from hydra.phantoms import TBinding, TTerm
@@ -161,8 +162,8 @@ def derive_primitive_name() -> Name:
     # Remove trailing underscore if present (e.g., abs_ -> abs), then convert snake_case to camelCase
     clean_name = func_name.rstrip('_')
     camel_name = hydra.formatting.convert_case(
-        hydra.mantle.CaseConvention.LOWER_SNAKE,
-        hydra.mantle.CaseConvention.CAMEL,
+        hydra.util.CaseConvention.LOWER_SNAKE,
+        hydra.util.CaseConvention.CAMEL,
         clean_name
     )
 
@@ -515,7 +516,7 @@ def variant(name: Name, fname: Name, term: TTerm[A]) -> TTerm[B]:
 def with_eq(v: str, term: TTerm[A]) -> TTerm[A]:
     """Associate the Eq type class with the inferred type of a term."""
     return with_type_classes(
-        FrozenDict({Name(v): frozenset([hydra.mantle.TypeClass.EQUALITY])}),
+        FrozenDict({Name(v): frozenset([hydra.meta.TypeClass.EQUALITY])}),
         term
     )
 
@@ -523,7 +524,7 @@ def with_eq(v: str, term: TTerm[A]) -> TTerm[A]:
 def with_ord(v: str, term: TTerm[A]) -> TTerm[A]:
     """Associate the Ord type class with the inferred type of a term."""
     return with_type_classes(
-        FrozenDict({Name(v): frozenset([hydra.mantle.TypeClass.ORDERING])}),
+        FrozenDict({Name(v): frozenset([hydra.meta.TypeClass.ORDERING])}),
         term
     )
 

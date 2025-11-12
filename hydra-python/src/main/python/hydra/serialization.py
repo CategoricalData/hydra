@@ -14,7 +14,7 @@ import hydra.lib.logic
 import hydra.lib.math
 import hydra.lib.maybes
 import hydra.lib.strings
-import hydra.mantle
+import hydra.util
 
 def sym(s: str) -> hydra.ast.Symbol:
     return hydra.ast.Symbol(s)
@@ -255,13 +255,13 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.ast.Expr:
                         lassoc = lop.associativity
                         comparison = hydra.lib.equality.compare(prec, lprec)
                         match comparison:
-                            case hydra.mantle.Comparison.LESS_THAN:
+                            case hydra.util.Comparison.LESS_THAN:
                                 return lhs_
                             
-                            case hydra.mantle.Comparison.GREATER_THAN:
+                            case hydra.util.Comparison.GREATER_THAN:
                                 return parens(lhs_)
                             
-                            case hydra.mantle.Comparison.EQUAL_TO:
+                            case hydra.util.Comparison.EQUAL_TO:
                                 return hydra.lib.logic.if_else(hydra.lib.logic.and_(assoc_left(assoc), assoc_left(lassoc)), lhs_, parens(lhs_))
                     
                     case _:
@@ -274,13 +274,13 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.ast.Expr:
                         rassoc = rop.associativity
                         comparison = hydra.lib.equality.compare(prec, rprec)
                         match comparison:
-                            case hydra.mantle.Comparison.LESS_THAN:
+                            case hydra.util.Comparison.LESS_THAN:
                                 return rhs_
                             
-                            case hydra.mantle.Comparison.GREATER_THAN:
+                            case hydra.util.Comparison.GREATER_THAN:
                                 return parens(rhs_)
                             
-                            case hydra.mantle.Comparison.EQUAL_TO:
+                            case hydra.util.Comparison.EQUAL_TO:
                                 return hydra.lib.logic.if_else(hydra.lib.logic.and_(assoc_right(assoc), assoc_right(rassoc)), rhs_, parens(rhs_))
                     
                     case _:
