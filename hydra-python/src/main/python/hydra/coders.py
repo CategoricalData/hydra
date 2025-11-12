@@ -21,9 +21,9 @@ V = TypeVar("V")
 class AdapterContext:
     r"""An evaluation context together with a source language and a target language."""
     
-    graph: hydra.graph.Graph
-    language: Language
-    adapters: FrozenDict[hydra.core.Name, hydra.compute.Adapter[AdapterContext, AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]
+    graph: Annotated[hydra.graph.Graph, "The underlying graph of elements and primitives"]
+    language: Annotated[Language, "The language being encoded or decoded"]
+    adapters: Annotated[FrozenDict[hydra.core.Name, hydra.compute.Adapter[AdapterContext, AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]], "A map of type names to adapters for those types"]
 
 ADAPTER_CONTEXT__NAME = hydra.core.Name("hydra.coders.AdapterContext")
 ADAPTER_CONTEXT__GRAPH__NAME = hydra.core.Name("graph")
@@ -45,8 +45,8 @@ CODER_DIRECTION__DECODE__NAME = hydra.core.Name("decode")
 class Language:
     r"""A named language together with language-specific constraints."""
     
-    name: LanguageName
-    constraints: LanguageConstraints
+    name: Annotated[LanguageName, "The unique name of the language"]
+    constraints: Annotated[LanguageConstraints, "The constraints which characterize the language"]
 
 LANGUAGE__NAME = hydra.core.Name("hydra.coders.Language")
 LANGUAGE__NAME__NAME = hydra.core.Name("name")

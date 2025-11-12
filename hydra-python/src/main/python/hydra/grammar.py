@@ -5,6 +5,7 @@ r"""A common API for BNF-based grammars, specifying context-free languages."""
 from __future__ import annotations
 from dataclasses import dataclass
 from hydra.dsl.python import Node, frozenlist
+from typing import Annotated
 import hydra.core
 
 class Constant(Node[str]):
@@ -26,34 +27,45 @@ LABEL__NAME = hydra.core.Name("hydra.grammar.Label")
 class LabeledPattern:
     r"""A pattern together with a name (label)."""
     
-    label: Label
-    pattern: Pattern
+    label: Annotated[Label, "The label for the pattern"]
+    pattern: Annotated[Pattern, "The pattern being labeled"]
 
 LABELED_PATTERN__NAME = hydra.core.Name("hydra.grammar.LabeledPattern")
 LABELED_PATTERN__LABEL__NAME = hydra.core.Name("label")
 LABELED_PATTERN__PATTERN__NAME = hydra.core.Name("pattern")
 
-class PatternAlternatives(Node["frozenlist[Pattern]"]): ...
+class PatternAlternatives(Node["frozenlist[Pattern]"]):
+    r"""A choice between alternative patterns."""
 
-class PatternConstant(Node["Constant"]): ...
+class PatternConstant(Node["Constant"]):
+    r"""A constant (terminal) pattern."""
 
-class PatternIgnored(Node["Pattern"]): ...
+class PatternIgnored(Node["Pattern"]):
+    r"""A pattern to be ignored (not captured)."""
 
-class PatternLabeled(Node["LabeledPattern"]): ...
+class PatternLabeled(Node["LabeledPattern"]):
+    r"""A labeled pattern."""
 
-class PatternNil: ...
+class PatternNil:
+    r"""An empty pattern."""
 
-class PatternNonterminal(Node["Symbol"]): ...
+class PatternNonterminal(Node["Symbol"]):
+    r"""A nonterminal symbol reference."""
 
-class PatternOption(Node["Pattern"]): ...
+class PatternOption(Node["Pattern"]):
+    r"""An optional pattern (zero or one occurrence)."""
 
-class PatternPlus(Node["Pattern"]): ...
+class PatternPlus(Node["Pattern"]):
+    r"""One or more occurrences of a pattern."""
 
-class PatternRegex(Node["Regex"]): ...
+class PatternRegex(Node["Regex"]):
+    r"""A regular expression pattern."""
 
-class PatternSequence(Node["frozenlist[Pattern]"]): ...
+class PatternSequence(Node["frozenlist[Pattern]"]):
+    r"""A sequence of patterns."""
 
-class PatternStar(Node["Pattern"]): ...
+class PatternStar(Node["Pattern"]):
+    r"""Zero or more occurrences of a pattern."""
 
 # A pattern which matches valid expressions in the language.
 type Pattern = PatternAlternatives | PatternConstant | PatternIgnored | PatternLabeled | PatternNil | PatternNonterminal | PatternOption | PatternPlus | PatternRegex | PatternSequence | PatternStar
@@ -75,8 +87,8 @@ PATTERN__STAR__NAME = hydra.core.Name("star")
 class Production:
     r"""A BNF production."""
     
-    symbol: Symbol
-    pattern: Pattern
+    symbol: Annotated[Symbol, "The nonterminal symbol being defined"]
+    pattern: Annotated[Pattern, "The pattern which defines the symbol"]
 
 PRODUCTION__NAME = hydra.core.Name("hydra.grammar.Production")
 PRODUCTION__SYMBOL__NAME = hydra.core.Name("symbol")

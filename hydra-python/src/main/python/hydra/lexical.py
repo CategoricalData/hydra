@@ -25,6 +25,8 @@ def lookup_element(g: hydra.graph.Graph, name: hydra.core.Name) -> Maybe[hydra.c
     return hydra.lib.maps.lookup(name, g.elements)
 
 def dereference_element(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Binding]]:
+    r"""Look up an element in the current graph context."""
+    
     return hydra.lib.flows.map((lambda g: lookup_element(g, name)), cast(hydra.compute.Flow[hydra.graph.Graph, hydra.graph.Graph], hydra.monads.get_state))
 
 def dereference_schema_type(name: hydra.core.Name, types: FrozenDict[hydra.core.Name, hydra.core.TypeScheme]) -> Maybe[hydra.core.TypeScheme]:
@@ -46,6 +48,8 @@ def dereference_schema_type(name: hydra.core.Name, types: FrozenDict[hydra.core.
     return hydra.lib.maybes.bind(hydra.lib.maps.lookup(name, types), (lambda ts: hydra.lib.maybes.map((lambda ts2: hydra.core.TypeScheme(hydra.lib.lists.concat2(ts.variables, ts2.variables), ts2.type)), for_type(ts.type))))
 
 def elements_to_graph(parent: hydra.graph.Graph, schema: Maybe[hydra.graph.Graph], elements: frozenlist[hydra.core.Binding]) -> hydra.graph.Graph:
+    r"""Create a graph from a parent graph, optional schema, and list of element bindings."""
+    
     def to_pair(el: hydra.core.Binding) -> Tuple[hydra.core.Name, hydra.core.Binding]:
         return (el.name, el)
     return hydra.graph.Graph(cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.from_list(hydra.lib.lists.map(to_pair, elements))), parent.environment, parent.types, parent.body, parent.primitives, schema)
@@ -54,6 +58,8 @@ def elements_to_graph(parent: hydra.graph.Graph, schema: Maybe[hydra.graph.Graph
 empty_graph = hydra.graph.Graph(cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.empty()), cast(FrozenDict[hydra.core.Name, Maybe[hydra.core.Term]], hydra.lib.maps.empty()), cast(FrozenDict[hydra.core.Name, hydra.core.TypeScheme], hydra.lib.maps.empty()), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("empty graph")))), cast(FrozenDict[hydra.core.Name, hydra.graph.Primitive], hydra.lib.maps.empty()), cast(Maybe[hydra.graph.Graph], Nothing()))
 
 def extend_graph_with_bindings(bindings: frozenlist[hydra.core.Binding], g: hydra.graph.Graph) -> hydra.graph.Graph:
+    r"""Add bindings to an existing graph."""
+    
     def to_el(binding: hydra.core.Binding) -> Tuple[hydra.core.Name, hydra.core.Binding]:
         name = binding.name
         term = binding.term
@@ -63,6 +69,8 @@ def extend_graph_with_bindings(bindings: frozenlist[hydra.core.Binding], g: hydr
     return hydra.graph.Graph(hydra.lib.maps.union(new_els, g.elements), g.environment, g.types, g.body, g.primitives, g.schema)
 
 def fields_of(t: hydra.core.Type) -> frozenlist[hydra.core.FieldType]:
+    r"""Extract the fields of a record or union type."""
+    
     stripped = hydra.rewriting.deannotate_type(t)
     match stripped:
         case hydra.core.TypeForall(value=forall_type):
@@ -106,7 +114,7 @@ def match_union[T0](tname: hydra.core.Name, pairs: frozenlist[Tuple[hydra.core.N
             return hydra.lib.logic.if_else(hydra.lib.equality.equal(injection.type_name.value, tname.value), exp(), hydra.monads.unexpected(hydra.lib.strings.cat(("injection for type ", tname.value)), hydra.show.core.term(term)))
         
         case _:
-            return hydra.monads.unexpected(hydra.lib.strings.cat(("union_{", tname.value, "} with one of {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda tuple2: tuple2[0].value), pairs)), "}")), hydra.show.core.term(stripped))
+            return hydra.monads.unexpected(hydra.lib.strings.cat(("inject(", tname.value, ") with one of {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda tuple2: tuple2[0].value), pairs)), "}")), hydra.show.core.term(stripped))
 
 def match_unit_field[T0, T1, T2, T3](fname: T0, x: T1) -> Tuple[T0, Callable[[T2], hydra.compute.Flow[T3, T1]]]:
     return (fname, (lambda ignored: hydra.lib.flows.pure(x)))

@@ -25,6 +25,7 @@ def bind[T0, T1, T2](l: hydra.compute.Flow[T0, T1], r: Callable[[T1], hydra.comp
         return hydra.lib.maybes.maybe(cast(hydra.compute.FlowState[T0, T2], hydra.compute.FlowState(cast(Maybe[T2], Nothing()), fs1.state, fs1.trace)), (lambda v: r(v).value(fs1.state, fs1.trace)), fs1.value)
     return cast(hydra.compute.Flow[T0, T2], hydra.compute.Flow(q))
 
+# An empty trace with no stack, messages, or other attributes.
 empty_trace = hydra.compute.Trace(cast(frozenlist[str], ()), cast(frozenlist[str], ()), cast(FrozenDict[hydra.core.Name, hydra.core.Term], hydra.lib.maps.empty()))
 
 def exec[T0, T1](f: hydra.compute.Flow[T0, T1], s0: T0) -> T0:

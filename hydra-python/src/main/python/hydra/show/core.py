@@ -79,16 +79,17 @@ def literal_type(lt: hydra.core.LiteralType) -> str:
         case hydra.core.LiteralTypeString():
             return "string"
 
+def field_type(ft: hydra.core.FieldType) -> str:
+    fname = ft.name.value
+    ftyp = ft.type
+    return hydra.lib.strings.cat((fname, ":", type(ftyp)))
+
 def type(typ: hydra.core.Type) -> str:
     r"""Show a type as a string."""
     
-    def show_field_type(ft: hydra.core.FieldType) -> str:
-        fname = ft.name.value
-        ftyp = ft.type
-        return hydra.lib.strings.cat((fname, ":", type(ftyp)))
     def show_row_type(rt: hydra.core.RowType) -> str:
         flds = rt.fields
-        field_strs = hydra.lib.lists.map(show_field_type, flds)
+        field_strs = hydra.lib.lists.map(field_type, flds)
         return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", field_strs), "}"))
     def gather_types(prev: frozenlist[hydra.core.Type], app: hydra.core.ApplicationType) -> frozenlist[hydra.core.Type]:
         lhs = app.function
@@ -284,14 +285,15 @@ def elimination(elm: hydra.core.Elimination) -> str:
         case hydra.core.EliminationWrap(value=tname):
             return hydra.lib.strings.cat(("unwrap(", tname.value, ")"))
 
+def field(field: hydra.core.Field) -> str:
+    fname = field.name.value
+    fterm = field.term
+    return hydra.lib.strings.cat2(fname, hydra.lib.strings.cat2("=", term(fterm)))
+
 def fields(flds: frozenlist[hydra.core.Field]) -> str:
     r"""Show a list of fields as a string."""
     
-    def show_field(field: hydra.core.Field) -> str:
-        fname = field.name.value
-        fterm = field.term
-        return hydra.lib.strings.cat2(fname, hydra.lib.strings.cat2("=", term(fterm)))
-    field_strs = hydra.lib.lists.map(show_field, flds)
+    field_strs = hydra.lib.lists.map(field, flds)
     return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", field_strs), "}"))
 
 def function(f: hydra.core.Function) -> str:
