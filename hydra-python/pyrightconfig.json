@@ -1,4 +1,15 @@
 {
+  "include": [
+    "src/main/python",
+    "src/test/python",
+    "src/gen-test/python"
+  ],
+  "exclude": [
+    "src/gen-test/python/hydra/test/test_suite.py"
+  ],
+  "extraPaths": [
+    "src/main/python"
+  ],
   "reportInvalidTypeVarUse": "none",
   "reportUnknownVariableType": "none"
 }
