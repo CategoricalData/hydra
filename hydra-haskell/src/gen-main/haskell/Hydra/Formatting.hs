@@ -10,7 +10,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -22,7 +22,7 @@ capitalize :: (String -> String)
 capitalize = (mapFirstLetter Strings.toUpper)
 
 -- | Convert a string from one case convention to another
-convertCase :: (Mantle.CaseConvention -> Mantle.CaseConvention -> String -> String)
+convertCase :: (Util.CaseConvention -> Util.CaseConvention -> String -> String)
 convertCase from to original =  
   let parts =  
           let byCaps =  
@@ -32,27 +32,27 @@ convertCase from to original =
                     []] (Lists.reverse (Strings.toList (decapitalize original))))) 
               byUnderscores = (Strings.splitOn "_" original)
           in ((\x -> case x of
-            Mantle.CaseConventionCamel -> byCaps
-            Mantle.CaseConventionPascal -> byCaps
-            Mantle.CaseConventionLowerSnake -> byUnderscores
-            Mantle.CaseConventionUpperSnake -> byUnderscores) from)
+            Util.CaseConventionCamel -> byCaps
+            Util.CaseConventionPascal -> byCaps
+            Util.CaseConventionLowerSnake -> byUnderscores
+            Util.CaseConventionUpperSnake -> byUnderscores) from)
   in ((\x -> case x of
-    Mantle.CaseConventionCamel -> (decapitalize (Strings.cat (Lists.map (\arg_ -> capitalize (Strings.toLower arg_)) parts)))
-    Mantle.CaseConventionPascal -> (Strings.cat (Lists.map (\arg_ -> capitalize (Strings.toLower arg_)) parts))
-    Mantle.CaseConventionLowerSnake -> (Strings.intercalate "_" (Lists.map Strings.toLower parts))
-    Mantle.CaseConventionUpperSnake -> (Strings.intercalate "_" (Lists.map Strings.toUpper parts))) to)
+    Util.CaseConventionCamel -> (decapitalize (Strings.cat (Lists.map (\arg_ -> capitalize (Strings.toLower arg_)) parts)))
+    Util.CaseConventionPascal -> (Strings.cat (Lists.map (\arg_ -> capitalize (Strings.toLower arg_)) parts))
+    Util.CaseConventionLowerSnake -> (Strings.intercalate "_" (Lists.map Strings.toLower parts))
+    Util.CaseConventionUpperSnake -> (Strings.intercalate "_" (Lists.map Strings.toUpper parts))) to)
 
 -- | Convert a string from camel case to lower snake case
 convertCaseCamelToLowerSnake :: (String -> String)
-convertCaseCamelToLowerSnake = (convertCase Mantle.CaseConventionCamel Mantle.CaseConventionLowerSnake)
+convertCaseCamelToLowerSnake = (convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake)
 
 -- | Convert a string from camel case to upper snake case
 convertCaseCamelToUpperSnake :: (String -> String)
-convertCaseCamelToUpperSnake = (convertCase Mantle.CaseConventionCamel Mantle.CaseConventionUpperSnake)
+convertCaseCamelToUpperSnake = (convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake)
 
 -- | Convert a string from pascal case to upper snake case
 convertCasePascalToUpperSnake :: (String -> String)
-convertCasePascalToUpperSnake = (convertCase Mantle.CaseConventionPascal Mantle.CaseConventionUpperSnake)
+convertCasePascalToUpperSnake = (convertCase Util.CaseConventionPascal Util.CaseConventionUpperSnake)
 
 -- | Decapitalize the first letter of a string
 decapitalize :: (String -> String)

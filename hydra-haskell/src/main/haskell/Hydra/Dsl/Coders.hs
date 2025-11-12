@@ -4,7 +4,6 @@ import Hydra.Kernel
 import Hydra.Dsl.Phantoms as Phantoms
 import qualified Hydra.Dsl.Core as Core
 import Hydra.Dsl.Lib.Sets as Sets
-import Hydra.Dsl.Mantle as Mantle
 import qualified Hydra.Dsl.TTypes as T
 
 import qualified Data.Map as M

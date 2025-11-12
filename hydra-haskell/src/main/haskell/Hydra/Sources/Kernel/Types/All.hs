@@ -12,7 +12,6 @@ import qualified Hydra.Sources.Kernel.Types.Core        as Core
 import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
 import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
 import qualified Hydra.Sources.Kernel.Types.Json        as Json
-import qualified Hydra.Sources.Kernel.Types.Mantle      as Mantle
 import qualified Hydra.Sources.Kernel.Types.Meta        as Meta
 import qualified Hydra.Sources.Kernel.Types.Module      as Module
 import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
@@ -37,7 +36,6 @@ kernelTypesModules = [
   Grammar.module_,
   Graph.module_,
   Json.module_,
-  Mantle.module_,
   Meta.module_,
   Module.module_,
   Phantoms.module_,

@@ -16,9 +16,10 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Meta as Meta
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Show.Core as Core___
+import qualified Hydra.Util as Util
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -27,14 +28,14 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Compare two precision values
-comparePrecision :: (Mantle.Precision -> Mantle.Precision -> Mantle.Comparison)
+comparePrecision :: (Util.Precision -> Util.Precision -> Util.Comparison)
 comparePrecision p1 p2 = ((\x -> case x of
-  Mantle.PrecisionArbitrary -> ((\x -> case x of
-    Mantle.PrecisionArbitrary -> Mantle.ComparisonEqualTo
-    Mantle.PrecisionBits _ -> Mantle.ComparisonGreaterThan) p2)
-  Mantle.PrecisionBits v1 -> ((\x -> case x of
-    Mantle.PrecisionArbitrary -> Mantle.ComparisonLessThan
-    Mantle.PrecisionBits v2 -> (Logic.ifElse (Equality.lt v1 v2) Mantle.ComparisonLessThan Mantle.ComparisonGreaterThan)) p2)) p1)
+  Util.PrecisionArbitrary -> ((\x -> case x of
+    Util.PrecisionArbitrary -> Util.ComparisonEqualTo
+    Util.PrecisionBits _ -> Util.ComparisonGreaterThan) p2)
+  Util.PrecisionBits v1 -> ((\x -> case x of
+    Util.PrecisionArbitrary -> Util.ComparisonLessThan
+    Util.PrecisionBits v2 -> (Logic.ifElse (Equality.lt v1 v2) Util.ComparisonLessThan Util.ComparisonGreaterThan)) p2)) p1)
 
 -- | Convert a float value to a different float type
 convertFloatValue :: (Core.FloatType -> Core.FloatValue -> Core.FloatValue)
@@ -118,7 +119,7 @@ literalAdapter lt =
                 in  
                   let hasIntegers = (Logic.not (Sets.null (Coders.languageConstraintsIntegerTypes constraints)))
                   in  
-                    let hasStrings = (Sets.member Mantle.LiteralVariantString (Coders.languageConstraintsLiteralVariants constraints))
+                    let hasStrings = (Sets.member Meta.LiteralVariantString (Coders.languageConstraintsLiteralVariants constraints))
                     in  
                       let withIntegers =  
                               let withAdapter = (\adapter ->  
@@ -200,7 +201,7 @@ literalAdapter lt =
 floatAdapter :: (Core.FloatType -> Compute.Flow Coders.AdapterContext (Compute.Adapter t0 t1 Core.FloatType Core.FloatType Core.FloatValue Core.FloatValue))
 floatAdapter ft =  
   let makeAdapter = (\source -> \target ->  
-          let lossy = (Equality.equal (comparePrecision (Variants.floatTypePrecision source) (Variants.floatTypePrecision target)) Mantle.ComparisonGreaterThan)
+          let lossy = (Equality.equal (comparePrecision (Variants.floatTypePrecision source) (Variants.floatTypePrecision target)) Util.ComparisonGreaterThan)
           in  
             let step = Compute.Coder {
                     Compute.coderEncode = (\fv -> Flows.pure (convertFloatValue target fv)),
@@ -235,9 +236,9 @@ integerAdapter it =
           xs,
           ys]))
   in  
-    let signedOrdered = (Lists.filter (\v -> Logic.and (Variants.integerTypeIsSigned v) (Logic.not (Equality.equal (Variants.integerTypePrecision v) Mantle.PrecisionArbitrary))) Variants.integerTypes)
+    let signedOrdered = (Lists.filter (\v -> Logic.and (Variants.integerTypeIsSigned v) (Logic.not (Equality.equal (Variants.integerTypePrecision v) Util.PrecisionArbitrary))) Variants.integerTypes)
     in  
-      let unsignedOrdered = (Lists.filter (\v -> Logic.and (Logic.not (Variants.integerTypeIsSigned v)) (Logic.not (Equality.equal (Variants.integerTypePrecision v) Mantle.PrecisionArbitrary))) Variants.integerTypes)
+      let unsignedOrdered = (Lists.filter (\v -> Logic.and (Logic.not (Variants.integerTypeIsSigned v)) (Logic.not (Equality.equal (Variants.integerTypePrecision v) Util.PrecisionArbitrary))) Variants.integerTypes)
       in  
         let signedPref = (interleave signedOrdered unsignedOrdered)
         in  
@@ -260,7 +261,7 @@ integerAdapter it =
                           (Lists.drop (Math.add (Math.sub 8 (Math.mul i 2)) 1) unsignedNonPref)])
                   in  
                     let makeAdapter = (\source -> \target ->  
-                            let lossy = (Logic.not (Equality.equal (comparePrecision (Variants.integerTypePrecision source) (Variants.integerTypePrecision target)) Mantle.ComparisonLessThan))
+                            let lossy = (Logic.not (Equality.equal (comparePrecision (Variants.integerTypePrecision source) (Variants.integerTypePrecision target)) Util.ComparisonLessThan))
                             in  
                               let step = Compute.Coder {
                                       Compute.coderEncode = (\iv -> Flows.pure (convertIntegerValue target iv)),

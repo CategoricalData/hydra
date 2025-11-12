@@ -3,7 +3,7 @@
 module Hydra.Describe.Core where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Describe.Mantle as Mantle
+import qualified Hydra.Describe.Util as Util
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -15,13 +15,13 @@ import qualified Data.Set as S
 -- | Display a floating-point type as a string
 floatType :: (Core.FloatType -> String)
 floatType t = (Strings.cat [
-  (\arg_ -> Mantle.precision (Variants.floatTypePrecision arg_)) t,
+  (\arg_ -> Util.precision (Variants.floatTypePrecision arg_)) t,
   " floating-point number"])
 
 -- | Display an integer type as a string
 integerType :: (Core.IntegerType -> String)
 integerType t = (Strings.cat [
-  (\arg_ -> Mantle.precision (Variants.integerTypePrecision arg_)) t,
+  (\arg_ -> Util.precision (Variants.integerTypePrecision arg_)) t,
   " integer"])
 
 -- | Display a literal type as a string

@@ -125,7 +125,7 @@ matchUnion tname pairs term =
   let stripped = (Rewriting.deannotateAndDetypeTerm term)
   in  
     let mapping = (Maps.fromList pairs)
-    in (Monads.withTrace "match union" ((\x -> case x of
+    in ((\x -> case x of
       Core.TermVariable v1 -> (Flows.bind (requireElement v1) (\el -> matchUnion tname pairs (Core.bindingTerm el)))
       Core.TermUnion v1 ->  
         let exp =  
@@ -147,7 +147,7 @@ matchUnion tname pairs term =
         Core.unName tname,
         ") with one of {",
         Strings.intercalate ", " (Lists.map (\tuple2 -> Core.unName (fst tuple2)) pairs),
-        "}"]) (Core_.term stripped))) stripped))
+        "}"]) (Core_.term stripped))) stripped)
 
 matchUnitField :: (t0 -> t1 -> (t0, (t2 -> Compute.Flow t3 t1)))
 matchUnitField fname x = (fname, (\ignored -> Flows.pure x))

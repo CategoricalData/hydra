@@ -11,8 +11,8 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -39,9 +39,9 @@ namespaceOf :: (Core.Name -> Maybe Module.Namespace)
 namespaceOf arg_ = (Module.qualifiedNameNamespace (qualifyName arg_))
 
 -- | Convert a namespace to a file path with the given case convention and file extension
-namespaceToFilePath :: (Mantle.CaseConvention -> Module.FileExtension -> Module.Namespace -> String)
+namespaceToFilePath :: (Util.CaseConvention -> Module.FileExtension -> Module.Namespace -> String)
 namespaceToFilePath caseConv ext ns =  
-  let parts = (Lists.map (Formatting.convertCase Mantle.CaseConventionCamel caseConv) (Strings.splitOn "." (Module.unNamespace ns)))
+  let parts = (Lists.map (Formatting.convertCase Util.CaseConventionCamel caseConv) (Strings.splitOn "." (Module.unNamespace ns)))
   in (Strings.cat [
     Strings.cat [
       Strings.intercalate "/" parts,

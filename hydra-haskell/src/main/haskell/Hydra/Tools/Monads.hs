@@ -4,7 +4,6 @@ module Hydra.Tools.Monads where
 
 import Hydra.Compute
 import Hydra.Monads hiding (fail, pure)
-import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Lib.Flows as Flows
 
 import qualified Control.Monad as CM
