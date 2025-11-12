@@ -13,7 +13,6 @@ import hydra.coders
 import hydra.compute
 import hydra.core
 import hydra.decode.core
-import hydra.describe.core
 import hydra.graph
 import hydra.lexical
 import hydra.lib.flows
@@ -27,6 +26,7 @@ import hydra.module
 import hydra.monads
 import hydra.rewriting
 import hydra.schemas
+import hydra.show.core
 
 def language_adapter[T0, T1](lang: hydra.coders.Language, typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, hydra.compute.Adapter[T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     def get_pair(typ2: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, Tuple[hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.coders.AdapterContext]]:
@@ -59,7 +59,7 @@ def adapted_module_definitions[T0](lang: hydra.coders.Language, mod: hydra.modul
     return hydra.lib.flows.bind(hydra.lexical.with_schema_context(hydra.lib.flows.map_list(cast(Callable[[hydra.core.Binding], hydra.compute.Flow[hydra.graph.Graph, hydra.core.TypeApplicationTerm]], hydra.schemas.element_as_type_application_term), els)), (lambda tterms: (types := hydra.lib.sets.to_list(hydra.lib.sets.from_list(hydra.lib.lists.map((lambda arg_: hydra.rewriting.deannotate_type(arg_.type)), tterms))), hydra.lib.flows.bind(adapters_for(types), (lambda adapters: hydra.lib.flows.map_list((lambda v1: classify(adapters, v1)), hydra.lib.lists.zip(els, tterms)))))[1]))
 
 def construct_coder[T0, T1, T2](lang: hydra.coders.Language, encode_term: Callable[[hydra.core.Term], hydra.compute.Flow[T0, T1]], typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, hydra.compute.Coder[T0, T2, hydra.core.Term, T1]]:
-    return hydra.monads.with_trace(hydra.lib.strings.cat2("coder for ", hydra.describe.core.type(typ)), hydra.lib.flows.bind(language_adapter(lang, typ), (lambda adapter: hydra.lib.flows.pure(hydra.adapt.utils.compose_coders(adapter.coder, hydra.adapt.utils.unidirectional_coder(encode_term))))))
+    return hydra.monads.with_trace(hydra.lib.strings.cat2("coder for ", hydra.show.core.type(typ)), hydra.lib.flows.bind(language_adapter(lang, typ), (lambda adapter: hydra.lib.flows.pure(hydra.adapt.utils.compose_coders(adapter.coder, hydra.adapt.utils.unidirectional_coder(encode_term))))))
 
 def transform_module[T0, T1, T2, T3](lang: hydra.coders.Language, encode_term: Callable[[hydra.core.Term], hydra.compute.Flow[T0, T1]], create_module: Callable[[
   hydra.module.Module,

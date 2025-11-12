@@ -59,16 +59,16 @@ import qualified Hydra.Sources.Kernel.Terms.Adapt.Terms as AdaptTerms
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils as AdaptUtils
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Decode.Core as DecodeCore
-import qualified Hydra.Sources.Kernel.Terms.Describe.Core as DescribeCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
 module_ :: Module
 module_ = Module (Namespace "hydra.adapt.modules") elements
-    [AdaptTerms.module_, AdaptUtils.module_, Annotations.module_, DecodeCore.module_, DescribeCore.module_,
+    [AdaptTerms.module_, AdaptUtils.module_, Annotations.module_, DecodeCore.module_,
       Lexical.module_, Monads.module_, Rewriting.module_, Schemas.module_]
     kernelTypesModules $
     Just "Entry point for Hydra's adapter (type/term rewriting) framework"
@@ -107,7 +107,7 @@ constructCoderDef :: TBinding (Language -> (Term -> Flow Graph c) -> Type -> Flo
 constructCoderDef = define "constructCoder" $
   doc "Given a target language, a unidirectional last-mile encoding, and a source type, construct a unidirectional adapting coder for terms of that type" $
   "lang" ~> "encodeTerm" ~> "typ" ~>
-  trace (Strings.cat2 (string "coder for ") (ref DescribeCore.typeDef @@ var "typ")) $
+  trace (Strings.cat2 (string "coder for ") (ref ShowCore.typeDef @@ var "typ")) $
   "adapter" <<~ ref languageAdapterDef @@ var "lang" @@ var "typ" $
   produce $ ref AdaptUtils.composeCodersDef
     @@ (Compute.adapterCoder $ var "adapter")

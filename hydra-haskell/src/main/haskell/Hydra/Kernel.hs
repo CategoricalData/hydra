@@ -1,13 +1,13 @@
--- | A proxy for the Hydra kernel, i.e. the code which must be present in every Hydra implementation, and can be imported as a unit.
+-- | A proxy for the Hydra kernel, i.e. the code which must be present in every Hydra implementation.
 {-
 Note: the following modules are part of the kernel, but they are not default imports because of name collisions:
 - Hydra.Ast
 - Hydra.Decode.Core
-- Hydra.Describe.Core
 - Hydra.Encode.Core
 - Hydra.Extract.Core
 - Hydra.Grammar
 - Hydra.Grammars
+- Hydra.Show.Core
 - Hydra.Topology
 -}
 
