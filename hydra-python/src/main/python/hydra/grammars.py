@@ -63,6 +63,9 @@ def raw_name(pat: hydra.grammar.Pattern) -> str:
         
         case hydra.grammar.PatternStar(value=p3):
             return hydra.lib.strings.cat2("listOf", hydra.formatting.capitalize(raw_name(p3)))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def find_names(pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[str]:
     r"""Find unique names for patterns."""
@@ -166,6 +169,9 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
             
             case hydra.grammar.PatternStar(value=p3):
                 return mod("Elmt", (lambda x: cast(hydra.core.Type, hydra.core.TypeList(x))), p3)
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     def for_record_or_union(is_record: bool, construct: Callable[[frozenlist[hydra.core.FieldType]], hydra.core.Type], pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[Tuple[str, hydra.core.Type]]:
         min_pats = simplify(is_record, pats)
         field_names = find_names(min_pats)

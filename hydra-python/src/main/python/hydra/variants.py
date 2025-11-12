@@ -25,6 +25,9 @@ def elimination_variant(v1: hydra.core.Elimination) -> hydra.meta.EliminationVar
         
         case hydra.core.EliminationWrap():
             return hydra.meta.EliminationVariant.WRAP
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 # All elimination variants (constructors), in a canonical order.
 elimination_variants = (hydra.meta.EliminationVariant.PRODUCT, hydra.meta.EliminationVariant.RECORD, hydra.meta.EliminationVariant.UNION, hydra.meta.EliminationVariant.WRAP)
@@ -41,6 +44,9 @@ def float_type_precision(v1: hydra.core.FloatType) -> hydra.util.Precision:
         
         case hydra.core.FloatType.FLOAT64:
             return cast(hydra.util.Precision, hydra.util.PrecisionBits(64))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 # All floating-point types in a canonical order.
 float_types = (hydra.core.FloatType.BIGFLOAT, hydra.core.FloatType.FLOAT32, hydra.core.FloatType.FLOAT64)
@@ -57,6 +63,9 @@ def float_value_type(v1: hydra.core.FloatValue) -> hydra.core.FloatType:
         
         case hydra.core.FloatValueFloat64():
             return hydra.core.FloatType.FLOAT64
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def function_variant(v1: hydra.core.Function) -> hydra.meta.FunctionVariant:
     r"""Find the function variant (constructor) for a given function."""
@@ -70,6 +79,9 @@ def function_variant(v1: hydra.core.Function) -> hydra.meta.FunctionVariant:
         
         case hydra.core.FunctionPrimitive():
             return hydra.meta.FunctionVariant.PRIMITIVE
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 # All function variants (constructors), in a canonical order.
 function_variants = (hydra.meta.FunctionVariant.ELIMINATION, hydra.meta.FunctionVariant.LAMBDA, hydra.meta.FunctionVariant.PRIMITIVE)
@@ -104,6 +116,9 @@ def integer_type_is_signed(v1: hydra.core.IntegerType) -> bool:
         
         case hydra.core.IntegerType.UINT64:
             return False
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def integer_type_precision(v1: hydra.core.IntegerType) -> hydra.util.Precision:
     r"""Find the precision of a given integer type."""
@@ -135,6 +150,9 @@ def integer_type_precision(v1: hydra.core.IntegerType) -> hydra.util.Precision:
         
         case hydra.core.IntegerType.UINT64:
             return cast(hydra.util.Precision, hydra.util.PrecisionBits(64))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 # All integer types, in a canonical order.
 integer_types = (hydra.core.IntegerType.BIGINT, hydra.core.IntegerType.INT8, hydra.core.IntegerType.INT16, hydra.core.IntegerType.INT32, hydra.core.IntegerType.INT64, hydra.core.IntegerType.UINT8, hydra.core.IntegerType.UINT16, hydra.core.IntegerType.UINT32, hydra.core.IntegerType.UINT64)
@@ -169,6 +187,9 @@ def integer_value_type(v1: hydra.core.IntegerValue) -> hydra.core.IntegerType:
         
         case hydra.core.IntegerValueUint64():
             return hydra.core.IntegerType.UINT64
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def literal_type(v1: hydra.core.Literal) -> hydra.core.LiteralType:
     r"""Find the literal type for a given literal value."""
@@ -188,6 +209,9 @@ def literal_type(v1: hydra.core.Literal) -> hydra.core.LiteralType:
         
         case hydra.core.LiteralString():
             return cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.meta.LiteralVariant:
     r"""Find the literal type variant (constructor) for a given literal value."""
@@ -207,6 +231,9 @@ def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.meta.LiteralVarian
         
         case hydra.core.LiteralTypeString():
             return hydra.meta.LiteralVariant.STRING
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 # All literal types, in a canonical order.
 literal_types = hydra.lib.lists.concat(((cast(hydra.core.LiteralType, hydra.core.LiteralTypeBinary()), cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean())), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(x))), float_types), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(x))), integer_types), (cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()),)))
@@ -282,6 +309,9 @@ def term_variant(v1: hydra.core.Term) -> hydra.meta.TermVariant:
         
         case hydra.core.TermWrap():
             return hydra.meta.TermVariant.WRAP
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 # All term (expression) variants, in a canonical order.
 term_variants = (hydra.meta.TermVariant.ANNOTATED, hydra.meta.TermVariant.APPLICATION, hydra.meta.TermVariant.EITHER, hydra.meta.TermVariant.FUNCTION, hydra.meta.TermVariant.LIST, hydra.meta.TermVariant.LITERAL, hydra.meta.TermVariant.MAP, hydra.meta.TermVariant.MAYBE, hydra.meta.TermVariant.PAIR, hydra.meta.TermVariant.PRODUCT, hydra.meta.TermVariant.RECORD, hydra.meta.TermVariant.SET, hydra.meta.TermVariant.SUM, hydra.meta.TermVariant.TYPE_LAMBDA, hydra.meta.TermVariant.TYPE_APPLICATION, hydra.meta.TermVariant.UNION, hydra.meta.TermVariant.UNIT, hydra.meta.TermVariant.VARIABLE, hydra.meta.TermVariant.WRAP)
@@ -343,6 +373,9 @@ def type_variant(v1: hydra.core.Type) -> hydra.meta.TypeVariant:
         
         case hydra.core.TypeWrap():
             return hydra.meta.TypeVariant.WRAP
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
 
 # All type variants, in a canonical order.
 type_variants = (hydra.meta.TypeVariant.ANNOTATED, hydra.meta.TypeVariant.APPLICATION, hydra.meta.TypeVariant.EITHER, hydra.meta.TypeVariant.FUNCTION, hydra.meta.TypeVariant.FORALL, hydra.meta.TypeVariant.LIST, hydra.meta.TypeVariant.LITERAL, hydra.meta.TypeVariant.MAP, hydra.meta.TypeVariant.WRAP, hydra.meta.TypeVariant.MAYBE, hydra.meta.TypeVariant.PAIR, hydra.meta.TypeVariant.PRODUCT, hydra.meta.TypeVariant.RECORD, hydra.meta.TypeVariant.SET, hydra.meta.TypeVariant.SUM, hydra.meta.TypeVariant.UNION, hydra.meta.TypeVariant.UNIT, hydra.meta.TypeVariant.VARIABLE)
