@@ -33,7 +33,7 @@ module Hydra.Kernel (
   module Hydra.Inference,
   module Hydra.Lexical,
   module Hydra.Literals,
-  module Hydra.Mantle,
+  module Hydra.Meta,
   module Hydra.Module,
   module Hydra.Phantoms,
   module Hydra.Names,
@@ -50,6 +50,7 @@ module Hydra.Kernel (
   module Hydra.Templates,
   module Hydra.Typing,
   module Hydra.Unification,
+  module Hydra.Util,
   module Hydra.Variants,
   module Hydra.Workflow,
 ) where
@@ -75,7 +76,7 @@ import Hydra.Graph
 import Hydra.Inference
 import Hydra.Lexical
 import Hydra.Literals
-import Hydra.Mantle hiding (Either)
+import Hydra.Meta
 import Hydra.Module
 import Hydra.Phantoms
 import Hydra.Names
@@ -92,5 +93,6 @@ import Hydra.Tabular
 import Hydra.Templates
 import Hydra.Typing
 import Hydra.Unification
+import Hydra.Util
 import Hydra.Variants
 import Hydra.Workflow

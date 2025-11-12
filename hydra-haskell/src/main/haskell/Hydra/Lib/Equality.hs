@@ -2,7 +2,7 @@
 
 module Hydra.Lib.Equality where
 
-import Hydra.Mantle
+import Hydra.Util
 
 import Data.Int
 

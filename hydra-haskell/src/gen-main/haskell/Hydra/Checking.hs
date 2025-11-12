@@ -22,7 +22,7 @@ import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core__
-import qualified Hydra.Show.Mantle as Mantle
+import qualified Hydra.Show.Meta as Meta
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Variants as Variants
@@ -242,7 +242,7 @@ typeOf tx typeArgs term =
           Core.TermWrap v1 -> (typeOfWrappedTerm tx typeArgs v1)
           _ -> (Flows.fail (Strings.cat [
             "unsupported term variant in typeOf: ",
-            (Mantle.termVariant (Variants.termVariant term))]))) term)
+            (Meta.termVariant (Variants.termVariant term))]))) term)
   in (Monads.withTrace (Strings.cat [
     "checking type of: ",
     Core__.term term,

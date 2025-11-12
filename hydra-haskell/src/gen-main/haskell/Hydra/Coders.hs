@@ -5,7 +5,7 @@ module Hydra.Coders where
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Meta as Meta
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -60,19 +60,19 @@ _Language_constraints = (Core.Name "constraints")
 data LanguageConstraints = 
   LanguageConstraints {
     -- | All supported elimination variants
-    languageConstraintsEliminationVariants :: (S.Set Mantle.EliminationVariant),
+    languageConstraintsEliminationVariants :: (S.Set Meta.EliminationVariant),
     -- | All supported literal variants
-    languageConstraintsLiteralVariants :: (S.Set Mantle.LiteralVariant),
+    languageConstraintsLiteralVariants :: (S.Set Meta.LiteralVariant),
     -- | All supported float types
     languageConstraintsFloatTypes :: (S.Set Core.FloatType),
     -- | All supported function variants
-    languageConstraintsFunctionVariants :: (S.Set Mantle.FunctionVariant),
+    languageConstraintsFunctionVariants :: (S.Set Meta.FunctionVariant),
     -- | All supported integer types
     languageConstraintsIntegerTypes :: (S.Set Core.IntegerType),
     -- | All supported term variants
-    languageConstraintsTermVariants :: (S.Set Mantle.TermVariant),
+    languageConstraintsTermVariants :: (S.Set Meta.TermVariant),
     -- | All supported type variants
-    languageConstraintsTypeVariants :: (S.Set Mantle.TypeVariant),
+    languageConstraintsTypeVariants :: (S.Set Meta.TypeVariant),
     -- | A logical set of types, as a predicate which tests a type for inclusion
     languageConstraintsTypes :: (Core.Type -> Bool)}
 

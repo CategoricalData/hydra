@@ -20,7 +20,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Meta as Meta
 import qualified Hydra.Module as Module
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Names as Names
@@ -240,7 +240,7 @@ isSerializable el =
   let variants = (\typ -> Lists.map Variants.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ))
   in (Flows.map (\deps ->  
     let allVariants = (Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps))))
-    in (Logic.not (Sets.member Mantle.TypeVariantFunction allVariants))) (typeDependencies False Equality.identity (Core.bindingName el)))
+    in (Logic.not (Sets.member Meta.TypeVariantFunction allVariants))) (typeDependencies False Equality.identity (Core.bindingName el)))
 
 -- | Find dependency namespaces in all elements of a module, excluding the module's own namespace
 moduleDependencyNamespaces :: (Bool -> Bool -> Bool -> Bool -> Module.Module -> Compute.Flow Graph.Graph (S.Set Module.Namespace))
@@ -309,9 +309,9 @@ requireUnionType name =
 
 -- | Resolve a type, dereferencing type variables
 resolveType :: (Core.Type -> Compute.Flow Graph.Graph (Maybe Core.Type))
-resolveType typ = (Monads.withTrace "resolve type" ((\x -> case x of
+resolveType typ = ((\x -> case x of
   Core.TypeVariable v1 -> (Lexical.withSchemaContext (Flows.bind (Lexical.resolveTerm v1) (\mterm -> Maybes.maybe (Flows.pure Nothing) (\t -> Flows.map Maybes.pure (Core_.type_ t)) mterm)))
-  _ -> (Flows.pure (Just typ))) (Rewriting.deannotateType typ)))
+  _ -> (Flows.pure (Just typ))) (Rewriting.deannotateType typ))
 
 schemaGraphToTypingEnvironment :: (Graph.Graph -> Compute.Flow t0 (M.Map Core.Name Core.TypeScheme))
 schemaGraphToTypingEnvironment g =  

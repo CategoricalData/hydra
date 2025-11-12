@@ -4,7 +4,8 @@ module Hydra.Variants where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Meta as Meta
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -12,27 +13,27 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Find the elimination variant (constructor) for a given elimination term
-eliminationVariant :: (Core.Elimination -> Mantle.EliminationVariant)
+eliminationVariant :: (Core.Elimination -> Meta.EliminationVariant)
 eliminationVariant x = case x of
-  Core.EliminationProduct _ -> Mantle.EliminationVariantProduct
-  Core.EliminationRecord _ -> Mantle.EliminationVariantRecord
-  Core.EliminationUnion _ -> Mantle.EliminationVariantUnion
-  Core.EliminationWrap _ -> Mantle.EliminationVariantWrap
+  Core.EliminationProduct _ -> Meta.EliminationVariantProduct
+  Core.EliminationRecord _ -> Meta.EliminationVariantRecord
+  Core.EliminationUnion _ -> Meta.EliminationVariantUnion
+  Core.EliminationWrap _ -> Meta.EliminationVariantWrap
 
 -- | All elimination variants (constructors), in a canonical order
-eliminationVariants :: [Mantle.EliminationVariant]
+eliminationVariants :: [Meta.EliminationVariant]
 eliminationVariants = [
-  Mantle.EliminationVariantProduct,
-  Mantle.EliminationVariantRecord,
-  Mantle.EliminationVariantUnion,
-  Mantle.EliminationVariantWrap]
+  Meta.EliminationVariantProduct,
+  Meta.EliminationVariantRecord,
+  Meta.EliminationVariantUnion,
+  Meta.EliminationVariantWrap]
 
 -- | Find the precision of a given floating-point type
-floatTypePrecision :: (Core.FloatType -> Mantle.Precision)
+floatTypePrecision :: (Core.FloatType -> Util.Precision)
 floatTypePrecision x = case x of
-  Core.FloatTypeBigfloat -> Mantle.PrecisionArbitrary
-  Core.FloatTypeFloat32 -> (Mantle.PrecisionBits 32)
-  Core.FloatTypeFloat64 -> (Mantle.PrecisionBits 64)
+  Core.FloatTypeBigfloat -> Util.PrecisionArbitrary
+  Core.FloatTypeFloat32 -> (Util.PrecisionBits 32)
+  Core.FloatTypeFloat64 -> (Util.PrecisionBits 64)
 
 -- | All floating-point types in a canonical order
 floatTypes :: [Core.FloatType]
@@ -49,18 +50,18 @@ floatValueType x = case x of
   Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
 
 -- | Find the function variant (constructor) for a given function
-functionVariant :: (Core.Function -> Mantle.FunctionVariant)
+functionVariant :: (Core.Function -> Meta.FunctionVariant)
 functionVariant x = case x of
-  Core.FunctionElimination _ -> Mantle.FunctionVariantElimination
-  Core.FunctionLambda _ -> Mantle.FunctionVariantLambda
-  Core.FunctionPrimitive _ -> Mantle.FunctionVariantPrimitive
+  Core.FunctionElimination _ -> Meta.FunctionVariantElimination
+  Core.FunctionLambda _ -> Meta.FunctionVariantLambda
+  Core.FunctionPrimitive _ -> Meta.FunctionVariantPrimitive
 
 -- | All function variants (constructors), in a canonical order
-functionVariants :: [Mantle.FunctionVariant]
+functionVariants :: [Meta.FunctionVariant]
 functionVariants = [
-  Mantle.FunctionVariantElimination,
-  Mantle.FunctionVariantLambda,
-  Mantle.FunctionVariantPrimitive]
+  Meta.FunctionVariantElimination,
+  Meta.FunctionVariantLambda,
+  Meta.FunctionVariantPrimitive]
 
 -- | Find whether a given integer type is signed (true) or unsigned (false)
 integerTypeIsSigned :: (Core.IntegerType -> Bool)
@@ -76,17 +77,17 @@ integerTypeIsSigned x = case x of
   Core.IntegerTypeUint64 -> False
 
 -- | Find the precision of a given integer type
-integerTypePrecision :: (Core.IntegerType -> Mantle.Precision)
+integerTypePrecision :: (Core.IntegerType -> Util.Precision)
 integerTypePrecision x = case x of
-  Core.IntegerTypeBigint -> Mantle.PrecisionArbitrary
-  Core.IntegerTypeInt8 -> (Mantle.PrecisionBits 8)
-  Core.IntegerTypeInt16 -> (Mantle.PrecisionBits 16)
-  Core.IntegerTypeInt32 -> (Mantle.PrecisionBits 32)
-  Core.IntegerTypeInt64 -> (Mantle.PrecisionBits 64)
-  Core.IntegerTypeUint8 -> (Mantle.PrecisionBits 8)
-  Core.IntegerTypeUint16 -> (Mantle.PrecisionBits 16)
-  Core.IntegerTypeUint32 -> (Mantle.PrecisionBits 32)
-  Core.IntegerTypeUint64 -> (Mantle.PrecisionBits 64)
+  Core.IntegerTypeBigint -> Util.PrecisionArbitrary
+  Core.IntegerTypeInt8 -> (Util.PrecisionBits 8)
+  Core.IntegerTypeInt16 -> (Util.PrecisionBits 16)
+  Core.IntegerTypeInt32 -> (Util.PrecisionBits 32)
+  Core.IntegerTypeInt64 -> (Util.PrecisionBits 64)
+  Core.IntegerTypeUint8 -> (Util.PrecisionBits 8)
+  Core.IntegerTypeUint16 -> (Util.PrecisionBits 16)
+  Core.IntegerTypeUint32 -> (Util.PrecisionBits 32)
+  Core.IntegerTypeUint64 -> (Util.PrecisionBits 64)
 
 -- | All integer types, in a canonical order
 integerTypes :: [Core.IntegerType]
@@ -124,13 +125,13 @@ literalType x = case x of
   Core.LiteralString _ -> Core.LiteralTypeString
 
 -- | Find the literal type variant (constructor) for a given literal value
-literalTypeVariant :: (Core.LiteralType -> Mantle.LiteralVariant)
+literalTypeVariant :: (Core.LiteralType -> Meta.LiteralVariant)
 literalTypeVariant x = case x of
-  Core.LiteralTypeBinary -> Mantle.LiteralVariantBinary
-  Core.LiteralTypeBoolean -> Mantle.LiteralVariantBoolean
-  Core.LiteralTypeFloat _ -> Mantle.LiteralVariantFloat
-  Core.LiteralTypeInteger _ -> Mantle.LiteralVariantInteger
-  Core.LiteralTypeString -> Mantle.LiteralVariantString
+  Core.LiteralTypeBinary -> Meta.LiteralVariantBinary
+  Core.LiteralTypeBoolean -> Meta.LiteralVariantBoolean
+  Core.LiteralTypeFloat _ -> Meta.LiteralVariantFloat
+  Core.LiteralTypeInteger _ -> Meta.LiteralVariantInteger
+  Core.LiteralTypeString -> Meta.LiteralVariantString
 
 -- | All literal types, in a canonical order
 literalTypes :: [Core.LiteralType]
@@ -144,105 +145,105 @@ literalTypes = (Lists.concat [
     Core.LiteralTypeString]])
 
 -- | Find the literal variant (constructor) for a given literal value
-literalVariant :: (Core.Literal -> Mantle.LiteralVariant)
+literalVariant :: (Core.Literal -> Meta.LiteralVariant)
 literalVariant arg_ = (literalTypeVariant (literalType arg_))
 
 -- | All literal variants, in a canonical order
-literalVariants :: [Mantle.LiteralVariant]
+literalVariants :: [Meta.LiteralVariant]
 literalVariants = [
-  Mantle.LiteralVariantBinary,
-  Mantle.LiteralVariantBoolean,
-  Mantle.LiteralVariantFloat,
-  Mantle.LiteralVariantInteger,
-  Mantle.LiteralVariantString]
+  Meta.LiteralVariantBinary,
+  Meta.LiteralVariantBoolean,
+  Meta.LiteralVariantFloat,
+  Meta.LiteralVariantInteger,
+  Meta.LiteralVariantString]
 
 -- | Find the term variant (constructor) for a given term
-termVariant :: (Core.Term -> Mantle.TermVariant)
+termVariant :: (Core.Term -> Meta.TermVariant)
 termVariant x = case x of
-  Core.TermAnnotated _ -> Mantle.TermVariantAnnotated
-  Core.TermApplication _ -> Mantle.TermVariantApplication
-  Core.TermEither _ -> Mantle.TermVariantEither
-  Core.TermFunction _ -> Mantle.TermVariantFunction
-  Core.TermLet _ -> Mantle.TermVariantLet
-  Core.TermList _ -> Mantle.TermVariantList
-  Core.TermLiteral _ -> Mantle.TermVariantLiteral
-  Core.TermMap _ -> Mantle.TermVariantMap
-  Core.TermMaybe _ -> Mantle.TermVariantMaybe
-  Core.TermPair _ -> Mantle.TermVariantPair
-  Core.TermProduct _ -> Mantle.TermVariantProduct
-  Core.TermRecord _ -> Mantle.TermVariantRecord
-  Core.TermSet _ -> Mantle.TermVariantSet
-  Core.TermSum _ -> Mantle.TermVariantSum
-  Core.TermTypeApplication _ -> Mantle.TermVariantTypeApplication
-  Core.TermTypeLambda _ -> Mantle.TermVariantTypeLambda
-  Core.TermUnion _ -> Mantle.TermVariantUnion
-  Core.TermUnit -> Mantle.TermVariantUnit
-  Core.TermVariable _ -> Mantle.TermVariantVariable
-  Core.TermWrap _ -> Mantle.TermVariantWrap
+  Core.TermAnnotated _ -> Meta.TermVariantAnnotated
+  Core.TermApplication _ -> Meta.TermVariantApplication
+  Core.TermEither _ -> Meta.TermVariantEither
+  Core.TermFunction _ -> Meta.TermVariantFunction
+  Core.TermLet _ -> Meta.TermVariantLet
+  Core.TermList _ -> Meta.TermVariantList
+  Core.TermLiteral _ -> Meta.TermVariantLiteral
+  Core.TermMap _ -> Meta.TermVariantMap
+  Core.TermMaybe _ -> Meta.TermVariantMaybe
+  Core.TermPair _ -> Meta.TermVariantPair
+  Core.TermProduct _ -> Meta.TermVariantProduct
+  Core.TermRecord _ -> Meta.TermVariantRecord
+  Core.TermSet _ -> Meta.TermVariantSet
+  Core.TermSum _ -> Meta.TermVariantSum
+  Core.TermTypeApplication _ -> Meta.TermVariantTypeApplication
+  Core.TermTypeLambda _ -> Meta.TermVariantTypeLambda
+  Core.TermUnion _ -> Meta.TermVariantUnion
+  Core.TermUnit -> Meta.TermVariantUnit
+  Core.TermVariable _ -> Meta.TermVariantVariable
+  Core.TermWrap _ -> Meta.TermVariantWrap
 
 -- | All term (expression) variants, in a canonical order
-termVariants :: [Mantle.TermVariant]
+termVariants :: [Meta.TermVariant]
 termVariants = [
-  Mantle.TermVariantAnnotated,
-  Mantle.TermVariantApplication,
-  Mantle.TermVariantEither,
-  Mantle.TermVariantFunction,
-  Mantle.TermVariantList,
-  Mantle.TermVariantLiteral,
-  Mantle.TermVariantMap,
-  Mantle.TermVariantMaybe,
-  Mantle.TermVariantPair,
-  Mantle.TermVariantProduct,
-  Mantle.TermVariantRecord,
-  Mantle.TermVariantSet,
-  Mantle.TermVariantSum,
-  Mantle.TermVariantTypeLambda,
-  Mantle.TermVariantTypeApplication,
-  Mantle.TermVariantUnion,
-  Mantle.TermVariantUnit,
-  Mantle.TermVariantVariable,
-  Mantle.TermVariantWrap]
+  Meta.TermVariantAnnotated,
+  Meta.TermVariantApplication,
+  Meta.TermVariantEither,
+  Meta.TermVariantFunction,
+  Meta.TermVariantList,
+  Meta.TermVariantLiteral,
+  Meta.TermVariantMap,
+  Meta.TermVariantMaybe,
+  Meta.TermVariantPair,
+  Meta.TermVariantProduct,
+  Meta.TermVariantRecord,
+  Meta.TermVariantSet,
+  Meta.TermVariantSum,
+  Meta.TermVariantTypeLambda,
+  Meta.TermVariantTypeApplication,
+  Meta.TermVariantUnion,
+  Meta.TermVariantUnit,
+  Meta.TermVariantVariable,
+  Meta.TermVariantWrap]
 
 -- | Find the type variant (constructor) for a given type
-typeVariant :: (Core.Type -> Mantle.TypeVariant)
+typeVariant :: (Core.Type -> Meta.TypeVariant)
 typeVariant x = case x of
-  Core.TypeAnnotated _ -> Mantle.TypeVariantAnnotated
-  Core.TypeApplication _ -> Mantle.TypeVariantApplication
-  Core.TypeEither _ -> Mantle.TypeVariantEither
-  Core.TypeFunction _ -> Mantle.TypeVariantFunction
-  Core.TypeForall _ -> Mantle.TypeVariantForall
-  Core.TypeList _ -> Mantle.TypeVariantList
-  Core.TypeLiteral _ -> Mantle.TypeVariantLiteral
-  Core.TypeMap _ -> Mantle.TypeVariantMap
-  Core.TypeMaybe _ -> Mantle.TypeVariantMaybe
-  Core.TypePair _ -> Mantle.TypeVariantPair
-  Core.TypeProduct _ -> Mantle.TypeVariantProduct
-  Core.TypeRecord _ -> Mantle.TypeVariantRecord
-  Core.TypeSet _ -> Mantle.TypeVariantSet
-  Core.TypeSum _ -> Mantle.TypeVariantSum
-  Core.TypeUnion _ -> Mantle.TypeVariantUnion
-  Core.TypeUnit -> Mantle.TypeVariantUnit
-  Core.TypeVariable _ -> Mantle.TypeVariantVariable
-  Core.TypeWrap _ -> Mantle.TypeVariantWrap
+  Core.TypeAnnotated _ -> Meta.TypeVariantAnnotated
+  Core.TypeApplication _ -> Meta.TypeVariantApplication
+  Core.TypeEither _ -> Meta.TypeVariantEither
+  Core.TypeFunction _ -> Meta.TypeVariantFunction
+  Core.TypeForall _ -> Meta.TypeVariantForall
+  Core.TypeList _ -> Meta.TypeVariantList
+  Core.TypeLiteral _ -> Meta.TypeVariantLiteral
+  Core.TypeMap _ -> Meta.TypeVariantMap
+  Core.TypeMaybe _ -> Meta.TypeVariantMaybe
+  Core.TypePair _ -> Meta.TypeVariantPair
+  Core.TypeProduct _ -> Meta.TypeVariantProduct
+  Core.TypeRecord _ -> Meta.TypeVariantRecord
+  Core.TypeSet _ -> Meta.TypeVariantSet
+  Core.TypeSum _ -> Meta.TypeVariantSum
+  Core.TypeUnion _ -> Meta.TypeVariantUnion
+  Core.TypeUnit -> Meta.TypeVariantUnit
+  Core.TypeVariable _ -> Meta.TypeVariantVariable
+  Core.TypeWrap _ -> Meta.TypeVariantWrap
 
 -- | All type variants, in a canonical order
-typeVariants :: [Mantle.TypeVariant]
+typeVariants :: [Meta.TypeVariant]
 typeVariants = [
-  Mantle.TypeVariantAnnotated,
-  Mantle.TypeVariantApplication,
-  Mantle.TypeVariantEither,
-  Mantle.TypeVariantFunction,
-  Mantle.TypeVariantForall,
-  Mantle.TypeVariantList,
-  Mantle.TypeVariantLiteral,
-  Mantle.TypeVariantMap,
-  Mantle.TypeVariantWrap,
-  Mantle.TypeVariantMaybe,
-  Mantle.TypeVariantPair,
-  Mantle.TypeVariantProduct,
-  Mantle.TypeVariantRecord,
-  Mantle.TypeVariantSet,
-  Mantle.TypeVariantSum,
-  Mantle.TypeVariantUnion,
-  Mantle.TypeVariantUnit,
-  Mantle.TypeVariantVariable]
+  Meta.TypeVariantAnnotated,
+  Meta.TypeVariantApplication,
+  Meta.TypeVariantEither,
+  Meta.TypeVariantFunction,
+  Meta.TypeVariantForall,
+  Meta.TypeVariantList,
+  Meta.TypeVariantLiteral,
+  Meta.TypeVariantMap,
+  Meta.TypeVariantWrap,
+  Meta.TypeVariantMaybe,
+  Meta.TypeVariantPair,
+  Meta.TypeVariantProduct,
+  Meta.TypeVariantRecord,
+  Meta.TypeVariantSet,
+  Meta.TypeVariantSum,
+  Meta.TypeVariantUnion,
+  Meta.TypeVariantUnit,
+  Meta.TypeVariantVariable]

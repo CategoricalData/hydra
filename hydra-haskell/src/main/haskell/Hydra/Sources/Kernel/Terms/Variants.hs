@@ -2,18 +2,22 @@
 
 module Hydra.Sources.Kernel.Terms.Variants where
 
--- Standard imports for term-level kernel modules
+-- Standard imports for kernel terms modules
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Accessors     as Accessors
+import qualified Hydra.Dsl.Annotations   as Annotations
 import qualified Hydra.Dsl.Ast           as Ast
+import qualified Hydra.Dsl.Bootstrap     as Bootstrap
 import qualified Hydra.Dsl.Coders        as Coders
 import qualified Hydra.Dsl.Compute       as Compute
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Grammar       as Grammar
+import qualified Hydra.Dsl.Grammars      as Grammars
 import qualified Hydra.Dsl.Graph         as Graph
 import qualified Hydra.Dsl.Json          as Json
 import qualified Hydra.Dsl.Lib.Chars     as Chars
+import qualified Hydra.Dsl.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Lib.Flows     as Flows
 import qualified Hydra.Dsl.Lib.Lists     as Lists
@@ -22,17 +26,27 @@ import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
 import qualified Hydra.Dsl.Lib.Maybes    as Maybes
-import           Hydra.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Lib.Pairs     as Pairs
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
-import qualified Hydra.Dsl.Mantle        as Mantle
+import qualified Hydra.Dsl.Literals      as Literals
+import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
+import qualified Hydra.Dsl.Meta          as Meta
 import qualified Hydra.Dsl.Module        as Module
+import           Hydra.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Prims         as Prims
+import qualified Hydra.Dsl.Tabular       as Tabular
+import qualified Hydra.Dsl.Testing       as Testing
+import qualified Hydra.Dsl.TBase         as TBase
+import qualified Hydra.Dsl.Terms         as Terms
+import qualified Hydra.Dsl.Testing       as Testing
+import qualified Hydra.Dsl.Tests         as Tests
+import qualified Hydra.Dsl.Topology      as Topology
 import qualified Hydra.Dsl.TTerms        as TTerms
 import qualified Hydra.Dsl.TTypes        as TTypes
-import qualified Hydra.Dsl.Terms         as Terms
-import qualified Hydra.Dsl.Topology      as Topology
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
+import qualified Hydra.Dsl.Util          as Util
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
@@ -77,10 +91,10 @@ eliminationVariantDef :: TBinding (Elimination -> EliminationVariant)
 eliminationVariantDef = define "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
   match _Elimination Nothing [
-    _Elimination_product>>: constant Mantle.eliminationVariantProduct,
-    _Elimination_record>>: constant Mantle.eliminationVariantRecord,
-    _Elimination_union>>: constant Mantle.eliminationVariantUnion,
-    _Elimination_wrap>>: constant Mantle.eliminationVariantWrap]
+    _Elimination_product>>: constant Meta.eliminationVariantProduct,
+    _Elimination_record>>: constant Meta.eliminationVariantRecord,
+    _Elimination_union>>: constant Meta.eliminationVariantUnion,
+    _Elimination_wrap>>: constant Meta.eliminationVariantWrap]
 
 eliminationVariantsDef :: TBinding [EliminationVariant]
 eliminationVariantsDef = define "eliminationVariants" $
@@ -95,9 +109,9 @@ floatTypePrecisionDef :: TBinding (FloatType -> Precision)
 floatTypePrecisionDef = define "floatTypePrecision" $
   doc "Find the precision of a given floating-point type" $
   match _FloatType Nothing [
-    _FloatType_bigfloat>>: constant Mantle.precisionArbitrary,
-    _FloatType_float32>>: constant $ Mantle.precisionBits $ int32 32,
-    _FloatType_float64>>: constant $ Mantle.precisionBits $ int32 64]
+    _FloatType_bigfloat>>: constant Util.precisionArbitrary,
+    _FloatType_float32>>: constant $ Util.precisionBits $ int32 32,
+    _FloatType_float64>>: constant $ Util.precisionBits $ int32 64]
 
 floatTypesDef :: TBinding [FloatType]
 floatTypesDef = define "floatTypes" $
@@ -119,9 +133,9 @@ functionVariantDef :: TBinding (Function -> FunctionVariant)
 functionVariantDef = define "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
   match _Function Nothing [
-    _Function_elimination>>: constant Mantle.functionVariantElimination,
-    _Function_lambda>>: constant Mantle.functionVariantLambda,
-    _Function_primitive>>: constant Mantle.functionVariantPrimitive]
+    _Function_elimination>>: constant Meta.functionVariantElimination,
+    _Function_lambda>>: constant Meta.functionVariantLambda,
+    _Function_primitive>>: constant Meta.functionVariantPrimitive]
 
 functionVariantsDef :: TBinding [FunctionVariant]
 functionVariantsDef = define "functionVariants" $
@@ -149,15 +163,15 @@ integerTypePrecisionDef :: TBinding (IntegerType -> Precision)
 integerTypePrecisionDef = define "integerTypePrecision" $
   doc "Find the precision of a given integer type" $
   match _IntegerType Nothing [
-    _IntegerType_bigint>>: constant Mantle.precisionArbitrary,
-    _IntegerType_int8>>: constant $ Mantle.precisionBits $ int32 8,
-    _IntegerType_int16>>: constant $ Mantle.precisionBits $ int32 16,
-    _IntegerType_int32>>: constant $ Mantle.precisionBits $ int32 32,
-    _IntegerType_int64>>: constant $ Mantle.precisionBits $ int32 64,
-    _IntegerType_uint8>>: constant $ Mantle.precisionBits $ int32 8,
-    _IntegerType_uint16>>: constant $ Mantle.precisionBits $ int32 16,
-    _IntegerType_uint32>>: constant $ Mantle.precisionBits $ int32 32,
-    _IntegerType_uint64>>: constant $ Mantle.precisionBits $ int32 64]
+    _IntegerType_bigint>>: constant Util.precisionArbitrary,
+    _IntegerType_int8>>: constant $ Util.precisionBits $ int32 8,
+    _IntegerType_int16>>: constant $ Util.precisionBits $ int32 16,
+    _IntegerType_int32>>: constant $ Util.precisionBits $ int32 32,
+    _IntegerType_int64>>: constant $ Util.precisionBits $ int32 64,
+    _IntegerType_uint8>>: constant $ Util.precisionBits $ int32 8,
+    _IntegerType_uint16>>: constant $ Util.precisionBits $ int32 16,
+    _IntegerType_uint32>>: constant $ Util.precisionBits $ int32 32,
+    _IntegerType_uint64>>: constant $ Util.precisionBits $ int32 64]
 
 integerTypesDef :: TBinding [IntegerType]
 integerTypesDef = define "integerTypes" $
@@ -201,11 +215,11 @@ literalTypeVariantDef :: TBinding (LiteralType -> LiteralVariant)
 literalTypeVariantDef = define "literalTypeVariant" $
   doc "Find the literal type variant (constructor) for a given literal value" $
   match _LiteralType Nothing [
-    _LiteralType_binary>>:  constant $ Mantle.literalVariantBinary,
-    _LiteralType_boolean>>: constant $ Mantle.literalVariantBoolean,
-    _LiteralType_float>>:   constant $ Mantle.literalVariantFloat,
-    _LiteralType_integer>>: constant $ Mantle.literalVariantInteger,
-    _LiteralType_string>>:  constant $ Mantle.literalVariantString]
+    _LiteralType_binary>>:  constant $ Meta.literalVariantBinary,
+    _LiteralType_boolean>>: constant $ Meta.literalVariantBoolean,
+    _LiteralType_float>>:   constant $ Meta.literalVariantFloat,
+    _LiteralType_integer>>: constant $ Meta.literalVariantInteger,
+    _LiteralType_string>>:  constant $ Meta.literalVariantString]
 
 literalTypesDef :: TBinding [LiteralType]
 literalTypesDef = define "literalTypes" $
@@ -238,26 +252,26 @@ termVariantDef :: TBinding (Term -> TermVariant)
 termVariantDef = define "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
   match _Term Nothing [
-    _Term_annotated>>: constant Mantle.termVariantAnnotated,
-    _Term_application>>: constant Mantle.termVariantApplication,
-    _Term_either>>: constant Mantle.termVariantEither,
-    _Term_function>>: constant Mantle.termVariantFunction,
-    _Term_let>>: constant Mantle.termVariantLet,
-    _Term_list>>: constant Mantle.termVariantList,
-    _Term_literal>>: constant Mantle.termVariantLiteral,
-    _Term_map>>: constant Mantle.termVariantMap,
-    _Term_maybe>>: constant Mantle.termVariantMaybe,
-    _Term_pair>>: constant Mantle.termVariantPair,
-    _Term_product>>: constant Mantle.termVariantProduct,
-    _Term_record>>: constant Mantle.termVariantRecord,
-    _Term_set>>: constant Mantle.termVariantSet,
-    _Term_sum>>: constant Mantle.termVariantSum,
-    _Term_typeApplication>>: constant Mantle.termVariantTypeApplication,
-    _Term_typeLambda>>: constant Mantle.termVariantTypeLambda,
-    _Term_union>>: constant Mantle.termVariantUnion,
-    _Term_unit>>: constant Mantle.termVariantUnit,
-    _Term_variable>>: constant Mantle.termVariantVariable,
-    _Term_wrap>>: constant Mantle.termVariantWrap]
+    _Term_annotated>>: constant Meta.termVariantAnnotated,
+    _Term_application>>: constant Meta.termVariantApplication,
+    _Term_either>>: constant Meta.termVariantEither,
+    _Term_function>>: constant Meta.termVariantFunction,
+    _Term_let>>: constant Meta.termVariantLet,
+    _Term_list>>: constant Meta.termVariantList,
+    _Term_literal>>: constant Meta.termVariantLiteral,
+    _Term_map>>: constant Meta.termVariantMap,
+    _Term_maybe>>: constant Meta.termVariantMaybe,
+    _Term_pair>>: constant Meta.termVariantPair,
+    _Term_product>>: constant Meta.termVariantProduct,
+    _Term_record>>: constant Meta.termVariantRecord,
+    _Term_set>>: constant Meta.termVariantSet,
+    _Term_sum>>: constant Meta.termVariantSum,
+    _Term_typeApplication>>: constant Meta.termVariantTypeApplication,
+    _Term_typeLambda>>: constant Meta.termVariantTypeLambda,
+    _Term_union>>: constant Meta.termVariantUnion,
+    _Term_unit>>: constant Meta.termVariantUnit,
+    _Term_variable>>: constant Meta.termVariantVariable,
+    _Term_wrap>>: constant Meta.termVariantWrap]
 
 termVariantsDef :: TBinding [TermVariant]
 termVariantsDef = define "termVariants" $
@@ -287,24 +301,24 @@ typeVariantDef :: TBinding (Type -> TypeVariant)
 typeVariantDef = define "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
   match _Type Nothing [
-    _Type_annotated>>: constant Mantle.typeVariantAnnotated,
-    _Type_application>>: constant Mantle.typeVariantApplication,
-    _Type_either>>: constant Mantle.typeVariantEither,
-    _Type_function>>: constant Mantle.typeVariantFunction,
-    _Type_forall>>: constant Mantle.typeVariantForall,
-    _Type_list>>: constant Mantle.typeVariantList,
-    _Type_literal>>: constant Mantle.typeVariantLiteral,
-    _Type_map>>: constant Mantle.typeVariantMap,
-    _Type_maybe>>: constant Mantle.typeVariantMaybe,
-    _Type_pair>>: constant Mantle.typeVariantPair,
-    _Type_product>>: constant Mantle.typeVariantProduct,
-    _Type_record>>: constant Mantle.typeVariantRecord,
-    _Type_set>>: constant Mantle.typeVariantSet,
-    _Type_sum>>: constant Mantle.typeVariantSum,
-    _Type_union>>: constant Mantle.typeVariantUnion,
-    _Type_unit>>: constant Mantle.typeVariantUnit,
-    _Type_variable>>: constant Mantle.typeVariantVariable,
-    _Type_wrap>>: constant Mantle.typeVariantWrap]
+    _Type_annotated>>: constant Meta.typeVariantAnnotated,
+    _Type_application>>: constant Meta.typeVariantApplication,
+    _Type_either>>: constant Meta.typeVariantEither,
+    _Type_function>>: constant Meta.typeVariantFunction,
+    _Type_forall>>: constant Meta.typeVariantForall,
+    _Type_list>>: constant Meta.typeVariantList,
+    _Type_literal>>: constant Meta.typeVariantLiteral,
+    _Type_map>>: constant Meta.typeVariantMap,
+    _Type_maybe>>: constant Meta.typeVariantMaybe,
+    _Type_pair>>: constant Meta.typeVariantPair,
+    _Type_product>>: constant Meta.typeVariantProduct,
+    _Type_record>>: constant Meta.typeVariantRecord,
+    _Type_set>>: constant Meta.typeVariantSet,
+    _Type_sum>>: constant Meta.typeVariantSum,
+    _Type_union>>: constant Meta.typeVariantUnion,
+    _Type_unit>>: constant Meta.typeVariantUnit,
+    _Type_variable>>: constant Meta.typeVariantVariable,
+    _Type_wrap>>: constant Meta.typeVariantWrap]
 
 typeVariantsDef :: TBinding [TypeVariant]
 typeVariantsDef = define "typeVariants" $

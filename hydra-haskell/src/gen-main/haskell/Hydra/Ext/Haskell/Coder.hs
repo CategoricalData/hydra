@@ -27,7 +27,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Meta as Meta
 import qualified Hydra.Module as Module
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Names as Names
@@ -35,6 +35,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as Core___
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -361,7 +362,7 @@ encodeType namespaces typ =
       in (ref name)
     _ -> (Flows.fail (Strings.cat2 "unexpected type: " (Core___.type_ typ)))) (Rewriting.deannotateType typ)))
 
-encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core.Name (S.Set Mantle.TypeClass) -> Core.Type -> Compute.Flow Graph.Graph Ast.Type)
+encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core.Name (S.Set Meta.TypeClass) -> Core.Type -> Compute.Flow Graph.Graph Ast.Type)
 encodeTypeWithClassAssertions namespaces explicitClasses typ =  
   let classes = (Maps.union explicitClasses (getImplicitTypeClasses typ)) 
       implicitClasses = (getImplicitTypeClasses typ)
@@ -369,8 +370,8 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ =
               let name = (fst tuple2) 
                   cls = (snd tuple2)
                   hname = (Utils.rawName ((\x -> case x of
-                          Mantle.TypeClassEquality -> "Eq"
-                          Mantle.TypeClassOrdering -> "Ord") cls))
+                          Meta.TypeClassEquality -> "Eq"
+                          Meta.TypeClassOrdering -> "Ord") cls))
                   htype = (Ast.TypeVariable (Utils.rawName (Core.unName name)))
               in (Ast.AssertionClass (Ast.ClassAssertion {
                 Ast.classAssertionName = hname,
@@ -407,10 +408,10 @@ findOrdVariables typ =
               _ -> names) (Rewriting.deannotateType t))
   in (Rewriting.foldOverType Coders.TraversalOrderPre fold Sets.empty typ)
 
-getImplicitTypeClasses :: (Core.Type -> M.Map Core.Name (S.Set Mantle.TypeClass))
+getImplicitTypeClasses :: (Core.Type -> M.Map Core.Name (S.Set Meta.TypeClass))
 getImplicitTypeClasses typ =  
   let toPair = (\name -> (name, (Sets.fromList [
-          Mantle.TypeClassOrdering])))
+          Meta.TypeClassOrdering])))
   in (Maps.fromList (Lists.map toPair (Sets.toList (findOrdVariables typ))))
 
 moduleToHaskellModule :: (Module.Module -> Compute.Flow Graph.Graph Ast.Module)
@@ -419,7 +420,7 @@ moduleToHaskellModule mod = (Flows.bind (Utils.namespacesForModule mod) (\namesp
 moduleToHaskell :: (Module.Module -> Compute.Flow Graph.Graph (M.Map String String))
 moduleToHaskell mod = (Flows.bind (moduleToHaskellModule mod) (\hsmod ->  
   let s = (Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr hsmod))) 
-      filepath = (Names.namespaceToFilePath Mantle.CaseConventionPascal (Module.FileExtension "hs") (Module.moduleNamespace mod))
+      filepath = (Names.namespaceToFilePath Util.CaseConventionPascal (Module.FileExtension "hs") (Module.moduleNamespace mod))
   in (Flows.pure (Maps.singleton filepath s))))
 
 nameDecls :: (t0 -> Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> [Ast.DeclarationWithComments])

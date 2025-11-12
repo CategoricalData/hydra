@@ -10,7 +10,7 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -318,9 +318,9 @@ parenthesize exp =
                                     in  
                                       let comparison = (Equality.compare prec lprec)
                                       in ((\x -> case x of
-                                        Mantle.ComparisonLessThan -> lhs_
-                                        Mantle.ComparisonGreaterThan -> (parens lhs_)
-                                        Mantle.ComparisonEqualTo -> (Logic.ifElse (Logic.and (assocLeft assoc) (assocLeft lassoc)) lhs_ (parens lhs_))) comparison)
+                                        Util.ComparisonLessThan -> lhs_
+                                        Util.ComparisonGreaterThan -> (parens lhs_)
+                                        Util.ComparisonEqualTo -> (Logic.ifElse (Logic.and (assocLeft assoc) (assocLeft lassoc)) lhs_ (parens lhs_))) comparison)
                               _ -> lhs_) lhs_)
                       in  
                         let rhs2 = ((\x -> case x of
@@ -333,9 +333,9 @@ parenthesize exp =
                                       in  
                                         let comparison = (Equality.compare prec rprec)
                                         in ((\x -> case x of
-                                          Mantle.ComparisonLessThan -> rhs_
-                                          Mantle.ComparisonGreaterThan -> (parens rhs_)
-                                          Mantle.ComparisonEqualTo -> (Logic.ifElse (Logic.and (assocRight assoc) (assocRight rassoc)) rhs_ (parens rhs_))) comparison)
+                                          Util.ComparisonLessThan -> rhs_
+                                          Util.ComparisonGreaterThan -> (parens rhs_)
+                                          Util.ComparisonEqualTo -> (Logic.ifElse (Logic.and (assocRight assoc) (assocRight rassoc)) rhs_ (parens rhs_))) comparison)
                                 _ -> rhs_) rhs_)
                         in (Ast.ExprOp (Ast.OpExpr {
                           Ast.opExprOp = op,

@@ -6,12 +6,12 @@ module Hydra.Dsl.Prims where
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
-import Hydra.Mantle
+import Hydra.Util
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Extract.Core as ExtractCore
-import qualified Hydra.Extract.Mantle as ExtractMantle
+import qualified Hydra.Extract.Util as ExtractUtil
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Show.Core as ShowCore
@@ -68,7 +68,7 @@ either_ xCoder yCoder = TermCoder (Types.either_ (termCoderType xCoder) (termCod
 comparison :: TermCoder Comparison
 comparison = TermCoder (TypeVariable _Comparison) $ Coder encode decode
   where
-    encode = ExtractMantle.comparison
+    encode = ExtractUtil.comparison
     decode = pure . Terms.comparison
 
 floatType :: TermCoder FloatType

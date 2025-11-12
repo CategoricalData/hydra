@@ -13,11 +13,12 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Meta as Meta
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Util as Util
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -89,7 +90,7 @@ literalTypeIsSupported constraints lt =
   in (Logic.and (Sets.member (Variants.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) (isSupported lt))
 
 -- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
-nameToFilePath :: (Mantle.CaseConvention -> Mantle.CaseConvention -> Module.FileExtension -> Core.Name -> String)
+nameToFilePath :: (Util.CaseConvention -> Util.CaseConvention -> Module.FileExtension -> Core.Name -> String)
 nameToFilePath nsConv localConv ext name =  
   let qualName = (Names.qualifyName name)
   in  
@@ -97,11 +98,11 @@ nameToFilePath nsConv localConv ext name =
     in  
       let local = (Module.qualifiedNameLocal qualName)
       in  
-        let nsToFilePath = (\ns -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Mantle.CaseConventionCamel nsConv part) (Strings.splitOn "." (Module.unNamespace ns))))
+        let nsToFilePath = (\ns -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Module.unNamespace ns))))
         in  
           let prefix = (Maybes.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns)
           in  
-            let suffix = (Formatting.convertCase Mantle.CaseConventionPascal localConv local)
+            let suffix = (Formatting.convertCase Util.CaseConventionPascal localConv local)
             in (Strings.cat [
               prefix,
               suffix,
@@ -114,7 +115,7 @@ typeIsSupported constraints t =
   let base = (Rewriting.deannotateType t)
   in  
     let isVariable = (\v -> (\x -> case x of
-            Mantle.TypeVariantVariable -> True
+            Meta.TypeVariantVariable -> True
             _ -> False) v)
     in  
       let isSupportedVariant = (\v -> Logic.or (isVariable v) (Sets.member v (Coders.languageConstraintsTypeVariants constraints)))
