@@ -5,7 +5,8 @@ module Hydra.Ext.Org.Json.Schema.Language where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Meta as Meta
+import qualified Hydra.Util as Util
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -29,10 +30,10 @@ jsonSchemaLanguage = Coders.Language {
   where 
     eliminationVariants = (Sets.fromList [])
     literalVariants = (Sets.fromList [
-      Mantle.LiteralVariantBoolean,
-      Mantle.LiteralVariantFloat,
-      Mantle.LiteralVariantInteger,
-      Mantle.LiteralVariantString])
+      Meta.LiteralVariantBoolean,
+      Meta.LiteralVariantFloat,
+      Meta.LiteralVariantInteger,
+      Meta.LiteralVariantString])
     floatTypes = (Sets.fromList [
       Core.FloatTypeBigfloat])
     functionVariants = (Sets.fromList [])
@@ -40,12 +41,12 @@ jsonSchemaLanguage = Coders.Language {
       Core.IntegerTypeBigint])
     termVariants = (Sets.fromList Variants.termVariants)
     typeVariants = (Sets.fromList [
-      Mantle.TypeVariantAnnotated,
-      Mantle.TypeVariantList,
-      Mantle.TypeVariantLiteral,
-      Mantle.TypeVariantMap,
-      Mantle.TypeVariantMaybe,
-      Mantle.TypeVariantRecord,
-      Mantle.TypeVariantUnion,
-      Mantle.TypeVariantVariable])
+      Meta.TypeVariantAnnotated,
+      Meta.TypeVariantList,
+      Meta.TypeVariantLiteral,
+      Meta.TypeVariantMap,
+      Meta.TypeVariantMaybe,
+      Meta.TypeVariantRecord,
+      Meta.TypeVariantUnion,
+      Meta.TypeVariantVariable])
     typePredicate = (\_ -> True)
