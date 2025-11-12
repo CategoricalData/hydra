@@ -1,0 +1,202 @@
+-- | Metadata and reflection types which describe the structure of Hydra core types and terms.
+
+module Hydra.Meta where
+
+import qualified Hydra.Core as Core
+import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
+
+-- | The identifier of an elimination constructor
+data EliminationVariant = 
+  EliminationVariantProduct  |
+  EliminationVariantRecord  |
+  EliminationVariantUnion  |
+  EliminationVariantWrap 
+  deriving (Eq, Ord, Read, Show)
+
+_EliminationVariant = (Core.Name "hydra.meta.EliminationVariant")
+
+_EliminationVariant_product = (Core.Name "product")
+
+_EliminationVariant_record = (Core.Name "record")
+
+_EliminationVariant_union = (Core.Name "union")
+
+_EliminationVariant_wrap = (Core.Name "wrap")
+
+-- | The identifier of a function constructor
+data FunctionVariant = 
+  FunctionVariantElimination  |
+  FunctionVariantLambda  |
+  FunctionVariantPrimitive 
+  deriving (Eq, Ord, Read, Show)
+
+_FunctionVariant = (Core.Name "hydra.meta.FunctionVariant")
+
+_FunctionVariant_elimination = (Core.Name "elimination")
+
+_FunctionVariant_lambda = (Core.Name "lambda")
+
+_FunctionVariant_primitive = (Core.Name "primitive")
+
+-- | The identifier of a literal constructor
+data LiteralVariant = 
+  LiteralVariantBinary  |
+  LiteralVariantBoolean  |
+  LiteralVariantFloat  |
+  LiteralVariantInteger  |
+  LiteralVariantString 
+  deriving (Eq, Ord, Read, Show)
+
+_LiteralVariant = (Core.Name "hydra.meta.LiteralVariant")
+
+_LiteralVariant_binary = (Core.Name "binary")
+
+_LiteralVariant_boolean = (Core.Name "boolean")
+
+_LiteralVariant_float = (Core.Name "float")
+
+_LiteralVariant_integer = (Core.Name "integer")
+
+_LiteralVariant_string = (Core.Name "string")
+
+-- | The identifier of a term expression constructor
+data TermVariant = 
+  TermVariantAnnotated  |
+  TermVariantApplication  |
+  TermVariantEither  |
+  TermVariantFunction  |
+  TermVariantLet  |
+  TermVariantList  |
+  TermVariantLiteral  |
+  TermVariantMap  |
+  TermVariantMaybe  |
+  TermVariantPair  |
+  TermVariantProduct  |
+  TermVariantRecord  |
+  TermVariantSet  |
+  TermVariantSum  |
+  TermVariantTypeApplication  |
+  TermVariantTypeLambda  |
+  TermVariantUnion  |
+  TermVariantUnit  |
+  TermVariantVariable  |
+  TermVariantWrap 
+  deriving (Eq, Ord, Read, Show)
+
+_TermVariant = (Core.Name "hydra.meta.TermVariant")
+
+_TermVariant_annotated = (Core.Name "annotated")
+
+_TermVariant_application = (Core.Name "application")
+
+_TermVariant_either = (Core.Name "either")
+
+_TermVariant_function = (Core.Name "function")
+
+_TermVariant_let = (Core.Name "let")
+
+_TermVariant_list = (Core.Name "list")
+
+_TermVariant_literal = (Core.Name "literal")
+
+_TermVariant_map = (Core.Name "map")
+
+_TermVariant_maybe = (Core.Name "maybe")
+
+_TermVariant_pair = (Core.Name "pair")
+
+_TermVariant_product = (Core.Name "product")
+
+_TermVariant_record = (Core.Name "record")
+
+_TermVariant_set = (Core.Name "set")
+
+_TermVariant_sum = (Core.Name "sum")
+
+_TermVariant_typeApplication = (Core.Name "typeApplication")
+
+_TermVariant_typeLambda = (Core.Name "typeLambda")
+
+_TermVariant_union = (Core.Name "union")
+
+_TermVariant_unit = (Core.Name "unit")
+
+_TermVariant_variable = (Core.Name "variable")
+
+_TermVariant_wrap = (Core.Name "wrap")
+
+-- | Any of a small number of built-in type classes
+data TypeClass = 
+  TypeClassEquality  |
+  TypeClassOrdering 
+  deriving (Eq, Ord, Read, Show)
+
+_TypeClass = (Core.Name "hydra.meta.TypeClass")
+
+_TypeClass_equality = (Core.Name "equality")
+
+_TypeClass_ordering = (Core.Name "ordering")
+
+-- | The identifier of a type constructor
+data TypeVariant = 
+  TypeVariantAnnotated  |
+  TypeVariantApplication  |
+  TypeVariantEither  |
+  TypeVariantForall  |
+  TypeVariantFunction  |
+  TypeVariantList  |
+  TypeVariantLiteral  |
+  TypeVariantMap  |
+  TypeVariantMaybe  |
+  TypeVariantPair  |
+  TypeVariantProduct  |
+  TypeVariantRecord  |
+  TypeVariantSet  |
+  TypeVariantSum  |
+  TypeVariantUnion  |
+  TypeVariantUnit  |
+  TypeVariantVariable  |
+  TypeVariantWrap 
+  deriving (Eq, Ord, Read, Show)
+
+_TypeVariant = (Core.Name "hydra.meta.TypeVariant")
+
+_TypeVariant_annotated = (Core.Name "annotated")
+
+_TypeVariant_application = (Core.Name "application")
+
+_TypeVariant_either = (Core.Name "either")
+
+_TypeVariant_forall = (Core.Name "forall")
+
+_TypeVariant_function = (Core.Name "function")
+
+_TypeVariant_list = (Core.Name "list")
+
+_TypeVariant_literal = (Core.Name "literal")
+
+_TypeVariant_map = (Core.Name "map")
+
+_TypeVariant_maybe = (Core.Name "maybe")
+
+_TypeVariant_pair = (Core.Name "pair")
+
+_TypeVariant_product = (Core.Name "product")
+
+_TypeVariant_record = (Core.Name "record")
+
+_TypeVariant_set = (Core.Name "set")
+
+_TypeVariant_sum = (Core.Name "sum")
+
+_TypeVariant_union = (Core.Name "union")
+
+_TypeVariant_unit = (Core.Name "unit")
+
+_TypeVariant_variable = (Core.Name "variable")
+
+_TypeVariant_wrap = (Core.Name "wrap")
