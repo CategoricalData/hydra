@@ -239,7 +239,7 @@ typeElement name typ =
       Core.bindingTerm = dataTerm,
       Core.bindingType = (Just (Core.TypeScheme {
         Core.typeSchemeVariables = [],
-        Core.typeSchemeType = typ}))}
+        Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type"))}))}
 
 whenFlag :: (Core.Name -> Compute.Flow t0 t1 -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 whenFlag flag fthen felse = (Flows.bind (hasFlag flag) (\b -> Logic.ifElse b fthen felse))
