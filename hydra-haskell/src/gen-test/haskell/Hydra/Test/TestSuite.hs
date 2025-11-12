@@ -1,4 +1,4 @@
--- | Test cases for primitive functions
+-- | Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass.
 
 module Hydra.Test.TestSuite where
 
