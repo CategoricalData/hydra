@@ -11,7 +11,6 @@ import hydra.adapt.utils
 import hydra.coders
 import hydra.compute
 import hydra.core
-import hydra.describe.core
 import hydra.extract.core
 import hydra.graph
 import hydra.lib.equality
@@ -629,13 +628,13 @@ def term_adapter(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapte
                 return for_type_reference(name)
             
             case _:
-                return hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.coders.AdapterContext, hydra.coders.AdapterContext], hydra.monads.get_state), (lambda cx: hydra.adapt.utils.choose_adapter((lambda v1: alts(cx, v1)), (lambda v1: supported(cx, v1)), hydra.show.core.type, hydra.describe.core.type, typ)))
+                return hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.coders.AdapterContext, hydra.coders.AdapterContext], hydra.monads.get_state), (lambda cx: hydra.adapt.utils.choose_adapter((lambda v1: alts(cx, v1)), (lambda v1: supported(cx, v1)), hydra.show.core.type, hydra.show.core.type, typ)))
     match typ:
         case hydra.core.TypeAnnotated(value=at):
             return hydra.lib.flows.bind(term_adapter(at.body), (lambda ad: hydra.lib.flows.pure(cast(hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(ad.is_lossy, ad.source, cast(hydra.core.Type, hydra.core.TypeAnnotated(hydra.core.AnnotatedType(ad.target, at.annotation))), ad.coder)))))
         
         case _:
-            return hydra.monads.with_trace(hydra.lib.strings.cat2("adapter for ", hydra.describe.core.type(typ)), dflt())
+            return hydra.monads.with_trace(hydra.lib.strings.cat2("adapter for ", hydra.show.core.type(typ)), dflt())
 
 def union_to_record(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     r"""Convert union types to record types."""

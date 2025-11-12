@@ -19,7 +19,7 @@ import Hydra.Generation
 import Hydra.Ext.Sources.All
 import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
-import qualified Hydra.Describe.Core as DescribeCore
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Pg.Model as PG

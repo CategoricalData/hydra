@@ -57,7 +57,6 @@ import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Literals as AdaptLiterals
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils as AdaptUtils
-import qualified Hydra.Sources.Kernel.Terms.Describe.Core as DescribeCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Literals as Lits
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
@@ -879,13 +878,13 @@ termAdapterDef = define "termAdapter" $
         @@ (var "alts" @@ var "cx")
         @@ (var "supported" @@ var "cx")
         @@ ref ShowCore.typeDef
-        @@ (ref DescribeCore.typeDef)
+        @@ (ref ShowCore.typeDef)
         @@ (var "typ"))) [
     -- Account for let-bound variables
     _Type_variable>>: "name" ~> ref forTypeReferenceDef @@ var "name"]) $
   cases _Type (var "typ")
     (Just (
-      trace (Strings.cat2 "adapter for " (ref DescribeCore.typeDef @@ var "typ"))
+      trace (Strings.cat2 "adapter for " (ref ShowCore.typeDef @@ var "typ"))
       (var "dflt"))) [
     _Type_annotated>>: "at" ~>
       "ad" <<~ ref termAdapterDef @@ Core.annotatedTypeBody (var "at") $
