@@ -84,17 +84,25 @@ def convert_case_pascal_to_upper_snake(v1: str) -> str:
     return convert_case(hydra.mantle.CaseConvention.PASCAL, hydra.mantle.CaseConvention.UPPER_SNAKE, v1)
 
 def escape_with_underscore(reserved: frozenset[str], s: str) -> str:
+    r"""Escape reserved words by appending an underscore."""
+    
     return hydra.lib.logic.if_else(hydra.lib.sets.member(s, reserved), hydra.lib.strings.cat((s, "_")), s)
 
 def indent_lines(s: str) -> str:
+    r"""Indent each line of a string with four spaces."""
+    
     def indent(l: str) -> str:
         return hydra.lib.strings.cat(("    ", l))
     return hydra.lib.strings.unlines(hydra.lib.lists.map(indent, hydra.lib.strings.lines(s)))
 
 def java_style_comment(s: str) -> str:
+    r"""Format a string as a Java-style block comment."""
+    
     return hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("/**\n", " * ")), s)), "\n */"))
 
 def non_alnum_to_underscores(input: str) -> str:
+    r"""Replace sequences of non-alphanumeric characters with single underscores."""
+    
     def is_alnum(c: int) -> bool:
         return hydra.lib.logic.or_(hydra.lib.logic.and_(hydra.lib.equality.gte(c, 65), hydra.lib.equality.lte(c, 90)), hydra.lib.logic.or_(hydra.lib.logic.and_(hydra.lib.equality.gte(c, 97), hydra.lib.equality.lte(c, 122)), hydra.lib.logic.and_(hydra.lib.equality.gte(c, 48), hydra.lib.equality.lte(c, 57))))
     def replace(p: Tuple[frozenlist[int], bool], c: int) -> Tuple[frozenlist[int], bool]:
@@ -105,15 +113,21 @@ def non_alnum_to_underscores(input: str) -> str:
     return hydra.lib.strings.from_list(hydra.lib.lists.reverse(result[0]))
 
 def sanitize_with_underscores(reserved: frozenset[str], s: str) -> str:
+    r"""Sanitize a string by replacing non-alphanumeric characters and escaping reserved words."""
+    
     return escape_with_underscore(reserved, non_alnum_to_underscores(s))
 
 def show_list[T0](f: Callable[[T0], str], els: frozenlist[T0]) -> str:
     return hydra.lib.strings.cat(("[", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map(f, els)), "]"))
 
 def strip_leading_and_trailing_whitespace(s: str) -> str:
+    r"""Remove leading and trailing whitespace from a string."""
+    
     return hydra.lib.strings.from_list(hydra.lib.lists.drop_while(hydra.lib.chars.is_space, hydra.lib.lists.reverse(hydra.lib.lists.drop_while(hydra.lib.chars.is_space, hydra.lib.lists.reverse(hydra.lib.strings.to_list(s))))))
 
 def with_character_aliases(original: str) -> str:
+    r"""Replace special characters with their alphanumeric aliases."""
+    
     aliases = cast(FrozenDict[int, str], hydra.lib.maps.from_list(((32, "sp"), (33, "excl"), (34, "quot"), (35, "num"), (36, "dollar"), (37, "percnt"), (38, "amp"), (39, "apos"), (40, "lpar"), (41, "rpar"), (42, "ast"), (43, "plus"), (44, "comma"), (45, "minus"), (46, "period"), (47, "sol"), (58, "colon"), (59, "semi"), (60, "lt"), (61, "equals"), (62, "gt"), (63, "quest"), (64, "commat"), (91, "lsqb"), (92, "bsol"), (93, "rsqb"), (94, "circ"), (95, "lowbar"), (96, "grave"), (123, "lcub"), (124, "verbar"), (125, "rcub"), (126, "tilde"))))
     def alias(c: int) -> frozenlist[int]:
         return hydra.lib.maybes.from_maybe(hydra.lib.lists.pure(c), hydra.lib.maybes.map(hydra.lib.strings.to_list, hydra.lib.maps.lookup(c, aliases)))

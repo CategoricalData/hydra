@@ -85,7 +85,7 @@ def get_term_description(term: hydra.core.Term) -> hydra.compute.Flow[hydra.grap
 def get_type(anns: FrozenDict[hydra.core.Name, hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Type]]:
     r"""Get type from annotations."""
     
-    return hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(Maybe[hydra.core.Type], Nothing())), (lambda dat: hydra.lib.flows.map(cast(Callable[[hydra.core.Type], Maybe[hydra.core.Type]], hydra.lib.maybes.pure), hydra.decode.core.type(dat))), hydra.lib.maps.lookup(hydra.constants.key_type, anns))
+    return hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(Maybe[hydra.core.Type], Nothing())), (lambda dat: hydra.lib.flows.map(cast(Callable[[hydra.core.Type], Maybe[hydra.core.Type]], hydra.lib.maybes.pure), hydra.monads.with_trace("get type", hydra.decode.core.type(dat)))), hydra.lib.maps.lookup(hydra.constants.key_type, anns))
 
 def type_annotation_internal(typ: hydra.core.Type) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
     r"""Get internal type annotations."""
@@ -216,7 +216,7 @@ def type_element(name: hydra.core.Name, typ: hydra.core.Type) -> hydra.core.Bind
     
     schema_term = cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.core.Type")))
     data_term = normalize_term_annotations(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(hydra.encode.core.type(typ), cast(FrozenDict[hydra.core.Name, hydra.core.Term], hydra.lib.maps.from_list(((hydra.constants.key_type, schema_term),)))))))
-    return hydra.core.Binding(name, data_term, cast(Maybe[hydra.core.TypeScheme], Just(hydra.core.TypeScheme(cast(frozenlist[hydra.core.Name], ()), typ))))
+    return hydra.core.Binding(name, data_term, cast(Maybe[hydra.core.TypeScheme], Just(hydra.core.TypeScheme(cast(frozenlist[hydra.core.Name], ()), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type")))))))
 
 def when_flag[T0, T1](flag: hydra.core.Name, fthen: hydra.compute.Flow[T0, T1], felse: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:
     return hydra.lib.flows.bind(has_flag(flag), (lambda b: hydra.lib.logic.if_else(b, fthen, felse)))

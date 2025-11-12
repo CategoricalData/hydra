@@ -4,6 +4,7 @@ r"""A model for path- and pattern-based graph constraints, which may be consider
 
 from __future__ import annotations
 from dataclasses import dataclass
+from typing import Annotated
 import hydra.core
 import hydra.query
 
@@ -11,8 +12,8 @@ import hydra.query
 class PathEquation:
     r"""A declared equivalence between two abstract paths in a graph."""
     
-    left: hydra.query.Path
-    right: hydra.query.Path
+    left: Annotated[hydra.query.Path, "The left-hand side of the equation"]
+    right: Annotated[hydra.query.Path, "The right-hand side of the equation"]
 
 PATH_EQUATION__NAME = hydra.core.Name("hydra.constraints.PathEquation")
 PATH_EQUATION__LEFT__NAME = hydra.core.Name("left")
@@ -22,8 +23,8 @@ PATH_EQUATION__RIGHT__NAME = hydra.core.Name("right")
 class PatternImplication:
     r"""A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns."""
     
-    antecedent: hydra.query.Pattern
-    consequent: hydra.query.Pattern
+    antecedent: Annotated[hydra.query.Pattern, "The pattern which, if it matches, triggers the constraint"]
+    consequent: Annotated[hydra.query.Pattern, "The pattern which must also match when the antecedent matches"]
 
 PATTERN_IMPLICATION__NAME = hydra.core.Name("hydra.constraints.PatternImplication")
 PATTERN_IMPLICATION__ANTECEDENT__NAME = hydra.core.Name("antecedent")

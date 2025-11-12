@@ -11,9 +11,11 @@ import hydra.graph
 
 N = TypeVar("N")
 
-class DefinitionTerm(Node["TermDefinition"]): ...
+class DefinitionTerm(Node["TermDefinition"]):
+    r"""A term definition."""
 
-class DefinitionType(Node["TypeDefinition"]): ...
+class DefinitionType(Node["TypeDefinition"]):
+    r"""A type definition."""
 
 # A definition, which may be either a term or type definition.
 type Definition = DefinitionTerm | DefinitionType
@@ -66,8 +68,8 @@ NAMESPACE__NAME = hydra.core.Name("hydra.module.Namespace")
 class Namespaces(Generic[N]):
     r"""A mapping from namespaces to values of type n, with a focus on one namespace."""
     
-    focus: Tuple[Namespace, N]
-    mapping: FrozenDict[Namespace, N]
+    focus: Annotated[Tuple[Namespace, N], "The namespace in focus, together with its associated value"]
+    mapping: Annotated[FrozenDict[Namespace, N], "A mapping of namespaces to values"]
 
 NAMESPACES__NAME = hydra.core.Name("hydra.module.Namespaces")
 NAMESPACES__FOCUS__NAME = hydra.core.Name("focus")
@@ -77,8 +79,8 @@ NAMESPACES__MAPPING__NAME = hydra.core.Name("mapping")
 class QualifiedName:
     r"""A qualified name consisting of an optional namespace together with a mandatory local name."""
     
-    namespace: Maybe[Namespace]
-    local: str
+    namespace: Annotated[Maybe[Namespace], "The optional namespace"]
+    local: Annotated[str, "The local name"]
 
 QUALIFIED_NAME__NAME = hydra.core.Name("hydra.module.QualifiedName")
 QUALIFIED_NAME__NAMESPACE__NAME = hydra.core.Name("namespace")
@@ -88,9 +90,9 @@ QUALIFIED_NAME__LOCAL__NAME = hydra.core.Name("local")
 class TermDefinition:
     r"""A term-level definition, including a name, a term, and the type of the term."""
     
-    name: hydra.core.Name
-    term: hydra.core.Term
-    type: hydra.core.Type
+    name: Annotated[hydra.core.Name, "The name of the term"]
+    term: Annotated[hydra.core.Term, "The term being defined"]
+    type: Annotated[hydra.core.Type, "The type of the term"]
 
 TERM_DEFINITION__NAME = hydra.core.Name("hydra.module.TermDefinition")
 TERM_DEFINITION__NAME__NAME = hydra.core.Name("name")
@@ -101,8 +103,8 @@ TERM_DEFINITION__TYPE__NAME = hydra.core.Name("type")
 class TypeDefinition:
     r"""A type-level definition, including a name and the type."""
     
-    name: hydra.core.Name
-    type: hydra.core.Type
+    name: Annotated[hydra.core.Name, "The name of the type"]
+    type: Annotated[hydra.core.Type, "The type being defined"]
 
 TYPE_DEFINITION__NAME = hydra.core.Name("hydra.module.TypeDefinition")
 TYPE_DEFINITION__NAME__NAME = hydra.core.Name("name")

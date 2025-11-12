@@ -5,13 +5,16 @@ r"""A model for term access patterns."""
 from __future__ import annotations
 from dataclasses import dataclass
 from hydra.dsl.python import Node, frozenlist
+from typing import Annotated
 import hydra.core
 
 @dataclass
 class AccessorEdge:
-    source: AccessorNode
-    path: AccessorPath
-    target: AccessorNode
+    r"""An edge in an accessor graph, connecting two nodes via a path."""
+    
+    source: Annotated[AccessorNode, "The source node of the edge"]
+    path: Annotated[AccessorPath, "The accessor path connecting source to target"]
+    target: Annotated[AccessorNode, "The target node of the edge"]
 
 ACCESSOR_EDGE__NAME = hydra.core.Name("hydra.accessors.AccessorEdge")
 ACCESSOR_EDGE__SOURCE__NAME = hydra.core.Name("source")
@@ -20,8 +23,10 @@ ACCESSOR_EDGE__TARGET__NAME = hydra.core.Name("target")
 
 @dataclass
 class AccessorGraph:
-    nodes: frozenlist[AccessorNode]
-    edges: frozenlist[AccessorEdge]
+    r"""A graph of accessor nodes and edges, representing term access patterns."""
+    
+    nodes: Annotated[frozenlist[AccessorNode], "All nodes in the graph"]
+    edges: Annotated[frozenlist[AccessorEdge], "All edges in the graph"]
 
 ACCESSOR_GRAPH__NAME = hydra.core.Name("hydra.accessors.AccessorGraph")
 ACCESSOR_GRAPH__NODES__NAME = hydra.core.Name("nodes")
@@ -29,58 +34,81 @@ ACCESSOR_GRAPH__EDGES__NAME = hydra.core.Name("edges")
 
 @dataclass
 class AccessorNode:
-    name: hydra.core.Name
-    label: str
-    id: str
+    r"""A node in an accessor graph, representing a term or subterm."""
+    
+    name: Annotated[hydra.core.Name, "The qualified name of the term"]
+    label: Annotated[str, "A human-readable label for the node"]
+    id: Annotated[str, "A unique identifier for the node"]
 
 ACCESSOR_NODE__NAME = hydra.core.Name("hydra.accessors.AccessorNode")
 ACCESSOR_NODE__NAME__NAME = hydra.core.Name("name")
 ACCESSOR_NODE__LABEL__NAME = hydra.core.Name("label")
 ACCESSOR_NODE__ID__NAME = hydra.core.Name("id")
 
-class AccessorPath(Node["frozenlist[TermAccessor]"]): ...
+class AccessorPath(Node["frozenlist[TermAccessor]"]):
+    r"""A sequence of term accessors forming a path through a term."""
 
 ACCESSOR_PATH__NAME = hydra.core.Name("hydra.accessors.AccessorPath")
 
-class TermAccessorAnnotatedBody: ...
+class TermAccessorAnnotatedBody:
+    r"""Access the body of an annotated term."""
 
-class TermAccessorApplicationFunction: ...
+class TermAccessorApplicationFunction:
+    r"""Access the function of an application term."""
 
-class TermAccessorApplicationArgument: ...
+class TermAccessorApplicationArgument:
+    r"""Access the argument of an application term."""
 
-class TermAccessorLambdaBody: ...
+class TermAccessorLambdaBody:
+    r"""Access the body of a lambda term."""
 
-class TermAccessorUnionCasesDefault: ...
+class TermAccessorUnionCasesDefault:
+    r"""Access the default case of a union elimination."""
 
-class TermAccessorUnionCasesBranch(Node["hydra.core.Name"]): ...
+class TermAccessorUnionCasesBranch(Node["hydra.core.Name"]):
+    r"""Access a specific branch of a union elimination by field name."""
 
-class TermAccessorLetBody: ...
+class TermAccessorLetBody:
+    r"""Access the body of a let term."""
 
-class TermAccessorLetBinding(Node["hydra.core.Name"]): ...
+class TermAccessorLetBinding(Node["hydra.core.Name"]):
+    r"""Access a specific binding in a let term by variable name."""
 
-class TermAccessorListElement(Node[int]): ...
+class TermAccessorListElement(Node[int]):
+    r"""Access an element of a list by index."""
 
-class TermAccessorMapKey(Node[int]): ...
+class TermAccessorMapKey(Node[int]):
+    r"""Access a key in a map by index."""
 
-class TermAccessorMapValue(Node[int]): ...
+class TermAccessorMapValue(Node[int]):
+    r"""Access a value in a map by index."""
 
-class TermAccessorMaybeTerm: ...
+class TermAccessorMaybeTerm:
+    r"""Access the term inside a Just value."""
 
-class TermAccessorProductTerm(Node[int]): ...
+class TermAccessorProductTerm(Node[int]):
+    r"""Access an element of a product (tuple) by index."""
 
-class TermAccessorRecordField(Node["hydra.core.Name"]): ...
+class TermAccessorRecordField(Node["hydra.core.Name"]):
+    r"""Access a field of a record by field name."""
 
-class TermAccessorSetElement(Node[int]): ...
+class TermAccessorSetElement(Node[int]):
+    r"""Access an element of a set by index."""
 
-class TermAccessorSumTerm: ...
+class TermAccessorSumTerm:
+    r"""Access the term inside a sum variant."""
 
-class TermAccessorTypeLambdaBody: ...
+class TermAccessorTypeLambdaBody:
+    r"""Access the body of a type lambda term."""
 
-class TermAccessorTypeApplicationTerm: ...
+class TermAccessorTypeApplicationTerm:
+    r"""Access the term being applied to a type."""
 
-class TermAccessorInjectionTerm: ...
+class TermAccessorInjectionTerm:
+    r"""Access the term inside a union injection."""
 
-class TermAccessorWrappedTerm: ...
+class TermAccessorWrappedTerm:
+    r"""Access the term inside a wrapped term."""
 
 # A function which maps from a term to a particular immediate subterm.
 type TermAccessor = TermAccessorAnnotatedBody | TermAccessorApplicationFunction | TermAccessorApplicationArgument | TermAccessorLambdaBody | TermAccessorUnionCasesDefault | TermAccessorUnionCasesBranch | TermAccessorLetBody | TermAccessorLetBinding | TermAccessorListElement | TermAccessorMapKey | TermAccessorMapValue | TermAccessorMaybeTerm | TermAccessorProductTerm | TermAccessorRecordField | TermAccessorSetElement | TermAccessorSumTerm | TermAccessorTypeLambdaBody | TermAccessorTypeApplicationTerm | TermAccessorInjectionTerm | TermAccessorWrappedTerm

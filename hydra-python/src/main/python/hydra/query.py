@@ -130,8 +130,8 @@ QUERY__PATTERNS__NAME = hydra.core.Name("patterns")
 class Range:
     r"""A range from min to max, inclusive."""
     
-    min: int
-    max: int
+    min: Annotated[int, "The minimum value (inclusive)"]
+    max: Annotated[int, "The maximum value (inclusive)"]
 
 RANGE__NAME = hydra.core.Name("hydra.query.Range")
 RANGE__MIN__NAME = hydra.core.Name("min")
@@ -174,8 +174,8 @@ REGEX_QUANTIFIER__RANGE__NAME = hydra.core.Name("range")
 class RegexSequence:
     r"""A path with a regex quantifier."""
     
-    path: Path
-    quantifier: RegexQuantifier
+    path: Annotated[Path, "The path to which the quantifier applies"]
+    quantifier: Annotated[RegexQuantifier, "The quantifier"]
 
 REGEX_SEQUENCE__NAME = hydra.core.Name("hydra.query.RegexSequence")
 REGEX_SEQUENCE__PATH__NAME = hydra.core.Name("path")
@@ -202,9 +202,9 @@ STEP__COMPARE__NAME = hydra.core.Name("compare")
 class TriplePattern:
     r"""A subject/predicate/object pattern."""
     
-    subject: Node_
-    predicate: Path
-    object: Node_
+    subject: Annotated[Node_, "The subject of the pattern"]
+    predicate: Annotated[Path, "The predicate (property) of the pattern"]
+    object: Annotated[Node_, "The object of the pattern"]
 
 TRIPLE_PATTERN__NAME = hydra.core.Name("hydra.query.TriplePattern")
 TRIPLE_PATTERN__SUBJECT__NAME = hydra.core.Name("subject")
