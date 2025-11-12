@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-r"""Test cases for primitive functions."""
+r"""Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass."""
 
 from __future__ import annotations
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist

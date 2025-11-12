@@ -107,6 +107,9 @@ pythonpath = [
     "src/gen-test/python",
     "src/test/python"
 ]
+testpaths = [
+    "src/test/python"
+]
 
 [build-system]
 requires = ["hatchling"]
