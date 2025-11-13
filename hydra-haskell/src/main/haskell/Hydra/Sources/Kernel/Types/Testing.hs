@@ -49,6 +49,17 @@ module_ = Module ns elements [Util.module_] [Core.module_] $
             doc "The expected output string" $
             string],
 
+      def "EtaExpansionTestCase" $
+        doc ("A test case which performs eta expansion (adding missing lambda abstractions) on a given term"
+          <> " and compares the result with the expected result") $
+        record [
+          "input">:
+            doc "The term to eta expand" $
+            core "Term",
+          "output">:
+            doc "The expected result" $
+            core "Term"],
+
       def "EvaluationTestCase" $
         doc "A test case which evaluates (reduces) a given term and compares it with the expected result" $
         record [
@@ -89,6 +100,9 @@ module_ = Module ns elements [Util.module_] [Core.module_] $
           "caseConversion">:
             doc "A case conversion test" $
             testing "CaseConversionTestCase",
+          "etaExpansion">:
+            doc "An eta expansion test" $
+            testing "EtaExpansionTestCase",
           "evaluation">:
             doc "A term evaluation test" $
             testing "EvaluationTestCase",
@@ -97,7 +111,13 @@ module_ = Module ns elements [Util.module_] [Core.module_] $
             testing "InferenceTestCase",
           "inferenceFailure">:
             doc "A type inference failure test" $
-            testing "InferenceFailureTestCase"],
+            testing "InferenceFailureTestCase",
+          "typeChecking">:
+            doc "A type checking test" $
+            testing "TypeCheckingTestCase",
+          "typeCheckingFailure">:
+            doc "A type checking failure test (currently unused)" $
+            testing "TypeCheckingFailureTestCase"],
 
       def "TestCaseWithMetadata" $
         doc "One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags" $
@@ -129,4 +149,24 @@ module_ = Module ns elements [Util.module_] [Core.module_] $
             list (testing "TestGroup"),
           "cases">:
             doc "The test cases in this group" $
-            list (testing "TestCaseWithMetadata")]]
+            list (testing "TestCaseWithMetadata")],
+
+      def "TypeCheckingTestCase" $
+        doc "A test case which performs type checking on a given term and compares the result with an expected annotated term and type" $
+        record [
+          "input">:
+            doc "An untyped term on which to perform inference, then type check" $
+            core "Term",
+          "outputTerm">:
+            doc "The expected fully annotated System F term after type inference" $
+            core "Term",
+          "outputType">:
+            doc "The expected inferred type" $
+            core "Type"],
+
+      def "TypeCheckingFailureTestCase" $
+        doc "A test case providing a term for which type checking is expected to fail. Note: there are currently no such test cases." $
+        record [
+          "input">:
+            doc "The term for which type checking should fail" $
+            core "Term"]]
