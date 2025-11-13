@@ -16,6 +16,7 @@ import Hydra.Sources.Test.Formatting
 import Hydra.Sources.Test.Inference.InferenceSuite
 import Hydra.Sources.Test.TestGraph
 import Hydra.Sources.Test.EtaExpansion
+import Hydra.Sources.Test.Checking
 
 import qualified Data.List as L
 
@@ -31,6 +32,7 @@ testSuiteModule = Module testSuiteNs elements
   where
     elements = [
       allTestsEl,
+      checkingTestsEl,
       etaExpansionTestsEl,
       formattingTestsEl,
       inferenceTestsEl,
@@ -42,10 +44,13 @@ allTestsEl :: Binding
 allTestsEl = encodedTestGroupToBinding testSuiteNs "allTests" $ tgroup "All tests" Nothing subgroups []
   where
     subgroups = fmap groupRef [
+      checkingTestsEl,
       etaExpansionTestsEl,
       formattingTestsEl,
       inferenceTestsEl,
       primitiveTestsEl]
+
+checkingTestsEl = encodedTestGroupToBinding testSuiteNs "checkingTests" checkingTests
 
 etaExpansionTestsEl = testGroupToBinding testSuiteNs "etaExpansionTests" etaExpansionTests
 

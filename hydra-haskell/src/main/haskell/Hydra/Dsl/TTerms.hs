@@ -346,3 +346,8 @@ variantPhantom tname fname term = Core.termUnion $ Core.injection (Core.nameLift
 -- Example: wrap (name "Email") (string "user@example.com")
 wrap :: TTerm Name -> TTerm Term -> TTerm Term
 wrap name = Core.termWrap . Core.wrappedTerm name
+
+-- | Create a term-encoded annotated term (term with type annotations)
+-- Example: annotated (int32 42) (Phantoms.map M.empty)
+annotated :: TTerm Term -> TTerm (M.Map Name Term) -> TTerm Term
+annotated term annMap = Core.termAnnotated $ Core.annotatedTerm term annMap
