@@ -1,22 +1,45 @@
 # Hydra-Haskell
 
-Hydra is a functional programming language which aims to be highly flexible and portable.
-It has its roots in graph databases and type theory, and provides APIs in Haskell, Java, and Python.
-See the main Hydra [README](https://github.com/CategoricalData/hydra) for more details.
-This Haskell package contains Hydra's Haskell API and Haskell sources specifically.
+Hydra is a functional programming language based on the [LambdaGraph](https://bit.ly/lg-kgc2024) data model,
+exploring an isomorphism between typed lambda calculus and labeled hypergraphs.
+See the main Hydra [README](https://github.com/CategoricalData/hydra) for project overview and use cases.
+
+This package contains Hydra's **Haskell implementation**, which serves as the bootstrapping implementation for the entire Hydra project.
 Releases are available [on Hackage](https://hackage.haskell.org/package/hydra).
+
+## Documentation
+
+For comprehensive documentation about Hydra's architecture, type system, and implementation details, see:
+
+- **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** - Core concepts: Type, Term, Graph, Flow monad, primitives, coders
+- **[Implementation](https://github.com/CategoricalData/hydra/wiki/Implementation)** - Detailed guide covering type modules, DSLs, primitives, coders, and the bootstrap process
+- **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** - Common test suite and language-specific testing
+- **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/index.md)** - Step-by-step guides for extending Hydra
+
+This README focuses on practical instructions for building, testing, and generating code with Hydra-Haskell.
 
 ## Build
 
-Haskell is Hydra's bootstrapping language, which means that,
-while the entire Hydra kernel is written in the Hydra language itself,
-the sources are written in a Haskell-based domain-specific language (DSL).
-You can find the DSL-based sources [here](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources);
-anything written in the DSL is also mapped into the generated Java and Python sources.
-You can find the generated Haskell sources [here](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/gen-main/haskell).
-To build Hydra-Haskell and enter the GHCi REPL,
-first install the [Haskell Tool Stack](https://docs.haskellstack.org/en/stable) ("Stack"),
-and then use:
+Haskell is Hydra's **bootstrapping language**. The entire Hydra kernel is written using Haskell-based domain-specific languages (DSLs):
+- **DSL syntax**: [src/main/haskell/Hydra/Dsl](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Dsl) - Specify the syntax for Hydra programs written in Haskell
+- **DSL-based sources**: [src/main/haskell/Hydra/Sources](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources) - Type definitions and core logic written in Haskell DSL
+- **Generated code**: [src/gen-main/haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/gen-main/haskell) - Haskell code generated from DSL sources
+- **Primitives**: [src/main/haskell/Hydra/Lib](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Lib) - Hydra's standard libraries of primitive functions and constants, implemented in Haskell. These libraries are registered in [Libraries.hs](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs).
+
+The DSL sources are also used to generate Java and Python implementations, ensuring parity across each Hydra language variant.
+
+### Build and REPL
+
+First, install the [Haskell Tool Stack](https://docs.haskellstack.org/en/stable):
+
+```bash
+# On macOS
+brew install haskell-stack
+
+# Other platforms: see https://docs.haskellstack.org/en/stable/install_and_upgrade/
+```
+
+Then build and enter the GHCi REPL:
 
 ```bash
 stack ghci
@@ -24,223 +47,252 @@ stack ghci
 
 ## Test
 
-To run all tests at the command line, use:
+Run all tests:
 
 ```bash
 stack test
 ```
 
-If you are familiar with Hydra-Haskell internals and you want to enter the test environment interactively:
+For interactive testing with access to test utilities:
 
 ```bash
 stack ghci hydra:lib hydra:hydra-test
 ```
 
-Or just `stack ghci hydra:hydra-test` if you want to treat the library as an external dependency.
-Now in the REPL, you can access test resources,
-
-```haskell
-:t Hydra.TestUtils.termTestContext
-```
-
-or run individual Hspec test cases.
+Then in the REPL, you can run individual tests:
 
 ```haskell
 Test.Hspec.hspec Hydra.TestSuiteSpec.spec
 ```
 
+See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testing) for details on Hydra's common test suite, which ensures parity across all Hydra language variants.
+
 ## Code generation
 
-Hydra is a self-hosting compiler in Haskell, which means that it can generate
-all of its own Haskell source code, with the exception of a few built-in
-artifacts such as Haskell-specific implementations of Hydra's primitive
-functions.
+Hydra is **self-hosting**: it can generate its own source code from DSL definitions.
 
-We are currently working on "closing the loop" in Java and Python, as well,
-but that code is currently in `hydra-ext`; see the [Hydra-Ext README](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/README.md)
-for details on Java and Python code generation, as well as many other coders
-including property graphs and their formats, RDF and their formats, Avro,
-Protobuf, C++, Scala, and others.
+### Generate Haskell code
 
-You can generate Hydra's Haskell sources by first entering the GHCi REPL as above, then:
+Enter the GHCi REPL and import the generation module:
 
 ```haskell
 import Hydra.Generation
+```
 
+Generate all main modules provided in Hydra-Haskell:
+
+```haskell
 writeHaskell "src/gen-main/haskell" mainModules
 ```
 
-The first argument to `writeHaskell` is the base directory to which the generated files are to be written,
-and the second is the list of modules you want to generate (in this case, a special list containing all built-in modules).
-To generate only the Hydra kernel, use:
+Generate only the Hydra kernel (excluding other Hydra-Haskell artifacts like the Haskell coder, the JSON coder, etc.):
 
 ```haskell
 writeHaskell "src/gen-main/haskell" kernelModules
 ```
 
-For individual modules, use list syntax, e.g.
+Generate specific main modules:
 
 ```haskell
 writeHaskell "src/gen-main/haskell" [haskellLanguageModule, haskellCoderModule]
 ```
 
-To generate test modules, use:
+Generate test modules:
 
 ```haskell
 writeHaskell "src/gen-test/haskell" testModules
 ```
 
-### JSON and YAML generation
+Note `src/gen-test` as opposed to `src/gen-main`.
 
-JSON and YAML are slightly different than the languages above, in that they are pure data languages, without accompanying syntax for schemas (types).
-Hydra terms can be serialized to either JSON or YAML by first providing a type, then any number of terms corresponding to that type.
-For example:
+### Generate code for other languages
+
+Java and Python code generation is handled by the [Hydra-Ext](https://github.com/CategoricalData/hydra/tree/main/hydra-ext) package.
+From the `hydra-ext` directory:
+
+```bash
+cd ../hydra-ext && stack ghci
+```
+
+Then in GHCi:
 
 ```haskell
-:module Hydra.Kernel
+import Hydra.Ext.Generation
+
+-- Generate Python kernel
+writePython "../hydra-python/src/gen-main/python" kernelModules
+
+-- Generate Java kernel
+writeJava "../hydra-java/src/gen-main/java" kernelModules
+```
+
+And similar for test artifacts. See the Hydra-Ext README for more details.
+Hydra-Ext also includes coders for many other languages and formats: Avro, Protobuf, C++, C#, Scala, GraphQL, JSON Schema, RDF, and more.
+
+## Working with Hydra
+
+### Core types
+
+Some of the fundamental types in Hydra are:
+
+- **`Type`** - Represents the structure of data (literals, records, unions, functions, etc.)
+- **`Term`** - Represents data or computation (instances of types)
+- **`Binding`** - A named binding (name + term + type scheme), also called an *element*.
+- **`Graph`** - A collection of elements with an environment, types, primitives, and schema graph
+- **`Module`** - A namespace containing elements with dependencies on other modules
+
+These are defined in [Hydra/Sources/Kernel/Types](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types)
+and code-generated into [Hydra.Core](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Core.hs),
+[Hydra.Graph](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Graph.hs), and
+[Hydra.Module](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Module.hs).
+
+See [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) for detailed explanations.
+
+### The Flow monad
+
+Transformations in Hydra use the `Flow` monad for:
+- State management (graph context)
+- Error handling
+- Logging and tracing
+
+```haskell
+type Flow s a = s -> Trace -> FlowState s a
+```
+
+Common usage pattern:
+
+```haskell
+import Hydra.Compute (Flow, FlowState, unFlow, emptyTrace)
+
+-- Create a Flow
+myComputation :: Flow Graph String
+myComputation = pure "result"
+
+-- Execute it
+let state = unFlow myComputation graph emptyTrace
+case flowStateValue state of
+  Just result -> putStrLn result
+  Nothing -> print (flowStateMessages $ flowStateTrace state)
+```
+
+### Coders and adapters
+
+**Coders** are bidirectional transformations:
+
+```haskell
+data Coder s1 s2 v1 v2 = Coder {
+  coderEncode :: v1 -> Flow s2 v2,
+  coderDecode :: v2 -> Flow s1 v1
+}
+```
+
+**Adapters** also transform types, enabling schema evolution and language mapping.
+
+See the [Implementation wiki](https://github.com/CategoricalData/hydra/wiki/Implementation#cross-language-compilation-coders) for details.
+
+### DSLs
+
+Hydra provides multiple domain-specific languages for constructing types and terms:
+
+**Untyped DSLs** ([Hydra/Dsl/Types.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Dsl/Types.hs),
+[Hydra/Dsl/Terms.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Dsl/Terms.hs)):
+```haskell
+import qualified Hydra.Dsl.Types as Types
+import qualified Hydra.Dsl.Terms as Terms
+
+personType = Types.record [
+  "name" >: string,
+  "age" >: int32]
+
+alice = Terms.record [
+  "name" >: Terms.string "Alice",
+  "age" >: Terms.int32 30]
+```
+
+**Phantom-typed DSLs** ([Hydra/Dsl/Phantoms.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Dsl/Phantoms.hs)) - Compile-time type safety:
+```haskell
+import Hydra.Dsl.Phantoms
+
+safeFn :: TTerm (Int -> String)
+safeFn = lambda "x" (Strings.toUpper (var "x"))  -- Type-checked at compile time
+```
+
+**Library DSLs** ([Hydra/Dsl/Lib](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Dsl/Lib)) - Wrappers for primitive functions:
+```haskell
+import Hydra.Dsl.Lib.Lists as Lists
+import Hydra.Dsl.Lib.Strings as Strings
+
+example = Lists.map (Strings.toUpper) (list ["hello", "world"])
+```
+
+See the [DSL system section](https://github.com/CategoricalData/hydra/wiki/Implementation#dsl-system) in the Implementation wiki for comprehensive coverage.
+
+### JSON and YAML serialization
+
+Serialize Hydra terms to JSON or YAML:
+
+```haskell
+import Hydra.Kernel
 import Hydra.Codegen
 import Hydra.Langs.Json.Serde
 import Hydra.Dsl.Terms as Terms
 
--- Choose a graph in which to execute flows; we will use the Hydra kernel graph.
-g = hydraCoreGraph
-flow = fromFlowIo g
+-- Get the Hydra core graph
+let g = hydraCoreGraph
+let flow = fromFlowIo g
 
--- Choose a type for terms to encode. In this case, we will be encoding numeric precision values.
-typ = TypeVariable _Precision
+-- Define a type
+let typ = TypeVariable _Precision
 
--- Construct an instance of the chosen type. In this case, we construct a precision value, then encode it as a term.
-term = Terms.inject _Precision (Field _Precision_bits $ Terms.int32 64)
+-- Create a term of that type
+let term = Terms.inject _Precision (Field _Precision_bits $ Terms.int32 64)
 
--- Create the adapting coder
+-- Create a JSON coder for the type
 coder <- flow $ jsonStringCoder typ
 
--- Apply the encoding, which turns the term into a JSON string.
-flow (coderEncode coder term) >>= putStrLn
+-- Encode to JSON
+result <- flow (coderEncode coder term)
+putStrLn result
 ```
 
-For a more sophisticated example involving recursive types, use:
+## Self-hosting demonstration
 
-```haskell
-typ = TypeVariable _Type
-term = Terms.inject _Type (Field _Type_literal $ Terms.inject _LiteralType (Field _LiteralType_boolean $ Terms.record _UnitType []))
-```
+Hydra-Haskell is a [self-hosting compiler](https://en.wikipedia.org/wiki/Self-hosting_(compilers)) - it can generate its own source code.
 
-in place of the `Precision` type and term above.
-This defines a type (in this case, the type of all types), and also a term which is an instance of that type (so in this case, an encoded type).
+Complete self-hosting cycle:
 
-## Haskell API
+```bash
+# Enter REPL
+stack ghci
 
-### Structures
-
-The most important structural types in Hydra are `Type` and `Term` (provided in the generated [Hydra.Core](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Core.hs) module in Haskell),
-and `Graph` and `Element` (provided in the generated [Hydra.Mantle](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Mantle.hs) module).
-`Type` provides a datatype, and a `Term` is an instance of a known `Type`.
-An `Element` is a named term together with its type, and a `Graph` is a collection of elements.
-A `Module` is a collection of elements in the same logical namespace, sometimes called a "model" if most of the elements represent type definitions.
-The main purpose of Hydra is to define and carry out transformations between graphs,
-where those graphs may be almost anything which fits into Hydra's type system -- data, schemas, source code, other transformations, etc.
-"Graphs" in the traditional sense are partially supported at this time, including property graphs and RDF graphs.
-
-Types, terms, graphs, elements, and many other entities are parameterized by an annotation type, so you will usually see `Type m`, `Term m`, `Context m`, etc. in the code.
-The most common annotation type is called `Meta` (which is just a map of string-valued keys to terms), so you will also encounter `Type Meta`, etc.
-
-### Transformations
-
-Transformations in Hydra take the form of simple functions or, more commonly, expressions involving the `Flow` monad
-(a special case of the [State](https://wiki.haskell.org/State_Monad) monad, which has been implemented in many programming languages)
-as well as a bidirectional flow called `Coder` and a two-level transformation (types and terms) called `Adapter`.
-All of these constructs are provided in the generated [Hydra.Compute](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Compute.hs) module in Haskell,
-along with the `Context` type which you will see almost everywhere in Hydra;
-a `Context` provides a graph, the schema of that graph (which is itself a graph), a set of primitive functions, an evaluation strategy, and other constructs which are needed for computation.
-A context is part of the state which flows through a graph transformation as it is being applied.
-
-In Haskell, you will often see `Flow` and `Context` combined as the `GraphFlow` alias:
-
-```haskell
-type GraphFlow m = Flow (Context m)
-```
-
-There are two helper types, `FlowState` and `Trace`, which are used together with `Flow`; a `FlowState` is the result of evaluating a `Flow`,
-while `Trace` encapsulates a stack trace and error or logger messages.
-Since `Flow` is a monad, you can create a `GraphFlow` with `f = pure x`, where `x` is anything you would like to enter into a transformation pipeline.
-The transformation is actually applied when you call `unFlow` and pass in a graph context and a trace, i.e.
-
-```haskell
-unFlow f cx emptyTrace
-```
-
-This gives you a flow state, which you can think of as the exit point of a transformation.
-Inside the state object is either a concrete value (if the transformation succeeded) or `Nothing` (if the transformation failed), a stack trace, and a list of messages.
-You will always find at least one message if the transformation failed; this is analogous to an exception in mainstream programming languages.
-
-A `Coder`, as mentioned above, is a construct which has a `Flow` in either direction between two types.
-As a trivial example, consider this coder which serializes integers to strings using Haskell's built-in `show` function, then reads the strings back to integers using `read`:
-
-```haskell
-intStringCoder :: Coder () () Int String
-intStringCoder = Coder {
-  coderEncode = pure . show,
-  coderDecode = pure . read}
-```
-
-The `()`'s indicate that this coder is stateless in both directions, which makes the use of `Coder` overkill in this case.
-For a more realistic, but still simple example, see the [JSON coder](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Ext/Json/Coder.hs), which makes use of state for error propagation.
-For a more sophisticated example, see the [Haskell coder](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Ext/Haskell/Coder.hs)
-or the [Java coder](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Ext/Java/Coder.hs);
-these make use of all of the facilities of a graph flow, including lexical lookups, type decoding, annotations, etc.
-
-### DSLs
-
-Constructing types and terms directly from the `Type` and `Term` APIs mentioned above is perfectly correct, but not very convenient.
-For example, the type of all lists of strings may be expressed as `TypeList $ TypeLiteral LiteralTypeString`,
-and a specific instance of that type (a term) may be expressed as `TermList [TermLiteral $ LiteralString "foo", TermLiteral $ LiteralString "bar"]`.
-
-Since all of the work of defining transformations in Hydra consists of specifying types and terms, we make the task (much) easier using domain-specific languages (DSLs).
-These DSLs are specific to the host language, so we have Haskell DSLs in hydra-haskell, and (similar, but distinct) Java DSLs in hydra-java.
-For example, the type of a list of strings is just `list string` if you include the [Types](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Impl/Haskell/Dsl/Types.hs) DSL,
-and the specific list of strings we mentioned is just `list [string "foo", string "bar"]`, or (better yet) `list ["foo", "bar"]` if you include the [Terms](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Impl/Haskell/Dsl/Terms.hs) DSL.
-There is additional syntactic sugar in Hydra-Haskell which aims to make defining models and transformations as easy as possible;
-see the [Sources](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Impl/Haskell/Sources) directory for many examples.
-
-### Phantom types
-
-A minority of Hydra's primary sources, rather than providing models (type definitions), provide collections of functions.
-For example, look at [Basics.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Impl/Haskell/Sources/Basics.hs)
-or [Utils.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Impl/Haskell/Sources/Adapters/Utils.hs).
-There are not many of these files because the syntax for constructing transformations natively in Hydra DSLs is still in flux,
-but you will notice that the type signatures in these modules look very different.
-For example, you will see signatures like `Definition (Precision -> String)` which appear to use native Haskell types such as `String`,
-or generated types like `Precision`, rather than Hydra's low-level constructs (`Type`, `Term`, etc.).
-This is a convenience for the programmer which will will be expanded upon as more of Hydra's kernel (indispensable code which is needed in each host language)
-is pulled out of raw Haskell and into the DSLs.
-If you are curious how these types work, see the [Phantoms](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Impl/Haskell/Sources/Phantoms.hs) model
-and [these slides](https://www.slideshare.net/joshsh/transpilers-gone-wild-introducing-hydra/34).
-Phantom types are available both in Haskell and Java.
-
-## Self-hosting in Haskell
-
-Hyra-Haskell is what is known as a [self-hosting compiler](https://en.wikipedia.org/wiki/Self-hosting_(compilers)),
-in that it is capable of generating its own Haskell source code from a Hydra source-of-truth.
-It is a goal of the Hydra project to become self-hosting in Java, Python, and other languages as well.
-The following is a simple demonstration of Hydra's self-hosting capabilities in Haskell:
-
-```
-stack ghci in hydra-haskell
+# Generate all kernel code
+import Hydra.Generation
 writeHaskell "src/gen-main/haskell" mainModules
 writeHaskell "src/gen-test/haskell" testModules
-:q (quit)
+
+# Exit and test
+:q
 stack test
 ```
 
-And there you go! You have just generated the entire Hydra kernel and test suite, then run the test suite.
-The only files and directories which stayed in place are:
-* `Hydra.Lib` (libraries)
-* `Hydra.Sources` (which are no longer needed after generation, and can be removed)
-* The test runner
-* Four small files including `Hydra.Generation` which contain I/O and Haskell-specific helpers 
+The generated code includes:
+- All core types (Type, Term, Graph, Module, etc.)
+- Type inference and checking
+- Term reduction and rewriting
+- Coders and adapters
+- Primitive functions (signatures only; implementations are in Hydra/Lib)
 
-Everything else is created from sources written in Hydra.
+What remains hand-written:
+- `Hydra.Lib` - Native primitive implementations
+- `Hydra.Sources` - DSL-based specifications (input to code generation)
+- `Hydra.Dsl` - DSL syntax
+- `Hydra.Generation` - I/O and generation utilities
+- Test runners
+
+See the [Bootstrap process](https://github.com/CategoricalData/hydra/wiki/Implementation#the-bootstrap-process) section for details on extending Hydra.
+For example:
+- [Adding new primitive functions](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/adding-primitives.md)
+- [Extending Hydra Core](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/extending-hydra-core.md)
 
 ## Troubleshooting
 
