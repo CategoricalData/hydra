@@ -2,7 +2,6 @@ module Hydra.Sources.Test.Formatting (formattingTests) where
 
 import Hydra.Kernel
 import Hydra.Dsl.Tests
-import Hydra.Dsl.ShorthandTypes
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
