@@ -45,6 +45,21 @@ _CaseConversionTestCase_fromString = (Core.Name "fromString")
 
 _CaseConversionTestCase_toString = (Core.Name "toString")
 
+-- | A test case which performs eta expansion (adding missing lambda abstractions) on a given term and compares the result with the expected result
+data EtaExpansionTestCase = 
+  EtaExpansionTestCase {
+    -- | The term to eta expand
+    etaExpansionTestCaseInput :: Core.Term,
+    -- | The expected result
+    etaExpansionTestCaseOutput :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_EtaExpansionTestCase = (Core.Name "hydra.testing.EtaExpansionTestCase")
+
+_EtaExpansionTestCase_input = (Core.Name "input")
+
+_EtaExpansionTestCase_output = (Core.Name "output")
+
 -- | A test case which evaluates (reduces) a given term and compares it with the expected result
 data EvaluationTestCase = 
   EvaluationTestCase {
@@ -102,23 +117,35 @@ _Tag = (Core.Name "hydra.testing.Tag")
 data TestCase = 
   -- | A case conversion test
   TestCaseCaseConversion CaseConversionTestCase |
+  -- | An eta expansion test
+  TestCaseEtaExpansion EtaExpansionTestCase |
   -- | A term evaluation test
   TestCaseEvaluation EvaluationTestCase |
   -- | A type inference test
   TestCaseInference InferenceTestCase |
   -- | A type inference failure test
-  TestCaseInferenceFailure InferenceFailureTestCase
+  TestCaseInferenceFailure InferenceFailureTestCase |
+  -- | A type checking test
+  TestCaseTypeChecking TypeCheckingTestCase |
+  -- | A type checking failure test (currently unused)
+  TestCaseTypeCheckingFailure TypeCheckingFailureTestCase
   deriving (Eq, Ord, Read, Show)
 
 _TestCase = (Core.Name "hydra.testing.TestCase")
 
 _TestCase_caseConversion = (Core.Name "caseConversion")
 
+_TestCase_etaExpansion = (Core.Name "etaExpansion")
+
 _TestCase_evaluation = (Core.Name "evaluation")
 
 _TestCase_inference = (Core.Name "inference")
 
 _TestCase_inferenceFailure = (Core.Name "inferenceFailure")
+
+_TestCase_typeChecking = (Core.Name "typeChecking")
+
+_TestCase_typeCheckingFailure = (Core.Name "typeCheckingFailure")
 
 -- | One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
 data TestCaseWithMetadata = 
@@ -165,3 +192,33 @@ _TestGroup_description = (Core.Name "description")
 _TestGroup_subgroups = (Core.Name "subgroups")
 
 _TestGroup_cases = (Core.Name "cases")
+
+-- | A test case which performs type checking on a given term and compares the result with an expected annotated term and type
+data TypeCheckingTestCase = 
+  TypeCheckingTestCase {
+    -- | An untyped term on which to perform inference, then type check
+    typeCheckingTestCaseInput :: Core.Term,
+    -- | The expected fully annotated System F term after type inference
+    typeCheckingTestCaseOutputTerm :: Core.Term,
+    -- | The expected inferred type
+    typeCheckingTestCaseOutputType :: Core.Type}
+  deriving (Eq, Ord, Read, Show)
+
+_TypeCheckingTestCase = (Core.Name "hydra.testing.TypeCheckingTestCase")
+
+_TypeCheckingTestCase_input = (Core.Name "input")
+
+_TypeCheckingTestCase_outputTerm = (Core.Name "outputTerm")
+
+_TypeCheckingTestCase_outputType = (Core.Name "outputType")
+
+-- | A test case providing a term for which type checking is expected to fail. Note: there are currently no such test cases.
+data TypeCheckingFailureTestCase = 
+  TypeCheckingFailureTestCase {
+    -- | The term for which type checking should fail
+    typeCheckingFailureTestCaseInput :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_TypeCheckingFailureTestCase = (Core.Name "hydra.testing.TypeCheckingFailureTestCase")
+
+_TypeCheckingFailureTestCase_input = (Core.Name "input")

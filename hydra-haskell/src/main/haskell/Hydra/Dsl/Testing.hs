@@ -66,6 +66,7 @@ encodeCaseWithMetadata (TestCaseWithMetadata name tcase mdesc tags) = Terms.reco
   Field _TestCaseWithMetadata_tags $ Terms.list (Terms.string . unTag <$> tags)]
 encodeCase tcase = case tcase of
   TestCaseCaseConversion ccase -> Terms.variant _TestCase _TestCase_caseConversion $ encodeCaseConversionTestCase ccase
+  TestCaseEtaExpansion ecase -> Terms.variant _TestCase _TestCase_etaExpansion $ encodeEtaExpansionTestCase ecase
   TestCaseEvaluation ecase -> Terms.variant _TestCase _TestCase_evaluation $ encodeEvaluationTestCase ecase
   TestCaseInference icase -> Terms.variant _TestCase _TestCase_inference $ encodeInferenceTestCase icase
 encodeCaseConvention c = Terms.unitVariant _CaseConvention $ case c of
@@ -78,6 +79,9 @@ encodeCaseConversionTestCase (CaseConversionTestCase fromConvention toConvention
   Field _CaseConversionTestCase_toConvention $ encodeCaseConvention toConvention,
   Field _CaseConversionTestCase_fromString $ Terms.string fromString,
   Field _CaseConversionTestCase_toString $ Terms.string toString]
+encodeEtaExpansionTestCase (EtaExpansionTestCase input output) = Terms.record _EtaExpansionTestCase [
+  Field _EtaExpansionTestCase_input $ EncodeCore.term input,
+  Field _EtaExpansionTestCase_output $ EncodeCore.term output]
 encodeEvaluationTestCase (EvaluationTestCase style input output) = Terms.record _EvaluationTestCase [
   Field _EvaluationTestCase_evaluationStyle $ Terms.variant _EvaluationStyle (case style of
     EvaluationStyleEager -> _EvaluationStyle_eager
