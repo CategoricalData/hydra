@@ -218,6 +218,27 @@ expectTypeOfResult desc types term mterm expected = do
   H.it "reconstructed type" $
     H.shouldBe (ShowCore.type_ rtype) (ShowCore.type_ expected)
 
+expectTypeCheckingResult :: String -> Term -> Term -> Type -> H.SpecWith ()
+expectTypeCheckingResult desc input outputTerm outputType = do
+  (iterm, itype, rtype) <- H.runIO $ fromTestFlow desc $ do
+    cx <- graphToInferenceContext testGraph
+    let tx = TypeContext M.empty S.empty cx
+
+    -- typeOf is always called on System F terms
+    (iterm, ts) <- inferTypeOf cx input
+    let itype = typeSchemeToFType ts
+
+    rtype <- typeOf tx [] iterm
+    return (iterm, itype, rtype)
+
+  -- Three labeled assertions as per the type checking specification
+  H.it "inferred term" $
+    H.shouldBe (ShowCore.term iterm) (ShowCore.term outputTerm)
+  H.it "inferred type" $
+    H.shouldBe (ShowCore.type_ itype) (ShowCore.type_ outputType)
+  H.it "reconstructed type" $
+    H.shouldBe (ShowCore.type_ rtype) (ShowCore.type_ outputType)
+
 shouldFail :: Flow Graph a -> H.Expectation
 shouldFail f = H.shouldBe True (Y.isNothing $ flowStateValue $ unFlow f testGraph emptyTrace)
 

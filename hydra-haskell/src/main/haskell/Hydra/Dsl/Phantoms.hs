@@ -53,8 +53,7 @@ name>: term = Field (Name name) (unTTerm term)
 -- Example: _Person_name>>: string "John"
 infixr 0 >>:
 (>>:) :: Name -> TTerm a -> Field
-fname >>: d = Field fname (unTTerm d)
-
+fname >>: d = field fname d
 
 -- | Add an annotation to a term
 -- Example: annot (Name "deprecated") (Just (boolean True)) myFunction
