@@ -33,13 +33,21 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
     TestCaseCaseConversion (CaseConversionTestCase fromConvention toConvention fromString toString) -> H.shouldBe
       (convertCase fromConvention toConvention fromString)
       toString
+    TestCaseEtaExpansion (EtaExpansionTestCase input output) -> expectEtaExpansion desc input output
     TestCaseEvaluation (EvaluationTestCase _ input output) -> shouldSucceedWith
       (eval input)
       output
     TestCaseInference (InferenceTestCase input output) -> expectInferenceResult desc input output
     TestCaseInferenceFailure (InferenceFailureTestCase input) -> expectInferenceFailure desc input
+    TestCaseTypeChecking (TypeCheckingTestCase input outputTerm outputType) -> H.shouldBe True True  -- TODO: implement
+    TestCaseTypeCheckingFailure (TypeCheckingFailureTestCase input) -> H.shouldBe True True  -- TODO: implement
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
+    expectEtaExpansion desc input output = shouldSucceedWith
+      (do
+        tx <- graphToTypeContext testGraph
+        etaExpandTypedTerm tx input)
+      output
 
 runTestCase :: String -> TestRunner -> TestCaseWithMetadata -> H.SpecWith ()
 runTestCase pdesc runner tcase@(TestCaseWithMetadata name _ mdesc _) = case runner cdesc tcase of
