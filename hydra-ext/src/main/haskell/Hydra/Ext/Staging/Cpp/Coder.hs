@@ -3,7 +3,6 @@
 module Hydra.Ext.Staging.Cpp.Coder (moduleToCpp) where
 
 import Hydra.Kernel
-import Hydra.Dsl.ShorthandTypes
 import Hydra.Dsl.Terms
 import Hydra.Ext.Cpp.Language
 import Hydra.Ext.Staging.Cpp.Names
