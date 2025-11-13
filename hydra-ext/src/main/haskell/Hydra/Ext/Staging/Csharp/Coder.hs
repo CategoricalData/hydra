@@ -10,7 +10,6 @@ import Hydra.Adapt.Modules
 import Hydra.Formatting
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Types as Types
-import Hydra.Dsl.ShorthandTypes
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

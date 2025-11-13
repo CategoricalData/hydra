@@ -13,7 +13,6 @@ import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Sorting as Sorting
-import Hydra.Dsl.ShorthandTypes
 import Hydra.Formatting
 import Hydra.Sources.Libraries
 
