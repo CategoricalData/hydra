@@ -4,7 +4,6 @@ import Hydra.Kernel
 import Hydra.Testing
 import qualified Hydra.Dsl.Core as Core
 import Hydra.Dsl.Testing as Testing
-import Hydra.Dsl.ShorthandTypes
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Test.TestGraph

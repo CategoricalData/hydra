@@ -12,7 +12,6 @@ import Hydra.Monads
 import Hydra.Tools.Monads
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
-import Hydra.Dsl.ShorthandTypes
 import qualified Hydra.Show.Core as ShowCore
 
 import Hydra.TestUtils
@@ -657,27 +656,27 @@ testNormalizeTypeVariablesInTerm = do
     H.describe "Nested polymorphic let bindings" $ do
       H.it "Parent variable shadows child variable" $ changesTo
         (tlet id42 [
-          ("id", Just faa, tlet (lambdaTyped "y" tA $ var "id2" @@ var "y") [
-            ("id2", Just faa, lambdaTyped "x" tA $ var "x")])])
+          ("id", Just faa, tlet (lambdaTyped "y" (Types.var "a") $ var "id2" @@ var "y") [
+            ("id2", Just faa, lambdaTyped "x" (Types.var "a") $ var "x")])])
         (tlet id42 [
           ("id", Just ft0t0, tlet (lambdaTyped "y" t0 $ var "id2" @@ var "y") [
             ("id2", Just ft1t1, lambdaTyped "x" t1 $ var "x")])])
       H.it "No shadowing" $ changesTo
         (tlet id42 [
-          ("id", Just faa, tlet (lambdaTyped "y" tA $ var "id2" @@ var "y") [
-            ("id2", Just fbb, lambdaTyped "x" tB $ var "x")])])
+          ("id", Just faa, tlet (lambdaTyped "y" (Types.var "a") $ var "id2" @@ var "y") [
+            ("id2", Just fbb, lambdaTyped "x" (Types.var "b") $ var "x")])])
         (tlet id42 [
           ("id", Just ft0t0, tlet (lambdaTyped "y" t0 $ var "id2" @@ var "y") [
             ("id2", Just ft1t1, lambdaTyped "x" t1 $ var "x")])])
       H.it "No shadowing, locally free type variable" $ changesTo
         (tlet (var "fun1" @@ string "foo" @@ int32 42) [
-          ("fun1", Just (Types.poly ["a", "b"] $ Types.functionMany [tA, tB, Types.tuple2 tA tB]), lambdaTyped "x" tA $ lambdaTyped "y" tB $
+          ("fun1", Just (Types.poly ["a", "b"] $ Types.functionMany [Types.var "a", Types.var "b", Types.tuple2 (Types.var "a") (Types.var "b")]), lambdaTyped "x" (Types.var "a") $ lambdaTyped "y" (Types.var "b") $
             tlet (var "fun2" @@ var "x") [
-              ("fun2", Just (Types.poly ["c"] $ tFun tC $ Types.tuple2 tC tB), lambdaTyped "z" tC $ tuple2 (var "z") (var "y"))])])
+              ("fun2", Just (Types.poly ["c"] $ Types.function (Types.var "c") $ Types.tuple2 (Types.var "c") (Types.var "b")), lambdaTyped "z" (Types.var "c") $ tuple2 (var "z") (var "y"))])])
         (tlet (var "fun1" @@ string "foo" @@ int32 42) [
           ("fun1", Just (Types.poly ["t0", "t1"] $ Types.functionMany [t0, t1, Types.tuple2 t0 t1]), lambdaTyped "x" t0 $ lambdaTyped "y" t1 $
             tlet (var "fun2" @@ var "x") [
-              ("fun2", Just (Types.poly ["t2"] $ tFun t2 $ Types.tuple2 t2 t1), lambdaTyped "z" t2 $ tuple2 (var "z") (var "y"))])])
+              ("fun2", Just (Types.poly ["t2"] $ Types.function t2 $ Types.tuple2 t2 t1), lambdaTyped "z" t2 $ tuple2 (var "z") (var "y"))])])
   where
     normalize = normalizeTypeVariablesInTerm
     changesTo term1 term2 = H.shouldBe (normalize term1) term2
@@ -688,11 +687,11 @@ testNormalizeTypeVariablesInTerm = do
     t0 = Types.var "t0"
     t1 = Types.var "t1"
     t2 = Types.var "t2"
-    const42 = lambdaTyped "x" (Types.function tA tInt32) $ int32 42
-    faa = Types.poly ["a"] $ tFun tA tA
-    fbb = Types.poly ["b"] $ tFun tB tB
-    ft0t0 = Types.poly ["t0"] $ tFun t0 t0
-    ft1t1 = Types.poly ["t1"] $ tFun t1 t1
+    const42 = lambdaTyped "x" (Types.function (Types.var "a") Types.int32) $ int32 42
+    faa = Types.poly ["a"] $ Types.function (Types.var "a") (Types.var "a")
+    fbb = Types.poly ["b"] $ Types.function (Types.var "b") (Types.var "b")
+    ft0t0 = Types.poly ["t0"] $ Types.function t0 t0
+    ft1t1 = Types.poly ["t1"] $ Types.function t1 t1
     id42 = var "id" @@ int32 42
     tsString = Types.mono Types.string
     tsA = Types.mono $ Types.var "a"
