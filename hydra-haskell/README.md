@@ -241,3 +241,22 @@ The only files and directories which stayed in place are:
 * Four small files including `Hydra.Generation` which contain I/O and Haskell-specific helpers 
 
 Everything else is created from sources written in Hydra.
+
+## Troubleshooting
+
+### Stack version warnings
+
+If you see warnings like:
+```
+Stack has not been tested with GHC versions above 9.0, and using 9.10.2, this may fail
+Stack has not been tested with Cabal versions above 3.4, but version 3.12.1.0 was found, this may fail
+```
+
+**Solution:** Update Stack to the latest version:
+```bash
+stack upgrade
+# or on macOS with Homebrew:
+brew upgrade stack
+```
+
+**Explanation:** These are compatibility warnings that appear when using newer GHC/Cabal versions. If your builds complete successfully, the warnings are harmless - Stack works fine with newer versions even before official testing. Upgrading Stack eliminates the warnings.
