@@ -9,9 +9,17 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 - **[Adding new type and term constructors to Hydra Core](extending-hydra-core.md)** - Complete process including schema updates, type inference, rewriting functions, and solving the bootstrap problem.
 - **[Adding new primitive functions](adding-primitives.md)** - Guide for implementing primitive functions across Haskell, Java, and Python implementations.
 
+### Testing
+
+- **[Extending the common test suite](extending-tests.md)** - How to add new test cases to Hydra's cross-language test suite.
+
 ### Implementations
 
 - **[Creating a new Hydra implementation](new-implementation.md)** - Step-by-step guide for implementing Hydra in a new language
+
+### Development Workflow
+
+- **[LLM-assisted development](llm-assisted-development.md)** - Best practices for using AI assistants when working with Hydra
 
 ## About Recipes
 
