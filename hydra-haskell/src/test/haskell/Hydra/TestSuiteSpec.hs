@@ -39,7 +39,7 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
       output
     TestCaseInference (InferenceTestCase input output) -> expectInferenceResult desc input output
     TestCaseInferenceFailure (InferenceFailureTestCase input) -> expectInferenceFailure desc input
-    TestCaseTypeChecking (TypeCheckingTestCase input outputTerm outputType) -> H.shouldBe True True  -- TODO: implement
+    TestCaseTypeChecking _ -> H.shouldBe True True  -- Handled specially in runTestCase
     TestCaseTypeCheckingFailure (TypeCheckingFailureTestCase input) -> H.shouldBe True True  -- TODO: implement
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
@@ -50,9 +50,15 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
       output
 
 runTestCase :: String -> TestRunner -> TestCaseWithMetadata -> H.SpecWith ()
-runTestCase pdesc runner tcase@(TestCaseWithMetadata name _ mdesc _) = case runner cdesc tcase of
-    Nothing -> return ()
-    Just e -> H.it desc e
+runTestCase pdesc runner tcase@(TestCaseWithMetadata name _ mdesc _) =
+  -- Type checking tests need special handling for multiple labeled assertions
+  case testCaseWithMetadataCase tcase of
+    TestCaseTypeChecking (TypeCheckingTestCase input outputTerm outputType) ->
+      if Testing.isDisabled tcase then return ()
+      else H.describe desc $ expectTypeCheckingResult cdesc input outputTerm outputType
+    _ -> case runner cdesc tcase of
+      Nothing -> return ()
+      Just e -> H.it desc e
   where
     desc = name ++ Y.maybe ("") (\d -> ": " ++ d) mdesc
     cdesc = if L.null pdesc then desc else pdesc ++ ", " ++ desc

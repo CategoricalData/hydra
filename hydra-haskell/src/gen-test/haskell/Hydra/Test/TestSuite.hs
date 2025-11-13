@@ -19,10 +19,794 @@ allTests = Testing.TestGroup {
   Testing.testGroupName = "All tests",
   Testing.testGroupDescription = Nothing,
   Testing.testGroupSubgroups = [
+    checkingTests,
     etaExpansionTests,
     formattingTests,
     inferenceTests,
     primitiveTests],
+  Testing.testGroupCases = []}
+
+checkingTests :: Testing.TestGroup
+checkingTests = Testing.TestGroup {
+  Testing.testGroupName = "Type checking tests",
+  Testing.testGroupDescription = Nothing,
+  Testing.testGroupSubgroups = [
+    Testing.TestGroup {
+      Testing.testGroupName = "Annotated terms",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Top-level annotations",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Nested annotations",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Annotations in complex contexts",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Applications",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Simple function applications",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Partial applications",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Higher-order applications",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphic applications",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Applications in complex contexts",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Applications with complex arguments",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Eithers",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Left values",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Right values",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphic eithers",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Eithers in complex contexts",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Nested eithers",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Eithers with complex types",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Flows",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Flows with failure across let bindings",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Functions",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Eliminations",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Product eliminations",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [
+                Testing.TestGroup {
+                  Testing.testGroupName = "Simple tuple projections",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Polymorphic tuple projections",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Projections with variables",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Projections in complex contexts",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Projections with mixed types",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Projections with primitive functions",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []}],
+              Testing.testGroupCases = []},
+            Testing.TestGroup {
+              Testing.testGroupName = "Record eliminations",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [
+                Testing.TestGroup {
+                  Testing.testGroupName = "Simple record projections",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Record projections applied to records",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Polymorphic record projections",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Polymorphic record projections applied",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Record projections with variables",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Record projections in complex contexts",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Multi-parameter polymorphic projections",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Higher-order record projections",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Recursive record projections",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Record projections with mutual recursion",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []}],
+              Testing.testGroupCases = []},
+            Testing.TestGroup {
+              Testing.testGroupName = "Union eliminations",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [
+                Testing.TestGroup {
+                  Testing.testGroupName = "Simple unit variant eliminations",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Union eliminations with data",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Polymorphic union eliminations",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Union eliminations with defaults",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Nested union eliminations",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Union eliminations in complex contexts",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Multi-parameter polymorphic case statements",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Higher-order union eliminations",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Recursive union eliminations",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []}],
+              Testing.testGroupCases = []},
+            Testing.TestGroup {
+              Testing.testGroupName = "Wrap eliminations",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [
+                Testing.TestGroup {
+                  Testing.testGroupName = "Monomorphic unwrapping",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Polymorphic unwrapping",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Unwrap eliminations in applications",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Unwrap in complex contexts",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Multi-parameter polymorphic unwrappers",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Chained unwrapping",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []},
+                Testing.TestGroup {
+                  Testing.testGroupName = "Multiple unwrap operations",
+                  Testing.testGroupDescription = Nothing,
+                  Testing.testGroupSubgroups = [],
+                  Testing.testGroupCases = []}],
+              Testing.testGroupCases = []}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Lambdas",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Simple lambdas",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = []},
+            Testing.TestGroup {
+              Testing.testGroupName = "Multi-parameter lambdas",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = []},
+            Testing.TestGroup {
+              Testing.testGroupName = "Lambdas with operations",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = []},
+            Testing.TestGroup {
+              Testing.testGroupName = "Nested lambdas",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = []},
+            Testing.TestGroup {
+              Testing.testGroupName = "Lambdas in complex contexts",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = []},
+            Testing.TestGroup {
+              Testing.testGroupName = "Higher-order lambdas",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = []}],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Primitives",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [
+            Testing.TestGroup {
+              Testing.testGroupName = "Nullary primitives",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = []},
+            Testing.TestGroup {
+              Testing.testGroupName = "Unary primitives",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = []},
+            Testing.TestGroup {
+              Testing.testGroupName = "Binary primitives",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = []},
+            Testing.TestGroup {
+              Testing.testGroupName = "Ternary primitives",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = []},
+            Testing.TestGroup {
+              Testing.testGroupName = "Monomorphic vs polymorphic",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = []},
+            Testing.TestGroup {
+              Testing.testGroupName = "Higher-order primitives",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = []},
+            Testing.TestGroup {
+              Testing.testGroupName = "Primitives in complex contexts",
+              Testing.testGroupDescription = Nothing,
+              Testing.testGroupSubgroups = [],
+              Testing.testGroupCases = []}],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Let terms",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Simple let bindings",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Let terms with shadowing",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Recursive bindings",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Mutual recursion",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Nested let terms",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Let with complex expressions",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Lists",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Lists of literals",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Empty lists",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphic lists",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Nested lists",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Lists in complex contexts",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Literals",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Boolean literals",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "String literals",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "int32 literal",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
+                Testing.typeCheckingTestCaseInput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                Testing.typeCheckingTestCaseOutputTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+                Testing.typeCheckingTestCaseOutputType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "string literal",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
+                Testing.typeCheckingTestCaseInput = (Core.TermLiteral (Core.LiteralString "hello")),
+                Testing.typeCheckingTestCaseOutputTerm = (Core.TermLiteral (Core.LiteralString "hello")),
+                Testing.typeCheckingTestCaseOutputType = (Core.TypeLiteral Core.LiteralTypeString)})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
+          Testing.testGroupName = "Integer literals",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Float literals",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Binary literals",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Literals in complex contexts",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Maps",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Monomorphic maps",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphic maps",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Maps in complex contexts",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Maps with complex types",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Optionals",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Monomorphic optionals",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphic optionals",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Optionals in complex contexts",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Nested optionals",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Optionals with complex types",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Pairs",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Basic pairs",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphic pairs",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Pairs in complex contexts",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Nested pairs",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Pairs with complex types",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Products",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Monomorphic products",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphic products",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Nested products",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Records",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Monomorphic records",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphic records",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Records in complex contexts",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Multi-parameter polymorphic records",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Sets",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Monomorphic sets",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphic sets",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Sets in complex contexts",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Nested sets",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Sets with complex types",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Sums",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Unions",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Simple union injections",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Union injections with data",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphic union injections",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphic recursive union injections",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphic unions from lambda",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Unions in complex contexts",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Multi-parameter polymorphic injections",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Unit",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Unit term",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Unit term in polymorphic context",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Variables",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Simple variable lookup",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Variable scoping",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphic variables",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Variables in complex contexts",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Recursive variables",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Wrapped terms",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Monomorphic wrapped terms",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Polymorphic wrapped terms",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Wrapped terms in complex contexts",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Nested wrapped terms",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Multiple wrapping levels",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []},
+        Testing.TestGroup {
+          Testing.testGroupName = "Multi-parameter polymorphic wrappers",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []},
+    Testing.TestGroup {
+      Testing.testGroupName = "Fail on untyped (pre-inference) terms",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Testing.TestGroup {
+          Testing.testGroupName = "Untyped lambdas",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = []}],
+      Testing.testGroupCases = []}],
   Testing.testGroupCases = []}
 
 etaExpansionTests :: Testing.TestGroup
