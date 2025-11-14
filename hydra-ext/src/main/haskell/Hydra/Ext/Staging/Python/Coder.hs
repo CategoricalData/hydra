@@ -6,6 +6,7 @@ import Hydra.Dsl.Terms
 import qualified Hydra.Ext.Python.Syntax as Py
 import Hydra.Ext.Staging.Python.Names
 import Hydra.Ext.Staging.Python.Utils
+import Hydra.Ext.Staging.CoderUtils
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Ext.Staging.Python.Serde as PySer
@@ -208,8 +209,12 @@ encodeForallType env lt = do
 encodeFunction :: PythonEnvironment -> Function -> Flow PyGraph Py.Expression
 encodeFunction env f = case f of
   FunctionLambda lam -> do
-    (_, params, bindings, innerBody, _, _, innerEnv) <- withTrace "gather for lambda" $
-      gatherBindingsAndParams env (TermFunction $ FunctionLambda lam)
+    fs <- withTrace "analyze function term for lambda" $
+      analyzeFunctionTerm pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc }) env (TermFunction $ FunctionLambda lam)
+    let params = functionStructureParams fs
+        bindings = functionStructureBindings fs
+        innerBody = functionStructureBody fs
+        innerEnv = functionStructureEnvironment fs
     pbody <- encodeTermInline innerEnv False innerBody
 --    let pparams = fmap (encodeNameQualified env) params
     let pparams = fmap (encodeName False CaseConventionLowerSnake innerEnv) params
@@ -475,8 +480,15 @@ encodeTermAssignment env name term comment = do
 --  then fail $ "term: " ++ ShowCore.term term
 --  else pure ()
 
-  (tparams, params, bindings, body, doms, cod, env2) <- withTrace "gather for term assignment" $
-    gatherBindingsAndParams env term
+  fs <- withTrace "analyze function term for term assignment" $
+    analyzeFunctionTerm pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc }) env term
+  let tparams = functionStructureTypeParams fs
+      params = functionStructureParams fs
+      bindings = functionStructureBindings fs
+      body = functionStructureBody fs
+      doms = functionStructureDomains fs
+      cod = functionStructureCodomain fs
+      env2 = functionStructureEnvironment fs
 
   -- If there are no arguments or let bindings, and if we are not dealing with a case statement,
   -- we can use a simple a = b assignment.
@@ -599,13 +611,17 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
     then withArg body (L.head args)
     else dflt
   where
-    (args, body) = gatherArgs [] term
-    gatherArgs rest term = case deannotateTerm term of
-      TermApplication (Application l r) -> gatherArgs (r:rest) l
-      t -> (rest, t)
+    (args, body) = gatherApplications term
     dflt = do
-      (tparams, params, bindings, body, doms, cod, env2) <- withTrace "gather for multiline" $
-        gatherBindingsAndParams env term
+      fs <- withTrace "analyze function term for multiline" $
+        analyzeFunctionTerm pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc }) env term
+      let tparams = functionStructureTypeParams fs
+          params = functionStructureParams fs
+          bindings = functionStructureBindings fs
+          body = functionStructureBody fs
+          doms = functionStructureDomains fs
+          cod = functionStructureCodomain fs
+          env2 = functionStructureEnvironment fs
       if (L.length params > 0)
         then fail $ "Functions currently unsupported in this context: " ++ ShowCore.term term
         else pure ()
@@ -934,36 +950,8 @@ findTypeParams env typ = L.filter isBound $ S.toList $ freeVariablesInType typ
   where
     isBound v = Y.isJust $ M.lookup v $ snd $ pythonEnvironmentBoundTypeVariables env
 
-gatherArgs :: Term -> [Term] -> (Term, [Term])
-gatherArgs term args = case deannotateTerm term of
-  TermApplication (Application lhs rhs) -> gatherArgs lhs (rhs:args)
-  TermTypeLambda (TypeLambda _ body) -> gatherArgs body args
-  TermTypeApplication (TypeApplicationTerm t _) -> gatherArgs t args
-  _ -> (term, args)
-
-gatherBindingsAndParams :: PythonEnvironment -> Term -> Flow s ([Name], [Name], [Binding], Term, [Type], Type, PythonEnvironment)
-gatherBindingsAndParams env term = withTrace ("gather for " ++ ShowCore.term term) $ gather True env [] [] [] [] [] term
-  where
-    gather argMode env tparams args bindings doms tapps term = case deannotateTerm term of
-        TermFunction (FunctionLambda lam@(Lambda var (Just dom) body)) -> if argMode
-            then gather argMode env2 tparams (var:args) bindings (dom:doms) tapps body
-            else finish term
-          where
-            env2 = extendEnvironmentForLambda env lam
-        TermLet lt@(Let bindings2 body) -> gather False env2 tparams args (bindings ++ bindings2) doms tapps body
-          where
-            env2 = extendEnvironmentForLet env lt
-        TermTypeApplication (TypeApplicationTerm e t) -> gather argMode env tparams args bindings doms (t:tapps) e
-        TermTypeLambda tlam@(TypeLambda tvar body) -> gather argMode env2 (tvar:tparams) args bindings doms tapps body
-          where
-            env2 = extendEnvironmentForTypeLambda env tlam
-        t -> finish t
-      where
-        finish t = do
-            typ <- withTrace ("debug 1") $ typeOf (pythonEnvironmentTypeContext env) [] t2
-            return (L.reverse tparams, L.reverse args, bindings, t2, L.reverse doms, typ, env)
-          where
-            t2 = L.foldl (\trm typ -> TermTypeApplication $ TypeApplicationTerm trm typ) t tapps
+-- Note: gatherBindingsAndParams, gatherArgs, isFunctionCall, and isSimpleAssignment have been
+-- moved to Hydra.Ext.Staging.CoderUtils for reuse across language coders.
 
 gatherMetadata :: Namespace -> [Definition] -> PythonModuleMetadata
 gatherMetadata focusNs defs = checkTvars $ L.foldl addDef start defs
@@ -1005,30 +993,6 @@ genericArg tparamList = if L.null tparamList
   else Just $ pyPrimaryToPyExpression $ primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Generic")
     (pyNameToPyExpression . encodeTypeVariable <$> tparamList)
 
-isFunctionCall :: Binding -> Bool
-isFunctionCall (Binding _ term (Just ts)) = isCaseStatement || isLet -- || typeArity (typeSchemeType ts) > 0
-  where
-    term1 = deannotateAndDetypeTerm term
-    isLet = case term1 of
-      TermLet _ -> True
-      _ -> False
-    isCaseStatement = case fst (gatherArgs term1 []) of
-      TermFunction (FunctionElimination (EliminationUnion _)) -> True
-      _ -> False
-
-isSimpleAssignment :: Term -> Bool
-isSimpleAssignment term = case term of
-  TermAnnotated (AnnotatedTerm body _) -> isSimpleAssignment body
-  TermFunction (FunctionLambda _) -> False
-  TermLet _ -> False
-  TermTypeLambda _ -> False
-  -- Polymorphic terms should not use simple assignment; they need a type signature for the sake of introducing
-  -- type variables which may be used in cast expressions.
-  TermTypeApplication (TypeApplicationTerm body _) -> isSimpleAssignment body
-  t -> case (fst (gatherArgs t [])) of
-    TermFunction (FunctionElimination (EliminationUnion _)) -> False
-    _ -> True
-
 moduleToPython :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
 moduleToPython mod defs = do
   file <- encodeModule mod defs
@@ -1037,9 +1001,7 @@ moduleToPython mod defs = do
   return $ M.fromList [(path, s)]
 
 updateMeta :: (PythonModuleMetadata -> PythonModuleMetadata) -> Flow PyGraph ()
-updateMeta f = do
-  PyGraph g meta <- getState
-  putState $ PyGraph g (f meta)
+updateMeta = updateCoderMetadata pyGraphMetadata PyGraph pyGraphGraph
 
 variantArgs :: Py.Expression -> [Name] -> Py.Args
 variantArgs ptype tparams = pyExpressionsToPyArgs $ Y.catMaybes [
@@ -1048,25 +1010,10 @@ variantArgs ptype tparams = pyExpressionsToPyArgs $ Y.catMaybes [
   genericArg tparams]
 
 withBindings :: [Binding] -> Flow PyGraph a -> Flow PyGraph a
-withBindings bindings = withUpdatedGraph (extendGraphWithBindings bindings)
+withBindings = withGraphBindings pyGraphGraph PyGraph pyGraphMetadata
 
--- Note: this does not use withState, as we want the rest of the environment (including metadata) to be
---       mutable throughout the flow, even though we update the graph temporarily.
 withUpdatedGraph :: (Graph -> Graph) -> Flow PyGraph a -> Flow PyGraph a
-withUpdatedGraph f flow = do
-  PyGraph g meta <- getState
-  putState $ PyGraph (f g) meta
-  r <- flow
-  PyGraph _ meta2 <- getState
-  putState $ PyGraph g meta2
-  return r
+withUpdatedGraph = withUpdatedCoderGraph pyGraphGraph pyGraphMetadata PyGraph
 
 inGraphContext :: Flow Graph a -> Flow PyGraph a
-inGraphContext f = do
-  (PyGraph g meta) <- getState
-  (ret, g2) <- withState g $ do
-    ret <- f
-    g2 <- getState
-    return (ret, g2)
-  putState $ PyGraph g2 meta
-  return ret
+inGraphContext = inCoderGraphContext pyGraphGraph pyGraphMetadata PyGraph
