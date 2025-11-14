@@ -24,41 +24,36 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-type TestRunner = String -> TestCaseWithMetadata -> Y.Maybe H.Expectation
+type TestRunner = String -> TestCaseWithMetadata -> Y.Maybe (H.SpecWith ())
 
 defaultTestRunner :: TestRunner
 defaultTestRunner desc tcase = if Testing.isDisabled tcase
   then Nothing
   else Just $ case testCaseWithMetadataCase tcase of
-    TestCaseCaseConversion (CaseConversionTestCase fromConvention toConvention fromString toString) -> H.shouldBe
-      (convertCase fromConvention toConvention fromString)
-      toString
-    TestCaseEtaExpansion (EtaExpansionTestCase input output) -> expectEtaExpansion desc input output
-    TestCaseEvaluation (EvaluationTestCase _ input output) -> shouldSucceedWith
-      (eval input)
-      output
+    TestCaseCaseConversion (CaseConversionTestCase fromConvention toConvention fromString toString) ->
+      H.it "case conversion" $ H.shouldBe
+        (convertCase fromConvention toConvention fromString)
+        toString
+    TestCaseEtaExpansion (EtaExpansionTestCase input output) -> expectEtaExpansionResult desc input output
+    TestCaseEvaluation (EvaluationTestCase _ input output) ->
+      H.it "evaluation" $ shouldSucceedWith
+        (eval input)
+        output
     TestCaseInference (InferenceTestCase input output) -> expectInferenceResult desc input output
-    TestCaseInferenceFailure (InferenceFailureTestCase input) -> expectInferenceFailure desc input
-    TestCaseTypeChecking _ -> H.shouldBe True True  -- Handled specially in runTestCase
-    TestCaseTypeCheckingFailure (TypeCheckingFailureTestCase input) -> H.shouldBe True True  -- TODO: implement
+    TestCaseInferenceFailure (InferenceFailureTestCase input) ->
+      H.it "inference failure" $ expectInferenceFailure desc input
+    TestCaseTypeChecking (TypeCheckingTestCase input outputTerm outputType) ->
+      expectTypeCheckingResult desc input outputTerm outputType
+    TestCaseTypeCheckingFailure (TypeCheckingFailureTestCase input) ->
+      H.it "type checking failure" $ H.shouldBe True False  -- TODO: implement
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
-    expectEtaExpansion desc input output = shouldSucceedWith
-      (do
-        tx <- graphToTypeContext testGraph
-        etaExpandTypedTerm tx input)
-      output
 
 runTestCase :: String -> TestRunner -> TestCaseWithMetadata -> H.SpecWith ()
 runTestCase pdesc runner tcase@(TestCaseWithMetadata name _ mdesc _) =
-  -- Type checking tests need special handling for multiple labeled assertions
-  case testCaseWithMetadataCase tcase of
-    TestCaseTypeChecking (TypeCheckingTestCase input outputTerm outputType) ->
-      if Testing.isDisabled tcase then return ()
-      else H.describe desc $ expectTypeCheckingResult cdesc input outputTerm outputType
-    _ -> case runner cdesc tcase of
-      Nothing -> return ()
-      Just e -> H.it desc e
+  case runner cdesc tcase of
+    Nothing -> return ()
+    Just spec -> H.describe desc spec
   where
     desc = name ++ Y.maybe ("") (\d -> ": " ++ d) mdesc
     cdesc = if L.null pdesc then desc else pdesc ++ ", " ++ desc

@@ -139,6 +139,13 @@ checkSerialization mkSerdeStr (TypeApplicationTerm term typ) expected = do
 eval :: Term -> Flow Graph Term
 eval = reduceTerm True
 
+expectEtaExpansionResult :: String -> Term -> Term -> H.SpecWith ()
+expectEtaExpansionResult desc input output = H.it "eta expansion" $ shouldSucceedWith
+  (do
+    tx <- graphToTypeContext testGraph
+    etaExpandTypedTerm tx input)
+  output
+
 expectFailure :: (a -> String) -> String -> Flow () a -> H.Expectation
 expectFailure print desc f = case my of
     Nothing -> return ()
@@ -154,14 +161,16 @@ expectInferenceFailure desc term = expectFailure (ShowCore.typeScheme . snd) des
   cx <- graphToInferenceContext testGraph
   inferTypeOf cx term
 
-expectInferenceResult :: String -> Term -> TypeScheme -> H.Expectation
+expectInferenceResult :: String -> Term -> TypeScheme -> H.SpecWith ()
 expectInferenceResult desc term expected = do
-    expectSuccess desc (ShowCore.typeScheme . snd <$> result) (ShowCore.typeScheme expected)
-    expectSuccess desc (ShowCore.term . removeTypesFromTerm . fst <$> result) (ShowCore.term $ removeTypesFromTerm term)
-  where
-    result = do
-      cx <- graphToInferenceContext testGraph
-      inferTypeOf cx term
+  (iterm, its) <- H.runIO $ fromTestFlow desc $ do
+    cx <- graphToInferenceContext testGraph
+    inferTypeOf cx term
+
+  H.it "inferred type" $
+    H.shouldBe (ShowCore.typeScheme its) (ShowCore.typeScheme expected)
+  H.it "inferred term" $
+    H.shouldBe (ShowCore.term $ removeTypesFromTerm iterm) (ShowCore.term $ removeTypesFromTerm term)
 
 expectSuccess :: (Eq a, Show a) => String -> Flow () a -> a -> H.Expectation
 expectSuccess desc flow x = case my of
@@ -172,28 +181,6 @@ expectSuccess desc flow x = case my of
     flow2 = do
       putAttr key_debugId $ Terms.string desc
       flow
-
-fromTestFlow :: String -> Flow () a -> IO a
-fromTestFlow desc flow = case my of
-    Nothing -> fail $ traceSummary trace
-    Just y -> return y
-  where
-    FlowState my _ trace = unFlow flow2 () emptyTrace
-    flow2 = do
-      putAttr key_debugId $ Terms.string desc
-      flow
-
-expectEtaExpansionResult :: String -> Term -> Term -> H.SpecWith ()
-expectEtaExpansionResult desc interm expected = do
-  (outterm, stripped) <- H.runIO $ fromTestFlow desc $ do
-    tx <- graphToTypeContext testGraph
-    (iterm, _) <- inferTypeOf (typeContextInferenceContext tx) interm
-    outterm <- etaExpandTypedTerm tx iterm
-    let stripped = removeTypesFromTerm outterm
-    return (outterm, stripped)
-
-  H.it desc $
-    H.shouldBe (ShowCore.term stripped) (ShowCore.term expected)
 
 expectTypeOfResult :: String -> M.Map Name Type -> Term -> Maybe Term -> Type -> H.SpecWith ()
 expectTypeOfResult desc types term mterm expected = do
@@ -239,6 +226,19 @@ expectTypeCheckingResult desc input outputTerm outputType = do
   H.it "reconstructed type" $
     H.shouldBe (ShowCore.type_ rtype) (ShowCore.type_ outputType)
 
+fromTestFlow :: String -> Flow () a -> IO a
+fromTestFlow desc flow = case my of
+    Nothing -> fail $ traceSummary trace
+    Just y -> return y
+  where
+    FlowState my _ trace = unFlow flow2 () emptyTrace
+    flow2 = do
+      putAttr key_debugId $ Terms.string desc
+      flow
+
+makeMap :: [(String, Int)] -> Term
+makeMap keyvals = Terms.map $ M.fromList $ ((\(k, v) -> (Terms.string k, Terms.int32 v)) <$> keyvals)
+
 shouldFail :: Flow Graph a -> H.Expectation
 shouldFail f = H.shouldBe True (Y.isNothing $ flowStateValue $ unFlow f testGraph emptyTrace)
 
@@ -272,6 +272,3 @@ termTestContext variants = withConstraints $ (languageConstraints baseLanguage) 
 
 withConstraints :: LanguageConstraints -> AdapterContext
 withConstraints c = baseContext { adapterContextLanguage = baseLanguage { languageConstraints = c }}
-
-makeMap :: [(String, Int)] -> Term
-makeMap keyvals = Terms.map $ M.fromList $ ((\(k, v) -> (Terms.string k, Terms.int32 v)) <$> keyvals)
