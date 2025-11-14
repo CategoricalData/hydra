@@ -37,6 +37,17 @@ CASE_CONVERSION_TEST_CASE__FROM_STRING__NAME = hydra.core.Name("fromString")
 CASE_CONVERSION_TEST_CASE__TO_STRING__NAME = hydra.core.Name("toString")
 
 @dataclass
+class EtaExpansionTestCase:
+    r"""A test case which performs eta expansion (adding missing lambda abstractions) on a given term and compares the result with the expected result."""
+    
+    input: Annotated[hydra.core.Term, "The term to eta expand"]
+    output: Annotated[hydra.core.Term, "The expected result"]
+
+ETA_EXPANSION_TEST_CASE__NAME = hydra.core.Name("hydra.testing.EtaExpansionTestCase")
+ETA_EXPANSION_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+ETA_EXPANSION_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+@dataclass
 class EvaluationTestCase:
     r"""A test case which evaluates (reduces) a given term and compares it with the expected result."""
     
@@ -77,6 +88,9 @@ TAG__NAME = hydra.core.Name("hydra.testing.Tag")
 class TestCaseCaseConversion(Node["CaseConversionTestCase"]):
     r"""A case conversion test."""
 
+class TestCaseEtaExpansion(Node["EtaExpansionTestCase"]):
+    r"""An eta expansion test."""
+
 class TestCaseEvaluation(Node["EvaluationTestCase"]):
     r"""A term evaluation test."""
 
@@ -86,14 +100,23 @@ class TestCaseInference(Node["InferenceTestCase"]):
 class TestCaseInferenceFailure(Node["InferenceFailureTestCase"]):
     r"""A type inference failure test."""
 
+class TestCaseTypeChecking(Node["TypeCheckingTestCase"]):
+    r"""A type checking test."""
+
+class TestCaseTypeCheckingFailure(Node["TypeCheckingFailureTestCase"]):
+    r"""A type checking failure test (currently unused)."""
+
 # A simple test case with an input and an expected output.
-type TestCase = TestCaseCaseConversion | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure
+type TestCase = TestCaseCaseConversion | TestCaseEtaExpansion | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseTypeChecking | TestCaseTypeCheckingFailure
 
 TEST_CASE__NAME = hydra.core.Name("hydra.testing.TestCase")
 TEST_CASE__CASE_CONVERSION__NAME = hydra.core.Name("caseConversion")
+TEST_CASE__ETA_EXPANSION__NAME = hydra.core.Name("etaExpansion")
 TEST_CASE__EVALUATION__NAME = hydra.core.Name("evaluation")
 TEST_CASE__INFERENCE__NAME = hydra.core.Name("inference")
 TEST_CASE__INFERENCE_FAILURE__NAME = hydra.core.Name("inferenceFailure")
+TEST_CASE__TYPE_CHECKING__NAME = hydra.core.Name("typeChecking")
+TEST_CASE__TYPE_CHECKING_FAILURE__NAME = hydra.core.Name("typeCheckingFailure")
 
 @dataclass
 class TestCaseWithMetadata:
@@ -124,3 +147,25 @@ TEST_GROUP__NAME__NAME = hydra.core.Name("name")
 TEST_GROUP__DESCRIPTION__NAME = hydra.core.Name("description")
 TEST_GROUP__SUBGROUPS__NAME = hydra.core.Name("subgroups")
 TEST_GROUP__CASES__NAME = hydra.core.Name("cases")
+
+@dataclass
+class TypeCheckingTestCase:
+    r"""A test case which performs type checking on a given term and compares the result with an expected annotated term and type."""
+    
+    input: Annotated[hydra.core.Term, "An untyped term on which to perform inference, then type check"]
+    output_term: Annotated[hydra.core.Term, "The expected fully annotated System F term after type inference"]
+    output_type: Annotated[hydra.core.Type, "The expected inferred type"]
+
+TYPE_CHECKING_TEST_CASE__NAME = hydra.core.Name("hydra.testing.TypeCheckingTestCase")
+TYPE_CHECKING_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+TYPE_CHECKING_TEST_CASE__OUTPUT_TERM__NAME = hydra.core.Name("outputTerm")
+TYPE_CHECKING_TEST_CASE__OUTPUT_TYPE__NAME = hydra.core.Name("outputType")
+
+@dataclass
+class TypeCheckingFailureTestCase:
+    r"""A test case providing a term for which type checking is expected to fail. Note: there are currently no such test cases."""
+    
+    input: Annotated[hydra.core.Term, "The term for which type checking should fail"]
+
+TYPE_CHECKING_FAILURE_TEST_CASE__NAME = hydra.core.Name("hydra.testing.TypeCheckingFailureTestCase")
+TYPE_CHECKING_FAILURE_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
