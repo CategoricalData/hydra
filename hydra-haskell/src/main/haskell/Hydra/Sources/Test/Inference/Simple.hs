@@ -151,16 +151,16 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
 
     subgroup "Maps" [
       expectMono 1 [tag_disabledForMinimalInference]
-        (mapTermCheat [
-          (Terms.string "firstName", Terms.string "Arthur"),
-          (Terms.string "lastName", Terms.string "Dent")])
+        (mapTerm [
+          (string "firstName", string "Arthur"),
+          (string "lastName", string "Dent")])
         (T.map T.string T.string),
       expectPoly 2 [tag_disabledForMinimalInference]
         (TTerms.map Maps.empty)
         ["t0", "t1"] (T.map (T.var "t0") (T.var "t1")),
       expectPoly 3 [tag_disabledForMinimalInference]
-        (lambdas ["x", "y"] $ mapTermCheat
-          [(Terms.var "x", Terms.float64 0.1), (Terms.var "y", Terms.float64 0.2)])
+        (lambdas ["x", "y"] $ mapTerm
+          [(var "x", float64 0.1), (var "y", float64 0.2)])
         ["t0"] (T.function (T.var "t0") (T.function (T.var "t0") (T.map (T.var "t0") T.float64)))]]
 
 --     -- TODO: add a case for a recursive nominal type -- e.g. MyList := () + (int, Mylist)
