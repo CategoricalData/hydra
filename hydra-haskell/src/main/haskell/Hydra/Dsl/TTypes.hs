@@ -38,6 +38,11 @@ apply l r = typeApplication $ applicationType l r
 applys :: TTerm Type -> [TTerm Type] -> TTerm Type
 applys t ts = L.foldl apply t ts
 
+-- | Create a term-encoded binary type
+-- Example: binary
+binary :: TTerm Type
+binary = typeLiteral literalTypeBinary
+
 -- | Create a term-encoded boolean type
 -- Example: boolean
 boolean :: TTerm Type
@@ -66,6 +71,11 @@ float32 = typeLiteral $ literalTypeFloat $ float FloatTypeFloat32
 float64 :: TTerm Type
 float64 = typeLiteral $ literalTypeFloat $ float FloatTypeFloat64
 
+-- | Create a term-encoded arbitrary-precision floating point type
+-- Example: bigfloat
+bigfloat :: TTerm Type
+bigfloat = typeLiteral $ literalTypeFloat $ float FloatTypeBigfloat
+
 -- | Create a term-encoded either type
 -- Example: either string int32
 either :: TTerm Type -> TTerm Type -> TTerm Type
@@ -90,6 +100,16 @@ functionMany :: [TTerm Type] -> TTerm Type
 functionMany types = case types of
   [t] -> t
   t:ts -> function t $ functionMany ts
+
+-- | Create a term-encoded arbitrary-precision integer type
+-- Example: bigint
+bigint :: TTerm Type
+bigint = typeLiteral $ literalTypeInteger integerTypeBigint
+
+-- | Create a term-encoded 8-bit signed integer type
+-- Example: int8
+int8 :: TTerm Type
+int8 = typeLiteral $ literalTypeInteger integerTypeInt8
 
 -- | Create a term-encoded 16-bit signed integer type
 -- Example: int16
@@ -185,6 +205,21 @@ string = typeLiteral literalTypeString
 -- Example: sum [string, int32, boolean]
 sum :: [TTerm Type] -> TTerm Type
 sum types = Core.typeSum $ TTerm $ TermList (unTTerm <$> types)
+
+-- | Create a term-encoded 8-bit unsigned integer type
+-- Example: uint8
+uint8 :: TTerm Type
+uint8 = typeLiteral $ literalTypeInteger integerTypeUint8
+
+-- | Create a term-encoded 16-bit unsigned integer type
+-- Example: uint16
+uint16 :: TTerm Type
+uint16 = typeLiteral $ literalTypeInteger integerTypeUint16
+
+-- | Create a term-encoded 32-bit unsigned integer type
+-- Example: uint32
+uint32 :: TTerm Type
+uint32 = typeLiteral $ literalTypeInteger integerTypeUint32
 
 -- | Create a term-encoded 64-bit unsigned integer type
 -- Example: uint64

@@ -36,9 +36,8 @@ infTest name tags term ts = testCaseWithMetadata (Phantoms.string name)
 isDisabled tcase = tag_disabled `L.elem` Testing.testCaseWithMetadataTags tcase
 isDisabledForMinimalInference tcase = tag_disabledForMinimalInference `L.elem` Testing.testCaseWithMetadataTags tcase
 
--- Note: this is a cheat for an encoded map term; consider using the TTerms DSL
-mapTermCheat :: [(Term, Term)] -> TTerm Term
-mapTermCheat = TTerm . EncodeCore.term . Terms.map . M.fromList
+mapTerm :: [(TTerm Term, TTerm Term)] -> TTerm Term
+mapTerm pairs = TTerm $ TermUnion $ Injection _Term $ Field _Term_map $ TermMap $ M.fromList [(unTTerm k, unTTerm v) | (k, v) <- pairs]
 
 subgroup :: String -> [TTerm TestCaseWithMetadata] -> TTerm TestGroup
 subgroup name = tgroup name Nothing []
