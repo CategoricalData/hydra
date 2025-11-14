@@ -62,6 +62,15 @@ boolean = booleanLift . TTerm . Terms.boolean
 booleanLift :: TTerm Bool -> TTerm Term
 booleanLift = Core.termLiteral . Core.literalBoolean
 
+-- | Create a term-encoded binary (byte string) literal
+-- Example: binary "SGVsbG8gV29ybGQ="
+binary :: String -> TTerm Term
+binary = binaryLift . TTerm . Terms.binary
+
+-- | Lift a TTerm String to a term-encoded binary literal
+binaryLift :: TTerm String -> TTerm Term
+binaryLift = Core.termLiteral . Core.literalBinary
+
 -- | Create a term-encoded constant function that always returns the same term-encoded value
 -- Example: constant (int32 42)
 constant :: TTerm Term -> TTerm Term
@@ -210,6 +219,16 @@ pair t1 t2 = Core.termPair $ Phantoms.tuple2 t1 t2
 tuple2 :: TTerm Term -> TTerm Term -> TTerm Term
 tuple2 t1 t2 = tuple [t1, t2]
 
+-- | Create a term-encoded 3-tuple
+-- Example: triple (int32 1) (string "test") (boolean True)
+triple :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
+triple t1 t2 t3 = tuple [t1, t2, t3]
+
+-- | Create a term-encoded 4-tuple
+-- Example: tuple4 (int32 1) (string "test") (boolean True) (float32 3.14)
+tuple4 :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
+tuple4 t1 t2 t3 t4 = tuple [t1, t2, t3, t4]
+
 -- | Create a term-encoded primitive function reference
 -- Example: primitive (Name "hydra.lib.strings.length")
 primitive :: Name -> TTerm Term
@@ -305,6 +324,11 @@ uint64 = uint64Lift . TTerm . Terms.uint64
 uint64Lift :: TTerm Integer -> TTerm Term
 uint64Lift = Core.termLiteral . Core.literalInteger . Core.integerValueUint64
 
+-- | Create a term-encoded unit value
+-- Example: unit
+unit :: TTerm Term
+unit = Core.termUnit
+
 unitVariantPhantom :: Name -> Name -> TTerm Term
 unitVariantPhantom tname fname = variantPhantom tname fname Core.termUnit
 
@@ -351,3 +375,35 @@ wrap name = Core.termWrap . Core.wrappedTerm name
 -- Example: annotated (int32 42) (Phantoms.map M.empty)
 annotated :: TTerm Term -> TTerm (M.Map Name Term) -> TTerm Term
 annotated term annMap = Core.termAnnotated $ Core.annotatedTerm term annMap
+
+-- | Create a term-encoded lambda with a type annotation
+-- Example: lambdaTyped "x" T.int32 (var "x")
+lambdaTyped :: String -> TTerm Type -> TTerm Term -> TTerm Term
+lambdaTyped param dom body = Core.termFunction $ Core.functionLambda $ Core.lambda (name param) (Phantoms.just dom) body
+
+-- | Create a term-encoded type application
+-- Example: tyapp (list []) T.int32
+tyapp :: TTerm Term -> TTerm Type -> TTerm Term
+tyapp term typ = Core.termTypeApplication $ Core.typeApplicationTerm term typ
+
+-- | Apply multiple type arguments to a term
+-- Example: tyapps (pair (int32 1) (string "a")) [T.int32, T.string]
+tyapps :: TTerm Term -> [TTerm Type] -> TTerm Term
+tyapps = L.foldl tyapp
+
+-- | Create a term-encoded type lambda (System F)
+-- Example: tylam "t0" (lambda "x" $ var "x")
+tylam :: String -> TTerm Term -> TTerm Term
+tylam var body = Core.termTypeLambda $ Core.typeLambda (name var) body
+
+-- | Create multiple term-encoded type lambdas
+-- Example: tylams ["t0", "t1"] (lambda "x" $ var "x")
+tylams :: [String] -> TTerm Term -> TTerm Term
+tylams vars body = L.foldl (\b v -> Core.termTypeLambda $ Core.typeLambda (name v) b) body $ L.reverse vars
+
+-- | Create a term-encoded let expression with type annotations on bindings
+-- Example: letsTyped [("x", int32 1, T.mono T.int32)] (var "x")
+letsTyped :: [(String, TTerm Term, TTerm TypeScheme)] -> TTerm Term -> TTerm Term
+letsTyped bindings body = Core.termLet $ Core.let_ (Phantoms.list $ toBinding bindings) body
+  where
+    toBinding = fmap (\(n, t, ts) -> Core.binding (name n) t (Phantoms.just ts))
