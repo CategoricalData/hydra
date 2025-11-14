@@ -417,26 +417,51 @@ lambdaExpressionToExprDef = haskellSerdeDefinition "lambdaExpressionToExpr" $
       (ref Serialization.prefixDef @@ string "\\" @@ var "head") @@
       var "body"
 
+--literalToExprDef :: TBinding (H.Literal -> Expr)
+--literalToExprDef = haskellSerdeDefinition "literalToExpr" $
+--  "lit" ~>
+--  "parensIfNeg" <~ ("b" ~> "e" ~> Logic.ifElse (var "b")
+--    (Strings.cat $ list ["(", var "e", ")"])
+--    (var "e")) $
+--  ref Serialization.cstDef @@
+--    cases H._Literal (var "lit") Nothing [
+--      H._Literal_char>>: lambda "c" $ Literals.showString $ Literals.showUint16 $ var "c", -- Simplified char handling
+--      H._Literal_double>>: "d" ~> var "parensIfNeg"
+--        @@ (Equality.lt (var "d") (float64 0.0))
+--        @@ (Literals.showFloat64 $ var "d"),
+--      H._Literal_float>>: "f" ~> var "parensIfNeg"
+--        @@ (Equality.lt (var "f") (float32 0.0))
+--        @@ (Literals.showFloat32 $ var "f"),
+--      H._Literal_int>>: "i" ~> var "parensIfNeg"
+--        @@ (Equality.lt (var "i") (int32 0))
+--        @@ (Literals.showInt32 $ var "i"),
+--
+--      H._Literal_integer>>: lambda "i" $ Literals.showBigint $ var "i",
+--      H._Literal_string>>: lambda "s" $ Literals.showString $ var "s"]
+
+
 literalToExprDef :: TBinding (H.Literal -> Expr)
 literalToExprDef = haskellSerdeDefinition "literalToExpr" $
-  lambda "lit" $
-    ref Serialization.cstDef @@
-      cases H._Literal (var "lit") Nothing [
-        H._Literal_char>>: lambda "c" $ Literals.showString $ Literals.showUint16 $ var "c", -- Simplified char handling
-        H._Literal_double>>: lambda "d" $
-          Logic.ifElse (Equality.lt (var "d") (float64 0.0))
-            (Strings.cat2 (string "(0") (Strings.cat2 (Literals.showFloat64 $ var "d") (string ")")))
-            (Literals.showFloat64 $ var "d"),
-        H._Literal_float>>: lambda "f" $
-          Logic.ifElse (Equality.lt (var "f") (float32 0.0))
-            (Strings.cat2 (string "(0") (Strings.cat2 (Literals.showFloat32 $ var "f") (string ")")))
-            (Literals.showFloat32 $ var "f"),
-        H._Literal_int>>: lambda "i" $
-          Logic.ifElse (Equality.lt (var "i") (int32 0))
-            (Strings.cat2 (string "(0") (Strings.cat2 (Literals.showInt32 $ var "i") (string ")")))
-            (Literals.showInt32 $ var "i"),
-        H._Literal_integer>>: lambda "i" $ Literals.showBigint $ var "i",
-        H._Literal_string>>: lambda "s" $ Literals.showString $ var "s"]
+  "lit" ~>
+  "parensIfNeg" <~ ("b" ~> "e" ~> Logic.ifElse (var "b")
+    (Strings.cat $ list ["(", var "e", ")"])
+    (var "e")) $
+  ref Serialization.cstDef @@
+    cases H._Literal (var "lit") Nothing [
+      H._Literal_char>>: "c" ~> Literals.showString $ Literals.showUint16 $ var "c", -- Simplified char handling
+      H._Literal_double>>: "d" ~> var "parensIfNeg"
+        @@ (Equality.lt (var "d") (float64 0.0))
+        @@ (Literals.showFloat64 $ var "d"),
+      H._Literal_float>>: "f" ~> var "parensIfNeg"
+        @@ (Equality.lt (var "f") (float32 0.0))
+        @@ (Literals.showFloat32 $ var "f"),
+      H._Literal_int>>: "i" ~> var "parensIfNeg"
+        @@ (Equality.lt (var "i") (int32 0))
+        @@ (Literals.showInt32 $ var "i"),
+      H._Literal_integer>>: "i" ~> var "parensIfNeg"
+        @@ (Equality.lt (var "i") (bigint 0))
+        @@ (Literals.showBigint $ var "i"),
+      H._Literal_string>>: lambda "s" $ Literals.showString $ var "s"]
 
 localBindingToExprDef :: TBinding (H.LocalBinding -> Expr)
 localBindingToExprDef = haskellSerdeDefinition "localBindingToExpr" $
