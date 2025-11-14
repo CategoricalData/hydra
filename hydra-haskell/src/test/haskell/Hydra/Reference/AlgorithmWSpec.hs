@@ -37,11 +37,13 @@ testHydraContext = W.HydraContext $ graphPrimitives testGraph
 inferType :: Term -> IO (Term, TypeScheme)
 inferType = W.termToInferredTerm testHydraContext
 
-expectType :: Term -> TypeScheme -> H.Expectation
+expectType :: Term -> TypeScheme -> H.SpecWith ()
 expectType term ts = do
-  result <- inferType term
-  H.shouldBe (ShowCore.typeScheme $ snd result) (ShowCore.typeScheme ts)
-  H.shouldBe (ShowCore.term $ removeTypesFromTerm $ fst result) (ShowCore.term $ removeTypesFromTerm term)
+  result <- H.runIO $ inferType term
+  H.it "inferred type" $
+    H.shouldBe (ShowCore.typeScheme $ snd result) (ShowCore.typeScheme ts)
+  H.it "inferred term" $
+    H.shouldBe (ShowCore.term $ removeTypesFromTerm $ fst result) (ShowCore.term $ removeTypesFromTerm term)
 
 algorithmWRunner :: TestRunner
 algorithmWRunner desc tcase = if Testing.isDisabled tcase || Testing.isDisabledForMinimalInference tcase
