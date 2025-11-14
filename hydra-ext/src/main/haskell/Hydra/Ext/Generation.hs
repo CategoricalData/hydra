@@ -33,7 +33,7 @@ writeGraphql :: FP.FilePath -> [Module] -> IO ()
 writeGraphql = generateSources moduleToGraphql
 
 writeJava :: FP.FilePath -> [Module] -> IO ()
-writeJava = generateSourcesSimple moduleToJava javaLanguage False
+writeJava = generateSourcesSimple moduleToJava javaLanguage True
 
 writeJsonSchema :: FP.FilePath -> [Module] -> IO ()
 writeJsonSchema = generateSources (moduleToJsonSchemaFiles (JsonSchemaOptions True))
