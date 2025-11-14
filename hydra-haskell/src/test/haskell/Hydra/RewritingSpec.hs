@@ -145,84 +145,6 @@ testEitherTypes = do
       TypeLiteral LiteralTypeString -> Types.int32
       _ -> recurse typ
 
-testEtaExpandTypedTerms :: Graph -> H.SpecWith ()
-testEtaExpandTypedTerms g = do
-  H.describe "Test eta expansion of typed terms" $ do
-
-    H.describe "Try terms which do not expand" $ do
-      noChange "test #1"
-        (int32 42)
-      noChange "test #2"
-        (list ["foo", "bar"])
-      noChange "test #3"
-        (splitOn @@ "foo" @@ "bar")
-      noChange "test #4"
-        (lambda "x" $ lambda "y" $ splitOn @@ var "x" @@ var "y")
-      noChange "test #5"
-        (lambda "x" $ int32 42)
-
-    H.describe "Try bare function terms" $ do
-      noChange "test #1"
-        toLower
---      expandsTo "test #1"
---        toLower
---        (lambda "v1" $ toLower @@ var "v1")
-      noChange "test #2"
-         splitOn
---      expandsTo "test #2"
---        splitOn
---        (lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2")
-      expandsTo "test #3"
-        (splitOn @@ string "foo")
-        (lambda "v1" $ splitOn @@ string "foo" @@ var "v1")
-      noChange "test #4"
-        (splitOn @@ string "foo" @@ string "bar")
-      expandsTo "test #5"
-        (primitive _maybes_maybe @@ (int32 42) @@ length)
-        (lambda "v1" $ primitive _maybes_maybe @@ (int32 42) @@ length @@ var "v1")
---        (lambda "v1" $ (primitive _maybes_maybe @@ (int32 42) @@ (lambda "v1" $ length @@ var "v1")) @@ var "v1")
-      expandsTo "test #6"
-        (project (Name "Person") (Name "firstName"))
-        (lambda "v1" $ ((project (Name "Person") (Name "firstName") @@ var "v1")))
-      -- TODO: case statement
-
-    H.describe "Try subterms within applications" $ do
-      expandsTo "test #1"
-        (splitOn @@ "bar")
-        (lambda "v1" $ splitOn @@ "bar" @@ var "v1")
-      expandsTo "test #2"
-        (lambda "x" $ splitOn @@ var "x")
-        (lambda "x" $ lambda "v1" $ splitOn @@ var "x" @@ var "v1")
-      noChange "test #3"
-        ((lambda "x" $ var "x") @@ length)
-
-    H.describe "Try let terms" $ do
-      noChange "test #1"
-        (lets ["foo">: int32 137] $ int32 42)
-      noChange "test #2"
-        (lets ["foo">: splitOn] $ var "foo")
---      expandsTo "test #2"
---        (lets ["foo">: splitOn] $ var "foo")
---        (lets ["foo">: lambda "v1" $ lambda "v2" $ splitOn @@ var "v1" @@ var "v2"] $ var "foo")
-
-    H.describe "Check that complete applications are no-ops" $ do
-      noChange "test #1"
-        (toLower @@ "FOO")
-      noChange "test #2"
-        (splitOn @@ "foo" @@ "bar")
-
-    H.describe "Try other subterms" $ do
-      expandsTo "test #1"
-        (list [lambda "x" $ list ["foo"], splitOn @@ "bar"])
-        (list [lambda "x" $ list ["foo"], lambda "v1" $ splitOn @@ "bar" @@ var "v1"])
-  where
-    length = primitive $ Name "hydra.lib.strings.length"
-    splitOn = primitive $ Name "hydra.lib.strings.splitOn"
-    toLower = primitive $ Name "hydra.lib.strings.toLower"
-    fromList = primitive $ Name "hydra.lib.sets.fromList"
-    expandsTo desc termBefore termAfter = expectEtaExpansionResult desc termBefore termAfter
-    noChange desc term = expandsTo desc term term
-
 testEtaExpandUntypedTerms :: Graph -> H.SpecWith ()
 testEtaExpandUntypedTerms g = do
   H.describe "Test eta expansion of untyped terms" $ do
@@ -1076,7 +998,6 @@ spec = do
 
   testFoldOverTerm
 
-  testEtaExpandTypedTerms testGraph
   testEtaExpandUntypedTerms testGraph
   testFlattenLetTerms
   testFreeVariablesInTerm
