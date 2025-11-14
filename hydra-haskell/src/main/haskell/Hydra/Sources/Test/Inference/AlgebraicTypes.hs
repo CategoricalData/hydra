@@ -126,12 +126,12 @@ testGroupForLists = supergroup "List terms" [
 testGroupForMaps :: TTerm TestGroup
 testGroupForMaps = subgroup "Map terms" [
     expectMono 1 [tag_disabledForMinimalInference]
-      (mapTermCheat [
-        (Terms.string "firstName", Terms.string "Arthur"),
-        (Terms.string "lastName", Terms.string "Dent")])
+      (mapTerm [
+        (string "firstName", string "Arthur"),
+        (string "lastName", string "Dent")])
       (T.map T.string T.string),
     expectPoly 2 [tag_disabledForMinimalInference]
-      (mapTermCheat [])
+      (mapTerm [])
       ["t0", "t1"] (T.map (T.var "t0") (T.var "t1"))]
 
 testGroupForOptionals :: TTerm TestGroup
