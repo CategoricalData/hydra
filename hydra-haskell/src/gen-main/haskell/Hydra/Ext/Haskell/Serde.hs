@@ -261,13 +261,18 @@ lambdaExpressionToExpr lambdaExpr =
   in (Serialization.ifx Operators.lambdaOp (Serialization.prefix "\\" head) body)
 
 literalToExpr :: (Ast_.Literal -> Ast.Expr)
-literalToExpr lit = (Serialization.cst ((\x -> case x of
-  Ast_.LiteralChar v1 -> (Literals.showString (Literals.showUint16 v1))
-  Ast_.LiteralDouble v1 -> (Logic.ifElse (Equality.lt v1 0.0) (Strings.cat2 "(0" (Strings.cat2 (Literals.showFloat64 v1) ")")) (Literals.showFloat64 v1))
-  Ast_.LiteralFloat v1 -> (Logic.ifElse (Equality.lt v1 0.0) (Strings.cat2 "(0" (Strings.cat2 (Literals.showFloat32 v1) ")")) (Literals.showFloat32 v1))
-  Ast_.LiteralInt v1 -> (Logic.ifElse (Equality.lt v1 0) (Strings.cat2 "(0" (Strings.cat2 (Literals.showInt32 v1) ")")) (Literals.showInt32 v1))
-  Ast_.LiteralInteger v1 -> (Literals.showBigint v1)
-  Ast_.LiteralString v1 -> (Literals.showString v1)) lit))
+literalToExpr lit =  
+  let parensIfNeg = (\b -> \e -> Logic.ifElse b (Strings.cat [
+          "(",
+          e,
+          ")"]) e)
+  in (Serialization.cst ((\x -> case x of
+    Ast_.LiteralChar v1 -> (Literals.showString (Literals.showUint16 v1))
+    Ast_.LiteralDouble v1 -> (parensIfNeg (Equality.lt v1 0.0) (Literals.showFloat64 v1))
+    Ast_.LiteralFloat v1 -> (parensIfNeg (Equality.lt v1 0.0) (Literals.showFloat32 v1))
+    Ast_.LiteralInt v1 -> (parensIfNeg (Equality.lt v1 0) (Literals.showInt32 v1))
+    Ast_.LiteralInteger v1 -> (parensIfNeg (Equality.lt v1 0) (Literals.showBigint v1))
+    Ast_.LiteralString v1 -> (Literals.showString v1)) lit))
 
 localBindingToExpr :: (Ast_.LocalBinding -> Ast.Expr)
 localBindingToExpr binding = ((\x -> case x of
