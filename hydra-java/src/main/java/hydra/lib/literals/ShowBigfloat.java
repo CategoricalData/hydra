@@ -10,6 +10,7 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Function;
 
@@ -35,7 +36,7 @@ public class ShowBigfloat extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.bigfloat(args.get(0)),
-            (Function<Double, Term>) d -> Terms.string(apply(d)));
+            (Function<BigDecimal, Term>) d -> Terms.string(apply(d)));
     }
 
     /**
@@ -43,7 +44,7 @@ public class ShowBigfloat extends PrimitiveFunction {
      * @param value the value
      * @return the result
      */
-        public static String apply(Double value) {
-        return Double.toString(value);
+        public static String apply(BigDecimal value) {
+        return value.toString();
     }
 }

@@ -1,13 +1,11 @@
 package hydra.dsl;
 
-// import hydra.basics.Basics; // TODO: restore when kernel terms modules are generated
 import hydra.core.FloatValue;
 import hydra.core.IntegerValue;
 import hydra.core.Literal;
-import hydra.core.LiteralType;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
-import hydra.util.Opt;
 
 
 /**
@@ -15,8 +13,8 @@ import hydra.util.Opt;
  */
 public interface Literals {
 
-    static Literal bigfloat(final double value) {
-        return float_(new FloatValue.Bigfloat(String.valueOf(value)));
+    static Literal bigfloat(final BigDecimal value) {
+        return float_(new FloatValue.Bigfloat(value));
     }
 
     static Literal bigint(final BigInteger value) {
@@ -67,8 +65,8 @@ public interface Literals {
         return new Literal.String_(value);
     }
 
-    static Literal uint8(final char value) {
-        return integer(new IntegerValue.Uint8((short) value));
+    static Literal uint8(final short value) {
+        return integer(new IntegerValue.Uint8(value));
     }
 
     static Literal uint16(final char value) {
@@ -178,16 +176,4 @@ public interface Literals {
             }
         });
     }
-
-    // TODO: restore when kernel terms modules (Basics) are generated
-    // /**
-    //  * Check a literal value against an expected type.
-    //  */
-    // static Opt<String> checkLiteral(LiteralType type, Literal value) {
-    //     String expected = LiteralTypes.showLiteralType(type);
-    //     String actual = LiteralTypes.showLiteralType(Basics.literalType(value));
-    //     return expected.equals(actual)
-    //             ? Opt.empty()
-    //             : Opt.of("Expected literal of type " + expected + ", found " + actual);
-    // }
 }

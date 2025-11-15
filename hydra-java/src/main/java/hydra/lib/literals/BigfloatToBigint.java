@@ -42,7 +42,7 @@ public class BigfloatToBigint extends PrimitiveFunction {
      * @param value the value
      * @return the result
      */
-        public static BigInteger apply(Double value) {
-        return BigDecimal.valueOf(value).toBigInteger();
+        public static BigInteger apply(BigDecimal value) {
+        return value.toBigInteger();
     }
 }

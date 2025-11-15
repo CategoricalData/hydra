@@ -8,7 +8,7 @@ import java.util.function.Function;
 /**
  * Tests equality of two 8-bit unsigned integers.
  */
-public class EqualUint8 extends EqualityFunction<Character> {
+public class EqualUint8 extends EqualityFunction<Short> {
     public EqualUint8() {
         super(PrimitiveType.uint8(), Relation.EQUALS);
     }
@@ -18,7 +18,7 @@ public class EqualUint8 extends EqualityFunction<Character> {
      * @param second the second
      * @return the result
      */
-        public static Function<Character, Boolean> apply(Character second) {
+        public static Function<Short, Boolean> apply(Short second) {
         return first -> apply(first, second);
     }
 
@@ -28,7 +28,7 @@ public class EqualUint8 extends EqualityFunction<Character> {
      * @param second the second
      * @return the result
      */
-        public static Boolean apply(Character first, Character second) {
+        public static Boolean apply(Short first, Short second) {
         return first.equals(second);
     }
 }
