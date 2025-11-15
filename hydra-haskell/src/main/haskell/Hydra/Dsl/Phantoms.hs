@@ -348,7 +348,12 @@ withEq v = withTypeClasses $ M.fromList [(Name v, S.singleton TypeClassEquality)
 -- | Associate the Ord type class with the inferred type of a term
 -- Example: withOrd "t0" myTerm
 withOrd :: String -> TTerm a -> TTerm a
-withOrd v = withTypeClasses $ M.fromList [(Name v, S.singleton TypeClassOrdering)]
+withOrd v = withOrds [v]
+
+withOrds :: [String] -> TTerm a -> TTerm a
+withOrds vs = withTypeClasses $ M.fromList $ fmap toPair vs
+  where
+    toPair v = (Name v, S.singleton TypeClassOrdering)
 
 -- | Associate type classes with the inferred type of a term
 -- Example: withTypeClasses (M.fromList [(Name "t0", S.singleton TypeClassOrdering)]) myTerm
