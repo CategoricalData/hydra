@@ -14,6 +14,7 @@ import Hydra.Adapt.Modules
 import Hydra.Ext.Staging.Java.Serde
 import Hydra.Ext.Staging.Java.Settings
 import Hydra.Adapt.Utils
+import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
@@ -672,21 +673,30 @@ encodeFunction env dom cod fun = case fun of
               ++ [Java.BlockStatementStatement $ javaReturnStatement $ Just jbody]
 
 encodeLiteral :: Literal -> Java.Expression
-encodeLiteral lit = javaLiteralToJavaExpression $ case lit of
-  LiteralBoolean b -> javaBoolean b
-  LiteralFloat f -> Java.LiteralFloatingPoint $ Java.FloatingPointLiteral $ case f of
-    FloatValueFloat32 v -> realToFrac v
-    FloatValueFloat64 v -> v
-  LiteralInteger i -> case i of
-      IntegerValueBigint v -> integer v -- BigInteger
-      IntegerValueInt8 v -> integer $ fromIntegral v -- byte
-      IntegerValueInt16 v -> integer $ fromIntegral v -- short
-      IntegerValueInt32 v -> integer $ fromIntegral v -- int
-      IntegerValueInt64 v -> integer $ fromIntegral v -- long
-      IntegerValueUint16 v -> Java.LiteralCharacter $ fromIntegral v -- char
-    where
-      integer = Java.LiteralInteger . Java.IntegerLiteral
-  LiteralString s -> javaString s
+encodeLiteral lit = case lit of
+    LiteralBoolean b -> litExp $ javaBoolean b
+    LiteralFloat f -> case f of
+        FloatValueBigfloat v -> javaConstructorCall
+          (javaConstructorName (Java.Identifier "java.math.BigDecimal") Nothing)
+          [encodeLiteral $ LiteralString $ "\"" <> Literals.showBigfloat v ++ "\""]
+          Nothing
+        FloatValueFloat32 v -> litExp $ Java.LiteralFloatingPoint $ Java.FloatingPointLiteral $ realToFrac v
+        FloatValueFloat64 v -> litExp $ Java.LiteralFloatingPoint $ Java.FloatingPointLiteral v
+    LiteralInteger i -> case i of
+        IntegerValueBigint v -> javaConstructorCall
+          (javaConstructorName (Java.Identifier "java.math.BigInteger") Nothing)
+          [encodeLiteral $ LiteralString $ "\"" <> Literals.showBigint v ++ "\""]
+          Nothing
+        IntegerValueInt8 v -> litExp $ integer $ fromIntegral v -- byte
+        IntegerValueInt16 v -> litExp $ integer $ fromIntegral v -- short
+        IntegerValueInt32 v -> litExp $ integer $ fromIntegral v -- int
+        IntegerValueInt64 v -> litExp $ integer $ fromIntegral v -- long
+        IntegerValueUint16 v -> litExp $ Java.LiteralCharacter $ fromIntegral v -- char
+      where
+        integer = Java.LiteralInteger . Java.IntegerLiteral
+    LiteralString s -> litExp $ javaString s
+  where
+    litExp = javaLiteralToJavaExpression
 
 -- Note: we use Java object types everywhere, rather than primitive types, as the latter cannot be used
 --       to build function types, parameterized types, etc.
@@ -694,10 +704,9 @@ encodeLiteralType :: LiteralType -> Flow Graph Java.Type
 encodeLiteralType lt = case lt of
     LiteralTypeBoolean -> simple "Boolean"
     LiteralTypeFloat ft -> case ft of
+      FloatTypeBigfloat -> pure $ javaRefType [] (Just $ javaPackageName ["java", "math"]) "BigDecimal"
       FloatTypeFloat32 -> simple "Float"
       FloatTypeFloat64 -> simple "Double"
-      FloatTypeBigfloat -> simple "Double" -- TODO: type adapter should prevent this
---      _ -> fail $ "unexpected float type: " ++ show ft
     LiteralTypeInteger it -> case it of
       IntegerTypeBigint -> pure $ javaRefType [] (Just $ javaPackageName ["java", "math"]) "BigInteger"
       IntegerTypeInt8 -> simple "Byte"
