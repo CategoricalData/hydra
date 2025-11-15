@@ -182,29 +182,6 @@ expectSuccess desc flow x = case my of
       putAttr key_debugId $ Terms.string desc
       flow
 
-expectTypeOfResult :: String -> M.Map Name Type -> Term -> Maybe Term -> Type -> H.SpecWith ()
-expectTypeOfResult desc types term mterm expected = do
-  (iterm, itype, rtype) <- H.runIO $ fromTestFlow desc $ do
-    cx <- graphToInferenceContext testGraph
-    let tx = TypeContext types S.empty cx
-
-    -- typeOf is always called on System F terms
-    (iterm, ts) <- inferTypeOf cx term
-    let itype = typeSchemeToFType ts
-
-    rtype <- typeOf tx [] iterm
-    return (iterm, itype, rtype)
-
-  case mterm of
-    Nothing -> pure ()
-    Just eterm -> H.it "inferred term" $
-      H.shouldBe (ShowCore.term iterm) (ShowCore.term eterm)
-
-  H.it "inferred type" $
-    H.shouldBe (ShowCore.type_ itype) (ShowCore.type_ expected)
-  H.it "reconstructed type" $
-    H.shouldBe (ShowCore.type_ rtype) (ShowCore.type_ expected)
-
 expectTypeCheckingResult :: String -> Term -> Term -> Type -> H.SpecWith ()
 expectTypeCheckingResult desc input outputTerm outputType = do
   (iterm, itype, rtype) <- H.runIO $ fromTestFlow desc $ do
