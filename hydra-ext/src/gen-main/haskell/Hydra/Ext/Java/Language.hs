@@ -8,7 +8,6 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Meta as Meta
-import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -44,6 +43,7 @@ javaLanguage = Coders.Language {
       Meta.LiteralVariantInteger,
       Meta.LiteralVariantString])
     floatTypes = (Sets.fromList [
+      Core.FloatTypeBigfloat,
       Core.FloatTypeFloat32,
       Core.FloatTypeFloat64])
     functionVariants = (Sets.fromList [
