@@ -41,7 +41,7 @@ public class BigintToUint8 extends PrimitiveFunction {
      * @param value the value
      * @return the result
      */
-        public static Character apply(BigInteger value) {
-        return (char) value.intValue();
+        public static Short apply(BigInteger value) {
+        return (short) value.intValue();
     }
 }

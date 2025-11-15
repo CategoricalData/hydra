@@ -7,6 +7,7 @@ import hydra.dsl.Expect;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Comparator;
 import java.util.function.Function;
@@ -45,8 +46,8 @@ public class PrimitiveType<T> {
     /**
      * The primitive type for bigfloat literal values.
      */
-    public static  PrimitiveType<Double> bigfloat() {
-        return new PrimitiveType<>("bigfloat", Types.bigfloat(), Expect::bigfloat, Double::compareTo);
+    public static  PrimitiveType<BigDecimal> bigfloat() {
+        return new PrimitiveType<>("bigfloat", Types.bigfloat(), Expect::bigfloat, BigDecimal::compareTo);
     }
 
     /**
@@ -141,8 +142,8 @@ public class PrimitiveType<T> {
     /**
      * The primitive type for uint8 literal values.
      */
-    public static  PrimitiveType<Character> uint8() {
-        return new PrimitiveType<>("uint8", Types.uint8(), Expect::uint8, Character::compareTo);
+    public static  PrimitiveType<Short> uint8() {
+        return new PrimitiveType<>("uint8", Types.uint8(), Expect::uint8, Short::compareTo);
     }
 
     /**

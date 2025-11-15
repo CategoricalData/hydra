@@ -13,6 +13,8 @@ import hydra.graph.Graph;
 import hydra.tools.PrettyPrinter;
 import hydra.util.Opt;
 import hydra.util.Tuple;
+
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -39,16 +41,16 @@ public class Expect {
     /**
      * Decode a bigfloat value.
      */
-    public static <S> Flow<S, Double> bigfloat(final Term term) {
-        return bind(float_(term), floatValue -> floatValue.accept(new FloatValue.PartialVisitor<Flow<S, Double>>() {
+    public static <S> Flow<S, BigDecimal> bigfloat(final Term term) {
+        return bind(float_(term), floatValue -> floatValue.accept(new FloatValue.PartialVisitor<Flow<S, BigDecimal>>() {
             @Override
-            public Flow<S, Double> otherwise(FloatValue instance) {
+            public Flow<S, BigDecimal> otherwise(FloatValue instance) {
                 return wrongType("bigfloat", term);
             }
 
             @Override
-            public Flow<S, Double> visit(FloatValue.Bigfloat instance) {
-                return pure(Double.parseDouble(instance.value));
+            public Flow<S, BigDecimal> visit(FloatValue.Bigfloat instance) {
+                return pure(instance.value);
             }
         }));
     }
@@ -464,17 +466,17 @@ public class Expect {
     /**
      * Decode a uint8 value.
      */
-    public static <S> Flow<S, Character> uint8(final Term term) {
+    public static <S> Flow<S, Short> uint8(final Term term) {
         return bind(integer(term),
-                integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Character>>() {
+                integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Short>>() {
                     @Override
-                    public Flow<S, Character> otherwise(IntegerValue instance) {
+                    public Flow<S, Short> otherwise(IntegerValue instance) {
                         return wrongType("uint8", term);
                     }
 
                     @Override
-                    public Flow<S, Character> visit(IntegerValue.Uint8 instance) {
-                        return pure((char) (int) instance.value);
+                    public Flow<S, Short> visit(IntegerValue.Uint8 instance) {
+                        return pure(instance.value);
                     }
                 }));
     }
