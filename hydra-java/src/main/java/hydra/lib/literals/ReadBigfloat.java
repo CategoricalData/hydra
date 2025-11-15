@@ -11,6 +11,7 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Opt;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Function;
 
@@ -45,9 +46,9 @@ public class ReadBigfloat extends PrimitiveFunction {
      * @param str the str
      * @return the result
      */
-        public static Opt<Double> apply(String str) {
+        public static Opt<BigDecimal> apply(String str) {
         try {
-            return Opt.of(Double.parseDouble(str));
+            return Opt.of(new BigDecimal(str));
         } catch (NumberFormatException e) {
             return Opt.empty();
         }

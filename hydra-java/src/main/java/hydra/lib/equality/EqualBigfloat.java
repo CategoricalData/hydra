@@ -2,13 +2,14 @@ package hydra.lib.equality;
 
 import hydra.lib.PrimitiveType;
 
+import java.math.BigDecimal;
 import java.util.function.Function;
 
 
 /**
  * Tests equality of two arbitrary-precision floating-point numbers.
  */
-public class EqualBigfloat extends EqualityFunction<Double> {
+public class EqualBigfloat extends EqualityFunction<BigDecimal> {
     public EqualBigfloat() {
         super(PrimitiveType.bigfloat(), Relation.EQUALS);
     }
@@ -18,7 +19,7 @@ public class EqualBigfloat extends EqualityFunction<Double> {
      * @param second the second
      * @return the result
      */
-        public static Function<Double, Boolean> apply(Double second) {
+        public static Function<BigDecimal, Boolean> apply(BigDecimal second) {
         return first -> apply(first, second);
     }
 
@@ -28,7 +29,7 @@ public class EqualBigfloat extends EqualityFunction<Double> {
      * @param second the second
      * @return the result
      */
-        public static Boolean apply(Double first, Double second) {
+        public static Boolean apply(BigDecimal first, BigDecimal second) {
         return first.equals(second);
     }
 }

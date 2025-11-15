@@ -5,6 +5,7 @@ import hydra.core.*;
 import hydra.util.Comparison;
 import hydra.util.Opt;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -190,7 +191,7 @@ public interface Terms {
     /**
      * Create a uint8 literal (Java char → Hydra uint8).
      */
-    static Term uint8(char value) {
+    static Term uint8(short value) {
         return literal(Literals.uint8(value));
     }
 
@@ -241,7 +242,7 @@ public interface Terms {
     /**
      * Create a bigfloat literal (Java double → Hydra bigfloat).
      */
-    static Term bigfloat(double value) {
+    static Term bigfloat(BigDecimal value) {
         return literal(Literals.bigfloat(value));
     }
 

@@ -11,6 +11,7 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.function.Function;
@@ -41,7 +42,7 @@ public class BigintToBigfloat extends PrimitiveFunction {
      * @param value the value
      * @return the result
      */
-        public static Double apply(BigInteger value) {
-        return value.doubleValue();
+    public static BigDecimal apply(BigInteger value) {
+        return new BigDecimal(value);
     }
 }
