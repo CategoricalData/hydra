@@ -19,6 +19,14 @@ module Hydra.Ext.Staging.CoderUtils (
   withGraphBindings,
   withUpdatedCoderGraph,
   inCoderGraphContext,
+
+  -- * TypeContext management
+  withLambdaContext,
+  withLetContext,
+  withTypeLambdaContext,
+
+  -- * Definitions
+  partititonDefinitions,
 ) where
 
 import Hydra.Kernel
@@ -182,6 +190,14 @@ isSimpleAssignment term = case term of
     TermFunction (FunctionElimination (EliminationUnion _)) -> False
     _ -> True
 
+partititonDefinitions :: [Definition] -> ([TypeDefinition], [TermDefinition])
+partititonDefinitions defs = (L.reverse typeDefsRev, L.reverse termDefsRev)
+  where
+    (typeDefsRev, termDefsRev) = L.foldl part ([], []) defs
+    part (types, terms) def = case def of
+      DefinitionType tdef -> (tdef:types, terms)
+      DefinitionTerm tdef -> (types, tdef:terms)
+
 -- | Update the metadata portion of a coder state.
 -- This is useful for tracking language-specific metadata during code generation.
 --
@@ -255,3 +271,50 @@ inCoderGraphContext getGraph getMeta makeCoder f = do
     return (ret, g2)
   putState $ makeCoder g2 (getMeta st)
   return ret
+
+-- | Process a term within a Lambda's extended TypeContext.
+-- This helper abstracts the common pattern of:
+-- 1. Extracting the TypeContext from the environment
+-- 2. Extending it for the lambda
+-- 3. Updating the environment with the new TypeContext
+-- 4. Continuing processing with the updated environment
+--
+-- This pattern is needed by both inline and multiline encoders in Python,
+-- and will be needed by the Java coder as well.
+--
+-- Parameters:
+-- - getTC: Extract TypeContext from environment
+-- - setTC: Update TypeContext in environment
+-- - env: Current environment
+-- - lam: Lambda to process
+-- - continuation: Action to run with the extended environment
+--
+-- Example usage in Python coder:
+-- @withLambdaContext pythonEnvironmentTypeContext (\\tc e -> e{pythonEnvironmentTypeContext=tc}) env lam $ \\env' -> ...@
+withLambdaContext :: (env -> TypeContext) -> (TypeContext -> env -> env)
+                  -> env -> Lambda -> (env -> Flow s a) -> Flow s a
+withLambdaContext getTC setTC env lam continuation =
+  let env' = setTC (extendTypeContextForLambda (getTC env) lam) env
+  in continuation env'
+
+-- | Process a term within a Let's extended TypeContext.
+-- Similar to 'withLambdaContext', but for Let expressions.
+--
+-- Example usage in Python coder:
+-- @withLetContext pythonEnvironmentTypeContext (\\tc e -> e{pythonEnvironmentTypeContext=tc}) env letrec $ \\env' -> ...@
+withLetContext :: (env -> TypeContext) -> (TypeContext -> env -> env)
+               -> env -> Let -> (env -> Flow s a) -> Flow s a
+withLetContext getTC setTC env letrec continuation =
+  let env' = setTC (extendTypeContextForLet (getTC env) letrec) env
+  in continuation env'
+
+-- | Process a term within a TypeLambda's extended TypeContext.
+-- Similar to 'withLambdaContext', but for TypeLambda expressions.
+--
+-- Example usage in Python coder:
+-- @withTypeLambdaContext pythonEnvironmentTypeContext (\\tc e -> e{pythonEnvironmentTypeContext=tc}) env tlam $ \\env' -> ...@
+withTypeLambdaContext :: (env -> TypeContext) -> (TypeContext -> env -> env)
+                      -> env -> TypeLambda -> (env -> Flow s a) -> Flow s a
+withTypeLambdaContext getTC setTC env tlam continuation =
+  let env' = setTC (extendTypeContextForTypeLambda (getTC env) tlam) env
+  in continuation env'
