@@ -113,6 +113,9 @@ float64Lift = Core.termLiteral . Core.literalFloat . Core.floatValueFloat64
 inject :: TTerm Name -> String -> TTerm Term -> TTerm Term
 inject tname fname = Core.termUnion . Core.injection tname . Core.field (name fname)
 
+injectUnit :: TTerm Name -> String -> TTerm Term
+injectUnit tname fname = inject tname fname unit
+
 -- | Create a term-encoded 8-bit signed integer literal
 -- Example: int8 127
 int8 :: Int8 -> TTerm Term
