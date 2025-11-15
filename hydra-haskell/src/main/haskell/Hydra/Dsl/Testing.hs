@@ -39,6 +39,9 @@ isDisabledForMinimalInference tcase = tag_disabledForMinimalInference `L.elem` T
 mapTerm :: [(TTerm Term, TTerm Term)] -> TTerm Term
 mapTerm pairs = TTerm $ TermUnion $ Injection _Term $ Field _Term_map $ TermMap $ M.fromList [(unTTerm k, unTTerm v) | (k, v) <- pairs]
 
+mapTermEmpty :: TTerm (M.Map k v)
+mapTermEmpty = TTerm $ TermMap M.empty
+
 subgroup :: String -> [TTerm TestCaseWithMetadata] -> TTerm TestGroup
 subgroup name = tgroup name Nothing []
 
