@@ -210,7 +210,7 @@ validateGraphDef :: TBinding (
   -> PG.Graph v
   -> Y.Maybe String)
 validateGraphDef = validationDefinition "validateGraph" $
-  withOrd "t0" $ withOrd "t1" $
+  withOrds ["t0", "t1"] $
   lambda "checkValue" $ lambda "showValue" $ lambda "schema" $ lambda "graph" $ lets [
     "checkVertices">: lets [
       "checkVertex">: lambda "el" $ Maybes.maybe

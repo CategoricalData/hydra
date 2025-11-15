@@ -7,7 +7,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Meta as Meta
-import qualified Hydra.Util as Util
 import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
