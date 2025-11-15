@@ -86,6 +86,12 @@ public class TestSuiteRunner extends HydraTestBase {
             }
 
             @Override
+            public Object visit(TestCase.EtaExpansion instance) {
+                // TODO
+                return null;
+            }
+
+            @Override
             public Object visit(TestCase.Evaluation instance) {
                 args.add(Arguments.of(testCaseDescription(testCase, prefix, idx),
                         instance.value.input, instance.value.output));
@@ -100,6 +106,18 @@ public class TestSuiteRunner extends HydraTestBase {
 
             @Override
             public Object visit(TestCase.InferenceFailure instance) {
+                // TODO
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.TypeChecking instance) {
+                // TODO
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.TypeCheckingFailure instance) {
                 // TODO
                 return null;
             }
