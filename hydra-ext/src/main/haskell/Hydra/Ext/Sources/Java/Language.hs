@@ -123,7 +123,7 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
     Meta.literalVariantInteger, -- (see integer types)
     Meta.literalVariantString], -- string
   "floatTypes">: Sets.fromList $ list [
-    -- Bigfloat (e.g. as Java's BigDecimal) is excluded for now
+    Core.floatTypeBigfloat, -- java.math.Bigfloat
     Core.floatTypeFloat32, -- float
     Core.floatTypeFloat64], -- double
   "functionVariants">: Sets.fromList $ list [
@@ -131,7 +131,7 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
     Meta.functionVariantLambda,
     Meta.functionVariantPrimitive],
   "integerTypes">: Sets.fromList $ list [
-    Core.integerTypeBigint, -- BigInteger
+    Core.integerTypeBigint, -- java.math.BigInteger
     Core.integerTypeInt8, -- byte (signed, 8-bit)
     Core.integerTypeInt16, -- short (signed, 16-bit)
     Core.integerTypeInt32, -- int (signed, 32-bit)
