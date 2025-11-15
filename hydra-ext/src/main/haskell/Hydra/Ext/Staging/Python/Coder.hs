@@ -210,7 +210,7 @@ encodeFunction :: PythonEnvironment -> Function -> Flow PyGraph Py.Expression
 encodeFunction env f = case f of
   FunctionLambda lam -> do
     fs <- withTrace "analyze function term for lambda" $
-      analyzeFunctionTerm pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc }) env (TermFunction $ FunctionLambda lam)
+      analyzePythonFunction env (TermFunction $ FunctionLambda lam)
     let params = functionStructureParams fs
         bindings = functionStructureBindings fs
         innerBody = functionStructureBody fs
@@ -481,7 +481,7 @@ encodeTermAssignment env name term comment = do
 --  else pure ()
 
   fs <- withTrace "analyze function term for term assignment" $
-    analyzeFunctionTerm pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc }) env term
+    analyzePythonFunction env term
   let tparams = functionStructureTypeParams fs
       params = functionStructureParams fs
       bindings = functionStructureBindings fs
@@ -565,9 +565,9 @@ encodeTermInline env noCast term = case deannotateTerm term of
     TermTypeApplication (TypeApplicationTerm body _) -> do
       pybase <- encodeTermInline env True $ deannotateAndDeTypeApplyTerm body
       withCast pybase
-    TermTypeLambda tl@(TypeLambda _ body) -> encodeTermInline env2 noCast body
-      where
-        env2 = extendEnvironmentForTypeLambda env tl
+    TermTypeLambda tl@(TypeLambda _ body) ->
+      withTypeLambdaContext pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc }) env tl $ \env2 ->
+        encodeTermInline env2 noCast body
     TermUnion (Injection tname field) -> do
       rt <- inGraphContext $ requireUnionType tname
       if isEnumRowType rt
@@ -614,7 +614,7 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
     (args, body) = gatherApplications term
     dflt = do
       fs <- withTrace "analyze function term for multiline" $
-        analyzeFunctionTerm pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc }) env term
+        analyzePythonFunction env term
       let tparams = functionStructureTypeParams fs
           params = functionStructureParams fs
           bindings = functionStructureBindings fs
@@ -657,26 +657,25 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
             let body = indentedBlock Nothing [[stmt]]
             return [Py.CaseBlock patterns Nothing body]
           toCaseBlock isEnum (Field fname fterm) = case deannotateTerm fterm of
-            TermFunction (FunctionLambda lam@(Lambda v _ body)) -> do
+            TermFunction (FunctionLambda lam@(Lambda v _ body)) ->
+              withLambdaContext pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc }) env lam $ \env2 -> do
                 stmts <- encodeTermMultiline env2 body
                 let pyBody = indentedBlock Nothing [stmts]
+                let pattern = if isEnum
+                      then Py.ClosedPatternValue $ Py.ValuePattern $ Py.Attribute [
+                        encodeName True CaseConventionPascal env tname,
+                        encodeEnumValue env2 fname]
+                      else if (isFreeVariableInTerm v body || EncodeCore.isUnitTerm body)
+                      then Py.ClosedPatternClass $
+                        Py.ClassPattern pyVarName Nothing Nothing
+                      else Py.ClosedPatternClass $
+                        Py.ClassPattern pyVarName Nothing (Just $ Py.KeywordPatterns [argPattern])
+                      where
+                        pyVarName = Py.NameOrAttribute [variantName True env2 tname fname]
+                        argPattern = Py.KeywordPattern (Py.Name "value") $ Py.PatternOr $ Py.OrPattern [
+                          Py.ClosedPatternCapture $ Py.CapturePattern
+                            $ Py.PatternCaptureTarget (encodeName False CaseConventionLowerSnake env2 v)]
                 return $ Py.CaseBlock (pyClosedPatternToPyPatterns pattern) Nothing pyBody
-              where
-                env2 = extendEnvironmentForLambda env lam
-                pattern = if isEnum
-                    then Py.ClosedPatternValue $ Py.ValuePattern $ Py.Attribute [
-                      encodeName True CaseConventionPascal env tname,
-                      encodeEnumValue env2 fname]
-                    else if (isFreeVariableInTerm v body || EncodeCore.isUnitTerm body)
-                    then Py.ClosedPatternClass $
-                      Py.ClassPattern pyVarName Nothing Nothing
-                    else Py.ClosedPatternClass $
-                      Py.ClassPattern pyVarName Nothing (Just $ Py.KeywordPatterns [argPattern])
-                  where
-                    pyVarName = Py.NameOrAttribute [variantName True env2 tname fname]
-                    argPattern = Py.KeywordPattern (Py.Name "value") $ Py.PatternOr $ Py.OrPattern [
-                      Py.ClosedPatternCapture $ Py.CapturePattern
-                        $ Py.PatternCaptureTarget (encodeName False CaseConventionLowerSnake env2 v)]
             _ -> fail $ "unsupported case: " ++ ShowCore.term fterm
       _ -> dflt
 
@@ -833,20 +832,14 @@ encodeWrappedType env name typ comment = do
   where
     (tparamList, tparamMap) = pythonEnvironmentBoundTypeVariables env
 
+-- | Analyze a function term with Python-specific TypeContext management.
+-- This is a thin wrapper around 'analyzeFunctionTerm' that provides the Python-specific
+-- TypeContext getter and setter functions, reducing boilerplate at call sites.
+analyzePythonFunction :: PythonEnvironment -> Term -> Flow PyGraph (FunctionStructure PythonEnvironment)
+analyzePythonFunction env = analyzeFunctionTerm pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc }) env
+
 environmentTypeParameters :: PythonEnvironment -> [Py.TypeParameter]
 environmentTypeParameters env = pyNameToPyTypeParameter . encodeTypeVariable <$> (fst $ pythonEnvironmentBoundTypeVariables env)
-
-extendEnvironmentForLambda :: PythonEnvironment -> Lambda -> PythonEnvironment
-extendEnvironmentForLambda env lam = env {
-  pythonEnvironmentTypeContext = extendTypeContextForLambda (pythonEnvironmentTypeContext env) lam}
-
-extendEnvironmentForLet :: PythonEnvironment -> Let -> PythonEnvironment
-extendEnvironmentForLet env letrec = env {
-  pythonEnvironmentTypeContext = extendTypeContextForLet (pythonEnvironmentTypeContext env) letrec}
-
-extendEnvironmentForTypeLambda :: PythonEnvironment -> TypeLambda -> PythonEnvironment
-extendEnvironmentForTypeLambda env tlam = env {
-  pythonEnvironmentTypeContext = extendTypeContextForTypeLambda (pythonEnvironmentTypeContext env) tlam}
 
 extendMetaForTerm :: Bool -> PythonModuleMetadata -> Term -> PythonModuleMetadata
 extendMetaForTerm topLevel meta0 t = case t of
