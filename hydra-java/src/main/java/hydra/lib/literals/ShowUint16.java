@@ -46,8 +46,8 @@ public class ShowUint16 extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.int32(args.get(0)),
-            (Function<Integer, Term>) i -> Terms.string(apply(i)));
+        return args -> Flows.map(Expect.uint16(args.get(0)),
+            (Function<Character, Term>) i -> Terms.string(apply(i)));
     }
 
     /**
@@ -55,7 +55,7 @@ public class ShowUint16 extends PrimitiveFunction {
      * @param value the Integer value to convert
      * @return the string representation of the value
      */
-    public static String apply(Integer value) {
-        return Integer.toString(value);
+    public static String apply(Character value) {
+        return Integer.toString((int) value);
     }
 }
