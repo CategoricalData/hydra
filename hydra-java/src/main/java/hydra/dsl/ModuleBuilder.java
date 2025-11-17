@@ -18,29 +18,60 @@ import hydra.util.Opt;
 // import static hydra.dsl.Modules.qname; // TODO: restore when kernel terms modules are generated
 
 
-// TODO: restore when Element and Modules.element/qname are available
+/**
+ * A builder for creating Hydra modules.
+ * TODO: restore when Element and Modules.element/qname are available
+ */
 public class ModuleBuilder {
     private final Namespace namespace;
     private final Opt<String> description;
-//    private final List<Element> elements = new ArrayList<Element>();
+    // private final List<Element> elements = new ArrayList<Element>();
 
+    /**
+     * Create a module builder with a namespace and optional description.
+     *
+     * @param namespace the namespace for the module
+     * @param description the optional description for the module
+     */
     public ModuleBuilder(Namespace namespace, Opt<String> description) {
         this.namespace = namespace;
         this.description = description;
     }
 
+    /**
+     * Create a module builder with a namespace and description.
+     *
+     * @param namespace the namespace for the module
+     * @param description the description for the module
+     */
     public ModuleBuilder(Namespace namespace, String description) {
         this(namespace, Opt.of(description));
     }
 
+    /**
+     * Create a module builder with a namespace and no description.
+     *
+     * @param namespace the namespace for the module
+     */
     public ModuleBuilder(Namespace namespace) {
         this(namespace, Opt.empty());
     }
 
+    /**
+     * Create a module builder from a namespace string.
+     *
+     * @param namespace the namespace string for the module
+     */
     public ModuleBuilder(String namespace) {
         this(new Namespace(namespace));
     }
 
+    /**
+     * Create a module builder from a namespace string and description.
+     *
+     * @param namespace the namespace string for the module
+     * @param description the description for the module
+     */
     public ModuleBuilder(String namespace, String description) {
         this(new Namespace(namespace), description);
     }
