@@ -80,7 +80,8 @@ moduleToJava mod defs = withTrace ("encode module: " ++ unNamespace (moduleNames
 --    forPair (name, unit) = (bindingNameToFilePath name, printExpr $ parenthesize $ writeCompilationUnit unit)
 
 adaptTypeToJavaAndEncode :: Aliases -> Type -> Flow Graph Java.Type
-adaptTypeToJavaAndEncode aliases = adaptTypeToLanguageAndEncode javaLanguage (encodeType aliases)
+adaptTypeToJavaAndEncode = encodeType
+--adaptTypeToJavaAndEncode aliases = adaptTypeToLanguageAndEncode javaLanguage (encodeType aliases)
 
 addComment :: Java.ClassBodyDeclaration -> FieldType -> Flow Graph Java.ClassBodyDeclarationWithComments
 addComment decl field = Java.ClassBodyDeclarationWithComments decl <$> commentsFromFieldType field
@@ -776,14 +777,14 @@ encodeNullaryConstant env typ fun = case fun of
   _ -> unexpected "nullary function" $ show fun
 
 encodeTerm :: JavaEnvironment -> Term -> Flow Graph Java.Expression
-encodeTerm env term0 = encodeInternal [] term0
+encodeTerm env term0 = encodeInternal [] [] term0
   where
     aliases = javaEnvironmentAliases env
     tc = javaEnvironmentTypeContext env
     encode = encodeTerm env
     failAsLiteral msg = pure $ encodeLiteral $ LiteralString msg
-    encodeInternal anns term = case term of
-        TermAnnotated (AnnotatedTerm term' ann) -> encodeInternal (ann:anns) term'
+    encodeInternal anns tyapps term = case term of
+        TermAnnotated (AnnotatedTerm term' ann) -> encodeInternal (ann:anns) tyapps term'
 
         TermApplication app -> withTrace "encode application" $ encodeApplication env app
 
@@ -798,8 +799,15 @@ encodeTerm env term0 = encodeInternal [] term0
 
         TermList els -> do
           jels <- CM.mapM encode els
+          targs <- if not (L.null jels)
+            then pure []
+            else if L.null tyapps
+            then fail $ "empty list without type application"
+            else do
+              rt <- javaTypeToJavaReferenceType $ L.head tyapps
+              return [Java.TypeArgumentReference rt]
           return $ javaMethodInvocationToJavaExpression $
-            methodInvocationStatic (Java.Identifier "java.util.Arrays") (Java.Identifier "asList") jels
+            methodInvocationStaticWithTypeArgs (Java.Identifier "java.util.List") (Java.Identifier "of") targs jels
 
         TermLiteral l -> pure $ encodeLiteral l
 
@@ -858,9 +866,9 @@ encodeTerm env term0 = encodeInternal [] term0
         TermTypeApplication (TypeApplicationTerm body _) -> do
           -- Type applications in Java require casting to the appropriate type
           -- We encode the body (stripping type applications) and cast it to the inferred type
-          jbody <- encode $ deannotateAndDeTypeApplyTerm body
           typ <- withTrace "debug e" $ typeOf tc [] term0
           jtype <- encodeType aliases typ
+          jbody <- encodeInternal anns (jtype:tyapps) body
           rt <- javaTypeToJavaReferenceType jtype
           return $ javaCastExpressionToJavaExpression $
             javaCastExpression rt (javaExpressionToJavaUnaryExpression jbody)
@@ -882,12 +890,6 @@ encodeTerm env term0 = encodeInternal [] term0
           return $ javaConstructorCall (javaConstructorName (nameToJavaName aliases tname) Nothing) [jarg] Nothing
 
         _ -> failAsLiteral $ "Unimplemented term variant: " ++ show (termVariant term)
-      where
-        -- Helper to strip annotations and type applications from a term
-        deannotateAndDeTypeApplyTerm t = case t of
-          TermAnnotated at -> deannotateAndDeTypeApplyTerm (annotatedTermBody at)
-          TermTypeApplication tat -> deannotateAndDeTypeApplyTerm (typeApplicationTermBody tat)
-          _ -> t
 
 -- | Convert a list of bindings to Java block statements, handling recursive bindings
 -- and performing topological sorting for correct declaration order.
@@ -1188,24 +1190,28 @@ fieldTypeToFormalParam aliases (FieldType fname ft) = do
 
 functionCall :: JavaEnvironment -> Bool -> Name -> [Term] -> Flow Graph Java.Expression
 functionCall env isPrim name args = do
+--    if name == Name "hydra.lib.maybes.maybe"
+--    then fail $ "args: " ++ L.intercalate ", " (fmap ShowCore.term args)
+--    else pure ()
+
     -- When there are no arguments and it's a primitive, use a method reference instead of calling .apply()
     if isPrim && L.null args
-      then do
-        -- Generate method reference like ClassName::apply
-        let Java.Identifier classWithApply = elementJavaIdentifier True False aliases name
-        let suffix = ".apply"
-        let className = take (length classWithApply - length suffix) classWithApply
-        return $ javaIdentifierToJavaExpression $ Java.Identifier $ className ++ "::apply"
-      else do
-        jargs <- CM.mapM (encodeTerm env) args
-        if isLocalVariable name
-          then do
-            prim <- javaExpressionToJavaPrimary <$> encodeVariable env name
-            return $ javaMethodInvocationToJavaExpression $
-              methodInvocation (Just $ Right prim) (Java.Identifier applyMethodName) jargs
-          else do
-            let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier isPrim False aliases name
-            return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
+    then do
+      -- Generate method reference like ClassName::apply
+      let Java.Identifier classWithApply = elementJavaIdentifier True False aliases name
+      let suffix = ".apply"
+      let className = take (length classWithApply - length suffix) classWithApply
+      return $ javaIdentifierToJavaExpression $ Java.Identifier $ className ++ "::apply"
+    else do
+      jargs <- CM.mapM (encodeTerm env) args
+      if isLocalVariable name
+        then do
+          prim <- javaExpressionToJavaPrimary <$> encodeVariable env name
+          return $ javaMethodInvocationToJavaExpression $
+            methodInvocation (Just $ Right prim) (Java.Identifier applyMethodName) jargs
+        else do
+          let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier isPrim False aliases name
+          return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
   where
     aliases = javaEnvironmentAliases env
 

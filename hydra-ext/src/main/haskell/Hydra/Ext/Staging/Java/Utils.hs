@@ -422,6 +422,13 @@ methodInvocationStatic self methodName = methodInvocation (Just $ Left name) met
   where
     name = Java.ExpressionName Nothing self
 
+methodInvocationStaticWithTypeArgs :: Java.Identifier -> Java.Identifier -> [Java.TypeArgument] -> [Java.Expression] -> Java.MethodInvocation
+methodInvocationStaticWithTypeArgs self methodName targs = Java.MethodInvocation header
+  where
+    header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex variant targs methodName
+    variant = Java.MethodInvocation_VariantExpression name
+    name = Java.ExpressionName Nothing self
+
 nameToJavaClassType :: Aliases -> Bool -> [Java.TypeArgument] -> Name -> Maybe String -> Java.ClassType
 nameToJavaClassType aliases qualify args name mlocal = Java.ClassType [] pkg id args
   where
