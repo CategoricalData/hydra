@@ -6,8 +6,8 @@ package hydra.literals;
  * Conversion functions for literal values.
  */
 public interface Literals {
-  static java.util.function.Function<java.math.BigDecimal, hydra.core.FloatValue> bigfloatToFloatValue(hydra.core.FloatType ft) {
-    return (java.util.function.Function<java.math.BigDecimal, hydra.core.FloatValue>) (bf -> ((ft)).accept(new hydra.core.FloatType.Visitor<>() {
+  static hydra.core.FloatValue bigfloatToFloatValue(hydra.core.FloatType ft, java.math.BigDecimal bf) {
+    return ((ft)).accept(new hydra.core.FloatType.Visitor<>() {
       @Override
       public hydra.core.FloatValue visit(hydra.core.FloatType.Bigfloat instance) {
         return new hydra.core.FloatValue.Bigfloat((bf));
@@ -22,11 +22,11 @@ public interface Literals {
       public hydra.core.FloatValue visit(hydra.core.FloatType.Float64 instance) {
         return new hydra.core.FloatValue.Float64(hydra.lib.literals.BigfloatToFloat64.apply((bf)));
       }
-    }));
+    });
   }
   
-  static java.util.function.Function<java.math.BigInteger, hydra.core.IntegerValue> bigintToIntegerValue(hydra.core.IntegerType it) {
-    return (java.util.function.Function<java.math.BigInteger, hydra.core.IntegerValue>) (bi -> ((it)).accept(new hydra.core.IntegerType.Visitor<>() {
+  static hydra.core.IntegerValue bigintToIntegerValue(hydra.core.IntegerType it, java.math.BigInteger bi) {
+    return ((it)).accept(new hydra.core.IntegerType.Visitor<>() {
       @Override
       public hydra.core.IntegerValue visit(hydra.core.IntegerType.Bigint instance) {
         return new hydra.core.IntegerValue.Bigint((bi));
@@ -71,7 +71,7 @@ public interface Literals {
       public hydra.core.IntegerValue visit(hydra.core.IntegerType.Uint64 instance) {
         return new hydra.core.IntegerValue.Uint64(hydra.lib.literals.BigintToUint64.apply((bi)));
       }
-    }));
+    });
   }
   
   static java.math.BigDecimal floatValueToBigfloat(hydra.core.FloatValue v1) {
