@@ -308,10 +308,15 @@ checkTypeVariablesDef = define "checkTypeVariables" $
       (Logic.ifElse (Maps.member (var "v") (Typing.inferenceContextSchemaTypes (var "cx")))
         (Flows.pure unit)
         (Flows.fail $ Strings.cat $ list [
-          string "unbound type variable \"",
+          "unbound type variable \"",
           Core.unName $ var "v",
-          string "\" in ",
-          ref ShowCore.typeDef @@ var "typ"]))]) $
+          "\" in ",
+          ref ShowCore.typeDef @@ var "typ",
+          ". Local variables: {",
+          Strings.intercalate ", " (Lists.map (unaryFunction $ Core.unName) $ Sets.toList $ var "vars"),
+          "}, schema variables: {",
+          Strings.intercalate ", " (Lists.map (unaryFunction $ Core.unName) $ Maps.keys $ Typing.inferenceContextSchemaTypes $ var "cx"),
+          "}"]))]) $
   trace (Strings.cat $ list [
     string "checking variables of: ",
     ref ShowCore.typeDef @@ var "typ"]) $
@@ -761,8 +766,11 @@ typeOfVariableDef = define "typeOfVariable" $
   "tx" ~> "typeArgs" ~> "name" ~>
   "t" <<~ optCases (Maps.lookup (var "name") (Typing.typeContextTypes $ var "tx"))
     (Flows.fail $ Strings.cat $ list [
-      string "unbound variable: ",
-      Core.unName $ var "name"])
+      "unbound variable: ",
+      Core.unName $ var "name",
+      ". Variables: {",
+      Strings.intercalate ", " (Lists.map (unaryFunction $ Core.unName) $ Maps.keys $ Typing.typeContextTypes $ var "tx"),
+      "}"])
     (ref Schemas.instantiateTypeDef) $
   ref applyTypeArgumentsToTypeDef @@ var "tx" @@ var "typeArgs" @@ var "t"
 
