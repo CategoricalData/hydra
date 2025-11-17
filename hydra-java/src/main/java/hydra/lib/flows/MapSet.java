@@ -53,20 +53,26 @@ public class MapSet extends PrimitiveFunction {
 
     /**
      * Applies a flow function to each element.
+     * @param <S> the state type
+     * @param <X> the input type
+     * @param <Y> the output type
      * @param f the function
      * @return the flow of results
      */
-        public static <S, X, Y> Function<Set<X>, Flow<S, Set<Y>>> apply(Function<X, Flow<S, Y>> f) {
+    public static <S, X, Y> Function<Set<X>, Flow<S, Set<Y>>> apply(Function<X, Flow<S, Y>> f) {
         return set -> apply(f, set);
     }
 
     /**
      * Applies a flow function to each element.
+     * @param <S> the state type
+     * @param <X> the input type
+     * @param <Y> the output type
      * @param f the function
      * @param set the set
      * @return the flow of results
      */
-        public static <S, X, Y> Flow<S, Set<Y>> apply(Function<X, Flow<S, Y>> f, Set<X> set) {
+    public static <S, X, Y> Flow<S, Set<Y>> apply(Function<X, Flow<S, Y>> f, Set<X> set) {
         return Flows.mapM(set, f);
     }
 }

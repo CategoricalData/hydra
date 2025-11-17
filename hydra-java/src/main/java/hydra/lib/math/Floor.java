@@ -24,15 +24,27 @@ import static hydra.dsl.Types.scheme;
  * Rounds down to the nearest integer.
  */
 public class Floor extends PrimitiveFunction {
+    /**
+     * Gets the name of this primitive function.
+     * @return the function name
+     */
     public Name name() {
         return new Name("hydra.lib.math.floor");
     }
 
+    /**
+     * Gets the type scheme for this function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(float64(), bigint()));
     }
 
+    /**
+     * Provides the implementation of this function.
+     * @return a function that maps terms to a flow of terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.float64(args.get(0)),
@@ -44,7 +56,7 @@ public class Floor extends PrimitiveFunction {
      * @param x the value
      * @return the floor value
      */
-        public static BigInteger apply(Double x) {
+    public static BigInteger apply(Double x) {
         return BigInteger.valueOf((long) Math.floor(x));
     }
 }

@@ -44,15 +44,20 @@ public class Intercalate extends PrimitiveFunction {
 
     /**
      * Joins lists with a separator.
-     * @param delim the separator
-     * @return the joined list
+     * @param <X> the element type
+     * @param delim the separator list to insert between lists
+     * @return a function that joins lists with the separator
      */
-        public static <X> Function<List<List<X>>, List<X>> apply(List<X> delim) {
+    public static <X> Function<List<List<X>>, List<X>> apply(List<X> delim) {
         return (sublists) -> apply(delim, sublists);
     }
 
     /**
      * Apply the function to both arguments.
+     * @param <X> the element type
+     * @param delim the separator list to insert between lists
+     * @param sublists the list of lists to join
+     * @return the joined list
      */
     public static <X> List<X> apply(List<X> delim, List<List<X>> sublists) {
         List<X> result = new ArrayList<>();

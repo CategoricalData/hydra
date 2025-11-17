@@ -43,20 +43,24 @@ public class Map extends PrimitiveFunction {
 
     /**
      * Transforms a flow value.
-     * @param mapping the function
-     * @return the transformed flow
+     * @param <X> the input element type
+     * @param <Y> the output element type
+     * @param mapping the function to apply to each element
+     * @return a function that maps the function over a list
      */
-        public static <X, Y> Function<List<X>, List<Y>> apply(Function<X, Y> mapping) {
+    public static <X, Y> Function<List<X>, List<Y>> apply(Function<X, Y> mapping) {
         return (arg) -> apply(mapping, arg);
     }
 
     /**
      * Transforms a flow value.
-     * @param mapping the function
-     * @param arg the flowValue
-     * @return the transformed flow
+     * @param <X> the input element type
+     * @param <Y> the output element type
+     * @param mapping the function to apply to each element
+     * @param arg the list to map over
+     * @return the transformed list
      */
-        public static <X, Y> List<Y> apply(Function<X, Y> mapping, List<X> arg) {
+    public static <X, Y> List<Y> apply(Function<X, Y> mapping, List<X> arg) {
         return arg.stream().map(mapping).collect(Collectors.toList());
     }
 }

@@ -55,15 +55,22 @@ public class Apply extends PrimitiveFunction {
 
     /**
      * Applies a function within a flow.
-     * @param functions the flowFunction
-     * @return the result flow
+     * @param <X> the input type
+     * @param <Y> the output type
+     * @param functions the list of functions to apply
+     * @return a function that applies all functions to all arguments
      */
-        public static <X, Y> Function<List<X>, List<Y>> apply(List<Function<X, Y>> functions) {
+    public static <X, Y> Function<List<X>, List<Y>> apply(List<Function<X, Y>> functions) {
         return (args) -> apply(functions, args);
     }
 
     /**
      * Apply the function to both arguments.
+     * @param <X> the input type
+     * @param <Y> the output type
+     * @param functions the list of functions to apply
+     * @param args the list of arguments
+     * @return the list of results from applying each function to each argument
      */
     public static <X, Y> List<Y> apply(List<Function<X, Y>> functions, List<X> args) {
         List<Y> results = new LinkedList<>();

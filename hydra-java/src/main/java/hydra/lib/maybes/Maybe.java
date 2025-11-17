@@ -25,15 +25,27 @@ import static hydra.dsl.Types.scheme;
  * Pattern matches with a default.
  */
 public class Maybe extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.maybes.maybe"
+     */
     public Name name() {
         return new Name("hydra.lib.maybes.maybe");
     }
 
+    /**
+     * Returns the type scheme of this primitive function.
+     * @return the type scheme for pattern matching on optional values with a default
+     */
     @Override
     public TypeScheme type() {
         return scheme("a", "b", function("b", function(function("a", "b"), function(optional("a"), "b"))));
     }
 
+    /**
+     * Returns the implementation of this primitive function.
+     * @return a function that performs pattern matching on optional values with a default
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> bind(Expect.optional(Flows::pure, args.get(2)), opt ->
@@ -43,22 +55,26 @@ public class Maybe extends PrimitiveFunction {
     }
 
     /**
-     * Handles Nothing with default.
-     * @param nothingCase the default
-     * @return the result
+     * Pattern matches on an optional value with a default. Curried version.
+     * @param <X> the optional value type
+     * @param <Y> the result type
+     * @param nothingCase the default value to return if the optional is empty
+     * @return a function that takes a Just case handler and returns a function that takes an optional
      */
-        public static <X, Y> Function<Function<X, Y>, Function<Opt<X>, Y>> apply(Y nothingCase) {
+    public static <X, Y> Function<Function<X, Y>, Function<Opt<X>, Y>> apply(Y nothingCase) {
         return (justCase) -> (opt) -> apply(nothingCase, justCase, opt);
     }
 
     /**
-     * Handles Nothing with default.
-     * @param nothingCase the default
-     * @param justCase the function
-     * @param opt the maybeValue
-     * @return the result
+     * Pattern matches on an optional value with a default.
+     * @param <X> the optional value type
+     * @param <Y> the result type
+     * @param nothingCase the default value to return if the optional is empty
+     * @param justCase the function to apply to the value if the optional is present
+     * @param opt the optional value to match on
+     * @return the result of applying the appropriate handler
      */
-        public static <X, Y> Y apply(Y nothingCase, Function<X, Y> justCase, Opt<X> opt) {
+    public static <X, Y> Y apply(Y nothingCase, Function<X, Y> justCase, Opt<X> opt) {
         return opt.isPresent() ? justCase.apply(opt.get()) : nothingCase;
     }
 }

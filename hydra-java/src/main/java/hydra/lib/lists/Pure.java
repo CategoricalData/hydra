@@ -39,6 +39,9 @@ public class Pure extends PrimitiveFunction {
 
     /**
      * Apply the function to the single argument.
+     * @param <X> the element type
+     * @param single the element to wrap in a list
+     * @return a singleton list containing the element
      */
     public static <X> List<X> apply(X single) {
         return Collections.singletonList(single);

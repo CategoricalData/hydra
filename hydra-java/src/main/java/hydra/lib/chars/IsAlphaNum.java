@@ -22,15 +22,27 @@ import static hydra.dsl.Types.scheme;
  * Determines whether a character is alphanumeric (a letter or digit).
  */
 public class IsAlphaNum extends PrimitiveFunction {
+    /**
+     * Gets the qualified name of this primitive function.
+     * @return the name "hydra.lib.chars.isAlphaNum"
+     */
     public Name name() {
         return new Name("hydra.lib.chars.isAlphaNum");
     }
 
+    /**
+     * Gets the type scheme for this function.
+     * @return the type scheme representing int32 to boolean function
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(int32(), boolean_()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that takes a list of terms and returns a flow producing a boolean term
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(

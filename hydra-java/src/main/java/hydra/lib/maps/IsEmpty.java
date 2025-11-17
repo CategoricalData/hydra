@@ -24,10 +24,18 @@ import static hydra.dsl.Types.scheme;
  * Checks if a map is empty.
  */
 public class IsEmpty extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
     public Name name() {
         return new Name("hydra.lib.maps.isEmpty");
     }
 
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme("k", "v", function(
@@ -35,6 +43,10 @@ public class IsEmpty extends PrimitiveFunction {
                 boolean_()));
     }
 
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
@@ -45,10 +57,12 @@ public class IsEmpty extends PrimitiveFunction {
 
     /**
      * Checks if the map is empty.
-     * @param map the map
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to check
      * @return true if empty, false otherwise
      */
-        public static <K, V> boolean apply(Map<K, V> map) {
+    public static <K, V> boolean apply(Map<K, V> map) {
         return map.isEmpty();
     }
 }

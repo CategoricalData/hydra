@@ -43,7 +43,8 @@ public class Map extends PrimitiveFunction {
             Term input = args.get(1);
             Term output = lambda("s", "t",
                     app(lambda("q", flowState(
-                                    app(Maybes.map(), mapping, app(project(FlowState.TYPE_NAME, "value"), variable("q"))),
+                                    app(Maybes.map(), mapping, app(project(FlowState.TYPE_NAME, "value"),
+                                            variable("q"))),
                                     app(project(FlowState.TYPE_NAME, "state"), variable("q")),
                                     app(project(FlowState.TYPE_NAME, "trace"), variable("q")))),
                             (app(unwrap(Flow.TYPE_NAME), input, variable("s"), variable("t")))));
@@ -53,20 +54,26 @@ public class Map extends PrimitiveFunction {
 
     /**
      * Transforms a flow value.
+     * @param <S> the state type
+     * @param <X> the input type
+     * @param <Y> the output type
      * @param mapping the function
      * @return the transformed flow
      */
-        public static <S, X, Y> Function<Flow<S, X>, Flow<S, Y>> apply(Function<X, Y> mapping) {
+    public static <S, X, Y> Function<Flow<S, X>, Flow<S, Y>> apply(Function<X, Y> mapping) {
         return input -> apply(mapping, input);
     }
 
     /**
      * Transforms a flow value.
+     * @param <S> the state type
+     * @param <X> the input type
+     * @param <Y> the output type
      * @param mapping the function
      * @param input the flowValue
      * @return the transformed flow
      */
-        public static <S, X, Y> Flow<S, Y> apply(Function<X, Y> mapping, Flow<S, X> input) {
+    public static <S, X, Y> Flow<S, Y> apply(Function<X, Y> mapping, Flow<S, X> input) {
         return Flows.map(mapping, input);
     }
 }

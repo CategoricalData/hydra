@@ -24,16 +24,28 @@ import static hydra.dsl.Types.scheme;
  * Removes a key from the map.
  */
 public class Remove extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
     public Name name() {
         return new Name("hydra.lib.maps.remove");
     }
 
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme("k", "v",
                 function(Types.var("k"), map("k", "v"), map("k", "v")));
     }
 
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
@@ -45,15 +57,22 @@ public class Remove extends PrimitiveFunction {
 
     /**
      * Removes the key and its value.
-     * @param k the key
-     * @return the updated map
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param k the key to remove
+     * @return a function that takes a map and returns the updated map
      */
-        public static <K, V> Function<Map<K, V>, Map<K, V>> apply(K k) {
+    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(K k) {
         return before -> apply(k, before);
     }
 
     /**
      * Apply the function to both arguments.
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param k the key to remove
+     * @param before the map to remove from
+     * @return the updated map
      */
     public static <K, V> Map<K, V> apply(K k, Map<K, V> before) {
         Map<K, V> after = new HashMap<>(before);

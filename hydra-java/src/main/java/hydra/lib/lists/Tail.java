@@ -40,10 +40,11 @@ public class Tail extends PrimitiveFunction {
 
     /**
      * Returns the tail of the list.
-     * @param list the list
-     * @return the tail
+     * @param <X> the element type
+     * @param list the list to get the tail from
+     * @return the tail (all elements except the first)
      */
-        public static <X> List<X> apply(List<X> list) {
+    public static <X> List<X> apply(List<X> list) {
         return list.subList(1, list.size());
     }
 }

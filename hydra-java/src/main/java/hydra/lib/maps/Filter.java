@@ -28,16 +28,28 @@ import static hydra.dsl.Types.scheme;
  * Filters map entries by value.
  */
 public class Filter extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
     public Name name() {
         return new Name("hydra.lib.maps.filter");
     }
 
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme("k", "v",
                 function(function("v", boolean_()), map("k", "v"), map("k", "v")));
     }
 
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> bind(Expect.map(Flows::pure, Flows::pure, args.get(1)), mp -> {
@@ -55,20 +67,24 @@ public class Filter extends PrimitiveFunction {
 
     /**
      * Filters entries where values match predicate.
-     * @param pred the predicate
-     * @return the filtered map
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param pred the predicate to test values
+     * @return a function that takes a map and returns the filtered map
      */
-        public static <K, V> Function<Map<K, V>, Map<K, V>> apply(Predicate<V> pred) {
+    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(Predicate<V> pred) {
         return mp -> apply(pred, mp);
     }
 
     /**
      * Filters entries where values match predicate.
-     * @param pred the predicate
-     * @param mp the map
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param pred the predicate to test values
+     * @param mp the map to filter
      * @return the filtered map
      */
-        public static <K, V> Map<K, V> apply(Predicate<V> pred, Map<K, V> mp) {
+    public static <K, V> Map<K, V> apply(Predicate<V> pred, Map<K, V> mp) {
         Map<K, V> result = new HashMap<>();
         for (Map.Entry<K, V> entry : mp.entrySet()) {
             if (pred.test(entry.getValue())) {

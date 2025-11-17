@@ -25,15 +25,27 @@ import static hydra.dsl.Types.set;
  * Checks if an element is in a set.
  */
 public class Member extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.sets.contains"
+     */
     public Name name() {
         return new Name("hydra.lib.sets.contains");
     }
 
+    /**
+     * Returns the type scheme of this function.
+     * @return the type scheme for a function that checks set membership
+     */
     @Override
     public TypeScheme type() {
         return scheme("x", function(Types.var("x"), set("x"), boolean_()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that transforms terms to a flow of graph and term
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.set(Flows::pure, args.get(1)),
@@ -41,21 +53,23 @@ public class Member extends PrimitiveFunction {
     }
 
     /**
-     * Checks if the element is present.
-     * @param elem the element
-     * @return true if present, false otherwise
+     * Checks if an element is in a set.
+     * @param <X> the type of elements in the set
+     * @param elem the element to check for
+     * @return a function that takes a set and returns true if the element is present
      */
-        public static <X> Function<Set<X>, Boolean> apply(X elem) {
+    public static <X> Function<Set<X>, Boolean> apply(X elem) {
         return (arg) -> apply(elem, arg);
     }
 
     /**
-     * Checks if the element is present.
-     * @param elem the element
-     * @param arg the set
-     * @return true if present, false otherwise
+     * Checks if an element is in a set.
+     * @param <X> the type of elements in the set
+     * @param elem the element to check for
+     * @param arg the set to check
+     * @return true if the element is present in the set, false otherwise
      */
-        public static <X> Boolean apply(X elem, Set<X> arg) {
+    public static <X> Boolean apply(X elem, Set<X> arg) {
         return arg.contains(elem);
     }
 }

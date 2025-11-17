@@ -41,20 +41,22 @@ public class At extends PrimitiveFunction {
 
     /**
      * Retrieves the element at the given index.
-     * @param i the index
-     * @return the element
+     * @param <X> the element type
+     * @param i the index to retrieve
+     * @return a function that retrieves the element at the given index
      */
-        public static <X> Function<List<X>, X> apply(int i) {
+    public static <X> Function<List<X>, X> apply(int i) {
         return list -> apply(i, list);
     }
 
     /**
      * Retrieves the element at the given index.
-     * @param i the index
-     * @param list the list
-     * @return the element
+     * @param <X> the element type
+     * @param i the index to retrieve
+     * @param list the list to retrieve from
+     * @return the element at the given index
      */
-        public static <X> X apply(int i, List<X> list) {
+    public static <X> X apply(int i, List<X> list) {
         if (list.isEmpty()) {
             throw new IllegalArgumentException("Cannot get head of empty list");
         } else {

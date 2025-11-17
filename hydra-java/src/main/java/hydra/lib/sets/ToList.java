@@ -23,29 +23,42 @@ import static hydra.dsl.Types.set;
 
 
 /**
- * Converts a map to a list of pairs.
+ * Converts a set to a list of elements.
  */
 public class ToList extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.sets.toList"
+     */
     public Name name() {
         return new Name("hydra.lib.sets.toList");
     }
 
+    /**
+     * Returns the type scheme of this function.
+     * @return the type scheme for a function that converts a set to a list
+     */
     @Override
     public TypeScheme type() {
         return scheme("x", function(set("x"), list("x")));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that transforms terms to a flow of graph and term
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.set(Flows::pure, args.get(0)), terms -> Terms.list(apply(terms)));
     }
 
     /**
-     * Converts to key-value pairs.
-     * @param arg the map
-     * @return the list of pairs
+     * Converts a set to a list of elements.
+     * @param <X> the type of elements in the set and list
+     * @param arg the set to convert
+     * @return a list containing all elements from the set
      */
-        public static <X> List<X> apply(Set<X> arg) {
+    public static <X> List<X> apply(Set<X> arg) {
         return new ArrayList<>(arg);
     }
 }

@@ -36,10 +36,12 @@ public class Pure extends PrimitiveFunction {
 
     /**
      * Creates a successful flow.
+     * @param <S> the state type
+     * @param <X> the output type
      * @param elem the value
      * @return the flow
      */
-        public static <S, X> Flow<S, X> apply(X elem) {
+    public static <S, X> Flow<S, X> apply(X elem) {
         return Flows.pure(elem);
     }
 }

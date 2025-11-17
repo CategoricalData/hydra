@@ -61,18 +61,29 @@ public class MapKeys extends PrimitiveFunction {
 
     /**
      * Transforms map keys with flow.
+     * @param <S> the state type
+     * @param <K1> the input key type
+     * @param <K2> the output key type
+     * @param <V> the value type
+     * @param f the function
      * @return the flow of results
      */
-        public static <S, K1, K2, V> Function<Map<K1, V>, Flow<S, Map<K2, V>>> apply(
+    public static <S, K1, K2, V> Function<Map<K1, V>, Flow<S, Map<K2, V>>> apply(
             Function<K1, Flow<S, K2>> f) {
         return map -> apply(f, map);
     }
 
     /**
      * Transforms map keys with flow.
+     * @param <S> the state type
+     * @param <K1> the input key type
+     * @param <K2> the output key type
+     * @param <V> the value type
+     * @param f the function
+     * @param map the map
      * @return the flow of results
      */
-        public static <S, K1, K2, V> Flow<S, Map<K2, V>> apply(
+    public static <S, K1, K2, V> Flow<S, Map<K2, V>> apply(
             Function<K1, Flow<S, K2>> f, Map<K1, V> map) {
         return Flows.mapM(map, f, v -> pure(v));
     }

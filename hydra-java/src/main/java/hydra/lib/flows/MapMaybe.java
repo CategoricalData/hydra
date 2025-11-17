@@ -47,20 +47,26 @@ public class MapMaybe extends PrimitiveFunction {
 
     /**
      * Applies a flow function to Maybe value.
+     * @param <S> the state type
+     * @param <X> the input type
+     * @param <Y> the output type
      * @param f the function
      * @return the flow of Maybe
      */
-        public static <S, X, Y> Function<Opt<X>, Flow<S, Opt<Y>>> apply(Function<X, Flow<S, Y>> f) {
+    public static <S, X, Y> Function<Opt<X>, Flow<S, Opt<Y>>> apply(Function<X, Flow<S, Y>> f) {
         return opt -> apply(f, opt);
     }
 
     /**
      * Applies a flow function to Maybe value.
+     * @param <S> the state type
+     * @param <X> the input type
+     * @param <Y> the output type
      * @param f the function
      * @param opt the maybeValue
      * @return the flow of Maybe
      */
-        public static <S, X, Y> Flow<S, Opt<Y>> apply(Function<X, Flow<S, Y>> f, Opt<X> opt) {
+    public static <S, X, Y> Flow<S, Opt<Y>> apply(Function<X, Flow<S, Y>> f, Opt<X> opt) {
         return Flows.mapM(opt, f);
     }
 }

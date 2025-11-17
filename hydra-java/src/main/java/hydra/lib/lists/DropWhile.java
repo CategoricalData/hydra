@@ -47,20 +47,22 @@ public class DropWhile extends PrimitiveFunction {
 
     /**
      * Drops elements while the predicate holds.
-     * @param pred the predicate
-     * @return the remaining list
+     * @param <X> the element type
+     * @param pred the predicate to test elements
+     * @return a function that drops elements while the predicate holds
      */
-        public static <X> Function<List<X>, List<X>> apply(Predicate<X> pred) {
+    public static <X> Function<List<X>, List<X>> apply(Predicate<X> pred) {
         return lst -> apply(pred, lst);
     }
 
     /**
      * Drops elements while the predicate holds.
-     * @param pred the predicate
-     * @param lst the list
-     * @return the remaining list
+     * @param <X> the element type
+     * @param pred the predicate to test elements
+     * @param lst the list to drop from
+     * @return the remaining list after dropping
      */
-        public static <X> List<X> apply(Predicate<X> pred, List<X> lst) {
+    public static <X> List<X> apply(Predicate<X> pred, List<X> lst) {
         List<X> result = new ArrayList<>(lst);
         while (!result.isEmpty() && pred.test(result.get(0))) {
             result = result.subList(1, result.size());

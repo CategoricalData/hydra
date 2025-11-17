@@ -20,18 +20,30 @@ import static hydra.dsl.Types.string;
 
 
 /**
- * Primitive function: ShowFloat64.
+ * Primitive function which converts a float64 (64-bit floating-point) to its string representation.
  */
 public class ShowFloat64 extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.lib.literals.showFloat64"
+     */
     public Name name() {
         return new Name("hydra.lib.literals.showFloat64");
     }
 
+    /**
+     * Returns the type scheme for this function: float64 -&gt; string.
+     * @return the type scheme representing the function signature
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(float64(), string()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that converts float64 terms to string terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.float64(args.get(0)),
@@ -39,11 +51,11 @@ public class ShowFloat64 extends PrimitiveFunction {
     }
 
     /**
-     * Applies the ShowFloat64 operation.
-     * @param value the value
-     * @return the result
+     * Converts a Double (64-bit) value to its string representation.
+     * @param value the Double value to convert
+     * @return the string representation of the value
      */
-        public static String apply(Double value) {
+    public static String apply(Double value) {
         return Double.toString(value);
     }
 }

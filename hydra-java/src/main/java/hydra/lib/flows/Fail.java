@@ -46,10 +46,13 @@ public class Fail extends PrimitiveFunction {
 
     /**
      * Creates a flow with an error.
+     *
+     * @param <S> the state type
+     * @param <X> the output type
      * @param msg the message
      * @return the failed flow
      */
-        public static <S, X> Flow<S, X> apply(String msg) {
+    public static <S, X> Flow<S, X> apply(String msg) {
         return Flows.fail(msg);
     }
 }

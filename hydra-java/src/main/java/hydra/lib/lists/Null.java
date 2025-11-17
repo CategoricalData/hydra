@@ -40,10 +40,11 @@ public class Null extends PrimitiveFunction {
 
     /**
      * Checks if the list is empty.
-     * @param list the list
+     * @param <X> the element type
+     * @param list the list to check
      * @return true if empty, false otherwise
      */
-        public static <X> boolean apply(List<X> list) {
+    public static <X> boolean apply(List<X> list) {
         return list.isEmpty();
     }
 }

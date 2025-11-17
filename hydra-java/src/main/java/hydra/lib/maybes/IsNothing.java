@@ -23,26 +23,39 @@ import static hydra.dsl.Types.scheme;
  * Checks if value is Nothing.
  */
 public class IsNothing extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.maybes.isNothing"
+     */
     public Name name() {
         return new Name("hydra.lib.maybes.isNothing");
     }
 
+    /**
+     * Returns the type scheme of this primitive function.
+     * @return the type scheme for checking if an optional is empty
+     */
     @Override
     public TypeScheme type() {
         return scheme("a", function(optional("a"), "a"));
     }
 
+    /**
+     * Returns the implementation of this primitive function.
+     * @return a function that checks if an optional value is empty
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.optional(Flows::pure, args.get(0)), x -> Terms.boolean_(IsNothing.apply(x)));
     }
 
     /**
-     * Checks for absence.
-     * @param opt the maybeValue
-     * @return true if Nothing, false otherwise
+     * Checks if an optional value is empty (Nothing).
+     * @param <X> the value type
+     * @param opt the optional value to check
+     * @return true if the optional is empty, false otherwise
      */
-        public static <X> boolean apply(Opt<X> opt) {
+    public static <X> boolean apply(Opt<X> opt) {
         return !opt.isPresent();
     }
 }

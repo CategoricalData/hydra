@@ -22,15 +22,27 @@ import static hydra.dsl.Types.scheme;
  * Computes the hyperbolic sine.
  */
 public class Sinh extends PrimitiveFunction {
+    /**
+     * Gets the name of this primitive function.
+     * @return the function name
+     */
     public Name name() {
         return new Name("hydra.lib.math.sinh");
     }
 
+    /**
+     * Gets the type scheme for this function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(float64(), float64()));
     }
 
+    /**
+     * Provides the implementation of this function.
+     * @return a function that maps terms to a flow of terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.float64(args.get(0)),
@@ -42,7 +54,7 @@ public class Sinh extends PrimitiveFunction {
      * @param x the value
      * @return the hyperbolic sine
      */
-        public static Double apply(Double x) {
+    public static Double apply(Double x) {
         return Math.sinh(x);
     }
 }

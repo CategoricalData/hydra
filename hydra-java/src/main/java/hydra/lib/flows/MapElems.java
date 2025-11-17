@@ -61,18 +61,29 @@ public class MapElems extends PrimitiveFunction {
 
     /**
      * Transforms map values with flow.
+     * @param <S> the state type
+     * @param <K> the key type
+     * @param <V1> the input value type
+     * @param <V2> the output value type
+     * @param f the function
      * @return the flow of results
      */
-        public static <S, K, V1, V2> Function<Map<K, V1>, Flow<S, Map<K, V2>>> apply(
+    public static <S, K, V1, V2> Function<Map<K, V1>, Flow<S, Map<K, V2>>> apply(
             Function<V1, Flow<S, V2>> f) {
         return map -> apply(f, map);
     }
 
     /**
      * Transforms map values with flow.
+     * @param <S> the state type
+     * @param <K> the key type
+     * @param <V1> the input value type
+     * @param <V2> the output value type
+     * @param f the function
+     * @param map the map
      * @return the flow of results
      */
-        public static <S, K, V1, V2> Flow<S, Map<K, V2>> apply(
+    public static <S, K, V1, V2> Flow<S, Map<K, V2>> apply(
             Function<V1, Flow<S, V2>> f, Map<K, V1> map) {
         return Flows.mapM(map, k -> pure(k), f);
     }

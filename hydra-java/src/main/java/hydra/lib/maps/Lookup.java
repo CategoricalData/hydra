@@ -25,16 +25,28 @@ import static hydra.dsl.Types.scheme;
  * Looks up a value by key.
  */
 public class Lookup extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
     public Name name() {
         return new Name("hydra.lib.maps.lookup");
     }
 
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme("k", "v",
                 function(Types.var("k"), map("k", "v"), optional("v")));
     }
 
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.map(Flows::pure, Flows::pure, args.get(1)),
@@ -43,20 +55,24 @@ public class Lookup extends PrimitiveFunction {
 
     /**
      * Retrieves the value for the key.
-     * @param k the key
-     * @return Just the value or Nothing
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param k the key to look up
+     * @return a function that takes a map and returns an optional value
      */
-        public static <K, V> Function<Map<K, V>, Opt<V>> apply(K k) {
+    public static <K, V> Function<Map<K, V>, Opt<V>> apply(K k) {
         return mp -> apply(k, mp);
     }
 
     /**
      * Retrieves the value for the key.
-     * @param k the key
-     * @param mp the map
-     * @return Just the value or Nothing
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param k the key to look up
+     * @param mp the map to search
+     * @return an optional containing the value if found, or empty if not found
      */
-        public static <K, V> Opt<V> apply(K k, Map<K, V> mp) {
+    public static <K, V> Opt<V> apply(K k, Map<K, V> mp) {
         V v = mp.get(k);
         return v == null ? Opt.empty() : Opt.of(v);
     }

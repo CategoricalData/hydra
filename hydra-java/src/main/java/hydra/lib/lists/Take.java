@@ -44,20 +44,22 @@ public class Take extends PrimitiveFunction {
 
     /**
      * Takes the first n elements.
-     * @param n the n
-     * @return the sublist
+     * @param <X> the element type
+     * @param n the number of elements to take
+     * @return a function that takes the first n elements from a list
      */
-        public static <X> Function<List<X>, List<X>> apply(Integer n) {
+    public static <X> Function<List<X>, List<X>> apply(Integer n) {
         return lst -> apply(n, lst);
     }
 
     /**
      * Takes the first n elements.
-     * @param n the n
-     * @param lst the list
-     * @return the sublist
+     * @param <X> the element type
+     * @param n the number of elements to take
+     * @param lst the list to take from
+     * @return the sublist containing the first n elements
      */
-        public static <X> List<X> apply(Integer n, List<X> lst) {
+    public static <X> List<X> apply(Integer n, List<X> lst) {
         if (n <= 0) {
             return List.of();
         }

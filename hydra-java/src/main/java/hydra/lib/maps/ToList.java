@@ -29,10 +29,18 @@ import static hydra.dsl.Types.variable;
  * Converts a map to a list of pairs.
  */
 public class ToList extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
     public Name name() {
         return new Name("hydra.lib.maps.toList");
     }
 
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme("k", "v", function(
@@ -40,16 +48,25 @@ public class ToList extends PrimitiveFunction {
                 list(pair(variable("k"), variable("v")))));
     }
 
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
             Flow<Graph, Map<Term, Term>> r = Expect.map(Flows::pure, Flows::pure, args.get(0));
-            return Flows.map(r, map -> Terms.list(apply(map).stream().map(e -> Terms.pair(e.object1, e.object2)).collect(Collectors.toList())));
+            return Flows.map(r, map -> Terms.list(apply(map).stream().map(
+                    e -> Terms.pair(e.object1, e.object2)).collect(Collectors.toList())));
         };
     }
 
     /**
      * Apply the function to its single argument.
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to convert
+     * @return a list of key-value pairs
      */
     public static <K, V> List<Tuple.Tuple2<K, V>> apply(Map<K, V> map) {
         List<Tuple.Tuple2<K, V>> pairs = new java.util.ArrayList<>(map.size());

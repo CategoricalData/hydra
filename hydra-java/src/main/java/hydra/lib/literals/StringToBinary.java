@@ -20,18 +20,31 @@ import static hydra.dsl.Types.string;
 
 
 /**
- * Primitive function: StringToBinary.
+ * Primitive function which converts a string to binary data.
+ * This is currently an identity function as both types are represented as String.
  */
 public class StringToBinary extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.lib.literals.stringToBinary"
+     */
     public Name name() {
         return new Name("hydra.lib.literals.stringToBinary");
     }
 
+    /**
+     * Returns the type scheme for this function: string -&gt; binary.
+     * @return the type scheme representing the function signature
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(string(), binary()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that converts string terms to binary terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.string(args.get(0)),
@@ -39,11 +52,11 @@ public class StringToBinary extends PrimitiveFunction {
     }
 
     /**
-     * Applies the StringToBinary operation.
-     * @param str the str
-     * @return the result
+     * Converts a string to binary data (identity function).
+     * @param str the string to convert
+     * @return the same string value
      */
-        public static String apply(String str) {
+    public static String apply(String str) {
         return str;
     }
 }

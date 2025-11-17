@@ -20,18 +20,31 @@ import static hydra.dsl.Types.string;
 
 
 /**
- * Primitive function: ShowBoolean.
+ * Primitive function which converts a boolean to its string representation.
+ * Returns "true" or "false".
  */
 public class ShowBoolean extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.lib.literals.showBoolean"
+     */
     public Name name() {
         return new Name("hydra.lib.literals.showBoolean");
     }
 
+    /**
+     * Returns the type scheme for this function: boolean -&gt; string.
+     * @return the type scheme representing the function signature
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(boolean_(), string()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that converts boolean terms to string terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.boolean_(args.get(0)),
@@ -39,11 +52,11 @@ public class ShowBoolean extends PrimitiveFunction {
     }
 
     /**
-     * Applies the ShowBoolean operation.
-     * @param value the value
-     * @return the result
+     * Converts a Boolean value to its string representation.
+     * @param value the Boolean value to convert
+     * @return "true" if the value is true, "false" otherwise
      */
-        public static String apply(Boolean value) {
+    public static String apply(Boolean value) {
         return value ? "true" : "false";
     }
 }

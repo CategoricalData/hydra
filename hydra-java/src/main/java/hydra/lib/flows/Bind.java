@@ -69,20 +69,26 @@ public class Bind extends PrimitiveFunction {
 
     /**
      * Chains flow computations.
+     * @param <S> the state type
+     * @param <X> the input type
+     * @param <Y> the output type
      * @param input the flowValue
      * @return the result flow
      */
-        public static <S, X, Y> Function<Function<X, Flow<S, Y>>, Flow<S, Y>> apply(Flow<S, X> input) {
+    public static <S, X, Y> Function<Function<X, Flow<S, Y>>, Flow<S, Y>> apply(Flow<S, X> input) {
         return mapping -> apply(input, mapping);
     }
 
     /**
      * Chains flow computations.
+     * @param <S> the state type
+     * @param <X> the input type
+     * @param <Y> the output type
      * @param input the flowValue
      * @param mapping the function
      * @return the result flow
      */
-        public static <S, X, Y> Flow<S, Y> apply(Flow<S, X> input, Function<X, Flow<S, Y>> mapping) {
+    public static <S, X, Y> Flow<S, Y> apply(Flow<S, X> input, Function<X, Flow<S, Y>> mapping) {
         return Flows.bind(input, mapping);
     }
 }

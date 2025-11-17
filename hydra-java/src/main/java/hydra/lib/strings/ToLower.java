@@ -21,22 +21,34 @@ import static hydra.dsl.Types.string;
  * Converts a string to lowercase.
  */
 public class ToLower extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.strings.toLower"
+     */
     public Name name() {
         return new Name("hydra.lib.strings.toLower");
     }
 
+    /**
+     * Returns the type scheme of this function.
+     * @return the type scheme for a function that converts a string to lowercase
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(string(), string()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that transforms terms to a flow of graph and term
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.string(args.get(0)), s -> Terms.string(apply(s)));
     }
 
     /**
-     * Converts the given string to lowercase.
+     * Converts a string to lowercase.
      * @param upper the string to convert
      * @return the lowercase version of the string
      */

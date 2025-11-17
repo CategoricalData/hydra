@@ -24,37 +24,53 @@ import static hydra.dsl.Types.scheme;
  * Creates a singleton list.
  */
 public class Singleton extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
     public Name name() {
         return new Name("hydra.lib.maps.singleton");
     }
 
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme("k", "v",
                 function(Types.var("k"), Types.var("v"), map("k", "v")));
     }
 
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> pure(Terms.map(Collections.singletonMap(args.get(0), args.get(1))));
     }
 
     /**
-     * Creates a list with one element.
-     * @param key the value
-     * @return the singleton list
+     * Creates a map with one element.
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param key the key
+     * @return a function that takes a value and returns the singleton map
      */
-        public static <K, V> Function<V, Map<K, V>> apply(K key) {
+    public static <K, V> Function<V, Map<K, V>> apply(K key) {
         return value -> apply(key, value);
     }
 
     /**
-     * Creates a list with one element.
-     * @param key the value
+     * Creates a map with one element.
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param key the key
      * @param value the value
-     * @return the singleton list
+     * @return the singleton map
      */
-        public static <K, V> Map<K, V> apply(K key, V value) {
+    public static <K, V> Map<K, V> apply(K key, V value) {
         return Collections.singletonMap(key, value);
     }
 }

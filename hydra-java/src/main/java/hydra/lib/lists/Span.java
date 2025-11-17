@@ -50,20 +50,22 @@ public class Span extends PrimitiveFunction {
 
     /**
      * Splits when predicate becomes false.
-     * @param pred the predicate
-     * @return a pair of lists
+     * @param <X> the element type
+     * @param pred the predicate to test elements
+     * @return a function that splits a list when the predicate becomes false
      */
-        public static <X> Function<List<X>, Map.Entry<List<X>, List<X>>> apply(Predicate<X> pred) {
+    public static <X> Function<List<X>, Map.Entry<List<X>, List<X>>> apply(Predicate<X> pred) {
         return lst -> apply(pred, lst);
     }
 
     /**
      * Splits when predicate becomes false.
-     * @param pred the predicate
-     * @param lst the list
-     * @return a pair of lists
+     * @param <X> the element type
+     * @param pred the predicate to test elements
+     * @param lst the list to split
+     * @return a pair of lists, split at the first element where predicate is false
      */
-        public static <X> Map.Entry<List<X>, List<X>> apply(Predicate<X> pred, List<X> lst) {
+    public static <X> Map.Entry<List<X>, List<X>> apply(Predicate<X> pred, List<X> lst) {
         int i = 0;
         while (i < lst.size() && pred.test(lst.get(i))) {
             i++;
