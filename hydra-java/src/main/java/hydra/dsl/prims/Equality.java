@@ -1,91 +1,98 @@
 package hydra.dsl.prims;
 
 import hydra.core.Term;
-import hydra.lib.equality.EqualBigfloat;
-import hydra.lib.equality.EqualBigint;
-import hydra.lib.equality.EqualBinary;
-import hydra.lib.equality.EqualBoolean;
-import hydra.lib.equality.EqualFloat32;
-import hydra.lib.equality.EqualFloat64;
-import hydra.lib.equality.EqualInt16;
-import hydra.lib.equality.EqualInt32;
-import hydra.lib.equality.EqualInt64;
-import hydra.lib.equality.EqualInt8;
-import hydra.lib.equality.EqualString;
-import hydra.lib.equality.EqualTerm;
-import hydra.lib.equality.EqualType;
-import hydra.lib.equality.EqualUint16;
-import hydra.lib.equality.EqualUint32;
-import hydra.lib.equality.EqualUint64;
-import hydra.lib.equality.EqualUint8;
+import hydra.lib.equality.Compare;
+import hydra.lib.equality.Equal;
+import hydra.lib.equality.Gt;
+import hydra.lib.equality.Gte;
+import hydra.lib.equality.Identity;
+import hydra.lib.equality.Lt;
+import hydra.lib.equality.Lte;
+import hydra.lib.equality.Max;
+import hydra.lib.equality.Min;
 
-
+/**
+ * DSL interface providing equality and comparison primitive operations.
+ */
 public interface Equality {
-    static Term equalBigfloat() {
-        return new EqualBigfloat().term();
+    /**
+     * Returns a term representing the compare primitive operation.
+     *
+     * @return a term for comparing two values
+     */
+    static Term compare() {
+        return new Compare().term();
     }
 
-    static Term equalBigint() {
-        return new EqualBigint().term();
+    /**
+     * Returns a term representing the equal primitive operation.
+     *
+     * @return a term for testing equality of two values
+     */
+    static Term equal() {
+        return new Equal().term();
     }
 
-    static Term equalBinary() {
-        return new EqualBinary().term();
+    /**
+     * Returns a term representing the greater-than primitive operation.
+     *
+     * @return a term for testing if one value is greater than another
+     */
+    static Term gt() {
+        return new Gt().term();
     }
 
-    static Term equalBoolean() {
-        return new EqualBoolean().term();
+    /**
+     * Returns a term representing the greater-than-or-equal primitive operation.
+     *
+     * @return a term for testing if one value is greater than or equal to another
+     */
+    static Term gte() {
+        return new Gte().term();
     }
 
-    static Term equalFloat32() {
-        return new EqualFloat32().term();
+    /**
+     * Returns a term representing the identity primitive operation.
+     *
+     * @return a term for the identity function
+     */
+    static Term identity() {
+        return new Identity().term();
     }
 
-    static Term equalFloat64() {
-        return new EqualFloat64().term();
+    /**
+     * Returns a term representing the less-than primitive operation.
+     *
+     * @return a term for testing if one value is less than another
+     */
+    static Term lt() {
+        return new Lt().term();
     }
 
-    static Term equalInt8() {
-        return new EqualInt8().term();
+    /**
+     * Returns a term representing the less-than-or-equal primitive operation.
+     *
+     * @return a term for testing if one value is less than or equal to another
+     */
+    static Term lte() {
+        return new Lte().term();
     }
 
-    static Term equalInt16() {
-        return new EqualInt16().term();
+    /**
+     * Returns a term representing the max primitive operation.
+     *
+     * @return a term for finding the maximum of two values
+     */
+    static Term max() {
+        return new Max().term();
     }
 
-    static Term equalInt32() {
-        return new EqualInt32().term();
-    }
-
-    static Term equalInt64() {
-        return new EqualInt64().term();
-    }
-
-    static Term equalString() {
-        return new EqualString().term();
-    }
-
-    static Term equalTerm() {
-        return new EqualTerm().term();
-    }
-
-    static Term equalType() {
-        return new EqualType().term();
-    }
-
-    static Term equalUint8() {
-        return new EqualUint8().term();
-    }
-
-    static Term equalUint16() {
-        return new EqualUint16().term();
-    }
-
-    static Term equalUint32() {
-        return new EqualUint32().term();
-    }
-
-    static Term equalUint64() {
-        return new EqualUint64().term();
+    /**
+     * Returns a term representing the min primitive operation.
+     *
+     * @return a term for finding the minimum of two values
+     */
+    static Term min() {
+        return new Min().term();
     }
 }

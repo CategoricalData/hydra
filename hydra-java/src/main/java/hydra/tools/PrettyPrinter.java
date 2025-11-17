@@ -27,6 +27,9 @@ public class PrettyPrinter {
 
     /**
      * Serialize a term to a string.
+     *
+     * @param t the term to serialize
+     * @return the string representation of the term
      */
     public static  String printTerm(Term t) {
         StringBuilder sb = new StringBuilder();
@@ -34,6 +37,14 @@ public class PrettyPrinter {
         return sb.toString();
     }
 
+    /**
+     * Create a consumer that renders a comma-separated list of items within brackets.
+     *
+     * @param open the opening bracket string
+     * @param close the closing bracket string
+     * @param consumers the list of consumers to render between the brackets
+     * @return a consumer that appends the bracketed list to a StringBuilder
+     */
     private static Consumer<StringBuilder> brackets(String open, String close,
         List<Consumer<StringBuilder>> consumers) {
         return sb -> {
@@ -51,6 +62,12 @@ public class PrettyPrinter {
         };
     }
 
+    /**
+     * Create a consumer that renders a float value.
+     *
+     * @param f the float value to render
+     * @return a consumer that appends the float value to a StringBuilder
+     */
     private static Consumer<StringBuilder> floatValue(FloatValue f) {
         return f.accept(new FloatValue.Visitor<Consumer<StringBuilder>>() {
             @Override
@@ -70,6 +87,12 @@ public class PrettyPrinter {
         });
     }
 
+    /**
+     * Create a consumer that renders a function.
+     *
+     * @param function the function to render
+     * @return a consumer that appends the function to a StringBuilder
+     */
     private static  Consumer<StringBuilder> function(hydra.core.Function function) {
         return function.accept(new Function.Visitor<Consumer<StringBuilder>>() {
             @Override
@@ -93,6 +116,12 @@ public class PrettyPrinter {
         });
     }
 
+    /**
+     * Create a consumer that renders an integer value.
+     *
+     * @param i the integer value to render
+     * @return a consumer that appends the integer value to a StringBuilder
+     */
     private static Consumer<StringBuilder> integerValue(IntegerValue i) {
         return i.accept(new IntegerValue.Visitor<Consumer<StringBuilder>>() {
             @Override
@@ -142,6 +171,12 @@ public class PrettyPrinter {
         });
     }
 
+    /**
+     * Create a consumer that renders a literal value.
+     *
+     * @param l the literal to render
+     * @return a consumer that appends the literal to a StringBuilder
+     */
     private static Consumer<StringBuilder> literal(Literal l) {
         return l.accept(new Literal.Visitor<Consumer<StringBuilder>>() {
             @Override
@@ -171,28 +206,64 @@ public class PrettyPrinter {
         });
     }
 
+    /**
+     * Create a consumer that renders a placeholder for not-yet-implemented features.
+     *
+     * @param name the name of the feature
+     * @return a consumer that appends a placeholder to a StringBuilder
+     */
     private static Consumer<StringBuilder> notImplemented(String name) {
         return sb -> sb.append("(").append(name).append(")");
     }
 
+    /**
+     * Create a consumer that renders items within parentheses.
+     *
+     * @param consumers the items to render
+     * @return a consumer that appends the parenthesized items to a StringBuilder
+     */
     private static Consumer<StringBuilder> parens(Consumer<StringBuilder>... consumers) {
         return parens(Arrays.asList(consumers));
     }
 
+    /**
+     * Create a consumer that renders items within parentheses.
+     *
+     * @param consumers the list of items to render
+     * @return a consumer that appends the parenthesized items to a StringBuilder
+     */
     private static Consumer<StringBuilder> parens(List<Consumer<StringBuilder>> consumers) {
         return brackets("(", ")", consumers);
     }
 
+    /**
+     * Extract the short name from a fully qualified name by taking the part after the last dot.
+     *
+     * @param name the fully qualified name
+     * @return the short name (part after the last dot, or the entire name if no dot is present)
+     */
     private static String shortName(Name name) {
         String s = name.value;
         int i = s.lastIndexOf('.');
         return i < 0 ? s : s.substring(i + 1);
     }
 
+    /**
+     * Create a consumer that renders items within square brackets.
+     *
+     * @param consumers the list of items to render
+     * @return a consumer that appends the square-bracketed items to a StringBuilder
+     */
     private static Consumer<StringBuilder> squareBrackets(List<Consumer<StringBuilder>> consumers) {
         return brackets("[", "]", consumers);
     }
 
+    /**
+     * Create a consumer that renders a term.
+     *
+     * @param t the term to render
+     * @return a consumer that appends the term to a StringBuilder
+     */
     private static Consumer<StringBuilder> term(Term t) {
         return sb -> {
             Consumer<StringBuilder> c = t.accept(new Term.Visitor<Consumer<StringBuilder>>() {
@@ -316,6 +387,13 @@ public class PrettyPrinter {
         };
     }
 
+    /**
+     * Create a consumer that renders a variable or constructor with arguments.
+     *
+     * @param name the name of the variable or constructor
+     * @param consumers the arguments to render
+     * @return a consumer that appends the variable/constructor with arguments to a StringBuilder
+     */
     private static Consumer<StringBuilder> var(String name, Consumer<StringBuilder>... consumers) {
         return sb -> {
             sb.append(name);

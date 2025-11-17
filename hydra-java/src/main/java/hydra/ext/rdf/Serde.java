@@ -23,10 +23,14 @@ import org.eclipse.rdf4j.rio.Rio;
  * RDF4j-based serialization for Hydra RDF graphs.
  */
 public interface Serde {
+  /** Value factory for creating RDF4j values. */
   ValueFactory valueFactory = SimpleValueFactory.getInstance();
 
   /**
-   * Serialize a list of RDF descriptions.
+   * Serialize a list of RDF descriptions to N-Triples format.
+   *
+   * @param descriptions the list of RDF descriptions to serialize
+   * @return the serialized N-Triples string
    */
   static String toNtriples(List<Description> descriptions) {
     List<Triple> triples = descriptions.stream().flatMap(
@@ -35,14 +39,20 @@ public interface Serde {
   }
 
   /**
-   * Serialize an RDF graph.
+   * Serialize an RDF graph to N-Triples format.
+   *
+   * @param graph the RDF graph to serialize
+   * @return the serialized N-Triples string
    */
   static String toNtriples(Graph graph) {
     return toNtriples(graph.value);
   }
 
   /**
-   * Serialize a collection of RDF triples.
+   * Serialize a collection of RDF triples to N-Triples format.
+   *
+   * @param triples the collection of RDF triples to serialize
+   * @return the serialized N-Triples string
    */
   static String toNtriples(Collection<Triple> triples) {
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -53,28 +63,40 @@ public interface Serde {
   }
 
   /**
-   * Convert a blank node to its RDF4j equivalent.
+   * Convert a Hydra blank node to its RDF4j equivalent.
+   *
+   * @param r the Hydra blank node
+   * @return the RDF4j BNode
    */
   static BNode bnode(hydra.ext.org.w3.rdf.syntax.BlankNode r) {
     return valueFactory.createBNode(r.value);
   }
 
   /**
-   * Convert an IRI to its RDF4j equivalent.
+   * Convert a Hydra IRI to its RDF4j equivalent.
+   *
+   * @param r the Hydra IRI
+   * @return the RDF4j IRI
    */
   static IRI iri(hydra.ext.org.w3.rdf.syntax.Iri r) {
     return valueFactory.createIRI(r.value);
   }
 
   /**
-   * Convert an RDF literal to its RDF4j equivalent.
+   * Convert a Hydra RDF literal to its RDF4j equivalent.
+   *
+   * @param r the Hydra RDF literal
+   * @return the RDF4j Literal
    */
   static Literal literal(hydra.ext.org.w3.rdf.syntax.Literal r) {
     return valueFactory.createLiteral(r.lexicalForm, iri(r.datatypeIri));
   }
 
   /**
-   * Convert an RDF resource to its RDF4j equivalent.
+   * Convert a Hydra RDF resource to its RDF4j equivalent.
+   *
+   * @param r the Hydra RDF resource
+   * @return the RDF4j Resource
    */
   static Resource resource(hydra.ext.org.w3.rdf.syntax.Resource r) {
     return r.accept(new hydra.ext.org.w3.rdf.syntax.Resource.Visitor<Resource>() {
@@ -91,7 +113,10 @@ public interface Serde {
   }
 
   /**
-   * Convert an RDF triple to its RDF4j equivalent.
+   * Convert a Hydra RDF triple to its RDF4j Statement equivalent.
+   *
+   * @param triple the Hydra RDF triple
+   * @return the RDF4j Statement
    */
   static Statement tripleToStatement(Triple triple) {
     Resource subj = resource(triple.subject);
@@ -101,7 +126,10 @@ public interface Serde {
   }
 
   /**
-   * Convert an RDF node to its RDF4j equivalent.
+   * Convert a Hydra RDF node to its RDF4j Value equivalent.
+   *
+   * @param r the Hydra RDF node
+   * @return the RDF4j Value
    */
   static Value value(hydra.ext.org.w3.rdf.syntax.Node r) {
     return r.accept(new Node.Visitor<Value>() {

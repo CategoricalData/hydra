@@ -60,6 +60,13 @@ public class Merging {
 
     /**
      * Create a vertex adapter based on a list of vertex types and given id adapters.
+     *
+     * @param <T> the type parameter for vertex types
+     * @param <V> the value type for vertex properties
+     * @param types the list of vertex types to merge
+     * @param idAdapters the id adapters for encoding/decoding vertex and edge ids
+     * @param unifyIdenticalTypes whether to unify identical property types across vertex types
+     * @return a flow producing a stateless adapter for the merged vertex type
      */
     public static <T, V> Flow<Unit, StatelessAdapter<List<VertexType<T>>, VertexType<T>, Vertex<V>, Vertex<V>>>
     createVertexAdapter(List<VertexType<T>> types,
@@ -77,6 +84,13 @@ public class Merging {
 
     /**
      * Create an edge adapter based on a list of edge types and given id adapters.
+     *
+     * @param <T> the type parameter for edge types
+     * @param <V> the value type for edge properties
+     * @param types the list of edge types to merge
+     * @param idAdapters the id adapters for encoding/decoding vertex and edge ids
+     * @param unifyIdenticalTypes whether to unify identical property types across edge types
+     * @return a flow producing a stateless adapter for the merged edge type
      */
     public static <T, V> Flow<Unit, StatelessAdapter<List<EdgeType<T>>, EdgeType<T>, Edge<V>, Edge<V>>>
     createEdgeAdapter(List<EdgeType<T>> types,
@@ -364,6 +378,9 @@ public class Merging {
 
     /**
      * A helper object which defines merged vertex and edge id types, and a value coder for each vertex and edge label.
+     *
+     * @param <T> the type parameter for id types
+     * @param <V> the value type for ids
      */
     public static class IdAdapters<T, V> {
         public final T mergedVertexIdType;
@@ -373,6 +390,11 @@ public class Merging {
 
         /**
          * Construct the helper object.
+         *
+         * @param mergedVertexIdType the merged type for vertex ids
+         * @param mergedEdgeIdType the merged type for edge ids
+         * @param forVertexId function to get a coder for a given vertex label
+         * @param forEdgeId function to get a coder for a given edge label
          */
         public IdAdapters(
             T mergedVertexIdType,
@@ -386,6 +408,16 @@ public class Merging {
         }
     }
 
+    /**
+     * Create string-based id adapters for merging vertex and edge types.
+     *
+     * @param <T> the type parameter for id types
+     * @param <V> the value type for ids
+     * @param stringType the string type to use for merged ids
+     * @param fromLiteral function to extract a string from a literal value
+     * @param toLiteral function to create a literal value from a string
+     * @return id adapters configured for string-based ids
+     */
     public static <T, V> Merging.IdAdapters<T, V> stringIdAdapters(
         T stringType,
         Function<V, Flow<Unit, String>> fromLiteral,
