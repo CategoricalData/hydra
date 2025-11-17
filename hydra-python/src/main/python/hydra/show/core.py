@@ -286,9 +286,7 @@ def elimination(elm: hydra.core.Elimination) -> str:
     
     match elm:
         case hydra.core.EliminationProduct(value=tp):
-            arity = tp.arity
-            index = tp.index
-            return hydra.lib.strings.cat(("[", hydra.lib.literals.show_int32(index), "/", hydra.lib.literals.show_int32(arity), "]"))
+            return hydra.lib.strings.cat(("[", hydra.lib.literals.show_int32(tp.index), "/", hydra.lib.literals.show_int32(tp.arity), "]"))
         
         case hydra.core.EliminationRecord(value=proj):
             tname = proj.type_name.value
