@@ -50,10 +50,6 @@ java11Features = JavaFeatures {
   supportsDiamondOperator = True
 }
 
--- TODO
-requireElementType :: Binding -> Flow Graph Type
-requireElementType el = fail $ "update me: types are derived using typeOf now, rather than from explicitly typed terms"
-
 -- For now, the supported features are hard-coded to those of Java 11, rather than being configurable.
 javaFeatures = java11Features
 
@@ -113,17 +109,21 @@ classifyDataReference name = do
   case mel of
     Nothing -> return JavaSymbolLocalVariable
     Just el -> do
-      typ <- requireElementType el
-      return $ classifyDataTerm typ $ bindingTerm el
+      g <- getState
+      tc <- graphToTypeContext g
+      ts <- case bindingType el of
+        Nothing -> fail $ "no type scheme for element " ++ unName (bindingName el)
+        Just ts -> pure ts
+      return $ classifyDataTerm ts $ bindingTerm el
 
-classifyDataTerm :: Type -> Term -> JavaSymbolClass
-classifyDataTerm typ term = if isLambda term
+classifyDataTerm :: TypeScheme -> Term -> JavaSymbolClass
+classifyDataTerm ts term = if isLambda term
     then JavaSymbolClassUnaryFunction
     else if hasTypeParameters || isUnsupportedVariant
       then JavaSymbolClassNullaryFunction
       else JavaSymbolClassConstant
   where
-    hasTypeParameters = not $ S.null $ freeVariablesInType typ
+    hasTypeParameters = not $ L.null $ typeSchemeVariables ts
     isUnsupportedVariant = case deannotateTerm term of
       TermLet _ -> True
       _ -> False
@@ -475,8 +475,8 @@ elementJavaIdentifier :: Bool -> Bool -> Aliases -> Name -> Java.Identifier
 elementJavaIdentifier isPrim isMethod aliases name = Java.Identifier $ if isPrim
     then (qualify $ capitalize local) ++ "." ++ applyMethodName
     else case ns of
-      Nothing -> local
-      Just n -> (qualify $ elementsClassName n) ++ sep ++ local
+      Nothing -> sanitizeJavaName local
+      Just n -> (qualify $ elementsClassName n) ++ sep ++ sanitizeJavaName local
   where
     sep = if isMethod then "::" else "."
     qualify s = Java.unIdentifier $ nameToJavaName aliases $ unqualifyName $ QualifiedName ns s
@@ -488,7 +488,7 @@ elementsClassName (Namespace ns) = capitalize $ L.last $ LS.splitOn "." ns
 encodeApplication :: JavaEnvironment -> Application -> Flow Graph Java.Expression
 encodeApplication env app@(Application lhs rhs) = do
     -- Get the function's arity from its type
-    funTyp <- typeOf tc [] fun
+    funTyp <- withTrace "debug b" $ typeOf tc [] fun
     let arity = typeArity funTyp
     -- Split arguments based on arity
     let hargs = L.take arity args  -- Head arguments: pass directly
@@ -521,7 +521,7 @@ encodeApplication env app@(Application lhs rhs) = do
 --          then fail $ "lhs: " ++ ShowCore.term lhs
 --          else pure ()
 
-        t <- typeOf tc [] lhs
+        t <- withTrace "debug c" $ typeOf tc [] lhs
         (dom, cod) <- case deannotateTypeParameters $ deannotateType t of
             TypeFunction (FunctionType dom cod) -> pure (dom, cod)
             t' -> fail $ "expected a function type on function " ++ show lhs ++ ", but found " ++ show t'
@@ -625,22 +625,44 @@ encodeElimination env marg dom cod elm = case elm of
             let anns = [overrideAnnotation]
             let param = javaTypeToJavaFormalParameter jdom $ Name instanceName
             let result = Java.ResultType $ Java.UnannType jcod
-            jret <- encodeTerm env d
+            -- Analyze the term for bindings (handles nested lets)
+            fs <- analyzeJavaFunction env d
+            let bindings = functionStructureBindings fs
+                innerBody = functionStructureBody fs
+                env2 = functionStructureEnvironment fs
+            -- Convert bindings to Java block statements
+            bindingStmts <- bindingsToStatements env2 bindings
+            -- Encode the body (now without nested lets)
+            jret <- encodeTerm env2 innerBody
             let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
-            return $ noComment $ methodDeclaration mods [] anns otherwiseMethodName [param] result (Just [returnStmt])
+            let allStmts = bindingStmts ++ [returnStmt]
+            return $ noComment $ methodDeclaration mods [] anns otherwiseMethodName [param] result (Just allStmts)
 
           visitBranch jcod field = do
             targs <- javaTypeArgumentsForNamedType tname
             let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True targs tname (Just $ capitalize $ unName $ fieldName field)
             let mods = [Java.MethodModifierPublic]
             let anns = [overrideAnnotation]
-            let param = javaTypeToJavaFormalParameter jdom $ Name instanceName
             let result = Java.ResultType $ Java.UnannType jcod
-            -- Note: the escaping is necessary because the instance.value field reference does not correspond to an actual Hydra projection term
-            let value = Terms.var ("$" ++ instanceName ++ "." ++ valueFieldName)
-            jret <- encodeTerm env $ contractTerm $ Terms.apply (fieldTerm field) value
-            let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
-            return $ noComment $ methodDeclaration mods [] anns visitMethodName [param] result (Just [returnStmt])
+
+            -- Field terms are lambdas; apply to special var that encodes to instance.value
+            case deannotateTerm (fieldTerm field) of
+              TermFunction (FunctionLambda lam@(Lambda lambdaParam mdom body)) -> withLambda env lam $ \env2 -> do
+                let env3 = insertBranchVar lambdaParam env2
+
+                fs <- analyzeJavaFunction env3 body
+                let bindings = functionStructureBindings fs
+                    innerBody = functionStructureBody fs
+                    env4 = functionStructureEnvironment fs
+
+                bindingStmts <- bindingsToStatements env4 bindings
+                jret <- encodeTerm env4 innerBody
+
+                let param = javaTypeToJavaFormalParameter jdom lambdaParam
+                let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
+                let allStmts = bindingStmts ++ [returnStmt]
+                return $ noComment $ methodDeclaration mods [] anns visitMethodName [param] result (Just allStmts)
+              _ -> fail $ "visitBranch: field term is not a lambda: " ++ ShowCore.term (fieldTerm field)
   EliminationWrap name -> case marg of
     Nothing -> pure $ javaLambda var jbody
       where
@@ -766,7 +788,7 @@ encodeTerm env term0 = encodeInternal [] term0
         TermApplication app -> withTrace "encode application" $ encodeApplication env app
 
         TermFunction f -> withTrace ("encode function (" ++ show (functionVariant f) ++ ")") $ do
-          t <- typeOf tc [] term0
+          t <- withTrace "debug d" $ typeOf tc [] term0
           case deannotateType t of
             TypeFunction (FunctionType dom cod) -> do
               encodeFunction env dom cod f
@@ -833,6 +855,16 @@ encodeTerm env term0 = encodeInternal [] term0
           return $ javaMethodInvocationToJavaExpression $
             methodInvocation (Just $ Right prim) (Java.Identifier "collect") [coll]
 
+        TermTypeApplication (TypeApplicationTerm body _) -> do
+          -- Type applications in Java require casting to the appropriate type
+          -- We encode the body (stripping type applications) and cast it to the inferred type
+          jbody <- encode $ deannotateAndDeTypeApplyTerm body
+          typ <- withTrace "debug e" $ typeOf tc [] term0
+          jtype <- encodeType aliases typ
+          rt <- javaTypeToJavaReferenceType jtype
+          return $ javaCastExpressionToJavaExpression $
+            javaCastExpression rt (javaExpressionToJavaUnaryExpression jbody)
+
         TermUnion (Injection name (Field (Name fname) v)) -> do
           let (Java.Identifier typeId) = nameToJavaName aliases name
           let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
@@ -848,16 +880,6 @@ encodeTerm env term0 = encodeInternal [] term0
         TermWrap (WrappedTerm tname arg) -> do
           jarg <- encode arg
           return $ javaConstructorCall (javaConstructorName (nameToJavaName aliases tname) Nothing) [jarg] Nothing
-
-        TermTypeApplication (TypeApplicationTerm body _) -> do
-          -- Type applications in Java require casting to the appropriate type
-          -- We encode the body (stripping type applications) and cast it to the inferred type
-          jbody <- encode $ deannotateAndDeTypeApplyTerm body
-          typ <- typeOf tc [] term0
-          jtype <- encodeType aliases typ
-          rt <- javaTypeToJavaReferenceType jtype
-          return $ javaCastExpressionToJavaExpression $
-            javaCastExpression rt (javaExpressionToJavaUnaryExpression jbody)
 
         _ -> failAsLiteral $ "Unimplemented term variant: " ++ show (termVariant term)
       where
@@ -920,7 +942,7 @@ bindingsToStatements env bindings = if L.null bindings
     toDeclInit name = if S.member name recursiveVars
       then do
         let value = bindingTerm $ L.head $ L.filter (\b -> bindingName b == name) flattenedBindings
-        typ <- typeOf tcExtended [] value
+        typ <- withTrace "debug f" $ typeOf tcExtended [] value
         jtype <- adaptTypeToJavaAndEncode aliases typ
         let id = variableToJavaIdentifier name
         let pkg = javaPackageName ["java", "util", "concurrent", "atomic"]
@@ -937,7 +959,7 @@ bindingsToStatements env bindings = if L.null bindings
     -- Declare or set binding value
     toDeclStatement name = do
       let value = bindingTerm $ L.head $ L.filter (\b -> bindingName b == name) flattenedBindings
-      typ <- typeOf tcExtended [] value
+      typ <- withTrace "debug g" $ typeOf tcExtended [] value
       jtype <- adaptTypeToJavaAndEncode aliases typ
       let id = variableToJavaIdentifier name
       rhs <- encodeTerm envExtended value
@@ -1126,7 +1148,20 @@ encodeTypeDefinition pkg aliases (TypeDefinition name typ) = do
       _ -> False
 
 encodeVariable :: JavaEnvironment -> Name -> Flow Graph Java.Expression
-encodeVariable env name = if isRecursiveVariable aliases name
+encodeVariable env name =
+    if S.member name (aliasesBranchVars aliases)
+    then return $ javaFieldAccessToJavaExpression $ Java.FieldAccess
+      (Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary $ javaIdentifierToJavaExpression jid)
+      (javaIdentifier valueFieldName)
+    -- Check if this is the special visitor instance value variable (instance_value)
+    else if name == Name (instanceName ++ "_" ++ valueFieldName) && isRecursiveVariable aliases name
+    then do
+      -- Emit instance.value field access
+      let instanceExpr = javaIdentifierToJavaExpression $ javaIdentifier instanceName
+      return $ javaFieldAccessToJavaExpression $ Java.FieldAccess
+        (Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary instanceExpr)
+        (javaIdentifier valueFieldName)
+    else if isRecursiveVariable aliases name
     then return $ javaMethodInvocationToJavaExpression $
       methodInvocation (Just $ Left $ Java.ExpressionName Nothing jid) (Java.Identifier getMethodName) []
     else do
@@ -1190,6 +1225,11 @@ innerClassRef :: Aliases -> Name -> String -> Java.Identifier
 innerClassRef aliases name local = Java.Identifier $ id ++ "." ++ local
   where
     Java.Identifier id = nameToJavaName aliases name
+
+insertBranchVar :: Name -> JavaEnvironment -> JavaEnvironment
+insertBranchVar name env = env {javaEnvironmentAliases = aliases {aliasesBranchVars = S.insert name (aliasesBranchVars aliases)}}
+  where
+    aliases = javaEnvironmentAliases env
 
 interfaceTypes :: Bool -> [Java.InterfaceType]
 interfaceTypes isSer = if isSer then [javaSerializableType] else []
@@ -1339,3 +1379,14 @@ typeArgsOrDiamond :: [Java.TypeArgument] -> Java.TypeArgumentsOrDiamond
 typeArgsOrDiamond args = if supportsDiamondOperator javaFeatures
   then Java.TypeArgumentsOrDiamondDiamond
   else Java.TypeArgumentsOrDiamondArguments args
+
+-- TODO: use these
+
+withLambda :: JavaEnvironment -> Lambda -> (JavaEnvironment -> Flow s a) -> Flow s a
+withLambda = withLambdaContext javaEnvironmentTypeContext (\tc e -> e { javaEnvironmentTypeContext = tc })
+
+withLet :: JavaEnvironment -> Let -> (JavaEnvironment -> Flow s a) -> Flow s a
+withLet = withLetContext javaEnvironmentTypeContext (\tc e -> e { javaEnvironmentTypeContext = tc })
+
+withTypeLambda :: JavaEnvironment -> TypeLambda -> (JavaEnvironment -> Flow s a) -> Flow s a
+withTypeLambda = withTypeLambdaContext javaEnvironmentTypeContext (\tc e -> e { javaEnvironmentTypeContext = tc })
