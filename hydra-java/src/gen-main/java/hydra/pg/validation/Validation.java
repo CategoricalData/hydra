@@ -20,15 +20,15 @@ public interface Validation {
       Opt<String> checkProperties = hydra.lib.maybes.Map.apply(
         (java.util.function.Function<String, String>) (s2 -> ((failWith)).apply((hydra.pg.validation.Validation.prepend("Invalid property")).apply((s2)))),
         ((hydra.pg.validation.Validation.validateProperties((checkValue))).apply(((typ)).properties)).apply(((el)).properties));
-      Opt<String> checkOut = (((labelForVertexId)).map((java.util.function.Function<java.util.function.Function<V, Opt<VertexLabel>>, Opt<String>>) (s0 -> ((((s0)).apply(((el)).out)).map((java.util.function.Function<hydra.pg.model.VertexLabel, Opt<String>>) (s1 -> (hydra.pg.validation.Validation.verify(hydra.lib.equality.EqualString.apply(
+      Opt<String> checkOut = (((labelForVertexId)).map((java.util.function.Function<java.util.function.Function<V, Opt<VertexLabel>>, Opt<String>>) (s0 -> ((((s0)).apply(((el)).out)).map((java.util.function.Function<hydra.pg.model.VertexLabel, Opt<String>>) (s1 -> (hydra.pg.validation.Validation.verify(hydra.lib.equality.Equal.apply(
         ((s1)).value,
         (((typ)).out).value))).apply(((failWith)).apply((hydra.pg.validation.Validation.prepend("Wrong out-vertex label")).apply((hydra.pg.validation.Validation.vertexLabelMismatch(((typ)).out)).apply((s1)))))))).orElse(Opt.of(((failWith)).apply((hydra.pg.validation.Validation.prepend("Out-vertex does not exist")).apply(((showValue)).apply(((el)).out)))))))).orElse(Opt.empty());
       hydra.pg.model.EdgeLabel checkLabel_expected = ((typ)).label;
       hydra.pg.model.EdgeLabel checkLabel_actual = ((el)).label;
-      Opt<String> checkLabel = (hydra.pg.validation.Validation.verify(hydra.lib.equality.EqualString.apply(
+      Opt<String> checkLabel = (hydra.pg.validation.Validation.verify(hydra.lib.equality.Equal.apply(
         ((checkLabel_actual)).value,
         ((checkLabel_expected)).value))).apply(((failWith)).apply((hydra.pg.validation.Validation.prepend("Wrong label")).apply((hydra.pg.validation.Validation.edgeLabelMismatch((checkLabel_expected))).apply((checkLabel_actual)))));
-      Opt<String> checkIn = (((labelForVertexId)).map((java.util.function.Function<java.util.function.Function<V, Opt<VertexLabel>>, Opt<String>>) (f -> ((((f)).apply(((el)).in)).map((java.util.function.Function<hydra.pg.model.VertexLabel, Opt<String>>) (label -> (hydra.pg.validation.Validation.verify(hydra.lib.equality.EqualString.apply(
+      Opt<String> checkIn = (((labelForVertexId)).map((java.util.function.Function<java.util.function.Function<V, Opt<VertexLabel>>, Opt<String>>) (f -> ((((f)).apply(((el)).in)).map((java.util.function.Function<hydra.pg.model.VertexLabel, Opt<String>>) (label -> (hydra.pg.validation.Validation.verify(hydra.lib.equality.Equal.apply(
         ((label)).value,
         (((typ)).in).value))).apply(((failWith)).apply((hydra.pg.validation.Validation.prepend("Wrong in-vertex label")).apply((hydra.pg.validation.Validation.vertexLabelMismatch(((typ)).in)).apply((label)))))))).orElse(Opt.of(((failWith)).apply((hydra.pg.validation.Validation.prepend("In-vertex does not exist")).apply(((showValue)).apply(((el)).in)))))))).orElse(Opt.empty());
       Opt<String> checkId = hydra.lib.maybes.Map.apply(
@@ -143,7 +143,7 @@ public interface Validation {
         ((hydra.pg.validation.Validation.validateProperties((checkValue))).apply(((typ)).properties)).apply(((el)).properties));
       hydra.pg.model.VertexLabel checkLabel_expected = ((typ)).label;
       hydra.pg.model.VertexLabel checkLabel_actual = ((el)).label;
-      Opt<String> checkLabel = (hydra.pg.validation.Validation.verify(hydra.lib.equality.EqualString.apply(
+      Opt<String> checkLabel = (hydra.pg.validation.Validation.verify(hydra.lib.equality.Equal.apply(
         ((checkLabel_actual)).value,
         ((checkLabel_expected)).value))).apply(((failWith)).apply((hydra.pg.validation.Validation.prepend("Wrong label")).apply((hydra.pg.validation.Validation.vertexLabelMismatch((checkLabel_expected))).apply((checkLabel_actual)))));
       Opt<String> checkId = hydra.lib.maybes.Map.apply(
