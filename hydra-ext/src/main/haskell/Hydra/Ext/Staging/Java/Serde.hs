@@ -7,6 +7,8 @@ import qualified Hydra.Ext.Java.Syntax as Java
 
 import qualified Data.List as L
 import qualified Data.Maybe as Y
+import Data.Char (ord, toUpper)
+import Numeric (showHex)
 
 
 sanitizeJavaComment :: String -> String
@@ -783,7 +785,21 @@ writeStaticInitializer :: Java.StaticInitializer -> Ast.Expr
 writeStaticInitializer _ = cst "TODO:StaticInitializer"
 
 writeStringLiteral :: Java.StringLiteral -> Ast.Expr
-writeStringLiteral (Java.StringLiteral s) = cst $ show s
+writeStringLiteral (Java.StringLiteral s) = cst $ "\"" ++ escapeJavaString s ++ "\""
+  where
+    escapeJavaString = concatMap escapeChar
+    escapeChar c = case c of
+      '"'  -> "\\\""
+      '\\' -> "\\\\"
+      '\n' -> "\\n"
+      '\r' -> "\\r"
+      '\t' -> "\\t"
+      '\b' -> "\\b"
+      '\f' -> "\\f"
+      _ | c < ' ' || c > '~' -> "\\u" ++ padHex (ord c)
+        | otherwise -> [c]
+    padHex n = replicate (4 - length hex) '0' ++ hex
+      where hex = fmap toUpper $ showHex n ""
 
 writeSwitchStatement :: Java.SwitchStatement -> Ast.Expr
 writeSwitchStatement _ = cst "TODO:SwitchStatement"
